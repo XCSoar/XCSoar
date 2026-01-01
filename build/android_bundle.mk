@@ -48,6 +48,46 @@ ANDROID_BIN = $(TARGET_BIN_DIR)
 ANDROID_LIB_NAMES = xcsoar
 JAVA_PACKAGE = org.xcsoar
 
+# Use template manifest for all builds
+MANIFEST_TEMPLATE = android/AndroidManifest.xml.template
+
+# Determine package name for manifest based on build flags
+# Priority: FOSS > PLAY > TESTING > default
+ifeq ($(FOSS),y)
+MANIFEST_PACKAGE = org.xcsoar.foss
+MANIFEST_APP_LABEL = @string/app_name
+else ifeq ($(PLAY),y)
+MANIFEST_PACKAGE = org.xcsoar.play
+MANIFEST_APP_LABEL = @string/app_name
+else ifeq ($(TESTING),y)
+MANIFEST_PACKAGE = org.xcsoar.testing
+MANIFEST_APP_LABEL = @string/app_name_testing
+else
+MANIFEST_PACKAGE = org.xcsoar
+MANIFEST_APP_LABEL = @string/app_name
+endif
+
+# Set XCSOAR_TESTING based on package name (for red resources in testing builds)
+ifeq ($(MANIFEST_PACKAGE),org.xcsoar.testing)
+  TARGET_CPPFLAGS += -DXCSOAR_TESTING
+endif
+
+# Generate a processed manifest with the custom package name
+MANIFEST_PROCESSED = $(NO_ARCH_OUTPUT_DIR)/AndroidManifest.xml
+MANIFEST_PACKAGE_STAMP = $(NO_ARCH_OUTPUT_DIR)/.manifest_package.stamp
+MANIFEST = $(MANIFEST_PROCESSED)
+
+$(MANIFEST_PACKAGE_STAMP): FORCE | $(NO_ARCH_OUTPUT_DIR)/dirstamp
+	@if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "$(MANIFEST_PACKAGE)" ]; then \
+		echo "$(MANIFEST_PACKAGE)" > $@.tmp && mv $@.tmp $@; \
+	fi
+
+$(MANIFEST_PROCESSED): $(MANIFEST_TEMPLATE) $(MANIFEST_PACKAGE_STAMP) | $(NO_ARCH_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  PROCESS $@"
+	$(Q)sed -e 's/@PACKAGE_NAME@/$(MANIFEST_PACKAGE)/g' \
+		-e 's|@APP_LABEL@|$(MANIFEST_APP_LABEL)|g' \
+		$< > $@
+
 
 ### Sources
 
@@ -157,7 +197,8 @@ JAVA_SOURCES := \
 ### Resources build
 
 # Images
-ifeq ($(TESTING),y)
+# Use red icon only for testing package (check package name, not just TESTING flag)
+ifeq ($(MANIFEST_PACKAGE),org.xcsoar.testing)
 ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
 else
 ICON_SVG = $(topdir)/Data/graphics/logo.svg
@@ -165,22 +206,28 @@ endif
 
 ICON_WHITE_SVG = $(topdir)/Data/graphics/logo_white.svg
 
-$(RES_DIR)/drawable-ldpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-ldpi/dirstamp
+ICON_PACKAGE_STAMP = $(RES_DIR)/.icon_package.stamp
+$(ICON_PACKAGE_STAMP): FORCE | $(RES_DIR)/dirstamp
+	@if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "$(MANIFEST_PACKAGE)" ]; then \
+		echo "$(MANIFEST_PACKAGE)" > $@.tmp && mv $@.tmp $@; \
+	fi
+
+$(RES_DIR)/drawable-ldpi/icon.png: $(ICON_SVG) $(ICON_PACKAGE_STAMP) | $(RES_DIR)/drawable-ldpi/dirstamp
 	$(Q)rsvg-convert --width=36 $< -o $@
 
-$(RES_DIR)/drawable/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable/dirstamp
+$(RES_DIR)/drawable/icon.png: $(ICON_SVG) $(ICON_PACKAGE_STAMP) | $(RES_DIR)/drawable/dirstamp
 	$(Q)rsvg-convert --width=48 $< -o $@
 
-$(RES_DIR)/drawable-hdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-hdpi/dirstamp
+$(RES_DIR)/drawable-hdpi/icon.png: $(ICON_SVG) $(ICON_PACKAGE_STAMP) | $(RES_DIR)/drawable-hdpi/dirstamp
 	$(Q)rsvg-convert --width=72 $< -o $@
 
-$(RES_DIR)/drawable-xhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xhdpi/dirstamp
+$(RES_DIR)/drawable-xhdpi/icon.png: $(ICON_SVG) $(ICON_PACKAGE_STAMP) | $(RES_DIR)/drawable-xhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
-$(RES_DIR)/drawable-xxhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xxhdpi/dirstamp
+$(RES_DIR)/drawable-xxhdpi/icon.png: $(ICON_SVG) $(ICON_PACKAGE_STAMP) | $(RES_DIR)/drawable-xxhdpi/dirstamp
 	$(Q)rsvg-convert --width=144 $< -o $@
 
-$(RES_DIR)/drawable-xxxhdpi/icon.png: $(ICON_SVG) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
+$(RES_DIR)/drawable-xxxhdpi/icon.png: $(ICON_SVG) $(ICON_PACKAGE_STAMP) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=192 $< -o $@
 
 $(RES_DIR)/drawable/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable/dirstamp
@@ -206,7 +253,7 @@ PNG2 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_LAUNCH_ALL
 $(PNG2): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG3 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_80) $(BMP_SPLASH_160) $(BMP_TITLE_110) $(BMP_TITLE_320))
+PNG3 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80) $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110))
 $(PNG3): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
@@ -247,12 +294,6 @@ ANDROID_XML_RES_COPIES := $(patsubst android/res/%,$(RES_DIR)/%,$(ANDROID_XML_RE
 $(ANDROID_XML_RES_COPIES): $(RES_DIR)/%: android/res/%
 	$(Q)-$(MKDIR) -p $(dir $@)
 	$(Q)cp $< $@
-
-ifeq ($(TESTING),y)
-MANIFEST = android/testing/AndroidManifest.xml
-else
-MANIFEST = android/AndroidManifest.xml
-endif
 
 # Convert resources to protobuf format with AAPT2 (build and unzip an apk)
 $(PROTOBUF_OUT_DIR)/dirstamp: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) $(MANIFEST) | $(GEN_DIR)/dirstamp $(COMPILED_RES_DIR)/dirstamp
