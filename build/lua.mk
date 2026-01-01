@@ -41,9 +41,15 @@ ifeq ($(TARGET),ANDROID)
 LUA_SOURCES += $(SRC)/lua/Android.cpp
 endif
 
-LUA_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS) $(LIBHTTP_CPPFLAGS)
+LUA_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
 LUA_DEPENDS = LIBLUA
+
+ifeq ($(USE_THIRDPARTY_LIBS),y)
+# libcurl is static in third-party builds, so avoid dllimport symbols
+LUA_CPPFLAGS_INTERNAL += -DCURL_STATICLIB
+LUA_DEPENDS += CURL
+endif
 
 $(eval $(call link-library,liblua,LUA))
 

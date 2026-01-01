@@ -41,6 +41,7 @@ class AirspaceWarningListWidget final
   Button *ack_day_button;
   Button *enable_button;
   Button *radio_button;
+  Button *details_button;
 
   std::vector<AirspaceWarning> warning_list;
 
@@ -67,6 +68,7 @@ public:
     ack_day_button = buttons.AddButton(_("ACK Day"), [this](){ AckDay(); });
     enable_button = buttons.AddButton(_("Enable"), [this](){ Enable(); });
     radio_button = buttons.AddButton(_("Radio"), [this](){ Radio(); });
+    details_button = buttons.AddButton(_("Details"), [this](){ Details(); });
   }
 
   void CopyList();
@@ -83,6 +85,7 @@ public:
   void AckDay();
   void Enable();
   void Radio() noexcept;
+  void Details() noexcept;
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -128,6 +131,7 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_day_button->SetEnabled(false);
     enable_button->SetEnabled(false);
     radio_button->SetEnabled(false);
+    details_button->SetEnabled(false);
     return;
   }
 
@@ -144,6 +148,7 @@ AirspaceWarningListWidget::UpdateButtons()
   ack_day_button->SetEnabled(!ack_day);
   enable_button->SetEnabled(!ack_expired);
   radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
+  details_button->SetEnabled(true);
 }
 
 void
@@ -262,6 +267,13 @@ AirspaceWarningListWidget::Radio() noexcept
       selected_airspace->GetRadioFrequency().IsDefined())
     ActionInterface::SetActiveFrequency(selected_airspace->GetRadioFrequency(),
                                         selected_airspace->GetName());
+}
+
+void
+AirspaceWarningListWidget::Details() noexcept
+{
+  if (selected_airspace != nullptr)
+    dlgAirspaceDetails(selected_airspace, &airspace_warnings);
 }
 
 void

@@ -16,7 +16,7 @@
 static void
 Draw(Canvas &canvas, PixelRect rc,
      const AbstractAirspace &airspace,
-     const TCHAR *comment,
+     const TCHAR *comment, const TCHAR *name,
      const TwoTextRowsRenderer &row_renderer,
      const AirspaceLook &look,
      const AirspaceRendererSettings &renderer_settings)
@@ -47,7 +47,7 @@ Draw(Canvas &canvas, PixelRect rc,
   row_renderer.DrawSecondRow(canvas, rc, comment);
 
   // Draw airspace name
-  row_renderer.DrawFirstRow(canvas, rc, airspace.GetName());
+  row_renderer.DrawFirstRow(canvas, rc, name);
 }
 
 void
@@ -57,8 +57,16 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClassOrType(airspace),
-         row_renderer, look, renderer_settings);
+  const TCHAR *class_or_type = AirspaceFormatter::GetClassOrType(airspace);
+  // NOTAMs: display type (e.g., "NOTAM") as primary, name as secondary
+  // Others: display name as primary, class/type as secondary
+  if (airspace.GetClassOrType() == AirspaceClass::NOTAM) {
+    ::Draw(canvas, rc, airspace, airspace.GetName(), class_or_type,
+           row_renderer, look, renderer_settings);
+  } else {
+    ::Draw(canvas, rc, airspace, class_or_type, airspace.GetName(),
+           row_renderer, look, renderer_settings);
+  }
 }
 
 void
@@ -69,12 +77,20 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  StaticString<256> comment(AirspaceFormatter::GetClassOrType(airspace));
+  const TCHAR *class_or_type = AirspaceFormatter::GetClassOrType(airspace);
+  StaticString<256> comment(class_or_type);
 
   comment.AppendFormat(_T(" - %s - %s"),
                        FormatUserDistanceSmart(vector.distance).c_str(),
                        FormatBearing(vector.bearing).c_str());
 
-  ::Draw(canvas, rc, airspace, comment,
-         row_renderer, look, renderer_settings);
+  const TCHAR *name = airspace.GetName();
+  if (airspace.GetClassOrType() == AirspaceClass::NOTAM) {
+    // NOTAMs: name is primary, class/type + distance + bearing as secondary
+    ::Draw(canvas, rc, airspace, name, comment,
+           row_renderer, look, renderer_settings);
+  } else {
+    ::Draw(canvas, rc, airspace, comment, name,
+           row_renderer, look, renderer_settings);
+  }
 }
