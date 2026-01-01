@@ -21,18 +21,18 @@ void
 dlgQuickGuideShowModal()
 {
   const std::array<const TCHAR*, 6> titles = {
-    _("Getting started: Welcome"),
-    _("Getting started: Gestures"),
-    _("Getting started: Configuration"),
-    _("Getting started: Preflight"),
-    _("Getting started: Postflight"),
-    _("Getting started: Show again"),
+    _("Quick Guide: Welcome"),
+    _("Quick Guide: Gestures"),
+    _("Quick Guide: Configuration"),
+    _("Quick Guide: Preflight"),
+    _("Quick Guide: Postflight"),
+    _("Quick Guide: Show again"),
   };
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Getting started"));
+                      look, _("Quick Guide"));
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button, dialog.MakeModalResultCallback(mrOK));
 

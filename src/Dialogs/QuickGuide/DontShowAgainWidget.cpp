@@ -39,7 +39,7 @@ void DontShowAgainWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) 
   );
 
   info_text.Prepare(parent, MakeTextRect(rc, MakeCheckboxRect(rc)));
-  info_text.SetText(_("This popup can be accessed anytime from the menu under Info → Getting Started."));
+  info_text.SetText(_("This popup can be accessed anytime from the menu under Info → Quick Guide."));
 }
 
 void DontShowAgainWidget::Show(const PixelRect &rc) noexcept {
