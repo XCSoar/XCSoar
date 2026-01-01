@@ -120,7 +120,8 @@ TEST_NAMES = \
 	TestThermalBand \
 	TestPackedFloat \
 	TestVersionNumber \
-	TestWeglideScoring
+	TestWeglideScoring \
+	TestHttpsVerify
 
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
@@ -2493,3 +2494,11 @@ TEST_VERSION_NUMBER_SOURCES = \
 	$(TEST_SRC_DIR)/TestVersionNumber.cpp
 TEST_VERSION_NUMBER_DEPENDS = MATH UTILS
 $(eval $(call link-program,TestVersionNumber,TEST_VERSION_NUMBER))
+
+TEST_HTTPS_VERIFY_SOURCES = \
+	$(SRC)/net/SocketError.cxx \
+	$(SRC)/Version.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestHttpsVerify.cpp
+TEST_HTTPS_VERIFY_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD UTIL
+$(eval $(call link-program,TestHttpsVerify,TEST_HTTPS_VERIFY))
