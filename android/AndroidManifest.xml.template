@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="@PACKAGE_NAME@"
           android:installLocation="auto"
-          android:versionCode="176"
+          android:versionCode="181"
           android:versionName="7.44">
   <!-- requestLegacyExternalStorage: Deprecated but still needed for
        compatibility with /sdcard/XCSoarData on Android 10 devices.
@@ -39,12 +39,6 @@
         <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
       </intent-filter>
 
-      <intent-filter>
-        <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
-      </intent-filter>
-      <intent-filter>
-        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-      </intent-filter>
       <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
                  android:resource="@xml/accessory_filter" />
       <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
@@ -88,7 +82,7 @@
 
   </application>
 
-  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33"/>
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35"/>
 
   <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
                    android:usesPermissionFlags="neverForLocation"/>
@@ -101,6 +95,9 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
 
+  <!-- required since Android 13 / targetSdkVersion 33+ for posting notifications -->
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
   <!-- legacy Bluetooth permission, required on older Android versions -->
   <uses-permission android:name="android.permission.BLUETOOTH"
                    android:maxSdkVersion="30"/>
@@ -109,6 +106,9 @@
 
   <!-- required since Android 9 / targetSdkVersion 28 -->
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+  <!-- required since Android 14 / targetSdkVersion 34+ for foreground services with type="location" -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
 
   <!-- required since Android 10 / targetSdkVersion 29 -->
   <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
