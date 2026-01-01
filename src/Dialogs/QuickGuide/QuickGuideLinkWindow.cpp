@@ -17,6 +17,10 @@ QuickGuideLinkWindow::DrawLink(Canvas &canvas, std::size_t index, PixelRect rc,
   const unsigned height = canvas.DrawFormattedText(rc, text, DT_LEFT | DT_UNDERLINE);
   canvas.SetTextColor(COLOR_BLACK);
 
+  if (index >= link_rects.size()) {
+    link_rects.resize(index + 1);
+  }
+
   link_rects[index] = {rc.left, rc.top, rc.right, rc.top + int(height)};
 
   return height;
