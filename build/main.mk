@@ -553,6 +553,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Apple/Services.cpp \
 	$(SRC)/Apple/SoundUtil.cpp \
+	$(SRC)/Apple/PathProvider.cpp \
 	$(SRC)/Apple/InternalSensors.cpp \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif

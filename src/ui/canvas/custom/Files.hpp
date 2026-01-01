@@ -3,24 +3,24 @@
 
 #pragma once
 
-class AllocatedPath;
+#include "system/Path.hpp"
 
-[[gnu::const]]
+[[nodiscard]]
 AllocatedPath
-FindDefaultFont();
+FindDefaultFont() noexcept;
 
-[[gnu::const]]
+[[nodiscard]]
 AllocatedPath
-FindDefaultBoldFont();
+FindDefaultBoldFont() noexcept;
 
-[[gnu::const]]
+[[nodiscard]]
 AllocatedPath
-FindDefaultItalicFont();
+FindDefaultItalicFont() noexcept;
 
-[[gnu::const]]
+[[nodiscard]]
 AllocatedPath
-FindDefaultBoldItalicFont();
+FindDefaultBoldItalicFont() noexcept;
 
-[[gnu::const]]
+[[nodiscard]]
 AllocatedPath
-FindDefaultMonospaceFont();
+FindDefaultMonospaceFont() noexcept;

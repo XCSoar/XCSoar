@@ -83,7 +83,6 @@ struct GPSState
    */
   bool simulator;
 
-#if defined(ANDROID) || defined(__APPLE__)
   /**
    * Was this fix obtained from an internal GPS device for which
    * link timeout detection must be disabled? This is the case on
@@ -91,7 +90,6 @@ struct GPSState
    * from the OS when the GPS gets disconnected.
    */
   bool nonexpiring_internal_gps;
-#endif
 
   void Reset() noexcept;
   void Expire(TimeStamp now) noexcept;
