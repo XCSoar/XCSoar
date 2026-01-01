@@ -163,7 +163,7 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 33 <http://developer.android.com/sdk/>`__
+- `Android SDK level 35 <http://developer.android.com/sdk/>`__
 
 - `Android NDK r26d <http://developer.android.com/sdk/ndk/>`__
 
@@ -180,14 +180,14 @@ On Debian::
 
 The required Android SDK components are:
 
-- Android SDK Build-Tools 33.0.2
+- Android SDK Build-Tools 35.0.0
 
-- SDK Platform 33
+- SDK Platform 35
 
 These can be installed from the Android Studio SDK Manager, or using the
 SDK command line tools:
 
-tools/bin/sdkmanager  "build-tools;33.0.2"  "platforms;android-33"
+tools/bin/sdkmanager  "build-tools;35.0.0"  "platforms;android-35"
 
 The ``Makefile`` assumes that the Android SDK is installed in
 ``~/opt/android-sdk-linux`` and the NDK is installed in
