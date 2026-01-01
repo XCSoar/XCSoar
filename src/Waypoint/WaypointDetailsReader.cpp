@@ -14,6 +14,7 @@
 #include "io/ConfiguredFile.hpp"
 #include "io/FileReader.hxx"
 #include "io/MapFile.hpp"
+#include "io/WaypointDataFile.hpp"
 #include "io/ProgressReader.hpp"
 #include "io/StringConverter.hpp"
 #include "io/ZipReader.hpp"
@@ -129,6 +130,26 @@ ReadFileFromProfile(Waypoints &way_points,
       ReadFile(buffered_reader, way_points);
     } catch (...) {
       LogError(std::current_exception());
+    }
+  }
+
+  // Load from waypoint data archives
+  paths = Profile::GetMultiplePaths(ProfileKeys::WaypointDataFileList,
+                                    _T("*.xcd\0"));
+  for (const auto &path : paths) {
+    try {
+      if (auto reader = OpenInWaypointDataFile(path, "waypoint_details.txt")) {
+        ProgressReader progress_reader{*reader, reader->GetSize(), progress};
+        BufferedReader buffered_reader{progress_reader};
+        ReadFile(buffered_reader, way_points);
+      } else if (auto reader = OpenInWaypointDataFile(path, "airfields.txt")) {
+        ProgressReader progress_reader{*reader, reader->GetSize(), progress};
+        BufferedReader buffered_reader{progress_reader};
+        ReadFile(buffered_reader, way_points);
+      }
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to load waypoint details from waypoint data file");
     }
   }
 
