@@ -26,7 +26,8 @@ public:
   /**
    * Throws on error.
    */
-  explicit Display(EGLNativeDisplayType native_display);
+  explicit Display(EGLNativeDisplayType native_display,
+                   unsigned antialiasing_samples = 0);
 
   ~Display() noexcept;
 
@@ -58,7 +59,8 @@ public:
   }
 
 private:
-  void InitDisplay(EGLNativeDisplayType native_display);
+  void InitDisplay(EGLNativeDisplayType native_display,
+                   unsigned antialiasing_samples);
   void CreateContext();
 };
 

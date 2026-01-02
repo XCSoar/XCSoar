@@ -10,9 +10,10 @@
 
 namespace EGL {
 
-Display::Display(EGLNativeDisplayType native_display)
+Display::Display(EGLNativeDisplayType native_display,
+                 unsigned antialiasing_samples)
 {
-  InitDisplay(native_display);
+  InitDisplay(native_display, antialiasing_samples);
   CreateContext();
 }
 
@@ -39,7 +40,8 @@ GetConfigAttrib(EGLDisplay display, EGLConfig config,
 }
 
 inline void
-Display::InitDisplay(EGLNativeDisplayType native_display)
+Display::InitDisplay(EGLNativeDisplayType native_display,
+                     unsigned antialiasing_samples)
 {
   assert(display == EGL_NO_DISPLAY);
 
@@ -62,7 +64,7 @@ Display::InitDisplay(EGLNativeDisplayType native_display)
   if (!eglBindAPI(EGL_OPENGL_ES_API))
     throw std::runtime_error("eglBindAPI() failed");
 
-  chosen_config = EGL::ChooseConfig(display);
+  chosen_config = EGL::ChooseConfig(display, antialiasing_samples);
 
   LogFormat("EGL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
             GetConfigAttrib(display, chosen_config, EGL_RED_SIZE, 0),
