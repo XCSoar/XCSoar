@@ -54,6 +54,12 @@ extern GLenum render_buffer_stencil;
 extern unsigned max_antialiasing_samples;
 
 /**
+ * Currently configured antialiasing samples (0 = disabled).
+ * Should only change on restart, so no protection necessary.
+ */
+extern unsigned antialiasing_samples;
+
+/**
  * The dimensions of the OpenGL window in pixels.
  */
 extern UnsignedPoint2D window_size;

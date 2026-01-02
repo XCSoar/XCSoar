@@ -8,6 +8,6 @@
 namespace EGL {
 
 EGLConfig
-ChooseConfig(EGLDisplay display);
+ChooseConfig(EGLDisplay display, unsigned antialiasing_samples = 0);
 
 } // namespace EGL
