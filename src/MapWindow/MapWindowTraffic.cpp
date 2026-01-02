@@ -11,6 +11,8 @@
 #include "FLARM/Friends.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "util/StringCompare.hxx"
+#include "Formatter/Units.hpp"
+#include "Units/Units.hpp"
 
 #include <cassert>
 
@@ -44,20 +46,26 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
       // Draw the name 16 points below the icon
       auto sc_name = sc;
       sc_name.y -= Layout::Scale(20);
-
-      TextInBox(canvas, traffic.name, sc_name,
+      size_t len = traffic.name.length();
+      if (len >= 2) {
+      TextInBox(canvas, traffic.name.c_str() + len - 2, sc_name,
                 mode, projection.GetScreenRect());
+      }
     }
 
-    if (!fading && traffic.climb_rate_avg30s >= 0.1) {
-      // If average climb data available draw it to the canvas
+    if (!fading) {
+      // hight data
+      TCHAR label_rla[12];
+      label_rla[0] = '\0';
+      const short relalt =
+      iround(Units::ToUserAltitude(traffic.relative_altitude) / 100);
+      if (relalt) sprintf(label_rla,"  %+d",static_cast<int>(relalt));
 
-      // Draw the average climb value above the icon
+      // Draw the relative hight value beside the icon
       auto sc_av = sc;
       sc_av.y += Layout::Scale(5);
 
-      TextInBox(canvas,
-                FormatUserVerticalSpeed(traffic.climb_rate_avg30s, false),
+      TextInBox(canvas, label_rla,
                 sc_av, mode,
                 projection.GetScreenRect());
     }

@@ -24,6 +24,8 @@
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
+#include "UISettings.hpp"
+#include "ui/canvas/Color.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -42,6 +44,7 @@ public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
     :FlarmTrafficWindow(look, Layout::Scale(10),
                         Layout::GetMinimumControlHeight() + Layout::Scale(10)) {}
+  UISettings uisettings = CommonInterface::GetUISettings();
 
 protected:
   void CalcAutoZoom();
@@ -287,23 +290,29 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
     return;
 
   canvas.Select(look.radar_pen);
-  canvas.SelectHollowBrush();
+  const Color color = COLOR_GRAY;
+  Brush brush(color);
+  canvas.Select(brush);
 
-  BulkPixelPoint triangle[3];
-  triangle[0].x = 0;
-  triangle[0].y = -(int)radar_renderer.GetRadius() / Layout::FastScale(1) + 15;
-  triangle[1].x = 7;
-  triangle[1].y = triangle[0].y + 30;
-  triangle[2].x = -triangle[1].x;
-  triangle[2].y = triangle[1].y;
+  int offset = -(int)radar_renderer.GetRadius()/Layout::FastScale(1)/4;
 
-  PolygonRotateShift(triangle, radar_renderer.GetCenter(),
+  BulkPixelPoint arrow[] = {
+    { -1, offset-40 },
+    { -1, offset-62 },
+    { -6, offset-62 },
+    {  0, offset-70 },
+    {  6, offset-62 },
+    {  1, offset-62 },
+    {  1, offset-40 },
+  };
+
+  PolygonRotateShift(arrow, radar_renderer.GetCenter(),
                      task_direction - (enable_north_up ?
                                        Angle::Zero() : heading),
                      Layout::FastScale(100u));
 
   // Draw the arrow
-  canvas.DrawPolygon(triangle, 3);
+  canvas.DrawPolygon(arrow, 7);
 }
 
 void
@@ -533,7 +542,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   canvas.SetBackgroundTransparent();
 
   // Climb Rate
-  if (!WarningMode() && traffic.climb_rate_avg30s_available)
+  if (!WarningMode() && traffic.climb_rate_avg30s_available && !uisettings.show_menu_button)
     PaintClimbRate(canvas, rc, traffic.climb_rate_avg30s);
 
   // Distance
@@ -554,9 +563,9 @@ FlarmTrafficControl::OnPaint(Canvas &canvas) noexcept
 {
   canvas.Clear(look.background_color);
 
-  PaintTaskDirection(canvas);
   FlarmTrafficWindow::Paint(canvas);
   PaintTrafficInfo(canvas);
+  PaintTaskDirection(canvas);
 }
 
 void
@@ -915,6 +924,9 @@ TrafficWidget::UpdateButtons() noexcept
   windows->previous_item_button.SetEnabled(unlocked && two_or_more);
   windows->next_item_button.SetEnabled(unlocked && two_or_more);
   windows->details_button.SetEnabled(unlocked && not_empty);
+
+  windows->zoom_in_button.SetVisible(false);
+  windows->zoom_out_button.SetVisible(false);
 }
 
 void
@@ -940,7 +952,7 @@ TrafficWidget::Show(const PixelRect &rc) noexcept
   UpdateLayout();
 
   /* show the "Close" button only if this is a "special" page */
-  windows->close_button.SetVisible(CommonInterface::GetUIState().pages.special_page.IsDefined());
+  windows->close_button.SetVisible(false);
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }

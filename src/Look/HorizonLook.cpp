@@ -8,7 +8,7 @@
 void
 HorizonLook::Initialise()
 {
-  aircraft_pen.Create(Layout::Scale(1), aircraft_color);
+  aircraft_pen.Create(Layout::ScalePenWidth(5), aircraft_color);
   aircraft_brush.Create(aircraft_color);
 
   mark_pen.Create(Layout::Scale(1), COLOR_WHITE);

@@ -19,7 +19,7 @@ static constexpr const TCHAR *acTypes[] = {
   _T("Airship"),
   _T("UAV"),
   _T("Unknown"),
-  _T("StaticObject") 
+  _T("StaticObject")
 };
 
 const TCHAR *

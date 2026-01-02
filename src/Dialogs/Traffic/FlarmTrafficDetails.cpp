@@ -192,6 +192,14 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
     value = _T("--");
 
   SetText(VARIO, value);
+
+  // Fill callsign from actual traffic data
+  if (target_ok && target->HasName())
+    value = target->name;
+  else
+    value = _T("--");
+
+  SetText(CALLSIGN, value);
 }
 
 /**

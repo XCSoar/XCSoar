@@ -40,7 +40,7 @@ HorizonRenderer::drawAircraftSymbol(Canvas &canvas, const PixelPoint &center,
                   {center.x + radius / 10, center.y});
   canvas.DrawLine({center.x - radius / 10, center.y + radius / 10},
                   {center.x - radius / 10, center.y});
-  canvas.DrawCircle(center, 2);
+  canvas.DrawCircle(center, 7);
 }
 
 int

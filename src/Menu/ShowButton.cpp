@@ -45,6 +45,10 @@ void
 ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                    ButtonState state) const noexcept
 {
+  const UISettings &settings = CommonInterface::GetUISettings();
+  if (!settings.show_menu_button)
+    return;
+
   const unsigned pen_width = Layout::ScalePenWidth(2);
   const unsigned padding = Layout::GetTextPadding() + pen_width;
 

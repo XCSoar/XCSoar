@@ -243,10 +243,9 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayout_flarm(rc, ib_layout);
 
   const UISettings &settings = CommonInterface::GetUISettings();
-  if (settings.show_menu_button){
-    show_menu_button = new ShowMenuButton();
-    show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
-  }
+  show_menu_button = new ShowMenuButton();
+  show_menu_button->Create(*this, GetShowMenuButtonRect(map_rect));
+
   if (settings.show_zoom_button) {
     show_zoom_out_button = new ShowZoomOutButton();
     show_zoom_out_button->Create(*this, GetShowZoomOutButtonRect(map_rect));

@@ -436,8 +436,8 @@ static constexpr MetaData meta_data[] = {
   // e_TimeLocal
   {
     N_("Time local"),
-    N_("Time loc"),
-    N_("GPS time expressed in local time zone."),
+    N_("Time loc/SS"),
+    N_("GPS time expressed in local time zone / sunset time."),
     UpdateInfoBoxTimeLocal,
   },
 
@@ -825,8 +825,8 @@ static constexpr MetaData meta_data[] = {
   // e_WP_ETE_VMG
   {
     N_("Next time to go (ground speed)"),
-    N_("WP ETE VMG"),
-    N_("Estimated time required to reach next waypoint, assuming current ground speed is maintained."),
+    N_("WP ETE/A"),
+    N_("Estimated time required to reach next waypoint / Arrival time at next waypoint, assuming current ground speed is maintained."),
     UpdateInfoBoxNextETEVMG,
     next_waypoint_infobox_panels,
   },

@@ -22,6 +22,9 @@ enum Mode {
 };
 
 void
+KoboScreenshot() noexcept;
+
+void
 ProcessTimer() noexcept;
 
 void
