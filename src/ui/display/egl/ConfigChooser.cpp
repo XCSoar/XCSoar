@@ -3,6 +3,7 @@
 
 #include "ConfigChooser.hpp"
 #include "lib/fmt/RuntimeError.hxx"
+#include "LogFile.hpp"
 
 #ifdef MESA_KMS
 #include "ui/canvas/egl/GBM.hpp"
@@ -48,7 +49,8 @@ AttribDistance(EGLDisplay display, EGLConfig config,
 static int
 ConfigDistance(EGLDisplay display, EGLConfig config,
                int want_r, int want_g, int want_b, int want_a,
-               int want_depth, int want_stencil) noexcept
+               int want_depth, int want_stencil,
+               int want_samples) noexcept
 {
   int distance = 0;
 
@@ -64,8 +66,9 @@ ConfigDistance(EGLDisplay display, EGLConfig config,
   int a = AttribDistance(display, config, EGL_ALPHA_SIZE, want_a);
   int d = AttribDistance(display, config, EGL_DEPTH_SIZE, want_depth);
   int s = AttribDistance(display, config, EGL_STENCIL_SIZE, want_stencil);
+  int samples = AttribDistance(display, config, EGL_SAMPLES, want_samples);
 
-  return distance + r + g + b + a + d + s;
+  return distance + r + g + b + a + d + s + samples;
 }
 
 [[gnu::pure]]
@@ -74,15 +77,16 @@ FindClosestConfig(EGLDisplay display,
                   std::span<const EGLConfig> configs,
                   int want_r, int want_g, int want_b,
                   int want_a,
-                  int want_depth, int want_stencil) noexcept
+                  int want_depth, int want_stencil,
+                  int want_samples) noexcept
 {
   EGLConfig closestConfig = nullptr;
-  int closestDistance = 1000;
+  int closestDistance = 10000;
 
   for (EGLConfig config : configs) {
     int distance = ConfigDistance(display, config,
                                   want_r, want_g, want_b, want_a,
-                                  want_depth, want_stencil);
+                                  want_depth, want_stencil, want_samples);
     if (distance < closestDistance) {
       closestDistance = distance;
       closestConfig = config;
@@ -120,7 +124,7 @@ FindConfigWithAttribute(EGLDisplay display,
 #endif /* MESA_KMS */
 
 EGLConfig
-ChooseConfig(EGLDisplay display)
+ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
 {
   static constexpr EGLint attributes[] = {
 #ifdef ANDROID
@@ -163,6 +167,7 @@ ChooseConfig(EGLDisplay display)
     throw std::runtime_error("eglChooseConfig() failed");
 
 #ifdef MESA_KMS
+  (void)antialiasing_samples; // not yet supported on MESA_KMS
   /* On some GBM targets, such as the Raspberry Pi 4,
      eglChooseConfig() gives us an EGLConfig which will later fail
      eglCreateWindowSurface() with EGL_BAD_MATCH.  Only the EGLConfig
@@ -178,12 +183,17 @@ ChooseConfig(EGLDisplay display)
 #elif defined(ANDROID)
   const auto closest_config =
     FindClosestConfig(display, {configs.data(), std::size_t(num_configs)},
-                      5, 6, 5, 0, 0, 1);
+                      5, 6, 5, 0, 0, 1, antialiasing_samples);
   if (closest_config == nullptr)
     throw std::runtime_error("eglChooseConfig() failed");
 
+  LogFormat("EGL config: samples=%d (requested %u)",
+            GetConfigAttrib(display, closest_config, EGL_SAMPLES, 0),
+            antialiasing_samples);
+
   return closest_config;
 #else
+  (void)antialiasing_samples; // not yet supported
   return configs[0];
 #endif
 }
