@@ -32,7 +32,7 @@ GetConfigAttrib(_XDisplay *display, GLXFBConfig config,
 
 #endif
 
-Display::Display(unsigned antialiasing_samples)
+Display::Display([[maybe_unused]] unsigned antialiasing_samples)
   :display(XOpenDisplay(nullptr))
 {
   if (display == nullptr)

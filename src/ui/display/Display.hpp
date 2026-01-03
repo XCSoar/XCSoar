@@ -57,7 +57,7 @@ class Display
 public:
   explicit Display(unsigned antialiasing_samples = 0)
     :X11::Display(antialiasing_samples),
-     EGL::Display(X11::Display::GetXDisplay()),
+     EGL::Display(X11::Display::GetXDisplay(), antialiasing_samples),
      OpenGL::Display(antialiasing_samples) {}
 };
 
