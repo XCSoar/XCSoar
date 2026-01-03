@@ -24,4 +24,15 @@ void
 SaveFlarmNames() noexcept;
 
 void
+SaveFlarmMessaging() noexcept;
+
+/**
+ * Save the FLARM messaging database at most every few minutes.
+ * Intended for frequent update call sites (e.g., parser) to avoid
+ * excessive disk writes while still persisting data regularly.
+ */
+void
+SaveFlarmMessagingPeriodic() noexcept;
+
+void
 DeinitTrafficGlobals() noexcept;

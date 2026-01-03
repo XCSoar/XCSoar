@@ -8,7 +8,7 @@
 
 int main()
 {
-  plan_tests(1);
+  plan_tests(2);
 
   std::array<std::byte, 32> expected = {
     std::byte{0x9e}, std::byte{0x52}, std::byte{0x22}, std::byte{0x98},
@@ -28,6 +28,12 @@ int main()
   raw_hash = ParseHexString<32>(hex_str);
 
   ok1(raw_hash == expected);
+
+  const std::string_view hex_str_2 = std::string_view(
+    "416E6472C3A965204DC3BC6C6C6572");
+  std::string result = ParseHexString(hex_str_2);
+
+  ok1(result == "Andrée Müller");
 
   return exit_status();
 }
