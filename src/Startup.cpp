@@ -574,11 +574,15 @@ Startup(UI::Display &display)
 
   PageActions::Update();
 
+#ifdef HAVE_HTTP
   net_components = new NetComponents(*asio_thread, *Net::curl,
                                      computer_settings.tracking);
+#endif
+#ifdef HAVE_HTTP
 #ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());
+#endif
 #endif
 
 #ifdef HAVE_HTTP
@@ -743,8 +747,10 @@ Shutdown()
   noaa_store = nullptr;
 #endif
 
+#ifdef HAVE_HTTP
   delete net_components;
   net_components = nullptr;
+#endif
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Deinitialise();

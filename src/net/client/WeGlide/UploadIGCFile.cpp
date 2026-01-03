@@ -2,6 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "UploadIGCFile.hpp"
+#include "system/Path.hpp"
+
+#ifdef HAVE_HTTP
+
 #include "UploadFlight.hpp"
 #include "Settings.hpp"
 #include "Interface.hpp"
@@ -16,7 +20,6 @@
 #include "lib/fmt/tchar.hxx"
 #include "net/http/Init.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
-#include "system/Path.hpp"
 #include "util/StaticString.hxx"
 #include "util/ConvertString.hpp"
 
@@ -134,3 +137,17 @@ try {
 }
 
 } // namespace WeGlide
+
+#else // !HAVE_HTTP
+
+namespace WeGlide {
+
+bool
+UploadIGCFile(Path) noexcept
+{
+  return false;
+}
+
+} // namespace WeGlide
+
+#endif

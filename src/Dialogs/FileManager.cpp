@@ -200,6 +200,7 @@ protected:
     const std::lock_guard lock{mutex};
     return downloads.find(name) != downloads.end();
 #else
+    (void)name;
     return false;
 #endif
   }
@@ -220,6 +221,8 @@ protected:
     status_r = i->second;
     return true;
 #else
+    (void)name;
+    (void)status_r;
     return false;
 #endif
   }
@@ -235,6 +238,7 @@ protected:
     const std::lock_guard lock{mutex};
     return failures.find(name) != failures.end();
 #else
+    (void)name;
     return false;
 #endif
   }
@@ -347,9 +351,13 @@ ManagedFileListWidget::RefreshList()
 {
   items.clear();
 
+#ifdef HAVE_DOWNLOAD_MANAGER
   some_out_of_date = false;
+#endif
 
+#ifdef HAVE_DOWNLOAD_MANAGER
   bool download_active = false;
+#endif
   for (auto i = repository.begin(), end = repository.end(); i != end; ++i) {
     const auto &remote_file = *i;
     DownloadStatus download_status;
@@ -360,7 +368,9 @@ ManagedFileListWidget::RefreshList()
 
     if (path != nullptr &&
         (is_downloading || file_exists)) {
+#ifdef HAVE_DOWNLOAD_MANAGER
       download_active |= is_downloading;
+#endif
 
       const Path base = path.GetBase();
       if (base == nullptr)
@@ -371,8 +381,10 @@ ManagedFileListWidget::RefreshList()
         BrokenDate local_changed = BrokenDateTime{File::GetLastModification(path)};
         is_out_of_date = (local_changed < remote_file.update_date);
 
+#ifdef HAVE_DOWNLOAD_MANAGER
         if (is_out_of_date)
           some_out_of_date = true;
+#endif
       }
 
       items.append().Set(base.c_str(),
@@ -403,6 +415,8 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog) noexcept
       UpdateFiles();
     });
   }
+#else
+  (void)dialog;
 #endif
 }
 

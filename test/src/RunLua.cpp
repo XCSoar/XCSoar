@@ -3,12 +3,15 @@
 
 #include "lua/Basic.hpp"
 #include "lua/Log.hpp"
-#include "lua/Http.hpp"
 #include "lua/Geo.hpp"
 #include "lua/RunFile.hxx"
 #include "lua/Ptr.hpp"
 #include "system/Args.hpp"
 #include "util/PrintException.hxx"
+
+#ifdef HAVE_HTTP
+#include "lua/Http.hpp"
+#endif
 
 extern "C" {
 #include <lua.h>
@@ -31,7 +34,9 @@ try {
 
   Lua::StatePtr state(Lua::NewBasicState());
   Lua::InitLog(state.get());
+#ifdef HAVE_HTTP
   Lua::InitHttp(state.get());
+#endif
   Lua::InitGeo(state.get());
 
   lua_register(state.get(), "alert", l_alert);

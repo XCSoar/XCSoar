@@ -54,9 +54,8 @@
 
 #ifdef HAVE_TRACKING
 #include "Panels/TrackingConfigPanel.hpp"
-#endif
-
 #include "Panels/CloudConfigPanel.hpp"
+#endif
 
 #if defined(HAVE_PCMET) || defined(HAVE_HTTP)
 #include "Panels/WeatherConfigPanel.hpp"
@@ -126,8 +125,8 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Time"), CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
-#endif
   { _T("XCSoar Cloud"), CreateCloudConfigPanel },
+#endif
 #if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   { N_("Weather"), CreateWeatherConfigPanel },
 #endif

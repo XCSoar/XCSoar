@@ -43,7 +43,9 @@ void
 WeatherConfigPanel::Prepare(ContainerWindow &parent,
                             const PixelRect &rc) noexcept
 {
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   const auto &settings = CommonInterface::GetComputerSettings().weather;
+#endif
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -74,7 +76,9 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   auto &settings = CommonInterface::SetComputerSettings().weather;
+#endif
 
 #ifdef HAVE_PCMET
   changed |= SaveValue(PCMET_USER, ProfileKeys::PCMetUsername,

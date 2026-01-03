@@ -4,9 +4,13 @@
 #include "MapWindow.hpp"
 #include "Look/MapLook.hpp"
 #include "ui/canvas/Icon.hpp"
+#ifdef HAVE_SKYLINES_TRACKING
 #include "Tracking/SkyLines/Data.hpp"
+#endif
+#ifdef HAVE_HTTP
 #include "net/client/tim/Glue.hpp"
 #include "net/client/tim/Thermal.hpp"
+#endif
 
 template<typename T>
 static void
@@ -49,6 +53,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
                      calculated.wind_available
                      ? calculated.wind : SpeedVector::Zero());
 
+#ifdef HAVE_SKYLINES_TRACKING
   const auto &cloud_settings = GetComputerSettings().tracking.skylines.cloud;
   if (cloud_settings.show_thermals && skylines_data != nullptr) {
     const std::lock_guard lock{skylines_data->mutex};
@@ -58,11 +63,14 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
         look.thermal_source_icon.Draw(canvas, *p);
     }
   }
+#endif
 
+#ifdef HAVE_HTTP
   if (tim_glue != nullptr && GetComputerSettings().weather.enable_tim) {
     const auto lock = tim_glue->Lock();
     for (const auto &i : tim_glue->Get())
       if (auto p = render_projection.GeoToScreenIfVisible(i.location))
         look.thermal_source_icon.Draw(canvas, *p);
   }
+#endif
 }
