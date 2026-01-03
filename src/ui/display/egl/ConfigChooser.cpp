@@ -14,7 +14,7 @@
 
 namespace EGL {
 
-#ifdef ANDROID
+#if defined(ANDROID) || (defined(USE_EGL) && defined(USE_X11))
 
 [[gnu::pure]]
 static int
@@ -180,7 +180,7 @@ ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
                                 EGL_NATIVE_VISUAL_ID,
                                 XCSOAR_GBM_FORMAT_FALLBACK);
   return i >= 0 ? configs[i] : configs[0];
-#elif defined(ANDROID)
+#elif defined(ANDROID) || (defined(USE_EGL) && defined(USE_X11))
   const auto closest_config =
     FindClosestConfig(display, {configs.data(), std::size_t(num_configs)},
                       5, 6, 5, 0, 0, 1, antialiasing_samples);
