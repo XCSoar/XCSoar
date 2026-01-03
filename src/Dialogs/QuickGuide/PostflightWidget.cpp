@@ -1,0 +1,220 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "PostflightWidget.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Font.hpp"
+#include "Look/FontDescription.hpp"
+#include "Language/Language.hpp"
+#include "util/StaticString.hxx"
+#include "Look/DialogLook.hpp"
+#include "UIGlobals.hpp"
+#include "Dialogs/Dialogs.h"
+#include "Dialogs/Device/DeviceListDialog.hpp"
+#include "Dialogs/dlgAnalysis.hpp"
+#include "Interface.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+#include "MainWindow.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
+#include "Profile/Profile.hpp"
+
+#include <winuser.h>
+
+PixelSize PostflightWidget::GetMinimumSize() const noexcept {
+  return { Layout::FastScale(200), Layout::FastScale(200) };
+}
+
+PixelSize PostflightWidget::GetMaximumSize() const noexcept {
+  return { Layout::FastScale(300), Layout::FastScale(500) };
+}
+
+void
+PostflightWidget::Initialise(ContainerWindow &parent,
+                             const PixelRect &rc) noexcept
+{
+  WindowStyle style;
+  style.Hide();
+  auto w = std::make_unique<PostflightWindow>();
+  w->Create(parent, rc, style);
+  SetWindow(std::move(w));
+}
+
+void
+PostflightWindow::OnPaint(Canvas &canvas) noexcept
+{
+  const PixelRect rc = GetClientRect();
+
+  canvas.Clear();
+
+  int margin = Layout::FastScale(10);
+  int x = rc.left + margin;
+  int x_indent = x + Layout::FastScale(17);
+  int y = rc.top + margin;
+
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  const Font &fontDefault = look.text_font;
+  
+  Font fontMono;
+  fontMono.Load(FontDescription(Layout::VptScale(10), false, false, true));
+
+  canvas.Select(fontDefault);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(COLOR_BLACK);
+
+  const TCHAR *t0 = _("After your flight, there are several steps to check "
+                      "and complete.");
+  PixelRect t0_rc{x, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t0_height = canvas.DrawFormattedText(t0_rc, t0, DT_LEFT);
+  y += int(t0_height) + margin;
+
+  // 1. Download Flight Log
+  canvas.DrawText({x, y}, _T("1.)"));
+  StaticString<1024> t1;
+  t1 = _("Download flight logs from your connected NMEA device, such "
+         "as a FLARM unit or another supported logger.");
+  t1 += _T(" ");
+  t1 += _("List available logs and save them in XCSoarData/logs, "
+          "from where they can be manually uploaded to other devices "
+          "or platforms such as WeGlide.");
+  PixelRect t1_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t1_height = canvas.DrawFormattedText(t1_rc, t1.c_str(), DT_LEFT);
+  y += int(t1_height) + margin / 2;
+  canvas.Select(fontMono);
+  const TCHAR *l1 = _("Config → Devices → Flight download");
+  PixelRect l1_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned l1_height = DrawLink(canvas, LinkAction::FLIGHT_DOWNLOAD, l1_rc, l1);
+  canvas.Select(fontDefault);
+  y += int(l1_height) + margin;
+
+  // 2. Flight Analysis
+  canvas.DrawText({x, y}, _T("2.)"));
+  const TCHAR *t2 = _("Review statistical data from your flight such "
+                      "as your flight score, barograph, and glide "
+                      "polar analysis.");
+  PixelRect t2_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t2_height = canvas.DrawFormattedText(t2_rc, t2, DT_LEFT);
+  y += int(t2_height) + margin / 2;
+  canvas.Select(fontMono);
+  const TCHAR *l2 = _("Info → Analysis");
+  PixelRect l2_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned l2_height = DrawLink(canvas, LinkAction::ANALYSIS, l2_rc, l2);
+  canvas.Select(fontDefault);
+  y += int(l2_height) + margin;
+
+  // 3. Flight Status
+  canvas.DrawText({x, y}, _T("3.)"));
+  const TCHAR *t3 = _("Check detailed statistics and timing "
+                      "information of your flight.");
+  PixelRect t3_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t3_height = canvas.DrawFormattedText(t3_rc, t3, DT_LEFT);
+  y += int(t3_height) + margin / 2;
+  canvas.Select(fontMono);
+  const TCHAR *l3 = _("Info → Info → Status");
+  PixelRect l3_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned l3_height = DrawLink(canvas, LinkAction::STATUS, l3_rc, l3);
+  canvas.Select(fontDefault);
+  y += int(l3_height) + margin;
+
+  // 4. Upload Flight
+  canvas.DrawText({x, y}, _T("4.)"));
+  StaticString<1024> t4;
+  t4 = _("Flights can be uploaded directly from XCSoar to WeGlide.");
+  t4 += _T(" ");
+  t4 += _("For this, configure your WeGlide User ID and date of "
+          "birth in the system setup.");
+  t4 += _T(" ");
+  t4 += _("You can find your User ID on weglide.org under "
+          "'My profile' by copying the numbers from the URL.");
+  PixelRect t4_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned t4_height = canvas.DrawFormattedText(t4_rc, t4.c_str(), DT_LEFT);
+  y += int(t4_height) + margin / 2;
+  canvas.Select(fontMono);
+  const TCHAR *l4 = _("Config → System → Setup → WeGlide");
+  PixelRect l4_rc{x_indent, y, int(canvas.GetWidth()) - margin,
+                  int(canvas.GetHeight())};
+  unsigned l4_height = DrawLink(canvas, LinkAction::WEGLIDE, l4_rc, l4);
+  canvas.Select(fontDefault);
+  y += int(l4_height) + margin;
+}
+
+PostflightWindow::PostflightWindow() noexcept
+  : QuickGuideLinkWindow()
+{
+  const auto count = static_cast<std::size_t>(LinkAction::COUNT);
+  link_rects.resize(count);
+}
+
+bool
+PostflightWindow::HandleLink(LinkAction link) noexcept
+{
+  switch (link) {
+  case LinkAction::FLIGHT_DOWNLOAD:
+    if (backend_components != nullptr &&
+        backend_components->device_blackboard != nullptr) {
+      ShowDeviceList(*backend_components->device_blackboard,
+                     backend_components->devices.get());
+      return true;
+    }
+    break;
+
+  case LinkAction::ANALYSIS:
+    dlgAnalysisShowModal(*CommonInterface::main_window,
+                         CommonInterface::main_window->GetLook(),
+                         CommonInterface::Full(),
+                         *backend_components->glide_computer,
+                         data_components->airspaces.get(),
+                         data_components->terrain.get());
+    return true;
+
+  case LinkAction::STATUS:
+    dlgStatusShowModal(-1);
+    return true;
+
+  case LinkAction::WEGLIDE: {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("WeGlide"));
+    auto panel = CreateWeGlideConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged()) {
+      Profile::Save();
+    }
+    return true;
+  }
+
+  case LinkAction::COUNT:
+	break;
+  }
+
+  return false;
+}
+
+unsigned
+PostflightWindow::DrawLink(Canvas &canvas, LinkAction link_action,
+                           PixelRect rc, const TCHAR *text) noexcept
+{
+  return QuickGuideLinkWindow::DrawLink(canvas,
+                                        static_cast<std::size_t>(link_action),
+                                        rc, text);
+}
+
+bool
+PostflightWindow::OnLinkActivated(std::size_t link_action) noexcept
+{
+  return HandleLink(static_cast<LinkAction>(link_action));
+}

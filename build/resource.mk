@@ -220,6 +220,31 @@ else
 RESOURCE_FILES += $(PNG_BITMAPS)
 endif
 
+####### add gesture icons from docs
+
+GESTURES = d dl dr du l ldr ldrdl r rd rl u ud uldr urd urdl
+GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_, \
+	$(addsuffix .png,$(GESTURES)))
+GESTURES_PNG_WIN = $(addprefix $(DATA)/graphics/gesture_, \
+	$(addsuffix .png,$(GESTURES)))
+GESTURES_BMP_WIN = $(GESTURES_PNG_WIN:.png=.bmp)
+
+$(DATA)/graphics2/dirstamp:
+	@$(NQ)echo "  MKDIR   $(DATA)/graphics2/"
+	$(Q)mkdir -p $(DATA)/graphics2
+	@touch $@
+
+$(eval $(call rsvg-convert,$(GESTURES_DST), \
+	$(DATA)/graphics2/gesture_%.png, \
+	doc/manual/figures/gesture_%.svg, \
+	--width=82 --height=82))
+$(eval $(call rsvg-convert,$(GESTURES_PNG_WIN), \
+	$(DATA)/graphics/gesture_%.png, \
+	doc/manual/figures/gesture_%.svg, \
+	--width=82 --height=82))
+$(eval $(call convert-to-bmp-white,$(GESTURES_BMP_WIN),%.bmp,%.png))
+
+RESOURCE_FILES += $(GESTURES_DST)
 RESOURCE_FILES += $(BMP_ICONS_ALL)
 RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
@@ -240,6 +265,10 @@ RESOURCE_FILES := $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(RE
 RESOURCE_FILES := $(patsubst $(DATA)/icons/%.bmp,$(DATA)/icons2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst %.bmp,%.png,$(RESOURCE_FILES))
 endif #!USE_WIN32_RESOURCES
+
+ifeq ($(USE_WIN32_RESOURCES),y)
+RESOURCE_FILES += $(GESTURES_BMP_WIN)
+endif #USE_WIN32_RESOURCES
 
 endif #TARGET!=IOS
 endif #!TARGET_IS_ANDROID
