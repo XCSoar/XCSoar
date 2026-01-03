@@ -81,6 +81,9 @@ Display::Display([[maybe_unused]] unsigned antialiasing_samples)
         throw std::runtime_error("Failed to enable GLX context");
       
       return;
+    } else if (fb_cfg != nullptr) {
+      XFree(fb_cfg);
+      fb_cfg = nullptr;
     }
 
     LogFormat("Requested %ux anti-aliasing not available, disabling",
