@@ -7,7 +7,12 @@ IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 IPA_NAME = xcsoar.ipa
 IOS_APP_DIR_NAME = XCSoar.app
 
-IOS_APP_VERSION ?= 1.0.0
+ifeq ($(wildcard VERSION.txt),)
+$(error VERSION.txt is missing)
+endif
+
+IOS_PATCH_VERSION ?= 0
+IOS_APP_VERSION ?= $(shell cat VERSION.txt).$(IOS_PATCH_VERSION)
 IOS_APP_BUILD_NUMBER ?= 1
 
 ifeq ($(TESTING),y)
