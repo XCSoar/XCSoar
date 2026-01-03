@@ -114,24 +114,24 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     const unsigned max_samples = 0;
 #endif
     if (max_samples >= 2)
-      df.AddChoice(2, _T("2x"));
+      df.AddChoice(2, _("2x"));
     else
-      df.AddChoice(2, _T("2x (Not available)"));
+      df.AddChoice(2, _("2x (Not available)"));
 
     if (max_samples >= 4)
-      df.AddChoice(4, _T("4x"));
+      df.AddChoice(4, _("4x"));
     else
-      df.AddChoice(4, _T("4x (Not available)"));
+      df.AddChoice(4, _("4x (Not available)"));
 
     if (max_samples >= 8)
-      df.AddChoice(8, _T("8x"));
+      df.AddChoice(8, _("8x"));
     else
-      df.AddChoice(8, _T("8x (Not available)"));
+      df.AddChoice(8, _("8x (Not available)"));
 
     if (max_samples >= 16)
-      df.AddChoice(16, _T("16x"));
+      df.AddChoice(16, _("16x"));
     else
-      df.AddChoice(16, _T("16x (Not available)"));  
+      df.AddChoice(16, _("16x (Not available)"));  
 
     df.SetValue(settings.antialiasing);
     wp_antialiasing->RefreshDisplay();
