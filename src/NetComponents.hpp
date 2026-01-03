@@ -12,6 +12,7 @@ struct TrackingSettings;
 class EventLoop;
 class CurlGlobal;
 class TrackingGlue;
+class TrafficAggregator;
 namespace TIM { class Glue; }
 
 /**
@@ -25,6 +26,8 @@ struct NetComponents {
 #ifdef HAVE_HTTP
   const std::unique_ptr<TIM::Glue> tim;
 #endif
+
+  const std::unique_ptr<TrafficAggregator> traffic_aggregator;
 
   NetComponents(EventLoop &event_loop, CurlGlobal &curl,
                 const TrackingSettings &tracking_settings) noexcept;

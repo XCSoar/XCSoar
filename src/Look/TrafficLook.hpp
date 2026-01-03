@@ -41,6 +41,19 @@ struct TrafficLook {
   Pen team_pen_yellow;
   Pen team_pen_magenta;
 
+  // Traffic source outline pens
+  static constexpr Color source_color_flarm = Color(0x00, 0xff, 0x00);  // Green
+  static constexpr Color source_color_gliderlink = Color(0x00, 0x90, 0xff);  // Blue
+  static constexpr Color source_color_ogn = Color(0xff, 0xa2, 0x00);  // Orange
+  static constexpr Color source_color_skylines = Color(0xff, 0x00, 0xcb);  // Magenta
+  static constexpr Color source_color_stratux = Color(0xff, 0xff, 0x00);  // Yellow
+
+  Pen source_pen_flarm;
+  Pen source_pen_gliderlink;
+  Pen source_pen_ogn;
+  Pen source_pen_skylines;
+  Pen source_pen_stratux;
+
   MaskedIcon teammate_icon;
 
   const Font *font;

@@ -7,6 +7,10 @@
 #include "NMEA/MoreData.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Device/MultipleDevices.hpp"
+#include "Components.hpp"
+#include "NetComponents.hpp"
+#include "Traffic/Aggregator.hpp"
+#include "time/Cast.hxx"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
                          MultipleDevices *_devices) noexcept
@@ -45,6 +49,20 @@ MergeThread::Process() noexcept
 
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
+
+  // Feed FLARM traffic into aggregator
+  if (net_components != nullptr && net_components->traffic_aggregator != nullptr &&
+      basic.flarm.IsDetected() && basic.time_available) {
+    const TimeStamp now = basic.time;
+    for (const auto &traffic : basic.flarm.traffic.list) {
+      if (traffic.IsDefined()) {
+        net_components->traffic_aggregator->FeedFLARM(traffic, now);
+      }
+    }
+    
+    // Expire old traffic
+    net_components->traffic_aggregator->Expire(now);
+  }
 }
 
 void

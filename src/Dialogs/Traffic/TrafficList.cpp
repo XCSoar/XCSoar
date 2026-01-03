@@ -31,7 +31,10 @@
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "DataComponents.hpp"
+#include "Traffic/Aggregator.hpp"
 #include "Pan.hpp"
+
+#include <algorithm>
 
 using namespace std::chrono;
 
@@ -116,8 +119,9 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 #ifdef HAVE_SKYLINES_TRACKING
     explicit Item(uint32_t _id, SkyLinesTracking::Data::Time _time_of_day,
                   const GeoPoint &_location, int _altitude,
-                  tstring &&_name)
-      :id(FlarmId::Undefined()), skylines_id(_id),
+                  tstring &&_name, uint32_t _flarm_id = 0)
+      :id(_flarm_id != 0 ? FlarmId::FromValue(_flarm_id) : FlarmId::Undefined()),
+       skylines_id(_id),
        time_of_day(_time_of_day),
        color(FlarmColor::COUNT),
        loaded(false),
@@ -152,8 +156,14 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
         callsign = traffic_databases->FindNameById(id);
 #ifdef HAVE_SKYLINES_TRACKING
       } else if (IsSkyLines()) {
-        record = nullptr;
-        callsign = nullptr;
+        // If this SkyLines traffic has a FlarmId, try to look it up
+        if (id.IsDefined()) {
+          record = traffic_databases->flarm_net.FindRecordById(id);
+          callsign = traffic_databases->FindNameById(id);
+        } else {
+          record = nullptr;
+          callsign = nullptr;
+        }
 #endif
       } else {
         gcc_unreachable();
@@ -165,6 +175,11 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     void AutoLoad() {
       if (IsFlarm() && color == FlarmColor::COUNT)
         color = traffic_databases->GetColor(id);
+#ifdef HAVE_SKYLINES_TRACKING
+      else if (IsSkyLines() && id.IsDefined() && color == FlarmColor::COUNT)
+        // If SkyLines traffic has a FlarmId, use it for color lookup
+        color = traffic_databases->GetColor(id);
+#endif
 
       if (!loaded)
         Load();
@@ -372,6 +387,26 @@ TrafficListWidget::UpdateList()
       AddItem(i.id);
     }
 
+    /* add unified traffic from aggregator (OGN, SkyLines, etc.) */
+    if (net_components != nullptr && net_components->traffic_aggregator != nullptr &&
+        CommonInterface::Basic().location_available && CommonInterface::Basic().time_available) {
+      const GeoPoint own_location = CommonInterface::Basic().location;
+      const TimeStamp now = CommonInterface::Basic().time;
+      TrafficList unified_list = net_components->traffic_aggregator->GetUnifiedTrafficList(
+        own_location, now);
+      
+      for (const auto &i : unified_list.list) {
+        // Only add if not already in list (avoid duplicates)
+        auto existing = std::find_if(items.begin(), items.end(),
+                                      [&i](const Item &item) {
+                                        return item.id == i.id;
+                                      });
+        if (existing == items.end()) {
+          AddItem(i.id);
+        }
+      }
+    }
+
     /* add FLARM peers that have a user-defined color */
     for (const auto &i : traffic_databases->flarm_colors) {
       Item &item = AddItem(i.first);
@@ -398,7 +433,7 @@ TrafficListWidget::UpdateList()
 
         items.emplace_back(i.first, i.second.time_of_day,
                            i.second.location, i.second.altitude,
-                           std::move(name));
+                           std::move(name), i.second.flarm_id);
         Item &item = items.back();
 
         if (i.second.location.IsValid()) {
@@ -436,6 +471,18 @@ TrafficListWidget::UpdateVolatile()
   Validity max_time;
   max_time.Clear();
 
+  // Get unified traffic for location updates
+  TrafficList unified_list;
+  bool has_unified = false;
+  if (net_components != nullptr && net_components->traffic_aggregator != nullptr &&
+      CommonInterface::Basic().location_available && CommonInterface::Basic().time_available) {
+    const GeoPoint own_location = CommonInterface::Basic().location;
+    const TimeStamp now = CommonInterface::Basic().time;
+    unified_list = net_components->traffic_aggregator->GetUnifiedTrafficList(
+      own_location, now);
+    has_unified = !unified_list.IsEmpty();
+  }
+
   for (auto &i : items) {
     if (i.IsFlarm()) {
       const FlarmTraffic *live = live_list.FindTraffic(i.id);
@@ -454,6 +501,21 @@ TrafficListWidget::UpdateVolatile()
         i.location = live->location;
         i.vector = GeoVector(live->distance, live->track);
       } else {
+        // Check unified traffic if not found in FLARM list
+        if (has_unified) {
+          const FlarmTraffic *unified = unified_list.FindTraffic(i.id);
+          if (unified != nullptr && unified->location_available) {
+            if (i.location != unified->location)
+              modified = true;
+            
+            i.location = unified->location;
+            if (i.location.IsValid() && CommonInterface::Basic().location_available) {
+              i.vector = GeoVector(CommonInterface::Basic().location, i.location);
+            }
+            continue;
+          }
+        }
+        
         if (i.location.IsValid() || i.vector.IsValid())
           /* this item has disappeared from our FLARM: redraw the
              list */
@@ -727,8 +789,15 @@ TrafficListWidget::OnActivateItem(unsigned index) noexcept
   if (buttons == nullptr)
     /* it's a traffic picker: finish the dialog */
     dialog.SetModalResult(mrOK);
-  else
-    OpenDetails(index);
+  else {
+    /* Pan to traffic location if valid, otherwise open details */
+    Item &item = items[index];
+    if (item.location.IsValid()) {
+      OpenMap(index);
+    } else {
+      OpenDetails(index);
+    }
+  }
 }
 
 void

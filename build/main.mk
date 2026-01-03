@@ -638,7 +638,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Key.cpp \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
-	$(SRC)/Tracking/TrackingGlue.cpp
+	$(SRC)/Tracking/TrackingGlue.cpp \
+	$(SRC)/Traffic/Aggregator.cpp
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
