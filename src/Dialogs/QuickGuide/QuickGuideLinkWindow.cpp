@@ -10,11 +10,12 @@
 QuickGuideLinkWindow::QuickGuideLinkWindow() noexcept = default;
 
 unsigned
-QuickGuideLinkWindow::DrawLink(Canvas &canvas, std::size_t index, PixelRect rc,
-                               const TCHAR *text) noexcept
+QuickGuideLinkWindow::DrawLink(Canvas &canvas, std::size_t index, 
+                                PixelRect rc, const TCHAR *text) noexcept
 {
   canvas.SetTextColor(COLOR_BLUE);
-  const unsigned height = canvas.DrawFormattedText(rc, text, DT_LEFT | DT_UNDERLINE);
+  const unsigned height = canvas.DrawFormattedText(rc, text, 
+                                                    DT_LEFT | DT_UNDERLINE);
   canvas.SetTextColor(COLOR_BLACK);
 
   if (index >= link_rects.size()) {

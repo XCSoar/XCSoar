@@ -63,11 +63,13 @@ PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_160.png,$(SVG
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
 PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_80.png,$(SVG_SPLASH))
 BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
+PNG_SPLASH_160_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_160_rgba.png,$(SVG_SPLASH))
 
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_SPLASH_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_160),$(DATA)/graphics/%_160.png,Data/graphics/%.svg,--width=160))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_80),$(DATA)/graphics/%_80.png,Data/graphics/%.svg,--width=80))
+$(eval $(call rsvg-convert,$(PNG_SPLASH_160_RGBA),$(DATA)/graphics2/%_160_rgba.png,Data/graphics/%.svg,--width=160))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp-white,$(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.png))
@@ -107,11 +109,13 @@ PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_
 BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
 PNG_TITLE_640 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_640.png,$(SVG_TITLE))
 BMP_TITLE_640 = $(PNG_TITLE_640:.png=.bmp)
+PNG_TITLE_320_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_320_rgba.png,$(SVG_TITLE))
 
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_TITLE_110),$(DATA)/graphics/%_110.png,Data/graphics/%.svg,--width=110))
 $(eval $(call rsvg-convert,$(PNG_TITLE_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_TITLE_640),$(DATA)/graphics/%_640.png,Data/graphics/%.svg,--width=640))
+$(eval $(call rsvg-convert,$(PNG_TITLE_320_RGBA),$(DATA)/graphics2/%_320_rgba.png,Data/graphics/%.svg,--width=320))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp-white,$(BMP_TITLE_110) $(BMP_TITLE_320) $(BMP_TITLE_640),%.bmp,%.png))
@@ -249,6 +253,10 @@ RESOURCE_FILES += $(BMP_ICONS_ALL)
 RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110)
+ifneq ($(USE_WIN32_RESOURCES),y)
+RESOURCE_FILES += $(PNG_SPLASH_160_RGBA)
+RESOURCE_FILES += $(PNG_TITLE_320_RGBA)
+endif
 RESOURCE_FILES += $(BMP_LAUNCH_ALL)
 
 RESOURCE_FILES += $(RAW_SOUNDS)
