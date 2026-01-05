@@ -27,6 +27,7 @@
 #include "UtilsSettings.hpp"
 #include "BackendComponents.hpp"
 #include "Components.hpp"
+#include "Interface.hpp"
 #include "Airspace/Patterns.hpp"
 #include "Waypoint/Patterns.hpp"
 
@@ -134,9 +135,11 @@ ConfigurationWindow::OnPaint(Canvas &canvas) noexcept
 
   // Aircraft polar
   canvas.Select(fontMono);
-  const char *c4 = Profile::Get(ProfileKeys::Polar); // TODO does not work
+  const bool has_plane_path = Profile::GetPath("PlanePath") != nullptr;
+  const bool has_polar = has_plane_path &&
+    CommonInterface::GetComputerSettings().plane.polar_shape.IsValid();
   canvas.DrawText({x, y + icon_offset},
-                  (c4 == nullptr || StringIsEmpty(c4)) ? undone : done);
+                  !has_polar ? undone : done);
   canvas.Select(fontDefault);
   const TCHAR *t4 = _("Add your aircraft and, most importantly, select "
                       "the corresponding polar curve and activate the "
