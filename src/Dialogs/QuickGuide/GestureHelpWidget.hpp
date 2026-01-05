@@ -17,6 +17,10 @@ class GestureHelpWindow final : public PaintWindow {
          rl_img{IDB_GESTURE_RL}, up_img{IDB_GESTURE_UP}, ud_img{IDB_GESTURE_UD},
          uldr_img{IDB_GESTURE_ULDR}, urd_img{IDB_GESTURE_URD}, urdl_img{IDB_GESTURE_URDL};
 
+public:
+  static unsigned Layout(Canvas *canvas, const PixelRect &rc,
+                         GestureHelpWindow *window) noexcept;
+
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
 };

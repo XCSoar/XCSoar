@@ -19,6 +19,8 @@ class PostflightWindow final : public QuickGuideLinkWindow {
 
 public:
   PostflightWindow() noexcept;
+  static unsigned Layout(Canvas *canvas, const PixelRect &rc,
+                         PostflightWindow *window) noexcept;
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
 private:
