@@ -27,6 +27,8 @@ class ConfigurationWindow final : public QuickGuideLinkWindow {
   };
 public:
   ConfigurationWindow() noexcept;
+  static unsigned Layout(Canvas *canvas, const PixelRect &rc,
+                         ConfigurationWindow *window) noexcept;
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
 private:

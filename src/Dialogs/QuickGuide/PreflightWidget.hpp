@@ -22,6 +22,8 @@ class PreflightWindow final : public QuickGuideLinkWindow {
 
 public:
   PreflightWindow() noexcept;
+  static unsigned Layout(Canvas *canvas, const PixelRect &rc,
+                         PreflightWindow *window) noexcept;
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
 private:
