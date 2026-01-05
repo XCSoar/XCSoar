@@ -15,6 +15,11 @@
 #include <string.h>
 #include <winuser.h>
 
+#ifndef DT_UNDERLINE
+// DT_UNDERLINE is from XCSoar's winuser.h, but in Windows the Windows winuser.h is used
+#define DT_UNDERLINE 0x800
+#endif
+
 void
 Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
 {
