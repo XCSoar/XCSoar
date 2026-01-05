@@ -26,7 +26,11 @@ PixelPoint translate;
 glm::mat4 projection_matrix;
 
 #ifndef NDEBUG
+#ifdef _WIN32
+DWORD thread;
+#else
 pthread_t thread;
+#endif
 #endif
 
 } // namespace OpenGL
