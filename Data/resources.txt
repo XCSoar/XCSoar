@@ -90,10 +90,16 @@ bitmap_icon_scaled IDB_SMALL "map_small"
 bitmap_graphic IDB_LOGO_UHD "logo_red_320"
 bitmap_graphic IDB_LOGO_HD "logo_red_160"
 bitmap_graphic IDB_LOGO "logo_red_80"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LOGO_HD_RGBA "logo_red_160_rgba"
+#endif
 #else
 bitmap_graphic IDB_LOGO_UHD "logo_320"
 bitmap_graphic IDB_LOGO_HD "logo_160"
 bitmap_graphic IDB_LOGO "logo_80"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LOGO_HD_RGBA "logo_160_rgba"
+#endif
 #endif
 bitmap_icon_scaled IDB_TARGET "map_target"
 bitmap_icon_scaled IDB_TEAMMATE_POS "map_teammate"
@@ -137,10 +143,16 @@ bitmap_graphic IDB_GESTURE_URDL "gesture_urdl"
 bitmap_graphic IDB_TITLE "title_red_110"
 bitmap_graphic IDB_TITLE_HD "title_red_320"
 bitmap_graphic IDB_TITLE_UHD "title_red_640"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_TITLE_HD_RGBA "title_red_320_rgba"
+#endif
 #else
 bitmap_graphic IDB_TITLE "title_110"
 bitmap_graphic IDB_TITLE_HD "title_320"
 bitmap_graphic IDB_TITLE_UHD "title_640"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_TITLE_HD_RGBA "title_320_rgba"
+#endif
 #endif
 bitmap_icon_scaled IDB_WEATHER_STATION "map_weather_station"
 

@@ -13,6 +13,9 @@
 #include "Renderer/TextRenderer.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#endif
 
 #include <winuser.h>
 
@@ -44,18 +47,40 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
     canvas->SetTextColor(COLOR_BLACK);
   }
 
+#ifdef ENABLE_OPENGL
+  // OpenGL builds use RGBA PNGs for transparency.
+  Bitmap logo_alpha(IDB_LOGO_HD_RGBA);
+  Bitmap title_alpha(IDB_TITLE_HD_RGBA);
+  PixelSize logo_size = logo_alpha.GetSize();
+  const int x_logo = rc.GetWidth() / 2 - (logo_size.width / 2);
+  if (canvas != nullptr) {
+    const ScopeAlphaBlend alpha_blend;
+    canvas->Copy({x_logo, y}, logo_size, logo_alpha, {0, 0});
+  }
+#else
+  // Non-OpenGL builds use opaque bitmaps.
   Bitmap logo(IDB_LOGO_HD);
   PixelSize logo_size = logo.GetSize();
   const int x_logo = rc.GetWidth() / 2 - (logo_size.width / 2);
   if (canvas != nullptr)
     canvas->Copy({x_logo, y}, logo_size, logo, {0, 0});
+#endif
   y += int(logo_size.height) + half_margin;
 
+#ifdef ENABLE_OPENGL
+  PixelSize title_size = title_alpha.GetSize();
+  const int x_title = rc.GetWidth() / 2 - (title_size.width / 2);
+  if (canvas != nullptr) {
+    const ScopeAlphaBlend alpha_blend;
+    canvas->Copy({x_title, y}, title_size, title_alpha, {0, 0});
+  }
+#else
   Bitmap title(IDB_TITLE_HD);
   PixelSize title_size = title.GetSize();
   const int x_title = rc.GetWidth() / 2 - (title_size.width / 2);
   if (canvas != nullptr)
     canvas->Copy({x_title, y}, title_size, title, {0, 0});
+#endif
   y += int(title_size.height) + margin * 2;
 
   const TCHAR *t0 = _("Welcome to XCSoar");
@@ -197,3 +222,6 @@ bool WelcomeWindow::OnMouseUp(PixelPoint p) noexcept {
   }
   return false;
 }
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#endif
