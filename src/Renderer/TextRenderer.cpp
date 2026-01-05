@@ -8,6 +8,11 @@
 
 #include <winuser.h>
 
+/* DT_UNDERLINE is an XCSoar extension not present in Windows headers */
+#ifndef DT_UNDERLINE
+#define DT_UNDERLINE 0x800
+#endif
+
 unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
                         tstring_view text) const noexcept

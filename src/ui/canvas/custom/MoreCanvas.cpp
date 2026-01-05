@@ -15,6 +15,11 @@
 #include <string.h>
 #include <winuser.h>
 
+#ifndef DT_UNDERLINE
+// DT_UNDERLINE is from winuser.h, but in Windows without GDI
+#define DT_UNDERLINE 0x00800000
+#endif
+
 void
 Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
 {
