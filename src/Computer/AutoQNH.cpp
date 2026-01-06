@@ -62,4 +62,6 @@ AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
 {
   calculated.pressure = AtmosphericPressure::FindQNHFromPressure(basic.static_pressure, altitude);
   calculated.pressure_available.Update(basic.clock);
+  calculated.pressure_elevation = altitude;
+  calculated.pressure_elevation_available.Update(basic.clock);
 }

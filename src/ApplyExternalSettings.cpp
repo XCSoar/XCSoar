@@ -7,6 +7,8 @@
 #include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "Device/MultipleDevices.hpp"
+#include "Math/Util.hpp"
+#include "LogFile.hpp"
 
 static bool
 BallastProcessTimer() noexcept
@@ -15,23 +17,22 @@ BallastProcessTimer() noexcept
 
   static Validity last_fraction, last_overload;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
-  const Plane &plane = CommonInterface::GetComputerSettings().plane;
-  const GlidePolar &polar = CommonInterface::GetComputerSettings().polar.glide_polar_task;
 
   if (settings.ballast_fraction_available.Modified(last_fraction)) {
-    ActionInterface::SetBallast(settings.ballast_fraction, false);
+    using namespace CommonInterface;
+    GlidePolar &polar_mutable = SetComputerSettings().polar.glide_polar_task;
+    polar_mutable.SetBallastFraction(settings.ballast_fraction);
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
     modified = true;
   }
 
   last_fraction = settings.ballast_fraction_available;
 
-  if (settings.ballast_overload_available.Modified(last_overload) &&
-      settings.ballast_overload >= 0.8 && plane.max_ballast > 0) {
-    auto overload =
-        ((settings.ballast_overload * plane.polar_shape.reference_mass) -
-         polar.GetCrewMass() - plane.empty_mass) /
-        plane.max_ballast;
-    ActionInterface::SetBallast(overload, false);
+  if (settings.ballast_overload_available.Modified(last_overload)) {
+    using namespace CommonInterface;
+    GlidePolar &polar_mutable = SetComputerSettings().polar.glide_polar_task;
+    polar_mutable.SetBallastOverload(settings.ballast_overload);
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
     modified = true;
   }
 
@@ -93,8 +94,14 @@ QNHProcessTimer(OperationEnvironment &env) noexcept
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
-    if (backend_components->devices)
+    if (backend_components->devices) {
       backend_components->devices->PutQNH(settings_computer.pressure, env);
+
+      if (calculated.pressure_elevation_available.IsValid()) {
+        int elevation = iround(calculated.pressure_elevation);
+        backend_components->devices->PutElevation(elevation, env);
+      }
+    }
 
     modified = true;
   }

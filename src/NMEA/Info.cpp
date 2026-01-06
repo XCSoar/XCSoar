@@ -122,6 +122,9 @@ NMEAInfo::Reset() noexcept
   pressure_altitude_available.Clear();
   pressure_altitude = 0;
 
+  igc_pressure_altitude_available.Clear();
+  igc_pressure_altitude = 0;
+
   time_available.Clear();
   time = {};
 
