@@ -20,6 +20,7 @@ QuickGuideScrollWidget::Initialise(ContainerWindow &parent,
   WindowStyle style;
   style.ControlParent();
   style.Hide();
+  style.TabStop();
 
   VScrollPanelListener &listener = *this;
   SetWindow(std::make_unique<VScrollPanel>(parent, look, rc, style,
@@ -110,4 +111,11 @@ QuickGuideScrollWidget::OnVScrollPanelChange() noexcept
     UpdateVirtualHeight(GetWindow().GetClientRect());
     widget->Move(ReserveScrollbar(GetWindow().GetVirtualRect()));
   }
+}
+
+bool
+QuickGuideScrollWidget::SetFocus() noexcept
+{
+  GetWindow().SetFocus();
+  return true;
 }

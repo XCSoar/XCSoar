@@ -8,6 +8,8 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "UIUtil/KineticManager.hpp"
 
+#include <memory>
+
 class VScrollPanelListener {
 public:
   virtual void OnVScrollPanelChange() noexcept = 0;
@@ -29,6 +31,14 @@ class VScrollPanel final : public PanelControl {
   VScrollPanelListener &listener;
 
   ScrollBar scroll_bar;
+
+  class ScrollBarButton;
+
+  std::unique_ptr<ScrollBarButton> up_button;
+  std::unique_ptr<ScrollBarButton> down_button;
+
+  PixelRect up_arrow_rect;
+  PixelRect down_arrow_rect;
 
   /**
    * The height of the virtual area which can be scrolled in.
@@ -64,6 +74,7 @@ public:
   VScrollPanel(ContainerWindow &parent, const DialogLook &look,
                const PixelRect &rc, const WindowStyle style,
                VScrollPanelListener &_listener) noexcept;
+  ~VScrollPanel() noexcept override;
 
   /**
    * Sets the virtual height and initialises the scroll bar.  This
@@ -103,11 +114,33 @@ private:
   void SetOriginClamped(int new_origin) noexcept;
   void OnKineticTimer() noexcept;
 
+  /**
+   * Update the position and visibility of scroll arrow buttons.
+   * Creates buttons lazily when the scroll bar is defined.
+   */
+  void UpdateArrowButtons() noexcept;
+
+  /**
+   * Scroll the panel by the specified delta.
+   *
+   * @param delta The scroll amount (positive = down, negative = up).
+   */
+  void ScrollBy(int delta) noexcept;
+
+  /**
+   * Get the scroll step size based on scroll bar width.
+   *
+   * @return The scroll step size, minimum 1.
+   */
+  [[gnu::pure]]
+  int GetScrollStep() const noexcept;
+
 protected:
   /* virtual methods from class Window */
   void OnResize(PixelSize new_size) noexcept override;
   void OnDestroy() noexcept override;
 
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
 
   bool OnMouseDown(PixelPoint p) noexcept override;
