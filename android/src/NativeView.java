@@ -14,6 +14,12 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowManager;
+import android.view.WindowMetrics;
+import android.graphics.Insets;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.net.Uri;
@@ -129,8 +135,36 @@ class NativeView extends SurfaceView
                                        int width, int height) {
     if (thread == null || !thread.isAlive())
       start();
-    else
-      resizedNative(width, height);
+    else {
+      Context context = getContext();
+      if (!(context instanceof Activity))
+        return;
+      
+      Activity activity = (Activity)context;
+      Window window = activity.getWindow();
+      View decorView = window.getDecorView();
+      
+      boolean is_fullscreen = false;
+      if (activity instanceof org.xcsoar.XCSoar) {
+        is_fullscreen = ((org.xcsoar.XCSoar)activity).wantFullScreen();
+      } else {
+        int systemUiVisibility = decorView.getSystemUiVisibility();
+        is_fullscreen = (systemUiVisibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0 ||
+                       (systemUiVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0;
+      }
+      
+      if (is_fullscreen) {
+        WindowUtil.enterFullScreenMode(window);
+      } else {
+        WindowUtil.leaveFullScreenMode(window, 0);
+      }
+      
+      int display_width = width;
+      int display_height = height;
+      int inset_left = 0, inset_top = 0, inset_right = 0, inset_bottom = 0;
+      
+      resizedNative(display_width, display_height, inset_left, inset_top, inset_right, inset_bottom);
+    }
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
@@ -141,6 +175,7 @@ class NativeView extends SurfaceView
     final Context context = getContext();
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
+    android.util.Log.d(TAG, "runNative: getSurfaceFrame() size=" + r.width() + "x" + r.height());
     DisplayMetrics metrics = new DisplayMetrics();
     ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
@@ -186,7 +221,7 @@ class NativeView extends SurfaceView
                                   int xdpi, int ydpi,
                                   String product);
 
-  protected native void resizedNative(int width, int height);
+  protected native void resizedNative(int width, int height, int inset_left, int inset_top, int inset_right, int inset_bottom);
 
   protected native void surfaceDestroyedNative();
 
@@ -321,20 +356,27 @@ class NativeView extends SurfaceView
       offsetY += p.getY();
     }
 
-    final int x = (int)(event.getX() - offsetX);
-    final int y = (int)(event.getY() - offsetY);
+    float x = event.getX() - offsetX;
+    float y = event.getY() - offsetY;
+    
+    /* Since we set margins on the SurfaceView in non-fullscreen mode, the SurfaceView
+       is already positioned in the safe area. The MotionEvent coordinates are already
+       relative to the SurfaceView, so we don't need to subtract insets. */
+    
+    final int finalX = (int)x;
+    final int finalY = (int)y;
 
     switch (event.getActionMasked()) {
     case MotionEvent.ACTION_DOWN:
-      EventBridge.onMouseDown(x, y);
+      EventBridge.onMouseDown(finalX, finalY);
       break;
 
     case MotionEvent.ACTION_UP:
-      EventBridge.onMouseUp(x, y);
+      EventBridge.onMouseUp(finalX, finalY);
       break;
 
     case MotionEvent.ACTION_MOVE:
-      EventBridge.onMouseMove(x, y);
+      EventBridge.onMouseMove(finalX, finalY);
       break;
 
     case MotionEvent.ACTION_POINTER_DOWN:
