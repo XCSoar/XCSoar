@@ -24,6 +24,17 @@ TopCanvas::SetupViewport(PixelSize native_size) noexcept
 bool
 TopCanvas::CheckResize(PixelSize new_native_size) noexcept
 {
+#ifdef ANDROID
+  if (IsReady()) {
+    if (new_native_size.width == OpenGL::window_size.x &&
+        new_native_size.height == OpenGL::window_size.y)
+      return false;
+
+    SetupViewport(new_native_size);
+    return true;
+  }
+#endif
+  
   if (new_native_size.width == OpenGL::window_size.x &&
       new_native_size.height == OpenGL::window_size.y)
     return false;
