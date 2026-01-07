@@ -437,7 +437,8 @@ MainWindow::ReinitialiseLayout() noexcept
     if (HaveBottomWidget())
       bottom_widget->Move(bottom_rect);
 
-    map->Move(GetMapRectAbove(main_rect, bottom_rect));
+    PixelRect map_rect_final = GetMapRectAbove(main_rect, bottom_rect);
+    map->Move(map_rect_final);
     map->FullRedraw();
   }
 
