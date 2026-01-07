@@ -16,8 +16,13 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
+import android.graphics.Insets;
+import android.graphics.Rect;
 import android.widget.TextView;
 import android.os.Build;
 import android.os.Environment;
@@ -196,6 +201,56 @@ public class XCSoar extends Activity implements PermissionManager {
       WindowUtil.enterFullScreenMode(window);
     else
       WindowUtil.leaveFullScreenMode(window, initialWindowFlags);
+    
+    if (nativeView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      final View decorView = window.getDecorView();
+      decorView.post(new Runnable() {
+        @Override
+        public void run() {
+          boolean is_fullscreen = wantFullScreen();
+          android.view.ViewGroup.LayoutParams layoutParams = nativeView.getLayoutParams();
+          
+          if (layoutParams instanceof android.view.ViewGroup.MarginLayoutParams) {
+            android.view.ViewGroup.MarginLayoutParams marginParams = 
+              (android.view.ViewGroup.MarginLayoutParams) layoutParams;
+            
+            if (is_fullscreen) {
+              marginParams.setMargins(0, 0, 0, 0);
+            } else {
+              WindowMetrics windowMetrics = getWindowManager().getCurrentWindowMetrics();
+              final WindowInsets windowInsets = windowMetrics.getWindowInsets();
+              Insets insets = windowInsets.getInsets(
+                WindowInsets.Type.statusBars() |
+                WindowInsets.Type.navigationBars() |
+                WindowInsets.Type.displayCutout());
+              marginParams.setMargins(insets.left, insets.top, insets.right, insets.bottom);
+            }
+            nativeView.setLayoutParams(marginParams);
+          }
+        }
+      });
+    }
+    
+    if (nativeView != null && Loader.loaded) {
+      final View decorView = window.getDecorView();
+      decorView.post(new Runnable() {
+        @Override
+        public void run() {
+          decorView.post(new Runnable() {
+            @Override
+            public void run() {
+              int display_width = nativeView.getWidth();
+              int display_height = nativeView.getHeight();
+              int inset_left = 0, inset_top = 0, inset_right = 0, inset_bottom = 0;
+              
+              if (display_width > 0 && display_height > 0) {
+                nativeView.resizedNative(display_width, display_height, inset_left, inset_top, inset_right, inset_bottom);
+              }
+            }
+          });
+        }
+      });
+    }
   }
 
   public void initNative() {
@@ -337,8 +392,11 @@ public class XCSoar extends Activity implements PermissionManager {
     /* Reapply fullscreen settings after orientation change.
        The display cutout mode and window layout parameters can be reset
        during orientation changes, so we need to reapply them. */
-    if (wantFullScreen())
-      WindowUtil.enterFullScreenMode(getWindow());
+    applyFullScreen();
+    
+    /* applyFullScreen() will handle updating the native view with the correct size.
+       No need to duplicate the logic here - applyFullScreen() already posts to decorView
+       to ensure layout is complete before getting the SurfaceView size. */
   }
 
   @Override
