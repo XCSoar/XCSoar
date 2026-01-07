@@ -317,15 +317,23 @@ try {
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
-                                         jint width, jint height)
+                                         jint width, jint height,
+                                         jint inset_left, jint inset_top,
+                                         jint inset_right, jint inset_bottom)
 {
+  (void)inset_left;
+  (void)inset_top;
+  (void)inset_right;
+  (void)inset_bottom;
+
   const std::scoped_lock shutdown_lock{shutdown_mutex};
 
   if (event_queue == nullptr)
     return;
 
-  if (auto *main_window = NativeView::GetPointer(env, obj))
+  if (auto *main_window = NativeView::GetPointer(env, obj)) {
     main_window->AnnounceResize({width, height});
+  }
 
   event_queue->Purge(UI::Event::RESIZE);
 
