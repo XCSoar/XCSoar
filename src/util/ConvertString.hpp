@@ -7,6 +7,7 @@
 
 #ifdef _UNICODE
 #include "AllocatedString.hxx"
+#include <concepts>
 #else
 #include "StringPointer.hxx"
 #endif
@@ -41,9 +42,22 @@ ConvertWideToUTF8(const wchar_t *p) noexcept;
 /**
  * @return nullptr on error
  */
+AllocatedString
+ConvertWideToUTF8(std::wstring_view p) noexcept;
+
+/**
+ * @return nullptr on error
+ */
 [[gnu::nonnull]]
 AllocatedString
 ConvertWideToACP(const wchar_t *p) noexcept;
+
+/**
+ * @return nullptr on error
+ */
+[[gnu::nonnull]]
+BasicAllocatedString<wchar_t>
+ConvertUTF8ToWide(std::string_view p) noexcept;
 
 #endif
 
@@ -65,6 +79,15 @@ class UTF8ToWideConverter {
 public:
 #ifdef _UNICODE
   UTF8ToWideConverter(const char *_value) noexcept
+    :value(ConvertUTF8ToWide(_value)) {}
+
+  /**
+   * Constructor for std::string_view. Uses a template with SFINAE to avoid
+   * ambiguity with types that can convert to both char* and string_view.
+   */
+  template<typename T>
+  requires std::same_as<T, std::string_view>
+  UTF8ToWideConverter(T _value) noexcept
     :value(ConvertUTF8ToWide(_value)) {}
 #else
   UTF8ToWideConverter(const_pointer _value) noexcept
@@ -99,6 +122,16 @@ public:
 
     return value.c_str();
   }
+
+#ifdef _UNICODE
+  /**
+   * Explicit conversion to std::wstring_view. Use this when passing
+   * to functions that take std::wstring_view or tstring_view.
+   */
+  std::wstring_view sv() const noexcept {
+    return value;
+  }
+#endif
 };
 
 /**
@@ -118,6 +151,16 @@ class WideToUTF8Converter {
 public:
 #ifdef _UNICODE
   WideToUTF8Converter(const wchar_t *_value) noexcept
+    :value(ConvertWideToUTF8(_value)) {}
+
+  /**
+   * Constructor for std::wstring_view. Uses a template with SFINAE to avoid
+   * ambiguity with types that can convert to both wchar_t* and wstring_view
+   * (like StaticString).
+   */
+  template<typename T>
+  requires std::same_as<T, std::wstring_view>
+  WideToUTF8Converter(T _value) noexcept
     :value(ConvertWideToUTF8(_value)) {}
 #else
   WideToUTF8Converter(const_pointer _value) noexcept
@@ -152,6 +195,16 @@ public:
 
     return value.c_str();
   }
+
+#ifdef _UNICODE
+  /**
+   * Explicit conversion to std::string_view. Use this when passing
+   * to functions that take std::string_view.
+   */
+  std::string_view sv() const noexcept {
+    return value;
+  }
+#endif
 };
 
 /**
