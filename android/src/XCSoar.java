@@ -372,7 +372,58 @@ public class XCSoar extends Activity implements PermissionManager {
     applyFullScreen();
   }
 
+  /**
+   * Threshold in pixels from the top edge where swipes should be
+   * ignored to allow system status bar gesture.
+   */
+  private static final int TOP_EDGE_THRESHOLD = 30;
+
+  /**
+   * Track the initial Y position of a touch gesture to detect
+   * top-edge swipes in fullscreen mode.
+   */
+  private float initialTouchY = -1;
+
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
+    /* In fullscreen mode, detect swipes from the very top edge and
+       let the system handle them (to show status bar) instead of
+       passing them to the app. */
+    if (wantFullScreen() && nativeView != null) {
+      final int action = ev.getActionMasked();
+      final float y = ev.getY();
+
+      switch (action) {
+      case MotionEvent.ACTION_DOWN:
+        /* Check if touch starts from the very top edge */
+        if (y <= TOP_EDGE_THRESHOLD) {
+          initialTouchY = y;
+          /* Let the system handle this touch to show status bar */
+          return false;
+        }
+        initialTouchY = -1;
+        break;
+
+      case MotionEvent.ACTION_MOVE:
+        /* If we started from the top edge and are moving downward,
+           continue letting the system handle it */
+        if (initialTouchY >= 0 && initialTouchY <= TOP_EDGE_THRESHOLD) {
+          final float dy = y - initialTouchY;
+          if (dy > 0) {
+            /* Moving downward from top edge - let system handle it */
+            return false;
+          }
+          /* Moving upward - cancel the gesture and pass to app */
+          initialTouchY = -1;
+        }
+        break;
+
+      case MotionEvent.ACTION_UP:
+      case MotionEvent.ACTION_CANCEL:
+        initialTouchY = -1;
+        break;
+      }
+    }
+
     if (nativeView != null) {
       nativeView.onTouchEvent(ev);
       return true;
