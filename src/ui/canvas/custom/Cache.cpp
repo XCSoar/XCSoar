@@ -175,7 +175,8 @@ TextCache::GetSize(const Font &font, std::string_view text) noexcept
     return *cached;
 
 #ifdef UNICODE
-  PixelSize size = font.TextSize(UTF8ToWideConverter(text));
+  UTF8ToWideConverter text_conv(text);
+  PixelSize size = font.TextSize(text_conv.sv());
 #else
   PixelSize size = font.TextSize(text);
 #endif
@@ -233,7 +234,8 @@ TextCache::Get(const Font &font, std::string_view text) noexcept
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
 #ifdef UNICODE
-  UTF8ToWideConverter text2(text);
+  UTF8ToWideConverter text_conv(text);
+  tstring_view text2 = text_conv.sv();
 #else
   std::string_view text2 = text;
 #endif
