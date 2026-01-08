@@ -321,6 +321,11 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint inset_left, jint inset_top,
                                          jint inset_right, jint inset_bottom)
 {
+  (void)inset_left;
+  (void)inset_top;
+  (void)inset_right;
+  (void)inset_bottom;
+
   const std::scoped_lock shutdown_lock{shutdown_mutex};
 
   if (event_queue == nullptr)
