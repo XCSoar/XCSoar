@@ -9,7 +9,7 @@ PanelControl::Create(ContainerWindow &parent, [[maybe_unused]] const DialogLook 
                      const PixelRect &rc,
                      const WindowStyle style)
 {
-#ifdef HAVE_CLIPPING
+#if defined(HAVE_CLIPPING) || defined(ENABLE_OPENGL)
   SolidContainerWindow::Create(parent, rc, look.background_color, style);
 #else
   ContainerWindow::Create(parent, rc, style);
