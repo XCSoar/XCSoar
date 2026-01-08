@@ -61,7 +61,8 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
                         TopWindowStyle style)
 {
 #ifdef UNICODE
-  const WideToUTF8Converter text(_text);
+  const WideToUTF8Converter text_conv(_text);
+  const char *text = text_conv.c_str();
 #else
   const char *text = _text;
 #endif
