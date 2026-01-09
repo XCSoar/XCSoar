@@ -94,7 +94,8 @@ TEST_NAMES = \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
-	TestMacCready TestOrderedTask TestAATPoint TestTaskSave\
+	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
+	TestTaskFileSeeYouParsing \
 	TestPlanes \
 	TestTaskPoint \
 	TestTaskWaypoint \
@@ -273,6 +274,16 @@ TEST_TASK_SAVE_SOURCES = \
 TEST_TASK_SAVE_OBJS = $(call SRC_TO_OBJ,$(TEST_TASK_SAVE_SOURCES))
 TEST_TASK_SAVE_DEPENDS = TASK TASKFILE ROUTE GLIDE WAYPOINT GEO TIME MATH UTIL XML
 $(eval $(call link-program,TestTaskSave,TEST_TASK_SAVE))
+
+TEST_TASKFILE_SEEYOU_PARSING_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/XML/Node.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestTaskFileSeeYouParsing.cpp
+TEST_TASKFILE_SEEYOU_PARSING_OBJS = $(call SRC_TO_OBJ,$(TEST_TASKFILE_SEEYOU_PARSING_SOURCES))
+TEST_TASKFILE_SEEYOU_PARSING_DEPENDS = TASK TASKFILE ROUTE GLIDE WAYPOINT GEO TIME MATH UTIL XML IO
+$(eval $(call link-program,TestTaskFileSeeYouParsing,TEST_TASKFILE_SEEYOU_PARSING))
 
 TEST_PLANES_SOURCES = \
 	$(SRC)/Polar/Parser.cpp \

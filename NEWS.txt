@@ -12,6 +12,9 @@ Version 7.44 - not yet released
     file being ignored or being overwritten by any Waypoint Editor dialog
     function.
   - read PG landing waypoint type correctly in cup files
+  - fix line zone gate width from CUP file R1 parameter #2029
+  - CUP files: correctly parse radius values with units (m, nm, ml) and
+    decimal values for observation zones #2031
   - openair: support for openair 2.0 format
   - openair: parse transponder codes for airspaces
   - openair: parse station names for airspaces
