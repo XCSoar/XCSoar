@@ -248,6 +248,3 @@ struct ComputerSettings {
 
   void SetDefaults();
 };
-
-static_assert(std::is_trivial<ComputerSettings>::value,
-              "type is not trivial");

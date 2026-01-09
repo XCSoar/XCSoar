@@ -13,6 +13,10 @@
 #include "PopupMessage.hpp"
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
+
+#ifdef HAVE_HTTP
+#include "NOTAM/NOTAMGlue.hpp"
+#endif
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "BallastDumpManager.hpp"
@@ -257,6 +261,12 @@ ProcessTimer() noexcept
     if (net_components->tim != nullptr &&
         CommonInterface::GetComputerSettings().weather.enable_tim)
       net_components->tim->OnTimer(CommonInterface::Basic());
+    
+    const NMEAInfo &basic = CommonInterface::Basic();
+    if (net_components->notam != nullptr &&
+        CommonInterface::GetComputerSettings().airspace.notam.enabled &&
+        basic.location_available)
+      net_components->notam->OnTimer(basic.location);
 #endif
   }
 }
