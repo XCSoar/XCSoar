@@ -324,7 +324,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
   else if (!is_intermediate && turnpoint_infos.is_line) // special case "is_line"
     return std::make_unique<LineSectorZone>(wp->location,
-                                            turnpoint_infos.radius1);
+                                            turnpoint_infos.radius1 * 2);
 
   // special case "Cylinder"
   else if (fabs(turnpoint_infos.angle1.Degrees() - 180) < 1 )
