@@ -64,9 +64,9 @@ public class InternalGPS
          onRequestPermissionsResult() will be called later */
       return;
 
-    if (android.os.Build.VERSION.SDK_INT >= 29)
-      permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                          null);
+    /* Background location permission is now requested automatically by XCSoar.java
+       after foreground permission is granted, with proper disclosure dialog.
+       Don't request it here to avoid duplicate dialogs. */
 
     try {
       if (!locationManager.isProviderEnabled(locationProvider) &&
