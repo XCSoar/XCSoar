@@ -197,10 +197,14 @@ public class XCSoar extends Activity implements PermissionManager {
 
   void applyFullScreen() {
     final Window window = getWindow();
-    if (wantFullScreen())
+    if (wantFullScreen()) {
       WindowUtil.enterFullScreenMode(window);
-    else
+      updateSystemGestureInsets();
+    } else {
       WindowUtil.leaveFullScreenMode(window, initialWindowFlags);
+      topGestureInset = 0;
+      bottomGestureInset = 0;
+    }
     
     if (nativeView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       final View decorView = window.getDecorView();
@@ -372,54 +376,82 @@ public class XCSoar extends Activity implements PermissionManager {
     applyFullScreen();
   }
 
-  /**
-   * Threshold in pixels from the top edge where swipes should be
-   * ignored to allow system status bar gesture.
-   */
-  private static final int TOP_EDGE_THRESHOLD = 30;
-
-  /**
-   * Track the initial Y position of a touch gesture to detect
-   * top-edge swipes in fullscreen mode.
-   */
   private float initialTouchY = -1;
+  private boolean isTopEdgeGesture = false;
+  private boolean isBottomEdgeGesture = false;
+  private int topGestureInset = 0;
+  private int bottomGestureInset = 0;
+
+  private void updateSystemGestureInsets() {
+    if (Build.VERSION.SDK_INT >= 29) {
+      final View decorView = getWindow().getDecorView();
+      final WindowInsets rootInsets = decorView.getRootWindowInsets();
+      if (rootInsets != null) {
+        final Insets gestureInsets = rootInsets.getSystemGestureInsets();
+        topGestureInset = gestureInsets.top;
+        bottomGestureInset = gestureInsets.bottom;
+      } else {
+        topGestureInset = 30;
+        bottomGestureInset = 30;
+      }
+    }
+  }
 
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
-    /* In fullscreen mode, detect swipes from the very top edge and
-       let the system handle them (to show status bar) instead of
-       passing them to the app. */
-    if (wantFullScreen() && nativeView != null) {
+    /* On API 29+, detect swipes from system gesture areas and let the system
+       handle them. On older Android, immersive mode handles this automatically. */
+    if (wantFullScreen() && nativeView != null && Build.VERSION.SDK_INT >= 29) {
+      if (topGestureInset == 0 && bottomGestureInset == 0) {
+        updateSystemGestureInsets();
+      }
+
       final int action = ev.getActionMasked();
       final float y = ev.getY();
+      final int windowHeight = getWindow().getDecorView().getHeight();
 
       switch (action) {
       case MotionEvent.ACTION_DOWN:
-        /* Check if touch starts from the very top edge */
-        if (y <= TOP_EDGE_THRESHOLD) {
+        if (y <= topGestureInset) {
           initialTouchY = y;
-          /* Let the system handle this touch to show status bar */
+          isTopEdgeGesture = true;
+          isBottomEdgeGesture = false;
+          return false;
+        }
+        if (windowHeight > 0 && y >= (windowHeight - bottomGestureInset)) {
+          initialTouchY = y;
+          isTopEdgeGesture = false;
+          isBottomEdgeGesture = true;
           return false;
         }
         initialTouchY = -1;
+        isTopEdgeGesture = false;
+        isBottomEdgeGesture = false;
         break;
 
       case MotionEvent.ACTION_MOVE:
-        /* If we started from the top edge and are moving downward,
-           continue letting the system handle it */
-        if (initialTouchY >= 0 && initialTouchY <= TOP_EDGE_THRESHOLD) {
+        if (isTopEdgeGesture && initialTouchY >= 0 && initialTouchY <= topGestureInset) {
           final float dy = y - initialTouchY;
           if (dy > 0) {
-            /* Moving downward from top edge - let system handle it */
             return false;
           }
-          /* Moving upward - cancel the gesture and pass to app */
           initialTouchY = -1;
+          isTopEdgeGesture = false;
+        }
+        if (isBottomEdgeGesture && windowHeight > 0 && initialTouchY >= (windowHeight - bottomGestureInset)) {
+          final float dy = y - initialTouchY;
+          if (dy < 0) {
+            return false;
+          }
+          initialTouchY = -1;
+          isBottomEdgeGesture = false;
         }
         break;
 
       case MotionEvent.ACTION_UP:
       case MotionEvent.ACTION_CANCEL:
         initialTouchY = -1;
+        isTopEdgeGesture = false;
+        isBottomEdgeGesture = false;
         break;
       }
     }
@@ -444,10 +476,6 @@ public class XCSoar extends Activity implements PermissionManager {
        The display cutout mode and window layout parameters can be reset
        during orientation changes, so we need to reapply them. */
     applyFullScreen();
-    
-    /* applyFullScreen() will handle updating the native view with the correct size.
-       No need to duplicate the logic here - applyFullScreen() already posts to decorView
-       to ensure layout is complete before getting the SurfaceView size. */
   }
 
   @Override
@@ -567,12 +595,10 @@ public class XCSoar extends Activity implements PermissionManager {
       .setOnDismissListener(new DialogInterface.OnDismissListener() {
           @Override
           public void onDismiss(DialogInterface d) {
-            /* Request permission after dialog is fully dismissed to prevent overlap */
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
                   if (requestBothBluetooth) {
-                    /* Request both Bluetooth permissions together */
                     final String[] bluetoothPermissions = {
                       Manifest.permission.BLUETOOTH_SCAN,
                       Manifest.permission.BLUETOOTH_CONNECT
@@ -599,7 +625,6 @@ public class XCSoar extends Activity implements PermissionManager {
                           if (handler != null)
                             handler.onRequestPermissionsResult(granted);
 
-                          /* Request background location with disclosure if needed */
                           if (granted && requestBackgroundAfter &&
                               android.os.Build.VERSION.SDK_INT >= 29) {
                             final String bgPermission = Manifest.permission.ACCESS_BACKGROUND_LOCATION;
@@ -621,7 +646,6 @@ public class XCSoar extends Activity implements PermissionManager {
         })
       .create();
 
-    /* Set OK button to dismiss dialog - onDismiss will handle permission request */
     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
         @Override
         public void onShow(DialogInterface d) {
@@ -695,7 +719,6 @@ public class XCSoar extends Activity implements PermissionManager {
   private void doRequestPermissions(String[] permissions,
                                      PermissionHandler handler) {
     if (android.os.Build.VERSION.SDK_INT >= 23) {
-      /* Check if activity is in valid state */
       if (isFinishing() || (android.os.Build.VERSION.SDK_INT >= 17 && isDestroyed())) {
         if (handler != null)
           handler.onRequestPermissionsResult(false);
@@ -726,7 +749,6 @@ public class XCSoar extends Activity implements PermissionManager {
           handler.onRequestPermissionsResult(false);
       }
     } else if (handler != null) {
-      /* On older Android versions, permissions are granted at install time */
       handler.onRequestPermissionsResult(true);
     }
   }
@@ -749,7 +771,6 @@ public class XCSoar extends Activity implements PermissionManager {
       return true;
 
     if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED)
-      /* we already have the permission */
       return true;
 
     /* For location and Bluetooth permissions, always show disclosure dialog before
@@ -775,12 +796,10 @@ public class XCSoar extends Activity implements PermissionManager {
         Manifest.permission.BLUETOOTH_CONNECT :
         Manifest.permission.BLUETOOTH_SCAN;
 
-      /* Check if other permission is pending (being requested) or also needed */
       boolean otherPending = pendingBluetoothPermissions.contains(otherBluetoothPermission);
       boolean otherNeeded = checkSelfPermission(otherBluetoothPermission) != PackageManager.PERMISSION_GRANTED;
 
       if (otherPending) {
-        /* Other permission is already being requested, skip disclosure for this one */
         pendingBluetoothPermissions.add(permission);
         doRequestPermission(permission, new PermissionHandler() {
             @Override
@@ -792,7 +811,6 @@ public class XCSoar extends Activity implements PermissionManager {
           });
         return false;
       } else if (otherNeeded) {
-        /* Both are needed, will show combined disclosure */
         pendingBluetoothPermissions.add(permission);
         pendingBluetoothPermissions.add(otherBluetoothPermission);
       }
