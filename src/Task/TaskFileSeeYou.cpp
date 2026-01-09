@@ -23,6 +23,7 @@
 #include "util/DecimalParser.hxx"
 #include "util/IterableSplitString.hxx"
 #include "util/NumberParser.hxx"
+#include "util/StringCompare.hxx"
 
 #include <stdlib.h>
 
@@ -103,7 +104,7 @@ ParseStyle(std::string_view src) noexcept
 static Angle
 ParseAngle(std::string_view src) noexcept
 {
-  if (auto value = ParseInteger<unsigned>(src))
+  if (auto value = ParseDecimal(src))
     return Angle::Degrees(*value);
 
   return Angle::Zero();
@@ -113,13 +114,20 @@ ParseAngle(std::string_view src) noexcept
 static double
 ParseRadius(std::string_view src) noexcept
 {
-  if (src.ends_with('m'))
-    src.remove_suffix(1);
+  Unit unit = Unit::METER;
+  if (RemoveSuffix(src, "ml"sv) || RemoveSuffix(src, "ML"sv))
+    unit = Unit::STATUTE_MILES;
+  else if (RemoveSuffix(src, "nm"sv) || RemoveSuffix(src, "NM"sv))
+    unit = Unit::NAUTICAL_MILES;
+  else
+    RemoveSuffix(src, "m"sv) || RemoveSuffix(src, "M"sv);
+  // If no unit suffix found, default to meters (unit already set to METER)
 
-  if (auto value = ParseInteger<unsigned>(src))
-    return *value;
+  const auto value = ParseDecimal(src);
+  if (!value)
+    return 0;
 
-  return 500;
+  return Units::ToSysUnit(*value, unit);
 }
 
 [[gnu::pure]]
@@ -170,12 +178,17 @@ ParseOZs(SeeYouTurnpointInformation &tp_info, std::string_view src) noexcept
   for (std::string_view i : IterableSplitString(src, ',')) {
     if (SkipPrefix(i, "Style="sv))
       tp_info.style = ParseStyle(i);
-    else if (SkipPrefix(i, "R1="sv))
-      tp_info.radius1 = ParseRadius(i);
-    else if (SkipPrefix(i, "A1="sv))
+    else if (SkipPrefix(i, "R1="sv)) {
+      const double radius = ParseRadius(i);
+      if (radius > 0)
+        tp_info.radius1 = radius;
+    } else if (SkipPrefix(i, "A1="sv))
       tp_info.angle1 = ParseAngle(i);
-    else if (SkipPrefix(i, "R2="sv))
-      tp_info.radius2 = ParseRadius(i);
+    else if (SkipPrefix(i, "R2="sv)) {
+      const double radius = ParseRadius(i);
+      if (radius > 0)
+        tp_info.radius2 = radius;
+    }
     else if (SkipPrefix(i, "A2="sv))
       tp_info.angle2 = ParseAngle(i);
     else if (SkipPrefix(i, "A12="sv))
@@ -323,8 +336,10 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     return KeyholeZone::CreateBGAFixedCourseZone(wp->location);
 
   else if (!is_intermediate && turnpoint_infos.is_line) // special case "is_line"
+    // R1 in CUP file is radius (half gate width), but LineSectorZone
+    // constructor expects full length, so multiply by 2
     return std::make_unique<LineSectorZone>(wp->location,
-                                            turnpoint_infos.radius1);
+                                            turnpoint_infos.radius1 * 2);
 
   // special case "Cylinder"
   else if (fabs(turnpoint_infos.angle1.Degrees() - 180) < 1 )
