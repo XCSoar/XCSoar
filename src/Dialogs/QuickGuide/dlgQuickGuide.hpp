@@ -3,4 +3,4 @@
 
 #pragma once
 
-#include "ui/canvas/TextFormat.hpp"
+void dlgQuickGuideShowModal();
