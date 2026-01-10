@@ -12,9 +12,14 @@
 
 namespace GLExt {
 
+#ifdef HAVE_GLES2
 #ifdef HAVE_DYNAMIC_MAPBUFFER
 inline PFNGLMAPBUFFEROESPROC map_buffer;
 inline PFNGLUNMAPBUFFEROESPROC unmap_buffer;
+#endif
+#else
+inline PFNGLMAPBUFFERPROC map_buffer;
+inline PFNGLUNMAPBUFFERPROC unmap_buffer;
 #endif
 
 #ifdef GL_EXT_multi_draw_arrays
