@@ -21,6 +21,7 @@
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
+#include "net/State.hpp"
 
 #include <algorithm> // for std::clamp()
 
@@ -224,6 +225,29 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas,
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
                        rc.bottom - bmp->GetSize().height - Layout::Scale(2)));
+}
+
+void
+GlueMapWindow::DrawSystemStatus([[maybe_unused]] Canvas &canvas,
+                                [[maybe_unused]] const PixelRect &rc) const noexcept
+{
+#ifdef HAVE_NET_STATE
+  // draw network status
+  const NetState net_state = GetNetState();
+  const MaskedIcon *bmp;
+  if (net_state == NetState::CONNECTED || net_state == NetState::ROAMING)
+    bmp = &look.network_connected_icon;
+  else if (net_state == NetState::DISCONNECTED)
+    bmp = &look.network_disconnected_icon;
+  else
+    return; // Don't show icon if status is unknown
+
+  int net_offset = bmp->GetSize().width + Layout::Scale(6);
+
+  bmp->Draw(canvas,
+            PixelPoint(rc.right - net_offset,
+                       rc.top + Layout::Scale(4)));
+#endif
 }
 
 void
