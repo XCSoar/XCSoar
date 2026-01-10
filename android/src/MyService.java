@@ -16,15 +16,21 @@ import android.os.Binder;
 import android.util.Log;
 
 /**
- * All this Service implementation does is put itself in foreground.
- * It shall reduce the risk of getting killed by the Android Activity
- * Manager, because foreground services will only be killed under
- * extreme pressure.  Since this services runs in-process, Android
- * will also not terminate our main Activity.
+ * Foreground service to ensure XCSoar continues running in the background.
  *
- * XCSoar needs high reliability, because it usually runs in
- * foreground as the only active application and should not be killed
- * by an incoming phone call.
+ * This service is essential for:
+ * 1. Continuous IGC flight logging - IGC files must be written continuously,
+ *    even when the screen is off or app is minimized, otherwise they are invalid.
+ * 2. Safety warnings - The full app must run in background to warn users of
+ *    airspace incursions, terrain warnings, glide slope violations, and other
+ *    critical flight safety alerts.
+ *
+ * The service uses foregroundServiceType="dataSync" to run reliably in the background
+ * for continuous IGC logging and safety warnings. A visible notification is required
+ * by Android for all foreground services.
+ *
+ * The notification also provides a convenient way for users to quickly return to
+ * the app and see that XCSoar is actively running.
  *
  * This is bad style for general-purpose Android apps, don't imitate
  * unless you have an excuse as good as ours ;-)
@@ -44,11 +50,15 @@ public class MyService extends Service {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       String name = "XCSoar";
 
-      /* this disables sound: */
-      int importance = NotificationManager.IMPORTANCE_LOW;
+      /* Use IMPORTANCE_DEFAULT to ensure notification is visible.
+         Sound can be disabled via channel settings if needed. */
+      int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
       NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
                                                             name, importance);
+      /* Disable sound for this channel */
+      channel.setSound(null, null);
+      channel.enableVibration(false);
       notificationManager.createNotificationChannel(channel);
     }
   }
@@ -67,12 +77,21 @@ public class MyService extends Service {
       .setContentText("XCSoar is running")
       .setSmallIcon(R.drawable.notification_icon);
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      /* Make notification visible on lock screen so user knows XCSoar is running
+         and can quickly return to the app. Background operation is essential for
+         continuous IGC logging and safety warnings. */
+      builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+    }
+
     return builder.build();
   }
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    /* add an icon to the notification area while XCSoar runs, to
-       remind the user that we're sucking his battery empty */
+    /* Display a notification while XCSoar runs in background.
+       This notification is required by Android for foreground services and provides
+       a quick way for users to return to the app. Background operation is essential
+       for continuous IGC logging and safety warnings. */
     Intent intent2 = new Intent(this, XCSoar.class);
     int pendingIntentFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
       ? PendingIntent.FLAG_IMMUTABLE
@@ -97,7 +116,18 @@ public class MyService extends Service {
   @Override public void onDestroy() {
     super.onDestroy();
 
-    notificationManager.cancel(1);
+    try {
+      /* Stop foreground service and remove notification */
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        stopForeground(STOP_FOREGROUND_REMOVE);
+      } else {
+        stopForeground(true);
+      }
+      notificationManager.cancel(1);
+    } catch (Exception e) {
+      /* Ignore exceptions during service destruction */
+      Log.d(TAG, "MyService: Exception during cleanup", e);
+    }
   }
 
   @Override public IBinder onBind(Intent intent) {
