@@ -61,6 +61,9 @@ MapLook::Initialise(const MapSettings &settings,
 
   thermal_source_icon.LoadResource(IDB_THERMALSOURCE_ALL);
 
+  network_connected_icon.LoadResource(IDB_NETWORK_CONNECTED_ALL, false);
+  network_disconnected_icon.LoadResource(IDB_NETWORK_DISCONNECTED_ALL, false);
+
   cruise_mode_icon.LoadResource(IDB_CRUISE_ALL, false);
   climb_mode_icon.LoadResource(IDB_CLIMB_ALL, false);
   final_glide_mode_icon.LoadResource(IDB_FINALGLIDE_ALL, false);

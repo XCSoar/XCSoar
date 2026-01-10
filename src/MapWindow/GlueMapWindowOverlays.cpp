@@ -21,6 +21,7 @@
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
+#include "net/Reachability.hxx"
 
 #include <algorithm> // for std::clamp()
 
@@ -138,6 +139,22 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 
     start = newline + 1;
   }
+}
+
+void
+GlueMapWindow::DrawSystemStatus(Canvas &canvas, const PixelRect &rc) const noexcept
+{
+  // Draw network status in upper-left corner
+  const int top = rc.top + Layout::FastScale(4);
+  PixelPoint p(rc.left + Layout::FastScale(4), top);
+  int offset_x = 0;
+
+  const MaskedIcon &net_icon = PollInternetReachable()
+    ? look.network_connected_icon
+    : look.network_disconnected_icon;
+
+  net_icon.Draw(canvas, p);
+  offset_x += net_icon.GetSize().width + Layout::FastScale(4);
 }
 
 void
@@ -424,8 +441,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas,
   PixelRect tb_rect;
   tb_rect.left = rc.left;
   tb_rect.right = rc.left+Layout::Scale(25);
-  tb_rect.top = Layout::Scale(2);
-  tb_rect.bottom = (rc.bottom-rc.top)/5 - Layout::Scale(2);
+  tb_rect.top = Layout::Scale(30);
+  tb_rect.bottom = (rc.bottom-rc.top)/5 + Layout::Scale(26);
 
   const ThermalBandRenderer &renderer = thermal_band_renderer;
   if (task != nullptr) {
