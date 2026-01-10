@@ -243,6 +243,7 @@ private:
   void DrawMapScale(Canvas &canvas, const PixelRect &rc,
                     const MapWindowProjection &projection) const noexcept;
   void DrawFlightMode(Canvas &canvas, const PixelRect &rc) const noexcept;
+  void DrawSystemStatus(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                      const NMEAInfo &info) const noexcept;
   void DrawCrossHairs(Canvas &canvas) const noexcept;

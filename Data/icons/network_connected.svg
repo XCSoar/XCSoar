@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <!-- Four vertical bars, black fill, no rounding, evenly spaced -->
+ <rect x="1"  y="16" width="4" height="5.75"  fill="#0f0" stroke="#000" stroke-width="0.75"/>
+ <rect x="6"  y="11" width="4" height="10.75" fill="#0f0" stroke="#000" stroke-width="0.75"/>
+ <rect x="11" y="6"  width="4" height="15.75" fill="#0f0" stroke="#000" stroke-width="0.75"/>
+ <rect x="16" y="0.25"  width="4" height="21.5" fill="#0f0" stroke="#000" stroke-width="0.75"/>
+</svg>
