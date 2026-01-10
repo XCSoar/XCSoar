@@ -130,8 +130,8 @@ public:
    * Sets active task to ordered task (or goto if none exists) after
    * goto or aborting.
    */
-  void Resume() noexcept {
-    SetMode(TaskType::ORDERED);
+  bool Resume() noexcept {
+    return SetMode(TaskType::ORDERED) == TaskType::ORDERED;
   }
 
   /**
