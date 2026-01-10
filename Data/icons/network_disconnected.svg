@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+ <!-- Three vertical bars in gray with black outline -->
+ <rect x="8" y="20" width="3" height="6" fill="#999" stroke="#000" stroke-width="0.5" rx="1"/>
+ <rect x="14" y="16" width="3" height="10" fill="#999" stroke="#000" stroke-width="0.5" rx="1"/>
+ <rect x="20" y="12" width="3" height="14" fill="#999" stroke="#000" stroke-width="0.5" rx="1"/>
+ <!-- Small red X mark in upper-right corner -->
+ <path d="M 20,4 L 28,12" stroke="#f00" stroke-width="2" stroke-linecap="round"/>
+ <path d="M 28,4 L 20,12" stroke="#f00" stroke-width="2" stroke-linecap="round"/>
+</svg>
