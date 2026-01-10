@@ -46,6 +46,7 @@ class NativeView extends SurfaceView
   implements SurfaceHolder.Callback, Runnable {
   private static final String TAG = "XCSoar";
 
+
   /**
    * A native pointer to a C++ #TopWindow instance.
    */
@@ -171,6 +172,55 @@ class NativeView extends SurfaceView
     surfaceDestroyedNative();
   }
 
+  /**
+   * Start MyService if needed for background operation.
+   * MyService enables continuous IGC logging and safety warnings (airspace, terrain, etc.)
+   * even when the app is in background or screen is off.
+   * 
+   * On Android 13+ (API 33+), POST_NOTIFICATIONS permission is required to show the notification.
+   * Permissions will be requested through the consent dialog flow if not granted.
+   */
+  private void startMyServiceIfNeeded(Context context) {
+    /* Skip service start in simulator mode - background logging and service are not needed */
+    if (isSimulator())
+      return;
+
+    try {
+      /* Check for POST_NOTIFICATIONS permission on Android 13+ */
+      if (Build.VERSION.SDK_INT >= 33) {
+        if (context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) !=
+            android.content.pm.PackageManager.PERMISSION_GRANTED) {
+          /* Permission not granted - request it through consent dialog flow.
+             Service will be started after permission is granted. */
+          permissionManager.requestPermission(android.Manifest.permission.POST_NOTIFICATIONS, new PermissionManager.PermissionHandler() {
+              @Override
+              public void onRequestPermissionsResult(boolean granted) {
+                if (granted) {
+                  /* After POST_NOTIFICATIONS is granted, start the service */
+                  startMyServiceIfNeeded(context);
+                }
+              }
+            });
+          return;
+        }
+      }
+
+      /* Start the foreground service. With foregroundServiceType="dataSync", no special
+         runtime permission is required beyond POST_NOTIFICATIONS (Android 13+). */
+      context.startService(new Intent(context, MyService.class));
+    } catch (IllegalStateException e) {
+      /* we get crash reports on this all the time, but I don't
+         know why - Android docs say "the application is in a
+         state where the service can not be started (such as not
+         in the foreground in a state when services are allowed)",
+         but we're about to be resumed, which means we're in
+         foreground... */
+    } catch (SecurityException e) {
+      /* Service start failed due to security restrictions */
+      Log.e(TAG, "Failed to start service", e);
+    }
+  }
+
   @Override public void run() {
     final Context context = getContext();
 
@@ -180,55 +230,20 @@ class NativeView extends SurfaceView
     ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
     try {
-      try {
-        /* On Android 14+ (API 34+), FOREGROUND_SERVICE_LOCATION is a runtime permission
-           that must be granted before starting a foreground service with type="location" */
-        boolean serviceStarted = false;
-        if (Build.VERSION.SDK_INT >= 34) {
-          final String fgsPermission = "android.permission.FOREGROUND_SERVICE_LOCATION";
-          if (context.checkSelfPermission(fgsPermission) ==
-              android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            context.startService(new Intent(context, MyService.class));
-            serviceStarted = true;
-          } else {
-            /* Permission not granted - request it. Service will be started after permission is granted.
-               For now, try to start it anyway - it will fail gracefully with SecurityException if needed. */
-            permissionManager.requestPermission(fgsPermission, null);
-            /* Try to start service anyway - on some devices it might work, or will fail with SecurityException */
-            try {
-              context.startService(new Intent(context, MyService.class));
-              serviceStarted = true;
-            } catch (SecurityException e) {
-              /* Expected on Android 14+ without permission - service will be started after permission is granted */
-            }
-          }
-        } else {
-          context.startService(new Intent(context, MyService.class));
-          serviceStarted = true;
-        }
-      } catch (IllegalStateException e) {
-        /* we get crash reports on this all the time, but I don't
-           know why - Android docs say "the application is in a
-           state where the service can not be started (such as not
-           in the foreground in a state when services are allowed)",
-           but we're about to be resumed, which means we're in
-           foreground... */
-      } catch (SecurityException e) {
-        /* On Android 14+ without FOREGROUND_SERVICE_LOCATION permission, starting the service throws SecurityException.
-           This is expected - the service will be started after permission is granted via the permission request above. */
-      }
-
-      try {
-        runNative(context, permissionManager,
-                  r.width(), r.height(),
-                  (int)metrics.xdpi, (int)metrics.ydpi,
-                  Build.PRODUCT);
-      } finally {
-        context.stopService(new Intent(context, MyService.class));
-      }
+      /* runNative() is the main native loop that runs continuously.
+         The service should continue running even when the app goes to background,
+         to ensure continuous IGC logging and safety warnings. The service will
+         only be stopped when the app is explicitly quit (in onDestroy()).
+         Service start is deferred until after simulator mode is determined (called from native code). */
+      runNative(context, permissionManager,
+                r.width(), r.height(),
+                (int)metrics.xdpi, (int)metrics.ydpi,
+                Build.PRODUCT);
     } catch (Exception e) {
       Log.e(TAG, "Initialisation error", e);
       errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
+      /* Stop service on error since app is exiting */
+      context.stopService(new Intent(context, MyService.class));
       return;
     }
 
@@ -237,6 +252,7 @@ class NativeView extends SurfaceView
 
   static native void initNative();
   static native void deinitNative();
+  static native boolean isSimulator();
 
   static native void onConfigurationChangedNative(boolean nightMode);
 
@@ -258,6 +274,14 @@ class NativeView extends SurfaceView
   protected native void setBatteryPercent(int level, int plugged);
 
   protected native void setHapticFeedback(boolean on);
+
+  /**
+   * Called from native code after simulator mode is determined to start the service if needed.
+   * This ensures permissions are only requested in fly mode, not simulator mode.
+   */
+  public void startServiceIfNeeded() {
+    startMyServiceIfNeeded(getContext());
+  }
 
   /**
    * Finds the next power of two.  Used to calculate texture sizes.

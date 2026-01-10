@@ -28,6 +28,7 @@
 #include "Language/LanguageGlue.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "Simulator.hpp"
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -124,6 +125,14 @@ Java_org_xcsoar_NativeView_initNative(JNIEnv *env, [[maybe_unused]] jclass cls)
   static std::once_flag init_native_flag;
 
   std::call_once(init_native_flag, InitNative, env);
+}
+
+gcc_visibility_default
+jboolean
+Java_org_xcsoar_NativeView_isSimulator([[maybe_unused]] JNIEnv *env,
+                                       [[maybe_unused]] jclass cls)
+{
+  return is_simulator();
 }
 
 gcc_visibility_default

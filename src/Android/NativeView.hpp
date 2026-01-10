@@ -35,6 +35,7 @@ class NativeView {
   static jmethodID shareText_method;
   static jmethodID openWaypointFile_method;
   static jmethodID getNetState_method;
+  static jmethodID startServiceIfNeeded_method;
 
   static Java::TrivialClass clsBitmap;
   static jmethodID createBitmap_method;
@@ -146,5 +147,9 @@ public:
   [[gnu::pure]]
   int GetNetState(JNIEnv *env) const noexcept {
     return env->CallIntMethod(obj, getNetState_method);
+  }
+
+  void StartServiceIfNeeded(JNIEnv *env) const noexcept {
+    env->CallVoidMethod(obj, startServiceIfNeeded_method);
   }
 };

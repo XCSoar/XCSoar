@@ -337,6 +337,8 @@ Startup(UI::Display &display)
     const auto env = Java::GetEnv();
     native_view->AcquireWakeLock(env);
     native_view->SetFullScreen(env, ui_settings.display.full_screen);
+    /* Start service after simulator mode is determined - only in fly mode */
+    native_view->StartServiceIfNeeded(env);
   }
 #endif
 
