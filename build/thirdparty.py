@@ -37,6 +37,8 @@ toolchain = Toolchain(xcsoar_path, lib_path,
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 
+geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
+
 if toolchain.is_windows:
     thirdparty_libs = [
         zlib,
@@ -59,16 +61,18 @@ elif toolchain.is_darwin:
         zlib,
         libfmt,
         libsodium,
-        openssl,
         cares,
         curl,
         lua,
-        sqlite3,
-        proj,
-        libtiff,
-        libgeotiff,
         sdl2
     ]
+    if geotiff_enabled:
+        thirdparty_libs += [
+            sqlite3,
+            proj,
+            libtiff,
+            libgeotiff,
+        ]
 elif toolchain.is_android:
     thirdparty_libs = [
         libfmt,

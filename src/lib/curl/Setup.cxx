@@ -66,12 +66,10 @@ Setup(CurlEasy &easy)
 		easy.SetOption(CURLOPT_CAINFO, ca_path.c_str());
 		easy.SetVerifyHost(true);
 		easy.SetVerifyPeer(true);
+	} else {
+		easy.SetVerifyHost(false);
+		easy.SetVerifyPeer(false);
 	}
-#elif defined(__APPLE__)
-	/* SSL validation disabled on iOS/macOS until we implement
-	   certificate extraction similar to Android */
-	easy.SetVerifyHost(false);
-	easy.SetVerifyPeer(false);
 #endif
 
 #ifdef KOBO
