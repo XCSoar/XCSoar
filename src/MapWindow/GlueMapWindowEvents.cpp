@@ -448,6 +448,7 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
       DrawThermalBand(canvas, rc);
     DrawStallRatio(canvas, rc);
     DrawFlightMode(canvas, rc);
+    DrawSystemStatus(canvas, rc);
     DrawFinalGlide(canvas, rc);
     DrawVario(canvas, rc);
     DrawGPSStatus(canvas, rc, Basic());
