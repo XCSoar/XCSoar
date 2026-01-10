@@ -206,13 +206,26 @@ InputEvents::eventAbortTask(const TCHAR *misc)
     return;
 
   ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
+  const auto report_resume = [&task_manager](bool resumed) {
+    if (resumed) {
+      Message::AddMessage(_("Task resumed"));
+      return;
+    }
+
+    const auto &ordered_task = task_manager->GetOrderedTask();
+    if (ordered_task.TaskSize() == 0)
+      Message::AddMessage(_("No ordered task"));
+    else if (!task_manager->CheckOrderedTask())
+      Message::AddMessage(_("Ordered task invalid"));
+    else
+      Message::AddMessage(_("Task resume failed"));
+  };
 
   if (StringIsEqual(misc, _T("abort"))) {
     task_manager->Abort();
     Message::AddMessage(_("Task aborted"));
   } else if (StringIsEqual(misc, _T("resume"))) {
-    task_manager->Resume();
-    Message::AddMessage(_("Task resumed"));
+    report_resume(task_manager->Resume());
   } else if (StringIsEqual(misc, _T("show"))) {
     switch (task_manager->GetMode()) {
     case TaskType::ABORT:
@@ -237,16 +250,14 @@ InputEvents::eventAbortTask(const TCHAR *misc)
       break;
     case TaskType::GOTO:
       if (task_manager->CheckOrderedTask()) {
-        task_manager->Resume();
-        Message::AddMessage(_("Task resumed"));
+        report_resume(task_manager->Resume());
       } else {
         task_manager->Abort();
         Message::AddMessage(_("Task aborted"));
       }
       break;
     case TaskType::ABORT:
-      task_manager->Resume();
-      Message::AddMessage(_("Task resumed"));
+      report_resume(task_manager->Resume());
       break;
     }
   }

@@ -35,6 +35,7 @@ Version 7.44 - not yet released
   - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Popup messages now appear at the top of the map
   - add status messages for user actions and state changes (alternates, task abort, task armed, final glide mode, terrain/topography visibility, airspace visibility)
+  - improve task resume: report failure reasons and allow resuming goto when no ordered task exists
   - FlarmTrafficWindow: align colors of FlarmTraffic with map for consistency
   - BigTrafficWidget: Save/Restore FLARM radar zoom on page change
   - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
