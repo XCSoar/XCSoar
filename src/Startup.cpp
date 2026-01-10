@@ -164,7 +164,10 @@ AfterStartup()
     backend_components->protected_task_manager->TaskCommit(*defaultTask);
   }
 
-  task_manager->Resume();
+  const bool resumed = task_manager->Resume();
+  // Return value intentionally unused; task will resume if available.
+  (void)resumed;
+
 
   InfoBoxManager::SetDirty();
 

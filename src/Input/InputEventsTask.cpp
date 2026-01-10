@@ -208,13 +208,16 @@ InputEvents::eventAbortTask(const TCHAR *misc)
   ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   const auto report_resume = [&task_manager](bool resumed) {
     if (resumed) {
-      Message::AddMessage(_("Task resumed"));
+      if (task_manager->GetMode() == TaskType::GOTO)
+        Message::AddMessage(_("Go to target"));
+      else
+        Message::AddMessage(_("Task resumed"));
       return;
     }
 
     const auto &ordered_task = task_manager->GetOrderedTask();
     if (ordered_task.TaskSize() == 0)
-      Message::AddMessage(_("No ordered task"));
+      Message::AddMessage(_("No task to resume"));
     else if (!task_manager->CheckOrderedTask())
       Message::AddMessage(_("Ordered task invalid"));
     else
