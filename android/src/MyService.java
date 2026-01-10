@@ -74,8 +74,11 @@ public class MyService extends Service {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
     Intent intent2 = new Intent(this, XCSoar.class);
+    int pendingIntentFlags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+      ? PendingIntent.FLAG_IMMUTABLE
+      : 0;
     PendingIntent contentIntent =
-      PendingIntent.getActivity(this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
+      PendingIntent.getActivity(this, 0, intent2, pendingIntentFlags);
     Notification notification = createNotification(this, contentIntent);
 
     notificationManager.notify(1, notification);
