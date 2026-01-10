@@ -129,10 +129,11 @@ public:
   /**
    * Sets active task to ordered task (or goto if none exists) after
    * goto or aborting.
+   * 
+   * @return True if the active mode was changed successfully
    */
-  bool Resume() noexcept {
-    return SetMode(TaskType::ORDERED) == TaskType::ORDERED;
-  }
+  [[nodiscard]]
+  bool Resume() noexcept;
 
   /**
    * Sets active task to go to mode, to specified waypoint
