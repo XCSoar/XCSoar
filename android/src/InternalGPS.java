@@ -4,6 +4,7 @@
 package org.xcsoar;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +41,7 @@ public class InternalGPS
   InternalGPS(Context context, PermissionManager permissionManager,
               SensorListener listener) {
     this.context = context;
-    handler = new Handler(context.getMainLooper());
+    handler = new Handler(Looper.getMainLooper());
     this.permissionManager = permissionManager;
     this.listener = listener;
 
@@ -64,9 +65,9 @@ public class InternalGPS
          onRequestPermissionsResult() will be called later */
       return;
 
-    if (android.os.Build.VERSION.SDK_INT >= 29)
-      permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                          null);
+    /* Background location permission is now requested automatically by XCSoar.java
+       after foreground permission is granted, with proper disclosure dialog.
+       Don't request it here to avoid duplicate dialogs. */
 
     try {
       if (!locationManager.isProviderEnabled(locationProvider) &&

@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.content.Context;
 
 class GliderLinkReceiver
   extends BroadcastReceiver
@@ -30,7 +29,7 @@ class GliderLinkReceiver
     this.context = context;
     this.listener = listener;
 
-    context.registerReceiver(this, new IntentFilter(ACTION));
+    BroadcastUtil.registerReceiver(context, this, new IntentFilter(ACTION));
   }
 
   @Override

@@ -14,6 +14,7 @@ import java.io.Closeable;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -100,7 +101,7 @@ public class NonGPSSensors
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   NonGPSSensors(Context context, SensorListener listener) {
-    handler_ = new Handler(context.getMainLooper());
+    handler_ = new Handler(Looper.getMainLooper());
     this.listener = listener;
 
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

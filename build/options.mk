@@ -61,6 +61,9 @@ endif
 # In the stable branch, this should default to "n".
 TESTING = n
 
+# Set XCSOAR_TESTING for non-Android builds (Android builds set it based on package name)
 ifeq ($(TESTING),y)
-  TARGET_CPPFLAGS += -DXCSOAR_TESTING
+  ifneq ($(TARGET_IS_ANDROID),y)
+    TARGET_CPPFLAGS += -DXCSOAR_TESTING
+  endif
 endif
