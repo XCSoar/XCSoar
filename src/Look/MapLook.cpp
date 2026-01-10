@@ -65,6 +65,9 @@ MapLook::Initialise(const MapSettings &settings,
   traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING_ALL, false);
   traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM_ALL, false);
 
+  network_connected_icon.LoadResource(IDB_NETWORK_CONNECTED_ALL, false);
+  network_disconnected_icon.LoadResource(IDB_NETWORK_DISCONNECTED_ALL, false);
+
   cruise_mode_icon.LoadResource(IDB_CRUISE_ALL, false);
   climb_mode_icon.LoadResource(IDB_CLIMB_ALL, false);
   final_glide_mode_icon.LoadResource(IDB_FINALGLIDE_ALL, false);
