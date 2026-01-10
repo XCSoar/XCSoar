@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.os.IBinder;
 import android.content.Context;
@@ -83,7 +84,7 @@ public class XCSoar extends Activity implements PermissionManager {
       return;
     }
 
-    mainHandler = new Handler(getMainLooper());
+    mainHandler = new Handler(Looper.getMainLooper());
 
     NativeView.initNative();
 

@@ -4,6 +4,7 @@
 package org.xcsoar;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +41,7 @@ public class InternalGPS
   InternalGPS(Context context, PermissionManager permissionManager,
               SensorListener listener) {
     this.context = context;
-    handler = new Handler(context.getMainLooper());
+    handler = new Handler(Looper.getMainLooper());
     this.permissionManager = permissionManager;
     this.listener = listener;
 
