@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Task/TaskFile.hpp"
@@ -10,12 +11,14 @@
 #include "system/FileUtil.hpp"
 #include "io/FileOutputStream.hxx"
 #include "util/PrintException.hxx"
+#include "util/SpanCast.hxx"
 
 #include "TestUtil.hpp"
 
 #include <memory>
 #include <cstdio>
 #include <cmath>
+#include <string_view>
 
 static TaskBehaviour task_behaviour;
 
@@ -45,7 +48,7 @@ TestRadiusParsingWithUnits()
 
   {
     FileOutputStream fos(task_path, FileOutputStream::Mode::CREATE);
-    fos.Write(cup_content, strlen(cup_content));
+    fos.Write(AsBytes(std::string_view(cup_content)));
     fos.Commit();
   }
 
@@ -139,8 +142,10 @@ TestAngleParsingWithDecimals()
     "\"Start1\",\"S1\",,4800.000N,01100.000E,500.0m,1,0,0.0m,\"\",\"Start 1\"\n"
     "\"Start2\",\"S2\",,4801.000N,01101.000E,500.0m,1,0,0.0m,\"\",\"Start 2\"\n"
     "\"Turn1\",\"T1\",,4810.000N,01110.000E,500.0m,1,0,0.0m,\"\",\"Turn 1\"\n"
+    "\"Turn2\",\"T2\",,4815.000N,01115.000E,500.0m,1,0,0.0m,\"\",\"Turn 2\"\n"
+    "\"Finish1\",\"F1\",,4820.000N,01120.000E,500.0m,1,0,0.0m,\"\",\"Finish 1\"\n"
     "-----Related Tasks-----\n"
-    "\"Test Task\",\"S1\",\"S2\",\"T1\",\"T1\"\n"
+    "\"Test Task\",\"S1\",\"S1\",\"S2\",\"T1\",\"T2\",\"F1\",\"F1\"\n"
     "ObsZone=0,Style=1,R1=1000m,A1=123.4\n"
     "ObsZone=1,Style=1,R1=1000m,A1=180\n"
     "ObsZone=2,Style=1,R1=1000m,A12=45.67\n";
@@ -149,7 +154,7 @@ TestAngleParsingWithDecimals()
 
   {
     FileOutputStream fos(task_path, FileOutputStream::Mode::CREATE);
-    fos.Write(cup_content, strlen(cup_content));
+    fos.Write(AsBytes(std::string_view(cup_content)));
     fos.Commit();
   }
 
@@ -179,9 +184,10 @@ TestLineZoneWithDecimalRadius()
   const char *cup_content =
     "name,code,country,lat,lon,elev,style,rwdir,rwlen,freq,desc\n"
     "\"Start1\",\"S1\",,4800.000N,01100.000E,500.0m,1,0,0.0m,\"\",\"Start 1\"\n"
+    "\"Start2\",\"S2\",,4801.000N,01101.000E,500.0m,1,0,0.0m,\"\",\"Start 2\"\n"
     "\"Finish1\",\"F1\",,4820.000N,01120.000E,500.0m,1,0,0.0m,\"\",\"Finish 1\"\n"
     "-----Related Tasks-----\n"
-    "\"Test Task\",\"S1\",\"F1\",\"F1\"\n"
+    "\"Test Task\",\"S1\",\"S2\",\"F1\",\"F1\"\n"
     "ObsZone=0,Style=2,R1=500.5m,Line=1\n"
     "ObsZone=1,Style=2,R1=1.2nm,Line=1\n";
 
@@ -189,7 +195,7 @@ TestLineZoneWithDecimalRadius()
 
   {
     FileOutputStream fos(task_path, FileOutputStream::Mode::CREATE);
-    fos.Write(cup_content, strlen(cup_content));
+    fos.Write(AsBytes(std::string_view(cup_content)));
     fos.Commit();
   }
 
@@ -240,7 +246,7 @@ int main()
 {
   Directory::Create(Path{_T("output/results")});
 
-  plan_tests(16);
+  plan_tests(33);
   task_behaviour.SetDefaults();
   TestAll();
   return exit_status();
