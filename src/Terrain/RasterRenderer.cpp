@@ -147,14 +147,38 @@ RasterRenderer::ScanMap(const RasterMap &map,
        RasterBuffer interpolation) */
     quantisation_effective = std::max(1, (int)q);
 
-    /* disable slope shading when zoomed in very near (not enough
-       terrain resolution to make a useful slope calculation) */
+    /* when zoomed in very near, use a large fixed area (25 pixels) for
+       slope calculation to ensure terrain shading still works */
     if (quantisation_effective > 25)
-      quantisation_effective = 0;
+      quantisation_effective = 25;
 
-  } else
-    /* disable slope shading when zoomed out very far (too tiny) */
+  } else if (pixel_size < 20000) {
+    // At low zoom levels (3000-20000m pixel size), use adaptive coarse quantisation
+    // instead of completely disabling shading
+    // Data point size of the (terrain) map in meters multiplied by 256
+    auto map_pixel_size = map.PixelDistance(center, 1);
+
+    // How many screen pixels does one data point stretch?
+    auto q = map_pixel_size / pixel_size;
+
+    // At low zoom levels, use coarser quantisation to maintain performance
+    // and visual quality. Scale quantisation based on pixel_size:
+    // - At 3000m: use calculated q (transition from normal mode)
+    // - At 20000m: use ~4x coarser quantisation for better performance
+    const double zoom_factor = 1.0 + (pixel_size - 3000.0) / 4250.0; // scales from 1.0 to ~5.0
+    quantisation_effective = std::max(1, (int)(q * zoom_factor));
+
+    // Cap at reasonable maximum to avoid artifacts and maintain performance
+    // Higher cap than normal mode since we're at low zoom
+    if (quantisation_effective > 40)
+      quantisation_effective = 40;
+
+  } else {
+    /* disable slope shading when zoomed out extremely far (pixel_size >= 20000m)
+       as terrain features become too small to be meaningful and performance
+       would suffer with reasonable quantisation */
     quantisation_effective = 0;
+  }
 
 #ifdef ENABLE_OPENGL
   bounds = projection.GetScreenBounds().Scale(1.5);
