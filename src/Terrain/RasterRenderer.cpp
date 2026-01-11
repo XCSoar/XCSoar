@@ -199,7 +199,8 @@ RasterRenderer::GenerateImage(bool do_shading,
                               unsigned height_scale,
                               int contrast, int brightness,
                               const Angle sunazimuth,
-                              bool do_contour) noexcept
+                              bool do_contour,
+                              double wind_speed) noexcept
 {
   if (image == nullptr ||
       height_matrix.GetSize().x > image->GetSize().width ||
@@ -222,7 +223,7 @@ RasterRenderer::GenerateImage(bool do_shading,
 
   if (do_shading)
     GenerateSlopeImage(height_scale, contrast, brightness,
-                       sunazimuth, contour_height_scale);
+                       sunazimuth, contour_height_scale, wind_speed);
   else
     GenerateUnshadedImage(height_scale, contour_height_scale);
 
@@ -300,7 +301,8 @@ void
 RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast,
                                    const int sx, const int sy, const int sz,
-                                   const unsigned contour_height_scale) noexcept
+                                   const unsigned contour_height_scale,
+                                   double wind_speed) noexcept
 {
   assert(quantisation_effective > 0);
 
@@ -407,8 +409,29 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
            integer arithmetics above can't overflow */
         /* TODO: debug this problem and replace this workaround */
         const int sval = num / int(mag|1);
-        const int sindex = (sval - sz) * contrast / 128;
-        *p++ = oColorBuf[int(h) + 256 * std::clamp(sindex, -63, 63)];
+        int sindex = (sval - sz) * contrast / 128;
+        
+        RawColor base_color = oColorBuf[int(h) + 256 * std::clamp(sindex, -63, 63)];
+        
+        // Mark lift-producing slopes: windward-facing slopes with wind >= 15 km/h (4.17 m/s)
+        // sval > sz means slope faces the wind more than average (lift-producing)
+        // Apply obnoxious bright cyan tint while keeping terrain visible
+        if (wind_speed >= 4.17 && sval > sz && current_color_ramp != nullptr) {
+          // Slope faces wind and wind is strong enough for lift
+          // Look up base terrain color and blend with bright cyan (0, 255, 255)
+          const RGB8Color base_terrain_color =
+            ColorRampLookup(h << current_height_scale, current_color_ramp,
+                           NUM_COLOR_RAMP_LEVELS, 2);
+          // Mix cyan with terrain color - 25% cyan for subtle but visible effect
+          const int cyan_mix = 32; // 25% of 128
+          *p++ = RawColor(
+            MIX(0, base_terrain_color.Red(), cyan_mix),      // Reduce red toward cyan
+            MIX(255, base_terrain_color.Green(), cyan_mix),  // Boost green toward cyan
+            MIX(255, base_terrain_color.Blue(), cyan_mix)   // Boost blue toward cyan
+          );
+        } else {
+          *p++ = base_color;
+        }
       } else if (e.IsWater()) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
@@ -426,7 +449,8 @@ void
 RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast, int brightness,
                                    const Angle sunazimuth,
-                                   const unsigned contour_height_scale) noexcept
+                                   const unsigned contour_height_scale,
+                                   double wind_speed) noexcept
 {
   const Angle fudgeelevation = Angle::Degrees(10) +
     Angle::Degrees(80.0 / 255.0) * brightness;
@@ -436,13 +460,15 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   const int sz = (int)(255 * fudgeelevation.fastsine());
 
   GenerateSlopeImage(height_scale, contrast,
-                     sx, sy, sz, contour_height_scale);
+                     sx, sy, sz, contour_height_scale, wind_speed);
 }
 
 void
 RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
                                   unsigned height_scale, int interp_levels) noexcept
 {
+  current_color_ramp = color_ramp;
+  current_height_scale = height_scale;
   if (color_table == nullptr)
     color_table = new RawColor[256 * 128];
 
