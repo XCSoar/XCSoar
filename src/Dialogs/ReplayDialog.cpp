@@ -20,15 +20,17 @@ class ReplayControlWidget final
   };
 
   Replay &replay;
+  WidgetDialog *dialog = nullptr;
 
 public:
   ReplayControlWidget(Replay &_replay, const DialogLook &look) noexcept
     :RowFormWidget(look), replay(_replay) {}
 
-  void CreateButtons(WidgetDialog &dialog) noexcept {
-    dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
-    dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
-    dialog.AddButton(_T("+10'"), [this](){ OnFastForwardClicked(); });
+  void CreateButtons(WidgetDialog &_dialog) noexcept {
+    dialog = &_dialog;
+    dialog->AddButton(_("Start"), [this](){ OnStartClicked(); });
+    dialog->AddButton(_("Stop"), [this](){ OnStopClicked(); });
+    dialog->AddButton(_T("+10'"), [this](){ OnFastForwardClicked(); });
   }
 
 private:
@@ -75,6 +77,10 @@ ReplayControlWidget::OnStartClicked() noexcept
 
   try {
     replay.Start(path);
+    // Close dialog after starting replay to allow UI updates
+    // User can reopen dialog via menu to stop/control replay
+    if (dialog != nullptr)
+      dialog->SetModalResult(mrOK);
   } catch (...) {
     ShowError(std::current_exception(), _("Replay"));
   }
