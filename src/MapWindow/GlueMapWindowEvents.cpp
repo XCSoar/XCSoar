@@ -14,6 +14,7 @@
 #include "Asset.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "Geo/GeoVector.hpp"
 
 #ifdef USE_X11
 #include "ui/event/Globals.hpp"
@@ -415,6 +416,121 @@ GlueMapWindow::OnMapItemTimer() noexcept
   }
 
   ShowMapItems(drag_start_geopoint, false);
+}
+
+void
+GlueMapWindow::OnSmoothUpdateTimer() noexcept
+{
+  // Use CommonInterface::Basic() since we're in the main thread, not DrawThread
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+  const bool circling =
+    CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
+  
+  // Only update map center if we're following the aircraft (not panning)
+  if (IsPanning() || !IsNearSelf()) {
+    smooth_update_timer.Cancel();
+    return;
+  }
+
+  // Get current map center location
+  if (!visible_projection.IsValid()) {
+    smooth_update_timer.Cancel();
+    return;
+  }
+  
+  const GeoPoint current_map_center = visible_projection.GetGeoLocation();
+  GeoPoint target_location;
+  bool has_target = false;
+  
+  // In circling mode, smoothly follow thermal center if available
+  if (circling && calculated.thermal_locator.estimate_valid && 
+      has_last_thermal_center && last_thermal_center.IsValid() &&
+      basic.location_available) {
+    // Use the stored thermal center (updated at 1 Hz) for smooth interpolation
+    // Calculate target map center (interpolated between aircraft and thermal center)
+    const auto d_t = last_thermal_center.DistanceS(basic.location);
+    if (d_t > 0) {
+      const auto d_max = 2 * visible_projection.GetMapScale();
+      const auto t = std::min(d_t, d_max) / d_t;
+      target_location = basic.location.Interpolate(last_thermal_center, t);
+      has_target = true;
+    } else {
+      // Thermal center is at aircraft location
+      target_location = basic.location;
+      has_target = true;
+    }
+  }
+  
+  // If not in circling mode or thermal center not available, use aircraft position dead reckoning
+  if (!has_target) {
+    // Only update if we have stored GPS location and aircraft is moving
+    if (!has_last_gps_location || !last_gps_location_time.IsDefined() ||
+        !basic.location_available || !basic.ground_speed_available ||
+        basic.ground_speed <= 0.5) {
+      // Stop timer if GPS is lost or aircraft stopped
+      smooth_update_timer.Cancel();
+      return;
+    }
+    
+    // Calculate predicted aircraft position using dead reckoning
+    // Use wall-clock time for accurate elapsed time calculation
+    const auto elapsed_wall = last_gps_fix_clock.Elapsed();
+    // Elapsed() can return negative if clock was never updated
+    GeoPoint predicted_location = last_gps_location;
+    
+    if (elapsed_wall.count() >= 0) {
+      const double elapsed_seconds = std::chrono::duration_cast<std::chrono::duration<double>>(elapsed_wall).count();
+      
+      // Use dead reckoning if we have valid speed and track
+      // Angle is always valid, just check if speed is positive
+      if (elapsed_seconds > 0 && elapsed_seconds < 2.0 && 
+          last_gps_speed > 0) {
+        // Calculate distance traveled since last GPS fix
+        const double distance = last_gps_speed * elapsed_seconds;
+        
+        // Calculate predicted location using GeoVector
+        const GeoVector vector(distance, last_gps_track);
+        predicted_location = vector.EndPoint(last_gps_location);
+      } else if (elapsed_seconds >= 2.0 || !basic.time_available) {
+        // Too much time elapsed or no time - use current GPS location
+        predicted_location = basic.location;
+      }
+    } else {
+      // Clock not initialized - use current GPS location
+      predicted_location = basic.location;
+    }
+    
+    target_location = predicted_location;
+    has_target = true;
+  }
+  
+  if (!has_target) {
+    smooth_update_timer.Cancel();
+    return;
+  }
+  
+  // Calculate distance to target location
+  const double distance_to_target = current_map_center.DistanceS(target_location);
+  const double distance_pixels = visible_projection.DistanceMetersToPixels(distance_to_target);
+  
+  // Update map center to follow target smoothly
+  // Use a constant blend factor for constant-speed panning
+  const double blend_factor = 0.5; // 50% toward target per frame = smooth constant movement
+  
+  // Only update if the distance is significant (more than 0.5 pixels)
+  if (distance_pixels > 0.5) {
+    // Interpolate between current map center and target location
+    const GeoPoint target = current_map_center.Interpolate(target_location, blend_factor);
+    SetLocation(target);
+    QuickRedraw();
+  } else {
+    // Already close enough - just trigger a redraw
+    PartialRedraw();
+  }
+  
+  // Reschedule for next update (10 Hz = 100ms)
+  smooth_update_timer.Schedule(std::chrono::milliseconds(100));
 }
 
 #ifdef ENABLE_OPENGL
