@@ -329,9 +329,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
     info.location = location;
 
   info.gps.real = real;
-#if defined(ANDROID) || defined(__APPLE__)
   info.gps.nonexpiring_internal_gps = false;
-#endif
 
   return true;
 }
@@ -484,9 +482,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   }
 
   info.gps.real = real;
-#if defined(ANDROID) || defined(__APPLE__)
   info.gps.nonexpiring_internal_gps = false;
-#endif
 
   return true;
 }
@@ -591,9 +587,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   */
 
   info.gps.real = real;
-#if defined(ANDROID) || defined(__APPLE__)
   info.gps.nonexpiring_internal_gps = false;
-#endif
 
   gps.hdop = line.Read(-1.);
 

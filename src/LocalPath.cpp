@@ -9,6 +9,11 @@
 #include "util/StringFormat.hpp"
 #include "util/StringAPI.hxx"
 #include "Asset.hpp"
+#include "LogFile.hpp"
+
+#ifdef __APPLE__
+#include "Apple/PathProvider.hpp"
+#endif
 
 #include "system/FileUtil.hpp"
 
@@ -26,6 +31,7 @@
 
 #include <algorithm>
 #include <list>
+#include <string>
 
 #include <cassert>
 #include <stdlib.h>
@@ -38,10 +44,6 @@
 #include <android/log.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#endif
-
-#ifdef __APPLE__
-#import <Foundation/Foundation.h>
 #endif
 
 /**
@@ -289,27 +291,28 @@ FindDataPaths() noexcept
        "Documents" folder inside the application's sandbox.  This
        folder can also be accessed via iTunes, if
        UIFileSharingEnabled is set to YES in Info.plist */
-#if (TARGET_OS_IPHONE)
-    constexpr const char *in_home = "Documents/" PRODUCT_DATA_DIR;
-#else
-    constexpr const char *in_home = PRODUCT_DATA_DIR;
-#endif
+    const Path in_home = Apple::GetDataPathInHome();
 #else // !APPLE
     constexpr const char *in_home = PRODUCT_UNIX_HOME_DIR;
 #endif
 
     result.emplace_back(AllocatedPath::Build(Path(home), in_home));
+#ifdef __APPLE__
+    const Path data_path(result.back().c_str());
+    if (!Apple::EnsureDataPathExists(data_path)) {
+      const std::string utf8_path = data_path.ToUTF8();
+      if (!utf8_path.empty())
+        LogFormat("Failed to create data path '%s'", utf8_path.c_str());
+      else
+        LogFormat("Failed to create data path (unknown path)");
+    }
+#endif
   }
 
 #ifndef __APPLE__
   /* Linux (and others): allow global configuration in /etc/<product_name> */
   if (Directory::Exists(Path{PRODUCT_UNIX_SYSCONF_DIR}))
     result.emplace_back(Path{PRODUCT_UNIX_SYSCONF_DIR});
-#else
-  if (!Directory::Exists(Path{result.back()})) {
-    id fileManager = [NSFileManager defaultManager];
-      [fileManager createDirectoryAtPath:[NSString stringWithCString:result.back().c_str()] withIntermediateDirectories:YES attributes:nil error:nil];
-  }
 #endif // !APPLE
 #endif // HAVE_POSIX
 

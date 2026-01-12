@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifdef __APPLE__
-#include <TargetConditionals.h>
-#endif
-
 #include "SmartDeviceSensors.hpp"
 
 #include "Descriptor.hpp"
@@ -98,8 +94,6 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
 }
 
 
-#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
-
 void
 DeviceDescriptor::OnBarometricPressureSensor(float pressure,
                                              float sensor_noise_variance) noexcept
@@ -121,4 +115,3 @@ DeviceDescriptor::OnBarometricPressureSensor(float pressure,
 
   e.Commit();
 }
-#endif
