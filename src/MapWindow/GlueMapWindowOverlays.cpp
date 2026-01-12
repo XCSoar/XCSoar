@@ -194,7 +194,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas,
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().height - Layout::Scale(4)));
+                       rc.bottom - bottom_margin - bmp->GetSize().height - Layout::Scale(4)));
 
   // draw flarm status
   if (!GetMapSettings().show_flarm_alarm_level)
@@ -223,7 +223,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas,
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().height - Layout::Scale(2)));
+                       rc.bottom - bottom_margin - bmp->GetSize().height - Layout::Scale(2)));
 }
 
 void
