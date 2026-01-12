@@ -284,13 +284,10 @@ GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
     return;
   }
 
-  PixelRect map_rect = GetClientRect();
+  PixelRect parent_rect = GetParentClientRect();
+  unsigned screen_height = parent_rect.GetHeight();
 
-  if (map_rect.GetHeight() > map_rect.GetWidth()) {
-    SetBottomMargin(map_rect.bottom / margin_factor);
-  } else {
-    SetBottomMargin(0);
-  }
+  SetBottomMargin(screen_height / margin_factor);
 }
 
 void
