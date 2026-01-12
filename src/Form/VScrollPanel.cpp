@@ -5,6 +5,8 @@
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Asset.hpp"
+#include "Screen/Layout.hpp"
+#include "Math/Point2D.hpp"
 
 #include <algorithm>
 
@@ -111,6 +113,12 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
     return true;
   }
 
+  if (potential_tap) {
+    potential_tap = false;
+    ReleaseCapture();
+    return PanelControl::OnMouseUp(p);
+  }
+
   return PanelControl::OnMouseUp(p);
 }
 
@@ -121,6 +129,18 @@ VScrollPanel::OnMouseMove(PixelPoint p, unsigned keys) noexcept
     origin = scroll_bar.DragMove(virtual_height, GetSize().height, p.y);
     listener.OnVScrollPanelChange();
     return true;
+  }
+
+  if (potential_tap) {
+    const unsigned threshold = Layout::Scale(HasTouchScreen() ? 50 : 10);
+    if ((unsigned)ManhattanDistance(drag_start, p) > threshold) {
+      potential_tap = false;
+      dragging = true;
+      drag_y = (int)origin + drag_start.y;
+      if (UsePixelPan())
+        kinetic.MouseDown(origin);
+    } else
+      return PanelControl::OnMouseMove(p, keys);
   }
 
   if (dragging) {
@@ -145,7 +165,15 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
     scroll_bar.DragBegin(this, p.y);
     return true;
   } else if (!scroll_bar.IsInside(p)) {
-    // Start dragging the content area itself instead of the scroll bar
+    // First, let child widgets handle the event
+    if (PanelControl::OnMouseDown(p)) {
+      potential_tap = true;
+      drag_start = p;
+      SetCapture();
+      return true;
+    }
+
+    // No child widget handled it, so start dragging the content area
     dragging = true;
     drag_y = (int)origin + p.y;
     if (UsePixelPan())
@@ -176,6 +204,10 @@ VScrollPanel::OnCancelMode() noexcept
   scroll_bar.DragEnd(this);
   if (dragging) {
     dragging = false;
+    ReleaseCapture();
+  }
+  if (potential_tap) {
+    potential_tap = false;
     ReleaseCapture();
   }
   kinetic_timer.Cancel();
