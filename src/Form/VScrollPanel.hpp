@@ -46,6 +46,12 @@ class VScrollPanel final : public PanelControl {
   bool dragging = false;
 
   /**
+   * Tracks if we're waiting to determine if this is a tap or drag.
+   */
+  bool potential_tap = false;
+  PixelPoint drag_start = {0, 0};
+
+  /**
    * The vertical distance from the start of the drag relative to the
    * top of the list (not the top of the screen)
    */
