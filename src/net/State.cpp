@@ -7,10 +7,15 @@
 #define NO_SCREEN
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#include "thread/Debug.hpp"
+
+#include <cassert>
 
 NetState
 GetNetState()
 {
+  assert(InMainThread());
+
   return native_view != nullptr
     ? NetState(native_view->GetNetState(Java::GetEnv()))
     : NetState::UNKNOWN;
