@@ -127,7 +127,6 @@ inline unsigned
 PopupMessage::CalculateWidth() const noexcept
 {
   if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT)
-    // TODO code: this shouldn't be hard-coded
     return rc.GetWidth();
   else
     return unsigned(rc.GetWidth() * 0.9);
