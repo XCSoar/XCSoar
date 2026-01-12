@@ -12,8 +12,7 @@ ContestResult
 WeglideFAI::CalculateResult() const noexcept
 {
   ContestResult result = TriangleContest::CalculateResult();
-  // 1 point per km 
-  result.score = ApplyHandicap(result.distance * 0.001);
-
+  // 0.3 raw points per km
+  result.score = ApplyHandicap(result.distance / 1000.0 * 0.3);
   return result;
 }

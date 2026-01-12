@@ -11,4 +11,8 @@
 class WeglideOR : public ContestDijkstra {
 public:
   explicit WeglideOR(const Trace &_trace) noexcept;
+
+protected:
+  /* virtual methods from AbstractContest */
+  ContestResult CalculateResult() const noexcept override;
 };
