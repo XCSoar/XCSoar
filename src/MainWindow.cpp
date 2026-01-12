@@ -408,7 +408,8 @@ MainWindow::ReinitialiseLayout() noexcept
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 
-  popup->UpdateLayout(map_rect);
+  if (popup != nullptr)
+    popup->UpdateLayout(GetMainRect());
 
   ReinitialiseLayout_vario(ib_layout);
 
@@ -943,6 +944,9 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
 
   if (map != nullptr)
     map->FastMove(GetMainRect());
+
+  if (popup != nullptr)
+    popup->UpdateLayout(GetMainRect());
 
   // the repaint will be triggered by the DrawThread
 
