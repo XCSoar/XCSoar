@@ -18,6 +18,8 @@
 #include "Renderer/TrailRenderer.hpp"
 #include "Weather/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
+#include "time/Stamp.hpp"
+#include "time/PeriodClock.hpp"
 
 #include <memory>
 
@@ -165,6 +167,39 @@ protected:
    * i.e. OnPaintBuffer().
    */
   ScreenStopWatch draw_sw;
+
+  /**
+   * State for smooth aircraft position interpolation between GPS fixes
+   */
+  PixelPoint last_aircraft_pos{0, 0};
+  TimeStamp last_gps_time{};
+  bool has_last_aircraft_pos = false;
+  
+  /**
+   * Previous and current GPS fix locations for smooth interpolation
+   * Used to interpolate aircraft icon position between GPS updates
+   * prev_gps_location = location from fix N-1
+   * current_gps_location = location from fix N (most recent)
+   */
+  GeoPoint prev_gps_location{GeoPoint::Invalid()};
+  GeoPoint current_gps_location{GeoPoint::Invalid()};
+  TimeStamp prev_gps_time{};
+  TimeStamp current_gps_time{};
+  bool has_prev_gps = false;
+  
+  /**
+   * Previous and current heading angles for smooth rotation interpolation
+   * Used to interpolate aircraft icon rotation between GPS updates
+   */
+  Angle prev_gps_heading{Angle::Zero()};
+  Angle current_gps_heading{Angle::Zero()};
+  bool has_prev_gps_heading = false;
+  
+  /**
+   * Wall-clock time when last GPS fix was received
+   * Used for smooth interpolation between GPS fixes
+   */
+  PeriodClock last_gps_fix_clock;
 
   friend class DrawThread;
 

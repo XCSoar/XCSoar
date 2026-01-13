@@ -66,7 +66,8 @@ public:
    * called
    */
   bool Generate(const WindowProjection &map_projection,
-                const Angle sunazimuth);
+                const Angle sunazimuth,
+                double wind_speed = 0.0);
 
   void Draw(Canvas &canvas, const WindowProjection &projection) const {
     raster_renderer.Draw(canvas, projection);

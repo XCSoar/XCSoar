@@ -222,6 +222,16 @@ GlueMapWindow::UpdateScreenAngle() noexcept
   OnProjectionModified();
 
   compass_visible = orientation != MapOrientation::NORTH_UP;
+
+  // Start smooth update timer if GPS is available and aircraft is moving
+  if (basic.location_available && basic.ground_speed_available && 
+      basic.ground_speed > 0.5) {
+    // Start timer for smooth updates (10 Hz = 100ms)
+    smooth_update_timer.Schedule(std::chrono::milliseconds(100));
+  } else {
+    // Stop timer if GPS is lost or aircraft stopped
+    smooth_update_timer.Cancel();
+  }
 }
 
 void
@@ -347,25 +357,114 @@ GlueMapWindow::UpdateProjection() noexcept
   if (!IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
   } else if (circling && calculated.thermal_locator.estimate_valid) {
-    const auto d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
-    if (d_t <= 0) {
-      SetLocationLazy(basic.location);
+    // Store thermal center for smooth interpolation by timer
+    // Only update stored location when we get a new thermal center estimate (time changed)
+    if (basic.time_available) {
+      if (!has_last_thermal_center || !last_thermal_center_time.IsDefined() || 
+          basic.time != last_thermal_center_time) {
+        // New thermal center estimate - store it for smooth interpolation
+        last_thermal_center = calculated.thermal_locator.estimate_location;
+        last_thermal_center_time = basic.time;
+        has_last_thermal_center = true;
+        
+        // Update wall-clock timer for smooth interpolation
+        last_thermal_center_clock.Update();
+        
+        // Calculate target map center (interpolated between aircraft and thermal center)
+        const auto d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
+        if (d_t <= 0) {
+          SetLocationLazy(basic.location);
+        } else {
+          const auto d_max = 2 * visible_projection.GetMapScale();
+          const auto t = std::min(d_t, d_max)/d_t;
+          const GeoPoint target = basic.location.Interpolate(calculated.thermal_locator.estimate_location, t);
+          
+          // If this is the first thermal center or map center is far away, jump immediately
+          if (!visible_projection.IsValid()) {
+            SetLocation(target);
+          } else {
+            const double distance_meters = visible_projection.GetGeoLocation().DistanceS(target);
+            const double distance_pixels = visible_projection.DistanceMetersToPixels(distance_meters);
+            // If more than 100 pixels away, jump directly to keep thermal center in frame
+            if (distance_pixels > 100.0) {
+              SetLocation(target);
+            }
+          }
+        }
+        
+        // Start smooth update timer if not already running
+        if (basic.location_available && basic.ground_speed_available && basic.ground_speed > 0.5) {
+          smooth_update_timer.Schedule(std::chrono::milliseconds(100));
+        }
+      }
     } else {
-      const auto d_max = 2 * visible_projection.GetMapScale();
-      const auto t = std::min(d_t, d_max)/d_t;
-      SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
-                                               t));
+      // No time available - use immediate update
+      const auto d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
+      if (d_t <= 0) {
+        SetLocationLazy(basic.location);
+      } else {
+        const auto d_max = 2 * visible_projection.GetMapScale();
+        const auto t = std::min(d_t, d_max)/d_t;
+        SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location, t));
+      }
     }
-  } else if (basic.location_available)
-    // Pan is off
-    SetLocationLazy(basic.location);
-  else if (!visible_projection.IsValid() && terrain != nullptr) {
-    /* if there's no GPS fix yet and no home waypoint, start at the
-       map center, to avoid showing a fully white map, which confuses
-       users */
-    if (const auto center = terrain->GetTerrainCenter();
-        center.IsValid())
-      SetLocation(center);
+  } else if (basic.location_available) {
+    // Store GPS location for smooth interpolation by timer
+    // Only update stored location when we get a new GPS fix (time changed)
+    if (basic.time_available) {
+      if (!has_last_gps_location || !last_gps_location_time.IsDefined() || 
+          basic.time != last_gps_location_time) {
+        // New GPS fix - store it for smooth interpolation
+        const bool is_new_fix = !has_last_gps_location || !last_gps_location_time.IsDefined();
+        last_gps_location = basic.location;
+        last_gps_location_time = basic.time;
+        if (basic.ground_speed_available) {
+          last_gps_speed = basic.ground_speed;
+        }
+        if (basic.track_available) {
+          last_gps_track = basic.track;
+        }
+        has_last_gps_location = true;
+        
+        // Update wall-clock timer for dead reckoning
+        last_gps_fix_clock.Update();
+        
+        // If this is the first GPS fix (e.g., replay start) or map center is far away,
+        // jump immediately to the GPS location to keep aircraft in frame
+        if (is_new_fix || !visible_projection.IsValid()) {
+          SetLocation(basic.location);
+        } else {
+          // Check if map center is far from GPS location (e.g., after replay start)
+          const double distance_meters = visible_projection.GetGeoLocation().DistanceS(basic.location);
+          const double distance_pixels = visible_projection.DistanceMetersToPixels(distance_meters);
+          // If more than 100 pixels away, jump directly to keep aircraft in frame
+          if (distance_pixels > 100.0) {
+            SetLocation(basic.location);
+          }
+        }
+        
+        // Start smooth update timer if aircraft is moving
+        if (basic.ground_speed_available && basic.ground_speed > 0.5) {
+          smooth_update_timer.Schedule(std::chrono::milliseconds(100));
+        }
+      }
+    } else {
+      // No time available - use immediate update
+      SetLocationLazy(basic.location);
+    }
+  } else {
+    // No GPS fix - reset state and stop timer
+    has_last_gps_location = false;
+    smooth_update_timer.Cancel();
+    
+    if (!visible_projection.IsValid() && terrain != nullptr) {
+      /* if there's no GPS fix yet and no home waypoint, start at the
+         map center, to avoid showing a fully white map, which confuses
+         users */
+      if (const auto center = terrain->GetTerrainCenter();
+          center.IsValid())
+        SetLocation(center);
+    }
   }
 
   OnProjectionModified();

@@ -39,7 +39,7 @@ BackgroundRenderer::Draw(Canvas& canvas,
       renderer.reset(new TerrainRenderer(*terrain));
 
     renderer->SetSettings(terrain_settings);
-    if (renderer->Generate(proj, shading_angle))
+    if (renderer->Generate(proj, shading_angle, wind_speed))
       renderer->Draw(canvas, proj);
   }
 }
@@ -53,15 +53,17 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
 
   if (settings.slope_shading == SlopeShading::WIND &&
       calculated.wind_available &&
-      calculated.wind.norm >= 0.5)
+      calculated.wind.norm >= 0.5) {
     angle = calculated.wind.bearing;
-
-  else if (settings.slope_shading == SlopeShading::SUN &&
-           calculated.sun_data_available)
-    angle = calculated.sun_azimuth;
-
-  else
-    angle = DEFAULT_SHADING_ANGLE;
+    wind_speed = calculated.wind.norm;
+  } else {
+    wind_speed = 0.0;
+    if (settings.slope_shading == SlopeShading::SUN &&
+        calculated.sun_data_available)
+      angle = calculated.sun_azimuth;
+    else
+      angle = DEFAULT_SHADING_ANGLE;
+  }
 
   SetShadingAngle(projection, angle);
 }

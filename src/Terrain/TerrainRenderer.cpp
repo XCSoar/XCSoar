@@ -7,6 +7,7 @@
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
@@ -324,7 +325,8 @@ IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
 
 bool
 TerrainRenderer::Generate(const WindowProjection &map_projection,
-                          const Angle sunazimuth)
+                          const Angle sunazimuth,
+                          double wind_speed)
 {
 #ifdef ENABLE_OPENGL
   const GeoBounds &old_bounds = raster_renderer.GetBounds();
@@ -381,9 +383,20 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     raster_renderer.ScanMap(map, map_projection);
   }
 
+  // Boost contrast for wind shading when wind speed is above 15 km/h (4.17 m/s)
+  // to make slopes that produce lift more visible
+  int adjusted_contrast = settings.contrast;
+  if (do_shading && settings.slope_shading == SlopeShading::WIND &&
+      wind_speed > 4.17) {
+    // Increase contrast by 50% to make wind shading more visible
+    // Clamp to maximum of 128 (which is the effective max in the shading calculation)
+    adjusted_contrast = std::min(128, (int)(settings.contrast * 1.5));
+  }
+
   raster_renderer.GenerateImage(do_shading, height_scale,
-                                settings.contrast, settings.brightness,
+                                adjusted_contrast, settings.brightness,
                                 sunazimuth,
-                                do_contour);
+                                do_contour,
+                                settings.slope_shading == SlopeShading::WIND ? wind_speed : 0.0);
   return true;
 }
