@@ -41,7 +41,35 @@ class WindowUtil {
 
   static void disableImmersiveMode(Window window) {
     View decorView = window.getDecorView();
-    decorView.setSystemUiVisibility(0);
+    
+    /* Check if we're in landscape orientation */
+    android.content.res.Configuration config = decorView.getContext().getResources().getConfiguration();
+    boolean isLandscape = config.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+    
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      /* Android 11+ (API 30+): Use WindowInsetsController */
+      WindowInsetsController controller = decorView.getWindowInsetsController();
+      if (controller != null) {
+        if (isLandscape) {
+          /* Hide status bar in landscape to maximize screen space */
+          controller.hide(WindowInsets.Type.statusBars());
+        } else {
+          /* Show status bar in portrait to display clock and battery */
+          controller.show(WindowInsets.Type.statusBars());
+        }
+        /* Always show navigation bar */
+        controller.show(WindowInsets.Type.navigationBars());
+      }
+    } else {
+      /* Android 10 and below: Use setSystemUiVisibility */
+      if (isLandscape) {
+        /* Hide status bar in landscape */
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+      } else {
+        /* Show status bar in portrait */
+        decorView.setSystemUiVisibility(0);
+      }
+    }
   }
 
   static void enterFullScreenMode(Window window) {
@@ -76,11 +104,13 @@ class WindowUtil {
     disableImmersiveMode(window);
     window.clearFlags(FULL_SCREEN_WINDOW_FLAGS & ~preserveFlags);
 
-    /* Reset display cutout mode to default when leaving fullscreen */
+    /* Set display cutout mode to SHORT_EDGES in non-fullscreen mode to respect the notch.
+       This allows content to extend into the cutout area while still accounting for it
+       in safe area calculations. */
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       WindowManager.LayoutParams lp = window.getAttributes();
       lp.layoutInDisplayCutoutMode =
-        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;
+        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
       window.setAttributes(lp);
     }
   }

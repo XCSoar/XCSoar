@@ -23,6 +23,7 @@ jmethodID NativeView::bitmapToTexture_method;
 jmethodID NativeView::shareText_method;
 jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
+jmethodID NativeView::startServiceIfNeeded_method;
 
 Java::TrivialClass NativeView::clsBitmap;
 jmethodID NativeView::createBitmap_method;
@@ -63,6 +64,8 @@ NativeView::Initialise(JNIEnv *env)
                      "(ILjava/lang/String;)V");
 
   getNetState_method = env->GetMethodID(cls, "getNetState", "()I");
+
+  startServiceIfNeeded_method = env->GetMethodID(cls, "startServiceIfNeeded", "()V");
 
   clsBitmap.Find(env, "android/graphics/Bitmap");
   createBitmap_method = env->GetStaticMethodID(
