@@ -57,7 +57,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    ProfileKeys::WaypointFileList, WAYPOINT_FILE_PATTERNS,
                    FileType::WAYPOINT);
 
-  AddMultipleFiles(_("Watched waypoints"),
+  AddMultipleFiles(_("Watched WPTs"),
                    _("Waypoint files containing special waypoints for which "
                      "additional computations like "
                      "calculation of arrival height in map display always "
@@ -68,7 +68,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    WAYPOINT_FILE_PATTERNS, FileType::WAYPOINT);
   SetExpertRow(WatchedWaypointFileList);
 
-  AddMultipleFiles(_("Airfields or Waypoint details"),
+  AddMultipleFiles(_("WPT A/F details"),
                    _("The files may contain extracts from enroute supplements "
                      "or other contributed "
                      "information about individual waypoints and airfields."),
@@ -76,7 +76,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    FileType::WAYPOINTDETAILS);
   SetExpertRow(AirfieldFileList);
 
-  AddMultipleFiles(_("Selected Airspace Files"),
+  AddMultipleFiles(_("Airspace"),
                    _("List of active airspace files. Use the Add and Remove "
                      "buttons to activate or deactivate"
                      " airspace files respectively. Supported file types are: "
@@ -84,7 +84,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    ProfileKeys::AirspaceFileList, AIRSPACE_FILE_PATTERNS,
                    FileType::AIRSPACE);
 
-  AddFile(_("FLARM Device Database"),
+  AddFile(_("FLARM database"),
           _("The name of the file containing information about registered FLARM devices."),
           ProfileKeys::FlarmFile, _T("*.fln\0"),
           FileType::FLARMNET);
