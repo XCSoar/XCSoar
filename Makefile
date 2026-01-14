@@ -62,6 +62,9 @@
 #
 #   USE_CCACHE  "y" to build with ccache
 #
+#   TARGET_DIR  "<path>" to build into output/<path> instead of output/<target>
+#
+#   TARGET_OUTPUT_DIR "<path>" to build into arbitrary directory
 
 .DEFAULT_GOAL := all
 
