@@ -261,7 +261,7 @@ $(TARGET_OUTPUT_DIR)/include/resource.h: $(TARGET_OUTPUT_DIR)/include/MakeResour
 
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/XCSoar.rsc
 
-$(TARGET_OUTPUT_DIR)/XCSoar.rsc: %.rsc: %.rc $(TARGET_OUTPUT_DIR)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp $(BUILD_TOOLCHAIN_TARGET)
+$(TARGET_OUTPUT_DIR)/XCSoar.rsc: %.rsc: %.rc $(TARGET_OUTPUT_DIR)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir output/data --include-dir Data -o $@ $<
 

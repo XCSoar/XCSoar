@@ -1,6 +1,6 @@
 ######## tools
 
-CCACHE := 
+CCACHE :=
 ifeq ($(USE_CCACHE),y)
   CCACHE := ccache$(EXE)
 endif
@@ -92,21 +92,23 @@ $(ABI_OUTPUT_DIR)/%.i: %.c FORCE
 # Provide our own rules for building...
 #
 
+.SECONDEXPANSION:
+
 WRAPPED_CC = $(strip $(CCACHE) $(CC))
 WRAPPED_CXX = $(strip $(CCACHE) $(CXX))
 
-$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c | $$(patsubst %/,%,$$(@D))/dirstamp $(compile-depends)
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(WRAPPED_CC) $< -c -o $@ $(cc-flags)
 
-$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp | $$(patsubst %/,%,$$(@D))/dirstamp $(compile-depends)
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
 endif
 
-$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx | $$(patsubst %/,%,$$(@D))/dirstamp $(compile-depends)
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)
