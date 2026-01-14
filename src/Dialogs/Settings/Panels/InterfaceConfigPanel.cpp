@@ -18,11 +18,16 @@
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
+
 using namespace std::chrono;
 
 enum ControlIndex {
   UIScale,
   CustomDPI,
+  AntiAliasing,
   InputFile,
 #ifdef HAVE_NLS
   LanguageFile,
@@ -94,6 +99,44 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     wp_dpi->RefreshDisplay();
   }
   SetExpertRow(CustomDPI);
+
+  WndProperty *wp_antialiasing = AddEnum(_("Anti-aliasing"),
+                                 _("Multi-sample anti-aliasing for smoother graphics. "
+                                   "Higher values improve quality but may reduce performance."));
+  if (wp_antialiasing != nullptr) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
+    df.AddChoice(0, _("Off"));
+
+    // Display all options but mark currently unavailable ones as "Not available"
+#ifdef ENABLE_OPENGL
+    const unsigned max_samples = OpenGL::max_antialiasing_samples;
+#else
+    const unsigned max_samples = 0;
+#endif
+    if (max_samples >= 2)
+      df.AddChoice(2, _("2x"));
+    else
+      df.AddChoice(2, _("2x (Not available)"));
+
+    if (max_samples >= 4)
+      df.AddChoice(4, _("4x"));
+    else
+      df.AddChoice(4, _("4x (Not available)"));
+
+    if (max_samples >= 8)
+      df.AddChoice(8, _("8x"));
+    else
+      df.AddChoice(8, _("8x (Not available)"));
+
+    if (max_samples >= 16)
+      df.AddChoice(16, _("16x"));
+    else
+      df.AddChoice(16, _("16x (Not available)"));  
+
+    df.SetValue(settings.antialiasing);
+    wp_antialiasing->RefreshDisplay();
+  }
+  SetExpertRow(AntiAliasing);
 
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
@@ -193,6 +236,10 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
 
   if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
                     settings.custom_dpi))
+    require_restart = changed = true;
+
+  if (SaveValueEnum(AntiAliasing, ProfileKeys::AntiAliasing,
+                    settings.antialiasing))
     require_restart = changed = true;
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))

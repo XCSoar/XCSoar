@@ -163,6 +163,33 @@ OpenGL::SetupContext()
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
 
+  /* Enable MSAA (configured at context creation).
+   * GL_MULTISAMPLE is 0x809D, (but ES 2.0 headers do not have it).
+   */
+#ifndef GL_MULTISAMPLE
+#define GL_MULTISAMPLE 0x809D
+#endif
+  glEnable(GL_MULTISAMPLE);
+
+  /* Query maximum MSAA samples */
+  GLint max_samples = 0;
+#ifdef GL_MAX_SAMPLES
+  /* Desktop OpenGL or OpenGL ES 3.0+ headers - query directly */
+  glGetIntegerv(GL_MAX_SAMPLES, &max_samples);
+#else
+  /* OpenGL ES 2.0 headers - check runtime version before querying */
+  if (auto version_string = (const char *)glGetString(GL_VERSION);
+      version_string != nullptr) {
+    /* GL_MAX_SAMPLES (0x8D57) requires OpenGL ES 3.0+ */
+    if (strstr(version_string, "OpenGL ES 3.") != nullptr ||
+        strstr(version_string, "OpenGL ES 4.") != nullptr) {
+      glGetIntegerv(0x8D57, &max_samples);
+    }
+  }
+#endif
+  max_antialiasing_samples = max_samples > 0 ? (unsigned)max_samples : 0;
+  LogFormat("GL max MSAA samples: %u", max_antialiasing_samples);
+
   InitShaders();
 }
 
