@@ -13,6 +13,10 @@ FLARM_SOURCES = \
 	$(SRC)/FLARM/Computer.cpp \
 	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/FLARM/Glue.cpp \
+    $(SRC)/FLARM/Details.cpp \
+    $(SRC)/FLARM/TrafficDatabases.cpp \
+    $(SRC)/FLARM/NameDatabase.cpp \
+    $(SRC)/FLARM/NameFile.cpp
 
 FLARM_DEPENDS = FMT
 
