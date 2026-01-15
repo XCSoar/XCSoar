@@ -23,6 +23,10 @@ class StratuxDevice : public AbstractDevice {
     };
 
     bool ParseNMEA(const char *line, NMEAInfo &info) override;
+
+  private:
+
+    void ExtractAndSetCallSign(const char *line, NMEAInfo &info);
 };
 
 void LoadFromProfile(StratuxDevice::StratuxSettings &settings) noexcept;
