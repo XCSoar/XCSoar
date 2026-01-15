@@ -6,6 +6,8 @@
 #include "Widget/CreateWindowWidget.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/LargeTextWidget.hpp"
+#include "Widget/ScrollableLargeTextWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "Look/FontDescription.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/Colors.hpp"
@@ -147,9 +149,18 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                   dialog.MakeModalResultCallback(mrOK));
   pager->Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
-  pager->Add(std::make_unique<LargeTextWidget>(look, authors2));
-  pager->Add(std::make_unique<LargeTextWidget>(look, news2));
-  pager->Add(std::make_unique<LargeTextWidget>(look, license2));
+  
+  auto authorInner = std::make_unique<ScrollableLargeTextWidget>(look, authors2);
+  auto authorScroll = std::make_unique<VScrollWidget>(std::move(authorInner), look);
+  pager->Add(std::move(authorScroll));
+
+  auto newsInner = std::make_unique<ScrollableLargeTextWidget>(look, news2);
+  auto newsScroll = std::make_unique<VScrollWidget>(std::move(newsInner), look);
+  pager->Add(std::move(newsScroll));
+
+  auto licenseInner = std::make_unique<ScrollableLargeTextWidget>(look, license2);
+  auto licenseScroll = std::make_unique<VScrollWidget>(std::move(licenseInner), look);
+  pager->Add(std::move(licenseScroll));
 
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
