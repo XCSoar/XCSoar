@@ -77,8 +77,8 @@ Canvas::InvertRectangle(PixelRect r) noexcept
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 }
 
-static tstring_view
-ClipText(const Font &font, tstring_view text,
+static std::string_view
+ClipText(const Font &font, std::string_view text,
          int x, unsigned canvas_width) noexcept
 {
   if (text.empty() || x >= int(canvas_width))
@@ -542,7 +542,8 @@ const PixelSize
 Canvas::CalcTextSize(tstring_view text) const noexcept
 {
 #ifdef UNICODE
-  const WideToUTF8Converter text2(text);
+  const WideToUTF8Converter text_conv(text);
+  const std::string_view text2 = text_conv.sv();
 #else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
@@ -575,7 +576,8 @@ void
 Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 {
 #ifdef UNICODE
-  const WideToUTF8Converter text2(text);
+  const WideToUTF8Converter text_conv(text);
+  const std::string_view text2 = text_conv.sv();
 #else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
@@ -609,7 +611,8 @@ void
 Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
 {
 #ifdef UNICODE
-  const WideToUTF8Converter text2(text);
+  const WideToUTF8Converter text_conv(text);
+  const std::string_view text2 = text_conv.sv();
 #else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
@@ -641,7 +644,8 @@ Canvas::DrawClippedText(PixelPoint p, PixelSize size,
                         tstring_view text) noexcept
 {
 #ifdef UNICODE
-  const WideToUTF8Converter text2(text);
+  const WideToUTF8Converter text_conv(text);
+  const std::string_view text2 = text_conv.sv();
 #else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));

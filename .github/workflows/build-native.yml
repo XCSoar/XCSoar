@@ -143,7 +143,7 @@ jobs:
             target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
-            target_ext: .exe
+            target_ext: .zip
             target_upload: true
             target_container: debian:trixie-slim
           - os: ubuntu-24.04

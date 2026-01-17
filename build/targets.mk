@@ -67,6 +67,10 @@ TARGET_ARCH :=
 ifeq ($(TARGET),WIN64)
   X64 := y
   override TARGET = PC
+
+  ### Just temporary, in PR only, to test CI build: make ANGLE default on 64bit Windows
+  USE_ANGLE = y
+  ### Temporary end
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -132,6 +136,11 @@ ifeq ($(TARGET),PC)
   endif
 
   WINVER = 0x0600
+  
+  ### Just temporary, in PR only, to test CI build: make OPENGL default on Windows
+  OPENGL = y
+  ENABLE_SDL = y
+  ### Temporary end
 endif
 
 ifeq ($(TARGET),OPT)

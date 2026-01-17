@@ -246,7 +246,7 @@ WndForm::OnCancelMode() noexcept
   }
 }
 
-#ifdef _WIN32
+#ifdef USE_WINUSER
 
 bool
 WndForm::OnCommand(unsigned id, unsigned code) noexcept

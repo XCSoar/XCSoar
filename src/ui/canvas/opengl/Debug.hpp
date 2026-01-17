@@ -5,12 +5,16 @@
 
 #ifndef NDEBUG
 
-#include <pthread.h>
-
+#ifdef _WIN32
+#include <windows.h>
 namespace OpenGL {
-
+extern DWORD thread;
+}
+#else
+#include <pthread.h>
+namespace OpenGL {
 extern pthread_t thread;
-
-} // namespace OpenGL
+}
+#endif
 
 #endif

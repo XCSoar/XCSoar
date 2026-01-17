@@ -57,8 +57,13 @@ struct TextCacheKey {
   void Allocate() noexcept {
     assert(allocated == nullptr);
 
-    allocated = strndup(text.data(), text.size());
-    text = {allocated, text.size()};
+    const auto s = text.size();
+    allocated = (char *) malloc(s + 1);
+    assert(allocated != nullptr);
+    if(allocated == nullptr)
+      return;
+    text.copy(allocated, s);
+    text = {allocated, s};
   }
 
   TextCacheKey &operator=(const TextCacheKey &other) = delete;
@@ -170,7 +175,8 @@ TextCache::GetSize(const Font &font, std::string_view text) noexcept
     return *cached;
 
 #ifdef UNICODE
-  PixelSize size = font.TextSize(UTF8ToWideConverter(text));
+  UTF8ToWideConverter text_conv(text);
+  PixelSize size = font.TextSize(text_conv.sv());
 #else
   PixelSize size = font.TextSize(text);
 #endif
@@ -202,7 +208,11 @@ TextCache::Result
 TextCache::Get(const Font &font, std::string_view text) noexcept
 {
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #endif
   assert(font.IsDefined());
 
@@ -224,7 +234,8 @@ TextCache::Get(const Font &font, std::string_view text) noexcept
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
 #ifdef UNICODE
-  UTF8ToWideConverter text2(text);
+  UTF8ToWideConverter text_conv(text);
+  tstring_view text2 = text_conv.sv();
 #else
   std::string_view text2 = text;
 #endif
@@ -267,7 +278,11 @@ void
 TextCache::Flush() noexcept
 {
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #endif
 
 #ifndef ENABLE_OPENGL
