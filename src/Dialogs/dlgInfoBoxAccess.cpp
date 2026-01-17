@@ -17,6 +17,7 @@
 #include "Widget/TwoWidgets.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 #include <cassert>
 #include <stdio.h>
@@ -119,8 +120,21 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   }
 
   dialog.SetModeless();
+
+  /* When InfoBox panel opens, adjust bottom margin to make room */
+  GlueMapWindow *map = UIGlobals::GetMap();
+  if (map != nullptr) {
+    unsigned dialog_height = form_rc.GetHeight();
+
+    if (dialog_height > 0)
+      map->SetBottomMargin(dialog_height);
+  }
+
   int result = dialog.ShowModal();
-  
+
+  if (map != nullptr)
+    map->SetBottomMargin(0);
+
   current_dialog = nullptr;
   current_dialog_id = -1;
 
@@ -139,6 +153,11 @@ dlgInfoBoxAccessClose() noexcept
     current_dialog->SetModalResult(mrCancel);
     current_dialog = nullptr;
     current_dialog_id = -1;
+
+    /* Restore map scale position when panel closes */
+    GlueMapWindow *map = UIGlobals::GetMap();
+    if (map != nullptr)
+      map->SetBottomMargin(0);
   }
 }
 
