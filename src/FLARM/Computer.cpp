@@ -44,13 +44,10 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
 
   // for each item in traffic
   for (auto &traffic : flarm.traffic.list) {
-    // if we don't know the target's name yet
-    if (!traffic.HasName()) {
-      // lookup the name of this target's id
-      const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.id);
-      if (fname != NULL)
-        traffic.name = fname;
-    }
+    // Keep the cached display name (callsign) in sync with current sources
+    const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.id);
+    if (fname != nullptr && (!traffic.HasName() || !traffic.name.equals(fname)))
+      traffic.name = fname;
 
     // Calculate distance
     traffic.distance = hypot(traffic.relative_north, traffic.relative_east);
@@ -87,7 +84,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     // Check if the target has been seen before in the last seconds
     const FlarmTraffic *last_traffic =
       last_flarm.traffic.FindTraffic(traffic.id);
-    if (last_traffic == NULL || !last_traffic->valid)
+    if (last_traffic == nullptr || !last_traffic->valid)
       continue;
 
     // Calculate the time difference between now and the last contact

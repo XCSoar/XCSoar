@@ -48,6 +48,7 @@ class FlarmTrafficDetailsWidget final
     AIRPORT,
     RADIO,
     PLANE,
+    SOURCE,
   };
 
   WndForm &dialog;
@@ -120,6 +121,7 @@ FlarmTrafficDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Airport"));
   AddReadOnly(_("Radio frequency"));
   AddReadOnly(_("Plane type"));
+  AddReadOnly(_("Data source"));
 
   Update();
 }
@@ -210,57 +212,36 @@ FlarmTrafficDetailsWidget::Update()
                      _("FLARM Traffic Details"), target_id.Format(tmp_id));
   dialog.SetCaption(tmp);
 
-  // Try to find the target in the FLARMnet database
-  /// @todo: make this code a little more usable
-  const FlarmNetRecord *record = FlarmDetails::LookupRecord(target_id);
-  if (record) {
-    // Fill the pilot name field
-    SetText(PILOT, record->pilot);
+  const FlarmTraffic* target =
+    CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
 
-    // Fill the frequency field
-    if (!StringIsEmpty(record->frequency))
-      value = UnsafeBuildString(tmp, record->frequency.c_str(), _T(" MHz"));
-    else
-      value = _T("--");
-    SetText(RADIO, value);
+  const ResolvedInfo info = FlarmDetails::ResolveInfo(target_id);
 
-    // Fill the home airfield field
-    SetText(AIRPORT, record->airfield);
+  // Shared fields: pilot/plane/airfield direct from resolver
+  SetText(PILOT, info.pilot != nullptr ? info.pilot : _T("--"));
 
-    // Fill the plane type field
-    SetText(PLANE, record->plane_type);
-  } else {
-    // Fill the pilot name field
-    SetText(PILOT, _T("--"));
+  const TCHAR *plane_value = info.plane_type;
+  if (plane_value == nullptr && target != nullptr)
+    plane_value = FlarmTraffic::GetTypeString(target->type);
+  SetText(PLANE, plane_value != nullptr ? plane_value : _T("--"));
 
-    // Fill the frequency field
-    SetText(RADIO, _T("--"));
+  SetText(AIRPORT, info.airfield != nullptr ? info.airfield : _T("--"));
 
-    // Fill the home airfield field
-    SetText(AIRPORT, _T("--"));
-
-    // Fill the plane type field
-    const FlarmTraffic* target =
-      CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
-
-    const TCHAR* actype;
-    if (target == nullptr ||
-        (actype = FlarmTraffic::GetTypeString(target->type)) == nullptr)
-      actype = _T("--");
-
-    SetText(PLANE, actype);
-  }
+  TCHAR fbuf[16];
+  const TCHAR *freq = info.frequency.Format(fbuf, 16);
+  value = freq != nullptr ? UnsafeBuildString(tmp, freq, _T(" MHz")) : _T("--");
+  SetText(RADIO, value);
 
   // Fill the callsign field (+ registration)
   // note: don't use target->Name here since it is not updated
   //       yet if it was changed
-  const TCHAR* cs = FlarmDetails::LookupCallsign(target_id);
+  const TCHAR* cs = info.callsign;
   if (cs != nullptr && cs[0] != 0) {
     try {
       BasicStringBuilder<TCHAR> builder(tmp, ARRAY_SIZE(tmp));
       builder.Append(cs);
-      if (record)
-        builder.Append(_T(" ("), record->registration.c_str(), _T(")"));
+      if (info.registration != nullptr)
+        builder.Append(_T(" ("), info.registration, _T(")"));
       value = tmp;
     } catch (BasicStringBuilder<TCHAR>::Overflow) {
       value = cs;
@@ -268,6 +249,8 @@ FlarmTrafficDetailsWidget::Update()
   } else
     value = _T("--");
   SetText(CALLSIGN, value);
+
+  SetText(SOURCE, FlarmDetails::ToString(info.source));
 
   // Update the frequently changing fields too
   UpdateChanging(CommonInterface::Basic());
