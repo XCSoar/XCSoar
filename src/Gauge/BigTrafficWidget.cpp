@@ -24,6 +24,7 @@
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
+#include "ui/canvas/Color.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -287,23 +288,29 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
     return;
 
   canvas.Select(look.radar_pen);
-  canvas.SelectHollowBrush();
+  const Color color = COLOR_GRAY;
+  Brush brush(color);
+  canvas.Select(brush);
 
-  BulkPixelPoint triangle[3];
-  triangle[0].x = 0;
-  triangle[0].y = -(int)radar_renderer.GetRadius() / Layout::FastScale(1) + 15;
-  triangle[1].x = 7;
-  triangle[1].y = triangle[0].y + 30;
-  triangle[2].x = -triangle[1].x;
-  triangle[2].y = triangle[1].y;
+  int offset = -(int)radar_renderer.GetRadius()/Layout::FastScale(1)/4;
 
-  PolygonRotateShift(triangle, radar_renderer.GetCenter(),
-                     task_direction - (enable_north_up ?
-                                       Angle::Zero() : heading),
-                     Layout::FastScale(100u));
+  BulkPixelPoint arrow[] = {
+    { -1, offset-40 },
+    { -1, offset-62 },
+    { -6, offset-62 },
+    {  0, offset-70 },
+    {  6, offset-62 },
+    {  1, offset-62 },
+    {  1, offset-40 },
+  };
+
+  PolygonRotateShift(arrow, radar_renderer.GetCenter(),
+                      task_direction - (enable_north_up ?
+                                        Angle::Zero() : heading),
+                      Layout::FastScale(100u));
 
   // Draw the arrow
-  canvas.DrawPolygon(triangle, 3);
+  canvas.DrawPolygon(arrow, 7);
 }
 
 void
