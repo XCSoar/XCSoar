@@ -81,6 +81,9 @@ $(TARGET_BIN_DIR)/libGLESv2.dll: $(ANGLE_FETCH_STAMP) | $(TARGET_BIN_DIR)/dirsta
 	@$(NQ)echo "  COPY    $(@F)"
 	$(Q)cp $(ANGLE_PREFIX_ABS)/bin/libGLESv2.dll $@
 
+# Add ANGLE DLLs to compile dependencies so they get copied to bin directory
+compile-depends += $(ANGLE_BIN_DLLS)
+
 endif
 
 endif
