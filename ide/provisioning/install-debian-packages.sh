@@ -110,7 +110,6 @@ install_arm() {
   echo Installing dependencies for ARM Linux targets...
   apt-get install ${APTOPTS[*]} g++-arm-linux-gnueabihf \
     libmpc-dev \
-    curl \
     meson
   echo
 }
@@ -119,6 +118,7 @@ install_win() {
   echo Installing PC/WIN64 dependencies...
   apt-get install ${APTOPTS[*]} g++-mingw-w64 \
       mingw-w64-tools \
+      curl \
       meson
   echo
 }
