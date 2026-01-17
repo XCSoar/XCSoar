@@ -119,6 +119,7 @@ install_win() {
   apt-get install ${APTOPTS[*]} g++-mingw-w64 \
       mingw-w64-tools \
       curl \
+      unzip \
       meson
   echo
 }
