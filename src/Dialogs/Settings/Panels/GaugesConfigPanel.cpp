@@ -177,7 +177,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
              _("If set to \"On\" the vario bar will be shown."),
              map_settings.vario_bar_enabled);
 
-  AddBoolean(_("No Position Target Distance Ring"),
+  AddBoolean(_("No position target"),
              _("This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"),
              ui_settings.traffic.no_position_target_distance_ring);
 
