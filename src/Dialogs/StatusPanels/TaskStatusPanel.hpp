@@ -5,8 +5,12 @@
 
 #include "StatusPanel.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "ui/event/Timer.hpp"
 
 class TaskStatusPanel : public StatusPanel, DataFieldListener {
+
+  UI::Timer refresh_timer{[this]{ Refresh(); }};
+
 public:
   explicit TaskStatusPanel(const DialogLook &look) noexcept
     :StatusPanel(look) {}
@@ -16,6 +20,8 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+
+  void Hide() noexcept override;
 
 private:
   /* virtual methods from DataFieldListener */
