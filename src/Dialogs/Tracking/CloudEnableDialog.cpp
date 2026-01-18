@@ -18,10 +18,6 @@ void
 CloudEnableDialog() noexcept
 {
 #ifdef HAVE_SKYLINES_TRACKING
-  if (!IsAndroid() && !IsDebug())
-    /* currently only enabled on Android */
-    return;
-
   auto &settings =
     CommonInterface::SetComputerSettings().tracking.skylines.cloud;
   if (settings.enabled != TriState::UNKNOWN)
