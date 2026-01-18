@@ -9,6 +9,7 @@
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
+#include "util/ConvertString.hpp"
 
 #include <tchar.h>
 
@@ -17,7 +18,12 @@ UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
                        const TCHAR *freq_name) noexcept
 {
   if(freq.IsDefined()) {
-    freq.Format(data.value.data(), data.value.capacity());
+    const auto freq_str = freq.Format();
+    const UTF8ToWideConverter freq_wide(freq_str.c_str());
+    if (freq_wide.IsValid())
+      data.SetValue(freq_wide.c_str());
+    else
+      data.SetValueInvalid();
   }
   else {
     data.SetValueInvalid();

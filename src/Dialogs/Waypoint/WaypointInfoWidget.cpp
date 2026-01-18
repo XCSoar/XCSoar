@@ -8,6 +8,7 @@
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "NMEA/MoreData.hpp"
+#include "util/ConvertString.hpp"
 #include "NMEA/Derived.hpp"
 #include "Computer/Settings.hpp"
 #include "Math/SunEphemeris.hpp"
@@ -88,10 +89,14 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (!waypoint->comment.empty())
     AddMultiLine(waypoint->comment.c_str());
 
-  if (waypoint->radio_frequency.Format(buffer.buffer(),
-                                      buffer.capacity()) != nullptr) {
-    buffer += _T(" MHz");
-    AddReadOnly(_("Radio frequency"), nullptr, buffer);
+  const auto freq_str = waypoint->radio_frequency.Format();
+  if (!freq_str.empty()) {
+    const UTF8ToWideConverter radio_wide(freq_str.c_str());
+    if (radio_wide.IsValid()) {
+      buffer = radio_wide.c_str();
+      buffer += _T(" MHz");
+      AddReadOnly(_("Radio frequency"), nullptr, buffer);
+    }
   }
 
   if (waypoint->runway.IsDirectionDefined())

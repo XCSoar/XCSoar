@@ -14,6 +14,7 @@
 #include "Language/Language.hpp"
 #include "TransponderMode.hpp"
 #include "util/StaticString.hxx"
+#include "util/ConvertString.hpp"
 
 #include <cassert>
 
@@ -62,10 +63,14 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   }
 
   if (airspace->GetRadioFrequency().IsDefined()) {
-    if (airspace->GetRadioFrequency().Format(buffer.data(), buffer.capacity()) !=
-        nullptr) {
-      buffer += _T(" MHz");
-      AddReadOnly(_("Radio"), nullptr, buffer);
+    const auto freq_str = airspace->GetRadioFrequency().Format();
+    if (!freq_str.empty()) {
+      const UTF8ToWideConverter freq_wide(freq_str.c_str());
+      if (freq_wide.IsValid()) {
+        buffer = freq_wide.c_str();
+        buffer += _T(" MHz");
+        AddReadOnly(_("Radio"), nullptr, buffer);
+      }
     }
 
     const TCHAR *frequencyName = airspace->GetName();

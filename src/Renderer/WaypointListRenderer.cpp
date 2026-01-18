@@ -13,6 +13,7 @@
 #include "Language/Language.hpp"
 #include "util/StaticString.hxx"
 #include "util/Macros.hpp"
+#include "util/ConvertString.hpp"
 
 typedef StaticString<256u> Buffer;
 
@@ -26,9 +27,10 @@ FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
     buffer.Format(_T("%s: %s"), _("Elevation"), _T("?"));
 
   if (waypoint.radio_frequency.IsDefined()) {
-    TCHAR radio[16];
-    waypoint.radio_frequency.Format(radio, 16);
-    buffer.AppendFormat(_T(" - %s MHz"), radio);
+    const auto radio_str = waypoint.radio_frequency.Format();
+    const UTF8ToWideConverter radio_wide(radio_str.c_str());
+    if (radio_wide.IsValid())
+      buffer.AppendFormat(_T(" - %s MHz"), radio_wide.c_str());
   }
 
   if (!waypoint.comment.empty()) {
@@ -128,7 +130,7 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
 
   // Draw distance and arrival altitude
   StaticString<256> buffer;
-  TCHAR alt[20], radio[20];
+  TCHAR alt[20];
   
   FormatRelativeUserAltitude(arrival_altitude, alt, true);
   buffer.Format(_T("%s: %s - %s: %s"), _("Distance"),
@@ -136,8 +138,10 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
                 _("Arrival Alt"), alt);
 
   if (waypoint.radio_frequency.IsDefined()) {
-    waypoint.radio_frequency.Format(radio, ARRAY_SIZE(radio));
-    buffer.AppendFormat(_T(" - %s MHz"), radio);
+    const auto radio_str = waypoint.radio_frequency.Format();
+    const UTF8ToWideConverter radio_wide(radio_str.c_str());
+    if (radio_wide.IsValid())
+      buffer.AppendFormat(_T(" - %s MHz"), radio_wide.c_str());
   }
 
   row_renderer.DrawSecondRow(canvas, rc, buffer);

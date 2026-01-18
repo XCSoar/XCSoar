@@ -5,20 +5,22 @@
 #include "Math/Util.hpp"
 #include "util/CharUtil.hxx"
 #include "util/DecimalParser.hxx"
-#include "util/StringFormat.hpp"
 #include "util/NumberParser.hpp"
 
-TCHAR *
-RadioFrequency::Format(TCHAR *buffer, size_t max_size) const noexcept
+#include <cstdio>
+
+std::string
+RadioFrequency::Format() const noexcept
 {
   if (!IsDefined())
-    return nullptr;
+    return {};
 
   unsigned khz = GetKiloHertz();
   unsigned mhz = khz / 1000;
   khz %= 1000;
 
-  StringFormat(buffer, max_size, _T("%u.%03u"), mhz, khz);
+  char buffer[16];
+  std::snprintf(buffer, sizeof(buffer), "%u.%03u", mhz, khz);
   return buffer;
 }
 
