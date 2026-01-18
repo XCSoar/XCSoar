@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "TextFormat.hpp"
+
 #ifdef ENABLE_OPENGL
 #include "opengl/Canvas.hpp"
 #elif defined(USE_MEMORY_CANVAS)
