@@ -8,8 +8,7 @@
 #include <compare>
 #include <cstddef>
 #include <string_view>
-
-#include <tchar.h>
+#include <string>
 
 /**
  * This class tores a VHF radio frequency.
@@ -103,7 +102,12 @@ public:
     SetKiloHertz(new_khz);
   }
 
-  TCHAR *Format(TCHAR *buffer, size_t max_size) const noexcept;
+  /**
+   * Format the frequency as a string (e.g., "123.456").
+   * Returns an empty string if the frequency is not defined.
+   */
+  [[nodiscard]]
+  std::string Format() const noexcept;
 
   [[gnu::pure]]
   static RadioFrequency Parse(std::string_view src) noexcept;
