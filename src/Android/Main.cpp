@@ -36,6 +36,7 @@
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Tracking/CloudEnableDialog.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Startup.hpp"
@@ -184,6 +185,14 @@ try {
   return nullptr;
 } catch (...) {
   return env->NewStringUTF(GetFullMessage(std::current_exception()).c_str());
+}
+
+gcc_visibility_default
+void
+Java_org_xcsoar_NativeView_showCloudEnableDialog([[maybe_unused]] JNIEnv *env,
+                                                  [[maybe_unused]] jclass cls)
+{
+  CloudEnableDialog();
 }
 
 gcc_visibility_default

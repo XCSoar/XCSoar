@@ -214,6 +214,7 @@ class NativeView extends SurfaceView
   static native void onConfigurationChangedNative(boolean nightMode);
 
   static native String onReceiveXCTrackTask(String data);
+  static native void showCloudEnableDialog();
 
   protected native void runNative(Context context,
                                   PermissionManager permissionManager,

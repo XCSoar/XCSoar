@@ -17,4 +17,12 @@ interface PermissionManager {
 
   boolean requestPermission(String permission, PermissionHandler handler);
   void cancelRequestPermission(PermissionHandler handler);
+  
+  /**
+   * Check if all required location permissions are granted.
+   * On Android 10+ (API 29+), this checks both foreground and background
+   * location permissions. On older versions, only foreground location is checked.
+   * @return true if all required location permissions are granted, false otherwise
+   */
+  boolean areLocationPermissionsGranted();
 }

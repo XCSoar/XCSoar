@@ -13,6 +13,49 @@
 #include "Profile/Profile.hpp"
 #include "UIGlobals.hpp"
 #include "ui/window/SingleWindow.hpp"
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "java/Global.hxx"
+#include "java/Class.hxx"
+#include <mutex>
+
+static Java::TrivialClass permission_manager_cls;
+static jmethodID areLocationPermissionsGranted_method;
+static std::once_flag permission_manager_init_flag;
+
+static void
+InitPermissionManagerCheck(JNIEnv *env) noexcept
+{
+  permission_manager_cls.Find(env, "org/xcsoar/PermissionManager");
+  areLocationPermissionsGranted_method =
+    env->GetMethodID(permission_manager_cls, "areLocationPermissionsGranted", "()Z");
+}
+
+static bool
+AreLocationPermissionsGranted() noexcept
+{
+  if (permission_manager == nullptr)
+    return false;
+
+  JNIEnv *env = Java::GetEnv();
+  if (env == nullptr)
+    return false;
+
+  std::call_once(permission_manager_init_flag, InitPermissionManagerCheck, env);
+
+  if (areLocationPermissionsGranted_method == nullptr)
+    return false;
+
+  bool result = env->CallBooleanMethod(permission_manager, areLocationPermissionsGranted_method);
+
+  if (env->ExceptionCheck()) {
+    env->ExceptionClear();
+    return false;
+  }
+
+  return result;
+}
+#endif
 
 void
 CloudEnableDialog() noexcept
@@ -23,6 +66,15 @@ CloudEnableDialog() noexcept
   if (settings.enabled != TriState::UNKNOWN)
     /* explicitly enabled or disabled - don't ask further questions */
     return;
+
+#ifdef ANDROID
+  /* On Android, check location permissions early (fail fast).
+     This prevents the dialog from overlapping with permission consent dialogs.
+     On Android, the dialog is also shown from the permission consent flow,
+     but ProcessTimer may call this before permissions are granted. */
+  if (!AreLocationPermissionsGranted())
+    return;
+#endif
 
   if (UIGlobals::GetMainWindow().HasDialog())
     /* don't ask stupid questions while the user operates in another
