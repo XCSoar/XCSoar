@@ -20,6 +20,8 @@
 #include "Operation/Operation.hpp"
 #include "time/PeriodClock.hpp"
 
+#include <cstdio>
+
 using std::string_view_literals::operator""sv;
 
 static bool
@@ -99,9 +101,10 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
      */
     unsigned code_value;
     if (line.ReadChecked(code_value)) {
-      StaticString<16> buffer;
-      buffer.Format(_T("%04u"), code_value);
-      TransponderCode parsed_code = TransponderCode::Parse(buffer);
+      char code_buffer[8];
+      std::snprintf(code_buffer, sizeof(code_buffer), "%04u", code_value);
+      TransponderCode parsed_code =
+          TransponderCode::Parse(std::string_view{code_buffer});
 
       if (!parsed_code.IsDefined())
         return false;
