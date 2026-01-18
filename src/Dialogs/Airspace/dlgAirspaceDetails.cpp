@@ -51,12 +51,11 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddMultiLine(airspace->GetName());
 
   const TransponderCode transponderCode = airspace->GetTransponderCode();
-  TCHAR buffer2[5];
-
-  transponderCode.Format(buffer2, sizeof(buffer2));
-
   if (transponderCode.IsDefined()) {
-    AddReadOnly(_("Squawk code"), nullptr, buffer2);
+    const auto code_str = transponderCode.Format();
+    const UTF8ToWideConverter code_wide(code_str.c_str());
+    if (code_wide.IsValid())
+      AddReadOnly(_("Squawk code"), nullptr, code_wide.c_str());
     AddButton(_("Set Squawk Code"), [transponderCode]() {
       ActionInterface::SetTransponderCode(transponderCode);
     });

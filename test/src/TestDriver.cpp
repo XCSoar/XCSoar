@@ -1707,7 +1707,7 @@ TestACD()
   ok1(equals(nmea_info.settings.transponder_code.GetCode(),
              TransponderCode{07000}.GetCode()));
   ok1(StringIsEqual(nmea_info.settings.transponder_mode.GetModeString(),
-                    _T("ALT")));
+                    "ALT"));
   ok1(equals(nmea_info.settings.transponder_mode.mode, TransponderMode::Mode::ALT));
 
   ok1(device->ParseNMEA("$PAAVS,XPDR,7260,1,0,1762,1,0*66",nmea_info));

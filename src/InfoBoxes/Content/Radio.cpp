@@ -42,14 +42,19 @@ UpdateInfoBoxTransponderCode(InfoBoxData &data,
                              TransponderMode mode) noexcept
 {
   if(code.IsDefined()) {
-    code.Format(data.value.data(), data.value.capacity());
-
-    if (data.value.equals(_T("7500")) ||
-        data.value.equals(_T("7600")) ||
-        data.value.equals(_T("7700"))) {
-      data.SetValueColor(1);
+    const auto code_str = code.Format();
+    const UTF8ToWideConverter code_wide(code_str.c_str());
+    if (code_wide.IsValid()) {
+      data.SetValue(code_wide.c_str());
+      const auto value = code.GetCode();
+      // Emergency squawk codes
+      if (value == 7500 || value == 7600 || value == 7700) {
+        data.SetValueColor(1);
+      } else {
+        data.SetValueColor(0);
+      }
     } else {
-      data.SetValueColor(0);
+      data.SetValueInvalid();
     }
   }
   else {
@@ -57,7 +62,13 @@ UpdateInfoBoxTransponderCode(InfoBoxData &data,
   }
 
   if(mode.IsDefined()) {
-    data.SetComment(mode.GetModeString());
+    const char *mode_key = mode.GetModeString();
+    const char *mode_text = _utf8(mode_key);
+    const UTF8ToWideConverter mode_wide(mode_text);
+    if (mode_wide.IsValid())
+      data.SetComment(mode_wide.c_str());
+    else
+      data.SetCommentInvalid();
 
     if (mode.mode == TransponderMode::IDENT) {
       data.SetCommentColor(5);

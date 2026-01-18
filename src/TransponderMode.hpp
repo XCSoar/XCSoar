@@ -5,7 +5,6 @@
 
 #include <type_traits>
 #include <cstdint>
-#include <tchar.h>
 #include <cassert>
 
 /**
@@ -52,15 +51,13 @@ struct TransponderMode {
   }
 
   /**
-   * Returns a human-readable string for the given value.
-   * The caller is responsible for calling gettext() on the return
-   * value.
+   * Returns a human-readable UTF-8 string for the given value.
    */
   [[gnu::const]]
-  static const TCHAR *ToString(Mode mode) noexcept;
+  static const char *ToString(Mode mode) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetModeString() const noexcept {
+  const char *GetModeString() const noexcept {
     return ToString(mode);
   }
 };

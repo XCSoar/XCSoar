@@ -762,10 +762,8 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'X':
     case 'x':
       if (input.SkipWhitespace()) {
-        tstring tempString = tstring(
-            string_converter.Convert(input.c_str())); // Convert to tstring
         temp_area.transponder_code =
-            TransponderCode::Parse(tempString.c_str());
+            TransponderCode::Parse(std::string_view{input.c_str()});
       }
       break;
     }

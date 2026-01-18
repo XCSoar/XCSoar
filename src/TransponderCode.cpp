@@ -2,29 +2,34 @@
 // Copyright The XCSoar Project
 
 #include "TransponderCode.hpp"
-#include "util/CharUtil.hxx"
-#include "util/NumberParser.hpp"
-#include "util/StringFormat.hpp"
 
-TCHAR *
-TransponderCode::Format(TCHAR *buffer, std::size_t max_size) const noexcept
+#include <cstdio>
+
+std::string
+TransponderCode::Format() const noexcept
 {
   if (!IsDefined())
-    return nullptr;
+    return {};
 
-  StringFormat(buffer, max_size, _T("%04o"), value);
+  char buffer[16];
+  std::snprintf(buffer, sizeof(buffer), "%04o", value);
   return buffer;
 }
 
 TransponderCode
-TransponderCode::Parse(const TCHAR *s) noexcept
+TransponderCode::Parse(std::string_view s) noexcept
 {
-  TCHAR *endptr;
-  const auto value = ParseUnsigned(s, &endptr, 8);
-
   auto result = Null();
-  if (endptr == s + 4 && IsWhitespaceOrNull(*endptr))
-    result.value = value;
+  if (s.size() != 4)
+    return result;
 
+  uint_least16_t value = 0;
+  for (const char c : s) {
+    if (c < '0' || c > '7')
+      return result;
+    value = (value << 3) + static_cast<uint_least16_t>(c - '0');
+  }
+
+  result.value = value;
   return result;
 }

@@ -26,7 +26,7 @@ airspace_random_properties(AbstractAirspace& as)
   AirspaceAltitude top;
   base.altitude = rand()%4000;
   top.altitude = base.altitude+rand()%3000;
-  TransponderCode code = TransponderCode::Parse(_T("1234"));
+  TransponderCode code = TransponderCode::Parse(std::string_view{"1234"});
   as.SetProperties(_T("hello"), _T("Hello2"),std::move(code), asclass, AirspaceClass::CLASSE, base, top);
 }
 
