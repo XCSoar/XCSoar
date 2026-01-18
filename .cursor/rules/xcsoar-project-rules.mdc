@@ -58,11 +58,29 @@ alwaysApply: true
 - Avoid expensive STL containers; prefer `StaticArray`/`StaticString` if size is predictable
 - Avoid template hell; keep templates readable
 
+### String Handling
+- Use UTF-8 everywhere; standard type is `std::string_view` for parameters and `std::string` for storage
+- Do not introduce new `TCHAR`, `tstring`, or `_T()` usage, **except** where strictly required by existing migration abstractions (e.g. `Path` construction; see Multi-Platform → File Path Handling)
+- Convert to wide as late as possible (ideally only for Windows API boundaries)
+- **Conversion utilities**: Use platform-aware converters for UTF-8 ↔ TCHAR conversion
+  - **`UTF8ToWideConverter`/`WideToUTF8Converter`** (`util/ConvertString.hpp`): For runtime string conversions
+    - Use for converting runtime UTF-8 strings → TCHAR for UI display, API calls, etc.
+    - Platform-aware: performs UTF-8 ↔ UTF-16 conversion on Windows, no-op on Unix
+    - Example: `UTF8ToWideConverter wide(str.c_str()); if (wide.IsValid()) use(wide.c_str());`
+  - **`StringConverter`** (`io/StringConverter.hpp`): For file I/O and charset-aware conversions
+    - Use for parsing data files that may have various encodings
+    - Has charset auto-detection capability (`Charset::AUTO`, `Charset::UTF8`)
+    - Example: `StringConverter converter{Charset::UTF8}; auto tstr = converter.Convert(line);`
+  - All conversion utilities handle Unicode vs non-Unicode builds internally
+  - Safe to use directly in cross-platform code without `#ifdef` guards
+- When calling legacy functions with `TCHAR*` parameters, use these conversion utilities at the boundary
+  - This is a temporary pattern during TCHAR migration; these conversion points will disappear as functions are modernized
+
 ### Enums with Count Values
 - Enums that are used in multiple places (backend and UI) should include a `COUNT` sentinel value as the last enum member
 - Arrays, lookup tables, or other data structures that correspond to enum values must be guarded with `static_assert` to ensure they match the enum `COUNT`
 - This provides compile-time checking to catch mismatches when enum values are added or removed
-- Example:
+- Example (internal enum names, non-translatable):
   ```cpp
   enum class MyEnum {
     VALUE1,
@@ -70,9 +88,10 @@ alwaysApply: true
     COUNT  // sentinel
   };
   
-  static const TCHAR *const names[] = {
-    _T("Value 1"),
-    _T("Value 2"),
+  // Internal names (not user-facing, no translation needed)
+  static constexpr std::string_view names[] = {
+    "Value 1",
+    "Value 2",
   };
   
   static_assert(ARRAY_SIZE(names) == unsigned(MyEnum::COUNT),
@@ -91,18 +110,46 @@ alwaysApply: true
 
 ### String Translation
 - All strings displayed to the user must be marked as translatable
-- Use `_()` macro for strings that are translated immediately: `_("Text")`
-- Use `N_()` macro for strings in static arrays/initializers that are translated later via `gettext()`: `N_("Text")`
-- Example with `N_()`:
+- **For TCHAR strings (legacy):** Use `_()` and `N_()` macros
+  - `_("Text")` for immediate TCHAR translation
+  - `N_("Text")` for deferred TCHAR translation (e.g., in static arrays)
+- **For UTF-8 strings (modern):** Use `_utf8()` and `N_utf8()` macros
+  - `_utf8("Text")` for immediate UTF-8 translation
+  - `N_utf8("Text")` for deferred UTF-8 translation (e.g., in static arrays)
+- Both macro families are defined in `Language/Language.hpp`:
+  - With `USE_LIBINTL` (Linux, Windows): pass strings directly to `gettext()`
+  - Without `USE_LIBINTL` (macOS, Android, iOS, Kobo): return strings unchanged (stub mode)
+- **Recommended pattern for UTF-8 APIs:**
   ```cpp
-  static constexpr const TCHAR *const names[] = {
+  // Core module returns UTF-8 (no translation)
+  const char *TransponderMode::ToString(Mode mode) noexcept {
+    return mode_strings[i];  // Plain UTF-8, e.g., "SBY", "ALT"
+  }
+  
+  // UI boundary translates and converts to wide
+  const char *mode_key = mode.GetModeString();
+  const char *mode_text = _utf8(mode_key);  // Translate UTF-8
+  const UTF8ToWideConverter mode_wide(mode_text);  // Convert for display
+  data.SetComment(mode_wide.c_str());
+  ```
+- Example migration from TCHAR to UTF-8:
+  ```cpp
+  // Old (TCHAR-based):
+  static const TCHAR *const names[] = {
     N_("Value 1"),
     N_("Value 2"),
   };
-  // Later, when displaying: gettext(names[i])
+  
+  // New (UTF-8-based):
+  static const char *const names[] = {
+    N_utf8("Value 1"),
+    N_utf8("Value 2"),
+  };
+  // When displaying:
+  const char *translated = _utf8(names[i]);
+  const UTF8ToWideConverter wide(translated);
   ```
-- `N_()` is commonly used with `StaticEnumChoice` arrays for enum dropdowns; `AddChoices()` automatically calls `gettext()` on these strings
-- **Logging is exempt**: Do not use translation macros (`_()` or `N_()`) in logging functions (e.g., `LogFormat()`, `LogDebug()`, `LogInfo()`, `LogError()`)
+- **Logging is exempt**: Do not use translation macros (`_()`, `_utf8()`, `N_()`, `N_utf8()`) in logging functions (e.g., `LogFormat()`, `LogDebug()`, `LogInfo()`, `LogError()`)
 - Log messages should remain in English for consistency and debugging
 
 ### Utilities
@@ -191,13 +238,12 @@ alwaysApply: true
 
 ### Multi-Platform Considerations
 - XCSoar is a multi-platform project supporting: Windows (PC, WIN64), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
-- **Unicode/Non-Unicode handling:**
-  - Use `TCHAR` for character types (maps to `char` on Unix/Android/iOS, `wchar_t` on Windows with `_UNICODE`)
-  - Use `_T()` macro for string literals (e.g., `_T("Hello")`)
-  - Use `tstring` (maps to `std::string` or `std::wstring` depending on build)
-  - On Windows: can be built with or without `_UNICODE` (Unicode vs ANSI)
-  - On Unix/Android/iOS: always uses UTF-8 (`char`, non-Unicode build)
-  - Use conversion utilities (`WideToUTF8Converter`, `UTF8ToWideConverter`) when interfacing between different string types
+- **Unicode handling:**
+  - Use UTF-8 for internal strings and APIs (`std::string_view` / `std::string`)
+  - Avoid `TCHAR`/`tstring` and `_T()` in new code
+  - Do not add new `#ifdef _UNICODE` conditional checks; use conversion utilities at boundaries instead
+  - Convert to wide only at the boundary where a wide API is required (primarily Windows APIs)
+  - See "String Handling" section above for detailed guidance on conversion utilities (`UTF8ToWideConverter`, `StringConverter`)
 - **File Path Handling:**
   - **Use `Path` class for all file paths** - This is the primary abstraction for file paths across the codebase
   - `Path` class automatically handles TCHAR differences:
@@ -208,13 +254,17 @@ alwaysApply: true
     - On Unix: Use `Path::c_str()` directly (already UTF-8)
   - Use `Path::ToUTF8()` when you need UTF-8 string representation
   - **Best practice**: Always use `Path` or `AllocatedPath` for file paths, never raw `TCHAR*` or `char*` strings
+  - **Note on _T() with Path**: Path APIs currently still use `TCHAR` internally during the migration period
+    - Use `Path` abstractions (not raw `TCHAR*`) to isolate `_T()` usage to Path construction
+    - This minimizes migration impact - later we can update Path's internal representation
+    - The key is avoiding raw `TCHAR*` pointers, which are much harder to migrate
   - Example:
     ```cpp
-    // Good: Use Path class
+    // Good: Use Path class (isolates _T() to construction)
     AllocatedPath file_path = LocalPath(_T("config.prf"));
     FileOutputStream fos(file_path, FileOutputStream::Mode::CREATE);
     
-    // Avoid: Raw TCHAR* for file paths
+    // Avoid: Raw TCHAR* for file paths (hard to migrate later)
     // TCHAR *file_path = _T("config.prf");  // Don't do this
     ```
 - **Platform detection:**
