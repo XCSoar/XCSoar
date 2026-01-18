@@ -1,0 +1,96 @@
+name: tchar-count
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 0"
+  pull_request:
+    paths:
+      - "src/**"
+      - "test/**"
+      - "android/**"
+      - "build/**"
+      - "tools/**"
+      - ".github/workflows/tchar-count.yml"
+  push:
+    branches:
+      - master
+    paths:
+      - "src/**"
+      - "test/**"
+      - "android/**"
+      - "build/**"
+      - "tools/**"
+      - ".github/workflows/tchar-count.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  update-badge:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Count TCHAR
+        id: tchar
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+
+          exts = {".c", ".cc", ".cpp", ".cxx", ".h", ".hh", ".hpp", ".hxx", ".mm", ".m", ".inl"}
+          files = subprocess.check_output(["git", "ls-files"], text=True).splitlines()
+
+          count = 0
+          for f in files:
+            path = pathlib.Path(f)
+            if path.suffix.lower() not in exts:
+              continue
+            try:
+              data = path.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+              continue
+            count += data.count("TCHAR")
+
+          badge = {
+            "schemaVersion": 1,
+            "label": "TCHAR",
+            "message": str(count),
+            "color": "blue",
+          }
+
+          badge_path = pathlib.Path(".github/badges/tchar-count.json")
+          badge_path.parent.mkdir(parents=True, exist_ok=True)
+          badge_path.write_text(json.dumps(badge, indent=2) + "\n", encoding="utf-8")
+
+          output_path = pathlib.Path(".github/badges/tchar-count.txt")
+          output_path.write_text(str(count) + "\n", encoding="utf-8")
+          PY
+
+      - name: Show count in job summary
+        run: |
+          count=$(cat .github/badges/tchar-count.txt)
+          echo "## TCHAR count" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Current occurrences: **$count**" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish badge branch
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B badges
+          git add .github/badges/tchar-count.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to badge"
+            exit 0
+          fi
+
+          git commit -m "chore: update TCHAR count badge"
+          git push -f origin badges
