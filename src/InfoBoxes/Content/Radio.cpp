@@ -42,14 +42,18 @@ UpdateInfoBoxTransponderCode(InfoBoxData &data,
                              TransponderMode mode) noexcept
 {
   if(code.IsDefined()) {
-    code.Format(data.value.data(), data.value.capacity());
-
-    if (data.value.equals(_T("7500")) ||
-        data.value.equals(_T("7600")) ||
-        data.value.equals(_T("7700"))) {
-      data.SetValueColor(1);
+    const auto code_str = code.Format();
+    const UTF8ToWideConverter code_wide(code_str.c_str());
+    if (code_wide.IsValid()) {
+      data.SetValue(code_wide.c_str());
+      const auto value = code.GetCode();
+      if (value == 07500 || value == 07600 || value == 07700) {
+        data.SetValueColor(1);
+      } else {
+        data.SetValueColor(0);
+      }
     } else {
-      data.SetValueColor(0);
+      data.SetValueInvalid();
     }
   }
   else {
