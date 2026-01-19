@@ -46,7 +46,7 @@ class InfoBoxContentBarogram : public InfoBoxContentAltitude
 public:
   void Update(InfoBoxData &data) noexcept override;
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
-  const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleClick() noexcept override;
 };
 
 class InfoBoxContentThermalBand : public InfoBoxContent
