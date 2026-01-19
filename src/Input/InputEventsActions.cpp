@@ -71,10 +71,12 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 #include <cassert>
 #include <tchar.h>
 #include <algorithm>
+#include <limits>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -648,12 +650,21 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
   const DerivedInfo &calculated = CommonInterface::Calculated();
   auto &way_points = *data_components->waypoints;
 
-  if (StringIsEqual(misc, _T("takeoff"))) {
-    if (basic.location_available && calculated.terrain_valid) {
-      ScopeSuspendAllThreads suspend;
-      way_points.AddTakeoffPoint(basic.location, calculated.terrain_altitude);
-      way_points.Optimise();
+  if (StringIsEqual(misc, "goto")) {
+    const auto location = GetVisibleLocation();
+    if (!location.IsValid())
+      return;
+
+    double elevation = std::numeric_limits<double>::quiet_NaN();
+    if (data_components->terrain != nullptr) {
+      const auto h = data_components->terrain->GetTerrainHeight(location);
+      if (!h.IsSpecial()) {
+        elevation = h.GetValue();
+      }
     }
+
+    ScopeSuspendAllThreads suspend;
+    way_points.AddTempPoint(location, elevation, "(goto)");
   } else {
     Waypoint edit_waypoint = way_points.Create(basic.location);
     edit_waypoint.elevation = calculated.terrain_altitude;
