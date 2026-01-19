@@ -3,7 +3,7 @@
 
 #include "WindEdit.hpp"
 #include "Dialogs/Settings/WindSettingsPanel.hpp"
-
+//TODO delete file
 std::unique_ptr<Widget>
 LoadWindEditPanel([[maybe_unused]] unsigned id)
 {

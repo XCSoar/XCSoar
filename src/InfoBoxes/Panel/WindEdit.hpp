@@ -4,7 +4,7 @@
 #pragma once
 
 #include <memory>
-
+// TODO Delete file
 class Widget;
 
 std::unique_ptr<Widget>
