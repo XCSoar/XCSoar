@@ -406,6 +406,149 @@ To include kernel images in ``KoboRoot.tgz``, copy ``uImage.otg``,
 ``uImage.kobo``, ``uImage.glohd.otg``, ``uImage.glohd``,
 ``uImage.aura2`` and ``uImage.aura2.otg`` to ``/opt/kobo/kernel``.
 
+.. _build-system-reference:
+
+Graphics Backends by Target
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Defaults shown are from the build system (they can be overridden with
+``ENABLE_SDL=y|n`` and ``OPENGL=y|n``).
+
+.. list-table::
+ :widths: 12 20 12 18 38
+ :header-rows: 1
+
+ * - Target
+   - Platform / ABI
+   - SDL (default)
+   - Graphics Engine (default)
+   - Notes
+ * - ``UNIX``
+   - Linux/Unix (native)
+   - yes
+   - OpenGL
+   - Default on Unix-like hosts; main desktop build.
+ * - ``UNIX32``
+   - Linux/Unix 32-bit
+   - yes
+   - OpenGL
+   - ``UNIX`` with ``-m32``.
+ * - ``UNIX64``
+   - Linux/Unix 64-bit
+   - yes
+   - OpenGL
+   - ``UNIX`` with ``-m64``.
+ * - ``OPT``
+   - Linux/Unix optimized
+   - yes
+   - OpenGL
+   - Alias for ``UNIX`` with ``DEBUG=n`` (set ``TARGET_OUTPUT_DIR`` if
+     you want a separate output tree).
+ * - ``WAYLAND``
+   - Linux/Unix (Wayland)
+   - no
+   - OpenGL (EGL)
+   - Experimental Wayland display server build.
+ * - ``FUZZER``
+   - Linux/Unix (libFuzzer)
+   - no
+   - Software (VFB)
+   - Builds fuzz targets with clang + libFuzzer.
+ * - ``PC``
+   - Windows 32-bit (i686)
+   - no
+   - GDI
+   - MinGW-w64 cross-compile target.
+ * - ``WIN64``
+   - Windows 64-bit (x86_64)
+   - no
+   - GDI
+   - Flavor of ``PC`` with 64-bit toolchain.
+ * - ``ANDROID``
+   - Android ARMv7
+   - no
+   - OpenGL ES (EGL)
+   - Alias for ``ANDROID7``.
+ * - ``ANDROID7``
+   - Android ARMv7 (32-bit)
+   - no
+   - OpenGL ES (EGL)
+   - Default Android ABI (armeabi-v7a).
+ * - ``ANDROIDAARCH64``
+   - Android ARM64 (64-bit)
+   - no
+   - OpenGL ES (EGL)
+   - arm64-v8a.
+ * - ``ANDROID86``
+   - Android x86 (32-bit)
+   - no
+   - OpenGL ES (EGL)
+   - x86 ABI.
+ * - ``ANDROIDX64``
+   - Android x86_64 (64-bit)
+   - no
+   - OpenGL ES (EGL)
+   - x86_64 ABI.
+ * - ``ANDROIDFAT``
+   - Android multi-ABI
+   - no
+   - OpenGL ES (EGL)
+   - "Fat" package across supported ABIs.
+ * - ``MACOS``
+   - macOS ARM64
+   - yes
+   - OpenGL (ANGLE)
+   - Apple Silicon (min macOS 12.0).
+ * - ``OSX64``
+   - macOS x86_64
+   - yes
+   - OpenGL (ANGLE)
+   - Intel (min macOS 12.0).
+ * - ``IOS32``
+   - iOS armv7
+   - yes
+   - OpenGL ES
+   - Legacy 32-bit iOS (min iOS 10.0).
+ * - ``IOS64``
+   - iOS arm64
+   - yes
+   - OpenGL ES
+   - Device build (min iOS 11.0).
+ * - ``IOS64SIM``
+   - iOS simulator arm64
+   - yes
+   - OpenGL ES
+   - Simulator SDK (min iOS 11.0).
+ * - ``PI``
+   - Raspberry Pi 1-3
+   - no
+   - OpenGL (EGL/KMS)
+   - ARMv6 cross-compile target.
+ * - ``PI2``
+   - Raspberry Pi 2
+   - no
+   - OpenGL (EGL/KMS)
+   - ARMv7 + NEON cross-compile target.
+ * - ``CUBIE``
+   - Cubieboard
+   - no
+   - OpenGL (EGL/KMS)
+   - Cross-compile target (ARMv7 + NEON).
+ * - ``KOBO``
+   - Kobo e-readers
+   - no
+   - Framebuffer (software)
+   - Cross-compile target (ARMv7 + NEON).
+ * - ``NEON``
+   - Generic ARMv7 + NEON
+   - yes
+   - OpenGL
+   - Internal flavor used by ``PI2``, ``CUBIE``, ``KOBO``.
+
+For a full list of build variables and their defaults, see the
+parameter list at the top of ``Makefile`` and the files in
+``build/*.mk``.
+
 Editing the Manuals
 ~~~~~~~~~~~~~~~~~~~
 
