@@ -20,19 +20,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
-static std::unique_ptr<Widget>
-LoadAlternatesPanel([[maybe_unused]] unsigned id) noexcept
-{
-  return std::make_unique<CallbackWidget>([]{
-    dlgAlternatesListShowModal(data_components->waypoints.get());
-  });
-}
-
-static constexpr
-InfoBoxPanel alternate_infobox_panels[] = {
-  { N_("Alternates"), LoadAlternatesPanel },
-  { nullptr, nullptr }
-};
 
 void
 InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
@@ -74,10 +61,14 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
 }
 
-const InfoBoxPanel *
-InfoBoxContentAlternateName::GetDialogContent() noexcept
+bool
+InfoBoxContentAlternateName::HandleClick() noexcept
 {
-  return alternate_infobox_panels;
+  if (!data_components)
+    return false;
+
+  dlgAlternatesListShowModal(data_components->waypoints.get());
+  return true;
 }
 
 void
@@ -128,10 +119,14 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
 }
 
-const InfoBoxPanel *
-InfoBoxContentAlternateGR::GetDialogContent() noexcept
+bool
+InfoBoxContentAlternateGR::HandleClick() noexcept
 {
-  return alternate_infobox_panels;
+  if (!data_components)
+    return false;
+
+  dlgAlternatesListShowModal(data_components->waypoints.get());
+  return true;
 }
 
 void
@@ -170,8 +165,12 @@ InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
   data.SetValueFromArrival(altitude_difference);
 }
 
-const InfoBoxPanel *
-InfoBoxContentAlternateAltDiff::GetDialogContent() noexcept
+bool
+InfoBoxContentAlternateAltDiff::HandleClick() noexcept
 {
-  return alternate_infobox_panels;
+  if (!data_components)
+    return false;
+
+  dlgAlternatesListShowModal(data_components->waypoints.get());
+  return true;
 }

@@ -12,7 +12,7 @@ public:
     :index(_index) {}
 
   void Update(InfoBoxData &data) noexcept override;
-  const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleClick() noexcept override;
 
 private:
   unsigned index;
@@ -25,7 +25,7 @@ public:
     :index(_index) {}
 
   void Update(InfoBoxData &data) noexcept override;
-  const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleClick() noexcept override;
 
 private:
   unsigned index;
@@ -38,7 +38,7 @@ public:
     :index(_index) {}
 
   void Update(InfoBoxData &data) noexcept override;
-  const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleClick() noexcept override;
 
 private:
   unsigned index;
