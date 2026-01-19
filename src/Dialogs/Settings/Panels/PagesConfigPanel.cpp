@@ -37,6 +37,7 @@ private:
     MAIN,
     INFO_BOX_PANEL,
     BOTTOM,
+    TOP,
   };
 
   static constexpr unsigned IBP_NONE = 0x7000;
@@ -218,12 +219,29 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+    { PageLayout::Bottom::NAVIGATOR, N_("B.Navigator") },
+    { PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE, N_("B.Navigator lite 1 line") },
+    { PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES, N_("B.Navigator lite 2 lines") },
+    { PageLayout::Bottom::NAVIGATOR_DETAILED, N_("B.Navigator detailed") },
     nullptr
   };
   AddEnum(_("Bottom area"),
           _("Specifies what should be displayed below the main area."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
+
+  static constexpr StaticEnumChoice top_list[] = {
+    { PageLayout::Top::NOTHING, N_("Nothing") },
+    { PageLayout::Top::NAVIGATOR, N_("T.Navigator") },
+    { PageLayout::Top::NAVIGATOR_LITE_ONE_LINE, N_("T.Navigator lite 1 line") },
+    { PageLayout::Top::NAVIGATOR_LITE_TWO_LINES, N_("T.Navigator lite 2 lines") },
+    { PageLayout::Top::NAVIGATOR_DETAILED, N_("T.Navigator detailed") },
+    nullptr
+  };
+  AddEnum(_("Top area"),
+          _("Specifies what should be displayed above the main area."),
+          top_list,
+          (unsigned)PageLayout::Top::NOTHING, this);
 }
 
 void
@@ -233,6 +251,7 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 
   LoadValueEnum(MAIN, value.main);
   LoadValueEnum(BOTTOM, value.bottom);
+  LoadValueEnum(TOP, value.top);
 
   unsigned ib = IBP_NONE;
   if (value.infobox_config.enabled) {
@@ -271,6 +290,9 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   } else if (&df == &GetDataField(BOTTOM)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.bottom = (PageLayout::Bottom)dfe.GetValue();
+  } else if (&df == &GetDataField(TOP)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.top = (PageLayout::Top)dfe.GetValue();
   } else {
     gcc_unreachable();
   }
@@ -388,9 +410,45 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     buffer.AppendFormat(_T(", %s"), _("Cross section"));
     break;
 
+  case PageLayout::Bottom::NAVIGATOR:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator"));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator lite 1 line"));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator lite 2 lines"));
+    break;
+  case PageLayout::Bottom::NAVIGATOR_DETAILED:
+    buffer.AppendFormat(_T(", %s"), _("B.Navigator detailed"));
+    break;
+
   case PageLayout::Bottom::MAX:
     gcc_unreachable();
   }
+
+  switch (value.top) {
+  case PageLayout::Top::NOTHING:
+  case PageLayout::Top::CUSTOM:
+    break;
+
+  case PageLayout::Top::NAVIGATOR:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator"));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_ONE_LINE:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator lite 1 line"));
+    break;
+  case PageLayout::Top::NAVIGATOR_LITE_TWO_LINES:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator lite 2 lines"));
+    break;
+  case PageLayout::Top::NAVIGATOR_DETAILED:
+    buffer.AppendFormat(_T(", %s"), _("T.Navigator detailed"));
+    break;
+
+  case PageLayout::Top::MAX:
+    gcc_unreachable();
+  }
+
 
   row_renderer.DrawTextRow(canvas, rc, buffer);
 }
