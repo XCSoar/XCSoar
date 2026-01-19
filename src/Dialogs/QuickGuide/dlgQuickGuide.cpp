@@ -8,14 +8,20 @@
 #include "PreflightWidget.hpp"
 #include "PostflightWidget.hpp"
 #include "DontShowAgainWidget.hpp"
+#include "QuickGuideScrollWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
-#include "Widget/VScrollWidget.hpp"
 #include "Language/Language.hpp"
 
 #include <array>
+
+static std::unique_ptr<Widget>
+CreateQuickGuideScrollWidget(std::unique_ptr<Widget> widget, const DialogLook &look)
+{
+  return std::make_unique<QuickGuideScrollWidget>(std::move(widget), look);
+}
 
 void
 dlgQuickGuideShowModal()
@@ -36,11 +42,11 @@ dlgQuickGuideShowModal()
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button, dialog.MakeModalResultCallback(mrOK));
 
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<WelcomeWidget>(), look));
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<GestureHelpWidget>(), look));
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<ConfigurationWidget>(), look));
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<PreflightWidget>(), look));
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<PostflightWidget>(), look));
+  pager->Add(CreateQuickGuideScrollWidget(std::make_unique<WelcomeWidget>(), look));
+  pager->Add(CreateQuickGuideScrollWidget(std::make_unique<GestureHelpWidget>(), look));
+  pager->Add(CreateQuickGuideScrollWidget(std::make_unique<ConfigurationWidget>(), look));
+  pager->Add(CreateQuickGuideScrollWidget(std::make_unique<PreflightWidget>(), look));
+  pager->Add(CreateQuickGuideScrollWidget(std::make_unique<PostflightWidget>(), look));
   pager->Add(std::make_unique<DontShowAgainWidget>(look));
 
   ArrowPagerWidget *p = pager.get();

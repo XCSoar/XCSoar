@@ -156,6 +156,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 	$(SRC)/Dialogs/QuickGuide/dlgQuickGuide.cpp \
     $(SRC)/Dialogs/QuickGuide/QuickGuideLinkWindow.cpp \
+    $(SRC)/Dialogs/QuickGuide/QuickGuideScrollWidget.cpp \
 	$(SRC)/Dialogs/QuickGuide/WelcomeWidget.cpp \
 	$(SRC)/Dialogs/QuickGuide/GestureHelpWidget.cpp \
 	$(SRC)/Dialogs/QuickGuide/ConfigurationWidget.cpp \
