@@ -15,6 +15,8 @@ XCSoar
    mapfile
    debugging
 
+Build system reference: :ref:`build-system-reference`
+
 
 Indices and tables
 ==================
