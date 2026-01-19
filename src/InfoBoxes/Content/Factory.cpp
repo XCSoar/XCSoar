@@ -318,8 +318,7 @@ static constexpr MetaData meta_data[] = {
     N_("Wind speed"),
     N_("Wind"),
     N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
-    UpdateInfoBoxWindSpeed,
-    wind_infobox_panels,
+    IBFHelper<InfoBoxContentWindSpeed>::Create,
   },
 
   // e_WindBearing_Est
@@ -327,8 +326,7 @@ static constexpr MetaData meta_data[] = {
     N_("Wind bearing"),
     N_("Wind"),
     N_("Wind bearing estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
-    UpdateInfoBoxWindBearing,
-    wind_infobox_panels,
+    IBFHelper<InfoBoxContentWindBearing>::Create,
   },
 
   // e_AA_Time
@@ -859,8 +857,7 @@ static constexpr MetaData meta_data[] = {
     N_("Wind, head component"),
     N_("Head Wind"),
     N_("Current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from an external device; otherwise, the estimated wind is used."),
-    UpdateInfoBoxHeadWind,
-    wind_infobox_panels,
+    IBFHelper<InfoBoxContentHeadWind>::Create,
   },
 
   // TerrainCollision
@@ -892,8 +889,7 @@ static constexpr MetaData meta_data[] = {
     N_("Wind, head component (simplified)"),
     N_("Head Wind *"),
     N_("Current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from TAS if airspeed is available from an external device."),
-    UpdateInfoBoxHeadWindSimplified,
-    wind_infobox_panels,
+    IBFHelper<InfoBoxContentHeadWindSimplified>::Create,
   },
 
   {

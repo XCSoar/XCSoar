@@ -3,7 +3,7 @@
 
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
-#include "InfoBoxes/Panel/WindEdit.hpp"
+#include "InfoBoxes/Panel/WindEdit.hpp" //TODO remove include
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
@@ -16,6 +16,7 @@
 #include "Renderer/WindArrowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "Dialogs/Dialogs.h"
 
 #include <tchar.h>
 
@@ -79,23 +80,44 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode) noex
  * Subpart callback function pointers
  */
 
-#ifdef __clang__
-/* gcc gives "redeclaration differs in 'constexpr'" */
-constexpr
-#endif
-const InfoBoxPanel wind_infobox_panels[] = {
-  { N_("Edit"), LoadWindEditPanel },
-  { nullptr, nullptr }
-};
 
-const InfoBoxPanel *
-InfoBoxContentWindArrow::GetDialogContent() noexcept
+bool
+InfoBoxContentWindArrow::HandleClick() noexcept
 {
-  return wind_infobox_panels;
+  ShowWindSettingsDialog();
+  return true;
+}
+
+bool
+InfoBoxContentHeadWindSimplified::HandleClick() noexcept
+{
+  ShowWindSettingsDialog();
+  return true;
+}
+
+bool
+InfoBoxContentHeadWind::HandleClick() noexcept
+{
+  ShowWindSettingsDialog();
+  return true;
+}
+
+bool
+InfoBoxContentWindBearing::HandleClick() noexcept
+{
+  ShowWindSettingsDialog();
+  return true;
+}
+
+bool
+InfoBoxContentWindSpeed::HandleClick() noexcept
+{
+  ShowWindSettingsDialog();
+  return true;
 }
 
 void
-UpdateInfoBoxWindSpeed(InfoBoxData &data) noexcept
+InfoBoxContentWindSpeed::Update(InfoBoxData &data) noexcept
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
@@ -114,7 +136,7 @@ UpdateInfoBoxWindSpeed(InfoBoxData &data) noexcept
 }
 
 void
-UpdateInfoBoxWindBearing(InfoBoxData &data) noexcept
+InfoBoxContentWindBearing::Update(InfoBoxData &data) noexcept
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
@@ -130,7 +152,7 @@ UpdateInfoBoxWindBearing(InfoBoxData &data) noexcept
 }
 
 void
-UpdateInfoBoxHeadWind(InfoBoxData &data) noexcept
+InfoBoxContentHeadWind::Update(InfoBoxData &data) noexcept
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.head_wind_available) {
@@ -146,7 +168,7 @@ UpdateInfoBoxHeadWind(InfoBoxData &data) noexcept
 }
 
 void
-UpdateInfoBoxHeadWindSimplified(InfoBoxData &data) noexcept
+InfoBoxContentHeadWindSimplified::Update(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.ground_speed_available || !basic.airspeed_available) {
