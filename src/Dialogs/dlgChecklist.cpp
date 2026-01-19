@@ -12,9 +12,14 @@
 #include "util/StringCompare.hxx"
 #include "util/tstring.hpp"
 #include "io/DataFile.hpp"
+#include "io/FileReader.hxx"
 #include "io/Reader.hxx"
 #include "io/BufferedReader.hxx"
 #include "io/StringConverter.hpp"
+#include "LocalPath.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/Keys.hpp"
+#include "system/Path.hpp"
 #include "Language/Language.hpp"
 
 #include <string>
@@ -52,7 +57,24 @@ LoadChecklist() noexcept
 try {
   Checklist c;
 
-  auto file_reader = OpenDataFile(_T(XCSCHKLIST));
+  std::unique_ptr<FileReader> file_reader;
+  
+  // Try configured checklist file first
+  const auto configured_path = Profile::GetPath(ProfileKeys::ChecklistFile);
+  if (configured_path != nullptr) {
+    try {
+      file_reader = std::make_unique<FileReader>(configured_path);
+    } catch (...) {
+      // If configured file fails, fall back to default
+      file_reader = nullptr;
+    }
+  }
+  
+  // Fall back to default checklist file if no configured file
+  if (file_reader == nullptr) {
+    file_reader = std::make_unique<FileReader>(LocalPath(_T(XCSCHKLIST)));
+  }
+  
   BufferedReader reader{*file_reader};
   StringConverter string_converter{Charset::UTF8};
 
