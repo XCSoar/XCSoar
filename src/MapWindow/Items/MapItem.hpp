@@ -70,6 +70,15 @@ struct LocationMapItem: public MapItem
    */
   static constexpr double UNKNOWN_ELEVATION_THRESHOLD = -1e4;
 
+  /**
+   * The actual clicked location.
+   */
+  GeoPoint location;
+
+  /**
+   * Vector from current aircraft position to the clicked location.
+   * Used for display purposes.
+   */
   GeoVector vector;
 
   /**
@@ -77,8 +86,10 @@ struct LocationMapItem: public MapItem
    */
   double elevation;
 
-  LocationMapItem(const GeoVector &_vector, double _elevation)
-    :MapItem(Type::LOCATION), vector(_vector), elevation(_elevation) {}
+  LocationMapItem(const GeoPoint &_location, const GeoVector &_vector,
+                  double _elevation)
+    :MapItem(Type::LOCATION), location(_location), vector(_vector),
+     elevation(_elevation) {}
 
   bool HasElevation() const {
     return elevation > UNKNOWN_ELEVATION_THRESHOLD;
