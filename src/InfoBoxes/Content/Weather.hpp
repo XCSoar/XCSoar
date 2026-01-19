@@ -18,24 +18,38 @@ public:
   bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
 };
 
-extern const InfoBoxPanel wind_infobox_panels[];
+class InfoBoxContentWindSpeed: public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
 
-void
-UpdateInfoBoxWindSpeed(InfoBoxData &data) noexcept;
+class InfoBoxContentWindBearing: public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
 
-void
-UpdateInfoBoxWindBearing(InfoBoxData &data) noexcept;
+class InfoBoxContentHeadWind: public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
 
-void
-UpdateInfoBoxHeadWind(InfoBoxData &data) noexcept;
-
-void
-UpdateInfoBoxHeadWindSimplified(InfoBoxData &data) noexcept;
+class InfoBoxContentHeadWindSimplified: public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
 
 class InfoBoxContentWindArrow: public InfoBoxContent
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
-  const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleClick() noexcept override;
 };
