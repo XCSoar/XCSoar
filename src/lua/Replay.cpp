@@ -25,6 +25,8 @@ l_replay_index(lua_State *L)
     Lua::Push(L, (lua_Integer)backend_components->replay->GetTimeScale());
   } else if (StringIsEqual(name, "virtual_time")) {
     Lua::Push(L, backend_components->replay->GetVirtualTime());
+  } else if (StringIsEqual(name, "is_active")) {
+    Lua::Push(L, backend_components->replay->IsActive());
   } else
     return 0;
 
