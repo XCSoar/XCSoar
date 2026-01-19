@@ -403,23 +403,14 @@ ShowMapItemListDialog(const MapItemList &list,
                       Waypoints *waypoints,
                       ProtectedAirspaceWarningManager *airspace_warnings)
 {
-  switch (list.size()) {
-  case 0:
+  if (list.empty())
     /* no map items in the list */
     return;
 
-  case 1:
-    /* only one map item, show it */
-    ShowMapItemDialog(*list[0], waypoints, airspace_warnings);
-    break;
-
-  default:
-    /* more than one map item: show a list */
-
-    int i = ShowMapItemListDialog(list, dialog_look, look,
-                                  traffic_look, final_glide_look, settings);
-    assert(i >= -1 && i < (int)list.size());
-    if (i >= 0)
-      ShowMapItemDialog(*list[i], waypoints, airspace_warnings);
-  }
+  /* always show list dialog when there are items, so user can choose action */
+  int i = ShowMapItemListDialog(list, dialog_look, look,
+                                traffic_look, final_glide_look, settings);
+  assert(i >= -1 && i < (int)list.size());
+  if (i >= 0)
+    ShowMapItemDialog(*list[i], waypoints, airspace_warnings);
 }
