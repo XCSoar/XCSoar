@@ -33,7 +33,7 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
     elevation = terrain->GetTerrainHeight(location)
       .ToDouble(LocationMapItem::UNKNOWN_ELEVATION);
 
-  list.append(new LocationMapItem(vector, elevation));
+  list.append(new LocationMapItem(location, vector, elevation));
 }
 
 void
