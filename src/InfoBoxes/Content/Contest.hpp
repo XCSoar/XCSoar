@@ -8,13 +8,13 @@
 class InfoBoxContentContest: public InfoBoxContent
 {
 public:
-  const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleClick() noexcept override;
   void Update(InfoBoxData &data) noexcept override;
 };
 
 class InfoBoxContentContestSpeed: public InfoBoxContent
 {
 public:
-  const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleClick() noexcept override;
   void Update(InfoBoxData &data) noexcept override;
 };
