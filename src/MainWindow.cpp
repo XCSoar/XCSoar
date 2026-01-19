@@ -906,6 +906,14 @@ MainWindow::OnClose() noexcept
 void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
+  if (HaveTopWidget() && map != nullptr) {
+    /* draw a separator between top widget and map */
+    PixelRect rc = map->GetPosition();
+    rc.bottom = rc.top;
+    rc.top -= separator_height;
+    canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+  }
+
   if (HaveBottomWidget() && map != nullptr) {
     /* draw a separator between main area and bottom area */
     PixelRect rc = map->GetPosition();
