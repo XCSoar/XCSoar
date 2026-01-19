@@ -7,6 +7,7 @@
 #include "Ordered/Points/AATPoint.hpp"
 #include "Unordered/GotoTask.hpp"
 #include "Unordered/AlternateTask.hpp"
+#include "Waypoint/Waypoints.hpp"
 
 TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
                          const Waypoints &wps) noexcept
@@ -527,8 +528,12 @@ TaskManager::SetIntersectionTest(AbortIntersectionTest *test) noexcept
 }
 
 void
-TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt) noexcept
+TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt,
+                             Waypoints &waypoints) noexcept
 {
+  // Add takeoff waypoint to database so it appears in waypoint list dialog
+  waypoints.AddTempPoint(loc, terrain_alt, "(takeoff)");
+
   // create a goto task on takeoff
   if (!active_task && goto_task->TakeoffAutotask(loc, terrain_alt))
     SetMode(TaskType::GOTO);
