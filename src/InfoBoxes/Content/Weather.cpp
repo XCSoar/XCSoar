@@ -3,7 +3,6 @@
 
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
-#include "InfoBoxes/Panel/WindEdit.hpp" //TODO remove include
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
