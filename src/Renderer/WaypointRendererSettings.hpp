@@ -56,7 +56,7 @@ struct WaypointRendererSettings {
   int landable_rendering_scale;
 
   void SetDefaults() noexcept {
-    display_text_type = DisplayTextType::FIRST_FIVE;
+    display_text_type = DisplayTextType::SHORT_NAME;
     arrival_height_display = ArrivalHeightDisplay::GLIDE;
     label_selection = LabelSelection::ALL;
     landable_render_mode = LabelShape::ROUNDED_BLACK;
