@@ -23,7 +23,6 @@
 #include "Dialogs/Settings/Panels/InfoBoxesConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
 #include "Dialogs/Plane/PlaneDialogs.hpp"
-#include "Dialogs/Plane/PlaneDialogs.hpp"
 #include "UtilsSettings.hpp"
 #include "BackendComponents.hpp"
 #include "Components.hpp"
@@ -158,8 +157,7 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
     const char *c6 = Profile::Get(ProfileKeys::CrewWeightTemplate);
     canvas->Select(fontMono);
     canvas->DrawText({x, y + icon_offset},
-                     (c6 == nullptr || StringIsEmpty(c6) ||
-                      (intptr_t)c6 <= 0) ? _T("[ ]") : _T("[X]"));
+                     (c6 == nullptr || StringIsEmpty(c6)) ? _T("[ ]") : _T("[X]"));
   }
   const TCHAR *t6 = _("Set your default weight.");
   y += int(DrawTextBlock(fontDefault, x_text, t6)) + margin / 2;
@@ -379,7 +377,7 @@ ConfigurationWindow::HandleLink(LinkAction link) noexcept
                      backend_components->devices.get());
       return true;
     }
-    return true;
+    return false;
 
   case LinkAction::COUNT:
     break;

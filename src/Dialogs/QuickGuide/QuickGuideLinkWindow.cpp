@@ -10,7 +10,7 @@
 QuickGuideLinkWindow::QuickGuideLinkWindow() noexcept = default;
 
 unsigned
-QuickGuideLinkWindow::DrawLink(Canvas &canvas, std::size_t index, 
+QuickGuideLinkWindow::DrawLink(Canvas &canvas, std::size_t index,
                                 PixelRect rc, const TCHAR *text) noexcept
 {
   canvas.SetTextColor(COLOR_BLUE);

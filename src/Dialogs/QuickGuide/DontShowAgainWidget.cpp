@@ -20,7 +20,7 @@ PixelRect DontShowAgainWidget::MakeCheckboxRect(const PixelRect &rc) const noexc
 
 PixelRect DontShowAgainWidget::MakeTextRect(const PixelRect &rc, const PixelRect &cb_rect) const noexcept {
   PixelRect rect = rc;
-  const unsigned spacing = 5;
+  const unsigned spacing = Layout::FastScale(5);
   rect.top = cb_rect.bottom + spacing;
   return rect;
 }

@@ -222,6 +222,3 @@ bool WelcomeWindow::OnMouseUp(PixelPoint p) noexcept {
   }
   return false;
 }
-#ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Scope.hpp"
-#endif

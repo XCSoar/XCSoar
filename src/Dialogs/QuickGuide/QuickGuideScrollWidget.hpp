@@ -29,10 +29,10 @@ public:
 
 private:
   VScrollPanel &GetWindow() noexcept {
-    return (VScrollPanel &)WindowWidget::GetWindow();
+    return static_cast<VScrollPanel &>(WindowWidget::GetWindow());
   }
 
-  [[gnu::const]]
+  [[gnu::pure]]
   static unsigned GetScrollbarWidth() noexcept;
 
   [[gnu::pure]]
