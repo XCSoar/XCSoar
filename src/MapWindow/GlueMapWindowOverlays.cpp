@@ -279,6 +279,11 @@ GlueMapWindow::SetBottomMargin(unsigned margin) noexcept
 void
 GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 {
+  if (Layout::landscape && follow_mode == FOLLOW_PAN) {
+    SetBottomMargin(0);
+    return;
+  }
+
   if (margin_factor == 0) {
     SetBottomMargin(0);
     return;
