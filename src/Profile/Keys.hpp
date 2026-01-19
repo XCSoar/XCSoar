@@ -75,6 +75,7 @@ constexpr std::string_view FlarmFile = "FlarmFile";
 constexpr std::string_view PolarFile = "PolarFile"; // pL
 constexpr std::string_view WaypointFileList = "WPFileList";           // pL
 constexpr std::string_view WatchedWaypointFileList = "WatchedWPFileList"; // pL
+constexpr std::string_view WaypointDataFileList = "WaypointDataFileList"; // pL
 constexpr std::string_view LanguageFile = "LanguageFile"; // pL
 constexpr std::string_view InputFile = "InputFile"; // pL
 constexpr std::string_view PilotName = "PilotName";

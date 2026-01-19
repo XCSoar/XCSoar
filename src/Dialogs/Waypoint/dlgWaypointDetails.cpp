@@ -16,6 +16,10 @@
 #include "Widget/Widget.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "LocalPath.hpp"
+#include "io/WaypointDataFile.hpp"
+#include "io/ZipReader.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/Keys.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "Screen/Layout.hpp"
@@ -38,8 +42,11 @@
 #include "LogFile.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
+#include "util/StringCompare.hxx"
 #include "BackendComponents.hpp"
 #include "Pan.hpp"
+#include <vector>
+#include <memory>
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -50,6 +57,65 @@ static bool
 ActivatePan(const Waypoint &waypoint)
 {
   return PanTo(waypoint.location);
+}
+
+/**
+ * Try to load an image from waypoint data archives.
+ * Only attempts to load if path starts with "pics/" (archive convention).
+ * Returns true if the image was successfully loaded into the bitmap.
+ * Returns false if path doesn't start with "pics/" or file not found in
+ * archives (caller should fall back to filesystem).
+ */
+static bool
+LoadImageFromWaypointDataArchives(Bitmap &bitmap,
+                                  [[maybe_unused]] const TCHAR *image_path)
+{
+  // Check if path starts with "pics/" (case-insensitive)
+  // Only paths starting with "pics/" are expected in archives.
+  // Other paths (e.g., "wpt_details/") should be loaded from filesystem.
+  // Convert to narrow string for comparison since ZIP paths are narrow
+  const NarrowPathName narrow_path{Path(image_path)};
+  const char *narrow_path_str = narrow_path;
+  if (!StringStartsWithIgnoreCase(narrow_path_str, "pics/"))
+    return false;  // Not an archive path, let caller use filesystem
+
+  // Get list of configured waypoint data files
+  auto archive_paths = Profile::GetMultiplePaths(ProfileKeys::WaypointDataFileList,
+                                                   _T("*.xcd\0"));
+
+  // Try loading from each archive
+  for (const auto &archive_path : archive_paths) {
+    try {
+      if (auto reader = OpenInWaypointDataFile(archive_path, narrow_path_str)) {
+        // Read entire file into memory
+        const auto size = reader->GetSize();
+        if (size == 0 || size > 10 * 1024 * 1024) // Limit to 10MB
+          continue;
+
+        std::vector<std::byte> buffer(static_cast<std::size_t>(size));
+        std::size_t total_read = 0;
+        while (total_read < buffer.size()) {
+          const auto nbytes = reader->Read(
+              std::span{buffer.data() + total_read,
+                        buffer.size() - total_read});
+          if (nbytes == 0)
+            break;
+          total_read += nbytes;
+        }
+
+        if (total_read == buffer.size()) {
+          // Load bitmap from memory
+          if (bitmap.Load(std::span{buffer.data(), buffer.size()}))
+            return true;
+        }
+      }
+    } catch (...) {
+      // Continue to next archive
+      continue;
+    }
+  }
+
+  return false;
 }
 
 #ifdef HAVE_RUN_FILE
@@ -417,7 +483,21 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
       break;
 
     try {
-      if (!images.append().LoadFile(LocalPath(i.c_str())))
+      Bitmap &bitmap = images.append();
+      bool loaded = false;
+
+      // Try loading from waypoint data archives first (for paths starting
+      // with "pics/"). If not found in archives or path doesn't start with
+      // "pics/", fall back to filesystem (XCSoarData directory).
+      if (LoadImageFromWaypointDataArchives(bitmap, i.c_str())) {
+        loaded = true;
+      } else {
+        // Fall back to filesystem - works for all paths including
+        // "wpt_details/", "pics/", or any other relative path
+        loaded = bitmap.LoadFile(LocalPath(i.c_str()));
+      }
+
+      if (!loaded)
         images.shrink(images.size() - 1);
     } catch (const std::exception &e) {
       LogFormat("Failed to load %s: %s",

@@ -170,6 +170,7 @@ endif
 
 XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/MapFile.cpp \
+	$(IO_SRC_DIR)/WaypointDataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \

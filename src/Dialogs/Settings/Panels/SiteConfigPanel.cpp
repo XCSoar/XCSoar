@@ -19,6 +19,7 @@ enum ControlIndex {
   WaypointFileList,
   WatchedWaypointFileList,
   AirfieldFileList,
+  WaypointDataFileList,
   AirspaceFileList,
   FlarmFile,
   RaspFile,
@@ -76,6 +77,13 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    FileType::WAYPOINTDETAILS);
   SetExpertRow(AirfieldFileList);
 
+  AddMultipleFiles(_("Waypoint Data Archives"),
+                   _("Archive files (.xcd) containing waypoints, waypoint "
+                     "details and associated images. These files can be "
+                     "downloaded from the repository."),
+                   ProfileKeys::WaypointDataFileList, _T("*.xcd\0"),
+                   FileType::WAYPOINTDATA);
+
   AddMultipleFiles(_("Selected Airspace Files"),
                    _("List of active airspace files. Use the Add and Remove "
                      "buttons to activate or deactivate"
@@ -115,11 +123,14 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   AirfieldFileChanged = SaveValueMultiFileReader(
       AirfieldFileList, ProfileKeys::AirfieldFileList);
 
+  bool WaypointDataFileChanged = SaveValueMultiFileReader(
+      WaypointDataFileList, ProfileKeys::WaypointDataFileList);
+
   RaspFileChanged = SaveValueFileReader(RaspFile, ProfileKeys::RaspFile);
 
   changed = WaypointFileChanged || AirfieldFileChanged ||
-            AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
-            RaspFileChanged;
+            WaypointDataFileChanged || AirspaceFileChanged ||
+            MapFileChanged || FlarmFileChanged || RaspFileChanged;
 
   _changed |= changed;
 
