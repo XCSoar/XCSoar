@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxes/Content/Trace.hpp"
-#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Renderer/BarographRenderer.hpp"
 #include "Renderer/TraceHistoryRenderer.hpp"
@@ -17,7 +16,6 @@
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Language/Language.hpp"
-#include "Widget/CallbackWidget.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
@@ -155,22 +153,11 @@ ShowAnalysisBarograph() noexcept
                        AnalysisPage::BAROGRAPH);
 }
 
-static std::unique_ptr<Widget>
-LoadAnalysisBarographPanel([[maybe_unused]] unsigned id) noexcept
+bool
+InfoBoxContentBarogram::HandleClick() noexcept
 {
-  return std::make_unique<CallbackWidget>(ShowAnalysisBarograph);
-}
-
-static constexpr
-InfoBoxPanel analysis_barograph_infobox_panels[] = {
-  { N_("Analysis"), LoadAnalysisBarographPanel },
-  { nullptr, nullptr }
-};
-
-const InfoBoxPanel *
-InfoBoxContentBarogram::GetDialogContent() noexcept
-{
-  return analysis_barograph_infobox_panels;
+  ShowAnalysisBarograph();
+  return true;
 }
 
 void
