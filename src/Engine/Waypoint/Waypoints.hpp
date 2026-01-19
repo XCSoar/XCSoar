@@ -186,19 +186,19 @@ public:
   }
 
   /**
-   * Generate takeoff waypoint
+   * Generate a temporary waypoint with a given name.
    *
    * @return waypoint copy
    */
-  Waypoint GenerateTakeoffPoint(const GeoPoint &location,
-                                double terrain_alt) const noexcept;
+  Waypoint GenerateTempPoint(const GeoPoint &location, double terrain_alt,
+                             const char *name) const noexcept;
 
   /**
-   * Create a takeoff point or replaces previous.
+   * Create a temporary point with a given name and replaces the previous one.
    * This modifies the waypoint database.
    */
-  void AddTakeoffPoint(const GeoPoint& location,
-                       double terrain_alt) noexcept;
+  void AddTempPoint(const GeoPoint& location, double terrain_alt,
+                    const char *name) noexcept;
 
   /**
    * Return the current home waypoint.  May be nullptr if none is
