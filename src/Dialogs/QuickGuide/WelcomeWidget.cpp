@@ -120,7 +120,7 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
     : renderer.GetHeight(look.text_font, text_width, t2.c_str());
   y += int(t2_height) + margin;
 
-  const TCHAR *t3 = _("https://xcsoar.org/discover/manual.html");
+  const TCHAR *t3 = _T("https://xcsoar.org/discover/manual.html");
   if (canvas != nullptr) {
     canvas->SetTextColor(COLOR_BLUE);
     canvas->Select(look.text_font);
@@ -149,7 +149,7 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
     : renderer.GetHeight(look.text_font, text_width, t4.c_str());
   y += int(t4_height) + margin;
 
-  const TCHAR *t5 = _("https://github.com/XCSoar/XCSoar");
+  const TCHAR *t5 = _T("https://github.com/XCSoar/XCSoar");
   if (canvas != nullptr) {
     canvas->SetTextColor(COLOR_BLUE);
     canvas->Select(look.text_font);

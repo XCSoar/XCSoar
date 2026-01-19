@@ -205,7 +205,7 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::LOOK_INFO_BOX_SETS, l9)) + margin / 2;
   const TCHAR *l9b = _("Config → System → Look → Pages");
   y += int(DrawLinkLine(LinkAction::LOOK_PAGES, l9b)) + margin / 2;
-  const TCHAR *l9c = _("https://youtube.com/user/M24Tom/playlists");
+  const TCHAR *l9c = _T("https://youtube.com/user/M24Tom/playlists");
   y += int(DrawLinkLine(LinkAction::YOUTUBE_TUTORIAL, l9c)) + margin;
 
   // NMEA devices
