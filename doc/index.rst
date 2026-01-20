@@ -14,6 +14,7 @@ XCSoar
    lua
    mapfile
    debugging
+   test_debug_utilities
 
 Build system reference: :ref:`build-system-reference`
 
