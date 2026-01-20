@@ -916,7 +916,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
 	$(SRC)/Engine/Task/Stats/CommonStats.cpp \
 	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1304,7 +1303,6 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
@@ -1332,7 +1330,6 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
 RUN_DECLARE_DEPENDS = DRIVER PORT LIBNMEA ASYNC LIBNET OPERATION IO OS THREAD WAYPOINT GEO TIME MATH UTIL
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
@@ -1357,7 +1354,6 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/RunEnableNMEA.cpp
 RUN_ENABLE_NMEA_DEPENDS = DRIVER PORT LIBNMEA GEO MATH ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL
 $(eval $(call link-program,RunEnableNMEA,RUN_ENABLE_NMEA))
@@ -1373,7 +1369,6 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/RunVegaSettings.cpp
 RUN_VEGA_SETTINGS_DEPENDS = DRIVER PORT LIBNMEA ASYNC LIBNET OPERATION IO OS THREAD GEO MATH TIME UTIL
 $(eval $(call link-program,RunVegaSettings,RUN_VEGA_SETTINGS))
@@ -1388,7 +1383,6 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
 RUN_FLARM_UTILS_DEPENDS = DRIVER PORT LIBNMEA ASYNC LIBNET OPERATION IO OS THREAD GEO MATH TIME UTIL
 $(eval $(call link-program,RunFlarmUtils,RUN_FLARM_UTILS))
@@ -1427,7 +1421,6 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
 RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT LIBNMEA ASYNC LIBNET OPERATION IO OS THREAD GEO TIME MATH UTIL
 $(eval $(call link-program,RunFlightList,RUN_FLIGHT_LIST))
@@ -1451,7 +1444,6 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
-	$(TEST_SRC_DIR)/FakeTraffic.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
 RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC LIBNMEA LIBNET OPERATION IO OS THREAD GEO TIME MATH UTIL
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
