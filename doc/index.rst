@@ -15,6 +15,7 @@ XCSoar
    mapfile
    debugging
    test_debug_utilities
+   git_tips
 
 Build system reference: :ref:`build-system-reference`
 
