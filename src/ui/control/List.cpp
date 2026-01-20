@@ -606,15 +606,25 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
     drag_y = GetPixelOrigin() + Pos.y;
     drag_y_window = Pos.y;
 
-    if (had_focus && (unsigned)index == GetCursorIndex() &&
-        CanActivateItem()) {
-      drag_mode = DragMode::CURSOR;
-      InvalidateItem(cursor);
-    } else {
-      // If item was not selected before
-      // -> select it
+    if (activate_on_first_click) {
+      // Single-click activation path (opt-in for multi-select UIs).
       SetCursorIndex(index);
-      drag_mode = DragMode::SCROLL;
+      if (CanActivateItem()) {
+        drag_mode = DragMode::CURSOR;
+        InvalidateItem(cursor);
+      } else {
+        drag_mode = DragMode::SCROLL;
+      }
+    } else {
+      if (had_focus && (unsigned)index == GetCursorIndex() &&
+          CanActivateItem()) {
+        drag_mode = DragMode::CURSOR;
+        InvalidateItem(cursor);
+      } else {
+        // Select item if it was not selected before
+        SetCursorIndex(index);
+        drag_mode = DragMode::SCROLL;
+      }
     }
     if (UsePixelPan())
       kinetic.MouseDown(GetPixelOrigin());
