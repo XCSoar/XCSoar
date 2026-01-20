@@ -220,5 +220,5 @@ bool WelcomeWindow::OnMouseUp(PixelPoint p) noexcept {
   if (github_link_rect.Contains(p)) {
     return OpenLink("https://github.com/XCSoar/XCSoar");
   }
-  return false;
+  return PaintWindow::OnMouseUp(p);
 }

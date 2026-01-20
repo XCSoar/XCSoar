@@ -366,9 +366,8 @@ ConfigurationWindow::HandleLink(LinkAction link) noexcept
   }
 
   case LinkAction::YOUTUBE_TUTORIAL:
-    OpenLink("https://youtube.com/playlist?list="
-             "PLb36zVafnfctzNG7yJoNXc2x8HnX5J9j7");
-    return true;
+    return OpenLink("https://youtube.com/playlist?list="
+                    "PLb36zVafnfctzNG7yJoNXc2x8HnX5J9j7");
 
   case LinkAction::DEVICES:
     if (backend_components != nullptr &&
