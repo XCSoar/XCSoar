@@ -27,6 +27,7 @@
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LevilAHRS_G.hpp"
+#include "Device/Driver/LoEFGREN.hpp"
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vaulter.hpp"
@@ -751,6 +752,46 @@ TestFlytec()
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToKelvin(),
              Temperature::FromCelsius(17).ToKelvin()));
+
+  delete device;
+}
+
+static void
+TestLoEFGREN()
+{
+  NullPort null;
+  Device *device = loe_fgren_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+
+  // Test positive vario (climb)
+  ok1(device->ParseNMEA("$PLOF,250,80,15*02", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, 2.5));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.indicated_airspeed,
+             Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToKelvin(),
+             Temperature::FromCelsius(15).ToKelvin()));
+
+  // Test negative vario (sink) and negative temperature
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$PLOF,-150,60,-5*3E", nmea_info));
+  ok1(equals(nmea_info.total_energy_vario, -1.5));
+  ok1(equals(nmea_info.temperature.ToKelvin(),
+             Temperature::FromCelsius(-5).ToKelvin()));
+
+  // Test invalid sentences
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{3}};
+  ok1(!device->ParseNMEA("$VARIO,999.98,-12*66", nmea_info));
+  ok1(!device->ParseNMEA("$PLOF,250,80,15*FF", nmea_info));
+  ok1(!nmea_info.total_energy_vario_available);
 
   delete device;
 }
@@ -1871,7 +1912,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1018);
+  plan_tests(1032);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -1901,6 +1942,7 @@ int main()
   TestXCTracer();
   TestACD();
   TestXCVario();
+  TestLoEFGREN();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */
