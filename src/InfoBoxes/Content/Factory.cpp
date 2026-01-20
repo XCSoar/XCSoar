@@ -852,7 +852,7 @@ static constexpr MetaData meta_data[] = {
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
     N_("Vertical distance to the nearest airspace. A positive value means the airspace is above you; a negative value means the airspace is below you."),
-    UpdateInfoBoxNearestAirspaceVertical,
+    IBFHelper<InfoBoxNearestAirspaceVertical>::Create,
   },
 
   // e_WP_MC0AltDiff

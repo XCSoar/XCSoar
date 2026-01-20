@@ -15,5 +15,9 @@ public:
   bool HandleClick() noexcept override;
 };
 
-void
-UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data) noexcept;
+class InfoBoxNearestAirspaceVertical : public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
