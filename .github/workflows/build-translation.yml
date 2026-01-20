@@ -8,11 +8,10 @@ on:
       - 'src/**'
       - 'po/**'
       - 'data/**'
-  pull_request:
-    paths:
-      - 'src/**'
-      - 'po/**'
-      - 'data/**'
+    tags:
+      - 'v*'
+  release:
+    types: [published]
 
 jobs:
   check-pot-update:
@@ -21,7 +20,7 @@ jobs:
     container: debian:trixie-slim
     permissions:
       contents: read
-    if: github.event_name == 'pull_request'
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'release'
     steps:
       - name: Install checkout dependencies
         run: |
