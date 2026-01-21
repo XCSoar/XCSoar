@@ -31,6 +31,7 @@ Version 7.44 - not yet released
   - fix waypoint editor silently discarding altitude and type changes
   - checklist: use .xcc extension, fix crash with empty profile path #2094
 * ui
+  - enable goto and waypoint details for location map items (clicking on empty map locations)
   - streamlined, and optimized icons
   - apply dark mode settings to thermal assistant
   - apply dark mode to large flarm radar

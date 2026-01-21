@@ -277,6 +277,13 @@ MapItemListWidget::OnGotoClicked()
       return;
   } else {
     waypoint = static_cast<const WaypointMapItem &>(item).waypoint;
+
+    // Remove old temporary goto waypoint when selecting a regular waypoint
+    auto &way_points = *data_components->waypoints;
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.EraseTempGoto();
+    }
   }
 
   backend_components->protected_task_manager->DoGoto(std::move(waypoint));

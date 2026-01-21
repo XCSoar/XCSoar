@@ -110,6 +110,13 @@ InputEvents::eventGotoLookup([[maybe_unused]] const TCHAR *misc)
 
   auto wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
   if (wp != NULL) {
+    // Remove old temporary goto waypoint when selecting a regular waypoint
+    auto &way_points = *data_components->waypoints;
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.EraseTempGoto();
+    }
+
     backend_components->protected_task_manager->DoGoto(std::move(wp));
     trigger_redraw();
   }

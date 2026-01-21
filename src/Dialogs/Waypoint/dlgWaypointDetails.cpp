@@ -39,6 +39,9 @@
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
 #include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+#include "Protection.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "Pan.hpp"
 
 #ifdef ANDROID
@@ -658,6 +661,15 @@ WaypointDetailsWidget::OnGotoClicked()
 {
   if (task_manager == nullptr)
     return;
+
+  // Remove old temporary goto waypoint when selecting a regular waypoint
+  if (data_components != nullptr && data_components->waypoints != nullptr) {
+    auto &way_points = *data_components->waypoints;
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.EraseTempGoto();
+    }
+  }
 
   task_manager->DoGoto(waypoint);
   dialog.SetModalResult(mrOK);
