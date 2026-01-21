@@ -14,6 +14,13 @@
 #include "net/http/DownloadManager.hpp"
 #endif
 
+static const TCHAR *
+GetFileName(const FileMultiSelectWidget::FileItem &item) noexcept
+{
+  const auto base = item.path.GetBase();
+  return (base != nullptr) ? base.c_str() : item.path.c_str();
+}
+
 bool
 MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
                 const TCHAR *help_text)
@@ -21,7 +28,9 @@ MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(), caption);
 
-  auto list_widget = std::make_unique<FileMultiSelectWidget>(df, caption, help_text);
+  auto list_widget = std::make_unique<FileMultiSelectWidget>(df, GetFileName,
+                                                             caption, help_text);
+
   FileMultiSelectWidget *file_widget = list_widget.get();
 
   dialog.AddButton(_("Help"), [file_widget]() { file_widget->ShowHelp(); });
