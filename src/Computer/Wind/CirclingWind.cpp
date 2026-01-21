@@ -4,46 +4,67 @@
 /* This library was originally imported from Cumulus
    http://kflog.org/cumulus/ */
 
+static constexpr double INITIAL_MIN_FIT_METRIC = 10000;
+
 #include "CirclingWind.hpp"
-#include "NMEA/MoreData.hpp"
-#include "NMEA/CirclingInfo.hpp"
+
+#include "LogFile.hpp"
 #include "Math/Util.hpp"
+#include "NMEA/CirclingInfo.hpp"
+#include "NMEA/MoreData.hpp"
 
 #include <algorithm>
 
 /*
 About Windanalysation
 
-Currently, the wind is being analyzed by finding the minimum and the maximum
-groundspeeds measured while flying a circle. The direction of the wind is taken
-to be the direction in wich the speed reaches it's maximum value, the speed
-is half the difference between the maximum and the minimum speeds measured.
-A quality parameter, based on the number of circles allready flown (the first
-circles are taken to be less accurate) and the angle between the headings at
-minimum and maximum speeds, is calculated in order to be able to weigh the
-resulting measurement.
+In this implementation, the wind is analyzed by assuming the recorded ground
+speeds, minus the true airspeed values, as a cosine curve. The wind speed is
+calculated from the amplitude of this curve.
 
-There are other options for determining the windspeed. You could for instance
-add all the vectors in a circle, and take the resuling vector as the windspeed.
-This is a more complex method, but because it is based on more heading/speed
-measurements by the GPS, it is probably more accurate. If equiped with
-instruments that pass along airspeed, the calculations can be compensated for
-changes in airspeed, resulting in better measurements. We are now assuming
-the pilot flies in perfect circles with constant airspeed, wich is of course
-not a safe assumption.
-The quality indication we are calculation can also be approched differently,
-by calculating how constant the speed in the circle would be if corrected for
-the windspeed we just derived. The more constant, the better. This is again
-more CPU intensive, but may produce better results.
+In order to determine the wind direction, the curve is iteratively adapted to
+a cosine curve.
 
-Some of the errors made here will be averaged-out by the WindStore, wich keeps
-a number of windmeasurements and calculates a weighted average based on quality.
+The change in the rotation rate is used as a quality parameter for the flown
+circles. If the rotation rate changes only slightly over the course of a
+circle, the circle in question is used for the wind calculation. As a further
+quality parameter, the deviation (sum of the distance squares) is used from the
+result of the curve fitting when determining the direction.
+
+The algorithm uses True Airspeed to compensate for changing airspeed during the
+circle. The algorithm also runs without the availability of True Airspeed, but
+then without this compensation.
+
+In a future implementation, the change in rotation rate can be derived from
+(simple) IMUs. However, this presupposes that IMUs are given an infrastructure
+in XCSoar.
+
+Some of the errors made here will be averaged-out by the WindStore, which keeps
+a number of wind measurements and calculates a weighted average based on
+quality.
 */
 
 void
 CirclingWind::Reset()
 {
-  active = false;
+  active      = false;
+  usable_tas = true;
+}
+
+void
+CirclingWind::ShowResources(const MoreData &info)
+{
+  const auto airspeed_available =
+    info.airspeed_real && info.airspeed_available.IsValid();
+
+  if (airspeed_available != _airspeed_available) {
+    if (!airspeed_available)
+      LogString("CirclingWind: Airspeed not usable!");
+    else
+      LogString("CirclingWind: Using Airspeed");
+  }
+
+  _airspeed_available = airspeed_available;
 }
 
 CirclingWind::Result
@@ -55,159 +76,267 @@ CirclingWind::NewSample(const MoreData &info, const CirclingInfo &circling)
   }
 
   if (!active) {
-    active = true;
-
-    /* reset the circlecounter for each flightmode change; the
-       important thing to measure is the number of turns in this
-       thermal only. */
-    circle_count = 0;
-
+    active      = true;
+    usable_tas = info.airspeed_real && info.airspeed_available.IsValid();
+    CirclingWind::ShowResources(info);
     current_circle = Angle::Zero();
+    last_track     = info.track;
     last_track_available.Clear();
     last_ground_speed_available.Clear();
     samples.clear();
+    suspend = 0;
   }
 
   if (last_track_available.FixTimeWarp(info.track_available,
                                        std::chrono::seconds(30)) ||
       last_ground_speed_available.FixTimeWarp(info.ground_speed_available,
-                                              std::chrono::seconds(30)))
+                                              std::chrono::seconds(30))) {
     /* time warp: start from scratch */
     Reset();
+    return Result(0);
+  }
 
   if (!info.track_available.Modified(last_track_available) ||
       !info.ground_speed_available.Modified(last_ground_speed_available))
-    /* no updated GPS fix */
+    // no new GPS fix
     return Result(0);
 
-  const bool previous_track_available = last_track_available;
-
-  last_track_available = info.track_available;
+  last_track_available        = info.track_available;
   last_ground_speed_available = info.ground_speed_available;
 
-  // Circle detection
-  if (previous_track_available)
-    current_circle += (info.track - last_track).AsDelta().Absolute();
+  char ar_source = ' '; // remembers where Angular Rate came from
+  Sample sample;
+  sample.time         = info.time;
+  sample.track        = info.track;
+  sample.ground_speed = info.ground_speed;
+  sample.tas          = usable_tas ? info.true_airspeed : 0;
 
-  last_track = info.track;
+  ar_source = 't';
+  /* we use GPS track in the absence of a Gyro
+     wont work well at high wind speeds
+  */
+  sample.angular_rate = (info.track - last_track).AsDelta();
+  last_track          = info.track;
 
-  const bool fullCircle = current_circle >= Angle::FullCircle();
-  if (fullCircle) {
-    //full circle made!
-
-    current_circle -= Angle::FullCircle();
-    circle_count++; //increase the number of circles flown (used
-    //to determine the quality)
-  }
-
-  if (!samples.full()) {
-    Sample &sample = samples.append();
-    sample.time = info.clock;
-    sample.vector = SpeedVector(info.track, info.ground_speed);
-  } else {
-    // TODO code: give error, too many wind samples
-    // or use circular buffer
-  }
+  // insert the newest sample at position 0
+  samples.push_front(sample);
 
   Result result(0);
-  if (fullCircle) { //we have completed a full circle!
-    if (!samples.full())
-      // calculate the wind for this circle, only if it is valid
-      result = CalcWind();
 
-    samples.clear();
+  if (suspend-- <= 0) { // avoid WindCalc for every single sample.
+
+    // how many samples for the full circle?
+    bool full_circle = false;
+    size_t idx;
+    current_circle        = Angle::Zero();
+    Angle angular_rate_sum = Angle::Zero();
+    for (idx = 1; (idx < samples.size()) && !full_circle; idx++) {
+      current_circle +=
+        (samples[idx - 1].track - samples[idx].track).AsDelta();
+      angular_rate_sum += samples[idx - 1].angular_rate;
+      full_circle = current_circle.Absolute() > Angle::FullCircle();
+    }
+    const auto n_samples = idx; // in the full circle
+
+    // how big is the change in turn rate?
+    if (full_circle && (n_samples > 8)) {
+      const Angle angular_rate_avg = angular_rate_sum / (n_samples - 1);
+
+      double max_angular_rate_deviation = 0;
+      for (size_t i = 1; i < n_samples; i++) {
+        const Angle v = samples[i].angular_rate - angular_rate_avg;
+        max_angular_rate_deviation =
+          std::max(abs(v.Degrees()), max_angular_rate_deviation);
+      }
+
+      // this should be small (< 0.3) for a good enough circle
+      const double circle_quality_metric =
+        abs(max_angular_rate_deviation / angular_rate_avg.Degrees());
+
+      if (circle_quality_metric < 1.0) {
+        result =
+          CalcWind(circle_quality_metric, n_samples, current_circle, ar_source);
+
+        /* we have a good circle, wait for 1/4 circle before calculating the
+           next */
+        if (result.quality)
+          suspend = n_samples / 4;
+        else
+          suspend = 0;
+      }
+    }
   }
-
   return result;
 }
 
 CirclingWind::Result
-CirclingWind::CalcWind()
+CirclingWind::CalcWind(double quality_metric,
+                       const size_t n_samples,
+                       const Angle circle,
+                       const char ar_source)
 {
-  assert(circle_count > 0);
+  assert(n_samples > 1);
   assert(!samples.empty());
 
   // reject if average time step greater than 2.0 seconds
-  if ((samples.back().time - samples[0].time) / (samples.size() - 1) > std::chrono::seconds{2})
+  const auto measure_time   = (samples[0].time - samples[n_samples - 1].time);
+  const auto avg_step_width = measure_time / (n_samples - 1);
+  if (avg_step_width <= std::chrono::seconds{0}) return Result(0);
+  if (avg_step_width > std::chrono::seconds{2}) return Result(0);
+
+  // reject if step width isn't sufficiently uniform
+  for (size_t i = 1; i < n_samples; i++)
+    if (std::chrono::abs(samples[i - 1].time - samples[i].time -
+                         avg_step_width) > (avg_step_width * 0.05))
+      return Result(0);
+
+  /* the fraction of the last step to be removed from the sum over the full
+     circle */
+  const auto last_track_change =
+    (samples[n_samples - 2].track - samples[n_samples - 1].track).AsDelta();
+  if (last_track_change.Absolute() < Angle::Degrees(0.1))
+    return Result(0); // will never happen!
+  const auto excess_circle = (circle - Angle::FullCircle()).AsDelta();
+  const double last_step_fraction_excess =
+    1.0 - (last_track_change - excess_circle) / last_track_change;
+  double last_val = 0;
+
+  /* find average to determine wind speed
+     this tolerates TAS == 0 if airspeed isn't available */
+  double speed_offset = 0;
+  for (size_t i = 0; i < n_samples; i++) {
+    last_val = (samples[i].ground_speed - samples[i].tas);
+    speed_offset += last_val;
+  }
+  speed_offset -= (last_val * last_step_fraction_excess);
+  speed_offset /= ((double)n_samples - last_step_fraction_excess); // average
+
+  // estimate wind speed by amplitude of wind speed data
+  double wind_speed = 0;
+  for (size_t i = 0; i < n_samples; i++) {
+    last_val = abs(samples[i].ground_speed - samples[i].tas - speed_offset);
+    wind_speed += last_val;
+  }
+  wind_speed -= (last_val * last_step_fraction_excess);
+  wind_speed /= ((double)n_samples - last_step_fraction_excess); // average
+  wind_speed *=
+    M_PI_2; // the ratio of the average to the amplitude of a sine curve
+
+  if (wind_speed >= 30)
+    // limit to reasonable values (30 m/s), reject otherwise
     return Result(0);
 
-  // find average
-  double av = 0;
-  for (unsigned i = 0; i < samples.size(); i++)
-    av += samples[i].vector.norm;
+  // determine bearing of the wind & prepare for the iterative search
+  Angle wind_dir        = Angle::Zero();
+  Angle search_midpoint = Angle::HalfCircle();
+  int search_steps      = 6;
+  // cover more then a full circle
+  Angle search_step_width = circle.Absolute() / search_steps;
+  search_steps += 1;
+  Angle probe_point;
+  double fit_metric;
+  // initialize to a large number
+  double min_fit_metric = INITIAL_MIN_FIT_METRIC;
 
-  av /= samples.size();
+  /* this is a "safety net", absolutely not necessary,
+   * since the number of iterations is fix at compile time
+   */
+  int max_iterations = 10;
+  // find best fit to cosine curve
+  do {
+    // make sure we don't loop forever
+    assert(max_iterations > 0);
+    max_iterations -= 1;
 
-  // find zero time for times above average
-  double rthismax = 0;
-  double rthismin = 0;
-  int jmax = -1;
-  int jmin = -1;
+    probe_point =
+      search_midpoint - (search_step_width * ((double)search_steps / 2.0));
 
-  for (unsigned j = 0; j < samples.size(); j++) {
-    double rthisp = 0;
-
-    for (unsigned i = 1; i < samples.size(); i++) {
-      const unsigned ithis = (i + j) % samples.size();
-      unsigned idiff = i;
-
-      if (idiff > samples.size() / 2)
-        idiff = samples.size() - idiff;
-
-      rthisp += samples[ithis].vector.norm * idiff;
+    for (int s = 0; s <= search_steps; s++) {
+      fit_metric = FitCosine(n_samples, wind_speed, speed_offset, probe_point);
+      if (fit_metric < min_fit_metric) {
+        min_fit_metric  = fit_metric;
+        search_midpoint = probe_point;
+      }
+      probe_point += search_step_width;
     }
 
-    if ((rthisp < rthismax) || (jmax == -1)) {
-      rthismax = rthisp;
-      jmax = j;
-    }
+    // hone in on the interesting part
+    search_steps      = 3;
+    search_step_width = search_step_width / 2.0;
+  } while (search_step_width > Angle::Degrees(2));
+  wind_dir = search_midpoint.AsBearing();
 
-    if ((rthisp > rthismin) || (jmin == -1)) {
-      rthismin = rthisp;
-      jmin = j;
-    }
+  /* If we knew the latency of the GPS receiver we would correct wind_dir here!
+   * ToDo: determine the latency of the GPS receiver in use
+   * 0.25 sec is a guesstimate for a PowerFLARM
+   */
+  const double latency_GPS =
+    0.25; // seconds from antenna signal to result in info
+  Angle latency_comp = circle * latency_GPS / measure_time.count();
+  wind_dir -= latency_comp;
+
+  if (min_fit_metric > (INITIAL_MIN_FIT_METRIC - 1)) {
+    return Result(0); // it doesn't converge
   }
 
-  // attempt to fit cycloid
-  const auto mag = (samples[jmax].vector.norm - samples[jmin].vector.norm) / 2;
-  if (mag >= 30)
-    // limit to reasonable values (60 knots), reject otherwise
-    return Result(0);
+  SpeedVector wind(wind_dir.AsBearing(), wind_speed);
+  const auto quality =
+    EstimateQuality(quality_metric, min_fit_metric, wind_speed, ar_source);
 
-  double rthis = 0;
-
-  for (const Sample &sample : samples) {
-    const auto sc = sample.vector.bearing.SinCos();
-    auto wx = sc.second, wy = sc.first;
-    wx = wx * av + mag;
-    wy *= av;
-    auto cmag = hypot(wx, wy) - sample.vector.norm;
-    rthis += Square(cmag);
-  }
-
-  rthis /= samples.size();
-  rthis = sqrt(rthis);
-
-  int quality;
-
-  if (mag > 1)
-    quality = 5 - iround(rthis / mag * 3);
-  else
-    quality = 5 - iround(rthis);
-
-  if (circle_count < 3)
-    quality--;
-  if (circle_count < 2)
-    quality--;
-
-  if (quality < 1)
-    //measurment quality too low
-    return Result(0);
-
-  /* 5 is maximum quality, make sure we honour that */
-  quality = std::min(quality, 5);
-
-  // jmax is the point where most wind samples are below
-  SpeedVector wind(samples[jmax].vector.bearing.Reciprocal(), mag);
   return Result(quality, wind);
+}
+
+unsigned int
+CirclingWind::EstimateQuality(const double circle_quality,
+                              const double fitCosine_quality,
+                              const double wind_speed,
+                              const char ar_source)
+/* the return value matches the quality number of WindStore::SlotMeasurement
+ */
+{
+  /* perfect circles are skewed, if GPS-track is the criteria, with higher
+   * winds, hence allow some margin for this. wind_speed in m/s
+   */
+  const double roundness_skew = wind_speed * ((ar_source == 'g') ? 0.01 : 0.02);
+
+  int quality = 5; // top quality, perfect circle
+  if (circle_quality > (0.2 + roundness_skew)) quality = 4;
+  if (circle_quality > (0.3 + roundness_skew)) quality = 3;
+  if (circle_quality > (0.4 + roundness_skew)) quality = 2;
+  if (circle_quality > (0.5 + roundness_skew)) quality = 1;
+  if (circle_quality > (0.7 + roundness_skew)) return 0;
+
+  // fine tune the quality number to reflect quality of fit to the cosine
+  if (fitCosine_quality > 10) quality -= 1; // penalty for bad fit
+  if (fitCosine_quality < 5) quality += 1;  // bonus for good fit
+  if (fitCosine_quality < 1) quality += 1;  // extra bonus for very good fit
+  quality = std::max(std::min(quality, 5), 0);
+
+  return quality;
+}
+
+double
+CirclingWind::FitCosine(const size_t n_samples,
+                        const double amplitude,
+                        const double offset,
+                        const Angle phase)
+/* fit the measured speed data to an inverse cosine
+ * uses the "sum of squares" algorithm
+ */
+{
+  double sum_of_squares_of_deltas = 0;
+
+  for (size_t i = 0; i < n_samples; i++) {
+    const double a        = (samples[i].track - phase).AsBearing().Radians();
+    double net_speed_diff = samples[i].ground_speed - samples[i].tas - offset;
+    /* to make the fit metric (somewhat) independent of the amplitude
+     * wind speeds less than 1 m/s are not interesting anyways
+     */
+    if (amplitude > 1.0) net_speed_diff /= amplitude;
+    sum_of_squares_of_deltas += Square(-fastcosine(a) - net_speed_diff);
+  }
+  /* tighter circles getting a smaller result, that is intended.
+   * Because wider circles tend to be search circles, hence not so round
+   */
+  return sum_of_squares_of_deltas;
 }
