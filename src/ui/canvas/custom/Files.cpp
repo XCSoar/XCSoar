@@ -5,6 +5,10 @@
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 
+#ifdef _UNICODE
+#include "util/ConvertString.hpp"
+#endif
+
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
@@ -21,9 +25,6 @@ static const char *const font_search_paths[] = {
   /* found on macOS Catalina */
   "/System/Library/Fonts/Supplemental",
 #endif
-#elif defined(_WIN32) && !defined(HAVE_POSIX)
-  /* just for the experimental WINSDL target */
-  "c:\\windows\\fonts",
 #elif defined(KOBO)
   "/mnt/onboard/XCSoar/fonts",
   "/mnt/onboard/fonts",
@@ -49,9 +50,6 @@ static const char *const all_font_paths[] = {
   "Times New Roman.ttf",
   "Arial.ttf",
 #endif
-#elif defined(_WIN32) && !defined(HAVE_POSIX)
-  /* just for the experimental WINSDL target */
-  "arial.ttf",
 #else
 
 #ifndef KOBO
@@ -252,11 +250,31 @@ static const char *const all_monospace_font_paths[] = {
   nullptr
 };
 
+#ifdef _UNICODE
+/**
+ * Convert a narrow string path to AllocatedPath on UNICODE builds.
+ */
+static AllocatedPath
+MakePath(const char *s) noexcept
+{
+  const auto wide = ConvertUTF8ToWide(s);
+  if (wide == nullptr)
+    return nullptr;
+  return AllocatedPath(wide.c_str());
+}
+#else
+static Path
+MakePath(const char *s) noexcept
+{
+  return Path(s);
+}
+#endif
+
 static AllocatedPath
 FindInSearchPaths(Path suffix)
 {
   for (const char *const* i = font_search_paths; *i != nullptr; ++i) {
-    const Path path(*i);
+    const auto path = MakePath(*i);
 
     auto full_path = AllocatedPath::Build(path, suffix);
     if (File::Exists(full_path))
@@ -271,7 +289,7 @@ static AllocatedPath
 FindFile(const char *const*list)
 {
   for (const char *const* i = list; *i != nullptr; ++i) {
-    const Path path(*i);
+    auto path = MakePath(*i);
 
     if (path.IsAbsolute()) {
       if (File::Exists(path))

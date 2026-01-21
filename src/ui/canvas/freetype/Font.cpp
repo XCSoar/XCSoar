@@ -16,6 +16,8 @@
 
 #ifndef _UNICODE
 #include "util/UTF8.hpp"
+#else
+#include "util/ConvertString.hpp"
 #endif
 
 #if defined(__clang__) && defined(__arm__)
@@ -194,7 +196,12 @@ Font::Load(const FontDescription &d)
 
   assert(path != nullptr);
 
+#ifdef _UNICODE
+  const WideToUTF8Converter path_utf8(path.c_str());
+  LoadFile(path_utf8.c_str(), d.GetHeight(), bold, italic);
+#else
   LoadFile(path.c_str(), d.GetHeight(), bold, italic);
+#endif
 }
 
 void
