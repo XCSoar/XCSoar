@@ -11,8 +11,12 @@
 #endif
 
 typedef char TCHAR;
-#define _stprintf sprintf
-#define _vstprintf vsprintf
+
+// Safe wrappers that use snprintf/vsnprintf instead of deprecated sprintf/vsprintf
+// Note: These require the buffer size to be known at compile time or passed explicitly
+// For compatibility with existing _stprintf calls, we use a macro that captures the buffer
+#define _stprintf(buffer, ...) snprintf(buffer, sizeof(buffer), __VA_ARGS__)
+#define _vstprintf(buffer, format, args) vsnprintf(buffer, sizeof(buffer), format, args)
 #define _vsntprintf vsnprintf
 #define _tprintf printf
 #define _ftprintf fprintf
