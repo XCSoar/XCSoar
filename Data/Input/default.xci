@@ -702,9 +702,9 @@ location=7
 mode=Config2
 type=key
 data=9
-event=FileManager
+event=DataManagement
 event=Mode default
-label=File Manager
+label=Data Management
 location=8
 
 mode=Config2
@@ -1384,7 +1384,7 @@ type=key
 data=0
 event=FileManager
 event=Mode default
-label=File Manager
+label=Download Manager
 location=37
 
 mode=RemoteStick
