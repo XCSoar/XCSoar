@@ -201,6 +201,13 @@ public:
                     const char *name) noexcept;
 
   /**
+   * Remove the temporary goto waypoint if it exists.
+   * This is called when starting a goto to a regular waypoint to clean up
+   * any previous temporary goto point.
+   */
+  void EraseTempGoto() noexcept;
+
+  /**
    * Return the current home waypoint.  May be nullptr if none is
    * configured.
    */
