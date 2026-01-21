@@ -367,7 +367,9 @@ void
 Waypoints::AddTempPoint(const GeoPoint& location, const double terrain_alt,
                         const TCHAR *name) noexcept
 {
-  assert(name != nullptr);
+  if (name == nullptr)
+    return;
+
   const bool is_takeoff = StringIsEqual(name, _T("(takeoff)"));
 
   // remove old temporary waypoint first (only if it's a temporary one)
@@ -382,4 +384,13 @@ Waypoints::AddTempPoint(const GeoPoint& location, const double terrain_alt,
   }
 
   Optimise();
+}
+
+void
+Waypoints::EraseTempGoto() noexcept
+{
+  const TCHAR *goto_name = _T("(goto)");
+  WaypointPtr old_goto = LookupName(goto_name);
+  if (old_goto != nullptr && old_goto->origin == WaypointOrigin::NONE)
+    Erase(std::move(old_goto));
 }
