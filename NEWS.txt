@@ -5,6 +5,10 @@ Version 7.44 - not yet released
   - remove FFVV NetCoupe
   - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
   - update OLC League calculation to latest ruleset
+  - improved circling wind algorithm: uses cosine curve fitting with True
+    Airspeed compensation for more accurate wind estimates, angular rate
+    quality assessment for better circle validation, and GPS latency
+    compensation
 * tracking
   - xcsoar-cloud-service: rebuild service, new domain cloud.xcsoar.org
 * data files
