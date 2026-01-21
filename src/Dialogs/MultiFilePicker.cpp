@@ -2,110 +2,62 @@
 // Copyright The XCSoar Project
 
 #include "MultiFilePicker.hpp"
-#include "Dialogs/FilePicker.hpp"
 #include "Form/DataField/MultiFile.hpp"
 #include "Language/Language.hpp"
-#include "ListPicker.hpp"
-#include "Look/DialogLook.hpp"
-#include "Renderer/TextRowListItemRenderer.hpp"
 #include "UIGlobals.hpp"
-#include "Widget/TextWidget.hpp"
-#include "Widget/TwoWidgets.hpp"
+#include "Widget/FileMultiSelectWidget.hpp"
 #include "WidgetDialog.hpp"
+#include "net/http/Features.hpp"
 
-static constexpr int mrRemove = 601;
-static constexpr int mrAdd = 600;
-
-class MultiFilePickerSupport final : public TextRowListItemRenderer {
-  std::vector<Path> &active_files;
-
-public:
-  explicit MultiFilePickerSupport(std::vector<Path> &_active_files)
-      : active_files(_active_files)
-  {
-  }
-
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned i) noexcept override
-  {
-    if (active_files.empty()) {
-      row_renderer.DrawTextRow(canvas, rc, _T(""));
-      return;
-    }
-    row_renderer.DrawTextRow(canvas, rc, active_files[i].GetBase().c_str());
-  }
-};
-
-static bool
-MultiFilePickerAdd(const TCHAR *caption, MultiFileDataField &df,
-                   const TCHAR *help_text)
-{
-
-  if (FilePicker(caption, df.GetFileDataField(), help_text, false)) {
-    df.AddValue(df.GetFileDataField().GetValue());
-    return true;
-  }
-
-  return false;
-}
-
-static int
-MultiFilePickerMain(const TCHAR *caption, MultiFileDataField &df,
-                    const TCHAR *help_text)
-{
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(), caption);
-
-  std::vector<Path> active_files = df.GetPathFiles();
-
-  MultiFilePickerSupport support(active_files);
-
-  ListPickerWidget *file_widget =
-      new ListPickerWidget(active_files.size(), 0,
-                           support.CalculateLayout(UIGlobals::GetDialogLook()),
-                           support, dialog, caption, help_text);
-
-  Widget *widget = file_widget;
-
-  dialog.AddButton(_("Help"), [file_widget]() { file_widget->ShowHelp(); });
-  dialog.AddButton(_("Add"), mrAdd);
-  dialog.AddButton(_("Remove"), mrRemove);
-  dialog.AddButton(_("OK"), mrOK);
-  dialog.AddButton(_("Cancel"), mrCancel);
-  dialog.EnableCursorSelection();
-
-  dialog.FinishPreliminary(widget);
-
-  int result = dialog.ShowModal();
-
-  if (result == mrRemove) {
-    unsigned int i = (int)file_widget->GetList().GetCursorIndex();
-    if (!active_files.empty() && i < active_files.size())
-      df.UnSet(active_files[i]);
-  }
-
-  return result;
-}
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "DownloadFilePicker.hpp"
+#include "net/http/DownloadManager.hpp"
+#endif
 
 bool
 MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
                 const TCHAR *help_text)
 {
-  int result;
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), caption);
 
-  while ((result = MultiFilePickerMain(caption, df, help_text)) != mrOK) {
-    if (result == mrAdd) {
+  auto list_widget = std::make_unique<FileMultiSelectWidget>(df, caption, help_text);
+  FileMultiSelectWidget *file_widget = list_widget.get();
 
-      MultiFilePickerAdd(_("Add File"), df,
-                         _("Select a file to add or download a new one."));
+  dialog.AddButton(_("Help"), [file_widget]() { file_widget->ShowHelp(); });
 
-    } else if (result == mrCancel) {
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (Net::DownloadManager::IsAvailable()) {
+    dialog.AddButton(_("Download"), [file_widget, &df]() {
+      const auto path = DownloadFilePicker(df.GetFileDataField().GetFileType());
+      if (path != nullptr) {
+        df.ForceModify(path);
+        df.GetFileDataField().Sort();
 
-      df.Restore();
-      return false;
-    }
+        file_widget->Refresh();
+      }
+    });
+  }
+#endif
+
+  dialog.AddButton(_("Select none"), [file_widget]() {
+    file_widget->ClearSelection();
+  });
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  dialog.FinishPreliminary(std::move(list_widget));
+  int result = dialog.ShowModal();
+
+  if (result == mrOK) {
+    auto selected = file_widget->GetSelectedPaths();
+    for (const auto &path : df.GetPathFiles())
+      df.UnSet(path);
+    for (const auto &path : selected)
+      df.AddValue(path);
+    return true;
   }
 
-  return true;
+  df.Restore();
+  return false;
 }

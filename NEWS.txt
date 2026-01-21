@@ -63,6 +63,7 @@ Version 7.44 - not yet released
   - Add support for multiple airspace files in UI
   - Add support for multiple waypoint files in UI
   - Add support for multiple  airfields or details waypoint in UI
+  - File list dialogs use multi-select widget for selection
   - QuickMenu: revamped look
   - QuickMenu: sane cursor control
   - add kinetic drag scrolling to vertical scroll panels
