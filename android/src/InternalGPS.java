@@ -44,6 +44,13 @@ public class InternalGPS
   /* Reference to GPS required dialog, so we can dismiss it when GPS is enabled */
   private AlertDialog gpsRequiredDialog = null;
 
+  /* Flag to prevent callbacks from executing after close() */
+  private volatile boolean closed = false;
+
+  /* Stored permission handlers to allow cancellation in close() */
+  private PermissionManager.PermissionHandler foregroundPermissionHandler = null;
+  private PermissionManager.PermissionHandler backgroundPermissionHandler = null;
+
   InternalGPS(Context context, PermissionManager permissionManager,
               SensorListener listener) {
     this.context = context;
@@ -66,12 +73,20 @@ public class InternalGPS
    */
   @Override public void run() {
     Log.d(TAG, "run() called");
+    if (closed) {
+      Log.d(TAG, "run() called after close(), ignoring");
+      return;
+    }
+
     try {
-      /* Request foreground location permission first */
-      boolean permissionAlreadyGranted = permissionManager.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
-                                             new PermissionManager.PermissionHandler() {
+      /* Create and store foreground permission handler */
+      foregroundPermissionHandler = new PermissionManager.PermissionHandler() {
         @Override
         public void onRequestPermissionsResult(boolean granted) {
+          if (closed) {
+            Log.d(TAG, "Foreground permission callback after close(), ignoring");
+            return;
+          }
           Log.d(TAG, "Foreground location permission result: " + granted);
           if (granted) {
             /* Foreground location granted. Now request background location if needed. */
@@ -80,22 +95,27 @@ public class InternalGPS
               if (!permissionManager.areLocationPermissionsGranted()) {
                 Log.d(TAG, "Background location not granted, requesting it");
                 /* Background location not yet granted, request it */
-                permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                                   new PermissionManager.PermissionHandler() {
-                    @Override
-                    public void onRequestPermissionsResult(boolean bgGranted) {
-                      Log.d(TAG, "Background location permission result: " + bgGranted);
-                      if (bgGranted) {
-                        /* All location permissions granted, check GPS */
-                        checkGpsAndShowDialogIfNeeded();
-                      } else {
-                        /* Background permission denied, but foreground GPS can still work.
-                           Proceed with foreground-only GPS and log a warning. */
-                        Log.w(TAG, "Background location permission denied - GPS will work in foreground only");
-                        checkGpsAndShowDialogIfNeeded();
-                      }
+                backgroundPermissionHandler = new PermissionManager.PermissionHandler() {
+                  @Override
+                  public void onRequestPermissionsResult(boolean bgGranted) {
+                    if (closed) {
+                      Log.d(TAG, "Background permission callback after close(), ignoring");
+                      return;
                     }
-                  });
+                    Log.d(TAG, "Background location permission result: " + bgGranted);
+                    if (bgGranted) {
+                      /* All location permissions granted, check GPS */
+                      checkGpsAndShowDialogIfNeeded();
+                    } else {
+                      /* Background permission denied, but foreground GPS can still work.
+                          Proceed with foreground-only GPS and log a warning. */
+                      Log.w(TAG, "Background location permission denied - GPS will work in foreground only");
+                      checkGpsAndShowDialogIfNeeded();
+                    }
+                  }
+                };
+                permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                                   backgroundPermissionHandler);
               } else {
                 Log.d(TAG, "All location permissions already granted, checking GPS");
                 /* All permissions already granted, check GPS */
@@ -110,7 +130,11 @@ public class InternalGPS
             submitError("Location permission denied by user");
           }
         }
-      });
+      };
+
+      /* Request foreground location permission first */
+      boolean permissionAlreadyGranted = permissionManager.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                                             foregroundPermissionHandler);
       Log.d(TAG, "requestPermission returned: " + permissionAlreadyGranted);
       if (permissionAlreadyGranted) {
         Log.d(TAG, "Foreground location permission already granted");
@@ -122,22 +146,27 @@ public class InternalGPS
         } else if (android.os.Build.VERSION.SDK_INT >= 29) {
           Log.d(TAG, "Foreground granted but background not, requesting background");
           /* Foreground granted but background not - request it */
-          permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                                             new PermissionManager.PermissionHandler() {
+          backgroundPermissionHandler = new PermissionManager.PermissionHandler() {
             @Override
             public void onRequestPermissionsResult(boolean bgGranted) {
+              if (closed) {
+                Log.d(TAG, "Background permission callback after close(), ignoring");
+                return;
+              }
               Log.d(TAG, "Background location permission result: " + bgGranted);
-            if (bgGranted) {
-              /* All location permissions granted, check GPS */
-              checkGpsAndShowDialogIfNeeded();
-            } else {
+              if (bgGranted) {
+                /* All location permissions granted, check GPS */
+                checkGpsAndShowDialogIfNeeded();
+              } else {
                 /* Background permission denied, but foreground GPS can still work.
                    Proceed with foreground-only GPS and log a warning. */
                 Log.w(TAG, "Background location permission denied - GPS will work in foreground only");
                 checkGpsAndShowDialogIfNeeded();
               }
             }
-          });
+          };
+          permissionManager.requestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                             backgroundPermissionHandler);
         }
       }
     } catch (Exception e) {
@@ -160,6 +189,10 @@ public class InternalGPS
    * If GPS is disabled, we always show the dialog to ask the user to enable it.
    */
   private void checkGpsAndShowDialogIfNeeded() {
+    if (closed) {
+      Log.d(TAG, "checkGpsAndShowDialogIfNeeded() called after close(), ignoring");
+      return;
+    }
     Log.d(TAG, "checkGpsAndShowDialogIfNeeded() called");
     try {
       boolean isEnabled = locationManager.isProviderEnabled(locationProvider);
@@ -183,10 +216,9 @@ public class InternalGPS
                 
                 Log.d(TAG, "Showing GPS required dialog");
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
-                builder.setTitle("GPS Required");
-                builder.setMessage("XCSoar needs GPS to be enabled to determine your location for flight logging and navigation. " +
-                                 "Please enable GPS in system settings.");
-                builder.setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
+                builder.setTitle(context.getString(R.string.gps_required_title));
+                builder.setMessage(context.getString(R.string.gps_required_message));
+                builder.setPositiveButton(context.getString(R.string.open_settings), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                       Log.d(TAG, "User clicked Open Settings");
@@ -217,6 +249,7 @@ public class InternalGPS
           Log.w(TAG, "Context is not an Activity, using fallback");
           // Fallback if context is not an Activity (shouldn't happen, but be safe)
           Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+          myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           context.startActivity(myIntent);
         }
       } else {
@@ -246,10 +279,18 @@ public class InternalGPS
    * if GPS was enabled.
    */
   public void recheckGpsStatus() {
+    if (closed) {
+      Log.d(TAG, "recheckGpsStatus() called after close(), ignoring");
+      return;
+    }
     Log.d(TAG, "recheckGpsStatus() called");
     handler.post(new Runnable() {
         @Override
         public void run() {
+          if (closed) {
+            Log.d(TAG, "recheckGpsStatus() runnable executed after close(), ignoring");
+            return;
+          }
           try {
             boolean isEnabled = locationManager.isProviderEnabled(locationProvider);
             Log.d(TAG, "GPS provider enabled on recheck: " + isEnabled);
@@ -280,7 +321,19 @@ public class InternalGPS
   public void close() {
     safeDestruct.beginShutdown();
 
+    /* Set closed flag to prevent callbacks from executing */
+    closed = true;
+
+    /* Cancel all permission handlers */
     permissionManager.cancelRequestPermission(InternalGPS.this);
+    if (foregroundPermissionHandler != null) {
+      permissionManager.cancelRequestPermission(foregroundPermissionHandler);
+      foregroundPermissionHandler = null;
+    }
+    if (backgroundPermissionHandler != null) {
+      permissionManager.cancelRequestPermission(backgroundPermissionHandler);
+      backgroundPermissionHandler = null;
+    }
 
     handler.removeCallbacks(this);
     handler.post(new Runnable() {
@@ -318,6 +371,10 @@ public class InternalGPS
   }
 
   private void submitError(String msg) {
+    if (closed) {
+      Log.d(TAG, "submitError() called after close(), ignoring: " + msg);
+      return;
+    }
     state = STATE_FAILED;
 
     if (safeDestruct.increment()) {
@@ -373,6 +430,9 @@ public class InternalGPS
 
   /** from LocationListener */
   @Override public void onProviderEnabled(String provider) {
+    if (closed)
+      return;
+
     Log.d(TAG, "onProviderEnabled() called for provider: " + provider);
     setConnectedSafe(1); // waiting for fix
     /* GPS was enabled, request location updates */

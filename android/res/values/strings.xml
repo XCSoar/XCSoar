@@ -2,4 +2,7 @@
 <resources>
   <string name="app_name">XCSoar</string>
   <string name="app_name_testing">XCS-test</string>
+  <string name="gps_required_title">GPS Required</string>
+  <string name="gps_required_message">XCSoar needs GPS to be enabled to determine your location for flight logging and navigation. Please enable GPS in system settings.</string>
+  <string name="open_settings">Open Settings</string>
 </resources>
