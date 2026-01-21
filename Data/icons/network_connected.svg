@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <!-- Three vertical bars with increasing height, green with black outline -->
+ <rect x="1" y="13" width="5" height="9" fill="#0f0" stroke="#000" stroke-width="0.75" rx="0.5"/>
+ <rect x="8" y="6" width="5" height="16" fill="#0f0" stroke="#000" stroke-width="0.75" rx="0.5"/>
+ <rect x="15" y="0" width="5" height="22" fill="#0f0" stroke="#000" stroke-width="0.75" rx="0.5"/>
+</svg>
