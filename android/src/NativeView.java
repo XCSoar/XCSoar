@@ -95,26 +95,28 @@ class NativeView extends SurfaceView
     final Context context = getContext();
 
     try {
-      if (Build.VERSION.SDK_INT >= 34) {
-        final String fgsPermission = "android.permission.FOREGROUND_SERVICE_LOCATION";
-        if (context.checkSelfPermission(fgsPermission) ==
-            android.content.pm.PackageManager.PERMISSION_GRANTED) {
-          context.startService(new Intent(context, MyService.class));
-        } else {
-          permissionManager.requestPermission(fgsPermission, null);
-          try {
-            context.startService(new Intent(context, MyService.class));
-          } catch (SecurityException e) {
-            /* Expected on Android 14+ without permission */
-          }
-        }
-      } else {
-        context.startService(new Intent(context, MyService.class));
-      }
+      /* Check for location permission (required for
+         foregroundServiceType="location").  If not granted yet,
+         return — the service will be started later when the
+         permission is granted via the retryStartService callback
+         in PermissionHelper.  Runtime permissions only exist on
+         API 23+; on older devices, permissions are granted at
+         install time. */
+      if (android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.M &&
+          context.checkSelfPermission(
+            android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+            android.content.pm.PackageManager.PERMISSION_GRANTED &&
+          context.checkSelfPermission(
+            android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
+            android.content.pm.PackageManager.PERMISSION_GRANTED)
+        return;
+
+      context.startService(new Intent(context, MyService.class));
     } catch (IllegalStateException e) {
       /* Android may not allow starting a service in this state */
     } catch (SecurityException e) {
-      /* Expected on Android 14+ without FOREGROUND_SERVICE_LOCATION */
+      Log.e(TAG, "Failed to start service", e);
     }
   }
 

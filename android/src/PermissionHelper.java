@@ -469,10 +469,10 @@ public class PermissionHelper implements PermissionManager {
       if (pendingBluetoothPermissions.contains(otherBluetoothPermission) ||
           (!otherNeeded && isBluetoothPermission(permission))) {
         /* Other Bluetooth permission is already being processed or already granted.
-           Skip this one and mark as granted since it will be handled together. */
+           Skip this one - the batch completion flow will notify the handler when the actual
+           grant result is known. Do not call handler.onRequestPermissionsResult() here as that
+           would falsely report the permission as granted before the actual result is known. */
         isProcessingPermission = false;
-        if (handler != null)
-          handler.onRequestPermissionsResult(true);
         processNextPermission();
         return;
       }
@@ -554,7 +554,19 @@ public class PermissionHelper implements PermissionManager {
 
   @Override
   public synchronized void cancelRequestPermission(PermissionHandler handler) {
-    permissionHandlers.values().remove(handler);
+    /* Remove all entries whose value matches the provided handler.
+       Use iterator to safely remove entries while iterating.
+       Use equals() to match the behavior of the original values().remove() implementation. */
+    java.util.Iterator<Map.Entry<Integer, PermissionHandler>> it =
+      permissionHandlers.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry<Integer, PermissionHandler> entry = it.next();
+      PermissionHandler value = entry.getValue();
+      if ((handler == null && value == null) ||
+          (handler != null && handler.equals(value))) {
+        it.remove();
+      }
+    }
   }
 
   @Override
