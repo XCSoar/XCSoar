@@ -6,6 +6,10 @@ build:
   tools:
     python: "latest"
 
+sphinx:
+  # Path to your Sphinx configuration file.
+  configuration: doc/conf.py
+
 python:
   install:
     - requirements: doc/requirements.txt
