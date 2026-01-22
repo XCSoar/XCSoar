@@ -75,11 +75,21 @@ struct VisibleWaypoint {
     const GlideState state(GeoVector(basic.location, waypoint->location),
                            elevation, basic.nav_altitude, wind);
 
-    const GlideResult result = mac_cready.SolveStraight(state);
+    /**
+     * This uses Solve() instead of SolveStraight() in order to cause
+     * altitude difference to be calculated for both possibilities for
+     * the "Predict wind drift" setting (On or Off).
+     */
+    const GlideResult result = mac_cready.Solve(state);
     if (!result.IsOk())
       return;
 
-    reach.direct = result.pure_glide_altitude_difference;
+    /**
+     * Set "direct" to the desired altitude difference based on the
+     * "Predict wind drift" setting.
+     */
+    reach.direct = result.SelectAltitudeDifference(task_behaviour.glide);
+
     if (result.pure_glide_altitude_difference > 0)
       reachable = WaypointReachability::TERRAIN;
     else
@@ -409,7 +419,18 @@ public:
 
   void CalculateDirect(const PolarSettings &polar_settings,
                        const TaskBehaviour &task_behaviour,
-                       const DerivedInfo &calculated) noexcept {
+                       const DerivedInfo &calculated,
+                       const bool recalc_neg_direct_only = false) noexcept {
+
+    /**
+     * The recalc_neg_direct_only argument (if true) causes the function to
+     * calculate "direct" only for waypoints with negative "direct" values.
+     * The function is called this way after "direct" has already been
+     * calculated for every waypoint in "waypoints". So "direct" is
+     * recalculated if needed to account for drifting with the wind to gain
+     * the needed altitude.
+     */
+
     if (!basic.location_available || !basic.NavAltitudeAvailable())
       return;
 
@@ -422,7 +443,10 @@ public:
     for (VisibleWaypoint &vwp : waypoints) {
       const Waypoint &way_point = *vwp.waypoint;
 
-      if (way_point.IsLandable() || way_point.flags.watched)
+      if ((way_point.IsLandable() || way_point.flags.watched) &&
+          (!recalc_neg_direct_only ||
+           vwp.reachable == WaypointReachability::INVALID ||
+           vwp.reach.direct < 0))
         vwp.CalculateReachabilityDirect(basic, calculated.GetWindOrZero(),
                                         mac_cready, task_behaviour);
     }
@@ -432,9 +456,17 @@ public:
                  const PolarSettings &polar_settings,
                  const TaskBehaviour &task_behaviour,
                  const DerivedInfo &calculated) noexcept {
-    if (route_planner != nullptr && !route_planner->IsTerrainReachEmpty())
+
+    if (route_planner != nullptr && !route_planner->IsTerrainReachEmpty()) {
       CalculateRoute(*route_planner);
-    else
+
+      /**
+       * Recalculate "direct" for each WP with direct<0 if "Predict wind
+       * drift" is "On".
+       */
+      if (task_behaviour.glide.predict_wind_drift)
+        CalculateDirect(polar_settings, task_behaviour, calculated, true);
+    } else
       CalculateDirect(polar_settings, task_behaviour, calculated);
   }
 
