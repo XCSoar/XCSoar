@@ -9,8 +9,7 @@
 #include <type_traits>
 
 #include <tchar.h>
-
-struct InfoBoxSettings;
+#include "InfoBoxes/InfoBoxSettings.hpp"
 
 struct PageLayout
 {
@@ -22,6 +21,8 @@ struct PageLayout
 
     bool auto_switch;
     unsigned panel;
+
+    InfoBoxSettings::Geometry geometry;
 
     constexpr InfoBoxConfig() noexcept = default;
 
