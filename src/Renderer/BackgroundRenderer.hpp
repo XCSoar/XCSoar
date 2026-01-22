@@ -23,6 +23,7 @@ class BackgroundRenderer {
   const RasterTerrain *terrain = nullptr;
   std::unique_ptr<TerrainRenderer> renderer;
   Angle shading_angle = DEFAULT_SHADING_ANGLE;
+  double wind_speed = 0.0;
 
 public:
   BackgroundRenderer() noexcept;

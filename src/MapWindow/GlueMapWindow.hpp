@@ -123,6 +123,40 @@ class GlueMapWindow : public MapWindow {
 
   UI::Timer map_item_timer{[this]{ OnMapItemTimer(); }};
 
+  /**
+   * Timer for smooth aircraft movement updates.
+   * Triggers partial redraws at higher frequency (10 Hz) for smooth movement.
+   */
+  UI::Timer smooth_update_timer{[this]{ OnSmoothUpdateTimer(); }};
+
+  /**
+   * State for smooth map center interpolation between GPS fixes
+   */
+  GeoPoint last_gps_location{GeoPoint::Invalid()};
+  TimeStamp last_gps_location_time{};
+  double last_gps_speed = 0.0;
+  Angle last_gps_track{Angle::Zero()};
+  bool has_last_gps_location = false;
+  
+  /**
+   * State for smooth thermal center interpolation in circling mode
+   */
+  GeoPoint last_thermal_center{GeoPoint::Invalid()};
+  TimeStamp last_thermal_center_time{};
+  bool has_last_thermal_center = false;
+  
+  /**
+   * Wall-clock time when last GPS fix was received
+   * Used for dead reckoning calculations
+   */
+  PeriodClock last_gps_fix_clock;
+  
+  /**
+   * Wall-clock time when last thermal center estimate was received
+   * Used for smooth thermal center interpolation
+   */
+  PeriodClock last_thermal_center_clock;
+
   UI::Notify redraw_notify{[this]{ PartialRedraw(); }};
 
 public:
@@ -303,6 +337,7 @@ protected:
 
 private:
   void OnMapItemTimer() noexcept;
+  void OnSmoothUpdateTimer() noexcept;
 
 #ifdef ENABLE_OPENGL
   void OnKineticTimer() noexcept;

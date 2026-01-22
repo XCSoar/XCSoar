@@ -58,6 +58,8 @@ class RasterRenderer {
   double pixel_size;
 
   RawColor *color_table = nullptr;
+  const ColorRamp *current_color_ramp = nullptr;
+  unsigned current_height_scale = 4;
 
 public:
   RasterRenderer() noexcept;
@@ -114,7 +116,8 @@ public:
   void GenerateImage(bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
                      const Angle sunazimuth,
-                     bool do_contour) noexcept;
+                     bool do_contour,
+                     double wind_speed = 0.0) noexcept;
 
   const RawBitmap &GetImage() const noexcept {
     return *image;
@@ -135,7 +138,8 @@ protected:
    */
   void GenerateSlopeImage(unsigned height_scale, int contrast,
                           int sx, int sy, int sz,
-                          unsigned contour_height_scale) noexcept;
+                          unsigned contour_height_scale,
+                          double wind_speed = 0.0) noexcept;
 
   /**
    * Convert the height matrix into the image, with slope shading.
@@ -143,7 +147,8 @@ protected:
   void GenerateSlopeImage(unsigned height_scale,
                           int contrast, int brightness,
                           Angle sunazimuth,
-                          unsigned contour_height_scale) noexcept;
+                          unsigned contour_height_scale,
+                          double wind_speed = 0.0) noexcept;
 
 private:
   void ContourStart(unsigned contour_height_scale) noexcept;
