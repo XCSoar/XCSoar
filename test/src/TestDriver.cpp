@@ -768,7 +768,7 @@ TestLoEFGREN()
   nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   // Test positive vario (climb)
-  ok1(device->ParseNMEA("$PLOF,250,80,15*02", nmea_info));
+  ok1(device->ParseNMEA("$PLOF,250,80,150*32", nmea_info));
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, 2.5));
   ok1(nmea_info.airspeed_available);
@@ -781,7 +781,7 @@ TestLoEFGREN()
   // Test negative vario (sink) and negative temperature
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{2}};
-  ok1(device->ParseNMEA("$PLOF,-150,60,-5*3E", nmea_info));
+  ok1(device->ParseNMEA("$PLOF,-150,60,-50*0E", nmea_info));
   ok1(equals(nmea_info.total_energy_vario, -1.5));
   ok1(equals(nmea_info.temperature.ToKelvin(),
              Temperature::FromCelsius(-5).ToKelvin()));
@@ -790,7 +790,7 @@ TestLoEFGREN()
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{3}};
   ok1(!device->ParseNMEA("$VARIO,999.98,-12*66", nmea_info));
-  ok1(!device->ParseNMEA("$PLOF,250,80,15*FF", nmea_info));
+  ok1(!device->ParseNMEA("$PLOF,250,80,150*FF", nmea_info));
   ok1(!nmea_info.total_energy_vario_available);
 
   delete device;

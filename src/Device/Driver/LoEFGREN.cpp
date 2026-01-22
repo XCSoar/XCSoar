@@ -22,11 +22,11 @@ static bool
 PLOF(NMEAInputLine &line, NMEAInfo &info)
 {
   /* $PLOF,<TE compensated climb/sink in cm/s>,<indicated airspeed km/h>,
-   * <temperature in deg c>*
+   * <temperature in deg c x 10>*
    *
    * TE compensated climb/sink = variometer in cm/s (up positive)
    * indicated airspeed = indicated airspeed in km/h
-   * temperature = temperature in degrees Celsius
+   * temperature = temperature in degrees Celsius x 10 (e.g., 15.2°C = 152)
    *
    * Protocol documentation:
    * https://www.lofgren-electronics.fr/Lofgren%20Variometer%20User%20Manual%20EN%20.pdf
@@ -44,9 +44,9 @@ PLOF(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideIndicatedAirspeed(Units::ToSysUnit(value,
                                                     Unit::KILOMETER_PER_HOUR));
 
-  // Parse temperature (°C)
+  // Parse temperature (°C x 10 -> °C)
   if (line.ReadChecked(value)) {
-    info.temperature = Temperature::FromCelsius(value);
+    info.temperature = Temperature::FromCelsius(value / 10);
     info.temperature_available = true;
   }
 
