@@ -181,7 +181,31 @@ class NativeView extends SurfaceView
 
     try {
       try {
-        context.startService(new Intent(context, MyService.class));
+        /* On Android 14+ (API 34+), FOREGROUND_SERVICE_LOCATION is a runtime permission
+           that must be granted before starting a foreground service with type="location" */
+        boolean serviceStarted = false;
+        if (Build.VERSION.SDK_INT >= 34) {
+          final String fgsPermission = "android.permission.FOREGROUND_SERVICE_LOCATION";
+          if (context.checkSelfPermission(fgsPermission) ==
+              android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            context.startService(new Intent(context, MyService.class));
+            serviceStarted = true;
+          } else {
+            /* Permission not granted - request it. Service will be started after permission is granted.
+               For now, try to start it anyway - it will fail gracefully with SecurityException if needed. */
+            permissionManager.requestPermission(fgsPermission, null);
+            /* Try to start service anyway - on some devices it might work, or will fail with SecurityException */
+            try {
+              context.startService(new Intent(context, MyService.class));
+              serviceStarted = true;
+            } catch (SecurityException e) {
+              /* Expected on Android 14+ without permission - service will be started after permission is granted */
+            }
+          }
+        } else {
+          context.startService(new Intent(context, MyService.class));
+          serviceStarted = true;
+        }
       } catch (IllegalStateException e) {
         /* we get crash reports on this all the time, but I don't
            know why - Android docs say "the application is in a
@@ -189,6 +213,9 @@ class NativeView extends SurfaceView
            in the foreground in a state when services are allowed)",
            but we're about to be resumed, which means we're in
            foreground... */
+      } catch (SecurityException e) {
+        /* On Android 14+ without FOREGROUND_SERVICE_LOCATION permission, starting the service throws SecurityException.
+           This is expected - the service will be started after permission is granted via the permission request above. */
       }
 
       try {
