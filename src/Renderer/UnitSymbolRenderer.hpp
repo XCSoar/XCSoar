@@ -8,6 +8,7 @@
 struct PixelPoint;
 struct PixelSize;
 class Canvas;
+class Color;
 class Font;
 class Pen;
 
@@ -24,4 +25,8 @@ namespace UnitSymbolRenderer
 
   void Draw(Canvas &canvas, PixelPoint pos, Unit unit,
             const Pen &unit_fraction_pen) noexcept;
+
+  void Draw(Canvas &canvas, PixelPoint pos, Unit unit,
+            const Pen &unit_fraction_pen,
+            Color text_color, Color outline_color) noexcept;
 }

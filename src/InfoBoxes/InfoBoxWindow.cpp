@@ -21,6 +21,18 @@
 /** timeout of infobox focus */
 static constexpr std::chrono::steady_clock::duration FOCUS_TIMEOUT_MAX = std::chrono::seconds(20);
 
+/**
+ * Determine outline color based on background color
+ */
+static Color
+GetOutlineColor(Color background_color) noexcept
+{
+  // White for dark backgrounds, black for light backgrounds
+  return (background_color == COLOR_BLACK ||
+          background_color.Red() + background_color.Green() + background_color.Blue() < 384)
+    ? COLOR_WHITE : COLOR_BLACK;
+}
+
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
                              const InfoBoxSettings &_settings,
@@ -99,12 +111,13 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 }
 
 void
-InfoBoxWindow::PaintValue(Canvas &canvas, [[maybe_unused]] Color background_color)
+InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 {
   if (data.value.empty())
     return;
 
-  canvas.SetTextColor(look.GetValueColor(data.value_color));
+  const Color value_color = look.GetValueColor(data.value_color);
+  canvas.SetTextColor(value_color);
 
   canvas.Select(look.value_font);
   int ascent_height = look.value_font.GetAscentHeight();
@@ -122,7 +135,15 @@ InfoBoxWindow::PaintValue(Canvas &canvas, [[maybe_unused]] Color background_colo
   if (value_p.x < 0)
     value_p.x = 0;
 
-  canvas.TextAutoClipped(value_p, data.value);
+  // Draw outline if color is not black or white
+  const bool needs_outline = (value_color != COLOR_BLACK && value_color != COLOR_WHITE);
+  if (needs_outline) {
+    const Color outline_color = GetOutlineColor(background_color);
+    // Draw text at original position and size, with outline applied around it
+    RenderShadowedText(canvas, data.value, value_p, value_color, outline_color);
+  } else {
+    canvas.TextAutoClipped(value_p, data.value);
+  }
 
   if (unit_width != 0) {
     const int unit_height =
@@ -132,8 +153,17 @@ InfoBoxWindow::PaintValue(Canvas &canvas, [[maybe_unused]] Color background_colo
                                    ascent_height - unit_height);
 
     canvas.Select(look.unit_font);
-    UnitSymbolRenderer::Draw(canvas, unit_p,
-                             data.value_unit, look.unit_fraction_pen);
+    
+    // Apply outline to unit if value color needs outline
+    if (needs_outline) {
+      const Color outline_color = GetOutlineColor(background_color);
+      UnitSymbolRenderer::Draw(canvas, unit_p, data.value_unit,
+                              look.unit_fraction_pen,
+                              value_color, outline_color);
+    } else {
+      UnitSymbolRenderer::Draw(canvas, unit_p,
+                               data.value_unit, look.unit_fraction_pen);
+    }
   }
 }
 
