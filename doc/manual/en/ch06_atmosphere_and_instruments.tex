@@ -398,18 +398,23 @@ actual information is available. Invoke the info dialogue and touch
 
 Regional Atmospheric Soaring Prediction (RASP) is intended to provide
 detailed graphical weather forecasts for soaring purposes. For further details 
-the keen pilot is invited to consult \url{http://www.drjack.info} on how RASP 
+the pilot is invited to consult \url{http://www.drjack.info} on how RASP 
 forecasts work, from where they are available, and their use and limitations. 
-At \url{http://www.drjack.info/RASP}, a list gives the coverage of available 
-RASP forecasts worldwide, provided by many soaring and paragliding enthusiasts. 
-Please note, that some of these links provide data in-season only and only some
+RASP forecasts use a specialized forecast model with a particular focus on
+boundary layer (BL) meteorology and convective processes.
+
+You can find a list of available RASP forecasts at \url{http://www.drjack.info/RASP}.
+These are provided by various independent soaring and paragliding enthusiasts. 
+Please note that some of these links provide data in-season only, and only some
 of these providers make data available in XCSoar format.
 
-For use within XCSoar, an \verb|xcsoar-rasp.dat| file has to be installed
-into the XCSoarData directory.  As of February 2014, download of
-\verb|xcsoar.rasp.dat| files is not (yet) supported by XCSoar's file manager. The
-RASP forecasts are displayed as colour-coded terrain overlays on the map.  \\ \\
-Make sure, terrain display is set to on. \tip{}  \\ \\
+You can either install RASP data files yourself, or use XCSoar's built-in automatic 
+download for many regions worldwide via the 'Site Files / Site Files' 
+configuration page, \ref{sec:site-files}. 
+
+The files have \verb|.dat| extension and the information is shown 
+as colour-coded terrain overlays on the map.  \\ \\
+Make sure that terrain display is set to ``on''. \tip{}  \\ \\
 
 The RASP-forecast overlays are invoked via menu 
 \menulabelr{\bmenug{Info}\blink\bmenug{Weather}}
@@ -421,15 +426,12 @@ be displayed.  Upon entering the weather dialogue, the Time setting is
 advanced to the next nearest forecast time available in the RASP file.
 When a field is not available in the RASP file, the background is left blank.
 
-The maximum and minimum values of the field in the map area are drawn
 \marginpar{\includegraphics[angle=0,width=0.95\linewidth,keepaspectratio='true']{figures/dialog-weather.png}}
-at their respective locations on the map.  The field name is displayed
-on the lower left of the screen.
+The current field name is displayed in the lower left corner of the 
+screen whenever RASP data is displayed.
 
-The fields available to display are as follows:
+The available fields can vary by data source. Some examples include:
 \begin{description}
-\item[Terrain] Display terrain on map, no weather data displayed.
-
 \item[W*] 
 Average dry thermal updraft strength near mid-BL height.  Subtract
 glider descent rate to get average vario reading for cloudless
@@ -443,9 +445,8 @@ the surface heating and the BL depth.
 \end{center}
 
 \item[BL wind spd] 
-The speed and direction of the vector-averaged wind in the BL.\@  This
-prediction can be misleading if there is a large change in wind
-direction through the BL.\@
+The speed and direction of the vector-averaged wind in the boundary layer.\@  This
+prediction can be unreliable if there is large wind shear through the BL.\@
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-blwindspd.png}
@@ -468,14 +469,13 @@ glider flying.
 
 \item[dwcrit]  
 This parameter estimates the height above ground at which the average
-dry updraft strength drops below 225~fpm (1.1~m/s) and is expected to give
+dry updraft strength drops below 225~fpm (1.1~m/s). This is expected to give
 better quantitative numbers for the maximum cloudless thermalling
 height than the BL Top altitude, especially when mixing results from
 vertical wind shear rather than thermals.  (Note: the present
 assumptions tend to underpredict the max.\ thermalling height for dry
-conditions.) In the presence of clouds the maximum thermalling height
-may instead be limited by the cloud base.  Being for ``dry'' thermals,
-this parameter omits the effect of ``cloudsuck''.
+conditions) In the presence of clouds the maximum thermalling height
+may instead be limited by the cloud base.
 
 \item[hwcrit]  
 Same as \emph{dwcrit}, but giving the altitude instead of the height at which the average
@@ -483,11 +483,11 @@ dry updraft strength drops below 225~fpm.
 
 \item[bl cloud]  
 This parameter provides an additional means of evaluating the
-formation of clouds within the BL and might be used either in
+formation of clouds within the BL, and might be used either in
 conjunction with or instead of the other cloud prediction parameters.
 It assumes a very simple relationship between cloud cover percentage
 and the maximum relative humidity within the BL.\@  The cloud base
-altitude is not predicted, but is expected to be below the BL Top
+altitude is not predicted, but is expected to be below the BL top
 altitude.
 
 \begin{center}
