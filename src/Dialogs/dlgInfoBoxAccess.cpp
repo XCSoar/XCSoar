@@ -65,9 +65,6 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   /* Track the current dialog and its owner */
   current_dialog = &dialog;
   current_dialog_id = id;
-
-  bool found_setup = false;
-
   if (panels != nullptr) {
     for (; panels->load != nullptr; ++panels) {
       assert(panels->name != nullptr);
@@ -76,37 +73,8 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
       if (widget == NULL)
         continue;
-
-      if (!found_setup && StringIsEqual(panels->name, _T("Setup"))) {
-        /* add a "Switch InfoBox" button to the "Setup" tab -
-           kludge! */
-        found_setup = true;
-
-        PixelRect button_rc;
-        button_rc.left = 0;
-        button_rc.top = 0;
-        button_rc.right = Layout::Scale(60);
-        button_rc.bottom = std::max(2u * Layout::GetMinimumControlHeight(),
-                                    Layout::GetMaximumControlHeight());
-
-        auto button = std::make_unique<ButtonWidget>(look.button,
-                                                     _("Switch InfoBox"),
-                                                     dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
-
-        widget = std::make_unique<TwoWidgets>(std::move(widget),
-                                              std::move(button),
-                                              false);
-      }
-
       tab_widget.AddTab(std::move(widget), gettext(panels->name));
     }
-  }
-
-  if (!found_setup) {
-    /* the InfoBox did not provide a "Setup" tab - create a default
-       one that allows switching the contents */
-    tab_widget.AddTab(std::make_unique<ActionWidget>(dialog.MakeModalResultCallback(SWITCH_INFO_BOX)),
-                      _("Switch InfoBox"));
   }
 
   tab_widget.AddTab(std::make_unique<ActionWidget>(dialog.MakeModalResultCallback(mrOK)),
