@@ -131,6 +131,9 @@ InfoBoxContentBarogram::Update(InfoBoxData &data) noexcept
 void
 InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept
 {
+  if (!backend_components || !backend_components->glide_computer)
+    return;
+
   const Look &look = UIGlobals::GetLook();
   RenderBarographSpark(canvas, GetSparkRect(rc),
                        look.chart, look.cross_section,
@@ -144,6 +147,9 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexc
 static void
 ShowAnalysisBarograph() noexcept
 {
+  if (!backend_components || !data_components || 
+      !data_components->airspaces || !data_components->terrain)
+    return;
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(),

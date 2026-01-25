@@ -24,7 +24,7 @@
 void
 InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 {
-  if (!backend_components->protected_task_manager) {
+  if (!backend_components || !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -64,7 +64,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 bool
 InfoBoxContentAlternateName::HandleClick() noexcept
 {
-  if (!data_components)
+  if (!data_components || !data_components->waypoints)
     return false;
 
   dlgAlternatesListShowModal(data_components->waypoints.get());
@@ -74,7 +74,7 @@ InfoBoxContentAlternateName::HandleClick() noexcept
 void
 InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 {
-  if (!backend_components->protected_task_manager) {
+  if (!backend_components || !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -122,7 +122,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 bool
 InfoBoxContentAlternateGR::HandleClick() noexcept
 {
-  if (!data_components)
+  if (!data_components || !data_components->waypoints)
     return false;
 
   dlgAlternatesListShowModal(data_components->waypoints.get());
@@ -132,7 +132,7 @@ InfoBoxContentAlternateGR::HandleClick() noexcept
 void
 InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
 {
-  if (!backend_components->protected_task_manager) {
+  if (!backend_components || !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -168,7 +168,7 @@ InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
 bool
 InfoBoxContentAlternateAltDiff::HandleClick() noexcept
 {
-  if (!data_components)
+  if (!data_components || !data_components->waypoints)
     return false;
 
   dlgAlternatesListShowModal(data_components->waypoints.get());

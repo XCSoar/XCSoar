@@ -98,7 +98,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
-  const auto way_point = backend_components->protected_task_manager
+  const auto way_point =
+    (backend_components && backend_components->protected_task_manager)
     ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
 
@@ -142,7 +143,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 {
-  const auto way_point = backend_components->protected_task_manager
+  const auto way_point =
+    (backend_components && backend_components->protected_task_manager)
     ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
 
@@ -176,7 +178,8 @@ UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxNextDistanceNominal(InfoBoxData &data) noexcept
 {
-  const auto way_point = backend_components->protected_task_manager
+  const auto way_point =
+    (backend_components && backend_components->protected_task_manager)
     ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
 
@@ -698,13 +701,17 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept
 {
+  if (!backend_components || !backend_components->protected_task_manager) {
+    data.SetInvalid();
+    return;
+  }
+
   const auto &calculated = CommonInterface::Calculated();
   const auto &task_stats = calculated.ordered_task_stats;
   const auto &common_stats = calculated.common_stats;
   const double maxheight = backend_components->protected_task_manager->GetOrderedTaskSettings().start_constraints.max_height;
 
   if (!task_stats.task_valid || maxheight <= 0
-      || !backend_components->protected_task_manager
       || !common_stats.TimeUnderStartMaxHeight.IsDefined()) {
     data.SetInvalid();
     return;
@@ -920,7 +927,8 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data) noexcept
   bool angle_valid = distance_valid && basic.track_available;
 
   // Set title. Use waypoint name if available.
-  const auto way_point = backend_components->protected_task_manager
+  const auto way_point =
+    (backend_components && backend_components->protected_task_manager)
     ? backend_components->protected_task_manager->GetActiveWaypoint()
     : nullptr;
   if (!way_point)
