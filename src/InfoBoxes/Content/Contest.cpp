@@ -18,7 +18,8 @@
 static bool
 ShowAnalysis8() noexcept
 {
-  if (!backend_components || !data_components)
+  if (!backend_components || !backend_components->glide_computer || !data_components || 
+      !data_components->airspaces || !data_components->terrain)
     return false;
 
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
@@ -44,7 +45,7 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
     CommonInterface::GetComputerSettings();
 
    if (!settings_computer.contest.enable ||
-       !backend_components->protected_task_manager) {
+       !backend_components || !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -79,7 +80,7 @@ InfoBoxContentContestSpeed::Update(InfoBoxData &data) noexcept
     CommonInterface::GetComputerSettings();
 
   if (!settings_computer.contest.enable ||
-      !backend_components->protected_task_manager) {
+      !backend_components || !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
