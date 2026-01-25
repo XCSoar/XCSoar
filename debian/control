@@ -32,6 +32,7 @@ Homepage: https://xcsoar.org/
 Package: xcsoar
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
+ ca-certificates,
  fonts-dejavu | fonts-roboto | fonts-droid | ttf-dejavu
 Suggests: vali-xcs
 Description: tactical glide computer
