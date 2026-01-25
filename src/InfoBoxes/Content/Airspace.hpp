@@ -3,10 +3,21 @@
 
 #pragma once
 
+#include "InfoBoxes/Content/Base.hpp"
+
 struct InfoBoxData;
 
-void
-UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data) noexcept;
 
-void
-UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data) noexcept;
+class InfoBoxNearestAirspaceHorizontal : public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
+class InfoBoxNearestAirspaceVertical : public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
