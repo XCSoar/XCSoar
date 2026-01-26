@@ -11,6 +11,15 @@
 
 namespace Layout {
 
+#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
+static constexpr unsigned
+MMToDPI(unsigned pixels, unsigned mm) noexcept
+{
+  /* 1 inch = 25.4 mm */
+  return pixels * 254 / (mm * 10);
+}
+#endif
+
 bool landscape = false;
 unsigned min_screen_pixels = 512;
 unsigned scale = 1;
@@ -80,6 +89,24 @@ Initialise(const UI::Display &display, PixelSize new_size,
     return;
 
   const auto dpi = Display::GetDPI(display, custom_dpi);
+  
+  /* Get physical DPI for font scaling to maintain same physical size
+     regardless of forced DPI. */
+  UnsignedPoint2D physical_dpi = dpi;
+#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
+  {
+    const auto size = display.GetSize();
+    const auto size_mm = display.GetSizeMM();
+    if (size.width > 0 && size.height > 0 &&
+        size_mm.width > 0 && size_mm.height > 0) {
+      physical_dpi = {
+        MMToDPI(size.width, size_mm.width),
+        MMToDPI(size.height, size_mm.height),
+      };
+    }
+  }
+#endif
+  
   const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
                                              dpi);
 
@@ -96,16 +123,19 @@ Initialise(const UI::Display &display, PixelSize new_size,
   scale_1024 = std::max(1024U, min_screen_pixels * 1024 / (square ? 320 : 240));
   scale = scale_1024 / 1024;
 
-  vdpi = SmallScreenAdjust(dpi.y);
+  /* Use physical DPI for font scaling to maintain same physical size
+     regardless of forced DPI. Forced DPI should only affect layout scaling,
+     not the physical size of text. */
+  vdpi = SmallScreenAdjust(physical_dpi.y);
 
   pen_width_scale = std::max(1024u, dpi.x * 1024u / 80u);
   fine_pen_width_scale = std::max(1024u, dpi.x * 1024u / 160u);
 
-  pt_scale = 1024 * dpi.y / 72;
+  pt_scale = 1024 * physical_dpi.y / 72;
 
   vpt_scale = SmallScreenAdjust(pt_scale);
 
-  font_scale = SmallScreenAdjust(1024 * dpi.y * ui_scale / 72 / 100);
+  font_scale = SmallScreenAdjust(1024 * physical_dpi.y * ui_scale / 72 / 100);
 
   text_padding = VptScale(2);
 
