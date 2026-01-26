@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxes/Content/Trace.hpp"
-#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Renderer/BarographRenderer.hpp"
 #include "Renderer/TraceHistoryRenderer.hpp"
@@ -17,7 +16,6 @@
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Language/Language.hpp"
-#include "Widget/CallbackWidget.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
@@ -133,6 +131,9 @@ InfoBoxContentBarogram::Update(InfoBoxData &data) noexcept
 void
 InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept
 {
+  if (!backend_components || !backend_components->glide_computer)
+    return;
+
   const Look &look = UIGlobals::GetLook();
   RenderBarographSpark(canvas, GetSparkRect(rc),
                        look.chart, look.cross_section,
@@ -143,9 +144,15 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexc
                        backend_components->protected_task_manager.get());
 }
 
-static void
+static bool
 ShowAnalysisBarograph() noexcept
 {
+
+  if (!backend_components || !backend_components->glide_computer ||
+      !data_components || !data_components->airspaces ||
+      !data_components->terrain)
+    return false;
+
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(),
@@ -153,24 +160,13 @@ ShowAnalysisBarograph() noexcept
                        data_components->airspaces.get(),
                        data_components->terrain.get(),
                        AnalysisPage::BAROGRAPH);
+  return true;
 }
 
-static std::unique_ptr<Widget>
-LoadAnalysisBarographPanel([[maybe_unused]] unsigned id) noexcept
+bool
+InfoBoxContentBarogram::HandleClick() noexcept
 {
-  return std::make_unique<CallbackWidget>(ShowAnalysisBarograph);
-}
-
-static constexpr
-InfoBoxPanel analysis_barograph_infobox_panels[] = {
-  { N_("Analysis"), LoadAnalysisBarographPanel },
-  { nullptr, nullptr }
-};
-
-const InfoBoxPanel *
-InfoBoxContentBarogram::GetDialogContent() noexcept
-{
-  return analysis_barograph_infobox_panels;
+  return ShowAnalysisBarograph();
 }
 
 void

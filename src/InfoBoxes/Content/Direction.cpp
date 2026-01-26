@@ -24,6 +24,9 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode) noexcept
   if (!CommonInterface::Basic().gps.simulator)
     return false;
 
+  if (!backend_components || !backend_components->device_blackboard)
+    return false;
+
   auto &device_blackboard = *backend_components->device_blackboard;
   const Angle a5 = Angle::Degrees(5);
   switch (keycode) {

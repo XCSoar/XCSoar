@@ -15,9 +15,13 @@
 
 #include <tchar.h>
 
-static void
+static bool
 ShowAnalysis8() noexcept
 {
+  if (!backend_components || !backend_components->glide_computer || !data_components || 
+      !data_components->airspaces || !data_components->terrain)
+    return false;
+
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(),
@@ -25,24 +29,13 @@ ShowAnalysis8() noexcept
                        data_components->airspaces.get(),
                        data_components->terrain.get(),
                        AnalysisPage::CONTEST);
+  return true;
 }
 
-static std::unique_ptr<Widget>
-LoadAnalysis8Panel([[maybe_unused]] unsigned id) noexcept
+bool
+InfoBoxContentContest::HandleClick() noexcept
 {
-  return std::make_unique<CallbackWidget>(ShowAnalysis8);
-}
-
-static constexpr
-InfoBoxPanel analysis8_infobox_panels[] = {
-  { N_("Analysis"), LoadAnalysis8Panel },
-  { nullptr, nullptr }
-};
-
-const InfoBoxPanel *
-InfoBoxContentContest::GetDialogContent() noexcept
-{
-  return analysis8_infobox_panels;
+  return ShowAnalysis8();
 }
 
 void
@@ -52,7 +45,7 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
     CommonInterface::GetComputerSettings();
 
    if (!settings_computer.contest.enable ||
-       !backend_components->protected_task_manager) {
+       !backend_components || !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }
@@ -74,10 +67,10 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
   data.FmtComment(_T("{:.1f} pts"), result_contest.score);
 }
 
-const InfoBoxPanel *
-InfoBoxContentContestSpeed::GetDialogContent() noexcept
+bool
+InfoBoxContentContestSpeed::HandleClick() noexcept
 {
-  return analysis8_infobox_panels;
+  return ShowAnalysis8();
 }
 
 void
@@ -87,7 +80,7 @@ InfoBoxContentContestSpeed::Update(InfoBoxData &data) noexcept
     CommonInterface::GetComputerSettings();
 
   if (!settings_computer.contest.enable ||
-      !backend_components->protected_task_manager) {
+      !backend_components || !backend_components->protected_task_manager) {
     data.SetInvalid();
     return;
   }

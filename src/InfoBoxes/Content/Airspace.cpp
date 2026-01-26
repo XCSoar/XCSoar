@@ -13,6 +13,11 @@
 void
 UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data) noexcept
 {
+  if (!backend_components || !data_components || !data_components->airspaces) {
+    data.SetInvalid();
+    return;
+  }
+
   NearestAirspace nearest = NearestAirspace::FindHorizontal(CommonInterface::Basic(),
                                                             backend_components->GetAirspaceWarnings(),
                                                             *data_components->airspaces);
@@ -28,6 +33,11 @@ UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data) noexcept
 {
+  if (!backend_components || !data_components || !data_components->airspaces) {
+    data.SetInvalid();
+    return;
+  }
+
   NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
                                                           CommonInterface::Calculated(),
                                                           backend_components->GetAirspaceWarnings(),
