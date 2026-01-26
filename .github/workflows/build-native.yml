@@ -15,6 +15,13 @@ on:
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
+      - 'NEWS.txt'
+      - 'AUTHORS'
+      - 'README.md'
+      - 'COPYING'
+      - 'PRIVACY.md'
+      - '.gitignore'
+      - 'VERSION.txt'
     branches:
       - master
       - apple-testing
@@ -35,6 +42,13 @@ on:
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
+      - 'NEWS.txt'
+      - 'AUTHORS'
+      - 'README.md'
+      - 'COPYING'
+      - 'PRIVACY.md'
+      - '.gitignore'
+      - 'VERSION.txt'
     branches:
       - master
 
