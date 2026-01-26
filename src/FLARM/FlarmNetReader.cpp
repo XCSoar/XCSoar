@@ -8,10 +8,7 @@
 #include "util/StringStrip.hxx"
 #include "io/LineReader.hpp"
 #include "io/FileLineReader.hpp"
-
-#ifndef _UNICODE
 #include "util/UTF8.hpp"
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,10 +24,7 @@ static void
 LoadString(const char *bytes, size_t length, TCHAR *res, [[maybe_unused]] size_t res_size)
 {
   const char *const end = bytes + length * 2;
-
-#ifndef _UNICODE
   const char *const limit = res + res_size - 2;
-#endif
 
   TCHAR *p = res;
 
@@ -44,24 +38,18 @@ LoadString(const char *bytes, size_t length, TCHAR *res, [[maybe_unused]] size_t
     /* FLARMNet files are ISO-Latin-1, which is kind of short-sighted */
 
     const unsigned char ch = (unsigned char)strtoul(tmp, NULL, 16);
-#ifdef _UNICODE
-    /* Latin-1 can be converted to WIN32 wchar_t by casting */
-    *p++ = ch;
-#else
-    /* convert to UTF-8 on all other platforms */
+
+    /* convert to UTF-8 */
 
     if (p >= limit)
       break;
 
     p = Latin1ToUTF8(ch, p);
-#endif
   }
 
   *p = 0;
 
-#ifndef _UNICODE
   assert(ValidateUTF8(res));
-#endif
 
   // Trim the string of any additional spaces
   StripRight(res);

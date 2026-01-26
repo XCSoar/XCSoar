@@ -11,11 +11,7 @@
 
 SocketErrorMessage::SocketErrorMessage(socket_error_t code) noexcept
 {
-#ifdef _UNICODE
-	wchar_t buffer[msg_size];
-#else
 	auto *buffer = msg;
-#endif
 
 	DWORD nbytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
 				     FORMAT_MESSAGE_IGNORE_INSERTS |
@@ -26,16 +22,6 @@ SocketErrorMessage::SocketErrorMessage(socket_error_t code) noexcept
 		strcpy(msg, "Unknown error");
 		return;
 	}
-
-#ifdef _UNICODE
-	auto length = WideCharToMultiByte(CP_UTF8, 0, buffer, -1,
-					  msg, std::size(msg),
-					  nullptr, nullptr);
-	if (length <= 0) {
-		strcpy(msg, "WideCharToMultiByte() error");
-		return;
-	}
-#endif
 }
 
 #else

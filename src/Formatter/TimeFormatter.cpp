@@ -17,15 +17,6 @@ FormatISO8601(char *buffer, const BrokenDate &date) noexcept
           date.year, date.month, date.day);
 }
 
-#ifdef _UNICODE
-void
-FormatISO8601(TCHAR *buffer, const BrokenDate &date) noexcept
-{
-  _stprintf(buffer, _T("%04u-%02u-%02u"),
-            date.year, date.month, date.day);
-}
-#endif
-
 void
 FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
 {
@@ -34,15 +25,6 @@ FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
           stamp.hour, stamp.minute, stamp.second);
 }
 
-#ifdef _UNICODE
-void
-FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp) noexcept
-{
-  _stprintf(buffer, _T("%04u-%02u-%02uT%02u:%02u:%02uZ"),
-            stamp.year, stamp.month, stamp.day,
-            stamp.hour, stamp.minute, stamp.second);
-}
-#endif
 
 void
 FormatTime(TCHAR *buffer, FloatDuration _time) noexcept

@@ -3,10 +3,6 @@
 
 #pragma once
 
-#ifdef _UNICODE
-#include <tchar.h>
-#endif
-
 /**
  * Is this a "reserved" character?
  *
@@ -34,14 +30,6 @@ IsValidIGCChar(char ch) noexcept
   return ch >= 0x20 && ch <= 0x7e && !IsReservedIGCChar(ch);
 }
 
-#ifdef _UNICODE
-static constexpr bool
-IsValidIGCChar(TCHAR ch) noexcept
-{
-  return ch >= 0x20 && ch <= 0x7e && !IsReservedIGCChar(char(ch));
-}
-#endif
-
 /**
  * Copy a null-terminated string to a buffer to be written to an IGC
  * file.  If the string is too long for the buffer, it is truncated.
@@ -49,8 +37,3 @@ IsValidIGCChar(TCHAR ch) noexcept
  */
 char *
 CopyIGCString(char *dest, char *dest_limit, const char *src) noexcept;
-
-#ifdef _UNICODE
-char *
-CopyIGCString(char *dest, char *dest_limit, const TCHAR *src) noexcept;
-#endif

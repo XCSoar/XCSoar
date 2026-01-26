@@ -104,10 +104,6 @@ public:
     return Get(key, std::span{value.data(), value.capacity()});
   }
 
-#ifdef _UNICODE
-  void Set(std::string_view key, const TCHAR *value) noexcept;
-#endif
-
   // numeric values
 
   bool Get(std::string_view key, int &value) const noexcept;
@@ -181,12 +177,8 @@ public:
   /**
    * Gets a path from the profile and return its base name only.
    */
-#ifdef _UNICODE
-  BasicAllocatedString<TCHAR> GetPathBase(std::string_view key) const noexcept;
-#else
   [[gnu::pure]]
   StringPointer<TCHAR> GetPathBase(std::string_view key) const noexcept;
-#endif
 
   void SetPath(std::string_view key, Path value) noexcept;
 

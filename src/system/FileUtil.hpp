@@ -110,12 +110,6 @@ IsCharDev(Path path) noexcept;
 
 #endif // HAVE_POSIX
 
-#if defined(_WIN32) && defined(UNICODE)
-[[gnu::pure]]
-bool
-Exists(const char *path) noexcept;
-#endif
-
 /**
  * Deletes the given file
  * @param path Path to the file that should be deleted

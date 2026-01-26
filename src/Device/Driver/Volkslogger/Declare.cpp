@@ -9,30 +9,13 @@
 #include "dbbconv.h"
 #include "Engine/Waypoint/Waypoint.hpp"
 
-#ifdef _UNICODE
-#include <stringapiset.h>
-#endif
-
 #include <algorithm>
 
 static void
 CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
 {
-#ifdef _UNICODE
-  size_t src_length = _tcslen(src);
-  if (src_length >= max_size)
-    src_length = max_size - 1;
-
-  int dest_length = WideCharToMultiByte(CP_ACP, 0, src, src_length,
-                                        dest, max_size - 1,
-                                        nullptr, nullptr);
-  if (dest_length < 0)
-    dest_length = 0;
-  dest[dest_length] = 0;
-#else
   strncpy(dest, src, max_size - 1);
   dest[max_size - 1] = 0;
-#endif
 }
 
 static void

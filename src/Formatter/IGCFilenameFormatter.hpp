@@ -13,14 +13,3 @@ void FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
 void FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
                            const TCHAR *manufacturer, const TCHAR *logger_id,
                            unsigned flight_number);
-
-#ifdef _UNICODE
-
-void FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
-                       char manufacturer, const char *logger_id,
-                       unsigned flight_number);
-void FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
-                           const char *manufacturer, const char *logger_id,
-                           unsigned flight_number);
-
-#endif

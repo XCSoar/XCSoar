@@ -3,10 +3,6 @@
 
 #pragma once
 
-#ifdef _UNICODE
-#include "WCharUtil.hxx"
-#endif
-
 constexpr bool
 IsASCII(const unsigned char ch) noexcept
 {

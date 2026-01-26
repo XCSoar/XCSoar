@@ -115,48 +115,6 @@ LogFormat(const char *fmt, ...) noexcept
   LogString(buf);
 }
 
-#ifdef _UNICODE
-
-static void
-LogString(std::wstring_view s) noexcept
-{
-  try {
-    auto fos = OpenLog();
-    BufferedOutputStream bos{fos};
-
-    bos.Write('[');
-
-    {
-      char time_buffer[32];
-      FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
-      bos.Write(time_buffer);
-    }
-
-    bos.Write("] ");
-    bos.Write(s);
-    bos.NewLine();
-
-    bos.Flush();
-    fos.Commit();
-  } catch (...) {
-  }
-}
-
-void
-LogFormat(const wchar_t *Str, ...) noexcept
-{
-  wchar_t buf[MAX_PATH];
-  va_list ap;
-
-  va_start(ap, Str);
-  std::vswprintf(buf, std::size(buf), Str, ap);
-  va_end(ap);
-
-  LogString(buf);
-}
-
-#endif
-
 void
 LogError(std::exception_ptr e) noexcept
 {

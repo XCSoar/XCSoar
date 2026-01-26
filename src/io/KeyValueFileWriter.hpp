@@ -3,10 +3,6 @@
 
 #pragma once
 
-#ifdef _UNICODE
-#include <tchar.h>
-#endif
-
 class BufferedOutputStream;
 
 class KeyValueFileWriter {
@@ -16,8 +12,4 @@ public:
   explicit KeyValueFileWriter(BufferedOutputStream &_os):os(_os) {}
 
   void Write(const char *key, const char *value);
-
-#ifdef _UNICODE
-  void Write(const char *key, const TCHAR *value);
-#endif
 };

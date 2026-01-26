@@ -3,10 +3,7 @@
 
 #include "Form/CharacterButton.hpp"
 #include "util/CharUtil.hxx"
-
-#ifndef _UNICODE
 #include "util/UTF8.hpp"
-#endif
 
 #include <cassert>
 
@@ -41,12 +38,8 @@ CharacterButton::SetCharacter(unsigned _character) noexcept
 
   character = _character;
 
-#ifdef _UNICODE
-  const TCHAR buffer[2] = { TCHAR(character), _T('\0') };
-#else
   char buffer[7];
   *UnicodeToUTF8(character, buffer) = '\0';
-#endif
   SetCaption(buffer);
 }
 

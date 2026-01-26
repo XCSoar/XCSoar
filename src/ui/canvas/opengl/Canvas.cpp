@@ -25,10 +25,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#ifdef UNICODE
-#include "util/ConvertString.hpp"
-#endif
-
 #ifndef NDEBUG
 #include "util/UTF8.hpp"
 #endif
@@ -541,12 +537,8 @@ Canvas::DrawFocusRectangle(PixelRect rc) noexcept
 const PixelSize
 Canvas::CalcTextSize(tstring_view text) const noexcept
 {
-#ifdef UNICODE
-  const WideToUTF8Converter text2(text);
-#else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
-#endif
 
   PixelSize size = { 0, 0 };
 
@@ -574,12 +566,8 @@ PrepareColoredAlphaTexture(Color color) noexcept
 void
 Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 {
-#ifdef UNICODE
-  const WideToUTF8Converter text2(text);
-#else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
-#endif
 
   assert(offset == OpenGL::translate);
 
@@ -608,12 +596,8 @@ Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 void
 Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
 {
-#ifdef UNICODE
-  const WideToUTF8Converter text2(text);
-#else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
-#endif
 
   assert(offset == OpenGL::translate);
 
@@ -640,12 +624,8 @@ void
 Canvas::DrawClippedText(PixelPoint p, PixelSize size,
                         tstring_view text) noexcept
 {
-#ifdef UNICODE
-  const WideToUTF8Converter text2(text);
-#else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
-#endif
 
   assert(offset == OpenGL::translate);
 

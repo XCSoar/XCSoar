@@ -10,22 +10,6 @@
 #include <cstring>
 #include <stdexcept>
 
-#ifdef _UNICODE
-#include "system/Error.hxx"
-#include <stringapiset.h>
-#endif
-
-#ifdef _UNICODE
-
-static constexpr TCHAR *
-iso_latin_1_to_tchar(TCHAR *dest, std::string_view src) noexcept
-{
-  for (unsigned char ch : src)
-    *dest++ = ch;
-  return dest;
-}
-
-#endif
 
 char *
 StringConverter::DetectStrip(char *src) noexcept
@@ -74,35 +58,6 @@ StringConverter::Convert(char *narrow)
 {
   narrow = DetectStrip(narrow);
 
-#ifdef _UNICODE
-  const std::string_view src{narrow};
-
-  TCHAR *t = tbuffer.get(src.size() + 1);
-  assert(t != nullptr);
-
-  if (src.empty()) {
-    t[0] = _T('\0');
-    return t;
-  }
-
-  switch (charset) {
-  case Charset::ISO_LATIN_1:
-    *iso_latin_1_to_tchar(t, src) = _T('\0');
-    break;
-
-  default:
-    int length = MultiByteToWideChar(CP_UTF8, 0, src.data(), src.size(),
-                                     t, src.size());
-    if (length == 0)
-      throw MakeLastError("Failed to convert string");
-
-    t[length] = _T('\0');
-
-    break;
-  }
-
-  return t;
-#else
   switch (charset) {
     size_t buffer_size;
     const char *utf8;
@@ -128,7 +83,6 @@ StringConverter::Convert(char *narrow)
 
   /* unreachable */
   gcc_unreachable();
-#endif
 }
 
 tstring_view
@@ -138,24 +92,6 @@ StringConverter::Convert(std::string_view src)
   if (src.empty())
     return {};
 
-#ifdef _UNICODE
-  TCHAR *t = tbuffer.get(src.size());
-  assert(t != nullptr);
-
-  switch (charset) {
-  case Charset::ISO_LATIN_1:
-    iso_latin_1_to_tchar(t, src);
-    return {t, src.size()};
-
-  default:
-    int length = MultiByteToWideChar(CP_UTF8, 0, src.data(), src.size(),
-                                     t, src.size());
-    if (length == 0)
-      throw MakeLastError("Failed to convert string");
-
-    return {t, std::size_t(length)};
-  }
-#else
   switch (charset) {
     size_t buffer_size;
 
@@ -181,5 +117,4 @@ StringConverter::Convert(std::string_view src)
 
   /* unreachable */
   gcc_unreachable();
-#endif
 }

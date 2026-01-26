@@ -6,10 +6,6 @@
 #include <cstddef>
 #include <string_view>
 
-#ifdef _UNICODE
-#include "WStringStrip.hxx"
-#endif
-
 /**
  * Skips whitespace at the beginning of the string, and returns the
  * first non-whitespace character.  If the string has no

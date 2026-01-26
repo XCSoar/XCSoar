@@ -17,10 +17,6 @@
 #include "util/UTF8.hpp"
 #endif
 
-#ifdef UNICODE
-#include "util/ConvertString.hpp"
-#endif
-
 #include <algorithm>
 #include <cassert>
 #include <string.h>
@@ -202,12 +198,8 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 const PixelSize
 Canvas::CalcTextSize(tstring_view text) const noexcept
 {
-#ifdef UNICODE
-  const WideToUTF8Converter text2(text);
-#else
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
-#endif
 
   PixelSize size = { 0, 0 };
 
@@ -230,11 +222,7 @@ RenderText(const Font *font, tstring_view text) noexcept
 
   assert(font->IsDefined());
 
-#ifdef UNICODE
-  return TextCache::Get(*font, WideToUTF8Converter(text));
-#else
   return TextCache::Get(*font, text);
-#endif
 }
 
 template<typename Operations>
@@ -270,9 +258,7 @@ CopyTextRectangle(SDLRasterCanvas &canvas, int x, int y,
 void
 Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 {
-#ifndef UNICODE
   assert(ValidateUTF8(text));
-#endif
 
   auto s = RenderText(font, text);
   if (!s)
@@ -287,9 +273,7 @@ Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 void
 Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
 {
-#ifndef UNICODE
   assert(ValidateUTF8(text));
-#endif
 
   auto s = RenderText(font, text);
   if (s.data == nullptr)
@@ -314,9 +298,7 @@ void
 Canvas::DrawClippedText(PixelPoint p, unsigned width,
                         tstring_view text) noexcept
 {
-#ifndef UNICODE
   assert(ValidateUTF8(text));
-#endif
 
   auto s = RenderText(font, text);
   if (s.data == nullptr)

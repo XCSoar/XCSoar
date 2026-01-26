@@ -11,11 +11,6 @@
 
 #include <string.h>
 
-#ifdef _UNICODE
-#include "system/Error.hxx"
-#include <stringapiset.h>
-#endif
-
 bool
 BufferedOutputStream::AppendToBuffer(std::span<const std::byte> src) noexcept
 {
@@ -59,47 +54,6 @@ BufferedOutputStream::VFmt(fmt::string_view format_str, fmt::format_args args)
 #endif
 	return Write(std::as_bytes(std::span{b.data(), b.size()}));
 }
-
-#ifdef _UNICODE
-
-void
-BufferedOutputStream::WriteWideToUTF8(std::wstring_view src)
-{
-	if (src.empty())
-		return;
-
-	auto r = buffer.Write();
-	if (r.empty()) {
-		Flush();
-		r = buffer.Write();
-	}
-
-	int length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
-					 (char *)r.data(), r.size(),
-					 nullptr, nullptr);
-	if (length <= 0) {
-		const auto error = GetLastError();
-		if (error != ERROR_INSUFFICIENT_BUFFER)
-			throw MakeLastError(error, "UTF-8 conversion failed");
-
-		/* how much buffer do we need? */
-		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
-					     nullptr, 0, nullptr, nullptr);
-		if (length <= 0)
-			throw MakeLastError(error, "UTF-8 conversion failed");
-
-		/* grow the buffer and try again */
-		length = WideCharToMultiByte(CP_UTF8, 0, src.data(), src.size(),
-					     (char *)buffer.Write(length), length,
-					     nullptr, nullptr);
-		if (length <= 0)
-			throw MakeLastError(error, "UTF-8 conversion failed");
-	}
-
-	buffer.Append(length);
-}
-
-#endif
 
 void
 BufferedOutputStream::Flush()

@@ -14,10 +14,6 @@
 #include "ui/canvas/opengl/Triangulate.hpp"
 #endif
 
-#ifdef _UNICODE
-#include "util/ConvertString.hpp"
-#endif
-
 #include <algorithm>
 #include <stdexcept>
 
@@ -35,14 +31,10 @@ ImportLabel(const char *src) noexcept
       StringIsEqual(src, "UNK"))
     return nullptr;
 
-#ifdef _UNICODE
-  return ConvertUTF8ToWide(src);
-#else
   if (!ValidateUTF8(src))
     return nullptr;
 
   return BasicAllocatedString<TCHAR>(src);
-#endif
 }
 
 /**

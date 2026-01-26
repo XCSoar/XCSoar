@@ -7,12 +7,7 @@
 #include "util/StringAPI.hxx"
 #include "util/CharUtil.hxx"
 
-#ifdef _UNICODE
-#include "util/ConvertString.hpp"
-#endif
-
 #include <algorithm>
-
 #include <cassert>
 
 std::string
@@ -21,15 +16,7 @@ Path::ToUTF8() const noexcept
   if (*this == nullptr)
     return std::string();
 
-#ifdef _UNICODE
-  const WideToUTF8Converter utf8(c_str());
-  if (!utf8.IsValid())
-    return std::string();
-
-  return (const char *)utf8;
-#else
   return c_str();
-#endif
 }
 
 AllocatedPath

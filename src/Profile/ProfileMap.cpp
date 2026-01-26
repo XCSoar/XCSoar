@@ -77,15 +77,6 @@ Profile::Set(std::string_view key, const char *value) noexcept
   map.Set(key, value);
 }
 
-#ifdef _UNICODE
-
-void
-Profile::Set(std::string_view key, const TCHAR *value) noexcept
-{
-  map.Set(key, value);
-}
-
-#endif
 
 void
 Profile::Set(std::string_view key, int value) noexcept

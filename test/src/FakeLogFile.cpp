@@ -42,22 +42,6 @@ LogFormat(const char *fmt, ...) noexcept
   fputc('\n', stderr);
 }
 
-#ifdef _UNICODE
-
-void
-LogFormat(const wchar_t *fmt, ...) noexcept
-{
-  va_list ap;
-
-  va_start(ap, fmt);
-  vfwprintf(stderr, fmt, ap);
-  va_end(ap);
-
-  fputc('\n', stderr);
-}
-
-#endif
-
 void
 LogError(std::exception_ptr e) noexcept
 {

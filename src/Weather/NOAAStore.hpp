@@ -9,10 +9,6 @@
 
 #include <list>
 
-#ifdef _UNICODE
-#include <tchar.h>
-#endif
-
 class NOAAStore
 {
 public:
@@ -34,14 +30,9 @@ public:
      * (even with different objects) may Invalidate the previous
      * return value.  May be called only from the main thread.
      */
-#ifdef _UNICODE
-    [[gnu::pure]]
-    const TCHAR *GetCodeT() const;
-#else
     const char *GetCodeT() const {
       return code;
     }
-#endif
   };
 
   typedef std::list<Item> StationContainer;
@@ -81,9 +72,6 @@ public:
    * @param code Four letter code of the station/airport (upper case)
    */
   static bool IsValidCode(const char *code);
-#ifdef _UNICODE
-  static bool IsValidCode(const TCHAR *code);
-#endif
 
   /**
    * Add a station to the set of stations for which
@@ -91,9 +79,6 @@ public:
    * @param code Four letter code of the station/airport (upper case)
    */
   iterator AddStation(const char *code);
-#ifdef _UNICODE
-  iterator AddStation(const TCHAR *code);
-#endif
 
   /**
    * Returns the amount of stations in the array

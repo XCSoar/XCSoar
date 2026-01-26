@@ -6,10 +6,6 @@
 #include <cstddef>
 #include <string_view>
 
-#ifdef _UNICODE
-#include "WStringUtil.hpp"
-#endif
-
 /**
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().

@@ -770,21 +770,6 @@ DeviceDescriptor::WriteNMEA(const char *line,
   }
 }
 
-#ifdef _UNICODE
-bool
-DeviceDescriptor::WriteNMEA(const TCHAR *line,
-                            OperationEnvironment &env) noexcept
-{
-  assert(line != nullptr);
-
-  if (port == nullptr)
-    return false;
-
-  WideToACPConverter narrow{line};
-  return narrow.IsValid() && WriteNMEA(narrow, env);
-}
-#endif
-
 bool
 DeviceDescriptor::PutMacCready(double value,
                                OperationEnvironment &env) noexcept
@@ -1271,17 +1256,6 @@ DeviceDescriptor::LockSetErrorMessage(const TCHAR *msg) noexcept
     const std::lock_guard lock{mutex};
     error_message = msg;
 }
-
-#ifdef _UNICODE
-
-inline void
-DeviceDescriptor::LockSetErrorMessage(const char *msg) noexcept
-{
-  if (const UTF8ToWideConverter tmsg(msg); tmsg.IsValid())
-    LockSetErrorMessage(tmsg);
-}
-
-#endif
 
 void
 DeviceDescriptor::OnJobFinished() noexcept

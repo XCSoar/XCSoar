@@ -23,26 +23,3 @@ CopyIGCString(char *dest, char *dest_limit, const char *src) noexcept
 
   return dest;
 }
-
-#ifdef _UNICODE
-
-char *
-CopyIGCString(char *dest, char *dest_limit, const TCHAR *src) noexcept
-{
-  assert(dest != nullptr);
-  assert(dest_limit > dest);
-  assert(src != nullptr);
-
-  while (*src != '\0') {
-    TCHAR ch = *src++;
-    if (IsValidIGCChar(ch)) {
-      *dest++ = ch;
-      if (dest == dest_limit)
-        break;
-    }
-  }
-
-  return dest;
-}
-
-#endif

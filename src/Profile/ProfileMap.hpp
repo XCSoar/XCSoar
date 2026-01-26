@@ -59,11 +59,6 @@ Get(std::string_view key, std::span<TCHAR> value) noexcept;
 void
 Set(std::string_view key, const char *value) noexcept;
 
-#ifdef _UNICODE
-void
-Set(std::string_view key, const TCHAR *value) noexcept;
-#endif
-
 bool
 Get(std::string_view key, int &value) noexcept;
 

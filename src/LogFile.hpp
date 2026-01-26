@@ -13,10 +13,6 @@
 #include <exception>
 #include <string_view>
 
-#ifdef _UNICODE
-#include <wchar.h>
-#endif
-
 void
 LogVFmt(fmt::string_view format_str, fmt::format_args args) noexcept;
 
@@ -52,11 +48,6 @@ LogString(std::string_view s) noexcept;
 gcc_printf(1, 2)
 void
 LogFormat(const char *fmt, ...) noexcept;
-
-#ifdef _UNICODE
-void
-LogFormat(const wchar_t *fmt, ...) noexcept;
-#endif
 
 #if !defined(NDEBUG)
 

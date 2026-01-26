@@ -14,9 +14,7 @@
 #include "thread/Mutex.hxx"
 #endif
 
-#ifndef _UNICODE
 #include "util/UTF8.hpp"
-#endif
 
 #if defined(__clang__) && defined(__arm__)
 /* work around warning: 'register' storage class specifier is
@@ -80,15 +78,9 @@ NextChar(tstring_view &s) noexcept
 {
   assert(!s.empty());
 
-#ifdef _UNICODE
-  const unsigned ch = s.front();
-  s.remove_prefix(1);
-  return ch;
-#else
   auto n = NextUTF8(s.data());
   s.remove_prefix(n.second - s.data());
   return n.first;
-#endif
 }
 
 void
@@ -212,9 +204,7 @@ Font::Destroy() noexcept
 static void
 ForEachChar(tstring_view text, std::invocable<unsigned> auto f)
 {
-#ifndef _UNICODE
   assert(ValidateUTF8(text));
-#endif
 
   while (!text.empty()) {
     const unsigned ch = NextChar(text);

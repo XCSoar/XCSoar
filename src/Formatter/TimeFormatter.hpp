@@ -14,24 +14,11 @@ struct BrokenDateTime;
 void
 FormatISO8601(char *buffer, const BrokenDate &date) noexcept;
 
-#ifdef _UNICODE
-void
-FormatISO8601(TCHAR *buffer, const BrokenDate &date) noexcept;
-#endif
-
 /**
  * Format a UTC time stamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ).
  */
 void
 FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept;
-
-#ifdef _UNICODE
-/**
- * Format a UTC time stamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ).
- */
-void
-FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp) noexcept;
-#endif
 
 void
 FormatTime(TCHAR *buffer, FloatDuration time) noexcept;

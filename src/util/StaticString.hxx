@@ -14,17 +14,8 @@
 #include <cstddef>
 #include <string_view>
 
-#ifdef _UNICODE
-#include <wchar.h>
-#endif
-
 bool
 CopyUTF8(char *dest, size_t dest_size, const char *src) noexcept;
-
-#ifdef _UNICODE
-bool
-CopyUTF8(wchar_t *dest, size_t dest_size, const char *src) noexcept;
-#endif
 
 /**
  * A string with a maximum size known at compile time.
@@ -78,13 +69,6 @@ public:
 		pointer end = ::CopyASCII(data(), capacity() - 1, src);
 		*end = SENTINEL;
 	}
-
-#ifdef _UNICODE
-	void SetASCII(std::wstring_view src) noexcept {
-		pointer end = ::CopyASCII(data(), capacity() - 1, src);
-		*end = SENTINEL;
-	}
-#endif
 
 	/**
 	 * Eliminate all non-ASCII characters.
@@ -304,35 +288,4 @@ public:
 	}
 };
 
-#ifdef _UNICODE
-
-/**
- * A string with a maximum size known at compile time.
- * This is the TCHAR-based sister of the NarrowString class.
- */
-template<size_t max>
-class StaticString: public StaticStringBase<wchar_t, max>
-{
-	typedef StaticStringBase<wchar_t, max> Base;
-
-public:
-	using typename Base::value_type;
-	using typename Base::reference;
-	using typename Base::pointer;
-	using typename Base::const_pointer;
-	using typename Base::const_iterator;
-	using typename Base::size_type;
-
-	using Base::Base;
-	using Base::operator=;
-	using Base::operator+=;
-
-	void CropIncompleteUTF8() noexcept {
-		/* this is a wchar_t string, it's not multi-byte,
-		   therefore we have no incomplete sequences */
-	}
-};
-
-#else
 #define StaticString NarrowString
-#endif
