@@ -15,10 +15,6 @@
 #include "thread/Mutex.hxx"
 #endif
 
-#ifdef UNICODE
-#include "util/ConvertString.hpp"
-#endif
-
 #include <cassert>
 #include <memory>
 
@@ -169,11 +165,7 @@ TextCache::GetSize(const Font &font, std::string_view text) noexcept
   if (const PixelSize *cached = size_cache.Get(key))
     return *cached;
 
-#ifdef UNICODE
-  PixelSize size = font.TextSize(UTF8ToWideConverter(text));
-#else
   PixelSize size = font.TextSize(text);
-#endif
 
   key.Allocate();
   size_cache.Put(std::move(key), size);
@@ -223,11 +215,7 @@ TextCache::Get(const Font &font, std::string_view text) noexcept
   /* render the text into a OpenGL texture */
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
-#ifdef UNICODE
-  UTF8ToWideConverter text2(text);
-#else
   std::string_view text2 = text;
-#endif
   PixelSize size = font.TextSize(text2);
   size_t buffer_size = font.BufferSize(size);
   if (buffer_size == 0)

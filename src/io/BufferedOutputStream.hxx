@@ -15,10 +15,6 @@
 #include <span>
 #include <string_view>
 
-#ifdef _UNICODE
-#include <wchar.h>
-#endif
-
 class OutputStream;
 
 /**
@@ -82,22 +78,6 @@ public:
 #endif
 	}
 
-#ifdef _UNICODE
-	/**
-	 * Write one wide character.
-	 */
-	void Write(const wchar_t &ch) {
-		WriteWideToUTF8({&ch, 1});
-	}
-
-	/**
-	 * Write a wide string.
-	 */
-	void Write(std::wstring_view src) {
-		WriteWideToUTF8(src);
-	}
-#endif
-
 	/**
 	 * Finish the current line.
 	 */
@@ -122,10 +102,6 @@ public:
 
 private:
 	bool AppendToBuffer(std::span<const std::byte> src) noexcept;
-
-#ifdef _UNICODE
-	void WriteWideToUTF8(std::wstring_view src);
-#endif
 };
 
 /**

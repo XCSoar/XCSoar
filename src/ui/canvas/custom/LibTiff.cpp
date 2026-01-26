@@ -26,11 +26,7 @@ TiffOpen(Path path, const char *mode)
   XTIFFInitialize();
 #endif
 
-#ifdef _UNICODE
-  return TIFFOpenW(path.c_str(), mode);
-#else
   return TIFFOpen(path.c_str(), mode);
-#endif
 }
 
 class TiffLoader {

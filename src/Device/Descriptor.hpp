@@ -530,10 +530,6 @@ public:
   void ForwardLine(const char *line);
 
   bool WriteNMEA(const char *line, OperationEnvironment &env) noexcept;
-#ifdef _UNICODE
-  bool WriteNMEA(const TCHAR *line, OperationEnvironment &env) noexcept;
-#endif
-
   bool PutMacCready(double mac_cready, OperationEnvironment &env) noexcept;
   bool PutBugs(double bugs, OperationEnvironment &env) noexcept;
   bool PutBallast(double fraction, double overload,
@@ -585,10 +581,6 @@ public:
 
 private:
   void LockSetErrorMessage(const TCHAR *msg) noexcept;
-#ifdef _UNICODE
-  void LockSetErrorMessage(const char *msg) noexcept;
-#endif
-
   void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */

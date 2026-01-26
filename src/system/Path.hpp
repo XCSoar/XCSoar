@@ -8,11 +8,6 @@
 
 #include <string>
 #include <string_view>
-
-#ifdef _UNICODE
-#include <wchar.h>
-#endif
-
 #include <cstddef>
 
 class AllocatedPath;
@@ -26,11 +21,7 @@ class AllocatedPath;
  */
 class Path {
 public:
-#ifdef _UNICODE
-  using char_type = wchar_t;
-#else
   using char_type = char;
-#endif
   using value_type = StringPointer<char_type>;
   using const_pointer = value_type::const_pointer;
   using pointer = value_type::pointer;

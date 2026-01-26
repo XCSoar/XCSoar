@@ -92,12 +92,10 @@ FormCharacter(unsigned ch)
   if (ch < 0x20)
     return false;
 
-#ifndef _UNICODE
   if (ch >= 0x80)
     /* TODO: ASCII only for now, because we don't have proper UTF-8
        support yet */
     return false;
-#endif
 
   DoCharacter((TCHAR)ch);
   return true;

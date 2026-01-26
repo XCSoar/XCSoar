@@ -3,10 +3,6 @@
 
 #pragma once
 
-#ifdef _UNICODE
-#include "WStringFormat.hpp"
-#endif
-
 #include <stdio.h>
 
 template<typename... Args>

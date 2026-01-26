@@ -7,12 +7,7 @@
 #include "util/tstring.hpp"
 #include "util/NumberParser.hpp"
 #include "system/Path.hpp"
-
-#ifdef _UNICODE
-#include "system/ConvertPathName.hpp"
-#else
 #include <tchar.h>
-#endif
 
 #include <list>
 #include <algorithm>
@@ -101,13 +96,6 @@ public:
     if (name == nullptr)
       name = "";
   }
-
-#ifdef _UNICODE
-  void ParseCommandLine(const TCHAR *_cmdline) {
-    WideToACPConverter convert(_cmdline);
-    ParseCommandLine(convert);
-  }
-#endif
 #endif
 
   Args &operator=(const Args &other) = delete;
@@ -176,29 +164,15 @@ public:
     const char *p = ExpectNext();
     assert(p != nullptr);
 
-#ifdef _UNICODE
-    PathName convert(p);
-    return tstring(((Path)convert).c_str());
-#else
     return tstring(p);
-#endif
   }
 
-#ifdef _UNICODE
-  AllocatedPath ExpectNextPath() {
-    const char *p = ExpectNext();
-    assert(p != nullptr);
-
-    return AllocatedPath(PathName(p));
-  }
-#else
   Path ExpectNextPath() {
     const char *p = ExpectNext();
     assert(p != nullptr);
 
     return Path(p);
   }
-#endif
 
   void ExpectEnd() {
     if (!IsEmpty())

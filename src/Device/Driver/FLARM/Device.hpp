@@ -152,13 +152,6 @@ private:
   bool SetConfig(const char *setting, const char *value,
                  OperationEnvironment &env);
 
-#ifdef _UNICODE
-  bool GetConfig(const char *setting, TCHAR *buffer, size_t length,
-                 OperationEnvironment &env);
-  bool SetConfig(const char *setting, const TCHAR *value,
-                 OperationEnvironment &env);
-#endif
-
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
 

@@ -58,19 +58,6 @@ FindRemoteFile(const FileRepository &repository, const char *name)
   return repository.FindByName(name);
 }
 
-#ifdef _UNICODE
-[[gnu::pure]]
-static const AvailableFile *
-FindRemoteFile(const FileRepository &repository, const TCHAR *name)
-{
-  const WideToUTF8Converter name2(name);
-  if (!name2.IsValid())
-    return nullptr;
-
-  return FindRemoteFile(repository, name2);
-}
-#endif
-
 [[gnu::pure]]
 static bool
 CanDownload(const FileRepository &repository, const TCHAR *name)

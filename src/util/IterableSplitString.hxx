@@ -94,10 +94,4 @@ public:
 };
 
 using IterableSplitString = BasicIterableSplitString<char>;
-
-#ifdef _UNICODE
-using WIterableSplitString = BasicIterableSplitString<wchar_t>;
-using TIterableSplitString = WIterableSplitString;
-#else
 using TIterableSplitString = IterableSplitString;
-#endif

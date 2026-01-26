@@ -37,28 +37,3 @@ ParseHexColor(const char *buffer, RGB8Color &color)
   color = RGB8Color(r, g, b);
   return true;
 }
-
-#ifdef _UNICODE
-
-bool
-ParseHexColor(const TCHAR *buffer, RGB8Color &color)
-{
-  if (*buffer != _T('#'))
-    return false;
-
-  buffer++;
-
-  TCHAR *endptr;
-  unsigned value = ParseUnsigned(buffer, &endptr, 16);
-  if (endptr != buffer + 6)
-    return false;
-
-  uint8_t r = value >> 16;
-  uint8_t g = value >> 8;
-  uint8_t b = value;
-
-  color = RGB8Color(r, g, b);
-  return true;
-}
-
-#endif

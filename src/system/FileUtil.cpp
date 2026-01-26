@@ -300,18 +300,6 @@ File::IsCharDev(Path path) noexcept
 
 #endif // HAVE_POSIX
 
-#if defined(_WIN32) && defined(UNICODE)
-
-bool
-File::Exists(const char *path) noexcept
-{
-  DWORD attributes = GetFileAttributesA(path);
-  return attributes != INVALID_FILE_ATTRIBUTES &&
-    (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
-}
-
-#endif
-
 uint64_t
 File::GetSize(Path path) noexcept
 {

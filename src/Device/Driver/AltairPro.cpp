@@ -35,11 +35,6 @@ private:
   bool PropertySetGet(const char *name, const char *value,
                       std::span<char> dest,
                       OperationEnvironment &env);
-#ifdef _UNICODE
-  bool PropertySetGet(const char *name, const TCHAR *value,
-                      std::span<char> dest,
-                      OperationEnvironment &env);
-#endif
 
 public:
   AltairProDevice(Port &_port):port(_port){}
@@ -223,20 +218,6 @@ AltairProDevice::PropertySetGet(const char *name, const char *value,
 
   return false;
 }
-
-#ifdef _UNICODE
-bool
-AltairProDevice::PropertySetGet(const char *name, const TCHAR *_value,
-                                std::span<char> dest,
-                                OperationEnvironment &env)
-{
-  const WideToACPConverter value{_value};
-  if (!value.IsValid())
-    throw std::runtime_error("Invalid string");
-
-  return PropertySetGet(name, value, dest, env);
-}
-#endif
 
 void
 AltairProDevice::PutTurnPoint(const char *propertyName,

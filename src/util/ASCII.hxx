@@ -6,10 +6,6 @@
 #include <cstddef>
 #include <string_view>
 
-#ifdef _UNICODE
-#include "WASCII.hxx"
-#endif
-
 /**
  * Copy all ASCII characters to the destination string
  * (i.e. 0x01..0x7f), ignoring the others.  In the worst case, the

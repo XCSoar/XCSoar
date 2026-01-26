@@ -9,10 +9,6 @@
 #include <tchar.h>
 #include <algorithm>
 
-#ifdef _UNICODE
-#include <stringapiset.h>
-#endif
-
 using std::string_view_literals::operator""sv;
 
 static bool

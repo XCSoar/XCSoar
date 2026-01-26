@@ -5,10 +5,6 @@
 #include "time/BrokenDate.hpp"
 #include "util/StringFormat.hpp"
 
-#ifdef _UNICODE
-#include <algorithm>
-#endif
-
 #include <cassert>
 #include <string.h>
 
@@ -60,45 +56,3 @@ FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
                      date.year, date.month, date.day,
                      manufacturer, logger_id, flight_number);
 }
-
-#ifdef _UNICODE
-
-void
-FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
-                  char manufacturer, const char *logger_id,
-                  unsigned flight_number)
-{
-  assert(logger_id != NULL);
-  assert(strlen(logger_id) == 3);
-
-  TCHAR logger_id_t[4];
-  /* poor man's char->TCHAR converted; this works because we know
-     we're dealing with ASCII only */
-  std::copy_n(logger_id, 4, logger_id_t);
-
-  FormatIGCFilename(buffer, date, (TCHAR)manufacturer, logger_id_t,
-                    flight_number);
-}
-
-void
-FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
-                      const char *manufacturer, const char *logger_id,
-                      unsigned flight_number)
-{
-  assert(manufacturer != NULL);
-  assert(strlen(manufacturer) == 3);
-
-  assert(logger_id != NULL);
-  assert(strlen(logger_id) == 3);
-
-  TCHAR manufacturer_t[4], logger_id_t[4];
-  /* poor man's char->TCHAR converted; this works because we know
-     we're dealing with ASCII only */
-  std::copy_n(manufacturer, 4, manufacturer_t);
-  std::copy_n(logger_id, 4, logger_id_t);
-
-  FormatIGCFilenameLong(buffer, date, manufacturer_t, logger_id_t,
-                        flight_number);
-}
-
-#endif

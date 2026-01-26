@@ -221,42 +221,6 @@ FlarmDevice::SetConfig(const char *setting, const char *value,
   return ExpectChecksum(port, NMEAChecksum(expected_answer), env);
 }
 
-#ifdef _UNICODE
-
-bool
-FlarmDevice::GetConfig(const char *setting, TCHAR *buffer, size_t length,
-                       OperationEnvironment &env)
-{
-  char narrow_buffer[90];
-  if (!GetConfig(setting, narrow_buffer, ARRAY_SIZE(narrow_buffer), env))
-    return false;
-
-  if (StringIsEmpty(narrow_buffer)) {
-    *buffer = _T('\0');
-    return true;
-  }
-
-  UTF8ToWideConverter wide(narrow_buffer);
-  if (!wide.IsValid())
-    return false;
-
-  CopyTruncateString(buffer, length, wide);
-  return true;
-}
-
-bool
-FlarmDevice::SetConfig(const char *setting, const TCHAR *value,
-                       OperationEnvironment &env)
-{
-  WideToUTF8Converter narrow_value(value);
-  if (!narrow_value.IsValid())
-    return false;
-
-  return SetConfig(setting, narrow_value, env);
-}
-
-#endif
-
 void
 FlarmDevice::Restart(OperationEnvironment &env)
 {

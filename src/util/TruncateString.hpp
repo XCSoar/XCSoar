@@ -17,11 +17,6 @@
 char *
 CopyTruncateString(char *dest, size_t dest_size, const char *src);
 
-#ifdef _UNICODE
-TCHAR *
-CopyTruncateString(TCHAR *dest, size_t dest_size, const TCHAR *src);
-#endif
-
 /**
  * Copy a string to a buffer, truncating it if the buffer is not large
  * enough.  At most #truncate characters will be copied.  No partial

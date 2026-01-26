@@ -11,15 +11,9 @@
 static constexpr std::size_t
 LatinBufferSize(std::size_t size) noexcept
 {
-#ifdef _UNICODE
-/* with wide characters, the exact size of the FLARMNet database field
-   (plus one for the terminator) is just right, ... */
-  return size;
-#else
 /* ..., but when we convert Latin-1 to UTF-8, we need a little bit
    more buffer */
   return size * 3 / 2 + 1;
-#endif
 }
 
 /**

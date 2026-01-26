@@ -6,10 +6,6 @@
 #include <cstdint>
 #include <compare> // for the defaulted spaceship operator
 
-#ifdef _UNICODE
-#include <tchar.h>
-#endif
-
 /**
  * The identification number of a FLARM traffic.
  */
@@ -40,12 +36,5 @@ public:
                                     const FlarmId &) noexcept = default;
 
   static FlarmId Parse(const char *input, char **endptr_r) noexcept;
-#ifdef _UNICODE
-  static FlarmId Parse(const TCHAR *input, TCHAR **endptr_r) noexcept;
-#endif
-
   const char *Format(char *buffer) const noexcept;
-#ifdef _UNICODE
-  const TCHAR *Format(TCHAR *buffer) const noexcept;
-#endif
 };

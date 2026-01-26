@@ -7,10 +7,6 @@
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "time/Calendar.hxx"
 
-#ifdef _UNICODE
-#include <stringapiset.h>
-#endif
-
 static constexpr unsigned IMI_SECONDS_IN_MINUTE = 60;
 static constexpr unsigned IMI_SECONDS_IN_HOUR = 60*60;
 static constexpr unsigned IMI_SECONDS_IN_DAY = 24*60*60;
@@ -18,12 +14,8 @@ static constexpr unsigned IMI_SECONDS_IN_DAY = 24*60*60;
 void
 IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
 {
-#ifdef _UNICODE
-  WideCharToMultiByte(CP_ACP, 0, unicode, -1, ascii, outSize, "?", nullptr);
-#else
   strncpy(ascii, unicode, outSize - 1);
   ascii[outSize - 1] = 0;
-#endif
 }
 
 IMI::AngleConverter::AngleConverter(Angle angle)

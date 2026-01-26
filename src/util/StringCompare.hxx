@@ -5,10 +5,6 @@
 
 #include "StringAPI.hxx"
 
-#ifdef _UNICODE
-#include "WStringCompare.hxx"
-#endif
-
 #include <string_view>
 
 [[gnu::pure]] [[gnu::nonnull]]

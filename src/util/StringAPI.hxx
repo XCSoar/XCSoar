@@ -5,10 +5,6 @@
 
 #include <cstring>
 
-#ifdef _UNICODE
-#include "WStringAPI.hxx"
-#endif
-
 [[gnu::pure]] [[gnu::nonnull]]
 static inline size_t
 StringLength(const char *p) noexcept
