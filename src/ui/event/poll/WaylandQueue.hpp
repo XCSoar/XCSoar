@@ -61,10 +61,15 @@ class WaylandEventQueue final {
 
   /* Cursor support */
   struct wl_cursor_theme *cursor_theme = nullptr;
-  struct wl_cursor *cursor_pointer = nullptr;
+  struct wl_cursor *cursor_arrow = nullptr;
+  struct wl_cursor *cursor_resize_horizontal = nullptr;
+  struct wl_cursor *cursor_resize_vertical = nullptr;
+  struct wl_cursor *current_cursor = nullptr;
   struct wl_surface *cursor_surface = nullptr;
 
   IntPoint2D pointer_position = {0, 0};
+  PixelSize screen_size{0, 0};
+  uint32_t pointer_serial = 0;
 
   struct xkb_context *xkb_context = nullptr;
   struct xkb_keymap *xkb_keymap = nullptr;
@@ -130,8 +135,8 @@ public:
 
   bool Generate(Event &event) noexcept;
 
-#ifdef SOFTWARE_ROTATE_DISPLAY
   void SetScreenSize(PixelSize new_size) noexcept;
+#ifdef SOFTWARE_ROTATE_DISPLAY
   void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif
 
@@ -154,8 +159,16 @@ public:
                          uint32_t mods_locked, uint32_t group) noexcept;
 
   void SetCursor(struct wl_pointer *wl_pointer, uint32_t serial) noexcept;
+  void UpdateCursorForPosition() noexcept;
+  void SetPointerSerial(uint32_t serial) noexcept {
+    pointer_serial = serial;
+  }
+  uint32_t GetPointerSerial() const noexcept {
+    return pointer_serial;
+  }
 
 private:
+  struct wl_cursor *SelectCursorForEdge(bool near_horizontal, bool near_vertical) const noexcept;
   void OnSocketReady(unsigned events) noexcept;
   void OnFlush() noexcept;
 };

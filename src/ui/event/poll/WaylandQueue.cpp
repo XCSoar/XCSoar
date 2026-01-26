@@ -83,16 +83,18 @@ static constexpr struct wl_seat_listener seat_listener = {
 
 static void
 WaylandPointerEnter(void *data,
-                    [[maybe_unused]] struct wl_pointer *wl_pointer,
-                    [[maybe_unused]] uint32_t serial,
+                    struct wl_pointer *wl_pointer,
+                    uint32_t serial,
                     [[maybe_unused]] struct wl_surface *surface,
                     wl_fixed_t surface_x,
                     wl_fixed_t surface_y)
 {
   auto &queue = *(WaylandEventQueue *)data;
-
+  queue.SetPointerSerial(serial);
   queue.PointerMotion(IntPoint2D(wl_fixed_to_int(surface_x),
                                  wl_fixed_to_int(surface_y)));
+  queue.UpdateCursorForPosition();
+  queue.SetCursor(wl_pointer, serial);
 }
 
 static void
@@ -105,14 +107,16 @@ WaylandPointerLeave([[maybe_unused]] void *data,
 
 static void
 WaylandPointerMotion(void *data,
-                     [[maybe_unused]] struct wl_pointer *wl_pointer,
+                     struct wl_pointer *wl_pointer,
                      [[maybe_unused]] uint32_t time,
                      wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
   auto &queue = *(WaylandEventQueue *)data;
-
   queue.PointerMotion(IntPoint2D(wl_fixed_to_int(surface_x),
                                  wl_fixed_to_int(surface_y)));
+  queue.UpdateCursorForPosition();
+  if (wl_pointer != nullptr && queue.GetPointerSerial() != 0)
+    queue.SetCursor(wl_pointer, queue.GetPointerSerial());
 }
 
 static void
@@ -285,12 +289,27 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   }
   cursor_theme = wl_cursor_theme_load(nullptr, cursor_size, shm);
   if (cursor_theme != nullptr) {
-    cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "left_ptr");
-    if (cursor_pointer == nullptr) {
-      /* Fallback to default cursor name */
-      cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "default");
-    }
-    if (cursor_pointer != nullptr && compositor != nullptr) {
+    /* Load default arrow cursor */
+    cursor_arrow = wl_cursor_theme_get_cursor(cursor_theme, "left_ptr");
+    if (cursor_arrow == nullptr)
+      cursor_arrow = wl_cursor_theme_get_cursor(cursor_theme, "default");
+
+    /* Load resize cursors for edge detection - use horizontal/vertical only */
+    cursor_resize_horizontal = wl_cursor_theme_get_cursor(cursor_theme, "sb_h_double_arrow");
+    if (cursor_resize_horizontal == nullptr)
+      cursor_resize_horizontal = wl_cursor_theme_get_cursor(cursor_theme, "h_double_arrow");
+    if (cursor_resize_horizontal == nullptr)
+      cursor_resize_horizontal = wl_cursor_theme_get_cursor(cursor_theme, "left_side");
+
+    cursor_resize_vertical = wl_cursor_theme_get_cursor(cursor_theme, "sb_v_double_arrow");
+    if (cursor_resize_vertical == nullptr)
+      cursor_resize_vertical = wl_cursor_theme_get_cursor(cursor_theme, "v_double_arrow");
+    if (cursor_resize_vertical == nullptr)
+      cursor_resize_vertical = wl_cursor_theme_get_cursor(cursor_theme, "top_side");
+
+    current_cursor = cursor_arrow;
+
+    if (current_cursor != nullptr && compositor != nullptr) {
       cursor_surface = wl_compositor_create_surface(compositor);
     }
   }
@@ -615,12 +634,13 @@ WaylandEventQueue::GetTransformedPointerPosition() const noexcept
 }
 
 void
-WaylandEventQueue::SetScreenSize(PixelSize screen_size) noexcept
+WaylandEventQueue::SetScreenSize(PixelSize new_size) noexcept
 {
+  screen_size = new_size;
   if (AreAxesSwapped(OpenGL::display_orientation)) {
-    physical_screen_size = PixelSize(screen_size.height, screen_size.width);
+    physical_screen_size = PixelSize(new_size.height, new_size.width);
   } else {
-    physical_screen_size = screen_size;
+    physical_screen_size = new_size;
   }
 }
 
@@ -632,16 +652,55 @@ WaylandEventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation ori
 #endif
 
 void
+WaylandEventQueue::UpdateCursorForPosition() noexcept
+{
+  if (screen_size.width == 0 || screen_size.height == 0 || cursor_theme == nullptr) {
+    current_cursor = cursor_arrow;
+    return;
+  }
+
+  static constexpr unsigned EDGE_THRESHOLD = 5;
+  const unsigned x = pointer_position.x;
+  const unsigned y = pointer_position.y;
+  const unsigned w = screen_size.width;
+  const unsigned h = screen_size.height;
+
+  const bool near_horizontal = (x < EDGE_THRESHOLD) || (x + EDGE_THRESHOLD >= w);
+  const bool near_vertical = (y < EDGE_THRESHOLD) || (y + EDGE_THRESHOLD >= h);
+
+  current_cursor = SelectCursorForEdge(near_horizontal, near_vertical);
+}
+
+struct wl_cursor *
+WaylandEventQueue::SelectCursorForEdge(bool near_horizontal, bool near_vertical) const noexcept
+{
+  /* If near both edges (corner), prefer vertical cursor */
+  if (near_horizontal && near_vertical)
+    return cursor_resize_vertical ?: cursor_arrow;
+
+  /* Horizontal edge */
+  if (near_horizontal)
+    return cursor_resize_horizontal ?: cursor_arrow;
+
+  /* Vertical edge */
+  if (near_vertical)
+    return cursor_resize_vertical ?: cursor_arrow;
+
+  /* Default arrow cursor */
+  return cursor_arrow;
+}
+
+void
 WaylandEventQueue::SetCursor(struct wl_pointer *wl_pointer, uint32_t serial) noexcept
 {
-  if (cursor_surface == nullptr || cursor_pointer == nullptr)
+  if (cursor_surface == nullptr || current_cursor == nullptr)
     return;
 
   /* wl_cursor contains an images array of wl_cursor_image structs */
-  if (cursor_pointer->image_count == 0)
+  if (current_cursor->image_count == 0)
     return;
 
-  struct wl_cursor_image *image = cursor_pointer->images[0];
+  struct wl_cursor_image *image = current_cursor->images[0];
   if (image == nullptr)
     return;
 
