@@ -29,7 +29,7 @@ static UnsignedPoint2D forced_dpi{};
 static UnsignedPoint2D detected_dpi{};
 #endif
 
-#if defined(USE_X11) || defined(MESA_KMS) || defined(HAVE_DPI_DETECTION)
+#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND) || defined(HAVE_DPI_DETECTION)
 
 static constexpr unsigned
 MMToDPI(unsigned pixels, unsigned mm)
@@ -40,7 +40,7 @@ MMToDPI(unsigned pixels, unsigned mm)
 
 #endif
 
-#if !defined(_WIN32) && !defined(USE_X11) && !defined(MESA_KMS)
+#if !defined(_WIN32) && !defined(USE_X11) && !defined(MESA_KMS) && !defined(USE_WAYLAND)
 #ifndef __APPLE__
 [[gnu::const]]
 #endif
@@ -131,11 +131,20 @@ Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi
 
 #ifdef _WIN32
   return display.GetDPI();
-#elif defined(USE_X11) || defined(MESA_KMS)
-  return {
-    MMToDPI(display.GetSize().width, display.GetSizeMM().width),
-    MMToDPI(display.GetSize().height, display.GetSizeMM().height),
-  };
+#elif defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
+  {
+    const auto size = display.GetSize();
+    const auto size_mm = display.GetSizeMM();
+    if (size.width > 0 && size.height > 0 &&
+        size_mm.width > 0 && size_mm.height > 0) {
+      return {
+        MMToDPI(size.width, size_mm.width),
+        MMToDPI(size.height, size_mm.height),
+      };
+    }
+  }
+  /* Fall back to default DPI (96) if size information not available */
+  return {96, 96};
 #else
   const auto dpi = ::GetDPI();
   return {dpi, dpi};
