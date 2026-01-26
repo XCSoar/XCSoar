@@ -3,10 +3,6 @@
 
 #pragma once
 
-#ifdef __APPLE__
-#include <TargetConditionals.h>
-#endif
-
 #include <chrono>
 
 struct GeoPoint;
@@ -80,8 +76,6 @@ public:
   virtual void OnSensorStateChanged() noexcept = 0;
   virtual void OnSensorError(const char *msg) noexcept = 0;
 #endif // ANDROID
-#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
   virtual void OnBarometricPressureSensor(float pressure,
                       float sensor_noise_variance) noexcept = 0;
-#endif // ANDROID or iPhone
 };

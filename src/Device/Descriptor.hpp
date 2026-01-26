@@ -26,14 +26,8 @@
 #include "SensorListener.hpp"
 #endif
 
-#ifdef __APPLE__
-#include <TargetConditionals.h>
-#endif
-
-#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "Math/WindowFilter.hpp"
-#endif
 
 #include <array>
 #include <atomic>
@@ -164,8 +158,8 @@ class DeviceDescriptor final
   InternalSensors *internal_sensors = nullptr;
 #endif
       
-#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
-  /* We use a Kalman filter to smooth (Android/iPhone) device pressure sensor
+#ifdef HAVE_INTERNAL_GPS
+  /* We use a Kalman filter to smooth device pressure sensor
      noise.  The filter requires two parameters: the first is the
      variance of the distribution of second derivatives of pressure
      values that we expect to see in flight, and the second is the
@@ -651,12 +645,10 @@ private:
   void OnSensorStateChanged() noexcept override;
   void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
-#endif // HAVE_INTERNAL_GPS
-        
-#if defined(ANDROID) || (defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
+
   void OnBarometricPressureSensor(float pressure,
                                   float sensor_noise_variance) noexcept override;
-#endif
+#endif // HAVE_INTERNAL_GPS
 };
 
 /**
