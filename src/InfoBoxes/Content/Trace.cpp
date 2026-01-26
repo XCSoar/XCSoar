@@ -144,12 +144,14 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexc
                        backend_components->protected_task_manager.get());
 }
 
-static void
+static bool
 ShowAnalysisBarograph() noexcept
 {
-  if (!backend_components || !data_components || 
-      !data_components->airspaces || !data_components->terrain)
-    return;
+  if (!backend_components || !backend_components->glide_computer ||
+      !data_components || !data_components->airspaces ||
+      !data_components->terrain)
+    return false;
+
   dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
                        UIGlobals::GetLook(),
                        CommonInterface::Full(),
@@ -157,13 +159,13 @@ ShowAnalysisBarograph() noexcept
                        data_components->airspaces.get(),
                        data_components->terrain.get(),
                        AnalysisPage::BAROGRAPH);
+  return true;
 }
 
 bool
 InfoBoxContentBarogram::HandleClick() noexcept
 {
-  ShowAnalysisBarograph();
-  return true;
+  return ShowAnalysisBarograph();
 }
 
 void
