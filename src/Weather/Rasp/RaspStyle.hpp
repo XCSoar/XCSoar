@@ -13,3 +13,4 @@ struct RaspStyle {
 };
 
 extern const RaspStyle rasp_styles[];
+extern const RaspStyle rasp_colormaps_general[];

@@ -501,3 +501,24 @@ const RaspStyle rasp_styles[] = {
 
   { nullptr, rasp_colors[0], 2, false }
 };
+
+const RaspStyle rasp_colormaps_general[] = {
+  // Thermalmap.info color scheme codes
+  { "vth", rasp_colors_thermalstrength, 4, false },
+  { "hth", rasp_colors_thermalheight, 4, false },
+  { "vve", rasp_colors_verticalspeed, 5, false },
+  { "tce", rasp_colors_temperature, 4, false },
+  { "prr", rasp_colors_rain, 3, false },
+  { "pfd", rasp_colors_pfd_ls4, 3, false },
+  { "vho", rasp_colors_bl_avg_windspeed, 3, false },
+  { "vxc", rasp_colors_xcspeed_ls4, 3, false },
+  { "vx8", rasp_colors_xcspeed_k8, 3, false },
+  { "hfl", rasp_colors_surface_heat_flux, 6, false },
+  { "pre", rasp_colors_sealevel_pressure, 7, false },
+  { "fcl", rasp_colors_cloudfraction_low, 4, false },
+  { "fcm", rasp_colors_cloudfraction_mid, 4, false },
+  { "fch", rasp_colors_cloudfraction_high, 4, false },
+  { "fct", rasp_colors_cloudfraction_accumulated, 4, false },
+  
+  { nullptr, rasp_colors[0], 2, false }
+};
