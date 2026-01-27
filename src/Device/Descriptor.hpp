@@ -404,6 +404,11 @@ public:
   void Reopen(OperationEnvironment &env);
 
   /**
+   * @param env a persistent object
+   */
+  void SlowReopen(OperationEnvironment &env);
+
+  /**
    * Call this periodically to auto-reopen a failed device after a
    * certain delay.
    *

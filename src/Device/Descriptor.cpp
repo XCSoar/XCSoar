@@ -542,6 +542,17 @@ DeviceDescriptor::Reopen(OperationEnvironment &env)
 }
 
 void
+DeviceDescriptor::SlowReopen(OperationEnvironment &env)
+{
+  assert(InMainThread());
+  assert(!IsBorrowed());
+
+  Close();
+  env.Sleep(std::chrono::seconds(5));
+  Open(env);
+}
+
+void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
   assert(InMainThread());

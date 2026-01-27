@@ -320,8 +320,9 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
         LogError(std::current_exception(), "Download failing");
       }
       if (line == nullptr || !HandleFlightLine(line, os, i, row_count)) {
-        if (request_retry_count > 5)
-          return false;
+        if (request_retry_count > 5) {
+          throw std::runtime_error("Flight download failed: maximum retries exceeded");
+        }
 
         /* Discard data which might still be in-transit, e.g. buffered
            inside a bluetooth dongle */
@@ -360,13 +361,18 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
   FileOutputStream fos(path);
   BufferedOutputStream bos(fos);
 
-  bool success = DownloadFlightInner(port, flight.internal.lx.nano_filename,
-                                     bos, env);
+  try {
+    bool success = DownloadFlightInner(port, flight.internal.lx.nano_filename,
+                                       bos, env);
 
-  if (success) {
-    bos.Flush();
-    fos.Commit();
+    if (success) {
+      bos.Flush();
+      fos.Commit();
+    }
+
+    return success;
+  } catch (...) {
+    /* propagate exception to DeviceDescriptor for proper error handling */
+    throw;
   }
-
-  return success;
 }
