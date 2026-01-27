@@ -102,6 +102,12 @@ CommandLine::Parse(Args &args)
     } else if (StringIsEqual(s, "-fullscreen")) {
       full_screen = true;
 #endif
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
+    } else if (StringIsEqual(s, "-touchscreen")) {
+      SetTouchScreenOverride(true);
+    } else if (StringIsEqual(s, "-notouchscreen")) {
+      SetTouchScreenOverride(false);
+#endif
 #ifdef _WIN32
     } else if (StringIsEqual(s, "-console")) {
       AllocConsole();
