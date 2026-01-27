@@ -54,7 +54,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   const bool is_selected = HasFocus() || dragging || force_draw_selector;
   if (is_selected)
-    canvas.SetTextColor(COLOR_BLACK);
+    canvas.SetTextColor(look.title.fg_color);
   else
     canvas.SetTextColor(look.GetTitleColor(data.title_color));
 
