@@ -436,4 +436,11 @@ public:
                           const Canvas src,
                           PixelPoint src_position, PixelSize src_size,
                           uint8_t alpha);
+
+  /**
+   * Stretch with per-pixel (from src) alpha blending.
+   */
+  void StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                              ConstImageBuffer src,
+                              PixelPoint src_position, PixelSize src_size) noexcept;
 };
