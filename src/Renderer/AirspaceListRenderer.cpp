@@ -12,6 +12,8 @@
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Geo/GeoVector.hpp"
 #include "util/StaticString.hxx"
+#include "RadioFrequency.hpp"
+#include "util/StringCompare.hxx"
 
 static void
 Draw(Canvas &canvas, PixelRect rc,
@@ -57,7 +59,24 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
-  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClassOrType(airspace),
+  StaticString<256> comment(AirspaceFormatter::GetClassOrType(airspace));
+
+  // Append frequency if defined
+  const RadioFrequency frequency = airspace.GetRadioFrequency();
+  if (frequency.IsDefined()) {
+    TCHAR freq_buffer[16];
+    if (frequency.Format(freq_buffer, sizeof(freq_buffer)) != nullptr) {
+      comment.AppendFormat(_T(" - %s MHz"), freq_buffer);
+    }
+  }
+
+  // Append station name if available
+  const TCHAR *station_name = airspace.GetStationName();
+  if (station_name != nullptr && !StringIsEmpty(station_name)) {
+    comment.AppendFormat(_T(" - %s"), station_name);
+  }
+
+  ::Draw(canvas, rc, airspace, comment,
          row_renderer, look, renderer_settings);
 }
 
@@ -70,6 +89,21 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceRendererSettings &renderer_settings)
 {
   StaticString<256> comment(AirspaceFormatter::GetClassOrType(airspace));
+
+  // Append frequency if defined
+  const RadioFrequency frequency = airspace.GetRadioFrequency();
+  if (frequency.IsDefined()) {
+    TCHAR freq_buffer[16];
+    if (frequency.Format(freq_buffer, sizeof(freq_buffer)) != nullptr) {
+      comment.AppendFormat(_T(" - %s MHz"), freq_buffer);
+    }
+  }
+
+  // Append station name if available
+  const TCHAR *station_name = airspace.GetStationName();
+  if (station_name != nullptr && !StringIsEmpty(station_name)) {
+    comment.AppendFormat(_T(" - %s"), station_name);
+  }
 
   comment.AppendFormat(_T(" - %s - %s"),
                        FormatUserDistanceSmart(vector.distance).c_str(),

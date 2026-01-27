@@ -11,8 +11,10 @@
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Language/Language.hpp"
 #include "MapSettings.hpp"
+#include "Look/MapLook.hpp"
 #include "MapWindow/Items/MapItem.hpp"
 #include "MapWindow/Items/List.hpp"
+#include "MapWindow/MapItemPreviewWindow.hpp"
 #include "Renderer/MapItemListRenderer.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
@@ -23,10 +25,50 @@
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/window/Window.hpp"
+#include "Waypoint/Factory.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "Terrain/RasterTerrain.hpp"
+#include "Engine/Task/TaskManager.hpp"
+#include "ui/window/PaintWindow.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
 #endif
+
+class SeparatorWindow : public PaintWindow {
+protected:
+  void OnPaint(Canvas &canvas) noexcept override {
+    canvas.SelectBlackPen();
+    const PixelSize size = GetSize();
+    if (Layout::landscape) {
+      // Vertical separator for landscape
+      const int middle = size.width / 2;
+      canvas.DrawLine(PixelPoint(middle, 0),
+                      PixelPoint(middle, size.height));
+    } else {
+      // Horizontal separator for portrait
+      const int middle = size.height / 2;
+      canvas.DrawLine(PixelPoint(0, middle),
+                      PixelPoint(size.width, middle));
+    }
+  }
+};
+
+class HorizontalSeparatorWindow : public PaintWindow {
+protected:
+  void OnPaint(Canvas &canvas) noexcept override {
+    canvas.SelectBlackPen();
+    const PixelSize size = GetSize();
+    // Always draw horizontal line in the middle
+    const int middle = size.height / 2;
+    canvas.DrawLine(PixelPoint(0, middle),
+                    PixelPoint(size.width, middle));
+  }
+};
 
 static bool
 HasDetails(const MapItem &item)
@@ -61,12 +103,22 @@ class MapItemListWidget final
   const MapItemList &list;
 
   const DialogLook &dialog_look;
+  const MapLook &map_look;
+  const TrafficLook &traffic_look;
   const MapSettings &settings;
 
   MapItemListRenderer renderer;
+  MapItemPreviewWindow *preview_window = nullptr;
+  SeparatorWindow *separator = nullptr;
+  HorizontalSeparatorWindow *button_separator = nullptr;
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
   Button *ack_button;
+
+  PixelRect list_rect;
+  PixelRect preview_rect;
+  PixelRect separator_rect;
+  PixelRect button_separator_rect;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -79,6 +131,8 @@ public:
                     const MapSettings &_settings)
     :list(_list),
      dialog_look(_dialog_look),
+     map_look(_look),
+     traffic_look(_traffic_look),
      settings(_settings),
      renderer(_look, _traffic_look, _final_glide_look,
               _settings, CommonInterface::GetComputerSettings().utc_offset) {}
@@ -108,6 +162,7 @@ public:
 
   void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
     UpdateButtons();
+    UpdatePreview();
   }
 
   bool CanActivateItem(unsigned index) const noexcept override {
@@ -119,8 +174,18 @@ public:
   }
 
   static bool CanGotoItem(const MapItem &item) noexcept {
-    return backend_components->protected_task_manager &&
-      item.type == MapItem::Type::WAYPOINT;
+    if (!backend_components->protected_task_manager)
+      return false;
+    
+    if (item.type == MapItem::Type::WAYPOINT)
+      return true;
+    
+    if (item.type == MapItem::Type::LOCATION) {
+      const LocationMapItem &loc_item = (const LocationMapItem &)item;
+      return loc_item.vector.IsValid() && CommonInterface::Basic().location_available;
+    }
+    
+    return false;
   }
 
   bool CanAckItem(unsigned index) const noexcept {
@@ -136,6 +201,94 @@ public:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
+
+  void UpdatePreview() noexcept {
+    if (preview_window != nullptr && GetCursorIndex() < list.size()) {
+      preview_window->SetMapItem(*list[GetCursorIndex()]);
+    }
+  }
+
+  ~MapItemListWidget() noexcept {
+    delete preview_window;
+    delete separator;
+    delete button_separator;
+  }
+
+  void Show(const PixelRect &rc) noexcept override {
+    CalculateLayout(rc);
+    ListWidget::Show(list_rect);
+    if (preview_window != nullptr) {
+      preview_window->MoveAndShow(preview_rect);
+      UpdatePreview();
+    }
+    if (separator != nullptr)
+      separator->MoveAndShow(separator_rect);
+    if (button_separator != nullptr)
+      button_separator->MoveAndShow(button_separator_rect);
+  }
+
+  void Hide() noexcept override {
+    if (preview_window != nullptr)
+      preview_window->Hide();
+    if (separator != nullptr)
+      separator->Hide();
+    if (button_separator != nullptr)
+      button_separator->Hide();
+    ListWidget::Hide();
+  }
+
+  void Move(const PixelRect &rc) noexcept override {
+    CalculateLayout(rc);
+    ListWidget::Move(list_rect);
+    if (preview_window != nullptr)
+      preview_window->Move(preview_rect);
+    if (separator != nullptr)
+      separator->Move(separator_rect);
+    if (button_separator != nullptr)
+      button_separator->Move(button_separator_rect);
+  }
+
+private:
+  void CalculateLayout(const PixelRect &rc) noexcept {
+    constexpr unsigned separator_size = 2;
+
+    // Reserve space for button separator at the top
+    button_separator_rect = rc;
+    button_separator_rect.bottom = button_separator_rect.top + separator_size;
+    
+    PixelRect remaining_rc = rc;
+    remaining_rc.top = button_separator_rect.bottom;
+
+    if (Layout::landscape) {
+      // Landscape: split vertically, list on left, preview on right
+      list_rect = remaining_rc;
+      const unsigned split = remaining_rc.GetWidth() / 2;
+      preview_rect = list_rect.CutRightSafe(split);
+      
+      // Add separator between list and preview
+      separator_rect = remaining_rc;
+      separator_rect.left = list_rect.right;
+      separator_rect.right = separator_rect.left + separator_size;
+      
+      // Button separator spans full width
+      button_separator_rect.left = rc.left;
+      button_separator_rect.right = rc.right;
+    } else {
+      // Portrait: split horizontally, list on top, preview on bottom
+      list_rect = remaining_rc;
+      const unsigned split = remaining_rc.GetHeight() / 2;
+      preview_rect = list_rect.CutBottomSafe(split);
+      
+      // Add separator between list and preview
+      separator_rect = remaining_rc;
+      separator_rect.top = list_rect.bottom;
+      separator_rect.bottom = separator_rect.top + separator_size;
+      
+      // Button separator spans full width
+      button_separator_rect.left = rc.left;
+      button_separator_rect.right = rc.right;
+    }
+  }
 };
 
 void
@@ -162,8 +315,44 @@ void
 MapItemListWidget::Prepare(ContainerWindow &parent,
                            const PixelRect &rc) noexcept
 {
-  CreateList(parent, dialog_look, rc,
+  CalculateLayout(rc);
+
+  CreateList(parent, dialog_look, list_rect,
              renderer.CalculateLayout(dialog_look));
+
+  // Create button separator (horizontal line at top)
+  WindowStyle button_separator_style;
+  button_separator_style.Hide();
+  button_separator = new HorizontalSeparatorWindow();
+  button_separator->Create(parent, button_separator_rect, button_separator_style);
+
+  // Create separator between list and preview
+  WindowStyle separator_style;
+  separator_style.Hide();
+  separator = new SeparatorWindow();
+  separator->Create(parent, separator_rect, separator_style);
+
+  // Create preview window
+  WindowStyle preview_style;
+  preview_style.Hide();
+
+  preview_window = new MapItemPreviewWindow(
+    map_look.waypoint, map_look.airspace,
+    map_look.trail, map_look.task, map_look.aircraft,
+    map_look.topography, map_look.overlay, traffic_look);
+  preview_window->Create(parent, preview_rect, preview_style);
+
+  if (data_components != nullptr) {
+    preview_window->SetTerrain(data_components->terrain.get());
+    preview_window->SetTopograpgy(data_components->topography.get());
+    preview_window->SetAirspaces(data_components->airspaces.get());
+    preview_window->SetWaypoints(data_components->waypoints.get());
+  }
+
+  if (backend_components != nullptr) {
+    preview_window->SetTask(backend_components->protected_task_manager.get());
+    preview_window->SetGlideComputer(backend_components->glide_computer.get());
+  }
 
   GetList().SetLength(list.size());
   UpdateButtons();
@@ -175,6 +364,8 @@ MapItemListWidget::Prepare(ContainerWindow &parent,
       break;
     }
   }
+
+  UpdatePreview();
 }
 
 void
@@ -209,11 +400,45 @@ MapItemListWidget::OnGotoClicked()
   unsigned index = GetCursorIndex();
   auto const &item = *list[index];
 
-  assert(item.type == MapItem::Type::WAYPOINT);
-
-  auto waypoint = ((const WaypointMapItem &)item).waypoint;
-  backend_components->protected_task_manager->DoGoto(std::move(waypoint));
-  cancel_button->Click();
+  if (item.type == MapItem::Type::WAYPOINT) {
+    auto waypoint = ((const WaypointMapItem &)item).waypoint;
+    backend_components->protected_task_manager->DoGoto(std::move(waypoint));
+    cancel_button->Click();
+  } else if (item.type == MapItem::Type::LOCATION) {
+    const LocationMapItem &loc_item = (const LocationMapItem &)item;
+    const MoreData &basic = CommonInterface::Basic();
+    
+    if (!loc_item.vector.IsValid() || !basic.location_available)
+      return;
+    
+    // Calculate target location
+    const GeoPoint target = loc_item.vector.EndPoint(basic.location);
+    
+    // Reuse the goto task logic similar to TakeoffAutotask
+    if (data_components != nullptr && data_components->waypoints != nullptr) {
+      ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
+      
+      // Try to find a nearby landable waypoint first
+      auto wp = data_components->waypoints->GetNearestLandable(target, 5000);
+      
+      if (!wp) {
+        // Create a temporary waypoint at target location (similar to GenerateTakeoffPoint)
+        double terrain_alt = 0;
+        if (data_components->terrain != nullptr) {
+          terrain_alt = data_components->terrain->GetTerrainHeight(target)
+            .ToDouble(0);
+        }
+        
+        Waypoint temp_wp = data_components->waypoints->GenerateTakeoffPoint(target, terrain_alt);
+        temp_wp.name = _T("Goto");
+        wp = std::make_unique<Waypoint>(std::move(temp_wp));
+      }
+      
+      if (task_manager->DoGoto(std::move(wp))) {
+        cancel_button->Click();
+      }
+    }
+  }
 }
 
 inline void
