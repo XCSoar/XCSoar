@@ -20,6 +20,9 @@
 #include "Message.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+#include "Protection.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #include <cassert>
 
@@ -136,6 +139,15 @@ void
 AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 {
   goto_button = dialog.AddButton(_("Goto"), [this](){
+    // Remove old temporary goto waypoint when selecting a regular waypoint
+    if (data_components != nullptr && data_components->waypoints != nullptr) {
+      auto &way_points = *data_components->waypoints;
+      {
+        ScopeSuspendAllThreads suspend;
+        way_points.EraseTempGoto();
+      }
+    }
+
     backend_components->protected_task_manager->DoGoto(GetSelectedWaypointPtr());
     cancel_button->Click();
   });

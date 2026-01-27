@@ -25,6 +25,7 @@ Version 7.44 - not yet released
   - openair: parse station names for airspaces
   - add support for downloadable checklists from repository
 * ui
+  - enable goto and waypoint details for location map items (clicking on empty map locations)
   - streamlined, and optimized icons
   - apply dark mode settings to thermal assistant
   - apply dark mode to large flarm radar

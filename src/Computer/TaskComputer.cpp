@@ -5,6 +5,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -147,7 +148,8 @@ TaskComputer::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
 
 void 
 TaskComputer::ProcessAutoTask([[maybe_unused]] const NMEAInfo &basic,
-                              const DerivedInfo &calculated)
+                              const DerivedInfo &calculated,
+                              Waypoints &waypoints)
 {
   if (!calculated.flight.flying) {
     /* not flying (yet) */
@@ -164,9 +166,15 @@ TaskComputer::ProcessAutoTask([[maybe_unused]] const NMEAInfo &basic,
   if (calculated.altitude_agl_valid && calculated.altitude_agl > 500)
     return;
 
+  // Use terrain altitude if available, otherwise fall back to GPS/baro altitude
+  // from takeoff detection (better than 0 when terrain data is unavailable)
+  const double elevation = calculated.terrain_valid
+    ? calculated.terrain_altitude
+    : calculated.flight.takeoff_altitude;
+
   ProtectedTaskManager::ExclusiveLease _task(task);
-  _task->TakeoffAutotask(calculated.flight.takeoff_location,
-                         calculated.terrain_altitude);
+  _task->TakeoffAutotask(calculated.flight.takeoff_location, elevation,
+                         waypoints);
 }
 
 void 

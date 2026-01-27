@@ -23,6 +23,13 @@
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "Geo/GeoVector.hpp"
+#include "Terrain/RasterTerrain.hpp"
+#include "Protection.hpp"
+
+#include <limits>
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -32,7 +39,6 @@ static bool
 HasDetails(const MapItem &item)
 {
   switch (item.type) {
-  case MapItem::Type::LOCATION:
   case MapItem::Type::ARRIVAL_ALTITUDE:
   case MapItem::Type::SELF:
   case MapItem::Type::THERMAL:
@@ -41,6 +47,7 @@ HasDetails(const MapItem &item)
 #endif
     return false;
 
+  case MapItem::Type::LOCATION:
   case MapItem::Type::AIRSPACE:
   case MapItem::Type::WAYPOINT:
   case MapItem::Type::TASK_OZ:
@@ -119,8 +126,10 @@ public:
   }
 
   static bool CanGotoItem(const MapItem &item) noexcept {
-    return backend_components->protected_task_manager &&
-      item.type == MapItem::Type::WAYPOINT;
+    return backend_components != nullptr &&
+           backend_components->protected_task_manager &&
+           (item.type == MapItem::Type::WAYPOINT ||
+            item.type == MapItem::Type::LOCATION);
   }
 
   bool CanAckItem(unsigned index) const noexcept {
@@ -168,12 +177,31 @@ MapItemListWidget::Prepare(ContainerWindow &parent,
   GetList().SetLength(list.size());
   UpdateButtons();
 
+  // First, try to find a waypoint to preselect
+  unsigned selected_index = list.size();
   for (unsigned i = 0; i < list.size(); ++i) {
     const MapItem &item = *list[i];
-    if (HasDetails(item) || CanGotoItem(item)) {
-      GetList().SetCursorIndex(i);
+    if (item.type == MapItem::Type::WAYPOINT) {
+      selected_index = i;
       break;
     }
+  }
+
+  // If no waypoint found, fall back to first item with details or can goto
+  if (selected_index >= list.size()) {
+    for (unsigned i = 0; i < list.size(); ++i) {
+      const MapItem &item = *list[i];
+      if (HasDetails(item) || CanGotoItem(item)) {
+        selected_index = i;
+        break;
+      }
+    }
+  }
+
+  // Set cursor if we found something to select
+  if (selected_index < list.size()) {
+    GetList().SetCursorIndex(selected_index);
+    UpdateButtons();
   }
 }
 
@@ -206,12 +234,55 @@ MapItemListWidget::OnGotoClicked()
   if (!backend_components->protected_task_manager)
     return;
 
+  if (data_components == nullptr || data_components->waypoints == nullptr)
+    return;
+
   unsigned index = GetCursorIndex();
   auto const &item = *list[index];
 
-  assert(item.type == MapItem::Type::WAYPOINT);
+  assert(item.type == MapItem::Type::WAYPOINT ||
+         item.type == MapItem::Type::LOCATION);
 
-  auto waypoint = ((const WaypointMapItem &)item).waypoint;
+  WaypointPtr waypoint;
+
+  if (item.type == MapItem::Type::LOCATION) {
+    const auto &loc_item = static_cast<const LocationMapItem &>(item);
+
+    // Use the stored location directly
+    const GeoPoint &location = loc_item.location;
+
+    // Get terrain elevation (prefer stored elevation, fall back to terrain lookup)
+    double elevation = std::numeric_limits<double>::quiet_NaN();
+    if (loc_item.HasElevation()) {
+      elevation = loc_item.elevation;
+    } else if (data_components->terrain != nullptr) {
+      const auto h = data_components->terrain->GetTerrainHeight(location);
+      if (!h.IsSpecial()) {
+        elevation = h.GetValue();
+      }
+    }
+
+    // Create temporary goto waypoint (elevation may be NaN if unavailable)
+    auto &way_points = *data_components->waypoints;
+    const TCHAR *goto_name = _("(goto)");
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.AddTempPoint(location, elevation, goto_name);
+      waypoint = way_points.LookupName(goto_name);
+    }
+    if (!waypoint)
+      return;
+  } else {
+    waypoint = static_cast<const WaypointMapItem &>(item).waypoint;
+
+    // Remove old temporary goto waypoint when selecting a regular waypoint
+    auto &way_points = *data_components->waypoints;
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.EraseTempGoto();
+    }
+  }
+
   backend_components->protected_task_manager->DoGoto(std::move(waypoint));
   cancel_button->Click();
 }
@@ -252,7 +323,6 @@ ShowMapItemDialog(const MapItem &item,
                   ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (item.type) {
-  case MapItem::Type::LOCATION:
   case MapItem::Type::ARRIVAL_ALTITUDE:
   case MapItem::Type::SELF:
   case MapItem::Type::THERMAL:
@@ -265,6 +335,37 @@ ShowMapItemDialog(const MapItem &item,
     dlgAirspaceDetails(((const AirspaceMapItem &)item).airspace,
                        airspace_warnings);
     break;
+  case MapItem::Type::LOCATION: {
+    const auto &loc_item = static_cast<const LocationMapItem &>(item);
+
+    // Use the stored location directly
+    const GeoPoint &location = loc_item.location;
+
+    // Get terrain elevation (prefer stored elevation, fall back to terrain lookup)
+    double elevation = std::numeric_limits<double>::quiet_NaN();
+    if (loc_item.HasElevation()) {
+      elevation = loc_item.elevation;
+    } else if (data_components != nullptr &&
+               data_components->terrain != nullptr) {
+      const auto h = data_components->terrain->GetTerrainHeight(location);
+      if (!h.IsSpecial()) {
+        elevation = h.GetValue();
+      }
+    }
+
+    // Create temporary goto waypoint for display (elevation may be NaN if unavailable)
+    const TCHAR *goto_name = _("(goto)");
+    {
+      ScopeSuspendAllThreads suspend;
+      waypoints->AddTempPoint(location, elevation, goto_name);
+    }
+
+    // Lookup the waypoint we just created and show details
+    auto wp = waypoints->LookupName(goto_name);
+    if (wp)
+      dlgWaypointDetailsShowModal(waypoints, wp, true, true);
+    break;
+  }
   case MapItem::Type::WAYPOINT:
     dlgWaypointDetailsShowModal(waypoints,
                                 ((const WaypointMapItem &)item).waypoint,
@@ -303,23 +404,14 @@ ShowMapItemListDialog(const MapItemList &list,
                       Waypoints *waypoints,
                       ProtectedAirspaceWarningManager *airspace_warnings)
 {
-  switch (list.size()) {
-  case 0:
+  if (list.empty())
     /* no map items in the list */
     return;
 
-  case 1:
-    /* only one map item, show it */
-    ShowMapItemDialog(*list[0], waypoints, airspace_warnings);
-    break;
-
-  default:
-    /* more than one map item: show a list */
-
-    int i = ShowMapItemListDialog(list, dialog_look, look,
-                                  traffic_look, final_glide_look, settings);
-    assert(i >= -1 && i < (int)list.size());
-    if (i >= 0)
-      ShowMapItemDialog(*list[i], waypoints, airspace_warnings);
-  }
+  /* always show list dialog when there are items, so user can choose action */
+  int i = ShowMapItemListDialog(list, dialog_look, look,
+                                traffic_look, final_glide_look, settings);
+  assert(i >= -1 && i < (int)list.size());
+  if (i >= 0)
+    ShowMapItemDialog(*list[i], waypoints, airspace_warnings);
 }
