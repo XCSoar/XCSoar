@@ -18,6 +18,18 @@ LookupWeatherTerrainStyle(const char *name)
   while (i->name != nullptr && !StringIsEqual(i->name, name))
     ++i;
 
+  if(i->name == nullptr) {
+    // If no exact match, try matching the short codes
+    // to the end of the field name
+    if(StringLength(name) >= 3) {
+      const char *short_name =
+        &name[StringLength(name) - 3];
+      i = rasp_colormaps_general;
+      while (i->name != nullptr
+             && !StringIsEqual(i->name, short_name))
+        ++i;
+    }
+  }
   return *i;
 }
 
