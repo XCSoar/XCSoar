@@ -51,8 +51,11 @@ RawBitmap::~RawBitmap() noexcept
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
-                     bool transparent_white) const noexcept
+                     bool transparent_white,
+                     [[maybe_unused]] bool use_source_alpha) const noexcept
 {
+  // Note: GDI doesn't support per-pixel alpha blending easily,
+  // so use_source_alpha is ignored on Windows GDI backend
   HDC source_dc = ::CreateCompatibleDC(dest_canvas);
   ::SelectObject(source_dc, bitmap);
   if (transparent_white)

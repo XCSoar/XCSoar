@@ -35,6 +35,20 @@ class GLTexture;
 #endif
 
 /**
+ * Greyscale, RGB565 and GDI RawColor types store no alpha, so fall back to an
+ * opaque colormap there.
+ */
+constexpr bool
+HaveBitmapSourceAlpha() noexcept
+{
+#if defined(GREYSCALE) || defined(USE_RGB565) || defined(USE_GDI)
+  return false;
+#else
+  return true;
+#endif
+}
+
+/**
  * The RawColor structure encapsulates color information about one
  * point in a #RawBitmap.
  */
@@ -206,7 +220,16 @@ public:
   GLTexture &BindAndGetTexture() const noexcept;
 #endif
 
+  /**
+   * Stretch and position this bitmap to the destination canvas.
+   *
+   * @param use_source_alpha if true, use per-pixel alpha from source for
+   *                         blending; takes precedence over transparent_white
+   * @param transparent_white if true, white pixels are treated as transparent
+   *                         (only effective when not use_source_alpha)
+   */
   void StretchTo(PixelSize src_size,
                  Canvas &dest_canvas, PixelSize dest_size,
-                 bool transparent_white=false) const noexcept;
+                 bool transparent_white=false,
+                 bool use_source_alpha=false) const noexcept;
 };
