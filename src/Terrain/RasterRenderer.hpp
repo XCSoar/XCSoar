@@ -19,6 +19,7 @@ class RawBitmap;
 struct RawColor;
 struct ColorRamp;
 struct ColumnContourPending;
+struct ColorRampAlpha;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -75,6 +76,12 @@ class RasterRenderer {
   double pixel_size = 0;
 
   RawColor *color_table = nullptr;
+
+  /**
+   * True if the current color table was prepared with alpha channel support.
+   * This affects how the image should be drawn (with or without alpha blending).
+   */
+  bool has_alpha = false;
 
 public:
   RasterRenderer() noexcept;
@@ -149,9 +156,20 @@ public:
    * Fills the color_table array with precomputed colors for 256 height and
    * 64 illumination levels. This is used to speed up the rendering by
    * preventing the same color calculations over and over again.
+   *
+   * This version uses RGB colors (no alpha channel).
    */
   void PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
                          unsigned height_scale, int interp_levels) noexcept;
+
+  /**
+   * Fills the color_table array with precomputed colors including alpha
+   * channel for 256 height and 64 illumination levels.
+   *
+   * This version uses RGBA colors (with alpha channel for transparency).
+   */
+  void PrepareColorTableAlpha(const ColorRampAlpha *color_ramp, bool do_water,
+                              unsigned height_scale, int interp_levels) noexcept;
 
   /**
    * Scan the map and fill the height matrix.
