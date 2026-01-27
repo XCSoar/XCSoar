@@ -14,6 +14,12 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.Window;
+import android.view.WindowInsets;
+import android.view.WindowManager;
+import android.view.WindowMetrics;
+import android.graphics.Insets;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.net.Uri;
@@ -129,8 +135,36 @@ class NativeView extends SurfaceView
                                        int width, int height) {
     if (thread == null || !thread.isAlive())
       start();
-    else
-      resizedNative(width, height);
+    else {
+      Context context = getContext();
+      if (!(context instanceof Activity))
+        return;
+      
+      Activity activity = (Activity)context;
+      Window window = activity.getWindow();
+      View decorView = window.getDecorView();
+      
+      boolean is_fullscreen = false;
+      if (activity instanceof org.xcsoar.XCSoar) {
+        is_fullscreen = ((org.xcsoar.XCSoar)activity).wantFullScreen();
+      } else {
+        int systemUiVisibility = decorView.getSystemUiVisibility();
+        is_fullscreen = (systemUiVisibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0 ||
+                       (systemUiVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0;
+      }
+      
+      if (is_fullscreen) {
+        WindowUtil.enterFullScreenMode(window);
+      } else {
+        WindowUtil.leaveFullScreenMode(window, 0);
+      }
+      
+      int display_width = width;
+      int display_height = height;
+      int inset_left = 0, inset_top = 0, inset_right = 0, inset_bottom = 0;
+      
+      resizedNative(display_width, display_height, inset_left, inset_top, inset_right, inset_bottom);
+    }
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
@@ -141,12 +175,37 @@ class NativeView extends SurfaceView
     final Context context = getContext();
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
+    android.util.Log.d(TAG, "runNative: getSurfaceFrame() size=" + r.width() + "x" + r.height());
     DisplayMetrics metrics = new DisplayMetrics();
     ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
     try {
       try {
-        context.startService(new Intent(context, MyService.class));
+        /* On Android 14+ (API 34+), FOREGROUND_SERVICE_LOCATION is a runtime permission
+           that must be granted before starting a foreground service with type="location" */
+        boolean serviceStarted = false;
+        if (Build.VERSION.SDK_INT >= 34) {
+          final String fgsPermission = "android.permission.FOREGROUND_SERVICE_LOCATION";
+          if (context.checkSelfPermission(fgsPermission) ==
+              android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            context.startService(new Intent(context, MyService.class));
+            serviceStarted = true;
+          } else {
+            /* Permission not granted - request it. Service will be started after permission is granted.
+               For now, try to start it anyway - it will fail gracefully with SecurityException if needed. */
+            permissionManager.requestPermission(fgsPermission, null);
+            /* Try to start service anyway - on some devices it might work, or will fail with SecurityException */
+            try {
+              context.startService(new Intent(context, MyService.class));
+              serviceStarted = true;
+            } catch (SecurityException e) {
+              /* Expected on Android 14+ without permission - service will be started after permission is granted */
+            }
+          }
+        } else {
+          context.startService(new Intent(context, MyService.class));
+          serviceStarted = true;
+        }
       } catch (IllegalStateException e) {
         /* we get crash reports on this all the time, but I don't
            know why - Android docs say "the application is in a
@@ -154,6 +213,9 @@ class NativeView extends SurfaceView
            in the foreground in a state when services are allowed)",
            but we're about to be resumed, which means we're in
            foreground... */
+      } catch (SecurityException e) {
+        /* On Android 14+ without FOREGROUND_SERVICE_LOCATION permission, starting the service throws SecurityException.
+           This is expected - the service will be started after permission is granted via the permission request above. */
       }
 
       try {
@@ -179,6 +241,7 @@ class NativeView extends SurfaceView
   static native void onConfigurationChangedNative(boolean nightMode);
 
   static native String onReceiveXCTrackTask(String data);
+  static native void showCloudEnableDialog();
 
   protected native void runNative(Context context,
                                   PermissionManager permissionManager,
@@ -186,7 +249,7 @@ class NativeView extends SurfaceView
                                   int xdpi, int ydpi,
                                   String product);
 
-  protected native void resizedNative(int width, int height);
+  protected native void resizedNative(int width, int height, int inset_left, int inset_top, int inset_right, int inset_bottom);
 
   protected native void surfaceDestroyedNative();
 
@@ -217,13 +280,12 @@ class NativeView extends SurfaceView
    * Loads the specified bitmap resource.
    */
   private Bitmap loadResourceBitmap(String name) {
-    /* find the resource */
-    int resourceId = resources.getIdentifier(name, "drawable", "org.xcsoar");
+    /* find the resource using the actual package name */
+    String packageName = getContext().getPackageName();
+    int resourceId = resources.getIdentifier(name, "drawable", packageName);
     if (resourceId == 0) {
-      resourceId = resources.getIdentifier(name, "drawable",
-                                           "org.xcsoar.testing");
-      if (resourceId == 0)
-        return null;
+      Log.e(TAG, "Resource not found: drawable/" + name + " in package " + packageName);
+      return null;
     }
 
     /* load the Bitmap from the resource */
@@ -289,7 +351,7 @@ class NativeView extends SurfaceView
 
       /* this URI is going to be handled by FileProvider */
       Uri uri = new Uri.Builder().scheme("content")
-        .authority("org.xcsoar")
+        .authority(getContext().getPackageName())
         .encodedPath("/waypoints/" + id + "/" + Uri.encode(filename))
         .build();
 
@@ -322,20 +384,27 @@ class NativeView extends SurfaceView
       offsetY += p.getY();
     }
 
-    final int x = (int)(event.getX() - offsetX);
-    final int y = (int)(event.getY() - offsetY);
+    float x = event.getX() - offsetX;
+    float y = event.getY() - offsetY;
+    
+    /* Since we set margins on the SurfaceView in non-fullscreen mode, the SurfaceView
+       is already positioned in the safe area. The MotionEvent coordinates are already
+       relative to the SurfaceView, so we don't need to subtract insets. */
+    
+    final int finalX = (int)x;
+    final int finalY = (int)y;
 
     switch (event.getActionMasked()) {
     case MotionEvent.ACTION_DOWN:
-      EventBridge.onMouseDown(x, y);
+      EventBridge.onMouseDown(finalX, finalY);
       break;
 
     case MotionEvent.ACTION_UP:
-      EventBridge.onMouseUp(x, y);
+      EventBridge.onMouseUp(finalX, finalY);
       break;
 
     case MotionEvent.ACTION_MOVE:
-      EventBridge.onMouseMove(x, y);
+      EventBridge.onMouseMove(finalX, finalY);
       break;
 
     case MotionEvent.ACTION_POINTER_DOWN:

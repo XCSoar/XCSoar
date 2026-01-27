@@ -5,6 +5,7 @@ package org.xcsoar;
 
 import java.io.Closeable;
 import android.os.Handler;
+import android.os.Looper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.app.AlertDialog;
@@ -45,7 +46,7 @@ final class TextEntryDialog
 
     /* the rest of the dialog setup needs to be done in Context's
        thread (XCSoar's Android UI thread) */
-    handler = new Handler(context.getMainLooper());
+    handler = new Handler(Looper.getMainLooper());
     handler.post(this);
   }
 
