@@ -406,6 +406,8 @@ public:
    */
   void Reopen(OperationEnvironment &env);
 
+  void SlowReopen();
+
   /**
    * Call this periodically to auto-reopen a failed device after a
    * certain delay.
