@@ -132,6 +132,8 @@ class ListControl final : public PaintWindow {
   ListItemRenderer *item_renderer = nullptr;
   ListCursorHandler *cursor_handler = nullptr;
 
+  bool activate_on_first_click = false;
+
   KineticManager kinetic;
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
@@ -166,6 +168,10 @@ public:
     assert(cursor_handler == nullptr);
 
     cursor_handler = _cursor_handler;
+  }
+
+  void SetActivateOnFirstClick(bool value) noexcept {
+    activate_on_first_click = value;
   }
 
   /**

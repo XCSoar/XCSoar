@@ -25,6 +25,52 @@ CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &_look,
   PaintWindow::Create(parent, rc, style);
 }
 
+void
+DrawCheckBox(Canvas &canvas, const DialogLook &look,
+             const PixelRect &box_rc,
+             bool checked, bool focused, bool pressed,
+             bool enabled) noexcept
+{
+  const auto &cb_look = look.check_box;
+
+  const auto &state_look = enabled
+    ? (pressed
+       ? cb_look.pressed
+       : (focused
+          ? cb_look.focused
+          : cb_look.standard))
+    : cb_look.disabled;
+
+  canvas.Select(state_look.box_brush);
+  canvas.Select(state_look.box_pen);
+  canvas.DrawRectangle(box_rc);
+
+  unsigned box_size = box_rc.right - box_rc.left;
+  if (checked && box_size > 4) {
+    canvas.Select(state_look.check_brush);
+    canvas.SelectNullPen();
+
+    BulkPixelPoint check_mark[] = {
+      {-8, -2},
+      {-3, 6},
+      {7, -9},
+      {8, -5},
+      {-3, 9},
+      {-9, 2},
+    };
+
+    int center_x = (box_rc.left + box_rc.right) / 2;
+    int center_y = (box_rc.top + box_rc.bottom) / 2;
+
+    for (auto &p : check_mark) {
+      p.x = (p.x * (int)box_size) / 24 + center_x;
+      p.y = (p.y * (int)box_size) / 24 + center_y;
+    }
+
+    canvas.DrawPolygon(check_mark, ARRAY_SIZE(check_mark));
+  }
+}
+
 unsigned
 CheckBoxControl::GetMinimumWidth(const DialogLook &look, unsigned height,
                                  tstring::const_pointer caption) noexcept
@@ -176,31 +222,13 @@ CheckBoxControl::OnPaint(Canvas &canvas) noexcept
   const unsigned padding = Layout::GetTextPadding();
   unsigned size = canvas.GetHeight() - 2 * padding;
 
-  canvas.Select(state_look.box_brush);
-  canvas.Select(state_look.box_pen);
-  canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetHeight()}}.WithPadding(padding));
+  PixelRect box_rc;
+  box_rc.left = (int)padding;
+  box_rc.top = (int)padding;
+  box_rc.right = box_rc.left + (int)size;
+  box_rc.bottom = box_rc.top + (int)size;
 
-  if (checked) {
-    canvas.Select(state_look.check_brush);
-    canvas.SelectNullPen();
-
-    BulkPixelPoint check_mark[] = {
-      {-8, -2},
-      {-3, 6},
-      {7, -9},
-      {8, -5},
-      {-3, 9},
-      {-9, 2},
-    };
-
-    unsigned top = canvas.GetHeight() / 2;
-    for (auto &i : check_mark) {
-      i.x = (i.x * (int)size) / 24 + top;
-      i.y = (i.y * (int)size) / 24 + top;
-    }
-
-    canvas.DrawPolygon(check_mark, ARRAY_SIZE(check_mark));
-  }
+  DrawCheckBox(canvas, *look, box_rc, checked, focused, pressed, IsEnabled());
 
   canvas.Select(*cb_look.font);
   canvas.SetTextColor(state_look.text_color);
