@@ -123,6 +123,28 @@ static constexpr ColorRamp rasp_colors_verticalspeed[NUM_COLOR_RAMP_LEVELS] = {
   {9500, {163, 0, 211}},
 };
 
+static constexpr ColorRampAlpha rasp_colors_verticalspeed_alpha[NUM_COLOR_RAMP_LEVELS] = {
+
+  /* Offset 5000 cm/s
+     Multiplyfactor 100
+     Blue to Transparent to Purple */
+
+  { 250, { 74,  85, 213, 255}},
+  {1250, { 89, 137, 255, 255}},
+  {2250, { 24, 160, 255, 255}},
+  {3250, { 55, 196, 250, 200}},
+  {3750, { 13, 217, 248, 128}},
+  {4250, {  0, 239, 243,  80}},
+  {5000, {255, 255, 255,   0}},
+  {5500, {255, 215,   0, 100}},
+  {6000, {255, 165,   0, 180}},
+  {7000, {255,  73,  50, 225}},
+  {7500, {255,  65, 110, 255}},
+  {8500, {250,  51, 204, 255}},
+  {9500, {163,   0, 211, 255}},
+};
+
+
 static constexpr ColorRamp rasp_colors_thermalstrength[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 0
@@ -206,6 +228,27 @@ static constexpr ColorRamp rasp_colors_rain[NUM_COLOR_RAMP_LEVELS] = {
   {900, {245, 54, 250}},
   {1200, {146, 4, 150}},
   {2000, {57, 15, 249}},
+};
+
+static constexpr ColorRampAlpha rasp_colors_rain_alpha[NUM_COLOR_RAMP_LEVELS] = {
+
+  /* Offset 0
+     Multiplyfactor 10
+     Transparent to blue to Green to Orange to Red to Purple to Blue */
+
+  { 19, {103, 255, 254,   0}},
+  { 20, {103, 255, 254,  64}},
+  { 50, { 88, 204, 252, 110}},
+  {100, { 83, 204,  47, 160}},
+  {150, {127, 255,  62, 200}},
+  {200, {193, 255, 108}},
+  {300, {254, 254,  65}},
+  {500, {238, 131,  35}},
+  {700, {199,   0,  13}},
+  {800, {155,   0,   8}},
+  {900, {245,  54, 250}},
+  {1200,{146,   4, 150}},
+  {2000,{ 57,  15, 249}},
 };
 
 static constexpr ColorRamp rasp_colors_pfd_ls4[NUM_COLOR_RAMP_LEVELS] = {
@@ -361,6 +404,29 @@ static constexpr ColorRamp rasp_colors_cloudfraction_low[NUM_COLOR_RAMP_LEVELS] 
   {1000, {0, 68, 27}},
 };
 
+static constexpr ColorRampAlpha rasp_colors_cloudfraction_low_alpha[NUM_COLOR_RAMP_LEVELS] = {
+
+  /* Cloud fraction low level (fraction scale)
+     Offset 0
+     Multiplyfactor 1000
+     White to Green */
+
+  { -2, {255, 255, 255,   0}},
+  { 90, {255, 255, 255,  40}},
+  { 91, {234, 246, 232,  75}},
+  {182, {213, 238, 209, 150}},
+  {273, {191, 229, 186, 200}},
+  {364, {166, 218, 163, 220}},
+  {455, {134, 202, 140}},
+  {545, {102, 187, 118}},
+  {636, { 69, 171,  96}},
+  {727, { 49, 147,  78}},
+  {818, { 33, 121,  61}},
+  {909, { 16,  94,  44}},
+  {1000,{  0,  68,  27}},
+};
+
+
 static constexpr ColorRamp rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction mid level (fraction scale)
@@ -381,6 +447,28 @@ static constexpr ColorRamp rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] 
   {818, {37, 98, 155}},
   {909, {22, 73, 131}},
   {1000, {8, 48, 107}},
+};
+
+static constexpr ColorRampAlpha rasp_colors_cloudfraction_mid_alpha[NUM_COLOR_RAMP_LEVELS] = {
+
+  /* Cloud fraction mid level (fraction scale)
+     Offset 0
+     Multiplyfactor 1000
+     Transparent to White to Blue */
+
+  {  0, {255, 255, 255,   0}},
+  { 90, {255, 255, 255, 100}},
+  {200, {233, 242, 248, 150}},
+  {420, {211, 230, 242, 200}},
+  {480, {189, 217, 235, 255}},
+  {550, {163, 202, 227}},
+  {615, {132, 184, 218}},
+  {685, {101, 165, 208}},
+  {736, { 70, 147, 199}},
+  {777, { 51, 123, 178}},
+  {818, { 37,  98, 155}},
+  {909, { 22,  73, 131}},
+  {1000,{  8,  48, 107}},
 };
 
 static constexpr ColorRamp rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS] = {
@@ -405,12 +493,34 @@ static constexpr ColorRamp rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS]
   {1000, {103, 0, 13}},
 };
 
+static constexpr ColorRampAlpha rasp_colors_cloudfraction_high_alpha[NUM_COLOR_RAMP_LEVELS] = {
+
+  /* Cloud fraction high level (fraction scale)
+     Offset -3
+     Multiplyfactor 1000
+     Transparent to White to Red */
+
+  {  0, {255, 255, 255,   0}},
+  { 90, {254, 230, 222,  64}},
+  { 91, {254, 230, 222,  64}},
+  {182, {253, 205, 188, 125}},
+  {273, {253, 180, 155, 175}},
+  {364, {250, 153, 125, 200}},
+  {455, {245, 123,  99, 225}},
+  {545, {240,  93,  74}},
+  {636, {235,  63,  49}},
+  {727, {208,  44,  36}},
+  {818, {173,  29,  29}},
+  {909, {138,  15,  21}},
+  {1000,{103,   0,  13}},
+};
+
 static constexpr ColorRamp rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction, all levels combined (fraction scale)
      Offset 0
      Multiplyfactor 10
-     White to Red */
+     White to Grey */
 
   {0, {255, 255, 255}},
   {83, {241, 241, 241}},
@@ -424,6 +534,28 @@ static constexpr ColorRamp rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_
   {750, {132, 132, 132}},
   {833, {118, 118, 118}},
   {917, {105, 105, 105}},
+  {1000, {91, 91, 91}},
+};
+
+static constexpr ColorRampAlpha rasp_colors_cloudfraction_accumulated_alpha[NUM_COLOR_RAMP_LEVELS] = {
+
+  /* Cloud fraction, all levels combined (fraction scale)
+     Offset 0
+     Multiplyfactor 10
+     Transparent to White to Grey*/
+
+  {  0, {255, 255, 255,   0}},
+  { 83, {255, 255, 255,  64}},
+  {167, {255, 255, 255, 100}},
+  {250, {255, 255, 255, 125}},
+  {333, {255, 255, 255, 150}},
+  {417, {255, 255, 255, 175}},
+  {500, {173, 173, 173, 200}},
+  {583, {159, 159, 159, 255}},
+  {657, {146, 146, 146}},
+  {720, {132, 132, 132}},
+  {800, {118, 118, 118}},
+  {883, {105, 105, 105}},
   {1000, {91, 91, 91}},
 };
 
@@ -459,16 +591,16 @@ const RaspStyle rasp_styles[] = {
   // Thermalmap.info Colorschemes and Rasp file names
   { "ThermalStrength", rasp_colors_thermalstrength, nullptr, 4, false },
   { "ThermalHeight", rasp_colors_thermalheight, nullptr, 4, false },
-  { "Convergence", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Wave_1000m", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Wave_2000m", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Wave_3000m", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Wave_4000m", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Wave_5000m", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Wave_6000m", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Wave_7000m", rasp_colors_verticalspeed, nullptr, 5, false },
-  { "Temperature2m", rasp_colors_temperature, nullptr, 4, false },
-  { "Rain", rasp_colors_rain, nullptr, 3, false },
+  { "Convergence",     rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Wave_1000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Wave_2000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Wave_3000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Wave_4000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Wave_5000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Wave_6000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Wave_7000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
+  { "Temperature2m",   rasp_colors_temperature, nullptr, 4, false },
+  { "Rain",            rasp_colors_rain,          rasp_colors_rain_alpha, 3, false },
   { "PFD_Day_DuoDiscus", rasp_colors_pfd_ls4, nullptr, 3, false },
   { "PFD_Day_LS4", rasp_colors_pfd_ls4, nullptr, 3, false },
   { "PFD_Day_K8", rasp_colors_pfd_ls4, nullptr, 3, false },
@@ -494,10 +626,14 @@ const RaspStyle rasp_styles[] = {
   { "XCSpeed_K8", rasp_colors_xcspeed_k8, nullptr, 3, false },
   { "SurfaceHeatFlux", rasp_colors_surface_heat_flux, nullptr, 6, false },
   { "SeaLevelPressure", rasp_colors_sealevel_pressure, nullptr, 7, false },
-  { "Cloudfraction_Low", rasp_colors_cloudfraction_low, nullptr, 4, false },
-  { "Cloudfraction_Mid", rasp_colors_cloudfraction_mid, nullptr, 4, false },
-  { "Cloudfraction_High", rasp_colors_cloudfraction_high, nullptr, 4, false },
-  { "Cloudfraction_Accumulated", rasp_colors_cloudfraction_accumulated, nullptr, 4, false },
+  { "Cloudfraction_Low", rasp_colors_cloudfraction_low, 
+                             rasp_colors_cloudfraction_low_alpha, 4, false },
+  { "Cloudfraction_Mid", rasp_colors_cloudfraction_mid, 
+                             rasp_colors_cloudfraction_mid_alpha, 4, false },
+  { "Cloudfraction_High", rasp_colors_cloudfraction_high, 
+                              rasp_colors_cloudfraction_high_alpha, 4, false },
+  { "Cloudfraction_Accumulated", rasp_colors_cloudfraction_accumulated, 
+                                     rasp_colors_cloudfraction_accumulated_alpha, 4, false },
 
   { nullptr, rasp_colors[0], nullptr, 2, false }
 };
@@ -506,19 +642,19 @@ const RaspStyle rasp_colormaps_general[] = {
   // Thermalmap.info color scheme codes
   { "vth", rasp_colors_thermalstrength, nullptr, 4, false },
   { "hth", rasp_colors_thermalheight, nullptr, 4, false },
-  { "vve", rasp_colors_verticalspeed, nullptr, 5, false },
+  { "vve", rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
   { "tce", rasp_colors_temperature, nullptr, 4, false },
-  { "prr", rasp_colors_rain, nullptr, 3, false },
+  { "prr", rasp_colors_rain, rasp_colors_rain_alpha, 3, false },
   { "pfd", rasp_colors_pfd_ls4, nullptr, 3, false },
   { "vho", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
   { "vxc", rasp_colors_xcspeed_ls4, nullptr, 3, false },
   { "vx8", rasp_colors_xcspeed_k8, nullptr, 3, false },
   { "hfl", rasp_colors_surface_heat_flux, nullptr, 6, false },
   { "pre", rasp_colors_sealevel_pressure, nullptr, 7, false },
-  { "fcl", rasp_colors_cloudfraction_low, nullptr, 4, false },
-  { "fcm", rasp_colors_cloudfraction_mid, nullptr, 4, false },
-  { "fch", rasp_colors_cloudfraction_high, nullptr, 4, false },
-  { "fct", rasp_colors_cloudfraction_accumulated, nullptr, 4, false },
+  { "fcl", rasp_colors_cloudfraction_low, rasp_colors_cloudfraction_low_alpha, 4, false },
+  { "fcm", rasp_colors_cloudfraction_mid, rasp_colors_cloudfraction_mid_alpha, 4, false },
+  { "fch", rasp_colors_cloudfraction_high, rasp_colors_cloudfraction_high_alpha, 4, false },
+  { "fct", rasp_colors_cloudfraction_accumulated, rasp_colors_cloudfraction_accumulated_alpha, 4, false },
 
   { nullptr, rasp_colors[0], nullptr, 2, false }
 };
