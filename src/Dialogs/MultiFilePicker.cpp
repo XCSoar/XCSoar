@@ -9,6 +9,8 @@
 #include "WidgetDialog.hpp"
 #include "net/http/Features.hpp"
 
+#include <functional>
+
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "DownloadFilePicker.hpp"
 #include "net/http/DownloadManager.hpp"
@@ -49,11 +51,27 @@ MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
   }
 #endif
 
-  dialog.AddButton(_("Select none"), [file_widget]() {
-    file_widget->ClearSelection();
+  // Create button first; centralise caption logic in `UpdateButtons`.
+  Button *select_button = dialog.AddButton(_T(""), [](){});
+
+  std::function<void()> UpdateButtons = [file_widget, select_button]() {
+    select_button->SetCaption(file_widget->GetSelectedPaths().empty()
+                               ? _("Select all") : _("Select none"));
+  };
+
+  select_button->SetCallback([file_widget, UpdateButtons]() mutable {
+    if (file_widget->GetSelectedPaths().empty())
+      file_widget->SetAllSelected(true);
+    else
+      file_widget->ClearSelection();
+    UpdateButtons();
   });
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+
+  // Ensure initial caption is correct and register callback.
+  UpdateButtons();
+  file_widget->SetSelectionChangedCallback(UpdateButtons);
 
   dialog.FinishPreliminary(std::move(list_widget));
   int result = dialog.ShowModal();
