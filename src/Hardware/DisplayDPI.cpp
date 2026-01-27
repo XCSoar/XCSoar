@@ -133,6 +133,9 @@ Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi
   return display.GetDPI();
 #elif defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
   {
+    /* Physical DPI from pixel size and physical size (mm). On Wayland
+       size comes from wl_output mode, size_mm from geometry
+       physical_width/height (millimeters). */
     const auto size = display.GetSize();
     const auto size_mm = display.GetSizeMM();
     if (size.width > 0 && size.height > 0 &&
@@ -142,6 +145,16 @@ Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi
         MMToDPI(size.height, size_mm.height),
       };
     }
+#if defined(USE_X11)
+    /* X11 fallback: many setups omit physical size (mm); try Xft.dpi
+       from the X resource database (e.g. ~/.Xresources, xrdb). */
+    {
+      const auto &x11_display = static_cast<const X11::Display &>(display);
+      const unsigned xft_dpi = x11_display.GetXftDPI();
+      if (xft_dpi >= 48 && xft_dpi <= 480)
+        return {xft_dpi, xft_dpi};
+    }
+#endif
   }
   /* Fall back to default DPI (96) if size information not available */
   return {96, 96};
@@ -149,4 +162,27 @@ Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi
   const auto dpi = ::GetDPI();
   return {dpi, dpi};
 #endif
+}
+
+unsigned
+Display::GetContentScale([[maybe_unused]] const UI::Display &display) noexcept
+{
+#if defined(USE_X11)
+  const auto size_mm = display.GetSizeMM();
+  if (size_mm.width > 0 && size_mm.height > 0)
+    return 1;
+  const auto &x11_display = static_cast<const X11::Display &>(display);
+  const unsigned xft_dpi = x11_display.GetXftDPI();
+  if (xft_dpi >= 48 && xft_dpi <= 480) {
+    const unsigned scale = xft_dpi / 96;
+    return scale >= 1 ? scale : 1;
+  }
+#endif
+  return 1;
+}
+
+unsigned
+Hardware::GetContentScale(const UI::Display &display) noexcept
+{
+  return Display::GetContentScale(display);
 }
