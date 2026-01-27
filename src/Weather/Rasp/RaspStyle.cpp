@@ -5,8 +5,10 @@
 #include "ui/canvas/Ramp.hpp"
 #include "Terrain/RasterRenderer.hpp"
 
+// Classic RASP Blipmap color schemes
+
 static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
-  { // Blue to red       // vertical speed
+  { // Blue to red       // vertical speed (cm/s scale)
     {   0, { 0, 0, 255 }}, // -200
     { 100, { 0, 195, 255 }}, // -100
     { 200, { 52, 192, 11 }}, // 0
@@ -36,7 +38,7 @@ static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
     {7000, { 0xFF, 0x00, 0x00 }},
     {8000, { 0xFF, 0x00, 0x00 }}
   },
-  {
+  {  // Blue to Yellow to red,  boundary layer height (m scale)
     {0, { 0xFF, 0xFF, 0xFF }},
     {750, { 0x80, 0x80, 0xFF }},
     {1500, { 0x80, 0xFF, 0xFF }},
@@ -51,7 +53,7 @@ static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
     {9700, { 0xFF, 0x00, 0x00 }},
     {20000, { 0xFF, 0x00, 0x00 }}
   },
-  { // Blue to Gray, 8 steps
+  { // Blue to Gray, 8 steps, cloud cover (percentage scale)
     {   0, { 0, 153, 204 }},
     {  12, { 102, 229, 255 }},
     {  25, { 153, 255, 255 }},
@@ -66,7 +68,7 @@ static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
     {8000, { 0xFF, 0x00, 0x00 }},
     {9000, { 0xFF, 0x00, 0x00 }}
   },
-  { // sfctemp, blue to orange to red
+  { // sfctemp, blue to orange to red (Fahrenheit scale)
     {   0, { 7, 90, 255 }},
     {  30, { 50, 118, 255 }},
     {  70, { 89, 144, 255 }},
@@ -81,7 +83,7 @@ static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
     { 100, { 255, 153, 0 }},
     { 120, { 255, 0, 0 }}
   },
-  { // Blue to white to red       // vertical speed (convergence)
+  { // Blue to white to red       // vertical speed (convergence, cm/s scale)
     {   0, { 7, 90, 255 }},
     { 100, { 50, 118, 255 }},
     { 140, { 89, 144, 255 }},
@@ -103,7 +105,7 @@ static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
 static constexpr ColorRamp rasp_colors_verticalspeed[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 5000 cm/s
-     Multiplyfactor 1000
+     Multiplyfactor 100
      Blue to white to Purple */
 
   {250, {74, 85, 213}},
@@ -165,7 +167,8 @@ static constexpr ColorRamp rasp_colors_thermalheight[NUM_COLOR_RAMP_LEVELS] = {
 
 static constexpr ColorRamp rasp_colors_temperature[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* Offset 50
+  /* Temperature (Celsius Scale)
+     Offset 50
      Multiplyfactor 100
      Blue to Green to Orange to Red */
 
@@ -251,7 +254,7 @@ static constexpr ColorRamp rasp_colors_bl_avg_windspeed[NUM_COLOR_RAMP_LEVELS] =
 
 static constexpr ColorRamp rasp_colors_xcspeed_ls4[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* XCSpeed - LS4,Duo Discus
+  /* XCSpeed - LS4,Duo Discus (km/h scale)
      Offset 0
      Multiplyfactor 1
      Blue to Green to Orange to Red */
@@ -273,7 +276,8 @@ static constexpr ColorRamp rasp_colors_xcspeed_ls4[NUM_COLOR_RAMP_LEVELS] = {
 
 static constexpr ColorRamp rasp_colors_xcspeed_k8[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* Offset 0
+  /* XCSpeed - K8 (km/h scale)
+     Offset 0
      Multiplyfactor 1
      Blue to Green to Orange to Red */
 
@@ -315,7 +319,8 @@ static constexpr ColorRamp rasp_colors_surface_heat_flux[NUM_COLOR_RAMP_LEVELS] 
 
 static constexpr ColorRamp rasp_colors_sealevel_pressure[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* Offset 1000
+  /* Sea level pressure (hPa scale)
+     Offset 1000
      Multiplyfactor 20
      Blue to White to Red */
 
@@ -336,7 +341,8 @@ static constexpr ColorRamp rasp_colors_sealevel_pressure[NUM_COLOR_RAMP_LEVELS] 
 
 static constexpr ColorRamp rasp_colors_cloudfraction_low[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* Offset 0
+  /* Cloud fraction low level (fraction scale)
+     Offset 0
      Multiplyfactor 1000
      White to Green */
 
@@ -357,7 +363,8 @@ static constexpr ColorRamp rasp_colors_cloudfraction_low[NUM_COLOR_RAMP_LEVELS] 
 
 static constexpr ColorRamp rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* Offset 0
+  /* Cloud fraction mid level (fraction scale)
+     Offset 0
      Multiplyfactor 1000
      White to Blue */
 
@@ -378,7 +385,8 @@ static constexpr ColorRamp rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] 
 
 static constexpr ColorRamp rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* Offset -3
+  /* Cloud fraction high level (fraction scale)
+     Offset -3
      Multiplyfactor 1000
      White to Red */
 
@@ -399,7 +407,8 @@ static constexpr ColorRamp rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS]
 
 static constexpr ColorRamp rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_LEVELS] = {
 
-  /* Offset 0
+  /* Cloud fraction, all levels combined (fraction scale)
+     Offset 0
      Multiplyfactor 10
      White to Red */
 
@@ -418,6 +427,17 @@ static constexpr ColorRamp rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_
   {1000, {91, 91, 91}},
 };
 
+/* RASP styles
+   List of styles, first Blipmap classic, then thermalmap.info styles
+   List of tuples:
+     * string fieldname,
+     * pointer to color map table
+     * int n = value range level. A value of n means the highest value in
+       the data (and the top end of the used colormap) has to be smaller than
+       256*(2**n)-1 
+     * bool do_water enables "water masking", special handling of 
+       the value 255 (for n=0) as water indicator */
+
 const RaspStyle rasp_styles[] = {
   { "wstar", rasp_colors[0],
     2, // max range 256*(2**2) = 1024 cm/s = 10 m/s
@@ -432,7 +452,7 @@ const RaspStyle rasp_styles[] = {
   { "sfctemp", rasp_colors[4], 0, false },
   { "hwcrit", rasp_colors[2], 4, false },
   { "wblmaxmin", rasp_colors[5],
-    1, // max range 256*(1**2) = 512 cm/s = 5.0 m/s
+    1, // max range 256*(2**1) = 512 cm/s = 5.0 m/s
     false },
   { "blcwbase", rasp_colors[2], 4, false },
 
