@@ -12,6 +12,11 @@
 #include "Projection/WindowProjection.hpp"
 #include "ui/event/Idle.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#include <optional>
+#endif
+
 #include <algorithm> // for std::clamp()
 #include <cassert>
 #include <cstdint>
@@ -636,6 +641,8 @@ void
 RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
                                   unsigned height_scale, int interp_levels) noexcept
 {
+  has_alpha = false;
+
   if (color_table == nullptr)
     color_table = new RawColor[256 * 128];
 
@@ -666,6 +673,73 @@ RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
   }
 }
 
+/**
+ * Shade the given RGBA color according to the illumination value.
+ * Similar to TerrainShading but preserves alpha channel.
+ */
+static constexpr RawColor
+TerrainShadingAlpha(const int illum, RGBA8Color color) noexcept
+{
+  if (illum == -64) {
+    // brown color mixed in for contours
+    return RawColor(MIX(100, color.Red(), 64),
+                    MIX(70, color.Green(), 64),
+                    MIX(26, color.Blue(), 64),
+                    color.Alpha());
+  } else if (illum < 0) {
+    // shadow to blue
+    int x = std::min(63, -illum);
+    return RawColor(MIX(0, color.Red(), x),
+                    MIX(0, color.Green(), x),
+                    MIX(32, color.Blue(), x),
+                    color.Alpha());
+  } else if (illum > 0) {
+    // highlight to yellow
+    int x = std::min(32, illum / 2);
+    return RawColor(MIX(255, color.Red(), x),
+                    MIX(255, color.Green(), x),
+                    MIX(196, color.Blue(), x),
+                    color.Alpha());
+  } else
+    return RawColor(color.Red(), color.Green(), color.Blue(), color.Alpha());
+}
+
+void
+RasterRenderer::PrepareColorTableAlpha(const ColorRampAlpha *color_ramp,
+                                       bool do_water,
+                                       unsigned height_scale,
+                                       int interp_levels) noexcept
+{
+  has_alpha = true;
+
+  if (color_table == nullptr)
+    color_table = new RawColor[256 * 128];
+
+  for (int i = 0; i < 256; i++) {
+    for (int mag = -64; mag < 64; mag++) {
+      RawColor color;
+
+      if (i == 255) {
+        if (do_water) {
+          // water colours (opaque)
+          color = RawColor(85, 160, 255, 0xff);
+        } else {
+          // fully transparent
+          color = RawColor(255, 255, 255, 0x00);
+        }
+      } else {
+        const RGBA8Color color2 =
+          ColorRampLookupAlpha(i << height_scale, color_ramp,
+                               NUM_COLOR_RAMP_LEVELS, interp_levels);
+
+        color = TerrainShadingAlpha(mag, color2);
+      }
+
+      color_table[i + (mag + 64) * 256] = color;
+    }
+  }
+}
+
 void
 RasterRenderer::ContourStart(const unsigned contour_height_scale) noexcept
 {
@@ -686,11 +760,18 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                      [[maybe_unused]] bool transparent_white) const noexcept
 {
 #ifdef ENABLE_OPENGL
-  if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
+  if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds())) {
+    // Enable alpha blending if the colormap has alpha channel
+    const std::optional<ScopeAlphaBlend> alpha_blend =
+      has_alpha
+      ? std::make_optional<ScopeAlphaBlend>()
+      : std::nullopt;
+
     DrawGeoBitmap(*image,
                   PixelSize{height_matrix.GetSize()},
                   bounds,
                   projection);
+  }
 #else
   image->StretchTo(PixelSize{height_matrix.GetSize()},
                    canvas, projection.GetScreenSize(),

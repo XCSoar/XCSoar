@@ -41,7 +41,6 @@ RaspRenderer::Generate(const WindowProjection &projection,
   const bool do_water = style.do_water;
   const unsigned height_scale = style.height_scale;
   const int interp_levels = 5;
-  const ColorRamp *color_ramp = style.color_ramp;
 
   const RasterMap *map = cache.GetMap();
   if (map == nullptr)
@@ -51,10 +50,29 @@ RaspRenderer::Generate(const WindowProjection &projection,
     /* not visible */
     return false;
 
-  if (color_ramp != last_color_ramp) {
-    raster_renderer.PrepareColorTable(color_ramp, do_water,
-                                      height_scale, interp_levels);
-    last_color_ramp = color_ramp;
+  // Choose between RGB and RGBA colormap based on style and rendering capabilities
+  #ifdef ENABLE_OPENGL
+  const bool use_alpha = style.HasAlpha();
+  #else
+  const bool use_alpha = false;
+  #endif
+
+  if (use_alpha) {
+    const ColorRampAlpha *color_ramp_alpha = style.color_ramp_alpha;
+    if (color_ramp_alpha != last_color_ramp_alpha) {
+      raster_renderer.PrepareColorTableAlpha(color_ramp_alpha, do_water,
+                                             height_scale, interp_levels);
+      last_color_ramp_alpha = color_ramp_alpha;
+      last_color_ramp = nullptr;  // Reset RGB cache
+    }
+  } else {
+    const ColorRamp *color_ramp = style.color_ramp;
+    if (color_ramp != last_color_ramp) {
+      raster_renderer.PrepareColorTable(color_ramp, do_water,
+                                        height_scale, interp_levels);
+      last_color_ramp = color_ramp;
+      last_color_ramp_alpha = nullptr;  // Reset RGBA cache
+    }
   }
 
   raster_renderer.ScanMap(*map, projection);
