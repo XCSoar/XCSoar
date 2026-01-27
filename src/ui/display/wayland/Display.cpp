@@ -32,6 +32,8 @@ OutputGeometry(void *data, struct wl_output *wl_output,
                [[maybe_unused]] const char *model,
                [[maybe_unused]] int32_t transform) noexcept
 {
+  /* physical_width / physical_height are in millimeters (Wayland protocol).
+     Used with mode width/height (pixels) to compute physical DPI. */
   auto *d = static_cast<Display *>(data);
   if (d->output == wl_output && physical_width > 0 && physical_height > 0) {
     d->size_mm = {static_cast<unsigned>(physical_width),
@@ -63,12 +65,11 @@ OutputDone([[maybe_unused]] void *data,
 }
 
 void
-OutputScale([[maybe_unused]] void *data,
-            [[maybe_unused]] struct wl_output *wl_output,
-            [[maybe_unused]] int32_t factor) noexcept
+OutputScale(void *data, struct wl_output *wl_output, int32_t factor) noexcept
 {
-  /* Scale factor is provided by the compositor but we calculate DPI
-     from physical dimensions, so we don't need to track it. */
+  auto *d = static_cast<Display *>(data);
+  if (d->output == wl_output && factor >= 1)
+    d->output_scale = factor;
 }
 
 static constexpr struct wl_output_listener output_listener = {
@@ -204,6 +205,13 @@ Display::GetSizeMM() const noexcept
 {
   InitOutput();
   return size_mm;
+}
+
+int
+Display::GetScale() const noexcept
+{
+  InitOutput();
+  return output_scale;
 }
 
 bool
