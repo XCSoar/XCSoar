@@ -8,6 +8,7 @@
 #include "Terrain/TerrainSettings.hpp"
 #include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "ui/canvas/RawBitmap.hpp"
 #include "util/StringAPI.hxx"
 
 StaticString<96>
@@ -72,12 +73,9 @@ RaspRenderer::Generate(const WindowProjection &projection,
   const ColorRamp *color_ramp = style.color_ramp;
   if (color_ramp != last_color_ramp) {
  
-    // Choose between RGB and RGBA colormap based on style and rendering capabilities
- #ifdef ENABLE_OPENGL
-    const bool use_alpha = style.HasAlpha();
- #else
-    const bool use_alpha = false;
- #endif
+    // Choose between RGB and RGBA colormap based on style and on
+    // whether the rendering backend can blend per-pixel source alpha.
+    const bool use_alpha = style.HasAlpha() && HaveBitmapSourceAlpha();
 
     if (use_alpha)
       raster_renderer.PrepareColorTableAlpha(color_ramp, do_water,
