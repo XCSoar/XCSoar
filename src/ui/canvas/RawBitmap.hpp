@@ -48,6 +48,11 @@ struct RawColor
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
+  /** Constructor with alpha (alpha is ignored on greyscale) */
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B,
+                     [[maybe_unused]] uint8_t A) noexcept
+    :value(R, G, B) {}
+
 #elif defined(USE_RGB565)
 
   RGB565Color value;
@@ -55,27 +60,45 @@ struct RawColor
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
     :value(R, G, B) {}
 
+  /** Constructor with alpha (alpha is ignored on RGB565) */
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B,
+                     [[maybe_unused]] uint8_t A) noexcept
+    :value(R, G, B) {}
+
 #elif defined(ENABLE_OPENGL)
 
   RGB8Color value;
-  uint8_t dummy;
+  uint8_t alpha;
 
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
-    :value(R, G, B), dummy() {}
+    :value(R, G, B), alpha(0xff) {}
+
+  /** Constructor with alpha channel support */
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B, uint8_t A) noexcept
+    :value(R, G, B), alpha(A) {}
 
 #elif defined(USE_MEMORY_CANVAS)
 
   BGR8Color value;
-  uint8_t dummy;
+  uint8_t alpha;
 
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
-    :value(R, G, B), dummy() {}
+    :value(R, G, B), alpha(0xff) {}
+
+  /** Constructor with alpha channel support */
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B, uint8_t A) noexcept
+    :value(R, G, B), alpha(A) {}
 
 #elif defined(USE_GDI)
 
   BGR8Color value;
 
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
+    :value(R, G, B) {}
+
+  /** Constructor with alpha (alpha is ignored on GDI) */
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B,
+                     [[maybe_unused]] uint8_t A) noexcept
     :value(R, G, B) {}
 
 #else

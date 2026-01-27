@@ -51,6 +51,48 @@ public:
   }
 };
 
+/**
+ * Represents a device-independent color class that stores 8 bits for
+ * each channel, ordered RGBA.
+ */
+class RGBA8Color {
+  uint8_t r, g, b, a;
+
+public:
+  RGBA8Color() = default;
+
+  constexpr RGBA8Color(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a = 0xff)
+    :r(_r), g(_g), b(_b), a(_a) {}
+
+  constexpr uint8_t Red() const {
+    return r;
+  }
+
+  constexpr uint8_t Green() const {
+    return g;
+  }
+
+  constexpr uint8_t Blue() const {
+    return b;
+  }
+
+  constexpr uint8_t Alpha() const {
+    return a;
+  }
+
+  explicit constexpr operator RGB8Color() const noexcept {
+    return {r, g, b};
+  }
+
+  constexpr bool operator ==(const RGBA8Color other) const {
+    return r == other.r && g == other.g && b == other.b && a == other.a;
+  }
+
+  constexpr bool operator !=(const RGBA8Color other) const {
+    return !(*this == other);
+  }
+};
+
 static constexpr RGB8Color RGB8_WHITE = RGB8Color(0xff, 0xff, 0xff);
 static constexpr RGB8Color RGB8_BLACK = RGB8Color(0x00, 0x00, 0x00);
 static constexpr RGB8Color RGB8_GRAY = RGB8Color(0x80, 0x80, 0x80);
