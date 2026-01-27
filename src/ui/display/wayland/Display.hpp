@@ -31,6 +31,7 @@ class Display {
   mutable struct wl_output *output = nullptr;
   mutable PixelSize size{0, 0};
   mutable PixelSize size_mm{0, 0};
+  mutable int output_scale = 1;  /* set by wl_output scale event */
   mutable bool output_initialized = false;
 
   mutable struct wl_seat *seat = nullptr;
@@ -61,6 +62,12 @@ public:
    * Returns the display size in mm.
    */
   PixelSize GetSizeMM() const noexcept;
+
+  /**
+   * Returns the wl_output scale factor (1, 2, 3, ...). Used for
+   * wl_surface_set_buffer_scale and buffer sizing on HiDPI.
+   */
+  int GetScale() const noexcept;
 
   /**
    * Returns whether a touch screen is available.
