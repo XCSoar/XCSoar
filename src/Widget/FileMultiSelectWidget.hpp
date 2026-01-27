@@ -60,6 +60,8 @@ public:
                    unsigned i) noexcept override;
   unsigned OnListResized() noexcept override;
 
+  void OnSelectionChanged() noexcept override;
+
 protected:
   unsigned ComputeRowHeight() noexcept;
 
@@ -78,6 +80,7 @@ private:
   bool refreshed_ = false;
   const TCHAR *caption_ = nullptr;
   const TCHAR *help_text_ = nullptr;
+  std::function<void()> selection_changed_callback_;
 
   void LoadFiles() noexcept;
   void ApplySelection(const std::vector<Path> &paths) noexcept;

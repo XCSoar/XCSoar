@@ -135,6 +135,12 @@ FileMultiSelectWidget::ShowHelp() noexcept
 }
 
 void
+FileMultiSelectWidget::SetSelectionChangedCallback(std::function<void()> cb) noexcept
+{
+  selection_changed_callback_ = std::move(cb);
+}
+
+void
 FileMultiSelectWidget::RestoreSelection(const std::vector<Path> &saved_selection,
                                         const std::vector<FileItem> &previous_items,
                                         const std::vector<Path> &current_items) noexcept
@@ -245,4 +251,11 @@ FileMultiSelectWidget::ComputeRowHeight() noexcept
                                                    look.small_font);
   else
     return text_row_renderer_.CalculateLayout(*look.list.font);
+}
+
+void
+FileMultiSelectWidget::OnSelectionChanged() noexcept
+{
+  if (selection_changed_callback_)
+    selection_changed_callback_();
 }
