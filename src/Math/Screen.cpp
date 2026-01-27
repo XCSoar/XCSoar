@@ -79,6 +79,12 @@ PolygonRotateShift(std::span<BulkPixelPoint> poly,
 {
   constexpr int SCALE_SHIFT = 2;
   constexpr int TOTAL_SHIFT = FastIntegerRotation::SHIFT + SCALE_SHIFT;
+  constexpr int SCALE_DIVISOR = 100 >> SCALE_SHIFT;  // 25
+  constexpr int MIN_SCALE = SCALE_DIVISOR;  // Minimum to avoid zero division
+
+  // Validate polygon input: need at least 3 points for a valid polygon
+  if (poly.size() < 3)
+    return;
 
   /*
    * About the scaling...
@@ -91,10 +97,29 @@ PolygonRotateShift(std::span<BulkPixelPoint> poly,
    *    we want to avoid the division operation. Therefore we divide by 25
    *    early but outside the loop, and divide by 2^12 late, inside the
    *    loop using roundshift.
+   *  - Clamp scale to minimum threshold to prevent zero division which
+   *    would cause all points to collapse to origin.
    */
   FastIntegerRotation fr(angle);
-  fr.Scale(scale / (100 >> SCALE_SHIFT));
+  const int clamped_scale = std::max(scale, MIN_SCALE);
+  fr.Scale(clamped_scale / SCALE_DIVISOR);
 
-  for (auto &p : poly)
-    p = roundshift<TOTAL_SHIFT>(fr.RotateRaw(p)) + shift;
+  // Validate transformation by checking first point
+  // If rotation collapsed (cost/sint became zero), all points would be (0,0)
+  // after rotation, which would cause lines from origin. Detect this early.
+  if (!poly.empty()) {
+    const auto test_rotated = fr.RotateRaw(poly[0]);
+    // If a non-zero input point rotated to (0,0), rotation has collapsed
+    if (test_rotated.x == 0 && test_rotated.y == 0 &&
+        (poly[0].x != 0 || poly[0].y != 0)) {
+      // Rotation collapsed - transformation is invalid, skip rendering
+      return;
+    }
+  }
+
+  for (auto &p : poly) {
+    const auto rotated = fr.RotateRaw(p);
+    const auto shifted = roundshift<TOTAL_SHIFT>(rotated) + shift;
+    p = shifted;
+  }
 }
