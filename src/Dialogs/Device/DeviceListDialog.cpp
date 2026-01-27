@@ -568,7 +568,7 @@ DeviceListWidget::ReconnectCurrent()
      DeviceDescriptor::Open() is asynchronous */
   static MessageOperationEnvironment env;
   device.ResetFailureCounter();
-  device.Reopen(env);
+  device.SlowReopen(env);
 }
 
 inline void
