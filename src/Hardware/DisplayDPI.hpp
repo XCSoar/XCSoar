@@ -47,4 +47,25 @@ ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
 UnsignedPoint2D
 GetDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
 
+/**
+ * Returns the content scale factor when the display uses logical scaling
+ * (e.g. Xft.dpi on X11 when physical size is unavailable). Layout and
+ * canvas use logical size = physical size / scale so that pen/font
+ * scaling matches Wayland. Returns 1 when physical size is known or
+ * when not applicable.
+ */
+[[gnu::const]]
+unsigned
+GetContentScale(const UI::Display &display) noexcept;
+
+}
+
+namespace Hardware {
+
+/** Wrapper for Display::GetContentScale usable from code that may
+ * have Display macro-defined (e.g. X11). */
+[[gnu::const]]
+unsigned
+GetContentScale(const UI::Display &display) noexcept;
+
 }
