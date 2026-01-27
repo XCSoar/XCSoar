@@ -17,3 +17,17 @@ RGB8Color
 ColorRampLookup(int h,
                 const ColorRamp* ramp_colors,
                 unsigned numramp, unsigned interp_bits=6);
+
+/**
+ * A color ramp entry with alpha channel support.
+ */
+struct ColorRampAlpha {
+  short h;
+  RGBA8Color color;
+};
+
+[[gnu::pure]]
+RGBA8Color
+ColorRampLookupAlpha(int h,
+                     const ColorRampAlpha* ramp_colors,
+                     unsigned numramp, unsigned interp_bits=6);
