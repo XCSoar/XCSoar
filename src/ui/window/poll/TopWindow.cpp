@@ -11,6 +11,11 @@
 #include "ui/canvas/custom/TopCanvas.hpp"
 #endif
 
+#ifdef USE_X11
+#include "Hardware/DisplayDPI.hpp"
+using Hardware::GetContentScale;
+#endif
+
 namespace UI {
 
 void
@@ -73,10 +78,17 @@ TopWindow::OnEvent(const Event &event)
     return OnMouseWheel(event.point, (int)event.param);
 
 #ifdef USE_X11
-  case Event::RESIZE:
-    if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
-      Resize(screen->GetSize());
+  case Event::RESIZE: {
+    const PixelSize physical(event.point.x, event.point.y);
+    const unsigned scale = GetContentScale(GetDisplay());
+    const PixelSize content =
+      (scale > 1)
+        ? PixelSize(physical.width / scale, physical.height / scale)
+        : physical;
+    screen->CheckResize(physical, content);
+    Resize(content);
     return true;
+  }
 #endif
 
 #if defined(USE_X11) || defined(MESA_KMS)

@@ -37,8 +37,18 @@ public:
   /**
    * Returns the display size in mm.
    */
+  /**
+   * Returns the display size in mm.
+   */
   [[gnu::pure]]
   PixelSize GetSizeMM() const noexcept;
+
+  /**
+   * Returns Xft.dpi from the X resource database when physical size (mm)
+   * is unavailable; 0 otherwise. Used as DPI fallback on X11.
+   */
+  [[gnu::pure]]
+  unsigned GetXftDPI() const noexcept;
 
 #ifdef USE_GLX
   auto *GetFBConfig() const noexcept {
