@@ -5,10 +5,10 @@
 
 #if defined(_WIN32) && defined(USE_GDI)
 
-#include <tchar.h>
 #include <windef.h>
+#include <string_view>
 
-HBITMAP GdiLoadImage(const TCHAR* filename);
+HBITMAP GdiLoadImage(std::string_view filename);
 void GdiStartup();
 void GdiShutdown();
 #endif  // _WIN32 && USE_GDI

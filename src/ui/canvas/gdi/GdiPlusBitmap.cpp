@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GdiPlusBitmap.hpp"
+#include "UTF8Win.hpp"
 
 #if defined(_MSC_VER)
 # include <algorithm>
@@ -33,16 +34,15 @@ GdiShutdown()
 //----------------------------------------------------------------------------
 // can load: BMP, GIF, JPEG, PNG, TIFF, Exif, WMF, and EMF
 HBITMAP
-GdiLoadImage(const TCHAR* filename)
+GdiLoadImage(std::string_view filename)
 {
   HBITMAP result = nullptr;
-#ifdef _UNICODE  // TCHAR has to be WCHAR in GdiPlus
-  Gdiplus::Bitmap bitmap(filename, false);
+  // filename has to be WCHAR* in GdiPlus
+  Gdiplus::Bitmap bitmap(UTF8ToWide(filename).c_str(), false);
   if (bitmap.GetLastStatus() != Gdiplus::Ok)
     return nullptr;
   const Gdiplus::Color color = Gdiplus::Color::White;
   if (bitmap.GetHBITMAP(color, &result) != Gdiplus::Ok)
     return nullptr;
-#endif  // _UNICODE
   return result;
 }
