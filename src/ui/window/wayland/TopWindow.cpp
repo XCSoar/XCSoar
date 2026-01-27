@@ -139,6 +139,14 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
   if (wl_surface == nullptr)
     throw std::runtime_error("Failed to create Wayland surface");
 
+  /* Use buffer scale only when wl_surface has version >= 3 (set_buffer_scale);
+   * otherwise stick to scale 1 for compatibility with older compositors. */
+  const int scale = (wl_proxy_get_version((struct wl_proxy *)wl_surface) >= 3)
+    ? std::max(1, display.GetScale())
+    : 1;
+  if (scale > 1)
+    wl_surface_set_buffer_scale(wl_surface, scale);
+
   if (auto wm_base = event_queue->GetWmBase()) {
     xdg_wm_base_add_listener(wm_base, &wm_base_listener, nullptr);
 
@@ -192,7 +200,9 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
   wl_surface_set_opaque_region(wl_surface, region);
   wl_region_destroy(region);
 
-  native_window = wl_egl_window_create(wl_surface, size.width, size.height);
+  const unsigned buffer_width = size.width * scale;
+  const unsigned buffer_height = size.height * scale;
+  native_window = wl_egl_window_create(wl_surface, buffer_width, buffer_height);
   if (native_window == nullptr)
     throw std::runtime_error("Failed to create Wayland EGL window");
 }
@@ -236,18 +246,36 @@ TopWindow::OnResize(PixelSize new_size) noexcept
   /* Skip initial resize from ContainerWindow::Create if we haven't received
    * the first configure event yet. This prevents the window from being
    * resized to the requested size before the compositor sends actual dimensions. */
-  if (!received_first_configure && 
+  if (!received_first_configure &&
       new_size.width == initial_requested_size.width &&
       new_size.height == initial_requested_size.height) {
     return;
   }
-  
+
+  /* Reject zero size (compositor may send 0x0 when fractional scale changes
+   * before sending the next configure with actual dimensions). */
+  if (new_size.width == 0 || new_size.height == 0)
+    return;
+
+  /* new_size is logical; buffer and viewport use physical (logical * scale) */
+  const int scale = std::max(1, display.GetScale());
+  const auto physical_size =
+    PixelSize(new_size.width * scale, new_size.height * scale);
+
+  /* When fractional scale changes, output scale changes; keep surface
+   * buffer_scale in sync so the compositor interprets our buffer correctly. */
+  if (wl_surface != nullptr &&
+      wl_proxy_get_version((struct wl_proxy *)wl_surface) >= 3) {
+    wl_surface_set_buffer_scale(wl_surface, scale);
+  }
+
   /* Update event queue screen size (required for proper coordinate transformation) */
   event_queue->SetScreenSize(new_size);
 
   if (native_window != nullptr) {
-    /* Update EGL window size */
-    wl_egl_window_resize(native_window, new_size.width, new_size.height, 0, 0);
+    /* Update EGL window size to physical pixels for sharp HiDPI rendering */
+    wl_egl_window_resize(native_window, physical_size.width, physical_size.height,
+                         0, 0);
   }
 
   /* Update opaque region for the new size BEFORE drawing.
@@ -265,9 +293,10 @@ TopWindow::OnResize(PixelSize new_size) noexcept
     }
   }
 
-  /* Check if screen needs to be resized and update OpenGL viewport */
+  /* Check if screen needs to be resized and update OpenGL viewport (physical px,
+     content in logical so projection maps logical -> physical). */
   if (screen != nullptr) {
-    const bool did_resize = screen->CheckResize(new_size);
+    const bool did_resize = screen->CheckResize(physical_size, new_size);
     if (did_resize) {
       /* Screen was resized, trigger redraw */
       Invalidate();
