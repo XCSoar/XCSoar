@@ -27,6 +27,7 @@
 #include "Input/InputQueue.hpp"
 #include "LogFile.hpp"
 #include "Job/Job.hpp"
+#include "system/FileUtil.hpp"
 
 #ifdef ANDROID
 #include "java/Closeable.hxx"
@@ -538,6 +539,17 @@ DeviceDescriptor::Reopen(OperationEnvironment &env)
   assert(!IsBorrowed());
 
   Close();
+  Open(env);
+}
+
+void
+DeviceDescriptor::SlowReopen(OperationEnvironment &env)
+{
+  assert(InMainThread());
+  assert(!IsBorrowed());
+
+  Close();
+  env.Sleep(std::chrono::seconds(5));
   Open(env);
 }
 
@@ -1170,22 +1182,42 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   StaticString<60> text;
+  unsigned resume_row = 0;
+  Path partial_path = MakePartialPath(path);
+
+  
+    try {
+      if (driver->HasPassThrough() && (second_device != nullptr)) {
+        text.Format(_T("%s: %s."), _("Downloading flight log"),
+                    second_driver->display_name);
+        env.SetText(text);
+
+        device->EnablePassThrough(env);
+        return second_device->DownloadFlight(flight, path, env, &resume_row);
+      } else {
+        text.Format(_T("%s: %s."), _("Downloading flight log"),
+                    driver->display_name);
+        env.SetText(text);
+
+        return device->DownloadFlight(flight, path, env, &resume_row);
+      }
+    } catch (OperationCancelled) {
+      // Clean up partial file
+      if (File::Exists(partial_path))
+        File::Delete(partial_path);
+      return false;
+    } catch (...) {
+      // Any failure - log it and return false
+      // Don't call SlowReopen here - we're in worker thread!
+      LogError(std::current_exception(), "DownloadFlight() failed");
+      return false;  // ← Just return false, let main thread handle reopen
+    }
 
 
-  if (driver->HasPassThrough() && (second_device != nullptr)) {
-    text.Format(_T("%s: %s."), _("Downloading flight log"),
-                second_driver->display_name);
-    env.SetText(text);
-
-    device->EnablePassThrough(env);
-    return second_device->DownloadFlight(flight, path, env);
-  } else {
-    text.Format(_T("%s: %s."), _("Downloading flight log"),
-                driver->display_name);
-    env.SetText(text);
-
-    return device->DownloadFlight(flight, path, env);
-  }
+  // Clean up partial file
+  if (File::Exists(partial_path))
+    File::Delete(partial_path);
+  return false;
 }
 
 void

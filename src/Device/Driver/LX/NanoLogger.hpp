@@ -14,5 +14,6 @@ namespace Nano {
                       OperationEnvironment &env);
 
   bool DownloadFlight(Port &port, const RecordedFlightInfo &flight,
-                      Path path, OperationEnvironment &env);
+                      Path path, OperationEnvironment &env,
+                      unsigned *resume_row = nullptr);
 }

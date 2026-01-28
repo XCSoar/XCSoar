@@ -27,6 +27,8 @@
 #include "time/BrokenDate.hpp"
 #include "Interface.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
+#include "system/FileUtil.hpp"
+#include "LogFile.hpp"
 
 
 class DeclareJob {
@@ -165,10 +167,58 @@ static TriStateJobResult
 DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, Path path)
 {
-  TriStateJob<DownloadFlightJob> job(device, flight, path);
-  JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-            _T(""), job, true);
-  return job.GetResult();
+  const unsigned MAX_RETRIES = 2;
+  const auto partial_path = MakePartialPath(path);
+
+  MessageOperationEnvironment env;  // Need an OperationEnvironment
+  
+  for (unsigned retry = 0; retry <= MAX_RETRIES; ++retry) {
+    // Run the download job
+    TriStateJob<DownloadFlightJob> job(device, flight, path);
+    JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+              _T(""), job, true);
+
+    auto result = job.GetResult();
+
+    if (result == TriStateJobResult::SUCCESS) {
+      // Download succeeded - clean up partial file if it exists
+      if (File::Exists(partial_path))
+        File::Delete(partial_path);
+      return result;
+    }
+
+    if (result == TriStateJobResult::CANCELLED) {
+      // User cancelled - don't retry
+      if (File::Exists(partial_path))
+        File::Delete(partial_path);
+      return result;
+    }
+
+    // Download failed - check if we should retry
+    if (retry < MAX_RETRIES) {
+      LogFormat(_T("Download attempt %u failed, reopening device..."), retry + 1);
+
+      // We're in MAIN THREAD now - safe to call SlowReopen!
+      try {
+        device.SlowReopen(env);
+
+        LogFormat(_T("Device reopened, retrying download (attempt %u/%u)"),
+                  retry + 2, MAX_RETRIES + 1);
+        // Loop continues, will retry download with resume
+      } catch (...) {
+        LogError(std::current_exception(), "Device reopen failed");
+        // Break out of retry loop
+        break;
+      }
+    }
+  }
+
+  // All retries exhausted - clean up partial file
+  LogFormat(_T("Download failed after %u attempts"), MAX_RETRIES + 1);
+  if (File::Exists(partial_path))
+    File::Delete(partial_path);
+
+  return TriStateJobResult::ERROR;
 }
 
 static void

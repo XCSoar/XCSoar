@@ -150,7 +150,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 bool
 CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
                              Path path,
-                             OperationEnvironment &env)
+                             OperationEnvironment &env,
+                             [[maybe_unused]] unsigned *resume_row)
 {
   assert(flight.internal.cai302 < 64);
 

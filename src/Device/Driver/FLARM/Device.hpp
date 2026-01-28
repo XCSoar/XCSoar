@@ -304,8 +304,10 @@ public:
    * Downloads a flight from the Flarm into an IGC file
    * @param flight A RecordedFlightInfo instance with internal.flarm set
    * @param path Path to the IGC file to write into
+   * @param resume_row optional pointer to track resume position for retries
    * @return True if received and written successfully, otherwise False
    */
   bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
-                      OperationEnvironment &env) override;
+                      OperationEnvironment &env,
+                      unsigned *resume_row = nullptr) override;
 };

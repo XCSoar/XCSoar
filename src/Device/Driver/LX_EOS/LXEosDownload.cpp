@@ -60,7 +60,8 @@ LXEosDevice::ReadFlightList(RecordedFlightList& flight_list,
 bool
 LXEosDevice::DownloadFlight(const RecordedFlightInfo& flight,
                             Path path,
-                            OperationEnvironment& env)
+                            OperationEnvironment& env,
+                            [[maybe_unused]] unsigned *resume_row)
 {
   FileOutputStream fos(path);
   BufferedOutputStream bos(fos);

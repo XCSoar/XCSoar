@@ -292,3 +292,11 @@ public:
     return Path{*this}.WithSuffix(new_suffix);
   }
 };
+
+/**
+ * Append ".partial" extension to a path.
+ *
+ * Used for temporary files during downloads/transfers.
+ */
+[[gnu::pure]]
+AllocatedPath MakePartialPath(Path path) noexcept;

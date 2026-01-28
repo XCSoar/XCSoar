@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "LogFile.hpp"
+#include <exception>
 #include "NanoLogger.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
@@ -14,12 +16,33 @@
 #include "NMEA/InputLine.hpp"
 #include "util/SpanCast.hxx"
 #include "util/StringCompare.hxx"
+#include "system/FileUtil.hpp"
+#include "util/TextFile.hxx"
+#include "io/FileLineReader.hpp"
 
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
 
 using std::string_view_literals::operator""sv;
+
+static unsigned
+CountLinesInFile(Path path)
+{
+  std::ifstream file(path.c_str());
+  if (!file.is_open())
+    return 1;
+
+  unsigned line_count = 0;
+  std::string line;
+  while (std::getline(file, line)) {
+    line_count++;
+  }
+
+  // Return next line number to download (1-indexed)
+  return line_count + 1;
+}
 
 static void
 RequestLogbookInfo(Port &port, OperationEnvironment &env)
@@ -280,14 +303,16 @@ HandleFlightLine(const char *_line, BufferedOutputStream &os,
 
 static bool
 DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
-                    OperationEnvironment &env)
+                    OperationEnvironment &env, unsigned *resume_row = nullptr)
 {
   PortNMEAReader reader(port, env);
-  unsigned row_count = 0, i = 1;
+  unsigned row_count = 0, i = (resume_row && *resume_row > 0) ? *resume_row : 1;
+  const unsigned FLUSH_INTERVAL = 500;  // Flush to disk every 500 lines
+  unsigned lines_since_last_flush = 0;
 
   while (true) {
-    /* read up to 32 lines at a time */
-    unsigned nrequest = row_count == 0 ? 1 : 32;
+    /* read up to 50 lines at a time */
+    unsigned nrequest = row_count == 0 ? 1 : 50;
     if (row_count > 0) {
       assert(i <= row_count);
       const unsigned remaining = row_count - i + 1;
@@ -298,6 +323,7 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
     const unsigned start = i;
     const unsigned end = start + nrequest;
     unsigned request_retry_count = 0;
+    constexpr unsigned MAX_request_retry_count = 2; // based on testing retrying on this lvl has little to no effect
 
     /* read the requested lines and save to file */
 
@@ -309,11 +335,23 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
         request_retry_count++;
       }
 
-      TimeoutClock timeout(std::chrono::seconds(2));
-      const char *line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
+      TimeoutClock timeout(std::chrono::seconds(i == 1 ? 20 : 2));
+      const char *line = nullptr;
+      try {
+        line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
+      } catch (...) {
+        LogFormat(_T("Communication with logger timed out, tries: %u, line: %u"), request_retry_count, i);
+        LogError(std::current_exception(), "Download failing");
+      }
+
       if (line == nullptr || !HandleFlightLine(line, os, i, row_count)) {
-        if (request_retry_count > 5)
-          return false;
+        if (request_retry_count > MAX_request_retry_count) {
+          /* Update resume point before throwing - but note that buffered data
+             may not be flushed to disk yet, so resume will restart from last flush */
+          if (resume_row)
+            *resume_row = i - lines_since_last_flush;  // Safe resume point
+          throw std::runtime_error("Flight download failed: maximum retries exceeded");
+        }
 
         /* Discard data which might still be in-transit, e.g. buffered
            inside a bluetooth dongle */
@@ -326,12 +364,40 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
           break;
 
         /* No valid reply received (i==start) - request same range again */
+      } else {
+        /* Line was successfully processed and written to buffer */
+        lines_since_last_flush++;
+
+        /* Periodic flush: write buffered data to disk */
+        if (lines_since_last_flush >= FLUSH_INTERVAL) {
+          try {
+            os.Flush();
+            /* Only update resume_row after successful flush to disk */
+            if (resume_row)
+              *resume_row = i;
+            lines_since_last_flush = 0;
+          } catch (...) {
+            /* If flush fails, keep resume_row at previous safe point */
+            LogError(std::current_exception(), "Failed to flush data to disk");
+            throw;
+          }
+        }
       }
     }
 
-    if (i > row_count)
+    if (i > row_count) {
+      /* Download complete - perform final flush */
+      try {
+        os.Flush();
+        if (resume_row)
+          *resume_row = i;
+      } catch (...) {
+        LogError(std::current_exception(), "Failed to flush final data to disk");
+        throw;
+      }
       /* finished successfully */
       return true;
+    }
 
     if (start == 1)
       /* configure the range in the first iteration, now that we know
@@ -344,20 +410,55 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
 
 bool
 Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
-                     Path path, OperationEnvironment &env)
+                     Path path, OperationEnvironment &env,
+                     [[maybe_unused]] unsigned *resume_row)
 {
   port.StopRxThread();
+  port.FullFlush(env, std::chrono::milliseconds(200), std::chrono::seconds(2));
 
-  FileOutputStream fos(path);
+  const auto partial_path = MakePartialPath(path);
+
+  // Check if partial file exists and count lines to determine resume point
+  unsigned calculated_resume_row = 1;
+  if (File::Exists(partial_path)) {
+    try {
+      // Count lines in existing partial file
+      calculated_resume_row = CountLinesInFile(partial_path);
+      if (calculated_resume_row > 1) {
+        LogFormat(_T("Resuming download from line %u"), calculated_resume_row);
+      }
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to count lines in partial file");
+      // If we can't count, delete partial and start fresh
+      File::Delete(partial_path);
+      calculated_resume_row = 1;
+    }
+  }
+
+  // Open file in appropriate mode
+  FileOutputStream fos(partial_path, 
+                      calculated_resume_row > 1 
+                        ? FileOutputStream::Mode::APPEND_OR_CREATE
+                        : FileOutputStream::Mode::CREATE);
   BufferedOutputStream bos(fos);
 
   bool success = DownloadFlightInner(port, flight.internal.lx.nano_filename,
-                                     bos, env);
+                                     bos, env, &calculated_resume_row);
 
   if (success) {
     bos.Flush();
     fos.Commit();
+    File::Rename(partial_path, path);
+    return true;
+  } else {
+    // Flush partial data for resume
+    try {
+      bos.Flush();
+      fos.Commit();
+    } catch (...) {
+      // If we can't save partial data, delete it
+      File::Delete(partial_path);
+    }
+    throw std::runtime_error("Download incomplete");
   }
-
-  return success;
 }

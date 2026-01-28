@@ -337,7 +337,8 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
 
 bool
 FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                            Path path, OperationEnvironment &env)
+                            Path path, OperationEnvironment &env,
+                            [[maybe_unused]] unsigned *resume_row)
 {
   if (!BinaryMode(env))
     return false;

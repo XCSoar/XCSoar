@@ -21,5 +21,6 @@ public:
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;
   bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
-                      OperationEnvironment &env) override;
+                      OperationEnvironment &env,
+                      unsigned *resume_row = nullptr) override;
 };
