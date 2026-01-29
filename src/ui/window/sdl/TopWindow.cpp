@@ -28,6 +28,9 @@
 #include "UtilsSystem.hpp"
 #endif
 
+#include "ui/display/sdl/Display.hpp"
+#include "LogFile.hpp"
+
 namespace UI {
 
 static constexpr Uint32
@@ -73,6 +76,17 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
   window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED, new_size.width,
                               new_size.height, flags);
+  if (window == nullptr) {
+    // If window creation failed, try disabling anti-aliasing and retry
+    const char *first_error = ::SDL_GetError();
+    LogFormat("SDL_CreateWindow failed: %s - retrying without anti-aliasing", first_error);
+    
+    SDL::Display::DisableAntiAliasing();
+    window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
+                                SDL_WINDOWPOS_UNDEFINED, new_size.width,
+                                new_size.height, flags);
+  }
+  
   if (window == nullptr)
     throw FmtRuntimeError("SDL_CreateWindow('{}', {}, {}, {}, {}, {:#x}) has failed: {}",
                           text, SDL_WINDOWPOS_UNDEFINED,
