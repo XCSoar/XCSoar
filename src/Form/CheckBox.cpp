@@ -178,7 +178,12 @@ CheckBoxControl::OnPaint(Canvas &canvas) noexcept
 
   canvas.Select(state_look.box_brush);
   canvas.Select(state_look.box_pen);
-  canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetHeight()}}.WithPadding(padding));
+  PixelRect box_rc;
+  box_rc.left = (int)padding;
+  box_rc.top = (int)padding;
+  box_rc.right = box_rc.left + (int)size;
+  box_rc.bottom = box_rc.top + (int)size;
+  canvas.DrawRectangle(box_rc);
 
   if (checked) {
     canvas.Select(state_look.check_brush);
@@ -193,10 +198,12 @@ CheckBoxControl::OnPaint(Canvas &canvas) noexcept
       {-9, 2},
     };
 
-    unsigned top = canvas.GetHeight() / 2;
-    for (auto &i : check_mark) {
-      i.x = (i.x * (int)size) / 24 + top;
-      i.y = (i.y * (int)size) / 24 + top;
+    int center_x = (box_rc.left + box_rc.right) / 2;
+    int center_y = (box_rc.top + box_rc.bottom) / 2;
+
+    for (auto &p : check_mark) {
+      p.x = (p.x * (int)size) / 24 + center_x;
+      p.y = (p.y * (int)size) / 24 + center_y;
     }
 
     canvas.DrawPolygon(check_mark, ARRAY_SIZE(check_mark));
