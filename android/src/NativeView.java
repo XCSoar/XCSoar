@@ -67,6 +67,19 @@ class NativeView extends SurfaceView
 
   Thread thread;
 
+  /*
+   * Check if running in simulator mode (user chose "simulator" on startup)
+   */
+  private static native boolean isSimulatorNative();
+
+  public static boolean isSimulator() {
+    try {
+      return isSimulatorNative();
+    } catch (UnsatisfiedLinkError e) {
+      return false;
+    }
+  }
+
   public NativeView(Activity context, Handler _quitHandler,
                     Handler _wakeLockHandler,
                     Handler _fullScreenHandler,
