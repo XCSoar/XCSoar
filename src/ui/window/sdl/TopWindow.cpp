@@ -266,7 +266,9 @@ TopWindow::OnResize(PixelSize new_size) noexcept
   ContainerWindow::OnResize(new_size);
 
 #ifdef USE_MEMORY_CANVAS
-  screen->OnResize(new_size);
+  // Request resize instead of doing it immediately
+  // The actual resize will happen in the draw thread (Expose)
+  screen->RequestResize(new_size);
 #endif
 }
 

@@ -166,6 +166,37 @@ TopCanvas::OnResize(PixelSize new_size) noexcept
 #endif
 }
 
+void
+TopCanvas::RequestResize(PixelSize new_size) noexcept
+{
+  // Store size components atomically
+  // Note: We store width/height separately to avoid torn reads
+  pending_width.store(new_size.width, std::memory_order_relaxed);
+  pending_height.store(new_size.height, std::memory_order_relaxed);
+
+  // Set flag last with release semantics to ensure size writes are visible
+  resize_pending.store(true, std::memory_order_release);
+}
+
+bool
+TopCanvas::ProcessPendingResize() noexcept
+{
+  // Check and clear flag atomically with acquire semantics
+  if (!resize_pending.exchange(false, std::memory_order_acquire))
+    return false;
+
+  // Read the size that was written before the flag was set
+  const PixelSize new_size{
+    pending_width.load(std::memory_order_relaxed),
+    pending_height.load(std::memory_order_relaxed)
+  };
+
+  // Perform the actual resize in the draw thread
+  OnResize(new_size);
+
+  return true;
+}
+
 #endif // USE_MEMORY_CANVAS
 
 #ifdef GREYSCALE
@@ -184,14 +215,14 @@ CopyFromGreyscale(
                   ConstImageBuffer<GreyscalePixelTraits> src)
 {
   uint8_t *dest_pixels;
-  int pitch_as_int, dest_with, dest_height;
-  SDL_QueryTexture(dest, nullptr, nullptr, &dest_with, &dest_height);
+  int pitch_as_int, dest_width, dest_height;
+  SDL_QueryTexture(dest, nullptr, nullptr, &dest_width, &dest_height);
   if (SDL_LockTexture(dest, nullptr,
                       reinterpret_cast<void**>(&dest_pixels),
                       &pitch_as_int) != 0)
     return;
 
-  int bytes_per_pixel = pitch_as_int / dest_with;
+  int bytes_per_pixel = pitch_as_int / dest_width;
 
   assert(bytes_per_pixel == 4 || bytes_per_pixel == 2);
 

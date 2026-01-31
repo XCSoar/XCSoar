@@ -146,6 +146,11 @@ TopWindow::Expose() noexcept
   const ScopeLockCPU cpu;
 #endif
 
+#if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)
+  // Process any pending resize BEFORE locking the canvas
+  screen->ProcessPendingResize();
+#endif
+
   if (auto canvas = screen->Lock(); canvas.IsDefined()) {
     OnPaint(canvas);
 
