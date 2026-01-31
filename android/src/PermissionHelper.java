@@ -404,6 +404,8 @@ public class PermissionHelper implements PermissionManager {
     final String html = buildPermissionRationaleHtml(rationale);
 
     final TextView tv  = new TextView(activity);
+    int padding = (int) (16.0 * activity.getResources().getDisplayMetrics().density);
+    tv.setPadding(padding, padding, padding, padding);
     tv.setMovementMethod(LinkMovementMethod.getInstance());
     tv.setText(Html.fromHtml(html));
 
