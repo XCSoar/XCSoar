@@ -71,6 +71,9 @@ LocalPath(const TCHAR *file) noexcept;
 AllocatedPath
 MakeLocalPath(const TCHAR *name);
 
+AllocatedPath
+MakeLocalPath(const Path name);
+
 /**
  * Return the portion of the specified path that is relative to the
  * primary data path.  Returns nullptr on failure (if the path is not

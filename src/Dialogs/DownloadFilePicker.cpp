@@ -25,6 +25,7 @@
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "util/ConvertString.hpp"
+#include "system/FileUtil.hpp"
 
 #include <vector>
 
@@ -298,9 +299,34 @@ DownloadFilePickerWidget::Download()
   assert(current < items.size());
 
   const auto &file = items[current];
-
   try {
-    path = DownloadFile(file.GetURI(), file.GetName());
+    AllocatedPath dest_dir;
+    if (file_type == FileType::RASP) {
+      const Path weather_dir(_T("weather"));
+      MakeLocalPath(weather_dir);
+      dest_dir = AllocatedPath::Build(weather_dir, Path(_T("rasp")));
+    } else if (file_type == FileType::MAP) {
+      dest_dir = AllocatedPath(_T("maps"));
+    }
+
+    const UTF8ToWideConverter file_name_wide(file.GetName());
+    if (!file_name_wide.IsValid())
+      throw std::runtime_error("Invalid download filename");
+
+    const Path file_path(file_name_wide.c_str());
+    AllocatedPath relative_path(file_path);
+    if (dest_dir != nullptr) {
+      const auto dest_path = MakeLocalPath(Path(dest_dir));
+      Directory::Create(dest_path);
+      if (Directory::Exists(dest_path))
+        relative_path = AllocatedPath::Build(Path(dest_dir), file_path);
+    }
+
+    const std::string path_relative = relative_path.ToUTF8();
+    if (path_relative.empty())
+      throw std::runtime_error("Invalid download path");
+
+    path = DownloadFile(file.GetURI(), path_relative.c_str());
     if (path != nullptr)
       dialog.SetModalResult(mrOK);
   } catch (...) {
