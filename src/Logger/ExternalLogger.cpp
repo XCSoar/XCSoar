@@ -294,7 +294,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       case TriStateJobResult::ERROR:
         ShowMessageBox(_("Failed to download flight."),
                        _("Download flight"), MB_OK | MB_ICONERROR);
-        continue;
+        return;
 
       case TriStateJobResult::CANCELLED:
         continue;
@@ -305,7 +305,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       ShowError(_("Failed to download flight."),
                 std::current_exception(),
                 _("Download flight"));
-      continue;
+      return;
     }
 
     /* read the IGC header and build the final IGC file name with it */
