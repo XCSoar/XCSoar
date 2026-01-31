@@ -48,6 +48,7 @@
 #include "java/Closeable.hxx"
 #include "util/Compiler.h"
 #include "org_xcsoar_NativeView.h"
+#include "Simulator.hpp"
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
 #include "net/http/Init.hpp"
@@ -193,6 +194,18 @@ Java_org_xcsoar_NativeView_showCloudEnableDialog([[maybe_unused]] JNIEnv *env,
                                                   [[maybe_unused]] jclass cls)
 {
   CloudEnableDialog();
+}
+
+gcc_visibility_default
+jboolean
+Java_org_xcsoar_NativeView_isSimulatorNative([[maybe_unused]] JNIEnv *env,
+                                             [[maybe_unused]] jclass cls)
+{
+#ifdef SIMULATOR_AVAILABLE
+  return is_simulator() ? JNI_TRUE : JNI_FALSE;
+#else
+  return JNI_FALSE;
+#endif
 }
 
 gcc_visibility_default
