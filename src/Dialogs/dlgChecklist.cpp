@@ -37,6 +37,9 @@ struct ChecklistPage {
 
 using Checklist = std::vector<ChecklistPage>;
 
+/** Maximum checklist pages; must not exceed PagerWidget's child limit (32). */
+static constexpr std::size_t MAX_CHECKLIST_PAGES = 32;
+
 static void
 UpdateCaption(WndForm &form, const Checklist &checklist, std::size_t page)
 {
@@ -84,24 +87,50 @@ try {
   while ((TempString = reader.ReadLine()) != nullptr) {
     const std::string_view line{TempString};
 
-    // Look for start
+    // Look for start of new page
     if (TempString[0] == '[') {
       if (!page.empty()) {
-        c.emplace_back(std::move(page));
+        if (c.size() < MAX_CHECKLIST_PAGES) {
+          c.emplace_back(std::move(page));
+        } else if (!c.empty()) {
+          c.back().text.append(page.title);
+          c.back().text.append(_T("\n"));
+          c.back().text.append(page.text);
+        }
         page = {};
       }
 
-      // extract name
-      page.title.assign(string_converter.Convert(Split(line.substr(1), ']').first));
+      if (c.size() < MAX_CHECKLIST_PAGES) {
+        page.title.assign(string_converter.Convert(Split(line.substr(1), ']').first));
+      } else if (!c.empty()) {
+        // Already at page limit; append this line to last page instead
+        c.back().text.append(string_converter.Convert(line));
+        c.back().text.push_back('\n');
+      }
     } else if (!line.empty() || !page.text.empty()) {
       // append text to details string
-      page.text.append(string_converter.Convert(line));
-      page.text.push_back('\n');
+      if (c.size() < MAX_CHECKLIST_PAGES) {
+        page.text.append(string_converter.Convert(line));
+        page.text.push_back('\n');
+      } else if (!c.empty()) {
+        c.back().text.append(string_converter.Convert(line));
+        c.back().text.push_back('\n');
+      }
     }
   }
 
-  if (!page.empty())
-    c.emplace_back(std::move(page));
+  if (!page.empty()) {
+    if (c.size() < MAX_CHECKLIST_PAGES) {
+      c.emplace_back(std::move(page));
+    } else if (!c.empty()) {
+      // At page limit; append final page content to last page
+      if (!page.title.empty()) {
+        c.back().text.append(page.title);
+        c.back().text.append(_T("\n"));
+      }
+      c.back().text.append(page.text);
+    }
+  }
 
   return c;
 } catch (...) {
