@@ -4,6 +4,7 @@
 #include "List.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
@@ -50,6 +51,8 @@ ListControl::Create(ContainerWindow &parent,
                     unsigned _item_height) noexcept
 {
   item_height = _item_height;
+  const Font *f = look.list.font;
+  last_list_font_height = f ? f->GetHeight() : 0;
   PaintWindow::Create(parent, rc, style);
 }
 
@@ -92,6 +95,10 @@ void
 ListControl::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
+
+  /* Update item height first if font/renderer changed, so the
+     subsequent items_visible/origin logic uses correct height. */
+  UpdateRendererHeight();
 
   items_visible = new_size.height / item_height;
 
@@ -170,6 +177,34 @@ ListControl::DrawItems(Canvas &canvas,
 }
 
 void
+ListControl::UpdateRendererHeight() noexcept
+{
+  unsigned new_height = 0;
+  if (item_renderer != nullptr)
+    new_height = item_renderer->OnListResized();
+
+  if (new_height == 0) {
+    const Font *f = look.list.font;
+    unsigned current_font_h = f ? f->GetHeight() : 0;
+    if (current_font_h != last_list_font_height) {
+      new_height = current_font_h + 2 * Layout::GetTextPadding();
+    } else {
+      new_height = 0;
+    }
+    last_list_font_height = current_font_h;
+  } else {
+    const Font *f = look.list.font;
+    last_list_font_height = f ? f->GetHeight() : 0;
+  }
+
+  if (new_height && new_height != item_height) {
+    item_height = new_height;
+    items_visible = GetSize().height / item_height;
+    ShowOrHideScrollBar();
+  }
+}
+
+void
 ListControl::OnPaint(Canvas &canvas) noexcept
 {
   if (item_renderer != nullptr)
@@ -206,6 +241,8 @@ void
 ListControl::SetItemHeight(unsigned _item_height) noexcept
 {
   item_height = _item_height;
+  const Font *f = look.list.font;
+  last_list_font_height = f ? f->GetHeight() : 0;
   items_visible = GetSize().height / item_height;
 
   ShowOrHideScrollBar();
