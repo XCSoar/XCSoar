@@ -86,6 +86,10 @@ class ListControl final : public PaintWindow {
 
   /** The height of one item on the screen, in pixels. */
   unsigned item_height;
+
+  /** The last known font height, used to detect font changes. */
+  unsigned last_list_font_height = 0;
+
   /** The number of items in the list. */
   unsigned length = 0;
   /** The index of the topmost item currently being displayed. */
@@ -167,6 +171,7 @@ public:
     assert(item_renderer == nullptr);
 
     item_renderer = _item_renderer;
+    UpdateRendererHeight();
   }
 
   void SetCursorHandler(ListCursorHandler *_cursor_handler) noexcept {
@@ -298,6 +303,12 @@ private:
 
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas) noexcept;
+
+  /**
+   * Update the item height based on the renderer's preferred height.
+   * Called when the list is resized or when the renderer is set.
+   */
+  void UpdateRendererHeight() noexcept;
 
   void OnKineticTimer() noexcept;
 

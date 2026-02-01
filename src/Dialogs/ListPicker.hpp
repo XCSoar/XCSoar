@@ -106,6 +106,11 @@ public:
 
   /* virtual methods from class ListControl::Handler */
 
+  unsigned OnListResized() noexcept override
+  {
+    return item_renderer.OnListResized();
+  }
+
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override
   {
