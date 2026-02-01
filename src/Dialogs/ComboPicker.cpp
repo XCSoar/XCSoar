@@ -13,7 +13,7 @@
 
 static const ComboList *ComboListPopup;
 
-class ComboPickerSupport : public TextRowListItemRenderer {
+class ComboPickerSupport final : public TextRowListItemRenderer {
   const ComboList &combo_list;
 
 public:
