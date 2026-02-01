@@ -16,7 +16,7 @@
 static constexpr int mrRemove = 601;
 static constexpr int mrAdd = 600;
 
-class MultiFilePickerSupport : public TextRowListItemRenderer {
+class MultiFilePickerSupport final : public TextRowListItemRenderer {
   std::vector<Path> &active_files;
 
 public:
