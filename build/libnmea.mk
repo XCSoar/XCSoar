@@ -3,6 +3,7 @@ LIBNMEA_SOURCES = \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/NMEA/Gyroscope.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \

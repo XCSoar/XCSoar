@@ -7,6 +7,7 @@
 #include "NMEA/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
+#include "NMEA/Gyroscope.hpp"
 #include "NMEA/Attitude.hpp"
 #include "SwitchState.hpp"
 #include "time/BrokenDateTime.hpp"
@@ -51,6 +52,7 @@ struct NMEAInfo {
   GPSState gps;
 
   AccelerationState acceleration;
+  GyroscopeState gyroscope;
 
   AttitudeState attitude;
 

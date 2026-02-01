@@ -95,6 +95,7 @@ NMEAInfo::Reset() noexcept
 
   gps.Reset();
   acceleration.Reset();
+  gyroscope.Reset();
   attitude.Reset();
 
   location_available.Clear();
@@ -251,6 +252,7 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
   }
 
   acceleration.Complement(add.acceleration);
+  gyroscope.Complement(add.gyroscope);
   attitude.Complement(add.attitude);
 
   if (location_available.Complement(add.location_available)) {
