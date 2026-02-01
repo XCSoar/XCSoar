@@ -24,6 +24,7 @@ IsInternalFile(const TCHAR *str) noexcept
 {
   static const TCHAR *const ifiles[] = {
     _T("xcsoar-checklist.txt"),
+    _T("xcsoar-checklist.xcc"),
     _T("xcsoar-flarm.txt"),
     _T("xcsoar-marks.txt"),
     _T("xcsoar-persist.log"),
@@ -51,7 +52,11 @@ public:
     : datafield(_datafield) {}
 
   void Visit(Path path, Path filename) override {
-    if (!IsInternalFile(filename.c_str()))
+    bool skip = IsInternalFile(filename.c_str());
+    if (skip && datafield.GetFileType() == FileType::CHECKLIST &&
+        StringIsEqual(filename.c_str(), _T("xcsoar-checklist.txt")))
+      skip = false;
+    if (!skip)
       datafield.AddFile(path);
   }
 };
