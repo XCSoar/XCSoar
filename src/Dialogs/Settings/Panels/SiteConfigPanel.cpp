@@ -96,7 +96,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
 
   AddFile(_("Checklist"),
           _("The checklist file containing pre-flight and other checklists."),
-          ProfileKeys::ChecklistFile, _T("*.txt\0"),
+          ProfileKeys::ChecklistFile, _T("*.xcc\0xcsoar-checklist.txt\0"),
           FileType::CHECKLIST);
 }
 
