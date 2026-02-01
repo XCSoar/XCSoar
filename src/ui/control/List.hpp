@@ -18,6 +18,14 @@ class ListItemRenderer {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) noexcept = 0;
+
+  /**
+   * Called when the list is resized or when the renderer is set.
+   * @return the preferred row height, or 0 to use default (font height + padding)
+   */
+  virtual unsigned OnListResized() noexcept {
+    return 0;
+  }
 };
 
 template<typename C>

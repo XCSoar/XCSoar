@@ -7,7 +7,7 @@
 #include "Language/Language.hpp"
 #include "ListPicker.hpp"
 #include "Look/DialogLook.hpp"
-#include "Renderer/TextRowRenderer.hpp"
+#include "Renderer/TextRowListItemRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
@@ -16,9 +16,7 @@
 static constexpr int mrRemove = 601;
 static constexpr int mrAdd = 600;
 
-class MultiFilePickerSupport : public ListItemRenderer {
-
-  TextRowRenderer row_renderer;
+class MultiFilePickerSupport : public TextRowListItemRenderer {
   std::vector<Path> &active_files;
 
 public:
@@ -27,13 +25,8 @@ public:
   {
   }
 
-  unsigned CalculateLayout(const DialogLook &look)
-  {
-    return row_renderer.CalculateLayout(*look.list.font);
-  }
-
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned i) noexcept override
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned i) noexcept override
   {
     if (active_files.empty()) {
       row_renderer.DrawTextRow(canvas, rc, _T(""));
