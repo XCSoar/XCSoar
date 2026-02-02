@@ -21,6 +21,7 @@
 #include "time/FloatDuration.hxx"
 #include "util/tstring.hpp"
 #include "util/StaticFifoBuffer.hxx"
+#include "ui/event/Timer.hpp"
 
 #ifdef HAVE_INTERNAL_GPS
 #include "SensorListener.hpp"
@@ -74,6 +75,11 @@ class DeviceDescriptor final
   DeviceFactory &factory;
 
   UI::Notify job_finished_notify{[this]{ OnJobFinished(); }};
+
+  /**
+   * Timer for delayed device reopening (used by SlowReopen).
+   */
+  UI::Timer reopen_timer{[this]{ OnReopenTimer(); }};
 
   /**
    * This mutex protects modifications of the attribute "device".  If
@@ -406,7 +412,7 @@ public:
   /**
    * @param env a persistent object
    */
-  void SlowReopen(OperationEnvironment &env);
+  void SlowReopen();
 
   /**
    * Call this periodically to auto-reopen a failed device after a
@@ -597,6 +603,8 @@ private:
 
   /* virtual methods from PortLineHandler */
   bool LineReceived(const char *line) noexcept override;
+
+  void OnReopenTimer() noexcept;
 
 #ifdef HAVE_INTERNAL_GPS
   /* methods from SensorListener */
