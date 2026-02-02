@@ -29,6 +29,7 @@
 #include "Input/InputQueue.hpp"
 #include "LogFile.hpp"
 #include "Job/Job.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 
 #ifdef ANDROID
 #include "java/Closeable.hxx"
@@ -543,14 +544,29 @@ DeviceDescriptor::Reopen(OperationEnvironment &env)
 }
 
 void
-DeviceDescriptor::SlowReopen(OperationEnvironment &env)
+DeviceDescriptor::OnReopenTimer() noexcept
+{
+  assert(InMainThread());
+  
+  // This runs after the 5-second delay
+  try {
+    MessageOperationEnvironment env;
+    Open(env);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to reopen device after delay");
+  }
+  reconnecting = false;
+}
+
+void
+DeviceDescriptor::SlowReopen()
 {
   assert(InMainThread());
   assert(!IsBorrowed());
 
   Close();
-  env.Sleep(std::chrono::seconds(5));
-  Open(env);
+  // Schedule the Open() call after 5 seconds instead of blocking
+  reopen_timer.Schedule(std::chrono::seconds(5));
 }
 
 void
