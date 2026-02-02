@@ -177,6 +177,10 @@ Display::GetContentScale([[maybe_unused]] const UI::Display &display) noexcept
     const unsigned scale = xft_dpi / 96;
     return scale >= 1 ? scale : 1;
   }
+#elif defined(USE_WAYLAND)
+  const auto &wayland_display = static_cast<const Wayland::Display &>(display);
+  const int scale = wayland_display.GetScale();
+  return scale >= 1 ? static_cast<unsigned>(scale) : 1;
 #endif
   return 1;
 }
