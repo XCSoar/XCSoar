@@ -80,12 +80,13 @@ static constexpr struct wl_output_listener output_listener = {
 
 void
 RegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
-               const char *interface, [[maybe_unused]] uint32_t version)
+               const char *interface, uint32_t version)
 {
   auto *d = static_cast<Display *>(data);
   if (StringIsEqual(interface, "wl_output") && d->output == nullptr) {
+    const uint32_t output_version = version < 2 ? version : 2;
     d->output = static_cast<wl_output *>(
-      wl_registry_bind(registry, id, &wl_output_interface, 2));
+      wl_registry_bind(registry, id, &wl_output_interface, output_version));
     if (d->output != nullptr)
       wl_output_add_listener(d->output, &output_listener, d);
   }
