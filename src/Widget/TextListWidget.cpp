@@ -15,6 +15,13 @@ TextListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
              row_renderer.CalculateLayout(*look.list.font));
 }
 
+unsigned
+TextListWidget::OnListResized() noexcept
+{
+  const Font *font = UIGlobals::GetDialogLook().list.font;
+  return font ? row_renderer.CalculateLayout(*font) : 0;
+}
+
 void
 TextListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned i) noexcept

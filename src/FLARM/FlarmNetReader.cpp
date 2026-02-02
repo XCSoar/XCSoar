@@ -86,13 +86,22 @@ LoadRecord(FlarmNetRecord &record, const char *line)
   if (strlen(line) < 172)
     return false;
 
-  LoadString(line, 6, record.id);
+  TCHAR id_buf[16];
+  LoadString(line, 6, id_buf, sizeof(id_buf));
+  record.id = FlarmId::Parse(id_buf, nullptr);
+
   LoadString(line + 12, 21, record.pilot);
   LoadString(line + 54, 21, record.airfield);
   LoadString(line + 96, 21, record.plane_type);
   LoadString(line + 138, 7, record.registration);
   LoadString(line + 152, 3, record.callsign);
-  LoadString(line + 158, 7, record.frequency);
+
+  StaticString<LatinBufferSize(8)> freq_text;
+  LoadString(line + 158, 7, freq_text);
+  char freq_ascii[16];
+  char *freq_end = CopyASCII(freq_ascii, sizeof(freq_ascii) - 1, freq_text);
+  *freq_end = '\0';
+  record.frequency = RadioFrequency::Parse(std::string_view(freq_ascii));
 
   // Terminate callsign string on first whitespace
   for (TCHAR *i = record.callsign.buffer(); *i != _T('\0'); ++i)

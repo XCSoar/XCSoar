@@ -124,6 +124,10 @@ Window::SetEnabled(bool enabled) noexcept
          thing */
       root->SetFocus();
   }
+
+  /* Force redraw to update visual appearance - ::EnableWindow() may
+     not trigger a visual update in all cases */
+  ::InvalidateRect(hWnd, nullptr, false);
 }
 
 void

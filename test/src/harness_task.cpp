@@ -283,7 +283,8 @@ bool test_task_manip(TaskManager& task_manager,
   if (task_manager.CheckOrderedTask()) {
     task_manager.Reset();
     task_manager.SetActiveTaskPoint(0);
-    task_manager.Resume();
+    if (!task_manager.Resume())
+      return false;
   } else {
     return false;
   }
@@ -391,7 +392,8 @@ bool test_task_mixed(TaskManager& task_manager,
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.LookupId(2);
@@ -481,7 +483,8 @@ bool test_task_fai(TaskManager& task_manager,
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.LookupId(2);
@@ -541,7 +544,8 @@ bool test_task_aat(TaskManager& task_manager,
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.LookupId(2);
@@ -610,7 +614,8 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.LookupId(2);
@@ -673,7 +678,8 @@ bool test_task_or(TaskManager& task_manager,
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.LookupId(2);
@@ -726,7 +732,8 @@ bool test_task_dash(TaskManager& task_manager,
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.LookupId(3);
@@ -770,7 +777,8 @@ bool test_task_fg(TaskManager& task_manager,
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.LookupId(6);
@@ -837,7 +845,8 @@ bool test_task_random(TaskManager& task_manager,
   }
 
   task_manager.SetActiveTaskPoint(0);
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
 
   for (unsigned i=0; i<num_points; i++) {
     task_report(task_manager, "# adding intermediate\n");
@@ -971,7 +980,8 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     if (IsError(fact.ValidateMATOZs()))
       return false;
   }
-  task_manager.Resume();
+  if (!task_manager.Resume())
+    return false;
   sprintf(tmp, "# SUCCESS CREATING %s task! task_size():%d..\n",
       tskType,
       task_manager.GetOrderedTask().TaskSize());
@@ -1032,5 +1042,4 @@ const char* task_name(int test_num)
     return "unknown";
   }
 }
-
 

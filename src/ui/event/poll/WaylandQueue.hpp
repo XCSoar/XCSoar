@@ -7,7 +7,18 @@
 #include "event/IdleEvent.hxx"
 #include "Math/Point2D.hpp"
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+#include "ui/dim/Size.hpp"
+#endif
+
 #include <cstdint>
+
+struct xkb_context;
+struct xkb_keymap;
+struct xkb_state;
+
+enum class DisplayOrientation : uint8_t;
+struct PixelSize;
 
 struct wl_display;
 struct wl_compositor;
@@ -16,7 +27,12 @@ struct wl_pointer;
 struct wl_keyboard;
 struct wl_shell;
 struct wl_registry;
+struct wl_shm;
+struct wl_surface;
+struct wl_cursor_theme;
+struct wl_cursor;
 struct xdg_wm_base;
+struct zxdg_decoration_manager_v1;
 
 namespace UI {
 
@@ -25,8 +41,8 @@ class EventQueue;
 struct Event;
 
 /**
- * This class opens a connection to the X11 server using Xlib and
- * listens for events.
+ * This class opens a connection to a Wayland compositor and
+ * listens for input events.
  */
 class WaylandEventQueue final {
   EventQueue &queue;
@@ -38,13 +54,28 @@ class WaylandEventQueue final {
   struct wl_keyboard *keyboard = nullptr;
   struct wl_shell *shell = nullptr;
   struct xdg_wm_base *wm_base = nullptr;
+  struct zxdg_decoration_manager_v1 *decoration_manager = nullptr;
+  struct wl_shm *shm = nullptr;
 
   bool has_touchscreen = false;
 
+  /* Cursor support */
+  struct wl_cursor_theme *cursor_theme = nullptr;
+  struct wl_cursor *cursor_pointer = nullptr;
+  struct wl_surface *cursor_surface = nullptr;
+
   IntPoint2D pointer_position = {0, 0};
+
+  struct xkb_context *xkb_context = nullptr;
+  struct xkb_keymap *xkb_keymap = nullptr;
+  struct xkb_state *xkb_state = nullptr;
 
   SocketEvent socket_event;
   IdleEvent flush_event;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  PixelSize physical_screen_size{0, 0};
+#endif
 
 public:
   /**
@@ -52,6 +83,7 @@ public:
    * events
    */
   WaylandEventQueue(UI::Display &display, EventQueue &queue);
+  ~WaylandEventQueue() noexcept;
 
   struct wl_compositor *GetCompositor() const noexcept {
     return compositor;
@@ -65,9 +97,23 @@ public:
     return wm_base;
   }
 
+  struct zxdg_decoration_manager_v1 *GetDecorationManager() const noexcept {
+    return decoration_manager;
+  }
+
+  struct wl_pointer *GetPointer() const noexcept {
+    return pointer;
+  }
+
   bool IsVisible() const noexcept {
     // TODO: implement
     return true;
+  }
+
+  void SetActivated(bool activated) noexcept {
+    // Activation state is tracked via xdg_toplevel configure events
+    // This method is called to update the activation state
+    (void)activated;
   }
 
   bool HasPointer() const noexcept {
@@ -84,6 +130,11 @@ public:
 
   bool Generate(Event &event) noexcept;
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void SetScreenSize(PixelSize new_size) noexcept;
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
+#endif
+
   void RegistryHandler(struct wl_registry *registry, uint32_t id,
                        const char *interface) noexcept;
 
@@ -93,7 +144,16 @@ public:
   void PointerMotion(IntPoint2D new_pointer_position) noexcept;
   void PointerButton(bool pressed) noexcept;
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  PixelPoint GetTransformedPointerPosition() const noexcept;
+#endif
+
   void KeyboardKey(uint32_t key, uint32_t state) noexcept;
+  void KeyboardKeymap(uint32_t format, int32_t fd, uint32_t size) noexcept;
+  void KeyboardModifiers(uint32_t mods_depressed, uint32_t mods_latched,
+                         uint32_t mods_locked, uint32_t group) noexcept;
+
+  void SetCursor(struct wl_pointer *wl_pointer, uint32_t serial) noexcept;
 
 private:
   void OnSocketReady(unsigned events) noexcept;

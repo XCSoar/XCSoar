@@ -3,4 +3,8 @@
 
 #pragma once
 
+#include "net/http/Features.hpp"
+
+#ifdef HAVE_HTTP
 #define HAVE_SKYLINES_TRACKING
+#endif

@@ -9,9 +9,12 @@ ENABLE_MESA_KMS = y
 else ifeq ($(ENABLE_MESA_KMS),y)
 # if Mesa KMS is explicitly enabled, we also need to enable EGL
 EGL ?= y
-else ifneq ($(HAVE_WIN32)$(TARGET_IS_DARWIN)$(TARGET_IS_KOBO),nnn)
+else ifeq ($(TARGET_IS_DARWIN),y)
+# macOS uses SDL with OpenGL/ANGLE (not EGL directly)
+# SDL handles OpenGL context creation and will use ANGLE libraries if available
+EGL = n
+else ifneq ($(HAVE_WIN32)$(TARGET_IS_KOBO),nn)
 # Windows uses GDI
-# macOS and iOS use SDL
 # Kobo uses software renderer on /dev/fb0
 EGL = n
 else ifeq ($(OPENGL),n)

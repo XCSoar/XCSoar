@@ -3,6 +3,8 @@ on:
   workflow_dispatch:
   push:
     paths-ignore:
+      - '.clang-format'
+      - '.cursor/**'
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
@@ -13,13 +15,23 @@ on:
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
+      - 'NEWS.txt'
+      - 'AUTHORS'
+      - 'README.md'
+      - 'COPYING'
+      - 'PRIVACY.md'
+      - '.gitignore'
+      - 'VERSION.txt'
     branches:
       - master
+      - apple-testing
     tags:
       - 'v*'
 
   pull_request:
     paths-ignore:
+      - '.clang-format'
+      - '.cursor/**'
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
@@ -30,6 +42,13 @@ on:
       - '.github/workflows/build-unix.yml'
       - '.github/workflows/build-translation.yml'
       - '.readthedocs.yaml'
+      - 'NEWS.txt'
+      - 'AUTHORS'
+      - 'README.md'
+      - 'COPYING'
+      - 'PRIVACY.md'
+      - '.gitignore'
+      - 'VERSION.txt'
     branches:
       - master
 
@@ -40,7 +59,7 @@ env:
 jobs:
   release:
     name: "Create Release"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     outputs:
@@ -48,7 +67,7 @@ jobs:
       version: ${{ steps.get_version.outputs.VERSION }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: true
 
@@ -99,23 +118,23 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             target: UNIX
             target_bin: xcsoar_${{ needs.release.outputs.version }}_amd64
             target_bin_path: ''
             target_final: xcsoar_
             target_ext: .deb
             target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: KOBO
             target_bin: KoboRoot
             target_bin_path: ''
             target_final: KoboRoot
             target_ext: .tgz
             target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: ANDROID
             target_bin: XCSoar
             target_bin_path: bin
@@ -123,8 +142,8 @@ jobs:
             target_ext: .apk
             target_upload: true
             ndk: r26d
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: ANDROID_BUNDLE
             target_bin: XCSoar
             target_bin_path: bin
@@ -132,44 +151,44 @@ jobs:
             target_ext: .apk
             target_upload: false
             ndk: r26d
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: WIN64
             target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
-            target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: PC
             target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
             target_ext: .exe
             target_upload: true
-            target_container: debian:bookworm-slim
-          - os: macos-14
+            target_container: debian:trixie-slim
+          - os: macos-15
             target: MACOS
             target_bin: XCSoar
-            target_bin_path: bin
+            target_bin_path: ''
             target_final: XCSoar
-            target_ext: ''
-            target_upload: false
+            target_ext: .dmg
+            target_upload: true
             target_container: ''
-          - os: macos-14
+          - os: macos-15
             target: IOS64
-            target_bin: XCSoar
-            target_bin_path: bin
+            target_bin: xcsoar-signed
+            target_bin_path: ''
             target_final: XCSoar
-            target_ext: ''
-            target_upload: false
+            target_ext: .ipa
+            target_upload: true
             target_container: ''
 
     steps:
       - name: Install checkout dependencies
         run: |
-          if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
+          if [ "${{ matrix.os }}" = 'ubuntu-24.04' ]; then
             apt-get update
             apt-get install -y --no-install-recommends git \
             ca-certificates rsync openssh-client
@@ -184,17 +203,82 @@ jobs:
           fi
 
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: true
+
+      - name: Verify Xcode version
+        if: ${{ matrix.target == 'IOS64' }}
+        run: |
+          xcodebuild -version
 
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ${{ matrix.target }}-ccache
 
+      - name: Configure ccache for cross-compilation
+        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        run: |
+          # Configure ccache to ignore compiler path for cross-compilation
+          # This is important because cross-compilers have different paths
+          # but produce the same output, so we want to cache based on content
+          ccache --set-config compiler_check=content
+          ccache --set-config hard_link=false
+
+      - name: "Cache common downloads"
+        uses: actions/cache@v5
+        with:
+          key: downloads-common-${{ runner.os }}-${{ hashFiles('build/libboost.mk') }}
+          restore-keys: |
+            downloads-common-${{ runner.os }}-
+          path: ${{ github.workspace }}/output/download
+
+      - name: "Cache target-specific downloads"
+        uses: actions/cache@v5
+        with:
+          key: downloads-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('build/kobo.mk', 'build/thirdparty.py', 'build/python/build/libs.py') }}
+          restore-keys: |
+            downloads-${{ runner.os }}-${{ matrix.target }}-
+            downloads-${{ runner.os }}-
+            downloads-common-${{ runner.os }}-
+          path: ${{ github.workspace }}/output/download
+
+      - name: "Cache apt packages"
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
+        uses: actions/cache@v5
+        with:
+          key: apt-${{ matrix.target_container }}-${{ hashFiles('ide/provisioning/install-debian-packages.sh') }}
+          restore-keys: |
+            apt-${{ matrix.target_container }}
+            apt
+          path: /var/cache/apt
+
+      - name: "Cache Homebrew packages"
+        if: ${{ startsWith(matrix.os, 'macos-') }}
+        uses: actions/cache@v5
+        with:
+          key: brew-${{ matrix.os }}-${{ hashFiles('ide/provisioning/install-darwin-packages.sh') }}
+          restore-keys: |
+            brew-${{ matrix.os }}
+            brew
+          path: |
+            /opt/homebrew/var/cache
+            /opt/homebrew/var/homebrew/cache
+            /usr/local/var/cache
+            /usr/local/var/homebrew/cache
+            /Users/runner/Library/Caches/Homebrew
+
+      - name: "Cache ANGLE downloads"
+        if: ${{ matrix.target == 'MACOS' }}
+        uses: actions/cache@v5
+        with:
+          key: angle-${{ hashFiles('darwin/fetch-angle-from-chrome.sh') }}
+          restore-keys: angle-
+          path: output/angle-download
+
       - name: "Cache Boost"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
           path: |
@@ -202,9 +286,32 @@ jobs:
             ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
             ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
+      - name: "Cache Android SDK/NDK"
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        uses: actions/cache@v5
+        with:
+          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh', 'build/android.mk', 'build/android_bundle.mk', 'build/targets.mk') }}
+          restore-keys: |
+            android-tools-${{ matrix.ndk }}-
+            android-tools-
+          path: |
+            ~/opt/android-sdk-linux
+            ~/opt/android-ndk-${{ matrix.ndk }}
+            ~/opt/bundletool
+
+      - name: "Cache third-party libraries"
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'KOBO' }}
+        uses: actions/cache@v5
+        with:
+          key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/thirdparty.mk') }}
+          restore-keys: |
+            thirdparty-${{ matrix.target }}-
+          path: |
+            ${{ github.workspace }}/output/${{ matrix.target }}/lib
+
       - name: Install dependencies
         run: |
-          if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
+          if [ ${{ matrix.os }} = 'ubuntu-24.04' ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
             if [ ${{ matrix.target }} = 'UNIX' ]; then
@@ -240,12 +347,13 @@ jobs:
             if [ ${{ matrix.target }} = 'OSX64' ]; then
               ./ide/provisioning/install-darwin-packages.sh OSX64
             fi
-          elif [ ${{ matrix.os }} = 'macos-14' ] ; then
+          elif [ ${{ matrix.os }} = 'macos-14' ] || [ ${{ matrix.os }} = 'macos-15' ] ; then
             ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'MACOS' ]; then
               ./ide/provisioning/install-darwin-packages.sh MACOS
             elif [ ${{ matrix.target }} = 'IOS64' ]; then
-              ./ide/provisioning/install-darwin-packages.sh IOS
+              # Workaround: also install macOS deps so macOS tests can run on iOS CI
+              ./ide/provisioning/install-darwin-packages.sh IOS MACOS
             fi
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
@@ -260,9 +368,83 @@ jobs:
             md5sum ~/.android/signing-key.jks
           fi
 
+      - name: Prepare iOS signing certificate and provisioning profile
+        shell: bash
+        if: ${{ matrix.target == 'IOS64' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        run: |
+          if [ -n "${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}" ] && [ -n "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" ]; then
+            # Decode and import the certificate
+            echo "${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}" | base64 -d > ios-cert.p12
+            
+            # Create temporary keychain
+            security create-keychain -p actions ios-build.keychain
+            security default-keychain -s ios-build.keychain
+            security unlock-keychain -p actions ios-build.keychain
+            security set-keychain-settings -t 3600 -u ios-build.keychain
+            
+            # Import certificate to keychain
+            security import ios-cert.p12 -k ios-build.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign -T /usr/bin/security
+            security set-key-partition-list -S apple-tool:,apple: -s -k actions ios-build.keychain
+            
+            # Clean up certificate file
+            rm ios-cert.p12
+            
+            echo "✅ iOS certificate imported successfully"
+          fi
+          
+          if [ -n "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" ]; then
+            # Decode and install provisioning profile
+            mkdir -p darwin
+            echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" | base64 -d > darwin/xcsoar.mobileprovision
+            echo "✅ iOS provisioning profile installed successfully"
+          fi
+
+      - name: Prepare macOS signing certificate and provisioning profile
+        shell: bash
+        if: ${{ (matrix.target == 'IOS64' || matrix.target == 'MACOS') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        run: |
+          if [ -n "${{ secrets.MACOS_CERTIFICATES_P12_BASE64 }}" ] && [ -n "${{ secrets.MACOS_CERTIFICATE_PASSWORD }}" ]; then
+            # Decode and import the certificate
+            echo "${{ secrets.MACOS_CERTIFICATES_P12_BASE64 }}" | base64 -d > macos-cert.p12
+
+            # Create temporary keychain
+            security create-keychain -p actions macos-build.keychain
+            security default-keychain -s macos-build.keychain
+            security unlock-keychain -p actions macos-build.keychain
+            security set-keychain-settings -t 3600 -u macos-build.keychain
+
+            # Import certificate to keychain
+            security import macos-cert.p12 -k macos-build.keychain \
+              -P "${{ secrets.MACOS_CERTIFICATE_PASSWORD }}" \
+              -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
+            security set-key-partition-list -S apple-tool:,apple: -s -k actions macos-build.keychain
+
+            # Clean up certificate file
+            rm macos-cert.p12
+
+            echo "✅ macOS certificate imported successfully"
+          fi
+
+          if [ -n "${{ secrets.MACOS_PROVISIONING_PROFILE_BASE64 }}" ]; then
+            # Decode and install provisioning profile
+            mkdir -p darwin
+            echo "${{ secrets.MACOS_PROVISIONING_PROFILE_BASE64 }}" | base64 -d > darwin/xcsoar.macos.provisionprofile
+            echo "✅ macOS provisioning profile installed successfully"
+          fi
+
       - name: Compile XCSoar - PR
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
+          if [ ${{ matrix.target }} = "IOS64" ]; then
+            export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+            export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
+          fi
+          if [ ${{ matrix.target }} = "MACOS" ]; then
+            export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export MACOS_APP_BUILD_NUMBER="${{ vars.MACOS_APP_BUILD_NUMBER || github.run_number }}"
+            export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
+          fi
           if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
             if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
             make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
@@ -282,9 +464,9 @@ jobs:
           elif [ ${{ matrix.target }} = "OSX64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
           elif [ ${{ matrix.target }} = "MACOS" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" dmg pkg
           elif [ ${{ matrix.target }} = "IOS64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" ipa
           elif [ ${{ matrix.target }} = "UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
@@ -302,6 +484,16 @@ jobs:
       - name: Compile XCSoar - Release
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
+          if [ ${{ matrix.target }} = "IOS64" ]; then
+            export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+            export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
+          fi
+          if [ ${{ matrix.target }} = "MACOS" ]; then
+            export MACOS_APP_BUNDLE_IDENTIFIER="${{ vars.MACOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export MACOS_APP_BUILD_NUMBER="${{ vars.MACOS_APP_BUILD_NUMBER || github.run_number }}"
+            export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
+          fi
           if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
             if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then BUNDLE=y ; fi
             if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
@@ -320,7 +512,22 @@ jobs:
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "OSX64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0" dmg pkg
+          elif [ ${{ matrix.target }} = "MACOS" ]; then
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 dmg pkg
+          elif [ ${{ matrix.target }} = "IOS64" ]; then
+            # Set iOS app configuration for production release builds
+            export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
+            export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
+            export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
+            if [ -n "${{ vars.IOS_APP_VERSION }}" ]; then
+              export IOS_APP_VERSION="${{ vars.IOS_APP_VERSION }}"
+            fi
+            
+            echo "Building production release version with TESTING=n"
+            
+            # Build the IPA without TESTING (production release)
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=n ipa
           elif [ ${{ matrix.target }} = "UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
@@ -329,14 +536,146 @@ jobs:
             cp *.deb ../
           fi
 
+      - name: Run tests before signing
+        id: tests
+        if: ${{ (matrix.target == 'IOS64' || matrix.target == 'MACOS') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        continue-on-error: true
+        run: |
+          echo "🧪 Running unit tests..."
+          # Run macOS unit tests for Apple builds.
+          gmake TARGET=MACOS check
+
+      - name: Sign iOS IPA
+        id: sign_ios
+        if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        run: |
+          if [ -f "darwin/xcsoar.mobileprovision" ]; then
+            export IOS_CERTIFICATE_NAME="${{ secrets.IOS_CERTIFICATE_NAME || 'Apple Distribution' }}"
+            export IOS_PROFILE_PATH="darwin/xcsoar.mobileprovision"
+            
+            echo "📝 Signing iOS IPA..."
+            bash darwin/sign.sh
+            echo "✅ iOS IPA signed successfully"
+          else
+            echo "⚠️ No provisioning profile found, skipping signing"
+          fi
+
+      - name: Sign macOS package
+        id: sign_macos
+        if: ${{ matrix.target == 'MACOS' && steps.tests.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        env:
+          MACOS_CERTIFICATE_NAME: ${{ secrets.MACOS_CERTIFICATE_NAME }}
+          MACOS_INSTALLER_CERTIFICATE_NAME: ${{ secrets.MACOS_INSTALLER_CERTIFICATE_NAME }}
+          MACOS_PROFILE_PATH: darwin/xcsoar.macos.provisionprofile
+        run: |
+          if [ -z "${{ secrets.MACOS_CERTIFICATES_P12_BASE64 }}" ] || [ -z "${{ secrets.MACOS_CERTIFICATE_PASSWORD }}" ]; then
+            echo "⚠️ macOS signing certificate not configured, skipping signing"
+            exit 0
+          fi
+
+          if [ -f "$MACOS_PROFILE_PATH" ]; then
+            echo "📝 Signing macOS package..."
+            bash darwin/sign-macos.sh
+            echo "✅ macOS package signed successfully"
+          else
+            echo "⚠️ No provisioning profile found, skipping signing"
+          fi
+
+      - name: Upload to iOS TestFlight
+        if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && steps.sign_ios.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
+        run: |
+          IPA_PATH="output/IOS64/xcsoar-signed.ipa"
+          
+          if [ ! -f "$IPA_PATH" ]; then
+            echo "⚠️ Signed IPA not found: $IPA_PATH, skipping upload"
+            exit 0
+          fi
+          
+          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
+            echo "⚠️ TestFlight credentials not configured, skipping upload"
+            exit 0
+          fi
+          
+          echo "📱 Uploading to App Store Connect / TestFlight..."
+          
+          # Use altool to upload (matches build-release.sh)
+          if [ -n "$ASC_PROVIDER" ]; then
+            xcrun altool --upload-app \
+              -f "$IPA_PATH" \
+              -t ios \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD" \
+              --asc-provider "$ASC_PROVIDER"
+          else
+            xcrun altool --upload-app \
+              -f "$IPA_PATH" \
+              -t ios \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD"
+          fi
+          
+          echo "✅ Upload completed successfully"
+
+      - name: Upload to macOS TestFlight
+        if: ${{ matrix.target == 'MACOS' && steps.tests.outcome == 'success' && steps.sign_macos.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
+        run: |
+          PKG_PATH="output/MACOS/XCSoar-signed.pkg"
+
+          if [ ! -f "$PKG_PATH" ]; then
+            echo "⚠️ Signed pkg not found: $PKG_PATH, skipping upload"
+            exit 0
+          fi
+
+          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
+            echo "⚠️ App Store Connect credentials not configured, skipping upload"
+            exit 0
+          fi
+
+          echo "🖥️  Uploading to App Store Connect / TestFlight..."
+
+          if [ -n "$ASC_PROVIDER" ]; then
+            xcrun altool --upload-app \
+              -f "$PKG_PATH" \
+              -t macos \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD" \
+              --asc-provider "$ASC_PROVIDER"
+          else
+            xcrun altool --upload-app \
+              -f "$PKG_PATH" \
+              -t macos \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD"
+          fi
+
+          echo "✅ Upload completed successfully"
+
+      - name: Cleanup iOS keychain
+        if: ${{ always() && matrix.target == 'IOS64' }}
+        run: |
+          security delete-keychain ios-build.keychain || true
+
+      - name: Cleanup macOS keychain
+        if: ${{ always() && matrix.target == 'MACOS' }}
+        run: |
+          security delete-keychain macos-build.keychain || true
+
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
       - name: Upload artifact (Bundle)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
@@ -354,13 +693,24 @@ jobs:
           asset_name: ${{ matrix.target_final }}-${{ matrix.target }}${{ matrix.target_ext }}
           asset_content_type: application/zip
 
+      - name: Choose iOS deploy artifact
+        if: ${{ matrix.target == 'IOS64' }}
+        run: |
+          SIGNED_IPA="output/IOS64/xcsoar-signed.ipa"
+          UNSIGNED_IPA="output/IOS64/xcsoar.ipa"
+          if [ -f "$SIGNED_IPA" ]; then
+            echo "DEPLOY_SOURCE=$SIGNED_IPA" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_SOURCE=$UNSIGNED_IPA" >> $GITHUB_ENV
+          fi
+
       - name: Deploy to Download server - testing
         if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
           ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          SOURCE: ${{ env.DEPLOY_SOURCE || format('output/{0}/{1}/{2}{3}', matrix.target, matrix.target_bin_path, matrix.target_bin, matrix.target_ext) }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
@@ -372,8 +722,11 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
           ARGS: "-rltgoDzvO"
-          SOURCE: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
+          SOURCE: ${{ env.DEPLOY_SOURCE || format('output/{0}/{1}/{2}{3}', matrix.target, matrix.target_bin_path, matrix.target_bin, matrix.target_ext) }}
           REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+
+      - name: Show ccache stats
+        run: ccache --show-stats || true

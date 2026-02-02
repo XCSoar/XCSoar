@@ -32,7 +32,12 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
   ProgressDialog form(parent, dialog_look, caption);
 
   DialogJobThread thread(form, job, form);
-  thread.Start();
+  try {
+    thread.Start();
+  } catch (...) {
+    // Thread failed to start, don't call Join()
+    return false;
+  }
 
   if (cancellable)
     form.AddCancelButton([&thread](){ thread.Cancel(); });

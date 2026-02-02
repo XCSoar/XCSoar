@@ -26,7 +26,7 @@
 #ifdef USE_FB
 #include "Hardware/RotateDisplay.hpp"
 bool
-Display::Rotate(DisplayOrientation orientation)
+Display::Rotate([[maybe_unused]] DisplayOrientation orientation)
 {
   return false;
 }

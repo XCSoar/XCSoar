@@ -1,6 +1,6 @@
-BOOST_URL = https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.bz2
-BOOST_ALTERNATIVE_URL = https://sourceforge.net/projects/boost/files/boost/1.87.0/boost_1_87_0.tar.bz2/download
-BOOST_MD5 = af57be25cb4c4f4b413ed692fe378affb4352ea50fbe294a11ef548f4d527d89
+BOOST_URL = https://archives.boost.io/release/1.90.0/source/boost_1_90_0.tar.bz2
+BOOST_ALTERNATIVE_URL = https://sourceforge.net/projects/boost/files/boost/1.90.0/boost_1_90_0.tar.bz2/download
+BOOST_MD5 = 49551aff3b22cbc5c5a9ed3dbc92f0e23ea50a0f7325b0d198b705e8ee3fc305
 
 BOOST_TARBALL_NAME = $(notdir $(BOOST_URL))
 BOOST_TARBALL = $(DOWNLOAD_DIR)/$(BOOST_TARBALL_NAME)

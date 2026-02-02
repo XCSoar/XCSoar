@@ -2,5 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "Product.hpp"
+#include <atomic>
 
-bool has_cursor_keys;
+std::atomic<bool> has_cursor_keys{false};

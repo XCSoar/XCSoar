@@ -437,6 +437,33 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
             return;
           }
         }
+
+        /* Re-register poll events when they were cleared after running out of
+           data (OnEvent returned false). Otherwise subsequent queued sounds
+           never get callbacks. See GitHub issue #2113. */
+        if (poll_events.empty()) {
+          const int poll_fds_count =
+            snd_pcm_poll_descriptors_count(alsa_handle.get());
+          if (poll_fds_count >= 1) {
+            std::unique_ptr<struct pollfd[]> resume_poll_fds(
+              new struct pollfd[static_cast<unsigned>(poll_fds_count)]);
+            const int ret = snd_pcm_poll_descriptors(
+              alsa_handle.get(), resume_poll_fds.get(),
+              static_cast<unsigned>(poll_fds_count));
+            if (ret >= 0) {
+              const int n_fds = (ret < poll_fds_count) ? ret : poll_fds_count;
+              for (int i = 0; i < n_fds; ++i) {
+                poll_events.emplace_front(event_loop,
+                                         BIND_THIS_METHOD(OnSocketReady),
+                                         SocketDescriptor(resume_poll_fds[i].fd));
+                poll_events.front().Schedule(resume_poll_fds[i].events);
+              }
+            } else {
+              LogFormat("snd_pcm_poll_descriptors(0x%p, ...) failed: %d - %s",
+                        alsa_handle.get(), ret, snd_strerror(ret));
+            }
+          }
+        }
       }
     });
     if (success)
@@ -494,9 +521,15 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   std::unique_ptr<struct pollfd[]> poll_fds(
       new struct pollfd[poll_fds_count]);
-  snd_pcm_poll_descriptors(new_alsa_handle.get(),
-                           poll_fds.get(),
-                           static_cast<unsigned>(poll_fds_count));
+  const int poll_ret = snd_pcm_poll_descriptors(new_alsa_handle.get(),
+                                                poll_fds.get(),
+                                                static_cast<unsigned>(poll_fds_count));
+  if (poll_ret < 0) {
+    LogFormat("snd_pcm_poll_descriptors(0x%p, ...) failed: %d - %s",
+              new_alsa_handle.get(), poll_ret, snd_strerror(poll_ret));
+    return false;
+  }
+  const int n_poll_fds = (poll_ret < poll_fds_count) ? poll_ret : poll_fds_count;
 
   source = &_source;
   size_t n_read = FillPCMBuffer(buffer.get(), static_cast<size_t>(n_available));
@@ -513,8 +546,8 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   alsa_handle = std::move(new_alsa_handle);
 
-  BlockingCall(event_loop, [this, poll_fds_count, &poll_fds](){
-    for (int i = 0; i < poll_fds_count; ++i) {
+  BlockingCall(event_loop, [this, n_poll_fds, &poll_fds](){
+    for (int i = 0; i < n_poll_fds; ++i) {
       poll_events.emplace_front(event_loop, BIND_THIS_METHOD(OnSocketReady),
                                 SocketDescriptor(poll_fds[i].fd));
       poll_events.front().Schedule(poll_fds[i].events);

@@ -67,7 +67,10 @@ Thread::Start()
 void
 Thread::Join() noexcept
 {
-  assert(IsDefined());
+  // Only join if the thread was successfully started
+  if (!IsDefined())
+    return;
+
   assert(!IsInside());
 
 #ifdef HAVE_POSIX
@@ -84,7 +87,10 @@ Thread::Join() noexcept
 bool
 Thread::Join(unsigned timeout_ms) noexcept
 {
-  assert(IsDefined());
+  // Only join if the thread was successfully started
+  if (!IsDefined())
+    return false;
+
   assert(!IsInside());
 
   bool result = ::WaitForSingleObject(handle, timeout_ms) == WAIT_OBJECT_0;

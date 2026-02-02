@@ -7,12 +7,18 @@ FLARM_SOURCES = \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
+	$(SRC)/FLARM/MessagingRecord.cpp \
+	$(SRC)/FLARM/MessagingDatabase.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/FLARM/Computer.cpp \
 	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/FLARM/Glue.cpp \
+    $(SRC)/FLARM/Details.cpp \
+    $(SRC)/FLARM/TrafficDatabases.cpp \
+    $(SRC)/FLARM/NameDatabase.cpp \
+    $(SRC)/FLARM/NameFile.cpp
 
 FLARM_DEPENDS = FMT
 

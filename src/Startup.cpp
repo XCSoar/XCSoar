@@ -165,7 +165,10 @@ AfterStartup()
     backend_components->protected_task_manager->TaskCommit(*defaultTask);
   }
 
-  task_manager->Resume();
+  const bool resumed = task_manager->Resume();
+  // Return value intentionally unused; task will resume if available.
+  (void)resumed;
+
 
   InfoBoxManager::SetDirty();
 
@@ -182,7 +185,7 @@ MainWindow::LoadTerrain() noexcept
 
   if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
       path != nullptr) {
-    LogString("LoadTerrain");
+    LogFormat(_T("Loading terrain: %s"), path.c_str());
     terrain_loader = new AsyncTerrainOverviewLoader();
 
     terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
@@ -429,14 +432,14 @@ Startup(UI::Display &display)
   // Read the topography file(s)
   data_components->topography = std::make_unique<TopographyStore>();
   {
-    LogString("Loading Topography File...");
+    LogFormat(_T("Loading topography"));
     operation.SetText(_("Loading Topography File..."));
     LoadConfiguredTopography(*data_components->topography);
     operation.SetProgressPosition(256);
   }
 
   // Read the waypoint files
-  LogString("ReadWaypoints");
+  LogFormat(_T("Loading waypoints"));
   {
     SubOperationEnvironment sub_env(operation, 256, 512);
     sub_env.SetText(_("Loading Waypoints..."));
@@ -578,11 +581,15 @@ Startup(UI::Display &display)
 
   PageActions::Update();
 
+#ifdef HAVE_HTTP
   net_components = new NetComponents(*asio_thread, *Net::curl,
                                      computer_settings.tracking);
+#endif
+#ifdef HAVE_HTTP
 #ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());
+#endif
 #endif
 
 #ifdef HAVE_HTTP
@@ -610,6 +617,9 @@ Shutdown()
   MainWindow *const main_window = CommonInterface::main_window;
   auto &live_blackboard = CommonInterface::GetLiveBlackboard();
 
+  // Turn off all displays first to prevent UI operations from blocking
+  global_running = false;
+
   // Show progress dialog
   operation.SetText(_("Shutdown, please wait..."));
 
@@ -619,9 +629,6 @@ Shutdown()
   main_window->BeginShutdown();
 
   Lua::StopAllBackground();
-
-  // Turn off all displays
-  global_running = false;
 
   // Stop logger and save igc file
   if (backend_components != nullptr && backend_components->igc_logger != nullptr) {
@@ -644,6 +651,7 @@ Shutdown()
   }
 
   SaveFlarmColors();
+  SaveFlarmMessaging();
 
   // Save settings to profile
   operation.SetText(_("Shutdown, saving profile..."));
@@ -677,12 +685,12 @@ Shutdown()
     // Wait for the calculations thread to finish
     LogString("Waiting for calculation thread");
 
-    if (backend_components->merge_thread) {
+    if (backend_components->merge_thread && backend_components->merge_thread->IsDefined()) {
       backend_components->merge_thread->Join();
       backend_components->merge_thread.reset();
     }
 
-    if (backend_components->calculation_thread) {
+    if (backend_components->calculation_thread && backend_components->calculation_thread->IsDefined()) {
       backend_components->calculation_thread->Join();
       backend_components->calculation_thread.reset();
     }
@@ -692,7 +700,7 @@ Shutdown()
 #ifndef ENABLE_OPENGL
   LogString("Waiting for draw thread");
 
-  if (draw_thread != nullptr) {
+  if (draw_thread != nullptr && draw_thread->IsDefined()) {
     draw_thread->Join();
     delete draw_thread;
     draw_thread = nullptr;
@@ -747,8 +755,10 @@ Shutdown()
   noaa_store = nullptr;
 #endif
 
+#ifdef HAVE_HTTP
   delete net_components;
   net_components = nullptr;
+#endif
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Deinitialise();

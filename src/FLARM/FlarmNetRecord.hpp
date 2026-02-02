@@ -4,8 +4,9 @@
 #pragma once
 
 #include "util/StaticString.hxx"
-
-class FlarmId;
+#include "RadioFrequency.hpp"
+#include "Id.hpp"
+#include <tchar.h>
 
 static constexpr std::size_t
 LatinBufferSize(std::size_t size) noexcept
@@ -25,8 +26,8 @@ LatinBufferSize(std::size_t size) noexcept
  * FlarmNet.org file entry
  */
 struct FlarmNetRecord {
-  /**< FLARM id 6 bytes */
-  StaticString<LatinBufferSize(7)> id;
+  /**< FLARM id */
+  FlarmId id;
 
   /**< Name 15 bytes */
   StaticString<LatinBufferSize(22)> pilot;
@@ -43,9 +44,15 @@ struct FlarmNetRecord {
   /**< Callsign 3 bytes */
   StaticString<LatinBufferSize(4)> callsign;
 
-  /**< Radio frequency 6 bytes */
-  StaticString<LatinBufferSize(8)> frequency;
+  /**< Radio frequency value (parsed) */
+  RadioFrequency frequency = RadioFrequency::Null();
 
-  [[gnu::pure]]
-  FlarmId GetId() const noexcept;
+  /** 
+   * Format a TCHAR value; returns nullptr if empty.
+   * @param buffer Present for interface compatibility with other Format
+   *        overloads, but unused in this specialization
+   * @return Formatted string pointer; must not be ignored 
+   */
+  [[nodiscard]] const TCHAR *Format([[maybe_unused]] StaticString<256> &buffer,
+                                     const TCHAR *value) const noexcept;
 };

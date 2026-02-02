@@ -36,7 +36,6 @@ TaskStatusPanel::OnModified(DataField &df) noexcept
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
     auto mc = Units::ToSysVSpeed(dff.GetValue());
     ActionInterface::SetManualMacCready(mc);
-    Refresh();
   }
 }
 
@@ -165,4 +164,26 @@ TaskStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
               _("Efficiency of cruise. 100 indicates perfect MacCready performance; greater than 100 indicates better than MacCready performance is achieved through flying in streets. Less than 100 is appropriate if you fly considerably off-track. This value estimates your cruise efficiency according to the current flight history with the set MC value. Calculation begins after task is started."),
               _T("%.0f %%"),
               0);
+}
+
+void
+TaskStatusPanel::Show(const PixelRect &rc) noexcept
+{
+  Refresh();
+  CommonInterface::GetLiveBlackboard().AddListener(rate_limiter);
+  StatusPanel::Show(rc);
+}
+
+void
+TaskStatusPanel::Hide() noexcept
+{
+  StatusPanel::Hide();
+  CommonInterface::GetLiveBlackboard().RemoveListener(rate_limiter);
+  rate_limiter.Cancel();
+}
+
+void
+TaskStatusPanel::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic, [[maybe_unused]] const DerivedInfo &calculated)
+{
+  Refresh();
 }

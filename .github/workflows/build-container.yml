@@ -14,7 +14,7 @@ jobs:
       REGISTRY: ghcr.io
       IMAGENAME: xcsoar-build
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           submodules: true
       - name: Login to Registry

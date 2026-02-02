@@ -132,6 +132,7 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddSpacer();
   SetExpertRow(SPACER2);
 
+  // xgettext:no-c-format
   AddBoolean(_("95% dist. rule helpers"),
              _("Show helpers for Argentinean Federation \"95% distance\" rule. "
                "The AAT Distance Around Target InfoBox will show projected "

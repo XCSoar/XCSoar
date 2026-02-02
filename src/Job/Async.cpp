@@ -46,7 +46,8 @@ AsyncJobRunner::Wait()
 {
   assert(IsBusy());
 
-  Thread::Join();
+  if (IsDefined())
+    Thread::Join();
 
   delete env;
 

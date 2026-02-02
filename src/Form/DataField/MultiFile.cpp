@@ -121,7 +121,7 @@ MultiFileDataField::ForceModify(Path path)
 const TCHAR *
 MultiFileDataField::GetAsString() const noexcept
 {
-  return _("");
+  return _T("");
 }
 
 void

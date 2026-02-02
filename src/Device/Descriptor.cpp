@@ -476,7 +476,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(open_job == nullptr);
 
   TCHAR buffer[64];
-  LogFormat(_T("Opening device %s"), config.GetPortName(buffer, 64));
+  LogFormat(_T("Opening device: %s"), config.GetPortName(buffer, 64));
 
 #ifdef ANDROID
   /* reset the Kalman filter */
@@ -565,7 +565,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
     return;
 
   TCHAR buffer[64];
-  LogFormat(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));
+  LogFormat(_T("Reconnecting to device: %s"), config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
   Reopen(env);
@@ -966,6 +966,30 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
 }
 
 bool
+DeviceDescriptor::ExchangeRadioFrequencies(OperationEnvironment &env,
+                                           NMEAInfo &info) noexcept
+{
+  assert(InMainThread());
+
+  if (device == nullptr || !config.sync_to_device)
+    return true;
+
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  try {
+    ScopeReturnDevice restore(*this, env);
+    return device->ExchangeRadioFrequencies(env, info);
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "ExchangeRadioFrequencies() failed");
+    return false;
+  }
+}
+
+bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
                                       const TCHAR *name,
                                       OperationEnvironment &env) noexcept
@@ -1302,7 +1326,7 @@ DeviceDescriptor::PortError(const char *msg) noexcept
 {
   {
     TCHAR buffer[64];
-    LogFormat(_T("Error on device %s: %s"),
+    LogFormat(_T("Device error on %s: %s"),
               config.GetPortName(buffer, 64), msg);
   }
 

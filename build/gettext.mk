@@ -18,6 +18,7 @@ GETTEXT_EVENTS = Data/Input/default.xci
 $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \
+	  --package-name=$(GETTEXT_PACKAGE) \
 	  --add-comments --keyword=_ --keyword=N_ \
 	  --from-code=utf-8 \
 	  --keyword=C_:1c,2 \
@@ -41,7 +42,7 @@ po/$(GETTEXT_PACKAGE).pot: $(OUT)/po/cpp.pot $(OUT)/po/event.pot
 mo: $(MO_FILES)
 
 update-po: po/$(GETTEXT_PACKAGE).pot
-	$(Q)for i in $(PO_FILES); do $(MSGMERGE) -o $$i $$i po/$(GETTEXT_PACKAGE).pot; done
+	$(Q)for i in $(PO_FILES); do $(MSGMERGE) --previous -o $$i $$i po/$(GETTEXT_PACKAGE).pot; done
 
 $(MO_FILES): $(OUT)/po/%.mo: po/%.po | $(OUT)/po/dirstamp
 	@$(NQ)echo "  GEN     $@"

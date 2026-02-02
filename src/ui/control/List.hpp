@@ -18,6 +18,14 @@ class ListItemRenderer {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) noexcept = 0;
+
+  /**
+   * Called when the list is resized or when the renderer is set.
+   * @return the preferred row height, or 0 to use default (font height + padding)
+   */
+  virtual unsigned OnListResized() noexcept {
+    return 0;
+  }
 };
 
 template<typename C>
@@ -78,6 +86,10 @@ class ListControl final : public PaintWindow {
 
   /** The height of one item on the screen, in pixels. */
   unsigned item_height;
+
+  /** The last known font height, used to detect font changes. */
+  unsigned last_list_font_height = 0;
+
   /** The number of items in the list. */
   unsigned length = 0;
   /** The index of the topmost item currently being displayed. */
@@ -132,6 +144,8 @@ class ListControl final : public PaintWindow {
   ListItemRenderer *item_renderer = nullptr;
   ListCursorHandler *cursor_handler = nullptr;
 
+  bool activate_on_first_click = false;
+
   KineticManager kinetic;
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
@@ -159,6 +173,7 @@ public:
     assert(item_renderer == nullptr);
 
     item_renderer = _item_renderer;
+    UpdateRendererHeight();
   }
 
   void SetCursorHandler(ListCursorHandler *_cursor_handler) noexcept {
@@ -166,6 +181,10 @@ public:
     assert(cursor_handler == nullptr);
 
     cursor_handler = _cursor_handler;
+  }
+
+  void SetActivateOnFirstClick(bool value) noexcept {
+    activate_on_first_click = value;
   }
 
   /**
@@ -290,6 +309,12 @@ private:
 
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas) noexcept;
+
+  /**
+   * Update the item height based on the renderer's preferred height.
+   * Called when the list is resized or when the renderer is set.
+   */
+  void UpdateRendererHeight() noexcept;
 
   void OnKineticTimer() noexcept;
 

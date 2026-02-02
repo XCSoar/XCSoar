@@ -20,6 +20,20 @@ TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
 
 TaskManager::~TaskManager() noexcept = default;
 
+bool
+TaskManager::Resume() noexcept
+{
+  if (ordered_task->TaskSize() > 0 &&
+      SetMode(TaskType::ORDERED) == TaskType::ORDERED)
+    return true;
+
+  if (goto_task->GetActiveTaskPoint() != nullptr &&
+      SetMode(TaskType::GOTO) == TaskType::GOTO)
+    return true;
+
+  return false;
+}
+
 void
 TaskManager::SetTaskEvents(TaskEvents &_task_events) noexcept
 {

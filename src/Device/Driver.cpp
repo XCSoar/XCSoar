@@ -81,6 +81,13 @@ AbstractDevice::PutStandbyFrequency([[maybe_unused]] RadioFrequency frequency,
 }
 
 bool
+AbstractDevice::ExchangeRadioFrequencies([[maybe_unused]] OperationEnvironment &env,
+                                         [[maybe_unused]] NMEAInfo &info)
+{
+  return true;
+}
+
+bool
 AbstractDevice::PutTransponderCode([[maybe_unused]] TransponderCode code,
                                    [[maybe_unused]] OperationEnvironment &env)
 {

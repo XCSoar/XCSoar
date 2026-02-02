@@ -23,17 +23,24 @@ PCMResourcePlayer::PlayResource(const TCHAR *resource_name)
     FromBytesStrict<const PCMBufferDataSource::PCMData::value_type>(
           ResourceLoader::Load(resource_name, _T("WAVE")));
   if (pcm_data.data() == nullptr) {
-    LogFormat(_T("PCM resource \"%s\" not found!"), resource_name);
+    LogFormat(_T("PCM resource not found: %s"), resource_name);
     return false;
   }
 
   const std::lock_guard protect{lock};
 
-  if (1 == buffer_data_source.Add(std::move(pcm_data))) {
+  const unsigned queue_size = buffer_data_source.Add(std::move(pcm_data));
+  if (1 == queue_size) {
     if (!player->Start(buffer_data_source)) {
       buffer_data_source.Clear();
       return false;
     }
+  } else {
+    /* Re-add buffer source to mixer so queued chunks are played after the
+       mixer removed us when the previous chunk finished (GetData returned 0).
+       See GitHub issue #2113. */
+    if (!player->Start(buffer_data_source))
+      LogFormat(_T("PCMResourcePlayer: failed to re-add buffer source"));
   }
 
   return true;

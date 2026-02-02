@@ -7,12 +7,17 @@ XCSoar
 
    build
    devsetup
+   rebranding
    policy
    architecture
    input_events
    lua
    mapfile
    debugging
+   test_debug_utilities
+   git_tips
+
+Build system reference: :ref:`build-system-reference`
 
 
 Indices and tables

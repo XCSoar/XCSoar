@@ -233,7 +233,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Next waypoint"),
     N_("Next WP"),
-    N_("Name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the waypoint details."),
+    N_("Name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the Airfields/waypoint details."),
     IBFHelper<InfoBoxContentNextWaypoint>::Create,
   },
 
@@ -844,7 +844,7 @@ static constexpr MetaData meta_data[] = {
     N_("Nearest airspace horizontal"),
     N_("Near AS H"),
     N_("Horizontal distance to the nearest airspace."),
-    UpdateInfoBoxNearestAirspaceHorizontal,
+    IBFHelper<InfoBoxNearestAirspaceHorizontal>::Create,
   },
 
   // e_NearestAirspaceVertical
@@ -852,7 +852,7 @@ static constexpr MetaData meta_data[] = {
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
     N_("Vertical distance to the nearest airspace. A positive value means the airspace is above you; a negative value means the airspace is below you."),
-    UpdateInfoBoxNearestAirspaceVertical,
+    IBFHelper<InfoBoxNearestAirspaceVertical>::Create,
   },
 
   // e_WP_MC0AltDiff

@@ -194,7 +194,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas,
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().height - Layout::Scale(4)));
+                       rc.bottom - bottom_margin - bmp->GetSize().height - Layout::Scale(4)));
 
   // draw flarm status
   if (!GetMapSettings().show_flarm_alarm_level)
@@ -223,7 +223,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas,
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().height - Layout::Scale(2)));
+                       rc.bottom - bottom_margin - bmp->GetSize().height - Layout::Scale(2)));
 }
 
 void
@@ -279,18 +279,20 @@ GlueMapWindow::SetBottomMargin(unsigned margin) noexcept
 void
 GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 {
+  if (Layout::landscape && follow_mode == FOLLOW_PAN) {
+    SetBottomMargin(0);
+    return;
+  }
+
   if (margin_factor == 0) {
     SetBottomMargin(0);
     return;
   }
 
-  PixelRect map_rect = GetClientRect();
+  PixelRect parent_rect = GetParentClientRect();
+  unsigned screen_height = parent_rect.GetHeight();
 
-  if (map_rect.GetHeight() > map_rect.GetWidth()) {
-    SetBottomMargin(map_rect.bottom / margin_factor);
-  } else {
-    SetBottomMargin(0);
-  }
+  SetBottomMargin(screen_height / margin_factor);
 }
 
 void

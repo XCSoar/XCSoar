@@ -53,6 +53,10 @@ class TopCanvas;
 
 #ifdef USE_WAYLAND
 struct wl_egl_window;
+struct wl_surface;
+struct xdg_surface;
+struct xdg_toplevel;
+struct zxdg_toplevel_decoration_v1;
 #endif
 
 #if defined(__APPLE__)
@@ -68,7 +72,7 @@ namespace UI {
 class Display;
 
 class TopWindowStyle : public WindowStyle {
-#if defined(ENABLE_SDL) || defined(USE_X11)
+#if defined(ENABLE_SDL) || defined(USE_X11) || defined(USE_WAYLAND)
   bool full_screen = false;
 #endif
 #ifdef ENABLE_SDL
@@ -91,13 +95,13 @@ public:
   }
 
   void FullScreen() {
-#if defined(ENABLE_SDL) || defined(USE_X11)
+#if defined(ENABLE_SDL) || defined(USE_X11) || defined(USE_WAYLAND)
     full_screen = true;
 #endif
   }
 
   bool GetFullScreen() const {
-#if defined(ENABLE_SDL) || defined(USE_X11)
+#if defined(ENABLE_SDL) || defined(USE_X11) || defined(USE_WAYLAND)
     return full_screen;
 #else
     return false;
@@ -140,7 +144,21 @@ class TopWindow : public ContainerWindow {
 #ifdef USE_X11
   X11Window x_window;
 #elif defined(USE_WAYLAND)
+  struct wl_surface *wl_surface = nullptr;
   struct wl_egl_window *native_window;
+  struct xdg_surface *xdg_surface = nullptr;
+  struct xdg_toplevel *xdg_toplevel = nullptr;
+  struct zxdg_toplevel_decoration_v1 *xdg_decoration = nullptr;
+  PixelSize initial_requested_size{0, 0};
+  std::chrono::steady_clock::time_point last_resize_flush_time;
+
+private:
+  bool received_first_configure = false;
+
+public:
+  void MarkFirstConfigureReceived() noexcept {
+    received_first_configure = true;
+  }
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif

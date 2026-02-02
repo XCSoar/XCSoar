@@ -6,11 +6,14 @@
 #include "ColorDatabase.hpp"
 #include "NameDatabase.hpp"
 #include "FlarmNetDatabase.hpp"
+#include "MessagingDatabase.hpp"
 
 struct TrafficDatabases {
   FlarmColorDatabase flarm_colors;
 
   FlarmNameDatabase flarm_names;
+
+  FlarmMessagingDatabase flarm_messages;
 
   FlarmNetDatabase flarm_net;
 

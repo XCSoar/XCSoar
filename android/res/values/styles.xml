@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- XCSoar main theme -->
+    <style name="XCSoarTheme" parent="android:Theme.NoTitleBar.Fullscreen">
+    </style>
+</resources>
+

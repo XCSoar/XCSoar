@@ -6,27 +6,22 @@
 #include "ui/control/List.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Renderer/TextRowRenderer.hpp"
+#include "Renderer/TextRowListItemRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "util/StaticString.hxx"
 
 static const ComboList *ComboListPopup;
 
-class ComboPickerSupport : public ListItemRenderer {
+class ComboPickerSupport final : public TextRowListItemRenderer {
   const ComboList &combo_list;
-  TextRowRenderer row_renderer;
 
 public:
   ComboPickerSupport(const ComboList &_combo_list)
     :combo_list(_combo_list) {}
 
-  unsigned CalculateLayout(const DialogLook &look) {
-    return row_renderer.CalculateLayout(*look.list.font);
-  }
-
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned i) noexcept override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned i) noexcept override {
     row_renderer.DrawTextRow(canvas, rc, combo_list[i].display_string.c_str());
   }
 };

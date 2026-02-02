@@ -57,15 +57,16 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   if (transponderCode.IsDefined()) {
     AddReadOnly(_("Squawk code"), nullptr, buffer2);
     AddButton(_("Set Squawk Code"), [transponderCode]() {
-      ActionInterface::SetTransponderCode(
-          transponderCode, TransponderMode(TransponderMode::ALT));
+      ActionInterface::SetTransponderCode(transponderCode);
     });
   }
 
-  if (airspace->GetRadioFrequency().Format(buffer.data(), buffer.capacity()) !=
-      nullptr) {
-    buffer += _T(" MHz");
-    AddReadOnly(_("Radio"), nullptr, buffer);
+  if (airspace->GetRadioFrequency().IsDefined()) {
+    if (airspace->GetRadioFrequency().Format(buffer.data(), buffer.capacity()) !=
+        nullptr) {
+      buffer += _T(" MHz");
+      AddReadOnly(_("Radio"), nullptr, buffer);
+    }
 
     const TCHAR *frequencyName = airspace->GetName();
     const TCHAR *stationName = airspace->GetStationName();

@@ -5,6 +5,8 @@
 
 #include "Panel.hpp"
 #include "ui/control/ScrollBar.hpp"
+#include "ui/event/PeriodicTimer.hpp"
+#include "UIUtil/KineticManager.hpp"
 
 class VScrollPanelListener {
 public:
@@ -37,6 +39,26 @@ class VScrollPanel final : public PanelControl {
    * The top-most virtual pixel line visible in the visible area.
    */
   unsigned origin = 0;
+
+  /**
+   * Tracks active drag gesture and optional kinetic scrolling.
+   */
+  bool dragging = false;
+
+  /**
+   * Tracks if we're waiting to determine if this is a tap or drag.
+   */
+  bool potential_tap = false;
+  PixelPoint drag_start = {0, 0};
+
+  /**
+   * The vertical distance from the start of the drag relative to the
+   * top of the list (not the top of the screen)
+   */
+  int drag_y = 0;
+
+  KineticManager kinetic;
+  UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
 public:
   VScrollPanel(ContainerWindow &parent, const DialogLook &look,
@@ -78,10 +100,13 @@ public:
 
 private:
   void SetupScrollBar() noexcept;
+  void SetOriginClamped(int new_origin) noexcept;
+  void OnKineticTimer() noexcept;
 
 protected:
   /* virtual methods from class Window */
   void OnResize(PixelSize new_size) noexcept override;
+  void OnDestroy() noexcept override;
 
   bool OnKeyDown(unsigned key_code) noexcept override;
 

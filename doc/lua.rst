@@ -654,6 +654,8 @@ The following attributes are provided by ``xcsoar.replay``:
    - Gets replay clock rate.
  * - ``virtual_time``
    - Gets replay virtual time [s].
+ * - ``is_active``
+   - Returns true if replay is currently active, false otherwise.
 
 .. _lua.timer:
 

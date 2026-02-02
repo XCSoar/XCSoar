@@ -27,6 +27,7 @@
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LevilAHRS_G.hpp"
+#include "Device/Driver/LoEFGREN.hpp"
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vaulter.hpp"
@@ -38,6 +39,9 @@
 #include "Device/Driver/Zander.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "FLARM/Global.hpp"
+#include "FLARM/TrafficDatabases.hpp"
+#include "FLARM/MessagingRecord.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -238,6 +242,38 @@ TestFLARM()
   } else {
     skip(15, 0, "traffic == NULL");
   }
+
+  // Ensure a database instance exists before PFLAM messages are parsed
+  if (traffic_databases == nullptr)
+    traffic_databases = new TrafficDatabases();
+
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,AREG,48422D534941*0B", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,ACALL,5A4D*2F", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,PNAME,4F7276696C6C6520577269676874*43", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,ATYPE,436573736E6120313732*44", 
+                        nmea_info));
+  ok1(parser.ParseLine("$PFLAM,U,2,DDAED5,VHF,118.455,121.500,,*17",
+                        nmea_info));
+
+  id = FlarmId::Parse("DDAED5", NULL);
+  auto mr = traffic_databases->flarm_messages.FindRecordById(id);
+  if (ok1(mr.has_value())) {
+    ok1(StringIsEqual(mr->registration.c_str(), "HB-SIA"));
+    ok1(StringIsEqual(mr->callsign.c_str(), "ZM"));
+    ok1(StringIsEqual(mr->pilot.c_str(), "Orville Wright"));
+    ok1(StringIsEqual(mr->plane_type.c_str(), "Cessna 172"));
+    ok1(mr->frequency.IsDefined());
+    ok1(mr->frequency.GetKiloHertz() == 118455);
+  } else {
+    skip(6, 0, "messaging record missing");
+  }
+
+  // Clean up to avoid side effects across tests
+  delete traffic_databases;
+  traffic_databases = nullptr;
 }
 
 static void
@@ -716,6 +752,46 @@ TestFlytec()
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToKelvin(),
              Temperature::FromCelsius(17).ToKelvin()));
+
+  delete device;
+}
+
+static void
+TestLoEFGREN()
+{
+  NullPort null;
+  Device *device = loe_fgren_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+
+  // Test positive vario (climb)
+  ok1(device->ParseNMEA("$PLOF,250,80,150*32", nmea_info));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, 2.5));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.indicated_airspeed,
+             Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToKelvin(),
+             Temperature::FromCelsius(15).ToKelvin()));
+
+  // Test negative vario (sink) and negative temperature
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$PLOF,-150,60,-50*0E", nmea_info));
+  ok1(equals(nmea_info.total_energy_vario, -1.5));
+  ok1(equals(nmea_info.temperature.ToKelvin(),
+             Temperature::FromCelsius(-5).ToKelvin()));
+
+  // Test invalid sentences
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{3}};
+  ok1(!device->ParseNMEA("$VARIO,999.98,-12*66", nmea_info));
+  ok1(!device->ParseNMEA("$PLOF,250,80,150*FF", nmea_info));
+  ok1(!nmea_info.total_energy_vario_available);
 
   delete device;
 }
@@ -1836,7 +1912,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1006);
+  plan_tests(1032);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -1866,6 +1942,7 @@ int main()
   TestXCTracer();
   TestACD();
   TestXCVario();
+  TestLoEFGREN();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */

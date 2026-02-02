@@ -23,6 +23,8 @@ public:
   bool PutStandbyFrequency(RadioFrequency frequency,
                            const TCHAR *name,
                            OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env,
+                                NMEAInfo &info) override;
 };
 
 bool
@@ -56,6 +58,15 @@ XCOM760Device::PutStandbyFrequency(RadioFrequency frequency,
   sprintf(szTmp, "$TXSF=%u.%03u\r\n",
           frequency.GetKiloHertz() / 1000,
           frequency.GetKiloHertz() % 1000);
+  port.FullWrite(szTmp, env, std::chrono::milliseconds{100});
+  return true;
+}
+
+bool
+XCOM760Device::ExchangeRadioFrequencies(OperationEnvironment &env,
+                                        [[maybe_unused]] NMEAInfo &info)
+{
+  const char szTmp[32] = "$TOGG\r\n";
   port.FullWrite(szTmp, env, std::chrono::milliseconds{100});
   return true;
 }

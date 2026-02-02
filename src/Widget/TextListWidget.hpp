@@ -20,6 +20,9 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
+  /* virtual methods from ListItemRenderer */
+  unsigned OnListResized() noexcept override;
+
 protected:
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, PixelRect rc,

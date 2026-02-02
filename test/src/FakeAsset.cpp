@@ -13,7 +13,7 @@ HasPointer() noexcept
 
 #endif
 
-#ifdef USE_LIBINPUT
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
 
 bool
 HasTouchScreen() noexcept

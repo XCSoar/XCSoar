@@ -11,4 +11,8 @@
 class WeglideDistance : public ContestDijkstra {
 public:
   explicit WeglideDistance(const Trace &_trace) noexcept;
+
+protected:
+  /* virtual methods from AbstractContest */
+  ContestResult CalculateResult() const noexcept override;
 };

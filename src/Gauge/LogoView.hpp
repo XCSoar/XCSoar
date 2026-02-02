@@ -10,10 +10,13 @@ struct PixelRect;
 class Canvas;
 
 class LogoView {
-  Bitmap logo, big_logo, title, big_title;
+  Bitmap logo, big_logo, huge_logo, title, big_title, huge_title;
 
 #ifndef USE_GDI
   Font font;
+#ifndef NDEBUG
+  Font bold_font;
+#endif
 #endif
 
 public:

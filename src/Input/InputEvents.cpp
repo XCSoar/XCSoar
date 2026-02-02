@@ -210,9 +210,14 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
     if (mode != MODE_DEFAULT)
     {
       /* Adjust the margin to ensure that GlueMapWindow elements,
-       * such as the scale, are not overdraw by the buttons
+       * such as the scale, are not overdrawn by the buttons
        * when in Pan mode. */
-      map->SetBottomMarginFactor(menubar_height_scale_factor);
+      PixelRect screen_rect = map->GetParentClientRect();
+      unsigned factor = (screen_rect.GetHeight() > screen_rect.GetWidth())
+        ? menubar_height_scale_factor
+        : 5;
+      
+      map->SetBottomMarginFactor(factor);
     } else {
       map->SetBottomMarginFactor(0);
     }

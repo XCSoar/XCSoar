@@ -14,9 +14,9 @@ OPENGL ?= y
 else ifeq ($(TARGET_IS_IOS),y)
 OPENGL ?= y
 
-# macOS has deprecated OpenGL, so let's use software rendering
+# macOS uses ANGLE (OpenGL ES via Metal backend)
 else ifeq ($(TARGET_IS_DARWIN),y)
-OPENGL ?= n
+OPENGL ?= y
 
 # the Cubieboard uses EGL + GL/ES
 else ifeq ($(TARGET_IS_CUBIE),y)
@@ -38,7 +38,15 @@ OPENGL_CPPFLAGS = -DENABLE_OPENGL
 
 OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
 ifeq ($(TARGET_IS_DARWIN),y)
+# Use ANGLE on macOS (not iOS)
+ifeq ($(TARGET_IS_IOS),y)
 OPENGL_LDLIBS = -framework OpenGLES
+else
+# Include ANGLE configuration
+include $(topdir)/build/angle.mk
+OPENGL_CPPFLAGS += $(ANGLE_CPPFLAGS)
+OPENGL_LDLIBS = $(ANGLE_LDLIBS)
+endif
 else
 OPENGL_LDLIBS = -lGLESv2 -ldl
 endif

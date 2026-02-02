@@ -5,6 +5,11 @@ Version 7.44 - not yet released
   - remove FFVV NetCoupe
   - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
   - update OLC League calculation to latest ruleset
+  - improved circling wind algorithm: uses cosine curve fitting with True
+    Airspeed compensation for more accurate wind estimates, angular rate
+    quality assessment for better circle validation, and GPS latency
+    compensation
+  - fix WeGlide scoring formulas
 * tracking
   - xcsoar-cloud-service: rebuild service, new domain cloud.xcsoar.org
 * data files
@@ -12,9 +17,13 @@ Version 7.44 - not yet released
     file being ignored or being overwritten by any Waypoint Editor dialog
     function.
   - read PG landing waypoint type correctly in cup files
+  - fix line zone gate width from CUP file R1 parameter #2029
+  - CUP files: correctly parse radius values with units (m, nm, ml) and
+    decimal values for observation zones #2031
   - openair: support for openair 2.0 format
   - openair: parse transponder codes for airspaces
   - openair: parse station names for airspaces
+  - add support for downloadable checklists from repository
 * ui
   - streamlined, and optimized icons
   - apply dark mode settings to thermal assistant
@@ -34,10 +43,13 @@ Version 7.44 - not yet released
   - Show transponder mode (if available) in transponder code InfoBox
   - add helpers on infoboxes for Argentinean contests 95% distance rule
   - Popup messages now appear at the top of the map
+  - add status messages for user actions and state changes (alternates, task abort, task armed, final glide mode, terrain/topography visibility, airspace visibility)
+  - improve task resume: report failure reasons and allow resuming goto when no ordered task exists
   - FlarmTrafficWindow: align colors of FlarmTraffic with map for consistency
   - BigTrafficWidget: Save/Restore FLARM radar zoom on page change
   - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
   - terrain: added 2 new terrain ramps for use in very flat countries
+  - terrain: fix terrain shading at highest zoom level and improve DPI scaling #440
   - add head wind component to V GND Infobox #1439
   - add V task leg Infobox #1767
   - PEV start wait/window times now have second accuraccy #1099
@@ -46,24 +58,63 @@ Version 7.44 - not yet released
   - ability to send squawk code from airspace details dialog to transponder
   - add support for a dedicated north-up map page layout
   - the thermal assistant InfoBox is now clickable
+  - nearest airspace InfoBoxes (horizontal and vertical) are now clickable
+    to open airspace details dialog #406
   - Add support for multiple airspace files in UI
   - Add support for multiple waypoint files in UI
+  - Add support for multiple  airfields or details waypoint in UI
+  - File list dialogs use multi-select widget for selection
+  - QuickMenu: revamped look
+  - QuickMenu: sane cursor control
+  - add kinetic drag scrolling to vertical scroll panels
+  - improve touch screen tap-vs-drag detection
+  - implement interaction rules and selection management for InfoBoxes
+  - draw separator between top widget and map
+  - keep popups centered on visible map
+  - improve margin handling for different screen orientations
+  - fix OpenGL panels not clearing background
+  - fix layout overlap and improve navigation in analysis dialog
+
 * Android
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
   - make xcsoar accessible from lock screen
   - battery: use scale for charge percent calculation
   - battery: prevent shutdown on devices without battery
+  - add Android 15 edge-to-edge opt-out and theme support
+  - enable fullscreen mode with display cutout (notch) support
+  - fix Android HiDPI native size handling
 * Windows
   - Popupmessages are now shown with full text again
+* macOS
+  - add .app bundle, .dmg and .pkg support with bundled ANGLE
+  - make App Store ready with signing
+  - add third-party notice for ANGLE
 * iOS
   - Improve audio support: prevent ducking and enable sound playback even when the phone is muted
+  - implement access to iPhone barometric altitude sensor
+  - add background location management to prevent crashes
+  - disable dragging of windows on iPhones
+* Linux
+  - fix Wayland window resizing and immediate redraw
+  - handle Wayland configure events and improve resize responsiveness
+  - fix Wayland resource cleanup and implement missing features
+  - fix inverted mouse wheel scrolling on Wayland and libinput
+  - fix Wayland shutdown hang when window is not visible
+  - set cursor to pointer when entering Wayland surface
 * devices
   - Add driver for Condor 3
+  - Add driver for LöFGREN variometer
   - Add driver for LX Navigation Eos / Era variometers
   - Add driver for Stratux
+  - Stratux: extract callsign from PFLAA record traffic-id field
+  - Stratux: add AHRS support using LevilAHRS components
   - Flarm: parse flarm error messages (PFLAE) and display them
   - Flarm: add support for PowerFlarm configuration
+  - Flarm: add messaging database (PFLAM) to store and display pilot, aircraft
+    type, registration, callsign, and frequency information
+  - Flarm: improve traffic details display with data source information and
+    pre-filled callsign dialog
   - PowerFlarm: make range / vrange configurable for adbs and pcas
   - PowerFlarm: support additional higher baud rates
   - LXNAV: parse acceleration/g-load from PLXVF sentence
@@ -77,11 +128,36 @@ Version 7.44 - not yet released
   - Add port 4000 to tcp-client
 * Polar:
   - LS8-15m: default polar, set to values according to flight manual
+  - Imported 32 polars from Ideaflieg, Lk8000 and condorutil
 * Weglide:
   - add button under config menu to tigger IGC upload
+  - fix scoring formulas
 * Task:
   - Reachable abort task landable waypoints are now sorted by arrival altitude
     instead of arrival time.
+  - fix button state and cursor validation in alternates list dialog
+  - fix radius and angle parsing for CUP files
+* development
+  - iOS: implement keyboard detection and HasCursorKeys()
+  - iOS: add iOS TestFlight automation for CI/CD
+  - iOS: add IOS_PATCH_VERSION support
+  - iOS: load device install configuration from .env file
+  - Linux: add xkbcommon library support for Wayland
+  - Lua scripting: add is_active property to replay bindings
+  - documentation: add Git tips and tricks guide
+  - documentation: add test and debug utilities documentation
+  - documentation: add graphics backends table
+  - documentation: add explicit Sphinx configuration for ReadTheDocs
+  - build system: enable building target in alternative directory
+  - build system: fix AAPT2 XML parsing error for dirstamp files
+  - build system: keep NaN/Inf checks with clang fast-math
+  - build system: fix install names for rpath (ANGLE)
+  - build system: move HAVE_HTTP to targets.mk as platform capability flag
+* input/configuration
+  - add WeGlide configured checkbox to input configuration
+  - shorten Config menu item descriptions for better portrait mode display
+* bug fixes
+  - fix memory leak when reloading FLARM traffic databases
 
 Version 7.43 - 2024-08-12
 * calculations

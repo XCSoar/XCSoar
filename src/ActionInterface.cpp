@@ -345,29 +345,21 @@ ActionInterface::OffsetStandbyFrequency(double offset_khz,
 void
 ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 {
-  const auto radio_settings = SetComputerSettings().radio;
-
-  if(radio_settings.active_frequency.IsDefined() &&
-     radio_settings.standby_frequency.IsDefined()) {
-    const auto old_active_freq = radio_settings.active_frequency;
-    const auto old_active_freq_name = radio_settings.active_name;
-
-    ActionInterface::SetActiveFrequency(radio_settings.standby_frequency, radio_settings.standby_name, to_devices);
-    ActionInterface::SetStandbyFrequency(old_active_freq, old_active_freq_name, to_devices);
+  /* send to external devices */
+  if (to_devices && backend_components->devices) {
+    MessageOperationEnvironment env;
+    backend_components->devices->ExchangeRadioFrequencies(env);
   }
 }
 
 void
 ActionInterface::SetTransponderCode(TransponderCode code,
-                                    TransponderMode mode,
                                     bool to_devices) noexcept
 {
   assert(code.IsDefined());
-  assert(mode.IsDefined());
 
   /* update interface settings */
   SetComputerSettings().transponder.transponder_code = code;
-  SetComputerSettings().transponder.transponder_mode = mode;
 
   /* update InfoBoxes (that might show the code setting) */
   InfoBoxManager::SetDirty();
@@ -377,4 +369,16 @@ ActionInterface::SetTransponderCode(TransponderCode code,
     MessageOperationEnvironment env;
     backend_components->devices->PutTransponderCode(code, env);
   }
+}
+
+void
+ActionInterface::SetTransponderMode(TransponderMode mode) noexcept
+{
+  /* update interface settings */
+  SetComputerSettings().transponder.transponder_mode = mode;
+
+  /* update InfoBoxes (that might show the mode setting) */
+  InfoBoxManager::SetDirty();
+
+  /* Note: no device API currently exists to send only the mode. */
 }

@@ -1,8 +1,5 @@
+ifeq ($(HAVE_HTTP),y)
 # Build rules for the HTTP client library
-
-HAVE_HTTP := y
-
-LIBHTTP_DEPENDS = LIBSODIUM FMT
 
 LIBHTTP_SOURCES = \
 	$(SRC)/net/http/DownloadManager.cpp \
@@ -21,7 +18,7 @@ ifeq ($(TARGET_IS_OSX)$(USE_HOMEBREW),yn)
 # We use the libcurl which is included in macOS.
 # macOS SDKs contain the required headers / library stubs,
 # but no pkg-config file.
-LIBHTTP_LDLIBS = -lcurl -lssl -lcrypto -lz
+LIBHTTP_LDLIBS = -lcurl -lz
 else
 $(eval $(call pkg-config-library,CURL,libcurl))
 
@@ -30,8 +27,11 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
 CURL_CPPFLAGS += -DCURL_STATICLIB
 endif
 
-LIBHTTP_CPPFLAGS = $(CURL_CPPFLAGS)
-LIBHTTP_DEPENDS += CURL ZLIB FMT
+LIBHTTP_CPPFLAGS += $(CURL_CPPFLAGS)
+LIBHTTP_DEPENDS += CURL ZLIB
 endif
 
+LIBHTTP_DEPENDS += LIBSODIUM FMT UTIL
+
 $(eval $(call link-library,libhttp,LIBHTTP))
+endif

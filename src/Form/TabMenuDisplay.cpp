@@ -4,6 +4,7 @@
 #include "TabMenuDisplay.hpp"
 #include "TabMenuData.hpp"
 #include "Widget/PagerWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -40,7 +41,10 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[],
       page_button.main_menu_index = i;
       page_button.caption = gettext(p->menu_caption);
 
-      pager.Add(p->Load());
+      /* Wrap panel in VScrollWidget for automatic scrolling when needed */
+      auto panel = p->Load();
+      auto scroll_panel = std::make_unique<VScrollWidget>(std::move(panel), look);
+      pager.Add(std::move(scroll_panel));
     }
 
     mb.last_page_index = buttons.size() - 1;

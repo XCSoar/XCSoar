@@ -9,6 +9,10 @@
 #include "ui/event/Globals.hpp"
 #include "Hardware/CPU.hpp"
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
@@ -72,6 +76,14 @@ TopWindow::Create([[maybe_unused]] const TCHAR *text, PixelSize size,
   size = screen->SetDisplayOrientation(style.GetInitialOrientation());
 #elif defined(USE_MEMORY_CANVAS)
   size = screen->GetSize();
+#elif defined(ENABLE_OPENGL)
+  // On HiDPI displays, the drawable size may differ from window size
+  PixelSize native_size = screen->GetNativeSize();
+  // On Android, surface might not be ready yet, so GetNativeSize() may return 0x0
+  // In that case, use the size passed to Create() (which should have a fallback)
+  if (native_size.width > 0 && native_size.height > 0)
+    size = native_size;
+  // else keep the original size (which should be from SystemWindowSize() with fallback)
 #endif
   ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }
@@ -134,6 +146,11 @@ TopWindow::Expose() noexcept
   const ScopeLockCPU cpu;
 #endif
 
+#if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)
+  // Process any pending resize BEFORE locking the canvas
+  screen->ProcessPendingResize();
+#endif
+
   if (auto canvas = screen->Lock(); canvas.IsDefined()) {
     OnPaint(canvas);
 
@@ -172,10 +189,10 @@ TopWindow::Refresh() noexcept
        OpenGL surface - ignore all drawing requests */
     return;
 
-#ifdef USE_X11
+#if defined(USE_X11) || defined(USE_WAYLAND)
   if (!IsVisible())
     /* don't bother to invoke the renderer if we're not visible on the
-       X11 display */
+       display */
     return;
 #endif
 

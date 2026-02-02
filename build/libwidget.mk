@@ -30,7 +30,9 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/DrawWidget.cpp \
 	$(SRC)/Widget/QuestionWidget.cpp \
 	$(SRC)/Widget/KeyboardWidget.cpp \
-	$(SRC)/Widget/ViewImageWidget.cpp
+	$(SRC)/Widget/ViewImageWidget.cpp \
+	$(SRC)/Widget/MultiSelectListWidget.cpp \
+	$(SRC)/Widget/FileMultiSelectWidget.cpp
 
 WIDGET_DEPENDS = SCREEN
 

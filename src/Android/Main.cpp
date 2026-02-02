@@ -22,6 +22,7 @@
 #include "NativeSensorListener.hpp"
 #include "TextUtil.hpp"
 #include "TextEntryDialog.hpp"
+#include "CertificateUtil.hpp"
 #include "Product.hpp"
 #include "Language/Language.hpp"
 #include "Language/LanguageGlue.hpp"
@@ -113,6 +114,7 @@ InitNative(JNIEnv *env) noexcept
   NunchuckDevice::Initialise(env);
   VoltageDevice::Initialise(env);
   AndroidTextEntryDialog::Initialise(env);
+  CertificateUtil::Initialise(env);
 }
 
 gcc_visibility_default
@@ -130,6 +132,7 @@ Java_org_xcsoar_NativeView_deinitNative(JNIEnv *env,
                                         [[maybe_unused]] jclass cls)
 {
   AndroidTextEntryDialog::Deinitialise(env);
+  CertificateUtil::Deinitialise(env);
   BMP085Device::Deinitialise(env);
   I2CbaroDevice::Deinitialise(env);
   NunchuckDevice::Deinitialise(env);
