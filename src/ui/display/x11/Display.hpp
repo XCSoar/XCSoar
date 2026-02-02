@@ -37,9 +37,6 @@ public:
   /**
    * Returns the display size in mm.
    */
-  /**
-   * Returns the display size in mm.
-   */
   [[gnu::pure]]
   PixelSize GetSizeMM() const noexcept;
 
