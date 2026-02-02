@@ -5,14 +5,38 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
 #include "Asset.hpp"
+#ifndef UNICODE
+#include "util/UTF8.hpp"
+#endif
 
 #include <winuser.h>
+
+static tstring_view
+EnsureValidUTF8(tstring_view text, char *buffer,
+                std::size_t buffer_size) noexcept
+{
+#ifndef UNICODE
+  if (ValidateUTF8(text))
+    return text;
+  const std::size_t n = SanitizeUTF8(text, {buffer, buffer_size - 1});
+  if (n == 0)
+    return text;
+  buffer[n] = '\0';
+  return buffer;
+#else
+  (void)buffer;
+  (void)buffer_size;
+  return text;
+#endif
+}
 
 unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
                         std::string_view text) const noexcept
 {
-  return canvas.DrawFormattedText(rc, text, DT_CALCRECT);
+  char sanitized[1024];
+  const tstring_view safe = EnsureValidUTF8(text, sanitized, sizeof(sanitized));
+  return canvas.DrawFormattedText(rc, safe, DT_CALCRECT);
 }
 
 unsigned
@@ -53,5 +77,7 @@ TextRenderer::Draw(Canvas &canvas, PixelRect rc,
     format |= DT_UNDERLINE;
 #endif
 
-  canvas.DrawFormattedText(rc, text, format);
+  char sanitized[1024];
+  const tstring_view safe = EnsureValidUTF8(text, sanitized, sizeof(sanitized));
+  canvas.DrawFormattedText(rc, safe, format);
 }

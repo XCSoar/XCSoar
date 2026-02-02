@@ -14,6 +14,10 @@ namespace ButtonLabel {
 struct Expanded {
   bool visible, enabled;
   const char *text;
+  /** Optional second line (e.g. toggle state "On"/"Off"); nullptr = single line */
+  const char *text2 = nullptr;
+  /** Optional third line; nullptr = at most two lines */
+  const char *text3 = nullptr;
 };
 
 [[gnu::pure]]

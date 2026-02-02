@@ -11,6 +11,9 @@
 #include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
 #include "Asset.hpp"
+#ifndef UNICODE
+#include "util/UTF8.hpp"
+#endif
 
 #include <algorithm>
 
@@ -76,6 +79,18 @@ TabDisplay::Button::GetRecommendedWidth(const DialogLook &look) const noexcept
   if (icon != nullptr)
     return icon->GetSize().width + 2 * Layout::GetTextPadding();
 
+#ifndef UNICODE
+  char sanitized[256];
+  if (!ValidateUTF8(std::string_view(caption))) {
+    const std::size_t n =
+      SanitizeUTF8(std::string_view(caption), {sanitized, sizeof(sanitized) - 1});
+    if (n != 0) {
+      sanitized[n] = '\0';
+      return look.button.font->TextSize(sanitized).width +
+        2 * Layout::GetTextPadding();
+    }
+  }
+#endif
   return look.button.font->TextSize(caption).width + 2 * Layout::GetTextPadding();
 }
 

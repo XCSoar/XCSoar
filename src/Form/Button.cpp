@@ -73,6 +73,26 @@ Button::SetCaption(const char *caption)
 
   auto &r = (TextButtonRenderer &)*renderer;
   r.SetCaption(caption);
+  r.SetCaption2(nullptr);
+  r.SetCaption3(nullptr);
+
+  Invalidate();
+}
+
+void
+Button::SetCaption2(const char *caption2)
+{
+  auto &r = (TextButtonRenderer &)*renderer;
+  r.SetCaption2(caption2);
+
+  Invalidate();
+}
+
+void
+Button::SetCaption3(const char *caption3)
+{
+  auto &r = (TextButtonRenderer &)*renderer;
+  r.SetCaption3(caption3);
 
   Invalidate();
 }

@@ -4,16 +4,12 @@
 #include "ui/canvas/Canvas.hpp"
 #include "util/StringAPI.hxx"
 
-#ifndef NDEBUG
-#include "util/UTF8.hpp"
-#endif
-
 #ifndef UNICODE
 #include "util/UTF8.hpp"
 #endif
 
-#include <algorithm>
 #include <cassert>
+#include <algorithm>
 
 #include <limits.h>
 #include <string.h>
@@ -44,10 +40,10 @@ unsigned
 Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
                           const unsigned format) noexcept
 {
-  assert(ValidateUTF8(text));
-
   if (font == nullptr)
     return 0;
+
+  assert(ValidateUTF8(text));
 
   const unsigned skip = font->GetLineSpacing();
   const unsigned max_lines = (format & DT_CALCRECT)
@@ -85,7 +81,6 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
     char *prev_p = nullptr;
     const bool has_spaces = StringFind(duplicated + i, ' ') != nullptr;
 
-    // remove words from behind till line fits or no more space is found
     while (sz.width > r.GetWidth() &&
            (p = StringFindLast(duplicated + i, ' ')) != nullptr) {
       if (prev_p)

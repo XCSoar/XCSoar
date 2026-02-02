@@ -20,6 +20,9 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "util/StaticString.hxx"
+#ifndef UNICODE
+#include "util/UTF8.hpp"
+#endif
 
 #include <boost/container/static_vector.hpp>
 #include <cstdlib>
@@ -30,12 +33,18 @@ class QuickMenuButtonRenderer final : public ButtonRenderer {
 
   TextRenderer text_renderer;
 
-  const StaticString<64> caption;
+  StaticString<64> caption;
+  StaticString<32> caption2;
+  StaticString<32> caption3;
 
 public:
   explicit QuickMenuButtonRenderer(const DialogLook &_look,
-                                   const char *_caption) noexcept
+                                   const char *_caption,
+                                   const char *_caption2 = nullptr,
+                                   const char *_caption3 = nullptr) noexcept
     :look(_look), caption(_caption) {
+    caption2 = _caption2 != nullptr ? _caption2 : "";
+    caption3 = _caption3 != nullptr ? _caption3 : "";
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
     text_renderer.SetControl();
@@ -48,17 +57,61 @@ public:
                   ButtonState state) const noexcept override;
 };
 
+#ifndef UNICODE
+static unsigned
+TextWidth(const Font &font, const char *text, char *sanitized,
+          std::size_t sanitized_size) noexcept
+{
+  if (ValidateUTF8(std::string_view(text)))
+    return font.TextSize(text).width;
+  const std::size_t n = SanitizeUTF8(std::string_view(text),
+                                     {sanitized, sanitized_size - 1});
+  if (n == 0)
+    return 0;
+  sanitized[n] = '\0';
+  return font.TextSize(sanitized).width;
+}
+#endif
+
 unsigned
 QuickMenuButtonRenderer::GetMinimumButtonWidth() const noexcept
 {
-  return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).width;
+  unsigned w;
+#ifndef UNICODE
+  char sanitized[256];
+  w = TextWidth(*look.button.font, caption.c_str(), sanitized, sizeof(sanitized));
+  if (!caption2.empty()) {
+    const unsigned w2 = TextWidth(*look.button.font, caption2.c_str(),
+                                 sanitized, sizeof(sanitized));
+    if (w2 > w)
+      w = w2;
+  }
+  if (!caption3.empty()) {
+    const unsigned w3 = TextWidth(*look.button.font, caption3.c_str(),
+                                 sanitized, sizeof(sanitized));
+    if (w3 > w)
+      w = w3;
+  }
+#else
+  w = look.button.font->TextSize(caption).width;
+  if (!caption2.empty()) {
+    const unsigned w2 = look.button.font->TextSize(caption2.c_str()).width;
+    if (w2 > w)
+      w = w2;
+  }
+  if (!caption3.empty()) {
+    const unsigned w3 = look.button.font->TextSize(caption3.c_str()).width;
+    if (w3 > w)
+      w = w3;
+  }
+#endif
+  return 2 * Layout::GetTextPadding() + w;
 }
 
 void
 QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                     ButtonState state) const noexcept
 {
-  // Draw focus rectangle
   switch (state) {
   case ButtonState::PRESSED:
     canvas.DrawFilledRectangle(rc, look.list.pressed.background_color);
@@ -87,7 +140,35 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   canvas.Select(*look.button.font);
   canvas.SetBackgroundTransparent();
 
-  text_renderer.Draw(canvas, rc, caption);
+  const unsigned line_height = look.button.font->GetLineSpacing();
+  if (!caption3.empty()) {
+    const unsigned total_height = 3 * line_height;
+    const int block_top = (rc.top + rc.bottom - (int)total_height) / 2;
+    text_renderer.Draw(canvas,
+                      PixelRect(rc.left, block_top, rc.right,
+                                block_top + (int)line_height),
+                      caption.c_str());
+    text_renderer.Draw(canvas,
+                      PixelRect(rc.left, block_top + (int)line_height,
+                                rc.right, block_top + 2 * (int)line_height),
+                      caption2.c_str());
+    text_renderer.Draw(canvas,
+                      PixelRect(rc.left, block_top + 2 * (int)line_height,
+                                rc.right, block_top + (int)total_height),
+                      caption3.c_str());
+  } else if (!caption2.empty()) {
+    const unsigned total_height = 2 * line_height;
+    const int block_top = (rc.top + rc.bottom - (int)total_height) / 2;
+    text_renderer.Draw(canvas,
+                      PixelRect(rc.left, block_top, rc.right,
+                                block_top + (int)line_height),
+                      caption.c_str());
+    text_renderer.Draw(canvas,
+                      PixelRect(rc.left, block_top + (int)line_height,
+                                rc.right, block_top + (int)total_height),
+                      caption2.c_str());
+  } else
+    text_renderer.Draw(canvas, rc, caption.c_str());
 }
 
 class QuickMenu final : public WindowWidget {
@@ -205,7 +286,8 @@ QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc
 
     auto &button = buttons.emplace_back(*grid_view, button_rc, buttonStyle,
                                         std::make_unique<QuickMenuButtonRenderer>(dialog_look,
-                                                                                  expanded.text),
+                                        expanded.text, expanded.text2,
+                                        expanded.text3),
                                         [this, &menuItem](){
                                           clicked_event = menuItem.event;
                                           dialog.SetModalResult(mrOK);
