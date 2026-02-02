@@ -291,7 +291,7 @@ private:
 #ifdef ENABLE_OPENGL
   PixelSize SetupViewport(PixelSize native_size) noexcept;
   PixelSize SetupViewport(PixelSize native_size,
-                         PixelSize content_size) noexcept;
+                          PixelSize content_size) noexcept;
 #endif
 
 #ifdef USE_EGL
