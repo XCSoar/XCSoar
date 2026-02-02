@@ -106,6 +106,21 @@ Initialise(const UI::Display &display, PixelSize new_size,
     }
   }
 #endif
+
+  /* When compositor uses content scale (e.g. Wayland buffer scale), we work
+     in logical space: effective_dpi = physical_dpi / content_scale so we do
+     not double-scale. One factor aligns with typical X11 (Xft.dpi 120). */
+  const unsigned content_scale = Display::GetContentScale(display);
+  static constexpr unsigned CONTENT_SCALE_DPI_FACTOR = 120;
+  UnsignedPoint2D effective_dpi = physical_dpi;
+  if (content_scale > 1) {
+    effective_dpi.x = std::clamp(physical_dpi.x * CONTENT_SCALE_DPI_FACTOR /
+                                  (content_scale * 100),
+                                1u, physical_dpi.x);
+    effective_dpi.y = std::clamp(physical_dpi.y * CONTENT_SCALE_DPI_FACTOR /
+                                  (content_scale * 100),
+                                1u, physical_dpi.y);
+  }
   
   const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
                                              dpi);
@@ -123,19 +138,18 @@ Initialise(const UI::Display &display, PixelSize new_size,
   scale_1024 = std::max(1024U, min_screen_pixels * 1024 / (square ? 320 : 240));
   scale = scale_1024 / 1024;
 
-  /* Use physical DPI for font scaling to maintain same physical size
-     regardless of forced DPI. Forced DPI should only affect layout scaling,
-     not the physical size of text. */
-  vdpi = SmallScreenAdjust(physical_dpi.y);
+  /* Use effective DPI for font/pen scaling (physical when content_scale is 1,
+     physical/content_scale when compositor scales so we do not double-scale). */
+  vdpi = SmallScreenAdjust(effective_dpi.y);
 
-  pen_width_scale = std::max(1024u, dpi.x * 1024u / 80u);
-  fine_pen_width_scale = std::max(1024u, dpi.x * 1024u / 160u);
+  pen_width_scale = std::max(1024u, effective_dpi.x * 1024u / 80u);
+  fine_pen_width_scale = std::max(1024u, effective_dpi.x * 1024u / 160u);
 
-  pt_scale = 1024 * physical_dpi.y / 72;
+  pt_scale = 1024 * effective_dpi.y / 72;
 
   vpt_scale = SmallScreenAdjust(pt_scale);
 
-  font_scale = SmallScreenAdjust(1024 * physical_dpi.y * ui_scale / 72 / 100);
+  font_scale = SmallScreenAdjust(1024 * effective_dpi.y * ui_scale / 72 / 100);
 
   text_padding = VptScale(2);
 
@@ -143,8 +157,13 @@ Initialise(const UI::Display &display, PixelSize new_size,
                                     min_screen_pixels / 12);
 
   if (HasTouchScreen()) {
-    /* larger rows for touch screens */
-    maximum_control_height = PtScale(30);
+    /* Larger rows for touch; when content_scale > 1 use same logical-space
+       rule and factor as effective_dpi so physical height matches. */
+    unsigned touch_height = Scale(30u);
+    if (content_scale > 1)
+      touch_height = touch_height / content_scale *
+                     CONTENT_SCALE_DPI_FACTOR / 100;
+    maximum_control_height = touch_height;
     if (maximum_control_height < minimum_control_height)
       maximum_control_height = minimum_control_height;
   } else {
