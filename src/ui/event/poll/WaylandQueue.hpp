@@ -141,7 +141,7 @@ public:
 #endif
 
   void RegistryHandler(struct wl_registry *registry, uint32_t id,
-                       const char *interface) noexcept;
+                       const char *interface, uint32_t version) noexcept;
 
   void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch) noexcept;
 
