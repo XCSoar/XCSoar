@@ -32,8 +32,6 @@ OutputGeometry(void *data, struct wl_output *wl_output,
                [[maybe_unused]] const char *model,
                [[maybe_unused]] int32_t transform) noexcept
 {
-  /* physical_width / physical_height are in millimeters (Wayland protocol).
-     Used with mode width/height (pixels) to compute physical DPI. */
   auto *d = static_cast<Display *>(data);
   if (d->output == wl_output && physical_width > 0 && physical_height > 0) {
     d->size_mm = {static_cast<unsigned>(physical_width),
@@ -95,13 +93,12 @@ static constexpr struct wl_seat_listener seat_listener = {
 
 void
 RegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
-               const char *interface, uint32_t version)
+               const char *interface, [[maybe_unused]] uint32_t version)
 {
   auto *d = static_cast<Display *>(data);
   if (StringIsEqual(interface, "wl_output") && d->output == nullptr) {
-    const uint32_t output_version = version < 2 ? version : 2;
     d->output = static_cast<wl_output *>(
-      wl_registry_bind(registry, id, &wl_output_interface, output_version));
+      wl_registry_bind(registry, id, &wl_output_interface, 2));
     if (d->output != nullptr)
       wl_output_add_listener(d->output, &output_listener, d);
   } else if (StringIsEqual(interface, "wl_seat") && d->seat == nullptr) {
