@@ -27,7 +27,9 @@ public:
 private:
   void Scissor(PixelRect rc) noexcept {
     OpenGL::ToViewport(rc);
-    ::glScissor(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
+    const auto p = OpenGL::ToPhysicalRect(rc.left, rc.top,
+                                          rc.GetWidth(), rc.GetHeight());
+    ::glScissor(p.x, p.y, p.width, p.height);
   }
 };
 
