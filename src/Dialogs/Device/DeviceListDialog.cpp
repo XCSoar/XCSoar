@@ -564,11 +564,8 @@ DeviceListWidget::ReconnectCurrent()
     return;
   }
 
-  /* this OperationEnvironment instance must be persistent, because
-     DeviceDescriptor::Open() is asynchronous */
-  static MessageOperationEnvironment env;
   device.ResetFailureCounter();
-  device.SlowReopen(env);
+  device.SlowReopen();
 }
 
 inline void
