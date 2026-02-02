@@ -38,10 +38,10 @@ namespace UI {
 
 static void
 WaylandRegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
-                      const char *interface, [[maybe_unused]] uint32_t version)
+                      const char *interface, uint32_t version)
 {
   auto &q = *(WaylandEventQueue *)data;
-  q.RegistryHandler(registry, id, interface);
+  q.RegistryHandler(registry, id, interface, version);
 }
 
 static void
@@ -423,11 +423,15 @@ WaylandEventQueue::OnFlush() noexcept
 
 inline void
 WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
-                                   const char *interface) noexcept
+                                   const char *interface,
+                                   uint32_t version) noexcept
 {
-  if (StringIsEqual(interface, "wl_compositor"))
+  if (StringIsEqual(interface, "wl_compositor")) {
+    const uint32_t compositor_version = version < 3 ? version : 3;
     compositor = (wl_compositor *)
-      wl_registry_bind(registry, id, &wl_compositor_interface, 1);
+      wl_registry_bind(registry, id, &wl_compositor_interface,
+                      compositor_version);
+  }
   else if (StringIsEqual(interface, "wl_seat")) {
     seat = (wl_seat *)wl_registry_bind(registry, id,
                                          &wl_seat_interface, 1);
@@ -636,18 +640,22 @@ WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
   }
 }
 
-#ifdef SOFTWARE_ROTATE_DISPLAY
-
 void
 WaylandEventQueue::SetScreenSize(PixelSize new_size) noexcept
 {
   screen_size = new_size;
+#ifdef SOFTWARE_ROTATE_DISPLAY
   if (AreAxesSwapped(OpenGL::display_orientation)) {
     physical_screen_size = PixelSize(new_size.height, new_size.width);
   } else {
     physical_screen_size = new_size;
   }
+#else
+  physical_screen_size = new_size;
+#endif
 }
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
 
 void
 WaylandEventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept
