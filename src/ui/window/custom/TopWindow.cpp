@@ -81,8 +81,15 @@ TopWindow::Create([[maybe_unused]] const TCHAR *text, PixelSize size,
   PixelSize native_size = screen->GetNativeSize();
   // On Android, surface might not be ready yet, so GetNativeSize() may return 0x0
   // In that case, use the size passed to Create() (which should have a fallback)
-  if (native_size.width > 0 && native_size.height > 0)
+  if (native_size.width > 0 && native_size.height > 0) {
+#if defined(USE_WAYLAND)
+    /* Wayland: set viewport to (physical, logical) from first frame; keep
+       logical size for window so compositor buffer scale does not double-scale. */
+    screen->CheckResize(native_size, size);
+#else
     size = native_size;
+#endif
+  }
   // else keep the original size (which should be from SystemWindowSize() with fallback)
 #endif
   ContainerWindow::Create(nullptr, PixelRect{size}, style);
