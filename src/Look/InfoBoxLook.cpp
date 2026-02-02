@@ -59,22 +59,24 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
   border_pen.Create(border_width, border_color);
   unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1), value.fg_color);
 
-  FontDescription title_font_d(8);
+  FontDescription title_font_d(Layout::FontScale(8));
   AutoSizeFont(title_font_d, (width * scale_title_font) / 100U,
                "1234567890A");
 
   title_font.Load(title_font_d);
   title_font_bold.Load(title_font_d.WithBold(true));
 
-  FontDescription value_font_d(10, true);
+  FontDescription value_font_d(Layout::FontScale(10), true);
   AutoSizeFont(value_font_d, width, "1234m");
   value_font.Load(value_font_d);
 
-  FontDescription small_value_font_d(10);
+  FontDescription small_value_font_d(Layout::FontScale(10));
   AutoSizeFont(small_value_font_d, width, "12345m");
   small_value_font.Load(small_value_font_d);
 
-  unsigned unit_font_height = std::max(value_font_d.GetHeight() * 2u / 5u, 7u);
+  const unsigned min_unit_pt_px = Layout::FontScale(8);
+  unsigned unit_font_height =
+    std::max(value_font_d.GetHeight() * 2u / 5u, min_unit_pt_px);
   unit_font.Load(FontDescription(unit_font_height));
 
 #ifdef HAVE_TEXT_CACHE
