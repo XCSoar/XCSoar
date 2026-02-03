@@ -549,11 +549,12 @@ DeviceDescriptor::OnReopenTimer() noexcept
   
   // This runs after the 5-second delay
   try {
-    MessageOperationEnvironment env;
+    static MessageOperationEnvironment env;
     Open(env);
   } catch (...) {
     LogError(std::current_exception(), "Failed to reopen device after delay");
   }
+  reconnecting = false;
   return;
 }
 
@@ -562,6 +563,8 @@ DeviceDescriptor::SlowReopen()
 {
   assert(InMainThread());
   assert(!IsBorrowed());
+
+  reconnecting = true;
 
   Close();
   // Schedule the Open() call after 5 seconds instead of blocking

@@ -280,6 +280,8 @@ class DeviceDescriptor final
    */
   bool borrowed = false;
 
+  bool reconnecting = false;
+
 public:
   DeviceDescriptor(DeviceBlackboard &_blackboard,
                    NMEALogger *_nmea_logger,
@@ -461,6 +463,10 @@ public:
 
   bool IsNMEAOut() const noexcept;
   bool IsManageable() const noexcept;
+
+  bool IsReconnecting() const noexcept {
+    return reconnecting;
+  }
 
   bool IsBorrowed() const noexcept {
     return borrowed;
