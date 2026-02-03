@@ -185,6 +185,13 @@ public:
    * @return true if the screen has been resized
    */
   bool CheckResize(PixelSize new_native_size) noexcept;
+
+  /**
+   * Same as above, with separate content (logical) size for HiDPI.
+   * When content_size is non-zero, viewport is native_size and
+   * projection uses content_size (logical coords -> physical viewport).
+   */
+  bool CheckResize(PixelSize new_native_size, PixelSize content_size) noexcept;
 #endif
 
 #ifdef USE_FB
@@ -283,6 +290,8 @@ private:
 
 #ifdef ENABLE_OPENGL
   PixelSize SetupViewport(PixelSize native_size) noexcept;
+  PixelSize SetupViewport(PixelSize native_size,
+                          PixelSize content_size) noexcept;
 #endif
 
 #ifdef USE_EGL

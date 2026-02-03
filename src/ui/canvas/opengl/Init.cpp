@@ -210,29 +210,42 @@ OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation) noexcept
 UnsignedPoint2D
 OpenGL::SetupViewport(UnsignedPoint2D size) noexcept
 {
+  return SetupViewport(size, size);
+}
+
+UnsignedPoint2D
+OpenGL::SetupViewport(UnsignedPoint2D size,
+                      UnsignedPoint2D content_size) noexcept
+{
   window_size = size;
 
   glViewport(0, 0, size.x, size.y);
 
+  /* Use content_size for projection when set (HiDPI: logical -> physical) */
+  const bool have_content = content_size.x > 0 && content_size.y > 0;
+  UnsignedPoint2D proj_size = have_content ? content_size : size;
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  OrientationSwap(size, display_orientation);
+  OrientationSwap(proj_size, display_orientation);
 #endif
 
-  projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
+  projection_matrix =
+    glm::ortho<float>(0, proj_size.x, proj_size.y, 0, -1, 1);
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   glm::mat4 rot_matrix = glm::rotate(
     glm::mat4(1),
-    (GLfloat)Angle::Degrees(OrientationToRotation(display_orientation)).Radians(),
+    (GLfloat)Angle::Degrees(OrientationToRotation(display_orientation))
+      .Radians(),
     glm::vec3(0, 0, 1));
   projection_matrix = rot_matrix * projection_matrix;
 #endif
 
-  viewport_size = size;
+  viewport_size = proj_size;
 
   UpdateShaderProjectionMatrix();
 
-  return size;
+  return proj_size;
 }
 
 void

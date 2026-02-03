@@ -20,9 +20,21 @@ HasPointer() noexcept
 
 #if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
 
+static bool touch_screen_override_valid = false;
+static bool touch_screen_override_value = false;
+
+void
+SetTouchScreenOverride(bool value) noexcept
+{
+  touch_screen_override_valid = true;
+  touch_screen_override_value = value;
+}
+
 bool
 HasTouchScreen() noexcept
 {
+  if (touch_screen_override_valid)
+    return touch_screen_override_value;
   return UI::event_queue->HasTouchScreen();
 }
 

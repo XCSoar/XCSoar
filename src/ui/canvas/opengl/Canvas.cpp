@@ -775,12 +775,15 @@ Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const noexcept
 {
   assert(offset == OpenGL::translate);
 
+  const int x = OpenGL::translate.x + src_rc.left;
+  const int y = OpenGL::viewport_size.y - OpenGL::translate.y - src_rc.bottom;
+  const int w = src_rc.GetWidth();
+  const int h = src_rc.GetHeight();
+
+  const auto p = OpenGL::ToPhysicalRect(x, y, w, h);
   texture.Bind();
   glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-                      OpenGL::translate.x + src_rc.left,
-                      OpenGL::viewport_size.y - OpenGL::translate.y - src_rc.bottom,
-                      src_rc.GetWidth(), src_rc.GetHeight());
-
+                     p.x, p.y, p.width, p.height);
 }
 
 void
