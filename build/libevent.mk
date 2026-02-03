@@ -25,9 +25,9 @@ VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_X11),y)
 EVENT_SOURCES += $(SRC)/ui/event/poll/X11Queue.cpp
 else ifeq ($(USE_WAYLAND),y)
+# Wayland protocol public.c objects are linked from libscreen only;
+# WaylandQueue resolves symbols against them when linking the executable.
 EVENT_SOURCES += \
-	$(WAYLAND_GENERATED)/xdg-shell-public.c \
-	$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c \
 	$(SRC)/ui/event/poll/WaylandQueue.cpp
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \

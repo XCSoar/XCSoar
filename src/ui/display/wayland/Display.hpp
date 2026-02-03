@@ -70,6 +70,15 @@ public:
   int GetScale() const noexcept;
 
   /**
+   * Integer scale for buffer sizing and wl_surface_set_buffer_scale,
+   * never below 1 (matches compositor output scale).
+   */
+  int GetBufferScale() const noexcept {
+    const int s = GetScale();
+    return s < 1 ? 1 : s;
+  }
+
+  /**
    * Returns whether a touch screen is available.
    */
   bool HasTouchScreen() const noexcept;

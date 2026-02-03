@@ -16,7 +16,6 @@
 #include "ui/canvas/opengl/Globals.hpp"
 #endif
 
-#include <algorithm>
 #include <chrono>
 #include <stdexcept>
 
@@ -146,7 +145,7 @@ TopWindow::CreateNative(const char *text, PixelSize size,
   /* Use buffer scale only when wl_surface has version >= 3 (set_buffer_scale);
    * otherwise stick to scale 1 for compatibility with older compositors. */
   const int scale = (wl_proxy_get_version((struct wl_proxy *)wl_surface) >= 3)
-    ? std::max(1, display.GetScale())
+    ? display.GetBufferScale()
     : 1;
   if (scale > 1)
     wl_surface_set_buffer_scale(wl_surface, scale);
@@ -280,7 +279,7 @@ TopWindow::OnResize(PixelSize new_size) noexcept
     return;
 
   /* new_size is logical; buffer and viewport use physical (logical * scale) */
-  const int scale = std::max(1, display.GetScale());
+  const int scale = display.GetBufferScale();
   const auto physical_size =
     PixelSize(new_size.width * scale, new_size.height * scale);
 
