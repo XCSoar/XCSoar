@@ -6,19 +6,11 @@
 #include "ui/display/Display.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Asset.hpp"
+#include "Math/Point2D.hpp"
 
 #include <algorithm>
 
 namespace Layout {
-
-#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
-static constexpr unsigned
-MMToDPI(unsigned pixels, unsigned mm) noexcept
-{
-  /* 1 inch = 25.4 mm */
-  return pixels * 254 / (mm * 10);
-}
-#endif
 
 bool landscape = false;
 unsigned min_screen_pixels = 512;
@@ -89,21 +81,15 @@ Initialise(const UI::Display &display, PixelSize new_size,
     return;
 
   const auto dpi = Display::GetDPI(display, custom_dpi);
-  
+
   /* Get physical DPI for font scaling to maintain same physical size
      regardless of forced DPI. */
   UnsignedPoint2D physical_dpi = dpi;
 #if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
   {
-    const auto size = display.GetSize();
-    const auto size_mm = display.GetSizeMM();
-    if (size.width > 0 && size.height > 0 &&
-        size_mm.width > 0 && size_mm.height > 0) {
-      physical_dpi = {
-        MMToDPI(size.width, size_mm.width),
-        MMToDPI(size.height, size_mm.height),
-      };
-    }
+    const auto from_mm = Display::PhysicalDpiFromDisplayMm(display);
+    if (from_mm.x > 0 && from_mm.y > 0)
+      physical_dpi = from_mm;
   }
 #endif
 
@@ -111,16 +97,8 @@ Initialise(const UI::Display &display, PixelSize new_size,
      in logical space: effective_dpi = physical_dpi / content_scale so we do
      not double-scale. One factor aligns with typical X11 (Xft.dpi 120). */
   const unsigned content_scale = Display::GetContentScale(display);
-  static constexpr unsigned CONTENT_SCALE_DPI_FACTOR = 120;
-  UnsignedPoint2D effective_dpi = physical_dpi;
-  if (content_scale > 1) {
-    effective_dpi.x = std::clamp(physical_dpi.x * CONTENT_SCALE_DPI_FACTOR /
-                                  (content_scale * 100),
-                                1u, physical_dpi.x);
-    effective_dpi.y = std::clamp(physical_dpi.y * CONTENT_SCALE_DPI_FACTOR /
-                                  (content_scale * 100),
-                                1u, physical_dpi.y);
-  }
+  UnsignedPoint2D effective_dpi =
+    DisplayMetrics::EffectiveDpiForContentScale(physical_dpi, content_scale);
   
   const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
                                              dpi);
@@ -159,10 +137,8 @@ Initialise(const UI::Display &display, PixelSize new_size,
   if (HasTouchScreen()) {
     /* Larger rows for touch; when content_scale > 1 use same logical-space
        rule and factor as effective_dpi so physical height matches. */
-    unsigned touch_height = Scale(30u);
-    if (content_scale > 1)
-      touch_height = touch_height / content_scale *
-                     CONTENT_SCALE_DPI_FACTOR / 100;
+    unsigned touch_height = DisplayMetrics::TouchControlHeightForContentScale(
+      Scale(30u), content_scale);
     maximum_control_height = touch_height;
     if (maximum_control_height < minimum_control_height)
       maximum_control_height = minimum_control_height;

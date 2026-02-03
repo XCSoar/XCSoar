@@ -3,11 +3,13 @@
 
 #pragma once
 
+#include "Math/DisplayMetrics.hpp"
+#include "Math/Point2D.hpp"
+#include "ui/dim/Size.hpp"
+
 #if defined(USE_FB) || defined(ANDROID)
 #define HAVE_DPI_DETECTION
 #endif
-
-struct UnsignedPoint2D;
 
 namespace UI { class Display; }
 
@@ -48,6 +50,24 @@ UnsignedPoint2D
 GetDPI(const UI::Display &display, unsigned custom_dpi=0) noexcept;
 
 /**
+ * Physical DPI from pixel dimensions and physical span in millimetres.
+ * Returns {0,0} when any dimension is zero.
+ */
+[[nodiscard]] constexpr UnsignedPoint2D
+PhysicalDpiFromSizeMm(PixelSize size, PixelSize size_mm) noexcept
+{
+  return DisplayMetrics::PhysicalDpiFromSizeMm(size.width, size.height,
+                                               size_mm.width, size_mm.height);
+}
+
+/**
+ * Same as PhysicalDpiFromSizeMm using the display's reported size and
+ * size in millimetres.
+ */
+UnsignedPoint2D
+PhysicalDpiFromDisplayMm(const UI::Display &display) noexcept;
+
+/**
  * Returns the content scale factor when the display uses logical scaling
  * (e.g. Xft.dpi on X11 when physical size is unavailable). Layout and
  * canvas use logical size = physical size / scale so that pen/font
@@ -62,8 +82,10 @@ GetContentScale(const UI::Display &display) noexcept;
 
 namespace Hardware {
 
-/** Wrapper for Display::GetContentScale usable from code that may
- * have Display macro-defined (e.g. X11). */
+/**
+ * Forwards to Display::GetContentScale().  Use this name in translation
+ * units where the X11 `Display` type macro would shadow UI::Display.
+ */
 [[gnu::const]]
 unsigned
 GetContentScale(const UI::Display &display) noexcept;

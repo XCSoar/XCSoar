@@ -2,9 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "DisplayDPI.hpp"
-#include "ui/dim/Size.hpp"
 #include "ui/display/Display.hpp"
-#include "Math/Point2D.hpp"
 
 #ifdef KOBO
 #include "Kobo/Model.hpp"
@@ -27,17 +25,6 @@ static UnsignedPoint2D forced_dpi{};
 
 #ifdef HAVE_DPI_DETECTION
 static UnsignedPoint2D detected_dpi{};
-#endif
-
-#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND) || defined(HAVE_DPI_DETECTION)
-
-static constexpr unsigned
-MMToDPI(unsigned pixels, unsigned mm)
-{
-  /* 1 inch = 25.4 mm */
-  return pixels * 254 / (mm * 10);
-}
-
 #endif
 
 #if !defined(_WIN32) && !defined(USE_X11) && !defined(MESA_KMS) && !defined(USE_WAYLAND)
@@ -104,13 +91,17 @@ Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
   assert(width_mm > 0);
   assert(height_mm > 0);
 
-  detected_dpi = {
-    MMToDPI(width_pixels, width_mm),
-    MMToDPI(height_pixels, height_mm),
-  };
+  detected_dpi = DisplayMetrics::PhysicalDpiFromSizeMm(
+    width_pixels, height_pixels, width_mm, height_mm);
 }
 
 #endif
+
+UnsignedPoint2D
+Display::PhysicalDpiFromDisplayMm(const UI::Display &display) noexcept
+{
+  return PhysicalDpiFromSizeMm(display.GetSize(), display.GetSizeMM());
+}
 
 UnsignedPoint2D
 Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi) noexcept
@@ -133,18 +124,9 @@ Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi
   return display.GetDPI();
 #elif defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
   {
-    /* Physical DPI from pixel size and physical size (mm). On Wayland
-       size comes from wl_output mode, size_mm from geometry
-       physical_width/height (millimeters). */
-    const auto size = display.GetSize();
-    const auto size_mm = display.GetSizeMM();
-    if (size.width > 0 && size.height > 0 &&
-        size_mm.width > 0 && size_mm.height > 0) {
-      return {
-        MMToDPI(size.width, size_mm.width),
-        MMToDPI(size.height, size_mm.height),
-      };
-    }
+    const auto dpi_from_mm = PhysicalDpiFromDisplayMm(display);
+    if (dpi_from_mm.x > 0 && dpi_from_mm.y > 0)
+      return dpi_from_mm;
 #if defined(USE_X11)
     /* X11 fallback: many setups omit physical size (mm); try Xft.dpi
        from the X resource database (e.g. ~/.Xresources, xrdb). */
@@ -179,8 +161,7 @@ Display::GetContentScale([[maybe_unused]] const UI::Display &display) noexcept
   }
 #elif defined(USE_WAYLAND)
   const auto &wayland_display = static_cast<const Wayland::Display &>(display);
-  const int scale = wayland_display.GetScale();
-  return scale >= 1 ? static_cast<unsigned>(scale) : 1;
+  return static_cast<unsigned>(wayland_display.GetBufferScale());
 #endif
   return 1;
 }
