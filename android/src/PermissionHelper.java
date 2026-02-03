@@ -120,18 +120,28 @@ public class PermissionHelper implements PermissionManager {
     }
   }
 
+  private static final String FOREGROUND_SERVICE_LOCATION =
+    "android.permission.FOREGROUND_SERVICE_LOCATION";
+
   private static String getBackgroundLocationRationale() {
-    return "XCSoar needs permission to access your location in the background (when the app is closed) for flight logging and score calculation. " +
+    return "XCSoar accesses your location in the background (when the app is closed or not in use) to enable continuous flight logging and score calculation. " +
       "If you choose not to allow background location, calculation results may be incomplete.";
+  }
+
+  private static String getForegroundServiceLocationRationale() {
+    return "XCSoar runs a location service in the foreground to enable continuous flight logging and safety warnings when the app is in the background. " +
+      "Android requires this permission to allow that operation.";
   }
 
   private static String getPermissionRationale(String permission) {
     if (isForegroundLocationPermission(permission))
-      return "XCSoar needs permission to access your GPS location - obviously, because XCSoar's purpose is to help you navigate an aircraft.";
+      return "XCSoar accesses your GPS location to enable flight tracking and navigation. This is required for XCSoar's core purpose: helping you navigate an aircraft.";
     else if (isBackgroundLocationPermission(permission))
       return getBackgroundLocationRationale();
+    else if (isForegroundServiceLocationPermission(permission))
+      return getForegroundServiceLocationRationale();
     else if (isBluetoothPermission(permission))
-      return "If you want XCSoar to connect to Bluetooth sensors, it needs your permission.";
+      return "XCSoar accesses Bluetooth to connect to external sensors (e.g. vario, FLARM). If you want XCSoar to use Bluetooth devices, grant this permission.";
     else if (Manifest.permission.POST_NOTIFICATIONS.equals(permission))
       return "XCSoar needs permission to show notifications. A notification is required by Android for background operation, and provides a quick way to return to the app. Background operation is essential for continuous flight logging and safety warnings.";
     else
@@ -159,6 +169,8 @@ public class PermissionHelper implements PermissionManager {
       return "Location";
     else if (isBackgroundLocationPermission(permission))
       return "Background Location";
+    else if (FOREGROUND_SERVICE_LOCATION.equals(permission))
+      return "Foreground service (location)";
     else if (Manifest.permission.BLUETOOTH_CONNECT.equals(permission))
       return "Bluetooth Connect";
     else if (Manifest.permission.BLUETOOTH_SCAN.equals(permission))
@@ -196,6 +208,13 @@ public class PermissionHelper implements PermissionManager {
    */
   private static boolean isBackgroundLocationPermission(String permission) {
     return Manifest.permission.ACCESS_BACKGROUND_LOCATION.equals(permission);
+  }
+
+  /**
+   * Check if a permission is Android 14+ foreground service location permission.
+   */
+  private static boolean isForegroundServiceLocationPermission(String permission) {
+    return FOREGROUND_SERVICE_LOCATION.equals(permission);
   }
 
   /**
@@ -565,12 +584,14 @@ public class PermissionHelper implements PermissionManager {
       /* we already have the permission */
       return true;
 
-    /* For location, Bluetooth, and notification permissions, always show disclosure dialog before
-       requesting permission (required by Google Play policy). For other
-       permissions, only show rationale if user previously denied. */
+    /* For location, foreground service location, Bluetooth, and notification permissions,
+       always show disclosure dialog before requesting permission (required by Google Play
+       policy). For other permissions, only show rationale if user previously denied. */
     final boolean isLocationPerm = isLocationPermission(permission);
     final boolean isBluetoothPerm = isBluetoothPermission(permission);
     final boolean isNotificationPerm = isNotificationPermission(permission);
+    final boolean isForegroundServiceLocationPerm =
+      isForegroundServiceLocationPermission(permission);
 
     /* Queue the permission request to prevent overlapping dialogs.
        Synchronize queue operations to ensure thread-safety with processNextPermission(). */
@@ -607,12 +628,14 @@ public class PermissionHelper implements PermissionManager {
     isProcessingPermission = true;
     PermissionHandler handler = request.handler;
 
-    /* For location, Bluetooth, and notification permissions, always show disclosure dialog before
-       requesting permission (required by Google Play policy). For other
-       permissions, only show rationale if user previously denied. */
+    /* For location, foreground service location, Bluetooth, and notification permissions,
+       always show disclosure dialog before requesting permission (required by Google Play
+       policy). For other permissions, only show rationale if user previously denied. */
     final boolean isLocationPerm = isLocationPermission(permission);
     final boolean isBluetoothPerm = isBluetoothPermission(permission);
     final boolean isNotificationPerm = isNotificationPermission(permission);
+    final boolean isForegroundServiceLocationPerm =
+      isForegroundServiceLocationPermission(permission);
 
     /* For Bluetooth permissions, check if the other one is also in the queue or needed.
        If so, remove it from queue and handle both together. */
@@ -672,9 +695,11 @@ public class PermissionHelper implements PermissionManager {
       }
     }
 
-    /* Always show consent dialog for location, Bluetooth, and notification permissions */
+    /* Always show consent dialog for location, foreground service location, Bluetooth,
+       and notification permissions (Google Play prominent disclosure requirement). */
     final PermissionHandler finalHandler = handler;
-    if ((isLocationPerm || isBluetoothPerm || isNotificationPerm ||
+    if ((isLocationPerm || isForegroundServiceLocationPerm || isBluetoothPerm ||
+         isNotificationPerm ||
          activity.shouldShowRequestPermissionRationale(permission)) &&
         showRequestPermissionRationaleIndirect(permission, new PermissionHandler() {
             @Override
