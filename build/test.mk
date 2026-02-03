@@ -130,6 +130,10 @@ TEST_NAMES += \
 	TestDriver
 endif
 
+ifeq ($(HAVE_WIN32),y)
+TEST_NAMES += TestUTF8Win
+endif
+
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
 TEST_HEX_STRING_SOURCES = \
@@ -544,6 +548,15 @@ TEST_UTF8_SOURCES = \
 	$(TEST_SRC_DIR)/TestUTF8.cpp
 TEST_UTF8_DEPENDS = UTIL
 $(eval $(call link-program,TestUTF8,TEST_UTF8))
+
+ifeq ($(HAVE_WIN32),y)
+TEST_UTF8WIN_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUTF8Win.cpp \
+	$(SRC)/ui/canvas/gdi/UTF8Win.cpp
+TEST_UTF8WIN_DEPENDS = UTIL
+$(eval $(call link-program,TestUTF8Win,TEST_UTF8WIN))
+endif
 
 TEST_INPUT_CONFIG_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
