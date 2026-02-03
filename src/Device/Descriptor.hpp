@@ -273,6 +273,8 @@ class DeviceDescriptor final
    */
   bool borrowed = false;
 
+  bool waiting_to_call_open = false;
+
 public:
   DeviceDescriptor(DeviceBlackboard &_blackboard,
                    NMEALogger *_nmea_logger,
@@ -454,6 +456,10 @@ public:
 
   bool IsNMEAOut() const noexcept;
   bool IsManageable() const noexcept;
+
+  bool IsWaitingToCallOpen() const noexcept {
+    return waiting_to_call_open;
+  }
 
   bool IsBorrowed() const noexcept {
     return borrowed;
