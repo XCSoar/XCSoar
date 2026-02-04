@@ -15,7 +15,6 @@
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Language/Language.hpp"
 #include "util/StaticString.hxx"
-
 #include <array>
 
 static std::unique_ptr<Widget>

@@ -34,4 +34,5 @@ public:
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
   void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
 };

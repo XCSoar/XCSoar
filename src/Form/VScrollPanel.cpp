@@ -156,18 +156,57 @@ VScrollPanel::ScrollBy(int delta) noexcept
 
   const int max_origin =
     static_cast<int>(virtual_height) - static_cast<int>(physical_height);
-  int new_origin = static_cast<int>(origin) + delta;
+
+  // If already animating, start from target; otherwise from current position
+  int current = smooth_scroll_target >= 0 ? smooth_scroll_target
+                                          : static_cast<int>(origin);
+  int new_origin = current + delta;
+
   if (new_origin < 0)
     new_origin = 0;
   else if (new_origin > max_origin)
     new_origin = max_origin;
 
-  if (static_cast<unsigned>(new_origin) == origin)
+  if (new_origin == current)
     return;
 
-  origin = static_cast<unsigned>(new_origin);
-  listener.OnVScrollPanelChange();
-  Invalidate();
+  SmoothScrollTo(new_origin);
+}
+
+void
+VScrollPanel::SmoothScrollTo(int target) noexcept
+{
+  const unsigned physical_height = GetSize().height;
+  const int max_origin = std::max(0, static_cast<int>(virtual_height) -
+                                     static_cast<int>(physical_height));
+
+  smooth_scroll_target = std::clamp(target, 0, max_origin);
+
+  // Start animation at ~60fps
+  smooth_scroll_timer.Schedule(std::chrono::milliseconds(16));
+}
+
+void
+VScrollPanel::OnSmoothScrollTimer() noexcept
+{
+  if (smooth_scroll_target < 0) {
+    smooth_scroll_timer.Cancel();
+    return;
+  }
+
+  const int diff = smooth_scroll_target - static_cast<int>(origin);
+
+  if (std::abs(diff) <= 1) {
+    // Close enough - snap to target and stop
+    SetOriginClamped(smooth_scroll_target);
+    smooth_scroll_target = -1;
+    smooth_scroll_timer.Cancel();
+  } else {
+    // Ease-out: move a fraction of remaining distance
+    // Using 1/3 gives ~100ms animation for typical distances
+    const int step = diff / 3;
+    SetOriginClamped(static_cast<int>(origin) + (step != 0 ? step : (diff > 0 ? 1 : -1)));
+  }
 }
 
 static bool UsePixelPan() noexcept
@@ -204,6 +243,7 @@ void
 VScrollPanel::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();
+  smooth_scroll_timer.Cancel();
   PanelControl::OnDestroy();
 }
 
@@ -328,6 +368,8 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
   scroll_bar.DragEnd(this);
 
   kinetic_timer.Cancel();
+  smooth_scroll_timer.Cancel();
+  smooth_scroll_target = -1;
 
   if (scroll_bar.IsInsideSlider(p)) {
     scroll_bar.DragBegin(this, p.y);
@@ -382,6 +424,8 @@ VScrollPanel::OnCancelMode() noexcept
     ReleaseCapture();
   }
   kinetic_timer.Cancel();
+  smooth_scroll_timer.Cancel();
+  smooth_scroll_target = -1;
 }
 
 void
@@ -406,20 +450,24 @@ void
 VScrollPanel::ScrollTo(const PixelRect &rc) noexcept
 {
   if (scroll_bar.IsDefined()) {
-    const unsigned old_origin = origin;
-
     const unsigned physical_height = GetSize().height;
-    assert(physical_height < virtual_height);
+    if (physical_height >= virtual_height) {
+      PanelControl::ScrollTo(rc);
+      return;
+    }
 
-    if (int delta = rc.bottom - (int)physical_height; delta > 0)
-      origin = std::min(origin + (unsigned)delta,
-                        virtual_height - (unsigned)physical_height);
+    // Calculate the target origin to bring rc into view
+    int target_origin = static_cast<int>(origin);
+
+    if (int delta = rc.bottom - static_cast<int>(physical_height); delta > 0)
+      target_origin = std::min(target_origin + delta,
+                               static_cast<int>(virtual_height - physical_height));
 
     if (int delta = rc.top; delta < 0)
-      origin = std::max((int)origin + delta, 0);
+      target_origin = std::max(target_origin + delta, 0);
 
-    if (origin != old_origin)
-      listener.OnVScrollPanelChange();
+    if (target_origin != static_cast<int>(origin))
+      SmoothScrollTo(target_origin);
   }
 
   PanelControl::ScrollTo(rc);

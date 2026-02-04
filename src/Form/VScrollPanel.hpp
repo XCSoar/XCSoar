@@ -70,6 +70,16 @@ class VScrollPanel final : public PanelControl {
   KineticManager kinetic;
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
+  /**
+   * Target position for smooth keyboard scrolling (-1 = no animation).
+   */
+  int smooth_scroll_target = -1;
+
+  /**
+   * Timer for smooth scroll animation (~60fps).
+   */
+  UI::PeriodicTimer smooth_scroll_timer{[this]{ OnSmoothScrollTimer(); }};
+
 public:
   VScrollPanel(ContainerWindow &parent, const DialogLook &look,
                const PixelRect &rc, const WindowStyle style,
@@ -113,6 +123,12 @@ private:
   void SetupScrollBar() noexcept;
   void SetOriginClamped(int new_origin) noexcept;
   void OnKineticTimer() noexcept;
+  void OnSmoothScrollTimer() noexcept;
+
+  /**
+   * Start smooth scrolling to a target position with easing.
+   */
+  void SmoothScrollTo(int target) noexcept;
 
   /**
    * Update the position and visibility of scroll arrow buttons.

@@ -153,9 +153,17 @@ PostflightWidget::Initialise(ContainerWindow &parent,
 {
   WindowStyle style;
   style.Hide();
+  style.TabStop();
   auto w = std::make_unique<PostflightWindow>();
   w->Create(parent, rc, style);
   SetWindow(std::move(w));
+}
+
+bool
+PostflightWidget::SetFocus() noexcept
+{
+  GetWindow().SetFocus();
+  return true;
 }
 
 void

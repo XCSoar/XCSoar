@@ -146,9 +146,17 @@ PreflightWidget::Initialise(ContainerWindow &parent,
 {
   WindowStyle style;
   style.Hide();
+  style.TabStop();
   auto w = std::make_unique<PreflightWindow>();
   w->Create(parent, rc, style);
   SetWindow(std::move(w));
+}
+
+bool
+PreflightWidget::SetFocus() noexcept
+{
+  GetWindow().SetFocus();
+  return true;
 }
 
 void

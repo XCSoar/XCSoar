@@ -268,9 +268,17 @@ ConfigurationWidget::Initialise(ContainerWindow &parent,
 {
   WindowStyle style;
   style.Hide();
+  style.TabStop();
   auto w = std::make_unique<ConfigurationWindow>();
   w->Create(parent, rc, style);
   SetWindow(std::move(w));
+}
+
+bool
+ConfigurationWidget::SetFocus() noexcept
+{
+  GetWindow().SetFocus();
+  return true;
 }
 
 void

@@ -116,6 +116,11 @@ QuickGuideScrollWidget::OnVScrollPanelChange() noexcept
 bool
 QuickGuideScrollWidget::SetFocus() noexcept
 {
+  // Try to give focus to the content widget first
+  if (widget->SetFocus())
+    return true;
+
+  // Fall back to the scroll panel
   GetWindow().SetFocus();
   return true;
 }
