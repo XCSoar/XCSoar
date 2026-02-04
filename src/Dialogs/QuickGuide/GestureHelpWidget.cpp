@@ -23,19 +23,42 @@ CalcTextSizeSingle(const Font &font, const TCHAR *text) noexcept
   return canvas.CalcTextSize(text);
 }
 
+/**
+ * Calculate scaled size maintaining aspect ratio.
+ * @param src_size Original bitmap size
+ * @param target_height Desired height after scaling
+ * @return Scaled size with correct aspect ratio
+ */
+static PixelSize
+ScaleSizeByHeight(PixelSize src_size, unsigned target_height) noexcept
+{
+  if (src_size.height == 0)
+    return src_size;
+
+  const double scale = double(target_height) / src_size.height;
+  return {
+    unsigned(src_size.width * scale),
+    target_height
+  };
+}
+
 unsigned
 GestureHelpWindow::Layout(Canvas *canvas, const PixelRect &rc,
                           GestureHelpWindow *window) noexcept
 {
   Bitmap tmp_du(IDB_GESTURE_DU);
-  const PixelSize img_size = window != nullptr
+  const PixelSize img_src_size = window != nullptr
     ? window->du_img.GetSize()
     : tmp_du.GetSize();
 
+  // Scale gesture icons based on DPI (target ~32px scaled height)
+  const unsigned target_icon_height = Layout::Scale(32u);
+  const PixelSize img_size = ScaleSizeByHeight(img_src_size, target_icon_height);
+
   const int margin = Layout::FastScale(10);
   const int x_img = rc.left + margin;
-  const int x_letter = x_img + img_size.width + margin;
-  const int x_text = x_img + img_size.width + Layout::FastScale(5) + 2 * margin;
+  const int x_letter = x_img + int(img_size.width) + margin;
+  const int x_text = x_img + int(img_size.width) + Layout::FastScale(5) + 2 * margin;
   int y = rc.top + margin;
 
   Font fontDefault;
@@ -87,8 +110,10 @@ GestureHelpWindow::Layout(Canvas *canvas, const PixelRect &rc,
 
   auto DrawGesture = [&](const Bitmap &bitmap, const TCHAR *text,
                          const TCHAR *letter=nullptr) {
-    if (canvas != nullptr && window != nullptr)
-      canvas->Copy({x_img, y}, img_size, bitmap, {0, 0});
+    if (canvas != nullptr && window != nullptr) {
+      const PixelSize src_size = bitmap.GetSize();
+      canvas->Stretch({x_img, y}, img_size, bitmap, {0, 0}, src_size);
+    }
 
     const PixelSize text_ps = CalcTextSizeSingle(fontDefault, text);
     if (canvas != nullptr && window != nullptr) {

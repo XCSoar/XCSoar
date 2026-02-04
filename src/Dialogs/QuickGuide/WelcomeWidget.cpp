@@ -17,6 +17,7 @@
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
+#include <algorithm>
 #include <winuser.h>
 
 struct WelcomeLayoutResult {
@@ -24,6 +25,25 @@ struct WelcomeLayoutResult {
   PixelRect xcsoar_link_rect;
   PixelRect github_link_rect;
 };
+
+/**
+ * Calculate scaled size maintaining aspect ratio.
+ * @param src_size Original bitmap size
+ * @param target_width Desired width after scaling
+ * @return Scaled size with correct aspect ratio
+ */
+static PixelSize
+ScaleSize(PixelSize src_size, unsigned target_width) noexcept
+{
+  if (src_size.width == 0)
+    return src_size;
+
+  const double scale = double(target_width) / src_size.width;
+  return {
+    target_width,
+    unsigned(src_size.height * scale)
+  };
+}
 
 static WelcomeLayoutResult
 LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
@@ -47,39 +67,51 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
     canvas->SetTextColor(COLOR_BLACK);
   }
 
+  // Scale logo to fit available width (max 50% of width, scaled for DPI)
+  const unsigned max_logo_width = std::min(Layout::Scale(160u),
+                                           width_u > margin_u ? (width_u - margin_u) / 2 : 160u);
+
 #ifdef ENABLE_OPENGL
   // OpenGL builds use RGBA PNGs for transparency.
   Bitmap logo_alpha(IDB_LOGO_HD_RGBA);
   Bitmap title_alpha(IDB_TITLE_HD_RGBA);
-  PixelSize logo_size = logo_alpha.GetSize();
-  const int x_logo = rc.GetWidth() / 2 - (logo_size.width / 2);
+  const PixelSize logo_src_size = logo_alpha.GetSize();
+  const PixelSize logo_size = ScaleSize(logo_src_size, max_logo_width);
+  const int x_logo = rc.GetWidth() / 2 - int(logo_size.width / 2);
   if (canvas != nullptr) {
     const ScopeAlphaBlend alpha_blend;
-    canvas->Copy({x_logo, y}, logo_size, logo_alpha, {0, 0});
+    canvas->Stretch({x_logo, y}, logo_size, logo_alpha, {0, 0}, logo_src_size);
   }
 #else
   // Non-OpenGL builds use opaque bitmaps.
   Bitmap logo(IDB_LOGO_HD);
-  PixelSize logo_size = logo.GetSize();
-  const int x_logo = rc.GetWidth() / 2 - (logo_size.width / 2);
+  const PixelSize logo_src_size = logo.GetSize();
+  const PixelSize logo_size = ScaleSize(logo_src_size, max_logo_width);
+  const int x_logo = rc.GetWidth() / 2 - int(logo_size.width / 2);
   if (canvas != nullptr)
-    canvas->Copy({x_logo, y}, logo_size, logo, {0, 0});
+    canvas->Stretch({x_logo, y}, logo_size, logo, {0, 0}, logo_src_size);
 #endif
   y += int(logo_size.height) + half_margin;
 
+  // Scale title to fit available width (max 80% of width, scaled for DPI)
+  const unsigned max_title_width = std::min(Layout::Scale(320u),
+                                            width_u > margin_u ? (width_u - margin_u) * 4 / 5 : 320u);
+
 #ifdef ENABLE_OPENGL
-  PixelSize title_size = title_alpha.GetSize();
-  const int x_title = rc.GetWidth() / 2 - (title_size.width / 2);
+  const PixelSize title_src_size = title_alpha.GetSize();
+  const PixelSize title_size = ScaleSize(title_src_size, max_title_width);
+  const int x_title = rc.GetWidth() / 2 - int(title_size.width / 2);
   if (canvas != nullptr) {
     const ScopeAlphaBlend alpha_blend;
-    canvas->Copy({x_title, y}, title_size, title_alpha, {0, 0});
+    canvas->Stretch({x_title, y}, title_size, title_alpha, {0, 0}, title_src_size);
   }
 #else
   Bitmap title(IDB_TITLE_HD);
-  PixelSize title_size = title.GetSize();
-  const int x_title = rc.GetWidth() / 2 - (title_size.width / 2);
+  const PixelSize title_src_size = title.GetSize();
+  const PixelSize title_size = ScaleSize(title_src_size, max_title_width);
+  const int x_title = rc.GetWidth() / 2 - int(title_size.width / 2);
   if (canvas != nullptr)
-    canvas->Copy({x_title, y}, title_size, title, {0, 0});
+    canvas->Stretch({x_title, y}, title_size, title, {0, 0}, title_src_size);
 #endif
   y += int(title_size.height) + margin * 2;
 
