@@ -70,9 +70,9 @@ alwaysApply: true
     COUNT  // sentinel
   };
   
-  static const TCHAR *const names[] = {
-    _T("Value 1"),
-    _T("Value 2"),
+  static const char *const names[] = {
+    "Value 1",
+    "Value 2",
   };
   
   static_assert(ARRAY_SIZE(names) == unsigned(MyEnum::COUNT),
@@ -95,7 +95,7 @@ alwaysApply: true
 - Use `N_()` macro for strings in static arrays/initializers that are translated later via `gettext()`: `N_("Text")`
 - Example with `N_()`:
   ```cpp
-  static constexpr const TCHAR *const names[] = {
+  static constexpr const char *const names[] = {
     N_("Value 1"),
     N_("Value 2"),
   };
@@ -161,9 +161,9 @@ alwaysApply: true
 - Explain *why* the change is being made, not just *what* changed
 - Example:
   ```
-  Path: Fix TCHAR to UTF-8 conversion in file I/O
+  Path: Fix char to UTF-8 conversion in file I/O
 
-  The file I/O layer was incorrectly handling TCHAR strings on Windows,
+  The file I/O layer was incorrectly handling char strings on Windows,
   leading to potential buffer overflows. This change uses the Path
   abstraction to ensure safe conversion at the API boundary.
   ```
@@ -191,31 +191,26 @@ alwaysApply: true
 
 ### Multi-Platform Considerations
 - XCSoar is a multi-platform project supporting: Windows (PC, WIN64), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
-- **Unicode/Non-Unicode handling:**
-  - Use `TCHAR` for character types (maps to `char` on Unix/Android/iOS, `wchar_t` on Windows with `_UNICODE`)
-  - Use `_T()` macro for string literals (e.g., `_T("Hello")`)
-  - Use `tstring` (maps to `std::string` or `std::wstring` depending on build)
-  - On Windows: can be built with or without `_UNICODE` (Unicode vs ANSI)
-  - On Unix/Android/iOS: always uses UTF-8 (`char`, non-Unicode build)
-  - Use conversion utilities (`WideToUTF8Converter`, `UTF8ToWideConverter`) when interfacing between different string types
+- **String handling (UTF-8 everywhere):**
+  - XCSoar uses UTF-8 encoding on all platforms
+  - For new code: use `char`, `std::string`, `std::string_view`, plain string literals
+  - Legacy code still uses `TCHAR` and `_T()` - these are now aliases for `char` and no-op respectively (defined in `src/unix/tchar.h`)
+  - Avoid adding new `TCHAR`/`_T()` usage; migrate incrementally when touching existing code
 - **File Path Handling:**
   - **Use `Path` class for all file paths** - This is the primary abstraction for file paths across the codebase
-  - `Path` class automatically handles TCHAR differences:
-    - On Windows (Unicode build): `Path::char_type` = `wchar_t` (UTF-16)
-    - On Unix/Android/iOS: `Path::char_type` = `char` (UTF-8)
-  - **File I/O conversion boundary**: File I/O operations (`FileOutputStream`, `FileReader`, `FileUtil`) are the single conversion point
-    - On Windows: Convert `Path` to UTF-16 for Windows APIs (`CreateFileW()`, `FindFirstFileW()`, etc.)
-    - On Unix: Use `Path::c_str()` directly (already UTF-8)
+  - `Path::char_type` is now always `char` (UTF-8)
+  - On Windows: File APIs use ANSI encoding (system code page); file names should use ASCII characters
+  - On Unix: Uses UTF-8 directly via `Path::c_str()`
   - Use `Path::ToUTF8()` when you need UTF-8 string representation
-  - **Best practice**: Always use `Path` or `AllocatedPath` for file paths, never raw `TCHAR*` or `char*` strings
+  - **Best practice**: Always use `Path` or `AllocatedPath` for file paths, never raw `char*` strings
   - Example:
     ```cpp
     // Good: Use Path class
-    AllocatedPath file_path = LocalPath(_T("config.prf"));
+    AllocatedPath file_path = LocalPath("config.prf");
     FileOutputStream fos(file_path, FileOutputStream::Mode::CREATE);
     
-    // Avoid: Raw TCHAR* for file paths
-    // TCHAR *file_path = _T("config.prf");  // Don't do this
+    // Avoid: Raw char* for file paths
+    // char *file_path = "config.prf";  // Don't do this
     ```
 - **Platform detection:**
   - Use `#ifdef ANDROID`, `#ifdef __APPLE__`, `#ifdef WIN32`, `#ifdef KOBO`, etc. for platform-specific code
