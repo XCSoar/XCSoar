@@ -16,6 +16,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <cstdio>
+#include <string>
 #include <vector>
 
 #ifdef HAVE_POSIX
@@ -24,6 +26,10 @@
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
+#endif
+
+#if defined(_WIN32)
+#include <windows.h>
 #endif
 
 void
@@ -49,6 +55,61 @@ Directory::Exists(Path path) noexcept
   DWORD attributes = GetFileAttributes(path.c_str());
   return attributes != INVALID_FILE_ATTRIBUTES &&
     (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+#endif
+}
+
+bool
+Directory::IsWritable(Path path) noexcept
+{
+#ifdef HAVE_POSIX
+  return access(path.c_str(), W_OK) == 0;
+#elif defined(_WIN32)
+  if (!Directory::Exists(path))
+    return false;
+
+  // Try to create a uniquely-named file using CreateFileA and remove it
+  // immediately. This avoids CRT path formatting and keeps overhead low.
+  std::string base = path.c_str();
+  if (base.empty())
+    return false;
+
+  const bool needs_sep = base.back() != '\\' &&
+    base.back() != '/';
+  if (needs_sep)
+    base.push_back('\\');
+
+  constexpr size_t hex_len = 8;
+  constexpr std::string_view suffix = "_wt";
+  constexpr std::string_view ext = ".tmp";
+  if (base.size() + suffix.size() + hex_len + ext.size() >= MAX_PATH)
+    return false;
+
+  const unsigned seed = GetTickCount() ^ GetCurrentProcessId();
+  for (unsigned attempt = 0; attempt < 8; ++attempt) {
+    char hexbuf[hex_len + 1];
+    std::snprintf(hexbuf, sizeof(hexbuf), "%08x", seed ^ attempt);
+
+    std::string tmpname = base;
+    tmpname.append(suffix);
+    tmpname.append(hexbuf);
+    tmpname.append(ext);
+
+    HANDLE h = CreateFileA(tmpname.c_str(),
+                          GENERIC_WRITE,
+                          FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                          nullptr,
+                          CREATE_NEW,
+                          FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
+                          nullptr);
+    if (h != INVALID_HANDLE_VALUE) {
+      CloseHandle(h);
+      return true;
+    }
+  }
+  return false;
+#else
+  // assume writability
+  return true;
 #endif
 }
 
