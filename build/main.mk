@@ -109,6 +109,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/RouteConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SiteConfigPanel.cpp \
+	$(SRC)/Dialogs/DataManagement/TargetPickerDialog.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp \
@@ -242,6 +243,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/util/MD5.cpp \
+	$(SRC)/util/UnescapeCString.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
@@ -481,6 +483,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Repository/FileRepository.cpp \
 	$(SRC)/Repository/Parser.cpp \
 	\
+	$(SRC)/Storage/PlatformStorageMonitor.cpp \
+	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
 	\
@@ -539,7 +543,19 @@ XCSOAR_SOURCES := \
 	$(SRC)/Monitor/AllMonitors.cpp \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \
-	$(SRC)/Hardware/Battery.cpp
+	$(SRC)/Hardware/Battery.cpp \
+
+ifeq ($(HAVE_POSIX),y)
+	XCSOAR_SOURCES += \
+		$(SRC)/Storage/posix/LinuxStorageDevice.cpp \
+		$(SRC)/Storage/posix/LinuxStorageMonitor.cpp
+endif
+
+ifeq ($(HAVE_WIN32),y)
+	XCSOAR_SOURCES += \
+		$(SRC)/Storage/win/WindowsStorageDevice.cpp \
+		$(SRC)/Storage/win/WindowsStorageMonitor.cpp
+endif
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
