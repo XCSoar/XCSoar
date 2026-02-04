@@ -16,6 +16,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <vector>
 
 #ifdef HAVE_POSIX
 #include <dirent.h>
@@ -398,6 +399,34 @@ File::ReadString(Path path, char *buffer, size_t size) noexcept
 
   buffer[nbytes] = '\0';
   return true;
+}
+
+bool
+File::ReadLink([[maybe_unused]] Path path,
+               [[maybe_unused]] std::string &out) noexcept
+{
+#ifdef HAVE_POSIX
+  // readlink does not null-terminate; resize buffer as needed
+  size_t bufsize = 256;
+  std::vector<char> buf;
+
+  while (true) {
+    buf.resize(bufsize);
+    ssize_t n = readlink(path.c_str(), buf.data(), buf.size());
+    if (n < 0)
+      return false;
+    if (static_cast<size_t>(n) < buf.size()) {
+      out.assign(buf.data(), static_cast<size_t>(n));
+      return true;
+    }
+    // truncated, increase buffer and retry
+    bufsize *= 2;
+    if (bufsize > 65536)
+      return false;
+  }
+#else
+  return false;
+#endif
 }
 
 bool
