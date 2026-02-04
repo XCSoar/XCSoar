@@ -10,6 +10,11 @@
 #include "java/Global.hxx"
 #endif
 
+#ifdef _WIN32
+#include <shellapi.h>
+#include <tchar.h>
+#endif
+
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
@@ -38,6 +43,11 @@ bool OpenLink(const char *url) noexcept {
   // Android - use Intent.ACTION_VIEW via JNI
   if (native_view != nullptr)
     return native_view->OpenURL(Java::GetEnv(), url);
+#elif defined(_WIN32)
+  // Windows - use ShellExecute to open URL in default browser
+  // ShellExecuteA returns > 32 on success
+  return reinterpret_cast<INT_PTR>(
+    ShellExecuteA(nullptr, "open", url, nullptr, nullptr, SW_SHOWNORMAL)) > 32;
 #elif defined(HAVE_RUN_FILE)
   // Linux/UNIX - use xdg-open via RunFile
   return RunFile(url);
