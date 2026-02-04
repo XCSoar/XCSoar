@@ -274,6 +274,21 @@ class NativeView extends SurfaceView
   }
 
   /**
+   * Opens a URL in the default browser.
+   */
+  private boolean openURL(String url) {
+    try {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      getContext().startActivity(intent);
+      return true;
+    } catch (Exception e) {
+      Log.e(TAG, "openURL('" + url + "') error", e);
+      return false;
+    }
+  }
+
+  /**
    * Starts a VIEW intent for a given file
    */
   private void openWaypointFile(int id, String filename) {

@@ -21,6 +21,7 @@ jmethodID NativeView::loadResourceBitmap_method;
 jmethodID NativeView::loadFileBitmap_method;
 jmethodID NativeView::bitmapToTexture_method;
 jmethodID NativeView::shareText_method;
+jmethodID NativeView::openURL_method;
 jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
 
@@ -57,6 +58,9 @@ NativeView::Initialise(JNIEnv *env)
 
   shareText_method = env->GetMethodID(cls, "shareText",
                                           "(Ljava/lang/String;)V");
+
+  openURL_method = env->GetMethodID(cls, "openURL",
+                                    "(Ljava/lang/String;)Z");
 
   openWaypointFile_method =
     env->GetMethodID(cls, "openWaypointFile",
@@ -146,4 +150,11 @@ NativeView::ShareText(JNIEnv *env, const char *text) noexcept
 {
   env->CallVoidMethod(obj, shareText_method,
                       Java::String{env, text}.Get());
+}
+
+bool
+NativeView::OpenURL(JNIEnv *env, const char *url) noexcept
+{
+  return env->CallBooleanMethod(obj, openURL_method,
+                                Java::String{env, url}.Get());
 }

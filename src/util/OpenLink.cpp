@@ -4,6 +4,12 @@
 #include "OpenLink.hpp"
 #include "system/RunFile.hpp"
 
+#ifdef ANDROID
+#include "Android/NativeView.hpp"
+#include "Android/Main.hpp"
+#include "java/Global.hxx"
+#endif
+
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
@@ -28,7 +34,11 @@ bool OpenLink(const char *url) noexcept {
   NSString *ns_url = [NSString stringWithUTF8String:url];
   NSURL *nsu = [NSURL URLWithString:ns_url];
   return [[NSWorkspace sharedWorkspace] openURL:nsu];
-#elif !defined(ANDROID) && defined(HAVE_RUN_FILE)
+#elif defined(ANDROID)
+  // Android - use Intent.ACTION_VIEW via JNI
+  if (native_view != nullptr)
+    return native_view->OpenURL(Java::GetEnv(), url);
+#elif defined(HAVE_RUN_FILE)
   // Linux/UNIX - use xdg-open via RunFile
   return RunFile(url);
 #endif
