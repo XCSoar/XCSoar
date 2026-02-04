@@ -13,6 +13,7 @@
 #include "Renderer/TextRenderer.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
+#include "Version.hpp"
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
@@ -115,7 +116,9 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
 #endif
   y += int(title_size.height) + margin * 2;
 
-  const TCHAR *t0 = _("Welcome to XCSoar");
+  // Build welcome message with version
+  StaticString<64> t0;
+  t0.Format(_T("%s %s"), _("Welcome to XCSoar"), _T(XCSoar_Version));
   if (canvas != nullptr)
     canvas->Select(look.bold_font);
   const PixelRect t0_rc{x, y, rc.right - margin, rc.bottom};
