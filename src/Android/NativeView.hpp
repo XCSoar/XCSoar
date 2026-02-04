@@ -96,11 +96,11 @@ public:
   }
 
   void AcquireWakeLock(JNIEnv *env) const noexcept {
-    return env->CallVoidMethod(obj, acquireWakeLock_method);
+    env->CallVoidMethod(obj, acquireWakeLock_method);
   }
 
   void SetFullScreen(JNIEnv *env, bool full_screen) const noexcept {
-    return env->CallVoidMethod(obj, setFullScreen_method, full_screen);
+    env->CallVoidMethod(obj, setFullScreen_method, full_screen);
   }
 
   bool SetRequestedOrientation(JNIEnv *env, ScreenOrientation so) {
