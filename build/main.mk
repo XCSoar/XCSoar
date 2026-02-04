@@ -20,6 +20,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
+	$(SRC)/Dialogs/DataManagement/StorageLocationPickerDialog.cpp \
 	$(SRC)/Dialogs/Device/PortDataField.cpp \
 	$(SRC)/Dialogs/Device/PortPicker.cpp \
 	$(SRC)/Dialogs/Device/DeviceEditWidget.cpp \
@@ -252,6 +253,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/util/MD5.cpp \
 	$(SRC)/system/OpenLink.cpp \
 	$(SRC)/util/MarkdownParser.cpp \
+	$(SRC)/util/UnescapeCString.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
@@ -496,6 +498,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Repository/FileRepository.cpp \
 	$(SRC)/Repository/Parser.cpp \
 	\
+	$(SRC)/Storage/PlatformStorageMonitor.cpp \
+	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
 	\
@@ -554,7 +558,21 @@ XCSOAR_SOURCES := \
 	$(SRC)/Monitor/AllMonitors.cpp \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \
-	$(SRC)/Hardware/Battery.cpp
+	$(SRC)/Hardware/Battery.cpp \
+
+ifneq ($(TARGET),ANDROID)
+ifeq ($(TARGET_IS_LINUX),y)
+	XCSOAR_SOURCES += \
+		$(SRC)/Storage/linux/LinuxStorageDevice.cpp \
+		$(SRC)/Storage/linux/LinuxStorageMonitor.cpp
+endif
+endif
+
+ifeq ($(HAVE_WIN32),y)
+	XCSOAR_SOURCES += \
+		$(SRC)/Storage/win/WindowsStorageDevice.cpp \
+		$(SRC)/Storage/win/WindowsStorageMonitor.cpp
+endif
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
