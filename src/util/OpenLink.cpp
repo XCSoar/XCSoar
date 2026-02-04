@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "OpenLink.hpp"
+#include "system/RunFile.hpp"
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -27,6 +28,9 @@ bool OpenLink(const char *url) noexcept {
   NSString *ns_url = [NSString stringWithUTF8String:url];
   NSURL *nsu = [NSURL URLWithString:ns_url];
   return [[NSWorkspace sharedWorkspace] openURL:nsu];
+#elif !defined(ANDROID) && defined(HAVE_RUN_FILE)
+  // Linux/UNIX - use xdg-open via RunFile
+  return RunFile(url);
 #endif
   (void)url;
   return false;
