@@ -21,11 +21,12 @@
 #include <algorithm>
 #include <winuser.h>
 
-struct WelcomeLayoutResult {
-  unsigned height;
-  PixelRect xcsoar_link_rect;
-  PixelRect github_link_rect;
-};
+WelcomeWindow::WelcomeWindow() noexcept
+  : QuickGuideLinkWindow()
+{
+  const auto count = static_cast<std::size_t>(LinkAction::COUNT);
+  link_rects.resize(count);
+}
 
 /**
  * Calculate scaled size maintaining aspect ratio.
@@ -46,8 +47,9 @@ ScaleSize(PixelSize src_size, unsigned target_width) noexcept
   };
 }
 
-static WelcomeLayoutResult
-LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
+static unsigned
+LayoutWelcome(Canvas *canvas, const PixelRect &rc,
+              WelcomeWindow *window) noexcept
 {
   const int margin = Layout::FastScale(10);
   const int half_margin = margin / 2;
@@ -156,17 +158,16 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
   y += int(t2_height) + margin;
 
   const TCHAR *t3 = _T("https://xcsoar.org/discover/manual.html");
-  if (canvas != nullptr) {
-    canvas->SetTextColor(COLOR_BLUE);
-    canvas->Select(look.text_font);
-  }
-  const PixelRect t3_rc{x, y, rc.right - margin, rc.bottom};
-  const unsigned t3_height = canvas != nullptr
-    ? canvas->DrawFormattedText(t3_rc, t3, DT_LEFT | DT_UNDERLINE)
-    : renderer.GetHeight(look.text_font, text_width, t3);
-  const PixelRect xcsoar_link_rect{x, y, rc.right - margin, y + int(t3_height)};
   if (canvas != nullptr)
-    canvas->SetTextColor(COLOR_BLACK);
+    canvas->Select(look.text_font);
+  const PixelRect t3_rc{x, y, rc.right - margin, rc.bottom};
+  unsigned t3_height;
+  if (canvas != nullptr && window != nullptr) {
+    t3_height = window->DrawLink(*canvas, WelcomeWindow::LinkAction::XCSOAR_MANUAL,
+                                  t3_rc, t3);
+  } else {
+    t3_height = renderer.GetHeight(look.text_font, text_width, t3);
+  }
   y += int(t3_height) + margin;
 
   StaticString<1024> t4;
@@ -185,24 +186,19 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc) noexcept
   y += int(t4_height) + margin;
 
   const TCHAR *t5 = _T("https://github.com/XCSoar/XCSoar");
-  if (canvas != nullptr) {
-    canvas->SetTextColor(COLOR_BLUE);
-    canvas->Select(look.text_font);
-  }
-  const PixelRect t5_rc{x, y, rc.right - margin, rc.bottom};
-  const unsigned t5_height = canvas != nullptr
-    ? canvas->DrawFormattedText(t5_rc, t5, DT_LEFT | DT_UNDERLINE)
-    : renderer.GetHeight(look.text_font, text_width, t5);
-  const PixelRect github_link_rect{x, y, rc.right - margin, y + int(t5_height)};
   if (canvas != nullptr)
-    canvas->SetTextColor(COLOR_BLACK);
+    canvas->Select(look.text_font);
+  const PixelRect t5_rc{x, y, rc.right - margin, rc.bottom};
+  unsigned t5_height;
+  if (canvas != nullptr && window != nullptr) {
+    t5_height = window->DrawLink(*canvas, WelcomeWindow::LinkAction::GITHUB,
+                                  t5_rc, t5);
+  } else {
+    t5_height = renderer.GetHeight(look.text_font, text_width, t5);
+  }
   y += int(t5_height) + margin;
 
-  return {
-    static_cast<unsigned>(y),
-    xcsoar_link_rect,
-    github_link_rect,
-  };
+  return static_cast<unsigned>(y);
 }
 
 PixelSize WelcomeWidget::GetMinimumSize() const noexcept {
@@ -218,9 +214,9 @@ PixelSize WelcomeWidget::GetMaximumSize() const noexcept {
     width = GetWindow().GetSize().width;
 
   const PixelRect measure_rc{PixelPoint{0, 0}, PixelSize{width, 0u}};
-  const auto layout = LayoutWelcome(nullptr, measure_rc);
-  if (layout.height > size.height)
-    size.height = layout.height;
+  const unsigned height = LayoutWelcome(nullptr, measure_rc, nullptr);
+  if (height > size.height)
+    size.height = height;
 
   return size;
 }
@@ -231,9 +227,17 @@ WelcomeWidget::Initialise(ContainerWindow &parent,
 {
   WindowStyle style;
   style.Hide();
+  style.TabStop();
   auto w = std::make_unique<WelcomeWindow>();
   w->Create(parent, rc, style);
   SetWindow(std::move(w));
+}
+
+bool
+WelcomeWidget::SetFocus() noexcept
+{
+  GetWindow().SetFocus();
+  return true;
 }
 
 void
@@ -243,17 +247,28 @@ WelcomeWindow::OnPaint(Canvas &canvas) noexcept
 
   canvas.Clear();
 
-  const auto layout = LayoutWelcome(&canvas, rc);
-  xcsoar_link_rect = layout.xcsoar_link_rect;
-  github_link_rect = layout.github_link_rect;
+  LayoutWelcome(&canvas, rc, this);
 }
 
-bool WelcomeWindow::OnMouseUp(PixelPoint p) noexcept {
-  if (xcsoar_link_rect.Contains(p)) {
+bool
+WelcomeWindow::OnLinkActivated(std::size_t index) noexcept
+{
+  switch (static_cast<LinkAction>(index)) {
+  case LinkAction::XCSOAR_MANUAL:
     return OpenLink("https://xcsoar.org/discover/manual.html");
-  }
-  if (github_link_rect.Contains(p)) {
+  case LinkAction::GITHUB:
     return OpenLink("https://github.com/XCSoar/XCSoar");
+  case LinkAction::COUNT:
+    break;
   }
-  return PaintWindow::OnMouseUp(p);
+  return false;
+}
+
+unsigned
+WelcomeWindow::DrawLink(Canvas &canvas, LinkAction link, PixelRect rc,
+                        const TCHAR *text) noexcept
+{
+  return QuickGuideLinkWindow::DrawLink(canvas,
+                                        static_cast<std::size_t>(link),
+                                        rc, text);
 }

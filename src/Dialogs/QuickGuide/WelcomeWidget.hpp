@@ -3,18 +3,29 @@
 
 #pragma once
 
-#include "ui/window/PaintWindow.hpp"
+#include "QuickGuideLinkWindow.hpp"
 #include "Widget/WindowWidget.hpp"
+
+#include <cstdint>
 
 class Canvas;
 
-class WelcomeWindow final : public PaintWindow {
-private:
-  PixelRect xcsoar_link_rect{};
-  PixelRect github_link_rect{};
+class WelcomeWindow final : public QuickGuideLinkWindow {
+public:
+  enum class LinkAction : std::uint8_t {
+    XCSOAR_MANUAL,
+    GITHUB,
+    COUNT
+  };
+
+  WelcomeWindow() noexcept;
+
+  unsigned DrawLink(Canvas &canvas, LinkAction link, PixelRect rc,
+                    const TCHAR *text) noexcept;
+
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
-  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnLinkActivated(std::size_t index) noexcept override;
 };
 
 class WelcomeWidget final : public WindowWidget {
@@ -22,4 +33,5 @@ public:
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
   void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
 };
