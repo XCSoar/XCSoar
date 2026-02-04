@@ -17,14 +17,17 @@
 #include "Inflate.hpp"
 #include "util/ConvertString.hpp"
 #include "util/AllocatedString.hxx"
+#include "util/OpenLink.hpp"
 #include "Resources.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 
 class LogoPageWindow final : public PaintWindow {
+  PixelRect url_rect{};
+
 protected:
-  /** from class PaintWindow */
   void OnPaint(Canvas &canvas) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
 };
 
 void
@@ -104,6 +107,18 @@ LogoPageWindow::OnPaint(Canvas &canvas) noexcept
   canvas.SetTextColor(COLOR_XCSOAR);
   canvas.DrawText({x, y}, url);
 
+  // Store URL rect for click handling
+  url_rect = {x, y, x + int(ts2.width), y + int(ts2.height)};
+}
+
+bool
+LogoPageWindow::OnMouseUp(PixelPoint p) noexcept
+{
+  if (url_rect.Contains(p)) {
+    OpenLink("https://xcsoar.org");
+    return true;
+  }
+  return PaintWindow::OnMouseUp(p);
 }
 
 static std::unique_ptr<Window>
