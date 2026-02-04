@@ -110,6 +110,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SiteConfigPanel.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportUtil.cpp \
+	$(SRC)/Dialogs/DataManagement/IgcMetaCache.cpp \
 	$(SRC)/Dialogs/DataManagement/TargetPickerDialog.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp \
