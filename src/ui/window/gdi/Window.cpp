@@ -3,6 +3,7 @@
 
 #include "../Window.hpp"
 #include "../ContainerWindow.hpp"
+#include "../MinimumSize.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Screen/Debug.hpp"
 #include "ui/event/Idle.hpp"
@@ -284,10 +285,19 @@ LRESULT CALLBACK
 Window::WndProc(HWND _hWnd, UINT message,
                 WPARAM wParam, LPARAM lParam) noexcept
 {
-  if (message == WM_GETMINMAXINFO)
+  if (message == WM_GETMINMAXINFO) {
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
-       a Window pointer yet - let DefWindowProc() handle it */
-    return ::DefWindowProc(_hWnd, message, wParam, lParam);
+       a Window pointer yet - but we can still enforce minimum size.
+       This prevents crashes from invalid rectangles (issue #2110) */
+    MINMAXINFO *mmi = reinterpret_cast<MINMAXINFO *>(lParam);
+
+    /* Only enforce minimum for top-level windows (no parent) */
+    if (::GetParent(_hWnd) == nullptr) {
+      mmi->ptMinTrackSize.x = UI::MIN_HEIGHT;
+      mmi->ptMinTrackSize.y = UI::MIN_HEIGHT;
+    }
+    return 0;
+  }
 
   Window *window;
   if (message == WM_NCCREATE) {

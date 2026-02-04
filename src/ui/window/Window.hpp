@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Features.hpp"
+#include "MinimumSize.hpp"
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/Size.hpp"
@@ -360,11 +361,19 @@ public:
     if (_size == size)
       return;
 
+    // Enforce minimum size only for top-level windows (issue #2110)
+    if (parent == nullptr)
+      _size = UI::ClampToMinimumSize(_size);
+
     size = _size;
 
     Invalidate();
     OnResize(size);
 #else /* USE_WINUSER */
+    // Enforce minimum size only for top-level windows (issue #2110)
+    if (GetParent() == nullptr)
+      _size = UI::ClampToMinimumSize(_size);
+
     ::SetWindowPos(hWnd, nullptr, 0, 0, _size.width, _size.height,
                    SWP_NOMOVE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
