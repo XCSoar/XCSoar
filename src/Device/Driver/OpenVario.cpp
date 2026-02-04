@@ -10,7 +10,8 @@
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Operation/Operation.hpp"
-#include "LogFile.hpp"
+#include "Geo/Gravity.hpp"
+#include "Math/Angle.hpp"
 
 using std::string_view_literals::operator""sv;
 
@@ -58,6 +59,14 @@ private:
   bool _ideal_polar_valid = false;
   PolarCoefficients _real_polar; 
   bool _real_polar_valid = false;
+  // previous Acceleration values
+  double previous_acceleration_x = 0;
+  double previous_acceleration_y = 0;
+  double previous_acceleration_z = 0;
+  // previous Gyro values
+  double previous_rotation_x = 0;
+  double previous_rotation_y = 0;
+  double previous_rotation_z = 0;
 };
 
 constexpr bool
@@ -258,6 +267,8 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
   /*
    * Type definitions:
    *
+   * A: 3 values of acceleration in m/s²
+   * G: 3 values of turnrate in degree per s
    * E: TE vario in m/s
    * H: relative humidity in %
    * P: static pressure in hPa
@@ -302,6 +313,50 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       break;
 
     switch (type) {
+      case 'A': {
+        double y, z;
+        if (line.ReadChecked(y) && line.ReadChecked(z)) {
+          /*
+           * We get 2 samples per sec from the device, but only use 1 per sec.
+           * Therefore average of 2 subsequent samples.
+           * In units of m/s²
+           * The calibration and alignment utility should have been run.
+           */
+          info.acceleration.ProvideGLoad(
+            SpaceDiagonal((previous_acceleration_x + value) / 2.0,
+                          (previous_acceleration_y + y) / 2.0,
+                          (previous_acceleration_z + z) / 2.0) /
+            GRAVITY);
+          previous_acceleration_x = value;
+          previous_acceleration_y = y;
+          previous_acceleration_z = z;
+        }
+        break;
+      }
+      case 'G': {
+        double y, z;
+        if (line.ReadChecked(y) && line.ReadChecked(z)) {
+          /*
+           * We get 2 samples per sec from the device, but only use 1 per sec.
+           * Therefore average of 2 subsequent samples.
+           * In units of degrees per sec
+           * Left turn is negative, right turn is positive!
+           * This device driver assumes the instrument is fixed in the panel
+           * and the 3 axes of the gyro are aligned to the axes of the aircraft.
+           * The calibration and alignment utility should have been run.
+           */
+          info.gyroscope.ProvideAngularRates(
+            Angle::Degrees((previous_rotation_x + value) / 2.0),
+            Angle::Degrees((previous_rotation_y + y) / 2.0),
+            Angle::Degrees((previous_rotation_z + z) / 2.0),
+            true,  // fixed_and_aligned
+            true); // is real
+          previous_rotation_x = value;
+          previous_rotation_y = y;
+          previous_rotation_z = z;
+        }
+        break;
+      }
       case 'E': {
         info.ProvideTotalEnergyVario(value);
         break;
