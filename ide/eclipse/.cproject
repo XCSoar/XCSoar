@@ -27,9 +27,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.804428986" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -38,9 +36,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.490395041" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -49,9 +45,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1687759916" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1186,9 +1180,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1751312565" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1197,9 +1189,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1228970797" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1208,9 +1198,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.190944738" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1776,9 +1764,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.657059216" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1787,9 +1773,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.447909109" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -1798,9 +1782,7 @@
 									<listOptionValue builtIn="false" value="WIN32"/>
 									<listOptionValue builtIn="false" value="CALLBACK"/>
 									<listOptionValue builtIn="false" value="WINAPI"/>
-									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="_cdecl"/>
-									<listOptionValue builtIn="false" value="UNICODE"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1757545394" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
