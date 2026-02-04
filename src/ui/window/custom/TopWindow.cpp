@@ -60,8 +60,6 @@ TopWindow::Create([[maybe_unused]] const TCHAR *text, PixelSize size,
 
 #ifdef ENABLE_SDL
   screen = new TopCanvas(display, window);
-#elif defined(USE_GLX)
-  screen = new TopCanvas(display, x_window);
 #elif defined(USE_X11)
   screen = new TopCanvas(display, x_window);
 #elif defined(USE_WAYLAND)
