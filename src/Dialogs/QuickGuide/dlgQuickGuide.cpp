@@ -14,6 +14,7 @@
 #include "Look/DialogLook.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Language/Language.hpp"
+#include "util/StaticString.hxx"
 
 #include <array>
 
@@ -50,11 +51,17 @@ dlgQuickGuideShowModal()
   pager->Add(std::make_unique<DontShowAgainWidget>(look));
 
   ArrowPagerWidget *p = pager.get();
-  pager->SetPageFlippedCallback([&dialog, &titles, p](){
-    dialog.SetCaption(titles[p->GetCurrentIndex()]);
-  });
+  const unsigned total_pages = titles.size();
 
-  dialog.SetCaption(titles[pager->GetCurrentIndex()]);
+  auto update_caption = [&dialog, &titles, p, total_pages]() {
+    const unsigned current = p->GetCurrentIndex();
+    StaticString<128> caption;
+    caption.Format(_T("%s (%u/%u)"), titles[current], current + 1, total_pages);
+    dialog.SetCaption(caption);
+  };
+
+  pager->SetPageFlippedCallback(update_caption);
+  update_caption();
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
 }
