@@ -20,6 +20,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
 	$(SRC)/Dialogs/DataManagement/TargetPickerDialog.cpp \
+	$(SRC)/Dialogs/DataManagement/FileTransferUtil.cpp \
 	$(SRC)/Dialogs/Device/PortDataField.cpp \
 	$(SRC)/Dialogs/Device/PortPicker.cpp \
 	$(SRC)/Dialogs/Device/DeviceEditWidget.cpp \
