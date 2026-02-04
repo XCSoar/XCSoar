@@ -15,6 +15,9 @@
 #include <fileapi.h>
 #include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h>
+#ifdef CopyFile
+#undef CopyFile
+#endif
 #endif
 
 namespace File {
@@ -51,6 +54,17 @@ Exists(Path path) noexcept;
  */
 void
 Create(Path path) noexcept;
+
+/**
+ * Returns whether the given directory is writable.
+ * On POSIX this uses `access(path, W_OK)`.
+ * On Windows it will attempt to create a temporary file.
+ */
+#ifdef HAVE_POSIX
+[[gnu::pure]]
+#endif
+bool
+IsWritable(Path path) noexcept;
 
 /**
  * Visit all the files of a specific directory with the given visitor
