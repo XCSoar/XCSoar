@@ -30,8 +30,8 @@ else ifeq ($(GLES2),y)
 # use EGL if GLES2 was chosen explicitly
 EGL = y
 else
-# default to GLX/X11
-EGL ?= n
+# default to EGL/X11
+EGL ?= y
 endif
 
 ifeq ($(EGL),y)

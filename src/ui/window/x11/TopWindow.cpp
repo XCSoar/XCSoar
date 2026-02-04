@@ -8,14 +8,6 @@
 #include "ui/event/poll/Queue.hpp"
 #include "util/Macros.hpp"
 
-#ifdef USE_EGL
-#include "ui/egl/System.hpp"
-#endif
-
-#ifdef USE_GLX
-#include "ui/glx/System.hpp"
-#endif
-
 #include <X11/Xatom.h>
 
 namespace UI {
@@ -25,10 +17,6 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
                         TopWindowStyle style)
 {
   const auto x_display = display.GetXDisplay();
-#ifdef USE_GLX
-  XVisualInfo *vi = glXGetVisualFromFBConfig(display.GetXDisplay(),
-                                             display.GetFBConfig());
-#endif
 
   const auto x_root = DefaultRootWindow(x_display);
   if (x_root == 0)
@@ -42,18 +30,8 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
     ExposureMask | StructureNotifyMask;
 
   unsigned long valuemask = CWEventMask;
-#ifdef USE_GLX
-  int depth = vi->depth;
-  Visual *visual = vi->visual;
-  swa.border_pixel = 0;
-  swa.background_pixel = 0;
-  swa.colormap = XCreateColormap(x_display, x_root,
-                                 vi->visual, AllocNone);
-  valuemask |= CWBorderPixel|CWBackPixel|CWColormap;
-#else
   int depth = CopyFromParent;
   Visual *visual = CopyFromParent;
-#endif
 
   x_window = XCreateWindow(x_display, x_root,
                            0, 0, size.width, size.height, 0,
@@ -62,10 +40,6 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
                            &swa);
   if (x_window == 0)
     throw std::runtime_error("XCreateWindow() failed");
-
-#ifdef USE_GLX
-  XFree(vi);
-#endif
 
   if (XClassHint *class_hint = XAllocClassHint()) {
     class_hint->res_name = class_hint->res_class = const_cast<char *>("xcsoar");
