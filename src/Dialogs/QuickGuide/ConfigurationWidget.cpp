@@ -13,6 +13,7 @@
 #include "util/OpenLink.hpp"
 #include "util/StaticString.hxx"
 #include "Look/DialogLook.hpp"
+#include "Form/CheckBox.hpp"
 #include "UIGlobals.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Device/DeviceListDialog.hpp"
@@ -43,14 +44,16 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
 {
   const int margin = Layout::FastScale(10);
   const int x = rc.left + margin;
-  const int x_text = x + Layout::FastScale(20);
   int y = rc.top + margin;
-  const int icon_offset = Layout::FastScale(1);
 
   const int right = rc.right - margin;
   const DialogLook &look = UIGlobals::GetDialogLook();
   const Font &fontDefault = look.text_font;
   const Font &fontSmall = look.small_font;
+
+  // Checkbox size based on font height
+  const int checkbox_size = fontDefault.GetHeight();
+  const int x_text = x + checkbox_size + Layout::FastScale(8);
 
   Font fontMono;
   fontMono.Load(FontDescription(Layout::VptScale(10), false, false, true));
@@ -85,13 +88,17 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
     return renderer.GetHeight(fontMono, width, text);
   };
 
-  if (canvas != nullptr)
-    canvas->Select(fontMono);
+  auto DrawCheckboxItem = [&](bool checked) {
+    if (canvas != nullptr) {
+      PixelRect box_rc{x, y, x + checkbox_size, y + checkbox_size};
+      DrawCheckBox(*canvas, look, box_rc, checked, false, false, true);
+    }
+  };
 
   // Map
-  if (canvas != nullptr) {
+  {
     const auto c1 = Profile::GetPath(ProfileKeys::MapFile);
-    canvas->DrawText({x, y + icon_offset}, c1 == nullptr ? _T("[ ]") : _T("[X]"));
+    DrawCheckboxItem(c1 != nullptr);
   }
   const TCHAR *t1 = _("Download the map for your region");
   y += int(DrawTextBlock(fontDefault, x_text, t1)) + margin / 2;
@@ -99,12 +106,11 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::SITE_FILES_1, l1)) + margin;
 
   // Waypoints
-  if (canvas != nullptr) {
+  {
     const auto c2 =
       Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
                                 WAYPOINT_FILE_PATTERNS);
-    canvas->Select(fontMono);
-    canvas->DrawText({x, y + icon_offset}, c2.size() == 0 ? _T("[ ]") : _T("[X]"));
+    DrawCheckboxItem(c2.size() > 0);
   }
   const TCHAR *t2 = _("Download waypoints for your region");
   y += int(DrawTextBlock(fontDefault, x_text, t2)) + margin / 2;
@@ -112,12 +118,11 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::SITE_FILES_2, l2)) + margin;
 
   // Airspace
-  if (canvas != nullptr) {
+  {
     const auto c3 =
       Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
                                 AIRSPACE_FILE_PATTERNS);
-    canvas->Select(fontMono);
-    canvas->DrawText({x, y + icon_offset}, c3.size() == 0 ? _T("[ ]") : _T("[X]"));
+    DrawCheckboxItem(c3.size() > 0);
   }
   const TCHAR *t3 = _("Download airspaces for your region");
   y += int(DrawTextBlock(fontDefault, x_text, t3)) + margin / 2;
@@ -125,12 +130,11 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::SITE_FILES_3, l3)) + margin;
 
   // Aircraft polar
-  if (canvas != nullptr) {
+  {
     const bool has_plane_path = Profile::GetPath("PlanePath") != nullptr;
     const bool has_polar = has_plane_path &&
       CommonInterface::GetComputerSettings().plane.polar_shape.IsValid();
-    canvas->Select(fontMono);
-    canvas->DrawText({x, y + icon_offset}, !has_polar ? _T("[ ]") : _T("[X]"));
+    DrawCheckboxItem(has_polar);
   }
   const TCHAR *t4 = _("Add your aircraft and, most importantly, select "
                       "the corresponding polar curve and activate the "
@@ -141,11 +145,9 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::PLANE_POLAR, l4)) + margin;
 
   // Pilot name
-  if (canvas != nullptr) {
+  {
     const char *c5 = Profile::Get(ProfileKeys::PilotName);
-    canvas->Select(fontMono);
-    canvas->DrawText({x, y + icon_offset},
-                     (c5 == nullptr || StringIsEmpty(c5)) ? _T("[ ]") : _T("[X]"));
+    DrawCheckboxItem(c5 != nullptr && !StringIsEmpty(c5));
   }
   const TCHAR *t5 = _("Set your name.");
   y += int(DrawTextBlock(fontDefault, x_text, t5)) + margin / 2;
@@ -153,11 +155,9 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::SETUP_LOGGER_1, l5)) + margin;
 
   // Pilot weight
-  if (canvas != nullptr) {
+  {
     const char *c6 = Profile::Get(ProfileKeys::CrewWeightTemplate);
-    canvas->Select(fontMono);
-    canvas->DrawText({x, y + icon_offset},
-                     (c6 == nullptr || StringIsEmpty(c6)) ? _T("[ ]") : _T("[X]"));
+    DrawCheckboxItem(c6 != nullptr && !StringIsEmpty(c6));
   }
   const TCHAR *t6 = _("Set your default weight.");
   y += int(DrawTextBlock(fontDefault, x_text, t6)) + margin / 2;
@@ -165,12 +165,9 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::SETUP_LOGGER_2, l6)) + margin;
 
   // Timezone (UTC offset)
-  if (canvas != nullptr) {
+  {
     int utc_offset;
-    canvas->Select(fontMono);
-    canvas->DrawText({x, y + icon_offset},
-                    (!Profile::Get(ProfileKeys::UTCOffsetSigned, utc_offset)
-                     ? _T("[ ]") : _T("[X]")));
+    DrawCheckboxItem(Profile::Get(ProfileKeys::UTCOffsetSigned, utc_offset));
   }
   const TCHAR *t7 = _("Set your timezone.");
   y += int(DrawTextBlock(fontDefault, x_text, t7)) + margin / 2;
@@ -178,12 +175,9 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   y += int(DrawLinkLine(LinkAction::SETUP_TIME, l7)) + margin;
 
   // Home waypoint
-  if (canvas != nullptr) {
+  {
     int home_waypoint;
-    canvas->Select(fontMono);
-    canvas->DrawText({x, y + icon_offset},
-                    (!Profile::Get(ProfileKeys::HomeWaypoint, home_waypoint)
-                     ? _T("[ ]") : _T("[X]")));
+    DrawCheckboxItem(Profile::Get(ProfileKeys::HomeWaypoint, home_waypoint));
   }
   const TCHAR *t8 = _("Set home airfield.");
   y += int(DrawTextBlock(fontDefault, x_text, t8)) + margin / 2;
