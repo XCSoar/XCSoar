@@ -20,9 +20,6 @@ public:
 
   WelcomeWindow() noexcept;
 
-  unsigned DrawLink(Canvas &canvas, LinkAction link, PixelRect rc,
-                    const TCHAR *text) noexcept;
-
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
   bool OnLinkActivated(std::size_t index) noexcept override;

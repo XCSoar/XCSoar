@@ -163,8 +163,9 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc,
   const PixelRect t3_rc{x, y, rc.right - margin, rc.bottom};
   unsigned t3_height;
   if (canvas != nullptr && window != nullptr) {
-    t3_height = window->DrawLink(*canvas, WelcomeWindow::LinkAction::XCSOAR_MANUAL,
-                                  t3_rc, t3);
+    t3_height = window->DrawLink(*canvas,
+                                 static_cast<std::size_t>(WelcomeWindow::LinkAction::XCSOAR_MANUAL),
+                                 t3_rc, t3);
   } else {
     t3_height = renderer.GetHeight(look.text_font, text_width, t3);
   }
@@ -191,8 +192,9 @@ LayoutWelcome(Canvas *canvas, const PixelRect &rc,
   const PixelRect t5_rc{x, y, rc.right - margin, rc.bottom};
   unsigned t5_height;
   if (canvas != nullptr && window != nullptr) {
-    t5_height = window->DrawLink(*canvas, WelcomeWindow::LinkAction::GITHUB,
-                                  t5_rc, t5);
+    t5_height = window->DrawLink(*canvas,
+                                 static_cast<std::size_t>(WelcomeWindow::LinkAction::GITHUB),
+                                 t5_rc, t5);
   } else {
     t5_height = renderer.GetHeight(look.text_font, text_width, t5);
   }
@@ -264,11 +266,3 @@ WelcomeWindow::OnLinkActivated(std::size_t index) noexcept
   return false;
 }
 
-unsigned
-WelcomeWindow::DrawLink(Canvas &canvas, LinkAction link, PixelRect rc,
-                        const TCHAR *text) noexcept
-{
-  return QuickGuideLinkWindow::DrawLink(canvas,
-                                        static_cast<std::size_t>(link),
-                                        rc, text);
-}

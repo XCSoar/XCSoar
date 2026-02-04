@@ -16,10 +16,10 @@ class QuickGuideLinkWindow : public PaintWindow {
 public:
   explicit QuickGuideLinkWindow() noexcept;
 
-protected:
   unsigned DrawLink(Canvas &canvas, std::size_t index, PixelRect rc,
                     const TCHAR *text) noexcept;
 
+protected:
   bool OnKeyCheck(unsigned key_code) const noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;

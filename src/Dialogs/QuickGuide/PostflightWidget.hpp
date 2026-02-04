@@ -9,6 +9,7 @@
 #include <cstdint>
 
 class PostflightWindow final : public QuickGuideLinkWindow {
+public:
   enum class LinkAction : std::uint8_t {
     FLIGHT_DOWNLOAD,
     ANALYSIS,
@@ -17,16 +18,16 @@ class PostflightWindow final : public QuickGuideLinkWindow {
     COUNT
   };
 
-public:
   PostflightWindow() noexcept;
   static unsigned Layout(Canvas *canvas, const PixelRect &rc,
                          PostflightWindow *window) noexcept;
+
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
+
 private:
-  unsigned DrawLink(Canvas &canvas, LinkAction link, PixelRect rc, const TCHAR *text) noexcept;
-  bool HandleLink(LinkAction link_action) noexcept;
-  bool OnLinkActivated(std::size_t link_action) noexcept override;
+  bool HandleLink(LinkAction link) noexcept;
+  bool OnLinkActivated(std::size_t index) noexcept override;
 };
 
 class PostflightWidget final : public WindowWidget {

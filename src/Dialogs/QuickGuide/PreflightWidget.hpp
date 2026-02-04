@@ -11,6 +11,7 @@
 class Canvas;
 
 class PreflightWindow final : public QuickGuideLinkWindow {
+public:
   enum class LinkAction : std::uint8_t {
     CHECKLIST,
     PLANE,
@@ -20,14 +21,14 @@ class PreflightWindow final : public QuickGuideLinkWindow {
     COUNT
   };
 
-public:
   PreflightWindow() noexcept;
   static unsigned Layout(Canvas *canvas, const PixelRect &rc,
                          PreflightWindow *window) noexcept;
+
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
+
 private:
-  unsigned DrawLink(Canvas &canvas, LinkAction link, PixelRect rc, const TCHAR *text) noexcept;
   bool HandleLink(LinkAction link) noexcept;
   bool OnLinkActivated(std::size_t index) noexcept override;
 };
