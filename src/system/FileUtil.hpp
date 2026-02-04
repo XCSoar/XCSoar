@@ -185,6 +185,13 @@ bool
 ReadString(Path path, char *buffer, size_t size) noexcept;
 
 /**
+ * Read the target of a symlink into a std::string.
+ * Returns true on success and fills `out` with the link target.
+ */
+bool
+ReadLink(Path path, std::string &out) noexcept;
+
+/**
  * Write a string to an existing file.  It will never create a new
  * file or truncate the existing file.  This function may be useful
  * for writing sysfs files.
