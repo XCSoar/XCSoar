@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
@@ -34,46 +35,6 @@ public:
     assert(value != nullptr);
 
     return ValidateUTF8(value.c_str());
-  }
-
-  const_pointer c_str() const noexcept {
-    assert(value != nullptr);
-
-    return value.c_str();
-  }
-
-  operator const_pointer() const noexcept {
-    assert(value != nullptr);
-
-    return value.c_str();
-  }
-};
-
-/**
- * Convert a char string to UTF-8.  The source buffer passed to the
- * constructor must be valid as long as this object is being used.
- */
-class WideToUTF8Converter {
-  typedef StringPointer<> Value;
-  typedef typename Value::const_pointer const_pointer;
-
-  Value value;
-
-public:
-  WideToUTF8Converter(const_pointer _value) noexcept
-    :value(_value)
-  {
-    assert(_value != nullptr);
-  }
-
-  WideToUTF8Converter(const WideToUTF8Converter &other) = delete;
-  WideToUTF8Converter &operator=(const WideToUTF8Converter &other) = delete;
-
-  [[gnu::pure]]
-  bool IsValid() const noexcept {
-    assert(value != nullptr);
-
-    return true;
   }
 
   const_pointer c_str() const noexcept {

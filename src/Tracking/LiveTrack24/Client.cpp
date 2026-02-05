@@ -35,16 +35,11 @@ Client::GetUserID(const char *username, const char *password)
   CurlEasy easy;
 
   {
-    const WideToUTF8Converter username2(username);
-    const WideToUTF8Converter password2(password);
-    if (!username2.IsValid() || !password2.IsValid())
-      throw std::runtime_error("WideToUTF8Converter failed");
-
     StaticString<1024> url;
     url.Format("http://%s/client.php?op=login&user=%s&pass=%s",
                GetServer(),
-               easy.Escape(username2).c_str(),
-               easy.Escape(password2).c_str());
+               easy.Escape(username).c_str(),
+               easy.Escape(password).c_str());
     easy.SetURL(url);
   }
 
@@ -75,11 +70,6 @@ Client::StartTracking(SessionID session, const char *username,
   CurlEasy easy;
 
   {
-    const WideToUTF8Converter username2(username);
-    const WideToUTF8Converter password2(password);
-    const WideToUTF8Converter vname2(vname);
-    if (!username2.IsValid() || !password2.IsValid() || !vname2.IsValid())
-      throw std::runtime_error("WideToUTF8Converter failed");
     const char *version = XCSoar_VersionLong;
 
     StaticString<2048> url;
@@ -87,10 +77,10 @@ Client::StartTracking(SessionID session, const char *username,
                "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s",
                GetServer(), session, 1,
                "XCSoar", easy.Escape(version).c_str(),
-               easy.Escape(username2).c_str(),
-               easy.Escape(password2).c_str(),
+               easy.Escape(username).c_str(),
+               easy.Escape(password).c_str(),
                vtype,
-               easy.Escape(vname2).c_str());
+               easy.Escape(vname).c_str());
 
     easy.SetURL(url);
   }

@@ -1063,7 +1063,7 @@ ParseAirspaceFile(Airspaces &airspaces,
   }
 
   if (filetype == AirspaceFileType::UNKNOWN)
-    throw std::runtime_error(WideToUTF8Converter(_("Unknown airspace filetype")));
+    throw std::runtime_error(_("Unknown airspace filetype"));
 
   // Process final area (if any)
   temp_area.Commit(airspaces);
