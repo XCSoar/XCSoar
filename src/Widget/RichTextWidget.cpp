@@ -4,6 +4,20 @@
 #include "RichTextWidget.hpp"
 #include "ui/control/RichTextWindow.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
+
+PixelSize
+RichTextWidget::GetMinimumSize() const noexcept
+{
+  return {Layout::FastScale(200), Layout::FastScale(200)};
+}
+
+PixelSize
+RichTextWidget::GetMaximumSize() const noexcept
+{
+  return {Layout::FastScale(300), Layout::FastScale(600)};
+}
 
 void
 RichTextWidget::SetText(const TCHAR *_text) noexcept
@@ -15,6 +29,14 @@ RichTextWidget::SetText(const TCHAR *_text) noexcept
   }
 }
 
+const DialogLook &
+RichTextWidget::GetLook() const noexcept
+{
+  if (look != nullptr)
+    return *look;
+  return UIGlobals::GetDialogLook();
+}
+
 void
 RichTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
@@ -24,7 +46,7 @@ RichTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   auto w = std::make_unique<RichTextWindow>();
   w->Create(parent, rc, style);
-  w->SetFont(look.text_font);
+  w->SetFont(GetLook().text_font);
   if (text != nullptr)
     w->SetText(text);
 

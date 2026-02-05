@@ -19,8 +19,11 @@ struct RichTextLink {
   /** Character offset in the text where link starts */
   std::size_t start;
 
-  /** Character offset in the text where link ends */
+  /** Character offset in the text where link ends (for display text) */
   std::size_t end;
+
+  /** The display text (for markdown links, differs from URL) */
+  tstring display_text;
 
   /** The URL (what to open when activated) */
   tstring url;
@@ -32,9 +35,12 @@ struct RichTextLink {
 /**
  * A window showing multi-line text with clickable links.
  *
- * Links are automatically detected:
- * - http:// and https:// URLs open in browser
- * - xcsoar:// URLs trigger internal actions
+ * Links are detected in two ways:
+ * - Markdown syntax: [display text](url)
+ * - Raw URLs: http://, https://, xcsoar://
+ *
+ * After parsing, markdown links are replaced with just display text,
+ * so the rendered text shows "display text" which is clickable.
  *
  * Keyboard navigation:
  * - Up/Down: scroll text

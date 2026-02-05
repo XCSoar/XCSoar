@@ -61,13 +61,62 @@ RichTextWindow::ParseLinks() noexcept
   if (text.empty())
     return;
 
+  // First pass: find and process markdown links [text](url)
+  // Replace them with just the text, and record links
+  tstring processed_text;
+  processed_text.reserve(text.size());
+
   const TCHAR *str = text.c_str();
-  const TCHAR *start = str;
+  const TCHAR *text_start = str;
 
   while (*str != _T('\0')) {
-    // Look for URL prefixes
-    const TCHAR *url_start = nullptr;
+    // Look for markdown link: [text](url)
+    if (*str == _T('[')) {
+      const TCHAR *text_begin = str + 1;
+      const TCHAR *text_end = text_begin;
 
+      // Find closing ]
+      while (*text_end != _T('\0') && *text_end != _T(']') &&
+             *text_end != _T('\n'))
+        ++text_end;
+
+      if (*text_end == _T(']') && *(text_end + 1) == _T('(')) {
+        // Found [text], now look for (url)
+        const TCHAR *url_begin = text_end + 2;
+        const TCHAR *url_end = url_begin;
+
+        // Find closing )
+        while (*url_end != _T('\0') && *url_end != _T(')') &&
+               *url_end != _T('\n'))
+          ++url_end;
+
+        if (*url_end == _T(')')) {
+          // Valid markdown link
+          // Copy text before the link
+          processed_text.append(text_start, str);
+
+          // Record link position in processed text
+          RichTextLink link;
+          link.start = processed_text.size();
+          link.display_text.assign(text_begin, text_end);
+          link.url.assign(url_begin, url_end);
+          link.end = link.start + link.display_text.size();
+
+          // Add display text to processed text
+          processed_text.append(link.display_text);
+
+          links.push_back(std::move(link));
+
+          // Move past the markdown link
+          str = url_end + 1;
+          text_start = str;
+          continue;
+        }
+      }
+    }
+
+    // Look for raw URL prefixes
+    const TCHAR *url_start = nullptr;
     if (StringStartsWith(str, _T("https://"))) {
       url_start = str;
     } else if (StringStartsWith(str, _T("http://"))) {
@@ -77,6 +126,9 @@ RichTextWindow::ParseLinks() noexcept
     }
 
     if (url_start != nullptr) {
+      // Copy text before the URL
+      processed_text.append(text_start, str);
+
       // Find end of URL
       const TCHAR *url_end = url_start;
       while (*url_end != _T('\0') && IsUrlChar(*url_end))
@@ -94,17 +146,29 @@ RichTextWindow::ParseLinks() noexcept
 
       if (url_end > url_start) {
         RichTextLink link;
-        link.start = url_start - start;
-        link.end = url_end - start;
+        link.start = processed_text.size();
+        link.display_text.assign(url_start, url_end);
         link.url.assign(url_start, url_end);
+        link.end = link.start + link.display_text.size();
+
+        // Add URL as display text
+        processed_text.append(link.display_text);
+
         links.push_back(std::move(link));
       }
 
       str = url_end;
+      text_start = str;
     } else {
       ++str;
     }
   }
+
+  // Append remaining text
+  processed_text.append(text_start);
+
+  // Replace text with processed version
+  text = std::move(processed_text);
 }
 
 unsigned
@@ -241,7 +305,7 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
         }
 
         if (link_idx >= 0) {
-          // Draw link
+          // Draw link (display text is already in processed text)
           RichTextLink &link = links[link_idx];
           std::size_t link_start_in_line =
             std::max(link.start, line_start_pos) - line_start_pos;
