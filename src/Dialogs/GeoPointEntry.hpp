@@ -10,6 +10,6 @@ enum class CoordinateFormat : uint8_t;
 struct GeoPoint;
 
 bool
-GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
+GeoPointEntryDialog(const char *caption, GeoPoint &value,
                     CoordinateFormat format,
                     bool nullable=false);

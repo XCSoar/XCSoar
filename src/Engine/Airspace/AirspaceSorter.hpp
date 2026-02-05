@@ -58,7 +58,7 @@ struct AirspaceFilterData {
   /**
    * Show only airspaces with a name beginning with this string.
    */
-  const TCHAR *name_prefix = nullptr;
+  const char *name_prefix = nullptr;
 
   /**
    * Show only airspaces with a direction deviating less than 18

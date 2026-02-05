@@ -6,7 +6,7 @@
 #include "util/StringAPI.hxx"
 
 void
-InputEvents::eventPage(const TCHAR *misc)
+InputEvents::eventPage(const char *misc)
 {
   if (StringIsEqual(misc, _T("restore")))
     PageActions::Restore();

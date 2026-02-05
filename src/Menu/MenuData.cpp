@@ -11,7 +11,7 @@ Menu::Clear() noexcept
 }
 
 void
-Menu::Add(const TCHAR *label, unsigned location, unsigned event_id) noexcept
+Menu::Add(const char *label, unsigned location, unsigned event_id) noexcept
 {
   if (location >= items.size())
     return;

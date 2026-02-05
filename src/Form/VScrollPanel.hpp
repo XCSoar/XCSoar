@@ -20,7 +20,7 @@ public:
    *
    * @return true if the gesture was handled
    */
-  virtual bool OnVScrollPanelGesture(const TCHAR *gesture) noexcept {
+  virtual bool OnVScrollPanelGesture(const char *gesture) noexcept {
     (void)gesture;
     return false;
   }

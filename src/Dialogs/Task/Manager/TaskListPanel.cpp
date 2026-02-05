@@ -98,7 +98,7 @@ protected:
   const OrderedTask *get_cursor_task();
 
   [[gnu::pure]]
-  const TCHAR *get_cursor_name();
+  const char *get_cursor_name();
 
 private:
   /* virtual methods from class ListControl::Handler */
@@ -141,7 +141,7 @@ TaskListPanel::get_cursor_task()
   return ordered_task;
 }
 
-const TCHAR *
+const char *
 TaskListPanel::get_cursor_name()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
@@ -173,7 +173,7 @@ TaskListPanel::RefreshView()
   if (ordered_task == nullptr) {
     summary.SetText(_T(""));
   } else {
-    TCHAR text[300];
+    char text[300];
     OrderedTaskSummary(ordered_task, text, false);
     summary.SetText(text);
   }
@@ -228,7 +228,7 @@ TaskListPanel::DeleteTask()
     return;
   }
 
-  const TCHAR *fname = task_store.GetName(cursor_index);
+  const char *fname = task_store.GetName(cursor_index);
 
   StaticString<1024> text;
   text.Format(_T("%s\n(%s)"), _("Delete the selected task?"), fname);
@@ -243,14 +243,14 @@ TaskListPanel::DeleteTask()
 }
 
 static bool
-ClearSuffix(TCHAR *p, const TCHAR *suffix)
+ClearSuffix(char *p, const char *suffix)
 {
   size_t length = _tcslen(p);
   size_t suffix_length = _tcslen(suffix);
   if (length <= suffix_length)
     return false;
 
-  TCHAR *q = p + length - suffix_length;
+  char *q = p + length - suffix_length;
   if (!StringIsEqualIgnoreCase(q, suffix))
     return false;
 
@@ -265,7 +265,7 @@ TaskListPanel::RenameTask()
   if (cursor_index >= task_store.Size())
     return;
 
-  const TCHAR *oldname = task_store.GetName(cursor_index);
+  const char *oldname = task_store.GetName(cursor_index);
   StaticString<40> newname(oldname);
 
   if (ClearSuffix(newname.buffer(), _T(".cup"))) {

@@ -10,7 +10,7 @@
 #include "Process.hpp"
 
 bool
-RunFile(const TCHAR *path) noexcept
+RunFile(const char *path) noexcept
 {
 #if defined(__APPLE__)
   return Start("/usr/bin/open", path);

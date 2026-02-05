@@ -97,9 +97,9 @@ public:
    * Sets the InfoBox title to the given Value
    * @param Value New value of the InfoBox title
    */
-  void SetTitle(const TCHAR *title);
+  void SetTitle(const char *title);
 
-  const TCHAR* GetTitle() {
+  const char* GetTitle() {
     return data.title;
   };
 

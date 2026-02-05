@@ -29,7 +29,7 @@ enum {
   NUM_OZ_TYPES = 12,
 };
 
-static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
+static const char *const oz_type_names[NUM_OZ_TYPES] = {
   _T("Line"),
   _T("Cylinder"),
   _T("MAT Cylinder"),

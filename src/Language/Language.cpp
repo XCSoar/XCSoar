@@ -52,8 +52,8 @@ DisallowLanguage()
  * @param text The text to search for
  * @return The translation if found, otherwise the text itself
  */
-const TCHAR*
-gettext(const TCHAR* text)
+const char*
+gettext(const char* text)
 {
   assert(language_allowed);
   assert(text != NULL);

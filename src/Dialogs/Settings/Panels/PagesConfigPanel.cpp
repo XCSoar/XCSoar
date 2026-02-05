@@ -194,11 +194,11 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
                             ib_list, IBP_AUTO, this);
   DataFieldEnum &ib = *(DataFieldEnum *)wp->GetDataField();
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; ++i) {
-    const TCHAR cruise_help[] = N_("For cruise mode. Displayed when 'Auto' is selected and glider is below final glide altitude.");
-    const TCHAR circling_help[] = N_("For circling mode. Displayed when 'Auto' is selected and glider is circling.");
-    const TCHAR final_glide_help[] = N_("For final glide mode. Displayed when 'Auto' is selected and glider is above final glide altitude.");
-    const TCHAR *display_text = gettext(info_box_settings.panels[i].name);
-    const TCHAR *help_text = N_("A custom InfoBox set");
+    const char cruise_help[] = N_("For cruise mode. Displayed when 'Auto' is selected and glider is below final glide altitude.");
+    const char circling_help[] = N_("For circling mode. Displayed when 'Auto' is selected and glider is circling.");
+    const char final_glide_help[] = N_("For final glide mode. Displayed when 'Auto' is selected and glider is above final glide altitude.");
+    const char *display_text = gettext(info_box_settings.panels[i].name);
+    const char *help_text = N_("A custom InfoBox set");
     switch (i) {
     case 0:
       help_text = circling_help;

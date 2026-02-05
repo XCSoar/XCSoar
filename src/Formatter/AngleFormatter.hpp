@@ -13,42 +13,42 @@
 class Angle;
 
 void
-FormatBearing(TCHAR *buffer, size_t size, unsigned degrees_value,
-              const TCHAR *suffix = NULL);
+FormatBearing(char *buffer, size_t size, unsigned degrees_value,
+              const char *suffix = NULL);
 
 void
-FormatBearing(TCHAR *buffer, size_t size, Angle value,
-              const TCHAR *suffix = NULL);
+FormatBearing(char *buffer, size_t size, Angle value,
+              const char *suffix = NULL);
 
 [[gnu::const]]
-static inline BasicStringBuffer<TCHAR, 16>
+static inline BasicStringBuffer<char, 16>
 FormatBearing(unsigned degrees_value)
 {
-  BasicStringBuffer<TCHAR, 16> buffer;
+  BasicStringBuffer<char, 16> buffer;
   FormatBearing(buffer.data(), buffer.capacity(), degrees_value);
   return buffer;
 }
 
 [[gnu::const]]
-static inline BasicStringBuffer<TCHAR, 16>
+static inline BasicStringBuffer<char, 16>
 FormatBearing(Angle value)
 {
-  BasicStringBuffer<TCHAR, 16> buffer;
+  BasicStringBuffer<char, 16> buffer;
   FormatBearing(buffer.data(), buffer.capacity(), value);
   return buffer;
 }
 
 void
-FormatAngleDelta(TCHAR *buffer, size_t size, Angle value);
+FormatAngleDelta(char *buffer, size_t size, Angle value);
 
 [[gnu::const]]
-static inline BasicStringBuffer<TCHAR, 16>
+static inline BasicStringBuffer<char, 16>
 FormatAngleDelta(Angle value)
 {
-  BasicStringBuffer<TCHAR, 16> buffer;
+  BasicStringBuffer<char, 16> buffer;
   FormatAngleDelta(buffer.data(), buffer.capacity(), value);
   return buffer;
 }
 
 void
-FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value);
+FormatVerticalAngleDelta(char *buffer, size_t size, Angle value);

@@ -17,7 +17,7 @@
 #include "net/http/DownloadManager.hpp"
 #endif
 
-static const TCHAR *
+static const char *
 GetFileName(const FileMultiSelectWidget::FileItem &item) noexcept
 {
   const auto base = item.path.GetBase();
@@ -25,8 +25,8 @@ GetFileName(const FileMultiSelectWidget::FileItem &item) noexcept
 }
 
 bool
-MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
-                const TCHAR *help_text)
+MultiFilePicker(const char *caption, MultiFileDataField &df,
+                const char *help_text)
 {
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(), caption);

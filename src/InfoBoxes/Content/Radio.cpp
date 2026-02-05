@@ -14,7 +14,7 @@
 
 static void
 UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
-                       const TCHAR *freq_name) noexcept
+                       const char *freq_name) noexcept
 {
   if(freq.IsDefined()) {
     freq.Format(data.value.data(), data.value.capacity());

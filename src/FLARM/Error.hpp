@@ -101,7 +101,7 @@ struct FlarmError {
    * value.
    */
   [[gnu::const]]
-  static const TCHAR *ToString(Severity severity) noexcept;
+  static const char *ToString(Severity severity) noexcept;
 
   /**
    * Returns a human-readable translatable string for the given value.
@@ -109,15 +109,15 @@ struct FlarmError {
    * value.
    */
   [[gnu::const]]
-  static const TCHAR *ToString(Code code) noexcept;
+  static const char *ToString(Code code) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetSeverityString() const noexcept {
+  const char *GetSeverityString() const noexcept {
     return ToString(severity);
   }
 
   [[gnu::pure]]
-  const TCHAR *GetCodeString() const noexcept {
+  const char *GetCodeString() const noexcept {
     return ToString(code);
   }
 };

@@ -62,10 +62,10 @@ public:
 
   void UpdateLayout(const PixelRect &rc, bool _vertical) noexcept;
 
-  void Add(const TCHAR *caption, const MaskedIcon *icon=nullptr) noexcept;
+  void Add(const char *caption, const MaskedIcon *icon=nullptr) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetCaption(unsigned i) const noexcept;
+  const char *GetCaption(unsigned i) const noexcept;
 
   void SetCurrentIndex(unsigned i) noexcept {
     if (i == current_index)

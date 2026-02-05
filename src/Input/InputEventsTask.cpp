@@ -42,7 +42,7 @@ trigger_redraw()
 //   toggle: Toggles between armed and disarmed.
 //   show: Shows current armed state
 void
-InputEvents::eventArmAdvance(const TCHAR *misc)
+InputEvents::eventArmAdvance(const char *misc)
 {
   if (!backend_components->protected_task_manager)
     return;
@@ -93,7 +93,7 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 }
 
 void
-InputEvents::eventCalculator([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventCalculator([[maybe_unused]] const char *misc)
 {
   dlgTaskManagerShowModal();
 
@@ -101,7 +101,7 @@ InputEvents::eventCalculator([[maybe_unused]] const TCHAR *misc)
 }
 
 void
-InputEvents::eventGotoLookup([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventGotoLookup([[maybe_unused]] const char *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -126,7 +126,7 @@ InputEvents::eventGotoLookup([[maybe_unused]] const TCHAR *misc)
 // Adjusts MacCready settings
 // up, down, auto on, auto off, auto toggle, auto show
 void
-InputEvents::eventMacCready(const TCHAR *misc)
+InputEvents::eventMacCready(const char *misc)
 {
   if (!backend_components->protected_task_manager)
     return;
@@ -170,7 +170,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
 //  nextwrap: selects the next waypoint, wrapping back to start after final
 //  previouswrap: selects the previous waypoint, wrapping to final after start
 void
-InputEvents::eventAdjustWaypoint(const TCHAR *misc)
+InputEvents::eventAdjustWaypoint(const char *misc)
 {
   auto *protected_task_manager = backend_components->protected_task_manager.get();
   if (protected_task_manager == NULL)
@@ -207,7 +207,7 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
 void
-InputEvents::eventAbortTask(const TCHAR *misc)
+InputEvents::eventAbortTask(const char *misc)
 {
   if (!backend_components->protected_task_manager)
     return;
@@ -283,7 +283,7 @@ InputEvents::eventAbortTask(const TCHAR *misc)
 // TaskLoad
 // Loads the task of the specified filename
 void
-InputEvents::eventTaskLoad(const TCHAR *misc)
+InputEvents::eventTaskLoad(const char *misc)
 {
   if (!backend_components->protected_task_manager)
     return;
@@ -311,7 +311,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
 // TaskSave
 // Saves the task to the specified filename
 void
-InputEvents::eventTaskSave(const TCHAR *misc)
+InputEvents::eventTaskSave(const char *misc)
 {
   if (!backend_components->protected_task_manager)
     return;
@@ -322,7 +322,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
 }
 
 void
-InputEvents::eventTaskTransition(const TCHAR *misc)
+InputEvents::eventTaskTransition(const char *misc)
 {
   if (!backend_components->protected_task_manager)
     return;
@@ -333,7 +333,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     if (!start_stats.HasStarted())
       return;
 
-    TCHAR TempAll[120];
+    char TempAll[120];
     StringFormatUnsafe(
         TempAll, _T("\r\n%s: %s\r\n%s:%s\r\n%s: %s"), _("Altitude"),
         FormatUserAltitude(start_stats.altitude).c_str(), _("Speed"),
@@ -350,7 +350,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
 }
 
 void
-InputEvents::eventResetTask([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventResetTask([[maybe_unused]] const char *misc)
 {
   if (backend_components->protected_task_manager)
     backend_components->protected_task_manager->ResetTask();

@@ -17,7 +17,7 @@ FlarmNetDatabase::Insert(const FlarmNetRecord &record) noexcept
 }
 
 const FlarmNetRecord *
-FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const noexcept
+FlarmNetDatabase::FindFirstRecordByCallSign(const char *cn) const noexcept
 {
   for (const auto &[id, record] : map) {
     assert(id.IsDefined());
@@ -30,7 +30,7 @@ FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const noexcept
 }
 
 unsigned
-FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
+FlarmNetDatabase::FindRecordsByCallSign(const char *cn,
                                         const FlarmNetRecord *array[],
                                         [[maybe_unused]] unsigned size) const noexcept
 {
@@ -47,7 +47,7 @@ FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
 }
 
 unsigned
-FlarmNetDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
+FlarmNetDatabase::FindIdsByCallSign(const char *cn, FlarmId array[],
                                     [[maybe_unused]] unsigned size) const noexcept
 {
   unsigned count = 0;

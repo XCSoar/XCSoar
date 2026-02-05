@@ -18,7 +18,7 @@ struct GeoPoint;
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer
  */
-bool FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
+bool FormatLongitude(Angle longitude, char *buffer, size_t size,
                      CoordinateFormat format);
 
 /**
@@ -27,21 +27,21 @@ bool FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer
  */
-bool FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
+bool FormatLatitude(Angle latitude, char *buffer, size_t size,
                     CoordinateFormat format);
 
 /**
  * Convert a GeoPoint into a formatted string.
  */
-TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-                      CoordinateFormat format, TCHAR separator = _T(' '));
+char *FormatGeoPoint(const GeoPoint &location, char *buffer, size_t size,
+                      CoordinateFormat format, char separator = _T(' '));
 
 [[gnu::pure]]
-static inline BasicStringBuffer<TCHAR, 32>
+static inline BasicStringBuffer<char, 32>
 FormatGeoPoint(const GeoPoint &location, CoordinateFormat format,
-               TCHAR separator = _T(' '))
+               char separator = _T(' '))
 {
-  BasicStringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<char, 32> buffer;
   auto result = FormatGeoPoint(location, buffer.data(), buffer.capacity(),
                                format, separator);
   if (result == nullptr)

@@ -86,7 +86,7 @@ WaypointFilter::CompareDirection(const Waypoint &waypoint,
 }
 
 inline bool
-WaypointFilter::CompareName(const Waypoint &waypoint, const TCHAR *name)
+WaypointFilter::CompareName(const Waypoint &waypoint, const char *name)
 {
   return StringIsEqualIgnoreCase(waypoint.name.c_str(), name, _tcslen(name));
 }

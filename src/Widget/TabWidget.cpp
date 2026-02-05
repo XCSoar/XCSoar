@@ -83,14 +83,14 @@ TabWidget::RestoreExtra() noexcept
 }
 
 void
-TabWidget::AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
+TabWidget::AddTab(std::unique_ptr<Widget> widget, const char *caption,
                   const MaskedIcon *icon) noexcept
 {
   tab_display->Add(caption, icon);
   PagerWidget::Add(std::move(widget));
 }
 
-const TCHAR *
+const char *
 TabWidget::GetButtonCaption(unsigned i) const noexcept
 {
   return tab_display->GetCaption(i);

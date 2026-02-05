@@ -5,7 +5,7 @@
 #include "ProgressGlue.hpp"
 
 void
-VerboseOperationEnvironment::SetText(const TCHAR *text) noexcept
+VerboseOperationEnvironment::SetText(const char *text) noexcept
 {
   ProgressGlue::Create(text);
 }

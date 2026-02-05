@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     WindEKFGlue::Result result =
       wind_ekf.Update(data, replay->Calculated());
     if (result.quality > 0) {
-      TCHAR time_buffer[32];
+      char time_buffer[32];
       FormatTime(time_buffer, data.time);
 
       _tprintf(_T("%s %d %g %g %g %d\n"), time_buffer,

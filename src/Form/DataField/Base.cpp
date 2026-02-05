@@ -35,20 +35,20 @@ DataField::Dec() noexcept
 {
 }
 
-const TCHAR *
+const char *
 DataField::GetAsString() const noexcept
 {
   return nullptr;
 }
 
-const TCHAR *
+const char *
 DataField::GetAsDisplayString() const noexcept
 {
   return GetAsString();
 }
 
 ComboList
-DataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
+DataField::CreateComboList([[maybe_unused]] const char *reference) const noexcept
 {
   return ComboList();
 }

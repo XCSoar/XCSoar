@@ -29,7 +29,7 @@ LookupRecord(FlarmId id) noexcept
   return traffic_databases->flarm_net.FindRecordById(id);
 }
 
-const TCHAR *
+const char *
 LookupCallsign(FlarmId id) noexcept
 {
   if (traffic_databases == nullptr)
@@ -39,7 +39,7 @@ LookupCallsign(FlarmId id) noexcept
 }
 
 FlarmId
-LookupId(const TCHAR *cn) noexcept
+LookupId(const char *cn) noexcept
 {
   assert(traffic_databases != nullptr);
 
@@ -47,7 +47,7 @@ LookupId(const TCHAR *cn) noexcept
 }
 
 bool
-AddSecondaryItem(FlarmId id, const TCHAR *name) noexcept
+AddSecondaryItem(FlarmId id, const char *name) noexcept
 {
   assert(id.IsDefined());
   assert(traffic_databases != nullptr);
@@ -68,7 +68,7 @@ StoreMessagingRecord(const MessagingRecord &record) noexcept
 }
 
 unsigned
-FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept
+FindIdsByCallSign(const char *cn, FlarmId array[], unsigned size) noexcept
 {
   assert(cn != NULL);
   assert(!StringIsEmpty(cn));
@@ -107,7 +107,7 @@ ResolveInfo(FlarmId id) noexcept
     out.plane_type = net->Format(plane_buf, net->plane_type.c_str());
     out.registration = net->Format(reg_buf, net->registration.c_str());
 
-    const TCHAR *af = net->Format(airfield_buf, net->airfield.c_str());
+    const char *af = net->Format(airfield_buf, net->airfield.c_str());
     if (af != nullptr && (out.registration == nullptr || !StringIsEqual(af, out.registration)))
       out.airfield = af;
 
@@ -115,23 +115,23 @@ ResolveInfo(FlarmId id) noexcept
       out.frequency = net->frequency;
   }
 
-  const TCHAR *user_callsign = traffic_databases->flarm_names.Get(id);
+  const char *user_callsign = traffic_databases->flarm_names.Get(id);
   if (user_callsign != nullptr)
     out.callsign = user_callsign;
 
   return out;
 }
 
-static const TCHAR *const resolved_source_strings[] = {
+static const char *const resolved_source_strings[] = {
   N_("Unresolved"),
   N_("Flarm Messaging"),
   N_("FLARMnet"),
 };
 
-const TCHAR *ToString(ResolvedSource source) noexcept
+const char *ToString(ResolvedSource source) noexcept
 {
   unsigned i = (unsigned)source;
-  const TCHAR *text = i < ARRAY_SIZE(resolved_source_strings)
+  const char *text = i < ARRAY_SIZE(resolved_source_strings)
     ? resolved_source_strings[i]
     : N_("Unknown");
 

@@ -112,7 +112,7 @@ protected:
   }
 
 protected:
-  bool OnMouseGesture(const TCHAR* gesture);
+  bool OnMouseGesture(const char* gesture);
 
   /* virtual methods from class Window */
   void OnCreate() noexcept override;
@@ -356,7 +356,7 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
                                    double distance) const
 {
   // Format distance
-  TCHAR buffer[20];
+  char buffer[20];
   Unit unit = FormatUserDistanceSmart(distance, buffer, false, 1000);
 
   // Calculate unit size
@@ -399,7 +399,7 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
                                            double relative_altitude) const
 {
   // Format relative altitude
-  TCHAR buffer[20];
+  char buffer[20];
   Unit unit = Units::GetUserAltitudeUnit();
   FormatRelativeUserAltitude(relative_altitude, buffer, false);
 
@@ -444,7 +444,7 @@ void
 FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
                              const FlarmTraffic &traffic) const
 {
-  TCHAR buffer[20];
+  char buffer[20];
 
   unsigned font_size;
   if (traffic.HasName()) {
@@ -577,7 +577,7 @@ FlarmTrafficControl::OpenDetails()
 
 static Button
 MakeSymbolButton(ContainerWindow &parent, const ButtonLook &look,
-                const TCHAR *caption,
+                const char *caption,
                 const PixelRect &rc,
                 Button::Callback callback) noexcept
 {
@@ -820,7 +820,7 @@ FlarmTrafficControl::OnMouseUp(PixelPoint p) noexcept
   if (dragging) {
     StopDragging();
 
-    const TCHAR *gesture = gestures.Finish();
+    const char *gesture = gestures.Finish();
     if (gesture && OnMouseGesture(gesture))
       return true;
   }
@@ -840,7 +840,7 @@ FlarmTrafficControl::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 }
 
 bool
-FlarmTrafficControl::OnMouseGesture(const TCHAR* gesture)
+FlarmTrafficControl::OnMouseGesture(const char* gesture)
 {
   if (StringIsEqual(gesture, _T("U"))) {
     ZoomIn();

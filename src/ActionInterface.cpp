@@ -260,7 +260,7 @@ ActionInterface::SendUIState() noexcept
 
 void
 ActionInterface::SetActiveFrequency(const RadioFrequency freq,
-                                    const TCHAR *freq_name,
+                                    const char *freq_name,
                                     bool to_devices) noexcept
 {
   assert(freq.IsDefined());
@@ -289,7 +289,7 @@ ActionInterface::SetActiveFrequency(const RadioFrequency freq,
 
 void
 ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
-                                     const TCHAR *freq_name,
+                                     const char *freq_name,
                                      bool to_devices) noexcept
 {
   assert(freq.IsDefined());

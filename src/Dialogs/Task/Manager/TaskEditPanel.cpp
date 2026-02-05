@@ -151,7 +151,7 @@ TaskEditPanel::RefreshView()
   UpdateButtons();
 
   {
-    TCHAR text[300];
+    char text[300];
     OrderedTaskSummary(ordered_task, text, false);
     summary.SetText(text);
   }
@@ -221,7 +221,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.GetHeight();
 
-  TCHAR buffer[120];
+  char buffer[120];
 
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {

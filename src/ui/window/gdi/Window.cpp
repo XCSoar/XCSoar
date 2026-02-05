@@ -13,7 +13,7 @@
 #include <windowsx.h>
 
 void
-Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
+Window::Create(ContainerWindow *parent, const char *cls, const char *text,
                PixelRect rc, const WindowStyle window_style) noexcept
 {
   assert(IsScreenInitialized());
@@ -254,7 +254,7 @@ Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
     break;
 
   case WM_CHAR:
-    if (OnCharacter((TCHAR)wParam))
+    if (OnCharacter((char)wParam))
       /* true returned: message was handled */
       return 0;
 

@@ -5,8 +5,8 @@
 
 #ifndef USE_LIBINTL
 
-const TCHAR *
-gettext(const TCHAR *text)
+const char *
+gettext(const char *text)
 {
   return text;
 }

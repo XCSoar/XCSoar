@@ -258,10 +258,10 @@ public:
    * Throws on error.
    */
 #ifdef USE_WINUSER
-  void Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
+  void Create(const char *cls, const char *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle());
 #else
-  void Create(const TCHAR *text, PixelSize size,
+  void Create(const char *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle());
 #endif
 
@@ -270,7 +270,7 @@ private:
   /**
    * Throws on error.
    */
-  void CreateNative(const TCHAR *text, PixelSize size,
+  void CreateNative(const char *text, PixelSize size,
                     TopWindowStyle style);
 
 public:
@@ -287,9 +287,9 @@ public:
 
 #if !defined(USE_WINUSER) && !defined(ENABLE_SDL)
 #if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
-  void SetCaption(const TCHAR *) noexcept {}
+  void SetCaption(const char *) noexcept {}
 #else
-  void SetCaption(const TCHAR *caption) noexcept;
+  void SetCaption(const char *caption) noexcept;
 #endif
 #endif
 

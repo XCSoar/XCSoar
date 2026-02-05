@@ -10,7 +10,7 @@ int main()
 {
   plan_tests(31);
 
-  TCHAR buffer[256];
+  char buffer[256];
 
   FormatByteSize(buffer, ARRAY_SIZE(buffer), 0);
   ok1(StringIsEqual(buffer, _T("0 B")));

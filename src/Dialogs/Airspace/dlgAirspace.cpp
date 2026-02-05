@@ -70,7 +70,7 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     CommonInterface::GetMapSettings().airspace;
   const AirspaceLook &look = CommonInterface::main_window->GetLook().map.airspace;
 
-  const TCHAR *const name = AirspaceFormatter::GetClass((AirspaceClass)i);
+  const char *const name = AirspaceFormatter::GetClass((AirspaceClass)i);
 
   if (color_mode) {
     int second_x = row_renderer.NextColumn(canvas, rc, name);

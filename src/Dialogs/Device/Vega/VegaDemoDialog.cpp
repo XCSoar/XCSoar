@@ -29,7 +29,7 @@ VegaWriteDemo()
   if (!last_time.CheckUpdate(std::chrono::milliseconds(250)))
     return;
 
-  TCHAR dbuf[100];
+  char dbuf[100];
   _stprintf(dbuf, _T("PDVDD,%d,%d"),
             iround(VegaDemoW * 10),
             iround(VegaDemoV * 10));

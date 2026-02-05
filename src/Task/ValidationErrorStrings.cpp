@@ -8,7 +8,7 @@
 #include <windef.h> // for MAX_PATH
 #include <string.h>
 
-static const TCHAR *const validation_error_strings[] = {
+static const char *const validation_error_strings[] = {
   N_("No valid start"),
   N_("No valid finish"),
   N_("Task not closed"),
@@ -26,10 +26,10 @@ static const TCHAR *const validation_error_strings[] = {
 static_assert(ARRAY_SIZE(validation_error_strings) == unsigned(TaskValidationErrorType::COUNT),
               "Wrong array size");
 
-const TCHAR*
+const char*
 getTaskValidationErrors(const TaskValidationErrorSet v)
 {
-  static TCHAR err[MAX_PATH];
+  static char err[MAX_PATH];
   err[0] = '\0';
 
   for (unsigned i = 0; i < v.N; i++) {
@@ -37,7 +37,7 @@ getTaskValidationErrors(const TaskValidationErrorSet v)
     if (!v.Contains(error))
       continue;
 
-    const TCHAR *current = gettext(validation_error_strings[i]);
+    const char *current = gettext(validation_error_strings[i]);
     if (_tcslen(err) + _tcslen(current) + 1 < MAX_PATH) {
       _tcscat(err, current);
       _tcscat(err, _T("\n"));

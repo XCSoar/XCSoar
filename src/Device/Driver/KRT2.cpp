@@ -102,7 +102,7 @@ private:
    * @param name Name of the radio station.
    * @return Name of the radio station (printable ASCII, MAX_NAME_LENGTH characters).
    */
-  static void GetStationName(char *station_name, const TCHAR *name);
+  static void GetStationName(char *station_name, const char *name);
   /**
    * Sends the frequency to the radio.
    *
@@ -116,7 +116,7 @@ private:
    */
   bool PutFrequency(std::byte cmd,
                     RadioFrequency frequency,
-                    const TCHAR *name,
+                    const char *name,
                     OperationEnvironment &env);
 
   void LockSetResponse(std::byte _response) noexcept {
@@ -156,13 +156,13 @@ public:
    * Sets the active frequency on the radio.
    */
   virtual bool PutActiveFrequency(RadioFrequency frequency,
-                                  const TCHAR *name,
+                                  const char *name,
                                   OperationEnvironment &env) override;
   /**
    * Sets the standby frequency on the radio.
    */
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
-                                   const TCHAR *name,
+                                   const char *name,
                                    OperationEnvironment &env) override;
   /**
    * Exchanges active and standby frequencies on the radio.
@@ -259,14 +259,14 @@ KRT2Device::DataReceived(std::span<const std::byte> s,
 }
 
 inline void
-KRT2Device::GetStationName(char *station_name, const TCHAR *name)
+KRT2Device::GetStationName(char *station_name, const char *name)
 {
   if(name == nullptr)
       name = _T("");
 
   size_t s_idx = 0; //!< Source name index
   size_t d_idx = 0; //!< Destination name index
-  TCHAR c; //!< Character at source name index
+  char c; //!< Character at source name index
 
   while ((c = name[s_idx++])) {
     // KRT2 supports printable ASCII only
@@ -390,7 +390,7 @@ KRT2Device::HandleMessage(std::span<const std::byte> src,
 bool
 KRT2Device::PutFrequency(std::byte cmd,
                          RadioFrequency frequency,
-                         const TCHAR *name,
+                         const char *name,
                          OperationEnvironment &env)
 {
   stx_msg msg;
@@ -406,7 +406,7 @@ KRT2Device::PutFrequency(std::byte cmd,
 
 bool
 KRT2Device::PutActiveFrequency(RadioFrequency frequency,
-                               const TCHAR *name,
+                               const char *name,
                                OperationEnvironment &env)
 {
   return PutFrequency(ACTIVE_FREQUENCY, frequency, name, env);
@@ -414,7 +414,7 @@ KRT2Device::PutActiveFrequency(RadioFrequency frequency,
 
 bool
 KRT2Device::PutStandbyFrequency(RadioFrequency frequency,
-                                const TCHAR *name,
+                                const char *name,
                                 OperationEnvironment &env)
 {
   return PutFrequency(STANDBY_FREQUENCY, frequency, name, env);

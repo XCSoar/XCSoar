@@ -73,7 +73,7 @@ try {
   MessageOperationEnvironment env;
   const ScopeReturnDevice return_device{dev, env};
 
-  const TCHAR *caption = dev.GetDisplayName();
+  const char *caption = dev.GetDisplayName();
   if (caption == nullptr)
     caption = _("Declare task");
 
@@ -316,7 +316,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     if (header.flight == 0)
       header.flight = GetFlightNumber(flight_list, *flight);
 
-    TCHAR name[64];
+    char name[64];
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 

@@ -17,7 +17,7 @@ class TerminalWindow : public PaintWindow {
   unsigned cursor_x, cursor_y;
   PixelSize cell_size;
 
-  AllocatedGrid<TCHAR> data;
+  AllocatedGrid<char> data;
 
 public:
   TerminalWindow(const TerminalLook &_look):look(_look) {}

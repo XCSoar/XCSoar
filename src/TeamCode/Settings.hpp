@@ -38,7 +38,7 @@ struct TeamCodeSettings {
    * Don't use this method directory, use TeamActions::TrackFlarm()
    * instead.
    */
-  void TrackFlarm(FlarmId id, const TCHAR *callsign);
+  void TrackFlarm(FlarmId id, const char *callsign);
 };
 
 static_assert(std::is_trivial<TeamCodeSettings>::value, "type is not trivial");

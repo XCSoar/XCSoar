@@ -196,7 +196,7 @@ PlaneListWidget::LoadWithDialog(unsigned i) noexcept
 {
   bool result = Load(i);
   if (!result) {
-    const TCHAR *title = _("Error");
+    const char *title = _("Error");
     StaticString<256> text;
     text.Format(_("Activating plane \"%s\" failed."),
                 list[i].name.c_str());
@@ -258,7 +258,7 @@ PlaneListWidget::EditClicked(bool copy) noexcept
 
   const unsigned index = GetList().GetCursorIndex();
   const Path old_path = list[index].path;
-  const TCHAR *old_filename = list[index].name;
+  const char *old_filename = list[index].name;
 
   Plane plane;
   PlaneGlue::ReadFile(plane, old_path);

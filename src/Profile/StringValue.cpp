@@ -7,7 +7,7 @@
 #include "util/Macros.hpp"
 
 bool
-ProfileMap::Get(std::string_view key, std::span<TCHAR> value) const noexcept
+ProfileMap::Get(std::string_view key, std::span<char> value) const noexcept
 {
   const char *src = Get(key);
   if (src == nullptr) {

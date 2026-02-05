@@ -188,7 +188,7 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas) const noexcept
     if(basic.gps_altitude_available && traf.altitude_received
         && fabs(double(traf.altitude) - basic.gps_altitude) >= 100.0) {
       // If average climb data available draw it to the canvas
-      TCHAR label_alt[100];
+      char label_alt[100];
       double alt = (double(traf.altitude) - basic.gps_altitude) / 100.0;
       FormatRelativeUserAltitude(alt, label_alt, false);
 
@@ -239,7 +239,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const noexcept
       traffic_look.teammate_icon.Draw(canvas, *p);
       if (DisplaySkyLinesTrafficMapMode::SYMBOL_NAME == GetMapSettings().skylines_traffic_map_mode) {
         const auto name_i = skylines_data->user_names.find(i.first);
-        const TCHAR *name = name_i != skylines_data->user_names.end()
+        const char *name = name_i != skylines_data->user_names.end()
           ? name_i->second.c_str()
           : _T("");
 

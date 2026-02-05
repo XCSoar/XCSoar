@@ -101,7 +101,7 @@ SendUIState() noexcept;
  * @param to_devices send the new setting to all devices?
  */
 void
-SetActiveFrequency(RadioFrequency freq, const TCHAR *freq_name,
+SetActiveFrequency(RadioFrequency freq, const char *freq_name,
                    bool to_devices=true) noexcept;
 
 /**
@@ -111,7 +111,7 @@ SetActiveFrequency(RadioFrequency freq, const TCHAR *freq_name,
  * @param to_devices send the new setting to all devices?
  */
 void
-SetStandbyFrequency(RadioFrequency freq, const TCHAR *freq_name,
+SetStandbyFrequency(RadioFrequency freq, const char *freq_name,
                     bool to_devices=true) noexcept;
 
 /**

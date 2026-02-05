@@ -24,7 +24,7 @@ namespace {
  * Helper to extract comparable filename from path.
  */
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetComparableName(const Path &path) noexcept
 {
   const auto base = path.GetBase();
@@ -213,11 +213,11 @@ FileMultiSelectWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   // Helper to invoke provider and check for valid text
   auto resolve_text = [&item](const TextProvider &provider,
-                          const TCHAR *fallback = nullptr) -> const TCHAR* {
+                          const char *fallback = nullptr) -> const char* {
     if (!provider)
       return fallback;
 
-    const TCHAR *text = provider(item);
+    const char *text = provider(item);
     return (text && *text) ? text : fallback;
   };
 

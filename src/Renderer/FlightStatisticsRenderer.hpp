@@ -68,8 +68,8 @@ public:
                   const ProtectedTaskManager &task,
                   const TraceComputer *trace_computer) noexcept;
 
-  static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) noexcept;
-  static void CaptionContest(TCHAR *sTmp, const ContestSettings &settings,
+  static void CaptionTask(char *sTmp, const DerivedInfo &derived) noexcept;
+  static void CaptionContest(char *sTmp, const ContestSettings &settings,
                              const DerivedInfo &derived) noexcept;
 
 private:

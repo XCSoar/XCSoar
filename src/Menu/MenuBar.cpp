@@ -81,7 +81,7 @@ MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
 }
 
 void
-MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text,
+MenuBar::ShowButton(unsigned i, bool enabled, const char *text,
                     unsigned event)
 {
   assert(i < MAX_BUTTONS);

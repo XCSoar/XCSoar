@@ -8,7 +8,7 @@
 #include <cassert>
 #include <string.h>
 
-static TCHAR
+static char
 NumToIGCChar(unsigned num)
 {
   assert(num <= 35);
@@ -20,17 +20,17 @@ NumToIGCChar(unsigned num)
 }
 
 void
-FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
-                  TCHAR manufacturer, const TCHAR *logger_id,
+FormatIGCFilename(char* buffer, const BrokenDate &date,
+                  char manufacturer, const char *logger_id,
                   unsigned flight_number)
 {
   assert(logger_id != NULL);
   assert(_tcslen(logger_id) == 3);
 
-  TCHAR cyear = NumToIGCChar(date.year % 10);
-  TCHAR cmonth = NumToIGCChar(date.month);
-  TCHAR cday = NumToIGCChar(date.day);
-  TCHAR cflight = NumToIGCChar(flight_number);
+  char cyear = NumToIGCChar(date.year % 10);
+  char cmonth = NumToIGCChar(date.month);
+  char cday = NumToIGCChar(date.day);
+  char cflight = NumToIGCChar(flight_number);
 
   StringFormatUnsafe(buffer, _T("%c%c%c%c%s%c.igc"),
                      cyear, cmonth, cday,
@@ -38,8 +38,8 @@ FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
 }
 
 void
-FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
-                      const TCHAR *manufacturer, const TCHAR *logger_id,
+FormatIGCFilenameLong(char* buffer, const BrokenDate &date,
+                      const char *manufacturer, const char *logger_id,
                       unsigned flight_number)
 {
   // 2003-12-31-XYZ-987-01.igc

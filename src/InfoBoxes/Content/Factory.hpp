@@ -16,7 +16,7 @@ namespace InfoBoxFactory
    * Returns the human-readable name of the info box type.
    */
   [[gnu::const]]
-  const TCHAR *
+  const char *
   GetName(Type type) noexcept;
 
   /**
@@ -25,14 +25,14 @@ namespace InfoBoxFactory
    * fit in the small #InfoBoxWindow.
    */
   [[gnu::const]]
-  const TCHAR *
+  const char *
   GetCaption(Type type) noexcept;
 
   /**
    * Returns the long description (help text) of the info box type.
    */
   [[gnu::const]]
-  const TCHAR *
+  const char *
   GetDescription(Type type) noexcept;
 
   std::unique_ptr<InfoBoxContent> Create(Type infobox_type) noexcept;

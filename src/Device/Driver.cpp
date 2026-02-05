@@ -66,7 +66,7 @@ AbstractDevice::PutPilotEvent([[maybe_unused]] OperationEnvironment &env)
 
 bool
 AbstractDevice::PutActiveFrequency([[maybe_unused]] RadioFrequency frequency,
-                                   [[maybe_unused]] const TCHAR *name,
+                                   [[maybe_unused]] const char *name,
                                    [[maybe_unused]] OperationEnvironment &env)
 {
   return true;
@@ -74,7 +74,7 @@ AbstractDevice::PutActiveFrequency([[maybe_unused]] RadioFrequency frequency,
 
 bool
 AbstractDevice::PutStandbyFrequency([[maybe_unused]] RadioFrequency frequency,
-                                    [[maybe_unused]] const TCHAR *name,
+                                    [[maybe_unused]] const char *name,
                                     [[maybe_unused]] OperationEnvironment &env)
 {
   return true;

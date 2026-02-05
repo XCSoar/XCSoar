@@ -100,14 +100,14 @@ public:
   }
 
   void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
-                   const TCHAR *asset_number, const Declaration &decl);
+                   const char *asset_number, const Declaration &decl);
 
   /**
    * Stops the logger
    * @param gps_info NMEA_INFO struct holding the current date
    */
   void StopLogger(const NMEAInfo &gps_info);
-  void LoggerNote(const TCHAR *text);
+  void LoggerNote(const char *text);
   void ClearBuffer() noexcept;
 
 private:

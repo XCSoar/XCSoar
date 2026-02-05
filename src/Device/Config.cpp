@@ -112,7 +112,7 @@ DeviceConfig::ShouldReopenOnTimeout() const noexcept
 }
 
 bool
-DeviceConfig::MaybeBluetooth(PortType port_type, [[maybe_unused]] const TCHAR *path) noexcept
+DeviceConfig::MaybeBluetooth(PortType port_type, [[maybe_unused]] const char *path) noexcept
 {
   /* note: RFCOMM_SERVER is not considered here because this
      function is used to check for the K6-Bt protocol, but the K6-Bt
@@ -189,8 +189,8 @@ DeviceConfig::Clear() noexcept
 #endif
 }
 
-const TCHAR *
-DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
+const char *
+DeviceConfig::GetPortName(char *buffer, size_t max_size) const noexcept
 {
   switch (port_type) {
   case PortType::DISABLED:
@@ -200,7 +200,7 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
     return path.c_str();
 
   case PortType::BLE_SENSOR: {
-    const TCHAR *name = bluetooth_mac.c_str();
+    const char *name = bluetooth_mac.c_str();
 #ifdef ANDROID
     if (bluetooth_helper != nullptr) {
       const char *name2 =
@@ -216,7 +216,7 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
     }
 
   case PortType::BLE_HM10: {
-    const TCHAR *name = bluetooth_mac.c_str();
+    const char *name = bluetooth_mac.c_str();
 #ifdef ANDROID
     if (bluetooth_helper != nullptr) {
       const char *name2 =
@@ -232,7 +232,7 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const noexcept
     }
 
   case PortType::RFCOMM: {
-    const TCHAR *name = bluetooth_mac.c_str();
+    const char *name = bluetooth_mac.c_str();
 #ifdef ANDROID
     if (bluetooth_helper != nullptr) {
       const char *name2 =

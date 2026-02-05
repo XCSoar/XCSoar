@@ -45,7 +45,7 @@ const UnitDescriptor Units::unit_descriptors[] = {
 static_assert(ARRAY_SIZE(Units::unit_descriptors) == (size_t)Unit::COUNT,
               "number of unit descriptions does not match number of units");
 
-const TCHAR *
+const char *
 Units::GetUnitName(Unit unit) noexcept
 {
   const unsigned i = (unsigned)unit;

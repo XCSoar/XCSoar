@@ -11,10 +11,10 @@
  */
 struct StatusMessage {
   /** English key */
-  const TCHAR *key;
+  const char *key;
 
   /** What sound entry to play */
-  const TCHAR *sound;
+  const char *sound;
 
   bool visible;
 
@@ -24,4 +24,4 @@ struct StatusMessage {
 
 [[gnu::pure]]
 const StatusMessage &
-FindStatusMessage(const TCHAR *key);
+FindStatusMessage(const char *key);

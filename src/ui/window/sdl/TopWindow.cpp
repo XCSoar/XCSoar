@@ -53,7 +53,7 @@ MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
 }
 
 void
-TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
+TopWindow::CreateNative(const char *_text, PixelSize new_size,
                         TopWindowStyle style)
 {
   const char *text = _text;

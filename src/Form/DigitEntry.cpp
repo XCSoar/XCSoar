@@ -990,7 +990,7 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
   rc.top = top;
   rc.bottom = bottom;
 
-  TCHAR buffer[5];
+  char buffer[5];
 
   for (unsigned i = 0; i < length; ++i) {
     const Column &c = columns[i];
@@ -1009,7 +1009,7 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
       canvas.SetBackgroundColor(look.background_color);
     }
 
-    const TCHAR *text = buffer;
+    const char *text = buffer;
     buffer[1] = _T('\0');
 
     switch (c.type) {

@@ -50,14 +50,14 @@ AngleDataField::ModifyValue(Angle _value) noexcept
   Modified();
 }
 
-const TCHAR *
+const char *
 AngleDataField::GetAsString() const noexcept
 {
   _stprintf(string_buffer, _T("%u"), GetIntegerValue());
   return string_buffer;
 }
 
-const TCHAR *
+const char *
 AngleDataField::GetAsDisplayString() const noexcept
 {
   _stprintf(string_buffer, _T("%u°"), GetIntegerValue());
@@ -77,7 +77,7 @@ AngleDataField::Dec() noexcept
 }
 
 void
-AngleDataField::SetFromCombo(int i, [[maybe_unused]] const TCHAR *s) noexcept
+AngleDataField::SetFromCombo(int i, [[maybe_unused]] const char *s) noexcept
 {
   assert(i >= 0);
   assert(unsigned(i) < MAX);
@@ -88,14 +88,14 @@ AngleDataField::SetFromCombo(int i, [[maybe_unused]] const TCHAR *s) noexcept
 static void
 AppendComboValue(ComboList &combo_list, unsigned value) noexcept
 {
-  TCHAR buffer1[16], buffer2[16];
+  char buffer1[16], buffer2[16];
   _stprintf(buffer1, _T("%u"), value);
   _stprintf(buffer2, _T("%u°"), value);
   combo_list.Append(value, buffer1, buffer2);
 }
 
 ComboList
-AngleDataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
+AngleDataField::CreateComboList([[maybe_unused]] const char *reference) const noexcept
 {
   ComboList combo_list;
 

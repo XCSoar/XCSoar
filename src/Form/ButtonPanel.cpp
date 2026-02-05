@@ -56,14 +56,14 @@ ButtonPanel::Add(std::unique_ptr<ButtonRenderer> &&renderer,
 }
 
 Button *
-ButtonPanel::Add(const TCHAR *caption, Button::Callback callback) noexcept
+ButtonPanel::Add(const char *caption, Button::Callback callback) noexcept
 {
   return Add(std::make_unique<TextButtonRenderer>(look, caption),
              std::move(callback));
 }
 
 Button *
-ButtonPanel::AddSymbol(const TCHAR *caption,
+ButtonPanel::AddSymbol(const char *caption,
                        Button::Callback callback) noexcept
 {
   return Add(std::make_unique<SymbolButtonRenderer>(look, caption),

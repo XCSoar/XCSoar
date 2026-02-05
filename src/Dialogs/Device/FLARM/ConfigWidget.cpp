@@ -92,7 +92,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     if (hardware.isPowerFlarm()) {
       df.AddChoice(255, _T("Automatic"));
     }
-    TCHAR buffer[64];
+    char buffer[64];
     for (unsigned i = 0; i <= 20; ++i) {
       StringFormatUnsafe(buffer, _T("%u m/s"), i);
       df.AddChoice(i, buffer);

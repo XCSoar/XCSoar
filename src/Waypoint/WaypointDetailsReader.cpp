@@ -22,13 +22,13 @@
 namespace WaypointDetails {
 
 static WaypointPtr
-FindWaypoint(Waypoints &way_points, const TCHAR *name)
+FindWaypoint(Waypoints &way_points, const char *name)
 {
   return way_points.LookupName(name);
 }
 
 struct WaypointDetailsBuilder {
-  TCHAR name[201];
+  char name[201];
   tstring details;
 #ifdef HAVE_RUN_FILE
   std::forward_list<tstring> files_external;

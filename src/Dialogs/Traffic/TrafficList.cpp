@@ -357,7 +357,7 @@ TrafficListWidget::UpdateList()
   items.clear();
   last_update.Clear();
 
-  const TCHAR *callsign = filter_widget->GetValueString(CALLSIGN);
+  const char *callsign = filter_widget->GetValueString(CALLSIGN);
   if (!StringIsEmpty(callsign)) {
     FlarmId ids[30];
     unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
@@ -579,7 +579,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
   const unsigned text_padding = Layout::GetTextPadding();
   const unsigned frame_padding = text_padding / 2;
 
-  TCHAR tmp_id[10];
+  char tmp_id[10];
   item.id.Format(tmp_id);
 
   canvas.Select(name_font);
@@ -764,7 +764,7 @@ TrafficListDialog()
 }
 
 FlarmId
-PickFlarmTraffic(const TCHAR *title, FlarmId array[], unsigned count)
+PickFlarmTraffic(const char *title, FlarmId array[], unsigned count)
 {
   assert(count > 0);
 

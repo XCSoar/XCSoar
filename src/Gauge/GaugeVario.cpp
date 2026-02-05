@@ -232,7 +232,7 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
                     TransformRotatedPoint(r.Rotate(tick_end),
                                           geometry.offset));
 
-    TCHAR label[16];
+    char label[16];
     StringFormatUnsafe(label, _T("%d"), i * tick_value_step);
 
     const auto label_size = canvas.CalcTextSize(label);
@@ -485,7 +485,7 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average,
 void
 GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                         LabelValueDrawInfo &di,
-                        double value, const TCHAR *label) noexcept
+                        double value, const char *label) noexcept
 {
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
@@ -515,7 +515,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   }
 
   if (!IsPersistent() || (dirty && di.value.last_value != value)) {
-    TCHAR buffer[18];
+    char buffer[18];
     canvas.SetBackgroundColor(look.background_color);
     canvas.SetTextColor(look.text_color);
     _stprintf(buffer, _T("%.1f"), (double)value);
@@ -704,7 +704,7 @@ GaugeVario::RenderBallast(Canvas &canvas) noexcept
 
     // new ballast 0, hide value
     if (ballast > 0) {
-      TCHAR buffer[18];
+      char buffer[18];
       _stprintf(buffer, _T("%u%%"), ballast);
       canvas.SetTextColor(look.text_color);
 
@@ -747,7 +747,7 @@ GaugeVario::RenderBugs(Canvas &canvas) noexcept
     }
 
     if (bugs > 0) {
-      TCHAR buffer[18];
+      char buffer[18];
       _stprintf(buffer, _T("%d%%"), bugs);
       canvas.SetTextColor(look.text_color);
       if (IsPersistent())

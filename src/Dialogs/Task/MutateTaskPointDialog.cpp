@@ -18,7 +18,7 @@
 
 static TrivialArray<TaskPointFactoryType, LegalPointSet::N> point_types;
 
-static const TCHAR *
+static const char *
 TPTypeItemHelp(unsigned i)
 {
   return OrderedTaskPointDescription(point_types[i]);

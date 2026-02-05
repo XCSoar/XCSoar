@@ -114,5 +114,5 @@ private:
 
   /* virtual methods from class VScrollPanelListener */
   void OnVScrollPanelChange() noexcept override;
-  bool OnVScrollPanelGesture(const TCHAR *gesture) noexcept override;
+  bool OnVScrollPanelGesture(const char *gesture) noexcept override;
 };

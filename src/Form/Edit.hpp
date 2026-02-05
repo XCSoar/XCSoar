@@ -16,8 +16,8 @@ class ContainerWindow;
  * an editable field (the Editor).
  */
 class WndProperty : public WindowControl {
-  typedef bool (*EditCallback)(const TCHAR *caption, DataField &df,
-                               const TCHAR *help_text);
+  typedef bool (*EditCallback)(const char *caption, DataField &df,
+                               const char *help_text);
 
   const DialogLook &look;
 
@@ -45,7 +45,7 @@ public:
    * @param CaptionWidth Width of the Caption of the Control
    */
   WndProperty(ContainerWindow &parent, const DialogLook &look,
-              const TCHAR *Caption,
+              const char *Caption,
               const PixelRect &rc, int CaptionWidth,
               const WindowStyle style) noexcept;
 
@@ -55,7 +55,7 @@ public:
   ~WndProperty() noexcept;
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              const TCHAR *_caption,
+              const char *_caption,
               unsigned _caption_width,
               const WindowStyle style) noexcept;
 
@@ -132,7 +132,7 @@ public:
     edit_callback = _ec;
   }
 
-  const TCHAR *GetText() const noexcept {
+  const char *GetText() const noexcept {
     return value.c_str();
   }
 
@@ -140,7 +140,7 @@ public:
    * Sets the Editors text to the given Value
    * @param Value The new text of the Editor Control
    */
-  void SetText(const TCHAR *_value) noexcept;
+  void SetText(const char *_value) noexcept;
 
 private:
   /**

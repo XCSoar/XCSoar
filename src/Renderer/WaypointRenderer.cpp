@@ -134,7 +134,7 @@ class WaypointVisitorMap final
   const TaskBehaviour &task_behaviour;
   const MoreData &basic;
 
-  TCHAR altitude_unit[4];
+  char altitude_unit[4];
   bool task_valid;
 
   /**
@@ -173,7 +173,7 @@ public:
 
 
 protected:
-  void FormatTitle(TCHAR *buffer, size_t buffer_size,
+  void FormatTitle(char *buffer, size_t buffer_size,
                    const Waypoint &way_point) const noexcept {
     buffer[0] = _T('\0');
 
@@ -196,7 +196,7 @@ protected:
 
     case WaypointRendererSettings::DisplayTextType::FIRST_WORD:
       CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
-      TCHAR *tmp;
+      char *tmp;
       tmp = _tcsstr(buffer, _T(" "));
       if (tmp != nullptr)
         tmp[0] = '\0';
@@ -216,7 +216,7 @@ protected:
     }
   }
 
-  void FormatLabel(TCHAR *buffer, size_t buffer_size,
+  void FormatLabel(char *buffer, size_t buffer_size,
                    const Waypoint &way_point,
                    WaypointReachability reachable,
                    const ReachResult &reach) const noexcept {
@@ -342,7 +342,7 @@ protected:
       text_mode.move_in_view = true;
     }
 
-    TCHAR buffer[NAME_SIZE+1];
+    char buffer[NAME_SIZE+1];
     FormatLabel(buffer, ARRAY_SIZE(buffer),
                 way_point, vwp.reachable, vwp.reach);
 

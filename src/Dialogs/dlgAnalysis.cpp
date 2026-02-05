@@ -150,12 +150,12 @@ public:
   }
 
   void SetCalcVisibility(bool visible);
-  void SetCalcCaption(const TCHAR *caption);
+  void SetCalcCaption(const char *caption);
 
   void NextPage(int step);
   void Update();
 
-  void OnGesture(const TCHAR *gesture);
+  void OnGesture(const char *gesture);
 
 private:
   void OnCalcClicked();
@@ -319,7 +319,7 @@ AnalysisWidget::SetCalcVisibility(bool visible)
 }
 
 void
-AnalysisWidget::SetCalcCaption(const TCHAR *caption)
+AnalysisWidget::SetCalcCaption(const char *caption)
 {
   details_button.SetCaption(caption);
   SetCalcVisibility(!StringIsEmpty(caption));
@@ -459,7 +459,7 @@ ChartControl::UpdateCrossSection(const MoreData &basic,
 void
 AnalysisWidget::Update()
 {
-  TCHAR sTmp[1000];
+  char sTmp[1000];
 
   const ComputerSettings &settings_computer = blackboard.GetComputerSettings();
   const DerivedInfo &calculated = blackboard.Calculated();
@@ -602,7 +602,7 @@ AnalysisWidget::NextPage(int Step)
 }
 
 void
-AnalysisWidget::OnGesture(const TCHAR *gesture)
+AnalysisWidget::OnGesture(const char *gesture)
 {
   if (StringIsEqual(gesture, _T("R")))
     NextPage(-1);
@@ -635,7 +635,7 @@ ChartControl::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
     dragging = false;
     ReleaseCapture();
 
-    const TCHAR *gesture = gestures.Finish();
+    const char *gesture = gestures.Finish();
     if (gesture != NULL)
       analysis_widget.OnGesture(gesture);
   }

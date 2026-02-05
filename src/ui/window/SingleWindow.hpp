@@ -20,7 +20,7 @@ struct Event;
  */
 class SingleWindow : public TopWindow {
 #ifdef USE_WINUSER
-  static constexpr const TCHAR *class_name = _T("XCSoarMain");
+  static constexpr const char *class_name = _T("XCSoarMain");
 #endif
 
   std::forward_list<WndForm *> dialogs;
@@ -38,7 +38,7 @@ public:
   /**
    * Throws on error.
    */
-  void Create(const TCHAR *text, PixelSize size,
+  void Create(const char *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle()) {
 #ifdef USE_WINUSER
     TopWindow::Create(class_name, text, size, style);

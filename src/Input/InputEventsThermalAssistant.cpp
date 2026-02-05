@@ -5,7 +5,7 @@
 #include "PageActions.hpp"
 
 void
-InputEvents::eventThermalAssistant([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventThermalAssistant([[maybe_unused]] const char *misc)
 {
   PageActions::ShowThermalAssistant();
 }

@@ -24,7 +24,7 @@ static AllowedCharacters AllowedCharactersCallback;
 static constexpr size_t MAX_TEXTENTRY = 40;
 static unsigned int cursor = 0;
 static size_t max_width;
-static TCHAR edittext[MAX_TEXTENTRY];
+static char edittext[MAX_TEXTENTRY];
 
 static void
 UpdateAllowedCharacters()
@@ -60,7 +60,7 @@ OnBackspace()
 }
 
 static bool
-DoCharacter(TCHAR character)
+DoCharacter(char character)
 {
   if (cursor >= max_width - 1)
     return false;
@@ -97,7 +97,7 @@ FormCharacter(unsigned ch)
        support yet */
     return false;
 
-  DoCharacter((TCHAR)ch);
+  DoCharacter((char)ch);
   return true;
 }
 
@@ -110,8 +110,8 @@ ClearText()
 }
 
 bool
-TouchTextEntry(TCHAR *text, size_t width,
-               const TCHAR *caption,
+TouchTextEntry(char *text, size_t width,
+               const char *caption,
                AllowedCharacters accb,
                bool default_shift_state)
 {

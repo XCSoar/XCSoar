@@ -47,20 +47,20 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
              FormatGeoPoint(parsed.location, CoordinateFormat::DDMMSS).c_str());
 
   if (parsed.qnh_available) {
-    TCHAR buffer[256];
+    char buffer[256];
     FormatUserPressure(parsed.qnh, buffer);
     _tprintf(_T("QNH: %s\n"), buffer);
   }
 
   if (parsed.wind_available) {
-    TCHAR buffer[256];
+    char buffer[256];
     FormatUserWindSpeed(parsed.wind.norm, buffer);
     _tprintf(_T("Wind: %.0f" DEG " %s\n"),
              (double)parsed.wind.bearing.Degrees(), buffer);
   }
 
   if (parsed.temperatures_available) {
-    TCHAR buffer[256];
+    char buffer[256];
     FormatUserTemperature(parsed.temperature, buffer);
     _tprintf(_T("Temperature: %s\n"), buffer);
     FormatUserTemperature(parsed.dew_point, buffer);
@@ -68,7 +68,7 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
   }
 
   if (parsed.visibility_available) {
-    TCHAR buffer[256];
+    char buffer[256];
     if (parsed.visibility >= 9999)
       _tcscpy(buffer, _T("unlimited"));
     else {

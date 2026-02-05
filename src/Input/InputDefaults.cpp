@@ -44,13 +44,13 @@ struct flat_event_map {
 struct flat_label {
   unsigned char mode, location;
   unsigned short event;
-  const TCHAR *label;
+  const char *label;
 };
 
 struct flat_gesture_map {
   unsigned char mode;
   unsigned short event;
-  const TCHAR *data;
+  const char *data;
 };
 
 // Make a new label (add to the end each time)
@@ -58,7 +58,7 @@ struct flat_gesture_map {
 // without taking up more data - but when loading from file must copy string
 static void
 makeLabel(InputConfig &input_config,
-          InputEvents::Mode mode_id, const TCHAR* label,
+          InputEvents::Mode mode_id, const char* label,
           unsigned location, unsigned event_id)
 {
   input_config.AppendMenu(mode_id, label, location, event_id);
@@ -66,7 +66,7 @@ makeLabel(InputConfig &input_config,
 
 static void
 apply_defaults(InputConfig &input_config,
-               const TCHAR *const* default_modes,
+               const char *const* default_modes,
                const InputConfig::Event *default_events,
                unsigned num_default_events,
                const flat_gesture_map *default_gesture2event,

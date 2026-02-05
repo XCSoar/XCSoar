@@ -15,7 +15,7 @@ struct DerivedInfo;
 class TaskManager;
 
 void
-ClimbChartCaption(TCHAR *buffer,
+ClimbChartCaption(char *buffer,
                   const FlightStatistics &fs);
 
 void

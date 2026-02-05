@@ -30,18 +30,18 @@ public:
   static constexpr unsigned MAX_WEATHER_TIMES = 96; /**< Max time segments of each item */
 
   struct MapInfo {
-    const TCHAR *name;
+    const char *name;
 
     /**
      * Human-readable label.  Call gettext() for internationalization.
      */
-    const TCHAR *label;
+    const char *label;
 
     /**
      * Human-readable help text.  Call gettext() for
      * internationalization.
      */
-    const TCHAR *help;
+    const char *help;
   };
 
   struct MapItem {
@@ -50,18 +50,18 @@ public:
     /**
      * Human-readable label.  Call gettext() for internationalization.
      */
-    const TCHAR *label;
+    const char *label;
 
     /**
      * Human-readable help text.  Call gettext() for
      * internationalization.
      */
-    const TCHAR *help;
+    const char *help;
 
     bool times[MAX_WEATHER_TIMES];
 
     MapItem() = default;
-    explicit MapItem(const TCHAR *_name);
+    explicit MapItem(const char *_name);
   };
 
   typedef StaticArray<MapItem, MAX_WEATHER_MAP> MapList;

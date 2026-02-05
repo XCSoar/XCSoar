@@ -8,7 +8,7 @@
 struct ColorRamp;
 
 struct RaspStyle {
-  const TCHAR *name;
+  const char *name;
   const ColorRamp *color_ramp;
   unsigned height_scale;
   bool do_water;

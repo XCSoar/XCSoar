@@ -14,15 +14,15 @@ FillPorts(DataFieldEnum &df, const DeviceConfig &config) noexcept;
 
 void
 UpdatePortEntry(DataFieldEnum &df, DeviceConfig::PortType type,
-                const TCHAR *value, const TCHAR *name) noexcept;
+                const char *value, const char *name) noexcept;
 
 void
 SetPort(DataFieldEnum &df, DeviceConfig::PortType type,
-        const TCHAR *value) noexcept;
+        const char *value) noexcept;
 
 void
 SetBluetoothPort(DataFieldEnum &df, DeviceConfig::PortType type,
-                 const TCHAR *bluetooth_mac) noexcept;
+                 const char *bluetooth_mac) noexcept;
 
 void
 SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept;

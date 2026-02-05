@@ -810,7 +810,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint.name.c_str());
 
   std::string_view key{};
-  const TCHAR *name = nullptr;
+  const char *name = nullptr;
 
   switch (waypoint.origin) {
   case WaypointOrigin::NONE:

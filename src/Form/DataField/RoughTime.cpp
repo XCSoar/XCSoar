@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-static TCHAR buffer[8];
+static char buffer[8];
 
 void
 RoughTimeDataField::ModifyValue(RoughTime _value) noexcept
@@ -18,7 +18,7 @@ RoughTimeDataField::ModifyValue(RoughTime _value) noexcept
   Modified();
 }
 
-const TCHAR *
+const char *
 RoughTimeDataField::GetAsString() const noexcept
 {
   if (!value.IsValid())
@@ -28,7 +28,7 @@ RoughTimeDataField::GetAsString() const noexcept
   return buffer;
 }
 
-const TCHAR *
+const char *
 RoughTimeDataField::GetAsDisplayString() const noexcept
 {
   if (!value.IsValid())

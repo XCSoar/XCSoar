@@ -12,7 +12,7 @@ namespace MenuGlue {
 
 void
 SetLabelText(MenuBar &bar, unsigned i,
-             const TCHAR *text, unsigned event) noexcept;
+             const char *text, unsigned event) noexcept;
 
   /**
    * Show the specified menu.

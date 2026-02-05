@@ -23,7 +23,7 @@ class FlightCheck {
   unsigned slow_count, fast_count;
 
 public:
-  FlightCheck(const TCHAR *_name)
+  FlightCheck(const char *_name)
     :name(_name),
      year(0), month(0), day(0),
      previous_valid(false), takeoff_valid(false),

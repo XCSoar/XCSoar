@@ -28,7 +28,7 @@ class CoDialog {
 
 public:
   CoDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
-           const TCHAR *caption,
+           const char *caption,
            PluggableOperationEnvironment *_env) noexcept
     :dialog(parent, dialog_look, caption),
      inject_task(asio_thread->GetEventLoop())
@@ -69,7 +69,7 @@ private:
 
 bool
 ShowCoDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
-             const TCHAR *caption, Co::InvokeTask task,
+             const char *caption, Co::InvokeTask task,
              PluggableOperationEnvironment *env)
 {
   CoDialog dialog{parent, dialog_look, caption, env};

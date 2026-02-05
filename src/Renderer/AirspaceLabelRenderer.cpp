@@ -93,11 +93,11 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
                                  const WindowProjection &projection,
                                  const AirspaceLabelList::Label &label) noexcept
 {
-  TCHAR topText[NAME_SIZE + 1];
+  char topText[NAME_SIZE + 1];
   AirspaceFormatter::FormatAltitudeShort(topText, label.top, false);
   const PixelSize topSize = canvas.CalcTextSize(topText);
 
-  TCHAR baseText[NAME_SIZE + 1];
+  char baseText[NAME_SIZE + 1];
   AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
   const PixelSize baseSize = canvas.CalcTextSize(baseText);
 

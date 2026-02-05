@@ -7,7 +7,7 @@
 #include "util/StringAPI.hxx"
 
 struct string_to_key {
-  const TCHAR *name;
+  const char *name;
   unsigned key;
 };
 
@@ -74,7 +74,7 @@ static constexpr struct string_to_key string_to_key[] = {
 };
 
 unsigned
-ParseKeyCode(const TCHAR *data)
+ParseKeyCode(const char *data)
 {
   for (const struct string_to_key *p = &string_to_key[0]; p->name != NULL; ++p)
     if (StringIsEqual(data, p->name))

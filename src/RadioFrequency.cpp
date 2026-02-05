@@ -8,8 +8,8 @@
 #include "util/StringFormat.hpp"
 #include "util/NumberParser.hpp"
 
-TCHAR *
-RadioFrequency::Format(TCHAR *buffer, size_t max_size) const noexcept
+char *
+RadioFrequency::Format(char *buffer, size_t max_size) const noexcept
 {
   if (!IsDefined())
     return nullptr;

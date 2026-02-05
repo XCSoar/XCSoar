@@ -39,10 +39,10 @@ struct TrafficDatabases {
   }
 
   [[gnu::pure]]
-  const TCHAR *FindNameById(FlarmId id) const noexcept;
+  const char *FindNameById(FlarmId id) const noexcept;
 
   [[gnu::pure]] [[gnu::nonnull]]
-  FlarmId FindIdByName(const TCHAR *name) const noexcept;
+  FlarmId FindIdByName(const char *name) const noexcept;
 
   /**
    * Look up all records with the specified name.
@@ -51,6 +51,6 @@ struct TrafficDatabases {
    * @return the number of items copied to the given buffer
    */
   [[gnu::nonnull]]
-  unsigned FindIdsByName(const TCHAR *name,
+  unsigned FindIdsByName(const char *name,
                          FlarmId *buffer, unsigned max) const noexcept;
 };

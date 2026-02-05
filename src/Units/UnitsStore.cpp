@@ -10,7 +10,7 @@
 
 struct UnitStoreItem
 {
-  const TCHAR* Name;
+  const char* Name;
   UnitSetting Units;
 };
 
@@ -70,7 +70,7 @@ static constexpr UnitStoreItem Presets[] =
   } }
 };
 
-const TCHAR *
+const char *
 Units::Store::GetName(unsigned i) noexcept
 {
   assert(i < Count());

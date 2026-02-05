@@ -9,7 +9,7 @@
 class DataFieldDate final : public DataField {
   BrokenDate value;
 
-  mutable TCHAR string_buffer[OUTBUFFERSIZE + 1];
+  mutable char string_buffer[OUTBUFFERSIZE + 1];
 
 public:
   DataFieldDate(BrokenDate _value,  DataFieldListener *listener) noexcept
@@ -31,5 +31,5 @@ public:
     Modified();
   }
 
-  const TCHAR *GetAsString() const noexcept override;
+  const char *GetAsString() const noexcept override;
 };

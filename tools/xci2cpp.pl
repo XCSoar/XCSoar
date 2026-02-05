@@ -167,10 +167,10 @@ foreach my $record (@all) {
 sub c_string($) {
     my $value = shift;
     return 'NULL' unless defined $value;
-    return qq|_T("$value")|;
+    return qq|"$value"|;
 }
 
-print "static const TCHAR *const default_modes[] = {\n";
+print "static const char *const default_modes[] = {\n";
 splice @modes, 0, 4;
 foreach my $m (@modes) {
     $m = c_string($m);
@@ -215,7 +215,7 @@ print "};\n";
 print "static constexpr struct flat_label default_labels[] = {\n";
 foreach my $l (@labels) {
     my ($mode, $label, $location, $event) = @$l;
-    print qq|  { $mode, $location, $event, _T("$label") },\n|;
+    print qq|  { $mode, $location, $event, "$label" },\n|;
 }
 print "  { 0, 0, 0, NULL },\n";
 print "};\n";
@@ -223,7 +223,7 @@ print "};\n";
 print "static constexpr struct flat_gesture_map default_gesture2event[] = {\n";
 foreach my $g (@gestures) {
     my ($mode, $event, $data) = @$g;
-    print "  { $mode, $event, _T(\"$data\") },\n";
+    print "  { $mode, $event, \"$data\" },\n";
 }
 print "  { 0, 0, NULL },\n";
 print "};\n";

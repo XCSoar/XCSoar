@@ -175,7 +175,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   row_renderer.DrawFirstRow(canvas, rc, info.ssid);
   row_renderer.DrawSecondRow(canvas, rc, info.bssid);
 
-  const TCHAR *state = nullptr;
+  const char *state = nullptr;
   StaticString<40> state_buffer;
 
   /* found the currently connected wifi network? */

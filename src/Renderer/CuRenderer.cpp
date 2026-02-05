@@ -121,7 +121,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 }
 
 void
-TemperatureChartCaption(TCHAR *sTmp, const CuSonde &cu_sonde)
+TemperatureChartCaption(char *sTmp, const CuSonde &cu_sonde)
 {
   StringFormatUnsafe(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
                      _("Thermal height"),

@@ -155,7 +155,7 @@ ShowPortMonitor(DeviceDescriptor &device)
 {
   const Look &look = UIGlobals::GetLook();
 
-  std::array<TCHAR, 64> buffer;
+  std::array<char, 64> buffer;
   StaticString<128> caption;
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device.GetConfig().GetPortName(buffer.data(), buffer.size()));
