@@ -8,6 +8,8 @@
 
 #include <cstdint>
 
+class Canvas;
+
 class PostflightWindow final : public QuickGuideLinkWindow {
 public:
   enum class LinkAction : std::uint8_t {
@@ -24,9 +26,6 @@ public:
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
-
-private:
-  bool HandleLink(LinkAction link) noexcept;
   bool OnLinkActivated(std::size_t index) noexcept override;
 };
 

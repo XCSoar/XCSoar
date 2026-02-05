@@ -13,7 +13,6 @@ class Canvas;
 class PreflightWindow final : public QuickGuideLinkWindow {
 public:
   enum class LinkAction : std::uint8_t {
-    CHECKLIST,
     PLANE,
     FLIGHT,
     WIND,
@@ -27,9 +26,6 @@ public:
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
-
-private:
-  bool HandleLink(LinkAction link) noexcept;
   bool OnLinkActivated(std::size_t index) noexcept override;
 };
 
