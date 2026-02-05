@@ -44,7 +44,7 @@ public:
       look(UIGlobals::GetDialogLook()),
       margin(Layout::FastScale(10)),
       x(rc.left + margin),
-      x_indent(x + Layout::FastScale(17)),
+      x_indent(x + Layout::FastScale(22)),
       right(rc.right - margin),
       y(rc.top + margin)
   {
@@ -132,10 +132,44 @@ public:
    */
   void DrawNumber(int number) noexcept {
     if (canvas != nullptr) {
+      canvas->Select(look.text_font);
       TCHAR buf[8];
       _stprintf(buf, _T("%d.)"), number);
       canvas->DrawText({x, y}, buf);
     }
+  }
+
+  /**
+   * Draw a complete numbered item with description and link.
+   * Updates y position after drawing.
+   * @param number The item number (1, 2, 3, ...)
+   * @param description The description text
+   * @param link The link action enum value
+   * @param link_text The link display text (e.g., "Config → Plane")
+   */
+  template<typename LinkAction>
+  void DrawNumberedItem(int number, const TCHAR *description,
+                        LinkAction link, const TCHAR *link_text) noexcept {
+    DrawNumber(number);
+    y += int(DrawTextBlock(GetTextFont(), x_indent, description)) + margin / 2;
+    y += int(DrawLinkLine(link, link_text)) + margin;
+  }
+
+  /**
+   * Draw a complete checkbox item with description and link.
+   * Updates y position after drawing.
+   * @param checked Whether the checkbox is checked
+   * @param description The description text
+   * @param link The link action enum value
+   * @param link_text The link display text
+   */
+  template<typename LinkAction>
+  void DrawCheckboxItem(bool checked, const TCHAR *description,
+                        LinkAction link, const TCHAR *link_text) noexcept {
+    DrawCheckbox(checked);
+    const int x_cb = GetCheckboxTextX();
+    y += int(DrawTextBlock(GetTextFont(), x_cb, description)) + margin / 2;
+    y += int(DrawLinkLine(link, x_cb, link_text)) + margin;
   }
 
   /**
