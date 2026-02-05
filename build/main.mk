@@ -19,6 +19,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
+	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
 	$(SRC)/Dialogs/DataManagement/TargetPickerDialog.cpp \
 	$(SRC)/Dialogs/DataManagement/FileTransferUtil.cpp \
