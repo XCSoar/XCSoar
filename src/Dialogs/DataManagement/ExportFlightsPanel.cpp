@@ -21,6 +21,9 @@
 #include "IGC/IgcMetaCache.hpp"
 #include "Job/Job.hpp"
 #include "Operation/Operation.hpp"
+#include "net/client/WeGlide/UploadIGCFile.hpp"
+#include "net/client/WeGlide/Settings.hpp"
+#include "Interface.hpp"
 #include "util/StaticString.hxx"
 #include "ui/event/Notify.hpp"
 
@@ -33,6 +36,19 @@
 static constexpr char EXPORT_FLIGHTS_SUBFOLDER[] = "xcsoar_flights";
 
 static IgcMetaCache igc_cache;
+
+/**
+ * Check if WeGlide is properly configured for uploads.
+ * Requires pilot ID and birthdate to be set.
+ */
+static bool
+IsWeGlideConfigured() noexcept
+{
+  const WeGlideSettings &settings = CommonInterface::GetComputerSettings().weglide;
+  return settings.enabled && 
+         settings.pilot_id != 0 && 
+         settings.pilot_birthdate.IsPlausible();
+}
 
 // Export job that runs in background thread
 struct ExportJob final : public Job {
@@ -156,6 +172,51 @@ PerformExport(FileMultiSelectWidget *file_widget)
 
   ShowMessageBox(msg, _("Export flights"),
                  MB_OK | (failed ? MB_ICONERROR : MB_ICONINFORMATION));
+}
+
+static void
+PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
+{
+  if (!IsWeGlideConfigured()) {
+    ShowMessageBox(_("WeGlide is not configured. Please set your pilot ID and birthdate in the settings."),
+                   _("WeGlide Upload"), MB_OK | MB_ICONERROR);
+    return;
+  }
+
+  const auto selected = file_widget->GetSelectedPaths();
+  if (selected.empty()) {
+    ShowMessageBox(_("Select at least one flight."), "", MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  // Validate that only .igc files are selected
+  for (const auto &path : selected) {
+    if (!path.EndsWithIgnoreCase(".igc")) {
+      ShowMessageBox(_("Only .igc files can be uploaded to WeGlide."), 
+                     _("WeGlide Upload"), MB_OK | MB_ICONERROR);
+      return;
+    }
+  }
+
+  /* Call UploadIGCFile() directly on the UI thread.  Each call shows
+     its own modal progress dialog (ShowCoFunctionDialog) with cancel
+     support.  Running this via JobDialog would crash because
+     UploadIGCFile() performs UI operations internally. */
+  unsigned successful = 0, failed = 0;
+  for (const auto &path : selected) {
+    if (WeGlide::UploadIGCFile(path))
+      ++successful;
+    else
+      ++failed;
+  }
+
+  StaticString<256> msg;
+  msg.Format(_("Uploaded %u file(s)"), successful);
+  if (failed > 0)
+    msg.AppendFormat(_("\nFailed %u."), failed);
+
+  ShowMessageBox(msg, _("WeGlide Upload"), 
+                 MB_OK | (failed > 0 ? MB_ICONWARNING : MB_ICONINFORMATION));
 }
 
 struct FlightContainer : public PropertyWidgetContainer {
@@ -329,6 +390,7 @@ ShowExportFlightsDialog()
     });
   });
 
+  dialog.AddButton(_("WeGlide Upload"), [&file_list]() { PerformWeGlideUpload(&file_list); });
   dialog.AddButton(_("Export"), [&file_list]() { PerformExport(&file_list); });
   dialog.AddButton(_("Select all"), [&file_list]() { file_list.SelectAll(); });
   dialog.AddButton(_("Select none"), [&file_list]() { file_list.ClearSelection(); });
