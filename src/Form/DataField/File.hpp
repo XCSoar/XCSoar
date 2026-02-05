@@ -147,6 +147,8 @@ public:
 
   /** Sorts the filelist by filenames */
   void Sort() noexcept;
+  /** Sorts the filelist by filenames in descending order */
+  void SortDesc() noexcept;
   void ScanDirectoryTop(const TCHAR *filter) noexcept;
 
   /**
