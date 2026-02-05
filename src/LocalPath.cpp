@@ -189,7 +189,7 @@ FindDataPathAtModule(HMODULE hModule) noexcept
   if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
     return nullptr;
 
-  ReplaceBaseName(buffer, PRODUCT_DATA_DIR_T);
+  ReplaceBaseName(buffer, PRODUCT_DATA_DIR);
   return Directory::Exists(Path(buffer))
     ? AllocatedPath(buffer)
     : nullptr;
@@ -277,7 +277,7 @@ FindDataPaths() noexcept
     char buffer[MAX_PATH];
     if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
                                result.empty()))
-      result.emplace_back(AllocatedPath::Build(buffer, PRODUCT_DATA_DIR_T));
+      result.emplace_back(AllocatedPath::Build(buffer, PRODUCT_DATA_DIR));
   }
 #endif // _WIN32
 
