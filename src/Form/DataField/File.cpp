@@ -74,7 +74,7 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
   :DataField(Type::FILE, true, listener),
    // Set selection to zero
    current_index(0),
-   loaded(false), postponed_sort(false),
+   loaded(false), postponed_sort(SortOrder::NO_ORDER),
    postponed_value(nullptr) {}
 
 void
@@ -294,19 +294,31 @@ FileDataField::Dec() noexcept
 }
 
 void
-FileDataField::Sort() noexcept
+FileDataField::Sort(SortOrder order) noexcept
 {
+  if (order == SortOrder::NO_ORDER)
+    return;
+
   if (!loaded) {
-    postponed_sort = true;
+    postponed_sort = order;
     return;
   }
 
-  // Sort the filelist (except for the first (empty) element)
-  std::sort(files.begin(), files.end(), [](const Item &a,
-                                           const Item &b) {
-              // Compare by filename
-              return StringCollate(a.filename.c_str(), b.filename.c_str()) < 0;
-            });
+  if (order == SortOrder::ASCENDING) {
+    // Sort the filelist in ascending order
+    std::sort(files.begin(), files.end(), [](const Item &a,
+                                             const Item &b) {
+                return StringCollate(a.filename.c_str(), b.filename.c_str()) < 0;
+              });
+  } else {
+    // Sort the filelist in descending order
+    std::sort(files.begin(), files.end(), [](const Item &a,
+                                             const Item &b) {
+                return StringCollate(a.filename.c_str(), b.filename.c_str()) > 0;
+              });
+  }
+
+  postponed_sort = SortOrder::NO_ORDER;
 }
 
 ComboList
@@ -389,8 +401,8 @@ FileDataField::EnsureLoaded() noexcept
        i != end; ++i)
     ScanDirectoryTop(*i);
 
-  if (postponed_sort)
-    Sort();
+  if (postponed_sort != SortOrder::NO_ORDER)
+    Sort(postponed_sort);
 
   if (postponed_value != nullptr)
     SetValue(postponed_value);
