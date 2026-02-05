@@ -53,6 +53,10 @@ public:
 
   void Refresh() noexcept;
 
+  /** Set an optional filter for which files to show. If `filter` is
+    default-constructed or empty, all files are shown. */
+  void SetFilter(std::function<bool(const Path &)> filter) noexcept;
+
   // MultiSelectListWidget virtual methods
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
@@ -81,6 +85,7 @@ private:
   const char *caption_ = nullptr;
   const char *help_text_ = nullptr;
   std::function<void()> selection_changed_callback_;
+  std::function<bool(const Path &)> filter_;
 
   void LoadFiles() noexcept;
   void ApplySelection(const std::vector<Path> &paths) noexcept;
