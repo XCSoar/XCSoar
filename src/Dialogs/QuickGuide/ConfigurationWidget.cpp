@@ -40,84 +40,69 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
   const int x_cb = ctx.GetCheckboxTextX();
 
   // Map
-  {
-    const auto path = Profile::GetPath(ProfileKeys::MapFile);
-    ctx.DrawCheckbox(path != nullptr);
-  }
-  ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
-               _("Download the map for your region"))) + ctx.margin / 2;
-  ctx.y += int(ctx.DrawLinkLine(LinkAction::SITE_FILES_1, x_cb,
-               _("Config → System → Site Files"))) + ctx.margin;
+  ctx.DrawCheckboxItem(
+    Profile::GetPath(ProfileKeys::MapFile) != nullptr,
+    _("Download the map for your region"),
+    LinkAction::SITE_FILES_1, _("Config → System → Site Files"));
 
   // Waypoints
-  {
-    const auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
-                                                 WAYPOINT_FILE_PATTERNS);
-    ctx.DrawCheckbox(paths.size() > 0);
-  }
-  ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
-               _("Download waypoints for your region"))) + ctx.margin / 2;
-  ctx.y += int(ctx.DrawLinkLine(LinkAction::SITE_FILES_2, x_cb,
-               _("Config → System → Site Files"))) + ctx.margin;
+  ctx.DrawCheckboxItem(
+    Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
+                              WAYPOINT_FILE_PATTERNS).size() > 0,
+    _("Download waypoints for your region"),
+    LinkAction::SITE_FILES_2, _("Config → System → Site Files"));
 
   // Airspace
-  {
-    const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
-                                                 AIRSPACE_FILE_PATTERNS);
-    ctx.DrawCheckbox(paths.size() > 0);
-  }
-  ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
-               _("Download airspaces for your region"))) + ctx.margin / 2;
-  ctx.y += int(ctx.DrawLinkLine(LinkAction::SITE_FILES_3, x_cb,
-               _("Config → System → Site Files"))) + ctx.margin;
+  ctx.DrawCheckboxItem(
+    Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
+                              AIRSPACE_FILE_PATTERNS).size() > 0,
+    _("Download airspaces for your region"),
+    LinkAction::SITE_FILES_3, _("Config → System → Site Files"));
 
   // Aircraft polar
   {
     const bool has_plane_path = Profile::GetPath("PlanePath") != nullptr;
     const bool has_polar = has_plane_path &&
       CommonInterface::GetComputerSettings().plane.polar_shape.IsValid();
-    ctx.DrawCheckbox(has_polar);
+    ctx.DrawCheckboxItem(has_polar,
+      _("Add your aircraft and, most importantly, select "
+        "the corresponding polar curve and activate the "
+        "aircraft, so that the flight computer can calculate "
+        "everything correctly."),
+      LinkAction::PLANE_POLAR, _("Config → Setup Plane → New → Polar → List"));
   }
-  ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
-               _("Add your aircraft and, most importantly, select "
-                 "the corresponding polar curve and activate the "
-                 "aircraft, so that the flight computer can calculate "
-                 "everything correctly."))) + ctx.margin / 2;
-  ctx.y += int(ctx.DrawLinkLine(LinkAction::PLANE_POLAR, x_cb,
-               _("Config → Setup Plane → New → Polar → List")))
-           + ctx.margin;
 
   // Pilot name
   {
     const char *name = Profile::Get(ProfileKeys::PilotName);
-    ctx.DrawCheckbox(name != nullptr && !StringIsEmpty(name));
+    ctx.DrawCheckboxItem(name != nullptr && !StringIsEmpty(name),
+      _("Set your name."),
+      LinkAction::SETUP_LOGGER_1, _("Config → System → Setup → Logger"));
   }
-  ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
-               _("Set your name."))) + ctx.margin / 2;
-  ctx.y += int(ctx.DrawLinkLine(LinkAction::SETUP_LOGGER_1, x_cb,
-               _("Config → System → Setup → Logger"))) + ctx.margin;
 
   // Pilot weight
   {
     const char *weight = Profile::Get(ProfileKeys::CrewWeightTemplate);
-    ctx.DrawCheckbox(weight != nullptr && !StringIsEmpty(weight));
+    ctx.DrawCheckboxItem(weight != nullptr && !StringIsEmpty(weight),
+      _("Set your default weight."),
+      LinkAction::SETUP_LOGGER_2, _("Config → System → Setup → Logger"));
   }
-  ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
-               _("Set your default weight."))) + ctx.margin / 2;
-  ctx.y += int(ctx.DrawLinkLine(LinkAction::SETUP_LOGGER_2, x_cb,
-               _("Config → System → Setup → Logger"))) + ctx.margin;
 
   // Timezone (UTC offset)
   {
     int utc_offset;
-    ctx.DrawCheckbox(Profile::Get(ProfileKeys::UTCOffsetSigned, utc_offset));
+    ctx.DrawCheckboxItem(Profile::Get(ProfileKeys::UTCOffsetSigned, utc_offset),
+      _("Set your timezone."),
+      LinkAction::SETUP_TIME, _("Config → System → Setup → Time"));
   }
-  ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
-               _("Set your timezone."))) + ctx.margin / 2;
-  ctx.y += int(ctx.DrawLinkLine(LinkAction::SETUP_TIME, x_cb,
-               _("Config → System → Setup → Time"))) + ctx.margin;
 
-  // Home waypoint
+  // Checklist
+  ctx.DrawCheckboxItem(
+    Profile::GetPath(ProfileKeys::ChecklistFile) != nullptr,
+    _("Configure a checklist file for preflight checks."),
+    LinkAction::CHECKLIST, _("Config → System → Site Files"));
+
+  // Home waypoint (no link, just text instruction)
   {
     int home_waypoint;
     ctx.DrawCheckbox(Profile::Get(ProfileKeys::HomeWaypoint, home_waypoint));
@@ -128,7 +113,7 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
                _("Tap waypoint on map → select waypoint → Details "
                  "→ next page → Set as New Home"))) + ctx.margin;
 
-  // InfoBoxes (no checkbox)
+  // InfoBoxes (no checkbox, multiple links)
   ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), x_cb,
                _("Configure the pages and InfoBoxes as you prefer.")))
            + ctx.margin / 2;
@@ -151,15 +136,13 @@ ConfigurationWindow::Layout(Canvas *canvas, const PixelRect &rc,
 
   // Replay (full-width text)
   StaticString<1024> replay_text;
-  replay_text = _("The easiest way to get familiar with XCSoar is to load an "
-                  "existing flight and use the replay feature to explore its "
-                  "functions.");
-  replay_text += _T(" ");
-  replay_text += _("To do this, copy an IGC file into the XCSoarData/logs "
-                   "folder.");
-  replay_text += _T(" ");
-  replay_text += _("Then you can select this file under Config → Config → "
-                   "Replay and start the flight simulation.");
+  replay_text.Format(_T("%s %s %s"),
+    _("The easiest way to get familiar with XCSoar is to load an "
+      "existing flight and use the replay feature to explore its "
+      "functions."),
+    _("To do this, copy an IGC file into the XCSoarData/logs folder."),
+    _("Then you can select this file under Config → Config → "
+      "Replay and start the flight simulation."));
   ctx.y += int(ctx.DrawTextBlock(ctx.GetTextFont(), ctx.x,
                                  replay_text.c_str())) + ctx.margin;
 
@@ -273,6 +256,19 @@ ConfigurationWindow::HandleLink(LinkAction link) noexcept
     WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                         look, _("Time"));
     auto panel = CreateTimeConfigPanel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged())
+      Profile::Save();
+    return true;
+  }
+
+  case LinkAction::CHECKLIST: {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("Site Files"));
+    auto panel = CreateSiteConfigPanel();
     dialog.FinishPreliminary(std::move(panel));
     dialog.AddButton(_("Close"), mrOK);
     dialog.ShowModal();
