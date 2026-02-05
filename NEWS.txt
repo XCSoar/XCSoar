@@ -110,7 +110,7 @@ Version 7.44 - not yet released
   - InfoBoxes with a single action now open their dialog directly on
     tap instead of showing a redundant menu #1442
   - fix Escape key not closing the waypoint details dialog
-
+  - add flight export to external storage for linux and windows
 * Android
   - add Google Play compliant permission disclosure pages for location,
     background location, and notification permissions in onboarding
