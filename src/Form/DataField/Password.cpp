@@ -4,13 +4,17 @@
 #include "Password.hpp"
 
 #include <algorithm>
-#include <cstring>
+#include <string_view>
+#include <cstdlib>
 
 const char *
 PasswordDataField::GetAsDisplayString() const noexcept
 {
-  const char *obfuscated = _T("********************************");
-  const size_t obfuscated_length = strlen(obfuscated);
-  size_t length = std::min(_tcsclen(GetAsString()), obfuscated_length);
-  return obfuscated + (obfuscated_length - length);
+  static const char *obfuscated = "********************************";
+  const size_t obfuscated_length = sizeof(obfuscated) - 1;
+  std::string_view s = GetAsString();
+  size_t length = std::min(std::mbstowcs(nullptr, s.data(), s.size()),
+    obfuscated_length);
+  size_t start = obfuscated_length - length;
+  return obfuscated + start;
 }
