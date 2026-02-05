@@ -90,16 +90,16 @@ ScanFiles(File::Visitor &visitor, Path sPath,
 
   if (sPath != nullptr)
     // e.g. "/test/data/something"
-    _tcscpy(DirPath, sPath.c_str());
+    strcpy(DirPath, sPath.c_str());
   else
     DirPath[0] = 0;
 
   // "/test/data/something/"
-  _tcscat(DirPath, _T(DIR_SEPARATOR_S));
-  _tcscpy(FileName, DirPath);
+  strcat(DirPath, _T(DIR_SEPARATOR_S));
+  strcpy(FileName, DirPath);
 
   // "/test/data/something/*.igc"
-  _tcscat(FileName, filter);
+  strcat(FileName, filter);
 
   // Find the first matching file
   WIN32_FIND_DATA FindFileData;
@@ -115,9 +115,9 @@ ScanFiles(File::Visitor &visitor, Path sPath,
         !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         checkFilter(FindFileData.cFileName, filter)) {
       // "/test/data/something/"
-      _tcscpy(FileName, DirPath);
+      strcpy(FileName, DirPath);
       // "/test/data/something/blubb.txt"
-      _tcscat(FileName, FindFileData.cFileName);
+      strcat(FileName, FindFileData.cFileName);
       // Call visitor with the file that was found
       visitor.Visit(Path(FileName), Path(FindFileData.cFileName));
     }
@@ -153,8 +153,8 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     return false;
 
   char FileName[MAX_PATH];
-  _tcscpy(FileName, sPath.c_str());
-  size_t FileNameLength = _tcslen(FileName);
+  strcpy(FileName, sPath.c_str());
+  size_t FileNameLength = strlen(FileName);
   FileName[FileNameLength++] = '/';
 
   struct dirent *ent;
@@ -163,7 +163,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     if (*ent->d_name == _T('.'))
       continue;
 
-    _tcscpy(FileName + FileNameLength, ent->d_name);
+    strcpy(FileName + FileNameLength, ent->d_name);
 
     struct stat st;
     if (stat(FileName, &st) < 0)
@@ -188,8 +188,8 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
   if (sPath != nullptr) {
     // e.g. "/test/data/something"
-    _tcscpy(DirPath, sPath.c_str());
-    _tcscpy(FileName, sPath.c_str());
+    strcpy(DirPath, sPath.c_str());
+    strcpy(FileName, sPath.c_str());
   } else {
     DirPath[0] = 0;
     FileName[0] = 0;
@@ -203,9 +203,9 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     return true;
 
   // "test/data/something/"
-  _tcscat(DirPath, _T(DIR_SEPARATOR_S));
+  strcat(DirPath, _T(DIR_SEPARATOR_S));
   // "test/data/something/*"
-  _tcscat(FileName, _T(DIR_SEPARATOR_S "*"));
+  strcat(FileName, _T(DIR_SEPARATOR_S "*"));
 
   // Find the first file
   WIN32_FIND_DATA FindFileData;
@@ -220,9 +220,9 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     if (!IsDots(FindFileData.cFileName) &&
         (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
       // "test/data/something/"
-      _tcscpy(FileName, DirPath);
+      strcpy(FileName, DirPath);
       // "test/data/something/SUBFOLDER"
-      _tcscat(FileName, FindFileData.cFileName);
+      strcat(FileName, FindFileData.cFileName);
       // Scan subfolder for matching files too
       ScanDirectories(visitor, true, Path(FileName), filter);
     }

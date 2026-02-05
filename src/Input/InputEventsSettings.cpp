@@ -468,7 +468,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
       StringFormatUnsafe(buf, _T("\r\n%s / "), _("On"));
     else StringFormatUnsafe(buf, _T("\r\n%s / "), _("Off"));
 
-    _tcscat(buf, settings_map.terrain.enable
+    strcat(buf, settings_map.terrain.enable
             ? _("On") : _("Off"));
 
     Message::AddMessage(_("Topography/Terrain"), buf);

@@ -325,15 +325,15 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
               (int)solution.elapsed_time.count());
 
     if (solution.distance > 0)
-      _stprintf(buffer + _tcslen(buffer), _T(" dist %d m"),
+      _stprintf(buffer + strlen(buffer), _T(" dist %d m"),
                 (int)solution.distance);
     else {
       /* the airspace is right above or below us - show the vertical
          distance */
-      _tcscat(buffer, _T(" vertical "));
+      strcat(buffer, _T(" vertical "));
 
       auto delta = solution.altitude - CommonInterface::Basic().nav_altitude;
-      FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
+      FormatRelativeUserAltitude(delta, buffer + strlen(buffer), true);
     }
 
     row_renderer.DrawSecondRow(canvas, text_rc, buffer);

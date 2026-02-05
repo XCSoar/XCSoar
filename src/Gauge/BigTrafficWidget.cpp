@@ -451,7 +451,7 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
     canvas.Select(look.call_sign_font);
     font_size = look.call_sign_font.GetHeight();
 
-    _tcscpy(buffer, traffic.name);
+    strcpy(buffer, traffic.name);
   } else {
     canvas.Select(look.info_labels_font);
     font_size = look.info_labels_font.GetHeight();

@@ -113,7 +113,7 @@ ComIndex(char *name) noexcept
     return -1;
 
   char *endptr;
-  const auto i = _tcstoul(suffix, &endptr, 10);
+  const auto i = strtoul(suffix, &endptr, 10);
   if (endptr == suffix || *endptr != _T('\0'))
     return -1;
 
