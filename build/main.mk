@@ -109,6 +109,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/RouteConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SiteConfigPanel.cpp \
+	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportUtil.cpp \
 	$(SRC)/Dialogs/DataManagement/IgcMetaCache.cpp \
 	$(SRC)/Dialogs/DataManagement/TargetPickerDialog.cpp \
