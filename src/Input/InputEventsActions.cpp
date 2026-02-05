@@ -38,6 +38,8 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Dialogs/Plane/PlaneDialogs.hpp"
+#include "Dialogs/DataManagement/DataManagement.hpp"
+#include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "Dialogs/ProfileListDialog.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
@@ -755,6 +757,18 @@ void
 InputEvents::eventFileManager([[maybe_unused]] const TCHAR *misc)
 {
   ShowFileManager();
+}
+
+void
+InputEvents::eventDataManagement([[maybe_unused]] const TCHAR *misc)
+{
+  ShowDataManagementDialog();
+}
+
+void
+InputEvents::eventExportFlights([[maybe_unused]] const TCHAR *misc)
+{
+  ShowExportFlightsDialog();
 }
 
 void
