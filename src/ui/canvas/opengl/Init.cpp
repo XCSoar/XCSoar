@@ -132,11 +132,13 @@ OpenGL::SetupContext()
 #ifdef ENABLE_SDL
   if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
     LogFormat("Failed to initialize OpenGL loader (glad)");
+    throw std::runtime_error("Failed to initialize OpenGL loader (glad)");
     return;
   }
 #else
   if (!gladLoadGL()) {
     LogFormat("Failed to initialize OpenGL loader (glad)");
+    throw std::runtime_error("Failed to initialize OpenGL loader (glad)");
     return;
   }
 #endif
