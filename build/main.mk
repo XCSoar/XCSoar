@@ -9,6 +9,7 @@ endif
 
 DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Inflate.cpp \
+	$(SRC)/Dialogs/InternalLink.cpp \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/LockScreen.cpp \
 	$(SRC)/Dialogs/Error.cpp \
