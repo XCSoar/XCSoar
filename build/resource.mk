@@ -200,7 +200,9 @@ $(PNG_LAUNCH_SIM_640_RGBA): $(PNG_LAUNCH_FLY_640_RGBA)
 
 ifneq ($(TARGET),ANDROID)
 ifneq ($(TARGET),IOS)
-ifneq ($(HAVE_WIN32),y)
+# For non-Win32 or Win32 with SDL (which doesn't use Win32 resources),
+# we need to convert WAV sounds to RAW format
+ifeq ($(USE_WIN32_RESOURCES),n)
 
 WAV_SOUNDS = $(wildcard Data/sound/*.wav)
 RAW_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.raw,$(WAV_SOUNDS))
