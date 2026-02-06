@@ -263,9 +263,14 @@ endif
 
 ifeq ($(HAVE_WIN32),y)
 OUTPUTS += $(LAUNCH_XCSOAR_BIN)
-# Add ANGLE DLLs if using ANGLE on Windows
+# Package with ANGLE DLLs if using ANGLE on Windows
 ifeq ($(USE_ANGLE),y)
-OUTPUTS += $(ANGLE_BIN_DLLS)
+ANGLE_ZIP = $(TARGET_BIN_DIR)/$(PROGRAM_NAME).zip
+OUTPUTS += $(ANGLE_ZIP)
+
+$(ANGLE_ZIP): $(XCSOAR_BIN) $(ANGLE_BIN_DLLS)
+	@$(NQ)echo "  ZIP     $(@F)"
+	$(Q)cd $(TARGET_BIN_DIR) && $(ZIP) $(@F) $(notdir $^)
 endif
 endif
 
