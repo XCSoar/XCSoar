@@ -20,6 +20,10 @@ Display::Display()
     throw FmtRuntimeError("SDL_Init() has failed: {}", ::SDL_GetError());
 
 #ifdef ENABLE_OPENGL
+#ifdef USE_ANGLE
+  // On Windows, tell SDL to use EGL (required for ANGLE)
+  SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
+#endif
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
