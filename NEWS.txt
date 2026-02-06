@@ -33,6 +33,7 @@ Version 7.44 - not yet released
     removed) #1541
   - fix waypoint editor silently discarding altitude and type changes
   - checklist: use .xcc extension, fix crash with empty profile path #2094
+  - checklists: add Markdown support (bold, links, checkboxes)
 * ui
   - enable goto and waypoint details for location map items (clicking on empty map locations)
   - streamlined, and optimized icons
@@ -77,6 +78,18 @@ Version 7.44 - not yet released
   - File list dialogs use multi-select widget for selection
   - QuickMenu: revamped look
   - QuickMenu: sane cursor control
+  - add unified onboarding dialog with paginated navigation, gesture
+    support, and version-aware What's New page
+  - add startup safety disclaimer with GPL warranty notice
+  - add dark mode support for dialogs, buttons, checkboxes, charts,
+    popup messages, and gradient dialog backgrounds
+  - add Markdown rendering for dialogs with bold, headings, links,
+    checkboxes, and embedded resource images
+  - add internal link system (xcsoar:// URLs) for navigating to config
+    panels and dialogs from text
+  - credits dialog now uses scrollable rich text with clickable links
+  - terrain display config panel: show topography in preview, render at
+    full resolution, add spacer between settings and preview
   - add kinetic drag scrolling to vertical scroll panels
   - improve touch screen tap-vs-drag detection
   - implement interaction rules and selection management for InfoBoxes
@@ -96,6 +109,8 @@ Version 7.44 - not yet released
   - fix Escape key not closing the waypoint details dialog
 
 * Android
+  - add Google Play compliant permission disclosure pages for location,
+    background location, and notification permissions in onboarding
   - fix crash on startup when loading icons on ldpi screens
   - update 'white list' of USB devices with one more VID/PID pair for SoftRF Academy
   - make xcsoar accessible from lock screen
