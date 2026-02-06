@@ -323,10 +323,25 @@ class NativeView extends SurfaceView
   static native void initNative();
   static native void deinitNative();
 
+  /**
+   * Show a native permission disclosure dialog on the XCSoar UI
+   * thread.  Called from PermissionHelper instead of showing a Java
+   * AlertDialog.  When the user responds, calls back to
+   * PermissionManager.onDisclosureResult().
+   */
+  static native void showPermissionDisclosure(String permission);
+
+  /**
+   * Notify native code that a permission request completed.
+   * Called from PermissionHelper when a permission chain finishes.
+   *
+   * @param granted true if the permission was granted
+   */
+  static native void onPermissionResult(boolean granted);
+
   static native void onConfigurationChangedNative(boolean nightMode);
 
   static native String onReceiveXCTrackTask(String data);
-  static native void showCloudEnableDialog();
 
   protected native void runNative(Context context,
                                   PermissionManager permissionManager,

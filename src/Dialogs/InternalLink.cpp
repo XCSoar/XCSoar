@@ -9,6 +9,8 @@
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/dlgGestureHelp.hpp"
+#include "Dialogs/ReplayDialog.hpp"
 #include "Dialogs/Settings/Panels/SiteConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/LoggerConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/TimeConfigPanel.hpp"
@@ -41,6 +43,41 @@ ShowConfigPanel(const char *title,
     Profile::Save();
 }
 
+/**
+ * Table of config panel links that all follow the
+ * ShowConfigPanel(title, factory) pattern.
+ */
+struct ConfigPanelLink {
+  const char *path;
+  const char *title;
+  std::unique_ptr<Widget> (*factory)();
+};
+
+static constexpr ConfigPanelLink config_panel_links[] = {
+  {"config/site-files", N_("Site Files"), CreateSiteConfigPanel},
+  {"config/logger",     N_("Logger"),     CreateLoggerConfigPanel},
+  {"config/time",       N_("Time"),       CreateTimeConfigPanel},
+  {"config/infoboxes",  N_("InfoBox Sets"), CreateInfoBoxesConfigPanel},
+  {"config/pages",      N_("Pages"),      CreatePagesConfigPanel},
+  {"config/weglide",    N_("WeGlide"),    CreateWeGlideConfigPanel},
+};
+
+/**
+ * Table of simple dialog links that call a void() handler.
+ */
+struct SimpleDialogLink {
+  const char *path;
+  void (*handler)();
+};
+
+static constexpr SimpleDialogLink simple_dialog_links[] = {
+  {"dialog/checklist", dlgChecklistShowModal},
+  {"dialog/flight",    dlgBasicSettingsShowModal},
+  {"dialog/wind",      ShowWindSettingsDialog},
+  {"dialog/task",      dlgTaskManagerShowModal},
+  {"dialog/gestures",  dlgGestureHelpShowModal},
+};
+
 bool
 HandleInternalLink(const char *url)
 {
@@ -50,7 +87,26 @@ HandleInternalLink(const char *url)
 
   const char *path = url + 9;  // Skip "xcsoar://"
 
-  // Config dialogs
+  /* ---- Config panel table ---- */
+
+  for (const auto &entry : config_panel_links) {
+    if (StringIsEqual(path, entry.path)) {
+      ShowConfigPanel(gettext(entry.title), entry.factory);
+      return true;
+    }
+  }
+
+  /* ---- Simple dialog table ---- */
+
+  for (const auto &entry : simple_dialog_links) {
+    if (StringIsEqual(path, entry.path)) {
+      entry.handler();
+      return true;
+    }
+  }
+
+  /* ---- Special-case config dialogs ---- */
+
   if (StringIsEqual(path, "config/devices")) {
     if (backend_components != nullptr &&
         backend_components->device_blackboard != nullptr) {
@@ -65,56 +121,7 @@ HandleInternalLink(const char *url)
     return true;
   }
 
-  if (StringIsEqual(path, "config/site-files")) {
-    ShowConfigPanel(_("Site Files"), CreateSiteConfigPanel);
-    return true;
-  }
-
-  if (StringIsEqual(path, "config/logger")) {
-    ShowConfigPanel(_("Logger"), CreateLoggerConfigPanel);
-    return true;
-  }
-
-  if (StringIsEqual(path, "config/time")) {
-    ShowConfigPanel(_("Time"), CreateTimeConfigPanel);
-    return true;
-  }
-
-  if (StringIsEqual(path, "config/infoboxes")) {
-    ShowConfigPanel(_("InfoBox Sets"), CreateInfoBoxesConfigPanel);
-    return true;
-  }
-
-  if (StringIsEqual(path, "config/pages")) {
-    ShowConfigPanel(_("Pages"), CreatePagesConfigPanel);
-    return true;
-  }
-
-  if (StringIsEqual(path, "config/weglide")) {
-    ShowConfigPanel(_("WeGlide"), CreateWeGlideConfigPanel);
-    return true;
-  }
-
-  // Action dialogs
-  if (StringIsEqual(path, "dialog/checklist")) {
-    dlgChecklistShowModal();
-    return true;
-  }
-
-  if (StringIsEqual(path, "dialog/flight")) {
-    dlgBasicSettingsShowModal();
-    return true;
-  }
-
-  if (StringIsEqual(path, "dialog/wind")) {
-    ShowWindSettingsDialog();
-    return true;
-  }
-
-  if (StringIsEqual(path, "dialog/task")) {
-    dlgTaskManagerShowModal();
-    return true;
-  }
+  /* ---- Special-case action dialogs ---- */
 
   if (StringIsEqual(path, "dialog/analysis")) {
     if (backend_components == nullptr ||
@@ -137,6 +144,14 @@ HandleInternalLink(const char *url)
 
   if (StringIsEqual(path, "dialog/credits")) {
     dlgCreditsShowModal(*CommonInterface::main_window);
+    return true;
+  }
+
+  if (StringIsEqual(path, "dialog/replay")) {
+    if (backend_components != nullptr &&
+        backend_components->replay &&
+        !CommonInterface::MovementDetected())
+      ShowReplayDialog(*backend_components->replay);
     return true;
   }
 

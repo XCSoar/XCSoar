@@ -75,6 +75,55 @@ GetHeadingLevel(const char *str) noexcept
 }
 
 /**
+ * Check for admonition marker: !!! type
+ * Returns the AdmonitionType if matched, or -1 if not.
+ * On match, *end_out is set past the marker (to '\n' or '\0').
+ */
+static int
+GetAdmonitionType(const char *str, const char **end_out) noexcept
+{
+  if (str[0] != '!' || str[1] != '!' || str[2] != '!')
+    return -1;
+
+  const char *p = str + 3;
+  // Skip optional whitespace after !!!
+  while (*p == ' ' || *p == '\t')
+    ++p;
+
+  struct {
+    const char *name;
+    AdmonitionType type;
+  } static constexpr types[] = {
+    {"warning", AdmonitionType::WARNING},
+    {"note", AdmonitionType::NOTE},
+    {"important", AdmonitionType::IMPORTANT},
+    {"tip", AdmonitionType::TIP},
+    {"caution", AdmonitionType::CAUTION},
+  };
+
+  static_assert(std::size(types) == 5,
+                "types array must cover all AdmonitionType values");
+
+  for (const auto &t : types) {
+    std::size_t len = strlen(t.name);
+    if (strncmp(p, t.name, len) == 0) {
+      const char *after = p + len;
+      // Must be followed by whitespace, newline, or end of string
+      if (*after == '\0' || *after == '\n' ||
+          *after == ' ' || *after == '\t') {
+        // Skip to end of line
+        while (*after != '\0' && *after != '\n')
+          ++after;
+        *end_out = after;
+        return static_cast<int>(t.type);
+      }
+    }
+  }
+
+  return -1;
+}
+
+/**
  * Check if line starts with list marker (- or *).
  */
 static bool
@@ -139,8 +188,22 @@ ParseMarkdown(const char *input)
   std::size_t bold_start = 0;
 
   while (*str != '\0') {
-    // Process line-start constructs (headings, list items)
+    // Process line-start constructs (admonitions, headings, list items)
     if (at_line_start) {
+      // Check for admonition: !!! type
+      const char *adm_end;
+      int adm_type = GetAdmonitionType(str, &adm_end);
+      if (adm_type >= 0) {
+        result.admonitions.push_back(
+          {result.text.size(),
+           static_cast<AdmonitionType>(adm_type)});
+        str = adm_end;
+        if (*str == '\n')
+          ++str;
+        at_line_start = true;
+        continue;
+      }
+
       // Check for heading
       unsigned heading_level = GetHeadingLevel(str);
       if (heading_level > 0) {
@@ -216,6 +279,42 @@ ParseMarkdown(const char *input)
             }
             p += bold_len;
             continue;
+          }
+
+          // Check for inline image: ![alt](url)
+          if (*p == '!' && *(p + 1) == '[') {
+            const char *alt_begin = p + 2;
+            const char *alt_end = alt_begin;
+
+            while (*alt_end != '\0' && *alt_end != ']' &&
+                   alt_end < line_end)
+              ++alt_end;
+
+            if (*alt_end == ']' && *(alt_end + 1) == '(') {
+              const char *img_url_begin = alt_end + 2;
+              const char *img_url_end = img_url_begin;
+
+              while (*img_url_end != '\0' && *img_url_end != ')' &&
+                     img_url_end < line_end)
+                ++img_url_end;
+
+              if (*img_url_end == ')') {
+                MarkdownImage image;
+                image.position = result.text.size();
+                image.alt_text.assign(alt_begin, alt_end);
+                image.url.assign(img_url_begin, img_url_end);
+                image.is_block = false; // inline in list item
+
+                if (!image.alt_text.empty())
+                  result.text.append(image.alt_text);
+                else
+                  result.text += ' ';
+
+                result.images.push_back(std::move(image));
+                p = img_url_end + 1;
+                continue;
+              }
+            }
           }
 
           // Check for markdown link: [text](url)
@@ -313,6 +412,7 @@ ParseMarkdown(const char *input)
       continue;
     }
 
+    const bool was_at_line_start = at_line_start;
     at_line_start = false;
 
     // Check for bold marker
@@ -327,6 +427,51 @@ ParseMarkdown(const char *input)
       }
       str += bold_len;
       continue;
+    }
+
+    // Check for image: ![alt](url)
+    if (*str == '!' && *(str + 1) == '[') {
+      const char *alt_begin = str + 2;
+      const char *alt_end = alt_begin;
+
+      while (*alt_end != '\0' && *alt_end != ']' &&
+             *alt_end != '\n')
+        ++alt_end;
+
+      if (*alt_end == ']' && *(alt_end + 1) == '(') {
+        const char *img_url_begin = alt_end + 2;
+        const char *img_url_end = img_url_begin;
+
+        while (*img_url_end != '\0' && *img_url_end != ')' &&
+               *img_url_end != '\n')
+          ++img_url_end;
+
+        if (*img_url_end == ')') {
+          // Check if this image is the sole content on its line
+          // (block image): nothing before it on the line and
+          // nothing after except whitespace/newline
+          const char *after = img_url_end + 1;
+          bool trailing_empty = (*after == '\0' || *after == '\n');
+          bool is_block = was_at_line_start && trailing_empty;
+
+          MarkdownImage image;
+          image.position = result.text.size();
+          image.alt_text.assign(alt_begin, alt_end);
+          image.url.assign(img_url_begin, img_url_end);
+          image.is_block = is_block;
+
+          // Add placeholder text (alt text or single space)
+          if (!image.alt_text.empty())
+            result.text.append(image.alt_text);
+          else
+            result.text += ' ';
+
+          result.images.push_back(std::move(image));
+
+          str = img_url_end + 1;
+          continue;
+        }
+      }
     }
 
     // Look for markdown link: [text](url)

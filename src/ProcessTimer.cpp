@@ -20,7 +20,6 @@
 #include "Tracking/TrackingGlue.hpp"
 #include "net/client/tim/Glue.hpp"
 #include "ui/event/Idle.hpp"
-#include "Dialogs/Tracking/CloudEnableDialog.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "BackendComponents.hpp"
@@ -163,7 +162,6 @@ ProcessAutoBugs() noexcept
 static void
 SettingsProcessTimer() noexcept
 {
-  CloudEnableDialog();
   BallastDumpProcessTimer();
   ProcessAutoBugs();
 }

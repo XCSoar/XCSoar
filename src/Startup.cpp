@@ -23,6 +23,7 @@
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
+#include "Dialogs/dlgOnboarding.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
@@ -433,6 +434,9 @@ Startup(UI::Display &display)
   }
 #endif
 
+  // Show unified onboarding dialog (warranty + guide pages)
+  if (!dlgOnboardingShowModal())
+    return false;
 
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(0);

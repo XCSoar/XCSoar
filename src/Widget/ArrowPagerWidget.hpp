@@ -15,8 +15,20 @@ struct ButtonLook;
 /**
  * A wrapper for #PagerWidget that adds arrow buttons on the
  * left/bottom for page navigation.
+ *
+ * Supports an optional page-advance guard: if set, forward navigation
+ * (next button, RIGHT key, swipe) is blocked unless the callback
+ * returns true for the current page.
  */
 class ArrowPagerWidget : public PagerWidget {
+public:
+  /**
+   * Callback to check whether forward navigation is allowed from
+   * the given page index.  Return true to allow, false to block.
+   */
+  using CanAdvanceCallback = std::function<bool(unsigned current_page)>;
+
+private:
   enum Buttons {
     PREVIOUS,
     NEXT,
@@ -44,6 +56,9 @@ class ArrowPagerWidget : public PagerWidget {
   Button previous_button, next_button;
   Button close_button;
 
+  /** Optional guard that blocks forward page navigation */
+  CanAdvanceCallback can_advance_callback;
+
 public:
   ArrowPagerWidget(const ButtonLook &_look,
                    std::function<void()> _close_callback,
@@ -58,6 +73,26 @@ public:
     return *extra;
   }
 
+  /**
+   * Set a callback to guard forward page navigation.  When set,
+   * Next() via button, keyboard, or swipe will only proceed if the
+   * callback returns true for the current page index.
+   */
+  void SetCanAdvanceCallback(CanAdvanceCallback callback) noexcept {
+    can_advance_callback = std::move(callback);
+  }
+
+  /**
+   * Check whether advancing from the current page is allowed.
+   * @return true if no guard is set or the guard allows it
+   */
+  [[gnu::pure]]
+  bool CanAdvance() const noexcept {
+    if (!can_advance_callback)
+      return true;
+    return can_advance_callback(GetCurrentIndex());
+  }
+
   /* virtual methods from Widget */
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
@@ -69,6 +104,16 @@ public:
   bool SetFocus() noexcept override;
   bool HasFocus() const noexcept override;
   bool KeyPress(unsigned key_code) noexcept override;
+
+  /**
+   * Re-evaluate whether the next button should be enabled.
+   * Call this after the advance-guard state changes (e.g. a
+   * prerequisite checkbox was toggled).
+   */
+  void UpdateNextButtonState() noexcept;
+
+protected:
+  void OnPageFlipped() noexcept override;
 
 private:
   void UpdateButtons() noexcept;

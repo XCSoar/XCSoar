@@ -5,13 +5,19 @@
 
 #include "LinkableWindow.hpp"
 #include "util/MarkdownParser.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Color.hpp"
 
+#include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 class Font;
 struct WrappedText;
 struct SegmentedLine;
+struct TextSegment;
+struct FocusItem;
 
 /**
  * A window showing multi-line text with Markdown formatting.
@@ -37,7 +43,14 @@ struct SegmentedLine;
 class RichTextWindow : public LinkableWindow {
   const Font *font = nullptr;
   const Font *bold_font = nullptr;
-  const Font *heading_font = nullptr;
+  const Font *heading1_font = nullptr;
+  const Font *heading2_font = nullptr;
+
+  /** Whether dark mode is active (affects text/background colors) */
+  bool dark_mode = false;
+
+  /** Background color (from DialogLook) */
+  Color background_color = COLOR_WHITE;
 
   /** Parsed text with links and styles extracted */
   ParsedMarkdown parsed;
@@ -73,7 +86,66 @@ class RichTextWindow : public LinkableWindow {
   /** Currently focused checkbox style_index (into parsed.styles), or nullopt */
   mutable std::optional<std::size_t> focused_checkbox_style;
 
+  /**
+   * Set when focus navigation reached the end (down) or start (up)
+   * of all focusable items.  While set, the next DOWN/UP returns
+   * false so the dialog can cycle focus to the next tab stop
+   * (e.g. pager buttons).  Cleared when the window receives focus.
+   */
+  mutable bool focus_exhausted_down = false;
+  mutable bool focus_exhausted_up = false;
+
+  /** Cache of loaded bitmaps keyed by URL */
+  mutable std::map<std::string, Bitmap> image_cache;
+
+  /**
+   * Per-line Y offsets and heights, accounting for block images
+   * that are taller than a normal text line.
+   */
+  mutable std::vector<int> line_y_offsets;
+  mutable std::vector<int> line_heights;
+  mutable unsigned line_layout_width = 0;
+
 private:
+  /**
+   * Load or retrieve a cached bitmap for the given image URL.
+   * Supports "resource:IDB_NAME" for compiled-in resources.
+   * @return pointer to the bitmap, or nullptr if not loadable
+   */
+  const Bitmap *LoadImage(const std::string &url) const noexcept;
+
+  /**
+   * Find the block image (if any) whose placeholder text falls
+   * within [line_start, line_start+line_length).
+   */
+  [[gnu::pure]]
+  const MarkdownImage *FindBlockImageForLine(
+    std::size_t line_start,
+    std::size_t line_length) const noexcept;
+
+  /**
+   * Find any image (block or inline) whose placeholder position
+   * falls within [start, start+length).
+   */
+  [[gnu::pure]]
+  const MarkdownImage *FindImageAtPosition(
+    std::size_t start,
+    std::size_t length) const noexcept;
+
+  /**
+   * Return the colour to use for a heading at the given text offset.
+   * If a !!! admonition marker precedes the heading, the colour
+   * is determined by the admonition type; otherwise the default
+   * heading colour is returned.
+   */
+  [[gnu::pure]]
+  Color GetAdmonitionColor(std::size_t heading_start) const noexcept;
+
+  /**
+   * Compute per-line Y offsets and heights, accounting for block
+   * images that may be taller than a text line.
+   */
+  void EnsureLineLayout() const noexcept;
   /**
    * Ensure wrapped_text is populated for current width.
    */
@@ -90,6 +162,37 @@ private:
   void GetVisibleArea(int &visible_top, int &visible_bottom,
                       int &viewport_height) const noexcept;
 
+  /**
+   * Reset all layout caches.  Called when text or size changes.
+   */
+  void InvalidateLayout() noexcept;
+
+  /** Render an inline image for a segment, if present.
+   * @return true if an image was rendered (caller should skip text) */
+  bool RenderInlineImage(Canvas &canvas, const TextSegment &seg,
+                         int &x, int y, int cur_line_height,
+                         int text_line_height) const noexcept;
+
+  /** Render an underlined link segment with hit-rect registration. */
+  void RenderLinkSegment(Canvas &canvas, const TextSegment &seg,
+                         const char *text_data, int &x, int text_y,
+                         int visible_top,
+                         int text_line_height) noexcept;
+
+  /** Render a checkbox segment with hit-rect registration. */
+  void RenderCheckboxSegment(Canvas &canvas, const TextSegment &seg,
+                             int &x, int text_y, int visible_top,
+                             int text_line_height) noexcept;
+
+  /** Render a plain text segment (heading, bold, list item, normal). */
+  void RenderPlainSegment(Canvas &canvas, const TextSegment &seg,
+                          const char *text_data,
+                          int &x, int text_y) const noexcept;
+
+  /** Set focus to a FocusItem and scroll to make it visible. */
+  void ScrollToFocusItem(const FocusItem &item,
+                         int text_line_height) noexcept;
+
 public:
   RichTextWindow() noexcept;
   ~RichTextWindow() noexcept;
@@ -102,14 +205,28 @@ public:
    *
    * @param _font Main text font
    * @param _bold_font Font for bold text (optional, falls back to main)
-   * @param _heading_font Font for headings (optional, falls back to bold or main)
+   * @param _heading1_font Font for H1 headings (optional, falls back to bold)
+   * @param _heading2_font Font for H2 headings (optional, falls back to bold)
    */
   void SetFont(const Font &_font,
                const Font *_bold_font = nullptr,
-               const Font *_heading_font = nullptr) noexcept {
+               const Font *_heading1_font = nullptr,
+               const Font *_heading2_font = nullptr) noexcept {
     font = &_font;
     bold_font = _bold_font ? _bold_font : &_font;
-    heading_font = _heading_font ? _heading_font : (bold_font ? bold_font : &_font);
+    heading1_font = _heading1_font ? _heading1_font : bold_font;
+    heading2_font = _heading2_font ? _heading2_font : bold_font;
+  }
+
+  /**
+   * Enable or disable dark mode rendering.
+   *
+   * @param _background_color The dialog background color from DialogLook
+   */
+  void SetDarkMode(bool _dark_mode,
+                   Color _background_color = COLOR_WHITE) noexcept {
+    dark_mode = _dark_mode;
+    background_color = _background_color;
   }
 
   [[gnu::pure]]
@@ -123,9 +240,20 @@ public:
     return bold_font ? *bold_font : GetFont();
   }
 
+  /**
+   * Return the appropriate font for a heading level.
+   * H1 uses heading1_font, H2 uses heading2_font, H3 uses bold_font.
+   */
   [[gnu::pure]]
-  const Font &GetHeadingFont() const noexcept {
-    return heading_font ? *heading_font : GetBoldFont();
+  const Font &GetHeadingFont(TextStyle style) const noexcept {
+    switch (style) {
+    case TextStyle::Heading1:
+      return heading1_font ? *heading1_font : GetBoldFont();
+    case TextStyle::Heading2:
+      return heading2_font ? *heading2_font : GetBoldFont();
+    default:
+      return GetBoldFont();
+    }
   }
 
   /**
@@ -165,6 +293,14 @@ public:
    * Toggle a checkbox state.
    */
   void ToggleCheckbox(std::size_t style_index) noexcept;
+
+  /**
+   * Find the style index of the checkbox span containing text_pos.
+   * @return index into parsed.styles, or SIZE_MAX if not found
+   */
+  [[gnu::pure]]
+  std::size_t FindCheckboxStyleIndex(
+    std::size_t text_pos) const noexcept;
 
   /**
    * Find checkbox at screen position.

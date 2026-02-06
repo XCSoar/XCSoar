@@ -3,7 +3,7 @@
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/QuickGuide/QuickGuideScrollWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/RichTextWidget.hpp"
 #include "Look/DialogLook.hpp"
@@ -38,20 +38,25 @@ using Checklist = std::vector<ChecklistPage>;
 static constexpr std::size_t MAX_CHECKLIST_PAGES = 32;
 
 static void
-UpdateCaption(WndForm &form, const Checklist &checklist, std::size_t page)
+UpdateCaption(WndForm &form, const Checklist &checklist,
+              std::size_t page, std::size_t total)
 {
   if (page >= checklist.size())
     return;
 
-  StaticString<80> buffer{_("Checklist")};
   const auto &p = checklist[page];
+  StaticString<128> caption;
 
-  if (!p.title.empty()) {
-    buffer.append(": ");
-    buffer.append(p.title);
-  }
+  if (!p.title.empty())
+    caption.Format("%s (%u/%u)",
+                   p.title.c_str(),
+                   (unsigned)(page + 1), (unsigned)total);
+  else
+    caption.Format("%s (%u/%u)",
+                   (const char *)_("Checklist"),
+                   (unsigned)(page + 1), (unsigned)total);
 
-  form.SetCaption(buffer);
+  form.SetCaption(caption);
 }
 
 static Checklist
@@ -178,16 +183,21 @@ dlgChecklistShowModal()
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                    dialog.MakeModalResultCallback(mrOK));
   for (const auto &i : checklist)
-    pager->Add(std::make_unique<QuickGuideScrollWidget>(
-      std::make_unique<RichTextWidget>(look, i.text.c_str()), look));
+    pager->Add(std::make_unique<VScrollWidget>(
+      std::make_unique<RichTextWidget>(look, i.text.c_str()), look, true));
 
   pager->SetCurrent(current_page);
 
-  pager->SetPageFlippedCallback([&checklist, &dialog, &pager=*pager](){
-    UpdateCaption(dialog, checklist, pager.GetCurrentIndex());
-  });
+  const std::size_t total_pages = checklist.size();
 
-  UpdateCaption(dialog, checklist, pager->GetCurrentIndex());
+  pager->SetPageFlippedCallback(
+    [&checklist, &dialog, &pager=*pager, total_pages](){
+      UpdateCaption(dialog, checklist,
+                    pager.GetCurrentIndex(), total_pages);
+    });
+
+  UpdateCaption(dialog, checklist,
+                pager->GetCurrentIndex(), total_pages);
 
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
