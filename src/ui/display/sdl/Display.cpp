@@ -4,6 +4,7 @@
 #include "Display.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "Asset.hpp"
+#include "Math/Point2D.hpp"
 
 #include <SDL.h>
 #include <SDL_hints.h>
@@ -44,6 +45,17 @@ Display::Display()
 Display::~Display() noexcept
 {
   ::SDL_Quit();
+}
+
+UnsignedPoint2D
+Display::GetDPI() const noexcept
+{
+  float ddpi, hdpi, vdpi;
+
+  if (SDL_GetDisplayDPI(0, &ddpi, &hdpi, &vdpi) == 0)
+    return {static_cast<unsigned>(hdpi), static_cast<unsigned>(vdpi)};
+
+  return {96, 96};
 }
 
 } // namespace SDL
