@@ -3,8 +3,9 @@
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/QuickGuide/QuickGuideScrollWidget.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
-#include "Widget/LargeTextWidget.hpp"
+#include "Widget/RichTextWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
@@ -46,7 +47,7 @@ UpdateCaption(WndForm &form, const Checklist &checklist, std::size_t page)
   const auto &p = checklist[page];
 
   if (!p.title.empty()) {
-    buffer.append(_T(": "));
+    buffer.append(": ");
     buffer.append(p.title);
   }
 
@@ -78,7 +79,7 @@ try {
           c.emplace_back(std::move(page));
         } else if (!c.empty()) {
           c.back().text.append(page.title);
-          c.back().text.append(_T("\n"));
+          c.back().text.append("\n");
           c.back().text.append(page.text);
         }
         page = {};
@@ -110,7 +111,7 @@ try {
       // At page limit; append final page content to last page
       if (!page.title.empty()) {
         c.back().text.append(page.title);
-        c.back().text.append(_T("\n"));
+        c.back().text.append("\n");
       }
       c.back().text.append(page.text);
     }
@@ -128,14 +129,43 @@ dlgChecklistShowModal()
 
   auto path = Profile::GetPath(ProfileKeys::ChecklistFile);
   if (path == nullptr || path.empty())
-    path = LocalPath(_T("xcsoar-checklist.txt"));
+    path = LocalPath("xcsoar-checklist.txt");
   auto checklist = LoadChecklist(path);
   if (checklist.empty())
-    checklist.emplace_back(ChecklistPage{
-        _("No checklist loaded"),
-        _("Create a checklist file (e.g. checklist.xcc) or select one in Site "
-          "Files > Checklist."),
-      });
+    {
+      /* Build the getting-started page by assembling translated
+         display text with untranslated Markdown syntax so that
+         translators never need to touch formatting characters. */
+      StaticString<1024> body;
+      body.Format(
+        "# %s\n\n"
+        "%s\n\n"
+        "- [%s](https://xcsoar.org/download/data/xcsoar-checklist.txt)\n"
+        "- [%s](https://xcsoar.readthedocs.io/en/latest/checklist.html)\n\n"
+        "%s **%s**.\n\n"
+        "## %s\n\n"
+        "- [ ] %s\n"
+        "- [ ] %s\n"
+        "- [ ] %s\n"
+        "- [ ] %s\n"
+        "- [ ] %s",
+        _("Getting Started"),
+        _("Download the example checklist or create your own:"),
+        _("Download Example"),
+        _("View Documentation"),
+        _("Then select it in"),
+        _("Site Files > Checklist"),
+        _("Features"),
+        _("Interactive checkboxes"),
+        N_("**Bold** and # Headings"),
+        _("Clickable links"),
+        _("Phone: tel: / SMS: sms: / Email: mailto:"),
+        _("Maps: geo:47.5,8.5"));
+      checklist.emplace_back(ChecklistPage{
+          _("No checklist loaded"),
+          body.c_str(),
+        });
+    }
 
   if (current_page >= checklist.size())
     current_page = 0;
@@ -148,7 +178,8 @@ dlgChecklistShowModal()
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                    dialog.MakeModalResultCallback(mrOK));
   for (const auto &i : checklist)
-    pager->Add(std::make_unique<LargeTextWidget>(look, i.text.c_str()));
+    pager->Add(std::make_unique<QuickGuideScrollWidget>(
+      std::make_unique<RichTextWidget>(look, i.text.c_str()), look));
 
   pager->SetCurrent(current_page);
 
