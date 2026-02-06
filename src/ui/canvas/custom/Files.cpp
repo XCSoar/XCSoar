@@ -5,22 +5,13 @@
 #include "ui/canvas/FontSearch.hpp"
 
 static const char *const font_search_paths[] = {
-#if defined(_WIN32) && !defined(HAVE_POSIX)
-  /* just for the experimental WINSDL target */
-  "c:\\windows\\fonts",
-#else
   "/usr/share/fonts/truetype",
   "/usr/share/fonts/TTF",
   "/usr/share/fonts",
-#endif
   nullptr
 };
 
 static const char *const all_font_paths[] = {
-#if defined(_WIN32) && !defined(HAVE_POSIX)
-  /* just for the experimental WINSDL target */
-  "arial.ttf",
-#else
   "ttf-dejavu/DejaVuSansCondensed.ttf",
   "dejavu/DejaVuSansCondensed.ttf",
   "DejaVuSansCondensed.ttf",
@@ -37,9 +28,6 @@ static const char *const all_font_paths[] = {
   "freefont-ttf/FreeSans.ttf",
   "unifont/unifont.ttf",
   "corefonts/tahoma.ttf",
-
-#endif
-
   nullptr
 };
 
