@@ -30,6 +30,16 @@ FREETYPE = y
 endif
 
 $(eval $(call pkg-config-library,SDL,sdl2))
+
+ifeq ($(HAVE_WIN32),y)
+# For Windows/SDL: Remove SDL's -Dmain=SDL_main macro which conflicts with
+# XCSoar's code (e.g., PageLayout::main). We define SDL_MAIN_HANDLED instead
+# and call SDL_SetMainReady() in XCSoar.cpp.
+# Use lazy evaluation (=) to avoid triggering pkg-config errors at parse time
+# Uses SDL_CPPFLAGS_RAW constructed through pkgconfig.mk/thunk.mk
+SDL_CPPFLAGS = $(filter-out -Dmain=SDL_main,$(SDL_CPPFLAGS_RAW)) -DENABLE_SDL -DSDL_MAIN_HANDLED
+else
 SDL_CPPFLAGS += -DENABLE_SDL
+endif
 
 endif
