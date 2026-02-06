@@ -593,6 +593,8 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -Wl,--no-undefined
+  # Support 16KB memory pages (required for Android 15+ devices)
+  TARGET_LDFLAGS += -Wl,-z,max-page-size=16384
 
   ifeq ($(ARMV7),y)
     TARGET_LDFLAGS += -Wl,--fix-cortex-a8
