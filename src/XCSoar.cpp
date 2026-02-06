@@ -119,7 +119,7 @@ Main()
 int main(int argc, char **argv)
 #else
 int WINAPI
-WinMain(HINSTANCE hInstance, [[maybe_unused]] HINSTANCE hPrevInstance,
+WinMain([[maybe_unused]] HINSTANCE hInstance, [[maybe_unused]] HINSTANCE hPrevInstance,
         [[maybe_unused]] LPSTR lpCmdLine2,
         [[maybe_unused]] int nCmdShow)
 #endif
