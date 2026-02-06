@@ -13,6 +13,7 @@ XCSoar
    input_events
    lua
    mapfile
+   checklist
    debugging
    test_debug_utilities
    git_tips
