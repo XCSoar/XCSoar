@@ -6,7 +6,7 @@
 
 #include "Features.hpp"
 
-#if defined(HAVE_PCM_PLAYER) && !defined(ANDROID) && !defined(_WIN32)
+#if defined(HAVE_PCM_PLAYER) && !defined(ANDROID) && (!defined(_WIN32) || defined(ENABLE_SDL))
 class PCMResourcePlayer;
 
 extern PCMResourcePlayer *pcm_resource_player;
