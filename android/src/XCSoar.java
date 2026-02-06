@@ -106,6 +106,14 @@ public class XCSoar extends Activity implements PermissionManager {
     final Window window = getWindow();
     window.requestFeature(Window.FEATURE_NO_TITLE);
 
+    /* Enable edge-to-edge display for SDK 30+. This is what EdgeToEdge.enable()
+       does under the hood and is required for proper edge-to-edge support on
+       Android 15+. The existing inset handling in applyFullScreen() handles
+       the layout margins correctly. */
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      window.setDecorFitsSystemWindows(false);
+    }
+
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");
     setContentView(tv);
