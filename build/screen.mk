@@ -37,6 +37,7 @@ SCREEN_CUSTOM_SOURCES = \
 	$(CANVAS_SRC_DIR)/custom/GeoBitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/Pen.cpp \
 	$(CONTROL_SRC_DIR)/custom/LargeTextWindow.cpp \
+	$(CONTROL_SRC_DIR)/RichTextWindow.cpp \
 	$(CONTROL_SRC_DIR)/LinkableWindow.cpp \
 	$(CANVAS_SRC_DIR)/TextWrapper.cpp \
 	$(WINDOW_SRC_DIR)/custom/Window.cpp \
@@ -219,6 +220,7 @@ SCREEN_SOURCES += \
 	$(WINDOW_SRC_DIR)/gdi/PaintWindow.cpp \
 	$(WINDOW_SRC_DIR)/gdi/ContainerWindow.cpp \
 	$(CONTROL_SRC_DIR)/gdi/LargeTextWindow.cpp \
+	$(CONTROL_SRC_DIR)/RichTextWindow.cpp \
 	$(CONTROL_SRC_DIR)/LinkableWindow.cpp \
 	$(CANVAS_SRC_DIR)/TextWrapper.cpp \
 	$(WINDOW_SRC_DIR)/gdi/SingleWindow.cpp \
