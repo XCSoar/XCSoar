@@ -1,5 +1,5 @@
 TARGETS = PC WIN64 \
-  WIN64OPENGL \
+  WIN64OPENGL WIN64WGL PCWGL \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
 	FUZZER \
@@ -77,6 +77,21 @@ ifeq ($(TARGET),WIN64OPENGL)
   OPENGL = y
   ENABLE_SDL = y
   USE_ANGLE = y
+endif
+
+ifeq ($(TARGET),WIN64WGL)
+  X64 := y
+  override TARGET = PC
+
+  OPENGL = y
+  ENABLE_SDL = y
+endif
+
+ifeq ($(TARGET),PCWGL)
+  override TARGET = PC
+
+  OPENGL = y
+  ENABLE_SDL = y
 endif
 
 ifeq ($(TARGET),ANDROID)
