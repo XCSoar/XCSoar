@@ -4,6 +4,7 @@
 #include "TextRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
+#include "ui/canvas/TextFormat.hpp"
 #include "Asset.hpp"
 
 #include <winuser.h>
