@@ -42,7 +42,11 @@ void
 OpenGL::Initialise()
 {
 #ifndef NDEBUG
+#ifdef _WIN32
+  thread = GetCurrentThreadId();
+#else
   thread = pthread_self();
+#endif
 #endif
 }
 
