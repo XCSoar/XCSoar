@@ -24,6 +24,7 @@ Version 7.44 - not yet released
   - openair: parse transponder codes for airspaces
   - openair: parse station names for airspaces
   - add support for downloadable checklists from repository
+  - checklists: add Markdown support (bold, links, checkboxes)
 * ui
   - streamlined, and optimized icons
   - apply dark mode settings to thermal assistant
@@ -66,6 +67,8 @@ Version 7.44 - not yet released
   - File list dialogs use multi-select widget for selection
   - QuickMenu: revamped look
   - QuickMenu: sane cursor control
+  - add Quick Guide dialog accessible from Info menu
+  - add startup safety disclaimer with GPL warranty notice
   - add kinetic drag scrolling to vertical scroll panels
   - improve touch screen tap-vs-drag detection
   - implement interaction rules and selection management for InfoBoxes
