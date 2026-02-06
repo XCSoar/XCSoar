@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/TextFormat.hpp"
 #include "util/StringAPI.hxx"
 
 #ifndef NDEBUG
