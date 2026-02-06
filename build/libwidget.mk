@@ -7,7 +7,6 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/CreateWindowWidget.cpp \
 	$(SRC)/Widget/ListWidget.cpp \
 	$(SRC)/Widget/TextListWidget.cpp \
-	$(SRC)/Widget/RichTextWidget.cpp \
 	$(SRC)/Widget/ContainerWidget.cpp \
 	$(SRC)/Widget/SolidWidget.cpp \
 	$(SRC)/Widget/PanelWidget.cpp \
@@ -15,6 +14,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/TabWidget.cpp \
 	$(SRC)/Widget/TextWidget.cpp \
 	$(SRC)/Widget/LargeTextWidget.cpp \
+	$(SRC)/Widget/RichTextWidget.cpp \
 	$(SRC)/Widget/OverlappedWidget.cpp \
 	$(SRC)/Widget/TwoWidgets.cpp \
 	$(SRC)/Widget/RowFormWidget.cpp \

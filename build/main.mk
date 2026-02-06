@@ -63,6 +63,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Traffic/TeamCodeDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
+	$(SRC)/Dialogs/dlgDisclaimer.cpp \
 	$(SRC)/Dialogs/ProfileListDialog.cpp \
 	$(SRC)/Dialogs/Plane/PlaneListDialog.cpp \
 	$(SRC)/Dialogs/Plane/PlaneDetailsDialog.cpp \
@@ -154,7 +155,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
-	$(SRC)/Dialogs/dlgDisclaimer.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 	$(SRC)/Dialogs/QuickGuide/dlgQuickGuide.cpp \
 	$(SRC)/Dialogs/QuickGuide/QuickGuideLinkWindow.cpp \
