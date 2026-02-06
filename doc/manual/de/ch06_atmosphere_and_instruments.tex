@@ -107,6 +107,7 @@ Es ist daher möglich, die Winddaten manuell zu korrigieren.
 \begin{description}
 \item[\textit{Beim Kurbeln}]  Diese Methode benutzt die  GPS Koordinaten um die Abdrift während
 des Kurbelns zu ermitteln und ist bei allen \xc Installationen verfügbar, da unabhängig von anderen Sensoren.
+Zur Verbesserung der Windberechnung werden, falls vorhanden, auch Fahrtmesser- und Drehraten-Messwerte herangezogen.
 \item[\textit{ZickZack Flug}] Diese Methode benutzt sowohl die GPS Daten wie auch die Werte aus der TAS-Messung.
 Dies ist nur verfügbar, wenn \xc an ein inelligentes Variometer mit entsprechendem Ausgang angeschlossen ist.
 \end{description}
@@ -132,7 +133,12 @@ eingestellt werden, welcher der Routinen benutzt werden soll
 
 Wenn sich Windrichtung und/oder -stärke ändern, erscheint eine Meldung  auf dem Bildschirm begleitet von einem Ton.
 \subsection*{Kurbel--Algorithmus der Windermittlung}
-\xc ermittelt Windstärke und -richtung während des Kurbelns. Dies geschieht über einen ausgefeilten Algorithmus, welcher den Versatz über Grund während eines ganzen kreises im Bart ermittelt. Ovales Kurbeln mit ständig ändernder Querneigung vermindern die Qualität der Berechnung ganz beträchtlich, da dann der Flugweg extrapoliert werden muß. Die besten ergebnisse gibt es, wenn wirklich kreisrund mit konstanter Querneigung geflogen wird.\index{Wind!Ermittlung}
+\xc ermittelt Windstärke und -richtung während des Kurbelns. Dies geschieht über einen ausgefeilten Algorithmus, welcher den Versatz über Grund während eines ganzen kreises im Bart ermittelt. Ovales Kurbeln mit ständig ändernder Querneigung vermindern die Qualität der Berechnung ganz beträchtlich, da dann der Flugweg extrapoliert werden muß. Die besten ergebnisse gibt es, wenn wirklich kreisrund mit konstanter Querneigung geflogen wird.
+
+Falls Werte aus der TAS-Messung zur Verfügung stehen, also ein entsprechendes Instrument angeschlossen ist,
+werden Geschwindigkeitsschwankungen beim Kreisen kompensiert.
+Falls ein Gyroskop (IMU Sensor) angeschlossen ist, können Änderungen der Querneigung,
+sowie Änderungen der Drehgeschwindigkeit erkannt und die betreffenden Kreise von der Windberechnung ausgeschlossen werden. \index{Wind!Ermittlung}
 
 Die Berechnung kann nur erfolgen wenn die GPS-Quelle mehr als einen Fix pro zwei Sekunden ausgibt. 
 Da --aus Erfahrung-- immer mit GPS-Ausfällen gerechnte werden muß, wurde dies als Mindestanforderung zur halbwegs glaubwürdigen Windermittluing vorausgesetzt.  

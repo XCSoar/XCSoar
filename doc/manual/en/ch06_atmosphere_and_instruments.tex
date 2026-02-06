@@ -118,6 +118,8 @@ XCSoar offers two ways of estimating wind during flight.
 \item[Circling]  This method uses GPS position fixes to estimate the wind
   based on drift, typically while thermalling; and is available on all
   XCSoar installations.
+  To improve wind calculations, airspeed and rotation rate measurements are
+  also used, if available.
 \item[Zigzag]  This method uses GPS position fixes and true airspeed measurements
   to estimate the wind, typically during cruise.  It is only available where
   XCSoar is connected to an intelligent variometer that outputs true airspeed.
@@ -156,6 +158,12 @@ the wind estimate from completed turns.  Poor quality turns, where
 the bank angle changes significantly, are rejected or have minimal
 impact on the overall wind estimate.  The best turns are those with
 constant bank angle.
+If values from the airspeed measurement are available, i.e., a
+corresponding instrument is connected,
+speed variations during circling are compensated for.
+If a gyroscope (IMU sensor) is connected, changes in bank angle and
+changes in turn rate can be detected, and the circles in question
+will be excluded from the wind calculation.
 
 Estimates are only obtained if the average GPS fix rate is better than
 one every two seconds.  This results in improved fidelity of estimates
