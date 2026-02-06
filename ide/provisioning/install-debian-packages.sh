@@ -120,6 +120,7 @@ install_win() {
       mingw-w64-tools \
       curl \
       unzip \
+      zip \
       meson
   echo
 }
