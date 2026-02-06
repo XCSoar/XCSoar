@@ -23,6 +23,8 @@
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
+#include "Dialogs/QuickGuide/dlgQuickGuide.hpp"
+#include "Dialogs/dlgDisclaimer.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
@@ -413,6 +415,18 @@ Startup(UI::Display &display)
   }
 #endif
 
+  // Show disclaimer dialog (if not already acknowledged for this version)
+  if (!CheckShowDisclaimer()) {
+    // User declined the disclaimer - exit the application
+    return false;
+  }
+
+  // Show Quick Guide dialog
+  bool hide_quick_guide_dialog_on_startup = false;
+  Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup, hide_quick_guide_dialog_on_startup);
+  if (!hide_quick_guide_dialog_on_startup) {
+    dlgQuickGuideShowModal();
+  }
 
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(0);

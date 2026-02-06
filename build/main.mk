@@ -154,6 +154,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
+	$(SRC)/Dialogs/dlgDisclaimer.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 	$(SRC)/Dialogs/QuickGuide/dlgQuickGuide.cpp \
 	$(SRC)/Dialogs/QuickGuide/QuickGuideLinkWindow.cpp \
