@@ -828,6 +828,22 @@ public:
   }
 #endif
 
+  /**
+   * Inject a key-press event from outside the message loop.
+   *
+   * On GDI (USE_WINUSER) the virtual OnKeyDown() is protected because
+   * it is called by the WndProc; this public wrapper allows other code
+   * (e.g. Widget::KeyPress()) to forward key events portably.
+   */
+  bool InjectKeyPress(unsigned key_code) noexcept {
+#ifdef USE_WINUSER
+    return ::SendMessage(hWnd, WM_KEYDOWN,
+                         (WPARAM)key_code, 0) == 0;
+#else
+    return OnKeyDown(key_code);
+#endif
+  }
+
 protected:
 #ifndef USE_WINUSER
 public:
