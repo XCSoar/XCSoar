@@ -13,7 +13,7 @@
 
 #include <string_view>
 
-/* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor
+/* Workaround: Some Win32 headers define OPAQUE, TRANSPARENT and DrawText as preprocessor
  * defines. Undefine them to avoid name conflict. */
 #ifdef OPAQUE
 #undef OPAQUE
@@ -21,6 +21,10 @@
 
 #ifdef TRANSPARENT
 #undef TRANSPARENT
+#endif
+
+#ifdef DrawText
+#undef DrawText
 #endif
 
 
