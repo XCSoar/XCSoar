@@ -47,6 +47,16 @@ include $(topdir)/build/angle.mk
 OPENGL_CPPFLAGS += $(ANGLE_CPPFLAGS)
 OPENGL_LDLIBS = $(ANGLE_LDLIBS)
 endif
+else ifeq ($(HAVE_WIN32),y)
+ifeq ($(USE_ANGLE),y)
+# Use ANGLE on Windows with SDL
+include $(topdir)/build/angle.mk
+OPENGL_CPPFLAGS += $(ANGLE_CPPFLAGS)
+OPENGL_LDLIBS = $(ANGLE_LDLIBS)
+else
+# Fallback for Windows without ANGLE (not yet fully supported)
+OPENGL_LDLIBS = -lGLESv2
+endif
 else
 OPENGL_LDLIBS = -lGLESv2 -ldl
 endif
