@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+  <!-- Warning triangle icon -->
+  <path d="M1 19.5L11 2l10 17.5z" fill="#ff8f00"/>
+  <path d="M10 8.5v5h2v-5zM10 15v2h2v-2z" fill="#fff"/>
+</svg>

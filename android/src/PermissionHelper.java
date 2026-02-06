@@ -10,19 +10,14 @@ import java.util.LinkedList;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.PermissionInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
+
 import android.app.NotificationManager;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.widget.TextView;
+
 
 /**
  * Helper class for managing Android permissions.
@@ -42,6 +37,26 @@ public class PermissionHelper implements PermissionManager {
   /* Track pending Bluetooth permission requests to avoid duplicate disclosures */
   private final java.util.Set<String> pendingBluetoothPermissions =
     new java.util.HashSet<String>();
+
+  /**
+   * When true, requestPermission() silently returns false for
+   * location and notification permissions instead of showing
+   * rationale dialogs.  Set by suppressPermissionDialogs() after
+   * the user clicks "Not Now" on the onboarding disclosure page.
+   */
+  private volatile boolean permissionDialogsSuppressed = false;
+
+  /**
+   * State for the pending native disclosure dialog.  When
+   * processNextPermission() needs to show a disclosure, it saves
+   * the permission/handler here and calls the native disclosure.
+   * When the user responds, onDisclosureResult() uses these to
+   * proceed.
+   */
+  private String pendingDisclosurePermission = null;
+  private PermissionHandler pendingDisclosureHandler = null;
+  private boolean pendingDisclosureRequestBothBluetooth = false;
+  private boolean pendingDisclosureRequestBackgroundAfter = false;
 
   /* Permission request queue to prevent overlapping dialogs */
   private static class PendingPermissionRequest {
@@ -88,33 +103,23 @@ public class PermissionHelper implements PermissionManager {
         }
       }
 
-      // If permission was denied and we can't show rationale, user selected "Don't ask again"
-      if (!granted && grantResults.length > 0 && 
+      /* If permission was denied and the system won't show the
+         dialog anymore ("Don't ask again"), open the app Settings
+         page directly so the user can grant it manually. */
+      if (!granted && grantResults.length > 0 &&
           grantResults[0] == PackageManager.PERMISSION_DENIED &&
           permissions.length > 0 &&
           Build.VERSION.SDK_INT >= 23 &&
           !activity.shouldShowRequestPermissionRationale(permissions[0])) {
-        // Show a message directing user to settings
-        final String permissionLabel = getPermissionLabel(permissions[0]);
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-              android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
-              builder.setTitle("Permission Required");
-              builder.setMessage("XCSoar needs " + permissionLabel + " permission, but it was previously denied. " +
-                               "Please grant it in Settings > Apps > XCSoar > Permissions.");
-              builder.setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    intent.setData(android.net.Uri.parse("package:" + activity.getPackageName()));
-                    activity.startActivity(intent);
-                  }
-                });
-              builder.setNegativeButton("Cancel", null);
-              builder.show();
-            }
-          });
+        try {
+          Intent intent = new Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+          intent.setData(android.net.Uri.parse(
+            "package:" + activity.getPackageName()));
+          activity.startActivity(intent);
+        } catch (Exception e) {
+          /* Ignore - worst case the user doesn't get redirected */
+        }
       }
 
       handler.onRequestPermissionsResult(granted);
@@ -123,71 +128,6 @@ public class PermissionHelper implements PermissionManager {
 
   private static final String FOREGROUND_SERVICE_LOCATION =
     "android.permission.FOREGROUND_SERVICE_LOCATION";
-
-  private static String getBackgroundLocationRationale() {
-    return "XCSoar accesses your location in the background (when the app is closed or not in use) to enable continuous flight logging and score calculation. " +
-      "If you choose not to allow background location, calculation results may be incomplete.";
-  }
-
-  private static String getForegroundServiceLocationRationale() {
-    return "XCSoar runs a location service in the foreground to enable continuous flight logging and safety warnings when the app is in the background. " +
-      "Android requires this permission to allow that operation.";
-  }
-
-  private static String getPermissionRationale(String permission) {
-    if (isForegroundLocationPermission(permission))
-      return "XCSoar accesses your GPS location to enable flight tracking and navigation. This is required for XCSoar's core purpose: helping you navigate an aircraft.";
-    else if (isBackgroundLocationPermission(permission))
-      return getBackgroundLocationRationale();
-    else if (isForegroundServiceLocationPermission(permission))
-      return getForegroundServiceLocationRationale();
-    else if (isBluetoothPermission(permission))
-      return "XCSoar accesses Bluetooth to connect to external sensors (e.g. vario, FLARM). If you want XCSoar to use Bluetooth devices, grant this permission.";
-    else if (Manifest.permission.POST_NOTIFICATIONS.equals(permission))
-      return "XCSoar needs permission to show notifications. A notification is required by Android for background operation, and provides a quick way to return to the app. Background operation is essential for continuous flight logging and safety warnings.";
-    else
-      return null;
-  }
-
-  /**
-   * Get a human-friendly label for a permission string.
-   * Attempts to use PackageManager to get a localized label,
-   * falling back to a predefined map or simplified string.
-   */
-  private String getPermissionLabel(String permission) {
-    PackageManager packageManager = activity.getPackageManager();
-    try {
-      PermissionInfo permissionInfo = packageManager.getPermissionInfo(permission, 0);
-      CharSequence label = permissionInfo.loadLabel(packageManager);
-      if (label != null && label.length() > 0)
-        return label.toString();
-    } catch (PackageManager.NameNotFoundException e) {
-      /* Fall through to fallback map */
-    }
-
-    /* Fallback map for common permissions */
-    if (isForegroundLocationPermission(permission))
-      return "Location";
-    else if (isBackgroundLocationPermission(permission))
-      return "Background Location";
-    else if (FOREGROUND_SERVICE_LOCATION.equals(permission))
-      return "Foreground service (location)";
-    else if (Manifest.permission.BLUETOOTH_CONNECT.equals(permission))
-      return "Bluetooth Connect";
-    else if (Manifest.permission.BLUETOOTH_SCAN.equals(permission))
-      return "Bluetooth Scan";
-    else if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permission))
-      return "Storage";
-    else if (Manifest.permission.POST_NOTIFICATIONS.equals(permission))
-      return "Notifications";
-    else {
-      /* Simplified fallback: extract last component of permission name */
-      int lastDot = permission.lastIndexOf('.');
-      if (lastDot >= 0 && lastDot < permission.length() - 1)
-        return permission.substring(lastDot + 1).replace('_', ' ');
-      return permission;
-    }
-  }
 
   /**
    * Check if a permission is a location permission (foreground or background).
@@ -262,62 +202,18 @@ public class PermissionHelper implements PermissionManager {
   }
 
   /**
-   * Check if notifications are enabled for this app, and prompt user to enable
-   * them if disabled. This should be called after POST_NOTIFICATIONS permission
-   * is granted on Android 13+.
+   * Check if notifications are enabled for this app.
+   * Returns true if notifications are enabled, false otherwise.
    */
-  public void checkNotificationEnablement() {
+  public boolean areNotificationsEnabled() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationManager notificationManager = (NotificationManager)activity.getSystemService(Activity.NOTIFICATION_SERVICE);
-      if (notificationManager != null && !notificationManager.areNotificationsEnabled()) {
-        /* Notifications are disabled at app level. Show dialog directing user to settings. */
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-              android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
-              builder.setTitle("Notifications Disabled");
-              builder.setMessage("XCSoar needs notifications enabled to run in the background for continuous flight logging and safety warnings. Please enable notifications in system settings.");
-              builder.setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
-                  @Override
-                  public void onClick(DialogInterface dialog, int which) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                      Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-                      intent.putExtra(Settings.EXTRA_APP_PACKAGE, activity.getPackageName());
-                      activity.startActivity(intent);
-                    } else {
-                      /* On Android < 8.0, open general app settings */
-                      Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                      intent.setData(android.net.Uri.parse("package:" + activity.getPackageName()));
-                      activity.startActivity(intent);
-                    }
-                  }
-                });
-              builder.setNegativeButton("Cancel", null);
-              builder.show();
-            }
-          });
-      }
+      NotificationManager notificationManager =
+        (NotificationManager)activity.getSystemService(
+          Activity.NOTIFICATION_SERVICE);
+      return notificationManager == null ||
+        notificationManager.areNotificationsEnabled();
     }
-  }
-
-  /**
-   * Build HTML template for permission rationale dialog.
-   * Uses HTML so the privacy policy link is clickable.
-   */
-  private static String buildPermissionRationaleHtml(String rationale) {
-    return "<p>" +
-      "XCSoar is free software developed by volunteers just for fun. " +
-      "The project is non-profit - you don't pay for XCSoar, and we don't sell your data (or anything else). " +
-      "</p>" +
-      "<p><big>" +
-      rationale +
-      "</big></p>" +
-      "<p>" +
-      "All those accesses are only in your own interest; we don't collect your data and we don't track you (unless you explicitly ask XCSoar to). " +
-      "</p>" +
-      "<p>" +
-      "More details can be found in the <a href=\"https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md\">Privacy policy</a>. " +
-      "</p>";
+    return true;
   }
 
   /**
@@ -328,6 +224,19 @@ public class PermissionHelper implements PermissionManager {
     if (areAllLocationPermissionsGranted() && onLocationPermissionsGranted != null) {
       mainHandler.post(onLocationPermissionsGranted);
     }
+
+    /* Notify native code that the location permission chain completed */
+    notifyNativePermissionResult(
+      isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION));
+  }
+
+  /**
+   * Notify native code that a permission request completed.
+   * Safe to call from any thread; does nothing if native is not loaded.
+   */
+  private static void notifyNativePermissionResult(boolean granted) {
+    if (Loader.loaded)
+      NativeView.onPermissionResult(granted);
   }
 
   /**
@@ -394,128 +303,9 @@ public class PermissionHelper implements PermissionManager {
               checkLocationPermissionsCallback();
             }
 
-            /* After POST_NOTIFICATIONS is granted, check if notifications are enabled
-               at the app level and prompt user to enable them if disabled. */
-            if (granted && isNotificationPermission(permission) &&
-                android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-              mainHandler.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    checkNotificationEnablement();
-                  }
-                });
-            }
           }
         });
     }
-  }
-
-  private void showRequestPermissionRationale(final String permission,
-                                              final String rationale,
-                                              final PermissionHandler handler) {
-    showRequestPermissionRationale(permission, rationale, handler, false, false);
-  }
-
-  private void showRequestPermissionRationale(final String permission,
-                                              final String rationale,
-                                              final PermissionHandler handler,
-                                              final boolean requestBackgroundAfter,
-                                              final boolean requestBothBluetooth) {
-    final String html = buildPermissionRationaleHtml(rationale);
-
-    final TextView tv  = new TextView(activity);
-    int padding = (int) (16.0 * activity.getResources().getDisplayMetrics().density);
-    tv.setPadding(padding, padding, padding, padding);
-    tv.setMovementMethod(LinkMovementMethod.getInstance());
-    tv.setText(Html.fromHtml(html));
-
-    final boolean[] dialogAccepted = {false};
-
-    final AlertDialog dialog = new AlertDialog.Builder(activity)
-      .setTitle("Requesting your permission")
-      .setView(tv)
-      .setPositiveButton("OK", null)
-      .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            if (handler != null)
-              handler.onRequestPermissionsResult(false);
-          }
-        })
-      .setOnCancelListener(new DialogInterface.OnCancelListener() {
-          @Override
-          public void onCancel(DialogInterface dialog) {
-            if (handler != null)
-              handler.onRequestPermissionsResult(false);
-          }
-        })
-      .setOnDismissListener(new DialogInterface.OnDismissListener() {
-          @Override
-          public void onDismiss(DialogInterface d) {
-            if (!dialogAccepted[0])
-              return;
-
-            final boolean isBluetooth = isBluetoothPermission(permission);
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                  requestPermissionAfterDialog(permission, handler, requestBothBluetooth,
-                                             requestBackgroundAfter, isBluetooth);
-                }
-              });
-          }
-        })
-      .create();
-
-    /* Set OK button to dismiss dialog - onDismiss will handle permission request */
-    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-        @Override
-        public void onShow(DialogInterface d) {
-          dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                dialogAccepted[0] = true;
-                dialog.dismiss();
-              }
-            });
-        }
-      });
-
-    dialog.show();
-  }
-
-  private boolean showRequestPermissionRationaleIndirect(final String permission,
-                                                         final PermissionHandler handler) {
-    final String rationale = getPermissionRationale(permission);
-    if (rationale == null)
-      return false;
-
-    /* For ACCESS_FINE_LOCATION, check if we'll also need background location.
-       If so, we'll show a separate disclosure for background after foreground
-       is granted (as required by Google Play policy). */
-    final boolean requestBackgroundAfter =
-      isForegroundLocationPermission(permission) &&
-      android.os.Build.VERSION.SDK_INT >= 29 &&
-      !isPermissionGranted(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-
-    /* For Bluetooth permissions, check if both SCAN and CONNECT are needed.
-       If so, show combined disclosure and request both together. */
-    final boolean isBluetoothPerm = isBluetoothPermission(permission);
-    final boolean requestBothBluetooth =
-      isBluetoothPerm &&
-      android.os.Build.VERSION.SDK_INT >= 31 &&
-      ((Manifest.permission.BLUETOOTH_SCAN.equals(permission) &&
-        activity.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) ||
-       (Manifest.permission.BLUETOOTH_CONNECT.equals(permission) &&
-        activity.checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED));
-
-    mainHandler.post(new Runnable() {
-        @Override public void run() {
-          showRequestPermissionRationale(permission, rationale, handler, requestBackgroundAfter, requestBothBluetooth);
-        }
-      });
-
-    return true;
   }
 
   private synchronized int addPermissionHandler(PermissionHandler handler) {
@@ -584,6 +374,19 @@ public class PermissionHelper implements PermissionManager {
     if (isPermissionGranted(permission))
       /* we already have the permission */
       return true;
+
+    /* If the user chose "Not Now" on the onboarding disclosure page,
+       silently skip location and notification permission dialogs for
+       this session.  The user already saw the prominent disclosure
+       and explicitly declined. */
+    if (permissionDialogsSuppressed &&
+        (isLocationPermission(permission) ||
+         isForegroundServiceLocationPermission(permission) ||
+         isNotificationPermission(permission))) {
+      if (handler != null)
+        handler.onRequestPermissionsResult(false);
+      return false;
+    }
 
     /* For location, foreground service location, Bluetooth, and notification permissions,
        always show disclosure dialog before requesting permission (required by Google Play
@@ -696,23 +499,43 @@ public class PermissionHelper implements PermissionManager {
       }
     }
 
-    /* Always show consent dialog for location, foreground service location, Bluetooth,
-       and notification permissions (Google Play prominent disclosure requirement). */
+    /* Show native disclosure dialog for foreground location,
+       Bluetooth, and notification permissions (Google Play prominent
+       disclosure requirement).  Background location and foreground
+       service location don't need a separate disclosure because the
+       foreground location disclosure already covers them.  For other
+       permissions, show disclosure if the user previously denied. */
     final PermissionHandler finalHandler = handler;
-    if ((isLocationPerm || isForegroundServiceLocationPerm || isBluetoothPerm ||
-         isNotificationPerm ||
-         (Build.VERSION.SDK_INT >= 23 &&
-          activity.shouldShowRequestPermissionRationale(permission))) &&
-        showRequestPermissionRationaleIndirect(permission, new PermissionHandler() {
-            @Override
-            public void onRequestPermissionsResult(boolean granted) {
-              isProcessingPermission = false;
-              if (finalHandler != null)
-                finalHandler.onRequestPermissionsResult(granted);
-              processNextPermission();
-            }
-          }))
+    final boolean isForegroundLoc = isForegroundLocationPermission(permission);
+    final boolean isBackgroundLoc = isBackgroundLocationPermission(permission);
+    final boolean needsDisclosure =
+      isForegroundLoc ||
+      isBluetoothPerm || isNotificationPerm ||
+      (!isBackgroundLoc && !isForegroundServiceLocationPerm &&
+       Build.VERSION.SDK_INT >= 23 &&
+       activity.shouldShowRequestPermissionRationale(permission));
+
+    if (needsDisclosure && Loader.loaded) {
+      /* Save state for onDisclosureResult() callback */
+      pendingDisclosurePermission = permission;
+      pendingDisclosureHandler = finalHandler;
+      pendingDisclosureRequestBackgroundAfter =
+        isForegroundLocationPermission(permission) &&
+        android.os.Build.VERSION.SDK_INT >= 29 &&
+        !isPermissionGranted(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+      pendingDisclosureRequestBothBluetooth =
+        isBluetoothPerm &&
+        android.os.Build.VERSION.SDK_INT >= 31 &&
+        ((Manifest.permission.BLUETOOTH_SCAN.equals(permission) &&
+          !isPermissionGranted(Manifest.permission.BLUETOOTH_CONNECT)) ||
+         (Manifest.permission.BLUETOOTH_CONNECT.equals(permission) &&
+          !isPermissionGranted(Manifest.permission.BLUETOOTH_SCAN)));
+
+      /* Show native disclosure dialog; onDisclosureResult() will
+         be called when the user responds */
+      NativeView.showPermissionDisclosure(permission);
       return;
+    }
 
     doRequestPermission(permission, new PermissionHandler() {
         @Override
@@ -733,6 +556,172 @@ public class PermissionHelper implements PermissionManager {
   @Override
   public boolean areLocationPermissionsGranted() {
     return areAllLocationPermissionsGranted();
+  }
+
+  @Override
+  public boolean isNotificationPermissionGranted() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+      /* Notification permission not needed before Android 13 */
+      return true;
+
+    return isPermissionGranted(Manifest.permission.POST_NOTIFICATIONS);
+  }
+
+  @Override
+  public void requestAllLocationPermissionsDirect() {
+    mainHandler.post(new Runnable() {
+        @Override
+        public void run() {
+          requestLocationChainDirect();
+        }
+      });
+  }
+
+  @Override
+  public void requestNotificationPermissionDirect() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+      return;
+
+    if (isPermissionGranted(Manifest.permission.POST_NOTIFICATIONS))
+      return;
+
+    mainHandler.post(new Runnable() {
+        @Override
+        public void run() {
+          doRequestPermission(Manifest.permission.POST_NOTIFICATIONS,
+            new PermissionHandler() {
+              @Override
+              public void onRequestPermissionsResult(boolean granted) {
+                notifyNativePermissionResult(granted);
+              }
+            });
+        }
+      });
+  }
+
+  @Override
+  public void suppressPermissionDialogs() {
+    permissionDialogsSuppressed = true;
+  }
+
+  @Override
+  public void onDisclosureResult(final boolean accepted) {
+    /* This may be called from the native UI thread (via JNI),
+       so dispatch everything to the Java main thread */
+    mainHandler.post(new Runnable() {
+        @Override
+        public void run() {
+          final String permission = pendingDisclosurePermission;
+          final PermissionHandler handler = pendingDisclosureHandler;
+          final boolean requestBothBluetooth = pendingDisclosureRequestBothBluetooth;
+          final boolean requestBackgroundAfter = pendingDisclosureRequestBackgroundAfter;
+
+          pendingDisclosurePermission = null;
+          pendingDisclosureHandler = null;
+          pendingDisclosureRequestBothBluetooth = false;
+          pendingDisclosureRequestBackgroundAfter = false;
+
+          if (permission == null) {
+            isProcessingPermission = false;
+            processNextPermission();
+            return;
+          }
+
+          if (!accepted) {
+            isProcessingPermission = false;
+            if (handler != null)
+              handler.onRequestPermissionsResult(false);
+            processNextPermission();
+            return;
+          }
+
+          /* User accepted disclosure - proceed with system permission dialog */
+          final boolean isBluetooth = isBluetoothPermission(permission);
+          requestPermissionAfterDialog(permission, new PermissionHandler() {
+              @Override
+              public void onRequestPermissionsResult(boolean granted) {
+                isProcessingPermission = false;
+                if (handler != null)
+                  handler.onRequestPermissionsResult(granted);
+                processNextPermission();
+              }
+            }, requestBothBluetooth, requestBackgroundAfter, isBluetooth);
+        }
+      });
+  }
+
+  /**
+   * Chain location permission requests directly (no rationale dialogs).
+   * Called from the onboarding disclosure page which already serves as
+   * the Google-Play-required prominent disclosure.
+   *
+   * Step 1: ACCESS_FINE_LOCATION
+   * Step 2: ACCESS_BACKGROUND_LOCATION (API 29+)
+   * Step 3: FOREGROUND_SERVICE_LOCATION (API 34+)
+   */
+  private void requestLocationChainDirect() {
+    if (isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+      /* Foreground already granted, proceed to background */
+      requestBackgroundLocationDirect();
+      return;
+    }
+
+    doRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+      new PermissionHandler() {
+        @Override
+        public void onRequestPermissionsResult(boolean granted) {
+          if (granted) {
+            requestBackgroundLocationDirect();
+          } else {
+            notifyNativePermissionResult(false);
+          }
+        }
+      });
+  }
+
+  private void requestBackgroundLocationDirect() {
+    if (Build.VERSION.SDK_INT < 29) {
+      /* No background location permission needed before Android 10 */
+      checkLocationPermissionsCallback();
+      return;
+    }
+
+    if (isPermissionGranted(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+      requestForegroundServiceLocationDirect();
+      return;
+    }
+
+    doRequestPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+      new PermissionHandler() {
+        @Override
+        public void onRequestPermissionsResult(boolean granted) {
+          if (granted)
+            requestForegroundServiceLocationDirect();
+          else
+            checkLocationPermissionsCallback();
+        }
+      });
+  }
+
+  private void requestForegroundServiceLocationDirect() {
+    if (Build.VERSION.SDK_INT < 34) {
+      /* No foreground service location permission before Android 14 */
+      checkLocationPermissionsCallback();
+      return;
+    }
+
+    if (isPermissionGranted(FOREGROUND_SERVICE_LOCATION)) {
+      checkLocationPermissionsCallback();
+      return;
+    }
+
+    doRequestPermission(FOREGROUND_SERVICE_LOCATION,
+      new PermissionHandler() {
+        @Override
+        public void onRequestPermissionsResult(boolean granted) {
+          checkLocationPermissionsCallback();
+        }
+      });
   }
 
   /**

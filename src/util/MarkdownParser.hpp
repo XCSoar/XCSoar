@@ -55,6 +55,53 @@ struct MarkdownLink {
 };
 
 /**
+ * A parsed image within text: ![alt text](url)
+ */
+struct MarkdownImage {
+  /** Character offset where image placeholder starts in processed text */
+  std::size_t position;
+
+  /** The alt text for the image */
+  std::string alt_text;
+
+  /** The image URL (file path or "resource:IDB_NAME") */
+  std::string url;
+
+  /** True if the image is the sole content on its line (block image) */
+  bool is_block;
+};
+
+/**
+ * Admonition types for !!! blocks.
+ *
+ * Syntax:  !!! type
+ * (on its own line, followed by content)
+ *
+ * Supported types: warning, note, important, tip, caution.
+ * The admonition marker is consumed by the parser and
+ * colours the next heading according to the type.
+ */
+enum class AdmonitionType : uint8_t {
+  WARNING,
+  NOTE,
+  IMPORTANT,
+  TIP,
+  CAUTION,
+};
+
+/**
+ * An admonition marker parsed from a !!! line.
+ * Headings that immediately follow (within a few characters)
+ * are rendered in the colour associated with this type.
+ */
+struct Admonition {
+  /** Character offset in processed text where the marker sits */
+  std::size_t position;
+
+  AdmonitionType type;
+};
+
+/**
  * Result of parsing Markdown text.
  */
 struct ParsedMarkdown {
@@ -66,6 +113,12 @@ struct ParsedMarkdown {
 
   /** Style spans (bold, headings, list items) */
   std::vector<StyledSpan> styles;
+
+  /** Images found in the text */
+  std::vector<MarkdownImage> images;
+
+  /** Admonition markers from !!! lines */
+  std::vector<Admonition> admonitions;
 };
 
 /**
@@ -78,6 +131,8 @@ struct ParsedMarkdown {
  * - Checkboxes: - [ ] unchecked, - [x] checked (at line start)
  * - Markdown links: [display text](url)
  * - Raw URLs: http://, https://, xcsoar://
+ * - Admonitions: !!! warning, !!! note, !!! important, !!! tip,
+ *   !!! caution (at line start; colours the next heading)
  *
  * @param input The raw text to parse
  * @return Processed text with extracted links and style spans

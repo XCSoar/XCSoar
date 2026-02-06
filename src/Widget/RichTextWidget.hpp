@@ -5,6 +5,7 @@
 
 #include "WindowWidget.hpp"
 
+#include <functional>
 #include <string>
 
 struct DialogLook;
@@ -24,12 +25,13 @@ struct DialogLook;
  * - http:// and https:// URLs open in browser
  * - xcsoar:// URLs trigger internal dialogs (see Dialogs/InternalLink.hpp)
  *
- * Use with VScrollPanel/QuickGuideScrollWidget for scrolling support.
+ * Use with VScrollWidget for scrolling support.
  */
 class RichTextWidget : public WindowWidget {
   const DialogLook *look = nullptr;
   std::string text;
   bool parse_links = true;
+  std::function<void()> link_return_callback;
 
 public:
   /**
@@ -56,6 +58,15 @@ public:
    * Update the displayed text.
    */
   void SetText(const char *text) noexcept;
+
+  /**
+   * Set a callback invoked after an internal (xcsoar://) link dialog
+   * closes, allowing the caller to refresh dynamic content.
+   * Must be called before Prepare().
+   */
+  void SetLinkReturnCallback(std::function<void()> cb) noexcept {
+    link_return_callback = std::move(cb);
+  }
 
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const noexcept override;

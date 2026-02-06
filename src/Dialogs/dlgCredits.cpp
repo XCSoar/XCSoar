@@ -3,133 +3,17 @@
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Widget/CreateWindowWidget.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/RichTextWidget.hpp"
-#include "QuickGuide/QuickGuideScrollWidget.hpp"
-#include "Look/FontDescription.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "Look/DialogLook.hpp"
-#include "Look/Colors.hpp"
-#include "ui/canvas/Canvas.hpp"
-#include "Screen/Layout.hpp"
-#include "ui/canvas/Bitmap.hpp"
-#include "ui/canvas/Font.hpp"
 #include "Version.hpp"
 #include "Inflate.hpp"
 #include "util/ConvertString.hpp"
 #include "util/AllocatedString.hxx"
-#include "util/OpenLink.hpp"
-#include "Resources.hpp"
+#include "util/StaticString.hxx"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-
-class LogoPageWindow final : public PaintWindow {
-  PixelRect url_rect{};
-
-protected:
-  void OnPaint(Canvas &canvas) noexcept override;
-  bool OnMouseUp(PixelPoint p) noexcept override;
-};
-
-void
-LogoPageWindow::OnPaint(Canvas &canvas) noexcept
-{
-  const PixelRect rc = GetClientRect();
-
-  const unsigned width = rc.GetWidth();
-  int x = rc.left + Layout::FastScale(10);
-  int y = rc.top + Layout::FastScale(10);
-
-  canvas.ClearWhite();
-
-  Bitmap logo(width > 360 ? IDB_LOGO_HD : IDB_LOGO);
-  Bitmap title(width > 360 ? IDB_TITLE_HD : IDB_TITLE);
-
-  // Determine title and logo image size
-  PixelSize logo_size = logo.GetSize();
-  PixelSize title_size = title.GetSize();
-
-  unsigned int middle = width / 2;
-
-  // Draw XCSoar Logo
-  x = middle - (logo_size.width / 2);
-  canvas.Copy({x, y}, logo_size, logo, {0, 0});
-
-  // Draw 'XCSoar N.N' title
-  x = middle - (title_size.width / 2);
-  y += logo_size.height + Layout::FastScale(2);
-  canvas.Copy({x, y}, title_size, title, {0, 0});
-  y += title_size.height + Layout::FastScale(2);
-
-
-  Font font;
-  if (width > 360)
-    font.Load(FontDescription(Layout::VptScale(16)));
-  else
-    font.Load(FontDescription(Layout::VptScale(8)));
-  canvas.Select(font);
-  canvas.SetBackgroundTransparent();
-
-  canvas.SetTextColor(COLOR_BLACK);
-  x = middle;
-  const TCHAR *version = _T("Version: ");
-  PixelSize ts = canvas.CalcTextSize(version);
-  PixelSize ts2 = canvas.CalcTextSize(XCSoar_VersionString);
-  x = middle - ((ts.width + ts2.width) / 2 );
-  canvas.DrawText({x, y}, version);
-  x += ts.width;
-  canvas.DrawText({x, y}, XCSoar_VersionString);
-
-
-#ifdef GIT_COMMIT_ID
-  y += ts.height + Layout::FastScale(2);
-  x = middle;
-  const TCHAR *git = _T("git: ");
-  ts = canvas.CalcTextSize(git);
-  ts2 = canvas.CalcTextSize(_T(GIT_COMMIT_ID));
-  x = middle - ((ts.width + ts2.width) / 2 );
-  canvas.DrawText({x, y}, git);
-  x += ts.width;
-  canvas.DrawText({x, y}, _T(GIT_COMMIT_ID));
-  y += ts.height + Layout::FastScale(2);
-#endif
-
-  y += Layout::FastScale(8);
-  const TCHAR *visit = _T("Visit us at:");
-  const TCHAR *url = _T("https://xcsoar.org");
-  ts = canvas.CalcTextSize(visit);
-  ts2 = canvas.CalcTextSize(url);
-  x = middle - (ts.width / 2);
-  y += ts.height;
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.DrawText({x, y}, visit);
-  x = middle - (ts2.width / 2);
-  y += ts2.height;
-  canvas.SetTextColor(COLOR_XCSOAR);
-  canvas.DrawText({x, y}, url);
-
-  // Store URL rect for click handling
-  url_rect = {x, y, x + int(ts2.width), y + int(ts2.height)};
-}
-
-bool
-LogoPageWindow::OnMouseUp(PixelPoint p) noexcept
-{
-  if (url_rect.Contains(p)) {
-    OpenLink("https://xcsoar.org");
-    return true;
-  }
-  return PaintWindow::OnMouseUp(p);
-}
-
-static std::unique_ptr<Window>
-CreateLogoPage(ContainerWindow &parent, const PixelRect &rc,
-               WindowStyle style)
-{
-  auto window = std::make_unique<LogoPageWindow>();
-  window->Create(parent, rc, style);
-  return window;
-}
 
 extern "C"
 {
@@ -141,6 +25,37 @@ extern "C"
 
   extern const uint8_t AUTHORS_gz[];
   extern const size_t AUTHORS_gz_size;
+}
+
+/**
+ * Build the logo/about page as markdown text.
+ */
+static const char *
+GetLogoText() noexcept
+{
+  static StaticString<512> text;
+
+#ifdef GIT_COMMIT_ID
+  text.Format(
+    "![XCSoar Logo](resource:IDB_LOGO_HD)\n\n"
+    "![XCSoar](resource:IDB_TITLE_HD)\n\n"
+    "**Version %s**\n\n"
+    "git: %s\n\n"
+    "Visit us at:\n"
+    "[https://xcsoar.org](https://xcsoar.org)",
+    XCSoar_VersionString,
+    _T(GIT_COMMIT_ID));
+#else
+  text.Format(
+    "![XCSoar Logo](resource:IDB_LOGO_HD)\n\n"
+    "![XCSoar](resource:IDB_TITLE_HD)\n\n"
+    "**Version %s**\n\n"
+    "Visit us at:\n"
+    "[https://xcsoar.org](https://xcsoar.org)",
+    XCSoar_VersionString);
+#endif
+
+  return text.c_str();
 }
 
 void
@@ -162,13 +77,40 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                   dialog.MakeModalResultCallback(mrOK));
-  pager->Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
-  pager->Add(std::make_unique<QuickGuideScrollWidget>(
-    std::make_unique<RichTextWidget>(look, authors2), look));
-  pager->Add(std::make_unique<QuickGuideScrollWidget>(
-    std::make_unique<RichTextWidget>(look, news2, false), look));
-  pager->Add(std::make_unique<QuickGuideScrollWidget>(
-    std::make_unique<RichTextWidget>(look, license2, false), look));
+  ArrowPagerWidget *pager_ptr = pager.get();
+
+  pager->Add(std::make_unique<VScrollWidget>(
+    std::make_unique<RichTextWidget>(look, GetLogoText()), look, true));
+  pager->Add(std::make_unique<VScrollWidget>(
+    std::make_unique<RichTextWidget>(look, authors2), look, true));
+  pager->Add(std::make_unique<VScrollWidget>(
+    std::make_unique<RichTextWidget>(look, news2, false), look, true));
+  pager->Add(std::make_unique<VScrollWidget>(
+    std::make_unique<RichTextWidget>(look, license2, false), look, true));
+
+  /* Caption update on page flip */
+  static constexpr const char *const titles[] = {
+    N_("About"),
+    N_("Authors"),
+    N_("News"),
+    N_("License"),
+  };
+  const unsigned total_pages = pager->GetSize();
+
+  auto update_caption = [&dialog, pager_ptr, total_pages]() {
+    const unsigned current = pager_ptr->GetCurrentIndex();
+    StaticString<128> caption;
+    if (current < std::size(titles))
+      caption.Format("%s (%u/%u)",
+                     gettext(titles[current]),
+                     current + 1, total_pages);
+    else
+      caption = _("Credits");
+    dialog.SetCaption(caption);
+  };
+
+  pager->SetPageFlippedCallback(update_caption);
+  update_caption();
 
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();

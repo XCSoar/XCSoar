@@ -88,14 +88,9 @@ public class XCSoar extends Activity implements PermissionManager {
 
     mainHandler = new Handler(Looper.getMainLooper());
 
-    /* Create PermissionHelper with callback */
-    permissionHelper = new PermissionHelper(this, mainHandler,
-        new Runnable() {
-          @Override
-          public void run() {
-            checkCloudEnableDialogIfReady();
-          }
-        });
+    /* Create PermissionHelper (no cloud dialog callback needed;
+       cloud consent is handled during onboarding) */
+    permissionHelper = new PermissionHelper(this, mainHandler, null);
 
     NativeView.initNative();
 
@@ -444,21 +439,6 @@ public class XCSoar extends Activity implements PermissionManager {
     }
   }
 
-  /**
-   * Check if all location permissions are granted and show CloudEnableDialog if ready.
-   * Called from permission helper callback after location permissions are granted.
-   */
-  private void checkCloudEnableDialogIfReady() {
-    /* Don't call showCloudEnableDialog() directly from permission callback.
-       The native code will show the dialog automatically via ProcessTimer when it's ready.
-       Calling it too early causes crashes because runNative() may not have completed yet.
-       
-       The native CloudEnableDialog() function already checks if permissions are granted
-       and will show the dialog when appropriate. We just need to ensure permissions are
-       granted, which the permission helper has already done. */
-    Log.d(TAG, "Location permissions granted - native code will show CloudEnableDialog when ready");
-  }
-
   /* virtual methods from PermissionManager */
 
   @Override
@@ -479,5 +459,36 @@ public class XCSoar extends Activity implements PermissionManager {
     if (permissionHelper != null)
       return permissionHelper.areLocationPermissionsGranted();
     return false;
+  }
+
+  @Override
+  public boolean isNotificationPermissionGranted() {
+    if (permissionHelper != null)
+      return permissionHelper.isNotificationPermissionGranted();
+    return true;
+  }
+
+  @Override
+  public void requestAllLocationPermissionsDirect() {
+    if (permissionHelper != null)
+      permissionHelper.requestAllLocationPermissionsDirect();
+  }
+
+  @Override
+  public void requestNotificationPermissionDirect() {
+    if (permissionHelper != null)
+      permissionHelper.requestNotificationPermissionDirect();
+  }
+
+  @Override
+  public void suppressPermissionDialogs() {
+    if (permissionHelper != null)
+      permissionHelper.suppressPermissionDialogs();
+  }
+
+  @Override
+  public void onDisclosureResult(boolean accepted) {
+    if (permissionHelper != null)
+      permissionHelper.onDisclosureResult(accepted);
   }
 }

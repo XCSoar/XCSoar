@@ -8,6 +8,7 @@
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Point2D.hpp"
+#include "util/StringAPI.hxx"
 
 #include <algorithm>
 
@@ -303,6 +304,24 @@ VScrollPanel::OnKeyDown(unsigned key_code) noexcept
 bool
 VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 {
+  /* Finish gesture tracking and check for horizontal swipe */
+  const TCHAR *gesture = gestures.Finish();
+  if (gesture != nullptr &&
+      (StringIsEqual(gesture, _T("L")) ||
+       StringIsEqual(gesture, _T("R")))) {
+    /* Horizontal swipe detected - forward to listener */
+    if (dragging) {
+      dragging = false;
+      ReleaseCapture();
+    }
+    if (potential_tap) {
+      potential_tap = false;
+      ReleaseCapture();
+    }
+    if (listener.OnVScrollPanelGesture(gesture))
+      return true;
+  }
+
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
     return true;
@@ -333,6 +352,8 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 bool
 VScrollPanel::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  gestures.Update(p);
+
   if (scroll_bar.IsDragging()) {
     origin = scroll_bar.DragMove(virtual_height, GetSize().height, p.y);
     listener.OnVScrollPanelChange();
@@ -370,6 +391,9 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
   kinetic_timer.Cancel();
   smooth_scroll_timer.Cancel();
   smooth_scroll_target = -1;
+
+  /* Start gesture tracking for swipe detection */
+  gestures.Start(p, Layout::Scale(20));
 
   if (scroll_bar.IsInsideSlider(p)) {
     scroll_bar.DragBegin(this, p.y);
