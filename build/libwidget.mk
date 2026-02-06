@@ -7,6 +7,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/CreateWindowWidget.cpp \
 	$(SRC)/Widget/ListWidget.cpp \
 	$(SRC)/Widget/TextListWidget.cpp \
+	$(SRC)/Widget/RichTextWidget.cpp \
 	$(SRC)/Widget/ContainerWidget.cpp \
 	$(SRC)/Widget/SolidWidget.cpp \
 	$(SRC)/Widget/PanelWidget.cpp \
