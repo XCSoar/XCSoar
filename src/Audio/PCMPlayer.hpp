@@ -7,7 +7,7 @@
 #define PCMPLAYER_SYNTHESISER_ONLY
 #endif
 
-#if !defined(ANDROID) && !defined(_WIN32)
+#if !defined(ANDROID) && (!defined(_WIN32) || defined(ENABLE_SDL))
 
 #include <cstddef>
 #include <cstdint>
@@ -55,7 +55,7 @@ protected:
   PCMDataSource *source = nullptr;
 #endif
 
-#if !defined(ANDROID) && !defined(_WIN32)
+#if !defined(ANDROID) && (!defined(_WIN32) || defined(ENABLE_SDL))
   unsigned channels;
 
   /**
