@@ -53,8 +53,13 @@ struct TextCacheKey {
   void Allocate() noexcept {
     assert(allocated == nullptr);
 
-    allocated = strndup(text.data(), text.size());
-    text = {allocated, text.size()};
+    const auto s = text.size();
+    allocated = (char *) malloc(s + 1);
+    assert(allocated != nullptr);
+    if(allocated == nullptr)
+      return;
+    text.copy(allocated, s);
+    text = {allocated, s};
   }
 
   TextCacheKey &operator=(const TextCacheKey &other) = delete;
