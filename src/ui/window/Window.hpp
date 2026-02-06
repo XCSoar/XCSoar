@@ -828,6 +828,32 @@ public:
   }
 #endif
 
+#ifdef USE_WINUSER
+  /**
+   * Private message used by InjectKeyPress() on GDI so the handler
+   * can return an unambiguous result (1 = handled, 0 = not handled).
+   * DefWindowProc(WM_KEYDOWN) always returns 0, making it impossible
+   * to tell whether the key was actually consumed.
+   */
+  static constexpr UINT WM_INJECT_KEYPRESS = WM_APP + 1;
+#endif
+
+  /**
+   * Inject a key-press event from outside the message loop.
+   *
+   * On GDI (USE_WINUSER) the virtual OnKeyDown() is protected because
+   * it is called by the WndProc; this public wrapper allows other code
+   * (e.g. Widget::KeyPress()) to forward key events portably.
+   */
+  bool InjectKeyPress(unsigned key_code) noexcept {
+#ifdef USE_WINUSER
+    return ::SendMessage(hWnd, WM_INJECT_KEYPRESS,
+                         (WPARAM)key_code, 0) != 0;
+#else
+    return OnKeyDown(key_code);
+#endif
+  }
+
 protected:
 #ifndef USE_WINUSER
 public:
