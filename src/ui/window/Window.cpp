@@ -13,7 +13,7 @@
 
 #include <cassert>
 
-#if defined(USE_WINUSER) && !defined(NDEBUG)
+#if defined(_WIN32) && !defined(NDEBUG)
 #include <processthreadsapi.h>
 #endif
 
@@ -30,7 +30,11 @@ Window::AssertThread() const noexcept
   assert(IsDefined());
 
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #elif defined(USE_WINUSER)
   assert(hWnd != nullptr);
   assert(!::IsWindow(hWnd) ||
@@ -42,7 +46,11 @@ void
 Window::AssertThreadOrUndefined() const noexcept
 {
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #elif defined(USE_WINUSER)
   assert(hWnd == nullptr || !::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, nullptr) == ::GetCurrentThreadId());
