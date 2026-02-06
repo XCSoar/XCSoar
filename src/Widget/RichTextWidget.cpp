@@ -79,7 +79,12 @@ RichTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   w->Create(parent, rc, style);
 
   const auto &dialog_look = GetLook();
-  w->SetFont(dialog_look.text_font, &dialog_look.bold_font, &dialog_look.bold_font);
+  w->SetFont(dialog_look.text_font, &dialog_look.bold_font,
+             &dialog_look.heading1_font, &dialog_look.heading2_font);
+  w->SetDarkMode(dialog_look.dark_mode, dialog_look.background_color);
+
+  if (link_return_callback)
+    w->SetInternalLinkReturnCallback(link_return_callback);
 
   if (!text.empty())
     w->SetText(text.c_str(), parse_links);

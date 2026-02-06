@@ -142,8 +142,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/TargetDialog.cpp \
 	$(SRC)/Dialogs/Task/AlternatesListDialog.cpp \
 	\
-	$(SRC)/Dialogs/Tracking/CloudEnableDialog.cpp \
-	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
@@ -154,6 +152,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
+	$(SRC)/Dialogs/dlgOnboarding.cpp \
+	$(SRC)/Dialogs/dlgGestureHelp.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp
 
 ifeq ($(HAVE_PCM_PLAYER),y)
@@ -585,6 +585,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/Bitmap.cpp \
 	$(SRC)/Android/Product.cpp \
 	$(SRC)/Android/InternalSensors.cpp \
+	$(SRC)/Android/Permissions.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \
 	$(SRC)/Android/EventBridge.cpp \

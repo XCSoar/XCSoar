@@ -42,6 +42,8 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/ReplayDialog.hpp"
+#include "Dialogs/dlgOnboarding.hpp"
+#include "Dialogs/dlgGestureHelp.hpp"
 #include "Message.hpp"
 #include "Markers/Markers.hpp"
 #include "MainWindow.hpp"
@@ -496,6 +498,30 @@ InputEvents::eventRepeatStatusMessage([[maybe_unused]] const TCHAR *misc)
   // TODO enhancement: display only by type specified in misc field
   if (CommonInterface::main_window->popup != nullptr)
     CommonInterface::main_window->popup->Repeat();
+}
+
+// QuickGuide
+// Open the onboarding dialog (replaces the old Quick Guide)
+void
+InputEvents::eventQuickGuide([[maybe_unused]] const TCHAR *misc)
+{
+  dlgOnboardingShowModal(true);
+}
+
+// GestureHelp
+// Open the standalone gesture help dialog
+void
+InputEvents::eventGestureHelp([[maybe_unused]] const TCHAR *misc)
+{
+  dlgGestureHelpShowModal();
+}
+
+// Onboarding
+// Open the onboarding guide from the Info menu
+void
+InputEvents::eventOnboarding([[maybe_unused]] const TCHAR *misc)
+{
+  dlgOnboardingShowModal(true);
 }
 
 // NearestWaypointDetails

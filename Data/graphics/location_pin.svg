@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+  <!-- Location pin / map marker icon -->
+  <path d="M11 1C7.14 1 4 4.14 4 8c0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7z" fill="#e53935"/>
+  <circle cx="11" cy="8" r="2.8" fill="#fff"/>
+</svg>

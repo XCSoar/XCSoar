@@ -7,10 +7,23 @@
 #include "ui/control/ScrollBar.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "UIUtil/KineticManager.hpp"
+#include "UIUtil/GestureManager.hpp"
 
 class VScrollPanelListener {
 public:
   virtual void OnVScrollPanelChange() noexcept = 0;
+
+  /**
+   * Called when a touch gesture (e.g. swipe) is detected on the
+   * scroll panel.  The gesture string uses the same format as
+   * #GestureManager (e.g. "L", "R", "U", "D").
+   *
+   * @return true if the gesture was handled
+   */
+  virtual bool OnVScrollPanelGesture(const TCHAR *gesture) noexcept {
+    (void)gesture;
+    return false;
+  }
 };
 
 /**
@@ -59,6 +72,11 @@ class VScrollPanel final : public PanelControl {
 
   KineticManager kinetic;
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
+
+  /**
+   * Detects swipe gestures (L/R/U/D) from mouse/touch movement.
+   */
+  GestureManager gestures;
 
   /**
    * Target position for smooth keyboard scrolling (-1 = no animation).
@@ -121,6 +139,24 @@ private:
   void SmoothScrollTo(int target) noexcept;
 
 public:
+  /**
+   * Can the panel scroll further down?
+   */
+  [[gnu::pure]]
+  bool CanScrollDown() const noexcept {
+    const unsigned physical_height = GetSize().height;
+    return virtual_height > physical_height &&
+           origin + physical_height < virtual_height;
+  }
+
+  /**
+   * Can the panel scroll further up?
+   */
+  [[gnu::pure]]
+  bool CanScrollUp() const noexcept {
+    return origin > 0;
+  }
+
   /**
    * Scroll the panel by the specified delta.
    *

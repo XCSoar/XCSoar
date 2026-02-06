@@ -4006,8 +4006,6 @@
 		5CBFE2932D742FA600F05795 /* TargetDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TargetDialog.cpp; sourceTree = "<group>"; };
 		5CBFE2942D742FA600F05795 /* TaskDialogs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TaskDialogs.hpp; sourceTree = "<group>"; };
 		5CBFE2952D742FA600F05795 /* TaskPointDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPointDialog.cpp; sourceTree = "<group>"; };
-		5CBFE2972D742FA600F05795 /* CloudEnableDialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CloudEnableDialog.hpp; sourceTree = "<group>"; };
-		5CBFE2982D742FA600F05795 /* CloudEnableDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CloudEnableDialog.cpp; sourceTree = "<group>"; };
 		5CBFE29A2D742FA600F05795 /* FlarmTrafficDetails.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FlarmTrafficDetails.cpp; sourceTree = "<group>"; };
 		5CBFE29B2D742FA600F05795 /* TeamCodeDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TeamCodeDialog.cpp; sourceTree = "<group>"; };
 		5CBFE29C2D742FA600F05795 /* TrafficDialogs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TrafficDialogs.hpp; sourceTree = "<group>"; };
@@ -15902,8 +15900,6 @@
 		5CBFE2992D742FA600F05795 /* Tracking */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFE2972D742FA600F05795 /* CloudEnableDialog.hpp */,
-				5CBFE2982D742FA600F05795 /* CloudEnableDialog.cpp */,
 			);
 			path = Tracking;
 			sourceTree = "<group>";

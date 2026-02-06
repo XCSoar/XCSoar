@@ -263,9 +263,11 @@ PixelSize
 Font::TextSize(tstring_view text) const noexcept
 {
   int maxx = 0;
+  int max_advance = 0;
 
   ForEachGlyph(face, ascent_height, text,
-               [&maxx](int x, [[maybe_unused]] int y, const FT_GlyphSlot glyph){
+               [&maxx, &max_advance](int x, [[maybe_unused]] int y,
+                                     const FT_GlyphSlot glyph){
       const FT_Glyph_Metrics &metrics = glyph->metrics;
       const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
       const int glyph_maxx = glyph_minx + FT_CEIL(metrics.width);
@@ -273,9 +275,15 @@ Font::TextSize(tstring_view text) const noexcept
       int z = x + glyph_maxx;
       if (z > maxx)
         maxx = z;
+
+      max_advance = x + FT_CEIL(metrics.horiAdvance);
     });
 
-  return PixelSize{unsigned(maxx), height};
+  /* Use the wider of the visual bounding box (maxx) and the total
+     advance (max_advance).  The advance accounts for trailing
+     whitespace that has no visible pixels but still occupies layout
+     space. */
+  return PixelSize{unsigned(std::max(maxx, max_advance)), height};
 }
 
 static void
