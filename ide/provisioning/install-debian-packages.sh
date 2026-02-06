@@ -123,6 +123,7 @@ install_win() {
       libtool \
       curl \
       unzip \
+      zip \
       meson
   echo
 }
