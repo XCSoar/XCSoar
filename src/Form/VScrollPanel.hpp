@@ -60,10 +60,21 @@ class VScrollPanel final : public PanelControl {
   KineticManager kinetic;
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
+  /**
+   * Target position for smooth keyboard scrolling (-1 = no animation).
+   */
+  int smooth_scroll_target = -1;
+
+  /**
+   * Timer for smooth scroll animation (~60fps).
+   */
+  UI::PeriodicTimer smooth_scroll_timer{[this]{ OnSmoothScrollTimer(); }};
+
 public:
   VScrollPanel(ContainerWindow &parent, const DialogLook &look,
                const PixelRect &rc, const WindowStyle style,
                VScrollPanelListener &_listener) noexcept;
+  ~VScrollPanel() noexcept override;
 
   /**
    * Sets the virtual height and initialises the scroll bar.  This
@@ -102,12 +113,35 @@ private:
   void SetupScrollBar() noexcept;
   void SetOriginClamped(int new_origin) noexcept;
   void OnKineticTimer() noexcept;
+  void OnSmoothScrollTimer() noexcept;
+
+  /**
+   * Start smooth scrolling to a target position with easing.
+   */
+  void SmoothScrollTo(int target) noexcept;
+
+public:
+  /**
+   * Scroll the panel by the specified delta.
+   *
+   * @param delta The scroll amount (positive = down, negative = up).
+   */
+  void ScrollBy(int delta) noexcept;
+
+  /**
+   * Get the scroll step size based on scroll bar width.
+   *
+   * @return The scroll step size, minimum 1.
+   */
+  [[gnu::pure]]
+  int GetScrollStep() const noexcept;
 
 protected:
   /* virtual methods from class Window */
   void OnResize(PixelSize new_size) noexcept override;
   void OnDestroy() noexcept override;
 
+  bool OnKeyCheck(unsigned key_code) const noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
 
   bool OnMouseDown(PixelPoint p) noexcept override;
