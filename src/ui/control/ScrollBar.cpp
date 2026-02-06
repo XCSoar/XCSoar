@@ -6,6 +6,8 @@
 #include "Screen/Layout.hpp"
 #include "ui/window/PaintWindow.hpp"
 #include "Asset.hpp"
+#include "Look/ButtonLook.hpp"
+#include "util/Compiler.h"
 #include "util/Macros.hpp"
 
 #include <cassert>
@@ -99,19 +101,19 @@ ScrollBar::ToOrigin(unsigned size, unsigned view_size, int y) const noexcept
 void
 ScrollBar::Paint(Canvas &canvas) const noexcept
 {
-  // ###################
-  // #### ScrollBar ####
-  // ###################
+  Paint(canvas, ButtonState::ENABLED, ButtonState::ENABLED);
+}
 
+void
+ScrollBar::Paint(Canvas &canvas, ButtonState up_state,
+                 ButtonState down_state) const noexcept
+{
   // draw rectangle around entire scrollbar area
   canvas.SelectBlackPen();
   canvas.SelectHollowBrush();
   canvas.DrawRectangle(rc);
 
-  // ###################
-  // ####  Buttons  ####
-  // ###################
-
+  // draw the up/down arrow buttons
   const int arrow_padding = std::max(GetWidth() / 4, 4);
 
   PixelRect up_arrow_rect = rc;
@@ -127,11 +129,32 @@ ScrollBar::Paint(Canvas &canvas) const noexcept
   canvas.DrawExactLine({down_arrow_rect.left, down_arrow_rect.top - 1},
                        {down_arrow_rect.right, down_arrow_rect.top - 1});
 
-  button_renderer.DrawButton(canvas, up_arrow_rect, ButtonState::ENABLED);
-  button_renderer.DrawButton(canvas, down_arrow_rect, ButtonState::ENABLED);
+  button_renderer.DrawButton(canvas, up_arrow_rect, up_state);
+  button_renderer.DrawButton(canvas, down_arrow_rect, down_state);
 
+  const ButtonLook &look = button_renderer.GetLook();
   canvas.SelectNullPen();
-  canvas.SelectBlackBrush();
+
+  const auto select_foreground = [&canvas, &look](ButtonState state) {
+    switch (state) {
+    case ButtonState::DISABLED:
+      canvas.Select(look.disabled.brush);
+      break;
+    case ButtonState::FOCUSED:
+    case ButtonState::PRESSED:
+      /* match button rendering: focused and pressed share the same palette */
+      canvas.Select(look.focused.foreground_brush);
+      break;
+    case ButtonState::SELECTED:
+      canvas.Select(look.selected.foreground_brush);
+      break;
+    case ButtonState::ENABLED:
+      canvas.Select(look.standard.foreground_brush);
+      break;
+    default:
+      gcc_unreachable();
+    }
+  };
 
   const BulkPixelPoint up_arrow[3] = {
     { (up_arrow_rect.left + rc.right) / 2,
@@ -141,6 +164,7 @@ ScrollBar::Paint(Canvas &canvas) const noexcept
     { rc.right - arrow_padding,
       up_arrow_rect.bottom - arrow_padding },
   };
+  select_foreground(up_state);
   canvas.DrawTriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
 
   const BulkPixelPoint down_arrow[3] = {
@@ -151,6 +175,7 @@ ScrollBar::Paint(Canvas &canvas) const noexcept
     { rc.right - arrow_padding,
       down_arrow_rect.top + arrow_padding },
   };
+  select_foreground(down_state);
   canvas.DrawTriangleFan(down_arrow, ARRAY_SIZE(down_arrow));
 
   // ###################
