@@ -5,7 +5,8 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/CreateWindowWidget.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
-#include "Widget/LargeTextWidget.hpp"
+#include "Widget/RichTextWidget.hpp"
+#include "QuickGuide/QuickGuideScrollWidget.hpp"
 #include "Look/FontDescription.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/Colors.hpp"
@@ -17,14 +18,17 @@
 #include "Inflate.hpp"
 #include "util/ConvertString.hpp"
 #include "util/AllocatedString.hxx"
+#include "util/OpenLink.hpp"
 #include "Resources.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 
 class LogoPageWindow final : public PaintWindow {
+  PixelRect url_rect{};
+
 protected:
-  /** from class PaintWindow */
   void OnPaint(Canvas &canvas) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
 };
 
 void
@@ -104,6 +108,18 @@ LogoPageWindow::OnPaint(Canvas &canvas) noexcept
   canvas.SetTextColor(COLOR_XCSOAR);
   canvas.DrawText({x, y}, url);
 
+  // Store URL rect for click handling
+  url_rect = {x, y, x + int(ts2.width), y + int(ts2.height)};
+}
+
+bool
+LogoPageWindow::OnMouseUp(PixelPoint p) noexcept
+{
+  if (url_rect.Contains(p)) {
+    OpenLink("https://xcsoar.org");
+    return true;
+  }
+  return PaintWindow::OnMouseUp(p);
 }
 
 static std::unique_ptr<Window>
@@ -147,9 +163,12 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                   dialog.MakeModalResultCallback(mrOK));
   pager->Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
-  pager->Add(std::make_unique<LargeTextWidget>(look, authors2));
-  pager->Add(std::make_unique<LargeTextWidget>(look, news2));
-  pager->Add(std::make_unique<LargeTextWidget>(look, license2));
+  pager->Add(std::make_unique<QuickGuideScrollWidget>(
+    std::make_unique<RichTextWidget>(look, authors2), look));
+  pager->Add(std::make_unique<QuickGuideScrollWidget>(
+    std::make_unique<RichTextWidget>(look, news2, false), look));
+  pager->Add(std::make_unique<QuickGuideScrollWidget>(
+    std::make_unique<RichTextWidget>(look, license2, false), look));
 
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
