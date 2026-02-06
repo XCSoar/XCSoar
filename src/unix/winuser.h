@@ -3,11 +3,4 @@
 
 #pragma once
 
-enum {
-  DT_LEFT = 0x2,
-  DT_CENTER = 0x20,
-  DT_VCENTER = 0x80,
-  DT_RIGHT = 0x100,
-  DT_CALCRECT = 0x400,
-  DT_UNDERLINE = 0x800,
-};
+#include "ui/canvas/TextFormat.hpp"
