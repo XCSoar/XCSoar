@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#pragma once
+
+#include "QuickGuideLinkWindow.hpp"
+#include "Widget/WindowWidget.hpp"
+#include "ui/canvas/Bitmap.hpp"
+
+#include <cstdint>
+
+class Canvas;
+
+class WelcomeWindow final : public QuickGuideLinkWindow {
+  Bitmap logo_bitmap;
+  Bitmap title_bitmap;
+
+public:
+  enum class LinkAction : std::uint8_t {
+    XCSOAR_MANUAL,
+    GITHUB,
+    COUNT
+  };
+
+  WelcomeWindow() noexcept;
+
+  const Bitmap &GetLogoBitmap() const noexcept { return logo_bitmap; }
+  const Bitmap &GetTitleBitmap() const noexcept { return title_bitmap; }
+
+protected:
+  void OnPaint(Canvas &canvas) noexcept override;
+  bool OnLinkActivated(std::size_t index) noexcept override;
+};
+
+class WelcomeWidget final : public WindowWidget {
+public:
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
+};

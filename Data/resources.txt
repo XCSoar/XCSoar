@@ -90,10 +90,16 @@ bitmap_icon_scaled IDB_SMALL "map_small"
 bitmap_graphic IDB_LOGO_UHD "logo_red_320"
 bitmap_graphic IDB_LOGO_HD "logo_red_160"
 bitmap_graphic IDB_LOGO "logo_red_80"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LOGO_HD_RGBA "logo_red_160_rgba"
+#endif
 #else
 bitmap_graphic IDB_LOGO_UHD "logo_320"
 bitmap_graphic IDB_LOGO_HD "logo_160"
 bitmap_graphic IDB_LOGO "logo_80"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LOGO_HD_RGBA "logo_160_rgba"
+#endif
 #endif
 bitmap_icon_scaled IDB_TARGET "map_target"
 bitmap_icon_scaled IDB_TEAMMATE_POS "map_teammate"
@@ -117,14 +123,36 @@ bitmap_icon_scaled IDB_REPORTING_POINT "map_reporting_point"
 bitmap_icon_scaled IDB_PGTAKEOFF "map_pgtakeoff"
 bitmap_icon_scaled IDB_PGLANDING "map_pglanding"
 
+bitmap_graphic IDB_GESTURE_DOWN "gesture_down"
+bitmap_graphic IDB_GESTURE_DL "gesture_dl"
+bitmap_graphic IDB_GESTURE_DR "gesture_dr"
+bitmap_graphic IDB_GESTURE_DU "gesture_du"
+bitmap_graphic IDB_GESTURE_LEFT "gesture_left"
+bitmap_graphic IDB_GESTURE_LDR "gesture_ldr"
+bitmap_graphic IDB_GESTURE_LDRDL "gesture_ldrdl"
+bitmap_graphic IDB_GESTURE_RIGHT "gesture_right"
+bitmap_graphic IDB_GESTURE_RD "gesture_rd"
+bitmap_graphic IDB_GESTURE_RL "gesture_rl"
+bitmap_graphic IDB_GESTURE_UP "gesture_up"
+bitmap_graphic IDB_GESTURE_UD "gesture_ud"
+bitmap_graphic IDB_GESTURE_ULDR "gesture_uldr"
+bitmap_graphic IDB_GESTURE_URD "gesture_urd"
+bitmap_graphic IDB_GESTURE_URDL "gesture_urdl"
+
 #ifdef XCSOAR_TESTING
 bitmap_graphic IDB_TITLE "title_red_110"
 bitmap_graphic IDB_TITLE_HD "title_red_320"
 bitmap_graphic IDB_TITLE_UHD "title_red_640"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_TITLE_HD_RGBA "title_red_320_rgba"
+#endif
 #else
 bitmap_graphic IDB_TITLE "title_110"
 bitmap_graphic IDB_TITLE_HD "title_320"
 bitmap_graphic IDB_TITLE_UHD "title_640"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_TITLE_HD_RGBA "title_320_rgba"
+#endif
 #endif
 bitmap_icon_scaled IDB_WEATHER_STATION "map_weather_station"
 

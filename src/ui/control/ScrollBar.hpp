@@ -154,6 +154,15 @@ public:
   void Paint(Canvas &canvas) const noexcept;
 
   /**
+   * Paints the ScrollBar with explicit button states.
+   *
+   * @param up_state State of the up arrow button.
+   * @param down_state State of the down arrow button.
+   */
+  void Paint(Canvas &canvas, ButtonState up_state,
+             ButtonState down_state) const noexcept;
+
+  /**
    * Returns whether the slider is currently being dragged
    * @return True if the slider is currently being dragged, False otherwise
    */

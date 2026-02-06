@@ -33,6 +33,7 @@ class NativeView {
   static jmethodID loadFileBitmap_method;
   static jmethodID bitmapToTexture_method;
   static jmethodID shareText_method;
+  static jmethodID openURL_method;
   static jmethodID openWaypointFile_method;
   static jmethodID getNetState_method;
 
@@ -137,6 +138,11 @@ public:
    * pick a recipient.
    */
   void ShareText(JNIEnv *env, const char *text) noexcept;
+
+  /**
+   * Open a URL in the default browser.
+   */
+  bool OpenURL(JNIEnv *env, const char *url) noexcept;
 
   void OpenWaypointFile(JNIEnv *env, unsigned id, const char *filename) {
     env->CallVoidMethod(obj, openWaypointFile_method, id,

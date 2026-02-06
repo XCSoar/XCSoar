@@ -9,6 +9,7 @@ endif
 
 DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Inflate.cpp \
+	$(SRC)/Dialogs/InternalLink.cpp \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/LockScreen.cpp \
 	$(SRC)/Dialogs/Error.cpp \
@@ -62,6 +63,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Traffic/TeamCodeDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
+	$(SRC)/Dialogs/dlgDisclaimer.cpp \
 	$(SRC)/Dialogs/ProfileListDialog.cpp \
 	$(SRC)/Dialogs/Plane/PlaneListDialog.cpp \
 	$(SRC)/Dialogs/Plane/PlaneDetailsDialog.cpp \
@@ -153,7 +155,16 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
-	$(SRC)/Dialogs/dlgQuickMenu.cpp
+	$(SRC)/Dialogs/dlgQuickMenu.cpp \
+	$(SRC)/Dialogs/QuickGuide/dlgQuickGuide.cpp \
+	$(SRC)/Dialogs/QuickGuide/QuickGuideLinkWindow.cpp \
+	$(SRC)/Dialogs/QuickGuide/QuickGuideScrollWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/WelcomeWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/GestureHelpWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/ConfigurationWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/PreflightWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/PostflightWidget.cpp \
+	$(SRC)/Dialogs/QuickGuide/DontShowAgainWidget.cpp
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 DIALOG_SOURCES += \
@@ -242,6 +253,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/util/MD5.cpp \
+	$(SRC)/util/OpenLink.cpp \
+	$(SRC)/util/MarkdownParser.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
