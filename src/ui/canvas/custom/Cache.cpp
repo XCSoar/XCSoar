@@ -200,7 +200,11 @@ TextCache::Result
 TextCache::Get(const Font &font, std::string_view text) noexcept
 {
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #endif
   assert(font.IsDefined());
 
@@ -261,7 +265,11 @@ void
 TextCache::Flush() noexcept
 {
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #endif
 
 #ifndef ENABLE_OPENGL
