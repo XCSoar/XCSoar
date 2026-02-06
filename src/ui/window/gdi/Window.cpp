@@ -229,6 +229,16 @@ Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
     }
     break;
 
+  case WM_INJECT_KEYPRESS:
+    /* private message from InjectKeyPress(): return 1 if handled,
+       0 if not, so the caller can distinguish from the ambiguous
+       DefWindowProc(WM_KEYDOWN) return value */
+    if (OnKeyDown(wParam)) {
+      ResetUserIdle();
+      return 1;
+    }
+    return 0;
+
   case WM_KEYUP:
     if (OnKeyUp(wParam)) {
       /* true returned: message was handled */
