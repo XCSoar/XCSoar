@@ -263,6 +263,10 @@ endif
 
 ifeq ($(HAVE_WIN32),y)
 OUTPUTS += $(LAUNCH_XCSOAR_BIN)
+# Add ANGLE DLLs if using ANGLE on Windows
+ifeq ($(USE_ANGLE),y)
+OUTPUTS += $(ANGLE_BIN_DLLS)
+endif
 endif
 
 endif

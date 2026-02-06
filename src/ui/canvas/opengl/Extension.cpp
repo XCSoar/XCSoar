@@ -14,7 +14,7 @@ OpenGL::IsExtensionSupported(const char *extension) noexcept
      http://www.opengl.org/resources/features/OGLextensions/ */
 
   const GLubyte *const extensions = glGetString(GL_EXTENSIONS);
-#ifdef ANDROID
+#if defined(ANDROID) || defined(_WIN32)
   /* some broken Android drivers are insane and return nullptr under
      certain conditions; under these conditions, the driver doesn't
      work at all; the following check works around the crash */
