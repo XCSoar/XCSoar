@@ -13,6 +13,9 @@ endif
 ifeq ($(TARGET_IS_KOBO),y)
 CANVAS_FILES_CPP = $(CANVAS_SRC_DIR)/kobo/Files.cpp
 endif
+ifeq ($(HAVE_WIN32)$(FREETYPE),yy)
+CANVAS_FILES_CPP = $(CANVAS_SRC_DIR)/windows/Files.cpp
+endif
 
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
