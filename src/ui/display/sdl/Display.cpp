@@ -21,6 +21,8 @@ Display::Display()
     throw FmtRuntimeError("SDL_Init() has failed: {}", ::SDL_GetError());
 
 #ifdef ENABLE_OPENGL
+#ifdef HAVE_GLES2
+  // Request OpenGL ES 2.0 profile (ANGLE or native GLES)
 #ifdef USE_ANGLE
   // On Windows, tell SDL to use EGL (required for ANGLE)
   SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
@@ -28,6 +30,12 @@ Display::Display()
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#else
+  // Request desktop OpenGL compatibility profile
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#endif
 #endif
 
   // Keep screen on (works on iOS, and maybe for other platforms)

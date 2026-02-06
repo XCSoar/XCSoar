@@ -39,6 +39,12 @@ ifeq ($(HAVE_WIN32),y)
 # Uses SDL_CPPFLAGS_RAW constructed through pkgconfig.mk/thunk.mk
 SDL_CPPFLAGS = $(filter-out -Dmain=SDL_main,$(SDL_CPPFLAGS_RAW)) -DENABLE_SDL -DSDL_MAIN_HANDLED
 
+# For WGL builds (not ANGLE), use SDL's built-in OpenGL definitions to avoid
+# conflicts with GLAD. For ANGLE builds, we need SDL to include the ANGLE headers.
+ifneq ($(USE_ANGLE),y)
+SDL_CPPFLAGS += -DSDL_USE_BUILTIN_OPENGL_DEFINITIONS
+endif
+
 # Override the default "console" subsystem (set in targets.mk) to
 # "windows" for GUI programs, to avoid console pop-up
 SDL_LDLIBS += -Wl,-subsystem,windows

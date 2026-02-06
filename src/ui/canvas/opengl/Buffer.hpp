@@ -70,7 +70,11 @@ public:
 
   static void *MapWrite() noexcept {
 #ifdef HAVE_DYNAMIC_MAPBUFFER
+#ifdef HAVE_GLES2
     return GLExt::map_buffer(target, GL_WRITE_ONLY_OES);
+#else
+    return GLExt::map_buffer(target, GL_WRITE_ONLY);
+#endif
 #elif defined(GL_OES_mapbuffer)
     return glMapBufferOES(target, GL_WRITE_ONLY_OES);
 #else

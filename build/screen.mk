@@ -147,6 +147,10 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/Shaders.cpp \
 	$(CANVAS_SRC_DIR)/opengl/CanvasRotateShift.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
+	# Add glad for desktop OpenGL on Windows
+ifdef GLAD_SOURCES
+SCREEN_SOURCES += $(GLAD_SOURCES)
+endif
 endif
 
 ifeq ($(ENABLE_SDL),y)

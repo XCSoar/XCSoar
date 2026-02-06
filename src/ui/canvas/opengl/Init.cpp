@@ -15,6 +15,15 @@
 #include "DisplayOrientation.hpp"
 #include "LogFile.hpp"
 
+#ifndef HAVE_GLES2
+#ifdef _WIN32
+#include <glad/glad.h>
+#endif
+#ifdef ENABLE_SDL
+#include <SDL_video.h>
+#endif
+#endif
+
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
 #endif
@@ -58,7 +67,11 @@ OpenGL::Initialise()
 static bool
 SupportsNonPowerOfTwoTextures() noexcept
 {
+#ifdef HAVE_GLES2
   return OpenGL::IsExtensionSupported("GL_OES_texture_npot");
+#else
+  return true; /* Desktop OpenGL 2.0+ always supports NPOT textures */
+#endif
 }
 
 /**
@@ -70,11 +83,16 @@ SupportsNonPowerOfTwoTextures() noexcept
 static GLenum
 CheckDepthStencil() noexcept
 {
+#ifdef HAVE_GLES2
   if (OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
     return GL_DEPTH24_STENCIL8_OES;
 
   /* not supported */
   return GL_NONE;
+#else
+  return GL_DEPTH24_STENCIL8; /* DesktopGL has packed depth+stencil via GL_DEPTH24_STENCIL8 */
+#endif
+
 }
 
 /**
@@ -85,6 +103,7 @@ CheckDepthStencil() noexcept
 static GLenum
 CheckStencil() noexcept
 {
+#ifdef HAVE_GLES2
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE
   if (OpenGL::IsExtensionSupported("GL_OES_stencil1"))
     return GL_STENCIL_INDEX1_OES;
@@ -99,11 +118,32 @@ CheckStencil() noexcept
 
   /* not supported */
   return GL_NONE;
+#else
+  return GL_STENCIL_INDEX8; /* Desktop OpenGL supports 8-bit stencil */
+#endif
 }
 
 void
 OpenGL::SetupContext()
 {
+#ifdef _WIN32
+#ifndef HAVE_GLES2
+  // Load OpenGL functions via glad (required on Windows where opengl32 only exports GL 1.1)
+#ifdef ENABLE_SDL
+  if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+    LogFormat("Failed to initialize OpenGL loader (glad)");
+    return;
+  }
+#else
+  if (!gladLoadGL()) {
+    LogFormat("Failed to initialize OpenGL loader (glad)");
+    return;
+  }
+#endif
+  LogFormat("OpenGL %d.%d loaded via glad", GLVersion.major, GLVersion.minor);
+#endif
+#endif
+
   if (auto s = (const char *)glGetString(GL_VENDOR))
     LogFormat("GL vendor: %s", s);
 
@@ -136,9 +176,14 @@ OpenGL::SetupContext()
     native_view->SetTexturePowerOfTwo(Java::GetEnv(), texture_non_power_of_two);
 #endif
 
+#ifdef HAVE_GLES2
   mapbuffer = IsExtensionSupported("GL_OES_mapbuffer");
+#else
+  mapbuffer = true; /* Desktop OpenGL always has glMapBuffer */
+#endif
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
+#ifdef HAVE_GLES2
   if (mapbuffer) {
     GLExt::map_buffer = (PFNGLMAPBUFFEROESPROC)
       GetProcAddress("glMapBufferOES");
@@ -147,6 +192,17 @@ OpenGL::SetupContext()
     if (GLExt::map_buffer == nullptr || GLExt::unmap_buffer == nullptr)
       mapbuffer = false;
   }
+#else
+  /* Desktop OpenGL uses standard glMapBuffer/glUnmapBuffer */
+  if (mapbuffer) {
+    GLExt::map_buffer = (PFNGLMAPBUFFERPROC)
+      GetProcAddress("glMapBuffer");
+    GLExt::unmap_buffer = (PFNGLUNMAPBUFFERPROC)
+      GetProcAddress("glUnmapBuffer");
+    if (GLExt::map_buffer == nullptr || GLExt::unmap_buffer == nullptr)
+      mapbuffer = false;
+  }
+#endif
 #endif
 
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS

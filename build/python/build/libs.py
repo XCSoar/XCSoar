@@ -463,7 +463,9 @@ sdl2 = CmakeProject(
         "-DSDL_COCOA=OFF",
     ],
     windows_configure_args=[
-        # Windows-specific SDL2 options for OpenGL ES via ANGLE
+        # Windows-specific SDL2 options
+        # Enable both OpenGL (WGL for desktop GL) and OpenGL ES (for ANGLE)
+        "-DSDL_OPENGL=ON",  # Overwrites previous setting, used only for OpenGL on Windows
         "-DSDL_DIRECTX=OFF",
         "-DSDL_WASAPI=OFF",
         "-DSDL_RENDER_D3D=OFF",
