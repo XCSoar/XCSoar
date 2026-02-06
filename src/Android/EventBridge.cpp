@@ -126,6 +126,18 @@ Java_org_xcsoar_EventBridge_onMouseMove([[maybe_unused]] JNIEnv *env, [[maybe_un
 
 gcc_visibility_default
 void
+Java_org_xcsoar_EventBridge_onMouseCancel([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls)
+{
+  if (event_queue == nullptr)
+    /* XCSoar not yet initialised */
+    return;
+
+  event_queue->Inject(Event::MOUSE_CANCEL);
+  ResetUserIdle();
+}
+
+gcc_visibility_default
+void
 Java_org_xcsoar_EventBridge_onPointerDown([[maybe_unused]] JNIEnv *env, [[maybe_unused]] jclass cls)
 {
   if (event_queue == nullptr)

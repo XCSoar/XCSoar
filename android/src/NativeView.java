@@ -557,7 +557,7 @@ class NativeView extends SurfaceView
           edgeTouchRejected = true;
 
           if (edgeDownForwarded) {
-            EventBridge.onMouseUp((int)edgeTouchStartX, (int)edgeTouchStartY);
+            EventBridge.onMouseCancel();
           }
           break;
         }
@@ -578,11 +578,7 @@ class NativeView extends SurfaceView
       break;
 
     case MotionEvent.ACTION_CANCEL:
-      /* Touch sequence was cancelled by the system.
-         Forward as mouse up if we haven't already rejected the sequence. */
-      if (!edgeTouchRejected && edgeDownForwarded) {
-        EventBridge.onMouseUp(finalX, finalY);
-      }
+      EventBridge.onMouseCancel();
       edgeTouchFlags = 0;
       edgeTouchRejected = false;
       edgeDownForwarded = false;

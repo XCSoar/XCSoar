@@ -230,6 +230,10 @@ TopWindow::OnEvent(const Event &event)
 
     return OnMouseUp(event.point);
 
+  case Event::MOUSE_CANCEL:
+    OnCancelMode();
+    return true;
+
   case Event::MOUSE_WHEEL:
     return OnMouseWheel(event.point, (int)event.param);
 

@@ -34,6 +34,7 @@ struct Event {
     MOUSE_WHEEL,
 
 #ifdef ANDROID
+    MOUSE_CANCEL,
     POINTER_DOWN,
     POINTER_UP,
 
