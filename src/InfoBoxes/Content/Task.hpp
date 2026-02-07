@@ -9,180 +9,158 @@
 bool
 NextWaypointClick() noexcept;
 
+/**
+ * Base class for InfoBox content that opens the next-waypoint
+ * details dialog on click.
+ */
+class InfoBoxContentNextWaypointBase : public InfoBoxContent
+{
+public:
+  bool HandleClick() noexcept override {
+    return NextWaypointClick();
+  }
+};
+
 void
 UpdateInfoBoxBearing(InfoBoxData &data) noexcept;
 
-class InfoBoxContentBearing : public InfoBoxContent
+class InfoBoxContentBearing : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxBearing(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxBearingDiff(InfoBoxData &data) noexcept;
 
-class InfoBoxContentBearingDiff : public InfoBoxContent
+class InfoBoxContentBearingDiff : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxBearingDiff(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxRadial(InfoBoxData &data) noexcept;
 
-class InfoBoxContentRadial : public InfoBoxContent
+class InfoBoxContentRadial : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxRadial(data);
   }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
-  }
 };
 
-class InfoBoxContentNextWaypoint : public InfoBoxContent
+class InfoBoxContentNextWaypoint : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
-  }
 };
 
 void
 UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextDistance : public InfoBoxContent
+class InfoBoxContentNextDistance : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextDistance(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextDistanceNominal(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextDistanceNominal : public InfoBoxContent
+class InfoBoxContentNextDistanceNominal
+  : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextDistanceNominal(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextETE(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextETE : public InfoBoxContent
+class InfoBoxContentNextETE : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextETE(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextETA(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextETA : public InfoBoxContent
+class InfoBoxContentNextETA : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextETA(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextAltitudeDiff : public InfoBoxContent
+class InfoBoxContentNextAltitudeDiff
+  : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextAltitudeDiff(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextMC0AltitudeDiff : public InfoBoxContent
+class InfoBoxContentNextMC0AltitudeDiff
+  : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextMC0AltitudeDiff(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextAltitudeRequire : public InfoBoxContent
+class InfoBoxContentNextAltitudeRequire
+  : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextAltitudeRequire(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextAltitudeArrival : public InfoBoxContent
+class InfoBoxContentNextAltitudeArrival
+  : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextAltitudeArrival(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextGR(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextGR : public InfoBoxContent
+class InfoBoxContentNextGR : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextGR(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
@@ -255,28 +233,22 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxNextETEVMG(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextETEVMG : public InfoBoxContent
+class InfoBoxContentNextETEVMG : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextETEVMG(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
 void
 UpdateInfoBoxNextETAVMG(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextETAVMG : public InfoBoxContent
+class InfoBoxContentNextETAVMG : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override {
     UpdateInfoBoxNextETAVMG(data);
-  }
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
   }
 };
 
@@ -292,14 +264,11 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept;
 
-class InfoBoxContentNextArrow: public InfoBoxContent
+class InfoBoxContentNextArrow : public InfoBoxContentNextWaypointBase
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
-  bool HandleClick() noexcept override {
-    return NextWaypointClick();
-  }
 };
 
 void

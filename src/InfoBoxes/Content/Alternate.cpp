@@ -13,13 +13,22 @@
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
-#include "Widget/CallbackWidget.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
 
+bool
+InfoBoxContentAlternateBase::HandleClick() noexcept
+{
+  if (!backend_components ||
+      !data_components || !data_components->waypoints)
+    return false;
+
+  dlgAlternatesListShowModal(data_components->waypoints.get());
+  return true;
+}
 
 void
 InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
@@ -59,16 +68,6 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 
   // Set Color (blue/black)
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
-}
-
-bool
-InfoBoxContentAlternateName::HandleClick() noexcept
-{
-  if (!data_components || !data_components->waypoints)
-    return false;
-
-  dlgAlternatesListShowModal(data_components->waypoints.get());
-  return true;
 }
 
 void
@@ -119,16 +118,6 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
 }
 
-bool
-InfoBoxContentAlternateGR::HandleClick() noexcept
-{
-  if (!data_components || !data_components->waypoints)
-    return false;
-
-  dlgAlternatesListShowModal(data_components->waypoints.get());
-  return true;
-}
-
 void
 InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
 {
@@ -165,12 +154,3 @@ InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
   data.SetValueFromArrival(altitude_difference);
 }
 
-bool
-InfoBoxContentAlternateAltDiff::HandleClick() noexcept
-{
-  if (!data_components || !data_components->waypoints)
-    return false;
-
-  dlgAlternatesListShowModal(data_components->waypoints.get());
-  return true;
-}

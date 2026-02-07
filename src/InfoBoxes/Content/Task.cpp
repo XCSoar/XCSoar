@@ -23,14 +23,29 @@
 
 #include <tchar.h>
 
+/**
+ * Return the active waypoint, or nullptr if unavailable.
+ */
+[[gnu::pure]]
+static WaypointPtr
+GetActiveWaypoint() noexcept
+{
+  return (backend_components && backend_components->protected_task_manager)
+    ? backend_components->protected_task_manager->GetActiveWaypoint()
+    : nullptr;
+}
+
+/**
+ * Open waypoint details for the active task waypoint.
+ *
+ * @return true if the dialog was shown, false if no active
+ * waypoint or required data components are unavailable
+ */
 bool
 NextWaypointClick() noexcept
 {
-  if (!backend_components || !backend_components->protected_task_manager)
-    return false;
-
-  auto wp = backend_components->protected_task_manager->GetActiveWaypoint();
-  if (wp == nullptr)
+  auto wp = GetActiveWaypoint();
+  if (!wp)
     return false;
 
   if (!data_components || !data_components->waypoints)
@@ -98,10 +113,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
 {
   // use proper non-terminal next task stats
 
-  const auto way_point =
-    (backend_components && backend_components->protected_task_manager)
-    ? backend_components->protected_task_manager->GetActiveWaypoint()
-    : nullptr;
+  const auto way_point = GetActiveWaypoint();
 
   if (!way_point) {
     data.SetTitle(_("Next"));
@@ -143,10 +155,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 {
-  const auto way_point =
-    (backend_components && backend_components->protected_task_manager)
-    ? backend_components->protected_task_manager->GetActiveWaypoint()
-    : nullptr;
+  const auto way_point = GetActiveWaypoint();
 
   // Set title
   if (!way_point)
@@ -178,10 +187,7 @@ UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxNextDistanceNominal(InfoBoxData &data) noexcept
 {
-  const auto way_point =
-    (backend_components && backend_components->protected_task_manager)
-    ? backend_components->protected_task_manager->GetActiveWaypoint()
-    : nullptr;
+  const auto way_point = GetActiveWaypoint();
 
   if (!way_point) {
     data.SetInvalid();
@@ -927,10 +933,7 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data) noexcept
   bool angle_valid = distance_valid && basic.track_available;
 
   // Set title. Use waypoint name if available.
-  const auto way_point =
-    (backend_components && backend_components->protected_task_manager)
-    ? backend_components->protected_task_manager->GetActiveWaypoint()
-    : nullptr;
+  const auto way_point = GetActiveWaypoint();
   if (!way_point)
     data.SetTitle(_("Next arrow"));
   else
