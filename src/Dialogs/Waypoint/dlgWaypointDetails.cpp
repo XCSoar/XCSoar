@@ -625,13 +625,14 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
     return false;
 
     case KEY_ESCAPE:
-      if (!images.empty()) {
+      if (!images.empty() && zoom > 0) {
         zoom = 0;
         image_window.Invalidate();
         shrink_button.SetEnabled(false);
+        goto_button.SetFocus();
+        return true;
       }
-      goto_button.SetFocus();
-      return true;
+      return false;
 
     case KEY_UP:
       if (!images.empty() && image_window.IsVisible() && goto_button.HasFocus()) {
