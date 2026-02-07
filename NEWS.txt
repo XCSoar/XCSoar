@@ -86,6 +86,9 @@ Version 7.44 - not yet released
     behind a Help button #2143
   - fix map scale indicator shifting up when any menu is active
   - add inline help descriptions for settings that were missing them
+  - InfoBoxes with a single action now open their dialog directly on
+    tap instead of showing a redundant menu
+  - fix Escape key not closing the waypoint details dialog
 
 * Android
   - fix crash on startup when loading icons on ldpi screens
