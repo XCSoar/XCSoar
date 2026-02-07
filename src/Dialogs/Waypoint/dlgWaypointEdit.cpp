@@ -82,8 +82,8 @@ WaypointEditWidget::Prepare(ContainerWindow &, const PixelRect &) noexcept
   AddFloat(_("Altitude"), nullptr,
            _T("%.0f %s"), _T("%.0f"),
            0, 30000, 5, false,
-           UnitGroup::ALTITUDE, value.GetElevationOrZero());
-  AddEnum(_("Type"), nullptr, waypoint_types, (unsigned)value.type);
+           UnitGroup::ALTITUDE, value.GetElevationOrZero(), this);
+  AddEnum(_("Type"), nullptr, waypoint_types, (unsigned)value.type, this);
 }
 
 bool

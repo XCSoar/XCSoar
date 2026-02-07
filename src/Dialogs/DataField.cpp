@@ -93,8 +93,6 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     const TCHAR *value = sdf.GetValue();
     assert(value != nullptr);
 
-    StaticString<EDITSTRINGSIZE> buffer(value);
-
     PrefixDataField::AllowedCharactersFunction acf;
     if (type == DataField::Type::PREFIX)
       acf = static_cast<PrefixDataField &>(sdf).GetAllowedCharactersFunction();
@@ -117,6 +115,8 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     }
 #endif
 
+    static constexpr unsigned MAX_TEXTENTRY_SIZE = 512;
+    StaticString<MAX_TEXTENTRY_SIZE> buffer(value);
     if (!TextEntryDialog(buffer, caption, acf))
       return false;
 
