@@ -25,6 +25,7 @@
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "util/ConvertString.hpp"
+#include "util/StringFormat.hpp"
 
 #include <vector>
 
@@ -257,6 +258,21 @@ try {
   FileLineReaderA reader(path);
 
   ParseFileRepository(repository, reader);
+
+  // add user repository contents
+  std::vector<std::string> uris;
+  uris = GetUserRepositoryURIs();
+  int file_number = 1;
+  for (const auto &uri : uris) {
+    if(uri.empty())
+      continue;
+    
+    TCHAR filename[32];
+    StringFormat(filename, (size_t) 32, _T("user_repository_%d"), file_number++);
+    const auto path = LocalPath(filename);
+    FileLineReaderA reader(path);
+    ParseFileRepository(repository, reader);
+  }
 
   items.clear();
   for (auto &i : repository)
