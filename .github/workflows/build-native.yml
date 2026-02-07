@@ -161,7 +161,31 @@ jobs:
             target_upload: true
             target_container: debian:trixie-slim
           - os: ubuntu-24.04
+            target: WIN64GL
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .exe
+            target_upload: true
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
+            target: WIN64ANGLE
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .zip
+            target_upload: true
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: PC
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .exe
+            target_upload: true
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
+            target: PCGL
             target_bin: XCSoar
             target_bin_path: bin
             target_final: XCSoar
@@ -324,11 +348,11 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh KOBO
             fi
-            if [ ${{ matrix.target }} = 'WIN64' ]; then
+            if [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64GL' ] || [ ${{ matrix.target }} = 'WIN64ANGLE' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
-            if [ ${{ matrix.target }} = 'PC' ]; then
+            if [ ${{ matrix.target }} = 'PC' ] || [ ${{ matrix.target }} = 'PCGL' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
@@ -455,9 +479,9 @@ jobs:
               mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug.aab \
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
             fi
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
+          elif [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64GL' ] || [ ${{ matrix.target }} = 'WIN64ANGLE' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
+          elif [ ${{ matrix.target }} = 'PC' ] || [ ${{ matrix.target }} = 'PCGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -505,9 +529,9 @@ jobs:
               make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
             fi
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
+          elif [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64GL' ] || [ ${{ matrix.target }} = 'WIN64ANGLE' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
+          elif [ ${{ matrix.target }} = 'PC' ] || [ ${{ matrix.target }} = 'PCGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
