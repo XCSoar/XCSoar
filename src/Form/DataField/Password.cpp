@@ -4,6 +4,7 @@
 #include "Password.hpp"
 
 #include <algorithm>
+#include <cstring>
 
 const TCHAR *
 PasswordDataField::GetAsDisplayString() const noexcept

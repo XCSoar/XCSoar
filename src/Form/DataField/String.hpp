@@ -4,13 +4,12 @@
 #pragma once
 
 #include "Base.hpp"
-#include "util/StaticString.hxx"
 
-static constexpr unsigned EDITSTRINGSIZE = 32;
+#include <string>
 
 class DataFieldString: public DataField
 {
-  StaticString<EDITSTRINGSIZE> mValue;
+  std::string mValue;
 
 protected:
   DataFieldString(Type _type, const TCHAR *_value,

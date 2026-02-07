@@ -34,6 +34,10 @@ WaypointGlue::SaveWaypoint(const Waypoint &wp)
   FileOutputStream file(path, FileOutputStream::Mode::APPEND_OR_CREATE);
   BufferedOutputStream writer(file);
 
+  /* write header when creating a new file */
+  if (file.Tell() == 0)
+    WriteCupHeader(writer);
+
   WriteCup(writer, wp);
 
   writer.Flush();
