@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:27+0100\n"
+"POT-Creation-Date: 2026-02-06 23:36+0100\n"
 "PO-Revision-Date: 2025-12-28 17:22+0000\n"
 "Last-Translator: Yorick Reum <git@yorickreum.de>; Веско "
 "<v.jeliazkov@jeliazkov.net>\n"
@@ -1690,12 +1690,12 @@ msgstr "Австралийски"
 #: src/FLARM/Details.cpp:126
 #, no-c-format
 msgid "Unresolved"
-msgstr ""
+msgstr "Неразрешен"
 
 #: src/FLARM/Details.cpp:127
 #, no-c-format
 msgid "Flarm Messaging"
-msgstr ""
+msgstr "FLARM съобщения"
 
 #: src/FLARM/Details.cpp:128
 #, fuzzy, no-c-format
@@ -3292,7 +3292,7 @@ msgstr "Тип летателен апарат"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 msgid "Data source"
-msgstr ""
+msgstr "Източник на данни"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:212
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
@@ -5957,11 +5957,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "XCSoar data path"
-msgstr ""
+msgstr "Път към данните на XCSoar"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "Click to view full path"
-msgstr ""
+msgstr "Кликнете за пълния път"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid "Map database"
@@ -6002,7 +6002,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
 msgid "WPT A/F details"
-msgstr ""
+msgstr "Детайли WPT A/F"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 msgid ""
