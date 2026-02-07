@@ -33,6 +33,8 @@ CoDownloadToFile(CurlGlobal &curl, const char *url,
 
   CurlEasy easy{url};
   Curl::Setup(easy);
+  easy.SetOption(CURLOPT_FOLLOWLOCATION, 1L);
+  easy.SetOption(CURLOPT_MAXREDIRS, 10L);
   const Net::ProgressAdapter progress_adapter{easy, progress};
   easy.SetFailOnError();
 
