@@ -21,7 +21,7 @@ struct IGCDeclarationHeader {
   unsigned num_turnpoints;
 
   /** Optional name of the task */
-  NarrowString<256> task_name;
+  StaticString<256> task_name;
 };
 
 struct IGCDeclarationTurnpoint {
@@ -29,5 +29,5 @@ struct IGCDeclarationTurnpoint {
   GeoPoint location;
 
   /** Optional name of the turnpoint */
-  NarrowString<256> name;
+  StaticString<256> name;
 };

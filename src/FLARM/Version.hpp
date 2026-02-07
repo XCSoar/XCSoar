@@ -15,8 +15,8 @@
 struct FlarmVersion {
   Validity available;
 
-  NarrowString<7> hardware_version, software_version;
-  NarrowString<19> obstacle_version;
+  StaticString<7> hardware_version, software_version;
+  StaticString<19> obstacle_version;
 
   constexpr void Clear() noexcept {
     available.Clear();

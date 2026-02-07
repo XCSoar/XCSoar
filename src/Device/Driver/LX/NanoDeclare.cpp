@@ -17,7 +17,7 @@ NanoWriteDecl(Port &port, OperationEnvironment &env, PortNMEAReader &reader,
               unsigned row, unsigned n_rows,
               const char *content)
 {
-  NarrowString<256> buffer;
+  StaticString<256> buffer;
   buffer.Format("$PLXVC,DECL,W,%u,%u,%s", row, n_rows, content);
 
   PortWriteNMEA(port, buffer, env);
@@ -35,7 +35,7 @@ NanoWriteDeclFormat(Port &port, OperationEnvironment &env,
                     unsigned row, unsigned n_rows,
                     const char *fmt, Args&&... args)
 {
-  NarrowString<256> buffer;
+  StaticString<256> buffer;
   buffer.Format(fmt, args...);
   return NanoWriteDecl(port, env, reader, row, n_rows, buffer);
 }

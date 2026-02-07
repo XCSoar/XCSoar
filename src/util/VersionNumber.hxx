@@ -45,10 +45,10 @@ struct VersionNumber
    * @brief Convert the version number to a string.
    * @param include_patch If true, include the patch version ("1.2.3", otherwise "1.2").
    */
-  NarrowString<16>
+  StaticString<16>
   toString(bool include_patch = true) const
   {
-    NarrowString<16> result;
+    StaticString<16> result;
     if (include_patch)
       result.Format("%u.%u.%u", major, minor, patch);
     else

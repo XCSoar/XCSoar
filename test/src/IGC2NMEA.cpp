@@ -18,7 +18,7 @@ GenerateNMEA(BufferedOutputStream &os,
 {
   char gprmc_buffer[100];
   FormatGPRMC(gprmc_buffer, sizeof(gprmc_buffer), basic);
-  NarrowString<256> gprmc("$");
+  StaticString<256> gprmc("$");
   gprmc.append(gprmc_buffer);
   AppendNMEAChecksum(gprmc.buffer());
   os.Write(gprmc);
@@ -26,7 +26,7 @@ GenerateNMEA(BufferedOutputStream &os,
 
   char gpgga_buffer[100];
   FormatGPGGA(gpgga_buffer, sizeof(gpgga_buffer), basic);
-  NarrowString<256> gpgga("$");
+  StaticString<256> gpgga("$");
   gpgga.append(gpgga_buffer);
   AppendNMEAChecksum(gpgga.buffer());
   os.Write(gpgga);
@@ -34,7 +34,7 @@ GenerateNMEA(BufferedOutputStream &os,
 
   char pgrmz_buffer[100];
   FormatPGRMZ(pgrmz_buffer, sizeof(pgrmz_buffer), basic);
-  NarrowString<256> pgrmz("$");
+  StaticString<256> pgrmz("$");
   pgrmz.append(pgrmz_buffer);
   AppendNMEAChecksum(pgrmz.buffer());
   os.Write(pgrmz);

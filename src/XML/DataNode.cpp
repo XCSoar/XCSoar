@@ -132,7 +132,7 @@ WritableDataNode::SetAttribute(const char *name, Angle value) noexcept
 void
 WritableDataNode::SetAttribute(const char *name, double value) noexcept
 {
-  NarrowString<48> buf;
+  StaticString<48> buf;
   buf.UnsafeFormat("%g", value);
   SetAttribute(name, buf);
 }
@@ -162,7 +162,7 @@ WritableDataNode::SetAttribute(const char *name, RoughTime value) noexcept
     /* no-op */
     return;
 
-  NarrowString<8> buffer;
+  StaticString<8> buffer;
   buffer.UnsafeFormat("%02u:%02u", value.GetHour(), value.GetMinute());
   SetAttribute(name, buffer);
 }
