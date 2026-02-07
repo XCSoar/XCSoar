@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:27+0100\n"
+"POT-Creation-Date: 2026-02-06 23:36+0100\n"
 "PO-Revision-Date: 2021-02-09 02:25+0000\n"
 "Last-Translator: Michalis <michalisntovas@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/xcsoar/"
@@ -37,7 +37,7 @@ msgstr "Διαδρομή"
 #: src/Task/TypeStrings.cpp:11
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "Πτυχία/ρεκόρ FAI"
 
 #: src/Task/TypeStrings.cpp:12 src/Dialogs/Task/dlgTaskHelpers.cpp:62
 #, no-c-format
@@ -52,17 +52,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:14
 #, no-c-format
 msgid "FAI goal"
-msgstr ""
+msgstr "Στόχος FAI"
 
 #: src/Task/TypeStrings.cpp:15
 #, no-c-format
 msgid "Racing"
-msgstr ""
+msgstr "Αγώνας"
 
 #: src/Task/TypeStrings.cpp:16
 #, no-c-format
 msgid "AAT"
-msgstr ""
+msgstr "AAT"
 
 #: src/Task/TypeStrings.cpp:17
 #, no-c-format
@@ -72,12 +72,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:18
 #, no-c-format
 msgid "Mixed"
-msgstr ""
+msgstr "Μικτό"
 
 #: src/Task/TypeStrings.cpp:19
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "Τουρισμός"
 
 #: src/Task/TypeStrings.cpp:32
 #, no-c-format
@@ -250,17 +250,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr ""
+msgstr "Τεταρτοκύκλιο εκκίνησης FAI"
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Start line"
-msgstr ""
+msgstr "Γραμμή εκκίνησης"
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid "Start cylinder"
-msgstr ""
+msgstr "Κύλινδρος εκκίνησης"
 
 #: src/Task/TypeStrings.cpp:96 src/Dialogs/Task/dlgTaskHelpers.cpp:160
 #, no-c-format
@@ -290,7 +290,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:101
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "Κύλινδρος σημείου στροφής"
 
 #: src/Task/TypeStrings.cpp:102
 #, no-c-format
@@ -310,17 +310,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:105
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "Τεταρτοκύκλιο τερματισμού FAI"
 
 #: src/Task/TypeStrings.cpp:106
 #, no-c-format
 msgid "Finish line"
-msgstr ""
+msgstr "Γραμμή τερματισμού"
 
 #: src/Task/TypeStrings.cpp:107
 #, no-c-format
 msgid "Finish cylinder"
-msgstr ""
+msgstr "Κύλινδρος τερματισμού"
 
 #: src/Task/TypeStrings.cpp:108
 #, no-c-format
@@ -412,7 +412,7 @@ msgstr "Άγνωστος τύπος αρχείου Εναέριου Χώρου"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:94
 msgid "Date"
-msgstr ""
+msgstr "Ημερομηνία"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:95
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:230
@@ -421,7 +421,7 @@ msgstr ""
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:96 Data/Input/default.xci:642
 msgid "Plane"
-msgstr ""
+msgstr "Αεροσκάφος"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:97
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:92
@@ -859,12 +859,12 @@ msgstr "Έδαφος Ανενεργό"
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
 #: src/Menu/ExpandMacros.cpp:350
 msgid "Hide"
-msgstr ""
+msgstr "Απόκρυψη"
 
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:348
 #: src/Menu/ExpandMacros.cpp:350
 msgid "Show"
-msgstr ""
+msgstr "Εμφάνιση"
 
 #: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:295
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
@@ -957,9 +957,9 @@ msgstr "Μεγένθυση Κυκλώματος OFF"
 
 #: src/Input/InputEventsAirspace.cpp:40 src/Input/InputEventsAirspace.cpp:47
 #, fuzzy
-#| msgid "Airspace"
+#| msgid "Airspaces"
 msgid "Airspace shown"
-msgstr "Εναέριος Χώρος"
+msgstr "Εναέριοι Χώροι"
 
 #: src/Input/InputEventsAirspace.cpp:41 src/Input/InputEventsAirspace.cpp:44
 #, fuzzy
@@ -1299,7 +1299,7 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:170
 msgid "Arrival altitude"
-msgstr ""
+msgstr "Υψόμετρο άφιξης"
 
 #: src/Renderer/MapItemListRenderer.cpp:192
 msgid "Your Position"
@@ -1499,7 +1499,7 @@ msgstr ""
 #: src/Renderer/FlightStatisticsRenderer.cpp:356
 #: src/Renderer/FlightStatisticsRenderer.cpp:366
 msgid "AAT to go"
-msgstr ""
+msgstr "Υπόλοιπο AAT"
 
 #. landscape: info above buttons
 #: src/Renderer/FlightStatisticsRenderer.cpp:357
@@ -1598,12 +1598,12 @@ msgstr ""
 #: src/FLARM/Details.cpp:126
 #, no-c-format
 msgid "Unresolved"
-msgstr ""
+msgstr "Μη επιλυμένο"
 
 #: src/FLARM/Details.cpp:127
 #, no-c-format
 msgid "Flarm Messaging"
-msgstr ""
+msgstr "Μηνύματα FLARM"
 
 #: src/FLARM/Details.cpp:128
 #, fuzzy, no-c-format
@@ -1744,7 +1744,7 @@ msgstr ""
 #: src/Dialogs/TouchTextEntry.cpp:181 src/Dialogs/TimeEntry.cpp:45
 #: src/Dialogs/DateEntry.cpp:41 src/Dialogs/GeoPointEntry.cpp:56
 msgid "OK"
-msgstr ""
+msgstr "Εντάξει"
 
 #: src/Dialogs/Message.cpp:82 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:40
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:43
@@ -1806,7 +1806,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
 #: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
-msgstr ""
+msgstr "Προσθήκη"
 
 #: src/Dialogs/FileManager.cpp:401
 msgid "Update all"
@@ -1833,7 +1833,7 @@ msgstr ""
 #: src/Dialogs/DownloadFilePicker.cpp:380 Data/Input/default.xci:708
 #: Data/Input/default.xci:1372
 msgid "File Manager"
-msgstr ""
+msgstr "Διαχείριση Αρχείων"
 
 #: src/Dialogs/FileManager.cpp:768 src/Dialogs/DownloadFilePicker.cpp:379
 msgid "The file manager is not available on this device."
@@ -2421,7 +2421,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:55
 msgid "Acknowledge"
-msgstr ""
+msgstr "Επιβεβαίωση"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:56
 msgid "Repeat"
@@ -2573,7 +2573,7 @@ msgstr "Απόσταση Ομάδας"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
-msgstr ""
+msgstr "Κατακόρυφο εύρος PCAS"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
@@ -2581,7 +2581,7 @@ msgstr "Απόσταση Ομάδας"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
-msgstr ""
+msgstr "Κατακόρυφο εύρος ADSB"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 #: src/Dialogs/Task/AlternatesListDialog.cpp:138
@@ -2666,7 +2666,7 @@ msgstr "Κωδικός Ομάδας"
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
-msgstr ""
+msgstr "Ασύρματος"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:75
 msgid "Station"
@@ -2690,7 +2690,7 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:94
 msgid "Top"
-msgstr ""
+msgstr "Οροφή"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:97
 msgid "Base"
@@ -2917,7 +2917,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:345 Data/Input/default.xci:1083
 msgid "Flight Setup"
-msgstr ""
+msgstr "Ρύθμιση Πτήσης"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:74
 #: src/Dialogs/Settings/dlgConfiguration.cpp:141
@@ -2961,7 +2961,7 @@ msgstr "Υπολογιστής Πτήσης"
 #: src/InfoBoxes/Content/Factory.cpp:920 Data/Input/default.xci:666
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "Άνεμος"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #, no-c-format
@@ -3006,7 +3006,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:114
 #, no-c-format
 msgid "Pages"
-msgstr ""
+msgstr "Σελίδες"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
@@ -3092,7 +3092,7 @@ msgstr "Επικόλληση"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "Overwrite all InfoBoxes in this set?"
-msgstr ""
+msgstr "Αντικατάσταση όλων των InfoBox σε αυτό το σετ;"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "InfoBox paste set"
@@ -3112,7 +3112,7 @@ msgstr "Αγωνιστική ID"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:348
 #, no-c-format
 msgid "Map"
-msgstr ""
+msgstr "Χάρτης"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:740
 msgid "Traffic"
@@ -3153,7 +3153,7 @@ msgstr ""
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 msgid "Data source"
-msgstr ""
+msgstr "Πηγή δεδομένων"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:212
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
@@ -3290,7 +3290,7 @@ msgstr "Προειδοποιήσεις"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:97
 #: Data/Input/default.xci:886 Data/Input/default.xci:1204
 msgid "Checklist"
-msgstr ""
+msgstr "Λίστα Ελέγχου"
 
 #: src/Dialogs/dlgChecklist.cpp:135
 msgid "No checklist loaded"
@@ -3572,7 +3572,7 @@ msgstr "Κατάσταση"
 
 #: src/Dialogs/dlgStatus.cpp:71 Data/Input/default.xci:658
 msgid "Flight"
-msgstr ""
+msgstr "Πτήση"
 
 #: src/Dialogs/dlgStatus.cpp:74 Data/Input/default.xci:634
 msgid "System"
@@ -3592,7 +3592,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
 #: src/InfoBoxes/Panel/ATCReference.cpp:65
 msgid "Location"
-msgstr ""
+msgstr "Τοποθεσία"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:72
 msgid "Max. height gain"
@@ -3699,7 +3699,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:147
 msgid "AAT range"
-msgstr ""
+msgstr "Εύρος AAT"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:149
 #, no-c-format
@@ -3807,7 +3807,7 @@ msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:112
 msgid "Runway"
-msgstr ""
+msgstr "Διάδρομος"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:76
@@ -3887,15 +3887,15 @@ msgstr "Αφαίρεση από Διαδρομή"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:228
 msgid "Replace in Task"
-msgstr "Αντικατάστασει Διαδρομής"
+msgstr "Αντικατάσταση Διαδρομής"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:233
 msgid "Insert in Task"
-msgstr "Εισαγωγή σε Διαδρομή"
+msgstr "Εισαγωγή Διαδρομής"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:238
 msgid "Append to Task"
-msgstr "Προσάρτηση στην Διαδρομή"
+msgstr "Προσθήκη σημείων"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
 msgid "Remove from Task"
@@ -3903,15 +3903,15 @@ msgstr "Αφαίρεση από Διαδρομή"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
 msgid "Set as New Home"
-msgstr "Ορισμός ως νέο Αεροδρόμιο"
+msgstr "Ορισμός ως νέα Βάση"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:254
 msgid "Pan to Waypoint"
-msgstr ""
+msgstr "Μετακίνηση χάρτη"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:445 Data/Input/default.xci:1282
 msgid "GoTo"
-msgstr ""
+msgstr "Προς"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:448
 msgid "Pan To"
@@ -3995,17 +3995,17 @@ msgstr ""
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "Φράγμα"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "Κάστρο"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
 #, no-c-format
@@ -4984,17 +4984,17 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "Χρήση ρύθμισης συστήματος"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "Μαύρο κείμενο σε λευκό φόντο"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "Λευκό κείμενο σε μαύρο φόντο"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "Full screen"
@@ -5032,7 +5032,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
 msgid "Zoom factor for InfoBox title and comment text"
-msgstr ""
+msgstr "Συντελεστής ζουμ για τίτλο και σχόλιο InfoBox"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
 msgid "Tab dialog style"
@@ -5299,7 +5299,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
 #, no-c-format
 msgid "Map (north-up)"
-msgstr ""
+msgstr "Χάρτης (βορράς επάνω)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
@@ -5577,7 +5577,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:64
 #, no-c-format
 msgid "Home"
-msgstr ""
+msgstr "Βάση"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #, no-c-format
@@ -5637,11 +5637,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "XCSoar data path"
-msgstr ""
+msgstr "Διαδρομή δεδομένων XCSoar"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "Click to view full path"
-msgstr ""
+msgstr "Κλικ για πλήρη διαδρομή"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid "Map database"
@@ -5673,7 +5673,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
 msgid "WPT A/F details"
-msgstr ""
+msgstr "Λεπτομέρειες WPT A/F"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 msgid ""
@@ -5689,8 +5689,10 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:88
+#, fuzzy
+#| msgid "FLARM Radar"
 msgid "FLARM database"
-msgstr ""
+msgstr "Ραντάρ FLARM"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:89
 msgid ""
@@ -5905,7 +5907,7 @@ msgstr "Χωρίς κυκλοφορία"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
-msgstr ""
+msgstr "Συνέχιση εμφάνισης κίνησης για λίγο μετά την εξαφάνισή της."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6136,7 +6138,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 msgid "AAT min. time"
-msgstr ""
+msgstr "Ελάχ. χρόνος AAT"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default AAT min. time for new AAT tasks."
@@ -6269,7 +6271,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 #, no-c-format
 msgid "95% dist. rule helpers"
-msgstr ""
+msgstr "Βοηθοί κανόνα 95% απόστ."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid ""
@@ -6451,7 +6453,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:112
 msgid "Custom"
-msgstr ""
+msgstr "Προσαρμοσμένο"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:112
 msgid "My individual set of units."
@@ -6885,7 +6887,7 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:244
 #: Data/Input/default.xci:443
 msgid "Task Manager"
-msgstr ""
+msgstr "Διαχείριση Διαδρομής"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:210
 msgid "Validation Errors"
@@ -7283,7 +7285,7 @@ msgstr ""
 #: Data/Input/default.xci:1249
 #, no-c-format
 msgid "Alternates"
-msgstr ""
+msgstr "Εναλλακτικά"
 
 #: src/Dialogs/Tracking/CloudEnableDialog.cpp:99
 msgid ""
@@ -7316,7 +7318,7 @@ msgstr "Χωράφι"
 
 #: src/Dialogs/dlgCredits.cpp:145 Data/Input/default.xci:955
 msgid "Credits"
-msgstr ""
+msgstr "Συντελεστές"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:51
 msgid "Audio vario"
@@ -8060,7 +8062,7 @@ msgstr "ΤαχΜικΑποσΚΔ"
 #: src/InfoBoxes/Content/Factory.cpp:373
 #, no-c-format
 msgid "AAT Vmin"
-msgstr ""
+msgstr "AAT Vmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 #, no-c-format
@@ -8087,7 +8089,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
 msgid "Barometric altitude"
-msgstr ""
+msgstr "Βαρομετρικό υψόμετρο"
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:64
@@ -8389,12 +8391,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:536
 #, no-c-format
 msgid "AAT distance around target"
-msgstr ""
+msgstr "Απόσταση AAT γύρω από στόχο"
 
 #: src/InfoBoxes/Content/Factory.cpp:537
 #, no-c-format
 msgid "AAT Dtgt"
-msgstr ""
+msgstr "AAT Απ.Στ."
 
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
@@ -8404,12 +8406,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:544
 #, no-c-format
 msgid "AAT speed around target"
-msgstr ""
+msgstr "Ταχύτητα AAT γύρω από στόχο"
 
 #: src/InfoBoxes/Content/Factory.cpp:545
 #, no-c-format
 msgid "AAT Vtgt"
-msgstr ""
+msgstr "AAT Vστ."
 
 #: src/InfoBoxes/Content/Factory.cpp:546
 #, no-c-format
@@ -8567,12 +8569,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:624
 #, no-c-format
 msgid "AAT delta time"
-msgstr ""
+msgstr "Διαφορά χρόνου AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:625
 #, no-c-format
 msgid "AAT dT"
-msgstr ""
+msgstr "AAT dT"
 
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
@@ -8629,7 +8631,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:656
 #, no-c-format
 msgid "Final GR"
-msgstr ""
+msgstr "Τελ. GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:657
 #, no-c-format
@@ -8895,7 +8897,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:795
 #, no-c-format
 msgid "Climb band"
-msgstr ""
+msgstr "Ζώνη ανόδου"
 
 #: src/InfoBoxes/Content/Factory.cpp:796
 #, no-c-format
@@ -9402,17 +9404,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1054
 #, no-c-format
 msgid "Active Radio Frequency"
-msgstr ""
+msgstr "Ενεργή Συχνότητα Ασύρματου"
 
 #: src/InfoBoxes/Content/Factory.cpp:1055
 #, no-c-format
 msgid "Act Freq"
-msgstr ""
+msgstr "Ενερ. Συχν."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
 msgid "Active radio frequency."
-msgstr ""
+msgstr "Ενεργή συχνότητα ασύρματου."
 
 #: src/InfoBoxes/Content/Factory.cpp:1061
 #, no-c-format
@@ -9494,12 +9496,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
 msgid "Engine CHT"
-msgstr ""
+msgstr "CHT κινητήρα"
 
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr ""
+msgstr "CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
@@ -9509,7 +9511,7 @@ msgstr "Προβλεπόμενη Θερμοκρασία"
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
 msgid "Engine EGT"
-msgstr ""
+msgstr "EGT κινητήρα"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
 #, no-c-format
@@ -9524,12 +9526,12 @@ msgstr "Προβλεπόμενη Θερμοκρασία"
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "Στροφές κινητήρα ανά λεπτό"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
@@ -9539,12 +9541,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "AAT dT and task ETA"
-msgstr ""
+msgstr "AAT dT και ETA διαδρομής"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr ""
+msgstr "AAT δέλτα ή ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -9675,11 +9677,11 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Other.cpp:58 src/InfoBoxes/Content/Other.cpp:61
 msgid "AC Off"
-msgstr ""
+msgstr "Κινητ. Off"
 
 #: src/InfoBoxes/Content/Other.cpp:66
 msgid "AC ON"
-msgstr ""
+msgstr "Κινητ. ON"
 
 #: src/InfoBoxes/Content/Other.cpp:187
 msgid "No GPS"
@@ -9707,7 +9709,7 @@ msgstr "ΚΛΕΙΣΤΟ"
 
 #: src/InfoBoxes/Content/Task.cpp:867 src/InfoBoxes/Content/Task.cpp:912
 msgid "Open"
-msgstr ""
+msgstr "Άνοιγμα"
 
 #: src/InfoBoxes/Content/Task.cpp:872 src/InfoBoxes/Content/Task.cpp:917
 msgid "Waiting"
@@ -10165,7 +10167,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:43
 #, no-c-format
 msgid "Accelerometer"
-msgstr ""
+msgstr "Επιταχυνσιόμετρο"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:44
 #, no-c-format
@@ -10314,7 +10316,7 @@ msgstr "Μεγέθυνση"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:878
 msgid "What's here?"
-msgstr ""
+msgstr "Τι υπάρχει εδώ;"
 
 #: Data/Input/default.xci:198
 msgid ""
@@ -10346,11 +10348,11 @@ msgstr "Επεξεργασία Σημείων"
 
 #: Data/Input/default.xci:499 Data/Input/default.xci:1296
 msgid "Dropped marker"
-msgstr ""
+msgstr "Σημείο Αναφοράς"
 
 #: Data/Input/default.xci:502 Data/Input/default.xci:1299
 msgid "Marker Drop"
-msgstr ""
+msgstr "Ρίψη Σημείου"
 
 #: Data/Input/default.xci:509 Data/Input/default.xci:1192
 msgid "Pilot event announced"
@@ -10372,11 +10374,11 @@ msgstr "Οθόνη"
 
 #: Data/Input/default.xci:561
 msgid "Page Show"
-msgstr ""
+msgstr "Εμφάνιση Σελίδας"
 
 #: Data/Input/default.xci:568 Data/Input/default.xci:1233
 msgid "Pan Mode"
-msgstr ""
+msgstr "Λειτουργία Μετακίνησης"
 
 #: Data/Input/default.xci:587 Data/Input/default.xci:1132
 msgid "Labels"
@@ -10388,7 +10390,7 @@ msgstr "Ίχνος"
 
 #: Data/Input/default.xci:609 Data/Input/default.xci:1154
 msgid "Topo."
-msgstr ""
+msgstr "Τοπογρ."
 
 #: Data/Input/default.xci:626
 msgid ""
@@ -10434,7 +10436,7 @@ msgstr "Ρύθμιση"
 
 #: Data/Input/default.xci:796
 msgid "Accel"
-msgstr ""
+msgstr "Επιτ."
 
 #: Data/Input/default.xci:814
 msgid "Vario ASI zeroed"
@@ -10446,11 +10448,11 @@ msgstr ""
 
 #: Data/Input/default.xci:821
 msgid "Accelerometer leveled"
-msgstr ""
+msgstr "Επιταχυνσιόμετρο οριζοντιωμένο"
 
 #: Data/Input/default.xci:822
 msgid "Accel Zero"
-msgstr ""
+msgstr "Μηδ. Επιτ."
 
 #: Data/Input/default.xci:829
 msgid "Stored to EEPROM"
@@ -10476,7 +10478,7 @@ msgstr ""
 
 #: Data/Input/default.xci:862 Data/Input/default.xci:1289
 msgid "FLARM Radar"
-msgstr ""
+msgstr "Ραντάρ FLARM"
 
 #: Data/Input/default.xci:904
 msgid ""
@@ -10486,19 +10488,19 @@ msgstr ""
 
 #: Data/Input/default.xci:928
 msgid "Traffic List"
-msgstr ""
+msgstr "Λίστα Κίνησης"
 
 #: Data/Input/default.xci:936 Data/Input/default.xci:1332
 msgid "Thermal Assistant"
-msgstr ""
+msgstr "Βοηθός Θερμικών"
 
 #: Data/Input/default.xci:963 Data/Input/default.xci:1340
 msgid "Airspaces"
-msgstr ""
+msgstr "Εναέριοι Χώροι"
 
 #: Data/Input/default.xci:970 Data/Input/default.xci:1379
 msgid "Message Repeat"
-msgstr ""
+msgstr "Επανάληψη Μηνύματος"
 
 #: Data/Input/default.xci:981
 msgid "Nav"
@@ -10510,7 +10512,7 @@ msgstr "Εγκατ/ση"
 
 #: Data/Input/default.xci:1010
 msgid "Lock Screen"
-msgstr ""
+msgstr "Κλείδωμα Οθόνης"
 
 #: Data/Input/default.xci:1068
 msgid "AVG/ALT"
@@ -10530,7 +10532,7 @@ msgstr "Επιλογή Εναέριου Χώρου"
 
 #: Data/Input/default.xci:1115
 msgid "Setup Plane"
-msgstr ""
+msgstr "Ρύθμιση Αεροσκάφους"
 
 #: Data/Input/default.xci:1219
 #, fuzzy
@@ -10544,7 +10546,7 @@ msgstr "Εναέριος Χώρος"
 
 #: Data/Input/default.xci:1394
 msgid "Quit XCSoar"
-msgstr ""
+msgstr "Έξοδος XCSoar"
 
 #~ msgid "Add File"
 #~ msgstr "Προσθήκη αρχείου"
