@@ -23,34 +23,24 @@
 
 #include <tchar.h>
 
-static void
-ShowNextWaypointDetails() noexcept
+bool
+NextWaypointClick() noexcept
 {
-  if (!backend_components->protected_task_manager)
-    return;
+  if (!backend_components || !backend_components->protected_task_manager)
+    return false;
 
   auto wp = backend_components->protected_task_manager->GetActiveWaypoint();
   if (wp == nullptr)
-    return;
+    return false;
+
+  if (!data_components || !data_components->waypoints)
+    return false;
 
   dlgWaypointDetailsShowModal(data_components->waypoints.get(),
                               std::move(wp), false);
-}
 
-static std::unique_ptr<Widget>
-LoadNextWaypointDetailsPanel([[maybe_unused]] unsigned id) noexcept
-{
-  return std::make_unique<CallbackWidget>(ShowNextWaypointDetails);
+  return true;
 }
-
-#ifdef __clang__
-/* gcc gives "redeclaration differs in 'constexpr'" */
-constexpr
-#endif
-const InfoBoxPanel next_waypoint_infobox_panels[] = {
-  { N_("Details"), LoadNextWaypointDetailsPanel },
-  { nullptr, nullptr }
-};
 
 void
 UpdateInfoBoxBearing(InfoBoxData &data) noexcept
@@ -148,11 +138,6 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
   data.SetValueColor(solution_remaining.IsFinalGlide() ? 2 : 0);
 }
 
-const InfoBoxPanel *
-InfoBoxContentNextWaypoint::GetDialogContent() noexcept
-{
-  return next_waypoint_infobox_panels;
-}
 
 void
 UpdateInfoBoxNextDistance(InfoBoxData &data) noexcept
@@ -713,13 +698,17 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept
 {
+  if (!backend_components || !backend_components->protected_task_manager) {
+    data.SetInvalid();
+    return;
+  }
+
   const auto &calculated = CommonInterface::Calculated();
   const auto &task_stats = calculated.ordered_task_stats;
   const auto &common_stats = calculated.common_stats;
   const double maxheight = backend_components->protected_task_manager->GetOrderedTaskSettings().start_constraints.max_height;
 
   if (!task_stats.task_valid || maxheight <= 0
-      || !backend_components->protected_task_manager
       || !common_stats.TimeUnderStartMaxHeight.IsDefined()) {
     data.SetInvalid();
     return;

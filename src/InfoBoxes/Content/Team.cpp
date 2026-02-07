@@ -2,39 +2,22 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxes/Content/Team.hpp"
-#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "TeamActions.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
-#include "Widget/CallbackWidget.hpp"
 #include "Language/Language.hpp"
 #include "util/StringCompare.hxx"
 
 #include <tchar.h>
 #include <stdio.h>
 
-static void
-ShowTeamCodeDialog() noexcept
+
+bool
+InfoBoxContentTeamCode::HandleClick() noexcept
 {
   dlgTeamCodeShowModal();
-}
-
-static std::unique_ptr<Widget>
-LoadTeamCodeDialog([[maybe_unused]] unsigned id) noexcept
-{
-  return std::make_unique<CallbackWidget>(ShowTeamCodeDialog);
-}
-
-static constexpr InfoBoxPanel team_code_infobox_panels[] = {
-  { N_("Team Code"), LoadTeamCodeDialog },
-  { nullptr, nullptr }
-};
-
-const InfoBoxPanel *
-InfoBoxContentTeamCode::GetDialogContent() noexcept
-{
-  return team_code_infobox_panels;
+  return true;
 }
 
 void
