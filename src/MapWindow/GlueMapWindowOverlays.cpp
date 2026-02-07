@@ -279,7 +279,9 @@ GlueMapWindow::SetBottomMargin(unsigned margin) noexcept
 void
 GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 {
-  if (Layout::landscape && follow_mode == FOLLOW_PAN) {
+  if (follow_mode != FOLLOW_PAN || Layout::landscape) {
+    /* only apply bottom margin in portrait pan mode where
+       overlay buttons cover the bottom of the screen */
     SetBottomMargin(0);
     return;
   }
