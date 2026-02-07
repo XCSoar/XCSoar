@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:27+0100\n"
+"POT-Creation-Date: 2026-02-06 23:36+0100\n"
 "PO-Revision-Date: 2024-09-25 08:15+0000\n"
 "Last-Translator: Jörg Schuon <schuongf@hotmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
@@ -1693,12 +1693,12 @@ msgstr "Australisch"
 #: src/FLARM/Details.cpp:126
 #, no-c-format
 msgid "Unresolved"
-msgstr ""
+msgstr "Nicht aufgelöst"
 
 #: src/FLARM/Details.cpp:127
 #, no-c-format
 msgid "Flarm Messaging"
-msgstr ""
+msgstr "FLARM Nachrichten"
 
 #: src/FLARM/Details.cpp:128
 #, fuzzy, no-c-format
@@ -3301,7 +3301,7 @@ msgstr "Flugzeug"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 msgid "Data source"
-msgstr ""
+msgstr "Datenquelle"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:212
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
@@ -5965,11 +5965,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "XCSoar data path"
-msgstr ""
+msgstr "XCSoar Datenpfad"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "Click to view full path"
-msgstr ""
+msgstr "Klicken für vollständigen Pfad"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid "Map database"
@@ -6010,7 +6010,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
 msgid "WPT A/F details"
-msgstr ""
+msgstr "WPT A/F Details"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 msgid ""
