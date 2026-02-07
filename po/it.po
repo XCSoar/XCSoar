@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:27+0100\n"
+"POT-Creation-Date: 2026-02-06 23:36+0100\n"
 "PO-Revision-Date: 2022-09-25 17:58+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
@@ -1688,12 +1688,12 @@ msgstr "Australiano"
 #: src/FLARM/Details.cpp:126
 #, no-c-format
 msgid "Unresolved"
-msgstr ""
+msgstr "Non risolto"
 
 #: src/FLARM/Details.cpp:127
 #, no-c-format
 msgid "Flarm Messaging"
-msgstr ""
+msgstr "Messaggi FLARM"
 
 #: src/FLARM/Details.cpp:128
 #, fuzzy, no-c-format
@@ -2691,7 +2691,7 @@ msgstr "Estensione AAT"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
-msgstr ""
+msgstr "Intervallo verticale PCAS"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
@@ -2699,7 +2699,7 @@ msgstr "Estensione AAT"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
-msgstr ""
+msgstr "Intervallo verticale ADSB"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 #: src/Dialogs/Task/AlternatesListDialog.cpp:138
@@ -3235,7 +3235,7 @@ msgstr "Incolla"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "Overwrite all InfoBoxes in this set?"
-msgstr ""
+msgstr "Sovrascrivere tutte le InfoBox in questo set?"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "InfoBox paste set"
@@ -3296,7 +3296,7 @@ msgstr "Velivolo"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 msgid "Data source"
-msgstr ""
+msgstr "Sorgente dati"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:212
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
@@ -4150,22 +4150,22 @@ msgstr "Centrale Elettrica"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr ""
+msgstr "VOR"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "Diga"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "Castello"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
 #, no-c-format
@@ -5250,17 +5250,17 @@ msgstr "Vetro"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "Usa impostazione di sistema"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "Testo nero su sfondo bianco"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "Testo bianco su sfondo nero"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "Full screen"
@@ -5300,7 +5300,7 @@ msgstr "Titoli InfoBox"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
 msgid "Zoom factor for InfoBox title and comment text"
-msgstr ""
+msgstr "Fattore zoom per titolo e commento InfoBox"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
 msgid "Tab dialog style"
@@ -5592,7 +5592,7 @@ msgstr "Mantiene il livello di zoom della mappa distinto per ogni pagina."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
 #, no-c-format
 msgid "Map (north-up)"
-msgstr ""
+msgstr "Mappa (nord in alto)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
@@ -5975,11 +5975,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "XCSoar data path"
-msgstr ""
+msgstr "Percorso dati XCSoar"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "Click to view full path"
-msgstr ""
+msgstr "Clicca per vedere il percorso completo"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid "Map database"
@@ -6021,7 +6021,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
 msgid "WPT A/F details"
-msgstr ""
+msgstr "Dettagli WPT A/F"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 #, fuzzy
@@ -6274,7 +6274,7 @@ msgstr "Traffico FLARM"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
-msgstr ""
+msgstr "Continua a mostrare il traffico per un po' dopo la sua scomparsa."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6698,7 +6698,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 #, no-c-format
 msgid "95% dist. rule helpers"
-msgstr ""
+msgstr "Aiuti regola 95% dist."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid ""
@@ -10212,7 +10212,7 @@ msgstr "Ricevitore transponder"
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
 msgid "XPDR Code"
-msgstr ""
+msgstr "Codice XPDR"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
 #, no-c-format
@@ -10222,12 +10222,12 @@ msgstr "La corrente frequenza radio di standby"
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
 msgid "Engine CHT"
-msgstr ""
+msgstr "CHT motore"
 
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr ""
+msgstr "CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
@@ -10237,7 +10237,7 @@ msgstr "Temperatura prevista"
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
 msgid "Engine EGT"
-msgstr ""
+msgstr "EGT motore"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
 #, no-c-format
@@ -10252,12 +10252,12 @@ msgstr "Temperatura prevista"
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "Giri motore al minuto"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
@@ -10267,12 +10267,12 @@ msgstr "Frequenza cardiaca in battiti al minuto."
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "AAT dT and task ETA"
-msgstr ""
+msgstr "AAT dT e ETA task"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr ""
+msgstr "AAT delta o ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -11359,7 +11359,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1394
 msgid "Quit XCSoar"
-msgstr ""
+msgstr "Esci da XCSoar"
 
 #~ msgid "Create xcsoar-checklist.txt"
 #~ msgstr "Crea xcsoar-checklist.txt"
