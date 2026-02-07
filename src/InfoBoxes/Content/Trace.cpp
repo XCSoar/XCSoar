@@ -111,7 +111,7 @@ void
 InfoBoxContentBarogram::Update(InfoBoxData &data) noexcept
 {
   const MoreData &basic = CommonInterface::Basic();
-  TCHAR sTmp[32];
+  char sTmp[32];
 
   if (basic.NavAltitudeAvailable()) {
     FormatUserAltitude(basic.nav_altitude, sTmp);

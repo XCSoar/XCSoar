@@ -15,14 +15,12 @@
 #include "PageActions.hpp"
 #include "UIState.hpp"
 
-#include <tchar.h>
-
 static void
 SetVSpeed(InfoBoxData &data, double value) noexcept
 {
-  TCHAR buffer[32];
+  char buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);
-  data.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
+  data.SetValue(buffer[0] == '+' ? buffer + 1 : buffer);
   data.SetValueUnit(Units::current.vertical_speed_unit);
 }
 
@@ -216,7 +214,7 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data) noexcept
     return;
   }
 
-  TCHAR buffer[32];
+  char buffer[32];
   Unit unit = FormatSmallUserDistance(buffer, circle_diameter, false, 0);
   data.SetValue (buffer);
   data.SetValueUnit(unit);
@@ -225,9 +223,8 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data) noexcept
     Angle::FullCircle().Native() / turn_rate.Native();
 
   StaticString<16> duration_buffer;
-  duration_buffer.Format(_T("%u s"), int(circle_duration));
-  _tcscpy (buffer, duration_buffer);
-  data.SetComment (buffer);
+  duration_buffer.Format("%u s", int(circle_duration));
+  data.SetComment(duration_buffer);
 }
 
 InfoBoxContentThermalAssistant::InfoBoxContentThermalAssistant() noexcept
@@ -265,7 +262,7 @@ InfoBoxContentThermalAssistant::HandleClick() noexcept
   if (pages.special_page.IsDefined() && pages.special_page.main == PageLayout::Main::THERMAL_ASSISTANT) {
     PageActions::Restore();
   } else {
-	InputEvents::eventThermalAssistant(_T(""));
+	InputEvents::eventThermalAssistant("");
   }
 
   return true;

@@ -21,8 +21,6 @@
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
-#include <tchar.h>
-
 /**
  * Return the active waypoint, or nullptr if unavailable.
  */
@@ -126,7 +124,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data) noexcept
   // Set Comment
   if (way_point->radio_frequency.IsDefined()) {
     const unsigned freq = way_point->radio_frequency.GetKiloHertz();
-    data.FmtComment(_T("{}.{:03} {}"),
+    data.FmtComment("{}.{:03} {}",
                     freq / 1000, freq % 1000, way_point->comment);
   }
   else
@@ -249,10 +247,10 @@ UpdateInfoBoxNextETA(InfoBoxData &data) noexcept
     std::chrono::duration_cast<std::chrono::seconds>(task_stats.current_leg.solution_remaining.time_elapsed);
 
   // Set Value
-  data.FmtValue(_T("{:02}:{:02}"), t.hour, t.minute);
+  data.FmtValue("{:02}:{:02}", t.hour, t.minute);
 
   // Set Comment
-  data.FmtComment(_T("{:02}"), t.second);
+  data.FmtComment("{:02}", t.second);
 }
 
 static void
@@ -337,7 +335,7 @@ UpdateInfoBoxNextGR(InfoBoxData &data) noexcept
   auto gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
 
   if (gradient <= 0) {
-    data.SetValue(_T("+++"));
+    data.SetValue("+++");
     return;
   }
   if (::GradientValid(gradient)) {
@@ -397,10 +395,10 @@ UpdateInfoBoxFinalETA(InfoBoxData &data) noexcept
     std::chrono::duration_cast<std::chrono::seconds>(task_stats.total.solution_remaining.time_elapsed);
 
   // Set Value
-  data.FmtValue(_T("{:02}:{:02}"), t.hour, t.minute);
+  data.FmtValue("{:02}:{:02}", t.hour, t.minute);
 
   // Set Comment
-  data.FmtComment(_T("{:02}"), t.second);
+  data.FmtComment("{:02}", t.second);
 }
 
 void
@@ -530,7 +528,7 @@ UpdateInfoBoxFinalGR(InfoBoxData &data) noexcept
   auto gradient = task_stats.total.gradient;
 
   if (gradient <= 0) {
-    data.SetValue(_T("+++"));
+    data.SetValue("+++");
     return;
   }
   if (::GradientValid(gradient))
@@ -632,7 +630,7 @@ UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data) noexcept
 
   if (map_settings.show_95_percent_rule_helpers) {
     auto distance = FormatUserDistanceSmart(0.95*task_stats.distance_max_total);
-    auto comment = std::basic_string<TCHAR>( _T("95% ") ) + distance.data();
+    auto comment = std::string("95% ") + distance.data();
     data.SetComment(comment.data());
   }
   else {
@@ -777,8 +775,8 @@ UpdateInfoBoxNextETAVMG(InfoBoxData &data) noexcept
   if (now_local.IsPlausible()) {
     const std::chrono::seconds dd{long(d/v)};
     const BrokenTime t = now_local + dd;
-    data.FmtValue(_T("{:02}:{:02}"), t.hour, t.minute);
-    data.FmtComment(_T("{:02}"), t.second);
+    data.FmtValue("{:02}:{:02}", t.hour, t.minute);
+    data.FmtComment("{:02}", t.second);
   }
 
 }
@@ -857,7 +855,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
   } else if (open.HasBegun(now)) {
     if (open.GetEnd().IsValid()) {
       unsigned seconds = SecondsUntil(now_s, open.GetEnd());
-      data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
+      data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
       data.SetValueInvalid();
@@ -865,7 +863,7 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
     data.SetComment(_("Open"));
   } else {
     unsigned seconds = SecondsUntil(now_s, open.GetStart());
-    data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
+    data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
   }
@@ -902,7 +900,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
   } else if (open.HasBegun(arrival)) {
     if (open.GetEnd().IsValid()) {
       unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
-      data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
+      data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
       data.SetValueInvalid();
@@ -910,7 +908,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
     data.SetComment(_("Open"));
   } else {
     unsigned seconds = SecondsUntil(arrival_s, open.GetStart());
-    data.FmtValue(_T("{:02}:{:02}"), seconds / 60, seconds % 60);
+    data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
   }
@@ -998,7 +996,7 @@ UpdateInfoTaskETAorAATdT(InfoBoxData& data) noexcept
     UpdateInfoBoxTaskAATimeDelta(data);
     data.SetComment(eta_text);
 
-    data.SetTitle(_T("AAT delta time"));
+    data.SetTitle(_("AAT delta time"));
   } else
-    data.SetTitle(_T("Task arrival time"));
+    data.SetTitle(_("Task arrival time"));
 }
