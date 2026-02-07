@@ -185,9 +185,13 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
   RowFormWidget::Prepare(parent, rc);
 
 #ifdef HAVE_SKYLINES_TRACKING
-  AddBoolean(_T("SkyLines"), nullptr, settings.skylines.enabled, this);
+  AddBoolean(_T("SkyLines"),
+             _("Enable live tracking via the SkyLines server."),
+             settings.skylines.enabled, this);
 #ifdef HAVE_NET_STATE_ROAMING
-  AddBoolean(_T("Roaming"), nullptr, settings.skylines.roaming, this);
+  AddBoolean(_("Roaming"),
+             _("Allow tracking when on a roaming mobile data connection."),
+             settings.skylines.roaming, this);
 #endif
   AddEnum(_("Tracking Interval"), nullptr, tracking_intervals,
           FindClosestTrackingInterval(settings.skylines.interval));
@@ -205,7 +209,10 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
     buffer.UnsafeFormat(_T("%llX"), (unsigned long long)settings.skylines.key);
   else
     buffer.clear();
-  AddText(_T("Key"), nullptr, buffer);
+  AddText(_T("Key"),
+          _("Your SkyLines tracking key. "
+            "This is used to identify your aircraft on the server."),
+          buffer);
 #endif
 
 #if defined(HAVE_SKYLINES_TRACKING) && defined(HAVE_LIVETRACK24)
