@@ -130,7 +130,7 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl,
                   sizeof(imiDecl.header.gid));
   ConvertToChar(decl.competition_id, imiDecl.header.cid,
                   sizeof(imiDecl.header.cid));
-  ConvertToChar(_T("XCSOARTASK"), imiDecl.header.tskName,
+  ConvertToChar("XCSOARTASK", imiDecl.header.tskName,
                   sizeof(imiDecl.header.tskName));
 
   ConvertWaypoint(decl.turnpoints[0].waypoint, imiDecl.wp[0]);

@@ -59,7 +59,7 @@ Lua::NewFullState()
 
   {
     SetPackagePath(L,
-                   WideToUTF8Converter(LocalPath(_T("lua" DIR_SEPARATOR_S "?.lua")).c_str()));
+                   WideToUTF8Converter(LocalPath("lua" DIR_SEPARATOR_S "?.lua").c_str()));
   }
 
   return L;

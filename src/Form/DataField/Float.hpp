@@ -30,7 +30,7 @@ public:
     :NumberDataField(Type::REAL, true, edit_format, display_format, listener),
      mValue(_value), mMin(_min), mMax(_max), mStep(_step),
      mSpeedup(0), mFine(_fine),
-     unit(_T("")) {}
+     unit("") {}
 
   void SetUnits(const char *text) noexcept {
     unit = text;

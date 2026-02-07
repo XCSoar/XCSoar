@@ -56,7 +56,7 @@ ReadAltitude(NMEAInputLine &line, double &value_r)
   if (!available)
     return false;
 
-  if (unit == _T('f') || unit == _T('F'))
+  if (unit == 'f' || unit == 'F')
     value = Units::ToSysUnit(value, Unit::FEET);
 
   value_r = value;
@@ -287,8 +287,8 @@ AltairProCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_por
 }
 
 const struct DeviceRegister altair_pro_driver = {
-  _T("Altair RU"),
-  _T("Altair Recording Unit"),
+  "Altair RU",
+  "Altair Recording Unit",
   DeviceRegister::DECLARE,
   AltairProCreateOnPort,
 };

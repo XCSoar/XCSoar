@@ -11,8 +11,8 @@ CAI302CreateOnPort(const DeviceConfig &config, Port &port)
 }
 
 const struct DeviceRegister cai302_driver = {
-  _T("CAI 302"),
-  _T("Cambridge CAI302"),
+  "CAI 302",
+  "Cambridge CAI302",
   DeviceRegister::BULK_BAUD_RATE |
   DeviceRegister::DECLARE | DeviceRegister::LOGGER | DeviceRegister::MANAGE |
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,

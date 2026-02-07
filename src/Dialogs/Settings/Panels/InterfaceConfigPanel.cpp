@@ -70,7 +70,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Text size"),
              nullptr,
-             _T("%d %%"), _T("%d"), 75, 200, 5,
+             "%d %%", "%d", 75, 200, 5,
              settings.scale);
 
   WndProperty *wp_dpi = AddEnum(_("Display Resolution"),
@@ -98,7 +98,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
             "button presses and events from external devices."),
-          ProfileKeys::InputFile, _T("*.xci\0"), FileType::XCI);
+          ProfileKeys::InputFile, "*.xci\0", FileType::XCI);
   SetExpertRow(InputFile);
 
 #ifdef HAVE_NLS
@@ -110,18 +110,18 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   if (wp != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
     df.addEnumText(_("Automatic"));
-    df.addEnumText(_T("English"));
+    df.addEnumText("English");
 
     for (const BuiltinLanguage *l = language_table;
          l->resource != nullptr; ++l) {
       StaticString<100> display_string;
-      display_string.Format(_T("%s (%s)"), l->name, l->resource);
+      display_string.Format("%s (%s)", l->name, l->resource);
       df.addEnumText(l->resource, display_string);
     }
 
 #ifdef HAVE_BUILTIN_LANGUAGES
     LanguageFileVisitor lfv(df);
-    VisitDataFiles(_T("*.mo"), lfv);
+    VisitDataFiles("*.mo", lfv);
 #endif
 
     df.Sort(2);
@@ -129,11 +129,11 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     auto value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
     Path value = value_buffer;
     if (value == nullptr)
-      value = Path(_T(""));
+      value = Path("");
 
-    if (value == Path(_T("none")))
+    if (value == Path("none"))
       df.SetValue(1);
-    else if (!value.empty() && value != Path(_T("auto"))) {
+    else if (!value.empty() && value != Path("auto")) {
       const Path base = value.GetBase();
       if (base != nullptr)
         df.SetValue(base.c_str());
@@ -206,7 +206,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
     const auto old_value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
     Path old_value = old_value_buffer;
     if (old_value == nullptr)
-      old_value = Path(_T(""));
+      old_value = Path("");
 
     auto old_base = old_value.GetBase();
     if (old_base == nullptr)
@@ -217,11 +217,11 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
 
     switch (df.GetValue()) {
     case 0:
-      new_value = new_base = _T("auto");
+      new_value = new_base = "auto";
       break;
 
     case 1:
-      new_value = new_base = _T("none");
+      new_value = new_base = "none";
       break;
 
     default:

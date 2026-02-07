@@ -184,7 +184,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
   AddInteger(_("InfoBox title size"), _("Zoom factor for InfoBox title and comment text"),
-             _T("%d %%"), _T("%d"), 50, 150, 5,
+             "%d %%", "%d", 50, 150, 5,
              ui_settings.info_boxes.scale_title_font);
   SetExpertRow(InfoBoxTitleScale);
 
@@ -217,7 +217,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(ShowZoomButton);
 
 #ifdef DRAW_MOUSE_CURSOR
-  AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), _T("%d x"), _T("%d x"), 1, 10, 1,
+  AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), "%d x", "%d x", 1, 10, 1,
              (unsigned)ui_settings.display.cursor_size);
   AddBoolean(_("Invert cursor color"), _("Enable black cursor"),
              ui_settings.display.invert_cursor_colors);

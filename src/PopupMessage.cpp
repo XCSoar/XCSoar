@@ -66,7 +66,7 @@ PopupMessage::Message::AppendTo(StaticString<2000> &buffer,
   }
 
   if (!buffer.empty())
-    buffer.append(_T("\r\n"));
+    buffer.append("\r\n");
   buffer.append(text);
   return true;
 }
@@ -324,7 +324,7 @@ PopupMessage::AddMessage(const char* text, const char *data) noexcept
     char msgcache[1024];
     strcpy(msgcache, text);
     if (data != nullptr) {
-      strcat(msgcache, _T(" "));
+      strcat(msgcache, " ");
       strcat(msgcache, data);
     }
 

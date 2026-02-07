@@ -19,39 +19,39 @@ ParsePortArgs(Args &args)
   config.path = args.ExpectNextT().c_str();
 
 #ifndef NDEBUG
-  if (config.path.equals(_T("dump"))) {
+  if (config.path.equals("dump")) {
     config = ParsePortArgs(args);
     config.dump_port = true;
     return config;
   }
 #endif
 
-  if (config.path.equals(_T("k6bt"))) {
+  if (config.path.equals("k6bt")) {
     config = ParsePortArgs(args);
     config.k6bt = true;
     return config;
   }
 
-  if (config.path.equals(_T("pty"))) {
+  if (config.path.equals("pty")) {
     config.port_type = DeviceConfig::PortType::PTY;
     config.path = args.ExpectNextT().c_str();
     return config;
   }
 
-  if (config.path.equals(_T("tcp"))) {
+  if (config.path.equals("tcp")) {
     config.port_type = DeviceConfig::PortType::TCP_LISTENER;
     config.tcp_port = atoi(args.ExpectNext());
     return config;
   }
 
-  if (config.path.equals(_T("tcp_client"))) {
+  if (config.path.equals("tcp_client")) {
     config.port_type = DeviceConfig::PortType::TCP_CLIENT;
     config.ip_address = args.ExpectNextT().c_str();
     config.tcp_port = atoi(args.ExpectNext());
     return config;
   }
 
-  if (config.path.equals(_T("udp"))) {
+  if (config.path.equals("udp")) {
     config.port_type = DeviceConfig::PortType::UDP_LISTENER;
     config.tcp_port = atoi(args.ExpectNext());
     return config;

@@ -71,7 +71,7 @@ FlarmNameDatabase::Set(FlarmId id, const char *name) noexcept
 
   int i = Find(id);
   if (i >= 0) {
-    if (!StringIsEqual(name, _T("")))
+    if (!StringIsEqual(name, ""))
       /* update existing record */
       data[i].name = name;
     else

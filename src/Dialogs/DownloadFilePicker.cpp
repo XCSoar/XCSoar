@@ -253,7 +253,7 @@ try {
 
   FileRepository repository;
 
-  const auto path = LocalPath(_T("repository"));
+  const auto path = LocalPath("repository");
   FileLineReaderA reader(path);
 
   ParseFileRepository(repository, reader);
@@ -322,7 +322,7 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
   if (name == nullptr)
     return;
 
-  if (name == Path(_T("repository"))) {
+  if (name == Path("repository")) {
     const std::lock_guard lock{mutex};
     repository_failed = false;
     repository_modified = true;
@@ -339,7 +339,7 @@ DownloadFilePickerWidget::OnDownloadError(Path path_relative,
   if (name == nullptr)
     return;
 
-  if (name == Path(_T("repository"))) {
+  if (name == Path("repository")) {
     const std::lock_guard lock{mutex};
     repository_failed = true;
     repository_error = std::move(error);

@@ -76,7 +76,7 @@ MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     PixelRect button_rc = GetButtonPosition(i, rc);
-    buttons[i].Create(parent, look, _T(""), button_rc, style);
+    buttons[i].Create(parent, look, "", button_rc, style);
   }
 }
 

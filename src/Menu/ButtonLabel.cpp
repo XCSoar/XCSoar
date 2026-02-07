@@ -38,7 +38,7 @@ GetTextN(const char *src, const char *src_end,
   if (src == src_end)
     /* gettext("") returns the PO header, and thus we need to exclude
        this special case */
-    return _T("");
+    return "";
 
   const size_t src_length = src_end - src;
   if (src_length >= buffer_size)
@@ -47,7 +47,7 @@ GetTextN(const char *src, const char *src_end,
 
   /* copy to buffer, because gettext() expects a null-terminated
      string */
-  *std::copy(src, src_end, buffer) = _T('\0');
+  *std::copy(src, src_end, buffer) = '\0';
 
   return gettext(buffer);
 }
@@ -58,7 +58,7 @@ ButtonLabel::Expand(const char *text, std::span<char> buffer) noexcept
   Expanded expanded;
   const char *dollar;
 
-  if (text == nullptr || *text == _T('\0') || *text == _T(' ')) {
+  if (text == nullptr || *text == '\0' || *text == ' ') {
     expanded.visible = false;
     return expanded;
   } else if ((dollar = StringFind(text, '$')) == nullptr) {
@@ -99,7 +99,7 @@ ButtonLabel::Expand(const char *text, std::span<char> buffer) noexcept
 
     char s[100];
     expanded.enabled = !ExpandMacros(text, std::span{s});
-    if (s[0] == _T('\0') || s[0] == _T(' ')) {
+    if (s[0] == '\0' || s[0] == ' ') {
       expanded.visible = false;
       return expanded;
     }

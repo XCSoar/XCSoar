@@ -16,10 +16,10 @@ void
 InputConfig::SetDefaults() noexcept
 {
   modes.resize(4);
-  modes[0] = _T("default");
-  modes[1] = _T("pan");
-  modes[2] = _T("infobox");
-  modes[3] = _T("Menu");
+  modes[0] = "default";
+  modes[1] = "pan";
+  modes[2] = "infobox";
+  modes[3] = "Menu";
 
   std::fill_n(&Key2Event[0][0], MAX_MODE*MAX_KEY, 0);
 #ifdef ENABLE_SDL

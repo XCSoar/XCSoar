@@ -26,25 +26,25 @@
 #include "Operation/MessageOperationEnvironment.hpp"
 
 static const char *const captions[] = {
-  _T(" 1 Hardware"),
-  _T(" 2 Calibration"),
-  _T(" 3 Audio Modes"),
-  _T(" 4 Deadband"),
-  _T(" 5 Tones: Cruise Faster"),
-  _T(" 6 Tones: Cruise Slower"),
-  _T(" 7 Tones: Cruise in Lift"),
-  _T(" 8 Tones: Circling, climbing fast"),
-  _T(" 9 Tones: Circling, climbing slow"),
-  _T("10 Tones: Circling, descending"),
-  _T("11 Vario flight logger"),
-  _T("12 Audio mixer"),
-  _T("13 FLARM Alerts"),
-  _T("14 FLARM Identification"),
-  _T("15 FLARM Repeats"),
-  _T("16 Alerts"),
-  _T("17 Airframe Limits"),
-  _T("18 Audio Schemes"),
-  _T("19 Display"),
+  " 1 Hardware",
+  " 2 Calibration",
+  " 3 Audio Modes",
+  " 4 Deadband",
+  " 5 Tones: Cruise Faster",
+  " 6 Tones: Cruise Slower",
+  " 7 Tones: Cruise in Lift",
+  " 8 Tones: Circling, climbing fast",
+  " 9 Tones: Circling, climbing slow",
+  "10 Tones: Circling, descending",
+  "11 Vario flight logger",
+  "12 Audio mixer",
+  "13 FLARM Alerts",
+  "14 FLARM Identification",
+  "15 FLARM Repeats",
+  "16 Alerts",
+  "17 Airframe Limits",
+  "18 Audio Schemes",
+  "19 Display",
 };
 
 static const char *const audio_pages[] = {
@@ -130,7 +130,7 @@ static void
 SetParametersScheme(PagerWidget &pager, int schemetype)
 {
   if(ShowMessageBox(_("Set new audio scheme? Old values will be lost."),
-                 _T("Vega"),
+                 "Vega",
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
@@ -201,10 +201,10 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     RowFormWidget::Prepare(parent, rc);
 
-    AddButton(_T("Vega"), MakeSetParametersScheme(pager, 0));
-    AddButton(_T("Borgelt"), MakeSetParametersScheme(pager, 1));
-    AddButton(_T("Cambridge"), MakeSetParametersScheme(pager, 2));
-    AddButton(_T("Zander"), MakeSetParametersScheme(pager, 3));
+    AddButton("Vega", MakeSetParametersScheme(pager, 0));
+    AddButton("Borgelt", MakeSetParametersScheme(pager, 1));
+    AddButton("Cambridge", MakeSetParametersScheme(pager, 2));
+    AddButton("Zander", MakeSetParametersScheme(pager, 3));
   }
 };
 

@@ -22,11 +22,11 @@ NMEALogger::Start()
   assert(dt.IsPlausible());
 
   StaticString<64> name;
-  name.Format(_T("%04u-%02u-%02u_%02u-%02u.nmea"),
+  name.Format("%04u-%02u-%02u_%02u-%02u.nmea",
               dt.year, dt.month, dt.day,
               dt.hour, dt.minute);
 
-  const auto logs_path = MakeLocalPath(_T("logs"));
+  const auto logs_path = MakeLocalPath("logs");
 
   const auto path = AllocatedPath::Build(logs_path, name);
   file = std::make_unique<FileOutputStream>(path,

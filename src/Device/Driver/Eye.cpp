@@ -159,8 +159,8 @@ EyeCreateOnPort(const DeviceConfig &, Port &)
 }
 
 const struct DeviceRegister eye_driver = {
-  _T("EYE"),
-  _T("EYE sensor-box (experimental)"),
+  "EYE",
+  "EYE sensor-box (experimental)",
   0,
   EyeCreateOnPort,
 };

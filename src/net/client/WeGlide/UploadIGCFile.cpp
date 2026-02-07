@@ -88,9 +88,9 @@ UploadSuccessDialog(const FlightData &flight_data) noexcept
   // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
   // With this Dialog insert the possibilty to update/patch the flight
   // f.e. copilot in double seater, scoring class, short comment and so on
-  const auto display_string = fmt::format(_T("{}: {}\n{}: {}\n{}: {} ({})\n"
-                                             "{}: {} ({})\n{}: {}, {}: {}"),
-    _T("Flight ID"), flight_data.flight_id,
+  const auto display_string = fmt::format("{}: {}\n{}: {}\n{}: {} ({})\n"
+                                             "{}: {} ({})\n{}: {}, {}: {}",
+    "Flight ID", flight_data.flight_id,
     _("Date"), flight_data.scoring_date.c_str(),
     _("Username"), flight_data.user.name.c_str(), flight_data.user.id,
     _("Plane"), flight_data.aircraft.name.c_str(), flight_data.aircraft.id,

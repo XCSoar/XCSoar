@@ -21,7 +21,7 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
 
   if (flights.empty()) {
     auto center = rc.GetCenter();
-    const char *text = _T("No flights");
+    const char *text = "No flights";
     PixelSize size = canvas.CalcTextSize(text);
     canvas.DrawText(center - size / 2u, text);
     return;
@@ -36,8 +36,8 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
     return;
 
   const unsigned row_height = font_height + padding;
-  const unsigned date_width = canvas.CalcTextWidth(_T("2222-22-22")) + padding * 4;
-  const unsigned time_width = canvas.CalcTextWidth(_T("22:22")) + padding * 4;
+  const unsigned date_width = canvas.CalcTextWidth("2222-22-22") + padding * 4;
+  const unsigned time_width = canvas.CalcTextWidth("22:22") + padding * 4;
 
   canvas.Select(header_font);
 
@@ -51,36 +51,36 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
 
     StaticString<64> buffer;
     if (flight.date.IsPlausible()) {
-      buffer.UnsafeFormat(_T("%04u-%02u-%02u  "), flight.date.year,
+      buffer.UnsafeFormat("%04u-%02u-%02u  ", flight.date.year,
                           flight.date.month, flight.date.day);
       canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText({x, y}, _T("____-__-__"));
+      canvas.DrawText({x, y}, "____-__-__");
     x += date_width;
 
     if (flight.start_time.IsPlausible()) {
-      buffer.UnsafeFormat(_T("%02u:%02u  "),
+      buffer.UnsafeFormat("%02u:%02u  ",
                           flight.start_time.hour, flight.start_time.minute);
       canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText({x, y}, _T("--:--"));
+      canvas.DrawText({x, y}, "--:--");
     x += time_width;
 
     if (flight.end_time.IsPlausible()) {
-      buffer.UnsafeFormat(_T("%02u:%02u"),
+      buffer.UnsafeFormat("%02u:%02u",
                           flight.end_time.hour, flight.end_time.minute);
       canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText({x, y}, _T("--:--"));
+      canvas.DrawText({x, y}, "--:--");
     x += time_width;
 
     if (flight.Duration().count() >= 0) {
       BrokenTime duration = BrokenTime::FromSinceMidnight(flight.Duration());
-      buffer.UnsafeFormat(_T("%02u:%02u"),
+      buffer.UnsafeFormat("%02u:%02u",
                           duration.hour, duration.minute);
       canvas.DrawText({x, y}, buffer);
     } else
-      canvas.DrawText({x, y}, _T("--:--"));
+      canvas.DrawText({x, y}, "--:--");
     x += time_width;
 
     y -= row_height;
@@ -89,13 +89,13 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
 
   {
     int x = rc.left + padding;
-    canvas.DrawText({x, y}, _T("Date"));
+    canvas.DrawText({x, y}, "Date");
     x += date_width;
 
-    canvas.DrawText({x, y}, _T("Time"));
+    canvas.DrawText({x, y}, "Time");
     x += time_width;
 
     x += time_width;
-    canvas.DrawText({x, y}, _T("Duration"));
+    canvas.DrawText({x, y}, "Duration");
   }
 }

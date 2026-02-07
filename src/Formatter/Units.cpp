@@ -17,10 +17,10 @@ FormatInteger(char *buffer,
   const int ivalue = iround(uvalue);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, include_sign ? _T("%+d %s") : _T("%d %s"),
+    StringFormatUnsafe(buffer, include_sign ? "%+d %s" : "%d %s",
                        ivalue, Units::GetUnitName(unit));
   else
-    StringFormatUnsafe(buffer, include_sign ? _T("%+d") : _T("%d"), ivalue);
+    StringFormatUnsafe(buffer, include_sign ? "%+d" : "%d", ivalue);
 }
 
 void
@@ -38,10 +38,10 @@ FormatWingLoading(char *buffer, double value, Unit unit,
   int precision = uvalue > 20 ? 0 : 1;
 
     if (include_unit)
-      sprintf(buffer, _T("%.*f %s"), precision, (double)uvalue,
+      sprintf(buffer, "%.*f %s", precision, (double)uvalue,
                 Units::GetUnitName(unit));
     else
-      sprintf(buffer, _T("%.*f"), precision, (double)uvalue);
+      sprintf(buffer, "%.*f", precision, (double)uvalue);
 }
 
 void
@@ -65,10 +65,10 @@ FormatDistance(char *buffer, double value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.*f %s"), precision, (double)value,
+    StringFormatUnsafe(buffer, "%.*f %s", precision, (double)value,
                        Units::GetUnitName(unit));
   else
-    StringFormatUnsafe(buffer, _T("%.*f"), precision, (double)value);
+    StringFormatUnsafe(buffer, "%.*f", precision, (double)value);
 }
 
 [[gnu::const]]
@@ -96,10 +96,10 @@ FormatSmallDistance(char *buffer, double value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.*f %s"), precision, (double)value,
+    StringFormatUnsafe(buffer, "%.*f %s", precision, (double)value,
                        Units::GetUnitName(unit));
   else
-    StringFormatUnsafe(buffer, _T("%.*f"), precision, (double)value);
+    StringFormatUnsafe(buffer, "%.*f", precision, (double)value);
 
   return unit;
 }
@@ -147,10 +147,10 @@ FormatSpeed(char *buffer,
 
   const int prec = precision && value < 100;
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.*f %s"), prec, (double)value,
+    StringFormatUnsafe(buffer, "%.*f %s", prec, (double)value,
                        Units::GetUnitName(unit));
   else
-    StringFormatUnsafe(buffer, _T("%.*f"), prec, (double)value);
+    StringFormatUnsafe(buffer, "%.*f", prec, (double)value);
 }
 
 const char*
@@ -158,9 +158,9 @@ GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
 {
   static const char *const format[2][2][2]= {
     //      0 0 0       0 0 1            0 1 0          0 1 1
-    { { _T("%.1f"), _T("%+.1f") }, { _T("%.1f %s"), _T("%+.1f %s") } },
+    { { "%.1f", "%+.1f" }, { "%.1f %s", "%+.1f %s" } },
     //      1 0 0       1 0 1            1 1 0          1 1 1
-    { { _T("%.0f"), _T("%+.0f") }, { _T("%.0f %s"), _T("%+.0f %s") } }
+    { { "%.0f", "%+.0f" }, { "%.0f %s", "%+.0f %s" } }
   };
 
   return format[unit == Unit::FEET_PER_MINUTE]
@@ -204,10 +204,10 @@ FormatTemperature(char *buffer, double value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.0f %s"),
+    StringFormatUnsafe(buffer, "%.0f %s",
                        (double)value, Units::GetUnitName(unit));
   else
-    StringFormatUnsafe(buffer, _T("%.0f"), (double)value);
+    StringFormatUnsafe(buffer, "%.0f", (double)value);
 }
 
 void
@@ -229,9 +229,9 @@ const char*
 GetPressureFormat(Unit unit, bool include_unit)
 {
   if (include_unit)
-    return unit == Unit::INCH_MERCURY ? _T("%.2f %s") : _T("%.f %s");
+    return unit == Unit::INCH_MERCURY ? "%.2f %s" : "%.f %s";
   else
-    return unit == Unit::INCH_MERCURY ? _T("%.2f") : _T("%.f");
+    return unit == Unit::INCH_MERCURY ? "%.2f" : "%.f";
 }
 
 double

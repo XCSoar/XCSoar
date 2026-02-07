@@ -38,7 +38,7 @@ LargeTextWindow::GetRowCount() const
 {
   const char *str = value.c_str();
   unsigned row_count = 1;
-  while ((str = StringFind(str, _T('\n'))) != nullptr) {
+  while ((str = StringFind(str, '\n')) != nullptr) {
     str++;
     row_count++;
   }

@@ -60,7 +60,7 @@ Directory::Exists(Path path) noexcept
 static bool
 IsDots(const char *str) noexcept
 {
-  return StringIsEqual(str, _T(".")) || StringIsEqual(str, _T(".."));
+  return StringIsEqual(str, ".") || StringIsEqual(str, "..");
 }
 #endif
 
@@ -83,7 +83,7 @@ checkFilter(const char *filename, const char *filter) noexcept
 
 static bool
 ScanFiles(File::Visitor &visitor, Path sPath,
-          const char* filter = _T("*"))
+          const char* filter = "*")
 {
   char DirPath[MAX_PATH];
   char FileName[MAX_PATH];
@@ -95,7 +95,7 @@ ScanFiles(File::Visitor &visitor, Path sPath,
     DirPath[0] = 0;
 
   // "/test/data/something/"
-  strcat(DirPath, _T(DIR_SEPARATOR_S));
+  strcat(DirPath, DIR_SEPARATOR_S);
   strcpy(FileName, DirPath);
 
   // "/test/data/something/*.igc"
@@ -145,7 +145,7 @@ ScanFiles(File::Visitor &visitor, Path sPath,
 
 static bool
 ScanDirectories(File::Visitor &visitor, bool recursive,
-                Path sPath, const char* filter = _T("*"))
+                Path sPath, const char* filter = "*")
 {
 #ifdef HAVE_POSIX
   DIR *dir = opendir(sPath.c_str());
@@ -160,7 +160,7 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   struct dirent *ent;
   while ((ent = readdir(dir)) != nullptr) {
     // omit '.', '..' and any other files/directories starting with '.'
-    if (*ent->d_name == _T('.'))
+    if (*ent->d_name == '.')
       continue;
 
     strcpy(FileName + FileNameLength, ent->d_name);
@@ -203,9 +203,9 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     return true;
 
   // "test/data/something/"
-  strcat(DirPath, _T(DIR_SEPARATOR_S));
+  strcat(DirPath, DIR_SEPARATOR_S);
   // "test/data/something/*"
-  strcat(FileName, _T(DIR_SEPARATOR_S "*"));
+  strcat(FileName, DIR_SEPARATOR_S "*");
 
   // Find the first file
   WIN32_FIND_DATA FindFileData;

@@ -267,9 +267,9 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_GR_TE
   {
-    _T("Final GR (TE) deprecated"),
-    _T("---"),
-    _T("Deprecated, there is no TE compensation on GR, you should switch to the \"Final GR\" info box."),
+    "Final GR (TE) deprecated",
+    "---",
+    "Deprecated, there is no TE compensation on GR, you should switch to the \"Final GR\" info box.",
     UpdateInfoBoxFinalGR,
   },
 

@@ -95,7 +95,7 @@ GetEnum(std::string_view key, T &value) noexcept
 static inline void
 Set(std::string_view key, bool value) noexcept
 {
-  Set(key, value ? _T("1") : _T("0"));
+  Set(key, value ? "1" : "0");
 }
 
 void

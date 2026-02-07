@@ -12,7 +12,7 @@
 class TestJob : public Job {
 public:
   virtual void Run(OperationEnvironment &env) {
-    env.SetText(_T("Working..."));
+    env.SetText("Working...");
     env.SetProgressRange(30);
     for (unsigned i = 0; i < 30 && !env.IsCancelled(); ++i) {
       env.SetProgressPosition(i);
@@ -25,5 +25,5 @@ static void
 Main(TestMainWindow &main_window)
 {
   TestJob job;
-  JobDialog(main_window, *dialog_look, _T("RunJobDialog"), job);
+  JobDialog(main_window, *dialog_look, "RunJobDialog", job);
 }

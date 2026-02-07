@@ -42,7 +42,7 @@ public:
   using UI::SingleWindow::SingleWindow;
 
   void Create(PixelSize size) {
-    SingleWindow::Create(_T("RunCanvas"), size);
+    SingleWindow::Create("RunCanvas", size);
 
     PixelRect rc = GetClientRect();
 
@@ -54,7 +54,7 @@ public:
     button_rc.left += 5;
     button_rc.right = button_rc.left + 65;
 
-    buffer_button.Create(*this, *button_look, _T("Buffer"), button_rc,
+    buffer_button.Create(*this, *button_look, "Buffer", button_rc,
                          WindowStyle(),
                          [this](){
                            buffered = !buffered;
@@ -70,7 +70,7 @@ public:
     button_rc.right = rc.right - 5;
     button_rc.left = button_rc.right - 65;
 
-    close_button.Create(*this, *button_look, _T("Close"), button_rc,
+    close_button.Create(*this, *button_look, "Close", button_rc,
                         WindowStyle(),
                         [this](){ Close(); });
   }
@@ -105,7 +105,7 @@ private:
                          std::min(width, height) / 3,
                      Angle::Zero(), Angle::Degrees(90),
                      false);
-      label = _T("segment 0-90 horizon=false");
+      label = "segment 0-90 horizon=false";
       break;
 
     case 1:
@@ -113,13 +113,13 @@ private:
                          std::min(width, height) / 3,
                      Angle::Degrees(45), Angle::Degrees(180),
                      true);
-      label = _T("segment 45-180 horizon=true");
+      label = "segment 45-180 horizon=true";
       break;
 
     case 2:
       canvas.DrawCircle(center,
                         std::min(width, height) / 3);
-      label = _T("circle");
+      label = "circle";
       break;
 
     case 3:
@@ -132,20 +132,20 @@ private:
       button_renderer.DrawButton(canvas, rc,
                                  page == 4 ? ButtonState::PRESSED : ButtonState::ENABLED);
       label = page == 4
-        ? _T("button down=true") : _T("button down=false");
+        ? "button down=true" : "button down=false";
     }
       break;
 
     case 5:
       canvas.Select(red_brush);
       canvas.DrawPolygon(p1, 3);
-      label = _T("big polygon");
+      label = "big polygon";
       break;
 
     case 6:
       canvas.Select(red_brush);
       canvas.DrawPolygon(p2, 3);
-      label = _T("huge polygon");
+      label = "huge polygon";
       break;
 
     default:
@@ -158,7 +158,7 @@ private:
     canvas.DrawText({5, 5}, label);
 #ifndef ENABLE_OPENGL
     canvas.DrawText({5, 25},
-                    buffered ? _T("buffered") : _T("not buffered"));
+                    buffered ? "buffered" : "not buffered");
 #endif
   }
 

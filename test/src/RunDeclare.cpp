@@ -33,13 +33,13 @@ PrintMoreUsage()
   const struct DeviceRegister *driver;
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
     if (driver->HasPassThrough())
-      fprintf(stderr, _T("\t%s\n"), driver->name);
+      fprintf(stderr, "\t%s\n", driver->name);
 
   fputs("Where DRIVER is one of:\n", stderr);
 
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
     if (driver->CanDeclare())
-      fprintf(stderr, _T("\t%s\n"), driver->name);
+      fprintf(stderr, "\t%s\n", driver->name);
 }
 
 bool
@@ -117,19 +117,19 @@ try {
   }
 
   LoggerSettings logger_settings;
-  logger_settings.pilot_name = _T("Foo Bar");
+  logger_settings.pilot_name = "Foo Bar";
   Plane plane;
-  plane.registration = _T("D-3003");
-  plane.competition_id = _T("33");
-  plane.type = _T("Cirrus");
+  plane.registration = "D-3003";
+  plane.competition_id = "33";
+  plane.type = "Cirrus";
 
   Declaration declaration(logger_settings, plane, NULL);
 
-  declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
+  declaration.Append(MakeWaypoint("Bergneustadt", 488,
                                   7.7061111111111114, 51.051944444444445));
-  declaration.Append(MakeWaypoint(_T("Foo"), 488, 8, 52));
-  declaration.Append(MakeWaypoint(_T("Bar"), 488, 7.5, 50));
-  declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
+  declaration.Append(MakeWaypoint("Foo", 488, 8, 52));
+  declaration.Append(MakeWaypoint("Bar", 488, 7.5, 50));
+  declaration.Append(MakeWaypoint("Bergneustadt", 488,
                                   7.7061111111111114, 51.051944444444445));
 
   Device *through_device = NULL;
@@ -137,12 +137,12 @@ try {
     const struct DeviceRegister *through_driver =
       FindDriverByName(through_name);
     if (through_driver == NULL) {
-      fprintf(stderr, _T("No such driver: %s\n"), through_name);
+      fprintf(stderr, "No such driver: %s\n", through_name);
       return EXIT_FAILURE;
     }
 
     if (!through_driver->HasPassThrough()) {
-      fprintf(stderr, _T("Not a pass-through driver: %s\n"), through_name);
+      fprintf(stderr, "Not a pass-through driver: %s\n", through_name);
       return EXIT_FAILURE;
     }
 
@@ -154,12 +154,12 @@ try {
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
-    fprintf(stderr, _T("No such driver: %s\n"), driver_name);
+    fprintf(stderr, "No such driver: %s\n", driver_name);
     return EXIT_FAILURE;
   }
 
   if (!driver->CanDeclare()) {
-    fprintf(stderr, _T("Not a logger driver: %s\n"), driver_name);
+    fprintf(stderr, "Not a logger driver: %s\n", driver_name);
     return EXIT_FAILURE;
   }
 
@@ -168,7 +168,7 @@ try {
   assert(device != NULL);
 
   if (through_device != NULL && !through_device->EnablePassThrough(env)) {
-    fprintf(stderr, _T("Failed to enable pass-through mode: %s\n"),
+    fprintf(stderr, "Failed to enable pass-through mode: %s\n",
               through_name);
     return EXIT_FAILURE;
   }

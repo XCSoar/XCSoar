@@ -9,7 +9,7 @@ struct TaskBehaviour;
 class OrderedTask;
 class Waypoints;
 
-#define default_task_path _T("Default.tsk")
+#define default_task_path "Default.tsk"
 
 /**
  * Creates an ordered task based on the Default.tsk file

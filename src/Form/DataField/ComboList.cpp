@@ -15,7 +15,7 @@ ComboList::Item::Item(int _int_value,
    display_string(_display_string),
    help_text(_help_text != nullptr
              ? _help_text
-             : _T(""))
+             : "")
 {
 }
 

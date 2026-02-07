@@ -596,16 +596,16 @@ struct TrafficWidget::Windows {
 
   Windows(TrafficWidget &widget, ContainerWindow &parent, const PixelRect &r,
           const ButtonLook &button_look, const FlarmTrafficLook &flarm_look)
-    :zoom_in_button(MakeSymbolButton(parent, button_look, _T("+"), r,
+    :zoom_in_button(MakeSymbolButton(parent, button_look, "+", r,
                                      [&widget](){ widget.ZoomIn(); })),
      zoom_out_button(MakeSymbolButton(parent, button_look,
-                                    _T("-"), r,
+                                    "-", r,
                                       [&widget](){ widget.ZoomOut(); })),
      previous_item_button(MakeSymbolButton(parent, button_look,
-                                           _T("<"), r,
+                                           "<", r,
                                            [&widget](){ widget.PreviousTarget(); })),
      next_item_button(MakeSymbolButton(parent, button_look,
-                                       _T(">"), r,
+                                       ">", r,
                                        [&widget](){ widget.NextTarget(); })),
      details_button(parent, button_look,
                     _("Details"), r, WindowStyle(),
@@ -842,23 +842,23 @@ FlarmTrafficControl::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 bool
 FlarmTrafficControl::OnMouseGesture(const char* gesture)
 {
-  if (StringIsEqual(gesture, _T("U"))) {
+  if (StringIsEqual(gesture, "U")) {
     ZoomIn();
     return true;
   }
-  if (StringIsEqual(gesture, _T("D"))) {
+  if (StringIsEqual(gesture, "D")) {
     ZoomOut();
     return true;
   }
-  if (StringIsEqual(gesture, _T("UD"))) {
+  if (StringIsEqual(gesture, "UD")) {
     SetAutoZoom(true);
     return true;
   }
-  if (StringIsEqual(gesture, _T("DR"))) {
+  if (StringIsEqual(gesture, "DR")) {
     OpenDetails();
     return true;
   }
-  if (StringIsEqual(gesture, _T("RL"))) {
+  if (StringIsEqual(gesture, "RL")) {
     SwitchData();
     return true;
   }

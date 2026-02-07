@@ -190,8 +190,8 @@ LeonardoCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused
 }
 
 const struct DeviceRegister leonardo_driver = {
-  _T("Leonardo"),
-  _T("Digifly Leonardo"),
+  "Leonardo",
+  "Digifly Leonardo",
   0,
   LeonardoCreateOnPort,
 };

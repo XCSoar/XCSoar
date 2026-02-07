@@ -45,7 +45,7 @@ SoundUtil::Play(JNIEnv *env, jobject context, const char *name)
 bool
 SoundUtil::PlayExternal(JNIEnv *env, jobject context, const char *path)
 {
-  AllocatedPath absolutePath = LocalPath(_T(path));
+  AllocatedPath absolutePath = LocalPath(path);
   Java::String paramName(env, absolutePath.c_str());
   return env->CallStaticBooleanMethod(cls, playExternal_method, context,
                                       paramName.Get());

@@ -5,21 +5,21 @@
 #include "util/Macros.hpp"
 
 static const char *const contest_to_string[] = {
-  _T("OLC Sprint"),
-  _T("OLC FAI"),
-  _T("OLC Classic"),
-  _T("OLC League"),
-  _T("OLC Plus"),
-  _T("XContest"),
-  _T("DHV-XC"),
-  _T("SIS-AT"),
-  _T("DMSt"),
-  _T("WeGlide FREE"),
-  _T("WeGlide Distance"),
-  _T("WeGlide FAI"),
-  _T("WeGlide O&R"),
-  _T("Charron"),
-  _T("None"),
+  "OLC Sprint",
+  "OLC FAI",
+  "OLC Classic",
+  "OLC League",
+  "OLC Plus",
+  "XContest",
+  "DHV-XC",
+  "SIS-AT",
+  "DMSt",
+  "WeGlide FREE",
+  "WeGlide Distance",
+  "WeGlide FAI",
+  "WeGlide O&R",
+  "Charron",
+  "None",
 };
 
 const char*

@@ -45,13 +45,13 @@ public:
   using UI::SingleWindow::SingleWindow;
 
   void Create(PixelSize size) {
-    SingleWindow::Create(_T("Test"), size);
+    SingleWindow::Create("Test", size);
 
     WindowStyle style;
     style.Disable();
 
     const PixelRect rc = GetClientRect();
-    close_button.Create(*this, *button_look, _T("Close"), GetButtonRect(rc),
+    close_button.Create(*this, *button_look, "Close", GetButtonRect(rc),
                         WindowStyle(),
                         [this](){ Close(); });
     test_window.Create(*this, rc, style);

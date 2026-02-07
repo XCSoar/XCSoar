@@ -157,7 +157,7 @@ ShowPortMonitor(DeviceDescriptor &device)
 
   std::array<char, 64> buffer;
   StaticString<128> caption;
-  caption.Format(_T("%s: %s"), _("Port monitor"),
+  caption.Format("%s: %s", _("Port monitor"),
                  device.GetConfig().GetPortName(buffer.data(), buffer.size()));
 
   TWidgetDialog<PortMonitorWidget>

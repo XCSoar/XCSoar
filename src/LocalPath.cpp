@@ -78,7 +78,7 @@ SetPrimaryDataPath(Path path) noexcept
   data_paths.emplace_front(path);
 
 #ifndef ANDROID
-  cache_path = LocalPath(_T("cache"));
+  cache_path = LocalPath("cache");
 #endif
 }
 
@@ -92,7 +92,7 @@ SetSingleDataPath(Path path) noexcept
   data_paths.emplace_front(path);
 
 #ifndef ANDROID
-  cache_path = LocalPath(_T("cache"));
+  cache_path = LocalPath("cache");
 #endif
 }
 
@@ -124,7 +124,7 @@ RelativePath(Path path) noexcept
   return path.RelativeTo(GetPrimaryDataPath());
 }
 
-static constexpr char local_path_code[] = _T("%LOCAL_PATH%\\");
+static constexpr char local_path_code[] = "%LOCAL_PATH%\\";
 
 [[gnu::pure]]
 static const char *
@@ -134,7 +134,7 @@ AfterLocalPathCode(const char *p) noexcept
   if (p == nullptr)
     return nullptr;
 
-  while (*p == _T('/') || *p == _T('\\'))
+  while (*p == '/' || *p == '\\')
     ++p;
 
   if (StringIsEmpty(p))
@@ -202,7 +202,7 @@ FindDataPaths() noexcept
 
   /* Kobo: hard-coded product data path */
   if constexpr (IsKobo()) {
-    result.emplace_back(_T(KOBO_USER_DATA DIR_SEPARATOR_S PRODUCT_DATA_DIR));
+    result.emplace_back(KOBO_USER_DATA DIR_SEPARATOR_S PRODUCT_DATA_DIR);
     return result;
   }
 
@@ -357,7 +357,7 @@ InitialiseDataPath()
 
   // TODO: delete the old cache directory in product data directory?
 #else
-  cache_path = LocalPath(_T("cache"));
+  cache_path = LocalPath("cache");
 #endif
 }
 

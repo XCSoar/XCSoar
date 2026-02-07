@@ -7,5 +7,5 @@
 void
 MessageOperationEnvironment::SetErrorMessage(const char *text) noexcept
 {
-  ShowMessageBox(text, _T(""), MB_OK|MB_ICONERROR);
+  ShowMessageBox(text, "", MB_OK|MB_ICONERROR);
 }

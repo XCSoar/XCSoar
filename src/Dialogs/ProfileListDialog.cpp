@@ -109,7 +109,7 @@ ProfileListWidget::UpdateList()
   list.clear();
 
   ProfileFileVisitor pfv(list);
-  VisitDataFiles(_T("*.prf"), pfv);
+  VisitDataFiles("*.prf", pfv);
 
   unsigned len = list.size();
 
@@ -173,7 +173,7 @@ ProfileListWidget::NewClicked()
 
   StaticString<80> filename;
   filename = name;
-  filename += _T(".prf");
+  filename += ".prf";
 
   const auto path = LocalPath(filename);
   if (!File::CreateExclusive(path)) {
@@ -240,7 +240,7 @@ ProfileListWidget::CopyClicked()
 
   StaticString<80> new_filename;
   new_filename = new_name;
-  new_filename += _T(".prf");
+  new_filename += ".prf";
 
   const auto new_path = LocalPath(new_filename);
 

@@ -27,16 +27,16 @@ try {
   way_points.Optimise();
   printf("Size %d\n", way_points.size());
 
-  way_points.VisitNamePrefix(_T(""), [](const auto &p){
+  way_points.VisitNamePrefix("", [](const auto &p){
     const auto &wp = *p;
-    fprintf(stdout, _T("%s, %f, %f, "), wp.name.c_str(),
+    fprintf(stdout, "%s, %f, %f, ", wp.name.c_str(),
               wp.location.latitude.Degrees(),
               wp.location.longitude.Degrees());
 
     if (wp.has_elevation)
-      fprintf(stdout, _T("%.0fm\n"), wp.elevation);
+      fprintf(stdout, "%.0fm\n", wp.elevation);
     else
-      fprintf(stdout, _T("?\n"));
+      fprintf(stdout, "?\n");
   });
 
   return EXIT_SUCCESS;

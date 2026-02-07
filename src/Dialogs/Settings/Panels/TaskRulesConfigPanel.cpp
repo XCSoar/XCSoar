@@ -46,13 +46,13 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   RowFormWidget::Prepare(parent, rc);
 
   AddFloat(_("Start max. speed"), _("Maximum speed allowed in start observation zone. Set to 0 for no limit."),
-           _T("%.0f %s"), _T("%.0f"), 0, 300, 5, false, UnitGroup::HORIZONTAL_SPEED,
+           "%.0f %s", "%.0f", 0, 300, 5, false, UnitGroup::HORIZONTAL_SPEED,
            task_behaviour.ordered_defaults.start_constraints.max_speed);
   SetExpertRow(StartMaxSpeed);
 
   AddFloat(_("Start max. speed margin"),
            _("Maximum speed above maximum start speed to tolerate. Set to 0 for no tolerance."),
-           _T("%.0f %s"), _T("%.0f"), 0, 300, 5, false, UnitGroup::HORIZONTAL_SPEED,
+           "%.0f %s", "%.0f", 0, 300, 5, false, UnitGroup::HORIZONTAL_SPEED,
            task_behaviour.start_margins.max_speed_margin);
   SetExpertRow(StartMaxSpeedMargin);
 
@@ -62,13 +62,13 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   AddFloat(_("Start max. height"),
            _("Maximum height based on start height reference (AGL or MSL) while starting the task. "
                "Set to 0 for no limit."),
-           _T("%.0f %s"), _T("%.0f"), 0, 10000, 50, false, UnitGroup::ALTITUDE,
+           "%.0f %s", "%.0f", 0, 10000, 50, false, UnitGroup::ALTITUDE,
            task_behaviour.ordered_defaults.start_constraints.max_height);
   SetExpertRow(StartMaxHeight);
 
   AddFloat(_("Start max. height margin"),
            _("Maximum height above maximum start height to tolerate. Set to 0 for no tolerance."),
-           _T("%.0f %s"), _T("%.0f"), 0, 10000, 50, false, UnitGroup::ALTITUDE,
+           "%.0f %s", "%.0f", 0, 10000, 50, false, UnitGroup::ALTITUDE,
            task_behaviour.start_margins.max_height_margin);
   SetExpertRow(StartMaxHeightMargin);
 
@@ -92,7 +92,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task. "
                "Set to 0 for no limit."),
-           _T("%.0f %s"), _T("%.0f"), 0, 10000, 50, false, UnitGroup::ALTITUDE,
+           "%.0f %s", "%.0f", 0, 10000, 50, false, UnitGroup::ALTITUDE,
            task_behaviour.ordered_defaults.finish_constraints.min_height);
   SetExpertRow(FinishMinHeight);
 

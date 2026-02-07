@@ -1783,7 +1783,7 @@ TestACD()
   ok1(equals(nmea_info.settings.transponder_code.GetCode(),
              TransponderCode{07000}.GetCode()));
   ok1(StringIsEqual(nmea_info.settings.transponder_mode.GetModeString(),
-                    _T("ALT")));
+                    "ALT"));
   ok1(equals(nmea_info.settings.transponder_mode.mode, TransponderMode::Mode::ALT));
 
   ok1(device->ParseNMEA("$PAAVS,XPDR,7260,1,0,1762,1,0*66",nmea_info));
@@ -1833,17 +1833,17 @@ TestDeclare(const struct DeviceRegister &driver)
   ok1(device != NULL);
 
   LoggerSettings logger_settings;
-  logger_settings.pilot_name = _T("Foo Bar");
+  logger_settings.pilot_name = "Foo Bar";
   Plane plane;
-  plane.registration = _T("D-3003");
-  plane.competition_id = _T("33");
-  plane.type = _T("Cirrus");
+  plane.registration = "D-3003";
+  plane.competition_id = "33";
+  plane.type = "Cirrus";
 
   Declaration declaration(logger_settings, plane, NULL);
   const GeoPoint gp(Angle::Degrees(7.7061111111111114),
                     Angle::Degrees(51.051944444444445));
   Waypoint wp(gp);
-  wp.name = _T("Foo");
+  wp.name = "Foo";
   wp.elevation = 123;
   wp.has_elevation = true;
   declaration.Append(wp);

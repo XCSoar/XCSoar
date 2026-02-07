@@ -47,7 +47,7 @@ private:
   static const char *ToDisplayString(DeviceConfig::PortType type) noexcept {
     switch (type) {
     case DeviceConfig::PortType::RFCOMM:
-      return _T("Bluetooth");
+      return "Bluetooth";
 
     case DeviceConfig::PortType::BLE_HM10:
       return _("BLE port");

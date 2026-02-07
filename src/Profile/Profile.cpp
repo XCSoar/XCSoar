@@ -90,7 +90,7 @@ Profile::SetFiles(Path override_path) noexcept
         startProfileFile = LocalPath(override_path);
       else {
         std::string t(override_path.c_str());
-        t += _T(".prf");
+        t += ".prf";
         startProfileFile = LocalPath(t.c_str());
       }
     } else
@@ -99,7 +99,7 @@ Profile::SetFiles(Path override_path) noexcept
   }
 
   // Set the default profile file
-  startProfileFile = LocalPath(_T(XCSPROFILE));
+  startProfileFile = LocalPath(XCSPROFILE);
 }
 
 AllocatedPath

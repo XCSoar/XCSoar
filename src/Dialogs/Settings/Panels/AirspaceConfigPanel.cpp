@@ -166,12 +166,12 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent,
 
   AddFloat(_("Clip altitude"),
            _("For clip airspace mode, this is the altitude below which airspace is displayed."),
-           _T("%.0f %s"), _T("%.0f"), 0, 20000, 100, false,
+           "%.0f %s", "%.0f", 0, 20000, 100, false,
            UnitGroup::ALTITUDE, renderer.clip_altitude);
 
   AddFloat(_("Margin"),
            _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
-           _T("%.0f %s"), _T("%.0f"), 0, 10000, 100, false,
+           "%.0f %s", "%.0f", 0, 10000, 100, false,
            UnitGroup::ALTITUDE, computer.warnings.altitude_warning_margin);
 
   AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."),

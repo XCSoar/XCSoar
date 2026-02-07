@@ -13,6 +13,6 @@ static void
 Main([[maybe_unused]] TestMainWindow &main_window)
 {
   unsigned value;
-  if (NumberEntryDialog(_T("The caption"), value, 6))
+  if (NumberEntryDialog("The caption", value, 6))
     printf("%u\n", value);
 }

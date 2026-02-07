@@ -241,10 +241,10 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const noexcept
         const auto name_i = skylines_data->user_names.find(i.first);
         const char *name = name_i != skylines_data->user_names.end()
           ? name_i->second.c_str()
-          : _T("");
+          : "";
 
         StaticString<128> buffer;
-        buffer.Format(_T("%s [%um]"), name, i.second.altitude);
+        buffer.Format("%s [%um]", name, i.second.altitude);
 
         TextInBoxMode mode;
         mode.shape = LabelShape::OUTLINED;

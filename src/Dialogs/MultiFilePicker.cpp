@@ -57,7 +57,7 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
 #endif
 
   // Create button first; centralise caption logic in `UpdateButtons`.
-  Button *select_button = dialog.AddButton(_T(""), [](){});
+  Button *select_button = dialog.AddButton("", [](){});
 
   std::function<void()> UpdateButtons = [file_widget, select_button]() {
     select_button->SetCaption(file_widget->GetSelectedPaths().empty()

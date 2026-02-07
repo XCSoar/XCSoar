@@ -185,7 +185,7 @@ PDTSM(NMEAInputLine &line, [[maybe_unused]] NMEAInfo &info)
   buffer.SetASCII(message);
 
   // todo duration handling
-  Message::AddMessage(_T("VEGA:"), buffer);
+  Message::AddMessage("VEGA:", buffer);
 
   return true;
 }

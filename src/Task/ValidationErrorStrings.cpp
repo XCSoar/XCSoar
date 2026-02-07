@@ -40,7 +40,7 @@ getTaskValidationErrors(const TaskValidationErrorSet v)
     const char *current = gettext(validation_error_strings[i]);
     if (strlen(err) + strlen(current) + 1 < MAX_PATH) {
       strcat(err, current);
-      strcat(err, _T("\n"));
+      strcat(err, "\n");
     }
   }
 

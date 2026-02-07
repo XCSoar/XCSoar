@@ -20,8 +20,8 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
                        const CuSonde &cu_sonde)
 {
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.SetXLabel(_T("T"), Units::GetTemperatureName());
-  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+  chart.SetXLabel("T", Units::GetTemperatureName());
+  chart.SetYLabel("h", Units::GetAltitudeName());
   chart.Begin();
 
   int hmin = 10000;
@@ -103,15 +103,15 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     if (ipos > 2) {
       if (!labelDry) {
         chart.DrawLabel({cu_sonde.cslevels[i + 1].dry_temperature.ToUser(), alt},
-                        _T("DALR"));
+                        "DALR");
         labelDry = true;
       } else if (!labelAir) {
         chart.DrawLabel({cu_sonde.cslevels[i + 1].air_temperature.ToUser(), alt},
-                        _T("Air"));
+                        "Air");
         labelAir = true;
       } else if (!labelDew && has_dewpoint) {
         chart.DrawLabel({cu_sonde.cslevels[i + 1].dewpoint.ToUser(), alt},
-                        _T("Dew"));
+                        "Dew");
         labelDew = true;
       }
     }
@@ -123,7 +123,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 void
 TemperatureChartCaption(char *sTmp, const CuSonde &cu_sonde)
 {
-  StringFormatUnsafe(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
+  StringFormatUnsafe(sTmp, "%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n",
                      _("Thermal height"),
                      (double)Units::ToUserAltitude(cu_sonde.thermal_height),
                      Units::GetAltitudeName(),

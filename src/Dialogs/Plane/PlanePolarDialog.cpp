@@ -112,7 +112,7 @@ PlanePolarWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   Add(std::make_unique<PolarShapeEditWidget>(plane.polar_shape, listener));
 
   AddFloat(_("Reference Mass"), _("Reference mass of the polar."),
-           _T("%.0f %s"), _T("%.0f"),
+           "%.0f %s", "%.0f",
            0, 1000, 5, false,
            UnitGroup::MASS, plane.polar_shape.reference_mass);
 }
@@ -180,7 +180,7 @@ inline void
 PlanePolarWidget::ImportClicked() noexcept
 {
   // let the user select
-  const auto path = FilePicker(_("Load Polar From File"), _T("*.plr\0"));
+  const auto path = FilePicker(_("Load Polar From File"), "*.plr\0");
   if (path == nullptr)
     return;
 
@@ -210,7 +210,7 @@ PlanePolarWidget::ImportClicked() noexcept
 void
 PlanePolarWidget::OnModified([[maybe_unused]] DataField &df) noexcept
 {
-  plane.polar_name = _T("Custom");
+  plane.polar_name = "Custom";
   UpdatePolarLabel();
   UpdateInvalidLabel();
 }
@@ -219,7 +219,7 @@ bool
 dlgPlanePolarShowModal(Plane &_plane) noexcept
 {
   StaticString<128> caption;
-  caption.Format(_T("%s: %s"), _("Plane Polar"), _plane.registration.c_str());
+  caption.Format("%s: %s", _("Plane Polar"), _plane.registration.c_str());
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<PlanePolarWidget>

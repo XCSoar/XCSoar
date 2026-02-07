@@ -39,7 +39,7 @@ AudioConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Master Volume"),
              _("The overall audio output volume."),
-             _T("%d %%"), _T("%d"),
+             "%d %%", "%d",
              0, VolumeController::GetMaxValue(), 1, settings.master_volume);
 }
 

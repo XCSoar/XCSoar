@@ -21,15 +21,15 @@ BarographCaption(char *sTmp, const FlightStatistics &fs)
 {
   const std::lock_guard lock{fs.mutex};
   if (!fs.altitude_ceiling.HasResult() || fs.altitude_base.IsEmpty()) {
-    sTmp[0] = _T('\0');
+    sTmp[0] = '\0';
   } else if (fs.altitude_ceiling.GetCount() < 4) {
-    StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
+    StringFormatUnsafe(sTmp, "%s:\r\n  %.0f-%.0f %s",
                        _("Working band"),
                        (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
                        (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
                        Units::GetAltitudeName());
   } else {
-    StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
+    StringFormatUnsafe(sTmp, "%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr",
                        _("Working band"),
                        (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
                        (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
@@ -99,8 +99,8 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
                 const ProtectedTaskManager *_task)
 {
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.SetXLabel(_T("t"), _T("hr"));
-  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+  chart.SetXLabel("t", "hr");
+  chart.SetYLabel("h", Units::GetAltitudeName());
   chart.Begin();
 
   if (!fs.altitude.HasResult()) {

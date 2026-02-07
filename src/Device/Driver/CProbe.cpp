@@ -124,8 +124,8 @@ CProbeCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]]
 }
 
 const struct DeviceRegister c_probe_driver = {
-  _T("CProbe"),
-  _T("Compass C-Probe"),
+  "CProbe",
+  "Compass C-Probe",
   0,
   CProbeCreateOnPort,
 };

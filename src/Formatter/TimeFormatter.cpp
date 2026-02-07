@@ -30,12 +30,12 @@ void
 FormatTime(char *buffer, FloatDuration _time) noexcept
 {
   if (_time.count() < 0) {
-    *buffer++ = _T('-');
+    *buffer++ = '-';
     _time = -_time;
   }
 
   const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
-  sprintf(buffer, _T("%02u:%02u:%02u"),
+  sprintf(buffer, "%02u:%02u:%02u",
             time.hour, time.minute, time.second);
 }
 
@@ -43,7 +43,7 @@ void
 FormatTimeLong(char *buffer, FloatDuration _time) noexcept
 {
   if (_time.count() < 0) {
-    *buffer++ = _T('-');
+    *buffer++ = '-';
     _time = -_time;
   }
 
@@ -52,7 +52,7 @@ FormatTimeLong(char *buffer, FloatDuration _time) noexcept
   _time -= FloatDuration{trunc(_time.count())};
   unsigned millisecond = uround(_time.count() * 1000);
 
-  sprintf(buffer, _T("%02u:%02u:%02u.%03u"),
+  sprintf(buffer, "%02u:%02u:%02u.%03u",
             time.hour, time.minute, time.second, millisecond);
 }
 
@@ -60,29 +60,29 @@ void
 FormatSignedTimeHHMM(char *buffer, std::chrono::seconds _time) noexcept
 {
   if (_time.count() < 0) {
-    *buffer++ = _T('-');
+    *buffer++ = '-';
     _time = -_time;
   }
 
   const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
-  sprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
+  sprintf(buffer, "%02u:%02u", time.hour, time.minute);
 }
 
 void
 FormatTimeTwoLines(char *buffer1, char *buffer2, std::chrono::seconds _time) noexcept
 {
   if (_time >= std::chrono::hours{24}) {
-    strcpy(buffer1, _T(">24h"));
+    strcpy(buffer1, ">24h");
     buffer2[0] = '\0';
     return;
   }
   if (_time <= -std::chrono::hours{24}) {
-    strcpy(buffer1, _T("<-24h"));
+    strcpy(buffer1, "<-24h");
     buffer2[0] = '\0';
     return;
   }
   if (_time.count() < 0) {
-    *buffer1++ = _T('-');
+    *buffer1++ = '-';
     _time = -_time;
   }
 
@@ -90,10 +90,10 @@ FormatTimeTwoLines(char *buffer1, char *buffer2, std::chrono::seconds _time) noe
 
   if (time.hour > 0) { // hh:mm, ss
     // Set Value
-    sprintf(buffer1, _T("%02u:%02u"), time.hour, time.minute);
-    sprintf(buffer2, _T("%02u"), time.second);
+    sprintf(buffer1, "%02u:%02u", time.hour, time.minute);
+    sprintf(buffer2, "%02u", time.second);
   } else { // mm'ss
-    sprintf(buffer1, _T("%02u'%02u"), time.minute, time.second);
+    sprintf(buffer1, "%02u'%02u", time.minute, time.second);
     buffer2[0] = '\0';
   }
 }
@@ -178,16 +178,16 @@ FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
 
   // Output
   if (timespan.count() < 0) {
-    *buffer = _T('-');
+    *buffer = '-';
     buffer++;
   }
 
-  *buffer = _T('\0');
+  *buffer = '\0';
 
   StaticString<16> component_buffer;
 
   if (show_days) {
-    component_buffer.Format(_T("%u days"), days);
+    component_buffer.Format("%u days", days);
     strcat(buffer, component_buffer);
   }
 
@@ -195,7 +195,7 @@ FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
     if (!StringIsEmpty(buffer))
       strcat(buffer, separator);
 
-    component_buffer.Format(_T("%u h"), hours);
+    component_buffer.Format("%u h", hours);
     strcat(buffer, component_buffer);
   }
 
@@ -203,7 +203,7 @@ FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
     if (!StringIsEmpty(buffer))
       strcat(buffer, separator);
 
-    component_buffer.Format(_T("%u min"), minutes);
+    component_buffer.Format("%u min", minutes);
     strcat(buffer, component_buffer);
   }
 
@@ -211,7 +211,7 @@ FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
     if (!StringIsEmpty(buffer))
       strcat(buffer, separator);
 
-    component_buffer.Format(_T("%u sec"), seconds);
+    component_buffer.Format("%u sec", seconds);
     strcat(buffer, component_buffer);
   }
 }

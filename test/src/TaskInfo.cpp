@@ -61,7 +61,7 @@ try {
     if (task != NULL) {
       Print(*task);
     } else {
-      fprintf(stderr, _T("Failed to load %s\n"), path.c_str());
+      fprintf(stderr, "Failed to load %s\n", path.c_str());
       result = EXIT_FAILURE;
     }
 

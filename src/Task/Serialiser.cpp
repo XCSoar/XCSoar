@@ -26,16 +26,16 @@ GetName(TaskPointType type, bool mode_optional_start)
     gcc_unreachable();
 
   case TaskPointType::START:
-    return mode_optional_start ? _T("OptionalStart") : _T("Start");
+    return mode_optional_start ? "OptionalStart" : "Start";
 
   case TaskPointType::AST:
-    return _T("Turn");
+    return "Turn";
 
   case TaskPointType::AAT:
-    return _T("Area");
+    return "Area";
 
   case TaskPointType::FINISH:
-    return _T("Finish");
+    return "Finish";
   }
 
   gcc_unreachable();
@@ -215,23 +215,23 @@ GetTaskFactoryType(TaskFactoryType type)
 {
   switch(type) {
   case TaskFactoryType::FAI_GENERAL:
-    return _T("FAIGeneral");
+    return "FAIGeneral";
   case TaskFactoryType::FAI_TRIANGLE:
-    return _T("FAITriangle");
+    return "FAITriangle";
   case TaskFactoryType::FAI_OR:
-    return _T("FAIOR");
+    return "FAIOR";
   case TaskFactoryType::FAI_GOAL:
-    return _T("FAIGoal");
+    return "FAIGoal";
   case TaskFactoryType::RACING:
-    return _T("RT");
+    return "RT";
   case TaskFactoryType::AAT:
-    return _T("AAT");
+    return "AAT";
   case TaskFactoryType::MAT:
-    return _T("MAT");
+    return "MAT";
   case TaskFactoryType::MIXED:
-    return _T("Mixed");
+    return "Mixed";
   case TaskFactoryType::TOURING:
-    return _T("Touring");
+    return "Touring";
   case TaskFactoryType::COUNT:
     gcc_unreachable();
   }

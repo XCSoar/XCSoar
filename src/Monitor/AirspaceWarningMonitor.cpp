@@ -34,9 +34,9 @@ class AirspaceWarningWidget final
                            AirspaceWarning::State state,
                            const AirspaceInterceptSolution &solution) noexcept {
     if (state == AirspaceWarning::WARNING_INSIDE)
-      buffer.Format(_T("%s: %s"), _("Inside airspace"), airspace.GetName());
+      buffer.Format("%s: %s", _("Inside airspace"), airspace.GetName());
     else
-      buffer.Format(_T("%s: %s (%s)"), _("Near airspace"), airspace.GetName(),
+      buffer.Format("%s: %s (%s)", _("Near airspace"), airspace.GetName(),
                     FormatTimespanSmart(solution.elapsed_time,
                                         2).c_str());
 
@@ -132,7 +132,7 @@ AirspaceWarningMonitor::Check() noexcept
 
     // un-blank the display, play a sound
     ResetUserIdle();
-    PlayResource(_T("IDR_WAV_BEEPBWEEP"));
+    PlayResource("IDR_WAV_BEEPBWEEP");
 
     // show airspace warnings dialog
     if (CommonInterface::GetUISettings().enable_airspace_warning_dialog)
@@ -166,5 +166,5 @@ AirspaceWarningMonitor::Check() noexcept
 
   // un-blank the display, play a sound
   ResetUserIdle();
-  PlayResource(_T("IDR_WAV_BEEPBWEEP"));
+  PlayResource("IDR_WAV_BEEPBWEEP");
 }

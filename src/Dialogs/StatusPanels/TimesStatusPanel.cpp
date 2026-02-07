@@ -37,7 +37,7 @@ TimesStatusPanel::Refresh() noexcept
     const unsigned sunsethours = (int)sun.time_of_sunset;
     const unsigned sunsetmins = (int)((sun.time_of_sunset - double(sunsethours)) * 60);
 
-    temp.Format(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunsethours, sunsetmins);
+    temp.Format("%02u:%02u - %02u:%02u", sunrisehours, sunrisemins, sunsethours, sunsetmins);
     SetText(Daylight, temp);
   } else {
     ClearText(Daylight);
@@ -53,7 +53,7 @@ TimesStatusPanel::Refresh() noexcept
   }
 
   if (basic.date_time_utc.IsDatePlausible()) {
-    temp.Format(_T("%04d-%02d-%02d"), basic.date_time_utc.year,
+    temp.Format("%04d-%02d-%02d", basic.date_time_utc.year,
                 basic.date_time_utc.month, basic.date_time_utc.day);
     SetText(UTCDate, temp);
   } else {

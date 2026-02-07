@@ -54,20 +54,20 @@ NOAADetailsWidget::CreateButtons(WidgetDialog &buttons)
 void
 NOAADetailsWidget::Update()
 {
-  std::string metar_taf = _T("");
+  std::string metar_taf = "";
 
   NOAAFormatter::Format(*station_iterator, metar_taf);
 
   SetText(metar_taf.c_str());
 
   StaticString<100> caption;
-  caption.Format(_T("%s: "), _("METAR and TAF"));
+  caption.Format("%s: ", _("METAR and TAF"));
 
   if (!station_iterator->parsed_metar_available ||
       !station_iterator->parsed_metar.name_available)
     caption += station_iterator->GetCodeT();
   else
-    caption.AppendFormat(_T("%s (%s)"),
+    caption.AppendFormat("%s (%s)",
                          station_iterator->parsed_metar.name.c_str(),
                          station_iterator->GetCodeT());
 

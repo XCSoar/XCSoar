@@ -128,7 +128,7 @@ struct InfoBoxData {
   /**
    * Sets the InfoBox value to the given angle.
    */
-  void SetValue(Angle value, const char *suffix=_T("")) noexcept;
+  void SetValue(Angle value, const char *suffix="") noexcept;
 
   void SetValueFromBearingDifference(Angle delta) noexcept;
 
@@ -199,7 +199,7 @@ struct InfoBoxData {
   /**
    * Sets the InfoBox comment to the given angle.
    */
-  void SetComment(Angle comment, const char *suffix=_T("")) noexcept;
+  void SetComment(Angle comment, const char *suffix="") noexcept;
 
   void SetCommentFromDistance(double value) noexcept;
 
