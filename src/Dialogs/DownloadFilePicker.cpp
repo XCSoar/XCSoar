@@ -24,6 +24,7 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
+#include "system/FileUtil.hpp"
 
 #include <vector>
 
@@ -289,15 +290,35 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 DownloadFilePickerWidget::Download()
 {
+  const int max_subdir_depth = 3; // Allow subdirectories up to this depth
   assert(Net::DownloadManager::IsAvailable());
 
   const unsigned current = GetList().GetCursorIndex();
   assert(current < items.size());
 
   const auto &file = items[current];
-
   try {
-    path = DownloadFile(file.GetURI(), file.GetName());
+    AllocatedPath dest_dir;
+    if (file_type == FileType::RASP) {
+      dest_dir = AllocatedPath::Build("weather", "rasp");
+    } else if (file_type == FileType::MAP) {
+      dest_dir = AllocatedPath("maps");
+    }
+
+    const Path file_path(file.GetName()); //AllocatedPath cannot take nullptr
+
+    if (!file_path.IsValidFilename())
+      throw std::runtime_error("Invalid download filename");
+
+    AllocatedPath relative_path(file_path);
+    if (dest_dir != nullptr) {
+      const auto dest_path = MakeLocalPathRecursively(dest_dir, max_subdir_depth);
+      if (dest_path == nullptr) 
+        throw std::runtime_error("Directory does not exist and could not be created.");
+
+      relative_path = AllocatedPath::Build(Path(dest_dir), file_path);
+    }
+    path = DownloadFile(file.GetURI(), relative_path.c_str());
     if (path != nullptr)
       dialog.SetModalResult(mrOK);
   } catch (...) {

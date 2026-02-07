@@ -113,6 +113,12 @@ LocalPath(const char *file) noexcept
 AllocatedPath
 MakeLocalPath(const char *name)
 {
+  return MakeLocalPath(Path(name));
+}
+
+AllocatedPath
+MakeLocalPath(Path name)
+{
   auto path = LocalPath(name);
   Directory::Create(path);
   return path;
