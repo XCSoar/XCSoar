@@ -24,7 +24,6 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
-#include "system/FileUtil.hpp"
 
 #include <vector>
 
@@ -298,12 +297,7 @@ DownloadFilePickerWidget::Download()
 
   const auto &file = items[current];
   try {
-    AllocatedPath dest_dir;
-    if (file_type == FileType::RASP) {
-      dest_dir = AllocatedPath::Build("weather", "rasp");
-    } else if (file_type == FileType::MAP) {
-      dest_dir = AllocatedPath("maps");
-    }
+    AllocatedPath dest_dir = GetFileTypeDefaultDir(file_type);
 
     const Path file_path(file.GetName()); //AllocatedPath cannot take nullptr
 
