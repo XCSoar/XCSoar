@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:27+0100\n"
+"POT-Creation-Date: 2026-02-06 23:36+0100\n"
 "PO-Revision-Date: 2022-10-02 06:15+0000\n"
 "Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -1630,12 +1630,12 @@ msgstr "澳大利亚"
 #: src/FLARM/Details.cpp:126
 #, no-c-format
 msgid "Unresolved"
-msgstr ""
+msgstr "未解决"
 
 #: src/FLARM/Details.cpp:127
 #, no-c-format
 msgid "Flarm Messaging"
-msgstr ""
+msgstr "FLARM 消息"
 
 #: src/FLARM/Details.cpp:128
 #, fuzzy, no-c-format
@@ -2616,7 +2616,7 @@ msgstr "AAT区域"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
-msgstr ""
+msgstr "PCAS 垂直范围"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
@@ -2624,7 +2624,7 @@ msgstr "AAT区域"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
-msgstr ""
+msgstr "ADSB 垂直范围"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 #: src/Dialogs/Task/AlternatesListDialog.cpp:138
@@ -3140,7 +3140,7 @@ msgstr "粘贴"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "Overwrite all InfoBoxes in this set?"
-msgstr ""
+msgstr "覆盖此集合中的所有 InfoBox？"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "InfoBox paste set"
@@ -3201,7 +3201,7 @@ msgstr "飞机"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 msgid "Data source"
-msgstr ""
+msgstr "数据源"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:212
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
@@ -4046,22 +4046,22 @@ msgstr "电源或电池"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr ""
+msgstr "VOR"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "大坝"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "城堡"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
 #, no-c-format
@@ -5076,17 +5076,17 @@ msgstr "玻璃"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "使用系统设置"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "白底黑字"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "黑底白字"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "Full screen"
@@ -5124,7 +5124,7 @@ msgstr "信息框设置"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
 msgid "Zoom factor for InfoBox title and comment text"
-msgstr ""
+msgstr "InfoBox 标题和注释文本缩放系数"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
 msgid "Tab dialog style"
@@ -5394,7 +5394,7 @@ msgstr "在每个页面上保持一个地图缩放级别。"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
 #, no-c-format
 msgid "Map (north-up)"
-msgstr ""
+msgstr "地图 (北向上)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
@@ -5739,11 +5739,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "XCSoar data path"
-msgstr ""
+msgstr "XCSoar 数据路径"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "Click to view full path"
-msgstr ""
+msgstr "点击查看完整路径"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid "Map database"
@@ -5781,7 +5781,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
 msgid "WPT A/F details"
-msgstr ""
+msgstr "WPT A/F 详情"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 #, fuzzy
@@ -6019,7 +6019,7 @@ msgstr "FLARM交通"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
-msgstr ""
+msgstr "在交通消失后继续显示一段时间。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6404,7 +6404,7 @@ msgstr "指定用于大FAI三角形的阈值。"
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 #, no-c-format
 msgid "95% dist. rule helpers"
-msgstr ""
+msgstr "95% 距离规则辅助"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid ""
@@ -7229,7 +7229,7 @@ msgstr "较少"
 
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:86
 msgid "Refresh"
-msgstr ""
+msgstr "刷新"
 
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:290
 #, fuzzy
@@ -9677,7 +9677,7 @@ msgstr "应答器接收机"
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
 msgid "XPDR Code"
-msgstr ""
+msgstr "XPDR 代码"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
 #, no-c-format
@@ -9687,12 +9687,12 @@ msgstr "当前待机频率"
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
 msgid "Engine CHT"
-msgstr ""
+msgstr "发动机 CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr ""
+msgstr "CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
@@ -9702,7 +9702,7 @@ msgstr "预报温度"
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
 msgid "Engine EGT"
-msgstr ""
+msgstr "发动机 EGT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
 #, no-c-format
@@ -9717,12 +9717,12 @@ msgstr "预报温度"
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "发动机每分钟转数"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
@@ -9732,12 +9732,12 @@ msgstr "每分钟心跳次数。"
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "AAT dT and task ETA"
-msgstr ""
+msgstr "AAT dT 和任务 ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr ""
+msgstr "AAT 增量或 ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -10761,7 +10761,7 @@ msgstr "阾近空域"
 
 #: Data/Input/default.xci:1394
 msgid "Quit XCSoar"
-msgstr ""
+msgstr "退出 XCSoar"
 
 #~ msgid "Create xcsoar-checklist.txt"
 #~ msgstr "创建xcsoar-checklist.txt"
