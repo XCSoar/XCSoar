@@ -3,6 +3,14 @@
 
 #pragma once
 
+#include <vector>
+#include <string>
+
+/**
+ * Get list of URIs of user repositories
+ */
+std::vector<std::string> GetUserRepositoryURIs();
+
 /**
  * Download the repository file.
  *
