@@ -24,6 +24,12 @@ Version 7.44 - not yet released
   - openair: parse transponder codes for airspaces
   - openair: parse station names for airspaces
   - add support for downloadable checklists from repository
+  - update CUP writer to Naviter 2022 specification with all 14 columns,
+    preventing data loss for details and embedded files on save
+  - fix text field truncation in waypoint editor (32-character limit
+    removed) #1541
+  - fix waypoint editor silently discarding altitude and type changes
+  - checklist: use .xcc extension, fix crash with empty profile path #2094
 * ui
   - streamlined, and optimized icons
   - apply dark mode settings to thermal assistant
@@ -74,6 +80,12 @@ Version 7.44 - not yet released
   - improve margin handling for different screen orientations
   - fix OpenGL panels not clearing background
   - fix layout overlap and improve navigation in analysis dialog
+  - fix map tap not dismissing menu when there is no GPS fix #2142
+  - fix selected InfoBox title color in dark mode
+  - show help text directly at the bottom of picker dialogs instead of
+    behind a Help button #2143
+  - fix map scale indicator shifting up when any menu is active
+  - add inline help descriptions for settings that were missing them
 
 * Android
   - fix crash on startup when loading icons on ldpi screens
@@ -84,6 +96,10 @@ Version 7.44 - not yet released
   - add Android 15 edge-to-edge opt-out and theme support
   - enable fullscreen mode with display cutout (notch) support
   - fix Android HiDPI native size handling
+  - add edge-swipe detection to prevent system gestures from interfering
+    with app interactions
+  - add SDK 35 compatibility: 16KB page alignment, modern fullscreen API,
+    edge-to-edge display #2145 #2146 #2147
 * Windows
   - Popupmessages are now shown with full text again
 * macOS
@@ -102,6 +118,8 @@ Version 7.44 - not yet released
   - fix inverted mouse wheel scrolling on Wayland and libinput
   - fix Wayland shutdown hang when window is not visible
   - set cursor to pointer when entering Wayland surface
+  - fix only first audio chime playing on ALSA (PulseAudio) #2113
+  - fix segfault when resizing window with software rendering
 * devices
   - Add driver for Condor 3
   - Add driver for LöFGREN variometer
@@ -126,6 +144,8 @@ Version 7.44 - not yet released
   - Larus: Protocol 0.1.4 add OAT,GLoad,Circling/Cruise
   - SerialPorts: add 230400 baud support
   - Add port 4000 to tcp-client
+  - OpenVario: extend protocol to support gyroscope and acceleration
+    sensors from onboard IMU #2119
 * Polar:
   - LS8-15m: default polar, set to values according to flight manual
   - Imported 32 polars from Ideaflieg, Lk8000 and condorutil
