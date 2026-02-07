@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:27+0100\n"
+"POT-Creation-Date: 2026-02-06 23:36+0100\n"
 "PO-Revision-Date: 2024-06-02 21:16+0000\n"
 "Last-Translator: Philipp Wollschlegel <folken@kabelsalat.ch>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
@@ -1694,12 +1694,12 @@ msgstr "Australien"
 #: src/FLARM/Details.cpp:126
 #, no-c-format
 msgid "Unresolved"
-msgstr ""
+msgstr "Non résolu"
 
 #: src/FLARM/Details.cpp:127
 #, no-c-format
 msgid "Flarm Messaging"
-msgstr ""
+msgstr "Messagerie FLARM"
 
 #: src/FLARM/Details.cpp:128
 #, fuzzy, no-c-format
@@ -2696,7 +2696,7 @@ msgstr "Durée AAT"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
-msgstr ""
+msgstr "Plage verticale PCAS"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
@@ -2704,7 +2704,7 @@ msgstr "Durée AAT"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
-msgstr ""
+msgstr "Plage verticale ADSB"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 #: src/Dialogs/Task/AlternatesListDialog.cpp:138
@@ -3240,7 +3240,7 @@ msgstr "Coller"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "Overwrite all InfoBoxes in this set?"
-msgstr ""
+msgstr "Écraser toutes les InfoBoxes de cet ensemble ?"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "InfoBox paste set"
@@ -3301,7 +3301,7 @@ msgstr "Aéronef"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 msgid "Data source"
-msgstr ""
+msgstr "Source de données"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:212
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
@@ -5296,7 +5296,7 @@ msgstr "Titres des InfoBoxes"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
 msgid "Zoom factor for InfoBox title and comment text"
-msgstr ""
+msgstr "Facteur de zoom pour le titre et commentaire des InfoBoxes"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
 msgid "Tab dialog style"
@@ -5592,7 +5592,7 @@ msgstr "Conserve un réglage de zoom par page."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
 #, no-c-format
 msgid "Map (north-up)"
-msgstr ""
+msgstr "Carte (nord en haut)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
@@ -5965,11 +5965,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "XCSoar data path"
-msgstr ""
+msgstr "Chemin des données XCSoar"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "Click to view full path"
-msgstr ""
+msgstr "Cliquer pour voir le chemin complet"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid "Map database"
@@ -6011,7 +6011,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
 msgid "WPT A/F details"
-msgstr ""
+msgstr "Détails WPT A/F"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 #, fuzzy
@@ -6695,7 +6695,7 @@ msgstr "Définit quel seuil est utilisé pour les \"grands\" triangles FAI."
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 #, no-c-format
 msgid "95% dist. rule helpers"
-msgstr ""
+msgstr "Aides règle 95% dist."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid ""
