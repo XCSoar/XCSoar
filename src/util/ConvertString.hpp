@@ -129,3 +129,24 @@ public:
     return value.c_str();
   }
 };
+
+#ifdef _WIN32
+
+#include <string>
+#include <string_view>
+
+/**
+ * Convert UTF-8 string to UTF-16 (Windows wide string).
+ * Returns empty string on conversion failure.
+ */
+std::wstring
+UTF8ToWide(std::string_view s) noexcept;
+
+/**
+ * Convert UTF-16 (Windows wide string) to UTF-8.
+ * Returns empty string on conversion failure.
+ */
+std::string
+WideToUTF8(std::wstring_view s) noexcept;
+
+#endif
