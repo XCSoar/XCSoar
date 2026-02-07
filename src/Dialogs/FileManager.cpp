@@ -440,7 +440,8 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                              / file.download_status.size));
     } else {
       TCHAR size[32];
-      FormatByteSize(size, ARRAY_SIZE(size), file.download_status.position);
+      FormatByteSize(size, ARRAY_SIZE(size),
+                     static_cast<uint64_t>(file.download_status.position));
       text.Format(_T("%s (%s)"), _("Downloading"), size);
     }
 
