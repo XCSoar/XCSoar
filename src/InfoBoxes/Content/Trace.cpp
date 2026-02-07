@@ -13,12 +13,11 @@
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "ShowAnalysis.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Dialogs/dlgAnalysis.hpp"
 #include "Language/Language.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
-#include "DataComponents.hpp"
 
 [[gnu::const]]
 static PixelRect
@@ -144,28 +143,28 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexc
                        backend_components->protected_task_manager.get());
 }
 
-static bool
-ShowAnalysisBarograph() noexcept
+bool
+InfoBoxContentSpark::HandleClick() noexcept
 {
-  if (!backend_components || !backend_components->glide_computer ||
-      !data_components || !data_components->airspaces ||
-      !data_components->terrain)
-    return false;
-
-  dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
-                       UIGlobals::GetLook(),
-                       CommonInterface::Full(),
-                       *backend_components->glide_computer,
-                       data_components->airspaces.get(),
-                       data_components->terrain.get(),
-                       AnalysisPage::BAROGRAPH);
-  return true;
+  return ShowAnalysis(AnalysisPage::CLIMB);
 }
 
 bool
 InfoBoxContentBarogram::HandleClick() noexcept
 {
-  return ShowAnalysisBarograph();
+  return ShowAnalysis(AnalysisPage::BAROGRAPH);
+}
+
+bool
+InfoBoxContentThermalBand::HandleClick() noexcept
+{
+  return ShowAnalysis(AnalysisPage::THERMAL_BAND);
+}
+
+bool
+InfoBoxContentTaskProgress::HandleClick() noexcept
+{
+  return ShowAnalysis(AnalysisPage::TASK);
 }
 
 void

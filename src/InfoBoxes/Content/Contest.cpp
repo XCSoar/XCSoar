@@ -2,40 +2,19 @@
 // Copyright The XCSoar Project
 
 #include "Contest.hpp"
+#include "ShowAnalysis.hpp"
 #include "InfoBoxes/Data.hpp"
-#include "InfoBoxes/Panel/Panel.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "UIGlobals.hpp"
-#include "Dialogs/dlgAnalysis.hpp"
 #include "Language/Language.hpp"
-#include "Widget/CallbackWidget.hpp"
 #include "BackendComponents.hpp"
-#include "DataComponents.hpp"
 
 #include <tchar.h>
-
-static bool
-ShowAnalysis8() noexcept
-{
-  if (!backend_components || !backend_components->glide_computer || !data_components || 
-      !data_components->airspaces || !data_components->terrain)
-    return false;
-
-  dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
-                       UIGlobals::GetLook(),
-                       CommonInterface::Full(),
-                       *backend_components->glide_computer,
-                       data_components->airspaces.get(),
-                       data_components->terrain.get(),
-                       AnalysisPage::CONTEST);
-  return true;
-}
 
 bool
 InfoBoxContentContest::HandleClick() noexcept
 {
-  return ShowAnalysis8();
+  return ShowAnalysis(AnalysisPage::CONTEST);
 }
 
 void
@@ -70,7 +49,7 @@ InfoBoxContentContest::Update(InfoBoxData &data) noexcept
 bool
 InfoBoxContentContestSpeed::HandleClick() noexcept
 {
-  return ShowAnalysis8();
+  return ShowAnalysis(AnalysisPage::CONTEST);
 }
 
 void
