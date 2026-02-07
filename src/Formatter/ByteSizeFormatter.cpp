@@ -8,13 +8,17 @@
 #include <cassert>
 
 void
-FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
+FormatByteSize(TCHAR *buffer, size_t size, uint64_t bytes, bool simple)
 {
   assert(buffer != NULL);
   assert(size >= 8);
 
-  static const TCHAR *const units[] = { _T("B"), _T("KB"), _T("MB"), _T("GB") };
-  static const TCHAR *const simple_units[] = { _T("B"), _T("K"), _T("M"), _T("G") };
+  static const TCHAR *const units[] = {
+    _T("B"), _T("KB"), _T("MB"), _T("GB"), _T("TB")
+  };
+  static const TCHAR *const simple_units[] = {
+    _T("B"), _T("K"), _T("M"), _T("G"), _T("T")
+  };
 
   double value = bytes;
 

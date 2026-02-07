@@ -309,6 +309,22 @@ FileDataField::Sort() noexcept
             });
 }
 
+void
+FileDataField::SortDesc() noexcept
+{
+  if (!loaded) {
+    postponed_sort = true;
+    return;
+  }
+
+  // Sort the filelist (except for the first (empty) element) in
+  // descending order by filename.
+  std::sort(files.begin(), files.end(), [](const Item &a,
+                                           const Item &b) {
+              return StringCollate(a.filename.c_str(), b.filename.c_str()) > 0;
+            });
+}
+
 ComboList
 FileDataField::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
 {

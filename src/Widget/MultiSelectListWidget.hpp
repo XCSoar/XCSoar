@@ -30,12 +30,11 @@ public:
   }
 
   void ClearSelection() noexcept {
-    if (selected_.empty())
-      return;
+    SetAllSelected(false);
+  }
 
-    std::fill(selected_.begin(), selected_.end(), false);
-    GetList().Invalidate();
-    OnSelectionChanged();
+  void SelectAll() noexcept {
+    SetAllSelected(true);
   }
 
   /**
@@ -76,15 +75,6 @@ public:
                          [](uint8_t v) { return v != 0; });
   }
 
-  /** Select or deselect all items. */
-  void SetAllSelected(bool value) noexcept {
-    if (selected_.empty())
-      return;
-    std::fill(selected_.begin(), selected_.end(), value);
-    GetList().Invalidate();
-    OnSelectionChanged();
-  }
-
   /** Set selection for a single item (no toggle). */
   void SetSelected(unsigned idx, bool value) noexcept {
     if (idx >= selected_.size())
@@ -103,6 +93,16 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     ListWidget::Prepare(parent, rc);
     GetList().SetActivateOnFirstClick(true);
+  }
+
+private:
+  /** Select or deselect all items. */
+  void SetAllSelected(bool value) noexcept {
+    if (selected_.empty())
+      return;
+    std::fill(selected_.begin(), selected_.end(), value);
+    GetList().Invalidate();
+    OnSelectionChanged();
   }
 
 protected:
