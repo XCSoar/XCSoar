@@ -43,6 +43,7 @@
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "DataGlobals.hpp"
+#include "Repository/Glue.hpp"
 
 bool DevicePortChanged = false;
 bool MapFileChanged = false;
@@ -53,6 +54,7 @@ bool FlarmFileChanged = false;
 bool RaspFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
+bool UserRepositoriesListChanged = false;
 bool require_restart;
 
 static void
@@ -72,6 +74,7 @@ SettingsEnter()
   InputFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
+  UserRepositoriesListChanged = false;
   require_restart = false;
 }
 
@@ -173,6 +176,9 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (RaspFileChanged)
     DataGlobals::SetRasp(LoadConfiguredRasp());
+
+  if (UserRepositoriesListChanged)
+    EnqueueRepositoryDownload(true);
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
