@@ -175,7 +175,10 @@ class NativeView extends SurfaceView
                           platformInsets.right,
                           platformInsets.bottom);
         } else {
-          systemGestureInsets = Insets.NONE;
+          systemGestureInsets = Insets.of(insets.getSystemWindowInsetLeft(),
+                          insets.getSystemWindowInsetTop(),
+                          insets.getSystemWindowInsetRight(),
+                          insets.getSystemWindowInsetBottom());
         }
 
         if (Build.VERSION.SDK_INT >= 30) {
