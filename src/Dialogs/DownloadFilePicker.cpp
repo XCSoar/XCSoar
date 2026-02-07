@@ -179,7 +179,6 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 DownloadFilePickerWidget::Download()
 {
-  const int max_subdir_depth = 3;
   assert(Net::DownloadManager::IsAvailable());
 
   const unsigned current = GetList().GetCursorIndex();
