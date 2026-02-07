@@ -3,13 +3,17 @@
 
 #include "Waypoint/WaypointReader.hpp"
 #include "Waypoint/WaypointReaderBase.hpp"
+#include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Waypoint/CupWriter.hpp"
+#include "Waypoint/Factory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
 #include "system/Path.hpp"
 #include "io/BufferedOutputStream.hxx"
+#include "io/BufferedReader.hxx"
+#include "io/MemoryReader.hxx"
 #include "io/StringOutputStream.hxx"
 #include "util/tstring.hpp"
 #include "util/StringAPI.hxx"
@@ -148,7 +152,7 @@ TestSeeYou(const wp_vector &org_wp)
     const auto wp2 = GetWaypoint(i, way_points2);
     TestSeeYouWaypoint(i, wp2.get());
   }
-  // Test a SeeYou waypoint file with useradata and pics fields:
+  // Test a SeeYou waypoint file with userdata and pics fields:
   Waypoints way_points3;
   if (!TestWaypointFile(Path(_T("test/data/waypoints3.cup")), way_points3,
                         org_wp.size())) {
@@ -296,10 +300,12 @@ TestCompeGPS_UTM(const wp_vector &org_wp)
 }
 
 static std::string
-WriteCupToString(const wp_vector &org_wp)
+WriteCupToString(const wp_vector &org_wp, bool with_header = false)
 {
   StringOutputStream sos;
   WithBufferedOutputStream(sos, [&](BufferedOutputStream &bos){
+    if (with_header)
+      WriteCupHeader(bos);
     for (const auto &i : org_wp)
       WriteCup(bos, i);
   });
@@ -309,13 +315,50 @@ WriteCupToString(const wp_vector &org_wp)
 static void
 TestCupWriter(const wp_vector &org_wp)
 {
+  // Test exact output format (2022 CUP spec with rwwidth, userdata, pics)
   const auto s = WriteCupToString(org_wp);
-  ok1(s == R"cup("Bergneustadt","",,5103.117N,00742.367E,488M,4,040,590M,,"Rabbit holes, 20" ditch south end of rwy"
-"Aconcagua","",,3239.200S,07000.700W,6962M,7,,,,"Highest mountain in south-america"
-"Golden Gate Bridge","",,3749.050N,12228.700W,227M,14,,,,""
-"Red Square","",,5545.250N,03737.200E,123M,3,090,016M,,""
-"Sydney Opera","",,3351.417S,15112.917E,5M,1,,,,""
+  ok1(s == R"cup("Bergneustadt","",,5103.117N,00742.367E,488M,4,040,590M,,,"Rabbit holes, 20"" ditch south end of rwy","",""
+"Aconcagua","",,3239.200S,07000.700W,6962M,7,,,,,"Highest mountain in south-america","",""
+"Golden Gate Bridge","",,3749.050N,12228.700W,227M,14,,,,,"","",""
+"Red Square","",,5545.250N,03737.200E,123M,3,090,016M,,,"","",""
+"Sydney Opera","",,3351.417S,15112.917E,5M,1,,,,,"","",""
 )cup"sv);
+}
+
+static void
+TestCupRoundTrip(const wp_vector &org_wp)
+{
+  // Write waypoints to CUP string (with header for 2022 format detection)
+  const auto s = WriteCupToString(org_wp, true);
+
+  // Parse them back
+  auto bytes = std::as_bytes(std::span{s.data(), s.size()});
+  MemoryReader mr(bytes);
+  BufferedReader br(mr);
+
+  Waypoints waypoints;
+  WaypointFactory factory(WaypointOrigin::USER);
+  ParseSeeYou(factory, waypoints, br);
+  waypoints.Optimise();
+
+  ok1(waypoints.size() == org_wp.size());
+
+  for (const auto &org : org_wp) {
+    auto wp = waypoints.LookupName(org.name);
+    if (!ok1(wp != nullptr)) {
+      skip(8, 0, "waypoint not found in round-trip");
+      continue;
+    }
+
+    ok1(wp->location.Distance(org.location) <= 1000);
+    ok1(wp->has_elevation == org.has_elevation);
+    ok1(!wp->has_elevation || fabs(wp->elevation - org.elevation) < 0.5);
+    ok1(wp->type == org.type);
+    ok1(wp->comment == org.comment);
+    ok1(wp->details == org.details);
+    ok1(wp->runway.IsDirectionDefined() == org.runway.IsDirectionDefined());
+    ok1(wp->runway.IsLengthDefined() == org.runway.IsLengthDefined());
+  }
 }
 
 static wp_vector
@@ -420,7 +463,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(451);
+  plan_tests(497);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
@@ -431,6 +474,7 @@ int main()
   TestCompeGPS(org_wp);
   TestCompeGPS_UTM(org_wp);
   TestCupWriter(org_wp);
+  TestCupRoundTrip(org_wp);
 
   return exit_status();
 }

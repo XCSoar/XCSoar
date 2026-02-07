@@ -8,6 +8,22 @@
 
 using std::string_view_literals::operator""sv;
 
+/**
+ * Write a quoted CSV field, escaping any embedded double quotes
+ * by doubling them per RFC 4180.
+ */
+static void
+WriteCsvQuoted(BufferedOutputStream &writer, std::string_view value)
+{
+  writer.Write('"');
+  for (const char ch : value) {
+    if (ch == '"')
+      writer.Write('"');
+    writer.Write(ch);
+  }
+  writer.Write('"');
+}
+
 static void
 WriteAngleDMM(BufferedOutputStream &writer, const Angle angle, bool is_latitude)
 {
@@ -103,15 +119,11 @@ void
 WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
 {
   // Write Title
-  writer.Write('"');
-  writer.Write(wp.name);
-  writer.Write('"');
+  WriteCsvQuoted(writer, wp.name);
   writer.Write(',');
 
   // Write Code / Short Name
-  writer.Write('"');
-  writer.Write(wp.shortname);
-  writer.Write('"');
+  WriteCsvQuoted(writer, wp.shortname);
   writer.Write(',');
 
   // Write Country
@@ -150,6 +162,9 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
 
   writer.Write(',');
 
+  // Write Runway Width (not stored, always empty)
+  writer.Write(',');
+
   // Write Airport Frequency
   if (wp.radio_frequency.IsDefined()) {
     const unsigned freq = wp.radio_frequency.GetKiloHertz();
@@ -159,16 +174,42 @@ WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
   writer.Write(',');
 
   // Write Description
-  writer.Write('"');
-  writer.Write(wp.comment);
-  writer.Write('"');
+  WriteCsvQuoted(writer, wp.comment);
+  writer.Write(',');
+
+  // Write Userdata (details)
+  WriteCsvQuoted(writer, wp.details);
+  writer.Write(',');
+
+  // Write Pics (embedded files, semicolon-separated)
+  if (!wp.files_embed.empty()) {
+    std::string pics;
+    for (const auto &file : wp.files_embed) {
+      if (!pics.empty())
+        pics += ';';
+      pics += file;
+    }
+    WriteCsvQuoted(writer, pics);
+  } else {
+    writer.Write("\"\"");
+  }
+
   writer.Write('\n');
+}
+
+void
+WriteCupHeader(BufferedOutputStream &writer)
+{
+  writer.Write("name,code,country,lat,lon,elev,style,"
+               "rwdir,rwlen,rwwidth,freq,desc,userdata,pics\n");
 }
 
 void
 WriteCup(BufferedOutputStream &writer, const Waypoints &waypoints,
          WaypointOrigin origin)
 {
+  WriteCupHeader(writer);
+
   // Iterate through the waypoint list and save each waypoint with
   // the right file number to the BufferedOutputStream
   /// @todo JMW: iteration ordered by ID would be preferred

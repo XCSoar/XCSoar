@@ -10,6 +10,9 @@ class Waypoints;
 class BufferedOutputStream;
 
 void
+WriteCupHeader(BufferedOutputStream &writer);
+
+void
 WriteCup(BufferedOutputStream &writer, const Waypoint &wp);
 
 void
