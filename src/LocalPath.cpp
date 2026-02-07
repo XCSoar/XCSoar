@@ -115,6 +115,12 @@ LocalPath(const TCHAR *file) noexcept
 AllocatedPath
 MakeLocalPath(const TCHAR *name)
 {
+  return MakeLocalPath(Path(name));
+}
+
+AllocatedPath
+MakeLocalPath(Path name)
+{
   auto path = LocalPath(name);
   Directory::Create(path);
   return path;
