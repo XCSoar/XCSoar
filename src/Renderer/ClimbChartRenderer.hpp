@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 struct PixelRect;
 class Canvas;
 struct ChartLook;

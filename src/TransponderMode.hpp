@@ -5,7 +5,6 @@
 
 #include <type_traits>
 #include <cstdint>
-#include <tchar.h>
 #include <cassert>
 
 /**

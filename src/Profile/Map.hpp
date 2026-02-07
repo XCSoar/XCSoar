@@ -11,7 +11,6 @@
 #include <string>
 
 #include <cstdint>
-#include <tchar.h>
 #include <vector>
 
 struct GeoPoint;

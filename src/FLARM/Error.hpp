@@ -7,8 +7,6 @@
 
 #include <type_traits>
 #include <cstdint>
-#include <tchar.h>
-
 #ifdef _WIN32
 #undef NO_ERROR
 #endif

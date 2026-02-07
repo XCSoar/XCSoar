@@ -6,8 +6,6 @@
 #include "util/StaticString.hxx"
 
 #include <cstdint>
-#include <tchar.h>
-
 /**
  * Configuration structure for serial devices
  */

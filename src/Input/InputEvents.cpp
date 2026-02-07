@@ -49,7 +49,6 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "lua/InputEvent.hpp"
 
 #include <cassert>
-#include <tchar.h>
 #include <stdio.h>
 #include <memory>
 

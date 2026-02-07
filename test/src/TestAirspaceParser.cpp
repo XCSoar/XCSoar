@@ -14,8 +14,6 @@
 #include "Operation/Operation.hpp"
 #include "TestUtil.hpp"
 
-#include <tchar.h>
-
 struct AirspaceClassTestCouple
 {
   const char* name;

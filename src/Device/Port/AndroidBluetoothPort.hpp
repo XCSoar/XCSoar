@@ -6,8 +6,6 @@
 #include "util/Compiler.h"
 
 #include <memory>
-#include <tchar.h>
-
 class BluetoothHelper;
 class Port;
 class PortListener;

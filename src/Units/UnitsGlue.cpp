@@ -7,8 +7,6 @@
 #include "util/ScopeExit.hxx"
 #include "util/StringAPI.hxx"
 
-#include <tchar.h>
-
 #ifndef HAVE_POSIX
 #include <winnls.h>
 #endif

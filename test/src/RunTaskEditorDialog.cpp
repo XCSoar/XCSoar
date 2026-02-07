@@ -18,7 +18,6 @@
 #include "LocalPath.hpp"
 #include "Look/GlobalFonts.hpp"
 
-#include <tchar.h>
 #include <stdio.h>
 
 void

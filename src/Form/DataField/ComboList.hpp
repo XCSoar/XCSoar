@@ -5,8 +5,6 @@
 
 #include <string>
 #include <vector>
-#include <tchar.h>
-
 class ComboList {
 public:
   struct Item {

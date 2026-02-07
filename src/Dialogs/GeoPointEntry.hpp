@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
 #include <cstdint>
 
 enum class CoordinateFormat : uint8_t;

@@ -7,8 +7,6 @@
 #include "AirspaceRenderer.hpp"
 #include "TrailRenderer.hpp"
 
-#include <tchar.h>
-
 struct PixelRect;
 struct NMEAInfo;
 struct DerivedInfo;

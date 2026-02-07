@@ -14,8 +14,6 @@
 #include <iostream>
 #include <stdio.h>
 
-#include <tchar.h>
-
 using namespace std;
 
 class MyResponseHandler final : public CurlResponseHandler {

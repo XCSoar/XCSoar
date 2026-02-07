@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 struct DeviceRegister;
 
 [[gnu::const]]

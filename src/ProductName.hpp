@@ -13,8 +13,6 @@
  * See REBRANDING_GUIDE.md for complete rebranding instructions.
  */
 
-#include <tchar.h>
-
 #ifndef PRODUCT_NAME
 #define PRODUCT_NAME "XCSoar"
 #endif

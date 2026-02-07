@@ -6,8 +6,6 @@
 #include "time/Stamp.hpp"
 #include "util/StringBuffer.hxx"
 
-#include <tchar.h>
-
 struct BrokenDate;
 struct BrokenDateTime;
 

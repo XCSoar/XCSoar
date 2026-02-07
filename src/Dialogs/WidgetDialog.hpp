@@ -9,8 +9,6 @@
 
 #include <memory>
 #include <type_traits>
-#include <tchar.h>
-
 class Widget;
 
 class WidgetDialog : public WndForm {

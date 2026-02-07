@@ -13,8 +13,6 @@
 
 #include <string_view>
 
-#include <tchar.h>
-
 /* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor
  * defines. Undefine them to avoid name conflict. */
 #ifdef OPAQUE

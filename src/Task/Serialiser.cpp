@@ -15,8 +15,6 @@
 #include "util/ConvertString.hpp"
 
 #include <cassert>
-#include <tchar.h>
-
 [[gnu::const]]
 static const char *
 GetName(TaskPointType type, bool mode_optional_start)

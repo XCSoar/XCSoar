@@ -10,7 +10,6 @@
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
 
-#include <tchar.h>
 #include <algorithm>
 
 using std::min;

@@ -11,8 +11,6 @@
 
 #include <string_view>
 #include <stdio.h>
-#include <tchar.h>
-
 pt2Event
 InputEvents::findEvent(std::string_view name) noexcept
 {

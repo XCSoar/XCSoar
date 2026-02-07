@@ -5,7 +5,6 @@
 
 #include <memory>
 
-#include <tchar.h>
 #include <commctrl.h>
 #include <windowsx.h>
 

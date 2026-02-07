@@ -7,8 +7,6 @@
 
 #include <cstdint>
 
-#include <tchar.h>
-
 namespace LiveTrack24 {
 
 struct Settings {

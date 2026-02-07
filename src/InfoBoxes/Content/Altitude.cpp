@@ -12,8 +12,6 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
-#include <tchar.h>
-
 /*
  * Subpart callback function pointers
  */

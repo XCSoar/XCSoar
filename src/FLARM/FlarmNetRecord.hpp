@@ -6,8 +6,6 @@
 #include "util/StaticString.hxx"
 #include "RadioFrequency.hpp"
 #include "Id.hpp"
-#include <tchar.h>
-
 static constexpr std::size_t
 LatinBufferSize(std::size_t size) noexcept
 {

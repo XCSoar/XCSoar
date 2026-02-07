@@ -10,8 +10,6 @@
 #include "util/StaticArray.hxx"
 #include "Sizes.h" /* for NAME_SIZE */
 
-#include <tchar.h>
-
 class WaypointLabelList : private NonCopyable {
   static constexpr int WPCIRCLESIZE = 2;
 

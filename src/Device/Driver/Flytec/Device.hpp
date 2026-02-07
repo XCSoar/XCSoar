@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "tchar.h"
 #include "Device/Driver.hpp"
 #include "time/Stamp.hpp"
 

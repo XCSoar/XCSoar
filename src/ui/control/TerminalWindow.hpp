@@ -7,8 +7,6 @@
 #include "ui/dim/Size.hpp"
 #include "util/AllocatedGrid.hxx"
 
-#include <tchar.h>
-
 struct TerminalLook;
 
 class TerminalWindow : public PaintWindow {

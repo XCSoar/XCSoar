@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 /* HAVE_RUN_FILE is defined for platforms that support external file references
  * in waypoint details (file= entries). On Android, these are handled via
  * ContentProvider (FileProvider.cpp) instead of RunFile(). */
