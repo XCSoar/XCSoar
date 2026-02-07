@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
-import android.graphics.Insets;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
@@ -50,13 +49,41 @@ class NativeView extends SurfaceView
   private static final String TAG = "XCSoar";
 
   /**
+   * Simple compat wrapper for android.graphics.Insets (API 29+).
+   * This local class is used so the code can compile and run on
+   * older API levels where android.graphics.Insets is not available.
+   * Remove when minSdk is raised to 29 or above, and replace by
+   * importing android.graphics.Insets in the imports section
+   */
+  public static final class Insets {
+    public final int left;
+    public final int top;
+    public final int right;
+    public final int bottom;
+
+    private Insets(int left, int top, int right, int bottom) {
+      this.left = left;
+      this.top = top;
+      this.right = right;
+      this.bottom = bottom;
+    }
+
+    public static Insets of(int left, int top, int right, int bottom) {
+      return new Insets(left, top, right, bottom);
+    }
+
+    public static final Insets NONE = of(0, 0, 0, 0);
+  }
+
+  /**
    * Parameters for detecting system swipe gestures vs taps.
    * Swipes exceeding this distance in the "OS gesture direction"
    * will be rejected if they started at an edge inset.
    */
-  private int touchSlop = 0;
 
   private Insets systemGestureInsets = Insets.NONE;
+
+  private int touchSlop = 0;
 
   private int screenWidth = 0;
   private int screenHeight = 0;
@@ -133,11 +160,22 @@ class NativeView extends SurfaceView
     setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener() {
       @Override
       public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+        // When minSdk is raised to 30 or above, replace if/else block by one line:
+        // systemGestureInsets = insets.getInsets(WindowInsets.Type.systemGestures());
         if (Build.VERSION.SDK_INT >= 29) {
-            systemGestureInsets =
-                    insets.getInsets(WindowInsets.Type.systemGestures());
+          android.graphics.Insets platformInsets;
+
+          if(Build.VERSION.SDK_INT >= 30)
+            platformInsets = insets.getInsets(WindowInsets.Type.systemGestures());
+          else
+            platformInsets = insets.getSystemGestureInsets();
+          
+          systemGestureInsets = Insets.of(platformInsets.left,
+                          platformInsets.top,
+                          platformInsets.right,
+                          platformInsets.bottom);
         } else {
-            systemGestureInsets = Insets.NONE;
+          systemGestureInsets = Insets.NONE;
         }
 
         if (Build.VERSION.SDK_INT >= 30) {
