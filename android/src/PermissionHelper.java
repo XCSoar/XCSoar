@@ -92,6 +92,7 @@ public class PermissionHelper implements PermissionManager {
       if (!granted && grantResults.length > 0 && 
           grantResults[0] == PackageManager.PERMISSION_DENIED &&
           permissions.length > 0 &&
+          Build.VERSION.SDK_INT >= 23 &&
           !activity.shouldShowRequestPermissionRationale(permissions[0])) {
         // Show a message directing user to settings
         final String permissionLabel = getPermissionLabel(permissions[0]);
@@ -700,7 +701,8 @@ public class PermissionHelper implements PermissionManager {
     final PermissionHandler finalHandler = handler;
     if ((isLocationPerm || isForegroundServiceLocationPerm || isBluetoothPerm ||
          isNotificationPerm ||
-         activity.shouldShowRequestPermissionRationale(permission)) &&
+         (Build.VERSION.SDK_INT >= 23 &&
+          activity.shouldShowRequestPermissionRationale(permission))) &&
         showRequestPermissionRationaleIndirect(permission, new PermissionHandler() {
             @Override
             public void onRequestPermissionsResult(boolean granted) {

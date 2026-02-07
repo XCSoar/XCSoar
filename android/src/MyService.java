@@ -15,7 +15,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Binder;
 import android.util.Log;
-import android.app.ForegroundServiceStartNotAllowedException;
+
 
 /**
  * Foreground service to ensure XCSoar continues running in the background.
@@ -172,16 +172,6 @@ public class MyService extends Service {
 
     try {
       startForeground(1, notification);
-    } catch (ForegroundServiceStartNotAllowedException e) {
-      /* On Android 12+ (API 31+), starting a foreground service from background
-         is not allowed. This typically happens when the service is automatically
-         restarted after the app process has exited (due to START_STICKY).
-         Since the app has exited, we should stop the service and prevent it from
-         being restarted again. */
-      Log.w(TAG, "Cannot start foreground service from background - app has exited, stopping service", e);
-      notificationManager.cancel(1);
-      stopSelf();
-      return START_NOT_STICKY;
     } catch (Exception e) {
       /* Check if this is the API-31-specific ForegroundServiceStartNotAllowedException.
          We use class name comparison instead of direct catch to avoid VerifyError on
