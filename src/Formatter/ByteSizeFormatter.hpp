@@ -5,6 +5,7 @@
 
 #include <tchar.h>
 #include <cstddef>
+#include <cstdint>
 
 void FormatByteSize(TCHAR *buffer, size_t size,
-                    unsigned long bytes, bool simple = false);
+                    uint64_t bytes, bool simple = false);
