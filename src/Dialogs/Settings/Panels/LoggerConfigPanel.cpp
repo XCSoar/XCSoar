@@ -54,9 +54,13 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent,
   const LoggerSettings &logger = settings_computer.logger;
 
   RowFormWidget::Prepare(parent, rc);
-  AddText(_("Pilot name"), nullptr, logger.pilot_name);
+  AddText(_("Pilot name"),
+          _("Name of the pilot in command, recorded in the IGC flight log."),
+          logger.pilot_name);
 
-  AddText(_("CoPilot name"), nullptr, logger.copilot_name);
+  AddText(_("CoPilot name"),
+          _("The co-pilot name recorded in the IGC flight log."),
+          logger.copilot_name);
 
   AddFloat(_("Crew weight default"),
             _("Default for all weight loaded to the glider beyond the empty weight and besides "
@@ -91,7 +95,9 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent,
              logger.enable_flight_logger);
   SetExpertRow(EnableFlightLogger);
 
-  AddText(_("Logger ID"), nullptr, logger.logger_id);
+  AddText(_("Logger ID"),
+          _("The three-letter logger ID used in the IGC filename."),
+          logger.logger_id);
   SetExpertRow(LoggerID);
 }
 

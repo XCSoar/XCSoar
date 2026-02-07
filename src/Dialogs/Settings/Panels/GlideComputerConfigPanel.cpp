@@ -99,7 +99,9 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
              task_behaviour.glide.predict_wind_drift);
   SetExpertRow(PredictWindDrift);
 
-  AddBoolean(_("Wave assistant"), nullptr,
+  AddBoolean(_("Wave assistant"),
+             _("Enable detection and display of wave lift. "
+               "When enabled, wave sources are identified and shown on the map."),
              settings_computer.wave.enabled);
 
   AddDuration(_("Cruise/Circling period"),

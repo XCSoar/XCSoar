@@ -276,7 +276,8 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
            0, db*ceil(plane.max_ballast/db), db, false, 0,
            this);
 
-  WndProperty *wing_loading = AddFloat(_("Wing loading"), nullptr,
+  WndProperty *wing_loading = AddFloat(_("Wing loading"),
+                                       _("The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."),
                                        _T("%.1f %s"), _T("%.0f"), 0,
                                        300, 5,
                                        false, UnitGroup::WING_LOADING,

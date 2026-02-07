@@ -52,7 +52,9 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent,
              _("Emulate the sound of an electronic vario."),
              settings.enabled);
 
-  AddInteger(_("Volume"), nullptr, _T("%u %%"), _T("%u"),
+  AddInteger(_("Volume"),
+             _("The audio vario sound volume."),
+             _T("%u %%"), _T("%u"),
              0, 100, 1, settings.volume);
 
   AddBoolean(_("Enable Deadband"),

@@ -213,7 +213,8 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
 {
   const Layout layout(rc, geometry);
 
-  AddText(_("Name"), nullptr,
+  AddText(_("Name"),
+          _("The name of this InfoBox panel configuration."),
           allow_name_change ? (const TCHAR *)data.name : gettext(data.name));
   SetReadOnly(NAME, !allow_name_change);
 
