@@ -24,6 +24,7 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
+#include "util/StringFormat.hpp"
 
 #include <vector>
 
@@ -255,6 +256,21 @@ try {
   FileLineReaderA reader(path);
 
   ParseFileRepository(repository, reader);
+
+  // add user repository contents
+  const std::vector<std::string> uris = GetUserRepositoryURIs();
+  int file_number = 1;
+  for (const auto &uri : uris) {
+    if (uri.empty())
+      continue;
+
+    char filename[32];
+    StringFormat(filename, std::size(filename), "user_repository_%d",
+                 file_number++);
+    const auto user_path = LocalPath(filename);
+    FileLineReaderA user_reader(user_path);
+    ParseFileRepository(repository, user_reader);
+  }
 
   items.clear();
   for (auto &i : repository)
