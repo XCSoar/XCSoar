@@ -5,41 +5,42 @@
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentAlternateName : public InfoBoxContent
+/**
+ * Base class for alternate-related InfoBox content that opens the
+ * alternates list dialog on click.
+ */
+class InfoBoxContentAlternateBase : public InfoBoxContent
 {
+protected:
+  unsigned index;
+
 public:
-  InfoBoxContentAlternateName(const unsigned _index) noexcept
+  explicit InfoBoxContentAlternateBase(unsigned _index) noexcept
     :index(_index) {}
 
-  void Update(InfoBoxData &data) noexcept override;
   bool HandleClick() noexcept override;
-
-private:
-  unsigned index;
 };
 
-class InfoBoxContentAlternateGR : public InfoBoxContent
+class InfoBoxContentAlternateName : public InfoBoxContentAlternateBase
 {
 public:
-  InfoBoxContentAlternateGR(const unsigned _index) noexcept
-    :index(_index) {}
+  using InfoBoxContentAlternateBase::InfoBoxContentAlternateBase;
 
   void Update(InfoBoxData &data) noexcept override;
-  bool HandleClick() noexcept override;
-
-private:
-  unsigned index;
 };
 
-class InfoBoxContentAlternateAltDiff : public InfoBoxContent
+class InfoBoxContentAlternateGR : public InfoBoxContentAlternateBase
 {
 public:
-  explicit InfoBoxContentAlternateAltDiff(const unsigned _index) noexcept
-    :index(_index) {}
+  using InfoBoxContentAlternateBase::InfoBoxContentAlternateBase;
 
   void Update(InfoBoxData &data) noexcept override;
-  bool HandleClick() noexcept override;
+};
 
-private:
-  unsigned index;
+class InfoBoxContentAlternateAltDiff : public InfoBoxContentAlternateBase
+{
+public:
+  using InfoBoxContentAlternateBase::InfoBoxContentAlternateBase;
+
+  void Update(InfoBoxData &data) noexcept override;
 };

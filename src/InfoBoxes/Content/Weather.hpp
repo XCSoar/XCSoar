@@ -18,38 +18,43 @@ public:
   bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
 };
 
-class InfoBoxContentWindSpeed: public InfoBoxContent
+/**
+ * Base class for wind-related InfoBox content that opens the
+ * wind settings dialog on click.
+ */
+class InfoBoxContentWind : public InfoBoxContent
 {
 public:
-  void Update(InfoBoxData &data) noexcept override;
   bool HandleClick() noexcept override;
 };
 
-class InfoBoxContentWindBearing: public InfoBoxContent
+class InfoBoxContentWindSpeed : public InfoBoxContentWind
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
-  bool HandleClick() noexcept override;
 };
 
-class InfoBoxContentHeadWind: public InfoBoxContent
+class InfoBoxContentWindBearing : public InfoBoxContentWind
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
-  bool HandleClick() noexcept override;
 };
 
-class InfoBoxContentHeadWindSimplified: public InfoBoxContent
+class InfoBoxContentHeadWind : public InfoBoxContentWind
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
-  bool HandleClick() noexcept override;
 };
 
-class InfoBoxContentWindArrow: public InfoBoxContent
+class InfoBoxContentHeadWindSimplified : public InfoBoxContentWind
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+};
+
+class InfoBoxContentWindArrow : public InfoBoxContentWind
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
-  bool HandleClick() noexcept override;
 };

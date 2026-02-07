@@ -75,41 +75,8 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode) noex
   return false;
 }
 
-/*
- * Subpart callback function pointers
- */
-
-
 bool
-InfoBoxContentWindArrow::HandleClick() noexcept
-{
-  ShowWindSettingsDialog();
-  return true;
-}
-
-bool
-InfoBoxContentHeadWindSimplified::HandleClick() noexcept
-{
-  ShowWindSettingsDialog();
-  return true;
-}
-
-bool
-InfoBoxContentHeadWind::HandleClick() noexcept
-{
-  ShowWindSettingsDialog();
-  return true;
-}
-
-bool
-InfoBoxContentWindBearing::HandleClick() noexcept
-{
-  ShowWindSettingsDialog();
-  return true;
-}
-
-bool
-InfoBoxContentWindSpeed::HandleClick() noexcept
+InfoBoxContentWind::HandleClick() noexcept
 {
   ShowWindSettingsDialog();
   return true;
