@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxes/Content/Thermal.hpp"
+#include "InfoBoxes/Content/ShowAnalysis.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -287,4 +288,10 @@ InfoBoxContentClimbPercent::Update(InfoBoxData &data) noexcept
 
   // TODO: use an appropriate digest
   data.SetCustom(basic.location_available.ToInteger());
+}
+
+bool
+InfoBoxContentClimbPercent::HandleClick() noexcept
+{
+  return ShowAnalysis(AnalysisPage::CLIMB);
 }

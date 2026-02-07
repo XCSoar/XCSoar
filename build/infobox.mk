@@ -12,6 +12,7 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Content/Task.cpp \
 	$(SRC)/InfoBoxes/Content/Places.cpp \
 	$(SRC)/InfoBoxes/Content/Contest.cpp \
+	$(SRC)/InfoBoxes/Content/ShowAnalysis.cpp \
 	$(SRC)/InfoBoxes/Content/Team.cpp \
 	$(SRC)/InfoBoxes/Content/Terrain.cpp \
 	$(SRC)/InfoBoxes/Content/Thermal.cpp \

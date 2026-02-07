@@ -9,8 +9,11 @@
 class Validity;
 class TraceVariableHistory;
 
-class InfoBoxContentSpark: public InfoBoxContent
+class InfoBoxContentSpark : public InfoBoxContent
 {
+public:
+  bool HandleClick() noexcept override;
+
 protected:
   void Paint(Canvas &canvas, const PixelRect &rc,
              const TraceVariableHistory &var,
@@ -54,6 +57,7 @@ class InfoBoxContentThermalBand : public InfoBoxContent
 public:
   void Update(InfoBoxData &data) noexcept override;
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
+  bool HandleClick() noexcept override;
 };
 
 class InfoBoxContentTaskProgress : public InfoBoxContent
@@ -61,4 +65,5 @@ class InfoBoxContentTaskProgress : public InfoBoxContent
 public:
   void Update(InfoBoxData &data) noexcept override;
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
+  bool HandleClick() noexcept override;
 };
