@@ -96,7 +96,7 @@ RelativePath(Path path) noexcept;
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
  * the XCSoarData folder
- * @param filein Pointer to the string to convert
+ * @param src Pointer to the string to convert
  */
 [[gnu::pure]]
 AllocatedPath
@@ -105,7 +105,7 @@ ExpandLocalPath(Path src) noexcept;
 /**
  * Converts a file path from full pathname to a shorter version with the
  * XCSoarData folder replaced by %LOCAL_PATH%
- * @param filein Pointer to the string to convert
+ * @param src Pointer to the string to convert
  * @return the new path or nullptr if the given path cannot be contracted
  */
 [[gnu::pure]]
