@@ -24,7 +24,7 @@ MakeGeoPoint(double longitude, double latitude) noexcept
 }
 
 static Waypoint
-MakeWaypoint(Waypoint wp, double altitude, tstring name, unsigned id) noexcept
+MakeWaypoint(Waypoint wp, double altitude, std::string name, unsigned id) noexcept
 {
   wp.name = name;
   wp.id = id;
@@ -34,7 +34,7 @@ MakeWaypoint(Waypoint wp, double altitude, tstring name, unsigned id) noexcept
 }
 
 static Waypoint
-MakeWaypoint(double longitude, double latitude, double altitude, tstring name, unsigned id) noexcept
+MakeWaypoint(double longitude, double latitude, double altitude, std::string name, unsigned id) noexcept
 {
   return MakeWaypoint(Waypoint(MakeGeoPoint(longitude, latitude)), altitude, name, id);
 }

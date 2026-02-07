@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include "util/tstring.hpp"
-
+#include <string>
 #include <vector>
 #include <tchar.h>
 
@@ -16,9 +15,9 @@ public:
     static constexpr int DOWNLOAD = -800003;
 
     int int_value;
-    tstring string_value;
-    tstring display_string;
-    tstring help_text;
+    std::string string_value;
+    std::string display_string;
+    std::string help_text;
 
     Item(int _int_value, const char *_string_value,
          const char *_display_string,

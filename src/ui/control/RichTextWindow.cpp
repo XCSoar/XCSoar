@@ -19,6 +19,7 @@
 #endif
 #include <algorithm>
 #include <cstdint>
+#include <string_view>
 
 /**
  * Safe proxy for "is this a touch device with larger controls".
@@ -724,7 +725,7 @@ RichTextWindow::RenderLinkSegment(Canvas &canvas,
                                   int visible_top,
                                   int text_line_height) noexcept
 {
-  tstring_view seg_text(text_data + seg.start, seg.length);
+  std::string_view seg_text(text_data + seg.start, seg.length);
   const bool is_focused = IsLinkFocused(seg.link_index);
 
   if (dark_mode)
@@ -809,7 +810,7 @@ RichTextWindow::RenderPlainSegment(Canvas &canvas,
                                    const char *text_data,
                                    int &x, int text_y) const noexcept
 {
-  tstring_view seg_text(text_data + seg.start, seg.length);
+  std::string_view seg_text(text_data + seg.start, seg.length);
 
   if (seg.IsHeading())
     canvas.SetTextColor(GetAdmonitionColor(seg.start));

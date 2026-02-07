@@ -9,12 +9,12 @@
 #include "io/ZipArchive.hpp"
 #include "util/StringCompare.hxx"
 #include "util/Macros.hpp"
-#include "util/tstring.hpp"
 #include "zzip/zzip.h"
 #include "LogFile.hpp"
 
 #include <set>
 
+#include <string>
 #include <cassert>
 #include <tchar.h>
 #include <stdio.h>
@@ -158,7 +158,7 @@ try {
 
   maps.clear();
 
-  std::set<tstring> names;
+  std::set<std::string> names;
 
   for (const auto &i : WeatherDescriptors) {
     if (maps.full())

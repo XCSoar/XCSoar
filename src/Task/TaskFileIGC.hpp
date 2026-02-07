@@ -10,7 +10,7 @@ class TaskFileIGC: public TaskFile
 public:
   using TaskFile::TaskFile;
 
-  std::vector<tstring> GetList() const override;
+  std::vector<std::string> GetList() const override;
 
   std::unique_ptr<OrderedTask> GetTask(const TaskBehaviour &task_behaviour,
                                        const Waypoints *waypoints,

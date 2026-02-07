@@ -10,7 +10,6 @@
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringSplit.hxx"
-#include "util/tstring.hpp"
 #include "io/FileReader.hxx"
 #include "io/Reader.hxx"
 #include "io/BufferedReader.hxx"
@@ -25,7 +24,7 @@
 #include <vector>
 
 struct ChecklistPage {
-  tstring title, text;
+  std::string title, text;
 
   bool empty() const noexcept {
     return title.empty() && text.empty();

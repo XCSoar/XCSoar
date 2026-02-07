@@ -274,10 +274,10 @@ public:
   void DrawFocusRectangle(PixelRect rc) noexcept;
 
   [[gnu::pure]]
-  const PixelSize CalcTextSize(tstring_view text) const noexcept;
+  const PixelSize CalcTextSize(std::string_view text) const noexcept;
 
   [[gnu::pure]]
-  unsigned CalcTextWidth(tstring_view text) const noexcept {
+  unsigned CalcTextWidth(std::string_view text) const noexcept {
     return CalcTextSize(text).width;
   }
 
@@ -286,15 +286,15 @@ public:
     return font != nullptr ? font->GetHeight() : 0;
   }
 
-  void DrawText(PixelPoint p, tstring_view text) noexcept;
+  void DrawText(PixelPoint p, std::string_view text) noexcept;
 
-  void DrawTransparentText(PixelPoint p, tstring_view text) noexcept;
+  void DrawTransparentText(PixelPoint p, std::string_view text) noexcept;
 
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                      tstring_view text) noexcept;
+                      std::string_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, const PixelRect &rc,
-                       tstring_view text) noexcept {
+                       std::string_view text) noexcept {
     // XXX
 
     if (p.x < rc.right)
@@ -302,17 +302,17 @@ public:
   }
 
   void DrawClippedText(PixelPoint p, PixelSize size,
-                       tstring_view text) noexcept;
+                       std::string_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, unsigned width,
-                       tstring_view text) noexcept {
+                       std::string_view text) noexcept {
     DrawClippedText(p, {width, 16384u}, text);
   }
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelPoint p, tstring_view t) noexcept {
+  void TextAutoClipped(PixelPoint p, std::string_view t) noexcept {
     if (p.x < (int)GetWidth() && p.y < (int)GetHeight())
       DrawClippedText(p, {GetWidth() - p.x, GetHeight() - p.y}, t);
   }
@@ -322,7 +322,7 @@ public:
    *
    * @return the resulting text height
    */
-  unsigned DrawFormattedText(PixelRect r, tstring_view text,
+  unsigned DrawFormattedText(PixelRect r, std::string_view text,
                              unsigned format) noexcept;
 
   /**

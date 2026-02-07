@@ -268,7 +268,7 @@ TestReplace(Waypoints& waypoints, unsigned id)
   if (wp == NULL)
     return false;
 
-  tstring oldName = wp->name;
+  std::string oldName = wp->name;
 
   Waypoint copy = *wp;
   copy.name = _T("Fred");

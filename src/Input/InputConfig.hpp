@@ -8,8 +8,8 @@
 #include "util/RadixTree.hpp"
 #include "util/StaticString.hxx"
 #include "util/TrivialArray.hxx"
-#include "util/tstring_view.hxx"
 
+#include <string_view>
 #include <array>
 #include <cassert>
 #include <tchar.h>
@@ -77,7 +77,7 @@ struct InputConfig {
   void SetDefaults() noexcept;
 
   [[gnu::pure]]
-  int LookupMode(tstring_view name) const noexcept {
+  int LookupMode(std::string_view name) const noexcept {
     for (std::size_t i = 0, size = modes.size(); i < size; ++i)
       if (name == modes[i].c_str())
         return i;
@@ -85,7 +85,7 @@ struct InputConfig {
     return -1;
   }
 
-  int AppendMode(tstring_view name) noexcept {
+  int AppendMode(std::string_view name) noexcept {
     if (modes.full())
       return -1;
 
@@ -94,7 +94,7 @@ struct InputConfig {
   }
 
   [[gnu::pure]]
-  int MakeMode(tstring_view name) noexcept {
+  int MakeMode(std::string_view name) noexcept {
     int mode = LookupMode(name);
     if (mode < 0)
       mode = AppendMode(name);
