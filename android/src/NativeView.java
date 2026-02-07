@@ -56,7 +56,15 @@ class NativeView extends SurfaceView
    */
   private int touchSlop = 0;
 
-  private Insets systemGestureInsets = Insets.NONE;
+  /**
+   * System gesture inset values for detecting edge swipes.
+   * Stored as individual int fields to avoid referencing the
+   * Insets class (API 29+) in field declarations.
+   */
+  private int gestureInsetLeft = 0;
+  private int gestureInsetRight = 0;
+  private int gestureInsetTop = 0;
+  private int gestureInsetBottom = 0;
 
   private int screenWidth = 0;
   private int screenHeight = 0;
@@ -134,10 +142,11 @@ class NativeView extends SurfaceView
       @Override
       public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= 29) {
-            systemGestureInsets =
-                    insets.getInsets(WindowInsets.Type.systemGestures());
-        } else {
-            systemGestureInsets = Insets.NONE;
+            Insets gi = insets.getSystemGestureInsets();
+            gestureInsetLeft = gi.left;
+            gestureInsetRight = gi.right;
+            gestureInsetTop = gi.top;
+            gestureInsetBottom = gi.bottom;
         }
 
         if (Build.VERSION.SDK_INT >= 30) {
@@ -513,16 +522,13 @@ class NativeView extends SurfaceView
         final float rawX = event.getRawX();
         final float rawY = event.getRawY();
 
-
-        final Insets insets = systemGestureInsets;
-
-        if (insets.left > 0 && rawX < insets.left)
+        if (gestureInsetLeft > 0 && rawX < gestureInsetLeft)
           edgeTouchFlags |= MotionEvent.EDGE_LEFT;
-        if (insets.right > 0 && rawX > screenWidth - insets.right)
+        if (gestureInsetRight > 0 && rawX > screenWidth - gestureInsetRight)
           edgeTouchFlags |= MotionEvent.EDGE_RIGHT;
-        if (insets.top > 0 && rawY < insets.top)
+        if (gestureInsetTop > 0 && rawY < gestureInsetTop)
           edgeTouchFlags |= MotionEvent.EDGE_TOP;
-        if (insets.bottom > 0 && rawY > screenHeight - insets.bottom)
+        if (gestureInsetBottom > 0 && rawY > screenHeight - gestureInsetBottom)
           edgeTouchFlags |= MotionEvent.EDGE_BOTTOM;
       }
       /* Always forward ACTION_DOWN to allow focus changes */
