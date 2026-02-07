@@ -69,6 +69,9 @@ LocalPath(const char *file) noexcept;
 AllocatedPath
 MakeLocalPath(const char *name);
 
+AllocatedPath
+MakeLocalPath(const Path name);
+
 /**
  * Determine absolute path from local path and create this directory
  * and any missing parent directories up to `max_creation_depth` levels.
