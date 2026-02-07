@@ -347,7 +347,7 @@ DeviceListWidget::UpdateButtons()
   } else {
     const DeviceDescriptor &device = (*devices)[current];
 
-    reconnect_button->SetEnabled(!device.GetConfig().IsDisabled());
+    reconnect_button->SetEnabled(!device.GetConfig().IsDisabled() && !device.IsReconnecting());
     flight_button->SetEnabled(device.IsLogger());
     manage_button->SetEnabled(device.IsManageable());
     monitor_button->SetEnabled(device.GetConfig().UsesPort());
@@ -556,11 +556,8 @@ DeviceListWidget::ReconnectCurrent()
     return;
   }
 
-  /* this OperationEnvironment instance must be persistent, because
-     DeviceDescriptor::Open() is asynchronous */
-  static MessageOperationEnvironment env;
   device.ResetFailureCounter();
-  device.Reopen(env);
+  device.SlowReopen();
 }
 
 inline void
