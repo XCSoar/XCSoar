@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 09:27+0100\n"
+"POT-Creation-Date: 2026-02-06 23:36+0100\n"
 "PO-Revision-Date: 2023-01-13 12:50+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
@@ -1646,12 +1646,12 @@ msgstr "호주식"
 #: src/FLARM/Details.cpp:126
 #, no-c-format
 msgid "Unresolved"
-msgstr ""
+msgstr "미해결"
 
 #: src/FLARM/Details.cpp:127
 #, no-c-format
 msgid "Flarm Messaging"
-msgstr ""
+msgstr "FLARM 메시지"
 
 #: src/FLARM/Details.cpp:128
 #, fuzzy, no-c-format
@@ -2627,7 +2627,7 @@ msgstr "AAT레인지"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:76
 msgid "PCAS vertical range"
-msgstr ""
+msgstr "PCAS 수직 범위"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:77
 msgid "ADSB range"
@@ -2635,7 +2635,7 @@ msgstr "AAT레인지"
 
 #: src/Dialogs/Device/FLARM/RangeConfigWidget.cpp:78
 msgid "ADSB vertical range"
-msgstr ""
+msgstr "ADSB 수직 범위"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 #: src/Dialogs/Task/AlternatesListDialog.cpp:138
@@ -3160,7 +3160,7 @@ msgstr "붙여넣기"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "Overwrite all InfoBoxes in this set?"
-msgstr ""
+msgstr "이 세트의 모든 InfoBox를 덮어쓰시겠습니까?"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:318
 msgid "InfoBox paste set"
@@ -3223,7 +3223,7 @@ msgstr ""
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:124
 msgid "Data source"
-msgstr ""
+msgstr "데이터 소스"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:212
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
@@ -4072,22 +4072,22 @@ msgstr "발전소"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:60
 #, no-c-format
 msgid "VOR"
-msgstr ""
+msgstr "VOR"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
 #, no-c-format
 msgid "NDB"
-msgstr ""
+msgstr "NDB"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
 #, no-c-format
 msgid "Dam"
-msgstr ""
+msgstr "댐"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
 #, no-c-format
 msgid "Castle"
-msgstr ""
+msgstr "성"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
 #, no-c-format
@@ -5112,17 +5112,17 @@ msgstr "유리"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr ""
+msgstr "시스템 설정 사용"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #, no-c-format
 msgid "Black text on white background"
-msgstr ""
+msgstr "흰색 배경에 검은색 텍스트"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #, no-c-format
 msgid "White text on black background"
-msgstr ""
+msgstr "검은색 배경에 흰색 텍스트"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "Full screen"
@@ -5160,7 +5160,7 @@ msgstr "정보창 제목"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
 msgid "Zoom factor for InfoBox title and comment text"
-msgstr ""
+msgstr "InfoBox 제목 및 코멘트 텍스트 확대 배율"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
 msgid "Tab dialog style"
@@ -5434,7 +5434,7 @@ msgstr "각 페이지별로 지도 확대/축소 범위를 고정한다."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
 #, no-c-format
 msgid "Map (north-up)"
-msgstr ""
+msgstr "지도 (북쪽 위)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Main area"
@@ -5788,11 +5788,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "XCSoar data path"
-msgstr ""
+msgstr "XCSoar 데이터 경로"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:45
 msgid "Click to view full path"
-msgstr ""
+msgstr "전체 경로를 보려면 클릭"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:49
 msgid "Map database"
@@ -5831,7 +5831,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
 msgid "WPT A/F details"
-msgstr ""
+msgstr "WPT A/F 세부정보"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 #, fuzzy
@@ -6074,7 +6074,7 @@ msgstr "FLARM 트래픽"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
-msgstr ""
+msgstr "사라진 후에도 잠시 동안 트래픽을 계속 표시합니다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Trail length"
@@ -6484,7 +6484,7 @@ msgstr "FAI트라이앵글에 대한 제한사항을 선택하시오."
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
 #, no-c-format
 msgid "95% dist. rule helpers"
-msgstr ""
+msgstr "95% 거리 규칙 도우미"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid ""
@@ -9819,7 +9819,7 @@ msgstr "트랜스폰더 수신기"
 #: src/InfoBoxes/Content/Factory.cpp:1094
 #, no-c-format
 msgid "XPDR Code"
-msgstr ""
+msgstr "XPDR 코드"
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
 #, no-c-format
@@ -9829,12 +9829,12 @@ msgstr "대기주파수 설정"
 #: src/InfoBoxes/Content/Factory.cpp:1101
 #, no-c-format
 msgid "Engine CHT"
-msgstr ""
+msgstr "엔진 CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1102
 #, no-c-format
 msgid "CHT"
-msgstr ""
+msgstr "CHT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1103
 #, no-c-format
@@ -9844,7 +9844,7 @@ msgstr "온도(예보온도)"
 #: src/InfoBoxes/Content/Factory.cpp:1109
 #, no-c-format
 msgid "Engine EGT"
-msgstr ""
+msgstr "엔진 EGT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
 #, no-c-format
@@ -9859,12 +9859,12 @@ msgstr "온도(예보온도)"
 #: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
-msgstr ""
+msgstr "엔진 분당 회전수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid "RPM"
-msgstr ""
+msgstr "RPM"
 
 #: src/InfoBoxes/Content/Factory.cpp:1119
 #, no-c-format
@@ -9874,12 +9874,12 @@ msgstr "분당 심박수."
 #: src/InfoBoxes/Content/Factory.cpp:1125
 #, no-c-format
 msgid "AAT dT and task ETA"
-msgstr ""
+msgstr "AAT dT 및 과제 ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "AATdeltaOrETA"
-msgstr ""
+msgstr "AAT 델타 또는 ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
@@ -10922,7 +10922,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1394
 msgid "Quit XCSoar"
-msgstr ""
+msgstr "XCSoar 종료"
 
 #~ msgid "Create xcsoar-checklist.txt"
 #~ msgstr "XCsoar-체크리스트 만들기"
