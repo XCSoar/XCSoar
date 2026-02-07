@@ -6,6 +6,7 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/FileMultiSelectWidget.hpp"
+#include "Widget/StaticHelpTextWidget.hpp"
 #include "WidgetDialog.hpp"
 #include "net/http/Features.hpp"
 
@@ -35,7 +36,11 @@ MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
 
   FileMultiSelectWidget *file_widget = list_widget.get();
 
-  dialog.AddButton(_("Help"), [file_widget]() { file_widget->ShowHelp(); });
+  std::unique_ptr<Widget> widget = std::move(list_widget);
+
+  if (help_text != nullptr)
+    widget = std::make_unique<StaticHelpTextWidget>(std::move(widget),
+                                                    help_text);
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
@@ -73,7 +78,8 @@ MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
   UpdateButtons();
   file_widget->SetSelectionChangedCallback(UpdateButtons);
 
-  dialog.FinishPreliminary(std::move(list_widget));
+  dialog.FinishPreliminary(std::move(widget));
+
   int result = dialog.ShowModal();
 
   if (result == mrOK) {

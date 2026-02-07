@@ -138,7 +138,8 @@ public:
  * @param item_height
  * @param item_renderer Paint a single item
  * @param update Update per timer
- * @param help_text enable the "Help" button and show this text on click
+ * @param help_text if no itemhelp_callback, show this text at the bottom;
+ * otherwise enable the "Help" button and show this text on click
  * @param itemhelp_callback Callback to return string for current item help
  * @param extra_caption caption of another button that closes the
  * dialog (nullptr disables it)
