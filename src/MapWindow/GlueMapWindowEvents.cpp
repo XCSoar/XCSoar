@@ -270,6 +270,13 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
     if (gesture && OnMouseGesture(gesture))
       return true;
 
+    /* Menu dismissal doesn't need a valid projection;
+       dismiss on tap even when there is no GPS fix */
+    if (!InputEvents::IsDefault() && !IsPanning()) {
+      InputEvents::HideMenu();
+      return true;
+    }
+
     break;
   }
 
