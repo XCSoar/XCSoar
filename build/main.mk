@@ -504,6 +504,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/FlarmProfile.cpp \
 	\
 	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/Repository/Parser.cpp \
 	\
 	$(SRC)/Storage/PlatformStorageMonitor.cpp \
