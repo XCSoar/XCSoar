@@ -105,7 +105,7 @@ RaspStore::GetNearestTime(unsigned item_index, unsigned time_index) const
 }
 
 bool
-RaspStore::NarrowWeatherFilename(char *filename, Path name,
+RaspStore::WeatherFilename(char *filename, Path name,
                                           unsigned time_index)
 {
   const NarrowPathName narrow_name(name);
@@ -128,7 +128,7 @@ bool
 RaspStore::ExistsItem(const ZipArchive &archive, Path name, unsigned time_index)
 {
   char filename[MAX_PATH];
-  if (!NarrowWeatherFilename(filename, name, time_index))
+  if (!WeatherFilename(filename, name, time_index))
     return false;
 
   return archive.Exists(filename);
