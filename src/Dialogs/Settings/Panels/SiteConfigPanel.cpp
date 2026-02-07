@@ -90,7 +90,12 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           ProfileKeys::FlarmFile, _T("*.fln\0"),
           FileType::FLARMNET);
 
-  AddFile(_T("RASP"), nullptr,
+  AddFile(_T("RASP"),
+          _("Regional Atmospheric Soaring Prediction file providing "
+            "weather forecasts for soaring. Displays color-coded map "
+            "overlays for thermal strength, boundary layer winds, "
+            "cloud cover, and other soaring-relevant parameters at "
+            "various forecast times throughout the day."),
           ProfileKeys::RaspFile, _T("*-rasp*.dat\0"),
           FileType::RASP);
 
