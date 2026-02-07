@@ -343,6 +343,26 @@ Startup(UI::Display &display)
   Display::LoadOrientation(operation);
   main_window->CheckResize();
 
+  /* Log device capabilities and features after initialization */
+  LogFormat("Device capabilities: HasIOIOLib()=%s",
+            HasIOIOLib() ? "yes" : "no");
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11)
+  LogFormat("Device capabilities: HasPointer()=%s",
+            HasPointer() ? "yes" : "no");
+  LogFormat("Device capabilities: HasKeyboard()=%s",
+            HasKeyboard() ? "yes" : "no");
+  LogFormat("Device capabilities: HasTouchScreen()=%s",
+            HasTouchScreen() ? "yes" : "no");
+  LogFormat("Device capabilities: HasCursorKeys()=%s",
+            HasCursorKeys() ? "yes" : "no");
+#endif
+  LogFormat("Device capabilities: HasColors()=%s",
+            HasColors() ? "yes" : "no");
+  LogFormat("Device capabilities: HasEPaper()=%s",
+            HasEPaper() ? "yes" : "no");
+  LogFormat("Device capabilities: IsDithered()=%s",
+            IsDithered() ? "yes" : "no");
+
   main_window->InitialiseConfigured();
 
   file_cache = new FileCache(GetCachePath());
