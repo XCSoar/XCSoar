@@ -241,7 +241,7 @@ protected:
   void RefreshList();
   void UpdateButtons();
 
-  void Download();
+  void UpdateFile();
   void Add();
   void Cancel();
   void UpdateFiles();
@@ -391,7 +391,7 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
-    download_button = dialog.AddButton(_("Update"), [this](){ Download(); });
+    download_button = dialog.AddButton(_("Update"), [this](){ UpdateFile(); });
     add_button = dialog.AddButton(_("Add"), [this](){ Add(); });
     cancel_button = dialog.AddButton(_("Abort"), [this](){ Cancel(); });
     update_button = dialog.AddButton(_("Update all"), [this](){
@@ -470,7 +470,7 @@ ManagedFileListWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
 }
 
 void
-ManagedFileListWidget::Download()
+ManagedFileListWidget::UpdateFile()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   assert(Net::DownloadManager::IsAvailable());
