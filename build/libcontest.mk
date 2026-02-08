@@ -8,6 +8,9 @@ CONTEST_SOURCES = \
 	$(CONTEST_SRC_DIR)/Solvers/TraceManager.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/ContestDijkstra.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/DMStQuad.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/DMStTriangle.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/DMStOR.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/DMStFree.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCLeague.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCSprint.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCClassic.cpp \

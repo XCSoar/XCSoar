@@ -121,6 +121,7 @@ TEST_NAMES = \
 	TestPackedFloat \
 	TestVersionNumber \
 	TestWeglideScoring \
+	TestDMStScoring \
 	TestHttpsVerify
 
 ifeq ($(TARGET_IS_ANDROID),n)
@@ -2503,6 +2504,12 @@ TEST_WEGLIDE_SCORING_SOURCES = \
 	$(TEST_SRC_DIR)/TestWeglideScoring.cpp
 TEST_WEGLIDE_SCORING_DEPENDS = MATH
 $(eval $(call link-program,TestWeglideScoring,TEST_WEGLIDE_SCORING))
+
+TEST_DMST_SCORING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDMStScoring.cpp
+TEST_DMST_SCORING_DEPENDS = MATH
+$(eval $(call link-program,TestDMStScoring,TEST_DMST_SCORING))
 
 TEST_VERSION_NUMBER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

@@ -10,6 +10,9 @@
 #include "Solvers/OLCLeague.hpp"
 #include "Solvers/OLCPlus.hpp"
 #include "Solvers/DMStQuad.hpp"
+#include "Solvers/DMStTriangle.hpp"
+#include "Solvers/DMStOR.hpp"
+#include "Solvers/DMStFree.hpp"
 #include "Solvers/XContestFree.hpp"
 #include "Solvers/XContestTriangle.hpp"
 #include "Solvers/OLCSISAT.hpp"
@@ -39,6 +42,9 @@ class ContestManager
   OLCLeague olc_league;
   OLCPlus olc_plus;
   DMStQuad dmst_quad;
+  DMStTriangle dmst_triangle;
+  DMStOR dmst_or;
+  DMStFree dmst_free;
   XContestFree xcontest_free;
   XContestTriangle xcontest_triangle;
   XContestFree dhv_xc_free;
@@ -110,6 +116,8 @@ public:
     dhv_xc_triangle.SetMaxTreeSize(max_tree_size);
     weglide_fai.SetMaxIterations(max_iterations);
     weglide_fai.SetMaxTreeSize(max_tree_size);
+    dmst_triangle.SetMaxIterations(max_iterations);
+    dmst_triangle.SetMaxTreeSize(max_tree_size);
 
     return SolveExhaustive();
   }

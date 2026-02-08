@@ -111,7 +111,14 @@ TestContest(DebugReplay &replay)
   PrintHelper::print(olc_plus.GetStats().GetResult(2));
 
   std::cout << "dmst\n";
-  PrintHelper::print(dmst.GetStats().GetResult());
+  std::cout << "# quadrilateral\n";
+  PrintHelper::print(dmst.GetStats().GetResult(0));
+  std::cout << "# triangle\n";
+  PrintHelper::print(dmst.GetStats().GetResult(1));
+  std::cout << "# out and return\n";
+  PrintHelper::print(dmst.GetStats().GetResult(2));
+  std::cout << "# free (best)\n";
+  PrintHelper::print(dmst.GetStats().GetResult(3));
 
   std::cout << "xcontest\n";
   std::cout << "# free\n";
