@@ -69,4 +69,10 @@ extern PixelPoint translate;
 
 extern glm::mat4 projection_matrix;
 
+/**
+ * Maximum map scale in meters for zoom-out, to work around
+ * GPU driver bugs.  0 means no GPU-imposed limit.
+ */
+extern unsigned max_map_scale;
+
 } // namespace OpenGL

@@ -25,6 +25,8 @@ PixelPoint translate;
 
 glm::mat4 projection_matrix;
 
+unsigned max_map_scale;
+
 #ifndef NDEBUG
 pthread_t thread;
 #endif

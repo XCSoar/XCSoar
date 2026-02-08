@@ -17,6 +17,10 @@
 #include "Math/Constants.hpp"
 #include "Screen/Layout.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
+
 #include <algorithm> // for std::clamp()
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
@@ -192,7 +196,14 @@ InputEvents::sub_SetZoom(double value)
   auto vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
   auto scale_2min_distance = vmin * 12;
   const double scale_100m = 10;
-  const double scale_1600km = 1600*100;
+  double scale_1600km = 1600*100;
+
+#ifdef ENABLE_OPENGL
+  if (OpenGL::max_map_scale > 0)
+    scale_1600km = std::min(scale_1600km,
+                            double(OpenGL::max_map_scale));
+#endif
+
   auto minreasonable = displayMode == DisplayMode::CIRCLING
     ? scale_100m
     : std::max(scale_100m, scale_2min_distance);

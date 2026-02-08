@@ -106,8 +106,16 @@ OpenGL::SetupContext()
   if (auto s = (const char *)glGetString(GL_VERSION))
     LogFormat("GL version: %s", s);
 
-  if (auto s = (const char *)glGetString(GL_RENDERER))
+  if (auto s = (const char *)glGetString(GL_RENDERER)) {
     LogFormat("GL renderer: %s", s);
+
+    if (strstr(s, "PowerVR Rogue GE8300") != nullptr)
+      /* PowerVR Rogue GE8300 (MediaTek MT8166) crashes in the driver
+         when rendering large topography polygons at extreme zoom-out.
+         Limit the maximum map scale to avoid triggering the bug.
+         See https://github.com/XCSoar/XCSoar/issues/1235 */
+      max_map_scale = 300000;
+  }
 
   if (auto s = (const char *)glGetString(GL_EXTENSIONS))
     LogFormat("GL extensions: %s", s);
