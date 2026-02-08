@@ -141,6 +141,18 @@ FileMultiSelectWidget::GetSelectedPaths() const noexcept
   return result;
 }
 
+std::vector<Path>
+FileMultiSelectWidget::GetAllPaths() const noexcept
+{
+  std::vector<Path> result;
+  result.reserve(items_.size());
+
+  for (const auto &item : items_)
+    result.push_back(item.path);
+
+  return result;
+}
+
 void
 FileMultiSelectWidget::ShowHelp() noexcept
 {
