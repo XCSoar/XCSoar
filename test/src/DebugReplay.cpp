@@ -54,7 +54,14 @@ CreateDebugReplay(Args &args)
   } else {
     const auto driver_name = args.ExpectNextT();
     const auto input_file = args.ExpectNextPath();
-    replay = DebugReplayNMEA::Create(input_file, driver_name);
+
+    if (StringEndsWithIgnoreCase(input_file.c_str(), ".igc"))
+      /* The user passed a driver name before an IGC file
+         (e.g. "IGC file.igc"); ignore the driver and use
+         the native IGC replay instead of NMEA parsing */
+      replay = DebugReplayIGC::Create(input_file);
+    else
+      replay = DebugReplayNMEA::Create(input_file, driver_name);
   }
 
   return replay;
