@@ -142,8 +142,7 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
 
   // TODO: delete the old directory XCSoarData/pc_met?
   const auto cache_path = MakeCacheDirectory("pc_met");
-  auto path = AllocatedPath::Build(cache_path,
-                                   UTF8ToWideConverter(name.c_str()));
+  auto path = AllocatedPath::Build(cache_path, name.c_str());
 
   if (!File::Exists(path)) {
     // URI for a single page of a selected 'Satellitenbilder"-page with link
