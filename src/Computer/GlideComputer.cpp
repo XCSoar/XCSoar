@@ -102,7 +102,10 @@ GlideComputer::ProcessGPS(bool force)
 
   TakeoffLanding(last_flying);
 
-  task_computer.ProcessAutoTask(basic, calculated);
+  // const_cast is safe here: waypoints object is actually non-const
+  // (from data_components->waypoints), and AddTempPoint is a safe operation
+  task_computer.ProcessAutoTask(basic, calculated,
+                                const_cast<Waypoints &>(waypoints));
 
   // Process extended information
   air_data_computer.ProcessVertical(Basic(),

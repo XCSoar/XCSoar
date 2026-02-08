@@ -33,7 +33,6 @@ end
 local gce_events = {
   ["gce_takeoff"] = function(e)
      xcsoar.fire_legacy_event("AutoLogger","start");
-     xcsoar.fire_legacy_event("AddWaypoint","takeoff");
      xcsoar.fire_legacy_event("StatusMessage","Takeoff");
   end,
   ["gce_landing"] = function(e)
