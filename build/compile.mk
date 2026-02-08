@@ -59,7 +59,7 @@ CXX_MAJOR_VERSION = $(firstword $(subst ., ,$(CXX_VERSION)))
 OBJ_SUFFIX = .o
 
 # Converts a list of source file names to *.o
-SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.cxx,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(ABI_OUTPUT_DIR)/,$(1))))))
+SRC_TO_OBJ = $(subst /./,/,$(patsubst %.mm,%$(OBJ_SUFFIX),$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.cxx,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(ABI_OUTPUT_DIR)/,$(1)))))))
 
 ####### dependency handling
 
@@ -112,6 +112,10 @@ $(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx | $(ABI_OUTPUT_DIR)/%/../dirstamp $(comp
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
 endif
+
+$(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.mm | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
+	@$(NQ)echo "  Objective-C++ $@"
+	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 
 # Note: $(compile-depends) contains a list of order-only targets which
 # must be finished before anything can be compiled.  It can be used to
