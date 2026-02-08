@@ -10,6 +10,10 @@
 #include "Screen/Layout.hpp"
 #include "PageActions.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
+
 #include <algorithm> // for std::clamp()
 
 void
@@ -134,9 +138,22 @@ GlueMapWindow::RestoreMapScale() noexcept
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
-  visible_projection.SetScale(settings.circle_zoom_enabled && circling
-                              ? settings.circling_scale
-                              : settings.cruise_scale);
+  double scale = settings.circle_zoom_enabled && circling
+    ? settings.circling_scale
+    : settings.cruise_scale;
+
+#ifdef ENABLE_OPENGL
+  if (OpenGL::max_map_scale > 0) {
+    /* enforce the GPU-imposed zoom-out limit;
+       min pixels/meter = map_resolution_factor / max_map_scale */
+    const double min_scale =
+      double(visible_projection.GetMinScreenDistance()) / 8.0
+      / double(OpenGL::max_map_scale);
+    scale = std::max(scale, min_scale);
+  }
+#endif
+
+  visible_projection.SetScale(scale);
   OnProjectionModified();
 }
 
