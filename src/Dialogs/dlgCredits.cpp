@@ -9,7 +9,6 @@
 #include "Look/DialogLook.hpp"
 #include "Version.hpp"
 #include "Inflate.hpp"
-#include "util/ConvertString.hpp"
 #include "util/AllocatedString.hxx"
 #include "util/StaticString.hxx"
 #include "UIGlobals.hpp"

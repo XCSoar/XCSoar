@@ -4,7 +4,6 @@
 #include "Dialogs.hpp"
 #include "Catch.hpp"
 #include "Error.hxx"
-#include "util/ConvertString.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Error.hpp"
 

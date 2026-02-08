@@ -3,7 +3,6 @@
 
 #include "Error.hpp"
 #include "Message.hpp"
-#include "util/ConvertString.hpp"
 #include "util/Exception.hxx"
 #include "util/StaticString.hxx"
 
