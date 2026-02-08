@@ -51,6 +51,9 @@ public:
   [[nodiscard]]
   std::vector<Path> GetSelectedPaths() const noexcept;
 
+  [[nodiscard]]
+  std::vector<Path> GetAllPaths() const noexcept;
+
   void Refresh() noexcept;
 
   /** Set an optional filter for which files to show. If `filter` is
