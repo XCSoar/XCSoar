@@ -8,6 +8,8 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Error.hpp"
 
+#include <utility>
+
 extern "C" {
 #include <lua.h>
 }
