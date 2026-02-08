@@ -109,9 +109,12 @@ flight data.
 ``CreateDebugReplay()`` automatically detects the file format (IGC, NMEA) and
 creates an appropriate replay object. It accepts:
 
-- IGC files: ``*.igc``
-- NMEA files: ``*.nmea``, ``*.txt`` (with NMEA sentences)
-- Device driver names: ``FLARM``, ``Vega``, etc. (for driver-specific parsing)
+- IGC files: ``file.igc`` (auto-detected by extension)
+- IGC files with driver prefix: ``IGC file.igc`` (driver name is ignored)
+- NMEA files: ``DRIVER file.nmea`` (driver name required for NMEA parsing)
+
+If the file has a ``.igc`` extension, it is always parsed using the native IGC
+replay, even if a driver name is specified before it.
 
 Pattern 2: Main.hpp-Based GUI Utilities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -573,6 +576,49 @@ Converts LX Navigation (LXN) binary files to IGC format.
 Flight Analysis Utilities
 -------------------------
 
+RunContestAnalysis
+~~~~~~~~~~~~~~~~~~
+
+Analyzes flight data through all contest solvers and prints results.
+
+**Usage**:
+
+.. code-block:: bash
+
+   # IGC file (auto-detected by extension):
+   ./output/UNIX/bin/RunContestAnalysis flight.igc
+
+   # NMEA file (driver name required):
+   ./output/UNIX/bin/RunContestAnalysis FLARM flight.nmea
+
+**What it does**:
+
+- Processes flight data through all contest solvers
+- Runs exhaustive solving for OLC Classic, FAI, Sprint, League, Plus,
+  DMSt (quadrilateral, triangle, out-and-return, free), XContest,
+  SIS-AT, WeGlide (distance, FAI, OR, free), and Charron
+- Prints distance, score, speed, and time for each contest type
+- Useful for comparing contest results across rule sets
+
+**Example output** (abbreviated):
+
+.. code-block:: text
+
+   classic
+   #   score 307.294
+   #   distance 307.294 (km)
+   #   speed 67.213 (kph)
+   #   time 16459 (sec)
+   dmst
+   # quadrilateral
+   #   score 276.402
+   #   distance 276.402 (km)
+   ...
+   # triangle
+   #   score 276.853
+   #   distance 197.752 (km)
+   ...
+
 AnalyseFlight
 ~~~~~~~~~~~~~
 
@@ -583,20 +629,20 @@ times, and contest results.
 
 .. code-block:: bash
 
-   # For IGC files (driver argument required but ignored):
-   ./output/UNIX/bin/AnalyseFlight FLARM test/data/01lz1hq1.igc
-   
-   # For NMEA files (driver required):
-   ./output/UNIX/bin/AnalyseFlight FLARM test/data/file.nmea
-   
+   # IGC file (auto-detected by extension):
+   ./output/UNIX/bin/AnalyseFlight flight.igc
+
+   # NMEA file (driver name required):
+   ./output/UNIX/bin/AnalyseFlight FLARM flight.nmea
+
    # With options:
-   ./output/UNIX/bin/AnalyseFlight --full-points=1024 FLARM test/data/01lz1hq1.igc
+   ./output/UNIX/bin/AnalyseFlight --full-points=1024 flight.igc
 
 **What it does**:
 
 - Processes flight data through flight phase detector
 - Detects takeoff, release, and landing events
-- Calculates contest results (OLC, FAI, etc.)
+- Calculates contest results (OLC Plus, DMSt)
 - Outputs JSON with flight statistics
 - Useful for automated flight analysis
 
@@ -604,7 +650,7 @@ times, and contest results.
 
 - Takeoff/release/landing times and locations
 - Flight phases (circling, cruise, etc.)
-- Contest scores
+- Contest scores (OLC Plus: classic/triangle/plus; DMSt: quadrilateral/triangle/out-and-return/free)
 - Circling statistics
 
 **Note**: Available on UNIX/PC platforms only (not Android).
