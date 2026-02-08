@@ -10,6 +10,9 @@ Version 7.44 - not yet released
     quality assessment for better circle validation, and GPS latency
     compensation
   - fix WeGlide scoring formulas
+  - implement full DMSt scoring rules: triangle (+40% bonus), out-and-return
+    (+30% bonus), composite solver, correct scoring formula, and minimum
+    point thresholds per official Wettbewerbsordnung
 * tracking
   - xcsoar-cloud-service: rebuild service, new domain cloud.xcsoar.org
 * data files
