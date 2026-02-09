@@ -68,6 +68,7 @@ GetWelcomeText(bool dark_mode)
     "%s\n\n"
     "- [%s](https://xcsoar.org/discover/manual.html)\n"
     "- [%s](https://github.com/XCSoar/XCSoar)\n"
+    "- [%s](https://github.com/XCSoar/XCSoar/discussions)\n"
     "- [https://xcsoar.org](https://xcsoar.org)",
     dark_mode ? "IDB_TITLE_HD_WHITE" : "IDB_TITLE_HD",
     XCSoar_VersionString,
@@ -77,7 +78,8 @@ GetWelcomeText(bool dark_mode)
     _("Documentation is available in several languages. "
       "You can always access the latest versions online:"),
     _("XCSoar Manual & Quick Guide"),
-    _("GitHub - Source Code & Contributions"));
+    _("GitHub - Source Code & Contributions"),
+    _("GitHub Discussions - Questions & Community"));
   return welcome.c_str();
 }
 
@@ -141,7 +143,13 @@ GetConfigurationHelpText()
   const bool has_pilot = pilot != nullptr && !StringIsEmpty(pilot);
   const bool has_device = IsAnyDeviceConfigured();
 
-  static StaticString<1024> text;
+  bool weglide_enabled = false;
+  Profile::Get(ProfileKeys::WeGlideEnabled, weglide_enabled);
+
+  bool tim_enabled = false;
+  Profile::Get(ProfileKeys::EnableThermalInformationMap, tim_enabled);
+
+  static StaticString<1536> text;
   text.Format(
     "# Getting Started\n\n"
     "To use XCSoar effectively, configure the following:\n\n"
@@ -154,12 +162,24 @@ GetConfigurationHelpText()
     "Enter your name and weight\n\n"
     "- [%s] [Devices](xcsoar://config/devices) - "
     "Connect your flight instruments\n\n"
+    "- [%s] [WeGlide](xcsoar://config/weglide) - "
+    "Upload flights automatically to WeGlide\n\n"
+    "- [%s] [Thermal Information Map](xcsoar://config/weather) - "
+    "Show thermal locations from thermalmap.info on the map\n\n"
+    "- [ ] [Safety factors](xcsoar://config/safety) - "
+    "Set arrival height, terrain clearance and polar degradation\n\n"
+    "- [ ] [Terrain display](xcsoar://config/terrain) - "
+    "Choose terrain colors, shading and contour lines\n\n"
+    "- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - "
+    "Share your position via SkyLines or LiveTrack24\n\n"
     "The easiest way to explore XCSoar is to "
     "[replay an existing IGC flight](xcsoar://dialog/replay).",
     has_map ? "x" : " ",
     has_polar ? "x" : " ",
     has_pilot ? "x" : " ",
-    has_device ? "x" : " ");
+    has_device ? "x" : " ",
+    weglide_enabled ? "x" : " ",
+    tim_enabled ? "x" : " ");
   return text.c_str();
 }
 
