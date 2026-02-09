@@ -227,7 +227,9 @@ TabDisplay::OnResize(PixelSize new_size) noexcept
 void
 TabDisplay::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(COLOR_BLACK);
+  canvas.Clear(look.dark_mode
+               ? DarkColor(look.background_color)
+               : COLOR_BLACK);
 
   const bool is_focused = !HasCursorKeys() || HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {

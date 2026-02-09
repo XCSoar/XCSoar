@@ -345,23 +345,28 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
 
   Color background_color, text_color;
   if (pressed) {
-    background_color = COLOR_BLACK;
-    text_color = COLOR_WHITE;
+    background_color = look.list.pressed.background_color;
+    text_color = look.list.pressed.text_color;
   } else if (IsEnabled()) {
-    if (IsReadOnly())
-      background_color = Color(0xf0, 0xf0, 0xf0);
-    else
-      background_color = COLOR_WHITE;
-    text_color = COLOR_BLACK;
+    if (IsReadOnly()) {
+      background_color = look.dark_mode
+        ? DarkColor(look.list.background_color)
+        : Color(0xf0, 0xf0, 0xf0);
+    } else {
+      background_color = look.list.background_color;
+    }
+    text_color = look.list.text_color;
   } else {
-    background_color = COLOR_LIGHT_GRAY;
-    text_color = COLOR_DARK_GRAY;
+    background_color = look.dark_mode
+      ? DarkColor(look.list.background_color)
+      : COLOR_LIGHT_GRAY;
+    text_color = look.dark_mode ? COLOR_GRAY : COLOR_DARK_GRAY;
   }
 
   canvas.DrawFilledRectangle(edit_rc, background_color);
 
   canvas.SelectHollowBrush();
-  canvas.SelectBlackPen();
+  canvas.Select(Pen(1, look.dark_mode ? COLOR_GRAY : COLOR_BLACK));
   canvas.DrawRectangle(edit_rc);
 
   if (!value.empty()) {
