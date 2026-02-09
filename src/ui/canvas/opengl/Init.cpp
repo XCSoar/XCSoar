@@ -221,11 +221,12 @@ OpenGL::SetupViewport(UnsignedPoint2D size) noexcept
   window_size = size;
 
   glViewport(0, 0, size.x, size.y);
-  projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   OrientationSwap(size, display_orientation);
 #endif
+
+  projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   glm::mat4 rot_matrix = glm::rotate(
@@ -235,7 +236,6 @@ OpenGL::SetupViewport(UnsignedPoint2D size) noexcept
   projection_matrix = rot_matrix * projection_matrix;
 #endif
 
-  /* viewport_size is the EGL surface size (which is already the safe area in non-fullscreen) */
   viewport_size = size;
 
   UpdateShaderProjectionMatrix();
