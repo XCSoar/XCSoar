@@ -4,6 +4,7 @@
 #include "ViewImageWidget.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Features.hpp"
 #include "ui/window/PaintWindow.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
@@ -47,7 +48,8 @@ void
 ViewImageWindow::OnPaint(Canvas &canvas) noexcept
 {
   const auto &look = UIGlobals::GetDialogLook();
-  canvas.Clear(look.background_color);
+  if (HaveClipping())
+    canvas.Clear(look.background_color);
 
   if (bitmap == nullptr)
     return;

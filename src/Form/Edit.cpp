@@ -301,14 +301,14 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
   const bool focused = HasCursorKeys() && HasFocus();
 
   /* background and selector */
-  if (pressed) {
-    canvas.Clear(look.list.pressed.background_color);
-  } else if (focused) {
-    canvas.Clear(look.focused.background_color);
-  } else {
-    /* don't need to erase the background when it has been done by the
-       parent window already */
-    if (HaveClipping())
+  if (HaveClipping()) {
+    /* with clipping, the parent's background does not extend into
+       child windows, so we must fill the background ourselves */
+    if (pressed)
+      canvas.Clear(look.list.pressed.background_color);
+    else if (focused)
+      canvas.Clear(look.focused.background_color);
+    else
       canvas.Clear(look.background_color);
   }
 
@@ -347,6 +347,9 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
   if (pressed) {
     background_color = look.list.pressed.background_color;
     text_color = look.list.pressed.text_color;
+  } else if (focused) {
+    background_color = look.list.focused.background_color;
+    text_color = look.list.focused.text_color;
   } else if (IsEnabled()) {
     if (IsReadOnly()) {
       background_color = look.dark_mode

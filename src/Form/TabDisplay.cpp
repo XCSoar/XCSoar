@@ -8,6 +8,7 @@
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
 #include "Asset.hpp"
@@ -227,9 +228,10 @@ TabDisplay::OnResize(PixelSize new_size) noexcept
 void
 TabDisplay::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(look.dark_mode
-               ? DarkColor(look.background_color)
-               : COLOR_BLACK);
+  if (HaveClipping())
+    canvas.Clear(look.dark_mode
+                 ? DarkColor(look.background_color)
+                 : COLOR_BLACK);
 
   const bool is_focused = !HasCursorKeys() || HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {

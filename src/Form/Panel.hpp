@@ -5,7 +5,7 @@
 
 #include "ui/canvas/Features.hpp"
 
-#if defined(HAVE_CLIPPING) || defined(ENABLE_OPENGL)
+#ifdef HAVE_CLIPPING
 #include "ui/window/SolidContainerWindow.hpp"
 #else
 #include "ui/window/ContainerWindow.hpp"
@@ -17,12 +17,14 @@ struct DialogLook;
  * The PanelControl class implements the simplest form of a ContainerControl
  */
 class PanelControl :
-#if defined(HAVE_CLIPPING) || defined(ENABLE_OPENGL)
-  /* need explicit background erasing with clipping or OpenGL rendering */
+#ifdef HAVE_CLIPPING
+  /* need explicit background erasing with clipping because the
+     parent's background does not extend into child windows */
   public SolidContainerWindow
 #else
   /* don't need to erase the background when it has been done by the
-     parent window already */
+     parent window already; staying transparent lets the parent's
+     gradient flow through uninterrupted */
   public ContainerWindow
 #endif
 {
