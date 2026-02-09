@@ -23,7 +23,8 @@ CalcProgressBarPosition(unsigned current_value,
 void
 DrawSimpleProgressBar(Canvas &canvas, const PixelRect &r,
                       unsigned current_value,
-                      unsigned min_value, unsigned max_value) noexcept
+                      unsigned min_value, unsigned max_value,
+                      const Color *background_color) noexcept
 {
   const int position =
     CalcProgressBarPosition(current_value, min_value, max_value,
@@ -33,20 +34,28 @@ DrawSimpleProgressBar(Canvas &canvas, const PixelRect &r,
   a.right = b.left = a.left + position;
 
   canvas.DrawFilledRectangle(a, IsDithered() ? COLOR_BLACK : COLOR_GREEN);
-  canvas.DrawFilledRectangle(b, COLOR_WHITE);
+  canvas.DrawFilledRectangle(b,
+                             background_color != nullptr
+                             ? *background_color : COLOR_WHITE);
 }
 
 void
 DrawRoundProgressBar(Canvas &canvas, const PixelRect &r,
                      unsigned current_value,
-                     unsigned min_value, unsigned max_value) noexcept
+                     unsigned min_value, unsigned max_value,
+                     const Color *background_color) noexcept
 {
   const unsigned position =
     CalcProgressBarPosition(current_value, min_value, max_value,
                             r.GetWidth());
 
   canvas.SelectNullPen();
-  canvas.SelectWhiteBrush();
+  if (background_color != nullptr) {
+    Brush bg_brush(*background_color);
+    canvas.Select(bg_brush);
+  } else {
+    canvas.SelectWhiteBrush();
+  }
   canvas.DrawRoundRectangle(r, PixelSize{r.GetHeight()});
 
   Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);

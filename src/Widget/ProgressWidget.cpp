@@ -39,17 +39,18 @@ public:
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
-    DrawSimpleProgressBar(canvas, canvas.GetRect(), position, 0, range);
+    auto &look = UIGlobals::GetDialogLook();
+    DrawSimpleProgressBar(canvas, canvas.GetRect(), position, 0, range,
+                          look.dark_mode ? &look.background_color : nullptr);
 
     if (!text.empty()) {
-      auto &look = UIGlobals::GetDialogLook();
       auto &font = look.text_font;
       canvas.Select(font);
 
       const int text_height = font.GetHeight();
       const int padding = ((int)canvas.GetHeight() - text_height) / 2;
 
-      canvas.SetTextColor(COLOR_BLACK);
+      canvas.SetTextColor(look.text_color);
       canvas.SetBackgroundTransparent();
 
       const tstring_view _text{text};

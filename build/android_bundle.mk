@@ -294,7 +294,12 @@ PNG8 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_TITLE_WHI
 $(PNG8): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
 	$(Q)cp $< $@
 
-PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(PNG8a) $(PNG8) \
+####### launcher RGBA halves (preserving alpha for dark mode)
+PNG9 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_LAUNCH_FLY_640_RGBA) $(PNG_LAUNCH_SIM_640_RGBA))
+$(PNG9): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
+	$(Q)cp $< $@
+
+PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(PNG8a) $(PNG8) $(PNG9) \
 	$(RES_DIR)/drawable-ldpi/icon.png \
 	$(RES_DIR)/drawable/icon.png \
 	$(RES_DIR)/drawable-hdpi/icon.png \

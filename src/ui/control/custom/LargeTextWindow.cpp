@@ -97,10 +97,10 @@ LargeTextWindow::OnKillFocus() noexcept
 void
 LargeTextWindow::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.ClearWhite();
+  canvas.Clear(background_color);
 
   auto rc = canvas.GetRect();
-  canvas.DrawOutlineRectangle(rc, COLOR_BLACK);
+  canvas.DrawOutlineRectangle(rc, border_color);
 
   if (HasFocus())
     canvas.DrawFocusRectangle(rc.WithPadding(1));
@@ -112,7 +112,7 @@ LargeTextWindow::OnPaint(Canvas &canvas) noexcept
   rc.Grow(-padding);
 
   canvas.SetBackgroundTransparent();
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(text_color);
 
   rc.top -= origin * GetFont().GetHeight();
 

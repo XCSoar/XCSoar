@@ -4,7 +4,9 @@
 #include "TaskMapButtonRenderer.hpp"
 #include "Gauge/TaskView.hpp"
 #include "Look/MapLook.hpp"
+#include "Look/DialogLook.hpp"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "DataComponents.hpp"
 
@@ -31,7 +33,7 @@ TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                   ButtonState state) const noexcept
 {
   if (task == nullptr) {
-    canvas.ClearWhite();
+    canvas.Clear(UIGlobals::GetDialogLook().background_color);
     return;
   }
 
