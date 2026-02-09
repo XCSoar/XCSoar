@@ -38,10 +38,13 @@
 
 #ifdef ANDROID
 #include "Android/ReceiveTask.hpp"
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
+#include "java/Global.hxx"
 #endif
 
 static constexpr unsigned separator_height = 2;
@@ -103,6 +106,22 @@ MainWindow::GetShowZoomInButtonRect(const PixelRect rc) noexcept
 
   return PixelRect(left, top, right, bottom);
 }
+
+#ifdef ANDROID
+[[gnu::pure]]
+PixelRect
+MainWindow::GetShowRotateButtonRect(const PixelRect rc) noexcept
+{
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned size = Layout::GetMaximumControlHeight();
+  const int left = rc.left + padding;
+  const int right = left + size;
+  const int top = rc.top + padding;
+  const int bottom = top + size;
+
+  return PixelRect(left, top, right, bottom);
+}
+#endif
 
 [[gnu::pure]]
 static PixelRect
@@ -254,6 +273,20 @@ MainWindow::InitialiseConfigured()
     show_zoom_in_button->Create(*this, GetShowZoomInButtonRect(map_rect));
   }
 
+#ifdef ANDROID
+  /* create a rotate button (initially hidden) when orientation is
+     DEFAULT (not forced) and the system auto-rotate setting is
+     enabled; the button appears temporarily when the Java
+     OrientationEventListener detects a physical orientation change */
+  if (settings.display.orientation == DisplayOrientation::DEFAULT &&
+      native_view != nullptr &&
+      native_view->IsAutoRotateEnabled(Java::GetEnv())) {
+    show_rotate_button = new ShowRotateButton();
+    show_rotate_button->Create(*this, GetShowRotateButtonRect(map_rect));
+    show_rotate_button->Hide();
+  }
+#endif
+
   map = new GlueMapWindow(*look);
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
   map->SetMapSettings(CommonInterface::GetMapSettings());
@@ -286,6 +319,12 @@ MainWindow::Deinitialise() noexcept
   show_menu_button = nullptr;
   delete show_zoom_out_button;
   show_zoom_out_button = nullptr;
+
+#ifdef ANDROID
+  rotate_button_timer.Cancel();
+  delete show_rotate_button;
+  show_rotate_button = nullptr;
+#endif
 
   vario.Clear();
   traffic_gauge.Clear();
@@ -451,6 +490,11 @@ MainWindow::ReinitialiseLayout() noexcept
     show_zoom_out_button->Move(GetShowZoomOutButtonRect(GetMainRect()));
   if (show_zoom_in_button != nullptr)
     show_zoom_in_button->Move(GetShowZoomInButtonRect(GetMainRect()));
+
+#ifdef ANDROID
+  if (show_rotate_button != nullptr)
+    show_rotate_button->Move(GetShowRotateButtonRect(GetMainRect()));
+#endif
 
   if (map != nullptr)
     map->BringToBottom();
@@ -878,6 +922,25 @@ MainWindow::OnRestorePageNotify() noexcept
   if (restore_page_pending)
     PageActions::Restore();
 }
+
+#ifdef ANDROID
+void
+MainWindow::OnRotationSuggestion() noexcept
+{
+  if (show_rotate_button == nullptr)
+    return;
+
+  show_rotate_button->Show();
+  rotate_button_timer.Schedule(std::chrono::seconds{5});
+}
+
+void
+MainWindow::OnRotateButtonTimeout() noexcept
+{
+  if (show_rotate_button != nullptr)
+    show_rotate_button->Hide();
+}
+#endif
 
 void
 MainWindow::OnDestroy() noexcept

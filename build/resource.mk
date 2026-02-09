@@ -276,7 +276,7 @@ endif
 
 ####### permission disclosure graphics
 
-SVG_DISCLOSURE = Data/graphics/location_pin.svg Data/graphics/notification_bell.svg Data/graphics/bluetooth.svg Data/graphics/warning_triangle.svg
+SVG_DISCLOSURE = Data/graphics/location_pin.svg Data/graphics/notification_bell.svg Data/graphics/bluetooth.svg Data/graphics/warning_triangle.svg Data/graphics/rotate.svg
 PNG_DISCLOSURE_DST = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%.png,$(SVG_DISCLOSURE))
 PNG_DISCLOSURE_WIN = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.png,$(SVG_DISCLOSURE))
 BMP_DISCLOSURE_WIN = $(PNG_DISCLOSURE_WIN:.png=.bmp)

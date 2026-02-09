@@ -5,6 +5,10 @@
 
 #include "Form/Button.hpp"
 
+#ifdef ANDROID
+#include "ui/canvas/Bitmap.hpp"
+#endif
+
 /* "M" menu button */
 class ShowMenuButton : public Button {
 public:
@@ -37,3 +41,18 @@ protected:
   /* virtual methods from class ButtonWindow */
   bool OnClicked() noexcept override;
 };
+
+#ifdef ANDROID
+/* rotate screen button */
+class ShowRotateButton : public Button {
+  Bitmap bitmap;
+
+public:
+  void Create(ContainerWindow &parent, const PixelRect &rc,
+              WindowStyle style=WindowStyle()) noexcept;
+
+protected:
+  /* virtual methods from class ButtonWindow */
+  bool OnClicked() noexcept override;
+};
+#endif

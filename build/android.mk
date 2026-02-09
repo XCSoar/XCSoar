@@ -295,7 +295,7 @@ $(PNG6): $(DRAWABLE_DIR)/gesture_%.png: doc/manual/figures/gesture_%.svg | $(DRA
 	$(Q)rsvg-convert --width=82 --height=82 $< -o $@
 
 ####### permission disclosure graphics from SVG sources
-PNG7 := $(DRAWABLE_DIR)/location_pin.png $(DRAWABLE_DIR)/notification_bell.png $(DRAWABLE_DIR)/bluetooth.png $(DRAWABLE_DIR)/warning_triangle.png
+PNG7 := $(DRAWABLE_DIR)/location_pin.png $(DRAWABLE_DIR)/notification_bell.png $(DRAWABLE_DIR)/bluetooth.png $(DRAWABLE_DIR)/warning_triangle.png $(DRAWABLE_DIR)/rotate.png
 $(PNG7): $(DRAWABLE_DIR)/%.png: Data/graphics/%.svg | $(DRAWABLE_DIR)/dirstamp
 	$(Q)rsvg-convert --width=80 --height=80 $< -o $@
 
