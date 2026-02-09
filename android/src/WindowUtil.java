@@ -14,12 +14,19 @@ import android.view.WindowInsets;
  * A library of utility functions for class #Window.
  */
 class WindowUtil {
-  static final int FULL_SCREEN_WINDOW_FLAGS =
+  /**
+   * Legacy fullscreen flags for Android 10 and below.
+   *
+   * FLAG_LAYOUT_NO_LIMITS is a KitKat-era workaround that tells the
+   * system the window extends beyond the screen.  On modern Android
+   * this conflicts with setDecorFitsSystemWindows(false) and can
+   * suppress gesture navigation indicators on some OEMs (e.g. Nokia).
+   *
+   * On API 30+ we rely on setDecorFitsSystemWindows(false) +
+   * WindowInsetsController instead and do not set these flags.
+   */
+  static final int LEGACY_FULL_SCREEN_FLAGS =
     WindowManager.LayoutParams.FLAG_FULLSCREEN|
-
-    /* Workaround for layout problems in Android KitKat with immersive full
-       screen mode: Sometimes the content view was not initialized with the
-       correct size, which caused graphics artifacts. */
     WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
     WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
@@ -84,7 +91,11 @@ class WindowUtil {
   }
 
   static void enterFullScreenMode(Window window) {
-    window.addFlags(FULL_SCREEN_WINDOW_FLAGS);
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+      /* Pre-Android 11: use legacy flags for edge-to-edge layout */
+      window.addFlags(LEGACY_FULL_SCREEN_FLAGS);
+    }
+
     enableImmersiveMode(window);
 
     /* Enable display cutout mode (notch support) for Android P (API 28) and above.
@@ -106,7 +117,7 @@ class WindowUtil {
 
   static void leaveFullScreenMode(Window window, int preserveFlags) {
     disableImmersiveMode(window);
-    window.clearFlags(FULL_SCREEN_WINDOW_FLAGS & ~preserveFlags);
+    window.clearFlags(LEGACY_FULL_SCREEN_FLAGS & ~preserveFlags);
 
     /* Set display cutout mode in non-fullscreen mode to respect the notch.
        For SDK 35+, use LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS as the SHORT_EDGES mode
