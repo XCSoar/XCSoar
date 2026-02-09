@@ -30,7 +30,22 @@ TopCanvas::CheckResize(PixelSize new_native_size) noexcept
         new_native_size.height == OpenGL::window_size.y)
       return false;
 
-    SetupViewport(new_native_size);
+    /* When the Activity handles configChanges (orientation|screenSize),
+       Android resizes the SurfaceView without destroying it.  The EGL
+       surface keeps the old buffer dimensions, so we must recreate it
+       to pick up the new native window size. */
+    const PixelSize egl_size = GetNativeSize();
+    if (egl_size.width != new_native_size.width ||
+        egl_size.height != new_native_size.height) {
+      ReleaseSurface();
+      if (!AcquireSurface())
+        /* AcquireSurface() already called SetupViewport() with the
+           correct dimensions from the new native window */
+        return false;
+    } else {
+      SetupViewport(new_native_size);
+    }
+
     return true;
   }
 #endif

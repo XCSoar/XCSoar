@@ -68,6 +68,15 @@ TopWindow::ResumeSurface() noexcept
 
   assert(screen->IsReady());
 
+  {
+    /* mark that we now have a native surface; this is also done in
+       OnSurface() for the event-queue path, but ResumeSurface() can
+       be called directly (e.g. from OnResize during initial startup)
+       where OnSurface() is never reached */
+    const std::lock_guard lock{paused_mutex};
+    have_native_surface = true;
+  }
+
   RefreshSize();
 
   /* schedule a redraw */
@@ -260,6 +269,10 @@ TopWindow::OnEvent(const Event &event)
        2.2.2); let's do one dummy call before we really draw
        something */
     screen->Flip();
+
+    /* after a surface recreation (e.g. orientation change), the
+       buffer is empty; schedule a full redraw */
+    Invalidate();
     return true;
   }
 
