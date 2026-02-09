@@ -169,7 +169,7 @@ OpenGL::SetupContext()
     render_buffer_stencil = render_buffer_depth_stencil;
 
   glDisable(GL_DEPTH_TEST);
-  glDisable(GL_DITHER);
+  glEnable(GL_DITHER);
 
   InitShaders();
 }
