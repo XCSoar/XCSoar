@@ -119,6 +119,11 @@ GetQuantisation() noexcept
 bool
 RasterRenderer::UpdateQuantisation() noexcept
 {
+  if (fixed_quantisation)
+    /* value was set explicitly via SetQuantisationPixels();
+       don't let the idle-based heuristic overwrite it */
+    return quantisation_pixels < last_quantisation_pixels;
+
   quantisation_pixels = GetQuantisation();
   return quantisation_pixels < last_quantisation_pixels;
 }
