@@ -253,9 +253,17 @@ PNG2 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_LAUNCH_ALL
 $(PNG2): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG3 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80) $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110))
-$(PNG3): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $< $@
+# Copy splash/title PNGs directly from SVG-rendered PNGs (preserving alpha)
+# instead of going through BMP (which flattens onto white background)
+PNG3_SPLASH := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80))
+$(PNG3_SPLASH): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.png | $(DRAWABLE_DIR)/dirstamp
+	$(Q)cp $< $@
+
+PNG3_TITLE := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110))
+$(PNG3_TITLE): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.png | $(DRAWABLE_DIR)/dirstamp
+	$(Q)cp $< $@
+
+PNG3 := $(PNG3_SPLASH) $(PNG3_TITLE)
 
 PNG4 := $(patsubst $(DATA)/icons/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_ICONS_ALL))
 $(PNG4): $(DRAWABLE_DIR)/%.png: $(DATA)/icons/%.png | $(DRAWABLE_DIR)/dirstamp
@@ -265,7 +273,28 @@ PNG5 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_DIALOG_TIT
 $(PNG5): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
+####### gesture icons from SVG sources
+GESTURES_ANDROID = down dl dr du left ldr ldrdl right rd rl up ud uldr urd urdl
+PNG6 := $(addprefix $(DRAWABLE_DIR)/gesture_,$(addsuffix .png,$(GESTURES_ANDROID)))
+$(PNG6): $(DRAWABLE_DIR)/gesture_%.png: doc/manual/figures/gesture_%.svg | $(DRAWABLE_DIR)/dirstamp
+	$(Q)rsvg-convert --width=82 --height=82 $< -o $@
+
+####### permission disclosure graphics from SVG sources
+PNG7 := $(DRAWABLE_DIR)/location_pin.png $(DRAWABLE_DIR)/notification_bell.png $(DRAWABLE_DIR)/bluetooth.png $(DRAWABLE_DIR)/warning_triangle.png
+$(PNG7): $(DRAWABLE_DIR)/%.png: Data/graphics/%.svg | $(DRAWABLE_DIR)/dirstamp
+	$(Q)rsvg-convert --width=80 --height=80 $< -o $@
+
+####### RGBA splash logos for dark mode (transparent background)
+PNG8a := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_SPLASH_320_RGBA) $(PNG_SPLASH_160_RGBA) $(PNG_SPLASH_80_RGBA))
+$(PNG8a): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
+	$(Q)cp $< $@
+
+####### white title for dark mode (RGBA PNGs with alpha)
+PNG8 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_TITLE_WHITE_320_RGBA) $(PNG_TITLE_WHITE_640_RGBA))
+$(PNG8): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
+	$(Q)cp $< $@
+
+PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(PNG8a) $(PNG8) \
 	$(RES_DIR)/drawable-ldpi/icon.png \
 	$(RES_DIR)/drawable/icon.png \
 	$(RES_DIR)/drawable-hdpi/icon.png \

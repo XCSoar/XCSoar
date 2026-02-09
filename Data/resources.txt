@@ -46,6 +46,10 @@ bitmap_icon_scaled IDB_GLOBE "globe"
 bitmap_icon_scaled IDB_DEVICE "device"
 bitmap_icon_scaled IDB_RULES "rules"
 bitmap_icon_scaled IDB_CLOCK "clock"
+bitmap_graphic IDB_LOCATION_PIN "location_pin"
+bitmap_graphic IDB_NOTIFICATION_BELL "notification_bell"
+bitmap_graphic IDB_BLUETOOTH "bluetooth"
+bitmap_graphic IDB_WARNING_TRIANGLE "warning_triangle"
 
 #ifdef EYE_CANDY
 #ifdef XCSOAR_TESTING
@@ -145,6 +149,8 @@ bitmap_graphic IDB_TITLE_HD "title_red_320"
 bitmap_graphic IDB_TITLE_UHD "title_red_640"
 #ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_TITLE_HD_RGBA "title_red_320_rgba"
+bitmap_graphic IDB_TITLE_HD_WHITE "title_red_white_320_rgba"
+bitmap_graphic IDB_TITLE_UHD_WHITE "title_red_white_640_rgba"
 #endif
 #else
 bitmap_graphic IDB_TITLE "title_110"
@@ -152,6 +158,8 @@ bitmap_graphic IDB_TITLE_HD "title_320"
 bitmap_graphic IDB_TITLE_UHD "title_640"
 #ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_TITLE_HD_RGBA "title_320_rgba"
+bitmap_graphic IDB_TITLE_HD_WHITE "title_white_320_rgba"
+bitmap_graphic IDB_TITLE_UHD_WHITE "title_white_640_rgba"
 #endif
 #endif
 bitmap_icon_scaled IDB_WEATHER_STATION "map_weather_station"
