@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "dlgOnboarding.hpp"
+#include "dlgQuickGuide.hpp"
 #include "dlgGestureHelp.hpp"
 #include "WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
-#include "Widget/OnboardingPageWidget.hpp"
+#include "Widget/QuickGuidePageWidget.hpp"
 #include "Widget/VScrollWidget.hpp"
 #include "Widget/RichTextWidget.hpp"
 #include "Profile/Profile.hpp"
@@ -45,13 +45,13 @@ static constexpr unsigned INVALID_PAGE = ~0u;
 /**
  * Track conditional page indices for post-dialog result handling.
  */
-struct OnboardingState {
+struct QuickGuideState {
   unsigned warranty_page_index = INVALID_PAGE;
   unsigned news_page_index = INVALID_PAGE;
   unsigned cloud_page_index = INVALID_PAGE;
   unsigned location_page_index = INVALID_PAGE;
   bool warranty_accepted = false;
-  OnboardingPageWidget *warranty_widget = nullptr;
+  QuickGuidePageWidget *warranty_widget = nullptr;
 };
 
 /* ---- Welcome / Logo page text ---- */
@@ -377,7 +377,7 @@ DisableCloud()
  * pages.
  */
 static bool
-IsOnboardingHidden() noexcept
+IsQuickGuideHidden() noexcept
 {
   bool hidden = false;
   Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup, hidden);
@@ -385,7 +385,7 @@ IsOnboardingHidden() noexcept
 }
 
 bool
-dlgOnboardingShowModal(bool force_info)
+dlgQuickGuideShowModal(bool force_info)
 {
   const bool is_simulator = global_simulator_flag;
   const bool warranty_needed =
@@ -400,7 +400,7 @@ dlgOnboardingShowModal(bool force_info)
 #else
   const bool permissions_needed = false;
 #endif
-  const bool info_pages_needed = force_info || !IsOnboardingHidden();
+  const bool info_pages_needed = force_info || !IsQuickGuideHidden();
 
   // If everything is already satisfied, skip the dialog entirely
   if (!warranty_needed && !news_needed &&
@@ -417,7 +417,7 @@ dlgOnboardingShowModal(bool force_info)
     look.button, dialog.MakeModalResultCallback(mrOK));
   ArrowPagerWidget *pager_ptr = pager.get();
 
-  OnboardingState state;
+  QuickGuideState state;
 
   // Track page titles for the caption callback
   std::vector<const char *> titles;
@@ -450,7 +450,7 @@ dlgOnboardingShowModal(bool force_info)
   if (warranty_needed) {
     state.warranty_page_index = pager->GetSize();
 
-    auto page = OnboardingPageWidget::CreateCheckboxPage(
+    auto page = QuickGuidePageWidget::CreateCheckboxPage(
       look, disclaimer_text,
       _("I have read and understand the above disclaimer"),
       false,
@@ -460,7 +460,7 @@ dlgOnboardingShowModal(bool force_info)
       });
     state.warranty_widget = page.get();
 
-    /* OnboardingPageWidget already has its own VScrollWidget
+    /* QuickGuidePageWidget already has its own VScrollWidget
        inside, so do NOT wrap it in another one (causes double
        scrolling and inflated virtual height).  Set the gesture
        callback directly instead. */
@@ -482,7 +482,7 @@ dlgOnboardingShowModal(bool force_info)
     if (news_text.IsValid()) {
       state.news_page_index = pager->GetSize();
 
-      auto page = OnboardingPageWidget::CreateCheckboxPage(
+      auto page = QuickGuidePageWidget::CreateCheckboxPage(
         look, news_text,
         _("Don't show these release notes again"),
         false,
@@ -504,7 +504,7 @@ dlgOnboardingShowModal(bool force_info)
       CommonInterface::GetComputerSettings()
         .tracking.skylines.cloud.enabled == TriState::TRUE;
 
-    auto page = OnboardingPageWidget::CreateCheckboxPage(
+    auto page = QuickGuidePageWidget::CreateCheckboxPage(
       look, cloud_consent_text,
       _("Enable XCSoar Cloud"),
       cloud_currently_enabled,
@@ -535,7 +535,7 @@ dlgOnboardingShowModal(bool force_info)
   if (!is_simulator && !AreLocationPermissionsGranted()) {
     state.location_page_index = pager->GetSize();
 
-    auto page = OnboardingPageWidget::CreateTwoButtonPage(
+    auto page = QuickGuidePageWidget::CreateTwoButtonPage(
       look, location_disclosure_text,
       _("Continue"),
       [advance_or_close]() {
@@ -554,7 +554,7 @@ dlgOnboardingShowModal(bool force_info)
   }
 
   if (!is_simulator && !IsNotificationPermissionGranted()) {
-    auto page = OnboardingPageWidget::CreateTwoButtonPage(
+    auto page = QuickGuidePageWidget::CreateTwoButtonPage(
       look, notification_disclosure_text,
       _("Continue"),
       [advance_or_close]() {
@@ -605,7 +605,7 @@ dlgOnboardingShowModal(bool force_info)
 
     // Don't show again - using a checkbox page
     {
-      auto done_page = OnboardingPageWidget::CreateCheckboxPage(
+      auto done_page = QuickGuidePageWidget::CreateCheckboxPage(
         look,
         _("# That's it!\n\n"
           "You can revisit the gesture help from the "
@@ -613,7 +613,7 @@ dlgOnboardingShowModal(bool force_info)
           "Check the box below to skip this guide on "
           "future startups."),
         _("Don't show this guide again"),
-        IsOnboardingHidden(),
+        IsQuickGuideHidden(),
         [](bool) { /* state is read on dialog close */ });
       done_page->SetGestureCallback(pager_gesture);
       pager->Add(std::move(done_page));
@@ -688,7 +688,7 @@ dlgOnboardingShowModal(bool force_info)
     auto &news_widget = static_cast<ArrowPagerWidget &>(
       dialog.GetWidget()).GetWidget(state.news_page_index);
     auto *news_page =
-      dynamic_cast<OnboardingPageWidget *>(&news_widget);
+      dynamic_cast<QuickGuidePageWidget *>(&news_widget);
     if (news_page != nullptr && news_page->GetCheckboxState()) {
       Profile::Set(ProfileKeys::LastSeenNewsVersion, XCSoar_Version);
       Profile::Save();
@@ -701,7 +701,7 @@ dlgOnboardingShowModal(bool force_info)
     auto &cloud_widget = static_cast<ArrowPagerWidget &>(
       dialog.GetWidget()).GetWidget(state.cloud_page_index);
     auto *cloud_page =
-      dynamic_cast<OnboardingPageWidget *>(&cloud_widget);
+      dynamic_cast<QuickGuidePageWidget *>(&cloud_widget);
     if (cloud_page != nullptr) {
       if (cloud_page->GetCheckboxState())
         EnableCloud();
@@ -717,10 +717,10 @@ dlgOnboardingShowModal(bool force_info)
     const unsigned last_page_idx = total_pages - 1;
     auto &last_widget = static_cast<ArrowPagerWidget &>(
       dialog.GetWidget()).GetWidget(last_page_idx);
-    auto *onboarding_page =
-      dynamic_cast<OnboardingPageWidget *>(&last_widget);
-    if (onboarding_page != nullptr &&
-        onboarding_page->GetCheckboxState()) {
+    auto *guide_page =
+      dynamic_cast<QuickGuidePageWidget *>(&last_widget);
+    if (guide_page != nullptr &&
+        guide_page->GetCheckboxState()) {
       Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup, true);
       Profile::Save();
     }

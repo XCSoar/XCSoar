@@ -6,7 +6,7 @@
 /**
  * Markdown text describing all supported map gestures.
  * Shared between the standalone gesture help dialog and the
- * onboarding wizard.
+ * Quick Guide dialog.
  */
 extern const char gesture_help_text[];
 

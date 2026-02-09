@@ -153,7 +153,6 @@ void eventRepeatStatusMessage(const TCHAR *misc);
 void eventRun(const TCHAR *misc);
 void eventQuickGuide(const TCHAR *misc);
 void eventGestureHelp(const TCHAR *misc);
-void eventOnboarding(const TCHAR *misc);
 void eventScreenModes(const TCHAR *misc);
 void eventDevice(const TCHAR *misc);
 void eventSendNMEA(const TCHAR *misc);

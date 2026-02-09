@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "OnboardingPageWidget.hpp"
+#include "QuickGuidePageWidget.hpp"
 #include "VScrollWidget.hpp"
 #include "RichTextWidget.hpp"
 #include "Form/Button.hpp"
@@ -10,7 +10,7 @@
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 
-OnboardingPageWidget::OnboardingPageWidget(
+QuickGuidePageWidget::QuickGuidePageWidget(
   const DialogLook &_look,
   const char *_markdown_text) noexcept
   :look(_look),
@@ -18,25 +18,25 @@ OnboardingPageWidget::OnboardingPageWidget(
 {
 }
 
-OnboardingPageWidget::~OnboardingPageWidget() noexcept = default;
+QuickGuidePageWidget::~QuickGuidePageWidget() noexcept = default;
 
-std::unique_ptr<OnboardingPageWidget>
-OnboardingPageWidget::CreateContentPage(
+std::unique_ptr<QuickGuidePageWidget>
+QuickGuidePageWidget::CreateContentPage(
   const DialogLook &look,
   const char *markdown_text) noexcept
 {
-  return std::make_unique<OnboardingPageWidget>(look, markdown_text);
+  return std::make_unique<QuickGuidePageWidget>(look, markdown_text);
 }
 
-std::unique_ptr<OnboardingPageWidget>
-OnboardingPageWidget::CreateCheckboxPage(
+std::unique_ptr<QuickGuidePageWidget>
+QuickGuidePageWidget::CreateCheckboxPage(
   const DialogLook &look,
   const char *markdown_text,
   const char *_checkbox_label,
   bool initial_state,
   std::function<void(bool)> callback) noexcept
 {
-  auto widget = std::make_unique<OnboardingPageWidget>(
+  auto widget = std::make_unique<QuickGuidePageWidget>(
     look, markdown_text);
   widget->bar_type = BottomBarType::CHECKBOX;
   widget->checkbox_label = _checkbox_label;
@@ -45,14 +45,14 @@ OnboardingPageWidget::CreateCheckboxPage(
   return widget;
 }
 
-std::unique_ptr<OnboardingPageWidget>
-OnboardingPageWidget::CreateButtonPage(
+std::unique_ptr<QuickGuidePageWidget>
+QuickGuidePageWidget::CreateButtonPage(
   const DialogLook &look,
   const char *markdown_text,
   const char *_button_label,
   std::function<void()> callback) noexcept
 {
-  auto widget = std::make_unique<OnboardingPageWidget>(
+  auto widget = std::make_unique<QuickGuidePageWidget>(
     look, markdown_text);
   widget->bar_type = BottomBarType::ONE_BUTTON;
   widget->button1_label = _button_label;
@@ -60,8 +60,8 @@ OnboardingPageWidget::CreateButtonPage(
   return widget;
 }
 
-std::unique_ptr<OnboardingPageWidget>
-OnboardingPageWidget::CreateTwoButtonPage(
+std::unique_ptr<QuickGuidePageWidget>
+QuickGuidePageWidget::CreateTwoButtonPage(
   const DialogLook &look,
   const char *markdown_text,
   const char *_button1_label,
@@ -69,7 +69,7 @@ OnboardingPageWidget::CreateTwoButtonPage(
   const char *_button2_label,
   std::function<void()> button2_cb) noexcept
 {
-  auto widget = std::make_unique<OnboardingPageWidget>(
+  auto widget = std::make_unique<QuickGuidePageWidget>(
     look, markdown_text);
   widget->bar_type = BottomBarType::TWO_BUTTONS;
   widget->button1_label = _button1_label;
@@ -80,7 +80,7 @@ OnboardingPageWidget::CreateTwoButtonPage(
 }
 
 bool
-OnboardingPageWidget::GetCheckboxState() const noexcept
+QuickGuidePageWidget::GetCheckboxState() const noexcept
 {
   if (checkbox)
     return checkbox->GetState();
@@ -88,7 +88,7 @@ OnboardingPageWidget::GetCheckboxState() const noexcept
 }
 
 void
-OnboardingPageWidget::SetCheckboxState(bool value) noexcept
+QuickGuidePageWidget::SetCheckboxState(bool value) noexcept
 {
   checkbox_initial_state = value;
   if (checkbox)
@@ -96,15 +96,15 @@ OnboardingPageWidget::SetCheckboxState(bool value) noexcept
 }
 
 void
-OnboardingPageWidget::SetText(const char *text) noexcept
+QuickGuidePageWidget::SetText(const char *text) noexcept
 {
   markdown_text = text ? text : "";
   // If the scroll widget already has a RichTextWidget inside,
   // we can't easily update it. The caller should recreate the page.
 }
 
-OnboardingPageWidget::PageLayout
-OnboardingPageWidget::CalcLayout(const PixelRect &rc) const noexcept
+QuickGuidePageWidget::PageLayout
+QuickGuidePageWidget::CalcLayout(const PixelRect &rc) const noexcept
 {
   PageLayout layout;
   layout.has_bottom_bar = (bar_type != BottomBarType::NONE);
@@ -123,13 +123,13 @@ OnboardingPageWidget::CalcLayout(const PixelRect &rc) const noexcept
 }
 
 PixelSize
-OnboardingPageWidget::GetMinimumSize() const noexcept
+QuickGuidePageWidget::GetMinimumSize() const noexcept
 {
   return {Layout::Scale(200u), Layout::Scale(200u)};
 }
 
 PixelSize
-OnboardingPageWidget::GetMaximumSize() const noexcept
+QuickGuidePageWidget::GetMaximumSize() const noexcept
 {
   /* Use the minimum size as a reasonable default; the actual
      content height is managed by the internal VScrollWidget
@@ -141,7 +141,7 @@ OnboardingPageWidget::GetMaximumSize() const noexcept
 }
 
 void
-OnboardingPageWidget::Initialise(ContainerWindow &parent,
+QuickGuidePageWidget::Initialise(ContainerWindow &parent,
                                  const PixelRect &rc) noexcept
 {
   // Create the RichTextWidget wrapped in VScrollWidget
@@ -160,7 +160,7 @@ OnboardingPageWidget::Initialise(ContainerWindow &parent,
 }
 
 void
-OnboardingPageWidget::Prepare(ContainerWindow &parent,
+QuickGuidePageWidget::Prepare(ContainerWindow &parent,
                               const PixelRect &rc) noexcept
 {
   const auto layout = CalcLayout(rc);
@@ -171,7 +171,7 @@ OnboardingPageWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-OnboardingPageWidget::CreateBottomBar(ContainerWindow &parent,
+QuickGuidePageWidget::CreateBottomBar(ContainerWindow &parent,
                                       const PixelRect &rc) noexcept
 {
   WindowStyle style;
@@ -210,7 +210,7 @@ OnboardingPageWidget::CreateBottomBar(ContainerWindow &parent,
 }
 
 void
-OnboardingPageWidget::Show(const PixelRect &rc) noexcept
+QuickGuidePageWidget::Show(const PixelRect &rc) noexcept
 {
   const auto layout = CalcLayout(rc);
   scroll_widget->Show(layout.content);
@@ -222,7 +222,7 @@ OnboardingPageWidget::Show(const PixelRect &rc) noexcept
 }
 
 void
-OnboardingPageWidget::Hide() noexcept
+QuickGuidePageWidget::Hide() noexcept
 {
   visible = false;
   scroll_widget->Hide();
@@ -233,7 +233,7 @@ OnboardingPageWidget::Hide() noexcept
 }
 
 void
-OnboardingPageWidget::Move(const PixelRect &rc) noexcept
+QuickGuidePageWidget::Move(const PixelRect &rc) noexcept
 {
   const auto layout = CalcLayout(rc);
   scroll_widget->Move(layout.content);
@@ -243,7 +243,7 @@ OnboardingPageWidget::Move(const PixelRect &rc) noexcept
 }
 
 void
-OnboardingPageWidget::PositionBottomBar(
+QuickGuidePageWidget::PositionBottomBar(
   const PixelRect &bar_rect, bool show) noexcept
 {
   switch (bar_type) {
@@ -289,13 +289,13 @@ OnboardingPageWidget::PositionBottomBar(
 }
 
 bool
-OnboardingPageWidget::SetFocus() noexcept
+QuickGuidePageWidget::SetFocus() noexcept
 {
   return scroll_widget->SetFocus();
 }
 
 bool
-OnboardingPageWidget::HasFocus() const noexcept
+QuickGuidePageWidget::HasFocus() const noexcept
 {
   if (scroll_widget->HasFocus())
     return true;
@@ -309,7 +309,7 @@ OnboardingPageWidget::HasFocus() const noexcept
 }
 
 bool
-OnboardingPageWidget::KeyPress(unsigned key_code) noexcept
+QuickGuidePageWidget::KeyPress(unsigned key_code) noexcept
 {
   // Let the scroll content handle the key first
   if (scroll_widget->KeyPress(key_code))

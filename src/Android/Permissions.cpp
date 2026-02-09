@@ -8,7 +8,7 @@
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Widget/OnboardingPageWidget.hpp"
+#include "Widget/QuickGuidePageWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
@@ -263,7 +263,7 @@ ShowDisclosureOnUIThread(void *ctx) noexcept
 
   bool accepted = false;
 
-  auto page = OnboardingPageWidget::CreateTwoButtonPage(
+  auto page = QuickGuidePageWidget::CreateTwoButtonPage(
     look, text,
     _("Continue"),
     [&dialog, &accepted]() {
