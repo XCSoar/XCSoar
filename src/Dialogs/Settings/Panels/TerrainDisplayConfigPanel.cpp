@@ -10,6 +10,8 @@
 #include "Language/Language.hpp"
 #include "MapSettings.hpp"
 #include "Terrain/TerrainRenderer.hpp"
+#include "Topography/TopographyRenderer.hpp"
+#include "Topography/TopographyStore.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Components.hpp"
 #include "DataComponents.hpp"
@@ -18,6 +20,7 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/MapLook.hpp"
 #include "UIGlobals.hpp"
 #include "Message.hpp"
 
@@ -39,10 +42,16 @@ enum ControlIndex {
 
 class TerrainPreviewWindow : public PaintWindow {
   TerrainRenderer renderer;
+  std::unique_ptr<TopographyRenderer> topo_renderer;
+  bool topography_enabled;
 
 public:
-  TerrainPreviewWindow(const RasterTerrain &terrain)
-    :renderer(terrain)
+  TerrainPreviewWindow(const RasterTerrain &terrain,
+                       const TopographyStore *topo_store,
+                       const TopographyLook &topo_look,
+                       bool _topography_enabled)
+    :renderer(terrain),
+     topography_enabled(_topography_enabled)
   {
 #ifdef ENABLE_OPENGL
     /* always render at full resolution in the preview;
@@ -50,11 +59,19 @@ public:
        blocky image while the user interacts with the dialog */
     renderer.SetQuantisationPixels(1);
 #endif
+    if (topo_store != nullptr)
+      topo_renderer =
+        std::make_unique<TopographyRenderer>(*topo_store, topo_look);
   }
 
   void SetSettings(const TerrainRendererSettings &settings) {
     renderer.SetSettings(settings);
     renderer.Flush();
+    Invalidate();
+  }
+
+  void SetTopographyEnabled(bool enabled) {
+    topography_enabled = enabled;
     Invalidate();
   }
 
@@ -155,6 +172,9 @@ TerrainDisplayConfigPanel::OnModified(DataField &df) noexcept
                         ? _("Topography shown")
                         : _("Topography hidden"));
     ActionInterface::SendMapSettings(true);
+    if (have_terrain_preview)
+      ((TerrainPreviewWindow &)GetRow(TerrainPreview))
+        .SetTopographyEnabled(topography_enabled);
   } else {
     UpdateTerrainPreview();
   }
@@ -192,6 +212,9 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas) noexcept
 #endif
 
   renderer.Draw(canvas, projection);
+
+  if (topography_enabled && topo_renderer)
+    topo_renderer->Draw(canvas, projection);
 }
 
 void
@@ -291,7 +314,12 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
     WindowStyle style;
     style.Border();
 
-    auto preview = std::make_unique<TerrainPreviewWindow>(*data_components->terrain);
+    const auto &map_look = UIGlobals::GetMapLook();
+    auto preview = std::make_unique<TerrainPreviewWindow>(
+      *data_components->terrain,
+      data_components->topography.get(),
+      map_look.topography,
+      settings_map.topography_enabled);
     preview->Create((ContainerWindow &)GetWindow(), {0, 0, 100, 100}, style);
     AddRemaining(std::move(preview));
   }
