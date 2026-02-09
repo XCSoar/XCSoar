@@ -84,6 +84,17 @@ RowFormWidget::SaveValue(unsigned i, std::string_view profile_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, std::string_view profile_key,
+                         std::string &string) const noexcept
+{
+  if (!SaveValue(i, string))
+    return false;
+
+  Profile::Set(profile_key, string);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i, std::string_view profile_key,
                          bool &value, bool negated) const noexcept
 {
   if (!SaveValue(i, value, negated))
