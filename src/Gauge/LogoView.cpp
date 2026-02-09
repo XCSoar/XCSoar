@@ -9,12 +9,20 @@
 #include "Resources.hpp"
 #include "Version.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#endif
+
 #include <algorithm>
 
 LogoView::LogoView() noexcept try
   :logo(IDB_LOGO), big_logo(IDB_LOGO_HD), huge_logo(IDB_LOGO_UHD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD), huge_title(IDB_TITLE_UHD)
 {
+#ifndef USE_WIN32_RESOURCES
+  /* Load the white title variant for dark mode */
+  white_title.Load(IDB_TITLE_HD_WHITE);
+#endif
 #ifndef USE_GDI
   font.Load(FontDescription(Layout::FontScale(10)));
 #ifndef NDEBUG
@@ -66,7 +74,8 @@ EstimateLogoViewSize(LogoViewOrientation orientation,
 }
 
 void
-LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
+LogoView::draw(Canvas &canvas, const PixelRect &rc,
+               bool dark_mode) noexcept
 {
   /* Return only if all logo and title variants are missing */
   if (!huge_logo.IsDefined() && !big_logo.IsDefined() && !logo.IsDefined() &&
@@ -169,11 +178,24 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
   }
 
   // Draw 'XCSoar N.N' title
-  if (orientation != LogoViewOrientation::SQUARE)
-    canvas.Stretch(title_position, title_size, *bitmap_title);
+  if (orientation != LogoViewOrientation::SQUARE) {
+    const Bitmap *draw_title = bitmap_title;
+    if (dark_mode && white_title.IsDefined())
+      draw_title = &white_title;
+
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
+    canvas.Stretch(title_position, title_size, *draw_title);
+  }
 
   // Draw XCSoar swift logo
-  canvas.Stretch(logo_position, logo_size, *bitmap_logo);
+  {
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
+    canvas.Stretch(logo_position, logo_size, *bitmap_logo);
+  }
 
   // Draw full XCSoar version number
 
@@ -184,7 +206,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc) noexcept
   canvas.Select(font);
 #endif
 
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(dark_mode ? COLOR_WHITE : COLOR_BLACK);
   canvas.SetBackgroundTransparent();
   canvas.DrawText({2, 2}, XCSoar_ProductToken);
 

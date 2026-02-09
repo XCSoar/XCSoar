@@ -24,12 +24,21 @@
 
 class LogoWindow final : public PaintWindow {
   LogoView logo;
+  bool dark_mode;
+
+public:
+  explicit LogoWindow(bool _dark_mode = false,
+                     Color _background_color = COLOR_WHITE) noexcept
+    :dark_mode(_dark_mode), background_color(_background_color) {}
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
-    canvas.ClearWhite();
-    logo.draw(canvas, GetClientRect());
+    canvas.Clear(background_color);
+    logo.draw(canvas, GetClientRect(), dark_mode);
   }
+
+private:
+  Color background_color;
 };
 
 class LogoQuitWidget final : public NullWidget {
@@ -40,8 +49,9 @@ class LogoQuitWidget final : public NullWidget {
   Button quit;
 
 public:
-  LogoQuitWidget(const ButtonLook &_look, WndForm &_dialog) noexcept
-    :look(_look), dialog(_dialog) {}
+  LogoQuitWidget(const ButtonLook &_look, WndForm &_dialog,
+                 bool dark_mode, Color background_color) noexcept
+    :look(_look), dialog(_dialog), logo(dark_mode, background_color) {}
 
 private:
   PixelRect GetButtonRect(PixelRect rc) noexcept {
@@ -222,7 +232,8 @@ dlgStartupShowModal() noexcept
                                    UIGlobals::GetDialogLook(),
                                    nullptr);
 
-  dialog.SetWidget(std::make_unique<LogoQuitWidget>(look.button, dialog),
+  dialog.SetWidget(std::make_unique<LogoQuitWidget>(look.button, dialog,
+                                                    look.dark_mode, look.background_color),
                    std::make_unique<StartupWidget>(look, dialog, dff));
 
   return dialog.ShowModal() == mrOK;
