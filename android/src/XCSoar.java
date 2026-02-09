@@ -339,10 +339,16 @@ public class XCSoar extends Activity implements PermissionManager {
       return;
     }
 
-    /* Stop the foreground service when app is being destroyed.
-       This is the only place where we stop the service - it continues running
-       when the app goes to background to ensure continuous IGC logging and
-       safety warnings. */
+    /* Mark the app as shutting down so that MyService will not restart
+       itself after System.exit() kills the process.  The flag must be
+       written synchronously (commit(), not apply()) because
+       System.exit() follows shortly. */
+    getApplicationContext()
+      .getSharedPreferences("xcsoar_service", Context.MODE_PRIVATE)
+      .edit()
+      .putBoolean("app_shutdown", true)
+      .commit();
+
     try {
       stopService(new Intent(this, org.xcsoar.MyService.class));
     } catch (Exception e) {
