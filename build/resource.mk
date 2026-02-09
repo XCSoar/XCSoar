@@ -63,13 +63,17 @@ PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_160.png,$(SVG
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
 PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_80.png,$(SVG_SPLASH))
 BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
+PNG_SPLASH_320_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_320_rgba.png,$(SVG_SPLASH))
 PNG_SPLASH_160_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_160_rgba.png,$(SVG_SPLASH))
+PNG_SPLASH_80_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_80_rgba.png,$(SVG_SPLASH))
 
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_SPLASH_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_160),$(DATA)/graphics/%_160.png,Data/graphics/%.svg,--width=160))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_80),$(DATA)/graphics/%_80.png,Data/graphics/%.svg,--width=80))
+$(eval $(call rsvg-convert,$(PNG_SPLASH_320_RGBA),$(DATA)/graphics2/%_320_rgba.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_160_RGBA),$(DATA)/graphics2/%_160_rgba.png,Data/graphics/%.svg,--width=160))
+$(eval $(call rsvg-convert,$(PNG_SPLASH_80_RGBA),$(DATA)/graphics2/%_80_rgba.png,Data/graphics/%.svg,--width=80))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp-white,$(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.png))
@@ -316,7 +320,7 @@ RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110)
 ifneq ($(USE_WIN32_RESOURCES),y)
-RESOURCE_FILES += $(PNG_SPLASH_160_RGBA)
+RESOURCE_FILES += $(PNG_SPLASH_320_RGBA) $(PNG_SPLASH_160_RGBA) $(PNG_SPLASH_80_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_320_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_WHITE_320_RGBA)
 endif
