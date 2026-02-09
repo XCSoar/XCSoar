@@ -200,7 +200,7 @@ VScrollWidget::KeyPress(unsigned key_code) noexcept
 
   /* Handle scrolling keys — only consume directional keys if there
      is room to scroll.  Otherwise return false so the parent widget
-     (e.g. OnboardingPageWidget) can move focus to other controls.
+     (e.g. QuickGuidePageWidget) can move focus to other controls.
      PageUp/PageDown/Home/End are always consumed when a scrollbar
      is present. */
   const int step = GetWindow().GetScrollStep();

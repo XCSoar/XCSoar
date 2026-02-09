@@ -15,7 +15,7 @@ class Button;
 class CheckBoxControl;
 
 /**
- * A composite widget for onboarding dialog pages.
+ * A composite widget for Quick Guide dialog pages.
  *
  * Provides a scrollable markdown content area with an optional
  * bottom bar containing either a checkbox or one/two buttons.
@@ -25,7 +25,7 @@ class CheckBoxControl;
  * Layout and are positioned at the bottom of the allocated
  * rectangle.
  */
-class OnboardingPageWidget : public NullWidget {
+class QuickGuidePageWidget : public NullWidget {
 public:
   /** Variant types for the bottom bar */
   enum class BottomBarType : uint8_t {
@@ -74,7 +74,7 @@ private:
   std::function<void(bool)> gesture_callback;
 
 public:
-  explicit OnboardingPageWidget(const DialogLook &_look,
+  explicit QuickGuidePageWidget(const DialogLook &_look,
                                 const char *_markdown_text) noexcept;
 
   /**
@@ -97,19 +97,19 @@ public:
   void SetGestureCallback(std::function<void(bool)> cb) noexcept {
     gesture_callback = std::move(cb);
   }
-  ~OnboardingPageWidget() noexcept override;
+  ~QuickGuidePageWidget() noexcept override;
 
   /**
    * Create a content-only page (no bottom bar).
    */
-  static std::unique_ptr<OnboardingPageWidget>
+  static std::unique_ptr<QuickGuidePageWidget>
   CreateContentPage(const DialogLook &look,
                     const char *markdown_text) noexcept;
 
   /**
    * Create a page with a checkbox in the bottom bar.
    */
-  static std::unique_ptr<OnboardingPageWidget>
+  static std::unique_ptr<QuickGuidePageWidget>
   CreateCheckboxPage(const DialogLook &look,
                      const char *markdown_text,
                      const char *checkbox_label,
@@ -119,7 +119,7 @@ public:
   /**
    * Create a page with a single button in the bottom bar.
    */
-  static std::unique_ptr<OnboardingPageWidget>
+  static std::unique_ptr<QuickGuidePageWidget>
   CreateButtonPage(const DialogLook &look,
                    const char *markdown_text,
                    const char *button_label,
@@ -128,7 +128,7 @@ public:
   /**
    * Create a page with two buttons in the bottom bar.
    */
-  static std::unique_ptr<OnboardingPageWidget>
+  static std::unique_ptr<QuickGuidePageWidget>
   CreateTwoButtonPage(const DialogLook &look,
                       const char *markdown_text,
                       const char *button1_label,
