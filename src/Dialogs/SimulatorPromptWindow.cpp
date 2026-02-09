@@ -6,6 +6,7 @@
 #ifdef SIMULATOR_AVAILABLE
 
 #include "Look/DialogLook.hpp"
+#include "Look/Colors.hpp"
 #include "Language/Language.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Gauge/LogoView.hpp"
@@ -96,11 +97,30 @@ SimulatorPromptWindow::OnResize(PixelSize new_size) noexcept
 void
 SimulatorPromptWindow::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(look.background_color);
-  logo_view.draw(canvas, logo_rect, look.dark_mode);
+  {
+    const PixelRect rc = GetClientRect();
+    const int height = rc.GetHeight();
+    for (int y = rc.top; y < rc.bottom; y++) {
+      const unsigned alpha = height > 0
+        ? (unsigned)(y - rc.top) * 256 / height
+        : 0;
+      const Color c = Color(COLOR_XCSOAR.Red()
+                              + (int(COLOR_XCSOAR_DARK.Red()) - int(COLOR_XCSOAR.Red()))
+                                * (int)alpha / 256,
+                            COLOR_XCSOAR.Green()
+                              + (int(COLOR_XCSOAR_DARK.Green()) - int(COLOR_XCSOAR.Green()))
+                                * (int)alpha / 256,
+                            COLOR_XCSOAR.Blue()
+                              + (int(COLOR_XCSOAR_DARK.Blue()) - int(COLOR_XCSOAR.Blue()))
+                                * (int)alpha / 256);
+      canvas.DrawFilledRectangle(PixelRect{PixelPoint{rc.left, y},
+                                          PixelPoint{rc.right, y + 1}}, c);
+    }
+  }
+  logo_view.draw(canvas, logo_rect, true);
 
   canvas.Select(look.text_font);
-  canvas.SetTextColor(look.text_color);
+  canvas.SetTextColor(COLOR_WHITE);
   canvas.SetBackgroundTransparent();
   canvas.DrawText(label_position, _("What do you want to do?"));
 
