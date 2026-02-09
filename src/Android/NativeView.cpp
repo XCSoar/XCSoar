@@ -24,6 +24,7 @@ jmethodID NativeView::shareText_method;
 jmethodID NativeView::openURL_method;
 jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
+jmethodID NativeView::isAutoRotateEnabled_method;
 
 Java::TrivialClass NativeView::clsBitmap;
 jmethodID NativeView::createBitmap_method;
@@ -67,6 +68,9 @@ NativeView::Initialise(JNIEnv *env)
                      "(ILjava/lang/String;)V");
 
   getNetState_method = env->GetMethodID(cls, "getNetState", "()I");
+
+  isAutoRotateEnabled_method =
+    env->GetMethodID(cls, "isAutoRotateEnabled", "()Z");
 
   clsBitmap.Find(env, "android/graphics/Bitmap");
   createBitmap_method = env->GetStaticMethodID(

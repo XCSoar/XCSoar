@@ -291,12 +291,8 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   if (orientation_changed) {
     assert(Display::RotateSupported());
 
-    if (ui_settings.display.orientation == DisplayOrientation::DEFAULT)
-      Display::RotateRestore();
-    else {
-      if (!Display::Rotate(ui_settings.display.orientation))
-        LogString("Display rotation failed");
-    }
+    if (!Display::Rotate(ui_settings.display.orientation))
+      LogString("Display rotation failed");
 
 #ifdef USE_POLL_EVENT
     UI::event_queue->SetDisplayOrientation(ui_settings.display.orientation);

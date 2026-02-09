@@ -220,6 +220,20 @@ class NativeView extends SurfaceView
     fullScreenHandler.sendEmptyMessage(fullScreen ? 1 : 0);
   }
 
+  /**
+   * Check if the system auto-rotate setting is enabled.
+   * Called from native code.
+   */
+  private boolean isAutoRotateEnabled() {
+    try {
+      return android.provider.Settings.System.getInt(
+        getContext().getContentResolver(),
+        android.provider.Settings.System.ACCELEROMETER_ROTATION) == 1;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
   private boolean setRequestedOrientation(int requestedOrientation) {
     try {
       ((Activity)getContext()).setRequestedOrientation(requestedOrientation);

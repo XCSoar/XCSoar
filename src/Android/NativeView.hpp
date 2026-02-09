@@ -36,6 +36,7 @@ class NativeView {
   static jmethodID openURL_method;
   static jmethodID openWaypointFile_method;
   static jmethodID getNetState_method;
+  static jmethodID isAutoRotateEnabled_method;
 
   static Java::TrivialClass clsBitmap;
   static jmethodID createBitmap_method;
@@ -59,6 +60,8 @@ public:
     // see http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_REVERSE_LANDSCAPE
     REVERSE_LANDSCAPE = 8,
     REVERSE_PORTRAIT = 9,
+    // API level 18
+    LOCKED = 14,
   };
 
   static void Initialise(JNIEnv *env);
@@ -106,6 +109,14 @@ public:
 
   bool SetRequestedOrientation(JNIEnv *env, ScreenOrientation so) {
     return env->CallBooleanMethod(obj, setRequestedOrientationID, (jint)so);
+  }
+
+  /**
+   * Check if the system auto-rotate setting is enabled.
+   */
+  [[gnu::pure]]
+  bool IsAutoRotateEnabled(JNIEnv *env) const noexcept {
+    return env->CallBooleanMethod(obj, isAutoRotateEnabled_method);
   }
 
   Java::LocalObject LoadResourceBitmap(JNIEnv *env, const char *name) {
