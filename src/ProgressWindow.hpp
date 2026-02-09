@@ -15,6 +15,7 @@
  */
 class ProgressWindow : public ContainerWindow {
   Color background_color;
+  bool dark_mode;
 
   Bitmap bitmap_progress_border;
 

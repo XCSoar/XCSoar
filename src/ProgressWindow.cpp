@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ProgressWindow.hpp"
+#include "GlobalSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/FontDescription.hpp"
 #include "Resources.hpp"
@@ -13,7 +14,9 @@
 #endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
-  :background_color(COLOR_WHITE)
+  :background_color(GlobalSettings::dark_mode
+                    ? Color(0x0a, 0x15, 0x1f) : COLOR_WHITE),
+   dark_mode(GlobalSettings::dark_mode)
 {
   message.clear();
 
@@ -130,7 +133,7 @@ ProgressWindow::OnPaint(Canvas &canvas) noexcept
 {
   canvas.Clear(background_color);
 
-  logo.draw(canvas, logo_position);
+  logo.draw(canvas, logo_position, dark_mode);
 
   // Draw progress bar background
   canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
@@ -140,7 +143,7 @@ ProgressWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(font);
 #endif
   canvas.SetBackgroundTransparent();
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(dark_mode ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText({(message_position.left + message_position.right
                     - (int)canvas.CalcTextWidth(message.c_str())) / 2,
       message_position.top},

@@ -11,6 +11,7 @@ class Canvas;
 
 class LogoView {
   Bitmap logo, big_logo, huge_logo, title, big_title, huge_title;
+  Bitmap white_title, huge_white_title;
 
 #ifndef USE_GDI
   Font font;
@@ -23,11 +24,12 @@ public:
   LogoView() noexcept;
 
   /**
-   * Draws the XCSoar logo and the version number into the Canvas, with
-   * a white background.
+   * Draws the XCSoar logo and the version number into the Canvas.
    *
    * @param canvas the Canvas to draw on
    * @param rc the region within the Canvas to draw into
+   * @param dark_mode if true, use light-on-dark colors and white title
    */
-  void draw(Canvas &canvas, const PixelRect &rc) noexcept;
+  void draw(Canvas &canvas, const PixelRect &rc,
+            bool dark_mode = false) noexcept;
 };
