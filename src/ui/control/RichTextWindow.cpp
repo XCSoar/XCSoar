@@ -705,11 +705,6 @@ RichTextWindow::RenderLinkSegment(Canvas &canvas,
   const int seg_width = static_cast<int>(text_size.width);
   canvas.DrawText({x, text_y}, seg_text);
 
-  const int underline_offset = Layout::ScalePenWidth(2);
-  const int underline_y =
-    text_y + text_line_height - underline_offset;
-  canvas.DrawLine({x, underline_y}, {x + seg_width, underline_y});
-
   /* Expand the touch target vertically on touch screens
      so links are easier to tap */
   const int touch_expand = IsTouchLayout() ? Layout::Scale(4) : 0;
