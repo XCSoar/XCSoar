@@ -48,6 +48,8 @@ alwaysApply: true
 - Compile with `WERROR=y` and fix all warnings
 - Use `noexcept` for functions that don't throw exceptions
 - Use GCC attributes when appropriate: `[[gnu::pure]]`, `[[gnu::const]]`, `[[noreturn]]`, `[[nodiscard]]`
+- Prefer `fmt::format` over `sprintf`/`snprintf` for string formatting in new code
+- Use `LogFmt()` for formatted logging (wraps `fmt` internally)
 
 ### Code Organization
 - In class declaration: attributes first, then constructor/destructor, then methods
@@ -536,6 +538,41 @@ if (data_components != nullptr) {
   - Device drivers: write to `DeviceBlackboard::per_device_data[i]`, can implement `OnSensorUpdate()` (called from MergeThread) or `OnCalculatedUpdate()` (called from UI thread)
   - CalculationThread: lock `DeviceBlackboard` or use `GlideComputerBlackboard`
 
+### Adding JNI Methods (Android)
+
+Adding a new method callable between Java and C++ requires updating three files:
+
+1. **Java class** (e.g., `android/src/NativeView.java`): declare the method
+   ```java
+   private void startMyService() { /* Java implementation */ }
+   // or for native→Java:
+   static native void someNativeMethod();
+   ```
+2. **C++ header** (e.g., `src/Android/NativeView.hpp`): add `static jmethodID` and wrapper
+   ```cpp
+   static jmethodID startMyService_method;
+   void StartMyService(JNIEnv *env) const noexcept {
+     env->CallVoidMethod(obj, startMyService_method);
+   }
+   ```
+3. **C++ implementation** (e.g., `src/Android/NativeView.cpp`): register the method ID in `Initialise()`
+   ```cpp
+   startMyService_method = env->GetMethodID(cls, "startMyService", "()V");
+   ```
+
+- JNI function names follow: `Java_org_xcsoar_<Class>_<methodName>`
+- All `jmethodID` values are static members cached during `Initialise()`, called from `InitNative()` in `Main.cpp`
+- JNI signature strings: `()V` = void(), `(Ljava/lang/String;)V` = void(String), `(I)Z` = boolean(int)
+
+### Cross-Platform Link/URI Handling
+
+- Use `OpenLink()` from `system/OpenLink.hpp` for opening external URIs on all platforms
+- Supported URI schemes are registered in `src/util/UriSchemes.hpp` in the `kUriSchemes[]` array
+- When adding a new URI scheme, add it to `kUriSchemes[]` sorted longest-first (for overlapping prefix handling)
+- Each scheme has: `{prefix, length, is_external}` where `is_external=true` means opened via `OpenLink()`
+- Internal schemes (`xcsoar://`) use `is_external=false` and are handled by `InternalLink` dispatching
+- Prefer standard URI schemes (`geo:`, `tel:`, `mailto:`, `https:`) over platform-specific APIs
+
 ## Privacy
 
 ### Network Activity and Tracking
@@ -638,10 +675,31 @@ if (data_components != nullptr) {
 - Use nested structs for related groups (e.g., `StateLook` within `ButtonLook`)
 
 ### Colors and Styling
-- Use colors from `src/Look/Colors.hpp` for consistency
+- **All custom color literals must be defined as named constants in `src/Look/Colors.hpp`**; never use raw `Color(0x.., 0x.., 0x..)` hex literals inline in Look or rendering code
+- `Colors.hpp` contains:
+  - Brand colors: `COLOR_XCSOAR`, `COLOR_XCSOAR_LIGHT`, `COLOR_XCSOAR_DARK` (with `XCSOAR_TESTING` variants)
+  - Dark theme palette: `COLOR_DARK_THEME_BACKGROUND`, `COLOR_DARK_THEME_CAPTION`, `COLOR_DARK_THEME_BUTTON`, `COLOR_DARK_THEME_GRADIENT_TOP`, `COLOR_DARK_THEME_LIST`, etc.
+  - Light theme colors: `COLOR_DIALOG_BACKGROUND`, `COLOR_DIALOG_GRADIENT_TOP`
+  - Admonition colors: `COLOR_ADMONITION_IMPORTANT`, `COLOR_ADMONITION_TIP`, etc.
+- Standard colors from `ui/canvas/Color.hpp` (`COLOR_WHITE`, `COLOR_BLACK`, `COLOR_RED`, `COLOR_GREEN`, `COLOR_GRAY`, etc.) can be used directly
+- Use `DarkColor()` and `LightColor()` helpers for derived shades rather than defining separate constants
 - Follow color conventions (red=warning, orange=caution, green=safety, blue=neutral)
 - Support dark mode when applicable (pass `dark_mode` parameter to `Initialise()`)
-- Use platform detection for conditional styling (dithered displays, color vs monochrome)
+- **E-paper / monochrome display support:**
+  - All UI code must remain usable on black-and-white e-paper displays (Kobo e-readers)
+  - Use `IsDithered()` from `Asset.hpp` to detect e-paper displays and provide monochrome fallbacks
+  - Use `HasColors()` to check if the display supports color; fall back to black/white or greyscale when false
+  - Gradients, colored backgrounds, and alpha blending are not available on e-paper; use `COLOR_WHITE`/`COLOR_BLACK` instead
+  - Example pattern in Look code:
+    ```cpp
+    if (IsDithered())
+      SetBackgroundColor(COLOR_WHITE);
+    else
+      SetBackgroundColor(COLOR_DIALOG_BACKGROUND);
+    ```
+  - Buttons on e-paper use `COLOR_WHITE`/`COLOR_BLACK` with visible borders instead of colored backgrounds
+  - Ensure sufficient contrast: text must be clearly readable in pure black on white (no light greys or subtle tints)
+  - Test visibility of all new UI elements on monochrome displays when possible
 
 ## Translation and Internationalization Workflow
 
@@ -756,6 +814,47 @@ If `make update-po` fails with syntax errors:
 - Use: `git checkout --theirs po/*.po po/xcsoar.pot && git add po/`
 - This preserves the comprehensive translation commit at the end of the branch
 
+## Building XCSoar
+
+### Compilation Basics
+- Always use parallel builds: `make -j$(nproc)` (or `-j16`, `-j8`, etc.)
+- Always use ccache: `USE_CCACHE=y` — significantly speeds up rebuilds
+- Always build with warnings as errors: `WERROR=y` (enabled by default when `DEBUG=y`)
+- Specify the target platform with `TARGET=`: `UNIX`, `ANDROID`, `WIN64`, `PC`, `KOBO`, etc.
+
+### Common Build Commands
+```bash
+# Standard UNIX build (fastest for local development)
+make -j$(nproc) TARGET=UNIX USE_CCACHE=y
+
+# Full build including optional outputs, tests, and tools
+make -j$(nproc) TARGET=UNIX USE_CCACHE=y everything
+
+# Android debug build
+make -j$(nproc) TARGET=ANDROID USE_CCACHE=y DEBUG=y
+
+# Cross-compile for Windows
+make -j$(nproc) TARGET=WIN64 USE_CCACHE=y
+
+# Build with explicit warnings-as-errors (default in DEBUG)
+make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
+```
+
+### Build Targets
+- **`all`** (default): builds the main XCSoar binary for the selected target
+- **`everything`**: builds `all` plus optional outputs, debug tools, `build-check` (unit tests), and `build-harness` (test utilities)
+- **`check`**: runs unit tests after building them
+- **`V=1`** or **`V=2`**: verbose output to see actual compiler/linker commands
+
+### Key Build Variables
+- `TARGET=`: platform (`UNIX`, `ANDROID`, `WIN64`, `PC`, `KOBO`, etc.)
+- `DEBUG=y|n`: debug build (default `y`); enables assertions, debug symbols, and `WERROR=y`
+- `WERROR=y`: treat all warnings as errors (defaults to `$(DEBUG)`)
+- `USE_CCACHE=y`: use ccache for faster recompilation
+- `OPENGL=y|n`: enable/disable OpenGL rendering (UNIX only; use `OPENGL=n` for memory canvas)
+- `VFB=y`: virtual framebuffer for headless builds (implies `OPENGL=n`)
+- `SANITIZE=y|address,undefined`: enable sanitizers (see Sanitizer Testing section)
+
 ## Build System Debugging
 
 ### Makefile Issues
@@ -773,6 +872,12 @@ If `make update-po` fails with syntax errors:
 - **Cross-compilation**: Different platforms have different `.mk` includes; check `build/detect.mk`
 - Use `make V=1` for verbose output to see actual command lines
 - Check `build/options.mk` for feature flags that might need to be enabled
+
+### Android Resource Pipeline
+- `build/android.mk` and `build/android_bundle.mk` must be kept in sync; changes to one must be mirrored in the other
+- Generated RGBA PNGs (from SVG sources) go to `output/data/graphics2/` and need explicit copy rules to `$(DRAWABLE_DIR)` in both Android Makefiles
+- Resource copy rules use numbered variables (`PNG1`..`PNG9` etc.) and must be listed in the `PNG_FILES` aggregate variable
+- When adding a new bitmap resource variant (e.g., white title for dark mode), all resolution tiers that the code can select must be provided; if the code has `huge`/`big`/`standard` selection logic, the new variant needs matching sizes or the highest-resolution tier will fall back to a lower-resolution variant and appear blurry
 
 ### Platform-Specific Builds
 - Each platform may have platform-specific files in subdirectories (e.g., `src/ui/window/wayland/`, `src/ui/window/gdi/`)
@@ -840,6 +945,25 @@ When debugging or extending platform code:
 - `USE_POLL_EVENT` - Poll-based event system (X11, Wayland)
 - `USE_FB` - Linux framebuffer
 
+## Sanitizer Testing
+
+### Build with Sanitizers
+- `SANITIZE=y` enables AddressSanitizer; `SANITIZE=address,undefined` enables both ASan and UBSan
+- Sanitizers are **runtime checks** — issues are reported when the instrumented code executes, not at compile time
+- The CI runs `SANITIZE=y` with `VFB=y` for the UNIX target on every PR
+- **Always clean** (`rm -rf output/UNIX/dbg/`) when changing `SANITIZE=` settings — sanitizer and non-sanitizer builds share the same output directory, and stale object files cause phantom linker errors (`undefined reference to __ubsan_handle_*`, `typeinfo` mismatches)
+
+### How to Run Locally
+```bash
+# Full sanitizer check (matches CI)
+make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
+```
+
+### Known Sanitizer Findings
+- Third-party code (zzip, shapelib) triggers misaligned-access warnings — benign on x86
+- `FastMath.hpp` uses intentional signed overflow for fast integer square root
+- Unit tests cover math/parser/logic but **do not exercise UI rendering paths** — rendering bugs are only caught by running the application manually
+
 ## GitHub PR Review Workflow
 
 ### Responding to PR Comments
@@ -864,6 +988,9 @@ When debugging or extending platform code:
 - Squash fixup commits and reword generic "Fix" messages
 - Ensure branch compiles on at least one platform
 - Check for accidentally committed debug code or temporary files
+- Verify all user-visible changes have corresponding NEWS.txt entries
+- When a NEWS.txt entry relates to a GitHub issue, include the issue number at the end (e.g., `#2145`)
+- When adding Android drawable resources, check both `build/android.mk` and `build/android_bundle.mk`
 
 ## Common Mistakes and How to Avoid Them
 
@@ -890,6 +1017,10 @@ When debugging or extending platform code:
 - ✅ Add to correct feature's LDLIBS (e.g., `AUDIO_LDLIBS` for sound)
 - ❌ Platform-specific code without proper `#ifdef` guards
 - ✅ Use appropriate platform detection macros
+- ❌ Adding resource copy rules to `build/android.mk` but not `build/android_bundle.mk`
+- ✅ Always update both Android Makefiles in sync
+- ❌ Adding only one resolution tier for a new bitmap variant (e.g., 320px white title)
+- ✅ Provide all resolution tiers the code can select (e.g., 320px + 640px)
 
 ### Code Organization Mistakes
 - ❌ Including platform-specific headers in cross-platform code
@@ -898,3 +1029,25 @@ When debugging or extending platform code:
 - ✅ Use existing platform directories (e.g., `wayland/TopWindow.cpp`)
 - ❌ Duplicating code across platform implementations
 - ✅ Extract common code to shared base classes or utilities
+- ❌ Using Android-specific JNI calls (e.g., `ShareText()`) when cross-platform alternatives exist
+- ✅ Use `OpenLink()` with standard URIs (`geo:`, `https:`, `tel:`, `mailto:`) for cross-platform functionality
+
+### Sanitizer and Testing Mistakes
+- ❌ Assuming `unsigned` subtraction is safe without checking operand order
+- ✅ Guard `unsigned a - unsigned b` with `if (a <= b) return;` to prevent underflow
+- ❌ Dividing by image dimensions without zero checks
+- ✅ Add `if (dim == 0) dim = 1;` guards before any division by width/height
+- ❌ Using 3-byte pixel readers for 4-byte RGBA image data
+- ✅ Match pixel reader stride to actual image format (RGB=3 bytes, RGBA=4 bytes)
+- ❌ Declaring variables uninitialized when stricter warnings are enabled
+- ✅ Initialize all local variables, especially when used conditionally (e.g., `double av = 0;`)
+- ❌ Ignoring sanitizer reports from third-party code
+- ✅ Triage: suppress known benign issues (misaligned access in zzip/shapelib), fix actionable ones
+
+### Android-Specific Mistakes
+- ❌ Using `SharedPreferences.apply()` (async) before `System.exit()`
+- ✅ Use `SharedPreferences.commit()` (synchronous) when process termination follows immediately
+- ❌ Starting Android foreground services unconditionally (e.g., in simulator mode)
+- ✅ Start services from native code only when needed (e.g., after fly/sim mode selection)
+- ❌ Relying on `stopService()` before `System.exit()` to cleanly stop `START_STICKY` services
+- ✅ Use a `SharedPreferences` flag to prevent `START_STICKY` restart after intentional exit
