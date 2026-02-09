@@ -5,6 +5,8 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/Colors.hpp"
+#include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
@@ -369,15 +371,17 @@ InfoBoxPreview::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 void
 InfoBoxPreview::OnPaint(Canvas &canvas) noexcept
 {
+  const auto &dlook = UIGlobals::GetDialogLook();
   const bool is_current = i == parent->GetCurrentInfoBox();
 
   if (is_current)
-    canvas.Clear(COLOR_BLACK);
+    canvas.Clear(dlook.dark_mode
+                 ? COLOR_XCSOAR_DARK : COLOR_BLACK);
   else
-    canvas.ClearWhite();
+    canvas.Clear(dlook.background_color);
 
   canvas.SelectHollowBrush();
-  canvas.SelectBlackPen();
+  canvas.Select(Pen(1, dlook.dark_mode ? COLOR_GRAY : COLOR_BLACK));
   canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetWidth() - 1, canvas.GetHeight() - 1}});
 
   InfoBoxFactory::Type type = parent->GetContents(i);
@@ -391,7 +395,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas) noexcept
 
   canvas.Select(parent->GetInfoBoxLook().title_font);
   canvas.SetBackgroundTransparent();
-  canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
+  canvas.SetTextColor(is_current ? COLOR_WHITE : dlook.text_color);
   canvas.DrawText({2, 2}, caption);
 }
 

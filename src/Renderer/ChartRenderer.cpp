@@ -77,7 +77,7 @@ ChartRenderer::Begin() noexcept
   }
 
   if (!x_label.empty() || !y_label.empty())
-    canvas.DrawFilledRectangle(rc_chart, COLOR_WHITE);
+    canvas.DrawFilledRectangle(rc_chart, look.background_color);
 }
 
 void

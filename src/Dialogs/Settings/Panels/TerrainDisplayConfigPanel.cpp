@@ -17,6 +17,7 @@
 #include "ActionInterface.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Message.hpp"
 
@@ -159,7 +160,7 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas) noexcept
   if (!projection.IsValid()) {
     /* TODO: initialise projection to middle of map instead of bailing
        out */
-    canvas.ClearWhite();
+    canvas.Clear(UIGlobals::GetDialogLook().background_color);
     return;
   }
 

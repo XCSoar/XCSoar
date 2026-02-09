@@ -40,6 +40,7 @@ Look::InitialiseConfigured(const UISettings &settings,
   const bool dark_mode = GetDarkMode(settings);
 
   dialog.Initialise(dark_mode);
+  chart.Initialise(dark_mode);
   terminal.Initialise();
   cross_section.Initialise(map_font);
   horizon.Initialise();

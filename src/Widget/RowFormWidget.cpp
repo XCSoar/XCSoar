@@ -280,6 +280,10 @@ RowFormWidget::AddMultiLine(const TCHAR *text) noexcept
   auto ltw = std::make_unique<LargeTextWindow>();
   ltw->Create(panel, rc, style);
   ltw->SetFont(look.text_font);
+#ifndef USE_WINUSER
+  ltw->SetColors(look.background_color, look.text_color,
+                 look.dark_mode ? COLOR_GRAY : COLOR_BLACK);
+#endif
 
   if (text != nullptr)
     ltw->SetText(text);
