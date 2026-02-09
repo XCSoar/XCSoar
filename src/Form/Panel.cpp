@@ -11,6 +11,7 @@ PanelControl::Create(ContainerWindow &parent, [[maybe_unused]] const DialogLook 
 {
 #if defined(HAVE_CLIPPING) || defined(ENABLE_OPENGL)
   SolidContainerWindow::Create(parent, rc, look.background_color, style);
+  SetGradientTopColor(look.background_gradient_top_color);
 #else
   ContainerWindow::Create(parent, rc, style);
 #endif

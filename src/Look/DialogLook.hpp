@@ -30,7 +30,7 @@ struct DialogLook {
     Color inactive_background_color;
   } caption;
 
-  Color background_color, text_color;
+  Color background_color, background_gradient_top_color, text_color;
 
   Brush background_brush;
 
