@@ -12,12 +12,12 @@ CheckBoxLook::Initialise(const Font &_font, bool dark_mode)
   if (dark_mode) {
     focus_background_brush.Create(COLOR_XCSOAR);
 
-    standard.box_brush.Create(Color(0x2a, 0x2a, 0x2a));
+    standard.box_brush.Create(COLOR_DARK_THEME_LIST);
     standard.box_pen.Create(1, COLOR_LIGHT_GRAY);
     standard.check_brush.Create(COLOR_WHITE);
     standard.text_color = COLOR_WHITE;
 
-    focused.box_brush.Create(Color(0x2a, 0x2a, 0x2a));
+    focused.box_brush.Create(COLOR_DARK_THEME_LIST);
     focused.box_pen.Create(1, COLOR_WHITE);
     focused.check_brush.Create(COLOR_WHITE);
     focused.text_color = COLOR_WHITE;
@@ -27,7 +27,7 @@ CheckBoxLook::Initialise(const Font &_font, bool dark_mode)
     pressed.check_brush.Create(COLOR_WHITE);
     pressed.text_color = COLOR_WHITE;
 
-    disabled.box_brush.Create(Color(0x2a, 0x2a, 0x2a));
+    disabled.box_brush.Create(COLOR_DARK_THEME_LIST);
     disabled.box_pen.Create(1, COLOR_DARK_GRAY);
     disabled.check_brush.Create(COLOR_DARK_GRAY);
     disabled.text_color = COLOR_DARK_GRAY;
