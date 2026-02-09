@@ -13,7 +13,7 @@ ButtonLook::Initialise(const Font &_font, bool dark_mode)
   if (dark_mode) {
     standard.foreground_color = COLOR_WHITE;
     standard.foreground_brush.Create(standard.foreground_color);
-    standard.background_color = COLOR_DARK_GRAY;
+    standard.background_color = COLOR_DARK_THEME_BUTTON;
     standard.CreateBorder(LightColor(standard.background_color),
                           DarkColor(standard.background_color));
 
