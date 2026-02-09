@@ -57,14 +57,16 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
     rc_upper.bottom = chart.ScreenY(mc);
 
     DrawVerticalGradient(canvas, rc_upper,
-                         chart_look.color_positive, COLOR_WHITE, COLOR_WHITE);
+                         chart_look.color_positive, chart_look.background_color,
+                         chart_look.background_color);
   }
   {
     PixelRect rc_lower = chart.GetChartRect();
     rc_lower.top = chart.ScreenY(s);
 
     DrawVerticalGradient(canvas, rc_lower,
-                         COLOR_WHITE, chart_look.color_negative, COLOR_WHITE);
+                         chart_look.background_color, chart_look.color_negative,
+                         chart_look.background_color);
   }
 
   canvas.SelectNullPen();

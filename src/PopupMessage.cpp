@@ -106,11 +106,12 @@ PopupMessage::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 void
 PopupMessage::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.ClearWhite();
+  canvas.Clear(look.background_color);
 
   auto rc = GetClientRect();
 #ifndef USE_WINUSER
-  canvas.DrawOutlineRectangle(rc, COLOR_BLACK);
+  canvas.DrawOutlineRectangle(rc,
+                              look.dark_mode ? COLOR_GRAY : COLOR_BLACK);
 #endif
 
   const int padding = Layout::GetTextPadding();
