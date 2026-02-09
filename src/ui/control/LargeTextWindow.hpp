@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ui/window/NativeWindow.hpp"
+#include "ui/canvas/Color.hpp"
 
 #ifndef USE_WINUSER
 #include "Renderer/TextRenderer.hpp"
@@ -44,6 +45,10 @@ class LargeTextWindow : public NativeWindow {
   unsigned origin;
 
   TextRenderer renderer;
+
+  Color background_color = COLOR_WHITE;
+  Color text_color = COLOR_BLACK;
+  Color border_color = COLOR_BLACK;
 #endif
 
 public:
@@ -74,6 +79,14 @@ public:
   unsigned GetRowCount() const {
 
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
+  }
+#endif
+
+#ifndef USE_WINUSER
+  void SetColors(Color _background, Color _text, Color _border) noexcept {
+    background_color = _background;
+    text_color = _text;
+    border_color = _border;
   }
 #endif
 

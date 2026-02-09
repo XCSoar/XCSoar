@@ -68,9 +68,17 @@ bitmap_icon_scaled IDB_LANDABLE "winpilot_landable"
 #ifdef XCSOAR_TESTING
 bitmap_graphic IDB_LAUNCHER1 "launcher_red_640_1"
 bitmap_graphic IDB_LAUNCHER2 "launcher_red_640_2"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LAUNCHER1_RGBA "launcher_red_640_rgba_1"
+bitmap_graphic IDB_LAUNCHER2_RGBA "launcher_red_640_rgba_2"
+#endif
 #else
 bitmap_graphic IDB_LAUNCHER1 "launcher_640_1"
 bitmap_graphic IDB_LAUNCHER2 "launcher_640_2"
+#ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LAUNCHER1_RGBA "launcher_640_rgba_1"
+bitmap_graphic IDB_LAUNCHER2_RGBA "launcher_640_rgba_2"
+#endif
 #endif
 bitmap_icon_scaled IDB_MAPSCALE_LEFT "scalearrow_left"
 bitmap_icon_scaled IDB_MAPSCALE_RIGHT "scalearrow_right"

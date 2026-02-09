@@ -179,6 +179,17 @@ PNG_LAUNCH_ALL = $(patsubst %.bmp,%.png,$(BMP_LAUNCH_ALL))
 $(PNG_LAUNCH_ALL): %.png: %.bmp
 	$(Q)$(IM_CONVERT) $< $@
 
+# RGBA PNG halves (preserving alpha for non-Win32 builds)
+# These go into graphics2/ because LinkResources.pl loads bitmap_graphic from there
+PNG_LAUNCH_FLY_640_RGBA = $(patsubst $(DATA)/graphics/%.png,$(DATA)/graphics2/%_rgba_1.png,$(PNG_LAUNCH_640))
+PNG_LAUNCH_SIM_640_RGBA = $(patsubst $(DATA)/graphics/%.png,$(DATA)/graphics2/%_rgba_2.png,$(PNG_LAUNCH_640))
+
+$(PNG_LAUNCH_FLY_640_RGBA): $(DATA)/graphics2/%_rgba_1.png: $(DATA)/graphics/%.png | $(DATA)/graphics2/dirstamp
+	@$(NQ)echo "  CROP    $@"
+	@$(NQ)echo "  CROP    $(@:_rgba_1.png=_rgba_2.png)"
+	$(Q)$(IM_CONVERT) $< -crop '50%x100%' +repage -scene 1 $(@:_rgba_1.png=_rgba_%d.png)
+$(PNG_LAUNCH_SIM_640_RGBA): $(PNG_LAUNCH_FLY_640_RGBA)
+
 ####### sounds
 
 ifneq ($(TARGET),ANDROID)
@@ -310,6 +321,9 @@ RESOURCE_FILES += $(PNG_TITLE_320_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_WHITE_320_RGBA)
 endif
 RESOURCE_FILES += $(BMP_LAUNCH_ALL)
+ifneq ($(USE_WIN32_RESOURCES),y)
+RESOURCE_FILES += $(PNG_LAUNCH_FLY_640_RGBA) $(PNG_LAUNCH_SIM_640_RGBA)
+endif
 
 RESOURCE_FILES += $(RAW_SOUNDS)
 

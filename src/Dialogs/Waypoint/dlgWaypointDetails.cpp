@@ -481,6 +481,10 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
   details_text.SetFont(look.text_font);
+#ifndef USE_WINUSER
+  details_text.SetColors(look.background_color, look.text_color,
+                         look.dark_mode ? COLOR_GRAY : COLOR_BLACK);
+#endif
   details_text.SetText(waypoint->details.c_str());
 
 #ifdef HAVE_RUN_FILE
@@ -681,7 +685,8 @@ void
 WaypointDetailsWidget::OnImagePaint(Canvas &canvas, [[maybe_unused]] const PixelRect &rc,
                   PixelPoint &offset, PixelPoint &img_pos)
 {
-  canvas.ClearWhite();
+  const auto &dlook = UIGlobals::GetDialogLook();
+  canvas.Clear(dlook.background_color);
 
   if (page < 3 || page >= 3 + static_cast<int>(images.size())) {
     return;

@@ -2,13 +2,14 @@
 // Copyright The XCSoar Project
 
 #include "ChartLook.hpp"
+#include "Colors.hpp"
 #include "FontDescription.hpp"
 #include "Screen/Layout.hpp"
 
 #include <algorithm>
 
 void
-ChartLook::Initialise()
+ChartLook::Initialise(bool dark_mode)
 {
   const auto width_thin = Layout::ScalePenWidth(1);
   const auto width_normal = Layout::ScalePenWidth(2);
@@ -43,4 +44,12 @@ ChartLook::Initialise()
 
   color_positive = Color(0xa0, 0xd0, 0xf3);
   color_negative = Color(0xf3, 0xd0, 0xa0);
+
+  if (dark_mode) {
+    background_color = COLOR_DARK_THEME_BACKGROUND;
+    text_color = COLOR_WHITE;
+  } else {
+    background_color = COLOR_WHITE;
+    text_color = COLOR_BLACK;
+  }
 }

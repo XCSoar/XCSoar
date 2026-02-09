@@ -24,14 +24,22 @@ SimulatorPromptWindow::OnCreate()
   WindowStyle style;
   style.TabStop();
 
+#ifndef USE_WIN32_RESOURCES
+  fly_bitmap.Load(IDB_LAUNCHER1_RGBA);
+#else
   fly_bitmap.Load(IDB_LAUNCHER1);
+#endif
   fly_button.Create(*this, rc, style,
-                    std::make_unique<BitmapButtonRenderer>(fly_bitmap),
+                    std::make_unique<BitmapButtonRenderer>(fly_bitmap, true),
                     [this](){ callback(Result::FLY); });
 
+#ifndef USE_WIN32_RESOURCES
+  sim_bitmap.Load(IDB_LAUNCHER2_RGBA);
+#else
   sim_bitmap.Load(IDB_LAUNCHER2);
+#endif
   sim_button.Create(*this, rc, style,
-                    std::make_unique<BitmapButtonRenderer>(sim_bitmap),
+                    std::make_unique<BitmapButtonRenderer>(sim_bitmap, true),
                     [this](){ callback(Result::SIMULATOR); });
 
   if (have_quit_button)
@@ -88,11 +96,11 @@ SimulatorPromptWindow::OnResize(PixelSize new_size) noexcept
 void
 SimulatorPromptWindow::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.ClearWhite();
-  logo_view.draw(canvas, logo_rect);
+  canvas.Clear(look.background_color);
+  logo_view.draw(canvas, logo_rect, look.dark_mode);
 
   canvas.Select(look.text_font);
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(look.text_color);
   canvas.SetBackgroundTransparent();
   canvas.DrawText(label_position, _("What do you want to do?"));
 

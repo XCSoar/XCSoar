@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "ui/canvas/Color.hpp"
 #include "ui/canvas/Font.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
@@ -52,7 +53,10 @@ struct ChartLook {
   Color color_positive;
   Color color_negative;
 
-  void Initialise();
+  Color background_color;
+  Color text_color;
+
+  void Initialise(bool dark_mode = false);
 
   const Pen &GetPen(Style style) const {
     unsigned i = (unsigned)style;

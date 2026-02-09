@@ -12,10 +12,12 @@ class Bitmap;
  */
 class BitmapButtonRenderer : public ButtonRenderer {
   const Bitmap &bitmap;
+  const bool use_alpha;
 
 public:
-  explicit BitmapButtonRenderer(const Bitmap &_bitmap) noexcept
-    :bitmap(_bitmap) {}
+  explicit BitmapButtonRenderer(const Bitmap &_bitmap,
+                                bool _use_alpha = false) noexcept
+    :bitmap(_bitmap), use_alpha(_use_alpha) {}
 
   [[gnu::pure]]
   unsigned GetMinimumButtonWidth() const noexcept override;
