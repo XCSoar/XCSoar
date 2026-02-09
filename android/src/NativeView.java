@@ -487,20 +487,7 @@ class NativeView extends SurfaceView
     pauseNative();
   }
 
-  private final int translateKeyCode(int keyCode) {
-    if (!hasKeyboard) {
-      /* map the volume keys to cursor up/down if the device has no
-         hardware keys */
-
-      switch (keyCode) {
-      case KeyEvent.KEYCODE_VOLUME_UP:
-        return KeyEvent.KEYCODE_DPAD_UP;
-
-      case KeyEvent.KEYCODE_VOLUME_DOWN:
-        return KeyEvent.KEYCODE_DPAD_DOWN;
-      }
-    }
-
+  private static int translateKeyCode(int keyCode) {
     return keyCode;
   }
 
