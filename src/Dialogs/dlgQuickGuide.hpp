@@ -4,7 +4,7 @@
 #pragma once
 
 /**
- * Show the unified onboarding dialog.
+ * Show the unified Quick Guide dialog.
  *
  * Dynamically assembles pages based on which conditions have already
  * been met (warranty acknowledged, permissions granted, cloud
@@ -18,4 +18,4 @@
  *         the warranty disclaimer (the app should exit)
  */
 bool
-dlgOnboardingShowModal(bool force_info = false);
+dlgQuickGuideShowModal(bool force_info = false);

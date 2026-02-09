@@ -59,7 +59,7 @@ RequestNotificationPermission(std::function<void(bool)> callback) noexcept;
 /**
  * Suppress location and notification permission request dialogs
  * for the current session.  Call this when the user clicks
- * "Not Now" on the onboarding disclosure page, so that the
+ * "Not Now" on the Quick Guide disclosure page, so that the
  * lazy permission flow does not immediately re-prompt.
  */
 void
