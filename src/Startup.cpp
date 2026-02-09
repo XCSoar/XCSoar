@@ -317,6 +317,16 @@ Startup(UI::Display &display)
   }
 #endif
 
+#ifdef ANDROID
+  /* Start the foreground service only in fly mode; the service keeps
+     XCSoar alive for IGC logging and safety warnings, neither of
+     which applies in simulator mode. */
+  if (!is_simulator()) {
+    const auto env = Java::GetEnv();
+    native_view->StartMyService(env);
+  }
+#endif
+
   CommonInterface::SetSystemSettings().SetDefaults();
   CommonInterface::SetComputerSettings().SetDefaults();
   CommonInterface::SetUIState().Clear();

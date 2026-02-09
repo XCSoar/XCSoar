@@ -38,6 +38,7 @@ class NativeView {
   static jmethodID getNetState_method;
   static jmethodID isAutoRotateEnabled_method;
   static jmethodID getPhysicalOrientation_method;
+  static jmethodID startMyService_method;
 
   static Java::TrivialClass clsBitmap;
   static jmethodID createBitmap_method;
@@ -175,5 +176,12 @@ public:
   [[gnu::pure]]
   int GetNetState(JNIEnv *env) const noexcept {
     return env->CallIntMethod(obj, getNetState_method);
+  }
+
+  /**
+   * Start the foreground service (only in fly mode).
+   */
+  void StartMyService(JNIEnv *env) const noexcept {
+    env->CallVoidMethod(obj, startMyService_method);
   }
 };
