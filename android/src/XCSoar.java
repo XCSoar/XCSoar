@@ -371,8 +371,16 @@ public class XCSoar extends Activity implements PermissionManager {
     System.exit(0);
   }
 
+  private static boolean isVolumeKey(int keyCode) {
+    return keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+           keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+           keyCode == KeyEvent.KEYCODE_VOLUME_MUTE;
+  }
+
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
-    // Overrides Back key to use in our app
+    if (isVolumeKey(keyCode))
+      return super.onKeyDown(keyCode, event);
+
     if (nativeView != null) {
       nativeView.onKeyDown(keyCode, event);
       return true;
@@ -381,6 +389,9 @@ public class XCSoar extends Activity implements PermissionManager {
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
+    if (isVolumeKey(keyCode))
+      return super.onKeyUp(keyCode, event);
+
     if (nativeView != null) {
       nativeView.onKeyUp(keyCode, event);
       return true;
