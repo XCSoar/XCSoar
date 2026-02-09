@@ -3,11 +3,16 @@
 
 #include "SolidContainerWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "Renderer/GradientRenderer.hpp"
 
 void
 SolidContainerWindow::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(background_color);
+  if (has_gradient)
+    DrawBandedVerticalGradient(canvas, GetClientRect(),
+                               gradient_top_color, background_color);
+  else
+    canvas.Clear(background_color);
 
   ContainerWindow::OnPaint(canvas);
 }

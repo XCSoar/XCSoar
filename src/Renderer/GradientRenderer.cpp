@@ -42,3 +42,30 @@ DrawVerticalGradient([[maybe_unused]] Canvas &canvas, const PixelRect &rc,
   canvas.DrawFilledRectangle(rc, fallback_color);
 #endif
 }
+
+void
+DrawBandedVerticalGradient(Canvas &canvas, const PixelRect &rc,
+                           Color top_color, Color bottom_color)
+{
+  const int height = rc.GetHeight();
+  if (height <= 0)
+    return;
+
+  constexpr unsigned N_BANDS = 64;
+  for (unsigned i = 0; i < N_BANDS; i++) {
+    const int y0 = rc.top + (int)((unsigned)height * i / N_BANDS);
+    const int y1 = rc.top + (int)((unsigned)height * (i + 1) / N_BANDS);
+    const uint8_t r = top_color.Red()
+      + (int(bottom_color.Red()) - int(top_color.Red()))
+        * (int)i / (int)(N_BANDS - 1);
+    const uint8_t g = top_color.Green()
+      + (int(bottom_color.Green()) - int(top_color.Green()))
+        * (int)i / (int)(N_BANDS - 1);
+    const uint8_t b = top_color.Blue()
+      + (int(bottom_color.Blue()) - int(top_color.Blue()))
+        * (int)i / (int)(N_BANDS - 1);
+    canvas.DrawFilledRectangle(PixelRect{PixelPoint{rc.left, y0},
+                                         PixelPoint{rc.right, y1}},
+                               Color(r, g, b));
+  }
+}

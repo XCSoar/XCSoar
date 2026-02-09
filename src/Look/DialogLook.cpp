@@ -50,6 +50,8 @@ DialogLook::Initialise(bool _dark_mode)
     caption.inactive_background_color = COLOR_DARK_THEME_CAPTION_INACTIVE;
 
     SetBackgroundColor(COLOR_DARK_THEME_BACKGROUND);
+    /* subtle gradient: lighter at top, base color at bottom */
+    background_gradient_top_color = Color(0x14, 0x22, 0x32);
     text_color = COLOR_WHITE;
 
     focused.background_color = COLOR_XCSOAR;
@@ -71,8 +73,11 @@ DialogLook::Initialise(bool _dark_mode)
 
     if (IsDithered())
       SetBackgroundColor(COLOR_WHITE);
-    else
+    else {
       SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));
+      /* subtle gradient: lighter at top, base color at bottom */
+      background_gradient_top_color = Color(0xf0, 0xeb, 0xd4);
+    }
     text_color = COLOR_BLACK;
 
     focused.background_color = COLOR_XCSOAR_DARK;
@@ -101,5 +106,6 @@ void
 DialogLook::SetBackgroundColor(Color color)
 {
   background_color = color;
+  background_gradient_top_color = color;
   background_brush.Create(color);
 }
