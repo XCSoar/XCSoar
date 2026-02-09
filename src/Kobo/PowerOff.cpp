@@ -65,7 +65,7 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
   x += canvas.CalcTextWidth(name2) + 30;
 
   /* some more text */
-  const TCHAR *const website = _T("www.xcsoar.org");
+  const TCHAR *const website = _T("xcsoar.org");
   canvas.Select(normal_font);
   canvas.DrawText({x, rc.top + int(banner_height - normal_font.GetHeight()) / 2},
                   website);

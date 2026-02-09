@@ -268,4 +268,4 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cd $(@D) && $(ZIP) -r XCSoar-manual-dev.zip XCSoar-manual-dev
 
 upload-html-manual: $(MANUAL_OUTPUT_DIR)/html/en/index.html $(MANUAL_OUTPUT_DIR)/html/developer/index.html
-	rsync -aP --delete-after --chmod=ugo+rX $(MANUAL_OUTPUT_DIR)/html/ max@www.xcsoar.org:/var/www/xcsoar/doc/
+	rsync -aP --delete-after --chmod=ugo+rX $(MANUAL_OUTPUT_DIR)/html/ max@xcsoar.org:/var/www/xcsoar/doc/

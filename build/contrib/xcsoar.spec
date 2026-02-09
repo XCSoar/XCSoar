@@ -3,8 +3,8 @@ Version:        6.7.5
 Release:        1%{?dist}
 Summary:        The open-source glide computer
 License:        AGPLv3, LGPLv2, BSD, BSL, MIT
-URL:            http://www.xcsoar.org/
-Source0:        http://download.xcsoar.org/releases/6.7.5/source/xcsoar-6.7.5.tar.bz2
+URL:            https://xcsoar.org/
+Source0:        https://download.xcsoar.org/releases/6.7.5/source/xcsoar-6.7.5.tar.bz2
 BuildRequires:  pkgconfig SDL-devel librsvg2-tools libcurl-devel
 BuildRequires:  freetype-devel libpng-devel libxslt perl(Data::Dumper) perl(Locale::PO)
 BuildRequires:  libjpeg-turbo-devel ImageMagick gettext
