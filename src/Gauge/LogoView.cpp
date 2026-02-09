@@ -20,6 +20,10 @@ LogoView::LogoView() noexcept try
    title(IDB_TITLE), big_title(IDB_TITLE_HD), huge_title(IDB_TITLE_UHD)
 {
 #ifndef USE_WIN32_RESOURCES
+  /* Load RGBA logo variants for dark mode (transparent background) */
+  logo_rgba.Load(IDB_LOGO_RGBA);
+  big_logo_rgba.Load(IDB_LOGO_HD_RGBA);
+  huge_logo_rgba.Load(IDB_LOGO_UHD_RGBA);
   /* Load white title variants for dark mode */
   white_title.Load(IDB_TITLE_HD_WHITE);
   huge_white_title.Load(IDB_TITLE_UHD_WHITE);
@@ -126,6 +130,16 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
     /* Use standard (80px logo, 110px title) for low resolution displays */
     bitmap_logo = &logo;
     bitmap_title = &title;
+  }
+
+  /* In dark mode, use RGBA logos (transparent background) if available */
+  if (dark_mode) {
+    if (bitmap_logo == &huge_logo && huge_logo_rgba.IsDefined())
+      bitmap_logo = &huge_logo_rgba;
+    else if (bitmap_logo == &big_logo && big_logo_rgba.IsDefined())
+      bitmap_logo = &big_logo_rgba;
+    else if (bitmap_logo == &logo && logo_rgba.IsDefined())
+      bitmap_logo = &logo_rgba;
   }
 
   // Determine logo size

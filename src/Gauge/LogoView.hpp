@@ -11,6 +11,7 @@ class Canvas;
 
 class LogoView {
   Bitmap logo, big_logo, huge_logo, title, big_title, huge_title;
+  Bitmap logo_rgba, big_logo_rgba, huge_logo_rgba;
   Bitmap white_title, huge_white_title;
 
 #ifndef USE_GDI

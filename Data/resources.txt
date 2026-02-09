@@ -103,14 +103,18 @@ bitmap_graphic IDB_LOGO_UHD "logo_red_320"
 bitmap_graphic IDB_LOGO_HD "logo_red_160"
 bitmap_graphic IDB_LOGO "logo_red_80"
 #ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LOGO_UHD_RGBA "logo_red_320_rgba"
 bitmap_graphic IDB_LOGO_HD_RGBA "logo_red_160_rgba"
+bitmap_graphic IDB_LOGO_RGBA "logo_red_80_rgba"
 #endif
 #else
 bitmap_graphic IDB_LOGO_UHD "logo_320"
 bitmap_graphic IDB_LOGO_HD "logo_160"
 bitmap_graphic IDB_LOGO "logo_80"
 #ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_LOGO_UHD_RGBA "logo_320_rgba"
 bitmap_graphic IDB_LOGO_HD_RGBA "logo_160_rgba"
+bitmap_graphic IDB_LOGO_RGBA "logo_80_rgba"
 #endif
 #endif
 bitmap_icon_scaled IDB_TARGET "map_target"
