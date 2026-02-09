@@ -111,11 +111,15 @@ PNG_TITLE_640 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_640.png,$(SVG_
 BMP_TITLE_640 = $(PNG_TITLE_640:.png=.bmp)
 PNG_TITLE_320_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_320_rgba.png,$(SVG_TITLE))
 
+SVG_TITLE_WHITE = Data/graphics/title_white.svg Data/graphics/title_red_white.svg
+PNG_TITLE_WHITE_320_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_320_rgba.png,$(SVG_TITLE_WHITE))
+
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_TITLE_110),$(DATA)/graphics/%_110.png,Data/graphics/%.svg,--width=110))
 $(eval $(call rsvg-convert,$(PNG_TITLE_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_TITLE_640),$(DATA)/graphics/%_640.png,Data/graphics/%.svg,--width=640))
 $(eval $(call rsvg-convert,$(PNG_TITLE_320_RGBA),$(DATA)/graphics2/%_320_rgba.png,Data/graphics/%.svg,--width=320))
+$(eval $(call rsvg-convert,$(PNG_TITLE_WHITE_320_RGBA),$(DATA)/graphics2/%_320_rgba.png,Data/graphics/%.svg,--width=320))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp-white,$(BMP_TITLE_110) $(BMP_TITLE_320) $(BMP_TITLE_640),%.bmp,%.png))
@@ -237,6 +241,13 @@ $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp: $(TARGET_OUTPUT_DIR)/resources.tx
 	$(Q)$(PERL) tools/GenerateMakeResource.pl <$< >$@.$(RANDOM_NUMBER).tmp
 	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
+$(TARGET_OUTPUT_DIR)/include/ResourceLookup_entries.cpp: $(TARGET_OUTPUT_DIR)/resources.txt tools/GenerateResourceLookup.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) tools/GenerateResourceLookup.pl <$< >$@.tmp
+	$(Q)mv $@.tmp $@
+
+$(call SRC_TO_OBJ,$(SRC)/ResourceLookup.cpp): $(TARGET_OUTPUT_DIR)/include/ResourceLookup_entries.cpp $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp
+
 ifeq ($(TARGET_IS_ANDROID),n)
 ifneq ($(TARGET),IOS)
 
@@ -245,6 +256,23 @@ RESOURCE_FILES += $(BMP_BITMAPS)
 else
 RESOURCE_FILES += $(PNG_BITMAPS)
 endif
+
+####### permission disclosure graphics
+
+SVG_DISCLOSURE = Data/graphics/location_pin.svg Data/graphics/notification_bell.svg Data/graphics/bluetooth.svg Data/graphics/warning_triangle.svg
+PNG_DISCLOSURE_DST = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%.png,$(SVG_DISCLOSURE))
+PNG_DISCLOSURE_WIN = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.png,$(SVG_DISCLOSURE))
+BMP_DISCLOSURE_WIN = $(PNG_DISCLOSURE_WIN:.png=.bmp)
+
+$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_DST), \
+	$(DATA)/graphics2/%.png, \
+	Data/graphics/%.svg, \
+	--width=80 --height=80))
+$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_WIN), \
+	$(DATA)/graphics/%.png, \
+	Data/graphics/%.svg, \
+	--width=80 --height=80))
+$(eval $(call convert-to-bmp-white,$(BMP_DISCLOSURE_WIN),%.bmp,%.png))
 
 ####### add gesture icons from docs
 
@@ -271,6 +299,7 @@ $(eval $(call rsvg-convert,$(GESTURES_PNG_WIN), \
 $(eval $(call convert-to-bmp-white,$(GESTURES_BMP_WIN),%.bmp,%.png))
 
 RESOURCE_FILES += $(GESTURES_DST)
+RESOURCE_FILES += $(PNG_DISCLOSURE_DST)
 RESOURCE_FILES += $(BMP_ICONS_ALL)
 RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
@@ -278,6 +307,7 @@ RESOURCE_FILES += $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110)
 ifneq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(PNG_SPLASH_160_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_320_RGBA)
+RESOURCE_FILES += $(PNG_TITLE_WHITE_320_RGBA)
 endif
 RESOURCE_FILES += $(BMP_LAUNCH_ALL)
 
@@ -298,6 +328,7 @@ endif #!USE_WIN32_RESOURCES
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(GESTURES_BMP_WIN)
+RESOURCE_FILES += $(BMP_DISCLOSURE_WIN)
 endif #USE_WIN32_RESOURCES
 
 endif #TARGET!=IOS
