@@ -338,7 +338,7 @@ ChartControl::OnPaint(Canvas &canvas) noexcept
   GLCanvasScissor scissor(canvas);
 #endif
 
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(chart_look.text_color);
 
   PixelRect rcgfx = GetClientRect();
 

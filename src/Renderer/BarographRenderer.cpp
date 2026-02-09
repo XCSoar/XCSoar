@@ -133,8 +133,11 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   canvas.Select(cross_section_look.terrain_brush);
 
   chart.DrawFilledLineGraph(fs.altitude_terrain);
-  canvas.SelectWhitePen();
-  canvas.SelectWhiteBrush();
+
+  Pen bg_pen(1, chart_look.background_color);
+  Brush bg_brush(chart_look.background_color);
+  canvas.Select(bg_pen);
+  canvas.Select(bg_brush);
 
   chart.DrawXGrid(0.25, 0.25, ChartRenderer::UnitFormat::TIME);
   chart.DrawYGrid(Units::ToSysAltitude(250), 250, ChartRenderer::UnitFormat::NUMERIC);
