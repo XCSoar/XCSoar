@@ -33,6 +33,10 @@ class RasterRenderer {
    * ScanMap() call.
    */
   unsigned last_quantisation_pixels = -1;
+
+  /** when true, #quantisation_pixels is fixed and
+      UpdateQuantisation() becomes a no-op */
+  bool fixed_quantisation = false;
 #endif
 
   /**
@@ -77,6 +81,18 @@ public:
 #ifdef ENABLE_OPENGL
   void Invalidate() noexcept {
     bounds.SetInvalid();
+  }
+
+  /**
+   * Force a specific quantisation value.  Useful for preview
+   * windows that should always render at full resolution
+   * regardless of user idle state.
+   */
+  void SetQuantisationPixels(unsigned q) noexcept {
+    quantisation_pixels = q;
+#ifdef ENABLE_OPENGL
+    fixed_quantisation = true;
+#endif
   }
 
   /**

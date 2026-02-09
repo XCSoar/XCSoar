@@ -24,9 +24,25 @@ class BackgroundRenderer {
   std::unique_ptr<TerrainRenderer> renderer;
   Angle shading_angle = DEFAULT_SHADING_ANGLE;
 
+#ifdef ENABLE_OPENGL
+  /** force full terrain resolution regardless of user idle state */
+  bool full_resolution = false;
+#endif
+
 public:
   BackgroundRenderer() noexcept;
   ~BackgroundRenderer() noexcept;
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Force full terrain resolution.  Useful for static renderings
+   * (analysis dialog, previews) where the idle-based dynamic
+   * quantisation would produce blocky images.
+   */
+  void SetFullResolution() noexcept {
+    full_resolution = true;
+  }
+#endif
 
   /**
    * Flush all caches.

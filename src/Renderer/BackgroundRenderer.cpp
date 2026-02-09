@@ -32,11 +32,17 @@ BackgroundRenderer::Draw(Canvas& canvas,
   canvas.ClearWhite();
 
   if (terrain_settings.enable && terrain != nullptr) {
-    if (!renderer)
+    if (!renderer) {
       // defer creation until first draw because
       // the buffer size, smoothing etc is set by the
       // loaded terrain properties
       renderer.reset(new TerrainRenderer(*terrain));
+
+#ifdef ENABLE_OPENGL
+      if (full_resolution)
+        renderer->SetQuantisationPixels(1);
+#endif
+    }
 
     renderer->SetSettings(terrain_settings);
     if (renderer->Generate(proj, shading_angle))
