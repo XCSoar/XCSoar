@@ -22,6 +22,7 @@ RenderGlidePolarInfo(Canvas &canvas, const PixelRect rc,
   StaticString<80> text;
   StaticString<20> value;
   canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(chart_look.text_color);
 
   FormatUserMass(glide_polar.GetTotalMass(), value.buffer(), true);
 

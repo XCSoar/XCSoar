@@ -27,6 +27,10 @@
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 #include "Computer/Settings.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#endif
+
 #include <algorithm>
 
 FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
@@ -114,7 +118,10 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
 
 #ifdef ENABLE_OPENGL
   /* desaturate the map background, to focus on the contest */
-  canvas.FadeToWhite(0xc0);
+  {
+    const ScopeAlphaBlend alpha_blend;
+    canvas.Clear(ColorWithAlpha(chart_look.background_color, 0xc0));
+  }
 #endif
 
   {
@@ -122,6 +129,7 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
     //    canvas.Select(*dialog_look.small_font);
     canvas.Select(chart_look.label_font);
     canvas.SetBackgroundTransparent();
+    canvas.SetTextColor(chart_look.text_color);
 
     for (const auto &i : retrospective.getNearWaypointList()) {
       auto wp_pos = proj.GeoToScreen(i.waypoint->location);
@@ -298,7 +306,10 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
 #ifdef ENABLE_OPENGL
   /* desaturate the map background, to focus on the task */
-  canvas.FadeToWhite(0xc0);
+  {
+    const ScopeAlphaBlend alpha_blend;
+    canvas.Clear(ColorWithAlpha(chart_look.background_color, 0xc0));
+  }
 #endif
 
   {
