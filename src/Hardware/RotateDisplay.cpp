@@ -75,7 +75,7 @@ Display::Rotate(DisplayOrientation orientation)
     break;
 
   default:
-    android_orientation = NativeView::ScreenOrientation::SENSOR;
+    android_orientation = NativeView::ScreenOrientation::LOCKED;
   };
 
   return native_view->SetRequestedOrientation(Java::GetEnv(),
