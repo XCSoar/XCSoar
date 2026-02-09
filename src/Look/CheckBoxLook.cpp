@@ -28,9 +28,9 @@ CheckBoxLook::Initialise(const Font &_font, bool dark_mode)
     pressed.text_color = COLOR_WHITE;
 
     disabled.box_brush.Create(COLOR_DARK_THEME_LIST);
-    disabled.box_pen.Create(1, COLOR_DARK_GRAY);
-    disabled.check_brush.Create(COLOR_DARK_GRAY);
-    disabled.text_color = COLOR_DARK_GRAY;
+    disabled.box_pen.Create(1, COLOR_GRAY);
+    disabled.check_brush.Create(COLOR_GRAY);
+    disabled.text_color = COLOR_GRAY;
   } else {
     focus_background_brush.Create(COLOR_XCSOAR_DARK);
 

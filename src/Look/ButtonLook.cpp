@@ -29,7 +29,7 @@ ButtonLook::Initialise(const Font &_font, bool dark_mode)
     focused.CreateBorder(LightColor(focused.background_color),
                          DarkColor(focused.background_color));
 
-    disabled.color = COLOR_DARK_GRAY;
+    disabled.color = COLOR_GRAY;
     disabled.brush.Create(disabled.color);
   } else {
     standard.foreground_color = COLOR_BLACK;

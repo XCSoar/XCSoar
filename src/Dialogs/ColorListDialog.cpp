@@ -7,7 +7,9 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/control/List.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/DialogLook.hpp"
 #include "Look/AirspaceLook.hpp"
+#include "UIGlobals.hpp"
 #include "util/Macros.hpp"
 
 #include <cassert>
@@ -30,7 +32,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept
   canvas.Select(brush);
 #endif
 
-  canvas.SelectBlackPen();
+  const auto &look = UIGlobals::GetDialogLook();
+  canvas.Select(Pen(1, look.dark_mode ? COLOR_LIGHT_GRAY : COLOR_BLACK));
   canvas.DrawRectangle(rc2);
 }
 
