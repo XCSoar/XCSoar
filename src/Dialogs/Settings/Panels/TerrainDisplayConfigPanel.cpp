@@ -33,6 +33,7 @@ enum ControlIndex {
   TerrainContrast,
   TerrainBrightness,
   TerrainContours,
+  TerrainSpacer,
   TerrainPreview,
 };
 
@@ -90,8 +91,10 @@ TerrainDisplayConfigPanel::ShowTerrainControls()
   SetRowVisible(TerrainContrast, show);
   SetRowVisible(TerrainBrightness, show);
   SetRowVisible(TerrainContours, show);
-  if (have_terrain_preview)
+  if (have_terrain_preview) {
+    SetRowVisible(TerrainSpacer, show);
     SetRowVisible(TerrainPreview, show);
+  }
 }
 
 static short
@@ -275,6 +278,8 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   have_terrain_preview = data_components->terrain != nullptr;
   if (have_terrain_preview) {
+    AddSpacer();
+
     WindowStyle style;
     style.Border();
 
