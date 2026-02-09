@@ -25,18 +25,12 @@ ChartLook::Initialise(bool dark_mode)
   pens[STYLE_GREENDASH].Create(Pen::DASH2, width_normal, COLOR_GREEN);
   pens[STYLE_GREEN].Create(width_normal, COLOR_GREEN);
 
-  pens[STYLE_BLACK].Create(width_normal, COLOR_BLACK);
-  pens[STYLE_WHITE].Create(width_normal, COLOR_WHITE);
   pens[STYLE_GRID].Create(Pen::DASH1, 1, Color(0xB0, 0xB0, 0xB0));
   pens[STYLE_GRIDMINOR].Create(1, Color(0xB0, 0xB0, 0xB0));
   pens[STYLE_GRIDZERO].Create(width_normal, Color(0xB0, 0xB0, 0xB0));
 
   bar_brush.Create(COLOR_GREEN);
   neg_brush.Create(COLOR_RED);
-
-  label_blank_brush.Create(ColorWithAlpha(COLOR_WHITE,0xC0));
-  blank_brush.Create(ColorWithAlpha(LightColor(COLOR_GRAY),0x80));
-  black_brush.Create(COLOR_BLACK);
 
   label_font.Load(FontDescription(Layout::FontScale(12)));
   axis_label_font.Load(FontDescription(Layout::FontScale(10), true));
@@ -48,8 +42,22 @@ ChartLook::Initialise(bool dark_mode)
   if (dark_mode) {
     background_color = COLOR_DARK_THEME_BACKGROUND;
     text_color = COLOR_WHITE;
+
+    pens[STYLE_BLACK].Create(width_normal, COLOR_WHITE);
+    pens[STYLE_WHITE].Create(width_normal, COLOR_BLACK);
+
+    label_blank_brush.Create(ColorWithAlpha(COLOR_DARK_THEME_BACKGROUND, 0xC0));
+    blank_brush.Create(ColorWithAlpha(DarkColor(COLOR_GRAY), 0x80));
+    black_brush.Create(COLOR_WHITE);
   } else {
     background_color = COLOR_WHITE;
     text_color = COLOR_BLACK;
+
+    pens[STYLE_BLACK].Create(width_normal, COLOR_BLACK);
+    pens[STYLE_WHITE].Create(width_normal, COLOR_WHITE);
+
+    label_blank_brush.Create(ColorWithAlpha(COLOR_WHITE, 0xC0));
+    blank_brush.Create(ColorWithAlpha(LightColor(COLOR_GRAY), 0x80));
+    black_brush.Create(COLOR_BLACK);
   }
 }
