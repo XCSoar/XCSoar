@@ -46,19 +46,19 @@ DialogLook::Initialise(bool _dark_mode)
 
   if (dark_mode) {
     caption.text_color = COLOR_WHITE;
-    caption.background_color = Color(0x10, 0x10, 0x10);
-    caption.inactive_background_color = Color(0x30, 0x30, 0x30);
+    caption.background_color = COLOR_DARK_THEME_CAPTION;
+    caption.inactive_background_color = COLOR_DARK_THEME_CAPTION_INACTIVE;
 
-    SetBackgroundColor(Color(0x0a, 0x15, 0x1f));
+    SetBackgroundColor(COLOR_DARK_THEME_BACKGROUND);
     text_color = COLOR_WHITE;
 
     focused.background_color = COLOR_XCSOAR;
     focused.text_color = COLOR_WHITE;
     focused.border_pen.Create(Layout::FastScale(1) + 2, COLOR_WHITE);
 
-    list.background_color = Color(0x2a, 0x2a, 0x2a);
+    list.background_color = COLOR_DARK_THEME_LIST;
     list.text_color = COLOR_WHITE;
-    list.selected.background_color = Color(0x3a, 0x3a, 0x3a);
+    list.selected.background_color = COLOR_DARK_THEME_LIST_SELECTED;
     list.selected.text_color = COLOR_WHITE;
     list.focused.background_color = COLOR_XCSOAR_DARK;
     list.focused.text_color = COLOR_WHITE;
