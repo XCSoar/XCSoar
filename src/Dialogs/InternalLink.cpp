@@ -17,6 +17,10 @@
 #include "Dialogs/Settings/Panels/InfoBoxesConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/SafetyFactorsConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/TrackingConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/TerrainDisplayConfigPanel.hpp"
 #include "Widget/Widget.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
@@ -60,6 +64,10 @@ static constexpr ConfigPanelLink config_panel_links[] = {
   {"config/infoboxes",  N_("InfoBox Sets"), CreateInfoBoxesConfigPanel},
   {"config/pages",      N_("Pages"),      CreatePagesConfigPanel},
   {"config/weglide",    N_("WeGlide"),    CreateWeGlideConfigPanel},
+  {"config/weather",    N_("Weather"),    CreateWeatherConfigPanel},
+  {"config/safety",     N_("Safety Factors"), CreateSafetyFactorsConfigPanel},
+  {"config/tracking",   N_("Tracking"),   CreateTrackingConfigPanel},
+  {"config/terrain",    N_("Terrain Display"), CreateTerrainDisplayConfigPanel},
 };
 
 /**
