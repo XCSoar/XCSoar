@@ -8,11 +8,9 @@
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Language/Language.hpp"
+#include "system/OpenLink.hpp"
 
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
-#endif
+#include <fmt/format.h>
 
 enum Controls {
   Location,
@@ -21,9 +19,7 @@ enum Controls {
   Near,
   Bearing,
   Distance,
-#ifdef ANDROID
   ShareButton,
-#endif
 };
 
 void
@@ -36,9 +32,7 @@ FlightStatusPanel::Refresh() noexcept
     SetText(Location, FormatGeoPoint(basic.location));
   else
     ClearText(Location);
-#ifdef ANDROID
   SetRowEnabled(ShareButton, basic.location_available);
-#endif
 
   if (basic.gps_altitude_available)
     SetText(Altitude, FormatUserAltitude(basic.gps_altitude));
@@ -74,11 +68,15 @@ FlightStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Bearing"));
   AddReadOnly(_("Distance"));
 
-#ifdef ANDROID
-  AddButton(_("Share"), [this](){
-    native_view->ShareText(Java::GetEnv(), GetText(Location));
+  AddButton(_("Share"), [](){
+    const auto &basic = CommonInterface::Basic();
+    if (basic.location_available) {
+      const auto uri = fmt::format("geo:{:.6f},{:.6f}",
+                                   basic.location.latitude.Degrees(),
+                                   basic.location.longitude.Degrees());
+      OpenLink(uri.c_str());
+    }
   });
 
   SetRowEnabled(ShareButton, false);
-#endif
 }
