@@ -3,6 +3,7 @@
 
 #include "ProgressWindow.hpp"
 #include "GlobalSettings.hpp"
+#include "Look/Colors.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/FontDescription.hpp"
 #include "Resources.hpp"
@@ -15,7 +16,7 @@
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
   :background_color(GlobalSettings::dark_mode
-                    ? Color(0x0a, 0x15, 0x1f) : COLOR_WHITE),
+                    ? COLOR_DARK_THEME_BACKGROUND : COLOR_WHITE),
    dark_mode(GlobalSettings::dark_mode)
 {
   message.clear();
