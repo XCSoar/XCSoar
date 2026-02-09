@@ -87,6 +87,8 @@ public:
 
   void Set(std::string_view key, const char *value) noexcept;
 
+  // Getters for non-(char *) data types
+
   // char string values
 
   /**
@@ -101,6 +103,23 @@ public:
   bool Get(std::string_view key,
            BasicStringBuffer<char, max> &value) const noexcept {
     return Get(key, std::span{value.data(), value.capacity()});
+  }
+
+  // std::string values
+
+  /**
+   * Reads a value from the profile map
+   *
+   * @param key name of the value that should be read
+   * @param value Reference to the output string
+   */
+  bool Get(std::string_view key, std::string &value) const noexcept {
+    const char *p = Get(key);
+    if (p == nullptr)
+      return false;
+
+    value = p;
+    return true;
   }
 
   // numeric values
@@ -128,6 +147,15 @@ public:
     if (result)
       value = std::chrono::duration<unsigned>{_value};
     return result;
+  }
+
+  // Value setters for non-(char *) data types
+
+  /**
+   * Sets a value to the profile map from std::string.
+   */
+  void Set(std::string_view key, const std::string &value) noexcept {
+    Set(key, value.c_str());
   }
 
   void Set(std::string_view key, bool value) noexcept {
