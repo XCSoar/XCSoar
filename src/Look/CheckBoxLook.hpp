@@ -23,5 +23,5 @@ struct CheckBoxLook {
     Color text_color;
   } standard, focused, pressed, disabled;
 
-  void Initialise(const Font &_font);
+  void Initialise(const Font &_font, bool dark_mode = false);
 };
