@@ -61,6 +61,17 @@ public:
     settings = _settings;
   }
 
+#ifdef ENABLE_OPENGL
+  /**
+   * Force a fixed quantisation value, bypassing the idle-based
+   * dynamic adjustment.  Call with q=1 for preview windows that
+   * should always render at full resolution.
+   */
+  void SetQuantisationPixels(unsigned q) noexcept {
+    raster_renderer.SetQuantisationPixels(q);
+  }
+#endif
+
   /**
    * @return true if an image has been renderered and Draw() may be
    * called

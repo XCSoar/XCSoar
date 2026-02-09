@@ -42,7 +42,15 @@ class TerrainPreviewWindow : public PaintWindow {
 
 public:
   TerrainPreviewWindow(const RasterTerrain &terrain)
-    :renderer(terrain) {}
+    :renderer(terrain)
+  {
+#ifdef ENABLE_OPENGL
+    /* always render at full resolution in the preview;
+       the default idle-based quantisation would produce a
+       blocky image while the user interacts with the dialog */
+    renderer.SetQuantisationPixels(1);
+#endif
+  }
 
   void SetSettings(const TerrainRendererSettings &settings) {
     renderer.SetSettings(settings);
