@@ -104,10 +104,10 @@ RasterRenderer::~RasterRenderer() noexcept
 static unsigned
 GetQuantisation() noexcept
 {
-  if (IsUserIdle(2000))
-    /* full terrain resolution when the user is idle */
+  if (IsUserIdle(1500))
+    /* full terrain resolution when the user stops interacting */
     return 1;
-  else if (IsUserIdle(1000))
+  else if (IsUserIdle(750))
     /* reduced terrain resolution when the user has interacted with
        XCSoar recently */
     return 2;
