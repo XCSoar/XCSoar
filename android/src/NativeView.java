@@ -141,13 +141,32 @@ class NativeView extends SurfaceView
     setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener() {
       @Override
       public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-        if (Build.VERSION.SDK_INT >= 29) {
+        if (Build.VERSION.SDK_INT >= 30) {
+            /* Modern API; getSystemGestureInsets() is deprecated from 30 */
+            Insets gi = insets.getInsets(WindowInsets.Type.systemGestures());
+            gestureInsetLeft = gi.left;
+            gestureInsetRight = gi.right;
+            gestureInsetTop = gi.top;
+            gestureInsetBottom = gi.bottom;
+        } else if (Build.VERSION.SDK_INT >= 29) {
             Insets gi = insets.getSystemGestureInsets();
             gestureInsetLeft = gi.left;
             gestureInsetRight = gi.right;
             gestureInsetTop = gi.top;
             gestureInsetBottom = gi.bottom;
         }
+
+        /* On devices without gesture navigation the system reports
+           zero left/right insets, but XCSoar draws edge-to-edge so
+           accidental edge touches are still likely (especially in
+           flight with gloves).  Apply a minimum dead zone matching
+           the standard Android back-gesture width (~24dp). */
+        final float density = v.getResources().getDisplayMetrics().density;
+        final int minEdge = (int)(24 * density + 0.5f);
+        if (gestureInsetLeft < minEdge)
+            gestureInsetLeft = minEdge;
+        if (gestureInsetRight < minEdge)
+            gestureInsetRight = minEdge;
 
         if (Build.VERSION.SDK_INT >= 30) {
             WindowManager wm = v.getContext().getSystemService(WindowManager.class);
