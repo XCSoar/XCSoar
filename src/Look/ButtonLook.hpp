@@ -33,5 +33,5 @@ struct ButtonLook {
     Brush brush;
   } disabled;
 
-  void Initialise(const Font &_font);
+  void Initialise(const Font &_font, bool dark_mode = false);
 };
