@@ -330,7 +330,9 @@ TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const noexcept
   rc.bottom = GetMainMenuButtonSize(GetNumMainMenuItems() - 1).bottom;
   rc.Grow(GetTabLineHeight());
 
-  canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+  canvas.DrawFilledRectangle(rc, look.dark_mode
+                             ? DarkColor(look.background_color)
+                             : COLOR_BLACK);
 }
 
 inline void
@@ -363,7 +365,9 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
   rc.bottom = GetSubMenuButtonSize(main_button.last_page_index).bottom;
   rc.Grow(GetTabLineHeight());
 
-  canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+  canvas.DrawFilledRectangle(rc, look.dark_mode
+                             ? DarkColor(look.background_color)
+                             : COLOR_BLACK);
 }
 
 inline void

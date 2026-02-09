@@ -11,16 +11,10 @@ struct DialogLook;
  * A horizontal black line.
  */
 class HLine : public PaintWindow {
-#ifndef ENABLE_OPENGL
   const DialogLook &look;
-#endif
 
 public:
-#ifdef ENABLE_OPENGL
-  HLine([[maybe_unused]] const DialogLook &_look) {}
-#else
-  HLine([[maybe_unused]] const DialogLook &_look):look(_look) {}
-#endif
+  HLine(const DialogLook &_look):look(_look) {}
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override;
