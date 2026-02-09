@@ -25,6 +25,7 @@ jmethodID NativeView::openURL_method;
 jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
 jmethodID NativeView::isAutoRotateEnabled_method;
+jmethodID NativeView::getPhysicalOrientation_method;
 
 Java::TrivialClass NativeView::clsBitmap;
 jmethodID NativeView::createBitmap_method;
@@ -71,6 +72,9 @@ NativeView::Initialise(JNIEnv *env)
 
   isAutoRotateEnabled_method =
     env->GetMethodID(cls, "isAutoRotateEnabled", "()Z");
+
+  getPhysicalOrientation_method =
+    env->GetMethodID(cls, "getPhysicalOrientation", "()I");
 
   clsBitmap.Find(env, "android/graphics/Bitmap");
   createBitmap_method = env->GetStaticMethodID(

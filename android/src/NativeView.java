@@ -102,6 +102,12 @@ class NativeView extends SurfaceView
 
   Thread thread;
 
+  /**
+   * Listens for physical device orientation changes to offer a
+   * rotation suggestion button (like Android's Rotate Suggestions).
+   */
+  private RotationListener rotationListener;
+
   /*
    * Check if running in simulator mode (user chose "simulator" on startup)
    */
@@ -192,6 +198,8 @@ class NativeView extends SurfaceView
     });
 
     requestApplyInsets(); // trigger initial inset calculation
+
+    rotationListener = new RotationListener(context);
   }
 
   private void start() {
@@ -247,6 +255,8 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceCreated(SurfaceHolder holder) {
+    if (rotationListener != null && rotationListener.canDetectOrientation())
+      rotationListener.enable();
   }
 
   @Override public void surfaceChanged(SurfaceHolder holder, int format,
@@ -286,6 +296,9 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
+    if (rotationListener != null)
+      rotationListener.disable();
+
     surfaceDestroyedNative();
   }
 
@@ -373,6 +386,21 @@ class NativeView extends SurfaceView
   static native void onPermissionResult(boolean granted);
 
   static native void onConfigurationChangedNative(boolean nightMode);
+
+  /**
+   * Called when the physical device orientation changes, to show
+   * or refresh the rotate suggestion button.
+   */
+  static native void onRotationSuggestion();
+
+  /**
+   * Delegate to {@link RotationListener#getPhysicalOrientation()}.
+   * Called from native code when the rotate button is pressed.
+   */
+  int getPhysicalOrientation() {
+    return rotationListener != null
+      ? rotationListener.getPhysicalOrientation() : 0;
+  }
 
   static native String onReceiveXCTrackTask(String data);
 

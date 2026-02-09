@@ -11,6 +11,15 @@
 #include "Interface.hpp"
 #include "UIState.hpp"
 
+#ifdef ANDROID
+#include "Hardware/RotateDisplay.hpp"
+#include "DisplayOrientation.hpp"
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#include "Renderer/BitmapButtonRenderer.hpp"
+#include "java/Global.hxx"
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
@@ -195,3 +204,36 @@ ShowZoomInButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 #endif
   }
 }
+
+#ifdef ANDROID
+
+#include "Resources.hpp"
+
+void
+ShowRotateButton::Create(ContainerWindow &parent, const PixelRect &rc,
+                         WindowStyle style) noexcept
+{
+  bitmap.Load(IDB_ROTATE);
+  Button::Create(parent, rc, style,
+                 std::make_unique<BitmapButtonRenderer>(bitmap, true));
+}
+
+bool
+ShowRotateButton::OnClicked() noexcept
+{
+  /* query the device sensor for the current physical orientation
+     and rotate to it */
+  if (native_view != nullptr) {
+    auto orientation = static_cast<DisplayOrientation>(
+      native_view->GetPhysicalOrientation(Java::GetEnv()));
+    if (orientation != DisplayOrientation::DEFAULT)
+      Display::Rotate(orientation);
+  }
+
+  /* hide the button immediately */
+  Hide();
+
+  return true;
+}
+
+#endif /* ANDROID */

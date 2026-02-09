@@ -50,6 +50,7 @@ bitmap_graphic IDB_LOCATION_PIN "location_pin"
 bitmap_graphic IDB_NOTIFICATION_BELL "notification_bell"
 bitmap_graphic IDB_BLUETOOTH "bluetooth"
 bitmap_graphic IDB_WARNING_TRIANGLE "warning_triangle"
+bitmap_graphic IDB_ROTATE "rotate"
 
 #ifdef EYE_CANDY
 #ifdef XCSOAR_TESTING

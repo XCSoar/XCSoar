@@ -29,10 +29,13 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
 #ifdef KOBO
   /* on the Kobo, the display orientation must be loaded explicitly
      (portrait), because the hardware default is landscape */
-#else
+#elif !defined(ANDROID)
   if (orientation == DisplayOrientation::DEFAULT)
     return;
 #endif
+  /* on Android, DEFAULT maps to LOCKED (lock to current orientation)
+     to prevent disruptive auto-rotation during flight; the rotate
+     button offers manual rotation when system auto-rotate is on */
 
   if (!Display::Rotate(orientation)) {
     LogString("Display rotation failed");
@@ -57,7 +60,7 @@ Display::RestoreOrientation()
   if (!Display::RotateSupported())
     return;
 
-#ifndef KOBO
+#if !defined(KOBO) && !defined(ANDROID)
   DisplayOrientation orientation =
     CommonInterface::GetUISettings().display.orientation;
   if (orientation == DisplayOrientation::DEFAULT)

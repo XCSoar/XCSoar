@@ -37,6 +37,7 @@ class NativeView {
   static jmethodID openWaypointFile_method;
   static jmethodID getNetState_method;
   static jmethodID isAutoRotateEnabled_method;
+  static jmethodID getPhysicalOrientation_method;
 
   static Java::TrivialClass clsBitmap;
   static jmethodID createBitmap_method;
@@ -117,6 +118,17 @@ public:
   [[gnu::pure]]
   bool IsAutoRotateEnabled(JNIEnv *env) const noexcept {
     return env->CallBooleanMethod(obj, isAutoRotateEnabled_method);
+  }
+
+  /**
+   * Return the DisplayOrientation enum value matching the device's
+   * current physical orientation (from the latest sensor reading).
+   * 0=DEFAULT (unknown), 1=PORTRAIT, 2=LANDSCAPE,
+   * 3=REVERSE_PORTRAIT, 4=REVERSE_LANDSCAPE.
+   */
+  [[gnu::pure]]
+  int GetPhysicalOrientation(JNIEnv *env) const noexcept {
+    return env->CallIntMethod(obj, getPhysicalOrientation_method);
   }
 
   Java::LocalObject LoadResourceBitmap(JNIEnv *env, const char *name) {

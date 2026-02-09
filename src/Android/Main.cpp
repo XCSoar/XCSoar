@@ -176,6 +176,17 @@ Java_org_xcsoar_NativeView_onConfigurationChangedNative([[maybe_unused]] JNIEnv 
 }
 
 gcc_visibility_default
+void
+Java_org_xcsoar_NativeView_onRotationSuggestion([[maybe_unused]] JNIEnv *env,
+                                                [[maybe_unused]] jclass cls)
+{
+  const std::scoped_lock shutdown_lock{shutdown_mutex};
+
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->SendRotationSuggestion();
+}
+
+gcc_visibility_default
 JNIEXPORT jstring JNICALL
 Java_org_xcsoar_NativeView_onReceiveXCTrackTask(JNIEnv *env,
                                                 [[maybe_unused]] jclass cls,
