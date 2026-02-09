@@ -16,6 +16,6 @@ HLine::OnPaint(Canvas &canvas) noexcept
   const unsigned height = canvas.GetHeight();
   const int middle = height / 2;
 
-  canvas.SelectBlackPen();
+  canvas.Select(Pen(1, look.dark_mode ? COLOR_GRAY : COLOR_BLACK));
   canvas.DrawLine({0, middle}, {width, middle});
 }
