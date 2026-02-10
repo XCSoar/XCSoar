@@ -319,7 +319,24 @@ TopWindow::OnResize(PixelSize new_size) noexcept
     }
   }
 
-  /* Call base implementation */
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  /* When software rotation is active, the compositor sends physical
+     dimensions but the layout and Window::size must use the logical
+     (post-rotation) dimensions.  Window::Resize() already set
+     Window::size to the physical dimensions before calling us; we
+     need to correct that.  Calling Resize(logical_size) will:
+     1. Update Window::size to the logical dimensions
+     2. Re-enter OnResize(), which hits the early-return guard above
+        (logical == viewport_size) and does the layout correctly */
+  if (screen != nullptr) {
+    PixelSize logical_size = screen->GetSize();
+    if (logical_size != new_size) {
+      Resize(logical_size);
+      return;
+    }
+  }
+#endif
+
   ContainerWindow::OnResize(new_size);
 
 #ifdef USE_MEMORY_CANVAS
