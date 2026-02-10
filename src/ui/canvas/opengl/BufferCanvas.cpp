@@ -110,6 +110,7 @@ BufferCanvas::Begin(Canvas &other) noexcept
     OpenGL::projection_matrix = glm::mat4(1);
 
     old_translate = OpenGL::translate;
+    old_window_size = OpenGL::window_size;
     old_size = OpenGL::viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -156,6 +157,7 @@ BufferCanvas::Commit(Canvas &other) noexcept
     OpenGL::UpdateShaderProjectionMatrix();
 
     OpenGL::translate = old_translate;
+    OpenGL::window_size = old_window_size;
     OpenGL::viewport_size = old_size;
 
     OpenGL::UpdateShaderTranslate();
