@@ -12,7 +12,7 @@ TestBasic()
   ClimbAverageCalculator c;
   c.Reset();
 
-  double av;
+  double av = 0;
 
   constexpr FloatDuration AVERAGE_TIME = std::chrono::seconds{30};
 
@@ -38,7 +38,7 @@ static void
 TestDuplicateTimestamps()
 {
   ClimbAverageCalculator c;
-  double av;
+  double av = 0;
 
   constexpr FloatDuration AVERAGE_TIME = std::chrono::seconds{30};
 
