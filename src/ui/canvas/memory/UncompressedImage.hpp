@@ -17,6 +17,29 @@ struct RGBPixelReader {
   }
 };
 
+/**
+ * Read RGBA pixels (4 bytes each), discarding the alpha channel.
+ * The memory canvas has no alpha blending, so alpha is dropped
+ * and transparent areas composite against an implicit white
+ * background.
+ */
+struct RGBAPixelReader {
+  const uint8_t *p;
+
+  template<AnyPixelTraits PixelTraits>
+  typename PixelTraits::color_type Read(PixelTraits) noexcept {
+    const uint8_t r = *p++, g = *p++, b = *p++;
+    const uint8_t a = *p++;
+
+    /* Pre-multiply against white so that transparent areas
+       render as white instead of black. */
+    const uint8_t rb = r + (255 - a) * (255 - r) / 255;
+    const uint8_t gb = g + (255 - a) * (255 - g) / 255;
+    const uint8_t bb = b + (255 - a) * (255 - b) / 255;
+    return typename PixelTraits::color_type(rb, gb, bb);
+  }
+};
+
 struct GrayPixelReader {
   const uint8_t *p;
 
@@ -72,12 +95,19 @@ ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
     gcc_unreachable();
 
   case UncompressedImage::Format::RGB:
-  case UncompressedImage::Format::RGBA:
     ConvertImage<PixelTraits,
                  RGBPixelReader>(buffer,
                                  (const uint8_t *)uncompressed.GetData(),
                                  uncompressed.GetPitch(),
                                  uncompressed.IsFlipped());
+    break;
+
+  case UncompressedImage::Format::RGBA:
+    ConvertImage<PixelTraits,
+                 RGBAPixelReader>(buffer,
+                                  (const uint8_t *)uncompressed.GetData(),
+                                  uncompressed.GetPitch(),
+                                  uncompressed.IsFlipped());
     break;
 
   case UncompressedImage::Format::GRAY:
