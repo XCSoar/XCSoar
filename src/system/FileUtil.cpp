@@ -227,7 +227,8 @@ ScanFiles(File::Visitor &visitor, Path sPath,
 
 static bool
 ScanDirectories(File::Visitor &visitor, bool recursive,
-                Path sPath, const char* filter = "*")
+                Path sPath, const char* filter = "*", bool show_dir = false,
+                Directory::DirEntryVisitor *dir_entry_cb = nullptr)
 {
 #ifdef HAVE_POSIX
   DIR *dir = opendir(sPath.c_str());
@@ -251,15 +252,24 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     if (stat(FileName, &st) < 0)
       continue;
 
-    if (S_ISDIR(st.st_mode) && recursive)
-      ScanDirectories(visitor, true, Path(FileName), filter);
-    else {
+    if (S_ISDIR(st.st_mode)) {
+      if (dir_entry_cb)
+        dir_entry_cb->Visit(Path(FileName), Path(ent->d_name), true);
+      else if (show_dir)
+        visitor.Visit(Path(FileName), Path(ent->d_name));
+      if (recursive)
+        ScanDirectories(visitor, true, Path(FileName), filter, show_dir, dir_entry_cb);
+    } else {
       int flags = 0;
 #ifdef FNM_CASEFOLD
       flags = FNM_CASEFOLD;
 #endif
-      if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, flags) == 0)
-        visitor.Visit(Path(FileName), Path(ent->d_name));
+      if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, flags) == 0) {
+        if (dir_entry_cb)
+          dir_entry_cb->Visit(Path(FileName), Path(ent->d_name), false);
+        else
+          visitor.Visit(Path(FileName), Path(ent->d_name));
+      }
     }
   }
 
@@ -278,11 +288,8 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   }
 
   // Scan for files in "/test/data/something"
-  ScanFiles(visitor, Path(FileName), filter);
-
-  // If we are not scanning recursive we are done now
-  if (!recursive)
-    return true;
+  if (dir_entry_cb == nullptr)
+    ScanFiles(visitor, Path(FileName), filter);
 
   // "test/data/something/"
   strcat(DirPath, DIR_SEPARATOR_S);
@@ -297,16 +304,28 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
-  // Loop through remaining files
+  // Loop through remaining entries.
   while (true) {
-    if (!IsDots(FindFileData.cFileName) &&
-        (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+    if (!IsDots(FindFileData.cFileName)) {
       // "test/data/something/"
       strcpy(FileName, DirPath);
       // "test/data/something/SUBFOLDER"
       strcat(FileName, FindFileData.cFileName);
-      // Scan subfolder for matching files too
-      ScanDirectories(visitor, true, Path(FileName), filter);
+
+      if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+        if (dir_entry_cb)
+          dir_entry_cb->Visit(Path(FileName), Path(FindFileData.cFileName), true);
+        else if (show_dir)
+          visitor.Visit(Path(FileName), Path(FindFileData.cFileName));
+
+        if (recursive)
+          ScanDirectories(visitor, true, Path(FileName), filter, show_dir, dir_entry_cb);
+      } else if (checkFilter(FindFileData.cFileName, filter)) {
+        if (dir_entry_cb)
+          dir_entry_cb->Visit(Path(FileName), Path(FindFileData.cFileName), false);
+        else
+          visitor.Visit(Path(FileName), Path(FindFileData.cFileName));
+      }
     }
 
     // Look for next file/folder
@@ -342,6 +361,22 @@ Directory::VisitSpecificFiles(Path path, const char* filter,
                               File::Visitor &visitor, bool recursive)
 {
   ScanDirectories(visitor, recursive, path, filter);
+}
+
+void
+Directory::VisitDirectoriesAndFiles(Path path, File::Visitor &visitor,
+                                    bool recursive) noexcept
+{
+  ScanDirectories(visitor, recursive, path, "*", true);
+}
+
+void
+Directory::VisitDirectoriesAndFiles(Path path, DirEntryVisitor &visitor,
+                                    bool recursive) noexcept
+{
+  // Use the internal mixed scanner and ignore File::Visitor callbacks.
+  struct NullVisitor : File::Visitor { void Visit(Path, Path) override {} } nullv;
+  ScanDirectories(nullv, recursive, path, "*", true, &visitor);
 }
 
 bool
