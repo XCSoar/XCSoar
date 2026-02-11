@@ -21,7 +21,8 @@ FindHomeId(Waypoints &waypoints,
 
   auto wp = waypoints.LookupId(settings.home_waypoint);
   if (wp == nullptr) {
-    settings.home_waypoint = -1;
+    LogFmt("FindHomeId: id={} not found in {} waypoints",
+           settings.home_waypoint, waypoints.size());
     return nullptr;
   }
 

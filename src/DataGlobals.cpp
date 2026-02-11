@@ -3,8 +3,10 @@
 
 #include "DataGlobals.hpp"
 #include "Profile/Current.hpp"
+#include "Profile/Profile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Waypoint/Waypoints.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -16,6 +18,7 @@
 #include "MainWindow.hpp"
 #include "PageActions.hpp"
 #include "Protection.hpp" // for global_running
+#include "LogFile.hpp"
 
 void
 DataGlobals::UnsetTerrain() noexcept
@@ -77,6 +80,11 @@ DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp) noexcept
 void
 DataGlobals::UpdateHome(bool reset) noexcept
 {
+  if (data_components->waypoints->IsEmpty()) {
+    LogString("UpdateHome: waypoints not loaded yet, skipping");
+    return;
+  }
+
   WaypointGlue::SetHome(*data_components->waypoints,
                         data_components->terrain.get(),
                         CommonInterface::SetComputerSettings().poi,
@@ -86,4 +94,6 @@ DataGlobals::UpdateHome(bool reset) noexcept
   WaypointGlue::SaveHome(Profile::map,
                          CommonInterface::GetComputerSettings().poi,
                          CommonInterface::GetComputerSettings().team_code);
+
+  Profile::Save();
 }
