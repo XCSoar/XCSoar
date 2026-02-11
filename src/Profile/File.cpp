@@ -25,35 +25,58 @@ Profile::LoadFile(ProfileMap &map, Path path)
 
   while (kvreader.Read(pair)) {
     // migrate old AirspaceFile and AdditionalAirspaceFile field
-    if (StringIsEqual(pair.key, "AirspaceFile") || StringIsEqual(
-            pair.key, "AdditionalAirspaceFile")) {
+    if (StringIsEqual(pair.key, "AirspaceFile") ||
+        StringIsEqual(pair.key, "AdditionalAirspaceFile")) {
       auto buffer = map.Get(ProfileKeys::AirspaceFileList);
       std::string airspace;
-      if (buffer != nullptr) {
+      if (buffer != nullptr)
         airspace = std::string(buffer);
+
+      /* primary file must come first in the list; since std::map
+         iterates alphabetically, "AdditionalAirspaceFile" is read
+         before "AirspaceFile" — prepend the primary file to preserve
+         the original loading order */
+      if (StringIsEqual(pair.key, "AirspaceFile")) {
+        if (!airspace.empty())
+          airspace = std::string(pair.value) + "|" + airspace;
+        else
+          airspace = pair.value;
+      } else {
+        if (!airspace.empty())
+          airspace += "|";
+        airspace += pair.value;
       }
 
-      if (airspace.size() > 0)
-        airspace += "|";
-      airspace += pair.value;
       map.Set(ProfileKeys::AirspaceFileList, airspace.c_str());
       continue;
     }
+
     // migrate old WPFile and AdditionalWPFile field
-    if (StringIsEqual(pair.key, "WPFile") || StringIsEqual(
-            pair.key, "AdditionalWPFile")) {
+    if (StringIsEqual(pair.key, "WPFile") ||
+        StringIsEqual(pair.key, "AdditionalWPFile")) {
       auto buffer = map.Get(ProfileKeys::WaypointFileList);
       std::string waypoint;
-      if (buffer != nullptr) {
+      if (buffer != nullptr)
         waypoint = std::string(buffer);
+
+      /* primary file must come first in the list; since std::map
+         iterates alphabetically, "AdditionalWPFile" is read before
+         "WPFile" — prepend the primary file to preserve the original
+         loading order */
+      if (StringIsEqual(pair.key, "WPFile")) {
+        if (!waypoint.empty())
+          waypoint = std::string(pair.value) + "|" + waypoint;
+        else
+          waypoint = pair.value;
+      } else {
+        if (!waypoint.empty())
+          waypoint += "|";
+        waypoint += pair.value;
       }
 
-      if (waypoint.size() > 0)
-        waypoint += "|";
-      waypoint += pair.value;
       map.Set(ProfileKeys::WaypointFileList, waypoint.c_str());
       continue;
-            }
+    }
 
     if (StringIsEqual(pair.key, "WatchedWPFile")) {
       auto buffer = map.Get(ProfileKeys::WatchedWaypointFileList);
