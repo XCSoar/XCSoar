@@ -18,6 +18,7 @@
 #include "system/RunFile.hpp"
 
 #include <cassert>
+#include <algorithm>
 
 bool
 WndProperty::OnKeyCheck(unsigned key_code) const noexcept
@@ -381,7 +382,24 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
     const int text_height = canvas.GetFontHeight();
     const int y = edit_rc.top + (canvas_height - text_height) / 2;
 
-    canvas.TextAutoClipped({x, y}, value.c_str());
+    // determine available pixel width for text inside edit rect
+    const int avail = std::max(0,
+                  static_cast<int>(edit_rc.GetWidth()) -
+                  static_cast<int>(Layout::GetTextPadding()) * 4);
+
+    // measure full text width
+    PixelSize tsize = canvas.CalcTextSize(value.c_str());
+    const int text_width = tsize.width;
+
+    int shift = 0;
+    if (alignment == Alignment::RIGHT) {
+      shift = std::max(0, text_width - avail);
+    } else if (alignment == Alignment::AUTO) {
+      if (text_width > avail)
+        shift = std::max(0, text_width - avail);
+    }
+
+    canvas.TextAutoClipped({x - shift, y}, value.c_str());
   }
 }
 
