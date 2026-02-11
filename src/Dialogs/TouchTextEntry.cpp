@@ -21,7 +21,7 @@ static KeyboardWidget *kb = NULL;
 
 static AllowedCharacters AllowedCharactersCallback;
 
-static constexpr size_t MAX_TEXTENTRY = 40;
+static constexpr size_t MAX_TEXTENTRY = 256;
 static unsigned int cursor = 0;
 static size_t max_width;
 static char edittext[MAX_TEXTENTRY];
@@ -174,6 +174,7 @@ TouchTextEntry(char *text, size_t width,
                       0, WindowStyle());
   _editor.SetReadOnly();
   editor = &_editor;
+  _editor.SetAlignment(WndProperty::Alignment::AUTO);
 
   WindowStyle button_style;
   button_style.TabStop();
@@ -220,8 +221,6 @@ TouchTextEntry(char *text, size_t width,
   if (!StringIsEmpty(text)) {
     CopyTruncateString(edittext, max_width, text);
     cursor = strlen(edittext);
-    if (cursor >= max_width)
-      cursor = max_width - 1;
   }
 
   UpdateTextboxProp();
