@@ -13,6 +13,7 @@
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "Dialogs/DataManagement/BackupRestorePanel.hpp"
+#include "Dialogs/DataManagement/ImportDataPanel.hpp"
 #include "Dialogs/Message.hpp"
 
 class DataManagementWidget : public RowFormWidget {
@@ -25,10 +26,7 @@ public:
     AddButton(_("Navigation & Flight Resources"), [](){ ShowConfigPanel(_("Site files"), CreateSiteConfigPanel); });
     AddButton(_("Download manager"), [](){ ShowFileManager(); });
     AddButton(_("Export flights"), [](){ ShowExportFlightsDialog(); });
-    AddButton(_("Import data"), [](){ 
-      ShowMessageBox(_("Import data is not available."),
-                     _("Import data"), MB_OK);
-    });
+    AddButton(_("Import data"), [](){ ShowImportDataDialog(); });
     AddButton(_("Backup manager"), [](){ ShowBackupManagerDialog(); });
   }
 };
