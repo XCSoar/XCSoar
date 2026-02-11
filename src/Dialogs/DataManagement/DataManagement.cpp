@@ -5,6 +5,8 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "Dialogs/InternalLink.hpp"
+#include "Dialogs/Settings/Panels/SiteConfigPanel.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "Form/Frame.hpp"
@@ -19,6 +21,7 @@ public:
 
   void Prepare([[maybe_unused]] ContainerWindow &parent,
                [[maybe_unused]] const PixelRect &rc) noexcept override {
+    AddButton(_("Navigation & Flight Resources"), [](){ ShowConfigPanel(_("Site files"), CreateSiteConfigPanel); });
     AddButton(_("Download manager"), [](){ ShowFileManager(); });
     AddButton(_("Export flights"), [](){ ShowExportFlightsDialog(); });
     AddButton(_("Import data"), [](){ 
