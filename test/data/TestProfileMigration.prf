@@ -1,0 +1,7 @@
+AdditionalAirspaceFile="/path/to/extra_airspace.txt"
+AdditionalWPFile="/path/to/extra_waypoints.cup"
+AirspaceFile="/path/to/main_airspace.txt"
+HomeLocation="7.161667 49.047500"
+HomeWaypoint="500"
+WPFile="/path/to/main_waypoints.cup"
+WatchedWPFile="/path/to/watched.cup"
