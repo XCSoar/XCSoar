@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Profile/Profile.hpp"
+#include "Profile/Keys.hpp"
 #include "io/FileLineReader.hpp"
 #include "system/Path.hpp"
 #include "TestUtil.hpp"
@@ -119,13 +120,56 @@ TestReader()
   }
 }
 
+static void
+TestMigration()
+{
+  Profile::Clear();
+  Profile::LoadFile(Path(_T("test/data/TestProfileMigration.prf")));
+
+  /* verify old keys are not present (they are consumed by migration) */
+  ok1(!Profile::Exists("WPFile"));
+  ok1(!Profile::Exists("AdditionalWPFile"));
+  ok1(!Profile::Exists("AirspaceFile"));
+  ok1(!Profile::Exists("AdditionalAirspaceFile"));
+  ok1(!Profile::Exists("WatchedWPFile"));
+
+  /* verify migrated waypoint list has primary file first */
+  {
+    StaticString<256> value;
+    ok1(Profile::Get(ProfileKeys::WaypointFileList, value));
+    ok1(value == _T("/path/to/main_waypoints.cup|/path/to/extra_waypoints.cup"));
+  }
+
+  /* verify migrated airspace list has primary file first */
+  {
+    StaticString<256> value;
+    ok1(Profile::Get(ProfileKeys::AirspaceFileList, value));
+    ok1(value == _T("/path/to/main_airspace.txt|/path/to/extra_airspace.txt"));
+  }
+
+  /* verify migrated watched waypoint list */
+  {
+    StaticString<256> value;
+    ok1(Profile::Get(ProfileKeys::WatchedWaypointFileList, value));
+    ok1(value == _T("/path/to/watched.cup"));
+  }
+
+  /* verify non-migrated keys are preserved */
+  {
+    int value;
+    ok1(Profile::Get(ProfileKeys::HomeWaypoint, value));
+    ok1(value == 500);
+  }
+}
+
 int main()
 try {
-  plan_tests(31);
+  plan_tests(44);
 
   TestMap();
   TestWriter();
   TestReader();
+  TestMigration();
 
   return exit_status();
 } catch (...) {
