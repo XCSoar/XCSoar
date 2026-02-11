@@ -103,6 +103,27 @@ void
 VisitSpecificFiles(Path path, const char *filter,
                    File::Visitor &visitor, bool recursive = false);
 
+/**
+ * Visit files and directories.
+ */
+void VisitDirectoriesAndFiles(Path path, File::Visitor &visitor,
+                              bool recursive = false) noexcept;
+
+/**
+ * Receives each directory entry with an `is_dir` flag.
+ */
+class DirEntryVisitor {
+public:
+  virtual void Visit(Path full, Path filename, bool is_dir) noexcept = 0;
+  virtual ~DirEntryVisitor() noexcept = default;
+};
+
+/**
+ * Visit files and directories with entry type information.
+ */
+void VisitDirectoriesAndFiles(Path path, DirEntryVisitor &visitor,
+                              bool recursive = false) noexcept;
+
 } // namespace Directory
 
 namespace File {
