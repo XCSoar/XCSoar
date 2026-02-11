@@ -218,8 +218,10 @@ TouchTextEntry(char *text, size_t width,
   ClearText();
 
   if (!StringIsEmpty(text)) {
-    CopyTruncateString(edittext, width, text);
-    cursor = strlen(text);
+    CopyTruncateString(edittext, max_width, text);
+    cursor = strlen(edittext);
+    if (cursor >= max_width)
+      cursor = max_width - 1;
   }
 
   UpdateTextboxProp();
@@ -229,7 +231,7 @@ TouchTextEntry(char *text, size_t width,
   keyboard.Unprepare();
 
   if (result) {
-    CopyTruncateString(text, width, edittext);
+    CopyTruncateString(text, max_width, edittext);
   }
 
   return result;
