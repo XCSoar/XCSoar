@@ -127,6 +127,8 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
   // Optimise the waypoint list after attaching new waypoints
   way_points.Optimise();
 
+  LogFmt("LoadWaypoints: loaded {} waypoints", way_points.size());
+
   // Return whether waypoints have been loaded into the waypoint list
   return found;
 }

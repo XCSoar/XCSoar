@@ -21,6 +21,7 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Profile/Current.hpp"
+#include "Profile/Profile.hpp"
 #include "ActionInterface.hpp"
 #include "Widget/RowFormWidget.hpp"
 
@@ -195,6 +196,8 @@ SetHome(Waypoints *way_points, const Waypoint &waypoint)
     WaypointGlue::SaveHome(Profile::map,
                            settings_computer.poi, settings_computer.team_code);
   }
+
+  Profile::Save();
 }
 
 static bool
