@@ -13,6 +13,7 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
@@ -279,7 +280,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
-  const auto logs_path = MakeLocalPath("logs");
+  const auto logs_path = MakeLocalPath(GetFileTypeDefaultDir(FileType::IGC));
 
   while (true) {
     // Show list of the flights

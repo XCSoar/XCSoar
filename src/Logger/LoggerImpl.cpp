@@ -5,6 +5,7 @@
 #include "Logger/Settings.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
@@ -201,7 +202,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   assert(writer == nullptr);
 
-  const auto logs_path = MakeLocalPath("logs");
+  const auto logs_path = MakeLocalPath(GetFileTypeDefaultDir(FileType::IGC));
 
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
     ? gps_info.date_time_utc.GetDate()
