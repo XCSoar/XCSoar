@@ -24,6 +24,7 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
 #include "util/ConvertString.hpp"
+#include "util/StringCompare.hxx"
 #include "util/StringFormat.hpp"
 
 #include <vector>
@@ -237,7 +238,10 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
   if (name == nullptr)
     return;
 
-  if (name == Path(_T("repository"))) {
+  const bool is_main = name == Path("repository");
+  const bool is_user = StringStartsWith(name.c_str(), "user_repository_");
+
+  if (is_main || is_user) {
     const std::lock_guard lock{mutex};
     repository_failed = false;
     repository_modified = true;
@@ -254,11 +258,14 @@ DownloadFilePickerWidget::OnDownloadError(Path path_relative,
   if (name == nullptr)
     return;
 
-  if (name == Path(_T("repository"))) {
+  if (name == Path("repository")) {
     const std::lock_guard lock{mutex};
     repository_failed = true;
     repository_error = std::move(error);
   }
+
+  /* user repository download errors are silently ignored 
+     one warning is enough on network loss */
 
   download_complete_notify.SendNotification();
 }
