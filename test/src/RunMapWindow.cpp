@@ -8,7 +8,6 @@
 #define ENABLE_CLOSE_BUTTON
 #define ENABLE_LOOK
 #include "Airspace/AirspaceGlue.hpp"
-#include "Airspace/Patterns.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -20,6 +19,7 @@
 #include "Profile/Current.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/MapProfile.hpp"
+#include "Repository/FileType.hpp"
 #include "Terrain/Loader.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Topography/TopographyGlue.hpp"
@@ -110,7 +110,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
                         NULL, false);
 
   const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
-                                               AIRSPACE_FILE_PATTERNS);
+                                               GetFileTypePatterns(FileType::AIRSPACE));
   for (auto it = paths.begin(); it < paths.end(); it++) {
     ParseAirspaceFile(airspace_database, *it, operation);
   }
