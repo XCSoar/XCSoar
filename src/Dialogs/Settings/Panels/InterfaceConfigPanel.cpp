@@ -17,6 +17,7 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
+#include "Repository/FileType.hpp"
 
 using namespace std::chrono;
 
@@ -98,7 +99,9 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
             "button presses and events from external devices."),
-          ProfileKeys::InputFile, "*.xci\0", FileType::XCI);
+          ProfileKeys::InputFile,
+          GetFileTypePatterns(FileType::XCI),
+          FileType::XCI);
   SetExpertRow(InputFile);
 
 #ifdef HAVE_NLS
