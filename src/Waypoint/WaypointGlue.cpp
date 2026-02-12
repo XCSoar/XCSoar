@@ -7,8 +7,8 @@
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
-#include "Patterns.hpp"
 #include "Profile/Profile.hpp"
+#include "Repository/FileType.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WaypointFileType.hpp"
 #include "WaypointReader.hpp"
@@ -83,7 +83,7 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
 
   // ### FIRST FILE ###
   auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
-                                         WAYPOINT_FILE_PATTERNS);
+                                         GetFileTypePatterns(FileType::WAYPOINT));
   uint8_t file_num = 0;
   for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
@@ -92,7 +92,7 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
   paths = Profile::GetMultiplePaths(ProfileKeys::WatchedWaypointFileList,
-                                    WAYPOINT_FILE_PATTERNS);
+                                    GetFileTypePatterns(FileType::WAYPOINT));
   file_num = 0;
   for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
