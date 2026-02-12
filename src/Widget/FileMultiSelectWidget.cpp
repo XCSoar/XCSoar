@@ -6,7 +6,10 @@
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "Resources.hpp"
 #include "ui/dim/Rect.hpp"
+#include "ui/dim/Point.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
@@ -59,13 +62,30 @@ void
 FileMultiSelectWidget::LoadFiles() noexcept
 {
   items_.clear();
-  FileDataField &file_field = df_.GetFileDataField();
-  for (unsigned i = 0; i < file_field.size(); ++i) {
-    const Path p = file_field.GetItem(i).path;
-    if (filter_ && !filter_(p))
-      continue;
+  if (loader_) {
+    // loader returns FileItem with is_dir flags and owned paths
+    auto loaded = loader_();
+    for (auto &it : loaded) {
+      // Never filter out directories — they are needed for navigation.
+      if (!it.is_dir && filter_ && !filter_(it.path))
+        continue;
+      items_.push_back(std::move(it));
+    }
+    return;
+  }
 
-    items_.push_back({AllocatedPath(p), true});
+  if (df_) {
+    FileDataField &file_field = df_->GetFileDataField();
+    for (unsigned i = 0; i < file_field.size(); ++i) {
+      const Path p = file_field.GetItem(i).path;
+      if (filter_ && !filter_(p))
+        continue;
+
+      FileItem it;
+      it.path = AllocatedPath(p);
+      it.exists = true;
+      items_.push_back(std::move(it));
+    }
   }
 }
 
@@ -78,11 +98,22 @@ FileMultiSelectWidget::SetFilter(std::function<bool(const Path &)> filter) noexc
   refreshed_ = false;
 }
 
+std::vector<Path>
+FileMultiSelectWidget::GetCurrentItems() const noexcept
+{
+  if (df_)
+    return df_->GetPathFiles();
+
+  return {};
+}
+
 void
 FileMultiSelectWidget::ApplySelection(const std::vector<Path> &paths) noexcept
 {
   for (const auto &path : paths) {
     for (unsigned i = 0; i < items_.size(); ++i) {
+      if (items_[i].is_dir)
+        continue;
       if (items_[i].path == path) {
         SetSelected(i, true);
         break;
@@ -95,8 +126,12 @@ void
 FileMultiSelectWidget::MergePaths(const std::vector<Path> &paths) noexcept
 {
   for (const auto &path : paths) {
-    if (!ContainsPath(items_, path))
-      items_.push_back({AllocatedPath(path), false});
+    if (!ContainsPath(items_, path)) {
+      FileItem it;
+      it.path = AllocatedPath(path);
+      it.exists = false;
+      items_.push_back(std::move(it));
+    }
   }
 }
 
@@ -117,13 +152,15 @@ FileMultiSelectWidget::Refresh() noexcept
   }
 
   LoadFiles();
-  const std::vector<Path> current_items = df_.GetPathFiles();
+  const std::vector<Path> current_items = GetCurrentItems();
 
   // Reserve to reduce reallocations while merging.
   items_.reserve(items_.size() + previous_items.size() + current_items.size());
 
   MergePreviousItems(previous_items);
-  MergePaths(current_items);
+
+  if (df_)
+    MergePaths(current_items);
 
   SetLengthWithSelection(items_.size());
   ClearSelection();
@@ -136,7 +173,7 @@ FileMultiSelectWidget::Refresh() noexcept
 void
 FileMultiSelectWidget::MergePreviousItems(std::vector<FileItem> &previous_items) noexcept
 {
-  if (!refreshed_)
+  if (!refreshed_ || loader_)
     return;
 
   for (auto &item : previous_items) {
@@ -151,11 +188,15 @@ FileMultiSelectWidget::RestoreAfterRefresh(const std::vector<Path> &saved_select
                                            const std::vector<Path> &current_items) noexcept
 {
   if (!refreshed_) {
-    ApplySelection(current_items);
+    if (df_)
+      ApplySelection(current_items);
     return;
   }
 
-  RestoreSelection(saved_selection, previous_paths, current_items);
+  if (loader_)
+    ApplySelection(saved_selection);
+  else
+    RestoreSelection(saved_selection, previous_paths, current_items);
 }
 
 std::vector<Path>
@@ -166,7 +207,7 @@ FileMultiSelectWidget::GetSelectedPaths() const noexcept
   result.reserve(indices.size());
 
   for (unsigned idx : indices) {
-    if (idx < items_.size())
+    if (idx < items_.size() && !items_[idx].is_dir)
       result.push_back(items_[idx].path);
   }
 
@@ -180,7 +221,8 @@ FileMultiSelectWidget::GetAllPaths() const noexcept
   result.reserve(items_.size());
 
   for (const auto &item : items_)
-    result.push_back(item.path);
+    if (!item.is_dir)
+      result.push_back(item.path);
 
   return result;
 }
@@ -205,6 +247,8 @@ FileMultiSelectWidget::RestoreSelection(const std::vector<Path> &saved_selection
 {
   for (unsigned i = 0; i < items_.size(); ++i) {
     const Path p = items_[i].path;
+    if (items_[i].is_dir)
+      continue;
 
     // Restore previously selected items
     if (ContainsPath(saved_selection, p)) {
@@ -222,16 +266,16 @@ void
 FileMultiSelectWidget::Prepare(ContainerWindow &parent,
                                const PixelRect &rc) noexcept
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
+  // Load folder icon for directory entries (only needed when loader
+  // is set, because only loaders can produce directory items).
+  if (loader_)
+    folder_icon_.LoadResource(IDB_FOLDER_ALL);
+
   // Choose renderer based on whether second-row providers are set.
   use_two_rows_ = (second_left_provider_ || second_right_provider_);
 
-  unsigned row_height;
-  if (use_two_rows_)
-    row_height = two_text_rows_renderer_.CalculateLayout(*look.list.font,
-                                               look.small_font);
-  else
-    row_height = text_row_renderer_.CalculateLayout(*look.list.font);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  const unsigned row_height = ComputeRowHeight();
   CreateList(parent, look, rc, row_height);
   MultiSelectListWidget::Prepare(parent, rc);
 }
@@ -251,7 +295,49 @@ FileMultiSelectWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
 
   const auto &item = items_[idx];
+
+  if (item.is_dir) {
+    PaintDirectoryItem(canvas, rc, item);
+    return;
+  }
+
   PaintFileItem(canvas, rc, idx, item);
+}
+
+void
+FileMultiSelectWidget::PaintDirectoryItem(Canvas &canvas, PixelRect rc,
+                                          const FileItem &item) noexcept
+{
+  const unsigned padding = Layout::GetTextPadding();
+  PixelRect text_rc = rc;
+  text_rc.left = rc.left + (int)padding;
+
+  const unsigned max_icon_size =
+    rc.GetHeight() > 2 * padding ? rc.GetHeight() - 2 * padding : 0;
+
+  if (folder_icon_.IsDefined() && max_icon_size > 0) {
+    // Centre the icon in the same column as the file checkboxes
+    // (which occupy max_icon_size × max_icon_size).
+    // Use the target_height overload so the icon scales to fit the row,
+    // matching the checkbox behaviour at any DPI / window size.
+    PixelPoint center{
+      rc.left + (int)padding + (int)max_icon_size / 2,
+      rc.top + (int)rc.GetHeight() / 2,
+    };
+    folder_icon_.Draw(canvas, center, max_icon_size);
+    text_rc.left += (int)max_icon_size + 2 * (int)padding;
+  }
+
+  const char *name = item.is_up ? "..." : GetComparableName(item.path);
+  if (use_two_rows_) {
+    const auto &font = two_text_rows_renderer_.GetFirstFont();
+    canvas.Select(font);
+    const int y = text_rc.top + (text_rc.GetHeight() - (int)font.GetHeight()) / 2;
+    canvas.DrawClippedText({text_rc.left + two_text_rows_renderer_.GetX(), y},
+                           text_rc, name);
+  } else {
+    text_row_renderer_.DrawTextRow(canvas, text_rc, name);
+  }
 }
 
 void
@@ -317,6 +403,32 @@ FileMultiSelectWidget::PaintFileItem(Canvas &canvas, PixelRect rc,
   }
 }
 
+void
+FileMultiSelectWidget::SetNavigateCallback(std::function<void(AllocatedPath)> cb) noexcept
+{
+  navigate_callback_ = std::move(cb);
+}
+
+void
+FileMultiSelectWidget::OnActivateItem(unsigned index) noexcept
+{
+  if (index >= items_.size())
+    return;
+
+  const auto &item = items_[index];
+  if (item.is_dir)
+    ActivateDirectoryItem(item);
+  else
+    ToggleSelection(index);
+}
+
+void
+FileMultiSelectWidget::ActivateDirectoryItem(const FileItem &item) noexcept
+{
+  if (navigate_callback_)
+    navigate_callback_(Path(item.path));
+}
+
 unsigned
 FileMultiSelectWidget::OnListResized() noexcept
 {
@@ -327,11 +439,12 @@ unsigned
 FileMultiSelectWidget::ComputeRowHeight() noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  if (use_two_rows_)
-    return two_text_rows_renderer_.CalculateLayout(*look.list.font,
-                                                   look.small_font);
-  else
-    return text_row_renderer_.CalculateLayout(*look.list.font);
+  /* Row height is driven purely by font metrics so that it adapts
+     when Layout scale factors change on window resize.  The folder
+     icon scales to fit via the target_height Draw() overload. */
+  return use_two_rows_
+    ? two_text_rows_renderer_.CalculateLayout(*look.list.font, look.small_font)
+    : text_row_renderer_.CalculateLayout(*look.list.font);
 }
 
 void
@@ -339,4 +452,15 @@ FileMultiSelectWidget::OnSelectionChanged() noexcept
 {
   if (selection_changed_callback_)
     selection_changed_callback_();
+}
+
+void
+FileMultiSelectWidget::SelectAllFiles() noexcept
+{
+  for (unsigned i = 0; i < items_.size(); ++i) {
+    if (!items_[i].is_dir)
+      SetSelected(i, true);
+    else
+      SetSelected(i, false);
+  }
 }
