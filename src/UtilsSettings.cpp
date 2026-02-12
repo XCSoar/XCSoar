@@ -47,6 +47,7 @@
 #include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 #include "Repository/Glue.hpp"
+#include "net/http/Features.hpp"
 
 bool DevicePortChanged = false;
 bool MapFileChanged = false;
@@ -197,8 +198,15 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (ChecklistFileChanged)
     dlgChecklistNotifySiteFileChanged();
 
-  if (UserRepositoriesListChanged)
-    EnqueueRepositoryDownload(true);
+#ifdef HAVE_HTTP
+  if (UserRepositoriesListChanged) {
+#ifdef HAVE_DOWNLOAD_MANAGER
+    DownloadRepositoriesModal(false, true);
+#else
+    EnqueueRepositoryDownload(true, false, true);
+#endif
+  }
+#endif
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
