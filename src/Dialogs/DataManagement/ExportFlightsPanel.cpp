@@ -10,6 +10,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
+#include "Form/DataField/MultiFile.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "LocalPath.hpp"
