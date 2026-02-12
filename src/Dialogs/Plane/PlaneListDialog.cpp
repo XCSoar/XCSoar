@@ -14,6 +14,7 @@
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "Profile/Profile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "UIGlobals.hpp"
@@ -106,7 +107,7 @@ PlaneListWidget::UpdateList() noexcept
   list.clear();
 
   PlaneFileVisitor pfv(list);
-  VisitDataFiles("*.xcp", pfv);
+  VisitDataFiles(GetFileTypePatterns(FileType::PLANE), pfv);
 
   unsigned len = list.size();
 

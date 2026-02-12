@@ -12,6 +12,7 @@
 #include "LogFile.hpp"
 #include "Look/DialogLook.hpp"
 #include "Profile/Profile.hpp"
+#include "Repository/FileType.hpp"
 #include "ProfileListDialog.hpp"
 #include "ProfilePasswordDialog.hpp"
 #include "Screen/Layout.hpp"
@@ -192,7 +193,7 @@ dlgStartupShowModal() noexcept
 
   /* scan all profile files */
   auto *dff = new FileDataField();
-  dff->ScanDirectoryTop("*.prf");
+  dff->ScanDirectoryTop(GetFileTypePatterns(FileType::PROFILE));
 
   if (dff->GetNumFiles() == 1) {
     /* skip this dialog if there is only one */
