@@ -31,6 +31,8 @@
 #include "ui/event/Notify.hpp"
 #include "thread/Mutex.hxx"
 #include "ui/event/PeriodicTimer.hpp"
+#include "util/StringCompare.hxx"
+#include "util/StringFormat.hpp"
 
 #include <map>
 #include <set>
@@ -316,7 +318,7 @@ ManagedFileListWidget::FindItem(const TCHAR *name) const noexcept
 
 void
 ManagedFileListWidget::LoadRepositoryFile()
-try {
+{
 #ifdef HAVE_DOWNLOAD_MANAGER
   {
     const std::lock_guard lock{mutex};
@@ -327,10 +329,31 @@ try {
 
   repository.Clear();
 
-  const auto path = LocalPath(_T("repository"));
-  FileLineReaderA reader(path);
-  ParseFileRepository(repository, reader);
-} catch (const std::runtime_error &e) {
+  try {
+    FileLineReaderA reader(LocalPath("repository"));
+    ParseFileRepository(repository, reader);
+  } catch (const std::runtime_error &) {
+    /* not yet downloaded - ignore */
+  }
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  const std::vector<std::string> uris = GetUserRepositoryURIs();
+  int file_number = 1;
+  for (const auto &uri : uris) {
+    if (uri.empty())
+      continue;
+
+    char filename[32];
+    StringFormat(filename, std::size(filename), "user_repository_%d",
+                 file_number++);
+    try {
+      FileLineReaderA reader(LocalPath(filename));
+      ParseFileRepository(repository, reader);
+    } catch (const std::runtime_error &) {
+      /* not yet downloaded - ignore */
+    }
+  }
+#endif
 }
 
 void
@@ -676,7 +699,8 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 
     downloads.erase(name3);
 
-    if (StringIsEqual(name2, "repository")) {
+    if (StringIsEqual(name2, "repository") ||
+        StringStartsWith(name2, "user_repository_")) {
       repository_failed = false;
       repository_modified = true;
     }

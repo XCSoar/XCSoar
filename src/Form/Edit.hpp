@@ -16,6 +16,14 @@ class ContainerWindow;
  * an editable field (the Editor).
  */
 class WndProperty : public WindowControl {
+public:
+  // Alignment of the text: left, right or auto = left align with autoscroll
+  enum class Alignment {
+    LEFT,
+    RIGHT,
+    AUTO
+  };
+
   typedef bool (*EditCallback)(const TCHAR *caption, DataField &df,
                                const TCHAR *help_text);
 
@@ -34,6 +42,7 @@ class WndProperty : public WindowControl {
   EditCallback edit_callback;
 
   bool read_only = false;
+  Alignment alignment = Alignment::LEFT;
 
   bool dragging = false, pressed = false;
 
@@ -127,6 +136,9 @@ public:
   }
 
   void SetDataField(DataField *Value) noexcept;
+
+  void SetAlignment(Alignment a) noexcept { alignment = a; }
+  Alignment GetAlignment() const noexcept { return alignment; }
 
   void SetEditCallback(EditCallback _ec) noexcept {
     edit_callback = _ec;

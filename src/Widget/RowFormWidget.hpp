@@ -673,6 +673,7 @@ public:
 
   bool SaveValue(unsigned i, RoughTime &value_r) const noexcept;
   bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const noexcept;
+  bool SaveValue(unsigned i, std::string &string) const noexcept;
 
   template<size_t max>
   bool SaveValue(unsigned i, BasicStringBuffer<TCHAR, max> &value) const noexcept {
@@ -681,6 +682,9 @@ public:
 
   bool SaveValue(unsigned i, std::string_view profile_key,
                  TCHAR *string, size_t max_size) const noexcept;
+
+  bool SaveValue(unsigned i, std::string_view profile_key,
+                 std::string& string) const noexcept;
 
   template<size_t max>
   bool SaveValue(unsigned i, std::string_view profile_key,

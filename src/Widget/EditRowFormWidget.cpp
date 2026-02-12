@@ -474,3 +474,17 @@ RowFormWidget::SaveValue(unsigned i,
   CopyTruncateString(string, max_size, new_value);
   return true;
 }
+
+bool
+RowFormWidget::SaveValue(unsigned i,
+                         std::string &string) const noexcept
+{
+  const char *new_value = GetDataField(i).GetAsString();
+  assert(new_value != nullptr);
+
+  if (string == new_value)
+    return false;
+
+  string = new_value;
+  return true;
+}
