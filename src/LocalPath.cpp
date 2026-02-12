@@ -115,9 +115,59 @@ LocalPath(const TCHAR *file) noexcept
 AllocatedPath
 MakeLocalPath(const TCHAR *name)
 {
+  return MakeLocalPath(Path(name));
+}
+
+AllocatedPath
+MakeLocalPath(Path name)
+{
   auto path = LocalPath(name);
   Directory::Create(path);
   return path;
+}
+
+AllocatedPath
+MakeLocalPathRecursively(Path name, int max_creation_depth)
+{
+  assert(name != nullptr);
+  assert(max_creation_depth >= 0);
+
+  AllocatedPath path = LocalPath(name);
+
+  if (Directory::Exists(path))
+    return path;
+
+  if (max_creation_depth == 0)
+    return nullptr;
+
+  // Collect paths from target up to first existing ancestor
+  std::list<AllocatedPath> to_create;
+  to_create.push_back(std::move(path));
+  const Path primary_data_path = GetPrimaryDataPath();
+
+  while (!Directory::Exists(to_create.front())) {
+    if (to_create.size() > static_cast<size_t>(max_creation_depth))
+      return nullptr;
+
+    AllocatedPath parent = to_create.front().GetParent();
+
+    if (parent == nullptr ||
+        parent == Path(_T(".")) ||
+        parent == primary_data_path)
+      break;
+
+    to_create.push_front(std::move(parent));
+  }
+
+  // Create directories from parent to child
+  for (const auto &dir : to_create) {
+    Directory::Create(dir);
+
+    if (!Directory::Exists(dir))
+      return nullptr;
+  }
+
+  return LocalPath(name);
 }
 
 Path

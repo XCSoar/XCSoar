@@ -40,13 +40,17 @@
 #include <cassert>
 
 static AllocatedPath
-LocalPath(const AvailableFile &file)
+LocalPathByType(const AvailableFile &file)
 {
   const UTF8ToWideConverter base(file.GetName());
   if (!base.IsValid())
     return nullptr;
 
-  return LocalPath(base);
+  const AllocatedPath subdir = GetFileTypeDefaultDir(file.type);
+  const AllocatedPath path = (subdir == nullptr) ? 
+                                    AllocatedPath(base) : 
+                                    AllocatedPath::Build(subdir, Path(base));
+  return LocalPath(path);
 }
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -75,7 +79,7 @@ UpdateAvailable(const FileRepository &repository, const TCHAR *name)
 
   BrokenDate remote_changed = remote_file->update_date;
 
-  const auto path = LocalPath(name);
+  const auto path = LocalPathByType(*remote_file);
   BrokenDate local_changed = BrokenDateTime{File::GetLastModification(path)};
 
   return local_changed < remote_changed;
@@ -96,17 +100,22 @@ class ManagedFileListWidget
     StaticString<64u> name;
     StaticString<32u> size;
     StaticString<32u> last_modified;
+    FileType type = FileType::UNKNOWN;
 
     bool downloading, failed, out_of_date;
 
     DownloadStatus download_status;
 
-    void Set(const TCHAR *_name, const DownloadStatus *_download_status,
+    void Set(const TCHAR *_name, FileType _type, const DownloadStatus *_download_status,
              bool _failed, bool _out_of_date) {
       name = _name;
+      type = _type;
 
-      const auto path = LocalPath(name);
-
+      AllocatedPath subdir = GetFileTypeDefaultDir(type);
+      AllocatedPath filename = (subdir == nullptr) ? AllocatedPath(name.c_str()) : 
+                                    AllocatedPath::Build(subdir, Path(name.c_str()));
+      const auto path = LocalPath(filename);
+      
       if (File::Exists(path)) {
         FormatByteSize(size.buffer(), size.capacity(),
                        File::GetSize(path));
@@ -242,10 +251,14 @@ protected:
   void RefreshList();
   void UpdateButtons();
 
-  void Download();
+  void UpdateFile();
   void Add();
   void Cancel();
-  void UpdateFiles();
+  void UpdateAllFiles();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  void DownloadRemoteFile(const AvailableFile &remote_file);
+#endif
 
 public:
   /* virtual methods from class Widget */
@@ -350,11 +363,12 @@ ManagedFileListWidget::RefreshList()
     DownloadStatus download_status;
     const bool is_downloading = IsDownloading(remote_file, download_status);
 
-    const auto path = LocalPath(remote_file);
+    const AllocatedPath path = LocalPathByType(remote_file);
+
     const bool file_exists = File::Exists(path);
 
     if (path != nullptr &&
-        (is_downloading || file_exists)) {
+      (is_downloading || file_exists)) {
 #ifdef HAVE_DOWNLOAD_MANAGER
       download_active |= is_downloading;
 #endif
@@ -374,7 +388,7 @@ ManagedFileListWidget::RefreshList()
 #endif
       }
 
-      items.append().Set(base.c_str(),
+      items.append().Set(base.c_str(), i->type,
                          is_downloading ? &download_status : nullptr,
                          HasFailed(remote_file), is_out_of_date);
     }
@@ -395,11 +409,11 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
-    download_button = dialog.AddButton(_("Update"), [this](){ Download(); });
+    download_button = dialog.AddButton(_("Update"), [this](){ UpdateFile(); });
     add_button = dialog.AddButton(_("Add"), [this](){ Add(); });
     cancel_button = dialog.AddButton(_("Abort"), [this](){ Cancel(); });
     update_button = dialog.AddButton(_("Update all"), [this](){
-      UpdateFiles();
+      UpdateAllFiles();
     });
   }
 #else
@@ -466,7 +480,7 @@ ManagedFileListWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
 }
 
 void
-ManagedFileListWidget::Download()
+ManagedFileListWidget::UpdateFile()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   assert(Net::DownloadManager::IsAvailable());
@@ -483,15 +497,38 @@ ManagedFileListWidget::Download()
     return;
 
   const AvailableFile &remote_file = *remote_file_p;
-  const UTF8ToWideConverter base(remote_file.GetName());
-  if (!base.IsValid())
-    return;
-
-  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), Path(base));
+  DownloadRemoteFile(remote_file);
 #endif
 }
 
 #ifdef HAVE_DOWNLOAD_MANAGER
+
+void
+ManagedFileListWidget::DownloadRemoteFile(const AvailableFile &remote_file)
+{
+  assert(Net::DownloadManager::IsAvailable());
+
+  if (remote_file.GetName() == nullptr)
+    return;
+
+  const AllocatedPath subdir = GetFileTypeDefaultDir(remote_file.type);
+  AllocatedPath path = nullptr;
+  if (subdir != nullptr) {
+    if (MakeLocalPathRecursively(subdir, 10) == nullptr) {
+      ShowMessageBox(_("Subdirectory does not exist and could not be created."),
+                _("Error"), MB_OK);
+      return;
+    }
+    path = AllocatedPath::Build(subdir, Path(remote_file.GetName()));
+  } else {
+    path = AllocatedPath(remote_file.GetName());
+    if (path == nullptr)
+      return;
+  }
+
+  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), path);
+}
+
 
 class AddFileListItemRenderer final : public ListItemRenderer {
   const std::vector<AvailableFile> &list;
@@ -569,16 +606,13 @@ ManagedFileListWidget::Add()
   assert((unsigned)i < list.size());
 
   const AvailableFile &remote_file = list[i];
-  const UTF8ToWideConverter base(remote_file.GetName());
-  if (!base.IsValid())
-    return;
 
-  Net::DownloadManager::Enqueue(remote_file.GetURI(), Path(base));
+  DownloadRemoteFile(remote_file);
 #endif
 }
 
 void
-ManagedFileListWidget::UpdateFiles() {
+ManagedFileListWidget::UpdateAllFiles() {
 #ifdef HAVE_DOWNLOAD_MANAGER
   assert(Net::DownloadManager::IsAvailable());
 
