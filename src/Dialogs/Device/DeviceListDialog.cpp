@@ -64,6 +64,7 @@ class DeviceListWidget final
     bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
     bool temperature:1;
     bool humidity:1;
+    bool imu:1;
     bool radio:1, transponder:1;
     bool engine:1;
     bool debug:1;
@@ -107,11 +108,13 @@ class DeviceListWidget final
         basic.pressure_altitude_available ||
         basic.static_pressure_available;
       pitot = basic.pitot_pressure_available;
-      airspeed = basic.airspeed_available;
+      airspeed = basic.airspeed_available ||
+        basic.dyn_pressure_available;
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
       temperature = basic.temperature_available;
       humidity = basic.humidity_available;
+      imu = basic.gyroscope.available;
       debug = device != nullptr && device->IsDumpEnabled();
       radio = basic.settings.has_active_frequency ||
         basic.settings.has_standby_frequency;
@@ -428,6 +431,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.temperature || flags.humidity) {
       buffer.append(_T("; "));
       buffer.append(_T("Environment"));
+    }
+
+    if (flags.imu) {
+      buffer.append(_T("; "));
+      buffer.append(_("IMU"));
     }
 
     if (flags.radio) {
