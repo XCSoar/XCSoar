@@ -38,6 +38,23 @@
 
 using std::string_view_literals::operator""sv;
 
+[[gnu::pure]]
+static AllocatedPath
+GetRelativePathByType(const AvailableFile &file)
+{
+  const auto base = file.GetName();
+  if (base == nullptr)
+    return nullptr;
+
+  const AllocatedPath subdir = GetFileTypeDefaultDir(file.type);
+  if (subdir == nullptr)
+    return AllocatedPath(base);
+
+  return AllocatedPath::Build(subdir, Path(base));
+}
+
+
+[[gnu::pure]]
 static AllocatedPath
 LocalPathByType(const char *name, FileType type)
 {
@@ -636,11 +653,11 @@ ManagedFileListWidget::UpdateAllFiles() {
       const AvailableFile *remote_file = FindRemoteFile(repository, file.name);
 
       if (remote_file != nullptr) {
-        const Path base(remote_file->GetName());
-        if (base.empty())
+        const auto relative_path = GetRelativePathByType(*remote_file);
+        if (relative_path == nullptr)
           return;
 
-        Net::DownloadManager::Enqueue(remote_file->GetURI(), base);
+        Net::DownloadManager::Enqueue(remote_file->GetURI(), relative_path);
       }
     }
   }
@@ -660,6 +677,15 @@ ManagedFileListWidget::Cancel()
   assert(current < items.size());
 
   const FileItem &item = items[current];
+  const AvailableFile *remote_file = FindRemoteFile(repository, item.name);
+  if (remote_file != nullptr) {
+    if (const auto relative_path = GetRelativePathByType(*remote_file);
+        relative_path != nullptr) {
+      Net::DownloadManager::Cancel(relative_path);
+      return;
+    }
+  }
+
   Net::DownloadManager::Cancel(Path(item.name));
 #endif
 }
