@@ -8,7 +8,6 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "system/Path.hpp"
-
 #include <functional>
 #include <vector>
 
@@ -96,7 +95,13 @@ private:
   void LoadFiles() noexcept;
   void ApplySelection(const std::vector<Path> &paths) noexcept;
   void MergePaths(const std::vector<Path> &paths) noexcept;
+  void MergePreviousItems(std::vector<FileItem> &previous_items) noexcept;
+  void RestoreAfterRefresh(const std::vector<Path> &saved_selection,
+                           const std::vector<AllocatedPath> &previous_paths,
+                           const std::vector<Path> &current_items) noexcept;
+  void PaintFileItem(Canvas &canvas, PixelRect rc,
+                     unsigned idx, const FileItem &item) noexcept;
   void RestoreSelection(const std::vector<Path> &saved_selection,
-                        const std::vector<AllocatedPath> &previous_paths,
+                        const std::vector<AllocatedPath> &previous_items_paths,
                         const std::vector<Path> &current_items) noexcept;
 };
