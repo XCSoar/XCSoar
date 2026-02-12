@@ -141,7 +141,7 @@ DownloadFilePickerWidget::Unprepare() noexcept
 
 void
 DownloadFilePickerWidget::RefreshList()
-try {
+{
   {
     const std::lock_guard lock{mutex};
     repository_modified = false;
@@ -150,24 +150,28 @@ try {
 
   FileRepository repository;
 
-  const auto path = LocalPath(_T("repository"));
-  FileLineReaderA reader(path);
-
-  ParseFileRepository(repository, reader);
+  try {
+    FileLineReaderA reader(LocalPath("repository"));
+    ParseFileRepository(repository, reader);
+  } catch (const std::runtime_error &) {
+    /* not yet downloaded - ignore */
+  }
 
   // add user repository contents
-  std::vector<std::string> uris;
-  uris = GetUserRepositoryURIs();
+  const std::vector<std::string> uris = GetUserRepositoryURIs();
   int file_number = 1;
   for (const auto &uri : uris) {
-    if(uri.empty())
+    if (uri.empty())
       continue;
-    
-    TCHAR filename[32];
-    StringFormat(filename, (size_t) 32, _T("user_repository_%d"), file_number++);
-    const auto path = LocalPath(filename);
-    FileLineReaderA reader(path);
-    ParseFileRepository(repository, reader);
+
+    char filename[32];
+    StringFormat(filename, std::size(filename), "user_repository_%d", file_number++);
+    try {
+      FileLineReaderA reader(LocalPath(filename));
+      ParseFileRepository(repository, reader);
+    } catch (const std::runtime_error &) {
+      /* not yet downloaded - ignore */
+    }
   }
 
   items.clear();
@@ -180,7 +184,6 @@ try {
   list.Invalidate();
 
   UpdateButtons();
-} catch (const std::runtime_error &e) {
 }
 
 void
