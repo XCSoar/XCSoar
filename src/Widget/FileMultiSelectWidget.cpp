@@ -38,6 +38,14 @@ ContainsPath(const std::vector<Path> &paths, const Path &p) noexcept
 }
 
 static bool
+ContainsPath(const std::vector<AllocatedPath> &paths, const Path &p) noexcept
+{
+  return std::any_of(paths.begin(), paths.end(), [p](const auto &item) noexcept {
+    return Path(item) == p;
+  });
+}
+
+static bool
 ContainsPath(const std::vector<FileMultiSelectWidget::FileItem> &items, const Path &p) noexcept
 {
   return std::any_of(items.begin(), items.end(), [p](const auto &item) noexcept {
@@ -96,34 +104,58 @@ void
 FileMultiSelectWidget::Refresh() noexcept
 {
   const auto saved_selection = refreshed_ ? GetSelectedPaths() : std::vector<Path>{};
-  const auto previous_items = refreshed_ ? items_ : std::vector<FileItem>{};
+  std::vector<FileItem> previous_items;
+  if (refreshed_)
+    previous_items = std::move(items_);
 
-  LoadFiles();
-  auto current_items = df_.GetPathFiles();
-
-  // Reserve to avoid reallocations when merging
-  items_.reserve(items_.size() + previous_items.size() + current_items.size());
-
-  // Merge previous items to preserve user's deselections
-  if (refreshed_) {
-    for (const auto &item : previous_items) {
-      if (!ContainsPath(items_, item.path))
-        items_.push_back(item);
-    }
+  // Extract paths before previous_items may be moved.
+  std::vector<AllocatedPath> previous_paths;
+  if (!previous_items.empty()) {
+    previous_paths.reserve(previous_items.size());
+    for (const auto &it : previous_items)
+      previous_paths.emplace_back(Path(it.path));
   }
 
+  LoadFiles();
+  const std::vector<Path> current_items = df_.GetPathFiles();
+
+  // Reserve to reduce reallocations while merging.
+  items_.reserve(items_.size() + previous_items.size() + current_items.size());
+
+  MergePreviousItems(previous_items);
   MergePaths(current_items);
 
   SetLengthWithSelection(items_.size());
   ClearSelection();
 
-  if (refreshed_) {
-    RestoreSelection(saved_selection, previous_items, current_items);
-  } else {
-    ApplySelection(current_items);
-  }
+  RestoreAfterRefresh(saved_selection, previous_paths, current_items);
 
   refreshed_ = true;
+}
+
+void
+FileMultiSelectWidget::MergePreviousItems(std::vector<FileItem> &previous_items) noexcept
+{
+  if (!refreshed_)
+    return;
+
+  for (auto &item : previous_items) {
+    if (!ContainsPath(items_, item.path))
+      items_.push_back(std::move(item));
+  }
+}
+
+void
+FileMultiSelectWidget::RestoreAfterRefresh(const std::vector<Path> &saved_selection,
+                                           const std::vector<AllocatedPath> &previous_paths,
+                                           const std::vector<Path> &current_items) noexcept
+{
+  if (!refreshed_) {
+    ApplySelection(current_items);
+    return;
+  }
+
+  RestoreSelection(saved_selection, previous_paths, current_items);
 }
 
 std::vector<Path>
@@ -168,7 +200,7 @@ FileMultiSelectWidget::SetSelectionChangedCallback(std::function<void()> cb) noe
 
 void
 FileMultiSelectWidget::RestoreSelection(const std::vector<Path> &saved_selection,
-                                        const std::vector<FileItem> &previous_items,
+                                        const std::vector<AllocatedPath> &previous_items_paths,
                                         const std::vector<Path> &current_items) noexcept
 {
   for (unsigned i = 0; i < items_.size(); ++i) {
@@ -181,7 +213,7 @@ FileMultiSelectWidget::RestoreSelection(const std::vector<Path> &saved_selection
     }
 
     // Auto-select new items from current_items that weren't in previous_items
-    if (ContainsPath(current_items, p) && !ContainsPath(previous_items, p))
+    if (ContainsPath(current_items, p) && !ContainsPath(previous_items_paths, p))
       SetSelected(i, true);
   }
 }
@@ -219,11 +251,19 @@ FileMultiSelectWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
 
   const auto &item = items_[idx];
+  PaintFileItem(canvas, rc, idx, item);
+}
+
+void
+FileMultiSelectWidget::PaintFileItem(Canvas &canvas, PixelRect rc,
+                                     unsigned idx,
+                                     const FileItem &item) noexcept
+{
   const bool selected = IsSelected(idx);
+  const unsigned padding = Layout::GetTextPadding();
 
   // Draw checkbox at left and then render text columns/rows according to
   // configured providers and selected renderer.
-  const unsigned padding = Layout::GetTextPadding();
   unsigned box_size = rc.GetHeight() > 2 * padding ? rc.GetHeight() - 2 * padding : 0;
   PixelRect box_rc;
   box_rc.left = rc.left + (int)padding;
@@ -248,17 +288,32 @@ FileMultiSelectWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   };
 
   if (use_two_rows_) {
-    two_text_rows_renderer_.DrawFirstRow(canvas, text_rc, resolve_text(first_left_provider_, GetComparableName(item.path)));
-    if (const auto text = resolve_text(first_right_provider_))
-      two_text_rows_renderer_.DrawRightFirstRow(canvas, text_rc, text);
-    if (const auto text = resolve_text(second_left_provider_))
-      two_text_rows_renderer_.DrawSecondRow(canvas, text_rc, text);
-    if (const auto text = resolve_text(second_right_provider_))
-      two_text_rows_renderer_.DrawRightSecondRow(canvas, text_rc, text);
+    const char *first_left = resolve_text(first_left_provider_, GetComparableName(item.path));
+    const char *first_right = resolve_text(first_right_provider_);
+    const char *second_left = resolve_text(second_left_provider_);
+    const char *second_right = resolve_text(second_right_provider_);
+
+    two_text_rows_renderer_.DrawFirstRow(canvas, text_rc, first_left);
+    if (second_left != nullptr)
+      two_text_rows_renderer_.DrawSecondRow(canvas, text_rc, second_left);
+
+    if (first_right != nullptr)
+      two_text_rows_renderer_.DrawRightFirstRow(canvas, text_rc,
+                                                first_right);
+
+    if (second_right != nullptr)
+      two_text_rows_renderer_.DrawRightSecondRow(canvas, text_rc, second_right);
   } else {
-    text_row_renderer_.DrawTextRow(canvas, text_rc, resolve_text(first_left_provider_, GetComparableName(item.path)));
-    if (const auto text = resolve_text(first_right_provider_))
-      text_row_renderer_.DrawRightColumn(canvas, text_rc, text);
+    const char *left_text = resolve_text(first_left_provider_, GetComparableName(item.path));
+    const char *right_text = resolve_text(first_right_provider_);
+
+    text_row_renderer_.DrawTextRow(canvas, text_rc, left_text);
+    if (right_text != nullptr) {
+      const int left_end = text_row_renderer_.NextColumn(canvas, text_rc, left_text);
+      const int right_limit = text_row_renderer_.PreviousRightColumn(canvas, text_rc, right_text);
+      if (right_limit > left_end + (int)Layout::GetTextPadding())
+        text_row_renderer_.DrawRightColumn(canvas, text_rc, right_text);
+    }
   }
 }
 
