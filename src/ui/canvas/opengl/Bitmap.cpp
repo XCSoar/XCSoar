@@ -62,7 +62,11 @@ void
 Bitmap::Reset() noexcept
 {
   assert(!IsDefined() || IsScreenInitialized());
+#ifdef _WIN32
+  assert(!IsDefined() || GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(!IsDefined() || pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 
   delete texture;
   texture = nullptr;

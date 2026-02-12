@@ -553,7 +553,7 @@ InputEvents::eventNull([[maybe_unused]] const TCHAR *misc)
 void
 InputEvents::eventBeep([[maybe_unused]] const TCHAR *misc)
 {
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(ENABLE_SDL)
   MessageBeep(MB_ICONEXCLAMATION);
 #else
   PlayResource(_T("IDR_WAV_CLEAR"));
