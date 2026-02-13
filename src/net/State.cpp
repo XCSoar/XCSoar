@@ -21,27 +21,39 @@ GetNetState()
     : NetState::UNKNOWN;
 }
 
-#elif defined(__linux__)
+#else // non-Android platforms
 
+#if defined(HAVE_NET_STATE)
+#include <mutex>
+#include <chrono>
+#include "time/PeriodClock.hpp"
+
+#if defined(__linux__)
 #include <cstring>
 #include <cstdio>
-#include <mutex>
 #include <dirent.h>
-#include <chrono>
 #include "system/FileUtil.hpp"
-#include "time/PeriodClock.hpp"
+#endif
+
+#if defined(_WIN32)
+#include <windows.h>
+#include <wininet.h>
+#endif
+
+namespace {
 
 static std::mutex net_state_mutex;
 static NetState cached_net_state = NetState::UNKNOWN;
 static PeriodClock last_update;
 
+static NetState
+PollNetState() noexcept
+{
 /**
  * Detect network connectivity by checking the operstate of network interfaces
  * in the sysfs (/sys/class/net) directory.
  */
-static NetState
-PollNetState() noexcept
-{
+#if defined(__linux__)
   DIR *dir = opendir("/sys/class/net");
   if (dir == nullptr)
     return NetState::UNKNOWN;
@@ -64,16 +76,31 @@ PollNetState() noexcept
 
   closedir(dir);
   return result;
+
+#elif defined(_WIN32)
+  DWORD flags = 0;
+  BOOL connected = InternetGetConnectedState(&flags, 0);
+  return connected ? NetState::CONNECTED : NetState::DISCONNECTED;
+
+#else
+  return NetState::UNKNOWN;
+#endif
 }
 
+} // anonymous namespace
+
+/* Shared GetNetState: caches PollNetState() for a short interval. */
 NetState
 GetNetState() noexcept
 {
   std::lock_guard<std::mutex> lock(net_state_mutex);
-  
+
   if (last_update.CheckUpdate(std::chrono::seconds(2)))
     cached_net_state = PollNetState();
 
   return cached_net_state;
 }
-#endif
+
+#endif // defined(HAVE_NET_STATE)
+
+#endif // non-Android
