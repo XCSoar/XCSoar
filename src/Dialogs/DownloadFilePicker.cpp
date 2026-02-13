@@ -114,7 +114,8 @@ DownloadFile(const char *uri, const char *base)
 
   ProgressDialog dialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                         _("Download"));
-  dialog.SetText(base);
+  const auto display_name = Path(base).GetBase();
+  dialog.SetText(display_name != nullptr ? display_name.c_str() : base);
 
   dialog.AddCancelButton();
 
