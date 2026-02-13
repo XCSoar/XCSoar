@@ -322,11 +322,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     .WithPadding(quantisation_effective);
 
   const unsigned height_slope_factor =
-    std::clamp((unsigned)pixel_size, 1u,
-               /* this upper limit avoids integer overflows in the
-                  "mag" formula; it effectively limits "dd2" so
-                  calculating its square will not overflow */
-               8192u / (quantisation_effective * quantisation_effective));
+    std::max(1u, (unsigned)pixel_size);
   
   const auto *src = height_matrix.GetData();
   const RawColor *oColorBuf = color_table + 64 * 256;
@@ -409,18 +405,13 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
         const unsigned p20 = column_plus_index + column_minus_index;
 
-        const int dd0 = p22 * int(p31);
-        const int dd1 = int(p20) * p32;
-        const unsigned dd2 = p20 * p31 * height_slope_factor;
-        const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
-        const unsigned square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
-        const unsigned mag = (unsigned)sqrt(square_mag);
-        /* this is a workaround for a SIGFPE (division by zero)
-           observed by our users on some Android devices (e.g. Nexus
-           7), even though we did our best to make sure that the
-           integer arithmetics above can't overflow */
-        /* TODO: debug this problem and replace this workaround */
-        const int sval = num / int(mag|1);
+        const int64_t dd0 = (int64_t)p22 * p31;
+        const int64_t dd1 = (int64_t)p20 * p32;
+        const int64_t dd2 = (int64_t)p20 * p31 * height_slope_factor;
+        const int64_t num = dd2 * sz + dd0 * sx + dd1 * sy;
+        const uint64_t square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
+        const int64_t mag = (int64_t)sqrt((double)square_mag);
+        const int sval = (int)(num / (mag | 1));
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[int(h) + 256 * std::clamp(sindex, -63, 63)];
       } else if (e.IsWater()) {

@@ -478,15 +478,25 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
     return;
 
   pointer_position = new_pointer_position;
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  Push(Event(Event::MOUSE_MOTION, GetTransformedPointerPosition()));
+#else
   Push(Event(Event::MOUSE_MOTION,
              PixelPoint(pointer_position.x, pointer_position.y)));
+#endif
 }
 
 inline void
 WaylandEventQueue::PointerButton(bool pressed) noexcept
 {
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
+             GetTransformedPointerPosition()));
+#else
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
              PixelPoint(pointer_position.x, pointer_position.y)));
+#endif
 }
 
 void

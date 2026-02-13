@@ -37,6 +37,7 @@ class BufferCanvas : public Canvas {
   glm::mat4 old_projection_matrix;
 
   PixelPoint old_translate;
+  UnsignedPoint2D old_window_size;
   UnsignedPoint2D old_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY

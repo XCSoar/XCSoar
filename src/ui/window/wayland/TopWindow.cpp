@@ -241,7 +241,22 @@ TopWindow::OnResize(PixelSize new_size) noexcept
       new_size.height == initial_requested_size.height) {
     return;
   }
-  
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  /* When SetDisplayOrientation() calls Resize(logical_size), we arrive
+     here with the logical (post-rotation) dimensions.  The OpenGL
+     viewport and projection were already configured correctly by
+     TopCanvas::SetDisplayOrientation().  We must NOT resize the EGL
+     surface (it must stay at physical dimensions) or call CheckResize()
+     (which would apply OrientationSwap a second time).  Detect this
+     case by comparing new_size with the already-configured viewport. */
+  if (screen != nullptr && new_size == screen->GetSize()) {
+    event_queue->SetScreenSize(new_size);
+    ContainerWindow::OnResize(new_size);
+    return;
+  }
+#endif
+
   /* Update event queue screen size (required for proper coordinate transformation) */
   event_queue->SetScreenSize(new_size);
 
@@ -304,7 +319,24 @@ TopWindow::OnResize(PixelSize new_size) noexcept
     }
   }
 
-  /* Call base implementation */
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  /* When software rotation is active, the compositor sends physical
+     dimensions but the layout and Window::size must use the logical
+     (post-rotation) dimensions.  Window::Resize() already set
+     Window::size to the physical dimensions before calling us; we
+     need to correct that.  Calling Resize(logical_size) will:
+     1. Update Window::size to the logical dimensions
+     2. Re-enter OnResize(), which hits the early-return guard above
+        (logical == viewport_size) and does the layout correctly */
+  if (screen != nullptr) {
+    PixelSize logical_size = screen->GetSize();
+    if (logical_size != new_size) {
+      Resize(logical_size);
+      return;
+    }
+  }
+#endif
+
   ContainerWindow::OnResize(new_size);
 
 #ifdef USE_MEMORY_CANVAS
