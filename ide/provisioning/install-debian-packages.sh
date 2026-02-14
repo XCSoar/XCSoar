@@ -124,7 +124,9 @@ install_win() {
       curl \
       unzip \
       zip \
-      meson
+      meson \
+      nsis \
+      fonts-dejavu
   echo
 }
 
