@@ -4,8 +4,25 @@
 #include "TextWrapper.hpp"
 #include "Canvas.hpp"
 #include "AnyCanvas.hpp"
+#include "util/UTF8.hpp"
 
+#include <algorithm>
 #include <string_view>
+
+/**
+ * Return the byte length of the UTF-8 character starting at @p ch,
+ * clamped to @p max_bytes.  Returns at least 1 even for malformed
+ * input so callers always make forward progress.
+ */
+static std::size_t
+ClampedSequenceLengthUTF8(char ch, std::size_t max_bytes) noexcept
+{
+  std::size_t n = SequenceLengthUTF8(ch);
+  if (n == 0)
+    /* malformed: skip one byte */
+    n = 1;
+  return std::min(n, max_bytes);
+}
 
 /**
  * Wrap a single paragraph (no embedded newlines) into lines.
@@ -44,32 +61,43 @@ WrapParagraph(Canvas &canvas, unsigned width,
     const char *break_point = nullptr;
     const char *last_space = nullptr;
 
-    for (const char *p = line_start; p < para_end; ++p) {
-      std::string_view test_text(line_start, p + 1 - line_start);
+    for (const char *p = line_start; p < para_end;) {
+      /* advance by one whole UTF-8 character so we never
+         create a test_text that ends mid-sequence */
+      const std::size_t seq_len =
+        ClampedSequenceLengthUTF8(*p, para_end - p);
+      const char *next = p + seq_len;
+
+      std::string_view test_text(line_start, next - line_start);
       const PixelSize test_size = canvas.CalcTextSize(test_text);
       if (test_size.width > width) {
-        // Text up to p+1 doesn't fit
+        // Text up to next doesn't fit
         if (last_space != nullptr) {
           // Break at last space
           break_point = last_space;
         } else if (p > line_start) {
-          // No space found - break at previous character
+          // No space found - break at previous character boundary
           break_point = p;
         } else {
           // Single character too wide - include it anyway
-          break_point = p + 1;
+          break_point = next;
         }
         break;
       }
 
       if (*p == ' ')
-        last_space = p + 1;  // Break after space
+        last_space = next;  // Break after space
 
-      break_point = p + 1;
+      break_point = next;
+      p = next;
     }
 
-    if (break_point == nullptr || break_point <= line_start)
-      break_point = line_start + 1;  // Ensure progress
+    if (break_point == nullptr || break_point <= line_start) {
+      // Ensure progress: skip at least one full UTF-8 character
+      const std::size_t seq_len =
+        ClampedSequenceLengthUTF8(*line_start, para_end - line_start);
+      break_point = line_start + seq_len;
+    }
 
     // Calculate line length (exclude trailing space if we broke at space)
     std::size_t line_len = break_point - line_start;
