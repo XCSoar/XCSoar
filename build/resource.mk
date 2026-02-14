@@ -391,6 +391,15 @@ RESOURCES_SOURCES = $(TARGET_OUTPUT_DIR)/resources.c
 $(eval $(call link-library,resources,RESOURCES))
 RESOURCE_BINARY = $(RESOURCES_BIN)
 
+# For Windows OpenGL builds (SDL), add minimal resource file to add the app icon to the .exe
+ifeq ($(HAVE_WIN32),y)
+$(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc: Data/XCSoarIcon.rc | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
+	@$(NQ)echo "  WINDRES $@"
+	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir Data -o $@ $<
+
+RESOURCE_BINARY += $(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc
+endif
+
 endif
 
 endif # !TARGET_IS_ANDROID
