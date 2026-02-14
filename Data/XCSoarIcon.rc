@@ -1,0 +1,6 @@
+// Minimal resource file for OpenGL/SDL builds
+// Contains only the application icon for Windows Explorer/taskbar display
+
+#define IDI_XCSOAR 101
+
+IDI_XCSOAR ICON DISCARDABLE "bitmaps/xcsoarswift.ico"
