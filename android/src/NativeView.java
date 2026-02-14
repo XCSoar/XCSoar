@@ -91,7 +91,7 @@ class NativeView extends SurfaceView
    * user chooses Fly mode (not called in Simulator mode because
    * IGC logging and safety warnings are not needed in simulation).
    */
-  private void startMyService() {
+  void startMyService() {
     final Context context = getContext();
 
     try {

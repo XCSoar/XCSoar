@@ -88,9 +88,20 @@ public class XCSoar extends Activity implements PermissionManager {
 
     mainHandler = new Handler(Looper.getMainLooper());
 
-    /* Create PermissionHelper (no cloud dialog callback needed;
-       cloud consent is handled during onboarding) */
-    permissionHelper = new PermissionHelper(this, mainHandler, null);
+    /* Retry starting the foreground service when location or
+       notification permissions are granted.  The initial
+       startMyService() call in Startup.cpp may fail on Android 14+
+       because ACCESS_FINE_LOCATION is not yet granted when
+       startForeground() is called.  Re-calling startService() after
+       notification permission is granted refreshes the notification
+       so it becomes visible to the user. */
+    final Runnable retryStartService = () -> {
+      if (nativeView != null)
+        nativeView.startMyService();
+    };
+
+    permissionHelper = new PermissionHelper(this, mainHandler,
+      retryStartService, retryStartService);
 
     NativeView.initNative();
 
