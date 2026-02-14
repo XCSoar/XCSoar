@@ -119,8 +119,12 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent,
                        if (CanAdvance())
                          Next(false);
                      });
-  close_button.Create(parent, look, _("Close"), layout.close_button,
+  close_button.Create(parent, look,
+                      pending_close_caption ? pending_close_caption
+                                            : _("Close"),
+                      layout.close_button,
                       style, close_callback);
+  pending_close_caption = nullptr;
 }
 
 void
