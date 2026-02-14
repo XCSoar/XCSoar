@@ -37,14 +37,9 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     pressed_background_color = DarkColor(pressed_background_color);
   }
 
-  Color border_color = Color(128, 128, 128);
-  border_pen.Create(BORDER_WIDTH, border_color);
-
   ReinitialiseLayout(width, scale_title_font);
 
-  unit_fraction_pen.Create(1, value.fg_color);
-
-  colors[0] = border_color;
+  colors[0] = COLOR_GRAY;
   if (HasColors() && use_colors) {
     colors[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
     colors[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
@@ -58,6 +53,12 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 {
+  border_width = Layout::ScaleFinePenWidth(1);
+
+  Color border_color = COLOR_GRAY;
+  border_pen.Create(border_width, border_color);
+  unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1), value.fg_color);
+
   FontDescription title_font_d(8);
   AutoSizeFont(title_font_d, (width * scale_title_font) / 100U,
                _T("1234567890A"));

@@ -4,6 +4,7 @@
 #include "HLine.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "Screen/Layout.hpp"
 
 void
 HLine::OnPaint(Canvas &canvas) noexcept
@@ -16,6 +17,7 @@ HLine::OnPaint(Canvas &canvas) noexcept
   const unsigned height = canvas.GetHeight();
   const int middle = height / 2;
 
-  canvas.Select(Pen(1, look.dark_mode ? COLOR_GRAY : COLOR_BLACK));
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1),
+                    look.dark_mode ? COLOR_GRAY : COLOR_BLACK));
   canvas.DrawLine({0, middle}, {width, middle});
 }

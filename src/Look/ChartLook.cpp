@@ -25,8 +25,8 @@ ChartLook::Initialise(bool dark_mode)
   pens[STYLE_GREENDASH].Create(Pen::DASH2, width_normal, COLOR_GREEN);
   pens[STYLE_GREEN].Create(width_normal, COLOR_GREEN);
 
-  pens[STYLE_GRID].Create(Pen::DASH1, 1, Color(0xB0, 0xB0, 0xB0));
-  pens[STYLE_GRIDMINOR].Create(1, Color(0xB0, 0xB0, 0xB0));
+  pens[STYLE_GRID].Create(Pen::DASH1, width_thin, Color(0xB0, 0xB0, 0xB0));
+  pens[STYLE_GRIDMINOR].Create(width_thin, Color(0xB0, 0xB0, 0xB0));
   pens[STYLE_GRIDZERO].Create(width_normal, Color(0xB0, 0xB0, 0xB0));
 
   bar_brush.Create(COLOR_GREEN);
