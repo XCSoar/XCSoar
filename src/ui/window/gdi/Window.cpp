@@ -163,6 +163,12 @@ Window::OnUser([[maybe_unused]] unsigned id) noexcept
 }
 
 LRESULT
+Window::OnChildColor([[maybe_unused]] HDC hdc) noexcept
+{
+  return 0;
+}
+
+LRESULT
 Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
                   WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -278,6 +284,17 @@ Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
     /* pass on to DefWindowProc() so the underlying window class knows
        it's not focused anymore */
     break;
+
+  case WM_CTLCOLORSTATIC:
+  case WM_CTLCOLOREDIT: {
+    Window *child = GetUnchecked((HWND)lParam);
+    if (child != nullptr) {
+      LRESULT result = child->OnChildColor((HDC)wParam);
+      if (result != 0)
+        return result;
+    }
+    break;
+  }
 
   case WM_GETDLGCODE:
     if (OnKeyCheck(wParam))
