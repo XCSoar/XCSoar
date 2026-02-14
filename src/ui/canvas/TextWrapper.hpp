@@ -14,10 +14,10 @@ class Font;
  * A single line of text after word wrapping.
  */
 struct WrappedTextLine {
-  /** Character offset in original text where this line starts */
+  /** Byte offset in original text where this line starts */
   std::size_t start;
 
-  /** Number of characters in this line (excluding trailing spaces removed) */
+  /** Number of bytes in this line (excluding trailing spaces removed) */
   std::size_t length;
 
   /**
