@@ -52,6 +52,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "..\COPYING"
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
@@ -62,8 +63,14 @@ RequestExecutionLevel admin
 ; Languages
 !insertmacro MUI_LANGUAGE "English"
 
-; Installer Section
-Section "MainSection" SEC01
+; Component descriptions
+LangString DESC_MainSection ${LANG_ENGLISH} "Core application files (required)"
+LangString DESC_StartMenuShortcut ${LANG_ENGLISH} "Create a shortcut in the Start Menu"
+LangString DESC_DesktopShortcut ${LANG_ENGLISH} "Create a shortcut on the Desktop"
+
+; Installer Sections
+Section "!${PRODUCT_NAME}" SEC01
+  SectionIn RO  ; Read-only, cannot be deselected
   SetOutPath "$INSTDIR"
   SetOverwrite on
 
@@ -73,11 +80,6 @@ Section "MainSection" SEC01
   ; Install ANGLE DLLs
   File "${BIN_DIR}\libEGL.dll"
   File "${BIN_DIR}\libGLESv2.dll"
-
-  ; Create shortcuts
-  CreateDirectory "$SMPROGRAMS\XCSoar"
-  CreateShortCut "$SMPROGRAMS\XCSoar\XCSoar.lnk" "$INSTDIR\XCSoar.exe"
-  CreateShortCut "$DESKTOP\XCSoar.lnk" "$INSTDIR\XCSoar.exe"
 
   ; Write uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -93,6 +95,23 @@ Section "MainSection" SEC01
   WriteRegDWORD HKLM "${PRODUCT_UNINST_KEY}" "NoRepair" 1
 SectionEnd
 
+Section "Start Menu Shortcut" SEC02
+  CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\XCSoar.exe"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+SectionEnd
+
+Section "Desktop Shortcut" SEC03
+  CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\XCSoar.exe"
+SectionEnd
+
+; Section descriptions
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} $(DESC_MainSection)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} $(DESC_StartMenuShortcut)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} $(DESC_DesktopShortcut)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
 ; Uninstaller Section
 Section "Uninstall"
   ; Remove files
@@ -101,10 +120,11 @@ Section "Uninstall"
   Delete "$INSTDIR\libGLESv2.dll"
   Delete "$INSTDIR\Uninstall.exe"
 
-  ; Remove shortcuts
-  Delete "$SMPROGRAMS\XCSoar\XCSoar.lnk"
-  Delete "$DESKTOP\XCSoar.lnk"
-  RMDir "$SMPROGRAMS\XCSoar"
+  ; Remove shortcuts (if they exist)
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
+  RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
+  Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
 
   ; Remove installation directory
   RMDir "$INSTDIR"
@@ -113,5 +133,5 @@ Section "Uninstall"
   DeleteRegKey HKLM "${PRODUCT_UNINST_KEY}"
 
   ; Display completion message
-  MessageBox MB_OK "XCSoar has been successfully removed from your computer."
+  MessageBox MB_OK "${PRODUCT_NAME} has been successfully removed from your computer."
 SectionEnd
