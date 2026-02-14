@@ -7,6 +7,7 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Error.hpp"
 #include "Language/Language.hpp"
+#include "Profile/Profile.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "UIGlobals.hpp"
@@ -46,6 +47,7 @@ public:
     changed |= SaveValueInteger(VRANGE, settings.vrange);
 
     SaveToProfile(settings);
+    Profile::Save();
 
     _changed |= changed;
     if (_changed) ShowMessageBox(_("Changes to configuration saved. Restart XCSoar to apply changes."),

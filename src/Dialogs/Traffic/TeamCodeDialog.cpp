@@ -138,6 +138,7 @@ TeamCodeWidget::OnSetWaypointClicked()
   if (wp != nullptr) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;
     Profile::Set(ProfileKeys::TeamcodeRefWaypoint, wp->id);
+    Profile::Save();
   }
 }
 
