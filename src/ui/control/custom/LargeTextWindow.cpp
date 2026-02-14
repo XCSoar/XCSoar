@@ -17,6 +17,16 @@ LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
   NativeWindow::Create(&parent, rc, style);
 }
 
+void
+LargeTextWindow::SetColors(Color _background, Color _text,
+                            Color _border) noexcept
+{
+  background_color = _background;
+  text_color = _text;
+  border_color = _border;
+  Invalidate();
+}
+
 unsigned
 LargeTextWindow::GetVisibleRows() const
 {
