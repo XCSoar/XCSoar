@@ -303,16 +303,16 @@ InfoBoxWindow::OnResize(PixelSize new_size) noexcept
   PixelRect rc = GetClientRect();
 
   if (border_kind & BORDERLEFT)
-    rc.left += look.BORDER_WIDTH;
+    rc.left += look.border_width;
 
   if (border_kind & BORDERRIGHT)
-    rc.right -= look.BORDER_WIDTH;
+    rc.right -= look.border_width;
 
   if (border_kind & BORDERTOP)
-    rc.top += look.BORDER_WIDTH;
+    rc.top += look.border_width;
 
   if (border_kind & BORDERBOTTOM)
-    rc.bottom -= look.BORDER_WIDTH;
+    rc.bottom -= look.border_width;
 
   title_rect = rc;
   title_rect.bottom = rc.top + look.title_font.GetHeight();
