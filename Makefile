@@ -126,6 +126,7 @@ include $(topdir)/build/version.mk
 include $(topdir)/build/darwin.mk
 include $(topdir)/build/ios.mk
 include $(topdir)/build/osx.mk
+include $(topdir)/build/nsis.mk
 include $(topdir)/build/generate.mk
 include $(topdir)/build/doxygen.mk
 include $(topdir)/build/manual.mk
