@@ -66,10 +66,10 @@ GetWelcomeText(bool dark_mode)
     "**Version %s**\n\n"
     "%s\n\n"
     "%s\n\n"
+    "- [https://xcsoar.org](https://xcsoar.org)\n"
     "- [%s](https://xcsoar.org/discover/manual.html)\n"
     "- [%s](https://github.com/XCSoar/XCSoar)\n"
-    "- [%s](https://github.com/XCSoar/XCSoar/discussions)\n"
-    "- [https://xcsoar.org](https://xcsoar.org)",
+    "- [%s](https://github.com/XCSoar/XCSoar/discussions)",
     dark_mode ? "IDB_TITLE_HD_WHITE" : "IDB_TITLE_HD",
     XCSoar_VersionString,
     _("To get the most out of XCSoar and to learn about its many "
