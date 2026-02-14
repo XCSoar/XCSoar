@@ -710,7 +710,8 @@ dlgQuickGuideShowModal(bool force_info)
   }
 #endif
 
-  // Check if user set "don't show again"
+  // Save "don't show again" state (both checked and unchecked,
+  // so unticking from the Info menu re-enables the guide)
   if (info_pages_needed) {
     // The last page is the don't-show-again page
     const unsigned last_page_idx = total_pages - 1;
@@ -718,9 +719,9 @@ dlgQuickGuideShowModal(bool force_info)
       dialog.GetWidget()).GetWidget(last_page_idx);
     auto *guide_page =
       dynamic_cast<QuickGuidePageWidget *>(&last_widget);
-    if (guide_page != nullptr &&
-        guide_page->GetCheckboxState()) {
-      Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup, true);
+    if (guide_page != nullptr) {
+      Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup,
+                   guide_page->GetCheckboxState());
       Profile::Save();
     }
   }
