@@ -301,16 +301,14 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
   const bool focused = HasCursorKeys() && HasFocus();
 
   /* background and selector */
-  if (HaveClipping()) {
+  if (pressed)
+    canvas.Clear(look.list.pressed.background_color);
+  else if (focused)
+    canvas.Clear(look.focused.background_color);
+  else if (HaveClipping())
     /* with clipping, the parent's background does not extend into
        child windows, so we must fill the background ourselves */
-    if (pressed)
-      canvas.Clear(look.list.pressed.background_color);
-    else if (focused)
-      canvas.Clear(look.focused.background_color);
-    else
-      canvas.Clear(look.background_color);
-  }
+    canvas.Clear(look.background_color);
 
   if (!caption.empty()) {
     canvas.SetTextColor(focused && !pressed
@@ -369,7 +367,8 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
   canvas.DrawFilledRectangle(edit_rc, background_color);
 
   canvas.SelectHollowBrush();
-  canvas.Select(Pen(1, look.dark_mode ? COLOR_GRAY : COLOR_BLACK));
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1),
+                    look.dark_mode ? COLOR_GRAY : COLOR_BLACK));
   canvas.DrawRectangle(edit_rc);
 
   if (!value.empty()) {
