@@ -173,17 +173,6 @@ SCREEN_SOURCES += \
 	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
-else ifeq ($(GLX),y)
-SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
-SCREEN_SOURCES += \
-	$(SCREEN_CUSTOM_SOURCES) \
-	$(CANVAS_FILES_CPP) \
-	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
-	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
-	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
@@ -274,11 +263,10 @@ SCREEN_CPPFLAGS = \
 	$(WAYLAND_CPPFLAGS) \
 	$(EGL_CPPFLAGS) \
 	$(EGL_FEATURE_CPPFLAGS) \
-	$(GLX_CPPFLAGS) \
 	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 
-SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG COREGRAPHICS GDI OPENGL WAYLAND EGL GLX APPKIT UIKIT
+SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG COREGRAPHICS GDI OPENGL WAYLAND EGL APPKIT UIKIT
 
 ifeq ($(TIFF),y)
 SCREEN_DEPENDS += LIBTIFF
@@ -299,20 +287,12 @@ ifeq ($(USE_FB)$(EGL),yy)
 $(error USE_FB and EGL are mutually exclusive)
 endif
 
-ifeq ($(USE_FB)$(GLX),yy)
-$(error USE_FB and GLX are mutually exclusive)
-endif
-
 ifeq ($(USE_FB)$(ENABLE_SDL),yy)
 $(error USE_FB and SDL are mutually exclusive)
 endif
 
 ifeq ($(VFB)$(EGL),yy)
 $(error VFB and EGL are mutually exclusive)
-endif
-
-ifeq ($(VFB)$(GLX),yy)
-$(error VFB and GLX are mutually exclusive)
 endif
 
 ifeq ($(VFB)$(ENABLE_SDL),yy)
@@ -323,16 +303,8 @@ ifeq ($(EGL)$(ENABLE_SDL),yy)
 $(error EGL and SDL are mutually exclusive)
 endif
 
-ifeq ($(GLX)$(ENABLE_SDL),yy)
-$(error GLX and SDL are mutually exclusive)
-endif
-
 ifeq ($(EGL)$(OPENGL),yn)
 $(error EGL requires OpenGL)
-endif
-
-ifeq ($(GLX)$(OPENGL),yn)
-$(error GLX requires OpenGL)
 endif
 
 ifeq ($(USE_MEMORY_CANVAS)$(OPENGL),yy)

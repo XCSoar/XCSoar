@@ -8,10 +8,6 @@
 #include "ui/egl/System.hpp"
 #endif
 
-#ifdef USE_GLX
-#include "ui/glx/System.hpp"
-#endif
-
 #include <cassert>
 #include <stdexcept>
 

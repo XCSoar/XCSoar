@@ -97,7 +97,6 @@ include $(topdir)/build/vfb.mk
 include $(topdir)/build/fb.mk
 include $(topdir)/build/wayland.mk
 include $(topdir)/build/egl.mk
-include $(topdir)/build/glx.mk
 include $(topdir)/build/opengl.mk
 endif
 
