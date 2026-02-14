@@ -1,0 +1,48 @@
+---
+description: UTF-8 safety rules for string handling in XCSoar
+alwaysApply: true
+---
+
+# UTF-8 Safety
+
+XCSoar uses UTF-8 everywhere. User-visible strings (waypoint names, checklist text, pilot names, place names, translations) frequently contain multi-byte characters. All string operations must preserve valid UTF-8.
+
+## Rules
+
+1. **Never iterate text byte-by-byte (`++p`) when creating substrings** for display or font measurement. Use `SequenceLengthUTF8()` from `util/UTF8.hpp` to advance by whole characters.
+
+2. **Never truncate strings at arbitrary byte offsets.** Use these existing helpers:
+   - `CropIncompleteUTF8()` -- trims trailing incomplete sequences from a buffer
+   - `TruncateStringUTF8()` -- returns byte count for N complete characters
+   - `CopyTruncateString()` -- copies with UTF-8-safe truncation (preferred over `CopyString`)
+
+3. **Byte-level scanning for ASCII delimiters is safe.** Searching for `'\n'`, `' '`, `','`, `']'`, etc. with `++p` is fine because UTF-8 continuation bytes (0x80-0xBF) never match ASCII (0x00-0x7F).
+
+4. **`string_view::substr()` must land on character boundaries** when the result is passed to font/canvas functions (`CalcTextSize`, `DrawText`).
+
+## Common Patterns
+
+```cpp
+// BAD: byte-by-byte iteration creating substrings for measurement
+for (const char *p = start; p < end; ++p) {
+  std::string_view text(start, p + 1 - start); // may split UTF-8
+  canvas.CalcTextSize(text);
+}
+
+// GOOD: advance by whole UTF-8 characters
+for (const char *p = start; p < end;) {
+  std::size_t len = SequenceLengthUTF8(*p);
+  if (len == 0) len = 1; // malformed: skip one byte
+  if (p + len > end) len = end - p; // clamp to buffer
+  const char *next = p + len;
+  std::string_view text(start, next - start); // always valid UTF-8
+  canvas.CalcTextSize(text);
+  p = next;
+}
+
+// BAD: truncate at byte boundary
+src = src.substr(0, dest_size - 1);
+
+// GOOD: use UTF-8-safe truncation
+CopyTruncateString(dest, dest_size, src); // or CropIncompleteUTF8()
+```
