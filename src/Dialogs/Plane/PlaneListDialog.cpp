@@ -178,6 +178,7 @@ LoadFile(Path path) noexcept
   PlaneGlue::Synchronize(settings.plane, settings,
                          settings.polar.glide_polar_task);
   backend_components->SetTaskPolar(settings.polar);
+  Profile::Save();
 
   return true;
 }
