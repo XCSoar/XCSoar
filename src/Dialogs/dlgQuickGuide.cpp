@@ -17,6 +17,7 @@
 #include "Version.hpp"
 #include "Simulator.hpp"
 #include "Inflate.hpp"
+#include "Message.hpp"
 #include "Interface.hpp"
 #include "Device/Config.hpp"
 #include "Tracking/SkyLines/Features.hpp"
@@ -413,11 +414,22 @@ dlgQuickGuideShowModal(bool force_info)
                       UIGlobals::GetMainWindow(),
                       look, _("Welcome to XCSoar"));
 
-  auto pager = std::make_unique<ArrowPagerWidget>(
-    look.button, dialog.MakeModalResultCallback(mrOK));
-  ArrowPagerWidget *pager_ptr = pager.get();
-
   QuickGuideState state;
+
+  auto pager = std::make_unique<ArrowPagerWidget>(
+    look.button, [&dialog, &state, warranty_needed]() {
+      if (warranty_needed && !state.warranty_accepted) {
+        if (ShowMessageBox(
+              _("The safety disclaimer must be accepted "
+                "to use XCSoar. Quit?"),
+              _T("XCSoar"),
+              MB_YESNO | MB_ICONWARNING) != IDYES)
+          /* User chose not to quit — stay in the dialog */
+          return;
+      }
+      dialog.SetModalResult(mrOK);
+    });
+  ArrowPagerWidget *pager_ptr = pager.get();
 
   // Track page titles for the caption callback
   std::vector<const char *> titles;
@@ -457,6 +469,9 @@ dlgQuickGuideShowModal(bool force_info)
       [&state, pager_ptr](bool checked) {
         state.warranty_accepted = checked;
         pager_ptr->UpdateNextButtonState();
+        pager_ptr->SetCloseButtonCaption(checked
+                                         ? _("Close")
+                                         : _("Quit"));
       });
     state.warranty_widget = page.get();
 
@@ -666,12 +681,16 @@ dlgQuickGuideShowModal(bool force_info)
 
   dialog.FinishPreliminary(std::move(pager));
 
+  /* Show "Quit" instead of "Close" until the disclaimer is accepted */
+  if (warranty_needed)
+    pager_ptr->SetCloseButtonCaption(_("Quit"));
+
   const int result = dialog.ShowModal();
 
   /* ---- Handle results ---- */
 
-  /* If warranty page was shown and user cancelled or closed without
-     accepting, the app should exit */
+  /* If warranty page was shown and user closed without accepting,
+     the close callback already confirmed the quit via message box */
   if (warranty_needed && !state.warranty_accepted)
     return false;
 

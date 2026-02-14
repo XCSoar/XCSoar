@@ -56,6 +56,9 @@ private:
   Button previous_button, next_button;
   Button close_button;
 
+  /** Caption for the close button, applied during Prepare(). */
+  const TCHAR *pending_close_caption = nullptr;
+
   /** Optional guard that blocks forward page navigation */
   CanAdvanceCallback can_advance_callback;
 
@@ -111,6 +114,18 @@ public:
    * prerequisite checkbox was toggled).
    */
   void UpdateNextButtonState() noexcept;
+
+  /**
+   * Change the label of the close button.  If the button has not
+   * been created yet, the caption is stored and applied during
+   * Prepare().
+   */
+  void SetCloseButtonCaption(const TCHAR *caption) noexcept {
+    if (close_button.IsDefined())
+      close_button.SetCaption(caption);
+    else
+      pending_close_caption = caption;
+  }
 
 protected:
   void OnPageFlipped() noexcept override;
