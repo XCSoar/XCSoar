@@ -1170,28 +1170,6 @@ DeclareToFLARM(const struct Declaration &declaration,
   return DeclareToFLARM(declaration, port, home, env);
 }
 
-static bool
-DoDeclare(const struct Declaration &declaration,
-          Port &port, const DeviceRegister &driver, Device *device,
-          bool flarm, const Waypoint *home,
-          OperationEnvironment &env)
-{
-  StaticString<60> text;
-  text.Format("%s: %s.", _("Sending declaration"), driver.display_name);
-  env.SetText(text);
-
-  bool result = device != nullptr && device->Declare(declaration, home, env);
-
-  if (flarm) {
-    text.Format("%s: FLARM.", _("Sending declaration"));
-    env.SetText(text);
-
-    result |= DeclareToFLARM(declaration, port, driver, device, home, env);
-  }
-
-  return result;
-}
-
 bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
                           const Waypoint *home,
@@ -1202,20 +1180,65 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
   assert(driver != nullptr);
   assert(device != nullptr);
 
-  // explicitly set passthrough device? Use it...
+  /* always declare to the primary device first */
+  StaticString<60> text;
+  text.Format("%s: %s.", _("Sending declaration"), driver->display_name);
+  env.SetText(text);
+
+  bool result = device->Declare(declaration, home, env);
+
   if (driver->HasPassThrough() && second_device != nullptr) {
-    // set the primary device to passthrough
+    /* explicitly configured passthrough device (e.g. FLARM behind
+       LXNAV vario): enable passthrough and declare to it */
+    text.Format("%s: %s.", _("Sending declaration"),
+                second_driver->display_name);
+    env.SetText(text);
+
+    /* The primary declaration (above) may have stopped the Rx
+       thread.  Restart it so EnablePassThrough() operates with the
+       Rx thread consuming data — this is required for the vario to
+       properly transition to DIRECT mode and for the serial buffers
+       to be drained while the mode switch settles. */
+    port->StartRxThread();
+
     device->EnablePassThrough(env);
-    return second_device != nullptr &&
-      second_device->Declare(declaration, home, env);
+
+    /* Stop the Rx thread and flush all stale data from the serial
+       buffers.  Then send a FLARM version request as a "ping" to
+       verify the passthrough is working bidirectionally before
+       attempting the actual declaration.  This also gives the vario
+       firmware additional time to complete the DIRECT mode
+       transition. */
+    port->StopRxThread();
+    port->FullFlush(env, std::chrono::milliseconds(50),
+                    std::chrono::milliseconds(500));
+    PortWriteNMEA(*port, "PFLAV,R", env);
+    try {
+      port->ExpectString("PFLAV,A",  env, std::chrono::seconds(2));
+    } catch (...) {
+      /* FLARM did not respond to the ping — passthrough may not be
+         working; continue anyway and let the declaration fail
+         gracefully */
+    }
+    port->StartRxThread();
+
+    result |= second_device->Declare(declaration, home, env);
   } else {
-    /* enable the "muxed FLARM" hack? */
+    /* no explicit passthrough device; try the "muxed FLARM" hack
+       if FLARM sentences were detected in the NMEA stream */
     const bool flarm = blackboard.IsFLARM(index) &&
       !IsDriver("FLARM");
 
-    return DoDeclare(declaration, *port, *driver, device, flarm,
-                     home, env);
+    if (flarm) {
+      text.Format("%s: FLARM.", _("Sending declaration"));
+      env.SetText(text);
+
+      result |= DeclareToFLARM(declaration, *port, *driver, device,
+                                home, env);
+    }
   }
+
+  return result;
 }
 
 bool

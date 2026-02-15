@@ -46,12 +46,32 @@ bool
 FlarmDevice::TextMode(OperationEnvironment &env)
 {
   /* the "text" mode is the same as NMEA mode, only the Port thread is
-     stopped */
-
-  if (!EnableNMEA(env))
-    return false;
+     stopped.  Stop the Rx thread FIRST, before sending any commands
+     to the FLARM, matching what BinaryMode() does.  This is critical
+     for passthrough scenarios (FLARM behind LXNAV vario) where the
+     Rx thread would consume FLARM responses. */
 
   port.StopRxThread();
+
+  switch (mode) {
+  case Mode::UNKNOWN:
+  case Mode::NMEA:
+  case Mode::TEXT:
+    /* For Mode::UNKNOWN, skip the speculative BinaryReset that
+       EnableNMEA() would send.  In passthrough scenarios, the FLARM
+       was never in binary mode, and the raw binary EXIT frame bytes
+       sent through the passthrough can confuse the FLARM's NMEA
+       parser.  Also skip PFLAE,R / PFLAV,R since the Rx thread is
+       stopped and the responses would just be noise for
+       ExpectString to scan through. */
+    break;
+
+  case Mode::BINARY:
+    /* we were in binary mode; try to exit */
+    BinaryReset(env, std::chrono::milliseconds(500));
+    break;
+  }
+
   mode = Mode::TEXT;
   return true;
 }
