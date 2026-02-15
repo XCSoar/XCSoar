@@ -100,11 +100,10 @@ ActionInterface::SetBallast(double ballast_litres, bool to_devices) noexcept
 
   // send to external devices
   if (to_devices && backend_components->devices) {
-    const Plane &plane = GetComputerSettings().plane;
-    if (plane.empty_mass > 0) {
-      auto dry_mass = plane.empty_mass + polar.GetCrewMass();
-      auto overload = (dry_mass + ballast_litres) /
-                      plane.polar_shape.reference_mass;
+    const double ref_mass = polar.GetReferenceMass();
+    if (ref_mass > 0) {
+      const double overload =
+        (polar.GetDryMass() + ballast_litres) / ref_mass;
 
       MessageOperationEnvironment env;
       backend_components->devices->PutBallast(0.0, overload, env);

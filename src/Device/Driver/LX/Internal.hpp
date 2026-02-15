@@ -477,26 +477,6 @@ private:
    */
   void TrackPolarChanges(const DerivedInfo &calculated) noexcept;
 
-  /**
-   * Handle MC synchronization with the device.
-   */
-  void SyncMacCready(const MoreData &basic,
-                     const DerivedInfo &calculated,
-                     OperationEnvironment &env) noexcept;
-
-  /**
-   * Handle Ballast synchronization with the device.
-   */
-  void SyncBallast(const MoreData &basic,
-                   const DerivedInfo &calculated,
-                   OperationEnvironment &env) noexcept;
-
-  /**
-   * Handle Bugs synchronization with the device.
-   */
-  void SyncBugs(const MoreData &basic,
-                const DerivedInfo &calculated,
-                OperationEnvironment &env) noexcept;
   void SyncCrewWeight(const MoreData &basic,
                      const DerivedInfo &calculated,
                      OperationEnvironment &env);

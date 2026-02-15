@@ -298,12 +298,10 @@ LXDevice::OnCalculatedUpdate(const MoreData &basic,
   /* Track polar changes to reset sent values on change */
   TrackPolarChanges(calculated);
 
-  /* MC, ballast, bugs: always "last change wins" bidirectional,
-     independent of polar_sync.  The RECEIVE direction is handled
-     by ApplyExternalSettings via sync_from_device. */
-  SyncMacCready(basic, calculated, env);
-  SyncBallast(basic, calculated, env);
-  SyncBugs(basic, calculated, env);
+  /* MC, ballast, bugs: bidirectional sync is handled by the generic
+     XCSoar path (ApplyExternalSettings for device→XCSoar, and
+     ActionInterface/DeviceDescriptor for XCSoar→device).
+     DeviceDescriptor::settings_sent provides echo suppression. */
 
   /* Crew weight is pilot data - always push to device */
   SyncCrewWeight(basic, calculated, env);
@@ -531,98 +529,6 @@ LXDevice::TrackPolarChanges(const DerivedInfo &calculated) noexcept
     tracked_polar.empty_mass = em;
     tracked_polar.crew_mass = cm;
     tracked_polar.valid = true;
-  }
-}
-
-void
-LXDevice::SyncMacCready(const MoreData &basic,
-                        const DerivedInfo &calculated,
-                        OperationEnvironment &env) noexcept
-{
-  const double mc = calculated.glide_polar_safety.GetMC();
-  
-  /* Check if device already has this value (echo) */
-  {
-    const std::lock_guard lock{mutex};
-    if (IsMCEcho(basic.settings))
-      return; // Device already has our value
-  }
-  
-  /* Check if we already sent this exact value */
-  {
-    const std::lock_guard lock{mutex};
-    if (last_sent_mc.has_value() && fabs(*last_sent_mc - mc) < 0.01)
-      return; // Already sent this value
-  }
-  
-  if (PutMacCready(mc, env)) {
-    const std::lock_guard lock{mutex};
-    last_sent_mc = mc;
-  }
-}
-
-void
-LXDevice::SyncBallast(const MoreData &basic,
-                      const DerivedInfo &calculated,
-                      OperationEnvironment &env) noexcept
-{
-  const GlidePolar &polar = calculated.glide_polar_safety;
-  if (!polar.IsValid())
-    return;
-
-  const double ballast_litres = polar.GetBallastLitres();
-  const double dry_mass = polar.GetDryMass();
-  const double reference_mass = polar.GetReferenceMass();
-  if (reference_mass <= 0)
-    return;
-
-  const double overload = (dry_mass + ballast_litres) / reference_mass;
-  
-  /* Check if device already has this value (echo) */
-  {
-    const std::lock_guard lock{mutex};
-    if (IsBallastEcho(basic.settings))
-      return; // Device already has our value
-  }
-  
-  /* Check if we already sent this exact value */
-  {
-    const std::lock_guard lock{mutex};
-    if (last_sent_ballast_overload.has_value() && 
-        fabs(*last_sent_ballast_overload - overload) < 0.01)
-      return; // Already sent this value
-  }
-  
-  if (PutBallast(0.0, overload, env)) {
-    const std::lock_guard lock{mutex};
-    last_sent_ballast_overload = overload;
-  }
-}
-
-void
-LXDevice::SyncBugs(const MoreData &basic,
-                   const DerivedInfo &calculated,
-                   OperationEnvironment &env) noexcept
-{
-  const double bugs = calculated.glide_polar_safety.GetBugs();
-  
-  /* Check if device already has this value (echo) */
-  {
-    const std::lock_guard lock{mutex};
-    if (IsBugsEcho(basic.settings))
-      return; // Device already has our value
-  }
-  
-  /* Check if we already sent this exact value */
-  {
-    const std::lock_guard lock{mutex};
-    if (last_sent_bugs.has_value() && fabs(*last_sent_bugs - bugs) < 0.01)
-      return; // Already sent this value
-  }
-  
-  if (PutBugs(bugs, env)) {
-    const std::lock_guard lock{mutex};
-    last_sent_bugs = bugs;
   }
 }
 

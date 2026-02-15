@@ -148,12 +148,11 @@ FlightSetupPanel::SetBallast()
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
   if (backend_components->devices != nullptr) {
-    const Plane &plane = CommonInterface::GetComputerSettings().plane;
-    if (plane.empty_mass > 0) {
-      auto dry_mass = polar_settings.glide_polar_task.GetDryMass();
-      auto ballast_litres = polar_settings.glide_polar_task.GetBallastLitres();
-      auto overload = (dry_mass + ballast_litres) /
-                      plane.polar_shape.reference_mass;
+    const auto &polar = polar_settings.glide_polar_task;
+    const double ref_mass = polar.GetReferenceMass();
+    if (ref_mass > 0) {
+      const double overload =
+        (polar.GetDryMass() + polar.GetBallastLitres()) / ref_mass;
 
       MessageOperationEnvironment env;
       backend_components->devices->PutBallast(0.0, overload, env);
