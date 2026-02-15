@@ -5,6 +5,9 @@
 #include "Device/Util/NMEAWriter.hpp"
 #include "LX1600.hpp"
 #include "LXNAVVario.hpp"
+#include "NMEA/Info.hpp"
+#include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
 
 #include <fmt/format.h>
 
@@ -310,5 +313,89 @@ LXDevice::PutPilotEvent(OperationEnvironment &env)
     return false;
 
   LXNAVVario::PutPilotEvent(env, port);
+  return true;
+}
+
+bool
+LXDevice::PutActiveFrequency(RadioFrequency frequency,
+                             const char *name,
+                             OperationEnvironment &env)
+{
+  if (!IsLXNAVVario())
+    return false;
+
+  if (!EnableNMEA(env))
+    return false;
+
+  /* LXNAV uses frequency in kHz without decimal point:
+     e.g. 128.800 MHz → 128800 */
+  const unsigned freq_khz = frequency.GetKiloHertz();
+  const auto buffer = (name != nullptr && name[0] != '\0')
+    ? fmt::format("PLXVC,RADIO,S,COMM,{},{}", freq_khz, name)
+    : fmt::format("PLXVC,RADIO,S,COMM,{}", freq_khz);
+  PortWriteNMEA(port, buffer.c_str(), env);
+  return true;
+}
+
+bool
+LXDevice::PutStandbyFrequency(RadioFrequency frequency,
+                              const char *name,
+                              OperationEnvironment &env)
+{
+  if (!IsLXNAVVario())
+    return false;
+
+  if (!EnableNMEA(env))
+    return false;
+
+  const unsigned freq_khz = frequency.GetKiloHertz();
+  const auto buffer = (name != nullptr && name[0] != '\0')
+    ? fmt::format("PLXVC,RADIO,S,SBY,{},{}", freq_khz, name)
+    : fmt::format("PLXVC,RADIO,S,SBY,{}", freq_khz);
+  PortWriteNMEA(port, buffer.c_str(), env);
+  return true;
+}
+
+bool
+LXDevice::ExchangeRadioFrequencies(OperationEnvironment &env,
+                                   NMEAInfo &info)
+{
+  if (!IsLXNAVVario())
+    return false;
+
+  /* Swap active and standby in NMEAInfo */
+  if (info.settings.has_active_frequency.IsValid() &&
+      info.settings.has_standby_frequency.IsValid()) {
+    std::swap(info.settings.active_frequency,
+              info.settings.standby_frequency);
+    std::swap(info.settings.active_freq_name,
+              info.settings.standby_freq_name);
+    info.settings.swap_frequencies.Update(info.clock);
+
+    /* Send both frequencies to the device */
+    PutActiveFrequency(info.settings.active_frequency,
+                       info.settings.active_freq_name,
+                       env);
+    PutStandbyFrequency(info.settings.standby_frequency,
+                        info.settings.standby_freq_name,
+                        env);
+  }
+  return true;
+}
+
+bool
+LXDevice::PutTransponderCode(TransponderCode code,
+                             OperationEnvironment &env)
+{
+  if (!IsLXNAVVario())
+    return false;
+
+  if (!EnableNMEA(env))
+    return false;
+
+  /* LXNAV uses display squawk format (e.g. "7700") which is octal */
+  const auto buffer =
+    fmt::format("PLXVC,XPDR,S,SQUAWK,{:04o}", code.GetCode());
+  PortWriteNMEA(port, buffer.c_str(), env);
   return true;
 }

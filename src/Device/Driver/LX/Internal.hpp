@@ -411,6 +411,16 @@ public:
 
   bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
+  bool PutActiveFrequency(RadioFrequency frequency,
+                          const char *name,
+                          OperationEnvironment &env) override;
+  bool PutStandbyFrequency(RadioFrequency frequency,
+                           const char *name,
+                           OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env,
+                                NMEAInfo &info) override;
+  bool PutTransponderCode(TransponderCode code,
+                          OperationEnvironment &env) override;
 
   bool EnablePassThrough(OperationEnvironment &env) override;
 

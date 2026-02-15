@@ -1465,6 +1465,64 @@ TestLXV7POLAR()
 }
 
 static void
+TestLXRadioTransponder()
+{
+  NullPort null;
+  Device *device = lx_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+
+  /* Active frequency with station name */
+  ok1(device->ParseNMEA("$PLXVC,RADIO,A,COMM,128800,CELJE*27", basic));
+  ok1(basic.settings.has_active_frequency.IsValid());
+  ok1(equals(basic.settings.active_frequency.GetKiloHertz(), 128800));
+  ok1(basic.settings.active_freq_name.equals("CELJE"));
+
+  /* Standby frequency without station name */
+  ok1(device->ParseNMEA("$PLXVC,RADIO,A,SBY,121500*0E", basic));
+  ok1(basic.settings.has_standby_frequency.IsValid());
+  ok1(equals(basic.settings.standby_frequency.GetKiloHertz(), 121500));
+
+  /* Active frequency without station name */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$PLXVC,RADIO,A,COMM,118000*45", basic));
+  ok1(basic.settings.has_active_frequency.IsValid());
+  ok1(equals(basic.settings.active_frequency.GetKiloHertz(), 118000));
+
+  /* Transponder squawk code (2000 display = 02000 octal = 1024 decimal) */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{3}};
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,SQUAWK,2000*06", basic));
+  ok1(basic.settings.has_transponder_code.IsValid());
+  ok1(equals(basic.settings.transponder_code.GetCode(),
+             TransponderCode{02000}.GetCode()));
+
+  /* Transponder mode ALT */
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,MODE,ALT*54", basic));
+  ok1(basic.settings.has_transponder_mode.IsValid());
+  ok1(equals(basic.settings.transponder_mode.mode,
+             TransponderMode::Mode::ALT));
+
+  /* Emergency squawk (7700 display = 07700 octal = 4032 decimal) */
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,SQUAWK,7700*04", basic));
+  ok1(basic.settings.has_transponder_code.IsValid());
+  ok1(equals(basic.settings.transponder_code.GetCode(),
+             TransponderCode{07700}.GetCode()));
+
+  /* Transponder mode SBY */
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,MODE,SBY*45", basic));
+  ok1(basic.settings.has_transponder_mode.IsValid());
+  ok1(equals(basic.settings.transponder_mode.mode,
+             TransponderMode::Mode::SBY));
+
+  delete device;
+}
+
+static void
 TestILEC()
 {
   NullPort null;
@@ -2023,7 +2081,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1062);
+  plan_tests(1085);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -2044,6 +2102,7 @@ int main()
   TestLXEos();
   TestLXV7();
   TestLXV7POLAR();
+  TestLXRadioTransponder();
   TestILEC();
   TestOpenVario();
   TestVega();

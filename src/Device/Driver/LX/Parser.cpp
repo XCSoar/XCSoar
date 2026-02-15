@@ -6,6 +6,9 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
+#include "TransponderMode.hpp"
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
 #include "util/StringCompare.hxx"
@@ -244,13 +247,107 @@ ParseNanoVarioInfo(NMEAInputLine &line, DeviceInfo &device)
 }
 
 /**
+ * Parse a PLXVC,RADIO,A response.
+ *
+ * $PLXVC,RADIO,A,<command>,<value>[,<name>]
+ *
+ * command: COMM (active), SBY (standby), VOL, SQUELCH, VOX
+ * value: frequency in kHz (e.g. 128800) or volume percentage
+ */
+static void
+ParseRadio(NMEAInputLine &line, NMEAInfo &info)
+{
+  const auto command = line.ReadView();
+  unsigned value;
+  if (!line.ReadChecked(value))
+    return;
+
+  if (command == "COMM"sv || command == "SBY"sv) {
+    auto freq = RadioFrequency::FromKiloHertz(value);
+    if (!freq.IsDefined())
+      return;
+
+    if (command == "COMM"sv) {
+      info.settings.has_active_frequency.Update(info.clock);
+      info.settings.active_frequency = freq;
+
+      /* Optional station name */
+      const auto name = line.ReadView();
+      if (!name.empty())
+        info.settings.active_freq_name.SetASCII(name);
+    } else {
+      info.settings.has_standby_frequency.Update(info.clock);
+      info.settings.standby_frequency = freq;
+
+      const auto name = line.ReadView();
+      if (!name.empty())
+        info.settings.standby_freq_name.SetASCII(name);
+    }
+  }
+}
+
+/**
+ * Map an LXNAV transponder mode string to a TransponderMode.
+ */
+[[gnu::pure]]
+static TransponderMode
+ParseTransponderMode(std::string_view mode_str) noexcept
+{
+  if (mode_str == "OFF"sv)
+    return TransponderMode(TransponderMode::OFF);
+  else if (mode_str == "SBY"sv)
+    return TransponderMode(TransponderMode::SBY);
+  else if (mode_str == "GND"sv)
+    return TransponderMode(TransponderMode::GND);
+  else if (mode_str == "ON"sv)
+    return TransponderMode(TransponderMode::ON);
+  else if (mode_str == "ALT"sv)
+    return TransponderMode(TransponderMode::ALT);
+  else if (mode_str == "IDENT"sv)
+    return TransponderMode(TransponderMode::IDENT);
+  else
+    return TransponderMode::Null();
+}
+
+/**
+ * Parse a PLXVC,XPDR,A response.
+ *
+ * $PLXVC,XPDR,A,<command>,<value>
+ *
+ * command: SQUAWK, MODE, ALT, STATUS
+ */
+static void
+ParseTransponder(NMEAInputLine &line, NMEAInfo &info)
+{
+  const auto command = line.ReadView();
+
+  if (command == "SQUAWK"sv) {
+    /* The protocol sends squawk as a display string (e.g. "7700").
+       TransponderCode stores values in octal, so parse base 8. */
+    char buf[8];
+    line.Read(buf, sizeof(buf));
+    auto code = TransponderCode::Parse(buf);
+    if (code.IsDefined()) {
+      info.settings.has_transponder_code.Update(info.clock);
+      info.settings.transponder_code = code;
+    }
+  } else if (command == "MODE"sv) {
+    const auto mode_str = line.ReadView();
+    auto mode = ParseTransponderMode(mode_str);
+    if (mode.IsDefined()) {
+      info.settings.has_transponder_mode.Update(info.clock);
+      info.settings.transponder_mode = mode;
+    }
+  }
+}
+
+/**
  * Parse the $PLXVC sentence (LXNAV Nano and sVarios).
  *
  * $PLXVC,<key>,<type>,<values>*<checksum><cr><lf>
  */
 static void
-PLXVC(NMEAInputLine &line, DeviceInfo &device,
-      DeviceInfo &secondary_device,
+PLXVC(NMEAInputLine &line, NMEAInfo &info,
       DeviceSettingsMap<std::string> &settings)
 {
   const auto key = line.ReadView();
@@ -264,19 +361,23 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
       settings.Set(std::string{name}, value);
     }
   } else if (key == "INFO"sv && type.starts_with('A')) {
-    ParseNanoVarioInfo(line, device);
+    ParseNanoVarioInfo(line, info.device);
   } else if (key == "GPSINFO"sv && type.starts_with('A')) {
     /* the LXNAV V7 (firmware >= 2.01) forwards the Nano's INFO
        sentence with the "GPS" prefix */
 
     const auto name = line.ReadView();
     if (name == "LXWP1"sv) {
-      LXDevice::LXWP1(line, secondary_device);
+      LXDevice::LXWP1(line, info.secondary_device);
     } else if (name == "INFO"sv) {
       const auto type2 = line.ReadView();
       if (type2.starts_with('A'))
-        ParseNanoVarioInfo(line, secondary_device);
+        ParseNanoVarioInfo(line, info.secondary_device);
     }
+  } else if (key == "RADIO"sv && type.starts_with('A')) {
+    ParseRadio(line, info);
+  } else if (key == "XPDR"sv && type.starts_with('A')) {
+    ParseTransponder(line, info);
   }
 }
 
@@ -451,7 +552,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   } else if (type == "$PLXVC"sv) {
     is_colibri = false;
-    PLXVC(line, info.device, info.secondary_device, nano_settings);
+    PLXVC(line, info, nano_settings);
     is_forwarded_nano = info.secondary_device.product.equals("NANO") ||
                           info.secondary_device.product.equals("NANO3") ||
                           info.secondary_device.product.equals("NANO4");
