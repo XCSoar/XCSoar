@@ -68,7 +68,7 @@ VarioLook::ReinitialiseLayout(unsigned width)
   FontDescription unit_font_d(8);
   AutoSizeFont(unit_font_d, width / 4.22, _T("00.0m"));
   unit_font.Load(unit_font_d);
-  unit_fraction_pen.Create(1, COLOR_GRAY);
+  unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1), COLOR_GRAY);
 
   FontDescription label_font_d(8);
   AutoSizeFont(label_font_d, width / 2, _T("Auto MC"));

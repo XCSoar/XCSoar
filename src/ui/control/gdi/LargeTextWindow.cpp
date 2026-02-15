@@ -9,11 +9,47 @@
 #include <commctrl.h>
 #include <windowsx.h>
 
+LargeTextWindow::~LargeTextWindow() noexcept
+{
+  if (background_brush != nullptr)
+    ::DeleteObject(background_brush);
+}
+
 void
 LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
                         const LargeTextWindowStyle style)
 {
   Window::Create(&parent, WC_EDIT, nullptr, rc, style);
+
+  /* store the Window pointer so the parent can find us when
+     reflecting WM_CTLCOLORSTATIC */
+  SetUserData(this);
+}
+
+void
+LargeTextWindow::SetColors(Color _background, Color _text,
+                            Color _border) noexcept
+{
+  background_color = _background;
+  text_color = _text;
+  border_color = _border;
+
+  if (background_brush != nullptr)
+    ::DeleteObject(background_brush);
+
+  background_brush = ::CreateSolidBrush(_background);
+  ::InvalidateRect(hWnd, nullptr, true);
+}
+
+LRESULT
+LargeTextWindow::OnChildColor(HDC hdc) noexcept
+{
+  if (background_brush == nullptr)
+    return 0;
+
+  ::SetTextColor(hdc, text_color);
+  ::SetBkColor(hdc, background_color);
+  return (LRESULT)background_brush;
 }
 
 void

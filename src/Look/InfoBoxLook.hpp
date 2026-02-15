@@ -11,7 +11,7 @@
 class Font;
 
 struct InfoBoxLook {
-  static constexpr unsigned BORDER_WIDTH = 1;
+  unsigned border_width;
 
   bool inverse;
 

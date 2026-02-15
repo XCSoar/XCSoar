@@ -47,9 +47,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
   team_pen_magenta.Create(width, other.team_color_magenta);
 
   plane_pen.Create(width, radar_color);
-  radar_pen.Create(1, radar_color);
+  radar_pen.Create(Layout::ScaleFinePenWidth(1), radar_color);
 
-  unit_fraction_pen.Create(1, inverse ? COLOR_WHITE : COLOR_BLACK);
+  unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1),
+                           inverse ? COLOR_WHITE : COLOR_BLACK);
 
   no_traffic_font.Load(FontDescription(Layout::FontScale(22)));
   label_font.Load(FontDescription(Layout::FontScale(12)));

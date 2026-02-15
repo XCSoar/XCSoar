@@ -6,6 +6,7 @@
 #include "ui/canvas/Color.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Pen.hpp"
+#include "Screen/Layout.hpp"
 
 class Font;
 
@@ -21,9 +22,9 @@ struct ButtonLook {
     Brush light_border_brush, dark_border_brush;
 
     void CreateBorder(Color light, Color dark) {
-      light_border_pen.Create(1, light);
+      light_border_pen.Create(Layout::ScaleFinePenWidth(1), light);
       light_border_brush.Create(light);
-      dark_border_pen.Create(1, dark);
+      dark_border_pen.Create(Layout::ScaleFinePenWidth(1), dark);
       dark_border_brush.Create(dark);
     }
   } standard, selected, focused;

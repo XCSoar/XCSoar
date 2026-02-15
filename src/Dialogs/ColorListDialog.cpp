@@ -33,7 +33,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept
 #endif
 
   const auto &look = UIGlobals::GetDialogLook();
-  canvas.Select(Pen(1, look.dark_mode ? COLOR_LIGHT_GRAY : COLOR_BLACK));
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1),
+                    look.dark_mode ? COLOR_LIGHT_GRAY : COLOR_BLACK));
   canvas.DrawRectangle(rc2);
 }
 

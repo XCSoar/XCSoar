@@ -22,8 +22,9 @@ ThermalAssistantLook::Initialise(bool small, bool inverse)
 #else /* !OPENGL */
   polygon_pen.Create(width, polygon_border_color);
 #endif /* !OPENGL */
-  inner_circle_pen.Create(1, circle_color);
-  outer_circle_pen.Create(Pen::DASH2, 1, circle_color);
+  inner_circle_pen.Create(Layout::ScaleFinePenWidth(1), circle_color);
+  outer_circle_pen.Create(Pen::DASH2, Layout::ScaleFinePenWidth(1),
+                          circle_color);
   plane_pen.Create(width, inverse? COLOR_WHITE: COLOR_BLACK);
 
   overlay_font.Load(FontDescription(Layout::FontScale(22)));

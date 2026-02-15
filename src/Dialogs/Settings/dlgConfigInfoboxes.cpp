@@ -381,7 +381,8 @@ InfoBoxPreview::OnPaint(Canvas &canvas) noexcept
     canvas.Clear(dlook.background_color);
 
   canvas.SelectHollowBrush();
-  canvas.Select(Pen(1, dlook.dark_mode ? COLOR_GRAY : COLOR_BLACK));
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1),
+                    dlook.dark_mode ? COLOR_GRAY : COLOR_BLACK));
   canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetWidth() - 1, canvas.GetHeight() - 1}});
 
   InfoBoxFactory::Type type = parent->GetContents(i);

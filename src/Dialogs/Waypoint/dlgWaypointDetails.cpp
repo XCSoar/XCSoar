@@ -480,11 +480,11 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
 
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
-  details_text.SetFont(look.text_font);
 #ifndef USE_WINUSER
+  details_text.SetFont(look.text_font);
+#endif
   details_text.SetColors(look.background_color, look.text_color,
                          look.dark_mode ? COLOR_GRAY : COLOR_BLACK);
-#endif
   details_text.SetText(waypoint->details.c_str());
 
 #ifdef HAVE_RUN_FILE

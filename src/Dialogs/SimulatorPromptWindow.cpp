@@ -98,6 +98,7 @@ SimulatorPromptWindow::OnResize(PixelSize new_size) noexcept
 void
 SimulatorPromptWindow::OnPaint(Canvas &canvas) noexcept
 {
+#ifdef ENABLE_OPENGL
   DrawVerticalGradient(canvas, GetClientRect(),
                        COLOR_XCSOAR, COLOR_XCSOAR_DARK,
                        COLOR_XCSOAR_DARK);
@@ -105,6 +106,18 @@ SimulatorPromptWindow::OnPaint(Canvas &canvas) noexcept
 
   canvas.Select(look.text_font);
   canvas.SetTextColor(COLOR_WHITE);
+#else
+  /* Without OpenGL there is no alpha blending — GDI uses BMP
+     resources and the software renderer uses pre-composited PNGs,
+     both with opaque white backgrounds.  A dark/gradient background
+     would show visible white rectangles around every bitmap.
+     Use a plain white background instead. */
+  canvas.ClearWhite();
+  logo_view.draw(canvas, logo_rect);
+
+  canvas.Select(look.text_font);
+  canvas.SetTextColor(COLOR_BLACK);
+#endif
   canvas.SetBackgroundTransparent();
   canvas.DrawText(label_position, _("What do you want to do?"));
 

@@ -105,20 +105,44 @@ MaskedIcon::Draw([[maybe_unused]] Canvas &canvas, PixelPoint p) const noexcept
   texture.Draw(PixelRect(p, size), texture.GetRect());
 #else
 
+  /* detect dark backgrounds: if the caller has set a light text color
+     (e.g. COLOR_WHITE for dark-mode lists), the standard mask+icon
+     approach would create a visible white rectangle.  Use the inverse
+     path instead so icon shapes appear white on the dark background. */
+  const Color old_text_color = canvas.GetTextColor();
+#ifdef GREYSCALE
+  const bool inverse = old_text_color.GetLuminosity() > 128;
+#else
+  const bool inverse =
+    (old_text_color.Red() + old_text_color.Green() +
+     old_text_color.Blue()) > 384;
+#endif
+
 #ifdef USE_GDI
-  /* our icons are monochrome bitmaps, and GDI uses current colors of
-     the destination HDC when blitting from a monochrome HDC */
+  /* GDI uses current HDC colors when blitting from a monochrome
+     bitmap; ensure black foreground / white background */
+  const Color old_bg_color = canvas.GetBackgroundColor();
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundColor(COLOR_WHITE);
 #endif
 
-  canvas.CopyOr(p, size, bitmap, {0, 0});
-  canvas.CopyAnd(p, size, bitmap, {(int)size.width, 0});
+  if (inverse) {
+    canvas.CopyNotOr(p, size, bitmap, {(int)size.width, 0});
+  } else {
+    canvas.CopyOr(p, size, bitmap, {0, 0});
+    canvas.CopyAnd(p, size, bitmap, {(int)size.width, 0});
+  }
+
+#ifdef USE_GDI
+  canvas.SetTextColor(old_text_color);
+  canvas.SetBackgroundColor(old_bg_color);
+#endif
 #endif
 }
 
 void
-MaskedIcon::Draw([[maybe_unused]] Canvas &canvas, const PixelRect &rc, bool inverse) const noexcept
+MaskedIcon::Draw([[maybe_unused]] Canvas &canvas, const PixelRect &rc,
+                 [[maybe_unused]] bool inverse) const noexcept
 {
   const PixelPoint position = rc.CenteredTopLeft(size);
 
@@ -134,11 +158,36 @@ MaskedIcon::Draw([[maybe_unused]] Canvas &canvas, const PixelRect &rc, bool inve
   texture.Bind();
   texture.Draw(PixelRect(position, size), texture.GetRect());
 #else
-  if (inverse) // black background
-    canvas.CopyNotOr(position, size, bitmap, {(int)size.width, 0});
 
-  else
-    canvas.CopyAnd(position, size, bitmap, {(int)size.width, 0});
+  /* detect dark backgrounds from the caller's text color rather than
+     relying on the "inverse" parameter, which may not reflect the
+     actual background (e.g. TabRenderer passes "selected" as
+     inverse, but in dark mode *all* tabs have dark backgrounds). */
+  const Color old_text_color = canvas.GetTextColor();
+#ifdef GREYSCALE
+  const bool dark_bg = old_text_color.GetLuminosity() > 128;
+#else
+  const bool dark_bg =
+    (old_text_color.Red() + old_text_color.Green() +
+     old_text_color.Blue()) > 384;
 #endif
 
+#ifdef USE_GDI
+  /* GDI uses current HDC colors when blitting from a monochrome
+     bitmap; ensure black foreground / white background */
+  const Color old_bg_color = canvas.GetBackgroundColor();
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundColor(COLOR_WHITE);
+#endif
+
+  if (dark_bg)
+    canvas.CopyNotOr(position, size, bitmap, {(int)size.width, 0});
+  else
+    canvas.CopyAnd(position, size, bitmap, {(int)size.width, 0});
+
+#ifdef USE_GDI
+  canvas.SetTextColor(old_text_color);
+  canvas.SetBackgroundColor(old_bg_color);
+#endif
+#endif
 }

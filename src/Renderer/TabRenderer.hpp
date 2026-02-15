@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "TextRenderer.hpp"
-
 #include <tchar.h>
 
 struct DialogLook;
@@ -16,18 +14,8 @@ class MaskedIcon;
  * Render #TabDisplay / #TabMenuDisplay buttons.
  */
 class TabRenderer {
-  TextRenderer text_renderer;
-
 public:
-  constexpr TabRenderer() noexcept {
-    text_renderer.SetCenter();
-    text_renderer.SetVCenter();
-    text_renderer.SetControl();
-  }
-
-  void InvalidateLayout() noexcept {
-    text_renderer.InvalidateLayout();
-  }
+  void InvalidateLayout() noexcept {}
 
   void Draw(Canvas &canvas, const PixelRect &rc,
             const DialogLook &look,
