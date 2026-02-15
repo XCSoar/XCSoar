@@ -25,6 +25,10 @@ private:
 void
 GlidePolarTest::Init()
 {
+  // Set operational parameters before any method that calls Update()
+  polar.bugs = 1;
+  polar.mc = 0;
+
   // Polar 1 from PolarStore (206 Hornet)
   polar.SetCoefficients(PolarCoefficients(0.0022032, -0.08784,
                                           1.47), false);
@@ -36,12 +40,8 @@ GlidePolarTest::Init()
 
   polar.SetWingArea(9.8);
 
-  // No ballast and no bugs on the wings
+  // No ballast
   polar.SetBallastLitres(0);
-  polar.bugs = 1;
-
-  // MC zero
-  polar.mc = 0;
 
   polar.SetVMax(Units::ToSysUnit(200, Unit::KILOMETER_PER_HOUR), false);
 }

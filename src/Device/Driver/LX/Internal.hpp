@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Protocol.hpp"
+#include "Device/Config.hpp"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
 #include "thread/Mutex.hxx"
@@ -32,6 +33,8 @@ class LXDevice: public AbstractDevice
   Port &port;
 
   const unsigned bulk_baud_rate;
+
+  const DeviceConfig::PolarSync polar_sync;
 
   std::atomic<bool> busy{false};
 
@@ -176,14 +179,22 @@ class LXDevice: public AbstractDevice
    */
   bool vario_just_detected = false;
 
+  /**
+   * Has the polar sync notification been shown this session?
+   */
+  bool polar_sync_notified = false;
+
   Mutex mutex;
   Mode mode = Mode::UNKNOWN;
   unsigned old_baud_rate = 0;
 
 public:
   LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate,
-           bool _use_pass_through, bool _port_is_nano=false) noexcept
+           bool _use_pass_through,
+           DeviceConfig::PolarSync _polar_sync = DeviceConfig::PolarSync::OFF,
+           bool _port_is_nano=false) noexcept
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
+     polar_sync(_polar_sync),
      is_colibri(baud_rate == 4800), use_pass_through(_use_pass_through),
      is_nano(_port_is_nano), port_is_nano(_port_is_nano) {}
 
@@ -242,6 +253,8 @@ public:
 
   void ResetDeviceDetection() noexcept {
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
+    polar_sync_notified = false;
+    device_polar.valid = false;
   }
 
   void IdDeviceByName(StaticString<16> productName, const DeviceInfo &device_info) noexcept
@@ -446,36 +459,51 @@ private:
   }
 
   /**
+   * In RECEIVE mode, read the device polar from ExternalSettings
+   * and apply it to the GlidePolar.
+   */
+  void ReceivePolarFromDevice(const MoreData &basic) noexcept;
+
+  /**
+   * In SEND mode, push XCSoar's current polar to the device
+   * via PLXV0,POLAR,W.
+   */
+  void SendPolarToDevice(const DerivedInfo &calculated,
+                         OperationEnvironment &env);
+
+  /**
+   * Track polar changes and reset sent values when the polar
+   * changes (e.g. due to plane profile switch).
+   */
+  void TrackPolarChanges(const DerivedInfo &calculated) noexcept;
+
+  /**
    * Handle MC synchronization with the device.
    */
   void SyncMacCready(const MoreData &basic,
                      const DerivedInfo &calculated,
-                     OperationEnvironment &env,
-                     bool plane_profile_active) noexcept;
+                     OperationEnvironment &env) noexcept;
 
   /**
    * Handle Ballast synchronization with the device.
    */
   void SyncBallast(const MoreData &basic,
                    const DerivedInfo &calculated,
-                   OperationEnvironment &env,
-                   bool plane_profile_active) noexcept;
+                   OperationEnvironment &env) noexcept;
 
   /**
    * Handle Bugs synchronization with the device.
    */
   void SyncBugs(const MoreData &basic,
                 const DerivedInfo &calculated,
-                OperationEnvironment &env,
-                bool plane_profile_active) noexcept;
+                OperationEnvironment &env) noexcept;
   void SyncCrewWeight(const MoreData &basic,
                      const DerivedInfo &calculated,
-                     OperationEnvironment &env,
-                     bool plane_profile_active);
+                     OperationEnvironment &env);
   void SyncEmptyWeight(const MoreData &basic,
                        const DerivedInfo &calculated,
                        OperationEnvironment &env,
-                       bool plane_profile_active);
+                       bool send_to_device);
 
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;

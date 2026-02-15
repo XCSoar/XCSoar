@@ -60,17 +60,33 @@
 
 #include <memory>
 
-// Stubs for BackendComponents used in device drivers
-// These are only needed for linking - the actual calls are guarded by null checks
+// Minimal stub definitions for types held by unique_ptr in
+// BackendComponents.  Only the destructor is needed (unique_ptr
+// calls delete on nullptr which is a no-op).
+class Logger { public: virtual ~Logger() = default; };
+class NMEALogger { public: virtual ~NMEALogger() = default; };
+class GlueFlightLogger { public: virtual ~GlueFlightLogger() = default; };
+class MultipleDevices { public: virtual ~MultipleDevices() = default; };
+class DeviceBlackboard { public: virtual ~DeviceBlackboard() = default; };
+class MergeThread { public: virtual ~MergeThread() = default; };
+class ProtectedTaskManager { public: virtual ~ProtectedTaskManager() = default; };
+class ProtectedAirspaceWarningManager {};
+class GlideComputer { public: virtual ~GlideComputer() = default; };
+class CalculationThread { public: virtual ~CalculationThread() = default; };
+class Replay { public: virtual ~Replay() = default; };
+
 #include "BackendComponents.hpp"
 #include "Computer/Settings.hpp"
 
 BackendComponents::BackendComponents() noexcept = default;
 BackendComponents::~BackendComponents() noexcept = default;
 
-void BackendComponents::SetTaskPolar(const PolarSettings &) noexcept
+void BackendComponents::SetTaskPolar(const PolarSettings &) noexcept {}
+
+ProtectedAirspaceWarningManager *
+BackendComponents::GetAirspaceWarnings() noexcept
 {
-  // Stub implementation for tests - backend_components is null in tests anyway
+  return nullptr;
 }
 
 static const DeviceConfig dummy_config = DeviceConfig();
@@ -1996,7 +2012,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1036);
+  plan_tests(1062);
   TestGeneric();
   TestTasman();
   TestFLARM();

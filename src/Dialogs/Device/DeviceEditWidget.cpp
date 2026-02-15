@@ -20,7 +20,7 @@ enum ControlIndex {
   IP_ADDRESS,
   TCPPort,
   I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
-  SyncFromDevice, SyncToDevice,
+  SyncFromDevice, SyncToDevice, PolarSyncMode,
   K6Bt,
 };
 
@@ -101,6 +101,17 @@ FillEngineType(DataFieldEnum &dfe) noexcept
   dfe.addEnumText("4S1I", static_cast<unsigned>(DeviceConfig::EngineType::FOUR_STROKE_1_IGN));
 }
 
+static void
+FillPolarSync(DataFieldEnum &dfe) noexcept
+{
+  dfe.addEnumText(_("Off"),
+                  static_cast<unsigned>(DeviceConfig::PolarSync::OFF));
+  dfe.addEnumText(_("Receive from device"),
+                  static_cast<unsigned>(DeviceConfig::PolarSync::RECEIVE));
+  dfe.addEnumText(_("Send to device"),
+                  static_cast<unsigned>(DeviceConfig::PolarSync::SEND));
+}
+
 static bool
 EditPortCallback(const char *caption, DataField &df,
                  [[maybe_unused]] const char *help_text) noexcept
@@ -137,6 +148,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   LoadValueEnum(Driver, config.driver_name);
   LoadValue(SyncFromDevice, config.sync_from_device);
   LoadValue(SyncToDevice, config.sync_to_device);
+  LoadValueEnum(PolarSyncMode, config.polar_sync);
   LoadValue(K6Bt, config.k6bt);
   LoadValueEnum(EngineTypes, config.engine_type);
 
@@ -238,6 +250,8 @@ DeviceEditWidget::UpdateVisibilities() noexcept
                 CanReceiveSettings(GetDataField(Driver)));
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
                 CanSendSettings(GetDataField(Driver)));
+  SetRowVisible(PolarSyncMode, DeviceConfig::UsesDriver(type) &&
+                CanReceiveSettings(GetDataField(Driver)));
   SetRowAvailable(K6Bt, maybe_bluetooth);
   SetRowAvailable(EngineTypes, maybe_engine_sensor);
 }
@@ -339,6 +353,16 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
                "like the MacCready value, bugs and ballast to the device."),
              config.sync_to_device, this);
   SetExpertRow(SyncToDevice);
+
+  DataFieldEnum *polar_sync_df = new DataFieldEnum(this);
+  FillPolarSync(*polar_sync_df);
+  polar_sync_df->SetValue(config.polar_sync);
+  Add(_("Polar sync"),
+      _("Synchronize the glide polar between XCSoar and the device. "
+        "'Receive' adopts the polar from the device (e.g. for club "
+        "gliders). 'Send' pushes XCSoar's polar to the device."),
+      polar_sync_df);
+  SetExpertRow(PolarSyncMode);
 
   AddBoolean("K6Bt",
              _("Whether you use a K6Bt to connect the device."),
@@ -459,6 +483,9 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 
     if (CanSendSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncToDevice, config.sync_to_device);
+
+    if (CanReceiveSettings(GetDataField(Driver)))
+      changed |= SaveValueEnum(PolarSyncMode, config.polar_sync);
 
     if (CanPassThrough(GetDataField(Driver))) {
       changed |= SaveValue(UseSecondDriver, config.use_second_device);
