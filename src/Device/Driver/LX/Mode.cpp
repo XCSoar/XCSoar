@@ -14,6 +14,8 @@
 #include "BackendComponents.hpp"
 #include "Components.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "Message.hpp"
 #include "Language/Language.hpp"
@@ -308,6 +310,26 @@ LXDevice::OnCalculatedUpdate(const MoreData &basic,
 
   /* Empty weight only in SEND mode (airframe data) */
   SyncEmptyWeight(basic, calculated, env, do_send);
+
+  /* Send active navigation target to the vario via PLXVTARG */
+  if (backend_components &&
+      backend_components->protected_task_manager) {
+    const auto wp =
+      backend_components->protected_task_manager->GetActiveWaypoint();
+
+    if (wp && wp->location.IsValid()) {
+      /* Only send when the target actually changes */
+      if (wp->name != last_sent_target_name ||
+          wp->location != last_sent_target_location) {
+        LXNAVVario::SetTarget(port, env,
+                              wp->name.c_str(),
+                              wp->location,
+                              wp->GetElevationOrZero());
+        last_sent_target_name = wp->name;
+        last_sent_target_location = wp->location;
+      }
+    }
+  }
 }
 
 void

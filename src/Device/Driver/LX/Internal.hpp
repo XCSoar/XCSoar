@@ -7,6 +7,7 @@
 #include "Device/Config.hpp"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "thread/Mutex.hxx"
 #include "util/StaticString.hxx"
 #include "NMEA/InputLine.hpp"
@@ -17,6 +18,7 @@
 #include <atomic>
 #include <cstdint>
 #include <optional>
+#include <string>
 
 struct MoreData;
 struct DerivedInfo;
@@ -184,6 +186,17 @@ class LXDevice: public AbstractDevice
    */
   bool polar_sync_notified = false;
 
+  /**
+   * Name of the last navigation target sent to the device via PLXVTARG.
+   * Used to avoid resending unchanged targets.
+   */
+  std::string last_sent_target_name;
+
+  /**
+   * Location of the last navigation target sent to the device.
+   */
+  GeoPoint last_sent_target_location = GeoPoint::Invalid();
+
   Mutex mutex;
   Mode mode = Mode::UNKNOWN;
   unsigned old_baud_rate = 0;
@@ -255,6 +268,8 @@ public:
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
     polar_sync_notified = false;
     device_polar.valid = false;
+    last_sent_target_name.clear();
+    last_sent_target_location = GeoPoint::Invalid();
   }
 
   void IdDeviceByName(StaticString<16> productName, const DeviceInfo &device_info) noexcept

@@ -6,10 +6,12 @@
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
 
 #include <fmt/format.h>
+#include <cmath>
 
 /**
  * Code specific to LXNav varios (e.g. V7).
@@ -163,6 +165,39 @@ namespace LXNAVVario {
     /* Leave all fields empty except empty_weight */
     const auto buffer =
       fmt::format("PLXV0,POLAR,W,,,,,,,{:.2f},,,", empty_weight);
+    PortWriteNMEA(port, buffer.c_str(), env);
+  }
+
+  /**
+   * Send the navigation target to the vario via PLXVTARG.
+   *
+   * @param name waypoint name
+   * @param location waypoint position
+   * @param elevation waypoint elevation in metres
+   */
+  static inline void
+  SetTarget(Port &port, OperationEnvironment &env,
+            const char *name, const GeoPoint &location,
+            double elevation)
+  {
+    /* Latitude: DDMM.MM,N/S */
+    const double abs_lat = std::abs(location.latitude.Degrees());
+    const int lat_deg = static_cast<int>(abs_lat);
+    const double lat_min = (abs_lat - lat_deg) * 60.0;
+    const char lat_sign = location.latitude.IsNegative() ? 'S' : 'N';
+
+    /* Longitude: DDDMM.MM,E/W */
+    const double abs_lon = std::abs(location.longitude.Degrees());
+    const int lon_deg = static_cast<int>(abs_lon);
+    const double lon_min = (abs_lon - lon_deg) * 60.0;
+    const char lon_sign = location.longitude.IsNegative() ? 'W' : 'E';
+
+    const auto buffer = fmt::format(
+      "PLXVTARG,{},{:02d}{:05.2f},{},{:03d}{:05.2f},{},{:.1f}",
+      name,
+      lat_deg, lat_min, lat_sign,
+      lon_deg, lon_min, lon_sign,
+      elevation);
     PortWriteNMEA(port, buffer.c_str(), env);
   }
 }

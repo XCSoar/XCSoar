@@ -45,6 +45,7 @@
 #include "Device/RecordedFlight.hpp"
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 #include "FaultInjectionPort.hpp"
 #include "Input/InputEvents.hpp"
 #include "Logger/Settings.hpp"
@@ -69,7 +70,17 @@ class GlueFlightLogger { public: virtual ~GlueFlightLogger() = default; };
 class MultipleDevices { public: virtual ~MultipleDevices() = default; };
 class DeviceBlackboard { public: virtual ~DeviceBlackboard() = default; };
 class MergeThread { public: virtual ~MergeThread() = default; };
-class ProtectedTaskManager { public: virtual ~ProtectedTaskManager() = default; };
+class ProtectedTaskManager {
+public:
+  virtual ~ProtectedTaskManager() = default;
+  WaypointPtr GetActiveWaypoint() const noexcept;
+};
+
+WaypointPtr
+ProtectedTaskManager::GetActiveWaypoint() const noexcept
+{
+  return nullptr;
+}
 class ProtectedAirspaceWarningManager {};
 class GlideComputer { public: virtual ~GlideComputer() = default; };
 class CalculationThread { public: virtual ~CalculationThread() = default; };
