@@ -190,6 +190,8 @@ void eventCredits(const TCHAR *misc);
 void eventWeather(const TCHAR *misc);
 void eventQuickMenu(const TCHAR *misc);
 void eventFileManager(const TCHAR *misc);
+void eventDataManagement(const TCHAR *misc);
+void eventExportFlights(const TCHAR *misc);
 void eventRunLuaFile(const TCHAR *misc);
 void eventResetTask(const TCHAR *misc);
 void eventLockScreen(const TCHAR *misc);

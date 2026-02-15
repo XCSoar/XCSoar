@@ -7,6 +7,7 @@
 #include "Compatibility/path.h"
 
 #ifdef _WIN32
+#include "util/ConvertString.hpp"
 #include "time/FileTime.hxx"
 #endif
 
@@ -16,6 +17,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string>
+#include <vector>
 
 #ifdef HAVE_POSIX
 #include <dirent.h>
@@ -23,6 +26,11 @@
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
+#endif
+
+#if defined(_WIN32)
+#include <windows.h>
+#include <cwchar>
 #endif
 
 void
@@ -48,6 +56,62 @@ Directory::Exists(Path path) noexcept
   DWORD attributes = GetFileAttributes(path.c_str());
   return attributes != INVALID_FILE_ATTRIBUTES &&
     (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+#endif
+}
+
+bool
+Directory::IsWritable(Path path) noexcept
+{
+#ifdef HAVE_POSIX
+  return access(path.c_str(), W_OK) == 0;
+#elif defined(_WIN32)
+  if (!Directory::Exists(path))
+    return false;
+
+  // Try to create a uniquely-named file using CreateFileW and remove it
+  // immediately. This avoids CRT path formatting and keeps overhead low.
+  std::wstring base = UTF8ToWideUtil(path.c_str());
+  if (base.empty())
+    return false;
+
+  const bool needs_sep = base.back() != L'\\' &&
+    base.back() != L'/';
+  if (needs_sep)
+    base.push_back(L'\\');
+
+  constexpr size_t hex_len = 8;
+  constexpr std::wstring_view suffix = L"_wt";
+  constexpr std::wstring_view ext = L".tmp";
+  if (base.size() + suffix.size() + hex_len + ext.size() >= MAX_PATH)
+    return false;
+
+  const unsigned seed = GetTickCount() ^ GetCurrentProcessId();
+  for (unsigned attempt = 0; attempt < 8; ++attempt) {
+    wchar_t hexbuf[hex_len + 1];
+    std::swprintf(hexbuf, sizeof(hexbuf) / sizeof(hexbuf[0]), L"%08x",
+                  seed ^ attempt);
+
+    std::wstring tmpname = base;
+    tmpname.append(suffix);
+    tmpname.append(hexbuf);
+    tmpname.append(ext);
+
+    HANDLE h = CreateFileW(tmpname.c_str(),
+                          GENERIC_WRITE,
+                          FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                          nullptr,
+                          CREATE_NEW,
+                          FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
+                          nullptr);
+    if (h != INVALID_HANDLE_VALUE) {
+      CloseHandle(h);
+      return true;
+    }
+  }
+  return false;
+#else
+  // assume writability
+  return true;
 #endif
 }
 
@@ -398,6 +462,34 @@ File::ReadString(Path path, char *buffer, size_t size) noexcept
 
   buffer[nbytes] = '\0';
   return true;
+}
+
+bool
+File::ReadLink([[maybe_unused]] Path path,
+               [[maybe_unused]] std::string &out) noexcept
+{
+#ifdef HAVE_POSIX
+  // readlink does not null-terminate; resize buffer as needed
+  size_t bufsize = 256;
+  std::vector<char> buf;
+
+  while (true) {
+    buf.resize(bufsize);
+    ssize_t n = readlink(path.c_str(), buf.data(), buf.size());
+    if (n < 0)
+      return false;
+    if (static_cast<size_t>(n) < buf.size()) {
+      out.assign(buf.data(), static_cast<size_t>(n));
+      return true;
+    }
+    // truncated, increase buffer and retry
+    bufsize *= 2;
+    if (bufsize > 65536)
+      return false;
+  }
+#else
+  return false;
+#endif
 }
 
 bool
