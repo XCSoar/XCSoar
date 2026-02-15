@@ -197,7 +197,9 @@ Event list
      toogle``, ``auto on``, ``auto off``, ``auto show``, ``in``,
      ``out``, ``+``, ``++``, ``-``, ``–-``.
  * - ``PilotEvent``
-   -
+   - Announces a Pilot Event (PEV). Sets the PEV start time window
+     based on the current task's start constraints, logs the event
+     to the IGC file, and notifies connected devices.
  * - ``ClearStatusMessages``
    - Clear event warnings
  * - ``Checklist``
