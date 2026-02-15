@@ -6,6 +6,10 @@
 #ifdef ANDROID
 #define HAVE_NET_STATE
 #define HAVE_NET_STATE_ROAMING
+#elif defined(__linux__)
+#define HAVE_NET_STATE
+#elif defined(_WIN32)
+#define HAVE_NET_STATE
 #endif
 
 enum class NetState {
@@ -21,9 +25,12 @@ enum class NetState {
 #ifdef ANDROID
 NetState
 GetNetState();
+#elif defined(HAVE_NET_STATE)
+NetState
+GetNetState() noexcept;
 #else
 constexpr NetState
-GetNetState()
+GetNetState() noexcept
 {
   return NetState::UNKNOWN;
 }
