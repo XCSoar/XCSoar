@@ -170,60 +170,114 @@ Event list
 
  * - Event
    - Description
- * - ``MainMenu``
-   -
- * - ``MarkLocation``
-   - Mark a location.
- * - ``Mode M``
-   - Set the screen mode.
- * - ``Pan [P]``
-   - Control pan mode. Possible arguments: ``on`` (enable pan),
-     ``off`` (disable pan), ``up``, ``down``, ``left``, ``right``
- * - ``PlaySound S``
-   - Play the specified sound.
- * - ``SnailTrail S``
-   - Change snail trail setting. Possible arguments: ``off``,
-     ``short``, ``long``, ``show``.
- * - ``ScreenModes M``
-   - Set the screen mode. Possible arguments: ``normal``, ``auxilary``,
-     ``toggleauxiliary``, ``full``, ``togglefull``, ``toggle``, ``show``, ``previous``, ``next``.
- * - ``Sounds S``
-   - Change vario sounds. Possible arguments: ``toggle``, ``on``,
-     ``off``, ``show``.
- * - ``StatusMessage MSG``
-   - Display the specified status message.
- * - ``Zoom Z``
-   - Everything about zoom of map. Possible arguments: ``auto
-     toogle``, ``auto on``, ``auto off``, ``auto show``, ``in``,
-     ``out``, ``+``, ``++``, ``-``, ``–-``.
- * - ``PilotEvent``
-   - Announces a Pilot Event (PEV). Sets the PEV start time window
-     based on the current task's start constraints, logs the event
-     to the IGC file, and notifies connected devices.
- * - ``ClearStatusMessages``
-   - Clear event warnings
- * - ``Checklist``
-   - Displays the checklist dialog
- * - ``Status``
-   - Displays one of the three status dialogs given as an argument: ``system``, ``aircraft``, ``task``
+ * - ``AbortTask``
+   - Controls task abort and resume. Possible arguments: ``abort``
+     (aborts the task), ``resume`` (resumes an aborted task),
+     ``toggle`` (toggles between abort and resume), ``show``
+     (displays the current task abort status).
+ * - ``AddWaypoint``
+   - Opens the waypoint editor to create a new waypoint at the
+     current location. Use ``goto`` to add a temporary goto point
+     at the current map position.
+ * - ``AdjustForecastTemperature``
+   - Adjusts the maximum ground temperature for convection forecast.
+     Possible arguments: ``+`` (increase by one degree), ``-``
+     (decrease by one degree), ``show`` (display current value).
+ * - ``AdjustVarioFilter``
+   - Adjusts the Vega variometer filter time constant and
+     diagnostics. Possible arguments: ``slow``, ``medium``, ``fast``
+     (filter speed), ``statistics``, ``diagnostics``, ``psraw``,
+     ``switch`` (diagnostic modes), ``democlimb``, ``demostf``
+     (demo modes), ``zero`` (zero airspeed offset), ``save`` (save
+     config to EEPROM).
+ * - ``AdjustWaypoint``
+   - Adjusts the active waypoint of the task. Possible arguments:
+     ``next`` (next waypoint), ``previous`` (previous waypoint),
+     ``nextwrap`` (next with wrap), ``previouswrap`` (previous with
+     wrap), ``nextarm`` (arm-sensitive next), ``previousarm``
+     (arm-sensitive previous).
+ * - ``AirSpace``
+   - Toggles airspace display on the map. Possible arguments:
+     ``toggle``, ``on``, ``off``, ``show``, ``list`` (opens
+     the airspace list dialog).
+ * - ``AirspaceDisplayMode``
+   - Controls the airspace display filter mode. Possible arguments:
+     ``all`` (show all), ``clip`` (clip to altitude), ``auto``
+     (automatic), ``below`` (show all below), ``off`` (hide all).
+ * - ``AirspaceWarnings``
+   - Opens the airspace warnings dialog.
  * - ``Analysis``
-   - Displays the analysis/statistics dialog
- * - ``WaypointDetails W``
-   - Displays airfields/waypoint details
-     
-     ``current``: the current active waypoint
-     
-     ``select``: brings up the waypoint selector, if the user then selects a waypoint, then the details dialog is shown.
- * - ``WaypointEditor``
-   - 
- * - ``AutoLogger C``
-   - Same as ``Logger``, but checks if 'Autologger' is active beforhand
+   - Displays the analysis/statistics dialog.
+ * - ``ArmAdvance``
+   - Controls waypoint advance trigger arming. Possible arguments:
+     ``on`` (arm), ``off`` (disarm), ``toggle``, ``show``
+     (display current state).
+ * - ``AudioDeadband``
+   - Adjusts the audio deadband of internal vario sounds. Possible
+     arguments: ``+`` (increase deadband), ``-`` (decrease
+     deadband).
+ * - ``AutoLogger``
+   - Same as ``Logger``, but only activates if the auto-logger
+     setting is enabled.
+ * - ``Ballast``
+   - Adjusts the glider ballast setting. Possible arguments: ``up``
+     (increase by 10%), ``down`` (decrease by 10%), ``max`` (100%),
+     ``min`` (0%), ``show`` (display current value).
+ * - ``Beep``
+   - Plays a beep sound.
+ * - ``Brightness``
+   - Adjusts screen brightness. (Not currently implemented.)
+ * - ``Bugs``
+   - Adjusts the bugs/degradation setting for glider performance.
+     Possible arguments: ``up`` (increase by 10%), ``down``
+     (decrease by 10%), ``max`` (clean), ``min`` (worst), ``show``
+     (display current value).
+ * - ``Calculator``
+   - Opens the task manager dialog.
+ * - ``Checklist``
+   - Displays the checklist dialog.
+ * - ``ClearAirspaceWarnings``
+   - Acknowledges all active airspace warnings.
+ * - ``ClearStatusMessages``
+   - Acknowledges and clears all status message warnings.
+ * - ``Credits``
+   - Displays the credits dialog.
+ * - ``DeclutterLabels``
+   - Controls waypoint label display filtering. Possible arguments:
+     ``toggle`` (cycle through modes), ``show`` (display current
+     mode), ``all``, ``task+landables``, ``task``, ``none``,
+     ``task+airfields``.
+ * - ``Device``
+   - Device management. Possible arguments: ``list`` (opens the
+     device list dialog).
+ * - ``ExchangeFrequencies``
+   - Swaps the active and standby radio frequencies.
+ * - ``Exit``
+   - Close XCSoar.
+ * - ``FileManager``
+   - Opens the file manager dialog.
+ * - ``FlarmDetails``
+   - Opens the FLARM traffic list dialog.
+ * - ``FLARMRadar``
+   - Controls the FLARM radar gauge display. Use ``ForceToggle`` to
+     force the radar on/off; without arguments, toggles suppression
+     of the automatic radar display.
+ * - ``FlarmTraffic``
+   - Opens the full-screen FLARM traffic radar page.
+ * - ``GestureHelp``
+   - Opens the gesture help dialog showing available touch gestures.
+ * - ``GotoLookup``
+   - Opens the waypoint selector and sets the selected waypoint as
+     a goto target.
+ * - ``LockScreen``
+   - Displays the screen lock dialog.
  * - ``Logger C``
-   - Activates the internal IGC logger
+   - Activates the internal IGC logger.
 
      ``start``: starts the logger
 
-     ``start ask``: starts the logger after asking the user to confirm
+     ``start ask``: starts the logger after asking the user to
+     confirm
 
      ``stop``: stops the logger
 
@@ -231,26 +285,97 @@ Event list
 
      ``toggle``: toggles between on and off
 
-     ``toggle ask``: toggles between on and off, asking the user to confirm
+     ``toggle ask``: toggles between on and off, asking the user to
+     confirm
 
-     ``show``: displays a status message indicating whether the logger is active
+     ``show``: displays a status message indicating whether the
+     logger is active
 
      ``nmea``: turns on and off NMEA logging
 
-     ``note``: the text following the 'note' characters is added to the log file
- * - ``RepeatStatusMessage``
-   - Repeats the last status message.  If pressed repeatedly, will repeat previous status messages
- * - ``NearestWaypointDetails``
-   - Displays the airfields/waypoint details dialog
+     ``note``: the text following the 'note' characters is added to
+     the log file
+ * - ``MacCready``
+   - Adjusts the MacCready setting. Possible arguments: ``up``
+     (increase), ``down`` (decrease), ``auto toggle``, ``auto on``,
+     ``auto off``, ``auto show``, ``show`` (display current value).
+ * - ``MainMenu``
+   - Opens the main menu.
+ * - ``MarkLocation``
+   - Marks the current location and creates a user waypoint marker.
+     Use ``reset`` to erase all user markers.
+ * - ``Mode M``
+   - Sets the current input event mode. The argument is the label
+     of the mode to activate (e.g. ``default``, ``Menu``).
+ * - ``NearestAirspaceDetails``
+   - If airspace warnings are active, opens the airspace warnings
+     dialog. Otherwise, finds the nearest airspace (within 30
+     minutes flight time) and shows its details.
  * - ``NearestMapItems``
-   - Displays the map item list dialog
+   - Displays the map item list dialog for items near the current
+     map position.
+ * - ``NearestWaypointDetails``
+   - Displays details for the nearest waypoint to the current map
+     position.
  * - ``Null``
-   - The null event does nothing.  This can be used to override default functionality
- * - ``Beep``
-   - Plays beep sound
+   - Does nothing. Can be used to override default functionality
+     for a key/button.
+ * - ``OrientationCircling``
+   - Sets the map orientation for circling mode. Possible arguments:
+     ``northup``, ``trackup``, ``headingup``, ``targetup``,
+     ``windup``.
+ * - ``OrientationCruise``
+   - Sets the map orientation for cruise mode. Possible arguments:
+     ``northup``, ``trackup``, ``headingup``, ``targetup``,
+     ``windup``.
+ * - ``Page``
+   - Controls page navigation. Possible arguments: ``restore``
+     (restore the previously active page).
+ * - ``Pan [P]``
+   - Control pan mode. Possible arguments: ``on`` (enable pan),
+     ``off`` (disable pan), ``toggle``, ``up``, ``down``, ``left``,
+     ``right``.
+ * - ``PilotEvent``
+   - Announces a Pilot Event (PEV). Sets the PEV start time window
+     based on the current task's start constraints, logs the event
+     to the IGC file, and notifies connected devices.
+ * - ``PlaySound S``
+   - Play the specified sound resource.
+ * - ``ProfileLoad PATH``
+   - Loads a profile from the specified file.
+ * - ``ProfileSave PATH``
+   - Saves the current profile to the specified file.
+ * - ``QuickGuide``
+   - Opens the Quick Guide dialog.
+ * - ``QuickMenu``
+   - Opens the quick menu dialog.
+ * - ``RepeatStatusMessage``
+   - Repeats the last status message. If pressed repeatedly, will
+     repeat previous status messages.
+ * - ``ResetTask``
+   - Resets the current task.
+ * - ``Run PATH``
+   - Runs an external program of the specified filename. Note that
+     XCSoar will wait until this program exits.
+ * - ``RunLuaFile [PATH]``
+   - Runs a Lua script. If a ``.lua`` filename is given, runs that
+     file from the ``lua/`` directory. If no argument is given,
+     opens a file picker to select a Lua script.
+ * - ``ScreenModes M``
+   - Set the screen mode. Possible arguments: ``normal``,
+     ``auxilary``, ``toggleauxiliary``, ``full``, ``togglefull``,
+     ``toggle``, ``show``, ``previous``, ``next``.
+ * - ``SendNMEA``
+   - Sends a user-defined NMEA string to all Vega variometers. The
+     string is automatically prefixed with ``$`` and appended with
+     the checksum.
+ * - ``SendNMEAPort1``
+   - Sends a user-defined NMEA string to the device on port 1.
+ * - ``SendNMEAPort2``
+   - Sends a user-defined NMEA string to the device on port 2.
  * - ``Setup D``
-   - Activates configuration and setting dialogs
-     
+   - Activates configuration and setting dialogs.
+
      ``Basic``: Basic settings (QNH/Bugs/Ballast/MaxTemperature)
 
      ``Wind``: Wind settings
@@ -261,27 +386,64 @@ Event list
 
      ``Replay``: IGC replay dialog
 
-     ``System``, ``Weather``, ``Switches``, ``Teamcode``, ``Target``, ``Plane``, ``Profile``, ``Alternates``
- * - ``Credits``
-   - 
- * - ``Run PATH``
-   - Runs an external program of the specified filename. Note that XCSoar will wait until this program exits.
- * - ``Exit``
-   - close XCSoar
- * - ``UserDisplayModeForce M``
-   - ``unforce``, ``forceclimb``, ``forcecruise``, ``forcefinal``
- * - ``AddWaypoint W``
-   - You can add ``takeoff`` as an option, when called without an option a dialog pops up.
- * - ``Weather``
-   - 
- * - ``QuickMenu``
-   - 
- * - ``FileManager``
-   - 
- * - ``ExchangeFrequencies``
-   - 
+     ``System``, ``Weather``, ``Switches``, ``Teamcode``,
+     ``Target``, ``Plane``, ``Profile``, ``Alternates``
+ * - ``SnailTrail S``
+   - Change snail trail setting. Possible arguments: ``off``,
+     ``short``, ``long``, ``full``, ``toggle``, ``show``.
+ * - ``Sounds S``
+   - Change vario sounds. Possible arguments: ``toggle``, ``on``,
+     ``off``, ``show``.
+ * - ``Status``
+   - Displays one of the status dialogs. Possible arguments:
+     ``system``, ``aircraft``, ``task``.
+ * - ``StatusMessage MSG``
+   - Display the specified status message text.
+ * - ``TaskLoad PATH``
+   - Loads a task from the specified file.
+ * - ``TaskSave PATH``
+   - Saves the current task to the specified file.
+ * - ``TaskTransition``
+   - Displays task transition messages. Possible arguments:
+     ``start`` (show start statistics), ``next`` (next turnpoint
+     message), ``finish`` (task finished message).
+ * - ``TerrainTopography``
+   - Controls terrain and topography display. Possible arguments:
+     ``terrain toggle``, ``terrain on``, ``terrain off``,
+     ``topography toggle``, ``topography on``, ``topography off``,
+     ``toggle`` (cycle all four states), ``show``.
+ * - ``TerrainTopology``
+   - Deprecated alias for ``TerrainTopography``.
+ * - ``ThermalAssistant``
+   - Opens the thermal assistant page.
+ * - ``Traffic``
+   - Controls the FLARM traffic radar widget. Possible arguments:
+     ``show`` (open radar page), ``zoom auto toggle``, ``zoom in``,
+     ``zoom out``, ``northup toggle``, ``details`` (open selected
+     traffic details), ``label toggle`` (cycle data labels).
  * - ``UploadIGCFile``
-   - 
+   - Opens a file picker to select an IGC file and uploads it to
+     WeGlide.
+ * - ``UserDisplayModeForce M``
+   - Forces a display mode. Possible arguments: ``unforce``,
+     ``forceclimb``, ``forcecruise``, ``forcefinal``.
+ * - ``WaypointDetails W``
+   - Displays airfield/waypoint details.
+
+     ``current``: the current active waypoint
+
+     ``select``: brings up the waypoint selector; if the user
+     selects a waypoint, the details dialog is shown.
+ * - ``WaypointEditor``
+   - Opens the waypoint editor/configuration dialog.
+ * - ``Weather``
+   - Opens the weather dialog.
+ * - ``Zoom Z``
+   - Controls map zoom. Possible arguments: ``auto toggle``,
+     ``auto on``, ``auto off``, ``auto show``, ``in``, ``out``,
+     ``+``, ``++``, ``-``, ``--``, ``circlezoom toggle``,
+     ``circlezoom on``, ``circlezoom off``, ``circlezoom show``,
+     or a numeric value to set a specific zoom scale.
 
 Modes
 -----
@@ -391,55 +553,6 @@ could include one of the following possibilities:
 -  Long Click
 
 Modifiers such as the above will not be supported in the first release.
-
-.. list-table::
- :widths: 20 80
- :header-rows: 1
-
- * - Functions/Events
-   - what it does
- * - AutoZoom
-   - on, off, toggle
- * - FullScreen
-   - on, off, toggle
- * - SnailTrail
-   - on, off, long, toggle
- * - VarioSound
-   - on, off
- * - Marker
-   - optional text to add
- * - MenuButton
-   - on, off, toggle
- * - Menu
-   - open, close, toggle
- * - MenuEntry
-   - task, b+b, abortresume, abore, resume, pressure logger, settings, status, analysis,
-     exit, cancel
-
-     NOTE: Some of the above may be separate functions
- * - Settings
-   - (each setting, bring up to that point)
- * - Bugs
-   - add, subtract, 0-100
- * - Ballast
-   - add, subtract, 0-100
- * - Zoom
-   - add, subtract, 0-nn (set value)
- * - Wind
-   - up, down, 0-nn (set value, left, right, "n","ne","e","se","s","sw","w","nw"...
- * - MacCready
-   - add, subtract, 0-nn (set value)
- * - WaypointNext
-   - "String" to specific waypoint eg: WayPointNext "home"
- * - WayPoint???
-   - "reverse" -
-     reverse, from last passed back to start (ie: from here to home) "drop
-     next" - drop the next "restore" - restore all - from start of flight but
-     XXX This needs more thought flight "startstop", "start", "stop",
-     "release" Start/Stop of flight - Can be automatic, but pressing will
-     override automatic part.
- * - release
-   - marks the point of release from tow
 
 Glide Computer Events
 ---------------------
