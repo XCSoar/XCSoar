@@ -29,6 +29,7 @@ public class PermissionHelper implements PermissionManager {
   private final Activity activity;
   private final Handler mainHandler;
   private final Runnable onLocationPermissionsGranted;
+  private final Runnable onNotificationPermissionGranted;
 
   private final Map<Integer, PermissionHandler> permissionHandlers =
     new TreeMap<Integer, PermissionHandler>();
@@ -77,12 +78,15 @@ public class PermissionHelper implements PermissionManager {
    * @param activity The Activity that will handle permission requests
    * @param mainHandler Handler for posting UI operations to main thread
    * @param onLocationPermissionsGranted Callback to invoke when location permissions are granted
+   * @param onNotificationPermissionGranted Callback to invoke when notification permission is granted
    */
   public PermissionHelper(Activity activity, Handler mainHandler,
-                          Runnable onLocationPermissionsGranted) {
+                          Runnable onLocationPermissionsGranted,
+                          Runnable onNotificationPermissionGranted) {
     this.activity = activity;
     this.mainHandler = mainHandler;
     this.onLocationPermissionsGranted = onLocationPermissionsGranted;
+    this.onNotificationPermissionGranted = onNotificationPermissionGranted;
   }
 
   /**
@@ -593,6 +597,8 @@ public class PermissionHelper implements PermissionManager {
               @Override
               public void onRequestPermissionsResult(boolean granted) {
                 notifyNativePermissionResult(granted);
+                if (granted && onNotificationPermissionGranted != null)
+                  mainHandler.post(onNotificationPermissionGranted);
               }
             });
         }

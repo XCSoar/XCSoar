@@ -88,9 +88,20 @@ public class XCSoar extends Activity implements PermissionManager {
 
     mainHandler = new Handler(Looper.getMainLooper());
 
-    /* Create PermissionHelper (no cloud dialog callback needed;
-       cloud consent is handled during onboarding) */
-    permissionHelper = new PermissionHelper(this, mainHandler, null);
+    /* Retry starting the foreground service when location or
+       notification permissions are granted.  The initial
+       startMyService() call in Startup.cpp may fail on Android 14+
+       because ACCESS_FINE_LOCATION is not yet granted when
+       startForeground() is called.  Re-calling startService() after
+       notification permission is granted refreshes the notification
+       so it becomes visible to the user. */
+    final Runnable retryStartService = () -> {
+      if (nativeView != null)
+        nativeView.startMyService();
+    };
+
+    permissionHelper = new PermissionHelper(this, mainHandler,
+      retryStartService, retryStartService);
 
     NativeView.initNative();
 
@@ -377,32 +388,18 @@ public class XCSoar extends Activity implements PermissionManager {
     System.exit(0);
   }
 
-  private static boolean isVolumeKey(int keyCode) {
-    return keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
-           keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
-           keyCode == KeyEvent.KEYCODE_VOLUME_MUTE;
-  }
-
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
-    if (isVolumeKey(keyCode))
-      return super.onKeyDown(keyCode, event);
-
-    if (nativeView != null) {
-      nativeView.onKeyDown(keyCode, event);
+    if (nativeView != null && nativeView.onKeyDown(keyCode, event))
       return true;
-    } else
-      return super.onKeyDown(keyCode, event);
+
+    return super.onKeyDown(keyCode, event);
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    if (isVolumeKey(keyCode))
-      return super.onKeyUp(keyCode, event);
-
-    if (nativeView != null) {
-      nativeView.onKeyUp(keyCode, event);
+    if (nativeView != null && nativeView.onKeyUp(keyCode, event))
       return true;
-    } else
-      return super.onKeyUp(keyCode, event);
+
+    return super.onKeyUp(keyCode, event);
   }
 
   @Override public void onWindowFocusChanged(boolean hasFocus) {

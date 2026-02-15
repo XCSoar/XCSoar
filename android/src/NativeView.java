@@ -91,7 +91,7 @@ class NativeView extends SurfaceView
    * user chooses Fly mode (not called in Simulator mode because
    * IGC logging and safety warnings are not needed in simulation).
    */
-  private void startMyService() {
+  void startMyService() {
     final Context context = getContext();
 
     try {
@@ -498,17 +498,25 @@ class NativeView extends SurfaceView
     pauseNative();
   }
 
-  private static int translateKeyCode(int keyCode) {
-    return keyCode;
+  private static boolean isVolumeKey(int keyCode) {
+    return keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+           keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+           keyCode == KeyEvent.KEYCODE_VOLUME_MUTE;
   }
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyDown(translateKeyCode(keyCode));
+    if (isVolumeKey(keyCode))
+      return false;
+
+    EventBridge.onKeyDown(keyCode);
     return true;
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    EventBridge.onKeyUp(translateKeyCode(keyCode));
+    if (isVolumeKey(keyCode))
+      return false;
+
+    EventBridge.onKeyUp(keyCode);
     return true;
   }
 }

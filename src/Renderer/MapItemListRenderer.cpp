@@ -62,14 +62,14 @@ Draw(Canvas &canvas, const PixelRect rc,
                        FormatBearing(item.vector.bearing).c_str());
   else
     StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
-                       _("Distance"), _T("???"), _("Direction"), _T("???"));
+                       _("Distance"), _T("---"), _("Direction"), _T("---"));
 
   row_renderer.DrawFirstRow(canvas, rc, info_buffer);
 
   StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
                      item.HasElevation()
                      ? FormatUserAltitude(item.elevation).c_str()
-                     : _T("???"));
+                     : _T("---"));
   row_renderer.DrawSecondRow(canvas, rc, info_buffer);
 }
 

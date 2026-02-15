@@ -176,6 +176,13 @@ WidgetDialog::ShowModal()
     widget.Move(buttons.UpdateLayout());
 
   widget.Show();
+  if (!auto_size) {
+    /* Ensure button layout is recalculated with any metrics that may have
+       become available when the widget was shown (fixes caption clipping on
+       some scaled/font configurations).  Keep this non-auto dialogs only,
+       so AutoSize()'s LeftLayout()/BottomLayout() decision remains intact. */
+    widget.Move(buttons.UpdateLayout());
+  }
   int result = WndForm::ShowModal();
   widget.Hide();
   return result;
