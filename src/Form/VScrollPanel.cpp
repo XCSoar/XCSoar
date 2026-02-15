@@ -218,7 +218,10 @@ bool
 VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 {
   /* Finish gesture tracking and check for horizontal swipe */
-  const TCHAR *gesture = gestures.Finish();
+  const TCHAR *gesture =
+    gesture_tracking ? gestures.Finish() : nullptr;
+  gesture_tracking = false;
+
   if (gesture != nullptr &&
       (StringIsEqual(gesture, _T("L")) ||
        StringIsEqual(gesture, _T("R")))) {
@@ -265,7 +268,8 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 bool
 VScrollPanel::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
-  gestures.Update(p);
+  if (gesture_tracking)
+    gestures.Update(p);
 
   if (scroll_bar.IsDragging()) {
     origin = scroll_bar.DragMove(virtual_height, GetSize().height, p.y);
@@ -306,9 +310,6 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
   smooth_scroll_timer.Cancel();
   smooth_scroll_target = -1;
 
-  /* Start gesture tracking for swipe detection */
-  gestures.Start(p, Layout::Scale(20));
-
   if (scroll_bar.IsInsideSlider(p)) {
     scroll_bar.DragBegin(this, p.y);
     return true;
@@ -329,6 +330,13 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
     }
     return true;
   } else {
+    /* Start gesture tracking for swipe detection only in the
+       content area — not on the scrollbar, where slight horizontal
+       finger movement during a tap would misfire as a page-change
+       swipe (especially noticeable on e-ink touch screens). */
+    gesture_tracking = true;
+    gestures.Start(p, Layout::Scale(20));
+
     // First, let child widgets handle the event
     if (PanelControl::OnMouseDown(p)) {
       potential_tap = true;
@@ -367,6 +375,7 @@ VScrollPanel::OnCancelMode() noexcept
 {
   PanelControl::OnCancelMode();
 
+  gesture_tracking = false;
   scroll_bar.DragEnd(this);
   if (dragging) {
     dragging = false;

@@ -75,8 +75,15 @@ class VScrollPanel final : public PanelControl {
 
   /**
    * Detects swipe gestures (L/R/U/D) from mouse/touch movement.
+   * Only active when #gesture_tracking is true.
    */
   GestureManager gestures;
+
+  /**
+   * True when gesture tracking has been started (i.e. the mouse-down
+   * was in the content area, not on the scrollbar).
+   */
+  bool gesture_tracking = false;
 
   /**
    * Target position for smooth keyboard scrolling (-1 = no animation).
