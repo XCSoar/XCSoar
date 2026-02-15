@@ -6,7 +6,7 @@
 #include "LX1600.hpp"
 #include "LXNAVVario.hpp"
 
-#include <cstdio>
+#include <fmt/format.h>
 
 bool
 LXDevice::SendLXNAVVarioSetting(const char *name, const char *value,
@@ -20,9 +20,8 @@ LXDevice::SendLXNAVVarioSetting(const char *name, const char *value,
     lxnav_vario_settings.MarkOld(name);
   }
 
-  char buffer[256];
-  sprintf(buffer, "PLXV0,%s,W,%s", name, value);
-  PortWriteNMEA(port, buffer, env);
+  const auto buffer = fmt::format("PLXV0,{},W,{}", name, value);
+  PortWriteNMEA(port, buffer.c_str(), env);
   return true;
 }
 
@@ -37,9 +36,8 @@ LXDevice::RequestLXNAVVarioSetting(const char *name, OperationEnvironment &env)
     lxnav_vario_settings.MarkOld(name);
   }
 
-  char buffer[256];
-  sprintf(buffer, "PLXV0,%s,R", name);
-  PortWriteNMEA(port, buffer, env);
+  const auto buffer = fmt::format("PLXV0,{},R", name);
+  PortWriteNMEA(port, buffer.c_str(), env);
   return true;
 }
 
@@ -79,9 +77,8 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
     nano_settings.MarkOld(name);
   }
 
-  char buffer[256];
-  sprintf(buffer, "PLXVC,SET,W,%s,%s", name, value);
-  PortWriteNMEA(port, buffer, env);
+  const auto buffer = fmt::format("PLXVC,SET,W,{},{}", name, value);
+  PortWriteNMEA(port, buffer.c_str(), env);
   return true;
 }
 
@@ -89,9 +86,8 @@ bool
 LXDevice::SendNanoSetting(const char *name, unsigned value,
                           OperationEnvironment &env)
 {
-  char buffer[32];
-  sprintf(buffer, "%u", value);
-  return SendNanoSetting(name, buffer, env);
+  const auto str = fmt::format("{}", value);
+  return SendNanoSetting(name, str.c_str(), env);
 }
 
 bool
@@ -105,9 +101,8 @@ LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
     nano_settings.MarkOld(name);
   }
 
-  char buffer[256];
-  sprintf(buffer, "PLXVC,SET,R,%s", name);
-  PortWriteNMEA(port, buffer, env);
+  const auto buffer = fmt::format("PLXVC,SET,R,{}", name);
+  PortWriteNMEA(port, buffer.c_str(), env);
   return true;
 }
 

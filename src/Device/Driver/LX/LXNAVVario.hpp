@@ -9,10 +9,12 @@
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
 
+#include <fmt/format.h>
+
 /**
  * Code specific to LXNav varios (e.g. V7).
  *
- * Source: LXNav Vario Dataport specification Version 1.03
+ * Source: LXNAV DataPort Specification v1.05
  */
 namespace LXNAVVario {
   /**
@@ -57,9 +59,8 @@ namespace LXNAVVario {
   static inline void
   SetMacCready(Port &port, OperationEnvironment &env, double mc)
   {
-    char buffer[32];
-    sprintf(buffer, "PLXV0,MC,W,%.1f", mc);
-    PortWriteNMEA(port, buffer, env);
+    const auto buffer = fmt::format("PLXV0,MC,W,{:.1f}", mc);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
@@ -69,9 +70,8 @@ namespace LXNAVVario {
   static inline void
   SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
-    char buffer[100];
-    sprintf(buffer, "PLXV0,BAL,W,%.2f", overload);
-    PortWriteNMEA(port, buffer, env);
+    const auto buffer = fmt::format("PLXV0,BAL,W,{:.2f}", overload);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
@@ -81,21 +81,21 @@ namespace LXNAVVario {
   static inline void
   SetBugs(Port &port, OperationEnvironment &env, unsigned bugs)
   {
-    char buffer[100];
-    sprintf(buffer, "PLXV0,BUGS,W,%u", bugs);
-    PortWriteNMEA(port, buffer, env);
+    const auto buffer = fmt::format("PLXV0,BUGS,W,{}", bugs);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
    * Set the QNH setting of the vario
    */
   static inline void
-  SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
+  SetQNH(Port &port, OperationEnvironment &env,
+         const AtmosphericPressure &qnh)
   {
-    char buffer[100];
-    unsigned QNHinPascal = uround(qnh.GetPascal());
-    sprintf(buffer, "PLXV0,QNH,W,%u", QNHinPascal); 
-    PortWriteNMEA(port, buffer, env);
+    const unsigned qnh_pascal = uround(qnh.GetPascal());
+    const auto buffer =
+      fmt::format("PLXV0,QNH,W,{}", qnh_pascal);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
@@ -105,9 +105,9 @@ namespace LXNAVVario {
   static inline void
   SetVolume(Port &port, OperationEnvironment &env, unsigned volume)
   {
-    char buffer[32];
-    sprintf(buffer, "PLXV0,VOL,W,%.1f", (double)volume);
-    PortWriteNMEA(port, buffer, env);
+    const auto buffer =
+      fmt::format("PLXV0,VOL,W,{:.1f}", (double)volume);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
@@ -117,9 +117,9 @@ namespace LXNAVVario {
   static inline void
   SetElevation(Port &port, OperationEnvironment &env, int elevation)
   {
-    char buffer[32];
-    sprintf(buffer, "PLXV0,ELEVATION,W,%d", elevation);
-    PortWriteNMEA(port, buffer, env);
+    const auto buffer =
+      fmt::format("PLXV0,ELEVATION,W,{}", elevation);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
@@ -141,11 +141,13 @@ namespace LXNAVVario {
   static inline void
   SetPilotWeight(Port &port, OperationEnvironment &env, double pilot_weight)
   {
-    char buffer[256];
-    /* POLAR format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar load>,<polar weight>,<max weight>,<empty weight>,<pilot weight>,<name>,<stall> */
-    /* Leave all fields empty except pilot_weight (position 10: after empty_weight) */
-    sprintf(buffer, "PLXV0,POLAR,W,,,,,,,,%.2f,,", pilot_weight);
-    PortWriteNMEA(port, buffer, env);
+    /* POLAR format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar load>,
+       <polar weight>,<max weight>,<empty weight>,<pilot weight>,
+       <name>,<stall> */
+    /* Leave all fields empty except pilot_weight */
+    const auto buffer =
+      fmt::format("PLXV0,POLAR,W,,,,,,,,{:.2f},,", pilot_weight);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
@@ -155,10 +157,12 @@ namespace LXNAVVario {
   static inline void
   SetEmptyWeight(Port &port, OperationEnvironment &env, double empty_weight)
   {
-    char buffer[256];
-    /* POLAR format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar load>,<polar weight>,<max weight>,<empty weight>,<pilot weight>,<name>,<stall> */
-    /* Leave all fields empty except empty_weight (position 9: after max_weight, before pilot_weight) */
-    sprintf(buffer, "PLXV0,POLAR,W,,,,,,,%.2f,,,", empty_weight);
-    PortWriteNMEA(port, buffer, env);
+    /* POLAR format: PLXV0,POLAR,W,<a>,<b>,<c>,<polar load>,
+       <polar weight>,<max weight>,<empty weight>,<pilot weight>,
+       <name>,<stall> */
+    /* Leave all fields empty except empty_weight */
+    const auto buffer =
+      fmt::format("PLXV0,POLAR,W,,,,,,,{:.2f},,,", empty_weight);
+    PortWriteNMEA(port, buffer.c_str(), env);
   }
 }
