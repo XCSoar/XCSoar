@@ -23,6 +23,7 @@
 #include "Device/Driver/IMI.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
+#include "Device/Driver/LX/LXNavDeclare.hpp"
 #include "Device/Driver/LX_Eos.hpp"
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver/Leonardo.hpp"
@@ -1523,6 +1524,270 @@ TestLXRadioTransponder()
 }
 
 static void
+TestLXNavDeclare()
+{
+  /* Test coordinate formatting */
+
+  /* Lat: 48 deg 46.667' N */
+  {
+    GeoPoint gp(Angle::Degrees(10.264717),
+                Angle::Degrees(48.77778));
+    const auto lat = LXNavDeclare::FormatLat(gp);
+    ok1(lat.starts_with("4846."));
+    ok1(lat.back() == 'N');
+
+    const auto lon = LXNavDeclare::FormatLon(gp);
+    ok1(lon.starts_with("01015."));
+    ok1(lon.back() == 'E');
+  }
+
+  /* Southern / Western hemisphere */
+  {
+    GeoPoint gp(Angle::Degrees(-43.5), Angle::Degrees(-22.9));
+    const auto lat = LXNavDeclare::FormatLat(gp);
+    ok1(lat.back() == 'S');
+    ok1(lat.starts_with("22"));
+
+    const auto lon = LXNavDeclare::FormatLon(gp);
+    ok1(lon.back() == 'W');
+    ok1(lon.starts_with("043"));
+  }
+
+  /* Test OZ style mapping */
+  ok1(LXNavDeclare::GetOZStyle(true, false) == 2);
+  ok1(LXNavDeclare::GetOZStyle(false, false) == 1);
+  ok1(LXNavDeclare::GetOZStyle(false, true) == 3);
+
+  /* Test A12 bearing computation */
+  {
+    /* Start: bearing from start to next */
+    const GeoPoint start(Angle::Degrees(10.0), Angle::Degrees(48.0));
+    const GeoPoint tp1(Angle::Degrees(10.0), Angle::Degrees(47.0));
+    const GeoPoint tp2(Angle::Degrees(11.0), Angle::Degrees(47.0));
+    const GeoPoint finish(Angle::Degrees(11.0), Angle::Degrees(48.0));
+
+    /* Start → next should be roughly 180° (due south) */
+    const Angle a12_start = LXNavDeclare::ComputeA12(
+      start, start, tp1, true, false);
+    ok1(a12_start.AsBearing().Degrees() > 170.0);
+    ok1(a12_start.AsBearing().Degrees() < 190.0);
+
+    /* Finish: bearing from finish toward prev should be roughly
+       south (back to tp2) */
+    const Angle a12_finish = LXNavDeclare::ComputeA12(
+      tp2, finish, finish, false, true);
+    ok1(a12_finish.AsBearing().Degrees() > 170.0);
+    ok1(a12_finish.AsBearing().Degrees() < 200.0);
+
+    /* Intermediate: bisector of incoming and outgoing legs.
+       tp1 at (10E, 47N): incoming from north (start), outgoing to
+       east (tp2).  Bisector should be roughly NE (~45°). */
+    const Angle a12_mid = LXNavDeclare::ComputeA12(
+      start, tp1, tp2, false, false);
+    ok1(a12_mid.AsBearing().Degrees() > 20.0);
+    ok1(a12_mid.AsBearing().Degrees() < 70.0);
+  }
+
+  /* Test FormatOZLine with a cylinder start */
+  {
+    LoggerSettings logger_settings;
+    logger_settings.pilot_name = "Test Pilot";
+    Plane plane;
+    plane.registration = "D-1234";
+    plane.competition_id = "AB";
+    plane.type = "ASW-27";
+
+    Declaration decl(logger_settings, plane, nullptr);
+
+    Waypoint wp_start(GeoPoint(Angle::Degrees(10.265),
+                                Angle::Degrees(48.778)));
+    wp_start.name = "START";
+    wp_start.elevation = 585;
+    wp_start.has_elevation = true;
+
+    Waypoint wp_tp1(GeoPoint(Angle::Degrees(9.702),
+                              Angle::Degrees(47.192)));
+    wp_tp1.name = "TP1";
+    wp_tp1.elevation = 572;
+    wp_tp1.has_elevation = true;
+
+    Waypoint wp_finish(GeoPoint(Angle::Degrees(11.552),
+                                 Angle::Degrees(47.735)));
+    wp_finish.name = "FINISH";
+    wp_finish.elevation = 420;
+    wp_finish.has_elevation = true;
+
+    /* Add as simple waypoints (cylinder, 1500m default) */
+    decl.Append(wp_start);
+    decl.Append(wp_tp1);
+    decl.Append(wp_finish);
+
+    ok1(decl.Size() == 3);
+
+    /* Start OZ: index=-1, Style=2 (ozNext), cylinder */
+    const auto oz0 = LXNavDeclare::FormatOZLine(decl, 0);
+    ok1(oz0.starts_with("LLXVOZ=-1,"));
+    ok1(oz0.find("Style=2") != std::string::npos);
+    ok1(oz0.find("R1=1500m") != std::string::npos);
+    ok1(oz0.find("A1=180.0") != std::string::npos);
+    ok1(oz0.find("Near=0") != std::string::npos);
+    /* Cylinder should NOT have Line flag */
+    ok1(oz0.find("Line=1") == std::string::npos);
+    /* Not AAT */
+    ok1(oz0.find("AAT=1") == std::string::npos);
+
+    /* Intermediate OZ: index=0, Style=1 (ozSymmetric), cylinder */
+    const auto oz1 = LXNavDeclare::FormatOZLine(decl, 1);
+    ok1(oz1.starts_with("LLXVOZ=0,"));
+    ok1(oz1.find("Style=1") != std::string::npos);
+    ok1(oz1.find("R1=1500m") != std::string::npos);
+
+    /* Finish OZ: index=1, Style=3 (ozPrev), Near=1 */
+    const auto oz2 = LXNavDeclare::FormatOZLine(decl, 2);
+    ok1(oz2.starts_with("LLXVOZ=1,"));
+    ok1(oz2.find("Style=3") != std::string::npos);
+    ok1(oz2.find("Near=1") != std::string::npos);
+
+    /* Lat/Lon should be present in all OZ lines */
+    ok1(oz0.find("Lat=") != std::string::npos);
+    ok1(oz0.find("Lon=") != std::string::npos);
+    ok1(oz1.find("Lat=") != std::string::npos);
+    ok1(oz2.find("Lon=") != std::string::npos);
+  }
+
+  /* Test FormatOZLine with a LINE shape */
+  {
+    Declaration decl_line({}, Plane{}, nullptr);
+
+    Waypoint wp1(GeoPoint(Angle::Degrees(10.0), Angle::Degrees(48.0)));
+    wp1.name = "S";
+
+    Waypoint wp2(GeoPoint(Angle::Degrees(11.0), Angle::Degrees(47.0)));
+    wp2.name = "F";
+
+    Declaration::TurnPoint tp1(wp1);
+    tp1.shape = Declaration::TurnPoint::LINE;
+    tp1.radius = 3000;
+    tp1.sector_angle = Angle::QuarterCircle();
+    decl_line.turnpoints.push_back(tp1);
+
+    Declaration::TurnPoint tp2(wp2);
+    tp2.shape = Declaration::TurnPoint::CYLINDER;
+    tp2.radius = 500;
+    decl_line.turnpoints.push_back(tp2);
+
+    /* Start with LINE shape should have Line=1 */
+    const auto oz_line = LXNavDeclare::FormatOZLine(decl_line, 0);
+    ok1(oz_line.find("Line=1") != std::string::npos);
+    ok1(oz_line.find("R1=3000m") != std::string::npos);
+    ok1(oz_line.find("A1=90.0") != std::string::npos);
+
+    /* Finish with cylinder should NOT have Line=1 */
+    const auto oz_cyl = LXNavDeclare::FormatOZLine(decl_line, 1);
+    ok1(oz_cyl.find("Line=1") == std::string::npos);
+    ok1(oz_cyl.find("R1=500m") != std::string::npos);
+  }
+
+  /* Test FormatOZLine with AAT point */
+  {
+    Declaration decl_aat({}, Plane{}, nullptr);
+    decl_aat.is_aat_task = true;
+
+    Waypoint wp1(GeoPoint(Angle::Degrees(10.0), Angle::Degrees(48.0)));
+    wp1.name = "S";
+
+    Waypoint wp2(GeoPoint(Angle::Degrees(11.0), Angle::Degrees(47.5)));
+    wp2.name = "AAT1";
+
+    Waypoint wp3(GeoPoint(Angle::Degrees(10.5), Angle::Degrees(48.0)));
+    wp3.name = "F";
+
+    Declaration::TurnPoint tp_s(wp1);
+    decl_aat.turnpoints.push_back(tp_s);
+
+    Declaration::TurnPoint tp_aat(wp2);
+    tp_aat.shape = Declaration::TurnPoint::CYLINDER;
+    tp_aat.radius = 5100;
+    tp_aat.is_aat = true;
+    decl_aat.turnpoints.push_back(tp_aat);
+
+    Declaration::TurnPoint tp_f(wp3);
+    tp_f.radius = 500;
+    decl_aat.turnpoints.push_back(tp_f);
+
+    /* AAT intermediate should have AAT=1 flag */
+    const auto oz_aat = LXNavDeclare::FormatOZLine(decl_aat, 1);
+    ok1(oz_aat.find("AAT=1") != std::string::npos);
+    ok1(oz_aat.find("R1=5100m") != std::string::npos);
+    ok1(oz_aat.starts_with("LLXVOZ=0,"));
+
+    /* Start and finish should NOT have AAT flag */
+    const auto oz_s = LXNavDeclare::FormatOZLine(decl_aat, 0);
+    ok1(oz_s.find("AAT=1") == std::string::npos);
+
+    const auto oz_f = LXNavDeclare::FormatOZLine(decl_aat, 2);
+    ok1(oz_f.find("AAT=1") == std::string::npos);
+  }
+
+  /* Test FormatOZLine with keyhole (inner radius) */
+  {
+    Declaration decl_kh({}, Plane{}, nullptr);
+
+    Waypoint wp1(GeoPoint(Angle::Degrees(10.0), Angle::Degrees(48.0)));
+    wp1.name = "S";
+    Waypoint wp2(GeoPoint(Angle::Degrees(11.0), Angle::Degrees(47.0)));
+    wp2.name = "KH";
+    Waypoint wp3(GeoPoint(Angle::Degrees(10.5), Angle::Degrees(48.0)));
+    wp3.name = "F";
+
+    decl_kh.turnpoints.push_back(Declaration::TurnPoint(wp1));
+
+    Declaration::TurnPoint tp_kh(wp2);
+    tp_kh.shape = Declaration::TurnPoint::DAEC_KEYHOLE;
+    tp_kh.radius = 10000;
+    tp_kh.sector_angle = Angle::QuarterCircle();
+    tp_kh.inner_radius = 500;
+    decl_kh.turnpoints.push_back(tp_kh);
+
+    decl_kh.turnpoints.push_back(Declaration::TurnPoint(wp3));
+
+    const auto oz_kh = LXNavDeclare::FormatOZLine(decl_kh, 1);
+    ok1(oz_kh.find("R1=10000m") != std::string::npos);
+    ok1(oz_kh.find("R2=500m") != std::string::npos);
+    ok1(oz_kh.find("A2=180.0") != std::string::npos);
+    ok1(oz_kh.find("A1=90.0") != std::string::npos);
+  }
+
+  /* Test C-record with elevation */
+  {
+    Waypoint wp(GeoPoint(Angle::Degrees(13.776),
+                          Angle::Degrees(47.811)));
+    wp.name = "EBENSEE";
+    wp.elevation = 420;
+    wp.has_elevation = true;
+
+    Declaration::TurnPoint tp(wp);
+    const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
+
+    ok1(c_record.starts_with("C"));
+    ok1(c_record.find("EBENSEE") != std::string::npos);
+    ok1(c_record.find("::420.00000") != std::string::npos);
+  }
+
+  /* Test C-record without elevation (defaults to 0) */
+  {
+    Waypoint wp(GeoPoint(Angle::Degrees(10.0),
+                          Angle::Degrees(48.0)));
+    wp.name = "NOELEVATION";
+
+    Declaration::TurnPoint tp(wp);
+    const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
+
+    ok1(c_record.find("::0.00000") != std::string::npos);
+  }
+}
+
+static void
 TestILEC()
 {
   NullPort null;
@@ -2081,7 +2346,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
-  plan_tests(1085);
+  plan_tests(1138);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -2103,6 +2368,7 @@ int main()
   TestLXV7();
   TestLXV7POLAR();
   TestLXRadioTransponder();
+  TestLXNavDeclare();
   TestILEC();
   TestOpenVario();
   TestVega();
