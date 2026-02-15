@@ -344,9 +344,15 @@ public:
 
 protected:
   /**
-   * A variant of EnableNMEA() that attempts to put the Nano into NMEA
-   * mode.  If the Nano is connected through a LXNAV V7, it will
-   * enable pass-through mode on the V7.
+   * Prepare the port for communicating with the LXNAV logger.
+   *
+   * For S-series varios (built-in logger): always stays in NMEA
+   * mode so PLXVC commands reach the vario's own logger.  If a
+   * FLARM is behind the vario, its flight downloads are handled
+   * by the FLARM driver on a separate device slot.
+   *
+   * For V7 with a Nano behind it: enables pass-through mode so
+   * PLXVC commands reach the Nano logger.
    */
   bool EnableLoggerNMEA(OperationEnvironment &env);
 

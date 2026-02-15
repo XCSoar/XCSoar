@@ -144,7 +144,14 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
 bool
 LXDevice::EnableLoggerNMEA(OperationEnvironment &env)
 {
-  return IsLXNAVVario() || UsePassThrough()
+  /* S-series varios have a built-in logger that understands PLXVC
+     commands in normal NMEA mode.  If a FLARM is behind the vario,
+     its flight downloads are handled by the FLARM driver on a
+     separate device slot. */
+  if (IsSVario())
+    return EnableNMEA(env);
+
+  return IsV7() || UsePassThrough()
     ? EnablePassThrough(env)
     : (LXNAVVario::ModeNormal(port, env), true);
 }
