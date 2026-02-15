@@ -51,4 +51,10 @@ static constexpr Color COLOR_ADMONITION_IMPORTANT_DARK =
 static constexpr Color COLOR_ADMONITION_TIP =
   Color(0x00, 0x80, 0x00);
 
+/**
+ * A muted green readable on light backgrounds.
+ * Standard COLOR_GREEN (0,255,0) is too bright on white.
+ */
+static constexpr Color COLOR_LIGHT_GREEN = Color(0x00, 0xc0, 0x00);
+
 static constexpr uint8_t ALPHA_OVERLAY = 0xA0;
