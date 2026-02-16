@@ -37,9 +37,8 @@ GetNetState()
 #endif
 
 #if defined(__APPLE__)
-#if !TARGET_OS_IPHONE
+#include <TargetConditionals.h>
 #include <Network/Network.h>
-#endif
 #endif
 
 #if defined(_WIN32)
@@ -54,7 +53,6 @@ static NetState cached_net_state = NetState::UNKNOWN;
 static PeriodClock last_update;
 
 #if defined(__APPLE__)
-#if !TARGET_OS_IPHONE
 static std::once_flag nw_path_monitor_once;
 static std::atomic<NetState> nw_path_monitor_state{NetState::UNKNOWN};
 static std::atomic<bool> nw_path_monitor_ready{false};
@@ -62,35 +60,39 @@ static std::atomic<bool> nw_path_monitor_ready{false};
 static void
 InitPathMonitor() noexcept
 {
-  nw_path_monitor_t monitor = nw_path_monitor_create();
-  if (monitor == nullptr)
-    return;
+  if (@available(iOS 12.0, macOS 10.14, *)) {
+    nw_path_monitor_t monitor = nw_path_monitor_create();
+    if (monitor == nullptr)
+      return;
 
-  dispatch_queue_t queue = dispatch_queue_create("org.xcsoar.net.path-monitor",
-                                                 DISPATCH_QUEUE_SERIAL);
-  if (queue == nullptr)
-    return;
+    dispatch_queue_t queue = dispatch_queue_create("org.xcsoar.net.path-monitor",
+                                                   DISPATCH_QUEUE_SERIAL);
+    if (queue == nullptr) {
+      nw_path_monitor_cancel(monitor);
+      return;
+    }
 
-  nw_path_monitor_set_queue(monitor, queue);
-  nw_path_monitor_set_update_handler(monitor, ^(nw_path_t path) {
-    const nw_path_status_t status = nw_path_get_status(path);
-    const NetState state = status == nw_path_status_satisfied
-      ? NetState::CONNECTED
-      : status == nw_path_status_unsatisfied
-        ? NetState::DISCONNECTED
-        : NetState::UNKNOWN;
+    nw_path_monitor_set_queue(monitor, queue);
+    nw_path_monitor_set_update_handler(monitor, ^(nw_path_t path) {
+      const nw_path_status_t status = nw_path_get_status(path);
+      const NetState state = status == nw_path_status_satisfied
+        ? NetState::CONNECTED
+        : status == nw_path_status_unsatisfied
+          ? NetState::DISCONNECTED
+          : NetState::UNKNOWN;
 
-    nw_path_monitor_state.store(state, std::memory_order_relaxed);
-    nw_path_monitor_ready.store(true, std::memory_order_release);
-  });
-  nw_path_monitor_start(monitor);
+      nw_path_monitor_state.store(state, std::memory_order_release);
+      nw_path_monitor_ready.store(true, std::memory_order_release);
+    });
+    nw_path_monitor_start(monitor);
 
-  static nw_path_monitor_t global_monitor = monitor;
-  static dispatch_queue_t global_queue = queue;
-  (void)global_monitor;
-  (void)global_queue;
+    // Keep monitor and queue alive for the lifetime of the program
+    static nw_path_monitor_t global_monitor = monitor;
+    static dispatch_queue_t global_queue = queue;
+    (void)global_monitor;
+    (void)global_queue;
+  }
 }
-#endif
 #endif
 
 static NetState
@@ -130,15 +132,15 @@ PollNetState() noexcept
   return connected ? NetState::CONNECTED : NetState::DISCONNECTED;
 
 #elif defined(__APPLE__)
-#if !TARGET_OS_IPHONE
-  std::call_once(nw_path_monitor_once, InitPathMonitor);
-  if (!nw_path_monitor_ready.load(std::memory_order_acquire))
-    return NetState::UNKNOWN;
+  if (@available(iOS 12.0, macOS 10.14, *)) {
+    std::call_once(nw_path_monitor_once, InitPathMonitor);
+    if (!nw_path_monitor_ready.load(std::memory_order_acquire))
+      return NetState::UNKNOWN;
 
-  return nw_path_monitor_state.load(std::memory_order_relaxed);
-#else
+    return nw_path_monitor_state.load(std::memory_order_acquire);
+  }
+
   return NetState::UNKNOWN;
-#endif
 
 #else
   return NetState::UNKNOWN;
