@@ -18,7 +18,7 @@ AirspaceFormatter::FormatAltitudeShort(char *buffer,
   switch (altitude.reference) {
   case AltitudeReference::AGL:
     if (altitude.altitude_above_terrain <= 0)
-      _tcscpy(buffer, _T("GND"));
+      strcpy(buffer, _T("GND"));
     else
       if (include_unit)
         StringFormatUnsafe(buffer, _T("%d %s AGL"),
@@ -56,13 +56,13 @@ AirspaceFormatter::FormatAltitude(char *buffer,
       Units::GetUserAltitudeUnit() == Unit::METER)
     /* additionally show airspace altitude in feet, because aviation
        charts usually print altitudes in feet */
-    StringFormatUnsafe(buffer + _tcslen(buffer), _T(" (%d %s)"),
+    StringFormatUnsafe(buffer + strlen(buffer), _T(" (%d %s)"),
                        iround(Units::ToUserUnit(altitude.altitude, Unit::FEET)),
                        Units::GetUnitName(Unit::FEET));
 
   if (altitude.reference != AltitudeReference::MSL &&
       altitude.altitude > 0)
-    StringFormatUnsafe(buffer + _tcslen(buffer), _T(" %d %s"),
+    StringFormatUnsafe(buffer + strlen(buffer), _T(" %d %s"),
                        iround(Units::ToUserAltitude(altitude.altitude)),
                        Units::GetAltitudeName());
 }

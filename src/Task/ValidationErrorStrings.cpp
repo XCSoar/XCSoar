@@ -38,9 +38,9 @@ getTaskValidationErrors(const TaskValidationErrorSet v)
       continue;
 
     const char *current = gettext(validation_error_strings[i]);
-    if (_tcslen(err) + _tcslen(current) + 1 < MAX_PATH) {
-      _tcscat(err, current);
-      _tcscat(err, _T("\n"));
+    if (strlen(err) + strlen(current) + 1 < MAX_PATH) {
+      strcat(err, current);
+      strcat(err, _T("\n"));
     }
   }
 

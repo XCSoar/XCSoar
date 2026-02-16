@@ -172,7 +172,7 @@ AbstractAirspace::Intercept(const AircraftState &state,
 bool
 AbstractAirspace::MatchNamePrefix(const char *prefix) const noexcept
 {
-  size_t prefix_length = _tcslen(prefix);
+  size_t prefix_length = strlen(prefix);
   return StringIsEqualIgnoreCase(name.c_str(), prefix, prefix_length);
 }
 

@@ -508,7 +508,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
       canvas.SetBackgroundColor(look.background_color);
       canvas.DrawOpaqueText(text_position, rc, label);
       di.label.last_width = width;
-      _tcscpy(di.label.last_text, label);
+      strcpy(di.label.last_text, label);
     } else {
       canvas.DrawText(text_position, label);
     }
