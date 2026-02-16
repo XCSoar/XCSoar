@@ -3,7 +3,8 @@
 
 #include "MessagingDatabase.hpp"
 #include "Id.hpp"
-#include "util/tstring_view.hxx"
+
+#include <string_view>
 #include <functional>
 
 void

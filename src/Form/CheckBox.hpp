@@ -4,8 +4,8 @@
 #pragma once
 
 #include "ui/window/PaintWindow.hpp"
-#include "util/tstring.hpp"
 
+#include <string>
 #include <cassert>
 #include <functional>
 
@@ -30,21 +30,21 @@ class CheckBoxControl : public PaintWindow {
   bool checked, dragging, pressed;
 
   const DialogLook *look;
-  tstring caption;
+  std::string caption;
 
   using Callback = std::function<void(bool)>;
   Callback callback;
 
 public:
   void Create(ContainerWindow &parent, const DialogLook &look,
-              tstring::const_pointer caption,
+              std::string::const_pointer caption,
               const PixelRect &rc,
               const WindowStyle style,
               Callback _callback) noexcept;
 
   [[gnu::pure]]
   static unsigned GetMinimumWidth(const DialogLook &look, unsigned height,
-                                  tstring::const_pointer caption) noexcept;
+                                  std::string::const_pointer caption) noexcept;
 
   /**
    * Set the function that will receive click events.

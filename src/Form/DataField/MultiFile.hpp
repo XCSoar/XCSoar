@@ -8,8 +8,8 @@
 #include "File.hpp"
 #include "Repository/FileType.hpp"
 #include "system/Path.hpp"
-#include "util/tstring.hpp"
 
+#include <string>
 #include <vector>
 
 /**
@@ -28,7 +28,7 @@ class MultiFileDataField final : public DataField {
 
   FileType file_type;
 
-  tstring display_string;
+  std::string display_string;
 
 public:
   explicit MultiFileDataField(DataFieldListener *listener = nullptr);

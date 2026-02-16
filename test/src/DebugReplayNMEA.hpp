@@ -27,5 +27,5 @@ private:
 public:
   virtual bool Next();
 
-  static DebugReplay *Create(Path input_file, const tstring &driver_name);
+  static DebugReplay *Create(Path input_file, const std::string &driver_name);
 };

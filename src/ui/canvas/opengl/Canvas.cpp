@@ -73,8 +73,8 @@ Canvas::InvertRectangle(PixelRect r) noexcept
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 }
 
-static tstring_view
-ClipText(const Font &font, tstring_view text,
+static std::string_view
+ClipText(const Font &font, std::string_view text,
          int x, unsigned canvas_width) noexcept
 {
   if (text.empty() || x >= int(canvas_width))
@@ -535,7 +535,7 @@ Canvas::DrawFocusRectangle(PixelRect rc) noexcept
 }
 
 const PixelSize
-Canvas::CalcTextSize(tstring_view text) const noexcept
+Canvas::CalcTextSize(std::string_view text) const noexcept
 {
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
@@ -564,7 +564,7 @@ PrepareColoredAlphaTexture(Color color) noexcept
 }
 
 void
-Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
+Canvas::DrawText(PixelPoint p, std::string_view text) noexcept
 {
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
@@ -594,7 +594,7 @@ Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 }
 
 void
-Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
+Canvas::DrawTransparentText(PixelPoint p, std::string_view text) noexcept
 {
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
@@ -622,7 +622,7 @@ Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
 
 void
 Canvas::DrawClippedText(PixelPoint p, PixelSize size,
-                        tstring_view text) noexcept
+                        std::string_view text) noexcept
 {
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));

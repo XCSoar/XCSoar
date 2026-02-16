@@ -30,7 +30,7 @@ static const char *const Text2NE[] = {
 };
 
 pt2Event
-InputEvents::findEvent(tstring_view name) noexcept
+InputEvents::findEvent(std::string_view name) noexcept
 {
   for (unsigned i = 0; Text2Event[i].text != nullptr; ++i)
     if (name == Text2Event[i].text)

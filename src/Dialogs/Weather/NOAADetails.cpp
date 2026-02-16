@@ -54,7 +54,7 @@ NOAADetailsWidget::CreateButtons(WidgetDialog &buttons)
 void
 NOAADetailsWidget::Update()
 {
-  tstring metar_taf = _T("");
+  std::string metar_taf = _T("");
 
   NOAAFormatter::Format(*station_iterator, metar_taf);
 

@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 try {
   Args args(argc, argv, "[--through DRIVER0] DRIVER PORT BAUD");
 
-  tstring _through_name;
+  std::string _through_name;
   const char *through_name = NULL;
 
   const char *a;
@@ -99,7 +99,7 @@ try {
       args.UsageError();
   }
 
-  tstring _driver_name = args.ExpectNextT();
+  std::string _driver_name = args.ExpectNextT();
   const char *driver_name = _driver_name.c_str();
   DebugPort debug_port(args);
   args.ExpectEnd();

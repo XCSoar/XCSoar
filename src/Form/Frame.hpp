@@ -6,7 +6,8 @@
 #include "ui/window/PaintWindow.hpp"
 #include "ui/canvas/Color.hpp"
 #include "Renderer/TextRenderer.hpp"
-#include "util/tstring.hpp"
+
+#include <string>
 
 #include <tchar.h>
 
@@ -19,7 +20,7 @@ class WndFrame : public PaintWindow {
 
   TextRenderer text_renderer;
 
-  tstring text;
+  std::string text;
 
 public:
   explicit WndFrame(const DialogLook &look) noexcept;

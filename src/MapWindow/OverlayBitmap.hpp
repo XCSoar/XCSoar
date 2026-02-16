@@ -7,7 +7,8 @@
 #include "ui/canvas/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "util/tstring.hpp"
+
+#include <string>
 
 class Canvas;
 class WindowProjection;
@@ -35,7 +36,7 @@ class MapOverlayBitmap final : public MapOverlay {
 
   float alpha = 1;
 
-  tstring label;
+  std::string label;
 
 public:
   /**
@@ -49,7 +50,7 @@ public:
    * Move an existing #Bitmap with a geo reference.
    */
   MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds,
-                   tstring::const_pointer _label) noexcept
+                   std::string::const_pointer _label) noexcept
     :bitmap(std::move(_bitmap)), bounds(_bounds),
      simple_bounds(bounds.GetBounds()),
      label(_label) {}

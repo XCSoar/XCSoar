@@ -4,7 +4,6 @@
 #pragma once
 
 #include "ui/dim/Size.hpp"
-#include "util/tstring_view.hxx"
 
 #if defined(USE_APPKIT) || defined(USE_UIKIT)
 #import <Foundation/Foundation.h>
@@ -16,6 +15,7 @@ class GLTexture;
 #endif
 
 #include <cstddef>
+#include <string_view>
 
 #ifdef _WIN32
 #include <windef.h>
@@ -104,17 +104,17 @@ public:
 #endif
 
   [[gnu::pure]]
-  PixelSize TextSize(tstring_view text) const noexcept;
+  PixelSize TextSize(std::string_view text) const noexcept;
 
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   static constexpr std::size_t BufferSize(const PixelSize size) noexcept {
     return std::size_t(size.width) * std::size_t(size.height);
   }
 
-  void Render(tstring_view text, const PixelSize size,
+  void Render(std::string_view text, const PixelSize size,
               void *buffer) const noexcept;
 #elif defined(ANDROID)
-  std::unique_ptr<GLTexture> TextTextureGL(tstring_view text) const noexcept;
+  std::unique_ptr<GLTexture> TextTextureGL(std::string_view text) const noexcept;
 #elif defined(USE_GDI)
   HFONT Native() const noexcept {
     return font;

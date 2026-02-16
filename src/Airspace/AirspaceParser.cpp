@@ -159,8 +159,8 @@ struct TempAirspace
   }
 
   // General
-  tstring name;
-  tstring station_name;
+  std::string name;
+  std::string station_name;
   RadioFrequency radio_frequency;
   TransponderCode transponder_code;
   AirspaceClass asclass;
@@ -762,8 +762,8 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'X':
     case 'x':
       if (input.SkipWhitespace()) {
-        tstring tempString = tstring(
-            string_converter.Convert(input.c_str())); // Convert to tstring
+        std::string tempString = std::string(
+            string_converter.Convert(input.c_str())); // Convert to std::string
         temp_area.transponder_code =
             TransponderCode::Parse(tempString.c_str());
       }

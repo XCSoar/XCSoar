@@ -11,7 +11,7 @@
 static constexpr std::size_t NORMALIZE_BUFFER_SIZE = 4096;
 
 inline WaypointPtr
-Waypoints::WaypointNameTree::Get(tstring_view name) const noexcept
+Waypoints::WaypointNameTree::Get(std::string_view name) const noexcept
 {
   if (name.size() >= NORMALIZE_BUFFER_SIZE)
     return {};
@@ -22,7 +22,7 @@ Waypoints::WaypointNameTree::Get(tstring_view name) const noexcept
 }
 
 inline void
-Waypoints::WaypointNameTree::VisitNormalisedPrefix(tstring_view prefix,
+Waypoints::WaypointNameTree::VisitNormalisedPrefix(std::string_view prefix,
                                                    const WaypointVisitor &visitor) const
 {
   if (prefix.size() >= NORMALIZE_BUFFER_SIZE)
@@ -34,7 +34,7 @@ Waypoints::WaypointNameTree::VisitNormalisedPrefix(tstring_view prefix,
 }
 
 char *
-Waypoints::WaypointNameTree::SuggestNormalisedPrefix(tstring_view prefix,
+Waypoints::WaypointNameTree::SuggestNormalisedPrefix(std::string_view prefix,
                                                      char *dest,
                                                      size_t max_length) const noexcept
 {
@@ -169,7 +169,7 @@ Waypoints::GetNearestIf(const GeoPoint &loc, double range,
 }
 
 WaypointPtr
-Waypoints::LookupName(tstring_view name) const noexcept
+Waypoints::LookupName(std::string_view name) const noexcept
 {
   return name_tree.Get(name);
 }
@@ -240,7 +240,7 @@ Waypoints::VisitWithinRange(const GeoPoint &loc, const double range,
 }
 
 void
-Waypoints::VisitNamePrefix(tstring_view prefix,
+Waypoints::VisitNamePrefix(std::string_view prefix,
                            WaypointVisitor visitor) const
 {
   name_tree.VisitNormalisedPrefix(prefix, visitor);

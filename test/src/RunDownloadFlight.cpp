@@ -77,7 +77,7 @@ try {
   }
 
   Args args(argc, argv, usage);
-  tstring driver_name = args.ExpectNextT();
+  std::string driver_name = args.ExpectNextT();
   DebugPort debug_port(args);
 
   const auto path = args.ExpectNextPath();

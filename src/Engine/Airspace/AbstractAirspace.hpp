@@ -4,7 +4,6 @@
 #pragma once
 
 #include "util/TriState.hpp"
-#include "util/tstring.hpp"
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
 #include "AirspaceActivity.hpp"
@@ -16,6 +15,7 @@
 #ifdef DO_PRINT
 #include <iosfwd>
 #endif
+#include <string>
 
 #include <tchar.h>
 
@@ -53,13 +53,13 @@ protected:
   AirspaceAltitude altitude_top;
 
   /** Airspace name (identifier) */
-  tstring name;
+  std::string name;
 
   /** Airspace type */
   AirspaceClass astype;
 
   /** Airspace Station name */
-  tstring station_name;
+  std::string station_name;
 
   /** Radio frequency (optional) */
   RadioFrequency radio_frequency = RadioFrequency::Null();
@@ -205,7 +205,7 @@ public:
    * @param _top Upper limit
    */
 
-  void SetProperties(tstring &&_name, tstring &&_station_name,
+  void SetProperties(std::string &&_name, std::string &&_station_name,
                      TransponderCode &&_transponder_code,
                      const AirspaceClass _class, const AirspaceClass _type,
                      const AirspaceAltitude &_base,
