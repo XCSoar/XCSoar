@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     const FlarmNetRecord &record = i->second;
 
     char id_buf[16];
-    _tprintf(_T("%s\t%s\t%s\t%s\n"),
+    printf(_T("%s\t%s\t%s\t%s\n"),
              record.id.Format(id_buf), record.pilot.c_str(),
              record.registration.c_str(), record.callsign.c_str());
   }

@@ -87,7 +87,7 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
 
     rasp->ForEachTime(item_index, [&time_df](BrokenTime t){
         char timetext[10];
-        _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
+        sprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
         time_df.addEnumText(timetext, t.GetMinuteOfDay());
       });
 
