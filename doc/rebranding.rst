@@ -49,9 +49,6 @@ Core Product Name
 ``PRODUCT_NAME_LC``
   Lowercase version for file paths and Unix conventions (e.g., ``"xcsoar"``).
 
-``PRODUCT_NAME_T``
-  ``TCHAR`` version for Windows API (e.g., ``_T("XCSoar")``).
-
 ``PRODUCT_NAME_A``
   ASCII version for help text and logging (same as ``PRODUCT_NAME``).
 
@@ -66,9 +63,6 @@ Data Directory Paths
 
 ``PRODUCT_DATA_DIR``
   Data directory name for Windows/macOS (e.g., ``"XCSoarData"``).
-
-``PRODUCT_DATA_DIR_T``
-  ``TCHAR`` version of data directory.
 
 ``PRODUCT_UNIX_SYSCONF_DIR``
   System-wide configuration directory on Linux/Unix.
