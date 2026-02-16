@@ -441,7 +441,9 @@ sdl2 = CmakeProject(
         "-DSDL_POWER=OFF",
         "-DSDL_TIMERS=ON", # needs to be enabled for SDL_Delay() to work on iOS
         "-DSDL_FILE=OFF",
-        "-DSDL_LOADSO=OFF",
+        # Required on macOS: with SDL_LOADSO=OFF startup fails with
+        # "SDL_LoadObject() not implemented" while creating the SDL window.
+        "-DSDL_LOADSO=ON",
         "-DSDL_CPUINFO=OFF",
         "-DSDL_FILESYSTEM=OFF",
         "-DSDL_SENSOR=OFF",
