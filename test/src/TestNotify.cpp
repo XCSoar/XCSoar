@@ -36,7 +36,7 @@ Display::Rotate([[maybe_unused]] DisplayOrientation orientation)
 
 namespace UI {
 
-#if defined(USE_EGL) || defined(USE_GLX)
+#if defined(USE_EGL)
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
 void TopWindow::Refresh() noexcept {}
