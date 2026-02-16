@@ -304,7 +304,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
     _T("all"),
     _T("task+landables"),
     _T("task"),
-    _T("none")
+    _T("none"),
     _T("task+airfields"),
   };
 
