@@ -5,7 +5,8 @@
 
 #include "Form/Control.hpp"
 #include "ui/dim/Rect.hpp"
-#include "util/tstring.hpp"
+
+#include <string>
 
 struct DialogLook;
 class DataField;
@@ -27,7 +28,7 @@ class WndProperty : public WindowControl {
   /** Width reserved for the caption of the Control */
   int caption_width;
 
-  tstring value;
+  std::string value;
 
   DataField *data_field = nullptr;
 

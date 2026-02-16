@@ -8,16 +8,17 @@
 #include "Renderer/ProgressBarRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
-#include "util/tstring_view.hxx"
 #include "UIGlobals.hpp"
+
+#include <string_view>
 
 class ProgressWidget::ProgressBar final : public PaintWindow {
   unsigned range = 0, position = 0;
 
-  tstring text;
+  std::string text;
 
 public:
-  explicit ProgressBar(tstring &&_text) noexcept
+  explicit ProgressBar(std::string &&_text) noexcept
     :text(std::move(_text)) {}
 
   void SetRange(unsigned _range) noexcept {
@@ -53,7 +54,7 @@ protected:
       canvas.SetTextColor(look.text_color);
       canvas.SetBackgroundTransparent();
 
-      const tstring_view _text{text};
+      const std::string_view _text{text};
       canvas.DrawText({padding, padding}, _text);
     }
   }

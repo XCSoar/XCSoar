@@ -37,7 +37,7 @@ prefix_sum(const RadixTree<int> &rt, const char *prefix)
 
 template<typename T>
 struct AscendingKeyVisitor {
-  tstring last;
+  std::string last;
 
   void operator()(const char *key, [[maybe_unused]] const T &value) {
     ok1(last.compare(key) <= 0);

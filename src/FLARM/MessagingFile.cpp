@@ -9,10 +9,11 @@
 #include "io/BufferedOutputStream.hxx"
 #include "io/StringConverter.hpp"
 #include "util/ConvertString.hpp"
-#include "util/tstring_view.hxx"
 #include "io/BufferedCsvReader.hpp"
 #include "util/StringStrip.hxx"
 #include "util/HexString.hpp"
+
+#include <string_view>
 
 /**
  * Write a CSV field with proper escaping according to RFC 4180.

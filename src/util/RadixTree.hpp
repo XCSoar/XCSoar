@@ -5,8 +5,8 @@
 
 #include "StaticString.hxx"
 #include "StringCompare.hxx"
-#include "tstring.hpp"
 
+#include <string>
 #include <algorithm>
 #include <cassert>
 #include <tchar.h>
@@ -427,7 +427,7 @@ class RadixTree {
 		 */
 		template<typename V>
 		void VisitValues(const char *prefix, V &visitor) const {
-			tstring key(prefix);
+			std::string key(prefix);
 			key.append(label);
 
 			const KeyVisitorAdapter<V> adapter(visitor, key.c_str());
@@ -465,7 +465,7 @@ class RadixTree {
 		 */
 		template<typename V>
 		void VisitAllChildren(const char *prefix, V &visitor) const {
-			tstring key(prefix);
+			std::string key(prefix);
 			key.append(label);
 
 			for (const Node *node = children; node != nullptr;

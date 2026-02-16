@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "util/tstring_view.hxx"
+#include <string_view>
 
 /**
  * Parses the special characters (cr, lf, back slash) in the old_string and
@@ -11,5 +11,5 @@
  * @param old_string The old string with (or without) special characters
  * @return The new parsed string
  */
-tstring_view::pointer
-UnescapeBackslash(tstring_view old_string) noexcept;
+std::string_view::pointer
+UnescapeBackslash(std::string_view old_string) noexcept;

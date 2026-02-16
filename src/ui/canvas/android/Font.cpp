@@ -37,7 +37,7 @@ Font::Destroy() noexcept
 }
 
 PixelSize
-Font::TextSize(tstring_view text) const noexcept
+Font::TextSize(std::string_view text) const noexcept
 {
   if (text_util_object == nullptr || text.empty())
     return {0, 0};
@@ -46,7 +46,7 @@ Font::TextSize(tstring_view text) const noexcept
 }
 
 std::unique_ptr<GLTexture>
-Font::TextTextureGL(tstring_view text) const noexcept
+Font::TextTextureGL(std::string_view text) const noexcept
 {
   if (!text_util_object)
     return {};

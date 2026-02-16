@@ -4,13 +4,13 @@
 #pragma once
 
 #include "Origin.hpp"
-#include "util/tstring.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
 #include "Runway.hpp"
 #include "system/RunFile.hpp"
 
+#include <string>
 #include <forward_list>
 
 class FlatProjection;
@@ -80,19 +80,19 @@ struct Waypoint {
   double elevation;
 
   /** Short name (code) label of waypoint */
-  tstring shortname;
+  std::string shortname;
 
   /** Name of waypoint */
-  tstring name;
+  std::string name;
   /** Additional comment text for waypoint */
-  tstring comment;
+  std::string comment;
   /** Airfield or additional (long) details */
-  tstring details;
+  std::string details;
   /** Additional files to be displayed in the WayointDetails dialog */
-  std::forward_list<tstring> files_embed;
+  std::forward_list<std::string> files_embed;
 #ifdef HAVE_RUN_FILE
   /** Additional files to be opened by external programs */
-  std::forward_list<tstring> files_external;
+  std::forward_list<std::string> files_external;
 #endif
 
   /** Unique id */

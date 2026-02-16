@@ -10,7 +10,7 @@ class TaskFileXCSoar: public TaskFile
 public:
   using TaskFile::TaskFile;
 
-  std::vector<tstring> GetList() const override {
+  std::vector<std::string> GetList() const override {
     return {{}};
   }
 

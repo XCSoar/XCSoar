@@ -196,7 +196,7 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 }
 
 const PixelSize
-Canvas::CalcTextSize(tstring_view text) const noexcept
+Canvas::CalcTextSize(std::string_view text) const noexcept
 {
   const std::string_view text2 = text;
   assert(ValidateUTF8(text));
@@ -215,7 +215,7 @@ Canvas::CalcTextSize(tstring_view text) const noexcept
 }
 
 static TextCache::Result
-RenderText(const Font *font, tstring_view text) noexcept
+RenderText(const Font *font, std::string_view text) noexcept
 {
   if (font == nullptr)
     return nullptr;
@@ -256,7 +256,7 @@ CopyTextRectangle(SDLRasterCanvas &canvas, int x, int y,
 }
 
 void
-Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
+Canvas::DrawText(PixelPoint p, std::string_view text) noexcept
 {
   assert(ValidateUTF8(text));
 
@@ -271,7 +271,7 @@ Canvas::DrawText(PixelPoint p, tstring_view text) noexcept
 }
 
 void
-Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
+Canvas::DrawTransparentText(PixelPoint p, std::string_view text) noexcept
 {
   assert(ValidateUTF8(text));
 
@@ -287,7 +287,7 @@ Canvas::DrawTransparentText(PixelPoint p, tstring_view text) noexcept
 
 void
 Canvas::DrawClippedText(PixelPoint p, const PixelRect &rc,
-                        tstring_view text) noexcept
+                        std::string_view text) noexcept
 {
   // TODO: implement full clipping
   if (rc.right > p.x)
@@ -296,7 +296,7 @@ Canvas::DrawClippedText(PixelPoint p, const PixelRect &rc,
 
 void
 Canvas::DrawClippedText(PixelPoint p, unsigned width,
-                        tstring_view text) noexcept
+                        std::string_view text) noexcept
 {
   assert(ValidateUTF8(text));
 

@@ -88,7 +88,7 @@ Font::Load(const FontDescription &d)
 }
 
 PixelSize
-Font::TextSize(const tstring_view text) const noexcept
+Font::TextSize(const std::string_view text) const noexcept
 {
   assert(nil != draw_attributes);
 
@@ -106,7 +106,7 @@ Font::TextSize(const tstring_view text) const noexcept
 }
 
 void
-Font::Render(tstring_view text, const PixelSize size,
+Font::Render(std::string_view text, const PixelSize size,
              void *buffer) const noexcept
 {
   assert(nil != draw_attributes);

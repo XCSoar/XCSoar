@@ -40,7 +40,7 @@ class PlaneListWidget final
     StaticString<32> name;
     AllocatedPath path;
 
-    ListItem(tstring_view _name, Path _path) noexcept
+    ListItem(std::string_view _name, Path _path) noexcept
       :name(_name), path(_path) {}
 
     bool operator<(const ListItem &i2) const noexcept {
@@ -56,8 +56,8 @@ class PlaneListWidget final
     PlaneFileVisitor(std::vector<ListItem> &_list) noexcept:list(_list) {}
 
     void Visit(Path path, Path filename) override {
-      tstring_view name{filename.c_str()};
-      RemoveSuffix(name, tstring_view{_T(".xcp")});
+      std::string_view name{filename.c_str()};
+      RemoveSuffix(name, std::string_view{_T(".xcp")});
 
       list.emplace_back(name, path);
     }

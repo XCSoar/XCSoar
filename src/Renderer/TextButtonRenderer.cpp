@@ -8,7 +8,7 @@
 
 unsigned
 TextButtonRenderer::GetMinimumButtonWidth(const ButtonLook &look,
-                                          tstring_view caption) noexcept
+                                          std::string_view caption) noexcept
 {
   return 2 * (ButtonFrameRenderer::GetMargin() + Layout::GetTextPadding())
     + look.font->TextSize(caption).width;
