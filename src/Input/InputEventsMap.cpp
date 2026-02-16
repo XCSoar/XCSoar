@@ -46,40 +46,40 @@ InputEvents::eventZoom(const char* misc)
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  if (StringIsEqual(misc, _T("auto toggle")))
+  if (StringIsEqual(misc, "auto toggle"))
     sub_AutoZoom(-1);
-  else if (StringIsEqual(misc, _T("auto on")))
+  else if (StringIsEqual(misc, "auto on"))
     sub_AutoZoom(1);
-  else if (StringIsEqual(misc, _T("auto off")))
+  else if (StringIsEqual(misc, "auto off"))
     sub_AutoZoom(0);
-  else if (StringIsEqual(misc, _T("auto show"))) {
+  else if (StringIsEqual(misc, "auto show")) {
     if (settings_map.auto_zoom_enabled)
       Message::AddMessage(_("Auto. zoom on"));
     else
       Message::AddMessage(_("Auto. zoom off"));
-  } else if (StringIsEqual(misc, _T("slowout")))
+  } else if (StringIsEqual(misc, "slowout"))
     sub_ScaleZoom(-1);
-  else if (StringIsEqual(misc, _T("slowin")))
+  else if (StringIsEqual(misc, "slowin"))
     sub_ScaleZoom(1);
-  else if (StringIsEqual(misc, _T("out")))
+  else if (StringIsEqual(misc, "out"))
     sub_ScaleZoom(-1);
-  else if (StringIsEqual(misc, _T("in")))
+  else if (StringIsEqual(misc, "in"))
     sub_ScaleZoom(1);
-  else if (StringIsEqual(misc, _T("-")))
+  else if (StringIsEqual(misc, "-"))
     sub_ScaleZoom(-1);
-  else if (StringIsEqual(misc, _T("+")))
+  else if (StringIsEqual(misc, "+"))
     sub_ScaleZoom(1);
-  else if (StringIsEqual(misc, _T("--")))
+  else if (StringIsEqual(misc, "--"))
     sub_ScaleZoom(-2);
-  else if (StringIsEqual(misc, _T("++")))
+  else if (StringIsEqual(misc, "++"))
     sub_ScaleZoom(2);
-  else if (StringIsEqual(misc, _T("circlezoom toggle"))) {
+  else if (StringIsEqual(misc, "circlezoom toggle")) {
     settings_map.circle_zoom_enabled = !settings_map.circle_zoom_enabled;
-  } else if (StringIsEqual(misc, _T("circlezoom on"))) {
+  } else if (StringIsEqual(misc, "circlezoom on")) {
     settings_map.circle_zoom_enabled = true;
-  } else if (StringIsEqual(misc, _T("circlezoom off"))) {
+  } else if (StringIsEqual(misc, "circlezoom off")) {
     settings_map.circle_zoom_enabled = false;
-  } else if (StringIsEqual(misc, _T("circlezoom show"))) {
+  } else if (StringIsEqual(misc, "circlezoom show")) {
     if (settings_map.circle_zoom_enabled)
       Message::AddMessage(_("Circling zoom on"));
     else
@@ -113,25 +113,25 @@ InputEvents::eventZoom(const char* misc)
 void
 InputEvents::eventPan(const char *misc)
 {
-  if (StringIsEqual(misc, _T("toggle")))
+  if (StringIsEqual(misc, "toggle"))
     TogglePan();
 
-  else if (StringIsEqual(misc, _T("on")))
+  else if (StringIsEqual(misc, "on"))
     EnterPan();
 
-  else if (StringIsEqual(misc, _T("off")))
+  else if (StringIsEqual(misc, "off"))
     LeavePan();
 
-  else if (StringIsEqual(misc, _T("up")))
+  else if (StringIsEqual(misc, "up"))
     sub_PanCursor(0, 1);
 
-  else if (StringIsEqual(misc, _T("down")))
+  else if (StringIsEqual(misc, "down"))
     sub_PanCursor(0, -1);
 
-  else if (StringIsEqual(misc, _T("left")))
+  else if (StringIsEqual(misc, "left"))
     sub_PanCursor(1, 0);
 
-  else if (StringIsEqual(misc, _T("right")))
+  else if (StringIsEqual(misc, "right"))
     sub_PanCursor(-1, 0);
 
   XCSoarInterface::SendMapSettings(true);

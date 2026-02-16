@@ -15,7 +15,7 @@ Main([[maybe_unused]] TestMainWindow &main_window)
 {
   RoughTime value = RoughTime::Invalid();
   const RoughTimeDelta time_zone = RoughTimeDelta::FromMinutes(0);
-  if (!TimeEntryDialog(_T("The caption"), value, time_zone, true))
+  if (!TimeEntryDialog("The caption", value, time_zone, true))
     return;
 
   if (value.IsValid())

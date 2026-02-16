@@ -19,7 +19,7 @@ public:
     :UI::SingleWindow(display), terminal(look) {}
 
   void Create(PixelSize size) {
-    SingleWindow::Create(_T("RunTerminal"), size);
+    SingleWindow::Create("RunTerminal", size);
 
     PixelRect rc = GetClientRect();
 

@@ -299,8 +299,8 @@ XVCCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister xcv_driver = {
-  _T("XCVario"),
-  _T("XCVario"),
+  "XCVario",
+  "XCVario",
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   XVCCreateOnPort,
 };

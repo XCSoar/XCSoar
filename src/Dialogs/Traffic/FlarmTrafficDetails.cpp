@@ -160,11 +160,11 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
   if (target_ok) {
     FormatUserDistanceSmart(target->distance, tmp, true, 20, 1000);
     char *p = tmp + strlen(tmp);
-    *p++ = _T(' ');
+    *p++ = ' ';
     FormatAngleDelta(p, 20, target->Bearing() - basic.track);
     value = tmp;
   } else
-    value = _T("--");
+    value = "--";
 
   SetText(DISTANCE, value);
 
@@ -174,7 +174,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
     if (target->altitude_available) {
       FormatUserAltitude(target->altitude, p);
       p += strlen(p);
-      *p++ = _T(' ');
+      *p++ = ' ';
     }
 
     Angle dir = Angle::FromXY(target->distance, target->relative_altitude);
@@ -182,7 +182,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 
     value = tmp;
   } else
-    value = _T("--");
+    value = "--";
 
   SetText(ALTITUDE, value);
 
@@ -191,7 +191,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
     FormatUserVerticalSpeed(target->climb_rate_avg30s, tmp);
     value = tmp;
   } else
-    value = _T("--");
+    value = "--";
 
   SetText(VARIO, value);
 }
@@ -208,7 +208,7 @@ FlarmTrafficDetailsWidget::Update()
   const char *value;
 
   // Set the dialog caption
-  StringFormatUnsafe(tmp, _T("%s (%s)"),
+  StringFormatUnsafe(tmp, "%s (%s)",
                      _("FLARM Traffic Details"), target_id.Format(tmp_id));
   dialog.SetCaption(tmp);
 
@@ -218,18 +218,18 @@ FlarmTrafficDetailsWidget::Update()
   const ResolvedInfo info = FlarmDetails::ResolveInfo(target_id);
 
   // Shared fields: pilot/plane/airfield direct from resolver
-  SetText(PILOT, info.pilot != nullptr ? info.pilot : _T("--"));
+  SetText(PILOT, info.pilot != nullptr ? info.pilot : "--");
 
   const char *plane_value = info.plane_type;
   if (plane_value == nullptr && target != nullptr)
     plane_value = FlarmTraffic::GetTypeString(target->type);
-  SetText(PLANE, plane_value != nullptr ? plane_value : _T("--"));
+  SetText(PLANE, plane_value != nullptr ? plane_value : "--");
 
-  SetText(AIRPORT, info.airfield != nullptr ? info.airfield : _T("--"));
+  SetText(AIRPORT, info.airfield != nullptr ? info.airfield : "--");
 
   char fbuf[16];
   const char *freq = info.frequency.Format(fbuf, 16);
-  value = freq != nullptr ? UnsafeBuildString(tmp, freq, _T(" MHz")) : _T("--");
+  value = freq != nullptr ? UnsafeBuildString(tmp, freq, " MHz") : "--";
   SetText(RADIO, value);
 
   // Fill the callsign field (+ registration)
@@ -241,13 +241,13 @@ FlarmTrafficDetailsWidget::Update()
       BasicStringBuilder<char> builder(tmp, ARRAY_SIZE(tmp));
       builder.Append(cs);
       if (info.registration != nullptr)
-        builder.Append(_T(" ("), info.registration, _T(")"));
+        builder.Append(" (", info.registration, ")");
       value = tmp;
     } catch (BasicStringBuilder<char>::Overflow) {
       value = cs;
     }
   } else
-    value = _T("--");
+    value = "--";
   SetText(CALLSIGN, value);
 
   SetText(SOURCE, FlarmDetails::ToString(info.source));

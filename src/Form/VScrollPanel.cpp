@@ -223,8 +223,8 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
   gesture_tracking = false;
 
   if (gesture != nullptr &&
-      (StringIsEqual(gesture, _T("L")) ||
-       StringIsEqual(gesture, _T("R")))) {
+      (StringIsEqual(gesture, "L") ||
+       StringIsEqual(gesture, "R"))) {
     /* Horizontal swipe detected - forward to listener */
     if (dragging) {
       dragging = false;

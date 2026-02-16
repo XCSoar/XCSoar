@@ -9,5 +9,5 @@ void
 Message::AddMessage(const char *text,
                     [[maybe_unused]] const char *data) noexcept
 {
-  fprintf(stderr, _T("%s\n"), text);
+  fprintf(stderr, "%s\n", text);
 }

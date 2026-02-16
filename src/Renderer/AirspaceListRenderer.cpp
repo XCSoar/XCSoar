@@ -71,7 +71,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   StaticString<256> comment(AirspaceFormatter::GetClassOrType(airspace));
 
-  comment.AppendFormat(_T(" - %s - %s"),
+  comment.AppendFormat(" - %s - %s",
                        FormatUserDistanceSmart(vector.distance).c_str(),
                        FormatBearing(vector.bearing).c_str());
 

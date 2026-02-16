@@ -33,9 +33,9 @@ public:
     :start(strdup(line)), data(start), end(start + strlen(line))
   {
     // Trim possible = character at the end (End-of-METAR character)
-    if (start != end && *(end - 1) == _T('=')) {
+    if (start != end && *(end - 1) == '=') {
       end--;
-      *end = _T('\0');
+      *end = '\0';
     }
   }
 
@@ -51,9 +51,9 @@ public:
 
     const char *start = data;
 
-    auto *seperator = StringFind(data, _T(' '));
+    auto *seperator = StringFind(data, ' ');
     if (seperator != NULL && seperator < end) {
-      *seperator = _T('\0');
+      *seperator = '\0';
       data = seperator + 1;
     } else {
       data = end;
@@ -88,7 +88,7 @@ DetectTimeCodeToken(const char *token)
   if (strlen(token) != 7)
     return false;
 
-  return token[6] == _T('Z') || token[6] == _T('z');
+  return token[6] == 'Z' || token[6] == 'z';
 }
 
 static bool
@@ -122,11 +122,11 @@ DetectWindToken(const char *token)
   if (length != 8 && length != 7)
     return false;
 
-  if (!StringIsEqualIgnoreCase(token + 5, _T("MPS")) &&
-      !StringIsEqualIgnoreCase(token + 5, _T("KT")))
+  if (!StringIsEqualIgnoreCase(token + 5, "MPS") &&
+      !StringIsEqualIgnoreCase(token + 5, "KT"))
     return false;
 
-  bool variable = (StringIsEqualIgnoreCase(token, _T("VRB"), 3));
+  bool variable = (StringIsEqualIgnoreCase(token, "VRB", 3));
 
   for (unsigned i = variable ? 3 : 0; i < 5; ++i)
     if (!IsDigitASCII(token[i]))
@@ -141,7 +141,7 @@ ParseWind(const char *token, ParsedMETAR &parsed)
   assert(DetectWindToken(token));
 
   // variable wind directions
-  if (StringIsEqualIgnoreCase(token, _T("VRB"), 3))
+  if (StringIsEqualIgnoreCase(token, "VRB", 3))
     // parsing okay but don't provide wind
     return true;
 
@@ -153,9 +153,9 @@ ParseWind(const char *token, ParsedMETAR &parsed)
   unsigned bearing = (int)(wind_code / 100);
   wind_code -= bearing * 100;
 
-  if (StringIsEqualIgnoreCase(endptr, _T("MPS")))
+  if (StringIsEqualIgnoreCase(endptr, "MPS"))
     parsed.wind.norm = wind_code;
-  else if (StringIsEqualIgnoreCase(endptr, _T("KT")))
+  else if (StringIsEqualIgnoreCase(endptr, "KT"))
     parsed.wind.norm = Units::ToSysUnit(wind_code, Unit::KNOTS);
   else
     return false;
@@ -169,7 +169,7 @@ ParseWind(const char *token, ParsedMETAR &parsed)
 static bool
 DetectCAVOK(const char *token)
 {
-  return (strlen(token) == 5 && StringIsEqualIgnoreCase(token, _T("CAVOK")));
+  return (strlen(token) == 5 && StringIsEqualIgnoreCase(token, "CAVOK"));
 }
 
 /** Detects a token with exactly 5 digits */
@@ -216,13 +216,13 @@ DetectTemperaturesToken(const char *token)
     if (IsDigitASCII(token[i]))
       continue;
 
-    if (token[i] == _T('/')) {
+    if (token[i] == '/') {
       divider_found = true;
       minus_possible = true;
       continue;
     }
 
-    if (minus_possible && (token[i] == _T('M') || token[i] == _T('m')))
+    if (minus_possible && (token[i] == 'M' || token[i] == 'm'))
       continue;
 
     return false;
@@ -234,7 +234,7 @@ DetectTemperaturesToken(const char *token)
 static const char *
 ParseTemperature(const char *token, double &temperature)
 {
-  bool negative = (token[0] == _T('M') || token[0] == _T('m'));
+  bool negative = (token[0] == 'M' || token[0] == 'm');
   if (negative)
     token++;
 
@@ -258,7 +258,7 @@ ParseTemperatures(const char *token, ParsedMETAR &parsed)
   if ((token = ParseTemperature(token, parsed.temperature)) == NULL)
     return false;
 
-  if (*token != _T('/'))
+  if (*token != '/')
     return false;
 
   token++;
@@ -277,7 +277,7 @@ DetectAdditionalTemperaturesToken(const char *token)
   if (strlen(token) != 9)
     return false;
 
-  if (token[0] != _T('T') && token[0] != _T('t'))
+  if (token[0] != 'T' && token[0] != 't')
     return false;
 
   for (unsigned i = 1; i < 9; ++i) {
@@ -323,11 +323,11 @@ DetectQNHToken(const char *token)
   unsigned length = strlen(token);
 
   // International style
-  if (token[0] == _T('Q') || token[0] == _T('q'))
+  if (token[0] == 'Q' || token[0] == 'q')
     return length <= 5 && length >= 4;
 
   // American style
-  if (token[0] == _T('A') || token[0] == _T('a'))
+  if (token[0] == 'A' || token[0] == 'a')
     return length == 5;
 
   return false;
@@ -339,7 +339,7 @@ ParseQNH(const char *token, ParsedMETAR &parsed)
   assert(DetectQNHToken(token));
 
   // International style (hPa)
-  if (token[0] == _T('Q') || token[0] == _T('q')) {
+  if (token[0] == 'Q' || token[0] == 'q') {
     token++;
 
     char *endptr;
@@ -353,7 +353,7 @@ ParseQNH(const char *token, ParsedMETAR &parsed)
   }
 
   // American style (inHg)
-  if (token[0] == _T('A') || token[0] == _T('a')) {
+  if (token[0] == 'A' || token[0] == 'a') {
     token++;
 
     char *endptr;
@@ -465,15 +465,15 @@ ParseLocation(const char *buffer, ParsedMETAR &parsed)
   unsigned lat_min = ParseUnsigned(end, &end, 10);
 
   unsigned lat_sec = 0;
-  if (*end == _T('-')) {
+  if (*end == '-') {
     ++end;
     lat_sec = ParseUnsigned(end, &end, 10);
   }
 
   bool north;
-  if (*end == _T('N') || *end == _T('n'))
+  if (*end == 'N' || *end == 'n')
     north = true;
-  else if (*end == _T('S') || *end == _T('s'))
+  else if (*end == 'S' || *end == 's')
     north = false;
   else
     return false;
@@ -492,15 +492,15 @@ ParseLocation(const char *buffer, ParsedMETAR &parsed)
   unsigned lon_min = ParseUnsigned(end, &end, 10);
 
   unsigned lon_sec = 0;
-  if (*end == _T('-')) {
+  if (*end == '-') {
     ++end;
     lon_sec = ParseUnsigned(end, &end, 10);
   }
 
   bool east;
-  if (*end == _T('E') || *end == _T('e'))
+  if (*end == 'E' || *end == 'e')
     east = true;
-  else if (*end == _T('W') || *end == _T('w'))
+  else if (*end == 'W' || *end == 'w')
     east = false;
   else
     return false;
@@ -530,9 +530,9 @@ METARParser::ParseDecoded(const METAR::ContentString &decoded,
 
   const char *start = decoded.c_str();
   const char *end = start + strlen(start);
-  const auto *opening_brace = StringFind(start, _T('('));
-  const auto *closing_brace = StringFind(start, _T(')'));
-  const auto *line_break = StringFind(start, _T('\n'));
+  const auto *opening_brace = StringFind(start, '(');
+  const auto *closing_brace = StringFind(start, ')');
+  const auto *line_break = StringFind(start, '\n');
 
   if (line_break == NULL || line_break >= end ||
       opening_brace == NULL || opening_brace >= line_break ||
@@ -540,7 +540,7 @@ METARParser::ParseDecoded(const METAR::ContentString &decoded,
     return;
 
   while (opening_brace >= start &&
-         (*opening_brace == _T('(') || *opening_brace == _T(' ')))
+         (*opening_brace == '(' || *opening_brace == ' '))
     opening_brace--;
 
   unsigned name_length = opening_brace - start + 1;
@@ -551,7 +551,7 @@ METARParser::ParseDecoded(const METAR::ContentString &decoded,
 
   do
     closing_brace++;
-  while (*closing_brace == _T(' '));
+  while (*closing_brace == ' ');
 
   ParseLocation(closing_brace, parsed);
 }

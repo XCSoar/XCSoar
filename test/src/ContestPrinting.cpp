@@ -14,7 +14,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
                                   const Trace &trace_triangle,
                                   const Trace &trace_sprint)
 {
-  Directory::Create(Path(_T("output/results")));
+  Directory::Create(Path("output/results"));
 
   {
     std::ofstream fs("output/results/res-olc-trace.txt");

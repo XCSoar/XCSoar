@@ -60,7 +60,7 @@ InfoBoxSettings::SetDefaults() noexcept
   panels[2].name = N_("FinalGlide");
 
   for (unsigned i = PREASSIGNED_PANELS; i < MAX_PANELS; i++)
-    panels[i].name.Format(_T("AUX-%u"), i-2);
+    panels[i].name.Format("AUX-%u", i-2);
 
   for (unsigned i = 0; i < DFLT_CONFIG_PANELS; i++)
     for (unsigned j = 0; j < DFLT_CONFIG_BOXES; j++)

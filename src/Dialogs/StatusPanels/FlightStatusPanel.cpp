@@ -51,9 +51,9 @@ FlightStatusPanel::Refresh() noexcept
 
     SetText(Distance, FormatUserDistanceSmart(vec.distance));
   } else {
-    SetText(Near, _T("-"));
-    SetText(Bearing, _T("-"));
-    SetText(Distance, _T("-"));
+    SetText(Near, "-");
+    SetText(Bearing, "-");
+    SetText(Distance, "-");
   }
 }
 

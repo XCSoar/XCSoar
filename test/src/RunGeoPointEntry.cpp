@@ -20,11 +20,11 @@ Main([[maybe_unused]] TestMainWindow &main_window)
   GeoPoint value = GeoPoint(Angle::Degrees(7.7061111111111114),
                             Angle::Degrees(51.051944444444445));
 
-  if (!GeoPointEntryDialog(_T("The caption"), value, format, true))
+  if (!GeoPointEntryDialog("The caption", value, format, true))
     return;
 
   if (value.IsValid())
-    printf(_T("%s\n"),
+    printf("%s\n",
              FormatGeoPoint(value, CoordinateFormat::DDMMSS).c_str());
   else
     printf("invalid\n");

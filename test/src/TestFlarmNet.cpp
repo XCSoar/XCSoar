@@ -13,7 +13,7 @@ int main()
   plan_tests(16);
 
   FlarmNetDatabase db;
-  int count = FlarmNetReader::LoadFile(Path(_T("test/data/flarmnet/data.fln")),
+  int count = FlarmNetReader::LoadFile(Path("test/data/flarmnet/data.fln"),
                                        db);
   ok1(count == 6);
 
@@ -23,30 +23,30 @@ int main()
   ok1(record != NULL);
 
   ok1(record->id == id);
-  ok1(StringIsEqual(record->pilot, _T("Tobias Bieniek")));
-  ok1(StringIsEqual(record->airfield, _T("AACHEN")));
-  ok1(StringIsEqual(record->plane_type, _T("Hornet")));
-  ok1(StringIsEqual(record->registration, _T("D-4449")));
-  ok1(StringIsEqual(record->callsign, _T("TH")));
+  ok1(StringIsEqual(record->pilot, "Tobias Bieniek"));
+  ok1(StringIsEqual(record->airfield, "AACHEN"));
+  ok1(StringIsEqual(record->plane_type, "Hornet"));
+  ok1(StringIsEqual(record->registration, "D-4449"));
+  ok1(StringIsEqual(record->callsign, "TH"));
   ok1(record->frequency.IsDefined());
   ok1(record->frequency.GetKiloHertz() == 130625);
 
   const FlarmNetRecord *array[3];
-  ok1(db.FindRecordsByCallSign(_T("TH"), array, 3) == 2);
+  ok1(db.FindRecordsByCallSign("TH", array, 3) == 2);
 
   bool found4449 = false, found5799 = false;
   for (unsigned i = 0; i < 2; i++) {
     record = array[i];
-    if (StringIsEqual(record->registration, _T("D-4449")))
+    if (StringIsEqual(record->registration, "D-4449"))
       found4449 = true;
-    if (StringIsEqual(record->registration, _T("D-5799")))
+    if (StringIsEqual(record->registration, "D-5799"))
       found5799 = true;
   }
   ok1(found4449);
   ok1(found5799);
 
   FlarmId ids[3];
-  ok1(db.FindIdsByCallSign(_T("TH"), ids, 3) == 2);
+  ok1(db.FindIdsByCallSign("TH", ids, 3) == 2);
 
   id = FlarmId::Parse("DDA85C", NULL);
   FlarmId id2 = FlarmId::Parse("DDA896", NULL);

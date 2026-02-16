@@ -90,8 +90,8 @@ FlymasterF1CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &port)
 }
 
 const struct DeviceRegister flymaster_f1_driver = {
-  _T("FlymasterF1"),
-  _T("Flymaster F1"),
+  "FlymasterF1",
+  "Flymaster F1",
   0,
   FlymasterF1CreateOnPort,
 };

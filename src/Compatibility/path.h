@@ -21,8 +21,8 @@ static inline bool
 IsDirSeparator(char ch)
 {
 #ifdef _WIN32
-  return ch == _T('\\');
+  return ch == '\\';
 #else
-  return ch == _T('/');
+  return ch == '/';
 #endif
 }

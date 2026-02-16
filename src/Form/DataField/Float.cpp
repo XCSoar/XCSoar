@@ -121,7 +121,7 @@ DataFieldFloat::CreateComboList(const char *reference_string) const noexcept
   auto first = corrected_value - surrounding_items * mStep;
   if (first > mMin + epsilon)
     /* there are values before "first" - give the user a choice */
-    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, "<<More Items>>");
   else if (first < mMin - epsilon)
     first = int(mMin / mStep) * mStep;
 
@@ -181,7 +181,7 @@ DataFieldFloat::CreateComboList(const char *reference_string) const noexcept
 
   if (last < mMax - epsilon)
     /* there are values after "last" - give the user a choice */
-    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, "<<More Items>>");
 
   return combo_list;
 }

@@ -343,14 +343,14 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   const auto &button_look = UIGlobals::GetDialogLook().button;
 
-  name_button.Create(parent, button_look, _T(""), layout.name_button,
+  name_button.Create(parent, button_look, "", layout.name_button,
                      control_style, [this](){ OnNameClicked(); });
 
   previous_button.Create(parent, layout.previous_button, control_style,
-                         std::make_unique<SymbolButtonRenderer>(button_look, _T("<")),
+                         std::make_unique<SymbolButtonRenderer>(button_look, "<"),
                          [this](){ OnPrevClicked(); });
   next_button.Create(parent, layout.next_button, control_style,
-                     std::make_unique<SymbolButtonRenderer>(button_look, _T(">")),
+                     std::make_unique<SymbolButtonRenderer>(button_look, ">"),
                      [this](){ OnNextClicked(); });
 
   const unsigned caption_width = ::Layout::Scale(50);
@@ -358,14 +358,14 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   range.Create(parent, layout.range, _("Distance"),
                caption_width, control_style);
   range.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors. Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances."));
-  range.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f %%"),
+  range.SetDataField(new DataFieldFloat("%.0f", "%.0f %%",
                                         -100, 100, 0,
                                         5, false, this));
 
   radial.Create(parent, layout.radial, _("Radial"),
                 caption_width, control_style);
   radial.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors. Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise."));
-  radial.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f" DEG),
+  radial.SetDataField(new DataFieldFloat("%.0f", "%.0f" DEG,
                                          -90, 90, 0,
                                          5, false, this));
 
@@ -490,7 +490,7 @@ TargetWidget::UpdateNameButton()
     const OrderedTask &task = lease->GetOrderedTask();
     if (target_point < task.TaskSize()) {
       const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
-      buffer.Format(_T("%u: %s"), target_point,
+      buffer.Format("%u: %s", target_point,
                     tp.GetWaypoint().name.c_str());
     } else
       buffer.clear();

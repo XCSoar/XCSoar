@@ -11,8 +11,8 @@ XCTracerCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused
 }
 
 const struct DeviceRegister xctracer_driver = {
-  _T("XCTracer"),
-  _T("XC-Tracer Vario"),
+  "XCTracer",
+  "XC-Tracer Vario",
   0,
   XCTracerCreateOnPort,
 };

@@ -8,9 +8,9 @@
 static const char *
 LastSeparator(const char *path)
 {
-  const auto *p = StringFindLast(path, _T('/'));
+  const auto *p = StringFindLast(path, '/');
 #ifdef _WIN32
-  const auto *backslash = StringFindLast(path, _T('\\'));
+  const auto *backslash = StringFindLast(path, '\\');
   if (p == nullptr || backslash > p)
     p = backslash;
 #endif

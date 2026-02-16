@@ -112,9 +112,9 @@ TaskEditPanel::CreateButtons(ButtonPanel &buttons) noexcept
                             [this](){ OnEditTurnpointClicked(); });
   mutate_button = buttons.Add(_("Make Finish"),
                               [this](){ OnMakeFinish(); });
-  down_button = buttons.Add(std::make_unique<SymbolButtonRenderer>(buttons.GetLook(), _T("v")),
+  down_button = buttons.Add(std::make_unique<SymbolButtonRenderer>(buttons.GetLook(), "v"),
                             [this](){ MoveDown(); });
-  up_button = buttons.Add(std::make_unique<SymbolButtonRenderer>(buttons.GetLook(), _T("^")),
+  up_button = buttons.Add(std::make_unique<SymbolButtonRenderer>(buttons.GetLook(), "^"),
                           [this](){ MoveUp(); });
   reverse_button = buttons.Add(_("Reverse"),
                                [this](){ ReverseTask(); });

@@ -78,7 +78,7 @@ try {
     if (argc > 1) {
       n = atoi(argv[1]);
     }
-    TestTrace(Path(_T("test/data/09kc3ov3.igc")), n);
+    TestTrace(Path("test/data/09kc3ov3.igc"), n);
   } else {
     assert(argc >= 3);
     unsigned n = atoi(argv[2]);

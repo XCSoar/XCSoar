@@ -27,7 +27,7 @@ try {
   bool header_found = false;
   while ((line = reader.ReadLine()) != nullptr) {
     // Skip lines which are not declaration records
-    if (*line != _T('C'))
+    if (*line != 'C')
       continue;
 
     if (!header_found) {
@@ -91,11 +91,11 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
       waypoint_name.clear();
       waypoint_name.UnsafeAppendASCII(it.name);
     } else if (i == 0)
-      waypoint_name = _T("Start");
+      waypoint_name = "Start";
     else if (i == num_turnpoints - 1)
-      waypoint_name = _T("Finish");
+      waypoint_name = "Finish";
     else
-      waypoint_name.Format(_T("%s #%u"), _T("Turnpoint"), i);
+      waypoint_name.Format("%s #%u", "Turnpoint", i);
 
     auto wp = MakeWaypoint(it.location, waypoint_name.c_str());
 

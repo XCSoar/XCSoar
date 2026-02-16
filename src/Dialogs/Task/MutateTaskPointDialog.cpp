@@ -48,7 +48,7 @@ MutateTaskPointRenderer::OnPaintItem(Canvas &canvas, PixelRect rc,
   assert(DrawListIndex < point_types.size());
 
   if (point_types[DrawListIndex] == current_type)
-    rc.left = row_renderer.DrawColumn(canvas, rc, _T("*"));
+    rc.left = row_renderer.DrawColumn(canvas, rc, "*");
 
   row_renderer.DrawTextRow(canvas, rc,
                            OrderedTaskPointName(point_types[DrawListIndex]));

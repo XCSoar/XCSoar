@@ -272,13 +272,13 @@ VScrollWidget::OnVScrollPanelGesture(const char *gesture) noexcept
   if (!gesture_callback)
     return false;
 
-  if (StringIsEqual(gesture, _T("R"))) {
+  if (StringIsEqual(gesture, "R")) {
     /* Swipe right = next page (+1) */
     gesture_callback(true);
     return true;
   }
 
-  if (StringIsEqual(gesture, _T("L"))) {
+  if (StringIsEqual(gesture, "L")) {
     /* Swipe left = previous page (-1) */
     gesture_callback(false);
     return true;

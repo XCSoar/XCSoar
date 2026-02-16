@@ -24,7 +24,7 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
                      const GlidePolar &glide_polar)
 {
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.SetYLabel(_T("w"), Units::GetVerticalSpeedName());
+  chart.SetYLabel("w", Units::GetVerticalSpeedName());
   chart.Begin();
 
   if (fs.vario_cruise_histogram.empty() &&
@@ -94,8 +94,8 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
   const double tref = chart.GetXMin()*0.1+chart.GetXMax()*0.9;
-  chart.DrawLabel({tref, mc}, _T("MC"));
-  chart.DrawLabel({tref, s}, _T("S cruise"));
+  chart.DrawLabel({tref, mc}, "MC");
+  chart.DrawLabel({tref, s}, "S cruise");
 
   chart.Finish();
 }

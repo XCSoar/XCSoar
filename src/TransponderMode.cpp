@@ -6,13 +6,13 @@
 #include "util/Macros.hpp"
 
 static const char *const mode_strings[] = {
-  _T(""),
-  _T("OFF"),
-  _T("SBY"),
-  _T("GND"),
-  _T("ON"),
-  _T("ALT"),
-  _T("IDENT"),
+  "",
+  "OFF",
+  "SBY",
+  "GND",
+  "ON",
+  "ALT",
+  "IDENT",
 };
 
 const char *
@@ -21,5 +21,5 @@ TransponderMode::ToString(Mode mode) noexcept
   unsigned i = (unsigned)mode;
   return i < ARRAY_SIZE(mode_strings)
     ? mode_strings[i]
-    : _T("Unknown");
+    : "Unknown";
 }

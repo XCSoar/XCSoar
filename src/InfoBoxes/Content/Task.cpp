@@ -21,6 +21,8 @@
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
+#include <string>
+
 static void
 UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_s) noexcept;
 
@@ -868,7 +870,8 @@ UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_
     data.SetComment(_("Closed"));
   } else if (eff_start_window.HasBegun(projected_start_time)) {
     if (eff_start_window.GetEnd().IsValid()) {
-      unsigned seconds = SecondsUntil(projected_start_time_s, eff_start_window.GetEnd());
+      unsigned seconds = SecondsUntil(projected_start_time_s,
+                         eff_start_window.GetEnd());
       data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
       data.SetValueColor(3);
     } else
@@ -876,7 +879,8 @@ UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_
 
     data.SetComment(_("Open"));
   } else {
-    unsigned seconds = SecondsUntil(projected_start_time_s, eff_start_window.GetStart());
+    unsigned seconds = SecondsUntil(projected_start_time_s,
+                       eff_start_window.GetStart());
     data.FmtValue("{:02}:{:02}", seconds / 60, seconds % 60);
     data.SetValueColor(2);
     data.SetComment(_("Waiting"));
@@ -887,7 +891,8 @@ void
 UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 {
   const GlideResult &current_remaining =
-    CommonInterface::Calculated().ordered_task_stats.current_leg.solution_remaining;
+    CommonInterface::Calculated().ordered_task_stats.current_leg
+                                 .solution_remaining;
 
   /* reset color that may have been set by a previous call */
   if (!current_remaining.IsOk()) {
@@ -896,7 +901,8 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
     return;
   }
 
-  const auto arrival_s = CommonInterface::Basic().time + current_remaining.time_elapsed;
+  const auto arrival_s = CommonInterface::Basic().time +
+                         current_remaining.time_elapsed;
   UpdateStartOpenInfobox(data, arrival_s);
 }
 

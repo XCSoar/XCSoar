@@ -105,9 +105,9 @@ void
 ManageI2CPitotWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                               [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  AddReadOnly(_("Pitot"), nullptr, _T("%.2f"), UnitGroup::PRESSURE, 0);
-  AddReadOnly(_("Pressure"), nullptr, _T("%.2f"), UnitGroup::PRESSURE, 0);
-  AddReadOnly(_("Offset"), nullptr, _T("%.2f"),
+  AddReadOnly(_("Pitot"), nullptr, "%.2f", UnitGroup::PRESSURE, 0);
+  AddReadOnly(_("Pressure"), nullptr, "%.2f", UnitGroup::PRESSURE, 0);
+  AddReadOnly(_("Offset"), nullptr, "%.2f",
               UnitGroup::PRESSURE, device.GetConfig().sensor_offset);
 }
 

@@ -23,7 +23,7 @@ static void
 SetTitle(WndForm &form, const TabWidget &pager)
 {
   StaticString<128> title;
-  title.Format(_T("%s: %s"), _("Weather"),
+  title.Format("%s: %s", _("Weather"),
                pager.GetButtonCaption(pager.GetCurrentIndex()));
   form.SetCaption(title);
 }
@@ -53,22 +53,22 @@ ShowWeatherDialog(const char *page)
   /* setup tabs */
 
 #ifdef HAVE_NOAA
-  if (page != nullptr && StringIsEqual(page, _T("list")))
+  if (page != nullptr && StringIsEqual(page, "list"))
     start_page = widget.GetSize();
 
   widget.AddTab(CreateNOAAListWidget(), _("METAR and TAF"));
 #endif
 
-  if (page != nullptr && StringIsEqual(page, _T("rasp")))
+  if (page != nullptr && StringIsEqual(page, "rasp"))
     start_page = widget.GetSize();
 
-  widget.AddTab(CreateRaspWidget(), _T("RASP"));
+  widget.AddTab(CreateRaspWidget(), "RASP");
 
 #ifdef HAVE_PCMET
-  if (page != nullptr && StringIsEqual(page, _T("pc_met")))
+  if (page != nullptr && StringIsEqual(page, "pc_met"))
     start_page = widget.GetSize();
 
-  widget.AddTab(CreatePCMetWidget(), _T("pc_met"));
+  widget.AddTab(CreatePCMetWidget(), "pc_met");
 #endif
 
 #if 0
@@ -77,11 +77,11 @@ ShowWeatherDialog(const char *page)
      eventually, we should refactor the code to be generic, allowing
      arbitrary georeferenced images */
 
-  if (page != nullptr && StringIsEqual(page, _T("overlay")))
+  if (page != nullptr && StringIsEqual(page, "overlay"))
     start_page = widget.GetSize();
 
   // TODO: better and translatable title?
-  widget.AddTab(CreateWeatherMapOverlayWidget(), _T("Overlay"));
+  widget.AddTab(CreateWeatherMapOverlayWidget(), "Overlay");
 #endif
 
   /* restore previous page */

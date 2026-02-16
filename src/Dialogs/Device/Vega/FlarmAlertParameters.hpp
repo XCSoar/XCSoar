@@ -8,19 +8,19 @@
 #include "Language/Language.hpp"
 
 static constexpr StaticEnumChoice flarm_user_interfaces[] = {
-  { 0, _T("LED+Buzzer") },
-  { 1, _T("None") },
-  { 2, _T("Buzzer") },
-  { 3, _T("LED") },
+  { 0, "LED+Buzzer" },
+  { 1, "None" },
+  { 2, "Buzzer" },
+  { 3, "LED" },
   { 0 }
 };
 
 static constexpr
 VegaParametersWidget::StaticParameter flarm_alert_parameters[] = {
   { DataField::Type::INTEGER, "FlarmMaxObjectsReported",
-    N_("Max. objects reported"), NULL, NULL, 0, 15, 1, _T("%d") },
+    N_("Max. objects reported"), NULL, NULL, 0, 15, 1, "%d" },
   { DataField::Type::INTEGER, "FlarmMaxObjectsReportedOnCircling",
-    N_("Max. reported"), NULL, NULL, 0, 4, 1, _T("%d") },
+    N_("Max. reported"), NULL, NULL, 0, 4, 1, "%d" },
   { DataField::Type::ENUM, "FlarmUserInterface",
     N_("Flarm interface"), NULL, flarm_user_interfaces },
   { DataField::Type::BOOLEAN, "KeepOnStraightFlightMode",

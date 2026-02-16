@@ -68,7 +68,7 @@ RenderTaskLegs(ChartRenderer &chart,
         }
       }
       if (y>=0 && x>chart.GetXMin()) {
-        StringFormatUnsafe(sTmp, _T("%d"), i);
+        StringFormatUnsafe(sTmp, "%d", i);
         chart.DrawLabel({x, chart.GetYMax()*y + chart.GetYMin()*(1-y)},
                         sTmp);
       }

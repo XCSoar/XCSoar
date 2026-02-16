@@ -52,17 +52,17 @@ LXNAVVarioConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[mayb
   brpda = WaitUnsignedValue(device, "BRPDA", 5);
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 0, _T("4800") },
-    { 1, _T("9600") },
-    { 2, _T("19200") },
-    { 3, _T("38400") },
-    { 4, _T("57600") },
-    { 5, _T("115200") },
-    { 6, _T("230400") },
-    { 7, _T("256000") },
-    { 8, _T("460800") },
-    { 9, _T("500k") },
-    { 10, _T("1M") },
+    { 0, "4800" },
+    { 1, "9600" },
+    { 2, "19200" },
+    { 3, "38400" },
+    { 4, "57600" },
+    { 5, "115200" },
+    { 6, "230400" },
+    { 7, "256000" },
+    { 8, "460800" },
+    { 9, "500k" },
+    { 10, "1M" },
     { 0 }
   };
 
@@ -94,6 +94,6 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  ShowError(std::current_exception(), _T("Vega"));
+  ShowError(std::current_exception(), "Vega");
   return false;
 }

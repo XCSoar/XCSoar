@@ -130,26 +130,26 @@ TrackingConfigPanel::OnModified(DataField &df) noexcept
 #if (defined HAVE_SKYLINES_TRACKING || defined HAVE_LIVETRACK24)
 
 static constexpr StaticEnumChoice tracking_intervals[] = {
-  { 1, _T("1 sec") },
-  { 2, _T("2 sec") },
-  { 3, _T("3 sec") },
-  { 5, _T("5 sec") },
-  { 10, _T("10 sec") },
-  { 15, _T("15 sec") },
-  { 20, _T("20 sec") },
-  { 30, _T("30 sec") },
-  { 45, _T("45 sec") },
-  { 60, _T("1 min") },
-  { 120, _T("2 min") },
-  { 180, _T("3 min") },
-  { 300, _T("5 min") },
-  { 600, _T("10 min") },
-  { 900, _T("15 min") },
-  { 1200, _T("20 min") },
-  { 1800, _T("30 min") },
-  { 2400, _T("40 min") },
-  { 3000, _T("50 min") },
-  { 3600, _T("60 min") },
+  { 1, "1 sec" },
+  { 2, "2 sec" },
+  { 3, "3 sec" },
+  { 5, "5 sec" },
+  { 10, "10 sec" },
+  { 15, "15 sec" },
+  { 20, "20 sec" },
+  { 30, "30 sec" },
+  { 45, "45 sec" },
+  { 60, "1 min" },
+  { 120, "2 min" },
+  { 180, "3 min" },
+  { 300, "5 min" },
+  { 600, "10 min" },
+  { 900, "15 min" },
+  { 1200, "20 min" },
+  { 1800, "30 min" },
+  { 2400, "40 min" },
+  { 3000, "50 min" },
+  { 3600, "60 min" },
   nullptr,
 };
 
@@ -158,9 +158,9 @@ static constexpr StaticEnumChoice tracking_intervals[] = {
 #ifdef HAVE_LIVETRACK24
 
 static constexpr StaticEnumChoice server_list[] = {
-  { 0, _T("www.livetrack24.com") },
-  { 1, _T("test.livetrack24.com") },
-  { 2, _T("livexc.dhv.de") },
+  { 0, "www.livetrack24.com" },
+  { 1, "test.livetrack24.com" },
+  { 2, "livexc.dhv.de" },
   nullptr,
 };
 
@@ -185,7 +185,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
   RowFormWidget::Prepare(parent, rc);
 
 #ifdef HAVE_SKYLINES_TRACKING
-  AddBoolean(_T("SkyLines"),
+  AddBoolean("SkyLines",
              _("Enable live tracking via the SkyLines server."),
              settings.skylines.enabled, this);
 #ifdef HAVE_NET_STATE_ROAMING
@@ -197,19 +197,21 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
           FindClosestTrackingInterval(settings.skylines.interval));
 
   AddBoolean(_("Track friends"),
-             _("Download the position of your friends live from the SkyLines server."),
+             _("Download the position of your friends live from the SkyLines "
+               "server."),
              settings.skylines.traffic_enabled, this);
 
   AddBoolean(_("Show nearby traffic"),
-             _("Download the position of your nearby traffic live from the SkyLines server."),
+             _("Download the position of your nearby traffic live from the "
+             "SkyLines server."),
              settings.skylines.near_traffic_enabled, this);
 
   StaticString<64> buffer;
   if (settings.skylines.key != 0)
-    buffer.UnsafeFormat(_T("%llX"), (unsigned long long)settings.skylines.key);
+    buffer.UnsafeFormat("%llX", (unsigned long long)settings.skylines.key);
   else
     buffer.clear();
-  AddText(_T("Key"),
+  AddText("Key",
           _("Your SkyLines tracking key. "
             "This is used to identify your aircraft on the server."),
           buffer);
@@ -220,22 +222,22 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
 #endif
 
 #ifdef HAVE_LIVETRACK24
-  AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
+  AddBoolean("LiveTrack24",  "", settings.livetrack24.enabled, this);
 
   AddEnum(_("Tracking Interval"), nullptr, tracking_intervals, 
           FindClosestTrackingInterval(settings.livetrack24.interval));
 
   AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
           (unsigned) settings.livetrack24.vehicleType);
-  AddText(_("Vehicle Name"), _T("Name of vehicle used."),
+  AddText(_("Vehicle Name"), "Name of vehicle used.",
           settings.livetrack24.vehicle_name);
 
-  WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
+  WndProperty *edit = AddEnum(_("Server"), "", server_list, 0);
   ((DataFieldEnum *)edit->GetDataField())->SetValue(settings.livetrack24.server);
   edit->RefreshDisplay();
 
-  AddText(_("Username"), _T(""), settings.livetrack24.username);
-  AddPassword(_("Password"), _T(""), settings.livetrack24.password);
+  AddText(_("Username"), "", settings.livetrack24.username);
+  AddPassword(_("Password"), "", settings.livetrack24.password);
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING

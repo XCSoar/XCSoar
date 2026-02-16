@@ -116,7 +116,7 @@ def get_current_xc_polar(glider, weight=0.0):
         return None
     ret = None
     for line in f:
-        if line[0:7] != "  { _T(" : continue
+        if line[0:7] != "  { " : continue
         if glider in line:
             ##357, 165, 108.8, -0.64, 156.4, -1.18, 211.13, -2.5, 9.0, 0.0, 114
             ret = polar()
@@ -210,7 +210,7 @@ def polar_store_line(p, wingload=0.0):
     minsinkspeed = p._x[np.argmax(p._y)]
     threedots = [minsinkspeed, 130.0, 170.0]
     print("XCSoar PolarStore template:")
-    print('  { _T("' + p._name + '"),', wieght, ", 0.0,", threedots[0], ',', p1d(threedots[0]), ',', threedots[1], ',', p1d(threedots[1]), ',', threedots[2],',', p1d(threedots[2]), ',', p._S, ", 0.0, 0 },")
+    print('  { "' + p._name + '",', wieght, ", 0.0,", threedots[0], ',', p1d(threedots[0]), ',', threedots[1], ',', p1d(threedots[1]), ',', threedots[2],',', p1d(threedots[2]), ',', p._S, ", 0.0, 0 },")
     print("The raw file for this:")
     print(p._name)
     print(p._w)

@@ -25,7 +25,7 @@ static constexpr const char *type_names[] = {
 };
 
 static constexpr const char *type_labels[] = {
-  _T("Vertikal"),
+  "Vertikal",
 };
 
 static_assert(ARRAY_SIZE(type_names) == unsigned(PCMet::OverlayInfo::Type::COUNT),
@@ -40,8 +40,8 @@ static constexpr const char *area_names[] = {
 };
 
 static constexpr const char *area_labels[] = {
-  _T("Nord"),
-  _T("Süd"),
+  "Nord",
+  "Süd",
 };
 
 static_assert(ARRAY_SIZE(area_names) == unsigned(PCMet::OverlayInfo::Area::COUNT),
@@ -54,7 +54,7 @@ static void
 MakeOverlayLabel(PCMet::OverlayInfo &info)
 {
   StaticString<64> label;
-  label.Format(_T("%s %s %um +%uh"),
+  label.Format("%s %s %um +%uh",
                type_labels[unsigned(info.type)],
                area_labels[unsigned(info.area)],
                info.level,
@@ -83,9 +83,9 @@ FindLatestOverlay(PCMet::OverlayInfo &info)
     }
   } visitor(info);
 
-  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
+  const auto cache_path = MakeCacheDirectory("pc_met");
   StaticString<256> pattern;
-  pattern.Format(_T("%s_%s_lv_%06u_p_%03u_*.tiff"),
+  pattern.Format("%s_%s_lv_%06u_p_%03u_*.tiff",
                  type_names[unsigned(info.type)],
                  area_names[unsigned(info.area)],
                  info.level, info.step);
@@ -127,7 +127,7 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
              area_names[unsigned(info.area)],
              info.level, info.step, run);
 
-  const auto cache_path = MakeCacheDirectory(_T("pc_met"));
+  const auto cache_path = MakeCacheDirectory("pc_met");
   auto path = AllocatedPath::Build(cache_path,
                                    UTF8ToWideConverter(url.c_str() + sizeof(PCMET_FTP)));
 

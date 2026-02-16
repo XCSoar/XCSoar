@@ -30,18 +30,18 @@ enum {
 };
 
 static const char *const oz_type_names[NUM_OZ_TYPES] = {
-  _T("Line"),
-  _T("Cylinder"),
-  _T("MAT Cylinder"),
-  _T("Sector"),
-  _T("FAI Sector"),
-  _T("DAeC Keyhole"),
-  _T("BGA Fixed Course"),
-  _T("BGA Enhanced Option"),
-  _T("BGA Start"),
-  _T("Annular sector"),
-  _T("Symmetric quadrant"),
-  _T("Custom Keyhole"),
+  "Line",
+  "Cylinder",
+  "MAT Cylinder",
+  "Sector",
+  "FAI Sector",
+  "DAeC Keyhole",
+  "BGA Fixed Course",
+  "BGA Enhanced Option",
+  "BGA Start",
+  "Annular sector",
+  "Symmetric quadrant",
+  "Custom Keyhole",
 };
 
 static GeoPoint location(Angle::Degrees(7.7061111111111114),
@@ -188,7 +188,7 @@ public:
   }
 
   void Create(const DialogLook &look, PixelSize size) {
-    SingleWindow::Create(_T("RunRenderOZ"), size);
+    SingleWindow::Create("RunRenderOZ", size);
 
     const PixelRect rc = GetClientRect();
 
@@ -211,7 +211,7 @@ public:
     PixelRect button_rc = rc;
     button_rc.right = (rc.left + rc.right) / 2;
     button_rc.top = button_rc.bottom - 30;
-    close_button.Create(*this, *button_look, _T("Close"), button_rc,
+    close_button.Create(*this, *button_look, "Close", button_rc,
                         WindowStyle(),
                         [this](){ Close(); });
 

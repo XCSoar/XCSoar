@@ -206,7 +206,7 @@ WaypointReaderWinPilot::ParseLine(const char *line, Waypoints &waypoints)
     return true;
 
   // If comment
-  if (line[0] == _T('*')) {
+  if (line[0] == '*') {
     if (first) {
       first = false;
       welt2000_format = strstr(line, "WRITTEN BY WELT2000") != nullptr;

@@ -81,7 +81,7 @@ GaugeThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
     ReleaseCapture();
 
     if (was_pressed)
-      InputEvents::eventThermalAssistant(_T(""));
+      InputEvents::eventThermalAssistant("");
 
     return true;
   }

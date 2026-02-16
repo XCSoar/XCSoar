@@ -9,7 +9,7 @@ my $line = 0;
 sub c_string($) {
     my $value = shift;
     return 'NULL' unless defined $value;
-    return qq|_T("$value")|;
+    return qq|"$value"|;
 }
 
 sub c_bool($) {

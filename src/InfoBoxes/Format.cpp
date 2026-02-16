@@ -51,19 +51,19 @@ InfoBoxData::SetValueFromTimeTwoLines(std::chrono::seconds dd) noexcept
 void
 InfoBoxData::SetValueFromPercent(double dd) noexcept
 {
-  FmtValue(_T("{}"), (int)dd);
+  FmtValue("{}", (int)dd);
   SetValueUnit(Unit::PERCENT);
 }
 
 void
 InfoBoxData::SetCommentFromPercent(double dd) noexcept
 {
-  FmtComment(_T("{} %"), (int)(dd));
+  FmtComment("{} %", (int)(dd));
 }
 
 void
 InfoBoxData::SetValueFromVoltage(double dd) noexcept
 {
-  FmtValue(_T("{:2.1f}"), dd);
+  FmtValue("{:2.1f}", dd);
   SetValueUnit(Unit::VOLT);
 }

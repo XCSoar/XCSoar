@@ -121,10 +121,10 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(spacer_1);
 
   static constexpr StaticEnumChoice units_speed_list[] = {
-    { Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
+    { Unit::STATUTE_MILES_PER_HOUR, "mph" },
     { Unit::KNOTS, N_("knots") },
-    { Unit::KILOMETER_PER_HOUR, _T("km/h") },
-    { Unit::METER_PER_SECOND, _T("m/s") },
+    { Unit::KILOMETER_PER_HOUR, "km/h" },
+    { Unit::METER_PER_SECOND, "m/s" },
     nullptr
   };
   AddEnum(_("Aircraft/Wind speed"),
@@ -135,9 +135,9 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(UnitsSpeed);
 
   static constexpr StaticEnumChoice units_distance_list[] = {
-    { Unit::STATUTE_MILES, _T("sm") },
-    { Unit::NAUTICAL_MILES, _T("nm") },
-    { Unit::KILOMETER, _T("km") },
+    { Unit::STATUTE_MILES, "sm" },
+    { Unit::NAUTICAL_MILES, "nm" },
+    { Unit::KILOMETER, "km" },
     nullptr
   };
   AddEnum(_("Distance"),
@@ -149,8 +149,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
 
   static constexpr StaticEnumChoice units_lift_list[] = {
     { Unit::KNOTS, N_("knots") },
-    { Unit::METER_PER_SECOND, _T("m/s") },
-    { Unit::FEET_PER_MINUTE, _T("ft/min") },
+    { Unit::METER_PER_SECOND, "m/s" },
+    { Unit::FEET_PER_MINUTE, "ft/min" },
     nullptr
   };
   AddEnum(_("Lift"), _("Units used for vertical speeds (variometer)."),
@@ -169,8 +169,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(UnitsAltitude);
 
   static constexpr StaticEnumChoice units_temperature_list[] = {
-    { Unit::DEGREES_CELCIUS, _T(DEG "C") },
-    { Unit::DEGREES_FAHRENHEIT, _T(DEG "F") },
+    { Unit::DEGREES_CELCIUS, DEG "C" },
+    { Unit::DEGREES_FAHRENHEIT, DEG "F" },
     nullptr
   };
   AddEnum(_("Temperature"), _("Units used for temperature."),
@@ -179,10 +179,10 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(UnitsTemperature);
 
   static constexpr StaticEnumChoice units_taskspeed_list[] = {
-    { Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
+    { Unit::STATUTE_MILES_PER_HOUR, "mph" },
     { Unit::KNOTS, N_("knots") },
-    { Unit::KILOMETER_PER_HOUR, _T("km/h") },
-    { Unit::METER_PER_SECOND, _T("m/s") },
+    { Unit::KILOMETER_PER_HOUR, "km/h" },
+    { Unit::METER_PER_SECOND, "m/s" },
     nullptr
   };
   AddEnum(_("Task speed"), _("Units used for task speeds."),
@@ -191,9 +191,9 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(UnitsTaskSpeed);
 
   static constexpr StaticEnumChoice pressure_labels_list[] = {
-    { Unit::HECTOPASCAL, _T("hPa") },
-    { Unit::MILLIBAR, _T("mb") },
-    { Unit::INCH_MERCURY, _T("inHg") },
+    { Unit::HECTOPASCAL, "hPa" },
+    { Unit::MILLIBAR, "mb" },
+    { Unit::INCH_MERCURY, "inHg" },
     nullptr
   };
   AddEnum(_("Pressure"), _("Units used for pressures."),
@@ -202,8 +202,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(UnitsPressure);
 
   static constexpr StaticEnumChoice mass_labels_list[] = {
-    { Unit::KG, _T("kg") },
-    { Unit::LB, _T("lb") },
+    { Unit::KG, "kg" },
+    { Unit::LB, "lb" },
     nullptr
   };
   AddEnum(_("Mass"), _("Units used for mass."),
@@ -212,8 +212,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(UnitsMass);
 
   static constexpr StaticEnumChoice wing_loading_labels_list[] = {
-    { Unit::KG_PER_M2, _T("kg/m²") },
-    { Unit::LB_PER_FT2, _T("lb/ft²") },
+    { Unit::KG_PER_M2, "kg/m²" },
+    { Unit::LB_PER_FT2, "lb/ft²" },
     nullptr
   };
   AddEnum(_("Wing loading"), _("Units used for wing loading."),
@@ -225,11 +225,11 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(spacer_2);
 
   static constexpr StaticEnumChoice units_lat_lon_list[] = {
-    { CoordinateFormat::DDMMSS, _T("DDMMSS") },
-    { CoordinateFormat::DDMMSS_S, _T("DDMMSS.s") },
-    { CoordinateFormat::DDMM_MMM, _T("DDMM.mmm") },
-    { CoordinateFormat::DD_DDDDD, _T("DD.ddddd") },
-    { CoordinateFormat::UTM, _T("UTM") },
+    { CoordinateFormat::DDMMSS, "DDMMSS" },
+    { CoordinateFormat::DDMMSS_S, "DDMMSS.s" },
+    { CoordinateFormat::DDMM_MMM, "DDMM.mmm" },
+    { CoordinateFormat::DD_DDDDD, "DD.ddddd" },
+    { CoordinateFormat::UTM, "UTM" },
     nullptr
   };
   AddEnum(_("Lat./Lon."), _("Units used for latitude and longitude."),
@@ -238,8 +238,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(UnitsLatLon);
 
   static constexpr StaticEnumChoice rotation_labels_list[] = {
-    { Unit::HZ, _T("Hz") },
-    { Unit::RPM, _T("rpm") },
+    { Unit::HZ, "Hz" },
+    { Unit::RPM, "rpm" },
     nullptr
   };
   AddEnum(_("Rotation"), _("Unit used for rotation."),

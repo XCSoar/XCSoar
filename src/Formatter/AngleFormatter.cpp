@@ -16,9 +16,9 @@ FormatBearing(char *buffer, size_t size, unsigned value_degrees,
   assert(size >= 8);
 
   if (suffix != NULL)
-    StringFormat(buffer, size, _T("%u° %s"), value_degrees, suffix);
+    StringFormat(buffer, size, "%u° %s", value_degrees, suffix);
   else
-    StringFormat(buffer, size, _T("%u°"), value_degrees);
+    StringFormat(buffer, size, "%u°", value_degrees);
 }
 
 void
@@ -35,11 +35,11 @@ FormatAngleDelta(char *buffer, size_t size, Angle value)
 
   auto degrees = lround(value.AsDelta().Degrees());
   if (degrees > 1)
-    StringFormat(buffer, size, _T("%u°»"), unsigned(degrees));
+    StringFormat(buffer, size, "%u°»", unsigned(degrees));
   else if (degrees < -1)
-    StringFormat(buffer, size, _T("«%u°"), unsigned(-degrees));
+    StringFormat(buffer, size, "«%u°", unsigned(-degrees));
   else
-    strcpy(buffer, _T("«»"));
+    strcpy(buffer, "«»");
 }
 
 void
@@ -50,7 +50,7 @@ FormatVerticalAngleDelta(char *buffer, size_t size, Angle value)
 
   auto degrees = lround(value.AsDelta().Degrees());
   if (degrees < -1 || degrees > 1)
-    StringFormat(buffer, size, _T("%+d°"), int(degrees));
+    StringFormat(buffer, size, "%+d°", int(degrees));
   else
-    strcpy(buffer, _T("--"));
+    strcpy(buffer, "--");
 }

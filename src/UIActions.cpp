@@ -29,7 +29,7 @@ UIActions::CheckShutdown()
   if (force_shutdown)
     return true;
 
-  return ShowMessageBox(_("Quit program?"), _T("XCSoar"),
+  return ShowMessageBox(_("Quit program?"), "XCSoar",
                      MB_YESNO | MB_ICONQUESTION) == IDYES;
 
 }
@@ -37,35 +37,35 @@ UIActions::CheckShutdown()
 void
 UIActions::ShowTrafficRadar()
 {
-  if (InputEvents::IsFlavour(_T("Traffic")))
+  if (InputEvents::IsFlavour("Traffic"))
     return;
 
   LoadFlarmDatabases();
 
   CommonInterface::main_window->SetWidget(new TrafficWidget());
-  InputEvents::SetFlavour(_T("Traffic"));
+  InputEvents::SetFlavour("Traffic");
 }
 
 void
 UIActions::ShowThermalAssistant()
 {
-  if (InputEvents::IsFlavour(_T("TA")))
+  if (InputEvents::IsFlavour("TA"))
     return;
 
   auto ta_widget =
     new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard(),
                                   UIGlobals::GetLook().thermal_assistant_dialog);
   CommonInterface::main_window->SetWidget(ta_widget);
-  InputEvents::SetFlavour(_T("TA"));
+  InputEvents::SetFlavour("TA");
 }
 
 void
 UIActions::ShowHorizon()
 {
-  if (InputEvents::IsFlavour(_T("Horizon")))
+  if (InputEvents::IsFlavour("Horizon"))
     return;
 
   auto widget = new HorizonWidget();
   CommonInterface::main_window->SetWidget(widget);
-  InputEvents::SetFlavour(_T("Horizon"));
+  InputEvents::SetFlavour("Horizon");
 }

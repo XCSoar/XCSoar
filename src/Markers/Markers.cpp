@@ -14,7 +14,7 @@ MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 try {
   assert(time.IsPlausible());
 
-  FileOutputStream file(LocalPath(_T("xcsoar-marks.txt")),
+  FileOutputStream file(LocalPath("xcsoar-marks.txt"),
                         FileOutputStream::Mode::APPEND_OR_CREATE);
   BufferedOutputStream os(file);
   os.Fmt("{:02}.{:02}.{:04}\t{:02}:{:02}:{:02}\tLon:{:f}\tLat:{:f}\n",

@@ -22,8 +22,8 @@ GeoQuadrilateral
 Bitmap::LoadGeoFile([[maybe_unused]] Path path)
 {
 #ifdef USE_GEOTIFF
-  if (path.EndsWithIgnoreCase(_T(".tif")) ||
-      path.EndsWithIgnoreCase(_T(".tiff"))) {
+  if (path.EndsWithIgnoreCase(".tif") ||
+      path.EndsWithIgnoreCase(".tiff")) {
     auto result = LoadGeoTiff(path);
     if (!Load(std::move(result.first)))
       throw std::runtime_error("Failed to use geo image file");

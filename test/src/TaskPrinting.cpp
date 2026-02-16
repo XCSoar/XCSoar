@@ -219,7 +219,7 @@ void
 PrintHelper::abstracttask_print(const AbstractTask &task,
                                 [[maybe_unused]] const AircraftState &state)
 {
-  Directory::Create(Path(_T("output/results")));
+  Directory::Create(Path("output/results"));
   std::ofstream fs("output/results/res-stats-all.txt");
 
   const auto &stats = task.GetStats();

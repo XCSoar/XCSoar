@@ -173,7 +173,7 @@ Main(UI::Display &display)
   delete replay;
 
   UI::SingleWindow main_window{display};
-  main_window.Create(_T("RunAnalysis"),
+  main_window.Create("RunAnalysis",
                      {640, 480});
 
   dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,

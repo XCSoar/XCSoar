@@ -21,13 +21,13 @@ KeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
   ObservationZoneEditWidget::Prepare(parent, rc);
 
   AddFloat(_("Radius"), _("Radius of the OZ sector."),
-           _T("%.1f %s"), _T("%.1f"),
+           "%.1f %s", "%.1f",
            0.1, 200, 1, true,
            UnitGroup::DISTANCE, GetObject().GetRadius(),
            this);
 
   AddFloat(_("Inner radius"), _("Inner radius of the OZ sector."),
-           _T("%.1f %s"), _T("%.1f"),
+           "%.1f %s", "%.1f",
            0.1, 100, 1, true,
            UnitGroup::DISTANCE, GetObject().GetInnerRadius(),
            this);

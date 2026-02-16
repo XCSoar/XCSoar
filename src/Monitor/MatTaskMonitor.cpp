@@ -29,7 +29,7 @@ class MatTaskAddWidget final
 
   [[gnu::pure]]
   const char *MakeMessage(const Waypoint &wp) {
-    buffer.Format(_T("%s\n%s"), wp.name.c_str(), _("Add this turn point?"));
+    buffer.Format("%s\n%s", wp.name.c_str(), _("Add this turn point?"));
     return buffer;
   }
 

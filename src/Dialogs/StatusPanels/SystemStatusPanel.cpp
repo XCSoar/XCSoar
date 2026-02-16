@@ -66,7 +66,7 @@ SystemStatusPanel::Refresh() noexcept
     ClearText(NumSat);
   else if (gps.satellites_used_available) {
     // known number of sats
-    Temp.Format(_T("%u"), gps.satellites_used);
+    Temp.Format("%u", gps.satellites_used);
     SetText(NumSat, Temp);
   } else
     // valid but unknown number of sats
@@ -82,9 +82,9 @@ SystemStatusPanel::Refresh() noexcept
   if (basic.flarm.version.available &&
       !basic.flarm.version.software_version.empty()) {
     /* append FLARM firmware version */
-    Temp.append(_T(" (fw "));
+    Temp.append(" (fw ");
     Temp.UnsafeAppendASCII(basic.flarm.version.software_version.c_str());
-    Temp.push_back(_T(')'));
+    Temp.push_back(')');
   }
 
   SetText(FLARM, Temp);
@@ -98,13 +98,13 @@ SystemStatusPanel::Refresh() noexcept
 #ifdef HAVE_BATTERY
   const auto &battery = Power::global_info.battery;
   if (battery.remaining_percent) {
-    Temp.Format(_T("%u %% "), *battery.remaining_percent);
+    Temp.Format("%u %% ", *battery.remaining_percent);
   }
 #endif
   if (basic.voltage_available)
-    Temp.AppendFormat(_T("%.1f V"), (double)basic.voltage);
+    Temp.AppendFormat("%.1f V", (double)basic.voltage);
   else if (basic.battery_level_available)
-    Temp.AppendFormat(_T("%.0f%%"), (double)basic.battery_level);
+    Temp.AppendFormat("%.0f%%", (double)basic.battery_level);
 
   SetText(Battery, Temp);
 
@@ -118,7 +118,7 @@ SystemStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("GPS lock"));
   AddReadOnly(_("Satellites in view"));
   AddReadOnly(_("Variometer"));
-  AddReadOnly(_T("FLARM"));
+  AddReadOnly("FLARM");
   AddReadOnly(_("Logger"));
   AddReadOnly(_("Supply voltage"));
   AddReadOnly(_("Network"));

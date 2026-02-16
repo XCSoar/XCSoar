@@ -79,8 +79,8 @@ LoEFGRENCreateOnPort([[maybe_unused]] const DeviceConfig &config,
 }
 
 const struct DeviceRegister loe_fgren_driver = {
-  _T("LoEFGREN"),
-  _T("LöFGREN Variometer"),
+  "LoEFGREN",
+  "LöFGREN Variometer",
   0,
   LoEFGRENCreateOnPort,
 };

@@ -30,7 +30,7 @@ JpegErrorExit(j_common_ptr cinfo)
 UncompressedImage
 LoadJPEGFile(Path path)
 {
-  FILE *file = fopen(path.c_str(), _T("rb"));
+  FILE *file = fopen(path.c_str(), "rb");
   if (file == nullptr)
     return UncompressedImage();
 

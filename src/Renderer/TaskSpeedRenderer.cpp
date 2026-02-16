@@ -20,12 +20,12 @@ TaskSpeedCaption(char *sTmp,
                  const GlidePolar &glide_polar)
 {
   if (!glide_polar.IsValid() || fs.task_speed.IsEmpty()) {
-    *sTmp = _T('\0');
+    *sTmp = '\0';
     return;
   }
 
   sprintf(sTmp,
-            _T("%s: %d %s\r\n%s: %d %s"),
+            "%s: %d %s\r\n%s: %d %s",
             _("Vave"),
             (int)Units::ToUserTaskSpeed(fs.task_speed.GetAverageY()),
             Units::GetTaskSpeedName(),
@@ -44,8 +44,8 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
             const GlidePolar &glide_polar)
 {
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.SetXLabel(_T("t"), _T("hr"));
-  chart.SetYLabel(_T("V"), Units::GetTaskSpeedName());
+  chart.SetXLabel("t", "hr");
+  chart.SetYLabel("V", Units::GetTaskSpeedName());
   chart.Begin();
 
   if (!fs.task_speed.HasResult() || !task.CheckOrderedTask()) {
@@ -95,10 +95,10 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
   chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHINDASH);
 
   chart.DrawLabel({chart.GetXMin()*0.9+chart.GetXMax()*0.1, vref},
-                  _T("Vest"));
+                  "Vest");
 
   const double tref = chart.GetXMin()*0.5+chart.GetXMax()*0.5;
-  chart.DrawLabel({tref, fs.task_speed.GetYAt(tref)}, _T("Vave"));
+  chart.DrawLabel({tref, fs.task_speed.GetYAt(tref)}, "Vave");
 
   chart.Finish();
 }

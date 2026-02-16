@@ -14,9 +14,9 @@ MakeTemporaryPath(Path path) noexcept
   assert(path != nullptr);
 
 #ifdef HAVE_POSIX
-  return path + _T(".tmp");
+  return path + ".tmp";
 #else
-  return path.WithSuffix(_T(".tmp"));
+  return path.WithSuffix(".tmp");
 #endif
 }
 
