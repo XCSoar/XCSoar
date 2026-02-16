@@ -23,7 +23,7 @@ GlidePolarCaption(char *sTmp, const GlidePolar &glide_polar)
     return;
   }
 
-  _stprintf(sTmp, Layout::landscape ?
+  sprintf(sTmp, Layout::landscape ?
                   _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n  %3.2f %s\r\n  at %d %s") :
                   _T("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
             _("L/D"),

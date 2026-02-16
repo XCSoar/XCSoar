@@ -90,7 +90,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
   if (length == 0)
     return false;
 
-  FILE *outfile = _tfopen(path.c_str(), _T("wt"));
+  FILE *outfile = fopen(path.c_str(), _T("wt"));
   if (outfile == nullptr)
     return false;
 

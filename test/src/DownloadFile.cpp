@@ -59,7 +59,7 @@ public:
 static void
 Download(CurlGlobal &curl, const char *url, Path path)
 {
-  FILE *file = path != nullptr ? _tfopen(path.c_str(), _T("wb")) : nullptr;
+  FILE *file = path != nullptr ? fopen(path.c_str(), _T("wb")) : nullptr;
   MyResponseHandler handler(file);
   CurlRequest request(curl, url, handler);
 

@@ -321,11 +321,11 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   if (const auto &solution = warning.GetSolution();
       warning.IsWarning() && !warning.IsInside() && solution.IsValid()) {
 
-    _stprintf(buffer, _T("%d secs"),
+    sprintf(buffer, _T("%d secs"),
               (int)solution.elapsed_time.count());
 
     if (solution.distance > 0)
-      _stprintf(buffer + strlen(buffer), _T(" dist %d m"),
+      sprintf(buffer + strlen(buffer), _T(" dist %d m"),
                 (int)solution.distance);
     else {
       /* the airspace is right above or below us - show the vertical

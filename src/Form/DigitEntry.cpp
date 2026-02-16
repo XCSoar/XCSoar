@@ -1021,17 +1021,17 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
 
     case Column::Type::HOUR:
       assert(c.value < 24);
-      _stprintf(buffer, _T("%02u"), c.value);
+      sprintf(buffer, _T("%02u"), c.value);
       break;
 
     case Column::Type::DIGIT36:
       assert(c.value < 36);
-      _stprintf(buffer, _T("%02u"), c.value);
+      sprintf(buffer, _T("%02u"), c.value);
       break;
 
     case Column::Type::DIGIT19:
       assert(c.value < 19);
-      _stprintf(buffer, _T("%02u"), c.value);
+      sprintf(buffer, _T("%02u"), c.value);
       break;
 
     case Column::Type::SIGN:
@@ -1067,13 +1067,13 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
       break;
 
     case Column::Type::DAY:
-      _stprintf(buffer, _T("%02u"), c.value + 1);
+      sprintf(buffer, _T("%02u"), c.value + 1);
       break;
     case Column::Type::MONTH:
-      _stprintf(buffer, _T("%02u"), c.value + 1);
+      sprintf(buffer, _T("%02u"), c.value + 1);
       break;
     case Column::Type::YEAR:
-      _stprintf(buffer, _T("%04u"), c.value + 1900);
+      sprintf(buffer, _T("%04u"), c.value + 1900);
       break;
 
     case Column::Type::UNIT:

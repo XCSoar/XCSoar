@@ -42,7 +42,7 @@ OffsetButtonsWidget::MakeButton(ContainerWindow &parent, const PixelRect &r,
                                 unsigned i) noexcept
 {
   char caption[16];
-  _stprintf(caption, format, offsets[i]);
+  sprintf(caption, format, offsets[i]);
 
   WindowStyle style;
   style.TabStop();

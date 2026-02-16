@@ -108,11 +108,6 @@ typedef uint32_t        ms_uint32;
 
 #ifdef SHAPELIB_DISABLED
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
-/* Need to use _vsnprintf() with VS2003 */
-#define vsnprintf _vsnprintf
-#endif
-
 #include "mapserver-api.h"
 
 #ifndef SWIG
@@ -190,14 +185,6 @@ typedef const ms_uint32 *ms_const_bitarray;
 #include <string>
 #include <vector>
 extern "C" {
-#endif
-
-// hide from swig or ruby will choke on the __FUNCTION__ name
-#ifndef SWIG
-  /* Memory allocation check utility */
-#ifndef __FUNCTION__
-#   define __FUNCTION__ "MapServer"
-#endif
 #endif
 
 #define MS_CHECK_ALLOC(var, size, retval)     \

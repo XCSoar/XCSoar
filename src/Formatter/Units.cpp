@@ -38,10 +38,10 @@ FormatWingLoading(char *buffer, double value, Unit unit,
   int precision = uvalue > 20 ? 0 : 1;
 
     if (include_unit)
-      _stprintf(buffer, _T("%.*f %s"), precision, (double)uvalue,
+      sprintf(buffer, _T("%.*f %s"), precision, (double)uvalue,
                 Units::GetUnitName(unit));
     else
-      _stprintf(buffer, _T("%.*f"), precision, (double)uvalue);
+      sprintf(buffer, _T("%.*f"), precision, (double)uvalue);
 }
 
 void
