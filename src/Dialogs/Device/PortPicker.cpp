@@ -84,7 +84,7 @@ class PortPickerWidget
 
   struct DetectedPort {
     DeviceConfig::PortType type;
-    tstring address, name;
+    std::string address, name;
   };
 
   Mutex detected_mutex;

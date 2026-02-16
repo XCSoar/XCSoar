@@ -172,7 +172,7 @@ int main(int argc, char **argv)
   }
 
   Args args(argc, argv, usage);
-  tstring driver_name = args.ExpectNextT();
+  std::string driver_name = args.ExpectNextT();
   args.ExpectEnd();
 
   driver = FindDriverByName(driver_name.c_str());

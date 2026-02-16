@@ -23,7 +23,7 @@ DebugReplayNMEA::DebugReplayNMEA(FileLineReaderA *_reader,
 }
 
 DebugReplay*
-DebugReplayNMEA::Create(Path input_file, const tstring &driver_name)
+DebugReplayNMEA::Create(Path input_file, const std::string &driver_name)
 {
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {

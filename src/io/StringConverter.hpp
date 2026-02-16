@@ -5,7 +5,8 @@
 
 #include "Charset.hpp"
 #include "util/ReusableArray.hpp"
-#include "util/tstring_view.hxx"
+
+#include <string_view>
 
 #include <tchar.h>
 
@@ -49,5 +50,5 @@ public:
    */
   char *Convert(char *src);
 
-  tstring_view Convert(std::string_view src);
+  std::string_view Convert(std::string_view src);
 };

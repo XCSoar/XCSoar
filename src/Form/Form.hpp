@@ -5,8 +5,8 @@
 
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/window/SolidContainerWindow.hpp"
-#include "util/tstring.hpp"
 
+#include <string>
 #include <functional>
 #include <tchar.h>
 
@@ -61,7 +61,7 @@ protected:
 
   void OnPaint(Canvas &canvas) noexcept override;
 
-  tstring caption;
+  std::string caption;
 
 public:
   WndForm(const DialogLook &_look);

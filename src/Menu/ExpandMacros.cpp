@@ -29,7 +29,7 @@
 #include <stdlib.h>
 
 static const char *
-ExpandTaskMacros(tstring_view name,
+ExpandTaskMacros(std::string_view name,
                  bool &invalid,
                  const DerivedInfo &calculated,
                  const ComputerSettings &settings_computer) noexcept
@@ -198,7 +198,7 @@ ExpandTaskMacros(tstring_view name,
 
 [[gnu::pure]]
 static const char *
-ExpandTrafficMacros(tstring_view name) noexcept
+ExpandTrafficMacros(std::string_view name) noexcept
 {
   TrafficWidget *widget = (TrafficWidget *)
     CommonInterface::main_window->GetFlavourWidget(_T("Traffic"));
@@ -244,7 +244,7 @@ GetUIState() noexcept
 }
 
 static const char *
-LookupMacro(tstring_view name, bool &invalid) noexcept
+LookupMacro(std::string_view name, bool &invalid) noexcept
 {
   if (name ==_T("CheckAirspace")) {
     invalid |= data_components->airspaces->IsEmpty();
@@ -431,7 +431,7 @@ ButtonLabel::ExpandMacros(const char *In, std::span<char> dest) noexcept
   bool invalid = false;
 
   DollarExpand(In, dest,
-               [&invalid](tstring_view name){
+               [&invalid](std::string_view name){
                  return LookupMacro(name, invalid);
                });
 

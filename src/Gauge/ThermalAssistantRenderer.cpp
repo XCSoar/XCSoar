@@ -80,7 +80,7 @@ ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift) noexcept
 
 static void
 DrawCircleLabel(Canvas &canvas, PixelPoint p,
-                tstring_view text) noexcept
+                std::string_view text) noexcept
 {
   const auto size = canvas.CalcTextSize(text);
   p.x -= size.width / 2;

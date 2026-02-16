@@ -244,13 +244,13 @@ WaypointReaderWinPilot::ParseLine(const char *line, Waypoints &waypoints)
   ParseFlags(NextColumn(rest), new_waypoint);
 
   // Name (e.g. KAMPLI)
-  new_waypoint.name = tstring{string_converter.Convert(NextColumn(rest))};
+  new_waypoint.name = std::string{string_converter.Convert(NextColumn(rest))};
   if (new_waypoint.name.empty())
     return false;
 
   // Description (e.g. 119.750 Airport)
   const auto comment = NextColumn(rest);
-  new_waypoint.comment = tstring{string_converter.Convert(comment)};
+  new_waypoint.comment = std::string{string_converter.Convert(comment)};
   ParseRunwayDirection(comment, new_waypoint.runway);
 
   waypoints.Append(std::move(new_waypoint));

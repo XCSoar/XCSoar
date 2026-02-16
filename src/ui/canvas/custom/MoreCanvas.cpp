@@ -41,7 +41,7 @@ Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
 }
 
 unsigned
-Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
+Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
                           const unsigned format) noexcept
 {
   assert(ValidateUTF8(text));
@@ -203,7 +203,7 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
 
 void
 Canvas::DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                       tstring_view text) noexcept
+                       std::string_view text) noexcept
 {
   DrawFilledRectangle(rc, background_color);
   DrawTransparentText(p, text);

@@ -14,8 +14,8 @@
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringUtil.hpp"
-#include "util/tstring.hpp"
 
+#include <string>
 #include <cassert>
 #include <windef.h> /* for MAX_PATH */
 
@@ -89,7 +89,7 @@ Profile::SetFiles(Path override_path) noexcept
       if (StringFind(override_path.c_str(), '.') != nullptr)
         startProfileFile = LocalPath(override_path);
       else {
-        tstring t(override_path.c_str());
+        std::string t(override_path.c_str());
         t += _T(".prf");
         startProfileFile = LocalPath(t.c_str());
       }

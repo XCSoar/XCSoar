@@ -29,11 +29,11 @@ FindWaypoint(Waypoints &way_points, const char *name)
 
 struct WaypointDetailsBuilder {
   char name[201];
-  tstring details;
+  std::string details;
 #ifdef HAVE_RUN_FILE
-  std::forward_list<tstring> files_external;
+  std::forward_list<std::string> files_external;
 #endif
-  std::forward_list<tstring> files_embed;
+  std::forward_list<std::string> files_embed;
 
   void Reset() noexcept {
     details.clear();

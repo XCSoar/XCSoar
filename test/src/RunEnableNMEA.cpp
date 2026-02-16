@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 try {
   Args args(argc, argv, "DRIVER PORT BAUD");
 
-  tstring _driver_name = args.ExpectNextT();
+  std::string _driver_name = args.ExpectNextT();
   const char *driver_name = _driver_name.c_str();
   DebugPort debug_port(args);
   args.ExpectEnd();

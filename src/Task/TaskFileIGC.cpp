@@ -118,7 +118,7 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
   return task;
 }
 
-std::vector<tstring>
+std::vector<std::string>
 TaskFileIGC::GetList() const
 {
   // Open the IGC file
@@ -136,7 +136,7 @@ TaskFileIGC::GetList() const
         header.num_turnpoints == 0)
       return {};
 
-    std::vector<tstring> result;
+    std::vector<std::string> result;
 
     if (!header.task_name.empty() &&
         !StringIsEqual(header.task_name, "Task")) {

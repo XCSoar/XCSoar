@@ -95,7 +95,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     /**
      * The display name of the SkyLines account.
      */
-    tstring name;
+    std::string name;
 
 #ifdef HAVE_SKYLINES_TRACKING
     StaticString<20> near_name;
@@ -117,7 +117,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 #ifdef HAVE_SKYLINES_TRACKING
     explicit Item(uint32_t _id, SkyLinesTracking::Data::Time _time_of_day,
                   const GeoPoint &_location, int _altitude,
-                  tstring &&_name)
+                  std::string &&_name)
       :id(FlarmId::Undefined()), skylines_id(_id),
        time_of_day(_time_of_day),
        color(FlarmColor::COUNT),
@@ -393,9 +393,9 @@ TrafficListWidget::UpdateList()
       const std::lock_guard lock{data.mutex};
       for (const auto &i : data.traffic) {
         const auto name_i = data.user_names.find(i.first);
-        tstring name = name_i != data.user_names.end()
+        std::string name = name_i != data.user_names.end()
           ? name_i->second
-          : tstring();
+          : std::string();
 
         items.emplace_back(i.first, i.second.time_of_day,
                            i.second.location, i.second.altitude,

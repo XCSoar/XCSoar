@@ -4,8 +4,8 @@
 #pragma once
 
 #include "system/Path.hpp"
-#include "util/tstring.hpp"
 
+#include <string>
 #include <memory>
 #include <vector>
 
@@ -21,14 +21,14 @@ class TaskStore
 public:
   struct Item
   {
-    tstring task_name;
+    std::string task_name;
     AllocatedPath filename;
     unsigned task_index;
     std::unique_ptr<OrderedTask> task;
     bool valid;
 
     Item(Path the_filename,
-         tstring::const_pointer _task_name,
+         std::string::const_pointer _task_name,
          unsigned _task_index = 0)
       :task_name(_task_name),
        filename(the_filename),
@@ -41,7 +41,7 @@ public:
     Item &operator=(Item &&) = default;
 
     [[gnu::pure]]
-    tstring::const_pointer GetName() const {
+    std::string::const_pointer GetName() const {
       return task_name.c_str();
     }
 
@@ -97,7 +97,7 @@ public:
    * @return Filename of the task defined by the given index
    */
   [[gnu::pure]]
-  tstring::const_pointer GetName(unsigned index) const;
+  std::string::const_pointer GetName(unsigned index) const;
 
   /**
    * Return the pathname of the task defined by the given index
