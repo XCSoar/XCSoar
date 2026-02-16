@@ -561,7 +561,8 @@ ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
   TARGET_LDFLAGS += -Wl,--minor-subsystem-version=00
 
-  # default to "console"; see SCREEN_LDLIBS
+  # default to "console"; overridden to "windows" by
+  # GDI_LDLIBS (screen.mk) or SDL_LDLIBS (sdl.mk) for GUI programs
   TARGET_LDFLAGS += -Wl,-subsystem,console
 endif
 
