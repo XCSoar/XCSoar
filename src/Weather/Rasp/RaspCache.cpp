@@ -92,7 +92,7 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
     return;
 
   char new_name[MAX_PATH];
-  store.NarrowWeatherFilename(new_name, Path(store.GetItemInfo(parameter).name),
+  store.WeatherFilename(new_name, Path(store.GetItemInfo(parameter).name),
                               effective_time);
 
   auto new_map = std::make_unique<RasterMap>();
