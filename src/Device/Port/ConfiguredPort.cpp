@@ -160,12 +160,11 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     break;
 
   case DeviceConfig::PortType::TCP_CLIENT: {
-    const WideToUTF8Converter ip_address(config.ip_address);
-    if (!ip_address.IsValid())
+    if (!config.ip_address)
       throw std::runtime_error("No IP address configured");
 
     return std::make_unique<TCPClientPort>(event_loop, cares,
-                                           ip_address, config.tcp_port,
+                                           config.ip_address, config.tcp_port,
                                            listener, handler);
   }
 
