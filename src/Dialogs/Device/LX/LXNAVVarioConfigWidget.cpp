@@ -75,7 +75,7 @@ LXNAVVarioConfigWidget::Save(bool &_changed) noexcept
 try {
   PopupOperationEnvironment env;
   bool changed = false;
-  NarrowString<32> buffer;
+  StaticString<32> buffer;
 
   if (SaveValueEnum(BRGPS, brgps)) {
     buffer.UnsafeFormat("%u", brgps);

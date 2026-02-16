@@ -82,7 +82,7 @@ FormatGPGSA(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   else
     gps_status = 3;
 
-  NarrowString<256> sat_ids;
+  StaticString<256> sat_ids;
   sat_ids.clear();
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
     if (info.gps.satellite_ids[i] > 0 && info.gps.satellite_ids_available) {

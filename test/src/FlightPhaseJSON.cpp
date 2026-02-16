@@ -42,7 +42,7 @@ static boost::json::object
 WritePhase(Phase &phase) noexcept
 {
   boost::json::object object;
-  NarrowString<64> buffer;
+  StaticString<64> buffer;
 
   FormatISO8601(buffer.buffer(), phase.start_datetime);
   object.emplace("start_time", buffer.c_str());

@@ -40,7 +40,7 @@ namespace LiveTrack24 {
 class Client final {
   CurlGlobal &curl;
 
-  NarrowString<256> server;
+  StaticString<256> server;
 
 public:
   explicit Client(CurlGlobal &_curl) noexcept

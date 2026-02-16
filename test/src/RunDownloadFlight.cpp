@@ -63,7 +63,7 @@ PrintFlightList(const RecordedFlightList &flight_list)
 
 int main(int argc, char **argv)
 try {
-  NarrowString<1024> usage;
+  StaticString<1024> usage;
   usage = "DRIVER PORT BAUD FILE.igc [FLIGHT NR]\n\n"
           "Where DRIVER is one of:";
   {

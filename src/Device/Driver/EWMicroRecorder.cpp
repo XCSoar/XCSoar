@@ -183,7 +183,7 @@ WriteCleanString(Port &port, const char *p,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout)
 {
-  NarrowString<256> buffer;
+  StaticString<256> buffer;
   buffer.SetASCII(p);
 
   CleanString(buffer.buffer());

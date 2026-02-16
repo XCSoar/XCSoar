@@ -40,7 +40,7 @@ Client::GetUserID(const char *username, const char *password)
     if (!username2.IsValid() || !password2.IsValid())
       throw std::runtime_error("WideToUTF8Converter failed");
 
-    NarrowString<1024> url;
+    StaticString<1024> url;
     url.Format("http://%s/client.php?op=login&user=%s&pass=%s",
                GetServer(),
                easy.Escape(username2).c_str(),
@@ -82,7 +82,7 @@ Client::StartTracking(SessionID session, const char *username,
       throw std::runtime_error("WideToUTF8Converter failed");
     const char *version = XCSoar_VersionLong;
 
-    NarrowString<2048> url;
+    StaticString<2048> url;
     url.Format("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
                "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s",
                GetServer(), session, 1,
@@ -107,7 +107,7 @@ Client::SendPosition(SessionID session, unsigned packet_id,
   // http://www.livetrack24.com/track.php?leolive=4&sid=42664778&pid=321&
   //   lat=22.3&lon=40.2&alt=23&sog=40&cog=160&tm=1241422845
 
-  NarrowString<2048> url;
+  StaticString<2048> url;
   url.Format("http://%s/track.php?leolive=4&sid=%u&pid=%u&"
              "lat=%f&lon=%f&alt=%d&sog=%d&cog=%d&tm=%lld",
              GetServer(), session, packet_id,
@@ -125,7 +125,7 @@ Client::EndTracking(SessionID session, unsigned packet_id)
 {
   // http://www.livetrack24.com/track.php?leolive=3&sid=42664778&pid=453&prid=0
 
-  NarrowString<1024> url;
+  StaticString<1024> url;
   url.Format("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0",
              GetServer(), session, packet_id);
 
