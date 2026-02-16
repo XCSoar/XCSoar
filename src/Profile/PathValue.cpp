@@ -15,7 +15,8 @@
 
 #include "Language/Language.hpp"
 #include "util/IterableSplitString.hxx"
-#include "util/tstring.hpp"
+
+#include <string>
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -47,7 +48,7 @@ ProfileMap::GetMultiplePaths(std::string_view key, const char *patterns) const
 
     if (i.empty()) continue;
 
-    tstring file_string(i);
+    std::string file_string(i);
 
     Path path(file_string.c_str());
 

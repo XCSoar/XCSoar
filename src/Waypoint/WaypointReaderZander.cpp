@@ -9,7 +9,7 @@
 
 static bool
 ParseString(StringConverter &string_converter,
-            std::string_view src, tstring &dest, std::size_t len) noexcept
+            std::string_view src, std::string &dest, std::size_t len) noexcept
 {
   if (src.empty())
     return false;

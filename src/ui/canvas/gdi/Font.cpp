@@ -31,7 +31,7 @@ Font::Load(const FontDescription &d)
 }
 
 PixelSize
-Font::TextSize(tstring_view text) const noexcept
+Font::TextSize(std::string_view text) const noexcept
 {
   AnyCanvas canvas;
   canvas.Select(*this);

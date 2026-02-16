@@ -12,7 +12,8 @@
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
 #include "ActivePixelTraits.hpp"
-#include "util/tstring_view.hxx"
+
+#include <string_view>
 
 #include <tchar.h>
 
@@ -250,10 +251,10 @@ public:
   }
 
   [[gnu::pure]]
-  const PixelSize CalcTextSize(tstring_view text) const noexcept;
+  const PixelSize CalcTextSize(std::string_view text) const noexcept;
 
   [[gnu::pure]]
-  unsigned CalcTextWidth(tstring_view text) const noexcept {
+  unsigned CalcTextWidth(std::string_view text) const noexcept {
     return CalcTextSize(text).width;
   }
 
@@ -262,22 +263,22 @@ public:
     return font != nullptr ? font->GetHeight() : 0;
   }
 
-  void DrawText(PixelPoint p, tstring_view text) noexcept;
+  void DrawText(PixelPoint p, std::string_view text) noexcept;
 
-  void DrawTransparentText(PixelPoint p, tstring_view text) noexcept;
+  void DrawTransparentText(PixelPoint p, std::string_view text) noexcept;
 
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                      tstring_view text) noexcept;
+                      std::string_view text) noexcept;
 
   void DrawClippedText(PixelPoint p, const PixelRect &rc,
-                       tstring_view text) noexcept;
+                       std::string_view text) noexcept;
   void DrawClippedText(PixelPoint p, unsigned width,
-                       tstring_view text) noexcept;
+                       std::string_view text) noexcept;
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelPoint p, tstring_view t) noexcept {
+  void TextAutoClipped(PixelPoint p, std::string_view t) noexcept {
     DrawText(p, t);
   }
 
@@ -286,7 +287,7 @@ public:
    *
    * @return the resulting text height
    */
-  unsigned DrawFormattedText(PixelRect r, tstring_view text,
+  unsigned DrawFormattedText(PixelRect r, std::string_view text,
                              unsigned format) noexcept;
 
   void Copy(PixelPoint dest_position, PixelSize dest_size,

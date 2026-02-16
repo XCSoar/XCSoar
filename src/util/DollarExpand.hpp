@@ -5,8 +5,8 @@
 
 #include "StringAPI.hxx"
 #include "TruncateString.hpp"
-#include "tstring_view.hxx"
 
+#include <string_view>
 #include <concepts>
 #include <span>
 
@@ -19,7 +19,7 @@
  */
 void
 DollarExpand(const char *src, std::span<char> dest,
-             std::invocable<tstring_view> auto lookup_function) noexcept
+             std::invocable<std::string_view> auto lookup_function) noexcept
 {
   while (true) {
     auto dollar = StringFind(src, _T("$("));
@@ -31,7 +31,7 @@ DollarExpand(const char *src, std::span<char> dest,
     if (closing == nullptr)
       break;
 
-    const tstring_view name(name_start, closing - name_start);
+    const std::string_view name(name_start, closing - name_start);
 
     const std::size_t prefix_size = dollar - src;
     if (prefix_size >= dest.size())
@@ -48,7 +48,7 @@ DollarExpand(const char *src, std::span<char> dest,
 
     const char *const expansion = lookup_function(name);
     if (expansion != nullptr) {
-      const tstring_view ex{expansion};
+      const std::string_view ex{expansion};
       if (ex.size() >= dest.size())
         break;
 

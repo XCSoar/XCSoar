@@ -171,7 +171,7 @@ class DeviceListWidget final
   static_assert(sizeof(Item) == 4, "wrong size");
 
   Item items[NUMDEV];
-  tstring error_messages[NUMDEV];
+  std::string error_messages[NUMDEV];
 
   Button *disable_button;
   Button *reconnect_button, *flight_button;

@@ -6,14 +6,14 @@
 #include <string.h>
 #include <tchar.h>
 
-tstring_view::pointer
-UnescapeBackslash(tstring_view old_string) noexcept
+std::string_view::pointer
+UnescapeBackslash(std::string_view old_string) noexcept
 {
   char buffer[2048]; // Note - max size of any string we cope with here !
 
-  tstring_view::size_type used = 0;
+  std::string_view::size_type used = 0;
 
-  for (tstring_view::size_type i = 0; i < old_string.size(); i++) {
+  for (std::string_view::size_type i = 0; i < old_string.size(); i++) {
     if (used < 2045) {
       if (old_string[i] == '\\') {
         if (old_string[i + 1] == 'r') {

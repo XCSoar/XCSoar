@@ -17,7 +17,7 @@
 #include "Interface.hpp"
 
 #include <map>
-#include "util/tstring.hpp"
+#include <string>
 
 extern "C" {
 #include <lauxlib.h>
@@ -56,7 +56,7 @@ public:
 };
 
 static LuaEventRegistry<unsigned> event_store_enum;
-static LuaEventRegistry<const tstring> event_store_gesture;
+static LuaEventRegistry<const std::string> event_store_gesture;
 static LuaEventRegistry<unsigned> event_store_key;
 
 static constexpr const char* event_enum_names[] = {
@@ -225,7 +225,7 @@ public:
     else if (StringIsEqual(name, "gesture_", 8)) {
       const UTF8ToWideConverter gesture(name+8);
       if (gesture.IsValid()) {
-        event_store_gesture.Clear(tstring(gesture));
+        event_store_gesture.Clear(std::string(gesture));
         return 1;
       }
     } else if (StringIsEqual(name, "key_", 4)) {

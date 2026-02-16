@@ -30,7 +30,7 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
 
   bool has_user_id;
   UserID user_id;
-  tstring username, password;
+  std::string username, password;
   if (args.IsEmpty()) {
     username = _T("");
     password = _T("");

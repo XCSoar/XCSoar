@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "util/tstring_view.hxx"
+#include <string_view>
 
 #include <tchar.h>
 
@@ -19,6 +19,6 @@ int findNE(const char *data);
 
 [[gnu::pure]]
 pt2Event
-findEvent(tstring_view name) noexcept;
+findEvent(std::string_view name) noexcept;
 
 } // namespace InputEvents

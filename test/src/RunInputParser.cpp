@@ -9,11 +9,12 @@
 #include "system/Args.hpp"
 #include "util/PrintException.hxx"
 
+#include <string_view>
 #include <stdio.h>
 #include <tchar.h>
 
 pt2Event
-InputEvents::findEvent(tstring_view name) noexcept
+InputEvents::findEvent(std::string_view name) noexcept
 {
   union {
     const char *in;

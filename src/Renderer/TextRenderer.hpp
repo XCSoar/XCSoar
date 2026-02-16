@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "util/tstring_view.hxx"
+#include <string_view>
 
 struct PixelRect;
 class Canvas;
@@ -38,15 +38,15 @@ public:
 
   [[gnu::pure]]
   unsigned GetHeight(Canvas &canvas, PixelRect rc,
-                     tstring_view text) const noexcept;
+                     std::string_view text) const noexcept;
 
   [[gnu::pure]]
   unsigned GetHeight(Canvas &canvas, unsigned width,
-                     tstring_view text) const noexcept;
+                     std::string_view text) const noexcept;
 
   [[gnu::pure]]
   unsigned GetHeight(const Font &font, unsigned width,
-                     tstring_view text) const noexcept;
+                     std::string_view text) const noexcept;
 
-  void Draw(Canvas &canvas, PixelRect rc, tstring_view text) const noexcept;
+  void Draw(Canvas &canvas, PixelRect rc, std::string_view text) const noexcept;
 };
