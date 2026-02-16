@@ -168,7 +168,7 @@ public:
                    projection.GetScreenAngle()),
      labels(projection.GetScreenRect())
   {
-    _tcscpy(altitude_unit, Units::GetAltitudeName());
+    strcpy(altitude_unit, Units::GetAltitudeName());
   }
 
 
@@ -197,7 +197,7 @@ protected:
     case WaypointRendererSettings::DisplayTextType::FIRST_WORD:
       CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
       char *tmp;
-      tmp = _tcsstr(buffer, _T(" "));
+      tmp = strstr(buffer, _T(" "));
       if (tmp != nullptr)
         tmp[0] = '\0';
       break;
@@ -243,7 +243,7 @@ protected:
       if (!GradientValid(gr))
         return;
 
-      size_t length = _tcslen(buffer);
+      size_t length = strlen(buffer);
       if (length > 0)
         buffer[length++] = _T(':');
 
@@ -268,7 +268,7 @@ protected:
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::NONE)
       return;
 
-    size_t length = _tcslen(buffer);
+    size_t length = strlen(buffer);
     int uah_glide = (int)Units::ToUserAltitude(reach.direct);
     int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
 

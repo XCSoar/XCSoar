@@ -83,7 +83,7 @@ private:
   }
 
   void MoveCursor() {
-    if (cursor >= _tcslen(buffer))
+    if (cursor >= strlen(buffer))
       buffer[cursor + 1] = 0;
 
     lettercursor = FindEntryLetter(ToUpperASCII(buffer[cursor]));

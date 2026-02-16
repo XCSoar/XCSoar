@@ -82,7 +82,7 @@ FileDataField::ScanDirectoryTop(const char *filter) noexcept
 {
   if (!loaded) {
     if (!postponed_patterns.full() &&
-        _tcslen(filter) < PatternList::value_type().capacity()) {
+        strlen(filter) < PatternList::value_type().capacity()) {
       postponed_patterns.append() = filter;
       return;
     } else
@@ -99,7 +99,7 @@ void
 FileDataField::ScanMultiplePatterns(const char *patterns) noexcept
 {
   size_t length;
-  while ((length = _tcslen(patterns)) > 0) {
+  while ((length = strlen(patterns)) > 0) {
     ScanDirectoryTop(patterns);
     patterns += length + 1;
   }
@@ -340,10 +340,10 @@ FileDataField::CreateComboList([[maybe_unused]] const char *reference) const noe
     if (found) {
       /* yes - append the absolute path to allow the user to see the
          difference */
-      _tcscpy(buffer, path.c_str());
-      _tcscat(buffer, _T(" ("));
-      _tcscat(buffer, files[i].path.c_str());
-      _tcscat(buffer, _T(")"));
+      strcpy(buffer, path.c_str());
+      strcat(buffer, _T(" ("));
+      strcat(buffer, files[i].path.c_str());
+      strcat(buffer, _T(")"));
       display_string = buffer;
     }
 

@@ -70,7 +70,7 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
   if (parsed.visibility_available) {
     char buffer[256];
     if (parsed.visibility >= 9999)
-      _tcscpy(buffer, _T("unlimited"));
+      strcpy(buffer, _T("unlimited"));
     else {
       FormatUserDistanceSmart(parsed.visibility, buffer);
     }

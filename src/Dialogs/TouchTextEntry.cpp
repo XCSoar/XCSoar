@@ -219,7 +219,7 @@ TouchTextEntry(char *text, size_t width,
 
   if (!StringIsEmpty(text)) {
     CopyTruncateString(edittext, width, text);
-    cursor = _tcslen(text);
+    cursor = strlen(text);
   }
 
   UpdateTextboxProp();

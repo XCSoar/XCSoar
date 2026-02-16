@@ -182,7 +182,7 @@ class RadixTree {
 		 */
 		Node *CreateLeaf(const char *label, const T &value) const {
 			Node *top = new Node(label), *bottom = top;
-			while (_tcslen(label) >= Node::label.capacity()) {
+			while (strlen(label) >= Node::label.capacity()) {
 				/* label too long for the Node's
 				   StaticString, create another child
 				   Node */

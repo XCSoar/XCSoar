@@ -265,7 +265,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   // chars must be legal in file names
   char logger_id[4];
-  unsigned asset_length = _tcslen(asset_number);
+  unsigned asset_length = strlen(asset_number);
   for (unsigned i = 0; i < 3; i++)
     logger_id[i] = i < asset_length && IsAlphaNumericASCII(asset_number[i]) ?
                    asset_number[i] : _T('A');

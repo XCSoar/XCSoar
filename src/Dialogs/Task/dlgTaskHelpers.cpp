@@ -37,33 +37,33 @@ TaskSummaryShape(const OrderedTask *task, char *text)
     break;
 
   case 1:
-    _tcscpy(text, _("Unknown"));
+    strcpy(text, _("Unknown"));
     break;
 
   case 2:
-    _tcscpy(text, _("Goal"));
+    strcpy(text, _("Goal"));
     FAIShape = true;
 
     break;
 
   case 3:
     if (task->GetFactory().IsClosed()) {
-      _tcscpy(text, _("Out and return"));
+      strcpy(text, _("Out and return"));
       FAIShape = true;
     }
     else
-      _tcscpy(text, _("Two legs"));
+      strcpy(text, _("Two legs"));
     break;
 
   case 4:
     if (!task->GetFactory().IsUnique() ||!task->GetFactory().IsClosed())
-      _tcscpy(text, _("Three legs"));
+      strcpy(text, _("Three legs"));
     else if (FAITriangleValidator::Validate(*task)) {
-      _tcscpy(text, _("FAI triangle"));
+      strcpy(text, _("FAI triangle"));
       FAIShape = true;
     }
     else
-      _tcscpy(text, _("non-FAI triangle"));
+      strcpy(text, _("non-FAI triangle"));
     break;
 
   default:
@@ -157,7 +157,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
 {
   switch (ozp.GetShape()) {
   case ObservationZone::Shape::FAI_SECTOR:
-    _tcscpy(buffer, _("FAI quadrant"));
+    strcpy(buffer, _("FAI quadrant"));
     return;
 
   case ObservationZone::Shape::SECTOR:
@@ -180,7 +180,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
     return;
 
   case ObservationZone::Shape::MAT_CYLINDER:
-    _tcscpy(buffer, _("MAT cylinder"));
+    strcpy(buffer, _("MAT cylinder"));
     return;
 
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
@@ -190,23 +190,23 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
     return;
 
   case ObservationZone::Shape::DAEC_KEYHOLE:
-    _tcscpy(buffer, _("DAeC Keyhole"));
+    strcpy(buffer, _("DAeC Keyhole"));
     return;
 
   case ObservationZone::Shape::BGAFIXEDCOURSE:
-    _tcscpy(buffer, _("BGA Fixed Course"));
+    strcpy(buffer, _("BGA Fixed Course"));
     return;
 
   case ObservationZone::Shape::BGAENHANCEDOPTION:
-    _tcscpy(buffer, _("BGA Enhanced Option"));
+    strcpy(buffer, _("BGA Enhanced Option"));
     return;
 
   case ObservationZone::Shape::BGA_START:
-    _tcscpy(buffer, _("BGA Start Sector"));
+    strcpy(buffer, _("BGA Start Sector"));
     return;
 
   case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-    _tcscpy(buffer, _("Symmetric quadrant"));
+    strcpy(buffer, _("Symmetric quadrant"));
     return;
   }
 
@@ -223,7 +223,7 @@ OrderedTaskSave(OrderedTask &task)
 
   const auto tasks_path = MakeLocalPath(_T("tasks"));
 
-  _tcscat(fname, _T(".tsk"));
+  strcat(fname, _T(".tsk"));
   task.SetName(fname);
   SaveTask(AllocatedPath::Build(tasks_path, fname), task);
   return true;

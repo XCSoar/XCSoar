@@ -245,8 +245,8 @@ TaskListPanel::DeleteTask()
 static bool
 ClearSuffix(char *p, const char *suffix)
 {
-  size_t length = _tcslen(p);
-  size_t suffix_length = _tcslen(suffix);
+  size_t length = strlen(p);
+  size_t suffix_length = strlen(suffix);
   if (length <= suffix_length)
     return false;
 
