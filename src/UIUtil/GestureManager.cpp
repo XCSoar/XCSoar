@@ -5,7 +5,7 @@
 #include "Math/FastMath.hpp"
 #include "util/Compiler.h"
 
-[[gnu::const]] static TCHAR
+[[gnu::const]] static char
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)
@@ -34,7 +34,7 @@ GestureManager::Update(PixelPoint p)
   drag_last = p;
 
   // Get current dragging direction
-  TCHAR direction = getDirection(d.x, d.y);
+  char direction = getDirection(d.x, d.y);
 
   // Return if we are in an unclear direction
   if (direction == '\0')
@@ -60,13 +60,13 @@ GestureManager::Start(PixelPoint p, int _threshold)
   threshold = _threshold;
 }
 
-const TCHAR*
+const char*
 GestureManager::Finish()
 {
   return GetGesture();
 }
 
-const TCHAR*
+const char*
 GestureManager::GetGesture() const
 {
   return gesture.empty()

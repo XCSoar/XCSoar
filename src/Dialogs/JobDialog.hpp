@@ -22,18 +22,18 @@ class Job;
  */
 bool
 JobDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
-          const TCHAR *caption, Job &job,
+          const char *caption, Job &job,
           bool cancellable=false);
 
 class DialogJobRunner : public JobRunner {
   UI::SingleWindow &parent;
   const DialogLook &dialog_look;
-  const TCHAR *caption;
+  const char *caption;
   bool cancellable;
 
 public:
   DialogJobRunner(UI::SingleWindow &_parent, const DialogLook &_dialog_look,
-                  const TCHAR *_caption, bool _cancellable=false)
+                  const char *_caption, bool _cancellable=false)
     :parent(_parent), dialog_look(_dialog_look),
      caption(_caption), cancellable(_cancellable) {}
 

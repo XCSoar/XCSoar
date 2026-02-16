@@ -147,13 +147,13 @@ public:
 
   /** Sorts the filelist by filenames */
   void Sort() noexcept;
-  void ScanDirectoryTop(const TCHAR *filter) noexcept;
+  void ScanDirectoryTop(const char *filter) noexcept;
 
   /**
    * Scan multiple shell patterns.  Each pattern is terminated by a
    * null byte, and the list ends with an empty pattern.
    */
-  void ScanMultiplePatterns(const TCHAR *patterns) noexcept;
+  void ScanMultiplePatterns(const char *patterns) noexcept;
 
   /** For use by other classes */
   [[gnu::pure]]
@@ -165,10 +165,10 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  const TCHAR *GetAsString() const noexcept override;
-  const TCHAR *GetAsDisplayString() const noexcept override;
-  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-  void SetFromCombo(int i, const TCHAR *s) noexcept override;
+  const char *GetAsString() const noexcept override;
+  const char *GetAsDisplayString() const noexcept override;
+  ComboList CreateComboList(const char *reference) const noexcept override;
+  void SetFromCombo(int i, const char *s) noexcept override;
 
 protected:
   void EnsureLoaded() noexcept;

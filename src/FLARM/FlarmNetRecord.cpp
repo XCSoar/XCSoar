@@ -4,9 +4,9 @@
 #include "FlarmNetRecord.hpp"
 #include <tchar.h>
 
-const TCHAR *
+const char *
 FlarmNetRecord::Format([[maybe_unused]] StaticString<256> &buffer, 
-                        const TCHAR *value) const noexcept
+                        const char *value) const noexcept
 {
   return (value != nullptr && !*value) ? nullptr : value;
 }

@@ -32,7 +32,7 @@ public:
     Invalidate();
   }
 
-  void SetText(const TCHAR *_text) noexcept {
+  void SetText(const char *_text) noexcept {
     text = _text;
     Invalidate();
   }
@@ -98,7 +98,7 @@ ProgressWidget::Unprepare() noexcept
 }
 
 void
-ProgressWidget::SetText(const TCHAR *_text) noexcept
+ProgressWidget::SetText(const char *_text) noexcept
 {
   if (IsDefined()) {
     auto &pb = (ProgressBar &)GetWindow();

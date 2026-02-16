@@ -73,7 +73,7 @@ VisitFiles(Path path, File::Visitor &visitor,
  * @param recursive If true all subfolders will be visited too
  */
 void
-VisitSpecificFiles(Path path, const TCHAR *filter,
+VisitSpecificFiles(Path path, const char *filter,
                    File::Visitor &visitor, bool recursive = false);
 
 } // namespace Directory

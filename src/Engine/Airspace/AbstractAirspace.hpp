@@ -361,12 +361,12 @@ public:
 #endif
 
   [[gnu::pure]]
-  const TCHAR *GetName() const noexcept {
+  const char *GetName() const noexcept {
     return name.c_str();
   }
 
   [[gnu::pure]]
-  const TCHAR *GetStationName() const noexcept {
+  const char *GetStationName() const noexcept {
     return station_name.c_str();
   }
 
@@ -374,7 +374,7 @@ public:
    * Returns true if the name begins with the specified string.
    */
   [[gnu::pure]]
-  bool MatchNamePrefix(const TCHAR *prefix) const noexcept;
+  bool MatchNamePrefix(const char *prefix) const noexcept;
 
   [[gnu::pure]]
   RadioFrequency GetRadioFrequency() const noexcept {

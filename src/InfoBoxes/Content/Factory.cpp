@@ -70,9 +70,9 @@ struct IBFHelperInt {
 using namespace InfoBoxFactory;
 
 struct MetaData {
-  const TCHAR *name;
-  const TCHAR *caption;
-  const TCHAR *description;
+  const char *name;
+  const char *caption;
+  const char *description;
   InfoBoxContent *(*create)() noexcept;
   void (*update)(InfoBoxData &data) noexcept;
   const InfoBoxPanel *panels;
@@ -84,23 +84,23 @@ struct MetaData {
    */
   MetaData() = delete;
 
-  constexpr MetaData(const TCHAR *_name,
-                     const TCHAR *_caption,
-                     const TCHAR *_description,
+  constexpr MetaData(const char *_name,
+                     const char *_caption,
+                     const char *_description,
                      InfoBoxContent *(*_create)() noexcept) noexcept
     :name(_name), caption(_caption), description(_description),
      create(_create), update(nullptr), panels(nullptr) {}
 
-  constexpr MetaData(const TCHAR *_name,
-                     const TCHAR *_caption,
-                     const TCHAR *_description,
+  constexpr MetaData(const char *_name,
+                     const char *_caption,
+                     const char *_description,
                      void (*_update)(InfoBoxData &data) noexcept) noexcept
     :name(_name), caption(_caption), description(_description),
      create(nullptr), update(_update), panels(nullptr) {}
 
-  constexpr MetaData(const TCHAR *_name,
-                     const TCHAR *_caption,
-                     const TCHAR *_description,
+  constexpr MetaData(const char *_name,
+                     const char *_caption,
+                     const char *_description,
                      void (*_update)(InfoBoxData &data) noexcept,
                      const InfoBoxPanel _panels[]) noexcept
     :name(_name), caption(_caption), description(_description),
@@ -1156,7 +1156,7 @@ static constexpr MetaData meta_data[] = {
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
               "Wrong InfoBox factory size");
 
-const TCHAR *
+const char *
 InfoBoxFactory::GetName(Type type) noexcept
 {
   assert(type < NUM_TYPES);
@@ -1164,7 +1164,7 @@ InfoBoxFactory::GetName(Type type) noexcept
   return meta_data[type].name;
 }
 
-const TCHAR *
+const char *
 InfoBoxFactory::GetCaption(Type type) noexcept
 {
   assert(type < NUM_TYPES);
@@ -1175,7 +1175,7 @@ InfoBoxFactory::GetCaption(Type type) noexcept
 /**
  * Returns the long description (help text) of the info box type.
  */
-const TCHAR *
+const char *
 InfoBoxFactory::GetDescription(Type type) noexcept
 {
   assert(type < NUM_TYPES);

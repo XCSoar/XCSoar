@@ -24,13 +24,13 @@ ToQuarterHours(BrokenTime t)
   return t.hour * 4u + t.minute / 15;
 }
 
-const TCHAR *
+const char *
 RaspCache::GetMapName() const
 {
   return store.GetItemInfo(parameter).name;
 }
 
-const TCHAR *
+const char *
 RaspCache::GetMapLabel() const
 {
   const auto &info = store.GetItemInfo(parameter);

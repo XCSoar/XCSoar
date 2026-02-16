@@ -12,7 +12,7 @@ ButtonWidget::ButtonWidget(std::unique_ptr<ButtonRenderer> _renderer,
   :renderer(std::move(_renderer)),
    callback(std::move(_callback)) {}
 
-ButtonWidget::ButtonWidget(const ButtonLook &look, const TCHAR *caption,
+ButtonWidget::ButtonWidget(const ButtonLook &look, const char *caption,
                            std::function<void()> _callback) noexcept
   :renderer(std::make_unique<TextButtonRenderer>(look, caption)),
    callback(std::move(_callback)) {}

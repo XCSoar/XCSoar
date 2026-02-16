@@ -30,7 +30,7 @@ GlueMapWindow::DrawGesture(Canvas &canvas) const noexcept
   if (!gestures.HasPoints())
     return;
 
-  const TCHAR *gesture = gestures.GetGesture();
+  const char *gesture = gestures.GetGesture();
   if (gesture != nullptr && !InputEvents::IsGesture(gesture))
     canvas.Select(gesture_look.invalid_pen);
   else
@@ -120,10 +120,10 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
     }
   }
 
-  TCHAR buffer[256];
+  char buffer[256];
   FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer), _T('\n'));
 
-  TCHAR *start = buffer;
+  char *start = buffer;
   while (true) {
     auto *newline = StringFind(start, _T('\n'));
     if (newline != nullptr)
@@ -144,7 +144,7 @@ void
 GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                              const NMEAInfo &info) const noexcept
 {
-  const TCHAR *txt;
+  const char *txt;
   const MaskedIcon *icon;
 
   if (!info.alive) {
@@ -344,7 +344,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
         (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
 
   if (rasp_renderer != nullptr) {
-    const TCHAR *label = rasp_renderer->GetLabel();
+    const char *label = rasp_renderer->GetLabel();
     if (label != nullptr)
       buffer += gettext(label);
   }

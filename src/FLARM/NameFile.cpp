@@ -33,7 +33,7 @@ LoadFlarmNameFile(BufferedReader &reader, FlarmNameDatabase &db)
 void
 SaveFlarmNameFile(BufferedOutputStream &writer, FlarmNameDatabase &db)
 {
-  TCHAR id[16];
+  char id[16];
 
   for (const auto &i : db) {
     assert(i.id.IsDefined());

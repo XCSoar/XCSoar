@@ -7,7 +7,7 @@
 #include "time/RoughTime.hpp"
 
 void
-FormatLocalTimeHHMM(TCHAR *buffer, TimeStamp time,
+FormatLocalTimeHHMM(char *buffer, TimeStamp time,
                     RoughTimeDelta utc_offset) noexcept
 {
   FormatTimeHHMM(buffer, TimeLocal(time, utc_offset));

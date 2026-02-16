@@ -4,7 +4,7 @@
 #include "Date.hpp"
 #include "Formatter/TimeFormatter.hpp"
 
-const TCHAR *
+const char *
 DataFieldDate::GetAsString() const noexcept
 {
   FormatISO8601(string_buffer, value);

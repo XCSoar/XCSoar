@@ -11,8 +11,8 @@
 #include <cstdio>
 
 struct UnitSymbolStrings {
-  const TCHAR *line1;
-  const TCHAR *line2;
+  const char *line1;
+  const char *line2;
   bool is_fraction;
 };
 

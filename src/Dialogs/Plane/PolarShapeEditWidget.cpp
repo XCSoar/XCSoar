@@ -107,8 +107,8 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent,
 
   const unsigned width = _rc.GetWidth(), height = _rc.GetHeight();
 
-  const TCHAR *v_text = _("Polar V");
-  const TCHAR *w_text = _("Polar W");
+  const char *v_text = _("Polar V");
+  const char *w_text = _("Polar W");
 
   const unsigned row_height = height / 2;
   const unsigned label_width = 2 * Layout::GetTextPadding() +

@@ -28,7 +28,7 @@ all_sum(const RadixTree<int> &rt)
 }
 
 static int
-prefix_sum(const RadixTree<int> &rt, const TCHAR *prefix)
+prefix_sum(const RadixTree<int> &rt, const char *prefix)
 {
   Sum sum;
   rt.VisitPrefix(prefix, sum);
@@ -39,7 +39,7 @@ template<typename T>
 struct AscendingKeyVisitor {
   tstring last;
 
-  void operator()(const TCHAR *key, [[maybe_unused]] const T &value) {
+  void operator()(const char *key, [[maybe_unused]] const T &value) {
     ok1(last.compare(key) <= 0);
     last = key;
   }
@@ -57,7 +57,7 @@ int main()
 {
   plan_tests(86);
 
-  TCHAR buffer[64], *suggest;
+  char buffer[64], *suggest;
 
   RadixTree<int> irt;
   irt.Add(_T("foo"), 42);

@@ -96,7 +96,7 @@ public:
 
   void SetColors(Color _background, Color _text, Color _border) noexcept;
 
-  void SetText(const TCHAR *text);
+  void SetText(const char *text);
 
   /**
    * Scroll the contents of a multi-line control by the specified

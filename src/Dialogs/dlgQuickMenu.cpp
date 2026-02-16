@@ -34,7 +34,7 @@ class QuickMenuButtonRenderer final : public ButtonRenderer {
 
 public:
   explicit QuickMenuButtonRenderer(const DialogLook &_look,
-                                   const TCHAR *_caption) noexcept
+                                   const char *_caption) noexcept
     :look(_look), caption(_caption) {
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
@@ -191,7 +191,7 @@ QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc
     if (!menuItem.IsDefined())
       continue;
 
-    TCHAR buffer[100];
+    char buffer[100];
     const auto expanded =
       ButtonLabel::Expand(menuItem.label, std::span{buffer});
     if (!expanded.visible)
@@ -433,7 +433,7 @@ class QuickMenuDialog final : public WidgetDialog {
 
 public:
   QuickMenuDialog(Full, UI::SingleWindow &parent, const DialogLook &look,
-                  const TCHAR *caption) noexcept
+                  const char *caption) noexcept
     :WidgetDialog(Full{}, parent, look, caption) {}
 
   template<typename... Args>

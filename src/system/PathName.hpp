@@ -16,4 +16,4 @@
  * @param new_base the new base name to be copied to #path
  */
 void
-ReplaceBaseName(TCHAR *path, const TCHAR *new_base);
+ReplaceBaseName(char *path, const char *new_base);

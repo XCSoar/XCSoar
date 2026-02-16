@@ -17,4 +17,4 @@ class Reader;
  * @param name the file name relative to the data directory
  */
 std::unique_ptr<Reader>
-OpenDataFile(const TCHAR *name);
+OpenDataFile(const char *name);

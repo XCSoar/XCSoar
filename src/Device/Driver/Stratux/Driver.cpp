@@ -86,7 +86,7 @@ void StratuxDevice::ExtractAndSetCallSign(const char *line, NMEAInfo &info)
     }
 
     /* Callsign from own list always overwrites. */
-    const TCHAR *cs = FlarmDetails::LookupCallsign(id);
+    const char *cs = FlarmDetails::LookupCallsign(id);
     if (cs != nullptr && cs[0] != 0) {
       flarm_slot->name.clear();
       flarm_slot->name.append(cs);

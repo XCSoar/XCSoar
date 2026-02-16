@@ -9,7 +9,7 @@
 tstring_view::pointer
 UnescapeBackslash(tstring_view old_string) noexcept
 {
-  TCHAR buffer[2048]; // Note - max size of any string we cope with here !
+  char buffer[2048]; // Note - max size of any string we cope with here !
 
   tstring_view::size_type used = 0;
 

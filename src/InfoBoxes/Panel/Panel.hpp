@@ -10,9 +10,9 @@ class Widget;
 
 struct InfoBoxPanel {
   constexpr
-  InfoBoxPanel(const TCHAR *_name, std::unique_ptr<Widget> (*_load)(unsigned id))
+  InfoBoxPanel(const char *_name, std::unique_ptr<Widget> (*_load)(unsigned id))
     :name(_name), load(_load) {};
 
-  const TCHAR *name;
+  const char *name;
   std::unique_ptr<Widget> (*load)(unsigned id);
 };

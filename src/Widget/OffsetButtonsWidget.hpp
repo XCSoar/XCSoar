@@ -21,12 +21,12 @@ class Button;
  */
 class OffsetButtonsWidget : public NullWidget {
   const ButtonLook &look;
-  const TCHAR *const format;
+  const char *const format;
   const double offsets[4];
   std::unique_ptr<std::array<Button, 4>> buttons;
 
 public:
-  OffsetButtonsWidget(const ButtonLook &_look, const TCHAR *_format,
+  OffsetButtonsWidget(const ButtonLook &_look, const char *_format,
                       double small_offset, double large_offset) noexcept
     :look(_look), format(_format),
      offsets{-large_offset, -small_offset, small_offset, large_offset} {}

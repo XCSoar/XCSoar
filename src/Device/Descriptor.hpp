@@ -421,12 +421,12 @@ public:
    */
   bool EnableNMEA(OperationEnvironment &env) noexcept;
 
-  const TCHAR *GetDisplayName() const noexcept;
+  const char *GetDisplayName() const noexcept;
 
   /**
    * Compares the driver's name.
    */
-  bool IsDriver(const TCHAR *name) const noexcept;
+  bool IsDriver(const char *name) const noexcept;
 
   [[gnu::pure]]
   bool CanDeclare() const noexcept;
@@ -537,12 +537,12 @@ public:
   bool PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
   bool PutPilotEvent(OperationEnvironment &env) noexcept;
   bool PutActiveFrequency(RadioFrequency frequency,
-                          const TCHAR *name,
+                          const char *name,
                           OperationEnvironment &env) noexcept;
   bool ExchangeRadioFrequencies(OperationEnvironment &env,
                                 NMEAInfo &info) noexcept;
   bool PutStandbyFrequency(RadioFrequency frequency,
-                           const TCHAR *name,
+                           const char *name,
                            OperationEnvironment &env) noexcept;
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   bool PutQNH(AtmosphericPressure pres,
@@ -580,7 +580,7 @@ public:
                           const DerivedInfo &calculated) noexcept;
 
 private:
-  void LockSetErrorMessage(const TCHAR *msg) noexcept;
+  void LockSetErrorMessage(const char *msg) noexcept;
   void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */

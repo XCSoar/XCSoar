@@ -22,7 +22,7 @@ using std::string_view_literals::operator""sv;
 namespace LiveTrack24 {
 
 Co::Task<UserID>
-Client::GetUserID(const TCHAR *username, const TCHAR *password)
+Client::GetUserID(const char *username, const char *password)
 {
   // http://www.livetrack24.com/client.php?op=login&user=<username>&pass=<pass>
 
@@ -63,9 +63,9 @@ Client::GetUserID(const TCHAR *username, const TCHAR *password)
 }
 
 Co::Task<void>
-Client::StartTracking(SessionID session, const TCHAR *username,
-                      const TCHAR *password, [[maybe_unused]] unsigned tracking_interval,
-                      VehicleType vtype, const TCHAR *vname)
+Client::StartTracking(SessionID session, const char *username,
+                      const char *password, [[maybe_unused]] unsigned tracking_interval,
+                      VehicleType vtype, const char *vname)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&
   //   client=YourProgramName&v=1&user=yourusername&pass=yourpass&
@@ -133,7 +133,7 @@ Client::EndTracking(SessionID session, unsigned packet_id)
 }
 
 void
-Client::SetServer(const TCHAR * _server) noexcept
+Client::SetServer(const char * _server) noexcept
 {
   server.SetASCII(_server);
 }

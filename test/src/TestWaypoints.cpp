@@ -107,10 +107,10 @@ TestLookups(const Waypoints &waypoints, const GeoPoint &center)
 
 class BeginsWith
 {
-  const TCHAR *prefix;
+  const char *prefix;
 
 public:
-  BeginsWith(const TCHAR *_prefix):prefix(_prefix) {}
+  BeginsWith(const char *_prefix):prefix(_prefix) {}
 
   bool operator()(const Waypoint &waypoint) {
     return StringStartsWith(waypoint.name.c_str(), prefix);
@@ -118,7 +118,7 @@ public:
 };
 
 static void
-TestNamePrefixVisitor(const Waypoints &waypoints, const TCHAR *prefix,
+TestNamePrefixVisitor(const Waypoints &waypoints, const char *prefix,
                       unsigned expected_results)
 {
   WaypointPredicateCounter::Predicate predicate = BeginsWith(prefix);

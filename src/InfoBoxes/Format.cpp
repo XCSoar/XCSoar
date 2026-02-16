@@ -8,7 +8,7 @@
 #include "Math/Angle.hpp"
 
 void
-InfoBoxData::SetValue(Angle _value, const TCHAR *suffix) noexcept
+InfoBoxData::SetValue(Angle _value, const char *suffix) noexcept
 {
   assert(suffix != NULL);
 
@@ -29,7 +29,7 @@ InfoBoxData::SetValueFromGlideRatio(double gr) noexcept
 }
 
 void
-InfoBoxData::SetComment(Angle _value, const TCHAR *suffix) noexcept
+InfoBoxData::SetComment(Angle _value, const char *suffix) noexcept
 {
   assert(suffix != NULL);
 

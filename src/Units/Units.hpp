@@ -108,35 +108,35 @@ Unit
 GetUserUnitByGroup(UnitGroup group);
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetSpeedName();
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetVerticalSpeedName();
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetWindSpeedName();
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetDistanceName();
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetAltitudeName();
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetTemperatureName();
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetTaskSpeedName();
 
 [[gnu::pure]]
-const TCHAR *
+const char *
 GetPressureName();
 
 static inline double

@@ -12,8 +12,8 @@
 #include "util/ConvertString.hpp"
 
 WndProperty *
-RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
-                       std::string_view profile_key, const TCHAR *filters,
+RowFormWidget::AddFile(const char *label, const char *help,
+                       std::string_view profile_key, const char *filters,
                        FileType file_type,
                        bool nullable) noexcept
 {
@@ -39,9 +39,9 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
 }
 
 WndProperty *
-RowFormWidget::AddMultipleFiles(const TCHAR *label, const TCHAR *help,
+RowFormWidget::AddMultipleFiles(const char *label, const char *help,
                                 std::string_view registry_key,
-                                const TCHAR *filters, FileType file_type)
+                                const char *filters, FileType file_type)
 {
 
   WndProperty *edit = Add(label, help);
@@ -74,7 +74,7 @@ RowFormWidget::SetProfile(std::string_view profile_key, unsigned value) noexcept
 
 bool
 RowFormWidget::SaveValue(unsigned i, std::string_view profile_key,
-                         TCHAR *string, size_t max_size) const noexcept
+                         char *string, size_t max_size) const noexcept
 {
   if (!SaveValue(i, string, max_size))
     return false;
@@ -142,7 +142,7 @@ RowFormWidget::SaveValue(unsigned i,
   if (new_value == value)
     return false;
 
-  TCHAR buffer[0x10];
+  char buffer[0x10];
   FormatISO8601(buffer, new_value);
   Profile::Set(profile_key, buffer);
   value = new_value;

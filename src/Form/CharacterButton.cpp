@@ -9,7 +9,7 @@
 
 void
 CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
-                        const TCHAR *text, PixelRect rc,
+                        const char *text, PixelRect rc,
                         OnCharacterCallback _on_character, unsigned _character,
                         const WindowStyle style) noexcept
 {
@@ -25,7 +25,7 @@ unsigned
 CharacterButton::GetUpperCharacter() const noexcept
 {
   unsigned result = character;
-  if (result < 0x80 && IsLowerAlphaASCII((TCHAR)result))
+  if (result < 0x80 && IsLowerAlphaASCII((char)result))
     result -= 'a' - 'A';
   return result;
 }

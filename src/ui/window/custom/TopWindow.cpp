@@ -46,7 +46,7 @@ TopWindow::~TopWindow() noexcept
 }
 
 void
-TopWindow::Create([[maybe_unused]] const TCHAR *text, PixelSize size,
+TopWindow::Create([[maybe_unused]] const char *text, PixelSize size,
                   TopWindowStyle style)
 {
   invalidated = true;

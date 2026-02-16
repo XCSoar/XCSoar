@@ -22,7 +22,7 @@ class AngleDataField final : public DataField {
   /**
    * For GetAsString().  Must be mutable because the method is const.
    */
-  mutable TCHAR string_buffer[16];
+  mutable char string_buffer[16];
 
 public:
   AngleDataField(unsigned _value, unsigned _step, bool _fine,
@@ -78,12 +78,12 @@ public:
   void ModifyValue(Angle _value) noexcept;
 
   /* virtual methods from class DataField */
-  const TCHAR *GetAsString() const noexcept override;
-  const TCHAR *GetAsDisplayString() const noexcept override;
+  const char *GetAsString() const noexcept override;
+  const char *GetAsDisplayString() const noexcept override;
 
   void Inc() noexcept override;
   void Dec() noexcept override;
 
-  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-  void SetFromCombo(int i, const TCHAR *s) noexcept override;
+  ComboList CreateComboList(const char *reference) const noexcept override;
+  void SetFromCombo(int i, const char *s) noexcept override;
 };

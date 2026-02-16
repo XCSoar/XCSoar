@@ -22,7 +22,7 @@
 
 struct language_unit_map {
   unsigned region_id;
-  const TCHAR* region_code;
+  const char* region_code;
   unsigned store_index;
 };
 
@@ -69,7 +69,7 @@ FindLanguage(LANGID lang)
 }
 #elif defined(ANDROID)
 static unsigned
-FindLanguage(const TCHAR* lang)
+FindLanguage(const char* lang)
 {
   // Search for supported languages matching the language code
   for (unsigned i = 0; language_table[i].region_code != nullptr; ++i)

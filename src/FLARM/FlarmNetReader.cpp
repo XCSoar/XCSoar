@@ -21,12 +21,12 @@
  * @param res Pointer to be written in
  */
 static void
-LoadString(const char *bytes, size_t length, TCHAR *res, [[maybe_unused]] size_t res_size)
+LoadString(const char *bytes, size_t length, char *res, [[maybe_unused]] size_t res_size)
 {
   const char *const end = bytes + length * 2;
   const char *const limit = res + res_size - 2;
 
-  TCHAR *p = res;
+  char *p = res;
 
   char tmp[3];
   tmp[2] = 0;
@@ -74,7 +74,7 @@ LoadRecord(FlarmNetRecord &record, const char *line)
   if (strlen(line) < 172)
     return false;
 
-  TCHAR id_buf[16];
+  char id_buf[16];
   LoadString(line, 6, id_buf, sizeof(id_buf));
   record.id = FlarmId::Parse(id_buf, nullptr);
 
@@ -92,7 +92,7 @@ LoadRecord(FlarmNetRecord &record, const char *line)
   record.frequency = RadioFrequency::Parse(std::string_view(freq_ascii));
 
   // Terminate callsign string on first whitespace
-  for (TCHAR *i = record.callsign.buffer(); *i != _T('\0'); ++i)
+  for (char *i = record.callsign.buffer(); *i != _T('\0'); ++i)
     if (IsWhitespaceFast(*i))
       *i = _T('\0');
 

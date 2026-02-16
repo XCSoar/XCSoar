@@ -18,15 +18,15 @@ class RoughTimeDelta;
  * @param time UTC time of day [seconds]
  */
 void
-FormatLocalTimeHHMM(TCHAR *buffer, TimeStamp time,
+FormatLocalTimeHHMM(char *buffer, TimeStamp time,
                     RoughTimeDelta utc_offset) noexcept;
 
 [[gnu::const]]
-static inline BasicStringBuffer<TCHAR, 8>
+static inline BasicStringBuffer<char, 8>
 FormatLocalTimeHHMM(TimeStamp time,
                     RoughTimeDelta utc_offset) noexcept
 {
-  BasicStringBuffer<TCHAR, 8> buffer;
+  BasicStringBuffer<char, 8> buffer;
   FormatLocalTimeHHMM(buffer.data(), time, utc_offset);
   return buffer;
 }

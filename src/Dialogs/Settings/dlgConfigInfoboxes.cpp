@@ -217,12 +217,12 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
 
   AddText(_("Name"),
           _("The name of this InfoBox panel configuration."),
-          allow_name_change ? (const TCHAR *)data.name : gettext(data.name));
+          allow_name_change ? (const char *)data.name : gettext(data.name));
   SetReadOnly(NAME, !allow_name_change);
 
   DataFieldEnum *dfe = new DataFieldEnum(this);
   for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
-    TCHAR label[32];
+    char label[32];
     _stprintf(label, _T("%u"), i + 1);
     dfe->addEnumText(label, i);
   }
@@ -231,8 +231,8 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
 
   dfe = new DataFieldEnum(this);
   for (unsigned i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++) {
-    const TCHAR *name = InfoBoxFactory::GetName((InfoBoxFactory::Type) i);
-    const TCHAR *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type) i);
+    const char *name = InfoBoxFactory::GetName((InfoBoxFactory::Type) i);
+    const char *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type) i);
     if (name != NULL)
       dfe->addEnumText(gettext(name), i, desc != NULL ? gettext(desc) : NULL);
   }
@@ -386,7 +386,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas) noexcept
   canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetWidth() - 1, canvas.GetHeight() - 1}});
 
   InfoBoxFactory::Type type = parent->GetContents(i);
-  const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES
+  const char *caption = type < InfoBoxFactory::NUM_TYPES
     ? InfoBoxFactory::GetCaption(type)
     : NULL;
   if (caption == NULL)

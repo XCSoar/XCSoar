@@ -375,7 +375,7 @@ AllocatedPath
 DownloadFilePicker(FileType file_type)
 {
   if (!Net::DownloadManager::IsAvailable()) {
-    const TCHAR *message =
+    const char *message =
       _("The file manager is not available on this device.");
     ShowMessageBox(message, _("File Manager"), MB_OK);
     return nullptr;

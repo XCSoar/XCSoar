@@ -17,7 +17,7 @@
  * the #TwoWidgets instance is not fully initialised in Show().
  */
 class StaticHelpTextWidget : public TwoWidgets {
-  const TCHAR *help_text;
+  const char *help_text;
 
   UI::Timer set_help_timer{[this]() {
     ((TextWidget &)GetSecond()).SetText(help_text);
@@ -26,7 +26,7 @@ class StaticHelpTextWidget : public TwoWidgets {
 
 public:
   StaticHelpTextWidget(std::unique_ptr<Widget> main_widget,
-                       const TCHAR *_help_text) noexcept
+                       const char *_help_text) noexcept
     :TwoWidgets(std::move(main_widget),
                 std::make_unique<TextWidget>()),
      help_text(_help_text) {}

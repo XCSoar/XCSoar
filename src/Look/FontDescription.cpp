@@ -16,7 +16,7 @@ FontDescription::FontDescription(unsigned height,
 }
 
 void
-FontDescription::Init(const TCHAR *face,
+FontDescription::Init(const char *face,
                       int height,
                       bool bold, bool italic,
                       bool monospace)

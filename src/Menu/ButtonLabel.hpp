@@ -15,14 +15,14 @@ namespace ButtonLabel {
 
 struct Expanded {
   bool visible, enabled;
-  const TCHAR *text;
+  const char *text;
 };
 
 [[gnu::pure]]
 Expanded
-Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept;
+Expand(const char *text, std::span<char> buffer) noexcept;
 
 bool
-ExpandMacros(const TCHAR *In, std::span<TCHAR> dest) noexcept;
+ExpandMacros(const char *In, std::span<char> dest) noexcept;
 
 } // namespace ButtonLabel

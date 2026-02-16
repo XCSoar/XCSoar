@@ -16,7 +16,7 @@ pt2Event
 InputEvents::findEvent(tstring_view name) noexcept
 {
   union {
-    const TCHAR *in;
+    const char *in;
     pt2Event out;
   } u;
 
@@ -25,13 +25,13 @@ InputEvents::findEvent(tstring_view name) noexcept
 }
 
 int
-InputEvents::findGCE([[maybe_unused]] const TCHAR *data)
+InputEvents::findGCE([[maybe_unused]] const char *data)
 {
   return -1;
 }
 
 int
-InputEvents::findNE([[maybe_unused]] const TCHAR *data)
+InputEvents::findNE([[maybe_unused]] const char *data)
 {
   return -1;
 }
@@ -40,7 +40,7 @@ static void
 Dump(InputConfig::Event &event, unsigned id)
 {
   _tprintf(_T("    Event[%u]: '%s' misc='%s'\n"), id,
-           (const TCHAR *)event.event, event.misc);
+           (const char *)event.event, event.misc);
 }
 
 int main(int argc, char **argv)

@@ -17,7 +17,7 @@ public:
     StaticString<21> name;
 
     Record() = default;
-    Record(FlarmId _id, const TCHAR *_name) noexcept
+    Record(FlarmId _id, const char *_name) noexcept
       :id(_id), name(_name) {}
   };
 
@@ -41,10 +41,10 @@ public:
   }
 
   [[gnu::pure]]
-  const TCHAR *Get(FlarmId id) const noexcept;
+  const char *Get(FlarmId id) const noexcept;
 
   [[gnu::pure]]
-  FlarmId Get(const TCHAR *name) const noexcept;
+  FlarmId Get(const char *name) const noexcept;
 
   /**
    * Look up all records with the specified name.
@@ -52,10 +52,10 @@ public:
    * @param max the maximum size of the given buffer
    * @return the number of items copied to the given buffer
    */
-  unsigned Get(const TCHAR *name,
+  unsigned Get(const char *name,
                FlarmId *buffer, unsigned max) const noexcept;
 
-  bool Set(FlarmId id, const TCHAR *name) noexcept;
+  bool Set(FlarmId id, const char *name) noexcept;
 
   bool Remove(FlarmId id) noexcept;
 
@@ -64,5 +64,5 @@ protected:
   int Find(FlarmId id) const noexcept;
 
   [[gnu::pure]]
-  int Find(const TCHAR *name) const noexcept;
+  int Find(const char *name) const noexcept;
 };

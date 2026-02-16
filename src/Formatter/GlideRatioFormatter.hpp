@@ -7,4 +7,4 @@
 #include <cstddef>
 
 void
-FormatGlideRatio(TCHAR *buffer, size_t size, double gr);
+FormatGlideRatio(char *buffer, size_t size, double gr);

@@ -17,4 +17,4 @@ void
 TrafficListDialog();
 
 FlarmId
-PickFlarmTraffic(const TCHAR *title, FlarmId array[], unsigned count);
+PickFlarmTraffic(const char *title, FlarmId array[], unsigned count);

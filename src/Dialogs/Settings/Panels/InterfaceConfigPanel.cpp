@@ -86,7 +86,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     DataFieldEnum &df = *(DataFieldEnum *)wp_dpi->GetDataField();
     df.AddChoice(0, _("Automatic"));
     for (const unsigned *dpi = dpi_choices; dpi != dpi_choices_end; ++dpi) {
-      TCHAR buffer[20];
+      char buffer[20];
       _stprintf(buffer, _("%d dpi"), *dpi);
       df.AddChoice(*dpi, buffer);
     }
@@ -213,7 +213,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
       old_base = old_value;
 
     AllocatedPath buffer = nullptr;
-    const TCHAR *new_value, *new_base;
+    const char *new_value, *new_base;
 
     switch (df.GetValue()) {
     case 0:

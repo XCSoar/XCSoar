@@ -16,7 +16,7 @@
 #include <stdio.h>
 
 void
-GlidePolarCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
+GlidePolarCaption(char *sTmp, const GlidePolar &glide_polar)
 {
   if (!glide_polar.IsValid()) {
     *sTmp = _T('\0');

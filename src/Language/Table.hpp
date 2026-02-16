@@ -24,8 +24,8 @@ struct BuiltinLanguage {
   const std::byte *begin;
   size_t size;
 #endif
-  const TCHAR *resource;
-  const TCHAR *name;
+  const char *resource;
+  const char *name;
 };
 
 extern const BuiltinLanguage language_table[];

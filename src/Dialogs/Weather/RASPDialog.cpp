@@ -55,11 +55,11 @@ RASPSettingsPanel::FillItemControl() noexcept
   df.AddChoice(-1, _T("none"), _T("none"), nullptr);
   for (unsigned i = 0; i < rasp->GetItemCount(); i++) {
     const auto &mi = rasp->GetItemInfo(i);
-    const TCHAR *label = mi.label;
+    const char *label = mi.label;
     if (label != nullptr)
       label = gettext(label);
 
-    const TCHAR *help = mi.help;
+    const char *help = mi.help;
     if (help != nullptr)
       help = gettext(help);
 
@@ -86,7 +86,7 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
     time_df.addEnumText(_("Now"));
 
     rasp->ForEachTime(item_index, [&time_df](BrokenTime t){
-        TCHAR timetext[10];
+        char timetext[10];
         _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
         time_df.addEnumText(timetext, t.GetMinuteOfDay());
       });

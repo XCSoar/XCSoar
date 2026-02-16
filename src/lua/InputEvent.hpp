@@ -23,12 +23,12 @@ bool
 FireNMEAEvent(unsigned event);
 
 bool
-FireGesture(const TCHAR *gesture);
+FireGesture(const char *gesture);
 
 bool
 FireKey(unsigned key);
 
 bool
-IsGesture(const TCHAR *gesture);
+IsGesture(const char *gesture);
 
 }

@@ -6,7 +6,7 @@
 #include "Look/DialogLook.hpp"
 
 void
-LargeTextWidget::SetText(const TCHAR *text) noexcept
+LargeTextWidget::SetText(const char *text) noexcept
 {
   LargeTextWindow &w = (LargeTextWindow &)GetWindow();
   w.SetText(text);

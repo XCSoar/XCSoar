@@ -14,7 +14,7 @@ protected:
   TextRowRenderer row_renderer;
 
   [[gnu::pure]]
-  virtual const TCHAR *GetRowText(unsigned i) const noexcept = 0;
+  virtual const char *GetRowText(unsigned i) const noexcept = 0;
 
 public:
   /* virtual methods from class Widget */

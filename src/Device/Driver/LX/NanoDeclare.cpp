@@ -45,7 +45,7 @@ static bool
 NanoWriteDeclString(Port &port, OperationEnvironment &env,
                     PortNMEAReader &reader,
                     unsigned row, unsigned n_rows,
-                    const char *prefix, const TCHAR *value)
+                    const char *prefix, const char *value)
 {
   WideToUTF8Converter narrow_value(value);
   if (!narrow_value.IsValid())

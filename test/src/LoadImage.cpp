@@ -28,7 +28,7 @@ ParseCommandLine(Args &args)
   path = args.ExpectNextPath();
 
 #ifdef USE_GDI
-  TCHAR *endptr;
+  char *endptr;
   unsigned _id = ParseUnsigned(path.c_str(), &endptr);
   if (StringIsEmpty(endptr))
     id = ResourceId(_id);

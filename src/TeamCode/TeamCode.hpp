@@ -30,7 +30,7 @@ public:
    * Returns the current team code
    * @return Current team code
    */
-  const TCHAR *GetCode() const {
+  const char *GetCode() const {
     return code;
   }
 
@@ -66,7 +66,7 @@ public:
    * Updates the team code to the given code
    * @param _code The new team code
    */
-  void Update(const TCHAR* _code);
+  void Update(const char* _code);
 };
 
 static_assert(std::is_trivial<TeamCode>::value, "type is not trivial");

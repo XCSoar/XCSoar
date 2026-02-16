@@ -83,7 +83,7 @@ TestBuiltInPolars()
 }
 
 struct PerformanceItem {
-  const TCHAR* name;
+  const char* name;
   bool check_best_LD;
   double best_LD;
   bool check_best_LD_speed;
@@ -125,7 +125,7 @@ ValuePlausible(double ref, double used, double threshold = 0.05)
 
 [[gnu::pure]]
 static auto
-GetPolarByName(const TCHAR *name) noexcept
+GetPolarByName(const char *name) noexcept
 {
   for (const auto &i : PolarStore::GetAll())
     if (StringIsEqual(i.name, name))
@@ -138,7 +138,7 @@ static void
 TestBuiltInPolarsPlausibility()
 {
   for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
-    const TCHAR *si = performanceData[i].name;
+    const char *si = performanceData[i].name;
     WideToUTF8Converter polarName(si);
     const auto polar = GetPolarByName(si);
     PolarCoefficients pc = polar.CalculateCoefficients();

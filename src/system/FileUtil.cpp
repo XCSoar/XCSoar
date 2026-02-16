@@ -58,7 +58,7 @@ Directory::Exists(Path path) noexcept
  */
 #ifndef HAVE_POSIX
 static bool
-IsDots(const TCHAR *str) noexcept
+IsDots(const char *str) noexcept
 {
   return StringIsEqual(str, _T(".")) || StringIsEqual(str, _T(".."));
 }
@@ -68,7 +68,7 @@ IsDots(const TCHAR *str) noexcept
 
 [[gnu::pure]]
 static bool
-checkFilter(const TCHAR *filename, const TCHAR *filter) noexcept
+checkFilter(const char *filename, const char *filter) noexcept
 {
   // filter = e.g. "*.igc" or "config/*.prf"
   // todo: make filters like "config/*.prf" work
@@ -83,10 +83,10 @@ checkFilter(const TCHAR *filename, const TCHAR *filter) noexcept
 
 static bool
 ScanFiles(File::Visitor &visitor, Path sPath,
-          const TCHAR* filter = _T("*"))
+          const char* filter = _T("*"))
 {
-  TCHAR DirPath[MAX_PATH];
-  TCHAR FileName[MAX_PATH];
+  char DirPath[MAX_PATH];
+  char FileName[MAX_PATH];
 
   if (sPath != nullptr)
     // e.g. "/test/data/something"
@@ -145,14 +145,14 @@ ScanFiles(File::Visitor &visitor, Path sPath,
 
 static bool
 ScanDirectories(File::Visitor &visitor, bool recursive,
-                Path sPath, const TCHAR* filter = _T("*"))
+                Path sPath, const char* filter = _T("*"))
 {
 #ifdef HAVE_POSIX
   DIR *dir = opendir(sPath.c_str());
   if (dir == nullptr)
     return false;
 
-  TCHAR FileName[MAX_PATH];
+  char FileName[MAX_PATH];
   _tcscpy(FileName, sPath.c_str());
   size_t FileNameLength = _tcslen(FileName);
   FileName[FileNameLength++] = '/';
@@ -183,8 +183,8 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
   closedir(dir);
 #else /* !HAVE_POSIX */
-  TCHAR DirPath[MAX_PATH];
-  TCHAR FileName[MAX_PATH];
+  char DirPath[MAX_PATH];
+  char FileName[MAX_PATH];
 
   if (sPath != nullptr) {
     // e.g. "/test/data/something"
@@ -256,7 +256,7 @@ Directory::VisitFiles(Path path, File::Visitor &visitor, bool recursive)
 }
 
 void
-Directory::VisitSpecificFiles(Path path, const TCHAR* filter,
+Directory::VisitSpecificFiles(Path path, const char* filter,
                               File::Visitor &visitor, bool recursive)
 {
   ScanDirectories(visitor, recursive, path, filter);

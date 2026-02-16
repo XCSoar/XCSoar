@@ -15,13 +15,13 @@ class DataFieldInteger final : public NumberDataField
   PeriodClock last_step;
   int speedup;
 
-  mutable TCHAR output_buffer[OUTBUFFERSIZE + 1];
+  mutable char output_buffer[OUTBUFFERSIZE + 1];
 
 protected:
   int SpeedUp(bool keyup) noexcept;
 
 public:
-  DataFieldInteger(const TCHAR *edit_format, const TCHAR *display_format,
+  DataFieldInteger(const char *edit_format, const char *display_format,
                    int _min, int _max, int _value, int _step,
                    DataFieldListener *listener=nullptr) noexcept
     :NumberDataField(Type::INTEGER,
@@ -66,10 +66,10 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  const TCHAR *GetAsString() const noexcept override;
-  const TCHAR *GetAsDisplayString() const noexcept override;
-  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept override;
+  const char *GetAsString() const noexcept override;
+  const char *GetAsDisplayString() const noexcept override;
+  ComboList CreateComboList(const char *reference) const noexcept override;
+  void SetFromCombo(int iDataFieldIndex, const char *sValue) noexcept override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const noexcept;

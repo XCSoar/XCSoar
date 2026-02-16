@@ -25,7 +25,7 @@ public:
   PixelRect rc;
 
 public:
-  Button(const TCHAR *_caption, const MaskedIcon *_icon) noexcept
+  Button(const char *_caption, const MaskedIcon *_icon) noexcept
     :icon(_icon)
   {
     caption = _caption;
@@ -194,13 +194,13 @@ TabDisplay::CalculateLayout() noexcept
 }
 
 void
-TabDisplay::Add(const TCHAR *caption, const MaskedIcon *icon) noexcept
+TabDisplay::Add(const char *caption, const MaskedIcon *icon) noexcept
 {
   buttons.append(new Button(caption, icon));
   CalculateLayout();
 }
 
-const TCHAR *
+const char *
 TabDisplay::GetCaption(unsigned i) const noexcept
 {
   return buttons[i]->caption.c_str();

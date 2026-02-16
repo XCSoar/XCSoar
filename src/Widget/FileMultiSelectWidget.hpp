@@ -26,12 +26,12 @@ public:
     Path path;
   };
 
-  using TextProvider = std::function<const TCHAR*(const FileItem&)>;
+  using TextProvider = std::function<const char*(const FileItem&)>;
 
   FileMultiSelectWidget(MultiFileDataField &df,
                         TextProvider first_left_provider,
-                        const TCHAR *caption,
-                        const TCHAR *help_text) noexcept
+                        const char *caption,
+                        const char *help_text) noexcept
     : df_(df), first_left_provider_(std::move(first_left_provider)),
       caption_(caption), help_text_(help_text) {}
 
@@ -78,8 +78,8 @@ private:
 
   bool use_two_rows_ = false;
   bool refreshed_ = false;
-  const TCHAR *caption_ = nullptr;
-  const TCHAR *help_text_ = nullptr;
+  const char *caption_ = nullptr;
+  const char *help_text_ = nullptr;
   std::function<void()> selection_changed_callback_;
 
   void LoadFiles() noexcept;

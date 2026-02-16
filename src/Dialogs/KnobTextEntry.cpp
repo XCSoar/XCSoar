@@ -27,7 +27,7 @@ enum Buttons {
 
 static constexpr size_t MAX_TEXTENTRY = 40;
 
-static constexpr TCHAR EntryLetters[] =
+static constexpr char EntryLetters[] =
   _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
 static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
@@ -39,7 +39,7 @@ static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
  */
 [[gnu::const]]
 static unsigned
-FindEntryLetter(TCHAR ch)
+FindEntryLetter(char ch)
 {
   for (unsigned i = 0; i < (int)MAXENTRYLETTERS; ++i)
     if (EntryLetters[i] == ch)
@@ -54,17 +54,17 @@ class KnobTextEntryWindow final : public PaintWindow {
   unsigned int cursor;
   int lettercursor;
 
-  TCHAR buffer[MAX_TEXTENTRY];
+  char buffer[MAX_TEXTENTRY];
 
 public:
-  KnobTextEntryWindow(const TCHAR *text, size_t width)
+  KnobTextEntryWindow(const char *text, size_t width)
     :max_width(std::min(MAX_TEXTENTRY, width)),
      cursor(0), lettercursor(0) {
     CopyTruncateString(buffer, max_width, text);
     MoveCursor();
   }
 
-  TCHAR *GetValue() {
+  char *GetValue() {
     return buffer;
   }
 
@@ -165,18 +165,18 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
 }
 
 class KnobTextEntryWidget final : public WindowWidget {
-  const TCHAR *const text;
+  const char *const text;
   const size_t width;
 
 public:
-  KnobTextEntryWidget(const TCHAR *_text, size_t _width) noexcept
+  KnobTextEntryWidget(const char *_text, size_t _width) noexcept
     :text(_text), width(_width) {}
 
   auto &GetWindow() noexcept {
     return (KnobTextEntryWindow &)WindowWidget::GetWindow();
   }
 
-  TCHAR *GetValue() {
+  char *GetValue() {
     return GetWindow().GetValue();
   }
 
@@ -212,8 +212,8 @@ KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 }
 
 void
-KnobTextEntry(TCHAR *text, size_t width,
-              const TCHAR *caption)
+KnobTextEntry(char *text, size_t width,
+              const char *caption)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;

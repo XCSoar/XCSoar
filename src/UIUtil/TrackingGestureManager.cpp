@@ -31,7 +31,7 @@ TrackingGestureManager::Start(PixelPoint p, int threshold)
   GestureManager::Start(p, threshold);
 }
 
-const TCHAR*
+const char*
 TrackingGestureManager::Finish()
 {
   points.clear();

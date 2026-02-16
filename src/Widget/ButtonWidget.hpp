@@ -25,7 +25,7 @@ public:
   ButtonWidget(std::unique_ptr<ButtonRenderer> _renderer,
                std::function<void()> _callback) noexcept;
 
-  ButtonWidget(const ButtonLook &look, const TCHAR *caption,
+  ButtonWidget(const ButtonLook &look, const char *caption,
                std::function<void()> _callback) noexcept;
 
   ~ButtonWidget() noexcept override;

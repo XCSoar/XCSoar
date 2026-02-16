@@ -37,7 +37,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
 }
 
 void
-InfoBoxWindow::SetTitle(const TCHAR *_title)
+InfoBoxWindow::SetTitle(const char *_title)
 {
   data.SetTitle(_title);
   Invalidate(title_rect);

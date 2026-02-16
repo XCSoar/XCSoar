@@ -11,10 +11,10 @@
  */
 class PasswordDataField final : public DataFieldString {
 public:
-  PasswordDataField(const TCHAR *initial_value,
+  PasswordDataField(const char *initial_value,
                     DataFieldListener *listener=nullptr) noexcept
     :DataFieldString(initial_value, listener) {}
 
   /* virtual methods from class DataField */
-  const TCHAR *GetAsDisplayString() const noexcept override;
+  const char *GetAsDisplayString() const noexcept override;
 };

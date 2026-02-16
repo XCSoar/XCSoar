@@ -68,7 +68,7 @@ AllocatedPath
 GetPath(std::string_view key) noexcept;
 
 std::vector<AllocatedPath> GetMultiplePaths(std::string_view key,
-                                            const TCHAR *patterns);
+                                            const char *patterns);
 
 void
 SetPath(std::string_view key, Path value) noexcept;

@@ -373,15 +373,15 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const unsigned margin = Layout::GetTextPadding();
 
-  TCHAR port_name_buffer[128];
-  const TCHAR *port_name =
+  char port_name_buffer[128];
+  const char *port_name =
     config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
 
   StaticString<256> text(_T("A: "));
   text[0u] += idx;
 
   if (config.UsesDriver()) {
-    const TCHAR *driver_name = FindDriverDisplayName(config.driver_name);
+    const char *driver_name = FindDriverDisplayName(config.driver_name);
 
     text.AppendFormat(_("%s on %s"), driver_name, port_name);
   } else {
@@ -394,7 +394,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   /* show a list of features that are available in the second row */
 
   StaticString<256> buffer;
-  const TCHAR *status;
+  const char *status;
   if (flags.alive) {
     if (flags.location) {
       buffer = _("GPS fix");

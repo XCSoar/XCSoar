@@ -11,11 +11,11 @@
 #include <cassert>
 
 void
-HelpDialog(const TCHAR *Caption, const TCHAR *HelpText)
+HelpDialog(const char *Caption, const char *HelpText)
 {
   assert(HelpText != nullptr);
 
-  const TCHAR *prefix = _("Help");
+  const char *prefix = _("Help");
 
   StaticString<100> full_caption;
   if (Caption != nullptr) {

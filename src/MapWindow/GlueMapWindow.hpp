@@ -236,7 +236,7 @@ protected:
    * @return True if the gesture was handled by the
    * event handler, False otherwise
    */
-  bool OnMouseGesture(const TCHAR* gesture) noexcept;
+  bool OnMouseGesture(const char* gesture) noexcept;
 
 private:
   void DrawGesture(Canvas &canvas) const noexcept;

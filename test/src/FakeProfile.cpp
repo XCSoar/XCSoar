@@ -24,7 +24,7 @@ Profile::Get([[maybe_unused]] std::string_view key,
 
 bool
 Profile::Get([[maybe_unused]] std::string_view key,
-             std::span<TCHAR> value) noexcept
+             std::span<char> value) noexcept
 {
   value[0] = _T('\0');
   return false;
@@ -44,7 +44,7 @@ Profile::GetPath([[maybe_unused]] std::string_view key) noexcept
 
 std::vector<AllocatedPath>
 Profile::GetMultiplePaths([[maybe_unused]] std::string_view key,
-                          [[maybe_unused]] const TCHAR *patterns)
+                          [[maybe_unused]] const char *patterns)
 {
   return std::vector<AllocatedPath>();
 }

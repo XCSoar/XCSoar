@@ -102,7 +102,7 @@ TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour,
   return task.get();
 }
 
-const TCHAR *
+const char *
 TaskStore::GetName(unsigned index) const
 {
   return store[index].GetName();

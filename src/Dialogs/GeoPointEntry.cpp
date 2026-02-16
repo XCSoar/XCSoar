@@ -11,7 +11,7 @@
 #include "Geo/GeoPoint.hpp"
 
 bool
-GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
+GeoPointEntryDialog(const char *caption, GeoPoint &value,
                     const CoordinateFormat format,
                     bool nullable)
 {

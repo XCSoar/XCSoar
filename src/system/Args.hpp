@@ -52,7 +52,7 @@ public:
   }
 
 #ifdef _WIN32
-  Args(const TCHAR *_cmdline, const char *_usage)
+  Args(const char *_cmdline, const char *_usage)
     :usage(_usage) {
     ParseCommandLine(_cmdline);
   }

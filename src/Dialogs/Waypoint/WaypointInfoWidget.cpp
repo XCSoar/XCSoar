@@ -19,8 +19,8 @@
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 
-static const TCHAR *
-FormatGlideResult(TCHAR *buffer, size_t size,
+static const char *
+FormatGlideResult(char *buffer, size_t size,
                   const GlideResult &result,
                   const GlideSettings &settings) noexcept
 {
@@ -42,12 +42,12 @@ FormatGlideResult(TCHAR *buffer, size_t size,
 }
 
 void
-WaypointInfoWidget::AddGlideResult(const TCHAR *label,
+WaypointInfoWidget::AddGlideResult(const char *label,
                                    const GlideResult &result) noexcept
 {
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
-  TCHAR buffer[64];
+  char buffer[64];
   AddReadOnly(label, nullptr,
               FormatGlideResult(buffer, ARRAY_SIZE(buffer),
                                 result, settings.task.glide));
@@ -103,7 +103,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
     if (!buffer.empty())
       buffer += _T("; ");
 
-    TCHAR length_buffer[16];
+    char length_buffer[16];
     FormatSmallUserDistance(length_buffer, waypoint->runway.GetLength());
     buffer += length_buffer;
   }

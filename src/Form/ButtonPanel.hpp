@@ -56,13 +56,13 @@ public:
   Button *Add(std::unique_ptr<ButtonRenderer> &&renderer,
               Button::Callback callback) noexcept;
 
-  Button *Add(const TCHAR *caption, Button::Callback callback) noexcept;
+  Button *Add(const char *caption, Button::Callback callback) noexcept;
 
   /**
    * Add a symbol button.  The caption is one of the "special"
    * #WndSymbolButton strings.
    */
-  Button *AddSymbol(const TCHAR *caption, Button::Callback callback) noexcept;
+  Button *AddSymbol(const char *caption, Button::Callback callback) noexcept;
 
   /**
    * Assign a hot key to the most recently added button.

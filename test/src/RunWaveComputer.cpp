@@ -39,7 +39,7 @@ int main(int argc, char **argv)
   delete replay;
 
   for (const auto &w : result.waves) {
-    TCHAR time_buffer[32];
+    char time_buffer[32];
     if (w.time.IsDefined())
       FormatTime(time_buffer, w.time);
     else

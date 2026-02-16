@@ -13,7 +13,7 @@
  */
 class MenuItem {
 public:
-  const TCHAR *label;
+  const char *label;
   unsigned event;
 
   void Clear() noexcept {
@@ -53,7 +53,7 @@ public:
     return items[i];
   }
 
-  void Add(const TCHAR *label, unsigned location, unsigned event_id) noexcept;
+  void Add(const char *label, unsigned location, unsigned event_id) noexcept;
 
   [[gnu::pure]]
   int FindByEvent(unsigned event) const noexcept;

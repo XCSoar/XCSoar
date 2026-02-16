@@ -16,7 +16,7 @@
 static void
 Draw(Canvas &canvas, PixelRect rc,
      const AbstractAirspace &airspace,
-     const TCHAR *comment,
+     const char *comment,
      const TwoTextRowsRenderer &row_renderer,
      const AirspaceLook &look,
      const AirspaceRendererSettings &renderer_settings)
@@ -33,7 +33,7 @@ Draw(Canvas &canvas, PixelRect rc,
   rc.left += line_height + padding;
 
   // Draw upper airspace altitude limit
-  TCHAR buffer[40];
+  char buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
   const int top_x = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
 

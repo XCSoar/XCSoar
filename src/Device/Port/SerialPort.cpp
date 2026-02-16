@@ -35,7 +35,7 @@ SerialPort::~SerialPort() noexcept
 }
 
 void
-SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
+SerialPort::Open(const char *path, unsigned _baud_rate)
 {
   assert(!Thread::IsInside());
 

@@ -24,9 +24,9 @@ CopyTruncateString(char *dest, size_t dest_size, const char *src)
   return CropIncompleteUTF8(dest);
 }
 
-TCHAR *
-CopyTruncateString(TCHAR *dest, size_t dest_size,
-                   const TCHAR *src, size_t truncate)
+char *
+CopyTruncateString(char *dest, size_t dest_size,
+                   const char *src, size_t truncate)
 {
   assert(dest != nullptr);
   assert(dest_size > 0);

@@ -13,7 +13,7 @@ namespace ProgressGlue {
  * Creates or updates the ProgressWindow
  * @param text the text inside the progress bar
  */
-void Create(const TCHAR *text) noexcept;
+void Create(const char *text) noexcept;
 
 void Move(const PixelRect &rc) noexcept;
 

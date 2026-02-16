@@ -135,8 +135,8 @@ struct PageLayout
   }
 
   [[nodiscard]]
-  const TCHAR *MakeTitle(const InfoBoxSettings &info_box_settings,
-                         std::span<TCHAR> buffer,
+  const char *MakeTitle(const InfoBoxSettings &info_box_settings,
+                         std::span<char> buffer,
                          const bool concise=false) const noexcept;
 
   constexpr bool operator==(const PageLayout &other) const noexcept = default;

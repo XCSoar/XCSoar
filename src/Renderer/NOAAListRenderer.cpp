@@ -21,7 +21,7 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   row_renderer.DrawFirstRow(canvas, rc, title);
 
-  const TCHAR *tmp;
+  const char *tmp;
   if (!station.metar_available)
     tmp = _("No METAR available");
   else

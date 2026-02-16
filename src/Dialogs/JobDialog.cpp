@@ -26,7 +26,7 @@ protected:
 
 bool
 JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
-          const TCHAR *caption,
+          const char *caption,
           Job &job, bool cancellable)
 {
   ProgressDialog form(parent, dialog_look, caption);

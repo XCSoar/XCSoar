@@ -8,11 +8,11 @@
 class Angle;
 
 bool
-NumberEntryDialog(const TCHAR *caption,
+NumberEntryDialog(const char *caption,
                   int &value, unsigned length);
 
 bool
-NumberEntryDialog(const TCHAR *caption,
+NumberEntryDialog(const char *caption,
                   unsigned &value, unsigned length);
 
-bool AngleEntryDialog(const TCHAR *caption, Angle &value);
+bool AngleEntryDialog(const char *caption, Angle &value);

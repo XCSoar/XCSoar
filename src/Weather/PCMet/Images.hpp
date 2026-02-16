@@ -15,12 +15,12 @@ namespace PCMet {
 
 struct ImageArea {
   const char *name;
-  const TCHAR *display_name;
+  const char *display_name;
 };
 
 struct ImageType {
   const char *uri;
-  const TCHAR *display_name;
+  const char *display_name;
 
   const ImageArea *areas;
 };

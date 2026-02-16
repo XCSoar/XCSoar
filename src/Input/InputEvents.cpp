@@ -55,7 +55,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 
 namespace InputEvents {
 
-static const TCHAR *flavour;
+static const char *flavour;
 
 static Mode current_mode = InputEvents::MODE_DEFAULT;
 
@@ -82,7 +82,7 @@ UpdateOverlayMode() noexcept;
 
 [[gnu::pure]]
 static unsigned
-gesture_to_event(const TCHAR *data) noexcept;
+gesture_to_event(const char *data) noexcept;
 
 /**
  * @param full if false, update only the dynamic labels
@@ -132,7 +132,7 @@ InputEvents::setMode(Mode mode) noexcept
 }
 
 void
-InputEvents::setMode(const TCHAR *mode) noexcept
+InputEvents::setMode(const char *mode) noexcept
 {
   int m = input_config.LookupMode(mode);
   if (m >= 0)
@@ -146,7 +146,7 @@ InputEvents::UpdatePan() noexcept
 }
 
 void
-InputEvents::SetFlavour(const TCHAR *_flavour) noexcept
+InputEvents::SetFlavour(const char *_flavour) noexcept
 {
   if (flavour == NULL && _flavour == NULL)
     /* optimised default case */
@@ -163,7 +163,7 @@ InputEvents::SetFlavour(const TCHAR *_flavour) noexcept
 }
 
 bool
-InputEvents::IsFlavour(const TCHAR *_flavour) noexcept
+InputEvents::IsFlavour(const char *_flavour) noexcept
 {
   if (flavour == NULL)
     return _flavour == NULL;
@@ -367,19 +367,19 @@ InputEvents::processKey(unsigned key_code) noexcept
 }
 
 unsigned
-InputEvents::gesture_to_event(const TCHAR *data) noexcept
+InputEvents::gesture_to_event(const char *data) noexcept
 {
   return input_config.Gesture2Event.Get(data, 0);
 }
 
 bool
-InputEvents::IsGesture(const TCHAR *data) noexcept
+InputEvents::IsGesture(const char *data) noexcept
 {
   return (Lua::IsGesture(data)) || (gesture_to_event(data) != 0);
 }
 
 bool
-InputEvents::processGesture(const TCHAR *data) noexcept
+InputEvents::processGesture(const char *data) noexcept
 {
   // start with lua event if available!
   if (Lua::FireGesture(data))
@@ -396,7 +396,7 @@ InputEvents::processGesture(const TCHAR *data) noexcept
 }
 
 /*
-  InputEvent::processNmea(TCHAR *data)
+  InputEvent::processNmea(char *data)
   Take hard coded inputs from NMEA processor.
   Return = TRUE if we have a valid key match
 */
@@ -478,7 +478,7 @@ InputEvents::ShowMenu() noexcept
 }
 
 Menu *
-InputEvents::GetMenu(const TCHAR *mode) noexcept
+InputEvents::GetMenu(const char *mode) noexcept
 {
   int m = input_config.LookupMode(mode);
   if (m >= 0) return &input_config.menus[m];
@@ -509,7 +509,7 @@ InputEvents::ProcessTimer() noexcept
 }
 
 void
-InputEvents::eventLockScreen([[maybe_unused]] const TCHAR *mode)
+InputEvents::eventLockScreen([[maybe_unused]] const char *mode)
 {
   ShowLockBox();
 }

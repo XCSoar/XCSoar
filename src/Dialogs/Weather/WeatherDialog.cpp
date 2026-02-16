@@ -29,7 +29,7 @@ SetTitle(WndForm &form, const TabWidget &pager)
 }
 
 void
-ShowWeatherDialog(const TCHAR *page)
+ShowWeatherDialog(const char *page)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 

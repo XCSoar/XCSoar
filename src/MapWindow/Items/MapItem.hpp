@@ -209,7 +209,7 @@ struct SkyLinesTrafficMapItem : public MapItem
 
   SkyLinesTrafficMapItem(uint32_t _id, Time _time_of_day_ms,
                          int _altitude,
-                         const TCHAR *_name)
+                         const char *_name)
     :MapItem(Type::SKYLINES_TRAFFIC), id(_id), time_of_day(_time_of_day_ms),
      altitude(_altitude),
      name(_name) {}

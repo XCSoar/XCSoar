@@ -94,80 +94,80 @@ FlarmDevice::SetBaudRate(unsigned baud_id, OperationEnvironment &env)
 }
 
 bool
-FlarmDevice::GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env)
+FlarmDevice::GetPilot(char *buffer, size_t length, OperationEnvironment &env)
 {
   return GetConfig("PILOT", buffer, length, env);
 }
 
 bool
-FlarmDevice::SetPilot(const TCHAR *pilot_name, OperationEnvironment &env)
+FlarmDevice::SetPilot(const char *pilot_name, OperationEnvironment &env)
 {
   return SetConfig("PILOT", pilot_name, env);
 }
 
 bool
-FlarmDevice::GetCoPilot(TCHAR *buffer, size_t length,
+FlarmDevice::GetCoPilot(char *buffer, size_t length,
                         OperationEnvironment &env)
 {
   return GetConfig("COPIL", buffer, length, env);
 }
 
 bool
-FlarmDevice::SetCoPilot(const TCHAR *copilot_name, OperationEnvironment &env)
+FlarmDevice::SetCoPilot(const char *copilot_name, OperationEnvironment &env)
 {
   return SetConfig("COPIL", copilot_name, env);
 }
 
 bool
-FlarmDevice::GetPlaneType(TCHAR *buffer, size_t length,
+FlarmDevice::GetPlaneType(char *buffer, size_t length,
                           OperationEnvironment &env)
 {
   return GetConfig("GLIDERTYPE", buffer, length, env);
 }
 
 bool
-FlarmDevice::SetPlaneType(const TCHAR *plane_type, OperationEnvironment &env)
+FlarmDevice::SetPlaneType(const char *plane_type, OperationEnvironment &env)
 {
   return SetConfig("GLIDERTYPE", plane_type, env);
 }
 
 bool
-FlarmDevice::GetPlaneRegistration(TCHAR *buffer, size_t length,
+FlarmDevice::GetPlaneRegistration(char *buffer, size_t length,
                                   OperationEnvironment &env)
 {
   return GetConfig("GLIDERID", buffer, length, env);
 }
 
 bool
-FlarmDevice::SetPlaneRegistration(const TCHAR *registration,
+FlarmDevice::SetPlaneRegistration(const char *registration,
                                   OperationEnvironment &env)
 {
   return SetConfig("GLIDERID", registration, env);
 }
 
 bool
-FlarmDevice::GetCompetitionId(TCHAR *buffer, size_t length,
+FlarmDevice::GetCompetitionId(char *buffer, size_t length,
                               OperationEnvironment &env)
 {
   return GetConfig("COMPID", buffer, length, env);
 }
 
 bool
-FlarmDevice::SetCompetitionId(const TCHAR *competition_id,
+FlarmDevice::SetCompetitionId(const char *competition_id,
                               OperationEnvironment &env)
 {
   return SetConfig("COMPID", competition_id, env);
 }
 
 bool
-FlarmDevice::GetCompetitionClass(TCHAR *buffer, size_t length,
+FlarmDevice::GetCompetitionClass(char *buffer, size_t length,
                                  OperationEnvironment &env)
 {
   return GetConfig("COMPCLASS", buffer, length, env);
 }
 
 bool
-FlarmDevice::SetCompetitionClass(const TCHAR *competition_class,
+FlarmDevice::SetCompetitionClass(const char *competition_class,
                                  OperationEnvironment &env)
 {
   return SetConfig("COMPCLASS", competition_class, env);

@@ -26,18 +26,18 @@ public:
   }
 };
 
-static const TCHAR*
+static const char*
 OnItemHelp(unsigned i)
 {
   return (*ComboListPopup)[i].help_text.c_str();
 }
 
 int
-ComboPicker(const TCHAR *caption,
+ComboPicker(const char *caption,
             const ComboList &combo_list,
-            const TCHAR *help_text,
+            const char *help_text,
             bool enable_item_help,
-            const TCHAR *extra_caption)
+            const char *extra_caption)
 {
   ComboListPopup = &combo_list;
 
@@ -53,11 +53,11 @@ ComboPicker(const TCHAR *caption,
 }
 
 bool
-ComboPicker(const TCHAR *caption, DataField &df,
-            const TCHAR *help_text)
+ComboPicker(const char *caption, DataField &df,
+            const char *help_text)
 {
   StaticString<256> buffer;
-  const TCHAR *reference = nullptr;
+  const char *reference = nullptr;
 
   while (true) {
     const ComboList combo_list = df.CreateComboList(reference);

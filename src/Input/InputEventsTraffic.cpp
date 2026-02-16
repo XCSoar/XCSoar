@@ -10,7 +10,7 @@
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 
 void
-InputEvents::eventFLARMRadar([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventFLARMRadar([[maybe_unused]] const char *misc)
 {
   if (StringIsEqual(misc, _T("ForceToggle"))) {
     CommonInterface::main_window->ToggleForceFLARMRadar();
@@ -21,13 +21,13 @@ InputEvents::eventFLARMRadar([[maybe_unused]] const TCHAR *misc)
 // FLARM Traffic
 // Displays the FLARM traffic dialog
 void
-InputEvents::eventFlarmTraffic([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventFlarmTraffic([[maybe_unused]] const char *misc)
 {
   PageActions::ShowTrafficRadar();
 }
 
 void
-InputEvents::eventTraffic(const TCHAR *misc)
+InputEvents::eventTraffic(const char *misc)
 {
   LoadFlarmDatabases();
 
@@ -57,7 +57,7 @@ InputEvents::eventTraffic(const TCHAR *misc)
 }
 
 void
-InputEvents::eventFlarmDetails([[maybe_unused]] const TCHAR *misc)
+InputEvents::eventFlarmDetails([[maybe_unused]] const char *misc)
 {
   LoadFlarmDatabases();
   TrafficListDialog();

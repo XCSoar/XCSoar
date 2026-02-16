@@ -30,7 +30,7 @@ class AirspaceWarningWidget final
   StaticString<256> buffer;
 
   [[gnu::pure]]
-  const TCHAR *MakeMessage(const AbstractAirspace &airspace,
+  const char *MakeMessage(const AbstractAirspace &airspace,
                            AirspaceWarning::State state,
                            const AirspaceInterceptSolution &solution) noexcept {
     if (state == AirspaceWarning::WARNING_INSIDE)

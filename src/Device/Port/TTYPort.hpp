@@ -38,7 +38,7 @@ public:
    *
    * Throws on error.
    */
-  void Open(const TCHAR *path, unsigned baud_rate);
+  void Open(const char *path, unsigned baud_rate);
 
   /**
    * Opens this object with a new pseudo-terminal.  This is only used

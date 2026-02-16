@@ -46,7 +46,7 @@ MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
 }
 
 void
-WaypointLabelList::Add(const TCHAR *Name, PixelPoint p,
+WaypointLabelList::Add(const char *Name, PixelPoint p,
                        TextInBoxMode Mode, bool bold,
                        int AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport,

@@ -164,7 +164,7 @@ WindSettingsPanel::UpdateVector() noexcept
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const WindSettings &settings = CommonInterface::SetComputerSettings().wind;
 
-  const TCHAR *source = nullptr;
+  const char *source = nullptr;
   switch (manual_modified
           ? DerivedInfo::WindSource::MANUAL
           : calculated.wind_source) {

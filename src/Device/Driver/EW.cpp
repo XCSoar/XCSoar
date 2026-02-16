@@ -82,7 +82,7 @@ EWDevice::TryConnect(OperationEnvironment &env)
 }
 
 static void
-convert_string(char *dest, size_t size, const TCHAR *src)
+convert_string(char *dest, size_t size, const char *src)
 {
   strncpy(dest, src, size - 1);
   dest[size - 1] = '\0';

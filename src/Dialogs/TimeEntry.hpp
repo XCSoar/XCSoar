@@ -10,5 +10,5 @@
 class RoughTimeDelta;
 
 bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value,
+TimeEntryDialog(const char *caption, RoughTime &value,
                 RoughTimeDelta time_zone, bool nullable=false);

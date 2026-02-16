@@ -12,7 +12,7 @@ TeamCodeSettings::SetDefaults()
 }
 
 void
-TeamCodeSettings::TrackFlarm(FlarmId id, const TCHAR *name)
+TeamCodeSettings::TrackFlarm(FlarmId id, const char *name)
 {
   // Start tracking
   team_flarm_id = id;

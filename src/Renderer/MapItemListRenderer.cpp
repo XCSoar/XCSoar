@@ -53,7 +53,7 @@ Draw(Canvas &canvas, const PixelRect rc,
      const LocationMapItem &item,
      const TwoTextRowsRenderer &row_renderer)
 {
-  TCHAR info_buffer[256];
+  char info_buffer[256];
   if (item.vector.IsValid())
     StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
                        _("Distance"),
@@ -120,7 +120,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   // Format title row
 
-  TCHAR altitude_buffer[32];
+  char altitude_buffer[32];
   StaticString<256> buffer;
   buffer.clear();
 
@@ -283,7 +283,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   rc.left += line_height + text_padding;
 
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Draw details line
   OrderedTaskPointRadiusLabel(*item.oz, buffer);
@@ -330,7 +330,7 @@ Draw(Canvas &canvas, PixelRect rc,
     title_string = _("FLARM Traffic");
 
   // Append name to the title, if it exists
-  const TCHAR *callsign = info.callsign;
+  const char *callsign = info.callsign;
   if (callsign != nullptr && !StringIsEmpty(callsign)) {
     title_string.append(_T(", "));
     title_string.append(callsign);

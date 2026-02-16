@@ -12,12 +12,12 @@
 
 class NOAALineSplitter
 {
-  const TCHAR *start;
+  const char *start;
 
 public:
-  typedef std::pair<const TCHAR *, unsigned> Range;
+  typedef std::pair<const char *, unsigned> Range;
 
-  NOAALineSplitter(const TCHAR *_start):start(_start) {}
+  NOAALineSplitter(const char *_start):start(_start) {}
 
   bool HasNext() const {
     return start != NULL && start[0] != _T('\0');
@@ -26,7 +26,7 @@ public:
   Range Next() {
     assert(HasNext());
 
-    const TCHAR *line_start = start;
+    const char *line_start = start;
 
     // Search for next line break
     const auto *line_break = StringFind(line_start, _T('\n'));
@@ -43,7 +43,7 @@ public:
 };
 
 static bool
-CheckTitle(const TCHAR *title, size_t title_length, const TCHAR *check)
+CheckTitle(const char *title, size_t title_length, const char *check)
 {
   if (_tcslen(check) != title_length)
     return false;
@@ -52,12 +52,12 @@ CheckTitle(const TCHAR *title, size_t title_length, const TCHAR *check)
 }
 
 static bool
-FormatDecodedMETARLine(const TCHAR *line, unsigned length,
+FormatDecodedMETARLine(const char *line, unsigned length,
                        const ParsedMETAR &parsed, tstring &output)
 {
-  const TCHAR *end = line + length;
+  const char *end = line + length;
 
-  const TCHAR *colon = (const TCHAR *)memchr(line, _T(':'), length);
+  const char *colon = (const char *)memchr(line, _T(':'), length);
   if (!colon)
     return false;
 
@@ -65,7 +65,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
   if (title_length == 0)
     return false;
 
-  const TCHAR *value = colon + 1;
+  const char *value = colon + 1;
   while (*value == _T(' '))
     value++;
 
@@ -94,7 +94,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.Format(_T("%s: "), _("Temperature"));
       buffer.append({value, value_length});
     } else {
-      TCHAR temperature_buffer[16];
+      char temperature_buffer[16];
       FormatUserTemperature(parsed.temperature, temperature_buffer);
 
       buffer.Format(_T("%s: %s"), _("Temperature"), temperature_buffer);
@@ -111,7 +111,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.Format(_T("%s: "), _("Dew Point"));
       buffer.append({value, value_length});
     } else {
-      TCHAR temperature_buffer[16];
+      char temperature_buffer[16];
       FormatUserTemperature(parsed.dew_point, temperature_buffer);
 
       buffer.Format(_T("%s: %s"), _("Dew Point"), temperature_buffer);
@@ -128,7 +128,7 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
       buffer.Format(_T("%s: "), _("Pressure"));
       buffer.append({value, value_length});
     } else {
-      TCHAR qnh_buffer[16];
+      char qnh_buffer[16];
       FormatUserPressure(parsed.qnh, qnh_buffer);
 
       buffer.Format(_T("%s: %s"), _("Pressure"), qnh_buffer);

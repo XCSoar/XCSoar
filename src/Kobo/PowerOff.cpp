@@ -54,23 +54,23 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
   const int name_y = rc.top
     + (banner_height - large_font.GetHeight()) / 2;
 
-  const TCHAR *const name1 = _T("XC");
+  const char *const name1 = _T("XC");
   canvas.DrawText({x, name_y}, name1);
   x += canvas.CalcTextWidth(name1);
 
-  const TCHAR *const name2 = _T("Soar");
+  const char *const name2 = _T("Soar");
   canvas.SetTextColor(COLOR_GRAY);
   canvas.DrawText({x, name_y}, name2);
   canvas.SetTextColor(COLOR_BLACK);
   x += canvas.CalcTextWidth(name2) + 30;
 
   /* some more text */
-  const TCHAR *const website = _T("xcsoar.org");
+  const char *const website = _T("xcsoar.org");
   canvas.Select(normal_font);
   canvas.DrawText({x, rc.top + int(banner_height - normal_font.GetHeight()) / 2},
                   website);
 
-  TCHAR comment[30] = _T("powered off");   
+  char comment[30] = _T("powered off");   
   const auto power_info = Power::GetInfo();
   if (power_info.battery.remaining_percent) {
     snprintf ( comment+strlen(comment), 30-strlen(comment), _T(" - battery %d%%"), *power_info.battery.remaining_percent);  

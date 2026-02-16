@@ -11,8 +11,8 @@
 #include <cassert>
 
 void
-RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
-                           const TCHAR *display_format,
+RowFormWidget::AddReadOnly(const char *label, const char *help,
+                           const char *display_format,
                            UnitGroup unit_group, double value) noexcept
 {
   WndProperty *edit = Add(label, help, true);
@@ -26,9 +26,9 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
 }
 
 WndProperty *
-RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
-                        const TCHAR *display_format,
-                        const TCHAR *edit_format,
+RowFormWidget::AddFloat(const char *label, const char *help,
+                        const char *display_format,
+                        const char *edit_format,
                         double min_value, double max_value,
                         double step, bool fine,
                         UnitGroup unit_group, double value,

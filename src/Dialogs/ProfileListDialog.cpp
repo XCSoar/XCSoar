@@ -28,7 +28,7 @@ class ProfileListWidget final
     StaticString<32> name;
     AllocatedPath path;
 
-    ListItem(const TCHAR *_name, Path _path)
+    ListItem(const char *_name, Path _path)
       :name(_name), path(_path) {}
 
     bool operator<(const ListItem &i2) const {
@@ -89,7 +89,7 @@ public:
 
 protected:
   /* virtual methods from TextListWidget */
-  const TCHAR *GetRowText(unsigned i) const noexcept override {
+  const char *GetRowText(unsigned i) const noexcept override {
     return list[i].name;
   }
 
@@ -262,7 +262,7 @@ ProfileListWidget::CopyClicked()
 }
 
 static bool
-ConfirmDeleteProfile(const TCHAR *name)
+ConfirmDeleteProfile(const char *name)
 {
   StaticString<256> tmp;
   StaticString<256> tmp_name(name);

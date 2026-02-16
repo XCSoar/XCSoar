@@ -162,7 +162,7 @@ InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
 
 // TODO: merge with original copy from Dialogs/StatusPanels/SystemStatusPanel.cpp
 [[gnu::pure]]
-static const TCHAR *
+static const char *
 GetGPSStatus(const NMEAInfo &basic) noexcept
 {
   if (!basic.alive)

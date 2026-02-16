@@ -22,7 +22,7 @@
 AllocatedPath
 ProfileMap::GetPath(std::string_view key) const noexcept
 {
-  TCHAR buffer[MAX_PATH];
+  char buffer[MAX_PATH];
   if (!Get(key, std::span{buffer}))
       return nullptr;
 
@@ -33,11 +33,11 @@ ProfileMap::GetPath(std::string_view key) const noexcept
 }
 
 std::vector<AllocatedPath>
-ProfileMap::GetMultiplePaths(std::string_view key, const TCHAR *patterns) const
+ProfileMap::GetMultiplePaths(std::string_view key, const char *patterns) const
 {
 
   std::vector<AllocatedPath> paths;
-  BasicStringBuffer<TCHAR, MAX_PATH> buffer;
+  BasicStringBuffer<char, MAX_PATH> buffer;
 
   if (!Get(key, buffer)) return paths;
 
@@ -52,7 +52,7 @@ ProfileMap::GetMultiplePaths(std::string_view key, const TCHAR *patterns) const
     Path path(file_string.c_str());
 
     size_t length;
-    const TCHAR *patterns_iterator = patterns;
+    const char *patterns_iterator = patterns;
     if (patterns == nullptr) {
       paths.push_back(ExpandLocalPath(AllocatedPath(path)));
       continue;
@@ -86,7 +86,7 @@ ProfileMap::GetPathIsEqual(std::string_view key, Path value) const noexcept
 
 [[gnu::pure]]
 static Path
-BackslashBaseName(const TCHAR *p) noexcept
+BackslashBaseName(const char *p) noexcept
 {
   if (DIR_SEPARATOR != '\\') {
     const auto *backslash = StringFindLast(p, _T('\\'));
@@ -97,7 +97,7 @@ BackslashBaseName(const TCHAR *p) noexcept
   return Path(p).GetBase();
 }
 
-StringPointer<TCHAR>
+StringPointer<char>
 ProfileMap::GetPathBase(std::string_view key) const noexcept
 {
   const auto *path = Get(key);

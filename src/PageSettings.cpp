@@ -8,9 +8,9 @@
 
 #include <algorithm>
 
-const TCHAR *
+const char *
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
-                      std::span<TCHAR> buffer,
+                      std::span<char> buffer,
                       const bool concise) const noexcept
 {
   if (!valid)
@@ -34,7 +34,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     gcc_unreachable();
   }
 
-  BasicStringBuilder<TCHAR> builder{buffer};
+  BasicStringBuilder<char> builder{buffer};
 
   try {
     if (infobox_config.enabled) {
@@ -75,7 +75,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     case Bottom::MAX:
       gcc_unreachable();
     }
-  } catch (BasicStringBuilder<TCHAR>::Overflow) {
+  } catch (BasicStringBuilder<char>::Overflow) {
   }
 
   return buffer.data();

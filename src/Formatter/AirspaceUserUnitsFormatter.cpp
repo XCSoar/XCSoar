@@ -11,7 +11,7 @@
 #include <string.h>
 
 void
-AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
+AirspaceFormatter::FormatAltitudeShort(char *buffer,
                                        const AirspaceAltitude &altitude,
                                        bool include_unit)
 {
@@ -46,7 +46,7 @@ AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
 }
 
 void
-AirspaceFormatter::FormatAltitude(TCHAR *buffer,
+AirspaceFormatter::FormatAltitude(char *buffer,
                                   const AirspaceAltitude &altitude)
 {
   FormatAltitudeShort(buffer, altitude);

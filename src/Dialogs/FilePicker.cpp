@@ -14,14 +14,14 @@
 #endif
 
 bool
-FilePicker(const TCHAR *caption, FileDataField &df, const TCHAR *help_text,
+FilePicker(const char *caption, FileDataField &df, const char *help_text,
            bool nullable)
 {
   ComboList combo_list = df.CreateComboList(nullptr);
   // if nullable it's mean that combo_list must have at least a null element
   if (combo_list.size() == 0 && nullable) return false;
 
-  const TCHAR *extra_caption = nullptr;
+  const char *extra_caption = nullptr;
 #ifdef HAVE_DOWNLOAD_MANAGER
   // with FileType::IGC don't show the 'Download'-Button!
   if (df.GetFileType() != FileType::IGC &&
@@ -52,7 +52,7 @@ FilePicker(const TCHAR *caption, FileDataField &df, const TCHAR *help_text,
 }
 
 AllocatedPath
-FilePicker(const TCHAR *caption, const TCHAR *patterns)
+FilePicker(const char *caption, const char *patterns)
 {
   assert(patterns != nullptr);
 

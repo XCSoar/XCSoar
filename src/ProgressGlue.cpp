@@ -16,7 +16,7 @@ static ProgressWindow *global_progress_window;
 static PeriodClock throttle_clock;
 
 void
-ProgressGlue::Create(const TCHAR *text) noexcept
+ProgressGlue::Create(const char *text) noexcept
 {
   /* Skip showing progress dialog during shutdown */
   if (!global_running)

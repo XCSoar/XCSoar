@@ -29,27 +29,27 @@ ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
 }
 
 void
-ChartRenderer::SetXLabel(const TCHAR *text) noexcept
+ChartRenderer::SetXLabel(const char *text) noexcept
 {
   CopyTruncateString(x_label.data(), x_label.capacity(), text);
 }
 
 void
-ChartRenderer::SetXLabel(const TCHAR *text, const TCHAR *unit) noexcept
+ChartRenderer::SetXLabel(const char *text, const char *unit) noexcept
 {
   StringFormat(x_label.data(), x_label.capacity(),
                _T("%s [%s]"), text, unit);
 }
 
 void
-ChartRenderer::SetYLabel(const TCHAR *text, const TCHAR *unit) noexcept
+ChartRenderer::SetYLabel(const char *text, const char *unit) noexcept
 {
   StringFormat(y_label.data(), y_label.capacity(),
                _T("%s [%s]"), text, unit);
 }
 
 void
-ChartRenderer::SetYLabel(const TCHAR *text) noexcept
+ChartRenderer::SetYLabel(const char *text) noexcept
 {
   CopyTruncateString(y_label.data(), y_label.capacity(), text);
 }
@@ -195,7 +195,7 @@ ChartRenderer::ScaleXFromValue(const double value) noexcept
 }
 
 void
-ChartRenderer::DrawLabel(DoublePoint2D v, const TCHAR *text) noexcept
+ChartRenderer::DrawLabel(DoublePoint2D v, const char *text) noexcept
 {
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
@@ -217,7 +217,7 @@ ChartRenderer::DrawLabel(DoublePoint2D v, const TCHAR *text) noexcept
 }
 
 void
-ChartRenderer::DrawNoData(const TCHAR *text) noexcept
+ChartRenderer::DrawNoData(const char *text) noexcept
 {
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
@@ -441,11 +441,11 @@ ChartRenderer::DrawLineGraph(const XYDataStore &lsdata,
   DrawLineGraph(lsdata, look.GetPen(style), swap);
 }
 
-BasicStringBuffer<TCHAR, 32>
+BasicStringBuffer<char, 32>
 ChartRenderer::FormatTicText(const double val, const double step,
                              UnitFormat units) noexcept
 {
-  BasicStringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<char, 32> buffer;
 
   if (units == UnitFormat::TIME) {
     const unsigned total_minutes(val * 60);
