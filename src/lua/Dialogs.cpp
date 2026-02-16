@@ -19,9 +19,7 @@ l_alert(lua_State *L)
 {
   const char *message = lua_tostring(L, 1);
   if (message != nullptr) {
-    const UTF8ToWideConverter c_message(message);
-    if (c_message.IsValid())
-      ShowMessageBox(c_message, "Lua", MB_OK|MB_ICONINFORMATION);
+    ShowMessageBox(message, "Lua", MB_OK|MB_ICONINFORMATION);
   }
 
   return 0;

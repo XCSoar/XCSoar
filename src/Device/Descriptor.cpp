@@ -392,14 +392,13 @@ try {
 
     LogError(e, name);
 
-    const auto _msg = GetFullMessage(e);
-    if (const UTF8ToWideConverter what{_msg.c_str()}; what.IsValid()) {
-      LockSetErrorMessage(what);
+    const auto msg = GetFullMessage(e);
+    if (!msg.empty()) {
+      LockSetErrorMessage(msg.c_str());
 
-      StaticString<256> msg;
-      msg.Format("%s: %s (%s)", _("Unable to open port"), name,
-                 (const char *)what);
-      env.SetErrorMessage(msg);
+      StaticString<256> _msg;
+      _msg.Format("%s: %s (%s)", _("Unable to open port"), name, msg.c_str());
+      env.SetErrorMessage(_msg);
     }
 
     return false;
@@ -436,11 +435,11 @@ try {
   const auto e = std::current_exception();
   LogError(e);
 
-  const auto _msg = GetFullMessage(e);
+  const auto msg = GetFullMessage(e);
 
-  if (const UTF8ToWideConverter msg{_msg.c_str()}; msg.IsValid()) {
-    LockSetErrorMessage(msg);
-    env.SetErrorMessage(msg);
+  if (!msg.empty()) {
+    LockSetErrorMessage(msg.c_str());
+    env.SetErrorMessage(msg.c_str());
   }
 
   return false;

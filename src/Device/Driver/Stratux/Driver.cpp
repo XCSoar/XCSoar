@@ -11,6 +11,8 @@
 #include "FLARM/Details.hpp"
 #include "util/ConvertString.hpp"
 
+#include <string_view>
+
 StratuxDevice::StratuxSettings settings;
 
 void
@@ -80,9 +82,9 @@ void StratuxDevice::ExtractAndSetCallSign(const char *line, NMEAInfo &info)
     char *ptr = strchr(id_string, '!');
 
     if (ptr && ptr[1] != '\0' && flarm_slot->name.empty()) {
-      UTF8ToWideConverter callsign(ptr + 1);
-      if (callsign.IsValid())
-        flarm_slot->name.append(callsign.c_str());
+      std::string_view callsign(ptr + 1);
+      if (!callsign.empty())
+        flarm_slot->name.append(callsign.data());
     }
 
     /* Callsign from own list always overwrites. */
