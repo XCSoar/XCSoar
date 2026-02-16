@@ -63,9 +63,9 @@ l_replay_start(lua_State *L)
   if (lua_gettop(L) != 1)
     return luaL_error(L, "Invalid parameters");
 
-  const UTF8ToWideConverter filename(luaL_checkstring(L, 1));
-  if (filename.IsValid()) {
-    Path p(filename);
+  const std::string_view filename(luaL_checkstring(L, 1));
+  if (!filename.empty()) {
+    Path p(filename.data());
 
     try {
       backend_components->replay->Start(p);

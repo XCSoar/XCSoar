@@ -10,7 +10,7 @@
 void
 ShowError(std::exception_ptr e, const char *caption) noexcept
 {
-  ShowMessageBox(UTF8ToWideConverter(GetFullMessage(e).c_str()), caption,
+  ShowMessageBox(GetFullMessage(e).c_str(), caption,
                  MB_OK|MB_ICONEXCLAMATION);
 }
 
@@ -20,7 +20,7 @@ ShowError(const char *msg, std::exception_ptr e,
 {
   StaticString<1024> buffer;
   buffer.Format("%s\n%s", msg,
-                UTF8ToWideConverter(GetFullMessage(e).c_str()).c_str());
+                GetFullMessage(e).c_str());
   buffer.CropIncompleteUTF8();
 
   ShowMessageBox(msg, caption,

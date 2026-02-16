@@ -44,8 +44,8 @@ using std::string_view_literals::operator""sv;
 static AllocatedPath
 LocalPath(const AvailableFile &file)
 {
-  const UTF8ToWideConverter base(file.GetName());
-  if (!base.IsValid())
+  const Path base(file.GetName());
+  if (base.empty())
     return nullptr;
 
   return LocalPath(base);
@@ -485,11 +485,11 @@ ManagedFileListWidget::Download()
     return;
 
   const AvailableFile &remote_file = *remote_file_p;
-  const UTF8ToWideConverter base(remote_file.GetName());
-  if (!base.IsValid())
+  const Path base(remote_file.GetName());
+  if (base.empty())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), Path(base));
+  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), base);
 #endif
 }
 
@@ -520,13 +520,11 @@ AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const AvailableFile &file = list[i];
 
-  const UTF8ToWideConverter name(file.GetName());
-  if (name.IsValid())
-    row_renderer.DrawFirstRow(canvas, rc, name);
+  if (file.GetName())
+    row_renderer.DrawFirstRow(canvas, rc, file.GetName());
 
-  const UTF8ToWideConverter description(file.GetDescription());
-  if (description.IsValid())
-    row_renderer.DrawSecondRow(canvas, rc, description);
+  if (file.GetDescription())
+    row_renderer.DrawSecondRow(canvas, rc, file.GetDescription());
 
   if (file.update_date.IsPlausible()) {
     char string_buffer[21];
@@ -545,15 +543,15 @@ ManagedFileListWidget::Add()
 
   std::vector<AvailableFile> list;
   for (const auto &remote_file : repository) {
+    std::string_view name = remote_file.GetName();
     if (IsDownloading(remote_file.GetName()))
       /* already downloading this file */
       continue;
 
-    const UTF8ToWideConverter name(remote_file.GetName());
-    if (!name.IsValid())
+    if (name.empty())
       continue;
 
-    if (FindItem(name) < 0)
+    if (FindItem(name.data()) < 0)
       list.push_back(remote_file);
   }
 
@@ -571,11 +569,11 @@ ManagedFileListWidget::Add()
   assert((unsigned)i < list.size());
 
   const AvailableFile &remote_file = list[i];
-  const UTF8ToWideConverter base(remote_file.GetName());
-  if (!base.IsValid())
+  const Path base(remote_file.GetName());
+  if (base.empty())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.GetURI(), Path(base));
+  Net::DownloadManager::Enqueue(remote_file.GetURI(), base);
 #endif
 }
 
@@ -589,11 +587,11 @@ ManagedFileListWidget::UpdateFiles() {
       const AvailableFile *remote_file = FindRemoteFile(repository, file.name);
 
       if (remote_file != nullptr) {
-        const UTF8ToWideConverter base(remote_file->GetName());
-        if (!base.IsValid())
+        const Path base(remote_file->GetName());
+        if (base.empty())
           return;
 
-        Net::DownloadManager::Enqueue(remote_file->GetURI(), Path(base));
+        Net::DownloadManager::Enqueue(remote_file->GetURI(), base);
       }
     }
   }
