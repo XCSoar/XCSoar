@@ -20,7 +20,7 @@ static inline void
 HexDumpLine(const char *prefix, unsigned offset,
             std::span<const std::byte> src) noexcept
 {
-  NarrowString<128> line;
+  StaticString<128> line;
   line.clear();
 
   for (size_t i = 0; i < src.size(); ++i) {

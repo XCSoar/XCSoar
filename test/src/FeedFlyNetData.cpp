@@ -48,7 +48,7 @@ try {
   unsigned battery_level = 11;
   while (true) {
     if (pressure_clock.CheckUpdate(std::chrono::milliseconds(48))) {
-      NarrowString<16> sentence;
+      StaticString<16> sentence;
 
       const auto elapsed = ToFloatSeconds(start_clock.Elapsed());
       auto vario = sin(elapsed / 3) * cos(elapsed / 10) *
@@ -66,7 +66,7 @@ try {
     }
 
     if (battery_clock.CheckUpdate(std::chrono::seconds(11))) {
-      NarrowString<16> sentence;
+      StaticString<16> sentence;
 
       sentence = "_BAT ";
       if (battery_level <= 10)

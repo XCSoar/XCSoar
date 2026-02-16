@@ -42,7 +42,7 @@ UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
              Path igc_path,
              ProgressListener &progress)
 {
-  NarrowString<0x200> url(settings.default_url);
+  StaticString<0x200> url(settings.default_url);
   url += "/igcfile";
 
   CurlEasy easy{url};

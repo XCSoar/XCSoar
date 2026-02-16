@@ -32,7 +32,7 @@ struct AvailableFile {
    * A short symbolic name for the area.  Empty means this file is
    * global.
    */
-  NarrowString<8> area;
+  StaticString<8> area;
 
   FileType type;
 

@@ -151,7 +151,7 @@ public:
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
   }
 
-  void IdDeviceByName(NarrowString<16> productName) noexcept
+  void IdDeviceByName(StaticString<16> productName) noexcept
   {
     is_v7 = productName.equals("V7");
     is_sVario = productName.equals("NINC") || productName.equals("S8x");

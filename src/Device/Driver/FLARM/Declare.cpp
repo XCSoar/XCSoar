@@ -103,7 +103,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
      * parameter of CopyCleanFlarmString() allows us to trim off excess characters
      * so that a dodgy waypoint configuration doesn't cause an overflow.
      */
-    NarrowString<90> buffer;
+    StaticString<90> buffer;
     const WideToUTF8Converter shortName(declaration.GetShortName(i));
     buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
                   DegLat, (double)MinLat, NoS,

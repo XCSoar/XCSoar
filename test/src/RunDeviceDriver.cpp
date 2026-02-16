@@ -160,7 +160,7 @@ Dump(const NMEAInfo &basic)
 
 int main(int argc, char **argv)
 {
-  NarrowString<1024> usage;
+  StaticString<1024> usage;
   usage = "DRIVER\n\n"
           "Where DRIVER is one of:";
   {
