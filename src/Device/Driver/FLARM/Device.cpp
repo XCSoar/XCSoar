@@ -3,7 +3,6 @@
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
-#include "util/ConvertString.hpp"
 #include "util/StaticString.hxx"
 #include "util/TruncateString.hpp"
 #include "util/Macros.hpp"

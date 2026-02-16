@@ -4,7 +4,6 @@
 #include "Device.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
-#include "util/ConvertString.hpp"
 #include "TextProtocol.hpp"
 
 bool

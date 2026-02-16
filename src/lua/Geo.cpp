@@ -6,7 +6,6 @@
 #include "Util.hxx"
 #include "Geo/GeoPoint.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
-#include "util/ConvertString.hpp"
 #include "util/StringAPI.hxx"
 
 namespace Lua {

@@ -12,7 +12,6 @@
 #include "io/BufferedReader.hxx"
 #include "system/ConvertPathName.hpp"
 #include "Operation/Operation.hpp"
-#include "util/ConvertString.hpp"
 #include "LogFile.hpp"
 
 static const char *const terrain_cache_name = "terrain";

@@ -9,7 +9,6 @@
 #include "lib/curl/Setup.hxx"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
-#include "util/ConvertString.hpp"
 #include "util/StringSplit.hxx"
 
 #include <stdexcept>

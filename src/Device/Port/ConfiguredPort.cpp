@@ -7,7 +7,6 @@
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
 #include "LogFile.hpp"
-#include "util/ConvertString.hpp"
 #include "TCPClientPort.hpp"
 
 #ifdef ANDROID

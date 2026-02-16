@@ -20,7 +20,6 @@
 #include "lib/fmt/RuntimeError.hxx"
 #include "io/BufferedReader.hxx"
 #include "io/StringConverter.hpp"
-#include "util/ConvertString.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"

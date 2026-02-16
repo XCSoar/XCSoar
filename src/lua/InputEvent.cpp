@@ -12,7 +12,6 @@
 #include "Input/InputKeys.hpp"
 #include "util/Compiler.h"
 #include "util/StringAPI.hxx"
-#include "util/ConvertString.hpp"
 #include "Util.hxx"
 #include "Interface.hpp"
 

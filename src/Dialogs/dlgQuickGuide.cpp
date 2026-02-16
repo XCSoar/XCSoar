@@ -28,7 +28,6 @@
 #include "Android/Permissions.hpp"
 #endif
 #include "util/AllocatedString.hxx"
-#include "util/ConvertString.hpp"
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
 

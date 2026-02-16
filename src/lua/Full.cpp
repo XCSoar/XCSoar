@@ -18,7 +18,6 @@
 #include "LocalPath.hpp"
 #include "Compatibility/path.h"
 #include "system/Path.hpp"
-#include "util/ConvertString.hpp"
 #include "Airspace.hpp"
 #include "Task.hpp"
 #include "Settings.hpp"

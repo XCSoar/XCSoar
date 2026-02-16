@@ -24,7 +24,6 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
-#include "util/ConvertString.hpp"
 
 #include <vector>
 

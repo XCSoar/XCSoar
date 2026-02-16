@@ -10,7 +10,6 @@
 #include "time/TimeoutClock.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Operation/Operation.hpp"
-#include "util/ConvertString.hpp"
 
 static bool
 NanoWriteDecl(Port &port, OperationEnvironment &env, PortNMEAReader &reader,
