@@ -451,7 +451,8 @@ sdl2 = CmakeProject(
         "-DSDL_DISKAUDIO=OFF",
         "-DSDL_DUMMYAUDIO=OFF",
         "-DSDL_DUMMYVIDEO=OFF",
-        "-DSDL_OPENGL=OFF",
+        # SDL_cocoawindow.m uses SDLOpenGLContext APIs on macOS.
+        "-DSDL_OPENGL=ON",
         "-DSDL_OPENGLES=ON",
         "-DSDL_OSS=OFF",
         "-DSDL_JACK=OFF",
@@ -460,7 +461,6 @@ sdl2 = CmakeProject(
         "-DSDL_NAS=OFF",
         "-DSDL_SNDIO=OFF",
         "-DSDL_LIBSAMPLERATE=OFF",
-        "-DSDL_COCOA=OFF",
     ],
     patches=abspath("lib/sdl2/patches"),
 )
