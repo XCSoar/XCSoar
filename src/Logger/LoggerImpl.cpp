@@ -14,7 +14,6 @@
 #include "IGC/IGCWriter.hpp"
 #include "util/CharUtil.hxx"
 
-#include <tchar.h>
 #include <algorithm>
 
 const struct LoggerImpl::PreTakeoffBuffer &

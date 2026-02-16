@@ -9,8 +9,6 @@
 #include "io/BufferedOutputStream.hxx"
 #include "system/Path.hpp"
 
-#include <tchar.h>
-
 void
 SaveTask(Path path, const OrderedTask &task)
 {

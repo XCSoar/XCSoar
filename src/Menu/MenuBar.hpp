@@ -5,8 +5,6 @@
 
 #include "Form/Button.hpp"
 
-#include <tchar.h>
-
 /*
     Menubar button height as a fraction of the screen height
 */

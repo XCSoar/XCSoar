@@ -10,8 +10,6 @@
 #include <concepts>
 #include <span>
 
-#include <tchar.h>
-
 /**
  * Expand variable references in the "$(NAME)" style from the source
  * string and copy the result to the destination buffer.  If the

@@ -8,7 +8,6 @@
 #include "PCMPlayer.hpp"
 #include "thread/Mutex.hxx"
 
-#include <tchar.h>
 #include <memory>
 
 /**

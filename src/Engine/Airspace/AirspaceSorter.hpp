@@ -7,7 +7,6 @@
 #include "Geo/GeoVector.hpp"
 #include "Airspace/AirspaceClass.hpp"
 
-#include <tchar.h>
 #include <vector>
 
 struct GeoPoint;

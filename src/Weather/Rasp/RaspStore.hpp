@@ -11,8 +11,6 @@
 #include <memory>
 
 #include <cassert>
-#include <tchar.h>
-
 #define RASP_FILENAME "xcsoar-rasp.dat"
 
 class Path;

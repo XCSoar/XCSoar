@@ -15,8 +15,6 @@
 
 #include <string_view>
 
-#include <tchar.h>
-
 #ifdef _WIN32
 /* those are WIN32 macros - undefine, or Canvas::background_mode will
    break */

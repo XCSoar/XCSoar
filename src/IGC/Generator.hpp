@@ -5,8 +5,6 @@
 
 #include <span>
 
-#include <tchar.h>
-
 struct BrokenDateTime;
 struct GeoPoint;
 

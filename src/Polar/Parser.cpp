@@ -7,8 +7,6 @@
 #include "Units/System.hpp"
 
 #include <cstdio>
-#include <tchar.h>
-
 bool
 ParsePolarShape(PolarShape &shape, const char *s) noexcept
 {

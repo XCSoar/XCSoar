@@ -9,8 +9,6 @@
 
 #include <string>
 
-#include <tchar.h>
-
 struct DialogLook;
 
 class WndFrame : public PaintWindow {

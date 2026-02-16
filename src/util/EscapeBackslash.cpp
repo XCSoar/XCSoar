@@ -4,8 +4,6 @@
 #include "EscapeBackslash.hpp"
 
 #include <string.h>
-#include <tchar.h>
-
 std::string_view::pointer
 UnescapeBackslash(std::string_view old_string) noexcept
 {

@@ -5,8 +5,6 @@
 
 #include "WindowWidget.hpp"
 
-#include <tchar.h>
-
 struct DialogLook;
 
 /**

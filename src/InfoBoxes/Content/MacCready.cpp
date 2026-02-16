@@ -11,8 +11,6 @@
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
 
-#include <tchar.h>
-
 static void
 SetVSpeed(InfoBoxData &data, double value) noexcept
 {

@@ -9,7 +9,6 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
-#include <tchar.h>
 #include <stdio.h>
 
 using std::string_view_literals::operator""sv;

@@ -5,8 +5,6 @@
 
 #include "Units/Unit.hpp"
 
-#include <tchar.h>
-
 class AtmosphericPressure;
 
 /**

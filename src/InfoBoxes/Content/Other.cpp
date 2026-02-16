@@ -15,8 +15,6 @@
 #include "Hardware/PowerInfo.hpp"
 #endif
 
-#include <tchar.h>
-
 void
 UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept
 {

@@ -8,8 +8,6 @@
 
 #include <functional>
 
-#include <tchar.h>
-
 /**
  * A #Widget that displays a message and a number of buttons.  It is
  * used by XCSoar to display context-sensitive dialogs in the "bottom

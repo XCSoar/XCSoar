@@ -4,8 +4,6 @@
 #pragma once
 
 #include "RadioFrequency.hpp"
-#include <tchar.h>
-
 class FlarmId;
 struct FlarmNetRecord;
 struct MessagingRecord;

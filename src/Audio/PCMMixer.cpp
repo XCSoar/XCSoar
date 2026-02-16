@@ -6,8 +6,6 @@
 
 #include "LogFile.hpp"
 
-#include <tchar.h>
-
 #include <utility>
 
 

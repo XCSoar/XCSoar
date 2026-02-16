@@ -5,7 +5,6 @@
 
 #include "BinaryProtocol.hpp"
 #include "util/AllocatedArray.hxx"
-#include "tchar.h"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
 
