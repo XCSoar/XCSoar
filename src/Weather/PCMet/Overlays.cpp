@@ -129,7 +129,7 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
 
   const auto cache_path = MakeCacheDirectory("pc_met");
   auto path = AllocatedPath::Build(cache_path,
-                                   UTF8ToWideConverter(url.c_str() + sizeof(PCMET_FTP)));
+                                   url.c_str() + sizeof(PCMET_FTP));
 
   {
     const auto ignored_response = co_await

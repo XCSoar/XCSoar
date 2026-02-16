@@ -492,12 +492,11 @@ dlgQuickGuideShowModal(bool force_info)
   if (news_needed) {
     news_inflated = InflateToString(NEWS_txt_gz, NEWS_txt_gz_size);
     TruncateToCurrentVersion(news_inflated.data());
-    const UTF8ToWideConverter news_text(news_inflated.c_str());
-    if (news_text.IsValid()) {
+    if (!news_inflated.empty()) {
       state.news_page_index = pager->GetSize();
 
       auto page = QuickGuidePageWidget::CreateCheckboxPage(
-        look, news_text,
+        look, news_inflated.c_str(),
         _("Don't show these release notes again"),
         false,
         [](bool) { /* state is read on dialog close */ });

@@ -95,12 +95,8 @@ DecodeXCTrackTask(const boost::json::value &_j,
     if (name.empty())
       throw std::invalid_argument{"Name is empty"};
 
-    const UTF8ToWideConverter name_t{name.c_str()};
-    if (!name_t.IsValid())
-      throw std::invalid_argument{"Malfored name"};
-
     auto oz = std::make_unique<CylinderZone>(z.location, z.radius);
-    auto wp = MakeWaypoint(z.location, name_t.c_str());
+    auto wp = MakeWaypoint(z.location, name.c_str());
 
     std::unique_ptr<OrderedTaskPoint> tp;
 
