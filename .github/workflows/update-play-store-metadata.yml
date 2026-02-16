@@ -1,0 +1,49 @@
+# Upload Play Store listing metadata from doc/store/play-store to Google Play
+# Console. Requires secret GOOGLE_PLAY_JSON_KEY (service account JSON).
+# See doc/store/README.md for setup.
+---
+name: Update Play Store metadata
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'doc/store/play-store/**'
+
+jobs:
+  update-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      - name: Create Play Store key
+        run: |
+          printf '%s' "$GOOGLE_PLAY_JSON_KEY" > play-key.json
+          chmod 600 play-key.json
+        env:
+          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+
+      - name: Upload metadata to Play Store
+        run: |
+          fastlane supply \
+            package_name:org.xcsoar.play \
+            metadata_path:doc/store/play-store/metadata/android \
+            json_key:play-key.json \
+            skip_upload_apk:true \
+            skip_upload_aab:true
+
+      - name: Remove key
+        if: always()
+        run: rm -f play-key.json
