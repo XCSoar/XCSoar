@@ -356,11 +356,9 @@ Waypoints::GenerateTempPoint(const GeoPoint& location, const double terrain_alt,
   to_point.has_elevation = IsFinite(terrain_alt);
   to_point.name = name;
   to_point.shortname = name;
-
   const bool is_takeoff = StringIsEqual(name, "(takeoff)");
   to_point.type = is_takeoff ? Waypoint::Type::OUTLANDING
                              : Waypoint::Type::NORMAL;
-
   return to_point;
 }
 
@@ -372,6 +370,12 @@ Waypoints::AddTempPoint(const GeoPoint& location, const double terrain_alt,
     return;
 
   const bool is_takeoff = StringIsEqual(name, "(takeoff)");
+#if 0  // August2111: removed this part from XCSoa? 
+  // remove old one first
+  WaypointPtr old_takeoff_point = LookupName("(takeoff)");
+  if (old_takeoff_point != nullptr)
+    Erase(std::move(old_takeoff_point));
+#endif
 
   // remove old temporary waypoint first (only if it's a temporary one)
   WaypointPtr old_point = LookupName(name);

@@ -11,58 +11,58 @@ CAI302UnitsEditor::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
   static constexpr StaticEnumChoice vario_list[] = {
-    { 0, _T("m/s"), },
-    { 1, _T("kt"), },
+    { 0, "m/s", },
+    { 1, "kt", },
     nullptr
   };
   AddEnum(_("Vario"), NULL, vario_list,
           data.GetVarioUnit());
 
   static constexpr StaticEnumChoice altitude_list[] = {
-    { 0, _T("m"), },
-    { 1, _T("ft"), },
+    { 0, "m", },
+    { 1, "ft", },
     nullptr
   };
   AddEnum(_("Altitude"), NULL, altitude_list,
           data.GetAltitudeUnit());
 
   static constexpr StaticEnumChoice temperature_list[] = {
-    { 0, _T(DEG "C"), },
-    { 1, _T(DEG "F"), },
+    { 0, DEG "C", },
+    { 1, DEG "F", },
     nullptr
   };
   AddEnum(_("Temperature"), NULL, temperature_list,
           data.GetTemperatureUnit());
 
   static constexpr StaticEnumChoice pressure_list[] = {
-    { 0, _T("hPa"), },
-    { 1, _T("inHg"), },
+    { 0, "hPa", },
+    { 1, "inHg", },
     nullptr
   };
   AddEnum(_("Pressure"), NULL, pressure_list,
           data.GetPressureUnit());
 
   static constexpr StaticEnumChoice distance_list[] = {
-    { 0, _T("km"), },
-    { 1, _T("NM"), },
-    { 2, _T("mi"), },
+    { 0, "km", },
+    { 1, "NM", },
+    { 2, "mi", },
     nullptr
   };
   AddEnum(_("Distance"), NULL, distance_list,
           data.GetDistanceUnit());
 
   static constexpr StaticEnumChoice speed_list[] = {
-    { 0, _T("m/s"), },
-    { 1, _T("kt"), },
-    { 2, _T("mph"), },
+    { 0, "m/s", },
+    { 1, "kt", },
+    { 2, "mph", },
     nullptr
   };
   AddEnum(_("Speed"), NULL, speed_list,
           data.GetSpeedUnit());
 
   static constexpr StaticEnumChoice sink_tone_list[] = {
-    { 0, _T("off"), },
-    { 1, _T("on"), },
+    { 0, "off", },
+    { 1, "on", },
     nullptr
   };
   AddEnum(_("Sink tone"), NULL, sink_tone_list,

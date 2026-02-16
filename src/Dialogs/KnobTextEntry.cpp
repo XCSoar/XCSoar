@@ -28,7 +28,7 @@ enum Buttons {
 static constexpr size_t MAX_TEXTENTRY = 40;
 
 static constexpr char EntryLetters[] =
-  _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
+  " ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-";
 
 static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
 
@@ -198,16 +198,16 @@ public:
 inline void
 KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_T("A+"), [this](){ GetWindow().IncrementLetter(); });
+  dialog.AddButton("A+", [this](){ GetWindow().IncrementLetter(); });
   dialog.AddButtonKey(KEY_UP);
 
-  dialog.AddButton(_T("A-"), [this](){ GetWindow().DecrementLetter(); });
+  dialog.AddButton("A-", [this](){ GetWindow().DecrementLetter(); });
   dialog.AddButtonKey(KEY_DOWN);
 
-  dialog.AddSymbolButton(_T("<"), [this](){ GetWindow().MoveCursorLeft(); });
+  dialog.AddSymbolButton("<", [this](){ GetWindow().MoveCursorLeft(); });
   dialog.AddButtonKey(KEY_LEFT);
 
-  dialog.AddSymbolButton(_T(">"), [this](){ GetWindow().MoveCursorRight(); });
+  dialog.AddSymbolButton(">", [this](){ GetWindow().MoveCursorRight(); });
   dialog.AddButtonKey(KEY_RIGHT);
 }
 

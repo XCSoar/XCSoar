@@ -14,20 +14,20 @@ std::unique_ptr<TaskFile>
 TaskFile::Create(Path path)
 {
   // If XCSoar task file -> return new TaskFileXCSoar
-  if (path.EndsWithIgnoreCase(_T(".tsk")))
+  if (path.EndsWithIgnoreCase(".tsk"))
     return std::make_unique<TaskFileXCSoar>(path);
 
   // If SeeYou task file -> return new TaskFileSeeYou
-  if (path.EndsWithIgnoreCase(_T(".cup")))
+  if (path.EndsWithIgnoreCase(".cup"))
     return std::make_unique<TaskFileSeeYou>(path);
 
   // If IGC file -> return new TaskFileIGC
-  if (path.EndsWithIgnoreCase(_T(".igc")))
+  if (path.EndsWithIgnoreCase(".igc"))
     return std::make_unique<TaskFileIGC>(path);
 
   /* TODO ".xctsk" is not a real filename suffix; there is just the
      MIME type "application/xctsk" */
-  if (path.EndsWithIgnoreCase(_T(".xctsk")))
+  if (path.EndsWithIgnoreCase(".xctsk"))
     return std::make_unique<XCTrackTaskFile>(path);
 
   // unknown task file type

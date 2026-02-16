@@ -57,22 +57,22 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   notrack = device.GetUnsignedValue("NOTRACK", 0) == 1;
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 0, _T("4800") },
-    { 1, _T("9600") },
-    { 2, _T("19200") },
-    { 4, _T("38400") },
-    { 5, _T("57600") },
+    { 0, "4800" },
+    { 1, "9600" },
+    { 2, "19200" },
+    { 4, "38400" },
+    { 5, "57600" },
     nullptr
   };
 
   static constexpr StaticEnumChoice baud_list_pf[] = {
-    { 0, _T("4800") },
-    { 1, _T("9600") },
-    { 2, _T("19200") },
-    { 4, _T("38400") },
-    { 5, _T("57600") },
-    { 6, _T("115200") },
-    { 7, _T("230400") },
+    { 0, "4800" },
+    { 1, "9600" },
+    { 2, "19200" },
+    { 4, "38400" },
+    { 5, "57600" },
+    { 6, "115200" },
+    { 7, "230400" },
     nullptr
   };
 
@@ -90,11 +90,11 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   if (wp_threshold != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp_threshold->GetDataField();
     if (hardware.isPowerFlarm()) {
-      df.AddChoice(255, _T("Automatic"));
+      df.AddChoice(255, "Automatic");
     }
     char buffer[64];
     for (unsigned i = 0; i <= 20; ++i) {
-      StringFormatUnsafe(buffer, _T("%u m/s"), i);
+      StringFormatUnsafe(buffer, "%u m/s", i);
       df.AddChoice(i, buffer);
     }
     df.SetValue(thre);
@@ -121,7 +121,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   };
 
   AddEnum(_("Type"), NULL, acft_list, acft);
-  AddInteger(_("Logger interval"), NULL, _T("%d s"), _T("%d"),
+  AddInteger(_("Logger interval"), NULL, "%d s", "%d",
              1, 8, 1, log_int);
   AddBoolean(_("Stealth mode"), NULL, priv);
   AddBoolean(_("No tracking mode"), NULL, notrack);
@@ -129,7 +129,7 @@ FLARMConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton(_("Range setup"), [this](){
     FLARMRangeConfigWidget widget(GetLook(), device, hardware);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                        _T("FLARM range setup"), widget);
+                        "FLARM range setup", widget);
   });
 }
 
@@ -185,6 +185,6 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  ShowError(std::current_exception(), _T("FLARM"));
+  ShowError(std::current_exception(), "FLARM");
   return false;
 }

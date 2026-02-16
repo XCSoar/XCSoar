@@ -14,7 +14,7 @@ static void
 Main([[maybe_unused]] TestMainWindow &main_window)
 {
   Angle value = Angle::Zero();
-  if (!AngleEntryDialog(_T("The caption"), value))
+  if (!AngleEntryDialog("The caption", value))
     return;
 
   printf("%ld\n", lround(value.Degrees()));

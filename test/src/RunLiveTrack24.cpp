@@ -32,12 +32,12 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
   UserID user_id;
   std::string username, password;
   if (args.IsEmpty()) {
-    username = _T("");
-    password = _T("");
+    username = "";
+    password = "";
     has_user_id = false;
   } else {
     username = args.ExpectNextT();
-    password = args.IsEmpty() ? _T("") : args.ExpectNextT();
+    password = args.IsEmpty() ? "" : args.ExpectNextT();
 
     user_id = co_await client.GetUserID(username.c_str(), password.c_str());
     has_user_id = (user_id != 0);
@@ -51,7 +51,7 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
   printf("Starting tracking ... ");
   co_await client.StartTracking(session, username.c_str(),
                                 password.c_str(), 10,
-                                VehicleType::GLIDER, _T("Hornet"));
+                                VehicleType::GLIDER, "Hornet");
   printf("done\n");
 
   BrokenDate now = BrokenDate::TodayUTC();
@@ -90,7 +90,7 @@ try {
   Instance instance;
 
   Client client{*Net::curl};
-  client.SetServer(_T("www.livetrack24.com"));
+  client.SetServer("www.livetrack24.com");
   instance.Run(TestTracking(argc, argv, client));
   return EXIT_SUCCESS;
 } catch (...) {

@@ -139,8 +139,8 @@ CaiLNavCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister cai_lnav_driver = {
-  _T("cai_lnav"),
-  _T("Cambridge L-Nav"),
+  "cai_lnav",
+  "Cambridge L-Nav",
   DeviceRegister::NO_TIMEOUT,
   CaiLNavCreateOnPort,
 };

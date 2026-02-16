@@ -14,9 +14,9 @@ NumToIGCChar(unsigned num)
   assert(num <= 35);
 
   if (num < 10)
-    return _T('1') + (num - 1);
+    return '1' + (num - 1);
 
-  return _T('A') + (num - 10);
+  return 'A' + (num - 10);
 }
 
 void
@@ -32,7 +32,7 @@ FormatIGCFilename(char* buffer, const BrokenDate &date,
   char cday = NumToIGCChar(date.day);
   char cflight = NumToIGCChar(flight_number);
 
-  StringFormatUnsafe(buffer, _T("%c%c%c%c%s%c.igc"),
+  StringFormatUnsafe(buffer, "%c%c%c%c%s%c.igc",
                      cyear, cmonth, cday,
                      manufacturer, logger_id, cflight);
 }
@@ -52,7 +52,7 @@ FormatIGCFilenameLong(char* buffer, const BrokenDate &date,
   assert(logger_id != NULL);
   assert(strlen(logger_id) == 3);
 
-  StringFormatUnsafe(buffer, _T("%04u-%02u-%02u-%s-%s-%02u.igc"),
+  StringFormatUnsafe(buffer, "%04u-%02u-%02u-%s-%s-%02u.igc",
                      date.year, date.month, date.day,
                      manufacturer, logger_id, flight_number);
 }

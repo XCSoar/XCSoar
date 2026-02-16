@@ -82,7 +82,7 @@ ParseTopographyIndexLine(const char *line) noexcept
     // Parse shape range
     char *endptr;
     entry.shape_range = strtod(p + 1, &endptr) * 1000;
-    if (*endptr != _T(','))
+    if (*endptr != ',')
       return std::nullopt;
 
     p = endptr + 1;
@@ -112,21 +112,21 @@ ParseTopographyIndexLine(const char *line) noexcept
 
     // Parse shape field for text display
     entry.shape_field = strtol(p + 1, &endptr, 10) - 1;
-    if (*endptr != _T(','))
+    if (*endptr != ',')
       return std::nullopt;
 
     p = endptr + 1;
 
     // Parse red component of line / shading colour
     uint8_t red = (uint8_t)strtol(p, &endptr, 10);
-    if (*endptr != _T(','))
+    if (*endptr != ',')
       return std::nullopt;
 
     p = endptr + 1;
 
     // Parse green component of line / shading colour
     uint8_t green = (uint8_t)strtol(p, &endptr, 10);
-    if (*endptr != _T(','))
+    if (*endptr != ',')
       return std::nullopt;
 
     p = endptr + 1;
@@ -138,7 +138,7 @@ ParseTopographyIndexLine(const char *line) noexcept
 
     // Parse pen width of lines
     entry.pen_width = 1;
-    if (*p == _T(',')) {
+    if (*p == ',') {
       entry.pen_width = strtoul(p + 1, &endptr, 10);
       if (entry.pen_width < 1)
         entry.pen_width = 1;
@@ -150,14 +150,14 @@ ParseTopographyIndexLine(const char *line) noexcept
 
     // Parse range for displaying labels
     entry.label_range = entry.shape_range;
-    if (*p == _T(',')) {
+    if (*p == ',') {
       entry.label_range = strtod(p + 1, &endptr) * 1000;
       p = endptr;
     }
 
     // Parse range for displaying labels with "important" rendering style
     entry.important_label_range = 0;
-    if (*p == _T(',')) {
+    if (*p == ',') {
       entry.important_label_range = strtod(p + 1, &endptr) * 1000;
       p = endptr;
     }
@@ -165,7 +165,7 @@ ParseTopographyIndexLine(const char *line) noexcept
     // Handle alpha component
     // If not present at all (i.e. v6.6 or earlier file), default to 100% opaque
     uint8_t alpha = 255;
-    if (*p == _T(',')) {
+    if (*p == ',') {
       // An alpha component of shading colour is present (v6.7 or later file).
       alpha = (uint8_t)strtol(p + 1, &endptr, 10);
       // Ignore a totally transparent file!

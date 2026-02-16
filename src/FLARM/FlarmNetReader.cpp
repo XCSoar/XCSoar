@@ -92,9 +92,9 @@ LoadRecord(FlarmNetRecord &record, const char *line)
   record.frequency = RadioFrequency::Parse(std::string_view(freq_ascii));
 
   // Terminate callsign string on first whitespace
-  for (char *i = record.callsign.buffer(); *i != _T('\0'); ++i)
+  for (char *i = record.callsign.buffer(); *i != '\0'; ++i)
     if (IsWhitespaceFast(*i))
-      *i = _T('\0');
+      *i = '\0';
 
   return true;
 }

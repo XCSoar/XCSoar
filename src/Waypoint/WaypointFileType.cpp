@@ -13,20 +13,20 @@ WaypointFileType
 DetermineWaypointFileType(Path path) noexcept
 {
   // If WinPilot waypoint file -> save type and return true
-  if (path.EndsWithIgnoreCase(_T(".dat")) ||
-      path.EndsWithIgnoreCase(_T(".xcw")))
+  if (path.EndsWithIgnoreCase(".dat") ||
+      path.EndsWithIgnoreCase(".xcw"))
     return WaypointFileType::WINPILOT;
 
   // If SeeYou waypoint file -> save type and return true
-  if (path.EndsWithIgnoreCase(_T(".cup")))
+  if (path.EndsWithIgnoreCase(".cup"))
     return WaypointFileType::SEEYOU;
 
   // If Zander waypoint file -> save type and return true
-  if (path.EndsWithIgnoreCase(_T(".wpz")))
+  if (path.EndsWithIgnoreCase(".wpz"))
     return WaypointFileType::ZANDER;
 
   // If FS waypoint file -> save type and return true
-  if (path.EndsWithIgnoreCase(_T(".wpt"))) {
+  if (path.EndsWithIgnoreCase(".wpt")) {
     try {
       FileReader r{path};
       char buffer[4096];

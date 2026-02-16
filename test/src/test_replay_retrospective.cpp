@@ -18,7 +18,7 @@
 static bool
 test_replay_retrospective()
 {
-  Directory::Create(_T("output/results"));
+  Directory::Create("output/results");
   std::ofstream f("output/results/res-sample.txt");
 
   Waypoints waypoints;

@@ -69,7 +69,7 @@ NumberToTeamCode(unsigned value, char *code, unsigned n_digits)
     n_digits = CountDigits(value);
 
   char *p = code + n_digits;
-  *p-- = _T('\0');
+  *p-- = '\0';
 
   do {
     unsigned digit_value = value % BASE;

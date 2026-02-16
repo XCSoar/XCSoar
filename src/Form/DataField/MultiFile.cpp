@@ -121,18 +121,18 @@ MultiFileDataField::ForceModify(Path path)
 const char *
 MultiFileDataField::GetAsString() const noexcept
 {
-  return _T("");
+  return "";
 }
 
 void
 MultiFileDataField::UpdateDisplayString()
 {
-  display_string = _T("");
+  display_string = "";
 
   bool first = true;
   for (const auto &path : current_selection) {
     if (!first) {
-      display_string += _T(" ");
+      display_string += " ";
     }
     first = false;
 

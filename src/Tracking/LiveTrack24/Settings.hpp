@@ -36,7 +36,7 @@ struct Settings {
 
   void SetDefaults() {
     enabled = false;
-    server = _T("www.livetrack24.com");
+    server = "www.livetrack24.com";
     username.clear();
     password.clear();
 

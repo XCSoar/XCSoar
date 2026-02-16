@@ -73,6 +73,29 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
       if (widget == NULL)
         continue;
+#if 0  // removed "Switch InfoBox" botton
+      if (!found_setup && StringIsEqual(panels->name, "Setup")) {
+        /* add a "Switch InfoBox" button to the "Setup" tab -
+           kludge! */
+        found_setup = true;
+
+        PixelRect button_rc;
+        button_rc.left = 0;
+        button_rc.top = 0;
+        button_rc.right = Layout::Scale(60);
+        button_rc.bottom = std::max(2u * Layout::GetMinimumControlHeight(),
+                                    Layout::GetMaximumControlHeight());
+
+        auto button = std::make_unique<ButtonWidget>(look.button,
+                                                     _("Switch InfoBox"),
+                                                     dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
+
+        widget = std::make_unique<TwoWidgets>(std::move(widget),
+                                              std::move(button),
+                                              false);
+      }
+#endif
+
       tab_widget.AddTab(std::move(widget), gettext(panels->name));
     }
   }

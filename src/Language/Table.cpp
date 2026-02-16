@@ -78,15 +78,15 @@ extern "C"
 }
 
 #ifdef _WIN32
-#define L(number, locale, code_name, display_name) { number, code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
+#define L(number, locale, code_name, display_name) { number, code_name ## _mo, code_name ## _mo_size,  #code_name ".mo", display_name }
 #else
-#define L(number, locale, code_name, display_name) { code_name ## _mo, code_name ## _mo_size, _T( #code_name ".mo"), _T(display_name) }
+#define L(number, locale, code_name, display_name) { code_name ## _mo, code_name ## _mo_size,  #code_name ".mo", display_name }
 #endif
 
 #endif // HAVE_BUILTIN_LANGUAGES
 
 #ifdef USE_LIBINTL
-#define L(number, locale, code_name, display_name) { #locale ".UTF-8", _T( #code_name ".mo"), _T(display_name) }
+#define L(number, locale, code_name, display_name) { #locale ".UTF-8",  #code_name ".mo", display_name }
 #endif // USE_LIBINTL
 
 #ifdef _WIN32

@@ -19,7 +19,7 @@ HelpDialog(const char *Caption, const char *HelpText)
 
   StaticString<100> full_caption;
   if (Caption != nullptr) {
-    full_caption.Format(_T("%s: %s"), prefix, Caption);
+    full_caption.Format("%s: %s", prefix, Caption);
     Caption = full_caption.c_str();
   } else
     Caption = prefix;

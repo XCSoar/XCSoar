@@ -77,7 +77,7 @@ protected:
 static bool
 test_replay()
 {
-  Directory::Create(Path(_T("output/results")));
+  Directory::Create(Path("output/results"));
   std::ofstream f("output/results/res-sample.txt");
 
   GlidePolar glide_polar(4.0);
@@ -185,8 +185,8 @@ int main(int argc, char** argv)
 try {
   output_skip = 60;
 
-  replay_file = Path(_T("test/data/apf-bug554.igc"));
-  task_file = Path(_T("test/data/apf-bug554.tsk"));
+  replay_file = Path("test/data/apf-bug554.igc");
+  task_file = Path("test/data/apf-bug554.tsk");
 
   if (!ParseArgs(argc,argv)) {
     return 0;

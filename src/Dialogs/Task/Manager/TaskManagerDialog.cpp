@@ -131,10 +131,10 @@ TaskManagerDialog::UpdateCaption()
 {
   StaticString<128> title;
   if (task->GetName().empty())
-    title.Format(_T("%s: %s"), _("Task Manager"),
+    title.Format("%s: %s", _("Task Manager"),
                  GetButtonCaption(GetCurrentIndex()));
   else
-    title.Format(_T("%s: %s - %s"), _("Task Manager"),
+    title.Format("%s: %s - %s", _("Task Manager"),
                  task->GetName().c_str(),
                  GetButtonCaption(GetCurrentIndex()));
   dialog.SetCaption(title);

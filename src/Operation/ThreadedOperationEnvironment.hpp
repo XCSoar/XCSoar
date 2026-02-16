@@ -27,7 +27,7 @@ class ThreadedOperationEnvironment
     bool update_text, update_progress_range, update_progress_position;
 
     Data() noexcept
-      :text(_T("")),
+      :text(""),
        progress_range(0u), progress_position(0u),
        update_error(false), update_text(false),
        update_progress_range(false), update_progress_position(false) {}

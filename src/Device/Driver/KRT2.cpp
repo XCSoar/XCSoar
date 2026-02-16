@@ -262,7 +262,7 @@ inline void
 KRT2Device::GetStationName(char *station_name, const char *name)
 {
   if(name == nullptr)
-      name = _T("");
+      name = "";
 
   size_t s_idx = 0; //!< Source name index
   size_t d_idx = 0; //!< Destination name index
@@ -456,8 +456,8 @@ KRT2CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &comPort)
 }
 
 const DeviceRegister krt2_driver = {
-  _T("KRT2"),
-  _T("KRT2"),
+  "KRT2",
+  "KRT2",
   DeviceRegister::NO_TIMEOUT
    | DeviceRegister::RAW_GPS_DATA,
   KRT2CreateOnPort,

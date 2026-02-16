@@ -105,7 +105,7 @@ ManageCAI302Widget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddButton(_("Delete all flights"), [this](){
     if (ShowMessageBox(_("Do you really want to delete all flights from the device?"),
-                       _T("CAI 302"), MB_YESNO) != IDYES)
+                       "CAI 302", MB_YESNO) != IDYES)
       return;
 
     MessageOperationEnvironment env;
@@ -134,7 +134,7 @@ ManageCAI302Dialog([[maybe_unused]] SingleWindow &parent, const DialogLook &look
 {
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
-                      _T("CAI 302"),
+                      "CAI 302",
                       new ManageCAI302Widget(look, (CAI302Device &)device));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();

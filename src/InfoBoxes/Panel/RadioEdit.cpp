@@ -11,7 +11,7 @@
 class RadioOffsetButtons final : public OffsetButtonsWidget {
 public:
   RadioOffsetButtons(bool active_freq) noexcept
-    :OffsetButtonsWidget(UIGlobals::GetDialogLook().button, _T("%.0f kHz"), 5, 1000),set_active_freq(active_freq) {}
+    :OffsetButtonsWidget(UIGlobals::GetDialogLook().button, "%.0f kHz", 5, 1000),set_active_freq(active_freq) {}
 
 protected:
   /* virtual methods from OffsetButtonsWidget */

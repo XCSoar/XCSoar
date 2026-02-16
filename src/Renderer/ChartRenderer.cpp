@@ -38,14 +38,14 @@ void
 ChartRenderer::SetXLabel(const char *text, const char *unit) noexcept
 {
   StringFormat(x_label.data(), x_label.capacity(),
-               _T("%s [%s]"), text, unit);
+               "%s [%s]", text, unit);
 }
 
 void
 ChartRenderer::SetYLabel(const char *text, const char *unit) noexcept
 {
   StringFormat(y_label.data(), y_label.capacity(),
-               _T("%s [%s]"), text, unit);
+               "%s [%s]", text, unit);
 }
 
 void
@@ -449,13 +449,13 @@ ChartRenderer::FormatTicText(const double val, const double step,
 
   if (units == UnitFormat::TIME) {
     const unsigned total_minutes(val * 60);
-    StringFormat(buffer.data(), buffer.capacity(), _T("%u:%02u"),
+    StringFormat(buffer.data(), buffer.capacity(), "%u:%02u",
                  total_minutes / 60, total_minutes % 60);
   } else {
     if (step < 1) {
-      StringFormat(buffer.data(), buffer.capacity(), _T("%.1f"), val);
+      StringFormat(buffer.data(), buffer.capacity(), "%.1f", val);
     } else {
-      StringFormat(buffer.data(), buffer.capacity(), _T("%.0f"), val);
+      StringFormat(buffer.data(), buffer.capacity(), "%.0f", val);
     }
   }
 

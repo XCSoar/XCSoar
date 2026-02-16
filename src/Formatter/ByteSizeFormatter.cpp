@@ -13,8 +13,8 @@ FormatByteSize(char *buffer, size_t size, unsigned long bytes, bool simple)
   assert(buffer != NULL);
   assert(size >= 8);
 
-  static const char *const units[] = { _T("B"), _T("KB"), _T("MB"), _T("GB") };
-  static const char *const simple_units[] = { _T("B"), _T("K"), _T("M"), _T("G") };
+  static const char *const units[] = { "B", "KB", "MB", "GB" };
+  static const char *const simple_units[] = { "B", "K", "M", "G" };
 
   double value = bytes;
 
@@ -25,11 +25,11 @@ FormatByteSize(char *buffer, size_t size, unsigned long bytes, bool simple)
 
   const char *format;
   if (value >= 100 || i == 0)
-    format = simple ? _T("%.0f%s") : _T("%.0f %s");
+    format = simple ? "%.0f%s" : "%.0f %s";
   else if (value >= 10)
-    format = simple ? _T("%.1f%s") : _T("%.1f %s");
+    format = simple ? "%.1f%s" : "%.1f %s";
   else
-    format = simple ? _T("%.1f%s") : _T("%.2f %s");
+    format = simple ? "%.1f%s" : "%.2f %s";
 
   StringFormat(buffer, size, format, value, unit);
 }

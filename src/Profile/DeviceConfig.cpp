@@ -100,7 +100,7 @@ LoadPortIndex(const ProfileMap &map, DeviceConfig &config, unsigned n)
     index = 0;
 
   char path[64];
-  sprintf(path, _T("COM%u:"), index);
+  sprintf(path, "COM%u:", index);
   config.path = path;
   return true;
 }

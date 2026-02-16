@@ -43,7 +43,7 @@ int main(int argc, char **argv)
       char time_buffer[32];
       FormatTime(time_buffer, data.time);
 
-      printf(_T("%s %d %g %g %g %d\n"), time_buffer,
+      printf("%s %d %g %g %g %d\n", time_buffer,
                (int)result.wind.bearing.Degrees(),
                (double)result.wind.norm,
                (double)data.ground_speed,

@@ -176,7 +176,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Landable size"),
              _("A percentage to select the size landables are displayed on the map."),
-             _T("%u %%"), _T("%u"), 50, 200, 10, settings.landable_rendering_scale);
+             "%u %%", "%u", 50, 200, 10, settings.landable_rendering_scale);
   SetExpertRow(AppLandableRenderingScale);
 
   AddBoolean(_("Scale runway length"),

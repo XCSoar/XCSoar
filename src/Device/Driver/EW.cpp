@@ -265,8 +265,8 @@ EWCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister ew_driver = {
-  _T("EW Logger"),
-  _T("EW Logger"),
+  "EW Logger",
+  "EW Logger",
   DeviceRegister::DECLARE,
   EWCreateOnPort,
 };

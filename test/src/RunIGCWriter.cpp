@@ -23,12 +23,12 @@ int main(int argc, char **argv)
     if (!replay->Next())
       return 0;
 
-  const char *driver_name = _T("Unknown");
+  const char *driver_name = "Unknown";
 
   IGCWriter writer(output_file);
-  writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"), _T("Manuela Mustermann"),
-                     _T("Ventus"), _T("D-1234"),
-                     _T("MM"), "FOO", driver_name, true);
+  writer.WriteHeader(replay->Basic().date_time_utc, "Manfred Mustermann", "Manuela Mustermann",
+                     "Ventus", "D-1234",
+                     "MM", "FOO", driver_name, true);
 
   GPSClock log_clock;
   while (replay->Next())

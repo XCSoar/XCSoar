@@ -120,7 +120,7 @@ ReadFileFromProfile(Waypoints &way_points,
                     ProgressListener &progress)
 {
   auto paths =
-      Profile::GetMultiplePaths(ProfileKeys::AirfieldFileList, _T("*.txt\0"));
+      Profile::GetMultiplePaths(ProfileKeys::AirfieldFileList, "*.txt\0");
   for (const auto &path : paths) {
     try {
       auto reader = std::make_unique<FileReader>(Path(path));

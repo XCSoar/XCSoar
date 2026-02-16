@@ -63,21 +63,21 @@ LargeTextWindow::SetText(const char *text)
 
   const char* p2 = text;
   char* p3 = buffer;
-  for (; *p2 != _T('\0'); p2++) {
-    if (*p2 == _T('\n')) {
-      *p3 = _T('\r');
+  for (; *p2 != '\0'; p2++) {
+    if (*p2 == '\n') {
+      *p3 = '\r';
       p3++;
-      *p3 = _T('\r');
+      *p3 = '\r';
       p3++;
-      *p3 = _T('\n');
-    } else if (*p2 == _T('\r')) {
+      *p3 = '\n';
+    } else if (*p2 == '\r') {
       continue;
     } else {
       *p3 = *p2;
     }
     p3++;
   }
-  *p3 = _T('\0');
+  *p3 = '\0';
 
   ::SetWindowText(hWnd, buffer);
 }

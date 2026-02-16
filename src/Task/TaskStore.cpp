@@ -42,11 +42,11 @@ public:
       // If the task file holds more than one task
       const auto &saved_name = list[i];
       if (!saved_name.empty()) {
-        name += _T(": ");
+        name += ": ";
         name += saved_name.c_str();
       } else if (count > 1) {
         // .. append " - Task #[n]" suffix to the task name
-        name.AppendFormat(_T(": %s #%d"), _("Task"), i + 1);
+        name.AppendFormat(": %s #%d", _("Task"), i + 1);
       }
 
       // Add the task to the TaskStore
@@ -71,11 +71,11 @@ TaskStore::Scan(bool extra)
 
   // scan files
   TaskFileVisitor tfv(store);
-  VisitDataFiles(_T("*.tsk"), tfv);
+  VisitDataFiles("*.tsk", tfv);
 
   if (extra) {
-    VisitDataFiles(_T("*.cup"), tfv);
-    VisitDataFiles(_T("*.igc"), tfv);
+    VisitDataFiles("*.cup", tfv);
+    VisitDataFiles("*.igc", tfv);
   }
 
   std::sort(store.begin(), store.end());

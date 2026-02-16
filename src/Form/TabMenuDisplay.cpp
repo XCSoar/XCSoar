@@ -58,7 +58,7 @@ TabMenuDisplay::GetCaption(char buffer[], size_t size) const noexcept
   const unsigned page = pager.GetCurrentIndex();
   if (page >= PAGE_OFFSET) {
     const unsigned i = page - PAGE_OFFSET;
-    StringFormat(buffer, size, _T("%s > %s"),
+    StringFormat(buffer, size, "%s > %s",
                  gettext(GetPageParentCaption(i)),
                  buttons[i].caption);
     return buffer;

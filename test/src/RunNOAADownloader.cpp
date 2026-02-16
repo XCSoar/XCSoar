@@ -40,41 +40,41 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
   printf("Parsed Data:\n");
 
   if (parsed.name_available)
-    printf(_T("Name: %s\n"), parsed.name.c_str());
+    printf("Name: %s\n", parsed.name.c_str());
 
   if (parsed.location_available)
-    printf(_T("Location: %s\n"),
+    printf("Location: %s\n",
              FormatGeoPoint(parsed.location, CoordinateFormat::DDMMSS).c_str());
 
   if (parsed.qnh_available) {
     char buffer[256];
     FormatUserPressure(parsed.qnh, buffer);
-    printf(_T("QNH: %s\n"), buffer);
+    printf("QNH: %s\n", buffer);
   }
 
   if (parsed.wind_available) {
     char buffer[256];
     FormatUserWindSpeed(parsed.wind.norm, buffer);
-    printf(_T("Wind: %.0f" DEG " %s\n"),
+    printf("Wind: %.0f" DEG " %s\n",
              (double)parsed.wind.bearing.Degrees(), buffer);
   }
 
   if (parsed.temperatures_available) {
     char buffer[256];
     FormatUserTemperature(parsed.temperature, buffer);
-    printf(_T("Temperature: %s\n"), buffer);
+    printf("Temperature: %s\n", buffer);
     FormatUserTemperature(parsed.dew_point, buffer);
-    printf(_T("Dew point: %s\n"), buffer);
+    printf("Dew point: %s\n", buffer);
   }
 
   if (parsed.visibility_available) {
     char buffer[256];
     if (parsed.visibility >= 9999)
-      strcpy(buffer, _T("unlimited"));
+      strcpy(buffer, "unlimited");
     else {
       FormatUserDistanceSmart(parsed.visibility, buffer);
     }
-    printf(_T("Visibility: %s\n"), buffer);
+    printf("Visibility: %s\n", buffer);
   }
 
   printf("\n");
@@ -99,10 +99,10 @@ DisplayMETAR(const NOAAStore::Item &station)
          (unsigned)metar.last_update.second);
 
   if (!metar.content.empty())
-    printf(_T("%s\n\n"), metar.content.c_str());
+    printf("%s\n\n", metar.content.c_str());
 
   if (!metar.decoded.empty())
-    printf(_T("%s\n\n"), metar.decoded.c_str());
+    printf("%s\n\n", metar.decoded.c_str());
 
   DisplayParsedMETAR(station);
 }
@@ -126,7 +126,7 @@ DisplayTAF(const NOAAStore::Item &station)
          (unsigned)taf.last_update.second);
 
   if (!taf.content.empty())
-    printf(_T("%s\n\n"), taf.content.c_str());
+    printf("%s\n\n", taf.content.c_str());
 }
 
 int

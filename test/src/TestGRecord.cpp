@@ -22,10 +22,10 @@ int main()
 try {
   plan_tests(4);
 
-  CheckGRecord(_T("test/data/grecord64a.igc"));
-  CheckGRecord(_T("test/data/grecord64b.igc"));
-  CheckGRecord(_T("test/data/grecord65a.igc"));
-  CheckGRecord(_T("test/data/grecord65b.igc"));
+  CheckGRecord("test/data/grecord64a.igc");
+  CheckGRecord("test/data/grecord64b.igc");
+  CheckGRecord("test/data/grecord65a.igc");
+  CheckGRecord("test/data/grecord65b.igc");
 
   return exit_status();
 } catch (...) {

@@ -13,7 +13,7 @@ static void
 PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   char text[32];
-  sprintf(text, _T("%u"), idx);
+  sprintf(text, "%u", idx);
   canvas.DrawText(rc.WithPadding(2).GetTopLeft(), text);
 }
 
@@ -21,7 +21,7 @@ static void
 Main(TestMainWindow &main_window)
 {
   WndForm form(*dialog_look);
-  form.Create(main_window, _T("RunListControl"));
+  form.Create(main_window, "RunListControl");
   ContainerWindow &client_area = form.GetClientAreaWindow();
 
   PixelRect list_rc = client_area.GetClientRect();

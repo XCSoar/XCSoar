@@ -529,7 +529,7 @@ void
 WndForm::SetCaption(const char *_caption)
 {
   if (_caption == nullptr)
-    _caption = _T("");
+    _caption = "";
 
   if (caption != _caption) {
     caption = _caption;

@@ -198,7 +198,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int i) noexcept
   /* let the user select */
 
   StaticString<20> caption;
-  caption.Format(_T("%s: %d"), _("InfoBox"), i + 1);
+  caption.Format("%s: %d", _("InfoBox"), i + 1);
   int result = ComboPicker(caption, list, nullptr, true);
   if (result < 0)
     return;

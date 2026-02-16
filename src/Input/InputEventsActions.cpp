@@ -157,7 +157,7 @@ InputEvents::eventMarkLocation(const char *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  if (StringIsEqual(misc, _T("reset"))) {
+  if (StringIsEqual(misc, "reset")) {
     ScopeSuspendAllThreads suspend;
     data_components->waypoints->EraseUserMarkers();
   } else {
@@ -172,10 +172,10 @@ InputEvents::eventMarkLocation(const char *misc)
     Waypoint wp = factory.Create(location);
     factory.FallbackElevation(wp);
 
-    char name[64] = _T("Marker");
+    char name[64] = "Marker";
     if (basic.date_time_utc.IsPlausible()) {
       auto *p = name + StringLength(name);
-      *p++ = _T(' ' );
+      *p++ = ' ' ;
       FormatISO8601(p, basic.date_time_utc);
     }
 
@@ -185,7 +185,7 @@ InputEvents::eventMarkLocation(const char *misc)
     SuspendAppendSaveWaypoint(std::move(wp));
 
     if (CommonInterface::GetUISettings().sound.sound_modes_enabled)
-      PlayResource(_T("IDR_WAV_CLEAR"));
+      PlayResource("IDR_WAV_CLEAR");
   }
 
   trigger_redraw();
@@ -237,27 +237,27 @@ InputEvents::eventScreenModes(const char *misc)
 
   const UIState &ui_state = CommonInterface::GetUIState();
 
-  if (StringIsEqual(misc, _T("normal"))) {
+  if (StringIsEqual(misc, "normal")) {
     PageActions::OpenLayout(PageLayout::Default());
-  } else if (StringIsEqual(misc, _T("auxilary"))) {
+  } else if (StringIsEqual(misc, "auxilary")) {
     PageActions::OpenLayout(PageLayout::Aux());
-  } else if (StringIsEqual(misc, _T("toggleauxiliary"))) {
+  } else if (StringIsEqual(misc, "toggleauxiliary")) {
     PageActions::OpenLayout(ui_state.auxiliary_enabled
                             ? PageLayout::Default()
                             : PageLayout::Aux());
-  } else if (StringIsEqual(misc, _T("full"))) {
+  } else if (StringIsEqual(misc, "full")) {
     PageActions::OpenLayout(PageLayout::FullScreen());
-  } else if (StringIsEqual(misc, _T("togglefull"))) {
+  } else if (StringIsEqual(misc, "togglefull")) {
     CommonInterface::main_window->SetFullScreen(
         !CommonInterface::main_window->GetFullScreen());
-  } else if (StringIsEqual(misc, _T("show"))) {
+  } else if (StringIsEqual(misc, "show")) {
     if (CommonInterface::main_window->GetFullScreen())
       Message::AddMessage(_("Screen Mode Full"));
     else if (ui_state.auxiliary_enabled)
         Message::AddMessage(_("Auxiliary InfoBoxes"));
     else
         Message::AddMessage(_("Default InfoBoxes"));
-  } else if (StringIsEqual(misc, _T("previous")))
+  } else if (StringIsEqual(misc, "previous"))
     PageActions::Prev();
   else
     PageActions::Next();
@@ -315,11 +315,11 @@ InputEvents::eventChecklist([[maybe_unused]] const char *misc)
 void
 InputEvents::eventStatus(const char *misc)
 {
-  if (StringIsEqual(misc, _T("system"))) {
+  if (StringIsEqual(misc, "system")) {
     dlgStatusShowModal(1);
-  } else if (StringIsEqual(misc, _T("task"))) {
+  } else if (StringIsEqual(misc, "task")) {
     dlgStatusShowModal(2);
-  } else if (StringIsEqual(misc, _T("aircraft"))) {
+  } else if (StringIsEqual(misc, "aircraft")) {
     dlgStatusShowModal(0);
   } else {
     dlgStatusShowModal(-1);
@@ -357,7 +357,7 @@ InputEvents::eventWaypointDetails(const char *misc)
   bool allow_navigation = true;
   bool allow_edit = true;
 
-  if (StringIsEqual(misc, _T("current"))) {
+  if (StringIsEqual(misc, "current")) {
     if (!backend_components->protected_task_manager)
       return;
 
@@ -373,7 +373,7 @@ InputEvents::eventWaypointDetails(const char *misc)
        editor doesn't know how to do that */
     allow_navigation = false;
     allow_edit = false;
-  } else if (StringIsEqual(misc, _T("select"))) {
+  } else if (StringIsEqual(misc, "select")) {
     wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
   }
   if (wp)
@@ -419,7 +419,7 @@ InputEvents::eventAutoLogger(const char *misc)
     return;
 
   if (auto_logger == LoggerSettings::AutoLogger::START_ONLY &&
-      !StringIsEqual(misc, _T("start")))
+      !StringIsEqual(misc, "start"))
     return;
 
   eventLogger(misc);
@@ -450,38 +450,38 @@ try {
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  if (StringIsEqual(misc, _T("start ask")))
+  if (StringIsEqual(misc, "start ask"))
     logger->GUIStartLogger(basic, settings_computer,
                            backend_components->protected_task_manager.get());
-  else if (StringIsEqual(misc, _T("start")))
+  else if (StringIsEqual(misc, "start"))
     logger->GUIStartLogger(basic, settings_computer,
                            backend_components->protected_task_manager.get(),
                            true);
-  else if (StringIsEqual(misc, _T("stop ask")))
+  else if (StringIsEqual(misc, "stop ask"))
     logger->GUIStopLogger(basic);
-  else if (StringIsEqual(misc, _T("stop")))
+  else if (StringIsEqual(misc, "stop"))
     logger->GUIStopLogger(basic, true);
-  else if (StringIsEqual(misc, _T("toggle ask")))
+  else if (StringIsEqual(misc, "toggle ask"))
     logger->GUIToggleLogger(basic, settings_computer,
                             backend_components->protected_task_manager.get());
-  else if (StringIsEqual(misc, _T("toggle")))
+  else if (StringIsEqual(misc, "toggle"))
     logger->GUIToggleLogger(basic, settings_computer,
                             backend_components->protected_task_manager.get(),
                             true);
-  else if (StringIsEqual(misc, _T("nmea"))) {
+  else if (StringIsEqual(misc, "nmea")) {
     backend_components->nmea_logger->ToggleEnabled();
     if (backend_components->nmea_logger->IsEnabled()) {
       Message::AddMessage(_("NMEA log on"));
     } else {
       Message::AddMessage(_("NMEA log off"));
     }
-  } else if (StringIsEqual(misc, _T("show")))
+  } else if (StringIsEqual(misc, "show"))
     if (logger->IsLoggerActive()) {
       Message::AddMessage(_("Logger on"));
     } else {
       Message::AddMessage(_("Logger off"));
     }
-  else if (StringIsEqual(misc, _T("note"), 4))
+  else if (StringIsEqual(misc, "note", 4))
     // add note to logger file if available..
     logger->LoggerNote(misc + 4);
 } catch (...) {
@@ -556,7 +556,7 @@ InputEvents::eventBeep([[maybe_unused]] const char *misc)
 #ifdef _WIN32
   MessageBeep(MB_ICONEXCLAMATION);
 #else
-  PlayResource(_T("IDR_WAV_CLEAR"));
+  PlayResource("IDR_WAV_CLEAR");
   #endif
 }
 
@@ -570,32 +570,32 @@ InputEvents::eventBeep([[maybe_unused]] const char *misc)
 void
 InputEvents::eventSetup(const char *misc)
 {
-  if (StringIsEqual(misc, _T("Basic")))
+  if (StringIsEqual(misc, "Basic"))
     dlgBasicSettingsShowModal();
-  else if (StringIsEqual(misc, _T("Wind")))
+  else if (StringIsEqual(misc, "Wind"))
     ShowWindSettingsDialog();
-  else if (StringIsEqual(misc, _T("System")))
+  else if (StringIsEqual(misc, "System"))
     SystemConfiguration();
-  else if (StringIsEqual(misc, _T("Task")))
+  else if (StringIsEqual(misc, "Task"))
     dlgTaskManagerShowModal();
-  else if (StringIsEqual(misc, _T("Airspace")))
+  else if (StringIsEqual(misc, "Airspace"))
     dlgAirspaceShowModal(false);
-  else if (StringIsEqual(misc, _T("Weather")))
-    ShowWeatherDialog(_T("rasp"));
-  else if (StringIsEqual(misc, _T("Replay"))) {
+  else if (StringIsEqual(misc, "Weather"))
+    ShowWeatherDialog("rasp");
+  else if (StringIsEqual(misc, "Replay")) {
     if (!CommonInterface::MovementDetected() && backend_components->replay)
       ShowReplayDialog(*backend_components->replay);
-  } else if (StringIsEqual(misc, _T("Switches")))
+  } else if (StringIsEqual(misc, "Switches"))
     dlgSwitchesShowModal();
-  else if (StringIsEqual(misc, _T("Teamcode")))
+  else if (StringIsEqual(misc, "Teamcode"))
     dlgTeamCodeShowModal();
-  else if (StringIsEqual(misc, _T("Target")))
+  else if (StringIsEqual(misc, "Target"))
     dlgTargetShowModal();
-  else if (StringIsEqual(misc, _T("Plane")))
+  else if (StringIsEqual(misc, "Plane"))
     dlgPlanesShowModal();
-  else if (StringIsEqual(misc, _T("Profile")))
+  else if (StringIsEqual(misc, "Profile"))
     ProfileListDialog();
-  else if (StringIsEqual(misc, _T("Alternates")))
+  else if (StringIsEqual(misc, "Alternates"))
     dlgAlternatesListShowModal(data_components->waypoints.get());
 
   trigger_redraw();
@@ -648,13 +648,13 @@ InputEvents::eventUserDisplayModeForce(const char *misc)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
-  if (StringIsEqual(misc, _T("unforce")))
+  if (StringIsEqual(misc, "unforce"))
     ui_state.force_display_mode = DisplayMode::NONE;
-  else if (StringIsEqual(misc, _T("forceclimb")))
+  else if (StringIsEqual(misc, "forceclimb"))
     ui_state.force_display_mode = DisplayMode::CIRCLING;
-  else if (StringIsEqual(misc, _T("forcecruise")))
+  else if (StringIsEqual(misc, "forcecruise"))
     ui_state.force_display_mode = DisplayMode::CRUISE;
-  else if (StringIsEqual(misc, _T("forcefinal")))
+  else if (StringIsEqual(misc, "forcefinal"))
     ui_state.force_display_mode = DisplayMode::FINAL_GLIDE;
 
   ActionInterface::UpdateDisplayMode();
@@ -766,9 +766,9 @@ InputEvents::eventExchangeFrequencies([[maybe_unused]] const char *misc)
 void
 InputEvents::eventUploadIGCFile([[maybe_unused]] const char *misc) {
   FileDataField df;
-  df.ScanMultiplePatterns(_T("*.igc\0"));
+  df.ScanMultiplePatterns("*.igc\0");
   df.SetFileType(FileType::IGC);
-  if (FilePicker(_T("IGC-FilePicker"), df)) {
+  if (FilePicker("IGC-FilePicker", df)) {
     auto path = df.GetValue();
     if (!path.empty())
       if (WeGlide::UploadIGCFile(path)) {

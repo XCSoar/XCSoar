@@ -38,7 +38,7 @@
 #endif
 
 const char XCSoar_Version[] = VERSION;
-const char XCSoar_VersionLong[] = _T(VERSION VERSION_SUFFIX);
-const char XCSoar_VersionString[] = _T(VERSION VERSION_SUFFIX "-" TARGET);
-const char XCSoar_VersionStringOld[] = _T(TARGET " " VERSION VERSION_SUFFIX);
-const char XCSoar_ProductToken[] = PRODUCT_NAME _T(" v" VERSION VERSION_SUFFIX "-" TARGET GIT_SUFFIX);
+const char XCSoar_VersionLong[] = VERSION VERSION_SUFFIX;
+const char XCSoar_VersionString[] = VERSION VERSION_SUFFIX "-" TARGET;
+const char XCSoar_VersionStringOld[] = TARGET " " VERSION VERSION_SUFFIX;
+const char XCSoar_ProductToken[] = PRODUCT_NAME " v" VERSION VERSION_SUFFIX "-" TARGET GIT_SUFFIX;

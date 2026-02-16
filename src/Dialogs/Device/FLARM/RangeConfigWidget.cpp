@@ -60,11 +60,11 @@ FLARMRangeConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   unsigned max_range = hardware.isPowerFlarm() ? 65535 : 25500;
   range = GetUnsignedValue(device, "RANGE", max_range);
-  AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, max_range, 250, range);
+  AddInteger(_("Range"), NULL, "%d m", "%d", 2000, max_range, 250, range);
 
   if (hardware.isPowerFlarm()) {
     vrange = GetUnsignedValue(device, "VRANGE", 500);
-    AddInteger(_("Vertical range"), NULL, _T("%d m"), _T("%d"), 100, 2000, 100, vrange);
+    AddInteger(_("Vertical range"), NULL, "%d m", "%d", 100, 2000, 100, vrange);
   }
 
   if (hardware.hasADSB()) {
@@ -72,10 +72,10 @@ FLARMRangeConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     pcas_vrange = GetUnsignedValue(device, "PCASVRANGE", 610);
     adsb_range = GetUnsignedValue(device, "ADSBRANGE", 65535);
     adsb_vrange = GetUnsignedValue(device, "ADSBVRANGE", 65535);
-    AddInteger(_("PCAS range"), NULL, _T("%d m"), _T("%d"), 500, 9260, 500, pcas_range);
-    AddInteger(_("PCAS vertical range"), NULL, _T("%d m"), _T("%d"), 250, 65535, 250, pcas_vrange);
-    AddInteger(_("ADSB range"), NULL, _T("%d m"), _T("%d"), 500, 65535, 500, adsb_range);
-    AddInteger(_("ADSB vertical range"), NULL, _T("%d m"), _T("%d"), 250, 65535, 250, adsb_vrange);
+    AddInteger(_("PCAS range"), NULL, "%d m", "%d", 500, 9260, 500, pcas_range);
+    AddInteger(_("PCAS vertical range"), NULL, "%d m", "%d", 250, 65535, 250, pcas_vrange);
+    AddInteger(_("ADSB range"), NULL, "%d m", "%d", 500, 65535, 500, adsb_range);
+    AddInteger(_("ADSB vertical range"), NULL, "%d m", "%d", 250, 65535, 250, adsb_vrange);
   }
 }
 
@@ -123,6 +123,6 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  ShowError(std::current_exception(), _T("FLARM"));
+  ShowError(std::current_exception(), "FLARM");
   return false;
 }

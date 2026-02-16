@@ -77,7 +77,7 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Pilot"),
              _("Take this from your WeGlide Profile. Or set to 0 if not used."),
-             _T("%d"), _T("%d"), 1, 99999, 1, weglide.pilot_id);
+             "%d", "%d", 1, 99999, 1, weglide.pilot_id);
 
   AddDate(_("Pilot date of birth"), nullptr,
           weglide.pilot_birthdate);

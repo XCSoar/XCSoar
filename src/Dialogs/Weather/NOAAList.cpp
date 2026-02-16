@@ -158,7 +158,7 @@ UpdateTask(NOAAStore::Item &item, ProgressListener &progress) noexcept
 inline void
 NOAAListWidget::AddClicked()
 {
-  char code[5] = _T("");
+  char code[5] = "";
   if (!TextEntryDialog(code, 5, _("Airport ICAO code")))
     return;
 

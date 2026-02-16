@@ -48,9 +48,9 @@ enum {
 #if !defined(HAVE_POSIX) || defined(ANDROID)
 
 const struct language_unit_map language_table[] = {
-  { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_UK), _T("en_UK"), 1 },
-  { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), _T("en_US"), 2 },
-  { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_AUS), _T("en_AU"), 3 },
+  { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_UK), "en_UK", 1 },
+  { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), "en_US", 2 },
+  { MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_AUS), "en_AU", 3 },
   { 0, nullptr, 0 }
 };
 

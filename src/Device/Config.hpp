@@ -410,7 +410,7 @@ struct DeviceConfig {
   }
 
   bool IsVega() const noexcept {
-    return IsDriver(_T("Vega"));
+    return IsDriver("Vega");
   }
 
   constexpr bool IsAndroidInternalGPS() const noexcept {

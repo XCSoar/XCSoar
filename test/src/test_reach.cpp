@@ -51,7 +51,7 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
   PrintHelper::print(reach_working);
 
   {
-    Directory::Create(Path(_T("output/results")));
+    Directory::Create(Path("output/results"));
     std::ofstream fout("output/results/terrain.txt");
     unsigned nx = 100;
     unsigned ny = 100;

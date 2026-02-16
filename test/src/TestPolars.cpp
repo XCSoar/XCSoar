@@ -59,7 +59,7 @@ TestFileImport()
 {
   // Test LoadFromFile()
   PolarInfo polar;
-  PolarGlue::LoadFromFile(polar, Path(_T("test/data/test.plr")));
+  PolarGlue::LoadFromFile(polar, Path("test/data/test.plr"));
   ok1(equals(polar.shape.reference_mass, 318));
   ok1(equals(polar.max_ballast, 100));
   ok1(equals(polar.shape[0].v, 22.2222222));
@@ -96,23 +96,23 @@ struct PerformanceItem {
 
 static const PerformanceItem performanceData[] = {
   /* 206 Hornet         */
-  {  _T("206 Hornet"), true, 38,   true,  103, true,  0.6,  true,   74 },
+  {  "206 Hornet", true, 38,   true,  103, true,  0.6,  true,   74 },
   /* Discus             */
-  {  _T("Discus"), true, 43,   false,   0, true,  0.59, false,   0 },
+  {  "Discus", true, 43,   false,   0, true,  0.59, false,   0 },
   /* G-103 TWIN II (PIL)*/
-  {  _T("G 103 Twin 2"), true, 38.5, true,   95, true,  0.64, true,   80 },
+  {  "G 103 Twin 2", true, 38.5, true,   95, true,  0.64, true,   80 },
   /* H-201 Std. Libelle */
-  {  _T("H-201 Std Libelle"), true, 38,   true,   90, true,  0.6,  true,   75 },
+  {  "H-201 Std Libelle", true, 38,   true,   90, true,  0.6,  true,   75 },
   /* Ka6 CR             */
-  {  _T("Ka 6CR"), true, 30,   true,   85, true,  0.65, true,   72 },
+  {  "Ka 6CR", true, 30,   true,   85, true,  0.65, true,   72 },
   /* K8                 */
-  {  _T("Ka 8"), true, 25,   true,   75, false, 0,    true,   62 },
+  {  "Ka 8", true, 25,   true,   75, false, 0,    true,   62 },
   /* LS-4               */
-  {  _T("LS-4"), true, 40.5, false,   0, true,  0.60, false,   0 },
+  {  "LS-4", true, 40.5, false,   0, true,  0.60, false,   0 },
   /* Std. Cirrus        */
-  {  _T("Std Cirrus"), true, 38.5, false,   0, true,  0.6,  false,   0 },
+  {  "Std Cirrus", true, 38.5, false,   0, true,  0.6,  false,   0 },
   /* LS-1f              */
-  { _T("LS-1f"), true, 38.2, false,   0, true,  0.64, false,   0 },
+  { "LS-1f", true, 38.2, false,   0, true,  0.64, false,   0 },
 };
 
 static bool

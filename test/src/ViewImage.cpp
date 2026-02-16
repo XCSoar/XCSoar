@@ -42,7 +42,7 @@ static void
 Main(UI::Display &display)
 {
   TestWindow window{display};
-  window.Create(_T("ViewImage"), {640, 480});
+  window.Create("ViewImage", {640, 480});
   if (!window.LoadFile(path)) {
     fprintf(stderr, "Failed to load file\n");
     exit(EXIT_FAILURE);

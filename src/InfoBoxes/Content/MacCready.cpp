@@ -18,7 +18,7 @@ SetVSpeed(InfoBoxData &data, double value) noexcept
 {
   char buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);
-  data.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
+  data.SetValue(buffer[0] == '+' ? buffer + 1 : buffer);
   data.SetValueUnit(Units::current.vertical_speed_unit);
 }
 

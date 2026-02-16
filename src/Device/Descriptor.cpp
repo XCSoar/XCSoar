@@ -196,8 +196,8 @@ try {
   port = std::move(_port);
 
   parser.Reset();
-  parser.SetReal(!StringIsEqual(driver->name, _T("Condor")));
-  if (config.IsDriver(_T("Condor")))
+  parser.SetReal(!StringIsEqual(driver->name, "Condor"));
+  if (config.IsDriver("Condor"))
     parser.DisableGeoid();
 
   if (driver->CreateOnPort != nullptr) {
@@ -397,7 +397,7 @@ try {
       LockSetErrorMessage(what);
 
       StaticString<256> msg;
-      msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
+      msg.Format("%s: %s (%s)", _("Unable to open port"), name,
                  (const char *)what);
       env.SetErrorMessage(msg);
     }
@@ -410,7 +410,7 @@ try {
     const char *name = config.GetPortName(name_buffer, 64);
 
     StaticString<256> msg;
-    msg.Format(_T("%s: %s."), _("Unable to open port"), name);
+    msg.Format("%s: %s.", _("Unable to open port"), name);
     env.SetErrorMessage(msg);
     return false;
   }
@@ -466,7 +466,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(open_job == nullptr);
 
   char buffer[64];
-  LogFormat(_T("Opening device: %s"), config.GetPortName(buffer, 64));
+  LogFormat("Opening device: %s", config.GetPortName(buffer, 64));
 
 #ifdef ANDROID
   /* reset the Kalman filter */
@@ -555,7 +555,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
     return;
 
   char buffer[64];
-  LogFormat(_T("Reconnecting to device: %s"), config.GetPortName(buffer, 64));
+  LogFormat("Reconnecting to device: %s", config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
   Reopen(env);
@@ -627,7 +627,7 @@ DeviceDescriptor::IsManageable() const noexcept
     if (driver->IsManageable())
       return true;
 
-    if (StringIsEqual(driver->name, _T("LX")) && device != nullptr) {
+    if (StringIsEqual(driver->name, "LX") && device != nullptr) {
       const LXDevice &lx = *(const LXDevice *)device;
       return lx.IsManageable();
     }
@@ -1074,13 +1074,13 @@ DoDeclare(const struct Declaration &declaration,
           OperationEnvironment &env)
 {
   StaticString<60> text;
-  text.Format(_T("%s: %s."), _("Sending declaration"), driver.display_name);
+  text.Format("%s: %s.", _("Sending declaration"), driver.display_name);
   env.SetText(text);
 
   bool result = device != nullptr && device->Declare(declaration, home, env);
 
   if (flarm) {
-    text.Format(_T("%s: FLARM."), _("Sending declaration"));
+    text.Format("%s: FLARM.", _("Sending declaration"));
     env.SetText(text);
 
     result |= DeclareToFLARM(declaration, port, driver, device, home, env);
@@ -1108,7 +1108,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
   } else {
     /* enable the "muxed FLARM" hack? */
     const bool flarm = blackboard.IsFLARM(index) &&
-      !IsDriver(_T("FLARM"));
+      !IsDriver("FLARM");
 
     return DoDeclare(declaration, *port, *driver, device, flarm,
                      home, env);
@@ -1127,14 +1127,14 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
   StaticString<60> text;
 
   if (driver->HasPassThrough() && second_device != nullptr) {
-    text.Format(_T("%s: %s."), _("Reading flight list"),
+    text.Format("%s: %s.", _("Reading flight list"),
                 second_driver->display_name);
     env.SetText(text);
 
     device->EnablePassThrough(env);
     return second_device->ReadFlightList(flight_list, env);
   } else {
-    text.Format(_T("%s: %s."), _("Reading flight list"), driver->display_name);
+    text.Format("%s: %s.", _("Reading flight list"), driver->display_name);
     env.SetText(text);
 
     return device->ReadFlightList(flight_list, env);
@@ -1158,14 +1158,14 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 
 
   if (driver->HasPassThrough() && (second_device != nullptr)) {
-    text.Format(_T("%s: %s."), _("Downloading flight log"),
+    text.Format("%s: %s.", _("Downloading flight log"),
                 second_driver->display_name);
     env.SetText(text);
 
     device->EnablePassThrough(env);
     return second_device->DownloadFlight(flight, path, env);
   } else {
-    text.Format(_T("%s: %s."), _("Downloading flight log"),
+    text.Format("%s: %s.", _("Downloading flight log"),
                 driver->display_name);
     env.SetText(text);
 
@@ -1290,7 +1290,7 @@ DeviceDescriptor::PortError(const char *msg) noexcept
 {
   {
     char buffer[64];
-    LogFormat(_T("Device error on %s: %s"),
+    LogFormat("Device error on %s: %s",
               config.GetPortName(buffer, 64), msg);
   }
 

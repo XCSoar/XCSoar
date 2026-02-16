@@ -32,7 +32,7 @@ ValidateXCS(Path path, GRecord &oGRecord)
   STATUS_t eStatus = eValidationFileNotFound;
 
   FILE *inFile = nullptr;
-  inFile = fopen(path.c_str(), _T("r"));
+  inFile = fopen(path.c_str(), "r");
   if (inFile == nullptr)
     return eStatus;
 

@@ -35,7 +35,7 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(1),
                                  Angle::Degrees(1)));
-  wp.name = _T("Hello");
+  wp.name = "Hello";
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = 0.5;
   wp.has_elevation = true;
@@ -43,7 +43,7 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(0.8),
                                  Angle::Degrees(0.5)));
-  wp.name = _T("Unk");
+  wp.name = "Unk";
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = 0.25;
   wp.has_elevation = true;
@@ -77,7 +77,7 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
   waypoints.Optimise();
 
   if (verbose) {
-    Directory::Create(Path(_T("output/results")));
+    Directory::Create(Path("output/results"));
     std::ofstream fin("output/results/res-wp-in.txt");
     for (unsigned i=1; i<=waypoints.size(); i++) {
       const auto wpt = waypoints.LookupId(i);

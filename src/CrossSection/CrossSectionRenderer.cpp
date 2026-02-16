@@ -44,8 +44,8 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  chart.SetXLabel(_T("D"), Units::GetDistanceName());
-  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+  chart.SetXLabel("D", Units::GetDistanceName());
+  chart.SetYLabel("h", Units::GetAltitudeName());
 
   chart.Begin();
 

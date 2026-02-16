@@ -125,12 +125,12 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Time"), CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
-  { _T("XCSoar Cloud"), CreateCloudConfigPanel },
+  { "XCSoar Cloud", CreateCloudConfigPanel },
 #endif
 #if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   { N_("Weather"), CreateWeatherConfigPanel },
 #endif
-  { _T("WeGlide"), CreateWeGlideConfigPanel },
+  { "WeGlide", CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER
   { N_("Audio"), CreateAudioConfigPanel },
 #endif
@@ -219,8 +219,8 @@ protected:
                   layout.expert, style,
                   [](bool value){ OnUserLevel(value); });
 
-    button2.Create(parent, look.button, _T(""), layout.button2, style);
-    button1.Create(parent, look.button, _T(""), layout.button1, style);
+    button2.Create(parent, look.button, "", layout.button2, style);
+    button1.Create(parent, look.button, "", layout.button1, style);
   }
 
   void Show(const PixelRect &rc) noexcept override {
@@ -350,6 +350,6 @@ void dlgConfigurationShowModal()
     Profile::Save();
     if (require_restart)
       ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
-                  _T(""), MB_OK);
+                  "", MB_OK);
   }
 }
