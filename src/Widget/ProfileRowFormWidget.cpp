@@ -114,15 +114,14 @@ RowFormWidget::SaveValueFileReader(unsigned i,
   if (contracted != nullptr)
     new_value = contracted;
 
-  const WideToUTF8Converter new_value2(new_value.c_str());
-  if (!new_value2.IsValid())
+  if (new_value.empty())
     return false;
 
   const char *old_value = Profile::Get(profile_key, "");
-  if (StringIsEqual(old_value, new_value2))
+  if (StringIsEqual(old_value, new_value.c_str()))
     return false;
 
-  Profile::Set(profile_key, new_value2);
+  Profile::Set(profile_key, new_value.c_str());
   return true;
 }
 
@@ -177,10 +176,9 @@ RowFormWidget::SaveValueMultiFileReader(unsigned i,
     const auto contracted = ContractLocalPath(value);
     Path final_path = contracted != nullptr ? Path(contracted) : value;
 
-    const WideToUTF8Converter value_to_add(final_path.c_str());
-    if (!value_to_add.IsValid()) continue;
+    if (final_path.empty()) continue;
 
-    new_output += value_to_add;
+    new_output += final_path.c_str();
     new_output += "|";
   }
   if (!new_output.empty())

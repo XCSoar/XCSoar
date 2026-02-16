@@ -104,11 +104,10 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
      * so that a dodgy waypoint configuration doesn't cause an overflow.
      */
     StaticString<90> buffer;
-    const WideToUTF8Converter shortName(declaration.GetShortName(i));
     buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
                   DegLat, (double)MinLat, NoS,
                   DegLon, (double)MinLon, EoW);
-    CopyCleanFlarmString(buffer.buffer() + buffer.length(), shortName, 6);
+    CopyCleanFlarmString(buffer.buffer() + buffer.length(), declaration.GetShortName(i), 6);
 
     if (!SetConfig("ADDWP", buffer, env))
       return false;

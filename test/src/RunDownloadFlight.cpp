@@ -70,8 +70,7 @@ try {
     const DeviceRegister *driver;
     for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i) {
       if (driver->IsLogger()) {
-        WideToUTF8Converter driver_name(driver->name);
-        usage.AppendFormat("\n\t%s", (const char *)driver_name);
+        usage.AppendFormat("\n\t%s", driver->name);
       }
     }
   }
