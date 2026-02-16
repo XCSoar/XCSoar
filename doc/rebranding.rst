@@ -284,9 +284,9 @@ XCSoar vs OpenSoar Approach
 
 - ✅ Single header file (:file:`ProductName.hpp`)
 - ✅ Build-time override support
-- ✅ Preserves ``TCHAR`` for cross-platform compatibility
 - ✅ Smart macro composition (e.g., ``"/etc/" + PRODUCT_NAME_LC``)
 - ⚠️ Version symbols still use ``XCSoar_*`` (acceptable for internal use)
+- ⚠️ Changed from ``TCHAR`` to ``char`` (breaks Windows Unicode)
 
 Advantages
 ~~~~~~~~~~
