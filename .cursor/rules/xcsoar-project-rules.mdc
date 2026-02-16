@@ -218,6 +218,8 @@ alwaysApply: true
   - Use `#ifdef ANDROID`, `#ifdef __APPLE__`, `#ifdef WIN32`, `#ifdef KOBO`, etc. for platform-specific code
   - Use helper functions from `Asset.hpp`: `IsAndroid()`, `IsIOS()`, `IsKobo()`, `IsEmbedded()`, etc.
   - Use `HAVE_*` defines for optional features (e.g., `HAVE_NOAA`, `HAVE_SKYLINES_TRACKING`)
+- **Darwin ARC (Objective-C++):**
+  - Darwin builds use ARC (`-fobjc-arc` in `build/darwin.mk`). Do not call manual retain/release APIs (e.g. `release`, `retain`, `autorelease`, `nw_release`) in ARC-compiled code
 - **Platform-specific implementations:**
   - Different implementations may be needed for the same functionality (e.g., audio players, file I/O, threading)
   - Use factory patterns or conditional compilation to select appropriate implementation
