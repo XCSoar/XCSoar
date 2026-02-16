@@ -6,8 +6,6 @@
 #include "LoggerImpl.hpp"
 #include "thread/Mutex.hxx"
 
-#include <tchar.h>
-
 struct NMEAInfo;
 struct ComputerSettings;
 

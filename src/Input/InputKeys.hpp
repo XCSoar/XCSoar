@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 [[gnu::pure]]
 unsigned
 ParseKeyCode(const char *data);

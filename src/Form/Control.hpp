@@ -6,8 +6,6 @@
 #include "ui/window/PaintWindow.hpp"
 #include "util/StaticString.hxx"
 
-#include <tchar.h>
-
 struct DialogLook;
 
 /**

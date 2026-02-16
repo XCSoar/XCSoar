@@ -6,7 +6,6 @@
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
 
-#include <tchar.h>
 #include <stdio.h>
 
 static void

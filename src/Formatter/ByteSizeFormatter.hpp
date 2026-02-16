@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
 #include <cstddef>
 
 void FormatByteSize(char *buffer, size_t size,

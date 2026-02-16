@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 /** 5.2.5 */
 extern const char XCSoar_Version[];
 /** 5.2.5F */

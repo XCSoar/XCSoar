@@ -7,8 +7,6 @@
 
 #include <cassert>
 
-#include <tchar.h>
-
 static std::unique_ptr<OrderedTask>
 LoadTask2(Path path, const TaskBehaviour &task_behaviour)
 {

@@ -8,7 +8,6 @@
 #include "ui/event/Timer.hpp"
 
 #include <memory>
-#include <tchar.h>
 
 /**
  * A #Widget wrapper that displays static help text at the bottom of

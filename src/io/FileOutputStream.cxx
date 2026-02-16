@@ -6,7 +6,6 @@
 #include "lib/fmt/SystemError.hxx"
 
 #ifdef _WIN32
-#include <tchar.h>
 #endif
 
 #ifdef __linux__

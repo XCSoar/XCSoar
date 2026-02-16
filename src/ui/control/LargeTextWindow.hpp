@@ -11,8 +11,6 @@
 #endif
 #include <string>
 
-#include <tchar.h>
-
 class LargeTextWindowStyle : public WindowStyle {
 public:
   LargeTextWindowStyle() {

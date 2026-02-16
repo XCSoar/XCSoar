@@ -6,7 +6,6 @@
 #include "util/StringBuffer.hxx"
 #include "Geo/CoordinateFormat.hpp"
 
-#include <tchar.h>
 #include <cstddef>
 
 class Angle;

@@ -8,8 +8,6 @@
 #include <exception>
 
 #include <cstdint>
-#include <tchar.h>
-
 struct GeoPoint;
 struct AGeoPoint;
 

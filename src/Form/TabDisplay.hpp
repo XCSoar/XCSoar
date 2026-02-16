@@ -6,8 +6,6 @@
 #include "ui/window/PaintWindow.hpp"
 #include "util/StaticArray.hxx"
 
-#include <tchar.h>
-
 struct DialogLook;
 class MaskedIcon;
 class ContainerWindow;

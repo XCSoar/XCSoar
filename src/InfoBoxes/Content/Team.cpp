@@ -9,7 +9,6 @@
 #include "Language/Language.hpp"
 #include "util/StringCompare.hxx"
 
-#include <tchar.h>
 #include <stdio.h>
 
 

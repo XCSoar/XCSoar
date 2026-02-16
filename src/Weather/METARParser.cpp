@@ -10,7 +10,6 @@
 #include "util/StringAPI.hxx"
 #include "util/NumberParser.hpp"
 
-#include <tchar.h>
 #include <cctype>
 
 namespace METARParser {

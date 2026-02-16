@@ -7,7 +7,6 @@
 #include "Math/Angle.hpp"
 #include "util/Compiler.h"
 
-#include <tchar.h>
 #include <cstddef>
 
 class Angle;

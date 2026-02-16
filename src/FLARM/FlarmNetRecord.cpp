@@ -2,8 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "FlarmNetRecord.hpp"
-#include <tchar.h>
-
 const char *
 FlarmNetRecord::Format([[maybe_unused]] StaticString<256> &buffer, 
                         const char *value) const noexcept

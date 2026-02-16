@@ -12,7 +12,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <tchar.h>
 #include <stdio.h>
 
 SerialPort::SerialPort(PortListener *_listener, DataHandler &_handler)

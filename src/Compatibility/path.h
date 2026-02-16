@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 #ifdef _WIN32
 
 #define DIR_SEPARATOR '\\'

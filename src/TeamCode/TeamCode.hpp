@@ -7,8 +7,6 @@
 
 #include <type_traits>
 
-#include <tchar.h>
-
 struct GeoPoint;
 class Angle;
 

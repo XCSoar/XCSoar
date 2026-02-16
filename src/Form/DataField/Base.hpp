@@ -7,8 +7,6 @@
 #include <cstdint>
 #include <functional>
 
-#include <tchar.h>
-
 static constexpr unsigned OUTBUFFERSIZE = 128;
 
 class DataFieldListener;

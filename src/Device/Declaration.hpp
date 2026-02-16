@@ -7,8 +7,6 @@
 #include "util/StaticString.hxx"
 
 #include <vector>
-#include <tchar.h>
-
 struct LoggerSettings;
 struct Plane;
 class OrderedTask;

@@ -5,8 +5,6 @@
 #include "util/PrintException.hxx"
 #include "TestUtil.hpp"
 
-#include <tchar.h>
-
 using std::string_view_literals::operator""sv;
 
 static constexpr GeoPoint

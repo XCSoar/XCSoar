@@ -4,8 +4,6 @@
 #pragma once
 
 #include <memory>
-#include <tchar.h>
-
 class Widget;
 
 struct InfoBoxPanel {

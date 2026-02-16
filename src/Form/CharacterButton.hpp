@@ -5,8 +5,6 @@
 
 #include "Button.hpp"
 
-#include <tchar.h>
-
 /**
  * A button that emits a character on press.
  */

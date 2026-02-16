@@ -7,8 +7,6 @@
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
 
-#include <tchar.h>
-
 int
 main()
 {

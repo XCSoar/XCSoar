@@ -17,8 +17,6 @@
 #endif
 #include <string>
 
-#include <tchar.h>
-
 struct AircraftState;
 struct AltitudeState;
 class AtmosphericPressure;

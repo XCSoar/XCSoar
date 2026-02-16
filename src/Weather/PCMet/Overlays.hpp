@@ -9,8 +9,6 @@
 #include <string>
 #include <list>
 
-#include <tchar.h>
-
 struct PCMetSettings;
 class CurlGlobal;
 class ProgressListener;

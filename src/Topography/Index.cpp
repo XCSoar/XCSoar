@@ -7,8 +7,6 @@
 #include "Resources.hpp"
 
 #include <stdlib.h>
-#include <tchar.h>
-
 typedef struct {
   const char *name;
   ResourceId resource_id, big_resource_id, ultra_resource_id;

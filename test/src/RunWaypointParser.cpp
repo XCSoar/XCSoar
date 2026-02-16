@@ -9,8 +9,6 @@
 #include "util/PrintException.hxx"
 
 #include <stdio.h>
-#include <tchar.h>
-
 int main(int argc, char **argv)
 try {
   Args args(argc, argv, "PATH\n");

@@ -10,8 +10,6 @@
 #include "Android/Main.hpp"
 #endif
 
-#include <tchar.h>
-
 #ifdef _WIN32
 #include <windef.h> // for HWND (needed by winuser.h)
 #include <winuser.h>

@@ -6,8 +6,6 @@
 #include <cstddef>
 #include <span>
 
-#include <tchar.h>
-
 struct PixelRect;
 class Menu;
 
