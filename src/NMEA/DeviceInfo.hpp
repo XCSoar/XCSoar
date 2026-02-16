@@ -23,23 +23,23 @@ struct DeviceInfo {
   /**
    * The name of the product.
    */
-  NarrowString<16> product;
+  StaticString<16> product;
 
   /**
    * The serial number.  This is a string because we're not sure if a
    * device sends non-numeric data here.
    */
-  NarrowString<16> serial;
+  StaticString<16> serial;
 
   /**
    * The hardware version number.
    */
-  NarrowString<16> hardware_version;
+  StaticString<16> hardware_version;
 
   /**
    * The software (or firmware) version number.
    */
-  NarrowString<16> software_version;
+  StaticString<16> software_version;
 
   void Clear() {
     product.clear();

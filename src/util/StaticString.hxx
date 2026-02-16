@@ -267,7 +267,7 @@ public:
  * This is the char-based sister of the StaticString class.
  */
 template<size_t max>
-class NarrowString: public StaticStringBase<char, max>
+class StaticString: public StaticStringBase<char, max>
 {
 	typedef StaticStringBase<char, max> Base;
 
@@ -287,5 +287,3 @@ public:
 		::CropIncompleteUTF8(this->data());
 	}
 };
-
-#define StaticString NarrowString

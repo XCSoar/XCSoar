@@ -21,7 +21,7 @@ FLARMEmulator::PFLAC_S(NMEAInputLine &line) noexcept
   const auto name = line.ReadView();
 
   const auto value = line.Rest();
-  NarrowString<256> value_buffer;
+  StaticString<256> value_buffer;
   value_buffer.SetASCII(value);
 
   settings[std::string{name}] = value_buffer;

@@ -145,7 +145,7 @@ try {
 void
 PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 {
-  NarrowString<255> tmp;
+  StaticString<255> tmp;
 
   writer.Write("Registration", plane.registration);
   writer.Write("CompetitionID", plane.competition_id);

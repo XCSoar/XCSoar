@@ -121,7 +121,7 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
   const unsigned run_hour = (now_utc.hour / 3) * 3;
   unsigned run = (now_utc.hour / 3) * 300;
 
-  NarrowString<256> url;
+  StaticString<256> url;
   url.Format(PCMET_FTP "/%s_%s_lv_%06u_p_%03u_%04u.tiff",
              type_names[unsigned(info.type)],
              area_names[unsigned(info.area)],
