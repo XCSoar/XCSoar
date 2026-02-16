@@ -16,7 +16,7 @@ static constexpr double MAX_MACCREADY = 5.2;
 static constexpr unsigned STEPS_MACCREADY = 25;
 
 void
-MacCreadyCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
+MacCreadyCaption(char *sTmp, const GlidePolar &glide_polar)
 {
   if (!glide_polar.IsValid()) {
     *sTmp = _T('\0');

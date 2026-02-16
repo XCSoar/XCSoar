@@ -9,8 +9,8 @@
 #include <string.h>
 
 void
-FormatBearing(TCHAR *buffer, size_t size, unsigned value_degrees,
-              const TCHAR *suffix)
+FormatBearing(char *buffer, size_t size, unsigned value_degrees,
+              const char *suffix)
 {
   assert(buffer != NULL);
   assert(size >= 8);
@@ -22,13 +22,13 @@ FormatBearing(TCHAR *buffer, size_t size, unsigned value_degrees,
 }
 
 void
-FormatBearing(TCHAR *buffer, size_t size, Angle value, const TCHAR *suffix)
+FormatBearing(char *buffer, size_t size, Angle value, const char *suffix)
 {
   FormatBearing(buffer, size, lround(value.AsBearing().Degrees()), suffix);
 }
 
 void
-FormatAngleDelta(TCHAR *buffer, size_t size, Angle value)
+FormatAngleDelta(char *buffer, size_t size, Angle value)
 {
   assert(buffer != NULL);
   assert(size >= 8);
@@ -43,7 +43,7 @@ FormatAngleDelta(TCHAR *buffer, size_t size, Angle value)
 }
 
 void
-FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value)
+FormatVerticalAngleDelta(char *buffer, size_t size, Angle value)
 {
   assert(buffer != NULL);
   assert(size >= 8);

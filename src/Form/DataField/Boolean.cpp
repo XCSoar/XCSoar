@@ -5,7 +5,7 @@
 #include "ComboList.hpp"
 
 ComboList
-DataFieldBoolean::CreateComboList([[maybe_unused]] const TCHAR *reference) const noexcept
+DataFieldBoolean::CreateComboList([[maybe_unused]] const char *reference) const noexcept
 {
   ComboList combo_list;
   combo_list.Append(false, false_text);
@@ -16,12 +16,12 @@ DataFieldBoolean::CreateComboList([[maybe_unused]] const TCHAR *reference) const
 }
 
 void
-DataFieldBoolean::SetFromCombo(int i, const TCHAR *) noexcept
+DataFieldBoolean::SetFromCombo(int i, const char *) noexcept
 {
   ModifyValue(i != 0);
 }
 
-const TCHAR *
+const char *
 DataFieldBoolean::GetAsString() const noexcept
 {
   return mValue ? true_text : false_text;

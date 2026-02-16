@@ -57,10 +57,10 @@ struct TransponderMode {
    * value.
    */
   [[gnu::const]]
-  static const TCHAR *ToString(Mode mode) noexcept;
+  static const char *ToString(Mode mode) noexcept;
 
   [[gnu::pure]]
-  const TCHAR *GetModeString() const noexcept {
+  const char *GetModeString() const noexcept {
     return ToString(mode);
   }
 };

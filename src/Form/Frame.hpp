@@ -35,11 +35,11 @@ public:
   void SetAlignCenter() noexcept;
   void SetVAlignCenter() noexcept;
 
-  const TCHAR *GetText() const noexcept {
+  const char *GetText() const noexcept {
     return text.c_str();
   }
 
-  void SetText(const TCHAR *_text) noexcept;
+  void SetText(const char *_text) noexcept;
 
   void SetTextColor(const Color &color) noexcept {
     text_color = color;

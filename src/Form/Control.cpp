@@ -11,7 +11,7 @@ WindowControl::WindowControl() noexcept
 }
 
 void
-WindowControl::SetCaption(const TCHAR *Value) noexcept
+WindowControl::SetCaption(const char *Value) noexcept
 {
   if (Value == nullptr)
     Value = _T("");

@@ -168,7 +168,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
   max_x -= Layout::GetTextPadding();
 
   /* draw the airspace name */
-  const TCHAR *name = as.GetName();
+  const char *name = as.GetName();
   if (name != nullptr && !StringIsEmpty(name) && min_x < max_x) {
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);

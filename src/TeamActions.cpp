@@ -8,7 +8,7 @@
 #include "FLARM/Global.hpp"
 
 void
-TeamActions::TrackFlarm(FlarmId id, const TCHAR *callsign) noexcept
+TeamActions::TrackFlarm(FlarmId id, const char *callsign) noexcept
 {
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;

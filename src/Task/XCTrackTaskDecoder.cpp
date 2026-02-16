@@ -50,7 +50,7 @@ DecodeXCTrackZ(std::string_view src)
 }
 
 static WaypointPtr
-MakeWaypoint(GeoPoint location, const TCHAR *name)
+MakeWaypoint(GeoPoint location, const char *name)
 {
   Waypoint *wp = new Waypoint(location);
   wp->name = name;

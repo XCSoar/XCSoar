@@ -269,7 +269,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
                                        const PixelRect paint_rc,
                                        unsigned i) noexcept
 {
-  TCHAR buffer[128];
+  char buffer[128];
 
   // This constant defines the margin that should be respected
   // for renderring within the paint_rc area.
@@ -342,7 +342,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   /* draw the warning state indicator */
 
   Color state_color;
-  const TCHAR *state_text;
+  const char *state_text;
 
   if (warning.IsInside()) {
     state_color = warning.IsActive() ? inside_color : inside_ack_color;

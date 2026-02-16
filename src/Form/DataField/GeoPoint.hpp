@@ -18,7 +18,7 @@ class GeoPointDataField final : public DataField {
   /**
    * For GetAsString().  Must be mutable because the method is const.
    */
-  mutable TCHAR string_buffer[64];
+  mutable char string_buffer[64];
 
 public:
   GeoPointDataField(GeoPoint _value, CoordinateFormat _format,
@@ -41,5 +41,5 @@ public:
   void ModifyValue(GeoPoint _value) noexcept;
 
   /* virtual methods from class DataField */
-  const TCHAR *GetAsString() const noexcept override;
+  const char *GetAsString() const noexcept override;
 };

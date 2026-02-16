@@ -17,7 +17,7 @@
 #include "GradientRenderer.hpp"
 
 void
-BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
+BarographCaption(char *sTmp, const FlightStatistics &fs)
 {
   const std::lock_guard lock{fs.mutex};
   if (!fs.altitude_ceiling.HasResult() || fs.altitude_base.IsEmpty()) {

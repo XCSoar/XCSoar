@@ -377,7 +377,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     const XShape &shape = *shape_p;
 
     // Skip shapes without a label
-    const TCHAR *label = shape.GetLabel();
+    const char *label = shape.GetLabel();
     assert(label != nullptr);
 
     const auto lines = shape.GetLines();

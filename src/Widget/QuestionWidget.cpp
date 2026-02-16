@@ -6,13 +6,13 @@
 #include "TextWidget.hpp"
 #include "Form/ButtonPanel.hpp"
 
-QuestionWidget::QuestionWidget(const TCHAR *_message) noexcept
+QuestionWidget::QuestionWidget(const char *_message) noexcept
   :SolidWidget(std::make_unique<ButtonPanelWidget>(std::make_unique<TextWidget>(),
                                                    ButtonPanelWidget::Alignment::BOTTOM)),
    message(_message) {}
 
 void
-QuestionWidget::SetMessage(const TCHAR *_message) noexcept
+QuestionWidget::SetMessage(const char *_message) noexcept
 {
   auto &bpw = (ButtonPanelWidget &)GetWidget();
   auto &tw = (TextWidget &)bpw.GetWidget();

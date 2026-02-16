@@ -43,7 +43,7 @@ public:
          Callback _callback) noexcept;
 
   Button(ContainerWindow &parent, const ButtonLook &look,
-         const TCHAR *caption, const PixelRect &rc,
+         const char *caption, const PixelRect &rc,
          WindowStyle style,
          Callback _callback) noexcept;
 
@@ -55,7 +55,7 @@ public:
               WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer);
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
-              const TCHAR *caption, const PixelRect &rc,
+              const char *caption, const PixelRect &rc,
               WindowStyle style);
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
@@ -63,7 +63,7 @@ public:
               Callback _callback) noexcept;
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
-              const TCHAR *caption, const PixelRect &rc,
+              const char *caption, const PixelRect &rc,
               WindowStyle style,
               Callback _callback) noexcept;
 
@@ -87,7 +87,7 @@ public:
    * #TextButtonRenderer and may only be used if created with a
    * #TextButtonRenderer instance.
    */
-  void SetCaption(const TCHAR *caption);
+  void SetCaption(const char *caption);
 
   void SetSelected(bool _selected);
 

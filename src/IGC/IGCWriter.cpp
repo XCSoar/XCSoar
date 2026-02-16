@@ -47,7 +47,7 @@ IGCWriter::WriteLine(const char *line)
 }
 
 void
-IGCWriter::WriteLine(const char *a, const TCHAR *b)
+IGCWriter::WriteLine(const char *a, const char *b)
 {
   size_t a_length = strlen(a);
   assert(a_length < buffer.size());
@@ -63,12 +63,12 @@ IGCWriter::WriteLine(const char *a, const TCHAR *b)
 
 void
 IGCWriter::WriteHeader(const BrokenDateTime &date_time,
-                       const TCHAR *pilot_name,
-                       const TCHAR *copilot_name,
-                       const TCHAR *aircraft_model,
-                       const TCHAR *aircraft_registration,
-                       const TCHAR *competition_id,
-                       const char *logger_id, const TCHAR *driver_name,
+                       const char *pilot_name,
+                       const char *copilot_name,
+                       const char *aircraft_model,
+                       const char *aircraft_registration,
+                       const char *competition_id,
+                       const char *logger_id, const char *driver_name,
                        bool simulator)
 {
   /*
@@ -139,7 +139,7 @@ IGCWriter::EndDeclaration()
 }
 
 void
-IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *id)
+IGCWriter::AddDeclaration(const GeoPoint &location, const char *id)
 {
   char c_record[64];
   FormatIGCTaskTurnPoint(c_record, location, id);
@@ -147,7 +147,7 @@ IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *id)
 }
 
 void
-IGCWriter::LoggerNote(const TCHAR *text)
+IGCWriter::LoggerNote(const char *text)
 {
   WriteLine("LPLT", text);
 }

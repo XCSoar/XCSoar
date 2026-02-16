@@ -18,7 +18,7 @@
 //   to provide the text in between the '$' and '*'.
 //
 void
-InputEvents::eventSendNMEA(const TCHAR *misc)
+InputEvents::eventSendNMEA(const char *misc)
 {
   if (misc != NULL && backend_components->devices != nullptr) {
     PopupOperationEnvironment env;
@@ -27,7 +27,7 @@ InputEvents::eventSendNMEA(const TCHAR *misc)
 }
 
 void
-InputEvents::eventSendNMEAPort1(const TCHAR *misc)
+InputEvents::eventSendNMEAPort1(const char *misc)
 {
   const unsigned i = 0;
 
@@ -38,7 +38,7 @@ InputEvents::eventSendNMEAPort1(const TCHAR *misc)
 }
 
 void
-InputEvents::eventSendNMEAPort2(const TCHAR *misc)
+InputEvents::eventSendNMEAPort2(const char *misc)
 {
   const unsigned i = 1;
 
@@ -49,7 +49,7 @@ InputEvents::eventSendNMEAPort2(const TCHAR *misc)
 }
 
 void
-InputEvents::eventDevice(const TCHAR *misc)
+InputEvents::eventDevice(const char *misc)
 {
   assert(misc != NULL);
 

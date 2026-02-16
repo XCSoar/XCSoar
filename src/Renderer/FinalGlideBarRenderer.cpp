@@ -37,7 +37,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       { 0, 0 }, { 9, 9 }, { 9, 15 }, { 0, 6 }
   };
 
-  TCHAR Value[10];
+  char Value[10];
 
   const TaskStats &task_stats = calculated.task_stats;
   const ElementStat &total = task_stats.total;

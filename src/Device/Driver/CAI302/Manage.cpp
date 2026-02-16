@@ -202,7 +202,7 @@ CAI302Device::ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
 }
 
 static void
-ToASCII(char *dest, size_t dest_size, const TCHAR *src)
+ToASCII(char *dest, size_t dest_size, const char *src)
 {
   char *end = dest + dest_size - 1;
   while (*src != _T('\0') && dest < end)

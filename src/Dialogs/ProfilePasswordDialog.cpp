@@ -33,12 +33,12 @@ CheckProfilePassword(const ProfileMap &map)
 {
   /* oh no, profile passwords are not truly secure! */
 
-  BasicStringBuffer<TCHAR, 80> profile_password;
+  BasicStringBuffer<char, 80> profile_password;
   if (!map.Get(ProfileKeys::Password, profile_password))
       /* not password protected */
       return ProfilePasswordResult::UNPROTECTED;
 
-  BasicStringBuffer<TCHAR, 80> user_password;
+  BasicStringBuffer<char, 80> user_password;
   user_password.clear();
   if (!TextEntryDialog(user_password, _("Enter your password")))
     return ProfilePasswordResult::CANCEL;
@@ -78,7 +78,7 @@ CheckProfilePasswordResult(ProfilePasswordResult result)
 bool
 SetProfilePasswordDialog(ProfileMap &map)
 {
-  BasicStringBuffer<TCHAR, 80> new_password;
+  BasicStringBuffer<char, 80> new_password;
   new_password.clear();
   if (!TextEntryDialog(new_password, _("Enter a new password")))
     return false;

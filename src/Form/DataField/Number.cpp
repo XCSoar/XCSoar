@@ -4,8 +4,8 @@
 #include "Number.hpp"
 
 NumberDataField::NumberDataField(Type type, bool support_combo,
-                                 const TCHAR *_edit_format,
-                                 const TCHAR *_display_format,
+                                 const char *_edit_format,
+                                 const char *_display_format,
                                  DataFieldListener *listener) noexcept
   :DataField(type, support_combo, listener),
    edit_format(_edit_format), display_format(_display_format)
@@ -13,7 +13,7 @@ NumberDataField::NumberDataField(Type type, bool support_combo,
 }
 
 void
-NumberDataField::SetFormat(const TCHAR *text) noexcept
+NumberDataField::SetFormat(const char *text) noexcept
 {
   edit_format = text;
   display_format = text;

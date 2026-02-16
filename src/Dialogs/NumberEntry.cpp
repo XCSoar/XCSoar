@@ -10,7 +10,7 @@
 #include "UIGlobals.hpp"
 
 bool
-NumberEntryDialog(const TCHAR *caption,
+NumberEntryDialog(const char *caption,
                   int &value, unsigned length)
 {
   /* create the dialog */
@@ -53,7 +53,7 @@ NumberEntryDialog(const TCHAR *caption,
 }
 
 bool
-NumberEntryDialog(const TCHAR *caption,
+NumberEntryDialog(const char *caption,
                   unsigned &value, unsigned length)
 {
   /* create the dialog */
@@ -96,7 +96,7 @@ NumberEntryDialog(const TCHAR *caption,
 }
 
 bool
-AngleEntryDialog(const TCHAR *caption, Angle &value)
+AngleEntryDialog(const char *caption, Angle &value)
 {
   /* create the dialog */
 

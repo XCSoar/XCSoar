@@ -30,12 +30,12 @@ NullOperationEnvironment::Sleep(std::chrono::steady_clock::duration) noexcept
 }
 
 void
-NullOperationEnvironment::SetErrorMessage([[maybe_unused]] const TCHAR *text) noexcept
+NullOperationEnvironment::SetErrorMessage([[maybe_unused]] const char *text) noexcept
 {
 }
 
 void
-NullOperationEnvironment::SetText([[maybe_unused]] const TCHAR *text) noexcept
+NullOperationEnvironment::SetText([[maybe_unused]] const char *text) noexcept
 {
 }
 

@@ -10,18 +10,18 @@
 #include <cassert>
 
 void
-VegaParametersWidget::AddBoolean(const char *name, const TCHAR *label,
-                                 const TCHAR *help)
+VegaParametersWidget::AddBoolean(const char *name, const char *label,
+                                 const char *help)
 {
   AddParameter(name);
   RowFormWidget::AddBoolean(label, help);
 }
 
 void
-VegaParametersWidget::AddInteger(const char *name, const TCHAR *label,
-                                 const TCHAR *help,
+VegaParametersWidget::AddInteger(const char *name, const char *label,
+                                 const char *help,
                                  int min_value, int max_value,
-                                 const TCHAR *format)
+                                 const char *format)
 {
   AddParameter(name);
   RowFormWidget::AddInteger(label, help, format, format,
@@ -29,8 +29,8 @@ VegaParametersWidget::AddInteger(const char *name, const TCHAR *label,
 }
 
 void
-VegaParametersWidget::AddEnum(const char *name, const TCHAR *label,
-                              const TCHAR *help, const StaticEnumChoice *list)
+VegaParametersWidget::AddEnum(const char *name, const char *label,
+                              const char *help, const StaticEnumChoice *list)
 {
   AddParameter(name);
   RowFormWidget::AddEnum(label, help, list);
@@ -41,8 +41,8 @@ VegaParametersWidget::AddParameter(const StaticParameter &p)
 {
   assert(p.label != NULL);
 
-  const TCHAR *label = gettext(p.label);
-  const TCHAR *help = p.help != NULL ? gettext(p.help) : NULL;
+  const char *label = gettext(p.label);
+  const char *help = p.help != NULL ? gettext(p.help) : NULL;
 
   switch (p.type) {
   case DataField::Type::BOOLEAN:

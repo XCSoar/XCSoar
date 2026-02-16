@@ -14,7 +14,7 @@ GeoPointDataField::ModifyValue(GeoPoint _value) noexcept
   Modified();
 }
 
-const TCHAR *
+const char *
 GeoPointDataField::GetAsString() const noexcept
 {
   if (!value.IsValid())

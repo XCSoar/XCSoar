@@ -231,14 +231,14 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 }
 
 void
-LoggerImpl::LoggerNote(const TCHAR *text)
+LoggerImpl::LoggerNote(const char *text)
 {
   if (writer != nullptr)
     writer->LoggerNote(text);
 }
 
 [[gnu::pure]]
-static const TCHAR *
+static const char *
 GetGPSDeviceName() noexcept
 {
   if (is_simulator())
@@ -258,7 +258,7 @@ GetGPSDeviceName() noexcept
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
-                        const TCHAR *asset_number, const Declaration &decl)
+                        const char *asset_number, const Declaration &decl)
 {
   if (!settings.logger_id.empty())
     asset_number = settings.logger_id.c_str();

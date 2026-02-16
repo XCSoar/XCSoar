@@ -70,7 +70,7 @@ MultipleDevices::HasVega() const noexcept
 }
 
 void
-MultipleDevices::VegaWriteNMEA(const TCHAR *text,
+MultipleDevices::VegaWriteNMEA(const char *text,
                                OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
@@ -117,7 +117,7 @@ MultipleDevices::PutPilotEvent(OperationEnvironment &env) noexcept
 
 void
 MultipleDevices::PutActiveFrequency(RadioFrequency frequency,
-                                    const TCHAR *name,
+                                    const char *name,
                                     OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)
@@ -126,7 +126,7 @@ MultipleDevices::PutActiveFrequency(RadioFrequency frequency,
 
 void
 MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
-                                     const TCHAR *name,
+                                     const char *name,
                                      OperationEnvironment &env) noexcept
 {
   for (DeviceDescriptor *i : devices)

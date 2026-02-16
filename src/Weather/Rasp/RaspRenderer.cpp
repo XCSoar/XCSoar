@@ -12,7 +12,7 @@
 
 [[gnu::pure]]
 static const RaspStyle &
-LookupWeatherTerrainStyle(const TCHAR *name)
+LookupWeatherTerrainStyle(const char *name)
 {
   const auto *i = rasp_styles;
   while (i->name != nullptr && !StringIsEqual(i->name, name))

@@ -32,12 +32,12 @@ class ThreadedOperationEnvironment
        update_error(false), update_text(false),
        update_progress_range(false), update_progress_position(false) {}
 
-    void SetErrorMessage(const TCHAR *_error) noexcept {
+    void SetErrorMessage(const char *_error) noexcept {
       error = _error;
       update_error = true;
     }
 
-    void SetText(const TCHAR *_text) noexcept {
+    void SetText(const char *_text) noexcept {
       text = _text;
       update_text = true;
     }
@@ -114,8 +114,8 @@ public:
   bool IsCancelled() const noexcept override;
   void SetCancelHandler(std::function<void()> handler) noexcept override;
   void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
-  void SetErrorMessage(const TCHAR *error) noexcept override;
-  void SetText(const TCHAR *text) noexcept override;
+  void SetErrorMessage(const char *error) noexcept override;
+  void SetText(const char *text) noexcept override;
   void SetProgressRange(unsigned range) noexcept override;
   void SetProgressPosition(unsigned position) noexcept override;
 

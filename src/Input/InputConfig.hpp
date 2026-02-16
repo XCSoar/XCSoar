@@ -30,14 +30,14 @@ struct InputConfig {
 #endif
   static constexpr std::size_t MAX_EVENTS = 2048;
 
-  typedef void (*pt2Event)(const TCHAR *);
+  typedef void (*pt2Event)(const char *);
 
   // Events - What do you want to DO
   struct Event {
     // Which function to call (can be any, but should be here)
     pt2Event event;
     // Parameters
-    const TCHAR *misc;
+    const char *misc;
     // Next in event list - eg: Macros
     unsigned next;
   };
@@ -102,7 +102,7 @@ struct InputConfig {
     return mode;
   }
 
-  std::size_t AppendEvent(pt2Event handler, const TCHAR *misc,
+  std::size_t AppendEvent(pt2Event handler, const char *misc,
                           unsigned next) noexcept {
     if (events.full())
       return 0;
@@ -115,7 +115,7 @@ struct InputConfig {
     return events.size() - 1;
   }
 
-  void AppendMenu(std::size_t mode_id, const TCHAR *label,
+  void AppendMenu(std::size_t mode_id, const char *label,
                   unsigned location, unsigned event_id) noexcept {
     assert(mode_id < MAX_MODE);
 

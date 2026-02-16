@@ -16,7 +16,7 @@ FlarmNameDatabase::Find(FlarmId id) const noexcept
 }
 
 int
-FlarmNameDatabase::Find(const TCHAR *name) const noexcept
+FlarmNameDatabase::Find(const char *name) const noexcept
 {
   assert(name != nullptr);
 
@@ -27,7 +27,7 @@ FlarmNameDatabase::Find(const TCHAR *name) const noexcept
   return -1;
 }
 
-const TCHAR *
+const char *
 FlarmNameDatabase::Get(FlarmId id) const noexcept
 {
   int i = Find(id);
@@ -38,7 +38,7 @@ FlarmNameDatabase::Get(FlarmId id) const noexcept
 }
 
 FlarmId
-FlarmNameDatabase::Get(const TCHAR *name) const noexcept
+FlarmNameDatabase::Get(const char *name) const noexcept
 {
   int i = Find(name);
   if (i < 0)
@@ -48,7 +48,7 @@ FlarmNameDatabase::Get(const TCHAR *name) const noexcept
 }
 
 unsigned
-FlarmNameDatabase::Get(const TCHAR *name,
+FlarmNameDatabase::Get(const char *name,
                        FlarmId *buffer, unsigned max) const noexcept
 {
   assert(name != nullptr);
@@ -64,7 +64,7 @@ FlarmNameDatabase::Get(const TCHAR *name,
 }
 
 bool
-FlarmNameDatabase::Set(FlarmId id, const TCHAR *name) noexcept
+FlarmNameDatabase::Set(FlarmId id, const char *name) noexcept
 {
   assert(id.IsDefined());
   assert(name != nullptr);

@@ -88,5 +88,5 @@ struct MessagingRecord {
   /**
    * Format a UTF-8 value into the provided buffer; returns nullptr if empty/invalid. 
    */
-  const TCHAR *Format(StaticString<256> &buffer, const std::string &value) const noexcept;
+  const char *Format(StaticString<256> &buffer, const std::string &value) const noexcept;
 };

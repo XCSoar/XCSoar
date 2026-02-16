@@ -8,6 +8,6 @@
 namespace Message {
 
 void
-AddMessage(const TCHAR *text, const TCHAR *data=nullptr) noexcept;
+AddMessage(const char *text, const char *data=nullptr) noexcept;
 
 } // namespace Message

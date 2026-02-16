@@ -13,7 +13,7 @@ static constexpr StatusMessage default_status_messages[] = {
 
 [[gnu::pure]]
 const StatusMessage &
-FindStatusMessage(const TCHAR *key)
+FindStatusMessage(const char *key)
 {
   assert(ARRAY_SIZE(default_status_messages) > 0);
 

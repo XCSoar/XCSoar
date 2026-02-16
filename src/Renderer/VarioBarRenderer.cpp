@@ -41,7 +41,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, -2 }, { 9, -11 }, { 0, -2 }
   };
 
-  TCHAR Value[10];
+  char Value[10];
 
   const int y0 = (rc.bottom + rc.top) / 2;
 

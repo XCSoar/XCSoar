@@ -61,7 +61,7 @@ MultiFileDataField::GetPathFiles() const
 }
 
 void
-MultiFileDataField::ScanMultiplePatterns(const TCHAR *patterns)
+MultiFileDataField::ScanMultiplePatterns(const char *patterns)
 {
   file_datafield.ScanMultiplePatterns(patterns);
 }
@@ -98,14 +98,14 @@ MultiFileDataField::GetItem(unsigned index) const
 }
 
 ComboList
-MultiFileDataField::CreateComboList(const TCHAR *reference) const noexcept
+MultiFileDataField::CreateComboList(const char *reference) const noexcept
 {
   return file_datafield.CreateComboList(reference);
 }
 
 void
 MultiFileDataField::SetFromCombo(
-    int datafield_index, [[maybe_unused]] const TCHAR *string_value) noexcept
+    int datafield_index, [[maybe_unused]] const char *string_value) noexcept
 {
   current_selection.emplace_back(Path(file_datafield.GetItem(datafield_index).path));
 }
@@ -118,7 +118,7 @@ MultiFileDataField::ForceModify(Path path)
   current_selection.push_back(path);
 }
 
-const TCHAR *
+const char *
 MultiFileDataField::GetAsString() const noexcept
 {
   return _T("");
@@ -144,7 +144,7 @@ MultiFileDataField::UpdateDisplayString()
   }
 }
 
-const TCHAR *
+const char *
 MultiFileDataField::GetAsDisplayString() const noexcept
 {
   return display_string.c_str();

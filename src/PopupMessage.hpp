@@ -71,7 +71,7 @@ private:
     }
 
     void Set(Type type, std::chrono::steady_clock::duration tshow,
-             const TCHAR *text,
+             const char *text,
              std::chrono::steady_clock::time_point now) noexcept;
 
     /**
@@ -117,10 +117,10 @@ public:
 protected:
   /** Caller must hold the lock. */
   void AddMessage(std::chrono::steady_clock::duration tshow, Type type,
-                  const TCHAR *Text) noexcept;
+                  const char *Text) noexcept;
 
 public:
-  void AddMessage(const TCHAR* text, const TCHAR *data=nullptr) noexcept;
+  void AddMessage(const char* text, const char *data=nullptr) noexcept;
 
   /**
    * Repeats last non-visible message of specified type

@@ -218,7 +218,7 @@ bool
 VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 {
   /* Finish gesture tracking and check for horizontal swipe */
-  const TCHAR *gesture =
+  const char *gesture =
     gesture_tracking ? gestures.Finish() : nullptr;
   gesture_tracking = false;
 

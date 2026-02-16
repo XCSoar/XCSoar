@@ -17,7 +17,7 @@ namespace AndroidIOIOUartPort
 {
   static inline unsigned getNumberUarts() { return 4; }
 
-  static inline const TCHAR *getPortHelp(unsigned UartID) {
+  static inline const char *getPortHelp(unsigned UartID) {
     switch (UartID) {
     case 0:
       return _T("IOIO external board Uart: pin3=out, pin4=in");

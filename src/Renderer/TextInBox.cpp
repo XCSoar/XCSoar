@@ -52,7 +52,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc) noexcept
 }
 
 void
-RenderShadowedText(Canvas &canvas, const TCHAR *text,
+RenderShadowedText(Canvas &canvas, const char *text,
                    PixelPoint p,
                    bool inverted) noexcept
 {
@@ -71,7 +71,7 @@ RenderShadowedText(Canvas &canvas, const TCHAR *text,
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
+TextInBox(Canvas &canvas, const char *text, PixelPoint p,
           TextInBoxMode mode, const PixelRect &map_rc,
           LabelBlock *label_block) noexcept
 {
@@ -144,7 +144,7 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
 }
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
+TextInBox(Canvas &canvas, const char *text, PixelPoint p,
           TextInBoxMode mode,
           PixelSize screen_size,
           LabelBlock *label_block) noexcept

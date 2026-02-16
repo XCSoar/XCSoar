@@ -9,14 +9,14 @@
 
 static bool data_field_key_up = false;
 
-const TCHAR *
+const char *
 DataFieldTime::GetAsString() const noexcept
 {
   StringFormatUnsafe(string_buffer, _T("%d"), value);
   return string_buffer;
 }
 
-const TCHAR *
+const char *
 DataFieldTime::GetAsDisplayString() const noexcept
 {
   FormatTimespanSmart(string_buffer, std::chrono::seconds{value}, max_tokens);
@@ -61,7 +61,7 @@ DataFieldTime::SpeedUp(bool key_up) noexcept
 
 void
 DataFieldTime::SetFromCombo(int data_field_index,
-                            [[maybe_unused]] const TCHAR *value_string) noexcept
+                            [[maybe_unused]] const char *value_string) noexcept
 {
   ModifyValue(std::chrono::seconds{data_field_index});
 }
@@ -70,14 +70,14 @@ void
 DataFieldTime::AppendComboValue(ComboList &combo_list,
                                 std::chrono::seconds value) const noexcept
 {
-  TCHAR buffer2[32];
+  char buffer2[32];
   StringFormatUnsafe(buffer2, _T("%ld"), (long)value.count());
   combo_list.Append(value.count(), buffer2,
                     FormatTimespanSmart(value, max_tokens));
 }
 
 ComboList
-DataFieldTime::CreateComboList(const TCHAR *reference_string) const noexcept
+DataFieldTime::CreateComboList(const char *reference_string) const noexcept
 {
   const auto reference = reference_string != nullptr
     ? std::chrono::seconds{ParseInt(reference_string)}

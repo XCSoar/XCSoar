@@ -28,7 +28,7 @@ public:
 };
 
 static AllocatedPath
-SelectLuaFile(const TCHAR *path)
+SelectLuaFile(const char *path)
 {
   if (StringIsEmpty(path)) {
     /* no parameter: let user select a *.lua file */
@@ -60,7 +60,7 @@ SelectLuaFile(const TCHAR *path)
 }
 
 void
-InputEvents::eventRunLuaFile(const TCHAR *misc)
+InputEvents::eventRunLuaFile(const char *misc)
 {
   const auto path = SelectLuaFile(misc);
   if (path == nullptr)
@@ -69,7 +69,7 @@ InputEvents::eventRunLuaFile(const TCHAR *misc)
   try {
     Lua::StartFile(path);
   } catch (...) {
-    TCHAR buffer[MAX_PATH];
+    char buffer[MAX_PATH];
     StringFormat(buffer, MAX_PATH, _T("RunLuaFile %s"), misc);
     ShowError(std::current_exception(), buffer);
   }

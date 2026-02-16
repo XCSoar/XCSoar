@@ -19,7 +19,7 @@ static AVAudioPlayer *player = nil;
 #endif
 
 bool
-SoundUtil::Play(const TCHAR *resource_name)
+SoundUtil::Play(const char *resource_name)
 {
 #if TARGET_OS_IPHONE
   // Map resource names to actual file names

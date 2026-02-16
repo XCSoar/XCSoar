@@ -8,7 +8,7 @@
 
 // Mapping text names of events to the real thing
 struct Text2EventSTRUCT {
-  const TCHAR *text;
+  const char *text;
   pt2Event event;
 };
 
@@ -18,13 +18,13 @@ static constexpr Text2EventSTRUCT Text2Event[] = {
 };
 
 // Mapping text names of events to the real thing
-static const TCHAR *const Text2GCE[] = {
+static const char *const Text2GCE[] = {
 #include "InputEvents_Text2GCE.cpp"
   nullptr
 };
 
 // Mapping text names of events to the real thing
-static const TCHAR *const Text2NE[] = {
+static const char *const Text2NE[] = {
 #include "InputEvents_Text2NE.cpp"
   nullptr
 };
@@ -40,7 +40,7 @@ InputEvents::findEvent(tstring_view name) noexcept
 }
 
 int
-InputEvents::findGCE(const TCHAR *data)
+InputEvents::findGCE(const char *data)
 {
   int i;
   for (i = 0; i < GCE_COUNT; i++) {
@@ -52,7 +52,7 @@ InputEvents::findGCE(const TCHAR *data)
 }
 
 int
-InputEvents::findNE(const TCHAR *data)
+InputEvents::findNE(const char *data)
 {
   int i;
   for (i = 0; i < NE_COUNT; i++) {

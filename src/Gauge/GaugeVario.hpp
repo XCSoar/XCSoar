@@ -68,7 +68,7 @@ class GaugeVario : public AntiFlickerWindow
   struct DrawInfo {
     unsigned last_width;
     double last_value;
-    TCHAR last_text[32];
+    char last_text[32];
     Unit last_unit;
 
     void Reset() noexcept {
@@ -152,7 +152,7 @@ private:
   void RenderZero(Canvas &canvas) noexcept;
   void RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                    LabelValueDrawInfo &di,
-                   double Value, const TCHAR *Label) noexcept;
+                   double Value, const char *Label) noexcept;
   void RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept;
   void RenderBallast(Canvas &canvas) noexcept;
   void RenderBugs(Canvas &canvas) noexcept;

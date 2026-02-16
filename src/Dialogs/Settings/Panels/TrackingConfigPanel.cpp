@@ -252,7 +252,7 @@ static bool
 SaveKey(const RowFormWidget &form, unsigned idx, std::string_view profile_key,
         uint64_t &value_r)
 {
-  const TCHAR *const s = form.GetValueString(idx);
+  const char *const s = form.GetValueString(idx);
   uint64_t value = ParseUint64(s, nullptr, 16);
   if (value == value_r)
     return false;

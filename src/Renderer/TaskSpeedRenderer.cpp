@@ -15,7 +15,7 @@
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 
 void
-TaskSpeedCaption(TCHAR *sTmp,
+TaskSpeedCaption(char *sTmp,
                  const FlightStatistics &fs,
                  const GlidePolar &glide_polar)
 {

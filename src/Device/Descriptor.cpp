@@ -387,8 +387,8 @@ try {
   } catch (...) {
     const auto e = std::current_exception();
 
-    TCHAR name_buffer[64];
-    const TCHAR *name = config.GetPortName(name_buffer, 64);
+    char name_buffer[64];
+    const char *name = config.GetPortName(name_buffer, 64);
 
     LogError(e, WideToUTF8Converter(name));
 
@@ -398,7 +398,7 @@ try {
 
       StaticString<256> msg;
       msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
-                 (const TCHAR *)what);
+                 (const char *)what);
       env.SetErrorMessage(msg);
     }
 
@@ -406,8 +406,8 @@ try {
   }
 
   if (port == nullptr) {
-    TCHAR name_buffer[64];
-    const TCHAR *name = config.GetPortName(name_buffer, 64);
+    char name_buffer[64];
+    const char *name = config.GetPortName(name_buffer, 64);
 
     StaticString<256> msg;
     msg.Format(_T("%s: %s."), _("Unable to open port"), name);
@@ -465,7 +465,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(!IsOccupied());
   assert(open_job == nullptr);
 
-  TCHAR buffer[64];
+  char buffer[64];
   LogFormat(_T("Opening device: %s"), config.GetPortName(buffer, 64));
 
 #ifdef ANDROID
@@ -554,7 +554,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
       !reopen_clock.CheckUpdate(std::chrono::seconds(30)))
     return;
 
-  TCHAR buffer[64];
+  char buffer[64];
   LogFormat(_T("Reconnecting to device: %s"), config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
@@ -584,7 +584,7 @@ DeviceDescriptor::EnableNMEA(OperationEnvironment &env) noexcept
   return success;
 }
 
-const TCHAR *
+const char *
 DeviceDescriptor::GetDisplayName() const noexcept
 {
   return driver != nullptr
@@ -593,7 +593,7 @@ DeviceDescriptor::GetDisplayName() const noexcept
 }
 
 bool
-DeviceDescriptor::IsDriver(const TCHAR *name) const noexcept
+DeviceDescriptor::IsDriver(const char *name) const noexcept
 {
   return driver != nullptr
     ? StringIsEqual(driver->name, name)
@@ -916,7 +916,7 @@ DeviceDescriptor::PutPilotEvent(OperationEnvironment &env) noexcept
 
 bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
-                                     const TCHAR *name,
+                                     const char *name,
                                      OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
@@ -966,7 +966,7 @@ DeviceDescriptor::ExchangeRadioFrequencies(OperationEnvironment &env,
 
 bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
-                                      const TCHAR *name,
+                                      const char *name,
                                       OperationEnvironment &env) noexcept
 {
   assert(InMainThread());
@@ -1251,7 +1251,7 @@ DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
 }
 
 inline void
-DeviceDescriptor::LockSetErrorMessage(const TCHAR *msg) noexcept
+DeviceDescriptor::LockSetErrorMessage(const char *msg) noexcept
 {
     const std::lock_guard lock{mutex};
     error_message = msg;
@@ -1289,7 +1289,7 @@ void
 DeviceDescriptor::PortError(const char *msg) noexcept
 {
   {
-    TCHAR buffer[64];
+    char buffer[64];
     LogFormat(_T("Device error on %s: %s"),
               config.GetPortName(buffer, 64), msg);
   }

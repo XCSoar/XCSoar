@@ -3,7 +3,7 @@
 
 #include "FLARM/Traffic.hpp"
 
-static constexpr const TCHAR *acTypes[] = {
+static constexpr const char *acTypes[] = {
   _T("Unknown"),
   _T("Glider"),
   _T("TowPlane"),
@@ -22,7 +22,7 @@ static constexpr const TCHAR *acTypes[] = {
   _T("StaticObject") 
 };
 
-const TCHAR *
+const char *
 FlarmTraffic::GetTypeString(AircraftType type) noexcept
 {
   std::size_t index = static_cast<std::size_t>(type);

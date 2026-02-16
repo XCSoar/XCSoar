@@ -15,7 +15,7 @@
 class ListItemRenderer;
 
 /** returns string of item's help text **/
-typedef const TCHAR* (*ItemHelpCallback_t)(unsigned item);
+typedef const char* (*ItemHelpCallback_t)(unsigned item);
 
 class ListPickerWidget : public ListWidget {
   unsigned num_items;
@@ -36,7 +36,7 @@ class ListPickerWidget : public ListWidget {
   UI::Timer postpone_update_help{
       [this] { UpdateHelp(GetList().GetCursorIndex()); }};
 
-  const TCHAR *const caption, *const help_text;
+  const char *const caption, *const help_text;
   ItemHelpCallback_t item_help_callback;
   TextWidget *help_widget;
   TwoWidgets *two_widgets;
@@ -44,8 +44,8 @@ class ListPickerWidget : public ListWidget {
 public:
   ListPickerWidget(unsigned _num_items, unsigned _initial_value,
                    unsigned _row_height, ListItemRenderer &_item_renderer,
-                   WndForm &_dialog, const TCHAR *_caption,
-                   const TCHAR *_help_text) noexcept
+                   WndForm &_dialog, const char *_caption,
+                   const char *_help_text) noexcept
       : num_items(_num_items),
         initial_value(_initial_value),
         row_height(_row_height),
@@ -147,10 +147,10 @@ public:
  * the user clicked the "extra" button
  */
 int
-ListPicker(const TCHAR *caption,
+ListPicker(const char *caption,
            unsigned num_items, unsigned initial_value,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update = false,
-           const TCHAR *help_text = nullptr,
+           const char *help_text = nullptr,
            ItemHelpCallback_t itemhelp_callback = nullptr,
-           const TCHAR *extra_caption=nullptr);
+           const char *extra_caption=nullptr);

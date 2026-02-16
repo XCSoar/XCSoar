@@ -18,7 +18,7 @@ class AtmosphericPressure;
  * @param include_unit include the unit into the string?
  */
 void
-FormatAltitude(TCHAR *buffer, double value, Unit unit,
+FormatAltitude(char *buffer, double value, Unit unit,
                bool include_unit = true);
 
 /**
@@ -30,7 +30,7 @@ FormatAltitude(TCHAR *buffer, double value, Unit unit,
  * @param include_unit include the unit into the string?
  */
 void
-FormatMass(TCHAR *buffer, double value, Unit unit,
+FormatMass(char *buffer, double value, Unit unit,
            bool include_unit = true);
 
 /**
@@ -42,7 +42,7 @@ FormatMass(TCHAR *buffer, double value, Unit unit,
  * @param include_unit include the unit into the string?
  */
 void
-FormatWingLoading(TCHAR *buffer, double value, Unit unit,
+FormatWingLoading(char *buffer, double value, Unit unit,
                   bool include_unit = true);
 
 /**
@@ -54,7 +54,7 @@ FormatWingLoading(TCHAR *buffer, double value, Unit unit,
  * @param include_unit include the unit into the string?
  */
 void
-FormatRelativeAltitude(TCHAR *buffer, double value, Unit unit,
+FormatRelativeAltitude(char *buffer, double value, Unit unit,
                        bool include_unit = true);
 
 /**
@@ -67,7 +67,7 @@ FormatRelativeAltitude(TCHAR *buffer, double value, Unit unit,
  * @param precision the number of decimal places
  */
 void
-FormatDistance(TCHAR *buffer, double value, const Unit unit,
+FormatDistance(char *buffer, double value, const Unit unit,
                bool include_unit = true, int precision = 0);
 
 /**
@@ -82,7 +82,7 @@ FormatDistance(TCHAR *buffer, double value, const Unit unit,
  * @return the unit used for output formatting
  */
 Unit
-FormatSmallDistance(TCHAR *buffer, double value, Unit unit,
+FormatSmallDistance(char *buffer, double value, Unit unit,
                     bool include_unit = true, int precision = 0);
 
 /**
@@ -96,7 +96,7 @@ FormatSmallDistance(TCHAR *buffer, double value, Unit unit,
  * @return the unit used for output formatting
  */
 Unit
-FormatDistanceSmart(TCHAR *buffer, double value, Unit unit,
+FormatDistanceSmart(char *buffer, double value, Unit unit,
                     bool include_unit = true,
                     double small_unit_threshold = 0,
                     double precision_threshold = 100);
@@ -111,7 +111,7 @@ FormatDistanceSmart(TCHAR *buffer, double value, Unit unit,
  * @param precision if true shows one decimal place if the speed is low
  */
 void
-FormatSpeed(TCHAR *buffer, double value, const Unit unit,
+FormatSpeed(char *buffer, double value, const Unit unit,
             bool include_unit = true, bool precision = false);
 
 /**
@@ -121,7 +121,7 @@ FormatSpeed(TCHAR *buffer, double value, const Unit unit,
  * @param include_sign include the sign into the string?
  * @return the format
  */
-const TCHAR* GetVerticalSpeedFormat(Unit unit, bool include_unit = false,
+const char* GetVerticalSpeedFormat(Unit unit, bool include_unit = false,
                                     bool include_sign = true);
 
 /**
@@ -142,7 +142,7 @@ GetVerticalSpeedStep(Unit unit);
  * @param include_sign include the sign into the string?
  */
 void
-FormatVerticalSpeed(TCHAR *buffer, double value, Unit unit,
+FormatVerticalSpeed(char *buffer, double value, Unit unit,
                     bool include_unit = true, bool include_sign = true);
 
 /**
@@ -154,7 +154,7 @@ FormatVerticalSpeed(TCHAR *buffer, double value, Unit unit,
  * @param include_unit include the unit into the string?
  */
 void
-FormatTemperature(TCHAR *buffer, double value, Unit unit,
+FormatTemperature(char *buffer, double value, Unit unit,
                   bool include_unit = true);
 
 /**
@@ -165,7 +165,7 @@ FormatTemperature(TCHAR *buffer, double value, Unit unit,
  * @param unit the pressure unit (e.g. meters, feet, ...)
  * @param include_unit include the unit into the string?
  */
-void FormatPressure(TCHAR *buffer, AtmosphericPressure value, Unit unit,
+void FormatPressure(char *buffer, AtmosphericPressure value, Unit unit,
                     bool include_unit = true);
 
 /**
@@ -173,7 +173,7 @@ void FormatPressure(TCHAR *buffer, AtmosphericPressure value, Unit unit,
  * @param unit the pressure unit
  * @return the format
  */
-const TCHAR* GetPressureFormat(Unit unit, bool include_unit = false);
+const char* GetPressureFormat(Unit unit, bool include_unit = false);
 
 /**
  * Give the basic step size for pressure editing

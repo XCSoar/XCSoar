@@ -11,17 +11,17 @@ enum class TaskFactoryType : uint8_t;
 enum class TaskPointFactoryType : uint8_t;
 
 [[gnu::const]]
-const TCHAR *
+const char *
 OrderedTaskFactoryDescription(TaskFactoryType type);
 
 [[gnu::const]]
-const TCHAR *
+const char *
 OrderedTaskFactoryName(TaskFactoryType type);
 
 [[gnu::const]]
-const TCHAR *
+const char *
 OrderedTaskPointDescription(TaskPointFactoryType type);
 
 [[gnu::const]]
-const TCHAR *
+const char *
 OrderedTaskPointName(TaskPointFactoryType type);

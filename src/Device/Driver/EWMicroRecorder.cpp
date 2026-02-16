@@ -179,7 +179,7 @@ CleanString(char *p)
  * Clean a string and write it to the Port.
  */
 static void
-WriteCleanString(Port &port, const TCHAR *p,
+WriteCleanString(Port &port, const char *p,
                  OperationEnvironment &env,
                  std::chrono::steady_clock::duration timeout)
 {
@@ -202,7 +202,7 @@ WriteLabel(Port &port, const char *name, OperationEnvironment &env)
  * Write a name/value pair to the EW microRecorder.
  */
 static void
-WritePair(Port &port, const char *name, const TCHAR *value,
+WritePair(Port &port, const char *name, const char *value,
           OperationEnvironment &env)
 {
   WriteLabel(port, name, env);
@@ -215,7 +215,7 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
-  TCHAR NoS, EoW;
+  char NoS, EoW;
 
   // prepare latitude
   tmp = (double)value.latitude.Degrees();

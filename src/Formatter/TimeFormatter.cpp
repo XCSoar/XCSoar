@@ -27,7 +27,7 @@ FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
 
 
 void
-FormatTime(TCHAR *buffer, FloatDuration _time) noexcept
+FormatTime(char *buffer, FloatDuration _time) noexcept
 {
   if (_time.count() < 0) {
     *buffer++ = _T('-');
@@ -40,7 +40,7 @@ FormatTime(TCHAR *buffer, FloatDuration _time) noexcept
 }
 
 void
-FormatTimeLong(TCHAR *buffer, FloatDuration _time) noexcept
+FormatTimeLong(char *buffer, FloatDuration _time) noexcept
 {
   if (_time.count() < 0) {
     *buffer++ = _T('-');
@@ -57,7 +57,7 @@ FormatTimeLong(TCHAR *buffer, FloatDuration _time) noexcept
 }
 
 void
-FormatSignedTimeHHMM(TCHAR *buffer, std::chrono::seconds _time) noexcept
+FormatSignedTimeHHMM(char *buffer, std::chrono::seconds _time) noexcept
 {
   if (_time.count() < 0) {
     *buffer++ = _T('-');
@@ -69,7 +69,7 @@ FormatSignedTimeHHMM(TCHAR *buffer, std::chrono::seconds _time) noexcept
 }
 
 void
-FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, std::chrono::seconds _time) noexcept
+FormatTimeTwoLines(char *buffer1, char *buffer2, std::chrono::seconds _time) noexcept
 {
   if (_time >= std::chrono::hours{24}) {
     _tcscpy(buffer1, _T(">24h"));
@@ -124,9 +124,9 @@ CalculateTimespanComponents(unsigned timespan, unsigned &days, unsigned &hours,
 }
 
 void
-FormatTimespanSmart(TCHAR *buffer, std::chrono::seconds timespan,
+FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
                     unsigned max_tokens,
-                    const TCHAR *separator) noexcept
+                    const char *separator) noexcept
 {
   assert(max_tokens > 0 && max_tokens <= 4);
 

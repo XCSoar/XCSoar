@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     if (!replay->Next())
       return 0;
 
-  const TCHAR *driver_name = _T("Unknown");
+  const char *driver_name = _T("Unknown");
 
   IGCWriter writer(output_file);
   writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"), _T("Manuela Mustermann"),

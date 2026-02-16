@@ -52,8 +52,8 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[],
   }
 }
 
-const TCHAR *
-TabMenuDisplay::GetCaption(TCHAR buffer[], size_t size) const noexcept
+const char *
+TabMenuDisplay::GetCaption(char buffer[], size_t size) const noexcept
 {
   const unsigned page = pager.GetCurrentIndex();
   if (page >= PAGE_OFFSET) {

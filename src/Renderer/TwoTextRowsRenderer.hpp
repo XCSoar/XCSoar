@@ -45,10 +45,10 @@ public:
   }
 
   void DrawFirstRow(Canvas &canvas, const PixelRect &rc,
-                    const TCHAR *text) const noexcept;
+                    const char *text) const noexcept;
 
   void DrawSecondRow(Canvas &canvas, const PixelRect &rc,
-                     const TCHAR *text) const noexcept;
+                     const char *text) const noexcept;
 
   /**
    * Draws a right-aligned column in the first row (but with the
@@ -56,12 +56,12 @@ public:
    * coordinate.
    */
   int DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
-                        const TCHAR *text) const noexcept;
+                        const char *text) const noexcept;
 
   /**
    * Draws a right-aligned column in the second row and returns the
    * new "right" coordinate.
    */
   int DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
-                         const TCHAR *text) const noexcept;
+                         const char *text) const noexcept;
 };

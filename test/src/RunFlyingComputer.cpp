@@ -10,9 +10,9 @@
 #include <stdio.h>
 
 static void
-LogEvent(const TCHAR *event, TimeStamp time, const GeoPoint &location) noexcept
+LogEvent(const char *event, TimeStamp time, const GeoPoint &location) noexcept
 {
-  TCHAR time_buffer[32];
+  char time_buffer[32];
   FormatTime(time_buffer, time);
 
   _tprintf(_T("%s %s %s\n"), time_buffer,

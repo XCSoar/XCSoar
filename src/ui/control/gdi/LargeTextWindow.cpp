@@ -53,16 +53,16 @@ LargeTextWindow::OnChildColor(HDC hdc) noexcept
 }
 
 void
-LargeTextWindow::SetText(const TCHAR *text)
+LargeTextWindow::SetText(const char *text)
 {
   // Replace \n by \r\r\n to enable usage of line-breaks in edit control
   unsigned size = _tcslen(text);
 
-  const std::unique_ptr<TCHAR[]> allocation(new TCHAR[size * 3 + 1]);
-  TCHAR *buffer = allocation.get();
+  const std::unique_ptr<char[]> allocation(new char[size * 3 + 1]);
+  char *buffer = allocation.get();
 
-  const TCHAR* p2 = text;
-  TCHAR* p3 = buffer;
+  const char* p2 = text;
+  char* p3 = buffer;
   for (; *p2 != _T('\0'); p2++) {
     if (*p2 == _T('\n')) {
       *p3 = _T('\r');

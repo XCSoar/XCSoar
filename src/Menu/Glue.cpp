@@ -10,9 +10,9 @@ namespace MenuGlue {
 
 void
 SetLabelText(MenuBar &bar, unsigned index,
-             const TCHAR *text, unsigned event) noexcept
+             const char *text, unsigned event) noexcept
 {
-  TCHAR buffer[100];
+  char buffer[100];
   const auto expanded = ButtonLabel::Expand(text, std::span{buffer});
   if (expanded.visible)
     bar.ShowButton(index, expanded.enabled, expanded.text, event);

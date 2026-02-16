@@ -49,7 +49,7 @@ class WeatherMapOverlayListWidget final
       :name(_pc_met.label.c_str()), path(_pc_met.path.c_str()),
        pc_met(new PCMet::OverlayInfo(std::move(_pc_met))) {}
 
-    Item(const TCHAR *_name, Path _path)
+    Item(const char *_name, Path _path)
       :name(_name), path(_path) {}
 
     bool operator<(const Item &other) const {
@@ -80,7 +80,7 @@ public:
   void CreateButtons(ButtonPanel &buttons);
 
 private:
-  int FindItemByName(const TCHAR *name) const {
+  int FindItemByName(const char *name) const {
     unsigned i = 0;
     for (const auto &item : items) {
       if (item.name == name)
@@ -156,7 +156,7 @@ protected:
   }
 
   /* virtual methods from TextListWidget */
-  const TCHAR *GetRowText(unsigned i) const noexcept override {
+  const char *GetRowText(unsigned i) const noexcept override {
     return items[i].name.c_str();
   }
 
@@ -185,7 +185,7 @@ protected:
   }
 
 private:
-  void SetOverlay(Path path, const TCHAR *label=nullptr);
+  void SetOverlay(Path path, const char *label=nullptr);
 
   void UseClicked(unsigned i);
 
@@ -307,7 +307,7 @@ SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer name)
 }
 
 void
-WeatherMapOverlayListWidget::SetOverlay(Path path, const TCHAR *label)
+WeatherMapOverlayListWidget::SetOverlay(Path path, const char *label)
 {
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
@@ -339,7 +339,7 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
     return;
   }
 
-  const TCHAR *label = nullptr;
+  const char *label = nullptr;
   auto &item = items[i];
   if (item.pc_met) {
     const auto &info = *item.pc_met;

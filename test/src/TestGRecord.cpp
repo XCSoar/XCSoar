@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 static void
-CheckGRecord(const TCHAR *path)
+CheckGRecord(const char *path)
 {
   GRecord grecord;
   grecord.Initialize();

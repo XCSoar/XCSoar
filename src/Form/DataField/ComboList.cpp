@@ -7,9 +7,9 @@
 #include <algorithm>
 
 ComboList::Item::Item(int _int_value,
-                      const TCHAR *_string_value,
-                      const TCHAR *_display_string,
-                      const TCHAR *_help_text) noexcept
+                      const char *_string_value,
+                      const char *_display_string,
+                      const char *_help_text) noexcept
   :int_value(_int_value),
    string_value(_string_value),
    display_string(_display_string),

@@ -37,7 +37,7 @@ class ProgressWindow : public ContainerWindow {
 public:
   explicit ProgressWindow(ContainerWindow &parent) noexcept;
 
-  void SetMessage(const TCHAR *text) noexcept;
+  void SetMessage(const char *text) noexcept;
 
   void SetRange(unsigned min_value, unsigned max_value) noexcept;
   void SetStep(unsigned size) noexcept;

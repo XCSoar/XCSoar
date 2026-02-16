@@ -18,7 +18,7 @@ struct ListItem
   StaticString<32> name;
   AllocatedPath path;
 
-  ListItem(const TCHAR *_name, Path _path)
+  ListItem(const char *_name, Path _path)
     :name(_name), path(_path) {}
 
   bool operator<(const ListItem &i2) const {

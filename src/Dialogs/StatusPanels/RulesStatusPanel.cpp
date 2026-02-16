@@ -28,7 +28,7 @@ enum Controls {
 void
 RulesStatusPanel::Refresh() noexcept
 {
-  TCHAR Temp[80];
+  char Temp[80];
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;

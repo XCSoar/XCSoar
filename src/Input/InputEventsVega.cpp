@@ -61,7 +61,7 @@ AllVegasRequestSetting(const char *name)
 //     zero: Zero's the airspeed indicator's offset
 //
 void
-InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
+InputEvents::eventAdjustVarioFilter(const char *misc)
 {
   static int naccel = 0;
   if (StringIsEqual(misc, _T("slow")))

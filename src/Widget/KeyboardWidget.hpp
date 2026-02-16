@@ -45,7 +45,7 @@ public:
   /**
    * Show only the buttons representing the specified character list.
    */
-  void SetAllowedCharacters(const TCHAR *allowed);
+  void SetAllowedCharacters(const char *allowed);
 
 private:
   void PrepareSize(const PixelRect &rc);
@@ -59,7 +59,7 @@ private:
   void ResizeButtons();
   void SetButtonsSize();
   void MoveButtonsToRow(const PixelRect &rc,
-                        const TCHAR *buttons, unsigned row,
+                        const char *buttons, unsigned row,
                         int offset_left = 0);
   void MoveButtons(const PixelRect &rc);
 
@@ -71,7 +71,7 @@ private:
   /* updates UI based on value of shift_state property */
   void UpdateShiftState();
 
-  void AddButton(ContainerWindow &parent, const TCHAR *caption, unsigned ch);
+  void AddButton(ContainerWindow &parent, const char *caption, unsigned ch);
 
 public:
   /* virtual methods from class Widget */

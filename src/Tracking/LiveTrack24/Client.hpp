@@ -54,12 +54,12 @@ public:
    * @param password Case-insensitive password
    * @return 0 if userdata are incorrect, or else the userID of the user
    */
-  Co::Task<UserID> GetUserID(const TCHAR *username, const TCHAR *password);
+  Co::Task<UserID> GetUserID(const char *username, const char *password);
 
   /** Sends the "start of track" packet to the tracking server */
-  Co::Task<void> StartTracking(SessionID session, const TCHAR *username,
-                               const TCHAR *password, unsigned tracking_interval,
-                               VehicleType vtype, const TCHAR *vname);
+  Co::Task<void> StartTracking(SessionID session, const char *username,
+                               const char *password, unsigned tracking_interval,
+                               VehicleType vtype, const char *vname);
 
   /**
    * Sends a "gps point" packet to the tracking server
@@ -79,7 +79,7 @@ public:
    * Set the tracking server
    * @param server e.g. www.livetrack24.com (without http:// prefix)
    */
-  void SetServer(const TCHAR *server) noexcept;
+  void SetServer(const char *server) noexcept;
 
 private:
   const char *GetServer() const noexcept {

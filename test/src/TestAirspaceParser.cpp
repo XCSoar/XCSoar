@@ -18,7 +18,7 @@
 
 struct AirspaceClassTestCouple
 {
-  const TCHAR* name;
+  const char* name;
   AirspaceClass asclass;
 };
 

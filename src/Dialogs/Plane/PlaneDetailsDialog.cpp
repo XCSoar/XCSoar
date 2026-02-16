@@ -68,7 +68,7 @@ PlaneEditWidget::UpdateCaption() noexcept
 void
 PlaneEditWidget::UpdatePolarButton() noexcept
 {
-  const TCHAR *caption = _("Polar");
+  const char *caption = _("Polar");
   StaticString<64> buffer;
   if (!plane.polar_name.empty()) {
     buffer.Format(_T("%s: %s"), caption, plane.polar_name.c_str());

@@ -12,7 +12,7 @@
 static void
 PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
-  TCHAR text[32];
+  char text[32];
   _stprintf(text, _T("%u"), idx);
   canvas.DrawText(rc.WithPadding(2).GetTopLeft(), text);
 }

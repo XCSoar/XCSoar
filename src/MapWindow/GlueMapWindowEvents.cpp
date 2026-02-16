@@ -266,7 +266,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
     break;
 
   case DRAG_GESTURE:
-    const TCHAR* gesture = gestures.Finish();
+    const char* gesture = gestures.Finish();
     if (gesture && OnMouseGesture(gesture))
       return true;
 
@@ -335,7 +335,7 @@ GlueMapWindow::OnMultiTouchDown() noexcept
 #endif /* HAVE_MULTI_TOUCH */
 
 bool
-GlueMapWindow::OnMouseGesture(const TCHAR *gesture) noexcept
+GlueMapWindow::OnMouseGesture(const char *gesture) noexcept
 {
   return InputEvents::processGesture(gesture);
 }

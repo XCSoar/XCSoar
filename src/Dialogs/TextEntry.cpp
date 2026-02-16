@@ -7,8 +7,8 @@
 #include "Asset.hpp"
 
 bool
-TextEntryDialog(TCHAR *text, size_t width,
-                const TCHAR *caption, AllowedCharacters accb,
+TextEntryDialog(char *text, size_t width,
+                const char *caption, AllowedCharacters accb,
                 bool default_shift_state)
 {
   switch (UIGlobals::GetDialogSettings().text_input_style) {

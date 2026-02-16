@@ -12,7 +12,7 @@
 #include "System.hpp"
 
 [[gnu::pure]]
-static const TCHAR *
+static const char *
 GetWifiToggleCaption()
 {
   return IsKoboWifiOn() ? _T("Wifi OFF") : _T("Wifi ON");

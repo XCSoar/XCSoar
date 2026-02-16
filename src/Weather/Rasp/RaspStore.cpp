@@ -75,7 +75,7 @@ static constexpr RaspStore::MapInfo WeatherDescriptors[] = {
   },
 };
 
-RaspStore::MapItem::MapItem(const TCHAR *_name)
+RaspStore::MapItem::MapItem(const char *_name)
   :name(_name)
 {
   std::fill_n(times, ARRAY_SIZE(times), false);

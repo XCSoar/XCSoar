@@ -10,7 +10,7 @@
 #include <cassert>
 
 std::unique_ptr<Reader>
-OpenDataFile(const TCHAR *name)
+OpenDataFile(const char *name)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));

@@ -28,7 +28,7 @@
 
 #include <stdlib.h>
 
-static const TCHAR *
+static const char *
 ExpandTaskMacros(tstring_view name,
                  bool &invalid,
                  const DerivedInfo &calculated,
@@ -197,7 +197,7 @@ ExpandTaskMacros(tstring_view name,
 }
 
 [[gnu::pure]]
-static const TCHAR *
+static const char *
 ExpandTrafficMacros(tstring_view name) noexcept
 {
   TrafficWidget *widget = (TrafficWidget *)
@@ -243,7 +243,7 @@ GetUIState() noexcept
   return CommonInterface::GetUIState();
 }
 
-static const TCHAR *
+static const char *
 LookupMacro(tstring_view name, bool &invalid) noexcept
 {
   if (name ==_T("CheckAirspace")) {
@@ -251,7 +251,7 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
     return nullptr;
   }
 
-  const TCHAR *value = ExpandTaskMacros(name, invalid,
+  const char *value = ExpandTaskMacros(name, invalid,
                                         Calculated(), GetComputerSettings());
   if (value != nullptr)
     return value;
@@ -349,7 +349,7 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
   } else if (name == _T("AirspaceToggleActionName")) {
     return GetMapSettings().airspace.enable ? _("Hide") : _("Show");
   } else if (name == _T("MapLabelsToggleActionName")) {
-    static const TCHAR *const labels[] = {
+    static const char *const labels[] = {
       N_("All"),
       N_("Task & Landables"),
       N_("Task"),
@@ -413,7 +413,7 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
   } else if (name == _T("ZoomAutoToggleActionName")) {
     return GetMapSettings().auto_zoom_enabled ? _("Manual") : _("Auto");
   } else if (name == _T("NextPageName")) {
-    static TCHAR label[64]; // TODO: oh no, a static string buffer!
+    static char label[64]; // TODO: oh no, a static string buffer!
     const PageLayout &page =
       CommonInterface::GetUISettings().pages.pages[PageActions::NextIndex()];
     return page.MakeTitle(CommonInterface::GetUISettings().info_boxes,
@@ -426,7 +426,7 @@ LookupMacro(tstring_view name, bool &invalid) noexcept
 }
 
 bool
-ButtonLabel::ExpandMacros(const TCHAR *In, std::span<TCHAR> dest) noexcept
+ButtonLabel::ExpandMacros(const char *In, std::span<char> dest) noexcept
 {
   bool invalid = false;
 

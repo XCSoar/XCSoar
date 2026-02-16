@@ -17,13 +17,13 @@ class DataFieldFloat final : public NumberDataField {
 
   StaticString<8> unit;
 
-  mutable TCHAR mOutBuf[OUTBUFFERSIZE+1];
+  mutable char mOutBuf[OUTBUFFERSIZE+1];
 
 protected:
   double SpeedUp(bool keyup) noexcept;
 
 public:
-  DataFieldFloat(const TCHAR *edit_format, const TCHAR *display_format,
+  DataFieldFloat(const char *edit_format, const char *display_format,
                  double _min, double _max, double _value,
                  double _step, bool _fine,
                  DataFieldListener *listener=nullptr) noexcept
@@ -32,7 +32,7 @@ public:
      mSpeedup(0), mFine(_fine),
      unit(_T("")) {}
 
-  void SetUnits(const TCHAR *text) noexcept {
+  void SetUnits(const char *text) noexcept {
     unit = text;
   }
 
@@ -65,10 +65,10 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  const TCHAR *GetAsString() const noexcept override;
-  const TCHAR *GetAsDisplayString() const noexcept override;
-  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept override;
+  const char *GetAsString() const noexcept override;
+  const char *GetAsDisplayString() const noexcept override;
+  ComboList CreateComboList(const char *reference) const noexcept override;
+  void SetFromCombo(int iDataFieldIndex, const char *sValue) noexcept override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, double value) const noexcept;

@@ -59,7 +59,7 @@ static constexpr int direction_filter_items[] = {
   -1, -1, 0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
-static const TCHAR *const type_filter_items[] = {
+static const char *const type_filter_items[] = {
   _T("*"), _T("Airport"), _T("Landable"),
   _T("Turnpoint"), 
   _T("Start"), 
@@ -222,8 +222,8 @@ public:
 
 static WaypointListDialogState dialog_state;
 
-static const TCHAR *
-GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index,
+static const char *
+GetDirectionData(char *buffer, size_t size, int direction_filter_index,
                  Angle heading)
 {
   if (direction_filter_index == 0)
@@ -246,7 +246,7 @@ WaypointFilterWidget::Update(Angle _last_heading)
   DataFieldEnum &direction_df = *(DataFieldEnum *)
     direction_control.GetDataField();
 
-  TCHAR buffer[22];
+  char buffer[22];
   direction_df.replaceEnumText(1, GetDirectionData(buffer, ARRAY_SIZE(buffer),
                                                    1, last_heading));
   direction_control.RefreshDisplay();
@@ -323,8 +323,8 @@ WaypointListWidget::Prepare(ContainerWindow &parent,
 static DataField *
 CreateNameDataField(Waypoints &waypoints, DataFieldListener *listener)
 {
-  return new PrefixDataField(_T(""), [&waypoints](const TCHAR *prefix){
-    static TCHAR buffer[256];
+  return new PrefixDataField(_T(""), [&waypoints](const char *prefix){
+    static char buffer[256];
     return waypoints.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
   }, listener);
 }
@@ -346,7 +346,7 @@ CreateDistanceDataField(DataFieldListener *listener)
 static DataField *
 CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
 {
-  TCHAR buffer[22];
+  char buffer[22];
   DataFieldEnum *df = new DataFieldEnum(listener);
   for (unsigned i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
     df->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i,

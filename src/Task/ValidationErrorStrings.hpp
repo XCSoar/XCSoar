@@ -8,5 +8,5 @@
 #include <tchar.h>
 
 [[gnu::const]]
-const TCHAR *
+const char *
 getTaskValidationErrors(const TaskValidationErrorSet v);

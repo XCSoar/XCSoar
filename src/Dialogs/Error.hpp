@@ -7,8 +7,8 @@
 #include <tchar.h>
 
 void
-ShowError(std::exception_ptr e, const TCHAR *caption) noexcept;
+ShowError(std::exception_ptr e, const char *caption) noexcept;
 
 void
-ShowError(const TCHAR *msg, std::exception_ptr e,
-          const TCHAR *caption) noexcept;
+ShowError(const char *msg, std::exception_ptr e,
+          const char *caption) noexcept;

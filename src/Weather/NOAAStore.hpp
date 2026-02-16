@@ -25,7 +25,7 @@ public:
     TAF taf;
 
     /**
-     * Returns the four letter code as a TCHAR string.  This may
+     * Returns the four letter code as a char string.  This may
      * return a pointer to a static buffer, and consecutive calls
      * (even with different objects) may Invalidate the previous
      * return value.  May be called only from the main thread.

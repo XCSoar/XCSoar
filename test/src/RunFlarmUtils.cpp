@@ -24,7 +24,7 @@ static void
 ChangePilot(FlarmDevice &flarm, OperationEnvironment &env)
 {
   while (true) {
-    TCHAR old_pilot_name[64];
+    char old_pilot_name[64];
     if (flarm.GetPilot(old_pilot_name, 64, env))
       _tprintf(_T("Old pilot name: \"%s\"\n"), old_pilot_name);
 
@@ -54,7 +54,7 @@ static void
 ChangeCoPilot(FlarmDevice &flarm, OperationEnvironment &env)
 {
   while (true) {
-    TCHAR old_copilot_name[64];
+    char old_copilot_name[64];
     if (flarm.GetCoPilot(old_copilot_name, 64, env))
       _tprintf(_T("Old copilot name: \"%s\"\n"), old_copilot_name);
 
@@ -84,7 +84,7 @@ static void
 ChangePlaneType(FlarmDevice &flarm, OperationEnvironment &env)
 {
   while (true) {
-    TCHAR old_plane_type[64];
+    char old_plane_type[64];
     if (flarm.GetPlaneType(old_plane_type, 64, env))
       _tprintf(_T("Old plane type: \"%s\"\n"), old_plane_type);
 
@@ -114,7 +114,7 @@ static void
 ChangeRegistration(FlarmDevice &flarm, OperationEnvironment &env)
 {
   while (true) {
-    TCHAR old_registration[64];
+    char old_registration[64];
     if (flarm.GetPlaneRegistration(old_registration, 64, env))
       _tprintf(_T("Old plane registratio: \"%s\"\n"), old_registration);
 
@@ -144,7 +144,7 @@ static void
 ChangeCompetitionId(FlarmDevice &flarm, OperationEnvironment &env)
 {
   while (true) {
-    TCHAR old_id[64];
+    char old_id[64];
     if (flarm.GetCompetitionId(old_id, 64, env))
       _tprintf(_T("Old competition id: \"%s\"\n"), old_id);
 
@@ -174,7 +174,7 @@ static void
 ChangeCompetitionClass(FlarmDevice &flarm, OperationEnvironment &env)
 {
   while (true) {
-    TCHAR old_comp_class[64];
+    char old_comp_class[64];
     if (flarm.GetCompetitionClass(old_comp_class, 64, env))
       _tprintf(_T("Old competition class: \"%s\"\n"), old_comp_class);
 

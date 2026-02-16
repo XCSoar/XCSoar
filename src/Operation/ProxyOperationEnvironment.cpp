@@ -22,13 +22,13 @@ ProxyOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) n
 }
 
 void
-ProxyOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
+ProxyOperationEnvironment::SetErrorMessage(const char *text) noexcept
 {
   other.SetErrorMessage(text);
 }
 
 void
-ProxyOperationEnvironment::SetText(const TCHAR *text) noexcept
+ProxyOperationEnvironment::SetText(const char *text) noexcept
 {
   other.SetText(text);
 }

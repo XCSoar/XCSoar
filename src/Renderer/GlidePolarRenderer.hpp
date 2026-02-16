@@ -12,7 +12,7 @@ class ClimbHistory;
 class GlidePolar;
 
 void
-GlidePolarCaption(TCHAR *buffer, const GlidePolar &glide_polar);
+GlidePolarCaption(char *buffer, const GlidePolar &glide_polar);
 
 void
 RenderGlidePolar(Canvas &canvas, const PixelRect rc,

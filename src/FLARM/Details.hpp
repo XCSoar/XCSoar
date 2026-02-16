@@ -24,11 +24,11 @@ enum class ResolvedSource : unsigned char {
  * same thread and must not be cached or shared across threads.
  */
 struct ResolvedInfo {
-  const TCHAR *pilot = nullptr;
-  const TCHAR *plane_type = nullptr;
-  const TCHAR *registration = nullptr;
-  const TCHAR *callsign = nullptr;
-  const TCHAR *airfield = nullptr;  // FLARMnet-only
+  const char *pilot = nullptr;
+  const char *plane_type = nullptr;
+  const char *registration = nullptr;
+  const char *callsign = nullptr;
+  const char *airfield = nullptr;  // FLARMnet-only
   RadioFrequency frequency = RadioFrequency::Null();
   ResolvedSource source = ResolvedSource::NONE;
 
@@ -63,7 +63,7 @@ LookupRecord(FlarmId id) noexcept;
  * @return The corresponding callsign if found, otherwise NULL
  */
 [[gnu::pure]]
-const TCHAR *
+const char *
 LookupCallsign(FlarmId id) noexcept;
 
 /**
@@ -74,7 +74,7 @@ LookupCallsign(FlarmId id) noexcept;
  */
 [[gnu::pure]]
 FlarmId
-LookupId(const TCHAR *cn) noexcept;
+LookupId(const char *cn) noexcept;
 
 /**
  * Adds a FLARM details couple (callsign + FLARM id)
@@ -84,7 +84,7 @@ LookupId(const TCHAR *cn) noexcept;
  * @return True if successfully added, False otherwise
  */
 bool
-AddSecondaryItem(FlarmId id, const TCHAR *name) noexcept;
+AddSecondaryItem(FlarmId id, const char *name) noexcept;
 
 /**
  * Stores a messaging record in the database and triggers periodic save.
@@ -94,7 +94,7 @@ void
 StoreMessagingRecord(const MessagingRecord &record) noexcept;
 
 unsigned
-FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size) noexcept;
+FindIdsByCallSign(const char *cn, FlarmId array[], unsigned size) noexcept;
 
 /**
  * Resolves human-readable fields with preference: messaging -> FLARMnet.
@@ -109,6 +109,6 @@ ResolveInfo(FlarmId id) noexcept;
  * Retrieves the localized string corresponding to the resolved source enum.
  */
 [[gnu::const]]
-const TCHAR *ToString(ResolvedSource source) noexcept;
+const char *ToString(ResolvedSource source) noexcept;
 
 } // namespace FlarmDetails

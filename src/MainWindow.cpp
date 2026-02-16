@@ -798,7 +798,7 @@ MainWindow::OnMouseUp(PixelPoint p) noexcept
   if (dragging) {
     StopDragging();
 
-    const TCHAR *gesture = gestures.Finish();
+    const char *gesture = gestures.Finish();
     if (gesture && InputEvents::processGesture(gesture))
       return true;
   }
@@ -1253,7 +1253,7 @@ MainWindow::SetWidget(Widget *_widget) noexcept
 }
 
 Widget *
-MainWindow::GetFlavourWidget(const TCHAR *flavour) noexcept
+MainWindow::GetFlavourWidget(const char *flavour) noexcept
 {
   return InputEvents::IsFlavour(flavour)
     ? widget

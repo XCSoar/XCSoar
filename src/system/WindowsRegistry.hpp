@@ -22,7 +22,7 @@ class RegistryKey {
 public:
   RegistryKey() noexcept = default;
 
-  RegistryKey(HKEY parent, const TCHAR *key) {
+  RegistryKey(HKEY parent, const char *key) {
     const auto result = RegOpenKeyEx(parent, key, 0, KEY_READ, &h);
     if (result != ERROR_SUCCESS)
       throw MakeLastError("RegOpenKeyEx() failed");
@@ -46,7 +46,7 @@ public:
     return h;
   }
 
-  bool GetValue(const TCHAR *name, LPDWORD type_r,
+  bool GetValue(const char *name, LPDWORD type_r,
                 LPBYTE data, LPDWORD length_r) const noexcept {
     return RegQueryValueEx(h, name, nullptr, type_r,
                            data, length_r) == ERROR_SUCCESS;
@@ -58,19 +58,19 @@ public:
    *
    * @return true on success
    */
-  bool GetValue(const TCHAR *name, std::span<TCHAR> value) const noexcept {
+  bool GetValue(const char *name, std::span<char> value) const noexcept {
     const auto s = std::as_writable_bytes(value);
     DWORD type, length = s.size();
     return GetValue(name, &type, (LPBYTE)s.data(), &length) && type == REG_SZ;
   }
 
-  bool EnumKey(DWORD idx, std::span<TCHAR> name) const noexcept {
+  bool EnumKey(DWORD idx, std::span<char> name) const noexcept {
     DWORD name_max_size = (DWORD)name.size();
     return RegEnumKeyEx(h, idx, name.data(), &name_max_size,
                         nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS;
   }
 
-  bool EnumValue(DWORD idx, std::span<TCHAR> name, LPDWORD type,
+  bool EnumValue(DWORD idx, std::span<char> name, LPDWORD type,
                  std::span<std::byte> value) const noexcept {
     DWORD name_max_size = (DWORD)name.size();
     DWORD value_max_size = (DWORD)name.size();

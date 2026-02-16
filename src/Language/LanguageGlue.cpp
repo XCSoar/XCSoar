@@ -66,7 +66,7 @@ FindLanguage(WORD language) noexcept
 
 [[gnu::pure]]
 static const BuiltinLanguage *
-FindLanguage(const TCHAR *resource) noexcept
+FindLanguage(const char *resource) noexcept
 {
   assert(resource != nullptr);
 
@@ -219,7 +219,7 @@ ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 }
 
 static bool
-ReadResourceLanguageFile(const TCHAR *resource) noexcept
+ReadResourceLanguageFile(const char *resource) noexcept
 {
   auto language = FindLanguage(resource);
   return language != nullptr && ReadBuiltinLanguage(*language);

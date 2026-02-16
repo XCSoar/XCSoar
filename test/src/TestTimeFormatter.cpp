@@ -9,7 +9,7 @@
 static void
 TestFormat()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   FormatTime(buffer, FloatDuration{});
   ok1(StringIsEqual(buffer, _T("00:00:00")));
@@ -48,7 +48,7 @@ TestFormat()
 static void
 TestFormatLong()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   FormatTimeLong(buffer, {});
   ok1(StringIsEqual(buffer, _T("00:00:00.000")));
@@ -87,7 +87,7 @@ TestFormatLong()
 static void
 TestHHMM()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   FormatSignedTimeHHMM(buffer, {});
   ok1(StringIsEqual(buffer, _T("00:00")));
@@ -128,7 +128,7 @@ TestHHMM()
 static void
 TestTwoLines()
 {
-  TCHAR buffer[256], buffer2[256];
+  char buffer[256], buffer2[256];
 
   FormatTimeTwoLines(buffer, buffer2, {});
   ok1(StringIsEqual(buffer, _T("00'00")));
@@ -176,11 +176,11 @@ TestTwoLines()
 }
 
 static void
-TestSmart(int _time, const TCHAR *expected_output1,
-          const TCHAR *expected_output2, const TCHAR *expected_output3,
-          const TCHAR *expected_output4, const TCHAR *separator = _T(" "))
+TestSmart(int _time, const char *expected_output1,
+          const char *expected_output2, const char *expected_output3,
+          const char *expected_output4, const char *separator = _T(" "))
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   const auto time = std::chrono::seconds{_time};
 

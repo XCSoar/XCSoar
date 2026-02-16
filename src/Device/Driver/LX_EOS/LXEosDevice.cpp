@@ -155,7 +155,7 @@ LXEosDevice::WriteAndWaitForACK(const std::span<const std::byte> &message,
 }
 
 void
-LXEosDevice::CopyStringSpacePadded(char dest[], const TCHAR src[],
+LXEosDevice::CopyStringSpacePadded(char dest[], const char src[],
                                    const size_t len)
 {
   bool src_end_reached = false;

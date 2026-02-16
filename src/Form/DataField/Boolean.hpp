@@ -15,7 +15,7 @@ private:
 
 public:
   DataFieldBoolean(bool _value,
-                   const TCHAR *_true_text, const TCHAR *_false_text,
+                   const char *_true_text, const char *_false_text,
                    DataFieldListener *listener=nullptr) noexcept
     :DataField(Type::BOOLEAN, true, listener),
      mValue(_value),
@@ -39,7 +39,7 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  const TCHAR *GetAsString() const noexcept override;
-  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-  void SetFromCombo(int i, const TCHAR *s) noexcept override;
+  const char *GetAsString() const noexcept override;
+  ComboList CreateComboList(const char *reference) const noexcept override;
+  void SetFromCombo(int i, const char *s) noexcept override;
 };

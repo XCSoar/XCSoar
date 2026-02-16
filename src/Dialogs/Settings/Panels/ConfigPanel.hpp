@@ -7,7 +7,7 @@
 #include <tchar.h>
 
 namespace ConfigPanel {
-void BorrowExtraButton(unsigned i, const TCHAR *caption,
+void BorrowExtraButton(unsigned i, const char *caption,
                        std::function<void()> callback) noexcept;
 void ReturnExtraButton(unsigned i);
 };

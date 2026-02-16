@@ -43,7 +43,7 @@ RenderTaskLegs(ChartRenderer &chart,
   if (!task_stats.start.HasStarted())
     return;
 
-  TCHAR sTmp[5];
+  char sTmp[5];
 
   const OrderedTask &task = task_manager.GetOrderedTask();
   for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {

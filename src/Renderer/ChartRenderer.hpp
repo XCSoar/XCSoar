@@ -33,7 +33,7 @@ class ChartRenderer
   PixelRect rc;
   PixelRect rc_chart;
 
-  BasicStringBuffer<TCHAR, 64> x_label, y_label;
+  BasicStringBuffer<char, 64> x_label, y_label;
 
   ReusableArray<BulkPixelPoint> point_buffer;
 
@@ -62,11 +62,11 @@ public:
                 const PixelRect &the_rc,
                 const bool has_padding=true) noexcept;
 
-  void SetXLabel(const TCHAR *text) noexcept;
-  void SetXLabel(const TCHAR *text, const TCHAR *unit) noexcept;
+  void SetXLabel(const char *text) noexcept;
+  void SetXLabel(const char *text, const char *unit) noexcept;
 
-  void SetYLabel(const TCHAR *text) noexcept;
-  void SetYLabel(const TCHAR *text, const TCHAR *unit) noexcept;
+  void SetYLabel(const char *text) noexcept;
+  void SetYLabel(const char *text, const char *unit) noexcept;
 
   /**
    * Prepare for drawing; this method calculates the layout.  Call
@@ -117,7 +117,7 @@ public:
   void ScaleXFromValue(double val) noexcept;
 
   [[gnu::pure]]
-  static BasicStringBuffer<TCHAR, 32> FormatTicText(double val, double step,
+  static BasicStringBuffer<char, 32> FormatTicText(double val, double step,
                                                     UnitFormat units) noexcept;
 
   void DrawXGrid(double tic_step, double unit_step,
@@ -125,8 +125,8 @@ public:
   void DrawYGrid(double tic_step, double unit_step,
                  UnitFormat units = UnitFormat::NONE) noexcept;
 
-  void DrawLabel(DoublePoint2D v, const TCHAR *text) noexcept;
-  void DrawNoData(const TCHAR *text) noexcept;
+  void DrawLabel(DoublePoint2D v, const char *text) noexcept;
+  void DrawNoData(const char *text) noexcept;
   void DrawNoData() noexcept;
 
   void DrawBlankRectangle(DoublePoint2D min, DoublePoint2D max) noexcept;

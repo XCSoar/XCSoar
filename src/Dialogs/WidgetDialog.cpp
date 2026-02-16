@@ -30,7 +30,7 @@ WidgetDialog::WidgetDialog(const DialogLook &look)
 }
 
 WidgetDialog::WidgetDialog(SingleWindow &parent, const DialogLook &look,
-                           const PixelRect &rc, const TCHAR *caption,
+                           const PixelRect &rc, const char *caption,
                            Widget *_widget) noexcept
   :WndForm(parent, look, rc, caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
@@ -42,7 +42,7 @@ WidgetDialog::WidgetDialog(SingleWindow &parent, const DialogLook &look,
 }
 
 WidgetDialog::WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
-                           const TCHAR *caption) noexcept
+                           const char *caption) noexcept
   :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
@@ -51,7 +51,7 @@ WidgetDialog::WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
 }
 
 WidgetDialog::WidgetDialog(Auto tag, SingleWindow &parent, const DialogLook &look,
-                           const TCHAR *caption,
+                           const char *caption,
                            Widget *_widget) noexcept
   :WidgetDialog(tag, parent, look, caption)
 {
@@ -60,7 +60,7 @@ WidgetDialog::WidgetDialog(Auto tag, SingleWindow &parent, const DialogLook &loo
 }
 
 WidgetDialog::WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
-                           const TCHAR *caption) noexcept
+                           const char *caption) noexcept
   :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
@@ -69,7 +69,7 @@ WidgetDialog::WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
 }
 
 WidgetDialog::WidgetDialog(Full tag, SingleWindow &parent, const DialogLook &look,
-                           const TCHAR *caption,
+                           const char *caption,
                            Widget *_widget) noexcept
   :WidgetDialog(tag, parent, look, caption)
 {
@@ -245,7 +245,7 @@ WidgetDialog::OnAnyKeyDown(unsigned key_code) noexcept
 
 bool
 DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
-                    const TCHAR *caption, const PixelRect &rc, Widget &widget)
+                    const char *caption, const PixelRect &rc, Widget &widget)
 {
   WidgetDialog dialog(parent, look, rc, caption, &widget);
   dialog.AddButton(_("OK"), mrOK);
@@ -261,7 +261,7 @@ DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
 
 bool
 DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
-                    const TCHAR *caption, Widget &widget)
+                    const char *caption, Widget &widget)
 {
   WidgetDialog dialog(WidgetDialog::Auto{}, parent, look, caption, &widget);
   dialog.AddButton(_("OK"), mrOK);

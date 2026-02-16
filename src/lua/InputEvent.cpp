@@ -96,7 +96,7 @@ public:
     }
   }
 
-  void AttachGesture(const TCHAR* gesture) {
+  void AttachGesture(const char* gesture) {
     if (event_store_gesture.Insert(gesture, this)) {
       Lua::AddPersistent(L, this);
     }
@@ -346,11 +346,11 @@ bool Lua::FireNMEAEvent(unsigned event) {
   return event_store_enum.Fire(event + GCE_COUNT);
 }
 
-bool Lua::FireGesture(const TCHAR* gesture) {
+bool Lua::FireGesture(const char* gesture) {
   return event_store_gesture.Fire(gesture);
 }
 
-bool Lua::IsGesture(const TCHAR* gesture) {
+bool Lua::IsGesture(const char* gesture) {
   return event_store_gesture.HasHandler(gesture);
 }
 

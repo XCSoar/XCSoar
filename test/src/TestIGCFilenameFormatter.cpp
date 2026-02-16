@@ -9,7 +9,7 @@
 static void
 TestShort()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   FormatIGCFilename(buffer, BrokenDate(2012, 2, 10), _T('T'), _T("ABC"), 1);
   ok1(StringIsEqual(buffer, _T("22ATABC1.igc")));
@@ -24,7 +24,7 @@ TestShort()
 static void
 TestLong()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   FormatIGCFilenameLong(buffer, BrokenDate(2012, 2, 10),
                         _T("XYZ"), _T("ABC"), 1);
@@ -42,7 +42,7 @@ TestLong()
 static void
 TestChar()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   FormatIGCFilename(buffer, BrokenDate(2012, 2, 10), 'T', "ABC", 1);
   ok1(StringIsEqual(buffer, _T("22ATABC1.igc")));

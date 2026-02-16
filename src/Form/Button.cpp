@@ -15,7 +15,7 @@ Button::Button(ContainerWindow &parent, const PixelRect &rc,
 }
 
 Button::Button(ContainerWindow &parent, const ButtonLook &look,
-               const TCHAR *caption, const PixelRect &rc,
+               const char *caption, const PixelRect &rc,
                WindowStyle style,
                Callback _callback) noexcept
 {
@@ -40,7 +40,7 @@ Button::Create(ContainerWindow &parent,
 
 void
 Button::Create(ContainerWindow &parent, const ButtonLook &look,
-               const TCHAR *caption, const PixelRect &rc,
+               const char *caption, const PixelRect &rc,
                WindowStyle style)
 {
   Create(parent, rc, style, std::make_unique<TextButtonRenderer>(look, caption));
@@ -58,7 +58,7 @@ Button::Create(ContainerWindow &parent, const PixelRect &rc,
 
 void
 Button::Create(ContainerWindow &parent, const ButtonLook &look,
-               const TCHAR *caption, const PixelRect &rc,
+               const char *caption, const PixelRect &rc,
                WindowStyle style,
                Callback _callback) noexcept {
   Create(parent, rc, style,
@@ -67,7 +67,7 @@ Button::Create(ContainerWindow &parent, const ButtonLook &look,
 }
 
 void
-Button::SetCaption(const TCHAR *caption)
+Button::SetCaption(const char *caption)
 {
   assert(caption != nullptr);
 

@@ -29,7 +29,7 @@ InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
     return;
   }
 
-  TCHAR buffer[16];
+  char buffer[16];
   FormatUserWindSpeed(-info.head_wind, buffer, true, false);
   data.SetComment(buffer);
 }

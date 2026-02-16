@@ -26,7 +26,7 @@ FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
     buffer.Format(_T("%s: %s"), _("Elevation"), _T("?"));
 
   if (waypoint.radio_frequency.IsDefined()) {
-    TCHAR radio[16];
+    char radio[16];
     waypoint.radio_frequency.Format(radio, 16);
     buffer.AppendFormat(_T(" - %s MHz"), radio);
   }
@@ -128,7 +128,7 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
 
   // Draw distance and arrival altitude
   StaticString<256> buffer;
-  TCHAR alt[20], radio[20];
+  char alt[20], radio[20];
   
   FormatRelativeUserAltitude(arrival_altitude, alt, true);
   buffer.Format(_T("%s: %s - %s: %s"), _("Distance"),

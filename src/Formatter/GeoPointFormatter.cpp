@@ -24,13 +24,13 @@
 #include "util/StringAPI.hxx"
 
 bool
-FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
+FormatLongitude(Angle longitude, char *buffer, size_t size,
                 CoordinateFormat format)
 {
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  TCHAR sign = longitude.IsNegative() ? _T('W') : _T('E');
+  char sign = longitude.IsNegative() ? _T('W') : _T('E');
 
   double mlong(longitude.AbsoluteDegrees());
 
@@ -93,13 +93,13 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
 }
 
 bool
-FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
+FormatLatitude(Angle latitude, char *buffer, size_t size,
                CoordinateFormat format)
 {
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  TCHAR sign = latitude.IsNegative() ? _T('S') : _T('N');
+  char sign = latitude.IsNegative() ? _T('S') : _T('N');
 
   double mlat(latitude.AbsoluteDegrees());
 
@@ -161,9 +161,9 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
   return true;
 }
 
-static TCHAR *
-FormatUTM(const GeoPoint &location, TCHAR *buffer, size_t size,
-          TCHAR separator = _T(' '))
+static char *
+FormatUTM(const GeoPoint &location, char *buffer, size_t size,
+          char separator = _T(' '))
 {
   UTM utm = UTM::FromGeoPoint(location);
   StringFormat(buffer, size, _T("%u%c%c%.0f%c%.0f"),
@@ -173,9 +173,9 @@ FormatUTM(const GeoPoint &location, TCHAR *buffer, size_t size,
   return buffer;
 }
 
-TCHAR *
-FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-               CoordinateFormat format, TCHAR separator)
+char *
+FormatGeoPoint(const GeoPoint &location, char *buffer, size_t size,
+               CoordinateFormat format, char separator)
 {
   if (format == CoordinateFormat::UTM)
     return FormatUTM(location, buffer, size, separator);
@@ -183,7 +183,7 @@ FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
   if (!FormatLatitude(location.latitude, buffer, size, format))
     return nullptr;
 
-  TCHAR *end = buffer + size, *p = buffer + StringLength(buffer);
+  char *end = buffer + size, *p = buffer + StringLength(buffer);
   if (p >= end)
     return nullptr;
 

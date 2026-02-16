@@ -110,23 +110,23 @@ public:
                OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
 
-  bool GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
-  bool SetPilot(const TCHAR *pilot_name, OperationEnvironment &env);
-  bool GetCoPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
-  bool SetCoPilot(const TCHAR *copilot_name, OperationEnvironment &env);
-  bool GetPlaneType(TCHAR *buffer, size_t length, OperationEnvironment &env);
-  bool SetPlaneType(const TCHAR *plane_type, OperationEnvironment &env);
-  bool GetPlaneRegistration(TCHAR *buffer, size_t length,
+  bool GetPilot(char *buffer, size_t length, OperationEnvironment &env);
+  bool SetPilot(const char *pilot_name, OperationEnvironment &env);
+  bool GetCoPilot(char *buffer, size_t length, OperationEnvironment &env);
+  bool SetCoPilot(const char *copilot_name, OperationEnvironment &env);
+  bool GetPlaneType(char *buffer, size_t length, OperationEnvironment &env);
+  bool SetPlaneType(const char *plane_type, OperationEnvironment &env);
+  bool GetPlaneRegistration(char *buffer, size_t length,
                             OperationEnvironment &env);
-  bool SetPlaneRegistration(const TCHAR *registration,
+  bool SetPlaneRegistration(const char *registration,
                             OperationEnvironment &env);
-  bool GetCompetitionId(TCHAR *buffer, size_t length,
+  bool GetCompetitionId(char *buffer, size_t length,
                         OperationEnvironment &env);
-  bool SetCompetitionId(const TCHAR *competition_id,
+  bool SetCompetitionId(const char *competition_id,
                         OperationEnvironment &env);
-  bool GetCompetitionClass(TCHAR *buffer, size_t length,
+  bool GetCompetitionClass(char *buffer, size_t length,
                            OperationEnvironment &env);
-  bool SetCompetitionClass(const TCHAR *competition_class,
+  bool SetCompetitionClass(const char *competition_class,
                            OperationEnvironment &env);
 
   bool GetStealthMode(bool &enabled, OperationEnvironment &env);

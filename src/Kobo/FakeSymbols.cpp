@@ -5,8 +5,8 @@
 #include "Dialogs/DataField.hpp"
 
 bool
-EditDataFieldDialog([[maybe_unused]] const TCHAR *caption, [[maybe_unused]] DataField &df,
-                    [[maybe_unused]] const TCHAR *help_text)
+EditDataFieldDialog([[maybe_unused]] const char *caption, [[maybe_unused]] DataField &df,
+                    [[maybe_unused]] const char *help_text)
 {
   return false;
 }

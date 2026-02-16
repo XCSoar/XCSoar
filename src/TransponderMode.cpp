@@ -5,7 +5,7 @@
 #include "Language/Language.hpp"
 #include "util/Macros.hpp"
 
-static const TCHAR *const mode_strings[] = {
+static const char *const mode_strings[] = {
   _T(""),
   _T("OFF"),
   _T("SBY"),
@@ -15,7 +15,7 @@ static const TCHAR *const mode_strings[] = {
   _T("IDENT"),
 };
 
-const TCHAR *
+const char *
 TransponderMode::ToString(Mode mode) noexcept
 {
   unsigned i = (unsigned)mode;

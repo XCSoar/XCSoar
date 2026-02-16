@@ -285,7 +285,7 @@ private:
    * @param src source buffer (0x00 terminated string)
    * @param len length of destination buffer
    */
-  static void CopyStringSpacePadded(char dest[], const TCHAR src[],
+  static void CopyStringSpacePadded(char dest[], const char src[],
                                     const size_t len);
 
   /**

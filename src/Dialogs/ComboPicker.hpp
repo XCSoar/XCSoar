@@ -9,16 +9,16 @@ class ComboList;
 class DataField;
 
 int
-ComboPicker(const TCHAR *caption,
+ComboPicker(const char *caption,
             const ComboList &combo_list,
-            const TCHAR *help_text = nullptr,
+            const char *help_text = nullptr,
             bool enable_item_help = false,
-            const TCHAR *extra_caption=nullptr);
+            const char *extra_caption=nullptr);
 
 /**
  * @return true if the user has selected a new value (though it may be
  * equal to the old one)
  */
 bool
-ComboPicker(const TCHAR *caption, DataField &df,
-            const TCHAR *help_text = nullptr);
+ComboPicker(const char *caption, DataField &df,
+            const char *help_text = nullptr);

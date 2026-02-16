@@ -36,7 +36,7 @@ WndFrame::SetVAlignCenter() noexcept
 }
 
 void
-WndFrame::SetText(const TCHAR *_text) noexcept
+WndFrame::SetText(const char *_text) noexcept
 {
   text = _text;
   text_renderer.InvalidateLayout();

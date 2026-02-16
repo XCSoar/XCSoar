@@ -128,8 +128,8 @@ public:
 };
 
 static bool
-SelectProfileCallback([[maybe_unused]] const TCHAR *caption, [[maybe_unused]] DataField &_df,
-                      [[maybe_unused]] const TCHAR *help_text) noexcept
+SelectProfileCallback([[maybe_unused]] const char *caption, [[maybe_unused]] DataField &_df,
+                      [[maybe_unused]] const char *help_text) noexcept
 {
   FileDataField &df = (FileDataField &)_df;
 
