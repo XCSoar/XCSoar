@@ -9,7 +9,6 @@
 #include "system/Path.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
-#include "util/ScopeExit.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringUtil.hpp"
 #include "util/AllocatedString.hxx"
