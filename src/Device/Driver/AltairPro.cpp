@@ -11,7 +11,6 @@
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "util/ConvertString.hpp"
 #include "util/TruncateString.hpp"
 #include "util/Macros.hpp"
 #include "time/TimeoutClock.hpp"
@@ -19,6 +18,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <cassert>
+#include <string>
+
 using std::string_view_literals::operator""sv;
 
 static constexpr unsigned DECELWPNAMESIZE = 24;                // max size of taskpoint name
@@ -230,8 +231,8 @@ AltairProDevice::PutTurnPoint(const char *propertyName,
   char NoS, EoW;
 
   if (waypoint != nullptr){
-    if (WideToACPConverter wp_name{waypoint->name.c_str()}; wp_name.IsValid())
-      CopyTruncateString(Name, ARRAY_SIZE(Name), wp_name);
+    if (waypoint->name.c_str())
+      CopyTruncateString(Name, ARRAY_SIZE(Name), waypoint->name.c_str());
     else
       throw std::runtime_error("Invalid string");
 
