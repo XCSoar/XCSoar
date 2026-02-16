@@ -244,8 +244,13 @@ MainWindow::InitialiseConfigured()
 
   PixelRect rc = GetClientRect();
 
+  const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
+  const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
+  const InfoBoxSettings::Geometry page_geometry = ib_settings.ResolveGeometry(panel);
+
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, page_geometry);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -438,8 +443,13 @@ MainWindow::ReinitialiseLayout() noexcept
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
+  const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
+  const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
+  const InfoBoxSettings::Geometry page_geometry = ib_settings.ResolveGeometry(panel);
+
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, page_geometry);
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
 
@@ -614,11 +624,14 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 void
 MainWindow::ReinitialiseLook() noexcept
 {
-  const auto &ui_settings = CommonInterface::GetUISettings();
+  const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
+  const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
+  const InfoBoxSettings::Geometry page_geometry = ib_settings.ResolveGeometry(panel);
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(GetClientRect(),
-                             ui_settings.info_boxes.geometry);
+                             page_geometry);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),

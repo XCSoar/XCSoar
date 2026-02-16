@@ -14,6 +14,7 @@ InfoBoxSettings::Panel::Clear() noexcept
 {
   name.clear();
   std::fill_n(contents, MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
+  geometry = INHERIT_GEOMETRY;
 }
 
 bool
