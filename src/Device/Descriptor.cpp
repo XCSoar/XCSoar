@@ -16,7 +16,6 @@
 #include "NMEA/Info.hpp"
 #include "thread/Mutex.hxx"
 #include "util/StringAPI.hxx"
-#include "util/ConvertString.hpp"
 #include "util/Exception.hxx"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"

@@ -18,7 +18,6 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "net/http/Features.hpp"
-#include "util/ConvertString.hpp"
 #include "util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"

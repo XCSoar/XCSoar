@@ -4,7 +4,6 @@
 #include "Client.hpp"
 #include "Operation/Operation.hpp"
 #include "util/StringCompare.hxx"
-#include "util/ConvertString.hpp"
 #include "lib/curl/CoRequest.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/fmt/RuntimeError.hxx"

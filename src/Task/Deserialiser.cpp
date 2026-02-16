@@ -14,7 +14,6 @@
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "util/ConvertString.hpp"
 
 #include <memory>
 

@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "MessagingRecord.hpp"
-#include "util/ConvertString.hpp"
 #include "util/StaticString.hxx"
 
 const char *MessagingRecord::Format(StaticString<256> &buffer, const std::string &value) const noexcept {

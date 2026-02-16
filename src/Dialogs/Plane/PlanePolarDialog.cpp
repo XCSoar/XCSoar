@@ -18,7 +18,6 @@
 #include "system/Path.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-#include "util/ConvertString.hpp"
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener {

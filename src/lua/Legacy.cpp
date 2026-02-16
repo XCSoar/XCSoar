@@ -4,7 +4,6 @@
 #include "Legacy.hpp"
 #include "Util.hxx"
 #include "Input/InputLookup.hpp"
-#include "util/ConvertString.hpp"
 
 extern "C" {
 #include <lauxlib.h>
