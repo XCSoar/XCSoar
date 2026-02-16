@@ -11,7 +11,6 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Input/InputEvents.hpp"
 #include "system/Args.hpp"
-#include "util/ConvertString.hpp"
 #include "util/StringStrip.hxx"
 
 #include <stdio.h>

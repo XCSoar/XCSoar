@@ -9,7 +9,6 @@
 #include "LocalPath.hpp"
 #include "Profile/Profile.hpp"
 #include "RowFormWidget.hpp"
-#include "util/ConvertString.hpp"
 
 WndProperty *
 RowFormWidget::AddFile(const char *label, const char *help,

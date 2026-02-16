@@ -11,7 +11,6 @@
 #include "Device/Config.hpp"
 #include "system/Args.hpp"
 #include "util/StringStrip.hxx"
-#include "util/ConvertString.hpp"
 #include "util/PrintException.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "io/async/GlobalAsioThread.hpp"

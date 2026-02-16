@@ -12,7 +12,6 @@
 #include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "XML/DataNode.hpp"
 #include "util/Compiler.h"
-#include "util/ConvertString.hpp"
 
 #include <cassert>
 [[gnu::const]]

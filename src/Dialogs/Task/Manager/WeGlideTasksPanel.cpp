@@ -27,7 +27,6 @@
 #include "net/http/Init.hpp"
 #include "lib/curl/Global.hxx"
 #include "util/Compiler.h"
-#include "util/ConvertString.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "DataComponents.hpp"
