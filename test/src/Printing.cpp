@@ -12,7 +12,7 @@
 std::ostream &
 operator<<(std::ostream &f, Path path)
 {
-  f << WideToUTF8Converter(path.c_str());
+  f << path.c_str();
   return f;
 }
 

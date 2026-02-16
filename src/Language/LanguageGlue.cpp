@@ -194,21 +194,20 @@ InitNativeGettext(const char *locale) noexcept
 static bool
 ReadBuiltinLanguage(const BuiltinLanguage &language) noexcept
 {
-  const WideToUTF8Converter resource_utf8(language.resource);
-  LogFmt("Language: loading resource '{}'", resource_utf8.IsValid() ? resource_utf8.c_str() : "(invalid)");
+  LogFmt("Language: loading resource '{}'", language.resource);
 
 #ifdef HAVE_BUILTIN_LANGUAGES
   // Load MO file from resource
   delete mo_loader;
   mo_loader = new MOLoader({language.begin, (size_t)language.size});
   if (mo_loader->error()) {
-    LogFmt("Language: could not load resource '{}'", resource_utf8.IsValid() ? resource_utf8.c_str() : "(invalid)");
+    LogFmt("Language: could not load resource '{}'", language.resource);
     delete mo_loader;
     mo_loader = nullptr;
     return false;
   }
 
-  LogFmt("Loaded translations from resource '{}'", resource_utf8.IsValid() ? resource_utf8.c_str() : "(invalid)");
+  LogFmt("Loaded translations from resource '{}'", language.resource);
 
   mo_file = &mo_loader->get();
 #else

@@ -39,6 +39,8 @@
 
 #include <cassert>
 
+using std::string_view_literals::operator""sv;
+
 static AllocatedPath
 LocalPath(const AvailableFile &file)
 {
@@ -640,19 +642,13 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
                                        int64_t size, int64_t position) noexcept
 {
   const auto name = path_relative.GetBase();
-  if (name == nullptr)
+  if (name == nullptr || name.empty())
     return;
-
-  const WideToUTF8Converter name2(name.c_str());
-  if (!name2.IsValid())
-    return;
-
-  const std::string name3(name2);
 
   {
     const std::lock_guard lock{mutex};
-    downloads[name3] = DownloadStatus{size, position};
-    failures.erase(name3);
+    downloads[name.c_str()] = DownloadStatus{size, position};
+    failures.erase(name.c_str());
   }
 
   download_notify.SendNotification();
@@ -662,21 +658,15 @@ void
 ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 {
   const auto name = path_relative.GetBase();
-  if (name == nullptr)
+  if (name == nullptr || name.empty())
     return;
-
-  const WideToUTF8Converter name2(name.c_str());
-  if (!name2.IsValid())
-    return;
-
-  const std::string name3(name2);
 
   {
     const std::lock_guard lock{mutex};
 
-    downloads.erase(name3);
+    downloads.erase(name.c_str());
 
-    if (StringIsEqual(name2, "repository")) {
+    if (name.c_str() == "repository"sv) {
       repository_failed = false;
       repository_modified = true;
     }
@@ -690,25 +680,19 @@ ManagedFileListWidget::OnDownloadError(Path path_relative,
                                        [[maybe_unused]] std::exception_ptr error) noexcept
 {
   const auto name = path_relative.GetBase();
-  if (name == nullptr)
+  if (name == nullptr || name.empty())
     return;
-
-  const WideToUTF8Converter name2(name.c_str());
-  if (!name2.IsValid())
-    return;
-
-  const std::string name3(name2);
 
   {
     const std::lock_guard lock{mutex};
 
-    downloads.erase(name3);
+    downloads.erase(name.c_str());
 
     // TODO: store the error
-    if (StringIsEqual(name2, "repository")) {
+    if (name.c_str() == "repository"sv) {
       repository_failed = true;
     } else
-      failures.insert(name3);
+      failures.insert(name.c_str());
   }
 
   download_notify.SendNotification();

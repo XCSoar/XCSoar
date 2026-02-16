@@ -132,12 +132,10 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
                                    UTF8ToWideConverter(url.c_str() + sizeof(PCMET_FTP)));
 
   {
-    const WideToUTF8Converter username(settings.ftp_credentials.username);
-    const WideToUTF8Converter password(settings.ftp_credentials.password);
-
     const auto ignored_response = co_await
       Net::CoDownloadToFile(curl, url,
-                            username, password,
+                            settings.ftp_credentials.username,
+                            settings.ftp_credentials.password,
                             path, nullptr,
                             progress);
   }

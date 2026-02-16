@@ -56,9 +56,9 @@ Serialise(WritableDataNode &node, const GeoPoint &data)
 static void
 Serialise(WritableDataNode &node, const Waypoint &data)
 {
-  node.SetAttribute("name", WideToUTF8Converter(data.name.c_str()));
+  node.SetAttribute("name", data.name.c_str());
   node.SetAttribute("id", data.id);
-  node.SetAttribute("comment", WideToUTF8Converter(data.comment.c_str()));
+  node.SetAttribute("comment", data.comment.c_str());
   if (data.has_elevation)
     node.SetAttribute("altitude", data.elevation);
 
@@ -168,7 +168,7 @@ Serialise(WritableDataNode &node, const OrderedTaskPoint &data,
 {
   // do nothing
   auto child = node.AppendChild("Point");
-  child->SetAttribute("type", WideToUTF8Converter(name));
+  child->SetAttribute("type", name);
 
   Serialise(*child->AppendChild("Waypoint"), data.GetWaypoint());
   Serialise(*child->AppendChild("ObservationZone"),
@@ -267,7 +267,7 @@ Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
 void
 SaveTask(WritableDataNode &node, const OrderedTask &task)
 {
-  node.SetAttribute("type", WideToUTF8Converter(GetTaskFactoryType(task.GetFactoryType())));
+  node.SetAttribute("type", GetTaskFactoryType(task.GetFactoryType()));
   Serialise(node, task.GetOrderedTaskSettings());
 
   for (const auto &tp : task.GetPoints())

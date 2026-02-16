@@ -11,7 +11,6 @@
 #include "Polar/Parser.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarStore.hpp"
-#include "util/ConvertString.hpp"
 #include "util/Macros.hpp"
 #include "util/PrintException.hxx"
 #include "util/StringAPI.hxx"
@@ -76,9 +75,7 @@ TestBuiltInPolars()
 {
   for (const auto &i : PolarStore::GetAll()) {
     PolarInfo polar = i.ToPolarInfo();
-
-    WideToUTF8Converter narrow(i.name);
-    ok(polar.IsValid(), narrow);
+    ok(polar.IsValid(), i.name);
   }
 }
 
@@ -138,9 +135,8 @@ static void
 TestBuiltInPolarsPlausibility()
 {
   for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
-    const char *si = performanceData[i].name;
-    WideToUTF8Converter polarName(si);
-    const auto polar = GetPolarByName(si);
+    const char *polarName = performanceData[i].name;
+    const auto polar = GetPolarByName(polarName);
     PolarCoefficients pc = polar.CalculateCoefficients();
 
     ok(pc.IsValid(), polarName);
