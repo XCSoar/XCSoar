@@ -14,6 +14,6 @@ struct RaspMapItem : public MapItem
 {
   const StaticString<64> label;
 
-  explicit RaspMapItem(const TCHAR *_label)
+  explicit RaspMapItem(const char *_label)
     :MapItem(Type::RASP), label(_label) {}
 };

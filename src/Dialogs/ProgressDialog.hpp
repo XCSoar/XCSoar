@@ -20,13 +20,13 @@ class ProgressDialog
 
 public:
   ProgressDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
-                 const TCHAR *caption);
+                 const char *caption);
 
   void AddCancelButton(std::function<void()> &&callback={});
 
   /* virtual methods from class OperationEnvironment */
 
-  void SetText(const TCHAR *text) noexcept override {
+  void SetText(const char *text) noexcept override {
     progress.SetMessage(text);
   }
 

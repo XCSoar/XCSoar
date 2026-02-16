@@ -115,7 +115,8 @@ struct TrafficList {
    * @param name the name or call sign
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  constexpr FlarmTraffic *FindTraffic(const TCHAR *name) noexcept {
+  constexpr FlarmTraffic *
+  FindTraffic(const char *name) noexcept {
     for (auto &traffic : list)
       if (traffic.name.equals(name))
         return &traffic;
@@ -129,7 +130,8 @@ struct TrafficList {
    * @param name the name or call sign
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  constexpr const FlarmTraffic *FindTraffic(const TCHAR *name) const noexcept {
+  constexpr const FlarmTraffic *
+  FindTraffic(const char *name) const noexcept {
     for (const auto &traffic : list)
       if (traffic.name.equals(name))
         return &traffic;

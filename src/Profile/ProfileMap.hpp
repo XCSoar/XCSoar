@@ -49,7 +49,7 @@ Get(std::string_view key, const char *default_value=nullptr) noexcept;
  * @param max_size Maximum size of the output buffer
  */
 bool
-Get(std::string_view key, std::span<TCHAR> value) noexcept;
+Get(std::string_view key, std::span<char> value) noexcept;
 
 /**
  * Writes a value to the profile map
@@ -125,7 +125,7 @@ SetEnum(std::string_view key, T value) noexcept
 
 template<std::size_t max>
 static inline bool
-Get(std::string_view key, BasicStringBuffer<TCHAR, max> &value) noexcept
+Get(std::string_view key, BasicStringBuffer<char, max> &value) noexcept
 {
   return Get(key, std::span{value.data(), value.capacity()});
 }

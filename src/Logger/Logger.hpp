@@ -38,6 +38,6 @@ public:
                        bool noAsk = false);
   void GUIStopLogger(const NMEAInfo &gps_info,
                      bool noAsk = false);
-  void LoggerNote(const TCHAR *text);
+  void LoggerNote(const char *text);
   void ClearBuffer() noexcept;
 };

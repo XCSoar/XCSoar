@@ -10,7 +10,7 @@
 
 std::unique_ptr<Port>
 OpenAndroidBluetoothPort(BluetoothHelper &bluetooth_helper,
-                         const TCHAR *address, PortListener *listener,
+                         const char *address, PortListener *listener,
                          DataHandler &handler)
 {
   assert(address != nullptr);
@@ -31,7 +31,7 @@ OpenAndroidBluetoothServerPort(BluetoothHelper &bluetooth_helper,
 
 std::unique_ptr<Port>
 OpenAndroidBleHm10Port(BluetoothHelper &bluetooth_helper,
-                       const TCHAR *address, PortListener *listener,
+                       const char *address, PortListener *listener,
                        DataHandler &handler)
 {
   assert(address != nullptr);

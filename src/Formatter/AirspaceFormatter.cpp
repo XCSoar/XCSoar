@@ -5,7 +5,7 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "util/Macros.hpp"
 
-static const TCHAR *const airspace_class_names[] = {
+static const char *const airspace_class_names[] = {
   _T("Unknown"),
   _T("Restricted"),
   _T("Prohibited"),
@@ -66,7 +66,7 @@ static_assert(ARRAY_SIZE(airspace_class_names) ==
               "number of airspace class names does not match number of "
               "airspace classes");
 
-static const TCHAR *const airspace_class_short_names[] = {
+static const char *const airspace_class_short_names[] = {
   _T("?"),
   _T("R"),
   _T("P"),
@@ -127,7 +127,7 @@ static_assert(ARRAY_SIZE(airspace_class_short_names) ==
               "number of airspace class short names does not match number of "
               "airspace classes");
 
-const TCHAR *
+const char *
 AirspaceFormatter::GetClass(AirspaceClass airspace_class)
 {
   unsigned i = (unsigned)airspace_class;
@@ -136,7 +136,7 @@ AirspaceFormatter::GetClass(AirspaceClass airspace_class)
          airspace_class_names[i] : NULL;
 }
 
-const TCHAR *
+const char *
 AirspaceFormatter::GetClassShort(AirspaceClass airspace_class)
 {
   unsigned i = (unsigned)airspace_class;
@@ -145,25 +145,25 @@ AirspaceFormatter::GetClassShort(AirspaceClass airspace_class)
          airspace_class_short_names[i] : NULL;
 }
 
-const TCHAR *
+const char *
 AirspaceFormatter::GetClass(const AbstractAirspace &airspace)
 {
   return GetClass(airspace.GetClass());
 }
 
-const TCHAR *
+const char *
 AirspaceFormatter::GetClassShort(const AbstractAirspace &airspace)
 {
   return GetClassShort(airspace.GetClass());
 }
 
-const TCHAR *
+const char *
 AirspaceFormatter::GetType(const AbstractAirspace &airspace)
 {
   return GetClass(airspace.GetType());
 }
 
-const TCHAR *
+const char *
 AirspaceFormatter::GetClassOrType(const AbstractAirspace &airspace)
 {
   return GetClass(airspace.GetClassOrType());

@@ -52,7 +52,7 @@ int main(int argc, char **argv)
                           replay->SetCalculated());
 
     if (calculated.estimated_wind_available.Modified(last)) {
-      TCHAR time_buffer[32];
+      char time_buffer[32];
       FormatTime(time_buffer, replay->Basic().time);
 
       _tprintf(_T("%s %d %g\n"),

@@ -16,13 +16,13 @@ public:
 
     const char *name;
 
-    const TCHAR *label, *help;
+    const char *label, *help;
 
     const StaticEnumChoice *choices;
 
     int min_value, max_value, step;
 
-    const TCHAR *format;
+    const char *format;
   };
 
 private:
@@ -66,11 +66,11 @@ private:
 
 public:
   /* methods to construct the form */
-  void AddBoolean(const char *name, const TCHAR *label,
-                  const TCHAR *help=NULL);
-  void AddInteger(const char *name, const TCHAR *label, const TCHAR *help,
-                  int min_value, int max_value, const TCHAR *format);
-  void AddEnum(const char *name, const TCHAR *label, const TCHAR *help,
+  void AddBoolean(const char *name, const char *label,
+                  const char *help=NULL);
+  void AddInteger(const char *name, const char *label, const char *help,
+                  int min_value, int max_value, const char *format);
+  void AddEnum(const char *name, const char *label, const char *help,
                const StaticEnumChoice *list);
 
 private:

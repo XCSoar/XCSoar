@@ -10,7 +10,7 @@
 namespace UI {
 
 void
-TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
+TopWindow::Create(const char *cls, const char *text, PixelSize size,
                   TopWindowStyle style)
 {
   hSavedFocus = nullptr;

@@ -43,8 +43,8 @@ ATCReferencePanel::UpdateValues() noexcept
 
   SetText(WAYPOINT, waypoint != nullptr ? waypoint->name.c_str() : _T("---"));
 
-  const TCHAR *location_string;
-  TCHAR buffer[64];
+  const char *location_string;
+  char buffer[64];
   if (location.IsValid()) {
     FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer),
                    CommonInterface::GetUISettings().format.coordinate_format);

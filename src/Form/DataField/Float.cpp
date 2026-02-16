@@ -10,14 +10,14 @@
 
 static bool DataFieldKeyUp = false;
 
-const TCHAR *
+const char *
 DataFieldFloat::GetAsString() const noexcept
 {
   _stprintf(mOutBuf, edit_format, (double)mValue);
   return mOutBuf;
 }
 
-const TCHAR *
+const char *
 DataFieldFloat::GetAsDisplayString() const noexcept
 {
   _stprintf(mOutBuf, display_format, (double)mValue, unit.c_str());
@@ -84,7 +84,7 @@ DataFieldFloat::SpeedUp(bool keyup) noexcept
 }
 
 void
-DataFieldFloat::SetFromCombo([[maybe_unused]] int iDataFieldIndex, const TCHAR *sValue) noexcept
+DataFieldFloat::SetFromCombo([[maybe_unused]] int iDataFieldIndex, const char *sValue) noexcept
 {
   ModifyValue(ParseDouble(sValue));
 }
@@ -93,14 +93,14 @@ void
 DataFieldFloat::AppendComboValue(ComboList &combo_list,
                                  double value) const noexcept
 {
-  TCHAR a[decltype(edit_format)::capacity()], b[decltype(display_format)::capacity()];
+  char a[decltype(edit_format)::capacity()], b[decltype(display_format)::capacity()];
   _stprintf(a, edit_format, (double)value);
   _stprintf(b, display_format, (double)value, unit.c_str());
   combo_list.Append(a, b);
 }
 
 ComboList
-DataFieldFloat::CreateComboList(const TCHAR *reference_string) const noexcept
+DataFieldFloat::CreateComboList(const char *reference_string) const noexcept
 {
   const auto reference = reference_string != nullptr
     ? ParseDouble(reference_string)

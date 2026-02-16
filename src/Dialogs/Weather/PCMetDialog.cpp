@@ -88,7 +88,7 @@ public:
 
 protected:
   /* virtual methods from TextListWidget */
-  const TCHAR *GetRowText(unsigned i) const noexcept override {
+  const char *GetRowText(unsigned i) const noexcept override {
     return areas[i].display_name;
   }
 
@@ -126,7 +126,7 @@ public:
 
 protected:
   /* virtual methods from TextListWidget */
-  const TCHAR *GetRowText(unsigned i) const noexcept override {
+  const char *GetRowText(unsigned i) const noexcept override {
     return PCMet::image_types[i].display_name;
   }
 

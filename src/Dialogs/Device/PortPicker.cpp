@@ -36,7 +36,7 @@ public:
 
   void PaintItem(Canvas &canvas, PixelRect rc,
                  const ComboList::Item &item) noexcept {
-    if (const TCHAR *text = ToDisplayString(DeviceConfig::PortType(item.int_value >> 16));
+    if (const char *text = ToDisplayString(DeviceConfig::PortType(item.int_value >> 16));
         text != nullptr)
       rc.right = row_renderer.DrawRightColumn(canvas, rc, text);
 
@@ -44,7 +44,7 @@ public:
   }
 
 private:
-  static const TCHAR *ToDisplayString(DeviceConfig::PortType type) noexcept {
+  static const char *ToDisplayString(DeviceConfig::PortType type) noexcept {
     switch (type) {
     case DeviceConfig::PortType::RFCOMM:
       return _T("Bluetooth");
@@ -282,7 +282,7 @@ PortPickerWidget::OnDetectedNotification() noexcept
 #endif
 
 bool
-PortPicker(DataFieldEnum &df, const TCHAR *caption) noexcept
+PortPicker(DataFieldEnum &df, const char *caption) noexcept
 {
   TWidgetDialog<PortPickerWidget> dialog(WidgetDialog::Full{},
                                          UIGlobals::GetMainWindow(),

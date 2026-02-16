@@ -5,7 +5,7 @@
 #include "Message.hpp"
 
 void
-PopupOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
+PopupOperationEnvironment::SetErrorMessage(const char *text) noexcept
 {
   Message::AddMessage(text);
 }

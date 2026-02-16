@@ -48,7 +48,7 @@ private:
   void CommitLine(std::string_view line);
 
   void WriteLine(const char *line);
-  void WriteLine(const char *a, const TCHAR *b);
+  void WriteLine(const char *a, const char *b);
 
   static const char *GetHFFXARecord();
   static const char *GetIRecord();
@@ -62,20 +62,20 @@ public:
    * alphanumeric characters (plain ASCII)
    */
   void WriteHeader(const BrokenDateTime &date_time,
-                   const TCHAR *pilot_name,
-                   const TCHAR *copilot_name,
-                   const TCHAR *aircraft_model,
-                   const TCHAR *aircraft_registration,
-                   const TCHAR *competition_id,
-                   const char *logger_id, const TCHAR *driver_name,
+                   const char *pilot_name,
+                   const char *copilot_name,
+                   const char *aircraft_model,
+                   const char *aircraft_registration,
+                   const char *competition_id,
+                   const char *logger_id, const char *driver_name,
                    bool simulator);
 
-  void AddDeclaration(const GeoPoint &location, const TCHAR *ID);
+  void AddDeclaration(const GeoPoint &location, const char *ID);
   void StartDeclaration(const BrokenDateTime &date_time,
                         const int number_of_turnpoints);
   void EndDeclaration();
 
-  void LoggerNote(const TCHAR *text);
+  void LoggerNote(const char *text);
 
   void LogPoint(const IGCFix &fix, int epe, int satellites);
   void LogPoint(const NMEAInfo &gps_info);

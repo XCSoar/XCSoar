@@ -25,7 +25,7 @@
 #include "Look/DialogLook.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
-static const TCHAR *const captions[] = {
+static const char *const captions[] = {
   _T(" 1 Hardware"),
   _T(" 2 Calibration"),
   _T(" 3 Audio Modes"),

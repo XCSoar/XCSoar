@@ -9,7 +9,7 @@
 
 struct UnitDescriptor
 {
-  const TCHAR *name;
+  const char *name;
   double factor_to_user;
   double offset_to_user;
 };
@@ -28,7 +28,7 @@ extern const UnitDescriptor unit_descriptors[];
  * @return The name of the given Unit (e.g. "km" or "ft")
  */
 [[gnu::const]]
-const TCHAR *
+const char *
 GetUnitName(Unit unit) noexcept;
 
 };

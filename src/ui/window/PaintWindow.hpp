@@ -29,12 +29,12 @@ public:
     Create(&parent, rc, style);
   }
 #else /* USE_WINUSER */
-  void Create(ContainerWindow *parent, const TCHAR *cls, PixelRect rc,
+  void Create(ContainerWindow *parent, const char *cls, PixelRect rc,
               const WindowStyle style=WindowStyle()) noexcept {
     Window::Create(parent, cls, nullptr, rc, style);
   }
 
-  void Create(ContainerWindow &parent, const TCHAR *cls, PixelRect rc,
+  void Create(ContainerWindow &parent, const char *cls, PixelRect rc,
               const WindowStyle style=WindowStyle()) noexcept {
     Create(&parent, cls, rc, style);
   }

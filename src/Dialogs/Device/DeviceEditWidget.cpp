@@ -97,8 +97,8 @@ FillEngineType(DataFieldEnum &dfe) noexcept
 }
 
 static bool
-EditPortCallback(const TCHAR *caption, DataField &df,
-                 [[maybe_unused]] const TCHAR *help_text) noexcept
+EditPortCallback(const char *caption, DataField &df,
+                 [[maybe_unused]] const char *help_text) noexcept
 {
   return PortPicker((DataFieldEnum &)df, caption);
 }
@@ -142,7 +142,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
 static bool
 SupportsBulkBaudRate(const DataField &df) noexcept
 {
-  const TCHAR *driver_name = df.GetAsString();
+  const char *driver_name = df.GetAsString();
   if (driver_name == nullptr)
     return false;
 
@@ -157,7 +157,7 @@ SupportsBulkBaudRate(const DataField &df) noexcept
 static bool
 CanReceiveSettings(const DataField &df) noexcept
 {
-  const TCHAR *driver_name = df.GetAsString();
+  const char *driver_name = df.GetAsString();
   if (driver_name == nullptr)
     return false;
 
@@ -172,7 +172,7 @@ CanReceiveSettings(const DataField &df) noexcept
 static bool
 CanSendSettings(const DataField &df) noexcept
 {
-  const TCHAR *driver_name = df.GetAsString();
+  const char *driver_name = df.GetAsString();
   if (driver_name == nullptr)
     return false;
 
@@ -187,7 +187,7 @@ CanSendSettings(const DataField &df) noexcept
 static bool
 CanPassThrough(const DataField &df) noexcept
 {
-  const TCHAR *driver_name = df.GetAsString();
+  const char *driver_name = df.GetAsString();
   if (driver_name == nullptr)
     return false;
 

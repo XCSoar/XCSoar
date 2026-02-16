@@ -24,7 +24,7 @@ static constexpr const char *type_names[] = {
   "nb_cosde_ome",
 };
 
-static constexpr const TCHAR *type_labels[] = {
+static constexpr const char *type_labels[] = {
   _T("Vertikal"),
 };
 
@@ -39,7 +39,7 @@ static constexpr const char *area_names[] = {
   "sued",
 };
 
-static constexpr const TCHAR *area_labels[] = {
+static constexpr const char *area_labels[] = {
   _T("Nord"),
   _T("Süd"),
 };

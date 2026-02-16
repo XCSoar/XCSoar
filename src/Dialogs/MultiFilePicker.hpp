@@ -8,7 +8,7 @@
 
 class MultiFileDataField;
 
-bool MultiFilePicker(const TCHAR *caption, MultiFileDataField &df,
-                     const TCHAR *help_text = nullptr);
+bool MultiFilePicker(const char *caption, MultiFileDataField &df,
+                     const char *help_text = nullptr);
 
 #endif

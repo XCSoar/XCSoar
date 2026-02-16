@@ -21,7 +21,7 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
 
   if (flights.empty()) {
     auto center = rc.GetCenter();
-    const TCHAR *text = _T("No flights");
+    const char *text = _T("No flights");
     PixelSize size = canvas.CalcTextSize(text);
     canvas.DrawText(center - size / 2u, text);
     return;

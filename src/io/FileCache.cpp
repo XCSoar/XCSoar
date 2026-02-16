@@ -75,13 +75,13 @@ FileCache::FileCache(AllocatedPath &&_cache_path)
   :cache_path(std::move(_cache_path)) {}
 
 void
-FileCache::Flush(const TCHAR *name)
+FileCache::Flush(const char *name)
 {
   File::Delete(MakeCachePath(name));
 }
 
 std::unique_ptr<Reader>
-FileCache::Load(const TCHAR *name, Path original_path) noexcept
+FileCache::Load(const char *name, Path original_path) noexcept
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))
@@ -121,7 +121,7 @@ FileCache::Load(const TCHAR *name, Path original_path) noexcept
 }
 
 std::unique_ptr<FileOutputStream>
-FileCache::Save(const TCHAR *name, Path original_path)
+FileCache::Save(const char *name, Path original_path)
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))

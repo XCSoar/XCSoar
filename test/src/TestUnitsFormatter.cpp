@@ -12,7 +12,7 @@
 static void
 TestAltitude()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatAltitude()
   FormatAltitude(buffer, 1234, Unit::METER);
@@ -37,7 +37,7 @@ TestAltitude()
 static void
 TestRelativeAltitude()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatRelativeAltitude()
   FormatRelativeAltitude(buffer, 1234, Unit::METER);
@@ -64,7 +64,7 @@ TestRelativeAltitude()
 static void
 TestDistance()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatDistance()
   FormatDistance(buffer, 123.4, Unit::METER);
@@ -137,7 +137,7 @@ TestDistance()
 static void
 TestSmallDistance()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatSmallDistance()
   FormatSmallDistance(buffer, 123.4, Unit::METER);
@@ -205,12 +205,12 @@ TestSmallDistance()
 
 static void
 TestDistanceSmart(double value, Unit unit, Unit expected_unit,
-                  const TCHAR *expected_output_with_unit,
-                  const TCHAR *expected_output_without_unit,
+                  const char *expected_output_with_unit,
+                  const char *expected_output_without_unit,
                   double small_unit_threshold = 2500,
                   double precision_threshold = 100)
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   ok1(FormatDistanceSmart(buffer, value, unit, true, small_unit_threshold,
                           precision_threshold) == expected_unit);
@@ -341,7 +341,7 @@ TestDistanceSmart()
 static void
 TestSpeed()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatSpeed()
   FormatSpeed(buffer, 23.46, Unit::METER_PER_SECOND);
@@ -399,7 +399,7 @@ TestSpeed()
 static void
 TestVerticalSpeed()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatVerticalSpeed()
   FormatVerticalSpeed(buffer, 1.42, Unit::METER_PER_SECOND);
@@ -430,7 +430,7 @@ TestVerticalSpeed()
 static void
 TestTemperature()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatTemperature()
   FormatTemperature(buffer, 293.93, Unit::KELVIN);
@@ -463,7 +463,7 @@ TestTemperature()
 static void
 TestPressure()
 {
-  TCHAR buffer[256];
+  char buffer[256];
 
   // Test FormatPressure()
   FormatPressure(buffer, AtmosphericPressure::HectoPascal(1013.25),

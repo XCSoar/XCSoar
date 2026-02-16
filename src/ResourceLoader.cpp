@@ -29,7 +29,7 @@ ResourceLoader::Init(HINSTANCE hInstance)
 #endif /* !WIN32 */
 
 ResourceLoader::Data
-ResourceLoader::Load(const TCHAR *name, [[maybe_unused]] const TCHAR *type)
+ResourceLoader::Load(const char *name, [[maybe_unused]] const char *type)
 {
 #ifdef USE_WIN32_RESOURCES
   assert(ResourceLoaderInstance != nullptr);

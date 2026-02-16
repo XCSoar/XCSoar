@@ -27,14 +27,14 @@ PluggableOperationEnvironment::Sleep(std::chrono::steady_clock::duration duratio
 }
 
 void
-PluggableOperationEnvironment::SetErrorMessage(const TCHAR *text) noexcept
+PluggableOperationEnvironment::SetErrorMessage(const char *text) noexcept
 {
   if (other != nullptr)
     other->SetErrorMessage(text);
 }
 
 void
-PluggableOperationEnvironment::SetText(const TCHAR *text) noexcept
+PluggableOperationEnvironment::SetText(const char *text) noexcept
 {
   if (other != nullptr)
     other->SetText(text);

@@ -20,7 +20,7 @@ static constexpr Angle ANGLE_FACTOR =
  * @return The decoded value
  */
 static unsigned
-GetValueFromTeamCode(const TCHAR *code, unsigned length)
+GetValueFromTeamCode(const char *code, unsigned length)
 {
   unsigned val = 0;
   unsigned position = 0;
@@ -63,12 +63,12 @@ CountDigits(unsigned value)
  * @param n_digits Number of chars for the teamcode
  */
 static void
-NumberToTeamCode(unsigned value, TCHAR *code, unsigned n_digits)
+NumberToTeamCode(unsigned value, char *code, unsigned n_digits)
 {
   if (n_digits == 0)
     n_digits = CountDigits(value);
 
-  TCHAR *p = code + n_digits;
+  char *p = code + n_digits;
   *p-- = _T('\0');
 
   do {
@@ -76,8 +76,8 @@ NumberToTeamCode(unsigned value, TCHAR *code, unsigned n_digits)
     value /= BASE;
 
     *p = digit_value < 10
-      ? TCHAR('0' + digit_value)
-      : TCHAR('A' + digit_value - 10);
+      ? char('0' + digit_value)
+      : char('A' + digit_value - 10);
   } while (--p >= code);
 }
 
@@ -87,7 +87,7 @@ NumberToTeamCode(unsigned value, TCHAR *code, unsigned n_digits)
  * @param code The teamcode (pointer)
  */
 static void
-ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
+ConvertBearingToTeamCode(const Angle bearing, char *code)
 {
   const unsigned value = uround(bearing.AsBearing().Native()
                                 / ANGLE_FACTOR.Native());
@@ -122,7 +122,7 @@ TeamCode::Update(Angle bearing, double range)
 }
 
 void
-TeamCode::Update(const TCHAR* _code)
+TeamCode::Update(const char* _code)
 {
   code = _code;
 }

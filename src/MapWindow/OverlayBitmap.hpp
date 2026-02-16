@@ -75,7 +75,7 @@ public:
   }
 
   /* virtual methods from class MapOverlay */
-  const TCHAR *GetLabel() const noexcept override {
+  const char *GetLabel() const noexcept override {
     return label.c_str();
   }
 

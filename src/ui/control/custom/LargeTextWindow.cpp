@@ -36,7 +36,7 @@ LargeTextWindow::GetVisibleRows() const
 unsigned
 LargeTextWindow::GetRowCount() const
 {
-  const TCHAR *str = value.c_str();
+  const char *str = value.c_str();
   unsigned row_count = 1;
   while ((str = StringFind(str, _T('\n'))) != nullptr) {
     str++;
@@ -191,7 +191,7 @@ LargeTextWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 }
 
 void
-LargeTextWindow::SetText(const TCHAR *text)
+LargeTextWindow::SetText(const char *text)
 {
   if (text != nullptr)
     value = text;

@@ -18,7 +18,7 @@
 #include <tchar.h>
 
 [[gnu::const]]
-static const TCHAR *
+static const char *
 GetName(TaskPointType type, bool mode_optional_start)
 {
   switch (type) {
@@ -42,7 +42,7 @@ GetName(TaskPointType type, bool mode_optional_start)
 }
 
 [[gnu::pure]]
-static const TCHAR *
+static const char *
 GetName(const OrderedTaskPoint &tp, bool mode_optional_start)
 {
   return GetName(tp.GetType(), mode_optional_start);
@@ -166,7 +166,7 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
 
 static void
 Serialise(WritableDataNode &node, const OrderedTaskPoint &data,
-          const TCHAR *name)
+          const char *name)
 {
   // do nothing
   auto child = node.AppendChild("Point");
@@ -187,7 +187,7 @@ static void
 Serialise(WritableDataNode &node, const OrderedTaskPoint &tp,
           bool mode_optional_start)
 {
-  const TCHAR *name = GetName(tp, mode_optional_start);
+  const char *name = GetName(tp, mode_optional_start);
   assert(name != nullptr);
   Serialise(node, tp, name);
 }
@@ -210,7 +210,7 @@ GetHeightRef(AltitudeReference height_ref)
 }
 
 [[gnu::const]]
-static const TCHAR *
+static const char *
 GetTaskFactoryType(TaskFactoryType type)
 {
   switch(type) {

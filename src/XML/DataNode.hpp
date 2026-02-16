@@ -198,6 +198,6 @@ public:
   void SetAttribute(const char *name, RoughTime value) noexcept;
 
   /* just here to prevent implicit pointer-to-bool casts
-     (e.g. TCHAR/wchar_t strings) */
+     (e.g. char/wchar_t strings) */
   void SetAttribute(const char *name, const auto *value) noexcept = delete;
 };

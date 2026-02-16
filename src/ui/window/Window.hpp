@@ -240,7 +240,7 @@ public:
   void Create(ContainerWindow *parent, const PixelRect rc,
               const WindowStyle window_style=WindowStyle()) noexcept;
 #else
-  void Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
+  void Create(ContainerWindow *parent, const char *cls, const char *text,
               const PixelRect rc,
               const WindowStyle window_style=WindowStyle()) noexcept;
 

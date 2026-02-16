@@ -47,8 +47,8 @@ class Waypoints {
     WaypointPtr Get(tstring_view name) const noexcept;
 
     void VisitNormalisedPrefix(tstring_view prefix, const WaypointVisitor &visitor) const;
-    TCHAR *SuggestNormalisedPrefix(tstring_view prefix,
-                                   TCHAR *dest, size_t max_length) const noexcept;
+    char *SuggestNormalisedPrefix(tstring_view prefix,
+                                   char *dest, size_t max_length) const noexcept;
     void Add(WaypointPtr wp) noexcept;
     void Remove(const WaypointPtr &wp) noexcept;
   };
@@ -296,8 +296,8 @@ public:
    * prefix.
    */
   [[gnu::pure]]
-  TCHAR *SuggestNamePrefix(tstring_view prefix,
-                           TCHAR *dest, size_t max_length) const noexcept {
+  char *SuggestNamePrefix(tstring_view prefix,
+                           char *dest, size_t max_length) const noexcept {
     return name_tree.SuggestNormalisedPrefix(prefix, dest, max_length);
   }
 

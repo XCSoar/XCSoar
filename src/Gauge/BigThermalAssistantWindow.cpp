@@ -31,7 +31,7 @@ BigThermalAssistantWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
   if (dragging) {
     StopDragging();
 
-    const TCHAR *gesture = gestures.Finish();
+    const char *gesture = gestures.Finish();
     if (gesture && InputEvents::processGesture(gesture))
       return true;
   }

@@ -11,5 +11,5 @@
 class PopupOperationEnvironment : public QuietOperationEnvironment {
 public:
   /* virtual methods from class OperationEnvironment */
-  void SetErrorMessage(const TCHAR *text) noexcept override;
+  void SetErrorMessage(const char *text) noexcept override;
 };

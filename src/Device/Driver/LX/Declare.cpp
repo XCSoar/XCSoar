@@ -16,7 +16,7 @@
  * len characters with last char = '\0'
  */
 static void
-copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
+copy_space_padded(char dest[], const char src[], unsigned int len)
 {
   const unsigned slen = _tcslen(src);
   for(unsigned i = 0; i < (len - 1); i++) {

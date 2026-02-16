@@ -16,7 +16,7 @@ class ProtectedTaskManager;
 class TaskManager;
 
 void
-BarographCaption(TCHAR *buffer, const FlightStatistics &fs);
+BarographCaption(char *buffer, const FlightStatistics &fs);
 
 void
 RenderBarographSpark(Canvas &canvas, const PixelRect rc,

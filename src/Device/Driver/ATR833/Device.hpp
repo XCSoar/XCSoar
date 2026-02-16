@@ -22,10 +22,10 @@ public:
   bool DataReceived(std::span<const std::byte> s,
                     NMEAInfo &info) noexcept override;
   bool PutActiveFrequency(RadioFrequency frequency,
-                          const TCHAR *name,
+                          const char *name,
                           OperationEnvironment &env) override;
   bool PutStandbyFrequency(RadioFrequency frequency,
-                           const TCHAR *name,
+                           const char *name,
                            OperationEnvironment &env) override;
   bool ExchangeRadioFrequencies(OperationEnvironment &env, NMEAInfo &info) override;
   bool EnableNMEA(OperationEnvironment &env) override;

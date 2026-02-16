@@ -15,7 +15,7 @@ class GlidePolar;
 #include <tchar.h>
 
 void
-TaskSpeedCaption(TCHAR *sTmp,
+TaskSpeedCaption(char *sTmp,
                  const FlightStatistics &fs,
                  const GlidePolar &glide_polar);
 

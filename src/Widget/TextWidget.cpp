@@ -9,7 +9,7 @@
 #include "Look/DialogLook.hpp"
 
 void
-TextWidget::SetText(const TCHAR *text) noexcept
+TextWidget::SetText(const char *text) noexcept
 {
   WndFrame &w = (WndFrame &)GetWindow();
   w.SetText(text);

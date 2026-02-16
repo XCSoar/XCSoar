@@ -17,7 +17,7 @@ template<typename T>
 [[nodiscard]]
 std::optional<T>
 ShowCoFunctionDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
-                     const TCHAR *caption, Co::Task<T> &&task,
+                     const char *caption, Co::Task<T> &&task,
                      PluggableOperationEnvironment *env)
 {
   ReturnValue<T> value;

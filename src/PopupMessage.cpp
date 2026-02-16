@@ -19,7 +19,7 @@ using std::max;
 void
 PopupMessage::Message::Set(Type _type,
                            std::chrono::steady_clock::duration _tshow,
-                           const TCHAR *_text,
+                           const char *_text,
                            std::chrono::steady_clock::time_point now) noexcept
 {
   type = _type;
@@ -242,7 +242,7 @@ PopupMessage::GetEmptySlot() noexcept
 
 void
 PopupMessage::AddMessage(std::chrono::steady_clock::duration tshow, Type type,
-                         const TCHAR *Text) noexcept
+                         const char *Text) noexcept
 {
   const auto now = std::chrono::steady_clock::now();
 
@@ -310,7 +310,7 @@ PopupMessage::Acknowledge(Type type) noexcept
 // into AddMessage ?
 
 void
-PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data) noexcept
+PopupMessage::AddMessage(const char* text, const char *data) noexcept
 {
   const std::lock_guard lock{mutex};
 
@@ -321,7 +321,7 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data) noexcept
 
   // TODO code: consider what is a sensible size?
   if (msg.visible) {
-    TCHAR msgcache[1024];
+    char msgcache[1024];
     _tcscpy(msgcache, text);
     if (data != nullptr) {
       _tcscat(msgcache, _T(" "));

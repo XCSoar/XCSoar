@@ -16,7 +16,7 @@
  * @return false if there is at least one ASCII letter in the string
  */
 static constexpr bool
-LacksAlphaASCII(const TCHAR *s) noexcept
+LacksAlphaASCII(const char *s) noexcept
 {
   for (; *s != 0; ++s)
     if (IsAlphaASCII(*s))
@@ -31,9 +31,9 @@ LacksAlphaASCII(const TCHAR *s) noexcept
  * @return the translated string or nullptr if the buffer is too small
  */
 [[gnu::pure]]
-static const TCHAR *
-GetTextN(const TCHAR *src, const TCHAR *src_end,
-         TCHAR *buffer, size_t buffer_size) noexcept
+static const char *
+GetTextN(const char *src, const char *src_end,
+         char *buffer, size_t buffer_size) noexcept
 {
   if (src == src_end)
     /* gettext("") returns the PO header, and thus we need to exclude
@@ -53,10 +53,10 @@ GetTextN(const TCHAR *src, const TCHAR *src_end,
 }
 
 ButtonLabel::Expanded
-ButtonLabel::Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept
+ButtonLabel::Expand(const char *text, std::span<char> buffer) noexcept
 {
   Expanded expanded;
-  const TCHAR *dollar;
+  const char *dollar;
 
   if (text == nullptr || *text == _T('\0') || *text == _T(' ')) {
     expanded.visible = false;
@@ -65,15 +65,15 @@ ButtonLabel::Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept
     /* no macro, we can just translate the text */
     expanded.visible = true;
     expanded.enabled = true;
-    const TCHAR *nl = StringFind(text, '\n');
+    const char *nl = StringFind(text, '\n');
     if (nl != nullptr && LacksAlphaASCII(nl + 1)) {
       /* Quick hack for skipping the translation for second line of a two line
          label with only digits and punctuation in the second line, e.g.
          for menu labels like "Config\n2/3" */
 
       /* copy the text up to the '\n' to a new buffer and translate it */
-      TCHAR translatable[256];
-      const TCHAR *translated = GetTextN(text, nl, translatable,
+      char translatable[256];
+      const char *translated = GetTextN(text, nl, translatable,
                                          ARRAY_SIZE(translatable));
       if (translated == nullptr) {
         /* buffer too small: keep it untranslated */
@@ -84,20 +84,20 @@ ButtonLabel::Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept
       /* concatenate the translated text and the part starting with '\n' */
       try {
         expanded.text = BuildString(buffer, translated, nl);
-      } catch (BasicStringBuilder<TCHAR>::Overflow) {
+      } catch (BasicStringBuilder<char>::Overflow) {
         expanded.text = gettext(text);
       }
     } else
       expanded.text = gettext(text);
     return expanded;
   } else {
-    const TCHAR *macros = dollar;
+    const char *macros = dollar;
     /* backtrack until the first non-whitespace character, because we
        don't want to translate whitespace between the text and the
        macro */
     macros = StripRight(text, macros);
 
-    TCHAR s[100];
+    char s[100];
     expanded.enabled = !ExpandMacros(text, std::span{s});
     if (s[0] == _T('\0') || s[0] == _T(' ')) {
       expanded.visible = false;
@@ -106,8 +106,8 @@ ButtonLabel::Expand(const TCHAR *text, std::span<TCHAR> buffer) noexcept
 
     /* copy the text (without trailing whitespace) to a new buffer and
        translate it */
-    TCHAR translatable[256];
-    const TCHAR *translated = GetTextN(text, macros, translatable,
+    char translatable[256];
+    const char *translated = GetTextN(text, macros, translatable,
                                        ARRAY_SIZE(translatable));
     if (translated == nullptr) {
       /* buffer too small: fail */

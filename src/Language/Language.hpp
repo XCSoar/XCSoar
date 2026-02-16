@@ -36,7 +36,7 @@ void DisallowLanguage();
 #endif
 
 [[gnu::const]]
-const TCHAR* gettext(const TCHAR* text);
+const char* gettext(const char* text);
 
 /**
  * For source compatibility with GNU gettext.

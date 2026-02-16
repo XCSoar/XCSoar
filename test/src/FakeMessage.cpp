@@ -6,8 +6,8 @@
 #include <stdio.h>
 
 void
-Message::AddMessage(const TCHAR *text,
-                    [[maybe_unused]] const TCHAR *data) noexcept
+Message::AddMessage(const char *text,
+                    [[maybe_unused]] const char *data) noexcept
 {
   _ftprintf(stderr, _T("%s\n"), text);
 }

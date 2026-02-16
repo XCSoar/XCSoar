@@ -21,7 +21,7 @@
 namespace UI {
 
 void
-TopWindow::CreateNative(const TCHAR *text, PixelSize size,
+TopWindow::CreateNative(const char *text, PixelSize size,
                         TopWindowStyle style)
 {
   const auto x_display = display.GetXDisplay();

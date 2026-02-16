@@ -24,9 +24,6 @@
 #define PRODUCT_NAME_LC "xcsoar"
 #endif
 
-/* TCHAR version for Windows API */
-#define PRODUCT_NAME_T _T(PRODUCT_NAME)
-
 /* ASCII version for help text and logging */
 #define PRODUCT_NAME_A PRODUCT_NAME
 

@@ -10,13 +10,13 @@
 class Widget;
 
 struct TabMenuPage {
-  const TCHAR *menu_caption;
+  const char *menu_caption;
 
   std::unique_ptr<Widget> (*Load)();
 };
 
 struct TabMenuGroup {
-  const TCHAR *caption;
+  const char *caption;
 
   const TabMenuPage *pages;
 };

@@ -14,8 +14,8 @@
  */
 struct StaticEnumChoice {
   unsigned id;
-  const TCHAR *display_string;
-  const TCHAR *help;
+  const char *display_string;
+  const char *help;
 
   constexpr StaticEnumChoice(std::nullptr_t n) noexcept
     :id(0), display_string(n), help(n) {}
@@ -23,8 +23,8 @@ struct StaticEnumChoice {
   template<typename T>
   requires(std::is_same_v<T, unsigned> || std::is_same_v<T, int> ||
            std::is_enum_v<T>)
-  constexpr StaticEnumChoice(T _id, const TCHAR *_display_string,
-                             const TCHAR *_help=nullptr) noexcept
+  constexpr StaticEnumChoice(T _id, const char *_display_string,
+                             const char *_help=nullptr) noexcept
     :id(static_cast<unsigned>(_id)), display_string(_display_string), help(_help) {}
 };
 
@@ -32,9 +32,9 @@ class DataFieldEnum final : public DataField {
 public:
   class Entry {
     unsigned id;
-    TCHAR *string;
-    TCHAR *display_string;
-    TCHAR *help;
+    char *string;
+    char *display_string;
+    char *help;
 
   public:
     Entry() noexcept:string(nullptr), display_string(nullptr), help(nullptr) {}
@@ -67,23 +67,23 @@ public:
       return id;
     }
 
-    const TCHAR *GetString() const noexcept {
+    const char *GetString() const noexcept {
       return string;
     }
 
-    const TCHAR *GetDisplayString() const noexcept {
+    const char *GetDisplayString() const noexcept {
       return display_string;
     }
 
-    const TCHAR *GetHelp() const noexcept {
+    const char *GetHelp() const noexcept {
       return help;
     }
 
-    void SetString(const TCHAR *_string) noexcept;
-    void SetDisplayString(const TCHAR *_string) noexcept;
-    void Set(unsigned _id, const TCHAR *_string,
-             const TCHAR *_display_string=nullptr,
-             const TCHAR *_help=nullptr) noexcept;
+    void SetString(const char *_string) noexcept;
+    void SetDisplayString(const char *_string) noexcept;
+    void Set(unsigned _id, const char *_string,
+             const char *_display_string=nullptr,
+             const char *_help=nullptr) noexcept;
   };
 
 private:
@@ -98,13 +98,13 @@ public:
   unsigned GetValue() const noexcept;
 
   [[gnu::pure]]
-  bool Exists(const TCHAR *text) const noexcept {
+  bool Exists(const char *text) const noexcept {
     return Find(text) >= 0;
   }
 
-  void replaceEnumText(std::size_t index, const TCHAR *Text) noexcept;
+  void replaceEnumText(std::size_t index, const char *Text) noexcept;
 
-  void SetDisplayString(std::size_t index, const TCHAR *_string) noexcept {
+  void SetDisplayString(std::size_t index, const char *_string) noexcept {
     entries[index].SetDisplayString(_string);
   }
 
@@ -117,9 +117,9 @@ public:
     value = 0;
   }
 
-  bool AddChoice(unsigned id, const TCHAR *text,
-                 const TCHAR *display_string=nullptr,
-                 const TCHAR *help=nullptr) noexcept;
+  bool AddChoice(unsigned id, const char *text,
+                 const char *display_string=nullptr,
+                 const char *help=nullptr) noexcept;
 
   /**
    * Add choices from the specified nullptr-terminated list (the last
@@ -128,19 +128,19 @@ public:
    */
   void AddChoices(const StaticEnumChoice *list) noexcept;
 
-  bool addEnumText(const TCHAR *text, unsigned id,
-                   const TCHAR *help=nullptr) noexcept {
+  bool addEnumText(const char *text, unsigned id,
+                   const char *help=nullptr) noexcept {
     return AddChoice(id, text, nullptr, help);
   }
 
-  unsigned addEnumText(const TCHAR *Text, const TCHAR *display_string=nullptr,
-                       const TCHAR *ItemHelpText=nullptr) noexcept;
-  void addEnumTexts(const TCHAR *const*list) noexcept;
+  unsigned addEnumText(const char *Text, const char *display_string=nullptr,
+                       const char *ItemHelpText=nullptr) noexcept;
+  void addEnumTexts(const char *const*list) noexcept;
 
   /**
    * @return help of current enum item or nullptr if current item has no help
    */
-  const TCHAR *GetHelp() const noexcept;
+  const char *GetHelp() const noexcept;
 
   /**
    * @param value True if display item help in text box below picker
@@ -165,7 +165,7 @@ public:
    * @return false if an item with the specified text was not found,
    * and therefore the value was not changed
    */
-  bool SetValue(const TCHAR *text) noexcept;
+  bool SetValue(const char *text) noexcept;
 
   bool ModifyValue(unsigned new_value) noexcept;
 
@@ -175,7 +175,7 @@ public:
     return ModifyValue(unsigned(value));
   }
 
-  bool ModifyValue(const TCHAR *text) noexcept;
+  bool ModifyValue(const char *text) noexcept;
 
   /**
    * Set the value to the specified string.  If there is no choice
@@ -183,7 +183,7 @@ public:
    *
    * @return the new integer value
    */
-  int SetStringAutoAdd(const TCHAR *text) noexcept;
+  int SetStringAutoAdd(const char *text) noexcept;
 
   void Sort(std::size_t startindex = 0) noexcept;
 
@@ -199,17 +199,17 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  const TCHAR *GetAsString() const noexcept override;
-  const TCHAR *GetAsDisplayString() const noexcept override;
-  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) noexcept override;
+  const char *GetAsString() const noexcept override;
+  const char *GetAsDisplayString() const noexcept override;
+  ComboList CreateComboList(const char *reference) const noexcept override;
+  void SetFromCombo(int iDataFieldIndex, const char *sValue) noexcept override;
 
 protected:
   /**
    * Finds an entry with the specified text.  Returns -1 if not found.
    */
   [[gnu::pure]]
-  int Find(const TCHAR *text) const noexcept;
+  int Find(const char *text) const noexcept;
 
   [[gnu::pure]]
   int Find(unsigned id) const noexcept;

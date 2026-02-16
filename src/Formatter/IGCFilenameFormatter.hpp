@@ -7,9 +7,9 @@
 
 struct BrokenDate;
 
-void FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
-                       TCHAR manufacturer, const TCHAR *logger_id,
+void FormatIGCFilename(char* buffer, const BrokenDate &date,
+                       char manufacturer, const char *logger_id,
                        unsigned flight_number);
-void FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
-                           const TCHAR *manufacturer, const TCHAR *logger_id,
+void FormatIGCFilenameLong(char* buffer, const BrokenDate &date,
+                           const char *manufacturer, const char *logger_id,
                            unsigned flight_number);

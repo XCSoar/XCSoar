@@ -8,5 +8,5 @@
 struct BrokenDate;
 
 bool
-DateEntryDialog(const TCHAR *caption, BrokenDate &value,
+DateEntryDialog(const char *caption, BrokenDate &value,
                 bool nullable=false);

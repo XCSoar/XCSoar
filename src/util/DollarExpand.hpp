@@ -18,7 +18,7 @@
  * buffer is too small, then the output is truncated silently.
  */
 void
-DollarExpand(const TCHAR *src, std::span<TCHAR> dest,
+DollarExpand(const char *src, std::span<char> dest,
              std::invocable<tstring_view> auto lookup_function) noexcept
 {
   while (true) {
@@ -46,7 +46,7 @@ DollarExpand(const TCHAR *src, std::span<TCHAR> dest,
     /* look up the name and copy the result to the destination
        buffer */
 
-    const TCHAR *const expansion = lookup_function(name);
+    const char *const expansion = lookup_function(name);
     if (expansion != nullptr) {
       const tstring_view ex{expansion};
       if (ex.size() >= dest.size())

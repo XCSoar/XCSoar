@@ -13,7 +13,7 @@
 
 void
 MultiSelectListWidget::DrawCheckboxText(Canvas &canvas, const PixelRect &rc,
-                                        const TCHAR *text, bool selected) noexcept
+                                        const char *text, bool selected) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   const bool focused = !HasCursorKeys() || GetList().HasFocus();

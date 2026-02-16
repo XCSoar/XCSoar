@@ -16,7 +16,7 @@
 #include "GradientRenderer.hpp"
 
 void
-ClimbChartCaption(TCHAR *sTmp,
+ClimbChartCaption(char *sTmp,
                   const FlightStatistics &fs)
 {
   const std::lock_guard lock{fs.mutex};

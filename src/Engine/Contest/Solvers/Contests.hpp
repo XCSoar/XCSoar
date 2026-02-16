@@ -9,5 +9,5 @@
 enum class Contest : uint8_t;
 
 [[gnu::const]]
-const TCHAR *
+const char *
 ContestToString(Contest contest) noexcept;

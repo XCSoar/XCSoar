@@ -21,7 +21,7 @@ class ProgressWidget final : public WindowWidget, MessageOperationEnvironment {
 
 public:
   explicit ProgressWidget(PluggableOperationEnvironment &_env,
-                          const TCHAR *_text) noexcept
+                          const char *_text) noexcept
     :env(_env), text(_text) {}
 
   /* virtual methods from class Widget */
@@ -32,7 +32,7 @@ public:
 
 private:
   /* virtual methods from class OperationEnvironment */
-  void SetText(const TCHAR *text) noexcept override;
+  void SetText(const char *text) noexcept override;
   void SetProgressRange(unsigned range) noexcept override;
   void SetProgressPosition(unsigned position) noexcept override;
 };

@@ -54,7 +54,7 @@ TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
 }
 
 void
-TrackingGlue::OnUserName(uint32_t user_id, const TCHAR *name)
+TrackingGlue::OnUserName(uint32_t user_id, const char *name)
 {
   const std::lock_guard lock{skylines_data.mutex};
   skylines_data.user_names[user_id] = name;

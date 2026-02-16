@@ -16,7 +16,7 @@ private:
   PeriodClock last_step;
   uint8_t speedup;
 
-  mutable TCHAR string_buffer[OUTBUFFERSIZE + 1];
+  mutable char string_buffer[OUTBUFFERSIZE + 1];
 
 protected:
   int SpeedUp(bool keyup) noexcept;
@@ -64,10 +64,10 @@ public:
   /* virtual methods from class DataField */
   void Inc() noexcept override;
   void Dec() noexcept override;
-  const TCHAR *GetAsString() const noexcept override;
-  const TCHAR *GetAsDisplayString() const noexcept override;
-  ComboList CreateComboList(const TCHAR *reference) const noexcept override;
-  void SetFromCombo(int data_field_index, const TCHAR *value_string) noexcept override;
+  const char *GetAsString() const noexcept override;
+  const char *GetAsDisplayString() const noexcept override;
+  ComboList CreateComboList(const char *reference) const noexcept override;
+  void SetFromCombo(int data_field_index, const char *value_string) noexcept override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, std::chrono::seconds value) const noexcept;

@@ -60,13 +60,13 @@ FindRemoteFile(const FileRepository &repository, const char *name)
 
 [[gnu::pure]]
 static bool
-CanDownload(const FileRepository &repository, const TCHAR *name)
+CanDownload(const FileRepository &repository, const char *name)
 {
   return FindRemoteFile(repository, name) != nullptr;
 }
 
 static bool
-UpdateAvailable(const FileRepository &repository, const TCHAR *name)
+UpdateAvailable(const FileRepository &repository, const char *name)
 {
   const AvailableFile *remote_file = FindRemoteFile(repository, name);
 
@@ -101,7 +101,7 @@ class ManagedFileListWidget
 
     DownloadStatus download_status;
 
-    void Set(const TCHAR *_name, const DownloadStatus *_download_status,
+    void Set(const char *_name, const DownloadStatus *_download_status,
              bool _failed, bool _out_of_date) {
       name = _name;
 
@@ -236,7 +236,7 @@ protected:
   }
 
   [[gnu::pure]]
-  int FindItem(const TCHAR *name) const noexcept;
+  int FindItem(const char *name) const noexcept;
 
   void LoadRepositoryFile();
   void RefreshList();
@@ -305,7 +305,7 @@ ManagedFileListWidget::Unprepare() noexcept
 }
 
 int
-ManagedFileListWidget::FindItem(const TCHAR *name) const noexcept
+ManagedFileListWidget::FindItem(const char *name) const noexcept
 {
   for (auto i = items.begin(), end = items.end(); i != end; ++i)
     if (StringIsEqual(i->name, name))
@@ -439,14 +439,14 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                     unsigned(file.download_status.position * 100
                              / file.download_status.size));
     } else {
-      TCHAR size[32];
+      char size[32];
       FormatByteSize(size, ARRAY_SIZE(size), file.download_status.position);
       text.Format(_T("%s (%s)"), _("Downloading"), size);
     }
 
     row_renderer.DrawRightFirstRow(canvas, rc, text);
   } else if (file.failed) {
-    const TCHAR *text = _("Error");
+    const char *text = _("Error");
     row_renderer.DrawRightFirstRow(canvas, rc, text);
   }
 
@@ -527,7 +527,7 @@ AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
     row_renderer.DrawSecondRow(canvas, rc, description);
 
   if (file.update_date.IsPlausible()) {
-    TCHAR string_buffer[21];
+    char string_buffer[21];
     FormatISO8601(string_buffer, file.update_date);
     row_renderer.DrawRightSecondRow(canvas, rc, string_buffer);
   }
@@ -764,7 +764,7 @@ ShowFileManager()
   }
 #endif
 
-  const TCHAR *message =
+  const char *message =
     _("The file manager is not available on this device.");
 
   ShowMessageBox(message, _("File Manager"), MB_OK);

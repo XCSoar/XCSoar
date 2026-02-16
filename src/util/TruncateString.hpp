@@ -28,6 +28,6 @@ CopyTruncateString(char *dest, size_t dest_size, const char *src);
  * copy
  * @return a pointer to the end of the destination string
  */
-TCHAR *
-CopyTruncateString(TCHAR *dest, size_t dest_size,
-                   const TCHAR *src, size_t truncate);
+char *
+CopyTruncateString(char *dest, size_t dest_size,
+                   const char *src, size_t truncate);

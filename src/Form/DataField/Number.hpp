@@ -12,10 +12,10 @@ protected:
   StaticString<32> display_format;
 
 public:
-  void SetFormat(const TCHAR *text) noexcept;
+  void SetFormat(const char *text) noexcept;
 
 protected:
   NumberDataField(Type type, bool support_combo,
-                  const TCHAR *edit_format, const TCHAR *display_format,
+                  const char *edit_format, const char *display_format,
                   DataFieldListener *listener=nullptr) noexcept;
 };

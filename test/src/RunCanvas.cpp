@@ -98,7 +98,7 @@ private:
       { width * 5, 3000 },
     };
 
-    const TCHAR *label;
+    const char *label;
     switch (page) {
     case 0:
       canvas.DrawSegment(center,

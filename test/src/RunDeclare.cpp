@@ -71,7 +71,7 @@ NMEAParser::TimeHasAdvanced([[maybe_unused]] TimeStamp this_time,
 }
 
 static Waypoint
-MakeWaypoint(const TCHAR *name, int altitude,
+MakeWaypoint(const char *name, int altitude,
              double longitude, double latitude)
 {
   Waypoint wp(GeoPoint(Angle::Degrees(longitude),
@@ -87,7 +87,7 @@ try {
   Args args(argc, argv, "[--through DRIVER0] DRIVER PORT BAUD");
 
   tstring _through_name;
-  const TCHAR *through_name = NULL;
+  const char *through_name = NULL;
 
   const char *a;
   while ((a = args.PeekNext()) != NULL && *a == '-') {
@@ -100,7 +100,7 @@ try {
   }
 
   tstring _driver_name = args.ExpectNextT();
-  const TCHAR *driver_name = _driver_name.c_str();
+  const char *driver_name = _driver_name.c_str();
   DebugPort debug_port(args);
   args.ExpectEnd();
 

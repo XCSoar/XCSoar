@@ -68,7 +68,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
 
   if (task) {
     if (!noAsk) {
-      TCHAR TaskMessage[1024];
+      char TaskMessage[1024];
       _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
       
       if (decl.Size()) {
@@ -117,7 +117,7 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 }
 
 void
-Logger::LoggerNote(const TCHAR *text)
+Logger::LoggerNote(const char *text)
 {
   const std::lock_guard protect{lock};
   logger.LoggerNote(text);

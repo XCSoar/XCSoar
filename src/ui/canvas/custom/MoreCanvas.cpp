@@ -54,9 +54,9 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
     ? UINT_MAX
     : (r.GetHeight() + skip - 1) / skip;
 
-  TCHAR *const duplicated = new TCHAR[text.size() + 1], *p = duplicated;
+  char *const duplicated = new char[text.size() + 1], *p = duplicated;
   unsigned lines = 1;
-  for (TCHAR ch : text) {
+  for (char ch : text) {
     if (ch == _T('\n')) {
       /* explicit line break */
 
@@ -82,7 +82,7 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
   // long, break it at character boundaries (e.g., for long paths).
   for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
     PixelSize sz = CalcTextSize(duplicated + i);
-    TCHAR *prev_p = nullptr;
+    char *prev_p = nullptr;
     const bool has_spaces = StringFind(duplicated + i, _T(' ')) != nullptr;
 
     // remove words from behind till line fits or no more space is found
@@ -98,7 +98,7 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
     // if line still doesn't fit and originally had no spaces, break at character boundary
     if (sz.width > r.GetWidth() && !has_spaces) {
       size_t line_start = i;
-      const TCHAR *line_ptr = duplicated + line_start;
+      const char *line_ptr = duplicated + line_start;
       size_t line_len_bytes = _tcslen(line_ptr);
       
 #ifndef UNICODE
@@ -119,19 +119,19 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
         size_t mid = (low + high) / 2;
         
 #ifndef UNICODE
-        // On non-Unicode platforms (TCHAR=char), use UTF-8 character boundaries
+        // On non-Unicode platforms (char=char), use UTF-8 character boundaries
         size_t byte_pos = TruncateStringUTF8(
           std::string_view(reinterpret_cast<const char *>(line_ptr), line_len_bytes),
           mid);
 #else
-        // On Unicode platforms (TCHAR=wchar_t), character = code unit
+        // On Unicode platforms (char=wchar_t), character = code unit
         size_t byte_pos = mid;
 #endif
         
         if (byte_pos > line_len_bytes)
           byte_pos = line_len_bytes;
         
-        TCHAR saved = duplicated[line_start + byte_pos];
+        char saved = duplicated[line_start + byte_pos];
         duplicated[line_start + byte_pos] = _T('\0');
         PixelSize test_sz = CalcTextSize(line_ptr);
         duplicated[line_start + byte_pos] = saved;

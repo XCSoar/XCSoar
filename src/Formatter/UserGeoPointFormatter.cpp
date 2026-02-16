@@ -20,20 +20,20 @@ SetUserCoordinateFormat(CoordinateFormat _fmt)
 }
 
 bool
-FormatLongitude(Angle longitude, TCHAR *buffer, size_t size)
+FormatLongitude(Angle longitude, char *buffer, size_t size)
 {
   return FormatLongitude(longitude, buffer, size, user_coordinate_format);
 }
 
 bool
-FormatLatitude(Angle latitude, TCHAR *buffer, size_t size)
+FormatLatitude(Angle latitude, char *buffer, size_t size)
 {
   return FormatLatitude(latitude, buffer, size, user_coordinate_format);
 }
 
-TCHAR *
-FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
-               TCHAR separator)
+char *
+FormatGeoPoint(const GeoPoint &location, char *buffer, size_t size,
+               char separator)
 {
   return FormatGeoPoint(location, buffer, size, user_coordinate_format,
                         separator);

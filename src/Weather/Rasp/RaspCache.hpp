@@ -44,14 +44,14 @@ public:
    * Returns the current map's name.
    */
   [[gnu::pure]]
-  const TCHAR *GetMapName() const;
+  const char *GetMapName() const;
 
   /**
    * Returns the human-readable name for the current RASP map, or
    * nullptr if no RASP map is enabled.
    */
   [[gnu::pure]]
-  const TCHAR *GetMapLabel() const;
+  const char *GetMapLabel() const;
 
   /**
    * Returns the index of the weather map being displayed.

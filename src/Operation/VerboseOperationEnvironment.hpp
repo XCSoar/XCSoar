@@ -15,7 +15,7 @@ public:
   void Hide() noexcept;
 
   /* virtual methods from class OperationEnvironment */
-  void SetText(const TCHAR *text) noexcept override;
+  void SetText(const char *text) noexcept override;
   void SetProgressRange(unsigned range) noexcept override;
   void SetProgressPosition(unsigned position) noexcept override;
 };

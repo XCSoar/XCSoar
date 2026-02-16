@@ -48,7 +48,7 @@ ThreadedOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration
 }
 
 void
-ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error) noexcept
+ThreadedOperationEnvironment::SetErrorMessage(const char *_error) noexcept
 {
   {
     const std::lock_guard lock{mutex};
@@ -59,7 +59,7 @@ ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error) noexcept
 }
 
 void
-ThreadedOperationEnvironment::SetText(const TCHAR *_text) noexcept
+ThreadedOperationEnvironment::SetText(const char *_text) noexcept
 {
   {
     const std::lock_guard lock{mutex};

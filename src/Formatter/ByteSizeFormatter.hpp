@@ -6,5 +6,5 @@
 #include <tchar.h>
 #include <cstddef>
 
-void FormatByteSize(TCHAR *buffer, size_t size,
+void FormatByteSize(char *buffer, size_t size,
                     unsigned long bytes, bool simple = false);

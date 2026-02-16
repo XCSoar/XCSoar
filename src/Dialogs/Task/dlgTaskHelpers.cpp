@@ -28,7 +28,7 @@
  * @return True if FAI shape
  */
 static bool
-TaskSummaryShape(const OrderedTask *task, TCHAR *text)
+TaskSummaryShape(const OrderedTask *task, char *text)
 {
   bool FAIShape = false;
   switch (task->TaskSize()) {
@@ -73,16 +73,16 @@ TaskSummaryShape(const OrderedTask *task, TCHAR *text)
   return FAIShape;
 }
 void
-OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
+OrderedTaskSummary(const OrderedTask *task, char *text, bool linebreaks)
 {
   const TaskStats &stats = task->GetStats();
-  TCHAR summary_shape[100];
+  char summary_shape[100];
   bool FAIShape = TaskSummaryShape(task, summary_shape);
   TaskValidationErrorSet validation_errors;
   if (FAIShape || task->GetFactoryType() == TaskFactoryType::FAI_GENERAL)
     validation_errors = task->GetFactory().ValidateFAIOZs();
 
-  TCHAR linebreak[3];
+  char linebreak[3];
   if (linebreaks) {
     linebreak[0] = '\n';
     linebreak[1] = 0;
@@ -127,8 +127,8 @@ OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks)
 }
 
 void
-OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
-                      unsigned index, TCHAR* buffer)
+OrderedTaskPointLabel(TaskPointType type, const char *name,
+                      unsigned index, char* buffer)
 {
   switch (type) {
   case TaskPointType::START:
@@ -153,7 +153,7 @@ OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
 }
 
 void
-OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
+OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
 {
   switch (ozp.GetShape()) {
   case ObservationZone::Shape::FAI_SECTOR:
@@ -217,7 +217,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 bool
 OrderedTaskSave(OrderedTask &task)
 {
-  TCHAR fname[69] = _T("");
+  char fname[69] = _T("");
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
 

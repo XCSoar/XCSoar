@@ -12,7 +12,7 @@
 #include "util/Macros.hpp"
 #include "Renderer/ChartRenderer.hpp"
 
-static const TCHAR *const chart_names[] = {
+static const char *const chart_names[] = {
   _T("Line"),
   _T("Line2"),
 };

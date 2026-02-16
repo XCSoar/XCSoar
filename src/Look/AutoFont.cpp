@@ -8,7 +8,7 @@
 #include <algorithm>
 
 void
-AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
+AutoSizeFont(FontDescription &d, unsigned width, const char *text)
 {
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.

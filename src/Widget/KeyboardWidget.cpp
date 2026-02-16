@@ -11,7 +11,7 @@
 #include <cassert>
 #include <string.h>
 
-static constexpr TCHAR keyboard_letters[] =
+static constexpr char keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 void
@@ -19,9 +19,9 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   PrepareSize(rc);
 
-  TCHAR caption[] = _T(" ");
+  char caption[] = _T(" ");
 
-  for (const TCHAR *i = keyboard_letters; !StringIsEmpty(i); ++i) {
+  for (const char *i = keyboard_letters; !StringIsEmpty(i); ++i) {
     caption[0] = *i;
     AddButton(parent, caption, *i);
   }
@@ -70,7 +70,7 @@ KeyboardWidget::Move(const PixelRect &rc) noexcept
 }
 
 void
-KeyboardWidget::SetAllowedCharacters(const TCHAR *allowed)
+KeyboardWidget::SetAllowedCharacters(const char *allowed)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].SetEnabled(allowed == nullptr ||
@@ -133,7 +133,7 @@ KeyboardWidget::ResizeButtons()
 
 void
 KeyboardWidget::MoveButtonsToRow(const PixelRect &rc,
-                                 const TCHAR *buttons, unsigned row,
+                                 const char *buttons, unsigned row,
                                  int offset)
 {
   if (StringIsEmpty(buttons))
@@ -191,7 +191,7 @@ KeyboardWidget::OnResize(const PixelRect &rc)
 
 void
 KeyboardWidget::AddButton(ContainerWindow &parent,
-                          const TCHAR *caption, unsigned ch)
+                          const char *caption, unsigned ch)
 {
   assert(num_buttons < MAX_BUTTONS);
 

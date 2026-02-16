@@ -64,7 +64,7 @@ try {
   Args args(argc, argv, "DRIVER PORT BAUD");
 
   tstring _driver_name = args.ExpectNextT();
-  const TCHAR *driver_name = _driver_name.c_str();
+  const char *driver_name = _driver_name.c_str();
   DebugPort debug_port(args);
   args.ExpectEnd();
 

@@ -208,7 +208,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const noexcept
   if (small)
     return;
 
-  const TCHAR* str = _("No Traffic");
+  const char* str = _("No Traffic");
   canvas.Select(look.no_traffic_font);
   PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.default_color);
@@ -276,7 +276,7 @@ FlarmTrafficWindow::PaintNoPositionTarget(Canvas &canvas,
   canvas.DrawCircle(target_point, dot_radius);
   // No position target - print exclamation mark in the middle over the dot
   if (!small) {
-    const TCHAR em[] = _T("!");
+    const char em[] = _T("!");
     const PixelSize text_size = canvas.CalcTextSize(em);
     const PixelPoint text_position {
       target_point.x - int(text_size.width / 2),
@@ -462,7 +462,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   canvas.Select(look.side_info_font);
 
   // Format string
-  TCHAR tmp[10];
+  char tmp[10];
 
   if (side_display_type == SideInfoType::VARIO)
     FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, false);

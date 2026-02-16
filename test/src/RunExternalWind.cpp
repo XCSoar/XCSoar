@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     if (basic.external_wind_available.Modified(last_available)) {
       last_available = basic.external_wind_available;
 
-      TCHAR time_buffer[32];
+      char time_buffer[32];
       FormatTime(time_buffer, basic.time);
 
       _tprintf(_T("%s %d %g\n"),

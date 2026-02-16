@@ -25,7 +25,7 @@ enum Controls {
 };
 
 [[gnu::pure]]
-static const TCHAR *
+static const char *
 GetGPSStatus(const NMEAInfo &basic) noexcept
 {
   if (!basic.alive)
@@ -38,7 +38,7 @@ GetGPSStatus(const NMEAInfo &basic) noexcept
     return N_("3D fix");
 }
 
-static const TCHAR *const net_state_strings[] = {
+static const char *const net_state_strings[] = {
   N_("Unknown"),
   N_("Disconnected"),
   N_("Connected"),
@@ -46,7 +46,7 @@ static const TCHAR *const net_state_strings[] = {
 };
 
 [[gnu::pure]]
-static const TCHAR *
+static const char *
 ToString(NetState state) noexcept
 {
   return gettext(net_state_strings[unsigned(state)]);

@@ -48,7 +48,7 @@ public:
    * nullptr if no RASP map is enabled.
    */
   [[gnu::pure]]
-  const TCHAR *GetLabel() const {
+  const char *GetLabel() const {
     return cache.GetMapLabel();
   }
 

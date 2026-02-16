@@ -4,6 +4,6 @@
 #include "Dialogs/HelpDialog.hpp"
 
 void
-HelpDialog([[maybe_unused]] const TCHAR *caption, [[maybe_unused]] const TCHAR *text)
+HelpDialog([[maybe_unused]] const char *caption, [[maybe_unused]] const char *text)
 {
 }

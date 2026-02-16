@@ -10,7 +10,7 @@
 struct InputConfig;
 class Menu;
 
-typedef void (*pt2Event)(const TCHAR *);
+typedef void (*pt2Event)(const char *);
 
 namespace InputEvents {
 
@@ -31,7 +31,7 @@ void
 HideMenu() noexcept;
 
 Menu *
-GetMenu(const TCHAR *mode) noexcept;
+GetMenu(const char *mode) noexcept;
 
 /**
  * Load the default input file (Data/Input/default.xci).
@@ -47,7 +47,7 @@ void
 setMode(Mode mode) noexcept;
 
 void
-setMode(const TCHAR *mode) noexcept;
+setMode(const char *mode) noexcept;
 
 /**
  * Update the menu after pan mode has been enabled or disabled.
@@ -64,7 +64,7 @@ UpdatePan() noexcept;
  * @param flavour the new flavour name; may be NULL
  */
 void
-SetFlavour(const TCHAR *flavour) noexcept;
+SetFlavour(const char *flavour) noexcept;
 
 /**
  * Is the specified flavour currently active?
@@ -73,7 +73,7 @@ SetFlavour(const TCHAR *flavour) noexcept;
  */
 [[gnu::pure]]
 bool
-IsFlavour(const TCHAR *flavour) noexcept;
+IsFlavour(const char *flavour) noexcept;
 
 /**
  * @return: true if current mode is MODE_DEFAULT
@@ -98,10 +98,10 @@ bool
 processKey(unsigned key) noexcept;
 
 bool
-processGesture(const TCHAR *data) noexcept;
+processGesture(const char *data) noexcept;
 
 bool
-IsGesture(const TCHAR *data) noexcept;
+IsGesture(const char *data) noexcept;
 
 bool
 processNmea_real(unsigned key) noexcept;
@@ -120,83 +120,83 @@ void sub_SetZoom(double value);
 
 // -------
 
-void eventAbortTask(const TCHAR *misc);
-void eventAdjustForecastTemperature(const TCHAR *misc);
-void eventAdjustVarioFilter(const TCHAR *misc);
-void eventAdjustWaypoint(const TCHAR *misc);
-void eventAnalysis(const TCHAR *misc);
-void eventArmAdvance(const TCHAR *misc);
-void eventAudioDeadband(const TCHAR *misc);
-void eventBallast(const TCHAR *misc);
-void eventBugs(const TCHAR *misc);
-void eventCalculator(const TCHAR *misc);
-void eventChecklist(const TCHAR *misc);
-void eventClearAirspaceWarnings(const TCHAR *misc);
-void eventAirspaceWarnings(const TCHAR *misc);
-void eventClearStatusMessages(const TCHAR *misc);
-void eventLogger(const TCHAR *misc);
-void eventMacCready(const TCHAR *misc);
-void eventMainMenu(const TCHAR *misc);
-void eventMarkLocation(const TCHAR *misc);
-void eventPilotEvent(const TCHAR *misc);
-void eventMode(const TCHAR *misc);
-void eventNearestAirspaceDetails(const TCHAR *misc);
-void eventNearestWaypointDetails(const TCHAR *misc);
-void eventNearestMapItems(const TCHAR *misc);
-void eventNull(const TCHAR *misc);
-void eventPage(const TCHAR *misc);
-void eventPan(const TCHAR *misc);
-void eventPlaySound(const TCHAR *misc);
-void eventProfileLoad(const TCHAR *misc);
-void eventProfileSave(const TCHAR *misc);
-void eventRepeatStatusMessage(const TCHAR *misc);
-void eventRun(const TCHAR *misc);
-void eventQuickGuide(const TCHAR *misc);
-void eventGestureHelp(const TCHAR *misc);
-void eventScreenModes(const TCHAR *misc);
-void eventDevice(const TCHAR *misc);
-void eventSendNMEA(const TCHAR *misc);
-void eventSendNMEAPort1(const TCHAR *misc);
-void eventSendNMEAPort2(const TCHAR *misc);
-void eventSetup(const TCHAR *misc);
-void eventSnailTrail(const TCHAR *misc);
-void eventAirSpace(const TCHAR *misc); // VENTA3
-void eventSounds(const TCHAR *misc);
-void eventStatus(const TCHAR *misc);
-void eventStatusMessage(const TCHAR *misc);
-void eventTaskLoad(const TCHAR *misc);
-void eventTaskSave(const TCHAR *misc);
-void eventTaskTransition(const TCHAR *misc);
-void eventTerrainTopography(const TCHAR *misc);
-void eventTerrainTopology(const TCHAR *misc);
-void eventWaypointDetails(const TCHAR *misc);
-void eventWaypointEditor(const TCHAR *misc);
-void eventZoom(const TCHAR *misc);
-void eventBrightness(const TCHAR *misc);
-void eventDeclutterLabels(const TCHAR *misc);
-void eventExit(const TCHAR *misc);
-void eventFLARMRadar(const TCHAR *misc);
-void eventThermalAssistant(const TCHAR *misc);
-void eventBeep(const TCHAR *misc);
-void eventUserDisplayModeForce(const TCHAR *misc);
-void eventAirspaceDisplayMode(const TCHAR *misc);
-void eventAutoLogger(const TCHAR *misc);
-void eventGotoLookup(const TCHAR *misc);
-void eventAddWaypoint(const TCHAR *misc);
-void eventTraffic(const TCHAR *misc);
-void eventFlarmTraffic(const TCHAR *misc);
-void eventFlarmDetails(const TCHAR *misc);
-void eventCredits(const TCHAR *misc);
-void eventWeather(const TCHAR *misc);
-void eventQuickMenu(const TCHAR *misc);
-void eventFileManager(const TCHAR *misc);
-void eventRunLuaFile(const TCHAR *misc);
-void eventResetTask(const TCHAR *misc);
-void eventLockScreen(const TCHAR *misc);
-void eventExchangeFrequencies(const TCHAR *misc);
-void eventUploadIGCFile(const TCHAR *misc);
-void eventOrientationCruise(const TCHAR *misc);
-void eventOrientationCircling(const TCHAR *misc);
+void eventAbortTask(const char *misc);
+void eventAdjustForecastTemperature(const char *misc);
+void eventAdjustVarioFilter(const char *misc);
+void eventAdjustWaypoint(const char *misc);
+void eventAnalysis(const char *misc);
+void eventArmAdvance(const char *misc);
+void eventAudioDeadband(const char *misc);
+void eventBallast(const char *misc);
+void eventBugs(const char *misc);
+void eventCalculator(const char *misc);
+void eventChecklist(const char *misc);
+void eventClearAirspaceWarnings(const char *misc);
+void eventAirspaceWarnings(const char *misc);
+void eventClearStatusMessages(const char *misc);
+void eventLogger(const char *misc);
+void eventMacCready(const char *misc);
+void eventMainMenu(const char *misc);
+void eventMarkLocation(const char *misc);
+void eventPilotEvent(const char *misc);
+void eventMode(const char *misc);
+void eventNearestAirspaceDetails(const char *misc);
+void eventNearestWaypointDetails(const char *misc);
+void eventNearestMapItems(const char *misc);
+void eventNull(const char *misc);
+void eventPage(const char *misc);
+void eventPan(const char *misc);
+void eventPlaySound(const char *misc);
+void eventProfileLoad(const char *misc);
+void eventProfileSave(const char *misc);
+void eventRepeatStatusMessage(const char *misc);
+void eventRun(const char *misc);
+void eventQuickGuide(const char *misc);
+void eventGestureHelp(const char *misc);
+void eventScreenModes(const char *misc);
+void eventDevice(const char *misc);
+void eventSendNMEA(const char *misc);
+void eventSendNMEAPort1(const char *misc);
+void eventSendNMEAPort2(const char *misc);
+void eventSetup(const char *misc);
+void eventSnailTrail(const char *misc);
+void eventAirSpace(const char *misc); // VENTA3
+void eventSounds(const char *misc);
+void eventStatus(const char *misc);
+void eventStatusMessage(const char *misc);
+void eventTaskLoad(const char *misc);
+void eventTaskSave(const char *misc);
+void eventTaskTransition(const char *misc);
+void eventTerrainTopography(const char *misc);
+void eventTerrainTopology(const char *misc);
+void eventWaypointDetails(const char *misc);
+void eventWaypointEditor(const char *misc);
+void eventZoom(const char *misc);
+void eventBrightness(const char *misc);
+void eventDeclutterLabels(const char *misc);
+void eventExit(const char *misc);
+void eventFLARMRadar(const char *misc);
+void eventThermalAssistant(const char *misc);
+void eventBeep(const char *misc);
+void eventUserDisplayModeForce(const char *misc);
+void eventAirspaceDisplayMode(const char *misc);
+void eventAutoLogger(const char *misc);
+void eventGotoLookup(const char *misc);
+void eventAddWaypoint(const char *misc);
+void eventTraffic(const char *misc);
+void eventFlarmTraffic(const char *misc);
+void eventFlarmDetails(const char *misc);
+void eventCredits(const char *misc);
+void eventWeather(const char *misc);
+void eventQuickMenu(const char *misc);
+void eventFileManager(const char *misc);
+void eventRunLuaFile(const char *misc);
+void eventResetTask(const char *misc);
+void eventLockScreen(const char *misc);
+void eventExchangeFrequencies(const char *misc);
+void eventUploadIGCFile(const char *misc);
+void eventOrientationCruise(const char *misc);
+void eventOrientationCircling(const char *misc);
 // -------
 
 } // namespace InputEvents

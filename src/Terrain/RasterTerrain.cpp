@@ -15,7 +15,7 @@
 #include "util/ConvertString.hpp"
 #include "LogFile.hpp"
 
-static const TCHAR *const terrain_cache_name = _T("terrain");
+static const char *const terrain_cache_name = _T("terrain");
 
 inline bool
 RasterTerrain::LoadCache(FileCache &cache, Path path)

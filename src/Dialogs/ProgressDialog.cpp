@@ -13,7 +13,7 @@ using namespace UI;
 
 ProgressDialog::ProgressDialog(SingleWindow &parent,
                                const DialogLook &dialog_look,
-                               const TCHAR *caption)
+                               const char *caption)
   :WndForm(parent, dialog_look, parent.GetClientRect(), caption),
    progress(GetClientAreaWindow())
 {

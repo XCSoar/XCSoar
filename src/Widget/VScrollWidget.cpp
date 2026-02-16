@@ -267,7 +267,7 @@ VScrollWidget::OnVScrollPanelChange() noexcept
 }
 
 bool
-VScrollWidget::OnVScrollPanelGesture(const TCHAR *gesture) noexcept
+VScrollWidget::OnVScrollPanelGesture(const char *gesture) noexcept
 {
   if (!gesture_callback)
     return false;

@@ -73,25 +73,25 @@ public:
    */
   WndForm(UI::SingleWindow &_main_window, const DialogLook &_look,
           const PixelRect &rc,
-          const TCHAR *caption=nullptr,
+          const char *caption=nullptr,
           const WindowStyle style = WindowStyle());
 
   /**
    * Construct a full-screen dialog.
    */
   WndForm(UI::SingleWindow &_main_window, const DialogLook &_look,
-          const TCHAR *caption=nullptr,
+          const char *caption=nullptr,
           const WindowStyle style={}) noexcept;
 
   void Create(UI::SingleWindow &main_window, const PixelRect &rc,
-              const TCHAR *caption=nullptr,
+              const char *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
   /**
    * Create a full-screen dialog.
    */
   void Create(UI::SingleWindow &main_window,
-              const TCHAR *caption=nullptr,
+              const char *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
 protected:
@@ -147,12 +147,12 @@ public:
 
   int ShowModal();
 
-  const TCHAR *GetCaption() const {
+  const char *GetCaption() const {
     return caption.c_str();
   }
 
   /** Set the titlebar text */
-  void SetCaption(const TCHAR *_caption);
+  void SetCaption(const char *_caption);
 
   /** from class Window */
   void OnCreate() override;

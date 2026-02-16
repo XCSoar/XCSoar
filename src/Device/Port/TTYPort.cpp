@@ -170,7 +170,7 @@ TTYPort::Drain()
 }
 
 void
-TTYPort::Open(const TCHAR *path, unsigned baud_rate)
+TTYPort::Open(const char *path, unsigned baud_rate)
 {
   auto fd = OpenTTY(path, baud_rate);
   ::SetBaudrate(TTYDescriptor(fd), baud_rate);

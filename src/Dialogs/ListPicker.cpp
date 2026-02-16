@@ -16,13 +16,13 @@
 #include <cassert>
 
 int
-ListPicker(const TCHAR *caption,
+ListPicker(const char *caption,
            unsigned num_items, unsigned initial_value,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update,
-           const TCHAR *help_text,
+           const char *help_text,
            ItemHelpCallback_t _itemhelp_callback,
-           const TCHAR *extra_caption)
+           const char *extra_caption)
 {
   assert(num_items <= 0x7fffffff);
   assert((num_items == 0 && initial_value == 0) || initial_value < num_items);

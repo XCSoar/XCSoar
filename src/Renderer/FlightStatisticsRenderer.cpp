@@ -194,7 +194,7 @@ FlightStatisticsRenderer::RenderContest(Canvas &canvas, const PixelRect rc,
 }
 
 void
-FlightStatisticsRenderer::CaptionContest(TCHAR *sTmp,
+FlightStatisticsRenderer::CaptionContest(char *sTmp,
                                          const ContestSettings &settings,
                                          const DerivedInfo &derived) noexcept
 {
@@ -346,7 +346,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 }
 
 void
-FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) noexcept
+FlightStatisticsRenderer::CaptionTask(char *sTmp, const DerivedInfo &derived) noexcept
 {
   const TaskStats &task_stats = derived.ordered_task_stats;
   const CommonStats &common = derived.common_stats;

@@ -17,7 +17,7 @@ PCMResourcePlayer::PCMResourcePlayer() :
 }
 
 bool
-PCMResourcePlayer::PlayResource(const TCHAR *resource_name)
+PCMResourcePlayer::PlayResource(const char *resource_name)
 {
   PCMBufferDataSource::PCMData pcm_data =
     FromBytesStrict<const PCMBufferDataSource::PCMData::value_type>(

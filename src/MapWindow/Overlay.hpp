@@ -24,7 +24,7 @@ public:
    * Returns a human-readable name for this overlay.
    */
   [[gnu::pure]]
-  virtual const TCHAR *GetLabel() const noexcept = 0;
+  virtual const char *GetLabel() const noexcept = 0;
 
   /**
    * Check whether the given location is inside the overlay.

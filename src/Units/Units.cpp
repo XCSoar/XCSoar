@@ -90,49 +90,49 @@ Units::GetUserUnitByGroup(UnitGroup group)
   return current.GetByGroup(group);
 }
 
-const TCHAR *
+const char *
 Units::GetSpeedName()
 {
   return GetUnitName(GetUserSpeedUnit());
 }
 
-const TCHAR *
+const char *
 Units::GetVerticalSpeedName()
 {
   return GetUnitName(GetUserVerticalSpeedUnit());
 }
 
-const TCHAR *
+const char *
 Units::GetWindSpeedName()
 {
   return GetUnitName(GetUserWindSpeedUnit());
 }
 
-const TCHAR *
+const char *
 Units::GetDistanceName()
 {
   return GetUnitName(GetUserDistanceUnit());
 }
 
-const TCHAR *
+const char *
 Units::GetAltitudeName()
 {
   return GetUnitName(GetUserAltitudeUnit());
 }
 
-const TCHAR *
+const char *
 Units::GetTemperatureName()
 {
   return GetUnitName(GetUserTemperatureUnit());
 }
 
-const TCHAR *
+const char *
 Units::GetTaskSpeedName()
 {
   return GetUnitName(GetUserTaskSpeedUnit());
 }
 
-const TCHAR *
+const char *
 Units::GetPressureName()
 {
   return GetUnitName(GetUserPressureUnit());

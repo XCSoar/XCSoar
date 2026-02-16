@@ -26,7 +26,7 @@ int main()
   TransponderCode code{04567};
   ok1(code.IsDefined());
 
-  TCHAR buf[12];
+  char buf[12];
   ok1(StringIsEqual(code.Format(buf, std::size(buf)),
                     _T("4567")));
 

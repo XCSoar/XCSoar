@@ -204,7 +204,7 @@ ProcessWidget::Unprepare() noexcept
 int
 RunProcessDialog(UI::SingleWindow &parent,
                  const DialogLook &dialog_look,
-                 const TCHAR *caption,
+                 const char *caption,
                  const char *const*argv,
                  std::function<int(int)> on_exit) noexcept
 {

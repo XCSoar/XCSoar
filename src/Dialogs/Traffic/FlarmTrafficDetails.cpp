@@ -148,8 +148,8 @@ FlarmTrafficDetailsWidget::Hide() noexcept
 void
 FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 {
-  TCHAR tmp[40];
-  const TCHAR *value;
+  char tmp[40];
+  const char *value;
 
   const FlarmTraffic* target =
     basic.flarm.traffic.FindTraffic(target_id);
@@ -159,7 +159,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
   // Fill distance/direction field
   if (target_ok) {
     FormatUserDistanceSmart(target->distance, tmp, true, 20, 1000);
-    TCHAR *p = tmp + _tcslen(tmp);
+    char *p = tmp + _tcslen(tmp);
     *p++ = _T(' ');
     FormatAngleDelta(p, 20, target->Bearing() - basic.track);
     value = tmp;
@@ -170,7 +170,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 
   // Fill altitude field
   if (target_ok) {
-    TCHAR *p = tmp;
+    char *p = tmp;
     if (target->altitude_available) {
       FormatUserAltitude(target->altitude, p);
       p += _tcslen(p);
@@ -204,8 +204,8 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 void
 FlarmTrafficDetailsWidget::Update()
 {
-  TCHAR tmp[200], tmp_id[7];
-  const TCHAR *value;
+  char tmp[200], tmp_id[7];
+  const char *value;
 
   // Set the dialog caption
   StringFormatUnsafe(tmp, _T("%s (%s)"),
@@ -220,30 +220,30 @@ FlarmTrafficDetailsWidget::Update()
   // Shared fields: pilot/plane/airfield direct from resolver
   SetText(PILOT, info.pilot != nullptr ? info.pilot : _T("--"));
 
-  const TCHAR *plane_value = info.plane_type;
+  const char *plane_value = info.plane_type;
   if (plane_value == nullptr && target != nullptr)
     plane_value = FlarmTraffic::GetTypeString(target->type);
   SetText(PLANE, plane_value != nullptr ? plane_value : _T("--"));
 
   SetText(AIRPORT, info.airfield != nullptr ? info.airfield : _T("--"));
 
-  TCHAR fbuf[16];
-  const TCHAR *freq = info.frequency.Format(fbuf, 16);
+  char fbuf[16];
+  const char *freq = info.frequency.Format(fbuf, 16);
   value = freq != nullptr ? UnsafeBuildString(tmp, freq, _T(" MHz")) : _T("--");
   SetText(RADIO, value);
 
   // Fill the callsign field (+ registration)
   // note: don't use target->Name here since it is not updated
   //       yet if it was changed
-  const TCHAR* cs = info.callsign;
+  const char* cs = info.callsign;
   if (cs != nullptr && cs[0] != 0) {
     try {
-      BasicStringBuilder<TCHAR> builder(tmp, ARRAY_SIZE(tmp));
+      BasicStringBuilder<char> builder(tmp, ARRAY_SIZE(tmp));
       builder.Append(cs);
       if (info.registration != nullptr)
         builder.Append(_T(" ("), info.registration, _T(")"));
       value = tmp;
-    } catch (BasicStringBuilder<TCHAR>::Overflow) {
+    } catch (BasicStringBuilder<char>::Overflow) {
       value = cs;
     }
   } else
@@ -283,7 +283,7 @@ FlarmTrafficDetailsWidget::OnCallsignClicked()
   newName.clear();
 
   // pre-fill the callsign from flarmnet database or userfile
-  const TCHAR* cs = FlarmDetails::LookupCallsign(target_id);
+  const char* cs = FlarmDetails::LookupCallsign(target_id);
   if (cs != nullptr && cs[0] != 0)
     newName = cs;
 

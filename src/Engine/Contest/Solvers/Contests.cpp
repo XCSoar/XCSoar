@@ -4,7 +4,7 @@
 #include "Contests.hpp"
 #include "util/Macros.hpp"
 
-static const TCHAR *const contest_to_string[] = {
+static const char *const contest_to_string[] = {
   _T("OLC Sprint"),
   _T("OLC FAI"),
   _T("OLC Classic"),
@@ -22,7 +22,7 @@ static const TCHAR *const contest_to_string[] = {
   _T("None"),
 };
 
-const TCHAR*
+const char*
 ContestToString(Contest contest) noexcept
 {
   unsigned i = (unsigned)contest;

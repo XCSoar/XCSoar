@@ -21,5 +21,5 @@ namespace Co { class InvokeTask; }
  */
 bool
 ShowCoDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
-             const TCHAR *caption, Co::InvokeTask task,
+             const char *caption, Co::InvokeTask task,
              PluggableOperationEnvironment *env);

@@ -8,22 +8,22 @@
 #include <cassert>
 
 void
-FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
+FormatByteSize(char *buffer, size_t size, unsigned long bytes, bool simple)
 {
   assert(buffer != NULL);
   assert(size >= 8);
 
-  static const TCHAR *const units[] = { _T("B"), _T("KB"), _T("MB"), _T("GB") };
-  static const TCHAR *const simple_units[] = { _T("B"), _T("K"), _T("M"), _T("G") };
+  static const char *const units[] = { _T("B"), _T("KB"), _T("MB"), _T("GB") };
+  static const char *const simple_units[] = { _T("B"), _T("K"), _T("M"), _T("G") };
 
   double value = bytes;
 
   unsigned i = 0;
   for (; value >= 1024 && i < ARRAY_SIZE(units)-1; i++, value /= 1024);
 
-  const TCHAR *unit = simple ? simple_units[i] : units[i];
+  const char *unit = simple ? simple_units[i] : units[i];
 
-  const TCHAR *format;
+  const char *format;
   if (value >= 100 || i == 0)
     format = simple ? _T("%.0f%s") : _T("%.0f %s");
   else if (value >= 10)

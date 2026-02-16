@@ -4,7 +4,7 @@
 #include "String.hpp"
 
 void
-DataFieldString::ModifyValue(const TCHAR *new_value) noexcept
+DataFieldString::ModifyValue(const char *new_value) noexcept
 {
   if (new_value == mValue)
     return;
@@ -14,12 +14,12 @@ DataFieldString::ModifyValue(const TCHAR *new_value) noexcept
 }
 
 void
-DataFieldString::SetValue(const TCHAR *Value) noexcept
+DataFieldString::SetValue(const char *Value) noexcept
 {
   mValue = Value;
 }
 
-const TCHAR *
+const char *
 DataFieldString::GetAsString() const noexcept
 {
   return GetValue();

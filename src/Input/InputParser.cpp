@@ -59,7 +59,7 @@ struct EventBuilder {
     // General errors - these should be true
     assert(location < 1024);
 
-    const TCHAR *new_label = NULL;
+    const char *new_label = NULL;
 
     // For each mode
     for (const auto token : TIterableSplitString(mode.c_str(), ' ')) {
@@ -110,7 +110,7 @@ struct EventBuilder {
       } else if (type.equals(_T("gesture"))) {
         // Check data for invalid characters:
         bool valid = true;
-        for (const TCHAR* c = data; *c; c++)
+        for (const char* c = data; *c; c++)
           if (*c != _T('U') &&
               *c != _T('D') &&
               *c != _T('R') &&
@@ -206,7 +206,7 @@ ParseInputFile(InputConfig &config, BufferedReader &reader)
           continue;
         }
 
-        TCHAR *allocated = UnescapeBackslash(string_converter.Convert(d_misc));
+        char *allocated = UnescapeBackslash(string_converter.Convert(d_misc));
         current.event_id = config.AppendEvent(event, allocated,
                                               current.event_id);
 

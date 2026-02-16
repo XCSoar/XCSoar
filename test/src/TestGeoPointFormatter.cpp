@@ -7,8 +7,8 @@
 #include "TestUtil.hpp"
 
 static bool
-StringIsEqualWildcard(const TCHAR *string1, const TCHAR *string2,
-                      TCHAR wildcard = _T('*'))
+StringIsEqualWildcard(const char *string1, const char *string2,
+                      char wildcard = _T('*'))
 {
   while (*string1 == *string2 ||
          *string1 == wildcard ||
@@ -26,7 +26,7 @@ int main()
 {
   plan_tests(14);
 
-  TCHAR buffer[256];
+  char buffer[256];
   GeoPoint location1(Angle::Degrees(8.466322),
                      Angle::Degrees(49.487153));
 

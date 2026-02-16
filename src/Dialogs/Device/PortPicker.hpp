@@ -8,4 +8,4 @@ class DataFieldEnum;
 #include <tchar.h>
 
 bool
-PortPicker(DataFieldEnum &df, const TCHAR *caption) noexcept;
+PortPicker(DataFieldEnum &df, const char *caption) noexcept;

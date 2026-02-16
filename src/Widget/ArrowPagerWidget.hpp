@@ -57,7 +57,7 @@ private:
   Button close_button;
 
   /** Caption for the close button, applied during Prepare(). */
-  const TCHAR *pending_close_caption = nullptr;
+  const char *pending_close_caption = nullptr;
 
   /** Optional guard that blocks forward page navigation */
   CanAdvanceCallback can_advance_callback;
@@ -120,7 +120,7 @@ public:
    * been created yet, the caption is stored and applied during
    * Prepare().
    */
-  void SetCloseButtonCaption(const TCHAR *caption) noexcept {
+  void SetCloseButtonCaption(const char *caption) noexcept {
     if (close_button.IsDefined())
       close_button.SetCaption(caption);
     else
