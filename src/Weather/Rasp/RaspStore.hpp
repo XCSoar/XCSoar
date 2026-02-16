@@ -125,7 +125,7 @@ public:
 
   std::unique_ptr<ZipArchive> OpenArchive() const;
 
-  static bool NarrowWeatherFilename(char *filename, Path name,
+  static bool WeatherFilename(char *filename, Path name,
                                     unsigned time_index);
 
 private:
