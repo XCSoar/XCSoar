@@ -57,7 +57,7 @@ NMEAParser::TimeHasAdvanced([[maybe_unused]] TimeStamp this_time,
 int
 main(int argc, char **argv)
 try {
-  NarrowString<1024> usage;
+  StaticString<1024> usage;
   usage = "DRIVER PORT BAUD\n\n"
           "Where DRIVER is one of:";
   {

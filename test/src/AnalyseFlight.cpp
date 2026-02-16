@@ -176,7 +176,7 @@ WriteEventAttributes(const BrokenDateTime &time,
     o = boost::json::value_from(location).as_object();
 
   if (time.IsPlausible()) {
-    NarrowString<64> buffer;
+    StaticString<64> buffer;
     FormatISO8601(buffer.buffer(), time);
     o.emplace("time", buffer.c_str());
   }

@@ -33,7 +33,7 @@ ProfileMap::GetGeoPoint(std::string_view key, GeoPoint &value) const noexcept
 void
 ProfileMap::SetGeoPoint(std::string_view key, const GeoPoint &value) noexcept
 {
-  NarrowString<128> buffer;
+  StaticString<128> buffer;
   buffer.UnsafeFormat("%f %f",
                       (double)value.longitude.Degrees(),
                       (double)value.latitude.Degrees());
