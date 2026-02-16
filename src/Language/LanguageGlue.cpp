@@ -298,8 +298,12 @@ ReadLanguageFile() noexcept
     return;
   }
 
-  if (value == Path("none"))
+  if (value == Path("none")) {
+#ifdef USE_LIBINTL
+    InitNativeGettext("C");
+#endif
     return;
+  }
 
   Path base = value.GetBase();
   if (base == nullptr)
