@@ -8,7 +8,6 @@
 #include "io/BufferedReader.hxx"
 #include "io/BufferedOutputStream.hxx"
 #include "io/StringConverter.hpp"
-#include "util/ConvertString.hpp"
 #include "io/BufferedCsvReader.hpp"
 #include "util/StringStrip.hxx"
 #include "util/HexString.hpp"

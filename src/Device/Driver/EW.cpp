@@ -14,7 +14,6 @@
 #include "NMEA/Checksum.hpp"
 #include "Operation/Operation.hpp"
 #include "util/TruncateString.hpp"
-#include "util/ConvertString.hpp"
 #include "util/ScopeExit.hxx"
 
 #include <algorithm>

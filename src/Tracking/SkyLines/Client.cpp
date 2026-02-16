@@ -14,7 +14,6 @@
 #include "net/UniqueSocketDescriptor.hxx"
 #include "util/CRC16CCITT.hpp"
 #include "util/UTF8.hpp"
-#include "util/ConvertString.hpp"
 
 #include <span>
 #include <string>

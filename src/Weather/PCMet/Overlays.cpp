@@ -9,7 +9,6 @@
 #include "co/Task.hxx"
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
-#include "util/ConvertString.hpp"
 #include "util/Macros.hpp"
 #include "LocalPath.hpp"
 
