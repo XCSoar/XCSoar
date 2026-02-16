@@ -11,7 +11,7 @@ static void
 Main(TestMainWindow &main_window)
 {
   ProgressWindow progress(main_window);
-  progress.SetMessage(_T("Testing..."));
+  progress.SetMessage("Testing...");
   progress.SetRange(0, 1024);
   progress.SetValue(768);
 

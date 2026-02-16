@@ -65,7 +65,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent,
 
     WndProperty *wp =
       AddFloat(_("Speed"), _("Manual adjustment of wind speed."),
-               _T("%.0f %s"), _T("%.0f"),
+               "%.0f %s", "%.0f",
                0,
                Units::ToUserWindSpeed(Units::ToSysUnit(200,
                                                        Unit::KILOMETER_PER_HOUR)),

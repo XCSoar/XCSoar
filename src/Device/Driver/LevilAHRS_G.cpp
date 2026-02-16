@@ -21,7 +21,7 @@ public:
 static void
 ErrorMessage([[maybe_unused]] unsigned code)
 {
-  Message::AddMessage(_T("Levil AHRS: hardware error !"));
+  Message::AddMessage("Levil AHRS: hardware error !");
 }
 
 bool
@@ -140,8 +140,8 @@ LevilCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]] 
 }
 
 const struct DeviceRegister levil_driver = {
-  _T("Levil AHRS"),
-  _T("Levil AHRS"),
+  "Levil AHRS",
+  "Levil AHRS",
   0,
   LevilCreateOnPort,
 };

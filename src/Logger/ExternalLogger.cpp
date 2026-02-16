@@ -52,7 +52,7 @@ DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
 {
   TriStateJob<DeclareJob> job(device, declaration, home);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-            _T(""), job, true);
+            "", job, true);
   return job.GetResult();
 }
 
@@ -142,7 +142,7 @@ DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 {
   TriStateJob<ReadFlightListJob> job(device, flight_list);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-            _T(""), job, true);
+            "", job, true);
   return job.GetResult();
 }
 
@@ -167,7 +167,7 @@ DoDownloadFlight(DeviceDescriptor &device,
 {
   TriStateJob<DownloadFlightJob> job(device, flight, path);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-            _T(""), job, true);
+            "", job, true);
   return job.GetResult();
 }
 
@@ -222,7 +222,7 @@ ShowFlightList(const RecordedFlightList &flight_list)
     const RecordedFlightInfo &flight = flight_list[i];
 
     StaticString<64> buffer;
-    buffer.UnsafeFormat(_T("%04u/%02u/%02u %02u:%02u-%02u:%02u"),
+    buffer.UnsafeFormat("%04u/%02u/%02u %02u:%02u-%02u:%02u",
                         flight.date.year, flight.date.month, flight.date.day,
                         flight.start_time.hour, flight.start_time.minute,
                         flight.end_time.hour, flight.end_time.minute);
@@ -231,7 +231,7 @@ ShowFlightList(const RecordedFlightList &flight_list)
   }
 
   // Show list of the flights
-  int i = ComboPicker(_T("Choose a flight"),
+  int i = ComboPicker("Choose a flight",
                       combo, nullptr, false);
 
   return i < 0 ? nullptr : &flight_list[i];
@@ -274,7 +274,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
-  const auto logs_path = MakeLocalPath(_T("logs"));
+  const auto logs_path = MakeLocalPath("logs");
 
   while (true) {
     // Show list of the flights
@@ -284,7 +284,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
     // Download chosen IGC file into temporary file
     FileTransaction transaction(AllocatedPath::Build(logs_path,
-                                                     _T("temp.igc")));
+                                                     "temp.igc"));
 
     try {
       switch (DoDownloadFlight(device, *flight, transaction.GetTemporaryPath())) {

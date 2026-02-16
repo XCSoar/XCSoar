@@ -35,11 +35,11 @@ bool FormatLatitude(Angle latitude, char *buffer, size_t size);
  * Convert a GeoPoint into a formatted string.
  */
 char *FormatGeoPoint(const GeoPoint &location, char *buffer, size_t size,
-                      char separator = _T(' '));
+                      char separator = ' ');
 
 [[gnu::pure]]
 static inline BasicStringBuffer<char, 32>
-FormatGeoPoint(const GeoPoint &location, char separator = _T(' '))
+FormatGeoPoint(const GeoPoint &location, char separator = ' ')
 {
   BasicStringBuffer<char, 32> buffer;
   auto result = FormatGeoPoint(location, buffer.data(), buffer.capacity(),

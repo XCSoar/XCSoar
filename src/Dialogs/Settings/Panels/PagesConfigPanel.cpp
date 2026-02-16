@@ -115,7 +115,7 @@ public:
       }
     });
 
-    move_up_button = buttons.AddSymbol(_T("^"), [this](){
+    move_up_button = buttons.AddSymbol("^", [this](){
       const unsigned cursor = GetList().GetCursorIndex();
       if (cursor > 0) {
         std::swap(settings.pages[cursor], settings.pages[cursor - 1]);
@@ -123,7 +123,7 @@ public:
       }
     });
 
-    move_down_button = buttons.AddSymbol(_T("v"), [this](){
+    move_down_button = buttons.AddSymbol("v", [this](){
       const unsigned n = GetList().GetLength();
       const unsigned cursor = GetList().GetCursorIndex();
       if (cursor + 1 < n) {
@@ -369,14 +369,14 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   if (value.infobox_config.enabled) {
-    buffer.AppendFormat(_T(", %s"), _("InfoBoxes"));
+    buffer.AppendFormat(", %s", _("InfoBoxes"));
 
     if (!value.infobox_config.auto_switch &&
         value.infobox_config.panel < InfoBoxSettings::MAX_PANELS)
-      buffer.AppendFormat(_T(" (%s)"),
+      buffer.AppendFormat(" (%s)",
                           gettext(info_box_settings.panels[value.infobox_config.panel].name));
     else
-      buffer.AppendFormat(_T(" (%s)"), _("Auto"));
+      buffer.AppendFormat(" (%s)", _("Auto"));
   }
 
   switch (value.bottom) {
@@ -385,7 +385,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     break;
 
   case PageLayout::Bottom::CROSS_SECTION:
-    buffer.AppendFormat(_T(", %s"), _("Cross section"));
+    buffer.AppendFormat(", %s", _("Cross section"));
     break;
 
   case PageLayout::Bottom::MAX:

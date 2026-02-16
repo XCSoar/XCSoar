@@ -295,12 +295,12 @@ ReadLanguageFile() noexcept
 
   auto value = Profile::GetPath(ProfileKeys::LanguageFile);
 
-  if (value == nullptr || value.empty() || value == Path(_T("auto"))) {
+  if (value == nullptr || value.empty() || value == Path("auto")) {
     AutoDetectLanguage();
     return;
   }
 
-  if (value == Path(_T("none")))
+  if (value == Path("none"))
     return;
 
   Path base = value.GetBase();

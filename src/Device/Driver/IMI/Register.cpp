@@ -11,8 +11,8 @@ IMICreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister imi_driver = {
-  _T("IMI ERIXX"),
-  _T("IMI ERIXX"),
+  "IMI ERIXX",
+  "IMI ERIXX",
   DeviceRegister::DECLARE | DeviceRegister::LOGGER,
   IMICreateOnPort,
 };

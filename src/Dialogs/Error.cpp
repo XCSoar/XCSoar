@@ -19,7 +19,7 @@ ShowError(const char *msg, std::exception_ptr e,
           const char *caption) noexcept
 {
   StaticString<1024> buffer;
-  buffer.Format(_T("%s\n%s"), msg,
+  buffer.Format("%s\n%s", msg,
                 UTF8ToWideConverter(GetFullMessage(e).c_str()).c_str());
   buffer.CropIncompleteUTF8();
 

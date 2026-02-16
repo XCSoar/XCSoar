@@ -105,7 +105,7 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton(_("Setup"), [this](){
     FLARMConfigWidget widget(GetLook(), device, hardware);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                        _T("FLARM"), widget);
+                        "FLARM", widget);
   });
 
   AddButton(_("Reboot"), [this](){
@@ -124,7 +124,7 @@ ManageFlarmDialog(Device &device, const FlarmVersion &version, FlarmHardware &ha
 {
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
-                      _T("FLARM"),
+                      "FLARM",
                       new ManageFLARMWidget(UIGlobals::GetDialogLook(),
                                             (FlarmDevice &)device, version, hardware));
   dialog.AddButton(_("Close"), mrCancel);

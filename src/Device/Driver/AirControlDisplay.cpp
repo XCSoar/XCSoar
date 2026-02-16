@@ -100,7 +100,7 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
     unsigned code_value;
     if (line.ReadChecked(code_value)) {
       StaticString<16> buffer;
-      buffer.Format(_T("%04u"), code_value);
+      buffer.Format("%04u", code_value);
       TransponderCode parsed_code = TransponderCode::Parse(buffer);
 
       if (!parsed_code.IsDefined())
@@ -261,8 +261,8 @@ AirControlDisplayCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port 
 }
 
 const struct DeviceRegister acd_driver = {
-  _T("ACD"),
-  _T("Air Control Display"),
+  "ACD",
+  "Air Control Display",
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   AirControlDisplayCreateOnPort,
 };

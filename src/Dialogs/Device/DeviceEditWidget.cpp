@@ -27,57 +27,57 @@ enum ControlIndex {
 static void
 FillBaudRates(DataFieldEnum &dfe) noexcept
 {
-  dfe.addEnumText(_T("1200"), 1200);
-  dfe.addEnumText(_T("2400"), 2400);
-  dfe.addEnumText(_T("4800"), 4800);
-  dfe.addEnumText(_T("9600"), 9600);
-  dfe.addEnumText(_T("19200"), 19200);
-  dfe.addEnumText(_T("38400"), 38400);
-  dfe.addEnumText(_T("57600"), 57600);
-  dfe.addEnumText(_T("115200"), 115200);
-  dfe.addEnumText(_T("230400"), 230400);
+  dfe.addEnumText("1200", 1200);
+  dfe.addEnumText("2400", 2400);
+  dfe.addEnumText("4800", 4800);
+  dfe.addEnumText("9600", 9600);
+  dfe.addEnumText("19200", 19200);
+  dfe.addEnumText("38400", 38400);
+  dfe.addEnumText("57600", 57600);
+  dfe.addEnumText("115200", 115200);
+  dfe.addEnumText("230400", 230400);
 }
 
 static void
 FillTCPPorts(DataFieldEnum &dfe) noexcept
 {
-  dfe.addEnumText(_T("4353"), 4353);
-  dfe.addEnumText(_T("10110"), 10110);
-  dfe.addEnumText(_T("4352"), 4352);
-  dfe.addEnumText(_T("2000"), 2000);
-  dfe.addEnumText(_T("4000"), 4000);
-  dfe.addEnumText(_T("23"), 23);
-  dfe.addEnumText(_T("8880"), 8880);
-  dfe.addEnumText(_T("8881"), 8881);
-  dfe.addEnumText(_T("8882"), 8882);
+  dfe.addEnumText("4353", 4353);
+  dfe.addEnumText("10110", 10110);
+  dfe.addEnumText("4352", 4352);
+  dfe.addEnumText("2000", 2000);
+  dfe.addEnumText("4000", 4000);
+  dfe.addEnumText("23", 23);
+  dfe.addEnumText("8880", 8880);
+  dfe.addEnumText("8881", 8881);
+  dfe.addEnumText("8882", 8882);
 }
 
 static void
 FillI2CBus(DataFieldEnum &dfe) noexcept
 {
-  dfe.addEnumText(_T("0"), 0U);
-  dfe.addEnumText(_T("1"), 1U);
-  dfe.addEnumText(_T("2"), 2U);
+  dfe.addEnumText("0", 0U);
+  dfe.addEnumText("1", 1U);
+  dfe.addEnumText("2", 2U);
 }
 
 /* Only lists possible addresses of supported devices */
 static void
 FillI2CAddr(DataFieldEnum &dfe) noexcept
 {
-  dfe.addEnumText(_T("0x76 (MS5611)"), 0x76);
-  dfe.addEnumText(_T("0x77 (BMP085 and MS5611)"), 0x77);
-//  dfe.addEnumText(_T("0x52 (Nunchuck)"), 0x52); Is implied by device, no choice
-//  dfe.addEnumText(_T("0x69 (MPU6050)"), 0x69); Is implied by device, no choice
-//  dfe.addEnumText(_T("0x1e (HMC5883)"), 0x1e); Is implied by device, no choice
+  dfe.addEnumText("0x76 (MS5611)", 0x76);
+  dfe.addEnumText("0x77 (BMP085 and MS5611)", 0x77);
+//  dfe.addEnumText("0x52 (Nunchuck)", 0x52); Is implied by device, no choice
+//  dfe.addEnumText("0x69 (MPU6050)", 0x69); Is implied by device, no choice
+//  dfe.addEnumText("0x1e (HMC5883)", 0x1e); Is implied by device, no choice
 }
 
 static void
 FillPress(DataFieldEnum &dfe) noexcept
 {
-  dfe.addEnumText(_T("Static & Vario"), (unsigned)DeviceConfig::PressureUse::STATIC_WITH_VARIO);
-  dfe.addEnumText(_T("Static"), (unsigned)DeviceConfig::PressureUse::STATIC_ONLY);
-  dfe.addEnumText(_T("TE probe (compensated vario)"), (unsigned)DeviceConfig::PressureUse::TEK_PRESSURE);
-  dfe.addEnumText(_T("Pitot (airspeed)"), (unsigned)DeviceConfig::PressureUse::PITOT);
+  dfe.addEnumText("Static & Vario", (unsigned)DeviceConfig::PressureUse::STATIC_WITH_VARIO);
+  dfe.addEnumText("Static", (unsigned)DeviceConfig::PressureUse::STATIC_ONLY);
+  dfe.addEnumText("TE probe (compensated vario)", (unsigned)DeviceConfig::PressureUse::TEK_PRESSURE);
+  dfe.addEnumText("Pitot (airspeed)", (unsigned)DeviceConfig::PressureUse::PITOT);
 }
 
 /**
@@ -90,10 +90,10 @@ FillPress(DataFieldEnum &dfe) noexcept
 static void
 FillEngineType(DataFieldEnum &dfe) noexcept
 {
-  dfe.addEnumText(_T("None"), static_cast<unsigned>(DeviceConfig::EngineType::NONE));
-  dfe.addEnumText(_T("2S1I"), static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_1_IGN));
-  dfe.addEnumText(_T("2S2I"), static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_2_IGN));
-  dfe.addEnumText(_T("4S1I"), static_cast<unsigned>(DeviceConfig::EngineType::FOUR_STROKE_1_IGN));
+  dfe.addEnumText("None", static_cast<unsigned>(DeviceConfig::EngineType::NONE));
+  dfe.addEnumText("2S1I", static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_1_IGN));
+  dfe.addEnumText("2S2I", static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_2_IGN));
+  dfe.addEnumText("4S1I", static_cast<unsigned>(DeviceConfig::EngineType::FOUR_STROKE_1_IGN));
 }
 
 static bool
@@ -259,14 +259,14 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
   Add(_("Baud rate"), nullptr, baud_rate_df);
 
   DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(this);
-  bulk_baud_rate_df->addEnumText(_T("Default"), 0u);
+  bulk_baud_rate_df->addEnumText("Default", 0u);
   FillBaudRates(*bulk_baud_rate_df);
   bulk_baud_rate_df->SetValue(config.bulk_baud_rate);
   Add(_("Bulk baud rate"),
       _("The baud rate used for bulk transfers, such as task declaration or flight download."),
       bulk_baud_rate_df);
 
-  DataFieldString *ip_address_df = new DataFieldString(_T(""), this);
+  DataFieldString *ip_address_df = new DataFieldString("", this);
   ip_address_df->SetValue(config.ip_address);
   Add(_("IP address"), nullptr, ip_address_df);
 
@@ -335,7 +335,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
              config.sync_to_device, this);
   SetExpertRow(SyncToDevice);
 
-  AddBoolean(_T("K6Bt"),
+  AddBoolean("K6Bt",
              _("Whether you use a K6Bt to connect the device."),
              config.k6bt, this);
   SetExpertRow(K6Bt);

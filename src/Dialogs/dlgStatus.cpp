@@ -25,7 +25,7 @@ static void
 SetTitle(WndForm &form, const TabWidget &pager)
 {
   StaticString<128> title;
-  title.Format(_T("%s: %s"), _("Status"),
+  title.Format("%s: %s", _("Status"),
                pager.GetButtonCaption(pager.GetCurrentIndex()));
   form.SetCaption(title);
 }

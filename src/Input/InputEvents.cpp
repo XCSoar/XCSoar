@@ -240,7 +240,7 @@ InputEvents::UpdateOverlayMode() noexcept
     /* build the "flavoured" mode name from the current "major" mode
        and the flavour name */
     StaticString<InputConfig::MAX_MODE_STRING + 32> name;
-    name.Format(_T("%s.%s"), input_config.modes[current_mode].c_str(),
+    name.Format("%s.%s", input_config.modes[current_mode].c_str(),
                 flavour);
 
     /* see if it exists */

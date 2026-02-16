@@ -38,14 +38,14 @@ ExpandTaskMacros(std::string_view name,
   const TaskStats &ordered_task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (name == _T("CheckTaskResumed")) {
+  if (name == "CheckTaskResumed") {
     // TODO code: check, does this need to be set with temporary task?
     invalid |= common_stats.task_type == TaskType::ABORT ||
       common_stats.task_type == TaskType::GOTO;
-    return _T("");
-  } else if (name == _T("CheckTask")) {
+    return "";
+  } else if (name == "CheckTask") {
     invalid |= !task_stats.task_valid;
-    return _T("");
+    return "";
   }
 
   if (!backend_components->protected_task_manager) {
@@ -59,24 +59,24 @@ ExpandTaskMacros(std::string_view name,
   if (task == nullptr || !task_stats.task_valid ||
       common_stats.task_type == TaskType::GOTO) {
 
-    if (name == _T("WaypointNext") ||
-        name == _T("WaypointNextArm")) {
+    if (name == "WaypointNext" ||
+        name == "WaypointNextArm") {
       invalid = true;
       return _("Next Turnpoint");
-    } else if (name == _T("WaypointPrevious") ||
-               name == _T("WaypointPreviousArm")) {
+    } else if (name == "WaypointPrevious" ||
+               name == "WaypointPreviousArm") {
       invalid = true;
       return _("Previous Turnpoint");
     }
   } else if (common_stats.task_type == TaskType::ABORT) {
-    if (name == _T("WaypointNext") ||
-        name == _T("WaypointNextArm")) {
+    if (name == "WaypointNext" ||
+        name == "WaypointNextArm") {
       invalid |= !common_stats.active_has_next;
       return common_stats.next_is_last
         ? _("Furthest Landpoint")
         : _("Next Landpoint");
-    } else if (name == _T("WaypointPrevious") ||
-               name == _T("WaypointPreviousArm")) {
+    } else if (name == "WaypointPrevious" ||
+               name == "WaypointPreviousArm") {
       invalid |= !common_stats.active_has_previous;
 
       return common_stats.previous_is_first
@@ -90,13 +90,13 @@ ExpandTaskMacros(std::string_view name,
     const bool previous_is_start = common_stats.previous_is_first;
     const bool has_optional_starts = ordered_task_stats.has_optional_starts;
 
-    if (name == _T("WaypointNext")) {
+    if (name == "WaypointNext") {
       // Waypoint\nNext
       invalid |= !common_stats.active_has_next;
       return next_is_final
         ? _("Finish Turnpoint")
         : _("Next Turnpoint");
-    } else if (name == _T("WaypointPrevious")) {
+    } else if (name == "WaypointPrevious") {
       if (has_optional_starts && !common_stats.active_has_previous) {
         return _("Next Startpoint");
       } else {
@@ -106,7 +106,7 @@ ExpandTaskMacros(std::string_view name,
           : _("Previous Turnpoint");
       }
 
-    } else if (name == _T("WaypointNextArm")) {
+    } else if (name == "WaypointNextArm") {
       // Waypoint\nNext
 
       switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
@@ -126,7 +126,7 @@ ExpandTaskMacros(std::string_view name,
         return _("Arm turn");
       }
 
-    } else if (name == _T("WaypointPreviousArm")) {
+    } else if (name == "WaypointPreviousArm") {
 
       switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
       case TaskAdvance::MANUAL:
@@ -152,7 +152,7 @@ ExpandTaskMacros(std::string_view name,
     }
   }
 
-  if (name == _T("AdvanceArmed")) {
+  if (name == "AdvanceArmed") {
     switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
     case TaskAdvance::MANUAL:
       invalid = true;
@@ -174,11 +174,11 @@ ExpandTaskMacros(std::string_view name,
     case TaskAdvance::TURN_DISARMED:
       return _("Arm\nTurn");
     }
-  } else if (name == _T("CheckAutoMc")) {
+  } else if (name == "CheckAutoMc") {
     invalid |= !task_stats.task_valid &&
       settings_computer.task.IsAutoMCFinalGlideEnabled();
-    return _T("");
-  } else if (name == _T("TaskAbortToggleActionName")) {
+    return "";
+  } else if (name == "TaskAbortToggleActionName") {
     if (common_stats.task_type == TaskType::GOTO)
       return ordered_task_stats.task_valid
         ? _("Resume")
@@ -187,10 +187,10 @@ ExpandTaskMacros(std::string_view name,
       return common_stats.task_type == TaskType::ABORT
         ? _("Resume")
         : _("Abort");
-  } else if (name == _T("CheckTaskRestart")) {
+  } else if (name == "CheckTaskRestart") {
     invalid |= !(common_stats.task_type == TaskType::ORDERED &&
                  task_stats.start.HasStarted());
-    return _T("");
+    return "";
   }
 
   return nullptr;
@@ -201,13 +201,13 @@ static const char *
 ExpandTrafficMacros(std::string_view name) noexcept
 {
   TrafficWidget *widget = (TrafficWidget *)
-    CommonInterface::main_window->GetFlavourWidget(_T("Traffic"));
+    CommonInterface::main_window->GetFlavourWidget("Traffic");
   if (widget == nullptr)
     return nullptr;
 
-  if (name == _T("TrafficZoomAutoToggleActionName"))
+  if (name == "TrafficZoomAutoToggleActionName")
     return widget->GetAutoZoom() ? _("Manual") : _("Auto");
-  else if (name == _T("TrafficNorthUpToggleActionName"))
+  else if (name == "TrafficNorthUpToggleActionName")
     return widget->GetNorthUp() ? _("Track up") : _("North up");
   else
     return nullptr;
@@ -246,7 +246,7 @@ GetUIState() noexcept
 static const char *
 LookupMacro(std::string_view name, bool &invalid) noexcept
 {
-  if (name ==_T("CheckAirspace")) {
+  if (name =="CheckAirspace") {
     invalid |= data_components->airspaces->IsEmpty();
     return nullptr;
   }
@@ -260,43 +260,43 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
   if (value != nullptr)
     return value;
 
-  if (name ==_T("CheckFLARM")) {
+  if (name =="CheckFLARM") {
     invalid |= !Basic().flarm.status.available;
     return nullptr;
-  } else if (name == _T("CheckWeather")) {
+  } else if (name == "CheckWeather") {
     const auto rasp = DataGlobals::GetRasp();
     invalid |= rasp == nullptr || rasp->GetItemCount() == 0;
     return nullptr;
-  } else if (name == _T("CheckCircling")) {
+  } else if (name == "CheckCircling") {
     invalid |= !Calculated().circling;
     return nullptr;
-  } else if (name == _T("CheckVega")) {
+  } else if (name == "CheckVega") {
     invalid |= backend_components->devices == nullptr ||
       !backend_components->devices->HasVega();
     return nullptr;
-  } else if (name == _T("CheckReplay")) {
+  } else if (name == "CheckReplay") {
     invalid |= CommonInterface::MovementDetected();
     return nullptr;
-  } else if (name == _T("CheckWaypointFile")) {
+  } else if (name == "CheckWaypointFile") {
     invalid |= data_components->waypoints->IsEmpty();
     return nullptr;
-  } else if (name == _T("CheckLogger")) {
+  } else if (name == "CheckLogger") {
     invalid |= Basic().gps.replay;
     return nullptr;
-  } else if (name == _T("CheckNet")) {
+  } else if (name == "CheckNet") {
 #ifndef HAVE_HTTP
     invalid = true;
 #endif
     return nullptr;
-  } else if (name == _T("CheckTerrain")) {
+  } else if (name == "CheckTerrain") {
     invalid |= !Calculated().terrain_valid;
     return nullptr;
-  } else if (name == _T("LoggerActive")) {
+  } else if (name == "LoggerActive") {
     return backend_components->igc_logger != nullptr &&
       backend_components->igc_logger->IsLoggerActive()
       ? _("Stop")
       : _("Start");
-  } else if (name == _T("SnailTrailToggleName")) {
+  } else if (name == "SnailTrailToggleName") {
     switch (GetMapSettings().trail.length) {
     case TrailSettings::Length::OFF:
       return _("Long");
@@ -312,10 +312,10 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     }
 
     return nullptr;
-  } else if (name == _T("AirSpaceToggleName")) {
+  } else if (name == "AirSpaceToggleName") {
     return GetMapSettings().airspace.enable ? _("Off") : _("On");
-  } else if (name == _T("TerrainTopologyToggleName") ||
-             name == _T("TerrainTopographyToggleName")) {
+  } else if (name == "TerrainTopologyToggleName" ||
+             name == "TerrainTopographyToggleName") {
     char val = 0;
     if (GetMapSettings().topography_enabled)
       val++;
@@ -337,18 +337,18 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     }
 
     return nullptr;
-  } else if (name == _T("FullScreenToggleActionName")) {
+  } else if (name == "FullScreenToggleActionName") {
     return CommonInterface::main_window->GetFullScreen() ? _("Off") : _("On");
-  } else if (name == _T("ZoomAutoToggleActionName")) {
+  } else if (name == "ZoomAutoToggleActionName") {
     return GetMapSettings().auto_zoom_enabled ? _("Manual") : _("Auto");
-  } else if (name == _T("TopologyToggleActionName") ||
-             name == _T("TopographyToggleActionName")) {
+  } else if (name == "TopologyToggleActionName" ||
+             name == "TopographyToggleActionName") {
     return GetMapSettings().topography_enabled ? _("Hide") : _("Show");
-  } else if (name == _T("TerrainToggleActionName")) {
+  } else if (name == "TerrainToggleActionName") {
     return GetMapSettings().terrain.enable ? _("Hide") : _("Show");
-  } else if (name == _T("AirspaceToggleActionName")) {
+  } else if (name == "AirspaceToggleActionName") {
     return GetMapSettings().airspace.enable ? _("Hide") : _("Show");
-  } else if (name == _T("MapLabelsToggleActionName")) {
+  } else if (name == "MapLabelsToggleActionName") {
     static const char *const labels[] = {
       N_("All"),
       N_("Task & Landables"),
@@ -360,65 +360,65 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     static constexpr unsigned int n = ARRAY_SIZE(labels);
     unsigned int i = (unsigned)GetMapSettings().waypoint.label_selection;
     return gettext(labels[(i + 1) % n]);
-  } else if (name == _T("MacCreadyToggleActionName")) {
+  } else if (name == "MacCreadyToggleActionName") {
     return GetComputerSettings().task.auto_mc ? _("Manual") : _("Auto");
-  } else if (name == _T("AuxInfoToggleActionName")) {
+  } else if (name == "AuxInfoToggleActionName") {
     return GetUIState().auxiliary_enabled ? _("Off") : _("On");
-  } else if (name == _T("DispModeClimbShortIndicator")) {
+  } else if (name == "DispModeClimbShortIndicator") {
     return GetUIState().force_display_mode == DisplayMode::CIRCLING
-      ? _T("*") : _T("");
-  } else if (name == _T("DispModeCruiseShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "DispModeCruiseShortIndicator") {
     return GetUIState().force_display_mode == DisplayMode::CRUISE
-      ? _T("*") : _T("");
-  } else if (name == _T("DispModeAutoShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "DispModeAutoShortIndicator") {
     return GetUIState().force_display_mode == DisplayMode::NONE
-      ? _T("*") : _T("");
-  } else if (name == _T("DispModeFinalShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "DispModeFinalShortIndicator") {
     return GetUIState().force_display_mode == DisplayMode::FINAL_GLIDE
-      ? _T("*") : _T("");
-  } else if (name == _T("AirspaceModeAllShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "AirspaceModeAllShortIndicator") {
     return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLON
-      ? _T("*") : _T("");
-  } else if (name == _T("AirspaceModeClipShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "AirspaceModeClipShortIndicator") {
     return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::CLIP
-      ? _T("*") : _T("");
-  } else if (name == _T("AirspaceModeAutoShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "AirspaceModeAutoShortIndicator") {
     return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::AUTO
-      ? _T("*") : _T("");
-  } else if (name == _T("AirspaceModeBelowShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "AirspaceModeBelowShortIndicator") {
     return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLBELOW
-      ? _T("*") : _T("");
-  } else if (name == _T("AirspaceModeAllOffIndicator")) {
+      ? "*" : "";
+  } else if (name == "AirspaceModeAllOffIndicator") {
     return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLOFF
-      ? _T("*") : _T("");
-  } else if (name == _T("SnailTrailOffShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "SnailTrailOffShortIndicator") {
     return GetMapSettings().trail.length == TrailSettings::Length::OFF
-      ? _T("*") : _T("");
-  } else if (name == _T("SnailTrailShortShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "SnailTrailShortShortIndicator") {
     return GetMapSettings().trail.length == TrailSettings::Length::SHORT
-      ? _T("*") : _T("");
-  } else if (name == _T("SnailTrailLongShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "SnailTrailLongShortIndicator") {
     return GetMapSettings().trail.length == TrailSettings::Length::LONG
-      ? _T("*") : _T("");
-  } else if (name == _T("SnailTrailFullShortIndicator")) {
+      ? "*" : "";
+  } else if (name == "SnailTrailFullShortIndicator") {
     return GetMapSettings().trail.length == TrailSettings::Length::FULL
-      ? _T("*") : _T("");
-  } else if (name == _T("AirSpaceOffShortIndicator")) {
-    return !GetMapSettings().airspace.enable ? _T("*") : _T("");
-  } else if (name == _T("AirSpaceOnShortIndicator")) {
-    return GetMapSettings().airspace.enable ? _T("*") : _T("");
-  } else if (name == _T("FlarmDispToggleActionName")) {
+      ? "*" : "";
+  } else if (name == "AirSpaceOffShortIndicator") {
+    return !GetMapSettings().airspace.enable ? "*" : "";
+  } else if (name == "AirSpaceOnShortIndicator") {
+    return GetMapSettings().airspace.enable ? "*" : "";
+  } else if (name == "FlarmDispToggleActionName") {
     return CommonInterface::GetUISettings().traffic.enable_gauge
       ? _("Off") : _("On");
-  } else if (name == _T("ZoomAutoToggleActionName")) {
+  } else if (name == "ZoomAutoToggleActionName") {
     return GetMapSettings().auto_zoom_enabled ? _("Manual") : _("Auto");
-  } else if (name == _T("NextPageName")) {
+  } else if (name == "NextPageName") {
     static char label[64]; // TODO: oh no, a static string buffer!
     const PageLayout &page =
       CommonInterface::GetUISettings().pages.pages[PageActions::NextIndex()];
     return page.MakeTitle(CommonInterface::GetUISettings().info_boxes,
                           std::span{label}, true);
-  } else if (name == _T("CheckWeGlide")) {
+  } else if (name == "CheckWeGlide") {
     invalid |= !CommonInterface::GetComputerSettings().weglide.enabled;
     return nullptr;
   } else

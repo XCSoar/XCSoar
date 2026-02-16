@@ -79,12 +79,12 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(EnableExternalTriggerCruise);
 
   static constexpr StaticEnumChoice aver_eff_list[] = {
-    { ae15seconds, _T("15 s"), N_("Preferred period for paragliders.") },
-    { ae30seconds, _T("30 s") },
-    { ae60seconds, _T("60 s") },
-    { ae90seconds, _T("90 s"), N_("Preferred period for gliders.") },
-    { ae2minutes, _T("2 min") },
-    { ae3minutes, _T("3 min") },
+    { ae15seconds, "15 s", N_("Preferred period for paragliders.") },
+    { ae30seconds, "30 s" },
+    { ae60seconds, "60 s" },
+    { ae90seconds, "90 s", N_("Preferred period for gliders.") },
+    { ae2minutes, "2 min" },
+    { ae3minutes, "3 min" },
     nullptr
   };
 

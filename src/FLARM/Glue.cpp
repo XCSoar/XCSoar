@@ -52,7 +52,7 @@ LoadSecondary(FlarmNameDatabase &db) noexcept
 try {
   LogString("OpenFLARMDetails");
 
-  auto reader = OpenDataFile(_T("xcsoar-flarm.txt"));
+  auto reader = OpenDataFile("xcsoar-flarm.txt");
   BufferedReader buffered_reader{*reader};
   LoadFlarmNameFile(buffered_reader, db);
 } catch (...) {
@@ -64,7 +64,7 @@ LoadFlarmMessagingData(FlarmMessagingDatabase &db) noexcept
 try {
   LogString("OpenFLARMMessages");
 
-  auto reader = OpenDataFile(_T("flarm-msg-data.csv"));
+  auto reader = OpenDataFile("flarm-msg-data.csv");
   BufferedReader buffered_reader{*reader};
   unsigned num_records = LoadFlarmMessagingFile(buffered_reader, db);
   if (num_records > 0)
@@ -117,7 +117,7 @@ SaveFlarmColors() noexcept
 static void
 SaveSecondary(FlarmNameDatabase &flarm_names) noexcept
 try {
-  FileOutputStream fos(LocalPath(_T("xcsoar-flarm.txt")));
+  FileOutputStream fos(LocalPath("xcsoar-flarm.txt"));
   BufferedOutputStream bos(fos);
   SaveFlarmNameFile(bos, flarm_names);
   bos.Flush();
@@ -129,7 +129,7 @@ try {
 static void
 SaveMessaging(FlarmMessagingDatabase &flarm_messages) noexcept
 try {
-  FileOutputStream fos(LocalPath(_T("flarm-msg-data.csv")));
+  FileOutputStream fos(LocalPath("flarm-msg-data.csv"));
   BufferedOutputStream bos(fos);
   SaveFlarmMessagingFile(bos, flarm_messages);
   bos.Flush();

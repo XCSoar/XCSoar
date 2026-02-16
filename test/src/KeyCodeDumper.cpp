@@ -83,12 +83,12 @@ protected:
     canvas.SetBackgroundTransparent();
     canvas.Select(normal_font);
 
-    unsigned text_height = canvas.CalcTextSize(_T("W")).height;
+    unsigned text_height = canvas.CalcTextSize("W").height;
     for (int i = num_events - 1, y = 4; i >= 0; --i, y += text_height) {
       const struct key_event &event = events[i];
       char buffer[64];
-      sprintf(buffer, _T("key %s = 0x%x"),
-                event.down ? _T("down") : _T("up"), event.code);
+      sprintf(buffer, "key %s = 0x%x",
+                event.down ? "down" : "up", event.code);
       canvas.DrawText({4, y}, buffer);
     }
   }
@@ -102,7 +102,7 @@ public:
   using UI::SingleWindow::SingleWindow;
 
   void Create(PixelSize size) {
-    SingleWindow::Create(_T("KeyCodeDumper"), size);
+    SingleWindow::Create("KeyCodeDumper", size);
 
     PixelRect rc = GetClientRect();
 
@@ -114,7 +114,7 @@ public:
     button_rc.top = (rc.top + rc.bottom + 1) / 2;
 
     close_button.Create(*this, *button_look,
-                        _T("Close"), button_rc,
+                        "Close", button_rc,
                         WindowStyle(),
                         [this](){ Close(); });
 

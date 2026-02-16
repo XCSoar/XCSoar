@@ -290,9 +290,9 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
-  const int status_width = canvas.CalcTextWidth(_T("inside"));
+  const int status_width = canvas.CalcTextWidth("inside");
   // "1888" is used in order to have enough space for 4-digit heights with "AGL"
-  const int altitude_width = canvas.CalcTextWidth(_T("1888 m AGL"));
+  const int altitude_width = canvas.CalcTextWidth("1888 m AGL");
 
   // Dynamic columns scaling - "name" column is flexible, altitude and state
   // columns are fixed-width.
@@ -306,7 +306,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
-    StringFormat(buffer, ARRAY_SIZE(buffer), _T("%s %s"), airspace.GetName(),
+    StringFormat(buffer, ARRAY_SIZE(buffer), "%s %s", airspace.GetName(),
                  AirspaceFormatter::GetClassOrType(airspace));
 
     row_renderer.DrawFirstRow(canvas, text_rc, buffer);
@@ -321,16 +321,16 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   if (const auto &solution = warning.GetSolution();
       warning.IsWarning() && !warning.IsInside() && solution.IsValid()) {
 
-    sprintf(buffer, _T("%d secs"),
+    sprintf(buffer, "%d secs",
               (int)solution.elapsed_time.count());
 
     if (solution.distance > 0)
-      sprintf(buffer + strlen(buffer), _T(" dist %d m"),
+      sprintf(buffer + strlen(buffer), " dist %d m",
                 (int)solution.distance);
     else {
       /* the airspace is right above or below us - show the vertical
          distance */
-      strcat(buffer, _T(" vertical "));
+      strcat(buffer, " vertical ");
 
       auto delta = solution.altitude - CommonInterface::Basic().nav_altitude;
       FormatRelativeUserAltitude(delta, buffer + strlen(buffer), true);
@@ -346,17 +346,17 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   if (warning.IsInside()) {
     state_color = warning.IsActive() ? inside_color : inside_ack_color;
-    state_text = _T("inside");
+    state_text = "inside";
   } else if (warning.IsWarning()) {
     state_color = warning.IsActive() ? near_color : near_ack_color;
-    state_text = _T("near");
+    state_text = "near";
   } else {
     state_color = COLOR_WHITE;
     state_text = NULL;
   }
 
   const PixelSize state_text_size =
-    canvas.CalcTextSize(state_text != NULL ? state_text : _T("W"));
+    canvas.CalcTextSize(state_text != NULL ? state_text : "W");
 
   if (state_color != COLOR_WHITE) {
     /* colored background */
@@ -429,7 +429,7 @@ AirspaceWarningListWidget::UpdateList()
       const unsigned sound_interval =
         ((tt_closest_airspace * 3 / warning_config.warning_time) + 1) * 2;
       if (sound_interval_counter >= sound_interval) {
-        PlayResource(_T("IDR_WAV_BEEPBWEEP"));
+        PlayResource("IDR_WAV_BEEPBWEEP");
         sound_interval_counter = 1;
       } else
         ++sound_interval_counter;

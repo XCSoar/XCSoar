@@ -164,8 +164,8 @@ protected:
   void OnPaintItem(Canvas &canvas, PixelRect rc,
                    unsigned i) noexcept override {
     if (int(i) == active_index) {
-      rc.left = row_renderer.DrawColumn(canvas, rc, _T(" > "));
-      rc.right = row_renderer.DrawRightColumn(canvas, rc, _T(" < "));
+      rc.left = row_renderer.DrawColumn(canvas, rc, " > ");
+      rc.right = row_renderer.DrawRightColumn(canvas, rc, " < ");
     }
 
     TextListWidget::OnPaintItem(canvas, rc, i);
@@ -231,10 +231,10 @@ WeatherMapOverlayListWidget::UpdateList()
     }
   } visitor(items);
 
-  const auto weather_path = LocalPath(_T("weather"));
-  const auto overlay_path = AllocatedPath::Build(weather_path, _T("overlay"));
-  Directory::VisitSpecificFiles(overlay_path, _T("*.tif"), visitor);
-  Directory::VisitSpecificFiles(overlay_path, _T("*.tiff"), visitor);
+  const auto weather_path = LocalPath("weather");
+  const auto overlay_path = AllocatedPath::Build(weather_path, "overlay");
+  Directory::VisitSpecificFiles(overlay_path, "*.tif", visitor);
+  Directory::VisitSpecificFiles(overlay_path, "*.tiff", visitor);
 
   const unsigned n = items.size();
 
@@ -276,7 +276,7 @@ SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer name)
   /* configure a default, just in case this overlay type is unknown */
   bmp.SetAlpha(0.5);
 
-  if (StringStartsWithIgnoreCase(name, _T("nb_"))) {
+  if (StringStartsWithIgnoreCase(name, "nb_")) {
     name += 3;
 
     /* skip "model", go to "met" */
@@ -284,21 +284,21 @@ SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer name)
     if (underscore != nullptr) {
       name = underscore + 1;
 
-      if (StringStartsWithIgnoreCase(name, _T("ome_"))) {
+      if (StringStartsWithIgnoreCase(name, "ome_")) {
         /* vertical wind */
         bmp.SetAlpha(0.5);
-      } else if (StringStartsWithIgnoreCase(name, _T("w_"))) {
+      } else if (StringStartsWithIgnoreCase(name, "w_")) {
         /* horizontal wind */
         bmp.SetAlpha(0.7);
       }
     }
-  } else if (StringStartsWithIgnoreCase(name, _T("sat_"))) {
+  } else if (StringStartsWithIgnoreCase(name, "sat_")) {
     bmp.IgnoreBitmapAlpha();
     bmp.SetAlpha(0.9);
-  } else if (StringStartsWithIgnoreCase(name, _T("pg_"))) {
+  } else if (StringStartsWithIgnoreCase(name, "pg_")) {
     /* precipitation */
     bmp.SetAlpha(0.4);
-  } else if (StringStartsWithIgnoreCase(name, _T("Vertikalwind"))) {
+  } else if (StringStartsWithIgnoreCase(name, "Vertikalwind")) {
     /* name of a draft file I got from DWD */
     // TODO: remove obsolete prefix
     bmp.IgnoreBitmapAlpha();
@@ -364,7 +364,7 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
         item.path = std::move(overlay->path);
         UpdatePreview(item.path);
       } catch (...) {
-        ShowError(std::current_exception(), _T("pc_met"));
+        ShowError(std::current_exception(), "pc_met");
       }
     }
   }
@@ -399,7 +399,7 @@ WeatherMapOverlayListWidget::UpdateClicked()
           SetOverlay(overlay->path, info.label.c_str());
         item.path = std::move(overlay->path);
       } catch (...) {
-        ShowError(std::current_exception(), _T("pc_met"));
+        ShowError(std::current_exception(), "pc_met");
         break;
       }
     }

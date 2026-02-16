@@ -39,6 +39,6 @@ LoadAltitudeSimulatorPanel([[maybe_unused]] unsigned id)
     return nullptr;
 
   return std::make_unique<AltitudeSimulatorOffsetButtons>(UIGlobals::GetDialogLook().button,
-                                                          _T("%+.0f"),
+                                                          "%+.0f",
                                                           10, 100);
 }

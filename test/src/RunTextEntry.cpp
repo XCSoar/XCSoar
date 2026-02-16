@@ -13,6 +13,6 @@
 static void
 Main([[maybe_unused]] TestMainWindow &main_window)
 {
-  char text[64] = _T("");
-  TextEntryDialog(text, ARRAY_SIZE(text), _T("The caption"));
+  char text[64] = "";
+  TextEntryDialog(text, ARRAY_SIZE(text), "The caption");
 }

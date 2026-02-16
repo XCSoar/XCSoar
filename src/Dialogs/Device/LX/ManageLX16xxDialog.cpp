@@ -54,7 +54,7 @@ void
 ManageLX16xxDialog(Device &device, const DeviceInfo &info)
 {
   StaticString<64> title;
-  title.Format(_T("LX %s"), info.product.c_str());
+  title.Format("LX %s", info.product.c_str());
 
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),

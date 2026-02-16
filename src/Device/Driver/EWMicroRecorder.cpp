@@ -58,7 +58,7 @@ ReadAltitude(NMEAInputLine &line, double &value_r)
   if (!available)
     return false;
 
-  if (unit == _T('f') || unit == _T('F'))
+  if (unit == 'f' || unit == 'F')
     value = Units::ToSysUnit(value, Unit::FEET);
 
   value_r = value;
@@ -219,10 +219,10 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
 
   // prepare latitude
   tmp = (double)value.latitude.Degrees();
-  NoS = _T('N');
+  NoS = 'N';
   if (tmp < 0)
     {
-      NoS = _T('S');
+      NoS = 'S';
       tmp = -tmp;
     }
 
@@ -231,10 +231,10 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
 
   // prepare long
   tmp = (double)value.longitude.Degrees();
-  EoW = _T('E');
+  EoW = 'E';
   if (tmp < 0)
     {
-      EoW = _T('W');
+      EoW = 'W';
       tmp = -tmp;
     }
 
@@ -293,7 +293,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   port.FullWrite("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
                  env, std::chrono::seconds(1));
 
-  WritePair(port, "Description", _T("XCSoar task declaration"), env);
+  WritePair(port, "Description", "XCSoar task declaration", env);
 
   for (unsigned i = 0; i < 11; i++) {
     if (i+1>= declaration.Size()) {
@@ -343,8 +343,8 @@ EWMicroRecorderCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &c
 }
 
 const struct DeviceRegister ew_microrecorder_driver = {
-  _T("EW MicroRecorder"),
-  _T("EW microRecorder"),
+  "EW MicroRecorder",
+  "EW microRecorder",
   DeviceRegister::DECLARE,
   EWMicroRecorderCreateOnPort,
 };

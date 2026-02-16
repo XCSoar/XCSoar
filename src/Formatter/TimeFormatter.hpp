@@ -89,12 +89,12 @@ FormatTimeTwoLines(char *buffer1, char *buffer2,
 void
 FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
                     unsigned max_tokens = 1,
-                    const char *separator = _T(" ")) noexcept;
+                    const char *separator = " ") noexcept;
 
 [[gnu::const]]
 static inline BasicStringBuffer<char, 64>
 FormatTimespanSmart(std::chrono::seconds timespan, unsigned max_tokens = 1,
-                    const char *separator = _T(" ")) noexcept
+                    const char *separator = " ") noexcept
 {
   BasicStringBuffer<char, 64> buffer;
   FormatTimespanSmart(buffer.data(), timespan, max_tokens, separator);
@@ -104,7 +104,7 @@ FormatTimespanSmart(std::chrono::seconds timespan, unsigned max_tokens = 1,
 [[gnu::const]]
 static inline auto
 FormatTimespanSmart(FloatDuration timespan, unsigned max_tokens = 1,
-                    const char *separator = _T(" ")) noexcept
+                    const char *separator = " ") noexcept
 {
   return FormatTimespanSmart(std::chrono::duration_cast<std::chrono::seconds>(timespan),
                              max_tokens, separator);

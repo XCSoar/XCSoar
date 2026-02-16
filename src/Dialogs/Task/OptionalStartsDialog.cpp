@@ -119,7 +119,7 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     const OrderedTaskPoint *tp;
     if (DrawListIndex == 0) {
       tp = &task.GetPoint(0);
-      rc.left = row_renderer.DrawColumn(canvas, rc, _T("*"));
+      rc.left = row_renderer.DrawColumn(canvas, rc, "*");
     } else
       tp = &task.GetOptionalStartPoint(index_optional_starts);
 

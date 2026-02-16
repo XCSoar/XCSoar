@@ -44,7 +44,7 @@ TestRadiusParsingWithUnits()
     "ObsZone=4,Style=0,R1=1.2NM\n"
     "ObsZone=5,Style=0,R1=1000\n";
 
-  constexpr Path task_path{_T("output/results/Test-Task-RadiusParsing.cup")};
+  constexpr Path task_path{"output/results/Test-Task-RadiusParsing.cup"};
 
   {
     FileOutputStream fos(task_path, FileOutputStream::Mode::CREATE);
@@ -150,7 +150,7 @@ TestAngleParsingWithDecimals()
     "ObsZone=1,Style=1,R1=1000m,A1=180\n"
     "ObsZone=2,Style=1,R1=1000m,A12=45.67\n";
 
-  constexpr Path task_path{_T("output/results/Test-Task-AngleParsing.cup")};
+  constexpr Path task_path{"output/results/Test-Task-AngleParsing.cup"};
 
   {
     FileOutputStream fos(task_path, FileOutputStream::Mode::CREATE);
@@ -191,7 +191,7 @@ TestLineZoneWithDecimalRadius()
     "ObsZone=0,Style=2,R1=500.5m,Line=1\n"
     "ObsZone=1,Style=2,R1=1.2nm,Line=1\n";
 
-  constexpr Path task_path{_T("output/results/Test-Task-LineZoneDecimal.cup")};
+  constexpr Path task_path{"output/results/Test-Task-LineZoneDecimal.cup"};
 
   {
     FileOutputStream fos(task_path, FileOutputStream::Mode::CREATE);
@@ -244,7 +244,7 @@ TestAll()
 
 int main()
 {
-  Directory::Create(Path{_T("output/results")});
+  Directory::Create(Path{"output/results"});
 
   plan_tests(33);
   task_behaviour.SetDefaults();

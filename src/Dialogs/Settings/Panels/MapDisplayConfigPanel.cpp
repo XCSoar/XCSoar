@@ -114,13 +114,13 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Glider position offset"),
              _("Defines the location of the glider drawn on the screen in percent from the screen edge."),
-             _T("%d %%"), _T("%d"), 10, 50, 5,
+             "%d %%", "%d", 10, 50, 5,
              settings_map.glider_screen_position);
   SetExpertRow(GliderScreenPosition);
 
   AddFloat(_("Max. auto zoom distance"),
            _("The upper limit for auto zoom distance."),
-           _T("%.0f %s"), _T("%.0f"), 20, 250, 10, false,
+           "%.0f %s", "%.0f", 20, 250, 10, false,
            UnitGroup::DISTANCE, settings_map.max_auto_zoom_distance);
   SetExpertRow(MaxAutoZoomDistance);
 

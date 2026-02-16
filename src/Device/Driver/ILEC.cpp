@@ -70,8 +70,8 @@ ILECCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]] P
 }
 
 const struct DeviceRegister ilec_driver = {
-  _T("ILEC SN10"),
-  _T("ILEC SN10"),
+  "ILEC SN10",
+  "ILEC SN10",
   0,
   ILECCreateOnPort,
 };

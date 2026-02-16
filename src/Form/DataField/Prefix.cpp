@@ -10,7 +10,7 @@ PrefixDataField::GetAsDisplayString() const noexcept
 {
   const char *s = DataFieldString::GetAsDisplayString();
   if (StringIsEmpty(s))
-    s = _T("*");
+    s = "*";
   return s;
 }
 
@@ -22,7 +22,7 @@ PrefixDataField::Inc() noexcept
     return;
 
   const char current = GetAsString()[0];
-  const char *p = current != _T('\0')
+  const char *p = current != '\0'
     ? StringFind(chars, current)
     : nullptr;
 
@@ -32,7 +32,7 @@ PrefixDataField::Inc() noexcept
   else
     next = p[1];
 
-  const char new_value[2] = { next, _T('\0') };
+  const char new_value[2] = { next, '\0' };
   ModifyValue(new_value);
 }
 
@@ -46,19 +46,19 @@ PrefixDataField::Dec() noexcept
   const char current = GetAsString()[0];
 
   char next;
-  if (current == _T('\0'))
+  if (current == '\0')
     next = chars[strlen(chars) - 1];
   else {
-    const char *p = current != _T('\0')
+    const char *p = current != '\0'
       ? StringFind(chars, current)
       : nullptr;
 
     if (p > chars)
       next = p[-1];
     else
-      next = _T('\0');
+      next = '\0';
   }
 
-  const char new_value[2] = { next, _T('\0') };
+  const char new_value[2] = { next, '\0' };
   ModifyValue(new_value);
 }

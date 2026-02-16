@@ -187,7 +187,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (addr.IsDefined()) { /* valid address? */
       StaticString<40> addr_str;
       if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
-        state_buffer.Format(_T("%s (%s)"), state, addr_str.c_str());
+        state_buffer.Format("%s (%s)", state, addr_str.c_str());
         state = state_buffer;
       }
     }
@@ -204,7 +204,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   if (info.signal_detected) {
     StaticString<36> text;
-    text.UnsafeFormat(signal_level_in_dbm ? _T("%s %d dBm") : _T("%s %d"),
+    text.UnsafeFormat(signal_level_in_dbm ? "%s %d dBm" : "%s %d",
                       wifi_security[info.security], info.signal_level);
     row_renderer.DrawRightSecondRow(canvas, rc, text);
   }

@@ -446,8 +446,8 @@ LarusCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister larus_driver = {
-  _T("Larus"),
-  _T("Larus"),
+  "Larus",
+  "Larus",
   DeviceRegister::SEND_SETTINGS,
   LarusCreateOnPort,
 };

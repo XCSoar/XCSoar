@@ -264,7 +264,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
 
   AddFloat(_("Crew"),
            _("All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."),
-           _T("%.0f %s"), _T("%.0f"),
+           "%.0f %s", "%.0f",
            0, Units::ToUserMass(300), 5, false, UnitGroup::MASS,
            polar_settings.glide_polar_task.GetCrewMass(),
            this);
@@ -272,13 +272,13 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
   const double db = 5;
   AddFloat(_("Ballast"),
            _("Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
-           _T("%.0f l"), _T("%.0f"),
+           "%.0f l", "%.0f",
            0, db*ceil(plane.max_ballast/db), db, false, 0,
            this);
 
   WndProperty *wing_loading = AddFloat(_("Wing loading"),
                                        _("The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."),
-                                       _T("%.1f %s"), _T("%.0f"), 0,
+                                       "%.1f %s", "%.0f", 0,
                                        300, 5,
                                        false, UnitGroup::WING_LOADING,
                                        0);
@@ -287,7 +287,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
   AddFloat(_("Bugs"), /* xgettext:no-c-format */
            _("How clean the glider is. Set to 0% for clean, larger numbers as the wings "
                "pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."),
-           _T("%.0f %%"), _T("%.0f"),
+           "%.0f %%", "%.0f",
            0, 50, 1, false,
            (1 - polar_settings.bugs) * 100,
            this);
@@ -306,12 +306,12 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
     wp->RefreshDisplay();
   }
 
-  AddReadOnly(_("Altitude"), NULL, _T("%.0f %s"),
+  AddReadOnly(_("Altitude"), NULL, "%.0f %s",
               UnitGroup::ALTITUDE, 0);
 
   wp = AddFloat(_("Max. temp."),
                 _("Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."),
-                _T("%.0f %s"), _T("%.0f"),
+                "%.0f %s", "%.0f",
                 Temperature::FromCelsius(-50).ToUser(),
                 Temperature::FromCelsius(60).ToUser(),
                 1, false,
@@ -344,7 +344,7 @@ dlgBasicSettingsShowModal()
 
   const Plane &plane = CommonInterface::GetComputerSettings().plane;
   StaticString<128> caption(_("Flight Setup"));
-  caption.append(_T(" - "));
+  caption.append(" - ");
   caption.append(plane.polar_name);
 
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),

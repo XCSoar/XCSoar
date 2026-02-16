@@ -71,7 +71,7 @@ inline void load_score_file(std::ifstream& fscore,
 
 inline void load_scores(unsigned &contest_handicap) {
   // replay_file
-  const auto score_file = replay_file.WithSuffix(_T(".txt"));
+  const auto score_file = replay_file.WithSuffix(".txt");
   if (verbose) {
     std::cout << "# replay file: " << replay_file << "\n";
     std::cout << "# score file: " << score_file << "\n";
@@ -114,7 +114,7 @@ static bool
 test_replay(const Contest olc_type,
             const ContestResult &official_score)
 {
-  Directory::Create(Path(_T("output/results")));
+  Directory::Create(Path("output/results"));
   std::ofstream f("output/results/res-sample.txt");
 
   GlidePolar glide_polar(2);

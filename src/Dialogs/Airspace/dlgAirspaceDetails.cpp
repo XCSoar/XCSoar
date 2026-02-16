@@ -64,7 +64,7 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   if (airspace->GetRadioFrequency().IsDefined()) {
     if (airspace->GetRadioFrequency().Format(buffer.data(), buffer.capacity()) !=
         nullptr) {
-      buffer += _T(" MHz");
+      buffer += " MHz";
       AddReadOnly(_("Radio"), nullptr, buffer);
     }
 

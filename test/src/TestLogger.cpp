@@ -91,12 +91,12 @@ Run(IGCWriter &writer)
   i.ProvidePressureAltitude(490);
   i.ProvideBaroAltitudeTrue(400);
 
-  writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("CoPilot Name"), _T("ASK-21"),
-                     _T("D-1234"), _T("34"), "FOO", _T("bar"), false);
+  writer.WriteHeader(i.date_time_utc, "Pilot Name", "CoPilot Name", "ASK-21",
+                     "D-1234", "34", "FOO", "bar", false);
   writer.StartDeclaration(i.date_time_utc, 3);
-  writer.AddDeclaration(home, _T("Bergneustadt"));
-  writer.AddDeclaration(tp, _T("Suhl"));
-  writer.AddDeclaration(home, _T("Bergneustadt"));
+  writer.AddDeclaration(home, "Bergneustadt");
+  writer.AddDeclaration(tp, "Suhl");
+  writer.AddDeclaration(home, "Bergneustadt");
   writer.EndDeclaration();
 
   writer.LogEmptyFRecord(i.date_time_utc);
@@ -106,7 +106,7 @@ Run(IGCWriter &writer)
   i.date_time_utc.second += 5;
   writer.LogEvent(i, "my_event");
   i.date_time_utc.second += 5;
-  writer.LoggerNote(_T("my_note"));
+  writer.LoggerNote("my_note");
 
   int satellites[GPSState::MAXSATELLITES];
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i)
@@ -139,7 +139,7 @@ int main()
 try {
   plan_tests(51);
 
-  const Path path(_T("output/test/test.igc"));
+  const Path path("output/test/test.igc");
   File::Delete(path);
 
   Run(path);

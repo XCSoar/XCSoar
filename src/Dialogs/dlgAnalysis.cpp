@@ -293,15 +293,15 @@ AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   info.Create(parent, layout.info);
 
   const auto &button_look = dialog.GetLook().button;
-  details_button.Create(parent, button_look, _T("Calc"), layout.details_button,
+  details_button.Create(parent, button_look, "Calc", layout.details_button,
                         button_style, [this](){ OnCalcClicked(); });
   previous_button.Create(parent, layout.previous_button,
                          button_style,
-                         std::make_unique<SymbolButtonRenderer>(button_look, _T("<")),
+                         std::make_unique<SymbolButtonRenderer>(button_look, "<"),
                          [this](){ NextPage(-1); });
   next_button.Create(parent, layout.next_button,
                      button_style,
-                     std::make_unique<SymbolButtonRenderer>(button_look, _T(">")),
+                     std::make_unique<SymbolButtonRenderer>(button_look, ">"),
                      [this](){ NextPage(1); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
                       button_style, dialog.MakeModalResultCallback(mrOK));
@@ -466,7 +466,7 @@ AnalysisWidget::Update()
 
   switch (page) {
   case AnalysisPage::BAROGRAPH:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Barograph"));
     dialog.SetCaption(sTmp);
     BarographCaption(sTmp, glide_computer.GetFlightStats());
@@ -475,7 +475,7 @@ AnalysisWidget::Update()
     break;
 
   case AnalysisPage::CLIMB:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Climb"));
     dialog.SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer.GetFlightStats());
@@ -484,32 +484,32 @@ AnalysisWidget::Update()
     break;
 
   case AnalysisPage::THERMAL_BAND:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Thermal Band"));
     dialog.SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer.GetFlightStats());
     info.SetText(sTmp);
-    SetCalcCaption(_T(""));
+    SetCalcCaption("");
     break;
 
   case AnalysisPage::VARIO_HISTOGRAM:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Vario Histogram"));
     dialog.SetCaption(sTmp);
-    info.SetText(_T(""));
-    SetCalcCaption(_T(""));
+    info.SetText("");
+    SetCalcCaption("");
     break;
 
   case AnalysisPage::WIND:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Wind at Altitude"));
     dialog.SetCaption(sTmp);
-    info.SetText(_T(""));
+    info.SetText("");
     SetCalcCaption(_("Set Wind"));
     break;
 
   case AnalysisPage::POLAR:
-    StringFormatUnsafe(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s (%s %d kg)", _("Analysis"),
                        _("Glide Polar"), _("Mass"),
                        (int)settings_computer.polar.glide_polar_task.GetTotalMass());
     dialog.SetCaption(sTmp);
@@ -519,7 +519,7 @@ AnalysisWidget::Update()
     break;
 
   case AnalysisPage::MACCREADY:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("MacCready Speeds"));
     dialog.SetCaption(sTmp);
     MacCreadyCaption(sTmp, settings_computer.polar.glide_polar_task);
@@ -528,7 +528,7 @@ AnalysisWidget::Update()
     break;
 
   case AnalysisPage::TEMPTRACE:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Temperature Trace"));
     dialog.SetCaption(sTmp);
     TemperatureChartCaption(sTmp, glide_computer.GetCuSonde());
@@ -537,7 +537,7 @@ AnalysisWidget::Update()
     break;
 
   case AnalysisPage::TASK_SPEED:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Task Speed"));
     dialog.SetCaption(sTmp);
     TaskSpeedCaption(sTmp, glide_computer.GetFlightStats(),
@@ -547,7 +547,7 @@ AnalysisWidget::Update()
     break;
 
   case AnalysisPage::TASK:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Task"));
     dialog.SetCaption(sTmp);
     FlightStatisticsRenderer::CaptionTask(sTmp, calculated);
@@ -556,20 +556,20 @@ AnalysisWidget::Update()
     break;
 
   case AnalysisPage::CONTEST:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        ContestToString(settings_computer.contest.contest));
     dialog.SetCaption(sTmp);
-    SetCalcCaption(_T(""));
+    SetCalcCaption("");
     FlightStatisticsRenderer::CaptionContest(sTmp, settings_computer.contest,
                                          calculated);
     info.SetText(sTmp);
     break;
 
   case AnalysisPage::AIRSPACE:
-    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+    StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Airspace"));
     dialog.SetCaption(sTmp);
-    info.SetText(_T(""));
+    info.SetText("");
     SetCalcCaption(_("Warnings"));
     break;
 
@@ -604,9 +604,9 @@ AnalysisWidget::NextPage(int Step)
 void
 AnalysisWidget::OnGesture(const char *gesture)
 {
-  if (StringIsEqual(gesture, _T("R")))
+  if (StringIsEqual(gesture, "R"))
     NextPage(-1);
-  else if (StringIsEqual(gesture, _T("L")))
+  else if (StringIsEqual(gesture, "L"))
     NextPage(+1);
 }
 

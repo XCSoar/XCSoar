@@ -14,8 +14,8 @@ GenericCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]
 }
 
 const struct DeviceRegister generic_driver = {
-  _T("Generic"),
-  _T("Generic"),
+  "Generic",
+  "Generic",
   0,
   GenericCreateOnPort,
 };

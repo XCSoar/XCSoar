@@ -41,8 +41,8 @@ const char* gettext(const char* text);
 /**
  * For source compatibility with GNU gettext.
  */
-#define _(x) gettext(_T(x))
-#define N_(x) _T(x)
+#define _(x) gettext(x)
+#define N_(x) x
 
 void reset_gettext_cache();
 

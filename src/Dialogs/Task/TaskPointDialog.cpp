@@ -92,11 +92,11 @@ public:
   }
 
   void CreateButtons() {
-    previous_button = dialog.AddSymbolButton(_T("<"), [this](){
+    previous_button = dialog.AddSymbolButton("<", [this](){
       OnPreviousClicked();
     });
 
-    next_button = dialog.AddSymbolButton(_T(">"), [this](){
+    next_button = dialog.AddSymbolButton(">", [this](){
       OnNextClicked();
     });
   }
@@ -315,7 +315,7 @@ TaskPointWidget::RefreshView()
     optional_starts.SetCaption(_("Enable Alternate Starts"));
   else {
     StaticString<50> tmp;
-    tmp.Format(_T("%s (%d)"), _("Edit Alternates"),
+    tmp.Format("%s (%d)", _("Edit Alternates"),
                ordered_task.GetOptionalStartPointCount());
     optional_starts.SetCaption(tmp);
   }
@@ -332,22 +332,22 @@ TaskPointWidget::RefreshView()
   switch (tp.GetType()) {
   case TaskPointType::START:
     type_buffer = _("Start point");
-    name_prefix_buffer = _T("Start: ");
+    name_prefix_buffer = "Start: ";
     break;
 
   case TaskPointType::AST:
     type_buffer = _("Task point");
-    name_prefix_buffer.Format(_T("%d: "), active_index);
+    name_prefix_buffer.Format("%d: ", active_index);
     break;
 
   case TaskPointType::AAT:
     type_buffer = _("Assigned area point");
-    name_prefix_buffer.Format(_T("%d: "), active_index);
+    name_prefix_buffer.Format("%d: ", active_index);
     break;
 
   case TaskPointType::FINISH:
     type_buffer = _("Finish point");
-    name_prefix_buffer = _T("Finish: ");
+    name_prefix_buffer = "Finish: ";
     break;
 
   default:
@@ -358,7 +358,7 @@ TaskPointWidget::RefreshView()
 
   {
     StaticString<100> buffer;
-    buffer.Format(_T("%s %s"), name_prefix_buffer.c_str(),
+    buffer.Format("%s %s", name_prefix_buffer.c_str(),
                   tp.GetWaypoint().name.c_str());
     waypoint_name.SetText(buffer);
   }

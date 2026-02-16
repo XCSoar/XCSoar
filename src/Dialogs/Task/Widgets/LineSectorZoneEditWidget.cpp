@@ -20,7 +20,7 @@ LineSectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) 
   ObservationZoneEditWidget::Prepare(parent, rc);
 
   AddFloat(_("Gate width"), _("Width of the start/finish gate."),
-           _T("%.1f %s"), _T("%.1f"),
+           "%.1f %s", "%.1f",
            0.1, 200, 1, true,
            UnitGroup::DISTANCE, GetObject().GetLength(),
            this);

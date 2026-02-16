@@ -18,7 +18,7 @@ const char *
 GeoPointDataField::GetAsString() const noexcept
 {
   if (!value.IsValid())
-    return _T("");
+    return "";
 
   return FormatGeoPoint(value, string_buffer, std::size(string_buffer),
                         format);

@@ -41,7 +41,7 @@ public:
 
   void Create(ContainerWindow &parent, PixelRect rc,
               const WindowStyle style=WindowStyle()) noexcept {
-    Create(parent, _T("PaintWindow"), rc, style);
+    Create(parent, "PaintWindow", rc, style);
   }
 #endif /* USE_WINUSER */
 

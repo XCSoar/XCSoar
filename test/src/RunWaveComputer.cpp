@@ -43,9 +43,9 @@ int main(int argc, char **argv)
     if (w.time.IsDefined())
       FormatTime(time_buffer, w.time);
     else
-      strcpy(time_buffer, _T("?"));
+      strcpy(time_buffer, "?");
 
-    printf(_T("wave: t=%s location=%f,%f a=%f,%f b=%f,%f location=%s normal=%f\n"),
+    printf("wave: t=%s location=%f,%f a=%f,%f b=%f,%f location=%s normal=%f\n",
              time_buffer,
              (double)w.location.longitude.Degrees(),
              (double)w.location.latitude.Degrees(),

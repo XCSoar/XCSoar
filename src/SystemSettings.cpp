@@ -15,11 +15,11 @@ SystemSettings::SetDefaults()
   } else {
     devices[0].port_type = DeviceConfig::PortType::SERIAL;
 #ifdef _WIN32
-    devices[0].path = _T("COM1:");
+    devices[0].path = "COM1:";
 #else
-    devices[0].path = _T("/dev/tty0");
+    devices[0].path = "/dev/tty0";
 #endif
     devices[0].baud_rate = 4800;
-    devices[0].driver_name = _T("Generic");
+    devices[0].driver_name = "Generic";
   }
 }

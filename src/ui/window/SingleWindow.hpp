@@ -20,7 +20,7 @@ struct Event;
  */
 class SingleWindow : public TopWindow {
 #ifdef USE_WINUSER
-  static constexpr const char *class_name = _T("XCSoarMain");
+  static constexpr const char *class_name = "XCSoarMain";
 #endif
 
   std::forward_list<WndForm *> dialogs;

@@ -72,7 +72,7 @@ LoggerImpl::StopLogger([[maybe_unused]] const NMEAInfo &gps_info)
 
   writer->Flush();
 
-  LogFormat(_T("Stopped logger: %s"), filename.c_str());
+  LogFormat("Stopped logger: %s", filename.c_str());
 
   // Logger off
   writer.reset();
@@ -202,7 +202,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   assert(writer == nullptr);
 
-  const auto logs_path = MakeLocalPath(_T("logs"));
+  const auto logs_path = MakeLocalPath("logs");
 
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
     ? gps_info.date_time_utc.GetDate()
@@ -226,7 +226,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     return false;
   }
 
-  LogFormat(_T("Started logger: %s"), filename.c_str());
+  LogFormat("Started logger: %s", filename.c_str());
   return true;
 }
 
@@ -242,16 +242,16 @@ static const char *
 GetGPSDeviceName() noexcept
 {
   if (is_simulator())
-    return _T("Simulator");
+    return "Simulator";
 
   const DeviceConfig &device = CommonInterface::GetSystemSettings().devices[0];
   if (device.UsesDriver())
     return device.driver_name;
 
   if (device.IsAndroidInternalGPS())
-    return _T("Internal GPS (Android)");
+    return "Internal GPS (Android)";
 
-  return _T("Unknown");
+  return "Unknown";
 }
 
 // TODO: fix scope so only gui things can start it
@@ -268,8 +268,8 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   unsigned asset_length = strlen(asset_number);
   for (unsigned i = 0; i < 3; i++)
     logger_id[i] = i < asset_length && IsAlphaNumericASCII(asset_number[i]) ?
-                   asset_number[i] : _T('A');
-  logger_id[3] = _T('\0');
+                   asset_number[i] : 'A';
+  logger_id[3] = '\0';
 
   if (!StartLogger(gps_info, settings, logger_id))
     return;

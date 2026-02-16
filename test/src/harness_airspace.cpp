@@ -26,8 +26,8 @@ airspace_random_properties(AbstractAirspace& as)
   AirspaceAltitude top;
   base.altitude = rand()%4000;
   top.altitude = base.altitude+rand()%3000;
-  TransponderCode code = TransponderCode::Parse(_T("1234"));
-  as.SetProperties(_T("hello"), _T("Hello2"),std::move(code), asclass, AirspaceClass::CLASSE, base, top);
+  TransponderCode code = TransponderCode::Parse("1234");
+  as.SetProperties("hello", "Hello2",std::move(code), asclass, AirspaceClass::CLASSE, base, top);
 }
 
 
@@ -47,7 +47,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
   std::ofstream *fin = NULL;
 
   if (verbose) {
-    Directory::Create(Path(_T("output/results")));
+    Directory::Create(Path("output/results"));
     fin = new std::ofstream("output/results/res-bb-in.txt");
   }
 
@@ -242,7 +242,7 @@ void scan_airspaces(const AircraftState state,
 {
   const double range(20000.0);
 
-  Directory::Create(Path(_T("output/results")));
+  Directory::Create(Path("output/results"));
 
   {
     AirspaceVisitorPrint pvisitor("output/results/res-bb-range.txt",

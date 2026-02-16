@@ -43,8 +43,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   LeastSquares windstats_mag;
 
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.SetXLabel(_T("w"), Units::GetSpeedName());
-  chart.SetYLabel(_T("h"), Units::GetAltitudeName());
+  chart.SetXLabel("w", Units::GetSpeedName());
+  chart.SetYLabel("h", Units::GetAltitudeName());
   chart.Begin();
 
   if (fs.altitude_base.IsEmpty() || fs.altitude_ceiling.IsEmpty()) {

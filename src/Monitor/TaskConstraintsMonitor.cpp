@@ -35,7 +35,7 @@ TaskConstraintsMonitor::Check()
         !settings.start_constraints.CheckSpeed(basic.ground_speed) &&
         max_start_speed_clock.CheckUpdate(std::chrono::seconds(30))) {
       StaticString<256> msg;
-      msg.Format(_T("%s (%s > %s)"), _("Maximum start speed exceeded"),
+      msg.Format("%s (%s > %s)", _("Maximum start speed exceeded"),
                  FormatUserSpeed(basic.ground_speed).c_str(),
                  FormatUserSpeed(settings.start_constraints.max_speed).c_str());
       Message::AddMessage(msg);

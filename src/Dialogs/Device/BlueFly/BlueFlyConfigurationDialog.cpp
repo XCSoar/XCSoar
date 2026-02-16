@@ -33,15 +33,15 @@ public:
   void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
 
       AddFloat(N_("Volume"), nullptr,
-             _T("%.2f"),
-             _T("%.2f"),
+             "%.2f",
+             "%.2f",
                0, 1.0, 0.1, true, 0);
 
       static constexpr StaticEnumChoice modes[] = {
-        { 0, _T("BlueFlyVario") },
-        { 1, _T("LK8EX1") },
-        { 2, _T("LX") },
-        { 3, _T("FlyNet") },
+        { 0, "BlueFlyVario" },
+        { 1, "LK8EX1" },
+        { 2, "LX" },
+        { 3, "FlyNet" },
         { 0 }
       };
 
@@ -73,7 +73,7 @@ public:
     } catch (OperationCancelled) {
       return false;
     } catch (...) {
-      ShowError(std::current_exception(), _T("BlueFly Vario"));
+      ShowError(std::current_exception(), "BlueFly Vario");
       return false;
     }
 
@@ -108,7 +108,7 @@ dlgConfigurationBlueFlyVarioShowModal(Device &_device)
 
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       look,
-                      _T("BlueFly Vario"),
+                      "BlueFly Vario",
                       new BlueFlyConfigurationWidget(look, dialog, device));
 
   dialog.AddButton(_("Cancel"), mrCancel);

@@ -133,7 +133,7 @@ ThermalBandRenderer::DrawRiskMC(const DerivedInfo &calculated,
 
   chart.DrawLineGraph(tmp, (is_map || is_infobox)? ChartLook::STYLE_WHITE: ChartLook::STYLE_REDTHICKDASH);
   if (!is_map && !is_infobox) {
-    chart.DrawLabel({rmc, h_m}, _T("MC"));
+    chart.DrawLabel({rmc, h_m}, "MC");
   }
 }
 
@@ -225,8 +225,8 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
 {
   ChartRenderer chart(chart_look, canvas, rc, !is_map);
   if (!is_map) {
-    chart.SetXLabel(_T("w"), Units::GetVerticalSpeedName());
-    chart.SetYLabel(_T("h AGL"), Units::GetAltitudeName());
+    chart.SetXLabel("w", Units::GetVerticalSpeedName());
+    chart.SetYLabel("h AGL", Units::GetAltitudeName());
   }
 
   chart.Begin();

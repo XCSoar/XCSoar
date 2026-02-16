@@ -14,5 +14,5 @@ FormatGlideRatio(char *buffer, size_t size, double gr)
   assert(size >= 8);
 
   StringFormat(buffer, size,
-             fabs(gr) < 100 ? _T("%.1f") : _T("%.0f"), (double) gr);
+             fabs(gr) < 100 ? "%.1f" : "%.0f", (double) gr);
 }

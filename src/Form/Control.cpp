@@ -14,7 +14,7 @@ void
 WindowControl::SetCaption(const char *Value) noexcept
 {
   if (Value == nullptr)
-    Value = _T("");
+    Value = "";
 
   if (!caption.equals(Value)) {
     caption = Value;

@@ -65,7 +65,7 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent,
   AddInteger(_("Border Width"),
              _("The width of the border drawn around each airspace. "
                "Set this value to zero to hide the border."),
-             _T("%d"), _T("%d"), 0, 5, 1, settings.border_width);
+             "%d", "%d", 0, 5, 1, settings.border_width);
 
   static constexpr StaticEnumChoice fill_mode_list[] = {
     { AirspaceClassRendererSettings::FillMode::ALL, N_("Filled"), },

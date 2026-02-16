@@ -327,7 +327,7 @@ try {
 
   repository.Clear();
 
-  const auto path = LocalPath(_T("repository"));
+  const auto path = LocalPath("repository");
   FileLineReaderA reader(path);
   ParseFileRepository(repository, reader);
 } catch (const std::runtime_error &e) {
@@ -435,13 +435,13 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (file.download_status.position < 0) {
       text = _("Queued");
     } else if (file.download_status.size > 0) {
-      text.Format(_T("%s (%u%%)"), _("Downloading"),
+      text.Format("%s (%u%%)", _("Downloading"),
                     unsigned(file.download_status.position * 100
                              / file.download_status.size));
     } else {
       char size[32];
       FormatByteSize(size, ARRAY_SIZE(size), file.download_status.position);
-      text.Format(_T("%s (%s)"), _("Downloading"), size);
+      text.Format("%s (%s)", _("Downloading"), size);
     }
 
     row_renderer.DrawRightFirstRow(canvas, rc, text);

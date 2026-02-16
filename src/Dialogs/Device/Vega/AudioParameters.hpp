@@ -12,49 +12,49 @@
 #include <stdio.h>
 
 static constexpr StaticEnumChoice beep_types[] = {
-  { 0, _T("Silence") },
-  { 1, _T("Short") },
-  { 2, _T("Medium") },
-  { 3, _T("Long") },
-  { 4, _T("Continuous") },
-  { 5, _T("Short double") },
+  { 0, "Silence" },
+  { 1, "Short" },
+  { 2, "Medium" },
+  { 3, "Long" },
+  { 4, "Continuous" },
+  { 5, "Short double" },
   { 0 }
 };
 
 static constexpr StaticEnumChoice pitch_schemes[] = {
-  { 0, _T("Constant high") },
-  { 1, _T("Constant medium") },
-  { 2, _T("Constant low") },
-  { 3, _T("Speed percent") },
-  { 4, _T("Speed error") },
-  { 5, _T("Vario gross") },
-  { 6, _T("Vario net") },
-  { 7, _T("Vario relative") },
-  { 8, _T("Vario gross/relative") },
+  { 0, "Constant high" },
+  { 1, "Constant medium" },
+  { 2, "Constant low" },
+  { 3, "Speed percent" },
+  { 4, "Speed error" },
+  { 5, "Vario gross" },
+  { 6, "Vario net" },
+  { 7, "Vario relative" },
+  { 8, "Vario gross/relative" },
   { 0 }
 };
 
 static constexpr StaticEnumChoice period_schemes[] = {
-  { 0, _T("Constant high") },
-  { 1, _T("Constant medium") },
-  { 2, _T("Constant low") },
-  { 3, _T("Speed percent") },
-  { 4, _T("Speed error") },
-  { 5, _T("Vario gross") },
-  { 6, _T("Vario net") },
-  { 7, _T("Vario relative") },
-  { 8, _T("Vario gross/relative") },
-  { 9, _T("Intermittent") },
+  { 0, "Constant high" },
+  { 1, "Constant medium" },
+  { 2, "Constant low" },
+  { 3, "Speed percent" },
+  { 4, "Speed error" },
+  { 5, "Vario gross" },
+  { 6, "Vario net" },
+  { 7, "Vario relative" },
+  { 8, "Vario gross/relative" },
+  { 9, "Intermittent" },
   { 0 }
 };
 
 static constexpr StaticEnumChoice pitch_and_period_scales[] = {
-  { 0, _T("+Linear") },
-  { 1, _T("+Low end") },
-  { 2, _T("+High end") },
-  { 3, _T("-Linear") },
-  { 4, _T("-Low end") },
-  { 5, _T("-High end") },
+  { 0, "+Linear" },
+  { 1, "+Low end" },
+  { 2, "+High end" },
+  { 3, "-Linear" },
+  { 4, "-Low end" },
+  { 5, "-High end" },
   { 0 }
 };
 

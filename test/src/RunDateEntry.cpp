@@ -14,7 +14,7 @@ static void
 Main([[maybe_unused]] TestMainWindow &main_window)
 {
   auto value = BrokenDate::TodayUTC();
-  if (!DateEntryDialog(_T("The caption"), value, true))
+  if (!DateEntryDialog("The caption", value, true))
     return;
 
   if (value.IsPlausible())

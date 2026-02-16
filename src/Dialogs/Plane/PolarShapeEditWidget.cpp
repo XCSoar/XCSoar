@@ -130,9 +130,9 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent,
   rc.bottom = row_height;
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
-    points[i].v = std::make_unique<WndProperty>(panel, look, _T(""),
+    points[i].v = std::make_unique<WndProperty>(panel, look, "",
                                                 rc, 0, style);
-    DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
+    DataFieldFloat *df = new DataFieldFloat("%.0f", "%.0f %s",
                                             0, 300, 0, 1, false,
                                             listener);
     points[i].v->SetDataField(df);
@@ -166,9 +166,9 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent,
 
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
-    points[i].w = std::make_unique<WndProperty>(panel, look, _T(""),
+    points[i].w = std::make_unique<WndProperty>(panel, look, "",
                                                 rc, 0, style);
-    DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
+    DataFieldFloat *df = new DataFieldFloat("%.2f", "%.2f %s",
                                             min, 0, 0, step, false,
                                             listener);
 

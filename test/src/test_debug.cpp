@@ -19,8 +19,8 @@ int output_skip = 5;
 AutopilotParameters autopilot_parms;
 
 int terrain_height = 1;
-AllocatedPath replay_file = Path(_T("test/data/0asljd01.igc"));
-AllocatedPath waypoint_file = Path(_T("test/data/waypoints_geo.wpt"));
+AllocatedPath replay_file = Path("test/data/0asljd01.igc");
+AllocatedPath waypoint_file = Path("test/data/waypoints_geo.wpt");
 AllocatedPath task_file;
 double range_threshold = 15000;
 

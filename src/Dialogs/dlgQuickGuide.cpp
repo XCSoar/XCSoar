@@ -422,7 +422,7 @@ dlgQuickGuideShowModal(bool force_info)
         if (ShowMessageBox(
               _("The safety disclaimer must be accepted "
                 "to use XCSoar. Quit?"),
-              _T("XCSoar"),
+              "XCSoar",
               MB_YESNO | MB_ICONWARNING) != IDYES)
           /* User chose not to quit — stay in the dialog */
           return;

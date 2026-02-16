@@ -5,4 +5,4 @@
 
 #include <tchar.h>
 
-#define AIRSPACE_FILE_PATTERNS _T("*.txt\0*.air\0*.sua\0")
+#define AIRSPACE_FILE_PATTERNS "*.txt\0*.air\0*.sua\0"

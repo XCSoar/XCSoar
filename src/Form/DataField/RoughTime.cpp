@@ -22,9 +22,9 @@ const char *
 RoughTimeDataField::GetAsString() const noexcept
 {
   if (!value.IsValid())
-    return _T("");
+    return "";
 
-  sprintf(buffer, _T("%02u:%02u"), value.GetHour(), value.GetMinute());
+  sprintf(buffer, "%02u:%02u", value.GetHour(), value.GetMinute());
   return buffer;
 }
 
@@ -32,10 +32,10 @@ const char *
 RoughTimeDataField::GetAsDisplayString() const noexcept
 {
   if (!value.IsValid())
-    return _T("");
+    return "";
 
   RoughTime local_value = value + time_zone;
-  sprintf(buffer, _T("%02u:%02u"),
+  sprintf(buffer, "%02u:%02u",
             local_value.GetHour(), local_value.GetMinute());
   return buffer;
 }

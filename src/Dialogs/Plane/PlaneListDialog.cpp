@@ -57,7 +57,7 @@ class PlaneListWidget final
 
     void Visit(Path path, Path filename) override {
       std::string_view name{filename.c_str()};
-      RemoveSuffix(name, std::string_view{_T(".xcp")});
+      RemoveSuffix(name, std::string_view{".xcp"});
 
       list.emplace_back(name, path);
     }
@@ -106,7 +106,7 @@ PlaneListWidget::UpdateList() noexcept
   list.clear();
 
   PlaneFileVisitor pfv(list);
-  VisitDataFiles(_T("*.xcp"), pfv);
+  VisitDataFiles("*.xcp", pfv);
 
   unsigned len = list.size();
 
@@ -154,7 +154,7 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   if (Profile::GetPathIsEqual("PlanePath", list[i].path)) {
     StaticString<256> buffer;
-    buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
+    buffer.Format("%s - %s", list[i].name.c_str(), _("Active"));
     row_renderer.DrawFirstRow(canvas, rc, buffer);
   } else
     row_renderer.DrawFirstRow(canvas, rc, list[i].name);
@@ -226,7 +226,7 @@ PlaneListWidget::NewClicked() noexcept
     }
 
     StaticString<42> filename(plane.registration);
-    filename += _T(".xcp");
+    filename += ".xcp";
 
     const auto path = LocalPath(filename);
 
@@ -271,7 +271,7 @@ PlaneListWidget::EditClicked(bool copy) noexcept
     }
 
     StaticString<42> filename(plane.registration);
-    filename += _T(".xcp");
+    filename += ".xcp";
 
     if (copy || filename != old_filename) {
       const auto path = AllocatedPath::Build(old_path.GetParent(),
@@ -346,7 +346,7 @@ PlaneListWidget::OnActivateItem(unsigned i) noexcept
   tmp.Format(_("Activate plane \"%s\"?"),
              list[i].name.c_str());
 
-  if (ShowMessageBox(tmp, _T(" "), MB_YESNO) == IDYES)
+  if (ShowMessageBox(tmp, " ", MB_YESNO) == IDYES)
     LoadWithDialog(i);
 }
 

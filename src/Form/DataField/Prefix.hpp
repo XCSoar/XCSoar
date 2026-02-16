@@ -21,7 +21,7 @@ public:
     :DataFieldString(Type::PREFIX, value, listener),
      allowed_characters(_allowed_characters) {}
 
-  PrefixDataField(const char *value=_T(""),
+  PrefixDataField(const char *value="",
                   DataFieldListener *listener=nullptr) noexcept
     :DataFieldString(Type::PREFIX, value, listener) {}
 
@@ -38,7 +38,7 @@ protected:
   [[gnu::pure]]
   const char *GetAllowedCharacters() const noexcept {
     return allowed_characters
-      ? allowed_characters(_T(""))
-      : _T("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+      ? allowed_characters("")
+      : "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   }
 };

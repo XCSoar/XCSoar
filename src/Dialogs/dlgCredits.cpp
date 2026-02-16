@@ -44,7 +44,7 @@ GetLogoText() noexcept
     "Visit us at:\n"
     "[https://xcsoar.org](https://xcsoar.org)",
     XCSoar_VersionString,
-    _T(GIT_COMMIT_ID));
+    GIT_COMMIT_ID);
 #else
   text.Format(
     "![XCSoar Logo](resource:IDB_LOGO_HD)\n\n"

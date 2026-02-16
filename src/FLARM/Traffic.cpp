@@ -4,22 +4,22 @@
 #include "FLARM/Traffic.hpp"
 
 static constexpr const char *acTypes[] = {
-  _T("Unknown"),
-  _T("Glider"),
-  _T("TowPlane"),
-  _T("Helicopter"),
-  _T("Parachute"),
-  _T("DropPlane"),
-  _T("HangGlider"),
-  _T("ParaGlider"),
-  _T("PoweredAircraft"),
-  _T("JetAircraft"),
-  _T("FlyingSaucer"),
-  _T("Balloon"),
-  _T("Airship"),
-  _T("UAV"),
-  _T("Unknown"),
-  _T("StaticObject") 
+  "Unknown",
+  "Glider",
+  "TowPlane",
+  "Helicopter",
+  "Parachute",
+  "DropPlane",
+  "HangGlider",
+  "ParaGlider",
+  "PoweredAircraft",
+  "JetAircraft",
+  "FlyingSaucer",
+  "Balloon",
+  "Airship",
+  "UAV",
+  "Unknown",
+  "StaticObject" 
 };
 
 const char *

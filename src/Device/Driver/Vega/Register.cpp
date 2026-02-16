@@ -11,8 +11,8 @@ VegaCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister vega_driver = {
-  _T("Vega"),
-  _T("Vega"),
+  "Vega",
+  "Vega",
   DeviceRegister::MANAGE |
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   VegaCreateOnPort,

@@ -34,7 +34,7 @@ ATCSetupPanel::Prepare(ContainerWindow &parent,
 
   AddFloat(_("Mag declination"),
            _("Magnetic declination used to calculate radial to reference. Negative values are W declination, positive is E."),
-           _T("%.0f°"), _T("%.0f°"), // unfortunately AngleDataField does not
+           "%.0f°", "%.0f°", // unfortunately AngleDataField does not
            -30.0, +30.0, 1.0, false, // support negative values to handle
            declination.Degrees(),    // this formatting more gracefully
            this);

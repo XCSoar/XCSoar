@@ -30,7 +30,7 @@ PlayResource(const char *resource_name)
 {
 #ifdef ANDROID
 
-  if (strstr(resource_name, _T(".wav")))
+  if (strstr(resource_name, ".wav"))
     return SoundUtil::PlayExternal(Java::GetEnv(), context->Get(), resource_name);
   return SoundUtil::Play(Java::GetEnv(), context->Get(), resource_name);
 
@@ -43,7 +43,7 @@ PlayResource(const char *resource_name)
   if (strstr(resource_name, TEXT(".wav")))
     return sndPlaySound(resource_name, SND_ASYNC | SND_NODEFAULT);
 
-  ResourceLoader::Data data = ResourceLoader::Load(resource_name, _T("WAVE"));
+  ResourceLoader::Data data = ResourceLoader::Load(resource_name, "WAVE");
   return data.data() != nullptr &&
     sndPlaySound((LPCTSTR)data.data(), SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
 

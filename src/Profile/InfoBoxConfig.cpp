@@ -127,7 +127,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
       sprintf(profileKey, "InfoBoxPanel%uName", i);
       map.Get(profileKey, panel.name);
       if (panel.name.empty())
-        sprintf(panel.name.buffer(), _T("AUX-%u"), i-2);
+        sprintf(panel.name.buffer(), "AUX-%u", i-2);
     }
 
     for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
