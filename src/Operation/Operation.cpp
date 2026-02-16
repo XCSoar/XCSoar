@@ -9,7 +9,7 @@
 void
 OperationEnvironment::SetError(std::exception_ptr e) noexcept
 {
-  SetErrorMessage(UTF8ToWideConverter(GetFullMessage(e).c_str()));
+  SetErrorMessage(GetFullMessage(e).c_str());
 }
 
 bool

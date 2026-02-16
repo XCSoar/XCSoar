@@ -173,16 +173,16 @@ public:
 
     else if (StringIsEqual(name, "gesture_", 8)) {
       // scan for gesture
-      const UTF8ToWideConverter gesture(name+8);
-      if (gesture.IsValid()) {
+      const char *gesture = name + 8;
+      if (gesture != nullptr) {
         auto *input_event = new LuaInputEvent(L, 2);
         input_event->AttachGesture(gesture);
         return 1;
       }
     } else if (StringIsEqual(name, "key_", 4)) {
         // scan for key code
-        const UTF8ToWideConverter keycode(name+4);
-        if (keycode.IsValid()) {
+        const char* keycode = name+4;
+        if (keycode != nullptr) { 
           const unsigned code = ParseKeyCode(keycode);
           auto *input_event = new LuaInputEvent(L, 2);
           input_event->AttachKey(code);
@@ -223,15 +223,15 @@ public:
       return luaL_error(L, "Invalid parameters");
 
     else if (StringIsEqual(name, "gesture_", 8)) {
-      const UTF8ToWideConverter gesture(name+8);
-      if (gesture.IsValid()) {
-        event_store_gesture.Clear(std::string(gesture));
+      std::string gesture(name + 8);
+      if (!gesture.empty()) {
+        event_store_gesture.Clear(gesture);
         return 1;
       }
     } else if (StringIsEqual(name, "key_", 4)) {
       // scan for key code
-      const UTF8ToWideConverter keycode(name+4);
-      if (keycode.IsValid()) {
+      const char *keycode = name + 4;
+      if (keycode != nullptr) {
         const unsigned code = ParseKeyCode(keycode);
         event_store_key.Clear(code);
         return 1;

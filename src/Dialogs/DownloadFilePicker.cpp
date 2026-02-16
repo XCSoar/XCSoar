@@ -106,12 +106,11 @@ private:
  * Throws on error.
  */
 static AllocatedPath
-DownloadFile(const char *uri, const char *_base)
+DownloadFile(const char *uri, const char *base)
 {
   assert(Net::DownloadManager::IsAvailable());
 
-  const UTF8ToWideConverter base(_base);
-  if (!base.IsValid())
+  if (base == nullptr)
     return nullptr;
 
   ProgressDialog dialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
@@ -285,8 +284,7 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const auto &file = items[i];
 
-  const UTF8ToWideConverter name(file.GetName());
-  row_renderer.DrawTextRow(canvas, rc, name);
+  row_renderer.DrawTextRow(canvas, rc, file.GetName());
 }
 
 void

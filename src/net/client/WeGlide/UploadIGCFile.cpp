@@ -26,10 +26,10 @@
 #include <cinttypes>
 
 // Wrapper for getting converted string values of a json string
-static const UTF8ToWideConverter 
+static const std::string_view
 GetJsonString(boost::json::value json_value, std::string_view key)
 {
-  return UTF8ToWideConverter(json_value.at(key).get_string().c_str());
+  return json_value.at(key).get_string().c_str();
 }
 
 namespace WeGlide {
@@ -62,20 +62,20 @@ UploadJsonInterpreter(const boost::json::value &json)
   FlightData flight_data;
   // flight is the 1st flight object in this array ('at(0)')
   auto flight = json.as_array().at(0);
-  flight_data.scoring_date = GetJsonString(flight, "scoring_date").c_str();
+  flight_data.scoring_date = GetJsonString(flight, "scoring_date").data();
   flight_data.flight_id = flight.at("id").to_number<int64_t>();
-  flight_data.registration = GetJsonString(flight, "registration").c_str();
-  flight_data.competition_id = GetJsonString(flight, "competition_id").c_str();
+  flight_data.registration = GetJsonString(flight, "registration").data();
+  flight_data.competition_id = GetJsonString(flight, "competition_id").data();
 
   auto user = flight.at("user").as_object();
   flight_data.user.id = user.at("id").to_number<uint32_t>();
-  flight_data.user.name = GetJsonString(user, "name").c_str();
+  flight_data.user.name = GetJsonString(user, "name").data();
 
   auto aircraft = flight.at("aircraft").as_object();
   flight_data.aircraft.id = aircraft.at("id").to_number<uint32_t>();
-  flight_data.aircraft.name = GetJsonString(aircraft, "name").c_str();
-  flight_data.aircraft.kind = GetJsonString(aircraft, "kind").c_str();
-  flight_data.aircraft.sc_class = GetJsonString(aircraft, "sc_class").c_str();
+  flight_data.aircraft.name = GetJsonString(aircraft, "name").data();
+  flight_data.aircraft.kind = GetJsonString(aircraft, "kind").data();
+  flight_data.aircraft.sc_class = GetJsonString(aircraft, "sc_class").data();
 
   return flight_data;
 }
