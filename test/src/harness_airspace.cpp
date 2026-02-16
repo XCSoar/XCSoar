@@ -118,7 +118,7 @@ public:
   void Visit(const AbstractAirspace &as) {
     if (do_report) {
       *fout << as;
-      *fout << "# Name: " << WideToUTF8Converter(as.GetName())
+      *fout << "# Name: " << as.GetName()
             << "Base: " << as.GetBase()
             << " Top: " << as.GetTop()
             << "\n";

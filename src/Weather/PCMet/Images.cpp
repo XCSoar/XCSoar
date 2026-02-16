@@ -111,9 +111,6 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
                            const PCMetSettings &settings,
                            CurlGlobal &curl, ProgressListener &progress)
 {
-  const WideToUTF8Converter username(settings.www_credentials.username);
-  const WideToUTF8Converter password(settings.www_credentials.password);
-
   char url[256];
   snprintf(url, sizeof(url),
            PCMET_URI "/fw/bilder/%s?type=%s",
@@ -121,7 +118,8 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
 
   // download the HTML page
   const auto response =
-    co_await CoGet(curl, url, username, password, progress);
+    co_await CoGet(curl, url, settings.www_credentials.username,
+                   settings.www_credentials.password, progress);
 
   static constexpr char img_needle[] = "<img name=\"bild\" src=\"/";
   const char *img = strstr(response.body.c_str(), img_needle);
@@ -153,7 +151,8 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
     snprintf(url, sizeof(url), PCMET_URI "%.*s", int(src.size()), src.data());
 
     const auto ignored_response = co_await
-      Net::CoDownloadToFile(curl, url, username, password,
+      Net::CoDownloadToFile(curl, url, settings.www_credentials.username,
+                            settings.www_credentials.password,
                             path, nullptr, progress);
   }
 

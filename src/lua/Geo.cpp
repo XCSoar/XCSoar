@@ -65,7 +65,7 @@ static int
 GeoPointToString(lua_State *L)
 {
   auto &gp = LuaGeoPointClass::Cast(L, 1);
-  Lua::Push(L, WideToUTF8Converter(FormatGeoPoint(gp, CoordinateFormat::DDMMSS)));
+  Lua::Push(L, FormatGeoPoint(gp, CoordinateFormat::DDMMSS));
   return 1;
 }
 

@@ -47,12 +47,11 @@ NanoWriteDeclString(Port &port, OperationEnvironment &env,
                     unsigned row, unsigned n_rows,
                     const char *prefix, const char *value)
 {
-  WideToUTF8Converter narrow_value(value);
-  if (!narrow_value.IsValid())
+  if (!value)
     return false;
 
   return NanoWriteDeclFormat(port, env, reader, row, n_rows,
-                             "%s%s", prefix, (const char *)narrow_value);
+                             "%s%s", prefix, value);
 }
 
 static bool
