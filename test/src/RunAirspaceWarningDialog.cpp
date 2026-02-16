@@ -27,8 +27,6 @@
 
 #include <memory>
 #include <stdio.h>
-#include <tchar.h>
-
 void VisitDataFiles([[maybe_unused]] const char* filter,
                     [[maybe_unused]] File::Visitor &visitor) {}
 

@@ -11,8 +11,6 @@
 #include <array>
 #include <string_view>
 
-#include <tchar.h>
-
 class Path;
 struct GPSState;
 struct BrokenDateTime;

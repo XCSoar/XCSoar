@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <stdexcept>
 
-#include <tchar.h>
 #include <cassert>
 #include <stdio.h>
 #include <cstddef>

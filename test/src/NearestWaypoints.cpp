@@ -11,8 +11,6 @@
 
 #include <cstdint>
 #include <stdio.h>
-#include <tchar.h>
-
 static void
 LoadWaypoints(Path path, Waypoints &waypoints)
 {

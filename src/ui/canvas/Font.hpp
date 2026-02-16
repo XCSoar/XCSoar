@@ -21,8 +21,6 @@ class GLTexture;
 #include <windef.h>
 #endif
 
-#include <tchar.h>
-
 #ifdef USE_FREETYPE
 typedef struct FT_FaceRec_ *FT_Face;
 #endif

@@ -6,8 +6,6 @@
 #ifdef USE_GDI
 #include <windef.h>
 #include <wingdi.h>
-#include <tchar.h>
-
 class FontDescription {
   LOGFONT logfont;
 

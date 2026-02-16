@@ -76,7 +76,6 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Terrain/RasterTerrain.hpp"
 
 #include <cassert>
-#include <tchar.h>
 #include <algorithm>
 #include <limits>
 

@@ -11,8 +11,6 @@
 
 #include <array>
 
-#include <tchar.h>
-
 struct ButtonLook;
 class Button;
 

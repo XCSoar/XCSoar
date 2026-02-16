@@ -6,8 +6,6 @@
 #include "Types.hpp"
 #include "Device/Declaration.hpp"
 
-#include <tchar.h>
-
 class Angle;
 struct BrokenDateTime;
 struct Waypoint;

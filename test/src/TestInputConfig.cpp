@@ -5,8 +5,6 @@
 #include "TestUtil.hpp"
 #include "ui/event/KeyCode.hpp"
 
-#include <tchar.h>
-
 int main()
 {
   plan_tests(37);

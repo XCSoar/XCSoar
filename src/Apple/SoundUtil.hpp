@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 class SoundUtil {
 public:
   static bool Play(const char *resource_name);

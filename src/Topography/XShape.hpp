@@ -17,8 +17,6 @@
 #include <memory>
 #include <span>
 
-#include <tchar.h>
-
 struct GeoPoint;
 
 class XShape {

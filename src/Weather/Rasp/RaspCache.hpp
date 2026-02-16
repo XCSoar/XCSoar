@@ -5,8 +5,6 @@
 
 #include <memory>
 
-#include <tchar.h>
-
 struct BrokenTime;
 struct GeoPoint;
 class RaspStore;

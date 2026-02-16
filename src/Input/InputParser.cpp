@@ -16,7 +16,6 @@
 #include "util/IterableSplitString.hxx"
 #include "LogFile.hpp"
 
-#include <tchar.h>
 #include <stdio.h>
 
 static bool

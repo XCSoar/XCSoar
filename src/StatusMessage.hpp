@@ -4,8 +4,6 @@
 #pragma once
 
 #include <chrono>
-#include <tchar.h>
-
 /**
  * Struct used to store status message items
  */

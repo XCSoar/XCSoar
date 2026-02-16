@@ -6,7 +6,6 @@
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
-#include <tchar.h>
 #include <algorithm>
 
 using std::string_view_literals::operator""sv;

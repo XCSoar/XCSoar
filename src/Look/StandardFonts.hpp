@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 [[gnu::const]]
 static inline const char *
 GetStandardMonospaceFontFace() noexcept

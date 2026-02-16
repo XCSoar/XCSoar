@@ -12,8 +12,6 @@
 
 #include <stdexcept>
 
-#include <tchar.h>
-
 #if !defined(USE_GEOTIFF) && defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=noreturn"
 #endif

@@ -8,8 +8,6 @@
 
 #include <string_view>
 
-#include <tchar.h>
-
 /**
  * Helper which imports strings from a file to `char*`.
  */

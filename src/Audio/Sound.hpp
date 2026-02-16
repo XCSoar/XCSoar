@@ -3,6 +3,4 @@
 
 #pragma once
 
-#include <tchar.h>
-
 bool PlayResource(const char *resource_name);

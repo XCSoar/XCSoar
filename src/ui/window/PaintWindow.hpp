@@ -6,7 +6,6 @@
 #include "Window.hpp"
 
 #ifdef USE_WINUSER
-#include <tchar.h>
 #endif
 
 class ContainerWindow;

@@ -22,8 +22,6 @@ static inline void DisallowLanguage() {}
 
 #else // !USE_LIBINTL
 
-#include <tchar.h>
-
 class MOFile;
 extern const MOFile *mo_file;
 

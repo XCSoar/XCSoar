@@ -5,8 +5,6 @@
 
 #include <cstddef>
 #include <span>
-#include <tchar.h>
-
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;

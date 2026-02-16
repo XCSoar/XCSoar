@@ -7,8 +7,6 @@
 #include "time/Stamp.hpp"
 #include "util/StringBuffer.hxx"
 
-#include <tchar.h>
-
 class RoughTimeDelta;
 
 /**

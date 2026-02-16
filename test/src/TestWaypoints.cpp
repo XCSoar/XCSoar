@@ -8,8 +8,6 @@
 #include <functional>
 
 #include <stdio.h>
-#include <tchar.h>
-
 extern "C" {
 #include "tap.h"
 }

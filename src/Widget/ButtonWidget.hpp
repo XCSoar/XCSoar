@@ -8,8 +8,6 @@
 #include <functional>
 #include <memory>
 
-#include <tchar.h>
-
 struct ButtonLook;
 class Button;
 class ButtonRenderer;

@@ -5,8 +5,6 @@
 
 #include "Engine/Airspace/AirspaceClass.hpp"
 
-#include <tchar.h>
-
 class AbstractAirspace;
 struct AirspaceAltitude;
 

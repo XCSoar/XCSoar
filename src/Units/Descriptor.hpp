@@ -5,8 +5,6 @@
 
 #include "Unit.hpp"
 
-#include <tchar.h>
-
 struct UnitDescriptor
 {
   const char *name;
