@@ -72,12 +72,12 @@ void
 FormatTimeTwoLines(char *buffer1, char *buffer2, std::chrono::seconds _time) noexcept
 {
   if (_time >= std::chrono::hours{24}) {
-    _tcscpy(buffer1, _T(">24h"));
+    strcpy(buffer1, _T(">24h"));
     buffer2[0] = '\0';
     return;
   }
   if (_time <= -std::chrono::hours{24}) {
-    _tcscpy(buffer1, _T("<-24h"));
+    strcpy(buffer1, _T("<-24h"));
     buffer2[0] = '\0';
     return;
   }
@@ -188,30 +188,30 @@ FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
 
   if (show_days) {
     component_buffer.Format(_T("%u days"), days);
-    _tcscat(buffer, component_buffer);
+    strcat(buffer, component_buffer);
   }
 
   if (show_hours) {
     if (!StringIsEmpty(buffer))
-      _tcscat(buffer, separator);
+      strcat(buffer, separator);
 
     component_buffer.Format(_T("%u h"), hours);
-    _tcscat(buffer, component_buffer);
+    strcat(buffer, component_buffer);
   }
 
   if (show_minutes) {
     if (!StringIsEmpty(buffer))
-      _tcscat(buffer, separator);
+      strcat(buffer, separator);
 
     component_buffer.Format(_T("%u min"), minutes);
-    _tcscat(buffer, component_buffer);
+    strcat(buffer, component_buffer);
   }
 
   if (show_seconds) {
     if (!StringIsEmpty(buffer))
-      _tcscat(buffer, separator);
+      strcat(buffer, separator);
 
     component_buffer.Format(_T("%u sec"), seconds);
-    _tcscat(buffer, component_buffer);
+    strcat(buffer, component_buffer);
   }
 }

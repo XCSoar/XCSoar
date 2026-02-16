@@ -33,7 +33,7 @@ public:
     if (!line_break) {
       // if no line break was found
       start = NULL;
-      return Range(line_start, _tcslen(line_start));
+      return Range(line_start, strlen(line_start));
     }
 
     unsigned length = line_break - line_start;
@@ -45,7 +45,7 @@ public:
 static bool
 CheckTitle(const char *title, size_t title_length, const char *check)
 {
-  if (_tcslen(check) != title_length)
+  if (strlen(check) != title_length)
     return false;
 
   return std::equal(title, title + title_length, check);

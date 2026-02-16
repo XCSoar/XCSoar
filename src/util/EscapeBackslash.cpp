@@ -36,5 +36,5 @@ UnescapeBackslash(tstring_view old_string) noexcept
 
   buffer[used++] = _T('\0');
 
-  return _tcsdup(buffer);
+  return strdup(buffer);
 }

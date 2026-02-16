@@ -57,7 +57,7 @@ ProfileMap::GetMultiplePaths(std::string_view key, const char *patterns) const
       paths.push_back(ExpandLocalPath(AllocatedPath(path)));
       continue;
     }
-    while ((length = _tcslen(patterns_iterator)) > 0) {
+    while ((length = strlen(patterns_iterator)) > 0) {
 #ifdef HAVE_POSIX
       if (!fnmatch(patterns_iterator, path.c_str(), 0))
 #else

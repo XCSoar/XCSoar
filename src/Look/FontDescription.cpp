@@ -37,7 +37,7 @@ FontDescription::Init(const char *face,
   logfont.lfPitchAndFamily = (monospace ? FIXED_PITCH : VARIABLE_PITCH)
     | FF_DONTCARE;
 
-  _tcscpy(logfont.lfFaceName, face);
+  strcpy(logfont.lfFaceName, face);
 }
 
 #endif

@@ -69,15 +69,15 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
   if (task) {
     if (!noAsk) {
       char TaskMessage[1024];
-      _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
+      strcpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
       
       if (decl.Size()) {
         for (unsigned i = 0; i< decl.Size(); ++i) {
-          _tcscat(TaskMessage, decl.GetName(i));
-          _tcscat(TaskMessage, _T("\r\n"));
+          strcat(TaskMessage, decl.GetName(i));
+          strcat(TaskMessage, _T("\r\n"));
         }
       } else {
-        _tcscat(TaskMessage, _T("None"));
+        strcat(TaskMessage, _T("None"));
       }
       
       if (ShowMessageBox(TaskMessage, _("Start Logger"),

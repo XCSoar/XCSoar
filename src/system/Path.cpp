@@ -65,7 +65,7 @@ Path::IsBase() const noexcept
   assert(*this != nullptr);
 
 #ifdef _WIN32
-  return _tcspbrk(c_str(), _T("/\\")) == nullptr;
+  return strpbrk(c_str(), _T("/\\")) == nullptr;
 #else
   return StringFind(c_str(), _T('/')) == nullptr;
 #endif
