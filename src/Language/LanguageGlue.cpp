@@ -246,9 +246,32 @@ InitNativeGettext(const char *locale) noexcept
     LogString("Language: failed to restore LANGUAGE");
   }
 
-  if (setlocale(LC_ALL, locale) == nullptr &&
-      locale != nullptr && *locale != '\0')
-    LogFmt("Language: failed to activate locale '{}'", locale);
+  bool locale_ok = setlocale(LC_ALL, locale) != nullptr;
+
+  if (!locale_ok && locale != nullptr && *locale != '\0') {
+    std::string_view locale_view{locale};
+    if (locale_view.ends_with(".UTF-8")) {
+      char locale_utf8[32]{};
+      const size_t prefix = locale_view.size() - 6;
+      auto [end, size] = fmt::format_to_n(locale_utf8,
+                                          sizeof(locale_utf8) - 1,
+                                          "{}.utf8",
+                                          locale_view.substr(0, prefix));
+      if (size < sizeof(locale_utf8)) {
+        *end = '\0';
+        locale_ok = setlocale(LC_ALL, locale_utf8) != nullptr;
+      }
+    }
+
+    if (!locale_ok) {
+      LogFmt("Language: failed to activate locale '{}'", locale);
+
+      if (setlocale(LC_ALL, "") != nullptr)
+        LogString("Language: using system locale fallback");
+      else
+        LogString("Language: failed to activate system locale fallback");
+    }
+  }
 
   // always use a dot as decimal point in printf/scanf()
   setlocale(LC_NUMERIC, "C");
