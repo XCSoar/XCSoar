@@ -14,34 +14,37 @@ on:
     branches:
       - master
 env:
-  TARGET: manual
+  DOC_OUTPUT: manual
   TARGET_FINAL: XCSoar-docs
   TARGET_EXT: pdf
 jobs:
   xcsoar-compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    container: debian:trixie-slim
     steps:
+     - name: Install checkout dependencies
+       run: |
+         apt-get update
+         apt-get install -y --no-install-recommends git ca-certificates
+
      - id: checkout
        uses: actions/checkout@v6
        with:
          submodules: false
-     - id: repository
-       uses: ASzc/change-string-case-action@v6
-       with:
-         string: ${{ github.repository }}
+
      - name: find githash
        run: |
          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+     - name: Install build dependencies
+       run: |
+         ./ide/provisioning/install-debian-packages.sh UPDATE BASE MANUAL
+
      - name: XCSoar generate Docs
-       uses: addnab/docker-run-action@v3
-       with:
-         image: ghcr.io/${{ steps.repository.outputs.lowercase }}/xcsoar-build:latest
-         options: -v ${{ github.workspace }}:/opt/xcsoar
-         run: |
-           cd /opt/xcsoar
-           make manual V=2
+       run: make manual V=2
+
      - name: upload artifact
        uses: actions/upload-artifact@v6
        with:
          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}
-         path: output/${{ env.TARGET }}/*.${{ env.TARGET_EXT }}
+         path: output/${{ env.DOC_OUTPUT }}/*.${{ env.TARGET_EXT }}
