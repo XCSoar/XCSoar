@@ -29,14 +29,14 @@ try {
 
   way_points.VisitNamePrefix(_T(""), [](const auto &p){
     const auto &wp = *p;
-    _ftprintf(stdout, _T("%s, %f, %f, "), wp.name.c_str(),
+    fprintf(stdout, _T("%s, %f, %f, "), wp.name.c_str(),
               wp.location.latitude.Degrees(),
               wp.location.longitude.Degrees());
 
     if (wp.has_elevation)
-      _ftprintf(stdout, _T("%.0fm\n"), wp.elevation);
+      fprintf(stdout, _T("%.0fm\n"), wp.elevation);
     else
-      _ftprintf(stdout, _T("?\n"));
+      fprintf(stdout, _T("?\n"));
   });
 
   return EXIT_SUCCESS;

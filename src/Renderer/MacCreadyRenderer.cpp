@@ -23,7 +23,7 @@ MacCreadyCaption(char *sTmp, const GlidePolar &glide_polar)
     return;
   }
 
-  _stprintf(sTmp,
+  sprintf(sTmp,
             _T("%s: %d %s\r\n%s: %d %s"),
             _("Vopt"),
             (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),

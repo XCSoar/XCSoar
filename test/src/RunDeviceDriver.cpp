@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 
   driver = FindDriverByName(driver_name.c_str());
   if (driver == nullptr) {
-    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
+    fprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
     return 1;
   }
 

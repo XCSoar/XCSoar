@@ -387,7 +387,7 @@ File::ReadString(Path path, char *buffer, size_t size) noexcept
   flags |= O_CLOEXEC;
 #endif
 
-  int fd = _topen(path.c_str(), flags);
+  int fd = open(path.c_str(), flags);
   if (fd < 0)
     return false;
 
@@ -414,7 +414,7 @@ File::WriteExisting(Path path, const char *value) noexcept
   flags |= O_CLOEXEC;
 #endif
 
-  int fd = _topen(path.c_str(), flags);
+  int fd = open(path.c_str(), flags);
   if (fd < 0)
     return false;
 
@@ -436,7 +436,7 @@ File::CreateExclusive(Path path) noexcept
   flags |= O_CLOEXEC;
 #endif
 
-  int fd = _topen(path.c_str(), flags, 0666);
+  int fd = open(path.c_str(), flags, 0666);
   if (fd < 0)
     return false;
 

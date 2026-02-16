@@ -19,14 +19,14 @@ ParseString(const char *s) noexcept
 const char *
 DataFieldInteger::GetAsString() const noexcept
 {
-  _stprintf(output_buffer, edit_format, value);
+  sprintf(output_buffer, edit_format, value);
   return output_buffer;
 }
 
 const char *
 DataFieldInteger::GetAsDisplayString() const noexcept
 {
-  _stprintf(output_buffer, display_format, value);
+  sprintf(output_buffer, display_format, value);
   return output_buffer;
 }
 
@@ -84,8 +84,8 @@ DataFieldInteger::AppendComboValue(ComboList &combo_list,
                                    int value) const noexcept
 {
   char a[decltype(edit_format)::capacity()], b[decltype(display_format)::capacity()];
-  _stprintf(a, edit_format, value);
-  _stprintf(b, display_format, value);
+  sprintf(a, edit_format, value);
+  sprintf(b, display_format, value);
   combo_list.Append(combo_list.size(), a, b);
 }
 

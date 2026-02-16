@@ -33,13 +33,13 @@ PrintMoreUsage()
   const struct DeviceRegister *driver;
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
     if (driver->HasPassThrough())
-      _ftprintf(stderr, _T("\t%s\n"), driver->name);
+      fprintf(stderr, _T("\t%s\n"), driver->name);
 
   fputs("Where DRIVER is one of:\n", stderr);
 
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
     if (driver->CanDeclare())
-      _ftprintf(stderr, _T("\t%s\n"), driver->name);
+      fprintf(stderr, _T("\t%s\n"), driver->name);
 }
 
 bool
@@ -137,12 +137,12 @@ try {
     const struct DeviceRegister *through_driver =
       FindDriverByName(through_name);
     if (through_driver == NULL) {
-      _ftprintf(stderr, _T("No such driver: %s\n"), through_name);
+      fprintf(stderr, _T("No such driver: %s\n"), through_name);
       return EXIT_FAILURE;
     }
 
     if (!through_driver->HasPassThrough()) {
-      _ftprintf(stderr, _T("Not a pass-through driver: %s\n"), through_name);
+      fprintf(stderr, _T("Not a pass-through driver: %s\n"), through_name);
       return EXIT_FAILURE;
     }
 
@@ -154,12 +154,12 @@ try {
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
-    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name);
+    fprintf(stderr, _T("No such driver: %s\n"), driver_name);
     return EXIT_FAILURE;
   }
 
   if (!driver->CanDeclare()) {
-    _ftprintf(stderr, _T("Not a logger driver: %s\n"), driver_name);
+    fprintf(stderr, _T("Not a logger driver: %s\n"), driver_name);
     return EXIT_FAILURE;
   }
 
@@ -168,7 +168,7 @@ try {
   assert(device != NULL);
 
   if (through_device != NULL && !through_device->EnablePassThrough(env)) {
-    _ftprintf(stderr, _T("Failed to enable pass-through mode: %s\n"),
+    fprintf(stderr, _T("Failed to enable pass-through mode: %s\n"),
               through_name);
     return EXIT_FAILURE;
   }

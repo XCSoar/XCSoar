@@ -26,7 +26,7 @@ PrintMoreUsage()
 
   const struct DeviceRegister *driver;
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
-    _ftprintf(stderr, _T("\t%s\n"), driver->name);
+    fprintf(stderr, _T("\t%s\n"), driver->name);
 }
 
 bool
@@ -75,7 +75,7 @@ try {
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
-    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name);
+    fprintf(stderr, _T("No such driver: %s\n"), driver_name);
     return EXIT_FAILURE;
   }
 

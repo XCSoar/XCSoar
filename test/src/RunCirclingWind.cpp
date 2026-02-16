@@ -46,7 +46,7 @@ int main(int argc, char **argv)
       char time_buffer[32];
       FormatTime(time_buffer, replay->Basic().time);
 
-      _tprintf(_T("%s %d %d %g\n"),
+      printf(_T("%s %d %d %g\n"),
                time_buffer, result.quality,
                (int)result.wind.bearing.Degrees(),
                (double)result.wind.norm);
