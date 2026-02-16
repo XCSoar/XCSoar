@@ -13,8 +13,6 @@
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 
-#include <tchar.h>
-
 static constexpr char CtrlC = '\x03';
 
 class CaiGpsNavDevice : public AbstractDevice {

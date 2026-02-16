@@ -5,8 +5,6 @@
 
 #include "Engine/Task/Factory/ValidationError.hpp"
 
-#include <tchar.h>
-
 [[gnu::const]]
 const char *
 getTaskValidationErrors(const TaskValidationErrorSet v);

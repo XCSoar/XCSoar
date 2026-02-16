@@ -6,8 +6,6 @@
 #include "util/Compiler.h"
 #include "util/NumberParser.hpp"
 #include "system/Path.hpp"
-#include <tchar.h>
-
 #include <string>
 #include <list>
 #include <algorithm>

@@ -13,8 +13,6 @@
 
 #include <stdexcept>
 
-#include <tchar.h>
-
 std::unique_ptr<OrderedTask>
 LoadTask(Path path, const TaskBehaviour &task_behaviour,
          const Waypoints *waypoints)

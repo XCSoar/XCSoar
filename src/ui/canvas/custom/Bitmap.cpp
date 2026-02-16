@@ -18,8 +18,6 @@
 
 #include "UncompressedImage.hpp"
 
-#include <tchar.h>
-
 Bitmap::Bitmap(std::span<const std::byte> _buffer)
 {
   Load(_buffer);

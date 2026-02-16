@@ -12,8 +12,6 @@
 #include <string_view>
 #include <array>
 #include <cassert>
-#include <tchar.h>
-
 struct InputConfig {
   // Sensible maximums
 

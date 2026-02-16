@@ -10,8 +10,6 @@
 
 #include <chrono>
 
-#include <tchar.h>
-
 struct UISettings;
 struct DialogLook;
 namespace UI { class SingleWindow; }

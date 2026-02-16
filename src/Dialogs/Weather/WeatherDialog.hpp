@@ -3,7 +3,5 @@
 
 #pragma once
 
-#include <tchar.h>
-
 void
 ShowWeatherDialog(const char *page);

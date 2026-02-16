@@ -7,7 +7,6 @@
 
 #include <algorithm>
 
-#include <tchar.h>
 #include <cstdio>
 
 struct UnitSymbolStrings {

@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 struct BrokenDate;
 
 void FormatIGCFilename(char* buffer, const BrokenDate &date,

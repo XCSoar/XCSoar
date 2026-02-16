@@ -7,8 +7,6 @@
 #include "util/StringBuffer.hxx"
 #include "util/Compiler.h"
 
-#include <tchar.h>
-
 class AtmosphericPressure;
 
 /**

@@ -4,8 +4,6 @@
 #pragma once
 
 #include <exception>
-#include <tchar.h>
-
 void
 ShowError(std::exception_ptr e, const char *caption) noexcept;
 

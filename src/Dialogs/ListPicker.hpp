@@ -10,8 +10,6 @@
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 
-#include <tchar.h>
-
 class ListItemRenderer;
 
 /** returns string of item's help text **/

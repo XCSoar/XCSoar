@@ -8,8 +8,6 @@
 #include <span>
 #include <type_traits>
 
-#include <tchar.h>
-
 struct InfoBoxSettings;
 
 struct PageLayout

@@ -6,7 +6,6 @@
 #include "system/Args.hpp"
 #include "util/Macros.hpp"
 
-#include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
 

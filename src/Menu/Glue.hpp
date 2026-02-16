@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 class Menu;
 class MenuBar;
 

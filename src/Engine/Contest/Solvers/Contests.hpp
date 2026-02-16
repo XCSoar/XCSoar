@@ -4,8 +4,6 @@
 #pragma once
 
 #include <cstdint>
-#include <tchar.h>
-
 enum class Contest : uint8_t;
 
 [[gnu::const]]

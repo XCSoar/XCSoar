@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 struct DialogLook;
 class PluggableOperationEnvironment;
 namespace UI { class SingleWindow; }

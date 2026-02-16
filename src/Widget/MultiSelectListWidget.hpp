@@ -7,8 +7,6 @@
 
 #include <vector>
 #include <algorithm>
-#include <tchar.h>
-
 class Canvas;
 struct PixelRect;
 

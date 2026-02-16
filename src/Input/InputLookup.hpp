@@ -5,8 +5,6 @@
 
 #include <string_view>
 
-#include <tchar.h>
-
 typedef void (*pt2Event)(const char *);
 
 namespace InputEvents {

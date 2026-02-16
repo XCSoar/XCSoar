@@ -5,8 +5,6 @@
 
 #include "Job/Runner.hpp"
 
-#include <tchar.h>
-
 struct DialogLook;
 namespace UI { class SingleWindow; }
 class Job;

@@ -6,7 +6,6 @@
 #include "system/Path.hpp"
 #include "util/PrintException.hxx"
 
-#include <tchar.h>
 #include <stdlib.h>
 
 static void

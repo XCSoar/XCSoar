@@ -8,8 +8,6 @@
 #include "NativeView.hpp"
 #include "Hardware/DisplayDPI.hpp"
 
-#include <tchar.h>
-
 Java::TrivialClass NativeView::cls;
 jfieldID NativeView::ptr_field;
 jfieldID NativeView::textureNonPowerOfTwo_field;

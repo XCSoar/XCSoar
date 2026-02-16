@@ -17,8 +17,6 @@
 #include <algorithm>
 #include <stdexcept>
 
-#include <tchar.h>
-
 static BasicAllocatedString<char>
 ImportLabel(const char *src) noexcept
 {

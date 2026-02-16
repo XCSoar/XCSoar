@@ -8,8 +8,6 @@
 #include <chrono>
 #include <cstdint>
 
-#include <tchar.h>
-
 #ifdef HAVE_POSIX
 #include <unistd.h>
 #include <stdio.h>

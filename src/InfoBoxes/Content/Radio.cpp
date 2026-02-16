@@ -10,8 +10,6 @@
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
 
-#include <tchar.h>
-
 static void
 UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency freq,
                        const char *freq_name) noexcept

@@ -5,8 +5,6 @@
 
 #include "LabelShape.hpp"
 
-#include <tchar.h>
-
 struct PixelPoint;
 struct PixelSize;
 struct PixelRect;

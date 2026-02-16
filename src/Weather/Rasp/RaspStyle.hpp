@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <tchar.h>
-
 struct ColorRamp;
 
 struct RaspStyle {
