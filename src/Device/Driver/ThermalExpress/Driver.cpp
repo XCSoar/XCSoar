@@ -43,8 +43,8 @@ ThermalExpressCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_
 }
 
 const struct DeviceRegister thermalexpress_driver = {
-  _T("ThermalExpress"),
-  _T("Thermal Express"),
+  "ThermalExpress",
+  "Thermal Express",
   0,
   ThermalExpressCreateOnPort,
 };

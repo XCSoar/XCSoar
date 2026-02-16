@@ -18,7 +18,7 @@ RadioFrequency::Format(char *buffer, size_t max_size) const noexcept
   unsigned mhz = khz / 1000;
   khz %= 1000;
 
-  StringFormat(buffer, max_size, _T("%u.%03u"), mhz, khz);
+  StringFormat(buffer, max_size, "%u.%03u", mhz, khz);
   return buffer;
 }
 

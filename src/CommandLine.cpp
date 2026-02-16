@@ -54,7 +54,7 @@ CommandLine::Parse(Args &args)
       s++;
 
     if (StringIsEqual(s, "-version")) {
-      printf(_T("%s\n"), XCSoar_ProductToken);
+      printf("%s\n", XCSoar_ProductToken);
       exit(EXIT_SUCCESS);
     } else if (StringIsEqual(s, "-profile=", 9)) {
       s += 9;

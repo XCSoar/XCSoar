@@ -142,8 +142,8 @@ ZanderCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]]
 }
 
 const struct DeviceRegister zander_driver = {
-  _T("Zander"),
-  _T("Zander / SDI"),
+  "Zander",
+  "Zander / SDI",
   DeviceRegister::RECEIVE_SETTINGS,
   ZanderCreateOnPort,
 };

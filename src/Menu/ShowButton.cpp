@@ -107,7 +107,7 @@ ShowZoomOutButton::Create(ContainerWindow &parent, const PixelRect &rc,
 bool
 ShowZoomOutButton::OnClicked() noexcept
 {
-  InputEvents::eventZoom(_T("out"));
+  InputEvents::eventZoom("out");
   return true;
 }
 
@@ -164,7 +164,7 @@ ShowZoomInButton::Create(ContainerWindow &parent, const PixelRect &rc,
 bool
 ShowZoomInButton::OnClicked() noexcept
 {
-  InputEvents::eventZoom(_T("in"));
+  InputEvents::eventZoom("in");
   return true;
 }
 

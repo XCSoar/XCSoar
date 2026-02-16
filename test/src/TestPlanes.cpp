@@ -18,13 +18,13 @@ static void
 TestReader()
 {
   Plane plane;
-  PlaneGlue::ReadFile(plane, Path(_T("test/data/D-4449.xcp")));
+  PlaneGlue::ReadFile(plane, Path("test/data/D-4449.xcp"));
 
-  ok1(plane.registration == _T("D-4449"));
-  ok1(plane.competition_id == _T("TH"));
-  ok1(plane.type == _T("Hornet"));
+  ok1(plane.registration == "D-4449");
+  ok1(plane.competition_id == "TH");
+  ok1(plane.type == "Hornet");
   ok1(plane.handicap == 100);
-  ok1(plane.polar_name == _T("Hornet"));
+  ok1(plane.polar_name == "Hornet");
   ok1(equals(plane.polar_shape[0].v,
              Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)));
   ok1(equals(plane.polar_shape[1].v,
@@ -44,7 +44,7 @@ TestReader()
   ok1(equals(plane.weglide_glider_type, 261));
 
   plane = Plane();
-  PlaneGlue::ReadFile(plane, Path(_T("test/data/D-4449dry.xcp")));
+  PlaneGlue::ReadFile(plane, Path("test/data/D-4449dry.xcp"));
   ok1(equals(plane.empty_mass, 212));
 }
 
@@ -52,11 +52,11 @@ static void
 TestWriter()
 {
   Plane plane;
-  plane.registration = _T("D-4449");
-  plane.competition_id = _T("TH");
-  plane.type = _T("Hornet");
+  plane.registration = "D-4449";
+  plane.competition_id = "TH";
+  plane.type = "Hornet";
   plane.handicap = 100;
-  plane.polar_name = _T("Hornet");
+  plane.polar_name = "Hornet";
   plane.polar_shape[0].v = Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR);
   plane.polar_shape[1].v = Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR);
   plane.polar_shape[2].v = Units::ToSysUnit(160, Unit::KILOMETER_PER_HOUR);
@@ -72,9 +72,9 @@ TestWriter()
   plane.wing_area = 9.8;
   plane.weglide_glider_type = 160;
 
-  PlaneGlue::WriteFile(plane, Path(_T("output/D-4449.xcp")));
+  PlaneGlue::WriteFile(plane, Path("output/D-4449.xcp"));
 
-  FileLineReaderA reader(Path(_T("output/D-4449.xcp")));
+  FileLineReaderA reader(Path("output/D-4449.xcp"));
 
   unsigned count = 0;
   bool found1 = false, found2 = false, found3 = false, found4 = false;

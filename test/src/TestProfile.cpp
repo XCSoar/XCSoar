@@ -70,9 +70,9 @@ TestWriter()
   Profile::Set("key1", 4);
   Profile::Set("key2", "value2");
 
-  Profile::SaveFile(Path(_T("output/TestProfileWriter.prf")));
+  Profile::SaveFile(Path("output/TestProfileWriter.prf"));
 
-  FileLineReaderA reader(Path(_T("output/TestProfileWriter.prf")));
+  FileLineReaderA reader(Path("output/TestProfileWriter.prf"));
 
   unsigned count = 0;
   bool found1 = false, found2 = false;
@@ -96,7 +96,7 @@ static void
 TestReader()
 {
   Profile::Clear();
-  Profile::LoadFile(Path(_T("test/data/TestProfileReader.prf")));
+  Profile::LoadFile(Path("test/data/TestProfileReader.prf"));
 
   {
     int value;
@@ -109,7 +109,7 @@ TestReader()
     StaticString<32> value;
     ok1(Profile::Exists("key2"));
     ok1(Profile::Get("key2", value));
-    ok1(value == _T("value"));
+    ok1(value == "value");
   }
 
   {
@@ -124,7 +124,7 @@ static void
 TestMigration()
 {
   Profile::Clear();
-  Profile::LoadFile(Path(_T("test/data/TestProfileMigration.prf")));
+  Profile::LoadFile(Path("test/data/TestProfileMigration.prf"));
 
   /* verify old keys are not present (they are consumed by migration) */
   ok1(!Profile::Exists("WPFile"));
@@ -137,21 +137,21 @@ TestMigration()
   {
     StaticString<256> value;
     ok1(Profile::Get(ProfileKeys::WaypointFileList, value));
-    ok1(value == _T("/path/to/main_waypoints.cup|/path/to/extra_waypoints.cup"));
+    ok1(value == "/path/to/main_waypoints.cup|/path/to/extra_waypoints.cup");
   }
 
   /* verify migrated airspace list has primary file first */
   {
     StaticString<256> value;
     ok1(Profile::Get(ProfileKeys::AirspaceFileList, value));
-    ok1(value == _T("/path/to/main_airspace.txt|/path/to/extra_airspace.txt"));
+    ok1(value == "/path/to/main_airspace.txt|/path/to/extra_airspace.txt");
   }
 
   /* verify migrated watched waypoint list */
   {
     StaticString<256> value;
     ok1(Profile::Get(ProfileKeys::WatchedWaypointFileList, value));
-    ok1(value == _T("/path/to/watched.cup"));
+    ok1(value == "/path/to/watched.cup");
   }
 
   /* verify non-migrated keys are preserved */

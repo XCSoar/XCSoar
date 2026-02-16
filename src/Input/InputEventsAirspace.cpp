@@ -34,25 +34,25 @@ InputEvents::eventAirSpace(const char *misc)
   AirspaceRendererSettings &settings =
     CommonInterface::SetMapSettings().airspace;
 
-  if (StringIsEqual(misc, _T("toggle"))) {
+  if (StringIsEqual(misc, "toggle")) {
     settings.enable = !settings.enable;
     Message::AddMessage(settings.enable
                         ? _("Airspace shown")
                         : _("Airspace hidden"));
-  } else if (StringIsEqual(misc, _T("off"))) {
+  } else if (StringIsEqual(misc, "off")) {
     settings.enable = false;
     Message::AddMessage(_("Airspace hidden"));
-  } else if (StringIsEqual(misc, _T("on"))) {
+  } else if (StringIsEqual(misc, "on")) {
     settings.enable = true;
     Message::AddMessage(_("Airspace shown"));
   }
-  else if (StringIsEqual(misc, _T("show"))) {
+  else if (StringIsEqual(misc, "show")) {
     if (!settings.enable)
       Message::AddMessage(_("Show airspace off"));
     if (settings.enable)
       Message::AddMessage(_("Show airspace on"));
     return;
-  } else if (StringIsEqual(misc, _T("list"))) {
+  } else if (StringIsEqual(misc, "list")) {
     ShowAirspaceListDialog(*data_components->airspaces,
                            backend_components->GetAirspaceWarnings());
     return;

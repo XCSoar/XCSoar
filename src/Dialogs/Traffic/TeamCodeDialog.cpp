@@ -105,7 +105,7 @@ TeamCodeWidget::Update(const MoreData &basic, const DerivedInfo &calculated)
   SetText(RELATIVE_BEARING,
           teamcode_info.teammate_available && basic.track_available
           ? FormatAngleDelta(teamcode_info.teammate_vector.bearing - basic.track).c_str()
-          : _T("---"));
+          : "---");
 
   if (teamcode_info.teammate_available) {
     SetText(BEARING,
@@ -120,7 +120,7 @@ TeamCodeWidget::Update(const MoreData &basic, const DerivedInfo &calculated)
   SetText(FLARM_LOCK,
           settings.team_flarm_id.IsDefined()
           ? settings.team_flarm_callsign.c_str()
-          : _T(""));
+          : "");
 }
 
 void

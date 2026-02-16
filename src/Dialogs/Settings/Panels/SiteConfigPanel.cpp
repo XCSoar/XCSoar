@@ -49,7 +49,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
   AddFile(_("Map database"),
           _("The name of the file (.xcm) containing terrain, topography, and optionally "
             "waypoints, their details and airspaces."),
-          ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"), FileType::MAP);
+          ProfileKeys::MapFile, "*.xcm\0*.lkm\0", FileType::MAP);
 
   AddMultipleFiles(_("Waypoints"),
                    _("Primary waypoints files.  Supported file types are "
@@ -73,7 +73,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    _("The files may contain extracts from enroute supplements "
                      "or other contributed "
                      "information about individual waypoints and airfields."),
-                   ProfileKeys::AirfieldFileList, _T("*.txt\0"),
+                   ProfileKeys::AirfieldFileList, "*.txt\0",
                    FileType::WAYPOINTDETAILS);
   SetExpertRow(AirfieldFileList);
 
@@ -86,22 +86,23 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    FileType::AIRSPACE);
 
   AddFile(_("FLARM database"),
-          _("The name of the file containing information about registered FLARM devices."),
-          ProfileKeys::FlarmFile, _T("*.fln\0"),
+          _("The name of the file containing information about registered "
+            "FLARM devices."),
+          ProfileKeys::FlarmFile, "*.fln\0",
           FileType::FLARMNET);
 
-  AddFile(_T("RASP"),
+  AddFile("RASP",
           _("Regional Atmospheric Soaring Prediction file providing "
             "weather forecasts for soaring. Displays color-coded map "
             "overlays for thermal strength, boundary layer winds, "
             "cloud cover, and other soaring-relevant parameters at "
             "various forecast times throughout the day."),
-          ProfileKeys::RaspFile, _T("*-rasp*.dat\0"),
+          ProfileKeys::RaspFile, "*-rasp*.dat\0",
           FileType::RASP);
 
   AddFile(_("Checklist"),
           _("The checklist file containing pre-flight and other checklists."),
-          ProfileKeys::ChecklistFile, _T("*.xcc\0xcsoar-checklist.txt\0"),
+          ProfileKeys::ChecklistFile, "*.xcc\0xcsoar-checklist.txt\0",
           FileType::CHECKLIST);
 }
 

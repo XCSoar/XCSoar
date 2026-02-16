@@ -35,8 +35,8 @@ static constexpr struct {
 #endif
 #ifdef ANDROID
   { DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server") },
-  { DeviceConfig::PortType::DROIDSOAR_V2, _T("DroidSoar V2") },
-  { DeviceConfig::PortType::GLIDER_LINK, _T("GliderLink traffic receiver") },
+  { DeviceConfig::PortType::DROIDSOAR_V2, "DroidSoar V2" },
+  { DeviceConfig::PortType::GLIDER_LINK, "GliderLink traffic receiver" },
 #ifndef NDEBUG
   { DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk") },
 #endif
@@ -108,13 +108,13 @@ DetectSerialPorts(DataFieldEnum &df) noexcept
 static int
 ComIndex(char *name) noexcept
 {
-  const char *suffix = StringAfterPrefix(name, _T("COM"));
+  const char *suffix = StringAfterPrefix(name, "COM");
   if (suffix == nullptr)
     return -1;
 
   char *endptr;
   const auto i = strtoul(suffix, &endptr, 10);
-  if (endptr == suffix || *endptr != _T('\0'))
+  if (endptr == suffix || *endptr != '\0')
     return -1;
 
   return static_cast<int>(i);
@@ -126,9 +126,9 @@ try {
   /* the registry key HKEY_LOCAL_MACHINE/Hardware/DEVICEMAP/SERIALCOMM
      is the best way to discover serial ports on Windows */
 
-  RegistryKey hardware{HKEY_LOCAL_MACHINE, _T("Hardware")};
-  RegistryKey devicemap{hardware, _T("DEVICEMAP")};
-  RegistryKey serialcomm{devicemap, _T("SERIALCOMM")};
+  RegistryKey hardware{HKEY_LOCAL_MACHINE, "Hardware"};
+  RegistryKey devicemap{hardware, "DEVICEMAP"};
+  RegistryKey serialcomm{devicemap, "SERIALCOMM"};
 
   for (unsigned i = 0;; ++i) {
     char name[128];
@@ -150,10 +150,10 @@ try {
       if (com_idx < 10)
         /* old-style raw names (with trailing colon for backwards
            compatibility with older XCSoar versions) */
-        StringFormatUnsafe(buffer, _T("%s:"), value);
+        StringFormatUnsafe(buffer, "%s:", value);
       else
         /* COM10 and above must use UNC paths */
-        StringFormatUnsafe(buffer, _T("\\\\.\\%s"), value);
+        StringFormatUnsafe(buffer, "\\\\.\\%s", value);
       path = buffer;
     }
 
@@ -244,8 +244,8 @@ FillAndroidIOIOPorts([[maybe_unused]] DataFieldEnum &df, [[maybe_unused]] const 
   char tempID[4];
   char tempName[15];
   for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
-    StringFormatUnsafe(tempID, _T("%u"), i);
-    StringFormat(tempName, sizeof(tempName), _T("IOIO UART %u"), i);
+    StringFormatUnsafe(tempID, "%u", i);
+    StringFormat(tempName, sizeof(tempName), "IOIO UART %u", i);
     unsigned id = AddPort(df, DeviceConfig::PortType::IOIOUART,
                           tempID, tempName,
                           AndroidIOIOUartPort::getPortHelp(i));
@@ -315,7 +315,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
 
   case DeviceConfig::PortType::IOIOUART:
     StaticString<16> buffer;
-    buffer.UnsafeFormat(_T("%d"), config.ioio_uart_id);
+    buffer.UnsafeFormat("%d", config.ioio_uart_id);
     df.SetValue(buffer);
     return;
   }

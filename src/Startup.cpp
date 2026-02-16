@@ -139,8 +139,8 @@ static void
 AfterStartup()
 {
   try {
-    const auto lua_path = LocalPath(_T("lua"));
-    Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")));
+    const auto lua_path = LocalPath("lua");
+    Lua::StartFile(AllocatedPath::Build(lua_path, "init.lua"));
   } catch (...) {
       LogError(std::current_exception());
   }
@@ -185,7 +185,7 @@ MainWindow::LoadTerrain() noexcept
 
   if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
       path != nullptr) {
-    LogFormat(_T("Loading terrain: %s"), path.c_str());
+    LogFormat("Loading terrain: %s", path.c_str());
     terrain_loader = new AsyncTerrainOverviewLoader();
 
     terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
@@ -462,14 +462,14 @@ Startup(UI::Display &display)
   // Read the topography file(s)
   data_components->topography = std::make_unique<TopographyStore>();
   {
-    LogFormat(_T("Loading topography"));
+    LogFormat("Loading topography");
     operation.SetText(_("Loading Topography File..."));
     LoadConfiguredTopography(*data_components->topography);
     operation.SetProgressPosition(256);
   }
 
   // Read the waypoint files
-  LogFormat(_T("Loading waypoints"));
+  LogFormat("Loading waypoints");
   {
     SubOperationEnvironment sub_env(operation, 256, 512);
     sub_env.SetText(_("Loading Waypoints..."));
@@ -594,7 +594,7 @@ Startup(UI::Display &display)
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     backend_components->flight_logger = std::make_unique<GlueFlightLogger>(live_blackboard);
-    backend_components->flight_logger->SetPath(LocalPath(_T("flights.log")));
+    backend_components->flight_logger->SetPath(LocalPath("flights.log"));
   }
 
   if (computer_settings.logger.enable_nmea_logger)

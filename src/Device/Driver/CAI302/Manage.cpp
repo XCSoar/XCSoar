@@ -205,7 +205,7 @@ static void
 ToASCII(char *dest, size_t dest_size, const char *src)
 {
   char *end = dest + dest_size - 1;
-  while (*src != _T('\0') && dest < end)
+  while (*src != '\0' && dest < end)
     if (IsPrintableASCII(*src))
       *dest++ = (char)*src++;
 

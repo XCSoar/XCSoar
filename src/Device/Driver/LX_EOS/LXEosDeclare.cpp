@@ -66,7 +66,7 @@ LXEosDevice::SendDeclaration(const Declaration &declaration,
   data.prg[0] = 3;
   data.lat[0] = 0;
   data.lon[0] = 0;
-  CopyStringSpacePadded(data.name[0], _T("TAKEOFF"), 9);
+  CopyStringSpacePadded(data.name[0], "TAKEOFF", 9);
 
   for (uint8_t i = 1; i <= declaration.Size(); i++) {
     data.prg[i] = 1;
@@ -85,7 +85,7 @@ LXEosDevice::SendDeclaration(const Declaration &declaration,
   data.prg[declaration.Size() + 1] = 2;
   data.lat[declaration.Size() + 1] = 0;
   data.lon[declaration.Size() + 1] = 0;
-  CopyStringSpacePadded(data.name[declaration.Size() + 1], _T("LANDING"), 9);
+  CopyStringSpacePadded(data.name[declaration.Size() + 1], "LANDING", 9);
 
   // Set the remaining entries to zeroes
   for (uint8_t i = declaration.Size() + 2; i < 12; i++) {
@@ -160,7 +160,7 @@ LXEosDevice::SendCompetitionClass(
   EosClassStruct data;
 
   // Declaration does not provide class information, set empty
-  CopyStringSpacePadded(data.name, _T(""), sizeof(data.name));
+  CopyStringSpacePadded(data.name, "", sizeof(data.name));
 
   /* CRC is calculated only from data bytes (excluding the SYN and CMD)
   Using poly 0x69 and initial 0xFF */

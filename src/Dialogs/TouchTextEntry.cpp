@@ -169,7 +169,7 @@ TouchTextEntry(char *text, size_t width,
     ? rc.right
     : clear_left + Layout::Scale(50);
 
-  WndProperty _editor(client_area, look, _T(""),
+  WndProperty _editor(client_area, look, "",
                       { 0, padding, backspace_left - padding, editor_bottom },
                       0, WindowStyle());
   _editor.SetReadOnly();
@@ -207,7 +207,7 @@ TouchTextEntry(char *text, size_t width,
 
   kb = &keyboard;
 
-  Button backspace_button(client_area, look.button, _T("<-"),
+  Button backspace_button(client_area, look.button, "<-",
                           { backspace_left, padding, rc.right - padding,
                               editor_bottom },
                           button_style, [](){ OnBackspace(); });

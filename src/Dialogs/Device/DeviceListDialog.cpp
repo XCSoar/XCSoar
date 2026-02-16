@@ -377,7 +377,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const char *port_name =
     config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
 
-  StaticString<256> text(_T("A: "));
+  StaticString<256> text("A: ");
   text[0u] += idx;
 
   if (config.UsesDriver()) {
@@ -406,59 +406,59 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     if (flags.baro) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("Baro"));
     }
 
     if (flags.pitot) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("Pitot"));
     }
 
     if (flags.airspeed) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("Airspeed"));
     }
 
     if (flags.vario) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("Vario"));
     }
 
     if (flags.traffic)
-      buffer.append(_T("; FLARM"));
+      buffer.append("; FLARM");
 
     if (flags.temperature || flags.humidity) {
-      buffer.append(_T("; "));
-      buffer.append(_T("Environment"));
+      buffer.append("; ");
+      buffer.append("Environment");
     }
 
     if (flags.imu) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("IMU"));
     }
 
     if (flags.radio) {
-      buffer.append(_T("; "));
-      buffer.append(_T("Radio"));
+      buffer.append("; ");
+      buffer.append("Radio");
     }
 
     if (flags.transponder) {
-      buffer.append(_T("; XPDR"));
+      buffer.append("; XPDR");
     }
 
     if (flags.engine)
-      buffer.append(_T("; Engine"));
+      buffer.append("; Engine");
 
     if (flags.debug) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("Debug"));
     }
 
     if (flags.battery_percent >= 0) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("Battery"));
-      buffer.AppendFormat(_T("=%d%%"), flags.battery_percent);
+      buffer.AppendFormat("=%d%%", flags.battery_percent);
     }
 
     status = buffer;
@@ -470,7 +470,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     buffer = _("No data");
 
     if (flags.debug) {
-      buffer.append(_T("; "));
+      buffer.append("; ");
       buffer.append(_("Debug"));
     }
 
@@ -685,11 +685,11 @@ DeviceListWidget::ManageCurrent()
     return;
   }
 
-  if (descriptor.IsDriver(_T("CAI 302")))
+  if (descriptor.IsDriver("CAI 302"))
     ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
-  else if (descriptor.IsDriver(_T("Stratux")))
+  else if (descriptor.IsDriver("Stratux"))
     ManageStratuxDialog(*device);
-  else if (descriptor.IsDriver(_T("FLARM"))) {
+  else if (descriptor.IsDriver("FLARM")) {
     FlarmVersion version;
     FlarmHardware hardware;
 
@@ -700,7 +700,7 @@ DeviceListWidget::ManageCurrent()
     }
 
     ManageFlarmDialog(*device, version, hardware);
-  } else if (descriptor.IsDriver(_T("LX"))) {
+  } else if (descriptor.IsDriver("LX")) {
     DeviceInfo info, secondary_info;
 
     {
@@ -717,9 +717,9 @@ DeviceListWidget::ManageCurrent()
       ManageNanoDialog(lx_device, info);
     else if (lx_device.IsLX16xx())
       ManageLX16xxDialog(lx_device, info);
-  } else if (descriptor.IsDriver(_T("Vega")))
+  } else if (descriptor.IsDriver("Vega"))
     dlgConfigurationVarioShowModal(*device);
-  else if (descriptor.IsDriver(_T("BlueFly")))
+  else if (descriptor.IsDriver("BlueFly"))
     dlgConfigurationBlueFlyVarioShowModal(*device);
 }
 

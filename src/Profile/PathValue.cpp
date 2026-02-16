@@ -90,7 +90,7 @@ static Path
 BackslashBaseName(const char *p) noexcept
 {
   if (DIR_SEPARATOR != '\\') {
-    const auto *backslash = StringFindLast(p, _T('\\'));
+    const auto *backslash = StringFindLast(p, '\\');
     if (backslash != NULL)
       p = backslash + 1;
   }
@@ -112,7 +112,7 @@ void
 ProfileMap::SetPath(std::string_view key, Path value) noexcept
 {
   if (value == nullptr || StringIsEmpty(value.c_str()))
-    Set(key, _T(""));
+    Set(key, "");
   else {
     const auto contracted = ContractLocalPath(value);
     if (contracted != nullptr)

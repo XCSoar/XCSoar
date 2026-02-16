@@ -15,7 +15,7 @@ LogEvent(const char *event, TimeStamp time, const GeoPoint &location) noexcept
   char time_buffer[32];
   FormatTime(time_buffer, time);
 
-  printf(_T("%s %s %s\n"), time_buffer,
+  printf("%s %s %s\n", time_buffer,
            FormatGeoPoint(location, CoordinateFormat::DDMMSS).c_str(),
            event);
 }
@@ -35,11 +35,11 @@ int main(int argc, char **argv)
     const FlyingState &flight = replay->Calculated().flight;
 
     if (flight.flying && !last_flying)
-      LogEvent(_T("take-off"), flight.takeoff_time, flight.takeoff_location);
+      LogEvent("take-off", flight.takeoff_time, flight.takeoff_location);
     else if (!flight.flying && last_flying)
-      LogEvent(_T("landing"), flight.landing_time, flight.landing_location);
+      LogEvent("landing", flight.landing_time, flight.landing_location);
     else if (flight.release_time.IsDefined() && !last_released)
-      LogEvent(_T("release"), flight.release_time, flight.release_location);
+      LogEvent("release", flight.release_time, flight.release_location);
 
     last_flying = flight.flying;
     last_released = flight.release_time.IsDefined();
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
   const FlyingState &flight = replay->Calculated().flight;
   if (flight.far_distance >= 0)
-    printf(_T("far %u km at %s\n"), unsigned(flight.far_distance / 1000),
+    printf("far %u km at %s\n", unsigned(flight.far_distance / 1000),
              FormatGeoPoint(flight.far_location,
                             CoordinateFormat::DDMMSS).c_str());
 

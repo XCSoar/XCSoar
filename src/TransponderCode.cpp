@@ -12,7 +12,7 @@ TransponderCode::Format(char *buffer, std::size_t max_size) const noexcept
   if (!IsDefined())
     return nullptr;
 
-  StringFormat(buffer, max_size, _T("%04o"), value);
+  StringFormat(buffer, max_size, "%04o", value);
   return buffer;
 }
 

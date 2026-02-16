@@ -39,7 +39,7 @@ Window::Create(ContainerWindow *parent, const char *cls, const char *text,
 void
 Window::CreateMessageWindow() noexcept
 {
-  hWnd = ::CreateWindowEx(0, _T("PaintWindow"), nullptr, 0, 0, 0, 0, 0,
+  hWnd = ::CreateWindowEx(0, "PaintWindow", nullptr, 0, 0, 0, 0, 0,
                           HWND_MESSAGE,
                           nullptr, nullptr, this);
   assert(hWnd != nullptr);

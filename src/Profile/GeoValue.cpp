@@ -15,13 +15,13 @@ ProfileMap::GetGeoPoint(std::string_view key, GeoPoint &value) const noexcept
 
   char *endptr;
   double longitude = ParseDouble(p, &endptr);
-  if (endptr == p || *endptr != _T(' ') ||
+  if (endptr == p || *endptr != ' ' ||
       longitude < -180.0 || longitude > 180.0)
     return false;
 
   p = endptr + 1;
   double latitude = ParseDouble(p, &endptr);
-  if (endptr == p || *endptr != _T('\0') ||
+  if (endptr == p || *endptr != '\0' ||
       latitude < -90.0 || latitude > 90.0)
     return false;
 

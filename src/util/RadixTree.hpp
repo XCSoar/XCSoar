@@ -308,7 +308,7 @@ class RadixTree {
 				     node = node->next_sibling)
 					*dest++ = node->label[0u];
 
-				*dest = _T('\0');
+				*dest = '\0';
 				return retval;
 			}
 
@@ -323,7 +323,7 @@ class RadixTree {
 
 			/* return one character */
 			dest[0u] = m.node->label[(unsigned)(m.key - prefix)];
-			dest[1] = _T('\0');
+			dest[1] = '\0';
 			return dest;
 		}
 
@@ -708,7 +708,7 @@ class RadixTree {
 	Node root;
 
 public:
-	constexpr RadixTree() noexcept:root(_T("")) {}
+	constexpr RadixTree() noexcept:root("") {}
 
 	/**
 	 * Gets a value for the specified key.  Returns the parameter
@@ -829,8 +829,8 @@ public:
 	 */
 	template<typename V>
 	void VisitAllPairs(V &visitor) const {
-		root.VisitValues(_T(""), visitor);
-		root.VisitAllChildren(_T(""), visitor);
+		root.VisitValues("", visitor);
+		root.VisitAllChildren("", visitor);
 	}
 
 	/**

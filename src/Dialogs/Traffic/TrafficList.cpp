@@ -324,7 +324,7 @@ public:
 
   void Prepare([[maybe_unused]] ContainerWindow &parent,
                [[maybe_unused]] const PixelRect &rc) noexcept override {
-    PrefixDataField *callsign_df = new PrefixDataField(_T(""), listener);
+    PrefixDataField *callsign_df = new PrefixDataField("", listener);
     Add(_("Competition ID"), nullptr, callsign_df);
   }
 };
@@ -588,21 +588,21 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
   if (item.IsFlarm()) {
     if (info.callsign != nullptr && info.registration != nullptr)
-      tmp.Format(_T("%s - %s - %s"),
+      tmp.Format("%s - %s - %s",
                  info.callsign, info.registration, tmp_id);
     else if (info.callsign != nullptr)
-      tmp.Format(_T("%s - %s"), info.callsign, tmp_id);
+      tmp.Format("%s - %s", info.callsign, tmp_id);
     else
-      tmp.Format(_T("%s"), tmp_id);
+      tmp.Format("%s", tmp_id);
 #ifdef HAVE_SKYLINES_TRACKING
   } else if (item.IsSkyLines()) {
     if (!item.name.empty())
       tmp = item.name.c_str();
     else
-      tmp.UnsafeFormat(_T("SkyLines %u"), item.skylines_id);
+      tmp.UnsafeFormat("SkyLines %u", item.skylines_id);
 #endif
   } else {
-    tmp = _T("?");
+    tmp = "?";
   }
 
   if (item.color != FlarmColor::NONE) {
@@ -655,14 +655,14 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
     if (info.plane_type != nullptr) {
       if (!tmp.empty())
-        tmp.append(_T(" - "));
+        tmp.append(" - ");
 
       tmp.append(info.plane_type);
     }
 
     if (info.airfield != nullptr) {
       if (!tmp.empty())
-        tmp.append(_T(" - "));
+        tmp.append(" - ");
 
       tmp.append(info.airfield);
     }
@@ -679,12 +679,12 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
       tmp.clear();
 
     if (!item.near_name.empty())
-      tmp.AppendFormat(_T(" near %s (%s)"),
+      tmp.AppendFormat(" near %s (%s)",
                        item.near_name.c_str(),
                        FormatUserDistanceSmart(item.near_distance).c_str());
 
     if (!tmp.empty())
-      tmp.append(_T("; "));
+      tmp.append("; ");
     tmp.append(FormatUserAltitude(item.altitude).c_str());
 
     if (!tmp.empty())

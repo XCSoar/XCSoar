@@ -12,7 +12,7 @@ static bool data_field_key_up = false;
 const char *
 DataFieldTime::GetAsString() const noexcept
 {
-  StringFormatUnsafe(string_buffer, _T("%d"), value);
+  StringFormatUnsafe(string_buffer, "%d", value);
   return string_buffer;
 }
 
@@ -71,7 +71,7 @@ DataFieldTime::AppendComboValue(ComboList &combo_list,
                                 std::chrono::seconds value) const noexcept
 {
   char buffer2[32];
-  StringFormatUnsafe(buffer2, _T("%ld"), (long)value.count());
+  StringFormatUnsafe(buffer2, "%ld", (long)value.count());
   combo_list.Append(value.count(), buffer2,
                     FormatTimespanSmart(value, max_tokens));
 }
@@ -94,7 +94,7 @@ DataFieldTime::CreateComboList(const char *reference_string) const noexcept
   auto first = corrected_value - (int)surrounding_items * step;
   if (first > min)
     /* there are values before "first" - give the user a choice */
-    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, "<<More Items>>");
   else if (first < min)
     first = min;
 
@@ -123,7 +123,7 @@ DataFieldTime::CreateComboList(const char *reference_string) const noexcept
 
   if (last < max)
     /* there are values after "last" - give the user a choice */
-    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, "<<More Items>>");
 
   return combo_list;
 }

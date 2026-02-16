@@ -76,7 +76,7 @@ void
 TerminalWindow::OnCreate()
 {
   PaintWindow::OnCreate();
-  cell_size = look.font.TextSize(_T("W"));
+  cell_size = look.font.TextSize("W");
   cursor_x = 0;
   cursor_y = 0;
   data.Reset();

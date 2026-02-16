@@ -8,9 +8,9 @@
 #include "Language/Language.hpp"
 
 static constexpr StaticEnumChoice needle_gauge_types[] = {
-  { 0, _T("None") },
-  { 1, _T("LX") },
-  { 2, _T("Analog") },
+  { 0, "None" },
+  { 1, "LX" },
+  { 2, "Analog" },
   { 0 },
 };
 
@@ -19,7 +19,7 @@ VegaParametersWidget::StaticParameter display_parameters[] = {
   { DataField::Type::ENUM, "NeedleGaugeType", N_("Needle gauge type"),
     NULL, needle_gauge_types },
   { DataField::Type::INTEGER, "LedBrightness", N_("LED bright"), NULL,
-    NULL, 1, 15, 1, _T("%d/15") },
+    NULL, 1, 15, 1, "%d/15" },
 
   /* sentinel */
   { DataField::Type::BOOLEAN }

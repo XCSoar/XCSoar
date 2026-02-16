@@ -38,7 +38,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
   setup_airspaces(airspaces, map.GetMapCenter(), n_airspaces);
 
   {
-    Directory::Create(Path(_T("output/results")));
+    Directory::Create(Path("output/results"));
     std::ofstream fout("output/results/terrain.txt");
 
     unsigned nx = 100;

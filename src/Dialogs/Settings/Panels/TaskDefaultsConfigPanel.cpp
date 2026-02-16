@@ -130,7 +130,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent,
                  task_behaviour.sector_defaults.start_type);
 
   AddFloat(Caption_GateWidth, _("Default radius or gate width of the start zone for new tasks."),
-           _T("%.1f %s"), _T("%.1f"), 0.1, 100, 1.0, true, UnitGroup::DISTANCE,
+           "%.1f %s", "%.1f", 0.1, 100, 1.0, true, UnitGroup::DISTANCE,
            task_behaviour.sector_defaults.start_radius);
 
   AddSpacer();
@@ -142,7 +142,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent,
                  task_behaviour.sector_defaults.finish_type);
 
   AddFloat(Caption_GateWidth, _("Default radius or gate width of the finish zone in new tasks."),
-           _T("%.1f %s"), _T("%.1f"), 0.1, 100, 1.0, true, UnitGroup::DISTANCE,
+           "%.1f %s", "%.1f", 0.1, 100, 1.0, true, UnitGroup::DISTANCE,
            task_behaviour.sector_defaults.finish_radius);
 
   AddSpacer();
@@ -152,7 +152,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent,
                  task_behaviour.sector_defaults.turnpoint_type);
 
   AddFloat(Caption_Radius, _("Default radius of turnpoint cylinders and sectors in new tasks."),
-           _T("%.1f %s"), _T("%.1f"), 0.1, 100, 1.0, true, UnitGroup::DISTANCE,
+           "%.1f %s", "%.1f", 0.1, 100, 1.0, true, UnitGroup::DISTANCE,
            task_behaviour.sector_defaults.turnpoint_radius);
 
   AddSpacer();

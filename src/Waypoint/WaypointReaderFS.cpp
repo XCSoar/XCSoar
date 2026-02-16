@@ -12,11 +12,11 @@ static bool
 ParseAngle(const char *src, Angle &angle) noexcept
 {
   bool is_positive;
-  if (src[0] == _T('N') || src[0] == _T('n') ||
-      src[0] == _T('E') || src[0] == _T('e'))
+  if (src[0] == 'N' || src[0] == 'n' ||
+      src[0] == 'E' || src[0] == 'e')
     is_positive = true;
-  else if (src[0] == _T('S') || src[0] == _T('s') ||
-           src[0] == _T('W') || src[0] == _T('w'))
+  else if (src[0] == 'S' || src[0] == 's' ||
+           src[0] == 'W' || src[0] == 'w')
     is_positive = false;
   else
     return false;
@@ -25,17 +25,17 @@ ParseAngle(const char *src, Angle &angle) noexcept
 
   src++;
   long deg = strtol(src, &endptr, 10);
-  if (endptr == src || *endptr != _T(' '))
+  if (endptr == src || *endptr != ' ')
     return false;
 
   src = endptr;
   long min = strtol(src, &endptr, 10);
-  if (endptr == src || *endptr != _T(' '))
+  if (endptr == src || *endptr != ' ')
     return false;
 
   src = endptr;
   double sec = strtod(src, &endptr);
-  if (endptr == src || *endptr != _T(' '))
+  if (endptr == src || *endptr != ' ')
     return false;
 
   auto value = deg + (double)min / 60 + sec / 3600;
@@ -80,12 +80,12 @@ ParseLocationUTM(const char *src, GeoPoint &p) noexcept
 
   src++;
   long easting = strtol(src, &endptr, 10);
-  if (endptr == src || *endptr != _T(' '))
+  if (endptr == src || *endptr != ' ')
     return false;
 
   src = endptr;
   long northing = strtol(src, &endptr, 10);
-  if (endptr == src || *endptr != _T(' '))
+  if (endptr == src || *endptr != ' ')
     return false;
 
   UTM u(zone_number, zone_letter, easting, northing);

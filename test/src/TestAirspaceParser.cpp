@@ -44,34 +44,34 @@ static void
 TestOpenAir()
 {
   Airspaces airspaces;
-  if (!ParseFile(Path(_T("test/data/airspace/openair.txt")), airspaces)) {
+  if (!ParseFile(Path("test/data/airspace/openair.txt"), airspaces)) {
     skip(3, 0, "Failed to parse input file");
     return;
   }
 
   static constexpr AirspaceClassTestCouple classes[] = {
-    { _T("Class-R-Test"), RESTRICTED },
-    { _T("Class-Q-Test"), DANGER },
-    { _T("Class-P-Test"), PROHIBITED },
-    { _T("Class-CTR-Test"), CTR },
-    { _T("Class-A-Test"), CLASSA },
-    { _T("Class-B-Test"), CLASSB },
-    { _T("Class-C-Test"), CLASSC },
-    { _T("Class-D-Test"), CLASSD },
-    { _T("Class-GP-Test"), NOGLIDER },
-    { _T("Class-W-Test"), WAVE },
-    { _T("Class-E-Test"), CLASSE },
-    { _T("Class-F-Test"), CLASSF },
-    { _T("Class-TMZ-Test"), TMZ },
-    { _T("Class-G-Test"), CLASSG },
-    { _T("Class-RMZ-Test"), RMZ },
+    { "Class-R-Test", RESTRICTED },
+    { "Class-Q-Test", DANGER },
+    { "Class-P-Test", PROHIBITED },
+    { "Class-CTR-Test", CTR },
+    { "Class-A-Test", CLASSA },
+    { "Class-B-Test", CLASSB },
+    { "Class-C-Test", CLASSC },
+    { "Class-D-Test", CLASSD },
+    { "Class-GP-Test", NOGLIDER },
+    { "Class-W-Test", WAVE },
+    { "Class-E-Test", CLASSE },
+    { "Class-F-Test", CLASSF },
+    { "Class-TMZ-Test", TMZ },
+    { "Class-G-Test", CLASSG },
+    { "Class-RMZ-Test", RMZ },
   };
 
   ok1(airspaces.GetSize() == 26);
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
-    if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
+    if (StringIsEqual("Circle-Test", airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
 
@@ -79,7 +79,7 @@ TestOpenAir()
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(5, Unit::NAUTICAL_MILES)));
       ok1(equals(circle.GetReferenceLocation(),
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
-    } else if (StringIsEqual(_T("Arc-Test"), airspace.GetName())) {
+    } else if (StringIsEqual("Arc-Test", airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
 
@@ -87,7 +87,7 @@ TestOpenAir()
       const SearchPointVector &points = polygon.GetPoints();
 
       ok1(points.size() == 33);
-    } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
+    } else if (StringIsEqual("Polygon-Test", airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
 
@@ -112,37 +112,37 @@ TestOpenAir()
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
-    } else if (StringIsEqual(_T("Radio-Test 1 (AR with MHz)"), airspace.GetName())) {
+    } else if (StringIsEqual("Radio-Test 1 (AR with MHz)", airspace.GetName())) {
       ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
-    } else if (StringIsEqual(_T("Radio-Test 2 (AF without MHz)"), airspace.GetName())) {
+    } else if (StringIsEqual("Radio-Test 2 (AF without MHz)", airspace.GetName())) {
       ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
-    } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-1", airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude,
                  Units::ToSysUnit(2000, Unit::FEET)));
-    } else if (StringIsEqual(_T("Height-Test-2"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-2", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 0));
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 65));
-    } else if (StringIsEqual(_T("Height-Test-3"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-3", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(100, Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
-    } else if (StringIsEqual(_T("Height-Test-4"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-4", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
-    } else if (StringIsEqual(_T("Height-Test-5"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-5", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude, 450));
-    } else if (StringIsEqual(_T("Height-Test-6"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-6", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(50, Unit::FEET)));
@@ -160,34 +160,34 @@ static void
 TestTNP()
 {
   Airspaces airspaces;
-  if (!ParseFile(Path(_T("test/data/airspace/tnp.sua")), airspaces)) {
+  if (!ParseFile(Path("test/data/airspace/tnp.sua"), airspaces)) {
     skip(3, 0, "Failed to parse input file");
     return;
   }
 
   static constexpr AirspaceClassTestCouple classes[] = {
-    { _T("Class-R-Test"), RESTRICTED },
-    { _T("Class-Q-Test"), DANGER },
-    { _T("Class-P-Test"), PROHIBITED },
-    { _T("Class-CTR-Test"), CTR },
-    { _T("Class-A-Test"), CLASSA },
-    { _T("Class-B-Test"), CLASSB },
-    { _T("Class-C-Test"), CLASSC },
-    { _T("Class-D-Test"), CLASSD },
-    { _T("Class-W-Test"), WAVE },
-    { _T("Class-E-Test"), CLASSE },
-    { _T("Class-F-Test"), CLASSF },
-    { _T("Class-TMZ-Test"), TMZ },
-    { _T("Class-G-Test"), CLASSG },
-    { _T("Class-CLASS-C-Test"), CLASSC },
-    { _T("Class-MATZ-Test"), MATZ },
+    { "Class-R-Test", RESTRICTED },
+    { "Class-Q-Test", DANGER },
+    { "Class-P-Test", PROHIBITED },
+    { "Class-CTR-Test", CTR },
+    { "Class-A-Test", CLASSA },
+    { "Class-B-Test", CLASSB },
+    { "Class-C-Test", CLASSC },
+    { "Class-D-Test", CLASSD },
+    { "Class-W-Test", WAVE },
+    { "Class-E-Test", CLASSE },
+    { "Class-F-Test", CLASSF },
+    { "Class-TMZ-Test", TMZ },
+    { "Class-G-Test", CLASSG },
+    { "Class-CLASS-C-Test", CLASSC },
+    { "Class-MATZ-Test", MATZ },
   };
 
   ok1(airspaces.GetSize() == 24);
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
-    if (StringIsEqual(_T("Circle-Test"), airspace.GetName())) {
+    if (StringIsEqual("Circle-Test", airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
 
@@ -195,7 +195,7 @@ TestTNP()
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(5, Unit::NAUTICAL_MILES)));
       ok1(equals(circle.GetReferenceLocation(),
                  Angle::Degrees(1.091667), Angle::Degrees(0.091667)));
-    } else if (StringIsEqual(_T("Polygon-Test"), airspace.GetName())) {
+    } else if (StringIsEqual("Polygon-Test", airspace.GetName())) {
       if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
 
@@ -220,35 +220,35 @@ TestTNP()
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30, true)));
-    } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
+    } else if (StringIsEqual("Radio-Test", airspace.GetName())) {
       ok1(airspace.GetRadioFrequency() == RadioFrequency::FromMegaKiloHertz(130, 125));
-    } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-1", airspace.GetName())) {
       ok1(airspace.GetBase().IsTerrain());
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude,
                  Units::ToSysUnit(2000, Unit::FEET)));
-    } else if (StringIsEqual(_T("Height-Test-2"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-2", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 0));
       ok1(airspace.GetTop().reference == AltitudeReference::STD);
       ok1(equals(airspace.GetTop().flight_level, 65));
-    } else if (StringIsEqual(_T("Height-Test-3"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-3", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(100, Unit::FEET)));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
-    } else if (StringIsEqual(_T("Height-Test-4"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-4", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(airspace.GetTop().altitude > Units::ToSysUnit(30000, Unit::FEET));
-    } else if (StringIsEqual(_T("Height-Test-5"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-5", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude, 100));
       ok1(airspace.GetTop().reference == AltitudeReference::MSL);
       ok1(equals(airspace.GetTop().altitude, 450));
-    } else if (StringIsEqual(_T("Height-Test-6"), airspace.GetName())) {
+    } else if (StringIsEqual("Height-Test-6", airspace.GetName())) {
       ok1(airspace.GetBase().reference == AltitudeReference::AGL);
       ok1(equals(airspace.GetBase().altitude_above_terrain,
                  Units::ToSysUnit(50, Unit::FEET)));
@@ -266,7 +266,7 @@ static void
 TestOpenAirExtended()
 {
   Airspaces airspaces;
-  if (!ParseFile(Path(_T("test/data/airspace/openair_2.txt")), airspaces)) {
+  if (!ParseFile(Path("test/data/airspace/openair_2.txt"), airspaces)) {
     skip(3, 0, "Failed to parse input file");
     return;
   }
@@ -275,13 +275,13 @@ TestOpenAirExtended()
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
-    if (StringIsEqual(_T("Type-TMA-Test"), airspace.GetName())) {
+    if (StringIsEqual("Type-TMA-Test", airspace.GetName())) {
       ok1(AirspaceClass::CLASSE == airspace.GetClass());
       ok1(AirspaceClass::TMA == airspace.GetType());
-    } else if (StringIsEqual(_T("Type-GLIDING_SECTOR-Test"), airspace.GetName())) {
+    } else if (StringIsEqual("Type-GLIDING_SECTOR-Test", airspace.GetName())) {
       ok1(AirspaceClass::UNCLASSIFIED == airspace.GetClass());
       ok1(AirspaceClass::GLIDING_SECTOR == airspace.GetType());
-    } else if (StringIsEqual(_T("NO-Type-Test"), airspace.GetName())) {
+    } else if (StringIsEqual("NO-Type-Test", airspace.GetName())) {
       ok1(AirspaceClass::CLASSA == airspace.GetClass());
       ok1(AirspaceClass::OTHER == airspace.GetType());
     }

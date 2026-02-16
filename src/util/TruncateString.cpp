@@ -20,7 +20,7 @@ CopyTruncateString(char *dest, size_t dest_size, const char *src)
   size_t copy = std::min(src_length, dest_size - 1);
 
   auto *p = std::copy_n(src, copy, dest);
-  *p = _T('\0');
+  *p = '\0';
   return CropIncompleteUTF8(dest);
 }
 

@@ -241,7 +241,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
     canvas.Select(bold_font);
 #endif
   
-  const char *warning_text = _T("DEBUG BUILD - DO NOT FLY!");
+  const char *warning_text = "DEBUG BUILD - DO NOT FLY!";
   const auto text_size = canvas.CalcTextSize(warning_text);
   
   /* Half character padding (max) */

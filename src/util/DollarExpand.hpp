@@ -22,12 +22,12 @@ DollarExpand(const char *src, std::span<char> dest,
              std::invocable<std::string_view> auto lookup_function) noexcept
 {
   while (true) {
-    auto dollar = StringFind(src, _T("$("));
+    auto dollar = StringFind(src, "$(");
     if (dollar == nullptr)
       break;
 
     auto name_start = dollar + 2;
-    auto closing = StringFind(name_start, _T(')'));
+    auto closing = StringFind(name_start, ')');
     if (closing == nullptr)
       break;
 

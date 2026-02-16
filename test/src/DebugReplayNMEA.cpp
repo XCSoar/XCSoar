@@ -27,7 +27,7 @@ DebugReplayNMEA::Create(Path input_file, const std::string &driver_name)
 {
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
-    fprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
+    fprintf(stderr, "No such driver: %s\n", driver_name.c_str());
     return nullptr;
   }
 

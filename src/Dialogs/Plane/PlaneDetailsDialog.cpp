@@ -61,7 +61,7 @@ PlaneEditWidget::UpdateCaption() noexcept
     return;
 
   StaticString<128> tmp;
-  tmp.Format(_T("%s: %s"), _("Plane Details"), GetValueString(REGISTRATION));
+  tmp.Format("%s: %s", _("Plane Details"), GetValueString(REGISTRATION));
   dialog->SetCaption(tmp);
 }
 
@@ -71,7 +71,7 @@ PlaneEditWidget::UpdatePolarButton() noexcept
   const char *caption = _("Polar");
   StaticString<64> buffer;
   if (!plane.polar_name.empty()) {
-    buffer.Format(_T("%s: %s"), caption, plane.polar_name.c_str());
+    buffer.Format("%s: %s", caption, plane.polar_name.c_str());
     caption = buffer;
   }
 
@@ -94,33 +94,33 @@ PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
   AddButton(_("Polar"), [this](){ PolarButtonClicked(); });
   AddText(_("Type"), nullptr, plane.type);
   AddInteger(_("Handicap"), nullptr,
-             _T("%u %%"), _T("%u"),
+             "%u %%", "%u",
              50, 150, 1,
              plane.handicap);
   AddFloat(_("Wing Area"), nullptr,
-           _T("%.1f m²"), _T("%.1f"),
+           "%.1f m²", "%.1f",
            0, 40, 0.1,
            false, plane.wing_area);
   AddFloat(_("Empty Mass"), _("Net mass of the rigged plane."),
-           _T("%.0f %s"), _T("%.0f"),
+           "%.0f %s", "%.0f",
            0, 1000, 5, false,
            UnitGroup::MASS, plane.empty_mass);
   AddFloat(_("Max. Ballast"), nullptr,
-           _T("%.0f l"), _T("%.0f"),
+           "%.0f l", "%.0f",
            0, 500, 5,
            false, plane.max_ballast);
   AddInteger(_("Dump Time"), nullptr,
-             _T("%u s"), _T("%u"),
+             "%u s", "%u",
              10, 300, 5,
              plane.dump_time);
   AddFloat(_("Max. Cruise Speed"), nullptr,
-           _T("%.0f %s"), _T("%.0f"), 0, 300, 5,
+           "%.0f %s", "%.0f", 0, 300, 5,
            false, UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 
   /* TODO: this should be a select list from
      https://api.weglide.org/v1/aircraft */
   if (CommonInterface::GetComputerSettings().weglide.enabled)
-    AddInteger(_("WeGlide Type"), nullptr, _T("%d"), _T("%d"), 1, 999,
+    AddInteger(_("WeGlide Type"), nullptr, "%d", "%d", 1, 999,
                1, plane.weglide_glider_type);
   else
     AddDummy();
@@ -161,7 +161,7 @@ PlaneEditWidget::PolarButtonClicked() noexcept
 
   dlgPlanePolarShowModal(plane);
   UpdatePolarButton();
-  if (plane.polar_name != _T("Custom"))
+  if (plane.polar_name != "Custom")
     LoadValue(TYPE, plane.polar_name.c_str());
 
   /* reload attributes that may have been modified */

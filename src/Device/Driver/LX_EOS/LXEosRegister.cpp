@@ -11,8 +11,8 @@ LXEosCreateOnPort([[maybe_unused]] const DeviceConfig& config,
 }
 
 const struct DeviceRegister lx_eos_driver = {
-  _T("LxEos"),
-  _T("Lx Eos / Era"),
+  "LxEos",
+  "Lx Eos / Era",
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   LXEosCreateOnPort,
 };

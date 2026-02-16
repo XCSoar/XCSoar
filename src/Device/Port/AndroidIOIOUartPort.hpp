@@ -20,15 +20,15 @@ namespace AndroidIOIOUartPort
   static inline const char *getPortHelp(unsigned UartID) {
     switch (UartID) {
     case 0:
-      return _T("IOIO external board Uart: pin3=out, pin4=in");
+      return "IOIO external board Uart: pin3=out, pin4=in";
     case 1:
-      return _T("IOIO external board Uart: pin5=out, pin6=in");
+      return "IOIO external board Uart: pin5=out, pin6=in";
     case 2:
-      return _T("IOIO external board Uart: pin10=out, pin11=in");
+      return "IOIO external board Uart: pin10=out, pin11=in";
     case 3:
-      return _T("IOIO external board Uart: pin12=out, pin13=in");
+      return "IOIO external board Uart: pin12=out, pin13=in";
     default:
-      return _T("Illegal IOIO Uart ID");
+      return "Illegal IOIO Uart ID";
     }
   }
 }

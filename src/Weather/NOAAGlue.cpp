@@ -14,7 +14,7 @@ NOAAStore::LoadFromString(const char *string)
 {
   const char *s = string;
   while (s != NULL && *s) {
-    const char *next = strchr(s, _T(','));
+    const char *next = strchr(s, ',');
     if ((next != NULL && next - s == 4) || (next == NULL && strlen(s) == 4)) {
       char code[5];
       std::copy_n(s, 4, code);
@@ -44,10 +44,10 @@ NOAAStore::SaveToProfile()
   for (auto i = begin(), e = end(); i != e; ++i) {
     const char *code = i->code;
     p = std::copy_n(code, strlen(code), p);
-    *p++ = _T(',');
+    *p++ = ',';
   }
 
-  *p = _T('\0');
+  *p = '\0';
 
   Profile::Set(ProfileKeys::WeatherStations, buffer);
   Profile::Save();

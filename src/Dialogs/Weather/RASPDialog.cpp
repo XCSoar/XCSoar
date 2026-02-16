@@ -52,7 +52,7 @@ RASPSettingsPanel::FillItemControl() noexcept
   auto &df = (DataFieldEnum &)GetDataField(ITEM);
 
   df.ClearChoices();
-  df.AddChoice(-1, _T("none"), _T("none"), nullptr);
+  df.AddChoice(-1, "none", "none", nullptr);
   for (unsigned i = 0; i < rasp->GetItemCount(); i++) {
     const auto &mi = rasp->GetItemInfo(i);
     const char *label = mi.label;
@@ -87,7 +87,7 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
 
     rasp->ForEachTime(item_index, [&time_df](BrokenTime t){
         char timetext[10];
-        sprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
+        sprintf(timetext, "%02u:%02u", t.hour, t.minute);
         time_df.addEnumText(timetext, t.GetMinuteOfDay());
       });
 
@@ -107,7 +107,7 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   WndProperty *wp;
 
   wp = AddFile(_("File"), nullptr,
-               ProfileKeys::RaspFile, _T("*-rasp*.dat\0"),
+               ProfileKeys::RaspFile, "*-rasp*.dat\0",
                FileType::RASP);
   wp->GetDataField()->SetOnModified([this]{
     if (SaveValueFileReader(FILE, ProfileKeys::RaspFile)) {

@@ -81,7 +81,7 @@ void
 PrintHelper::trace_print([[maybe_unused]] const Trace& trace,
 			 [[maybe_unused]] const GeoPoint &loc)
 {
-  Directory::Create(Path(_T("output/results")));
+  Directory::Create(Path("output/results"));
   std::ofstream fs("output/results/res-trace.txt");
 
   for (auto it = trace.begin(); it != trace.end(); ++it)

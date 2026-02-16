@@ -11,7 +11,7 @@ ProfileMap::Get(std::string_view key, std::span<char> value) const noexcept
 {
   const char *src = Get(key);
   if (src == nullptr) {
-    value[0] = _T('\0');
+    value[0] = '\0';
     return false;
   }
 

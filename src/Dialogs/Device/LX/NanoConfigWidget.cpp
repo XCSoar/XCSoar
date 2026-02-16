@@ -64,13 +64,13 @@ NanoConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   RequestAllSettings(device);
 
   static constexpr StaticEnumChoice baud_list[] = {
-    { 2400, _T("2400") },
-    { 4800, _T("4800") },
-    { 9600, _T("9600") },
-    { 19200, _T("19200") },
-    { 38400, _T("38400") },
-    { 57600, _T("57600") },
-    { 115200, _T("115200") },
+    { 2400, "2400" },
+    { 4800, "4800" },
+    { 9600, "9600" },
+    { 19200, "19200" },
+    { 38400, "38400" },
+    { 57600, "57600" },
+    { 115200, "115200" },
     { 0 }
   };
 
@@ -90,7 +90,7 @@ NanoConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
              WaitBoolValue(device, "NMEA", true));
 
   AddInteger(_("Recording interval"), NULL,
-             _T("%d s"), _T("%d"), 1, 60, 1,
+             "%d s", "%d", 1, 60, 1,
              WaitUnsignedValue(device, "RECINT", 1));
 }
 
@@ -139,6 +139,6 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  ShowError(std::current_exception(), _T("LXNAV Nano"));
+  ShowError(std::current_exception(), "LXNAV Nano");
   return false;
 }

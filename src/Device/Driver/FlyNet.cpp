@@ -96,8 +96,8 @@ FlyNetCreateOnPort([[maybe_unused]] const DeviceConfig &config, [[maybe_unused]]
 }
 
 const struct DeviceRegister flynet_driver = {
-  _T("FlyNet"),
-  _T("FlyNet Vario"),
+  "FlyNet",
+  "FlyNet Vario",
   0,
   FlyNetCreateOnPort,
 };

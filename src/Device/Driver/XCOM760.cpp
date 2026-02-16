@@ -78,8 +78,8 @@ XCOM760CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const struct DeviceRegister xcom760_driver = {
-  _T("XCOM760"),
-  _T("XCOM760"),
+  "XCOM760",
+  "XCOM760",
   DeviceRegister::NO_TIMEOUT | DeviceRegister::SEND_SETTINGS,
   XCOM760CreateOnPort,
 };

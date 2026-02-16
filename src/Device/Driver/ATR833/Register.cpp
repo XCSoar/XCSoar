@@ -11,8 +11,8 @@ ATR833CreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 }
 
 const DeviceRegister atr833_driver = {
-  _T("ATR833"),
-  _T("ATR833"),
+  "ATR833",
+  "ATR833",
   DeviceRegister::RAW_GPS_DATA,
   ATR833CreateOnPort,
 };

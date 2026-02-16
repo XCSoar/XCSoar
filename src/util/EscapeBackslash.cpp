@@ -34,7 +34,7 @@ UnescapeBackslash(std::string_view old_string) noexcept
     }
   }
 
-  buffer[used++] = _T('\0');
+  buffer[used++] = '\0';
 
   return strdup(buffer);
 }

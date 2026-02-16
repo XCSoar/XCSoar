@@ -14,7 +14,7 @@ LoadConfiguredRasp() noexcept
   if (path == nullptr)
     /* if no path is configured, attempt to load xcsoar-rasp.dat
        (XCSoar < 7.29) */
-    path = LocalPath(_T(RASP_FILENAME));
+    path = LocalPath(RASP_FILENAME);
 
   auto rasp = std::make_shared<RaspStore>(std::move(path));
   rasp->ScanAll();

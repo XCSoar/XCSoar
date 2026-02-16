@@ -20,7 +20,7 @@ public:
   NOAALineSplitter(const char *_start):start(_start) {}
 
   bool HasNext() const {
-    return start != NULL && start[0] != _T('\0');
+    return start != NULL && start[0] != '\0';
   }
 
   Range Next() {
@@ -29,7 +29,7 @@ public:
     const char *line_start = start;
 
     // Search for next line break
-    const auto *line_break = StringFind(line_start, _T('\n'));
+    const auto *line_break = StringFind(line_start, '\n');
     if (!line_break) {
       // if no line break was found
       start = NULL;
@@ -57,7 +57,7 @@ FormatDecodedMETARLine(const char *line, unsigned length,
 {
   const char *end = line + length;
 
-  const char *colon = (const char *)memchr(line, _T(':'), length);
+  const char *colon = (const char *)memchr(line, ':', length);
   if (!colon)
     return false;
 
@@ -66,19 +66,19 @@ FormatDecodedMETARLine(const char *line, unsigned length,
     return false;
 
   const char *value = colon + 1;
-  while (*value == _T(' '))
+  while (*value == ' ')
     value++;
 
   unsigned value_length = end - value;
 
-  if (CheckTitle(line, title_length, _T("Wind"))) {
+  if (CheckTitle(line, title_length, "Wind")) {
     StaticString<256> buffer;
 
     if (!parsed.wind_available) {
-      buffer.Format(_T("%s: "), _("Wind"));
+      buffer.Format("%s: ", _("Wind"));
       buffer.append({value, value_length});
     } else {
-      buffer.Format(_T("%s: %.0f" DEG " %s"), _("Wind"),
+      buffer.Format("%s: %.0f" DEG " %s", _("Wind"),
                     (double)parsed.wind.bearing.Degrees(),
                     FormatUserWindSpeed(parsed.wind.norm).c_str());
     }
@@ -87,61 +87,61 @@ FormatDecodedMETARLine(const char *line, unsigned length,
     return true;
   }
 
-  if (CheckTitle(line, title_length, _T("Temperature"))) {
+  if (CheckTitle(line, title_length, "Temperature")) {
     StaticString<256> buffer;
 
     if (!parsed.temperatures_available) {
-      buffer.Format(_T("%s: "), _("Temperature"));
+      buffer.Format("%s: ", _("Temperature"));
       buffer.append({value, value_length});
     } else {
       char temperature_buffer[16];
       FormatUserTemperature(parsed.temperature, temperature_buffer);
 
-      buffer.Format(_T("%s: %s"), _("Temperature"), temperature_buffer);
+      buffer.Format("%s: %s", _("Temperature"), temperature_buffer);
     }
     output += buffer;
     output += '\n';
     return true;
   }
 
-  if (CheckTitle(line, title_length, _T("Dew Point"))) {
+  if (CheckTitle(line, title_length, "Dew Point")) {
     StaticString<256> buffer;
 
     if (!parsed.temperatures_available) {
-      buffer.Format(_T("%s: "), _("Dew Point"));
+      buffer.Format("%s: ", _("Dew Point"));
       buffer.append({value, value_length});
     } else {
       char temperature_buffer[16];
       FormatUserTemperature(parsed.dew_point, temperature_buffer);
 
-      buffer.Format(_T("%s: %s"), _("Dew Point"), temperature_buffer);
+      buffer.Format("%s: %s", _("Dew Point"), temperature_buffer);
     }
     output += buffer;
     output += '\n';
     return true;
   }
 
-  if (CheckTitle(line, title_length, _T("Pressure (altimeter)"))) {
+  if (CheckTitle(line, title_length, "Pressure (altimeter)")) {
     StaticString<256> buffer;
 
     if (!parsed.qnh_available) {
-      buffer.Format(_T("%s: "), _("Pressure"));
+      buffer.Format("%s: ", _("Pressure"));
       buffer.append({value, value_length});
     } else {
       char qnh_buffer[16];
       FormatUserPressure(parsed.qnh, qnh_buffer);
 
-      buffer.Format(_T("%s: %s"), _("Pressure"), qnh_buffer);
+      buffer.Format("%s: %s", _("Pressure"), qnh_buffer);
     }
     output += buffer;
     output += '\n';
     return true;
   }
 
-  if (CheckTitle(line, title_length, _T("Visibility"))) {
+  if (CheckTitle(line, title_length, "Visibility")) {
     StaticString<256> buffer;
 
-    buffer.Format(_T("%s: "), _("Visibility"));
+    buffer.Format("%s: ", _("Visibility"));
     if (!parsed.visibility_available) {
       buffer.append({value, value_length});
     } else {
@@ -156,9 +156,9 @@ FormatDecodedMETARLine(const char *line, unsigned length,
     return true;
   }
 
-  if (CheckTitle(line, title_length, _T("Sky conditions"))) {
+  if (CheckTitle(line, title_length, "Sky conditions")) {
     StaticString<256> buffer;
-    buffer.Format(_T("%s: "), _("Sky Conditions"));
+    buffer.Format("%s: ", _("Sky Conditions"));
 
     StaticString<64> _value;
     _value.assign({value, value_length});
@@ -170,9 +170,9 @@ FormatDecodedMETARLine(const char *line, unsigned length,
     return true;
   }
 
-  if (CheckTitle(line, title_length, _T("Weather"))) {
+  if (CheckTitle(line, title_length, "Weather")) {
     StaticString<256> buffer;
-    buffer.Format(_T("%s: "), _("Weather"));
+    buffer.Format("%s: ", _("Weather"));
 
     StaticString<64> _value;
     _value.assign({value, value_length});
@@ -188,7 +188,7 @@ FormatDecodedMETARLine(const char *line, unsigned length,
   title.assign({line, title_length});
 
   StaticString<256> buffer;
-  buffer.Format(_T("%s: "), gettext(title.c_str()));
+  buffer.Format("%s: ", gettext(title.c_str()));
   buffer.append({value, value_length});
 
   output += buffer;
@@ -254,11 +254,11 @@ NOAAFormatter::Format(const NOAAStore::Item &station, std::string &output)
     else
       output += station.metar.decoded.c_str();
 
-    output += _T("\n\n");
+    output += "\n\n";
     output += station.metar.content.c_str();
   }
 
-  output += _T("\n\n");
+  output += "\n\n";
 
   if (!station.taf_available)
     output += _("No TAF available!");

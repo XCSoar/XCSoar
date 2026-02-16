@@ -12,30 +12,30 @@
 #include <string.h>
 
 static constexpr char keyboard_letters[] =
-  _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+  "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 void
 KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   PrepareSize(rc);
 
-  char caption[] = _T(" ");
+  char caption[] = " ";
 
   for (const char *i = keyboard_letters; !StringIsEmpty(i); ++i) {
     caption[0] = *i;
     AddButton(parent, caption, *i);
   }
 
-  AddButton(parent, _T("Space"), ' ');
-  AddButton(parent, _T("."), '.');
-  AddButton(parent, _T("@"), '@');
-  AddButton(parent, _T("-"), '-');
+  AddButton(parent, "Space", ' ');
+  AddButton(parent, ".", '.');
+  AddButton(parent, "@", '@');
+  AddButton(parent, "-", '-');
 
   if (show_shift_button) {
     WindowStyle style;
     style.Hide();
     shift_button.Create(parent, { 0, 0, 16, 16 }, style,
-                        std::make_unique<SymbolButtonRenderer>(look, _T("v")),
+                        std::make_unique<SymbolButtonRenderer>(look, "v"),
                         [this](){ OnShiftClicked(); });
   }
   UpdateShiftState();
@@ -139,7 +139,7 @@ KeyboardWidget::MoveButtonsToRow(const PixelRect &rc,
   if (StringIsEmpty(buttons))
     return;
 
-  for (unsigned i = 0; buttons[i] != _T('\0'); i++) {
+  for (unsigned i = 0; buttons[i] != '\0'; i++) {
     MoveButton(buttons[i],
                rc.GetTopLeft() + PixelSize(i * button_size.width + offset,
                                            row * button_size.height));
@@ -149,25 +149,25 @@ KeyboardWidget::MoveButtonsToRow(const PixelRect &rc,
 void
 KeyboardWidget::MoveButtons(const PixelRect &rc)
 {
-  MoveButtonsToRow(rc, _T("1234567890"), 0);
-  MoveButtonsToRow(rc, _T("QWERTYUIOP"), 1);
-  MoveButtonsToRow(rc, _T("ASDFGHJKL"), 2, button_size.width / 3);
-  MoveButtonsToRow(rc, _T("ZXCVBNM@."), 3, button_size.width);
+  MoveButtonsToRow(rc, "1234567890", 0);
+  MoveButtonsToRow(rc, "QWERTYUIOP", 1);
+  MoveButtonsToRow(rc, "ASDFGHJKL", 2, button_size.width / 3);
+  MoveButtonsToRow(rc, "ZXCVBNM@.", 3, button_size.width);
 
   if (IsLandscape(rc)) {
-    MoveButton(_T('-'),
+    MoveButton('-',
                rc.GetTopLeft() + PixelSize{button_size.width * 9, Layout::Scale(160U)});
 
-    MoveButton(_T(' '),
+    MoveButton(' ',
                rc.GetTopLeft() + PixelSize{Layout::Scale(80U), Layout::Scale(160U)});
-    ResizeButton(_T(' '), {Layout::Scale(93U), Layout::Scale(40U)});
+    ResizeButton(' ', {Layout::Scale(93U), Layout::Scale(40U)});
   } else {
-    MoveButton(_T('-'),
+    MoveButton('-',
                rc.GetTopLeft() + PixelSize{button_size.width * 8, button_size.height * 4});
 
-    MoveButton(_T(' '),
+    MoveButton(' ',
                rc.GetTopLeft() + PixelSize{button_size.width * 2, button_size.height * 4});
-    ResizeButton(_T(' '), {button_size.width * 11 / 2, button_size.height});
+    ResizeButton(' ', {button_size.width * 11 / 2, button_size.height});
   }
 
   if (show_shift_button)
@@ -207,7 +207,7 @@ void
 KeyboardWidget::UpdateShiftState()
 {
   if (show_shift_button)
-    shift_button.SetCaption(shift_state ? _T("v") : _T("^"));
+    shift_button.SetCaption(shift_state ? "v" : "^");
 
   for (unsigned i = 0; i < num_buttons; ++i) {
     unsigned uch = buttons[i].GetCharacter();

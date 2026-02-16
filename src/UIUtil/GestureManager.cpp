@@ -9,15 +9,15 @@
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)
-    return _T('U');
+    return 'U';
   if (dy > 0 && dy >= abs(dx) * 2)
-    return _T('D');
+    return 'D';
   if (dx > 0 && dx >= abs(dy) * 2)
-    return _T('R');
+    return 'R';
   if (dx < 0 && -dx >= abs(dy) * 2)
-    return _T('L');
+    return 'L';
 
-  return _T('\0');
+  return '\0';
 }
 
 bool

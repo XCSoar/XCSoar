@@ -409,8 +409,8 @@ OpenVarioCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_por
 }
 
 const struct DeviceRegister open_vario_driver = {
-  _T("OpenVario"),
-  _T("OpenVario"),
+  "OpenVario",
+  "OpenVario",
   DeviceRegister::SEND_SETTINGS,
   OpenVarioCreateOnPort,
 };

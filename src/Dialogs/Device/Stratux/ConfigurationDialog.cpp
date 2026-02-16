@@ -35,8 +35,8 @@ public:
 
     LoadFromProfile(settings);
 
-    AddInteger(_("Horizontal Range"), nullptr, _T("%d m"), _T("%d"), 4000, 20000, 1000, settings.hrange);
-    AddInteger(_("Vertical Range"), nullptr, _T("%d m"), _T("%d"), 1000, 4000, 1000, settings.vrange);
+    AddInteger(_("Horizontal Range"), nullptr, "%d m", "%d", 4000, 20000, 1000, settings.hrange);
+    AddInteger(_("Vertical Range"), nullptr, "%d m", "%d", 1000, 4000, 1000, settings.vrange);
   }
 
   bool Save(bool &_changed) noexcept override {
@@ -51,7 +51,7 @@ public:
 
     _changed |= changed;
     if (_changed) ShowMessageBox(_("Changes to configuration saved. Restart XCSoar to apply changes."),
-                    _T(""), MB_OK);
+                    "", MB_OK);
     return true;
   }
 };
@@ -65,7 +65,7 @@ ManageStratuxDialog(Device &_device)
 
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       look,
-                      _T("Stratux Setup"),
+                      "Stratux Setup",
                       new StratuxConfigurationWidget(look, dialog, device));
 
   dialog.AddButton(_("Close"), mrOK);

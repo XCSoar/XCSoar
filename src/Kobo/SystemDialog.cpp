@@ -107,7 +107,7 @@ SystemWidget::SwitchOTGMode()
         switch_otg_mode->SetCaption("Enable USB-OTG");
         usb_storage->SetEnabled(true);
       } else {
-        ShowMessageBox(_T("Failed to switch OTG mode."), _("Error"), MB_OK);
+        ShowMessageBox("Failed to switch OTG mode.", _("Error"), MB_OK);
       }
     } else {
       success = File::WriteExisting(Path("/sys/kernel/debug/ci_hdrc.0/role"),
@@ -119,7 +119,7 @@ SystemWidget::SwitchOTGMode()
         switch_otg_mode->SetCaption("Disable USB-OTG");
         usb_storage->SetEnabled(false);
       } else {
-        ShowMessageBox(_T("Failed to switch OTG mode."), _("Error"), MB_OK);
+        ShowMessageBox("Failed to switch OTG mode.", _("Error"), MB_OK);
       }
     }
   } else {
@@ -138,8 +138,8 @@ SystemWidget::SwitchKernel()
       model != KoboModel::TOUCH2 &&
       model != KoboModel::GLO_HD &&
       model != KoboModel::AURA2 &&
-      ShowMessageBox(_T("This feature was designed for the Kobo Mini, Touch 2.0, Glo HD and Aura 2, but this is not one.  Use at your own risk.  Continue?"),
-                     _T("USB-OTG"), MB_YESNO) != IDYES)
+      ShowMessageBox("This feature was designed for the Kobo Mini, Touch 2.0, Glo HD and Aura 2, but this is not one.  Use at your own risk.  Continue?",
+                     "USB-OTG", MB_YESNO) != IDYES)
     return;
 
   const char *otg_kernel_image, *kobo_kernel_image;
@@ -166,7 +166,7 @@ SystemWidget::SwitchKernel()
     : otg_kernel_image;
 
   if (!KoboInstallKernel(kernel_image)) {
-      ShowMessageBox(_T("Failed to activate kernel."), _("Error"), MB_OK);
+      ShowMessageBox("Failed to activate kernel.", _("Error"), MB_OK);
       return;
   }
 
@@ -178,20 +178,20 @@ inline void
 SystemWidget::ExportUSBStorage()
 {
   if (!KoboUmountData()) {
-      ShowMessageBox(_T("Failed to unmount data partition."), _("Error"),
+      ShowMessageBox("Failed to unmount data partition.", _("Error"),
                      MB_OK);
       return;
   }
 
   if (!KoboExportUSBStorage()) {
-      ShowMessageBox(_T("Failed to export data partition."), _("Error"),
+      ShowMessageBox("Failed to export data partition.", _("Error"),
                      MB_OK);
       KoboMountData();
       return;
   }
 
-  ShowMessageBox(_T("Your PC has now access to the data partition until you close this dialog."),
-                 _T("Export USB storage"),
+  ShowMessageBox("Your PC has now access to the data partition until you close this dialog.",
+                 "Export USB storage",
                  MB_OK);
 
   KoboUnexportUSBStorage();

@@ -175,7 +175,7 @@ public:
 protected:
   void FormatTitle(char *buffer, size_t buffer_size,
                    const Waypoint &way_point) const noexcept {
-    buffer[0] = _T('\0');
+    buffer[0] = '\0';
 
     switch (settings.display_text_type) {
     case WaypointRendererSettings::DisplayTextType::NAME:
@@ -197,7 +197,7 @@ protected:
     case WaypointRendererSettings::DisplayTextType::FIRST_WORD:
       CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
       char *tmp;
-      tmp = strstr(buffer, _T(" "));
+      tmp = strstr(buffer, " ");
       if (tmp != nullptr)
         tmp[0] = '\0';
       break;
@@ -245,17 +245,17 @@ protected:
 
       size_t length = strlen(buffer);
       if (length > 0)
-        buffer[length++] = _T(':');
+        buffer[length++] = ':';
 
       if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN &&
          reach.IsReachableTerrain()) {
           int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
-          StringFormatUnsafe(buffer + length, _T("%.1f/%d%s"), (double) gr,
+          StringFormatUnsafe(buffer + length, "%.1f/%d%s", (double) gr,
                             uah_terrain, altitude_unit);
           return;
          }
 
-      StringFormatUnsafe(buffer + length, _T("%.1f"), (double) gr);
+      StringFormatUnsafe(buffer + length, "%.1f", (double) gr);
       return;
     }
 
@@ -275,25 +275,25 @@ protected:
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN) {
       if (reach.IsReachableTerrain()) {
         if (length > 0)
-          buffer[length++] = _T(':');
-        StringFormatUnsafe(buffer + length, _T("%d%s"),
+          buffer[length++] = ':';
+        StringFormatUnsafe(buffer + length, "%d%s",
                            uah_terrain, altitude_unit);
       }
       return;
     }
 
     if (length > 0)
-      buffer[length++] = _T(':');
+      buffer[length++] = ':';
 
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN &&
         reach.IsReachableDirect() && reach.IsReachableTerrain() &&
         reach.IsDeltaConsiderable()) {
-      StringFormatUnsafe(buffer + length, _T("%d/%d%s"), uah_glide,
+      StringFormatUnsafe(buffer + length, "%d/%d%s", uah_glide,
                          uah_terrain, altitude_unit);
       return;
     }
 
-    StringFormatUnsafe(buffer + length, _T("%d%s"), uah_glide, altitude_unit);
+    StringFormatUnsafe(buffer + length, "%d%s", uah_glide, altitude_unit);
   }
 
   void DrawWaypoint(const VisibleWaypoint &vwp) noexcept {

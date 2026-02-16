@@ -244,7 +244,7 @@ DigitEntry::CalculateLayout()
 
   const unsigned min_value_height = control_height * 3 / 2;
 
-  PixelSize digit_size = look.text_font.TextSize(_T("8"));
+  PixelSize digit_size = look.text_font.TextSize("8");
   digit_size.height += 2 * padding;
   if (digit_size.height < min_value_height)
     digit_size.height = min_value_height;
@@ -1010,70 +1010,70 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
     }
 
     const char *text = buffer;
-    buffer[1] = _T('\0');
+    buffer[1] = '\0';
 
     switch (c.type) {
     case Column::Type::DIGIT:
     case Column::Type::DIGIT6:
       assert(c.value < 10);
-      buffer[0] = _T('0') + c.value;
+      buffer[0] = '0' + c.value;
       break;
 
     case Column::Type::HOUR:
       assert(c.value < 24);
-      sprintf(buffer, _T("%02u"), c.value);
+      sprintf(buffer, "%02u", c.value);
       break;
 
     case Column::Type::DIGIT36:
       assert(c.value < 36);
-      sprintf(buffer, _T("%02u"), c.value);
+      sprintf(buffer, "%02u", c.value);
       break;
 
     case Column::Type::DIGIT19:
       assert(c.value < 19);
-      sprintf(buffer, _T("%02u"), c.value);
+      sprintf(buffer, "%02u", c.value);
       break;
 
     case Column::Type::SIGN:
-      buffer[0] = c.IsNegative() ? _T('-') : _T('+');
+      buffer[0] = c.IsNegative() ? '-' : '+';
       break;
 
     case Column::Type::DECIMAL_POINT:
-      buffer[0] = _T('.');
+      buffer[0] = '.';
       break;
 
     case Column::Type::COLON:
-      buffer[0] = _T(':');
+      buffer[0] = ':';
       break;
 
     case Column::Type::NORTH_SOUTH:
-      buffer[0] = c.IsNegative() ? _T('S') : _T('N');
+      buffer[0] = c.IsNegative() ? 'S' : 'N';
       break;
 
     case Column::Type::EAST_WEST:
-      buffer[0] = c.IsNegative() ? _T('W') : _T('E');
+      buffer[0] = c.IsNegative() ? 'W' : 'E';
       break;
 
     case Column::Type::DEGREES:
-      text = _T("°");
+      text = "°";
       break;
 
     case Column::Type::APOSTROPHE:
-      text = _T("'");
+      text = "'";
       break;
 
     case Column::Type::QUOTE:
-      text = _T("\"");
+      text = "\"";
       break;
 
     case Column::Type::DAY:
-      sprintf(buffer, _T("%02u"), c.value + 1);
+      sprintf(buffer, "%02u", c.value + 1);
       break;
     case Column::Type::MONTH:
-      sprintf(buffer, _T("%02u"), c.value + 1);
+      sprintf(buffer, "%02u", c.value + 1);
       break;
     case Column::Type::YEAR:
-      sprintf(buffer, _T("%04u"), c.value + 1900);
+      sprintf(buffer, "%04u", c.value + 1900);
       break;
 
     case Column::Type::UNIT:
@@ -1083,7 +1083,7 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
     }
 
     if (c.IsEditable() && !valid)
-      buffer[0] = _T('\0');
+      buffer[0] = '\0';
 
     const int x = (c.left + c.right - canvas.CalcTextWidth(text)) / 2;
 

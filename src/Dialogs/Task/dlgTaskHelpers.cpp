@@ -97,10 +97,10 @@ OrderedTaskSummary(const OrderedTask *task, char *text, bool linebreaks)
                        OrderedTaskFactoryName(task->GetFactoryType()));
   } else {
     if (task->HasTargets())
-      StringFormatUnsafe(text, _T("%s%s%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)"),
+      StringFormatUnsafe(text, "%s%s%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)",
                          summary_shape,
-                         validation_errors.IsEmpty() ? _T("") : _T(" / "),
-                         validation_errors.IsEmpty() ? _T("") : getTaskValidationErrors(validation_errors),
+                         validation_errors.IsEmpty() ? "" : " / ",
+                         validation_errors.IsEmpty() ? "" : getTaskValidationErrors(validation_errors),
                          linebreak,
                          (double)Units::ToUserDistance(stats.distance_nominal),
                          Units::GetDistanceName(),
@@ -114,10 +114,10 @@ OrderedTaskSummary(const OrderedTask *task, char *text, bool linebreaks)
                          Units::GetDistanceName(),
                          OrderedTaskFactoryName(task->GetFactoryType()));
     else
-      StringFormatUnsafe(text, _T("%s%s%s%s%s %.0f %s (%s)"),
+      StringFormatUnsafe(text, "%s%s%s%s%s %.0f %s (%s)",
                          summary_shape,
-                         validation_errors.IsEmpty() ? _T("") : _T(" / "),
-                         validation_errors.IsEmpty() ? _T("") : getTaskValidationErrors(validation_errors),
+                         validation_errors.IsEmpty() ? "" : " / ",
+                         validation_errors.IsEmpty() ? "" : getTaskValidationErrors(validation_errors),
                          linebreak,
                          _("dist."),
                          (double)Units::ToUserDistance(stats.distance_nominal),
@@ -132,19 +132,19 @@ OrderedTaskPointLabel(TaskPointType type, const char *name,
 {
   switch (type) {
   case TaskPointType::START:
-    StringFormatUnsafe(buffer, _T("S: %s"), name);
+    StringFormatUnsafe(buffer, "S: %s", name);
     break;
 
   case TaskPointType::AST:
-    StringFormatUnsafe(buffer, _T("T%d: %s"), index, name);
+    StringFormatUnsafe(buffer, "T%d: %s", index, name);
     break;
 
   case TaskPointType::AAT:
-    StringFormatUnsafe(buffer, _T("A%d: %s"), index, name);
+    StringFormatUnsafe(buffer, "A%d: %s", index, name);
     break;
 
   case TaskPointType::FINISH:
-    StringFormatUnsafe(buffer, _T("F: %s"), name);
+    StringFormatUnsafe(buffer, "F: %s", name);
     break;
 
   default:
@@ -162,19 +162,19 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
 
   case ObservationZone::Shape::SECTOR:
   case ObservationZone::Shape::ANNULAR_SECTOR:
-    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Sector"), _("Radius"),
+    StringFormatUnsafe(buffer,"%s - %s: %.1f%s", _("Sector"), _("Radius"),
                        (double)Units::ToUserDistance(((const SectorZone &)ozp).GetRadius()),
                        Units::GetDistanceName());
     return;
 
   case ObservationZone::Shape::LINE:
-    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Line"), _("Gate width"),
+    StringFormatUnsafe(buffer,"%s - %s: %.1f%s", _("Line"), _("Gate width"),
                        (double)Units::ToUserDistance(((const LineSectorZone &)ozp).GetLength()),
                        Units::GetDistanceName());
     return;
 
   case ObservationZone::Shape::CYLINDER:
-    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Cylinder"), _("Radius"),
+    StringFormatUnsafe(buffer,"%s - %s: %.1f%s", _("Cylinder"), _("Radius"),
                        (double)Units::ToUserDistance(((const CylinderZone &)ozp).GetRadius()),
                        Units::GetDistanceName());
     return;
@@ -184,7 +184,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
     return;
 
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
-    StringFormatUnsafe(buffer,_T("%s - %s: %.1f%s"), _("Keyhole"), _("Radius"),
+    StringFormatUnsafe(buffer,"%s - %s: %.1f%s", _("Keyhole"), _("Radius"),
                        (double)Units::ToUserDistance(((const KeyholeZone &)ozp).GetRadius()),
                        Units::GetDistanceName());
     return;
@@ -217,13 +217,13 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
 bool
 OrderedTaskSave(OrderedTask &task)
 {
-  char fname[69] = _T("");
+  char fname[69] = "";
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
 
-  const auto tasks_path = MakeLocalPath(_T("tasks"));
+  const auto tasks_path = MakeLocalPath("tasks");
 
-  strcat(fname, _T(".tsk"));
+  strcat(fname, ".tsk");
   task.SetName(fname);
   SaveTask(AllocatedPath::Build(tasks_path, fname), task);
   return true;

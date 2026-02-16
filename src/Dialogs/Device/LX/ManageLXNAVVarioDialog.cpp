@@ -61,11 +61,11 @@ ManageLXNAVVarioWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[mayb
   AddButton(_("Setup"), [this](){
     LXNAVVarioConfigWidget widget(GetLook(), device);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                        _T("LXNAV Vario"), widget);
+                        "LXNAV Vario", widget);
   });
 
   if (device.IsNano())
-    AddButton(_T("LXNAV Nano"), [this](){
+    AddButton("LXNAV Nano", [this](){
       MessageOperationEnvironment env;
       if (device.EnablePassThrough(env)) {
         ManageNanoDialog(device, secondary_info);
@@ -80,7 +80,7 @@ ManageLXNAVVarioDialog(Device &device, const DeviceInfo &info,
 {
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
-                      _T("LXNAV Vario"),
+                      "LXNAV Vario",
                       new ManageLXNAVVarioWidget(UIGlobals::GetDialogLook(),
                                          (LXDevice &)device, info,
                                          secondary_info));

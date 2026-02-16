@@ -107,7 +107,7 @@ DataFieldInteger::CreateComboList(const char *reference_string) const noexcept
   int first = corrected_value - (int)surrounding_items * step;
   if (first > min)
     /* there are values before "first" - give the user a choice */
-    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, "<<More Items>>");
   else if (first < min)
     first = min;
 
@@ -137,7 +137,7 @@ DataFieldInteger::CreateComboList(const char *reference_string) const noexcept
 
   if (last < max)
     /* there are values after "last" - give the user a choice */
-    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, "<<More Items>>");
 
   return combo_list;
 }

@@ -13,8 +13,8 @@
 #include "Renderer/ChartRenderer.hpp"
 
 static const char *const chart_names[] = {
-  _T("Line"),
-  _T("Line2"),
+  "Line",
+  "Line2",
 };
 
 class ChartWindow : public PaintWindow {
@@ -51,8 +51,8 @@ void
 ChartWindow::DrawChart(ChartRenderer &renderer)
 {
   if (chart == 1) {
-    renderer.SetXLabel(_T("VVV"),_T("m/s"));
-    renderer.SetYLabel(_T("AAA"),_T("m/s"));
+    renderer.SetXLabel("VVV","m/s");
+    renderer.SetYLabel("AAA","m/s");
   }
 
   renderer.Begin();
@@ -84,7 +84,7 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
 
     renderer.DrawYGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
 
-    renderer.DrawLabel({50, 50}, _T("hello"));
+    renderer.DrawLabel({50, 50}, "hello");
   }
 
   renderer.Finish();
@@ -104,7 +104,7 @@ public:
   }
 
   void Create(const DialogLook &look, PixelSize size) {
-    SingleWindow::Create(_T("RunChartRenderer"), size);
+    SingleWindow::Create("RunChartRenderer", size);
 
     const PixelRect rc = GetClientRect();
 
@@ -127,7 +127,7 @@ public:
     PixelRect button_rc = rc;
     button_rc.right = list_rc.right;
     button_rc.top = button_rc.bottom - 30;
-    close_button.Create(*this, *button_look, _T("Close"), button_rc,
+    close_button.Create(*this, *button_look, "Close", button_rc,
                         WindowStyle(),
                         [this](){ Close(); });
 

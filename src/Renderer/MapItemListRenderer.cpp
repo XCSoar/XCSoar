@@ -55,21 +55,21 @@ Draw(Canvas &canvas, const PixelRect rc,
 {
   char info_buffer[256];
   if (item.vector.IsValid())
-    StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
+    StringFormatUnsafe(info_buffer, "%s: %s, %s: %s",
                        _("Distance"),
                        FormatUserDistanceSmart(item.vector.distance).c_str(),
                        _("Direction"),
                        FormatBearing(item.vector.bearing).c_str());
   else
-    StringFormatUnsafe(info_buffer, _T("%s: %s, %s: %s"),
-                       _("Distance"), _T("---"), _("Direction"), _T("---"));
+    StringFormatUnsafe(info_buffer, "%s: %s, %s: %s",
+                       _("Distance"), "---", _("Direction"), "---");
 
   row_renderer.DrawFirstRow(canvas, rc, info_buffer);
 
-  StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
+  StringFormatUnsafe(info_buffer, "%s: %s", _("Elevation"),
                      item.HasElevation()
                      ? FormatUserAltitude(item.elevation).c_str()
-                     : _T("---"));
+                     : "---");
   row_renderer.DrawSecondRow(canvas, rc, info_buffer);
 }
 
@@ -130,10 +130,10 @@ Draw(Canvas &canvas, PixelRect rc,
 
     FormatRelativeUserAltitude(relative_arrival_altitude, altitude_buffer);
 
-    buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
+    buffer.AppendFormat("%s %s, ", altitude_buffer, _("AGL"));
   }
 
-  buffer.AppendFormat(_T("%s %s"),
+  buffer.AppendFormat("%s %s",
                       FormatUserAltitude(item.reach.direct).c_str(),
                       _("MSL"));
 
@@ -144,7 +144,7 @@ Draw(Canvas &canvas, PixelRect rc,
   // Format comment row
 
   if (reach_relevant) {
-    buffer.Format(_T("%s: "), _("around terrain"));
+    buffer.Format("%s: ", _("around terrain"));
 
     if (item.HasElevation()) {
       int relative_arrival_altitude =
@@ -153,16 +153,16 @@ Draw(Canvas &canvas, PixelRect rc,
       FormatRelativeUserAltitude(relative_arrival_altitude,
                                  altitude_buffer);
 
-     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
+     buffer.AppendFormat("%s %s, ", altitude_buffer, _("AGL"));
     }
 
-    buffer.AppendFormat(_T("%s %s, "),
+    buffer.AppendFormat("%s %s, ",
                         FormatUserAltitude(item.reach.terrain).c_str(),
                         _("MSL"));
   } else if (item.HasElevation() &&
              item.reach.direct >= item.elevation + item.safety_height &&
              item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
-    buffer.UnsafeFormat(_T("%s "), _("Unreachable due to terrain."));
+    buffer.UnsafeFormat("%s ", _("Unreachable due to terrain."));
   } else {
     buffer.clear();
   }
@@ -254,7 +254,7 @@ Draw(Canvas &canvas, PixelRect rc,
   if (timespan.count() < 0)
     timespan += hours{24};
 
-  buffer.Format(_T("%s: %s - left %s ago (%s)"),
+  buffer.Format("%s: %s - left %s ago (%s)",
                 _("Avg. lift"),
                 FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                 FormatTimespanSmart(timespan).c_str(),
@@ -332,7 +332,7 @@ Draw(Canvas &canvas, PixelRect rc,
   // Append name to the title, if it exists
   const char *callsign = info.callsign;
   if (callsign != nullptr && !StringIsEmpty(callsign)) {
-    title_string.append(_T(", "));
+    title_string.append(", ");
     title_string.append(callsign);
   }
 
@@ -349,11 +349,11 @@ Draw(Canvas &canvas, PixelRect rc,
   // Generate the line of info about the target, if it's available
   if (traffic != nullptr) {
     if (traffic->altitude_available)
-      info_string.AppendFormat(_T(", %s: %s"), _("Altitude"),
+      info_string.AppendFormat(", %s: %s", _("Altitude"),
                                FormatUserAltitude(traffic->altitude).c_str());
 
     if (traffic->climb_rate_avg30s_available) {
-      info_string.AppendFormat(_T(", %s: %s"), _("Vario"),
+      info_string.AppendFormat(", %s: %s", _("Vario"),
                                FormatUserVerticalSpeed(traffic->climb_rate_avg30s).c_str());
     }
   }

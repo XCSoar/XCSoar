@@ -90,18 +90,18 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
 
   if (waypoint->radio_frequency.Format(buffer.buffer(),
                                       buffer.capacity()) != nullptr) {
-    buffer += _T(" MHz");
+    buffer += " MHz";
     AddReadOnly(_("Radio frequency"), nullptr, buffer);
   }
 
   if (waypoint->runway.IsDirectionDefined())
-    buffer.UnsafeFormat(_T("%02u"), waypoint->runway.GetDirectionName());
+    buffer.UnsafeFormat("%02u", waypoint->runway.GetDirectionName());
   else
     buffer.clear();
 
   if (waypoint->runway.IsLengthDefined()) {
     if (!buffer.empty())
-      buffer += _T("; ");
+      buffer += "; ";
 
     char length_buffer[16];
     FormatSmallUserDistance(length_buffer, waypoint->runway.GetLength());
@@ -121,7 +121,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (waypoint->has_elevation)
     AddReadOnly(_("Elevation"), nullptr, FormatUserAltitude(waypoint->elevation));
   else
-    AddReadOnly(_("Elevation"), nullptr, _T("?"));
+    AddReadOnly(_("Elevation"), nullptr, "?");
 
   if (basic.time_available && basic.date_time_utc.IsDatePlausible()) {
     const SunEphemeris::Result sun =
@@ -131,7 +131,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
     const BrokenTime sunrise = BreakHourOfDay(sun.time_of_sunrise);
     const BrokenTime sunset = BreakHourOfDay(sun.time_of_sunset);
 
-    buffer.UnsafeFormat(_T("%02u:%02u - %02u:%02u"),
+    buffer.UnsafeFormat("%02u:%02u - %02u:%02u",
                         sunrise.hour, sunrise.minute,
                         sunset.hour, sunset.minute);
     AddReadOnly(_("Daylight time"), nullptr, buffer);
@@ -183,7 +183,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
       const auto distance = basic.location.Distance(waypoint->location);
       const auto gr = distance / delta_h;
       if (GradientValid(gr)) {
-        buffer.UnsafeFormat(_T("%.1f"), (double)gr);
+        buffer.UnsafeFormat("%.1f", (double)gr);
         AddReadOnly(_("Required glide ratio"), nullptr, buffer);
       }
     }

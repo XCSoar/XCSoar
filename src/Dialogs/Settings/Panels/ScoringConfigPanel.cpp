@@ -57,8 +57,8 @@ ScoringConfigPanel::ShowFAITriangleControls(bool show)
 }
 
 static constexpr StaticEnumChoice fai_triangle_threshold_list[] = {
-  { FAITriangleSettings::Threshold::FAI, _T("750km (FAI)") },
-  { FAITriangleSettings::Threshold::KM500, _T("500km (OLC, DMSt)") },
+  { FAITriangleSettings::Threshold::FAI, "750km (FAI)" },
+  { FAITriangleSettings::Threshold::KM500, "500km (OLC, DMSt)" },
   nullptr
 };
 
@@ -85,7 +85,7 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       N_("A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.") },
     { Contest::DMST, ContestToString(Contest::DMST),
       /* German competition, no translation */
-      _T("Deutsche Meisterschaft im Streckensegelflug.") },
+      "Deutsche Meisterschaft im Streckensegelflug." },
     { Contest::XCONTEST, ContestToString(Contest::XCONTEST),
       N_("PG online contest with different track values: Free flight - 1 km = 1.0 point; "
           "flat triangle - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p.") },

@@ -17,5 +17,5 @@ NumberDataField::SetFormat(const char *text) noexcept
 {
   edit_format = text;
   display_format = text;
-  display_format += _T(" %s") ;
+  display_format += " %s" ;
 }

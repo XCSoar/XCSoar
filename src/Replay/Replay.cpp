@@ -49,7 +49,7 @@ Replay::Start(Path _path)
 
   if (path == nullptr || path.empty()) {
     replay = new DemoReplayGlue(device_blackboard, task_manager);
-  } else if (path.EndsWithIgnoreCase(_T(".igc"))) {
+  } else if (path.EndsWithIgnoreCase(".igc")) {
     replay = new IgcReplay(std::make_unique<FileLineReaderA>(path));
 
     cli = new CatmullRomInterpolator(FloatDuration{0.98});

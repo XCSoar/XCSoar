@@ -37,10 +37,10 @@ RulesStatusPanel::Refresh() noexcept
 
   /// @todo proper task validity check
   SetText(ValidStart, start_stats.HasStarted()
-          ? _("Yes") : _T("No"));
+          ? _("Yes") : "No");
 
   SetText(ValidFinish, task_stats.task_finished
-          ? _("Yes") : _T("No"));
+          ? _("Yes") : "No");
 
   if (start_stats.HasStarted()) {
     SetText(StartTime,
@@ -56,7 +56,7 @@ RulesStatusPanel::Refresh() noexcept
     ClearValue(StartHeight);
   }
 
-  Temp[0] = _T('\0');
+  Temp[0] = '\0';
   double finish_height(0);
 
   if (backend_components->protected_task_manager) {

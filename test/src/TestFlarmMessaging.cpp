@@ -73,7 +73,7 @@ TestFlarmMessagingIO()
   db.Insert(rec);
 
   // Write to a test file
-  Path out_path(_T("xcsoar-messaging-test.csv"));
+  Path out_path("xcsoar-messaging-test.csv");
   FileOutputStream fos(out_path);
   BufferedOutputStream bos(fos);
   SaveFlarmMessagingFile(bos, db);
@@ -111,7 +111,7 @@ TestFlarmMessagingFile()
 {
   // Load from test data file with edge cases
   FlarmMessagingDatabase db;
-  FileReader fr(Path(_T("test/data/flarmmessaging/flarm-messaging.csv")));
+  FileReader fr(Path("test/data/flarmmessaging/flarm-messaging.csv"));
   BufferedReader br(fr);
   unsigned count = LoadFlarmMessagingFile(br, db);
 
@@ -250,7 +250,7 @@ TestFlarmMessagingThreadSafety()
     base.id = FlarmId::Parse("DADADA", nullptr);
 
     std::atomic<bool> updates_done{false};
-    Path out_path(_T("xcsoar-messaging-concurrent-save.csv"));
+    Path out_path("xcsoar-messaging-concurrent-save.csv");
 
     LambdaThread updater([&]{
       for (int i = 0; i < 200; ++i) {
