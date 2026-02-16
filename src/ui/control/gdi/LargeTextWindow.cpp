@@ -56,7 +56,7 @@ void
 LargeTextWindow::SetText(const char *text)
 {
   // Replace \n by \r\r\n to enable usage of line-breaks in edit control
-  unsigned size = _tcslen(text);
+  unsigned size = strlen(text);
 
   const std::unique_ptr<char[]> allocation(new char[size * 3 + 1]);
   char *buffer = allocation.get();

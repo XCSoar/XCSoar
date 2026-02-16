@@ -27,7 +27,7 @@ DataFieldEnum::Entry::SetString(const char *_string) noexcept
   if (display_string != string)
     free(display_string);
 
-  display_string = string = _tcsdup(_string);
+  display_string = string = strdup(_string);
 }
 
 void
@@ -35,7 +35,7 @@ DataFieldEnum::Entry::SetDisplayString(const char *_string) noexcept
 {
   if (display_string != string)
     free(display_string);
-  display_string = _tcsdup(_string);
+  display_string = strdup(_string);
 }
 
 void
@@ -47,10 +47,10 @@ DataFieldEnum::Entry::Set(unsigned _id, const char *_string,
   SetString(_string);
 
   if (_display_string != nullptr)
-    display_string = _tcsdup(_display_string);
+    display_string = strdup(_display_string);
 
   free(help);
-  help = _help ? _tcsdup(_help) : nullptr;
+  help = _help ? strdup(_help) : nullptr;
 }
 
 unsigned

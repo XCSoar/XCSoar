@@ -47,7 +47,7 @@ PrefixDataField::Dec() noexcept
 
   char next;
   if (current == _T('\0'))
-    next = chars[_tcslen(chars) - 1];
+    next = chars[strlen(chars) - 1];
   else {
     const char *p = current != _T('\0')
       ? StringFind(chars, current)

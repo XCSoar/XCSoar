@@ -80,7 +80,7 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces. If a line has no spaces and is too
   // long, break it at character boundaries (e.g., for long paths).
-  for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
+  for (size_t i = 0; i < len; i += strlen(duplicated + i) + 1) {
     PixelSize sz = CalcTextSize(duplicated + i);
     char *prev_p = nullptr;
     const bool has_spaces = StringFind(duplicated + i, _T(' ')) != nullptr;
@@ -99,7 +99,7 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
     if (sz.width > r.GetWidth() && !has_spaces) {
       size_t line_start = i;
       const char *line_ptr = duplicated + line_start;
-      size_t line_len_bytes = _tcslen(line_ptr);
+      size_t line_len_bytes = strlen(line_ptr);
       
 #ifndef UNICODE
       // On non-Unicode platforms, get actual UTF-8 character count
@@ -174,7 +174,7 @@ Canvas::DrawFormattedText(const PixelRect r, const tstring_view text,
   int y = (format & DT_VCENTER) && lines < max_lines
     ? (r.top + r.bottom - lines * skip) / 2
     : r.top;
-  for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
+  for (size_t i = 0; i < len; i += strlen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
       int x;
       if (format & (DT_RIGHT | DT_CENTER)) {

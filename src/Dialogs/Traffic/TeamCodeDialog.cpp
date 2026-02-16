@@ -168,7 +168,7 @@ TeamCodeWidget::OnFlarmLockClicked()
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;
   char newTeamFlarmCNTarget[decltype(settings.team_flarm_callsign)::capacity()];
-  _tcscpy(newTeamFlarmCNTarget, settings.team_flarm_callsign.c_str());
+  strcpy(newTeamFlarmCNTarget, settings.team_flarm_callsign.c_str());
 
   if (!TextEntryDialog(newTeamFlarmCNTarget, 4))
     return;

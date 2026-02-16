@@ -25,7 +25,7 @@ FormatIGCFilename(char* buffer, const BrokenDate &date,
                   unsigned flight_number)
 {
   assert(logger_id != NULL);
-  assert(_tcslen(logger_id) == 3);
+  assert(strlen(logger_id) == 3);
 
   char cyear = NumToIGCChar(date.year % 10);
   char cmonth = NumToIGCChar(date.month);
@@ -47,10 +47,10 @@ FormatIGCFilenameLong(char* buffer, const BrokenDate &date,
   // XYZ represents manufacturer code
 
   assert(manufacturer != NULL);
-  assert(_tcslen(manufacturer) == 3);
+  assert(strlen(manufacturer) == 3);
 
   assert(logger_id != NULL);
-  assert(_tcslen(logger_id) == 3);
+  assert(strlen(logger_id) == 3);
 
   StringFormatUnsafe(buffer, _T("%04u-%02u-%02u-%s-%s-%02u.igc"),
                      date.year, date.month, date.day,

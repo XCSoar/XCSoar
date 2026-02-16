@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     if (w.time.IsDefined())
       FormatTime(time_buffer, w.time);
     else
-      _tcscpy(time_buffer, _T("?"));
+      strcpy(time_buffer, _T("?"));
 
     _tprintf(_T("wave: t=%s location=%f,%f a=%f,%f b=%f,%f location=%s normal=%f\n"),
              time_buffer,

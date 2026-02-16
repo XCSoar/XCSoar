@@ -162,7 +162,7 @@ NOAAListWidget::AddClicked()
   if (!TextEntryDialog(code, 5, _("Airport ICAO code")))
     return;
 
-  if (_tcslen(code) != 4) {
+  if (strlen(code) != 4) {
     ShowMessageBox(_("Please enter the FOUR letter code of the desired station."),
                 _("Error"), MB_OK);
     return;

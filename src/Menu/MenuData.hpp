@@ -32,7 +32,7 @@ public:
    */
   [[gnu::pure]]
   bool IsDynamic() const noexcept {
-    return label != nullptr && _tcsstr(label, _T("$(")) != nullptr;
+    return label != nullptr && strstr(label, _T("$(")) != nullptr;
   }
 };
 
