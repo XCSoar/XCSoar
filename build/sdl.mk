@@ -37,7 +37,11 @@ ifeq ($(HAVE_WIN32),y)
 # and call SDL_SetMainReady() in XCSoar.cpp.
 # Use lazy evaluation (=) to avoid triggering pkg-config errors at parse time
 # Uses SDL_CPPFLAGS_RAW constructed through pkgconfig.mk/thunk.mk
-SDL_CPPFLAGS = $(filter-out -Dmain=SDL_main,$(SDL_CPPFLAGS_RAW)) -DENABLE_SDL -DSDL_MAIN_HANDLED -DSDL_USE_BUILTIN_OPENGL_DEFINITIONS
+SDL_CPPFLAGS = $(filter-out -Dmain=SDL_main,$(SDL_CPPFLAGS_RAW)) -DENABLE_SDL -DSDL_MAIN_HANDLED
+
+# Override the default "console" subsystem (set in targets.mk) to
+# "windows" for GUI programs, to avoid console pop-up
+SDL_LDLIBS += -Wl,-subsystem,windows
 else
 SDL_CPPFLAGS += -DENABLE_SDL
 endif
