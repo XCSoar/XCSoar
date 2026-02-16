@@ -15,7 +15,7 @@ LogEvent(const char *event, TimeStamp time, const GeoPoint &location) noexcept
   char time_buffer[32];
   FormatTime(time_buffer, time);
 
-  _tprintf(_T("%s %s %s\n"), time_buffer,
+  printf(_T("%s %s %s\n"), time_buffer,
            FormatGeoPoint(location, CoordinateFormat::DDMMSS).c_str(),
            event);
 }
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
   const FlyingState &flight = replay->Calculated().flight;
   if (flight.far_distance >= 0)
-    _tprintf(_T("far %u km at %s\n"), unsigned(flight.far_distance / 1000),
+    printf(_T("far %u km at %s\n"), unsigned(flight.far_distance / 1000),
              FormatGeoPoint(flight.far_location,
                             CoordinateFormat::DDMMSS).c_str());
 

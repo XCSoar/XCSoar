@@ -30,7 +30,7 @@ VegaWriteDemo()
     return;
 
   char dbuf[100];
-  _stprintf(dbuf, _T("PDVDD,%d,%d"),
+  sprintf(dbuf, _T("PDVDD,%d,%d"),
             iround(VegaDemoW * 10),
             iround(VegaDemoV * 10));
 

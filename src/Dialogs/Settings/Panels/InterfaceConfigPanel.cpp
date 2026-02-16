@@ -87,7 +87,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     df.AddChoice(0, _("Automatic"));
     for (const unsigned *dpi = dpi_choices; dpi != dpi_choices_end; ++dpi) {
       char buffer[20];
-      _stprintf(buffer, _("%d dpi"), *dpi);
+      sprintf(buffer, _("%d dpi"), *dpi);
       df.AddChoice(*dpi, buffer);
     }
     df.SetValue(settings.custom_dpi);

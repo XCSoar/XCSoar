@@ -35,7 +35,7 @@ FormatTime(char *buffer, FloatDuration _time) noexcept
   }
 
   const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
-  _stprintf(buffer, _T("%02u:%02u:%02u"),
+  sprintf(buffer, _T("%02u:%02u:%02u"),
             time.hour, time.minute, time.second);
 }
 
@@ -52,7 +52,7 @@ FormatTimeLong(char *buffer, FloatDuration _time) noexcept
   _time -= FloatDuration{trunc(_time.count())};
   unsigned millisecond = uround(_time.count() * 1000);
 
-  _stprintf(buffer, _T("%02u:%02u:%02u.%03u"),
+  sprintf(buffer, _T("%02u:%02u:%02u.%03u"),
             time.hour, time.minute, time.second, millisecond);
 }
 
@@ -65,7 +65,7 @@ FormatSignedTimeHHMM(char *buffer, std::chrono::seconds _time) noexcept
   }
 
   const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
-  _stprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
+  sprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
 }
 
 void
@@ -90,10 +90,10 @@ FormatTimeTwoLines(char *buffer1, char *buffer2, std::chrono::seconds _time) noe
 
   if (time.hour > 0) { // hh:mm, ss
     // Set Value
-    _stprintf(buffer1, _T("%02u:%02u"), time.hour, time.minute);
-    _stprintf(buffer2, _T("%02u"), time.second);
+    sprintf(buffer1, _T("%02u:%02u"), time.hour, time.minute);
+    sprintf(buffer2, _T("%02u"), time.second);
   } else { // mm'ss
-    _stprintf(buffer1, _T("%02u'%02u"), time.minute, time.second);
+    sprintf(buffer1, _T("%02u'%02u"), time.minute, time.second);
     buffer2[0] = '\0';
   }
 }

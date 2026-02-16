@@ -19,7 +19,7 @@ LoadTask2(Path path, const TaskBehaviour &task_behaviour)
 
   const auto errors = task->CheckTask();
   if (!errors.IsEmpty())
-    _fputts(getTaskValidationErrors(errors), stderr);
+    fputs(getTaskValidationErrors(errors), stderr);
 
   if (IsError(errors)) {
     fprintf(stderr, "Failed to load task from XML\n");
@@ -61,7 +61,7 @@ try {
     if (task != NULL) {
       Print(*task);
     } else {
-      _ftprintf(stderr, _T("Failed to load %s\n"), path.c_str());
+      fprintf(stderr, _T("Failed to load %s\n"), path.c_str());
       result = EXIT_FAILURE;
     }
 

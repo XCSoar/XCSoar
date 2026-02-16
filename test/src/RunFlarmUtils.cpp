@@ -26,7 +26,7 @@ ChangePilot(FlarmDevice &flarm, OperationEnvironment &env)
   while (true) {
     char old_pilot_name[64];
     if (flarm.GetPilot(old_pilot_name, 64, env))
-      _tprintf(_T("Old pilot name: \"%s\"\n"), old_pilot_name);
+      printf(_T("Old pilot name: \"%s\"\n"), old_pilot_name);
 
     fprintf(stdout, "Please enter the new pilot name:\n");
     fprintf(stdout, "> ");
@@ -56,7 +56,7 @@ ChangeCoPilot(FlarmDevice &flarm, OperationEnvironment &env)
   while (true) {
     char old_copilot_name[64];
     if (flarm.GetCoPilot(old_copilot_name, 64, env))
-      _tprintf(_T("Old copilot name: \"%s\"\n"), old_copilot_name);
+      printf(_T("Old copilot name: \"%s\"\n"), old_copilot_name);
 
     fprintf(stdout, "Please enter the new copilot name:\n");
     fprintf(stdout, "> ");
@@ -86,7 +86,7 @@ ChangePlaneType(FlarmDevice &flarm, OperationEnvironment &env)
   while (true) {
     char old_plane_type[64];
     if (flarm.GetPlaneType(old_plane_type, 64, env))
-      _tprintf(_T("Old plane type: \"%s\"\n"), old_plane_type);
+      printf(_T("Old plane type: \"%s\"\n"), old_plane_type);
 
     fprintf(stdout, "Please enter the new plane type:\n");
     fprintf(stdout, "> ");
@@ -116,7 +116,7 @@ ChangeRegistration(FlarmDevice &flarm, OperationEnvironment &env)
   while (true) {
     char old_registration[64];
     if (flarm.GetPlaneRegistration(old_registration, 64, env))
-      _tprintf(_T("Old plane registratio: \"%s\"\n"), old_registration);
+      printf(_T("Old plane registratio: \"%s\"\n"), old_registration);
 
     fprintf(stdout, "Please enter the new plane registration:\n");
     fprintf(stdout, "> ");
@@ -146,7 +146,7 @@ ChangeCompetitionId(FlarmDevice &flarm, OperationEnvironment &env)
   while (true) {
     char old_id[64];
     if (flarm.GetCompetitionId(old_id, 64, env))
-      _tprintf(_T("Old competition id: \"%s\"\n"), old_id);
+      printf(_T("Old competition id: \"%s\"\n"), old_id);
 
     fprintf(stdout, "Please enter the new competition id:\n");
     fprintf(stdout, "> ");
@@ -176,7 +176,7 @@ ChangeCompetitionClass(FlarmDevice &flarm, OperationEnvironment &env)
   while (true) {
     char old_comp_class[64];
     if (flarm.GetCompetitionClass(old_comp_class, 64, env))
-      _tprintf(_T("Old competition class: \"%s\"\n"), old_comp_class);
+      printf(_T("Old competition class: \"%s\"\n"), old_comp_class);
 
     fprintf(stdout, "Please enter the new competition class:\n");
     fprintf(stdout, "> ");
