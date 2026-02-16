@@ -3,6 +3,10 @@
 
 #pragma once
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #ifdef ANDROID
 #define HAVE_NET_STATE
 #define HAVE_NET_STATE_ROAMING
@@ -10,6 +14,10 @@
 #define HAVE_NET_STATE
 #elif defined(_WIN32)
 #define HAVE_NET_STATE
+#elif defined(__APPLE__)
+#if !TARGET_OS_IPHONE
+#define HAVE_NET_STATE
+#endif
 #endif
 
 enum class NetState {
