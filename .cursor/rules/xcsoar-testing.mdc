@@ -1,0 +1,140 @@
+---
+description: XCSoar unit testing patterns, NMEA test conventions, build and check workflow
+globs: test/**
+alwaysApply: false
+---
+
+# XCSoar Testing Conventions
+
+## Test Framework (TAP)
+
+Tests use the TAP (Test Anything Protocol) framework with `ok1()` assertions:
+
+```cpp
+#include "TestUtil.hpp"  // provides ok1(), equals(), plan_tests()
+
+plan_tests(N);         // declare total assertion count upfront
+ok1(condition);        // boolean assertion
+ok1(equals(a, b));     // floating-point comparison with tolerance
+```
+
+## Test Count Discipline
+
+`plan_tests(N)` must exactly match the total number of `ok1()` calls. When adding tests:
+1. Count all new `ok1()` assertions
+2. Add to the `plan_tests()` expression (use addition for clarity: `1032 + 8 + 4`)
+3. Build and verify — TAP reports mismatches
+
+## NMEA Parser Test Pattern
+
+```cpp
+static void TestMyFeature()
+{
+  NMEAParser parser;
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};  // non-zero clock required
+  nmea_info.alive.Update(nmea_info.clock);         // heartbeat required
+
+  // Advance time first (TimeHasAdvanced check)
+  ok1(parser.ParseLine("$GPRMC,082310.00,...*XX", nmea_info));
+
+  // Test your sentence
+  ok1(parser.ParseLine("$GPGLL,...*XX", nmea_info));
+  ok1(nmea_info.location_available);
+}
+```
+
+### Key Setup Requirements
+
+- `clock` must be non-zero for `Validity::Update()` to produce valid timestamps
+- `alive` must be set for `NMEAInfo::Complement()` (it returns early if `!add.alive`)
+- Time must advance between sentences (parser ignores sentences with same/earlier time)
+
+## NMEA Checksum Calculation
+
+Every test sentence needs a valid checksum. Calculate with:
+
+```python
+import functools, operator
+def nmea_cs(s):
+    body = s.split('$')[1].split('*')[0]
+    return f"{functools.reduce(operator.xor, (ord(c) for c in body), 0):02X}"
+```
+
+The checksum is XOR of all bytes between `$` and `*` (exclusive), formatted as 2-digit hex.
+
+## Test Data Directory
+
+Test fixtures and sample data live in `test/data/`:
+
+| Path | Contents |
+|------|----------|
+| `test/data/driver/` | NMEA recordings from real devices |
+| `test/data/driver/FLARM/` | FLARM simulation scenarios (`pflaf01-05.nmea`) and real traffic (`rl-traffic.nmea`) |
+| `test/data/driver/Flytec.nmea` | Flytec device NMEA recording |
+| `test/data/driver/Leonardo.nmea` | Leonardo device NMEA recording |
+| `test/data/airspace/` | Airspace files (OpenAir `.txt`, TNP `.sua`) |
+| `test/data/wp_parser/` | Waypoint files in multiple formats (`.cup`, `.dat`, `.da4`, `.wpt`, `.st2`, `.wpz`) |
+| `test/data/flarmnet/` | FlarmNet database file (`.fln`) |
+| `test/data/flarmmessaging/` | FLARM messaging test data (`.csv`) |
+| `test/data/lxn_to_igc/` | LXN binary to IGC conversion test pairs |
+| `test/data/*.igc` | IGC flight recordings for replay/scoring/GRecord tests |
+| `test/data/*.xcp` | Polar files for aircraft performance tests |
+| `test/data/*.xcm` | Map container files |
+| `test/data/*.prf` | Profile files for settings round-trip tests |
+
+When adding test data for a new device driver, place NMEA recordings in `test/data/driver/<DeviceName>.nmea`. For FLARM-specific scenarios, use `test/data/driver/FLARM/`.
+
+Note: `TestDriver.cpp` embeds NMEA sentences as string literals (no external files). The `test/data/driver/` recordings are used by replay/harness tools, not directly by unit tests.
+
+## Build and Run Tests
+
+```bash
+# Build and run all unit tests
+make -j$(nproc) TARGET=UNIX check
+
+# Build everything including tests and tools
+make -j$(nproc) TARGET=UNIX everything
+```
+
+## Testing Validity Expiry
+
+```cpp
+// Set up with valid data
+info.temperature_available.Update(info.clock);
+
+// Advance clock past the expiry timeout
+info.clock = TimeStamp{FloatDuration{60}};  // well past 30s
+info.Expire();
+ok1(!info.temperature_available);  // expired
+```
+
+## Testing Complement
+
+```cpp
+NMEAInfo a, b;
+a.Reset(); b.Reset();
+a.clock = TimeStamp{FloatDuration{1}};
+b.clock = TimeStamp{FloatDuration{1}};
+b.alive.Update(b.clock);  // required! Complement returns early without it
+
+b.some_value = 42;
+b.some_available.Update(b.clock);
+
+a.Complement(b);
+ok1(a.some_available);
+ok1(equals(a.some_value, 42));
+```
+
+## Floating-Point Comparison
+
+The `equals()` helper in `TestUtil.hpp` uses ratio-based tolerance (`ACCURACY=10000`). For small absolute values (e.g., sub-second time deltas), use direct comparison:
+
+```cpp
+// For large values where ratio tolerance works
+ok1(equals(nmea_info.location.latitude, 51.059));
+
+// For small deltas where ratio tolerance is too loose
+ok1(fabs(actual - expected) < 0.01);
+```

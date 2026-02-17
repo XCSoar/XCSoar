@@ -1,0 +1,93 @@
+---
+description: NMEAInfo Validity patterns, TimeStamp/FloatDuration/BrokenTime usage, device driver data conventions
+globs: src/NMEA/**,src/Device/**,src/time/**,src/Computer/**
+alwaysApply: false
+---
+
+# NMEA Data Validity and Time Patterns
+
+## Validity vs bool for Availability Flags
+
+All sensor availability flags in `NMEAInfo` must use `Validity`, never `bool`:
+
+```cpp
+// BAD: bool never expires, breaks Complement()
+bool temperature_available;
+temperature_available = true;
+
+// GOOD: Validity tracks timestamps, expires, complements correctly
+Validity temperature_available;
+temperature_available.Update(info.clock);  // mark valid
+temperature_available.Clear();              // mark invalid
+```
+
+### Validity Lifecycle in Device Drivers
+
+```cpp
+// Setting data available (in a device parser):
+if (line.ReadChecked(value)) {
+  info.temperature = Temperature::FromCelsius(value);
+  info.temperature_available.Update(info.clock);  // NOT = true
+}
+
+// Clearing data (when device reports no data):
+info.temperature_available.Clear();  // NOT = false
+```
+
+### Validity in Expire()
+
+Every `Validity` field in `NMEAInfo` must have a corresponding `Expire()` call:
+
+```cpp
+void NMEAInfo::Expire() noexcept {
+  temperature_available.Expire(clock, std::chrono::seconds(30));
+  // ...
+}
+```
+
+### Validity in Complement()
+
+Always use `Validity::Complement()`, never the manual pattern:
+
+```cpp
+// BAD: doesn't update the Validity timestamp, breaks subsequent Complement/Expire
+if (!x_available && add.x_available) {
+  x = add.x;
+  x_available = add.x_available;
+}
+
+// GOOD: atomically checks and copies the Validity, returns true if copied
+if (x_available.Complement(add.x_available))
+  x = add.x;
+```
+
+## Time Types
+
+- **`TimeStamp`**: Point in time (wraps `FloatDuration`). Use for GPS time, fix timestamps.
+- **`FloatDuration`** (`std::chrono::duration<double>`): Duration in seconds with sub-second precision. Use for time arithmetic.
+- **`BrokenTime`**: Integer hour/minute/second for display only. `DurationSinceMidnight()` returns `std::chrono::seconds` (integer) — do NOT use it for precise time calculations.
+
+```cpp
+// BAD: loses sub-second precision
+time_of_day_s = TimeStamp{broken_time.DurationSinceMidnight()};
+
+// GOOD: preserves fractional seconds from NMEA parsing
+time_of_day_s = TimeStamp{FloatDuration{hour * 3600 + minute * 60 + second}};
+```
+
+## NMEA Parser Return Convention
+
+- Return `true` = sentence recognized and parsed (even if data was not used/updated)
+- Return `false` = sentence unrecognized, malformed, or failed checksum
+
+Example: MWV with relative wind reference returns `true` (recognized) but doesn't update `external_wind`.
+
+## Null Safety in Parsing
+
+Always check `strchr`/`strstr` results before pointer arithmetic:
+
+```cpp
+char *dot = strchr(buffer, '.');
+if (dot == nullptr || dot < buffer + 3)  // check nullptr FIRST
+  return false;
+```
