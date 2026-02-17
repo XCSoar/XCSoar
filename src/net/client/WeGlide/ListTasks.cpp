@@ -176,4 +176,26 @@ ListDeclaredTasks(CurlGlobal &curl, const WeGlideSettings &settings,
   co_return boost::json::value_to<std::vector<TaskInfo>>(body);
 }
 
+Co::Task<std::vector<TaskInfo>>
+ListDailyCompetitions(CurlGlobal &curl, const WeGlideSettings &settings,
+                      ProgressListener &progress)
+{
+  const auto url = FmtBuffer<256>("{}/task/competitions/today",
+                                  settings.default_url);
+
+  CurlEasy easy{url};
+  Curl::Setup(easy);
+  const Net::ProgressAdapter progress_adapter{easy, progress};
+
+  Json::ParserOutputStream parser;
+  const auto response =
+    co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
+  auto body = parser.Finish();
+
+  if (response.status != 200)
+    throw ResponseToException(response.status, body);
+
+  co_return boost::json::value_to<std::vector<TaskInfo>>(body);
+}
+
 } // namespace WeGlide

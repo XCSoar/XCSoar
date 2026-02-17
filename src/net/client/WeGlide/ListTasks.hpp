@@ -108,4 +108,13 @@ Co::Task<std::vector<TaskInfo>>
 ListDeclaredTasks(CurlGlobal &curl, const WeGlideSettings &settings,
                   ProgressListener &progress);
 
+/**
+ * Download the list of daily competition tasks from WeGlide.
+ *
+ * @see https://api.weglide.org/docs#/task/daily_competitions_v1_task_competitions_today_get
+ */
+Co::Task<std::vector<TaskInfo>>
+ListDailyCompetitions(CurlGlobal &curl, const WeGlideSettings &settings,
+                      ProgressListener &progress);
+
 } // namespace WeGlide

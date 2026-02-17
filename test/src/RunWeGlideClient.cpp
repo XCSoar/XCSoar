@@ -28,6 +28,7 @@ static constexpr auto usage = R"usage(
   declaration USER_ID
   declarations
   by_user USER_ID
+  competitions
   upload USER_ID BIRTHDAY GLIDER IGCFILE
 )usage";
 
@@ -129,6 +130,30 @@ try {
 
       for (const auto &tp : task.turnpoints)
         fmt::print("  {} ({} m)\n", tp.name, tp.elevation);
+    }
+
+    return EXIT_SUCCESS;
+  } else if (StringIsEqual(cmd, "competitions")) {
+    args.ExpectEnd();
+
+    const auto tasks = instance.Run(
+      WeGlide::ListDailyCompetitions(*Net::curl, settings, env));
+
+    if (tasks.empty()) {
+      fmt::print("No competitions today.\n");
+    } else {
+      for (const auto &task : tasks) {
+        fmt::print("{}\t{}\t{:.1f} km\t{}\t{}\t{}\n",
+                   task.id,
+                   WeGlide::ToString(task.kind),
+                   task.distance / 1000,
+                   task.name,
+                   task.user_name,
+                   task.ruleset);
+
+        for (const auto &tp : task.turnpoints)
+          fmt::print("  {} ({} m)\n", tp.name, tp.elevation);
+      }
     }
 
     return EXIT_SUCCESS;

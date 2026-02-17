@@ -110,11 +110,12 @@ private:
   }
 
   bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
-      return true;
+      return !list.empty();
   }
 
   void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
-    LoadTask();
+    if (!list.empty())
+      LoadTask();
   }
 };
 
@@ -122,7 +123,12 @@ void
 WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned idx) noexcept
 {
-  assert(idx <= list.size());
+  if (list.empty()) {
+    row_renderer.DrawFirstRow(canvas, rc, _("No tasks"));
+    return;
+  }
+
+  assert(idx < list.size());
   const auto &info = list[idx];
 
   if (info.name.c_str())
@@ -168,6 +174,10 @@ LoadTaskList(WeGlideTaskSelection selection,
   case WeGlideTaskSelection::PUBLIC_DECLARED:
     return WeGlide::ListDeclaredTasks(*Net::curl, settings,
                                       progress);
+
+  case WeGlideTaskSelection::DAILY_COMPETITIONS:
+    return WeGlide::ListDailyCompetitions(*Net::curl, settings,
+                                          progress);
   }
 
   gcc_unreachable();
@@ -183,11 +193,13 @@ WeGlideTasksPanel::ReloadList() noexcept
                                    null_progress_listener),
                       [this](List &&_list){
                         list = std::move(_list);
-                        GetList().SetLength(list.size());
+                        GetList().SetLength(list.empty() ? 1 : list.size());
                         UpdateButtons();
+                        RefreshView();
                       },
-                      [](std::exception_ptr error){
+                      [this](std::exception_ptr error){
                         ShowError(error, "Error");
+                        RefreshView();
                       });
 }
 
