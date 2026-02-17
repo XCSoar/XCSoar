@@ -35,6 +35,9 @@ class CirclingWind {
   bool usable_gyroscope = false;
   bool fixed_and_aligned = false;
 
+  // remembers the TimeStamp of the last sample
+  TimeStamp last_sample_time = TimeStamp::Undefined();
+
   // active is set to true or false by the slot_newFlightMode slot
   bool active;
   // after a successful wind calculation suspend for a number of samples
