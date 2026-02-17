@@ -20,6 +20,11 @@ class WaypointIconRenderer
   bool small_icons;
   Angle screen_rotation;
 
+  /**
+   * Target icon height in pixels.  0 means native (map) size.
+   */
+  unsigned icon_size = 0;
+
 public:
   WaypointIconRenderer(const WaypointRendererSettings &_settings,
                        const WaypointLook &_look,
@@ -28,6 +33,10 @@ public:
     :settings(_settings), look(_look),
      canvas(_canvas), small_icons(_small_icons),
      screen_rotation(_screen_rotation) {}
+
+  void SetIconSize(unsigned _icon_size) noexcept {
+    icon_size = _icon_size;
+  }
 
   void Draw(const Waypoint &waypoint, const PixelPoint &point,
             WaypointReachability reachable=WaypointReachability::UNREACHABLE,
