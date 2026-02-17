@@ -22,6 +22,13 @@ protected:
 
   PixelPoint origin;
 
+  /**
+   * True if the icon contains meaningful colours (e.g. green/red
+   * landable icons).  Dark-mode inversion is skipped for such icons
+   * because inverting the colour channels would produce wrong colours.
+   */
+  bool has_colors = false;
+
 public:
   const PixelSize &GetSize() const noexcept {
     return size;

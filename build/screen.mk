@@ -132,6 +132,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/VertexArray.cpp \
 	$(CANVAS_SRC_DIR)/opengl/ConstantAlpha.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/opengl/RawBitmap.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Canvas.cpp \
 	$(CANVAS_SRC_DIR)/opengl/BufferCanvas.cpp \
@@ -153,6 +154,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/sdl/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/sdl/Window.cpp \
 	$(WINDOW_SRC_DIR)/sdl/TopWindow.cpp \
@@ -167,6 +169,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(SRC)/ui/display/egl/ConfigChooser.cpp \
 	$(SRC)/ui/display/egl/Display.cpp \
@@ -180,6 +183,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
@@ -191,6 +195,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
@@ -203,6 +208,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_FILES_CPP) \
 	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/memory/Export.cpp \
 	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \

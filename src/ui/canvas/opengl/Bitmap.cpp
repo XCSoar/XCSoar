@@ -11,7 +11,8 @@
 Bitmap::Bitmap(Bitmap &&src) noexcept
   :texture(std::exchange(src.texture, nullptr)),
    size(src.size),
-   flipped(src.flipped)
+   flipped(src.flipped),
+   has_colors(src.has_colors)
 {
 }
 
@@ -21,6 +22,7 @@ Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
   texture = std::exchange(src.texture, nullptr);
   size = src.size;
   flipped = src.flipped;
+  has_colors = src.has_colors;
   return *this;
 }
 
@@ -46,6 +48,8 @@ Bitmap::Load(UncompressedImage &&_uncompressed, Type _type)
   assert(_uncompressed.IsDefined());
 
   Reset();
+
+  has_colors = _uncompressed.HasNonGrayscalePixels();
 
   size = { _uncompressed.GetWidth(), _uncompressed.GetHeight() };
   flipped = _uncompressed.IsFlipped();

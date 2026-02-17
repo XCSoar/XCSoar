@@ -54,6 +54,8 @@ Bitmap::LoadStretch(ResourceId id, unsigned zoom)
   if (!Load(id))
     return false;
 
+  const bool _has_colors = has_colors;
+
   Bitmap stretched;
   stretched.Create(GetSize() * zoom);
 
@@ -64,6 +66,7 @@ Bitmap::LoadStretch(ResourceId id, unsigned zoom)
   }
 
   *this = std::move(stretched);
+  has_colors = _has_colors;
   return true;
 }
 

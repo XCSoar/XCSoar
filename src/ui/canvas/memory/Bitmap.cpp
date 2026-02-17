@@ -10,7 +10,8 @@
 #include <utility> // for std::exchange()
 
 Bitmap::Bitmap(Bitmap &&src) noexcept
-  :buffer(std::exchange(src.buffer, WritableImageBuffer<BitmapPixelTraits>::Empty()))
+  :buffer(std::exchange(src.buffer, WritableImageBuffer<BitmapPixelTraits>::Empty())),
+   has_colors(src.has_colors)
 {
 }
 
@@ -18,6 +19,7 @@ Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
 {
   using std::swap;
   swap(buffer, src.buffer);
+  swap(has_colors, src.has_colors);
   return *this;
 }
 
@@ -29,6 +31,7 @@ Bitmap::Load(UncompressedImage &&uncompressed, Type)
 
   Reset();
 
+  has_colors = uncompressed.HasNonGrayscalePixels();
   ImportSurface(buffer, uncompressed);
   return true;
 }
