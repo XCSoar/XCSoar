@@ -78,7 +78,7 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
 
   if (line.ReadChecked(i) && i >= -999 && i <= 999) {
     info.temperature = Temperature::FromCelsius(i / 10.);
-    info.temperature_available = true;
+    info.temperature_available.Update(info.clock);
   }
 
   return true;

@@ -275,7 +275,7 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
   double temperature;
   if (line.ReadChecked(temperature)) {
     info.temperature = Temperature::FromCelsius(temperature);
-    info.temperature_available = true;
+    info.temperature_available.Update(info.clock);
   }
 
   int mode;

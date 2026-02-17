@@ -63,10 +63,10 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideBothAirspeeds(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 10,11 = temperature, unit
-  info.temperature_available =
-    line.ReadCheckedCompare(value, "C");
-  if (info.temperature_available)
+  if (line.ReadCheckedCompare(value, "C")) {
     info.temperature = Temperature::FromCelsius(value);
+    info.temperature_available.Update(info.clock);
+  }
 
   return true;
 }
@@ -189,10 +189,10 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 
   if (balloon_temperature_available) {
     info.temperature = Temperature::FromCelsius(balloon_temperature);
-    info.temperature_available = true;
+    info.temperature_available.Update(info.clock);
   } else if (pcb_temperature_available) {
     info.temperature = Temperature::FromCelsius(pcb_temperature);
-    info.temperature_available = true;
+    info.temperature_available.Update(info.clock);
   }
 
   //  Battery Capacity Bank 1 (0 to 100%)   3 Digits

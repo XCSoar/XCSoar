@@ -48,9 +48,10 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 
   // 4 = temperature [deg C]
   double oat;
-  info.temperature_available = line.ReadChecked(oat);
-  if (info.temperature_available)
+  if (line.ReadChecked(oat)) {
     info.temperature = Temperature::FromCelsius(oat);
+    info.temperature_available.Update(info.clock);
+  }
 
   line.Skip(5);
 
@@ -95,9 +96,10 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 
   // 4 = temperature [deg C]
   double oat;
-  info.temperature_available = line.ReadChecked(oat);
-  if (info.temperature_available)
+  if (line.ReadChecked(oat)) {
     info.temperature = Temperature::FromCelsius(oat);
+    info.temperature_available.Update(info.clock);
+  }
 
   // 5 = compass [degrees]
   /* XXX unsupported by XCSoar */

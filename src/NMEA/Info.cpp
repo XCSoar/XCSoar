@@ -137,8 +137,8 @@ NMEAInfo::Reset() noexcept
 
   external_wind_available.Clear();
 
-  temperature_available = false;
-  humidity_available = false;
+  temperature_available.Clear();
+  humidity_available.Clear();
 
   heart_rate_available.Clear();
 
@@ -220,6 +220,8 @@ NMEAInfo::Expire() noexcept
   settings.Expire(clock);
   external_wind_available.Expire(clock, std::chrono::minutes(10));
   heart_rate_available.Expire(clock, std::chrono::seconds(10));
+  temperature_available.Expire(clock, std::chrono::seconds(30));
+  humidity_available.Expire(clock, std::chrono::seconds(30));
   engine_noise_level_available.Expire(clock, std::chrono::seconds(30));
   voltage_available.Expire(clock, std::chrono::minutes(5));
   battery_level_available.Expire(clock, std::chrono::minutes(5));
@@ -311,20 +313,14 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
   if (external_wind_available.Complement(add.external_wind_available))
     external_wind = add.external_wind;
 
-  if (!temperature_available && add.temperature_available) {
+  if (temperature_available.Complement(add.temperature_available))
     temperature = add.temperature;
-    temperature_available = add.temperature_available;
-  }
 
-   if (!variation_available && add.variation_available) {
+  if (variation_available.Complement(add.variation_available))
     variation = add.variation;
-    variation_available = add.variation_available;
-  }
 
-  if (!humidity_available && add.humidity_available) {
+  if (humidity_available.Complement(add.humidity_available))
     humidity = add.humidity;
-    humidity_available = add.humidity_available;
-  }
 
   if (heart_rate_available.Complement(add.heart_rate_available))
     heart_rate = add.heart_rate;

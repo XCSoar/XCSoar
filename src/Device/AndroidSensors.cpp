@@ -223,9 +223,9 @@ DeviceDescriptor::OnVoltageValues(int temp_adc, unsigned voltage_index,
     if (temperature_filter.Update(v.ToNative()))
       v = Temperature::FromNative(temperature_filter.Average());
     basic.temperature = v;
-    basic.temperature_available = true;
+    basic.temperature_available.Update(basic.clock);
   } else {
-    basic.temperature_available = false;
+    basic.temperature_available.Clear();
   }
 
   if (voltage_index < voltage_filter.size()) {
@@ -349,7 +349,7 @@ DeviceDescriptor::OnTemperature(Temperature temperature) noexcept
   basic.alive.Update(basic.clock);
 
   basic.temperature = temperature;
-  basic.temperature_available = true;
+  basic.temperature_available.Update(basic.clock);
 
   e.Commit();
 }

@@ -78,13 +78,13 @@ EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
   // Outside Air Temperature (?C) (i.e. +15.2)
   if (line.ReadChecked(value)) {
     info.temperature = Temperature::FromCelsius(value);
-    info.temperature_available = true;
+    info.temperature_available.Update(info.clock);
   }
 
   // Relative humidity [%] (i.e. 095)
   if (line.ReadChecked(value)) {
     info.humidity = value;
-    info.humidity_available = true;
+    info.humidity_available.Update(info.clock);
   }
 
   // Condensation altitude [m*1'000] (i.e. 1650)

@@ -47,7 +47,7 @@ PLOF(NMEAInputLine &line, NMEAInfo &info)
   // Parse temperature (°C x 10 -> °C)
   if (line.ReadChecked(value)) {
     info.temperature = Temperature::FromCelsius(value / 10);
-    info.temperature_available = true;
+    info.temperature_available.Update(info.clock);
   }
 
   return true;

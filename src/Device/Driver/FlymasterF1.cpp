@@ -62,7 +62,7 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
 
   if (line.ReadChecked(value)) {
     info.temperature = Temperature::FromCelsius(value);
-    info.temperature_available = true;
+    info.temperature_available.Update(info.clock);
   }
 
   return true;
