@@ -22,6 +22,9 @@
 #ifdef HAVE_HTTP
 #include "net/http/Init.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
+#include "Dialogs/InternalLink.hpp"
+#include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
+#include "util/StaticString.hxx"
 #endif
 #include "Components.hpp"
 #include "DataComponents.hpp"
@@ -149,25 +152,40 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
   AddButton(_("Save"), [this](){ SaveTask(); });
 
 #ifdef HAVE_HTTP
-  if (settings.weglide.pilot_id != 0)
-    AddButton(_("Download WeGlide task"),
-              [this](){ OnDownloadClicked(); });
+  AddSpacer();
 
-  AddButton(_("My WeGlide tasks"), [this](){
+  AddReadOnly(_("WeGlide"),
+              nullptr,
+              settings.weglide.enabled
+              ? _("On") : _("Off"));
+
+  const bool weglide_enabled = settings.weglide.enabled;
+  const bool pilot_configured = weglide_enabled &&
+    settings.weglide.pilot_id != 0;
+
+  AddButton(_("Download Declaration"),
+            [this](){ OnDownloadClicked(); });
+  SetRowEnabled(DOWNLOAD_DECLARATION, pilot_configured);
+
+  AddButton(_("My Tasks"), [this](){
     parent.SetCurrent(parent.PAGE_WEGLIDE_USER);
   });
+  SetRowEnabled(MY_TASKS, pilot_configured);
 
-  AddButton(_("Public WeGlide tasks"), [this](){
+  AddButton(_("Declared Tasks"), [this](){
     parent.SetCurrent(parent.PAGE_WEGLIDE_PUBLIC_DECLARED);
   });
+  SetRowEnabled(DECLARED_TASKS, weglide_enabled);
 
-  AddButton(_("WeGlide competitions"), [this](){
+  AddButton(_("Competitions Today"), [this](){
     parent.SetCurrent(parent.PAGE_WEGLIDE_DAILY_COMPETITIONS);
   });
+  SetRowEnabled(COMPETITIONS_TODAY, weglide_enabled);
 
-  AddButton(_("WeGlide scores"), [this](){
+  AddButton(_("Recent Scores"), [this](){
     parent.SetCurrent(parent.PAGE_WEGLIDE_RECENT_SCORES);
   });
+  SetRowEnabled(RECENT_SCORES, weglide_enabled);
 #endif
 
   if (is_simulator())

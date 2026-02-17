@@ -204,6 +204,14 @@ WeGlideTasksPanel::ReloadList() noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings();
 
+  if (!settings.weglide.enabled) {
+    list.clear();
+    GetList().SetLength(1);
+    UpdateButtons();
+    RefreshView();
+    return;
+  }
+
   inject_reload.Cancel();
   inject_reload.Start(LoadTaskList(selection, settings.weglide,
                                    null_progress_listener),
