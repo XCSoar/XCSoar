@@ -131,7 +131,7 @@ WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   assert(idx < list.size());
   const auto &info = list[idx];
 
-  if (info.name.c_str())
+  if (!info.name.empty())
     row_renderer.DrawFirstRow(canvas, rc, info.name.c_str());
 
   StaticString<256> second_row;
@@ -150,7 +150,7 @@ WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (!info.turnpoints.empty()) {
     if (!second_row.empty())
       second_row.append(", ");
-    second_row.AppendFormat("%u TPs", (unsigned)info.turnpoints.size());
+    second_row.AppendFormat(_("%u TPs"), (unsigned)info.turnpoints.size());
   }
 
   if (selection != WeGlideTaskSelection::USER && !info.user_name.empty()) {

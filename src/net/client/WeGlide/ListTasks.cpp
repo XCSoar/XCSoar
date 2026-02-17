@@ -52,7 +52,7 @@ ParseTaskKind(std::string_view kind) noexcept
 }
 
 static std::vector<TurnpointInfo>
-ParseTurnpoints(const boost::json::value &jv) noexcept
+ParseTurnpoints(const boost::json::value &jv)
 {
   std::vector<TurnpointInfo> turnpoints;
 
@@ -75,13 +75,9 @@ ParseTurnpoints(const boost::json::value &jv) noexcept
 
       if (auto e = props.if_contains("elevation"sv); e && e->is_number())
         tp.elevation = e->to_number<int>();
-      else
-        tp.elevation = 0;
 
       if (auto r = props.if_contains("radius"sv); r && r->is_number())
         tp.radius = r->to_number<double>() * 1000;
-      else
-        tp.radius = -1;
     }
 
     if (auto g = obj.if_contains("geometry"sv); g && g->is_object()) {
@@ -103,7 +99,7 @@ ParseTurnpoints(const boost::json::value &jv) noexcept
 }
 
 static std::vector<ScoreEntry>
-ParseScores(const boost::json::value &jv) noexcept
+ParseScores(const boost::json::value &jv)
 {
   std::vector<ScoreEntry> scores;
 
@@ -125,13 +121,9 @@ ParseScores(const boost::json::value &jv) noexcept
 
     if (auto p = obj.if_contains("points"sv); p && p->is_number())
       se.points = p->to_number<double>();
-    else
-      se.points = 0;
 
     if (auto s = obj.if_contains("speed"sv); s && s->is_number())
       se.speed = s->to_number<double>();
-    else
-      se.speed = 0;
 
     scores.push_back(std::move(se));
   }
@@ -178,14 +170,10 @@ tag_invoke(boost::json::value_to_tag<TaskInfo>,
   return info;
 }
 
-Co::Task<std::vector<TaskInfo>>
-ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
-                uint_least64_t user_id,
-                ProgressListener &progress)
+static Co::Task<std::vector<TaskInfo>>
+FetchTaskList(CurlGlobal &curl, const char *url,
+              ProgressListener &progress)
 {
-  const auto url = FmtBuffer<256>("{}/task?user_id_in={}",
-                                  settings.default_url, user_id);
-
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
@@ -199,6 +187,16 @@ ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
     throw ResponseToException(response.status, body);
 
   co_return boost::json::value_to<std::vector<TaskInfo>>(body);
+}
+
+Co::Task<std::vector<TaskInfo>>
+ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
+                uint_least64_t user_id,
+                ProgressListener &progress)
+{
+  const auto url = FmtBuffer<256>("{}/task?user_id_in={}",
+                                  settings.default_url, user_id);
+  return FetchTaskList(curl, url, progress);
 }
 
 Co::Task<std::vector<TaskInfo>>
@@ -207,20 +205,7 @@ ListDeclaredTasks(CurlGlobal &curl, const WeGlideSettings &settings,
 {
   const auto url = FmtBuffer<256>("{}/task/declaration",
                                   settings.default_url);
-
-  CurlEasy easy{url};
-  Curl::Setup(easy);
-  const Net::ProgressAdapter progress_adapter{easy, progress};
-
-  Json::ParserOutputStream parser;
-  const auto response =
-    co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
-  auto body = parser.Finish();
-
-  if (response.status != 200)
-    throw ResponseToException(response.status, body);
-
-  co_return boost::json::value_to<std::vector<TaskInfo>>(body);
+  return FetchTaskList(curl, url, progress);
 }
 
 Co::Task<std::vector<TaskInfo>>
@@ -229,20 +214,7 @@ ListDailyCompetitions(CurlGlobal &curl, const WeGlideSettings &settings,
 {
   const auto url = FmtBuffer<256>("{}/task/competitions/today",
                                   settings.default_url);
-
-  CurlEasy easy{url};
-  Curl::Setup(easy);
-  const Net::ProgressAdapter progress_adapter{easy, progress};
-
-  Json::ParserOutputStream parser;
-  const auto response =
-    co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
-  auto body = parser.Finish();
-
-  if (response.status != 200)
-    throw ResponseToException(response.status, body);
-
-  co_return boost::json::value_to<std::vector<TaskInfo>>(body);
+  return FetchTaskList(curl, url, progress);
 }
 
 Co::Task<std::vector<TaskInfo>>
@@ -251,20 +223,7 @@ ListRecentTaskScores(CurlGlobal &curl, const WeGlideSettings &settings,
 {
   const auto url = FmtBuffer<256>("{}/task/score/recent",
                                   settings.default_url);
-
-  CurlEasy easy{url};
-  Curl::Setup(easy);
-  const Net::ProgressAdapter progress_adapter{easy, progress};
-
-  Json::ParserOutputStream parser;
-  const auto response =
-    co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
-  auto body = parser.Finish();
-
-  if (response.status != 200)
-    throw ResponseToException(response.status, body);
-
-  co_return boost::json::value_to<std::vector<TaskInfo>>(body);
+  return FetchTaskList(curl, url, progress);
 }
 
 } // namespace WeGlide

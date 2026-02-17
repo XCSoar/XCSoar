@@ -49,14 +49,14 @@ struct TurnpointInfo {
   /**
    * Elevation in metres.
    */
-  int elevation;
+  int elevation = 0;
 
   /**
    * Observation zone radius [m], or -1 if not specified.
    */
-  double radius;
+  double radius = -1;
 
-  double longitude, latitude;
+  double longitude = 0, latitude = 0;
 };
 
 /**
@@ -68,12 +68,12 @@ struct ScoreEntry {
   /**
    * Scoring points.
    */
-  double points;
+  double points = 0;
 
   /**
    * Speed in km/h.
    */
-  double speed;
+  double speed = 0;
 };
 
 struct TaskInfo {
