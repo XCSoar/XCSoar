@@ -12,6 +12,7 @@ class OrderedTask;
 enum class WeGlideTaskSelection {
   USER,
   PUBLIC_DECLARED,
+  DAILY_COMPETITIONS,
 };
 
 std::unique_ptr<Widget>

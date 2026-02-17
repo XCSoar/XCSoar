@@ -160,6 +160,10 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
   AddButton(_("Public WeGlide tasks"), [this](){
     parent.SetCurrent(parent.PAGE_WEGLIDE_PUBLIC_DECLARED);
   });
+
+  AddButton(_("WeGlide competitions"), [this](){
+    parent.SetCurrent(parent.PAGE_WEGLIDE_DAILY_COMPETITIONS);
+  });
 #endif
 
   if (is_simulator())

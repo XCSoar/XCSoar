@@ -15,6 +15,7 @@ public:
     PAGE_LIST,
     PAGE_WEGLIDE_USER,
     PAGE_WEGLIDE_PUBLIC_DECLARED,
+    PAGE_WEGLIDE_DAILY_COMPETITIONS,
   };
 
   TaskMiscPanel(TaskManagerDialog &dialog,
