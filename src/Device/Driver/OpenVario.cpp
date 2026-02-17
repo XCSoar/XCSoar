@@ -362,7 +362,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         break;
       }
       case 'H': {
-          info.humidity_available = true;
+          info.humidity_available.Update(info.clock);
           info.humidity = value;
           break;
       }
@@ -388,7 +388,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       }
       case 'T': {
         info.temperature = Temperature::FromCelsius(value);
-        info.temperature_available = true;
+        info.temperature_available.Update(info.clock);
         break;
       }
       case 'V': {

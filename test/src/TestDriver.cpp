@@ -2041,9 +2041,80 @@ TestStallRatioComplement()
   ok1(equals(a.stall_ratio, 0.75));
 }
 
+/**
+ * Test that temperature_available and humidity_available are now
+ * Validity objects that properly expire.
+ */
+static void
+TestTemperatureHumidityValidity()
+{
+  NMEAInfo info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{1}};
+
+  /* initially not valid */
+  ok1(!info.temperature_available);
+  ok1(!info.humidity_available);
+
+  /* after Update(), they become valid */
+  info.temperature = Temperature::FromCelsius(20);
+  info.temperature_available.Update(info.clock);
+  info.humidity = 50;
+  info.humidity_available.Update(info.clock);
+  ok1(info.temperature_available);
+  ok1(info.humidity_available);
+
+  /* advance clock well past the 30s expiry timeout */
+  info.clock = TimeStamp{FloatDuration{60}};
+  info.Expire();
+  ok1(!info.temperature_available);
+  ok1(!info.humidity_available);
+
+  /* Test Complement: temperature/humidity from second source should be
+     adopted when primary has none */
+  NMEAInfo a, b;
+  a.Reset();
+  b.Reset();
+  a.clock = TimeStamp{FloatDuration{1}};
+  b.clock = TimeStamp{FloatDuration{1}};
+
+  b.alive.Update(b.clock);
+  b.temperature = Temperature::FromCelsius(25);
+  b.temperature_available.Update(b.clock);
+  b.humidity = 65;
+  b.humidity_available.Update(b.clock);
+
+  ok1(!a.temperature_available);
+  ok1(!a.humidity_available);
+  a.Complement(b);
+  ok1(a.temperature_available);
+  ok1(equals(a.temperature.ToCelsius(), 25));
+  ok1(a.humidity_available);
+  ok1(equals(a.humidity, 65));
+}
+
+/**
+ * Test that ReadGeoAngle handles NMEA fields without a decimal point
+ * gracefully (no crash or undefined behavior).
+ */
+static void
+TestReadGeoAngleNoDot()
+{
+  NMEAParser parser;
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+
+  /* A malformed GGA with latitude/longitude missing decimal points
+     should not crash and should return false (not update position). */
+  ok1(!parser.ParseLine("$GPGGA,120000,12345,N,12345,E,1,04,1.0,100.0,M,0.0,M,,*40", nmea_info));
+  ok1(!nmea_info.location_available);
+}
+
 int main()
 {
-  plan_tests(1032 + 8 + 4 + 5 + 4);
+  plan_tests(1032 + 8 + 4 + 5 + 4 + 12 + 2);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -2100,6 +2171,8 @@ int main()
   TestMWVStatus();
   TestMWVRelativeTrue();
   TestStallRatioComplement();
+  TestTemperatureHumidityValidity();
+  TestReadGeoAngleNoDot();
 
   return exit_status();
 }

@@ -160,11 +160,13 @@ static bool
 PDVVT(NMEAInputLine &line, NMEAInfo &info)
 {
   int value;
-  info.temperature_available = line.ReadChecked(value);
-  if (info.temperature_available)
+  if (line.ReadChecked(value)) {
     info.temperature = Temperature::FromKelvin(value / 10.);
+    info.temperature_available.Update(info.clock);
+  }
 
-  info.humidity_available = line.ReadChecked(info.humidity);
+  if (line.ReadChecked(info.humidity))
+    info.humidity_available.Update(info.clock);
 
   return true;
 }

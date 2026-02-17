@@ -135,7 +135,7 @@ ReadGeoAngle(NMEAInputLine &line, Angle &a)
   line.Read(buffer, sizeof(buffer));
 
   char *dot = strchr(buffer, '.');
-  if (dot < buffer + 3)
+  if (dot == nullptr || dot < buffer + 3)
     return false;
 
   double x = strtod(dot - 2, &endptr);

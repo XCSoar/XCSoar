@@ -197,9 +197,10 @@ LarusDevice::PLARB(NMEAInputLine &line, NMEAInfo &info)
     }
   }
   // Outside air temperature (OAT)
-  info.temperature_available = line.ReadChecked(value);
-  if (info.temperature_available)
+  if (line.ReadChecked(value)) {
     info.temperature = Temperature::FromCelsius(value);
+    info.temperature_available.Update(info.clock);
+  }
   return true;
 }
 

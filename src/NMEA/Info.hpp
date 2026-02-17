@@ -276,7 +276,7 @@ struct NMEAInfo {
    * Is temperature information available?
    * @see OutsideAirTemperature
    */
-  bool temperature_available;
+  Validity temperature_available;
   /**
    * Temperature of outside air (if available)
    * @see TemperatureAvailable
@@ -297,7 +297,7 @@ struct NMEAInfo {
    * Is humidity information available?
    * @see RelativeHumidity
    */
-  bool humidity_available;
+  Validity humidity_available;
   /**
    * Humidity of outside air (if available)
    * @see HumidityAvailable
