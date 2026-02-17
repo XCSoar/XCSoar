@@ -4,8 +4,6 @@
 /* This library was originally imported from Cumulus
    http://kflog.org/cumulus/ */
 
-static constexpr double INITIAL_MIN_FIT_METRIC = 10000;
-
 #include "CirclingWind.hpp"
 
 #include "LogFile.hpp"
@@ -15,6 +13,8 @@ static constexpr double INITIAL_MIN_FIT_METRIC = 10000;
 
 #include <algorithm>
 #include <cmath>
+
+static constexpr double INITIAL_MIN_FIT_METRIC = 10000;
 
 /*
 About Windanalysation
@@ -32,13 +32,12 @@ circle, the circle in question is used for the wind calculation. As a further
 quality parameter, the deviation (sum of the distance squares) is used from the
 result of the curve fitting when determining the direction.
 
+The rotation rate is derived from changes in the GPS track, or from a (simple)
+IMU, if available. IMU data is more reliable especially at higher wind speeds.
+
 The algorithm uses True Airspeed to compensate for changing airspeed during the
 circle. The algorithm also runs without the availability of True Airspeed, but
 then without this compensation.
-
-In a future implementation, the change in rotation rate can be derived from
-(simple) IMUs. However, this presupposes that IMUs are given an infrastructure
-in XCSoar.
 
 Some of the errors made here will be averaged-out by the WindStore, which keeps
 a number of wind measurements and calculates a weighted average based on
@@ -50,6 +49,7 @@ void CirclingWind::Reset() noexcept {
   usable_airspeed = true;
   usable_gyroscope = false;
   fixed_and_aligned = false;
+  last_sample_time = TimeStamp::Undefined();
 }
 
 void CirclingWind::ShowResources(const MoreData &info) noexcept {
@@ -82,6 +82,9 @@ CirclingWind::Result CirclingWind::NewSample(const MoreData &info,
     Reset();
     return Result(0);
   }
+
+  // skip if GPS time is undefined or has not advanced since the last accepted sample
+  if (!info.time.IsDefined() || info.time == last_sample_time) return Result(0);
 
   if (!active) {
     active = true;
@@ -119,7 +122,7 @@ CirclingWind::Result CirclingWind::NewSample(const MoreData &info,
 
   char angular_rate_source = ' '; // remembers where angular rate came from
   Sample sample;
-  sample.time = info.time;
+  last_sample_time = sample.time = info.time;
   sample.track = info.track;
   sample.ground_speed = info.ground_speed;
   sample.tas = usable_airspeed ? info.true_airspeed : 0;
@@ -162,8 +165,10 @@ CirclingWind::Result CirclingWind::NewSample(const MoreData &info,
 
   Result result(0);
 
-  if (suspend-- <= 0) { // avoid WindCalc for every single sample.
-
+  // avoid WindCalc for every single sample
+  if (suspend > 0) {
+    suspend -= 1;
+  } else {
     // how many samples for the full circle?
     bool full_circle = false;
     size_t idx;
