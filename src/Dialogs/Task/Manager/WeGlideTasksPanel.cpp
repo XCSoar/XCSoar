@@ -18,6 +18,7 @@
 #include "Task/ValidationErrorStrings.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
+#include "util/StaticString.hxx"
 #include "Look/DialogLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
@@ -127,9 +128,27 @@ WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (info.name.c_str())
     row_renderer.DrawFirstRow(canvas, rc, info.name.c_str());
 
-  if (selection != WeGlideTaskSelection::USER)
-    if (info.user_name.c_str())
-      row_renderer.DrawSecondRow(canvas, rc, info.user_name.c_str());
+  StaticString<256> second_row;
+  second_row.clear();
+
+  if (info.kind != WeGlide::TaskKind::UNKNOWN) {
+    second_row.append(WeGlide::ToString(info.kind));
+  }
+
+  if (!info.turnpoints.empty()) {
+    if (!second_row.empty())
+      second_row.append(", ");
+    second_row.AppendFormat("%u TPs", (unsigned)info.turnpoints.size());
+  }
+
+  if (selection != WeGlideTaskSelection::USER && !info.user_name.empty()) {
+    if (!second_row.empty())
+      second_row.append(" · ");
+    second_row.append(info.user_name.c_str());
+  }
+
+  if (!second_row.empty())
+    row_renderer.DrawSecondRow(canvas, rc, second_row.c_str());
 
   row_renderer.DrawRightSecondRow(canvas, rc,
                                   FormatUserDistanceSmart(info.distance));
@@ -175,12 +194,26 @@ WeGlideTasksPanel::ReloadList() noexcept
 void
 WeGlideTasksPanel::RefreshView() noexcept
 {
-  //const auto &info = list[GetList().GetCursorIndex()];
-
   dialog.InvalidateTaskView();
 
-  // TODO dialog.ShowTaskView(...);
-  (void)summary; // TODO
+  if (list.empty() || GetList().GetCursorIndex() >= list.size()) {
+    summary.SetText("");
+  } else {
+    const auto &info = list[GetList().GetCursorIndex()];
+
+    StaticString<512> text;
+    text.clear();
+
+    if (!info.turnpoints.empty()) {
+      for (const auto &tp : info.turnpoints) {
+        if (!text.empty())
+          text.append(" → ");
+        text.append(tp.name.c_str());
+      }
+    }
+
+    summary.SetText(text.c_str());
+  }
 
   if (GetList().IsVisible() && two_widgets != nullptr)
     two_widgets->UpdateLayout();
