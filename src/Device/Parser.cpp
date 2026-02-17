@@ -390,7 +390,7 @@ NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
     return false;
 
   broken_time = BrokenTime(hour, minute, (unsigned)second);
-  time_of_day_s = TimeStamp{broken_time.DurationSinceMidnight()};
+  time_of_day_s = TimeStamp{FloatDuration{hour * 3600 + minute * 60 + second}};
   return true;
 }
 
@@ -718,29 +718,34 @@ inline bool
 NMEAParser::MWV(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
-    * $--MWV,x.x,a,x.x,a,a,a,*hh
+    * $--MWV,x.x,a,x.x,a,a*hh
     *
     * Field Number:
-    *  1) wind angle
-    *  2) (R)elative or (T)rue
-    *  3) wind speed
-    *  4) K/M/N
-    *  5) Status A=valid
-    *  8) Checksum
+    *  1) Wind angle, 0 to 360 degrees
+    *  2) Reference, R = Relative, T = True
+    *  3) Wind speed
+    *  4) Wind speed units, K/M/N
+    *  5) Status, A = Data Valid, V = Data Invalid
+    *  6) Checksum
     */
 
   Angle winddir;
   if (!line.ReadBearing(winddir))
     return false;
 
-  char ch = line.ReadOneChar();
+  char reference = line.ReadOneChar();
+  if (reference != 'T')
+    /* only accept true wind; relative wind (referenced to vessel
+       heading) cannot be stored as external_wind which expects a
+       true bearing */
+    return true;
 
   double windspeed;
   if (!line.ReadChecked(windspeed))
     return false;
 
-  ch = line.ReadOneChar();
-  switch (ch) {
+  char unit = line.ReadOneChar();
+  switch (unit) {
   case 'N':
     windspeed = Units::ToSysUnit(windspeed, Unit::KNOTS);
     break;
@@ -756,6 +761,11 @@ NMEAParser::MWV(NMEAInputLine &line, NMEAInfo &info)
   default:
     return false;
   }
+
+  char status = line.ReadOneChar();
+  if (status != 'A')
+    /* reject invalid data */
+    return true;
 
   SpeedVector wind(winddir, windspeed);
   info.ProvideExternalWind(wind);

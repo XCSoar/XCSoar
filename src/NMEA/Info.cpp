@@ -340,7 +340,7 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
 
   switch_state.Complement(add.switch_state);
 
-  if (!stall_ratio_available && add.stall_ratio_available)
+  if (stall_ratio_available.Complement(add.stall_ratio_available))
     stall_ratio = add.stall_ratio;
 
   flarm.Complement(add.flarm);

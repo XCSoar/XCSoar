@@ -1910,9 +1910,140 @@ TestFlightList(const struct DeviceRegister &driver)
   delete device;
 }
 
+/**
+ * Test that NMEAParser::ReadTime() preserves sub-second precision
+ * from the NMEA time field (HHMMSS.SS).
+ *
+ * Before the fix, ReadTime() routed through BrokenTime which only
+ * stores integer seconds, losing the fractional part.
+ * See: https://github.com/XCSoar/XCSoar/issues/2207
+ */
+static void
+TestSubSecondPrecision()
+{
+  NMEAParser parser;
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+
+  /* parse a GPRMC sentence with .50 fractional seconds */
+  ok1(parser.ParseLine("$GPRMC,082310.50,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*46",
+                        nmea_info));
+
+  /* the integer part must be correct */
+  ok1(nmea_info.date_time_utc.hour == 8);
+  ok1(nmea_info.date_time_utc.minute == 23);
+  ok1(nmea_info.date_time_utc.second == 10);
+
+  /* the sub-second part must be preserved in info.time */
+  const double expected_time_50 = 8 * 3600 + 23 * 60 + 10.50;
+  const double actual_time_50 = nmea_info.time.ToDuration().count();
+  ok1(fabs(actual_time_50 - expected_time_50) < 0.01);
+
+  /* parse a second fix at .00 of the next second */
+  nmea_info.clock = TimeStamp{FloatDuration{2}};
+  ok1(parser.ParseLine("$GPRMC,082311.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*42",
+                        nmea_info));
+
+  const double expected_time_00 = 8 * 3600 + 23 * 60 + 11.00;
+  const double actual_time_00 = nmea_info.time.ToDuration().count();
+  ok1(fabs(actual_time_00 - expected_time_00) < 0.01);
+
+  /* the difference between the two fixes must be exactly 0.50 seconds,
+     not 1.0 seconds (which would indicate truncation to integer seconds) */
+  const double delta = actual_time_00 - actual_time_50;
+  ok1(fabs(delta - 0.50) < 0.01);
+}
+
+/**
+ * Test that the MWV parser checks the status field (field 5).
+ * Status 'V' means data invalid and should be rejected.
+ */
+static void
+TestMWVStatus()
+{
+  NMEAParser parser;
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+
+  /* MWV with status A (valid) — must be accepted */
+  ok1(parser.ParseLine("$WIMWV,12.1,T,10.1,M,A*24", nmea_info));
+  ok1(nmea_info.external_wind_available);
+
+  /* clear the wind so we can test the invalid case */
+  nmea_info.external_wind_available.Clear();
+
+  /* MWV with status V (invalid) — must be rejected */
+  ok1(parser.ParseLine("$WIMWV,12.1,T,10.1,M,V*33", nmea_info));
+  ok1(!nmea_info.external_wind_available);
+}
+
+/**
+ * Test that the MWV parser distinguishes between Relative (R) and
+ * True (T) wind reference.  Relative wind (referenced to vessel heading)
+ * should not be stored as true wind bearing.
+ */
+static void
+TestMWVRelativeTrue()
+{
+  NMEAParser parser;
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+
+  /* MWV with True reference — must be accepted */
+  ok1(parser.ParseLine("$WIMWV,45.0,T,10.1,M,A*27", nmea_info));
+  ok1(nmea_info.external_wind_available);
+  ok1(equals(nmea_info.external_wind.bearing, 45.0));
+
+  /* clear the wind */
+  nmea_info.external_wind_available.Clear();
+
+  /* MWV with Relative reference — must be rejected (or handled differently)
+     since XCSoar's external_wind expects a true bearing */
+  ok1(parser.ParseLine("$WIMWV,45.0,R,10.1,M,A*21", nmea_info));
+  ok1(!nmea_info.external_wind_available);
+}
+
+/**
+ * Test that NMEAInfo::Complement() correctly copies stall_ratio AND
+ * updates stall_ratio_available.
+ */
+static void
+TestStallRatioComplement()
+{
+  NMEAInfo a, b;
+  a.Reset();
+  b.Reset();
+
+  a.clock = TimeStamp{FloatDuration{1}};
+  b.clock = TimeStamp{FloatDuration{1}};
+
+  /* 'a' has no stall ratio */
+  ok1(!a.stall_ratio_available);
+
+  /* 'b' provides a stall ratio */
+  b.stall_ratio = 0.75;
+  b.stall_ratio_available.Update(b.clock);
+  b.alive.Update(b.clock);
+  ok1(b.stall_ratio_available);
+
+  /* Complement 'a' with 'b' — both value and flag must be copied */
+  a.Complement(b);
+  ok1(a.stall_ratio_available);
+  ok1(equals(a.stall_ratio, 0.75));
+}
+
 int main()
 {
-  plan_tests(1032);
+  plan_tests(1032 + 8 + 4 + 5 + 4);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -1964,6 +2095,11 @@ int main()
   TestFlightList(lx_driver);
   TestFlightList(lx_eos_driver);
   TestFlightList(imi_driver);
+
+  TestSubSecondPrecision();
+  TestMWVStatus();
+  TestMWVRelativeTrue();
+  TestStallRatioComplement();
 
   return exit_status();
 }
