@@ -1938,22 +1938,19 @@ TestSubSecondPrecision()
   ok1(nmea_info.date_time_utc.second == 10);
 
   /* the sub-second part must be preserved in info.time */
-  const double expected_time_50 = 8 * 3600 + 23 * 60 + 10.50;
-  const double actual_time_50 = nmea_info.time.ToDuration().count();
-  ok1(fabs(actual_time_50 - expected_time_50) < 0.01);
+  ok1(equals(nmea_info.time, TimeStamp{FloatDuration{8 * 3600 + 23 * 60 + 10.50}}));
+  const auto time_50 = nmea_info.time;
 
   /* parse a second fix at .00 of the next second */
   nmea_info.clock = TimeStamp{FloatDuration{2}};
   ok1(parser.ParseLine("$GPRMC,082311.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*42",
                         nmea_info));
 
-  const double expected_time_00 = 8 * 3600 + 23 * 60 + 11.00;
-  const double actual_time_00 = nmea_info.time.ToDuration().count();
-  ok1(fabs(actual_time_00 - expected_time_00) < 0.01);
+  ok1(equals(nmea_info.time, TimeStamp{FloatDuration{8 * 3600 + 23 * 60 + 11.00}}));
 
   /* the difference between the two fixes must be exactly 0.50 seconds,
      not 1.0 seconds (which would indicate truncation to integer seconds) */
-  const double delta = actual_time_00 - actual_time_50;
+  const double delta = (nmea_info.time - time_50).count();
   ok1(fabs(delta - 0.50) < 0.01);
 }
 
@@ -2107,8 +2104,9 @@ TestReadGeoAngleNoDot()
   nmea_info.alive.Update(nmea_info.clock);
 
   /* A malformed GGA with latitude/longitude missing decimal points
-     should not crash and should return false (not update position). */
-  ok1(!parser.ParseLine("$GPGGA,120000,12345,N,12345,E,1,04,1.0,100.0,M,0.0,M,,*40", nmea_info));
+     should not crash.  GGA does not update location (that's RMC's job),
+     but ReadGeoPoint must handle the missing dots without UB. */
+  ok1(parser.ParseLine("$GPGGA,120000,12345,N,12345,E,1,04,1.0,100.0,M,0.0,M,,*45", nmea_info));
   ok1(!nmea_info.location_available);
 }
 
@@ -2276,7 +2274,10 @@ TestMalformedInput()
 
 int main()
 {
-  plan_tests(1032 + 8 + 4 + 5 + 4 + 12 + 2 + 13 + 20 + 23);
+  plan_tests(1032 /* drivers */ + 8 /* SubSecond */ + 4 /* MWVStatus */
+             + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
+             + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
+             + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */);
   TestGeneric();
   TestTasman();
   TestFLARM();
