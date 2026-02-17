@@ -13,6 +13,7 @@ enum class WeGlideTaskSelection {
   USER,
   PUBLIC_DECLARED,
   DAILY_COMPETITIONS,
+  RECENT_SCORES,
 };
 
 std::unique_ptr<Widget>

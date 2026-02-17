@@ -16,6 +16,7 @@ public:
     PAGE_WEGLIDE_USER,
     PAGE_WEGLIDE_PUBLIC_DECLARED,
     PAGE_WEGLIDE_DAILY_COMPETITIONS,
+    PAGE_WEGLIDE_RECENT_SCORES,
   };
 
   TaskMiscPanel(TaskManagerDialog &dialog,
