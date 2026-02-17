@@ -137,7 +137,13 @@ WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   StaticString<256> second_row;
   second_row.clear();
 
+  if (!info.scoring_date.empty()) {
+    second_row.append(info.scoring_date.c_str());
+  }
+
   if (info.kind != WeGlide::TaskKind::UNKNOWN) {
+    if (!second_row.empty())
+      second_row.append(", ");
     second_row.append(WeGlide::ToString(info.kind));
   }
 
@@ -151,6 +157,12 @@ WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (!second_row.empty())
       second_row.append(" · ");
     second_row.append(info.user_name.c_str());
+  }
+
+  if (!info.ruleset.empty()) {
+    if (!second_row.empty())
+      second_row.append(" · ");
+    second_row.append(info.ruleset.c_str());
   }
 
   if (!second_row.empty())
@@ -178,6 +190,10 @@ LoadTaskList(WeGlideTaskSelection selection,
   case WeGlideTaskSelection::DAILY_COMPETITIONS:
     return WeGlide::ListDailyCompetitions(*Net::curl, settings,
                                           progress);
+
+  case WeGlideTaskSelection::RECENT_SCORES:
+    return WeGlide::ListRecentTaskScores(*Net::curl, settings,
+                                         progress);
   }
 
   gcc_unreachable();
@@ -216,7 +232,17 @@ WeGlideTasksPanel::RefreshView() noexcept
     StaticString<512> text;
     text.clear();
 
-    if (!info.turnpoints.empty()) {
+    if (!info.scores.empty()) {
+      unsigned rank = 1;
+      for (const auto &se : info.scores) {
+        if (!text.empty())
+          text.append("\n");
+        text.AppendFormat("%u. %s — %.0f pts, %.1f km/h",
+                         rank++,
+                         se.user_name.c_str(),
+                         se.points, se.speed);
+      }
+    } else if (!info.turnpoints.empty()) {
       for (const auto &tp : info.turnpoints) {
         if (!text.empty())
           text.append(" → ");

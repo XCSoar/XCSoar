@@ -29,6 +29,7 @@ static constexpr auto usage = R"usage(
   declarations
   by_user USER_ID
   competitions
+  scores
   upload USER_ID BIRTHDAY GLIDER IGCFILE
 )usage";
 
@@ -153,6 +154,29 @@ try {
 
         for (const auto &tp : task.turnpoints)
           fmt::print("  {} ({} m)\n", tp.name, tp.elevation);
+      }
+    }
+
+    return EXIT_SUCCESS;
+  } else if (StringIsEqual(cmd, "scores")) {
+    args.ExpectEnd();
+
+    const auto tasks = instance.Run(
+      WeGlide::ListRecentTaskScores(*Net::curl, settings, env));
+
+    if (tasks.empty()) {
+      fmt::print("No recent scores.\n");
+    } else {
+      for (const auto &task : tasks) {
+        fmt::print("{}\t{:.1f} km\t{}\t{}\n",
+                   task.id,
+                   task.distance / 1000,
+                   task.name,
+                   task.scoring_date);
+
+        for (const auto &se : task.scores)
+          fmt::print("  {:.0f} pts  {:.1f} km/h  {}\n",
+                     se.points, se.speed, se.user_name);
       }
     }
 

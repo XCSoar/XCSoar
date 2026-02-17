@@ -59,6 +59,23 @@ struct TurnpointInfo {
   double longitude, latitude;
 };
 
+/**
+ * A single score entry from a WeGlide task score.
+ */
+struct ScoreEntry {
+  std::string user_name;
+
+  /**
+   * Scoring points.
+   */
+  double points;
+
+  /**
+   * Speed in km/h.
+   */
+  double speed;
+};
+
 struct TaskInfo {
   uint_least64_t id;
 
@@ -84,9 +101,19 @@ struct TaskInfo {
   std::string token;
 
   /**
+   * The scoring date (e.g. "2026-02-12"), if available.
+   */
+  std::string scoring_date;
+
+  /**
    * Turnpoint information from the point_features array.
    */
   std::vector<TurnpointInfo> turnpoints;
+
+  /**
+   * Task scores (podium), if available from score endpoints.
+   */
+  std::vector<ScoreEntry> scores;
 };
 
 /**
@@ -116,5 +143,14 @@ ListDeclaredTasks(CurlGlobal &curl, const WeGlideSettings &settings,
 Co::Task<std::vector<TaskInfo>>
 ListDailyCompetitions(CurlGlobal &curl, const WeGlideSettings &settings,
                       ProgressListener &progress);
+
+/**
+ * Download recent task scores from WeGlide.
+ *
+ * @see https://api.weglide.org/docs#/task_score/get_recent_task_score_v1_task_score_recent_get
+ */
+Co::Task<std::vector<TaskInfo>>
+ListRecentTaskScores(CurlGlobal &curl, const WeGlideSettings &settings,
+                     ProgressListener &progress);
 
 } // namespace WeGlide

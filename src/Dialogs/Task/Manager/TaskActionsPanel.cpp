@@ -164,6 +164,10 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
   AddButton(_("WeGlide competitions"), [this](){
     parent.SetCurrent(parent.PAGE_WEGLIDE_DAILY_COMPETITIONS);
   });
+
+  AddButton(_("WeGlide scores"), [this](){
+    parent.SetCurrent(parent.PAGE_WEGLIDE_RECENT_SCORES);
+  });
 #endif
 
   if (is_simulator())

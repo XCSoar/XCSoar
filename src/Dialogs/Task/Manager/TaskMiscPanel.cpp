@@ -19,6 +19,8 @@ TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
                               _active_task, _task_modified));
   Add(CreateWeGlideTasksPanel(dialog, WeGlideTaskSelection::DAILY_COMPETITIONS,
                               _active_task, _task_modified));
+  Add(CreateWeGlideTasksPanel(dialog, WeGlideTaskSelection::RECENT_SCORES,
+                              _active_task, _task_modified));
 }
 
 void

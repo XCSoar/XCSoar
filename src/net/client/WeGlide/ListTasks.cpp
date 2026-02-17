@@ -102,6 +102,43 @@ ParseTurnpoints(const boost::json::value &jv) noexcept
   return turnpoints;
 }
 
+static std::vector<ScoreEntry>
+ParseScores(const boost::json::value &jv) noexcept
+{
+  std::vector<ScoreEntry> scores;
+
+  if (!jv.is_array())
+    return scores;
+
+  for (const auto &entry : jv.as_array()) {
+    if (!entry.is_object())
+      continue;
+
+    const auto &obj = entry.as_object();
+
+    ScoreEntry se;
+
+    if (auto u = obj.if_contains("user"sv); u && u->is_object()) {
+      if (auto n = u->as_object().if_contains("name"sv); n && n->is_string())
+        se.user_name = n->as_string();
+    }
+
+    if (auto p = obj.if_contains("points"sv); p && p->is_number())
+      se.points = p->to_number<double>();
+    else
+      se.points = 0;
+
+    if (auto s = obj.if_contains("speed"sv); s && s->is_number())
+      se.speed = s->to_number<double>();
+    else
+      se.speed = 0;
+
+    scores.push_back(std::move(se));
+  }
+
+  return scores;
+}
+
 static auto
 tag_invoke(boost::json::value_to_tag<TaskInfo>,
            const boost::json::value &jv)
@@ -111,7 +148,11 @@ tag_invoke(boost::json::value_to_tag<TaskInfo>,
   TaskInfo info;
   info.id = json.at("id").to_number<uint_least64_t>();
   info.name = json.at("name").as_string();
-  info.user_name = json.at("user").at("name").as_string();
+
+  if (auto u = json.if_contains("user"sv); u && u->is_object()) {
+    if (auto n = u->as_object().if_contains("name"sv); n && n->is_string())
+      info.user_name = n->as_string();
+  }
 
   // convert km to m
   info.distance = json.at("distance").to_number<double>() * 1000;
@@ -125,8 +166,14 @@ tag_invoke(boost::json::value_to_tag<TaskInfo>,
   if (auto t = json.if_contains("token"sv); t && t->is_string())
     info.token = t->as_string();
 
+  if (auto sd = json.if_contains("scoring_date"sv); sd && sd->is_string())
+    info.scoring_date = sd->as_string();
+
   if (auto pf = json.if_contains("point_features"sv))
     info.turnpoints = ParseTurnpoints(*pf);
+
+  if (auto ts = json.if_contains("task_score"sv))
+    info.scores = ParseScores(*ts);
 
   return info;
 }
@@ -181,6 +228,28 @@ ListDailyCompetitions(CurlGlobal &curl, const WeGlideSettings &settings,
                       ProgressListener &progress)
 {
   const auto url = FmtBuffer<256>("{}/task/competitions/today",
+                                  settings.default_url);
+
+  CurlEasy easy{url};
+  Curl::Setup(easy);
+  const Net::ProgressAdapter progress_adapter{easy, progress};
+
+  Json::ParserOutputStream parser;
+  const auto response =
+    co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
+  auto body = parser.Finish();
+
+  if (response.status != 200)
+    throw ResponseToException(response.status, body);
+
+  co_return boost::json::value_to<std::vector<TaskInfo>>(body);
+}
+
+Co::Task<std::vector<TaskInfo>>
+ListRecentTaskScores(CurlGlobal &curl, const WeGlideSettings &settings,
+                     ProgressListener &progress)
+{
+  const auto url = FmtBuffer<256>("{}/task/score/recent",
                                   settings.default_url);
 
   CurlEasy easy{url};
