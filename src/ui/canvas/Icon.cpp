@@ -61,9 +61,21 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id,
                          bool center)
 {
 #ifdef ENABLE_OPENGL
-  unsigned stretch = 1024;
-#endif
+  /* On OpenGL the GPU scales textures efficiently, so always load
+     the highest-resolution variant for maximum quality (especially
+     beneficial when icons are scaled up in list views). */
+  unsigned source_dpi = 96;
+  if (ultra_id.IsDefined()) {
+    id = ultra_id;
+    source_dpi = 300;
+  } else if (big_id.IsDefined()) {
+    id = big_id;
+    source_dpi = 192;
+  }
 
+  const unsigned stretch = IconStretchFixed10(source_dpi);
+  bitmap.Load(id);
+#else
   if (Layout::vdpi >= 120) {
     /* switch to larger 160dpi icons at 120dpi */
 
@@ -76,14 +88,10 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id,
       source_dpi = 192;
     }
 
-#ifdef ENABLE_OPENGL
-    stretch = IconStretchFixed10(source_dpi);
-    bitmap.Load(id);
-#else
     bitmap.LoadStretch(id, IconStretchInteger(source_dpi));
-#endif
   } else
     bitmap.Load(id);
+#endif
 
   assert(IsDefined());
 
