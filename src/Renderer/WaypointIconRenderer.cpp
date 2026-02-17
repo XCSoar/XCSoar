@@ -134,13 +134,23 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
         ? &look.airport_unreachable_icon
         : &look.field_unreachable_icon;
 
-    icon->Draw(canvas, point);
+    if (icon_size > 0)
+      icon->Draw(canvas, point, icon_size);
+    else
+      icon->Draw(canvas, point);
     return;
   }
 
   // SW rendering of landables
   double scale = std::max(Layout::VptScale(settings.landable_rendering_scale),
                           110u) / 177.;
+
+  /* The vector landable is drawn with radius = 10 * scale and the
+     reachable ring at 1.5 * radius, giving a total diameter of
+     30 * scale.  Derive scale so the full icon fits icon_size. */
+  if (icon_size > 0)
+    scale = icon_size / 30.;
+
   double radius = 10 * scale;
 
   canvas.SelectBlackPen();
@@ -205,7 +215,8 @@ WaypointIconRenderer::Draw(const Waypoint &waypoint, const PixelPoint &point,
 {
   if (waypoint.IsLandable())
     DrawLandable(waypoint, point, reachable);
+  else if (icon_size > 0)
+    GetWaypointIcon(look, waypoint, small_icons, in_task).Draw(canvas, point, icon_size);
   else
-    // non landable turnpoint
     GetWaypointIcon(look, waypoint, small_icons, in_task).Draw(canvas, point);
 }

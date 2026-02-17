@@ -11,6 +11,8 @@
 
 #include "opengl/Shaders.hpp"
 #include "opengl/Program.hpp"
+#elif !defined(USE_GDI)
+#include "VirtualCanvas.hpp"
 #endif
 
 #include <algorithm>
@@ -139,6 +141,93 @@ MaskedIcon::Draw([[maybe_unused]] Canvas &canvas, PixelPoint p) const noexcept
   canvas.SetTextColor(old_text_color);
   canvas.SetBackgroundColor(old_bg_color);
 #endif
+#endif
+}
+
+void
+MaskedIcon::Draw(Canvas &canvas, PixelPoint p,
+                 unsigned target_height) const noexcept
+{
+  assert(IsDefined());
+
+  if (target_height == 0 || target_height == size.height) {
+    Draw(canvas, p);
+    return;
+  }
+
+  if (size.height == 0)
+    return;
+
+  /* uniformly scaled size */
+  const PixelSize scaled_size = {
+    size.width * target_height / size.height,
+    target_height,
+  };
+
+  /* scale the hotspot (origin) proportionally */
+  const PixelPoint dest = {
+    p.x - int(origin.x * target_height / size.height),
+    p.y - int(origin.y * target_height / size.height),
+  };
+
+#ifdef ENABLE_OPENGL
+  const bool inverse = !has_colors &&
+    IsDarkBackground(canvas.GetTextColor());
+
+  if (inverse)
+    OpenGL::invert_shader->Use();
+  else
+    OpenGL::texture_shader->Use();
+
+  const ScopeAlphaBlend alpha_blend;
+
+  GLTexture &texture = *bitmap.GetNative();
+  texture.Bind();
+  texture.Draw(PixelRect(dest, scaled_size), texture.GetRect());
+#elif defined(USE_GDI)
+  const Color old_text_color = canvas.GetTextColor();
+  const bool inverse = !has_colors &&
+    IsDarkBackground(old_text_color);
+
+  const Color old_bg_color = canvas.GetBackgroundColor();
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundColor(COLOR_WHITE);
+
+  if (inverse) {
+    canvas.Stretch(dest, scaled_size,
+                   bitmap, {(int)size.width, 0}, size, MERGEPAINT);
+  } else {
+    canvas.Stretch(dest, scaled_size,
+                   bitmap, {0, 0}, size, SRCPAINT);
+    canvas.Stretch(dest, scaled_size,
+                   bitmap, {(int)size.width, 0}, size, SRCAND);
+  }
+
+  canvas.SetTextColor(old_text_color);
+  canvas.SetBackgroundColor(old_bg_color);
+#else
+  /* memory canvas: stretch each half (mask / icon) into a temporary
+     surface, then composite with CopyOr + CopyAnd (or CopyNotOr for
+     dark-mode inversion). */
+  const Color old_text_color = canvas.GetTextColor();
+  const bool inverse = !has_colors &&
+    IsDarkBackground(old_text_color);
+
+  VirtualCanvas temp{scaled_size};
+
+  if (inverse) {
+    temp.Stretch({0, 0}, scaled_size,
+                 bitmap, {(int)size.width, 0}, size);
+    canvas.CopyNotOr(dest, scaled_size, temp, {0, 0});
+  } else {
+    temp.Stretch({0, 0}, scaled_size,
+                 bitmap, {0, 0}, size);
+    canvas.CopyOr(dest, scaled_size, temp, {0, 0});
+
+    temp.Stretch({0, 0}, scaled_size,
+                 bitmap, {(int)size.width, 0}, size);
+    canvas.CopyAnd(dest, scaled_size, temp, {0, 0});
+  }
 #endif
 }
 

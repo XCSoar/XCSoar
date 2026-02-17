@@ -46,9 +46,13 @@ Draw(Canvas &canvas, PixelRect rc,
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.GetHeight();
 
+  const unsigned icon_size =
+    line_height > 4 * padding ? line_height - 4 * padding : 0;
+
   // Draw icon
   const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
   WaypointIconRenderer wir(settings, look, canvas);
+  wir.SetIconSize(icon_size);
   wir.Draw(waypoint, pt);
 
   rc.left += line_height + padding;
@@ -113,6 +117,9 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.GetHeight();
 
+  const unsigned icon_size =
+    line_height > 4 * padding ? line_height - 4 * padding : 0;
+
   // Draw icon
   const PixelPoint pt(rc.left + line_height / 2,
                       rc.top + line_height / 2);
@@ -122,6 +129,7 @@ WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
     : WaypointReachability::UNREACHABLE;
 
   WaypointIconRenderer wir(settings, look, canvas);
+  wir.SetIconSize(icon_size);
   wir.Draw(waypoint, pt, reachable);
 
   rc.left += line_height + padding;
