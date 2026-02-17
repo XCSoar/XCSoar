@@ -27,6 +27,7 @@ static constexpr auto usage = R"usage(
   task TASK_ID
   declaration USER_ID
   declarations
+  by_user USER_ID
   upload USER_ID BIRTHDAY GLIDER IGCFILE
 )usage";
 
@@ -96,8 +97,18 @@ try {
     const auto tasks = instance.Run(
       WeGlide::ListDeclaredTasks(*Net::curl, settings, env));
 
-    for (const auto &task : tasks)
-      fmt::print("{}\t{:4.0f}\t{}\t{}\n", task.id, task.distance, task.name, task.user_name);
+    for (const auto &task : tasks) {
+      fmt::print("{}\t{}\t{:.1f} km\t{}\t{}\t{}\n",
+                 task.id,
+                 WeGlide::ToString(task.kind),
+                 task.distance / 1000,
+                 task.name,
+                 task.user_name,
+                 task.ruleset);
+
+      for (const auto &tp : task.turnpoints)
+        fmt::print("  {} ({} m)\n", tp.name, tp.elevation);
+    }
 
     return EXIT_SUCCESS;
   } else if (StringIsEqual(cmd, "by_user")) {
@@ -107,8 +118,18 @@ try {
     const auto tasks = instance.Run(
       WeGlide::ListTasksByUser(*Net::curl, settings, user_id, env));
 
-    for (const auto &task : tasks)
-      fmt::print("{}\t{:4.0f}\t{}\t{}\n", task.id, task.distance, task.name, task.user_name);
+    for (const auto &task : tasks) {
+      fmt::print("{}\t{}\t{:.1f} km\t{}\t{}\t{}\n",
+                 task.id,
+                 WeGlide::ToString(task.kind),
+                 task.distance / 1000,
+                 task.name,
+                 task.user_name,
+                 task.ruleset);
+
+      for (const auto &tp : task.turnpoints)
+        fmt::print("  {} ({} m)\n", tp.name, tp.elevation);
+    }
 
     return EXIT_SUCCESS;
   } else if (StringIsEqual(cmd, "upload")) {

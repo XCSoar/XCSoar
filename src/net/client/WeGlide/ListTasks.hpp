@@ -14,6 +14,51 @@ namespace Co { template<typename T> class Task; }
 
 namespace WeGlide {
 
+/**
+ * Task kind/type as returned by the WeGlide API.
+ *
+ * @see https://api.weglide.org/docs#/task
+ */
+enum class TaskKind : uint_least8_t {
+  UNKNOWN,
+
+  /** Free flight (FAI triangle) */
+  FREE,
+
+  /** Free flight with 4 turnpoints */
+  FREE4,
+
+  /** Triangle */
+  TRIANGLE,
+};
+
+[[gnu::const]]
+const char *
+ToString(TaskKind kind) noexcept;
+
+/**
+ * Parse the "kind" field from a WeGlide task JSON object.
+ */
+[[gnu::pure]]
+TaskKind
+ParseTaskKind(std::string_view kind) noexcept;
+
+struct TurnpointInfo {
+  std::string name;
+
+  /**
+   * Elevation in metres.
+   */
+  int elevation;
+
+  /**
+   * Observation zone radius [m], or -1 if not specified.
+   */
+  double radius;
+
+  double longitude, latitude;
+};
+
 struct TaskInfo {
   uint_least64_t id;
 
@@ -25,6 +70,23 @@ struct TaskInfo {
    * The total task distance [m].
    */
   double distance;
+
+  TaskKind kind = TaskKind::UNKNOWN;
+
+  /**
+   * The scoring ruleset (e.g. "D", "US", "AA").
+   */
+  std::string ruleset;
+
+  /**
+   * The share token for this task.
+   */
+  std::string token;
+
+  /**
+   * Turnpoint information from the point_features array.
+   */
+  std::vector<TurnpointInfo> turnpoints;
 };
 
 /**
