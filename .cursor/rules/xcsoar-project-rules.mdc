@@ -599,6 +599,23 @@ Adding a new method callable between Java and C++ requires updating three files:
 
 ## GUI Guidelines
 
+### Rendering Backends — Always Consider All Three
+
+XCSoar has three canvas backends in `src/ui/canvas/`. **Every renderer implementation must work on all three:**
+
+| Backend | Define | Platform | Capabilities |
+|---------|--------|----------|-------------|
+| **OpenGL** | `ENABLE_OPENGL` | Linux/Android/macOS | Full color, alpha blending, gradients, hardware-accelerated |
+| **Memory canvas** | `USE_MEMORY_CANVAS` | Kobo e-ink, headless (`VFB=y`) | Software rendering, greyscale on e-ink, no GPU |
+| **GDI** | `USE_GDI` | Windows | Win32 GDI API, full color but no alpha on all surfaces |
+
+When writing or modifying renderer code (`src/Renderer/`, `src/Look/`, `MapWindow/`):
+- **E-ink (memory canvas)**: No color, no gradients, no alpha blending. Use `IsDithered()` and `HasColors()` from `Asset.hpp`. Fall back to `COLOR_WHITE`/`COLOR_BLACK` with clear contrast.
+- **OpenGL**: Can use `AlphaBlendEnable`/`Disable`, textures, and smooth anti-aliased rendering.
+- **GDI**: Has color but limited alpha support. `Canvas::StretchMono()` and some blending operations differ.
+- Use `#ifdef ENABLE_OPENGL` / `#ifdef USE_MEMORY_CANVAS` / `#ifdef USE_GDI` when backend-specific code is unavoidable.
+- **Test with**: `TARGET=UNIX` (OpenGL default), `TARGET=UNIX OPENGL=n` (memory canvas), `TARGET=WIN64` (GDI).
+
 ### UI Scaling and DPI Support
 - UI must scale from low-DPI devices (e.g., CGA resolution ~96 DPI) to very high-DPI devices (e.g., modern phones with 400+ DPI)
 - Use `Layout::Scale()` for general UI element scaling (based on 240x320 base resolution)
@@ -611,6 +628,28 @@ Adding a new method callable between Java and C++ requires updating three files:
 - Small screens (< 5 inch) automatically get adjusted scaling for viewing distance
 - Touch screens get larger hit areas and control heights
 - Test UI changes on both low-DPI and high-DPI devices when possible
+
+### Display and DPI — Consider All Targets
+
+DPI detection, screen size queries, and display setup differ across targets. When implementing display-related features (DPI scaling, screen rotation, fullscreen, window management), ensure they work on all platforms:
+
+| Target | Display | DPI detection | Notes |
+|--------|---------|---------------|-------|
+| **Android** | Native `SurfaceView` | System-provided density (`DisplayMetrics`) | Variable DPI (120–640), runtime rotation |
+| **Linux/Wayland** | `wl_surface` | Compositor scale factor (`wl_output`) | HiDPI via integer/fractional scaling |
+| **Linux/X11** | `XWindow` | `Xft.dpi` resource or fallback | May be inaccurate; `xrandr` for physical size |
+| **Kobo** | Framebuffer (`/dev/fb0`) | Hardcoded per model | Fixed resolution, no rotation, no DPI query API |
+| **Windows** | `HWND` (GDI) | `GetDpiForWindow()` / `GetDeviceCaps()` | Per-monitor DPI on Win10+ |
+| **macOS/iOS** | Native view | `backingScaleFactor` / `UIScreen.scale` | Retina 2x/3x scaling |
+| **SDL** | `SDL_Window` | `SDL_GetDisplayDPI()` | Cross-platform fallback, may be inaccurate |
+
+Key rules:
+- **Never assume a specific DPI or resolution** — always use `Layout::` scaling functions
+- Platform-specific display code goes in `src/ui/window/<platform>/` and `src/ui/display/`
+- Use `IsEmbedded()`, `IsKobo()`, `IsAndroid()` from `Asset.hpp` for target-specific branches
+- **Kobo has no runtime DPI query** — screen parameters are hardcoded in device-specific setup
+- **Android provides reliable DPI** but beware of foldables and external displays changing at runtime
+- When adding a new display feature, check that it compiles with at least: `TARGET=UNIX`, `TARGET=ANDROID`, `TARGET=KOBO`, `TARGET=WIN64`
 
 ### UI Operability
 - UI must be operable via multiple input methods: touch, keyboard, and gestures
@@ -887,7 +926,7 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
 
 ### Platform Code Organization Patterns
 
-XCSoar uses a consistent pattern for platform-specific implementations:
+**Core principle: maximize shared code, isolate platform differences through components and overloads.** Most logic (layout, data processing, rendering algorithms) should be cross-platform. Only the thin platform-specific layer (window creation, DPI query, input handling) needs per-platform code.
 
 **Directory Structure:**
 - `src/ui/window/custom/` - Shared base implementations (fallback/common code)
@@ -895,32 +934,42 @@ XCSoar uses a consistent pattern for platform-specific implementations:
 - `src/ui/window/wayland/` - Wayland-specific implementations  
 - `src/ui/window/x11/` - X11-specific implementations
 - `src/ui/window/sdl/` - SDL-specific implementations
-- Similar patterns exist in `src/ui/canvas/`, `src/ui/event/`, etc.
+- Similar patterns exist in `src/ui/canvas/`, `src/ui/event/`, `src/ui/display/`, etc.
 
-**Implementation Pattern:**
-1. **Shared base** in `custom/` provides default/common implementation
-2. **Platform directories** override specific methods for that platform
-3. Build system conditionally compiles appropriate files based on `USE_*` defines
-4. Example: `TopWindow.cpp` exists in multiple directories, each compiled for its platform
+**Code Reuse Strategy:**
+1. **Put shared logic in `custom/`** — this is the default implementation compiled for all platforms that don't have a specific override. Maximize what lives here.
+2. **Platform directories only override what differs** — a platform file should only contain the platform-specific parts, calling back into shared code for everything else.
+3. Build system conditionally compiles appropriate files based on `USE_*` defines — only one implementation of each `.cpp` is compiled per target.
+4. **Prefer method overloads and virtual dispatch over `#ifdef`** — when a class needs platform-specific behavior, implement the method in the platform directory rather than scattering `#ifdef` blocks in shared code.
+5. **Use `#ifdef` in shared code only for small, isolated differences** — e.g., a single extra call or a type alias. If the `#ifdef` block grows beyond a few lines, extract it into a platform-specific file.
 
-**When adding platform code:**
-- Check if platform-specific directory exists (e.g., `wayland/`, `gdi/`)
-- If yes, add implementation there (not in `custom/`)
-- If implementing cross-platform feature, add to `custom/` with platform overrides as needed
-- Use `#ifdef USE_WAYLAND`, `#ifdef USE_GDI`, etc. for conditional compilation in shared files
-- Don't duplicate code - extract common logic to base classes or utility functions
+**When adding a new feature:**
+- Start by implementing it entirely in `custom/` (cross-platform)
+- Only create platform-specific overrides when something genuinely can't be done portably
+- If a platform has a better/native API for the same thing, override just that method in the platform directory — keep the algorithm and data flow in shared code
+- Check if platform-specific directory exists (e.g., `wayland/`, `gdi/`) before creating `#ifdef` blocks
 
-**Common pattern:**
+**Good vs bad isolation:**
 ```cpp
-// In custom/TopWindow.cpp - base implementation
-void TopWindow::SomeMethod() {
-  // Default implementation for platforms without specific override
+// BAD: scattering platform logic throughout shared code
+void TopWindow::SetFullScreen(bool full) {
+#ifdef USE_WAYLAND
+  xdg_toplevel_set_fullscreen(toplevel, nullptr);
+#elif defined(USE_X11)
+  XChangeProperty(display, window, ...);
+#elif defined(USE_GDI)
+  SetWindowLong(hwnd, GWL_STYLE, ...);
+#else
+  // fallback?
+#endif
 }
 
-// In wayland/TopWindow.cpp - Wayland-specific override
-void TopWindow::SomeMethod() {
-  // Wayland-specific implementation using Wayland APIs
-}
+// GOOD: each platform overrides the same method in its own file
+// custom/TopWindow.cpp — shared base (may be empty or have a fallback)
+// wayland/TopWindow.cpp — Wayland-specific SetFullScreen()
+// x11/TopWindow.cpp — X11-specific SetFullScreen()
+// gdi/TopWindow.cpp — GDI-specific SetFullScreen()
+// All share the same class, same header, same interface
 ```
 
 ### Finding Platform-Specific Implementations
