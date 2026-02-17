@@ -92,4 +92,12 @@ public:
   const void *GetData() const {
     return data.get();
   }
+
+  /**
+   * Scan pixel data to determine whether the image contains
+   * non-grayscale (coloured) pixels.  Returns false for
+   * Format::GRAY and Format::INVALID.
+   */
+  [[gnu::pure]]
+  bool HasNonGrayscalePixels() const noexcept;
 };

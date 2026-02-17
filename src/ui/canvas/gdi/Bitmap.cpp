@@ -13,7 +13,8 @@
 #include <winuser.h>
 
 Bitmap::Bitmap(Bitmap &&src) noexcept
-  :bitmap(std::exchange(src.bitmap, nullptr))
+  :bitmap(std::exchange(src.bitmap, nullptr)),
+   has_colors(src.has_colors)
 {
 }
 
@@ -21,6 +22,7 @@ Bitmap &Bitmap::operator=(Bitmap &&src) noexcept
 {
   using std::swap;
   swap(bitmap, src.bitmap);
+  swap(has_colors, src.has_colors);
   return *this;
 }
 

@@ -612,7 +612,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS += -llog -landroid
+  TARGET_LDLIBS += -llog -landroid -ljnigraphics
 endif
 
 ######## output files
