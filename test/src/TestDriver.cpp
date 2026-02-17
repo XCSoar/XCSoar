@@ -2112,9 +2112,171 @@ TestReadGeoAngleNoDot()
   ok1(!nmea_info.location_available);
 }
 
+/**
+ * Test the GLL (Geographic Position - Latitude/Longitude) parser.
+ */
+static void
+TestGLL()
+{
+  NMEAParser parser;
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+
+  /* first, advance time with an RMC so TimeHasAdvanced works */
+  ok1(parser.ParseLine("$GPRMC,082309.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*4B",
+                        nmea_info));
+
+  /* GLL with valid status — should update location */
+  ok1(parser.ParseLine("$GPGLL,5103.5403,N,00741.5742,E,082311.00,A*0E",
+                        nmea_info));
+  ok1(nmea_info.location_available);
+  ok1(equals(nmea_info.location.latitude, 51.059));
+  ok1(equals(nmea_info.location.longitude, 7.693));
+  ok1(nmea_info.date_time_utc.hour == 8);
+  ok1(nmea_info.date_time_utc.minute == 23);
+  ok1(nmea_info.date_time_utc.second == 11);
+  ok1(nmea_info.gps.real);
+
+  /* GLL with invalid status V — should clear location_available */
+  ok1(parser.ParseLine("$GPGLL,5103.5403,N,00741.5742,E,082314.00,V*1C",
+                        nmea_info));
+  ok1(!nmea_info.location_available);
+
+  /* GLL with valid status again — location restored */
+  ok1(parser.ParseLine("$GPGLL,5103.5403,N,00741.5742,E,082317.00,A*08",
+                        nmea_info));
+  ok1(nmea_info.location_available);
+}
+
+/**
+ * Test the GSA (GPS DOP and Active Satellites) parser.
+ */
+static void
+TestGSA()
+{
+  NMEAParser parser;
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+
+  /* advance time first */
+  ok1(parser.ParseLine("$GPRMC,082318.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*4B",
+                        nmea_info));
+
+  /* GSA with 3D fix, 12 satellites, and DOP values */
+  ok1(parser.ParseLine("$GPGSA,A,3,01,02,03,04,05,06,07,08,09,10,11,12,1.2,0.8,0.9*33",
+                        nmea_info));
+  ok1(nmea_info.gps.satellite_ids_available);
+  ok1(nmea_info.gps.satellite_ids[0] == 1);
+  ok1(nmea_info.gps.satellite_ids[5] == 6);
+  ok1(nmea_info.gps.satellite_ids[11] == 12);
+  ok1(equals(nmea_info.gps.pdop, 1.2));
+  ok1(equals(nmea_info.gps.hdop, 0.8));
+  ok1(equals(nmea_info.gps.vdop, 0.9));
+
+  /* GSA with no fix (mode 1) — should clear location_available */
+  nmea_info.location_available.Update(nmea_info.clock);
+  ok1(nmea_info.location_available);
+  ok1(parser.ParseLine("$GPGSA,A,1,,,,,,,,,,,,99.9,99.9,99.9*25",
+                        nmea_info));
+  ok1(!nmea_info.location_available);
+
+  /* GSA with 2D fix and partial satellites */
+  ok1(parser.ParseLine("$GPGSA,M,2,01,02,03,,,,,,,,,,2.5,1.3,2.1*39",
+                        nmea_info));
+  ok1(nmea_info.gps.satellite_ids[0] == 1);
+  ok1(nmea_info.gps.satellite_ids[1] == 2);
+  ok1(nmea_info.gps.satellite_ids[2] == 3);
+  ok1(nmea_info.gps.satellite_ids[3] == 0);
+  ok1(equals(nmea_info.gps.pdop, 2.5));
+  ok1(equals(nmea_info.gps.hdop, 1.3));
+  ok1(equals(nmea_info.gps.vdop, 2.1));
+}
+
+/**
+ * Test parser robustness with malformed, truncated, and edge-case
+ * NMEA sentences.
+ */
+static void
+TestMalformedInput()
+{
+  NMEAParser parser;
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+
+  /* sentences that don't start with $ are rejected */
+  ok1(!parser.ParseLine("GPRMC,082310,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
+                         nmea_info));
+
+  /* empty string */
+  ok1(!parser.ParseLine("", nmea_info));
+
+  /* just a dollar sign */
+  ok1(!parser.ParseLine("$", nmea_info));
+
+  /* too short sentence type (less than 6 chars) */
+  ok1(!parser.ParseLine("$GP*00", nmea_info));
+
+  /* bad checksum — should be rejected */
+  ok1(!parser.ParseLine("$HCHDM,182.7,M*26", nmea_info));
+
+  /* missing checksum entirely — ParseLine should reject */
+  ok1(!parser.ParseLine("$GPRMC,082321.00,A,5103.5403,N", nmea_info));
+
+  /* RMC with all empty fields (except V status) */
+  ok1(parser.ParseLine("$GPRMC,,V,,,,,,,,,*31", nmea_info));
+  ok1(!nmea_info.location_available);
+
+  /* advance time so subsequent sentences can be parsed */
+  ok1(parser.ParseLine("$GPRMC,082322.00,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*42",
+                        nmea_info));
+  ok1(nmea_info.location_available);
+
+  /* GGA with fix quality 0 (no fix) and empty position */
+  ok1(parser.ParseLine("$GPGGA,082323.00,,,,,0,00,,,M,,M,,*40",
+                        nmea_info));
+
+  /* GGA with extreme altitude — should still parse */
+  ok1(parser.ParseLine("$GPGGA,082324.00,5103.5403,N,00741.5742,E,1,04,1.0,99999.0,M,47.0,M,,*6F",
+                        nmea_info));
+  ok1(nmea_info.gps_altitude_available);
+  ok1(equals(nmea_info.gps_altitude, 99999.0));
+
+  /* RMC with extreme ground speed — should parse without crash */
+  ok1(parser.ParseLine("$GPRMC,082325.00,A,5103.5403,N,00741.5742,E,99999.9,022.4,230610,000.3,W*46",
+                        nmea_info));
+  ok1(nmea_info.ground_speed_available);
+
+  /* RMC with V status — location should be cleared */
+  ok1(parser.ParseLine("$GPRMC,082326.00,V,,,,,,,230610,,*14",
+                        nmea_info));
+  ok1(!nmea_info.location_available);
+
+  /* MWV with missing wind speed — should not crash */
+  ok1(!parser.ParseLine("$WIMWV,12.1,T,,M,A*3A", nmea_info));
+
+  /* MWV with missing bearing — should not crash */
+  ok1(!parser.ParseLine("$WIMWV,,T,10.1,M,A*38", nmea_info));
+
+  /* HDM with empty heading — should not crash, clears heading */
+  ok1(parser.ParseLine("$HCHDM,,M*07", nmea_info));
+  ok1(!nmea_info.attitude.heading_available);
+
+  /* GSA with completely empty fields — should not crash */
+  ok1(parser.ParseLine("$GPGSA,,,,,,,,,,,,,,,,,*6E", nmea_info));
+}
+
 int main()
 {
-  plan_tests(1032 + 8 + 4 + 5 + 4 + 12 + 2);
+  plan_tests(1032 + 8 + 4 + 5 + 4 + 12 + 2 + 13 + 20 + 23);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -2173,6 +2335,9 @@ int main()
   TestStallRatioComplement();
   TestTemperatureHumidityValidity();
   TestReadGeoAngleNoDot();
+  TestGLL();
+  TestGSA();
+  TestMalformedInput();
 
   return exit_status();
 }
