@@ -171,10 +171,9 @@ tag_invoke(boost::json::value_to_tag<TaskInfo>,
 }
 
 static Co::Task<std::vector<TaskInfo>>
-FetchTaskList(CurlGlobal &curl, const char *url,
+FetchTaskList(CurlGlobal &curl, CurlEasy easy,
               ProgressListener &progress)
 {
-  CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
 
@@ -194,36 +193,41 @@ ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
                 uint_least64_t user_id,
                 ProgressListener &progress)
 {
-  const auto url = FmtBuffer<256>("{}/task?user_id_in={}",
-                                  settings.default_url, user_id);
-  return FetchTaskList(curl, url, progress);
+  return FetchTaskList(curl,
+                       CurlEasy{FmtBuffer<256>("{}/task?user_id_in={}",
+                                               settings.default_url,
+                                               user_id)},
+                       progress);
 }
 
 Co::Task<std::vector<TaskInfo>>
 ListDeclaredTasks(CurlGlobal &curl, const WeGlideSettings &settings,
                   ProgressListener &progress)
 {
-  const auto url = FmtBuffer<256>("{}/task/declaration",
-                                  settings.default_url);
-  return FetchTaskList(curl, url, progress);
+  return FetchTaskList(curl,
+                       CurlEasy{FmtBuffer<256>("{}/task/declaration",
+                                               settings.default_url)},
+                       progress);
 }
 
 Co::Task<std::vector<TaskInfo>>
 ListDailyCompetitions(CurlGlobal &curl, const WeGlideSettings &settings,
                       ProgressListener &progress)
 {
-  const auto url = FmtBuffer<256>("{}/task/competitions/today",
-                                  settings.default_url);
-  return FetchTaskList(curl, url, progress);
+  return FetchTaskList(curl,
+                       CurlEasy{FmtBuffer<256>("{}/task/competitions/today",
+                                               settings.default_url)},
+                       progress);
 }
 
 Co::Task<std::vector<TaskInfo>>
 ListRecentTaskScores(CurlGlobal &curl, const WeGlideSettings &settings,
                      ProgressListener &progress)
 {
-  const auto url = FmtBuffer<256>("{}/task/score/recent",
-                                  settings.default_url);
-  return FetchTaskList(curl, url, progress);
+  return FetchTaskList(curl,
+                       CurlEasy{FmtBuffer<256>("{}/task/score/recent",
+                                               settings.default_url)},
+                       progress);
 }
 
 } // namespace WeGlide
