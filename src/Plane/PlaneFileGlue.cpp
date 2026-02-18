@@ -272,6 +272,7 @@ PlaneGlue::CreateFromPolar(const char *registration,
   plane.wing_area = gp.GetWingArea();
   plane.max_speed = DEFAULT_MAX_SPEED;
   plane.max_ballast = gp.GetMaxBallast();
+  plane.handicap = 100;
 
   const auto &coeffs = gp.GetCoefficients();
   if (coeffs.IsValid()) {
