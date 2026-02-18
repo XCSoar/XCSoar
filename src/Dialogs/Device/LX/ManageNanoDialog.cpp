@@ -57,6 +57,11 @@ ManageNanoWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unus
     AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
   }
 
+  if (!info.license.empty()) {
+    buffer.SetASCII(info.license.c_str());
+    AddReadOnly(_("License"), NULL, buffer.c_str());
+  }
+
   AddButton(_("Setup"), [this](){
     NanoConfigWidget widget(GetLook(), device);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),

@@ -8,10 +8,15 @@
 #include "Language/Language.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "util/NumberParser.hpp"
+#include "Math/Util.hpp"
+#include "NMEA/InputLine.hpp"
 
 static const char *const lxnav_vario_setting_names[] = {
   "BRGPS",
   "BRPDA",
+  "VOL",
+  "ALTOFF",
   NULL
 };
 
@@ -35,12 +40,46 @@ WaitUnsignedValue(LXDevice &device, const char *name,
   const auto x = device.WaitLXNAVVarioSetting(name, env, 500);
   if (!x.empty()) {
     char *endptr;
-    unsigned long y = strtoul(x.c_str(), &endptr, 10);
-    if (endptr > x.c_str() && *endptr == 0)
-      return (unsigned)y;
+    /* VOL is a float (e.g., "70.5"), so parse as double first */
+    double d = ParseDouble(x.c_str(), &endptr);
+    if (endptr > x.c_str())
+      return uround(d);
   }
 
   return default_value;
+}
+
+static void
+WaitAltoffValues(LXDevice &device, int &error, int &qnh, int &takeoff)
+{
+  PopupOperationEnvironment env;
+  const auto x = device.WaitLXNAVVarioSetting("ALTOFF", env, 500);
+  if (!x.empty()) {
+    NMEAInputLine line(x.c_str());
+    double d;
+
+    /* Parse first value: Alt offset error */
+    if (line.ReadChecked(d))
+      error = iround(d);
+    else
+      error = 0;
+
+    /* Parse second value: Alt offset qnh */
+    if (line.ReadChecked(d))
+      qnh = iround(d);
+    else
+      qnh = 0;
+
+    /* Parse third value: Alt take off */
+    if (line.ReadChecked(d))
+      takeoff = iround(d);
+    else
+      takeoff = 0;
+
+    return;
+  }
+
+  error = qnh = takeoff = 0;
 }
 
 void
@@ -68,6 +107,14 @@ LXNAVVarioConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[mayb
 
   AddEnum(_("GPS baud rate"), NULL, baud_list, brgps);
   AddEnum(_("PDA baud rate"), NULL, baud_list, brpda);
+
+  volume = WaitUnsignedValue(device, "VOL", 50);
+  AddInteger(_("Volume"), NULL, "%u %%", "%u", 0, 100, 1, volume);
+
+  WaitAltoffValues(device, altoff_error, altoff_qnh, altoff_takeoff);
+  AddInteger(_("Alt offset error"), NULL, "%d m", "%d", -1000, 1000, 1, altoff_error);
+  AddInteger(_("Alt offset QNH"), NULL, "%d m", "%d", -1000, 1000, 1, altoff_qnh);
+  AddInteger(_("Alt take off"), NULL, "%d m", "%d", -1000, 1000, 1, altoff_takeoff);
 }
 
 bool
@@ -86,6 +133,21 @@ try {
   if (SaveValueEnum(BRPDA, brpda)) {
     buffer.UnsafeFormat("%u", brpda);
     device.SendLXNAVVarioSetting("BRPDA", buffer, env);
+    changed = true;
+  }
+
+  if (SaveValueInteger(VOL, volume)) {
+    buffer.UnsafeFormat("%u", volume);
+    device.SendLXNAVVarioSetting("VOL", buffer, env);
+    changed = true;
+  }
+
+  bool altoff_changed = SaveValueInteger(ALTOFF_ERROR, altoff_error);
+  altoff_changed |= SaveValueInteger(ALTOFF_QNH, altoff_qnh);
+  altoff_changed |= SaveValueInteger(ALTOFF_TAKEOFF, altoff_takeoff);
+  if (altoff_changed) {
+    buffer.UnsafeFormat("%d,%d,%d", altoff_error, altoff_qnh, altoff_takeoff);
+    device.SendLXNAVVarioSetting("ALTOFF", buffer, env);
     changed = true;
   }
 
