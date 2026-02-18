@@ -23,6 +23,7 @@
 #include "Device/Driver/IMI.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
+#include "Device/Driver/LX/LXNavDeclare.hpp"
 #include "Device/Driver/LX_Eos.hpp"
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver/Leonardo.hpp"
@@ -45,6 +46,7 @@
 #include "Device/RecordedFlight.hpp"
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 #include "FaultInjectionPort.hpp"
 #include "Input/InputEvents.hpp"
 #include "Logger/Settings.hpp"
@@ -1416,6 +1418,382 @@ TestLXV7()
 }
 
 static void
+TestLXV7POLAR()
+{
+  NullPort null;
+  Device *device = lx_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+
+  LXDevice &lx_device = *(LXDevice *)device;
+  lx_device.ResetDeviceDetection();
+
+  /* Test POLAR sentence parsing with all fields */
+  ok1(device->ParseNMEA("$PLXV0,POLAR,W,1.780,-3.030,1.930,30.0,292,600,265,90,LS 7,0*21", basic));
+
+  /* LX_V = 100 km/h = 27.778 m/s; a_si = a_lx / LX_V^2, b_si = b_lx / LX_V */
+  constexpr double LX_V = 100.0 / 3.6;
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(equals(basic.settings.polar_a, 1.780 / (LX_V * LX_V)));
+  ok1(equals(basic.settings.polar_b, -3.030 / LX_V));
+  ok1(equals(basic.settings.polar_c, 1.930));
+
+  ok1(basic.settings.polar_load_available);
+  ok1(equals(basic.settings.polar_load, 30.0));
+
+  ok1(basic.settings.polar_reference_mass_available);
+  ok1(equals(basic.settings.polar_reference_mass, 292.0));
+
+  ok1(basic.settings.polar_maximum_mass_available);
+  ok1(equals(basic.settings.polar_maximum_mass, 600.0));
+
+  ok1(basic.settings.polar_empty_weight_available);
+  ok1(equals(basic.settings.polar_empty_weight, 265.0));
+
+  ok1(basic.settings.polar_pilot_weight_available);
+  ok1(equals(basic.settings.polar_pilot_weight, 90.0));
+
+  /* Test POL variant */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$PLXV0,POL,W,1.240,-1.960,1.280,36.0,400,600,325,70,LS 8,0*3A", basic));
+
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(equals(basic.settings.polar_a, 1.240 / (LX_V * LX_V)));
+  ok1(equals(basic.settings.polar_b, -1.960 / LX_V));
+  ok1(equals(basic.settings.polar_c, 1.280));
+  ok1(equals(basic.settings.polar_load, 36.0));
+  ok1(equals(basic.settings.polar_reference_mass, 400.0));
+  ok1(equals(basic.settings.polar_maximum_mass, 600.0));
+  ok1(equals(basic.settings.polar_empty_weight, 325.0));
+  ok1(equals(basic.settings.polar_pilot_weight, 70.0));
+
+  /* Test with zero pilot weight */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{3}};
+  ok1(device->ParseNMEA("$PLXV0,POLAR,W,1.780,-3.030,1.930,30.0,292,600,265,0,LS 7,0*18", basic));
+
+  ok1(basic.settings.polar_coefficients_available);
+  ok1(basic.settings.polar_pilot_weight_available);
+  ok1(equals(basic.settings.polar_pilot_weight, 0.0));
+
+  delete device;
+}
+
+static void
+TestLXRadioTransponder()
+{
+  NullPort null;
+  Device *device = lx_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+
+  /* Active frequency with station name */
+  ok1(device->ParseNMEA("$PLXVC,RADIO,A,COMM,128800,CELJE*27", basic));
+  ok1(basic.settings.has_active_frequency.IsValid());
+  ok1(equals(basic.settings.active_frequency.GetKiloHertz(), 128800));
+  ok1(basic.settings.active_freq_name.equals("CELJE"));
+
+  /* Standby frequency without station name */
+  ok1(device->ParseNMEA("$PLXVC,RADIO,A,SBY,121500*0E", basic));
+  ok1(basic.settings.has_standby_frequency.IsValid());
+  ok1(equals(basic.settings.standby_frequency.GetKiloHertz(), 121500));
+
+  /* Active frequency without station name */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$PLXVC,RADIO,A,COMM,118000*45", basic));
+  ok1(basic.settings.has_active_frequency.IsValid());
+  ok1(equals(basic.settings.active_frequency.GetKiloHertz(), 118000));
+
+  /* Transponder squawk code (2000 display = 02000 octal = 1024 decimal) */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{3}};
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,SQUAWK,2000*06", basic));
+  ok1(basic.settings.has_transponder_code.IsValid());
+  ok1(equals(basic.settings.transponder_code.GetCode(),
+             TransponderCode{02000}.GetCode()));
+
+  /* Transponder mode ALT */
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,MODE,ALT*54", basic));
+  ok1(basic.settings.has_transponder_mode.IsValid());
+  ok1(equals(basic.settings.transponder_mode.mode,
+             TransponderMode::Mode::ALT));
+
+  /* Emergency squawk (7700 display = 07700 octal = 4032 decimal) */
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,SQUAWK,7700*04", basic));
+  ok1(basic.settings.has_transponder_code.IsValid());
+  ok1(equals(basic.settings.transponder_code.GetCode(),
+             TransponderCode{07700}.GetCode()));
+
+  /* Transponder mode SBY */
+  ok1(device->ParseNMEA("$PLXVC,XPDR,A,MODE,SBY*45", basic));
+  ok1(basic.settings.has_transponder_mode.IsValid());
+  ok1(equals(basic.settings.transponder_mode.mode,
+             TransponderMode::Mode::SBY));
+
+  delete device;
+}
+
+static void
+TestLXNavDeclare()
+{
+  /* Test coordinate formatting */
+
+  /* Lat: 48 deg 46.667' N */
+  {
+    GeoPoint gp(Angle::Degrees(10.264717),
+                Angle::Degrees(48.77778));
+    const auto lat = LXNavDeclare::FormatLat(gp);
+    ok1(lat.starts_with("4846."));
+    ok1(lat.back() == 'N');
+
+    const auto lon = LXNavDeclare::FormatLon(gp);
+    ok1(lon.starts_with("01015."));
+    ok1(lon.back() == 'E');
+  }
+
+  /* Southern / Western hemisphere */
+  {
+    GeoPoint gp(Angle::Degrees(-43.5), Angle::Degrees(-22.9));
+    const auto lat = LXNavDeclare::FormatLat(gp);
+    ok1(lat.back() == 'S');
+    ok1(lat.starts_with("22"));
+
+    const auto lon = LXNavDeclare::FormatLon(gp);
+    ok1(lon.back() == 'W');
+    ok1(lon.starts_with("043"));
+  }
+
+  /* Test OZ style mapping */
+  ok1(LXNavDeclare::GetOZStyle(true, false) == 2);
+  ok1(LXNavDeclare::GetOZStyle(false, false) == 1);
+  ok1(LXNavDeclare::GetOZStyle(false, true) == 3);
+
+  /* Test A12 bearing computation */
+  {
+    const GeoPoint start(Angle::Degrees(10.0), Angle::Degrees(48.0));
+    const GeoPoint tp1(Angle::Degrees(10.0), Angle::Degrees(47.0));
+    const GeoPoint tp2(Angle::Degrees(11.0), Angle::Degrees(47.0));
+    const GeoPoint finish(Angle::Degrees(11.0), Angle::Degrees(48.0));
+
+    /* Start -> next should be roughly 180 degrees (due south) */
+    const Angle a12_start = LXNavDeclare::ComputeA12(
+      start, start, tp1, true, false);
+    ok1(a12_start.AsBearing().Degrees() > 170.0);
+    ok1(a12_start.AsBearing().Degrees() < 190.0);
+
+    /* Finish: bearing from finish toward prev */
+    const Angle a12_finish = LXNavDeclare::ComputeA12(
+      tp2, finish, finish, false, true);
+    ok1(a12_finish.AsBearing().Degrees() > 170.0);
+    ok1(a12_finish.AsBearing().Degrees() < 200.0);
+
+    /* Intermediate: bisector of incoming and outgoing legs */
+    const Angle a12_mid = LXNavDeclare::ComputeA12(
+      start, tp1, tp2, false, false);
+    ok1(a12_mid.AsBearing().Degrees() > 20.0);
+    ok1(a12_mid.AsBearing().Degrees() < 70.0);
+  }
+
+  /* Test FormatOZLine with a cylinder start */
+  {
+    LoggerSettings logger_settings;
+    logger_settings.pilot_name = "Test Pilot";
+    Plane plane;
+    plane.registration = "D-1234";
+    plane.competition_id = "AB";
+    plane.type = "ASW-27";
+
+    Declaration decl(logger_settings, plane, nullptr);
+
+    Waypoint wp_start(GeoPoint(Angle::Degrees(10.265),
+                                Angle::Degrees(48.778)));
+    wp_start.name = "START";
+    wp_start.elevation = 585;
+    wp_start.has_elevation = true;
+
+    Waypoint wp_tp1(GeoPoint(Angle::Degrees(9.702),
+                              Angle::Degrees(47.192)));
+    wp_tp1.name = "TP1";
+    wp_tp1.elevation = 572;
+    wp_tp1.has_elevation = true;
+
+    Waypoint wp_finish(GeoPoint(Angle::Degrees(11.552),
+                                 Angle::Degrees(47.735)));
+    wp_finish.name = "FINISH";
+    wp_finish.elevation = 420;
+    wp_finish.has_elevation = true;
+
+    decl.Append(wp_start);
+    decl.Append(wp_tp1);
+    decl.Append(wp_finish);
+
+    ok1(decl.Size() == 3);
+
+    /* Start OZ: index=-1, Style=2 (ozNext), cylinder */
+    const auto oz0 = LXNavDeclare::FormatOZLine(decl, 0);
+    ok1(oz0.starts_with("LLXVOZ=-1,"));
+    ok1(oz0.find("Style=2") != std::string::npos);
+    ok1(oz0.find("R1=1500m") != std::string::npos);
+    ok1(oz0.find("A1=180.0") != std::string::npos);
+    ok1(oz0.find("Near=0") != std::string::npos);
+    ok1(oz0.find("Line=1") == std::string::npos);
+    ok1(oz0.find("AAT=1") == std::string::npos);
+
+    /* Intermediate OZ: index=0, Style=1 (ozSymmetric), cylinder */
+    const auto oz1 = LXNavDeclare::FormatOZLine(decl, 1);
+    ok1(oz1.starts_with("LLXVOZ=0,"));
+    ok1(oz1.find("Style=1") != std::string::npos);
+    ok1(oz1.find("R1=1500m") != std::string::npos);
+
+    /* Finish OZ: index=1, Style=3 (ozPrev), Near=1 */
+    const auto oz2 = LXNavDeclare::FormatOZLine(decl, 2);
+    ok1(oz2.starts_with("LLXVOZ=1,"));
+    ok1(oz2.find("Style=3") != std::string::npos);
+    ok1(oz2.find("Near=1") != std::string::npos);
+
+    ok1(oz0.find("Lat=") != std::string::npos);
+    ok1(oz0.find("Lon=") != std::string::npos);
+    ok1(oz1.find("Lat=") != std::string::npos);
+    ok1(oz2.find("Lon=") != std::string::npos);
+  }
+
+  /* Test FormatOZLine with a LINE shape */
+  {
+    Declaration decl_line({}, Plane{}, nullptr);
+
+    Waypoint wp1(GeoPoint(Angle::Degrees(10.0), Angle::Degrees(48.0)));
+    wp1.name = "S";
+
+    Waypoint wp2(GeoPoint(Angle::Degrees(11.0), Angle::Degrees(47.0)));
+    wp2.name = "F";
+
+    Declaration::TurnPoint tp1(wp1);
+    tp1.shape = Declaration::TurnPoint::LINE;
+    tp1.radius = 3000;
+    tp1.sector_angle = Angle::QuarterCircle();
+    decl_line.turnpoints.push_back(tp1);
+
+    Declaration::TurnPoint tp2(wp2);
+    tp2.shape = Declaration::TurnPoint::CYLINDER;
+    tp2.radius = 500;
+    decl_line.turnpoints.push_back(tp2);
+
+    const auto oz_line = LXNavDeclare::FormatOZLine(decl_line, 0);
+    ok1(oz_line.find("Line=1") != std::string::npos);
+    ok1(oz_line.find("R1=3000m") != std::string::npos);
+    ok1(oz_line.find("A1=90.0") != std::string::npos);
+
+    const auto oz_cyl = LXNavDeclare::FormatOZLine(decl_line, 1);
+    ok1(oz_cyl.find("Line=1") == std::string::npos);
+    ok1(oz_cyl.find("R1=500m") != std::string::npos);
+  }
+
+  /* Test FormatOZLine with AAT point */
+  {
+    Declaration decl_aat({}, Plane{}, nullptr);
+    decl_aat.is_aat_task = true;
+
+    Waypoint wp1(GeoPoint(Angle::Degrees(10.0), Angle::Degrees(48.0)));
+    wp1.name = "S";
+
+    Waypoint wp2(GeoPoint(Angle::Degrees(11.0), Angle::Degrees(47.5)));
+    wp2.name = "AAT1";
+
+    Waypoint wp3(GeoPoint(Angle::Degrees(10.5), Angle::Degrees(48.0)));
+    wp3.name = "F";
+
+    Declaration::TurnPoint tp_s(wp1);
+    decl_aat.turnpoints.push_back(tp_s);
+
+    Declaration::TurnPoint tp_aat(wp2);
+    tp_aat.shape = Declaration::TurnPoint::CYLINDER;
+    tp_aat.radius = 5100;
+    tp_aat.is_aat = true;
+    decl_aat.turnpoints.push_back(tp_aat);
+
+    Declaration::TurnPoint tp_f(wp3);
+    tp_f.radius = 500;
+    decl_aat.turnpoints.push_back(tp_f);
+
+    const auto oz_aat = LXNavDeclare::FormatOZLine(decl_aat, 1);
+    ok1(oz_aat.find("AAT=1") != std::string::npos);
+    ok1(oz_aat.find("R1=5100m") != std::string::npos);
+    ok1(oz_aat.starts_with("LLXVOZ=0,"));
+
+    const auto oz_s = LXNavDeclare::FormatOZLine(decl_aat, 0);
+    ok1(oz_s.find("AAT=1") == std::string::npos);
+
+    const auto oz_f = LXNavDeclare::FormatOZLine(decl_aat, 2);
+    ok1(oz_f.find("AAT=1") == std::string::npos);
+  }
+
+  /* Test FormatOZLine with keyhole (inner radius) */
+  {
+    Declaration decl_kh({}, Plane{}, nullptr);
+
+    Waypoint wp1(GeoPoint(Angle::Degrees(10.0), Angle::Degrees(48.0)));
+    wp1.name = "S";
+    Waypoint wp2(GeoPoint(Angle::Degrees(11.0), Angle::Degrees(47.0)));
+    wp2.name = "KH";
+    Waypoint wp3(GeoPoint(Angle::Degrees(10.5), Angle::Degrees(48.0)));
+    wp3.name = "F";
+
+    decl_kh.turnpoints.push_back(Declaration::TurnPoint(wp1));
+
+    Declaration::TurnPoint tp_kh(wp2);
+    tp_kh.shape = Declaration::TurnPoint::DAEC_KEYHOLE;
+    tp_kh.radius = 10000;
+    tp_kh.sector_angle = Angle::QuarterCircle();
+    tp_kh.inner_radius = 500;
+    decl_kh.turnpoints.push_back(tp_kh);
+
+    decl_kh.turnpoints.push_back(Declaration::TurnPoint(wp3));
+
+    const auto oz_kh = LXNavDeclare::FormatOZLine(decl_kh, 1);
+    ok1(oz_kh.find("R1=10000m") != std::string::npos);
+    ok1(oz_kh.find("R2=500m") != std::string::npos);
+    ok1(oz_kh.find("A2=180.0") != std::string::npos);
+    ok1(oz_kh.find("A1=90.0") != std::string::npos);
+  }
+
+  /* Test C-record with elevation */
+  {
+    Waypoint wp(GeoPoint(Angle::Degrees(13.776),
+                          Angle::Degrees(47.811)));
+    wp.name = "EBENSEE";
+    wp.elevation = 420;
+    wp.has_elevation = true;
+
+    Declaration::TurnPoint tp(wp);
+    const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
+
+    ok1(c_record.starts_with("C"));
+    ok1(c_record.find("EBENSEE") != std::string::npos);
+    ok1(c_record.find("::420.00000") != std::string::npos);
+  }
+
+  /* Test C-record without elevation (defaults to 0) */
+  {
+    Waypoint wp(GeoPoint(Angle::Degrees(10.0),
+                          Angle::Degrees(48.0)));
+    wp.name = "NOELEVATION";
+
+    Declaration::TurnPoint tp(wp);
+    const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
+
+    ok1(c_record.find("::0.00000") != std::string::npos);
+  }
+}
+
+static void
 TestILEC()
 {
   NullPort null;
@@ -2337,6 +2715,7 @@ TestMalformedInput()
 int main()
 {
   plan_tests(1032 /* drivers */ + 26 /* PFLAA v7+ */
+             + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
@@ -2360,6 +2739,9 @@ int main()
   TestLX(condor3_driver, true, false);
   TestLXEos();
   TestLXV7();
+  TestLXV7POLAR();
+  TestLXRadioTransponder();
+  TestLXNavDeclare();
   TestILEC();
   TestOpenVario();
   TestVega();

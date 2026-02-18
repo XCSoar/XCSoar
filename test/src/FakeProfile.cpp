@@ -42,6 +42,12 @@ Profile::GetPath([[maybe_unused]] std::string_view key) noexcept
   return nullptr;
 }
 
+void
+Profile::SetPath([[maybe_unused]] std::string_view key,
+                 [[maybe_unused]] Path value) noexcept
+{
+}
+
 std::vector<AllocatedPath>
 Profile::GetMultiplePaths([[maybe_unused]] std::string_view key,
                           [[maybe_unused]] const char *patterns)
