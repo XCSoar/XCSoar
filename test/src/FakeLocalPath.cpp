@@ -4,19 +4,19 @@
 #include "LocalPath.hpp"
 #include "system/Path.hpp"
 
-AllocatedPath
+[[gnu::weak]] AllocatedPath
 LocalPath([[maybe_unused]] Path file) noexcept
 {
   return nullptr;
 }
 
-AllocatedPath
+[[gnu::weak]] AllocatedPath
 LocalPath([[maybe_unused]] const char *file) noexcept
 {
   return nullptr;
 }
 
-void
+[[gnu::weak]] void
 VisitDataFiles([[maybe_unused]] const char *filter,
                [[maybe_unused]] File::Visitor &visitor)
 {
