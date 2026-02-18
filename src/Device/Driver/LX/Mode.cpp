@@ -20,9 +20,12 @@
 #include "Message.hpp"
 #include "Language/Language.hpp"
 #include "Plane/PlaneFileGlue.hpp"
+#include "Plane/PlaneGlue.hpp"
 #include "Profile/Profile.hpp"
 #include "system/Path.hpp"
+#include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "system/FileUtil.hpp"
 
 #include <fmt/format.h>
 
@@ -270,6 +273,17 @@ LXDevice::OnCalculatedUpdate(const MoreData &basic,
         last_polar_request.Update();
       }
       RequestLXNAVVarioSetting("POLAR", env);
+
+      /* Request declaration H-records to get registration and
+         competition ID for plane profile matching */
+      {
+        const std::lock_guard lock{mutex};
+        if (!declaration_requested) {
+          declaration_requested = true;
+          device_declaration = {};
+        }
+      }
+      PortWriteNMEA(port, "PLXVC,DECL,R,1,7", env);
     }
 
     /* Ballast and bugs come via LXWP2, no need to request separately */
@@ -296,6 +310,10 @@ LXDevice::OnCalculatedUpdate(const MoreData &basic,
   /* RECEIVE mode: adopt device polar into XCSoar */
   if (do_receive)
     ReceivePolarFromDevice(basic);
+
+  /* RECEIVE mode: match declaration to a plane profile */
+  if (do_receive)
+    MatchPlaneProfile();
 
   /* SEND mode: push XCSoar polar to device */
   if (do_send)
@@ -512,6 +530,147 @@ LXDevice::ReceivePolarFromDevice(const MoreData &basic) noexcept
   }
   if (should_notify)
     Message::AddMessage(_("Polar received from device"));
+}
+
+void
+LXDevice::MatchPlaneProfile()
+{
+  using namespace CommonInterface;
+
+  /* Check if declaration is complete and not yet processed */
+  std::string registration;
+  std::string competition_id;
+  std::string glider_type;
+  {
+    const std::lock_guard lock{mutex};
+    if (!device_declaration.complete || device_declaration.processed)
+      return;
+    registration = device_declaration.registration;
+    competition_id = device_declaration.competition_id;
+    glider_type = device_declaration.glider_type;
+  }
+
+  if (registration.empty()) {
+    const std::lock_guard lock{mutex};
+    device_declaration.processed = true;
+    return;
+  }
+
+  /* Check if current profile already matches */
+  {
+    const Plane &current = GetComputerSettings().plane;
+    if (current.plane_profile_active &&
+        current.registration.equals(registration.c_str())) {
+      /* Already using the correct profile, update comp ID if needed */
+      if (!competition_id.empty())
+        SetComputerSettings().plane.competition_id.SetUTF8(
+          competition_id.c_str());
+      const std::lock_guard lock{mutex};
+      device_declaration.processed = true;
+      return;
+    }
+  }
+
+  /* Scan all .xcp files for a matching registration */
+  struct PlaneMatch {
+    const std::string &target_reg;
+    AllocatedPath found_path{nullptr};
+  } match{registration};
+
+  class MatchVisitor : public File::Visitor {
+    PlaneMatch &match;
+  public:
+    explicit MatchVisitor(PlaneMatch &m) : match(m) {}
+    void Visit(Path path, [[maybe_unused]] Path filename) override {
+      if (match.found_path != nullptr)
+        return;
+      Plane p{};
+      if (PlaneGlue::ReadFile(p, path) &&
+          p.registration.equals(match.target_reg.c_str()))
+        match.found_path = AllocatedPath{path};
+    }
+  } visitor{match};
+
+  VisitDataFiles("*.xcp", visitor);
+
+  if (match.found_path != nullptr) {
+    /* Found a matching profile — activate it */
+    Plane &plane = SetComputerSettings().plane;
+    if (PlaneGlue::ReadFile(plane, match.found_path)) {
+      /* Update competition ID from vario if available */
+      if (!competition_id.empty())
+        plane.competition_id.SetUTF8(competition_id.c_str());
+
+      Profile::SetPath("PlanePath", match.found_path);
+      PlaneGlue::Synchronize(plane, SetComputerSettings(),
+                             SetComputerSettings().polar.glide_polar_task);
+      if (backend_components && backend_components->calculation_thread)
+        backend_components->SetTaskPolar(GetComputerSettings().polar);
+      Profile::Save();
+
+      const auto msg = fmt::format("Plane profile matched: {}",
+                                   registration);
+      Message::AddMessage(msg.c_str());
+    }
+  } else {
+    /* No matching profile found — create a new one */
+    /* Start from the current plane settings (which may already have
+       polar data from ReceivePolarFromDevice) and overlay the
+       declaration fields */
+    Plane plane = GetComputerSettings().plane;
+    plane.registration.SetUTF8(registration.c_str());
+    plane.competition_id.SetUTF8(competition_id.c_str());
+    plane.type.SetUTF8(glider_type.c_str());
+    plane.polar_name.clear();
+
+    /* If no polar shape data yet, populate from current GlidePolar */
+    if (plane.polar_shape.reference_mass <= 0) {
+      const auto &gp =
+        GetComputerSettings().polar.glide_polar_task;
+      if (gp.IsValid()) {
+        plane.polar_shape.reference_mass = gp.GetReferenceMass();
+        plane.empty_mass = gp.GetEmptyMass();
+        plane.wing_area = gp.GetWingArea();
+        plane.max_speed = 75.0;
+        plane.max_ballast = gp.GetMaxBallast();
+
+        /* Regenerate polar shape points from coefficients */
+        const auto &coeffs = gp.GetCoefficients();
+        if (coeffs.IsValid()) {
+          constexpr double speeds[] = {25.0, 36.1, 50.0};
+          for (unsigned i = 0; i < 3; ++i) {
+            const double v = speeds[i];
+            plane.polar_shape.points[i].v = v;
+            plane.polar_shape.points[i].w =
+              coeffs.a * v * v + coeffs.b * v + coeffs.c;
+          }
+        }
+      }
+    }
+
+    const auto filename = fmt::format("{}.xcp", registration);
+    const auto path = LocalPath(filename.c_str());
+
+    try {
+      PlaneGlue::WriteFile(plane, path);
+      plane.plane_profile_active = true;
+      SetComputerSettings().plane = plane;
+      Profile::SetPath("PlanePath", path);
+      Profile::Save();
+
+      const auto msg = fmt::format("Plane profile created: {}",
+                                   registration);
+      Message::AddMessage(msg.c_str());
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to create plane profile");
+    }
+  }
+
+  {
+    const std::lock_guard lock{mutex};
+    device_declaration.processed = true;
+  }
 }
 
 void

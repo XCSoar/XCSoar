@@ -342,13 +342,35 @@ ParseTransponder(NMEAInputLine &line, NMEAInfo &info)
 }
 
 /**
+ * Parse H-record content from a declaration line.
+ * Matches HFPLTPILOT:, HFGTYGLIDERTYPE:, HFGIDGLIDERID:,
+ * HFCIDCOMPETITIONID: prefixes.
+ */
+static void
+ParseDeclHRecord(const std::string_view content,
+                 LXDevice::DeviceDeclaration &decl) noexcept
+{
+  using namespace std::string_view_literals;
+  if (content.starts_with("HFPLTPILOT:"sv))
+    decl.pilot_name = content.substr(11);
+  else if (content.starts_with("HFGTYGLIDERTYPE:"sv))
+    decl.glider_type = content.substr(16);
+  else if (content.starts_with("HFGIDGLIDERID:"sv))
+    decl.registration = content.substr(14);
+  else if (content.starts_with("HFCIDCOMPETITIONID:"sv))
+    decl.competition_id = content.substr(19);
+}
+
+/**
  * Parse the $PLXVC sentence (LXNAV Nano and sVarios).
  *
  * $PLXVC,<key>,<type>,<values>*<checksum><cr><lf>
  */
 static void
 PLXVC(NMEAInputLine &line, NMEAInfo &info,
-      DeviceSettingsMap<std::string> &settings)
+      DeviceSettingsMap<std::string> &settings,
+      LXDevice::DeviceDeclaration &device_declaration,
+      Mutex &decl_mutex)
 {
   const auto key = line.ReadView();
   const auto type = line.ReadView();
@@ -360,6 +382,22 @@ PLXVC(NMEAInputLine &line, NMEAInfo &info,
       const std::lock_guard<Mutex> lock(settings);
       settings.Set(std::string{name}, value);
     }
+  } else if (key == "DECL"sv && type.starts_with('A')) {
+    /* PLXVC,DECL,A,<current_line>,<total_lines>,<content> */
+    unsigned current_line = 0, total_lines = 0;
+    if (!line.ReadChecked(current_line) ||
+        !line.ReadChecked(total_lines))
+      return;
+    const auto content = line.Rest();
+
+    const std::lock_guard lock{decl_mutex};
+    if (device_declaration.complete)
+      return;
+    device_declaration.total_lines = total_lines;
+    device_declaration.lines_received++;
+    ParseDeclHRecord(content, device_declaration);
+    if (current_line >= 6)
+      device_declaration.complete = true;
   } else if (key == "INFO"sv && type.starts_with('A')) {
     ParseNanoVarioInfo(line, info.device);
   } else if (key == "GPSINFO"sv && type.starts_with('A')) {
@@ -552,7 +590,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   } else if (type == "$PLXVC"sv) {
     is_colibri = false;
-    PLXVC(line, info, nano_settings);
+    PLXVC(line, info, nano_settings, device_declaration, mutex);
     is_forwarded_nano = info.secondary_device.product.equals("NANO") ||
                           info.secondary_device.product.equals("NANO3") ||
                           info.secondary_device.product.equals("NANO4");

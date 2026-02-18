@@ -158,6 +158,27 @@ class LXDevice: public AbstractDevice
     bool valid = false;
   } device_polar;
 
+public:
+  /**
+   * Declaration H-records read from the device via PLXVC,DECL,R.
+   * Used to match or create a plane profile by registration.
+   */
+  struct DeviceDeclaration {
+    std::string pilot_name;
+    std::string glider_type;
+    std::string registration;
+    std::string competition_id;
+    unsigned lines_received = 0;
+    unsigned total_lines = 0;
+    bool complete = false;
+    bool processed = false;
+  };
+
+private:
+  DeviceDeclaration device_declaration;
+
+  bool declaration_requested = false;
+
   /**
    * Has POLAR been requested from the device?
    */
@@ -503,6 +524,12 @@ private:
    * changes (e.g. due to plane profile switch).
    */
   void TrackPolarChanges(const DerivedInfo &calculated) noexcept;
+
+  /**
+   * Match the device declaration (registration) against existing
+   * plane profiles, or create a new profile if none matches.
+   */
+  void MatchPlaneProfile();
 
   void SyncCrewWeight(const MoreData &basic,
                      const DerivedInfo &calculated,
