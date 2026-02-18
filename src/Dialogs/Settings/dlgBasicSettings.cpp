@@ -132,13 +132,17 @@ FlightSetupPanel::SetBallast()
   const bool ballastable = polar_settings.glide_polar_task.IsBallastable();
   SetRowVisible(Ballast, ballastable);
   if (ballastable) {
-    /* Update the maximum value of the ballast field to allow up to 400L */
     WndProperty &control = GetControl(Ballast);
-    DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
-    const double db = 5;
-    const double ui_max_ballast = 400.0; /* Allow UI to set up to 400L maximum */
-    const double new_max = db * ceil(ui_max_ballast / db);
-    df.SetMax(new_max);
+    auto *df = dynamic_cast<DataFieldFloat *>(control.GetDataField());
+    if (df != nullptr) {
+      const double db = 5;
+      /* Use configured max_ballast if available, otherwise
+         fall back to 400 L as a reasonable UI ceiling */
+      double ui_max = polar_settings.glide_polar_task.GetMaxBallast();
+      if (ui_max < db)
+        ui_max = 400.0;
+      df->SetMax(db * ceil(ui_max / db));
+    }
     LoadValue(Ballast, polar_settings.glide_polar_task.GetBallastLitres());
   }
 

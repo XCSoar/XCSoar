@@ -25,8 +25,12 @@ BallastProcessTimer() noexcept
 
   last_fraction = settings.ballast_fraction_available;
 
+  /* Ignore overload values below 0.8 -- these indicate
+     uninitialized or implausible readings from the device */
   if (settings.ballast_overload_available.Modified(last_overload) &&
-      settings.ballast_overload >= 0.8 && plane.max_ballast > 0) {
+      settings.ballast_overload >= 0.8 &&
+      plane.max_ballast > 0 &&
+      plane.polar_shape.reference_mass > 0) {
     auto water_mass =
         (settings.ballast_overload * plane.polar_shape.reference_mass) -
          polar.GetCrewMass() - plane.empty_mass;

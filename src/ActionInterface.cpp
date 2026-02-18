@@ -119,7 +119,7 @@ ActionInterface::SetBallastFraction(double fraction, bool to_devices) noexcept
     const double ref_mass = polar.GetReferenceMass();
     if (ref_mass > 0) {
       MessageOperationEnvironment env;
-      backend_components->devices->PutBallast(fraction,
+      backend_components->devices->PutBallast(polar.GetBallastFraction(),
                                               polar.GetBallastOverload(),
                                               env);
     }

@@ -46,29 +46,30 @@ BallastDumpManager::Update(GlidePolar &glide_polar,
   const auto dt = ballast_clock.ElapsedUpdate();
 
   auto ballast_litres = glide_polar.GetBallastLitres();
-  
   const double max_ballast = glide_polar.GetMaxBallast();
-  
+
   if (max_ballast > 0) {
     double ballast_fraction = glide_polar.GetBallastFraction();
     ballast_fraction -= ToFloatSeconds(dt) / dump_time;
-    
+
     if (ballast_fraction < 0) {
       Stop();
       glide_polar.SetBallastLitres(0);
       return false;
     }
-    
+
     glide_polar.SetBallastFraction(ballast_fraction);
   } else {
+    /* Without max_ballast, use proportional decay with a threshold
+       to ensure the dump terminates (pure exponential never reaches 0) */
     ballast_litres -= ballast_litres * ToFloatSeconds(dt) / dump_time;
-    
-    if (ballast_litres < 0) {
+
+    if (ballast_litres < 0.5) {
       Stop();
       glide_polar.SetBallastLitres(0);
       return false;
     }
-    
+
     glide_polar.SetBallastLitres(ballast_litres);
   }
   return true;
