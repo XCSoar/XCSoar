@@ -63,6 +63,37 @@ struct ExternalSettings {
   /** the volume of the device [0-100%] */
   unsigned volume;
 
+  Validity elevation_available;
+
+  /** the elevation setting [meters] */
+  int elevation;
+
+  /** POLAR data from device */
+  Validity polar_coefficients_available;
+  double polar_a;
+  double polar_b;
+  double polar_c;
+
+  Validity polar_load_available;
+  /** Polar load (overload) from device POLAR sentence */
+  double polar_load;
+
+  Validity polar_reference_mass_available;
+  /** Reference mass (polar weight) from device POLAR sentence [kg] */
+  double polar_reference_mass;
+
+  Validity polar_maximum_mass_available;
+  /** Maximum mass (max weight) from device POLAR sentence [kg] */
+  double polar_maximum_mass;
+
+  Validity polar_pilot_weight_available;
+  /** Pilot weight from device POLAR sentence [kg] */
+  double polar_pilot_weight;
+
+  Validity polar_empty_weight_available;
+  /** Empty weight from device POLAR sentence [kg] */
+  double polar_empty_weight;
+
   /** the radio frequencies of the device */
   Validity has_active_frequency;
   RadioFrequency active_frequency;
@@ -73,6 +104,16 @@ struct ExternalSettings {
   StaticString<32> standby_freq_name;
 
   Validity swap_frequencies;
+
+  /** Glider identity from device (e.g. declaration H-records) */
+  Validity glider_registration_available;
+  StaticString<32> glider_registration;
+
+  Validity glider_competition_id_available;
+  StaticString<6> glider_competition_id;
+
+  Validity glider_type_available;
+  StaticString<32> glider_type;
 
   /** transponder */
   Validity has_transponder_code;
@@ -182,6 +223,16 @@ struct ExternalSettings {
   }
 
   /**
+   * Compare the elevation setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareElevation(int value) const {
+    return elevation_available && abs(elevation - value) <= 1;
+  }
+
+  /**
    * Sets a new MacCready value, but updates the time stamp only if
    * the value has changed.
    *
@@ -195,4 +246,45 @@ struct ExternalSettings {
   bool ProvideBugs(double value, TimeStamp time) noexcept;
   bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;
   bool ProvideVolume(unsigned value, TimeStamp time) noexcept;
+  bool ProvideElevation(int value, TimeStamp time) noexcept;
+  bool ProvidePolarCoefficients(double a, double b, double c, TimeStamp time) noexcept;
+  bool ProvidePolarLoad(double value, TimeStamp time) noexcept;
+  bool ProvidePolarReferenceMass(double value, TimeStamp time) noexcept;
+  bool ProvidePolarMaximumMass(double value, TimeStamp time) noexcept;
+  bool ProvidePolarPilotWeight(double value, TimeStamp time) noexcept;
+  bool ProvidePolarEmptyWeight(double value, TimeStamp time) noexcept;
+  bool ProvideGliderRegistration(const char *value, TimeStamp time) noexcept;
+  bool ProvideGliderCompetitionId(const char *value, TimeStamp time) noexcept;
+  bool ProvideGliderType(const char *value, TimeStamp time) noexcept;
+
+  bool ComparePolarCoefficients(double a, double b, double c) const {
+    return polar_coefficients_available &&
+      fabs(polar_a - a) <= 0.0001 &&
+      fabs(polar_b - b) <= 0.0001 &&
+      fabs(polar_c - c) <= 0.0001;
+  }
+
+  bool ComparePolarLoad(double value) const {
+    return polar_load_available && fabs(polar_load - value) <= 0.01;
+  }
+
+  bool ComparePolarReferenceMass(double value) const {
+    return polar_reference_mass_available &&
+      fabs(polar_reference_mass - value) <= 0.1;
+  }
+
+  bool ComparePolarMaximumMass(double value) const {
+    return polar_maximum_mass_available &&
+      fabs(polar_maximum_mass - value) <= 0.1;
+  }
+
+  bool ComparePolarPilotWeight(double value) const {
+    return polar_pilot_weight_available &&
+      fabs(polar_pilot_weight - value) <= 0.1;
+  }
+
+  bool ComparePolarEmptyWeight(double value) const {
+    return polar_empty_weight_available &&
+      fabs(polar_empty_weight - value) <= 0.1;
+  }
 };
