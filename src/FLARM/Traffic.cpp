@@ -32,6 +32,25 @@ FlarmTraffic::GetTypeString(AircraftType type) noexcept
   return NULL;
 }
 
+const char *
+FlarmTraffic::GetSourceString(SourceType source) noexcept
+{
+  switch (source) {
+  case SourceType::FLARM:
+    return "FLARM";
+  case SourceType::ADSB:
+    return "ADS-B";
+  case SourceType::ADSR:
+    return "ADS-R";
+  case SourceType::TISB:
+    return "TIS-B";
+  case SourceType::MODES:
+    return "Mode-S";
+  }
+
+  return "Unknown";
+}
+
 void
 FlarmTraffic::Update(const FlarmTraffic &other) noexcept
 {
@@ -49,4 +68,8 @@ FlarmTraffic::Update(const FlarmTraffic &other) noexcept
   climb_rate_received = other.climb_rate_received;
   stealth = other.stealth;
   type = other.type;
+  source = other.source;
+  rssi = other.rssi;
+  rssi_available = other.rssi_available;
+  no_track = other.no_track;
 }
