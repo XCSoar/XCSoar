@@ -30,6 +30,7 @@
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/Details.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
+#include "FLARM/Traffic.hpp"
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
 #include "time/RoughTime.hpp"
@@ -348,6 +349,10 @@ Draw(Canvas &canvas, PixelRect rc,
 
   // Generate the line of info about the target, if it's available
   if (traffic != nullptr) {
+    if (traffic->source != FlarmTraffic::SourceType::FLARM)
+      info_string.AppendFormat(" [%s]",
+                               FlarmTraffic::GetSourceString(traffic->source));
+
     if (traffic->altitude_available)
       info_string.AppendFormat(", %s: %s", _("Altitude"),
                                FormatUserAltitude(traffic->altitude).c_str());
