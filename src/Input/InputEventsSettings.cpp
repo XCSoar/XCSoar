@@ -207,9 +207,8 @@ InputEvents::eventBallast(const char *misc)
   auto &settings = CommonInterface::SetComputerSettings().polar;
   GlidePolar &polar = settings.glide_polar_task;
   
-  /* Get current ballast as fraction for UI manipulation */
   double ballast_fraction = polar.GetBallastFraction();
-  auto oldBallastFraction = ballast_fraction;
+  const auto old_ballast_fraction = ballast_fraction;
 
   if (StringIsEqual(misc, "up")) {
     ballast_fraction += 1 / 10.;
@@ -230,7 +229,7 @@ InputEvents::eventBallast(const char *misc)
     Message::AddMessage(_("Ballast %"), Temp);
   }
 
-  if (ballast_fraction != oldBallastFraction) {
+  if (ballast_fraction != old_ballast_fraction) {
     polar.SetBallastFraction(ballast_fraction);
     backend_components->SetTaskPolar(settings);
   }
