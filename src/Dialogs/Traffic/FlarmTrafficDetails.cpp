@@ -49,6 +49,7 @@ class FlarmTrafficDetailsWidget final
     RADIO,
     PLANE,
     SOURCE,
+    TRAFFIC_SOURCE,
   };
 
   WndForm &dialog;
@@ -122,6 +123,7 @@ FlarmTrafficDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Radio frequency"));
   AddReadOnly(_("Plane type"));
   AddReadOnly(_("Data source"));
+  AddReadOnly(_("Traffic source"));
 
   Update();
 }
@@ -251,6 +253,17 @@ FlarmTrafficDetailsWidget::Update()
   SetText(CALLSIGN, value);
 
   SetText(SOURCE, FlarmDetails::ToString(info.source));
+
+  // Traffic source type (FLARM, ADS-B, Mode-S, etc.) and signal strength
+  if (target != nullptr) {
+    StaticString<64> source_str;
+    source_str = FlarmTraffic::GetSourceString(target->source);
+    if (target->rssi_available)
+      source_str.AppendFormat(" (%d dBm)", (int)target->rssi);
+    SetText(TRAFFIC_SOURCE, source_str);
+  } else {
+    SetText(TRAFFIC_SOURCE, "--");
+  }
 
   // Update the frequently changing fields too
   UpdateChanging(CommonInterface::Basic());
