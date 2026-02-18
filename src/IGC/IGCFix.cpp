@@ -27,15 +27,20 @@ IGCFix::Apply(const NMEAInfo &basic) noexcept
     ? (int)basic.gps_altitude
     : 0;
 
-  pressure_altitude = basic.pressure_altitude_available
-    ? (int)basic.pressure_altitude
-    : (basic.baro_altitude_available
-       /* if there's only baro altitude and no QNH, assume baro
-          altitude is good enough */
-       ? (int)basic.baro_altitude
-       /* if all else fails, fall back to GPS altitude, to avoid
-          application bugs (SeeYou is known for display errors) */
-       : gps_altitude);
+  /* Use IGC pressure altitude if available (device's IGC recording value),
+     otherwise fall back to standard pressure altitude, then baro altitude,
+     then GPS altitude */
+  pressure_altitude = basic.igc_pressure_altitude_available
+    ? (int)basic.igc_pressure_altitude
+    : (basic.pressure_altitude_available
+       ? (int)basic.pressure_altitude
+       : (basic.baro_altitude_available
+          /* if there's only baro altitude and no QNH, assume baro
+             altitude is good enough */
+          ? (int)basic.baro_altitude
+          /* if all else fails, fall back to GPS altitude, to avoid
+             application bugs (SeeYou is known for display errors) */
+          : gps_altitude));
 
   ClearExtensions();
 

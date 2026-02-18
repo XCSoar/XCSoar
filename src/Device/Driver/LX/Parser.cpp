@@ -6,11 +6,31 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "RadioFrequency.hpp"
+#include "TransponderCode.hpp"
+#include "TransponderMode.hpp"
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
 #include "util/StringCompare.hxx"
+#include "Math/Util.hpp"
+#include "util/NumberParser.hpp"
+#include "LogFile.hpp"
+
+#include <optional>
 
 using std::string_view_literals::operator""sv;
+
+/**
+ * Check whether a product name identifies an LXNAV Nano variant.
+ */
+[[gnu::pure]]
+static bool
+IsNanoProduct(const auto &product) noexcept
+{
+  return product.equals("NANO") ||
+         product.equals("NANO3") ||
+         product.equals("NANO4");
+}
 
 static bool
 LXWP0(NMEAInputLine &line, NMEAInfo &info)
@@ -74,6 +94,7 @@ LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
   device.serial = line.ReadView();
   device.software_version = line.ReadView();
   device.hardware_version = line.ReadView();
+  device.license = line.ReadView();
 }
 
 static bool
@@ -92,21 +113,26 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 
   double value;
   // MacCready value
-  if (line.ReadChecked(value))
+  if (line.ReadChecked(value)) {
     info.settings.ProvideMacCready(value, info.clock);
+  }
 
   // Ballast
-  if (line.ReadChecked(value))
+  if (line.ReadChecked(value)) {
     info.settings.ProvideBallastOverload(value, info.clock);
+  }
 
   // Bugs
   if (line.ReadChecked(value)) {
-    if (value <= 1.5 && value >= 1.0)
+    double bugs;
+    if (value <= 1.5 && value >= 1.0) {
       // LX160 (sw 3.04) reports bugs as 1.00, 1.05 or 1.10 (#2167)
-      info.settings.ProvideBugs(2 - value, info.clock);
-    else
+      bugs = 2 - value;
+    } else {
       // All other known LX devices report bugs as 0, 5, 10, 15, ...
-      info.settings.ProvideBugs((100 - value) / 100., info.clock);
+      bugs = (100 - value) / 100.;
+    }
+    info.settings.ProvideBugs(bugs, info.clock);
   }
 
   line.Skip(3);
@@ -151,23 +177,89 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
 }
 
 /**
+ * Parse double from a string_view value field.
+ * Returns the parsed value, or std::nullopt on failure.
+ */
+static std::optional<double>
+ParseDoubleValue(std::string_view sv) noexcept
+{
+  const std::string s{sv};
+  char *endptr;
+  double d = ParseDouble(s.c_str(), &endptr);
+  if (endptr > s.c_str())
+    return d;
+  return std::nullopt;
+}
+
+/**
+ * Parse the POLAR value from a PLXV0 sentence.
+ *
+ * Format: <a>,<b>,<c>,<polar_load>,<polar_weight>,
+ *         <max_weight>,<empty_weight>,<pilot_weight>,<name>,<stall>
+ *
+ * Coefficients arrive in LX units (v=1 corresponds to 100 km/h)
+ * and are converted to SI (m/s) before storing.
+ */
+static void
+ParsePLXV0Polar(std::string_view value, NMEAInfo &info) noexcept
+{
+  const std::string value_str{value};
+  NMEAInputLine polar_line{value_str.c_str()};
+  double a_lx, b_lx, c, polar_load, polar_weight,
+    max_weight, empty_weight, pilot_weight;
+  if (polar_line.ReadChecked(a_lx) &&
+      polar_line.ReadChecked(b_lx) &&
+      polar_line.ReadChecked(c) &&
+      polar_line.ReadChecked(polar_load) &&
+      polar_line.ReadChecked(polar_weight) &&
+      polar_line.ReadChecked(max_weight) &&
+      polar_line.ReadChecked(empty_weight) &&
+      polar_line.ReadChecked(pilot_weight)) {
+
+    const double a = a_lx / (LX_POLAR_V * LX_POLAR_V);
+    const double b = b_lx / LX_POLAR_V;
+
+    info.settings.ProvidePolarCoefficients(a, b, c, info.clock);
+    info.settings.ProvidePolarLoad(polar_load, info.clock);
+    info.settings.ProvidePolarReferenceMass(polar_weight, info.clock);
+    info.settings.ProvidePolarMaximumMass(max_weight, info.clock);
+    info.settings.ProvidePolarPilotWeight(pilot_weight, info.clock);
+    info.settings.ProvidePolarEmptyWeight(empty_weight, info.clock);
+  } else {
+    LogFmt("LXNAV: Failed to parse POLAR values from: {}", value);
+  }
+}
+
+/**
  * Parse the $PLXV0 sentence (LXNAV sVarios (including V7)).
  */
 static bool
-PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
+PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
+      NMEAInfo &info)
 {
   const auto name = line.ReadView();
   if (name.empty())
     return true;
 
   const auto type = line.ReadView();
-  if (!type.starts_with('W'))
-    return true;
 
   const auto value = line.Rest();
 
-  const std::lock_guard<Mutex> lock(settings);
+  if (!type.starts_with('W'))
+    return true;
+
+  const std::lock_guard<Mutex> lock{settings};
   settings.Set(std::string{name}, value);
+
+  if (name == "ELEVATION"sv) {
+    if (auto d = ParseDoubleValue(value))
+      info.settings.ProvideElevation(iround(*d), info.clock);
+  } else if (name == "MC"sv) {
+    if (auto d = ParseDoubleValue(value))
+      info.settings.ProvideMacCready(*d, info.clock);
+  } else if (name == "POLAR"sv || name == "POL"sv) {
+    ParsePLXV0Polar(value, info);
+  }
 
   return true;
 }
@@ -182,14 +274,133 @@ ParseNanoVarioInfo(NMEAInputLine &line, DeviceInfo &device)
 }
 
 /**
+ * Parse a PLXVC,RADIO,A response.
+ *
+ * $PLXVC,RADIO,A,<command>,<value>[,<name>]
+ *
+ * command: COMM (active), SBY (standby), VOL, SQUELCH, VOX
+ * value: frequency in kHz (e.g. 128800) or volume percentage
+ */
+static void
+ParseRadio(NMEAInputLine &line, NMEAInfo &info)
+{
+  const auto command = line.ReadView();
+  unsigned value;
+  if (!line.ReadChecked(value))
+    return;
+
+  if (command == "COMM"sv || command == "SBY"sv) {
+    auto freq = RadioFrequency::FromKiloHertz(value);
+    if (!freq.IsDefined())
+      return;
+
+    if (command == "COMM"sv) {
+      info.settings.has_active_frequency.Update(info.clock);
+      info.settings.active_frequency = freq;
+
+      /* Optional station name */
+      const auto name = line.ReadView();
+      if (!name.empty())
+        info.settings.active_freq_name.SetASCII(name);
+    } else {
+      info.settings.has_standby_frequency.Update(info.clock);
+      info.settings.standby_frequency = freq;
+
+      const auto name = line.ReadView();
+      if (!name.empty())
+        info.settings.standby_freq_name.SetASCII(name);
+    }
+  }
+}
+
+/**
+ * Map an LXNAV transponder mode string to a TransponderMode.
+ */
+[[gnu::pure]]
+static TransponderMode
+ParseTransponderMode(std::string_view mode_str) noexcept
+{
+  static constexpr struct {
+    std::string_view name;
+    TransponderMode::Mode value;
+  } table[] = {
+    {"OFF"sv,   TransponderMode::OFF},
+    {"SBY"sv,   TransponderMode::SBY},
+    {"GND"sv,   TransponderMode::GND},
+    {"ON"sv,    TransponderMode::ON},
+    {"ALT"sv,   TransponderMode::ALT},
+    {"IDENT"sv, TransponderMode::IDENT},
+  };
+
+  for (const auto &[name, value] : table)
+    if (mode_str == name)
+      return TransponderMode{value};
+
+  return TransponderMode::Null();
+}
+
+/**
+ * Parse a PLXVC,XPDR,A response.
+ *
+ * $PLXVC,XPDR,A,<command>,<value>
+ *
+ * command: SQUAWK, MODE, ALT, STATUS
+ */
+static void
+ParseTransponder(NMEAInputLine &line, NMEAInfo &info)
+{
+  const auto command = line.ReadView();
+
+  if (command == "SQUAWK"sv) {
+    /* The protocol sends squawk as a display string (e.g. "7700").
+       TransponderCode stores values in octal, so parse base 8. */
+    char buf[8];
+    line.Read(buf, sizeof(buf));
+    auto code = TransponderCode::Parse(buf);
+    if (code.IsDefined()) {
+      info.settings.has_transponder_code.Update(info.clock);
+      info.settings.transponder_code = code;
+    }
+  } else if (command == "MODE"sv) {
+    const auto mode_str = line.ReadView();
+    auto mode = ParseTransponderMode(mode_str);
+    if (mode.IsDefined()) {
+      info.settings.has_transponder_mode.Update(info.clock);
+      info.settings.transponder_mode = mode;
+    }
+  }
+}
+
+/**
+ * Parse H-record content from a declaration line.
+ * Matches HFPLTPILOT:, HFGTYGLIDERTYPE:, HFGIDGLIDERID:,
+ * HFCIDCOMPETITIONID: prefixes.
+ */
+static void
+ParseDeclHRecord(const std::string_view content,
+                 LXDevice::DeviceDeclaration &decl) noexcept
+{
+  using namespace std::string_view_literals;
+  if (content.starts_with("HFPLTPILOT:"sv))
+    decl.pilot_name = content.substr(11);
+  else if (content.starts_with("HFGTYGLIDERTYPE:"sv))
+    decl.glider_type = content.substr(16);
+  else if (content.starts_with("HFGIDGLIDERID:"sv))
+    decl.registration = content.substr(14);
+  else if (content.starts_with("HFCIDCOMPETITIONID:"sv))
+    decl.competition_id = content.substr(19);
+}
+
+/**
  * Parse the $PLXVC sentence (LXNAV Nano and sVarios).
  *
  * $PLXVC,<key>,<type>,<values>*<checksum><cr><lf>
  */
 static void
-PLXVC(NMEAInputLine &line, DeviceInfo &device,
-      DeviceInfo &secondary_device,
-      DeviceSettingsMap<std::string> &settings)
+PLXVC(NMEAInputLine &line, NMEAInfo &info,
+      DeviceSettingsMap<std::string> &settings,
+      LXDevice::DeviceDeclaration &device_declaration,
+      Mutex &decl_mutex)
 {
   const auto key = line.ReadView();
   const auto type = line.ReadView();
@@ -198,23 +409,55 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
     const auto name = line.ReadView();
     const auto value = line.Rest();
     if (!name.empty()) {
-      const std::lock_guard<Mutex> lock(settings);
+      const std::lock_guard<Mutex> lock{settings};
       settings.Set(std::string{name}, value);
     }
+  } else if (key == "DECL"sv && type.starts_with('A')) {
+    /* PLXVC,DECL,A,<current_line>,<total_lines>,<content> */
+    unsigned current_line = 0, total_lines = 0;
+    if (!line.ReadChecked(current_line) ||
+        !line.ReadChecked(total_lines))
+      return;
+    const auto content = line.Rest();
+
+    const std::lock_guard lock{decl_mutex};
+    if (device_declaration.complete)
+      return;
+    device_declaration.total_lines = total_lines;
+    device_declaration.lines_received++;
+    ParseDeclHRecord(content, device_declaration);
+    if (current_line >= 6) {
+      device_declaration.complete = true;
+
+      /* Populate ExternalSettings with glider identity */
+      if (!device_declaration.registration.empty())
+        info.settings.ProvideGliderRegistration(
+          device_declaration.registration.c_str(), info.clock);
+      if (!device_declaration.competition_id.empty())
+        info.settings.ProvideGliderCompetitionId(
+          device_declaration.competition_id.c_str(), info.clock);
+      if (!device_declaration.glider_type.empty())
+        info.settings.ProvideGliderType(
+          device_declaration.glider_type.c_str(), info.clock);
+    }
   } else if (key == "INFO"sv && type.starts_with('A')) {
-    ParseNanoVarioInfo(line, device);
+    ParseNanoVarioInfo(line, info.device);
   } else if (key == "GPSINFO"sv && type.starts_with('A')) {
     /* the LXNAV V7 (firmware >= 2.01) forwards the Nano's INFO
        sentence with the "GPS" prefix */
 
     const auto name = line.ReadView();
     if (name == "LXWP1"sv) {
-      LXDevice::LXWP1(line, secondary_device);
+      LXDevice::LXWP1(line, info.secondary_device);
     } else if (name == "INFO"sv) {
       const auto type2 = line.ReadView();
       if (type2.starts_with('A'))
-        ParseNanoVarioInfo(line, secondary_device);
+        ParseNanoVarioInfo(line, info.secondary_device);
     }
+  } else if (key == "RADIO"sv && type.starts_with('A')) {
+    ParseRadio(line, info);
+  } else if (key == "XPDR"sv && type.starts_with('A')) {
+    ParseTransponder(line, info);
   }
 }
 
@@ -293,42 +536,83 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
     info.voltage_available.Update(info.clock);
   }
 
+  /* IGC press altitude field - pressure altitude used by device for IGC recording */
+  double igc_press_altitude;
+  if (line.ReadChecked(igc_press_altitude)) {
+    info.igc_pressure_altitude = igc_press_altitude;
+    info.igc_pressure_altitude_available.Update(info.clock);
+  }
+
+  /* Parse FlapPosition field (added in protocol v1.03) */
+  const auto flap_str = line.ReadView();
+  if (!flap_str.empty()) {
+    if (flap_str == "L"sv)
+      info.switch_state.flap_position = SwitchState::FlapPosition::LANDING;
+    else
+      /* Other flap position values not yet defined in protocol documentation */
+      info.switch_state.flap_position = SwitchState::FlapPosition::UNKNOWN;
+  }
+
+  /* VP (Vario Priority) flag is available but not currently used */
+  line.Skip();
+
   return true;
 }
 
-bool
-LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
+void
+LXDevice::IdDeviceByNameLocked(const StaticString<16> &product_name,
+                               const DeviceInfo &device_info) noexcept
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
+  const bool new_v7 = product_name.equals("V7");
+  const bool new_sVario = product_name.equals("NINC") ||
+                           product_name.equals("S8x");
+  const bool new_nano = IsNanoProduct(product_name);
+  const bool new_lx16xx = product_name.equals("1606") ||
+                           product_name.equals("1600");
 
-  NMEAInputLine line(String);
+  if ((new_v7 && !is_v7) || (new_sVario && !is_sVario)) {
+    const char *device_type = new_v7 ? "V7" : "S series vario";
+    LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {})",
+           device_type, product_name.c_str(),
+           device_info.software_version.empty()
+             ? "unknown"
+             : device_info.software_version.c_str());
+    if (!device_info.software_version.empty())
+      firmware_version_logged = true;
+  }
 
-  const auto type = line.ReadView();
-  if (type == "$LXWP0"sv)
-    return LXWP0(line, info);
+  is_v7 = new_v7;
+  is_sVario = new_sVario;
+  is_nano = new_nano;
+  is_lx16xx = new_lx16xx;
+}
 
-  else if (type == "$LXWP1"sv) {
-    /* if in pass-through mode, assume that this line was sent by the
-       secondary device */
-    DeviceInfo &device_info = mode == Mode::PASS_THROUGH
-      ? info.secondary_device
-      : info.device;
-    LXWP1(line, device_info);
+void
+LXDevice::IdDeviceByName(const StaticString<16> &product_name,
+                         const DeviceInfo &device_info) noexcept
+{
+  const std::lock_guard lock{mutex};
+  IdDeviceByNameLocked(product_name, device_info);
+}
 
-    const bool saw_sVario = device_info.product.equals("NINC") || 
-                            device_info.product.equals("S8x");
-    const bool saw_v7 = device_info.product.equals("V7");
-    const bool saw_nano = device_info.product.equals("NANO") ||
-                            device_info.product.equals("NANO3") || 
-                            device_info.product.equals("NANO4");
-    const bool saw_lx16xx = device_info.product.equals("1606") ||
-                             device_info.product.equals("1600");
+void
+LXDevice::UpdateDeviceFlags(const DeviceInfo &device_info,
+                            bool pass_through) noexcept
+{
+  const bool saw_v7 = device_info.product.equals("V7");
+  const bool saw_sVario = device_info.product.equals("NINC") ||
+                           device_info.product.equals("S8x");
+  const bool saw_nano = IsNanoProduct(device_info.product);
+  const bool saw_lx16xx = device_info.product.equals("1606") ||
+                           device_info.product.equals("1600");
 
-    if (mode == Mode::PASS_THROUGH) {
-      /* in pass-through mode, we should never clear the V7 flag,
-         because the V7 is still there, even though it's "hidden"
-         currently */
+  const bool was_vario = IsLXNAVVario();
+
+  {
+    const std::lock_guard lock{mutex};
+    if (pass_through) {
+      /* in pass-through mode, never clear flags — the primary
+         device is still there even though it's "hidden" */
       is_v7 |= saw_v7;
       is_sVario |= saw_sVario;
       is_nano |= saw_nano;
@@ -344,37 +628,68 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     if (saw_v7 || saw_sVario || saw_nano || saw_lx16xx)
       is_colibri = false;
 
-    return true;
+    if (!was_vario && (saw_v7 || saw_sVario))
+      vario_just_detected = true;
+  }
+}
 
-  } else if (type == "$LXWP2"sv)
+bool
+LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
+{
+  if (!VerifyNMEAChecksum(String))
+    return false;
+
+  NMEAInputLine line(String);
+
+  const auto type = line.ReadView();
+  if (type == "$LXWP0"sv)
+    return LXWP0(line, info);
+
+  if (type == "$LXWP1"sv) {
+    DeviceInfo &device_info = mode == Mode::PASS_THROUGH
+      ? info.secondary_device
+      : info.device;
+    LXWP1(line, device_info);
+    UpdateDeviceFlags(device_info, mode == Mode::PASS_THROUGH);
+    return true;
+  }
+
+  if (type == "$LXWP2"sv)
     return LXWP2(line, info);
 
-  else if (type == "$LXWP3"sv)
+  if (type == "$LXWP3"sv)
     return LXWP3(line, info);
 
-  else if (type == "$PLXV0"sv) {
+  if (type == "$PLXV0"sv) {
     is_colibri = false;
-    return PLXV0(line, lxnav_vario_settings);
+    return PLXV0(line, lxnav_vario_settings, info);
+  }
 
-  } else if (type == "$PLXVC"sv) {
+  if (type == "$PLXVC"sv) {
     is_colibri = false;
-    PLXVC(line, info.device, info.secondary_device, nano_settings);
-    is_forwarded_nano = info.secondary_device.product.equals("NANO") ||
-                          info.secondary_device.product.equals("NANO3") ||
-                          info.secondary_device.product.equals("NANO4");
+    PLXVC(line, info, nano_settings, device_declaration, mutex);
 
-    LXDevice::IdDeviceByName(info.device.product);
-
+    {
+      const std::lock_guard lock{mutex};
+      is_forwarded_nano =
+        IsNanoProduct(info.secondary_device.product);
+      const bool was_vario = IsLXNAVVario();
+      IdDeviceByNameLocked(info.device.product, info.device);
+      if (!was_vario && IsLXNAVVario())
+        vario_just_detected = true;
+    }
     return true;
+  }
 
-  } else if (type == "$PLXVF"sv) {
+  if (type == "$PLXVF"sv) {
     is_colibri = false;
     return PLXVF(line, info);
+  }
 
-  } else if (type == "$PLXVS"sv) {
+  if (type == "$PLXVS"sv) {
     is_colibri = false;
     return PLXVS(line, info);
+  }
 
-  } else
-    return false;
+  return false;
 }
