@@ -206,30 +206,32 @@ InputEvents::eventBallast(const char *misc)
 
   auto &settings = CommonInterface::SetComputerSettings().polar;
   GlidePolar &polar = settings.glide_polar_task;
-  auto BALLAST = polar.GetBallast();
-  auto oldBallast = BALLAST;
+  
+  /* Get current ballast as fraction for UI manipulation */
+  double ballast_fraction = polar.GetBallastFraction();
+  auto oldBallastFraction = ballast_fraction;
 
   if (StringIsEqual(misc, "up")) {
-    BALLAST += 1 / 10.;
-    if (BALLAST >= 1)
-      BALLAST = 1;
+    ballast_fraction += 1 / 10.;
+    if (ballast_fraction >= 1)
+      ballast_fraction = 1;
   } else if (StringIsEqual(misc, "down")) {
-    BALLAST -= 1 / 10.;
-    if (BALLAST < 0)
-      BALLAST = 0;
+    ballast_fraction -= 1 / 10.;
+    if (ballast_fraction < 0)
+      ballast_fraction = 0;
   } else if (StringIsEqual(misc, "max"))
-    BALLAST = 1;
+    ballast_fraction = 1;
   else if (StringIsEqual(misc, "min"))
-    BALLAST = 0;
+    ballast_fraction = 0;
   else if (StringIsEqual(misc, "show")) {
     char Temp[100];
-    StringFormatUnsafe(Temp, "%d", (int)(BALLAST * 100));
+    StringFormatUnsafe(Temp, "%d", (int)(ballast_fraction * 100));
     /* xgettext:no-c-format */
     Message::AddMessage(_("Ballast %"), Temp);
   }
 
-  if (BALLAST != oldBallast) {
-    polar.SetBallast(BALLAST);
+  if (ballast_fraction != oldBallastFraction) {
+    polar.SetBallastFraction(ballast_fraction);
     backend_components->SetTaskPolar(settings);
   }
 }

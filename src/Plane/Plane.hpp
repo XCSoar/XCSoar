@@ -35,4 +35,10 @@ struct Plane
    * https://api.weglide.org/v1/aircraft/$(ID)
    */
   unsigned weglide_glider_type;
+
+  /**
+   * Is a plane profile file active (not the default plane)?
+   * This is set when a plane profile file is loaded from Profile::GetPath("PlanePath").
+   */
+  bool plane_profile_active;
 };

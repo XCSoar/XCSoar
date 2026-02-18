@@ -25,6 +25,10 @@ private:
 void
 GlidePolarTest::Init()
 {
+  // Set operational parameters before any method that calls Update()
+  polar.bugs = 1;
+  polar.mc = 0;
+
   // Polar 1 from PolarStore (206 Hornet)
   polar.SetCoefficients(PolarCoefficients(0.0022032, -0.08784,
                                           1.47), false);
@@ -36,12 +40,8 @@ GlidePolarTest::Init()
 
   polar.SetWingArea(9.8);
 
-  // No ballast and no bugs on the wings
-  polar.ballast = 0;
-  polar.bugs = 1;
-
-  // MC zero
-  polar.mc = 0;
+  // No ballast
+  polar.SetBallastLitres(0);
 
   polar.SetVMax(Units::ToSysUnit(200, Unit::KILOMETER_PER_HOUR), false);
 }
@@ -71,7 +71,7 @@ GlidePolarTest::TestBasic()
 
   ok1(equals(polar.GetTotalMass(), 318));
   ok1(equals(polar.GetWingLoading(), 32.448979592));
-  ok1(equals(polar.GetBallast(), 0));
+  ok1(equals(polar.GetBallastFraction(), 0));
   ok1(equals(polar.GetBallastLitres(), 0));
   ok1(polar.IsBallastable());
   ok1(!polar.HasBallast());
@@ -80,15 +80,15 @@ GlidePolarTest::TestBasic()
 void
 GlidePolarTest::TestBallast()
 {
-  polar.SetBallast(0.25);
+  polar.SetBallastFraction(0.25);
 
   ok1(equals(polar.GetBallastLitres(), 25));
-  ok1(equals(polar.GetBallast(), 0.25));
+  ok1(equals(polar.GetBallastFraction(), 0.25));
 
   polar.SetBallastLitres(50);
 
   ok1(equals(polar.GetBallastLitres(), 50));
-  ok1(equals(polar.GetBallast(), 0.5));
+  ok1(equals(polar.GetBallastFraction(), 0.5));
   ok1(equals(polar.GetTotalMass(), 368));
   ok1(equals(polar.GetWingLoading(), 37.551020408));
   ok1(polar.HasBallast());
@@ -108,7 +108,7 @@ GlidePolarTest::TestBallast()
   ok1(equals(polar.GetVMin(), 21.44464));
   ok1(equals(polar.GetVBestLD(), 27.78703));
 
-  polar.SetBallast(0);
+  polar.SetBallastLitres(0);
   ok1(!polar.HasBallast());
 }
 

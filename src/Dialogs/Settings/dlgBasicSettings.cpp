@@ -62,6 +62,12 @@ public:
     polar_settings.glide_polar_task.SetCrewMass(_crew_mass);
     PublishPolarSettings();
     SetBallast();
+    
+    // Send to external devices
+    if (backend_components->devices != nullptr) {
+      MessageOperationEnvironment env;
+      backend_components->devices->PutCrewMass(_crew_mass, env);
+    }
   }
 
   void SetBallast();
@@ -125,8 +131,16 @@ FlightSetupPanel::SetBallast()
 {
   const bool ballastable = polar_settings.glide_polar_task.IsBallastable();
   SetRowVisible(Ballast, ballastable);
-  if (ballastable)
+  if (ballastable) {
+    /* Update the maximum value of the ballast field to allow up to 400L */
+    WndProperty &control = GetControl(Ballast);
+    DataFieldFloat &df = *(DataFieldFloat *)control.GetDataField();
+    const double db = 5;
+    const double ui_max_ballast = 400.0; /* Allow UI to set up to 400L maximum */
+    const double new_max = db * ceil(ui_max_ballast / db);
+    df.SetMax(new_max);
     LoadValue(Ballast, polar_settings.glide_polar_task.GetBallastLitres());
+  }
 
   const auto wl = polar_settings.glide_polar_task.GetWingLoading();
   SetRowVisible(WingLoading, wl > 0);
@@ -134,15 +148,13 @@ FlightSetupPanel::SetBallast()
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
   if (backend_components->devices != nullptr) {
-    const Plane &plane = CommonInterface::GetComputerSettings().plane;
-    if (plane.empty_mass > 0) {
-      auto dry_mass = polar_settings.glide_polar_task.GetDryMass();
-      auto fraction = polar_settings.glide_polar_task.GetBallast();
-      auto overload = (dry_mass + fraction * plane.max_ballast) /
-                      plane.polar_shape.reference_mass;
-
+    const auto &polar = polar_settings.glide_polar_task;
+    const double ref_mass = polar.GetReferenceMass();
+    if (ref_mass > 0) {
       MessageOperationEnvironment env;
-      backend_components->devices->PutBallast(fraction, overload, env);
+      backend_components->devices->PutBallast(polar.GetBallastFraction(),
+                                              polar.GetBallastOverload(),
+                                              env);
     }
   }
 }

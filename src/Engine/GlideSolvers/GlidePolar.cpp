@@ -13,16 +13,17 @@
 
 #include <cassert>
 
-GlidePolar::GlidePolar(const double _mc, const double _bugs,
-                       const double _ballast) noexcept
+GlidePolar::GlidePolar(double _mc, double _bugs,
+                       double _ballast) noexcept
   :mc(_mc),
    bugs(_bugs),
-   ballast(_ballast),
+   ballast_litres(_ballast),
    cruise_efficiency(1),
    VbestLD(0),
    Vmax(75),
    Vmin(0),
    reference_polar(0.00157, -0.0734, 1.48),
+   max_ballast(90),
    ballast_ratio(0.3),
    reference_mass(300),
    empty_mass(reference_mass),
@@ -41,6 +42,11 @@ GlidePolar::Update() noexcept
   assert(bugs > 0);
 
   if (!reference_polar.IsValid()) {
+    Vmin = Vmax = 0;
+    return;
+  }
+
+  if (reference_mass <= 0 || GetTotalMass() <= 0) {
     Vmin = Vmax = 0;
     return;
   }
@@ -67,7 +73,7 @@ GlidePolar::UpdateSMax() noexcept
 }
 
 void
-GlidePolar::SetBugs(const double clean) noexcept
+GlidePolar::SetBugs(double clean) noexcept
 {
   assert(clean > 0 && clean <= 1);
   bugs = clean;
@@ -75,18 +81,47 @@ GlidePolar::SetBugs(const double clean) noexcept
 }
 
 void
-GlidePolar::SetBallast(const double bal) noexcept
+GlidePolar::SetBallastLitres(double litres) noexcept
 {
-  assert(bal >= 0);
-  SetBallastLitres(bal * ballast_ratio * reference_mass);
+  assert(litres >= 0);
+  ballast_litres = litres;
+  Update();
 }
 
 void
-GlidePolar::SetBallastLitres(const double litres) noexcept
+GlidePolar::SetBallastFraction(double fraction) noexcept
 {
-  assert(litres >= 0);
-  ballast = litres;
+  assert(fraction >= 0 && fraction <= 1);
+  ballast_litres = fraction * max_ballast;
   Update();
+}
+
+void
+GlidePolar::SetBallastOverload(double overload) noexcept
+{
+  assert(overload > 0);
+  const double total_mass = overload * GetReferenceMass();
+  ballast_litres = total_mass - GetDryMass();
+  if (ballast_litres < 0)
+    ballast_litres = 0;
+  Update();
+}
+
+double
+GlidePolar::GetBallastFraction() const noexcept
+{
+  if (max_ballast <= 0)
+    return 0;
+  return std::min(GetBallastLitres() / max_ballast, 1.0);
+}
+
+double
+GlidePolar::GetBallastOverload() const noexcept
+{
+  const auto ref = GetReferenceMass();
+  if (ref <= 0)
+    return 1.0;
+  return GetTotalMass() / ref;
 }
 
 void
