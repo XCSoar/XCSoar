@@ -21,6 +21,7 @@
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
+#include "net/State.hpp"
 
 #include <algorithm> // for std::clamp()
 
@@ -141,35 +142,56 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 }
 
 void
-GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
-                             const NMEAInfo &info) const noexcept
+GlueMapWindow::DrawSystemStatus(Canvas &canvas, const PixelRect &rc) const noexcept
 {
-  const char *txt;
-  const MaskedIcon *icon;
+  PixelPoint p(rc.left + Layout::FastScale(4), rc.top + Layout::FastScale(4));
+  int offset_x = 0;
+
+  const NetState net_state = GetNetState();
+  const MaskedIcon *net_icon = nullptr;
+  if (net_state == NetState::CONNECTED || net_state == NetState::ROAMING)
+    net_icon = &look.network_connected_icon;
+  else if (net_state == NetState::DISCONNECTED)
+    net_icon = &look.network_disconnected_icon;
+
+  if (net_icon != nullptr) {
+    net_icon->Draw(canvas, p);
+    offset_x += net_icon->GetSize().width + Layout::FastScale(4);
+  }
+
+  const auto &info = Basic();
+  const MaskedIcon *gps_icon = nullptr;
+  const char *gps_txt = nullptr;
 
   if (!info.alive) {
-    icon = &look.no_gps_icon;
-    txt = _("GPS not connected");
+    gps_icon = &look.no_gps_icon;
+    gps_txt = _("GPS not connected");
   } else if (!info.location_available) {
-    icon = &look.waiting_for_fix_icon;
-    txt = _("GPS waiting for fix");
-  } else
-    // early exit
-    return;
+    gps_icon = &look.waiting_for_fix_icon;
+    gps_txt = _("GPS waiting for fix");
+  }
 
-  PixelPoint p(rc.left + Layout::FastScale(2),
-               rc.bottom - Layout::FastScale(35));
-  icon->Draw(canvas, p);
+  if (gps_icon != nullptr) {
+    PixelPoint gps_p = p;
+    gps_p.x += offset_x;
+    gps_icon->Draw(canvas, gps_p);
 
-  p.x += icon->GetSize().width + Layout::FastScale(4);
-  p.y = rc.bottom - Layout::FastScale(34);
+    if (gps_txt != nullptr) {
+      const Font &font = *look.overlay.overlay_font;
+      canvas.Select(font);
 
-  TextInBoxMode mode;
-  mode.shape = LabelShape::ROUNDED_BLACK;
+      PixelPoint text_p = gps_p;
+      text_p.x += gps_icon->GetSize().width + Layout::FastScale(4);
+      const int text_height = font.GetHeight();
+      const int icon_height = gps_icon->GetSize().height;
+      text_p.y += std::max(0, (icon_height - text_height) / 2);
 
-  const Font &font = *look.overlay.overlay_font;
-  canvas.Select(font);
-  TextInBox(canvas, txt, p, mode, rc, nullptr);
+      TextInBoxMode mode;
+      mode.shape = LabelShape::ROUNDED_BLACK;
+
+      TextInBox(canvas, gps_txt, text_p, mode, rc, nullptr);
+    }
+  }
 }
 
 void

@@ -68,6 +68,9 @@ struct MapLook {
   MaskedIcon traffic_warning_icon;
   MaskedIcon traffic_alarm_icon;
 
+  MaskedIcon network_connected_icon;
+  MaskedIcon network_disconnected_icon;
+
   MaskedIcon cruise_mode_icon, climb_mode_icon, final_glide_mode_icon, abort_mode_icon;
   MaskedIcon waiting_for_fix_icon, no_gps_icon;
 
