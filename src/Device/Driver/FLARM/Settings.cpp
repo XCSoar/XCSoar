@@ -3,8 +3,7 @@
 
 #include "Device.hpp"
 #include "system/Sleep.h"
-
-#include <stdio.h>
+#include "util/StringFormat.hpp"
 
 void
 FlarmDevice::SendSetting(const char *name, const char *value,
@@ -21,7 +20,7 @@ FlarmDevice::SendSetting(const char *name, const char *value,
   }
 
   char buffer[64];
-  sprintf(buffer, "PFLAC,S,%s,%s", name, value);
+  StringFormat(buffer, sizeof(buffer), "PFLAC,S,%s,%s", name, value);
   Send(buffer, env);
 }
 
@@ -49,7 +48,7 @@ void
 FlarmDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
-  sprintf(buffer, "PFLAC,R,%s", name);
+  StringFormat(buffer, sizeof(buffer), "PFLAC,R,%s", name);
   Send(buffer, env);
 }
 
