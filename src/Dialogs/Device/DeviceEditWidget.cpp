@@ -20,7 +20,7 @@ enum ControlIndex {
   IP_ADDRESS,
   TCPPort,
   I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
-  SyncFromDevice, SyncToDevice,
+  SyncFromDevice, SyncToDevice, PolarSyncMode,
   K6Bt,
 };
 
@@ -36,6 +36,11 @@ FillBaudRates(DataFieldEnum &dfe) noexcept
   dfe.addEnumText("57600", 57600);
   dfe.addEnumText("115200", 115200);
   dfe.addEnumText("230400", 230400);
+  dfe.addEnumText("256000", 256000);
+  dfe.addEnumText("460800", 460800);
+  dfe.addEnumText("500000", 500000);
+  dfe.addEnumText("921600", 921600);
+  dfe.addEnumText("1000000", 1000000);
 }
 
 static void
@@ -96,6 +101,21 @@ FillEngineType(DataFieldEnum &dfe) noexcept
   dfe.addEnumText("4S1I", static_cast<unsigned>(DeviceConfig::EngineType::FOUR_STROKE_1_IGN));
 }
 
+static void
+FillPolarSync(DataFieldEnum &dfe,
+              bool can_receive, bool can_send) noexcept
+{
+  dfe.ClearChoices();
+  dfe.addEnumText(_("Off"),
+                  static_cast<unsigned>(DeviceConfig::PolarSync::OFF));
+  if (can_receive)
+    dfe.addEnumText(_("Receive from device"),
+                    static_cast<unsigned>(DeviceConfig::PolarSync::RECEIVE));
+  if (can_send)
+    dfe.addEnumText(_("Send to device"),
+                    static_cast<unsigned>(DeviceConfig::PolarSync::SEND));
+}
+
 static bool
 EditPortCallback(const char *caption, DataField &df,
                  [[maybe_unused]] const char *help_text) noexcept
@@ -132,6 +152,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   LoadValueEnum(Driver, config.driver_name);
   LoadValue(SyncFromDevice, config.sync_from_device);
   LoadValue(SyncToDevice, config.sync_to_device);
+  LoadValueEnum(PolarSyncMode, config.polar_sync);
   LoadValue(K6Bt, config.k6bt);
   LoadValueEnum(EngineTypes, config.engine_type);
 
@@ -229,10 +250,20 @@ DeviceEditWidget::UpdateVisibilities() noexcept
                 && CanPassThrough(GetDataField(Driver))
                 && GetValueBoolean(UseSecondDriver));
 
+  const bool can_receive = CanReceiveSettings(GetDataField(Driver));
+  const bool can_send = CanSendSettings(GetDataField(Driver));
   SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
-                CanReceiveSettings(GetDataField(Driver)));
+                can_receive);
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
-                CanSendSettings(GetDataField(Driver)));
+                can_send);
+  SetRowVisible(PolarSyncMode, DeviceConfig::UsesDriver(type) &&
+                (can_receive || can_send));
+  if (can_receive || can_send) {
+    auto &polar_df = (DataFieldEnum &)GetDataField(PolarSyncMode);
+    const auto prev = polar_df.GetValue();
+    FillPolarSync(polar_df, can_receive, can_send);
+    polar_df.SetValue(prev);
+  }
   SetRowAvailable(K6Bt, maybe_bluetooth);
   SetRowAvailable(EngineTypes, maybe_engine_sensor);
 }
@@ -334,6 +365,18 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
                "like the MacCready value, bugs and ballast to the device."),
              config.sync_to_device, this);
   SetExpertRow(SyncToDevice);
+
+  DataFieldEnum *polar_sync_df = new DataFieldEnum(this);
+  FillPolarSync(*polar_sync_df,
+                CanReceiveSettings(*driver_df),
+                CanSendSettings(*driver_df));
+  polar_sync_df->SetValue(config.polar_sync);
+  Add(_("Polar sync"),
+      _("Synchronize the glide polar between XCSoar and the device. "
+        "'Receive' adopts the polar from the device (e.g. for club "
+        "gliders). 'Send' pushes XCSoar's polar to the device."),
+      polar_sync_df);
+  SetExpertRow(PolarSyncMode);
 
   AddBoolean("K6Bt",
              _("Whether you use a K6Bt to connect the device."),
@@ -454,6 +497,10 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 
     if (CanSendSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncToDevice, config.sync_to_device);
+
+    if (CanReceiveSettings(GetDataField(Driver)) ||
+        CanSendSettings(GetDataField(Driver)))
+      changed |= SaveValueEnum(PolarSyncMode, config.polar_sync);
 
     if (CanPassThrough(GetDataField(Driver))) {
       changed |= SaveValue(UseSecondDriver, config.use_second_device);
