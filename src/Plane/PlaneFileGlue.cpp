@@ -4,13 +4,19 @@
 #include "PlaneFileGlue.hpp"
 #include "Plane.hpp"
 #include "Polar/Parser.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "io/KeyValueFileReader.hpp"
 #include "io/KeyValueFileWriter.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"
 #include "io/FileLineReader.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
+#include "LocalPath.hpp"
 #include "util/NumberParser.hpp"
 #include "LogFile.hpp"
+
+#include <fmt/format.h>
 
 static bool
 ReadPolar(const char *string, Plane &plane) noexcept
@@ -136,9 +142,15 @@ PlaneGlue::ReadFile(Plane &plane, Path path) noexcept
 try {
   FileLineReaderA reader(path);
   KeyValueFileReader kvreader(reader);
-  return Read(plane, kvreader);
+  if (Read(plane, kvreader)) {
+    plane.plane_profile_active = true;
+    return true;
+  }
+  plane.plane_profile_active = false;
+  return false;
 } catch (...) {
   LogError(std::current_exception());
+  plane.plane_profile_active = false;
   return false;
 }
 
@@ -187,4 +199,98 @@ PlaneGlue::WriteFile(const Plane &plane, Path path)
   Write(plane, kvwriter);
   buffered.Flush();
   file.Commit();
+}
+
+AllocatedPath
+PlaneGlue::FindByRegistration(const char *registration)
+{
+  if (registration == nullptr || *registration == '\0')
+    return nullptr;
+
+  struct PlaneMatch {
+    const char *target_reg;
+    AllocatedPath found_path{nullptr};
+  } match{registration};
+
+  class MatchVisitor : public File::Visitor {
+    PlaneMatch &match;
+  public:
+    explicit MatchVisitor(PlaneMatch &m) : match(m) {}
+    void Visit(Path path, [[maybe_unused]] Path filename) override {
+      if (match.found_path != nullptr)
+        return;
+      Plane p{};
+      if (PlaneGlue::ReadFile(p, path) &&
+          p.registration.equals(match.target_reg))
+        match.found_path = AllocatedPath{path};
+    }
+  } visitor{match};
+
+  VisitDataFiles("*.xcp", visitor);
+  return std::move(match.found_path);
+}
+
+/**
+ * Strip characters that are unsafe for use in filenames.
+ * Only alphanumeric, dash and underscore are kept.
+ */
+static std::string
+SanitizeFilename(const char *s) noexcept
+{
+  std::string result;
+  for (; *s != '\0'; ++s) {
+    char c = *s;
+    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+        (c >= '0' && c <= '9') || c == '-' || c == '_')
+      result += c;
+  }
+  return result;
+}
+
+AllocatedPath
+PlaneGlue::CreateFromPolar(const char *registration,
+                           const char *competition_id,
+                           const char *glider_type,
+                           const GlidePolar &gp)
+{
+  if (registration == nullptr || *registration == '\0')
+    return nullptr;
+
+  if (!gp.IsValid())
+    return nullptr;
+
+  Plane plane{};
+  plane.registration.SetUTF8(registration);
+  if (competition_id != nullptr && *competition_id != '\0')
+    plane.competition_id.SetUTF8(competition_id);
+  if (glider_type != nullptr && *glider_type != '\0')
+    plane.type.SetUTF8(glider_type);
+  plane.polar_name.clear();
+
+  plane.polar_shape.reference_mass = gp.GetReferenceMass();
+  plane.empty_mass = gp.GetEmptyMass();
+  plane.wing_area = gp.GetWingArea();
+  plane.max_speed = DEFAULT_MAX_SPEED;
+  plane.max_ballast = gp.GetMaxBallast();
+
+  const auto &coeffs = gp.GetCoefficients();
+  if (coeffs.IsValid()) {
+    constexpr double speeds[] = {90.0 / 3.6, 130.0 / 3.6, 180.0 / 3.6};
+    for (unsigned i = 0; i < 3; ++i) {
+      const double v = speeds[i];
+      plane.polar_shape.points[i].v = v;
+      plane.polar_shape.points[i].w =
+        coeffs.a * v * v + coeffs.b * v + coeffs.c;
+    }
+  }
+
+  const auto safe_name = SanitizeFilename(registration);
+  if (safe_name.empty())
+    return nullptr;
+
+  const auto filename = fmt::format("{}.xcp", safe_name);
+  auto path = LocalPath(filename.c_str());
+
+  WriteFile(plane, path);
+  return path;
 }

@@ -6,6 +6,10 @@
 #include "util/StaticString.hxx"
 #include "Polar/Shape.hpp"
 
+/** Default maximum speed (m/s, ≈270 km/h) for device-provided polars
+    when no plane-specific value is known */
+static constexpr double DEFAULT_MAX_SPEED = 75.0;
+
 struct Plane
 {
   StaticString<32> registration;
