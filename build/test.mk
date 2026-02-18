@@ -300,10 +300,11 @@ $(eval $(call link-program,TestTaskFileSeeYouParsing,TEST_TASKFILE_SEEYOU_PARSIN
 TEST_PLANES_SOURCES = \
 	$(SRC)/Polar/Parser.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestPlanes.cpp
-TEST_PLANES_DEPENDS = UNITS IO OS MATH UTIL
+TEST_PLANES_DEPENDS = UNITS IO OS MATH UTIL GLIDE
 $(eval $(call link-program,TestPlanes,TEST_PLANES))
 
 TEST_ZEROFINDER_SOURCES = \
