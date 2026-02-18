@@ -64,7 +64,7 @@ public:
     SetBallast();
     
     // Send to external devices
-    if (backend_components->devices != nullptr) {
+    if (backend_components && backend_components->devices) {
       MessageOperationEnvironment env;
       backend_components->devices->PutCrewMass(_crew_mass, env);
     }
@@ -75,7 +75,8 @@ public:
   void FlipBallastTimer();
 
   void PublishPolarSettings() {
-    backend_components->SetTaskPolar(polar_settings);
+    if (backend_components)
+      backend_components->SetTaskPolar(polar_settings);
   }
 
   void SetBallastLitres(double ballast_litres) {
@@ -151,7 +152,7 @@ FlightSetupPanel::SetBallast()
   if (wl > 0)
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
-  if (backend_components->devices != nullptr) {
+  if (backend_components && backend_components->devices) {
     const auto &polar = polar_settings.glide_polar_task;
     const double ref_mass = polar.GetReferenceMass();
     if (ref_mass > 0) {
@@ -215,7 +216,7 @@ FlightSetupPanel::SetBugs(double bugs) {
   polar_settings.SetBugs(bugs);
   PublishPolarSettings();
 
-  if (backend_components->devices != nullptr) {
+  if (backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutBugs(bugs, env);
   }
@@ -230,7 +231,7 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
   settings_computer.pressure = qnh;
   settings_computer.pressure_available.Update(basic.clock);
 
-  if (backend_components->devices != nullptr) {
+  if (backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutQNH(qnh, env);
   }
