@@ -11,6 +11,7 @@
 #include "Math/Util.hpp"
 
 #include <fmt/format.h>
+#include <algorithm>
 #include <cmath>
 
 /**
@@ -56,33 +57,37 @@ namespace LXNAVVario {
 
   /**
    * Set the MC setting of the vario
-   * @param mc in m/s
+   * @param mc in m/s (clamped to [0.0, 5.0] per S80 firmware limits)
    */
   static inline void
   SetMacCready(Port &port, OperationEnvironment &env, double mc)
   {
+    mc = std::clamp(mc, 0.0, 5.0);
     const auto buffer = fmt::format("PLXV0,MC,W,{:.1f}", mc);
     PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
    * Set the ballast setting of the vario
-   * @param overload 1.0 - 1.4 (100 - 140%)
+   * @param overload overload factor (clamped to [1.0, 2.0] per S80
+   *   firmware limits; sub-reference-mass values are not supported)
    */
   static inline void
   SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
+    overload = std::clamp(overload, 1.0, 2.0);
     const auto buffer = fmt::format("PLXV0,BAL,W,{:.2f}", overload);
     PortWriteNMEA(port, buffer.c_str(), env);
   }
 
   /**
    * Set the bugs setting of the vario
-   * @param bugs 0 - 30 %
+   * @param bugs 0 - 50 % (clamped per S80 firmware limits)
    */
   static inline void
   SetBugs(Port &port, OperationEnvironment &env, unsigned bugs)
   {
+    bugs = std::clamp(bugs, 0u, 50u);
     const auto buffer = fmt::format("PLXV0,BUGS,W,{}", bugs);
     PortWriteNMEA(port, buffer.c_str(), env);
   }
