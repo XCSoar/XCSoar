@@ -403,6 +403,23 @@ LXDevice::ReceivePolarFromDevice(const MoreData &basic) noexcept
       device_polar.empty_weight = empty_weight;
       device_polar.pilot_weight = pilot_weight;
       device_polar.valid = true;
+
+      /* Parse glider name and stall from stored POLAR value.
+         The settings map stores the full value after
+         "PLXV0,POL,W," as fields:
+         a,b,c,load,ref,max,empty,pilot,name,stall */
+      auto polar_val = GetLXNAVVarioSetting("POL");
+      if (polar_val.empty())
+        polar_val = GetLXNAVVarioSetting("POLAR");
+      if (!polar_val.empty()) {
+        NMEAInputLine pline{polar_val.c_str()};
+        /* Skip a,b,c,load,ref,max,empty,pilot (8 fields) */
+        pline.Skip(8);
+        device_polar.name = std::string{pline.ReadView()};
+        double stall_val = 0;
+        if (pline.ReadChecked(stall_val))
+          device_polar.stall = stall_val;
+      }
     }
   }
 
@@ -473,31 +490,49 @@ LXDevice::SendPolarToDevice(const DerivedInfo &calculated,
   const double ref_mass = gp.GetReferenceMass();
   const double empty_mass = gp.GetEmptyMass();
   const double crew_mass = gp.GetCrewMass();
-  const double wing_area = gp.GetWingArea();
-  const double polar_load =
-    (wing_area > 0 && ref_mass > 0) ? ref_mass / wing_area : 0;
 
-  /* Check if we already sent these exact values */
+  /* Read device-specific fields and check for duplicate sends
+     in a single lock acquisition */
+  double polar_load = 0;
+  double max_weight = 0;
+  std::string glider_name;
+  double stall = 0;
   {
     const std::lock_guard lock{mutex};
-    if (device_polar.valid &&
-        fabs(device_polar.a - coeffs.a) < 0.0001 &&
-        fabs(device_polar.b - coeffs.b) < 0.0001 &&
-        fabs(device_polar.c - coeffs.c) < 0.0001 &&
-        fabs(device_polar.polar_weight - ref_mass) < 0.1 &&
-        fabs(device_polar.empty_weight - empty_mass) < 0.1 &&
-        fabs(device_polar.pilot_weight - crew_mass) < 0.1)
-      return;
+    if (device_polar.valid) {
+      /* Check if we already sent these exact values */
+      if (fabs(device_polar.a - coeffs.a) < 0.0001 &&
+          fabs(device_polar.b - coeffs.b) < 0.0001 &&
+          fabs(device_polar.c - coeffs.c) < 0.0001 &&
+          fabs(device_polar.polar_weight - ref_mass) < 0.1 &&
+          fabs(device_polar.empty_weight - empty_mass) < 0.1 &&
+          fabs(device_polar.pilot_weight - crew_mass) < 0.1)
+        return;
+
+      /* Preserve device metadata: polar_load is a metadata field on
+         the vario that doesn't affect calculations.  Also preserve
+         max_weight, glider name, and stall speed. */
+      polar_load = device_polar.polar_load;
+      max_weight = device_polar.max_weight;
+      glider_name = device_polar.name;
+      stall = device_polar.stall;
+    }
+  }
+
+  /* Fall back: compute polar_load from wing area if no device value */
+  if (polar_load <= 0) {
+    const double wing_area = gp.GetWingArea();
+    polar_load =
+      (wing_area > 0 && ref_mass > 0) ? ref_mass / wing_area : 0;
   }
 
   if (!EnableNMEA(env))
     return;
 
-  /* PLXV0,POLAR,W,a,b,c,polar_load,polar_weight,max_weight,
-     empty_weight,pilot_weight,name,stall */
   const auto cmd = fmt::format(
-    "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},,{:.1f},{:.1f},,",
-    a_lx, b_lx, c_lx, polar_load, ref_mass, empty_mass, crew_mass);
+    "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},{:.0f},{:.1f},{:.1f},{},{:.0f}",
+    a_lx, b_lx, c_lx, polar_load, ref_mass,
+    max_weight, empty_mass, crew_mass, glider_name, stall);
   PortWriteNMEA(port, cmd.c_str(), env);
 
   bool notify = false;

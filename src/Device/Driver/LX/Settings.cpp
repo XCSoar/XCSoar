@@ -217,15 +217,45 @@ LXDevice::PutCrewMass(double crew_mass, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  /* Send only pilot weight, leaving all other POLAR fields empty */
+  /* Send full POLAR command with only pilot_weight changed to
+     avoid zeroing other fields on the device.  Fall back to
+     partial command if we haven't read the device polar yet. */
+  std::string cmd;
+  {
+    const std::lock_guard lock{mutex};
+    if (device_polar.valid) {
+      constexpr double LX_V = 100.0 / 3.6;
+      cmd = fmt::format(
+        "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},{:.0f},"
+        "{:.1f},{:.1f},{},{:.0f}",
+        device_polar.a * (LX_V * LX_V),
+        device_polar.b * LX_V,
+        device_polar.c,
+        device_polar.polar_load,
+        device_polar.polar_weight,
+        device_polar.max_weight,
+        device_polar.empty_weight,
+        crew_mass,
+        device_polar.name,
+        device_polar.stall);
+      device_polar.pilot_weight = crew_mass;
+      last_sent_crew_mass = crew_mass;
+    }
+  }
+
+  if (!cmd.empty()) {
+    PortWriteNMEA(port, cmd.c_str(), env);
+    return true;
+  }
+
+  /* Fall back to partial command */
   LXNAVVario::SetPilotWeight(port, env, crew_mass);
-  
-  /* Track what we sent */
+
   {
     const std::lock_guard lock{mutex};
     last_sent_crew_mass = crew_mass;
   }
-  
+
   return true;
 }
 
@@ -239,15 +269,45 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  /* Send only empty weight, leaving all other POLAR fields empty */
+  /* Send full POLAR command with only empty_weight changed to
+     avoid zeroing other fields on the device.  Fall back to
+     partial command if we haven't read the device polar yet. */
+  std::string cmd;
+  {
+    const std::lock_guard lock{mutex};
+    if (device_polar.valid) {
+      constexpr double LX_V = 100.0 / 3.6;
+      cmd = fmt::format(
+        "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},{:.0f},"
+        "{:.1f},{:.1f},{},{:.0f}",
+        device_polar.a * (LX_V * LX_V),
+        device_polar.b * LX_V,
+        device_polar.c,
+        device_polar.polar_load,
+        device_polar.polar_weight,
+        device_polar.max_weight,
+        empty_mass,
+        device_polar.pilot_weight,
+        device_polar.name,
+        device_polar.stall);
+      device_polar.empty_weight = empty_mass;
+      last_sent_empty_mass = empty_mass;
+    }
+  }
+
+  if (!cmd.empty()) {
+    PortWriteNMEA(port, cmd.c_str(), env);
+    return true;
+  }
+
+  /* Fall back to partial command */
   LXNAVVario::SetEmptyWeight(port, env, empty_mass);
-  
-  /* Track what we sent */
+
   {
     const std::lock_guard lock{mutex};
     last_sent_empty_mass = empty_mass;
   }
-  
+
   return true;
 }
 

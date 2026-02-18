@@ -153,6 +153,8 @@ class LXDevice: public AbstractDevice
     double max_weight = 0;
     double empty_weight = 0;
     double pilot_weight = 0;
+    std::string name;
+    double stall = 0;
     bool valid = false;
   } device_polar;
 
