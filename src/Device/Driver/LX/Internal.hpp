@@ -220,6 +220,13 @@ private:
    */
   GeoPoint last_sent_target_location = GeoPoint::Invalid();
 
+  /**
+   * Previous task type, used to detect GoTo→Ordered transitions
+   * so we can send one re-sync target to the vario.
+   * Uses the underlying uint8_t to avoid including TaskType.hpp.
+   */
+  uint8_t last_task_type = 0; /* TaskType::NONE */
+
   Mutex mutex;
   Mode mode = Mode::UNKNOWN;
   unsigned old_baud_rate = 0;
@@ -293,6 +300,7 @@ public:
     device_polar.valid = false;
     last_sent_target_name.clear();
     last_sent_target_location = GeoPoint::Invalid();
+    last_task_type = 0;
   }
 
   void IdDeviceByName(StaticString<16> productName, const DeviceInfo &device_info) noexcept

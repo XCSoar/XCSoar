@@ -14,6 +14,7 @@
 #include "BackendComponents.hpp"
 #include "Components.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
+#include "Engine/Task/TaskType.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Device/Util/NMEAWriter.hpp"
@@ -333,24 +334,44 @@ LXDevice::OnCalculatedUpdate(const MoreData &basic,
   /* Empty weight only in SEND mode (airframe data) */
   SyncEmptyWeight(basic, calculated, env, do_send);
 
-  /* Send active navigation target to the vario via PLXVTARG */
-  if (backend_components &&
-      backend_components->protected_task_manager) {
-    const auto wp =
-      backend_components->protected_task_manager->GetActiveWaypoint();
+  /* Send navigation target to the vario via PLXVTARG.
+     During ordered tasks the vario handles its own waypoint
+     advancement from its declaration, so we only send targets
+     for GoTo/Abort.  On transition back to Ordered we send
+     one re-sync target so the vario switches away from the
+     GoTo target. */
+  {
+    const auto task_type = calculated.common_stats.task_type;
+    const auto prev_type = static_cast<TaskType>(last_task_type);
+    const bool was_goto = (prev_type == TaskType::GOTO ||
+                           prev_type == TaskType::ABORT);
+    const bool is_goto = (task_type == TaskType::GOTO ||
+                          task_type == TaskType::ABORT);
+    const bool transitioning_back = was_goto && !is_goto &&
+      task_type == TaskType::ORDERED;
 
-    if (wp && wp->location.IsValid()) {
-      /* Only send when the target actually changes */
-      if (wp->name != last_sent_target_name ||
-          wp->location != last_sent_target_location) {
-        LXNAVVario::SetTarget(port, env,
-                              wp->name.c_str(),
-                              wp->location,
-                              wp->GetElevationOrZero());
-        last_sent_target_name = wp->name;
-        last_sent_target_location = wp->location;
+    if (is_goto || transitioning_back) {
+      if (backend_components &&
+          backend_components->protected_task_manager) {
+        const auto wp =
+          backend_components->protected_task_manager->GetActiveWaypoint();
+
+        if (wp && wp->location.IsValid()) {
+          if (transitioning_back ||
+              wp->name != last_sent_target_name ||
+              wp->location != last_sent_target_location) {
+            LXNAVVario::SetTarget(port, env,
+                                  wp->name.c_str(),
+                                  wp->location,
+                                  wp->GetElevationOrZero());
+            last_sent_target_name = wp->name;
+            last_sent_target_location = wp->location;
+          }
+        }
       }
     }
+
+    last_task_type = static_cast<uint8_t>(task_type);
   }
 }
 
