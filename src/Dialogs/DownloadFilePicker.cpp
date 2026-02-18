@@ -4,7 +4,7 @@
 #include "DownloadFilePicker.hpp"
 #include "Error.hpp"
 #include "WidgetDialog.hpp"
-#include "ProgressDialog.hpp"
+#include "DownloadFileModal.hpp"
 #include "Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -23,114 +23,13 @@
 #include "ui/event/Notify.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
-#include "Operation/ThreadedOperationEnvironment.hpp"
+#include "util/StringCompare.hxx"
+#include "util/StringFormat.hpp"
 
 #include <vector>
 
 #include <cassert>
 
-/**
- * This class tracks a download and updates a #ProgressDialog.
- */
-class DownloadProgress final : Net::DownloadListener {
-  ProgressDialog &dialog;
-  ThreadedOperationEnvironment env;
-  const Path path_relative;
-
-  UI::PeriodicTimer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
-
-  UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
-
-  std::exception_ptr error;
-
-  bool got_size = false, complete = false, success;
-
-public:
-  DownloadProgress(ProgressDialog &_dialog,
-                   const Path _path_relative)
-    :dialog(_dialog), env(_dialog), path_relative(_path_relative) {
-    update_timer.Schedule(std::chrono::seconds(1));
-    Net::DownloadManager::AddListener(*this);
-  }
-
-  ~DownloadProgress() {
-    Net::DownloadManager::RemoveListener(*this);
-  }
-
-  void Rethrow() const {
-    if (error)
-      std::rethrow_exception(error);
-  }
-
-private:
-  /* virtual methods from class Net::DownloadListener */
-  void OnDownloadAdded(Path _path_relative,
-                       int64_t size, int64_t position) noexcept override {
-    if (!complete && path_relative == _path_relative) {
-      if (!got_size && size >= 0) {
-        got_size = true;
-        env.SetProgressRange(uint64_t(size) / 1024u);
-      }
-
-      if (got_size)
-        env.SetProgressPosition(uint64_t(position) / 1024u);
-    }
-  }
-
-  void OnDownloadComplete(Path _path_relative) noexcept override {
-    if (!complete && path_relative == _path_relative) {
-      complete = true;
-      success = true;
-      download_complete_notify.SendNotification();
-    }
-  }
-
-  void OnDownloadError(Path _path_relative,
-                       std::exception_ptr _error) noexcept override {
-    if (!complete && path_relative == _path_relative) {
-      complete = true;
-      success = false;
-      error = std::move(_error);
-      download_complete_notify.SendNotification();
-    }
-  }
-
-  void OnDownloadCompleteNotification() noexcept {
-    assert(complete);
-    dialog.SetModalResult(success ? mrOK : mrCancel);
-  }
-};
-
-/**
- * Throws on error.
- */
-static AllocatedPath
-DownloadFile(const char *uri, const char *base)
-{
-  assert(Net::DownloadManager::IsAvailable());
-
-  if (base == nullptr)
-    return nullptr;
-
-  ProgressDialog dialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                        _("Download"));
-  dialog.SetText(base);
-
-  dialog.AddCancelButton();
-
-  const DownloadProgress dp(dialog, Path(base));
-
-  Net::DownloadManager::Enqueue(uri, Path(base));
-
-  int result = dialog.ShowModal();
-  if (result != mrOK) {
-    Net::DownloadManager::Cancel(Path(base));
-    dp.Rethrow();
-    return nullptr;
-  }
-
-  return LocalPath(base);
-}
 
 class DownloadFilePickerWidget final
   : public ListWidget,
@@ -242,7 +141,7 @@ DownloadFilePickerWidget::Unprepare() noexcept
 
 void
 DownloadFilePickerWidget::RefreshList()
-try {
+{
   {
     const std::lock_guard lock{mutex};
     repository_modified = false;
@@ -251,10 +150,30 @@ try {
 
   FileRepository repository;
 
-  const auto path = LocalPath("repository");
-  FileLineReaderA reader(path);
+  try {
+    FileLineReaderA reader(LocalPath("repository"));
+    ParseFileRepository(repository, reader);
+  } catch (const std::runtime_error &) {
+    /* not yet downloaded - ignore */
+  }
 
-  ParseFileRepository(repository, reader);
+  // add user repository contents
+  const std::vector<std::string> uris = GetUserRepositoryURIs();
+  int file_number = 1;
+  for (const auto &uri : uris) {
+    if (uri.empty())
+      continue;
+
+    char filename[32];
+    StringFormat(filename, std::size(filename), "user_repository_%d",
+                 file_number++);
+    try {
+      FileLineReaderA reader(LocalPath(filename));
+      ParseFileRepository(repository, reader);
+    } catch (const std::runtime_error &) {
+      /* not yet downloaded - ignore */
+    }
+  }
 
   items.clear();
   for (auto &i : repository)
@@ -266,7 +185,6 @@ try {
   list.Invalidate();
 
   UpdateButtons();
-} catch (const std::runtime_error &e) {
 }
 
 void
@@ -297,7 +215,7 @@ DownloadFilePickerWidget::Download()
   const auto &file = items[current];
 
   try {
-    path = DownloadFile(file.GetURI(), file.GetName());
+    path = DownloadFileModal(_("Download"), file.GetURI(), file.GetName());
     if (path != nullptr)
       dialog.SetModalResult(mrOK);
   } catch (...) {
@@ -319,7 +237,10 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
   if (name == nullptr)
     return;
 
-  if (name == Path("repository")) {
+  const bool is_main = name == Path("repository");
+  const bool is_user = StringStartsWith(name.c_str(), "user_repository_");
+
+  if (is_main || is_user) {
     const std::lock_guard lock{mutex};
     repository_failed = false;
     repository_modified = true;
@@ -341,6 +262,9 @@ DownloadFilePickerWidget::OnDownloadError(Path path_relative,
     repository_failed = true;
     repository_error = std::move(error);
   }
+
+  /* user repository download errors are silently ignored 
+     one warning is enough on network loss */
 
   download_complete_notify.SendNotification();
 }

@@ -30,6 +30,12 @@ Profile::Get(std::string_view key, std::span<char> value) noexcept
 }
 
 bool
+Profile::Get(std::string_view key, std::string &value) noexcept
+{
+  return map.Get(key, value);
+}
+
+bool
 Profile::Get(std::string_view key, int &value) noexcept
 {
   return map.Get(key, value);
@@ -77,6 +83,11 @@ Profile::Set(std::string_view key, const char *value) noexcept
   map.Set(key, value);
 }
 
+void
+Profile::Set(std::string_view key, std::string value) noexcept
+{
+  map.Set(key, value);
+}
 
 void
 Profile::Set(std::string_view key, int value) noexcept
