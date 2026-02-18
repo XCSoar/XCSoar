@@ -192,8 +192,11 @@ TestFLARM()
     ok1(traffic->climb_rate_received);
     ok1(traffic->type == FlarmTraffic::AircraftType::TOW_PLANE);
     ok1(!traffic->stealth);
+    ok1(traffic->source == FlarmTraffic::SourceType::FLARM);
+    ok1(!traffic->rssi_available);
+    ok1(!traffic->no_track);
   } else {
-    skip(16, 0, "traffic == NULL");
+    skip(19, 0, "traffic == NULL");
   }
 
   ok1(parser.ParseLine("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
@@ -241,6 +244,65 @@ TestFLARM()
     ok1(!traffic->stealth);
   } else {
     skip(15, 0, "traffic == NULL");
+  }
+
+  // PFLAA v7+ with source=ADS-B, RSSI=-85, NoTrack=0
+  ok1(parser.ParseLine("$PFLAA,0,200,-300,15,2,AABB01,180,5,30,0.8,1,2,-85,0*4B",
+                       nmea_info));
+
+  id = FlarmId::Parse("AABB01", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->source == FlarmTraffic::SourceType::ADSB);
+    ok1(traffic->rssi_available);
+    ok1(traffic->rssi == -85);
+    ok1(!traffic->no_track);
+    ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
+    ok1(equals(traffic->track, 180));
+  } else {
+    skip(7, 0, "traffic == NULL");
+  }
+
+  // PFLAA v7+ with source=Mode-S only (no RSSI, no NoTrack)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB02,90,,20,,8,5*64",
+                       nmea_info));
+
+  id = FlarmId::Parse("AABB02", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->source == FlarmTraffic::SourceType::MODES);
+    ok1(!traffic->rssi_available);
+    ok1(!traffic->no_track);
+    ok1(traffic->type == FlarmTraffic::AircraftType::POWERED_AIRCRAFT);
+  } else {
+    skip(4, 0, "traffic == NULL");
+  }
+
+  // PFLAA stealth with NoTrack=1
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB03,,,,,1,0,,1*53",
+                       nmea_info));
+
+  id = FlarmId::Parse("AABB03", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->source == FlarmTraffic::SourceType::FLARM);
+    ok1(traffic->stealth);
+    ok1(traffic->no_track);
+    ok1(!traffic->rssi_available);
+  } else {
+    skip(4, 0, "traffic == NULL");
+  }
+
+  // PFLAA v7+ with out-of-range source (9 -> defaults to FLARM)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB04,90,,20,,8,9*6E",
+                       nmea_info));
+
+  id = FlarmId::Parse("AABB04", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->source == FlarmTraffic::SourceType::FLARM);
+  } else {
+    skip(1, 0, "traffic == NULL");
   }
 
   // Ensure a database instance exists before PFLAM messages are parsed
@@ -2274,7 +2336,8 @@ TestMalformedInput()
 
 int main()
 {
-  plan_tests(1032 /* drivers */ + 8 /* SubSecond */ + 4 /* MWVStatus */
+  plan_tests(1032 /* drivers */ + 26 /* PFLAA v7+ */
+             + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */);
