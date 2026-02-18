@@ -75,7 +75,7 @@ struct ExternalSettings {
   double polar_c;
 
   Validity polar_load_available;
-  /** Polar load (overload) from device POLAR sentence */
+  /** Wing loading (kg/m²) from device POLAR sentence */
   double polar_load;
 
   Validity polar_reference_mass_available;
@@ -232,31 +232,6 @@ struct ExternalSettings {
     return elevation_available && abs(elevation - value) <= 1;
   }
 
-  /**
-   * Sets a new MacCready value, but updates the time stamp only if
-   * the value has changed.
-   *
-   * @return true if the value and the time stamp have been updated
-   */
-  bool ProvideMacCready(double value, TimeStamp time) noexcept;
-  bool ProvideBallastFraction(double value, TimeStamp time) noexcept;
-  bool ProvideBallastOverload(double value, TimeStamp time) noexcept;
-  bool ProvideBallastLitres(double value, TimeStamp time) noexcept;
-  bool ProvideWingLoading(double value, TimeStamp time) noexcept;
-  bool ProvideBugs(double value, TimeStamp time) noexcept;
-  bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;
-  bool ProvideVolume(unsigned value, TimeStamp time) noexcept;
-  bool ProvideElevation(int value, TimeStamp time) noexcept;
-  bool ProvidePolarCoefficients(double a, double b, double c, TimeStamp time) noexcept;
-  bool ProvidePolarLoad(double value, TimeStamp time) noexcept;
-  bool ProvidePolarReferenceMass(double value, TimeStamp time) noexcept;
-  bool ProvidePolarMaximumMass(double value, TimeStamp time) noexcept;
-  bool ProvidePolarPilotWeight(double value, TimeStamp time) noexcept;
-  bool ProvidePolarEmptyWeight(double value, TimeStamp time) noexcept;
-  bool ProvideGliderRegistration(const char *value, TimeStamp time) noexcept;
-  bool ProvideGliderCompetitionId(const char *value, TimeStamp time) noexcept;
-  bool ProvideGliderType(const char *value, TimeStamp time) noexcept;
-
   bool ComparePolarCoefficients(double a, double b, double c) const {
     return polar_coefficients_available &&
       fabs(polar_a - a) <= 0.0001 &&
@@ -287,4 +262,29 @@ struct ExternalSettings {
     return polar_empty_weight_available &&
       fabs(polar_empty_weight - value) <= 0.1;
   }
+
+  /**
+   * Sets a new MacCready value, but updates the time stamp only if
+   * the value has changed.
+   *
+   * @return true if the value and the time stamp have been updated
+   */
+  bool ProvideMacCready(double value, TimeStamp time) noexcept;
+  bool ProvideBallastFraction(double value, TimeStamp time) noexcept;
+  bool ProvideBallastOverload(double value, TimeStamp time) noexcept;
+  bool ProvideBallastLitres(double value, TimeStamp time) noexcept;
+  bool ProvideWingLoading(double value, TimeStamp time) noexcept;
+  bool ProvideBugs(double value, TimeStamp time) noexcept;
+  bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;
+  bool ProvideVolume(unsigned value, TimeStamp time) noexcept;
+  bool ProvideElevation(int value, TimeStamp time) noexcept;
+  bool ProvidePolarCoefficients(double a, double b, double c, TimeStamp time) noexcept;
+  bool ProvidePolarLoad(double value, TimeStamp time) noexcept;
+  bool ProvidePolarReferenceMass(double value, TimeStamp time) noexcept;
+  bool ProvidePolarMaximumMass(double value, TimeStamp time) noexcept;
+  bool ProvidePolarPilotWeight(double value, TimeStamp time) noexcept;
+  bool ProvidePolarEmptyWeight(double value, TimeStamp time) noexcept;
+  bool ProvideGliderRegistration(const char *value, TimeStamp time) noexcept;
+  bool ProvideGliderCompetitionId(const char *value, TimeStamp time) noexcept;
+  bool ProvideGliderType(const char *value, TimeStamp time) noexcept;
 };

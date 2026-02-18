@@ -410,7 +410,7 @@ bool
 ExternalSettings::ProvidePolarLoad(double value, TimeStamp time) noexcept
 {
   if (value < 0 || value > 100)
-    /* failed sanity check - allow up to 100 (could be percentage or loading factor) */
+    /* failed sanity check — wing loading in kg/m² */
     return false;
 
   if (polar_load_available && fabs(polar_load - value) <= 0.01)

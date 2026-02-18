@@ -19,10 +19,8 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
   {
     auto plane_path = profile.GetPath("PlanePath");
     if (plane_path != nullptr &&
-        PlaneGlue::ReadFile(plane, plane_path)) {
-      plane.plane_profile_active = true;
+        PlaneGlue::ReadFile(plane, plane_path))
       return;
-    }
   }
 
   /* No plane profile file loaded - default plane is active */
@@ -101,10 +99,11 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   gp.SetWingArea(plane.wing_area);
 
-  gp.SetVMax(75, false);
+  gp.SetVMax(DEFAULT_MAX_SPEED, false);
 
   gp.Update();
 
   if (plane.max_speed > 0)
-    gp.SetVMax(std::clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
+    gp.SetVMax(std::clamp(plane.max_speed,
+                          gp.GetVMin() + 10, DEFAULT_MAX_SPEED));
 }
