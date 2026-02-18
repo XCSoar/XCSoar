@@ -16,6 +16,7 @@
 #include "util/HexString.hpp"
 
 #include <algorithm>
+#include <fmt/format.h>
 
 using std::string_view_literals::operator""sv;
 
@@ -29,12 +30,13 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept
   error.severity = (FlarmError::Severity)
     line.Read((int)FlarmError::Severity::NO_ERROR);
   error.code = (FlarmError::Code)line.ReadHex(0);
-  char buffer[100];
-  StringFormatUnsafe(buffer, "%s - %s",
-                     FlarmError::ToString(error.severity),
-                     FlarmError::ToString(error.code));
-  if (error.severity != FlarmError::Severity::NO_ERROR)
-    Message::AddMessage("FLARM: ", buffer);
+
+  if (error.severity != FlarmError::Severity::NO_ERROR) {
+    const auto msg = fmt::format("{} - {}",
+                                 FlarmError::ToString(error.severity),
+                                 FlarmError::ToString(error.code));
+    Message::AddMessage("FLARM: ", msg.c_str());
+  }
 
   error.available.Update(clock);
 }
