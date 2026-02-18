@@ -160,7 +160,7 @@ InputEvents::eventAudioDeadband(const char *misc)
 void
 InputEvents::eventBugs(const char *misc)
 {
-  if (!backend_components->protected_task_manager)
+  if (!backend_components || !backend_components->protected_task_manager)
     return;
 
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
@@ -187,7 +187,8 @@ InputEvents::eventBugs(const char *misc)
 
   if (BUGS != oldBugs) {
     settings.SetBugs(BUGS);
-    backend_components->SetTaskPolar(settings);
+    if (backend_components)
+      backend_components->SetTaskPolar(settings);
   }
 }
 
@@ -201,7 +202,7 @@ InputEvents::eventBugs(const char *misc)
 void
 InputEvents::eventBallast(const char *misc)
 {
-  if (!backend_components->protected_task_manager)
+  if (!backend_components || !backend_components->protected_task_manager)
     return;
 
   auto &settings = CommonInterface::SetComputerSettings().polar;
@@ -231,7 +232,8 @@ InputEvents::eventBallast(const char *misc)
 
   if (ballast_fraction != old_ballast_fraction) {
     polar.SetBallastFraction(ballast_fraction);
-    backend_components->SetTaskPolar(settings);
+    if (backend_components)
+      backend_components->SetTaskPolar(settings);
   }
 }
 

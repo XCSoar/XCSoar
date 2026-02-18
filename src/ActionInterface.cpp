@@ -94,9 +94,10 @@ ActionInterface::SetBallastLitres(double ballast_litres, bool to_devices) noexce
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
   polar.SetBallastLitres(ballast_litres);
 
-  backend_components->SetTaskPolar(GetComputerSettings().polar);
+  if (backend_components)
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
 
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     const double ref_mass = polar.GetReferenceMass();
     if (ref_mass > 0) {
       MessageOperationEnvironment env;
@@ -113,9 +114,10 @@ ActionInterface::SetBallastFraction(double fraction, bool to_devices) noexcept
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
   polar.SetBallastFraction(fraction);
 
-  backend_components->SetTaskPolar(GetComputerSettings().polar);
+  if (backend_components)
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
 
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     const double ref_mass = polar.GetReferenceMass();
     if (ref_mass > 0) {
       MessageOperationEnvironment env;
@@ -129,14 +131,12 @@ ActionInterface::SetBallastFraction(double fraction, bool to_devices) noexcept
 void
 ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
 {
-  // Write Bugs into settings
   CommonInterface::SetComputerSettings().polar.SetBugs(bugs);
 
-  // send to calculation thread and trigger recalculation
-  backend_components->SetTaskPolar(GetComputerSettings().polar);
+  if (backend_components)
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
 
-  // send to external devices
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutBugs(bugs, env);
   }
@@ -145,15 +145,13 @@ ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
 void
 ActionInterface::SetCrewMass(double crew_mass, bool to_devices) noexcept
 {
-  // Write crew mass into settings
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
   polar.SetCrewMass(crew_mass);
 
-  // send to calculation thread and trigger recalculation
-  backend_components->SetTaskPolar(GetComputerSettings().polar);
+  if (backend_components)
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
 
-  // send to external devices
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutCrewMass(crew_mass, env);
   }
@@ -162,15 +160,13 @@ ActionInterface::SetCrewMass(double crew_mass, bool to_devices) noexcept
 void
 ActionInterface::SetEmptyMass(double empty_mass, bool to_devices) noexcept
 {
-  // Write empty mass into settings
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
   polar.SetEmptyMass(empty_mass);
 
-  // send to calculation thread and trigger recalculation
-  backend_components->SetTaskPolar(GetComputerSettings().polar);
+  if (backend_components)
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
 
-  // send to external devices
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutEmptyMass(empty_mass, env);
   }
@@ -196,11 +192,12 @@ ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
   InfoBoxManager::SetDirty();
 
   /* send to calculation thread and trigger recalculation */
-  backend_components->SetTaskPolar(GetComputerSettings().polar);
+  if (backend_components)
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
 
   /* send to external devices */
 
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutMacCready(mc, env);
   }
@@ -329,7 +326,7 @@ ActionInterface::SetActiveFrequency(const RadioFrequency freq,
 
   /* send to external devices */
 
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutActiveFrequency(freq, freq_name, env);
   }
@@ -358,7 +355,7 @@ ActionInterface::SetStandbyFrequency(const RadioFrequency freq,
 
   /* send to external devices */
 
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutStandbyFrequency(freq, freq_name, env);
   }
@@ -394,7 +391,7 @@ void
 ActionInterface::ExchangeRadioFrequencies(bool to_devices) noexcept
 {
   /* send to external devices */
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->ExchangeRadioFrequencies(env);
   }
@@ -413,7 +410,7 @@ ActionInterface::SetTransponderCode(TransponderCode code,
   InfoBoxManager::SetDirty();
 
   /* send to external devices */
-  if (to_devices && backend_components->devices) {
+  if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutTransponderCode(code, env);
   }
