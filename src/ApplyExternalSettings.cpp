@@ -19,7 +19,7 @@ BallastProcessTimer() noexcept
   const GlidePolar &polar = CommonInterface::GetComputerSettings().polar.glide_polar_task;
 
   if (settings.ballast_fraction_available.Modified(last_fraction)) {
-    ActionInterface::SetBallast(settings.ballast_fraction, false);
+    ActionInterface::SetBallastFraction(settings.ballast_fraction, false);
     modified = true;
   }
 
@@ -27,11 +27,12 @@ BallastProcessTimer() noexcept
 
   if (settings.ballast_overload_available.Modified(last_overload) &&
       settings.ballast_overload >= 0.8 && plane.max_ballast > 0) {
-    auto overload =
-        ((settings.ballast_overload * plane.polar_shape.reference_mass) -
-         polar.GetCrewMass() - plane.empty_mass) /
-        plane.max_ballast;
-    ActionInterface::SetBallast(overload, false);
+    auto water_mass =
+        (settings.ballast_overload * plane.polar_shape.reference_mass) -
+         polar.GetCrewMass() - plane.empty_mass;
+    if (water_mass < 0)
+      water_mass = 0;
+    ActionInterface::SetBallastLitres(water_mass, false);
     modified = true;
   }
 

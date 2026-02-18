@@ -43,20 +43,33 @@ BallastDumpManager::Update(GlidePolar &glide_polar,
     return false;
   }
 
-  // Milliseconds since last ballast_clock.Update() call
   const auto dt = ballast_clock.ElapsedUpdate();
 
-  // Calculate the new ballast percentage
-  auto ballast = glide_polar.GetBallast() - ToFloatSeconds(dt) / dump_time;
-
-  // Check if the plane is dry now
-  if (ballast < 0) {
-    Stop();
-    glide_polar.SetBallastLitres(0);
-    return false;
+  auto ballast_litres = glide_polar.GetBallastLitres();
+  
+  const double max_ballast = glide_polar.GetMaxBallast();
+  
+  if (max_ballast > 0) {
+    double ballast_fraction = glide_polar.GetBallastFraction();
+    ballast_fraction -= ToFloatSeconds(dt) / dump_time;
+    
+    if (ballast_fraction < 0) {
+      Stop();
+      glide_polar.SetBallastLitres(0);
+      return false;
+    }
+    
+    glide_polar.SetBallastFraction(ballast_fraction);
+  } else {
+    ballast_litres -= ballast_litres * ToFloatSeconds(dt) / dump_time;
+    
+    if (ballast_litres < 0) {
+      Stop();
+      glide_polar.SetBallastLitres(0);
+      return false;
+    }
+    
+    glide_polar.SetBallastLitres(ballast_litres);
   }
-
-  // Set new ballast
-  glide_polar.SetBallast(ballast);
   return true;
 }
