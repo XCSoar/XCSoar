@@ -59,6 +59,10 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
                        GlidePolar &gp) noexcept
 {
   settings.contest.handicap = plane.handicap;
+  settings.plane.competition_id = plane.competition_id;
+  settings.plane.registration = plane.registration;
+  settings.plane.type = plane.type;
+  settings.plane.weglide_glider_type = plane.weglide_glider_type;
 
   PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
   if (!pc.IsValid())
@@ -66,7 +70,6 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   gp.SetCoefficients(pc, false);
 
-  // Glider empty weight
   gp.SetReferenceMass(plane.polar_shape.reference_mass, false);
   gp.SetEmptyMass(plane.empty_mass, false);
 
@@ -75,17 +78,10 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   gp.SetWingArea(plane.wing_area);
 
-  // assure the polar is not invalid (because of VMin > VMax)
   gp.SetVMax(75, false);
 
   gp.Update();
 
-  // set VMax from settings but assure the range [VMin, VMax] is reasonable
   if (plane.max_speed > 0)
     gp.SetVMax(std::clamp(plane.max_speed, gp.GetVMin() + 10, 75.));
-
-  settings.plane.competition_id = plane.competition_id;
-  settings.plane.registration = plane.registration;
-  settings.plane.type = plane.type;
-  settings.plane.weglide_glider_type = plane.weglide_glider_type;
 }

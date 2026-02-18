@@ -124,6 +124,9 @@ NMEAInfo::Reset() noexcept
   pressure_altitude_available.Clear();
   pressure_altitude = 0;
 
+  igc_pressure_altitude_available.Clear();
+  igc_pressure_altitude = 0;
+
   time_available.Clear();
   time = {};
 
@@ -214,6 +217,7 @@ NMEAInfo::Expire() noexcept
   sensor_calibration_available.Expire(clock, std::chrono::hours(1));
   baro_altitude_available.Expire(clock, std::chrono::seconds(30));
   pressure_altitude_available.Expire(clock, std::chrono::seconds(30));
+  igc_pressure_altitude_available.Expire(clock, std::chrono::seconds(30));
   noncomp_vario_available.Expire(clock, std::chrono::seconds(5));
   total_energy_vario_available.Expire(clock, std::chrono::seconds(5));
   netto_vario_available.Expire(clock, std::chrono::seconds(5));
@@ -298,6 +302,9 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
 
   if (pressure_altitude_available.Complement(add.pressure_altitude_available))
     pressure_altitude = add.pressure_altitude;
+
+  if (igc_pressure_altitude_available.Complement(add.igc_pressure_altitude_available))
+    igc_pressure_altitude = add.igc_pressure_altitude;
 
   if (noncomp_vario_available.Complement(add.noncomp_vario_available))
     noncomp_vario = add.noncomp_vario;

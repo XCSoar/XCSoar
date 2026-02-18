@@ -41,11 +41,18 @@ struct DeviceInfo {
    */
   StaticString<16> software_version;
 
+  /**
+   * The license string reported by the device (e.g. LXWP1 field 5
+   * in LXNav protocol >= 1.05).
+   */
+  StaticString<32> license;
+
   void Clear() {
     product.clear();
     serial.clear();
     hardware_version.clear();
     software_version.clear();
+    license.clear();
   }
 };
 
