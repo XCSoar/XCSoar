@@ -19,6 +19,10 @@
 #include "Device/Util/NMEAWriter.hpp"
 #include "Message.hpp"
 #include "Language/Language.hpp"
+#include "Plane/PlaneFileGlue.hpp"
+#include "Profile/Profile.hpp"
+#include "system/Path.hpp"
+#include "LogFile.hpp"
 
 #include <fmt/format.h>
 
@@ -441,18 +445,61 @@ LXDevice::ReceivePolarFromDevice(const MoreData &basic) noexcept
   if (pilot_weight > 0)
     polar.SetCrewMass(pilot_weight, false);
 
-  /* Estimate wing area from reference mass and wing loading */
-  if (polar.GetWingArea() <= 0 &&
-      polar_load > 0 && polar_weight > 0) {
+  /* Derive wing area from reference mass and wing loading.
+     Always update so XCSoar stays in sync with the device. */
+  if (polar_load > 0 && polar_weight > 0) {
     const double area = polar_weight / polar_load;
     if (area > 0)
       polar.SetWingArea(area);
   }
 
+  /* Reset VMax so the plane profile's max cruise speed doesn't
+     cap the speed-to-fly solver when the polar comes from the
+     device.  75 m/s (270 km/h) is a safe upper bound. */
+  polar.SetVMax(75, false);
+
   polar.Update();
 
   if (backend_components && backend_components->calculation_thread)
     backend_components->SetTaskPolar(GetComputerSettings().polar);
+
+  /* Update the active plane profile with received polar values */
+  {
+    Plane &plane = SetComputerSettings().plane;
+    if (plane.plane_profile_active) {
+      /* Regenerate polar shape points from coefficients.
+         Use the existing 3 speeds if valid, otherwise pick
+         standard speeds (90, 130, 180 km/h). */
+      auto &ps = plane.polar_shape;
+      if (ps.points[0].v <= 0 || ps.points[1].v <= 0 ||
+          ps.points[2].v <= 0) {
+        ps.points[0].v = 90.0 / 3.6;
+        ps.points[1].v = 130.0 / 3.6;
+        ps.points[2].v = 180.0 / 3.6;
+      }
+      for (auto &pt : ps.points)
+        pt.w = a * pt.v * pt.v + b * pt.v + c;
+      ps.reference_mass = polar_weight;
+
+      if (empty_weight > 0)
+        plane.empty_mass = empty_weight;
+      if (polar_load > 0 && polar_weight > 0)
+        plane.wing_area = polar_weight / polar_load;
+
+      /* Reset max_speed so it doesn't cap speed-to-fly */
+      plane.max_speed = 75.0;
+
+      /* Save to disk */
+      try {
+        auto plane_path = Profile::GetPath("PlanePath");
+        if (plane_path != nullptr)
+          PlaneGlue::WriteFile(plane, plane_path);
+      } catch (...) {
+        LogError(std::current_exception(),
+                 "Failed to save plane profile");
+      }
+    }
+  }
 
   /* One-time notification */
   bool should_notify = false;
