@@ -116,7 +116,8 @@ def get_current_xc_polar(glider, weight=0.0):
         return None
     ret = None
     for line in f:
-        if line[0:7] != "  { " : continue
+        if not line.startswith('  { ') :
+            continue
         if glider in line:
             ##357, 165, 108.8, -0.64, 156.4, -1.18, 211.13, -2.5, 9.0, 0.0, 114
             ret = polar()
