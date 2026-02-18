@@ -21,6 +21,8 @@
 #include "time/FloatDuration.hxx"
 #include "util/StaticFifoBuffer.hxx"
 
+#include <optional>
+
 #ifdef HAVE_INTERNAL_GPS
 #include "SensorListener.hpp"
 #endif
@@ -40,6 +42,8 @@
 namespace Java { class GlobalCloseable; }
 class DeviceBlackboard;
 class NMEALogger;
+class GlidePolar;
+struct GeoPoint;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -533,6 +537,12 @@ public:
   bool PutBugs(double bugs, OperationEnvironment &env) noexcept;
   bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) noexcept;
+  bool PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept;
+  bool PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept;
+  bool PutPolar(const GlidePolar &polar, OperationEnvironment &env) noexcept;
+  bool PutTarget(const GeoPoint &location, const char *name,
+                 std::optional<double> elevation,
+                 OperationEnvironment &env) noexcept;
   bool PutVolume(unsigned volume, OperationEnvironment &env) noexcept;
   bool PutPilotEvent(OperationEnvironment &env) noexcept;
   bool PutActiveFrequency(RadioFrequency frequency,
@@ -546,6 +556,8 @@ public:
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   bool PutQNH(AtmosphericPressure pres,
               OperationEnvironment &env) noexcept;
+  bool PutElevation(int elevation, OperationEnvironment &env) noexcept;
+  bool RequestElevation(OperationEnvironment &env) noexcept;
 
   /**
    * Caller is responsible for calling Borrow() and Return().
