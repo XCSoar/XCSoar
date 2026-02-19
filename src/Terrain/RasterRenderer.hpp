@@ -168,7 +168,7 @@ public:
    *
    * This version uses RGBA colors (with alpha channel for transparency).
    */
-  void PrepareColorTableAlpha(const ColorRampAlpha *color_ramp, bool do_water,
+  void PrepareColorTableAlpha(const ColorRamp *color_ramp, bool do_water,
                               unsigned height_scale, int interp_levels) noexcept;
 
   /**
