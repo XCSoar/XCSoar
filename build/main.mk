@@ -21,6 +21,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/FileManager.cpp \
 	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
+	$(SRC)/Dialogs/DataManagement/BackupRestorePanel.cpp \
 	$(SRC)/Dialogs/DataManagement/StorageLocationPickerDialog.cpp \
 	$(SRC)/Dialogs/DataManagement/ArchiveUtil.cpp \
 	$(SRC)/Dialogs/DataManagement/FileTransferUtil.cpp \
