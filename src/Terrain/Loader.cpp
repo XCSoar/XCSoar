@@ -126,12 +126,8 @@ void
 TerrainLoader::ProcessComment(const char *data, unsigned size)
 {
   if (scan_overview) {
-    char buffer[128];
-    if (size < sizeof(buffer)) {
-      memcpy(buffer, data, size);
-      buffer[size] = 0;
-      ParseBounds(buffer);
-    }
+    const std::string comment{data, size};
+    ParseBounds(comment.c_str());
   }
 }
 
