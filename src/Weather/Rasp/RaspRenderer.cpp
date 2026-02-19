@@ -69,29 +69,25 @@ RaspRenderer::Generate(const WindowProjection &projection,
     /* not visible */
     return false;
 
-  // Choose between RGB and RGBA colormap based on style and rendering capabilities
-  #ifdef ENABLE_OPENGL
-  const bool use_alpha = style.HasAlpha();
-  #else
-  const bool use_alpha = false;
-  #endif
+  const ColorRamp *color_ramp = style.color_ramp;
+  if (color_ramp != last_color_ramp) {
+ 
+    // Choose between RGB and RGBA colormap based on style and rendering capabilities
+ #ifdef ENABLE_OPENGL
+    const bool use_alpha = style.HasAlpha();
+ #else
+    const bool use_alpha = false;
+ #endif
 
-  if (use_alpha) {
-    const ColorRampAlpha *color_ramp_alpha = style.color_ramp_alpha;
-    if (color_ramp_alpha != last_color_ramp_alpha) {
-      raster_renderer.PrepareColorTableAlpha(color_ramp_alpha, do_water,
-                                             height_scale, interp_levels);
-      last_color_ramp_alpha = color_ramp_alpha;
-      last_color_ramp = nullptr;  // Reset RGB cache
-    }
-  } else {
-    const ColorRamp *color_ramp = style.color_ramp;
-    if (color_ramp != last_color_ramp) {
+    if (use_alpha)
+      raster_renderer.PrepareColorTableAlpha(color_ramp, do_water,
+                                             height_scale,
+                                             interp_levels);
+    else
       raster_renderer.PrepareColorTable(color_ramp, do_water,
-                                        height_scale, interp_levels);
-      last_color_ramp = color_ramp;
-      last_color_ramp_alpha = nullptr;  // Reset RGBA cache
-    }
+                                        height_scale,
+                                        interp_levels);
+    last_color_ramp = color_ramp;
   }
 
   raster_renderer.ScanMap(*map, projection);
