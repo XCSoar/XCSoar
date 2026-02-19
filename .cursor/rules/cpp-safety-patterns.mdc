@@ -1,0 +1,118 @@
+---
+globs: ["**/*.cpp", "**/*.hpp"]
+alwaysApply: false
+---
+
+# C++ Safety Patterns
+
+## noexcept Contract Safety
+
+A throw that escapes a `noexcept` function calls `std::terminate` — this is an unrecoverable crash.
+
+When marking a function `noexcept`, verify that ALL callees are either `noexcept` themselves or wrapped in try-catch. Filesystem and I/O functions (`VisitDataFiles`, file readers, `WriteFile`) are common traps — they are usually NOT `noexcept`.
+
+```cpp
+// BAD: VisitDataFiles can throw; std::terminate if it does
+static bool
+MyProcessTimer() noexcept
+{
+  auto path = FindSomething();   // calls VisitDataFiles — throws!
+  if (path != nullptr) {
+    try {
+      DoWork(path);
+    } catch (...) {
+      LogError(std::current_exception(), "failed");
+    }
+  }
+  return true;
+}
+
+// GOOD: throwing call is inside try-catch
+static bool
+MyProcessTimer() noexcept
+{
+  try {
+    auto path = FindSomething();
+    if (path != nullptr)
+      DoWork(path);
+  } catch (...) {
+    LogError(std::current_exception(), "failed");
+  }
+  return true;
+}
+```
+
+## Defensive Parameter Validation
+
+Functions that accept raw pointers (`const char *`) should guard against `nullptr` and empty strings at entry. Functions that accept objects with validity states (e.g., `GlidePolar::IsValid()`) should validate early and return a sentinel (`nullptr`, `false`, etc.) rather than proceeding with invalid data. This is especially important for functions that write persistent state (files, profiles).
+
+```cpp
+// BAD: proceeds to create file even with invalid polar
+AllocatedPath
+CreateFromPolar(const char *registration, const GlidePolar &gp)
+{
+  Plane plane{};
+  if (gp.IsValid()) {
+    // ... populate plane from gp ...
+  }
+  auto path = MakePath(registration);
+  // writes broken plane file when gp is invalid
+  WriteFile(plane, path);
+  return path;
+}
+
+// GOOD: reject invalid input early
+AllocatedPath
+CreateFromPolar(const char *registration, const GlidePolar &gp)
+{
+  if (registration == nullptr || *registration == '\0')
+    return nullptr;
+
+  if (!gp.IsValid())
+    return nullptr;
+
+  Plane plane{};
+  // populate plane fields from gp (omitted for brevity)
+  auto path = MakePath(registration);
+  WriteFile(plane, path);
+  return path;
+}
+```
+
+## Enum Type Safety
+
+Never store enum values as integer types (`uint8_t`, `unsigned`, `int`). Use the enum type directly. Casting between enum and integer bypasses type safety and makes the code fragile when enum values are added or reordered.
+
+```cpp
+// BAD: fragile round-trip casts
+static uint8_t last_type = static_cast<uint8_t>(TaskType::NONE);
+const auto prev = static_cast<TaskType>(last_type);
+// ...
+last_type = static_cast<uint8_t>(task_type);
+
+// GOOD: use the enum type directly
+static TaskType last_type = TaskType::NONE;
+// ...
+last_type = task_type;
+```
+
+Only cast to integer when interfacing with serialization, profile storage, or external APIs (e.g., `DataFieldEnum::SetValue`).
+
+## Shared Constants
+
+Numeric values used in more than one file must be defined as named `constexpr` constants in a shared header. This applies to domain-specific thresholds, speeds, limits, and tolerances — not just colors.
+
+```cpp
+// BAD: magic number repeated across files
+gp.SetVMax(75, false);           // in PlaneGlue.cpp
+polar.SetVMax(75, false);        // in ApplyExternalSettings.cpp
+plane.max_speed = 75.0;          // in PlaneFileGlue.cpp
+
+// GOOD: named constant in a shared header (e.g., Plane.hpp)
+static constexpr double DEFAULT_MAX_SPEED = 75.0;
+
+gp.SetVMax(DEFAULT_MAX_SPEED, false);
+plane.max_speed = DEFAULT_MAX_SPEED;
+```
+
+When the same value is expressed differently in different files (e.g., `36.1` vs `130.0 / 3.6`), use the same expression everywhere to make the relationship obvious and avoid subtle precision differences.
