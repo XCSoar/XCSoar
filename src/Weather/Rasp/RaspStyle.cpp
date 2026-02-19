@@ -5,9 +5,15 @@
 #include "ui/canvas/Ramp.hpp"
 #include "Terrain/RasterRenderer.hpp"
 
+bool
+RaspStyle::HasAlpha() const noexcept
+{
+  return color_ramp != nullptr && color_ramp->has_alpha;
+}
+
 // Classic RASP Blipmap color schemes
 
-static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed (cm/s scale)
     {   0, { 0, 0, 255 }}, // -200
     { 100, { 0, 195, 255 }}, // -100
@@ -102,7 +108,7 @@ static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
 
 // Thermalmap.info Color schemes
 
-static constexpr ColorRamp rasp_colors_verticalspeed[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_verticalspeed[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 5000 cm/s
      Multiplyfactor 100
@@ -123,7 +129,7 @@ static constexpr ColorRamp rasp_colors_verticalspeed[NUM_COLOR_RAMP_LEVELS] = {
   {9500, {163, 0, 211}},
 };
 
-static constexpr ColorRampAlpha rasp_colors_verticalspeed_alpha[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntryAlpha rasp_colors_verticalspeed_alpha[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 5000 cm/s
      Multiplyfactor 100
@@ -145,7 +151,7 @@ static constexpr ColorRampAlpha rasp_colors_verticalspeed_alpha[NUM_COLOR_RAMP_L
 };
 
 
-static constexpr ColorRamp rasp_colors_thermalstrength[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_thermalstrength[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 0
      Multiplyfactor 100
@@ -166,7 +172,7 @@ static constexpr ColorRamp rasp_colors_thermalstrength[NUM_COLOR_RAMP_LEVELS] = 
   {475, {185, 39, 190}},
 };
 
-static constexpr ColorRamp rasp_colors_thermalheight[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_thermalheight[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 0
      Multiplyfactor 1
@@ -187,7 +193,7 @@ static constexpr ColorRamp rasp_colors_thermalheight[NUM_COLOR_RAMP_LEVELS] = {
   {2800, {122, 4, 3}},
 };
 
-static constexpr ColorRamp rasp_colors_temperature[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_temperature[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Temperature (Celsius Scale)
      Offset 50
@@ -209,7 +215,7 @@ static constexpr ColorRamp rasp_colors_temperature[NUM_COLOR_RAMP_LEVELS] = {
   {3350, {243, 0, 18}},
 };
 
-static constexpr ColorRamp rasp_colors_rain[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_rain[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 0
      Multiplyfactor 10
@@ -230,7 +236,7 @@ static constexpr ColorRamp rasp_colors_rain[NUM_COLOR_RAMP_LEVELS] = {
   {2000, {57, 15, 249}},
 };
 
-static constexpr ColorRampAlpha rasp_colors_rain_alpha[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntryAlpha rasp_colors_rain_alpha[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 0
      Multiplyfactor 10
@@ -251,7 +257,7 @@ static constexpr ColorRampAlpha rasp_colors_rain_alpha[NUM_COLOR_RAMP_LEVELS] = 
   {2000,{ 57,  15, 249}},
 };
 
-static constexpr ColorRamp rasp_colors_pfd_ls4[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_pfd_ls4[NUM_COLOR_RAMP_LEVELS] = {
 
   /* PFD - LS4, DuoDiscus
      Offset 0
@@ -273,7 +279,7 @@ static constexpr ColorRamp rasp_colors_pfd_ls4[NUM_COLOR_RAMP_LEVELS] = {
   {900, {122, 4, 3}},
 };
 
-static constexpr ColorRamp rasp_colors_bl_avg_windspeed[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_bl_avg_windspeed[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Windspeed, WindShear, BL Avg Windspeed
      Offset 100
@@ -295,7 +301,7 @@ static constexpr ColorRamp rasp_colors_bl_avg_windspeed[NUM_COLOR_RAMP_LEVELS] =
   {4200, {122, 44, 122}},
 };
 
-static constexpr ColorRamp rasp_colors_xcspeed_ls4[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_xcspeed_ls4[NUM_COLOR_RAMP_LEVELS] = {
 
   /* XCSpeed - LS4,Duo Discus (km/h scale)
      Offset 0
@@ -317,7 +323,7 @@ static constexpr ColorRamp rasp_colors_xcspeed_ls4[NUM_COLOR_RAMP_LEVELS] = {
   {160, {122, 4, 3}},
 };
 
-static constexpr ColorRamp rasp_colors_xcspeed_k8[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_xcspeed_k8[NUM_COLOR_RAMP_LEVELS] = {
 
   /* XCSpeed - K8 (km/h scale)
      Offset 0
@@ -339,7 +345,7 @@ static constexpr ColorRamp rasp_colors_xcspeed_k8[NUM_COLOR_RAMP_LEVELS] = {
   {100, {122, 4, 3}},
 };
 
-static constexpr ColorRamp rasp_colors_surface_heat_flux[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_surface_heat_flux[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Offset 10000
      Multiplyfactor 10
@@ -360,7 +366,7 @@ static constexpr ColorRamp rasp_colors_surface_heat_flux[NUM_COLOR_RAMP_LEVELS] 
   {14500, {227, 0, 16}},
 };
 
-static constexpr ColorRamp rasp_colors_sealevel_pressure[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_sealevel_pressure[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Sea level pressure (hPa scale)
      Offset 1000
@@ -382,7 +388,7 @@ static constexpr ColorRamp rasp_colors_sealevel_pressure[NUM_COLOR_RAMP_LEVELS] 
   {21680, {227, 0, 255}},
 };
 
-static constexpr ColorRamp rasp_colors_cloudfraction_low[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_cloudfraction_low[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction low level (fraction scale)
      Offset 0
@@ -404,7 +410,7 @@ static constexpr ColorRamp rasp_colors_cloudfraction_low[NUM_COLOR_RAMP_LEVELS] 
   {1000, {0, 68, 27}},
 };
 
-static constexpr ColorRampAlpha rasp_colors_cloudfraction_low_alpha[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_low_alpha[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction low level (fraction scale)
      Offset 0
@@ -427,7 +433,7 @@ static constexpr ColorRampAlpha rasp_colors_cloudfraction_low_alpha[NUM_COLOR_RA
 };
 
 
-static constexpr ColorRamp rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction mid level (fraction scale)
      Offset 0
@@ -449,7 +455,7 @@ static constexpr ColorRamp rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] 
   {1000, {8, 48, 107}},
 };
 
-static constexpr ColorRampAlpha rasp_colors_cloudfraction_mid_alpha[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_mid_alpha[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction mid level (fraction scale)
      Offset 0
@@ -471,7 +477,7 @@ static constexpr ColorRampAlpha rasp_colors_cloudfraction_mid_alpha[NUM_COLOR_RA
   {1000,{  8,  48, 107}},
 };
 
-static constexpr ColorRamp rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction high level (fraction scale)
      Offset -3
@@ -493,7 +499,7 @@ static constexpr ColorRamp rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS]
   {1000, {103, 0, 13}},
 };
 
-static constexpr ColorRampAlpha rasp_colors_cloudfraction_high_alpha[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_high_alpha[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction high level (fraction scale)
      Offset -3
@@ -515,7 +521,7 @@ static constexpr ColorRampAlpha rasp_colors_cloudfraction_high_alpha[NUM_COLOR_R
   {1000,{103,   0,  13}},
 };
 
-static constexpr ColorRamp rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction, all levels combined (fraction scale)
      Offset 0
@@ -537,7 +543,7 @@ static constexpr ColorRamp rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_
   {1000, {91, 91, 91}},
 };
 
-static constexpr ColorRampAlpha rasp_colors_cloudfraction_accumulated_alpha[NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_accumulated_alpha[NUM_COLOR_RAMP_LEVELS] = {
 
   /* Cloud fraction, all levels combined (fraction scale)
      Offset 0
@@ -559,102 +565,188 @@ static constexpr ColorRampAlpha rasp_colors_cloudfraction_accumulated_alpha[NUM_
   {1000, {91, 91, 91}},
 };
 
+// ColorRamp wrapper objects for classic Blipmap color schemes
+
+static constexpr ColorRamp ramp_classic[] = {
+  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[0], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[1], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[2], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[3], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[4], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[5], nullptr },
+};
+
+// ColorRamp wrapper objects for thermalmap.info color schemes
+
+static constexpr ColorRamp ramp_verticalspeed = {
+  true, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha
+};
+
+static constexpr ColorRamp ramp_thermalstrength = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_thermalstrength, nullptr
+};
+
+static constexpr ColorRamp ramp_thermalheight = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_thermalheight, nullptr
+};
+
+static constexpr ColorRamp ramp_temperature = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_temperature, nullptr
+};
+
+static constexpr ColorRamp ramp_rain = {
+  true, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_rain, rasp_colors_rain_alpha
+};
+
+static constexpr ColorRamp ramp_pfd_ls4 = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_pfd_ls4, nullptr
+};
+
+static constexpr ColorRamp ramp_bl_avg_windspeed = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_bl_avg_windspeed, nullptr
+};
+
+static constexpr ColorRamp ramp_xcspeed_ls4 = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_xcspeed_ls4, nullptr
+};
+
+static constexpr ColorRamp ramp_xcspeed_k8 = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_xcspeed_k8, nullptr
+};
+
+static constexpr ColorRamp ramp_surface_heat_flux = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_surface_heat_flux, nullptr
+};
+
+static constexpr ColorRamp ramp_sealevel_pressure = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_sealevel_pressure, nullptr
+};
+
+static constexpr ColorRamp ramp_cloudfraction_low = {
+  true, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_cloudfraction_low, rasp_colors_cloudfraction_low_alpha
+};
+
+static constexpr ColorRamp ramp_cloudfraction_mid = {
+  true, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_cloudfraction_mid, rasp_colors_cloudfraction_mid_alpha
+};
+
+static constexpr ColorRamp ramp_cloudfraction_high = {
+  true, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_cloudfraction_high, rasp_colors_cloudfraction_high_alpha
+};
+
+static constexpr ColorRamp ramp_cloudfraction_accumulated = {
+  true, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_cloudfraction_accumulated,
+  rasp_colors_cloudfraction_accumulated_alpha
+};
+
 /* RASP styles
    List of styles, first Blipmap classic, then thermalmap.info styles
    List of tuples:
      * string fieldname,
-     * pointer to color map table
+     * pointer to ColorRamp wrapper
      * int n = value range level. A value of n means the highest value in
        the data (and the top end of the used colormap) has to be smaller than
-       256*(2**n)-1 
-     * bool do_water enables "water masking", special handling of 
+       256*(2**n)-1
+     * bool do_water enables "water masking", special handling of
        the value 255 (for n=0) as water indicator */
 
 const RaspStyle rasp_styles[] = {
-  { "wstar", rasp_colors[0], nullptr,
+  { "wstar", &ramp_classic[0],
     2, // max range 256*(2**2) = 1024 cm/s = 10 m/s
     false },
-  { "wstar_bsratio", rasp_colors[0], nullptr,
+  { "wstar_bsratio", &ramp_classic[0],
     2, // max range 256*(2**2) = 1024 cm/s = 10 m/s
     false },
-  { "blwindspd", rasp_colors[1], nullptr, 3, false },
-  { "hbl", rasp_colors[2], nullptr, 4, false },
-  { "dwcrit", rasp_colors[2], nullptr, 4, false },
-  { "blcloudpct", rasp_colors[3], nullptr, 0, true },
-  { "sfctemp", rasp_colors[4], nullptr, 0, false },
-  { "hwcrit", rasp_colors[2], nullptr, 4, false },
-  { "wblmaxmin", rasp_colors[5], nullptr,
+  { "blwindspd", &ramp_classic[1], 3, false },
+  { "hbl", &ramp_classic[2], 4, false },
+  { "dwcrit", &ramp_classic[2], 4, false },
+  { "blcloudpct", &ramp_classic[3], 0, true },
+  { "sfctemp", &ramp_classic[4], 0, false },
+  { "hwcrit", &ramp_classic[2], 4, false },
+  { "wblmaxmin", &ramp_classic[5],
     1, // max range 256*(2**1) = 512 cm/s = 5.0 m/s
     false },
-  { "blcwbase", rasp_colors[2], nullptr, 4, false },
+  { "blcwbase", &ramp_classic[2], 4, false },
 
   // Thermalmap.info Colorschemes and Rasp file names
-  { "ThermalStrength", rasp_colors_thermalstrength, nullptr, 4, false },
-  { "ThermalHeight", rasp_colors_thermalheight, nullptr, 4, false },
-  { "Convergence",     rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Wave_1000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Wave_2000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Wave_3000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Wave_4000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Wave_5000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Wave_6000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Wave_7000m",      rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "Temperature2m",   rasp_colors_temperature, nullptr, 4, false },
-  { "Rain",            rasp_colors_rain,          rasp_colors_rain_alpha, 3, false },
-  { "PFD_Day_DuoDiscus", rasp_colors_pfd_ls4, nullptr, 3, false },
-  { "PFD_Day_LS4", rasp_colors_pfd_ls4, nullptr, 3, false },
-  { "PFD_Day_K8", rasp_colors_pfd_ls4, nullptr, 3, false },
-  { "Windspeed_10m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_500m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_1000m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_1500m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_2000m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_2500m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_3000m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_3500m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_4000m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_4500m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_5000m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_5500m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_6000m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_6500m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "Windspeed_7000m", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "VerticalWindShear", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "BL_AverageWindSpeed", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "XCSpeed_LS4", rasp_colors_xcspeed_ls4, nullptr, 3, false },
-  { "XCSpeed_DuoDiscus", rasp_colors_xcspeed_ls4, nullptr, 3, false },
-  { "XCSpeed_K8", rasp_colors_xcspeed_k8, nullptr, 3, false },
-  { "SurfaceHeatFlux", rasp_colors_surface_heat_flux, nullptr, 6, false },
-  { "SeaLevelPressure", rasp_colors_sealevel_pressure, nullptr, 7, false },
-  { "Cloudfraction_Low", rasp_colors_cloudfraction_low, 
-                             rasp_colors_cloudfraction_low_alpha, 4, false },
-  { "Cloudfraction_Mid", rasp_colors_cloudfraction_mid, 
-                             rasp_colors_cloudfraction_mid_alpha, 4, false },
-  { "Cloudfraction_High", rasp_colors_cloudfraction_high, 
-                              rasp_colors_cloudfraction_high_alpha, 4, false },
-  { "Cloudfraction_Accumulated", rasp_colors_cloudfraction_accumulated, 
-                                     rasp_colors_cloudfraction_accumulated_alpha, 4, false },
+  { "ThermalStrength", &ramp_thermalstrength, 4, false },
+  { "ThermalHeight", &ramp_thermalheight, 4, false },
+  { "Convergence", &ramp_verticalspeed, 5, false },
+  { "Wave_1000m", &ramp_verticalspeed, 5, false },
+  { "Wave_2000m", &ramp_verticalspeed, 5, false },
+  { "Wave_3000m", &ramp_verticalspeed, 5, false },
+  { "Wave_4000m", &ramp_verticalspeed, 5, false },
+  { "Wave_5000m", &ramp_verticalspeed, 5, false },
+  { "Wave_6000m", &ramp_verticalspeed, 5, false },
+  { "Wave_7000m", &ramp_verticalspeed, 5, false },
+  { "Temperature2m", &ramp_temperature, 4, false },
+  { "Rain", &ramp_rain, 3, false },
+  { "PFD_Day_DuoDiscus", &ramp_pfd_ls4, 3, false },
+  { "PFD_Day_LS4", &ramp_pfd_ls4, 3, false },
+  { "PFD_Day_K8", &ramp_pfd_ls4, 3, false },
+  { "Windspeed_10m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_500m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_1000m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_1500m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_2000m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_2500m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_3000m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_3500m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_4000m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_4500m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_5000m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_5500m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_6000m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_6500m", &ramp_bl_avg_windspeed, 3, false },
+  { "Windspeed_7000m", &ramp_bl_avg_windspeed, 3, false },
+  { "VerticalWindShear", &ramp_bl_avg_windspeed, 3, false },
+  { "BL_AverageWindSpeed", &ramp_bl_avg_windspeed, 3, false },
+  { "XCSpeed_LS4", &ramp_xcspeed_ls4, 3, false },
+  { "XCSpeed_DuoDiscus", &ramp_xcspeed_ls4, 3, false },
+  { "XCSpeed_K8", &ramp_xcspeed_k8, 3, false },
+  { "SurfaceHeatFlux", &ramp_surface_heat_flux, 6, false },
+  { "SeaLevelPressure", &ramp_sealevel_pressure, 7, false },
+  { "Cloudfraction_Low", &ramp_cloudfraction_low, 4, false },
+  { "Cloudfraction_Mid", &ramp_cloudfraction_mid, 4, false },
+  { "Cloudfraction_High", &ramp_cloudfraction_high, 4, false },
+  { "Cloudfraction_Accumulated",
+    &ramp_cloudfraction_accumulated, 4, false },
 
-  { nullptr, rasp_colors[0], nullptr, 2, false }
+  { nullptr, &ramp_classic[0], 2, false }
 };
 
 const RaspStyle rasp_colormaps_general[] = {
   // Thermalmap.info color scheme codes
-  { "vth", rasp_colors_thermalstrength, nullptr, 4, false },
-  { "hth", rasp_colors_thermalheight, nullptr, 4, false },
-  { "vve", rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha, 5, false },
-  { "tce", rasp_colors_temperature, nullptr, 4, false },
-  { "prr", rasp_colors_rain, rasp_colors_rain_alpha, 3, false },
-  { "pfd", rasp_colors_pfd_ls4, nullptr, 3, false },
-  { "vho", rasp_colors_bl_avg_windspeed, nullptr, 3, false },
-  { "vxc", rasp_colors_xcspeed_ls4, nullptr, 3, false },
-  { "vx8", rasp_colors_xcspeed_k8, nullptr, 3, false },
-  { "hfl", rasp_colors_surface_heat_flux, nullptr, 6, false },
-  { "pre", rasp_colors_sealevel_pressure, nullptr, 7, false },
-  { "fcl", rasp_colors_cloudfraction_low, rasp_colors_cloudfraction_low_alpha, 4, false },
-  { "fcm", rasp_colors_cloudfraction_mid, rasp_colors_cloudfraction_mid_alpha, 4, false },
-  { "fch", rasp_colors_cloudfraction_high, rasp_colors_cloudfraction_high_alpha, 4, false },
-  { "fct", rasp_colors_cloudfraction_accumulated, rasp_colors_cloudfraction_accumulated_alpha, 4, false },
+  { "vth", &ramp_thermalstrength, 4, false },
+  { "hth", &ramp_thermalheight, 4, false },
+  { "vve", &ramp_verticalspeed, 5, false },
+  { "tce", &ramp_temperature, 4, false },
+  { "prr", &ramp_rain, 3, false },
+  { "pfd", &ramp_pfd_ls4, 3, false },
+  { "vho", &ramp_bl_avg_windspeed, 3, false },
+  { "vxc", &ramp_xcspeed_ls4, 3, false },
+  { "vx8", &ramp_xcspeed_k8, 3, false },
+  { "hfl", &ramp_surface_heat_flux, 6, false },
+  { "pre", &ramp_sealevel_pressure, 7, false },
+  { "fcl", &ramp_cloudfraction_low, 4, false },
+  { "fcm", &ramp_cloudfraction_mid, 4, false },
+  { "fch", &ramp_cloudfraction_high, 4, false },
+  { "fct", &ramp_cloudfraction_accumulated, 4, false },
 
-  { nullptr, rasp_colors[0], nullptr, 2, false }
+  { nullptr, &ramp_classic[0], 2, false }
 };

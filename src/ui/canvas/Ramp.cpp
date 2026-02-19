@@ -16,7 +16,7 @@ Interpolate(RGB8Color c1, RGB8Color c2,
 }
 
 static RGB8Color
-Interpolate(int h, const ColorRamp *c1, const ColorRamp *c2,
+Interpolate(int h, const ColorRampEntry *c1, const ColorRampEntry *c2,
             unsigned interp_levels)
 {
   if (interp_levels == 0)
@@ -31,22 +31,25 @@ Interpolate(int h, const ColorRamp *c1, const ColorRamp *c2,
 
 RGB8Color
 ColorRampLookup(const int h,
-                const ColorRamp* ramp_colors,
+                const ColorRamp* ramp,
                 const unsigned numramp,
                 const unsigned interp_levels)
 {
+  assert(ramp != nullptr);
+  const ColorRampEntry *ramp_colors = ramp->ramp_table;
+
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
 
   // Check if "h" is above the defined range
-  ColorRamp last = ramp_colors[numramp - 1];
+  ColorRampEntry last = ramp_colors[numramp - 1];
   if (h >= last.h)
     return last.color;
 
   // Iterate over color ramp control points and find the
   // point above and below "h"
-  const ColorRamp *c1 = ramp_colors + numramp - 2;
-  const ColorRamp *c2 = c1 + 1;
+  const ColorRampEntry *c1 = ramp_colors + numramp - 2;
+  const ColorRampEntry *c2 = c1 + 1;
   while (c1 >= ramp_colors) {
     assert(c1->h < c2->h);
 
@@ -59,7 +62,7 @@ ColorRampLookup(const int h,
   }
 
   // Check if "h" is below the defined range
-  ColorRamp first = ramp_colors[0];
+  ColorRampEntry first = ramp_colors[0];
   assert(h <= first.h);
   return first.color;
 }
@@ -76,7 +79,8 @@ InterpolateAlpha(RGBA8Color c1, RGBA8Color c2,
 }
 
 static RGBA8Color
-InterpolateAlpha(int h, const ColorRampAlpha *c1, const ColorRampAlpha *c2,
+InterpolateAlpha(int h, const ColorRampEntryAlpha *c1,
+                 const ColorRampEntryAlpha *c2,
                  unsigned interp_levels)
 {
   if (interp_levels == 0)
@@ -91,22 +95,27 @@ InterpolateAlpha(int h, const ColorRampAlpha *c1, const ColorRampAlpha *c2,
 
 RGBA8Color
 ColorRampLookupAlpha(const int h,
-                     const ColorRampAlpha* ramp_colors,
+                     const ColorRamp* ramp,
                      const unsigned numramp,
                      const unsigned interp_levels)
 {
+  assert(ramp != nullptr);
+  assert(ramp->has_alpha);
+
+  const ColorRampEntryAlpha *ramp_colors = ramp->ramp_table_alpha;
+  
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
 
   // Check if "h" is above the defined range
-  ColorRampAlpha last = ramp_colors[numramp - 1];
+  ColorRampEntryAlpha last = ramp_colors[numramp - 1];
   if (h >= last.h)
     return last.color;
 
   // Iterate over color ramp control points and find the
   // point above and below "h"
-  const ColorRampAlpha *c1 = ramp_colors + numramp - 2;
-  const ColorRampAlpha *c2 = c1 + 1;
+  const ColorRampEntryAlpha *c1 = ramp_colors + numramp - 2;
+  const ColorRampEntryAlpha *c2 = c1 + 1;
   while (c1 >= ramp_colors) {
     assert(c1->h < c2->h);
 
@@ -119,7 +128,7 @@ ColorRampLookupAlpha(const int h,
   }
 
   // Check if "h" is below the defined range
-  ColorRampAlpha first = ramp_colors[0];
+  ColorRampEntryAlpha first = ramp_colors[0];
   assert(h <= first.h);
   return first.color;
 }
