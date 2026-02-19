@@ -11,51 +11,67 @@
 
 static RGB8Color
 GetVario1Color(short ramp_h) {
-  static constexpr ColorRamp snail_colors_vario[] = {
+  static constexpr ColorRampEntry snail_colors_vario[] = {
     {  0, { 0xc4, 0x80, 0x1e }}, // sinkColor
     {100, { 0xa0, 0xa0, 0xa0 }},
     {200, { 0x1e, 0xf1, 0x73 }} // liftColor
   };
+  static constexpr ColorRamp ramp = {
+    false, ARRAY_SIZE(snail_colors_vario),
+    snail_colors_vario, nullptr
+  };
 
-  return ColorRampLookup(ramp_h, snail_colors_vario,
+  return ColorRampLookup(ramp_h, &ramp,
                          ARRAY_SIZE(snail_colors_vario));
 }
 
 static RGB8Color
 GetVario2Color(short ramp_h) {
-  static constexpr ColorRamp snail_colors_vario2[] = {
+  static constexpr ColorRampEntry snail_colors_vario2[] = {
     {  0, { 0x00, 0x00, 0xff }},
     { 99, { 0x00, 0xff, 0xff }},
     {100, { 0xff, 0xff, 0x00 }},
     {200, { 0xff, 0x00, 0x00 }}
   };
+  static constexpr ColorRamp ramp = {
+    false, ARRAY_SIZE(snail_colors_vario2),
+    snail_colors_vario2, nullptr
+  };
 
-  return ColorRampLookup(ramp_h, snail_colors_vario2,
+  return ColorRampLookup(ramp_h, &ramp,
                          ARRAY_SIZE(snail_colors_vario2));
 }
 
 static RGB8Color
 GetVarioEinkColor(short ramp_h) {
-  static constexpr ColorRamp snail_colors_vario_eink[] = {
+  static constexpr ColorRampEntry snail_colors_vario_eink[] = {
     {  0, {0x00, 0x00, 0x00}},
     {200, {0x80, 0x80, 0x80}}
   };
+  static constexpr ColorRamp ramp = {
+    false, ARRAY_SIZE(snail_colors_vario_eink),
+    snail_colors_vario_eink, nullptr
+  };
 
-  return ColorRampLookup(ramp_h, snail_colors_vario_eink,
+  return ColorRampLookup(ramp_h, &ramp,
                          ARRAY_SIZE(snail_colors_vario_eink));
 }
 
 static RGB8Color
 GetAltitudeColor(short ramp_h) {
-  static constexpr ColorRamp snail_colors_alt[] = {
+  static constexpr ColorRampEntry snail_colors_alt[] = {
     {  0, { 0xff, 0x00, 0x00 }},
     { 50, { 0xff, 0xff, 0x00 }},
     {100, { 0x00, 0xff, 0x00 }},
     {150, { 0x00, 0xff, 0xff }},
     {200, { 0x00, 0x00, 0xff }},
   };
+  static constexpr ColorRamp ramp = {
+    false, ARRAY_SIZE(snail_colors_alt),
+    snail_colors_alt, nullptr
+  };
 
-  return ColorRampLookup(ramp_h, snail_colors_alt,
+  return ColorRampLookup(ramp_h, &ramp,
                          ARRAY_SIZE(snail_colors_alt));
 }
 

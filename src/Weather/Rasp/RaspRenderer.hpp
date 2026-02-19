@@ -13,7 +13,6 @@
 #endif
 
 struct TerrainRendererSettings;
-struct ColorRampAlpha;
 
 class RaspRenderer {
   RaspCache cache;
@@ -25,7 +24,6 @@ class RaspRenderer {
 #endif
 
   const ColorRamp *last_color_ramp = nullptr;
-  const ColorRampAlpha *last_color_ramp_alpha = nullptr;
 
 public:
   RaspRenderer(const RaspStore &_store, unsigned parameter)

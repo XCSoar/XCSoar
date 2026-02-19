@@ -704,7 +704,7 @@ TerrainShadingAlpha(const int illum, RGBA8Color color) noexcept
 }
 
 void
-RasterRenderer::PrepareColorTableAlpha(const ColorRampAlpha *color_ramp,
+RasterRenderer::PrepareColorTableAlpha(const ColorRamp *color_ramp,
                                        bool do_water,
                                        unsigned height_scale,
                                        int interp_levels) noexcept
