@@ -169,6 +169,37 @@ TestFLARM()
   ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::NONE);
   ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 0);
   ok1(!nmea_info.flarm.traffic.new_traffic);
+  ok1(!nmea_info.flarm.status.has_extended);
+
+  // PFLAU with all 10 fields: alarm=2, bearing=45, type=3, vert=-200,
+  // dist=1500, ID=DDA85C
+  ok1(parser.ParseLine("$PFLAU,5,1,2,1,2,45,3,-200,1500,DDA85C*5D",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.rx == 5);
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
+  ok1(nmea_info.flarm.status.has_extended);
+  ok1(nmea_info.flarm.status.relative_bearing == 45);
+  ok1(nmea_info.flarm.status.alarm_type == 3);
+  ok1(nmea_info.flarm.status.relative_vertical == -200);
+  ok1(nmea_info.flarm.status.relative_distance == 1500);
+  ok1(nmea_info.flarm.status.target_id == FlarmId::Parse("DDA85C", NULL));
+
+  // PFLAU alarm=3 with negative bearing
+  ok1(parser.ParseLine("$PFLAU,8,1,2,1,3,-30,2,150,800,DEADFF*63",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::URGENT);
+  ok1(nmea_info.flarm.status.has_extended);
+  ok1(nmea_info.flarm.status.relative_bearing == -30);
+  ok1(nmea_info.flarm.status.alarm_type == 2);
+  ok1(nmea_info.flarm.status.relative_vertical == 150);
+  ok1(nmea_info.flarm.status.relative_distance == 800);
+  ok1(nmea_info.flarm.status.target_id == FlarmId::Parse("DEADFF", NULL));
+
+  // PFLAU with empty bearing fields (no alarm target)
+  ok1(parser.ParseLine("$PFLAU,3,1,2,1,0,,0,,*63",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::NONE);
+  ok1(!nmea_info.flarm.status.has_extended);
 
   ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
                                       nmea_info));
@@ -2714,7 +2745,8 @@ TestMalformedInput()
 
 int main()
 {
-  plan_tests(1032 /* drivers */ + 26 /* PFLAA v7+ */
+  plan_tests(1032 /* drivers */ + 21 /* PFLAU extended */
+             + 26 /* PFLAA v7+ */
              + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
