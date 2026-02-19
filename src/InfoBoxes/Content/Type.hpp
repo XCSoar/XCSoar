@@ -10,6 +10,7 @@ namespace InfoBoxFactory
     e_HeightGPS, /* This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn */
     e_HeightAGL, /* This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height */
     e_Thermal_30s, /* A 30 second rolling average climb rate based of the reported GPS altitude, or vario if available */
+    e_Thermal_last_turn, /* The average climb rate of the last thermal turn */
     e_Bearing, /* True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector */
     e_GR_Instantaneous, /* Instantaneous glide ratio over ground, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---' */
     e_GR_Cruise, /* The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---' */

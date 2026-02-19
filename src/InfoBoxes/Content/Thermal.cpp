@@ -47,6 +47,18 @@ UpdateInfoBoxThermal30s(InfoBoxData &data) noexcept
   data.SetCommentFromVerticalSpeed(CommonInterface::Calculated().current_thermal.lift_rate);
 }
 
+void UpdateInfoBoxThermalTurnAvg(InfoBoxData &data) noexcept
+{
+  const auto& calculated = CommonInterface::Calculated();
+  if (calculated.trace_history.TurnAverage.empty()) {
+    data.SetInvalid();
+    return;
+  }
+
+  SetVSpeed(data, calculated.trace_history.TurnAverage.last());
+  data.SetCommentFromTimeSeconds(calculated.trace_history.turn_time);
+}
+
 void
 UpdateInfoBoxThermalLastAvg(InfoBoxData &data) noexcept
 {
