@@ -100,6 +100,31 @@ speed_t_to_baud_rate(speed_t speed) noexcept
   case B230400:
     return 230400;
 
+#ifdef B460800
+  case B460800:
+    return 460800;
+#endif
+
+#ifdef B500000
+  case B500000:
+    return 500000;
+#endif
+
+#ifdef B576000
+  case B576000:
+    return 576000;
+#endif
+
+#ifdef B921600
+  case B921600:
+    return 921600;
+#endif
+
+#ifdef B1000000
+  case B1000000:
+    return 1000000;
+#endif
+
   default:
     return 0;
   }
@@ -139,6 +164,31 @@ baud_rate_to_speed_t(unsigned baud_rate) noexcept
 
   case 230400:
     return B230400;
+
+#ifdef B460800
+  case 460800:
+    return B460800;
+#endif
+
+#ifdef B500000
+  case 500000:
+    return B500000;
+#endif
+
+#ifdef B576000
+  case 576000:
+    return B576000;
+#endif
+
+#ifdef B921600
+  case 921600:
+    return B921600;
+#endif
+
+#ifdef B1000000
+  case 1000000:
+    return B1000000;
+#endif
 
   default:
     return B0;
