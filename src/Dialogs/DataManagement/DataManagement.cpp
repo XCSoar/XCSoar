@@ -12,6 +12,7 @@
 #include "Form/Frame.hpp"
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
+#include "Dialogs/DataManagement/BackupRestorePanel.hpp"
 #include "Dialogs/Message.hpp"
 
 class DataManagementWidget : public RowFormWidget {
@@ -28,10 +29,7 @@ public:
       ShowMessageBox(_("Import data is not available."),
                      _("Import data"), MB_OK);
     });
-    AddButton(_("Backup manager"), [](){ 
-      ShowMessageBox(_("Backup manager is not available."),
-                     _("Backup manager"), MB_OK);
-    });
+    AddButton(_("Backup manager"), [](){ ShowBackupManagerDialog(); });
   }
 };
 
