@@ -113,6 +113,7 @@ TEST_NAMES = \
 	TestHexColorFormatter \
 	TestByteSizeFormatter \
 	TestTimeFormatter \
+	TestFileMetadataFormatter \
 	TestIGCFilenameFormatter \
 	TestNMEAFormatter \
 	TestLXNToIGC \
@@ -508,6 +509,16 @@ TEST_BYTE_SIZE_FORMATTER_SOURCES = \
 	$(TEST_SRC_DIR)/TestByteSizeFormatter.cpp
 TEST_BYTE_SIZE_FORMATTER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestByteSizeFormatter,TEST_BYTE_SIZE_FORMATTER))
+
+TEST_FILE_METADATA_FORMATTER_SOURCES = \
+	$(SRC)/Formatter/ByteSizeFormatter.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFileMetadataFormatter.cpp
+TEST_FILE_METADATA_FORMATTER_DEPENDS = MATH UTIL TIME
+$(eval $(call link-program,TestFileMetadataFormatter,TEST_FILE_METADATA_FORMATTER))
 
 TEST_TIME_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
