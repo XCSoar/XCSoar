@@ -2,7 +2,7 @@ LLVM_SUFFIX ?=
 
 ifeq ($(CLANG),y)
 
-DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
+DEPFLAGS = -MD -MP -MF $(DEPFILE) -MT $@
 
 ifeq ($(USE_CCACHE),y)
   # ccache will not use the optimisation of avoiding the 2nd call to the

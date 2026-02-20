@@ -64,7 +64,7 @@ SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.cxx,%$(O
 ####### dependency handling
 
 DEPFILE = $(@:$(OBJ_SUFFIX)=.d)
-DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
+DEPFLAGS = -MD -MP -MF $(DEPFILE) -MT $@
 cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)  $(EXTRA_CPPFLAGS)  $(EXTRA_CFLAGS)
 cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)  $(EXTRA_CPPFLAGS)  $(EXTRA_CXXFLAGS)
 
