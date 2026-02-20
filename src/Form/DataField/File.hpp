@@ -9,6 +9,7 @@
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
 
+#include <cstdint>
 #include <utility>
 
 /**
@@ -20,6 +21,12 @@ class FileDataField final : public DataField {
   typedef StaticArray<StaticString<32>, 8> PatternList;
 
 public:
+  enum class SortOrder : uint8_t {
+    NO_ORDER,
+    ASCENDING,
+    DESCENDING,
+  };
+
   /** FileList item */
   struct Item {
     /** Filename */
@@ -65,10 +72,10 @@ private:
   bool loaded;
 
   /**
-   * Set to true if Sort() has been called before the file list was
-   * loaded.  It will trigger a call to Sort() after loading.
+   * Stores the requested sort order if Sort() has been called before
+   * the file list was loaded. It will trigger a sort after loading.
    */
-  bool postponed_sort;
+  SortOrder postponed_sort;
 
   /**
    * Used to store the value while !loaded.
@@ -146,7 +153,7 @@ public:
   void ModifyIndex(unsigned new_value) noexcept;
 
   /** Sorts the filelist by filenames */
-  void Sort() noexcept;
+  void Sort(SortOrder order = SortOrder::ASCENDING) noexcept;
   void ScanDirectoryTop(const char *filter) noexcept;
 
   /**

@@ -5,6 +5,7 @@
 
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
+#include "Compatibility/path.h"
 
 #include <string>
 #include <string_view>
@@ -120,6 +121,39 @@ public:
   [[gnu::pure]]
   AllocatedPath WithSuffix(const_pointer new_suffix) const noexcept;
 };
+
+/**
+ * Trim trailing directory separators from a path string, leaving at least
+ * one character.
+ */
+static inline void
+TrimTrailingSeparators(std::string &path)
+{
+  while (path.size() > 1 && IsDirSeparator(path.back()))
+    path.pop_back();
+}
+
+/**
+ * Trim leading directory separators from a path string.
+ */
+static inline void
+TrimLeadingSeparators(std::string &path)
+{
+  size_t pos = 0;
+  while (pos < path.size() && IsDirSeparator(path[pos]))
+    ++pos;
+  if (pos == 0)
+    return;
+
+  if (pos >= path.size()) {
+    // Path consists only of separators — keep a single separator (mirror
+    // TrimTrailingSeparators which also leaves at least one character).
+    if (path.size() > 1)
+      path.erase(0, path.size() - 1);
+  } else {
+    path.erase(0, pos);
+  }
+}
 
 /**
  * The path name of a local file.

@@ -52,8 +52,22 @@ FileMultiSelectWidget::LoadFiles() noexcept
 {
   items_.clear();
   FileDataField &file_field = df_.GetFileDataField();
-  for (unsigned i = 0; i < file_field.size(); ++i)
-    items_.push_back({file_field.GetItem(i).path});
+  for (unsigned i = 0; i < file_field.size(); ++i) {
+    const Path p = file_field.GetItem(i).path;
+    if (filter_ && !filter_(p))
+      continue;
+
+    items_.push_back({p});
+  }
+}
+
+void
+FileMultiSelectWidget::SetFilter(std::function<bool(const Path &)> filter) noexcept
+{
+  filter_ = std::move(filter);
+  // When the filter changes, force a full reload so previous_items are
+  // not re-merged into the visible list (which would defeat the filter).
+  refreshed_ = false;
 }
 
 void
@@ -123,6 +137,18 @@ FileMultiSelectWidget::GetSelectedPaths() const noexcept
     if (idx < items_.size())
       result.push_back(items_[idx].path);
   }
+
+  return result;
+}
+
+std::vector<Path>
+FileMultiSelectWidget::GetAllPaths() const noexcept
+{
+  std::vector<Path> result;
+  result.reserve(items_.size());
+
+  for (const auto &item : items_)
+    result.push_back(item.path);
 
   return result;
 }

@@ -15,6 +15,9 @@
 #include <fileapi.h>
 #include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h>
+#ifdef CopyFile
+#undef CopyFile
+#endif
 #endif
 
 namespace File {
@@ -51,6 +54,17 @@ Exists(Path path) noexcept;
  */
 void
 Create(Path path) noexcept;
+
+/**
+ * Returns whether the given directory is writable.
+ * On POSIX this uses `access(path, W_OK)`.
+ * On Windows it will attempt to create a temporary file.
+ */
+#ifdef HAVE_POSIX
+[[gnu::pure]]
+#endif
+bool
+IsWritable(Path path) noexcept;
 
 /**
  * Visit all the files of a specific directory with the given visitor
@@ -183,6 +197,13 @@ Touch(Path path) noexcept;
  */
 bool
 ReadString(Path path, char *buffer, size_t size) noexcept;
+
+/**
+ * Read the target of a symlink into a std::string.
+ * Returns true on success and fills `out` with the link target.
+ */
+bool
+ReadLink(Path path, std::string &out) noexcept;
 
 /**
  * Write a string to an existing file.  It will never create a new

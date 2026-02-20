@@ -104,7 +104,7 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
-	TestStrings TestUTF8 TestWrapText \
+	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
 	TestInputConfig \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
@@ -543,6 +543,13 @@ TEST_STRINGS_SOURCES = \
 	$(TEST_SRC_DIR)/TestStrings.cpp
 TEST_STRINGS_DEPENDS = UTIL
 $(eval $(call link-program,TestStrings,TEST_STRINGS))
+
+TEST_UNESCAPE_CSTRING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUnescapeCString.cpp \
+	$(SRC)/util/UnescapeCString.cpp
+TEST_UNESCAPE_CSTRING_DEPENDS = UTIL
+$(eval $(call link-program,TestUnescapeCString,TEST_UNESCAPE_CSTRING))
 
 TEST_UTF8_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

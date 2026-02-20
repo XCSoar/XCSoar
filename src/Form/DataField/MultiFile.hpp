@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef XCSOAR_MULTIFILE_DATA_FIELD_HPP
-#define XCSOAR_MULTIFILE_DATA_FIELD_HPP
+#pragma once
 
 #include "Base.hpp"
 #include "File.hpp"
@@ -57,6 +56,9 @@ public:
   // Return the currently selected items
   std::vector<Path> GetPathFiles() const;
 
+  // Return all available items from the embedded FileDataField.
+  std::vector<Path> GetAllPaths() const;
+
   // Set selection to the given index(es)
   void AddValue(Path new_value);
   void ForceModify(Path path);
@@ -94,4 +96,3 @@ public:
   void Dec() noexcept override {}
 };
 
-#endif
