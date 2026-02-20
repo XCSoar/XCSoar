@@ -577,6 +577,8 @@ WaypointDetailsWidget::UpdatePage() noexcept
     magnify_button.SetVisible(image_page);
     shrink_button.SetVisible(image_page);
   }
+
+  UpdateCaption();
 }
 
 void
@@ -900,7 +902,27 @@ WaypointDetailsWidget::InitCaption() noexcept
 void
 WaypointDetailsWidget::UpdateCaption() noexcept
 {
-  dialog.SetCaption(base_caption);
+  if (last_page == 0) {
+    dialog.SetCaption(base_caption);
+    return;
+  }
+
+  const bool details_skipped =
+#ifdef HAVE_RUN_FILE
+    waypoint->files_external.empty() &&
+#endif
+    waypoint->details.empty();
+
+  const int total_pages = last_page + 1 - (details_skipped ? 1 : 0);
+
+  int logical_page = page + 1;
+  if (details_skipped && page > 1)
+    --logical_page;
+
+  StaticString<256> caption;
+  caption.Format("%s (%d/%d)", base_caption.c_str(),
+                 logical_page, total_pages);
+  dialog.SetCaption(caption);
 }
 
 void
