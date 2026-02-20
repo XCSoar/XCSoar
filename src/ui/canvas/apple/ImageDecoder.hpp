@@ -12,6 +12,9 @@ UncompressedImage
 LoadJPEGFile(Path path) noexcept;
 
 UncompressedImage
+LoadJPEG(std::span<const std::byte> buffer);
+
+UncompressedImage
 LoadPNG(std::span<const std::byte> buffer);
 
 UncompressedImage
