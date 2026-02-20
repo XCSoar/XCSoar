@@ -69,6 +69,24 @@ LocalPath(const char *file) noexcept;
 AllocatedPath
 MakeLocalPath(const char *name);
 
+AllocatedPath
+MakeLocalPath(const Path name);
+
+/**
+ * Determine absolute path from local path and create this directory
+ * and any missing parent directories up to `max_creation_depth` levels.
+ * In contrast to MakeLocalPath: returns nullptr on failure
+ * (path does not exist and could not be created), otherwise
+ * the resulting absolute path.
+ * @param name The local (relative to xcsoar dir) path to create.
+ * @param max_creation_depth The maximum number of directory levels to create.
+ *        If 0, only checks if the path exists (no creation).
+ *        If the required depth exceeds this value, returns nullptr.
+ * @return The created (or already existing) absolute path, or nullptr on failure.
+ */
+AllocatedPath
+MakeLocalPathRecursively(Path name, int max_creation_depth = 10);
+
 /**
  * Return the portion of the specified path that is relative to the
  * primary data path.  Returns nullptr on failure (if the path is not
@@ -81,7 +99,7 @@ RelativePath(Path path) noexcept;
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
  * the XCSoarData folder
- * @param filein Pointer to the string to convert
+ * @param src Pointer to the string to convert
  */
 [[gnu::pure]]
 AllocatedPath
@@ -90,7 +108,7 @@ ExpandLocalPath(Path src) noexcept;
 /**
  * Converts a file path from full pathname to a shorter version with the
  * XCSoarData folder replaced by %LOCAL_PATH%
- * @param filein Pointer to the string to convert
+ * @param src Pointer to the string to convert
  * @return the new path or nullptr if the given path cannot be contracted
  */
 [[gnu::pure]]

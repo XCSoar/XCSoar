@@ -114,7 +114,8 @@ DownloadFile(const char *uri, const char *base)
 
   ProgressDialog dialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                         _("Download"));
-  dialog.SetText(base);
+  const auto display_name = Path(base).GetBase();
+  dialog.SetText(display_name != nullptr ? display_name.c_str() : base);
 
   dialog.AddCancelButton();
 
@@ -289,15 +290,30 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 DownloadFilePickerWidget::Download()
 {
+  const int max_subdir_depth = 3; // Allow subdirectories up to this depth
   assert(Net::DownloadManager::IsAvailable());
 
   const unsigned current = GetList().GetCursorIndex();
   assert(current < items.size());
 
   const auto &file = items[current];
-
   try {
-    path = DownloadFile(file.GetURI(), file.GetName());
+    AllocatedPath dest_dir = GetFileTypeDefaultDir(file_type);
+
+    const Path file_path(file.GetName()); //AllocatedPath cannot take nullptr
+
+    if (!file_path.IsValidFilename())
+      throw std::runtime_error("Invalid download filename");
+
+    AllocatedPath relative_path(file_path);
+    if (dest_dir != nullptr) {
+      const auto dest_path = MakeLocalPathRecursively(dest_dir, max_subdir_depth);
+      if (dest_path == nullptr) 
+        throw std::runtime_error("Directory does not exist and could not be created.");
+
+      relative_path = AllocatedPath::Build(Path(dest_dir), file_path);
+    }
+    path = DownloadFile(file.GetURI(), relative_path.c_str());
     if (path != nullptr)
       dialog.SetModalResult(mrOK);
   } catch (...) {

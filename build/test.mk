@@ -1089,6 +1089,7 @@ $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_REPOSITORY_PARSER_SOURCES = \
 	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/Repository/Parser.cpp \
 	$(TEST_SRC_DIR)/RunRepositoryParser.cpp
 RUN_REPOSITORY_PARSER_DEPENDS = LIBNET IO OS UTIL
