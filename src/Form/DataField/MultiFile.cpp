@@ -60,6 +60,18 @@ MultiFileDataField::GetPathFiles() const
   return paths;
 }
 
+std::vector<Path>
+MultiFileDataField::GetAllPaths() const
+{
+  std::vector<Path> paths;
+  paths.reserve(file_datafield.size());
+
+  for (unsigned i = 0; i < file_datafield.size(); ++i)
+    paths.push_back(file_datafield.GetItem(i).path);
+
+  return paths;
+}
+
 void
 MultiFileDataField::ScanMultiplePatterns(const char *patterns)
 {
