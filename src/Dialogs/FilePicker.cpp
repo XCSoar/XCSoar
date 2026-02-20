@@ -27,7 +27,7 @@ FilePicker(const char *caption, FileDataField &df, const char *help_text,
   if (df.GetFileType() != FileType::IGC &&
     df.GetFileType() != FileType::UNKNOWN &&
     Net::DownloadManager::IsAvailable())
-      extra_caption = _("Download");
+      extra_caption = _("Repository");
 #endif
 
   int i = ComboPicker(caption, combo_list, help_text, false, extra_caption);
