@@ -35,6 +35,9 @@
 #include "system/RunFile.hpp"
 #include "system/Path.hpp"
 #include "system/ConvertPathName.hpp"
+#include "io/CupxArchive.hpp"
+#include "io/FileOutputStream.hxx"
+#include "system/FileUtil.hpp"
 #include "LogFile.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
@@ -182,6 +185,10 @@ class WaypointDetailsWidget final
 
   int page = 0, last_page = 0;
 
+  StaticString<256> base_caption;
+
+  AllocatedPath source_path{nullptr};
+
   ManagedWidget info_widget{new WaypointInfoWidget(look, waypoint)};
   PanelControl details_panel;
   ManagedWidget commands_widget;
@@ -207,6 +214,15 @@ public:
      commands_widget(new WaypointCommandsWidget(look, &dialog, waypoints, waypoint,
                                                 task_manager, allow_edit)) {}
 
+  /**
+   * Resolve the source file path for this waypoint from its
+   * origin and file_num fields.
+   */
+  [[gnu::pure]]
+  AllocatedPath GetSourcePath() const noexcept;
+
+  void InitCaption() noexcept;
+  void UpdateCaption() noexcept;
   void UpdatePage() noexcept;
   void UpdateZoomControls();
 
@@ -415,13 +431,42 @@ void
 WaypointDetailsWidget::Prepare(ContainerWindow &parent,
                                const PixelRect &rc) noexcept
 {
+  const bool is_cupx = source_path != nullptr &&
+    source_path.EndsWithIgnoreCase(".cupx");
+
   for (const auto &i : waypoint->files_embed) {
     if (images.full())
       break;
 
     try {
-      if (!images.append().LoadFile(LocalPath(i.c_str())))
-        images.shrink(images.size() - 1);
+      if (is_cupx) {
+        auto data = CupxArchive::ExtractImage(source_path, i);
+        if (data.empty())
+          continue;
+
+#if !defined(USE_GDI) && !defined(ANDROID)
+        if (!images.append().Load(std::span<const std::byte>(data)))
+          images.shrink(images.size() - 1);
+#else
+        {
+          const auto tmp_dir = MakeCacheDirectory("cupx");
+          const auto tmp_file = AllocatedPath::Build(tmp_dir, i.c_str());
+
+          FileOutputStream fos(tmp_file,
+                               FileOutputStream::Mode::CREATE_VISIBLE);
+          fos.Write(std::as_bytes(std::span{data}));
+          fos.Commit();
+
+          if (!images.append().LoadFile(tmp_file))
+            images.shrink(images.size() - 1);
+
+          File::Delete(tmp_file);
+        }
+#endif
+      } else {
+        if (!images.append().LoadFile(LocalPath(i.c_str())))
+          images.shrink(images.size() - 1);
+      }
     } catch (const std::exception &e) {
       LogFormat("Failed to load %s: %s",
                 (const char *)NarrowPathName(Path(i.c_str())),
@@ -803,49 +848,59 @@ DrawPanFrame::OnKeyDown(unsigned key_code) noexcept
   return true;
 }
 
-static void
-UpdateCaption(WndForm *form, const Waypoint &waypoint)
+/**
+ * Map a WaypointOrigin to the profile key that stores its source
+ * file list, or return an empty view for origins without a key.
+ */
+static std::string_view
+OriginToProfileKey(WaypointOrigin origin) noexcept
 {
-  StaticString<256> buffer;
-  buffer.Format("%s: %s", _("Waypoint"), waypoint.name.c_str());
-
-  std::string_view key{};
-  const char *name = nullptr;
-
-  switch (waypoint.origin) {
-  case WaypointOrigin::NONE:
-    break;
-
-  case WaypointOrigin::USER:
-    name = "user.cup";
-    break;
-
+  switch (origin) {
   case WaypointOrigin::PRIMARY:
-    key = ProfileKeys::WaypointFileList;
-    break;
-
+    return ProfileKeys::WaypointFileList;
   case WaypointOrigin::WATCHED:
-    key = ProfileKeys::WatchedWaypointFileList;
-    break;
-
+    return ProfileKeys::WatchedWaypointFileList;
   case WaypointOrigin::MAP:
-    key = ProfileKeys::MapFile;
-    break;
+    return ProfileKeys::MapFile;
+  default:
+    return {};
   }
+}
 
-  if (!key.empty()) {
-    // Get the list of files for this origin and extract the correct one
-    const auto paths = Profile::GetMultiplePaths(key, nullptr);
-    if (waypoint.file_num < paths.size()) {
-      const auto &path = paths[waypoint.file_num];
-      const auto filename = path.GetBase();
-      if (filename != nullptr)
-        buffer.AppendFormat(" (%s)", filename.c_str());
-    }
-  } else if (name != nullptr)
-    buffer.AppendFormat(" (%s)", name);
+AllocatedPath
+WaypointDetailsWidget::GetSourcePath() const noexcept
+{
+  const auto key = OriginToProfileKey(waypoint->origin);
+  if (key.empty())
+    return {};
 
-  form->SetCaption(buffer);
+  auto paths = Profile::GetMultiplePaths(key, nullptr);
+  if (waypoint->file_num < paths.size())
+    return std::move(paths[waypoint->file_num]);
+
+  return {};
+}
+
+void
+WaypointDetailsWidget::InitCaption() noexcept
+{
+  source_path = GetSourcePath();
+
+  base_caption.Format("%s: %s", _("Waypoint"), waypoint->name.c_str());
+
+  if (source_path != nullptr) {
+    const auto filename = source_path.GetBase();
+    if (filename != nullptr)
+      base_caption.AppendFormat(" (%s)", filename.c_str());
+  } else if (waypoint->origin == WaypointOrigin::USER) {
+    base_caption.AppendFormat(" (%s)", "user.cup");
+  }
+}
+
+void
+WaypointDetailsWidget::UpdateCaption() noexcept
+{
+  dialog.SetCaption(base_caption);
 }
 
 void
@@ -862,7 +917,8 @@ dlgWaypointDetailsShowModal(Waypoints *waypoints, WaypointPtr _waypoint,
                    allow_navigation ? backend_components->protected_task_manager.get() : nullptr,
                    allow_edit);
 
-  UpdateCaption(&dialog, *_waypoint);
+  dialog.GetWidget().InitCaption();
+  dialog.GetWidget().UpdateCaption();
 
   dialog.ShowModal();
 }
