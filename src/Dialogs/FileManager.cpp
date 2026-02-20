@@ -256,6 +256,7 @@ public:
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
+  unsigned OnListResized() noexcept override;
   void OnCursorMoved(unsigned index) noexcept override;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -460,6 +461,14 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 }
 
+unsigned
+ManagedFileListWidget::OnListResized() noexcept
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  return row_renderer.CalculateLayout(*look.list.font_bold,
+                                      look.small_font);
+}
+
 void
 ManagedFileListWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
 {
@@ -496,16 +505,22 @@ ManagedFileListWidget::Download()
 
 class AddFileListItemRenderer final : public ListItemRenderer {
   const std::vector<AvailableFile> &list;
+  const DialogLook &look;
 
   TwoTextRowsRenderer row_renderer;
 
 public:
-  explicit AddFileListItemRenderer(const std::vector<AvailableFile> &_list)
-    :list(_list) {}
+  AddFileListItemRenderer(const std::vector<AvailableFile> &_list,
+                          const DialogLook &_look)
+    :list(_list), look(_look) {}
 
-  unsigned CalculateLayout(const DialogLook &look) {
+  unsigned CalculateLayout() noexcept {
     return row_renderer.CalculateLayout(*look.list.font_bold,
-                                          look.small_font);
+                                        look.small_font);
+  }
+
+  unsigned OnListResized() noexcept override {
+    return CalculateLayout();
   }
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept override;
@@ -540,6 +555,8 @@ ManagedFileListWidget::Add()
 #ifdef HAVE_DOWNLOAD_MANAGER
   assert(Net::DownloadManager::IsAvailable());
 
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
   std::vector<AvailableFile> list;
   for (const auto &remote_file : repository) {
     std::string_view name = remote_file.GetName();
@@ -557,10 +574,10 @@ ManagedFileListWidget::Add()
   if (list.empty())
     return;
 
-  AddFileListItemRenderer item_renderer(list);
+  AddFileListItemRenderer item_renderer(list, look);
   int i = ListPicker(_("Select a file"),
                      list.size(), 0,
-                     item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
+                     item_renderer.CalculateLayout(),
                      item_renderer);
   if (i < 0)
     return;
