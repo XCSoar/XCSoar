@@ -57,6 +57,9 @@ public:
   // Return the currently selected items
   std::vector<Path> GetPathFiles() const;
 
+  // Return all available items from the embedded FileDataField.
+  std::vector<Path> GetAllPaths() const;
+
   // Set selection to the given index(es)
   void AddValue(Path new_value);
   void ForceModify(Path path);
