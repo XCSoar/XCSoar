@@ -106,7 +106,6 @@ using the provided Dockerfile.
 
 To download and start the prepared container::
 
-   cd ide/docker
    docker run --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
     -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
 
@@ -389,8 +388,10 @@ basically a simpler way to run a Linux VM based on the Hyper-V platform that com
 with Windows, with particularly good integration into Windows. WSL version 2 is necessary,
 which is available for Windows from Win 10 build number 18917 or later.
 
-Note: Hyper-V is required for WSL2, but not compatible with VirtualBox. According to Oracle 
-(maker of VirtualBox), you should not enable Hyper-V if you want to use VirtualBox.
+Note: Hyper-V is required for WSL2, but not compatible with older versions of VirtualBox.
+From VirtualBox 7.1 on, both can technically be installed at the same time using
+the Windows Hypervisor Platform (WHPX), but this is still experimental and not guaranteed 
+to be stable. Also, VirtualBox guest performance is significantly degraded in that mode.
 
 To set up the system for building XCSoar, you can follow these steps:
 
@@ -495,7 +496,7 @@ For this, run the config commands again, now inside the VM::
 Now, you are ready to build the code! (But not yet ready to *run* xcsoar on your computer, 
 that requires more configuration, see below).
 
-To build the code e.g. for Android, run:
+To build the code e.g. for Android, run::
 
    cd xcsoar-src/
    make TARGET=ANDROID
