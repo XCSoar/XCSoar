@@ -362,6 +362,33 @@ TestCupRoundTrip(const wp_vector &org_wp)
   }
 }
 
+static void
+TestCupx()
+{
+  Waypoints way_points;
+  if (!TestWaypointFile(Path("test/data/test.cupx"), way_points, 2)) {
+    skip(7, 0, "opening CUPX file failed");
+    return;
+  }
+
+  const auto wp = way_points.LookupName("Test Airfield");
+  ok1(wp != nullptr);
+  if (wp == nullptr) {
+    skip(6, 0, "waypoint not found");
+    return;
+  }
+
+  ok1(wp->type == Waypoint::Type::AIRFIELD);
+  ok1(wp->has_elevation);
+  ok1(fabs(wp->elevation - 500.0) < 0.5);
+  ok1(wp->comment == "A test airfield");
+
+  /* verify files_embed has the bare image filename */
+  ok1(!wp->files_embed.empty());
+  const auto &first_embed = wp->files_embed.front();
+  ok1(first_embed == "test_image.jpg");
+}
+
 static wp_vector
 CreateOriginalWaypoints()
 {
@@ -464,10 +491,11 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(497);
+  plan_tests(507);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
+  TestCupx();
   TestZander(org_wp);
   TestFS(org_wp);
   TestFS_UTM(org_wp);

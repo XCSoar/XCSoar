@@ -21,6 +21,10 @@ DetermineWaypointFileType(Path path) noexcept
   if (path.EndsWithIgnoreCase(".cup"))
     return WaypointFileType::SEEYOU;
 
+  // If CUPX waypoint archive
+  if (path.EndsWithIgnoreCase(".cupx"))
+    return WaypointFileType::CUPX;
+
   // If Zander waypoint file -> save type and return true
   if (path.EndsWithIgnoreCase(".wpz"))
     return WaypointFileType::ZANDER;

@@ -11,9 +11,13 @@
 #include "WaypointFileType.hpp"
 #include "system/Path.hpp"
 #include "io/FileReader.hxx"
+#include "io/CupxArchive.hpp"
+#include "io/MemoryReader.hxx"
 #include "io/ZipReader.hpp"
 #include "io/ProgressReader.hpp"
 #include "io/BufferedReader.hxx"
+
+#include "util/Compiler.h"
 
 #include <memory>
 
@@ -29,6 +33,9 @@ CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
 
   case WaypointFileType::SEEYOU:
     break;
+
+  case WaypointFileType::CUPX:
+    gcc_unreachable();
 
   case WaypointFileType::ZANDER:
     return new WaypointReaderZander(factory);
@@ -59,6 +66,9 @@ ReadWaypointFile(Reader &file_reader, WaypointFileType file_type,
   case WaypointFileType::SEEYOU:
     ParseSeeYou(factory, way_points, buffered_reader);
     break;
+
+  case WaypointFileType::CUPX:
+    gcc_unreachable();
   default:
     std::unique_ptr<WaypointReaderBase> reader { CreateWaypointReader(file_type,
                                                                       factory) };
@@ -75,6 +85,18 @@ ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
                  WaypointFactory factory, ProgressListener &progress)
 {
+  if (file_type == WaypointFileType::CUPX) {
+    auto cup_data = CupxArchive::ExtractPointsCup(path);
+    if (cup_data.empty())
+      throw std::runtime_error{"Failed to read POINTS.CUP from CUPX archive"};
+
+    MemoryReader mem_reader{cup_data};
+    ProgressReader progress_reader{mem_reader, cup_data.size(), progress};
+    BufferedReader buffered_reader{progress_reader};
+    ParseSeeYou(factory, way_points, buffered_reader);
+    return;
+  }
+
   FileReader file_reader{path};
   ReadWaypointFile(file_reader, file_type, file_reader.GetSize(),
                    way_points, factory, progress);
