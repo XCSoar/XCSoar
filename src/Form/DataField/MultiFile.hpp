@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#ifndef XCSOAR_MULTIFILE_DATA_FIELD_HPP
-#define XCSOAR_MULTIFILE_DATA_FIELD_HPP
+#pragma once
 
 #include "Base.hpp"
 #include "File.hpp"
@@ -96,5 +95,3 @@ public:
   void Inc() noexcept override {}
   void Dec() noexcept override {}
 };
-
-#endif
