@@ -4,9 +4,9 @@
 #include "RaspRenderer.hpp"
 #include "RaspCache.hpp"
 #include "RaspStyle.hpp"
+#include "ColorMap.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/TerrainSettings.hpp"
-#include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "ui/canvas/RawBitmap.hpp"
 #include "util/StringAPI.hxx"
@@ -70,22 +70,28 @@ RaspRenderer::Generate(const WindowProjection &projection,
     /* not visible */
     return false;
 
-  const ColorRamp *color_ramp = style.color_ramp;
-  if (color_ramp != last_color_ramp) {
+  auto materialized_color_ramp =
+    MaterializeColorRamp(style.color_map,
+                         style.color_map_alpha,
+                         style.scale, style.offset,
+                         height_scale, style.do_water);
+
+  if (materialized_color_ramp.hash != last_ramp_hash) {
+    auto ramp = materialized_color_ramp.GetColorRamp();
  
     // Choose between RGB and RGBA colormap based on style and on
     // whether the rendering backend can blend per-pixel source alpha.
     const bool use_alpha = style.HasAlpha() && HaveBitmapSourceAlpha();
 
     if (use_alpha)
-      raster_renderer.PrepareColorTableAlpha(color_ramp, do_water,
+      raster_renderer.PrepareColorTableAlpha(&ramp, do_water,
                                              height_scale,
                                              interp_levels);
     else
-      raster_renderer.PrepareColorTable(color_ramp, do_water,
+      raster_renderer.PrepareColorTable(&ramp, do_water,
                                         height_scale,
                                         interp_levels);
-    last_color_ramp = color_ramp;
+    last_ramp_hash = materialized_color_ramp.hash;
   }
 
   raster_renderer.ScanMap(*map, projection);
