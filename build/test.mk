@@ -1964,6 +1964,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
 	$(SRC)/Weather/Rasp/ColorMap.cpp \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
+	$(SRC)/Weather/Rasp/RaspStylesData.cpp \
 	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
