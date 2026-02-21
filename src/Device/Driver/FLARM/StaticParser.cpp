@@ -31,10 +31,19 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, TimeStamp clock) noexcept
     line.Read((int)FlarmError::Severity::NO_ERROR);
   error.code = (FlarmError::Code)line.ReadHex(0);
 
+  const auto device_msg = line.ReadView();
+  if (!device_msg.empty())
+    error.message = device_msg;
+  else
+    error.message.clear();
+
   if (error.severity != FlarmError::Severity::NO_ERROR) {
+    const auto code_desc = error.message.empty()
+      ? FlarmError::ToString(error.code)
+      : error.message.c_str();
     const auto msg = fmt::format("{} - {}",
                                  FlarmError::ToString(error.severity),
-                                 FlarmError::ToString(error.code));
+                                 code_desc);
     Message::AddMessage("FLARM: ", msg.c_str());
   }
 

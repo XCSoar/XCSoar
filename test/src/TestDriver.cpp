@@ -40,6 +40,7 @@
 #include "Device/Driver/Zander.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "FLARM/Error.hpp"
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/MessagingRecord.hpp"
@@ -375,6 +376,24 @@ TestFLARM()
   } else {
     skip(1, 0, "traffic == NULL");
   }
+
+  // PFLAE without message (pre-v7 style)
+  ok1(parser.ParseLine("$PFLAE,A,0,0*33", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::NO_ERROR);
+  ok1(nmea_info.flarm.error.code == (FlarmError::Code)0);
+  ok1(nmea_info.flarm.error.message.empty());
+
+  // PFLAE without message, severity > 0
+  ok1(parser.ParseLine("$PFLAE,A,2,81*08", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::REDUCED_FUNCTIONALITY);
+  ok1(nmea_info.flarm.error.code == FlarmError::OBSTACLE_DATABASE);
+  ok1(nmea_info.flarm.error.message.empty());
+
+  // PFLAE with device message (v7+)
+  ok1(parser.ParseLine("$PFLAE,A,3,11,Software expiry*2C", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::FATAL_PROBLEM);
+  ok1(nmea_info.flarm.error.code == FlarmError::FIRMWARE_TIMEOUT);
+  ok1(nmea_info.flarm.error.message.equals("Software expiry"));
 
   // Ensure a database instance exists before PFLAM messages are parsed
   if (traffic_databases == nullptr)
@@ -2784,7 +2803,7 @@ TestMalformedInput()
 int main()
 {
   plan_tests(1032 /* drivers */ + 21 /* PFLAU extended */
-             + 37 /* PFLAA v7+ */
+             + 37 /* PFLAA v7+ */ + 12 /* PFLAE */
              + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
