@@ -13,6 +13,10 @@ Version 7.44 - not yet released
   - implement full DMSt scoring rules: triangle (+40% bonus), out-and-return
     (+30% bonus), composite solver, correct scoring formula, and minimum
     point thresholds per official Wettbewerbsordnung #1980
+  - fix speed-to-fly (Vopt) InfoBox showing 0 before GPS fix
+  - ballast is now stored in litres for accurate device synchronization
+  - fix ballast dump rate calculation when dump time is configured
+  - fix circling wind with sub-second GPS fixes
 * tracking
   - xcsoar-cloud-service: rebuild service, new domain cloud.xcsoar.org
 * data files
@@ -34,6 +38,8 @@ Version 7.44 - not yet released
   - fix waypoint editor silently discarding altitude and type changes
   - checklist: use .xcc extension, fix crash with empty profile path #2094
   - checklists: add Markdown support (bold, links, checkboxes)
+  - fix home waypoint lost on restart due to async terrain loading #2169
+  - fix profile migration ordering of old waypoint/airspace keys
 * ui
   - enable goto and waypoint details for location map items (clicking on empty map locations)
   - streamlined, and optimized icons
@@ -110,6 +116,9 @@ Version 7.44 - not yet released
   - InfoBoxes with a single action now open their dialog directly on
     tap instead of showing a redundant menu #1442
   - fix Escape key not closing the waypoint details dialog
+  - fix UTF-8 text wrapping crash with non-ASCII characters #2184 #2185
+  - display "---" instead of "???" for invalid map item values
+  - fix profile not saved after team code, plane, or NOAA changes #2171
 
 * Android
   - add Google Play compliant permission disclosure pages for location,
@@ -166,8 +175,27 @@ Version 7.44 - not yet released
     pre-filled callsign dialog
   - PowerFlarm: make range / vrange configurable for adbs and pcas
   - PowerFlarm: support additional higher baud rates
+  - LXNAV: implement dataport protocol 1.05 for V7 and S-series varios
+  - LXNAV: bidirectional polar synchronization between XCSoar and vario,
+    configurable as Send, Receive or Off per device
+  - LXNAV: send navigation target (active waypoint) to vario display
+  - LXNAV: send task declarations (observation zones and task points) to vario
+  - LXNAV: receive radio frequencies and transponder code/mode from vario
+  - LXNAV: receive glider registration, type and competition ID from vario
+    and auto-match or create plane profile
+  - LXNAV: receive flap position, IGC pressure altitude and vario priority
+  - LXNAV: send QNH, elevation, volume, MC, ballast and bugs to vario
+  - LXNAV: clamp MC, ballast and bugs values to S80 firmware limits
+  - LXNAV: fix task declaration to FLARM via vario pass-through
+  - LXNAV: fix EnableLoggerNMEA for S-series varios (stay in NMEA mode)
   - LXNAV: parse acceleration/g-load from PLXVF sentence
   - LXNAV: Overload formula, use reference mass instead of dry mass
+  - support serial baud rates above 230400 on Linux (e.g. 256000, 500000)
+  - fix NMEA sub-second time precision for >1 Hz GPS devices #2207
+  - fix MWV wind sentence: reject invalid status and relative wind #2209
+  - fix stall ratio not propagating after device merging #2210
+  - fix temperature and humidity sensor data expiry (convert to Validity)
+  - show IMU and airspeed flags on device list dialog
   - OpenVario: Overload formula, use reference mass instead of dry mass
   - Vaulter: use fraction instead of overload for ballast
   - Devices: Switch to manual MC when set via external Device
@@ -184,6 +212,9 @@ Version 7.44 - not yet released
 * Weglide:
   - add button under config menu to tigger IGC upload
   - fix scoring formulas
+  - add daily competition tasks panel
+  - add recent task scores view
+  - fix dangling URL pointer in task list download
 * Task:
   - Reachable abort task landable waypoints are now sorted by arrival altitude
     instead of arrival time.
