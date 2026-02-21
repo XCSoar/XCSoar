@@ -41,3 +41,12 @@ struct RaspStyle {
 
 extern const RaspStyle rasp_styles[];
 extern const RaspStyle rasp_colormaps_general[];
+
+/**
+ * Look up the rendering style for a RASP weather field by name.
+ * Falls back to matching the last 3 characters against
+ * rasp_colormaps_general, then returns a default style.
+ */
+[[gnu::pure]]
+const RaspStyle &
+LookupWeatherTerrainStyle(const char *name);
