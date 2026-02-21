@@ -257,6 +257,15 @@ RasterRenderer::ScanMap(const RasterMap &map,
 }
 
 void
+RasterRenderer::FillGradient(UnsignedPoint2D size,
+                             int16_t min_h, int16_t max_h,
+                             bool vertical) noexcept
+{
+  height_matrix.FillGradient(size, min_h, max_h, vertical);
+  quantisation_effective = 1;
+}
+
+void
 RasterRenderer::GenerateImage(bool do_shading,
                               unsigned height_scale,
                               int contrast, int brightness,
