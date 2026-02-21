@@ -42,6 +42,7 @@
 #include "net/http/DownloadManager.hpp"
 #endif
 
+#include <fmt/format.h>
 #include <algorithm>
 
 class RaspColorbarWindow : public PaintWindow {
@@ -106,8 +107,11 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
       &ramp, style->do_water,
       height_scale, interp_levels);
 
+  canvas.Select(look.text_font);
+  const unsigned font_h = canvas.CalcTextSize("0").height;
+  const int bar_bottom = rc.bottom - font_h - 2;
   const unsigned width = rc.right - rc.left;
-  const unsigned bar_height = rc.bottom - rc.top;
+  const unsigned bar_height = std::max(0, bar_bottom - rc.top);
 
   if (width == 0 || bar_height == 0)
     return;
@@ -149,6 +153,26 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
   renderer.GetImage().StretchTo(
     PixelSize{width, bar_height}, canvas,
     PixelSize{width, bar_height}, false, use_alpha);
+
+  // Draw min/max text labels
+  auto fmt_value = [](float v) -> std::string {
+    if (v >= 100.0f || v <= -100.0f)
+      return fmt::format("{:.0f}", v);
+    return fmt::format("{:.1f}", v);
+  };
+
+  canvas.SetTextColor(look.text_color);
+  canvas.SetBackgroundTransparent();
+
+  const auto min_text = fmt_value(min_v);
+  const auto max_text = fmt_value(max_v);
+
+  canvas.DrawText({rc.left + 1, bar_bottom + 1},
+                  min_text);
+  const auto max_size = canvas.CalcTextSize(max_text);
+  canvas.DrawText({rc.right - (int)max_size.width - 1,
+                   bar_bottom + 1},
+                  max_text);
 }
 
 class RASPSettingsPanel final
