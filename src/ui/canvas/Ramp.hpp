@@ -35,12 +35,12 @@ struct ColorRamp{
 [[gnu::pure]]
 RGB8Color
 ColorRampLookup(int h,
-                const ColorRamp* ramp_colors,
-                unsigned numramp, unsigned interp_bits=6);
+                const ColorRamp* ramp,
+                unsigned interp_bits=6);
 
 
 [[gnu::pure]]
 RGBA8Color
 ColorRampLookupAlpha(int h,
-                     const ColorRamp* ramp_colors,
-                     unsigned numramp, unsigned interp_bits=6);
+                     const ColorRamp* ramp,
+                     unsigned interp_bits=6);
