@@ -662,7 +662,7 @@ RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
       } else {
         const RGB8Color color2 =
           ColorRampLookup(i << height_scale, color_ramp,
-                          NUM_COLOR_RAMP_LEVELS, interp_levels);
+                          interp_levels);
 
         color = TerrainShading(mag, color2);
       }
@@ -729,7 +729,7 @@ RasterRenderer::PrepareColorTableAlpha(const ColorRamp *color_ramp,
       } else {
         const RGBA8Color color2 =
           ColorRampLookupAlpha(i << height_scale, color_ramp,
-                               NUM_COLOR_RAMP_LEVELS, interp_levels);
+                               interp_levels);
 
         color = TerrainShadingAlpha(mag, color2);
       }
