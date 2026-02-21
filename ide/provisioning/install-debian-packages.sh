@@ -122,7 +122,8 @@ install_win() {
       unzip \
       zip \
       meson \
-      nsis
+      nsis \
+      fonts-dejavu
   echo
 }
 
