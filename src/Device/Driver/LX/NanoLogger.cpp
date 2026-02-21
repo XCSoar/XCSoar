@@ -95,7 +95,9 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
   if (endptr == p || *endptr != 0)
     return false;
 
-  return date.IsPlausible();
+  /* accept implausible dates (e.g. 00.00.1980) from devices
+     without an RTC -- the flight is still downloadable */
+  return true;
 }
 
 static bool
@@ -119,7 +121,7 @@ ReadTime(NMEAInputLine &line, BrokenTime &time)
   if (endptr == p || *endptr != 0)
     return false;
 
-  return time.IsPlausible();
+  return true;
 }
 
 static void
@@ -153,13 +155,10 @@ ParseLogbookContent(const char *_line, RecordedFlightInfo &info)
 }
 
 /**
- * Read exactly @p n logbook response lines, appending only those
- * with valid dates to @p flight_list.  Entries with invalid dates
- * (e.g. 00.00.00 from unrecorded flights) are silently skipped
- * instead of aborting the whole download.
- *
- * Each PLXVC,LOGBOOK,A line from the device is consumed exactly
- * once, so there is no cascading shift when an entry is skipped.
+ * Read exactly @p n logbook response lines, appending parseable
+ * entries to @p flight_list.  Entries with implausible dates
+ * (e.g. 00.00.1980 from devices without an RTC) are still
+ * included so the user can download those flights.
  */
 static bool
 ReadLogbookContents(PortNMEAReader &reader, RecordedFlightList &flight_list,

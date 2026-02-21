@@ -222,10 +222,15 @@ ShowFlightList(const RecordedFlightList &flight_list)
     const RecordedFlightInfo &flight = flight_list[i];
 
     StaticString<64> buffer;
-    buffer.UnsafeFormat("%04u/%02u/%02u %02u:%02u-%02u:%02u",
-                        flight.date.year, flight.date.month, flight.date.day,
-                        flight.start_time.hour, flight.start_time.minute,
-                        flight.end_time.hour, flight.end_time.minute);
+    if (flight.date.IsPlausible())
+      buffer.UnsafeFormat("%04u/%02u/%02u %02u:%02u-%02u:%02u",
+                          flight.date.year, flight.date.month, flight.date.day,
+                          flight.start_time.hour, flight.start_time.minute,
+                          flight.end_time.hour, flight.end_time.minute);
+    else
+      buffer.UnsafeFormat("----/--/-- %02u:%02u-%02u:%02u",
+                          flight.start_time.hour, flight.start_time.minute,
+                          flight.end_time.hour, flight.end_time.minute);
 
     combo.Append(i, buffer);
   }
