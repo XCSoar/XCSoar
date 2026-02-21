@@ -178,6 +178,13 @@ public:
                const WindowProjection &projection) noexcept;
 
   /**
+   * Make a gradient map from min_h to max_h, default left to right
+   */
+  void FillGradient(UnsignedPoint2D size,
+                    int16_t min_h, int16_t max_h,
+                    bool vertical = false) noexcept;
+
+  /**
    * Convert the height matrix into the image.
    *
    * @param contour_spacing draw contour lines every N height-domain units;
