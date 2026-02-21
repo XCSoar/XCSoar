@@ -9,14 +9,23 @@
 #include "Weather/MapOverlay/ControlsWidget.hpp"
 #include "Weather/Settings.hpp"
 #include "WeatherOverlayDraft.hpp"
+#include "Weather/Rasp/RaspStyle.hpp"
+#include "Weather/Rasp/ColorMap.hpp"
+#include "Terrain/RasterRenderer.hpp"
+#include "ui/canvas/RawBitmap.hpp"
+#include "Math/Angle.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
+#include "ui/window/PaintWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/Edit.hpp"
 #include "Interface.hpp"
 #include "PageSettings.hpp"
 #include "Repository/FileType.hpp"
+#include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
@@ -27,6 +36,81 @@
 #include "Weather/Rasp/DownloadGlue.hpp"
 #include "net/http/DownloadManager.hpp"
 #endif
+
+#include <algorithm>
+
+class RaspColorbarWindow : public PaintWindow {
+  const DialogLook &look;
+  const RaspStyle *style = nullptr;
+
+public:
+  explicit RaspColorbarWindow(const DialogLook &_look) noexcept
+    :look(_look) {}
+
+  void SetStyle(const RaspStyle *_style) noexcept {
+    style = _style;
+    Invalidate();
+  }
+
+  void OnPaint(Canvas &canvas) noexcept override;
+};
+
+void
+RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
+{
+  const auto rc = canvas.GetRect();
+
+  if (style == nullptr) {
+    canvas.Clear(look.background_color);
+    return;
+  }
+
+  const auto &map = style->color_map;
+  const float min_v = map.points[0].value;
+  const float max_v = map.points[map.num_points - 1].value;
+  const unsigned height_scale = style->height_scale;
+
+  // Compute rendering-domain bounds from the physical
+  // color map range
+  const int16_t min_h = (int16_t)std::clamp(
+    (int)(min_v * style->scale + style->offset),
+    0, (int)INT16_MAX);
+  const int16_t max_h = (int16_t)std::clamp(
+    (int)(max_v * style->scale + style->offset),
+    0, (int)INT16_MAX);
+
+  // Build the color table using the same code path
+  // as the map renderer
+  auto materialized =
+    MaterializeColorRamp(style->color_map,
+                         style->color_map_alpha,
+                         style->scale, style->offset,
+                         height_scale, style->do_water);
+  auto ramp = materialized.GetColorRamp();
+
+  RasterRenderer renderer;
+  constexpr int interp_levels = 5;
+  renderer.PrepareColorTable(
+    &ramp, style->do_water,
+    height_scale, interp_levels);
+
+  const unsigned width = rc.right - rc.left;
+  const unsigned bar_height = rc.bottom - rc.top;
+
+  if (width == 0 || bar_height == 0)
+    return;
+
+  // Fill a synthetic height matrix with a horizontal
+  // gradient and render through the full pipeline
+  renderer.FillGradient({width, bar_height},
+                        min_h, max_h);
+  renderer.GenerateImage(false, height_scale,
+                         0, 0, Angle::Zero(), 0u);
+
+  renderer.GetImage().StretchTo(
+    PixelSize{width, bar_height}, canvas,
+    PixelSize{width, bar_height});
+}
 
 class RASPSettingsPanel final
   : public RowFormWidget {
@@ -40,6 +124,7 @@ class RASPSettingsPanel final
     SPACER_AFTER_UPDATE,
 #endif
     LAYER,
+    COLORBAR,
     TIME,
     APPLY_TO_PAGE,
     ADD_PAGE,
@@ -82,6 +167,10 @@ public:
       active = nullptr;
   }
 
+private:
+  void UpdateColorbar() noexcept;
+
+  /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
@@ -100,6 +189,7 @@ RASPSettingsPanel::ReloadRasp()
   RefreshPageSection();
   SyncUpdateButtonEnabled();
   WeatherMapOverlay::RefreshControlsLabels();
+  UpdateColorbar();
 }
 
 void
@@ -167,6 +257,7 @@ RASPSettingsPanel::RefreshPageSection() noexcept
   overlay.Load(PageLayout::Overlay::RASP);
   UpdateLayerControl();
   UpdateTimeControl();
+  UpdateColorbar();
   overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
@@ -212,6 +303,7 @@ RASPSettingsPanel::OnLayerModified() noexcept
   auto &df = (DataFieldEnum &)*GetControl(LAYER).GetDataField();
   overlay.draft.rasp_field = df.GetValue();
   UpdateTimeControl();
+  UpdateColorbar();
   overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
@@ -238,6 +330,22 @@ RASPSettingsPanel::UpdateClicked()
 
   RequestConfiguredRaspUpdate();
 #endif
+}
+
+void
+RASPSettingsPanel::UpdateColorbar() noexcept
+{
+  /* The colorbar previews the layer selected in the "Layer" control;
+     the "None" choice has the id -1. */
+  const RaspStyle *s = nullptr;
+  const int field_index = overlay.draft.rasp_field;
+  if (field_index >= 0 && rasp &&
+      unsigned(field_index) < rasp->GetItemCount()) {
+    const auto &mi = rasp->GetItemInfo(field_index);
+    s = &LookupWeatherTerrainStyle(mi.name);
+  }
+
+  ((RaspColorbarWindow &)GetRow(COLORBAR)).SetStyle(s);
 }
 
 void
@@ -292,6 +400,19 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   layer->GetDataField()->SetOnModified([this]{
     OnLayerModified();
   });
+
+  {
+    const auto &dialog_look = UIGlobals::GetDialogLook();
+    auto colorbar =
+      std::make_unique<RaspColorbarWindow>(dialog_look);
+
+    WindowStyle style;
+    style.Border();
+    colorbar->Create((ContainerWindow &)GetWindow(),
+                     {0, 0, 100, Layout::Scale(40)},
+                     style);
+    Add(std::move(colorbar));
+  }
 
   auto *time = AddEnum(_("Time"),
                        _("Forecast time for the current map page. "
