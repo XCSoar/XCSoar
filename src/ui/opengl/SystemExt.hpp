@@ -5,7 +5,7 @@
 
 #include "System.hpp"
 
-#ifndef ENABLE_SDL
+#if defined(HAVE_GLES2) && !defined(ENABLE_SDL)
 #include <GLES2/gl2ext.h>
 #endif
 

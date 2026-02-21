@@ -17,12 +17,13 @@
 #endif
 #endif
 
-#if defined(_WIN32)
-#include "ResourceLoader.hpp"
-#include <mmsystem.h>
-#elif defined(HAVE_PCM_PLAYER)
+#if defined(HAVE_PCM_PLAYER)
 #include "GlobalPCMResourcePlayer.hpp"
 #include "PCMResourcePlayer.hpp"
+#elif defined(_WIN32)
+// On Windows without SDL we use sndPlaySound
+#include "ResourceLoader.hpp"
+#include <mmsystem.h>
 #endif
 
 bool
@@ -38,6 +39,13 @@ PlayResource(const char *resource_name)
 
   return SoundUtil::Play(resource_name);
 
+#elif defined(HAVE_PCM_PLAYER)
+
+  if (nullptr == pcm_resource_player)
+    return false;
+
+  return pcm_resource_player->PlayResource(resource_name);
+
 #elif defined(_WIN32)
 
   if (strstr(resource_name, TEXT(".wav")))
@@ -46,13 +54,6 @@ PlayResource(const char *resource_name)
   ResourceLoader::Data data = ResourceLoader::Load(resource_name, "WAVE");
   return data.data() != nullptr &&
     sndPlaySound((LPCTSTR)data.data(), SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
-
-#elif defined(HAVE_PCM_PLAYER)
-
-  if (nullptr == pcm_resource_player)
-    return false;
-
-  return pcm_resource_player->PlayResource(resource_name);
 
 #else
   return false;

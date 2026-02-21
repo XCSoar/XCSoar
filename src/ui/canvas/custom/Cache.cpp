@@ -53,8 +53,14 @@ struct TextCacheKey {
   void Allocate() noexcept {
     assert(allocated == nullptr);
 
-    allocated = strndup(text.data(), text.size());
-    text = {allocated, text.size()};
+    const auto s = text.size();
+    allocated = (char *) malloc(s + 1);
+    if (allocated == nullptr) {
+      assert(false && "malloc failed in TextCacheKey::Allocate");
+      return;
+    }
+    text.copy(allocated, s);
+    text = {allocated, s};
   }
 
   TextCacheKey &operator=(const TextCacheKey &other) = delete;
@@ -194,7 +200,11 @@ TextCache::Result
 TextCache::Get(const Font &font, std::string_view text) noexcept
 {
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #endif
   assert(font.IsDefined());
 
@@ -255,7 +265,11 @@ void
 TextCache::Flush() noexcept
 {
 #ifdef ENABLE_OPENGL
+#ifdef _WIN32
+  assert(GetCurrentThreadId() == OpenGL::thread);
+#else
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
 #endif
 
 #ifndef ENABLE_OPENGL

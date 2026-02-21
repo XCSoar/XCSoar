@@ -197,6 +197,7 @@ freetype = MesonProject(
         "-Dpng=disabled",
         "-Dzlib=enabled",
     ],
+    patches=abspath("lib/freetype/patches"),
 )
 
 cares = CmakeProject(
@@ -460,6 +461,18 @@ sdl2 = CmakeProject(
         "-DSDL_SNDIO=OFF",
         "-DSDL_LIBSAMPLERATE=OFF",
         "-DSDL_COCOA=OFF",
+    ],
+    windows_configure_args=[
+        # Windows-specific SDL2 options
+        # Enable both OpenGL (WGL for desktop GL) and OpenGL ES (for ANGLE)
+        "-DSDL_OPENGL=ON",  # Overwrites previous setting, used only for OpenGL on Windows
+        "-DSDL_DIRECTX=OFF",
+        "-DSDL_WASAPI=OFF",
+        "-DSDL_RENDER_D3D=OFF",
+        "-DSDL_LOADSO=ON",  # Required for SDL_VIDEO on Windows
+        # Disable joystick/xinput to avoid mingw-w64 header conflicts
+        "-DSDL_JOYSTICK=OFF",
+        "-DSDL_XINPUT=OFF",
     ],
     patches=abspath("lib/sdl2/patches"),
 )
