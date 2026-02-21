@@ -9,7 +9,6 @@
 #include "Terrain/TerrainSettings.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "ui/canvas/RawBitmap.hpp"
-#include "util/StringAPI.hxx"
 
 StaticString<96>
 RaspRenderer::GetExtendedLabel() const
@@ -28,29 +27,6 @@ RaspRenderer::GetExtendedLabel() const
     result = label;
 
   return result;
-}
-
-[[gnu::pure]]
-static const RaspStyle &
-LookupWeatherTerrainStyle(const char *name)
-{
-  const auto *i = rasp_styles;
-  while (i->name != nullptr && !StringIsEqual(i->name, name))
-    ++i;
-
-  if(i->name == nullptr) {
-    // If no exact match, try matching the short codes
-    // to the end of the field name
-    if(StringLength(name) >= 3) {
-      const char *short_name =
-        &name[StringLength(name) - 3];
-      i = rasp_colormaps_general;
-      while (i->name != nullptr
-             && !StringIsEqual(i->name, short_name))
-        ++i;
-    }
-  }
-  return *i;
 }
 
 bool
