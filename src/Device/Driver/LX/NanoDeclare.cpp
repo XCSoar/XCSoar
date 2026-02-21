@@ -139,10 +139,18 @@ static bool
 NanoWriteTaskOptions(Port &port, OperationEnvironment &env,
                      PortNMEAReader &reader, unsigned row,
                      unsigned total_size,
-                     [[maybe_unused]] const Declaration &declaration)
+                     const Declaration &declaration)
 {
-  return NanoWriteDecl(port, env, reader, row, total_size,
-                       "LLXVTSK,StartOnEntry=false,Short=false,Near=true");
+  StaticString<128> content;
+  content = "LLXVTSK";
+
+  if (declaration.is_aat_task && declaration.aat_min_time.count() > 0)
+    content.AppendFormat(",TaskTime=%us",
+                         declaration.aat_min_time.count());
+
+  content += ",StartOnEntry=false,Short=false,Near=true";
+
+  return NanoWriteDecl(port, env, reader, row, total_size, content);
 }
 
 bool

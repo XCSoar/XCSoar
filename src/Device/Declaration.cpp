@@ -125,6 +125,9 @@ Declaration::Declaration(const LoggerSettings &logger_settings,
     const auto ft = task->GetFactoryType();
     is_aat_task = (ft == TaskFactoryType::AAT || ft == TaskFactoryType::MAT);
 
+    if (is_aat_task)
+      aat_min_time = task->GetOrderedTaskSettings().aat_min_time;
+
     for (unsigned i = 0; i < task->TaskSize(); i++)
       turnpoints.push_back(task->GetTaskPoint(i));
   }
