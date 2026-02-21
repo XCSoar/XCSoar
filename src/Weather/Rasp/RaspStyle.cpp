@@ -2,812 +2,834 @@
 // Copyright The XCSoar Project
 
 #include "RaspStyle.hpp"
-#include "ui/canvas/Ramp.hpp"
-#include "Terrain/RasterRenderer.hpp"
+
+#include <iterator>
 
 /**
  * Compute the minimum height_scale needed so that the full range
- * of the color ramp is reachable through the 255-bucket color
+ * of the color map is reachable through the 255-bucket color
  * table (max lookup value = 254 << height_scale).
  */
 static constexpr unsigned
-HeightScaleForRamp(const ColorRamp &ramp) noexcept
+HeightScaleForColorMap(const ColorMap &map,
+                       float scale, float offset) noexcept
 {
-  const int max_h = ramp.ramp_table[ramp.num_entries - 1].h;
-  unsigned scale = 0;
-  while ((254 << scale) < max_h)
-    ++scale;
-  return scale;
+  float max_v = map.points[map.num_points - 1].value;
+  int max_h = static_cast<int>(max_v * scale + offset);
+  unsigned s = 0;
+  while ((254 << s) < max_h)
+    ++s;
+  return s;
 }
 
 /**
  * Create a RaspStyle with height_scale auto-computed from
- * the color ramp's range.
+ * the color map's range and transform.
  */
 static constexpr RaspStyle
-CalcRaspStyle(const char *name, const ColorRamp &ramp,
-          bool do_water = false) noexcept
+MakeRaspStyle(const char *name,
+              const ColorMap &map,
+              const ColorMap &map_alpha,
+              float scale, float offset,
+              bool do_water = false) noexcept
 {
-  return { name, &ramp, HeightScaleForRamp(ramp), do_water };
+  return {name, map, map_alpha, scale, offset,
+          HeightScaleForColorMap(map, scale, offset),
+          do_water};
 }
 
-bool
-RaspStyle::HasAlpha() const noexcept
+static constexpr RaspStyle
+MakeRaspStyle(const char *name,
+              const ColorMap &map,
+              float scale, float offset,
+              bool do_water = false) noexcept
 {
-  return color_ramp != nullptr && color_ramp->has_alpha;
+  return MakeRaspStyle(name, map, {}, scale, offset, do_water);
 }
 
-// Classic RASP Blipmap color schemes
+// ---- Classic RASP Blipmap color schemes ----
+// Identity transform: physical value = h value directly
 
-static constexpr ColorRampEntry rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {
-  { // Blue to red       // vertical speed (cm/s scale)
-    {   0, { 0, 0, 255 }}, // -200
-    { 100, { 0, 195, 255 }}, // -100
-    { 200, { 52, 192, 11 }}, // 0
-    { 250, { 182, 233, 4 }}, // 40
-    { 300, { 255, 233, 0 }}, // 80
-    { 360, { 255, 209, 0 }}, // 120
-    { 420, { 255, 155, 0 }}, // 160
-    { 480, { 255, 109, 0 }}, // 200
-    { 540, { 255, 35, 0 }}, // 240
-    { 600, { 255, 00, 0 }}, // 300
-    {1000, { 0xFF, 0x00, 0x00 }},
-    {8000, { 0xFF, 0x00, 0x00 }},
-    {9000, { 0xFF, 0x00, 0x00 }}
-  },
-  {
-    {0, { 0xFF, 0xFF, 0xFF }},
-    {250, { 0x80, 0x80, 0xFF }},
-    {500, { 0x80, 0xFF, 0xFF }},
-    {750, { 0xFF, 0xFF, 0x80 }},
-    {1000, { 0xFF, 0x80, 0x80 }},
-    {1250, { 0xFF, 0x80, 0x80 }},
-    {2000, { 0xFF, 0xA0, 0xA0 }},
-    {3000, { 0xFF, 0xA0, 0xA0 }},
-    {4000, { 0xFF, 0x00, 0x00 }},
-    {5000, { 0xFF, 0x00, 0x00 }},
-    {6000, { 0xFF, 0x00, 0x00 }},
-    {7000, { 0xFF, 0x00, 0x00 }},
-    {8000, { 0xFF, 0x00, 0x00 }}
-  },
-  {  // Blue to Yellow to red,  boundary layer height (m scale)
-    {0, { 0xFF, 0xFF, 0xFF }},
-    {750, { 0x80, 0x80, 0xFF }},
-    {1500, { 0x80, 0xFF, 0xFF }},
-    {2250, { 0xFF, 0xFF, 0x80 }},
-    {3000, { 0xFF, 0x80, 0x80 }},
-    {3500, { 0xFF, 0x80, 0x80 }},
-    {6000, { 0xFF, 0xA0, 0xA0 }},
-    {8000, { 0xFF, 0xA0, 0xA0 }},
-    {9000, { 0xFF, 0x00, 0x00 }},
-    {9500, { 0xFF, 0x00, 0x00 }},
-    {9600, { 0xFF, 0x00, 0x00 }},
-    {9700, { 0xFF, 0x00, 0x00 }},
-    {20000, { 0xFF, 0x00, 0x00 }}
-  },
-  { // Blue to Gray, 8 steps, cloud cover (percentage scale)
-    {   0, { 0, 153, 204 }},
-    {  12, { 102, 229, 255 }},
-    {  25, { 153, 255, 255 }},
-    {  37, { 204, 255, 255 }},
-    {  50, { 229, 229, 229 }},
-    {  62, { 173, 173, 173 }},
-    {  75, { 122, 122, 122 }},
-    { 100, { 81, 81, 81 }},
-    {5000, { 71, 71, 71 }},
-    {6000, { 0xFF, 0x00, 0x00 }},
-    {7000, { 0xFF, 0x00, 0x00 }},
-    {8000, { 0xFF, 0x00, 0x00 }},
-    {9000, { 0xFF, 0x00, 0x00 }}
-  },
-  { // sfctemp, blue to orange to red (Fahrenheit scale)
-    {   0, { 7, 90, 255 }},
-    {  30, { 50, 118, 255 }},
-    {  70, { 89, 144, 255 }},
-    {  73, { 140, 178, 255 }},
-    {  76, { 191, 212, 255 }},
-    {  79, { 229, 238, 255 }},
-    {  82, { 247, 249, 255 }},
-    {  85, { 255, 255, 204 }},
-    {  88, { 255, 255, 153 }},
-    {  91, { 255, 255, 0 }},
-    {  95, { 255, 204, 0 }},
-    { 100, { 255, 153, 0 }},
-    { 120, { 255, 0, 0 }}
-  },
-  { // Blue to white to red       // vertical speed (convergence, cm/s scale)
-    {   0, { 7, 90, 255 }},
-    { 100, { 50, 118, 255 }},
-    { 140, { 89, 144, 255 }},
-    { 160, { 140, 178, 255 }},
-    { 180, { 191, 212, 255 }},
-    { 190, { 229, 238, 255 }},
-    { 200, { 247, 249, 255 }},
-    { 210, { 255, 255, 204 }},
-    { 220, { 255, 255, 153 }},
-    { 240, { 255, 255, 0 }},
-    { 260, { 255, 204, 0 }},
-    { 300, { 255, 153, 0 }},
-    {1000, { 255, 102, 0 }},
-  },
+// Blue to red (vertical speed, cm/s file encoding)
+static constexpr ColorPoint classic_vertical_speed[] = {
+  {   0.0f, {  0,   0, 255}},
+  { 100.0f, {  0, 195, 255}},
+  { 200.0f, { 52, 192,  11}},
+  { 250.0f, {182, 233,   4}},
+  { 300.0f, {255, 233,   0}},
+  { 360.0f, {255, 209,   0}},
+  { 420.0f, {255, 155,   0}},
+  { 480.0f, {255, 109,   0}},
+  { 540.0f, {255,  35,   0}},
+  { 600.0f, {255,   0,   0}},
+  {1000.0f, {255,   0,   0}},
+  {8000.0f, {255,   0,   0}},
+  {9000.0f, {255,   0,   0}},
+};
+static constexpr ColorMap classic_vertical_speed_map = {
+  classic_vertical_speed, std::size(classic_vertical_speed)
 };
 
-// Thermalmap.info Color schemes
-
-static constexpr ColorRampEntry rasp_colors_verticalspeed[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Offset 5000 cm/s
-     Multiplyfactor 100
-     Blue to white to Purple */
-
-  {250, {74, 85, 213}},
-  {1250, {89, 137, 255}},
-  {2250, {24, 160, 255}},
-  {3250, {55, 196, 250}},
-  {3750, {13, 217, 248}},
-  {4250, {0, 239, 243}},
-  {5000, {255, 255, 255}},
-  {5500, {255, 215, 0}},
-  {6000, {255, 165, 0}},
-  {7000, {255, 73, 50}},
-  {7500, {255, 65, 110}},
-  {8500, {250, 51, 204}},
-  {9500, {163, 0, 211}},
+// White to purple (wind speed, knots file encoding)
+static constexpr ColorPoint classic_windspeed[] = {
+  {   0.0f, {0xFF, 0xFF, 0xFF}},
+  { 250.0f, {0x80, 0x80, 0xFF}},
+  { 500.0f, {0x80, 0xFF, 0xFF}},
+  { 750.0f, {0xFF, 0xFF, 0x80}},
+  {1000.0f, {0xFF, 0x80, 0x80}},
+  {1250.0f, {0xFF, 0x80, 0x80}},
+  {2000.0f, {0xFF, 0xA0, 0xA0}},
+  {3000.0f, {0xFF, 0xA0, 0xA0}},
+  {4000.0f, {0xFF, 0x00, 0x00}},
+  {5000.0f, {0xFF, 0x00, 0x00}},
+  {6000.0f, {0xFF, 0x00, 0x00}},
+  {7000.0f, {0xFF, 0x00, 0x00}},
+  {8000.0f, {0xFF, 0x00, 0x00}},
+};
+static constexpr ColorMap classic_windspeed_map = {
+  classic_windspeed, std::size(classic_windspeed)
 };
 
-static constexpr ColorRampEntryAlpha rasp_colors_verticalspeed_alpha[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Offset 5000 cm/s
-     Multiplyfactor 100
-     Blue to Transparent to Purple */
-
-  { 250, { 74,  85, 213, 255}},
-  {1250, { 89, 137, 255, 255}},
-  {2250, { 24, 160, 255, 255}},
-  {3250, { 55, 196, 250, 200}},
-  {3750, { 13, 217, 248, 128}},
-  {4250, {  0, 239, 243,  80}},
-  {5000, {255, 255, 255,   0}},
-  {5500, {255, 215,   0, 100}},
-  {6000, {255, 165,   0, 180}},
-  {7000, {255,  73,  50, 225}},
-  {7500, {255,  65, 110, 255}},
-  {8500, {250,  51, 204, 255}},
-  {9500, {163,   0, 211, 255}},
+// Blue to Yellow to red (boundary layer height, m)
+static constexpr ColorPoint classic_height[] = {
+  {    0.0f, {0xFF, 0xFF, 0xFF}},
+  {  750.0f, {0x80, 0x80, 0xFF}},
+  { 1500.0f, {0x80, 0xFF, 0xFF}},
+  { 2250.0f, {0xFF, 0xFF, 0x80}},
+  { 3000.0f, {0xFF, 0x80, 0x80}},
+  { 3500.0f, {0xFF, 0x80, 0x80}},
+  { 6000.0f, {0xFF, 0xA0, 0xA0}},
+  { 8000.0f, {0xFF, 0xA0, 0xA0}},
+  { 9000.0f, {0xFF, 0x00, 0x00}},
+  { 9500.0f, {0xFF, 0x00, 0x00}},
+  { 9600.0f, {0xFF, 0x00, 0x00}},
+  { 9700.0f, {0xFF, 0x00, 0x00}},
+  {20000.0f, {0xFF, 0x00, 0x00}},
+};
+static constexpr ColorMap classic_height_map = {
+  classic_height, std::size(classic_height)
 };
 
-
-static constexpr ColorRampEntry rasp_colors_thermalstrength[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Offset 0
-     Multiplyfactor 100
-     Blue to Green to Yellow to Red to Purple */
-
-  {74, {255, 255, 255}},
-  {75, {0, 128, 255}},
-  {100, {0, 160, 255}},
-  {150, {64, 224, 255}},
-  {175, {64, 255, 255}},
-  {200, {64, 255, 192}},
-  {250, {128, 255, 64}},
-  {275, {192, 255, 64}},
-  {300, {255, 255, 64}},
-  {325, {255, 224, 64}},
-  {400, {255, 32, 64}},
-  {425, {255, 96, 192}},
-  {475, {185, 39, 190}},
+// Blue to Gray (cloud cover, percentage file encoding)
+static constexpr ColorPoint classic_cloud[] = {
+  {  0.0f, {  0, 153, 204}},
+  { 12.0f, {102, 229, 255}},
+  { 25.0f, {153, 255, 255}},
+  { 37.0f, {204, 255, 255}},
+  { 50.0f, {229, 229, 229}},
+  { 62.0f, {173, 173, 173}},
+  { 75.0f, {122, 122, 122}},
+  {100.0f, { 81,  81,  81}},
+  {5000.0f, { 71,  71,  71}},
+  {6000.0f, {0xFF, 0x00, 0x00}},
+  {7000.0f, {0xFF, 0x00, 0x00}},
+  {8000.0f, {0xFF, 0x00, 0x00}},
+  {9000.0f, {0xFF, 0x00, 0x00}},
+};
+static constexpr ColorMap classic_cloud_map = {
+  classic_cloud, std::size(classic_cloud)
 };
 
-static constexpr ColorRampEntry rasp_colors_thermalheight[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Offset 0
-     Multiplyfactor 1
-     Blue to Green to Orange to Red */
-
-  {199, {255, 255, 255}},
-  {200, {65, 71, 173}},
-  {400, {71, 119, 239}},
-  {600, {56, 165, 251}},
-  {800, {27, 208, 213}},
-  {1000, {38, 237, 166}},
-  {1200, {100, 253, 106}},
-  {1400, {164, 252, 60}},
-  {1600, {211, 232, 53}},
-  {1800, {245, 198, 58}},
-  {2000, {254, 153, 44}},
-  {2200, {243, 99, 21}},
-  {2800, {122, 4, 3}},
+// Blue to orange to red (surface temperature, Fahrenheit)
+static constexpr ColorPoint classic_sfctemp[] = {
+  {  0.0f, {  7,  90, 255}},
+  { 30.0f, { 50, 118, 255}},
+  { 70.0f, { 89, 144, 255}},
+  { 73.0f, {140, 178, 255}},
+  { 76.0f, {191, 212, 255}},
+  { 79.0f, {229, 238, 255}},
+  { 82.0f, {247, 249, 255}},
+  { 85.0f, {255, 255, 204}},
+  { 88.0f, {255, 255, 153}},
+  { 91.0f, {255, 255,   0}},
+  { 95.0f, {255, 204,   0}},
+  {100.0f, {255, 153,   0}},
+  {120.0f, {255,   0,   0}},
+};
+static constexpr ColorMap classic_sfctemp_map = {
+  classic_sfctemp, std::size(classic_sfctemp)
 };
 
-static constexpr ColorRampEntry rasp_colors_temperature[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Temperature (Celsius Scale)
-     Offset 50
-     Multiplyfactor 100
-     Blue to Green to Orange to Red 
-     
-     This is the legacy color scale of ThermalMap.info. Since the current data
-     path clips the negative values from the .jp2 file, negative
-     temperatures are never plotted, however */
-
-  {-4950, {23, 16, 207}},
-  {-850, {35, 63, 249}},
-  {-550, {48, 120, 250}},
-  {-250, {66, 178, 251}},
-  {50, {84, 235, 253}},
-  {350, {106, 255, 222}},
-  {650, {125, 242, 160}},
-  {1250, {210, 241, 74}},
-  {1550, {252, 233, 60}},
-  {1850, {248, 180, 47}},
-  {2150, {246, 144, 38}},
-  {3050, {244, 36, 23}},
-  {3350, {243, 0, 18}},
+// Blue to white to red (convergence, cm/s file encoding)
+static constexpr ColorPoint classic_convergence[] = {
+  {   0.0f, {  7,  90, 255}},
+  { 100.0f, { 50, 118, 255}},
+  { 140.0f, { 89, 144, 255}},
+  { 160.0f, {140, 178, 255}},
+  { 180.0f, {191, 212, 255}},
+  { 190.0f, {229, 238, 255}},
+  { 200.0f, {247, 249, 255}},
+  { 210.0f, {255, 255, 204}},
+  { 220.0f, {255, 255, 153}},
+  { 240.0f, {255, 255,   0}},
+  { 260.0f, {255, 204,   0}},
+  { 300.0f, {255, 153,   0}},
+  {1000.0f, {255, 102,   0}},
+};
+static constexpr ColorMap classic_convergence_map = {
+  classic_convergence, std::size(classic_convergence)
 };
 
-static constexpr ColorRampEntry rasp_colors_temperature_norm[NUM_COLOR_RAMP_LEVELS] = {
+// ---- Thermalmap.info color schemes ----
 
-  /* Temperature (Celsius Scale)
-     Blue to Green to Orange to Red 
-     
-     Shifted color scale that maps
-     -100 C ->     0
-        0 C -> 10000
-      100 C -> 20000
-     */
-
-  { 5050, {  23,  16, 207}},
-  { 9150, {  35,  63, 249}},
-  { 9450, {48, 120, 250}},
-  { 9750, {66, 178, 251}},
-  {10050, {84, 235, 253}},
-  {10350, {106, 255, 222}},
-  {10650, {125, 242, 160}},
-  {11250, {210, 241, 74}},
-  {11550, {252, 233, 60}},
-  {11850, {248, 180, 47}},
-  {12150, {246, 144, 38}},
-  {13050, {244, 36, 23}},
-  {13350, {243, 0, 18}},
+// Vertical speed (m/s)
+// h = m_s * 1000 + 5000
+static constexpr ColorPoint verticalspeed_colors[] = {
+  {-4.75f, { 74,  85, 213}},
+  {-3.75f, { 89, 137, 255}},
+  {-2.75f, { 24, 160, 255}},
+  {-1.75f, { 55, 196, 250}},
+  {-1.25f, { 13, 217, 248}},
+  {-0.75f, {  0, 239, 243}},
+  { 0.0f,  {255, 255, 255}},
+  { 0.5f,  {255, 215,   0}},
+  { 1.0f,  {255, 165,   0}},
+  { 2.0f,  {255,  73,  50}},
+  { 2.5f,  {255,  65, 110}},
+  { 3.5f,  {250,  51, 204}},
+  { 4.5f,  {163,   0, 211}},
+};
+static constexpr ColorMap verticalspeed_map = {
+  verticalspeed_colors, std::size(verticalspeed_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_rain[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Offset 0
-     Multiplyfactor 10
-     Blue to Green to Orange to Red to Purple to Blue */
-
-  {19, {255, 255, 255}},
-  {20, {103, 255, 254}},
-  {50, {88, 204, 252}},
-  {100, {83, 204, 47}},
-  {150, {127, 255, 62}},
-  {200, {193, 255, 108}},
-  {300, {254, 254, 65}},
-  {500, {238, 131, 35}},
-  {700, {199, 0, 13}},
-  {800, {155, 0, 8}},
-  {900, {245, 54, 250}},
-  {1200, {146, 4, 150}},
-  {2000, {57, 15, 249}},
+static constexpr ColorPoint verticalspeed_colors_alpha[] = {
+  {-4.75f, { 74,  85, 213, 255}},
+  {-3.75f, { 89, 137, 255, 255}},
+  {-2.75f, { 24, 160, 255, 255}},
+  {-1.75f, { 55, 196, 250, 200}},
+  {-1.25f, { 13, 217, 248, 128}},
+  {-0.75f, {  0, 239, 243,  80}},
+  { 0.0f,  {255, 255, 255,   0}},
+  { 0.5f,  {255, 215,   0, 100}},
+  { 1.0f,  {255, 165,   0, 180}},
+  { 2.0f,  {255,  73,  50, 225}},
+  { 2.5f,  {255,  65, 110, 255}},
+  { 3.5f,  {250,  51, 204, 255}},
+  { 4.5f,  {163,   0, 211, 255}},
+};
+static constexpr ColorMap verticalspeed_alpha_map = {
+  verticalspeed_colors_alpha,
+  std::size(verticalspeed_colors_alpha)
 };
 
-static constexpr ColorRampEntryAlpha rasp_colors_rain_alpha[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Offset 0
-     Multiplyfactor 10
-     Transparent to blue to Green to Orange to Red to Purple to Blue */
-
-  { 19, {103, 255, 254,   0}},
-  { 20, {103, 255, 254,  64}},
-  { 50, { 88, 204, 252, 110}},
-  {100, { 83, 204,  47, 160}},
-  {150, {127, 255,  62, 200}},
-  {200, {193, 255, 108}},
-  {300, {254, 254,  65}},
-  {500, {238, 131,  35}},
-  {700, {199,   0,  13}},
-  {800, {155,   0,   8}},
-  {900, {245,  54, 250}},
-  {1200,{146,   4, 150}},
-  {2000,{ 57,  15, 249}},
+// Thermal strength (m/s)
+// h = m_s * 100
+static constexpr ColorPoint thermalstrength_colors[] = {
+  {0.74f, {255, 255, 255}},
+  {0.75f, {  0, 128, 255}},
+  {1.0f,  {  0, 160, 255}},
+  {1.5f,  { 64, 224, 255}},
+  {1.75f, { 64, 255, 255}},
+  {2.0f,  { 64, 255, 192}},
+  {2.5f,  {128, 255,  64}},
+  {2.75f, {192, 255,  64}},
+  {3.0f,  {255, 255,  64}},
+  {3.25f, {255, 224,  64}},
+  {4.0f,  {255,  32,  64}},
+  {4.25f, {255,  96, 192}},
+  {4.75f, {185,  39, 190}},
+};
+static constexpr ColorMap thermalstrength_map = {
+  thermalstrength_colors, std::size(thermalstrength_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_pfd_ls4[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* PFD - LS4, DuoDiscus
-     Offset 0
-     Multiplyfactor 1
-     Blue to Green to Orange to Red */
-
-  {23, {255, 255, 255}},
-  {24, {255, 255, 255}},
-  {25, {33, 13, 41}},
-  {50, {48, 18, 59}},
-  {100, {70, 98, 216}},
-  {200, {53, 171, 248}},
-  {300, {27, 229, 181}},
-  {400, {116, 254, 93}},
-  {500, {201, 239, 52}},
-  {600, {251, 185, 56}},
-  {700, {245, 105, 24}},
-  {800, {201, 41, 3}},
-  {900, {122, 4, 3}},
+// Thermal height (m)
+// h = meters * 1
+static constexpr ColorPoint thermalheight_colors[] = {
+  { 199.0f, {255, 255, 255}},
+  { 200.0f, { 65,  71, 173}},
+  { 400.0f, { 71, 119, 239}},
+  { 600.0f, { 56, 165, 251}},
+  { 800.0f, { 27, 208, 213}},
+  {1000.0f, { 38, 237, 166}},
+  {1200.0f, {100, 253, 106}},
+  {1400.0f, {164, 252,  60}},
+  {1600.0f, {211, 232,  53}},
+  {1800.0f, {245, 198,  58}},
+  {2000.0f, {254, 153,  44}},
+  {2200.0f, {243,  99,  21}},
+  {2800.0f, {122,   4,   3}},
+};
+static constexpr ColorMap thermalheight_map = {
+  thermalheight_colors, std::size(thermalheight_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_bl_avg_windspeed[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Windspeed, WindShear, BL Avg Windspeed
-     Offset 100
-     Multiplyfactor 1
-     Blue to Green to Yellow to Orange to Purple */
-
-  {0, {40, 140, 255}},
-  {200, {0, 220, 225}},
-  {400, {0, 234, 156}},
-  {600, {240, 245, 3}},
-  {800, {255, 219, 0}},
-  {1000, {255, 152, 0}},
-  {1200, {247, 120, 0}},
-  {1400, {224, 97, 40}},
-  {1800, {220, 81, 50}},
-  {2400, {205, 58, 70}},
-  {3000, {180, 26, 90}},
-  {3600, {150, 40, 120}},
-  {4200, {122, 44, 122}},
+// Temperature (Celsius)
+// h = celsius * 100 + 50
+static constexpr ColorPoint temperature_colors[] = {
+  {-50.0f, { 23,  16, 207}},
+  { -9.0f, { 35,  63, 249}},
+  { -6.0f, { 48, 120, 250}},
+  { -3.0f, { 66, 178, 251}},
+  {  0.0f, { 84, 235, 253}},
+  {  3.0f, {106, 255, 222}},
+  {  6.0f, {125, 242, 160}},
+  { 12.0f, {210, 241,  74}},
+  { 15.0f, {252, 233,  60}},
+  { 18.0f, {248, 180,  47}},
+  { 21.0f, {246, 144,  38}},
+  { 30.0f, {244,  36,  23}},
+  { 33.0f, {243,   0,  18}},
+};
+static constexpr ColorMap temperature_map = {
+  temperature_colors, std::size(temperature_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_xcspeed_ls4[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* XCSpeed - LS4,Duo Discus (km/h scale)
-     Offset 0
-     Multiplyfactor 1
-     Blue to Green to Orange to Red */
-
-  {58, {255, 255, 255}},
-  {59, {255, 255, 255}},
-  {60, {48, 18, 59}},
-  {70, {69, 91, 205}},
-  {80, {62, 156, 254}},
-  {90, {24, 215, 203}},
-  {100, {72, 248, 130}},
-  {110, {164, 252, 60}},
-  {120, {226, 220, 56}},
-  {130, {254, 163, 49}},
-  {140, {239, 89, 17}},
-  {150, {194, 36, 3}},
-  {160, {122, 4, 3}},
+// Temperature normalized (Celsius)
+// h = celsius * 100 + 10000
+static constexpr ColorPoint temperature_norm_colors[] = {
+  {-49.5f, { 23,  16, 207}},
+  { -8.5f, { 35,  63, 249}},
+  { -5.5f, { 48, 120, 250}},
+  { -2.5f, { 66, 178, 251}},
+  {  0.5f, { 84, 235, 253}},
+  {  3.5f, {106, 255, 222}},
+  {  6.5f, {125, 242, 160}},
+  { 12.5f, {210, 241,  74}},
+  { 15.5f, {252, 233,  60}},
+  { 18.5f, {248, 180,  47}},
+  { 21.5f, {246, 144,  38}},
+  { 30.5f, {244,  36,  23}},
+  { 33.5f, {243,   0,  18}},
+};
+static constexpr ColorMap temperature_norm_map = {
+  temperature_norm_colors, std::size(temperature_norm_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_xcspeed_k8[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* XCSpeed - K8 (km/h scale)
-     Offset 0
-     Multiplyfactor 1
-     Blue to Green to Orange to Red */
-
-  {25, {255, 255, 255}},
-  {26, {255, 255, 255}},
-  {27, {255, 255, 255}},
-  {28, {255, 255, 255}},
-  {29, {255, 255, 255}},
-  {30, {24, 215, 203}},
-  {40, {72, 248, 130}},
-  {50, {164, 252, 60}},
-  {60, {226, 220, 56}},
-  {70, {254, 163, 49}},
-  {80, {239, 89, 17}},
-  {90, {194, 36, 3}},
-  {100, {122, 4, 3}},
+// Rain (mm)
+// h = mm * 10
+static constexpr ColorPoint rain_colors[] = {
+  { 1.9f, {255, 255, 255}},
+  { 2.0f, {103, 255, 254}},
+  { 5.0f, { 88, 204, 252}},
+  {10.0f, { 83, 204,  47}},
+  {15.0f, {127, 255,  62}},
+  {20.0f, {193, 255, 108}},
+  {30.0f, {254, 254,  65}},
+  {50.0f, {238, 131,  35}},
+  {70.0f, {199,   0,  13}},
+  {80.0f, {155,   0,   8}},
+  {90.0f, {245,  54, 250}},
+  {120.0f, {146,   4, 150}},
+  {200.0f, { 57,  15, 249}},
+};
+static constexpr ColorMap rain_map = {
+  rain_colors, std::size(rain_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_surface_heat_flux[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Offset 10000
-     Multiplyfactor 10
-     Blue to White to Red */
-
-  {0, {11, 5, 130}},
-  {5500, {34, 43, 160}},
-  {6500, {78, 119, 215}},
-  {7000, {98, 157, 236}},
-  {7500, {122, 191, 252}},
-  {8500, {193, 236, 254}},
-  {9500, {233, 252, 255}},
-  {10000, {244, 253, 233}},
-  {11000, {252, 242, 144}},
-  {11500, {251, 220, 106}},
-  {12500, {248, 183, 53}},
-  {13500, {244, 138, 39}},
-  {14500, {227, 0, 16}},
+static constexpr ColorPoint rain_colors_alpha[] = {
+  { 1.9f, {103, 255, 254,   0}},
+  { 2.0f, {103, 255, 254,  64}},
+  { 5.0f, { 88, 204, 252, 110}},
+  {10.0f, { 83, 204,  47, 160}},
+  {15.0f, {127, 255,  62, 200}},
+  {20.0f, {193, 255, 108}},
+  {30.0f, {254, 254,  65}},
+  {50.0f, {238, 131,  35}},
+  {70.0f, {199,   0,  13}},
+  {80.0f, {155,   0,   8}},
+  {90.0f, {245,  54, 250}},
+  {120.0f, {146,   4, 150}},
+  {200.0f, { 57,  15, 249}},
+};
+static constexpr ColorMap rain_alpha_map = {
+  rain_colors_alpha, std::size(rain_colors_alpha)
 };
 
-static constexpr ColorRampEntry rasp_colors_sealevel_pressure[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Sea level pressure (hPa scale)
-     Offset 1000
-     Multiplyfactor 20
-     Blue to White to Red */
-
-  {20400, {11, 5, 130}},
-  {20560, {77, 118, 215}},
-  {20640, {107, 174, 246}},
-  {20720, {155, 212, 253}},
-  {20880, {231, 251, 255}},
-  {20960, {246, 251, 215}},
-  {21040, {252, 245, 149}},
-  {21120, {250, 212, 92}},
-  {21200, {249, 185, 54}},
-  {21360, {237, 82, 30}},
-  {21440, {227, 0, 30}},
-  {21520, {227, 0, 102}},
-  {21680, {227, 0, 255}},
+// PFD - LS4, DuoDiscus (km/h)
+// h = km_h * 1
+static constexpr ColorPoint pfd_ls4_colors[] = {
+  { 23.0f, {255, 255, 255}},
+  { 24.0f, {255, 255, 255}},
+  { 25.0f, { 33,  13,  41}},
+  { 50.0f, { 48,  18,  59}},
+  {100.0f, { 70,  98, 216}},
+  {200.0f, { 53, 171, 248}},
+  {300.0f, { 27, 229, 181}},
+  {400.0f, {116, 254,  93}},
+  {500.0f, {201, 239,  52}},
+  {600.0f, {251, 185,  56}},
+  {700.0f, {245, 105,  24}},
+  {800.0f, {201,  41,   3}},
+  {900.0f, {122,   4,   3}},
+};
+static constexpr ColorMap pfd_ls4_map = {
+  pfd_ls4_colors, std::size(pfd_ls4_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_cloudfraction_low[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction low level (fraction scale)
-     Offset 0
-     Multiplyfactor 1000
-     White to Green */
-
-  {-2, {255, 255, 255}},
-  {90, {255, 255, 255}},
-  {91, {234, 246, 232}},
-  {182, {213, 238, 209}},
-  {273, {191, 229, 186}},
-  {364, {166, 218, 163}},
-  {455, {134, 202, 140}},
-  {545, {102, 187, 118}},
-  {636, {69, 171, 96}},
-  {727, {49, 147, 78}},
-  {818, {33, 121, 61}},
-  {909, {16, 94, 44}},
-  {1000, {0, 68, 27}},
+// BL Average Windspeed, Wind Shear (knots)
+// h = knots * 100 + 100
+static constexpr ColorPoint bl_avg_windspeed_colors[] = {
+  { -1.0f, { 40, 140, 255}},
+  {  1.0f, {  0, 220, 225}},
+  {  3.0f, {  0, 234, 156}},
+  {  5.0f, {240, 245,   3}},
+  {  7.0f, {255, 219,   0}},
+  {  9.0f, {255, 152,   0}},
+  { 11.0f, {247, 120,   0}},
+  { 13.0f, {224,  97,  40}},
+  { 17.0f, {220,  81,  50}},
+  { 23.0f, {205,  58,  70}},
+  { 29.0f, {180,  26,  90}},
+  { 35.0f, {150,  40, 120}},
+  { 41.0f, {122,  44, 122}},
+};
+static constexpr ColorMap bl_avg_windspeed_map = {
+  bl_avg_windspeed_colors, std::size(bl_avg_windspeed_colors)
 };
 
-static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_low_alpha[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction low level (fraction scale)
-     Offset 0
-     Multiplyfactor 1000
-     White to Green */
-
-  { -2, {255, 255, 255,   0}},
-  { 90, {255, 255, 255,  40}},
-  { 91, {234, 246, 232,  75}},
-  {182, {213, 238, 209, 150}},
-  {273, {191, 229, 186, 200}},
-  {364, {166, 218, 163, 220}},
-  {455, {134, 202, 140}},
-  {545, {102, 187, 118}},
-  {636, { 69, 171,  96}},
-  {727, { 49, 147,  78}},
-  {818, { 33, 121,  61}},
-  {909, { 16,  94,  44}},
-  {1000,{  0,  68,  27}},
+// XC Speed - LS4, Duo Discus (km/h)
+// h = km_h * 1
+static constexpr ColorPoint xcspeed_ls4_colors[] = {
+  { 58.0f, {255, 255, 255}},
+  { 59.0f, {255, 255, 255}},
+  { 60.0f, { 48,  18,  59}},
+  { 70.0f, { 69,  91, 205}},
+  { 80.0f, { 62, 156, 254}},
+  { 90.0f, { 24, 215, 203}},
+  {100.0f, { 72, 248, 130}},
+  {110.0f, {164, 252,  60}},
+  {120.0f, {226, 220,  56}},
+  {130.0f, {254, 163,  49}},
+  {140.0f, {239,  89,  17}},
+  {150.0f, {194,  36,   3}},
+  {160.0f, {122,   4,   3}},
+};
+static constexpr ColorMap xcspeed_ls4_map = {
+  xcspeed_ls4_colors, std::size(xcspeed_ls4_colors)
 };
 
-
-static constexpr ColorRampEntry rasp_colors_cloudfraction_mid[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction mid level (fraction scale)
-     Offset 0
-     Multiplyfactor 1000
-     White to Blue */
-
-  {0, {255, 255, 255}},
-  {90, {255, 255, 255}},
-  {91, {233, 242, 248}},
-  {182, {211, 230, 242}},
-  {273, {189, 217, 235}},
-  {364, {163, 202, 227}},
-  {455, {132, 184, 218}},
-  {545, {101, 165, 208}},
-  {636, {70, 147, 199}},
-  {727, {51, 123, 178}},
-  {818, {37, 98, 155}},
-  {909, {22, 73, 131}},
-  {1000, {8, 48, 107}},
+// XC Speed - K8 (km/h)
+// h = km_h * 1
+static constexpr ColorPoint xcspeed_k8_colors[] = {
+  {25.0f, {255, 255, 255}},
+  {26.0f, {255, 255, 255}},
+  {27.0f, {255, 255, 255}},
+  {28.0f, {255, 255, 255}},
+  {29.0f, {255, 255, 255}},
+  {30.0f, { 24, 215, 203}},
+  {40.0f, { 72, 248, 130}},
+  {50.0f, {164, 252,  60}},
+  {60.0f, {226, 220,  56}},
+  {70.0f, {254, 163,  49}},
+  {80.0f, {239,  89,  17}},
+  {90.0f, {194,  36,   3}},
+  {100.0f, {122,   4,   3}},
+};
+static constexpr ColorMap xcspeed_k8_map = {
+  xcspeed_k8_colors, std::size(xcspeed_k8_colors)
 };
 
-static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_mid_alpha[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction mid level (fraction scale)
-     Offset 0
-     Multiplyfactor 1000
-     Transparent to White to Blue */
-
-  {  0, {255, 255, 255,   0}},
-  { 90, {255, 255, 255, 100}},
-  {200, {233, 242, 248, 150}},
-  {420, {211, 230, 242, 200}},
-  {480, {189, 217, 235, 255}},
-  {550, {163, 202, 227}},
-  {615, {132, 184, 218}},
-  {685, {101, 165, 208}},
-  {736, { 70, 147, 199}},
-  {777, { 51, 123, 178}},
-  {818, { 37,  98, 155}},
-  {909, { 22,  73, 131}},
-  {1000,{  8,  48, 107}},
+// Surface heat flux (W/m^2)
+// h = W_m2 * 10 + 10000
+static constexpr ColorPoint surface_heat_flux_colors[] = {
+  {-1000.0f, { 11,   5, 130}},
+  { -450.0f, { 34,  43, 160}},
+  { -350.0f, { 78, 119, 215}},
+  { -300.0f, { 98, 157, 236}},
+  { -250.0f, {122, 191, 252}},
+  { -150.0f, {193, 236, 254}},
+  {  -50.0f, {233, 252, 255}},
+  {    0.0f, {244, 253, 233}},
+  {  100.0f, {252, 242, 144}},
+  {  150.0f, {251, 220, 106}},
+  {  250.0f, {248, 183,  53}},
+  {  350.0f, {244, 138,  39}},
+  {  450.0f, {227,   0,  16}},
+};
+static constexpr ColorMap surface_heat_flux_map = {
+  surface_heat_flux_colors, std::size(surface_heat_flux_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_cloudfraction_high[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction high level (fraction scale)
-     Offset -3
-     Multiplyfactor 1000
-     White to Red */
-
-  {0, {255, 255, 255}},
-  {90, {255, 255, 255}},
-  {91, {254, 230, 222}},
-  {182, {253, 205, 188}},
-  {273, {253, 180, 155}},
-  {364, {250, 153, 125}},
-  {455, {245, 123, 99}},
-  {545, {240, 93, 74}},
-  {636, {235, 63, 49}},
-  {727, {208, 44, 36}},
-  {818, {173, 29, 29}},
-  {909, {138, 15, 21}},
-  {1000, {103, 0, 13}},
+// Sea level pressure (hPa)
+// h = hPa * 20 + 1000
+static constexpr ColorPoint sealevel_pressure_colors[] = {
+  { 970.0f, { 11,   5, 130}},
+  { 978.0f, { 77, 118, 215}},
+  { 982.0f, {107, 174, 246}},
+  { 986.0f, {155, 212, 253}},
+  { 994.0f, {231, 251, 255}},
+  { 998.0f, {246, 251, 215}},
+  {1002.0f, {252, 245, 149}},
+  {1006.0f, {250, 212,  92}},
+  {1010.0f, {249, 185,  54}},
+  {1018.0f, {237,  82,  30}},
+  {1022.0f, {227,   0,  30}},
+  {1026.0f, {227,   0, 102}},
+  {1034.0f, {227,   0, 255}},
+};
+static constexpr ColorMap sealevel_pressure_map = {
+  sealevel_pressure_colors, std::size(sealevel_pressure_colors)
 };
 
-static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_high_alpha[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction high level (fraction scale)
-     Offset -3
-     Multiplyfactor 1000
-     Transparent to White to Red */
-
-  {  0, {255, 255, 255,   0}},
-  { 90, {254, 230, 222,  64}},
-  { 91, {254, 230, 222,  64}},
-  {182, {253, 205, 188, 125}},
-  {273, {253, 180, 155, 175}},
-  {364, {250, 153, 125, 200}},
-  {455, {245, 123,  99, 225}},
-  {545, {240,  93,  74}},
-  {636, {235,  63,  49}},
-  {727, {208,  44,  36}},
-  {818, {173,  29,  29}},
-  {909, {138,  15,  21}},
-  {1000,{103,   0,  13}},
+// Cloud fraction low level (percent 0..100)
+// h = percent * 10
+static constexpr ColorPoint cloudfraction_low_colors[] = {
+  { -0.2f, {255, 255, 255}},
+  {  9.0f, {255, 255, 255}},
+  {  9.1f, {234, 246, 232}},
+  { 18.2f, {213, 238, 209}},
+  { 27.3f, {191, 229, 186}},
+  { 36.4f, {166, 218, 163}},
+  { 45.5f, {134, 202, 140}},
+  { 54.5f, {102, 187, 118}},
+  { 63.6f, { 69, 171,  96}},
+  { 72.7f, { 49, 147,  78}},
+  { 81.8f, { 33, 121,  61}},
+  { 90.9f, { 16,  94,  44}},
+  {100.0f, {  0,  68,  27}},
+};
+static constexpr ColorMap cloudfraction_low_map = {
+  cloudfraction_low_colors, std::size(cloudfraction_low_colors)
 };
 
-static constexpr ColorRampEntry rasp_colors_cloudfraction_accumulated[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction, all levels combined (fraction scale)
-     Offset 0
-     Multiplyfactor 10
-     White to Grey */
-
-  {0, {255, 255, 255}},
-  {83, {241, 241, 241}},
-  {167, {228, 228, 228}},
-  {250, {214, 214, 214}},
-  {333, {200, 200, 200}},
-  {417, {187, 187, 187}},
-  {500, {173, 173, 173}},
-  {583, {159, 159, 159}},
-  {667, {146, 146, 146}},
-  {750, {132, 132, 132}},
-  {833, {118, 118, 118}},
-  {917, {105, 105, 105}},
-  {1000, {91, 91, 91}},
+static constexpr ColorPoint
+    cloudfraction_low_colors_alpha[] = {
+  { -0.2f, {255, 255, 255,   0}},
+  {  9.0f, {255, 255, 255,  40}},
+  {  9.1f, {234, 246, 232,  75}},
+  { 18.2f, {213, 238, 209, 150}},
+  { 27.3f, {191, 229, 186, 200}},
+  { 36.4f, {166, 218, 163, 220}},
+  { 45.5f, {134, 202, 140}},
+  { 54.5f, {102, 187, 118}},
+  { 63.6f, { 69, 171,  96}},
+  { 72.7f, { 49, 147,  78}},
+  { 81.8f, { 33, 121,  61}},
+  { 90.9f, { 16,  94,  44}},
+  {100.0f, {  0,  68,  27}},
+};
+static constexpr ColorMap cloudfraction_low_alpha_map = {
+  cloudfraction_low_colors_alpha,
+  std::size(cloudfraction_low_colors_alpha)
 };
 
-static constexpr ColorRampEntryAlpha rasp_colors_cloudfraction_accumulated_alpha[NUM_COLOR_RAMP_LEVELS] = {
-
-  /* Cloud fraction, all levels combined (fraction scale)
-     Offset 0
-     Multiplyfactor 10
-     Transparent to White to Grey*/
-
-  {  0, {255, 255, 255,   0}},
-  { 83, {255, 255, 255,  64}},
-  {167, {255, 255, 255, 100}},
-  {250, {255, 255, 255, 125}},
-  {333, {255, 255, 255, 150}},
-  {417, {255, 255, 255, 175}},
-  {500, {173, 173, 173, 200}},
-  {583, {159, 159, 159, 255}},
-  {657, {146, 146, 146}},
-  {720, {132, 132, 132}},
-  {800, {118, 118, 118}},
-  {883, {105, 105, 105}},
-  {1000, {91, 91, 91}},
+// Cloud fraction mid level (percent 0..100)
+// h = percent * 10
+static constexpr ColorPoint cloudfraction_mid_colors[] = {
+  {  0.0f, {255, 255, 255}},
+  {  9.0f, {255, 255, 255}},
+  {  9.1f, {233, 242, 248}},
+  { 18.2f, {211, 230, 242}},
+  { 27.3f, {189, 217, 235}},
+  { 36.4f, {163, 202, 227}},
+  { 45.5f, {132, 184, 218}},
+  { 54.5f, {101, 165, 208}},
+  { 63.6f, { 70, 147, 199}},
+  { 72.7f, { 51, 123, 178}},
+  { 81.8f, { 37,  98, 155}},
+  { 90.9f, { 22,  73, 131}},
+  {100.0f, {  8,  48, 107}},
+};
+static constexpr ColorMap cloudfraction_mid_map = {
+  cloudfraction_mid_colors, std::size(cloudfraction_mid_colors)
 };
 
-// ColorRamp wrapper objects for classic Blipmap color schemes
-
-static constexpr ColorRamp ramp_classic[] = {
-  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[0], nullptr },
-  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[1], nullptr },
-  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[2], nullptr },
-  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[3], nullptr },
-  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[4], nullptr },
-  { false, NUM_COLOR_RAMP_LEVELS, rasp_colors[5], nullptr },
+static constexpr ColorPoint
+    cloudfraction_mid_colors_alpha[] = {
+  {  0.0f, {255, 255, 255,   0}},
+  {  9.0f, {255, 255, 255, 100}},
+  { 20.0f, {233, 242, 248, 150}},
+  { 42.0f, {211, 230, 242, 200}},
+  { 48.0f, {189, 217, 235, 255}},
+  { 55.0f, {163, 202, 227}},
+  { 61.5f, {132, 184, 218}},
+  { 68.5f, {101, 165, 208}},
+  { 73.6f, { 70, 147, 199}},
+  { 77.7f, { 51, 123, 178}},
+  { 81.8f, { 37,  98, 155}},
+  { 90.9f, { 22,  73, 131}},
+  {100.0f, {  8,  48, 107}},
+};
+static constexpr ColorMap cloudfraction_mid_alpha_map = {
+  cloudfraction_mid_colors_alpha,
+  std::size(cloudfraction_mid_colors_alpha)
 };
 
-// ColorRamp wrapper objects for thermalmap.info color schemes
-
-static constexpr ColorRamp ramp_verticalspeed = {
-  true, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_verticalspeed, rasp_colors_verticalspeed_alpha
+// Cloud fraction high level (percent 0..100)
+// h = percent * 10 - 3
+static constexpr ColorPoint
+    cloudfraction_high_colors[] = {
+  {  0.3f, {255, 255, 255}},
+  {  9.3f, {255, 255, 255}},
+  {  9.4f, {254, 230, 222}},
+  { 18.5f, {253, 205, 188}},
+  { 27.6f, {253, 180, 155}},
+  { 36.7f, {250, 153, 125}},
+  { 45.8f, {245, 123,  99}},
+  { 54.8f, {240,  93,  74}},
+  { 63.9f, {235,  63,  49}},
+  { 73.0f, {208,  44,  36}},
+  { 82.1f, {173,  29,  29}},
+  { 91.2f, {138,  15,  21}},
+  {100.3f, {103,   0,  13}},
+};
+static constexpr ColorMap cloudfraction_high_map = {
+  cloudfraction_high_colors,
+  std::size(cloudfraction_high_colors)
 };
 
-static constexpr ColorRamp ramp_thermalstrength = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_thermalstrength, nullptr
+static constexpr ColorPoint
+    cloudfraction_high_colors_alpha[] = {
+  {  0.3f, {255, 255, 255,   0}},
+  {  9.3f, {254, 230, 222,  64}},
+  {  9.4f, {254, 230, 222,  64}},
+  { 18.5f, {253, 205, 188, 125}},
+  { 27.6f, {253, 180, 155, 175}},
+  { 36.7f, {250, 153, 125, 200}},
+  { 45.8f, {245, 123,  99, 225}},
+  { 54.8f, {240,  93,  74}},
+  { 63.9f, {235,  63,  49}},
+  { 73.0f, {208,  44,  36}},
+  { 82.1f, {173,  29,  29}},
+  { 91.2f, {138,  15,  21}},
+  {100.3f, {103,   0,  13}},
+};
+static constexpr ColorMap
+    cloudfraction_high_alpha_map = {
+  cloudfraction_high_colors_alpha,
+  std::size(cloudfraction_high_colors_alpha)
 };
 
-static constexpr ColorRamp ramp_thermalheight = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_thermalheight, nullptr
+// Cloud fraction accumulated (percent 0..100)
+// h = percent * 10
+static constexpr ColorPoint
+    cloudfraction_accumulated_colors[] = {
+  {  0.0f, {255, 255, 255}},
+  {  8.3f, {241, 241, 241}},
+  { 16.7f, {228, 228, 228}},
+  { 25.0f, {214, 214, 214}},
+  { 33.3f, {200, 200, 200}},
+  { 41.7f, {187, 187, 187}},
+  { 50.0f, {173, 173, 173}},
+  { 58.3f, {159, 159, 159}},
+  { 66.7f, {146, 146, 146}},
+  { 75.0f, {132, 132, 132}},
+  { 83.3f, {118, 118, 118}},
+  { 91.7f, {105, 105, 105}},
+  {100.0f, { 91,  91,  91}},
+};
+static constexpr ColorMap
+    cloudfraction_accumulated_map = {
+  cloudfraction_accumulated_colors,
+  std::size(cloudfraction_accumulated_colors)
 };
 
-static constexpr ColorRamp ramp_temperature = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_temperature, nullptr
+static constexpr ColorPoint
+    cloudfraction_accumulated_colors_alpha[] = {
+  {  0.0f, {255, 255, 255,   0}},
+  {  8.3f, {255, 255, 255,  64}},
+  { 16.7f, {255, 255, 255, 100}},
+  { 25.0f, {255, 255, 255, 125}},
+  { 33.3f, {255, 255, 255, 150}},
+  { 41.7f, {255, 255, 255, 175}},
+  { 50.0f, {173, 173, 173, 200}},
+  { 58.3f, {159, 159, 159, 255}},
+  { 65.7f, {146, 146, 146}},
+  { 72.0f, {132, 132, 132}},
+  { 80.0f, {118, 118, 118}},
+  { 88.3f, {105, 105, 105}},
+  {100.0f, { 91,  91,  91}},
 };
-
-static constexpr ColorRamp ramp_temperature_norm = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_temperature_norm, nullptr
-};
-
-static constexpr ColorRamp ramp_rain = {
-  true, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_rain, rasp_colors_rain_alpha
-};
-
-static constexpr ColorRamp ramp_pfd_ls4 = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_pfd_ls4, nullptr
-};
-
-static constexpr ColorRamp ramp_bl_avg_windspeed = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_bl_avg_windspeed, nullptr
-};
-
-static constexpr ColorRamp ramp_xcspeed_ls4 = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_xcspeed_ls4, nullptr
-};
-
-static constexpr ColorRamp ramp_xcspeed_k8 = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_xcspeed_k8, nullptr
-};
-
-static constexpr ColorRamp ramp_surface_heat_flux = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_surface_heat_flux, nullptr
-};
-
-static constexpr ColorRamp ramp_sealevel_pressure = {
-  false, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_sealevel_pressure, nullptr
-};
-
-static constexpr ColorRamp ramp_cloudfraction_low = {
-  true, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_cloudfraction_low, rasp_colors_cloudfraction_low_alpha
-};
-
-static constexpr ColorRamp ramp_cloudfraction_mid = {
-  true, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_cloudfraction_mid, rasp_colors_cloudfraction_mid_alpha
-};
-
-static constexpr ColorRamp ramp_cloudfraction_high = {
-  true, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_cloudfraction_high, rasp_colors_cloudfraction_high_alpha
-};
-
-static constexpr ColorRamp ramp_cloudfraction_accumulated = {
-  true, NUM_COLOR_RAMP_LEVELS,
-  rasp_colors_cloudfraction_accumulated,
-  rasp_colors_cloudfraction_accumulated_alpha
+static constexpr ColorMap
+    cloudfraction_accumulated_alpha_map = {
+  cloudfraction_accumulated_colors_alpha,
+  std::size(cloudfraction_accumulated_colors_alpha)
 };
 
 /* RASP styles
-   List of styles, first Blipmap classic, then thermalmap.info styles
+   List of styles, first Blipmap classic, then thermalmap.info
    List of tuples:
      * string fieldname,
-     * pointer to ColorRamp wrapper
-     * int n = value range level. A value of n means the highest value in
-       the data (and the top end of the used colormap) has to be smaller than
-       256*(2**n)-1
-     * bool do_water enables "water masking", special handling of
-       the value 255 (for n=0) as water indicator */
+     * ColorMap (RGB colors)
+     * ColorMap (RGBA colors, empty if no alpha)
+     * float scale, float offset (value transform)
+     * int height_scale = value range level
+     * bool do_water enables "water masking" */
 
 const RaspStyle rasp_styles[] = {
-  { "wstar", &ramp_classic[0],
-    2, // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    false },
-  { "wstar_bsratio", &ramp_classic[0],
-    2, // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    false },
-  { "blwindspd", &ramp_classic[1], 3, false },
-  { "hbl", &ramp_classic[2], 4, false },
-  { "dwcrit", &ramp_classic[2], 4, false },
-  { "blcloudpct", &ramp_classic[3], 0, true },
-  { "sfctemp", &ramp_classic[4], 0, false },
-  { "hwcrit", &ramp_classic[2], 4, false },
-  { "wblmaxmin", &ramp_classic[5],
-    1, // max range 256*(2**1) = 512 cm/s = 5.0 m/s
-    false },
-  { "blcwbase", &ramp_classic[2], 4, false },
+  {"wstar",
+   classic_vertical_speed_map, {}, 1, 0,
+   2, false},
+  {"wstar_bsratio",
+   classic_vertical_speed_map, {}, 1, 0,
+   2, false},
+  {"blwindspd",
+   classic_windspeed_map, {}, 1, 0,
+   3, false},
+  {"hbl",
+   classic_height_map, {}, 1, 0,
+   4, false},
+  {"dwcrit",
+   classic_height_map, {}, 1, 0,
+   4, false},
+  {"blcloudpct",
+   classic_cloud_map, {}, 1, 0,
+   0, true},
+  {"sfctemp",
+   classic_sfctemp_map, {}, 1, 0,
+   0, false},
+  {"hwcrit",
+   classic_height_map, {}, 1, 0,
+   4, false},
+  {"wblmaxmin",
+   classic_convergence_map, {}, 1, 0,
+   1, false},
+  {"blcwbase",
+   classic_height_map, {}, 1, 0,
+   4, false},
 
-  // Thermalmap.info Colorschemes and Rasp file names
-  CalcRaspStyle("ThermalStrength", ramp_thermalstrength),
-  CalcRaspStyle("ThermalHeight", ramp_thermalheight),
-  CalcRaspStyle("Convergence", ramp_verticalspeed),
-  CalcRaspStyle("Wave_1000m", ramp_verticalspeed),
-  CalcRaspStyle("Wave_2000m", ramp_verticalspeed),
-  CalcRaspStyle("Wave_3000m", ramp_verticalspeed),
-  CalcRaspStyle("Wave_4000m", ramp_verticalspeed),
-  CalcRaspStyle("Wave_5000m", ramp_verticalspeed),
-  CalcRaspStyle("Wave_6000m", ramp_verticalspeed),
-  CalcRaspStyle("Wave_7000m", ramp_verticalspeed),
-  CalcRaspStyle("Temperature2m", ramp_temperature),
-  CalcRaspStyle("Rain", ramp_rain),
-  CalcRaspStyle("PFD_Day_DuoDiscus", ramp_pfd_ls4),
-  CalcRaspStyle("PFD_Day_LS4", ramp_pfd_ls4),
-  CalcRaspStyle("PFD_Day_K8", ramp_pfd_ls4),
-  CalcRaspStyle("Windspeed_10m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_500m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_1000m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_1500m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_2000m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_2500m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_3000m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_3500m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_4000m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_4500m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_5000m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_5500m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_6000m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_6500m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("Windspeed_7000m", ramp_bl_avg_windspeed),
-  CalcRaspStyle("VerticalWindShear", ramp_bl_avg_windspeed),
-  CalcRaspStyle("BL_AverageWindSpeed", ramp_bl_avg_windspeed),
-  CalcRaspStyle("XCSpeed_LS4", ramp_xcspeed_ls4),
-  CalcRaspStyle("XCSpeed_DuoDiscus", ramp_xcspeed_ls4),
-  CalcRaspStyle("XCSpeed_K8", ramp_xcspeed_k8),
-  CalcRaspStyle("SurfaceHeatFlux", ramp_surface_heat_flux),
-  CalcRaspStyle("SeaLevelPressure", ramp_sealevel_pressure),
-  CalcRaspStyle("Cloudfraction_Low", ramp_cloudfraction_low),
-  CalcRaspStyle("Cloudfraction_Mid", ramp_cloudfraction_mid),
-  CalcRaspStyle("Cloudfraction_High", ramp_cloudfraction_high),
-  CalcRaspStyle("Cloudfraction_Accumulated",
-            ramp_cloudfraction_accumulated),
+  // Thermalmap.info styles
+  MakeRaspStyle("ThermalStrength",
+                thermalstrength_map, 100, 0),
+  MakeRaspStyle("ThermalHeight",
+                thermalheight_map, 1, 0),
+  MakeRaspStyle("Convergence",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Wave_1000m",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Wave_2000m",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Wave_3000m",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Wave_4000m",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Wave_5000m",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Wave_6000m",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Wave_7000m",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("Temperature2m",
+                temperature_map, 100, 50),
+  MakeRaspStyle("Rain",
+                rain_map, rain_alpha_map, 10, 0),
+  MakeRaspStyle("PFD_Day_DuoDiscus",
+                pfd_ls4_map, 1, 0),
+  MakeRaspStyle("PFD_Day_LS4",
+                pfd_ls4_map, 1, 0),
+  MakeRaspStyle("PFD_Day_K8",
+                pfd_ls4_map, 1, 0),
+  MakeRaspStyle("Windspeed_10m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_500m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_1000m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_1500m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_2000m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_2500m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_3000m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_3500m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_4000m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_4500m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_5000m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_5500m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_6000m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_6500m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("Windspeed_7000m",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("VerticalWindShear",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("BL_AverageWindSpeed",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("XCSpeed_LS4",
+                xcspeed_ls4_map, 1, 0),
+  MakeRaspStyle("XCSpeed_DuoDiscus",
+                xcspeed_ls4_map, 1, 0),
+  MakeRaspStyle("XCSpeed_K8",
+                xcspeed_k8_map, 1, 0),
+  MakeRaspStyle("SurfaceHeatFlux",
+                surface_heat_flux_map, 10, 10000),
+  MakeRaspStyle("SeaLevelPressure",
+                sealevel_pressure_map, 20, 1000),
+  MakeRaspStyle("Cloudfraction_Low",
+                cloudfraction_low_map,
+                cloudfraction_low_alpha_map,
+                10, 0),
+  MakeRaspStyle("Cloudfraction_Mid",
+                cloudfraction_mid_map,
+                cloudfraction_mid_alpha_map,
+                10, 0),
+  MakeRaspStyle("Cloudfraction_High",
+                cloudfraction_high_map,
+                cloudfraction_high_alpha_map,
+                10, -3),
+  MakeRaspStyle("Cloudfraction_Accumulated",
+                cloudfraction_accumulated_map,
+                cloudfraction_accumulated_alpha_map,
+                10, 0),
 
-  { nullptr, &ramp_classic[0], 2, false }
+  // Sentinel: default style for unknown field names
+  {nullptr,
+   classic_vertical_speed_map, {}, 1, 0,
+   2, false},
 };
 
 const RaspStyle rasp_colormaps_general[] = {
   // Thermalmap.info color scheme codes
-  CalcRaspStyle("vth", ramp_thermalstrength),
-  CalcRaspStyle("hth", ramp_thermalheight),
-  CalcRaspStyle("vve", ramp_verticalspeed),
-  CalcRaspStyle("tce", ramp_temperature_norm),
-  CalcRaspStyle("prr", ramp_rain),
-  CalcRaspStyle("pfd", ramp_pfd_ls4),
-  CalcRaspStyle("vho", ramp_bl_avg_windspeed),
-  CalcRaspStyle("vxc", ramp_xcspeed_ls4),
-  CalcRaspStyle("vx8", ramp_xcspeed_k8),
-  CalcRaspStyle("hfl", ramp_surface_heat_flux),
-  CalcRaspStyle("pre", ramp_sealevel_pressure),
-  CalcRaspStyle("fcl", ramp_cloudfraction_low),
-  CalcRaspStyle("fcm", ramp_cloudfraction_mid),
-  CalcRaspStyle("fch", ramp_cloudfraction_high),
-  CalcRaspStyle("fct", ramp_cloudfraction_accumulated),
+  MakeRaspStyle("vth",
+                thermalstrength_map, 100, 0),
+  MakeRaspStyle("hth",
+                thermalheight_map, 1, 0),
+  MakeRaspStyle("vve",
+                verticalspeed_map, verticalspeed_alpha_map,
+                1000, 5000),
+  MakeRaspStyle("tce",
+                temperature_norm_map, 100, 10000),
+  MakeRaspStyle("prr",
+                rain_map, rain_alpha_map, 10, 0),
+  MakeRaspStyle("pfd",
+                pfd_ls4_map, 1, 0),
+  MakeRaspStyle("vho",
+                bl_avg_windspeed_map, 100, 100),
+  MakeRaspStyle("vxc",
+                xcspeed_ls4_map, 1, 0),
+  MakeRaspStyle("vx8",
+                xcspeed_k8_map, 1, 0),
+  MakeRaspStyle("hfl",
+                surface_heat_flux_map, 10, 10000),
+  MakeRaspStyle("pre",
+                sealevel_pressure_map, 20, 1000),
+  MakeRaspStyle("fcl",
+                cloudfraction_low_map,
+                cloudfraction_low_alpha_map,
+                10, 0),
+  MakeRaspStyle("fcm",
+                cloudfraction_mid_map,
+                cloudfraction_mid_alpha_map,
+                10, 0),
+  MakeRaspStyle("fch",
+                cloudfraction_high_map,
+                cloudfraction_high_alpha_map,
+                10, -3),
+  MakeRaspStyle("fct",
+                cloudfraction_accumulated_map,
+                cloudfraction_accumulated_alpha_map,
+                10, 0),
 
-  { nullptr, &ramp_classic[0], 2, false }
+  // Sentinel
+  {nullptr,
+   classic_vertical_speed_map, {}, 1, 0,
+   2, false},
 };
