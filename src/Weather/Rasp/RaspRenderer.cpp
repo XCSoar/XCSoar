@@ -10,6 +10,25 @@
 #include "Projection/WindowProjection.hpp"
 #include "util/StringAPI.hxx"
 
+StaticString<96>
+RaspRenderer::GetExtendedLabel() const
+{
+  StaticString<96> result;
+  const char *label = cache.GetMapLabel();
+  if (label == nullptr) {
+    result.clear();
+    return result;
+  }
+
+  const BrokenTime t = cache.GetLoadedTime();
+  if (t.IsPlausible())
+    result.Format("%s %02u:%02ulst", label, t.hour, t.minute);
+  else
+    result = label;
+
+  return result;
+}
+
 [[gnu::pure]]
 static const RaspStyle &
 LookupWeatherTerrainStyle(const char *name)

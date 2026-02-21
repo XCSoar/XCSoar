@@ -115,6 +115,15 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   new_map->UpdateProjection();
 
+  loaded_time_index = effective_time;
   map = std::move(new_map);
   last_time = requested_time;
+}
+
+BrokenTime
+RaspCache::GetLoadedTime() const
+{
+  return loaded_time_index > 0
+    ? RaspStore::IndexToTime(loaded_time_index)
+    : BrokenTime::Invalid();
 }
