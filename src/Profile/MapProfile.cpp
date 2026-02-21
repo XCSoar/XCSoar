@@ -137,6 +137,11 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   map.Get(ProfileKeys::Show95PercentRuleHelpers,
           settings.show_95_percent_rule_helpers);
+
+  map.Get(ProfileKeys::RaspLayerOpacity,
+          settings.rasp_layer_opacity);
+  settings.rasp_layer_opacity =
+      std::clamp(settings.rasp_layer_opacity, uint8_t(0), uint8_t(100));
 }
 
 void
