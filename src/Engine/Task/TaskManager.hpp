@@ -426,11 +426,16 @@ public:
    */
   void SetPevStartTimeSpan(const TimeSpan &open_time_span) noexcept;
 
+  /**
+   * Update speed-to-fly and risk MC from the current polar.
+   * Safe to call without a valid location (e.g. before GPS fix).
+   */
+  void UpdateCommonStatsPolar(const AircraftState &state) noexcept;
+
 private:
   TaskType SetMode(const TaskType mode) noexcept;
 
   void UpdateCommonStats(const AircraftState &state) noexcept;
   void UpdateCommonStatsTimes(const AircraftState &state) noexcept;
   void UpdateCommonStatsWaypoints(const AircraftState &state) noexcept;
-  void UpdateCommonStatsPolar(const AircraftState &state) noexcept;
 };
