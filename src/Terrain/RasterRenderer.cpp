@@ -385,8 +385,8 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
       } else {
-        /* outside the terrain file bounds: white background */
-        *p++ = RawColor(0xff, 0xff, 0xff);
+        /* outside the terrain file bounds */
+        *p++ = oColorBuf[255];
       }
       contour_this_column_base++;
 
@@ -575,8 +575,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
       } else {
-        /* outside the terrain file bounds: white background */
-        *p++ = RawColor(0xff, 0xff, 0xff);
+        /* outside the terrain file bounds */
+        *p++ = oColorBuf[255];
       }
       contour_this_column_base++;
 
