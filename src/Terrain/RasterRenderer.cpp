@@ -28,6 +28,20 @@ static constexpr unsigned MAX_QUANTISATION_LOW_ZOOM = 40;
 static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
 
 /**
+ * Minimum contour spacing factor: contour interval must be at
+ * least this multiple of pixel_size. This corresponds to a
+ * fixed spacing for a given slope angle (i.e. 6 pixels/contour 
+ * at 30 degrees slope)
+ */
+static constexpr double CONTOUR_MIN_SPACING_FACTOR = 3.0;
+
+/**
+ * Maximum contour height scale (bit shift): stop the contour scaling
+ * at this level (basically, contour interval > Mount Everest height)
+ */
+static constexpr unsigned CONTOUR_HEIGHT_SCALE_MAX = 15;
+
+/**
  * Interpolate between x and y with i/128, i.e. i/(1 << 7).
  *
  * i must be below or equal to 128.
@@ -230,7 +244,21 @@ RasterRenderer::GenerateImage(bool do_shading,
     do_contour = false;
   }
 
-  const unsigned contour_height_scale = do_contour? height_scale * 2 : 16;
+  /* Adapt contour density to zoom level: double the contour
+     interval for each doubling of pixel_size beyond the base */
+  unsigned contour_height_scale;
+  if (do_contour) {
+    contour_height_scale = height_scale * 2;
+    unsigned interval = 1u << contour_height_scale;
+    while (interval < (unsigned)(pixel_size
+                                 * CONTOUR_MIN_SPACING_FACTOR)
+           && contour_height_scale < CONTOUR_HEIGHT_SCALE_MAX) {
+      interval <<= 1;
+      contour_height_scale++;
+    }
+  } else {
+    contour_height_scale = 16;
+  }
 
   ContourStart(contour_height_scale);
 
