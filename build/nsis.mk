@@ -36,11 +36,12 @@ NSIS_SCRIPT = $(topdir)/windows/xcsoar.nsi
 INSTALLER_NAME = $(PRODUCT_NAME)-$(XCSOAR_VERSION)-WIN64OPENGL-Installer.exe
 INSTALLER_OUTPUT = $(TARGET_BIN_DIR)/$(INSTALLER_NAME)
 
-# Dependencies: XCSoar.exe and ANGLE DLLs must be built first
+# Dependencies: XCSoar.exe, ANGLE DLLs, and bundled fonts
 INSTALLER_DEPS = $(TARGET_BIN_DIR)/XCSoar.exe
 ifeq ($(USE_ANGLE),y)
 INSTALLER_DEPS += $(TARGET_BIN_DIR)/libEGL.dll $(TARGET_BIN_DIR)/libGLESv2.dll
 endif
+INSTALLER_DEPS += $(FONT_TARGETS)
 
 # Build the installer
 $(INSTALLER_OUTPUT): $(INSTALLER_DEPS) $(NSIS_SCRIPT) | $(TARGET_BIN_DIR)/dirstamp
