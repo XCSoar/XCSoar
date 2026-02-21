@@ -82,7 +82,8 @@ public:
   bool Generate(const WindowProjection &projection,
                 const TerrainRendererSettings &settings);
 
-  void Draw(Canvas &canvas, const WindowProjection &projection) const {
-    raster_renderer.Draw(canvas, projection, true);
+  void Draw(Canvas &canvas, const WindowProjection &projection,
+            float alpha=1.0f) const {
+    raster_renderer.Draw(canvas, projection, true, alpha);
   }
 };

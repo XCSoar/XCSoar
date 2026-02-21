@@ -192,8 +192,13 @@ public:
     return *image;
   }
 
+  /**
+   * @param alpha overall layer opacity (0.0=transparent,
+   * 1.0=opaque); only used on OpenGL
+   */
   void Draw(Canvas &canvas, const WindowProjection &projection,
-            bool transparent_white=false) const noexcept;
+            bool transparent_white=false,
+            float alpha=1.0f) const noexcept;
 
 protected:
   /**
