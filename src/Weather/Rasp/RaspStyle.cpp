@@ -5,6 +5,32 @@
 #include "ui/canvas/Ramp.hpp"
 #include "Terrain/RasterRenderer.hpp"
 
+/**
+ * Compute the minimum height_scale needed so that the full range
+ * of the color ramp is reachable through the 255-bucket color
+ * table (max lookup value = 254 << height_scale).
+ */
+static constexpr unsigned
+HeightScaleForRamp(const ColorRamp &ramp) noexcept
+{
+  const int max_h = ramp.ramp_table[ramp.num_entries - 1].h;
+  unsigned scale = 0;
+  while ((254 << scale) < max_h)
+    ++scale;
+  return scale;
+}
+
+/**
+ * Create a RaspStyle with height_scale auto-computed from
+ * the color ramp's range.
+ */
+static constexpr RaspStyle
+CalcRaspStyle(const char *name, const ColorRamp &ramp,
+          bool do_water = false) noexcept
+{
+  return { name, &ramp, HeightScaleForRamp(ramp), do_water };
+}
+
 bool
 RaspStyle::HasAlpha() const noexcept
 {
@@ -198,7 +224,11 @@ static constexpr ColorRampEntry rasp_colors_temperature[NUM_COLOR_RAMP_LEVELS] =
   /* Temperature (Celsius Scale)
      Offset 50
      Multiplyfactor 100
-     Blue to Green to Orange to Red */
+     Blue to Green to Orange to Red 
+     
+     This is the legacy color scale of ThermalMap.info. Since the current data
+     path clips the negative values from the .jp2 file, negative
+     temperatures are never plotted, however */
 
   {-4950, {23, 16, 207}},
   {-850, {35, 63, 249}},
@@ -213,6 +243,32 @@ static constexpr ColorRampEntry rasp_colors_temperature[NUM_COLOR_RAMP_LEVELS] =
   {2150, {246, 144, 38}},
   {3050, {244, 36, 23}},
   {3350, {243, 0, 18}},
+};
+
+static constexpr ColorRampEntry rasp_colors_temperature_norm[NUM_COLOR_RAMP_LEVELS] = {
+
+  /* Temperature (Celsius Scale)
+     Blue to Green to Orange to Red 
+     
+     Shifted color scale that maps
+     -100 C ->     0
+        0 C -> 10000
+      100 C -> 20000
+     */
+
+  { 5050, {  23,  16, 207}},
+  { 9150, {  35,  63, 249}},
+  { 9450, {48, 120, 250}},
+  { 9750, {66, 178, 251}},
+  {10050, {84, 235, 253}},
+  {10350, {106, 255, 222}},
+  {10650, {125, 242, 160}},
+  {11250, {210, 241, 74}},
+  {11550, {252, 233, 60}},
+  {11850, {248, 180, 47}},
+  {12150, {246, 144, 38}},
+  {13050, {244, 36, 23}},
+  {13350, {243, 0, 18}},
 };
 
 static constexpr ColorRampEntry rasp_colors_rain[NUM_COLOR_RAMP_LEVELS] = {
@@ -598,6 +654,11 @@ static constexpr ColorRamp ramp_temperature = {
   rasp_colors_temperature, nullptr
 };
 
+static constexpr ColorRamp ramp_temperature_norm = {
+  false, NUM_COLOR_RAMP_LEVELS,
+  rasp_colors_temperature_norm, nullptr
+};
+
 static constexpr ColorRamp ramp_rain = {
   true, NUM_COLOR_RAMP_LEVELS,
   rasp_colors_rain, rasp_colors_rain_alpha
@@ -684,69 +745,69 @@ const RaspStyle rasp_styles[] = {
   { "blcwbase", &ramp_classic[2], 4, false },
 
   // Thermalmap.info Colorschemes and Rasp file names
-  { "ThermalStrength", &ramp_thermalstrength, 4, false },
-  { "ThermalHeight", &ramp_thermalheight, 4, false },
-  { "Convergence", &ramp_verticalspeed, 5, false },
-  { "Wave_1000m", &ramp_verticalspeed, 5, false },
-  { "Wave_2000m", &ramp_verticalspeed, 5, false },
-  { "Wave_3000m", &ramp_verticalspeed, 5, false },
-  { "Wave_4000m", &ramp_verticalspeed, 5, false },
-  { "Wave_5000m", &ramp_verticalspeed, 5, false },
-  { "Wave_6000m", &ramp_verticalspeed, 5, false },
-  { "Wave_7000m", &ramp_verticalspeed, 5, false },
-  { "Temperature2m", &ramp_temperature, 4, false },
-  { "Rain", &ramp_rain, 3, false },
-  { "PFD_Day_DuoDiscus", &ramp_pfd_ls4, 3, false },
-  { "PFD_Day_LS4", &ramp_pfd_ls4, 3, false },
-  { "PFD_Day_K8", &ramp_pfd_ls4, 3, false },
-  { "Windspeed_10m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_500m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_1000m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_1500m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_2000m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_2500m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_3000m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_3500m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_4000m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_4500m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_5000m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_5500m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_6000m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_6500m", &ramp_bl_avg_windspeed, 3, false },
-  { "Windspeed_7000m", &ramp_bl_avg_windspeed, 3, false },
-  { "VerticalWindShear", &ramp_bl_avg_windspeed, 3, false },
-  { "BL_AverageWindSpeed", &ramp_bl_avg_windspeed, 3, false },
-  { "XCSpeed_LS4", &ramp_xcspeed_ls4, 3, false },
-  { "XCSpeed_DuoDiscus", &ramp_xcspeed_ls4, 3, false },
-  { "XCSpeed_K8", &ramp_xcspeed_k8, 3, false },
-  { "SurfaceHeatFlux", &ramp_surface_heat_flux, 6, false },
-  { "SeaLevelPressure", &ramp_sealevel_pressure, 7, false },
-  { "Cloudfraction_Low", &ramp_cloudfraction_low, 4, false },
-  { "Cloudfraction_Mid", &ramp_cloudfraction_mid, 4, false },
-  { "Cloudfraction_High", &ramp_cloudfraction_high, 4, false },
-  { "Cloudfraction_Accumulated",
-    &ramp_cloudfraction_accumulated, 4, false },
+  CalcRaspStyle("ThermalStrength", ramp_thermalstrength),
+  CalcRaspStyle("ThermalHeight", ramp_thermalheight),
+  CalcRaspStyle("Convergence", ramp_verticalspeed),
+  CalcRaspStyle("Wave_1000m", ramp_verticalspeed),
+  CalcRaspStyle("Wave_2000m", ramp_verticalspeed),
+  CalcRaspStyle("Wave_3000m", ramp_verticalspeed),
+  CalcRaspStyle("Wave_4000m", ramp_verticalspeed),
+  CalcRaspStyle("Wave_5000m", ramp_verticalspeed),
+  CalcRaspStyle("Wave_6000m", ramp_verticalspeed),
+  CalcRaspStyle("Wave_7000m", ramp_verticalspeed),
+  CalcRaspStyle("Temperature2m", ramp_temperature),
+  CalcRaspStyle("Rain", ramp_rain),
+  CalcRaspStyle("PFD_Day_DuoDiscus", ramp_pfd_ls4),
+  CalcRaspStyle("PFD_Day_LS4", ramp_pfd_ls4),
+  CalcRaspStyle("PFD_Day_K8", ramp_pfd_ls4),
+  CalcRaspStyle("Windspeed_10m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_500m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_1000m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_1500m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_2000m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_2500m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_3000m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_3500m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_4000m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_4500m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_5000m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_5500m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_6000m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_6500m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("Windspeed_7000m", ramp_bl_avg_windspeed),
+  CalcRaspStyle("VerticalWindShear", ramp_bl_avg_windspeed),
+  CalcRaspStyle("BL_AverageWindSpeed", ramp_bl_avg_windspeed),
+  CalcRaspStyle("XCSpeed_LS4", ramp_xcspeed_ls4),
+  CalcRaspStyle("XCSpeed_DuoDiscus", ramp_xcspeed_ls4),
+  CalcRaspStyle("XCSpeed_K8", ramp_xcspeed_k8),
+  CalcRaspStyle("SurfaceHeatFlux", ramp_surface_heat_flux),
+  CalcRaspStyle("SeaLevelPressure", ramp_sealevel_pressure),
+  CalcRaspStyle("Cloudfraction_Low", ramp_cloudfraction_low),
+  CalcRaspStyle("Cloudfraction_Mid", ramp_cloudfraction_mid),
+  CalcRaspStyle("Cloudfraction_High", ramp_cloudfraction_high),
+  CalcRaspStyle("Cloudfraction_Accumulated",
+            ramp_cloudfraction_accumulated),
 
   { nullptr, &ramp_classic[0], 2, false }
 };
 
 const RaspStyle rasp_colormaps_general[] = {
   // Thermalmap.info color scheme codes
-  { "vth", &ramp_thermalstrength, 4, false },
-  { "hth", &ramp_thermalheight, 4, false },
-  { "vve", &ramp_verticalspeed, 5, false },
-  { "tce", &ramp_temperature, 4, false },
-  { "prr", &ramp_rain, 3, false },
-  { "pfd", &ramp_pfd_ls4, 3, false },
-  { "vho", &ramp_bl_avg_windspeed, 3, false },
-  { "vxc", &ramp_xcspeed_ls4, 3, false },
-  { "vx8", &ramp_xcspeed_k8, 3, false },
-  { "hfl", &ramp_surface_heat_flux, 6, false },
-  { "pre", &ramp_sealevel_pressure, 7, false },
-  { "fcl", &ramp_cloudfraction_low, 4, false },
-  { "fcm", &ramp_cloudfraction_mid, 4, false },
-  { "fch", &ramp_cloudfraction_high, 4, false },
-  { "fct", &ramp_cloudfraction_accumulated, 4, false },
+  CalcRaspStyle("vth", ramp_thermalstrength),
+  CalcRaspStyle("hth", ramp_thermalheight),
+  CalcRaspStyle("vve", ramp_verticalspeed),
+  CalcRaspStyle("tce", ramp_temperature_norm),
+  CalcRaspStyle("prr", ramp_rain),
+  CalcRaspStyle("pfd", ramp_pfd_ls4),
+  CalcRaspStyle("vho", ramp_bl_avg_windspeed),
+  CalcRaspStyle("vxc", ramp_xcspeed_ls4),
+  CalcRaspStyle("vx8", ramp_xcspeed_k8),
+  CalcRaspStyle("hfl", ramp_surface_heat_flux),
+  CalcRaspStyle("pre", ramp_sealevel_pressure),
+  CalcRaspStyle("fcl", ramp_cloudfraction_low),
+  CalcRaspStyle("fcm", ramp_cloudfraction_mid),
+  CalcRaspStyle("fch", ramp_cloudfraction_high),
+  CalcRaspStyle("fct", ramp_cloudfraction_accumulated),
 
   { nullptr, &ramp_classic[0], 2, false }
 };
