@@ -21,8 +21,7 @@ GetVario1Color(short ramp_h) {
     snail_colors_vario, nullptr
   };
 
-  return ColorRampLookup(ramp_h, &ramp,
-                         ARRAY_SIZE(snail_colors_vario));
+  return ColorRampLookup(ramp_h, &ramp);
 }
 
 static RGB8Color
@@ -38,8 +37,7 @@ GetVario2Color(short ramp_h) {
     snail_colors_vario2, nullptr
   };
 
-  return ColorRampLookup(ramp_h, &ramp,
-                         ARRAY_SIZE(snail_colors_vario2));
+  return ColorRampLookup(ramp_h, &ramp);
 }
 
 static RGB8Color
@@ -53,8 +51,7 @@ GetVarioEinkColor(short ramp_h) {
     snail_colors_vario_eink, nullptr
   };
 
-  return ColorRampLookup(ramp_h, &ramp,
-                         ARRAY_SIZE(snail_colors_vario_eink));
+  return ColorRampLookup(ramp_h, &ramp);
 }
 
 static RGB8Color
@@ -71,8 +68,7 @@ GetAltitudeColor(short ramp_h) {
     snail_colors_alt, nullptr
   };
 
-  return ColorRampLookup(ramp_h, &ramp,
-                         ARRAY_SIZE(snail_colors_alt));
+  return ColorRampLookup(ramp_h, &ramp);
 }
 
 [[gnu::const]]
