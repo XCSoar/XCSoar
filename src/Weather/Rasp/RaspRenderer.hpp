@@ -8,6 +8,8 @@
 #include "time/BrokenTime.hpp"
 #include "util/StaticString.hxx"
 
+#include <cstdint>
+
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"
 #endif
@@ -23,7 +25,7 @@ class RaspRenderer {
   CompareProjection compare_projection;
 #endif
 
-  const ColorRamp *last_color_ramp = nullptr;
+  uint32_t last_ramp_hash = 0;
 
 public:
   RaspRenderer(const RaspStore &_store, unsigned parameter)

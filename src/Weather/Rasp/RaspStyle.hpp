@@ -3,24 +3,40 @@
 
 #pragma once
 
-struct ColorRamp;
+#include "ColorMap.hpp"
 
 /**
  * Defines the rendering style for a RASP weather map.
  *
- * The color_ramp wrapper contains both RGB and optional RGBA entry tables.
- * Use HasAlpha() to check if the alpha table is available.
+ * The primary data is a physical color map (value -> color) plus
+ * a value transform that connects physical values to the integer
+ * domain used by the rendering pipeline.
+ * color_map_alpha should be used if provided and alpha blending is available
+ * color_map can define a non-alpha optimized map for when alpha is 
+ * not supported/used
  */
 struct RaspStyle {
   const char *name;
-  const ColorRamp *color_ramp;
+
+  ColorMap color_map;
+  ColorMap color_map_alpha;
+  
+  /**
+   * Linear value transform from physical to rendering domain:
+   * h = physical_value * scale + offset
+   */
+  float scale;
+  float offset;
+
   unsigned height_scale;
   bool do_water;
 
   /**
    * Returns true if this style uses an alpha-enabled colormap.
    */
-  bool HasAlpha() const noexcept;
+  bool HasAlpha() const noexcept {
+    return color_map_alpha.num_points > 0;
+  }
 };
 
 extern const RaspStyle rasp_styles[];
