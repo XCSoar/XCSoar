@@ -32,11 +32,11 @@ Interpolate(int h, const ColorRampEntry *c1, const ColorRampEntry *c2,
 RGB8Color
 ColorRampLookup(const int h,
                 const ColorRamp* ramp,
-                const unsigned numramp,
                 const unsigned interp_levels)
 {
   assert(ramp != nullptr);
   const ColorRampEntry *ramp_colors = ramp->ramp_table;
+  const unsigned numramp = ramp->num_entries;
 
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
@@ -96,14 +96,14 @@ InterpolateAlpha(int h, const ColorRampEntryAlpha *c1,
 RGBA8Color
 ColorRampLookupAlpha(const int h,
                      const ColorRamp* ramp,
-                     const unsigned numramp,
                      const unsigned interp_levels)
 {
   assert(ramp != nullptr);
   assert(ramp->has_alpha);
 
   const ColorRampEntryAlpha *ramp_colors = ramp->ramp_table_alpha;
-  
+  const unsigned numramp = ramp->num_entries;
+
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
 
