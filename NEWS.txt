@@ -190,6 +190,9 @@ Version 7.44 - not yet released
   - LXNAV: fix EnableLoggerNMEA for S-series varios (stay in NMEA mode)
   - LXNAV: parse acceleration/g-load from PLXVF sentence
   - LXNAV: Overload formula, use reference mass instead of dry mass
+  - LXNAV: send AAT/MAT minimum task time (TaskTime) in declarations
+  - LXNAV: fix flight list on devices without RTC (e.g. S-series) #1837
+  - LXNAV: fix error dialog showing "Vega" instead of "LXNAV Vario"
   - support serial baud rates above 230400 on Linux (e.g. 256000, 500000)
   - fix NMEA sub-second time precision for >1 Hz GPS devices #2207
   - fix MWV wind sentence: reject invalid status and relative wind #2209
