@@ -355,9 +355,9 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   if (rasp_renderer != nullptr &&
       ui_state.page_overlay != PageLayout::Overlay::RASP) {
-    const char *label = rasp_renderer->GetLabel();
-    if (label != nullptr)
-      buffer += gettext(label);
+    const auto label = rasp_renderer->GetExtendedLabel();
+    if (!label.empty())
+      buffer += label;
   }
 
   if (!buffer.empty()) {

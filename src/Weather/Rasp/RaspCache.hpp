@@ -26,6 +26,7 @@ class RaspCache {
      index (0..95) */
   unsigned last_time = unsigned(-1);
   unsigned failed_time = unsigned(-1);
+  unsigned loaded_time_index = 0;
 
   std::unique_ptr<RasterMap> map;
 
@@ -81,4 +82,11 @@ public:
    * Sets the current time index.
    */
   void SetTime(BrokenTime t);
+
+  /**
+   * Returns the time of the actually loaded map data,
+   * or BrokenTime::Invalid() if no time is available or no map loaded
+   */
+  [[gnu::pure]]
+  BrokenTime GetLoadedTime() const;
 };

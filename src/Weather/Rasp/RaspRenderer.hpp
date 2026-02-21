@@ -6,6 +6,7 @@
 #include "RaspCache.hpp"
 #include "Terrain/RasterRenderer.hpp"
 #include "time/BrokenTime.hpp"
+#include "util/StaticString.hxx"
 
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"
@@ -53,6 +54,13 @@ public:
   const char *GetLabel() const {
     return cache.GetMapLabel();
   }
+
+  /**
+   * Returns a description that is the label with additional information
+   * appended, e.g. "Rain 12:45lst".
+   */
+  [[gnu::pure]]
+  StaticString<96> GetExtendedLabel() const;
 
   [[gnu::pure]]
   bool IsInside(GeoPoint p) const {
