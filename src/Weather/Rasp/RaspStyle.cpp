@@ -50,21 +50,19 @@ MakeRaspStyle(const char *name,
 // ---- Classic RASP Blipmap color schemes ----
 // Identity transform: physical value = h value directly
 
-// Blue to red (vertical speed, cm/s file encoding)
+// Blue to red (vertical speed, m/s)
+// h = m_s * 100 + 200  (offset 200 = 0 m/s, classic RASP cm/s encoding)
 static constexpr ColorPoint classic_vertical_speed[] = {
-  {   0.0f, {  0,   0, 255}},
-  { 100.0f, {  0, 195, 255}},
-  { 200.0f, { 52, 192,  11}},
-  { 250.0f, {182, 233,   4}},
-  { 300.0f, {255, 233,   0}},
-  { 360.0f, {255, 209,   0}},
-  { 420.0f, {255, 155,   0}},
-  { 480.0f, {255, 109,   0}},
-  { 540.0f, {255,  35,   0}},
-  { 600.0f, {255,   0,   0}},
-  {1000.0f, {255,   0,   0}},
-  {8000.0f, {255,   0,   0}},
-  {9000.0f, {255,   0,   0}},
+  {-2.0f, {  0,   0, 255}},
+  {-1.0f, {  0, 195, 255}},
+  { 0.0f, { 52, 192,  11}},
+  { 0.5f, {182, 233,   4}},
+  { 1.0f, {255, 233,   0}},
+  { 1.6f, {255, 209,   0}},
+  { 2.2f, {255, 155,   0}},
+  { 2.8f, {255, 109,   0}},
+  { 3.4f, {255,  35,   0}},
+  { 4.0f, {255,   0,   0}},
 };
 static constexpr ColorMap classic_vertical_speed_map = {
   classic_vertical_speed, std::size(classic_vertical_speed)
@@ -649,12 +647,10 @@ static constexpr ColorMap
      * bool do_water enables "water masking" */
 
 const RaspStyle rasp_styles[] = {
-  {"wstar",
-   classic_vertical_speed_map, {}, 1, 0,
-   2, false},
-  {"wstar_bsratio",
-   classic_vertical_speed_map, {}, 1, 0,
-   2, false},
+  MakeRaspStyle("wstar",
+                classic_vertical_speed_map, 100, 200),
+  MakeRaspStyle("wstar_bsratio",
+                classic_vertical_speed_map, 100, 200),
   {"blwindspd",
    classic_windspeed_map, {}, 1, 0,
    3, false},
