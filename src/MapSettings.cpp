@@ -50,6 +50,7 @@ MapSettings::SetDefaults() noexcept
   show_fai_triangle_areas = false;
   skylines_traffic_map_mode = DisplaySkyLinesTrafficMapMode::SYMBOL;
   show_95_percent_rule_helpers = false;
+  rasp_layer_opacity = 100;
 
   trail.SetDefaults();
   item_list.SetDefaults();
