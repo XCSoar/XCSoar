@@ -7,7 +7,9 @@
 #include "Math/Angle.hpp"
 #include "util/StaticString.hxx"
 
+#include <chrono>
 #include <vector>
+
 struct LoggerSettings;
 struct Plane;
 class OrderedTask;
@@ -60,6 +62,11 @@ struct Declaration {
    * Is the overall task an AAT or MAT type?
    */
   bool is_aat_task = false;
+
+  /**
+   * Minimum task time for AAT/MAT tasks.
+   */
+  std::chrono::duration<unsigned> aat_min_time{};
 
   Declaration(const LoggerSettings &logger_settings, const Plane &plane,
               const OrderedTask* task);
