@@ -21,6 +21,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "ui/window/PaintWindow.hpp"
+#include "ui/canvas/Color.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -117,6 +118,30 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
                         min_h, max_h);
   renderer.GenerateImage(false, height_scale,
                          0, 0, Angle::Zero(), 0u);
+
+  if (use_alpha) {
+    // Draw checkerboard background for alpha styles
+    constexpr unsigned CHECK_SIZE = 8;
+    const Color light_color(230, 230, 230);
+    const Color dark_color(26, 26, 26);
+
+    for (unsigned y = 0; y < bar_height;
+         y += CHECK_SIZE) {
+      for (unsigned x = 0; x < width;
+           x += CHECK_SIZE) {
+        const bool light =
+          ((x / CHECK_SIZE)
+           + (y / CHECK_SIZE)) % 2 == 0;
+        canvas.DrawFilledRectangle(
+          PixelRect{(int)x, (int)y,
+            std::min((int)(x + CHECK_SIZE),
+                     (int)width),
+            std::min((int)(y + CHECK_SIZE),
+                     (int)bar_height)},
+          light ? light_color : dark_color);
+      }
+    }
+  }
 
 #ifdef ENABLE_OPENGL
   const ScopeTextureConstantAlpha blend(use_alpha, 1.0f);
