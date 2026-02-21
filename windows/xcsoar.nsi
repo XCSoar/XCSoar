@@ -81,6 +81,11 @@ Section "!${PRODUCT_NAME}" SEC01
   File "${BIN_DIR}\libEGL.dll"
   File "${BIN_DIR}\libGLESv2.dll"
 
+  ; Install bundled fonts (wildcard picks up whatever build/fonts.mk copied)
+  SetOutPath "$INSTDIR\fonts"
+  File "${BIN_DIR}\fonts\*.ttf"
+  SetOutPath "$INSTDIR"
+
   ; Write uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
@@ -119,6 +124,10 @@ Section "Uninstall"
   Delete "$INSTDIR\libEGL.dll"
   Delete "$INSTDIR\libGLESv2.dll"
   Delete "$INSTDIR\Uninstall.exe"
+
+  ; Remove bundled fonts
+  Delete "$INSTDIR\fonts\*.ttf"
+  RMDir "$INSTDIR\fonts"
 
   ; Remove shortcuts (if they exist)
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk"
