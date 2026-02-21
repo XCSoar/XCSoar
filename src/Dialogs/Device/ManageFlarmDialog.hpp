@@ -6,6 +6,8 @@
 class Device;
 struct FlarmVersion;
 struct FlarmHardware;
+struct FlarmState;
 
 void
-ManageFlarmDialog(Device &device, const FlarmVersion &version, FlarmHardware &hardware);
+ManageFlarmDialog(Device &device, const FlarmVersion &version,
+                  FlarmHardware &hardware, const FlarmState &state);

@@ -692,14 +692,16 @@ DeviceListWidget::ManageCurrent()
   else if (descriptor.IsDriver("FLARM")) {
     FlarmVersion version;
     FlarmHardware hardware;
+    FlarmState state;
 
     {
       const std::lock_guard lock{device_blackboard.mutex};
       const NMEAInfo &basic = device_blackboard.RealState(current);
       version = basic.flarm.version;
+      state = basic.flarm.state;
     }
 
-    ManageFlarmDialog(*device, version, hardware);
+    ManageFlarmDialog(*device, version, hardware, state);
   } else if (descriptor.IsDriver("LX")) {
     DeviceInfo info, secondary_info;
 

@@ -4,6 +4,7 @@
 #include "StaticParser.hpp"
 #include "FLARM/Error.hpp"
 #include "FLARM/List.hpp"
+#include "FLARM/State.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/Version.hpp"
 #include "FLARM/Details.hpp"
@@ -262,6 +263,27 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
   flarm_slot->valid.Update(clock);
 
   flarm_slot->Update(traffic);
+}
+
+void
+ParsePFLAJ(NMEAInputLine &line, FlarmState &state,
+           TimeStamp clock) noexcept
+{
+  const auto type = line.ReadView();
+  if (type != "A"sv)
+    return;
+
+  int flight_val;
+  if (!line.ReadChecked(flight_val) || flight_val < 0 || flight_val > 1)
+    return;
+
+  int recorder_val;
+  if (!line.ReadChecked(recorder_val) || recorder_val < 0 || recorder_val > 2)
+    return;
+
+  state.flight = static_cast<FlarmState::Flight>(flight_val);
+  state.recorder = static_cast<FlarmState::Recorder>(recorder_val);
+  state.available.Update(clock);
 }
 
 void

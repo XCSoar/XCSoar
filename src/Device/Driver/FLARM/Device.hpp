@@ -137,6 +137,14 @@ public:
 
   void Restart(OperationEnvironment &env);
 
+  /**
+   * Start a FLARM simulation scenario (PFLAF).
+   * Not available on Classic FLARM or while in flight.
+   *
+   * @param scenario 1-6, see FTD-012 for descriptions
+   */
+  void RunSimulation(unsigned scenario, OperationEnvironment &env);
+
 private:
   /**
    * Sends the supplied sentence with a $ prepended and a line break appended

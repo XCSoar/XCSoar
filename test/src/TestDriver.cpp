@@ -41,6 +41,7 @@
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
 #include "FLARM/Error.hpp"
+#include "FLARM/State.hpp"
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/MessagingRecord.hpp"
@@ -394,6 +395,22 @@ TestFLARM()
   ok1(nmea_info.flarm.error.severity == FlarmError::FATAL_PROBLEM);
   ok1(nmea_info.flarm.error.code == FlarmError::FIRMWARE_TIMEOUT);
   ok1(nmea_info.flarm.error.message.equals("Software expiry"));
+
+  // PFLAJ: in flight, recording, TIS-B unavailable
+  ok1(parser.ParseLine("$PFLAJ,A,1,1,0*20", nmea_info));
+  ok1(nmea_info.flarm.state.available);
+  ok1(nmea_info.flarm.state.flight == FlarmState::Flight::IN_FLIGHT);
+  ok1(nmea_info.flarm.state.recorder == FlarmState::Recorder::RECORDING);
+
+  // PFLAJ: on ground, recorder off (no TIS-B field)
+  ok1(parser.ParseLine("$PFLAJ,A,0,0*3C", nmea_info));
+  ok1(nmea_info.flarm.state.flight == FlarmState::Flight::ON_GROUND);
+  ok1(nmea_info.flarm.state.recorder == FlarmState::Recorder::OFF);
+
+  // PFLAJ: in flight, baro-only recording
+  ok1(parser.ParseLine("$PFLAJ,A,1,2*3F", nmea_info));
+  ok1(nmea_info.flarm.state.flight == FlarmState::Flight::IN_FLIGHT);
+  ok1(nmea_info.flarm.state.recorder == FlarmState::Recorder::BARO_ONLY);
 
   // Ensure a database instance exists before PFLAM messages are parsed
   if (traffic_databases == nullptr)
@@ -2803,7 +2820,7 @@ TestMalformedInput()
 int main()
 {
   plan_tests(1032 /* drivers */ + 21 /* PFLAU extended */
-             + 37 /* PFLAA v7+ */ + 12 /* PFLAE */
+             + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */

@@ -225,3 +225,11 @@ FlarmDevice::Restart(OperationEnvironment &env)
 {
   Send("PFLAR,0", env);
 }
+
+void
+FlarmDevice::RunSimulation(unsigned scenario, OperationEnvironment &env)
+{
+  StaticString<32> buffer;
+  buffer.Format("PFLAF,S,%u", scenario);
+  Send(buffer, env);
+}
