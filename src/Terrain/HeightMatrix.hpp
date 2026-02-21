@@ -46,6 +46,13 @@ public:
             unsigned quantisation_pixels, bool interpolate) noexcept;
 #endif
 
+  /**
+   * Make height matrix with a gradient from min_h to max_h, default left-right
+   */
+  void FillGradient(UnsignedPoint2D _size,
+                    int16_t min_h, int16_t max_h,
+                    bool vertical = false) noexcept;
+
   UnsignedPoint2D GetSize() const noexcept {
     return size;
   }
