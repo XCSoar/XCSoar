@@ -18,8 +18,7 @@
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Scope.hpp"
-#include <optional>
+#include "ui/canvas/opengl/ConstantAlpha.hpp"
 #endif
 
 #include <algorithm> // for std::clamp()
@@ -782,15 +781,12 @@ RasterRenderer::ContourStart(const unsigned contour_height_scale) noexcept
 void
 RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                      const WindowProjection &projection,
-                     [[maybe_unused]] bool transparent_white) const noexcept
+                     [[maybe_unused]] bool transparent_white,
+                     [[maybe_unused]] float alpha) const noexcept
 {
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds())) {
-    // Enable alpha blending if the colormap has alpha channel
-    const std::optional<ScopeAlphaBlend> alpha_blend =
-      has_alpha
-      ? std::make_optional<ScopeAlphaBlend>()
-      : std::nullopt;
+    const ScopeTextureConstantAlpha blend(has_alpha, alpha);
 
     DrawGeoBitmap(*image,
                   PixelSize{height_matrix.GetSize()},
