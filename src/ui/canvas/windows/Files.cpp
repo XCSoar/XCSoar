@@ -3,6 +3,7 @@
 
 #include "ui/canvas/custom/Files.hpp"
 #include "ui/canvas/FontSearch.hpp"
+#include "system/PathName.hpp"
 
 #include <shlobj.h>
 #include <windef.h> // for MAX_PATH
@@ -10,7 +11,8 @@
 
 /**
  * Get the Windows fonts directory using the Shell API.
- * This handles custom font locations and different Windows installations.
+ * This handles custom font locations and different Windows
+ * installations.
  */
 static const char *
 GetWindowsFontsPath() noexcept
@@ -19,7 +21,8 @@ GetWindowsFontsPath() noexcept
 
   if (fonts_path.empty()) {
     char buffer[MAX_PATH];
-    if (SHGetSpecialFolderPathA(nullptr, buffer, CSIDL_FONTS, FALSE)) {
+    if (SHGetSpecialFolderPathA(nullptr, buffer,
+                                CSIDL_FONTS, FALSE)) {
       fonts_path = buffer;
     } else {
       // Fallback to typical location if API fails
@@ -30,7 +33,30 @@ GetWindowsFontsPath() noexcept
   return fonts_path.c_str();
 }
 
-static const char *font_search_paths_storage[5];
+/**
+ * Get the "fonts" subdirectory next to the executable.
+ * This allows bundling fonts with the installer/ZIP.
+ */
+static const char *
+GetExeFontsPath() noexcept
+{
+  static std::string exe_fonts_path;
+
+  if (exe_fonts_path.empty()) {
+    char buffer[MAX_PATH];
+    DWORD len = GetModuleFileName(nullptr, buffer, MAX_PATH);
+    if (len > 0 && len < MAX_PATH) {
+      ReplaceBaseName(buffer, "fonts");
+      exe_fonts_path = buffer;
+    }
+  }
+
+  return exe_fonts_path.empty()
+    ? nullptr
+    : exe_fonts_path.c_str();
+}
+
+static const char *font_search_paths_storage[6];
 
 static const char *const *
 GetFontSearchPaths() noexcept
@@ -38,12 +64,18 @@ GetFontSearchPaths() noexcept
   static bool initialized = false;
 
   if (!initialized) {
-    font_search_paths_storage[0] = GetWindowsFontsPath();
+    unsigned n = 0;
+
+    // Highest priority: fonts bundled next to the executable
+    if (const char *exe_fonts = GetExeFontsPath())
+      font_search_paths_storage[n++] = exe_fonts;
+
+    font_search_paths_storage[n++] = GetWindowsFontsPath();
     // Include Linux paths as fallback (for Wine compatibility)
-    font_search_paths_storage[1] = "/usr/share/fonts/truetype";
-    font_search_paths_storage[2] = "/usr/share/fonts/TTF";
-    font_search_paths_storage[3] = "/usr/share/fonts";
-    font_search_paths_storage[4] = nullptr;
+    font_search_paths_storage[n++] = "/usr/share/fonts/truetype";
+    font_search_paths_storage[n++] = "/usr/share/fonts/TTF";
+    font_search_paths_storage[n++] = "/usr/share/fonts";
+    font_search_paths_storage[n] = nullptr;
     initialized = true;
   }
 
@@ -167,7 +199,7 @@ static constexpr const char *const all_monospace_font_paths[] = {
   "DroidSansMono.ttf",
   "ttf-bitstream-vera/VeraMono.ttf",
   "VeraMono.ttf",
-  "msttcorefonts/couri.ttf",
+  "msttcorefonts/cour.ttf",
   "freefont/FreeMono.ttf",
   nullptr
 };
