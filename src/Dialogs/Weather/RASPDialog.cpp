@@ -10,6 +10,10 @@
 #include "Terrain/RasterRenderer.hpp"
 #include "ui/canvas/RawBitmap.hpp"
 #include "Math/Angle.hpp"
+
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/ConstantAlpha.hpp"
+#endif
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "ui/window/PaintWindow.hpp"
@@ -60,7 +64,9 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
     return;
   }
 
-  const auto &map = style->color_map;
+  const bool use_alpha = style->HasAlpha();
+  const auto &map = use_alpha
+    ? style->color_map_alpha : style->color_map;
   const float min_v = map.points[0].value;
   const float max_v = map.points[map.num_points - 1].value;
   const unsigned height_scale = style->height_scale;
@@ -85,9 +91,14 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
 
   RasterRenderer renderer;
   constexpr int interp_levels = 5;
-  renderer.PrepareColorTable(
-    &ramp, style->do_water,
-    height_scale, interp_levels);
+  if (use_alpha)
+    renderer.PrepareColorTableAlpha(
+      &ramp, style->do_water,
+      height_scale, interp_levels);
+  else
+    renderer.PrepareColorTable(
+      &ramp, style->do_water,
+      height_scale, interp_levels);
 
   const unsigned width = rc.right - rc.left;
   const unsigned bar_height = rc.bottom - rc.top;
@@ -102,9 +113,12 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
   renderer.GenerateImage(false, height_scale,
                          0, 0, Angle::Zero(), 0u);
 
+#ifdef ENABLE_OPENGL
+  const ScopeTextureConstantAlpha blend(use_alpha, 1.0f);
+#endif
   renderer.GetImage().StretchTo(
     PixelSize{width, bar_height}, canvas,
-    PixelSize{width, bar_height});
+    PixelSize{width, bar_height}, false, use_alpha);
 }
 
 class RASPSettingsPanel final
