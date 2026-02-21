@@ -55,9 +55,10 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
 
   _task->SetTaskBehaviour(settings_computer.task);
 
+  const AircraftState current_as = ToAircraftState(basic, calculated);
+
   if (force || (last_location_available &&
                 basic.location_available.Modified(last_location_available))) {
-    const AircraftState current_as = ToAircraftState(basic, calculated);
     const AircraftState &last_as = valid_last_state ? last_state : current_as;
 
     _task->Update(current_as, last_as);
@@ -72,6 +73,8 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
     if (_task->UpdateAutoMC(current_as, fallback_mc))
       calculated.ProvideAutoMacCready(basic.clock,
                                       _task->GetGlidePolar().GetMC());
+  } else {
+    _task->UpdateCommonStatsPolar(current_as);
   }
 
   last_location_available = basic.location_available;
