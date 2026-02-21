@@ -194,6 +194,9 @@ struct MapSettings {
   /** Show 95% distance rule helpers on map and infoboxes */
   bool show_95_percent_rule_helpers;
 
+  /** RASP weather overlay opacity (0=transparent, 100=opaque) */
+  uint8_t rasp_layer_opacity;
+
   void SetDefaults() noexcept;
 };
 
