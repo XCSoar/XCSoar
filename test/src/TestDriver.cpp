@@ -225,11 +225,12 @@ TestFLARM()
     ok1(traffic->climb_rate_received);
     ok1(traffic->type == FlarmTraffic::AircraftType::TOW_PLANE);
     ok1(!traffic->stealth);
+    ok1(traffic->id_type == FlarmTraffic::IdType::FLARM);
     ok1(traffic->source == FlarmTraffic::SourceType::FLARM);
     ok1(!traffic->rssi_available);
     ok1(!traffic->no_track);
   } else {
-    skip(19, 0, "traffic == NULL");
+    skip(20, 0, "traffic == NULL");
   }
 
   ok1(parser.ParseLine("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
@@ -279,13 +280,50 @@ TestFLARM()
     skip(15, 0, "traffic == NULL");
   }
 
-  // PFLAA v7+ with source=ADS-B, RSSI=-85, NoTrack=0
-  ok1(parser.ParseLine("$PFLAA,0,200,-300,15,2,AABB01,180,5,30,0.8,1,2,-85,0*4B",
+  // PFLAA with IDType=0 (random ID)
+  ok1(parser.ParseLine("$PFLAA,0,300,400,20,0,ABC123,90,,20,,8*30",
+                       nmea_info));
+
+  id = FlarmId::Parse("ABC123", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::RANDOM);
+  } else {
+    skip(1, 0, "traffic == NULL");
+  }
+
+  // PFLAA with IDType=1 (ICAO address)
+  ok1(parser.ParseLine("$PFLAA,0,300,400,20,1,4CA123,90,,20,,8*47",
+                       nmea_info));
+
+  id = FlarmId::Parse("4CA123", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::ICAO);
+  } else {
+    skip(1, 0, "traffic == NULL");
+  }
+
+  // PFLAA with empty IDType (Mode-C, unknown)
+  ok1(parser.ParseLine("$PFLAA,0,300,400,20,,MODEC1,90,,20,,8*01",
+                       nmea_info));
+
+  id = FlarmId::Parse("MODEC1", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::UNKNOWN);
+  } else {
+    skip(1, 0, "traffic == NULL");
+  }
+
+  // PFLAA v8+ with NoTrack=0, Source=ADS-B, RSSI=-85
+  ok1(parser.ParseLine("$PFLAA,0,200,-300,15,2,AABB01,180,5,30,0.8,1,0,2,-85*4B",
                        nmea_info));
 
   id = FlarmId::Parse("AABB01", NULL);
   traffic = nmea_info.flarm.traffic.FindTraffic(id);
   if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::FLARM);
     ok1(traffic->source == FlarmTraffic::SourceType::ADSB);
     ok1(traffic->rssi_available);
     ok1(traffic->rssi == -85);
@@ -293,11 +331,11 @@ TestFLARM()
     ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
     ok1(equals(traffic->track, 180));
   } else {
-    skip(7, 0, "traffic == NULL");
+    skip(8, 0, "traffic == NULL");
   }
 
-  // PFLAA v7+ with source=Mode-S only (no RSSI, no NoTrack)
-  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB02,90,,20,,8,5*64",
+  // PFLAA v9+ with Source=Mode-S only (NoTrack=0, no RSSI)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB02,90,,20,,8,0,5*78",
                        nmea_info));
 
   id = FlarmId::Parse("AABB02", NULL);
@@ -311,8 +349,8 @@ TestFLARM()
     skip(4, 0, "traffic == NULL");
   }
 
-  // PFLAA stealth with NoTrack=1
-  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB03,,,,,1,0,,1*53",
+  // PFLAA stealth with NoTrack=1 (no Source/RSSI)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB03,,,,,1,1*63",
                        nmea_info));
 
   id = FlarmId::Parse("AABB03", NULL);
@@ -326,8 +364,8 @@ TestFLARM()
     skip(4, 0, "traffic == NULL");
   }
 
-  // PFLAA v7+ with out-of-range source (9 -> defaults to FLARM)
-  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB04,90,,20,,8,9*6E",
+  // PFLAA v8+ with NoTrack=0, out-of-range source (9 -> defaults to FLARM)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB04,90,,20,,8,0,9*72",
                        nmea_info));
 
   id = FlarmId::Parse("AABB04", NULL);
@@ -2746,7 +2784,7 @@ TestMalformedInput()
 int main()
 {
   plan_tests(1032 /* drivers */ + 21 /* PFLAU extended */
-             + 26 /* PFLAA v7+ */
+             + 37 /* PFLAA v7+ */
              + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */

@@ -69,6 +69,7 @@ FlarmTraffic::Update(const FlarmTraffic &other) noexcept
   stealth = other.stealth;
   type = other.type;
   source = other.source;
+  id_type = other.id_type;
   rssi = other.rssi;
   rssi_available = other.rssi_available;
   no_track = other.no_track;

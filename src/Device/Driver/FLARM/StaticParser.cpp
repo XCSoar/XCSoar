@@ -148,9 +148,14 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
       return;
   }
 
-  line.Skip(); /* id type */
+  int id_type_val;
+  if (line.ReadChecked(id_type_val) &&
+      id_type_val >= 0 && id_type_val <= 2)
+    traffic.id_type =
+      static_cast<FlarmTraffic::IdType>(id_type_val + 1);
+  else
+    traffic.id_type = FlarmTraffic::IdType::UNKNOWN;
 
-  // 5 id, 6 digit hex
   char id_string[16];
   line.Read(id_string, 16);
   traffic.id = FlarmId::Parse(id_string, nullptr);
@@ -195,34 +200,40 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
   else
     traffic.type = (FlarmTraffic::AircraftType)type;
 
-  // PFLAA v7+ optional fields: Source, RSSI, NoTrack
-  int source_val;
-  if (line.ReadChecked(source_val)) {
-    switch (source_val) {
-    case 0: case 2: case 3: case 4: case 5:
-      traffic.source = (FlarmTraffic::SourceType)source_val;
-      break;
-    default:
-      traffic.source = FlarmTraffic::SourceType::FLARM;
-      break;
-    }
+  // PFLAA optional fields per FTD-012: NoTrack (v8+), Source (v9+), RSSI (v9+)
+  int no_track_val;
+  if (line.ReadChecked(no_track_val)) {
+    traffic.no_track = no_track_val != 0;
 
-    int rssi_val;
-    if (line.ReadChecked(rssi_val)) {
-      traffic.rssi = (int8_t)rssi_val;
-      traffic.rssi_available = true;
+    int source_val;
+    if (line.ReadChecked(source_val)) {
+      switch (source_val) {
+      case 0: case 2: case 3: case 4: case 5:
+        traffic.source = (FlarmTraffic::SourceType)source_val;
+        break;
+      default:
+        traffic.source = FlarmTraffic::SourceType::FLARM;
+        break;
+      }
+
+      int rssi_val;
+      if (line.ReadChecked(rssi_val)) {
+        traffic.rssi = (int8_t)rssi_val;
+        traffic.rssi_available = true;
+      } else {
+        traffic.rssi = 0;
+        traffic.rssi_available = false;
+      }
     } else {
+      traffic.source = FlarmTraffic::SourceType::FLARM;
       traffic.rssi = 0;
       traffic.rssi_available = false;
     }
-
-    int no_track_val;
-    traffic.no_track = line.ReadChecked(no_track_val) && no_track_val != 0;
   } else {
+    traffic.no_track = false;
     traffic.source = FlarmTraffic::SourceType::FLARM;
     traffic.rssi = 0;
     traffic.rssi_available = false;
-    traffic.no_track = false;
   }
 
   FlarmTraffic *flarm_slot = flarm.FindTraffic(traffic.id);

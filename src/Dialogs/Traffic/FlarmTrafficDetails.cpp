@@ -275,14 +275,20 @@ FlarmTrafficDetailsWidget::Update()
 inline void
 FlarmTrafficDetailsWidget::OnTeamClicked()
 {
-  // Ask for confirmation
+  const FlarmTraffic *target =
+    CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
+  if (target != nullptr && target->no_track) {
+    ShowMessageBox(_("This target has NoTrack enabled and may not be persisted."),
+                   _("Privacy"), MB_OK);
+    return;
+  }
+
   if (ShowMessageBox(_("Do you want to set this FLARM contact as your new teammate?"),
                   _("New Teammate"), MB_YESNO) != IDYES)
     return;
 
   TeamActions::TrackFlarm(target_id);
 
-  // Close the dialog
   dialog.SetModalResult(mrOK);
 }
 
@@ -292,10 +298,17 @@ FlarmTrafficDetailsWidget::OnTeamClicked()
 inline void
 FlarmTrafficDetailsWidget::OnCallsignClicked()
 {
+  const FlarmTraffic *target =
+    CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
+  if (target != nullptr && target->no_track) {
+    ShowMessageBox(_("This target has NoTrack enabled and may not be persisted."),
+                   _("Privacy"), MB_OK);
+    return;
+  }
+
   StaticString<21> newName;
   newName.clear();
 
-  // pre-fill the callsign from flarmnet database or userfile
   const char* cs = FlarmDetails::LookupCallsign(target_id);
   if (cs != nullptr && cs[0] != 0)
     newName = cs;
@@ -310,6 +323,14 @@ FlarmTrafficDetailsWidget::OnCallsignClicked()
 void
 FlarmTrafficDetailsWidget::OnFriendColorClicked(FlarmColor color)
 {
+  const FlarmTraffic *target =
+    CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
+  if (target != nullptr && target->no_track) {
+    ShowMessageBox(_("This target has NoTrack enabled and may not be persisted."),
+                   _("Privacy"), MB_OK);
+    return;
+  }
+
   FlarmFriends::SetFriendColor(target_id, color);
   dialog.SetModalResult(mrOK);
 }
