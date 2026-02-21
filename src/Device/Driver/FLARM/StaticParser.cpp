@@ -4,6 +4,7 @@
 #include "StaticParser.hpp"
 #include "FLARM/Error.hpp"
 #include "FLARM/List.hpp"
+#include "FLARM/Progress.hpp"
 #include "FLARM/State.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/Version.hpp"
@@ -13,6 +14,7 @@
 #include "Message.hpp"
 #include "NMEA/InputLine.hpp"
 #include "util/Macros.hpp"
+#include "util/NumberParser.hxx"
 #include "util/StringAPI.hxx"
 #include "util/HexString.hpp"
 
@@ -284,6 +286,41 @@ ParsePFLAJ(NMEAInputLine &line, FlarmState &state,
   state.flight = static_cast<FlarmState::Flight>(flight_val);
   state.recorder = static_cast<FlarmState::Recorder>(recorder_val);
   state.available.Update(clock);
+}
+
+void
+ParsePFLAQ(NMEAInputLine &line, FlarmProgress &progress,
+           TimeStamp clock) noexcept
+{
+  // PFLAQ,<Operation>,<Info>,<Progress> (PowerFLARM)
+  // PFLAQ,<Operation>,<Progress>        (Classic FLARM, no Info field)
+
+  const auto operation = line.ReadView();
+  if (operation.empty())
+    return;
+
+  const auto field2 = line.ReadView();
+
+  int progress_val;
+  if (line.ReadChecked(progress_val)) {
+    // PowerFLARM: field2 is Info, progress_val is Progress
+    if (progress_val < 0 || progress_val > 100)
+      return;
+
+    progress.info = field2;
+  } else {
+    // Classic FLARM: field2 is Progress (no Info field)
+    const auto parsed = ParseInteger<int>(field2);
+    if (!parsed || *parsed < 0 || *parsed > 100)
+      return;
+
+    progress_val = *parsed;
+    progress.info.clear();
+  }
+
+  progress.operation = operation;
+  progress.progress = (unsigned)progress_val;
+  progress.available.Update(clock);
 }
 
 void

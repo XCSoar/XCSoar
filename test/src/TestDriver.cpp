@@ -41,6 +41,7 @@
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
 #include "FLARM/Error.hpp"
+#include "FLARM/Progress.hpp"
 #include "FLARM/State.hpp"
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
@@ -411,6 +412,30 @@ TestFLARM()
   ok1(parser.ParseLine("$PFLAJ,A,1,2*3F", nmea_info));
   ok1(nmea_info.flarm.state.flight == FlarmState::Flight::IN_FLIGHT);
   ok1(nmea_info.flarm.state.recorder == FlarmState::Recorder::BARO_ONLY);
+
+  // PFLAQ: PowerFLARM with Info field
+  ok1(parser.ParseLine("$PFLAQ,IGC,2A8GJ7K1.IGC,55*43", nmea_info));
+  ok1(nmea_info.flarm.progress.available);
+  ok1(nmea_info.flarm.progress.operation.equals("IGC"));
+  ok1(nmea_info.flarm.progress.info.equals("2A8GJ7K1.IGC"));
+  ok1(nmea_info.flarm.progress.progress == 55);
+
+  // PFLAQ: PowerFLARM with empty Info field
+  ok1(parser.ParseLine("$PFLAQ,OBST,,10*6D", nmea_info));
+  ok1(nmea_info.flarm.progress.operation.equals("OBST"));
+  ok1(nmea_info.flarm.progress.info.empty());
+  ok1(nmea_info.flarm.progress.progress == 10);
+
+  // PFLAQ: Classic FLARM (no Info field at all)
+  ok1(parser.ParseLine("$PFLAQ,IGC,25*00", nmea_info));
+  ok1(nmea_info.flarm.progress.operation.equals("IGC"));
+  ok1(nmea_info.flarm.progress.info.empty());
+  ok1(nmea_info.flarm.progress.progress == 25);
+
+  // PFLAQ: firmware update complete
+  ok1(parser.ParseLine("$PFLAQ,FW,,100*46", nmea_info));
+  ok1(nmea_info.flarm.progress.operation.equals("FW"));
+  ok1(nmea_info.flarm.progress.progress == 100);
 
   // Ensure a database instance exists before PFLAM messages are parsed
   if (traffic_databases == nullptr)
@@ -2821,6 +2846,7 @@ int main()
 {
   plan_tests(1032 /* drivers */ + 21 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
+             + 16 /* PFLAQ */
              + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */

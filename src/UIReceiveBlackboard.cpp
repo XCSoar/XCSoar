@@ -12,6 +12,8 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "FlarmProgressOverlay.hpp"
+#include "util/StaticString.hxx"
 
 #if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
 #include "lib/dbus/Connection.hxx"
@@ -67,6 +69,30 @@ UIReceiveSensorData(OperationEnvironment &env)
   if (modified || !CommonInterface::Basic().location_available) {
     InfoBoxManager::SetDirty();
     InfoBoxManager::ProcessTimer();
+  }
+
+  {
+    static bool flarm_progress_visible = false;
+    const auto &progress = CommonInterface::Basic().flarm.progress;
+
+    if (progress.available) {
+      StaticString<128> msg;
+      if (!progress.info.empty())
+        msg.Format("FLARM %s: %s (%u%%)",
+                   progress.operation.c_str(),
+                   progress.info.c_str(),
+                   progress.progress);
+      else
+        msg.Format("FLARM %s (%u%%)",
+                   progress.operation.c_str(),
+                   progress.progress);
+
+      FlarmProgressOverlay::Show(msg.c_str(), progress.progress);
+      flarm_progress_visible = true;
+    } else if (flarm_progress_visible) {
+      FlarmProgressOverlay::Close();
+      flarm_progress_visible = false;
+    }
   }
 }
 

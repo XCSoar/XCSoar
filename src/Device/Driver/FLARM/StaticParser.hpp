@@ -12,6 +12,7 @@
 class TimeStamp;
 class NMEAInputLine;
 struct FlarmError;
+struct FlarmProgress;
 struct FlarmState;
 struct FlarmVersion;
 struct FlarmStatus;
@@ -77,6 +78,17 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
  */
 void
 ParsePFLAJ(NMEAInputLine &line, FlarmState &state,
+           TimeStamp clock) noexcept;
+
+/**
+ * Parses a PFLAQ sentence (operations progress information).
+ *
+ * @param line The Flarm NMEA record to parse.
+ * @param progress The current Flarm progress which will be updated.
+ * @param clock The time now.
+ */
+void
+ParsePFLAQ(NMEAInputLine &line, FlarmProgress &progress,
            TimeStamp clock) noexcept;
 
 /**
