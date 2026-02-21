@@ -156,6 +156,6 @@ try {
 } catch (OperationCancelled) {
   return false;
 } catch (...) {
-  ShowError(std::current_exception(), "Vega");
+  ShowError(std::current_exception(), "LXNAV Vario");
   return false;
 }
