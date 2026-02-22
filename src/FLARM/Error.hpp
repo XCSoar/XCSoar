@@ -36,6 +36,7 @@ struct FlarmError {
     EEPROM = 0x28,
     GENERAL = 0x29,
     TRANSPONDER_ADSB = 0x2a,
+    EEPROM2 = 0x2b,
     GPIO = 0x2c,
     GPS_COMMUNICATION = 0x31,
     GPS_CONFIGURATION = 0x32,
