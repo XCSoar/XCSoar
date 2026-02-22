@@ -465,8 +465,10 @@ jobs:
               mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug.aab \
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
             fi
-          elif [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+          elif [ ${{ matrix.target }} = 'WIN64' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
           elif [ ${{ matrix.target }} = 'PC' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
@@ -515,8 +517,10 @@ jobs:
               make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
             fi
-          elif [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+          elif [ ${{ matrix.target }} = 'WIN64' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
           elif [ ${{ matrix.target }} = 'PC' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
@@ -691,6 +695,13 @@ jobs:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
 
+      - name: Upload artifact (Installer)
+        uses: actions/upload-artifact@v6
+        if: ${{ matrix.target == 'WIN64OPENGL' }}
+        with:
+          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}-Installer.exe
+          path: output/${{ matrix.target }}/bin/XCSoar-*-WIN64OPENGL-Installer.exe
+
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -702,6 +713,17 @@ jobs:
           asset_path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           asset_name: ${{ matrix.target_final }}-${{ matrix.target }}${{ matrix.target_ext }}
           asset_content_type: application/zip
+
+      - name: Upload Release Asset (Installer)
+        uses: actions/upload-release-asset@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target == 'WIN64OPENGL' && needs.release.outputs.upload_url != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: output/${{ matrix.target }}/bin/${{ matrix.target_final }}-${{ needs.release.outputs.version }}-${{ matrix.target }}-Installer.exe
+          asset_name: ${{ matrix.target_final }}-${{ matrix.target }}-Installer.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
 
       - name: Choose iOS deploy artifact
         if: ${{ matrix.target == 'IOS64' }}
