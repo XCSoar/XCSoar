@@ -28,10 +28,10 @@ struct FlarmTraffic {
    */
   enum class SourceType: uint8_t {
     FLARM = 0,
-    ADSB = 2,
+    ADSB = 1,
     ADSR = 3,
     TISB = 4,
-    MODES = 5,
+    MODES = 6,
   };
 
   /**

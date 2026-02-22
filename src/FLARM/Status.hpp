@@ -59,6 +59,10 @@ struct FlarmStatus {
   constexpr void Clear() noexcept {
     available.Clear();
     has_extended = false;
+    relative_bearing = 0;
+    alarm_type = 0;
+    relative_vertical = 0;
+    relative_distance = 0;
     target_id.Clear();
   }
 

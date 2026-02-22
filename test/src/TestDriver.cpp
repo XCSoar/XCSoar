@@ -198,6 +198,19 @@ TestFLARM()
   ok1(nmea_info.flarm.status.relative_distance == 800);
   ok1(nmea_info.flarm.status.target_id == FlarmId::Parse("DEADFF", NULL));
 
+  // PFLAU Alert Zone alarm (FTD-012 spec example): AlarmType=0x41
+  // (skydiver drop zone), hex-encoded per spec
+  ok1(parser.ParseLine("$PFLAU,2,1,2,1,1,0,41,0,0,A25703*38",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level ==
+      FlarmTraffic::AlarmType::LOW);
+  ok1(nmea_info.flarm.status.has_extended);
+  ok1(nmea_info.flarm.status.relative_bearing == 0);
+  ok1(nmea_info.flarm.status.alarm_type == 0x41);
+  ok1(nmea_info.flarm.status.relative_vertical == 0);
+  ok1(nmea_info.flarm.status.relative_distance == 0);
+  ok1(nmea_info.flarm.status.target_id == FlarmId::Parse("A25703", NULL));
+
   // PFLAU with empty bearing fields (no alarm target)
   ok1(parser.ParseLine("$PFLAU,3,1,2,1,0,,0,,*63",
                        nmea_info));
@@ -233,7 +246,7 @@ TestFLARM()
     ok1(!traffic->rssi_available);
     ok1(!traffic->no_track);
   } else {
-    skip(20, 0, "traffic == NULL");
+    skip(19, 0, "traffic == NULL");
   }
 
   ok1(parser.ParseLine("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
@@ -319,8 +332,8 @@ TestFLARM()
     skip(1, 0, "traffic == NULL");
   }
 
-  // PFLAA v8+ with NoTrack=0, Source=ADS-B, RSSI=-85
-  ok1(parser.ParseLine("$PFLAA,0,200,-300,15,2,AABB01,180,5,30,0.8,1,0,2,-85*4B",
+  // PFLAA v8+ with NoTrack=0, Source=ADS-B (1), RSSI=-85
+  ok1(parser.ParseLine("$PFLAA,0,200,-300,15,2,AABB01,180,5,30,0.8,1,0,1,-85*48",
                        nmea_info));
 
   id = FlarmId::Parse("AABB01", NULL);
@@ -334,11 +347,11 @@ TestFLARM()
     ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
     ok1(equals(traffic->track, 180));
   } else {
-    skip(8, 0, "traffic == NULL");
+    skip(7, 0, "traffic == NULL");
   }
 
-  // PFLAA v9+ with Source=Mode-S only (NoTrack=0, no RSSI)
-  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB02,90,,20,,8,0,5*78",
+  // PFLAA v9+ with Source=Mode-S (6), NoTrack=0, no RSSI
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB02,90,,20,,8,0,6*7B",
                        nmea_info));
 
   id = FlarmId::Parse("AABB02", NULL);
@@ -2844,7 +2857,7 @@ TestMalformedInput()
 
 int main()
 {
-  plan_tests(1032 /* drivers */ + 21 /* PFLAU extended */
+  plan_tests(1032 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 106 /* LXNav protocol 1.05 */

@@ -89,11 +89,13 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept
   flarm.alarm_level = (FlarmTraffic::AlarmType)
     line.Read((int)FlarmTraffic::AlarmType::NONE);
 
-  // Extended fields (6-10): present when alarm_level > 0
+  // Extended fields (6-10): parse if bearing field is present (field 6).
+  // Per FTD-012 ICD these are only emitted when alarm_level > 0, but we
+  // check field presence to be robust against empty fields either way.
   int bearing;
   if (line.ReadChecked(bearing)) {
     flarm.relative_bearing = (int16_t)bearing;
-    flarm.alarm_type = (uint8_t)line.Read(0);
+    flarm.alarm_type = (uint8_t)line.ReadHex(0);
 
     int vert;
     if (line.ReadChecked(vert))
@@ -102,7 +104,7 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept
       flarm.relative_vertical = 0;
 
     int dist;
-    if (line.ReadChecked(dist))
+    if (line.ReadChecked(dist) && dist >= 0)
       flarm.relative_distance = (uint32_t)dist;
     else
       flarm.relative_distance = 0;
@@ -220,7 +222,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
     int source_val;
     if (line.ReadChecked(source_val)) {
       switch (source_val) {
-      case 0: case 2: case 3: case 4: case 5:
+      case 0: case 1: case 3: case 4: case 6:
         traffic.source = (FlarmTraffic::SourceType)source_val;
         break;
       default:
@@ -228,7 +230,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
         break;
       }
 
-      int rssi_val;
+      double rssi_val;
       if (line.ReadChecked(rssi_val)) {
         traffic.rssi = (int8_t)rssi_val;
         traffic.rssi_available = true;
