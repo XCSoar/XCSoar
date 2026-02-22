@@ -293,16 +293,22 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   GetDataField(TerrainBrightness).SetListener(this);
   SetExpertRow(TerrainBrightness);
 
-  // JMW using enum here instead of bool so can provide more contour rendering
-  // options later
   static constexpr StaticEnumChoice contours_list[] = {
     { Contours::OFF, N_("Off"), },
-    { Contours::ON, N_("On"), },
+    { Contours::MOUNTAINS, N_("Mountains"),
+      N_("For steep mountain terrain, 256m reference"), },
+    { Contours::HIGHLANDS, N_("Highlands"),
+      N_("Medium density, with 64m reference"), },
+    { Contours::LOWLANDS, N_("Lowlands"),
+      N_("More line density for gentler slopes."), },
+    { Contours::SUPERFINE, N_("Holland"),
+      N_("Maximum density"), },
     nullptr
   };
 
   AddEnum(_("Contours"),
-          _("If enabled, draws contour lines on the terrain."),
+          _("Draw contour lines on the terrain. Contour mode "
+            "controls density of contour lines."),
           contours_list, (unsigned)terrain.contours);
   GetDataField(TerrainContours).SetListener(this);
   SetExpertRow(TerrainContours);

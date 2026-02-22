@@ -49,6 +49,7 @@ RaspRenderer::Generate(const WindowProjection &projection,
 
   raster_renderer.GenerateImage(false, height_scale,
                                 settings.contrast, settings.brightness,
-                                Angle::Zero(), false);
+                                Angle::Zero(),
+                                Contours::OFF);
   return true;
 }

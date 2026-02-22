@@ -30,6 +30,7 @@ Profile::LoadTerrainRendererSettings(const ProfileMap &map,
     settings.ramp = ramp;
 
   uint8_t contours = (uint8_t)settings.contours;
-  if (map.Get(ProfileKeys::TerrainContours, contours))
+  if (map.Get(ProfileKeys::TerrainContours, contours) &&
+      contours <= (uint8_t)Contours::SUPERFINE)
     settings.contours = (Contours)contours;
 }
