@@ -18,10 +18,12 @@
 #include "time/BrokenDate.hpp"
 #include "Language/Language.hpp"
 #include "Math/Angle.hpp"
+#include "LogFile.hpp"
 #include "util/StringAPI.hxx"
 #include "util/TruncateString.hpp"
 
 #include <cassert>
+#include <new>
 
 std::unique_ptr<WndProperty>
 RowFormWidget::CreateEdit(const char *label, const char *help,
@@ -477,7 +479,7 @@ RowFormWidget::SaveValue(unsigned i,
 
 bool
 RowFormWidget::SaveValue(unsigned i,
-                         std::string &string) const
+                         std::string &string) const noexcept
 {
   const char *new_value = GetDataField(i).GetAsString();
   assert(new_value != nullptr);
@@ -485,6 +487,12 @@ RowFormWidget::SaveValue(unsigned i,
   if (string == new_value)
     return false;
 
-  string = new_value;
+  try {
+    string = new_value;
+  } catch (const std::bad_alloc &) {
+    LogFmt("SaveValue: allocation failed storing string value");
+    return false;
+  }
+
   return true;
 }
