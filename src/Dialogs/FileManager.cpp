@@ -30,8 +30,6 @@
 #include "ui/event/Notify.hpp"
 #include "thread/Mutex.hxx"
 #include "ui/event/PeriodicTimer.hpp"
-#include "util/StringCompare.hxx"
-#include "util/StringFormat.hpp"
 
 #include <map>
 #include <set>
@@ -339,17 +337,9 @@ ManagedFileListWidget::LoadRepositoryFile()
   }
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  const std::vector<std::string> uris = GetUserRepositoryURIs();
-  int file_number = 1;
-  for (const auto &uri : uris) {
-    if (uri.empty())
-      continue;
-
-    char filename[32];
-    StringFormat(filename, std::size(filename), "user_repository_%d",
-                 file_number++);
+  for (const auto &repo : GetUserRepositories()) {
     try {
-      FileLineReaderA reader(LocalPath(filename));
+      FileLineReaderA reader(LocalPath(repo.filename.c_str()));
       ParseFileRepository(repository, reader);
     } catch (const std::runtime_error &) {
       /* not yet downloaded - ignore */
@@ -704,7 +694,7 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
     downloads.erase(name.c_str());
 
     if (name.c_str() == "repository"sv ||
-        StringStartsWith(name.c_str(), "user_repository_")) {
+        IsUserRepositoryFile(name.c_str())) {
       repository_failed = false;
       repository_modified = true;
     }
