@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Terrain/HeightMatrix.hpp"
+#include "Terrain/TerrainSettings.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
@@ -130,7 +131,7 @@ public:
   void GenerateImage(bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
                      const Angle sunazimuth,
-                     bool do_contour) noexcept;
+                     Contours contours) noexcept;
 
   const RawBitmap &GetImage() const noexcept {
     return *image;

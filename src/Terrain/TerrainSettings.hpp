@@ -14,7 +14,10 @@ enum class SlopeShading: uint8_t {
 
 enum class Contours: uint8_t {
   OFF,
-  ON
+  MOUNTAINS,
+  HIGHLANDS,
+  LOWLANDS,
+  SUPERFINE,
 };
 
 struct TerrainRendererSettings {
