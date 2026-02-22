@@ -9,12 +9,16 @@
 #include "system/Path.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
-#include "util/ScopeExit.hxx"
 #include "util/StringCompare.hxx"
-#include "util/StringAPI.hxx"
+#include "util/StringUtil.hpp"
+#include "util/AllocatedString.hxx"
 
 #ifdef USE_LIBINTL
+
+#include <cstdlib>
+#include <fmt/format.h>
 #include <locale.h>
+#include <string_view>
 #endif
 
 #ifdef ANDROID
@@ -172,6 +176,60 @@ DetectLanguage() noexcept
 
 #ifdef USE_LIBINTL
 
+static bool
+SetLanguageEnvironment(const char *locale) noexcept
+{
+  if (locale == nullptr || *locale == '\0')
+    return true;
+
+  std::string_view locale_view{locale};
+
+  if (const auto dot = locale_view.find('.'); dot != std::string_view::npos)
+    locale_view = locale_view.substr(0, dot);
+
+  char base[16]{};
+  if (locale_view.empty() || locale_view.size() > sizeof(base) - 1)
+    return false;
+
+  CopyString(base, sizeof(base), locale_view);
+
+  const auto country_separator = locale_view.find('_');
+  if (country_separator == std::string_view::npos)
+    return setenv("LANGUAGE", base, 1) == 0;
+
+  const std::string_view language_view =
+    locale_view.substr(0, country_separator);
+  char language[8]{};
+  if (language_view.empty() || language_view.size() > sizeof(language) - 1)
+    return false;
+
+  CopyString(language, sizeof(language), language_view);
+
+  char lang_override[24]{};
+  auto [end, size] = fmt::format_to_n(lang_override,
+                                      sizeof(lang_override) - 1,
+                                      "{}:{}", base, language);
+  if (size >= sizeof(lang_override))
+    return false;
+  *end = '\0';
+
+  return setenv("LANGUAGE", lang_override, 1) == 0;
+}
+
+static bool
+RestoreLanguageEnvironment() noexcept
+{
+  static const AllocatedString initial_language = []() {
+    const char *const value = getenv("LANGUAGE");
+    return value != nullptr ? AllocatedString(value) : AllocatedString::Empty();
+  }();
+
+  if (initial_language.empty())
+    return unsetenv("LANGUAGE") == 0;
+
+  return setenv("LANGUAGE", initial_language.c_str(), 1) == 0;
+}
+
 static void
 InitNativeGettext(const char *locale) noexcept
 {
@@ -180,11 +238,47 @@ InitNativeGettext(const char *locale) noexcept
   /* we want to get UTF-8 strings from gettext() */
   bind_textdomain_codeset(domain, "utf8");
 
-  setlocale(LC_ALL, locale);
+  if (locale != nullptr && *locale != '\0') {
+    if (!SetLanguageEnvironment(locale))
+      LogFmt("Language: failed to set LANGUAGE from '{}'", locale);
+  } else if (!RestoreLanguageEnvironment()) {
+    LogString("Language: failed to restore LANGUAGE");
+  }
+
+  bool locale_ok = setlocale(LC_ALL, locale) != nullptr;
+
+  if (!locale_ok && locale != nullptr && *locale != '\0') {
+    std::string_view locale_view{locale};
+    if (locale_view.ends_with(".UTF-8")) {
+      char locale_utf8[32]{};
+      const size_t prefix = locale_view.size() - 6;
+      auto [end, size] = fmt::format_to_n(locale_utf8,
+                                          sizeof(locale_utf8) - 1,
+                                          "{}.utf8",
+                                          locale_view.substr(0, prefix));
+      if (size < sizeof(locale_utf8)) {
+        *end = '\0';
+        locale_ok = setlocale(LC_ALL, locale_utf8) != nullptr;
+      }
+    }
+
+    if (!locale_ok) {
+      LogFmt("Language: failed to activate locale '{}'", locale);
+
+      if (setlocale(LC_ALL, "") != nullptr)
+        LogString("Language: using system locale fallback");
+      else
+        LogString("Language: failed to activate system locale fallback");
+    }
+  }
+
   // always use a dot as decimal point in printf/scanf()
   setlocale(LC_NUMERIC, "C");
   bindtextdomain(domain, "/usr/share/locale");
   textdomain(domain);
+
+  /* trigger gettext's locale fallback initialization eagerly */
+  [[maybe_unused]] const char *dummy = dcgettext(domain, "", LC_MESSAGES);
 
 }
 
@@ -298,8 +392,12 @@ ReadLanguageFile() noexcept
     return;
   }
 
-  if (value == Path("none"))
+  if (value == Path("none")) {
+#ifdef USE_LIBINTL
+    InitNativeGettext("C");
+#endif
     return;
+  }
 
   Path base = value.GetBase();
   if (base == nullptr)
