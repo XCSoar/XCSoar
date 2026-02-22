@@ -3,8 +3,16 @@
 
 #pragma once
 
+#include <cstddef>
+#include <span>
+
 class Path;
 class UncompressedImage;
 
+[[nodiscard]]
 UncompressedImage
 LoadJPEGFile(Path path);
+
+[[nodiscard]]
+UncompressedImage
+LoadJPEG(std::span<const std::byte> buffer);

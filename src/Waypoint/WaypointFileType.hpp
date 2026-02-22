@@ -11,6 +11,7 @@ enum class WaypointFileType: uint8_t {
   UNKNOWN,
   WINPILOT,
   SEEYOU,
+  CUPX,
   ZANDER,
   OZI_EXPLORER,
   FS,

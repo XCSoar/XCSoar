@@ -26,28 +26,9 @@ JpegErrorExit(j_common_ptr cinfo)
   throw std::runtime_error(msg);
 }
 
-UncompressedImage
-LoadJPEGFile(Path path)
+static UncompressedImage
+DecodeJPEG(struct jpeg_decompress_struct &cinfo)
 {
-  FILE *file = fopen(path.c_str(), "rb");
-  if (file == nullptr)
-    return UncompressedImage();
-
-  AtScopeExit(file) { fclose(file); };
-
-  struct jpeg_decompress_struct cinfo;
-
-  struct jpeg_error_mgr err;
-  cinfo.err = jpeg_std_error(&err);
-  err.error_exit = JpegErrorExit;
-
-  jpeg_create_decompress(&cinfo);
-
-  AtScopeExit(&cinfo) { jpeg_destroy_decompress(&cinfo); };
-
-  jpeg_stdio_src(&cinfo, file);
-  jpeg_read_header(&cinfo, (boolean)true);
-
   if (cinfo.num_components != 3)
     return UncompressedImage();
 
@@ -63,8 +44,6 @@ LoadJPEGFile(Path path)
   const size_t row_size = 3 * width;
   const size_t image_buffer_size = row_size * height;
   const size_t row_buffer_size = row_size;
-  /* allocate a buffer that holds the uncompressed image plus a row
-     buffer with packed 24 bit samples (for libjpeg) */
   std::unique_ptr<uint8_t[]> image_buffer(new uint8_t[image_buffer_size
                                                       + row_buffer_size]);
 
@@ -85,4 +64,50 @@ LoadJPEGFile(Path path)
   return UncompressedImage(UncompressedImage::Format::RGB,
                            row_size, width, height,
                            std::move(image_buffer));
+}
+
+UncompressedImage
+LoadJPEGFile(Path path)
+{
+  FILE *file = fopen(path.c_str(), "rb");
+  if (file == nullptr)
+    return UncompressedImage();
+
+  AtScopeExit(file) { fclose(file); };
+
+  struct jpeg_decompress_struct cinfo;
+
+  struct jpeg_error_mgr err;
+  cinfo.err = jpeg_std_error(&err);
+  err.error_exit = JpegErrorExit;
+
+  jpeg_create_decompress(&cinfo);
+  AtScopeExit(&cinfo) { jpeg_destroy_decompress(&cinfo); };
+
+  jpeg_stdio_src(&cinfo, file);
+  jpeg_read_header(&cinfo, (boolean)true);
+
+  return DecodeJPEG(cinfo);
+}
+
+UncompressedImage
+LoadJPEG(std::span<const std::byte> buffer)
+{
+  assert(buffer.data() != nullptr);
+
+  struct jpeg_decompress_struct cinfo;
+
+  struct jpeg_error_mgr err;
+  cinfo.err = jpeg_std_error(&err);
+  err.error_exit = JpegErrorExit;
+
+  jpeg_create_decompress(&cinfo);
+  AtScopeExit(&cinfo) { jpeg_destroy_decompress(&cinfo); };
+
+  jpeg_mem_src(&cinfo,
+               reinterpret_cast<const unsigned char *>(buffer.data()),
+               buffer.size());
+  jpeg_read_header(&cinfo, (boolean)true);
+
+  return DecodeJPEG(cinfo);
 }

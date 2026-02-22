@@ -92,6 +92,28 @@ LoadJPEGFile(Path path) noexcept
 }
 
 UncompressedImage
+LoadJPEG(std::span<const std::byte> raw)
+{
+  assert(raw.data() != nullptr);
+
+  CGDataProviderRef data_provider = CGDataProviderCreateWithData(
+      nullptr, raw.data(), raw.size(), nullptr);
+  if (nullptr == data_provider)
+    return {};
+
+  CGImageRef image = CGImageCreateWithJPEGDataProvider(
+      data_provider, nullptr, false, kCGRenderingIntentDefault);
+
+  UncompressedImage result = CGImageToUncompressedImage(image);
+
+  if (nullptr != image)
+    CFRelease(image);
+  CFRelease(data_provider);
+
+  return result;
+}
+
+UncompressedImage
 LoadPNG(std::span<const std::byte> raw)
 {
   assert(raw.data() != nullptr);

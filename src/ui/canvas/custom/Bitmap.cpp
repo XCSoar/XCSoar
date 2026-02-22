@@ -23,10 +23,22 @@ Bitmap::Bitmap(std::span<const std::byte> _buffer)
   Load(_buffer);
 }
 
+[[gnu::pure]]
+static bool
+IsJPEG(std::span<const std::byte> buffer) noexcept
+{
+  return buffer.size() >= 3 &&
+    buffer[0] == std::byte{0xFF} &&
+    buffer[1] == std::byte{0xD8} &&
+    buffer[2] == std::byte{0xFF};
+}
+
 bool
 Bitmap::Load(std::span<const std::byte> buffer, Type type)
 {
-  auto uncompressed = LoadPNG(buffer);
+  auto uncompressed = IsJPEG(buffer)
+    ? LoadJPEG(buffer)
+    : LoadPNG(buffer);
   return uncompressed.IsDefined() && Load(std::move(uncompressed), type);
 }
 
