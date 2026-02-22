@@ -23,8 +23,6 @@
 #include "ui/event/Notify.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
-#include "util/StringCompare.hxx"
-#include "util/StringFormat.hpp"
 
 #include <vector>
 
@@ -158,17 +156,9 @@ DownloadFilePickerWidget::RefreshList()
   }
 
   // add user repository contents
-  const std::vector<std::string> uris = GetUserRepositoryURIs();
-  int file_number = 1;
-  for (const auto &uri : uris) {
-    if (uri.empty())
-      continue;
-
-    char filename[32];
-    StringFormat(filename, std::size(filename), "user_repository_%d",
-                 file_number++);
+  for (const auto &repo : GetUserRepositories()) {
     try {
-      FileLineReaderA reader(LocalPath(filename));
+      FileLineReaderA reader(LocalPath(repo.filename.c_str()));
       ParseFileRepository(repository, reader);
     } catch (const std::runtime_error &) {
       /* not yet downloaded - ignore */
@@ -238,7 +228,7 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
     return;
 
   const bool is_main = name == Path("repository");
-  const bool is_user = StringStartsWith(name.c_str(), "user_repository_");
+  const bool is_user = IsUserRepositoryFile(name.c_str());
 
   if (is_main || is_user) {
     const std::lock_guard lock{mutex};

@@ -7,6 +7,7 @@
 #include "system/Path.hpp"
 
 #include "util/StringFormat.hpp"
+#include "util/StringCompare.hxx"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "util/IterableSplitString.hxx"
@@ -23,20 +24,29 @@
 
 static bool repository_downloaded = false;
 
-std::vector<std::string> GetUserRepositoryURIs()
+std::vector<RepositoryLink>
+GetUserRepositories()
 {
-  std::vector<std::string> uris;
+  std::vector<RepositoryLink> result;
 
   const char *src = Profile::Get(ProfileKeys::UserRepositoriesList);
-  if (src == nullptr) return uris;
-  if (*src == '\0') return uris;
+  if (src == nullptr || *src == '\0') return result;
 
+  int index = 1;
   for (auto i : TIterableSplitString(src, '|')) {
     if (i.empty()) continue;
-    uris.emplace_back(i.data(), i.size());
+    char filename[32];
+    StringFormat(filename, std::size(filename), "user_repository_%d", index++);
+    result.push_back({std::string{i}, std::string{filename}});
   }
 
-  return uris;
+  return result;
+}
+
+bool
+IsUserRepositoryFile(std::string_view name) noexcept
+{
+  return StringStartsWith(name.data(), "user_repository_");
 }
 
 void
@@ -51,16 +61,8 @@ EnqueueRepositoryDownload(bool force, bool main_repo, bool user_repo)
 
   // Enqueue additional user-defined repository URIs, if set
   if (user_repo) {
-    char filename[32];
-    std::vector<std::string> uris = GetUserRepositoryURIs();
-    int user_repository_index = 1;
-    for (const auto &uri : uris) {
-      if (uri.empty())
-        continue;
-      StringFormat(filename, std::size(filename), "user_repository_%d",
-                   user_repository_index++);
-      Net::DownloadManager::Enqueue(uri.c_str(), Path(filename));
-    }
+    for (const auto &repo : GetUserRepositories())
+      Net::DownloadManager::Enqueue(repo.uri.c_str(), Path(repo.filename.c_str()));
   }
 }
 
@@ -81,16 +83,10 @@ DownloadRepositoriesModal(bool main_repo, bool user_repo)
   }
 
   if (user_repo) {
-    const std::vector<std::string> uris = GetUserRepositoryURIs();
-    char filename[32];
-    int user_repository_index = 1;
-    for (const auto &uri : uris) {
-      if (uri.empty())
-        continue;
-      StringFormat(filename, std::size(filename), "user_repository_%d",
-                   user_repository_index++);
+    for (const auto &repo : GetUserRepositories()) {
       try {
-        if (DownloadFileModal(_("Updating repository"), uri.c_str(), filename) == nullptr)
+        if (DownloadFileModal(_("Updating repository"),
+                              repo.uri.c_str(), repo.filename.c_str()) == nullptr)
           return; /* cancelled */
       } catch (...) {
         ShowError(std::current_exception(), _("Updating repository"));

@@ -5,13 +5,25 @@
 
 #include "net/http/Features.hpp"
 
-#include <vector>
 #include <string>
+#include <string_view>
+#include <vector>
+
+struct RepositoryLink {
+  std::string uri;
+  std::string filename;
+};
 
 /**
- * Get list of URIs of user repositories
+ * Get list of user repositories with their local filenames.
  */
-std::vector<std::string> GetUserRepositoryURIs();
+std::vector<RepositoryLink> GetUserRepositories();
+
+/**
+ * Returns true if the given filename is a user repository file
+ * (i.e. matches the "user_repository_*" pattern).
+ */
+[[gnu::pure]] bool IsUserRepositoryFile(std::string_view name) noexcept;
 
 /**
  * Download the repository file.
