@@ -12,12 +12,9 @@
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Language/Language.hpp"
-#include "LocalPath.hpp"
 #include "system/Path.hpp"
-#include "io/FileLineReader.hpp"
-#include "Repository/Glue.hpp"
 #include "Repository/FileRepository.hpp"
-#include "Repository/Parser.hpp"
+#include "Repository/Glue.hpp"
 #include "net/http/Features.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "ui/event/Notify.hpp"
@@ -147,23 +144,7 @@ DownloadFilePickerWidget::RefreshList()
   }
 
   FileRepository repository;
-
-  try {
-    FileLineReaderA reader(LocalPath("repository"));
-    ParseFileRepository(repository, reader);
-  } catch (const std::runtime_error &) {
-    /* not yet downloaded - ignore */
-  }
-
-  // add user repository contents
-  for (const auto &repo : GetUserRepositories()) {
-    try {
-      FileLineReaderA reader(LocalPath(repo.filename.c_str()));
-      ParseFileRepository(repository, reader);
-    } catch (const std::runtime_error &) {
-      /* not yet downloaded - ignore */
-    }
-  }
+  LoadAllRepositories(repository);
 
   items.clear();
   for (auto &i : repository)

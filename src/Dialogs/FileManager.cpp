@@ -13,14 +13,12 @@
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
-#include "io/FileLineReader.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "net/http/Features.hpp"
 #include "util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
-#include "Repository/Parser.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Repository/Glue.hpp"
@@ -328,24 +326,7 @@ ManagedFileListWidget::LoadRepositoryFile()
 #endif
 
   repository.Clear();
-
-  try {
-    FileLineReaderA reader(LocalPath("repository"));
-    ParseFileRepository(repository, reader);
-  } catch (const std::runtime_error &) {
-    /* not yet downloaded - ignore */
-  }
-
-#ifdef HAVE_DOWNLOAD_MANAGER
-  for (const auto &repo : GetUserRepositories()) {
-    try {
-      FileLineReaderA reader(LocalPath(repo.filename.c_str()));
-      ParseFileRepository(repository, reader);
-    } catch (const std::runtime_error &) {
-      /* not yet downloaded - ignore */
-    }
-  }
-#endif
+  LoadAllRepositories(repository);
 }
 
 void

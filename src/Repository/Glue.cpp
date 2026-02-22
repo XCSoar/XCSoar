@@ -2,9 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "Glue.hpp"
+#include "Parser.hpp"
 #include "net/http/Features.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "system/Path.hpp"
+#include "io/FileLineReader.hpp"
+#include "LocalPath.hpp"
+
 #include "util/StringFormat.hpp"
 #include "util/StringCompare.hxx"
 #include "Profile/Keys.hpp"
@@ -52,6 +56,26 @@ IsUserRepositoryFile(std::string_view name) noexcept
   return name.size() >= USER_REPOSITORY_FILE_PREFIX.size() &&
          StringIsEqual(name.data(), USER_REPOSITORY_FILE_PREFIX.data(),
                        USER_REPOSITORY_FILE_PREFIX.size());
+}
+
+void
+LoadAllRepositories(FileRepository &repository)
+{
+  try {
+    FileLineReaderA reader(LocalPath("repository"));
+    ParseFileRepository(repository, reader);
+  } catch (const std::runtime_error &) {
+    /* not yet downloaded - ignore */
+  }
+
+  for (const auto &repo : GetUserRepositories()) {
+    try {
+      FileLineReaderA reader(LocalPath(repo.filename.c_str()));
+      ParseFileRepository(repository, reader);
+    } catch (const std::runtime_error &) {
+      /* not yet downloaded - ignore */
+    }
+  }
 }
 
 void
