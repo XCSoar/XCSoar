@@ -25,6 +25,11 @@
 #include "Device/Port/AndroidIOIOUartPort.hpp"
 #endif
 
+#ifdef __APPLE__
+#include "Apple/Services.hpp"
+#include "Apple/BluetoothHelper.hpp"
+#endif
+
 static constexpr struct {
   DeviceConfig::PortType type;
   const char *label;
@@ -210,6 +215,9 @@ SetBluetoothPort(DataFieldEnum &df, DeviceConfig::PortType type,
     if (bluetooth_helper != nullptr)
       name = bluetooth_helper->GetNameFromAddress(Java::GetEnv(),
                                                   bluetooth_mac);
+#elif defined(__APPLE__)
+    if (bluetooth_helper != nullptr)
+      name = bluetooth_helper->GetNameFromAddress(bluetooth_mac);
 #endif
     df.SetValue(AddPort(df, type, bluetooth_mac, name));
   }

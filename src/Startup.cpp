@@ -29,6 +29,7 @@
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "UtilsSystem.hpp"
+
 #include "FLARM/Glue.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
@@ -399,6 +400,9 @@ Startup(UI::Display &display)
 #ifdef ANDROID
     *context, permission_manager,
     bluetooth_helper, ioio_helper, usb_serial_helper,
+#endif
+#ifdef __APPLE__
+    bluetooth_helper,
 #endif
   };
 

@@ -134,7 +134,7 @@ struct DeviceConfig {
   /**
    * The Bluetooth MAC address of the peer.
    */
-  StaticString<32> bluetooth_mac;
+  StaticString<64> bluetooth_mac;
 
   /**
    * The IOIO UART ID.

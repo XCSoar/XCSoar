@@ -555,6 +555,14 @@ endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += \
+	$(SRC)/Device/AndroidSensors.cpp \
+	$(SRC)/Device/Port/AppleBluetoothPort.cpp \
+	$(SRC)/Device/Port/ApplePort.cpp \
+	$(SRC)/Apple/BluetoothHelper.mm \
+	$(SRC)/Apple/NativeDetectDeviceListener.mm \
+	$(SRC)/Apple/NativePortListener.cpp \
+	$(SRC)/Apple/NativeInputListener.cpp \
+	$(SRC)/Apple/PortBridge.cpp \
 	$(SRC)/Apple/Services.cpp \
 	$(SRC)/Apple/SoundUtil.cpp \
 	$(SRC)/Apple/PathProvider.cpp \
