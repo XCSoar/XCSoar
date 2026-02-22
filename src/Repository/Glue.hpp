@@ -9,6 +9,8 @@
 #include <string_view>
 #include <vector>
 
+struct FileRepository;
+
 struct RepositoryLink {
   std::string uri;
   std::string filename;
@@ -24,6 +26,12 @@ std::vector<RepositoryLink> GetUserRepositories();
  * (i.e. matches the "user_repository_*" pattern).
  */
 [[gnu::pure]] bool IsUserRepositoryFile(std::string_view name) noexcept;
+
+/**
+ * Load the main repository file and all user repository files into
+ * @a repository.  Files not yet downloaded are silently skipped.
+ */
+void LoadAllRepositories(FileRepository &repository);
 
 /**
  * Download the repository file.
