@@ -13,6 +13,11 @@ namespace SDL {
 
 Display::Display()
 {
+#ifdef _WIN32
+  SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS,
+              "permonitorv2");
+#endif
+
   Uint32 flags = SDL_INIT_VIDEO;
   if (!IsKobo())
     flags |= SDL_INIT_AUDIO;
