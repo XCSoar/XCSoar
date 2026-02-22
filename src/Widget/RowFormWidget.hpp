@@ -673,7 +673,7 @@ public:
 
   bool SaveValue(unsigned i, RoughTime &value_r) const noexcept;
   bool SaveValue(unsigned i, char *string, size_t max_size) const noexcept;
-  bool SaveValue(unsigned i, std::string &string) const;
+  bool SaveValue(unsigned i, std::string &string) const noexcept;
 
   template<size_t max>
   bool SaveValue(unsigned i, BasicStringBuffer<char, max> &value) const noexcept {
