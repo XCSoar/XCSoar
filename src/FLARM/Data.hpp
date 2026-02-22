@@ -6,6 +6,8 @@
 #include "FLARM/Error.hpp"
 #include "FLARM/Version.hpp"
 #include "FLARM/Hardware.hpp"
+#include "FLARM/State.hpp"
+#include "FLARM/Progress.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
 
@@ -21,6 +23,10 @@ struct FlarmData {
 
   FlarmHardware hardware;
 
+  FlarmState state;
+
+  FlarmProgress progress;
+
   FlarmStatus status;
 
   TrafficList traffic;
@@ -33,6 +39,8 @@ struct FlarmData {
     error.Clear();
     version.Clear();
     hardware.Clear();
+    state.Clear();
+    progress.Clear();
     status.Clear();
     traffic.Clear();
   }
@@ -41,6 +49,8 @@ struct FlarmData {
     error.Complement(add.error);
     version.Complement(add.version);
     hardware.Complement(add.hardware);
+    state.Complement(add.state);
+    progress.Complement(add.progress);
     status.Complement(add.status);
     traffic.Complement(add.traffic);
   }
@@ -49,6 +59,8 @@ struct FlarmData {
     error.Expire(clock);
     version.Expire(clock);
     hardware.Expire(clock);
+    state.Expire(clock);
+    progress.Expire(clock);
     status.Expire(clock);
     traffic.Expire(clock);
   }

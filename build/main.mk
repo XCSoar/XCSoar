@@ -384,6 +384,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Blackboard/DeviceBlackboard.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/UIReceiveBlackboard.cpp \
+	$(SRC)/FlarmProgressOverlay.cpp \
 	$(SRC)/UIGlobals.cpp \
 	$(SRC)/UIState.cpp \
 	$(SRC)/UISettings.cpp \

@@ -40,6 +40,9 @@
 #include "Device/Driver/Zander.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "FLARM/Error.hpp"
+#include "FLARM/Progress.hpp"
+#include "FLARM/State.hpp"
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/MessagingRecord.hpp"
@@ -169,6 +172,37 @@ TestFLARM()
   ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::NONE);
   ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 0);
   ok1(!nmea_info.flarm.traffic.new_traffic);
+  ok1(!nmea_info.flarm.status.has_extended);
+
+  // PFLAU with all 10 fields: alarm=2, bearing=45, type=3, vert=-200,
+  // dist=1500, ID=DDA85C
+  ok1(parser.ParseLine("$PFLAU,5,1,2,1,2,45,3,-200,1500,DDA85C*5D",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.rx == 5);
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
+  ok1(nmea_info.flarm.status.has_extended);
+  ok1(nmea_info.flarm.status.relative_bearing == 45);
+  ok1(nmea_info.flarm.status.alarm_type == 3);
+  ok1(nmea_info.flarm.status.relative_vertical == -200);
+  ok1(nmea_info.flarm.status.relative_distance == 1500);
+  ok1(nmea_info.flarm.status.target_id == FlarmId::Parse("DDA85C", NULL));
+
+  // PFLAU alarm=3 with negative bearing
+  ok1(parser.ParseLine("$PFLAU,8,1,2,1,3,-30,2,150,800,DEADFF*63",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::URGENT);
+  ok1(nmea_info.flarm.status.has_extended);
+  ok1(nmea_info.flarm.status.relative_bearing == -30);
+  ok1(nmea_info.flarm.status.alarm_type == 2);
+  ok1(nmea_info.flarm.status.relative_vertical == 150);
+  ok1(nmea_info.flarm.status.relative_distance == 800);
+  ok1(nmea_info.flarm.status.target_id == FlarmId::Parse("DEADFF", NULL));
+
+  // PFLAU with empty bearing fields (no alarm target)
+  ok1(parser.ParseLine("$PFLAU,3,1,2,1,0,,0,,*63",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::NONE);
+  ok1(!nmea_info.flarm.status.has_extended);
 
   ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
                                       nmea_info));
@@ -194,11 +228,12 @@ TestFLARM()
     ok1(traffic->climb_rate_received);
     ok1(traffic->type == FlarmTraffic::AircraftType::TOW_PLANE);
     ok1(!traffic->stealth);
+    ok1(traffic->id_type == FlarmTraffic::IdType::FLARM);
     ok1(traffic->source == FlarmTraffic::SourceType::FLARM);
     ok1(!traffic->rssi_available);
     ok1(!traffic->no_track);
   } else {
-    skip(19, 0, "traffic == NULL");
+    skip(20, 0, "traffic == NULL");
   }
 
   ok1(parser.ParseLine("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
@@ -248,13 +283,50 @@ TestFLARM()
     skip(15, 0, "traffic == NULL");
   }
 
-  // PFLAA v7+ with source=ADS-B, RSSI=-85, NoTrack=0
-  ok1(parser.ParseLine("$PFLAA,0,200,-300,15,2,AABB01,180,5,30,0.8,1,2,-85,0*4B",
+  // PFLAA with IDType=0 (random ID)
+  ok1(parser.ParseLine("$PFLAA,0,300,400,20,0,ABC123,90,,20,,8*30",
+                       nmea_info));
+
+  id = FlarmId::Parse("ABC123", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::RANDOM);
+  } else {
+    skip(1, 0, "traffic == NULL");
+  }
+
+  // PFLAA with IDType=1 (ICAO address)
+  ok1(parser.ParseLine("$PFLAA,0,300,400,20,1,4CA123,90,,20,,8*47",
+                       nmea_info));
+
+  id = FlarmId::Parse("4CA123", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::ICAO);
+  } else {
+    skip(1, 0, "traffic == NULL");
+  }
+
+  // PFLAA with empty IDType (Mode-C, unknown)
+  ok1(parser.ParseLine("$PFLAA,0,300,400,20,,MODEC1,90,,20,,8*01",
+                       nmea_info));
+
+  id = FlarmId::Parse("MODEC1", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::UNKNOWN);
+  } else {
+    skip(1, 0, "traffic == NULL");
+  }
+
+  // PFLAA v8+ with NoTrack=0, Source=ADS-B, RSSI=-85
+  ok1(parser.ParseLine("$PFLAA,0,200,-300,15,2,AABB01,180,5,30,0.8,1,0,2,-85*4B",
                        nmea_info));
 
   id = FlarmId::Parse("AABB01", NULL);
   traffic = nmea_info.flarm.traffic.FindTraffic(id);
   if (ok1(traffic != NULL)) {
+    ok1(traffic->id_type == FlarmTraffic::IdType::FLARM);
     ok1(traffic->source == FlarmTraffic::SourceType::ADSB);
     ok1(traffic->rssi_available);
     ok1(traffic->rssi == -85);
@@ -262,11 +334,11 @@ TestFLARM()
     ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
     ok1(equals(traffic->track, 180));
   } else {
-    skip(7, 0, "traffic == NULL");
+    skip(8, 0, "traffic == NULL");
   }
 
-  // PFLAA v7+ with source=Mode-S only (no RSSI, no NoTrack)
-  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB02,90,,20,,8,5*64",
+  // PFLAA v9+ with Source=Mode-S only (NoTrack=0, no RSSI)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB02,90,,20,,8,0,5*78",
                        nmea_info));
 
   id = FlarmId::Parse("AABB02", NULL);
@@ -280,8 +352,8 @@ TestFLARM()
     skip(4, 0, "traffic == NULL");
   }
 
-  // PFLAA stealth with NoTrack=1
-  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB03,,,,,1,0,,1*53",
+  // PFLAA stealth with NoTrack=1 (no Source/RSSI)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB03,,,,,1,1*63",
                        nmea_info));
 
   id = FlarmId::Parse("AABB03", NULL);
@@ -295,8 +367,8 @@ TestFLARM()
     skip(4, 0, "traffic == NULL");
   }
 
-  // PFLAA v7+ with out-of-range source (9 -> defaults to FLARM)
-  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB04,90,,20,,8,9*6E",
+  // PFLAA v8+ with NoTrack=0, out-of-range source (9 -> defaults to FLARM)
+  ok1(parser.ParseLine("$PFLAA,0,50,80,5,2,AABB04,90,,20,,8,0,9*72",
                        nmea_info));
 
   id = FlarmId::Parse("AABB04", NULL);
@@ -306,6 +378,64 @@ TestFLARM()
   } else {
     skip(1, 0, "traffic == NULL");
   }
+
+  // PFLAE without message (pre-v7 style)
+  ok1(parser.ParseLine("$PFLAE,A,0,0*33", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::NO_ERROR);
+  ok1(nmea_info.flarm.error.code == (FlarmError::Code)0);
+  ok1(nmea_info.flarm.error.message.empty());
+
+  // PFLAE without message, severity > 0
+  ok1(parser.ParseLine("$PFLAE,A,2,81*08", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::REDUCED_FUNCTIONALITY);
+  ok1(nmea_info.flarm.error.code == FlarmError::OBSTACLE_DATABASE);
+  ok1(nmea_info.flarm.error.message.empty());
+
+  // PFLAE with device message (v7+)
+  ok1(parser.ParseLine("$PFLAE,A,3,11,Software expiry*2C", nmea_info));
+  ok1(nmea_info.flarm.error.severity == FlarmError::FATAL_PROBLEM);
+  ok1(nmea_info.flarm.error.code == FlarmError::FIRMWARE_TIMEOUT);
+  ok1(nmea_info.flarm.error.message.equals("Software expiry"));
+
+  // PFLAJ: in flight, recording, TIS-B unavailable
+  ok1(parser.ParseLine("$PFLAJ,A,1,1,0*20", nmea_info));
+  ok1(nmea_info.flarm.state.available);
+  ok1(nmea_info.flarm.state.flight == FlarmState::Flight::IN_FLIGHT);
+  ok1(nmea_info.flarm.state.recorder == FlarmState::Recorder::RECORDING);
+
+  // PFLAJ: on ground, recorder off (no TIS-B field)
+  ok1(parser.ParseLine("$PFLAJ,A,0,0*3C", nmea_info));
+  ok1(nmea_info.flarm.state.flight == FlarmState::Flight::ON_GROUND);
+  ok1(nmea_info.flarm.state.recorder == FlarmState::Recorder::OFF);
+
+  // PFLAJ: in flight, baro-only recording
+  ok1(parser.ParseLine("$PFLAJ,A,1,2*3F", nmea_info));
+  ok1(nmea_info.flarm.state.flight == FlarmState::Flight::IN_FLIGHT);
+  ok1(nmea_info.flarm.state.recorder == FlarmState::Recorder::BARO_ONLY);
+
+  // PFLAQ: PowerFLARM with Info field
+  ok1(parser.ParseLine("$PFLAQ,IGC,2A8GJ7K1.IGC,55*43", nmea_info));
+  ok1(nmea_info.flarm.progress.available);
+  ok1(nmea_info.flarm.progress.operation.equals("IGC"));
+  ok1(nmea_info.flarm.progress.info.equals("2A8GJ7K1.IGC"));
+  ok1(nmea_info.flarm.progress.progress == 55);
+
+  // PFLAQ: PowerFLARM with empty Info field
+  ok1(parser.ParseLine("$PFLAQ,OBST,,10*6D", nmea_info));
+  ok1(nmea_info.flarm.progress.operation.equals("OBST"));
+  ok1(nmea_info.flarm.progress.info.empty());
+  ok1(nmea_info.flarm.progress.progress == 10);
+
+  // PFLAQ: Classic FLARM (no Info field at all)
+  ok1(parser.ParseLine("$PFLAQ,IGC,25*00", nmea_info));
+  ok1(nmea_info.flarm.progress.operation.equals("IGC"));
+  ok1(nmea_info.flarm.progress.info.empty());
+  ok1(nmea_info.flarm.progress.progress == 25);
+
+  // PFLAQ: firmware update complete
+  ok1(parser.ParseLine("$PFLAQ,FW,,100*46", nmea_info));
+  ok1(nmea_info.flarm.progress.operation.equals("FW"));
+  ok1(nmea_info.flarm.progress.progress == 100);
 
   // Ensure a database instance exists before PFLAM messages are parsed
   if (traffic_databases == nullptr)
@@ -2714,7 +2844,9 @@ TestMalformedInput()
 
 int main()
 {
-  plan_tests(1032 /* drivers */ + 26 /* PFLAA v7+ */
+  plan_tests(1032 /* drivers */ + 21 /* PFLAU extended */
+             + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
+             + 16 /* PFLAQ */
              + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
