@@ -34,8 +34,8 @@ UdevContext::operator=(const UdevContext &other) noexcept
 {
   if (this != &other) {
     const std::lock_guard lock{udev_context_mutex};
-    struct udev *new_ud = (nullptr == other.ud) ? udev_ref(other.ud) : nullptr;
-    assert(nullptr == other.ud || nullptr != new_ud);
+    struct udev *new_ud = other.ud ? udev_ref(other.ud) : nullptr;
+    assert(!other.ud || new_ud);
     if (ud != nullptr)
       udev_unref(ud);
     ud = new_ud;
