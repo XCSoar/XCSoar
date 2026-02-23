@@ -40,6 +40,7 @@
 #include "Device/Driver/Zander.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "FLARM/AlertZone.hpp"
 #include "FLARM/Error.hpp"
 #include "FLARM/Progress.hpp"
 #include "FLARM/State.hpp"
@@ -449,6 +450,57 @@ TestFLARM()
   ok1(parser.ParseLine("$PFLAQ,FW,,100*46", nmea_info));
   ok1(nmea_info.flarm.progress.operation.equals("FW"));
   ok1(nmea_info.flarm.progress.progress == 100);
+
+  // PFLAO: Alert Zone (spec example - skydiver drop zone, inside, alarm)
+  ok1(parser.ParseLine("$PFLAO,1,1,471122335,85577812,2000,100,4550,1432832400,DF4738,2,41*4E",
+                        nmea_info));
+  ok1(nmea_info.flarm.alert_zones.modified);
+  ok1(nmea_info.flarm.alert_zones.list.size() == 1);
+  {
+    const auto *zone = nmea_info.flarm.alert_zones.list.begin();
+    ok1(zone->alarm_level == FlarmTraffic::AlarmType::LOW);
+    ok1(zone->inside == true);
+    ok1(equals(zone->center.latitude, 47.1122335));
+    ok1(equals(zone->center.longitude, 8.5577812));
+    ok1(zone->radius == 2000);
+    ok1(zone->bottom == 100);
+    ok1(zone->top == 4550);
+    ok1(zone->activity_limit == 1432832400);
+    ok1(zone->id_type == FlarmTraffic::IdType::FLARM);
+    ok1(zone->zone_type == 0x41);
+  }
+
+  // PFLAO: second zone (ATZ, outside, no alarm)
+  ok1(parser.ParseLine("$PFLAO,0,0,470000000,86000000,1500,200,3000,0,A25703,1,42*05",
+                        nmea_info));
+  ok1(nmea_info.flarm.alert_zones.list.size() == 2);
+  {
+    const auto *zone = nmea_info.flarm.alert_zones.FindZone(
+        FlarmId::Parse("A25703", nullptr));
+    ok1(zone != nullptr);
+    ok1(zone->alarm_level == FlarmTraffic::AlarmType::NONE);
+    ok1(zone->inside == false);
+    ok1(equals(zone->center.latitude, 47.0));
+    ok1(equals(zone->center.longitude, 8.6));
+    ok1(zone->radius == 1500);
+    ok1(zone->bottom == 200);
+    ok1(zone->top == 3000);
+    ok1(zone->activity_limit == 0);
+    ok1(zone->id_type == FlarmTraffic::IdType::ICAO);
+    ok1(zone->zone_type == 0x42);
+  }
+
+  // PFLAO: update to first zone (same ID, alarm cleared, still inside)
+  ok1(parser.ParseLine("$PFLAO,0,1,471122335,85577812,2000,100,4550,1432832400,DF4738,2,41*4F",
+                        nmea_info));
+  ok1(nmea_info.flarm.alert_zones.list.size() == 2);
+  {
+    const auto *zone = nmea_info.flarm.alert_zones.FindZone(
+        FlarmId::Parse("DF4738", nullptr));
+    ok1(zone != nullptr);
+    ok1(zone->alarm_level == FlarmTraffic::AlarmType::NONE);
+    ok1(zone->inside == true);
+  }
 
   // Ensure a database instance exists before PFLAM messages are parsed
   if (traffic_databases == nullptr)
@@ -2859,7 +2911,7 @@ int main()
 {
   plan_tests(1032 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
-             + 16 /* PFLAQ */
+             + 16 /* PFLAQ */ + 31 /* PFLAO */
              + 106 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */

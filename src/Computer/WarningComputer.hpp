@@ -5,10 +5,15 @@
 
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/Ptr.hpp"
+#include "FLARM/Id.hpp"
 #include "time/DeltaTime.hpp"
+
+#include <map>
 
 class Airspaces;
 struct ComputerSettings;
+struct FlarmData;
 struct MoreData;
 struct DerivedInfo;
 struct AirspaceWarningsInfo;
@@ -25,6 +30,13 @@ class WarningComputer {
   ProtectedAirspaceWarningManager protected_manager;
 
   bool initialised;
+
+  /**
+   * Cached AirspaceCircle objects for FLARM alert zones, keyed by
+   * FlarmId.  Reusing the same shared_ptr across ticks preserves
+   * warning acknowledgement state.
+   */
+  std::map<FlarmId, AirspacePtr> flarm_zone_airspaces;
 
 public:
   WarningComputer(const AirspaceWarningConfig &_config,
@@ -47,4 +59,8 @@ public:
               const MoreData &basic,
               const DerivedInfo &calculated,
               AirspaceWarningsInfo &result);
+
+private:
+  void UpdateFlarmZones(const FlarmData &flarm,
+                        AirspaceWarningManager &mgr) noexcept;
 };
