@@ -123,7 +123,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
   }
   if (!has_empty_mass)
     plane.empty_mass = plane.polar_shape.reference_mass;
-  if (!has_handicap)
+  if (!has_handicap || plane.handicap == 0)
     plane.handicap = 100;
   if (!has_max_ballast)
     plane.max_ballast = 0;
