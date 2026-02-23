@@ -5,6 +5,9 @@
 
 #include "AirspaceLabelList.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
+#include "Engine/Airspace/Ptr.hpp"
+
+#include <span>
 
 struct AirspaceLook;
 struct MoreData;
@@ -56,7 +59,8 @@ private:
   void DrawInternal(Canvas &canvas,
                     const WindowProjection &projection,
                     AirspacePredicate visible,
-                    const AirspaceWarningConfig &config) noexcept;
+                    const AirspaceWarningConfig &config,
+                    std::span<const ConstAirspacePtr> external_airspaces) noexcept;
 
   void DrawLabel(Canvas &canvas, const WindowProjection &projection,
                  const AirspaceLabelList::Label &label) noexcept;

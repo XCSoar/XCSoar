@@ -263,6 +263,11 @@ public:
     external_airspaces.assign(airspaces.begin(), airspaces.end());
   }
 
+  [[gnu::pure]]
+  std::span<const ConstAirspacePtr> GetExternalAirspaces() const noexcept {
+    return external_airspaces;
+  }
+
 private:
   bool UpdateTask(const AircraftState &state, const GlidePolar &glide_polar,
                   const TaskStats &task_stats);

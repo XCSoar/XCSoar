@@ -297,25 +297,39 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
                                const AirspaceWarningCopy &awc,
                                const AirspacePredicate &visible)
 {
-  const auto range =
-    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                projection.GetScreenDistanceMeters());
-
   if (settings.fill_mode == AirspaceRendererSettings::FillMode::ALL ||
       settings.fill_mode == AirspaceRendererSettings::FillMode::NONE) {
     AirspaceFillRenderer renderer(canvas, projection, look, awc, settings);
-    for (const auto &i : range) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        renderer.Visit(airspace);
+
+    if (airspaces != nullptr) {
+      for (const auto &i :
+             airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                         projection.GetScreenDistanceMeters())) {
+        const AbstractAirspace &airspace = i.GetAirspace();
+        if (visible(airspace))
+          renderer.Visit(airspace);
+      }
     }
+
+    for (const auto &ea : awc.GetExternalAirspaces())
+      if (visible(*ea))
+        renderer.Visit(*ea);
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings);
-    for (const auto &i : range) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        renderer.Visit(airspace);
+
+    if (airspaces != nullptr) {
+      for (const auto &i :
+             airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                         projection.GetScreenDistanceMeters())) {
+        const AbstractAirspace &airspace = i.GetAirspace();
+        if (visible(airspace))
+          renderer.Visit(airspace);
+      }
     }
+
+    for (const auto &ea : awc.GetExternalAirspaces())
+      if (visible(*ea))
+        renderer.Visit(*ea);
   }
 }
 
