@@ -10,9 +10,11 @@
 #include "util/Serial.hpp"
 
 #include <list>
+#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_set>
+#include <vector>
 
 class TaskStats;
 class GlidePolar;
@@ -70,6 +72,13 @@ class AirspaceWarningManager {
    */
   std::unordered_set<std::string, TransparentStringHash,
                      TransparentStringEqual> notam_day_ack_by_station;
+
+  /**
+   * Airspaces provided externally (e.g. FLARM alert zones) that are
+   * not in the main Airspaces R-tree but should be checked by the
+   * same detection passes.
+   */
+  std::vector<ConstAirspacePtr> external_airspaces;
 
   /**
    * This number is incremented each time this object is modified.
@@ -272,6 +281,15 @@ public:
    */
   [[gnu::pure]]
   bool IsActive(const AbstractAirspace &airspace) const noexcept;
+
+  /**
+   * Set externally-provided airspaces (e.g. from FLARM PFLAO).
+   * These are checked by the same detection passes as normal
+   * airspaces during the next Update() cycle.
+   */
+  void SetExternalAirspaces(std::span<const ConstAirspacePtr> airspaces) {
+    external_airspaces.assign(airspaces.begin(), airspaces.end());
+  }
 
 private:
   AirspaceWarning *FindWarningByNotamDayAckKey(std::string_view key) noexcept;

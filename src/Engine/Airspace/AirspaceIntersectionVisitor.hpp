@@ -30,7 +30,7 @@ public:
    *
    * @return True if more than one intersection pair
    */
-  bool SetIntersections(AirspaceIntersectionVector &&p) {
+  bool SetIntersections(AirspaceIntersectionVector &&p) noexcept {
     intersections = std::move(p);
     return !intersections.empty();
   }
