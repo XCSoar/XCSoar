@@ -10,6 +10,8 @@
 #include "util/Serial.hpp"
 
 #include <list>
+#include <span>
+#include <vector>
 
 class TaskStats;
 class GlidePolar;
@@ -42,6 +44,13 @@ class AirspaceWarningManager {
   using AirspaceWarningList = std::list<AirspaceWarning>;
 
   AirspaceWarningList warnings;
+
+  /**
+   * Airspaces provided externally (e.g. FLARM alert zones) that are
+   * not in the main Airspaces R-tree but should be checked by the
+   * same detection passes.
+   */
+  std::vector<ConstAirspacePtr> external_airspaces;
 
   /**
    * This number is incremented each time this object is modified.
@@ -243,6 +252,15 @@ public:
    */
   [[gnu::pure]]
   bool IsActive(const AbstractAirspace &airspace) const noexcept;
+
+  /**
+   * Set externally-provided airspaces (e.g. from FLARM PFLAO).
+   * These are checked by the same detection passes as normal
+   * airspaces during the next Update() cycle.
+   */
+  void SetExternalAirspaces(std::span<const ConstAirspacePtr> airspaces) {
+    external_airspaces.assign(airspaces.begin(), airspaces.end());
+  }
 
 private:
   bool UpdateTask(const AircraftState &state, const GlidePolar &glide_polar,
