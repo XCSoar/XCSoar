@@ -6,12 +6,14 @@
 #include "ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Airspace/Ptr.hpp"
 #include "util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
 #include <span>
 #include <exception>
 #include <vector>
+
 class AirspaceWarningCopy
 {
 private:

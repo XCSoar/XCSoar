@@ -207,13 +207,22 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
     settings.show_notam_labels &&
     projection.GetMapScale() <= NOTAM_LABEL_MAX_MAP_SCALE;
 
-  if ((!draw_altitude_labels && !draw_notam_labels) ||
-      airspaces == nullptr || airspaces->IsEmpty())
+  if (!draw_altitude_labels && !draw_notam_labels)
     return;
 
   AirspaceWarningCopy awc;
   if (warning_manager != nullptr)
     awc.Visit(*warning_manager);
+
+  if ((airspaces == nullptr || airspaces->IsEmpty()) &&
+      awc.GetExternalAirspaces().empty()) {
+    if (!draw_notam_labels)
+      return;
+  }
+
+  if (!draw_altitude_labels && draw_notam_labels &&
+      (airspaces == nullptr || airspaces->IsEmpty()))
+    return;
 
   const AircraftState aircraft = ToAircraftState(basic, calculated);
   const AirspaceMapVisible visible(computer_settings, settings,
@@ -221,7 +230,8 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
 
   DrawInternal(canvas,
                projection, visible, computer_settings.warnings,
-               draw_altitude_labels, draw_notam_labels, label_block);
+               draw_altitude_labels, draw_notam_labels, label_block,
+               awc.GetExternalAirspaces());
 }
 
 inline void
@@ -231,18 +241,26 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const AirspaceWarningConfig &config,
                                     const bool draw_altitude_labels,
                                     const bool draw_notam_labels,
-                                    LabelBlock *label_block) noexcept
+                                    LabelBlock *label_block,
+                                    std::span<const ConstAirspacePtr> external_airspaces) noexcept
 {
   AirspaceLabelList labels;
 
   if (draw_altitude_labels) {
-    for (const auto &i : airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                                     projection.GetScreenDistanceMeters())) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        labels.Add(airspace.GetCenter(), airspace.GetClass(), airspace.GetBase(),
-                   airspace.GetTop());
+    if (airspaces != nullptr) {
+      for (const auto &i : airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                                       projection.GetScreenDistanceMeters())) {
+        const AbstractAirspace &airspace = i.GetAirspace();
+        if (visible(airspace))
+          labels.Add(airspace.GetCenter(), airspace.GetClass(), airspace.GetBase(),
+                     airspace.GetTop());
+      }
     }
+
+    for (const auto &ea : external_airspaces)
+      if (visible(*ea))
+        labels.Add(ea->GetCenter(), ea->GetClass(),
+                   ea->GetBase(), ea->GetTop());
 
     labels.Sort(config);
   }

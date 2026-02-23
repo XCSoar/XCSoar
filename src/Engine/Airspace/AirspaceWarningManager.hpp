@@ -292,6 +292,11 @@ public:
     external_airspaces.assign(airspaces.begin(), airspaces.end());
   }
 
+  [[gnu::pure]]
+  std::span<const ConstAirspacePtr> GetExternalAirspaces() const noexcept {
+    return external_airspaces;
+  }
+
 private:
   AirspaceWarning *FindWarningByNotamDayAckKey(std::string_view key) noexcept;
   const AirspaceWarning *
