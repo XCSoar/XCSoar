@@ -21,6 +21,7 @@ class GlidePolar;
 class Airspaces;
 class FlatProjection;
 class AirspaceAircraftPerformance;
+class AirspaceIntersectionVisitor;
 
 /**
  * Class to detect and track airspace warnings
@@ -307,4 +308,18 @@ private:
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
                        FloatDuration max_time) noexcept;
+
+  /**
+   * Call f(ConstAirspacePtr) for every airspace (R-tree and external)
+   * whose horizontal bounds contain the given location.
+   */
+  template<typename F>
+  void ForEachInside(const GeoPoint &location, F &&f) const;
+
+  /**
+   * Visit all airspaces (R-tree and external) that intersect the
+   * line segment [a, b].
+   */
+  void VisitAllIntersecting(const GeoPoint &a, const GeoPoint &b,
+                            AirspaceIntersectionVisitor &visitor) const;
 };
