@@ -141,6 +141,8 @@ Version 7.44 - not yet released
   - volume buttons now control system volume instead of map zoom
   - fix foreground service not terminating on app exit
 * Windows
+  - Support high DPI displays in Windows (OpenGL only)
+  - Support OpenGL with GPU acceleration in new Windows 64bit version
   - Popupmessages are now shown with full text again
 * macOS
   - add .app bundle, .dmg and .pkg support with bundled ANGLE

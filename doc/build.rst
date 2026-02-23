@@ -233,16 +233,17 @@ The following command installs it on Debian::
 
   sudo apt-get install g++-mingw-w64
 
-To compile for 32 bit Windows, run::
+To compile for 64-bit Windows with OpenGL support, run::
 
-  make TARGET=PC
+  make TARGET=WIN64OPENGL
 
 Use one of the following targets:
 
-========= ============================
-``PC``    32 bit Windows (i686)
-``WIN64`` Windows x64 (amd64 / x86-64)
-========= ============================
+================ =================================================
+``PC``           32-bit Windows (i686), GDI legacy build
+``WIN64``        Windows x64 (amd64 / x86-64), GDI legacy build
+``WIN64OPENGL``  Windows x64 (amd64 / x86-64), OpenGL via ANGLE
+================ =================================================
 
 Compiling for iOS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -464,6 +465,11 @@ Defaults shown are from the build system (they can be overridden with
    - no
    - GDI
    - Flavor of ``PC`` with 64-bit toolchain.
+ * - ``WIN64OPENGL``
+   - Windows 64-bit (x86_64)
+   - yes
+   - OpenGL ES (ANGLE)
+   - Windows 64-bit build with SDL and OpenGL ES
  * - ``ANDROID``
    - Android ARMv7
    - no
