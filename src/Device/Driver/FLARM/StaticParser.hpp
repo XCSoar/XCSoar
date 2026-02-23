@@ -15,6 +15,7 @@ struct FlarmError;
 struct FlarmProgress;
 struct FlarmState;
 struct FlarmVersion;
+struct FlarmAlertZoneList;
 struct FlarmStatus;
 struct TrafficList;
 
@@ -89,6 +90,17 @@ ParsePFLAJ(NMEAInputLine &line, FlarmState &state,
  */
 void
 ParsePFLAQ(NMEAInputLine &line, FlarmProgress &progress,
+           TimeStamp clock) noexcept;
+
+/**
+ * Parses a PFLAO sentence (Alert Zone information).
+ *
+ * @param line The Flarm NMEA record to parse.
+ * @param zones The current alert zone list which will be updated.
+ * @param clock The time now.
+ */
+void
+ParsePFLAO(NMEAInputLine &line, FlarmAlertZoneList &zones,
            TimeStamp clock) noexcept;
 
 /**

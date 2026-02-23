@@ -107,10 +107,14 @@ AirspaceWarningManager::Update(const AircraftState& state,
 {
   bool changed = false;
 
-  // update warning states
-  if (airspaces.IsEmpty()) {
-    // no airspaces, no warnings possible
-    assert(warnings.empty());
+  const bool have_airspaces = !airspaces.IsEmpty();
+  const bool have_external = !external_airspaces.empty();
+
+  if (!have_airspaces && !have_external) {
+    if (!warnings.empty()) {
+      warnings.clear();
+      ++serial;
+    }
     return false;
   }
 
@@ -118,11 +122,22 @@ AirspaceWarningManager::Update(const AircraftState& state,
   for (auto &w : warnings)
     w.SaveState();
 
-  // check from strongest to weakest alerts
-  UpdateInside(state, glide_polar);
-  UpdateGlide(state, glide_polar);
-  UpdateFilter(state, circling);
-  UpdateTask(state, glide_polar, task_stats);
+  if (have_airspaces) {
+    // check from strongest to weakest alerts
+    UpdateInside(state, glide_polar);
+    UpdateGlide(state, glide_polar);
+    UpdateFilter(state, circling);
+    UpdateTask(state, glide_polar, task_stats);
+  }
+
+  for (const auto &ea : external_airspaces) {
+    if (ea->Inside(state.location)) {
+      auto &w = GetWarning(ea);
+      if (w.IsStateAccepted(AirspaceWarning::WARNING_INSIDE))
+        w.UpdateSolution(AirspaceWarning::WARNING_INSIDE,
+                         AirspaceInterceptSolution::Invalid());
+    }
+  }
 
   // action changes
   for (auto it = warnings.begin(), end = warnings.end(); it != end;) {
