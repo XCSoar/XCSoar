@@ -19,6 +19,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/FileOutputStream.cxx \
 	$(IO_SRC_DIR)/FileTransaction.cpp \
 	$(IO_SRC_DIR)/FileCache.cpp \
+	$(IO_SRC_DIR)/TarArchive.cpp \
 	$(IO_SRC_DIR)/ZipArchive.cpp \
 	$(IO_SRC_DIR)/ZipReader.cpp \
 	$(IO_SRC_DIR)/CupxArchive.cpp \
