@@ -9,11 +9,16 @@
 #include "util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
+#include <span>
+#include <exception>
+#include <vector>
 class AirspaceWarningCopy
 {
 private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
   StaticArray<GeoPoint,32> locations;
+
+  std::vector<ConstAirspacePtr> external_airspaces;
 
   Serial serial;
 
@@ -39,6 +44,13 @@ public:
 
     for (const auto &i : awm)
       Visit(i);
+
+    const auto ext = awm.GetExternalAirspaces();
+    try {
+      external_airspaces.assign(ext.begin(), ext.end());
+    } catch (const std::exception &) {
+      external_airspaces.clear();
+    }
   }
 
   void Visit(const ProtectedAirspaceWarningManager &awm) noexcept {
@@ -48,6 +60,10 @@ public:
 
   const StaticArray<GeoPoint,32> &GetLocations() const noexcept {
     return locations;
+  }
+
+  std::span<const ConstAirspacePtr> GetExternalAirspaces() const noexcept {
+    return external_airspaces;
   }
 
   bool HasWarning(const AbstractAirspace &as) const noexcept {
