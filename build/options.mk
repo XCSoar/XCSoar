@@ -61,6 +61,19 @@ endif
 # In the stable branch, this should default to "n".
 TESTING = n
 
+# Default Android package flavor:
+# - FOSS is the default for regular Android builds
+# - PLAY/TESTING builds keep their own package IDs without requiring FOSS=n
+ifneq ($(filter ANDROID%,$(TARGET)),)
+  ifeq ($(PLAY),y)
+    FOSS ?= n
+  else ifeq ($(TESTING),y)
+    FOSS ?= n
+  else
+    FOSS ?= y
+  endif
+endif
+
 # Set XCSOAR_TESTING for non-Android builds (Android builds set it based on package name)
 ifeq ($(TESTING),y)
   ifneq ($(TARGET_IS_ANDROID),y)
