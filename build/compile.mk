@@ -1,8 +1,12 @@
 ######## tools
 
-CCACHE := 
+CCACHE :=
 ifeq ($(USE_CCACHE),y)
   CCACHE := ccache$(EXE)
+  # ccache will not use the optimisation of avoiding the 2nd call to the
+  # pre-processor by compiling the pre-processed output that was used for
+  # finding the hash in the case of a cache miss.
+  export CCACHE_CPP2 = yes
 endif
 
 EXE := $(findstring .exe,$(MAKE))

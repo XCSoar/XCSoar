@@ -4,13 +4,6 @@ ifeq ($(CLANG),y)
 
 DEPFLAGS = -MD -MP -MF $(DEPFILE) -MT $@
 
-ifeq ($(USE_CCACHE),y)
-  # ccache will not use the optimisation of avoiding the 2nd call to the
-  # pre-processor by compiling the pre-processed output that was used for
-  # finding the hash in the case of a cache miss.
-  export CCACHE_CPP2 = yes
-endif
-
 ifneq ($(LLVM_TARGET),)
   TARGET_ARCH += -target $(LLVM_TARGET)
 endif
