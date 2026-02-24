@@ -113,9 +113,6 @@ RowFormWidget::SaveValueFileReader(unsigned i,
   if (contracted != nullptr)
     new_value = contracted;
 
-  if (new_value.empty())
-    return false;
-
   const char *old_value = Profile::Get(profile_key, "");
   if (StringIsEqual(old_value, new_value.c_str()))
     return false;
