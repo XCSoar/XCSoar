@@ -68,6 +68,9 @@ Version 7.45 - not yet released
     pre-filtered to recently-used waypoints; listed in the Gesture Help
     dialog with its own icon #336
 * map
+  - dynamically adjust contour line density to zoom factor #2233
+  - provide different contour density profile settings for mountains, 
+    low lands, etc. to have sensible contours in a given landscape type
   - larger on-map typography: default waypoint text, map-scale readout, and
     topography labels
   - map waypoint icons (bitmap and vector landables): new ``Waypoint icon
