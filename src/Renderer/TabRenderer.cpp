@@ -5,6 +5,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
 
 void
 TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
@@ -28,8 +29,16 @@ TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
        causing multi-word labels like "Turn Points" to break across
        lines or disappear entirely on GDI */
     const PixelSize size = canvas.CalcTextSize(caption);
-    const int x = (rc.left + rc.right - (int)size.width) / 2;
+    const unsigned padding = Layout::GetTextPadding();
+    const int min_x = rc.left + (int)padding;
+    const unsigned total_padding = 2 * padding;
+    const unsigned max_width = rc.GetWidth() > total_padding
+      ? rc.GetWidth() - total_padding
+      : 1;
+    const int x = size.width <= max_width
+      ? (rc.left + rc.right - (int)size.width) / 2
+      : min_x;
     const int y = (rc.top + rc.bottom - (int)size.height) / 2;
-    canvas.DrawClippedText({x, y}, rc, caption);
+    canvas.DrawClippedText({x, y}, max_width, caption);
   }
 }
