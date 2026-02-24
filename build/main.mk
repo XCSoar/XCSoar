@@ -22,6 +22,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
 	$(SRC)/Dialogs/DataManagement/StorageLocationPickerDialog.cpp \
+	$(SRC)/Dialogs/DataManagement/ArchiveUtil.cpp \
 	$(SRC)/Dialogs/DataManagement/FileTransferUtil.cpp \
 	$(SRC)/Dialogs/DataManagement/IgcMetaCache.cpp \
 	$(SRC)/Dialogs/Device/PortDataField.cpp \
