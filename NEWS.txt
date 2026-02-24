@@ -131,6 +131,9 @@ Version 7.45 - not yet released
     pre-filtered to recently-used waypoints; listed in the Gesture Help
     dialog with its own icon #336
 * map
+  - dynamically adjust contour line density to zoom factor #2233
+  - provide different contour density profile settings for mountains, 
+    low lands, etc. to have sensible contours in a given landscape type
   - turn back marker: new opt-in overlay (Safety Factors config panel) showing
     a green triangle along the current track indicating the furthest point from
     which the active task waypoint or Goto target can still be reached with the
