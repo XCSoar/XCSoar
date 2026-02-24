@@ -163,6 +163,8 @@ GetConfigurationHelpText()
   text.Format(
     _("# Getting Started\n\n"
     "To use XCSoar effectively, configure the following:\n\n"
+    "- [Restore from backup](xcsoar://dialog/backup) - "
+    "Restore previous XCSoar data from a USB or SD card (optional)\n\n"
     "- [%s] [Map and data](xcsoar://config/site-files) - "
     "Download maps, waypoints, and airspace files for your "
     "region\n\n"
