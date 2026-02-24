@@ -32,12 +32,31 @@ GetDarkMode(const UISettings &settings) noexcept
   return false;
 }
 
+[[gnu::pure]]
+static bool
+GetInfoBoxDarkMode(const UISettings &settings, bool dark_mode) noexcept
+{
+  switch (settings.info_boxes.theme) {
+  case InfoBoxSettings::Theme::FOLLOW_GLOBAL:
+    return dark_mode;
+
+  case InfoBoxSettings::Theme::LIGHT:
+    return false;
+
+  case InfoBoxSettings::Theme::DARK:
+    return true;
+  }
+
+  return dark_mode;
+}
+
 void
 Look::InitialiseConfigured(const UISettings &settings,
                            const Font &map_font, const Font &map_bold_font,
                            unsigned infobox_width)
 {
   const bool dark_mode = GetDarkMode(settings);
+  const bool infobox_dark_mode = GetInfoBoxDarkMode(settings, dark_mode);
 
   dialog.Initialise(dark_mode);
   chart.Initialise(dark_mode);
@@ -47,14 +66,17 @@ Look::InitialiseConfigured(const UISettings &settings,
   thermal_band.Initialise(dark_mode,
                           cross_section.sky_color);
   trace_history.Initialise(dark_mode);
-  info_box.Initialise(dark_mode, settings.info_boxes.use_colors, infobox_width,
+  info_box.Initialise(infobox_dark_mode, settings.info_boxes.use_colors,
+                      infobox_width,
                       settings.info_boxes.scale_title_font);
-  vario.Initialise(dark_mode,
+  vario.Initialise(infobox_dark_mode,
                    settings.info_boxes.use_colors,
                    infobox_width,
                    info_box.title_font);
-  wind_arrow_info_box.Initialise(map_bold_font, dark_mode);
-  next_arrow_info_box.Initialise(map_bold_font, settings.info_boxes.use_colors, dark_mode);
+  wind_arrow_info_box.Initialise(map_bold_font, infobox_dark_mode);
+  next_arrow_info_box.Initialise(map_bold_font,
+                                 settings.info_boxes.use_colors,
+                                 infobox_dark_mode);
   flarm_gauge.Initialise(traffic, true, dark_mode);
   flarm_dialog.Initialise(traffic, false, dark_mode);
   thermal_assistant_dialog.Initialise(false, dark_mode);

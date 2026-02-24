@@ -184,6 +184,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (ui_settings.dark_mode != old_ui_settings.dark_mode ||
       ui_settings.info_boxes.use_colors != old_ui_settings.info_boxes.use_colors ||
+      ui_settings.info_boxes.theme != old_ui_settings.info_boxes.theme ||
       settings_map.trail.type != old_settings_map.trail.type ||
       settings_map.trail.scaling_enabled != old_settings_map.trail.scaling_enabled ||
       settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)

@@ -117,6 +117,12 @@ struct InfoBoxSettings {
 
   bool use_colors;
 
+  enum class Theme : uint8_t {
+    FOLLOW_GLOBAL,
+    LIGHT,
+    DARK,
+  } theme;
+
   enum class BorderStyle : uint8_t {
     BOX,
     TAB,
