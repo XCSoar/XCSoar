@@ -105,7 +105,7 @@ PopupMessage::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 void
 PopupMessage::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(look.background_color);
+  canvas.Clear(look.dark_mode ? look.background_color : COLOR_WHITE);
 
   auto rc = GetClientRect();
 #ifndef USE_WINUSER
