@@ -8,5 +8,5 @@
 class RaspStore;
 
 std::shared_ptr<RaspStore>
-LoadConfiguredRasp() noexcept;
+LoadConfiguredRasp(bool legacy_default = true) noexcept;
 

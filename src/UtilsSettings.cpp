@@ -172,7 +172,7 @@ SettingsLeave(const UISettings &old_ui_settings)
   }
 
   if (RaspFileChanged)
-    DataGlobals::SetRasp(LoadConfiguredRasp());
+    DataGlobals::SetRasp(LoadConfiguredRasp(false));
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 

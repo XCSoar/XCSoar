@@ -111,7 +111,7 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                FileType::RASP);
   wp->GetDataField()->SetOnModified([this]{
     if (SaveValueFileReader(FILE, ProfileKeys::RaspFile)) {
-      rasp = LoadConfiguredRasp();
+      rasp = LoadConfiguredRasp(false);
       DataGlobals::SetRasp(rasp);
       FillItemControl();
       UpdateTimeControl();
