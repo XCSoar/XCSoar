@@ -21,6 +21,7 @@
 #include "Dialogs/Settings/Panels/SafetyFactorsConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/TrackingConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/TerrainDisplayConfigPanel.hpp"
+#include "Dialogs/DataManagement/BackupRestorePanel.hpp"
 #include "Widget/Widget.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
@@ -83,6 +84,7 @@ static constexpr SimpleDialogLink simple_dialog_links[] = {
   {"dialog/flight",    dlgBasicSettingsShowModal},
   {"dialog/wind",      ShowWindSettingsDialog},
   {"dialog/task",      dlgTaskManagerShowModal},
+  {"dialog/backup",    ShowBackupManagerDialog},
   {"dialog/gestures",  dlgGestureHelpShowModal},
 };
 
