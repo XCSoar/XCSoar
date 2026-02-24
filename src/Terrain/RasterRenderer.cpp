@@ -411,16 +411,22 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
         const int dd0 = p22 * int(p31);
         const int dd1 = int(p20) * p32;
-        const unsigned dd2 = p20 * p31 * height_slope_factor;
-        const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
-        const unsigned square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
-        const unsigned mag = (unsigned)sqrt(square_mag);
+        const double dd2 = double(p20) * double(p31) *
+          double(height_slope_factor);
+        const double num =
+          dd2 * double(sz) + double(dd0) * double(sx) +
+          double(dd1) * double(sy);
+        const double square_mag =
+          double(dd0) * double(dd0) +
+          double(dd1) * double(dd1) +
+          dd2 * dd2;
+        const double mag = sqrt(square_mag);
         /* this is a workaround for a SIGFPE (division by zero)
            observed by our users on some Android devices (e.g. Nexus
            7), even though we did our best to make sure that the
            integer arithmetics above can't overflow */
         /* TODO: debug this problem and replace this workaround */
-        const int sval = num / int(mag|1);
+        const int sval = int(num / std::max(mag, 1.0));
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[int(h) + 256 * std::clamp(sindex, -63, 63)];
       } else if (e.IsWater()) {
