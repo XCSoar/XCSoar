@@ -108,8 +108,9 @@ LargeTextWindow::OnKillFocus() noexcept
 void
 LargeTextWindow::OnPaint(Canvas &canvas) noexcept
 {
-  if (HaveClipping())
-    canvas.Clear(background_color);
+  /* Always paint our own background to avoid transparent-looking text
+     panes in container layouts without clipping. */
+  canvas.Clear(background_color);
 
   auto rc = canvas.GetRect();
   canvas.DrawOutlineRectangle(rc, border_color);
