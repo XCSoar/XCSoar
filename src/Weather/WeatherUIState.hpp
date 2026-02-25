@@ -146,6 +146,11 @@ struct WeatherUIState {
 
   OverlaySession rasp;
 
+  /**
+   * Draw contour lines on the RASP weather overlay?
+   */
+  bool contours = false;
+
   EDLWeatherUIState edl;
 
   OverlaySession xctherm;
@@ -168,6 +173,7 @@ struct WeatherUIState {
     time = BrokenTime::Invalid();
     time_auto_advance = true;
     rasp.Clear();
+    contours = false;
     edl.Clear();
     xctherm.Clear();
     xctherm_cursor.Clear();

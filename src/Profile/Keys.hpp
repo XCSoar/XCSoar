@@ -333,6 +333,7 @@ constexpr std::string_view XCThermParameter = "XCThermParameter";
 constexpr std::string_view XCThermWaveHeight = "XCThermWaveHeight";
 constexpr std::string_view XCThermVerticalWindAGL = "XCThermVerticalWindAGL";
 constexpr std::string_view RaspLayerOpacity = "RaspLayerOpacity";
+constexpr std::string_view RaspContours = "RaspContours";
 
 constexpr std::string_view StratuxHorizontalRange = "StratuxHorizontalRange";
 constexpr std::string_view StratuxVerticalRange = "StratuxVerticalRange";
