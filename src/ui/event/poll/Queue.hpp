@@ -120,7 +120,7 @@ public:
   void SetScreenSize([[maybe_unused]] const PixelSize &screen_size) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
     input_queue.SetScreenSize(screen_size);
-#elif defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && (defined(USE_X11) || defined(USE_WAYLAND))
+#elif defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && defined(USE_WAYLAND)
     input_queue.SetScreenSize(screen_size);
 #endif
   }
@@ -128,7 +128,7 @@ public:
   void SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept {
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND) && !defined(USE_LIBINPUT)
     input_queue.SetDisplayOrientation(orientation);
-#elif defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && (defined(USE_X11) || defined(USE_WAYLAND))
+#elif defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && defined(USE_WAYLAND)
     input_queue.SetDisplayOrientation(orientation);
 #endif
   }

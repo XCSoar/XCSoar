@@ -10,9 +10,8 @@
 #include "ui/display/Display.hpp"
 #include "ui/dim/Size.hpp"
 
-#ifdef SOFTWARE_ROTATE_DISPLAY
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
 #include "../shared/TransformCoordinates.hpp"
-#include "ui/canvas/opengl/Globals.hpp"
 #endif
 
 /* kludges to work around namespace collisions with X11 headers */
@@ -41,6 +40,16 @@ X11EventQueue::X11EventQueue(Display &_display, EventQueue &_queue)
 
   socket_event.Open(SocketDescriptor(ConnectionNumber(display)));
   socket_event.ScheduleRead();
+}
+
+PixelPoint
+X11EventQueue::MaybeTransformPoint(PixelPoint p) const noexcept
+{
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+  return TransformCoordinates(p, physical_screen_size);
+#else
+  return p;
+#endif
 }
 
 inline void
@@ -84,17 +93,21 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button1:
     case Button2:
     case Button3:
+      pointer_position = MaybeTransformPoint(
+        PixelPoint(event.xbutton.x, event.xbutton.y));
       ctrl_click = event.xbutton.state & ControlMask;
       queue.Push(Event(Event::MOUSE_DOWN,
-                       PixelPoint(event.xbutton.x, event.xbutton.y)));
+                       pointer_position));
       break;
 
     case Button4:
     case Button5:
       /* mouse wheel */
       {
+        pointer_position = MaybeTransformPoint(
+          PixelPoint(event.xbutton.x, event.xbutton.y));
         Event e(Event::MOUSE_WHEEL,
-                PixelPoint(event.xbutton.x, event.xbutton.y));
+                pointer_position);
         e.param = event.xbutton.button == Button4 ? 1u : unsigned(-1);
         queue.Push(e);
       }
@@ -107,14 +120,18 @@ X11EventQueue::HandleEvent(_XEvent &event)
     case Button1:
     case Button2:
     case Button3:
+      pointer_position = MaybeTransformPoint(
+        PixelPoint(event.xbutton.x, event.xbutton.y));
       queue.Push(Event(Event::MOUSE_UP,
-                       PixelPoint(event.xbutton.x, event.xbutton.y)));
+                       pointer_position));
     }
     break;
 
   case MotionNotify:
+    pointer_position = MaybeTransformPoint(
+      PixelPoint(event.xmotion.x, event.xmotion.y));
     queue.Push(Event(Event::MOUSE_MOTION,
-                     PixelPoint(event.xmotion.x, event.xmotion.y)));
+                     pointer_position));
     break;
 
   case ClientMessage:
@@ -130,9 +147,7 @@ X11EventQueue::HandleEvent(_XEvent &event)
     {
       PixelSize physical_size(event.xconfigure.width,
                               event.xconfigure.height);
-#ifdef SOFTWARE_ROTATE_DISPLAY
       physical_screen_size = physical_size;
-#endif
       queue.Push(Event(Event::RESIZE,
                        PixelPoint(physical_size.width,
                                   physical_size.height)));
@@ -162,19 +177,5 @@ X11EventQueue::OnSocketReady(unsigned) noexcept
     HandleEvent(event);
   }
 }
-
-#ifdef SOFTWARE_ROTATE_DISPLAY
-
-void
-X11EventQueue::SetScreenSize([[maybe_unused]] PixelSize screen_size) noexcept
-{
-}
-
-void
-X11EventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept
-{
-}
-
-#endif
 
 } // namespace UI
