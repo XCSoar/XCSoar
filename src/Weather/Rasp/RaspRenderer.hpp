@@ -76,11 +76,14 @@ public:
   }
 
   /**
+   * @param do_contour draw contour lines at intervals appropriate for
+   * the current field's value range (~16 lines across the full range)
    * @return true if an image has been renderered and Draw() may be
    * called
    */
   bool Generate(const WindowProjection &projection,
-                const TerrainRendererSettings &settings);
+                const TerrainRendererSettings &settings,
+                bool do_contour = false);
 
   void Draw(Canvas &canvas, const WindowProjection &projection,
             float alpha=1.0f) const {

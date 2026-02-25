@@ -31,7 +31,8 @@ RaspRenderer::GetExtendedLabel() const
 
 bool
 RaspRenderer::Generate(const WindowProjection &projection,
-                       const TerrainRendererSettings &settings)
+                       const TerrainRendererSettings &settings,
+                       bool do_contour)
 {
   const auto &style = LookupWeatherTerrainStyle(cache.GetMapName());
   const bool do_water = style.do_water;
@@ -72,8 +73,12 @@ RaspRenderer::Generate(const WindowProjection &projection,
 
   raster_renderer.ScanMap(*map, projection);
 
+  /* 1u << (height_scale + 4) gives ~16 contour lines across any RASP field range */
+  const unsigned contour_spacing =
+    do_contour ? (1u << (height_scale + 4)) : 0u;
+
   raster_renderer.GenerateImage(false, height_scale,
                                 settings.contrast, settings.brightness,
-                                Angle::Zero(), 0u);
+                                Angle::Zero(), contour_spacing);
   return true;
 }
