@@ -34,6 +34,8 @@
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
+#include "UIState.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "util/StaticString.hxx"
 #include "net/http/Features.hpp"
@@ -48,13 +50,15 @@
 class RaspColorbarWindow : public PaintWindow {
   const DialogLook &look;
   const RaspStyle *style = nullptr;
+  bool show_contours = false;
 
 public:
   explicit RaspColorbarWindow(const DialogLook &_look) noexcept
     :look(_look) {}
 
-  void SetStyle(const RaspStyle *_style) noexcept {
+  void SetStyle(const RaspStyle *_style, bool _show_contours) noexcept {
     style = _style;
+    show_contours = _show_contours;
     Invalidate();
   }
 
@@ -120,8 +124,10 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
   // gradient and render through the full pipeline
   renderer.FillGradient({width, bar_height},
                         min_h, max_h);
+  const unsigned contour_spacing =
+    show_contours ? (1u << (height_scale + 4)) : 0u;
   renderer.GenerateImage(false, height_scale,
-                         0, 0, Angle::Zero(), 0u);
+                         0, 0, Angle::Zero(), contour_spacing);
 
   if (use_alpha) {
     // Draw checkerboard background for alpha styles
@@ -188,6 +194,7 @@ class RASPSettingsPanel final
 #endif
     LAYER,
     COLORBAR,
+    CONTOURS,
     TIME,
     APPLY_TO_PAGE,
     ADD_PAGE,
@@ -204,6 +211,8 @@ class RASPSettingsPanel final
   Button *add_page_button = nullptr;
 
   static RASPSettingsPanel *active;
+
+  bool contours = false;
 
   void ReloadRasp();
   void UpdateModifiedDisplay();
@@ -408,7 +417,7 @@ RASPSettingsPanel::UpdateColorbar() noexcept
     s = &LookupWeatherTerrainStyle(mi.name);
   }
 
-  ((RaspColorbarWindow &)GetRow(COLORBAR)).SetStyle(s);
+  ((RaspColorbarWindow &)GetRow(COLORBAR)).SetStyle(s, contours);
 }
 
 void
@@ -477,6 +486,19 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
     Add(std::move(colorbar));
   }
 
+  {
+    bool saved_contours = false;
+    Profile::Get(ProfileKeys::RaspContours, saved_contours);
+    contours = saved_contours;
+    WndProperty *cp = AddBoolean(_("Contours"), nullptr, contours);
+    cp->GetDataField()->SetOnModified([this]{
+      contours = GetValueBoolean(CONTOURS);
+      UpdateColorbar();
+    });
+  }
+
+  UpdateColorbar();
+
   auto *time = AddEnum(_("Time"),
                        _("Forecast time for the current map page. "
                          "Opens the same picker as the weather controls "
@@ -514,6 +536,14 @@ RASPSettingsPanel::Save([[maybe_unused]] bool &_changed) noexcept
   _changed |= SaveValue(AUTO_UPDATE, ProfileKeys::RaspAutoUpdate,
                         weather.rasp.auto_update);
 #endif
+
+  WeatherUIState &state = CommonInterface::SetUIState().weather;
+
+  state.contours = contours;
+  Profile::Set(ProfileKeys::RaspContours, contours);
+
+  ActionInterface::SendUIState(true);
+
   return true;
 }
 
