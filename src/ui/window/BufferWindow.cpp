@@ -58,13 +58,12 @@ BufferWindow::OnPaint(Canvas &canvas) noexcept
 #endif
 
 #ifdef ENABLE_OPENGL
-  if (dirty) {
-    dirty = false;
-    buffer.Begin(canvas);
-    OnPaintBuffer(buffer);
-    buffer.Commit(canvas);
-  } else
-    buffer.CopyTo(canvas);
+  /* Disable the cache replay path and always repaint.  This avoids
+     reusing stale cached buffers after display orientation changes. */
+  dirty = false;
+  buffer.Begin(canvas);
+  OnPaintBuffer(buffer);
+  buffer.Commit(canvas);
 
 #else
 
