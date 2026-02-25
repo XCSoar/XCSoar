@@ -5,6 +5,7 @@
 
 #include "RaspCache.hpp"
 #include "Terrain/RasterRenderer.hpp"
+#include "Weather/WeatherUIState.hpp"
 #include "time/BrokenTime.hpp"
 #include "util/StaticString.hxx"
 
@@ -76,14 +77,14 @@ public:
   }
 
   /**
-   * @param do_contour draw contour lines at intervals appropriate for
-   * the current field's value range (~16 lines across the full range)
+   * @param contour_density density of contour lines to draw;
+   * ContourDensity::OFF disables them
    * @return true if an image has been renderered and Draw() may be
    * called
    */
   bool Generate(const WindowProjection &projection,
                 const TerrainRendererSettings &settings,
-                bool do_contour = false);
+                ContourDensity contour_density = ContourDensity::OFF);
 
   void Draw(Canvas &canvas, const WindowProjection &projection,
             float alpha=1.0f) const {

@@ -85,7 +85,7 @@ MapWindow::RenderRasp(Canvas &canvas) noexcept
 
   const auto &map_settings = GetMapSettings();
   if (rasp_renderer->Generate(render_projection, map_settings.terrain,
-                              state.contours))
+                              state.contour_density))
     rasp_renderer->Draw(canvas, render_projection,
                         map_settings.rasp_layer_opacity / 100.f);
 }

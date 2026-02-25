@@ -68,6 +68,40 @@ struct OverlaySession {
 };
 
 /**
+ * Density of RASP contour lines.  Each step doubles or halves the
+ * number of lines relative to REGULAR (~16 lines across the field
+ * range).
+ */
+enum class ContourDensity : unsigned {
+  OFF = 0,
+  WIDE = 1,      ///< ~8 lines (spacing × 2)
+  REGULAR = 2,   ///< ~16 lines (baseline)
+  FINE = 3,      ///< ~32 lines (spacing / 2)
+  SUPERFINE = 4, ///< ~64 lines (spacing / 4)
+  COUNT
+};
+
+/**
+ * Convert ContourDensity + a RASP height_scale into a contour_spacing
+ * value suitable for RasterRenderer::GenerateImage().  Returns 0 when
+ * contours are disabled.
+ */
+[[gnu::const]] inline unsigned
+ContourSpacing(ContourDensity density, unsigned height_scale) noexcept
+{
+  switch (density) {
+  case ContourDensity::OFF:       return 0;
+  case ContourDensity::WIDE:      return 1u << (height_scale + 5);
+  case ContourDensity::REGULAR:   return 1u << (height_scale + 4);
+  case ContourDensity::FINE:      return 1u << (height_scale + 3);
+  case ContourDensity::SUPERFINE: return 1u << (height_scale + 2);
+  case ContourDensity::COUNT:
+    assert(false);
+  }
+  return 0;
+}
+
+/**
  * The state of weather display on the user interface.
  */
 struct EDLWeatherUIState {
@@ -147,9 +181,9 @@ struct WeatherUIState {
   OverlaySession rasp;
 
   /**
-   * Draw contour lines on the RASP weather overlay?
+   * Density of contour lines drawn on the RASP weather overlay.
    */
-  bool contours = false;
+  ContourDensity contour_density = ContourDensity::OFF;
 
   EDLWeatherUIState edl;
 
@@ -173,7 +207,7 @@ struct WeatherUIState {
     time = BrokenTime::Invalid();
     time_auto_advance = true;
     rasp.Clear();
-    contours = false;
+    contour_density = ContourDensity::OFF;
     edl.Clear();
     xctherm.Clear();
     xctherm_cursor.Clear();
