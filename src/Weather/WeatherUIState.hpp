@@ -90,6 +90,11 @@ struct WeatherUIState {
    */
   bool rasp_page_suspended_for_pan;
 
+  /**
+   * Draw contour lines on the RASP weather overlay?
+   */
+  bool contours = false;
+
   EDLWeatherUIState edl;
 
   void Clear() noexcept {
@@ -98,6 +103,7 @@ struct WeatherUIState {
     time_auto_advance = true;
     rasp_page_entered = false;
     rasp_page_suspended_for_pan = false;
+    contours = false;
     edl.Clear();
   }
 
