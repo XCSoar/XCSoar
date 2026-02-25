@@ -56,6 +56,14 @@ void
 Create(Path path) noexcept;
 
 /**
+ * Recursively remove a directory and all its contents.
+ * @param path Path to the directory to remove
+ * @return True if the directory was fully removed
+ */
+bool
+Remove(Path path) noexcept;
+
+/**
  * Returns whether the given directory is writable.
  * On POSIX this uses `access(path, W_OK)`.
  * On Windows it will attempt to create a temporary file.
