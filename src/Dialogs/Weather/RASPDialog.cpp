@@ -46,15 +46,16 @@
 class RaspColorbarWindow : public PaintWindow {
   const DialogLook &look;
   const RaspStyle *style = nullptr;
-  bool show_contours = false;
+  ContourDensity contour_density = ContourDensity::OFF;
 
 public:
   explicit RaspColorbarWindow(const DialogLook &_look) noexcept
     :look(_look) {}
 
-  void SetStyle(const RaspStyle *_style, bool _show_contours) noexcept {
+  void SetStyle(const RaspStyle *_style,
+                ContourDensity _contour_density) noexcept {
     style = _style;
-    show_contours = _show_contours;
+    contour_density = _contour_density;
     Invalidate();
   }
 
@@ -121,7 +122,7 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
   renderer.FillGradient({width, bar_height},
                         min_h, max_h);
   const unsigned contour_spacing =
-    show_contours ? (1u << (height_scale + 4)) : 0u;
+    ContourSpacing(contour_density, height_scale);
   renderer.GenerateImage(false, height_scale,
                          0, 0, Angle::Zero(), contour_spacing);
 
@@ -198,7 +199,7 @@ class RASPSettingsPanel final
   Button *update_button = nullptr;
 #endif
 
-  bool contours = false;
+  ContourDensity contour_density = ContourDensity::OFF;
 
   void ReloadRasp();
   void UpdateModifiedDisplay();
@@ -292,7 +293,7 @@ RASPSettingsPanel::UpdateColorbar() noexcept
     s = &LookupWeatherTerrainStyle(mi.name);
   }
 
-  ((RaspColorbarWindow &)GetRow(COLORBAR)).SetStyle(s, contours);
+  ((RaspColorbarWindow &)GetRow(COLORBAR)).SetStyle(s, contour_density);
 }
 
 void
@@ -329,12 +330,20 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   FillPreviewField();
 
   {
-    bool saved_contours = false;
-    Profile::Get(ProfileKeys::RaspContours, saved_contours);
-    contours = saved_contours;
-    WndProperty *cp = AddBoolean(_("Contours"), nullptr, contours);
+    static constexpr StaticEnumChoice contour_density_list[] = {
+      { ContourDensity::OFF,       N_("Off") },
+      { ContourDensity::WIDE,      N_("Wide") },
+      { ContourDensity::REGULAR,   N_("Regular") },
+      { ContourDensity::FINE,      N_("Fine") },
+      { ContourDensity::SUPERFINE, N_("Superfine") },
+      nullptr,
+    };
+    Profile::GetEnum(ProfileKeys::RaspContours, contour_density);
+    WndProperty *cp = AddEnum(_("Contours"), nullptr,
+                              contour_density_list,
+                              (unsigned)contour_density);
     cp->GetDataField()->SetOnModified([this]{
-      contours = GetValueBoolean(CONTOURS);
+      contour_density = (ContourDensity)GetValueEnum(CONTOURS);
       UpdateColorbar();
     });
   }
@@ -360,8 +369,8 @@ RASPSettingsPanel::Save([[maybe_unused]] bool &_changed) noexcept
 {
   WeatherUIState &state = CommonInterface::SetUIState().weather;
 
-  state.contours = contours;
-  Profile::Set(ProfileKeys::RaspContours, contours);
+  state.contour_density = contour_density;
+  Profile::SetEnum(ProfileKeys::RaspContours, contour_density);
 
   ActionInterface::SendUIState(true);
 
