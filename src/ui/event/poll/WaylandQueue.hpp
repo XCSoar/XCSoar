@@ -17,7 +17,6 @@ struct xkb_context;
 struct xkb_keymap;
 struct xkb_state;
 
-enum class DisplayOrientation : uint8_t;
 struct PixelSize;
 
 struct wl_display;
@@ -132,7 +131,6 @@ public:
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   void SetScreenSize(PixelSize new_size) noexcept;
-  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif
 
   void RegistryHandler(struct wl_registry *registry, uint32_t id,

@@ -145,6 +145,9 @@ X11EventQueue::HandleEvent(_XEvent &event)
 
   case ConfigureNotify:
     {
+      if (event.xconfigure.width <= 0 || event.xconfigure.height <= 0)
+        break;
+
       PixelSize physical_size(event.xconfigure.width,
                               event.xconfigure.height);
       physical_screen_size = physical_size;

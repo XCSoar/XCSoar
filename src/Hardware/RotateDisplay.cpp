@@ -46,7 +46,7 @@ Display::RotateSupported()
 bool
 Display::Rotate(DisplayOrientation orientation)
 {
-#if !defined(ANDROID) && !defined(KOBO)
+#if !defined(ANDROID) && !defined(KOBO) && !defined(SOFTWARE_ROTATE_DISPLAY)
   if (orientation == DisplayOrientation::DEFAULT)
     /* leave it as it is */
     return true;

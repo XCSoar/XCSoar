@@ -38,7 +38,7 @@ handle_configure(void *data,
 {
   if (width > 0 && height > 0) {
     auto *window = static_cast<TopWindow *>(data);
-    window->Resize(PixelSize(width, height));
+    window->OnNativeConfigure(PixelSize(width, height));
   }
 }
 
@@ -314,7 +314,6 @@ TopWindow::OnResize(PixelSize new_size) noexcept
       if (time_since_last_flush >= throttle_ms) {
         struct wl_display *wl_display = display.GetWaylandDisplay();
         wl_display_flush(wl_display);
-        wl_display_dispatch_pending(wl_display);
         last_resize_flush_time = now;
       }
     } else {

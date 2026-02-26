@@ -98,10 +98,13 @@ TopWindow::SetDisplayOrientation(DisplayOrientation orientation) noexcept
   const PixelSize new_size = screen->SetDisplayOrientation(orientation);
   const bool resize_needed = new_size != GetSize();
 
-#ifdef MESA_KMS
-  /* On KMS, keep the EGL viewport aligned with the current native mode
-     dimensions after software rotation changes. */
-  if (screen->CheckResize(screen->GetNativeSize())) {
+#ifdef ENABLE_OPENGL
+  /* Re-read the current drawable size after orientation changes.
+     On some UNIX backends, output/orientation changes don't always
+     deliver a fresh configure event immediately. */
+  const PixelSize native_size = screen->GetNativeSize();
+  if (native_size.width > 0 && native_size.height > 0 &&
+      screen->CheckResize(native_size)) {
     Resize(screen->GetSize());
     return;
   }

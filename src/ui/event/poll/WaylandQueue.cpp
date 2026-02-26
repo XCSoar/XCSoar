@@ -137,7 +137,7 @@ WaylandPointerAxis(void *data,
   if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL ||
       axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL) {
     auto &q = *(WaylandEventQueue *)data;
-    PixelPoint p = q.GetPointerPosition();
+    PixelPoint p = q.MaybeTransformPoint(q.GetPointerPosition());
     Event e(Event::MOUSE_WHEEL, p);
     /* Vertical scroll: positive = down, negative = up
        Horizontal scroll: positive = right, negative = left */
@@ -480,25 +480,25 @@ WaylandEventQueue::MaybeTransformPoint(PixelPoint p) const noexcept
 inline void
 WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
 {
-  const PixelPoint transformed =
-    MaybeTransformPoint(PixelPoint(new_pointer_position.x,
-                                   new_pointer_position.y));
-
-  new_pointer_position = IntPoint2D(transformed.x, transformed.y);
-
   if (new_pointer_position == pointer_position)
     return;
 
   pointer_position = new_pointer_position;
+  const PixelPoint transformed =
+    MaybeTransformPoint(PixelPoint(pointer_position.x,
+                                   pointer_position.y));
   Push(Event(Event::MOUSE_MOTION,
-             PixelPoint(pointer_position.x, pointer_position.y)));
+             transformed));
 }
 
 inline void
 WaylandEventQueue::PointerButton(bool pressed) noexcept
 {
+  const PixelPoint transformed =
+    MaybeTransformPoint(PixelPoint(pointer_position.x,
+                                   pointer_position.y));
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
-             PixelPoint(pointer_position.x, pointer_position.y)));
+             transformed));
 }
 
 void
@@ -623,12 +623,6 @@ void
 WaylandEventQueue::SetScreenSize(PixelSize screen_size) noexcept
 {
   physical_screen_size = screen_size;
-}
-
-void
-WaylandEventQueue::SetDisplayOrientation(
-  [[maybe_unused]] DisplayOrientation orientation) noexcept
-{
 }
 
 #endif
