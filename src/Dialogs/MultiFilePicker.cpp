@@ -42,6 +42,8 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
     widget = std::make_unique<StaticHelpTextWidget>(std::move(widget),
                                                     help_text);
 
+  dialog.AddButton(_("OK"), mrOK);
+
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
     dialog.AddButton(_("Download"), [file_widget, &df]() {
@@ -71,7 +73,6 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
       file_widget->ClearSelection();
     UpdateButtons();
   });
-  dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
   // Ensure initial caption is correct and register callback.
