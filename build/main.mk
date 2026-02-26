@@ -494,6 +494,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Repository/Parser.cpp \
 	\
 	$(SRC)/Storage/PlatformStorageMonitor.cpp \
+	$(SRC)/Storage/PlatformStorageHotplugMonitor.cpp \
+	$(SRC)/Storage/StorageManager.cpp \
+	$(SRC)/Storage/StorageEvents.cpp \
 	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
@@ -559,14 +562,17 @@ ifneq ($(TARGET),ANDROID)
 ifeq ($(TARGET_IS_LINUX),y)
 	XCSOAR_SOURCES += \
 		$(SRC)/Storage/linux/LinuxStorageDevice.cpp \
-		$(SRC)/Storage/linux/LinuxStorageMonitor.cpp
+		$(SRC)/Storage/linux/LinuxStorageMonitor.cpp \
+		$(SRC)/Storage/linux/LinuxStorageHotplugMonitor.cpp
 endif
 endif
 
 ifeq ($(HAVE_WIN32),y)
 	XCSOAR_SOURCES += \
 		$(SRC)/Storage/win/WindowsStorageDevice.cpp \
-		$(SRC)/Storage/win/WindowsStorageMonitor.cpp
+		$(SRC)/Storage/win/WindowsStorageMonitor.cpp \
+		$(SRC)/Storage/win/WindowsStorageHotplugMonitor.cpp \
+		$(SRC)/Storage/win/WinHotplugForward.cpp
 endif
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
