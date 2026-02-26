@@ -154,7 +154,7 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
 #ifdef HAVE_HTTP
   AddSpacer();
 
-  AddReadOnly(_("WeGlide"),
+  AddReadOnly("WeGlide",
               nullptr,
               settings.weglide.enabled
               ? _("On") : _("Off"));
