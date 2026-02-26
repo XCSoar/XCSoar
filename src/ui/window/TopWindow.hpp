@@ -157,6 +157,8 @@ public:
   void MarkFirstConfigureReceived() noexcept {
     received_first_configure = true;
   }
+
+  void OnNativeConfigure(PixelSize new_native_size) noexcept;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif

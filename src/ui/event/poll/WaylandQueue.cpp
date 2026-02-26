@@ -137,11 +137,7 @@ WaylandPointerAxis(void *data,
   if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL ||
       axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL) {
     auto &q = *(WaylandEventQueue *)data;
-#ifdef SOFTWARE_ROTATE_DISPLAY
-    PixelPoint p = q.GetTransformedPointerPosition();
-#else
-    PixelPoint p(q.pointer_position.x, q.pointer_position.y);
-#endif
+    PixelPoint p = q.GetPointerPosition();
     Event e(Event::MOUSE_WHEEL, p);
     /* Vertical scroll: positive = down, negative = up
        Horizontal scroll: positive = right, negative = left */
@@ -471,9 +467,25 @@ WaylandEventQueue::Push(const Event &event) noexcept
   queue.Push(event);
 }
 
+PixelPoint
+WaylandEventQueue::MaybeTransformPoint(PixelPoint p) const noexcept
+{
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+  return TransformCoordinates(p, physical_screen_size);
+#else
+  return p;
+#endif
+}
+
 inline void
 WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
 {
+  const PixelPoint transformed =
+    MaybeTransformPoint(PixelPoint(new_pointer_position.x,
+                                   new_pointer_position.y));
+
+  new_pointer_position = IntPoint2D(transformed.x, transformed.y);
+
   if (new_pointer_position == pointer_position)
     return;
 
@@ -607,25 +619,15 @@ WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 
-PixelPoint
-WaylandEventQueue::GetTransformedPointerPosition() const noexcept
-{
-  PixelPoint p(pointer_position.x, pointer_position.y);
-  return TransformCoordinates(p, physical_screen_size);
-}
-
 void
 WaylandEventQueue::SetScreenSize(PixelSize screen_size) noexcept
 {
-  if (AreAxesSwapped(OpenGL::display_orientation)) {
-    physical_screen_size = PixelSize(screen_size.height, screen_size.width);
-  } else {
-    physical_screen_size = screen_size;
-  }
+  physical_screen_size = screen_size;
 }
 
 void
-WaylandEventQueue::SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept
+WaylandEventQueue::SetDisplayOrientation(
+  [[maybe_unused]] DisplayOrientation orientation) noexcept
 {
 }
 

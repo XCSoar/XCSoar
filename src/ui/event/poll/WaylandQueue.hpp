@@ -141,12 +141,14 @@ public:
   void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch) noexcept;
 
   void Push(const Event &event) noexcept;
+  [[gnu::pure]]
+  PixelPoint MaybeTransformPoint(PixelPoint p) const noexcept;
+  [[gnu::pure]]
+  PixelPoint GetPointerPosition() const noexcept {
+    return PixelPoint(pointer_position.x, pointer_position.y);
+  }
   void PointerMotion(IntPoint2D new_pointer_position) noexcept;
   void PointerButton(bool pressed) noexcept;
-
-#ifdef SOFTWARE_ROTATE_DISPLAY
-  PixelPoint GetTransformedPointerPosition() const noexcept;
-#endif
 
   void KeyboardKey(uint32_t key, uint32_t state) noexcept;
   void KeyboardKeymap(uint32_t format, int32_t fd, uint32_t size) noexcept;
