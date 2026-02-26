@@ -5,6 +5,7 @@
 
 #include "event/PipeEvent.hxx"
 #include "ui/dim/Size.hpp"
+#include "ui/dim/Point.hpp"
 
 #include <cassert>
 
@@ -54,24 +55,31 @@ public:
   void Resume() noexcept;
 
   void SetScreenSize(PixelSize _screen_size) noexcept {
+    const PixelSize old_size = screen_size;
     screen_size = _screen_size;
 
     assert(screen_size.width > 0);
     assert(screen_size.height > 0);
 
-    if (-1.0 == x)
+    if (-1.0 == x) {
       x = screen_size.width / 2;
+    } else if (old_size.width > 0 && old_size.width != screen_size.width) {
+      x = x * screen_size.width / old_size.width;
+    }
 
-    if (-1.0 == y)
+    if (-1.0 == y) {
       y = screen_size.height / 2;
+    } else if (old_size.height > 0 && old_size.height != screen_size.height) {
+      y = y * screen_size.height / old_size.height;
+    }
   }
 
   unsigned GetX() const noexcept {
-    return (unsigned) x;
+    return GetPosition().x;
   }
 
   unsigned GetY() const noexcept {
-    return (unsigned) y;
+    return GetPosition().y;
   }
 
   bool HasPointer() const noexcept {
@@ -91,6 +99,12 @@ public:
   }
 
 private:
+  [[gnu::pure]]
+  PixelPoint GetPosition() const noexcept;
+
+  [[gnu::pure]]
+  PixelPoint MaybeTransformPoint(PixelPoint p) const noexcept;
+
   int OpenDevice(const char *path, int flags) noexcept;
   void CloseDevice(int fd) noexcept;
 

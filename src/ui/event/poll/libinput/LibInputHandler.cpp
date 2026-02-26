@@ -7,6 +7,10 @@
 #include "ui/event/shared/Event.hpp"
 #include "ui/event/poll/linux/Translate.hpp"
 
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+#include "ui/event/shared/TransformCoordinates.hpp"
+#endif
+
 #include <libinput.h>
 
 #include <algorithm> // for std::clamp()
@@ -18,6 +22,35 @@
 #include <termios.h>
 
 namespace UI {
+
+PixelPoint
+LibInputHandler::GetPosition() const noexcept
+{
+  return MaybeTransformPoint(PixelPoint((unsigned)x, (unsigned)y));
+}
+
+PixelPoint
+LibInputHandler::MaybeTransformPoint(PixelPoint p) const noexcept
+{
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+  p = TransformCoordinates(p, screen_size);
+#else
+  return p;
+#endif
+
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+  PixelSize logical_size = screen_size;
+  if (AreAxesSwapped(OpenGL::display_orientation))
+    logical_size = PixelSize(screen_size.height, screen_size.width);
+
+  if (logical_size.width > 0 && unsigned(p.x) >= logical_size.width)
+    p.x = logical_size.width - 1;
+  if (logical_size.height > 0 && unsigned(p.y) >= logical_size.height)
+    p.y = logical_size.height - 1;
+#endif
+
+  return p;
+}
 
 LibInputHandler::LibInputHandler(EventQueue &_queue) noexcept
   :queue(_queue),
@@ -64,6 +97,10 @@ LibInputHandler::Open() noexcept
 
   fd.Open(FileDescriptor{_fd});
   fd.ScheduleRead();
+
+  /* Process initial DEVICE_ADDED events immediately so HasPointer() /
+     HasTouchScreen() / HasKeyboard() are accurate during startup. */
+  HandlePendingEvents();
   return true;
 }
 
@@ -122,16 +159,20 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
     {
       libinput_device *event_device = libinput_event_get_device(li_event);
       assert(nullptr != event_device);
-      if (libinput_device_has_capability(event_device,
-                                         LIBINPUT_DEVICE_CAP_POINTER)) {
+      const bool is_pointer = libinput_device_has_capability(
+        event_device, LIBINPUT_DEVICE_CAP_POINTER);
+      const bool is_touch = libinput_device_has_capability(
+        event_device, LIBINPUT_DEVICE_CAP_TOUCH);
+      const bool is_keyboard = libinput_device_has_capability(
+        event_device, LIBINPUT_DEVICE_CAP_KEYBOARD);
+
+      if (is_pointer) {
         n_pointers += (LIBINPUT_EVENT_DEVICE_ADDED == type) ? 1 : -1;
       }
-      if (libinput_device_has_capability(event_device,
-                                         LIBINPUT_DEVICE_CAP_TOUCH)) {
+      if (is_touch) {
         n_touch_screens += (LIBINPUT_EVENT_DEVICE_ADDED == type) ? 1 : -1;
       }
-      if (libinput_device_has_capability(event_device,
-                                         LIBINPUT_DEVICE_CAP_KEYBOARD)) {
+      if (is_keyboard) {
         n_keyboards += (LIBINPUT_EVENT_DEVICE_ADDED == type) ? 1 : -1;
       }
     }
@@ -169,8 +210,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       x = std::clamp<double>(x, 0, screen_size.width);
       y += libinput_event_pointer_get_dy(ptr_li_event);
       y = std::clamp<double>(y, 0, screen_size.height);
-      queue.Push(Event(Event::MOUSE_MOTION,
-                       PixelPoint((unsigned)x, (unsigned)y)));
+      queue.Push(Event(Event::MOUSE_MOTION, GetPosition()));
     }
     break;
   case LIBINPUT_EVENT_POINTER_MOTION_ABSOLUTE:
@@ -181,8 +221,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
                                                             screen_size.width);
       y = libinput_event_pointer_get_absolute_y_transformed(ptr_li_event,
                                                             screen_size.height);
-      queue.Push(Event(Event::MOUSE_MOTION,
-                       PixelPoint((unsigned)x, (unsigned)y)));
+      queue.Push(Event(Event::MOUSE_MOTION, GetPosition()));
     }
     break;
   case LIBINPUT_EVENT_POINTER_BUTTON:
@@ -194,7 +233,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       queue.Push(Event(btn_state == LIBINPUT_BUTTON_STATE_PRESSED
                        ? Event::MOUSE_DOWN
                        : Event::MOUSE_UP,
-                       PixelPoint((unsigned)x, (unsigned)y)));
+                       GetPosition()));
     }
     break;
   case LIBINPUT_EVENT_POINTER_AXIS:
@@ -209,8 +248,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
           ptr_li_event, LIBINPUT_POINTER_AXIS_SCROLL_VERTICAL);
 #endif
       if (0 != axis_value) {
-        Event event(Event::MOUSE_WHEEL,
-                    PixelPoint((unsigned)x, (unsigned)y));
+        Event event(Event::MOUSE_WHEEL, GetPosition());
         /* Invert scroll direction to match X11 convention (positive = scroll up) */
         event.param = unsigned(-(int) axis_value);
         queue.Push(event);
@@ -225,14 +263,12 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
                                                  screen_size.width);
       y = libinput_event_touch_get_y_transformed(touch_li_event,
                                                  screen_size.height);
-      queue.Push(Event(Event::MOUSE_DOWN,
-                       PixelPoint((unsigned)x, (unsigned)y)));
+      queue.Push(Event(Event::MOUSE_DOWN, GetPosition()));
     }
     break;
   case LIBINPUT_EVENT_TOUCH_UP:
     {
-      queue.Push(Event(Event::MOUSE_UP,
-                       PixelPoint((unsigned)x, (unsigned)y)));
+      queue.Push(Event(Event::MOUSE_UP, GetPosition()));
     }
     break;
   case LIBINPUT_EVENT_TOUCH_MOTION:
@@ -243,8 +279,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
                                                  screen_size.width);
       y = libinput_event_touch_get_y_transformed(touch_li_event,
                                                  screen_size.height);
-      queue.Push(Event(Event::MOUSE_MOTION,
-                       PixelPoint((unsigned)x, (unsigned)y)));
+      queue.Push(Event(Event::MOUSE_MOTION, GetPosition()));
     }
     break;
   }
