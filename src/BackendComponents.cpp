@@ -12,6 +12,7 @@
 #include "Replay/Replay.hpp"
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
+#include "Storage/StorageManager.hpp"
 
 BackendComponents::BackendComponents() noexcept
   :device_blackboard(new DeviceBlackboard())
