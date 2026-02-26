@@ -96,6 +96,7 @@ TopWindow::SetDisplayOrientation(DisplayOrientation orientation) noexcept
   assert(screen != nullptr);
 
   const PixelSize new_size = screen->SetDisplayOrientation(orientation);
+  const bool resize_needed = new_size != GetSize();
 
 #ifdef MESA_KMS
   /* On KMS, keep the EGL viewport aligned with the current native mode
@@ -105,6 +106,9 @@ TopWindow::SetDisplayOrientation(DisplayOrientation orientation) noexcept
     return;
   }
 #endif
+
+  if (!resize_needed)
+    BumpRenderStateToken();
 
   Resize(new_size);
 }

@@ -240,7 +240,11 @@ TopWindow::OnNativeConfigure(PixelSize new_native_size) noexcept
 
   if (screen != nullptr) {
     screen->CheckResize(new_native_size);
-    Resize(screen->GetSize());
+    const PixelSize logical_size = screen->GetSize();
+    if (logical_size == GetSize())
+      BumpRenderStateToken();
+
+    Resize(logical_size);
   } else
     Resize(new_native_size);
 }
@@ -256,7 +260,9 @@ TopWindow::OnResize(PixelSize new_size) noexcept
       new_size.height == initial_requested_size.height) {
     return;
   }
-  
+
+  BumpRenderStateToken();
+
   PixelSize native_size = new_size;
 #ifdef SOFTWARE_ROTATE_DISPLAY
   if (AreAxesSwapped(OpenGL::display_orientation))

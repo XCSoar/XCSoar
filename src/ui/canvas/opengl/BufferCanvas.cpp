@@ -24,10 +24,9 @@ BufferCanvas::Create(PixelSize new_size) noexcept
 
   Destroy();
   texture = new GLTexture(INTERNAL_FORMAT, new_size, FORMAT, TYPE, true);
+  frame_buffer = new GLFrameBuffer();
 
-  if (OpenGL::render_buffer_stencil) {
-    frame_buffer = new GLFrameBuffer();
-
+  if (OpenGL::render_buffer_stencil != GL_NONE) {
     stencil_buffer = new GLRenderBuffer();
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
@@ -90,41 +89,39 @@ BufferCanvas::Begin(Canvas &other) noexcept
 
   Resize(other.GetSize());
 
-  if (frame_buffer != nullptr) {
-    /* activate the frame buffer */
-    frame_buffer->Bind();
-    texture->AttachFramebuffer(FBO::COLOR_ATTACHMENT0);
+  /* activate the frame buffer */
+  frame_buffer->Bind();
+  texture->AttachFramebuffer(FBO::COLOR_ATTACHMENT0);
 
+  if (stencil_buffer != nullptr) {
     if (OpenGL::render_buffer_stencil == OpenGL::render_buffer_depth_stencil)
       /* we don't need a depth buffer, but we must attach it to the
          FBO if the stencil Renderbuffer has one */
       stencil_buffer->AttachFramebuffer(FBO::DEPTH_ATTACHMENT);
 
     stencil_buffer->AttachFramebuffer(FBO::STENCIL_ATTACHMENT);
+  }
 
-    /* save the old viewport */
+  /* save the old viewport */
 
-    glGetIntegerv(GL_VIEWPORT, old_viewport);
+  glGetIntegerv(GL_VIEWPORT, old_viewport);
 
-    old_projection_matrix = OpenGL::projection_matrix;
-    OpenGL::projection_matrix = glm::mat4(1);
+  old_projection_matrix = OpenGL::projection_matrix;
+  OpenGL::projection_matrix = glm::mat4(1);
 
-    old_translate = OpenGL::translate;
-    old_size = OpenGL::viewport_size;
+  old_translate = OpenGL::translate;
+  old_size = OpenGL::viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-    old_orientation = OpenGL::display_orientation;
-    OpenGL::display_orientation = DisplayOrientation::DEFAULT;
+  old_orientation = OpenGL::display_orientation;
+  OpenGL::display_orientation = DisplayOrientation::DEFAULT;
 #endif
 
-    /* configure a new viewport */
-    OpenGL::SetupViewport({GetWidth(), GetHeight()});
-    OpenGL::translate = {0, 0};
+  /* configure a new viewport */
+  OpenGL::SetupViewport({GetWidth(), GetHeight()});
+  OpenGL::translate = {0, 0};
 
-    OpenGL::UpdateShaderTranslate();
-  } else {
-    offset = other.offset;
-  }
+  OpenGL::UpdateShaderTranslate();
 
 #ifndef NDEBUG
   active = true;
@@ -138,40 +135,34 @@ BufferCanvas::Commit(Canvas &other) noexcept
   assert(active);
   assert(GetWidth() == other.GetWidth());
   assert(GetHeight() == other.GetHeight());
+  assert(frame_buffer != nullptr);
 
-  if (frame_buffer != nullptr) {
-    assert(OpenGL::translate.x == 0);
-    assert(OpenGL::translate.y == 0);
+  assert(OpenGL::translate.x == 0);
+  assert(OpenGL::translate.y == 0);
 
-    frame_buffer->Unbind();
+  frame_buffer->Unbind();
 
-    /* restore the old viewport */
+  /* restore the old viewport */
 
-    assert(OpenGL::translate == PixelPoint(0, 0));
+  assert(OpenGL::translate == PixelPoint(0, 0));
 
-    glViewport(old_viewport[0], old_viewport[1],
-               old_viewport[2], old_viewport[3]);
+  glViewport(old_viewport[0], old_viewport[1],
+             old_viewport[2], old_viewport[3]);
 
-    OpenGL::projection_matrix = old_projection_matrix;
-    OpenGL::UpdateShaderProjectionMatrix();
+  OpenGL::projection_matrix = old_projection_matrix;
+  OpenGL::UpdateShaderProjectionMatrix();
 
-    OpenGL::translate = old_translate;
-    OpenGL::viewport_size = old_size;
+  OpenGL::translate = old_translate;
+  OpenGL::viewport_size = old_size;
 
-    OpenGL::UpdateShaderTranslate();
+  OpenGL::UpdateShaderTranslate();
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-    OpenGL::display_orientation = old_orientation;
+  OpenGL::display_orientation = old_orientation;
 #endif
 
-    /* copy frame buffer to screen */
-    CopyTo(other);
-  } else {
-    assert(offset == other.offset);
-
-    /* copy screen to texture */
-    CopyToTexture(*texture, GetRect());
-  }
+  /* copy frame buffer to screen */
+  CopyTo(other);
 
 #ifndef NDEBUG
   active = false;
@@ -182,7 +173,7 @@ void
 BufferCanvas::CopyTo(Canvas &other) noexcept
 {
   assert(IsDefined());
-  assert(!active || frame_buffer != nullptr);
+  assert(frame_buffer != nullptr);
 
   OpenGL::texture_shader->Use();
 

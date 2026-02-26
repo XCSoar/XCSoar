@@ -6,6 +6,10 @@
 #include "PaintWindow.hpp"
 #include "ui/canvas/BufferCanvas.hpp"
 
+#ifdef ENABLE_OPENGL
+#include <cstdint>
+#endif
+
 #ifdef USE_MEMORY_CANVAS
 #include <atomic>
 #endif
@@ -21,6 +25,11 @@ class BufferWindow : public PaintWindow {
    * OnPaintBuffer()?
    */
   bool dirty;
+
+#ifdef ENABLE_OPENGL
+  uint32_t last_render_state_token = 0;
+  bool render_state_token_known = false;
+#endif
 
 #ifdef USE_MEMORY_CANVAS
   /**
