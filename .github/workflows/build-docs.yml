@@ -44,7 +44,7 @@ jobs:
        run: make manual V=2
 
      - name: upload artifact
-       uses: actions/upload-artifact@v6
+       uses: actions/upload-artifact@v7
        with:
          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}
          path: output/${{ env.DOC_OUTPUT }}/*.${{ env.TARGET_EXT }}

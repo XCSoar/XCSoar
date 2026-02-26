@@ -671,13 +671,13 @@ jobs:
           security delete-keychain macos-build.keychain || true
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
 
       - name: Upload artifact (Bundle)
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}.aab
