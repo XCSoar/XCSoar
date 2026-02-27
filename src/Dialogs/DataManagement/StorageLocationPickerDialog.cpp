@@ -4,16 +4,23 @@
 #include "StorageLocationPickerDialog.hpp"
 
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "system/Path.hpp"
 #include "Storage/PlatformStorageMonitor.hpp"
+#include "Storage/StorageEvents.hpp"
+#include "Storage/StorageManager.hpp"
+#include "BackendComponents.hpp"
+#include "Components.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
+#include "Storage/StorageUtil.hpp"
+#include "util/StaticString.hxx"
 
 #include <memory>
 #include <string>
@@ -46,10 +53,13 @@ DiscoverTargets() noexcept
 /**
  * Custom list widget for the storage location picker.
  *
- * Paints device entries via TwoTextRowsRenderer and manages its own
- * device list.  Refresh() re-enumerates on demand ("Scan" button).
+ * Paints device entries via TwoTextRowsRenderer and registers itself
+ * as a StorageEventListener so the list refreshes automatically when
+ * the OS hotplug monitor detects a device arrival or removal —
+ * no need for the user to press "Scan".
  */
-class StorageListWidget final : public ListWidget {
+class StorageListWidget final : public ListWidget,
+                                public StorageEventListener {
   TwoTextRowsRenderer row_renderer_;
   DeviceList options_;
   WndForm *dialog_ = nullptr;
@@ -79,6 +89,28 @@ public:
     SyncSelectButton();
   }
 
+  void ScanAndReport() noexcept {
+    const unsigned old_count = options_.size();
+    Refresh();
+    const unsigned new_count = options_.size();
+
+    StaticString<128> msg;
+    if (new_count > old_count)
+      msg.Format(_("Found %u new device(s). %u total."),
+                 new_count - old_count, new_count);
+    else if (new_count < old_count)
+      msg.Format(_("Removed %u device(s). %u remaining."),
+                 old_count - new_count, new_count);
+    else
+      msg.Format(_("No changes. %u device(s)."), new_count);
+
+    ShowMessageBox(msg, _("Scan"), MB_OK | MB_ICONINFORMATION);
+  }
+
+  /* StorageEventListener */
+  void OnStorageEvent(const StorageEventInfo &) noexcept override {
+    Refresh();
+  }
 
   /* Widget */
   void Prepare(ContainerWindow &parent,
@@ -89,6 +121,17 @@ public:
     options_ = DiscoverTargets();
     CreateList(parent, look, rc, row_height).SetLength(options_.size());
     SyncSelectButton();
+
+    if (backend_components != nullptr &&
+        backend_components->storage_manager != nullptr)
+      backend_components->storage_manager->AddEventListener(*this);
+  }
+
+  void Unprepare() noexcept override {
+    if (backend_components != nullptr &&
+        backend_components->storage_manager != nullptr)
+      backend_components->storage_manager->RemoveEventListener(*this);
+    ListWidget::Unprepare();
   }
 
   /* ListControl::Handler */
@@ -161,7 +204,7 @@ PickStorageLocation() noexcept
 
   auto *select_btn = dialog.AddButton(_("Select"), mrOK);
   list_widget->SetSelectButton(*select_btn);
-  dialog.AddButton(_("Scan"), [list_widget]{ list_widget->Refresh(); });
+  dialog.AddButton(_("Scan"), [list_widget]{ list_widget->ScanAndReport(); });
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
   dialog.FinishPreliminary(list_widget);
