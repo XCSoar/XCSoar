@@ -8,6 +8,10 @@
 #include "Look/DialogLook.hpp"
 #include "system/Path.hpp"
 #include "Storage/PlatformStorageMonitor.hpp"
+#include "Storage/StorageEvents.hpp"
+#include "Storage/StorageManager.hpp"
+#include "BackendComponents.hpp"
+#include "Components.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
@@ -56,10 +60,13 @@ std::vector<DeviceEntry> DiscoverTargets() noexcept;
 /**
  * Custom list widget for the storage location picker.
  *
- * Paints device entries via TwoTextRowsRenderer and manages its own
- * device list.  Refresh() re-enumerates on demand ("Scan" button).
+ * Paints device entries via TwoTextRowsRenderer and registers itself
+ * as a StorageEventListener so the list refreshes automatically when
+ * the OS hotplug monitor detects a device arrival or removal —
+ * no need for the user to press "Scan".
  */
-class StorageListWidget final : public ListWidget {
+class StorageListWidget final : public ListWidget,
+                                public StorageEventListener {
   TwoTextRowsRenderer row_renderer_;
   std::vector<DeviceEntry> options_;
   WndForm *dialog_ = nullptr;
@@ -94,6 +101,11 @@ public:
     SyncSelectButton();
   }
 
+  /* StorageEventListener — called on the UI thread by StorageManager */
+  void OnStorageEvent(const StorageEventInfo &) noexcept override {
+    Refresh();
+  }
+
   /* Widget */
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override {
@@ -103,6 +115,17 @@ public:
     options_ = DiscoverTargets();
     CreateList(parent, look, rc, row_height).SetLength(options_.size());
     SyncSelectButton();
+
+    if (backend_components != nullptr &&
+        backend_components->storage_manager != nullptr)
+      backend_components->storage_manager->AddEventListener(*this);
+  }
+
+  void Unprepare() noexcept override {
+    if (backend_components != nullptr &&
+        backend_components->storage_manager != nullptr)
+      backend_components->storage_manager->RemoveEventListener(*this);
+    ListWidget::Unprepare();
   }
 
   /* ListControl::Handler */
