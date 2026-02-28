@@ -384,6 +384,6 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
-                                do_contour);
+                                do_contour ? (1u << (height_scale * 2)) : 0u);
   return true;
 }
