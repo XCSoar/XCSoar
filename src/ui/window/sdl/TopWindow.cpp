@@ -158,8 +158,9 @@ TopWindow::OnEvent(const SDL_Event &event)
     {
       auto p = PointToReal(PixelPoint(event.motion.x, event.motion.y));
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-      p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
-                                            OpenGL::window_size.y});
+      if(OpenGL::window_size.x > 0 && OpenGL::window_size.y > 0)
+        p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
+                                              OpenGL::window_size.y});
 #endif
       return OnMouseMove(p, 0);
     }
@@ -168,8 +169,9 @@ TopWindow::OnEvent(const SDL_Event &event)
     {
       auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-      p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
-                                            OpenGL::window_size.y});
+      if(OpenGL::window_size.x > 0 && OpenGL::window_size.y > 0)
+        p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
+                                              OpenGL::window_size.y});
 #endif
       return double_click.Check(p)
         ? OnMouseDouble(p)
@@ -180,8 +182,9 @@ TopWindow::OnEvent(const SDL_Event &event)
     {
       auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-      p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
-                                            OpenGL::window_size.y});
+      if(OpenGL::window_size.x > 0 && OpenGL::window_size.y > 0)
+        p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
+                                              OpenGL::window_size.y});
 #endif
       double_click.Moved(p);
       return OnMouseUp(p);

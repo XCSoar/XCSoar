@@ -47,8 +47,9 @@ SingleWindow::FilterEvent(const UI::Event &_event, Window *allowed) const noexce
   }
 
   #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-  p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
-                                        OpenGL::window_size.y});
+  if(OpenGL::window_size.x > 0 && OpenGL::window_size.y > 0)
+    p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
+                                          OpenGL::window_size.y});
 #endif
 
   return FilterMouseEvent(p, allowed);
