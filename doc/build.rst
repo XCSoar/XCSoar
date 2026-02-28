@@ -425,22 +425,22 @@ Defaults shown are from the build system (they can be overridden with
    - Notes
  * - ``UNIX``
    - Linux/Unix (native)
-   - yes
+   - no
    - OpenGL
    - Default on Unix-like hosts; main desktop build.
  * - ``UNIX32``
    - Linux/Unix 32-bit
-   - yes
+   - no
    - OpenGL
    - ``UNIX`` with ``-m32``.
  * - ``UNIX64``
    - Linux/Unix 64-bit
-   - yes
+   - no
    - OpenGL
    - ``UNIX`` with ``-m64``.
  * - ``OPT``
    - Linux/Unix optimized
-   - yes
+   - no
    - OpenGL
    - Alias for ``UNIX`` with ``DEBUG=n`` (set ``TARGET_OUTPUT_DIR`` if
      you want a separate output tree).
