@@ -23,7 +23,9 @@ namespace UI {
 void
 TopWindow::OnResize(PixelSize new_size) noexcept
 {
+#ifdef ENABLE_OPENGL
   BumpRenderStateToken();
+#endif
 
   PixelSize native_size = new_size;
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && defined(USE_LIBINPUT)
