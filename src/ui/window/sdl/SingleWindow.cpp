@@ -22,26 +22,36 @@ SingleWindow::FilterEvent(const UI::Event &_event, Window *allowed) const noexce
 
   const SDL_Event &event = _event.event;
 
+  PixelPoint p{};
+
   switch (event.type) {
   case SDL_MOUSEMOTION:
+#ifdef HAVE_HIGHDPI_SUPPORT
+      p = PointToReal(PixelPoint(event.motion.x, event.motion.y));
+#else
+      p = PixelPoint(event.motion.x, event.motion.y);
+#endif
+    break;
+
   case SDL_MOUSEBUTTONDOWN:
   case SDL_MOUSEBUTTONUP:
-    {
 #ifdef HAVE_HIGHDPI_SUPPORT
-      auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
+    p = PointToReal(PixelPoint(event.button.x, event.button.y));
 #else
-      auto p = PixelPoint(event.button.x, event.button.y);
+    p = PixelPoint(event.button.x, event.button.y);
 #endif
-#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-      p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
-                                            OpenGL::window_size.y});
-#endif
-      return FilterMouseEvent(p, allowed);
-    }
+    break;
 
   default:
     return true;
   }
+
+  #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+  p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
+                                        OpenGL::window_size.y});
+#endif
+
+  return FilterMouseEvent(p, allowed);
 }
 
 } // namespace UI
