@@ -28,20 +28,6 @@ static constexpr unsigned MAX_QUANTISATION_LOW_ZOOM = 40;
 static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
 
 /**
- * Minimum contour spacing factor: contour interval must be at
- * least this multiple of pixel_size. This corresponds to a
- * fixed spacing for a given slope angle (i.e. 6 pixels/contour 
- * at 30 degrees slope)
- */
-static constexpr double CONTOUR_MIN_SPACING_FACTOR = 3.0;
-
-/**
- * Maximum contour height scale (bit shift): stop the contour scaling
- * at this level (basically, contour interval > Mount Everest height)
- */
-static constexpr unsigned CONTOUR_HEIGHT_SCALE_MAX = 15;
-
-/**
  * Interpolate between x and y with i/128, i.e. i/(1 << 7).
  *
  * i must be below or equal to 128.
