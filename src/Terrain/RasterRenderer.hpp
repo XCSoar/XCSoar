@@ -126,11 +126,14 @@ public:
 
   /**
    * Convert the height matrix into the image.
+   *
+   * @param contour_spacing draw contour lines every N height-domain units;
+   * 0 disables contours.  Useful values are powers of two.
    */
   void GenerateImage(bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
                      const Angle sunazimuth,
-                     bool do_contour) noexcept;
+                     unsigned contour_spacing) noexcept;
 
   const RawBitmap &GetImage() const noexcept {
     return *image;
