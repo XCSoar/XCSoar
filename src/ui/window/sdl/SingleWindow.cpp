@@ -7,6 +7,10 @@
 
 #include <SDL_events.h>
 
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+#include "ui/event/shared/TransformCoordinates.hpp"
+#endif
+
 #include <cassert>
 
 namespace UI {
@@ -22,14 +26,18 @@ SingleWindow::FilterEvent(const UI::Event &_event, Window *allowed) const noexce
   case SDL_MOUSEMOTION:
   case SDL_MOUSEBUTTONDOWN:
   case SDL_MOUSEBUTTONUP:
-#ifdef HAVE_HIGHDPI_SUPPORT
     {
-      return FilterMouseEvent(PointToReal(PixelPoint(event.button.x, event.button.y)), allowed);
-    }
+#ifdef HAVE_HIGHDPI_SUPPORT
+      auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
 #else
-    return FilterMouseEvent(PixelPoint(event.button.x, event.button.y),
-                            allowed);
+      auto p = PixelPoint(event.button.x, event.button.y);
 #endif
+#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
+      p = TransformCoordinates(p, PixelSize{OpenGL::window_size.x,
+                                            OpenGL::window_size.y});
+#endif
+      return FilterMouseEvent(p, allowed);
+    }
 
   default:
     return true;
