@@ -22,6 +22,7 @@
 #include "ui/canvas/BufferCanvas.hpp"
 #else
 #include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
 [[gnu::pure]]
@@ -190,6 +191,11 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
     return;
   }
 
+#ifdef ENABLE_OPENGL
+  /* enable clipping */
+  GLCanvasScissor scissor(rc);
+#endif
+
   ChartProjection projection(rc, task.GetTaskProjection(), 1);
   PaintTask(canvas, projection, task, location,
             settings_map,
@@ -209,6 +215,11 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const RasterTerrain *terrain, const Airspaces *airspaces,
                int highlight_index)
 {
+#ifdef ENABLE_OPENGL
+  /* enable clipping */
+  GLCanvasScissor scissor(rc);
+#endif
+
   ChartProjection projection(rc, point);
   PaintTask(canvas, projection, task, location,
             settings_map,
