@@ -4,6 +4,7 @@
 #pragma once
 
 #include "event/PipeEvent.hxx"
+#include "InputTransform.hpp"
 #include "ui/dim/Size.hpp"
 #include "ui/dim/Point.hpp"
 #include "DisplayOrientation.hpp"
@@ -19,11 +20,6 @@ class UdevContext;
 namespace UI {
 
 class EventQueue;
-
-enum class InputTransformMode : uint8_t {
-  XCSOAR_ROTATED,
-  SYSTEM_ROTATED,
-};
 
 /**
  * A driver for handling libinput events.
