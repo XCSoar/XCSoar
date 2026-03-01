@@ -61,7 +61,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent,
   if (edit_manual_wind) {
     SpeedVector manual_wind = CommonInterface::Calculated().GetWindOrZero();
 
-    AddReadOnly(_("Source"));
+    AddReadOnly(C_("Wind source", "Source"));
 
     WndProperty *wp =
       AddFloat(_("Speed"), _("Manual adjustment of wind speed."),

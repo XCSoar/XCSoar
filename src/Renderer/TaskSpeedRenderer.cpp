@@ -26,7 +26,7 @@ TaskSpeedCaption(char *sTmp,
 
   sprintf(sTmp,
             "%s: %d %s\r\n%s: %d %s",
-            _("Vave"),
+            C_("Average velocity abbreviation", "Vave"),
             (int)Units::ToUserTaskSpeed(fs.task_speed.GetAverageY()),
             Units::GetTaskSpeedName(),
             _("Vest"),
