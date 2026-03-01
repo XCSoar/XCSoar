@@ -42,11 +42,13 @@ public:
   #endif
   }
 
-#ifndef USE_LIBINPUT
   void SetDisplayOrientation(DisplayOrientation orientation) {
+#ifdef USE_LIBINPUT
+    libinput_handler.SetDisplayOrientation(orientation);
+#else
     merge_mouse.SetDisplayOrientation(orientation);
-  }
 #endif
+  }
 
   bool HasPointer() const noexcept {
 #ifdef USE_LIBINPUT
