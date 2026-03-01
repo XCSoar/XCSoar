@@ -234,7 +234,9 @@ RasterRenderer::ScanMap(const RasterMap &map,
   bounds.IntersectWith(map.GetBounds());
 
   const UnsignedPoint2D matrix_size =
-    (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels;
+    (UnsignedPoint2D)projection.GetScreenSize()
+    * static_cast<unsigned>(BOUNDS_SCALE_FACTOR * 128.0f + 0.5f)
+    / quantisation_pixels / 128;
   if (matrix_size.x == 0 || matrix_size.y == 0) {
     quantisation_effective = 0;
     return;
