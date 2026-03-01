@@ -5,6 +5,7 @@ Version 7.45 - not yet released
   - terrain: fix fluctuating hill-shading strength #2262
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
+  - terrain: add new terrain shading orientation "fixed (Top Left)"
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
 

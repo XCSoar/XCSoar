@@ -267,14 +267,17 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   static constexpr StaticEnumChoice slope_shading_list[] = {
     { SlopeShading::OFF, N_("Off"), },
-    { SlopeShading::FIXED, N_("Fixed"), },
+    { SlopeShading::FIXED, N_("Fixed (North-West)"), },
     { SlopeShading::SUN, N_("Sun"), },
     { SlopeShading::WIND, N_("Wind"), },
+    { SlopeShading::TOP_LEFT, N_("Fixed (Top Left)"), },
     nullptr
   };
 
   AddEnum(_("Slope shading"),
-          _("The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from North-West."),
+          _("The terrain can be shaded among slopes to indicate either "
+            "wind direction, sun position, a geographically fixed shading from "
+            "North-West, or a screen-relative fixed shading from top left."),
           slope_shading_list, (unsigned)terrain.slope_shading);
   GetDataField(TerrainSlopeShading).SetListener(this);
   SetExpertRow(TerrainSlopeShading);
