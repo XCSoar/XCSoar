@@ -7,10 +7,6 @@
 #include "ui/event/shared/Event.hpp"
 #include "ui/event/poll/linux/Translate.hpp"
 
-#if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-#include "ui/event/shared/TransformCoordinates.hpp"
-#endif
-
 #include <libinput.h>
 
 #include <algorithm> // for std::clamp()
@@ -64,17 +60,16 @@ PixelPoint
 LibInputHandler::MaybeTransformPoint(PixelPoint p) const noexcept
 {
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-  if (input_transform_mode == InputTransformMode::XCSOAR_ROTATED)
-    p = TransformCoordinates(p, screen_size, display_orientation);
+  p = TransformInputPointForMode(p, screen_size, display_orientation,
+                                 input_transform_mode);
 #else
   return p;
 #endif
 
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-  PixelSize logical_size = screen_size;
-  if (input_transform_mode == InputTransformMode::XCSOAR_ROTATED &&
-      AreAxesSwapped(display_orientation))
-    logical_size = PixelSize(screen_size.height, screen_size.width);
+  PixelSize logical_size = GetLogicalInputSizeForMode(screen_size,
+                                                      display_orientation,
+                                                      input_transform_mode);
 
   if (logical_size.width > 0 && unsigned(p.x) >= logical_size.width)
     p.x = logical_size.width - 1;

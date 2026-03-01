@@ -76,6 +76,7 @@ TEST_NAMES = \
 	TestWaypoints \
 	test_pressure \
 	test_task \
+	TestInputTransformMode \
 	TestOverwritingRingBuffer \
 	TestDateTime TestRoughTime TestWrapClock \
 	TestPolylineDecoder \
@@ -579,6 +580,12 @@ TEST_INPUT_CONFIG_SOURCES = \
 TEST_INPUT_CONFIG_CPPFLAGS = $(SCREEN_CPPFLAGS)
 TEST_INPUT_CONFIG_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestInputConfig,TEST_INPUT_CONFIG))
+
+TEST_INPUT_TRANSFORM_MODE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestInputTransformMode.cpp
+TEST_INPUT_TRANSFORM_MODE_DEPENDS = UTIL
+$(eval $(call link-program,TestInputTransformMode,TEST_INPUT_TRANSFORM_MODE))
 
 TEST_POLARS_SOURCES = \
 	$(SRC)/Polar/Shape.cpp \

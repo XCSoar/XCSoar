@@ -3,11 +3,11 @@
 
 #pragma once
 
-#ifdef KOBO
+#ifdef USE_LIBINPUT
+#include "libinput/LibInputHandler.hpp"
+#else
 #include "linux/MergeMouse.hpp"
 #include "linux/Input.hpp"
-#else
-#include "libinput/LibInputHandler.hpp"
 #endif
 
 #include "ui/dim/Point.hpp"
@@ -22,13 +22,13 @@ class EventQueue;
 struct Event;
 
 class InputEventQueue final {
-#ifdef KOBO
+#ifdef USE_LIBINPUT
+  LibInputHandler libinput_handler;
+#else
   MergeMouse merge_mouse;
   LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
-#else
-  LibInputHandler libinput_handler;
-#endif /* !USE_LIBINPUT */
+#endif
 
 public:
   explicit InputEventQueue(EventQueue &queue) noexcept;

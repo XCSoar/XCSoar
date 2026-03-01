@@ -9,14 +9,14 @@ namespace UI {
 
 InputEventQueue::InputEventQueue(EventQueue &queue) noexcept
   :
-#ifdef KOBO
+#ifndef USE_LIBINPUT
    keyboard(queue, merge_mouse),
    mouse(queue, merge_mouse)
 #else
    libinput_handler(queue)
 #endif
 {
-#ifdef KOBO
+#ifndef USE_LIBINPUT
   /* power button */
   keyboard.Open("/dev/input/event0");
 
@@ -32,7 +32,7 @@ InputEventQueue::~InputEventQueue() noexcept = default;
 bool
 InputEventQueue::Generate([[maybe_unused]] Event &event) noexcept
 {
-#ifdef KOBO
+#ifndef USE_LIBINPUT
   event = merge_mouse.Generate();
   if (event.type != Event::Type::NOP)
     return true;
