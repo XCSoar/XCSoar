@@ -233,6 +233,13 @@ RasterRenderer::GenerateImage(bool do_shading,
     contour_height_scale = s;
   }
 
+  // Compute contour width 
+  contour_thickness = contour_height_scale < 16
+    ? std::max(1u,
+               Layout::ScalePenWidth(1u * 1024u)
+               / (quantisation_pixels * 1024u))
+    : 1;
+
   ContourStart(contour_height_scale);
 
   if (do_shading)
@@ -251,10 +258,16 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
   const auto *src = height_matrix.GetData();
   const RawColor *oColorBuf = color_table + 64 * 256;
   RawColor *dest = image->GetTopRow();
+  const ptrdiff_t row_stride =
+    image->GetNextRow(dest) - dest;
 
   for (unsigned y = height_matrix.GetSize().y; y > 0; --y) {
     RawColor *p = dest;
+    RawColor *const row_start = p;
     dest = image->GetNextRow(dest);
+
+    const unsigned current_row =
+      height_matrix.GetSize().y - y;
 
     unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
@@ -270,7 +283,26 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
         h = std::min(254u, h >> height_scale);
         if (contour_interval != contour_row_base ||
             contour_interval != *contour_this_column_base) [[unlikely]] {
-          *p++ = oColorBuf[(int)h - 64 * 256];
+          const RawColor contour_color =
+            oColorBuf[(int)h - 64 * 256];
+
+          if (contour_thickness > 1)
+            // draw T x T square as contour for thickness T. This is offsetting
+            // the contour to top left for T > 3, but that is rare
+            for (unsigned r = 0; r < contour_thickness; ++r) {
+              if (r > current_row)
+                break;
+              for (unsigned c = 0; c < contour_thickness; ++c) {
+                if (p - c < row_start)
+                  break;
+                *(p - c - ptrdiff_t(r) * row_stride) =
+                  contour_color;
+              }
+            }
+          else
+            *p = contour_color;
+
+          ++p;
           *contour_this_column_base = contour_row_base = contour_interval;
         } else {
           *p++ = oColorBuf[h];
@@ -333,6 +365,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   const RawColor *oColorBuf = color_table + 64 * 256;
 
   RawColor *dest = image->GetTopRow();
+  const ptrdiff_t row_stride =
+    image->GetNextRow(dest) - dest;
 
   for (unsigned y = 0; y < height_matrix.GetSize().y; ++y) {
     const unsigned row_plus_index = y < (unsigned)border.bottom
@@ -347,6 +381,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     const unsigned p31 = row_plus_index + row_minus_index;
 
     RawColor *p = dest;
+    RawColor *const row_start = p;
     dest = image->GetNextRow(dest);
 
     unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
@@ -400,8 +435,28 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         if (contour_interval != contour_row_base ||
             contour_interval != *contour_this_column_base) [[unlikely]] {
 
+          const RawColor contour_color =
+            oColorBuf[int(h) - 64 * 256];
+
           *contour_this_column_base++ = contour_row_base = contour_interval;
-          *p++ = oColorBuf[int(h) - 64 * 256];
+
+          if (contour_thickness > 1)
+            // draw T x T square as contour for thickness T. This is offsetting
+            // the contour to top left for T > 3, but that is rare
+            for (unsigned r = 0; r < contour_thickness; ++r) {
+              if (r > y)
+                break;
+              for (unsigned c = 0; c < contour_thickness; ++c) {
+                if (p - c < row_start)
+                  break;
+                *(p - c - ptrdiff_t(r) * row_stride) =
+                  contour_color;
+              }
+            }
+          else
+            *p = contour_color;
+
+          ++p;
           continue;
         }
 

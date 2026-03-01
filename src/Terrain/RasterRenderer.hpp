@@ -59,6 +59,11 @@ class RasterRenderer {
 
   unsigned char *contour_column_base = nullptr;
 
+  /**
+   * Contour line thickness in pixels, computed from display DPI.
+   */
+  unsigned contour_thickness = 1;
+
   double pixel_size;
 
   RawColor *color_table = nullptr;
