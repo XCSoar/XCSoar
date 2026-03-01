@@ -126,7 +126,7 @@ public:
   }
 
   void SetDisplayOrientation([[maybe_unused]] DisplayOrientation orientation) noexcept {
-#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND) && !defined(USE_LIBINPUT)
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
     input_queue.SetDisplayOrientation(orientation);
 #endif
   }
