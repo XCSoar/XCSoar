@@ -195,7 +195,7 @@ RasterRenderer::ScanMap(const RasterMap &map,
   bounds.IntersectWith(map.GetBounds());
 
   height_matrix.Fill(map, bounds,
-                     (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels,
+                     (UnsignedPoint2D)projection.GetScreenSize() * static_cast<unsigned>(BOUNDS_SCALE_FACTOR * 128.0f + 0.5f) / quantisation_pixels / 128,
                      true);
 
   last_quantisation_pixels = quantisation_pixels;
