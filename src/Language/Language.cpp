@@ -6,6 +6,7 @@
 #include "util/UTF8.hpp"
 
 #include <cassert>
+#include <string>
 #include <string.h>
 
 #if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
@@ -76,3 +77,19 @@ reset_gettext_cache()
 }
 
 #endif /* !HAVE_POSIX */
+
+const char *
+gettext_context(const char *context, const char *text) noexcept
+{
+  assert(context != nullptr);
+  assert(text != nullptr);
+
+  std::string key;
+  key.reserve(strlen(context) + 1 + strlen(text));
+  key.append(context);
+  key.push_back('\004');
+  key.append(text);
+
+  const char *translation = gettext(key.c_str());
+  return strcmp(translation, key.c_str()) == 0 ? text : translation;
+}

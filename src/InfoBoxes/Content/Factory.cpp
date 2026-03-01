@@ -413,7 +413,7 @@ static constexpr MetaData meta_data[] = {
   // e_Load_G
   {
     N_("G load"),
-    N_("G"),
+    "G",
     N_("Magnitude of G loading reported by a supported external intelligent vario. This value is negative for pitch-down manoeuvres."),
     UpdateInfoBoxGLoad,
   },
@@ -1168,6 +1168,9 @@ const char *
 InfoBoxFactory::GetCaption(Type type) noexcept
 {
   assert(type < NUM_TYPES);
+
+  if (type == e_Load_G)
+    return C_("InfoBox caption (gravity/load factor)", "G");
 
   return meta_data[type].caption;
 }

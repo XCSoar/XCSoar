@@ -17,6 +17,12 @@
 #define N_(x) (x)
 #endif
 
+const char *gettext_context(const char *context,
+                            const char *text) noexcept;
+
+#define C_(c, x) gettext_context((c), (x))
+#define NC_(c, x) (x)
+
 static inline void AllowLanguage() {}
 static inline void DisallowLanguage() {}
 
@@ -35,12 +41,16 @@ void DisallowLanguage();
 
 [[gnu::const]]
 const char* gettext(const char* text);
+const char *gettext_context(const char *context,
+                            const char *text) noexcept;
 
 /**
  * For source compatibility with GNU gettext.
  */
 #define _(x) gettext(x)
 #define N_(x) x
+#define C_(c, x) gettext_context((c), (x))
+#define NC_(c, x) (x)
 
 void reset_gettext_cache();
 
