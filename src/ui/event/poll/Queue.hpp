@@ -131,6 +131,14 @@ public:
 #endif
   }
 
+  bool UsesSystemRotatedInput() const noexcept {
+#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND) && defined(USE_LIBINPUT)
+    return input_queue.UsesSystemRotatedInput();
+#else
+    return false;
+#endif
+  }
+
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11)
   bool HasPointer() const noexcept {
     return input_queue.HasPointer();

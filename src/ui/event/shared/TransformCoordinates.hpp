@@ -19,10 +19,9 @@ namespace UI {
  */
 [[gnu::pure]]
 inline PixelPoint
-TransformCoordinates(PixelPoint p, PixelSize physical_size) noexcept
+TransformCoordinates(PixelPoint p, PixelSize physical_size,
+                     DisplayOrientation orientation) noexcept
 {
-  const auto orientation = OpenGL::display_orientation;
-
   switch (TranslateDefaultDisplayOrientation(orientation)) {
   case DisplayOrientation::DEFAULT:
   case DisplayOrientation::LANDSCAPE:
@@ -40,6 +39,13 @@ TransformCoordinates(PixelPoint p, PixelSize physical_size) noexcept
   }
 
   return p;
+}
+
+[[gnu::pure]]
+inline PixelPoint
+TransformCoordinates(PixelPoint p, PixelSize physical_size) noexcept
+{
+  return TransformCoordinates(p, physical_size, OpenGL::display_orientation);
 }
 
 } // namespace UI

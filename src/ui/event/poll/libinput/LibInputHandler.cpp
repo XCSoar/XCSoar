@@ -20,8 +20,39 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <termios.h>
+#include <cstdlib>
+#include <cstring>
 
 namespace UI {
+
+[[gnu::pure]]
+static InputTransformMode
+ParseInputTransformMode() noexcept
+{
+  const char *value = std::getenv("XCSOAR_KMS_INPUT_TRANSFORM");
+  if (value != nullptr &&
+      (std::strcmp(value, "system") == 0 ||
+       std::strcmp(value, "native") == 0 ||
+       std::strcmp(value, "none") == 0))
+    return InputTransformMode::SYSTEM_ROTATED;
+
+  if (value != nullptr &&
+      (std::strcmp(value, "xcsoar") == 0 ||
+       std::strcmp(value, "software") == 0))
+    return InputTransformMode::XCSOAR_ROTATED;
+
+#ifdef MESA_KMS
+  return InputTransformMode::SYSTEM_ROTATED;
+#else
+  return InputTransformMode::XCSOAR_ROTATED;
+#endif
+}
+
+void
+LibInputHandler::SetDisplayOrientation(DisplayOrientation orientation) noexcept
+{
+  display_orientation = orientation;
+}
 
 PixelPoint
 LibInputHandler::GetPosition() const noexcept
@@ -33,14 +64,16 @@ PixelPoint
 LibInputHandler::MaybeTransformPoint(PixelPoint p) const noexcept
 {
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
-  p = TransformCoordinates(p, screen_size);
+  if (input_transform_mode == InputTransformMode::XCSOAR_ROTATED)
+    p = TransformCoordinates(p, screen_size, display_orientation);
 #else
   return p;
 #endif
 
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
   PixelSize logical_size = screen_size;
-  if (AreAxesSwapped(OpenGL::display_orientation))
+  if (input_transform_mode == InputTransformMode::XCSOAR_ROTATED &&
+      AreAxesSwapped(display_orientation))
     logical_size = PixelSize(screen_size.height, screen_size.width);
 
   if (logical_size.width > 0 && unsigned(p.x) >= logical_size.width)
@@ -54,7 +87,8 @@ LibInputHandler::MaybeTransformPoint(PixelPoint p) const noexcept
 
 LibInputHandler::LibInputHandler(EventQueue &_queue) noexcept
   :queue(_queue),
-   fd(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)) {}
+   fd(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)),
+   input_transform_mode(ParseInputTransformMode()) {}
 
 bool
 LibInputHandler::Open() noexcept
