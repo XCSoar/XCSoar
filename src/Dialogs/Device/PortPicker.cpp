@@ -24,6 +24,14 @@
 #include <list>
 #endif
 
+#ifdef __APPLE__
+#include "Apple/Services.hpp"
+#include "Apple/BluetoothHelper.hpp"
+#include "Apple/NativeDetectDeviceListener.h"
+#include "thread/Mutex.hxx"
+#include <list>
+#endif
+
 #include <cassert>
 
 class PortListItemRenderer final {
@@ -66,7 +74,7 @@ private:
 
 class PortPickerWidget
   : public ListWidget
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
   , DetectDeviceListener
 #endif
 {
@@ -78,6 +86,19 @@ class PortPickerWidget
 
   ComboList combo_list;
 
+#ifdef __APPLE__
+  NativeDetectDeviceListener *detect_listener;
+
+  struct DetectedPort {
+    DeviceConfig::PortType type;
+    tstring address, name;
+  };
+
+  Mutex detected_mutex;
+  std::list<DetectedPort> detected_list;
+
+  UI::Notify detected_notify{[this] { OnDetectedNotification(); }};
+#endif
 #ifdef ANDROID
   Java::LocalObject detect_listener;
   Java::LocalObject usb_serial_detect_listener;
@@ -137,6 +158,12 @@ public:
 
   void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
+#ifdef __APPLE__
+    if (bluetooth_helper != nullptr) {
+      if (bluetooth_helper->HasLe())
+        detect_listener = bluetooth_helper->AddDetectDeviceListener(*this);
+    }
+#endif
 
 #ifdef ANDROID
     if (bluetooth_helper != nullptr) {
@@ -155,6 +182,12 @@ public:
   }
 
   void Hide() noexcept override {
+#ifdef __APPLE__
+    if (detect_listener) {
+      bluetooth_helper->RemoveDetectDeviceListener(detect_listener);
+      detect_listener = nullptr;
+    }
+#endif
 #ifdef ANDROID
     if (detect_listener) {
       bluetooth_helper->RemoveDetectDeviceListener(detect_listener.GetEnv(),
@@ -187,7 +220,7 @@ public:
     dialog.SetModalResult(mrOK);
   }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
 private:
   /* virtual methods from class DetectDeviceListener */
   void OnDeviceDetected(Type type, const char *address,
@@ -218,7 +251,7 @@ PortPickerWidget::ReloadComboList() noexcept
   list.Invalidate();
 }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
 
 void
 PortPickerWidget::OnDeviceDetected(Type type, const char *address,
