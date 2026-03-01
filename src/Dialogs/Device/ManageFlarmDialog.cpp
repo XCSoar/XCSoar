@@ -17,6 +17,8 @@
 #include "FLARM/Hardware.hpp"
 #include "FLARM/State.hpp"
 
+#include <string>
+
 class ManageFLARMWidget final
   : public RowFormWidget {
   enum Controls {
@@ -146,28 +148,34 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddButton(_("Simulation"), [this](){
     ComboList list;
+    const auto sim1_label = std::to_string(1) + " - " + _("FLARM collision");
     list.Append(1, "1",
-                _("1 - FLARM collision"),
+                sim1_label.c_str(),
                 _("FLARM aircraft on collision course, "
                   "all alarm levels. 30s."));
+    const auto sim2_label = std::to_string(2) + " - " + _("ADS-B collision");
     list.Append(2, "2",
-                _("2 - ADS-B collision"),
+                sim2_label.c_str(),
                 _("ADS-B aircraft on collision course, "
                   "all alarm levels. 30s."));
+    const auto sim3_label = std::to_string(3) + " - " + _("Mode-S collision");
     list.Append(3, "3",
-                _("3 - Mode-S collision"),
+                sim3_label.c_str(),
                 _("Non-directional Mode-S aircraft on "
                   "collision course. 30s."));
+    const auto sim4_label = std::to_string(4) + " - " + _("Obstacle");
     list.Append(4, "4",
-                _("4 - Obstacle"),
+                sim4_label.c_str(),
                 _("Fixed obstacle from database, "
                   "all alarm levels. 30s."));
+    const auto sim5_label = std::to_string(5) + " - " + _("Alert Zone");
     list.Append(5, "5",
-                _("5 - Alert Zone"),
+                sim5_label.c_str(),
                 _("Alert Zone fly-through (e.g. active "
                   "skydiving area). 30s."));
+    const auto sim6_label = std::to_string(6) + " - " + _("Mixed");
     list.Append(6, "6",
-                _("6 - Mixed"),
+                sim6_label.c_str(),
                 _("Multiple traffic types and an alert zone, "
                   "no warnings. 30s."));
 
