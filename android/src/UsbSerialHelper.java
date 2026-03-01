@@ -29,7 +29,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 public final class UsbSerialHelper extends BroadcastReceiver {
 
   private static final String TAG = "UsbSerialHelper";
-  private static final String ACTION_USB_PERMISSION = "org.xcsoar.otg.action.USB_PERMISSION";
+  private final String ACTION_USB_PERMISSION;
 
   private final Context context;
   private final UsbManager usbmanager;
@@ -338,6 +338,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
 
   private UsbSerialHelper(Context context) throws IOException {
     this.context = context;
+    ACTION_USB_PERMISSION = context.getPackageName() + ".otg.action.USB_PERMISSION";
 
     usbmanager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
     if (usbmanager == null)
@@ -372,7 +373,7 @@ public final class UsbSerialHelper extends BroadcastReceiver {
       : 0;
     PendingIntent pi =
       PendingIntent.getBroadcast(context, 0,
-                                 new Intent(UsbSerialHelper.ACTION_USB_PERMISSION),
+                                 new Intent(ACTION_USB_PERMISSION),
                                  flags);
 
     usbmanager.requestPermission(device, pi);
