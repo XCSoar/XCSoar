@@ -74,6 +74,10 @@ TopWindow::Create([[maybe_unused]] const char *text, PixelSize size,
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   size = screen->SetDisplayOrientation(style.GetInitialOrientation());
+#ifdef USE_POLL_EVENT
+  if (event_queue != nullptr)
+    event_queue->SetDisplayOrientation(style.GetInitialOrientation());
+#endif
 #elif defined(USE_MEMORY_CANVAS)
   size = screen->GetSize();
 #elif defined(ENABLE_OPENGL)
