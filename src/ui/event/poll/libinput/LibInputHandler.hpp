@@ -6,6 +6,7 @@
 #include "event/PipeEvent.hxx"
 #include "ui/dim/Size.hpp"
 #include "ui/dim/Point.hpp"
+#include "DisplayOrientation.hpp"
 
 #include <cassert>
 
@@ -18,6 +19,11 @@ class UdevContext;
 namespace UI {
 
 class EventQueue;
+
+enum class InputTransformMode : uint8_t {
+  XCSOAR_ROTATED,
+  SYSTEM_ROTATED,
+};
 
 /**
  * A driver for handling libinput events.
@@ -35,6 +41,8 @@ class LibInputHandler final {
   double x = -1.0, y = -1.0;
 
   PixelSize screen_size{0, 0};
+  DisplayOrientation display_orientation = DisplayOrientation::DEFAULT;
+  InputTransformMode input_transform_mode = InputTransformMode::XCSOAR_ROTATED;
 
   /**
    * The number of pointer input devices, touch screens ans keyboards.
@@ -96,6 +104,12 @@ public:
 
   bool HasKeyboard() const noexcept {
     return n_keyboards > 0;
+  }
+
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
+
+  bool UsesSystemRotatedInput() const noexcept {
+    return input_transform_mode == InputTransformMode::SYSTEM_ROTATED;
   }
 
 private:

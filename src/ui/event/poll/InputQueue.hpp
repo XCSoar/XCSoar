@@ -50,6 +50,14 @@ public:
 #endif
   }
 
+  bool UsesSystemRotatedInput() const noexcept {
+#ifdef USE_LIBINPUT
+    return libinput_handler.UsesSystemRotatedInput();
+#else
+    return false;
+#endif
+  }
+
   bool HasPointer() const noexcept {
 #ifdef USE_LIBINPUT
     return libinput_handler.HasPointer();
