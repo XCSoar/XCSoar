@@ -272,6 +272,14 @@ event=Mode default
 
 mode=default
 type=key
+data=F9
+event=Mode default
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+
+mode=default
+type=key
 data=F10
 event=Ballast toggle
 event=Mode default
