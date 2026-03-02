@@ -198,6 +198,7 @@ InputEvents::eventBugs(const char *misc)
 // down: decreases ballast by 10%
 // max: selects 100% ballast
 // min: selects 0% ballast
+// toggle: starts/stops ballast dump timer
 // show: displays a status message indicating the ballast percentage
 void
 InputEvents::eventBallast(const char *misc)
@@ -205,8 +206,29 @@ InputEvents::eventBallast(const char *misc)
   if (!backend_components || !backend_components->protected_task_manager)
     return;
 
-  auto &settings = CommonInterface::SetComputerSettings().polar;
+  auto &computer_settings = CommonInterface::SetComputerSettings();
+  auto &settings = computer_settings.polar;
   GlidePolar &polar = settings.glide_polar_task;
+
+  if (StringIsEqual(misc, "toggle")) {
+    if (settings.ballast_timer_active) {
+      settings.ballast_timer_active = false;
+      Message::AddMessage(_("Ballast dump stopped"));
+      return;
+    }
+
+    if (!polar.HasBallast())
+      return;
+
+    if (computer_settings.plane.dump_time == 0) {
+      Message::AddMessage(_("Ballast dump time is 0 in plane profile"));
+      return;
+    }
+
+    settings.ballast_timer_active = true;
+    Message::AddMessage(_("Ballast dump started"));
+    return;
+  }
   
   double ballast_fraction = polar.GetBallastFraction();
   const auto old_ballast_fraction = ballast_fraction;
