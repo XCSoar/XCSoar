@@ -70,3 +70,9 @@ public:
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
   bool HandleClick() noexcept override;
 };
+
+class InfoBoxContentThermalRatio final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};

@@ -399,7 +399,7 @@ static constexpr MetaData meta_data[] = {
     N_("Percentage climb"),
     N_("% Climb"),
     N_("Percentage of time spent in climb mode. These statistics are reset upon starting the task."),
-    UpdateInfoBoxThermalRatio,
+    IBFHelper<InfoBoxContentThermalRatio>::Create,
   },
 
   // e_TimeSinceTakeoff
@@ -407,7 +407,7 @@ static constexpr MetaData meta_data[] = {
     N_("Flight duration"),
     N_("Flt Duration"),
     N_("Time elapsed since takeoff was detected."),
-    UpdateInfoBoxTimeFlight,
+    IBFHelper<InfoBoxContentTimeFlight>::Create,
   },
 
   // e_Load_G
@@ -431,7 +431,7 @@ static constexpr MetaData meta_data[] = {
     N_("Time local"),
     N_("Time loc"),
     N_("GPS time expressed in local time zone."),
-    UpdateInfoBoxTimeLocal,
+    IBFHelper<InfoBoxContentTimeLocal>::Create,
   },
 
   // e_TimeUTC
@@ -439,7 +439,7 @@ static constexpr MetaData meta_data[] = {
     N_("Time UTC"),
     N_("Time UTC"),
     N_("GPS time expressed in UTC."),
-    UpdateInfoBoxTimeUTC,
+    IBFHelper<InfoBoxContentTimeUTC>::Create,
   },
 
   // e_Fin_Time
@@ -503,7 +503,7 @@ static constexpr MetaData meta_data[] = {
     N_("Outside air temperature"),
     N_("OAT"),
     N_("Outside air temperature measured by a probe if supported by a connected intelligent variometer."),
-    UpdateInfoBoxTemperature,
+    IBFHelper<InfoBoxContentTemperature>::Create,
   },
 
   // e_HumidityRel
@@ -511,7 +511,7 @@ static constexpr MetaData meta_data[] = {
     N_("Relative humidity"),
     N_("Rel Hum"),
     N_("Relative humidity of the air in percent as measured by a probe if supported by a connected intelligent variometer."),
-    UpdateInfoBoxHumidity,
+    IBFHelper<InfoBoxContentHumidity>::Create,
   },
 
   // e_Home_Temperature
@@ -567,7 +567,7 @@ static constexpr MetaData meta_data[] = {
     N_("Team bearing"),
     N_("Team Brng"),
     N_("Bearing to the team aircraft location at the last team code report."),
-    UpdateInfoBoxTeamBearing,
+    IBFHelper<InfoBoxContentTeamBearing>::Create,
   },
 
   // e_Team_BearingDiff
@@ -575,7 +575,7 @@ static constexpr MetaData meta_data[] = {
     N_("Team bearing difference"),
     N_("Team BrngD"),
     N_("Relative bearing to the team aircraft location at the last reported team code."),
-    UpdateInfoBoxTeamBearingDiff,
+    IBFHelper<InfoBoxContentTeamBearingDiff>::Create,
   },
 
   // e_Team_Range
@@ -583,7 +583,7 @@ static constexpr MetaData meta_data[] = {
     N_("Team range"),
     N_("Team Dist"),
     N_("Range to the team aircraft location at the last reported team code."),
-    UpdateInfoBoxTeamDistance,
+    IBFHelper<InfoBoxContentTeamDistance>::Create,
   },
 
   // e_CC_SpeedInst
@@ -898,7 +898,7 @@ static constexpr MetaData meta_data[] = {
     N_("Efficiency of cruise. 100 indicates perfect MacCready performance. "
        "This value estimates your cruise efficiency according to the current "
        "flight history with the set MC value. Calculation begins after task is started."),
-    UpdateInfoBoxCruiseEfficiency,
+    IBFHelper<InfoBoxContentCruiseEfficiency>::Create,
   },
 
   {
@@ -919,14 +919,14 @@ static constexpr MetaData meta_data[] = {
     N_("Start open/close countdown"),
     N_("Start open"),
     N_("Time left until the start point opens or closes."),
-    UpdateInfoBoxStartOpen,
+    IBFHelper<InfoBoxContentStartOpen>::Create,
   },
 
   {
     N_("Start open/close countdown at reaching"),
     N_("Start reach"),
     N_("Time left until the start point opens or closes, minus the calculated time to reach the start point."),
-    UpdateInfoBoxStartOpenArrival,
+    IBFHelper<InfoBoxContentStartOpenArrival>::Create,
   },
 
   {
@@ -1029,7 +1029,7 @@ static constexpr MetaData meta_data[] = {
     N_("Number of used satellites"),
     N_("Satellites"),
     N_("Number of satellites currently used by the GPS module. If this information is unavailable, the displayed value is '---'."),
-    UpdateInfoBoxNbrSat,
+    IBFHelper<InfoBoxContentNbrSat>::Create,
   },
 
   // Radio

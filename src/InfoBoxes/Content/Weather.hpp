@@ -8,8 +8,20 @@
 void
 UpdateInfoBoxHumidity(InfoBoxData &data) noexcept;
 
+class InfoBoxContentHumidity final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
 void
 UpdateInfoBoxTemperature(InfoBoxData &data) noexcept;
+
+class InfoBoxContentTemperature final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
 
 class InfoBoxContentTemperatureForecast : public InfoBoxContent
 {

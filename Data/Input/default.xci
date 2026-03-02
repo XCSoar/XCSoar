@@ -231,42 +231,66 @@ event=QuickMenu
 mode=default
 type=key
 data=F2
-event=Analysis
-event=Mode default
-
-mode=default
-type=key
-data=F3
 event=Checklist
 event=Mode default
 
 mode=default
 type=key
-data=F4
+data=F3
 event=FlarmTraffic
 event=Mode default
 
 mode=default
 type=key
-data=F5
-event=GotoLookup
+data=F4
+event=AirspaceWarnings
 event=Mode default
 
 mode=default
 type=key
-data=F6
+data=F5
 event=Setup Alternates
 event=Mode default
 
 mode=default
 type=key
+data=F6
+event=GotoLookup
+event=Mode default
+
+mode=default
+type=key
 data=F7
-event=Setup Task
+event=Setup Target
 event=Mode default
 
 mode=default
 type=key
 data=F8
+event=Setup Task
+event=Mode default
+
+mode=default
+type=key
+data=F9
+event=Analysis
+event=Mode default
+
+mode=default
+type=key
+data=F10
+event=ThermalAssistant
+event=Mode default
+
+mode=default
+type=key
+data=F11
+event=Status all
+event=Mode default
+
+mode=default
+type=key
+data=F12
 event=Setup Basic
 event=Mode default
 
@@ -403,24 +427,37 @@ event=Mode default
 mode=default
 type=key
 data=7
-event=Calculator
+event=StatusMessage Previous waypoint
+event=AdjustWaypoint previousarm
 
-#mode=default
-#type=key
-#data=8
-#event=Setup Task
-#event=Mode default
+mode=default
+type=key
+data=8
+event=StatusMessage Next waypoint
+event=AdjustWaypoint nextarm
 
 mode=default
 type=key
 data=9
-event=Setup Target
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
 
-#mode=default
-#type=key
-#data=0
-#event=ArmAdvance show
-#event=ArmAdvance toggle
+mode=default
+type=key
+data=5
+event=Ballast toggle
+event=Mode default
+
+mode=default
+type=key
+data=3
+event=Mode mc
+
+mode=default
+type=key
+data=0
+event=ArmAdvance toggle
 
 
 # -------------
@@ -1024,13 +1061,6 @@ event=LockScreen
 event=Mode default
 label=Lock Screen
 location=7
-
-mode=Menu
-type=key
-data=9
-event=Mode default
-label=Cancel
-location=8
 
 mode=Menu
 type=key

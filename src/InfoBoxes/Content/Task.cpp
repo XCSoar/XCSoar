@@ -7,6 +7,7 @@
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -823,6 +824,19 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept
   data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
 }
 
+void
+InfoBoxContentCruiseEfficiency::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxCruiseEfficiency(data);
+}
+
+bool
+InfoBoxContentCruiseEfficiency::HandleClick() noexcept
+{
+  dlgStatusShowModal(2);
+  return true;
+}
+
 static constexpr unsigned
 SecondsUntil(TimeStamp now, FineTime until) noexcept
 {
@@ -837,6 +851,19 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 {
   const auto now_s = CommonInterface::Basic().time;
   UpdateStartOpenInfobox(data, now_s);
+}
+
+void
+InfoBoxContentStartOpen::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxStartOpen(data);
+}
+
+bool
+InfoBoxContentStartOpen::HandleClick() noexcept
+{
+  dlgStatusShowModal(3);
+  return true;
 }
 
 static void
@@ -904,6 +931,19 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
   const auto arrival_s = CommonInterface::Basic().time +
                          current_remaining.time_elapsed;
   UpdateStartOpenInfobox(data, arrival_s);
+}
+
+void
+InfoBoxContentStartOpenArrival::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxStartOpenArrival(data);
+}
+
+bool
+InfoBoxContentStartOpenArrival::HandleClick() noexcept
+{
+  dlgStatusShowModal(3);
+  return true;
 }
 
 /*
