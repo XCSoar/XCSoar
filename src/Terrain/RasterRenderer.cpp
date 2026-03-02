@@ -26,6 +26,17 @@ static constexpr double ZOOM_FACTOR_DIVISOR = 4250.0;
 static constexpr unsigned MAX_QUANTISATION_NEAR = 25;
 static constexpr unsigned MAX_QUANTISATION_LOW_ZOOM = 40;
 static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
+static constexpr unsigned BOUNDS_SCALE_NUMERATOR = 3;
+static constexpr unsigned BOUNDS_SCALE_DENOMINATOR = 2;
+
+#ifdef ENABLE_OPENGL
+/**
+ * Temporary debug toggle:
+ * - true: OpenGL terrain uses fragment shader hillshade path
+ * - false: OpenGL falls back to legacy CPU slope shading path
+ */
+static constexpr bool ENABLE_OPENGL_TERRAIN_SHADER = true;
+#endif
 
 /**
  * Interpolate between x and y with i/128, i.e. i/(1 << 7).
@@ -96,6 +107,9 @@ RasterRenderer::~RasterRenderer() noexcept
   delete[] color_table;
   delete image;
   delete[] contour_column_base;
+#ifdef ENABLE_OPENGL
+  delete shader_color_ramp_image;
+#endif
 }
 
 #ifdef ENABLE_OPENGL
@@ -195,11 +209,20 @@ RasterRenderer::ScanMap(const RasterMap &map,
   }
 
 #ifdef ENABLE_OPENGL
+  /* Keep the same terrain pixel density as non-OpenGL builds:
+     if we enlarge the geographic bounds, we must enlarge the sampled
+     bitmap dimensions by the same factor. */
+  const auto screen_size = (UnsignedPoint2D)projection.GetScreenSize();
+  const UnsignedPoint2D scaled_screen_size{
+    (screen_size.x * BOUNDS_SCALE_NUMERATOR + 1) / BOUNDS_SCALE_DENOMINATOR,
+    (screen_size.y * BOUNDS_SCALE_NUMERATOR + 1) / BOUNDS_SCALE_DENOMINATOR,
+  };
+
   bounds = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
   bounds.IntersectWith(map.GetBounds());
 
   height_matrix.Fill(map, bounds,
-                     (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels,
+                     scaled_screen_size / quantisation_pixels,
                      true);
 
   last_quantisation_pixels = quantisation_pixels;
@@ -232,13 +255,39 @@ RasterRenderer::GenerateImage(bool do_shading,
 
   const unsigned contour_height_scale = do_contour? height_scale * 2 : 16;
 
+#ifdef ENABLE_OPENGL
+  if (do_shading && ENABLE_OPENGL_TERRAIN_SHADER) {
+    /* OpenGL path: generate base terrain colors + height alpha;
+       slope shading is applied in fragment shader. */
+    shader_shading_enabled = true;
+    shader_ramp_enabled = !do_contour;
+    shader_light_x = (float)-sunazimuth.fastsine();
+    shader_light_y = (float)-sunazimuth.fastcosine();
+    const float contrast_gain = std::clamp(contrast / 127.0f, 0.2f, 2.0f);
+    const float brightness_gain = std::clamp(1.0f + brightness / 255.0f,
+                                             0.5f, 1.5f);
+    shader_shading_gain = 0.65f * contrast_gain * brightness_gain;
+    if (!shader_ramp_enabled)
+      ContourStart(contour_height_scale);
+    GenerateUnshadedImage(height_scale, contour_height_scale);
+  } else {
+    shader_shading_enabled = false;
+    shader_ramp_enabled = false;
+    ContourStart(contour_height_scale);
+    if (do_shading)
+      GenerateSlopeImage(height_scale, contrast, brightness,
+                         sunazimuth, contour_height_scale);
+    else
+      GenerateUnshadedImage(height_scale, contour_height_scale);
+  }
+#else
   ContourStart(contour_height_scale);
-
   if (do_shading)
     GenerateSlopeImage(height_scale, contrast, brightness,
                        sunazimuth, contour_height_scale);
   else
     GenerateUnshadedImage(height_scale, contour_height_scale);
+#endif
 
   image->SetDirty();
 }
@@ -263,6 +312,16 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
       if (!e.IsSpecial()) [[likely]] {
         unsigned h = std::max(0, (int)e.GetValue());
 
+#ifdef ENABLE_OPENGL
+        if (shader_ramp_enabled) {
+          h = std::min(254u, h >> height_scale);
+          *p++ = RawColor(0, 0, 0);
+          (p - 1)->dummy = h;
+          contour_this_column_base++;
+          continue;
+        }
+#endif
+
         const unsigned contour_interval =
           ContourInterval(h, contour_height_scale);
 
@@ -270,16 +329,28 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
         if (contour_interval != contour_row_base ||
             contour_interval != *contour_this_column_base) [[unlikely]] {
           *p++ = oColorBuf[(int)h - 64 * 256];
+#ifdef ENABLE_OPENGL
+          (p - 1)->dummy = h;
+#endif
           *contour_this_column_base = contour_row_base = contour_interval;
         } else {
           *p++ = oColorBuf[h];
+#ifdef ENABLE_OPENGL
+          (p - 1)->dummy = h;
+#endif
         }
       } else if (e.IsWater()) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
+#ifdef ENABLE_OPENGL
+        (p - 1)->dummy = 255;
+#endif
       } else {
         /* outside the terrain file bounds: white background */
         *p++ = RawColor(0xff, 0xff, 0xff);
+#ifdef ENABLE_OPENGL
+        (p - 1)->dummy = 0;
+#endif
       }
       contour_this_column_base++;
 
@@ -491,6 +562,17 @@ RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
       color_table[i + (mag + 64) * 256] = color;
     }
   }
+
+#ifdef ENABLE_OPENGL
+  if (shader_color_ramp_image == nullptr)
+    shader_color_ramp_image = new RawBitmap(PixelSize{256, 1});
+
+  RawColor *ramp = shader_color_ramp_image->GetTopRow();
+  for (unsigned i = 0; i < 256; ++i)
+    ramp[i] = color_table[i + 64 * 256];
+
+  shader_color_ramp_image->SetDirty();
+#endif
 }
 
 void
@@ -510,10 +592,15 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
 {
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
-    DrawGeoBitmap(*image,
-                  PixelSize{height_matrix.GetSize()},
-                  bounds,
-                  projection);
+    DrawGeoBitmapTerrain(*image,
+                         PixelSize{height_matrix.GetSize()},
+                         bounds,
+                         projection,
+                         shader_shading_enabled,
+                         shader_light_x, shader_light_y,
+                         shader_shading_gain,
+                         shader_ramp_enabled ? shader_color_ramp_image
+                                             : nullptr);
 #else
   image->StretchTo(PixelSize{height_matrix.GetSize()},
                    canvas, projection.GetScreenSize(),

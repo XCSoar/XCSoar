@@ -14,10 +14,11 @@
 #include "ui/canvas/opengl/Program.hpp"
 #include "ui/dim/BulkPoint.hpp"
 
-void
-DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
-              const GeoBounds &bounds,
-              const Projection &projection)
+static void
+DrawGeoBitmapWithShader(const RawBitmap &bitmap, PixelSize bitmap_size,
+                        const GeoBounds &bounds,
+                        const Projection &projection,
+                        GLProgram &shader)
 {
   assert(bounds.IsValid());
 
@@ -48,7 +49,7 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
     x1, y1,
   };
 
-  OpenGL::texture_shader->Use();
+  shader.Use();
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
@@ -56,6 +57,44 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+}
+
+void
+DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
+              const GeoBounds &bounds,
+              const Projection &projection)
+{
+  DrawGeoBitmapWithShader(bitmap, bitmap_size, bounds, projection,
+                          *OpenGL::texture_shader);
+}
+
+void
+DrawGeoBitmapTerrain(const RawBitmap &bitmap, PixelSize bitmap_size,
+                     const GeoBounds &bounds,
+                     const Projection &projection,
+                     bool shading_enabled,
+                     float light_x, float light_y,
+                     float shading_gain,
+                     const RawBitmap *color_ramp_bitmap)
+{
+  OpenGL::terrain_texture_shader->Use();
+  glUniform2f(OpenGL::terrain_texture_texel_size,
+              1.0f / bitmap_size.width, 1.0f / bitmap_size.height);
+  glUniform2f(OpenGL::terrain_texture_light_dir, light_x, light_y);
+  glUniform1f(OpenGL::terrain_texture_shading_enabled,
+              shading_enabled ? 1.0f : 0.0f);
+  glUniform1f(OpenGL::terrain_texture_shading_gain, shading_gain);
+  glUniform1f(OpenGL::terrain_texture_use_ramp,
+              color_ramp_bitmap != nullptr ? 1.0f : 0.0f);
+
+  if (color_ramp_bitmap != nullptr) {
+    glActiveTexture(GL_TEXTURE1);
+    color_ramp_bitmap->BindAndGetTexture();
+    glActiveTexture(GL_TEXTURE0);
+  }
+
+  DrawGeoBitmapWithShader(bitmap, bitmap_size, bounds, projection,
+                          *OpenGL::terrain_texture_shader);
 }
 
 #endif

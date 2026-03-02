@@ -73,6 +73,9 @@ class GlueMapWindow : public MapWindow {
   KineticManager kinetic_x{std::chrono::milliseconds{700}};
   KineticManager kinetic_y{std::chrono::milliseconds{700}};
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
+  UI::PeriodicTimer terrain_perf_redraw_timer{
+    [this]{ OnTerrainPerfRedrawTimer(); }
+  };
 #endif
 
   /** flag to indicate if the MapItemList should be shown on mouse up */
@@ -306,5 +309,6 @@ private:
 
 #ifdef ENABLE_OPENGL
   void OnKineticTimer() noexcept;
+  void OnTerrainPerfRedrawTimer() noexcept;
 #endif
 };

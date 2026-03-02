@@ -380,6 +380,7 @@ Canvas::DrawCircle(PixelPoint center, unsigned radius) noexcept
   if (brush.IsHollow()) {
     OpenGL::circle_outline_shader->Use();
     pen.GetColor().Uniform(OpenGL::circle_outline_color);
+    glUniform1f(OpenGL::circle_outline_feather, 1.0f);
 
     glUniform2f(OpenGL::circle_outline_center, center.x, center.y);
     glUniform1f(OpenGL::circle_outline_radius2, radius);
@@ -390,6 +391,7 @@ Canvas::DrawCircle(PixelPoint center, unsigned radius) noexcept
     OpenGL::filled_circle_shader->Use();
     pen.GetColor().Uniform(OpenGL::filled_circle_color2);
     brush.BindUniform(OpenGL::filled_circle_color1);
+    glUniform1f(OpenGL::filled_circle_feather, 1.0f);
 
     glUniform2f(OpenGL::filled_circle_center, center.x, center.y);
     glUniform1f(OpenGL::filled_circle_radius2, radius);
