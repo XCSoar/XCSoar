@@ -32,6 +32,18 @@ UpdateInfoBoxHumidity(InfoBoxData &data) noexcept
 }
 
 void
+InfoBoxContentHumidity::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxHumidity(data);
+}
+
+bool
+InfoBoxContentHumidity::HandleClick() noexcept
+{
+  return ShowAnalysis(AnalysisPage::TEMPTRACE);
+}
+
+void
 UpdateInfoBoxTemperature(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
