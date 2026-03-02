@@ -567,7 +567,7 @@ static constexpr MetaData meta_data[] = {
     N_("Team bearing"),
     N_("Team Brng"),
     N_("Bearing to the team aircraft location at the last team code report."),
-    UpdateInfoBoxTeamBearing,
+    IBFHelper<InfoBoxContentTeamBearing>::Create,
   },
 
   // e_Team_BearingDiff
@@ -575,7 +575,7 @@ static constexpr MetaData meta_data[] = {
     N_("Team bearing difference"),
     N_("Team BrngD"),
     N_("Relative bearing to the team aircraft location at the last reported team code."),
-    UpdateInfoBoxTeamBearingDiff,
+    IBFHelper<InfoBoxContentTeamBearingDiff>::Create,
   },
 
   // e_Team_Range
@@ -583,7 +583,7 @@ static constexpr MetaData meta_data[] = {
     N_("Team range"),
     N_("Team Dist"),
     N_("Range to the team aircraft location at the last reported team code."),
-    UpdateInfoBoxTeamDistance,
+    IBFHelper<InfoBoxContentTeamDistance>::Create,
   },
 
   // e_CC_SpeedInst
@@ -1029,7 +1029,7 @@ static constexpr MetaData meta_data[] = {
     N_("Number of used satellites"),
     N_("Satellites"),
     N_("Number of satellites currently used by the GPS module. If this information is unavailable, the displayed value is '---'."),
-    UpdateInfoBoxNbrSat,
+    IBFHelper<InfoBoxContentNbrSat>::Create,
   },
 
   // Radio

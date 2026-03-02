@@ -19,6 +19,27 @@ InfoBoxContentTeamCode::HandleClick() noexcept
   return true;
 }
 
+bool
+InfoBoxContentTeamBearing::HandleClick() noexcept
+{
+  dlgTeamCodeShowModal();
+  return true;
+}
+
+bool
+InfoBoxContentTeamBearingDiff::HandleClick() noexcept
+{
+  dlgTeamCodeShowModal();
+  return true;
+}
+
+bool
+InfoBoxContentTeamDistance::HandleClick() noexcept
+{
+  dlgTeamCodeShowModal();
+  return true;
+}
+
 void
 InfoBoxContentTeamCode::Update(InfoBoxData &data) noexcept
 {
@@ -106,6 +127,12 @@ UpdateInfoBoxTeamBearing(InfoBoxData &data) noexcept
 }
 
 void
+InfoBoxContentTeamBearing::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxTeamBearing(data);
+}
+
+void
 UpdateInfoBoxTeamBearingDiff(InfoBoxData &data) noexcept
 {
   const TeamCodeSettings &settings =
@@ -136,6 +163,12 @@ UpdateInfoBoxTeamBearingDiff(InfoBoxData &data) noexcept
 }
 
 void
+InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxTeamBearingDiff(data);
+}
+
+void
 UpdateInfoBoxTeamDistance(InfoBoxData &data) noexcept
 {
   const TeamCodeSettings &settings =
@@ -157,4 +190,10 @@ UpdateInfoBoxTeamDistance(InfoBoxData &data) noexcept
     data.SetComment("???");
 
   data.SetCommentColor(teamcode_info.flarm_teammate_code_current ? 2 : 1);
+}
+
+void
+InfoBoxContentTeamDistance::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxTeamDistance(data);
 }
