@@ -22,6 +22,15 @@ extern GLProgram *texture_shader;
 extern GLint texture_projection, texture_texture, solid_translate;
 
 /**
+ * A shader dedicated to terrain texture rendering.
+ */
+extern GLProgram *terrain_texture_shader;
+extern GLint terrain_texture_projection, terrain_texture_texture,
+  terrain_texture_translate, terrain_texture_texel_size,
+  terrain_texture_light_dir, terrain_texture_shading_enabled,
+  terrain_texture_shading_gain;
+
+/**
  * A shader that copies the inverted texture.
  */
 extern GLProgram *invert_shader;

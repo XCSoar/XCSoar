@@ -82,4 +82,18 @@ public:
   void Draw(Canvas &canvas, const WindowProjection &projection) const {
     raster_renderer.Draw(canvas, projection);
   }
+
+  unsigned GetQuantisationPixels() const noexcept {
+    return raster_renderer.GetQuantisationPixels();
+  }
+
+  unsigned GetQuantisationEffective() const noexcept {
+    return raster_renderer.GetQuantisationEffective();
+  }
+
+#ifdef ENABLE_OPENGL
+  bool IsShaderShadingEnabled() const noexcept {
+    return raster_renderer.IsShaderShadingEnabled();
+  }
+#endif
 };

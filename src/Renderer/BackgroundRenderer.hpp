@@ -5,6 +5,7 @@
 
 #include "Math/Angle.hpp"
 
+#include <cstdint>
 #include <memory>
 
 class Canvas;
@@ -23,6 +24,13 @@ class BackgroundRenderer {
   const RasterTerrain *terrain = nullptr;
   std::unique_ptr<TerrainRenderer> renderer;
   Angle shading_angle = DEFAULT_SHADING_ANGLE;
+
+  unsigned perf_frames = 0;
+  unsigned perf_generate_true = 0;
+  std::uint64_t perf_generate_us_sum = 0;
+  std::uint64_t perf_generate_us_max = 0;
+  std::uint64_t perf_draw_us_sum = 0;
+  std::uint64_t perf_draw_us_max = 0;
 
 #ifdef ENABLE_OPENGL
   /** force full terrain resolution regardless of user idle state */

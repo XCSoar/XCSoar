@@ -52,6 +52,13 @@ class RasterRenderer {
    * texture has to be redrawn.
    */
   GeoBounds bounds = GeoBounds::Invalid();
+
+  /**
+   * OpenGL-only terrain fragment shading parameters.
+   */
+  bool shader_shading_enabled = false;
+  float shader_light_x = 0.0f, shader_light_y = -1.0f;
+  float shader_shading_gain = 1.0f;
 #endif
 
   HeightMatrix height_matrix;
@@ -76,6 +83,14 @@ public:
 
   UnsignedPoint2D GetSize() const noexcept {
     return height_matrix.GetSize();
+  }
+
+  unsigned GetQuantisationPixels() const noexcept {
+    return quantisation_pixels;
+  }
+
+  unsigned GetQuantisationEffective() const noexcept {
+    return quantisation_effective;
   }
 
 #ifdef ENABLE_OPENGL
@@ -105,6 +120,10 @@ public:
 
   const GeoBounds &GetBounds() const noexcept {
     return bounds;
+  }
+
+  bool IsShaderShadingEnabled() const noexcept {
+    return shader_shading_enabled;
   }
 
   const GLTexture &BindAndGetTexture() const noexcept;

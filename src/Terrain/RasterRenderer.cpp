@@ -29,6 +29,15 @@ static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
 static constexpr unsigned BOUNDS_SCALE_NUMERATOR = 3;
 static constexpr unsigned BOUNDS_SCALE_DENOMINATOR = 2;
 
+#ifdef ENABLE_OPENGL
+/**
+ * Temporary debug toggle:
+ * - true: OpenGL terrain uses fragment shader hillshade path
+ * - false: OpenGL falls back to legacy CPU slope shading path
+ */
+static constexpr bool ENABLE_OPENGL_TERRAIN_SHADER = true;
+#endif
+
 /**
  * Interpolate between x and y with i/128, i.e. i/(1 << 7).
  *
@@ -245,11 +254,33 @@ RasterRenderer::GenerateImage(bool do_shading,
 
   ContourStart(contour_height_scale);
 
+#ifdef ENABLE_OPENGL
+  if (do_shading && ENABLE_OPENGL_TERRAIN_SHADER) {
+    /* OpenGL path: generate base terrain colors + height alpha;
+       slope shading is applied in fragment shader. */
+    shader_shading_enabled = true;
+    shader_light_x = (float)-sunazimuth.fastsine();
+    shader_light_y = (float)-sunazimuth.fastcosine();
+    const float contrast_gain = std::clamp(contrast / 127.0f, 0.2f, 2.0f);
+    const float brightness_gain = std::clamp(1.0f + brightness / 255.0f,
+                                             0.5f, 1.5f);
+    shader_shading_gain = 0.65f * contrast_gain * brightness_gain;
+    GenerateUnshadedImage(height_scale, contour_height_scale);
+  } else {
+    shader_shading_enabled = false;
+    if (do_shading)
+      GenerateSlopeImage(height_scale, contrast, brightness,
+                         sunazimuth, contour_height_scale);
+    else
+      GenerateUnshadedImage(height_scale, contour_height_scale);
+  }
+#else
   if (do_shading)
     GenerateSlopeImage(height_scale, contrast, brightness,
                        sunazimuth, contour_height_scale);
   else
     GenerateUnshadedImage(height_scale, contour_height_scale);
+#endif
 
   image->SetDirty();
 }
@@ -281,16 +312,28 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
         if (contour_interval != contour_row_base ||
             contour_interval != *contour_this_column_base) [[unlikely]] {
           *p++ = oColorBuf[(int)h - 64 * 256];
+#ifdef ENABLE_OPENGL
+          (p - 1)->dummy = h;
+#endif
           *contour_this_column_base = contour_row_base = contour_interval;
         } else {
           *p++ = oColorBuf[h];
+#ifdef ENABLE_OPENGL
+          (p - 1)->dummy = h;
+#endif
         }
       } else if (e.IsWater()) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
+#ifdef ENABLE_OPENGL
+        (p - 1)->dummy = 255;
+#endif
       } else {
         /* outside the terrain file bounds: white background */
         *p++ = RawColor(0xff, 0xff, 0xff);
+#ifdef ENABLE_OPENGL
+        (p - 1)->dummy = 0;
+#endif
       }
       contour_this_column_base++;
 
@@ -521,10 +564,13 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
 {
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
-    DrawGeoBitmap(*image,
-                  PixelSize{height_matrix.GetSize()},
-                  bounds,
-                  projection);
+    DrawGeoBitmapTerrain(*image,
+                         PixelSize{height_matrix.GetSize()},
+                         bounds,
+                         projection,
+                         shader_shading_enabled,
+                         shader_light_x, shader_light_y,
+                         shader_shading_gain);
 #else
   image->StretchTo(PixelSize{height_matrix.GetSize()},
                    canvas, projection.GetScreenSize(),

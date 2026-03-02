@@ -18,6 +18,12 @@ GLint solid_projection, solid_modelview, solid_translate;
 GLProgram *texture_shader;
 GLint texture_projection, texture_texture, texture_translate;
 
+GLProgram *terrain_texture_shader;
+GLint terrain_texture_projection, terrain_texture_texture,
+  terrain_texture_translate, terrain_texture_texel_size,
+  terrain_texture_light_dir, terrain_texture_shading_enabled,
+  terrain_texture_shading_gain;
+
 GLProgram *invert_shader;
 GLint invert_projection, invert_texture, invert_translate;
 
@@ -101,6 +107,83 @@ static constexpr char texture_fragment_shader[] =
     varying vec2 texcoordvar;
     void main() {
       gl_FragColor = texture2D(texture, texcoordvar);
+    }
+)glsl";
+
+static const char *const terrain_texture_vertex_shader = texture_vertex_shader;
+static constexpr char terrain_texture_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform sampler2D texture;
+    uniform vec2 texel_size;
+    uniform vec2 light_dir;
+    uniform float shading_enabled;
+    uniform float shading_gain;
+    varying vec2 texcoordvar;
+    void main() {
+      vec4 c = texture2D(texture, texcoordvar);
+
+      if (shading_enabled > 0.5) {
+        vec2 tx = vec2(texel_size.x, 0.0);
+        vec2 ty = vec2(0.0, texel_size.y);
+
+        float h00 = texture2D(texture, texcoordvar - tx - ty).a;
+        float h10 = texture2D(texture, texcoordvar      - ty).a;
+        float h20 = texture2D(texture, texcoordvar + tx - ty).a;
+        float h01 = texture2D(texture, texcoordvar - tx     ).a;
+        float h11 = c.a;
+        float h21 = texture2D(texture, texcoordvar + tx     ).a;
+        float h02 = texture2D(texture, texcoordvar - tx + ty).a;
+        float h12 = texture2D(texture, texcoordvar      + ty).a;
+        float h22 = texture2D(texture, texcoordvar + tx + ty).a;
+
+        /* Sobel-like local gradient for smoother shading than simple
+           central differences on quantised height. */
+        vec2 grad = vec2(
+          (h20 + 2.0 * h21 + h22) - (h00 + 2.0 * h01 + h02),
+          (h02 + 2.0 * h12 + h22) - (h00 + 2.0 * h10 + h20)
+        ) * 0.25;
+
+        float grad_mag = abs(grad.x) + abs(grad.y) + abs(h11 - 0.5) * 0.0;
+        if (grad_mag < 0.0005) {
+          /* Fallback for targets where alpha may not carry height. */
+          vec3 c00 = texture2D(texture, texcoordvar - tx - ty).rgb;
+          vec3 c10 = texture2D(texture, texcoordvar      - ty).rgb;
+          vec3 c20 = texture2D(texture, texcoordvar + tx - ty).rgb;
+          vec3 c01 = texture2D(texture, texcoordvar - tx     ).rgb;
+          vec3 c21 = texture2D(texture, texcoordvar + tx     ).rgb;
+          vec3 c02 = texture2D(texture, texcoordvar - tx + ty).rgb;
+          vec3 c12 = texture2D(texture, texcoordvar      + ty).rgb;
+          vec3 c22 = texture2D(texture, texcoordvar + tx + ty).rgb;
+
+          float y00 = dot(c00, vec3(0.299, 0.587, 0.114));
+          float y10 = dot(c10, vec3(0.299, 0.587, 0.114));
+          float y20 = dot(c20, vec3(0.299, 0.587, 0.114));
+          float y01 = dot(c01, vec3(0.299, 0.587, 0.114));
+          float y21 = dot(c21, vec3(0.299, 0.587, 0.114));
+          float y02 = dot(c02, vec3(0.299, 0.587, 0.114));
+          float y12 = dot(c12, vec3(0.299, 0.587, 0.114));
+          float y22 = dot(c22, vec3(0.299, 0.587, 0.114));
+
+          grad = vec2(
+            (y20 + 2.0 * y21 + y22) - (y00 + 2.0 * y01 + y02),
+            (y02 + 2.0 * y12 + y22) - (y00 + 2.0 * y10 + y20)
+          ) * 0.5;
+        } else {
+          grad *= 255.0;
+        }
+
+        float illum = dot(normalize(vec3(-grad.x * shading_gain,
+                                         -grad.y * shading_gain,
+                                         1.0)),
+                          normalize(vec3(light_dir, 0.7)));
+        float shade = smoothstep(-0.35, 0.95, illum);
+        shade = 0.62 + 0.46 * shade;
+        c.rgb *= shade;
+      }
+
+      gl_FragColor = vec4(c.rgb, 1.0);
     }
 )glsl";
 
@@ -307,6 +390,34 @@ OpenGL::InitShaders()
   texture_shader->Use();
   glUniform1i(texture_texture, 0);
 
+  terrain_texture_shader = CompileProgram(terrain_texture_vertex_shader,
+                                          terrain_texture_fragment_shader);
+  terrain_texture_shader->BindAttribLocation(Attribute::POSITION, "position");
+  terrain_texture_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  LinkProgram(*terrain_texture_shader);
+
+  terrain_texture_projection =
+    terrain_texture_shader->GetUniformLocation("projection");
+  terrain_texture_texture =
+    terrain_texture_shader->GetUniformLocation("texture");
+  terrain_texture_translate =
+    terrain_texture_shader->GetUniformLocation("translate");
+  terrain_texture_texel_size =
+    terrain_texture_shader->GetUniformLocation("texel_size");
+  terrain_texture_light_dir =
+    terrain_texture_shader->GetUniformLocation("light_dir");
+  terrain_texture_shading_enabled =
+    terrain_texture_shader->GetUniformLocation("shading_enabled");
+  terrain_texture_shading_gain =
+    terrain_texture_shader->GetUniformLocation("shading_gain");
+
+  terrain_texture_shader->Use();
+  glUniform1i(terrain_texture_texture, 0);
+  glUniform2f(terrain_texture_texel_size, 1.0f / 1024.0f, 1.0f / 1024.0f);
+  glUniform2f(terrain_texture_light_dir, 0.0f, -1.0f);
+  glUniform1f(terrain_texture_shading_enabled, 0.0f);
+  glUniform1f(terrain_texture_shading_gain, 1.0f);
+
   invert_shader = CompileProgram(invert_vertex_shader, invert_fragment_shader);
   invert_shader->BindAttribLocation(Attribute::POSITION, "position");
   invert_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
@@ -402,6 +513,8 @@ OpenGL::DeinitShaders() noexcept
   invert_shader = nullptr;
   delete texture_shader;
   texture_shader = nullptr;
+  delete terrain_texture_shader;
+  terrain_texture_shader = nullptr;
   delete solid_shader;
   solid_shader = nullptr;
 }
@@ -419,6 +532,10 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
 
   texture_shader->Use();
   glUniformMatrix4fv(texture_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  terrain_texture_shader->Use();
+  glUniformMatrix4fv(terrain_texture_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
 
   solid_shader->Use();
@@ -453,6 +570,9 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   texture_shader->Use();
   glUniform2f(texture_translate, t.x, t.y);
+
+  terrain_texture_shader->Use();
+  glUniform2f(terrain_texture_translate, t.x, t.y);
 
   invert_shader->Use();
   glUniform2f(invert_translate, t.x, t.y);

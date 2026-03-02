@@ -23,4 +23,12 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
               const GeoBounds &bounds,
               const Projection &projection);
 
+void
+DrawGeoBitmapTerrain(const RawBitmap &bitmap, PixelSize bitmap_size,
+                     const GeoBounds &bounds,
+                     const Projection &projection,
+                     bool shading_enabled,
+                     float light_x, float light_y,
+                     float shading_gain);
+
 #endif
