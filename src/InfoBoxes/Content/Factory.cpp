@@ -898,7 +898,7 @@ static constexpr MetaData meta_data[] = {
     N_("Efficiency of cruise. 100 indicates perfect MacCready performance. "
        "This value estimates your cruise efficiency according to the current "
        "flight history with the set MC value. Calculation begins after task is started."),
-    UpdateInfoBoxCruiseEfficiency,
+    IBFHelper<InfoBoxContentCruiseEfficiency>::Create,
   },
 
   {
