@@ -3,6 +3,7 @@
 
 #include "InfoBoxes/Content/Time.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
@@ -53,4 +54,43 @@ UpdateInfoBoxTimeFlight(InfoBoxData &data) noexcept
     return;
   }
   data.SetValueFromTimeTwoLines(flight.flight_time);
+}
+
+void
+InfoBoxContentTimeFlight::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxTimeFlight(data);
+}
+
+bool
+InfoBoxContentTimeFlight::HandleClick() noexcept
+{
+  dlgStatusShowModal(4);
+  return true;
+}
+
+void
+InfoBoxContentTimeLocal::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxTimeLocal(data);
+}
+
+bool
+InfoBoxContentTimeLocal::HandleClick() noexcept
+{
+  dlgStatusShowModal(4);
+  return true;
+}
+
+void
+InfoBoxContentTimeUTC::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxTimeUTC(data);
+}
+
+bool
+InfoBoxContentTimeUTC::HandleClick() noexcept
+{
+  dlgStatusShowModal(4);
+  return true;
 }
