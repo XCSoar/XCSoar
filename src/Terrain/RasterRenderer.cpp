@@ -107,6 +107,9 @@ RasterRenderer::~RasterRenderer() noexcept
   delete[] color_table;
   delete image;
   delete[] contour_column_base;
+#ifdef ENABLE_OPENGL
+  delete shader_color_ramp_image;
+#endif
 }
 
 #ifdef ENABLE_OPENGL
@@ -252,22 +255,25 @@ RasterRenderer::GenerateImage(bool do_shading,
 
   const unsigned contour_height_scale = do_contour? height_scale * 2 : 16;
 
-  ContourStart(contour_height_scale);
-
 #ifdef ENABLE_OPENGL
   if (do_shading && ENABLE_OPENGL_TERRAIN_SHADER) {
     /* OpenGL path: generate base terrain colors + height alpha;
        slope shading is applied in fragment shader. */
     shader_shading_enabled = true;
+    shader_ramp_enabled = !do_contour;
     shader_light_x = (float)-sunazimuth.fastsine();
     shader_light_y = (float)-sunazimuth.fastcosine();
     const float contrast_gain = std::clamp(contrast / 127.0f, 0.2f, 2.0f);
     const float brightness_gain = std::clamp(1.0f + brightness / 255.0f,
                                              0.5f, 1.5f);
     shader_shading_gain = 0.65f * contrast_gain * brightness_gain;
+    if (!shader_ramp_enabled)
+      ContourStart(contour_height_scale);
     GenerateUnshadedImage(height_scale, contour_height_scale);
   } else {
     shader_shading_enabled = false;
+    shader_ramp_enabled = false;
+    ContourStart(contour_height_scale);
     if (do_shading)
       GenerateSlopeImage(height_scale, contrast, brightness,
                          sunazimuth, contour_height_scale);
@@ -275,6 +281,7 @@ RasterRenderer::GenerateImage(bool do_shading,
       GenerateUnshadedImage(height_scale, contour_height_scale);
   }
 #else
+  ContourStart(contour_height_scale);
   if (do_shading)
     GenerateSlopeImage(height_scale, contrast, brightness,
                        sunazimuth, contour_height_scale);
@@ -304,6 +311,16 @@ RasterRenderer::GenerateUnshadedImage(const unsigned height_scale,
       const auto e = *src++;
       if (!e.IsSpecial()) [[likely]] {
         unsigned h = std::max(0, (int)e.GetValue());
+
+#ifdef ENABLE_OPENGL
+        if (shader_ramp_enabled) {
+          h = std::min(254u, h >> height_scale);
+          *p++ = RawColor(0, 0, 0);
+          (p - 1)->dummy = h;
+          contour_this_column_base++;
+          continue;
+        }
+#endif
 
         const unsigned contour_interval =
           ContourInterval(h, contour_height_scale);
@@ -545,6 +562,17 @@ RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
       color_table[i + (mag + 64) * 256] = color;
     }
   }
+
+#ifdef ENABLE_OPENGL
+  if (shader_color_ramp_image == nullptr)
+    shader_color_ramp_image = new RawBitmap(PixelSize{256, 1});
+
+  RawColor *ramp = shader_color_ramp_image->GetTopRow();
+  for (unsigned i = 0; i < 256; ++i)
+    ramp[i] = color_table[i + 64 * 256];
+
+  shader_color_ramp_image->SetDirty();
+#endif
 }
 
 void
@@ -570,7 +598,9 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                          projection,
                          shader_shading_enabled,
                          shader_light_x, shader_light_y,
-                         shader_shading_gain);
+                         shader_shading_gain,
+                         shader_ramp_enabled ? shader_color_ramp_image
+                                             : nullptr);
 #else
   image->StretchTo(PixelSize{height_matrix.GetSize()},
                    canvas, projection.GetScreenSize(),

@@ -7,6 +7,8 @@
 #include "util/Serial.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
+#include <cstdint>
+
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"
 #endif
@@ -31,6 +33,9 @@ protected:
   Angle last_sun_azimuth = Angle::Zero();
 
   const ColorRamp *last_color_ramp = nullptr;
+  bool last_generate_cache_hit = false;
+  std::uint32_t last_scan_map_us = 0;
+  std::uint32_t last_generate_image_us = 0;
 
   RasterRenderer raster_renderer;
 
@@ -91,9 +96,25 @@ public:
     return raster_renderer.GetQuantisationEffective();
   }
 
+  bool WasLastGenerateCacheHit() const noexcept {
+    return last_generate_cache_hit;
+  }
+
+  std::uint32_t GetLastScanMapUs() const noexcept {
+    return last_scan_map_us;
+  }
+
+  std::uint32_t GetLastGenerateImageUs() const noexcept {
+    return last_generate_image_us;
+  }
+
 #ifdef ENABLE_OPENGL
   bool IsShaderShadingEnabled() const noexcept {
     return raster_renderer.IsShaderShadingEnabled();
+  }
+
+  bool IsShaderRampEnabled() const noexcept {
+    return raster_renderer.IsShaderRampEnabled();
   }
 #endif
 };

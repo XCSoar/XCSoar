@@ -22,7 +22,8 @@ GLProgram *terrain_texture_shader;
 GLint terrain_texture_projection, terrain_texture_texture,
   terrain_texture_translate, terrain_texture_texel_size,
   terrain_texture_light_dir, terrain_texture_shading_enabled,
-  terrain_texture_shading_gain;
+  terrain_texture_shading_gain, terrain_texture_ramp,
+  terrain_texture_use_ramp;
 
 GLProgram *invert_shader;
 GLint invert_projection, invert_texture, invert_translate;
@@ -41,12 +42,12 @@ GLint dashed_projection, dashed_translate,
 GLProgram *circle_outline_shader;
 GLint circle_outline_projection, circle_outline_translate,
   circle_outline_center, circle_outline_radius1, circle_outline_radius2,
-  circle_outline_color;
+  circle_outline_color, circle_outline_feather;
 
 GLProgram *filled_circle_shader;
 GLint filled_circle_projection, filled_circle_translate,
   filled_circle_center, filled_circle_radius1, filled_circle_radius2,
-  filled_circle_color1, filled_circle_color2;
+  filled_circle_color1, filled_circle_color2, filled_circle_feather;
 
 } // namespace OpenGL
 
@@ -116,13 +117,19 @@ static constexpr char terrain_texture_fragment_shader[] =
   GLSL_PRECISION
   R"glsl(
     uniform sampler2D texture;
+    uniform sampler2D terrain_ramp;
     uniform vec2 texel_size;
     uniform vec2 light_dir;
     uniform float shading_enabled;
     uniform float shading_gain;
+    uniform float use_ramp;
     varying vec2 texcoordvar;
     void main() {
       vec4 c = texture2D(texture, texcoordvar);
+      vec3 base_rgb = c.rgb;
+
+      if (use_ramp > 0.5)
+        base_rgb = texture2D(terrain_ramp, vec2(c.a, 0.5)).rgb;
 
       if (shading_enabled > 0.5) {
         vec2 tx = vec2(texel_size.x, 0.0);
@@ -180,10 +187,10 @@ static constexpr char terrain_texture_fragment_shader[] =
                           normalize(vec3(light_dir, 0.7)));
         float shade = smoothstep(-0.35, 0.95, illum);
         shade = 0.62 + 0.46 * shade;
-        c.rgb *= shade;
+        base_rgb *= shade;
       }
 
-      gl_FragColor = vec4(c.rgb, 1.0);
+      gl_FragColor = vec4(base_rgb, 1.0);
     }
 )glsl";
 
@@ -293,12 +300,16 @@ static constexpr char circle_outline_fragment_shader[] =
     uniform vec2 center;
     uniform float radius1;
     uniform float radius2;
+    uniform float feather;
     uniform vec4 color;
     varying highp vec2 vert_pos;
     void main() {
       float distance = distance(center, vert_pos);
-      if (distance < radius1 || distance > radius2) discard;
-      gl_FragColor = color;
+      float a_inner = smoothstep(radius1 - feather, radius1 + feather, distance);
+      float a_outer = 1.0 - smoothstep(radius2 - feather, radius2 + feather, distance);
+      float alpha = a_inner * a_outer;
+      if (alpha <= 0.001) discard;
+      gl_FragColor = vec4(color.rgb, color.a * alpha);
     }
 )glsl";
 
@@ -309,17 +320,18 @@ static constexpr char filled_circle_fragment_shader[] =
     uniform vec2 center;
     uniform float radius1;
     uniform float radius2;
+    uniform float feather;
     uniform vec4 color1;
     uniform vec4 color2;
     varying highp vec2 vert_pos;
     void main() {
       float distance = distance(center, vert_pos);
-      if (distance > radius2) discard;
+      float alpha_outer = 1.0 - smoothstep(radius2 - feather, radius2 + feather, distance);
+      if (alpha_outer <= 0.001) discard;
 
-      if (distance < radius1)
-        gl_FragColor = color1;
-      else
-        gl_FragColor = color2;
+      float mix_ring = smoothstep(radius1 - feather, radius1 + feather, distance);
+      vec4 c = mix(color1, color2, mix_ring);
+      gl_FragColor = vec4(c.rgb, c.a * alpha_outer);
     }
 )glsl";
 
@@ -410,13 +422,19 @@ OpenGL::InitShaders()
     terrain_texture_shader->GetUniformLocation("shading_enabled");
   terrain_texture_shading_gain =
     terrain_texture_shader->GetUniformLocation("shading_gain");
+  terrain_texture_ramp =
+    terrain_texture_shader->GetUniformLocation("terrain_ramp");
+  terrain_texture_use_ramp =
+    terrain_texture_shader->GetUniformLocation("use_ramp");
 
   terrain_texture_shader->Use();
   glUniform1i(terrain_texture_texture, 0);
+  glUniform1i(terrain_texture_ramp, 1);
   glUniform2f(terrain_texture_texel_size, 1.0f / 1024.0f, 1.0f / 1024.0f);
   glUniform2f(terrain_texture_light_dir, 0.0f, -1.0f);
   glUniform1f(terrain_texture_shading_enabled, 0.0f);
   glUniform1f(terrain_texture_shading_gain, 1.0f);
+  glUniform1f(terrain_texture_use_ramp, 0.0f);
 
   invert_shader = CompileProgram(invert_vertex_shader, invert_fragment_shader);
   invert_shader->BindAttribLocation(Attribute::POSITION, "position");
@@ -482,6 +500,10 @@ OpenGL::InitShaders()
   circle_outline_radius1 = circle_outline_shader->GetUniformLocation("radius1");
   circle_outline_radius2 = circle_outline_shader->GetUniformLocation("radius2");
   circle_outline_color = circle_outline_shader->GetUniformLocation("color");
+  circle_outline_feather = circle_outline_shader->GetUniformLocation("feather");
+
+  circle_outline_shader->Use();
+  glUniform1f(circle_outline_feather, 1.0f);
 
   filled_circle_shader = CompileProgram(circle_vertex_shader, filled_circle_fragment_shader);
   filled_circle_shader->BindAttribLocation(Attribute::POSITION, "position");
@@ -494,6 +516,10 @@ OpenGL::InitShaders()
   filled_circle_radius2 = filled_circle_shader->GetUniformLocation("radius2");
   filled_circle_color1 = filled_circle_shader->GetUniformLocation("color1");
   filled_circle_color2 = filled_circle_shader->GetUniformLocation("color2");
+  filled_circle_feather = filled_circle_shader->GetUniformLocation("feather");
+
+  filled_circle_shader->Use();
+  glUniform1f(filled_circle_feather, 1.0f);
 }
 
 void

@@ -74,7 +74,8 @@ DrawGeoBitmapTerrain(const RawBitmap &bitmap, PixelSize bitmap_size,
                      const Projection &projection,
                      bool shading_enabled,
                      float light_x, float light_y,
-                     float shading_gain)
+                     float shading_gain,
+                     const RawBitmap *color_ramp_bitmap)
 {
   OpenGL::terrain_texture_shader->Use();
   glUniform2f(OpenGL::terrain_texture_texel_size,
@@ -83,6 +84,14 @@ DrawGeoBitmapTerrain(const RawBitmap &bitmap, PixelSize bitmap_size,
   glUniform1f(OpenGL::terrain_texture_shading_enabled,
               shading_enabled ? 1.0f : 0.0f);
   glUniform1f(OpenGL::terrain_texture_shading_gain, shading_gain);
+  glUniform1f(OpenGL::terrain_texture_use_ramp,
+              color_ramp_bitmap != nullptr ? 1.0f : 0.0f);
+
+  if (color_ramp_bitmap != nullptr) {
+    glActiveTexture(GL_TEXTURE1);
+    color_ramp_bitmap->BindAndGetTexture();
+    glActiveTexture(GL_TEXTURE0);
+  }
 
   DrawGeoBitmapWithShader(bitmap, bitmap_size, bounds, projection,
                           *OpenGL::terrain_texture_shader);

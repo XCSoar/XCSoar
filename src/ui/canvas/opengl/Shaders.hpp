@@ -28,7 +28,8 @@ extern GLProgram *terrain_texture_shader;
 extern GLint terrain_texture_projection, terrain_texture_texture,
   terrain_texture_translate, terrain_texture_texel_size,
   terrain_texture_light_dir, terrain_texture_shading_enabled,
-  terrain_texture_shading_gain;
+  terrain_texture_shading_gain, terrain_texture_ramp,
+  terrain_texture_use_ramp;
 
 /**
  * A shader that copies the inverted texture.
@@ -63,7 +64,7 @@ extern GLint dashed_projection, dashed_translate,
 extern GLProgram *circle_outline_shader;
 extern GLint circle_outline_projection, circle_outline_translate,
   circle_outline_center, circle_outline_radius1, circle_outline_radius2,
-  circle_outline_color;
+  circle_outline_color, circle_outline_feather;
 
 /**
  * A shader that draws a filled circle.
@@ -71,7 +72,7 @@ extern GLint circle_outline_projection, circle_outline_translate,
 extern GLProgram *filled_circle_shader;
 extern GLint filled_circle_projection, filled_circle_translate,
   filled_circle_center, filled_circle_radius1, filled_circle_radius2,
-  filled_circle_color1, filled_circle_color2;
+  filled_circle_color1, filled_circle_color2, filled_circle_feather;
 
 /**
  * Throws on error.

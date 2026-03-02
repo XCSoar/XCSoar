@@ -26,12 +26,24 @@
 
 #include <algorithm> // for std::clamp()
 
+#ifdef ENABLE_OPENGL
+/** Temporary perf-testing toggle: force map redraw at 32 Hz. */
+static constexpr bool ENABLE_TERRAIN_PERF_REDRAW_32HZ = true;
+static constexpr auto TERRAIN_PERF_REDRAW_INTERVAL =
+  std::chrono::microseconds{31250};
+#endif
+
 void
 GlueMapWindow::OnCreate()
 {
   MapWindow::OnCreate();
 
   visible_projection.SetScale(CommonInterface::GetMapSettings().cruise_scale);
+
+#ifdef ENABLE_OPENGL
+  if (ENABLE_TERRAIN_PERF_REDRAW_32HZ)
+    terrain_perf_redraw_timer.Schedule(TERRAIN_PERF_REDRAW_INTERVAL);
+#endif
 }
 
 void
@@ -43,6 +55,7 @@ GlueMapWindow::OnDestroy() noexcept
 
 #ifdef ENABLE_OPENGL
   kinetic_timer.Cancel();
+  terrain_perf_redraw_timer.Cancel();
 #endif
 
   map_item_timer.Cancel();
@@ -444,6 +457,13 @@ GlueMapWindow::OnKineticTimer() noexcept
 
   SetLocation(location);
   QuickRedraw();
+}
+
+void
+GlueMapWindow::OnTerrainPerfRedrawTimer() noexcept
+{
+  if (ENABLE_TERRAIN_PERF_REDRAW_32HZ)
+    PartialRedraw();
 }
 
 #endif

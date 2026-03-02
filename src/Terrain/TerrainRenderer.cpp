@@ -7,7 +7,15 @@
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 
+#include <chrono>
 #include <cassert>
+
+/**
+ * Temporary perf-testing toggle:
+ * force terrain regeneration while slope shading is enabled by
+ * disabling the sun-azimuth rough-equality cache shortcut.
+ */
+static constexpr bool ENABLE_TERRAIN_PERF_FORCE_REGEN = true;
 
 static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
   {
@@ -326,6 +334,14 @@ bool
 TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
+  using clock = std::chrono::steady_clock;
+  last_scan_map_us = 0;
+  last_generate_image_us = 0;
+  bool sunazimuth_unchanged = sunazimuth.CompareRoughly(last_sun_azimuth);
+  if (ENABLE_TERRAIN_PERF_FORCE_REGEN &&
+      settings.slope_shading != SlopeShading::OFF)
+    sunazimuth_unchanged = false;
+
 #ifdef ENABLE_OPENGL
   const GeoBounds &old_bounds = raster_renderer.GetBounds();
   GeoBounds new_bounds = map_projection.GetScreenBounds();
@@ -333,29 +349,36 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 
   {
     RasterTerrain::Lease map(terrain);
-    if (!new_bounds.IntersectWith(map->GetBounds()))
+    if (!new_bounds.IntersectWith(map->GetBounds())) {
       /* map is outside of visible screen area */
+      last_generate_cache_hit = false;
       return false;
+    }
   }
 
   if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth) &&
-      !raster_renderer.UpdateQuantisation())
+      sunazimuth_unchanged &&
+      !raster_renderer.UpdateQuantisation()) {
     /* no change since previous frame */
+    last_generate_cache_hit = true;
     return true;
+  }
 
 #else
   if (compare_projection.Compare(map_projection) &&
       terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth))
+      sunazimuth_unchanged) {
     /* no change since previous frame */
+    last_generate_cache_hit = true;
     return true;
+  }
 
   compare_projection = CompareProjection(map_projection);
 #endif
 
+  last_generate_cache_hit = false;
   terrain_serial = terrain.GetSerial();
 
   last_sun_azimuth = sunazimuth;
@@ -376,14 +399,22 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     last_color_ramp = color_ramp;
   }
 
+  const auto t0 = clock::now();
   {
     RasterTerrain::Lease map(terrain);
     raster_renderer.ScanMap(map, map_projection);
   }
+  const auto t1 = clock::now();
+  last_scan_map_us = (std::uint32_t)std::chrono::duration_cast<
+    std::chrono::microseconds>(t1 - t0).count();
 
+  const auto t2 = clock::now();
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
                                 do_contour);
+  const auto t3 = clock::now();
+  last_generate_image_us = (std::uint32_t)std::chrono::duration_cast<
+    std::chrono::microseconds>(t3 - t2).count();
   return true;
 }

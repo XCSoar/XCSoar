@@ -57,8 +57,11 @@ class RasterRenderer {
    * OpenGL-only terrain fragment shading parameters.
    */
   bool shader_shading_enabled = false;
+  bool shader_ramp_enabled = false;
   float shader_light_x = 0.0f, shader_light_y = -1.0f;
   float shader_shading_gain = 1.0f;
+
+  RawBitmap *shader_color_ramp_image = nullptr;
 #endif
 
   HeightMatrix height_matrix;
@@ -124,6 +127,10 @@ public:
 
   bool IsShaderShadingEnabled() const noexcept {
     return shader_shading_enabled;
+  }
+
+  bool IsShaderRampEnabled() const noexcept {
+    return shader_ramp_enabled;
   }
 
   const GLTexture &BindAndGetTexture() const noexcept;

@@ -29,6 +29,7 @@ DrawGeoBitmapTerrain(const RawBitmap &bitmap, PixelSize bitmap_size,
                      const Projection &projection,
                      bool shading_enabled,
                      float light_x, float light_y,
-                     float shading_gain);
+                     float shading_gain,
+                     const RawBitmap *color_ramp_bitmap);
 
 #endif
