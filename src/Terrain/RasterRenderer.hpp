@@ -84,12 +84,16 @@ public:
   }
 
   /**
-   * Geographic size of one screen pixel in meters, computed
+   * Geographic size of one rendered pixel in meters, computed
    * by the ScanMap() call.
    */
   [[gnu::pure]]
   double GetPixelSize() const noexcept {
     return pixel_size;
+  }
+
+  unsigned GetQuantisationPixels() const noexcept {
+    return quantisation_pixels;
   }
 
 #ifdef ENABLE_OPENGL
