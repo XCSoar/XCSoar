@@ -853,6 +853,19 @@ UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
   UpdateStartOpenInfobox(data, now_s);
 }
 
+void
+InfoBoxContentStartOpen::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxStartOpen(data);
+}
+
+bool
+InfoBoxContentStartOpen::HandleClick() noexcept
+{
+  dlgStatusShowModal(3);
+  return true;
+}
+
 static void
 UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_s) noexcept
 {
@@ -918,6 +931,19 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
   const auto arrival_s = CommonInterface::Basic().time +
                          current_remaining.time_elapsed;
   UpdateStartOpenInfobox(data, arrival_s);
+}
+
+void
+InfoBoxContentStartOpenArrival::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxStartOpenArrival(data);
+}
+
+bool
+InfoBoxContentStartOpenArrival::HandleClick() noexcept
+{
+  dlgStatusShowModal(3);
+  return true;
 }
 
 /*
