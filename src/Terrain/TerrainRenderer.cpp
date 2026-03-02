@@ -366,8 +366,10 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   const bool is_terrain = true;
   const bool do_shading = is_terrain &&
                           settings.slope_shading != SlopeShading::OFF;
+  const double screen_pixel_size =
+    1.0 / map_projection.GetScale();
   const unsigned contour_spacing = is_terrain
-    ? ContourSpacing(settings.contours, height_scale, raster_renderer.GetPixelSize())
+    ? ContourSpacing(settings.contours, height_scale, screen_pixel_size)
     : 0u;
 
   const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
