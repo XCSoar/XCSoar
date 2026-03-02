@@ -399,7 +399,7 @@ static constexpr MetaData meta_data[] = {
     N_("Percentage climb"),
     N_("% Climb"),
     N_("Percentage of time spent in climb mode. These statistics are reset upon starting the task."),
-    UpdateInfoBoxThermalRatio,
+    IBFHelper<InfoBoxContentThermalRatio>::Create,
   },
 
   // e_TimeSinceTakeoff
