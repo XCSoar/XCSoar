@@ -407,7 +407,7 @@ static constexpr MetaData meta_data[] = {
     N_("Flight duration"),
     N_("Flt Duration"),
     N_("Time elapsed since takeoff was detected."),
-    UpdateInfoBoxTimeFlight,
+    IBFHelper<InfoBoxContentTimeFlight>::Create,
   },
 
   // e_Load_G
@@ -431,7 +431,7 @@ static constexpr MetaData meta_data[] = {
     N_("Time local"),
     N_("Time loc"),
     N_("GPS time expressed in local time zone."),
-    UpdateInfoBoxTimeLocal,
+    IBFHelper<InfoBoxContentTimeLocal>::Create,
   },
 
   // e_TimeUTC
@@ -439,7 +439,7 @@ static constexpr MetaData meta_data[] = {
     N_("Time UTC"),
     N_("Time UTC"),
     N_("GPS time expressed in UTC."),
-    UpdateInfoBoxTimeUTC,
+    IBFHelper<InfoBoxContentTimeUTC>::Create,
   },
 
   // e_Fin_Time
