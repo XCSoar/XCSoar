@@ -29,6 +29,12 @@ UpdateInfoBoxFreeRAM(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept;
 
+class InfoBoxContentNbrSat final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
 class InfoBoxContentHorizon : public InfoBoxContent
 {
 public:

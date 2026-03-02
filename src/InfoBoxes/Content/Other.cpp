@@ -3,6 +3,7 @@
 
 #include "InfoBoxes/Content/Other.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "Hardware/PowerGlobal.hpp"
@@ -190,4 +191,17 @@ UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept
         // valid but unknown number of sats
         data.SetValueInvalid();
     }
+}
+
+void
+InfoBoxContentNbrSat::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxNbrSat(data);
+}
+
+bool
+InfoBoxContentNbrSat::HandleClick() noexcept
+{
+  dlgStatusShowModal(1);
+  return true;
 }
