@@ -74,6 +74,18 @@ TopWindow::Create([[maybe_unused]] const char *text, PixelSize size,
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   size = screen->SetDisplayOrientation(style.GetInitialOrientation());
+#ifdef USE_POLL_EVENT
+  if (event_queue != nullptr) {
+    event_queue->SetDisplayOrientation(style.GetInitialOrientation());
+    PixelSize native_size = size;
+#if defined(ENABLE_OPENGL) && defined(USE_LIBINPUT)
+    if (!event_queue->UsesSystemRotatedInput() &&
+        AreAxesSwapped(style.GetInitialOrientation()))
+      native_size = {size.height, size.width};
+#endif
+    event_queue->SetScreenSize(native_size);
+  }
+#endif
 #elif defined(USE_MEMORY_CANVAS)
   size = screen->GetSize();
 #elif defined(ENABLE_OPENGL)

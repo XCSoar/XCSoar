@@ -3,11 +3,11 @@
 
 #pragma once
 
-#ifdef KOBO
+#ifdef USE_LIBINPUT
+#include "libinput/LibInputHandler.hpp"
+#else
 #include "linux/MergeMouse.hpp"
 #include "linux/Input.hpp"
-#else
-#include "libinput/LibInputHandler.hpp"
 #endif
 
 #include "ui/dim/Point.hpp"
@@ -22,13 +22,13 @@ class EventQueue;
 struct Event;
 
 class InputEventQueue final {
-#ifdef KOBO
+#ifdef USE_LIBINPUT
+  LibInputHandler libinput_handler;
+#else
   MergeMouse merge_mouse;
   LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
-#else
-  LibInputHandler libinput_handler;
-#endif /* !USE_LIBINPUT */
+#endif
 
 public:
   explicit InputEventQueue(EventQueue &queue) noexcept;
@@ -42,11 +42,21 @@ public:
   #endif
   }
 
-#ifndef USE_LIBINPUT
   void SetDisplayOrientation(DisplayOrientation orientation) {
+#ifdef USE_LIBINPUT
+    libinput_handler.SetDisplayOrientation(orientation);
+#else
     merge_mouse.SetDisplayOrientation(orientation);
-  }
 #endif
+  }
+
+  bool UsesSystemRotatedInput() const noexcept {
+#ifdef USE_LIBINPUT
+    return libinput_handler.UsesSystemRotatedInput();
+#else
+    return false;
+#endif
+  }
 
   bool HasPointer() const noexcept {
 #ifdef USE_LIBINPUT
