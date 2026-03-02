@@ -18,3 +18,7 @@ enum class FileType : uint8_t {
   TASK,
   CHECKLIST,
 };
+
+class AllocatedPath;
+
+AllocatedPath GetFileTypeDefaultDir(const FileType file_type);
