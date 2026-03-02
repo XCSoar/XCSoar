@@ -7,6 +7,7 @@
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -821,6 +822,19 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept
 
   data.SetValueFromPercent(task_stats.cruise_efficiency*100);
   data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
+}
+
+void
+InfoBoxContentCruiseEfficiency::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxCruiseEfficiency(data);
+}
+
+bool
+InfoBoxContentCruiseEfficiency::HandleClick() noexcept
+{
+  dlgStatusShowModal(2);
+  return true;
 }
 
 static constexpr unsigned

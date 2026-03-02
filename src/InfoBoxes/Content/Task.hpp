@@ -258,6 +258,12 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxCruiseEfficiency(InfoBoxData &data) noexcept;
 
+class InfoBoxContentCruiseEfficiency final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
 void
 UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept;
 
