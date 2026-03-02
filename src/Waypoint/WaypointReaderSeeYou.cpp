@@ -201,6 +201,7 @@ bool ParseSeeYou(WaypointFactory factory, Waypoints &waypoints, BufferedReader &
 
   bool tasks { false };
   bool first_line = true;
+  bool has_rwwidth = false;
 
   while ( true ) {
     params_num = ReadCsvRecord(reader, params);
@@ -222,6 +223,7 @@ bool ParseSeeYou(WaypointFactory factory, Waypoints &waypoints, BufferedReader &
          */
         if ( params_num > iRWWidth &&
              params[iRWWidth] == "rwwidth"sv ) {
+          has_rwwidth = true;
           iFrequency = 10;
           iDescription = 11;
         }
@@ -300,7 +302,16 @@ bool ParseSeeYou(WaypointFactory factory, Waypoints &waypoints, BufferedReader &
            rwlen > 0 && rwlen <= 30000)
         new_waypoint.runway.SetLength(uround(rwlen));
 
-      if ( params_num > iRWLen &&
+      // Runway width (e.g. 15.0m; available in newer CUP formats)
+      double rwwidth = -1;
+      if (has_rwwidth &&
+          params_num > iRWWidth &&
+          !params[iRWWidth].empty() &&
+          ParseDistance(params[iRWWidth], rwwidth) &&
+          rwwidth > 0 && rwwidth <= 30000)
+        new_waypoint.runway.SetWidth(uround(rwwidth));
+
+      if ( params_num > iRWDir &&
            !params[iRWDir].empty()) {
         if (auto value = ParseInteger<unsigned>(params[iRWDir])) {
           unsigned direction = *value;
