@@ -105,7 +105,17 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
 
     char length_buffer[16];
     FormatSmallUserDistance(length_buffer, waypoint->runway.GetLength());
-    buffer += length_buffer;
+
+    if (waypoint->runway.IsWidthDefined()) {
+      char width_buffer[16];
+      FormatSmallUserDistance(width_buffer, waypoint->runway.GetWidth());
+
+      StaticString<64> runway_size;
+      runway_size.UnsafeFormat("%s x %s", length_buffer, width_buffer);
+      buffer += runway_size;
+    } else {
+      buffer += length_buffer;
+    }
   }
 
   if (!buffer.empty())

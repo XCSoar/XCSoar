@@ -15,8 +15,11 @@ class Runway {
   /** Main runway length in m (0 for unknown) */
   uint16_t length;
 
-  constexpr Runway(int _direction, unsigned _length)
-    :direction(_direction), length(_length) {}
+  /** Main runway width in m (0 for unknown) */
+  uint16_t width;
+
+  constexpr Runway(int _direction, unsigned _length, unsigned _width)
+    :direction(_direction), length(_length), width(_width) {}
 
 public:
   /**
@@ -29,7 +32,7 @@ public:
    * false.
    */
   static constexpr Runway Null() {
-    return { -1, 0 };
+    return { -1, 0, 0 };
   }
 
   bool IsDirectionDefined() const {
@@ -40,9 +43,14 @@ public:
     return length > 0;
   }
 
+  bool IsWidthDefined() const {
+    return width > 0;
+  }
+
   void Clear() {
     ClearDirection();
     length = 0;
+    width = 0;
   }
 
   void ClearDirection() {
@@ -89,5 +97,16 @@ public:
     assert(IsLengthDefined());
 
     return length;
+  }
+
+  void SetWidth(unsigned _width) {
+    width = _width;
+  }
+
+  [[gnu::pure]]
+  unsigned GetWidth() const {
+    assert(IsWidthDefined());
+
+    return width;
   }
 };

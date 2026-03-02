@@ -153,6 +153,11 @@ TestSeeYou(const wp_vector &org_wp)
     const auto wp2 = GetWaypoint(i, way_points2);
     TestSeeYouWaypoint(i, wp2.get());
   }
+
+  const auto berg2 = way_points2.LookupName("Bergneustadt");
+  ok1(berg2 != nullptr);
+  ok1(berg2 != nullptr && berg2->runway.IsWidthDefined() &&
+      berg2->runway.GetWidth() == 15);
   // Test a SeeYou waypoint file with userdata and pics fields:
   Waypoints way_points3;
   if (!TestWaypointFile(Path("test/data/waypoints3.cup"), way_points3,
@@ -165,6 +170,11 @@ TestSeeYou(const wp_vector &org_wp)
     const auto wp3 = GetWaypoint(i, way_points3);
     TestSeeYouWaypoint(i, wp3.get());
   }
+
+  const auto berg3 = way_points3.LookupName("Bergneustadt");
+  ok1(berg3 != nullptr);
+  ok1(berg3 != nullptr && berg3->runway.IsWidthDefined() &&
+      berg3->runway.GetWidth() == 15);
 }
 
 static void
@@ -491,7 +501,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(507);
+  plan_tests(511);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
