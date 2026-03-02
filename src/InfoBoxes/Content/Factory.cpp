@@ -919,14 +919,14 @@ static constexpr MetaData meta_data[] = {
     N_("Start open/close countdown"),
     N_("Start open"),
     N_("Time left until the start point opens or closes."),
-    UpdateInfoBoxStartOpen,
+    IBFHelper<InfoBoxContentStartOpen>::Create,
   },
 
   {
     N_("Start open/close countdown at reaching"),
     N_("Start reach"),
     N_("Time left until the start point opens or closes, minus the calculated time to reach the start point."),
-    UpdateInfoBoxStartOpenArrival,
+    IBFHelper<InfoBoxContentStartOpenArrival>::Create,
   },
 
   {
