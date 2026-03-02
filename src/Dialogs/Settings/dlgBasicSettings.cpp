@@ -15,6 +15,8 @@
 #include "Interface.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Dialogs/Message.hpp"
+#include "Dialogs/InternalLink.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
@@ -167,6 +169,16 @@ FlightSetupPanel::SetBallast()
 void
 FlightSetupPanel::SetBallastTimer(bool active)
 {
+  if (active && CommonInterface::GetComputerSettings().plane.dump_time == 0) {
+    if (ShowMessageBox(_("Ballast dump time is 0 in plane profile.\n"
+                         "Open Plane configuration now?"),
+                       _("Flight Setup"),
+                       MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
+      HandleInternalLink("xcsoar://config/planes");
+
+    return;
+  }
+
   if (!polar_settings.glide_polar_task.HasBallast())
     active = false;
 
