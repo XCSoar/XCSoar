@@ -292,3 +292,15 @@ InfoBoxContentClimbPercent::HandleClick() noexcept
 {
   return ShowAnalysis(AnalysisPage::CLIMB);
 }
+
+void
+InfoBoxContentThermalRatio::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxThermalRatio(data);
+}
+
+bool
+InfoBoxContentThermalRatio::HandleClick() noexcept
+{
+  return ShowAnalysis(AnalysisPage::CLIMB);
+}
