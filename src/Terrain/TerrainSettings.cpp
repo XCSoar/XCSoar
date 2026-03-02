@@ -26,8 +26,9 @@ static constexpr unsigned CONTOUR_HEIGHT_SCALE_MAX = 15;
  * Contour density preset definition:
  * base_scale_offset: added to height_scale to compute the starting
  *   contour_height_scale.  Higher values = coarser base interval.
- * min_spacing_factor: contour interval is at least this multiple
- *   of pixel_size.  Higher value = more thinning when zoomed out.
+ * min_spacing_factor: contour interval is at least this many
+ *   millimeters at 45 degree slope (approximately).  
+ *   Higher value = more thinning when zoomed out.
  */
 
 struct ContourModeParams {
@@ -36,16 +37,16 @@ struct ContourModeParams {
 };
 
 // Mountains: coarse base interval (256 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_MOUNTAINS{4, 12.0};
+static constexpr ContourModeParams CONTOUR_MOUNTAINS{4, 1.5};
 
 // Highlands: medium-coarse base interval (64 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_HIGHLANDS{2, 6.0};
+static constexpr ContourModeParams CONTOUR_HIGHLANDS{2, 0.75};
 
 // Lowlands: medium-fine base interval (16 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_LOWLANDS{0, 4.0};
+static constexpr ContourModeParams CONTOUR_LOWLANDS{0, 0.5};
 
 // Superfine: very fine base interval (8 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_SUPERFINE{-1, 4.0};
+static constexpr ContourModeParams CONTOUR_SUPERFINE{-1, 0.5};
 
 unsigned
 ContourSpacing(Contours contours, unsigned height_scale,

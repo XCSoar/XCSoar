@@ -3,6 +3,7 @@
 
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Screen/Layout.hpp"
 #include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
@@ -368,6 +369,10 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                           settings.slope_shading != SlopeShading::OFF;
   const double screen_pixel_size =
     1.0 / map_projection.GetScale();
+  const double dpi_factor =
+    Layout::ScalePenWidth(1024u) / 1024.0;
+  const double contour_pixel_size = screen_pixel_size * dpi_factor *
+    std::max(1u, raster_renderer.GetQuantisationPixels() / 2u);
   const unsigned contour_spacing = is_terrain
     ? ContourSpacing(settings.contours, height_scale,
                      contour_pixel_size)
