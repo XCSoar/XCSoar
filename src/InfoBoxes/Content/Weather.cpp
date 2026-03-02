@@ -3,6 +3,7 @@
 
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
+#include "InfoBoxes/Content/ShowAnalysis.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
@@ -43,6 +44,18 @@ UpdateInfoBoxTemperature(InfoBoxData &data) noexcept
   data.FmtValue("{:2.1f}", basic.temperature.ToUser());
 
   data.SetValueUnit(Units::current.temperature_unit);
+}
+
+void
+InfoBoxContentTemperature::Update(InfoBoxData &data) noexcept
+{
+  UpdateInfoBoxTemperature(data);
+}
+
+bool
+InfoBoxContentTemperature::HandleClick() noexcept
+{
+  return ShowAnalysis(AnalysisPage::TEMPTRACE);
 }
 
 void
