@@ -36,16 +36,16 @@ struct ContourModeParams {
 };
 
 // Mountains: coarse base interval (256 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_MOUNTAINS{4, 3.0};
+static constexpr ContourModeParams CONTOUR_MOUNTAINS{4, 12.0};
 
 // Highlands: medium-coarse base interval (64 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_HIGHLANDS{2, 1.5};
+static constexpr ContourModeParams CONTOUR_HIGHLANDS{2, 6.0};
 
 // Lowlands: medium-fine base interval (16 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_LOWLANDS{0, 1.0};
+static constexpr ContourModeParams CONTOUR_LOWLANDS{0, 4.0};
 
 // Superfine: very fine base interval (8 m at height_scale=4)
-static constexpr ContourModeParams CONTOUR_SUPERFINE{-1, 1.0};
+static constexpr ContourModeParams CONTOUR_SUPERFINE{-1, 4.0};
 
 unsigned
 ContourSpacing(Contours contours, unsigned height_scale,
