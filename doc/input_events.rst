@@ -228,7 +228,8 @@ Event list
  * - ``Ballast``
    - Adjusts the glider ballast setting. Possible arguments: ``up``
      (increase by 10%), ``down`` (decrease by 10%), ``max`` (100%),
-     ``min`` (0%), ``show`` (display current value).
+     ``min`` (0%), ``toggle`` (start/stop ballast dump timer),
+     ``show`` (display current value).
  * - ``Beep``
    - Plays a beep sound.
  * - ``Brightness``
