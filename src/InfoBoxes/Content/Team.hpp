@@ -13,6 +13,24 @@ public:
   bool HandleClick() noexcept override;
 };
 
+class InfoBoxContentTeamBearing final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
+class InfoBoxContentTeamBearingDiff final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
+class InfoBoxContentTeamDistance final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
 void
 UpdateInfoBoxTeamBearing(InfoBoxData &data) noexcept;
 
