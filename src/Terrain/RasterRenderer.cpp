@@ -26,6 +26,8 @@ static constexpr double ZOOM_FACTOR_DIVISOR = 4250.0;
 static constexpr unsigned MAX_QUANTISATION_NEAR = 25;
 static constexpr unsigned MAX_QUANTISATION_LOW_ZOOM = 40;
 static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
+static constexpr unsigned BOUNDS_SCALE_NUMERATOR = 3;
+static constexpr unsigned BOUNDS_SCALE_DENOMINATOR = 2;
 
 /**
  * Interpolate between x and y with i/128, i.e. i/(1 << 7).
@@ -195,11 +197,20 @@ RasterRenderer::ScanMap(const RasterMap &map,
   }
 
 #ifdef ENABLE_OPENGL
+  /* Keep the same terrain pixel density as non-OpenGL builds:
+     if we enlarge the geographic bounds, we must enlarge the sampled
+     bitmap dimensions by the same factor. */
+  const auto screen_size = (UnsignedPoint2D)projection.GetScreenSize();
+  const UnsignedPoint2D scaled_screen_size{
+    (screen_size.x * BOUNDS_SCALE_NUMERATOR + 1) / BOUNDS_SCALE_DENOMINATOR,
+    (screen_size.y * BOUNDS_SCALE_NUMERATOR + 1) / BOUNDS_SCALE_DENOMINATOR,
+  };
+
   bounds = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
   bounds.IntersectWith(map.GetBounds());
 
   height_matrix.Fill(map, bounds,
-                     (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels,
+                     scaled_screen_size / quantisation_pixels,
                      true);
 
   last_quantisation_pixels = quantisation_pixels;
