@@ -511,7 +511,7 @@ static constexpr MetaData meta_data[] = {
     N_("Relative humidity"),
     N_("Rel Hum"),
     N_("Relative humidity of the air in percent as measured by a probe if supported by a connected intelligent variometer."),
-    UpdateInfoBoxHumidity,
+    IBFHelper<InfoBoxContentHumidity>::Create,
   },
 
   // e_Home_Temperature
