@@ -49,21 +49,7 @@ InputEvents::eventArmAdvance(const char *misc)
 
   ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
   TaskAdvance &advance = task_manager->SetTaskAdvance();
-
-  if (StringIsEqual(misc, "on")) {
-    advance.SetArmed(true);
-    Message::AddMessage(_("Armed start activated"));
-  } else if (StringIsEqual(misc, "off")) {
-    advance.SetArmed(false);
-  } else if (StringIsEqual(misc, "toggle")) {
-    const bool was_armed = advance.GetState() == TaskAdvance::START_ARMED ||
-                           advance.GetState() == TaskAdvance::TURN_ARMED;
-    advance.ToggleArmed();
-    const bool is_armed = advance.GetState() == TaskAdvance::START_ARMED ||
-                          advance.GetState() == TaskAdvance::TURN_ARMED;
-    if (is_armed && !was_armed)
-      Message::AddMessage(_("Armed start activated"));
-  } else if (StringIsEqual(misc, "show")) {
+  const auto show_state = [&advance]() {
     switch (advance.GetState()) {
     case TaskAdvance::MANUAL:
       Message::AddMessage(_("Advance manually"));
@@ -84,6 +70,18 @@ InputEvents::eventArmAdvance(const char *misc)
       Message::AddMessage(_("Hold turn"));
       break;
     }
+  };
+
+  if (StringIsEqual(misc, "on")) {
+    advance.SetArmed(true);
+    Message::AddMessage(_("Armed start activated"));
+  } else if (StringIsEqual(misc, "off")) {
+    advance.SetArmed(false);
+  } else if (StringIsEqual(misc, "toggle")) {
+    advance.ToggleArmed();
+    show_state();
+  } else if (StringIsEqual(misc, "show")) {
+    show_state();
   }
 
   /* quickly propagate the updated values from the TaskManager to the
