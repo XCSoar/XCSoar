@@ -503,7 +503,7 @@ static constexpr MetaData meta_data[] = {
     N_("Outside air temperature"),
     N_("OAT"),
     N_("Outside air temperature measured by a probe if supported by a connected intelligent variometer."),
-    UpdateInfoBoxTemperature,
+    IBFHelper<InfoBoxContentTemperature>::Create,
   },
 
   // e_HumidityRel
