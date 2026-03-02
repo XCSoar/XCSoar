@@ -267,8 +267,20 @@ public:
 void
 UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept;
 
+class InfoBoxContentStartOpen final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
 void
 UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept;
+
+class InfoBoxContentStartOpenArrival final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
 
 class InfoBoxContentNextArrow : public InfoBoxContentNextWaypointBase
 {
