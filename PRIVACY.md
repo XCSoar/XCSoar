@@ -2,11 +2,11 @@
 # Privacy Policy
 
 This document describes the XCSoar privacy policy for an application operated
-and provided by the current project maintainer ([Max Kellermann]). It describes
+and provided by the current project maintainer ([Philipp Wollschlegel]). It describes
 what personal information we may be gathering from you, who can see this
 information, and what options you have for controlling this.
 
-[Max Kellermann]: mailto:max@kellermann.name
+[Philipp Wollschlegel]: mailto:folken@users.noreply.github.com
 
 For the protection of the XCSoar and other users, if you do not agree with this
 Privacy Policy, you may not use the application.
