@@ -13,6 +13,7 @@ extern bool InputFileChanged;
 extern bool MapFileChanged;
 extern bool FlarmFileChanged;
 extern bool RaspFileChanged;
+extern bool UserRepositoriesListChanged;
 extern bool LanguageChanged;
 extern bool require_restart;
 

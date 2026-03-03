@@ -13,14 +13,12 @@
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
-#include "io/FileLineReader.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "net/http/Features.hpp"
 #include "util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
-#include "Repository/Parser.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Repository/Glue.hpp"
@@ -318,7 +316,7 @@ ManagedFileListWidget::FindItem(const char *name) const noexcept
 
 void
 ManagedFileListWidget::LoadRepositoryFile()
-try {
+{
 #ifdef HAVE_DOWNLOAD_MANAGER
   {
     const std::lock_guard lock{mutex};
@@ -328,11 +326,7 @@ try {
 #endif
 
   repository.Clear();
-
-  const auto path = LocalPath("repository");
-  FileLineReaderA reader(path);
-  ParseFileRepository(repository, reader);
-} catch (const std::runtime_error &e) {
+  LoadAllRepositories(repository);
 }
 
 void
@@ -680,7 +674,8 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 
     downloads.erase(name.c_str());
 
-    if (name.c_str() == "repository"sv) {
+    if (name.c_str() == "repository"sv ||
+        IsUserRepositoryFile(name.c_str())) {
       repository_failed = false;
       repository_modified = true;
     }

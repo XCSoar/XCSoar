@@ -98,10 +98,16 @@ configured when flying at a new site.
   airspaces are loaded from the map file (if available).
 \item[Airfields or Waypoint details*]  The airfields file may contain extracts from
   Enroute Supplements or other contributed information about individual airfields.
+\item[User repositories] List of user repository URLs, separated by the character `|'.
+  The URL for each repository must point to the repository's manifest file. 
+  The content listed in that manifest is then included in the file download 
+  selectors. The manifest needs to use the same format as that of the XCSoar repository
+  (See \url{https://github.com/XCSoar/xcsoar-data-content}).
+  
 \end{description}
 
 
-Multiple files can be selected to be used simultaneously.
+Multiple airspace and waypoint files can be selected to be used simultaneously.
 \sketch{figures/config-site.png}
 
 The XCM map database concept is the current way to setup a site to fly.
