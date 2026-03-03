@@ -78,6 +78,15 @@ public:
     return height_matrix.GetSize();
   }
 
+  /**
+   * Geographic size of one screen pixel in meters, computed
+   * by the ScanMap() call.
+   */
+  [[gnu::pure]]
+  double GetPixelSize() const noexcept {
+    return pixel_size;
+  }
+
 #ifdef ENABLE_OPENGL
   void Invalidate() noexcept {
     bounds.SetInvalid();
@@ -126,11 +135,14 @@ public:
 
   /**
    * Convert the height matrix into the image.
+   *
+   * @param contour_spacing draw contour lines every N height-domain units;
+   * 0 disables contours.  Useful values are powers of two.
    */
   void GenerateImage(bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
                      const Angle sunazimuth,
-                     bool do_contour) noexcept;
+                     unsigned contour_spacing) noexcept;
 
   const RawBitmap &GetImage() const noexcept {
     return *image;

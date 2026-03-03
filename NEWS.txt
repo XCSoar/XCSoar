@@ -1,4 +1,8 @@
 Version 7.44 - not yet released
+* map
+  - dynamically adjust contour line density to zoom factor #2233
+  - provide different contour density profile settings for mountains, 
+    low lands, etc. to have sensible contours in a given landscape type
 * WaypointDetails
   - Add pan capability to the waypoint details image #1127
 * calculations
