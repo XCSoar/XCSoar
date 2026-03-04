@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "StaticParser.hpp"
+#include "FLARM/AlertZone.hpp"
 #include "FLARM/Error.hpp"
 #include "FLARM/List.hpp"
 #include "FLARM/Progress.hpp"
@@ -323,6 +324,89 @@ ParsePFLAQ(NMEAInputLine &line, FlarmProgress &progress,
   progress.operation = operation;
   progress.progress = (unsigned)progress_val;
   progress.available.Update(clock);
+}
+
+void
+ParsePFLAO(NMEAInputLine &line, FlarmAlertZoneList &zones,
+           TimeStamp clock) noexcept
+{
+  // PFLAO,<AlarmLevel>,<Inside>,<Latitude>,<Longitude>,<Radius>,
+  //   <Bottom>,<Top>,<ActivityLimit>,<ID>,<ID-Type>,<ZoneType>
+
+  zones.modified.Update(clock);
+
+  int alarm_level_val;
+  if (!line.ReadChecked(alarm_level_val) ||
+      alarm_level_val < 0 || alarm_level_val > 3)
+    return;
+
+  int inside_val;
+  if (!line.ReadChecked(inside_val))
+    return;
+
+  int lat_e7;
+  if (!line.ReadChecked(lat_e7))
+    return;
+
+  int lon_e7;
+  if (!line.ReadChecked(lon_e7))
+    return;
+
+  int radius_val;
+  if (!line.ReadChecked(radius_val) || radius_val < 0)
+    return;
+
+  int bottom_val;
+  if (!line.ReadChecked(bottom_val))
+    return;
+
+  int top_val;
+  if (!line.ReadChecked(top_val))
+    return;
+
+  unsigned activity_limit_val;
+  if (!line.ReadChecked(activity_limit_val))
+    return;
+
+  char id_string[16];
+  line.Read(id_string, 16);
+  FlarmId id = FlarmId::Parse(id_string, nullptr);
+  if (!id.IsDefined())
+    return;
+
+  int id_type_val;
+  if (line.ReadChecked(id_type_val) &&
+      id_type_val >= 0 && id_type_val <= 2) {
+    // offset by 1 matching PFLAA convention
+  } else {
+    id_type_val = -1;
+  }
+
+  unsigned zone_type_val = line.ReadHex(0);
+  if (zone_type_val < 0x10 || zone_type_val > 0xFF)
+    return;
+
+  FlarmAlertZone *slot = zones.FindZone(id);
+  if (slot == nullptr) {
+    slot = zones.AllocateZone();
+    if (slot == nullptr)
+      return;
+  }
+
+  slot->alarm_level = static_cast<FlarmTraffic::AlarmType>(alarm_level_val);
+  slot->inside = inside_val != 0;
+  slot->center = GeoPoint(Angle::Degrees(lon_e7 * 1e-7),
+                           Angle::Degrees(lat_e7 * 1e-7));
+  slot->radius = (unsigned)radius_val;
+  slot->bottom = bottom_val;
+  slot->top = top_val;
+  slot->activity_limit = activity_limit_val;
+  slot->id = id;
+  slot->id_type = id_type_val >= 0
+    ? static_cast<FlarmTraffic::IdType>(id_type_val + 1)
+    : FlarmTraffic::IdType::UNKNOWN;
+  slot->zone_type = (uint8_t)zone_type_val;
+  slot->valid.Update(clock);
 }
 
 void
