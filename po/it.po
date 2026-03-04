@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-11 22:17+0100\n"
+"POT-Creation-Date: 2025-12-28 19:19+0100\n"
 "PO-Revision-Date: 2022-09-25 17:58+0000\n"
 "Last-Translator: ulipo <uli.peru@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
@@ -24,13 +24,13 @@ msgstr ""
 #. #-#-#-#-#  cpp.pot (xcsoar)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
 #: src/Task/TaskStore.cpp:49 src/Menu/ExpandMacros.cpp:355
-#: src/Input/InputEventsSettings.cpp:296 src/Dialogs/dlgAnalysis.cpp:535
+#: src/Input/InputEventsSettings.cpp:297 src/Dialogs/dlgAnalysis.cpp:548
 #: src/Dialogs/dlgStatus.cpp:77
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
-#: Data/Input/default.xci:430 Data/Input/default.xci:1018
-#: Data/Input/default.xci:1056
+#: Data/Input/default.xci:492 Data/Input/default.xci:1177
+#: Data/Input/default.xci:1185
 #, no-c-format
 msgid "Task"
 msgstr "Tema"
@@ -451,7 +451,7 @@ msgstr "Data"
 msgid "Username"
 msgstr "Nome utente"
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:93 Data/Input/default.xci:580
+#: src/net/client/WeGlide/UploadIGCFile.cpp:93 Data/Input/default.xci:642
 msgid "Plane"
 msgstr "Velivolo"
 
@@ -465,7 +465,7 @@ msgstr "Registrazione"
 msgid "Comp. ID"
 msgstr "ID Comp."
 
-#: src/net/client/WeGlide/UploadIGCFile.cpp:97
+#: src/net/client/WeGlide/UploadIGCFile.cpp:97 Data/Input/default.xci:1388
 msgid "WeGlide Upload"
 msgstr "Caricamento WeGlide"
 
@@ -585,7 +585,7 @@ msgstr "Non circuitando"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:158
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:133
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:135
 #: src/Dialogs/Airspace/AirspaceList.cpp:134
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:469
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
@@ -593,19 +593,19 @@ msgstr "Non circuitando"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:254
 #: src/Dialogs/Traffic/TrafficList.cpp:347
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:335
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:209 src/Dialogs/dlgAnalysis.cpp:290
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:209 src/Dialogs/dlgAnalysis.cpp:303
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:361 src/Dialogs/HelpDialog.cpp:30
-#: src/Dialogs/dlgInfoBoxAccess.cpp:95 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:471
+#: src/Dialogs/dlgInfoBoxAccess.cpp:112 src/Dialogs/ReplayDialog.cpp:97
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:472
 #: src/Dialogs/Waypoint/Manager.cpp:289
-#: src/Dialogs/Waypoint/WaypointList.cpp:215
+#: src/Dialogs/Waypoint/WaypointList.cpp:219
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:69
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:42
 #: src/Dialogs/Task/TaskPointDialog.cpp:515
 #: src/Dialogs/Task/TargetDialog.cpp:395
-#: src/Dialogs/Task/AlternatesListDialog.cpp:122
+#: src/Dialogs/Task/AlternatesListDialog.cpp:157
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/Weather/PCMetDialog.cpp:36
 #: src/Dialogs/Weather/NOAADetails.cpp:125
@@ -634,11 +634,11 @@ msgstr "Variometro"
 #: src/Renderer/FlightStatisticsRenderer.cpp:226
 #: src/Renderer/FlightStatisticsRenderer.cpp:253
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:102
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:115
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:384
+#: src/Dialogs/Waypoint/WaypointList.cpp:402
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
 #: src/Dialogs/Task/TargetDialog.cpp:358
 msgid "Distance"
@@ -651,9 +651,9 @@ msgstr "Alt. Rel."
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:144
 #: src/Dialogs/Airspace/AirspaceList.cpp:130
 #: src/Dialogs/Traffic/TrafficList.cpp:345
-#: src/Dialogs/Waypoint/WaypointList.cpp:211
+#: src/Dialogs/Waypoint/WaypointList.cpp:215
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
-#: src/Dialogs/Task/AlternatesListDialog.cpp:108
+#: src/Dialogs/Task/AlternatesListDialog.cpp:143
 #: src/Dialogs/Weather/NOAAList.cpp:97 src/InfoBoxes/Content/Task.cpp:51
 #, no-c-format
 msgid "Details"
@@ -833,8 +833,9 @@ msgstr "Completa"
 
 #: src/Menu/ExpandMacros.cpp:311 src/Menu/ExpandMacros.cpp:316
 #: src/Menu/ExpandMacros.cpp:341 src/Menu/ExpandMacros.cpp:366
-#: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:450
-#: src/Input/InputEventsSettings.cpp:453
+#: src/Menu/ExpandMacros.cpp:412 src/Input/InputEventsSettings.cpp:430
+#: src/Input/InputEventsSettings.cpp:431 src/Input/InputEventsSettings.cpp:469
+#: src/Input/InputEventsSettings.cpp:472
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:95
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
@@ -847,8 +848,8 @@ msgstr "Completa"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:115
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:217
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:247
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:234
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:264
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:11
 #, no-c-format
 msgid "Off"
@@ -856,14 +857,15 @@ msgstr "Spento"
 
 #: src/Menu/ExpandMacros.cpp:316 src/Menu/ExpandMacros.cpp:341
 #: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
-#: src/Input/InputEventsSettings.cpp:449 src/Input/InputEventsSettings.cpp:453
+#: src/Input/InputEventsSettings.cpp:430 src/Input/InputEventsSettings.cpp:431
+#: src/Input/InputEventsSettings.cpp:468 src/Input/InputEventsSettings.cpp:472
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:144
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:248
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:265
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:12
 #, no-c-format
 msgid "On"
@@ -895,19 +897,19 @@ msgstr "Nascondi"
 msgid "Show"
 msgstr "Mostra"
 
-#: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:294
+#: src/Menu/ExpandMacros.cpp:353 src/Input/InputEventsSettings.cpp:295
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:128
 #, no-c-format
 msgid "All"
 msgstr "Tutto"
 
-#: src/Menu/ExpandMacros.cpp:354 src/Input/InputEventsSettings.cpp:295
+#: src/Menu/ExpandMacros.cpp:354 src/Input/InputEventsSettings.cpp:296
 #, no-c-format
 msgid "Task & Landables"
 msgstr "Tema & Atterrabili"
 
-#: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:297
+#: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:298
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
@@ -921,7 +923,7 @@ msgstr "Tema & Atterrabili"
 msgid "None"
 msgstr "Nessuno"
 
-#: src/Menu/ExpandMacros.cpp:357 src/Input/InputEventsSettings.cpp:298
+#: src/Menu/ExpandMacros.cpp:357 src/Input/InputEventsSettings.cpp:299
 #, no-c-format
 msgid "Task & Airfields"
 msgstr "Tema & Aviosuperfici"
@@ -984,70 +986,88 @@ msgstr "Zoom Termica on"
 msgid "Circling zoom off"
 msgstr "Zoom Termica off"
 
-#: src/Input/InputEventsAirspace.cpp:45
+#: src/Input/InputEventsAirspace.cpp:40 src/Input/InputEventsAirspace.cpp:47
+msgid "Airspace shown"
+msgstr ""
+
+#: src/Input/InputEventsAirspace.cpp:41 src/Input/InputEventsAirspace.cpp:44
+msgid "Airspace hidden"
+msgstr ""
+
+#: src/Input/InputEventsAirspace.cpp:51
 msgid "Show airspace off"
 msgstr "SpazioAereo off"
 
-#: src/Input/InputEventsAirspace.cpp:47
+#: src/Input/InputEventsAirspace.cpp:53
 msgid "Show airspace on"
 msgstr "SpazioAereo on"
 
-#: src/Input/InputEventsTask.cpp:62
+#: src/Input/InputEventsTask.cpp:55 src/Input/InputEventsTask.cpp:65
+msgid "Armed start activated"
+msgstr ""
+
+#: src/Input/InputEventsTask.cpp:69
 msgid "Advance manually"
 msgstr "Avanza manualmente"
 
-#: src/Input/InputEventsTask.cpp:65
+#: src/Input/InputEventsTask.cpp:72
 msgid "Advance automatically"
 msgstr "Avanza automaticamente"
 
-#: src/Input/InputEventsTask.cpp:68
+#: src/Input/InputEventsTask.cpp:75
 msgid "Ready to start"
 msgstr "Pronto alla partenza"
 
-#: src/Input/InputEventsTask.cpp:71
+#: src/Input/InputEventsTask.cpp:78
 msgid "Hold start"
 msgstr "Attendere Partenza"
 
-#: src/Input/InputEventsTask.cpp:74
+#: src/Input/InputEventsTask.cpp:81
 msgid "Ready to turn"
 msgstr "Pronto alla virata"
 
-#: src/Input/InputEventsTask.cpp:77
+#: src/Input/InputEventsTask.cpp:84
 msgid "Hold turn"
 msgstr "attendere virata"
 
-#: src/Input/InputEventsTask.cpp:143
+#: src/Input/InputEventsTask.cpp:150
 msgid "Auto. MacCready on"
 msgstr "MacCready auto on"
 
-#: src/Input/InputEventsTask.cpp:145
+#: src/Input/InputEventsTask.cpp:152
 msgid "Auto. MacCready off"
 msgstr "MacCready auto off"
 
-#: src/Input/InputEventsTask.cpp:148
+#: src/Input/InputEventsTask.cpp:155
 msgid "MacCready "
 msgstr "MacCready "
 
-#: src/Input/InputEventsTask.cpp:210
+#: src/Input/InputEventsTask.cpp:212 src/Input/InputEventsTask.cpp:219
+#: src/Input/InputEventsTask.cpp:236 src/Input/InputEventsTask.cpp:244
 msgid "Task aborted"
 msgstr "Tema abortito"
 
-#: src/Input/InputEventsTask.cpp:213
+#: src/Input/InputEventsTask.cpp:215 src/Input/InputEventsTask.cpp:241
+#: src/Input/InputEventsTask.cpp:249
+msgid "Task resumed"
+msgstr ""
+
+#: src/Input/InputEventsTask.cpp:222
 msgid "Go to target"
 msgstr "Vai all'obiettivo"
 
-#: src/Input/InputEventsTask.cpp:216
+#: src/Input/InputEventsTask.cpp:225
 msgid "Ordered task"
 msgstr "Tema ordinato"
 
-#: src/Input/InputEventsTask.cpp:219
+#: src/Input/InputEventsTask.cpp:228
 #: src/Renderer/FlightStatisticsRenderer.cpp:345
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:110
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:210
 msgid "No task"
 msgstr "Nessuna task"
 
-#: src/Input/InputEventsTask.cpp:304 src/Renderer/MapItemListRenderer.cpp:352
+#: src/Input/InputEventsTask.cpp:317 src/Renderer/MapItemListRenderer.cpp:352
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:26
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:308
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:116
@@ -1059,7 +1079,7 @@ msgstr "Nessuna task"
 msgid "Altitude"
 msgstr "Altitudine"
 
-#: src/Input/InputEventsTask.cpp:305
+#: src/Input/InputEventsTask.cpp:318
 #: src/Renderer/FlightStatisticsRenderer.cpp:213
 #: src/Renderer/FlightStatisticsRenderer.cpp:232
 #: src/Renderer/FlightStatisticsRenderer.cpp:258
@@ -1071,7 +1091,7 @@ msgstr "Velocità"
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
-#: src/Input/InputEventsTask.cpp:306
+#: src/Input/InputEventsTask.cpp:319
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:230
 #: src/Renderer/FlightStatisticsRenderer.cpp:256
@@ -1081,52 +1101,52 @@ msgstr "Velocità"
 msgid "Time"
 msgstr "Tempo"
 
-#: src/Input/InputEventsTask.cpp:310
+#: src/Input/InputEventsTask.cpp:323
 msgid "Task start"
 msgstr "Avvio Tema"
 
-#: src/Input/InputEventsTask.cpp:312
+#: src/Input/InputEventsTask.cpp:325
 msgid "Next turnpoint"
 msgstr "Prossima boa"
 
-#: src/Input/InputEventsTask.cpp:314
+#: src/Input/InputEventsTask.cpp:327
 msgid "Task finished"
 msgstr "Tema terminato"
 
-#: src/Input/InputEventsSettings.cpp:40
+#: src/Input/InputEventsSettings.cpp:41
 msgid "Vario sounds on"
 msgstr "Suoni variometro on"
 
-#: src/Input/InputEventsSettings.cpp:42
+#: src/Input/InputEventsSettings.cpp:43
 msgid "Vario sounds off"
 msgstr "Suoni variometro off"
 
-#: src/Input/InputEventsSettings.cpp:70
+#: src/Input/InputEventsSettings.cpp:71
 msgid "Snail trail off"
 msgstr "Traccia off"
 
-#: src/Input/InputEventsSettings.cpp:74
+#: src/Input/InputEventsSettings.cpp:75
 msgid "Long snail trail"
 msgstr "Traccia lunga"
 
-#: src/Input/InputEventsSettings.cpp:78
+#: src/Input/InputEventsSettings.cpp:79
 msgid "Short snail trail"
 msgstr "Traccia corta"
 
-#: src/Input/InputEventsSettings.cpp:82
+#: src/Input/InputEventsSettings.cpp:83
 msgid "Full snail trail"
 msgstr "Traccia completa"
 
-#: src/Input/InputEventsSettings.cpp:184
+#: src/Input/InputEventsSettings.cpp:185
 msgid "Bugs performance"
 msgstr "Prestazioni sporco"
 
-#: src/Input/InputEventsSettings.cpp:227
+#: src/Input/InputEventsSettings.cpp:228
 #, no-c-format
 msgid "Ballast %"
 msgstr "% Zavorra"
 
-#: src/Input/InputEventsSettings.cpp:263 src/Dialogs/ProfileListDialog.cpp:211
+#: src/Input/InputEventsSettings.cpp:264 src/Dialogs/ProfileListDialog.cpp:211
 #: src/Dialogs/ProfileListDialog.cpp:256
 #: src/Dialogs/Plane/PlaneListDialog.cpp:244
 #: src/Dialogs/Plane/PlaneListDialog.cpp:294
@@ -1139,23 +1159,48 @@ msgstr "% Zavorra"
 msgid "Failed to save file."
 msgstr "Salvataggio del file fallito."
 
-#: src/Input/InputEventsSettings.cpp:286 src/InfoBoxes/Content/Factory.cpp:528
+#: src/Input/InputEventsSettings.cpp:287 src/InfoBoxes/Content/Factory.cpp:528
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "Temperatura prevista"
 
-#: src/Input/InputEventsSettings.cpp:317
+#: src/Input/InputEventsSettings.cpp:318
 #, c-format
 msgid "%s: %s"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:317
+#: src/Input/InputEventsSettings.cpp:318
 msgid "Waypoint labels"
 msgstr "Etichette boe"
 
-#: src/Input/InputEventsSettings.cpp:455
+#: src/Input/InputEventsSettings.cpp:429
+#, c-format
+msgid "%s / %s"
+msgstr ""
+
+#: src/Input/InputEventsSettings.cpp:433 src/Input/InputEventsSettings.cpp:474
 msgid "Topography/Terrain"
 msgstr "Topografia/Terreno"
+
+#: src/Input/InputEventsSettings.cpp:438 src/Input/InputEventsSettings.cpp:457
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:134
+msgid "Terrain shown"
+msgstr ""
+
+#: src/Input/InputEventsSettings.cpp:439 src/Input/InputEventsSettings.cpp:461
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:135
+msgid "Terrain hidden"
+msgstr ""
+
+#: src/Input/InputEventsSettings.cpp:444 src/Input/InputEventsSettings.cpp:449
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:143
+msgid "Topography shown"
+msgstr ""
+
+#: src/Input/InputEventsSettings.cpp:445 src/Input/InputEventsSettings.cpp:453
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:144
+msgid "Topography hidden"
+msgstr ""
 
 #: src/Input/InputEventsLua.cpp:40
 msgid "Not found"
@@ -1190,7 +1235,7 @@ msgid "Horizon"
 msgstr "Orizzonte"
 
 #: src/PageSettings.cpp:41 src/InfoBoxes/Content/Altitude.cpp:27
-#: Data/Input/default.xci:940
+#: Data/Input/default.xci:1002
 #, no-c-format
 msgid "Info"
 msgstr "Info"
@@ -1216,7 +1261,7 @@ msgstr "No dati"
 #: src/Renderer/MapItemListRenderer.cpp:65
 #: src/Dialogs/Airspace/AirspaceList.cpp:449
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
-#: src/Dialogs/Waypoint/WaypointList.cpp:385
+#: src/Dialogs/Waypoint/WaypointList.cpp:403
 msgid "Direction"
 msgstr "Direzione"
 
@@ -1516,7 +1561,7 @@ msgstr "AAT rimanente"
 #: src/Renderer/FlightStatisticsRenderer.cpp:357
 #: src/Renderer/FlightStatisticsRenderer.cpp:367
 #: src/Renderer/FlightStatisticsRenderer.cpp:378
-#: src/Dialogs/dlgAnalysis.cpp:225
+#: src/Dialogs/dlgAnalysis.cpp:228
 msgid "Distance to go"
 msgstr "Distanza rimanente"
 
@@ -1550,7 +1595,7 @@ msgstr "L/D"
 msgid "Min. sink"
 msgstr "Min. disc."
 
-#: src/Renderer/GlidePolarInfoRenderer.cpp:30 src/Dialogs/dlgAnalysis.cpp:497
+#: src/Renderer/GlidePolarInfoRenderer.cpp:30 src/Dialogs/dlgAnalysis.cpp:510
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:209
 msgid "Mass"
 msgstr "Massa"
@@ -1658,7 +1703,7 @@ msgid "Initialising display"
 msgstr "Inizializzazione display"
 
 #. Show progress dialog
-#: src/Startup.cpp:610 src/Startup.cpp:648 src/Startup.cpp:716
+#: src/Startup.cpp:613 src/Startup.cpp:648 src/Startup.cpp:716
 msgid "Shutdown, please wait..."
 msgstr "Spegnimento, attendere..."
 
@@ -1772,9 +1817,9 @@ msgstr "Riprova"
 #: src/Dialogs/TouchTextEntry.cpp:187 src/Dialogs/TimeEntry.cpp:46
 #: src/Dialogs/DateEntry.cpp:42 src/Dialogs/GeoPointEntry.cpp:57
 #: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:387
-#: Data/Input/default.xci:121 Data/Input/default.xci:422
-#: Data/Input/default.xci:517 Data/Input/default.xci:664
-#: Data/Input/default.xci:884 Data/Input/default.xci:955
+#: Data/Input/default.xci:121 Data/Input/default.xci:484
+#: Data/Input/default.xci:579 Data/Input/default.xci:726
+#: Data/Input/default.xci:946 Data/Input/default.xci:1017
 msgid "Cancel"
 msgstr "Annulla"
 
@@ -1827,8 +1872,8 @@ msgid "Failed to download the repository index."
 msgstr "Impossibile scaricare l'indice di posizionamento."
 
 #: src/Dialogs/FileManager.cpp:744 src/Dialogs/FileManager.cpp:769
-#: src/Dialogs/DownloadFilePicker.cpp:380 Data/Input/default.xci:646
-#: Data/Input/default.xci:1263
+#: src/Dialogs/DownloadFilePicker.cpp:380 Data/Input/default.xci:708
+#: Data/Input/default.xci:1373
 msgid "File Manager"
 msgstr "Gestore di file"
 
@@ -2035,7 +2080,7 @@ msgid "Debug"
 msgstr "Debug"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:335
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:68
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
@@ -2127,8 +2172,8 @@ msgstr ""
 "La comunicazione con questo dispositivo verrà registrata per i prossimi %u "
 "minuti."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:769 Data/Input/default.xci:588
-#: Data/Input/default.xci:1192
+#: src/Dialogs/Device/DeviceListDialog.cpp:769 Data/Input/default.xci:650
+#: Data/Input/default.xci:1365
 msgid "Devices"
 msgstr "Dispositivi"
 
@@ -2556,10 +2601,10 @@ msgid "Static object"
 msgstr "Oggetto statico"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:89
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:91
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:95
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
-#: src/Dialogs/Waypoint/WaypointList.cpp:386
+#: src/Dialogs/Waypoint/WaypointList.cpp:404
 msgid "Type"
 msgstr "Tipo"
 
@@ -2607,18 +2652,18 @@ msgid "ADSB vertical range"
 msgstr ""
 
 #: src/Dialogs/MapItemListDialog.cpp:146
-#: src/Dialogs/Task/AlternatesListDialog.cpp:103
+#: src/Dialogs/Task/AlternatesListDialog.cpp:138
 msgid "Goto"
 msgstr "Vai Verso"
 
 #: src/Dialogs/MapItemListDialog.cpp:150
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:130
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
 msgid "Ack Day"
 msgstr "Conferma Oggi"
 
-#: src/Dialogs/MapItemListDialog.cpp:154 src/Dialogs/dlgAnalysis.cpp:458
-#: src/Dialogs/dlgAnalysis.cpp:502 src/Dialogs/dlgAnalysis.cpp:511
-#: src/Dialogs/dlgAnalysis.cpp:520
+#: src/Dialogs/MapItemListDialog.cpp:154 src/Dialogs/dlgAnalysis.cpp:471
+#: src/Dialogs/dlgAnalysis.cpp:515 src/Dialogs/dlgAnalysis.cpp:524
+#: src/Dialogs/dlgAnalysis.cpp:533
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -2660,7 +2705,7 @@ msgid "Select Color"
 msgstr "Seleziona colore"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:91
-#: src/Dialogs/Airspace/dlgAirspace.cpp:92 Data/Input/default.xci:926
+#: src/Dialogs/Airspace/dlgAirspace.cpp:92 Data/Input/default.xci:988
 msgid "Display"
 msgstr "Mostra"
 
@@ -2670,9 +2715,9 @@ msgid "Warn"
 msgstr "Avviso"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:554
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:567
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
-#: Data/Input/default.xci:554 Data/Input/default.xci:1280
+#: Data/Input/default.xci:616 Data/Input/default.xci:1227
 #, no-c-format
 msgid "Airspace"
 msgstr "Spazio aereo"
@@ -2689,45 +2734,45 @@ msgstr "Imposta codice"
 msgid "Set Squawk Code"
 msgstr "Imposta codice"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:67
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
 msgstr "Radio"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:73
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:75
 msgid "Station"
 msgstr "Posizione"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:79
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
-#: src/Dialogs/Task/AlternatesListDialog.cpp:110
+#: src/Dialogs/Task/AlternatesListDialog.cpp:145
 msgid "Set Active Frequency"
 msgstr "Imposta Frequenza Attiva"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:82
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:84
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:265
-#: src/Dialogs/Task/AlternatesListDialog.cpp:116
+#: src/Dialogs/Task/AlternatesListDialog.cpp:151
 msgid "Set Standby Frequency"
 msgstr "Imposta Frequenza di Standby"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:90
 msgid "Class"
 msgstr "Vetro"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:92
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:94
 msgid "Top"
 msgstr "Alto"
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:95
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:97
 msgid "Base"
 msgstr "Lim.Inf."
 
-#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:125
+#: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:127
 msgid "Airspace Details"
 msgstr "Dettagli SpazioAer"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:330
-#: src/Dialogs/Waypoint/WaypointList.cpp:426
+#: src/Dialogs/Waypoint/WaypointList.cpp:454
 msgid "No Match!"
 msgstr "Nessuna corrispondenza!"
 
@@ -2739,7 +2784,7 @@ msgstr "Prua"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:216
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:106
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:383
+#: src/Dialogs/Waypoint/WaypointList.cpp:401
 msgid "Name"
 msgstr "Nome"
 
@@ -2820,7 +2865,7 @@ msgstr "ACK Oggi"
 msgid "No Warnings"
 msgstr "Nessun avviso"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:467
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:467 Data/Input/default.xci:1258
 msgid "Airspace Warnings"
 msgstr "Avvisi SpazioAer"
 
@@ -2962,7 +3007,7 @@ msgstr ""
 "Imposta al valore di temperatura prevista al suolo. Utilizzato per stimare "
 "la convezione (la pagina traccia della temperatura nel dialogo di Analisi)"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:345 Data/Input/default.xci:1145
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:345 Data/Input/default.xci:1083
 msgid "Flight Setup"
 msgstr "Configurazione volo"
 
@@ -2984,8 +3029,8 @@ msgstr "Elementi"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:83
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:540
-#: Data/Input/default.xci:1121
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:602
+#: Data/Input/default.xci:1147
 #, no-c-format
 msgid "Terrain"
 msgstr "Terreno"
@@ -3002,10 +3047,10 @@ msgid "Glide Computer"
 msgstr "Computer di Volo"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:237
 #: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:323 src/InfoBoxes/Content/Factory.cpp:332
-#: src/InfoBoxes/Content/Factory.cpp:920 Data/Input/default.xci:604
+#: src/InfoBoxes/Content/Factory.cpp:920 Data/Input/default.xci:666
 #, no-c-format
 msgid "Wind"
 msgstr "Vento"
@@ -3062,7 +3107,7 @@ msgstr "Set InfoBox"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:122
-#: Data/Input/default.xci:672 Data/Input/default.xci:1177
+#: Data/Input/default.xci:734 Data/Input/default.xci:1350
 #, no-c-format
 msgid "Logger"
 msgstr "Logger"
@@ -3075,8 +3120,8 @@ msgstr "Live Tracking"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
-#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:808
-#: Data/Input/default.xci:1215
+#: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:870
+#: Data/Input/default.xci:1275
 #, no-c-format
 msgid "Weather"
 msgstr "Meteo"
@@ -3261,76 +3306,76 @@ msgstr "Scegli nuovo compagno del team"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:206
 #: src/InfoBoxes/Content/Factory.cpp:569 src/InfoBoxes/Content/Team.cpp:30
-#: Data/Input/default.xci:858
+#: Data/Input/default.xci:920
 #, no-c-format
 msgid "Team Code"
 msgstr "Codice Team"
 
-#: src/Dialogs/dlgAnalysis.cpp:228 src/Dialogs/dlgAnalysis.cpp:467
-#: src/Dialogs/dlgAnalysis.cpp:530 src/Dialogs/dlgAnalysis.cpp:539
+#: src/Dialogs/dlgAnalysis.cpp:231 src/Dialogs/dlgAnalysis.cpp:480
+#: src/Dialogs/dlgAnalysis.cpp:543 src/Dialogs/dlgAnalysis.cpp:552
 msgid "Task Calc"
 msgstr "Calcolo Tema"
 
-#: src/Dialogs/dlgAnalysis.cpp:453 src/Dialogs/dlgAnalysis.cpp:462
-#: src/Dialogs/dlgAnalysis.cpp:471 src/Dialogs/dlgAnalysis.cpp:480
-#: src/Dialogs/dlgAnalysis.cpp:488 src/Dialogs/dlgAnalysis.cpp:496
-#: src/Dialogs/dlgAnalysis.cpp:506 src/Dialogs/dlgAnalysis.cpp:515
-#: src/Dialogs/dlgAnalysis.cpp:524 src/Dialogs/dlgAnalysis.cpp:534
-#: src/Dialogs/dlgAnalysis.cpp:543 src/Dialogs/dlgAnalysis.cpp:553
-#: src/Dialogs/dlgAnalysis.cpp:702 src/InfoBoxes/Content/Contest.cpp:38
-#: src/InfoBoxes/Content/Trace.cpp:166 Data/Input/default.xci:832
-#: Data/Input/default.xci:1239
+#: src/Dialogs/dlgAnalysis.cpp:466 src/Dialogs/dlgAnalysis.cpp:475
+#: src/Dialogs/dlgAnalysis.cpp:484 src/Dialogs/dlgAnalysis.cpp:493
+#: src/Dialogs/dlgAnalysis.cpp:501 src/Dialogs/dlgAnalysis.cpp:509
+#: src/Dialogs/dlgAnalysis.cpp:519 src/Dialogs/dlgAnalysis.cpp:528
+#: src/Dialogs/dlgAnalysis.cpp:537 src/Dialogs/dlgAnalysis.cpp:547
+#: src/Dialogs/dlgAnalysis.cpp:556 src/Dialogs/dlgAnalysis.cpp:566
+#: src/Dialogs/dlgAnalysis.cpp:715 src/InfoBoxes/Content/Contest.cpp:38
+#: src/InfoBoxes/Content/Trace.cpp:166 Data/Input/default.xci:894
+#: Data/Input/default.xci:1317
 #, no-c-format
 msgid "Analysis"
 msgstr "Analisi"
 
-#: src/Dialogs/dlgAnalysis.cpp:454
+#: src/Dialogs/dlgAnalysis.cpp:467
 msgid "Barograph"
 msgstr "Barografo"
 
-#: src/Dialogs/dlgAnalysis.cpp:463
+#: src/Dialogs/dlgAnalysis.cpp:476
 msgid "Climb"
 msgstr "Risalita"
 
-#: src/Dialogs/dlgAnalysis.cpp:472
+#: src/Dialogs/dlgAnalysis.cpp:485
 msgid "Thermal Band"
 msgstr "Banda Termica"
 
-#: src/Dialogs/dlgAnalysis.cpp:481
+#: src/Dialogs/dlgAnalysis.cpp:494
 msgid "Vario Histogram"
 msgstr "Istogramma del Variometro"
 
-#: src/Dialogs/dlgAnalysis.cpp:489
+#: src/Dialogs/dlgAnalysis.cpp:502
 msgid "Wind at Altitude"
 msgstr "Vento in Quota"
 
-#: src/Dialogs/dlgAnalysis.cpp:492
+#: src/Dialogs/dlgAnalysis.cpp:505
 msgid "Set Wind"
 msgstr "Imposta Vento"
 
-#: src/Dialogs/dlgAnalysis.cpp:497
+#: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Glide Polar"
 msgstr "Polare"
 
-#: src/Dialogs/dlgAnalysis.cpp:507
+#: src/Dialogs/dlgAnalysis.cpp:520
 msgid "MacCready Speeds"
 msgstr "Velocità MacCready"
 
-#: src/Dialogs/dlgAnalysis.cpp:516
+#: src/Dialogs/dlgAnalysis.cpp:529
 msgid "Temperature Trace"
 msgstr "Grafico Temperatura"
 
-#: src/Dialogs/dlgAnalysis.cpp:525
+#: src/Dialogs/dlgAnalysis.cpp:538
 msgid "Task Speed"
 msgstr "Velocita Tema"
 
-#: src/Dialogs/dlgAnalysis.cpp:557
+#: src/Dialogs/dlgAnalysis.cpp:570
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:177
 msgid "Warnings"
 msgstr "Avvisi"
 
 #: src/Dialogs/dlgChecklist.cpp:38 src/Dialogs/dlgChecklist.cpp:104
-#: Data/Input/default.xci:824 Data/Input/default.xci:1231
+#: Data/Input/default.xci:886 Data/Input/default.xci:1204
 msgid "Checklist"
 msgstr "Checklist"
 
@@ -3385,7 +3430,7 @@ msgstr "Caricamento file fallito."
 msgid "Delete \"%s\"?"
 msgstr "Cancellare \"%s\"?"
 
-#: src/Dialogs/ProfileListDialog.cpp:315 Data/Input/default.xci:622
+#: src/Dialogs/ProfileListDialog.cpp:315 Data/Input/default.xci:684
 msgid "Profiles"
 msgstr "Profili"
 
@@ -3549,7 +3594,7 @@ msgstr "File"
 msgid "Select a file to add or download a new one."
 msgstr ""
 
-#: src/Dialogs/dlgInfoBoxAccess.cpp:75 src/Dialogs/dlgInfoBoxAccess.cpp:91
+#: src/Dialogs/dlgInfoBoxAccess.cpp:92 src/Dialogs/dlgInfoBoxAccess.cpp:108
 msgid "Switch InfoBox"
 msgstr "Cambia InfoBox"
 
@@ -3578,16 +3623,16 @@ msgstr ""
 "riproduzione in tempo reale."
 
 #: src/Dialogs/ReplayDialog.cpp:79 src/Dialogs/ReplayDialog.cpp:95
-#: Data/Input/default.xci:654
+#: Data/Input/default.xci:716
 msgid "Replay"
 msgstr "Replay"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:38 src/Dialogs/StartupDialog.cpp:73
-#: Data/Input/default.xci:963
+#: Data/Input/default.xci:1025
 msgid "Quit"
 msgstr "Esci"
 
-#: src/Dialogs/SimulatorPromptWindow.cpp:90
+#: src/Dialogs/SimulatorPromptWindow.cpp:97
 msgid "What do you want to do?"
 msgstr "Cosa vuoi fare?"
 
@@ -3612,16 +3657,16 @@ msgid "Enter a new password"
 msgstr "Inserisci una nuova password"
 
 #: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
-#: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:850
-#: Data/Input/default.xci:1247
+#: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:912
+#: Data/Input/default.xci:1325
 msgid "Status"
 msgstr "Stato"
 
-#: src/Dialogs/dlgStatus.cpp:71 Data/Input/default.xci:596
+#: src/Dialogs/dlgStatus.cpp:71 Data/Input/default.xci:658
 msgid "Flight"
 msgstr "Volo"
 
-#: src/Dialogs/dlgStatus.cpp:74 Data/Input/default.xci:572
+#: src/Dialogs/dlgStatus.cpp:74 Data/Input/default.xci:634
 msgid "System"
 msgstr "Sistema"
 
@@ -3971,15 +4016,15 @@ msgstr "Imposta come Nuova Base"
 msgid "Pan to Waypoint"
 msgstr "Sposta alla boa"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:444 Data/Input/default.xci:1064
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:445 Data/Input/default.xci:1283
 msgid "GoTo"
 msgstr "Vola Verso"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:447
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:448
 msgid "Pan To"
 msgstr "Modo Sposta"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:791
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:792
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -3991,7 +4036,8 @@ msgstr "Cancellare boa?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:286
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:638
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:700
+#: Data/Input/default.xci:1123
 msgid "Waypoint Editor"
 msgstr "Editor Punto di virata"
 
@@ -4105,11 +4151,11 @@ msgstr ""
 "Spiecente, l'editor delle boe non è ancora diponibile per le coordinate in "
 "formato UTM."
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:427
+#: src/Dialogs/Waypoint/WaypointList.cpp:455
 msgid "Choose a filter or click here"
 msgstr "Scegli un filtro o clicca qui"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:484
+#: src/Dialogs/Waypoint/WaypointList.cpp:512
 msgid "Select Waypoint"
 msgstr "Seleziona Boa"
 
@@ -5872,6 +5918,14 @@ msgstr ""
 "all'altezza della maggior risalita). Se tenuto in considerazione, 0.3 è il "
 "valore raccomandato."
 
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:44
+msgid "XCSoar data path"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:44
+msgid "Click to view full path"
+msgstr ""
+
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:48
 msgid "Map database"
 msgstr "Database mappa"
@@ -5909,18 +5963,14 @@ msgstr ""
 "(es. centrali elettriche) o passi di montagna."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:71
-#, fuzzy
 msgid "Airfields or Waypoint details"
-msgstr "Dettagli delle boe"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:72
-#, fuzzy
 msgid ""
 "The files may contain extracts from enroute supplements or other contributed "
 "information about individual waypoints and airfields."
 msgstr ""
-"Il file può contenere estratti di integratori di rotta o altre informazioni "
-"utili su singole boe e aviosuperfici."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:79
 msgid "Selected Airspace Files"
@@ -6583,148 +6633,148 @@ msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr ""
 "Specifica quale soglia viene utilizzata per i \"grandi\" triangoli FAI."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
-#, c-format
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
+#, no-c-format
 msgid "95% dist. rule helpers"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid ""
 "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
 "Distance Around Target InfoBox will show projected distance vs. maximum and "
 "change colors as you approach 95%."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
 msgid "Terrain display"
 msgstr "Visualizzazione terreno"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Draw a digital elevation terrain on the map."
 msgstr "Disegnare l'orografia altimetrica del terreno sulla mappa."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:201
 msgid "Topography display"
 msgstr "Visualizzazione topografia"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
 msgstr ""
 "Disegna caratteristiche topografiche (strade, fiumi, laghi, ecc) sulla mappa."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:190
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:207
 #, no-c-format
 msgid "Low lands"
 msgstr "Pianura"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
 #, no-c-format
 msgid "Mountainous"
 msgstr "Montuoso"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 #, no-c-format
 msgid "Imhof 7"
 msgstr "Imhof 7"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:193
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 #, no-c-format
 msgid "Imhof 4"
 msgstr "Imhof 4"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:194
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:211
 #, no-c-format
 msgid "Imhof 12"
 msgstr "Imhof 12"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 #, no-c-format
 msgid "Imhof Atlas"
 msgstr "Imhof Atlas"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
 #, no-c-format
 msgid "ICAO"
 msgstr "ICAO"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
 msgid "Vibrant"
 msgstr "Vivace"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:198
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 #, no-c-format
 msgid "Grey"
 msgstr "Grigio"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
 #, no-c-format
 msgid "White"
 msgstr "Bianco"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:200
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:217
 #, no-c-format
 msgid "Sandstone"
 msgstr "Sabbia"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:201
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
 #, no-c-format
 msgid "Pastel"
 msgstr "Pastello"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
 msgstr "Carte Avioportolano VFR"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 #, no-c-format
 msgid "German DFS VFR Chart"
 msgstr "Carte DFS VFR tedesche"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:221
 #, no-c-format
 msgid "French SIA VFR Chart"
 msgstr "Carte SIA VFR francesi"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
 #, no-c-format
 msgid "High Contrast"
 msgstr "Contrasto terreno"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:206
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:223
 #, no-c-format
 msgid "High Contrast low lands"
 msgstr "Contrasto terreno"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:207
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:224
 #, no-c-format
 msgid "Very low lands"
 msgstr "Pianura"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:211
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:228
 msgid "Terrain colors"
 msgstr "Colori naturali"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:229
 msgid "Defines the color ramp used in terrain rendering."
 msgstr "Definisce lo schema di colori utilizzato per il rendering del terreno."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:235
 #, no-c-format
 msgid "Fixed"
 msgstr "Fissa"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:236
 #, no-c-format
 msgid "Sun"
 msgstr "Sole"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:224
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:241
 msgid "Slope shading"
 msgstr "Ombreggiatura pendio"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:225
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:242
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
@@ -6732,11 +6782,11 @@ msgstr ""
 "Il terreno può essere ombreggiato per indicare la parte sottovento oppure il "
 "pendio esposto al sole o un ombreggiamento fisso da nord-ovest."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:230
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:247
 msgid "Terrain contrast"
 msgstr "Contrasto terreno"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:248
 msgid ""
 "Defines the amount of Phong shading in the terrain rendering. Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -6746,21 +6796,21 @@ msgstr ""
 "valori più alti per enfatizzare la pendenza del terreno (se zona collinare), "
 "scegliere valori più bassi per volare in una zona di montagne ripide."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:237
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:254
 msgid "Terrain brightness"
 msgstr "Luminosità terreno"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:238
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:255
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering. This controls "
 "the average illumination of the terrain."
 msgstr "Definisce la luminosità media nel rendering del terreno."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:252
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:269
 msgid "Contours"
 msgstr "Contorni"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:253
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:270
 msgid "If enabled, draws contour lines on the terrain."
 msgstr "Se abilitato, saranno disegnati i contorni del terreno."
 
@@ -7329,7 +7379,7 @@ msgstr "Boe"
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:137
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:213
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:244
-#: Data/Input/default.xci:381
+#: Data/Input/default.xci:443
 msgid "Task Manager"
 msgstr "Gestore Tema"
 
@@ -7726,9 +7776,14 @@ msgstr ""
 msgid "Optimized"
 msgstr "Ottimizzato"
 
-#: src/Dialogs/Task/AlternatesListDialog.cpp:157
-#: src/InfoBoxes/Content/Alternate.cpp:33 Data/Input/default.xci:411
-#: Data/Input/default.xci:1048
+#. no alternates: don't show the dialog
+#: src/Dialogs/Task/AlternatesListDialog.cpp:192
+msgid "No alternates available"
+msgstr ""
+
+#: src/Dialogs/Task/AlternatesListDialog.cpp:198
+#: src/InfoBoxes/Content/Alternate.cpp:33 Data/Input/default.xci:473
+#: Data/Input/default.xci:1250
 #, no-c-format
 msgid "Alternates"
 msgstr "Alternative"
@@ -7770,7 +7825,7 @@ msgstr "METAR e TAF"
 msgid "Field"
 msgstr "Campo"
 
-#: src/Dialogs/dlgCredits.cpp:145 Data/Input/default.xci:893
+#: src/Dialogs/dlgCredits.cpp:145 Data/Input/default.xci:955
 msgid "Credits"
 msgstr "Credits"
 
@@ -8226,17 +8281,13 @@ msgid "Next WP"
 msgstr "Prossimo WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "Airfields/waypoint details."
 msgstr ""
-"Il nome della boaa attualmente selezionata. Quando la infoBox è attiva, "
-"l'utilizzo dei tasti cursore su/giù seleziona il punto prossimo/precedente "
-"nel tema. (solo per Touch-screen/PC) Premendo il tasto cursore enter "
-"richiama i dettagli del punto."
 
 #: src/InfoBoxes/Content/Factory.cpp:242
 #, no-c-format
@@ -10243,9 +10294,9 @@ msgstr ""
 "sicurezza all'arrivo."
 
 #: src/InfoBoxes/Content/Alternate.cpp:58
-#, fuzzy, c++-format
+#, c++-format
 msgid "Altn {}"
-msgstr "Alt 1"
+msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:26
 #: src/MapWindow/GlueMapWindowOverlays.cpp:333
@@ -10953,20 +11004,44 @@ msgid "Final glide through terrain"
 msgstr "Planata Finale Attraverso Terreno"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:135
-#: Data/Input/default.xci:477 Data/Input/default.xci:484
-#: Data/Input/default.xci:492 Data/Input/default.xci:978
-#: Data/Input/default.xci:985 Data/Input/default.xci:992
-#: Data/Input/default.xci:1081
+#: Data/Input/default.xci:539 Data/Input/default.xci:546
+#: Data/Input/default.xci:554 Data/Input/default.xci:1040
+#: Data/Input/default.xci:1047 Data/Input/default.xci:1054
+#: Data/Input/default.xci:1308
 msgid "Zoom"
 msgstr "Zoom"
 
-#: Data/Input/default.xci:142 Data/Input/default.xci:816
+#: Data/Input/default.xci:142 Data/Input/default.xci:878
 msgid "What's here?"
 msgstr ""
 "Cosa c'è\n"
 "qui?"
 
-#: Data/Input/default.xci:373
+#: Data/Input/default.xci:198
+msgid ""
+"Exit\n"
+"(ESC)"
+msgstr ""
+
+#: Data/Input/default.xci:206
+msgid ""
+"Auto/Man\n"
+"(RETURN)"
+msgstr ""
+
+#: Data/Input/default.xci:214
+msgid ""
+"MC+\n"
+"(UP)"
+msgstr ""
+
+#: Data/Input/default.xci:222
+msgid ""
+"MC-\n"
+"(DOWN)"
+msgstr ""
+
+#: Data/Input/default.xci:435
 msgid ""
 "Nav\n"
 "Page 2/2"
@@ -10974,33 +11049,33 @@ msgstr ""
 "Naviga\n"
 "Pag. 2/2"
 
-#: Data/Input/default.xci:403 Data/Input/default.xci:1040
+#: Data/Input/default.xci:465 Data/Input/default.xci:1242
 msgid "Waypoint List"
 msgstr "Lista Boe"
 
-#: Data/Input/default.xci:437 Data/Input/default.xci:1088
+#: Data/Input/default.xci:499 Data/Input/default.xci:1297
 msgid "Dropped marker"
 msgstr "Segnaposto Rilasciato"
 
-#: Data/Input/default.xci:440 Data/Input/default.xci:1091
+#: Data/Input/default.xci:502 Data/Input/default.xci:1300
 msgid "Marker Drop"
 msgstr ""
 "Aggiungi\n"
 "Segnaposto"
 
-#: Data/Input/default.xci:447 Data/Input/default.xci:1270
+#: Data/Input/default.xci:509 Data/Input/default.xci:1192
 msgid "Pilot event announced"
 msgstr "Pilot event annunciato"
 
-#: Data/Input/default.xci:450 Data/Input/default.xci:1273
+#: Data/Input/default.xci:512 Data/Input/default.xci:1195
 msgid "Pilot Event Announce"
 msgstr "Pilot event annunciato"
 
-#: Data/Input/default.xci:458 Data/Input/default.xci:1072
+#: Data/Input/default.xci:520 Data/Input/default.xci:1212
 msgid "Target Show"
 msgstr "Mostra Obiettivo"
 
-#: Data/Input/default.xci:469
+#: Data/Input/default.xci:531
 msgid ""
 "Display\n"
 "Page 2/2"
@@ -11008,27 +11083,27 @@ msgstr ""
 "Mostra\n"
 "Pag. 2/2"
 
-#: Data/Input/default.xci:499
+#: Data/Input/default.xci:561
 msgid "Page Show"
 msgstr "Mostra Pagina"
 
-#: Data/Input/default.xci:506 Data/Input/default.xci:1098
+#: Data/Input/default.xci:568 Data/Input/default.xci:1234
 msgid "Pan Mode"
 msgstr "Modo Sposta"
 
-#: Data/Input/default.xci:525 Data/Input/default.xci:1106
+#: Data/Input/default.xci:587 Data/Input/default.xci:1132
 msgid "Labels"
 msgstr "Etichette"
 
-#: Data/Input/default.xci:533 Data/Input/default.xci:1114
+#: Data/Input/default.xci:595 Data/Input/default.xci:1140
 msgid "Trail"
 msgstr "Scia"
 
-#: Data/Input/default.xci:547 Data/Input/default.xci:1128
+#: Data/Input/default.xci:609 Data/Input/default.xci:1154
 msgid "Topo."
 msgstr "Topografia"
 
-#: Data/Input/default.xci:564
+#: Data/Input/default.xci:626
 msgid ""
 "Config\n"
 "Page 2/3"
@@ -11036,7 +11111,7 @@ msgstr ""
 "Config\n"
 "Pag. 2/3"
 
-#: Data/Input/default.xci:614
+#: Data/Input/default.xci:676
 msgid ""
 "Config\n"
 "Page 3/3"
@@ -11044,23 +11119,23 @@ msgstr ""
 "Config\n"
 "Pag. 3/3"
 
-#: Data/Input/default.xci:630
+#: Data/Input/default.xci:692
 msgid "Weglide Upload"
 msgstr "Caricamento WeGlide"
 
-#: Data/Input/default.xci:679 Data/Input/default.xci:1184
+#: Data/Input/default.xci:741 Data/Input/default.xci:1357
 msgid "NMEA Logger"
 msgstr "Logger NMEA"
 
-#: Data/Input/default.xci:687
+#: Data/Input/default.xci:749
 msgid "Lua"
 msgstr "Lua"
 
-#: Data/Input/default.xci:694 Data/Input/default.xci:745
+#: Data/Input/default.xci:756 Data/Input/default.xci:807
 msgid "Vega"
 msgstr "Vega"
 
-#: Data/Input/default.xci:705
+#: Data/Input/default.xci:767
 msgid ""
 "Vega\n"
 "Page 2/2"
@@ -11068,61 +11143,61 @@ msgstr ""
 "Vega\n"
 "Pag. 2/2"
 
-#: Data/Input/default.xci:713
+#: Data/Input/default.xci:775
 msgid "Airframe Switches"
 msgstr "Interruttori Velivolo"
 
-#: Data/Input/default.xci:720
+#: Data/Input/default.xci:782
 msgid "Manual Demo"
 msgstr "Demo Manuale"
 
-#: Data/Input/default.xci:727
+#: Data/Input/default.xci:789
 msgid "Setup Stall"
 msgstr "Impostazioni di Stallo"
 
-#: Data/Input/default.xci:734
+#: Data/Input/default.xci:796
 msgid "Accel"
 msgstr "Scorciatoia"
 
-#: Data/Input/default.xci:752
+#: Data/Input/default.xci:814
 msgid "Vario ASI zeroed"
 msgstr "Vario ASI azzerato"
 
-#: Data/Input/default.xci:753
+#: Data/Input/default.xci:815
 msgid "ASI Zero"
 msgstr ""
 "ASI\n"
 "Zero"
 
-#: Data/Input/default.xci:759
+#: Data/Input/default.xci:821
 msgid "Accelerometer leveled"
 msgstr "Accelerometro livellato"
 
-#: Data/Input/default.xci:760
+#: Data/Input/default.xci:822
 msgid "Accel Zero"
 msgstr ""
 "Scorciatoia\n"
 "Zero"
 
-#: Data/Input/default.xci:767
+#: Data/Input/default.xci:829
 msgid "Stored to EEPROM"
 msgstr "Salvato in EEPROM"
 
-#: Data/Input/default.xci:768
+#: Data/Input/default.xci:830
 msgid "Store"
 msgstr "Salva"
 
-#: Data/Input/default.xci:775
+#: Data/Input/default.xci:837
 msgid "Cruise Demo"
 msgstr ""
 "Demo\n"
 "Crociera"
 
-#: Data/Input/default.xci:782
+#: Data/Input/default.xci:844
 msgid "Climb Demo"
 msgstr "Demo Risalita"
 
-#: Data/Input/default.xci:792
+#: Data/Input/default.xci:854
 msgid ""
 "Info\n"
 "Page 2/3"
@@ -11130,11 +11205,11 @@ msgstr ""
 "Info\n"
 "Pag. 2/3"
 
-#: Data/Input/default.xci:800 Data/Input/default.xci:1207
+#: Data/Input/default.xci:862 Data/Input/default.xci:1290
 msgid "FLARM Radar"
 msgstr "Radar FLARM"
 
-#: Data/Input/default.xci:842
+#: Data/Input/default.xci:904
 msgid ""
 "Info\n"
 "Page 3/3"
@@ -11142,1332 +11217,70 @@ msgstr ""
 "Info\n"
 "Pag. 3/3"
 
-#: Data/Input/default.xci:866
+#: Data/Input/default.xci:928
 msgid "Traffic List"
 msgstr "Lista Traffico"
 
-#: Data/Input/default.xci:874 Data/Input/default.xci:1255
+#: Data/Input/default.xci:936 Data/Input/default.xci:1333
 msgid "Thermal Assistant"
 msgstr "Assistente Termica"
 
-#: Data/Input/default.xci:901
+#: Data/Input/default.xci:963 Data/Input/default.xci:1341
 msgid "Airspaces"
 msgstr "Spazi aerei"
 
-#: Data/Input/default.xci:908
+#: Data/Input/default.xci:970 Data/Input/default.xci:1380
 msgid "Message Repeat"
 msgstr ""
 "Ripeti\n"
 "Messaggio"
 
-#: Data/Input/default.xci:919
+#: Data/Input/default.xci:981
 msgid "Nav"
 msgstr "Naviga"
 
-#: Data/Input/default.xci:933
+#: Data/Input/default.xci:995
 msgid "Config"
 msgstr "Config"
 
-#: Data/Input/default.xci:948
+#: Data/Input/default.xci:1010
 msgid "Lock Screen"
 msgstr ""
 "Blocco\n"
 "Schermo"
 
-#: Data/Input/default.xci:1006
+#: Data/Input/default.xci:1068
 msgid "AVG/ALT"
 msgstr "AVG/ALT"
 
-#: Data/Input/default.xci:1153
+#: Data/Input/default.xci:1091
 msgid "Setup Wind"
 msgstr ""
 "Imposta\n"
 "Vento"
 
-#: Data/Input/default.xci:1161
+#: Data/Input/default.xci:1099
 msgid "Setup System"
 msgstr ""
 "Imposta\n"
 "Sistema"
 
-#: Data/Input/default.xci:1169
+#: Data/Input/default.xci:1107
 msgid "Settings Airspace"
 msgstr ""
 "Impostazioni\n"
 "Spazio Aereo"
 
-#: Data/Input/default.xci:1200
+#: Data/Input/default.xci:1115
 msgid "Setup Plane"
 msgstr "Impostazioni Velivolo"
 
-#: Data/Input/default.xci:1223
+#: Data/Input/default.xci:1266
 msgid "Nearest Airspace"
 msgstr ""
 "Spazio Aereo\n"
 "più Vicino"
 
-#: Data/Input/default.xci:1287
+#: Data/Input/default.xci:1395
 msgid "Quit XCSoar"
 msgstr ""
-
-#~ msgid "More waypoints"
-#~ msgstr "Boe aggiuntive"
-
-#~ msgid ""
-#~ "Secondary waypoints file. This may be used to add waypoints for a "
-#~ "competition."
-#~ msgstr ""
-#~ "File secondario delle boe. Può essere usato per aggiungere le boe del "
-#~ "percorso per una gara."
-
-#~ msgid "Raw Logger"
-#~ msgstr "Logger Grezzo"
-
-#, no-c-format
-#~ msgid "Topleft"
-#~ msgstr "Alto-Sinistra"
-
-#~ msgid "The file name of the primary airspace file."
-#~ msgstr "File principale dello spazio aereo."
-
-#~ msgid "More airspaces"
-#~ msgstr "Spazi aerei aggiuntivi"
-
-#~ msgid "The file name of the secondary airspace file."
-#~ msgstr "File secondario dello spazio aereo."
-
-#, no-c-format
-#~ msgid "The currently active Radio Frequency"
-#~ msgstr "La frequenza radio attualmente attiva"
-
-#, no-c-format
-#~ msgid "The currently standby Radio Frequency"
-#~ msgstr "La corrente frequenza radio di standby"
-
-#, no-c-format
-#~ msgid "No error"
-#~ msgstr "Nessun errore"
-
-#, no-c-format
-#~ msgid "Information"
-#~ msgstr "Informazione"
-
-#, no-c-format
-#~ msgid "Reduced functionality"
-#~ msgstr "Funzionalità ridotta"
-
-#, no-c-format
-#~ msgid "Fatal problem"
-#~ msgstr "Problema fatale"
-
-#~ msgid "Firmware expired"
-#~ msgstr "Scadenza del tempo del firmware"
-
-#~ msgid "Firmware update error"
-#~ msgstr "Scadenza del tempo del firmware"
-
-#~ msgid "Voltage Low"
-#~ msgstr "Mostra Pagina"
-
-#~ msgid "UI error"
-#~ msgstr "Nessun errore"
-
-#~ msgid "Audio error"
-#~ msgstr "Nessun errore"
-
-#~ msgid "ADC error"
-#~ msgstr "Nessun errore"
-
-#~ msgid "SDCARD error"
-#~ msgstr "Nessun errore"
-
-#~ msgid "LED error"
-#~ msgstr "Errore"
-
-#~ msgid "EEPROM error"
-#~ msgstr "Nessun errore"
-
-#~ msgid "GPIO error"
-#~ msgstr "Nessun errore"
-
-#, no-c-format
-#~ msgid "GPS communication"
-#~ msgstr "Comunicazione GPS"
-
-#~ msgid "Configuration of GPS module"
-#~ msgstr "Configurazione Salvata"
-
-#, no-c-format
-#~ msgid "RF communication"
-#~ msgstr "Collegamento RF"
-
-#, no-c-format
-#~ msgid "Communication"
-#~ msgstr "Comunicazione"
-
-#, no-c-format
-#~ msgid "Flash memory"
-#~ msgstr "Memoria flash"
-
-#, no-c-format
-#~ msgid "Pressure sensor"
-#~ msgstr "Sensore di pressione"
-
-#~ msgid "Obstacle database expired"
-#~ msgstr "Database ostacoli"
-
-#, no-c-format
-#~ msgid "Flight recorder"
-#~ msgstr "Logger di volo"
-
-#~ msgid "Invalid obstacle database license"
-#~ msgstr "Database ostacoli"
-
-#~ msgid "Generic error"
-#~ msgstr "Generico"
-
-#, no-c-format
-#~ msgid "Other"
-#~ msgstr "Altro"
-
-#, no-c-format
-#~ msgid "The FFVV NetCoupe \"libre\" competiton."
-#~ msgstr "La gara \"libre\" FFVV NetCoupe."
-
-#, no-c-format
-#~ msgid "Power"
-#~ msgstr "Accensione"
-
-#, no-c-format
-#~ msgid "GPS configuration"
-#~ msgstr "Configurazione GPS"
-
-#, no-c-format
-#~ msgid "Transponder receiver"
-#~ msgstr "Ricevitore transponder"
-
-#~ msgid "Overwrite?"
-#~ msgstr "Sovrascrivi?"
-
-#~ msgid "Waypoints Editor"
-#~ msgstr "Editor Boe"
-
-#, no-c-format
-#~ msgid "Top Left"
-#~ msgstr "In Alto a Sinistra"
-
-#, no-c-format
-#~ msgid "Bottom Left"
-#~ msgstr "In Basso a Sinistra"
-
-#, no-c-format
-#~ msgid "Bottom Right"
-#~ msgstr "In Basso a Destra"
-
-#, no-c-format
-#~ msgid "Total altitude gain/loss in the last thermal."
-#~ msgstr "Quota Totale guadagnata/persa nell'ultima termica."
-
-#~ msgid "Inverse InfoBoxes"
-#~ msgstr "InfoBox inversi"
-
-#~ msgid "If true, the InfoBoxes are white on black, otherwise black on white."
-#~ msgstr ""
-#~ "Se selezionato, gli InfoBox sono di colore bianco su nero, altrimenti "
-#~ "nero su bianco."
-
-#~ msgid "Uploads flights automatically after download from logger?"
-#~ msgstr "Carica automaticamente i voli dopo averli scaricati dal logger?"
-
-#, c-format
-#~ msgid "Altn %d"
-#~ msgstr "Altn %d"
-
-#~ msgid ""
-#~ "Team\n"
-#~ "Code"
-#~ msgstr ""
-#~ "Codice\n"
-#~ "Team"
-
-#~ msgid ""
-#~ "Flight\n"
-#~ "Setup"
-#~ msgstr ""
-#~ "Impostaz.\n"
-#~ "Volo"
-
-#, no-c-format
-#~ msgid ""
-#~ "When the algorithm is switched off, the pilot is responsible for setting "
-#~ "the wind estimate."
-#~ msgstr ""
-#~ "Quando l'algoritmo è disattivato, è responsabilità del pilota impostare "
-#~ "la stima del vento."
-
-#, no-c-format
-#~ msgid "Requires only a GPS source."
-#~ msgstr "Richiede solo una sorgente GPS."
-
-#, no-c-format
-#~ msgid "Requires GPS and an intelligent vario with airspeed output."
-#~ msgstr ""
-#~ "Richiede un GSP e un variometro intelligente con output della velocità "
-#~ "dell'aria."
-
-#, no-c-format
-#~ msgid "Use ZigZag and circling."
-#~ msgstr "Utilizza ZigZag e Termica."
-
-#~ msgid "Auto wind"
-#~ msgstr "Vento automatico"
-
-#~ msgid "This allows switching on or off the automatic wind algorithm."
-#~ msgstr ""
-#~ "Questo consente di attivare o disattivare l'algoritmo del vento "
-#~ "automatico."
-
-#, no-c-format
-#~ msgid "Unkown"
-#~ msgstr "Sconosciuto"
-
-#~ msgid "Dry Mass"
-#~ msgstr "Massa a Secco"
-
-#~ msgid "Dry all-up flying mass of your plane"
-#~ msgstr "Il peso complessivo a secco in volo"
-
-#~ msgid ""
-#~ "Pan\n"
-#~ "Off"
-#~ msgstr ""
-#~ "Pan \n"
-#~ "Off"
-
-#~ msgid ""
-#~ "Zoom\n"
-#~ "In"
-#~ msgstr ""
-#~ "Zoom\n"
-#~ "In"
-
-#~ msgid ""
-#~ "Zoom\n"
-#~ "Out"
-#~ msgstr ""
-#~ "Zoom\n"
-#~ "Out"
-
-#~ msgid ""
-#~ "Check\n"
-#~ "list"
-#~ msgstr ""
-#~ "Check\n"
-#~ "list"
-
-#~ msgid ""
-#~ "Pilot\n"
-#~ "Event"
-#~ msgstr ""
-#~ "Pilot\n"
-#~ "Event"
-
-#~ msgid ""
-#~ "Pan\n"
-#~ "On"
-#~ msgstr ""
-#~ "Pan \n"
-#~ "On"
-
-#~ msgid "Parse Error at Line"
-#~ msgstr "Errore di sintassi alla linea"
-
-#~ msgid "Failed to erase waypoints."
-#~ msgstr "Impossibile cancellare boe."
-
-#~ msgid "Task calc"
-#~ msgstr "Calcolo tema"
-
-#, no-c-format
-#~ msgid "24 Right (Landscape)"
-#~ msgstr "24 Destra (Orizzontale)"
-
-#~ msgid "Failed to download file."
-#~ msgstr "Scaricamento file fallito."
-
-#, no-c-format
-#~ msgid "Wind V"
-#~ msgstr "V vento"
-
-#, no-c-format
-#~ msgid "Wind Brng"
-#~ msgstr "Direz Vento"
-
-#~ msgid "Bluetooth LE"
-#~ msgstr "Bluetooth LE"
-
-#~ msgid "Logger inactive, insufficient storage!"
-#~ msgstr "Logger non attivo: memoria insufficiente!"
-
-#, no-c-format
-#~ msgid "OLC Dist"
-#~ msgstr "OLC Dist"
-
-#, no-c-format
-#~ msgid "OLC Speed"
-#~ msgstr "Velocità OLC"
-
-#~ msgid "On-Line Contest"
-#~ msgstr "Competizione On-Line"
-
-#~ msgid ""
-#~ "Pressure Altitude given as Flight Level. Only available if barometric "
-#~ "altitude available and correct QNH set."
-#~ msgstr ""
-#~ "Altitudine barometrica riportata come Livello di Volo. Utilizzabile solo "
-#~ "se l'altitudine barometrica è disponibile e il corretto QNH è impostato."
-
-#~ msgid "The file manager requires Android 2.3."
-#~ msgstr "Il gestore file richiede Android 2.3."
-
-#~ msgid "I2C Bus"
-#~ msgstr "Bus I2C"
-
-#~ msgid "I2C Addr"
-#~ msgstr "Indir. I2C"
-
-#~ msgid "This enables the display of the thermal assistant gauge."
-#~ msgstr ""
-#~ "Questo abilita la visualizzazione dell'indicatore assistente termica."
-
-#~ msgid "Battery voltage"
-#~ msgstr "Voltaggio batteria"
-
-#~ msgid "Enable voice read-back of the average climb rate when circling."
-#~ msgstr ""
-#~ "Attiva la rilettura vocale del tasso medio di salita quando è in "
-#~ "rotazione."
-
-#~ msgid "Enable warnings for final glide through terrain."
-#~ msgstr "attiva l'allarme per la planata finale attraverso il terreno."
-
-#~ msgid "Waypoint distance"
-#~ msgstr "distanza dal punto"
-
-#~ msgid ""
-#~ "Enable voice read-back of the distance to next waypoint when in cruise "
-#~ "mode."
-#~ msgstr ""
-#~ "Attiva voce rilettura della distanza dal prossimo waypoint in modalità "
-#~ "crociera."
-
-#~ msgid "Task altitude difference"
-#~ msgstr "Task dislivello"
-
-#~ msgid ""
-#~ "Enable voice read-back of height above/below final glide when in final "
-#~ "glide."
-#~ msgstr ""
-#~ "Attiva voce rilettura di altezza sopra / sotto planata finale quando in "
-#~ "planata finale."
-
-#~ msgid "MacCready"
-#~ msgstr "MacCready"
-
-#~ msgid "Enable voice read-back of MacReady setting after it is adjusted."
-#~ msgstr ""
-#~ "Attiva voce rilettura di impostazione MacReady dopo che è stato regolato."
-
-#~ msgid "New waypoint"
-#~ msgstr "Nuovo Pilone"
-
-#~ msgid "Enable voice announcement that the task waypoint has changed."
-#~ msgstr "Abilita annuncio vocale che il waypoint compito è cambiato."
-
-#~ msgid "In sector"
-#~ msgstr "Nel Settore"
-
-#~ msgid ""
-#~ "Enable voice announcement that the glider is within the task observation "
-#~ "sector."
-#~ msgstr ""
-#~ "Abilita annuncio vocale che la vela è nel settore dell'osservazione "
-#~ "compito."
-
-#~ msgid "Enable voice warnings for airspace incursions."
-#~ msgstr "Attiva gli avvisi vocali per incursioni dello spazio aereo."
-
-#~ msgid "Vega Voice Extensions"
-#~ msgstr "Vega estensioni vocali"
-
-#~ msgid "Experimental Features"
-#~ msgstr "Caratteristiche sperimentali"
-
-#~ msgid "Enables automatic backlight, responsive to light sensor."
-#~ msgstr ""
-#~ "Attiva retroilluminazione automatica, sensibile al sensore luminosità."
-
-#~ msgid "Brightness"
-#~ msgstr "Luminosità"
-
-#~ msgid ""
-#~ "Adjusts backlight. When automatic backlight is enabled, this biases the "
-#~ "backlight algorithm. When the automatic backlight is disabled, this "
-#~ "controls the backlight directly."
-#~ msgstr ""
-#~ "Regola retroilluminazione. Quando la retroilluminazione automatica è "
-#~ "abilitata, ciò porta a sottovalutare l'algoritmo di retroilluminazione. "
-#~ "Quando la retroilluminazione automatica è disabilitata, è possibile "
-#~ "controllare la retroilluminazione direttamente."
-
-#~ msgid "Screen Brightness"
-#~ msgstr "Luminosità dello schermo"
-
-#~ msgid "Could not open IGC file!"
-#~ msgstr "Impossibile aprire il file IGC!"
-
-#~ msgid "Device model"
-#~ msgstr "Modello Strumento"
-
-#~ msgid ""
-#~ "Select your PNA model to make full use of its hardware capabilities. If "
-#~ "it is not included, use Generic type."
-#~ msgstr ""
-#~ "Seleziona il tuo dispositivo di navigazione per permettere il massimo "
-#~ "utilizzo delle sue capacità hardware. Se non è incluso, utilizza il tipo "
-#~ "Generico."
-
-#~ msgid "Auto. blank"
-#~ msgstr "Blank automatico"
-
-#~ msgid ""
-#~ "This determines whether to blank the display after a long period of "
-#~ "inactivity when operating on internal battery power."
-#~ msgstr ""
-#~ "Quando operando con l'alimentazione interna delle batterie, questo "
-#~ "determina se disattivare lo schermo dopo un lungo periodo di inattività."
-
-#~ msgid "Shade"
-#~ msgstr "Ombra"
-
-#~ msgid "foot"
-#~ msgstr "piede"
-
-#~ msgid "Weather Forecast"
-#~ msgstr "Previsioni Meteo"
-
-#~ msgid "Display terrain on map, no weather data displayed."
-#~ msgstr "Visualizza il terreno sulla mappa, nessun dato meteo visualizzato."
-
-#~ msgid "Scanning weather forecast"
-#~ msgstr "Ricerca previsioni meteo"
-
-#~ msgid ""
-#~ "METAR\n"
-#~ "TAF"
-#~ msgstr ""
-#~ "METAR\n"
-#~ "TAF"
-
-#~ msgid "Setup Audio"
-#~ msgstr "Impostaz. Audio"
-
-#~ msgid "Delete Waypoint?"
-#~ msgstr "Cancella Pilone?"
-
-#~ msgid "Task Point"
-#~ msgstr "Piloni Tema"
-
-#~ msgid "Weather parameters"
-#~ msgstr "Parametri Meteo"
-
-#~ msgid "Edit Font"
-#~ msgstr "Edita stile"
-
-#~ msgid "V rough air"
-#~ msgstr "V Turbolenza"
-
-#~ msgid "Waypoint Info"
-#~ msgstr "Info Pilone"
-
-#~ msgid "Dump time"
-#~ msgstr "Tempo scarico"
-
-#~ msgid "Sunset"
-#~ msgstr "Tramonto"
-
-#~ msgid "Height"
-#~ msgstr "Quota"
-
-#~ msgid "ACK Warn"
-#~ msgstr "Ok alarm"
-
-#~ msgid "Lookup"
-#~ msgstr "Ricerca"
-
-#~ msgid "Fonts"
-#~ msgstr "Caratteri"
-
-#~ msgid "Filter..."
-#~ msgstr "Filtro..."
-
-#~ msgid "ACK Space"
-#~ msgstr "Ok spazio"
-
-#~ msgid "Edit text"
-#~ msgstr "Edita testo"
-
-#~ msgid "MANUAL"
-#~ msgstr "Manuale"
-
-#~ msgid "Wind At Altitude"
-#~ msgstr "Vento in Quota"
-
-#~ msgid "Set As New Home"
-#~ msgstr "Set = nuova casa"
-
-#~ msgid "Insert In Task"
-#~ msgstr "Inserisci nel tema"
-
-#~ msgid "Customize fonts"
-#~ msgstr "Customizza Stili"
-
-#~ msgid "Remove From Task"
-#~ msgstr "Rimuovi dal Tema"
-
-#~ msgid "Fly"
-#~ msgstr "VOLO"
-
-#~ msgid "Append To Task"
-#~ msgstr "Aggiungi al tema"
-
-#~ msgid "Replace In Task"
-#~ msgstr "Sostit.nel tema"
-
-#~ msgid "Line skipped."
-#~ msgstr "Linea saltata."
-
-#~ msgid ""
-#~ "This is the navigation altitude minus the terrain height obtained from "
-#~ "the terrain file. The value is coloured red when the glider is below the "
-#~ "terrain safety clearance height."
-#~ msgstr ""
-#~ "Questa è l'altezza di navigazione meno l'altezza dal terreno ottenuta dal "
-#~ "file terreno. Il valore è colorato di rosso quando l'aliante è sotto "
-#~ "l'altezza di sicurezza dal terreno."
-
-#~ msgid "Height GPS"
-#~ msgstr "Altezza GPS"
-
-#~ msgid "Status message"
-#~ msgstr "Messaggio stato"
-
-#~ msgid "L/D average period"
-#~ msgstr "Tempo x Media L/D"
-
-#~ msgid ""
-#~ "Waypoint\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Piloni\n"
-#~ "Dettagli"
-
-#~ msgid "Start rules violated"
-#~ msgstr "Regole di partenza violate"
-
-#~ msgid "H GND"
-#~ msgstr "H GND"
-
-#~ msgid ""
-#~ "FLARM\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Dettagli\n"
-#~ "FLARM"
-
-#~ msgid "Return"
-#~ msgstr "Indietro"
-
-#~ msgid ""
-#~ "This is the height above mean sea level reported by the GPS. Touch-screen/"
-#~ "PC only: In simulation mode, this value is adjustable with the up/down "
-#~ "arrow keys and the right/left arrow keys also cause the glider to turn."
-#~ msgstr ""
-#~ "Questa è l'altezza riferita al livello medio del mare, riportata dal GPS. "
-#~ "Touch-screen/Solo PC: In modalità simulazione, questo valore può essere "
-#~ "variato con i tasti freccia su/giù mentre i tasti freccia destra/sinistra "
-#~ "consentono la virata dell'aliante."
-
-#~ msgid ""
-#~ "Start rules slightly violated\n"
-#~ "but within margin"
-#~ msgstr ""
-#~ "Regole di partenza leggermente violate\n"
-#~ "ma all'interno dei margini"
-
-#~ msgid ""
-#~ "Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment "
-#~ "is possible by pressing the up/down cursor keys to adjust magnitude and "
-#~ "left/right cursor keys to adjust bearing when the InfoBox is active. "
-#~ "Pressing the enter cursor key saves the wind value as the initial value "
-#~ "when XCSoar next starts."
-#~ msgstr ""
-#~ "Velocità del vento stimata da XCSoar. (Touch-screen/Solo PC) La "
-#~ "correzione manuale è possibile premendo i tasti cursore su/giù per "
-#~ "variarne la magnitudo e  quando la Info Box è attiva i tasti cursore "
-#~ "sinistra/destra per variare la direzione. La pressione del tasto cursore "
-#~ "enter salva il valore del vento come valore iniziale al successivo avvio "
-#~ "di XCSoar"
-
-#~ msgid ""
-#~ "Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual "
-#~ "adjustment is possible by pressing the up/down cursor keys to adjust "
-#~ "bearing when the InfoBox is active."
-#~ msgstr ""
-#~ "Direzione del vento stimata da XCSoar. (Touch-screen/Solo PC) Correzioni "
-#~ "manuali sono possibili quando la Info Box è attiva premendo i tasti "
-#~ "cursore su/giù per variare la direzione."
-
-#~ msgid ""
-#~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
-#~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
-#~ "if on ground. During flight you can change QFE with up and down keys. "
-#~ "Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."
-#~ msgstr ""
-#~ "QFE automatico. Questo valore di altitudine è costantemente azzerato a "
-#~ "suolo PRIMA di decollare. Dopo il decollo, non è più azzerato "
-#~ "automaticamente anche se al suolo. Durante il volo puoi cambiare il QFE "
-#~ "con i tasti su e giù. La riga in fondo indica altitudine sul QNH. "
-#~ "Cambiando il QFE non influenza l'altitudine del QNH."
-
-#~ msgid ""
-#~ "The distance made in the configured period of time , divided by the "
-#~ "altitude lost since then. Negative values are shown as ^^^ and indicate "
-#~ "climbing cruise (height gain). Over 200 of L/D the value is shown as ++"
-#~ "+ . You can configure the period of averaging in the system setup. "
-#~ "Suggested values are 60, 90 or 120. Lower values will be closed to L/D "
-#~ "INST, and higher values will be closed to L/D Cruise. Notice that the "
-#~ "distance is NOT the straight line between your old and current position, "
-#~ "it's exactly the distance you have made even in a zigzag glide. This "
-#~ "value is not calculated while circling."
-#~ msgstr ""
-#~ "La distanza percorsa nel periodo di tempo configurato, diviso per la "
-#~ "perdita di quota dall'inizio dello stesso. Valori negativi sono indicati "
-#~ "come ^^^ e indicano salita in crociera (altezza guadagnata). Per valori "
-#~ "di L/D speriori a 200 il valore è indicato come +++. Puoi configurare il "
-#~ "periodo di calcolo della media nel system setup. Valori suggeriti sono "
-#~ "60, 90 o 120. Valori inferiori saranno prossimi al L/D IST, e valori "
-#~ "superiori saranno prossimi al L/D Crociera. Nota che la distanza NON è la "
-#~ "linea retta tra la tua posizione vecchia e quella corrente, è esattamente "
-#~ "la distanza che hai percorso anche in planata a zigzag. Questo valore non "
-#~ "è calcolato circuitando."
-
-#~ msgid ""
-#~ "Graph of average circling climb rate (horizontal axis) as a function of "
-#~ "height (vertical axis)."
-#~ msgstr ""
-#~ "Grafico della media del rateo di salita in circuitazione (asse "
-#~ "orizzontale) come funz"
-
-#~ msgid "No help available on this item"
-#~ msgstr "Nessun aiuto disponibile per questo elemento"
-
-#~ msgid "Auto. wind"
-#~ msgstr "Auto. vento"
-
-#~ msgid "AUTO"
-#~ msgstr "AUTO"
-
-#~ msgid ""
-#~ "Determines whether the snail trail is drifted with the wind when "
-#~ "displayed in circling mode."
-#~ msgstr ""
-#~ "Determina se il tracciato del volo sia scarrocciato con il vento quando "
-#~ "visualizzato nel modo circuitazione."
-
-#~ msgid "Unknown competition number"
-#~ msgstr "Numero di competizione sconosciuto"
-
-#~ msgid "Ignore checksum"
-#~ msgstr "Ignora controllo integrità"
-
-#~ msgid ""
-#~ "If your GPS device outputs invalid NMEA checksums, this will allow it's "
-#~ "data to be used anyway."
-#~ msgstr ""
-#~ "Se il tuo dispositivo GPS  trasmette controlli di integrità NMEA "
-#~ "invalidi, questo permetterà ti utilizzare comunque i suoi dati."
-
-#~ msgid ""
-#~ "Enable this if you would like to log the communication with the device."
-#~ msgstr ""
-#~ "Abilitare questo se desideri registrare le comunicazioni con il "
-#~ "dispositivo."
-
-#~ msgid ""
-#~ "If enabled, then the wind vector received from external devices overrides "
-#~ "XCSoar's internal wind calculation."
-#~ msgstr ""
-#~ "Se abilitato, allora il vettore vento ricevuto dai dispositivi esterni ha "
-#~ "precedenza sul calcolo del vento interno di XCSoar."
-
-#~ msgid "No further information"
-#~ msgstr "Non ci sono ulteriori informazioni"
-
-#~ msgid "Create xcsoar-checklist.txt\n"
-#~ msgstr "Crea xcsoar-checklist.txt\n"
-
-#~ msgid "Plane profile \"%s\" activated."
-#~ msgstr "Profilo aliante \"%s\" attivato."
-
-#~ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
-#~ msgstr "Un profilo aliante \"%s\" già esiste. Vuoi sovrascriverlo?"
-
-#~ msgid "Do you want to load plane profile \"%s\"?"
-#~ msgstr "Vuoi caricare il profilo aliante \"%s\"?"
-
-#~ msgid "Do you really want to delete plane profile \"%s\"?"
-#~ msgstr "Vuoi veramente cancellare il profilo aliante \"%s\"?"
-
-#~ msgid "InfoBox Modes"
-#~ msgstr "Modi InfoBoxes"
-
-#~ msgid "Logger Info"
-#~ msgstr "Informazioni registro"
-
-#~ msgid "English"
-#~ msgstr "Inglese"
-
-#~ msgid ""
-#~ "The status file can be used to define sounds to be played when certain "
-#~ "events occur, and how long various status messages will appear on screen."
-#~ msgstr ""
-#~ "Il file di stato può essere utilizzato per definire suoni da riprodurre "
-#~ "quanto occorrono certi eventi. e per quanto a lungo i vari messaggi di "
-#~ "stati appaiono sullo schermo."
-
-#~ msgid "Longitude"
-#~ msgstr "Longit."
-
-#~ msgid "Latitude"
-#~ msgstr "Latit."
-
-#~ msgid "Calc"
-#~ msgstr "Calcola"
-
-#~ msgid "Waypoints not editable"
-#~ msgstr "Punto di virata non modificabile"
-
-#~ msgid "Loading of plane profile \"%s\" failed!"
-#~ msgstr "Impossibile caricare il profilo aliante \"%s\"!"
-
-#~ msgid "Clear current task?"
-#~ msgstr "Elimino il tema corrente?"
-
-#~ msgid "Unknown error creating task."
-#~ msgstr "Errore sconosciuto durante la creazione del tema."
-
-#~ msgid "Calculator"
-#~ msgstr "Calcolatore"
-
-#~ msgid "Calculator excludes unsaved task changes!"
-#~ msgstr "Il calcolatore non include le modifiche non salvate!"
-
-#~ msgid "Font Configuration"
-#~ msgstr "Configurazione caratteri"
-
-#~ msgid "Font not found."
-#~ msgstr "Carattere non trovato"
-
-#~ msgid "Font face"
-#~ msgstr "Tipo di carattere"
-
-#~ msgid "8 Top + Bottom (Portrait)"
-#~ msgstr "8 Alto + Basso (Verticale)"
-
-#~ msgid "8 Bottom (Portrait)"
-#~ msgstr "8 Basso (Verticale)"
-
-#~ msgid "8 Left + Right (Landscape)"
-#~ msgstr "8 Sinistra + Destra (Orizzontale)"
-
-#~ msgid "8 Top (Portrait)"
-#~ msgstr "8 Alto (Verticale)"
-
-#~ msgid "12 Right (Landscape)"
-#~ msgstr "12 Destra (Orizzontale)"
-
-#~ msgid "8 Left (Landscape)"
-#~ msgstr "8 Sinistra (Orizzontale)"
-
-#~ msgid "8 Right (Landscape)"
-#~ msgstr "8 Destra (Orizzontale)"
-
-#~ msgid "4 Top (Portrait)"
-#~ msgstr "4 Alto (Verticale)"
-
-#~ msgid "12 Top (Portrait)"
-#~ msgstr "12 Alto (Verticale)"
-
-#~ msgid "12 Bottom (Portrait)"
-#~ msgstr "12 Basso (Verticale)"
-
-#~ msgid "4 Right (Landscape)"
-#~ msgstr "4 Destra (Orizzontale)"
-
-#~ msgid "4 Bottom (Portrait)"
-#~ msgstr "4 Basso (Verticale)"
-
-#~ msgid "4 Left (Landscape)"
-#~ msgstr "4 Sinistra (Orizzontale)"
-
-#~ msgid "Dialog text"
-#~ msgstr "Testo dialogo"
-
-#~ msgid "Topography labels, normal"
-#~ msgstr "Testo mappa, normale"
-
-#~ msgid "InfoBox values, normal"
-#~ msgstr "Valori InfoBox, normali"
-
-#~ msgid "Topography labels, important"
-#~ msgstr "Testo mappa, piccolo"
-
-#~ msgid "InfoBox values, small"
-#~ msgstr "Valori InfoBox, piccoli"
-
-#~ msgid "left %s ago"
-#~ msgstr "sinistra % s fa"
-
-#~ msgid "Prefer external wind"
-#~ msgstr "priorità vento esterno"
-
-#~ msgid "dropped %s ago"
-#~ msgstr "dropped %s ago"
-
-#~ msgid "Goto and clear task"
-#~ msgstr "Vai e cancella il tema"
-
-#~ msgid "Waypts."
-#~ msgstr "Waypoint."
-
-#~ msgid "No waypoint labels will be displayed."
-#~ msgstr "Non verranno visualizzate le boe e waypoint se non hanno etichette."
-
-#~ msgid "All waypoint labels will be displayed."
-#~ msgstr "Verranno visualizzate tutte le etichette dei waypoint."
-
-#~ msgid ""
-#~ "Determines what waypoint labels are displayed for each waypoint (space "
-#~ "permitting)."
-#~ msgstr ""
-#~ "Determina quello che viene visualizzato nelle etichette per ciascun "
-#~ "waypoint (spazio permettendo)."
-
-#~ msgid "Normal"
-#~ msgstr "Normale"
-
-#~ msgid "Large"
-#~ msgstr "Grande"
-
-#~ msgid "Small"
-#~ msgstr "Piccolo"
-
-#~ msgid "InfoBox values"
-#~ msgstr "Valori InfoBox"
-
-#~ msgid "Overlay text"
-#~ msgstr "testo in sovrimpressione"
-
-#~ msgid "Bold"
-#~ msgstr "Grassetto"
-
-#~ msgid "Italic"
-#~ msgstr "Corsivo"
-
-#~ msgid "Do you want to activate plane profile \"%s\"?"
-#~ msgstr "Vuoi caricare il profilo aliante \"%s\"?"
-
-#~ msgid "Landpoint"
-#~ msgstr "Prossimo punto di atterraggio"
-
-#~ msgid "Start open arr"
-#~ msgstr "Avvia Logger"
-
-#~ msgid "Map labels on"
-#~ msgstr "Etichet.mappa ON"
-
-#~ msgid "Flight replay"
-#~ msgstr "Replay Volo"
-
-#~ msgid "Task Status"
-#~ msgstr "Stato Tema"
-
-#~ msgid "System Status"
-#~ msgstr "Stato Sistema"
-
-#~ msgid "Speed achieved"
-#~ msgstr "Velocita conseguita"
-
-#~ msgid "Edit Text"
-#~ msgstr "Edita testo"
-
-#~ msgid "Aircraft Status"
-#~ msgstr "Stato Velivolo"
-
-#~ msgid "Final GR (TE Compensated)"
-#~ msgstr "GR finale (Compensata per TE)"
-
-#~ msgid ""
-#~ "The required glide ratio over ground to finish the task, given by the "
-#~ "distance to go divided by the height required to arrive at the safety "
-#~ "arrival height. Negative values indicate a climb is necessary to finish. "
-#~ "If the height required is close to zero, the displayed value is '---'. "
-#~ "Note that this calculation may be optimistic because it reduces the "
-#~ "height required to finish by the excess energy height of the glider if "
-#~ "its true airspeed is greater than the MacCready and best L/D speeds."
-#~ msgstr ""
-#~ "Il rateo di planata richiesto al suolo per completare il tema, ottenuto "
-#~ "dividendo la distanza rimanente per l'altezza necessaria  ad arrivare "
-#~ "all'altezza di sicurezza. Valori negativi indicano che è necessaria una "
-#~ "salita per l'arrivo. Se l'altezza richiesta è prossima allo zero, il "
-#~ "valore visualizzato è '---'. Da notare che questo calcolo potrebbe essere "
-#~ "ottimistico in quanto riduce l'altezza richiesta all'arrivo dell'eccesso "
-#~ "di altezza energia dell'aliante se la velocità vera è maggiore di quella "
-#~ "di MacCready e delle migliori velocità L/D."
-
-#~ msgid ""
-#~ "Geometric gradient to the arrival height above the final waypoint. This "
-#~ "is not adjusted for total energy."
-#~ msgstr ""
-#~ "Gradiente geometrico all'altezza di arrivo sopra il punto finale. Questo "
-#~ "non è corretto per l'energia totale."
-
-#~ msgid "Declare Task?"
-#~ msgstr "Dichiara Tema?"
-
-#~ msgid "Task Declared!"
-#~ msgstr "Tema Dichiarato!"
-
-#~ msgid "OK to invalidate declaration?"
-#~ msgstr "OK per invalidare dichiarazione?"
-
-#~ msgid "Task declared"
-#~ msgstr "Tema Dichiarato"
-
-#~ msgid "SnailTrail OFF"
-#~ msgstr "Scia OFF"
-
-#~ msgid "SnailTrail ON Long"
-#~ msgstr "Scia ON Lunga"
-
-#~ msgid "SnailTrail ON Short"
-#~ msgstr "Scia ON Corta"
-
-#~ msgid "SnailTrail ON Full"
-#~ msgstr "Scia ON Completa"
-
-#~ msgid "Circling Zoom ON"
-#~ msgstr "Zoom Termica ON"
-
-#~ msgid "Circling Zoom OFF"
-#~ msgstr "Zoom Termica OFF"
-
-#~ msgid "Pan mode OFF"
-#~ msgstr "Modo sposta OFF"
-
-#~ msgid "No Active Waypoint!"
-#~ msgstr "Nessun pilone attivo!"
-
-#~ msgid "No Task"
-#~ msgstr "Nessun tema"
-
-#~ msgid "Map labels ON"
-#~ msgstr "Etichet.mappa ON"
-
-#~ msgid "Map labels OFF"
-#~ msgstr "Etichet.mappa OFF"
-
-#~ msgid "Task Start"
-#~ msgstr "Start Tema"
-
-#~ msgid "Task Finish"
-#~ msgstr "Tema Completato"
-
-#~ msgid "Loading Topology File..."
-#~ msgstr "Caricando File della Topologia..."
-
-#~ msgid "Best LD"
-#~ msgstr "Miglior L/D"
-
-#~ msgid "Min sink"
-#~ msgstr "Min caduta"
-
-#~ msgid "Acknowledge for day?"
-#~ msgstr "Silenzia oggi?"
-
-#~ msgid "Set wind"
-#~ msgstr "Setup vento"
-
-#~ msgid "Temp trace"
-#~ msgstr "Grafico Temperatura"
-
-#~ msgid "Terrain Display"
-#~ msgstr "Display Terreno"
-
-#~ msgid "Safety factors"
-#~ msgstr "Fattori di Sicurezza"
-
-#~ msgid "ON/Fixed"
-#~ msgstr "ON/Fisso"
-
-#~ msgid "ON/Scaled"
-#~ msgstr "ON/Scalato"
-
-#~ msgid "Names"
-#~ msgstr "Nomi"
-
-#~ msgid "Numbers"
-#~ msgstr "Numeri"
-
-#~ msgid "First 5"
-#~ msgstr "Prime 5"
-
-#~ msgid "First 3"
-#~ msgstr "Prime 3"
-
-#~ msgid "Names in task"
-#~ msgstr "Nomi nel tema"
-
-#~ msgid "Statute"
-#~ msgstr "Statutario"
-
-#~ msgid "Nautical"
-#~ msgstr "Nautico"
-
-#~ msgid "Metric"
-#~ msgstr "Metrico"
-
-#~ msgid "15 seconds"
-#~ msgstr "15 secondi"
-
-#~ msgid "30 seconds"
-#~ msgstr "30 secondi"
-
-#~ msgid "60 seconds"
-#~ msgstr "60 secondi"
-
-#~ msgid "90 seconds"
-#~ msgstr "90 secondi"
-
-#~ msgid "3 minutes"
-#~ msgstr "3 minuti"
-
-#~ msgid "White outline"
-#~ msgstr "Riquadro Bianco"
-
-#~ msgid "Alternate"
-#~ msgstr "Alternato"
-
-#~ msgid "Changes to configuration saved."
-#~ msgstr "Cambio di configurazione salvato"
-
-#~ msgid "TRUE"
-#~ msgstr "VERO"
-
-#~ msgid "FALSE"
-#~ msgstr "FALSO"
-
-#~ msgid "add waypoint"
-#~ msgstr "aggiungi pilone"
-
-#~ msgid "FAI Sector"
-#~ msgstr "Settore FAI"
-
-#~ msgid "Append to task"
-#~ msgstr "Aggiungi al tema"
-
-#~ msgid "Info box titles"
-#~ msgstr "Titoli info box"
-
-#~ msgid "Aircraft/wind speed"
-#~ msgstr "Velocita Aereo/Vento"
-
-#~ msgid "Start max height"
-#~ msgstr "Max quota start"
-
-#~ msgid "Start max speed"
-#~ msgstr "Max velocita start"
-
-#~ msgid "Start Anyway"
-#~ msgstr "Start comunque"
-
-#~ msgid "File browser"
-#~ msgstr "Esplora files"
-
-#~ msgid "Infobox Geometry"
-#~ msgstr "Geometria InfoBox"
-
-#~ msgid "Map waypoints"
-#~ msgstr "Piloni mappa"
-
-#~ msgid "New Waypoint"
-#~ msgstr "Nuovo Pilone"
-
-#~ msgid "Device A"
-#~ msgstr "Strum A"
-
-#~ msgid "Acknowledge time*"
-#~ msgstr "Tempo Silenziato*"
-
-#~ msgid "Device B"
-#~ msgstr "Strum B"
-
-#~ msgid "Finish alt min"
-#~ msgstr "Min.quota arriv."
-
-#~ msgid "V rem"
-#~ msgstr "V rim"
-
-#~ msgid "Achieved Speed"
-#~ msgstr "Velocita volata"
-
-#~ msgid "Declared"
-#~ msgstr "Dichiarato"
-
-#~ msgid "Set speed remaining"
-#~ msgstr "Set veloc.rimanente"
-
-#~ msgid "Finish min height"
-#~ msgstr "Min Quota Arrivo"
-
-#~ msgid "Select colour"
-#~ msgstr "Selez. Colore"
-
-#~ msgid "Customize Fonts"
-#~ msgstr "Customizza Stili"
-
-#~ msgid "Polar file"
-#~ msgstr "File Polare"
-
-#~ msgid "FAI finish height"
-#~ msgstr "Quota arrivo FAI"
-
-#~ msgid "Free"
-#~ msgstr "Libero"
-
-#~ msgid "Select pattern"
-#~ msgstr "Selez. Motivo"
-
-#~ msgid "Baudrate"
-#~ msgstr "Velocita"
-
-#~ msgid "Dialog boxes"
-#~ msgstr "Finestre dialogo"
-
-#~ msgid "Topology labels"
-#~ msgstr "Cartigli topologia"
-
-#~ msgid "Insert in task"
-#~ msgstr "Inserisci nel tema"
-
-#~ msgid "Warning time*"
-#~ msgstr "Tempo allarme*"
-
-#~ msgid "Topology display"
-#~ msgstr "Topologia"
-
-#~ msgid "Start height ref"
-#~ msgstr "Quota Rif Start"
-
-#~ msgid "Safety lock"
-#~ msgstr "Blocca Setup volo"
-
-#~ msgid "Use black outline*"
-#~ msgstr "Usa riquadro nero*"
-
-#~ msgid "AAT min time"
-#~ msgstr "AAT tempo min"
-
-#~ msgid "Task Calculator"
-#~ msgstr "Calcolo Tema"
-
-#~ msgid "Info box values small"
-#~ msgstr "InfoBox valori piccoli"
-
-#~ msgid "Glider position"
-#~ msgstr "Posizione Aliante"
-
-#~ msgid "Below Final Glide"
-#~ msgstr "Sotto Planata Finale"
-
-#~ msgid "Waiting for GPS Connection"
-#~ msgstr "Attesa di connessione GPS"
-
-#~ msgid "Above Final Glide"
-#~ msgstr "Sopra Planata Finale"
-
-#~ msgid "Restarting Comm Ports"
-#~ msgstr "Ri-inizializzando porte Com"
-
-#~ msgid "Marks cleared"
-#~ msgstr "Segnap.cancel."
-
-#~ msgid "Waiting for GPS Fix"
-#~ msgstr "In attesa del fix GPS"
-
-#~ msgid "Final Glide Through Terrain"
-#~ msgstr "Planata Finale Attraverso Terreno"
-
-#~ msgid "Unknown Filetype."
-#~ msgstr "Tipo file sconosciuto"
-
-#~ msgid ""
-#~ "This is the height above mean sea level reported by the GPS. Touchscreen/"
-#~ "PC only: in simulation mode, this value is adjustable with the up/down "
-#~ "arrow keys and the right/left arrow keys also cause the glider to turn."
-#~ msgstr ""
-#~ "Questa è l'altezza sul mare riportata dal GPS. Solo Touchscreen/PC: in "
-#~ "modalità simulazione, questo valore è aggiustabile con tasti freccia su/"
-#~ "giù mentre con tasti freccia destra/sinistra si fa girare l'aliante."
-
-#~ msgid "L/D Inst"
-#~ msgstr "L/D Inst"
-
-#~ msgid ""
-#~ "Instantaneous glide ratio, given by the ground speed divided by the "
-#~ "vertical speed (GPS speed) over the last 20 seconds. Negative values "
-#~ "indicate climbing cruise. If the vertical speed is close to zero, the "
-#~ "displayed value is '---'."
-#~ msgstr ""
-#~ "Efficienza istantanea, ottenuta dividendo la velocità rispetto terra con "
-#~ "la velocità verticale (GPS) degli ultimi 20 secondi. Valori negativi "
-#~ "indicano salita. Se la velocità verticale è prossima allo zero, il valore "
-#~ "visualizzato è '---'."
-
-#~ msgid "V Gnd"
-#~ msgstr "V Gnd"
-
-#~ msgid "L/D instantaneous"
-#~ msgstr "L/D istantaneo"
-
-#~ msgid "Additional altitude required to reach the next turn point."
-#~ msgstr ""
-#~ "Altitudine addizionale richiesta per raggiungere il prossimo punto di "
-#~ "aggiramento."
-
-#~ msgid "Fin LD"
-#~ msgstr "Fin LD"
-
-#~ msgid ""
-#~ "Altitude gained/lost in the current thermal, divided by time spent "
-#~ "thermaling."
-#~ msgstr ""
-#~ "Quota guadagnata/persa nella termica corrente, divisa per il tempo speso "
-#~ "in termica."
-
-#~ msgid "Time of flight"
-#~ msgstr "Tempo di volo"
-
-#~ msgid "Could not open NMEA file!"
-#~ msgstr "Impossibile aprire il file NMEA!"
