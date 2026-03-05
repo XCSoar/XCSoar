@@ -464,16 +464,16 @@ public class PermissionHelper implements PermissionManager {
         }
       }
 
-      /* If the other Bluetooth permission is already being processed (in pendingBluetoothPermissions),
-         or if it's already granted, skip this one - it will be handled when the other one is processed */
-      if (pendingBluetoothPermissions.contains(otherBluetoothPermission) ||
-          (!otherNeeded && isBluetoothPermission(permission))) {
-        /* Other Bluetooth permission is already being processed or already granted.
-           Skip this one - the batch completion flow will notify the handler when the actual
-           grant result is known. Do not call handler.onRequestPermissionsResult() here as that
-           would falsely report the permission as granted before the actual result is known. */
+      /* If the other Bluetooth permission is already being
+         processed (in pendingBluetoothPermissions), the in-flight
+         request will ask for both permissions as a batch.
+         Re-queue this request so the handler is called with the
+         real grant/deny result once the batch completes. */
+      if (pendingBluetoothPermissions.contains(otherBluetoothPermission)) {
+        permissionQueue.offer(request);
         isProcessingPermission = false;
-        processNextPermission();
+        /* Don't call processNextPermission() — the in-flight
+           batch's completion handler will call it. */
         return;
       }
 
