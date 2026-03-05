@@ -194,7 +194,7 @@ public class InternalGPS
                       activity.startActivity(myIntent);
                     }
                   });
-                builder.setNegativeButton("Cancel", null);
+                builder.setNegativeButton(android.R.string.cancel, null);
                 builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
