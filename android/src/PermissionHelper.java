@@ -498,8 +498,6 @@ public class PermissionHelper implements PermissionManager {
         /* Both are needed, will show combined disclosure */
         pendingBluetoothPermissions.add(permission);
         pendingBluetoothPermissions.add(otherBluetoothPermission);
-      } else if (pendingBluetoothPermissions.contains(otherBluetoothPermission)) {
-        pendingBluetoothPermissions.add(permission);
       }
     }
 
