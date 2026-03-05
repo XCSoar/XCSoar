@@ -52,7 +52,7 @@ final class TextEntryDialog
 
   @Override
   public void run() {
-    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
           onResult(ptr, input.getText().toString());
@@ -60,7 +60,7 @@ final class TextEntryDialog
         }
       });
 
-    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
           dialog.cancel();
