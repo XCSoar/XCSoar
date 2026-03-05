@@ -237,7 +237,11 @@ final class BluetoothHelper
       return;
 
     if (scanner != null) {
-      scanner.stopScan(this);
+      try {
+        scanner.stopScan(this);
+      } catch (SecurityException e) {
+        Log.e(TAG, "Failed to stop Bluetooth LE scan", e);
+      }
       scanner = null;
     }
   }
