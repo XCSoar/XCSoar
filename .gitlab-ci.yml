@@ -1,4 +1,4 @@
-image: docker:29.2
+image: docker:29.3
 
 stages:
  - prepare-image
