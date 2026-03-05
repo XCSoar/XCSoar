@@ -207,7 +207,9 @@ public class InternalGPS
           handler.post(new Runnable() {
               @Override
               public void run() {
-                Log.d(TAG, "Posting dialog show to main thread");
+                if (closed)
+                  return;
+
                 // Check if activity is still valid before showing dialog
                 if (activity.isFinishing() || (android.os.Build.VERSION.SDK_INT >= 17 && activity.isDestroyed())) {
                   Log.w(TAG, "Activity not valid, cannot show GPS dialog");
