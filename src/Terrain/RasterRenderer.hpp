@@ -18,6 +18,7 @@ class WindowProjection;
 class RawBitmap;
 struct RawColor;
 struct ColorRamp;
+struct ColumnContourPending;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -43,7 +44,7 @@ class RasterRenderer {
    * Step size used for slope calculations.  Slope shading is disabled
    * when this attribute is 0.
    */
-  unsigned quantisation_effective;
+  unsigned quantisation_effective = 0;
 
 #ifdef ENABLE_OPENGL
   /**
@@ -64,7 +65,14 @@ class RasterRenderer {
    */
   unsigned contour_thickness = 1;
 
-  double pixel_size;
+  /**
+   * Per-column deferred contour expansion. For contour lines thicker than 1,
+   * this array tracks upcoming pixels that are part of a contour line 
+   * from higher up and do not need to be rendered as terrain.
+   */
+  ColumnContourPending *contour_pending = nullptr;
+
+  double pixel_size = 0;
 
   RawColor *color_table = nullptr;
 
