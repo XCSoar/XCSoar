@@ -29,6 +29,8 @@ public:
   SAFOutputStream(JNIEnv *env, jobject output_stream) noexcept;
   ~SAFOutputStream() noexcept;
 
+  void Commit() override;
+
   static void Initialise(JNIEnv *env) noexcept;
 
   /* virtual methods from class OutputStream */
