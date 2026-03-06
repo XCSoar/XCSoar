@@ -649,6 +649,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/SAFHelper.cpp \
 	$(SRC)/Storage/android/SAFReader.cpp \
 	$(SRC)/Storage/android/SAFOutputStream.cpp \
+	$(SRC)/Storage/android/AndroidSAFStorageDevice.cpp \
+	$(SRC)/Storage/android/AndroidStorageMonitor.cpp \
 	$(SRC)/Android/Main.cpp
 
 else
