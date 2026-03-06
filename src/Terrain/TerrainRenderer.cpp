@@ -343,9 +343,16 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth) &&
-      !raster_renderer.UpdateQuantisation())
-    /* no change since previous frame */
-    return true;
+      !raster_renderer.UpdateQuantisation()) {
+    /* The existing terrain image is suitable for reuse.
+       But with contours: Re-use only without zoom change.
+       Otherwise we can re-use as a fast preview, but
+       re-render the higher quality views (q=2 and q=1) */
+    if (settings.contours == Contours::OFF ||
+        raster_renderer.GetQuantisationPixels() > 2 ||
+        map_projection.GetScale() == last_projection_scale)
+      return true;
+  }
 
 #else
   if (compare_projection.Compare(map_projection) &&
@@ -394,5 +401,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
                                 contour_spacing);
+
+  last_projection_scale = map_projection.GetScale();
+
   return true;
 }
