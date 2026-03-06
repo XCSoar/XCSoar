@@ -25,6 +25,7 @@ jmethodID NativeView::getNetState_method;
 jmethodID NativeView::isAutoRotateEnabled_method;
 jmethodID NativeView::getPhysicalOrientation_method;
 jmethodID NativeView::startMyService_method;
+jmethodID NativeView::launchSAFTreePicker_method;
 
 Java::TrivialClass NativeView::clsBitmap;
 jmethodID NativeView::createBitmap_method;
@@ -77,6 +78,10 @@ NativeView::Initialise(JNIEnv *env)
 
   startMyService_method =
     env->GetMethodID(cls, "startMyService", "()V");
+
+  launchSAFTreePicker_method =
+    env->GetMethodID(cls, "launchSAFTreePicker",
+                     "(Ljava/lang/String;)V");
 
   clsBitmap.Find(env, "android/graphics/Bitmap");
   createBitmap_method = env->GetStaticMethodID(
@@ -167,4 +172,12 @@ NativeView::OpenURL(JNIEnv *env, const char *url) noexcept
 {
   return env->CallBooleanMethod(obj, openURL_method,
                                 Java::String{env, url}.Get());
+}
+
+void
+NativeView::LaunchSAFTreePicker(JNIEnv *env,
+                                const char *volume_uuid) const noexcept
+{
+  env->CallVoidMethod(obj, launchSAFTreePicker_method,
+                      Java::String{env, volume_uuid}.Get());
 }
