@@ -59,13 +59,13 @@ TerrainShading(const int illum, RGB8Color color) noexcept
     int x = std::min(63, -illum);
     return RawColor(MIX(0, color.Red(), x),
                     MIX(0, color.Green(), x),
-                    MIX(64, color.Blue(), x));
+                    MIX(32, color.Blue(), x));
   } else if (illum > 0) {
     // highlight to yellow
     int x = std::min(32, illum / 2);
     return RawColor(MIX(255, color.Red(), x),
                     MIX(255, color.Green(), x),
-                    MIX(16, color.Blue(), x));
+                    MIX(196, color.Blue(), x));
   } else
     return RawColor(color.Red(), color.Green(), color.Blue());
 }
