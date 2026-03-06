@@ -10,6 +10,8 @@ enum class SlopeShading: uint8_t {
   FIXED,
   SUN,
   WIND,
+  TOP_LEFT,
+  COUNT,
 };
 
 enum class Contours: uint8_t {

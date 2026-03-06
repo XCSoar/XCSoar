@@ -19,7 +19,8 @@ Profile::LoadTerrainRendererSettings(const ProfileMap &map,
       // 0: OFF, 3: Wind
       Temp = old_profile_setting ? 3 : 0;
   }
-  settings.slope_shading = (SlopeShading)Temp;
+  if (Temp < (uint8_t)SlopeShading::COUNT)
+    settings.slope_shading = (SlopeShading)Temp;
 
   map.Get(ProfileKeys::TerrainContrast, settings.contrast);
   map.Get(ProfileKeys::TerrainBrightness, settings.brightness);

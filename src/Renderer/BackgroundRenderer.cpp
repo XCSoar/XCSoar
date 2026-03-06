@@ -57,7 +57,10 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
 {
   Angle angle;
 
-  if (settings.slope_shading == SlopeShading::WIND &&
+  if (settings.slope_shading == SlopeShading::TOP_LEFT)
+    angle = DEFAULT_SHADING_ANGLE + projection.GetScreenAngle();
+
+  else if (settings.slope_shading == SlopeShading::WIND &&
       calculated.wind_available &&
       calculated.wind.norm >= 0.5)
     angle = calculated.wind.bearing;
