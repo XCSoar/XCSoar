@@ -61,6 +61,8 @@
 #include "I2CbaroDevice.hpp"
 #include "NunchuckDevice.hpp"
 #include "VoltageDevice.hpp"
+#include "SAFHelper.hpp"
+#include "Storage/android/SAFOutputStream.hpp"
 
 #include <cassert>
 #include <mutex>
@@ -78,6 +80,7 @@ Vibrator *vibrator;
 BluetoothHelper *bluetooth_helper;
 UsbSerialHelper *usb_serial_helper;
 IOIOHelper *ioio_helper;
+SAFHelper *saf_helper;
 
 /**
  * This mutex protects shutdown against other JNI calls, to avoid
@@ -116,6 +119,9 @@ InitNative(JNIEnv *env) noexcept
   VoltageDevice::Initialise(env);
   AndroidTextEntryDialog::Initialise(env);
   CertificateUtil::Initialise(env);
+
+  SAFHelper::Initialise(env);
+  SAFOutputStream::Initialise(env);
 }
 
 gcc_visibility_default
@@ -132,6 +138,7 @@ void
 Java_org_xcsoar_NativeView_deinitNative(JNIEnv *env,
                                         [[maybe_unused]] jclass cls)
 {
+  SAFHelper::Deinitialise(env);
   AndroidTextEntryDialog::Deinitialise(env);
   CertificateUtil::Deinitialise(env);
   BMP085Device::Deinitialise(env);
@@ -304,6 +311,17 @@ try {
   AtScopeExit() {
     delete ioio_helper;
     ioio_helper = nullptr;
+  };
+
+  try {
+    saf_helper = new SAFHelper(env, *context);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to initialise SAF helper");
+  }
+
+  AtScopeExit() {
+    delete saf_helper;
+    saf_helper = nullptr;
   };
 
   ScreenGlobalInit screen_init;
