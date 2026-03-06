@@ -140,15 +140,11 @@ void
 RasterRenderer::ScanMap(const RasterMap &map,
                         const WindowProjection &projection) noexcept
 {
-  // Coordinates of the MapWindow center
-  const auto p = projection.GetScreenCenter();
   // GeoPoint corresponding to the MapWindow center
-  GeoPoint center = projection.ScreenToGeo(p);
-  // GeoPoint "next to" Gmid (depends on terrain resolution)
-  GeoPoint neighbor = projection.ScreenToGeo(p + PixelSize{quantisation_pixels});
+  GeoPoint center = projection.ScreenToGeo(projection.GetScreenCenter());
 
-  // Geographical edge length of pixel in the MapWindow center in meters
-  pixel_size = M_SQRT1_2 * center.DistanceS(neighbor);
+  // Geographical edge length of one height matrix cell in meters
+  pixel_size = quantisation_pixels / projection.GetScale();
 
   // set resolution
 
