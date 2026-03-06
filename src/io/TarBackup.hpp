@@ -3,8 +3,11 @@
 
 #pragma once
 
+#include "Storage/DirEntry.hpp"
+
 #include <string>
 #include <string_view>
+#include <vector>
 
 class OperationEnvironment;
 class Path;

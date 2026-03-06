@@ -10,7 +10,6 @@
 #include "Reader.hxx"
 #include "TarArchive.hpp"
 #include "Operation/Operation.hpp"
-#include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "Storage/StorageDevice.hpp"
 #include "Storage/StorageUtil.hpp"
@@ -182,7 +181,8 @@ try {
   restored_files = 0;
   failed_files = 0;
 
-  AllocatedPath temp_root = AllocatedPath(destination_root) + ".restore_tmp";
+  AllocatedPath temp_root =
+    AllocatedPath::Build(destination_root, Path(".restore_tmp"));
   Directory::Create(temp_root);
   if (!Directory::Exists(temp_root)) {
     error_message = "Failed to create restore temp directory.";
