@@ -505,4 +505,62 @@ public class XCSoar extends Activity implements PermissionManager {
     if (permissionHelper != null)
       permissionHelper.onDisclosureResult(accepted);
   }
+
+  // ---- SAF (Storage Access Framework) support ----
+
+  private SAFHelper safHelper;
+
+  /**
+   * Called from native code to launch the system document-tree picker
+   * for a given volume UUID.
+   *
+   * This method is intentionally non-blocking. If called from the UI
+   * thread, it launches directly; otherwise it posts to the UI thread.
+   */
+  public void launchSAFTreePicker(String volumeUuid) {
+    final Runnable launch = () -> {
+      try {
+        if (safHelper == null)
+          safHelper = new SAFHelper(this);
+
+        Intent intent = safHelper.buildOpenTreeIntent(volumeUuid);
+        startActivityForResult(intent, SAFHelper.REQUEST_CODE_OPEN_TREE);
+      } catch (Exception e) {
+        Log.e(TAG, "Failed to launch SAF tree picker", e);
+      }
+    };
+
+    if (android.os.Looper.myLooper() == android.os.Looper.getMainLooper()) {
+      launch.run();
+    } else {
+      runOnUiThread(launch);
+    }
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode,
+                                   Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == SAFHelper.REQUEST_CODE_OPEN_TREE) {
+      if (resultCode == RESULT_OK && data != null) {
+        android.net.Uri treeUri = data.getData();
+        if (treeUri != null) {
+          if (safHelper == null)
+            safHelper = new SAFHelper(this);
+          if (safHelper.persistTreePermission(treeUri)) {
+            // Notify native code so it can re-enumerate volumes.
+            onSAFPermissionGranted(treeUri.toString());
+          }
+        }
+      }
+
+    }
+  }
+
+  /**
+   * JNI callback: notify native StorageManager that a new SAF
+   * tree permission was granted.
+   */
+  private static native void onSAFPermissionGranted(String treeUri);
 }
