@@ -233,10 +233,10 @@ RasterRenderer::GenerateImage(bool do_shading,
     contour_height_scale = s;
   }
 
-  // Compute contour width 
+  // Compute contour width, aiming for 0.75 units (=3/4 of one 80 dpi pixel)
   contour_thickness = contour_height_scale < 16
     ? std::max(1u,
-               Layout::ScalePenWidth(1u * 1024u)
+               Layout::ScalePenWidth(1u * 768u)
                / (quantisation_pixels * 1024u))
     : 1;
 
