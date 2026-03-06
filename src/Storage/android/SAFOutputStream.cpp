@@ -71,6 +71,12 @@ SAFOutputStream::Write(std::span<const std::byte> src)
 }
 
 void
+SAFOutputStream::Commit()
+{
+  Close();
+}
+
+void
 SAFOutputStream::Close()
 {
   JNIEnv *env = Java::GetEnv();
@@ -78,10 +84,14 @@ SAFOutputStream::Close()
     return;
 
   env->CallVoidMethod(output_stream_.Get(), flush_method_);
-  if (env->ExceptionCheck())
+  if (env->ExceptionCheck()) {
     env->ExceptionClear();
+    throw std::runtime_error("SAFOutputStream: flush() failed");
+  }
 
   env->CallVoidMethod(output_stream_.Get(), close_method_);
-  if (env->ExceptionCheck())
+  if (env->ExceptionCheck()) {
     env->ExceptionClear();
+    throw std::runtime_error("SAFOutputStream: close() failed");
+  }
 }
