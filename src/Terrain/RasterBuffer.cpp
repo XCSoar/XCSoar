@@ -124,7 +124,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
      axis, which can have a different scale, making the factor some
      sort of ugly kludge to avoid horizontal shading stripes */
   if (interpolate &&
-      (unsigned)abs(dx) < (2 * size << RasterTraits::SUBPIXEL_BITS)) {
+      (unsigned)abs(dx) < (3 * size << RasterTraits::SUBPIXEL_BITS)) {
     /* interpolate */
 
     const auto [cy, iy] = RasterTraits::CalcSubpixel(y);
