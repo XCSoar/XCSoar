@@ -16,6 +16,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <cstdio>
+#include <string>
+#include <vector>
 
 #ifdef HAVE_POSIX
 #include <dirent.h>
@@ -23,6 +26,10 @@
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
+#endif
+
+#if defined(_WIN32)
+#include <windows.h>
 #endif
 
 void
@@ -48,6 +55,68 @@ Directory::Exists(Path path) noexcept
   DWORD attributes = GetFileAttributes(path.c_str());
   return attributes != INVALID_FILE_ATTRIBUTES &&
     (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+#endif
+}
+
+bool
+Directory::IsWritable(Path path) noexcept
+{
+#ifdef HAVE_POSIX
+  struct stat st;
+  if (stat(path.c_str(), &st) != 0)
+    return false;
+
+  if (!S_ISDIR(st.st_mode))
+    return false;
+
+  return access(path.c_str(), W_OK) == 0;
+#elif defined(_WIN32)
+  if (!Directory::Exists(path))
+    return false;
+
+  // Try to create a uniquely-named file using CreateFileA and remove it
+  // immediately. This avoids CRT path formatting and keeps overhead low.
+  std::string base = path.c_str();
+  if (base.empty())
+    return false;
+
+  const bool needs_sep = base.back() != '\\' &&
+    base.back() != '/';
+  if (needs_sep)
+    base.push_back('\\');
+
+  constexpr size_t hex_len = 8;
+  constexpr std::string_view suffix = "_wt";
+  constexpr std::string_view ext = ".tmp";
+  if (base.size() + suffix.size() + hex_len + ext.size() >= MAX_PATH)
+    return false;
+
+  const unsigned seed = GetTickCount() ^ GetCurrentProcessId();
+  for (unsigned attempt = 0; attempt < 8; ++attempt) {
+    char hexbuf[hex_len + 1];
+    std::snprintf(hexbuf, sizeof(hexbuf), "%08x", seed ^ attempt);
+
+    std::string tmpname = base;
+    tmpname.append(suffix);
+    tmpname.append(hexbuf);
+    tmpname.append(ext);
+
+    HANDLE h = CreateFile(tmpname.c_str(),
+                          GENERIC_WRITE,
+                          FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                          nullptr,
+                          CREATE_NEW,
+                          FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
+                          nullptr);
+    if (h != INVALID_HANDLE_VALUE) {
+      CloseHandle(h);
+      return true;
+    }
+  }
+  return false;
+#else
+  // assume writability
+  return true;
 #endif
 }
 
@@ -263,6 +332,75 @@ Directory::VisitSpecificFiles(Path path, const char* filter,
 }
 
 bool
+Directory::Remove(Path path) noexcept
+{
+  if (!Exists(path))
+    return true;
+
+#ifdef HAVE_POSIX
+  DIR *dir = opendir(path.c_str());
+  if (dir == nullptr)
+    return false;
+
+  bool ok = true;
+  char child_path[MAX_PATH];
+  strcpy(child_path, path.c_str());
+  const size_t base_len = strlen(child_path);
+  child_path[base_len] = '/';
+
+  struct dirent *ent;
+  while ((ent = readdir(dir)) != nullptr) {
+    if (*ent->d_name == '.')
+      continue;
+
+    strcpy(child_path + base_len + 1, ent->d_name);
+
+    struct stat st;
+    if (stat(child_path, &st) < 0) {
+      ok = false;
+      continue;
+    }
+
+    if (S_ISDIR(st.st_mode))
+      ok &= Remove(Path(child_path));
+    else
+      ok &= (unlink(child_path) == 0);
+  }
+
+  closedir(dir);
+  return ok && rmdir(path.c_str()) == 0;
+#else
+  char search_path[MAX_PATH];
+  strcpy(search_path, path.c_str());
+  strcat(search_path, DIR_SEPARATOR_S "*");
+
+  WIN32_FIND_DATA fd;
+  HANDLE hFind = FindFirstFile(search_path, &fd);
+  if (hFind == INVALID_HANDLE_VALUE)
+    return RemoveDirectoryA(path.c_str());
+
+  bool ok = true;
+  do {
+    if (IsDots(fd.cFileName))
+      continue;
+
+    char child_path[MAX_PATH];
+    strcpy(child_path, path.c_str());
+    strcat(child_path, DIR_SEPARATOR_S);
+    strcat(child_path, fd.cFileName);
+
+    if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+      ok &= Remove(Path(child_path));
+    else
+      ok &= (DeleteFile(child_path) != 0);
+  } while (FindNextFile(hFind, &fd));
+
+  FindClose(hFind);
+  return ok && RemoveDirectoryA(path.c_str());
+#endif
+}
+
+bool
 File::ExistsAny(Path path) noexcept
 {
 #ifdef HAVE_POSIX
@@ -398,6 +536,34 @@ File::ReadString(Path path, char *buffer, size_t size) noexcept
 
   buffer[nbytes] = '\0';
   return true;
+}
+
+bool
+File::ReadLink([[maybe_unused]] Path path,
+               [[maybe_unused]] std::string &out) noexcept
+{
+#ifdef HAVE_POSIX
+  // readlink does not null-terminate; resize buffer as needed
+  size_t bufsize = 256;
+  std::vector<char> buf;
+
+  while (true) {
+    buf.resize(bufsize);
+    ssize_t n = readlink(path.c_str(), buf.data(), buf.size());
+    if (n < 0)
+      return false;
+    if (static_cast<size_t>(n) < buf.size()) {
+      out.assign(buf.data(), static_cast<size_t>(n));
+      return true;
+    }
+    // truncated, increase buffer and retry
+    bufsize *= 2;
+    if (bufsize > 65536)
+      return false;
+  }
+#else
+  return false;
+#endif
 }
 
 bool

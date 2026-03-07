@@ -10,6 +10,7 @@ class OutputStream {
 public:
 	OutputStream() = default;
 	OutputStream(const OutputStream &) = delete;
+	virtual ~OutputStream() noexcept = default;
 
 	/**
 	 * Throws std::exception on error.

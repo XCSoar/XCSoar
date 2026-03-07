@@ -19,6 +19,13 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
+	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
+	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
+	$(SRC)/Dialogs/DataManagement/BackupRestorePanel.cpp \
+	$(SRC)/Dialogs/DataManagement/StorageLocationPickerDialog.cpp \
+	$(SRC)/Dialogs/DataManagement/ArchiveUtil.cpp \
+	$(SRC)/Dialogs/DataManagement/FileTransferUtil.cpp \
+	$(SRC)/Dialogs/DataManagement/IgcMetaCache.cpp \
 	$(SRC)/Dialogs/Device/PortDataField.cpp \
 	$(SRC)/Dialogs/Device/PortPicker.cpp \
 	$(SRC)/Dialogs/Device/DeviceEditWidget.cpp \
@@ -245,6 +252,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/util/MD5.cpp \
 	$(SRC)/system/OpenLink.cpp \
 	$(SRC)/util/MarkdownParser.cpp \
+	$(SRC)/util/UnescapeCString.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
@@ -485,6 +493,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/Repository/FileRepository.cpp \
 	$(SRC)/Repository/Parser.cpp \
 	\
+	$(SRC)/Storage/PlatformStorageMonitor.cpp \
+	$(SRC)/Storage/PlatformStorageHotplugMonitor.cpp \
+	$(SRC)/Storage/StorageManager.cpp \
+	$(SRC)/Storage/StorageEvents.cpp \
+	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
 	\
@@ -543,7 +556,24 @@ XCSOAR_SOURCES := \
 	$(SRC)/Monitor/AllMonitors.cpp \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \
-	$(SRC)/Hardware/Battery.cpp
+	$(SRC)/Hardware/Battery.cpp \
+
+ifneq ($(TARGET),ANDROID)
+ifeq ($(TARGET_IS_LINUX),y)
+	XCSOAR_SOURCES += \
+		$(SRC)/Storage/linux/LinuxStorageDevice.cpp \
+		$(SRC)/Storage/linux/LinuxStorageMonitor.cpp \
+		$(SRC)/Storage/linux/LinuxStorageHotplugMonitor.cpp
+endif
+endif
+
+ifeq ($(HAVE_WIN32),y)
+	XCSOAR_SOURCES += \
+		$(SRC)/Storage/win/WindowsStorageDevice.cpp \
+		$(SRC)/Storage/win/WindowsStorageMonitor.cpp \
+		$(SRC)/Storage/win/WindowsStorageHotplugMonitor.cpp \
+		$(SRC)/Storage/win/WinHotplugForward.cpp
+endif
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
