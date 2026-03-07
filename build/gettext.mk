@@ -6,7 +6,7 @@ MSGCAT = msgcat
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
 MSGATTRIB = msgattrib
-GETTEXT_NO_WRAP =
+GETTEXT_NO_WRAP = --no-wrap
 
 GETTEXT_PACKAGE = xcsoar
 GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
@@ -46,9 +46,13 @@ mo: $(MO_FILES)
 
 update-po: po/$(GETTEXT_PACKAGE).pot
 	$(Q)for i in $(PO_FILES); do \
-	  $(MSGMERGE) $(GETTEXT_NO_WRAP) --previous -o $$i $$i po/$(GETTEXT_PACKAGE).pot; \
+	  tmp=$$(mktemp); \
+	  $(MSGMERGE) $(GETTEXT_NO_WRAP) --previous -o $$tmp $$i po/$(GETTEXT_PACKAGE).pot; \
 	  $(MSGATTRIB) --clear-fuzzy --empty --no-obsolete --clear-previous \
-	    $(GETTEXT_NO_WRAP) -o $$i $$i; \
+	    $(GETTEXT_NO_WRAP) -o $$tmp $$tmp; \
+	  $(PYTHON) $(topdir)/tools/update_po_low_churn.py \
+	    --original $$i --normalized $$tmp; \
+	  rm -f $$tmp; \
 	done
 
 $(MO_FILES): $(OUT)/po/%.mo: po/%.po | $(OUT)/po/dirstamp
