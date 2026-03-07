@@ -565,6 +565,29 @@ public class PermissionHelper implements PermissionManager {
         it.remove();
       }
     }
+
+    /* Remove queued requests that reference this handler. */
+    java.util.Iterator<PendingPermissionRequest> queue_it =
+      permissionQueue.iterator();
+    while (queue_it.hasNext()) {
+      PendingPermissionRequest request = queue_it.next();
+      PermissionHandler value = request.handler;
+      if ((handler == null && value == null) ||
+          (handler != null && handler.equals(value))) {
+        queue_it.remove();
+      }
+    }
+
+    /* Clear pending disclosure state for this handler. */
+    if ((handler == null && pendingDisclosureHandler == null) ||
+        (handler != null && handler.equals(pendingDisclosureHandler))) {
+      pendingDisclosurePermission = null;
+      pendingDisclosureHandler = null;
+      pendingDisclosureRequestBothBluetooth = false;
+      pendingDisclosureRequestBackgroundAfter = false;
+      isProcessingPermission = false;
+      processNextPermission();
+    }
   }
 
   @Override
