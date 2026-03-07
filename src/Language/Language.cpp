@@ -6,7 +6,6 @@
 #include "util/UTF8.hpp"
 
 #include <cassert>
-#include <string.h>
 
 #if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
 
@@ -76,3 +75,4 @@ reset_gettext_cache()
 }
 
 #endif /* !HAVE_POSIX */
+

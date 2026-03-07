@@ -28,7 +28,7 @@ MacCreadyCaption(char *sTmp, const GlidePolar &glide_polar)
             _("Vopt"),
             (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
             Units::GetSpeedName(),
-            _("Vave"),
+            C_("Average velocity abbreviation", "Vave"),
             (int)Units::ToUserTaskSpeed(glide_polar.GetAverageSpeed()),
             Units::GetTaskSpeedName());
 }

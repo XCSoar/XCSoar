@@ -29,6 +29,7 @@ install_base() {
   apt-get install ${APTOPTS[*]} make \
     librsvg2-bin xsltproc \
     imagemagick gettext sox \
+    python3-polib \
     git quilt zip \
     m4 automake wget \
     pkg-config cmake ninja-build ccache \
