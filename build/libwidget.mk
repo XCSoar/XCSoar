@@ -34,7 +34,8 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/QuickGuidePageWidget.cpp \
 	$(SRC)/Widget/ViewImageWidget.cpp \
 	$(SRC)/Widget/MultiSelectListWidget.cpp \
-	$(SRC)/Widget/FileMultiSelectWidget.cpp
+	$(SRC)/Widget/FileMultiSelectWidget.cpp \
+	$(SRC)/Widget/PropertyWidgetContainer.cpp
 
 WIDGET_DEPENDS = SCREEN
 
