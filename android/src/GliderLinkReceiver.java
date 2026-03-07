@@ -29,7 +29,8 @@ class GliderLinkReceiver
     this.context = context;
     this.listener = listener;
 
-    BroadcastUtil.registerReceiver(context, this, new IntentFilter(ACTION));
+    /* Use registerExportedReceiver to allow external app broadcasts (GliderLink) */
+    BroadcastUtil.registerExportedReceiver(context, this, new IntentFilter(ACTION));
   }
 
   @Override

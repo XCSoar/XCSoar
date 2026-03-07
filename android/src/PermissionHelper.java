@@ -464,16 +464,16 @@ public class PermissionHelper implements PermissionManager {
         }
       }
 
-      /* If the other Bluetooth permission is already being processed (in pendingBluetoothPermissions),
-         or if it's already granted, skip this one - it will be handled when the other one is processed */
-      if (pendingBluetoothPermissions.contains(otherBluetoothPermission) ||
-          (!otherNeeded && isBluetoothPermission(permission))) {
-        /* Other Bluetooth permission is already being processed or already granted.
-           Skip this one and mark as granted since it will be handled together. */
+      /* If the other Bluetooth permission is already being
+         processed (in pendingBluetoothPermissions), the in-flight
+         request will ask for both permissions as a batch.
+         Re-queue this request so the handler is called with the
+         real grant/deny result once the batch completes. */
+      if (pendingBluetoothPermissions.contains(otherBluetoothPermission)) {
+        permissionQueue.offer(request);
         isProcessingPermission = false;
-        if (handler != null)
-          handler.onRequestPermissionsResult(true);
-        processNextPermission();
+        /* Don't call processNextPermission() — the in-flight
+           batch's completion handler will call it. */
         return;
       }
 
@@ -498,8 +498,6 @@ public class PermissionHelper implements PermissionManager {
         /* Both are needed, will show combined disclosure */
         pendingBluetoothPermissions.add(permission);
         pendingBluetoothPermissions.add(otherBluetoothPermission);
-      } else if (pendingBluetoothPermissions.contains(otherBluetoothPermission)) {
-        pendingBluetoothPermissions.add(permission);
       }
     }
 
@@ -554,7 +552,42 @@ public class PermissionHelper implements PermissionManager {
 
   @Override
   public synchronized void cancelRequestPermission(PermissionHandler handler) {
-    permissionHandlers.values().remove(handler);
+    /* Remove all entries whose value matches the provided handler.
+       Use iterator to safely remove entries while iterating.
+       Use equals() to match the behavior of the original values().remove() implementation. */
+    java.util.Iterator<Map.Entry<Integer, PermissionHandler>> it =
+      permissionHandlers.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry<Integer, PermissionHandler> entry = it.next();
+      PermissionHandler value = entry.getValue();
+      if ((handler == null && value == null) ||
+          (handler != null && handler.equals(value))) {
+        it.remove();
+      }
+    }
+
+    /* Remove queued requests that reference this handler. */
+    java.util.Iterator<PendingPermissionRequest> queue_it =
+      permissionQueue.iterator();
+    while (queue_it.hasNext()) {
+      PendingPermissionRequest request = queue_it.next();
+      PermissionHandler value = request.handler;
+      if ((handler == null && value == null) ||
+          (handler != null && handler.equals(value))) {
+        queue_it.remove();
+      }
+    }
+
+    /* Clear pending disclosure state for this handler. */
+    if ((handler == null && pendingDisclosureHandler == null) ||
+        (handler != null && handler.equals(pendingDisclosureHandler))) {
+      pendingDisclosurePermission = null;
+      pendingDisclosureHandler = null;
+      pendingDisclosureRequestBothBluetooth = false;
+      pendingDisclosureRequestBackgroundAfter = false;
+      isProcessingPermission = false;
+      processNextPermission();
+    }
   }
 
   @Override

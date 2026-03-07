@@ -29,5 +29,19 @@ final class BroadcastUtil {
       context.registerReceiver(receiver, filter);
     }
   }
+
+  /**
+   * Register an exported broadcast receiver that can receive broadcasts from external apps.
+   * On API 33+ (TIRAMISU), uses the 3-arg overload with RECEIVER_EXPORTED flag.
+   * On API < 33, uses the 2-arg overload (receivers are exported by default on older APIs).
+   */
+  static void registerExportedReceiver(Context context, BroadcastReceiver receiver,
+                                        IntentFilter filter) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      context.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+    } else {
+      context.registerReceiver(receiver, filter);
+    }
+  }
 }
 
