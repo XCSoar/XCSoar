@@ -41,6 +41,55 @@ FormatGlideResult(char *buffer, size_t size,
   return nullptr;
 }
 
+static const char *
+GetWaypointTypeName(Waypoint::Type type) noexcept
+{
+  switch (type) {
+  case Waypoint::Type::NORMAL:
+    return _("Turnpoint");
+  case Waypoint::Type::AIRFIELD:
+    return _("Airport");
+  case Waypoint::Type::OUTLANDING:
+    return _("Landable");
+  case Waypoint::Type::MOUNTAIN_PASS:
+    return _("Mountain Pass");
+  case Waypoint::Type::MOUNTAIN_TOP:
+    return _("Mountain Top");
+  case Waypoint::Type::OBSTACLE:
+    return _("Transmitter Mast");
+  case Waypoint::Type::TOWER:
+    return _("Tower");
+  case Waypoint::Type::TUNNEL:
+    return _("Tunnel");
+  case Waypoint::Type::BRIDGE:
+    return _("Bridge");
+  case Waypoint::Type::POWERPLANT:
+    return _("Power Plant");
+  case Waypoint::Type::VOR:
+    return _("VOR");
+  case Waypoint::Type::NDB:
+    return _("NDB");
+  case Waypoint::Type::DAM:
+    return _("Dam");
+  case Waypoint::Type::CASTLE:
+    return _("Castle");
+  case Waypoint::Type::INTERSECTION:
+    return _("Intersection");
+  case Waypoint::Type::MARKER:
+    return _("Marker");
+  case Waypoint::Type::REPORTING_POINT:
+    return _("Control Point");
+  case Waypoint::Type::PGTAKEOFF:
+    return _("PG Take Off");
+  case Waypoint::Type::PGLANDING:
+    return _("PG Landing Zone");
+  case Waypoint::Type::THERMAL_HOTSPOT:
+    return _("Thermal hotspot");
+  }
+
+  return nullptr;
+}
+
 void
 WaypointInfoWidget::AddGlideResult(const char *label,
                                    const GlideResult &result) noexcept
@@ -88,6 +137,20 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (!waypoint->comment.empty())
     AddMultiLine(waypoint->comment.c_str());
 
+  AddReadOnly(_("Type"), nullptr, GetWaypointTypeName(waypoint->type));
+
+  if (!waypoint->shortname.empty())
+    AddReadOnly(_("Short Name"), nullptr, waypoint->shortname.c_str());
+
+  if (FormatGeoPoint(waypoint->location,
+                     buffer.buffer(), buffer.capacity()) != nullptr)
+    AddReadOnly(_("Location"), nullptr, buffer);
+
+  if (waypoint->has_elevation)
+    AddReadOnly(_("Elevation"), nullptr, FormatUserAltitude(waypoint->elevation));
+  else
+    AddReadOnly(_("Elevation"), nullptr, "?");
+
   if (waypoint->radio_frequency.Format(buffer.buffer(),
                                       buffer.capacity()) != nullptr) {
     buffer += " MHz";
@@ -105,23 +168,21 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
 
     char length_buffer[16];
     FormatSmallUserDistance(length_buffer, waypoint->runway.GetLength());
-    buffer += length_buffer;
+
+    if (waypoint->runway.IsWidthDefined()) {
+      char width_buffer[16];
+      FormatSmallUserDistance(width_buffer, waypoint->runway.GetWidth());
+
+      StaticString<64> runway_size;
+      runway_size.UnsafeFormat("%s x %s", length_buffer, width_buffer);
+      buffer += runway_size;
+    } else {
+      buffer += length_buffer;
+    }
   }
 
   if (!buffer.empty())
     AddReadOnly(_("Runway"), nullptr, buffer);
-
-  if (!waypoint->shortname.empty())
-    AddReadOnly(_("Short Name"), nullptr, waypoint->shortname.c_str());
-
-  if (FormatGeoPoint(waypoint->location,
-                     buffer.buffer(), buffer.capacity()) != nullptr)
-    AddReadOnly(_("Location"), nullptr, buffer);
-
-  if (waypoint->has_elevation)
-    AddReadOnly(_("Elevation"), nullptr, FormatUserAltitude(waypoint->elevation));
-  else
-    AddReadOnly(_("Elevation"), nullptr, "?");
 
   if (basic.time_available && basic.date_time_utc.IsDatePlausible()) {
     const SunEphemeris::Result sun =
