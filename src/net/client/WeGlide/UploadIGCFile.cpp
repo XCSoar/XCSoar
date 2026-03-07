@@ -106,6 +106,13 @@ UploadFile(Path igc_path)
   uint32_t glider_id = CommonInterface::GetComputerSettings().plane
     .weglide_glider_type;
 
+  if (glider_id == 0) {
+    ShowMessageBox(_("Please set WeGlide Aircraft Type in Plane profile "
+                     "before uploading."),
+                   _("WeGlide Upload"), MB_OK | MB_ICONINFORMATION);
+    return {};
+  }
+
   PluggableOperationEnvironment env;
 
   auto value = ShowCoFunctionDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
