@@ -838,11 +838,21 @@ jobs:
 
       - name: Upload AAB and metadata to Play Store
         run: |
-          AAB_PATH="android-bundle/output/ANDROID_BUNDLE/bin/XCSoar.aab"
-          if [ ! -f "$AAB_PATH" ]; then
-            echo "AAB not found at $AAB_PATH"
+          AAB_PATH=""
+          for candidate in \
+            "android-bundle/output/ANDROID_BUNDLE/bin/XCSoar.aab" \
+            "android-bundle/XCSoar.aab" \
+            "XCSoar.aab"; do
+            if [ -f "$candidate" ]; then
+              AAB_PATH="$candidate"
+              break
+            fi
+          done
+          if [ -z "$AAB_PATH" ]; then
+            echo "AAB not found in expected locations"
             exit 1
           fi
+          echo "Using AAB at: $AAB_PATH"
           fastlane supply \
             --package_name org.xcsoar.play \
             --aab "$AAB_PATH" \
