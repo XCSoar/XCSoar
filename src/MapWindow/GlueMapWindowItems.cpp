@@ -61,9 +61,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (airspace_database)
     builder.AddVisibleAirspace(*airspace_database,
                                airspace_renderer.GetWarningManager(),
-                               computer_settings.airspace,
-                               settings.airspace, basic,
-                               calculated);
+                               settings.airspace);
 
   if (visible_projection.GetMapScale() <= 4000) {
     builder.AddThermals(calculated.thermal_locator, basic, calculated);
