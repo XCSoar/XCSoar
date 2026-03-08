@@ -832,11 +832,12 @@ jobs:
             exit 1
           fi
           fastlane supply \
-            package_name:org.xcsoar.play \
-            aab_path:"$AAB_PATH" \
-            metadata_path:fastlane/metadata/android \
-            json_key:play-key.json \
-            track:internal
+            --package_name org.xcsoar.play \
+            --aab "$AAB_PATH" \
+            --metadata_path fastlane/metadata/android \
+            --json_key play-key.json \
+            --track internal \
+            --skip_upload_changelogs true
 
       - name: Remove key
         if: always()

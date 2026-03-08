@@ -41,11 +41,12 @@ jobs:
       - name: Upload metadata to Play Store
         run: |
           fastlane supply \
-            package_name:org.xcsoar.play \
-            metadata_path:fastlane/metadata/android \
-            json_key:play-key.json \
-            skip_upload_apk:true \
-            skip_upload_aab:true
+            --package_name org.xcsoar.play \
+            --metadata_path fastlane/metadata/android \
+            --json_key play-key.json \
+            --skip_upload_apk true \
+            --skip_upload_aab true \
+            --skip_upload_changelogs true
 
       - name: Remove key
         if: always()
