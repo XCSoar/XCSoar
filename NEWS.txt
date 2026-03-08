@@ -1,6 +1,7 @@
 Version 7.44 - not yet released
 * WaypointDetails
   - Add pan capability to the waypoint details image #1127
+  - Show waypoint type and runway width
 * calculations
   - remove FFVV NetCoupe #1259
   - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
@@ -23,6 +24,7 @@ Version 7.44 - not yet released
   - fix problem (introduced in v7.42) of first waypoint in user.cup waypoint
     file being ignored or being overwritten by any Waypoint Editor dialog
     function.
+  - add CUPX read support for waypoint detail data and embedded files
   - read PG landing waypoint type correctly in cup files #1539
   - fix line zone gate width from CUP file R1 parameter #2029
   - CUP files: correctly parse radius values with units (m, nm, ml) and
@@ -36,7 +38,7 @@ Version 7.44 - not yet released
   - fix text field truncation in waypoint editor (32-character limit
     removed) #1541
   - fix waypoint editor silently discarding altitude and type changes
-  - checklist: use .xcc extension, fix crash with empty profile path #2094
+  - checklists: use .xcc extension, fix crash with empty profile path #2094
   - checklists: add Markdown support (bold, links, checkboxes)
   - fix home waypoint lost on restart due to async terrain loading #2169
   - fix profile migration ordering of old waypoint/airspace keys
