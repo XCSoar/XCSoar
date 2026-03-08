@@ -366,7 +366,7 @@ jobs:
 
       - name: Prepare signing key
         shell: bash
-        if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && (startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && matrix.target == 'ANDROID_BUNDLE')) }}
+        if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master') }}
         run: |
           if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ]; then
             mkdir -p ~/.android/
@@ -506,8 +506,7 @@ jobs:
               BUNDLE=y
               PLAY=y
             fi
-            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ] &&
-               [ "${{ github.ref }}" = "refs/heads/master" ] &&
+            if [ "${{ github.ref }}" = "refs/heads/master" ] &&
                [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ] &&
                [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] &&
                [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
