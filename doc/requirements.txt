@@ -1,2 +1,2 @@
-setuptools<81
+setuptools<83
 sphinxcontrib-blockdiag==3.0.0
