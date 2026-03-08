@@ -17,9 +17,11 @@ IM_DISABLE_ALPHA := $(if $(IM_BIN),-alpha Off,+matte)
 %_rgb.png: %.png
 	$(Q)$(IM_CONVERT) $< -background white -flatten $(IM_DISABLE_ALPHA) +dither -colors 64 $@
 
-# tile both images
+# tile both images side-by-side.
+# Use convert/+append instead of montage to avoid implicit font lookup
+# (montage may fail on CI runners with no default font configured).
 %_tile.png: %_alpha.png %_rgb.png
-	$(Q)$(IM_MONTAGE) -tile 2x1 -geometry +0+0 $^ -depth 8 $@
+	$(Q)$(IM_CONVERT) $^ +append -depth 8 $@
 
 # Convert a raster graphic file to 8 bit BMP.
 #
