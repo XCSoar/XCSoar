@@ -365,7 +365,7 @@ jobs:
 
       - name: Prepare signing key
         shell: bash
-        if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && startsWith(github.ref, 'refs/tags/v') }}
+        if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && (startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && matrix.target == 'ANDROID_BUNDLE')) }}
         run: |
           if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ]; then
             mkdir -p ~/.android/
@@ -505,13 +505,24 @@ jobs:
               BUNDLE=y
               PLAY=y
             fi
-            make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-            output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
-            mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
-            output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
-            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
-              mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug.aab \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
+            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ] &&
+               [ "${{ github.ref }}" = "refs/heads/master" ] &&
+               [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ] &&
+               [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] &&
+               [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
+              ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
+              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=n USE_CCACHE=y V=2 \
+              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
+              ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
+            else
+              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
+              mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
+              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+              if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
+                mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug.aab \
+                output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
+              fi
             fi
           elif [ ${{ matrix.target }} = "WIN64" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
