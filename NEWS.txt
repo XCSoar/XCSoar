@@ -119,6 +119,7 @@ Version 7.44 - not yet released
   - fix UTF-8 text wrapping crash with non-ASCII characters #2184 #2185
   - display "---" instead of "???" for invalid map item values
   - fix profile not saved after team code, plane, or NOAA changes #2171
+  - gettext/po: translate updated entries in 32 language catalogs
 
 * Android
   - add Google Play compliant permission disclosure pages for location,
