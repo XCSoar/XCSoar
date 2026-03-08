@@ -42,6 +42,101 @@ To use a custom file, go to
 **Menu > Config > System > Look > Language, Input > Events**, select
 your ``.xci`` file, and restart XCSoar.
 
+Default key bindings
+~~~~~~~~~~~~~~~~~~~~
+
+The built-in ``type=key`` mapping in :file:`Data/Input/default.xci`
+currently uses this grouped layout for ``F1`` -- ``F12``:
+
+- **F1 -- F4 (safety / immediate cockpit use)**: quick access to
+  immediate in-flight interactions (quick menu, checklist, FLARM
+  traffic, airspace warnings).
+- **F5 -- F8 (navigation / task flow)**: lookup and task workflow
+  actions (alternates, goto, target, task setup).
+- **F9 -- F12 (analysis / system views)**: analysis and status pages,
+  plus basic setup.
+
+.. list-table::
+ :widths: 15 45 40
+ :header-rows: 1
+
+ * - Key
+   - Default event
+   - Group
+ * - ``F1``
+   - ``QuickMenu``
+   - Safety / immediate cockpit use
+ * - ``F2``
+   - ``Checklist``
+   - Safety / immediate cockpit use
+ * - ``F3``
+   - ``FlarmTraffic``
+   - Safety / immediate cockpit use
+ * - ``F4``
+   - ``AirspaceWarnings``
+   - Safety / immediate cockpit use
+ * - ``F5``
+   - ``Setup Alternates``
+   - Navigation / task flow
+ * - ``F6``
+   - ``GotoLookup``
+   - Navigation / task flow
+ * - ``F7``
+   - ``Setup Target``
+   - Navigation / task flow
+ * - ``F8``
+   - ``Setup Task``
+   - Navigation / task flow
+ * - ``F9``
+   - ``Analysis``
+   - Analysis / system views
+ * - ``F10``
+   - ``ThermalAssistant``
+   - Analysis / system views
+ * - ``F11``
+   - ``Status all``
+   - Analysis / system views
+ * - ``F12``
+   - ``Setup Basic``
+   - Analysis / system views
+
+In ``mode=default``, the number row currently uses this grouping:
+
+- **3 and 5 (settings toggles)**: direct access to MC mode and ballast
+  toggle.
+- **6 -- 9 (task workflow shortcuts)**: setup/basic task actions and
+  waypoint/pilot-event actions.
+- **0 (task control toggle)**: arm/disarm automatic waypoint advance.
+
+.. list-table::
+ :widths: 15 45 40
+ :header-rows: 1
+
+ * - Key
+   - Default event (``mode=default``)
+   - Group
+ * - ``3``
+   - ``Mode mc``
+   - Settings toggles
+ * - ``5``
+   - ``Ballast toggle``
+   - Settings toggles
+ * - ``6``
+   - ``Setup Basic``
+   - Task workflow shortcuts
+ * - ``7``
+   - ``AdjustWaypoint previousarm``
+   - Task workflow shortcuts
+ * - ``8``
+   - ``AdjustWaypoint nextarm``
+   - Task workflow shortcuts
+ * - ``9``
+   - ``PilotEvent``
+   - Task workflow shortcuts
+ * - ``0``
+   - ``ArmAdvance toggle``
+   - Task control toggle
+
 File format
 -----------
 
