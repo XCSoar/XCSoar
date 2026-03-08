@@ -220,7 +220,8 @@ jobs:
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ matrix.target }}-ccache
+          key: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && 'ANDROIDFAT-ccache' || format('{0}-ccache', matrix.target) }}
+          max-size: 3G
 
       - name: Configure ccache for cross-compilation
         if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
