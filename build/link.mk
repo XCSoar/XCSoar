@@ -53,6 +53,14 @@ $(2)_DEPENDS_FLAT = $$(call flat-depends,$(2))
 $(2)_LDADD += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_LDADD))
 $(2)_LDLIBS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_LDLIBS))
 
+ifeq ($$(TARGET_IS_DARWIN),y)
+ifneq ($$(filter $$(SRC)/LocalPath.cpp,$$($(2)_SOURCES)),)
+ifeq ($$(filter $$(SRC)/Apple/PathProvider.cpp,$$($(2)_SOURCES)),)
+$(2)_SOURCES += $$(SRC)/Apple/PathProvider.cpp
+endif
+endif
+endif
+
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
