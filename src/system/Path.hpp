@@ -101,6 +101,13 @@ public:
   [[gnu::pure]]
   Path RelativeTo(Path parent) const noexcept;
 
+  /**
+   * Check whether the path contains ".." segments that could
+   * escape a directory hierarchy (path traversal).
+   */
+  [[gnu::pure]]
+  bool HasPathTraversal() const noexcept;
+
   [[gnu::pure]]
   bool EndsWithIgnoreCase(const_pointer needle) const noexcept;
 
