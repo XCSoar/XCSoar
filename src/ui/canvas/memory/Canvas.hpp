@@ -56,6 +56,20 @@ public:
     buffer = _buffer;
   }
 
+  /**
+   * Copy drawing state (pen/brush/font/colors) from another canvas.
+   * This is useful when painting to temporary canvases that should
+   * behave exactly like the caller's canvas.
+   */
+  void CopyStateFrom(const Canvas &other) noexcept {
+    pen = other.pen;
+    brush = other.brush;
+    font = other.font;
+    text_color = other.text_color;
+    background_color = other.background_color;
+    background_mode = other.background_mode;
+  }
+
 protected:
   /**
    * Returns true if the outline should be drawn after the area has
