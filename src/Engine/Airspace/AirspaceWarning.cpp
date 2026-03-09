@@ -12,7 +12,6 @@ AirspaceWarning::SaveState() noexcept
   state_last = state;
   state = WARNING_CLEAR;
   expired_last = expired;
-  is_exit_warning = false;
   covered_by_clearance = false;
   interval_task_ = AirspaceWarningInterval::Invalid();
   interval_filter_ = AirspaceWarningInterval::Invalid();
@@ -93,8 +92,8 @@ AirspaceWarning::IsAckExpired() const noexcept
   if (covered_by_clearance)
     return false;
 
-  // Clearance suppresses entry warnings but not exit warnings
-  if (cleared_day && !is_exit_warning)
+  // Clearance suppresses warnings against this airspace itself.
+  if (cleared_day)
     return false;
 
   if (ack_day)

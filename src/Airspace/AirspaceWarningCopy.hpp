@@ -34,8 +34,7 @@ public:
   }
 
   void Visit(const AirspaceWarning& as) noexcept {
-    if (!as.IsCoveredByClearance() &&
-        !(as.IsCleared() && !as.IsExitWarning())) {
+    if (!as.IsCoveredByClearance() && !as.IsCleared()) {
       if (as.IsInside()) {
         ids_inside.checked_append(&as.GetAirspace());
       } else if (as.IsWarning()) {

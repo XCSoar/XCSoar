@@ -880,7 +880,6 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       } else {
         w.ForceState(nearest_method);
         w.SetSolution(sol);
-        w.SetExitWarning(true);
       }
     }
   }
