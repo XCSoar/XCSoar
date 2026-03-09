@@ -78,8 +78,9 @@ Path::IsValidFilename() const noexcept
     return false;
   if (empty())
     return false;
-
-#ifdef _WIN32  
+  if (StringIsEqual(c_str(), ".") || StringIsEqual(c_str(), ".."))
+    return false;
+#ifdef _WIN32
   const char *invalid_chars = "<>:\"/\\|?*";
   size_t len = StringLength(c_str());
 
