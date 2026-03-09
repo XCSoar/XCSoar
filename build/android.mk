@@ -304,8 +304,8 @@ PNG8a := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_SPLASH_3
 $(PNG8a): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
 	$(Q)cp $< $@
 
-####### white title for dark mode (RGBA PNGs with alpha)
-PNG8 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_TITLE_WHITE_320_RGBA) $(PNG_TITLE_WHITE_640_RGBA))
+####### title PNGs with alpha (normal + white)
+PNG8 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_TITLE_320_RGBA) $(PNG_TITLE_WHITE_320_RGBA) $(PNG_TITLE_WHITE_640_RGBA))
 $(PNG8): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
 	$(Q)cp $< $@
 
