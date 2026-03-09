@@ -22,7 +22,11 @@ Glue::Glue(CurlGlobal &curl) noexcept
 void
 Glue::OnTimer(const MoreData &basic, [[maybe_unused]] const DerivedInfo &calculated)
 {
-  if (!settings.enabled || !basic.time_available || !basic.location_available)
+  if (!settings.enabled || settings.app_key.empty() ||
+      settings.device_id.empty())
+    return;
+
+  if (!basic.time_available || !basic.gps.real || !basic.location_available)
     return;
 
   if (!clock.CheckUpdate(std::chrono::seconds(settings.interval)))
@@ -32,8 +36,22 @@ Glue::OnTimer(const MoreData &basic, [[maybe_unused]] const DerivedInfo &calcula
     return;
 
   Sample sample;
-  sample.timestamp = basic.date_time_utc.ToTimePoint();
+  sample.timestamp = basic.date_time_utc.IsDatePlausible()
+    ? basic.date_time_utc.ToTimePoint()
+    : std::chrono::system_clock::now();
   sample.location = basic.location;
+  sample.altitude = basic.NavAltitudeAvailable() && basic.nav_altitude > 0
+    ? basic.nav_altitude
+    : 0;
+  sample.speed = basic.ground_speed_available
+    ? basic.ground_speed
+    : 0;
+  sample.course = basic.track_available
+    ? basic.track.AsBearing().Degrees()
+    : 0;
+  sample.vertical_speed = basic.brutto_vario_available
+    ? basic.brutto_vario
+    : 0;
 
   inject_task.Start(Tick(settings, sample), BIND_THIS_METHOD(OnCompletion));
 }
