@@ -264,6 +264,16 @@ constexpr std::string_view LiveTrack24TrackingInterval = "TrackingInterval";
 constexpr std::string_view LiveTrack24TrackingVehicleType = "TrackingVehicleType";
 constexpr std::string_view LiveTrack24TrackingVehicleName = "TrackingVehicleName";
 
+constexpr std::string_view PureTrackEnabled = "PureTrackEnabled";
+constexpr std::string_view PureTrackInsertEndpoint = "PureTrackInsertEndpoint";
+constexpr std::string_view PureTrackInsertInterval = "PureTrackInsertInterval";
+constexpr std::string_view PureTrackInsertAppKey = "PureTrackInsertAppKey";
+constexpr std::string_view PureTrackInsertDeviceID = "PureTrackInsertDeviceID";
+constexpr std::string_view PureTrackInsertLabel = "PureTrackInsertLabel";
+constexpr std::string_view PureTrackInsertRego = "PureTrackInsertRego";
+constexpr std::string_view PureTrackInsertVehicleType =
+  "PureTrackInsertVehicleType";
+
 constexpr std::string_view PCMetUsername = "PCMetUsername";
 constexpr std::string_view PCMetPassword = "PCMetPassword";
 constexpr std::string_view PCMetFtpUsername = "PCMetFtpUsername";
