@@ -46,7 +46,6 @@ private:
   Duration debounce_time = std::chrono::minutes{1};
   bool ack_day = false;
   bool cleared_day = false;
-  bool is_exit_warning = false;
   bool covered_by_clearance = false;
   bool expired = true;
   bool expired_last = true;
@@ -263,24 +262,6 @@ public:
   [[gnu::pure]]
   bool IsCleared() const noexcept {
     return cleared_day;
-  }
-
-  /**
-   * Mark this warning as an exit warning (approaching exit
-   * boundary of a cleared airspace into restricted airspace).
-   *
-   * This flag is recomputed each update cycle.
-   */
-  void SetExitWarning(const bool set) noexcept {
-    is_exit_warning = set;
-  }
-
-  /**
-   * Determine if this is an exit warning for a cleared airspace
-   */
-  [[gnu::pure]]
-  bool IsExitWarning() const noexcept {
-    return is_exit_warning;
   }
 
   /**
