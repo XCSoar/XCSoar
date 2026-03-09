@@ -221,31 +221,33 @@ WindowList::Paint(Canvas &canvas) noexcept
         WritableImageBuffer<ActivePixelTraits>::Empty();
       scratch.Allocate(child_size);
 
+      const PixelPoint src_pos{
+        std::max(0, -child_pos.x),
+        std::max(0, -child_pos.y),
+      };
+      const PixelPoint dest_pos{
+        std::max(0, child_pos.x),
+        std::max(0, child_pos.y),
+      };
+      /* std::min of signed extents can be negative; PixelSize is unsigned and
+         would wrap to huge values and bypass the > 0 guards below. */
+      const int copy_w = std::max(
+        0, std::min((int)child_size.width - src_pos.x,
+                    (int)canvas.GetWidth() - dest_pos.x));
+      const int copy_h = std::max(
+        0, std::min((int)child_size.height - src_pos.y,
+                    (int)canvas.GetHeight() - dest_pos.y));
+      const PixelSize copy_size{
+        static_cast<unsigned>(copy_w),
+        static_cast<unsigned>(copy_h),
+      };
+
       {
         Canvas offscreen_canvas(scratch);
         offscreen_canvas.CopyStateFrom(canvas);
+        if (copy_size.width > 0 && copy_size.height > 0)
+          offscreen_canvas.Copy(src_pos, copy_size, canvas, dest_pos);
         child.OnPaint(offscreen_canvas);
-
-        const PixelPoint src_pos{
-          std::max(0, -child_pos.x),
-          std::max(0, -child_pos.y),
-        };
-        const PixelPoint dest_pos{
-          std::max(0, child_pos.x),
-          std::max(0, child_pos.y),
-        };
-        /* std::min of signed extents can be negative; PixelSize is unsigned and
-           would wrap to huge values and bypass the > 0 guards below. */
-        const int copy_w = std::max(
-          0, std::min((int)child_size.width - src_pos.x,
-                      (int)canvas.GetWidth() - dest_pos.x));
-        const int copy_h = std::max(
-          0, std::min((int)child_size.height - src_pos.y,
-                      (int)canvas.GetHeight() - dest_pos.y));
-        const PixelSize copy_size{
-          static_cast<unsigned>(copy_w),
-          static_cast<unsigned>(copy_h),
-        };
 
         if (copy_size.width > 0 && copy_size.height > 0)
           canvas.Copy(dest_pos, copy_size, offscreen_canvas, src_pos);
