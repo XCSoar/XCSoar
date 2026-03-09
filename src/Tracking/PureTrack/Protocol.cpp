@@ -15,6 +15,28 @@ using std::string_view_literals::operator""sv;
 
 namespace PureTrack {
 
+static unsigned
+MapVehicleType(Settings::VehicleType type) noexcept
+{
+  switch (type) {
+  case Settings::VehicleType::GLIDER:
+    return 1;
+  case Settings::VehicleType::PARAGLIDER:
+    return 7;
+  case Settings::VehicleType::POWERED_AIRCRAFT:
+    return 8;
+  case Settings::VehicleType::HOT_AIR_BALLOON:
+    return 11;
+  case Settings::VehicleType::HANGGLIDER_FLEX:
+  case Settings::VehicleType::HANGGLIDER_RIGID:
+    return 6;
+  case Settings::VehicleType::COUNT:
+    break;
+  }
+
+  return 1;
+}
+
 static boost::json::object
 BuildPoint(const Sample &sample)
 {
@@ -38,6 +60,7 @@ BuildInsertRequestBody(const Settings &settings, const Sample &sample)
   boost::json::object request;
   request.emplace("key", std::string_view{settings.app_key});
   request.emplace("deviceID", std::string_view{settings.device_id});
+  request.emplace("type", MapVehicleType(settings.vehicle_type));
 
   if (!settings.label.empty())
     request.emplace("label", std::string_view{settings.label});
