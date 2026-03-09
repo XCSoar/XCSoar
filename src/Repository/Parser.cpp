@@ -6,6 +6,7 @@
 #include "io/LineReader.hpp"
 #include "util/StringStrip.hxx"
 #include "util/HexString.hpp"
+#include "system/Path.hpp"
 
 /**
  * Parses a line of the repository file.
@@ -37,6 +38,10 @@ Commit(FileRepository &repository, AvailableFile &file)
 {
   if (file.IsEmpty())
     return true;
+  
+  const Path path(file.name.c_str());
+  if (!path.IsValidFilename())
+    return false;
 
   if (!file.IsValid())
     return false;
