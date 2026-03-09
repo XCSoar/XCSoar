@@ -221,25 +221,27 @@ WindowList::Paint(Canvas &canvas) noexcept
         WritableImageBuffer<ActivePixelTraits>::Empty();
       scratch.Allocate(child_size);
 
+      const PixelPoint src_pos{
+        std::max(0, -child_pos.x),
+        std::max(0, -child_pos.y),
+      };
+      const PixelPoint dest_pos{
+        std::max(0, child_pos.x),
+        std::max(0, child_pos.y),
+      };
+      const PixelSize copy_size{
+        std::min((int)child_size.width - src_pos.x,
+                 (int)canvas.GetWidth() - dest_pos.x),
+        std::min((int)child_size.height - src_pos.y,
+                 (int)canvas.GetHeight() - dest_pos.y),
+      };
+
       {
         Canvas offscreen_canvas(scratch);
         offscreen_canvas.CopyStateFrom(canvas);
+        if (copy_size.width > 0 && copy_size.height > 0)
+          offscreen_canvas.Copy(src_pos, copy_size, canvas, dest_pos);
         child.OnPaint(offscreen_canvas);
-
-        const PixelPoint src_pos{
-          std::max(0, -child_pos.x),
-          std::max(0, -child_pos.y),
-        };
-        const PixelPoint dest_pos{
-          std::max(0, child_pos.x),
-          std::max(0, child_pos.y),
-        };
-        const PixelSize copy_size{
-          std::min((int)child_size.width - src_pos.x,
-                   (int)canvas.GetWidth() - dest_pos.x),
-          std::min((int)child_size.height - src_pos.y,
-                   (int)canvas.GetHeight() - dest_pos.y),
-        };
 
         if (copy_size.width > 0 && copy_size.height > 0)
           canvas.Copy(dest_pos, copy_size, offscreen_canvas, src_pos);
