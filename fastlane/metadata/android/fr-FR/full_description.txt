@@ -1,0 +1,30 @@
+XCSoar est un calculateur de vol tactique puissant pour pilotes de planeur et de parapente.
+Gratuit, open source, sans publicité et sans suivi.
+Fonctionne sur Android, iOS, Linux, macOS et Windows.
+Développé par une communauté open source active.
+
+FONCTIONNALITÉS
+
+- Carte mobile avec relief, espaces aériens, aérodromes et navigation de tâche
+- Vario audio intégré pour un retour sonore sur la montée et la descente
+- InfoBoxes contextuelles avec altitude, navigation, calculs de finesse,
+  vent, météo et données de tâche
+- Affichage du trafic et calculs du calculateur de vol
+- Planification/déclaration de tâche avec prise en charge de nombreux varios
+  et enregistreurs
+- Outils d'analyse de vol tels que le barogramme, la vue de polaire
+  et l'optimisation OLC
+- Aide au centrage en thermique et prise en charge de sources en ligne
+- Import des formats courants de points de virage, d'espaces aériens
+  et de cartes (dont CUP, CUPX, OpenAir et XCM)
+
+POURQUOI XCSOAR
+
+- Sans pub, sans suivi, sans collecte de données et sans compte requis
+- Fonctionne hors ligne ; vos données de vol restent sur votre appareil
+- Multi-plateforme : téléphone, tablette, PC, Kobo et systèmes embarqués
+- Alternative open source aux calculateurs de vol commerciaux
+- Compatible avec une large gamme de matériels
+
+Documentation :
+- Manuel utilisateur : https://xcsoar.org/discover/manual.html

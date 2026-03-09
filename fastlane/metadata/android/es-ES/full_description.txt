@@ -1,0 +1,31 @@
+XCSoar es un potente computador táctico de vuelo para pilotos de planeador y parapente.
+Gratis y de código abierto, sin anuncios ni seguimiento.
+Funciona en Android, iOS, Linux, macOS y Windows.
+Desarrollado por una comunidad activa de código abierto.
+
+FUNCIONES
+
+- Mapa en movimiento con terreno, espacio aéreo, aeropuertos y navegación de tareas
+- Vario acústico integrado para avisos sonoros de ascenso y descenso
+- InfoBoxes contextuales con altitud, navegación, cálculos de planeo,
+  viento, meteorología y datos de tarea
+- Visualización de tráfico y cálculos avanzados del computador de vuelo
+- Planificación/declaración de tareas con soporte para muchos variómetros
+  y registradores
+- Herramientas de análisis de vuelo como barograma, vista polar
+  y optimización OLC
+- Ayuda de centrado en térmicas y soporte para fuentes térmicas en línea
+- Importación de formatos comunes de puntos de giro, espacio aéreo y mapas
+  (incluidos CUP, CUPX, OpenAir y XCM)
+
+POR QUÉ XCSOAR
+
+- Sin anuncios, sin seguimiento, sin recopilación de datos
+  y sin cuenta obligatoria
+- Funciona sin conexión; tus datos de vuelo permanecen en tu dispositivo
+- Multiplataforma: teléfono, tablet, PC, Kobo y equipos integrados
+- Alternativa de código abierto a los computadores de vuelo comerciales
+- Compatible con una amplia gama de hardware
+
+Documentación:
+- Manual de usuario: https://xcsoar.org/discover/manual.html

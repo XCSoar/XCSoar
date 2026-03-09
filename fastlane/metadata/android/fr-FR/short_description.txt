@@ -1,0 +1,1 @@
+Calculateur tactique pour planeur. Gratuit, open source et sans publicité.
