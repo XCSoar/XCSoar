@@ -11,6 +11,7 @@
 #include "Tracking/SkyLines/Features.hpp"
 #include "Tracking/SkyLines/Settings.hpp"
 #include "Tracking/LiveTrack24/Settings.hpp"
+#include "Tracking/PureTrack/Settings.hpp"
 
 #include "util/StaticString.hxx"
 
@@ -19,11 +20,13 @@ struct TrackingSettings {
   SkyLinesTracking::Settings skylines;
   CloudSettings cloud;
   LiveTrack24::Settings livetrack24;
+  PureTrack::Settings puretrack;
 
   void SetDefaults() {
     skylines.SetDefaults();
     cloud.SetDefaults();
     livetrack24.SetDefaults();
+    puretrack.SetDefaults();
   }
 };
 

@@ -9,8 +9,10 @@
 /* live tracking requires networking */
 #ifdef HAVE_HTTP
 #define HAVE_LIVETRACK24
+#define HAVE_PURETRACK
 #endif
 
-#if defined(HAVE_SKYLINES_TRACKING) || defined(HAVE_LIVETRACK24)
+#if defined(HAVE_SKYLINES_TRACKING) || defined(HAVE_LIVETRACK24) || \
+  defined(HAVE_PURETRACK)
 #define HAVE_TRACKING
 #endif
