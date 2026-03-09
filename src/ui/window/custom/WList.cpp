@@ -223,6 +223,7 @@ WindowList::Paint(Canvas &canvas) noexcept
 
       {
         Canvas offscreen_canvas(scratch);
+        offscreen_canvas.CopyStateFrom(canvas);
         child.OnPaint(offscreen_canvas);
 
         const PixelPoint src_pos{
