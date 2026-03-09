@@ -1,0 +1,29 @@
+XCSoar, planör ve yamaç paraşütü pilotları için güçlü bir taktik uçuş bilgisayarıdır.
+Ücretsiz ve açık kaynaklıdır; reklam ve takip içermez.
+Android, iOS, Linux, macOS ve Windows üzerinde çalışır.
+Aktif bir açık kaynak topluluğu tarafından geliştirilmektedir.
+
+ÖZELLİKLER
+
+- Arazi, hava sahası, meydanlar ve görev seyrüseferi içeren hareketli harita
+- Tırmanış/alçalış için sesli geri bildirim sunan dahili audio vario
+- İrtifa, seyrüsefer, süzülüş hesapları, rüzgâr, hava durumu
+  ve görev verilerini gösteren bağlama duyarlı InfoBox’lar
+- Trafik görüntüleme ve gelişmiş uçuş bilgisayarı hesaplamaları
+- Çok sayıda variometre ve kaydedici desteğiyle görev planlama/beyan
+- Barograf, polar görünüm ve OLC optimizasyonu gibi uçuş analiz araçları
+- Termik merkezleme desteği ve çevrimiçi termik kaynakları desteği
+- Yaygın nokta, hava sahası ve harita formatlarını içe aktarma
+  (CUP, CUPX, OpenAir ve XCM dahil)
+
+NEDEN XCSOAR
+
+- Reklamsız, takipsiz, veri toplamasız
+  ve hesap zorunluluğu olmadan
+- Çevrimdışı çalışır; uçuş verileriniz cihazınızda kalır
+- Çok platformlu: telefon, tablet, PC, Kobo ve gömülü sistemler
+- Ticari uçuş bilgisayarlarına açık kaynak bir alternatif
+- Geniş bir donanım yelpazesiyle uyumludur
+
+Dokümantasyon:
+- Kullanım kılavuzu: https://xcsoar.org/discover/manual.html

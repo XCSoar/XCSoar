@@ -1,0 +1,29 @@
+XCSoar ist ein leistungsstarker taktischer Flugrechner für Segel- und Gleitschirmpiloten.
+Kostenlos, Open Source, ohne Werbung und ohne Tracking.
+Läuft auf Android, iOS, Linux, macOS und Windows.
+Entwickelt von einer aktiven Open-Source-Community.
+
+FUNKTIONEN
+
+- Bewegte Karte mit Gelände, Lufträumen, Flugplätzen und Aufgaben-Navigation
+- Integriertes Audio-Vario für akustisches Steigen-/Sinken-Feedback
+- Kontextabhängige InfoBoxes mit Höhe, Navigation, Gleitberechnung,
+  Wind, Wetter und Aufgabendaten
+- Verkehrsanzeige und Glide-Computer-Berechnungen
+- Aufgabenplanung/-deklaration mit Unterstützung für viele Vario-
+  und Logger-Geräte
+- Fluganalyse-Werkzeuge wie Barogramm, Polare-Ansicht und OLC-Optimierung
+- Thermikzentrierhilfe und Unterstützung für Online-Quellen zu Thermik
+- Import gängiger Wegpunkt-, Luftraum- und Kartenformate
+  (einschließlich CUP, CUPX, OpenAir und XCM)
+
+WARUM XCSOAR
+
+- Keine Werbung, kein Tracking, keine Datenerfassung und kein Konto nötig
+- Funktioniert offline; deine Flugdaten bleiben auf deinem Gerät
+- Plattformübergreifend: Smartphone, Tablet, PC, Kobo und Embedded-Systeme
+- Open-Source-Alternative zu kommerziellen Flugrechnern
+- Unterstützt eine breite Auswahl an Hardware
+
+Dokumentation:
+- Benutzerhandbuch: https://xcsoar.org/discover/manual.html

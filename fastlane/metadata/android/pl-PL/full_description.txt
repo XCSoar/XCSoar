@@ -1,0 +1,31 @@
+XCSoar to zaawansowany komputer taktyczny dla pilotów szybowców i paralotni.
+Darmowy i open source, bez reklam i bez śledzenia.
+Działa na Androidzie, iOS, Linuksie, macOS i Windows.
+Rozwijany przez aktywną społeczność open source.
+
+FUNKCJE
+
+- Ruchoma mapa z terenem, przestrzenią powietrzną, lotniskami i nawigacją zadań
+- Wbudowane audio vario z dźwiękową sygnalizacją noszenia i opadania
+- Kontekstowe InfoBoxy z wysokością, nawigacją, obliczeniami szybowania,
+  wiatrem, pogodą i danymi zadania
+- Wyświetlanie ruchu oraz zaawansowane obliczenia komputera pokładowego
+- Planowanie/deklaracja zadań z obsługą wielu wariometrów
+  i rejestratorów
+- Narzędzia analizy lotu: barogram, widok polary
+  i optymalizacja OLC
+- Pomoc w centrowaniu komina oraz obsługa internetowych źródeł termiki
+- Import popularnych formatów punktów trasy, przestrzeni powietrznej i map
+  (w tym CUP, CUPX, OpenAir i XCM)
+
+DLACZEGO XCSOAR
+
+- Bez reklam, bez śledzenia, bez zbierania danych
+  i bez wymaganego konta
+- Działa offline; dane lotu pozostają na Twoim urządzeniu
+- Wieloplatformowość: telefon, tablet, PC, Kobo i systemy wbudowane
+- Alternatywa open source dla komercyjnych komputerów szybowcowych
+- Zgodny z szeroką gamą sprzętu
+
+Dokumentacja:
+- Podręcznik użytkownika: https://xcsoar.org/discover/manual.html

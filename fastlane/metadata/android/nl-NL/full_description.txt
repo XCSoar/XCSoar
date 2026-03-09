@@ -1,0 +1,31 @@
+XCSoar is een krachtige tactische vluchtcomputer voor zweefvlieg- en paraglidingpiloten.
+Gratis en open source, zonder advertenties en zonder tracking.
+Werkt op Android, iOS, Linux, macOS en Windows.
+Ontwikkeld door een actieve open-sourcecommunity.
+
+FUNCTIES
+
+- Bewegende kaart met terrein, luchtruim, vliegvelden en taaknavigatie
+- Ingebouwde audio-vario voor hoorbare stijg-/daalsignalen
+- Contextgevoelige InfoBoxen met hoogte, navigatie, glijberekeningen,
+  wind, weer en taakgegevens
+- Verkeersweergave en geavanceerde vluchtcomputerberekeningen
+- Taakplanning/declaratie met ondersteuning voor veel variometers
+  en loggers
+- Vluchtanalysetools zoals barogram, polaire weergave
+  en OLC-optimalisatie
+- Hulp bij thermiek centreren en ondersteuning voor online thermiekbronnen
+- Import van gangbare waypoint-, luchtruim- en kaartformaten
+  (waaronder CUP, CUPX, OpenAir en XCM)
+
+WAAROM XCSOAR
+
+- Geen advertenties, geen tracking, geen gegevensverzameling
+  en geen verplicht account
+- Werkt offline; je vluchtgegevens blijven op je apparaat
+- Multiplatform: telefoon, tablet, PC, Kobo en embedded systemen
+- Open-sourcealternatief voor commerciële vluchtcomputers
+- Compatibel met een breed scala aan hardware
+
+Documentatie:
+- Gebruikershandleiding: https://xcsoar.org/discover/manual.html
