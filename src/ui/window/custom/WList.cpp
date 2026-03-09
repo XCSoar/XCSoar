@@ -4,7 +4,12 @@
 #include "WList.hpp"
 #include "../ContainerWindow.hpp"
 #include "ui/canvas/SubCanvas.hpp"
+#ifdef USE_MEMORY_CANVAS
+#include "ui/canvas/memory/ActivePixelTraits.hpp"
+#include "ui/canvas/memory/Buffer.hpp"
+#endif
 
+#include <algorithm>
 #include <iterator>
 
 void
@@ -202,6 +207,47 @@ WindowList::Paint(Canvas &canvas) noexcept
     PaintWindow &child = (PaintWindow &)*i;
     if (!child.IsVisible())
       continue;
+
+#ifdef USE_MEMORY_CANVAS
+    const PixelPoint child_pos = child.GetTopLeft();
+    const PixelSize child_size = child.GetSize();
+    const bool partially_outside =
+      child_pos.x < 0 || child_pos.y < 0 ||
+      child_pos.x + (int)child_size.width > (int)canvas.GetWidth() ||
+      child_pos.y + (int)child_size.height > (int)canvas.GetHeight();
+
+    if (partially_outside) {
+      WritableImageBuffer<ActivePixelTraits> scratch =
+        WritableImageBuffer<ActivePixelTraits>::Empty();
+      scratch.Allocate(child_size);
+
+      {
+        Canvas offscreen_canvas(scratch);
+        child.OnPaint(offscreen_canvas);
+
+        const PixelPoint src_pos{
+          std::max(0, -child_pos.x),
+          std::max(0, -child_pos.y),
+        };
+        const PixelPoint dest_pos{
+          std::max(0, child_pos.x),
+          std::max(0, child_pos.y),
+        };
+        const PixelSize copy_size{
+          std::min((int)child_size.width - src_pos.x,
+                   (int)canvas.GetWidth() - dest_pos.x),
+          std::min((int)child_size.height - src_pos.y,
+                   (int)canvas.GetHeight() - dest_pos.y),
+        };
+
+        if (copy_size.width > 0 && copy_size.height > 0)
+          canvas.Copy(dest_pos, copy_size, offscreen_canvas, src_pos);
+      }
+
+      scratch.Free();
+      continue;
+    }
+#endif
 
     SubCanvas sub_canvas(canvas, child.GetTopLeft(),
                          child.GetSize());
