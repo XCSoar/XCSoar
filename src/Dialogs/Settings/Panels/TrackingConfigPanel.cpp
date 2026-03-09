@@ -40,7 +40,20 @@ enum ControlIndex {
   LT24_VEHICLE_NAME,
   LT24_SERVER,
   LT24_USERNAME,
-  LT24_PASSWORD
+  LT24_PASSWORD,
+#endif
+#if (defined(HAVE_SKYLINES_TRACKING) || defined(HAVE_LIVETRACK24)) && \
+  defined(HAVE_PURETRACK)
+  PT_SPACER,
+#endif
+#ifdef HAVE_PURETRACK
+  PT_ENABLED,
+  PT_INTERVAL,
+  PT_VEHICLE_TYPE,
+  PT_LABEL,
+  PT_ENDPOINT,
+  PT_APP_KEY,
+  PT_DEVICE_ID,
 #endif
 };
 
@@ -57,6 +70,10 @@ public:
 
 #ifdef HAVE_LIVETRACK24
   void SetLiveTrack24Enabled(bool enabled);
+#endif
+
+#ifdef HAVE_PURETRACK
+  void SetPureTrackEnabled(bool enabled);
 #endif
 
   /* methods from Widget */
@@ -102,6 +119,21 @@ TrackingConfigPanel::SetLiveTrack24Enabled(bool enabled)
 
 #endif
 
+#ifdef HAVE_PURETRACK
+
+void
+TrackingConfigPanel::SetPureTrackEnabled(bool enabled)
+{
+  SetRowEnabled(PT_INTERVAL, enabled);
+  SetRowEnabled(PT_VEHICLE_TYPE, enabled);
+  SetRowEnabled(PT_LABEL, enabled);
+  SetRowEnabled(PT_ENDPOINT, enabled);
+  SetRowEnabled(PT_APP_KEY, enabled);
+  SetRowEnabled(PT_DEVICE_ID, enabled);
+}
+
+#endif
+
 void
 TrackingConfigPanel::OnModified(DataField &df) noexcept
 {
@@ -123,6 +155,13 @@ TrackingConfigPanel::OnModified(DataField &df) noexcept
   if (IsDataField(LT24_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     SetLiveTrack24Enabled(dfb.GetValue());
+  }
+#endif
+
+#ifdef HAVE_PURETRACK
+  if (IsDataField(PT_ENABLED, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    SetPureTrackEnabled(dfb.GetValue());
   }
 #endif
 }
@@ -171,6 +210,24 @@ static constexpr StaticEnumChoice vehicle_type_list[] = {
   { LiveTrack24::Settings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
   { LiveTrack24::Settings::VehicleType::HANGGLIDER_FLEX, N_("Hangglider (Flex/FAI1)") },
   { LiveTrack24::Settings::VehicleType::HANGGLIDER_RIGID, N_("Hangglider (Rigid/FAI5)") },
+  nullptr,
+};
+
+#endif
+
+#ifdef HAVE_PURETRACK
+
+static constexpr StaticEnumChoice puretrack_vehicle_type_list[] = {
+  { PureTrack::Settings::VehicleType::GLIDER, N_("Glider") },
+  { PureTrack::Settings::VehicleType::PARAGLIDER, N_("Paraglider") },
+  { PureTrack::Settings::VehicleType::POWERED_AIRCRAFT,
+    N_("Powered aircraft") },
+  { PureTrack::Settings::VehicleType::HOT_AIR_BALLOON,
+    N_("Hot-air balloon") },
+  { PureTrack::Settings::VehicleType::HANGGLIDER_FLEX,
+    N_("Hangglider (Flex/FAI1)") },
+  { PureTrack::Settings::VehicleType::HANGGLIDER_RIGID,
+    N_("Hangglider (Rigid/FAI5)") },
   nullptr,
 };
 
@@ -240,12 +297,38 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
   AddPassword(_("Password"), "", settings.livetrack24.password);
 #endif
 
+#if (defined(HAVE_SKYLINES_TRACKING) || defined(HAVE_LIVETRACK24)) && \
+  defined(HAVE_PURETRACK)
+  AddSpacer();
+#endif
+
+#ifdef HAVE_PURETRACK
+  AddBoolean("PureTrack", "", settings.puretrack.enabled, this);
+  AddEnum(_("Tracking Interval"), nullptr, tracking_intervals,
+          FindClosestTrackingInterval(settings.puretrack.interval));
+  AddEnum(_("Vehicle Type"), _("Type of vehicle used."),
+          puretrack_vehicle_type_list,
+          (unsigned)settings.puretrack.vehicle_type);
+  AddText(_("Vehicle Name"), "Name shown by PureTrack.",
+          settings.puretrack.label);
+  AddText(_("Server"), "PureTrack Insert API endpoint URL.",
+          settings.puretrack.endpoint);
+  AddText("Key", "PureTrack Insert API application key.",
+          settings.puretrack.app_key);
+  AddText(_("Username"), "Unique device identifier sent to PureTrack.",
+          settings.puretrack.device_id);
+#endif
+
 #ifdef HAVE_SKYLINES_TRACKING
   SetSkyLinesEnabled(settings.skylines.enabled);
 #endif
 
 #ifdef HAVE_LIVETRACK24
   SetLiveTrack24Enabled(settings.livetrack24.enabled);
+#endif
+
+#ifdef HAVE_PURETRACK
+  SetPureTrackEnabled(settings.puretrack.enabled);
 #endif
 }
 
@@ -316,6 +399,24 @@ TrackingConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(LT24_PASSWORD, ProfileKeys::LiveTrack24Password,
                        settings.livetrack24.password);
+#endif
+
+#ifdef HAVE_PURETRACK
+  changed |= SaveValue(PT_ENABLED, ProfileKeys::PureTrackEnabled,
+                       settings.puretrack.enabled);
+  changed |= SaveValueEnum(PT_INTERVAL, ProfileKeys::PureTrackInsertInterval,
+                           settings.puretrack.interval);
+  changed |= SaveValueEnum(PT_VEHICLE_TYPE,
+                           ProfileKeys::PureTrackInsertVehicleType,
+                           settings.puretrack.vehicle_type);
+  changed |= SaveValue(PT_LABEL, ProfileKeys::PureTrackInsertLabel,
+                       settings.puretrack.label);
+  changed |= SaveValue(PT_ENDPOINT, ProfileKeys::PureTrackInsertEndpoint,
+                       settings.puretrack.endpoint);
+  changed |= SaveValue(PT_APP_KEY, ProfileKeys::PureTrackInsertAppKey,
+                       settings.puretrack.app_key);
+  changed |= SaveValue(PT_DEVICE_ID, ProfileKeys::PureTrackInsertDeviceID,
+                       settings.puretrack.device_id);
 #endif
 
   _changed |= changed;
