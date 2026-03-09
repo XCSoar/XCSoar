@@ -47,6 +47,10 @@ Version 7.45 - not yet released
 * iOS
   - disable Core Location distance filter for built-in GPS so fixes are not
     suppressed while stationary #2380
+* kobo
+  - memory canvas: fix painting when list rows or edit fields are partially
+    off-screen while scrolling (no black squares; safer clipping of subcanvas
+    and list blits) #2293
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
