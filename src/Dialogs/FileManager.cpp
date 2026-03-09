@@ -46,11 +46,15 @@ GetRelativePathByType(const AvailableFile &file)
   if (base == nullptr)
     return nullptr;
 
+  const Path base_path(base);
+  if (!base_path.IsValidFilename())
+    return nullptr;
+
   const AllocatedPath subdir = GetFileTypeDefaultDir(file.type);
   if (subdir == nullptr)
     return AllocatedPath(base);
 
-  return AllocatedPath::Build(subdir, Path(base));
+  return AllocatedPath::Build(subdir, base_path);
 }
 
 
@@ -61,10 +65,14 @@ LocalPathByType(const char *name, FileType type)
   if (name == nullptr)
     return nullptr;
 
+  const Path name_path(name);
+  if (!name_path.IsValidFilename())
+    return nullptr;
+
   const AllocatedPath subdir = GetFileTypeDefaultDir(type);
   const AllocatedPath path = (subdir == nullptr) ? 
                                     AllocatedPath(name) : 
-                                    AllocatedPath::Build(subdir, Path(name));
+                                    AllocatedPath::Build(subdir, name_path);
   return LocalPath(path);
 }
 
@@ -535,6 +543,9 @@ ManagedFileListWidget::DownloadRemoteFile(const AvailableFile &remote_file)
   const int max_subdir_depth = 3; // Allow subdirectories up to this depth
 
   if (remote_file.GetName() == nullptr)
+    return;
+
+  if (!Path(remote_file.GetName()).IsValidFilename())
     return;
 
   const AllocatedPath subdir = GetFileTypeDefaultDir(remote_file.type);
