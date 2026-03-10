@@ -9,6 +9,7 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Logger/Logger.hpp"
 #include "Interface.hpp"
+#include "Repository/FileType.hpp"
 #include "CatmullRomInterpolator.hpp"
 #include "time/Cast.hxx"
 
@@ -49,7 +50,8 @@ Replay::Start(Path _path)
 
   if (path == nullptr || path.empty()) {
     replay = new DemoReplayGlue(device_blackboard, task_manager);
-  } else if (path.EndsWithIgnoreCase(".igc")) {
+  } else if (FilenameMatchesFileType(path.GetBase().c_str(),
+                                      FileType::IGC)) {
     replay = new IgcReplay(std::make_unique<FileLineReaderA>(path));
 
     cli = new CatmullRomInterpolator(FloatDuration{0.98});
