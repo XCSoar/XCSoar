@@ -16,11 +16,11 @@ enum class FileType : uint8_t {
   IGC,
   NMEA,
   RASP,
-  XCI,
   TASK,
   CHECKLIST,
   PROFILE,
   PLANE,
+  XCI,
   COUNT,
 };
 

@@ -82,9 +82,6 @@ GetFileTypeDefaultDir(const FileType file_type)
   case FileType::RASP:
     return AllocatedPath::Build("weather", "rasp");
 
-  case FileType::XCI:
-    return AllocatedPath("input");
-
   case FileType::TASK:
     return AllocatedPath("tasks");
 
@@ -95,8 +92,12 @@ GetFileTypeDefaultDir(const FileType file_type)
   case FileType::NMEA:
     return AllocatedPath("logs");
 
-  case FileType::PROFILE:
   case FileType::PLANE:
+    return AllocatedPath("planes");
+
+  case FileType::XCI:
+    return AllocatedPath("input");
+  case FileType::PROFILE:
   case FileType::UNKNOWN:
   case FileType::COUNT:
     return nullptr;
