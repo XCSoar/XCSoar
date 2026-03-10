@@ -93,7 +93,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestGeoPoint TestDiffFilter \
-	TestFileUtil TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
+	TestFileUtil TestFileType TestRepository TestPath TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
@@ -633,6 +633,16 @@ TEST_FILE_TYPE_SOURCES = \
 	$(TEST_SRC_DIR)/TestFileType.cpp
 TEST_FILE_TYPE_DEPENDS = UTIL
 $(eval $(call link-program,TestFileType,TEST_FILE_TYPE))
+
+TEST_REPOSITORY_SOURCES = \
+	$(SRC)/Repository/Parser.cpp \
+	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestRepository.cpp
+TEST_REPOSITORY_DEPENDS = UTIL
+$(eval $(call link-program,TestRepository,TEST_REPOSITORY))
 
 TEST_GEO_POINT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
