@@ -8,6 +8,7 @@
 enum class FileType : uint8_t {
   UNKNOWN,
   AIRSPACE,
+  RASP,     // RASP before WAYPOINT, so "-rasp.dat" overrides ".dat"
   WAYPOINT,
   WAYPOINTDETAILS,
   MAP,
@@ -15,7 +16,6 @@ enum class FileType : uint8_t {
   FLARMDB,
   IGC,
   NMEA,
-  RASP,
   TASK,
   CHECKLIST,
   PROFILE,
@@ -35,3 +35,19 @@ AllocatedPath GetFileTypeDefaultDir(const FileType file_type);
  * an empty pattern.
  */
 const char *GetFileTypePatterns(const FileType file_type) noexcept;
+
+/**
+ * Check whether a filename matches an exact (non-wildcard) pattern
+ * for any #FileType.  Returns that type, or FileType::UNKNOWN if
+ * no exact match exists.
+ */
+[[gnu::pure]]
+FileType SpecialFilenameType(const char *filename) noexcept;
+
+/**
+ * Check whether a filename matches any of the glob patterns
+ * for the given #FileType.
+ */
+[[gnu::pure]]
+bool FilenameMatchesFileType(const char *filename,
+                             FileType file_type) noexcept;
