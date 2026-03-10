@@ -96,6 +96,7 @@
 
 #include "lua/StartFile.hpp"
 #include "lua/Background.hpp"
+#include "Repository/FileType.hpp"
 
 #include "util/ScopeExit.hxx"
 
@@ -141,7 +142,7 @@ static void
 AfterStartup()
 {
   try {
-    const auto lua_path = LocalPath("lua");
+    const auto lua_path = LocalPath(GetFileTypeDefaultDir(FileType::LUA));
     Lua::StartFile(AllocatedPath::Build(lua_path, "init.lua"));
   } catch (...) {
       LogError(std::current_exception());
