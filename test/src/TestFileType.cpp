@@ -50,12 +50,62 @@ TestPatterns()
   ok1(p != nullptr && p[0] == '\0');
 }
 
+static void
+TestSpecialFilenameType()
+{
+  // Exact-match patterns should return their type
+  ok1(SpecialFilenameType("xcsoar-flarm.txt") == FileType::FLARMDB);
+  ok1(SpecialFilenameType("flarm-msg-data.csv") == FileType::FLARMDB);
+  ok1(SpecialFilenameType("xcsoar-checklist.txt") == FileType::CHECKLIST);
+
+  // Case-insensitive
+  ok1(SpecialFilenameType("XCSoar-Flarm.TXT") == FileType::FLARMDB);
+
+  // Wildcard-only patterns should not match
+  ok1(SpecialFilenameType("test.lua") == FileType::UNKNOWN);
+  ok1(SpecialFilenameType("airspace.txt") == FileType::UNKNOWN);
+  ok1(SpecialFilenameType("nonexistent.xyz") == FileType::UNKNOWN);
+}
+
+static void
+TestFilenameMatchesFileType()
+{
+  // Basic wildcard matches
+  ok1(FilenameMatchesFileType("init.lua", FileType::LUA));
+  ok1(FilenameMatchesFileType("test.igc", FileType::IGC));
+  ok1(FilenameMatchesFileType("map.xcm", FileType::MAP));
+  ok1(FilenameMatchesFileType("profile.prf", FileType::PROFILE));
+
+  // Exact-match patterns
+  ok1(FilenameMatchesFileType("xcsoar-flarm.txt", FileType::FLARMDB));
+  ok1(FilenameMatchesFileType("xcsoar-checklist.txt", FileType::CHECKLIST));
+
+  // Key test: wildcard should NOT match if another type has an exact
+  // claim on this filename (xcsoar-flarm.txt matches *.txt for
+  // AIRSPACE, but FLARMDB owns it exactly)
+  ok1(!FilenameMatchesFileType("xcsoar-flarm.txt", FileType::AIRSPACE));
+  ok1(!FilenameMatchesFileType("xcsoar-checklist.txt", FileType::AIRSPACE));
+
+  // Regular .txt file should still match AIRSPACE (no exact claim)
+  ok1(FilenameMatchesFileType("london.txt", FileType::AIRSPACE));
+
+  // No match at all
+  ok1(!FilenameMatchesFileType("readme.md", FileType::LUA));
+  ok1(!FilenameMatchesFileType("photo.jpg", FileType::MAP));
+
+  // Case-insensitive
+  ok1(FilenameMatchesFileType("INIT.LUA", FileType::LUA));
+  ok1(FilenameMatchesFileType("XCSoar-Flarm.TXT", FileType::FLARMDB));
+}
+
 int main()
 {
-  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2);
+  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 13);
 
   TestDefaultDirs();
   TestPatterns();
+  TestSpecialFilenameType();
+  TestFilenameMatchesFileType();
 
   return exit_status();
 }
