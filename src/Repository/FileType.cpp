@@ -39,6 +39,9 @@ GetFileTypePatterns(const FileType file_type) noexcept
   case FileType::XCI:
     return "*.xci\0";
 
+  case FileType::LUA:
+    return "*.lua\0";
+
   case FileType::TASK:
     return "*.tsk\0*.cup\0*.igc\0";
 
@@ -97,6 +100,10 @@ GetFileTypeDefaultDir(const FileType file_type)
 
   case FileType::XCI:
     return AllocatedPath("input");
+
+  case FileType::LUA:
+    return AllocatedPath("lua");
+
   case FileType::PROFILE:
   case FileType::UNKNOWN:
   case FileType::COUNT:

@@ -8,6 +8,7 @@
 #include "Dialogs/ComboPicker.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
 #include "Form/DataField/ComboList.hpp"
@@ -34,7 +35,9 @@ SelectLuaFile(const char *path)
     /* no parameter: let user select a *.lua file */
     LuaFileVisitor visitor;
 
-    Directory::VisitSpecificFiles(LocalPath("lua"), "*.lua",
+    const auto lua_dir = LocalPath(GetFileTypeDefaultDir(FileType::LUA));
+    Directory::VisitSpecificFiles(lua_dir,
+                                  GetFileTypePatterns(FileType::LUA),
                                   visitor, true);
     if (visitor.combo_list.empty()) {
       ShowMessageBox(_("Not found"), "RunLuaFile",
@@ -51,7 +54,7 @@ SelectLuaFile(const char *path)
     /* *.lua file specified: run this file */
     return Path(path).IsAbsolute()
       ? AllocatedPath(Path(path))
-      : AllocatedPath::Build(LocalPath("lua"), path);
+      : AllocatedPath::Build(LocalPath(GetFileTypeDefaultDir(FileType::LUA)), path);
   } else {
     ShowMessageBox("RunLuaFile expects *.lua parameter",
                    "RunLuaFile", MB_OK|MB_ICONINFORMATION);
