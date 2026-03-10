@@ -25,7 +25,7 @@ public final class UsbSerialPort
   private PortListener portListener;
   private InputListener inputListener;
   private int baudRate;
-  private int state = STATE_LIMBO;
+  private volatile int state = STATE_LIMBO;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   public UsbSerialPort(UsbSerialHelper.UsbDeviceInterface parent, int baud) {
@@ -73,7 +73,7 @@ public final class UsbSerialPort
   public synchronized void close() {
     parent.portClosed(this);
 
-    state = STATE_LIMBO;
+    setState(STATE_FAILED);
     safeDestruct.beginShutdown();
 
     if( serialDevice != null) {
@@ -123,6 +123,7 @@ public final class UsbSerialPort
 
   @Override
   public synchronized boolean setBaudRate(int baud) {
+    // Keep this value even while disconnected; open() applies it later.
     baudRate = baud;
     UsbSerialDevice serialDevice = this.serialDevice;
     if (serialDevice == null)
