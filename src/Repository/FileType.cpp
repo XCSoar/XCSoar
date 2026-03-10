@@ -4,6 +4,9 @@
 #include "FileType.hpp"
 #include "system/Path.hpp"
 #include "Compatibility/path.h"
+#include "util/StringCompare.hxx"
+
+#include <cstring>
 
 const char *
 GetFileTypePatterns(const FileType file_type) noexcept
@@ -111,4 +114,52 @@ GetFileTypeDefaultDir(const FileType file_type)
   }
 
   return nullptr;
+}
+
+FileType
+SpecialFilenameType(const char *filename) noexcept
+{
+  for (uint8_t i = 1; i < static_cast<uint8_t>(FileType::COUNT); ++i) {
+    const auto type = static_cast<FileType>(i);
+    const char *p = GetFileTypePatterns(type);
+    size_t length;
+    while ((length = std::strlen(p)) > 0) {
+      if (p[0] != '*' && StringIsEqualIgnoreCase(filename, p))
+        return type;
+      p += length + 1;
+    }
+  }
+
+  return FileType::UNKNOWN;
+}
+
+bool
+FilenameMatchesFileType(const char *filename,
+                        FileType file_type) noexcept
+{
+  bool wildcard_match = false;
+
+  const char *p = GetFileTypePatterns(file_type);
+  size_t length;
+  while ((length = std::strlen(p)) > 0) {
+    if (p[0] == '*') {
+      /* suffix match: "*.lua" matches "init.lua" */
+      if (StringEndsWithIgnoreCase(filename, p + 1))
+        wildcard_match = true;
+    } else {
+      /* exact match: "xcsoar-flarm.txt" — return immediately */
+      if (StringIsEqualIgnoreCase(filename, p))
+        return true;
+    }
+    p += length + 1;
+  }
+
+  if (!wildcard_match)
+    return false;
+
+  /* a wildcard matched, but check whether another type claims this
+     filename with an exact pattern (e.g. "xcsoar-flarm.txt" should
+     not be identified as an airspace file via "*.txt") */
+  const auto special = SpecialFilenameType(filename);
+  return special == FileType::UNKNOWN || special == file_type;
 }
