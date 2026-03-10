@@ -87,7 +87,7 @@ GetWaypointTypeName(Waypoint::Type type) noexcept
     return _("Thermal hotspot");
   }
 
-  return nullptr;
+  return _("Unknown");
 }
 
 void
