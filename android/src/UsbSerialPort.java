@@ -46,12 +46,16 @@ public final class UsbSerialPort
 
     serialDevice = UsbSerialDevice.createUsbSerialDevice(device, connection, iface);
     if (serialDevice == null) {
+      connection.close();
+      connection = null;
       setState(STATE_FAILED);
       return;
     }
 
     if (!serialDevice.open()) {
       serialDevice = null;
+      connection.close();
+      connection = null;
       setState(STATE_FAILED);
       return;
     }
@@ -69,6 +73,7 @@ public final class UsbSerialPort
   public synchronized void close() {
     parent.portClosed(this);
 
+    state = STATE_LIMBO;
     safeDestruct.beginShutdown();
 
     if( serialDevice != null) {
@@ -117,14 +122,22 @@ public final class UsbSerialPort
   }
 
   @Override
-  public boolean setBaudRate(int baud) {
-    serialDevice.setBaudRate(baud);
+  public synchronized boolean setBaudRate(int baud) {
     baudRate = baud;
+    UsbSerialDevice serialDevice = this.serialDevice;
+    if (serialDevice == null)
+      return true;
+
+    serialDevice.setBaudRate(baud);
     return true;
   }
 
   @Override
   public synchronized int write(byte[] data, int length) {
+    UsbSerialDevice serialDevice = this.serialDevice;
+    if (serialDevice == null)
+      return -1;
+
     serialDevice.write(Arrays.copyOf(data, length));
     return length;
   }
