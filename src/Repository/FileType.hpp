@@ -8,6 +8,7 @@
 enum class FileType : uint8_t {
   UNKNOWN,
   AIRSPACE,
+  RASP,     // RASP before WAYPOINT, so "-rasp.dat" overrides ".dat"
   WAYPOINT,
   WAYPOINTDETAILS,
   MAP,
@@ -15,7 +16,6 @@ enum class FileType : uint8_t {
   FLARMDB,
   IGC,
   NMEA,
-  RASP,
   TASK,
   CHECKLIST,
   PROFILE,
