@@ -356,39 +356,33 @@ Directory::Remove(Path path) noexcept
     return false;
 
   bool ok = true;
-  char child_path[MAX_PATH];
-  strcpy(child_path, path.c_str());
-  const size_t base_len = strlen(child_path);
-  child_path[base_len] = '/';
 
   struct dirent *ent;
   while ((ent = readdir(dir)) != nullptr) {
     if (*ent->d_name == '.')
       continue;
 
-    strcpy(child_path + base_len + 1, ent->d_name);
+    AllocatedPath child = AllocatedPath::Build(path, Path(ent->d_name));
 
     struct stat st;
-    if (stat(child_path, &st) < 0) {
+    if (stat(child.c_str(), &st) < 0) {
       ok = false;
       continue;
     }
 
     if (S_ISDIR(st.st_mode))
-      ok &= Remove(Path(child_path));
+      ok &= Remove(child);
     else
-      ok &= (unlink(child_path) == 0);
+      ok &= (unlink(child.c_str()) == 0);
   }
 
   closedir(dir);
   return ok && rmdir(path.c_str()) == 0;
 #else
-  char search_path[MAX_PATH];
-  strcpy(search_path, path.c_str());
-  strcat(search_path, DIR_SEPARATOR_S "*");
+  AllocatedPath search = AllocatedPath::Build(path, Path("*"));
 
   WIN32_FIND_DATA fd;
-  HANDLE hFind = FindFirstFile(search_path, &fd);
+  HANDLE hFind = FindFirstFile(search.c_str(), &fd);
   if (hFind == INVALID_HANDLE_VALUE)
     return RemoveDirectoryA(path.c_str());
 
@@ -397,15 +391,12 @@ Directory::Remove(Path path) noexcept
     if (IsDots(fd.cFileName))
       continue;
 
-    char child_path[MAX_PATH];
-    strcpy(child_path, path.c_str());
-    strcat(child_path, DIR_SEPARATOR_S);
-    strcat(child_path, fd.cFileName);
+    AllocatedPath child = AllocatedPath::Build(path, Path(fd.cFileName));
 
     if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-      ok &= Remove(Path(child_path));
+      ok &= Remove(child);
     else
-      ok &= (DeleteFile(child_path) != 0);
+      ok &= (DeleteFile(child.c_str()) != 0);
   } while (FindNextFile(hFind, &fd));
 
   FindClose(hFind);
