@@ -119,6 +119,7 @@ TEST_NAMES = \
 	TestLXNToIGC \
 	TestLeastSquares \
 	TestHexString \
+	TestUriUtil \
 	TestThermalBand \
 	TestPackedFloat \
 	TestVersionNumber \
@@ -143,6 +144,11 @@ TEST_HEX_STRING_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestHexString.cpp
 $(eval $(call link-program,TestHexString,TEST_HEX_STRING))
+
+TEST_URI_UTIL_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUriUtil.cpp
+$(eval $(call link-program,TestUriUtil,TEST_URI_UTIL))
 
 TEST_CRC16_SOURCES = \
 	$(SRC)/util/CRC16CCITT.cpp \
