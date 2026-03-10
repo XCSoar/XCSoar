@@ -131,8 +131,9 @@ public final class UsbSerialPort
 
   @Override
   public void onReceivedData(byte[] arg0) {
-    if (arg0.length == 0) {
-      error("Disconnected");
+    if (arg0 == null || arg0.length == 0) {
+      // Some chipsets can trigger empty read callbacks; this is not
+      // a disconnect and should not force the port into FAILED state.
       return;
     }
 
