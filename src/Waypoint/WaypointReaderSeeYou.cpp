@@ -221,8 +221,8 @@ bool ParseSeeYou(WaypointFactory factory, Waypoints &waypoints, BufferedReader &
          * Newer cup/cupx specification adds rwwidth, shifts freq and desc
          * right, and adds userdata and pics.
          */
-        if ( params_num > iRWWidth &&
-             params[iRWWidth] == "rwwidth"sv ) {
+        if (params_num > iRWWidth &&
+            StringIsEqualIgnoreCase(params[iRWWidth], "rwwidth"sv)) {
           has_rwwidth = true;
           iFrequency = 10;
           iDescription = 11;
