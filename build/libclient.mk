@@ -4,6 +4,8 @@ ifeq ($(HAVE_HTTP),y)
 
 LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/tim/Client.cpp \
+	$(SRC)/net/client/WeGlide/AircraftCache.cpp \
+	$(SRC)/net/client/WeGlide/AircraftList.cpp \
 	$(SRC)/net/client/WeGlide/Error.cpp \
 	$(SRC)/net/client/WeGlide/DownloadTask.cpp \
 	$(SRC)/net/client/WeGlide/ListTasks.cpp \

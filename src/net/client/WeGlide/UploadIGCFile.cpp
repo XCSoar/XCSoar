@@ -7,6 +7,7 @@
 #ifdef HAVE_HTTP
 
 #include "UploadFlight.hpp"
+#include "AircraftList.hpp"
 #include "Settings.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
@@ -25,10 +26,10 @@
 #include <cinttypes>
 
 // Wrapper for getting converted string values of a json string
-static const std::string_view
-GetJsonString(boost::json::value json_value, std::string_view key)
+static std::string_view
+GetJsonString(const boost::json::object &json_object, std::string_view key)
 {
-  return json_value.at(key).get_string().c_str();
+  return json_object.at(key).as_string().c_str();
 }
 
 namespace WeGlide {
@@ -50,6 +51,8 @@ struct FlightData {
   uint64_t flight_id = 0;
   User user;
   Aircraft aircraft;
+  uint32_t uploaded_aircraft_id = 0;
+  StaticString<0x40> uploaded_aircraft_name;
   StaticString<0x40> scoring_date;
   StaticString<0x40> registration;
   StaticString<0x40> competition_id;
@@ -60,17 +63,17 @@ UploadJsonInterpreter(const boost::json::value &json)
 {
   FlightData flight_data;
   // flight is the 1st flight object in this array ('at(0)')
-  auto flight = json.as_array().at(0);
+  const auto &flight = json.as_array().at(0).as_object();
   flight_data.scoring_date = GetJsonString(flight, "scoring_date").data();
   flight_data.flight_id = flight.at("id").to_number<int64_t>();
   flight_data.registration = GetJsonString(flight, "registration").data();
   flight_data.competition_id = GetJsonString(flight, "competition_id").data();
 
-  auto user = flight.at("user").as_object();
+  const auto &user = flight.at("user").as_object();
   flight_data.user.id = user.at("id").to_number<uint32_t>();
   flight_data.user.name = GetJsonString(user, "name").data();
 
-  auto aircraft = flight.at("aircraft").as_object();
+  const auto &aircraft = flight.at("aircraft").as_object();
   flight_data.aircraft.id = aircraft.at("id").to_number<uint32_t>();
   flight_data.aircraft.name = GetJsonString(aircraft, "name").data();
   flight_data.aircraft.kind = GetJsonString(aircraft, "kind").data();
@@ -87,12 +90,18 @@ UploadSuccessDialog(const FlightData &flight_data) noexcept
   // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
   // With this Dialog insert the possibilty to update/patch the flight
   // f.e. copilot in double seater, scoring class, short comment and so on
+  const auto uploaded_aircraft_name =
+    flight_data.uploaded_aircraft_name.empty()
+    ? "-"
+    : flight_data.uploaded_aircraft_name.c_str();
   const auto display_string = fmt::format("{}: {}\n{}: {}\n{}: {} ({})\n"
-                                             "{}: {} ({})\n{}: {}, {}: {}",
+                                             "{}: {} ({}) / {} ({})\n"
+                                             "{}: {}, {}: {}",
     "Flight ID", flight_data.flight_id,
     _("Date"), flight_data.scoring_date.c_str(),
     _("Username"), flight_data.user.name.c_str(), flight_data.user.id,
     _("Plane"), flight_data.aircraft.name.c_str(), flight_data.aircraft.id,
+    uploaded_aircraft_name, flight_data.uploaded_aircraft_id,
     _("Registration"), flight_data.registration.c_str(),
     _("Comp. ID"), flight_data.competition_id.c_str());
 
@@ -124,7 +133,15 @@ UploadFile(Path igc_path)
     return {};
 
   // read the important data from json in a structure
-  return UploadJsonInterpreter(*value);
+  auto flight_data = UploadJsonInterpreter(*value);
+  flight_data.uploaded_aircraft_id = glider_id;
+  StaticString<96> long_name;
+  if (LookupAircraftTypeName(glider_id, long_name))
+    flight_data.uploaded_aircraft_name = long_name.c_str();
+  else
+    flight_data.uploaded_aircraft_name.clear();
+
+  return flight_data;
 }
 
 bool
