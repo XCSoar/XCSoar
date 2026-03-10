@@ -2,10 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "PlaneDialogs.hpp"
+#include "WeGlideTypePicker.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Button.hpp"
+#include "Form/DataField/Integer.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "net/client/WeGlide/AircraftList.hpp"
 #include "Plane/Plane.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
@@ -26,6 +29,7 @@ class PlaneEditWidget final
     DUMP_TIME,
     MAX_SPEED,
     WEGLIDE_ID,
+    WEGLIDE_NAME,
   };
 
   WndForm *dialog;
@@ -43,6 +47,7 @@ public:
 
   void UpdateCaption() noexcept;
   void UpdatePolarButton() noexcept;
+  void UpdateWeGlideName() noexcept;
   void PolarButtonClicked() noexcept;
 
   /* virtual methods from Widget */
@@ -53,6 +58,28 @@ private:
   /* methods from DataFieldListener */
   void OnModified(DataField &df) noexcept override;
 };
+
+static bool
+EditWeGlideType([[maybe_unused]] const char *caption, DataField &df,
+                [[maybe_unused]] const char *help_text)
+{
+  if (df.GetType() != DataField::Type::INTEGER)
+    return false;
+
+  auto &integer = static_cast<DataFieldInteger &>(df);
+  const int current_value = integer.GetValue();
+  unsigned weglide_type = current_value > 0
+    ? static_cast<unsigned>(current_value)
+    : 0;
+
+  if (!SelectWeGlideAircraftType(weglide_type,
+                                 CommonInterface::GetComputerSettings()
+                                   .weglide))
+    return false;
+
+  integer.ModifyValue(static_cast<int>(weglide_type));
+  return true;
+}
 
 void
 PlaneEditWidget::UpdateCaption() noexcept
@@ -80,10 +107,32 @@ PlaneEditWidget::UpdatePolarButton() noexcept
 }
 
 void
+PlaneEditWidget::UpdateWeGlideName() noexcept
+{
+  if (!CommonInterface::GetComputerSettings().weglide.enabled)
+    return;
+
+  if (plane.weglide_glider_type == 0) {
+    SetText(WEGLIDE_NAME, "-");
+    return;
+  }
+
+  StaticString<96> name;
+  if (WeGlide::LookupAircraftTypeName(plane.weglide_glider_type, name))
+    SetText(WEGLIDE_NAME, name.c_str());
+  else
+    SetText(WEGLIDE_NAME, _("Unknown"));
+}
+
+void
 PlaneEditWidget::OnModified(DataField &df) noexcept
 {
   if (IsDataField(REGISTRATION, df))
     UpdateCaption();
+  else if (IsDataField(WEGLIDE_ID, df)) {
+    SaveValueInteger(WEGLIDE_ID, plane.weglide_glider_type);
+    UpdateWeGlideName();
+  }
 }
 
 void
@@ -117,16 +166,19 @@ PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
            "%.0f %s", "%.0f", 0, 300, 5,
            false, UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 
-  /* TODO: this should be a select list from
-     https://api.weglide.org/v1/aircraft */
-  if (CommonInterface::GetComputerSettings().weglide.enabled)
-    AddInteger(_("WeGlide Type"), nullptr, "%d", "%d", 1, 999,
-               1, plane.weglide_glider_type);
-  else
+  if (CommonInterface::GetComputerSettings().weglide.enabled) {
+    auto *row = AddInteger(_("WeGlide Type"), nullptr, "%u", "%u", 0,
+                           9999, 1, plane.weglide_glider_type, this);
+    row->SetEditCallback(EditWeGlideType);
+    AddReadOnly(_("WeGlide Aircraft"), nullptr, "");
+  } else {
     AddDummy();
+    AddDummy();
+  }
 
   UpdateCaption();
   UpdatePolarButton();
+  UpdateWeGlideName();
 }
 
 bool
@@ -144,7 +196,6 @@ PlaneEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValueInteger(DUMP_TIME, plane.dump_time);
   changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
                        plane.max_speed);
-
   if (CommonInterface::GetComputerSettings().weglide.enabled)
     changed |= SaveValueInteger(WEGLIDE_ID, plane.weglide_glider_type);
 
