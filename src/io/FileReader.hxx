@@ -62,7 +62,7 @@ public:
 #endif
 
 	[[gnu::pure]]
-	uint_least64_t GetSize() const noexcept {
+	uint_least64_t GetSize() const noexcept override {
 #ifdef _WIN32
 		LARGE_INTEGER size;
 		return GetFileSizeEx(handle, &size)
