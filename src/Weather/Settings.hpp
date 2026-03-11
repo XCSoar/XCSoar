@@ -22,6 +22,11 @@ struct WeatherSettings {
    * Enable Thermal Information Map?
    */
   bool enable_tim;
+
+  /**
+   * Enable the EDL weather page and downloader?
+   */
+  bool enable_edl;
 #endif
 
   void SetDefaults() {
@@ -31,6 +36,7 @@ struct WeatherSettings {
 
 #ifdef HAVE_HTTP
     enable_tim = false;
+    enable_edl = true;
 #endif
   }
 };

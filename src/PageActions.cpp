@@ -13,6 +13,7 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "Dialogs/Weather/WeatherPageWidget.hpp"
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -366,6 +367,18 @@ PageActions::ShowThermalAssistant()
     layout.bottom = PageLayout::Bottom::NOTHING;
     OpenLayout(layout);
   }
+}
+
+void
+PageActions::ShowWeatherPage()
+{
+  PageLayout layout = GetCurrentLayout();
+  layout.main = PageLayout::Main::MAP_NORTH_UP;
+  OpenLayout(layout);
+
+  auto widget = CreateWeatherPageWidget();
+  if (widget)
+    SetCustomBottom(widget.release());
 }
 
 void

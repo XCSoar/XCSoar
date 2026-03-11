@@ -98,6 +98,11 @@ namespace PageActions
   void ShowThermalAssistant();
 
   /**
+   * Show the dedicated weather map page.
+   */
+  void ShowWeatherPage();
+
+  /**
    * Use a custom widget for the "bottom" area.  This is a wrapper for
    * MainWindow::SetBottomWidget().  Call RestoreBottom() to undo this.
    */

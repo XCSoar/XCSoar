@@ -741,7 +741,10 @@ mph/kts/...
 void
 InputEvents::eventWeather(const char *misc)
 {
-  ShowWeatherDialog(misc);
+  if (misc == nullptr || StringIsEqual(misc, "page"))
+    PageActions::ShowWeatherPage();
+  else
+    ShowWeatherDialog(misc);
 }
 
 void
