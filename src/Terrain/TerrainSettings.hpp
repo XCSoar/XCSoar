@@ -14,8 +14,27 @@ enum class SlopeShading: uint8_t {
 
 enum class Contours: uint8_t {
   OFF,
-  ON
+  MOUNTAINS,
+  HIGHLANDS,
+  LOWLANDS,
+  SUPERFINE,
+  COUNT,
 };
+
+/**
+ * Compute the contour spacing (in height-domain units) for the given
+ * density preset. Adapts to the zoom level via pixel_size.
+ *
+ * @param contours the density preset
+ * @param height_scale the terrain height bit-shift
+ * @param pixel_size geographic size of one screen pixel (meters),
+ * @return contour spacing in height-domain units, or 0 if contours
+ *   are disabled
+ */
+[[gnu::const]]
+unsigned
+ContourSpacing(Contours contours, unsigned height_scale,
+               double pixel_size) noexcept;
 
 struct TerrainRendererSettings {
   /** Number of available color ramps */

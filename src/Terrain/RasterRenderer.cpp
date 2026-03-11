@@ -213,7 +213,7 @@ RasterRenderer::GenerateImage(bool do_shading,
                               unsigned height_scale,
                               int contrast, int brightness,
                               const Angle sunazimuth,
-                              bool do_contour) noexcept
+                              unsigned contour_spacing) noexcept
 {
   if (image == nullptr ||
       height_matrix.GetSize().x > image->GetSize().width ||
@@ -225,12 +225,17 @@ RasterRenderer::GenerateImage(bool do_shading,
     contour_column_base = new unsigned char[height_matrix.GetSize().x];
   }
 
-  if (quantisation_effective == 0) {
+  if (quantisation_effective == 0)
     do_shading = false;
-    do_contour = false;
-  }
 
-  const unsigned contour_height_scale = do_contour? height_scale * 2 : 16;
+  // Convert spacing to scale, with scale=16: effectively no contours
+  unsigned contour_height_scale = 16;
+  if (contour_spacing > 0 && quantisation_effective > 0) {
+    unsigned s = 0;
+    while ((1u << s) < contour_spacing)
+      ++s;
+    contour_height_scale = s;
+  }
 
   ContourStart(contour_height_scale);
 
