@@ -1018,7 +1018,7 @@ msgstr "Zeige Luftraum ein"
 
 #: src/Input/InputEventsTask.cpp:55 src/Input/InputEventsTask.cpp:65
 msgid "Armed start activated"
-msgstr "Windenstart aktiviert"
+msgstr "Abflug automatisch"
 
 #: src/Input/InputEventsTask.cpp:69
 msgid "Advance manually"
@@ -1326,7 +1326,7 @@ msgstr "Deine Position"
 #: src/InfoBoxes/Content/Factory.cpp:927
 #, no-c-format
 msgid "Thermal"
-msgstr "Thermik - Mittel ü. alle Bärte"
+msgstr "Zentrierhilfe"
 
 #: src/Renderer/MapItemListRenderer.cpp:258
 msgid "Avg. lift"
@@ -2739,20 +2739,20 @@ msgstr "Wähle ein Muster"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:58
 msgid "Squawk code"
-msgstr "Setze Kode"
+msgstr "Squawk"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:59
 msgid "Set Squawk Code"
-msgstr "Code setzen"
+msgstr "Squawk setzen"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:68
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:69
 msgid "Radio"
-msgstr "Funk"
+msgstr "Frequenz"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:75
 msgid "Station"
-msgstr "Drehzahl"
+msgstr "Funk"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:79
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:260
@@ -2973,10 +2973,9 @@ msgid ""
 "ballast volume according to the dump rate specified in the configuration "
 "settings."
 msgstr ""
-"Ballast des Seglers. Erhöhe diesen Wert, wenn der Pilot/Zuladung im Cockpit "
-"schwerer als das Gewicht des Referenzpiloten aus der Polare ist "
-"(normalerweise 75kg). Die ENTER-Taste schaltet das Herabzählen des "
-"Balastvolumens ein und aus, entsprechend der Ablassgeschwindigkeit aus den "
+"Ballast des Seglers."
+"Drücke \"Ablassen/Stop\" um das Herabzählen des Ballastvolumens "
+"ein und auszuschalten, entsprechend der Ablassgeschwindigkeit aus den "
 "Einstellungen."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:286
@@ -3273,7 +3272,7 @@ msgstr "Neuer Teampartner"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:66
 msgid "Set code"
-msgstr "Setze Kode"
+msgstr "Setze Code"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:67
 msgid "Set WP"
@@ -3519,7 +3518,7 @@ msgstr "Leermasse"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:104
 msgid "Net mass of the rigged plane."
-msgstr "Referenzmasse zur Polare."
+msgstr "Netto-Masse des aufgerüsteten Flugzeugs."
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:108
 msgid "Max. Ballast"
@@ -3602,7 +3601,7 @@ msgstr "Entfernen"
 
 #: src/Dialogs/MultiFilePicker.cpp:107
 msgid "Add File"
-msgstr "Datei"
+msgstr "Datei hinzufügen"
 
 #: src/Dialogs/MultiFilePicker.cpp:108
 msgid "Select a file to add or download a new one."
@@ -3864,17 +3863,17 @@ msgstr "Gültiger Abflug"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:84
 msgid "Start time"
-msgstr "Startzeit"
+msgstr "Abflugzeit"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:85
 msgid "Start alt."
-msgstr "Starthöhe"
+msgstr "Abflughöhe"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:86
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:126
 #: src/Dialogs/Task/TaskPointDialog.cpp:334
 msgid "Start point"
-msgstr "Startpunkt"
+msgstr "Abflugpunkt"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:87
 msgid "Start speed"
@@ -4425,25 +4424,25 @@ msgstr "Auto (folge InfoBoxen)"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
 #, no-c-format
 msgid "Top left"
-msgstr "Oben Links"
+msgstr "Oben links"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:86
 #, no-c-format
 msgid "Top right"
-msgstr "Oben Rechts"
+msgstr "Oben rechts"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:44
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:71
 #, no-c-format
 msgid "Bottom left"
-msgstr "Unten Links"
+msgstr "Unten links"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:77
 #, no-c-format
 msgid "Bottom right"
-msgstr "Unten Rechts"
+msgstr "Unten rechts"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
@@ -4460,36 +4459,36 @@ msgstr "Mitte unten"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:92
 #, no-c-format
 msgid "Top left (avoid InfoBoxes)"
-msgstr "Unten Links (vermeide InfoBoxen)"
+msgstr "Oben links (vermeide InfoBoxen)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:54
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:95
 #, no-c-format
 msgid "Top right (avoid InfoBoxes)"
-msgstr "Unten Rechts (vermeide InfoBoxen)"
+msgstr "Oben rechts (vermeide InfoBoxen)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:56
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
 #, no-c-format
 msgid "Bottom left (avoid InfoBoxes)"
-msgstr "Unten Links (vermeide InfoBoxen)"
+msgstr "Unten links (vermeide InfoBoxen)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:58
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:80
 #, no-c-format
 msgid "Bottom right (avoid InfoBoxes)"
-msgstr "Unten Rechts (vermeide InfoBoxen)"
+msgstr "Unten rechts (vermeide InfoBoxen)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
 #, no-c-format
 msgid "Center top (avoid InfoBoxes)"
-msgstr "Unten Links (vermeide InfoBoxen)"
+msgstr "Mitte oben (vermeide InfoBoxen)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, no-c-format
 msgid "Center bottom (avoid InfoBoxes)"
-msgstr "Unten Links (vermeide InfoBoxen)"
+msgstr "Mitte unten (vermeide InfoBoxen)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
@@ -4525,35 +4524,35 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #, no-c-format
 msgid "Show thermal assistant in top left."
-msgstr "Platziere die Zentrierhilfe unten links."
+msgstr "Platziere die Zentrierhilfe oben links."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:87
 #, no-c-format
 msgid "Show thermal assistant in top right."
-msgstr "Platziere Zentrierhilfe unten rechts."
+msgstr "Platziere Zentrierhilfe oben rechts."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:90
 #, no-c-format
 msgid "Show thermal assistant in center top."
-msgstr "Platziere die Zentrierhilfe unten links."
+msgstr "Platziere die Zentrierhilfe Mitte oben."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:93
 #, no-c-format
 msgid "Show thermal assistant in top left (avoid InfoBoxes)."
 msgstr ""
-"Platziere die Zentrierhilfe unten links, über oder rechts der InfoBoxen."
+"Platziere die Zentrierhilfe oben links, unter oder rechts der InfoBoxen."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:96
 #, no-c-format
 msgid "Show thermal assistant in top right (avoid InfoBoxes)."
 msgstr ""
-"Platziere die Zentrierhilfe unten rechts, über oder links der InfoBoxen."
+"Platziere die Zentrierhilfe oben rechts, unter oder links der InfoBoxen."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:99
 #, no-c-format
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr ""
-"Platziere die Zentrierhilfe unten links, über oder rechts der InfoBoxen."
+"Platziere die Zentrierhilfe Mitte oben, unter oder rechts der InfoBoxen."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:136
 msgid ""
@@ -4564,7 +4563,7 @@ msgid ""
 "indicates the threat level."
 msgstr ""
 "Aktiviert die Anzeige des FLARM Radars. Die Flugrichtung des Ziels relativ "
-"zum eigenen Steuerkurs wird als Pfeilkopf dargestellt. Ein Dreieck, dass "
+"zum eigenen Steuerkurs wird als Pfeilkopf dargestellt. Ein Dreieck, das "
 "nach oben oder nach unten zeigt die Höhe des Ziels relativ zur Eigenen. In "
 "allen Modi deutet die Farbe des Ziels die Größe der Bedrohung an."
 
@@ -4640,16 +4639,16 @@ msgid "If set to \"On\" the vario bar will be shown."
 msgstr "Hier kannst Du den Variostengel einschalten"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:180
-msgid "No Position Target Distance Ring"
-msgstr "Kein Positionsziel Entfernungsring"
+msgid "No position target"
+msgstr "Entfernungsring für Ziele ohne Position"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:181
 msgid ""
 "This parameter enables or disables the No Position Target Distance Ring in "
 "Flarm Radar"
 msgstr ""
-"Dieser Parameter aktiviert oder deaktiviert den Kein-Positionsziel-"
-"Entfernungsring im FLARM Radar"
+"Dieser Parameter aktiviert oder deaktiviert den Entfernungsring für"
+"Ziele ohne Position im FLARM Radar"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:41
 msgid "Speed arrows"
@@ -4660,8 +4659,8 @@ msgid ""
 "Whether to show speed command arrows on the vario gauge. In cruise mode, "
 "arrows pointing up command slow down; arrows pointing down command speed up."
 msgstr ""
-"Ob Pfeile für die Geschwindigkeitsanweisung in der Varioanzeige dargestellt "
-"werden sollen. Wenn aktiviert weisen im Vorflugmodus Aufwärtspfeile zum "
+"Pfeile für die Geschwindigkeitsanweisung in der Varioanzeige. "
+"Wenn aktiviert weisen im Vorflugmodus Aufwärtspfeile zum "
 "Verlangsamen, und Abwärtspfeile zum Beschleunigen an."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:47
@@ -4673,7 +4672,7 @@ msgid ""
 "Whether to show the average climb rate. In cruise mode, this switches to "
 "showing the average netto airmass rate."
 msgstr ""
-"Ob das mittlere Steigen angezeigt werden soll. Im Vorflug wird dann auf "
+"Anzeige des mittleren Steigens. Im Vorflug wird dann auf "
 "mittlere Nettovario Anzeige geschaltet."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:53
@@ -4682,7 +4681,7 @@ msgstr "Zeige MacCready"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:53
 msgid "Whether to show the MacCready setting."
-msgstr "Ob der MacCready-Wert angezeigt werden soll."
+msgstr "Anzeige des MacCready-Werts."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:56
 msgid "Show bugs"
@@ -4690,7 +4689,7 @@ msgstr "Zeige Mücken"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:56
 msgid "Whether to show the bugs percentage."
-msgstr "Ob die Mücken in Prozent angezeigt werden soll."
+msgstr "Anzeige der Mücken in Prozent."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:59
 msgid "Show ballast"
@@ -4698,7 +4697,7 @@ msgstr "Zeige Ballast"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:59
 msgid "Whether to show the ballast percentage."
-msgstr "Ob der Ballastprozentanteil angezeigt werden soll."
+msgstr "Anzeige des Ballastprozentanteils."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:62
 msgid "Show gross"
@@ -4706,7 +4705,7 @@ msgstr "Zeige Brutto"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:62
 msgid "Whether to show the gross climb rate."
-msgstr "Ob das Bruttosteigen angezeigt werden soll."
+msgstr "Anzeige des Bruttosteigens."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Averager needle"
@@ -4733,7 +4732,7 @@ msgid ""
 "thermal average netto value. During circling, this needle displays the "
 "average net value."
 msgstr ""
-"Falls aktiviert zeigt die Vario-Anzeige einen Mittelwert-Zeiger anstatt des "
+"Falls aktiviert, zeigt die Vario-Anzeige einen Mittelwert-Zeiger anstatt des "
 "aktuellen Variowertes. Im Vorflug zeigt der Zeiger das gemittelte "
 "Nettosteigen der letzten Thermik. Im Steigen wird das mittlere Nettovario "
 "angezeigt."
@@ -5346,7 +5345,7 @@ msgstr "Zeitintervall im Steigen"
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "This is the time interval between logged points when circling."
 msgstr ""
-"Mit diesem Zeitintervall werden im Steigmodus GPS Positionen ins Logg "
+"Mit diesem Zeitintervall werden im Steigmodus GPS Positionen ins Log "
 "geschrieben."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:78
@@ -5925,7 +5924,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:44
 msgid "XCSoar data path"
-msgstr "Pfad der XCSoar-Daten"
+msgstr "XCSoar Verzeichnis"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:44
 msgid "Click to view full path"
@@ -5952,7 +5951,7 @@ msgstr ""
 "(.dat), Zander (.wpz), oder SeeYou Dateien (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
-msgid "Watched waypoints"
+msgid "Watched WPTs"
 msgstr "Beobachtete Wegpunkte"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:61
@@ -5994,8 +5993,8 @@ msgstr ""
 "(.sua)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
-msgid "FLARM Device Database"
-msgstr "FLARM Id Datenbank"
+msgid "FLARM database"
+msgstr "FLARM ID Datenbank"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:88
 msgid ""
@@ -6093,8 +6092,8 @@ msgid ""
 "E-ink friendly color scheme, lighter and thicker dots means lift while "
 "darker and thinner means sink."
 msgstr ""
-"E-Ink-freundliches Farbschema: hellere und dickere Punkte bedeuten Auftrieb,"
-" dunklere und dünnere bedeuten Sinkflug."
+"E-Ink-freundliches Farbschema: hellere und dickere Punkte bedeuten Aufwind, "
+"dunklere und dünnere bedeuten Sinken."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
@@ -6216,7 +6215,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Fade traffic"
-msgstr "Verkehr ausblenden"
+msgstr "Verkehr langsam ausblenden"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
 msgid "Keep showing traffic for a while after it has disappeared."
@@ -6402,7 +6401,7 @@ msgid ""
 "Wait time in minutes after Pilot Event and before start gate opens. 0 means "
 "start opens immediately."
 msgstr ""
-"Wartezeit in Minuten nach Pilotenevent und bevor das Starttor öffnet. \n"
+"Wartezeit in Minuten nach Pilot-Event und bevor das Starttor öffnet. \n"
 "0 bedeutet, das Starttor öffnet sofort."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:115
@@ -6415,7 +6414,7 @@ msgid ""
 "Number of minutes start remains open after Pilot Event and PEV wait time.0 "
 "means start will never close after it opens."
 msgstr ""
-"Dauer in Minuten für die das Start-Tor nach dem Piloten Event geöffnet "
+"Dauer in Minuten für die das Start-Tor nach dem Pilot-Event geöffnet "
 "bleibt. 0 bedeutet der Start bleibt unbegrenzt offen."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:61
@@ -6507,7 +6506,7 @@ msgid ""
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
-"Gleich lautend zu den FAI Dreiecksregeln. Drei Wenden wobei Abflug und Ziel "
+"Entspricht den FAI Dreiecksregeln. Drei Wenden wobei Abflug und Ziel "
 "identisch sind. Kein Schenkel darf kürzer als 28% der Gesamtstrecke sein, "
 "mit Ausnahme bei Aufgaben über 500km: Es darf kein Schenkel kleiner 25%, "
 "oder größer als 45% sein."
@@ -6816,11 +6815,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:269
 msgid "Contours"
-msgstr "Konturen"
+msgstr "Höhenlinien"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:270
 msgid "If enabled, draws contour lines on the terrain."
-msgstr "Wenn aktiviert, werden Konturlinien über das Gelände gelegt."
+msgstr "Wenn aktiviert, werden Höhenlinien über das Gelände gelegt."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:109
 msgid "Preset"
@@ -7454,7 +7453,7 @@ msgstr "Minimale AAT Aufgabenzeit in Minuten."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:216
 msgid "Arm start manually"
-msgstr "Abflug manuell auf Bereit"
+msgstr "Aktiviere Abflug manuell"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:217
 msgid "Configure whether the start must be armed manually or automatically."
@@ -7990,7 +7989,7 @@ msgstr "Kein TAF verfügbar!"
 #: src/InfoBoxes/Content/Factory.cpp:117
 #, no-c-format
 msgid "Altitude GPS"
-msgstr "Höhe - GPS FLughöhe"
+msgstr "Höhe - GPS Flughöhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:118
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:63
@@ -9607,7 +9606,7 @@ msgid ""
 "safety arrival height. For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
-"Ankunftshöhe am nächsten Wegpunkt mit MC 0 relativ zur Sicherheitsankunftshöhe.\n"
+"Ankunftshöhe am nächsten Wegpunkt mit MC 0 relativ zur Sicherheitsankunftshöhe. "
 "Bei AAT-Aufgaben wird das Ziel im Sektor benutzt."
 
 #: src/InfoBoxes/Content/Factory.cpp:869
@@ -10064,7 +10063,7 @@ msgstr "Alternative 2 - Gleitzahl"
 #: src/InfoBoxes/Content/Factory.cpp:1078
 #, no-c-format
 msgid "Altn 2 GR"
-msgstr "Altn1 benö GZ"
+msgstr "Altn2 benö GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:1079
 #, no-c-format
@@ -11256,4 +11255,4 @@ msgstr ""
 
 #: Data/Input/default.xci:1395
 msgid "Quit XCSoar"
-msgstr "XCSoar"
+msgstr "XCSoar\nbeenden"
