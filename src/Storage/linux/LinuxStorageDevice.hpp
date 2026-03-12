@@ -34,4 +34,7 @@ public:
   OpenWrite(Path path, bool truncate = true) override;
 
   std::optional<Space> GetSpace() const noexcept override;
+
+protected:
+  AllocatedPath RootPath() const override { return AllocatedPath{Path{mount_point_}}; }
 };
