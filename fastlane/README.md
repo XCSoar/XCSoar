@@ -20,7 +20,7 @@ display order.
 
 Localized Play Store metadata is currently provided for:
 `de-DE`, `el-GR`, `es-ES`, `fr-FR`, `it-IT`, `ja-JP`, `ko-KR`,
-`nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `tr-TR`, `uk-UA`, `zh-CN`,
+`nl-NL`, `pl-PL`, `pt-BR`, `pt-PT`, `tr-TR`, `uk`, `zh-CN`,
 and `zh-TW`.
 
 CI uploads this metadata with:
