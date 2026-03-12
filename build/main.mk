@@ -499,6 +499,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Storage/PlatformStorageHotplugMonitor.cpp \
 	$(SRC)/Storage/StorageManager.cpp \
 	$(SRC)/Storage/StorageEvents.cpp \
+	$(SRC)/Storage/DirEntry.cpp \
+	$(SRC)/Storage/StorageDevice.cpp \
 	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \

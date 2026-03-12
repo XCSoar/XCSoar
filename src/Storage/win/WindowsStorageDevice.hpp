@@ -32,6 +32,9 @@ public:
 
   std::optional<Space> GetSpace() const noexcept override;
 
+protected:
+  AllocatedPath RootPath() const override { return AllocatedPath{Path{mount_point_}}; }
+
 private:
   Kind MapDriveType() const noexcept;
 };
