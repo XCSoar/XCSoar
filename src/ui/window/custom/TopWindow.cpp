@@ -194,10 +194,12 @@ TopWindow::Expose() noexcept
 
   screen->Flip();
 
-#if defined(ENABLE_OPENGL) && defined(GL_EXT_discard_framebuffer)
-  /* tell the GPU that we won't be needing the frame buffer contents
-     again which can increase rendering performance; see
-     https://registry.khronos.org/OpenGL/extensions/EXT/EXT_discard_framebuffer.txt */
+#if defined(ENABLE_OPENGL) && defined(GL_EXT_discard_framebuffer) && \
+  (defined(ANDROID) || defined(MESA_KMS))
+  /* On mobile/KMS style backends, discarding the previous window
+     contents can save bandwidth.  Desktop EGL/GLX compositors may
+     still read from the just-swapped window surface, so avoid this
+     optimisation there. */
   if (GLExt::discard_framebuffer != nullptr) {
     static constexpr GLenum attachments[3] = {
       GL_COLOR_EXT,
