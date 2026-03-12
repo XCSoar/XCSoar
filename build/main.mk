@@ -501,6 +501,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Storage/StorageEvents.cpp \
 	$(SRC)/Storage/DirEntry.cpp \
 	$(SRC)/Storage/StorageDevice.cpp \
+	$(SRC)/Storage/StorageUtil.cpp \
 	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
