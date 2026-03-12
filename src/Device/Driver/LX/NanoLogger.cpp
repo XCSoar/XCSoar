@@ -6,6 +6,7 @@
 #include "Device/RecordedFlight.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "Device/Util/NMEAReader.hpp"
+#include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
 #include "system/Path.hpp"
 #include "io/BufferedOutputStream.hxx"
@@ -307,8 +308,8 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
 
   StaticString<60> text;
   if (resume_row && *resume_row > 1) {
-    text.Format("%s: %s.", _("Resumed Download flight log"),
-                    "LXNAV");
+    text.Format("%s: %s.", _("Resuming flight log download"),
+                "LXNAV");
     env.SetText(text);
   }
 
@@ -341,9 +342,12 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
       const char *line = nullptr;
       try {
         line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
+      } catch (const OperationCancelled &) {
+        throw;
       } catch (...) {
-        LogFormat("Communication with logger timed out, tries: %u, line: %u", request_retry_count, i);
-        LogError(std::current_exception(), "Download failing");
+        LogFormat("NanoLogger: communication with logger timed out,"
+                  " tries: %u, line: %u", request_retry_count, i);
+        LogError(std::current_exception(), "NanoLogger: download failing");
       }
 
       if (line == nullptr || !HandleFlightLine(line, os, i, row_count)) {
@@ -380,7 +384,8 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
             lines_since_last_flush = 0;
           } catch (...) {
             /* If flush fails, keep resume_row at previous safe point */
-            LogError(std::current_exception(), "Failed to flush data to disk");
+            LogError(std::current_exception(),
+                     "NanoLogger: failed to flush data to disk");
             throw;
           }
         }
@@ -394,7 +399,8 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
         if (resume_row)
           *resume_row = i;
       } catch (...) {
-        LogError(std::current_exception(), "Failed to flush final data to disk");
+        LogError(std::current_exception(),
+                 "NanoLogger: failed to flush final data to disk");
         throw;
       }
       /* finished successfully */
@@ -444,10 +450,13 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
       // Count lines in existing partial file
       calculated_resume_row = CountLinesInFile(partial_path);
       if (calculated_resume_row > 1) {
-        LogFormat("Resuming download from line %u", calculated_resume_row);
+        LogFormat("NanoLogger: resuming download from line %u",
+                  calculated_resume_row);
       }
     } catch (...) {
-      LogError(std::current_exception(), "Failed to count lines in partial file, deleting it for clean fresh download.");
+      LogError(std::current_exception(),
+               "NanoLogger: failed to count lines in partial file,"
+               " deleting it for clean fresh download.");
       // If we can't count, delete partial and start fresh
       File::Delete(partial_path);
       calculated_resume_row = 1;
@@ -467,8 +476,12 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
     if (success) {
       bos.Flush();
       fos.Commit();
-      LogFormat("Download complete, renaming to final filename");
-      File::Rename(partial_path, path);
+      LogFormat("NanoLogger: download complete, renaming to final filename");
+      if (!File::Rename(partial_path, path)) {
+        LogFormat("NanoLogger: failed to rename partial flight log to final"
+                  " filename");
+        return false;
+      }
       return true;
     } 
   } catch (...) {
@@ -476,7 +489,7 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
         bos.Flush();
         fos.Commit();
       } catch (...) {
-        LogFormat("Failed to flush partial data to disk");
+        LogFormat("NanoLogger: failed to flush partial data to disk");
       }
     throw;
   }
