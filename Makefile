@@ -182,6 +182,8 @@ include $(topdir)/build/libevent_options.mk
 include $(topdir)/build/udev.mk
 include $(topdir)/build/libevent.mk
 include $(topdir)/build/freetype.mk
+include $(topdir)/build/fonts.mk
+include $(topdir)/build/nsis.mk
 include $(topdir)/build/libpng.mk
 include $(topdir)/build/libjpeg.mk
 include $(topdir)/build/libtiff.mk
@@ -263,6 +265,18 @@ endif
 
 ifeq ($(HAVE_WIN32),y)
 OUTPUTS += $(LAUNCH_XCSOAR_BIN)
+# Package with ANGLE DLLs if using ANGLE on Windows
+ifeq ($(USE_ANGLE),y)
+ANGLE_ZIP = $(TARGET_BIN_DIR)/$(PROGRAM_NAME).zip
+OUTPUTS += $(ANGLE_ZIP)
+
+$(ANGLE_ZIP): $(XCSOAR_BIN) $(ANGLE_BIN_DLLS) $(FONT_TARGETS)
+	@$(NQ)echo "  ZIP     $(@F)"
+	$(Q)cd $(TARGET_BIN_DIR) && $(ZIP) -r $(@F) $(notdir $(XCSOAR_BIN) $(ANGLE_BIN_DLLS)) $(if $(FONT_TARGETS),fonts/*.ttf)
+endif
+ifeq ($(FREETYPE),y)
+OUTPUTS += $(FONT_TARGETS)
+endif
 endif
 
 endif

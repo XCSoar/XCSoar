@@ -207,7 +207,20 @@ TopWindow::OnEvent(const SDL_Event &event)
     switch (event.window.event) {
 
     case SDL_WINDOWEVENT_RESIZED:
-#ifndef HAVE_HIGHDPI_SUPPORT
+#if defined(HAVE_HIGHDPI_SUPPORT) && defined(_WIN32)
+      {
+        int w = static_cast<int>(event.window.data1 *
+                                 point_to_real_x);
+        int h = static_cast<int>(event.window.data2 *
+                                 point_to_real_y);
+
+        if (screen->CheckResize(PixelSize(w, h)))
+          Resize(screen->GetSize());
+        Refresh();
+
+        return true;
+      }
+#elif !defined(HAVE_HIGHDPI_SUPPORT)
 #ifdef ENABLE_OPENGL
       if (screen->CheckResize(PixelSize(event.window.data1, event.window.data2)))
         Resize(screen->GetSize());
@@ -259,6 +272,9 @@ TopWindow::OnEvent(const SDL_Event &event)
            NSWindowCollectionBehaviorFullScreenPrimary];
         }
         Invalidate();
+#endif
+#ifdef _WIN32
+        Refresh();
 #endif
       }
       return true;

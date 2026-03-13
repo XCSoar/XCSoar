@@ -363,9 +363,13 @@ VScrollPanel::OnMouseWheel(PixelPoint p, int delta) noexcept
   if (PanelControl::OnMouseWheel(p, delta))
     return true;
 
-  // Scroll by 3 steps per wheel notch (delta is typically 120 per notch)
   const int step = GetScrollStep();
+#if defined(ENABLE_SDL) && defined(_WIN32)
+  // On Windows/SDL, scroll wheel signals are smaller
+  const int scroll_amount = delta * 3 * step;
+#else
   const int scroll_amount = (delta * 3 * step) / 120;
+#endif
   ScrollBy(-scroll_amount);
   return true;
 }
