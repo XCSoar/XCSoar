@@ -535,6 +535,64 @@ in the table below.
 \end{longtable}
 \end{maxipage}
 
+\section{Weather forecast, EDL Soaring}\label{sec:weather-edl}
+
+XCSoar can display wave-oriented weather overlays provided by the
+public EDL Soaring MBTiles service at
+\url{https://www.edl-soaring.com/mbtiles/}.  XCSoar downloads the
+tiles on demand from EDL Soaring's public extraction service and stores
+them locally as \verb|.mbtiles| files in the weather cache.
+
+The EDL controls are available from the
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}} dialogue on the
+\bmenuw{EDL} tab.  This tab allows the pilot to:
+\begin{description}
+\item[Forecast] Select the forecast hour to display.  XCSoar shows this
+  time in local time for the pilot's convenience, but requests the data
+  from the EDL service in UTC because the remote service expects UTC
+  timestamps.
+\item[Level] Select one of the supported pressure levels.  The EDL
+  source provides the fixed isobars 500, 600, 700, 800 and 900~hPa.
+  XCSoar also shows the approximate altitude corresponding to each
+  isobar in the current pressure setting.
+\item[Always show EDL on map] Keep the EDL overlay visible on ordinary
+  map pages.  When this option is disabled, the overlay is shown only on
+  the dedicated EDL page.
+\item[Cached day] Show which UTC days are already stored in the local
+  cache.  A day is marked \emph{Complete} when all 24 forecast hours and
+  all five EDL levels are available locally, otherwise it is marked
+  \emph{Partial}.
+\item[Precache day] Download all 24 hours and all five EDL levels for
+  the currently selected UTC day.  This is intended for pre-flight
+  preparation, so that the EDL data remains available when internet
+  connectivity is lost in flight.
+\item[Clean other days] Keep only the selected cached UTC day and delete
+  the other locally cached EDL days.
+\end{description}
+
+EDL overlays can be used in two ways:
+\begin{description}
+\item[Dedicated EDL page] In the page configuration dialogue
+  (Section~\ref{conf:screenpages}), select \emph{EDL weather} as the
+  \emph{Main area} and \emph{EDL} as the \emph{Bottom area}.  Entering
+  this page resets the display to the current UTC hour and selects the
+  nearest supported EDL level for the current glider altitude when that
+  altitude is available from the connected sensors.  The overlay legend
+  in the upper right corner shows the active local forecast hour, the
+  selected pressure level and its approximate altitude.
+\item[Overlay on the normal map] Open
+  \menulabelr{\bmenug{Info}\blink\bmenug{Weather}} \bmenuw{EDL}, select
+  the desired forecast hour and level, and enable
+  \bmenuw{Always show EDL on map}.  The normal moving map remains in use,
+  with the EDL weather image shown as an overlay on top of the map.
+\end{description}
+
+The EDL source is intended for wave flying and provides rendered image
+tiles rather than raw meteorological grids.  XCSoar therefore uses the
+EDL imagery as a map overlay and does not expose additional model
+parameters beyond the forecast hour and the fixed isobar levels
+published by the EDL service.
+
 \section{pc\_met, Deutscher Wetterdienst}\label{sec:pcmet}
 
 German weather service ``Deutscher Wetterdienst'' provides several
