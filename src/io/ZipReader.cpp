@@ -29,7 +29,7 @@ ZipReader::~ZipReader()
 }
 
 uint_least64_t
-ZipReader::GetSize() const
+ZipReader::GetSize() const noexcept
 {
   ZZIP_STAT st;
   return zzip_file_stat(file, &st) >= 0

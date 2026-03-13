@@ -39,6 +39,7 @@ class NativeView {
   static jmethodID isAutoRotateEnabled_method;
   static jmethodID getPhysicalOrientation_method;
   static jmethodID startMyService_method;
+  static jmethodID launchSAFTreePicker_method;
 
   static Java::TrivialClass clsBitmap;
   static jmethodID createBitmap_method;
@@ -184,4 +185,9 @@ public:
   void StartMyService(JNIEnv *env) const noexcept {
     env->CallVoidMethod(obj, startMyService_method);
   }
+
+  /**
+   * Launch the SAF document-tree picker for a given volume UUID.
+   */
+  void LaunchSAFTreePicker(JNIEnv *env, const char *volume_uuid) const noexcept;
 };

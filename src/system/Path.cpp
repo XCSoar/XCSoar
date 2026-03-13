@@ -71,6 +71,22 @@ Path::IsBase() const noexcept
 #endif
 }
 
+bool
+Path::HasPathTraversal() const noexcept
+{
+  assert(*this != nullptr);
+
+  for (const auto *s = c_str();
+       (s = strstr(s, "..")) != nullptr; s += 2) {
+    if (s != c_str() && !IsDirSeparator(s[-1]))
+      continue;
+    if (s[2] != '\0' && !IsDirSeparator(s[2]))
+      continue;
+    return true;
+  }
+  return false;
+}
+
 [[gnu::pure]]
 static Path::const_pointer
 LastSeparator(Path::const_pointer path) noexcept

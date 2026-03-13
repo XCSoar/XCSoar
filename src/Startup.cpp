@@ -67,6 +67,7 @@
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Storage/StorageManager.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -380,6 +381,15 @@ Startup(UI::Display &display)
 
   data_components = new DataComponents();
   backend_components = new BackendComponents();
+
+  /* Create storage manager and hand it a callback that marshals
+     notifications to the UI thread via MainWindow::storage_notify_. */
+  backend_components->storage_manager =
+    std::make_unique<StorageManager>([main_window]{
+      main_window->SendStorageNotification();
+    });
+  backend_components->storage_manager->StartMonitoring();
+  main_window->InitialiseStorage();
 
   ReadLanguageFile();
 
@@ -803,6 +813,12 @@ Shutdown()
 
   // Destroy FlarmNet records
   DeinitTrafficGlobals();
+
+  main_window->DeinitialiseStorage();
+
+  if (backend_components != nullptr &&
+      backend_components->storage_manager != nullptr)
+    backend_components->storage_manager->StopMonitoring();
 
   delete backend_components;
   backend_components = nullptr;

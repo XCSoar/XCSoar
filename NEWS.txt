@@ -118,6 +118,7 @@ Version 7.44 - 2026-03-12
   - InfoBoxes with a single action now open their dialog directly on
     tap instead of showing a redundant menu #1442
   - fix Escape key not closing the waypoint details dialog
+  - add flight export and file import to external storage for linux and windows
   - fix UTF-8 text wrapping crash with non-ASCII characters #2184 #2185
   - display "---" instead of "???" for invalid map item values
   - fix profile not saved after team code, plane, or NOAA changes #2171

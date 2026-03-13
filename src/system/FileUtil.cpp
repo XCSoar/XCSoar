@@ -16,6 +16,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <cstdio>
+#include <string>
+#include <vector>
 
 #ifdef HAVE_POSIX
 #include <dirent.h>
@@ -23,6 +26,10 @@
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
+#endif
+
+#if defined(_WIN32)
+#include <windows.h>
 #endif
 
 void
@@ -33,6 +40,19 @@ Directory::Create(Path path) noexcept
 #else /* !HAVE_POSIX */
   CreateDirectory(path.c_str(), nullptr);
 #endif /* !HAVE_POSIX */
+}
+
+void
+Directory::CreateRecursive(Path path) noexcept
+{
+  if (path == nullptr || Exists(path))
+    return;
+
+  AllocatedPath parent = path.GetParent();
+  if (parent != nullptr && parent != path)
+    CreateRecursive(parent);
+
+  Create(path);
 }
 
 bool
@@ -48,6 +68,68 @@ Directory::Exists(Path path) noexcept
   DWORD attributes = GetFileAttributes(path.c_str());
   return attributes != INVALID_FILE_ATTRIBUTES &&
     (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+#endif
+}
+
+bool
+Directory::IsWritable(Path path) noexcept
+{
+#ifdef HAVE_POSIX
+  struct stat st;
+  if (stat(path.c_str(), &st) != 0)
+    return false;
+
+  if (!S_ISDIR(st.st_mode))
+    return false;
+
+  return access(path.c_str(), W_OK) == 0;
+#elif defined(_WIN32)
+  if (!Directory::Exists(path))
+    return false;
+
+  // Try to create a uniquely-named file using CreateFileA and remove it
+  // immediately. This avoids CRT path formatting and keeps overhead low.
+  std::string base = path.c_str();
+  if (base.empty())
+    return false;
+
+  const bool needs_sep = base.back() != '\\' &&
+    base.back() != '/';
+  if (needs_sep)
+    base.push_back('\\');
+
+  constexpr size_t hex_len = 8;
+  constexpr std::string_view suffix = "_wt";
+  constexpr std::string_view ext = ".tmp";
+  if (base.size() + suffix.size() + hex_len + ext.size() >= MAX_PATH)
+    return false;
+
+  const unsigned seed = GetTickCount() ^ GetCurrentProcessId();
+  for (unsigned attempt = 0; attempt < 8; ++attempt) {
+    char hexbuf[hex_len + 1];
+    std::snprintf(hexbuf, sizeof(hexbuf), "%08x", seed ^ attempt);
+
+    std::string tmpname = base;
+    tmpname.append(suffix);
+    tmpname.append(hexbuf);
+    tmpname.append(ext);
+
+    HANDLE h = CreateFile(tmpname.c_str(),
+                          GENERIC_WRITE,
+                          FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                          nullptr,
+                          CREATE_NEW,
+                          FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
+                          nullptr);
+    if (h != INVALID_HANDLE_VALUE) {
+      CloseHandle(h);
+      return true;
+    }
+  }
+  return false;
+#else
+  // assume writability
+  return true;
 #endif
 }
 
@@ -145,7 +227,8 @@ ScanFiles(File::Visitor &visitor, Path sPath,
 
 static bool
 ScanDirectories(File::Visitor &visitor, bool recursive,
-                Path sPath, const char* filter = "*")
+                Path sPath, const char* filter = "*", bool show_dir = false,
+                Directory::DirEntryVisitor *dir_entry_cb = nullptr)
 {
 #ifdef HAVE_POSIX
   DIR *dir = opendir(sPath.c_str());
@@ -169,15 +252,24 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     if (stat(FileName, &st) < 0)
       continue;
 
-    if (S_ISDIR(st.st_mode) && recursive)
-      ScanDirectories(visitor, true, Path(FileName), filter);
-    else {
+    if (S_ISDIR(st.st_mode)) {
+      if (dir_entry_cb)
+        dir_entry_cb->Visit(Path(FileName), Path(ent->d_name), true);
+      else if (show_dir)
+        visitor.Visit(Path(FileName), Path(ent->d_name));
+      if (recursive)
+        ScanDirectories(visitor, true, Path(FileName), filter, show_dir, dir_entry_cb);
+    } else {
       int flags = 0;
 #ifdef FNM_CASEFOLD
       flags = FNM_CASEFOLD;
 #endif
-      if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, flags) == 0)
-        visitor.Visit(Path(FileName), Path(ent->d_name));
+      if (S_ISREG(st.st_mode) && fnmatch(filter, ent->d_name, flags) == 0) {
+        if (dir_entry_cb)
+          dir_entry_cb->Visit(Path(FileName), Path(ent->d_name), false);
+        else
+          visitor.Visit(Path(FileName), Path(ent->d_name));
+      }
     }
   }
 
@@ -196,11 +288,8 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   }
 
   // Scan for files in "/test/data/something"
-  ScanFiles(visitor, Path(FileName), filter);
-
-  // If we are not scanning recursive we are done now
-  if (!recursive)
-    return true;
+  if (dir_entry_cb == nullptr)
+    ScanFiles(visitor, Path(FileName), filter);
 
   // "test/data/something/"
   strcat(DirPath, DIR_SEPARATOR_S);
@@ -215,16 +304,28 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   if (hFind == INVALID_HANDLE_VALUE)
     return false;
 
-  // Loop through remaining files
+  // Loop through remaining entries.
   while (true) {
-    if (!IsDots(FindFileData.cFileName) &&
-        (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+    if (!IsDots(FindFileData.cFileName)) {
       // "test/data/something/"
       strcpy(FileName, DirPath);
       // "test/data/something/SUBFOLDER"
       strcat(FileName, FindFileData.cFileName);
-      // Scan subfolder for matching files too
-      ScanDirectories(visitor, true, Path(FileName), filter);
+
+      if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+        if (dir_entry_cb)
+          dir_entry_cb->Visit(Path(FileName), Path(FindFileData.cFileName), true);
+        else if (show_dir)
+          visitor.Visit(Path(FileName), Path(FindFileData.cFileName));
+
+        if (recursive)
+          ScanDirectories(visitor, true, Path(FileName), filter, show_dir, dir_entry_cb);
+      } else if (checkFilter(FindFileData.cFileName, filter)) {
+        if (dir_entry_cb)
+          dir_entry_cb->Visit(Path(FileName), Path(FindFileData.cFileName), false);
+        else
+          visitor.Visit(Path(FileName), Path(FindFileData.cFileName));
+      }
     }
 
     // Look for next file/folder
@@ -260,6 +361,82 @@ Directory::VisitSpecificFiles(Path path, const char* filter,
                               File::Visitor &visitor, bool recursive)
 {
   ScanDirectories(visitor, recursive, path, filter);
+}
+
+void
+Directory::VisitDirectoriesAndFiles(Path path, File::Visitor &visitor,
+                                    bool recursive) noexcept
+{
+  ScanDirectories(visitor, recursive, path, "*", true);
+}
+
+void
+Directory::VisitDirectoriesAndFiles(Path path, DirEntryVisitor &visitor,
+                                    bool recursive) noexcept
+{
+  // Use the internal mixed scanner and ignore File::Visitor callbacks.
+  struct NullVisitor : File::Visitor { void Visit(Path, Path) override {} } nullv;
+  ScanDirectories(nullv, recursive, path, "*", true, &visitor);
+}
+
+bool
+Directory::Remove(Path path) noexcept
+{
+  if (!Exists(path))
+    return true;
+
+#ifdef HAVE_POSIX
+  DIR *dir = opendir(path.c_str());
+  if (dir == nullptr)
+    return false;
+
+  bool ok = true;
+
+  struct dirent *ent;
+  while ((ent = readdir(dir)) != nullptr) {
+    if (*ent->d_name == '.')
+      continue;
+
+    AllocatedPath child = AllocatedPath::Build(path, Path(ent->d_name));
+
+    struct stat st;
+    if (stat(child.c_str(), &st) < 0) {
+      ok = false;
+      continue;
+    }
+
+    if (S_ISDIR(st.st_mode))
+      ok &= Remove(child);
+    else
+      ok &= (unlink(child.c_str()) == 0);
+  }
+
+  closedir(dir);
+  return ok && rmdir(path.c_str()) == 0;
+#else
+  AllocatedPath search = AllocatedPath::Build(path, Path("*"));
+
+  WIN32_FIND_DATA fd;
+  HANDLE hFind = FindFirstFile(search.c_str(), &fd);
+  if (hFind == INVALID_HANDLE_VALUE)
+    return RemoveDirectoryA(path.c_str());
+
+  bool ok = true;
+  do {
+    if (IsDots(fd.cFileName))
+      continue;
+
+    AllocatedPath child = AllocatedPath::Build(path, Path(fd.cFileName));
+
+    if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+      ok &= Remove(child);
+    else
+      ok &= (DeleteFile(child.c_str()) != 0);
+  } while (FindNextFile(hFind, &fd));
+
+  FindClose(hFind);
+  return ok && RemoveDirectoryA(path.c_str());
+#endif
 }
 
 bool
@@ -398,6 +575,34 @@ File::ReadString(Path path, char *buffer, size_t size) noexcept
 
   buffer[nbytes] = '\0';
   return true;
+}
+
+bool
+File::ReadLink([[maybe_unused]] Path path,
+               [[maybe_unused]] std::string &out) noexcept
+{
+#ifdef HAVE_POSIX
+  // readlink does not null-terminate; resize buffer as needed
+  size_t bufsize = 256;
+  std::vector<char> buf;
+
+  while (true) {
+    buf.resize(bufsize);
+    ssize_t n = readlink(path.c_str(), buf.data(), buf.size());
+    if (n < 0)
+      return false;
+    if (static_cast<size_t>(n) < buf.size()) {
+      out.assign(buf.data(), static_cast<size_t>(n));
+      return true;
+    }
+    // truncated, increase buffer and retry
+    bufsize *= 2;
+    if (bufsize > 65536)
+      return false;
+  }
+#else
+  return false;
+#endif
 }
 
 bool
