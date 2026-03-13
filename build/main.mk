@@ -151,7 +151,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
-	$(SRC)/Dialogs/Weather/WeatherPageWidget.cpp \
+	$(SRC)/Dialogs/Weather/WeatherControlsWidget.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickGuide.cpp \
 	$(SRC)/Dialogs/dlgGestureHelp.cpp \
@@ -627,6 +627,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/EDL/Request.cpp \
 	$(SRC)/Weather/EDL/LevelResolver.cpp \
+	$(SRC)/Weather/EDL/Manager.cpp \
 	$(SRC)/Weather/EDL/Download.cpp \
 	$(SRC)/Weather/EDL/MbTilesDatabase.cpp \
 	$(SRC)/Weather/EDL/MbTilesOverlay.cpp \

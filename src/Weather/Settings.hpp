@@ -27,6 +27,11 @@ struct WeatherSettings {
    * Enable the EDL weather page and downloader?
    */
   bool enable_edl;
+
+  /**
+   * Keep the EDL overlay visible on the normal map pages?
+   */
+  bool show_edl_on_main_map;
 #endif
 
   void SetDefaults() {
@@ -37,6 +42,7 @@ struct WeatherSettings {
 #ifdef HAVE_HTTP
     enable_tim = false;
     enable_edl = true;
+    show_edl_on_main_map = false;
 #endif
   }
 };

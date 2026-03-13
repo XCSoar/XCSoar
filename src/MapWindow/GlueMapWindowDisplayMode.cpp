@@ -204,9 +204,10 @@ GlueMapWindow::UpdateScreenAngle() noexcept
   const MapSettings &settings = CommonInterface::GetMapSettings();
   const UIState &ui_state = CommonInterface::GetUIState();
 
-  // force north-up if the current page is MAP_NORTH_UP
-  const PageLayout &layout = PageActions::GetConfiguredLayout();
-  if (layout.main == PageLayout::Main::MAP_NORTH_UP) {
+  // force north-up if the current page is a dedicated north-up weather page
+  const PageLayout &layout = PageActions::GetCurrentLayout();
+  if (layout.main == PageLayout::Main::MAP_NORTH_UP ||
+      layout.main == PageLayout::Main::EDL_MAP) {
     visible_projection.SetScreenAngle(Angle::Zero());
     OnProjectionModified();
     compass_visible = false;

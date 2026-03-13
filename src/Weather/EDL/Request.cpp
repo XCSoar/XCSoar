@@ -54,14 +54,22 @@ BuildCacheFileName(const BrokenDateTime &forecast, unsigned isobar) noexcept
 }
 
 AllocatedPath
-BuildCachePath(const BrokenDateTime &forecast, unsigned isobar) noexcept
+BuildCacheDirectory() noexcept
 {
   const auto weather_path = LocalPath("weather");
   Directory::Create(weather_path);
-  const auto edl_path = AllocatedPath::Build(weather_path, Path("edl"));
+  auto edl_path = AllocatedPath::Build(weather_path, Path("edl"));
   Directory::Create(edl_path);
-  const auto mbtiles_path = AllocatedPath::Build(edl_path, Path("mbtiles"));
+  auto mbtiles_path = AllocatedPath::Build(edl_path, Path("mbtiles"));
   Directory::Create(mbtiles_path);
+
+  return mbtiles_path;
+}
+
+AllocatedPath
+BuildCachePath(const BrokenDateTime &forecast, unsigned isobar) noexcept
+{
+  const auto mbtiles_path = BuildCacheDirectory();
 
   const auto filename = BuildCacheFileName(forecast, isobar);
   return AllocatedPath::Build(mbtiles_path, Path(filename.c_str()));

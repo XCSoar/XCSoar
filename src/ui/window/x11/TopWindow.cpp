@@ -101,18 +101,18 @@ TopWindow::IsVisible() const noexcept
 void
 TopWindow::EnableCapture() noexcept
 {
-  XGrabPointer(display.GetXDisplay(), x_window, true,
-               ButtonPressMask |
-               ButtonReleaseMask |
-               PointerMotionMask,
-               GrabModeAsync, GrabModeAsync,
-               0, 0, CurrentTime);
+//   XGrabPointer(display.GetXDisplay(), x_window, true,
+//                ButtonPressMask |
+//                ButtonReleaseMask |
+//                PointerMotionMask,
+//                GrabModeAsync, GrabModeAsync,
+//                0, 0, CurrentTime);
 }
 
 void
 TopWindow::DisableCapture() noexcept
 {
-  XUngrabPointer(display.GetXDisplay(), CurrentTime);
+  // XUngrabPointer(display.GetXDisplay(), CurrentTime);
 }
 
 } // namespace UI

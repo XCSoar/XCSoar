@@ -11,6 +11,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
+#include "WeatherControlsWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
@@ -63,6 +64,11 @@ ShowWeatherDialog(const char *page)
     start_page = widget.GetSize();
 
   widget.AddTab(CreateRaspWidget(), "RASP");
+
+  if (page != nullptr && StringIsEqual(page, "edl"))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateWeatherControlsOverlayWidget(), "EDL");
 
 #ifdef HAVE_PCMET
   if (page != nullptr && StringIsEqual(page, "pc_met"))

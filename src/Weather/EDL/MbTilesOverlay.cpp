@@ -9,6 +9,11 @@
 #include "ui/canvas/BufferCanvas.hpp"
 #include "ui/canvas/Canvas.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/ConstantAlpha.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
+#endif
+
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -154,7 +159,11 @@ MbTilesOverlay::Draw(Canvas &canvas, const WindowProjection &projection) noexcep
       const PixelSize dest_size{unsigned(right - left), unsigned(bottom - top)};
 
 #ifdef ENABLE_OPENGL
-      canvas.Stretch(dest_position, dest_size, it->second);
+      (void)canvas;
+      GLTexture &texture = *it->second.GetNative();
+      const ScopeTextureConstantAlpha blend(true, float(alpha) / 255.f);
+      texture.Bind();
+      texture.Draw(PixelRect(dest_position, dest_size), texture.GetRect());
 #else
       BufferCanvas buffer;
       buffer.Create(canvas, it->second.GetSize());

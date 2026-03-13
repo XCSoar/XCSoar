@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
+#include "Overlay.hpp"
 #include "Look/MapLook.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "Language/Language.hpp"
@@ -301,8 +302,8 @@ void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const noexcept
 {
-
   PixelRect scale_pos(rc.left, rc.top, rc.right, rc.bottom - bottom_margin);
+  const char *overlay_label = nullptr;
 
   RenderMapScale(canvas, projection, scale_pos, look.overlay);
 
@@ -349,6 +350,12 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
       buffer += gettext(label);
   }
 
+  if (overlay != nullptr) {
+    const char *label = overlay->GetLabel();
+    if (label != nullptr && *label != '\0')
+      overlay_label = label;
+  }
+
   if (!buffer.empty()) {
 
     const Font &font = *look.overlay.overlay_font;
@@ -361,6 +368,20 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     mode.shape = LabelShape::OUTLINED;
 
     TextInBox(canvas, buffer, {0, scale_pos.bottom - height}, mode, rc, nullptr);
+  }
+
+  if (overlay_label != nullptr) {
+    const Font &font = *look.overlay.overlay_font;
+    canvas.Select(font);
+
+    TextInBoxMode mode;
+    mode.align = TextInBoxMode::Alignment::RIGHT;
+    mode.shape = LabelShape::OUTLINED;
+
+    const unsigned padding = Layout::FastScale(4);
+    TextInBox(canvas, overlay_label,
+              {rc.right - int(padding), int(padding)},
+              mode, rc, nullptr);
   }
 }
 

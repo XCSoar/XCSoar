@@ -34,6 +34,9 @@ StaticString<64>
 BuildCacheFileName(const BrokenDateTime &forecast, unsigned isobar) noexcept;
 
 AllocatedPath
+BuildCacheDirectory() noexcept;
+
+AllocatedPath
 BuildCachePath(const BrokenDateTime &forecast, unsigned isobar) noexcept;
 
 } // namespace EDL
