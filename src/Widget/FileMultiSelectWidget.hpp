@@ -23,7 +23,7 @@ class Canvas;
 class FileMultiSelectWidget : public MultiSelectListWidget {
 public:
   struct FileItem {
-    Path path;
+    AllocatedPath path;
   };
 
   using TextProvider = std::function<const char*(const FileItem&)>;
@@ -86,6 +86,6 @@ private:
   void ApplySelection(const std::vector<Path> &paths) noexcept;
   void MergePaths(const std::vector<Path> &paths) noexcept;
   void RestoreSelection(const std::vector<Path> &saved_selection,
-                        const std::vector<FileItem> &previous_items,
+                        const std::vector<AllocatedPath> &previous_paths,
                         const std::vector<Path> &current_items) noexcept;
 };
