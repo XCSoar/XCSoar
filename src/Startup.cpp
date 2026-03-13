@@ -243,6 +243,8 @@ try {
   SetAirspaceGroundLevels(*data_components->airspaces,
                           *data_components->terrain);
 } catch (...) {
+  SetTopWidget(nullptr);
+  terrain_loader_env.reset();
   LogError(std::current_exception(), "LoadTerrain failed");
 }
 
