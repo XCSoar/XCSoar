@@ -5,6 +5,7 @@
 #include "Form/DataField/MultiFile.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "util/StaticString.hxx"
 #include "Widget/FileMultiSelectWidget.hpp"
 #include "Widget/StaticHelpTextWidget.hpp"
 #include "WidgetDialog.hpp"
@@ -21,7 +22,15 @@ static const char *
 GetFileName(const FileMultiSelectWidget::FileItem &item) noexcept
 {
   const auto base = item.path.GetBase();
-  return (base != nullptr) ? base.c_str() : item.path.c_str();
+  const char *name = (base != nullptr) ? base.c_str() : item.path.c_str();
+
+  if (item.exists)
+    return name;
+
+  /* file configured in profile but not found on disk */
+  static StaticString<256> buffer;
+  buffer.Format("%s [%s]", name, _("not found"));
+  return buffer.c_str();
 }
 
 bool
