@@ -8,9 +8,9 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "system/Path.hpp"
-#include "Storage/PlatformStorageMonitor.hpp"
 #include "Storage/StorageEvents.hpp"
 #include "Storage/StorageManager.hpp"
+#include "Storage/StorageDevice.hpp"
 #include "BackendComponents.hpp"
 #include "Components.hpp"
 #include "Form/Form.hpp"
@@ -25,7 +25,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <cstdint>
+#include <algorithm>
 
 namespace {
 
@@ -33,19 +33,31 @@ static AllocatedPath last_storage_target;
 
 using DeviceList = std::vector<std::shared_ptr<StorageDevice>>;
 
-DeviceList
+static DeviceList
 DiscoverTargets() noexcept
 {
   DeviceList result;
 
-  auto monitor = CreatePlatformStorageMonitor();
-  if (!monitor)
+  if (backend_components == nullptr ||
+      backend_components->storage_manager == nullptr)
     return result;
 
-  for (auto &dev : monitor->Enumerate()) {
-    if (dev && dev->IsWritable() && !dev->Name().empty())
-      result.push_back(std::move(dev));
+  for (const auto &dev :
+       backend_components->storage_manager->GetDevices()) {
+    if (dev == nullptr)
+      continue;
+    if (!dev->IsWritable() && !dev->NeedsPermission())
+      continue;
+    if (dev->Name().empty())
+      continue;
+
+    result.push_back(dev);
   }
+
+  std::stable_sort(result.begin(), result.end(),
+                   [](const auto &a, const auto &b) {
+                     return a->NeedsPermission() < b->NeedsPermission();
+                   });
 
   return result;
 }
@@ -141,27 +153,35 @@ public:
       return;
 
     const auto &dev = *options_[idx];
-    const std::string mount_text = dev.Name();
+    const std::string name = dev.Name();
     const std::string label = dev.Label();
+    const std::string dev_id = dev.Id();
 
-    const std::string &first_text = label.empty() ? mount_text : label;
+    std::string first_text = dev.NeedsPermission()
+      ? label + " - " + _("Grant access")
+      : (label.empty() ? name : label);
 
     std::string second_text;
-    const std::string dev_id = dev.Id();
-    if (!dev_id.empty() && dev_id != first_text)
+    const AllocatedPath mount{name.c_str()};
+    if (IsContentUri(mount)) {
+      const auto subfolder = ExtractSafSubfolder(name);
+      if (!subfolder.empty())
+        second_text = subfolder;
+    } else if (!dev_id.empty() && dev_id != first_text &&
+               !IsSafDeviceId(dev_id))
       second_text = dev_id;
-    else if (mount_text != first_text)
-      second_text = mount_text;
+    else if (name != first_text)
+      second_text = name;
 
     row_renderer_.DrawFirstRow(canvas, rc, first_text.c_str());
 
-    if (auto space = dev.GetSpace()) {
-      char free_buf[16], total_buf[16];
+    if (const auto space = dev.GetSpace()) {
+      char free_buf[64], total_buf[64];
       FormatByteSize(free_buf, sizeof(free_buf), space->free_bytes, false);
       FormatByteSize(total_buf, sizeof(total_buf), space->total_bytes, false);
-      char space_buf[40];
-      snprintf(space_buf, sizeof(space_buf), "%s / %s", free_buf, total_buf);
-      row_renderer_.DrawRightFirstRow(canvas, rc, space_buf);
+      StaticString<128> space_text;
+      space_text.Format("%s / %s", free_buf, total_buf);
+      row_renderer_.DrawRightSecondRow(canvas, rc, space_text.c_str());
     }
 
     if (!second_text.empty())
@@ -196,31 +216,59 @@ AllocatedPath
 PickStorageLocation() noexcept
 {
   const auto &look = UIGlobals::GetDialogLook();
-  auto *list_widget = new StorageListWidget();
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Choose location"));
-  list_widget->SetDialog(dialog);
+  while (true) {
+    auto *list_widget = new StorageListWidget();
 
-  auto *select_btn = dialog.AddButton(_("Select"), mrOK);
-  list_widget->SetSelectButton(*select_btn);
-  dialog.AddButton(_("Scan"), [list_widget]{ list_widget->ScanAndReport(); });
-  dialog.AddButton(_("Cancel"), mrCancel);
-  dialog.EnableCursorSelection();
-  dialog.FinishPreliminary(list_widget);
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, _("Choose location"));
+    list_widget->SetDialog(dialog);
 
-  const int result = dialog.ShowModal();
+    auto *select_btn = dialog.AddButton(_("Select"), mrOK);
+    list_widget->SetSelectButton(*select_btn);
+#ifdef ANDROID
+    static constexpr int mrChangeFolder = 100;
+    dialog.AddButton(_("Change folder"), mrChangeFolder);
+#endif
+    /* "Scan" is kept for manual refresh; hotplug also triggers Refresh(). */
+    dialog.AddButton(_("Scan"), [list_widget]{ list_widget->ScanAndReport(); });
+    dialog.AddButton(_("Cancel"), mrCancel);
+    dialog.EnableCursorSelection();
+    dialog.FinishPreliminary(list_widget);
 
-  if (result != mrOK)
-    return AllocatedPath();
+    const int result = dialog.ShowModal();
 
-  const unsigned sel = list_widget->GetCursorIndex();
-  auto &opts = list_widget->GetOptions();
-  if (sel >= opts.size())
-    return AllocatedPath();
+#ifdef ANDROID
+    if (result == mrChangeFolder) {
+      const unsigned sel = list_widget->GetCursorIndex();
+      auto &opts = list_widget->GetOptions();
+      if (sel < opts.size()) {
+        const auto &dev = opts[sel];
+        if (IsContentUri(AllocatedPath(dev->Name().c_str())))
+          dev->RequestPermission();
+      }
+      continue;
+    }
+#endif
 
-  AllocatedPath chosen{opts[sel]->Name().c_str()};
-  if (chosen != nullptr)
-    last_storage_target = Path(chosen);
-  return chosen;
+    if (result != mrOK)
+      return AllocatedPath();
+
+    const unsigned sel = list_widget->GetCursorIndex();
+    auto &opts = list_widget->GetOptions();
+    if (sel >= opts.size())
+      return AllocatedPath();
+
+    const auto &chosen = opts[sel];
+
+    if (chosen->NeedsPermission()) {
+      chosen->RequestPermission();
+      continue;
+    }
+
+    AllocatedPath chosen_path{chosen->Name().c_str()};
+    if (chosen_path != nullptr)
+      last_storage_target = Path(chosen_path);
+    return chosen_path;
+  }
 }
