@@ -2280,8 +2280,8 @@ msgid "Hardware type"
 msgstr "Version matérielle"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:79
-msgid "Flarm ID"
-msgstr "Capture Flarm"
+msgid "FLARM ID"
+msgstr "Capture FLARM"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:89
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:52
@@ -3282,7 +3282,7 @@ msgstr "Définir WP"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:68
 msgid "Flarm Lock"
-msgstr "Capture Flarm"
+msgstr "Capture FLARM"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:75
 msgid "Own code"
@@ -3305,7 +3305,7 @@ msgstr "Cap Réel"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:80
 msgid "Flarm lock"
-msgstr "Capture Flarm"
+msgstr "Capture FLARM"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:188
 msgid "Unknown Competition Number"
@@ -4431,7 +4431,7 @@ msgstr "Auto (suit les InfoBoxes)"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
 #, no-c-format
 msgid "Top left"
-msgstr "HautGauche"
+msgstr "En haut à gauche"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:86
@@ -4466,13 +4466,13 @@ msgstr "Centre en bas"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:92
 #, no-c-format
 msgid "Top left (avoid InfoBoxes)"
-msgstr "En bas à gauche (hors des InfoBoxes)"
+msgstr "En haut à gauche (hors des InfoBoxes)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:54
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:95
 #, no-c-format
 msgid "Top right (avoid InfoBoxes)"
-msgstr "En bas à droite (hors des InfoBoxes)"
+msgstr "En haut à droite (hors des InfoBoxes)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:56
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
@@ -4490,12 +4490,12 @@ msgstr "En bas à droite (hors des InfoBoxes)"
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
 #, no-c-format
 msgid "Center top (avoid InfoBoxes)"
-msgstr "En bas à gauche (hors des InfoBoxes)"
+msgstr "Centre en haut (hors des InfoBoxes)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:62
 #, no-c-format
 msgid "Center bottom (avoid InfoBoxes)"
-msgstr "En bas à gauche (hors des InfoBoxes)"
+msgstr "Centre en bas (hors des InfoBoxes)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 #, no-c-format
@@ -4514,7 +4514,7 @@ msgid ""
 "(if present)."
 msgstr ""
 "Afficher l'assistant thermique en bas à gauche, au-dessus / à droite des "
-"infoboxes (le cas échéant)."
+"InfoBoxes (le cas échéant)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:78
 #, no-c-format
@@ -4528,43 +4528,43 @@ msgid ""
 "(if present)."
 msgstr ""
 "Afficher l'assistant thermique en bas à droite au-dessus / à gauche des "
-"infoboxes (le cas échéant)."
+"InfoBoxes (le cas échéant)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #, no-c-format
 msgid "Show thermal assistant in top left."
-msgstr "Afficher l'assistant thermique en bas à gauche."
+msgstr "Afficher l'assistant thermique en haut à gauche."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:87
 #, no-c-format
 msgid "Show thermal assistant in top right."
-msgstr "Afficher l'assistant thermique en bas à droite."
+msgstr "Afficher l'assistant thermique en haut à droite."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:90
 #, no-c-format
 msgid "Show thermal assistant in center top."
-msgstr "Afficher l'assistant thermique en bas à gauche."
+msgstr "Afficher l'assistant thermique centre en haut."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:93
 #, no-c-format
 msgid "Show thermal assistant in top left (avoid InfoBoxes)."
 msgstr ""
-"Afficher l'assistant thermique en bas à gauche, au-dessus / à droite des "
-"infoboxes (le cas échéant)."
+"Afficher l'assistant thermique en haut à gauche, au-dessus / à droite des "
+"InfoBoxes (le cas échéant)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:96
 #, no-c-format
 msgid "Show thermal assistant in top right (avoid InfoBoxes)."
 msgstr ""
-"Afficher l'assistant thermique en bas à droite au-dessus / à gauche des "
-"infoboxes (le cas échéant)."
+"Afficher l'assistant thermique en haut à droite au-dessus / à gauche des "
+"InfoBoxes (le cas échéant)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:99
 #, no-c-format
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr ""
-"Afficher l'assistant thermique en bas à gauche, au-dessus / à droite des "
-"infoboxes (le cas échéant)."
+"Afficher l'assistant thermique centre en haut, au-dessus / à droite des "
+"InfoBoxes (le cas échéant)."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:136
 msgid ""
@@ -4653,15 +4653,15 @@ msgstr "Si activé, alors la barre du vario sera affiché."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:180
 msgid "No Position Target Distance Ring"
-msgstr "Aucun cercle de distance cible de position"
+msgstr "Cercle de distance cible sans position"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:181
 msgid ""
 "This parameter enables or disables the No Position Target Distance Ring in "
-"Flarm Radar"
+"FLARM Radar"
 msgstr ""
-"Ce paramètre active ou désactive le cercle de distance cible de position "
-"dans la radar Flarm"
+"Ce paramètre active ou désactive le cercle de distance pour les cibles sans position "
+"dans le radar FLARM"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:41
 msgid "Speed arrows"
@@ -5953,7 +5953,7 @@ msgstr ""
 "ceux de Cambridge/WinPilot (.dat), Zander (.wpz) or SeeYou files (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:60
-msgid "Watched waypoints"
+msgid "Watched WPTs"
 msgstr "Waypoints spéc."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:61
@@ -5997,14 +5997,14 @@ msgstr ""
 "Tim Newport-Pearce (.sua)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
-msgid "FLARM Device Database"
-msgstr "Base de données des périphériques FLARM"
+msgid "FLARM database"
+msgstr "Base de données des ID FLARM"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:88
 msgid ""
 "The name of the file containing information about registered FLARM devices."
 msgstr ""
-"Le nom du fichier contenant les informations sur les périphériques FLARM "
+"Le nom du fichier contenant les informations sur les ID FLARM "
 "enregistrés."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:65
@@ -11292,4 +11292,4 @@ msgstr "Esp. Aér. le + proche"
 
 #: Data/Input/default.xci:1395
 msgid "Quit XCSoar"
-msgstr "XCSoar"
+msgstr "Terminer XCSoar"
