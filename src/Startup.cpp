@@ -17,6 +17,8 @@
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/AsyncLoader.hpp"
+#include "io/ZipArchive.hpp"
+#include "Message.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Weather/Rasp/Configured.hpp"
 #include "Input/InputEvents.hpp"
@@ -186,6 +188,18 @@ MainWindow::LoadTerrain() noexcept
   if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
       path != nullptr) {
     LogFormat("Loading terrain: %s", path.c_str());
+
+    /* Quick synchronous validation: try opening the ZIP archive
+       before launching the async loader to fail fast on missing or
+       unreadable files. */
+    try {
+      ZipArchive test_archive{path};
+    } catch (...) {
+      LogFormat("Failed to open map file: %s", path.c_str());
+      Message::AddMessage(_("Failed to open configured map file"));
+      return;
+    }
+
     terrain_loader = new AsyncTerrainOverviewLoader();
 
     terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
@@ -229,6 +243,8 @@ try {
   SetAirspaceGroundLevels(*data_components->airspaces,
                           *data_components->terrain);
 } catch (...) {
+  SetTopWidget(nullptr);
+  terrain_loader_env.reset();
   LogError(std::current_exception(), "LoadTerrain failed");
 }
 

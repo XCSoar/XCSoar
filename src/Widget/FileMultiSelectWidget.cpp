@@ -53,7 +53,7 @@ FileMultiSelectWidget::LoadFiles() noexcept
   items_.clear();
   FileDataField &file_field = df_.GetFileDataField();
   for (unsigned i = 0; i < file_field.size(); ++i)
-    items_.push_back({file_field.GetItem(i).path});
+    items_.push_back({AllocatedPath(Path(file_field.GetItem(i).path)), true});
 }
 
 void
@@ -74,7 +74,7 @@ FileMultiSelectWidget::MergePaths(const std::vector<Path> &paths) noexcept
 {
   for (const auto &path : paths) {
     if (!ContainsPath(items_, path))
-      items_.push_back({path});
+      items_.push_back({AllocatedPath(path), false});
   }
 }
 
@@ -82,7 +82,14 @@ void
 FileMultiSelectWidget::Refresh() noexcept
 {
   const auto saved_selection = refreshed_ ? GetSelectedPaths() : std::vector<Path>{};
-  const auto previous_items = refreshed_ ? items_ : std::vector<FileItem>{};
+  auto previous_items = refreshed_ ? std::move(items_) : std::vector<FileItem>{};
+
+  /* capture paths before moving items (move leaves AllocatedPath in
+     an unspecified state) */
+  std::vector<AllocatedPath> previous_paths;
+  previous_paths.reserve(previous_items.size());
+  for (const auto &item : previous_items)
+    previous_paths.emplace_back(item.path.c_str());
 
   LoadFiles();
   auto current_items = df_.GetPathFiles();
@@ -92,9 +99,9 @@ FileMultiSelectWidget::Refresh() noexcept
 
   // Merge previous items to preserve user's deselections
   if (refreshed_) {
-    for (const auto &item : previous_items) {
+    for (auto &item : previous_items) {
       if (!ContainsPath(items_, item.path))
-        items_.push_back(item);
+        items_.push_back(std::move(item));
     }
   }
 
@@ -104,7 +111,7 @@ FileMultiSelectWidget::Refresh() noexcept
   ClearSelection();
 
   if (refreshed_) {
-    RestoreSelection(saved_selection, previous_items, current_items);
+    RestoreSelection(saved_selection, previous_paths, current_items);
   } else {
     ApplySelection(current_items);
   }
@@ -142,7 +149,7 @@ FileMultiSelectWidget::SetSelectionChangedCallback(std::function<void()> cb) noe
 
 void
 FileMultiSelectWidget::RestoreSelection(const std::vector<Path> &saved_selection,
-                                        const std::vector<FileItem> &previous_items,
+                                        const std::vector<AllocatedPath> &previous_paths,
                                         const std::vector<Path> &current_items) noexcept
 {
   for (unsigned i = 0; i < items_.size(); ++i) {
@@ -154,8 +161,10 @@ FileMultiSelectWidget::RestoreSelection(const std::vector<Path> &saved_selection
       continue;
     }
 
-    // Auto-select new items from current_items that weren't in previous_items
-    if (ContainsPath(current_items, p) && !ContainsPath(previous_items, p))
+    // Auto-select new items from current_items that weren't in the previous list
+    if (ContainsPath(current_items, p) &&
+        std::none_of(previous_paths.begin(), previous_paths.end(),
+                     [p](const AllocatedPath &pp) { return pp == p; }))
       SetSelected(i, true);
   }
 }
