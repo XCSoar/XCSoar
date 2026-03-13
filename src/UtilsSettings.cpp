@@ -11,6 +11,9 @@
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
+#include "system/FileUtil.hpp"
 #include "Device/device.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
@@ -103,6 +106,16 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (TerrainFileChanged)
     main_window.LoadTerrain();
+
+  /* If the terrain wasn't changed via the settings UI but no terrain is
+     currently loaded (e.g. a previous automated load failed), attempt
+     to load the configured map file when it now exists. */
+  if (!TerrainFileChanged && data_components->terrain == nullptr) {
+    if (const auto path = Profile::GetPath(ProfileKeys::MapFile); path != nullptr) {
+      if (File::Exists(path))
+        main_window.LoadTerrain();
+    }
+  }
 
   auto &way_points = *data_components->waypoints;
 
