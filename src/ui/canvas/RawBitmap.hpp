@@ -29,8 +29,8 @@ class Canvas;
 class GLTexture;
 #endif
 
-#if defined(ENABLE_OPENGL) && (defined(ANDROID) || defined(__arm__))
-// use 16-bit RGB565 only on mobile devices
+#if defined(ENABLE_OPENGL) && defined(__arm__) && !defined(ANDROID)
+// use 16-bit RGB565 on non-Android ARM devices
 #define USE_RGB565
 #endif
 
