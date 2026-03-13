@@ -7,7 +7,6 @@
 #include "ActionInterface.hpp"
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
-#include "Airspace/Patterns.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Components.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
@@ -19,6 +18,7 @@
 #include "Main.hpp"
 #include "Operation/Operation.hpp"
 #include "Profile/Profile.hpp"
+#include "Repository/FileType.hpp"
 #include "ResourceLoader.hpp"
 #include "UIGlobals.hpp"
 #include "io/BufferedReader.hxx"
@@ -52,7 +52,7 @@ LoadFiles(Airspaces &airspace_database)
 {
   NullOperationEnvironment test_operation_environment;
   const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
-                                               AIRSPACE_FILE_PATTERNS);
+                                               GetFileTypePatterns(FileType::AIRSPACE));
   for (auto it = paths.begin(); it < paths.end(); it++) {
     ParseAirspaceFile(airspace_database, *it, test_operation_environment);
   }

@@ -16,7 +16,7 @@
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
 #include "Device/Driver/CAI302/Protocol.hpp"
-#include "Waypoint/Patterns.hpp"
+#include "Repository/FileType.hpp"
 
 using namespace UI;
 
@@ -53,7 +53,8 @@ EditUnits(const DialogLook &look, CAI302Device &device)
 static void
 UploadWaypoints(const DialogLook &look, CAI302Device &device)
 {
-  const auto path = FilePicker(_("Waypoints"), WAYPOINT_FILE_PATTERNS);
+  const auto path = FilePicker(_("Waypoints"),
+                               GetFileTypePatterns(FileType::WAYPOINT));
   if (path == nullptr)
     return;
 

@@ -93,7 +93,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestGeoPoint TestDiffFilter \
-	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
+	TestFileUtil TestFileType TestRepository TestPath TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
@@ -618,6 +618,31 @@ TEST_FILE_UTIL_SOURCES = \
 TEST_FILE_UTIL_DEPENDS = UTIL
 $(eval $(call link-program,TestFileUtil,TEST_FILE_UTIL))
 
+TEST_PATH_SOURCES = \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPath.cpp
+TEST_PATH_DEPENDS = UTIL
+$(eval $(call link-program,TestPath,TEST_PATH))
+
+TEST_FILE_TYPE_SOURCES = \
+	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFileType.cpp
+TEST_FILE_TYPE_DEPENDS = UTIL
+$(eval $(call link-program,TestFileType,TEST_FILE_TYPE))
+
+TEST_REPOSITORY_SOURCES = \
+	$(SRC)/Repository/Parser.cpp \
+	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestRepository.cpp
+TEST_REPOSITORY_DEPENDS = UTIL
+$(eval $(call link-program,TestRepository,TEST_REPOSITORY))
+
 TEST_GEO_POINT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGeoPoint.cpp
@@ -1102,6 +1127,7 @@ $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_REPOSITORY_PARSER_SOURCES = \
 	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/Repository/Parser.cpp \
 	$(TEST_SRC_DIR)/RunRepositoryParser.cpp
 RUN_REPOSITORY_PARSER_DEPENDS = LIBNET IO OS UTIL

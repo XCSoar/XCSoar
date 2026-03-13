@@ -9,6 +9,7 @@
 #include "Profile/Profile.hpp"
 #include "ui/control/List.hpp"
 #include "Form/Edit.hpp"
+#include "Repository/FileType.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "DataGlobals.hpp"
@@ -107,7 +108,8 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   WndProperty *wp;
 
   wp = AddFile(_("File"), nullptr,
-               ProfileKeys::RaspFile, "*-rasp*.dat\0",
+               ProfileKeys::RaspFile,
+               GetFileTypePatterns(FileType::RASP),
                FileType::RASP);
   wp->GetDataField()->SetOnModified([this]{
     if (SaveValueFileReader(FILE, ProfileKeys::RaspFile)) {

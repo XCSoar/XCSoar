@@ -14,6 +14,7 @@
 #include "LocalPath.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
+#include "Repository/FileType.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "util/StaticString.hxx"
@@ -109,7 +110,7 @@ ProfileListWidget::UpdateList()
   list.clear();
 
   ProfileFileVisitor pfv(list);
-  VisitDataFiles("*.prf", pfv);
+  VisitDataFiles(GetFileTypePatterns(FileType::PROFILE), pfv);
 
   unsigned len = list.size();
 
