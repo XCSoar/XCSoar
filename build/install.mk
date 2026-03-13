@@ -19,4 +19,17 @@ install-manual: manual
 
 install: install-bin install-mo install-manual
 
+uninstall-mo:
+	for i in $(LINGUAS); do \
+		rm -f $(prefix)/share/locale/$$i/LC_MESSAGES/xcsoar.mo; \
+	done
+
+uninstall-bin:
+	rm -f $(prefix)/bin/xcsoar $(prefix)/bin/vali-xcs
+
+uninstall-manual:
+	rm -f $(prefix)/share/doc/xcsoar/$(notdir $(MANUAL_PDF))
+
+uninstall: uninstall-bin uninstall-mo uninstall-manual
+
 endif
