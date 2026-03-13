@@ -69,6 +69,7 @@ Version 7.44 - 2026-03-12
   - BigTrafficWidget: zoom range to 5km when opening big radar via the FlarmGauge
   - terrain: added 2 new terrain ramps for use in very flat countries
   - terrain: fix terrain shading at highest zoom level and improve DPI scaling #440
+  - terrain: add new terrain shading orientation "fixed (Top Left)"
   - add head wind component to V GND Infobox #1439
   - add V task leg Infobox #1767
   - PEV start wait/window times now have second accuraccy #1099
