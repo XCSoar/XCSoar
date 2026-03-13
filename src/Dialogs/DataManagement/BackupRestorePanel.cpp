@@ -3,7 +3,10 @@
 
 #include "BackupRestorePanel.hpp"
 #include "StorageLocationPickerDialog.hpp"
+#include "Formatter/FileMetadataFormatter.hpp"
 #include "io/TarBackup.hpp"
+#include "io/OutputStream.hxx"
+#include "io/Reader.hxx"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -11,19 +14,18 @@
 #include "Operation/Operation.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "system/FileUtil.hpp"
 #include "Widget/PropertyWidgetContainer.hpp"
 #include "Widget/ListWidget.hpp"
 #include "util/StaticString.hxx"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
-#include "Formatter/ByteSizeFormatter.hpp"
-#include "Formatter/TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "fmt/format.h"
+#include "Storage/StorageUtil.hpp"
+#include "Storage/StorageDevice.hpp"
 
 #include <algorithm>
 #include <memory>
@@ -62,22 +64,6 @@ IsExcludedPath(std::string_view path) noexcept
   return false;
 }
 
-static std::vector<AllocatedPath>
-EnumerateTarFiles(Path dir) noexcept
-{
-  std::vector<AllocatedPath> result;
-  struct TarVisitor : public File::Visitor {
-    std::vector<AllocatedPath> &out;
-    explicit TarVisitor(std::vector<AllocatedPath> &o) noexcept : out(o) {}
-    void Visit(Path full, Path) override {
-      if (full.EndsWithIgnoreCase(".tar"))
-        out.emplace_back(full);
-    }
-  } visitor(result);
-  Directory::VisitFiles(dir, visitor, true);
-  return result;
-}
-
 // Backup job: creates a tarball of primary data path
 struct BackupJob final : public Job {
   AllocatedPath target_device;
@@ -90,7 +76,7 @@ struct BackupJob final : public Job {
     : target_device(target), tar_name(name), created_files(c) {}
 
   void Run(OperationEnvironment &env) override {
-    env.SetText(_("Creating backup..."));
+    env.SetText(_("Creating backup"));
 
     AllocatedPath primary = GetPrimaryDataPath();
     if (primary == nullptr) {
@@ -99,28 +85,46 @@ struct BackupJob final : public Job {
       return;
     }
 
-    AllocatedPath dest = AllocatedPath::Build(target_device, tar_name.c_str());
-    if (!CreateBackup(primary, dest, IsExcludedPath, env,
-                      created_files, error_message)) {
+    auto dev = FindDeviceByName(target_device);
+    if (!dev) {
       aborted = true;
+      error_message = _("Target device not found.");
       return;
+    }
+
+    try {
+      auto writer = dev->OpenWrite(Path(tar_name.c_str()), true);
+
+      if (!CreateBackup(primary, *writer, IsExcludedPath, env,
+                        created_files, error_message)) {
+        aborted = true;
+        return;
+      }
+
+      writer->Commit();
+    } catch (const std::exception &e) {
+      aborted = true;
+      error_message = e.what();
     }
   }
 };
 
 // Restore job: extracts selected zip into primary data path (excludes patterns)
 struct RestoreJob final : public Job {
-  AllocatedPath zip_path;
+  AllocatedPath device_path;
+  AllocatedPath tar_name;
   unsigned &restored_files;
   unsigned &failed_files;
   bool aborted{false};
   std::string error_message;
 
-  RestoreJob(Path zip, unsigned &r, unsigned &f) noexcept
-    : zip_path(zip), restored_files(r), failed_files(f) {}
+  RestoreJob(Path device, Path name, unsigned &r, unsigned &f) noexcept
+    : device_path(device), tar_name(name),
+      restored_files(r), failed_files(f) {}
 
   void Run(OperationEnvironment &env) override {
-    env.SetText(_("Restoring backup..."));
+    env.SetText(_("Restoring backup"));
+
     AllocatedPath primary = GetPrimaryDataPath();
     if (primary == nullptr) {
       aborted = true;
@@ -128,16 +132,28 @@ struct RestoreJob final : public Job {
       return;
     }
 
-    if (!RestoreBackup(zip_path, primary, IsExcludedPath, env,
-                       restored_files, failed_files, error_message)) {
+    auto dev = FindDeviceByName(device_path);
+    if (!dev) {
       aborted = true;
+      error_message = _("Source device not found.");
       return;
+    }
+
+    try {
+      auto reader = dev->OpenRead(tar_name);
+
+      if (!RestoreBackup(*reader, primary, IsExcludedPath, env,
+                         restored_files, failed_files, error_message))
+        aborted = true;
+    } catch (const std::exception &e) {
+      aborted = true;
+      error_message = e.what();
     }
   }
 };
 
 static void
-RunRestoreJob(Path chosen)
+RunRestoreJob(Path device_root, Path tar_name)
 {
   int rr = ShowMessageBox(_("Restoring will overwrite existing data. Continue?"),
                           _("Restore"), MB_YESNO);
@@ -145,7 +161,7 @@ RunRestoreJob(Path chosen)
     return;
 
   unsigned restored = 0, failed = 0;
-  RestoreJob job(chosen, restored, failed);
+  RestoreJob job(device_root, tar_name, restored, failed);
   if (!JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                  _("Restoring backup"), job, true))
     return;
@@ -168,8 +184,8 @@ struct BackupContainer : public PropertyWidgetContainer {
   struct BackupItem {
     AllocatedPath path;
     std::string display_name;
-    StaticString<32> size;
-    StaticString<32> date;
+    std::string size;
+    std::string date;
   };
 
   struct BackupListWidget final : public ListWidget {
@@ -243,19 +259,15 @@ struct BackupContainer : public PropertyWidgetContainer {
 
     try {
     if (target_device_path != nullptr) {
-      for (const auto &path : EnumerateTarFiles(target_device_path)) {
+      for (const auto &entry : EnumerateTarFiles(target_device_path)) {
         BackupItem item;
-        item.path = Path(path);
-        item.display_name = path.GetBase().c_str();
 
-        char size_buf[32];
-        FormatByteSize(size_buf, sizeof(size_buf), File::GetSize(path), false);
-        item.size = size_buf;
+        item.path = AllocatedPath(entry.name.c_str());
+        item.display_name = entry.name;
 
-        char date_buf[32];
-        FormatISO8601(date_buf,
-                      BrokenDateTime{File::GetLastModification(path)});
-        item.date = date_buf;
+        auto meta = FileMetadataFormatter::FormatEntry(entry);
+        item.size = meta.size.c_str();
+        item.date = meta.last_modified.c_str();
 
         available_backups.emplace_back(std::move(item));
       }
@@ -313,7 +325,8 @@ struct BackupContainer : public PropertyWidgetContainer {
       UpdatePropertyText(_("(none)"));
       return;
     }
-    UpdatePropertyText(target_device_path.c_str());
+    const std::string caption = FormatStorageCaption(target_device_path);
+    UpdatePropertyText(caption.c_str());
   }
 };
 
@@ -379,12 +392,12 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
 
     AllocatedPath selected;
     if (!container_ptr->GetSelectedBackup(selected)) {
-      ShowMessageBox(_("No backup files found in target."), _("Restore backup"),
+      ShowMessageBox(_("No backup files found in selected location."), _("Restore backup"),
                      MB_OK | MB_ICONINFORMATION);
       return;
     }
 
-    RunRestoreJob(selected);
+    RunRestoreJob(container_ptr->target_device_path, selected);
   });
 
   dialog.AddButton(_("Delete backup"), [container_ptr]() {
@@ -437,14 +450,14 @@ ShowRestoreDialogWithSource(const AllocatedPath &initial_source)
   }
 
   // Enumerate tar files in the selected source.
-  const auto tar_files = EnumerateTarFiles(source);
+  const auto entries = EnumerateTarFiles(source);
   ComboList list;
-  for (const auto &path : tar_files)
-    list.Append(path.c_str(),
-                path.GetBase().c_str());
+  for (const auto &entry : entries) {
+    list.Append(entry.name.c_str(), entry.name.c_str());
+  }
 
   if (list.empty()) {
-    ShowMessageBox(_("No backup files found in selected source."), _("Restore"), MB_OK | MB_ICONINFORMATION);
+    ShowMessageBox(_("No backup files found in selected location."), _("Restore"), MB_OK | MB_ICONINFORMATION);
     return;
   }
 
@@ -453,9 +466,8 @@ ShowRestoreDialogWithSource(const AllocatedPath &initial_source)
     return;
 
   const ComboList::Item &item = list[idx];
-  AllocatedPath chosen(item.string_value.c_str());
 
-  RunRestoreJob(chosen);
+  RunRestoreJob(source, Path(item.string_value.c_str()));
 }
 
 void ShowBackupManagerDialog()

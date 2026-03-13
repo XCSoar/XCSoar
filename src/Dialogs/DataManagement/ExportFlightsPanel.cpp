@@ -5,6 +5,7 @@
 #include "StorageLocationPickerDialog.hpp"
 #include "Dialogs/DataManagement/FileTransferUtil.hpp"
 #include "Formatter/FileMetadataFormatter.hpp"
+#include "Storage/StorageUtil.hpp"
 #include "Widget/FileMultiSelectWidget.hpp"
 #include "Widget/PropertyWidgetContainer.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -14,7 +15,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "LocalPath.hpp"
-#include "io/CopyFile.hxx"
+#include "Storage/StorageDevice.hpp"
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Form/CheckBox.hpp"
@@ -54,7 +55,7 @@ IsWeGlideConfigured() noexcept
 // Export job that runs in background thread
 struct ExportJob final : public Job {
   std::vector<Path> selected_files;
-  AllocatedPath target_device;
+  std::shared_ptr<StorageDevice> device;
   unsigned total_files;
   unsigned &completed;
   unsigned &skipped;
@@ -62,28 +63,14 @@ struct ExportJob final : public Job {
   std::vector<std::string> failed_names;
 
   ExportJob(const std::vector<Path> &files,
-            Path target,
+            std::shared_ptr<StorageDevice> dev,
             unsigned &c, unsigned &s, unsigned &f) noexcept
     : selected_files(files),
-      target_device(target),
+      device(std::move(dev)),
       total_files((unsigned)files.size()),
       completed(c), skipped(s), failed(f) {}
 
   void Run(OperationEnvironment &env) override {
-    // Try to create the export subfolder on the target device
-    AllocatedPath exports_subfolder =
-      BuildTargetDirectory(target_device, EXPORT_FLIGHTS_SUBFOLDER);
-    bool use_subfolder = Directory::Exists(exports_subfolder);
-    if (!use_subfolder) {
-      try {
-        Directory::Create(exports_subfolder);
-        use_subfolder = true;
-      } catch (...) {
-        // Fall back to target root on creation failure
-        use_subfolder = false;
-      }
-    }
-
     completed = 0;
     skipped = 0;
     failed = 0;
@@ -95,32 +82,37 @@ struct ExportJob final : public Job {
       if (env.IsCancelled())
         break;
 
-      if (!Directory::Exists(target_device)) {
-        failed += total_files - processed;
-        break;
+      {
+        const std::string dev_name = device->Name();
+        const Path dev_path{dev_name.c_str()};
+        if (!IsContentUri(dev_path) && !Directory::Exists(dev_path)) {
+          failed += total_files - processed;
+          break;
+        }
       }
 
       auto filename = p.GetBase();
 
-      const AllocatedPath &export_dir = use_subfolder ? exports_subfolder : target_device;
-      AllocatedPath dest = AllocatedPath::Build(export_dir, filename);
+      /* Build device-relative destination path.  For SAF devices the
+         subdirectory is created automatically by resolveOrCreateDocument;
+         for local filesystems LocalFilesystemDevice prepends the root. */
+      std::string rel = EXPORT_FLIGHTS_SUBFOLDER;
+      rel.push_back('/');
+      rel.append(filename.c_str());
+      AllocatedPath remote_path{rel.c_str()};
 
       StaticString<128> status_msg;
       status_msg.Format(_("Exporting: %s"), filename.c_str());
       env.SetText(status_msg);
       env.SetProgressPosition(processed);
 
-      if (File::Exists(dest)) {
-        ++skipped;
-      } else {
-        try {
-          CopyFile(p, dest);
-          ++completed;
-        } catch (...) {
-          ++failed;
-          if (failed_names.size() < 5)
-            failed_names.emplace_back(filename.c_str());
-        }
+      try {
+        device->CopyFromLocal(p, remote_path, nullptr);
+        ++completed;
+      } catch (...) {
+        ++failed;
+        if (failed_names.size() < 5)
+          failed_names.emplace_back(filename.c_str());
       }
 
       ++processed;
@@ -145,15 +137,22 @@ PerformExport(FileMultiSelectWidget *file_widget)
     return;
   }
 
-  const AllocatedPath &target = GetLastStorageTarget();
+  AllocatedPath target{Path{GetLastStorageTarget()}};
   if (target == nullptr) {
-    AllocatedPath chosen = PickStorageLocation();
-    if (chosen == nullptr)
+    target = PickStorageLocation();
+    if (target == nullptr)
       return;
   }
 
+  auto device = FindDeviceByName(target);
+  if (!device) {
+    ShowMessageBox(_("Target device not found."),
+                   _("Export flights"), MB_OK | MB_ICONERROR);
+    return;
+  }
+
   unsigned completed = 0, skipped = 0, failed = 0;
-  ExportJob job(selected, Path(GetLastStorageTarget()), completed, skipped, failed);
+  ExportJob job(selected, std::move(device), completed, skipped, failed);
 
   if (!JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                  _("Export flights"), job, true)) {
@@ -351,9 +350,12 @@ struct FlightContainer : public PropertyWidgetContainer {
       UpdatePropertyText(_("(none)"));
       return;
     }
-    const AllocatedPath result_dir =
-      BuildTargetDirectory(target_device_path, EXPORT_FLIGHTS_SUBFOLDER);
-    UpdatePropertyText(result_dir != nullptr ? result_dir.c_str() : target_device_path.c_str());
+    std::string caption = FormatStorageCaption(target_device_path);
+    if (EXPORT_FLIGHTS_SUBFOLDER[0] != '\0') {
+      caption.push_back('/');
+      caption.append(EXPORT_FLIGHTS_SUBFOLDER);
+    }
+    UpdatePropertyText(caption.c_str());
   }
 };
 
