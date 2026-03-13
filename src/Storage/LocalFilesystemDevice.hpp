@@ -53,14 +53,23 @@ public:
   /**
    * Override: use efficient platform copy instead of stream copy.
    */
-  void CopyToLocal(Path remote_path, Path local_dest) const override {
+  void CopyToLocal(Path remote_path, Path local_dest,
+                   OperationEnvironment *env = nullptr) const override {
+    (void)env;
     CopyFile(AllocatedPath::Build(root_, remote_path), local_dest);
   }
 
   /**
    * Override: use efficient move-or-copy instead of stream copy.
+   * Ensures the parent directory exists first.
    */
-  void CopyFromLocal(Path local_src, Path remote_path) override {
-    MoveOrCopyFile(local_src, AllocatedPath::Build(root_, remote_path));
+  void CopyFromLocal(Path local_src, Path remote_path,
+                     OperationEnvironment *env = nullptr) override {
+    (void)env;
+    AllocatedPath dest = AllocatedPath::Build(root_, remote_path);
+    AllocatedPath parent = dest.GetParent();
+    if (parent != nullptr && !Directory::Exists(parent))
+      Directory::Create(parent);
+    MoveOrCopyFile(local_src, dest);
   }
 };
