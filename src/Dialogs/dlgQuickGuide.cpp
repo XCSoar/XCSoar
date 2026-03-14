@@ -85,23 +85,7 @@ GetWelcomeText(bool dark_mode)
 
 /* ---- Disclaimer / Warranty text ---- */
 
-static constexpr const char *disclaimer_text =
-  "![](resource:IDB_WARNING_TRIANGLE)\n\n"
-  "!!! warning\n"
-  "# Important Safety Notice\n\n"
-  "By using XCSoar, you acknowledge and accept the following:\n\n"
-  "## Limitations\n\n"
-  "- XCSoar is for **situational awareness only**\n"
-  "- XCSoar is **not** a FLARM display\n"
-  "- XCSoar is **not** aviation certified in any way\n"
-  "- The artificial horizon is **not** fit for any purpose\n"
-  "- Databanks (airspace, waypoints) may contain errors, be "
-  "incomplete, or **not** up to date\n"
-  "- XCSoar is **not** guaranteed to be error free\n\n"
-  "## Pilot Responsibility\n\n"
-  "The **Pilot in Command** is always responsible for the safe "
-  "operation of the aircraft. Never rely solely on XCSoar for "
-  "navigation or situational awareness.\n\n"
+static constexpr const char *no_warranty_clause_text =
   "## No Warranty (GPL Section 11)\n\n"
   "BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY "
   "FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN "
@@ -111,8 +95,34 @@ static constexpr const char *disclaimer_text =
   "WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. "
   "THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM "
   "IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE "
-  "COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n\n"
-  "[Full GPL License](xcsoar://dialog/credits)";
+  "COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n\n";
+
+static const char *
+GetDisclaimerText() noexcept
+{
+  static StaticString<8192> text;
+  text.Format(
+    "%s%s%s",
+    _("![](resource:IDB_WARNING_TRIANGLE)\n\n"
+      "!!! warning\n"
+      "# Important Safety Notice\n\n"
+      "By using XCSoar, you acknowledge and accept the following:\n\n"
+      "## Limitations\n\n"
+      "- XCSoar is for **situational awareness only**\n"
+      "- XCSoar is **not** a FLARM display\n"
+      "- XCSoar is **not** aviation certified in any way\n"
+      "- The artificial horizon is **not** fit for any purpose\n"
+      "- Databanks (airspace, waypoints) may contain errors, be "
+      "incomplete, or **not** up to date\n"
+      "- XCSoar is **not** guaranteed to be error free\n\n"
+      "## Pilot Responsibility\n\n"
+      "The **Pilot in Command** is always responsible for the safe "
+      "operation of the aircraft. Never rely solely on XCSoar for "
+      "navigation or situational awareness.\n\n"),
+    no_warranty_clause_text,
+    _("[Full GPL License](xcsoar://dialog/credits)"));
+  return text.c_str();
+}
 
 /* ---- Configuration help text (dynamic, with checkbox status) ---- */
 
@@ -151,7 +161,7 @@ GetConfigurationHelpText()
 
   static StaticString<1536> text;
   text.Format(
-    "# Getting Started\n\n"
+    _("# Getting Started\n\n"
     "To use XCSoar effectively, configure the following:\n\n"
     "- [%s] [Map and data](xcsoar://config/site-files) - "
     "Download maps, waypoints, and airspace files for your "
@@ -173,7 +183,7 @@ GetConfigurationHelpText()
     "- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - "
     "Share your position via SkyLines or LiveTrack24\n\n"
     "The easiest way to explore XCSoar is to "
-    "[replay an existing IGC flight](xcsoar://dialog/replay).",
+    "[replay an existing IGC flight](xcsoar://dialog/replay)."),
     has_map ? "x" : " ",
     has_polar ? "x" : " ",
     has_pilot ? "x" : " ",
@@ -185,32 +195,40 @@ GetConfigurationHelpText()
 
 /* ---- Preflight text ---- */
 
-static constexpr const char *preflight_text =
-  "# Preflight Checks\n\n"
-  "Before each flight, verify:\n\n"
-  "1. **Plane & Polar** - Correct aircraft and polar selected. "
-  "[Config > Plane](xcsoar://config/planes)\n\n"
-  "2. **Flight parameters** - Wing loading, bugs, QNH, max "
-  "temperature. [Info > Flight](xcsoar://dialog/flight)\n\n"
-  "3. **Wind** - Set wind manually or enable auto wind. "
-  "[Info > Wind](xcsoar://dialog/wind)\n\n"
-  "4. **Task** - Create a task for navigation guidance. "
-  "[Nav > Task Manager](xcsoar://dialog/task)";
+static const char *
+GetPreflightText() noexcept
+{
+  return _(
+    "# Preflight Checks\n\n"
+    "Before each flight, verify:\n\n"
+    "1. **Plane & Polar** - Correct aircraft and polar selected. "
+    "[Config > Plane](xcsoar://config/planes)\n\n"
+    "2. **Flight parameters** - Wing loading, bugs, QNH, max "
+    "temperature. [Info > Flight](xcsoar://dialog/flight)\n\n"
+    "3. **Wind** - Set wind manually or enable auto wind. "
+    "[Info > Wind](xcsoar://dialog/wind)\n\n"
+    "4. **Task** - Create a task for navigation guidance. "
+    "[Nav > Task Manager](xcsoar://dialog/task)");
+}
 
 /* ---- Postflight text ---- */
 
-static constexpr const char *postflight_text =
-  "# After Your Flight\n\n"
-  "1. **Download logs** - Retrieve flight logs from your "
-  "FLARM or logger device. "
-  "[Config > Devices](xcsoar://config/devices)\n\n"
-  "2. **Analysis** - Review your flight statistics. "
-  "[Info > Analysis](xcsoar://dialog/analysis)\n\n"
-  "3. **Status** - Check flight timing and statistics. "
-  "[Info > Status](xcsoar://dialog/status)\n\n"
-  "4. **Upload** - Upload to WeGlide directly from XCSoar. "
-  "Configure your WeGlide User ID in "
-  "[Config > System > WeGlide](xcsoar://config/weglide)";
+static const char *
+GetPostflightText() noexcept
+{
+  return _(
+    "# After Your Flight\n\n"
+    "1. **Download logs** - Retrieve flight logs from your "
+    "FLARM or logger device. "
+    "[Config > Devices](xcsoar://config/devices)\n\n"
+    "2. **Analysis** - Review your flight statistics. "
+    "[Info > Analysis](xcsoar://dialog/analysis)\n\n"
+    "3. **Status** - Check flight timing and statistics. "
+    "[Info > Status](xcsoar://dialog/status)\n\n"
+    "4. **Upload** - Upload to WeGlide directly from XCSoar. "
+    "Configure your WeGlide User ID in "
+    "[Config > System > WeGlide](xcsoar://config/weglide)");
+}
 
 /* ---- Helpers ---- */
 
@@ -291,47 +309,59 @@ IsCloudConsentNeeded() noexcept
  * with "when the app is closed or not in use" per Google Play
  * policy requirements.
  */
-static constexpr const char *location_disclosure_text =
-  "![](resource:IDB_LOCATION_PIN)\n\n"
-  "# Location Access\n\n"
-  "XCSoar collects location data to enable flight navigation, "
-  "thermal mapping, and flight logging even when the app is "
-  "closed or not in use.\n\n"
-  "- **GPS Position** - Real-time navigation and glide computer\n"
-  "- **Background Location** - Continuous flight recording when "
-  "the screen is off or another app is in the foreground\n"
-  "- **Foreground Service** - Keeps GPS active during your "
-  "flight\n\n"
-  "Your location data is stored locally on your device. It is "
-  "not shared unless you explicitly enable tracking in "
-  "[Config > Tracking](xcsoar://config/tracking).\n\n"
-  "[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)";
+static const char *
+GetLocationDisclosureText() noexcept
+{
+  return _(
+    "![](resource:IDB_LOCATION_PIN)\n\n"
+    "# Location Access\n\n"
+    "XCSoar collects location data to enable flight navigation, "
+    "thermal mapping, and flight logging even when the app is "
+    "closed or not in use.\n\n"
+    "- **GPS Position** - Real-time navigation and glide computer\n"
+    "- **Background Location** - Continuous flight recording when "
+    "the screen is off or another app is in the foreground\n"
+    "- **Foreground Service** - Keeps GPS active during your "
+    "flight\n\n"
+    "Your location data is stored locally on your device. It is "
+    "not shared unless you explicitly enable tracking in "
+    "[Config > Tracking](xcsoar://config/tracking).\n\n"
+    "[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)");
+}
 
 /**
  * Google Play prominent disclosure for notification permission.
  */
-static constexpr const char *notification_disclosure_text =
-  "![](resource:IDB_NOTIFICATION_BELL)\n\n"
-  "# Notifications\n\n"
-  "XCSoar needs notification permission to maintain a persistent "
-  "notification while recording your flight. This notification "
-  "is required by Android for background operation and provides "
-  "a quick way to return to the app.\n\n"
-  "Without this permission, Android may stop flight recording "
-  "when the app is in the background.";
+static const char *
+GetNotificationDisclosureText() noexcept
+{
+  return _(
+    "![](resource:IDB_NOTIFICATION_BELL)\n\n"
+    "# Notifications\n\n"
+    "XCSoar needs notification permission to maintain a persistent "
+    "notification while recording your flight. This notification "
+    "is required by Android for background operation and provides "
+    "a quick way to return to the app.\n\n"
+    "Without this permission, Android may stop flight recording "
+    "when the app is in the background.");
+}
 #endif
 
 /* ---- Cloud consent text ---- */
 
-static constexpr const char *cloud_consent_text =
-  "# XCSoar Cloud\n\n"
-  "The XCSoar project offers a service that allows sharing "
-  "thermal and wave locations with other pilots in real time.\n\n"
-  "If you participate, your **position**, **thermal/wave "
-  "locations** and other weather data will be transmitted to "
-  "the XCSoar Cloud server.\n\n"
-  "You can change this at any time in "
-  "[Config > Tracking](xcsoar://config/tracking).";
+static const char *
+GetCloudConsentText() noexcept
+{
+  return _(
+    "# XCSoar Cloud\n\n"
+    "The XCSoar project offers a service that allows sharing "
+    "thermal and wave locations with other pilots in real time.\n\n"
+    "If you participate, your **position**, **thermal/wave "
+    "locations** and other weather data will be transmitted to "
+    "the XCSoar Cloud server.\n\n"
+    "You can change this at any time in "
+    "[Config > Tracking](xcsoar://config/tracking).");
+}
 
 #ifdef HAVE_SKYLINES_TRACKING
 /**
@@ -462,7 +492,7 @@ dlgQuickGuideShowModal(bool force_info)
     state.warranty_page_index = pager->GetSize();
 
     auto page = QuickGuidePageWidget::CreateCheckboxPage(
-      look, disclaimer_text,
+      look, GetDisclaimerText(),
       _("I have read and understand the above disclaimer"),
       false,
       [&state, pager_ptr](bool checked) {
@@ -517,7 +547,7 @@ dlgQuickGuideShowModal(bool force_info)
         .tracking.skylines.cloud.enabled == TriState::TRUE;
 
     auto page = QuickGuidePageWidget::CreateCheckboxPage(
-      look, cloud_consent_text,
+      look, GetCloudConsentText(),
       _("Enable XCSoar Cloud"),
       cloud_currently_enabled,
       [](bool) { /* state is read on dialog close */ });
@@ -548,7 +578,7 @@ dlgQuickGuideShowModal(bool force_info)
     state.location_page_index = pager->GetSize();
 
     auto page = QuickGuidePageWidget::CreateTwoButtonPage(
-      look, location_disclosure_text,
+      look, GetLocationDisclosureText(),
       _("Continue"),
       [advance_or_close]() {
         /* Fire the permission request; advance only when the
@@ -567,7 +597,7 @@ dlgQuickGuideShowModal(bool force_info)
 
   if (!is_simulator && !IsNotificationPermissionGranted()) {
     auto page = QuickGuidePageWidget::CreateTwoButtonPage(
-      look, notification_disclosure_text,
+      look, GetNotificationDisclosureText(),
       _("Continue"),
       [advance_or_close]() {
         RequestNotificationPermission([advance_or_close](bool) {
@@ -590,7 +620,7 @@ dlgQuickGuideShowModal(bool force_info)
   if (info_pages_needed) {
     // Gestures
     pager->Add(make_scroll_page(
-      std::make_unique<RichTextWidget>(look, gesture_help_text)));
+      std::make_unique<RichTextWidget>(look, GetGestureHelpText())));
     titles.push_back(_("Gesture Navigation"));
 
     // Configuration (checkboxes reflect current profile state)
@@ -607,12 +637,12 @@ dlgQuickGuideShowModal(bool force_info)
 
     // Preflight
     pager->Add(make_scroll_page(
-      std::make_unique<RichTextWidget>(look, preflight_text)));
+      std::make_unique<RichTextWidget>(look, GetPreflightText())));
     titles.push_back(_("Preflight"));
 
     // Postflight
     pager->Add(make_scroll_page(
-      std::make_unique<RichTextWidget>(look, postflight_text)));
+      std::make_unique<RichTextWidget>(look, GetPostflightText())));
     titles.push_back(_("After Your Flight"));
 
     // Don't show again - using a checkbox page

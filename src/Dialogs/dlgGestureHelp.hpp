@@ -8,7 +8,8 @@
  * Shared between the standalone gesture help dialog and the
  * Quick Guide dialog.
  */
-extern const char gesture_help_text[];
+const char *
+GetGestureHelpText() noexcept;
 
 /**
  * Show the gesture help dialog as a standalone modal dialog.
