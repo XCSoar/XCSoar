@@ -400,6 +400,72 @@ Les dégradés de couleurs utilisés pour représenter les contours RASP sont il
 \end{longtable}
 \end{maxipage}
 
+\section{Prévisions météo, EDL Soaring}\label{sec:weather-edl}
+
+\xc{} peut afficher des surcouches météo orientées onde fournies par
+le service public MBTiles d'EDL Soaring à l'adresse
+\url{https://www.edl-soaring.com/mbtiles/}. \xc{} télécharge les tuiles
+à la demande depuis le service public d'extraction d'EDL Soaring et les
+stocke localement comme fichiers \verb|.mbtiles| dans le cache météo.
+
+Les commandes EDL sont disponibles dans la boîte de dialogue
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}} sur l'onglet
+\bmenuw{EDL}. Cet onglet permet au pilote de~:
+\begin{description}
+\item[Prévision]
+  Sélectionner l'heure de prévision à afficher. \xc{} affiche cette
+  heure en heure locale pour le confort du pilote, mais interroge le
+  service EDL en UTC car le service distant attend des horodatages UTC.
+\item[Niveau]
+  Sélectionner l'un des niveaux de pression disponibles. La source EDL
+  fournit les isobares fixes 500, 600, 700, 800 et 900~hPa. \xc{}
+  affiche également l'altitude approximative correspondant à chaque
+  isobare avec le réglage de pression courant.
+\item[Toujours afficher EDL sur la carte]
+  Conserver la surcouche EDL visible sur les pages de carte ordinaires.
+  Lorsque cette option est désactivée, la surcouche n'est affichée que
+  sur la page EDL dédiée.
+\item[Jour en cache]
+  Afficher quels jours UTC sont déjà présents dans le cache local. Un
+  jour est marqué \emph{Complet} lorsque les 24 heures de prévision et
+  les cinq niveaux EDL sont disponibles localement ; sinon il est marqué
+  \emph{Partiel}.
+\item[Précharger le jour]
+  Télécharger les 24 heures et les cinq niveaux EDL pour le jour UTC
+  actuellement sélectionné. Cette fonction est destinée à la préparation
+  du vol, afin que les données EDL restent disponibles si la connexion
+  Internet est perdue en vol.
+\item[Nettoyer les autres jours]
+  Conserver uniquement le jour UTC sélectionné dans le cache et
+  supprimer les autres jours EDL stockés localement.
+\end{description}
+
+Les surcouches EDL peuvent être utilisées de deux manières~:
+\begin{description}
+\item[Page EDL dédiée]
+  Dans la boîte de dialogue de configuration des pages
+  (Section~\ref{conf:screenpages}), sélectionnez \emph{Météo EDL}
+  comme \emph{Zone principale} et \emph{EDL} comme \emph{Zone
+  inférieure}. En entrant sur cette page, l'affichage revient à l'heure
+  UTC courante et sélectionne le niveau EDL disponible le plus proche de
+  l'altitude actuelle du planeur lorsque cette altitude est fournie par
+  les capteurs connectés. La légende de surcouche en haut à droite
+  affiche l'heure locale active, le niveau de pression sélectionné et
+  son altitude approximative.
+\item[Surcouche sur la carte normale]
+  Ouvrez \menulabelr{\bmenug{Info}\blink\bmenug{Weather}}
+  \bmenuw{EDL}, sélectionnez l'heure de prévision et le niveau
+  souhaités, puis activez \bmenuw{Toujours afficher EDL sur la carte}.
+  La carte mobile normale reste utilisée, avec l'image météo EDL
+  affichée en surcouche au-dessus de la carte.
+\end{description}
+
+La source EDL est destinée au vol d'onde et fournit des tuiles d'image
+rendues plutôt que des champs météorologiques bruts. \xc{} utilise donc
+l'imagerie EDL comme une surcouche de carte et n'expose pas de
+paramètres de modèle supplémentaires au-delà de l'heure de prévision et
+des niveaux isobares fixes publiés par le service EDL.
+
 \section{pc\_met, Deutscher Wetterdienst}\label{sec:pcmet}
 
 Le service météorologique allemand ``Deutscher Wetterdienst'' fournit plusieurs images météo utiles aux utilisateurs de \xc.
