@@ -133,7 +133,7 @@ namespace LXNAVVario {
 
   /**
    * Send pilotevent to vario 
-   * (needs S10x/S8x firmware 8.01 or newer)
+   * (needs firmware 8.01 or newer)
    */
   static inline void
   PutPilotEvent(OperationEnvironment &env, Port &port)
