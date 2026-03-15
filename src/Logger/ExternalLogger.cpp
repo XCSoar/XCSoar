@@ -284,8 +284,10 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   while (true) {
     // Show list of the flights
     const RecordedFlightInfo *flight = ShowFlightList(flight_list);
-    if (!flight)
+    if (!flight) {
+      (void)device.EnableSecondDeviceNMEA(env);
       break;
+    }
 
     // Download chosen IGC file into temporary file
     FileTransaction transaction(AllocatedPath::Build(logs_path,
@@ -346,7 +348,9 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     }
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
-                    _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+                    _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES) {
+      (void)device.EnableSecondDeviceNMEA(env);
       break;
+    }
   }
 }

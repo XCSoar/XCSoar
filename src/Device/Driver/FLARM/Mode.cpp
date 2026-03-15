@@ -10,9 +10,10 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
 {
   switch (mode) {
   case Mode::UNKNOWN:
-    /* device could be in binary mode, we don't know, but this is the
-       best we can do: */
-    BinaryReset(env, std::chrono::milliseconds(500));
+    /* Use tracked binary state to avoid unnecessary EXIT frames. */
+    if (was_binary)
+      BinaryReset(env, std::chrono::milliseconds(500));
+    was_binary = false;
     mode = Mode::NMEA;
 
     /* request self-test results and version information from FLARM */
@@ -21,18 +22,22 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     return true;
 
   case Mode::NMEA:
+    was_binary = false;
     return true;
 
   case Mode::TEXT:
     /* no real difference between NMEA and TEXT; in mode==TEXT, the
        Port thread is stopped, but the caller is responsible for
        restarting it, which means there's nothing to do for us */
+    was_binary = false;
     mode = Mode::NMEA;
     return true;
 
   case Mode::BINARY:
+    was_binary = true;
     mode = Mode::UNKNOWN;
     BinaryReset(env, std::chrono::milliseconds(500));
+    was_binary = false;
     mode = Mode::NMEA;
     return true;
   }
@@ -65,6 +70,7 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
       // We are now in binary mode and have verified that with a binary ping
 
       // Remember that we should now be in binary mode (for further assert() calls)
+      was_binary = true;
       mode = Mode::BINARY;
       return true;
     }

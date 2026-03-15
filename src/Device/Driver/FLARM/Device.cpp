@@ -15,6 +15,9 @@
 void
 FlarmDevice::LinkTimeout()
 {
+  if (mode == Mode::BINARY)
+    was_binary = true;
+
   mode = Mode::UNKNOWN;
 }
 

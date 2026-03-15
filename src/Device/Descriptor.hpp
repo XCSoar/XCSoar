@@ -238,6 +238,15 @@ class DeviceDescriptor final
   ExternalSettings settings_received;
 
   /**
+   * Cached LXNAV BRGPS baudrate for passthrough sessions.
+   *
+   * If reading BRGPS fails intermittently, this keeps the last known
+   * value so repeated DIRECT transitions can still switch the host
+   * port to the downstream device's baudrate.
+   */
+  std::optional<unsigned> cached_lxgps_baudrate;
+
+  /**
    * If this device has failed, then this attribute may contain an
    * error message.
    */
@@ -590,6 +599,14 @@ public:
    */
   bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
                       OperationEnvironment &env);
+
+  /**
+   * Caller is responsible for calling Borrow() and Return().
+   *
+   * For passthrough configurations, this temporarily enables
+   * passthrough and asks the second device to switch back to NMEA.
+   */
+  bool EnableSecondDeviceNMEA(OperationEnvironment &env) noexcept;
 
   void OnSysTicker() noexcept;
 
