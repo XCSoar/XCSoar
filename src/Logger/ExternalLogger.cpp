@@ -245,7 +245,22 @@ ShowFlightList(const RecordedFlightList &flight_list)
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
+  class ScopeEnableSecondDeviceNMEA {
+    DeviceDescriptor &device;
+    OperationEnvironment &env;
+
+  public:
+    ScopeEnableSecondDeviceNMEA(DeviceDescriptor &_device,
+                                OperationEnvironment &_env) noexcept
+      :device(_device), env(_env) {}
+
+    ~ScopeEnableSecondDeviceNMEA() noexcept {
+      (void)device.EnableSecondDeviceNMEA(env);
+    }
+  };
+
   MessageOperationEnvironment env;
+  const ScopeEnableSecondDeviceNMEA enable_second_device_nmea{device, env};
 
   // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
@@ -284,10 +299,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   while (true) {
     // Show list of the flights
     const RecordedFlightInfo *flight = ShowFlightList(flight_list);
-    if (!flight) {
-      (void)device.EnableSecondDeviceNMEA(env);
+    if (!flight)
       break;
-    }
 
     // Download chosen IGC file into temporary file
     FileTransaction transaction(AllocatedPath::Build(logs_path,
@@ -348,9 +361,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     }
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
-                    _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES) {
-      (void)device.EnableSecondDeviceNMEA(env);
+                    _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)
       break;
-    }
   }
 }
