@@ -12,6 +12,21 @@
 
 #endif
 
+struct EDLSettings {
+#ifdef HAVE_HTTP
+  /**
+   * Enables the EDL weather page and downloader.
+   */
+  bool enabled;
+#endif
+
+  void SetDefaults() noexcept {
+#ifdef HAVE_HTTP
+    enabled = true;
+#endif
+  }
+};
+
 struct WeatherSettings {
 #ifdef HAVE_PCMET
   PCMetSettings pcmet;
@@ -22,15 +37,18 @@ struct WeatherSettings {
    * Enable Thermal Information Map?
    */
   bool enable_tim;
+
+  EDLSettings edl;
 #endif
 
-  void SetDefaults() {
+  void SetDefaults() noexcept {
 #ifdef HAVE_PCMET
     pcmet.SetDefaults();
 #endif
 
 #ifdef HAVE_HTTP
     enable_tim = false;
+    edl.SetDefaults();
 #endif
   }
 };

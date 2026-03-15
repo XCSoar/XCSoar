@@ -192,6 +192,19 @@ TEST_METAR_PARSER_SOURCES = \
 TEST_METAR_PARSER_DEPENDS = MATH UTIL UNITS
 $(eval $(call link-program,TestMETARParser,TEST_METAR_PARSER))
 
+ifeq ($(HAVE_HTTP),y)
+TEST_NAMES += TestEDL
+
+TEST_EDL_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/Weather/EDL/TileStore.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestEDL.cpp
+TEST_EDL_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD MATH TIME UTIL
+$(eval $(call link-program,TestEDL,TEST_EDL))
+endif
+
 TEST_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
