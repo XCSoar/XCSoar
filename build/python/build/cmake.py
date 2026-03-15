@@ -72,6 +72,16 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 """)
+    elif toolchain.is_android:
+        # Android uses the NDK compiler sysroot for platform headers/libs,
+        # but third-party package discovery must still stay inside our
+        # target prefix to avoid picking up host libraries such as zlib.
+        f.write(f"""
+set(CMAKE_FIND_ROOT_PATH "{toolchain.install_prefix}")
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+""")
 
 def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[], env: Optional[Mapping[str, str]]=None) -> None:
     cross_args: list[str] = []

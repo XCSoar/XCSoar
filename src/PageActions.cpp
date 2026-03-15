@@ -309,7 +309,9 @@ PageActions::ShowMap()
   if (layout.main != PageLayout::Main::MAP && layout.main != PageLayout::Main::MAP_NORTH_UP) {
     /* not showing map currently: activate it */
 
-    if (GetConfiguredLayout().main == PageLayout::Main::MAP || GetConfiguredLayout().main == PageLayout::Main::MAP_NORTH_UP)
+    if (GetConfiguredLayout().main == PageLayout::Main::MAP ||
+        GetConfiguredLayout().main == PageLayout::Main::MAP_NORTH_UP ||
+        GetConfiguredLayout().main == PageLayout::Main::EDL_MAP)
       /* the configured page is a map page: restore it */
       Restore();
     else {

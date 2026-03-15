@@ -152,6 +152,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
+	$(SRC)/Dialogs/Weather/EdlControlsWidget.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickGuide.cpp \
 	$(SRC)/Dialogs/dlgGestureHelp.cpp \
@@ -651,6 +652,16 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp \
 	$(SRC)/NetComponents.cpp
+
+ifeq ($(OPENGL),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Weather/EDL/Levels.cpp \
+	$(SRC)/Weather/EDL/TileStore.cpp \
+	$(SRC)/Weather/EDL/StateController.cpp \
+	$(SRC)/Weather/EDL/Sqlite.cpp \
+	$(SRC)/Weather/EDL/MbTilesDatabase.cpp \
+	$(SRC)/Weather/EDL/MbTilesOverlay.cpp
+endif
 else
 XCSOAR_SOURCES += \
 	$(SRC)/NetComponentsStub.cpp
@@ -691,6 +702,10 @@ ifeq ($(HAVE_HTTP),y)
 XCSOAR_DEPENDS += \
 	LIBHTTP \
 	LIBCLIENT
+
+ifeq ($(OPENGL),y)
+XCSOAR_DEPENDS += SQLITE
+endif
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
