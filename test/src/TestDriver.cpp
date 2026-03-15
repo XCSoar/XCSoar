@@ -1832,7 +1832,8 @@ TestLXNavDeclare()
     const auto oz_line = LXNavDeclare::FormatOZLine(decl_line, 0);
     ok1(oz_line.find("Line=1") != std::string::npos);
     ok1(oz_line.find("R1=3000m") != std::string::npos);
-    ok1(oz_line.find("A1=90.0") != std::string::npos);
+    ok1(oz_line.find("A1=45.0") != std::string::npos);
+    ok1(oz_line.find("A2=0.0") != std::string::npos);
 
     const auto oz_cyl = LXNavDeclare::FormatOZLine(decl_line, 1);
     ok1(oz_cyl.find("Line=1") == std::string::npos);
@@ -1904,7 +1905,7 @@ TestLXNavDeclare()
     ok1(oz_kh.find("R1=10000m") != std::string::npos);
     ok1(oz_kh.find("R2=500m") != std::string::npos);
     ok1(oz_kh.find("A2=180.0") != std::string::npos);
-    ok1(oz_kh.find("A1=90.0") != std::string::npos);
+    ok1(oz_kh.find("A1=45.0") != std::string::npos);
   }
 
   /* Test C-record with elevation */
@@ -2860,7 +2861,7 @@ int main()
   plan_tests(1032 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
-             + 106 /* LXNav protocol 1.05 */
+             + 107 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */

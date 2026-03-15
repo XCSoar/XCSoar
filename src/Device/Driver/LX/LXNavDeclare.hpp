@@ -104,8 +104,20 @@ FormatOZLine(const Declaration &declaration, unsigned tp_index)
 
   const unsigned style = GetOZStyle(is_start, is_finish);
   const unsigned r1 = tp.radius;
-  const double a1 = tp.sector_angle.Degrees();
+  /*
+   * LXNAV A1/A2 encode half-angles for sectors:
+   * a 90 degree sector is represented as A1=45.
+   * Cylinders are represented as A1=180.
+   */
+  const double a1 = tp.shape == Declaration::TurnPoint::CYLINDER
+    ? 180.0
+    : tp.sector_angle.Degrees() / 2.0;
   const unsigned r2 = tp.inner_radius;
+  /*
+   * In XCSoar declarations, zone2 is currently only used as keyhole
+   * inner circle. For a full circle, the LXNAV half-angle encoding is
+   * 180 degrees.
+   */
   const double a2 = (r2 > 0) ? 180.0 : 0.0;
 
   const GeoPoint &prev_loc = is_start
