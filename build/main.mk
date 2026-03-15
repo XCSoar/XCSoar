@@ -556,7 +556,8 @@ $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp
+	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
+	$(SRC)/Dialogs/Weather/MapOverlayControlsWidget.cpp
 endif
 endif
 
