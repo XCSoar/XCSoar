@@ -173,6 +173,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice main_list[] = {
     { PageLayout::Main::MAP, N_("Map") },
     { PageLayout::Main::MAP_NORTH_UP, N_("Map (north-up)") },
+    { PageLayout::Main::EDL_MAP, N_("EDL weather") },
     { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
     { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
     { PageLayout::Main::HORIZON, N_("Horizon") },
@@ -218,6 +219,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+    { PageLayout::Bottom::EDL_CONTROLS, N_("EDL weather controls") },
     nullptr
   };
   AddEnum(_("Bottom area"),
@@ -352,6 +354,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     buffer = _("Map (north-up)");
     break;
 
+  case PageLayout::Main::EDL_MAP:
+    buffer = _("EDL weather");
+    break;
+
   case PageLayout::Main::FLARM_RADAR:
     buffer = _("FLARM radar");
     break;
@@ -386,6 +392,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   case PageLayout::Bottom::CROSS_SECTION:
     buffer.AppendFormat(", %s", _("Cross section"));
+    break;
+
+  case PageLayout::Bottom::EDL_CONTROLS:
+    buffer.AppendFormat(", %s", _("EDL weather controls"));
     break;
 
   case PageLayout::Bottom::MAX:

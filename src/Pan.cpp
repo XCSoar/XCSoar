@@ -7,6 +7,7 @@
 #include "Interface.hpp"
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
+#include "Weather/EDL/StateController.hpp"
 
 #include <cassert>
 
@@ -22,6 +23,9 @@ EnterPan()
 {
   assert(CommonInterface::main_window != nullptr);
 
+  if (PageActions::GetCurrentLayout().main == PageLayout::Main::EDL_MAP)
+    EDL::SuspendDedicatedPageForPan();
+
   GlueMapWindow *map = PageActions::ShowOnlyMap();
   if (map == nullptr || map->IsPanning())
     return;
@@ -36,6 +40,9 @@ bool
 PanTo(const GeoPoint &location)
 {
   assert(CommonInterface::main_window != nullptr);
+
+  if (PageActions::GetCurrentLayout().main == PageLayout::Main::EDL_MAP)
+    EDL::SuspendDedicatedPageForPan();
 
   GlueMapWindow *map = PageActions::ShowOnlyMap();
   if (map == nullptr)
@@ -71,6 +78,7 @@ LeavePan()
 
   InputEvents::UpdatePan();
   PageActions::Restore();
+  EDL::ResumeDedicatedPageAfterPan();
 }
 
 void

@@ -77,6 +77,8 @@ Version 7.44 - 2026-03-12
   - show squawk code in airspace details dialog
   - ability to send squawk code from airspace details dialog to transponder
   - add support for a dedicated north-up map page layout
+  - add EDL weather support with a dedicated page, optional map overlay,
+    touch-friendly time/level controls, and day precaching
   - the thermal assistant InfoBox is now clickable
   - nearest airspace InfoBoxes (horizontal and vertical) are now clickable
     to open airspace details dialog #406
