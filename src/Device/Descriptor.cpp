@@ -1281,6 +1281,9 @@ ReadLXGPSBaudrate(Device &device, std::optional<unsigned> &cached_baudrate,
   if (lx == nullptr)
     return std::nullopt;
 
+  if (!lx->ShouldSwitchHostBaudForPassThrough())
+    return std::nullopt;
+
   unsigned baudrate = 0;
   if (!lx->ReadLXGPSBaudrate(baudrate, env))
     return cached_baudrate;

@@ -32,6 +32,15 @@ IsNanoProduct(const auto &product) noexcept
          product.equals("NANO4");
 }
 
+[[gnu::pure]]
+static bool
+ShouldSwitchHostBaudForNinc(const DeviceInfo &device_info) noexcept
+{
+  return device_info.product.equals("NINC") &&
+         (device_info.hardware_version.equals("08") ||
+          device_info.hardware_version.equals("8"));
+}
+
 static bool
 LXWP0(NMEAInputLine &line, NMEAInfo &info)
 {
@@ -265,12 +274,22 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
 }
 
 static void
-ParseNanoVarioInfo(NMEAInputLine &line, DeviceInfo &device)
+ParsePLXVCInfo(NMEAInputLine &line, DeviceInfo &device)
 {
   device.product = line.ReadView();
   device.software_version = line.ReadView();
   line.Skip(); /* ver.date, e.g. "May 12 2012 21:38:28" */
-  device.hardware_version = line.ReadView();
+
+  const auto id_field = line.ReadView();
+  if (id_field.empty())
+    return;
+
+  if (IsNanoProduct(device.product))
+    device.hardware_version = id_field;
+  else if (device.serial.empty())
+    device.serial = id_field;
+  else
+    device.hardware_version = id_field;
 }
 
 /**
@@ -441,7 +460,7 @@ PLXVC(NMEAInputLine &line, NMEAInfo &info,
           device_declaration.glider_type.c_str(), info.clock);
     }
   } else if (key == "INFO"sv && type.starts_with('A')) {
-    ParseNanoVarioInfo(line, info.device);
+    ParsePLXVCInfo(line, info.device);
   } else if (key == "GPSINFO"sv && type.starts_with('A')) {
     /* the LXNAV V7 (firmware >= 2.01) forwards the Nano's INFO
        sentence with the "GPS" prefix */
@@ -452,7 +471,7 @@ PLXVC(NMEAInputLine &line, NMEAInfo &info,
     } else if (name == "INFO"sv) {
       const auto type2 = line.ReadView();
       if (type2.starts_with('A'))
-        ParseNanoVarioInfo(line, info.secondary_device);
+        ParsePLXVCInfo(line, info.secondary_device);
     }
   } else if (key == "RADIO"sv && type.starts_with('A')) {
     ParseRadio(line, info);
@@ -564,20 +583,33 @@ LXDevice::IdDeviceByNameLocked(const StaticString<16> &product_name,
                                const DeviceInfo &device_info) noexcept
 {
   const bool new_v7 = product_name.equals("V7");
-  const bool new_sVario = product_name.equals("NINC") ||
-                           product_name.equals("S8x");
+  const bool new_sVario = product_name.equals("NINC");
   const bool new_nano = IsNanoProduct(product_name);
   const bool new_lx16xx = product_name.equals("1606") ||
                            product_name.equals("1600");
 
+  if (product_name.equals("NINC"))
+    switch_host_baud_for_direct = ShouldSwitchHostBaudForNinc(device_info);
+  else if (new_v7)
+    switch_host_baud_for_direct = true;
+
   if ((new_v7 && !is_v7) || (new_sVario && !is_sVario)) {
     const char *device_type = new_v7 ? "V7" : "S series vario";
-    LogFmt("LXNAV: {} detected via PLXVC (product: {}, firmware: {})",
+    LogFmt("LXNAV: {} detected via PLXVC (product: {}, serial: {}, "
+           "firmware: {}, hardware: {}, switch_host_baud_for_direct: {})",
            device_type, product_name.c_str(),
+           device_info.serial.empty()
+             ? "unknown"
+             : device_info.serial.c_str(),
            device_info.software_version.empty()
              ? "unknown"
-             : device_info.software_version.c_str());
-    if (!device_info.software_version.empty())
+             : device_info.software_version.c_str(),
+           device_info.hardware_version.empty()
+             ? "unknown"
+             : device_info.hardware_version.c_str(),
+           switch_host_baud_for_direct);
+    if (!device_info.software_version.empty() ||
+        !device_info.hardware_version.empty())
       firmware_version_logged = true;
   }
 
@@ -600,8 +632,7 @@ LXDevice::UpdateDeviceFlags(const DeviceInfo &device_info,
                             bool pass_through) noexcept
 {
   const bool saw_v7 = device_info.product.equals("V7");
-  const bool saw_sVario = device_info.product.equals("NINC") ||
-                           device_info.product.equals("S8x");
+  const bool saw_sVario = device_info.product.equals("NINC");
   const bool saw_nano = IsNanoProduct(device_info.product);
   const bool saw_lx16xx = device_info.product.equals("1606") ||
                            device_info.product.equals("1600");
@@ -624,6 +655,12 @@ LXDevice::UpdateDeviceFlags(const DeviceInfo &device_info,
       is_nano = saw_nano;
       is_lx16xx = saw_lx16xx;
     }
+
+    if (device_info.product.equals("NINC"))
+      switch_host_baud_for_direct =
+        ShouldSwitchHostBaudForNinc(device_info);
+    else if (saw_v7)
+      switch_host_baud_for_direct = true;
 
     if (saw_v7 || saw_sVario || saw_nano || saw_lx16xx)
       is_colibri = false;

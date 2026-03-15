@@ -93,6 +93,13 @@ class LXDevice: public AbstractDevice
   bool is_forwarded_nano = false;
 
   /**
+   * Model-specific passthrough behavior:
+   * true  -> host baud shall be switched to BRGPS in DIRECT mode
+   * false -> keep host baud unchanged in DIRECT mode
+   */
+  bool switch_host_baud_for_direct = true;
+
+  /**
    * Has the firmware version been logged?
    */
   bool firmware_version_logged = false;
@@ -301,8 +308,13 @@ public:
     return use_pass_through;
   }
 
+  bool ShouldSwitchHostBaudForPassThrough() const noexcept {
+    return switch_host_baud_for_direct;
+  }
+
   void ResetDeviceDetection() noexcept {
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
+    switch_host_baud_for_direct = true;
     polar_sync_notified = false;
     device_polar.valid = false;
     last_sent_target_name.clear();
