@@ -57,6 +57,9 @@ public:
   };
 };
 
+static void
+FlushPortBeforePassThroughSwitch(Port &port, OperationEnvironment &env);
+
 DeviceDescriptor::DeviceDescriptor(DeviceBlackboard &_blackboard,
                                    NMEALogger *_nmea_logger,
                                    DeviceFactory &_factory,
@@ -600,6 +603,13 @@ DeviceDescriptor::EnableNMEA(OperationEnvironment &env) noexcept
   bool success = false;
 
   try {
+    if (port != nullptr && driver != nullptr &&
+        driver->HasPassThrough() && config.use_second_device) {
+      /* Flush stale bytes before leaving DIRECT/passthrough mode so
+         the mode switch command is sent on a clean transport. */
+      FlushPortBeforePassThroughSwitch(*port, env);
+    }
+
     success = device->EnableNMEA(env);
   } catch (OperationCancelled) {
   } catch (...) {
@@ -1253,6 +1263,15 @@ DeclareToFLARM(const struct Declaration &declaration, Port &port,
   return FlarmDevice(port).Declare(declaration, home, env);
 }
 
+static void
+FlushPortBeforePassThroughSwitch(Port &port, OperationEnvironment &env)
+{
+  port.StopRxThread();
+  port.FullFlush(env, std::chrono::milliseconds(50),
+                 std::chrono::milliseconds(300));
+  port.StartRxThread();
+}
+
 static bool
 DeclareToFLARM(const struct Declaration &declaration,
                Port &port, const DeviceRegister &driver, Device *device,
@@ -1260,9 +1279,11 @@ DeclareToFLARM(const struct Declaration &declaration,
                OperationEnvironment &env)
 {
   /* enable pass-through mode in the "front" device */
-  if (driver.HasPassThrough() && device != nullptr &&
-      !device->EnablePassThrough(env))
-    return false;
+  if (driver.HasPassThrough() && device != nullptr) {
+    FlushPortBeforePassThroughSwitch(port, env);
+    if (!device->EnablePassThrough(env))
+      return false;
+  }
 
   return DeclareToFLARM(declaration, port, home, env);
 }
@@ -1298,6 +1319,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
        to be drained while the mode switch settles. */
     port->StartRxThread();
 
+    FlushPortBeforePassThroughSwitch(*port, env);
     device->EnablePassThrough(env);
 
     /* Stop the Rx thread and flush all stale data from the serial
@@ -1354,6 +1376,7 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                 second_driver->display_name);
     env.SetText(text);
 
+    FlushPortBeforePassThroughSwitch(*port, env);
     device->EnablePassThrough(env);
     return second_device->ReadFlightList(flight_list, env);
   } else {
@@ -1385,6 +1408,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
                 second_driver->display_name);
     env.SetText(text);
 
+    FlushPortBeforePassThroughSwitch(*port, env);
     device->EnablePassThrough(env);
     return second_device->DownloadFlight(flight, path, env);
   } else {
