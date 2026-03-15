@@ -13,6 +13,7 @@
 #include "Profile/PageProfile.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
+#include "Weather/Features.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
@@ -173,6 +174,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice main_list[] = {
     { PageLayout::Main::MAP, N_("Map") },
     { PageLayout::Main::MAP_NORTH_UP, N_("Map (north-up)") },
+#ifdef HAVE_EDL
+    { PageLayout::Main::EDL_MAP, N_("EDL weather") },
+#endif
     { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
     { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
     { PageLayout::Main::HORIZON, N_("Horizon") },
@@ -218,6 +222,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+#ifdef HAVE_EDL
+    { PageLayout::Bottom::EDL_CONTROLS, N_("EDL weather controls") },
+#endif
     nullptr
   };
   AddEnum(_("Bottom area"),
@@ -352,6 +359,16 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     buffer = _("Map (north-up)");
     break;
 
+#ifdef HAVE_EDL
+  case PageLayout::Main::EDL_MAP:
+    buffer = _("EDL weather");
+    break;
+#else
+  case PageLayout::Main::EDL_MAP:
+    buffer = _("Map");
+    break;
+#endif
+
   case PageLayout::Main::FLARM_RADAR:
     buffer = _("FLARM radar");
     break;
@@ -387,6 +404,15 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   case PageLayout::Bottom::CROSS_SECTION:
     buffer.AppendFormat(", %s", _("Cross section"));
     break;
+
+#ifdef HAVE_EDL
+  case PageLayout::Bottom::EDL_CONTROLS:
+    buffer.AppendFormat(", %s", _("EDL weather controls"));
+    break;
+#else
+  case PageLayout::Bottom::EDL_CONTROLS:
+    break;
+#endif
 
   case PageLayout::Bottom::MAX:
     gcc_unreachable();

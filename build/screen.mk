@@ -85,9 +85,6 @@ SCREEN_SOURCES += \
 	$(WINDOW_SRC_DIR)/android/SingleWindow.cpp \
 	$(CANVAS_SRC_DIR)/android/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/android/Font.cpp
-ifeq ($(TIFF),y)
-SCREEN_SOURCES += $(CANVAS_SRC_DIR)/custom/LibTiff.cpp
-endif
 endif
 
 ifeq ($(DITHER),y)

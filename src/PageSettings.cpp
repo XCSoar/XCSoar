@@ -21,6 +21,11 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
   case PageLayout::Main::MAP_NORTH_UP:
     break;
 
+  case PageLayout::Main::EDL_MAP:
+    /* Dedicated weather pages are titled directly instead of being
+       described as "Map + widgets". */
+    return _("EDL weather");
+
   case PageLayout::Main::FLARM_RADAR:
     return _("FLARM radar");
 
@@ -70,6 +75,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     case Bottom::CROSS_SECTION:
       // TODO: better text and translate
       builder.Append(", XS");
+      break;
+
+    case Bottom::EDL_CONTROLS:
+      builder.Append(", EDL");
       break;
 
     case Bottom::MAX:
