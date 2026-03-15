@@ -38,7 +38,9 @@ ifeq ($(EGL),y)
 
 OPENGL = y
 
-ifneq ($(TARGET),ANDROID)
+ifeq ($(TARGET),ANDROID)
+LIBPNG = y
+else
 FREETYPE = y
 LIBPNG = y
 LIBJPEG = y

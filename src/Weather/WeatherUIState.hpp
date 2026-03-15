@@ -19,7 +19,7 @@ struct EDLWeatherUIState {
     IDLE,
     LOADING,
     READY,
-    ERROR,
+    FAILED,
   };
 
   BrokenDateTime forecast_datetime;
