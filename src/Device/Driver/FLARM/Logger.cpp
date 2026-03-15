@@ -287,6 +287,8 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
 bool
 FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
 {
+  static constexpr unsigned get_igcdata_retries = 3;
+
   FileOutputStream fos(path);
   BufferedOutputStream os(fos);
 
@@ -295,16 +297,28 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
     // Create header for getting IGC file data
     FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::GETIGCDATA);
 
-    // Send request
-    SendStartByte();
-    SendFrameHeader(header, env, std::chrono::seconds(1));
-
-    // Wait for an answer and save the payload for further processing
     AllocatedArray<std::byte> data;
-    uint16_t length;
-    bool ack = WaitForACKOrNACK(header.sequence_number, data,
-                                length, env,
-                                std::chrono::seconds(10)) == FLARM::MessageType::ACK;
+    uint16_t length = 0;
+    bool ack = false;
+
+    for (unsigned retry = 0; retry < get_igcdata_retries; ++retry) {
+      // Send request
+      SendStartByte();
+      SendFrameHeader(header, env, std::chrono::seconds(1));
+
+      // Wait for an answer and save the payload for further processing
+      try {
+        ack = WaitForACKOrNACK(header.sequence_number, data,
+                               length, env,
+                               std::chrono::seconds(10)) ==
+          FLARM::MessageType::ACK;
+      } catch (const DeviceTimeout &) {
+        ack = false;
+      }
+
+      if (ack)
+        break;
+    }
 
     // If no ACK was received
     if (!ack || length <= 3)
