@@ -24,6 +24,7 @@ enum ControlIndex {
 
 #ifdef HAVE_HTTP
   ENABLE_TIM,
+  ENABLE_EDL,
 #endif
 };
 
@@ -68,6 +69,9 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean("Thermal Information Map",
              _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
              settings.enable_tim);
+  AddBoolean("EDL Weather Page",
+             _("Enable the dedicated EDL MBTiles weather page."),
+             settings.edl.enabled);
 #endif
 }
 
@@ -100,6 +104,8 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 #ifdef HAVE_HTTP
   changed |= SaveValue(ENABLE_TIM, ProfileKeys::EnableThermalInformationMap,
                        settings.enable_tim);
+  changed |= SaveValue(ENABLE_EDL, ProfileKeys::EnableEDLWeather,
+                       settings.edl.enabled);
 #endif
 
   _changed |= changed;

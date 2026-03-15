@@ -13,6 +13,8 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "Dialogs/Weather/EdlControlsWidget.hpp"
+#include "Weather/EDL/StateController.hpp"
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -44,6 +46,16 @@ PageActions::LeavePage()
 {
   PagesState &state = CommonInterface::SetUIState().pages;
 
+  /* Dedicated EDL pages own the temporary map overlay unless the user
+     has explicitly asked to keep EDL visible on the normal map. */
+  if (GetCurrentLayout().main == PageLayout::Main::EDL_MAP) {
+    if (!EDL::IsDedicatedPageSuspendedForPan()) {
+      EDL::LeaveDedicatedPage();
+      if (!EDL::ShouldShowOnMainMap())
+        EDL::ClearOverlay();
+    }
+  }
+
   if (state.special_page.IsDefined())
     return;
 
@@ -55,6 +67,28 @@ PageActions::LeavePage()
     page.circling_scale = map_settings.circling_scale;
     page.auto_zoom_enabled = map_settings.auto_zoom_enabled;
   }
+}
+
+void
+PageActions::Restore()
+{
+  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
+  if (!special_page.IsDefined())
+    return;
+
+  if (special_page.main == PageLayout::Main::EDL_MAP &&
+      !EDL::IsDedicatedPageSuspendedForPan() &&
+      !EDL::ShouldShowOnMainMap()) {
+    EDL::LeaveDedicatedPage();
+    EDL::ClearOverlay();
+  } else if (special_page.main == PageLayout::Main::EDL_MAP &&
+             !EDL::IsDedicatedPageSuspendedForPan())
+    EDL::LeaveDedicatedPage();
+
+  special_page.SetUndefined();
+
+  LoadLayout(GetConfiguredLayout());
+  RestoreMapZoom();
 }
 
 void
@@ -176,6 +210,7 @@ LoadMain(PageLayout::Main main)
   switch (main) {
   case PageLayout::Main::MAP:
   case PageLayout::Main::MAP_NORTH_UP:
+  case PageLayout::Main::EDL_MAP:
     CommonInterface::main_window->ActivateMap();
     break;
 
@@ -207,6 +242,14 @@ LoadBottom(PageLayout::Bottom bottom)
   case PageLayout::Bottom::CROSS_SECTION:
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget(*data_components));
     break;
+
+  case PageLayout::Bottom::EDL_CONTROLS: {
+    /* The same bottom widget is used by dedicated EDL pages and by
+       special weather pages opened from input events. */
+    auto widget = CreateEdlControlsBottomWidget();
+    CommonInterface::main_window->SetBottomWidget(widget.release());
+    break;
+  }
 
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */
@@ -265,18 +308,6 @@ PageActions::OpenLayout(const PageLayout &layout)
   LoadLayout(layout);
 }
 
-void
-PageActions::Restore()
-{
-  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
-  if (!special_page.IsDefined())
-    return;
-
-  special_page.SetUndefined();
-
-  LoadLayout(GetConfiguredLayout());
-  RestoreMapZoom();
-}
 
 void
 PageActions::DeferredRestore()
@@ -306,7 +337,9 @@ GlueMapWindow *
 PageActions::ShowMap()
 {
   PageLayout layout = GetCurrentLayout();
-  if (layout.main != PageLayout::Main::MAP && layout.main != PageLayout::Main::MAP_NORTH_UP) {
+  if (layout.main != PageLayout::Main::MAP &&
+      layout.main != PageLayout::Main::MAP_NORTH_UP &&
+      layout.main != PageLayout::Main::EDL_MAP) {
     /* not showing map currently: activate it */
 
     if (GetConfiguredLayout().main == PageLayout::Main::MAP || GetConfiguredLayout().main == PageLayout::Main::MAP_NORTH_UP)
@@ -366,6 +399,17 @@ PageActions::ShowThermalAssistant()
     layout.bottom = PageLayout::Bottom::NOTHING;
     OpenLayout(layout);
   }
+}
+
+void
+PageActions::ShowWeatherPage()
+{
+  PageLayout layout = GetCurrentLayout();
+  /* Open a normal page layout so EDL can also exist as a configurable
+     page type, instead of relying on ad-hoc runtime widgets only. */
+  layout.main = PageLayout::Main::EDL_MAP;
+  layout.bottom = PageLayout::Bottom::EDL_CONTROLS;
+  OpenLayout(layout);
 }
 
 void
