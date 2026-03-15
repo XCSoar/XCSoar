@@ -423,7 +423,7 @@ Si vous avez activé l'affichage du radar FLARM ceci permet de positionner sur l
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Apparence / Pages InfoBoxes}
+\section{Apparence / Pages InfoBoxes}\label{conf:screenpages}
 
 Ce panel permet de définir l'ensemble des pages écran. Un réglage typique contiens 3 pages, le mode expert permet d'en ajouter pour en avoir 8 au total.
 
@@ -434,6 +434,28 @@ De plus il est possible de vous personnaliser 5 autres pages, constituées de ca
 \begin{description}
 \item[Page 1..3]  Sélectionnez ce qui vous semble le plus approprié en page 1,2,3 etc. La sélection de "---" rendra cette page inactive.
 \item[Page 4..8*] Le mode Expert permet de créer jusqu'à 8 pages (prédéfinies ou personnalisées).
+\end{description}
+
+Lors de l'édition d'une page, les options suivantes sont disponibles pour
+les pages carte~:
+\begin{description}
+\item[Zone principale]
+  Contenu principal de la page, par exemple \emph{Carte} ou \emph{Carte
+  (nord en haut)}.
+\item[InfoBoxes]
+  Quel ensemble d'InfoBoxes est affiché à côté de la zone principale.
+\item[Zone inférieure]
+  Panneau optionnel sous la zone principale.  Choisissez \emph{Commandes
+  météo} pour afficher les contrôles RASP ou EDL en vol lorsque la page
+  utilise une surcouche météo.
+\item[Surcouche carte]
+  Surcouche météo optionnelle sur les pages carte~: \emph{Aucune},
+  \emph{RASP} ou \emph{EDL}.  RASP nécessite un fichier RASP chargé ; EDL
+  nécessite que \emph{Page météo EDL} soit activée dans la configuration
+  météo du système.
+\item[Couche RASP]
+  Lorsque \emph{Surcouche carte} est \emph{RASP}, sélectionne le champ
+  RASP affiché sur cette page.
 \end{description}
 
 

@@ -424,19 +424,24 @@ The files have \verb|.dat| extension and the information is shown
 as colour-coded terrain overlays on the map.  \\ \\
 Make sure that terrain display is set to ``on''. \tip{}  \\ \\
 
-The RASP-forecast overlays are invoked via menu 
+Select a \verb|xcsoar-rasp.dat| file via menu
 \menulabelr{\bmenug{Info}\blink\bmenug{Weather}}
-\bmenug{Info}.
-
-The Field setting determines which data field is displayed on the map.
-The Time setting determines at which forecast time the data field will
-be displayed.  Upon entering the weather dialogue, the Time setting is
-advanced to the next nearest forecast time available in the RASP file.
-When a field is not available in the RASP file, the background is left blank.
+\bmenuw{RASP}.  Page configuration (Section~\ref{conf:screenpages})
+determines where RASP is shown: set \emph{Map overlay} to \emph{RASP},
+choose the \emph{RASP layer} for that page, and optionally set the
+\emph{Bottom area} to \emph{Weather controls} for in-flight forecast time
+control.
 
 \marginpar{\includegraphics[angle=0,width=0.95\linewidth,keepaspectratio='true']{figures/dialog-weather.png}}
-The current field name is displayed in the lower left corner of the 
-screen whenever RASP data is displayed.
+When the bottom \emph{Weather controls} panel is visible, \emph{Auto advance}
+follows the current local time in 15-minute steps.  Turn it off to select a
+fixed forecast time.  When entering a page with RASP overlay for the first
+time, XCSoar selects the next forecast time in the RASP file at or after the
+current time.
+
+When a field is not available in the RASP file, the background is left blank.
+The current field name is displayed in the lower left corner of the screen
+whenever RASP data is displayed.
 
 The available fields can vary by data source. Some examples include:
 \begin{description}
@@ -534,6 +539,68 @@ in the table below.
 
 \end{longtable}
 \end{maxipage}
+
+\section{Weather forecast, EDL Soaring}\label{sec:weather-edl}
+
+XCSoar can display wave-oriented weather overlays provided by the
+public EDL Soaring MBTiles service at
+\url{https://www.edl-soaring.com/mbtiles/}.  XCSoar downloads the
+tiles on demand from EDL Soaring's public extraction service and stores
+them locally as \verb|.mbtiles| files in the weather cache.
+
+Before using EDL, enable \emph{EDL Weather Page} in the system
+configuration under \emph{System setup / Weather} (requires an OpenGL build
+with HTTP support).
+
+Tiles are cached locally.  Open the \bmenuw{EDL} tab in
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}} or the EDL section in
+\emph{System setup / Weather} to manage the cache:
+\begin{description}
+\item[Cached day] Show which UTC days are already stored in the local
+  cache.  A day is marked \emph{Complete} when all 24 forecast hours and
+  all five EDL levels are available locally, otherwise it is marked
+  \emph{Partial}.
+\item[Precache day] Download all 24 hours and all five EDL levels for
+  the selected UTC day.  This is intended for pre-flight preparation, so
+  that the EDL data remains available when internet connectivity is lost
+  in flight.
+\item[Clean other days] Keep only the selected cached UTC day and delete
+  the other locally cached EDL days.
+\end{description}
+
+Configure a map page in the page configuration dialogue
+(Section~\ref{conf:screenpages}): set \emph{Main area} to \emph{Map}
+(or \emph{Map (north-up)}), \emph{Map overlay} to \emph{EDL}, and
+\emph{Bottom area} to \emph{Weather controls}.  The in-flight bottom
+panel provides:
+\begin{description}
+\item[Auto advance] When enabled, XCSoar follows the next UTC forecast
+  hour and selects the lowest isobar above the current aircraft
+  altitude.  Forecast and level selectors are disabled while auto advance
+  is active.
+\item[Forecast] Select the forecast hour to display.  XCSoar shows this
+  time in local time for the pilot's convenience, but requests the data
+  from the EDL service in UTC because the remote service expects UTC
+  timestamps.
+\item[Level] Select one of the supported pressure levels.  The EDL
+  source provides the fixed isobars 500, 600, 700, 800 and 900~hPa.
+  XCSoar also shows the approximate altitude corresponding to each
+  isobar in the current pressure setting.
+\end{description}
+
+Entering a page with EDL overlay resets the display to the next UTC
+forecast hour and enables auto advance.  The overlay legend in the upper
+right corner shows the active local forecast hour, the selected pressure
+level and its approximate altitude.
+
+The same EDL overlay can be enabled on any map page by setting
+\emph{Map overlay} to \emph{EDL} in the page configuration.
+
+The EDL source is intended for wave flying and provides rendered image
+tiles rather than raw meteorological grids.  XCSoar therefore uses the
+EDL imagery as a map overlay and does not expose additional model
+parameters beyond the forecast hour and the fixed isobar levels
+published by the EDL service.
 
 \section{pc\_met, Deutscher Wetterdienst}\label{sec:pcmet}
 
