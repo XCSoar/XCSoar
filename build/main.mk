@@ -151,6 +151,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
+	$(SRC)/Dialogs/Weather/EdlControlsWidget.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickGuide.cpp \
 	$(SRC)/Dialogs/dlgGestureHelp.cpp \
@@ -624,6 +625,12 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
 	$(SRC)/Repository/Glue.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
+	$(SRC)/Weather/EDL/Levels.cpp \
+	$(SRC)/Weather/EDL/TileStore.cpp \
+	$(SRC)/Weather/EDL/StateController.cpp \
+	$(SRC)/Weather/EDL/Sqlite.cpp \
+	$(SRC)/Weather/EDL/MbTilesDatabase.cpp \
+	$(SRC)/Weather/EDL/MbTilesOverlay.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
 	$(SRC)/Weather/PCMet/Overlays.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
@@ -684,7 +691,8 @@ XCSOAR_DEPENDS = \
 	OPERATION \
 	JSON \
 	LIBNET TIME OS THREAD \
-	UTIL GEO MATH
+	UTIL GEO MATH \
+	SQLITE
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_DEPENDS += \
