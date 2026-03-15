@@ -89,24 +89,17 @@ LXNAVVarioConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[mayb
 
   brgps = WaitUnsignedValue(device, "BRGPS", 5);
   brpda = WaitUnsignedValue(device, "BRPDA", 5);
+  auto *gps_baud_df = new DataFieldEnum();
+  auto *pda_baud_df = new DataFieldEnum();
+  for (const auto &entry : LXDevice::lxnav_baud_rates) {
+    gps_baud_df->addEnumText(entry.display_label, entry.index);
+    pda_baud_df->addEnumText(entry.display_label, entry.index);
+  }
 
-  static constexpr StaticEnumChoice baud_list[] = {
-    { 0, "4800" },
-    { 1, "9600" },
-    { 2, "19200" },
-    { 3, "38400" },
-    { 4, "57600" },
-    { 5, "115200" },
-    { 6, "230400" },
-    { 7, "256000" },
-    { 8, "460800" },
-    { 9, "500k" },
-    { 10, "1M" },
-    { 0 }
-  };
-
-  AddEnum(_("GPS baud rate"), NULL, baud_list, brgps);
-  AddEnum(_("PDA baud rate"), NULL, baud_list, brpda);
+  gps_baud_df->SetValue(brgps);
+  pda_baud_df->SetValue(brpda);
+  Add(_("GPS baud rate"), NULL, gps_baud_df);
+  Add(_("PDA baud rate"), NULL, pda_baud_df);
 
   volume = WaitUnsignedValue(device, "VOL", 50);
   AddInteger(_("Volume"), NULL, "%u %%", "%u", 0, 100, 1, volume);

@@ -10,6 +10,40 @@
 #include "TransponderCode.hpp"
 
 #include <fmt/format.h>
+#include <cstdlib>
+
+std::optional<unsigned>
+LXDevice::GetLXNAVBaudrateByIndex(unsigned index) noexcept
+{
+  for (const auto &entry : lxnav_baud_rates)
+    if (entry.index == index)
+      return entry.baud_rate;
+
+  return std::nullopt;
+}
+
+bool
+LXDevice::ReadLXGPSBaudrate(unsigned &baudrate, OperationEnvironment &env)
+{
+  if (!RequestLXNAVVarioSetting("BRGPS", env))
+    return false;
+
+  const auto value = WaitLXNAVVarioSetting("BRGPS", env, 1000);
+  if (value.empty())
+    return false;
+
+  char *endptr = nullptr;
+  const unsigned index = strtoul(value.c_str(), &endptr, 10);
+  if (endptr == value.c_str())
+    return false;
+
+  const auto mapped = GetLXNAVBaudrateByIndex(index);
+  if (!mapped.has_value())
+    return false;
+
+  baudrate = *mapped;
+  return true;
+}
 
 bool
 LXDevice::SendLXNAVVarioSetting(const char *name, const char *value,
