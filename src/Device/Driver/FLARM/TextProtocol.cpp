@@ -55,15 +55,20 @@ FlarmDevice::TextMode(OperationEnvironment &env)
 
   switch (mode) {
   case Mode::UNKNOWN:
+    /* LinkTimeout() sets mode to UNKNOWN between passthrough
+       sessions; preserve and use was_binary to decide whether we
+       need a binary EXIT before sending text commands. */
+    if (was_binary)
+      BinaryReset(env, std::chrono::milliseconds(500));
+    break;
+
   case Mode::NMEA:
   case Mode::TEXT:
-    /* For Mode::UNKNOWN, skip the speculative BinaryReset that
-       EnableNMEA() would send.  In passthrough scenarios, the FLARM
-       was never in binary mode, and the raw binary EXIT frame bytes
-       sent through the passthrough can confuse the FLARM's NMEA
-       parser.  Also skip PFLAE,R / PFLAV,R since the Rx thread is
-       stopped and the responses would just be noise for
-       ExpectString to scan through. */
+    /* Skip BinaryReset here: if we weren't in binary mode, sending the
+       raw EXIT frame bytes through passthrough can confuse the FLARM's
+       NMEA parser.  Also skip PFLAE,R / PFLAV,R since the Rx thread is
+       stopped and the responses would just be noise for ExpectString to
+       scan through. */
     break;
 
   case Mode::BINARY:
@@ -72,6 +77,7 @@ FlarmDevice::TextMode(OperationEnvironment &env)
     break;
   }
 
+  was_binary = false;
   mode = Mode::TEXT;
   return true;
 }

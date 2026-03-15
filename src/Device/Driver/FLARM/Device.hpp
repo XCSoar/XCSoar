@@ -31,6 +31,7 @@ class FlarmDevice: public AbstractDevice
   Port &port;
 
   Mode mode = Mode::UNKNOWN;
+  bool was_binary = false;
 
   uint16_t sequence_number = 0;
 
