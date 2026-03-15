@@ -43,6 +43,7 @@
 #endif
 
 #include <cassert>
+#include <optional>
 
 class OpenDeviceJob final : public Job {
   DeviceDescriptor &device;
@@ -1272,16 +1273,79 @@ FlushPortBeforePassThroughSwitch(Port &port, OperationEnvironment &env)
   port.StartRxThread();
 }
 
+static std::optional<unsigned>
+ReadLXGPSBaudrate(Device &device, OperationEnvironment &env)
+{
+  auto *lx = dynamic_cast<LXDevice *>(&device);
+  if (lx == nullptr)
+    return std::nullopt;
+
+  unsigned baudrate = 0;
+  if (!lx->ReadLXGPSBaudrate(baudrate, env))
+    return std::nullopt;
+
+  return baudrate;
+}
+
+class ScopeRestorePassThroughBaud final {
+  Port *port = nullptr;
+  unsigned old_baudrate = 0;
+  bool active = false;
+
+public:
+  void Arm(Port &_port, unsigned _old_baudrate) noexcept {
+    port = &_port;
+    old_baudrate = _old_baudrate;
+    active = true;
+  }
+
+  ~ScopeRestorePassThroughBaud() noexcept {
+    if (!active || port == nullptr)
+      return;
+
+    try {
+      const unsigned current_baudrate = port->GetBaudrate();
+      if (current_baudrate != old_baudrate)
+        port->SetBaudrate(old_baudrate);
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to restore passthrough baudrate");
+    }
+  }
+};
+
+static bool
+EnablePassThroughWithLXGPSBaud(Device &device, Port &port,
+                               OperationEnvironment &env,
+                               ScopeRestorePassThroughBaud &restore)
+{
+  const auto gps_baudrate = ReadLXGPSBaudrate(device, env);
+  const unsigned old_baudrate = port.GetBaudrate();
+  restore.Arm(port, old_baudrate);
+
+  FlushPortBeforePassThroughSwitch(port, env);
+  if (!device.EnablePassThrough(env))
+    return false;
+
+  if (gps_baudrate.has_value() && *gps_baudrate != old_baudrate) {
+    (void)port.Drain();
+    port.SetBaudrate(*gps_baudrate);
+  }
+
+  return true;
+}
+
 static bool
 DeclareToFLARM(const struct Declaration &declaration,
                Port &port, const DeviceRegister &driver, Device *device,
                const Waypoint *home,
                OperationEnvironment &env)
 {
+  ScopeRestorePassThroughBaud restore_baud;
+
   /* enable pass-through mode in the "front" device */
   if (driver.HasPassThrough() && device != nullptr) {
-    FlushPortBeforePassThroughSwitch(port, env);
-    if (!device->EnablePassThrough(env))
+    if (!EnablePassThroughWithLXGPSBaud(*device, port, env, restore_baud))
       return false;
   }
 
@@ -1319,8 +1383,9 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
        to be drained while the mode switch settles. */
     port->StartRxThread();
 
-    FlushPortBeforePassThroughSwitch(*port, env);
-    device->EnablePassThrough(env);
+    ScopeRestorePassThroughBaud restore_baud;
+    if (!EnablePassThroughWithLXGPSBaud(*device, *port, env, restore_baud))
+      return result;
 
     /* Stop the Rx thread and flush all stale data from the serial
        buffers.  Then send a FLARM version request as a "ping" to
@@ -1376,8 +1441,9 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                 second_driver->display_name);
     env.SetText(text);
 
-    FlushPortBeforePassThroughSwitch(*port, env);
-    device->EnablePassThrough(env);
+    ScopeRestorePassThroughBaud restore_baud;
+    if (!EnablePassThroughWithLXGPSBaud(*device, *port, env, restore_baud))
+      return false;
     return second_device->ReadFlightList(flight_list, env);
   } else {
     text.Format("%s: %s.", _("Reading flight list"), driver->display_name);
@@ -1408,8 +1474,9 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
                 second_driver->display_name);
     env.SetText(text);
 
-    FlushPortBeforePassThroughSwitch(*port, env);
-    device->EnablePassThrough(env);
+    ScopeRestorePassThroughBaud restore_baud;
+    if (!EnablePassThroughWithLXGPSBaud(*device, *port, env, restore_baud))
+      return false;
     return second_device->DownloadFlight(flight, path, env);
   } else {
     text.Format("%s: %s.", _("Downloading flight log"),
