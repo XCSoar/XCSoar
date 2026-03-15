@@ -26,8 +26,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
-#: Data/Input/default.xci:601 Data/Input/default.xci:1295
-#: Data/Input/default.xci:1303
+#: Data/Input/default.xci:601 Data/Input/default.xci:1302
+#: Data/Input/default.xci:1310
 #, no-c-format
 msgid "Task"
 msgstr "Bài thi"
@@ -468,7 +468,7 @@ msgstr "ID thi đấu"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:108
 #: src/net/client/WeGlide/UploadIGCFile.cpp:121 Data/Input/default.xci:801
-#: Data/Input/default.xci:1505
+#: Data/Input/default.xci:1512
 msgid "WeGlide Upload"
 msgstr "Tính toán đường lượn"
 
@@ -482,7 +482,8 @@ msgstr "Tải chuyến bay lên"
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:193
 #: src/Dialogs/Plane/PlaneListDialog.cpp:199
 #: src/Dialogs/Plane/PlaneListDialog.cpp:224
-#: src/Dialogs/Plane/PlaneListDialog.cpp:269
+#: src/Dialogs/Plane/PlaneListDialog.cpp:269 src/Dialogs/WifiDialog.cpp:232
+#: src/Dialogs/WifiDialog.cpp:240 src/Dialogs/WifiDialog.cpp:294
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:44
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:54
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:82
@@ -498,6 +499,7 @@ msgstr "Tải chuyến bay lên"
 #: src/Dialogs/Weather/NOAADetails.cpp:137
 #: src/Dialogs/DownloadFilePicker.cpp:193
 #: src/Dialogs/DownloadFilePicker.cpp:262
+#: src/Weather/EDL/StateController.cpp:319
 msgid "Error"
 msgstr "Có lỗi"
 
@@ -575,7 +577,7 @@ msgid "Not Circling"
 msgstr "Không quay vòng"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:56
-#: src/Gauge/BigTrafficWidget.cpp:614 src/Dialogs/InternalLink.cpp:50
+#: src/Gauge/BigTrafficWidget.cpp:614 src/Dialogs/InternalLink.cpp:51
 #: src/Dialogs/FileManager.cpp:742 src/Dialogs/Device/DeviceListDialog.cpp:786
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
@@ -585,34 +587,35 @@ msgstr "Không quay vòng"
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:93
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:80
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:109
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:121
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:192
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:135
 #: src/Dialogs/Airspace/AirspaceList.cpp:465
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:515
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:522
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:386
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:390
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:257
 #: src/Dialogs/Traffic/TrafficList.cpp:348
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:351
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:210 src/Dialogs/dlgAnalysis.cpp:306
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:362 src/Dialogs/HelpDialog.cpp:30
-#: src/Dialogs/dlgInfoBoxAccess.cpp:104 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:571
+#: src/Dialogs/WifiDialog.cpp:508 src/Dialogs/dlgInfoBoxAccess.cpp:104
+#: src/Dialogs/ReplayDialog.cpp:97 src/Dialogs/dlgStatus.cpp:42
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:520
 #: src/Dialogs/Waypoint/Manager.cpp:289
-#: src/Dialogs/Waypoint/WaypointList.cpp:281
+#: src/Dialogs/Waypoint/WaypointList.cpp:295
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:69
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:42
 #: src/Dialogs/Task/TaskPointDialog.cpp:515
 #: src/Dialogs/Task/TargetDialog.cpp:395
 #: src/Dialogs/Task/AlternatesListDialog.cpp:271
-#: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
+#: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:55
 #: src/Dialogs/dlgQuickGuide.cpp:512 src/Dialogs/dlgGestureHelp.cpp:46
-#: src/Dialogs/Weather/PCMetDialog.cpp:36
+#: src/Dialogs/Weather/PCMetDialog.cpp:191
 #: src/Dialogs/Weather/NOAADetails.cpp:125
 msgid "Close"
 msgstr "Đóng"
@@ -625,7 +628,7 @@ msgstr "Không có giao thông"
 #: src/Renderer/MapItemListRenderer.cpp:360
 #: src/Dialogs/Device/DeviceListDialog.cpp:428
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
+#: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:119
 #: src/InfoBoxes/Content/Factory.cpp:310 src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -643,7 +646,7 @@ msgstr "Đồng hồ tốc độ lên xuống"
 #: src/Dialogs/Airspace/AirspaceList.cpp:432
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:117
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:69
-#: src/Dialogs/Waypoint/WaypointList.cpp:489
+#: src/Dialogs/Waypoint/WaypointList.cpp:521
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
 #: src/Dialogs/Task/TargetDialog.cpp:358
 msgid "Distance"
@@ -655,9 +658,9 @@ msgstr "Chiều cao tương đối"
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:174
 #: src/Dialogs/Airspace/AirspaceList.cpp:462
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:79
 #: src/Dialogs/Traffic/TrafficList.cpp:346
-#: src/Dialogs/Waypoint/WaypointList.cpp:277
+#: src/Dialogs/Waypoint/WaypointList.cpp:291
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
 #: src/Dialogs/Task/AlternatesListDialog.cpp:229
 #: src/Dialogs/Weather/NOAAList.cpp:97
@@ -772,12 +775,11 @@ msgstr "Hướng dẫn thủ công"
 
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
-#: src/PageSettings.cpp:51 src/PageSettings.cpp:54
+#: src/PageSettings.cpp:120 src/PageSettings.cpp:123
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:379
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:237
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:67
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:31
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:13
@@ -797,7 +799,7 @@ msgstr "Theo dõi lên"
 msgid "North up"
 msgstr "Hướng bắc ở phía trên"
 
-#: src/Menu/ExpandMacros.cpp:297 src/Dialogs/Settings/dlgBasicSettings.cpp:129
+#: src/Menu/ExpandMacros.cpp:297 src/Dialogs/Settings/dlgBasicSettings.cpp:130
 #: src/Dialogs/ReplayDialog.cpp:30
 msgid "Stop"
 msgstr "Ngừng"
@@ -831,10 +833,10 @@ msgstr "Toàn bộ"
 #: src/Input/InputEventsSettings.cpp:497
 #: src/Dialogs/Device/DeviceEditWidget.cpp:109
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:127
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:101
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:87
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
@@ -855,9 +857,9 @@ msgstr "Tắt"
 #: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
 #: src/Input/InputEventsSettings.cpp:455 src/Input/InputEventsSettings.cpp:456
 #: src/Input/InputEventsSettings.cpp:493 src/Input/InputEventsSettings.cpp:497
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:100
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:86
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:174
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
@@ -907,14 +909,18 @@ msgid "Task & Landables"
 msgstr "Nhiệm vụ & Điểm hạ cánh"
 
 #: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:323
+#: src/Weather/Rasp/FieldControls.cpp:23
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:163
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:238
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:282
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:80
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:91
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:245
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:12
 #, no-c-format
 msgid "None"
@@ -1078,7 +1084,7 @@ msgstr "Không có bài thi nào"
 #: src/Input/InputEventsTask.cpp:368 src/Input/InputEventsTask.cpp:377
 #: src/Renderer/MapItemListRenderer.cpp:356
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:26
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:338
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:342
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:118
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:65
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:82
@@ -1104,9 +1110,8 @@ msgstr "Tốc độ"
 #: src/Renderer/FlightStatisticsRenderer.cpp:220
 #: src/Renderer/FlightStatisticsRenderer.cpp:239
 #: src/Renderer/FlightStatisticsRenderer.cpp:265
-#: src/Dialogs/InternalLink.cpp:78
-#: src/Dialogs/Settings/dlgConfiguration.cpp:125
-#: src/Dialogs/Weather/RASPDialog.cpp:129
+#: src/Dialogs/InternalLink.cpp:79
+#: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #, no-c-format
 msgid "Time"
 msgstr "Thời gian"
@@ -1232,45 +1237,43 @@ msgstr "Không tìm thấy"
 msgid "Select a file"
 msgstr "Chọn một file"
 
-#: src/PageSettings.cpp:25
+#: src/PageSettings.cpp:94
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:135
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:356
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:226
 #, no-c-format
 msgid "FLARM radar"
 msgstr "radar FLARM"
 
-#: src/PageSettings.cpp:28
+#: src/PageSettings.cpp:97
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:360
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:227
 #: src/InfoBoxes/Content/Factory.cpp:918
 #, no-c-format
 msgid "Thermal assistant"
 msgstr "trợ lý dòng nhiệt"
 
-#: src/PageSettings.cpp:31 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:364
+#: src/PageSettings.cpp:100
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:228
 #: src/InfoBoxes/Content/Factory.cpp:832
 #, no-c-format
 msgid "Horizon"
 msgstr "chân trời"
 
-#: src/PageSettings.cpp:41 src/InfoBoxes/Content/Altitude.cpp:28
+#: src/PageSettings.cpp:110 src/InfoBoxes/Content/Altitude.cpp:28
 #: Data/Input/default.xci:1127
 #, no-c-format
 msgid "Info"
 msgstr "thông tin"
 
-#: src/PageSettings.cpp:41
+#: src/PageSettings.cpp:110
 msgid "Map and InfoBoxes"
 msgstr "bản đồ và InfoBox"
 
-#: src/PageSettings.cpp:60
+#: src/PageSettings.cpp:129
 msgid "Info Hide"
 msgstr "ẩn thông tin"
 
-#: src/PageSettings.cpp:62
+#: src/PageSettings.cpp:131
 msgid "Map (Full screen)"
 msgstr "bản đồ (màn hình đầy)"
 
@@ -1283,7 +1286,7 @@ msgstr "Không có dữ liệu"
 #: src/Renderer/MapItemListRenderer.cpp:66
 #: src/Dialogs/Airspace/AirspaceList.cpp:433
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
-#: src/Dialogs/Waypoint/WaypointList.cpp:490
+#: src/Dialogs/Waypoint/WaypointList.cpp:522
 msgid "Direction"
 msgstr "Hướng"
 
@@ -1292,8 +1295,8 @@ msgstr "Hướng"
 #: src/Renderer/WaypointListRenderer.cpp:26
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:150
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:121
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:124
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:127
 msgid "Elevation"
 msgstr "Cao độ"
 
@@ -1350,9 +1353,17 @@ msgstr "giao thông FLARM"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:32
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:105
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:73
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:59
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:90
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:62
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:111
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:170
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:218
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:265
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:266
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:278
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:40
 #, no-c-format
 msgid "Unknown"
@@ -1372,174 +1383,87 @@ msgstr "độ cao đến sân"
 msgid " ("
 msgstr "("
 
-#: src/Weather/Rasp/RaspStore.cpp:27 src/Weather/Rasp/RaspStore.cpp:32
+#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
 #, no-c-format
 msgid "W*"
 msgstr "Warning"
 
-#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
+#: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
 #, no-c-format
-msgid ""
-"Average dry thermal updraft strength near mid-BL height. Subtract glider "
-"descent rate to get average vario reading for cloudless thermals. Updraft "
-"strengths will be stronger than this forecast if convective clouds are "
-"present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
-"\"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
-msgstr ""
-"sức nâng trung bình khô gần độ sâu BL giữa. Trừ tốc độ lặn của tàu lượn để "
-"được đọc trung bình của đồng hồ tốc độ lên xuống trong các dòng nhiệt không "
-"có mây. Sức nâng sẽ mạnh hơn dự báo này nếu có đám mây đối lưu, vì "
-"condensation của mây thêm buoyancy ở trên (tức là điều này bỏ qua "
-"\"cloudsuck\"). W* phụ thuộc vào cả sự làm nóng bề mặt và độ sâu BL."
+msgid "Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
+msgstr "sức nâng trung bình khô gần độ sâu BL giữa. Trừ tốc độ lặn của tàu lượn để được đọc trung bình của đồng hồ tốc độ lên xuống trong các dòng nhiệt không có mây. Sức nâng sẽ mạnh hơn dự báo này nếu có đám mây đối lưu, vì condensation của mây thêm buoyancy ở trên (tức là điều này bỏ qua \"cloudsuck\"). W* phụ thuộc vào cả sự làm nóng bề mặt và độ sâu BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:37
+#: src/Weather/Rasp/RaspStore.cpp:38
 #, no-c-format
 msgid "BL Wind spd"
 msgstr "BL Gió tốc độ"
 
-#: src/Weather/Rasp/RaspStore.cpp:38
+#: src/Weather/Rasp/RaspStore.cpp:39
 #, no-c-format
-msgid ""
-"The speed and direction of the vector-averaged wind in the BL. This "
-"prediction can be misleading if there is a large change in wind direction "
-"through the BL."
-msgstr ""
-"Tốc độ và hướng của vectơ trung bình gió trong BL. Dự đoán này có thể gây "
-"hiểu lầm nếu có sự thay đổi lớn về hướng gió qua BL."
+msgid "The speed and direction of the vector-averaged wind in the BL. This prediction can be misleading if there is a large change in wind direction through the BL."
+msgstr "Tốc độ và hướng của vectơ trung bình gió trong BL. Dự đoán này có thể gây hiểu lầm nếu có sự thay đổi lớn về hướng gió qua BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:42
+#: src/Weather/Rasp/RaspStore.cpp:43
 #, no-c-format
 msgid "H bl"
 msgstr "H BL"
 
-#: src/Weather/Rasp/RaspStore.cpp:43
+#: src/Weather/Rasp/RaspStore.cpp:44
 #, no-c-format
-msgid ""
-"Height of the top of the mixing layer, which for thermal convection is the "
-"average top of a dry thermal. Over flat terrain, maximum thermalling heights "
-"will be lower due to the glider descent rate and other factors. In the "
-"presence of clouds (which release additional buoyancy aloft, creating "
-"\"cloudsuck\") the updraft top will be above this forecast, but the maximum "
-"thermalling height will then be limited by the cloud base. Further, when the "
-"mixing results from shear turbulence rather than thermal mixing this "
-"parameter is not useful for glider flying."
-msgstr ""
-"Chiều cao đỉnh lớp trộn, đối với bay lượn nhiệt là chiều cao trung bình đỉnh "
-"của một dòng nhiệt khô. Trên địa hình phẳng, độ cao tối đa để lượn sẽ thấp "
-"hơn do tốc độ lún của tàu lượn và các yếu tố khác. Trong trường hợp có mây "
-"(đưa ra thêm sức nổi lên trên, tạo ra \"mây hút\"), đỉnh lưu động tăng sẽ ở "
-"trên dự báo này, nhưng độ cao tối đa để lượn sẽ bị giới hạn bởi nền mây. "
-"Ngoài ra, khi sự trộn lẫn do nhiễu loạn dọc thay vì sự trộn lẫn nhiệt thì "
-"tham số này không hữu ích cho việc bay lượn."
+msgid "Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal. Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors. In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base. Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying."
+msgstr "Chiều cao đỉnh lớp trộn, đối với bay lượn nhiệt là chiều cao trung bình đỉnh của một dòng nhiệt khô. Trên địa hình phẳng, độ cao tối đa để lượn sẽ thấp hơn do tốc độ lún của tàu lượn và các yếu tố khác. Trong trường hợp có mây (đưa ra thêm sức nổi lên trên, tạo ra \"mây hút\"), đỉnh lưu động tăng sẽ ở trên dự báo này, nhưng độ cao tối đa để lượn sẽ bị giới hạn bởi nền mây. Ngoài ra, khi sự trộn lẫn do nhiễu loạn dọc thay vì sự trộn lẫn nhiệt thì tham số này không hữu ích cho việc bay lượn."
 
-#: src/Weather/Rasp/RaspStore.cpp:47
+#: src/Weather/Rasp/RaspStore.cpp:48
 #, no-c-format
 msgid "dwcrit"
 msgstr "tiêu chuẩn độ chênh lệch động lực"
 
-#: src/Weather/Rasp/RaspStore.cpp:48
+#: src/Weather/Rasp/RaspStore.cpp:49
 #, no-c-format
-msgid ""
-"This parameter estimates the height above ground at which the average dry "
-"updraft strength drops below 225 fpm and is expected to give better "
-"quantitative numbers for the maximum cloudless thermalling height than the "
-"BL Top height, especially when mixing results from vertical wind shear "
-"rather than thermals. (Note: the present assumptions tend to underpredict "
-"the max. thermalling height for dry conditions.) In the presence of clouds "
-"the maximum thermalling height may instead be limited by the cloud base. "
-"Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Tham số này ước lượng độ cao trên mặt đất ở đó sức lưu động khô trung bình "
-"giảm xuống dưới 225 fpm và dự kiến sẽ đưa ra các số liệu định lượng tốt hơn "
-"về độ cao tối đa để lượn không có mây so với độ cao đỉnh BL, đặc biệt khi sự "
-"trộn lẫn do pha dọc thay vì dòng nhiệt. (Lưu ý: các giả định hiện tại có xu "
-"hướng underpredict độ cao tối đa để lượn trong điều kiện khô.) Trong trường "
-"hợp có mây, độ cao tối đa để lượn có thể bị giới hạn bởi nền mây. Là cho "
-"\"dòng nhiệt khô\", tham số này bỏ qua tác động của \"mây hút\"."
+msgid "This parameter estimates the height above ground at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Tham số này ước lượng độ cao trên mặt đất ở đó sức lưu động khô trung bình giảm xuống dưới 225 fpm và dự kiến sẽ đưa ra các số liệu định lượng tốt hơn về độ cao tối đa để lượn không có mây so với độ cao đỉnh BL, đặc biệt khi sự trộn lẫn do pha dọc thay vì dòng nhiệt. (Lưu ý: các giả định hiện tại có xu hướng underpredict độ cao tối đa để lượn trong điều kiện khô.) Trong trường hợp có mây, độ cao tối đa để lượn có thể bị giới hạn bởi nền mây. Là cho \"dòng nhiệt khô\", tham số này bỏ qua tác động của \"mây hút\"."
 
-#: src/Weather/Rasp/RaspStore.cpp:52
+#: src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "bl cloud"
 msgstr "BL Mây"
 
-#: src/Weather/Rasp/RaspStore.cpp:53
+#: src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
-msgid ""
-"This parameter provides an additional means of evaluating the formation of "
-"clouds within the BL and might be used either in conjunction with or instead "
-"of the other cloud prediction parameters. It assumes a very simple "
-"relationship between cloud cover percentage and the maximum relative "
-"humidity within the BL. The cloud base height is not predicted, but is "
-"expected to be below the BL Top height."
-msgstr ""
-"Tham số này cung cấp một phương tiện bổ sung để đánh giá sự hình thành mây "
-"trong BL và có thể được sử dụng cùng với hoặc thay thế các tham số dự báo "
-"mây khác. Nó giả định mối quan hệ rất đơn giản giữa phần trăm bao phủ mây và "
-"độ ẩm tương đối tối đa trong BL. Chiều cao nền mây không được dự đoán, nhưng "
-"dự kiến sẽ ở dưới độ cao đỉnh BL."
+msgid "This parameter provides an additional means of evaluating the formation of clouds within the BL and might be used either in conjunction with or instead of the other cloud prediction parameters. It assumes a very simple relationship between cloud cover percentage and the maximum relative humidity within the BL. The cloud base height is not predicted, but is expected to be below the BL Top height."
+msgstr "Tham số này cung cấp một phương tiện bổ sung để đánh giá sự hình thành mây trong BL và có thể được sử dụng cùng với hoặc thay thế các tham số dự báo mây khác. Nó giả định mối quan hệ rất đơn giản giữa phần trăm bao phủ mây và độ ẩm tương đối tối đa trong BL. Chiều cao nền mây không được dự đoán, nhưng dự kiến sẽ ở dưới độ cao đỉnh BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:57
+#: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
 msgstr "Nhiệt độ mặt đất"
 
-#: src/Weather/Rasp/RaspStore.cpp:58
+#: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
-msgid ""
-"The temperature at a height of 2m above ground level. This can be compared "
-"to observed surface temperatures as an indication of model simulation "
-"accuracy; e.g. if observed surface temperatures are significantly below "
-"those forecast, then soaring conditions will be poorer than forecast."
-msgstr ""
-"Nhiệt độ tại độ cao 2m trên mặt đất. Có thể so sánh với nhiệt độ bề mặt quan "
-"sát để chỉ ra độ chính xác của mô hình; ví dụ, nếu nhiệt độ bề mặt quan sát "
-"đáng kể thấp hơn dự báo, thì điều kiện bay lượn sẽ kém hơn dự báo."
+msgid "The temperature at a height of 2m above ground level. This can be compared to observed surface temperatures as an indication of model simulation accuracy; e.g. if observed surface temperatures are significantly below those forecast, then soaring conditions will be poorer than forecast."
+msgstr "Nhiệt độ tại độ cao 2m trên mặt đất. Có thể so sánh với nhiệt độ bề mặt quan sát để chỉ ra độ chính xác của mô hình; ví dụ, nếu nhiệt độ bề mặt quan sát đáng kể thấp hơn dự báo, thì điều kiện bay lượn sẽ kém hơn dự báo."
 
-#: src/Weather/Rasp/RaspStore.cpp:62
+#: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "hwcrit"
 msgstr "giới hạn tốc độ tay"
 
-#: src/Weather/Rasp/RaspStore.cpp:63
+#: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
-msgid ""
-"This parameter estimates the height at which the average dry updraft "
-"strength drops below 225 fpm and is expected to give better quantitative "
-"numbers for the maximum cloudless thermalling height than the BL Top height, "
-"especially when mixing results from vertical wind shear rather than "
-"thermals. (Note: the present assumptions tend to underpredict the max. "
-"thermalling height for dry conditions.) In the presence of clouds the "
-"maximum thermalling height may instead be limited by the cloud base. Being "
-"for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Tham số này ước lượng độ cao ở đó sức lưu động khô trung bình giảm xuống "
-"dưới 225 fpm và dự kiến sẽ đưa ra các số liệu định lượng tốt hơn về độ cao "
-"tối đa để lượn không có mây so với độ cao đỉnh BL, đặc biệt khi sự trộn lẫn "
-"do pha dọc thay vì dòng nhiệt. (Lưu ý: các giả định hiện tại có xu hướng "
-"underpredict độ cao tối đa để lượn trong điều kiện khô.) Trong trường hợp có "
-"mây, độ cao tối đa để lượn có thể bị giới hạn bởi nền mây. Là cho \"dòng "
-"nhiệt khô\", tham số này bỏ qua tác động của \"mây hút\"."
+msgid "This parameter estimates the height at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Tham số này ước lượng độ cao ở đó sức lưu động khô trung bình giảm xuống dưới 225 fpm và dự kiến sẽ đưa ra các số liệu định lượng tốt hơn về độ cao tối đa để lượn không có mây so với độ cao đỉnh BL, đặc biệt khi sự trộn lẫn do pha dọc thay vì dòng nhiệt. (Lưu ý: các giả định hiện tại có xu hướng underpredict độ cao tối đa để lượn trong điều kiện khô.) Trong trường hợp có mây, độ cao tối đa để lượn có thể bị giới hạn bởi nền mây. Là cho \"dòng nhiệt khô\", tham số này bỏ qua tác động của \"mây hút\"."
 
-#: src/Weather/Rasp/RaspStore.cpp:67
+#: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "wblmaxmin"
 msgstr "mức nước ballast tối đa và minimum"
 
-#: src/Weather/Rasp/RaspStore.cpp:68
+#: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
-msgid ""
-"Maximum grid-area-averaged extensive upward or downward motion within the BL "
-"as created by horizontal wind convergence. Positive convergence is "
-"associated with local small-scale convergence lines. Negative convergence "
-"(divergence) produces subsiding vertical motion, creating low-level "
-"inversions which limit thermalling heights."
-msgstr ""
-"Độ lớn cực đại trung bình của sự di chuyển lên hoặc xuống trong BL do hội tụ "
-"gió ngang tạo ra. Hội tụ dương liên quan đến các đường nhỏ-scale cục bộ. Hội "
-"tụ âm (tách rời) tạo ra sự di chuyển giảm, tạo ra nghịch lưu thấp-layer giới "
-"hạn độ cao để lượn."
+msgid "Maximum grid-area-averaged extensive upward or downward motion within the BL as created by horizontal wind convergence. Positive convergence is associated with local small-scale convergence lines. Negative convergence (divergence) produces subsiding vertical motion, creating low-level inversions which limit thermalling heights."
+msgstr "Độ lớn cực đại trung bình của sự di chuyển lên hoặc xuống trong BL do hội tụ gió ngang tạo ra. Hội tụ dương liên quan đến các đường nhỏ-scale cục bộ. Hội tụ âm (tách rời) tạo ra sự di chuyển giảm, tạo ra nghịch lưu thấp-layer giới hạn độ cao để lượn."
 
-#: src/Weather/Rasp/RaspStore.cpp:72
+#: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "blcwbase"
 msgstr "BL Cw Base"
@@ -1580,28 +1504,28 @@ msgstr "Khoảng cách còn phải bay"
 msgid "Target speed"
 msgstr "Tốc độ mục tiêu"
 
-#: src/Renderer/BarographRenderer.cpp:27 src/Renderer/BarographRenderer.cpp:33
+#: src/Renderer/BarographRenderer.cpp:34 src/Renderer/BarographRenderer.cpp:43
 msgid "Working band"
 msgstr "Dải tần hoạt động"
 
-#: src/Renderer/BarographRenderer.cpp:37
+#: src/Renderer/BarographRenderer.cpp:47
 msgid "Ceiling trend"
 msgstr "Tendency của trần"
 
-#: src/Renderer/ClimbChartRenderer.cpp:27
-#: src/Renderer/ClimbChartRenderer.cpp:32
+#: src/Renderer/ClimbChartRenderer.cpp:33
+#: src/Renderer/ClimbChartRenderer.cpp:38
 msgid "Avg. climb"
 msgstr "Trung bình tăng tốc"
 
-#: src/Renderer/ClimbChartRenderer.cpp:35
+#: src/Renderer/ClimbChartRenderer.cpp:41
 msgid "Climb trend"
 msgstr "Xu hướng leo lên"
 
-#: src/Renderer/GlidePolarRenderer.cpp:29
+#: src/Renderer/GlidePolarRenderer.cpp:36
 msgid "L/D"
 msgstr "Tỷ lệ lượn (L/D)"
 
-#: src/Renderer/GlidePolarRenderer.cpp:33
+#: src/Renderer/GlidePolarRenderer.cpp:40
 msgid "Min. sink"
 msgstr "Tốc độ chìm nhỏ nhất"
 
@@ -1611,7 +1535,7 @@ msgid "Mass"
 msgstr "Khối lượng"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:38
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:308
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:312
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:219
 msgid "Wing loading"
 msgstr "Trọng tải cánh"
@@ -1624,12 +1548,12 @@ msgstr "Độ cao thermal"
 msgid "Cloud base"
 msgstr "Trần mây"
 
-#: src/Renderer/MacCreadyRenderer.cpp:28 src/InfoBoxes/Content/Factory.cpp:464
+#: src/Renderer/MacCreadyRenderer.cpp:33 src/InfoBoxes/Content/Factory.cpp:464
 #, no-c-format
 msgid "Vopt"
 msgstr "Vô瞟"
 
-#: src/Renderer/TaskSpeedRenderer.cpp:32
+#: src/Renderer/TaskSpeedRenderer.cpp:38
 msgid "Vest"
 msgstr "Vôest"
 
@@ -1701,27 +1625,27 @@ msgstr "Hồ sơ máy bay khớp: {}"
 msgid "Plane profile created: {}"
 msgstr "Hồ sơ máy bay đã được tạo: {}"
 
-#: src/Startup.cpp:209
+#: src/Startup.cpp:216
 msgid "Loading Terrain File..."
 msgstr "Đang tải file địa hình..."
 
-#: src/Startup.cpp:359
+#: src/Startup.cpp:366
 msgid "Initialising"
 msgstr "Khởi tạo"
 
-#: src/Startup.cpp:488
+#: src/Startup.cpp:495
 msgid "Loading Topography File..."
 msgstr "Tải file không phận..."
 
-#: src/Startup.cpp:497 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:504 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "Đang tải điểm đường bay..."
 
-#: src/Startup.cpp:506
+#: src/Startup.cpp:513
 msgid "Loading Airfield Details File..."
 msgstr "Đang tải chi tiết sân bay..."
 
-#: src/Startup.cpp:562
+#: src/Startup.cpp:569
 msgid "Starting devices"
 msgstr "Khởi động thiết bị..."
 
@@ -1731,25 +1655,25 @@ msgstr "Khởi động thiết bị..."
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:574
+#: src/Startup.cpp:581
 msgid "Initialising display"
 msgstr "Khởi tạo màn hình..."
 
 #. Show progress dialog
-#: src/Startup.cpp:676 src/Startup.cpp:712 src/Startup.cpp:780
+#: src/Startup.cpp:688 src/Startup.cpp:732 src/Startup.cpp:800
 msgid "Shutdown, please wait..."
 msgstr "Tắt máy, vui lòng chờ..."
 
-#: src/Startup.cpp:687
+#: src/Startup.cpp:699
 msgid "Shutdown, saving logs..."
 msgstr "Tắt máy, lưu nhật ký..."
 
 #. Save settings to profile
-#: src/Startup.cpp:709
+#: src/Startup.cpp:729
 msgid "Shutdown, saving profile..."
 msgstr "Tắt máy, lưu hồ sơ..."
 
-#: src/Startup.cpp:770
+#: src/Startup.cpp:790
 msgid "Shutdown, saving task..."
 msgstr "Tắt máy, lưu nhiệm vụ..."
 
@@ -1774,6 +1698,8 @@ msgstr "Tải nhật ký chuyến bay"
 
 #: src/Device/Config.cpp:199 src/Dialogs/Device/PortDataField.cpp:32
 #: src/Dialogs/Device/DeviceListDialog.cpp:472
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:102
+#: src/Weather/EDL/StateController.cpp:311
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:19
 #, no-c-format
 msgid "Disabled"
@@ -1809,60 +1735,67 @@ msgstr "Nhận thông tin lưu lượng tàu lượn"
 msgid "USB serial"
 msgstr "Serial USB"
 
-#: src/Dialogs/InternalLink.cpp:76 src/Dialogs/Settings/dlgConfiguration.cpp:74
-#: src/Dialogs/Settings/dlgConfiguration.cpp:141
+#: src/Dialogs/InternalLink.cpp:77 src/Dialogs/Settings/dlgConfiguration.cpp:75
+#: src/Dialogs/Settings/dlgConfiguration.cpp:143
 #, no-c-format
 msgid "Site Files"
 msgstr "Tập tin địa điểm"
 
-#: src/Dialogs/InternalLink.cpp:77
-#: src/Dialogs/Settings/dlgConfiguration.cpp:120
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:128
-#: Data/Input/default.xci:843 Data/Input/default.xci:1467
+#: src/Dialogs/InternalLink.cpp:78
+#: src/Dialogs/Settings/dlgConfiguration.cpp:121
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:114
+#: Data/Input/default.xci:843 Data/Input/default.xci:1474
 #, no-c-format
 msgid "Logger"
 msgstr "Nhật ký"
 
-#: src/Dialogs/InternalLink.cpp:79
-#: src/Dialogs/Settings/dlgConfiguration.cpp:115
+#: src/Dialogs/InternalLink.cpp:80
+#: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "InfoBox Sets"
 msgstr "Bộ.InfoBox"
 
-#: src/Dialogs/InternalLink.cpp:80
-#: src/Dialogs/Settings/dlgConfiguration.cpp:114
+#: src/Dialogs/InternalLink.cpp:81
+#: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
 msgid "Pages"
 msgstr "Trang"
 
-#: src/Dialogs/InternalLink.cpp:81
+#: src/Dialogs/InternalLink.cpp:82
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:157
 #, no-c-format
 msgid "WeGlide"
 msgstr "Tính toán đường lượn"
 
-#: src/Dialogs/InternalLink.cpp:82
-#: src/Dialogs/Settings/dlgConfiguration.cpp:131
-#: src/Dialogs/Weather/WeatherDialog.cpp:26
+#: src/Dialogs/InternalLink.cpp:84
+#: src/Dialogs/Settings/dlgConfiguration.cpp:132
+#: src/Dialogs/Weather/WeatherDialog.cpp:40
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:416
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:457
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:469
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:489
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:491
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:511
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:520
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:979
-#: Data/Input/default.xci:1392
+#: Data/Input/default.xci:1399
 #, no-c-format
 msgid "Weather"
 msgstr "Thời tiết"
 
-#: src/Dialogs/InternalLink.cpp:83 src/Dialogs/Settings/dlgConfiguration.cpp:88
+#: src/Dialogs/InternalLink.cpp:85 src/Dialogs/Settings/dlgConfiguration.cpp:89
 #, no-c-format
 msgid "Safety Factors"
 msgstr "Các yếu tố an toàn"
 
-#: src/Dialogs/InternalLink.cpp:84
-#: src/Dialogs/Settings/dlgConfiguration.cpp:127
+#: src/Dialogs/InternalLink.cpp:86
+#: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #, no-c-format
 msgid "Tracking"
 msgstr "Theo dõi"
 
-#: src/Dialogs/InternalLink.cpp:85
+#: src/Dialogs/InternalLink.cpp:87
 #, no-c-format
 msgid "Terrain Display"
 msgstr "Hiển thị địa hình"
@@ -1913,7 +1846,7 @@ msgstr "Thử lại"
 #: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:281
 #: Data/Input/default.xci:151 Data/Input/default.xci:593
 #: Data/Input/default.xci:688 Data/Input/default.xci:835
-#: Data/Input/default.xci:1055
+#: Data/Input/default.xci:1055 Data/Input/default.xci:1142
 msgid "Cancel"
 msgstr "Bỏ qua"
 
@@ -1939,7 +1872,7 @@ msgid "Update"
 msgstr "Cập nhật"
 
 #: src/Dialogs/FileManager.cpp:395
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:101
 #: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
 msgstr "Thêm"
@@ -1967,7 +1900,7 @@ msgstr "Không thể tải về chỉ mục thư viện."
 
 #: src/Dialogs/FileManager.cpp:739 src/Dialogs/FileManager.cpp:764
 #: src/Dialogs/DownloadFilePicker.cpp:274 Data/Input/default.xci:817
-#: Data/Input/default.xci:1490
+#: Data/Input/default.xci:1497
 msgid "File Manager"
 msgstr "Quản lý File"
 
@@ -2039,6 +1972,8 @@ msgid "The baud rate used for bulk transfers, such as task declaration or flight
 msgstr "Tốc độ bit được sử dụng cho các chuyển phát khối lượng, như tuyên bố nhiệm vụ hoặc tải bay."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:356
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:216
 msgid "IP address"
 msgstr "Địa chỉ IP"
 
@@ -2157,7 +2092,7 @@ msgstr "debug"
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 #: src/Dialogs/MapItemListDialog.cpp:184
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "Kích hoạt"
@@ -2177,9 +2112,8 @@ msgid "Bad GPS"
 msgstr "GPS không tốt"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:408
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:85
-#, no-c-format
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:71
+#: src/net/wifi/ConnmanClient.cpp:620
 msgid "Connected"
 msgstr "Đã kết nối"
 
@@ -2193,7 +2127,7 @@ msgid "Pitot"
 msgstr "Dòng pitot"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:423
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid "Airspeed"
 msgstr "Tốc độ không khí"
 
@@ -2225,6 +2159,8 @@ msgid "Duplicate"
 msgstr "Đã trùng lặp"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:494
+#: src/net/wifi/NetworkManagerClient.cpp:561
+#: src/net/wifi/NetworkManagerClient.cpp:565 src/net/wifi/ConnmanClient.cpp:623
 msgid "Not connected"
 msgstr "Không kết nối"
 
@@ -2250,7 +2186,7 @@ msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "Liên lạc với thiết bị này sẽ được ghi lại trong %u phút tiếp theo."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:782 Data/Input/default.xci:759
-#: Data/Input/default.xci:1482
+#: Data/Input/default.xci:1489
 msgid "Devices"
 msgstr "Thiết bị"
 
@@ -2276,7 +2212,7 @@ msgstr "Monitor cổng"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:47
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:68
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:73
-#: src/Dialogs/Settings/dlgConfiguration.cpp:121
+#: src/Dialogs/Settings/dlgConfiguration.cpp:122
 #, no-c-format
 msgid "Units"
 msgstr "Đơn vị"
@@ -2285,7 +2221,7 @@ msgstr "Đơn vị"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:61
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:82
-#: src/Dialogs/Settings/dlgConfiguration.cpp:81
+#: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:57
 #, no-c-format
 msgid "Waypoints"
@@ -2392,9 +2328,9 @@ msgstr "đầu ghi IGC"
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:133
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:67
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:65
-#: src/Dialogs/Settings/dlgConfiguration.cpp:147
+#: src/Dialogs/Settings/dlgConfiguration.cpp:149
 #: src/InfoBoxes/Content/Altitude.cpp:29 src/InfoBoxes/Content/MacCready.cpp:29
-#: src/InfoBoxes/Content/Places.cpp:182
+#: src/InfoBoxes/Content/Places.cpp:304
 #, no-c-format
 msgid "Setup"
 msgstr "Cài đặt"
@@ -2547,42 +2483,30 @@ msgstr "Thiết lập phương án âm thanh mới? Giá trị cũ sẽ bị m�
 msgid "Vario Configuration"
 msgstr "Cấu hình đồng hồ tốc độ lên xuống"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 msgid "TE vario"
 msgstr "TE đồng hồ tốc độ lên xuống"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
-msgid ""
-"This produces a fake TE vario gross vertical velocity. It can be used when "
-"in circling mode to demonstrate the lift tones. When not in circling mode, "
-"set this to a realistic negative value so speed command tones are produced."
-msgstr ""
-"Điều này tạo ra một tốc độ lên xuống giả mạo. Nó có thể được sử dụng khi ở "
-"chế độ quay vòng để trình diễn các âm thanh nâng đỡ. Khi không ở chế độ quay "
-"vòng, đặt giá trị này thành một giá trị tiêu cực thực tế để sản xuất các âm "
-"thanh chỉ thị tốc độ."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+msgid "This produces a fake TE vario gross vertical velocity. It can be used when in circling mode to demonstrate the lift tones. When not in circling mode, set this to a realistic negative value so speed command tones are produced."
+msgstr "Điều này tạo ra một tốc độ lên xuống giả mạo. Nó có thể được sử dụng khi ở chế độ quay vòng để trình diễn các âm thanh nâng đỡ. Khi không ở chế độ quay vòng, đặt giá trị này thành một giá trị tiêu cực thực tế để sản xuất các âm thanh chỉ thị tốc độ."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
-msgid ""
-"This produces a fake airspeed. It can be used when not in circling mode to "
-"demonstrate the speed command tones."
-msgstr ""
-"Điều này tạo ra một vận tốc gió giả mạo. Nó có thể được sử dụng khi không ở "
-"chế độ quay vòng để trình diễn các âm thanh chỉ thị tốc độ."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:101
+msgid "This produces a fake airspeed. It can be used when not in circling mode to demonstrate the speed command tones."
+msgstr "Điều này tạo ra một vận tốc gió giả mạo. Nó có thể được sử dụng khi không ở chế độ quay vòng để trình diễn các âm thanh chỉ thị tốc độ."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:105
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:57
 #, no-c-format
 msgid "Circling"
 msgstr "lượn vòng"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "This forces the variometer into circling or cruise mode"
-msgstr ""
-"Điều này ép đồng hồ tốc độ lên xuống vào chế độ quay vòng hoặc hành trình"
+msgstr "Điều này ép đồng hồ tốc độ lên xuống vào chế độ quay vòng hoặc hành trình"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:120
 msgid "Vario Demo"
 msgstr "Demo đồng hồ tốc độ lên xuống"
 
@@ -2761,7 +2685,7 @@ msgstr "Static object | đối tượng tĩnh"
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:144
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:140
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
-#: src/Dialogs/Waypoint/WaypointList.cpp:491
+#: src/Dialogs/Waypoint/WaypointList.cpp:523
 msgid "Type"
 msgstr "Type | loại"
 
@@ -2872,10 +2796,10 @@ msgid "Warn"
 msgstr "Cảnh báo"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:83 src/Dialogs/dlgAnalysis.cpp:570
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:570
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:83
-#: Data/Input/default.xci:725 Data/Input/default.xci:1344
+#: Data/Input/default.xci:725 Data/Input/default.xci:1351
 #, no-c-format
 msgid "Airspace"
 msgstr "Không phận"
@@ -2930,7 +2854,7 @@ msgid "Airspace Details"
 msgstr "Thông tin thêm về không phận"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:310
-#: src/Dialogs/Waypoint/WaypointList.cpp:542
+#: src/Dialogs/Waypoint/WaypointList.cpp:574
 msgid "No Match!"
 msgstr "Không tìm thấy!"
 
@@ -2939,10 +2863,10 @@ msgid "Heading"
 msgstr "Hướng"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:431
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:218
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:105
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:488
+#: src/Dialogs/Waypoint/WaypointList.cpp:520
 msgid "Name"
 msgstr "Tên"
 
@@ -3006,12 +2930,12 @@ msgstr "Chế độ Tô màu"
 msgid "Defines how the airspace is filled with the configured color."
 msgstr "Định nghĩa cách tô màu không phận bằng màu đã cấu hình."
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:75
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "ACK"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "Ngày ACK"
@@ -3019,11 +2943,11 @@ msgstr "Ngày ACK"
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:313
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:314
 msgid "No Warnings"
 msgstr "Không có cảnh báo nào"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:513 Data/Input/default.xci:1375
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:520 Data/Input/default.xci:1382
 msgid "Airspace Warnings"
 msgstr "Các cảnh báo về không phận"
 
@@ -3088,12 +3012,12 @@ msgstr "Đa phương"
 msgid "Wind Settings"
 msgstr "Các thiết lập về gió"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:129
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:382
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:130
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:386
 msgid "Dump"
 msgstr "Rời bỏ"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:173
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:174
 msgid ""
 "Ballast dump time is 0 in plane profile.\n"
 "Open Plane configuration now?"
@@ -3101,108 +3025,85 @@ msgstr ""
 "Thời gian xả dằn là 0 trong biên dạng mặt phẳng.\n"
 "Mở cấu hình Máy bay ngay bây giờ?"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:175
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1201
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:176
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:379 Data/Input/default.xci:1208
 msgid "Flight Setup"
 msgstr "Cài đặt chuyến bay"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:294
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:298
 msgid "Crew"
 msgstr "Phi hành đoàn"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:295
-msgid ""
-"All masses loaded to the glider beyond the empty weight including pilot and "
-"copilot, but not water ballast."
-msgstr ""
-"Tổng khối lượng đã tải lên tàu lượn bao gồm trọng lượng rỗng, phi công và "
-"đồng hành viên, nhưng không bao gồm nước ballast."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:299
+msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
+msgstr "Tổng khối lượng đã tải lên tàu lượn bao gồm trọng lượng rỗng, phi công và đồng hành viên, nhưng không bao gồm nước ballast."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:302
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:306
 msgid "Ballast"
 msgstr "Túi dằn"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:303
-msgid ""
-"Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the "
-"ballast volume according to the dump rate specified in the configuration "
-"settings."
-msgstr ""
-"Ballast của tàu lượn. Nhấn \"Rời bỏ/STOP\" để chuyển đổi trạng thái đếm "
-"ngược thể tích ballast theo tốc độ đã cài đặt trong cài đặt cấu hình."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:307
+msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
+msgstr "Ballast của tàu lượn. Nhấn \"Rời bỏ/STOP\" để chuyển đổi trạng thái đếm ngược thể tích ballast theo tốc độ đã cài đặt trong cài đặt cấu hình."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:309
-msgid ""
-"The current wing loading, calculated from the glider's empty weight, crew "
-"weight, and ballast."
-msgstr ""
-"Tải trọng hiện tại của cánh, được tính từ trọng lượng rỗng của tàu lượn, "
-"trọng lượng của tổ lái và vật dằn."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:313
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
+msgstr "Tải trọng hiện tại của cánh, được tính từ trọng lượng rỗng của tàu lượn, trọng lượng của tổ lái và vật dằn."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:316
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:320
 msgid "Bugs"
 msgstr "Lỗi"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:317
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:321
 #, no-c-format
-msgid ""
-"How clean the glider is. Set to 0% for clean, larger numbers as the wings "
-"pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."
-msgstr ""
-"Tàu lượn sạch sẽ làm sao. Đặt thành 0% để có số lượng lớn hơn, sạch hơn khi "
-"cánh bắt côn trùng hoặc bị ướt. 50% cho biết tốc độ chìm của tàu lượn tăng "
-"gấp đôi."
+msgid "How clean the glider is. Set to 0% for clean, larger numbers as the wings pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."
+msgstr "Tàu lượn sạch sẽ làm sao. Đặt thành 0% để có số lượng lớn hơn, sạch hơn khi cánh bắt côn trùng hoặc bị ướt. 50% cho biết tốc độ chìm của tàu lượn tăng gấp đôi."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:325
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:77
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:329
+#: src/InfoBoxes/Content/Factory.cpp:1191
+#: src/InfoBoxes/Content/Factory.cpp:1192
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:80
+#, no-c-format
 msgid "QNH"
 msgstr "QNH"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:326
-msgid ""
-"Area pressure for barometric altimeter calibration. This is set "
-"automatically if Vega is connected."
-msgstr ""
-"Áp suất khu vực để calibr hóa altimeter barometric. Được thiết lập tự động "
-"nếu Vega được kết nối."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:330
+msgid "Area pressure for barometric altimeter calibration. This is set automatically if Vega is connected."
+msgstr "Áp suất khu vực để calibr hóa altimeter barometric. Được thiết lập tự động nếu Vega được kết nối."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:341
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:345
 msgid "Max. temp."
 msgstr "Nhiệt độ cực đại"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:342
-msgid ""
-"Set to forecast ground temperature. Used by convection estimator "
-"(temperature trace page of Analysis dialog)."
-msgstr ""
-"Đặt theo nhiệt độ mặt đất dự báo. Sử dụng bởi ước lượng đối lưu (trang trắc "
-"nhiệt của hộp thoại phân tích)."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:346
+msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
+msgstr "Đặt theo nhiệt độ mặt đất dự báo. Sử dụng bởi ước lượng đối lưu (trang trắc nhiệt của hộp thoại phân tích)."
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:79
+#: src/Dialogs/Settings/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Orientation"
 msgstr "Hướng"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:80
+#: src/Dialogs/Settings/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Elements"
 msgstr "Các thành phần"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:82
+#: src/Dialogs/Settings/dlgConfiguration.cpp:83
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:711
-#: Data/Input/default.xci:1265
+#: Data/Input/default.xci:1272
 #, no-c-format
 msgid "Terrain"
 msgstr "Địa hình"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:89
-#: src/Dialogs/Settings/dlgConfiguration.cpp:143
+#: src/Dialogs/Settings/dlgConfiguration.cpp:90
+#: src/Dialogs/Settings/dlgConfiguration.cpp:145
 #, no-c-format
 msgid "Glide Computer"
 msgstr "Tính toán đường lượn"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:90
+#: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:272
 #: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:319 src/InfoBoxes/Content/Factory.cpp:327
@@ -3211,86 +3112,86 @@ msgstr "Tính toán đường lượn"
 msgid "Wind"
 msgstr "Gió"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:91
+#: src/Dialogs/Settings/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Route"
 msgstr "Đường đi"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:93
 #, no-c-format
 msgid "Scoring"
 msgstr "Điểm"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:97
+#: src/Dialogs/Settings/dlgConfiguration.cpp:98
 #, no-c-format
 msgid "FLARM, Other"
 msgstr "FLARM, khác"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:100
+#: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #, no-c-format
 msgid "Audio Vario"
 msgstr "Vòng âm variometer"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:106
+#: src/Dialogs/Settings/dlgConfiguration.cpp:107
 #, no-c-format
 msgid "Task Rules"
 msgstr "Quy tắc thi"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:107
+#: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
 msgid "Turnpoint Types"
 msgstr "Loại điểm quay vòng"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:112
+#: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
 msgid "Language, Input"
 msgstr "Ngôn ngữ, Nhập liệu"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:113
+#: src/Dialogs/Settings/dlgConfiguration.cpp:114
 #, no-c-format
 msgid "Screen Layout"
 msgstr "Thiết kế màn hình"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:135
+#: src/Dialogs/Settings/dlgConfiguration.cpp:136
 #, no-c-format
 msgid "Audio"
 msgstr "Âm thanh"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:142
+#: src/Dialogs/Settings/dlgConfiguration.cpp:144
 #, no-c-format
 msgid "Map Display"
 msgstr "Hiển thị bản đồ"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:144
+#: src/Dialogs/Settings/dlgConfiguration.cpp:146
 #, no-c-format
 msgid "Gauges"
 msgstr "Biểu đồ"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:145
+#: src/Dialogs/Settings/dlgConfiguration.cpp:147
 #, no-c-format
 msgid "Task Defaults"
 msgstr "Mức độ mặc định nhiệm vụ"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:146
+#: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #, no-c-format
 msgid "Look"
 msgstr "Giao diện"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:205
-#: src/Dialogs/Settings/dlgConfiguration.cpp:214
+#: src/Dialogs/Settings/dlgConfiguration.cpp:207
+#: src/Dialogs/Settings/dlgConfiguration.cpp:216
 msgid "Expert"
 msgstr "Chuyên gia"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:307
-#: src/Dialogs/Settings/dlgConfiguration.cpp:316
+#: src/Dialogs/Settings/dlgConfiguration.cpp:309
+#: src/Dialogs/Settings/dlgConfiguration.cpp:318
 msgid "Configuration"
 msgstr "Cấu hình"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:351
+#: src/Dialogs/Settings/dlgConfiguration.cpp:353
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Các thay đổi trong cấu hình đã được lưu. Khởi động lại XCSoar để áp dụng các thay đổi."
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:220
 msgid "The name of this InfoBox panel configuration."
 msgstr "Tên của cấu hình bảng InfoBox này."
 
@@ -3329,8 +3230,7 @@ msgid "Competition ID"
 msgstr "ID cuộc thi"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:347
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:174
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:348
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:224
 #, no-c-format
 msgid "Map"
 msgstr "Bản đồ"
@@ -3473,7 +3373,7 @@ msgstr "Tính toán nhiệm vụ"
 #: src/Dialogs/dlgAnalysis.cpp:540 src/Dialogs/dlgAnalysis.cpp:550
 #: src/Dialogs/dlgAnalysis.cpp:559 src/Dialogs/dlgAnalysis.cpp:569
 #: src/Dialogs/dlgAnalysis.cpp:718 Data/Input/default.xci:1003
-#: Data/Input/default.xci:1434
+#: Data/Input/default.xci:1441
 msgid "Analysis"
 msgstr "Phân tích"
 
@@ -3524,7 +3424,7 @@ msgstr "Các cảnh báo"
 
 #: src/Dialogs/dlgChecklist.cpp:55 src/Dialogs/dlgChecklist.cpp:192
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:106
-#: Data/Input/default.xci:995 Data/Input/default.xci:1322
+#: Data/Input/default.xci:995 Data/Input/default.xci:1329
 msgid "Checklist"
 msgstr "Danh sách kiểm tra"
 
@@ -3602,7 +3502,7 @@ msgstr "Sao chép"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:135
 #: src/Dialogs/Plane/PlaneListDialog.cpp:333
 #: src/Dialogs/Waypoint/Manager.cpp:109
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:102
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:111
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:81
 msgid "Delete"
 msgstr "Xóa"
@@ -3756,10 +3656,11 @@ msgstr "Máy Bay Polar"
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:126
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:278
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:300
-#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:183
+#: src/Dialogs/Weather/PCMetDialog.cpp:208 src/Dialogs/Weather/NOAAList.cpp:183
 #: src/Dialogs/Weather/NOAAList.cpp:199 src/Dialogs/Weather/NOAADetails.cpp:88
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:355
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:390
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:438
 #: src/Dialogs/DownloadFilePicker.cpp:164
 #: src/Dialogs/DownloadFilePicker.cpp:189
 #: src/Dialogs/DownloadFilePicker.cpp:280
@@ -3778,7 +3679,7 @@ msgstr "Lựa chọn waypoint"
 msgid "Switch InfoBox"
 msgstr "Đổi InfoBox"
 
-#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
+#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:37
 msgid "File"
 msgstr "Tệp"
 
@@ -3808,7 +3709,7 @@ msgstr "Tái Tạo"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:48 src/Dialogs/StartupDialog.cpp:83
 #: src/Dialogs/dlgQuickGuide.cpp:513 src/Dialogs/dlgQuickGuide.cpp:708
-#: Data/Input/default.xci:1143
+#: Data/Input/default.xci:1150
 msgid "Quit"
 msgstr "Thoát"
 
@@ -3838,8 +3739,11 @@ msgid "Enter a new password"
 msgstr "Nhập mật khẩu mới"
 
 #: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
-#: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:1021
-#: Data/Input/default.xci:1442
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:327
+#: src/Dialogs/Weather/WeatherDialog.cpp:52 Data/Input/default.xci:1021
+#: Data/Input/default.xci:1449
 msgid "Status"
 msgstr "Tình trạng"
 
@@ -3880,9 +3784,8 @@ msgid "Share"
 msgstr "Chia sẻ"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:32
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:43
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:82
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:86
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:68
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:72
 #: src/InfoBoxes/Content/Other.cpp:168
 #, no-c-format
 msgid "Disconnected"
@@ -3906,29 +3809,36 @@ msgstr "Phân tích 2D"
 msgid "3D fix"
 msgstr "Phân tích 3D"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:45
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:192
-#, no-c-format
 msgid "Roaming"
 msgstr "Di chuyển"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:124
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:110
 msgid "GPS lock"
 msgstr "Kẹt GPS"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:125
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:111
 msgid "Satellites in view"
 msgstr "Tín hiệu vệ tinh trong tầm nhìn"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:126
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:112
 msgid "Variometer"
 msgstr "Đồng hồ tốc độ lên xuống"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:129
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:115
 msgid "Supply voltage"
 msgstr "Điện áp nguồn cung cấp"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
+#: src/Dialogs/InternalLink.cpp:83
+#: src/Dialogs/Settings/dlgConfiguration.cpp:138
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:116
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:80
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:244
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:252
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:303
+#, no-c-format
 msgid "Network"
 msgstr "Mạng"
 
@@ -4197,15 +4107,15 @@ msgstr "Đặt làm Nhà Mới"
 msgid "Pan to Waypoint"
 msgstr "Quay về Điểm đường bay"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:538 Data/Input/default.xci:1400
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:487 Data/Input/default.xci:1407
 msgid "GoTo"
 msgstr "Đi đến"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:541
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:490
 msgid "Pan To"
 msgstr "Quay về"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:1030
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:877
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -4218,7 +4128,7 @@ msgstr "Xóa Waypoint?"
 #: src/Dialogs/Waypoint/Manager.cpp:286
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:809
-#: Data/Input/default.xci:1241
+#: Data/Input/default.xci:1248
 msgid "Waypoint Editor"
 msgstr "Sửa các waypoint"
 
@@ -4349,12 +4259,13 @@ msgid ""
 msgstr ""
 "Xin lỗi, bộ chỉnh sửa điểm đường bay chưa sẵn dùng cho định dạng tọa độ UTM."
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:543
+#: src/Dialogs/Waypoint/WaypointList.cpp:575
+#: src/Dialogs/Waypoint/WaypointList.cpp:584
 msgid "Choose a filter or click here"
 msgstr "Chọn một bộ lọc hoặc nhấp vào đây"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:628
-#: src/Dialogs/Waypoint/WaypointList.cpp:671
+#: src/Dialogs/Waypoint/WaypointList.cpp:678
+#: src/Dialogs/Waypoint/WaypointList.cpp:722
 msgid "Select Waypoint"
 msgstr "Lựa chọn waypoint"
 
@@ -4394,7 +4305,7 @@ msgid "Display airspaces below the glider or within a margin."
 msgstr "Hiển thị không phận dưới tàu lượn hoặc trong phạm vi."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
@@ -5084,101 +4995,75 @@ msgstr ""
 "Điều khiển việc sử dụng chế độ \"lượn cuối\" trong InfoBox trên các trang tự "
 "động."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:72
 msgid "Text size"
 msgstr "Kích thước văn bản"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
 msgid "Display Resolution"
 msgstr "Độ phân giải màn hình"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
-msgid ""
-"The display resolution is used to adapt line widths, font size, landable "
-"size and more."
-msgstr ""
-"Độ phân giải màn hình được sử dụng để điều chỉnh độ rộng của các đường, kích "
-"cỡ chữ, và kích thước hạ cánh."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:78
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
+msgstr "Độ phân giải màn hình được sử dụng để điều chỉnh độ rộng của các đường, kích cỡ chữ, và kích thước hạ cánh."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:87
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:113
 msgid "Automatic"
 msgstr "Tự động"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:90
-#, c-format
-msgid "%d dpi"
-msgstr "%d dpi"
-
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:98
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
 msgid "Events"
 msgstr "Sự kiện"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-msgid ""
-"The Input Events file defines the menu system and how XCSoar responds to "
-"button presses and events from external devices."
-msgstr ""
-"File Sự kiện Nhập định nghĩa hệ thống menu và cách XCSoar phản ứng với nhấn "
-"nút và sự kiện từ thiết bị ngoại vi."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
+msgid "The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices."
+msgstr "File Sự kiện Nhập định nghĩa hệ thống menu và cách XCSoar phản ứng với nhấn nút và sự kiện từ thiết bị ngoại vi."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
-msgid ""
-"The language options selects translations for English texts to other "
-"languages. Select English for a native interface or Automatic to localise "
-"XCSoar according to the system settings."
-msgstr ""
-"Các tùy chọn ngôn ngữ chọn bản dịch cho văn bản tiếng Anh sang các ngôn ngữ "
-"khác. Chọn Tiếng Việt để có giao diện gốc hoặc Tự động để localis hóa XCSoar "
-"theo cài đặt hệ thống."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:108
+msgid "The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings."
+msgstr "Các tùy chọn ngôn ngữ chọn bản dịch cho văn bản tiếng Anh sang các ngôn ngữ khác. Chọn Tiếng Việt để có giao diện gốc hoặc Tự động để localis hóa XCSoar theo cài đặt hệ thống."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
 msgid "Menu timeout"
 msgstr "Thời gian chờ menu"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
-msgid ""
-"This determines how long menus will appear on screen if the user does not "
-"make any button presses or interacts with the computer."
-msgstr ""
-"Điều này xác định thời gian mà menu sẽ xuất hiện trên màn hình nếu người "
-"dùng không nhấn bất kỳ nút nào hoặc tương tác với máy tính."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:147
+msgid "This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer."
+msgstr "Điều này xác định thời gian mà menu sẽ xuất hiện trên màn hình nếu người dùng không nhấn bất kỳ nút nào hoặc tương tác với máy tính."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:155
 #, no-c-format
 msgid "Keyboard"
 msgstr "Phím bàn phím"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:156
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:157
 #, no-c-format
 msgid "HighScore Style"
 msgstr "Kiểu HighScore"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
 msgid "Text input style"
 msgstr "Kiểu nhập văn bản"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
-msgid ""
-"Determines how the user is prompted for text input (filename, teamcode etc.)"
-msgstr ""
-"Xác định cách người dùng được nhắc nhở để nhập văn bản (tên tệp, mã đội, "
-"v.v.)"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
+msgid "Determines how the user is prompted for text input (filename, teamcode etc.)"
+msgstr "Xác định cách người dùng được nhắc nhở để nhập văn bản (tên tệp, mã đội, v.v.)"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #, no-c-format
 msgid "OS settings"
 msgstr "Cài đặt hệ thống"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
 msgid "Haptic feedback"
 msgstr "Phản hồi xúc giác"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:179
 msgid "Determines if haptic feedback like vibration is used."
 msgstr "Xác định liệu có sử dụng phản hồi xúc giác như rung động hay không."
 
@@ -5756,86 +5641,72 @@ msgstr "Zoom trang riêng biệt"
 msgid "Maintain one map zoom level on each page."
 msgstr "Giữ một mức zoom bản đồ duy nhất trên mỗi trang."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:225
 #, no-c-format
 msgid "Map (north-up)"
 msgstr "Bản đồ (trên hướng bắc)"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:231
 msgid "Main area"
 msgstr "Khu vực chính"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:232
 msgid "Specifies what should be displayed in the main area."
 msgstr "Xác định điều gì nên được hiển thị trong khu vực chính."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:237
 #, no-c-format
 msgid "Displays either the Circling, Cruise, or Final glide InfoBoxes."
 msgstr "Hiển thị InfoBox quay vòng, di chuyển hoặc lượn cuối."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:238
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
 msgstr "Hiển thị toàn màn hình (không có InfoBox)"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:192
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:372
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:242
 msgid "InfoBoxes"
 msgstr "Thông báo"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:243
 msgid "Specifies which InfoBoxes should be displayed on this page."
 msgstr "Chỉ định các InfoBox nào nên được hiển thị trên trang này."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:247
 #, no-c-format
-msgid ""
-"For cruise mode. Displayed when 'Auto' is selected and glider is below final "
-"glide altitude."
-msgstr ""
-"Đối với chế độ bay xa. Hiển thị khi 'Tự động' được chọn và tàu lượn ở dưới "
-"độ cao lượn cuối."
+msgid "For cruise mode. Displayed when 'Auto' is selected and glider is below final glide altitude."
+msgstr "Đối với chế độ bay xa. Hiển thị khi 'Tự động' được chọn và tàu lượn ở dưới độ cao lượn cuối."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:198
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:248
 #, no-c-format
-msgid ""
-"For circling mode. Displayed when 'Auto' is selected and glider is circling."
-msgstr ""
-"Đối với chế độ quay vòng. Hiển thị khi 'Tự động' được chọn và tàu lượn đang "
-"quay vòng."
+msgid "For circling mode. Displayed when 'Auto' is selected and glider is circling."
+msgstr "Đối với chế độ quay vòng. Hiển thị khi 'Tự động' được chọn và tàu lượn đang quay vòng."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:199
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:249
 #, no-c-format
-msgid ""
-"For final glide mode. Displayed when 'Auto' is selected and glider is above "
-"final glide altitude."
-msgstr ""
-"Đối với chế độ lượn cuối. Hiển thị khi 'Tự động' được chọn và tàu lượn ở "
-"trên độ cao lượn cuối."
+msgid "For final glide mode. Displayed when 'Auto' is selected and glider is above final glide altitude."
+msgstr "Đối với chế độ lượn cuối. Hiển thị khi 'Tự động' được chọn và tàu lượn ở trên độ cao lượn cuối."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:201
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:251
 #, no-c-format
 msgid "A custom InfoBox set"
 msgstr "Một tập InfoBox tùy chỉnh"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:219
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:269
 #, no-c-format
 msgid "Nothing"
 msgstr "Không có gì"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:220
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:388
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:270
 #, no-c-format
 msgid "Cross section"
 msgstr "Cắt ngang"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:223
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:276
 msgid "Bottom area"
 msgstr "Khu vực dưới cùng"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:224
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:277
 msgid "Specifies what should be displayed below the main area."
 msgstr "Chỉ định điều gì nên được hiển thị bên dưới khu vực chính."
 
@@ -6056,7 +5927,7 @@ msgstr "Sắp xếp cũng sẽ xem xét hướng nhiệm vụ hiện tại."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:64
 #: src/InfoBoxes/Content/Factory.cpp:1174
-#: src/InfoBoxes/Content/Factory.cpp:1175 src/InfoBoxes/Content/Places.cpp:107
+#: src/InfoBoxes/Content/Factory.cpp:1175 src/InfoBoxes/Content/Places.cpp:112
 #, no-c-format
 msgid "Home"
 msgstr "Trang chủ"
@@ -7277,13 +7148,9 @@ msgid ""
 "[On] Scale displayed runway length based on real length."
 msgstr "[Off] Hiển thị chiều dài đường băng cố định."
 
-#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:69
-msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
-msgstr ""
-"Hiển thị vị trí dòng nhiệt tải xuống từ Thermal Information Map "
-"(thermalmap.info)."
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:76
+msgid "Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."
+msgstr "Hiển thị vị trí dòng nhiệt tải xuống từ Thermal Information Map (thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
@@ -7793,12 +7660,11 @@ msgstr "Không có điểm dự phòng sẵn có"
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:316
 #: src/Dialogs/Task/AlternatesListDialog.cpp:349 Data/Input/default.xci:582
-#: Data/Input/default.xci:1367
+#: Data/Input/default.xci:1374
 msgid "Alternates"
 msgstr "Điểm dự phòng"
 
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
+#: src/Weather/Rasp/FieldControls.cpp:45 src/Dialogs/TimeEntry.cpp:48
 msgid "Now"
 msgstr "Hiện tại"
 
@@ -7806,15 +7672,11 @@ msgstr "Hiện tại"
 msgid "Reset"
 msgstr "Khởi tạo lại"
 
-#: src/Dialogs/Weather/WeatherDialog.cpp:59
+#: src/Dialogs/Weather/WeatherDialog.cpp:73
 #: src/Dialogs/Weather/NOAADetails.cpp:64
 #: src/Dialogs/Weather/NOAADetails.cpp:122
 msgid "METAR and TAF"
 msgstr "METAR và TAF"
-
-#: src/Dialogs/Weather/RASPDialog.cpp:122
-msgid "Field"
-msgstr "Trường địa"
 
 #: src/Dialogs/dlgCredits.cpp:81 src/Dialogs/dlgCredits.cpp:123
 #: Data/Input/default.xci:1064
@@ -9114,7 +8976,7 @@ msgstr ""
 msgid "Netto vario"
 msgstr "Vario net"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:76
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Netto"
@@ -10410,13 +10272,14 @@ msgid "Arrival altitude at the second-best alternate landing location relative t
 msgstr "Độ cao đến sân đáp dự phòng thứ hai so với độ cao an toàn khi hạ cánh."
 
 #: src/InfoBoxes/Content/Altitude.cpp:27
-#: src/MapWindow/GlueMapWindowOverlays.cpp:337
+#: src/MapWindow/GlueMapWindowOverlays.cpp:340
 #, no-c-format
 msgid "Simulator"
 msgstr "Simulater"
 
 #: src/InfoBoxes/Content/Altitude.cpp:79 src/InfoBoxes/Content/Altitude.cpp:137
 #: src/InfoBoxes/Content/Altitude.cpp:206
+#: src/InfoBoxes/Content/Altitude.cpp:220
 msgid "no QNH"
 msgstr "Không có QNH"
 
@@ -10472,7 +10335,7 @@ msgstr "Mở"
 msgid "Waiting"
 msgstr "Đợi"
 
-#: src/InfoBoxes/Content/Places.cpp:181
+#: src/InfoBoxes/Content/Places.cpp:303
 #, no-c-format
 msgid "Reference"
 msgstr "Tham chiếu"
@@ -10487,16 +10350,12 @@ msgstr "đi thẳng"
 msgid "FinalGlide"
 msgstr "Lượn cuối"
 
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:78
-msgid ""
-"Area pressure for barometric altimeter calibration.  This is set "
-"automatically if Vega connected."
-msgstr ""
-"Áp suất khu vực để calibrate đồng hồ độ cao barometric. Điều này được thiết "
-"lập tự động nếu Vega kết nối."
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:81
+msgid "Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."
+msgstr "Áp suất khu vực để calibrate đồng hồ độ cao barometric. Điều này được thiết lập tự động nếu Vega kết nối."
 
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:121
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:124
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:127
 msgid "Ground elevation for device calibration (meters)."
 msgstr "Độ cao mặt đất để hiệu chuẩn thiết bị (mét)."
 
@@ -10767,23 +10626,23 @@ msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr ""
 "Điều chỉnh đến thang tần số cơ bản của âm thanh trong tất cả các chế độ."
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:85
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:89
 msgid "Beep type"
 msgstr "Loại tiếng bíp"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:88
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:92
 msgid "Pitch scheme"
 msgstr "Chuỗi góc canted"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:91
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:95
 msgid "Pitch scale"
 msgstr "Thước đo góc canted"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:94
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:98
 msgid "Period scheme"
 msgstr "Chuỗi chu kỳ"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:97
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:101
 msgid "Period scale"
 msgstr "Thước đo chu kỳ"
 
@@ -11094,9 +10953,9 @@ msgstr "Lượn cuối qua địa hình"
 
 #: Data/Input/default.xci:158 Data/Input/default.xci:165
 #: Data/Input/default.xci:648 Data/Input/default.xci:655
-#: Data/Input/default.xci:663 Data/Input/default.xci:1158
-#: Data/Input/default.xci:1165 Data/Input/default.xci:1172
-#: Data/Input/default.xci:1425
+#: Data/Input/default.xci:663 Data/Input/default.xci:1165
+#: Data/Input/default.xci:1172 Data/Input/default.xci:1179
+#: Data/Input/default.xci:1432
 msgid "Zoom"
 msgstr "Phóng to"
 
@@ -11133,7 +10992,7 @@ msgid "Previous waypoint"
 msgstr "Điểm tham chiếu trước đó"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:618
-#: Data/Input/default.xci:1310
+#: Data/Input/default.xci:1317
 msgid "Pilot event announced"
 msgstr "Sự kiện của phi công được thông báo"
 
@@ -11143,23 +11002,23 @@ msgid ""
 "Page 2/2"
 msgstr "Hướng dẫn"
 
-#: Data/Input/default.xci:574 Data/Input/default.xci:1359
+#: Data/Input/default.xci:574 Data/Input/default.xci:1366
 msgid "Waypoint List"
 msgstr "Sửa các waypoint"
 
-#: Data/Input/default.xci:608 Data/Input/default.xci:1414
+#: Data/Input/default.xci:608 Data/Input/default.xci:1421
 msgid "Dropped marker"
 msgstr "Biểu tượng chấm dứt"
 
-#: Data/Input/default.xci:611 Data/Input/default.xci:1417
+#: Data/Input/default.xci:611 Data/Input/default.xci:1424
 msgid "Marker Drop"
 msgstr "Chấm dứt bị bỏ qua"
 
-#: Data/Input/default.xci:621 Data/Input/default.xci:1313
+#: Data/Input/default.xci:621 Data/Input/default.xci:1320
 msgid "Pilot Event Announce"
 msgstr "Thông báo sự kiện của phi công"
 
-#: Data/Input/default.xci:629 Data/Input/default.xci:1330
+#: Data/Input/default.xci:629 Data/Input/default.xci:1337
 msgid "Target Show"
 msgstr "Hiển thị Mục tiêu"
 
@@ -11173,19 +11032,19 @@ msgstr "Hiển thị"
 msgid "Page Show"
 msgstr "Hiển thị Trang"
 
-#: Data/Input/default.xci:677 Data/Input/default.xci:1351
+#: Data/Input/default.xci:677 Data/Input/default.xci:1358
 msgid "Pan Mode"
 msgstr "Quan sát toàn cảnh"
 
-#: Data/Input/default.xci:696 Data/Input/default.xci:1250
+#: Data/Input/default.xci:696 Data/Input/default.xci:1257
 msgid "Labels"
 msgstr "Các địa danh"
 
-#: Data/Input/default.xci:704 Data/Input/default.xci:1258
+#: Data/Input/default.xci:704 Data/Input/default.xci:1265
 msgid "Trail"
 msgstr "Đường trượt"
 
-#: Data/Input/default.xci:718 Data/Input/default.xci:1272
+#: Data/Input/default.xci:718 Data/Input/default.xci:1279
 msgid "Topo."
 msgstr "Địa hình"
 
@@ -11201,7 +11060,7 @@ msgid ""
 "Page 3/3"
 msgstr "Cấu hình"
 
-#: Data/Input/default.xci:850 Data/Input/default.xci:1474
+#: Data/Input/default.xci:850 Data/Input/default.xci:1481
 msgid "NMEA Logger"
 msgstr "Nhật ký"
 
@@ -11273,7 +11132,7 @@ msgid ""
 "Page 2/3"
 msgstr "Thông tin"
 
-#: Data/Input/default.xci:971 Data/Input/default.xci:1407
+#: Data/Input/default.xci:971 Data/Input/default.xci:1414
 msgid "FLARM Radar"
 msgstr "Radar FLARM"
 
@@ -11287,15 +11146,15 @@ msgstr "Thông tin"
 msgid "Traffic List"
 msgstr "Danh sách giao thông"
 
-#: Data/Input/default.xci:1045 Data/Input/default.xci:1450
+#: Data/Input/default.xci:1045 Data/Input/default.xci:1457
 msgid "Thermal Assistant"
 msgstr "Trợ lý nhiệt đối lưu"
 
-#: Data/Input/default.xci:1072 Data/Input/default.xci:1458
+#: Data/Input/default.xci:1072 Data/Input/default.xci:1465
 msgid "Airspaces"
 msgstr "Vùng trời"
 
-#: Data/Input/default.xci:1079 Data/Input/default.xci:1497
+#: Data/Input/default.xci:1079 Data/Input/default.xci:1504
 msgid "Message Repeat"
 msgstr "Nhắc lại thông điệp"
 
@@ -11315,41 +11174,37 @@ msgstr "Cấu hình"
 msgid "Lock Screen"
 msgstr "Màn hình khóa"
 
-#: Data/Input/default.xci:1186
+#: Data/Input/default.xci:1193
 msgid "AVG/ALT"
 msgstr "Trung bình/Độ cao"
 
-#: Data/Input/default.xci:1209
+#: Data/Input/default.xci:1216
 msgid "Setup Wind"
 msgstr "Thiết lập gió"
 
-#: Data/Input/default.xci:1217
+#: Data/Input/default.xci:1224
 msgid "Setup System"
 msgstr "Hệ thống"
 
-#: Data/Input/default.xci:1225
+#: Data/Input/default.xci:1232
 msgid "Settings Airspace"
 msgstr "Lựa chọn không phận"
 
-#: Data/Input/default.xci:1233
+#: Data/Input/default.xci:1240
 msgid "Setup Plane"
 msgstr "Thiết lập máy bay"
 
-#: Data/Input/default.xci:1337
+#: Data/Input/default.xci:1344
 msgid "MacCready"
 msgstr "MacCready đạt được"
 
-#: Data/Input/default.xci:1383
+#: Data/Input/default.xci:1390
 msgid "Nearest Airspace"
 msgstr "Không phận"
 
-#: Data/Input/default.xci:1512
+#: Data/Input/default.xci:1519
 msgid "Quit XCSoar"
 msgstr "Kết thúc XCSoar"
-#: src/net/client/WeGlide/UploadIGCFile.cpp:119
-msgid "Please set WeGlide Aircraft Type in Plane profile before uploading."
-msgstr "Vui lòng đặt Loại máy bay WeGlide trong hồ sơ Máy bay trước khi tải lên."
-
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:53
 msgid "unknown"
 msgstr "không rõ"
@@ -11371,13 +11226,13 @@ msgstr "Chọn loại WeGlide"
 msgid "Thermal hotspot"
 msgstr "Điểm nóng nhiệt"
 
-#: src/Renderer/MacCreadyRenderer.cpp:31 src/Renderer/TaskSpeedRenderer.cpp:29
+#: src/Renderer/MacCreadyRenderer.cpp:36 src/Renderer/TaskSpeedRenderer.cpp:35
 #, no-c-format
 msgctxt "Average velocity abbreviation"
 msgid "Vave"
 msgstr "V TB"
 
-#: src/Startup.cpp:201
+#: src/Startup.cpp:208
 msgid "Failed to open configured map file"
 msgstr "Không mở được tệp bản đồ đã cấu hình"
 
@@ -11423,7 +11278,7 @@ msgstr "Cực W"
 msgid "not found"
 msgstr "không tìm thấy"
 
-#: src/InfoBoxes/Content/Factory.cpp:1208
+#: src/InfoBoxes/Content/Factory.cpp:1225
 #, no-c-format
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
@@ -11481,11 +11336,11 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:64
 msgid "Total energy"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:80
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:66
 msgid "Uncompensated"
 msgstr ""
 
@@ -11681,5 +11536,359 @@ msgstr ""
 #. Title is StaticString<32> (31 bytes + NUL).
 #: src/InfoBoxes/Content/Task.cpp:1024
 msgid "Start unknown"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:370
+#, c-format
+msgid "%d secs"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:376
+#, c-format
+msgid " dist %d m"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:382
+msgid " vertical "
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:109
+msgid "Hidden network"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:223 src/Dialogs/WifiDialog.cpp:492
+msgid "Scan"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:228 src/Dialogs/WifiDialog.cpp:310
+#: src/Dialogs/WifiDialog.cpp:313
+msgid "Connect"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:236
+msgid "Forget"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:289
+msgid "Scanning..."
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:307
+msgid "Disconnect"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:329
+msgid "WiFi update failed"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:409
+#, c-format
+msgid "Passphrase of network '%s'"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:486 src/net/wifi/WifiError.cpp:74
+#: src/net/wifi/WifiError.cpp:87 src/net/wifi/WifiError.cpp:129
+#: src/net/wifi/WifiError.cpp:140
+msgid "The operation failed."
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:507
+msgid "WiFi"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:91
+#, c-format
+msgid "%u dpi"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:56
+msgid "This page shows Kobo WiFi status. Open WiFi list to scan and connect."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:57
+msgid "Checking WiFi..."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:217
+msgid "IPv4 address of the active WiFi interface."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:65
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:221
+msgid "Backend"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:66
+msgid "WiFi on Kobo is managed by wpa_supplicant."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:235
+msgid "WiFi Enabled"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:71
+msgid "Turns the Kobo WiFi interface on or off."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:74
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:238
+msgid "WiFi List"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:79
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:110
+msgid "WiFi backend is not available in this Kobo build."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:136
+msgid "Failed to enable WiFi."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:137
+msgid "Failed to disable WiFi."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:165
+msgid "NetworkManager"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:167
+msgid "ConnMan"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:205
+msgid "This page shows WiFi status when NetworkManager or ConnMan is on D-Bus (e.g. Linux with Wayland or KMS). Open WiFi list to scan and connect when a service is available."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:208
+msgid "Checking network services..."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:211
+msgid "Connectivity"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:212
+msgid "Current network connectivity state."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:222
+msgid "D-Bus provider used for WiFi (see WiFi list to manage networks)."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:243
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:277
+msgid "No network service (NetworkManager or ConnMan) found on D-Bus."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:329
+msgid "In-app network settings are not available in this build."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:185
+msgid "No RASP file loaded"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:272
+#, no-c-format
+msgid "Weather controls"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:283
+#, no-c-format
+msgid "RASP"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:285
+#, no-c-format
+msgid "EDL"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:289
+msgid "Map overlay"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:290
+msgid "Optional weather overlay drawn on map pages."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:294
+msgid "RASP layer"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:295
+msgid "RASP weather layer to display on this map page."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:79
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:84
+msgid "EDL Weather Page"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:80
+msgid "Enable the dedicated EDL MBTiles weather page."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:85
+msgid "EDL weather requires an OpenGL renderer and is not available in this build."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:86
+msgid "Unavailable"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:87
+msgid "EDL weather is disabled in this build because the OpenGL renderer is not available."
+msgstr ""
+
+#: src/Dialogs/Weather/WeatherDialog.cpp:31
+msgid "EDL weather is not available because this build has no OpenGL renderer."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:282
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:295
+msgid "Auto advance"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:283
+msgid "Automatically follow the next UTC forecast hour and the next lower pressure level below the aircraft."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:287
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:300
+msgid "Forecast"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:290
+msgid "Level"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:296
+msgid "Automatically follow the current local time in 15-minute steps."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:312
+msgid "Cached day"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:315
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:478
+msgid "Precache day"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:318
+msgid "Clean other days"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:415
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:468
+msgid "HTTP support is not available in this build."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:488
+#, c-format
+msgid "Cached %u files for the selected UTC day."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:507
+#, c-format
+msgid "Keep only %04u-%02u-%02u and delete the other cached days?"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:519
+#, c-format
+msgid "Deleted %u cached files."
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:313
+msgid "Idle"
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:315
+msgid "Loading"
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:317
+msgid "Ready"
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:349
+#, c-format
+msgid "EDL %02u:00 %u hPa %s"
+msgstr ""
+
+#: src/Weather/MapOverlay/EdlControlsModel.cpp:100
+#, c-format
+msgid "%u hPa (%d m)"
+msgstr ""
+
+#: src/Weather/MapOverlay/EdlControlsModel.cpp:138
+msgid "Complete"
+msgstr ""
+
+#: src/Weather/MapOverlay/EdlControlsModel.cpp:138
+msgid "Partial"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:52
+msgid "The selected network is not available. Try scanning again."
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:55 src/net/wifi/WifiError.cpp:106
+msgid "A passphrase is required, or a saved network for this name must exist in the system settings."
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:59
+msgid "No Wi-Fi interface available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:62
+msgid "No D-Bus connection"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:65
+msgid "ConnMan is not available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:68
+msgid "No Wi-Fi backend available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:71
+msgid "NetworkManager is not available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:93
+msgid "Permission denied. You may not be allowed to connect to this network."
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:97 src/net/wifi/WifiError.cpp:102
+msgid "A D-Bus error occurred. Is NetworkManager or ConnMan running on the bus?"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:112
+msgid "Could not connect. Check the passphrase and try again."
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1193
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1200
+#, no-c-format
+msgid "Active Waypoint"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1201 src/InfoBoxes/Content/Places.cpp:184
+#, no-c-format
+msgid "Active WP"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1202
+#, no-c-format
+msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
 msgstr ""
 
