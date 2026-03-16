@@ -1197,17 +1197,27 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
   if (HaveTopWidget())
     top_widget->Move(top_rect);
 
+  if (bottom_widget != nullptr) {
+    /*
+     * Prepare the bottom widget with the full available main area
+     * first, so it can create child controls and report its final
+     * minimum size before GetBottomWidgetRect() computes the actual
+     * bottom rectangle.
+     */
+    bottom_widget->Initialise(*this, main_rect);
+    bottom_widget->Prepare(*this, main_rect);
+  }
+
   const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
                                                     bottom_widget);
 
   if (bottom_widget != nullptr) {
-    bottom_widget->Initialise(*this, bottom_rect);
-    bottom_widget->Prepare(*this, bottom_rect);
-
     if (widget == nullptr)
       /* the bottom widget is only visible below the map, but not
          below a custom main widget; see HaveBottomWidget() */
       bottom_widget->Show(bottom_rect);
+    else
+      bottom_widget->Move(bottom_rect);
   }
 
   map->Move(GetMapRectAbove(main_rect, bottom_rect));
