@@ -220,8 +220,8 @@ TEXT_FILES = AUTHORS COPYING NEWS.txt
 TEXT_COMPRESSED = $(patsubst %,$(DATA)/%.gz,$(TEXT_FILES))
 $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
 	@$(NQ)echo "  GZIP    $@"
-	$(Q)gzip --best <$< >$@.tmp
-	$(Q)mv $@.tmp $@
+	$(Q)gzip --best <$< >$@.$(RANDOM_NUMBER).tmp
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 RESOURCE_FILES =
 
@@ -244,12 +244,14 @@ $(RESOURCE_FLAGS_STAMP): FORCE | $(TARGET_OUTPUT_DIR)/dirstamp
 		value=$(TESTING); \
 	fi; \
 	if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "XCSOAR_TESTING=$$value" ]; then \
-		echo "XCSOAR_TESTING=$$value" > $@.tmp && mv $@.tmp $@; \
+		echo "XCSOAR_TESTING=$$value" > $@.$(RANDOM_NUMBER).tmp && \
+			mv $@.$(RANDOM_NUMBER).tmp $@; \
 	fi
 
 $(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt $(RESOURCE_FLAGS_STAMP) | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  CPP     $@"
-	$(Q)cat $< |$(CC) -E -o $@ -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) $(GDI_CPPFLAGS) -
+	$(Q)cat $< |$(CC) -E -o $@.$(RANDOM_NUMBER).tmp -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) $(GDI_CPPFLAGS) -
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 RANDOM_NUMBER := $(shell od -vAn -N4 -tu4 < /dev/urandom| tr -d ' ')
 
@@ -260,8 +262,8 @@ $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp: $(TARGET_OUTPUT_DIR)/resources.tx
 
 $(TARGET_OUTPUT_DIR)/include/ResourceLookup_entries.cpp: $(TARGET_OUTPUT_DIR)/resources.txt tools/GenerateResourceLookup.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) tools/GenerateResourceLookup.pl <$< >$@.tmp
-	$(Q)mv $@.tmp $@
+	$(Q)$(PERL) tools/GenerateResourceLookup.pl <$< >$@.$(RANDOM_NUMBER).tmp
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 $(call SRC_TO_OBJ,$(SRC)/ResourceLookup.cpp): $(TARGET_OUTPUT_DIR)/include/ResourceLookup_entries.cpp $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp
 
@@ -361,14 +363,14 @@ ifeq ($(USE_WIN32_RESOURCES),y)
 
 $(TARGET_OUTPUT_DIR)/XCSoar.rc: $(TARGET_OUTPUT_DIR)/resources.txt Data/XCSoar.rc tools/GenerateWindowsResources.pl
 	@$(NQ)echo "  GEN     $@"
-	$(Q)cp Data/XCSoar.rc $@.tmp
-	$(Q)$(PERL) tools/GenerateWindowsResources.pl $< >>$@.tmp
-	$(Q)mv $@.tmp $@
+	$(Q)cp Data/XCSoar.rc $@.$(RANDOM_NUMBER).tmp
+	$(Q)$(PERL) tools/GenerateWindowsResources.pl $< >>$@.$(RANDOM_NUMBER).tmp
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 $(TARGET_OUTPUT_DIR)/include/resource.h: $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), \S+, (\d+)\);/;' $< >$@.tmp
-	$(Q)mv $@.tmp $@
+	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), \S+, (\d+)\);/;' $< >$@.$(RANDOM_NUMBER).tmp
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/XCSoar.rsc
 
@@ -382,8 +384,8 @@ $(TARGET_OUTPUT_DIR)/resources.c: export TARGET_IS_ANDROID:=$(TARGET_IS_ANDROID)
 $(TARGET_OUTPUT_DIR)/resources.c: export ENABLE_OPENGL:=$(OPENGL)
 $(TARGET_OUTPUT_DIR)/resources.c: $(TARGET_OUTPUT_DIR)/resources.txt $(RESOURCE_FILES) tools/LinkResources.pl tools/BinToC.pm | $(TARGET_OUTPUT_DIR)/resources/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) tools/LinkResources.pl <$< >$@.tmp
-	$(Q)mv $@.tmp $@
+	$(Q)$(PERL) tools/LinkResources.pl <$< >$@.$(RANDOM_NUMBER).tmp
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 RESOURCES_SOURCES = $(TARGET_OUTPUT_DIR)/resources.c
 $(eval $(call link-library,resources,RESOURCES))
