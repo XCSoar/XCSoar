@@ -4,7 +4,6 @@
 #include "MultiFile.hpp"
 #include "ComboList.hpp"
 #include "Language/Language.hpp"
-#include "system/FileUtil.hpp"
 
 #include <algorithm>
 
@@ -139,8 +138,14 @@ MultiFileDataField::UpdateDisplayString()
     auto index = file_datafield.Find(path);
     if (index >= 0)
       display_string += file_datafield.GetItem(index).filename.c_str();
-    else
-      display_string += path.c_str();
+    else {
+      /* file configured in profile but not found on disk */
+      auto base = path.GetBase();
+      display_string += (base != nullptr) ? base.c_str() : path.c_str();
+      display_string += " [";
+      display_string += _("not found");
+      display_string += "]";
+    }
   }
 }
 
