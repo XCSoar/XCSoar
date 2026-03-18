@@ -3,13 +3,15 @@
 
 #include "File.hpp"
 #include "ComboList.hpp"
+#include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
+#include "util/StaticString.hxx"
 #include "system/FileUtil.hpp"
 
 #include <algorithm>
 
-#include <windef.h> /* for MAX_PATH */
 #include <cassert>
 #include <stdlib.h>
 
@@ -124,8 +126,17 @@ FileDataField::SetValue(Path text) noexcept
   }
 
   auto i = Find(text);
-  if (i >= 0)
+  if (i >= 0) {
     current_index = i;
+  } else if (text != nullptr && !StringIsEmpty(text.c_str())) {
+    /* file configured in profile but not found on disk - add it to
+       the list so the user can see what's configured */
+    if (!files.full()) {
+      auto &item = files.append();
+      item.Set(text);
+      current_index = files.size() - 1;
+    }
+  }
 }
 
 void
@@ -319,11 +330,19 @@ FileDataField::CreateComboList([[maybe_unused]] const char *reference) const noe
 
   ComboList combo_list;
 
-  char buffer[MAX_PATH];
+  StaticString<1024> buffer;
 
+  unsigned combo_index = 0;
   for (unsigned i = 0; i < files.size(); i++) {
     const Path path = files[i].filename;
     assert(path != nullptr);
+
+    const bool is_not_found = !StringIsEmpty(path.c_str()) &&
+                              !File::Exists(files[i].path);
+
+    /* hide not-found files that are no longer selected */
+    if (is_not_found && i != current_index)
+      continue;
 
     /* is a file with the same base name present in another data
        directory? */
@@ -340,17 +359,19 @@ FileDataField::CreateComboList([[maybe_unused]] const char *reference) const noe
     if (found) {
       /* yes - append the absolute path to allow the user to see the
          difference */
-      strcpy(buffer, path.c_str());
-      strcat(buffer, " (");
-      strcat(buffer, files[i].path.c_str());
-      strcat(buffer, ")");
+      buffer.Format("%s (%s)", path.c_str(), files[i].path.c_str());
+      display_string = buffer;
+    } else if (is_not_found) {
+      /* file configured in profile does not exist on disk */
+      buffer.Format("%s [%s]", path.c_str(), _("not found"));
       display_string = buffer;
     }
 
-    combo_list.Append(display_string);
+    if (i == current_index)
+      combo_list.current_index = combo_index;
+    combo_index++;
+    combo_list.Append(i, display_string);
   }
-
-  combo_list.current_index = current_index;
 
   return combo_list;
 }

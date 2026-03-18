@@ -24,6 +24,9 @@ class FileMultiSelectWidget : public MultiSelectListWidget {
 public:
   struct FileItem {
     AllocatedPath path;
+
+    /** true if the file was found on disk during scanning */
+    bool exists = true;
   };
 
   using TextProvider = std::function<const char*(const FileItem&)>;

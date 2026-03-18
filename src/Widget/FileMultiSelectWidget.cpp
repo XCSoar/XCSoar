@@ -53,7 +53,7 @@ FileMultiSelectWidget::LoadFiles() noexcept
   items_.clear();
   FileDataField &file_field = df_.GetFileDataField();
   for (unsigned i = 0; i < file_field.size(); ++i)
-    items_.push_back({AllocatedPath(Path(file_field.GetItem(i).path))}); 
+    items_.push_back({AllocatedPath(Path(file_field.GetItem(i).path)), true});
 }
 
 void
@@ -74,7 +74,7 @@ FileMultiSelectWidget::MergePaths(const std::vector<Path> &paths) noexcept
 {
   for (const auto &path : paths) {
     if (!ContainsPath(items_, path))
-      items_.push_back({AllocatedPath(path)});
+      items_.push_back({AllocatedPath(path), false});
   }
 }
 
