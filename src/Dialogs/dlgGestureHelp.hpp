@@ -8,6 +8,7 @@
  * Shared between the standalone gesture help dialog and the
  * Quick Guide dialog.
  */
+[[gnu::const]]
 const char *
 GetGestureHelpText() noexcept;
 
