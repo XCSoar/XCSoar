@@ -18,6 +18,7 @@
 #include <cassert>
 #include <stdexcept>
 
+#include <cerrno>
 #include <stdio.h>
 
 #ifdef MESA_KMS
@@ -80,6 +81,9 @@ TopCanvas::~TopCanvas() noexcept
   ReleaseSurface();
 
 #ifdef MESA_KMS
+  if (next_bo != nullptr)
+    gbm_surface_release_buffer(gbm_surface, next_bo);
+
   if (current_bo != nullptr)
     gbm_surface_release_buffer(gbm_surface, current_bo);
 
@@ -142,6 +146,40 @@ TopCanvas::Flip()
 {
   assert(surface != EGL_NO_SURFACE);
 
+#ifdef MESA_KMS
+  const FileDescriptor dri_fd = display.GetDriFD();
+
+  const auto process_drm_events = [&]() {
+    while (true) {
+      const int handle_event_ret = drmHandleEvent(dri_fd.Get(), &evctx);
+      if (handle_event_ret == 0)
+        continue;
+
+      if (errno == EAGAIN)
+        break;
+
+      fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
+      exit(EXIT_FAILURE);
+    }
+  };
+
+  process_drm_events();
+
+  if (page_flip_pending) {
+    if (!page_flip_finished)
+      return;
+
+    page_flip_pending = false;
+    page_flip_finished = false;
+
+    if (current_bo != nullptr)
+      gbm_surface_release_buffer(gbm_surface, current_bo);
+
+    current_bo = next_bo;
+    next_bo = nullptr;
+  }
+#endif
+
   if (!display.SwapBuffers(surface)) {
 #ifdef ANDROID
     LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
@@ -152,8 +190,6 @@ TopCanvas::Flip()
   }
 
 #ifdef MESA_KMS
-  const FileDescriptor dri_fd = display.GetDriFD();
-
   gbm_bo *new_bo = gbm_surface_lock_front_buffer(gbm_surface);
 
   auto *fb = (EGL::DrmFrameBuffer *)gbm_bo_get_user_data(new_bo);
@@ -173,27 +209,18 @@ TopCanvas::Flip()
   if (nullptr == current_bo) {
     saved_crtc = display.ModeGetCrtc();
     display.ModeSetCrtc(fb->GetId(), 0, 0);
+    current_bo = new_bo;
   } else {
-
-    bool flip_finished = false;
     int page_flip_ret = display.ModePageFlip(fb->GetId(),
                                              DRM_MODE_PAGE_FLIP_EVENT,
-                                             &flip_finished);
+                                             &page_flip_finished);
     if (0 != page_flip_ret) {
       fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
       exit(EXIT_FAILURE);
     }
-    while (!flip_finished) {
-      int handle_event_ret = drmHandleEvent(dri_fd.Get(), &evctx);
-      if (0 != handle_event_ret) {
-        fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
-        exit(EXIT_FAILURE);
-      }
-    }
-
-    gbm_surface_release_buffer(gbm_surface, current_bo);
+    next_bo = new_bo;
+    page_flip_pending = true;
+    page_flip_finished = false;
   }
-
-  current_bo = new_bo;
 #endif
 }

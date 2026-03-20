@@ -74,6 +74,9 @@ class TopCanvas
   drmEventContext evctx;
 
   struct gbm_bo *current_bo = nullptr;
+  struct gbm_bo *next_bo = nullptr;
+  bool page_flip_pending = false;
+  bool page_flip_finished = false;
 
   drmModeCrtc *saved_crtc = nullptr;
 #endif // MESA_KMS
