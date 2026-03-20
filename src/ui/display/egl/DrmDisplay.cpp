@@ -15,7 +15,7 @@ static UniqueFileDescriptor
 OpenDriDevice(const char *path)
 {
   UniqueFileDescriptor fd;
-  if (!fd.Open(path, O_RDWR))
+  if (!fd.Open(path, O_RDWR | O_NONBLOCK))
     throw FmtErrno("Could not open DRI device {}", path);
 
   /* check if this card works */
