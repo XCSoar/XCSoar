@@ -11,7 +11,7 @@ fi
 # Input configuration (with defaults)
 IPA_PATH="${IOS_IPA_PATH:-$(pwd)/output/IOS64/xcsoar.ipa}"
 PROFILE_PATH="${IOS_PROFILE_PATH:-}"
-CERTIFICATE_NAME="${IOS_CERTIFICATE_NAME:-}"
+CERTIFICATE_NAME="${APPLE_DISTRIBUTION_CERTIFICATE_NAME:-}"
 
 # Output configuration
 IPA_SIGNED_PATH="${IOS_SIGNED_IPA_PATH:-$(pwd)/output/IOS64/xcsoar-signed.ipa}"
@@ -25,8 +25,8 @@ if [[ -z "$PROFILE_PATH" ]]; then
 fi
 
 if [[ -z "$CERTIFICATE_NAME" ]]; then
-  echo "❌ IOS_CERTIFICATE_NAME not set"
-  echo "Set it via: export IOS_CERTIFICATE_NAME='Apple Distribution: ...'"
+  echo "❌ APPLE_DISTRIBUTION_CERTIFICATE_NAME not set"
+  echo "Set it via: export APPLE_DISTRIBUTION_CERTIFICATE_NAME='Apple Distribution: ...'"
   echo "Or configure it in $SCRIPT_DIR/.env (see .env.example)"
   exit 1
 fi
