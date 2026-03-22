@@ -740,6 +740,11 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/FLARM/Details.cpp \
+	$(IO_SRC_DIR)/DataFile.cpp \
+	$(SRC)/FLARM/MessagingFile.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Profile/FlarmProfile.cpp \
+	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
