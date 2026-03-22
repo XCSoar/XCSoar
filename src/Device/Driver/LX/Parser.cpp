@@ -32,6 +32,18 @@ IsNanoProduct(const auto &product) noexcept
          product.equals("NANO4");
 }
 
+/**
+ * S-series varios identify as NINC or with an S8* product id on $LXWP1
+ * (e.g. "S8x" in unit tests, S80 firmware strings).
+ */
+[[gnu::pure]]
+static bool
+IsSSeriesVarioProduct(const auto &product) noexcept
+{
+  return product.equals("NINC") ||
+         StringStartsWith(product.c_str(), "S8"sv);
+}
+
 [[gnu::pure]]
 static bool
 ShouldSwitchHostBaudForNinc(const DeviceInfo &device_info) noexcept
@@ -583,7 +595,7 @@ LXDevice::IdDeviceByNameLocked(const StaticString<16> &product_name,
                                const DeviceInfo &device_info) noexcept
 {
   const bool new_v7 = product_name.equals("V7");
-  const bool new_sVario = product_name.equals("NINC");
+  const bool new_sVario = IsSSeriesVarioProduct(product_name);
   const bool new_nano = IsNanoProduct(product_name);
   const bool new_lx16xx = product_name.equals("1606") ||
                            product_name.equals("1600");
@@ -632,7 +644,7 @@ LXDevice::UpdateDeviceFlags(const DeviceInfo &device_info,
                             bool pass_through) noexcept
 {
   const bool saw_v7 = device_info.product.equals("V7");
-  const bool saw_sVario = device_info.product.equals("NINC");
+  const bool saw_sVario = IsSSeriesVarioProduct(device_info.product);
   const bool saw_nano = IsNanoProduct(device_info.product);
   const bool saw_lx16xx = device_info.product.equals("1606") ||
                            device_info.product.equals("1600");
