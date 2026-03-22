@@ -19,7 +19,7 @@ fi
 APP_PATH="${APP_PATH:-$PROJECT_ROOT/output/MACOS/app/XCSoar.app}"
 
 PROFILE_PATH="${MACOS_PROFILE_PATH:-$SCRIPT_DIR/de_yorickreum_XCSoar_App_Store_Connect_macOS.provisionprofile}"
-CERTIFICATE_NAME="${MACOS_CERTIFICATE_NAME:-3rd Party Mac Developer Application}"
+CERTIFICATE_NAME="${APPLE_DISTRIBUTION_CERTIFICATE_NAME:-}"
 INSTALLER_CERTIFICATE_NAME="${MACOS_INSTALLER_CERTIFICATE_NAME:-3rd Party Mac Developer Installer}"
 
 # Output paths
@@ -60,6 +60,11 @@ fi
 echo "📦 Signing macOS app for App Store"
 echo "   App: $APP_PATH"
 echo "   Certificate: $CERTIFICATE_NAME"
+
+if [[ -z "$CERTIFICATE_NAME" ]]; then
+  echo "❌ APPLE_DISTRIBUTION_CERTIFICATE_NAME not set"
+  exit 1
+fi
 
 if ! security find-identity -v -p codesigning | grep -Fq "$CERTIFICATE_NAME"; then
   echo "❌ Signing certificate not found in keychain: $CERTIFICATE_NAME"
