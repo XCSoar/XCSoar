@@ -90,16 +90,20 @@ InfoBoxContentHomeAltitudeDiff::HandleClick() noexcept
     return false;
 
   const GeoPoint location = CommonInterface::Basic().location;
-  WaypointPtr waypoint =
-    ShowWaypointListDialog(*data_components->waypoints, location);
+  WaypointPtr waypoint;
+  try {
+    waypoint = ShowWaypointListDialog(*data_components->waypoints, location);
+  } catch (...) {
+    return false;
+  }
   if (!waypoint)
     return true;
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
-  settings_computer.poi.SetHome(*waypoint);
 
   {
     ScopeSuspendAllThreads suspend;
+    settings_computer.poi.SetHome(*waypoint);
     WaypointGlue::SetHome(*data_components->waypoints,
                           data_components->terrain.get(),
                           settings_computer.poi, settings_computer.team_code,
