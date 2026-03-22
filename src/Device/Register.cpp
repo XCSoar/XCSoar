@@ -25,6 +25,7 @@
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/XCOM760.hpp"
 #include "Device/Driver/Condor.hpp"
+#include "Device/Driver/Condor3UDP.hpp"
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/ILEC.hpp"
@@ -89,6 +90,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &thermalexpress_driver,
   &acd_driver,
   &condor3_driver,
+  &condor3_udp_driver,
   &lx_eos_driver,
   &stratux_driver,
   &loe_fgren_driver,

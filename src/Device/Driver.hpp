@@ -426,6 +426,18 @@ struct DeviceRegister {
      * EnablePassThrough() is implemented.
      */
     PASS_THROUGH = 0x200,
+
+    /**
+     * Adopts the glide polar from the device when
+     * #DeviceConfig::PolarSync::RECEIVE is selected (e.g. LXNAV PLXVC).
+     */
+    POLAR_SYNC_RECEIVE = 0x400,
+
+    /**
+     * Implements #Device::PutPolar() when
+     * #DeviceConfig::PolarSync::SEND is selected.
+     */
+    POLAR_SYNC_SEND = 0x800,
   };
 
   /**
@@ -522,5 +534,15 @@ struct DeviceRegister {
    */
   bool HasPassThrough() const {
     return (flags & PASS_THROUGH) != 0;
+  }
+
+  [[gnu::pure]]
+  bool CanPolarSyncReceive() const noexcept {
+    return (flags & POLAR_SYNC_RECEIVE) != 0;
+  }
+
+  [[gnu::pure]]
+  bool CanPolarSyncSend() const noexcept {
+    return (flags & POLAR_SYNC_SEND) != 0;
   }
 };

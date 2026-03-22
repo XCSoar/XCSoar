@@ -165,6 +165,8 @@ Version 7.44 - 2026-03-22
   - fix segfault when resizing window with software rendering
 * devices
   - Add driver for Condor 3 #1612
+  - Add Condor3 UDP driver for Condor 3 simkits UDP telemetry (UDP listener)
+  - Devices: show glide polar sync only for drivers that implement it (LXNAV)
   - Add driver for LöFGREN variometer #2080
   - Add driver for LX Navigation Eos / Era variometers #389
   - Add driver for Stratux

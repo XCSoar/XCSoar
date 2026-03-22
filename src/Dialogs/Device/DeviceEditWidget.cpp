@@ -46,6 +46,7 @@ FillBaudRates(DataFieldEnum &dfe) noexcept
 static void
 FillTCPPorts(DataFieldEnum &dfe) noexcept
 {
+  dfe.addEnumText("55278 (Condor UDP)", 55278);
   dfe.addEnumText("4353", 4353);
   dfe.addEnumText("10110", 10110);
   dfe.addEnumText("4352", 4352);
@@ -206,6 +207,36 @@ CanSendSettings(const DataField &df) noexcept
 
 [[gnu::pure]]
 static bool
+CanPolarSyncReceive(const DataField &df) noexcept
+{
+  const char *driver_name = df.GetAsString();
+  if (driver_name == nullptr)
+    return false;
+
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == nullptr)
+    return false;
+
+  return driver->CanPolarSyncReceive();
+}
+
+[[gnu::pure]]
+static bool
+CanPolarSyncSend(const DataField &df) noexcept
+{
+  const char *driver_name = df.GetAsString();
+  if (driver_name == nullptr)
+    return false;
+
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == nullptr)
+    return false;
+
+  return driver->CanPolarSyncSend();
+}
+
+[[gnu::pure]]
+static bool
 CanPassThrough(const DataField &df) noexcept
 {
   const char *driver_name = df.GetAsString();
@@ -252,16 +283,19 @@ DeviceEditWidget::UpdateVisibilities() noexcept
 
   const bool can_receive = CanReceiveSettings(GetDataField(Driver));
   const bool can_send = CanSendSettings(GetDataField(Driver));
+  const bool can_polar_receive =
+    CanPolarSyncReceive(GetDataField(Driver));
+  const bool can_polar_send = CanPolarSyncSend(GetDataField(Driver));
   SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
                 can_receive);
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
                 can_send);
   SetRowVisible(PolarSyncMode, DeviceConfig::UsesDriver(type) &&
-                (can_receive || can_send));
-  if (can_receive || can_send) {
+                (can_polar_receive || can_polar_send));
+  if (can_polar_receive || can_polar_send) {
     auto &polar_df = (DataFieldEnum &)GetDataField(PolarSyncMode);
     const auto prev = polar_df.GetValue();
-    FillPolarSync(polar_df, can_receive, can_send);
+    FillPolarSync(polar_df, can_polar_receive, can_polar_send);
     polar_df.SetValue(prev);
   }
   SetRowAvailable(K6Bt, maybe_bluetooth);
@@ -368,8 +402,8 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
 
   DataFieldEnum *polar_sync_df = new DataFieldEnum(this);
   FillPolarSync(*polar_sync_df,
-                CanReceiveSettings(*driver_df),
-                CanSendSettings(*driver_df));
+                CanPolarSyncReceive(*driver_df),
+                CanPolarSyncSend(*driver_df));
   polar_sync_df->SetValue(config.polar_sync);
   Add(_("Polar sync"),
       _("Synchronize the glide polar between XCSoar and the device. "
@@ -498,8 +532,8 @@ DeviceEditWidget::Save(bool &_changed) noexcept
     if (CanSendSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncToDevice, config.sync_to_device);
 
-    if (CanReceiveSettings(GetDataField(Driver)) ||
-        CanSendSettings(GetDataField(Driver)))
+    if (CanPolarSyncReceive(GetDataField(Driver)) ||
+        CanPolarSyncSend(GetDataField(Driver)))
       changed |= SaveValueEnum(PolarSyncMode, config.polar_sync);
 
     if (CanPassThrough(GetDataField(Driver))) {

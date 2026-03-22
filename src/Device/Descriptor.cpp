@@ -203,8 +203,9 @@ try {
   port = std::move(_port);
 
   parser.Reset();
-  parser.SetReal(!StringIsEqual(driver->name, "Condor"));
-  if (config.IsDriver("Condor"))
+  parser.SetReal(!StringIsEqual(driver->name, "Condor") &&
+                 !StringIsEqual(driver->name, "Condor3UDP"));
+  if (config.IsDriver("Condor") || config.IsDriver("Condor3UDP"))
     parser.DisableGeoid();
 
   if (driver->CreateOnPort != nullptr) {
