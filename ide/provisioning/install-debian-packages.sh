@@ -91,7 +91,8 @@ install_debian() {
     debhelper \
     texlive-lang-english \
     libio-captureoutput-perl \
-    build-essential
+    build-essential \
+    xvfb
   echo
 }
 
