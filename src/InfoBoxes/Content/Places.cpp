@@ -46,13 +46,14 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept
 void
 InfoBoxContentHomeAltitudeDiff::Update(InfoBoxData &data) noexcept
 {
+  const MoreData &more_data = CommonInterface::Basic();
   const NMEAInfo &basic = CommonInterface::Basic();
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (!basic.location_available ||
-      !basic.NavAltitudeAvailable() ||
+      !more_data.NavAltitudeAvailable() ||
       !settings.polar.glide_polar_task.IsValid() ||
       !common_stats.vector_home.IsValid() ||
       !settings.poi.home_location_available ||
@@ -65,7 +66,7 @@ InfoBoxContentHomeAltitudeDiff::Update(InfoBoxData &data) noexcept
   const GlideState glide_state(
     basic.location.DistanceBearing(settings.poi.home_location),
     settings.poi.home_elevation + settings.task.safety_height_arrival,
-    basic.nav_altitude,
+    more_data.nav_altitude,
     calculated.GetWindOrZero());
 
   const GlideResult &result =
