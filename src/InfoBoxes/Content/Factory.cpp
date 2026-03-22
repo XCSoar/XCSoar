@@ -1124,7 +1124,7 @@ static constexpr MetaData meta_data[] = {
     N_("Home altitude difference"),
     N_("Home AltD"),
     N_("Arrival altitude at the home waypoint relative to the safety arrival height."),
-    UpdateInfoBoxHomeAltitudeDiff,
+    IBFHelper<InfoBoxContentHomeAltitudeDiff>::Create,
   },
 
   // e_SpeedTaskLeg
