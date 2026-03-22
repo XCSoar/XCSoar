@@ -53,6 +53,7 @@
 #include "FaultInjectionPort.hpp"
 #include "Input/InputEvents.hpp"
 #include "Logger/Settings.hpp"
+#include "LocalPath.hpp"
 #include "NMEA/Info.hpp"
 #include "Operation/Operation.hpp"
 #include "Plane/Plane.hpp"
@@ -60,12 +61,46 @@
 #include "TestUtil.hpp"
 #include "Units/System.hpp"
 #include "io/NullDataHandler.hpp"
+#include "system/Path.hpp"
+#include "util/StaticString.hxx"
 #include "util/ByteOrder.hxx"
 #include "util/PackedFloat.hxx"
 
+#include <chrono>
 #include <memory>
 
+#ifdef _WIN32
+#include <process.h>
+#else
+#include <unistd.h>
+#endif
+
 static const DeviceConfig dummy_config = DeviceConfig();
+
+static unsigned long
+GetProcessId() noexcept
+{
+#ifdef _WIN32
+  return (unsigned long)_getpid();
+#else
+  return (unsigned long)getpid();
+#endif
+}
+
+static AllocatedPath
+MakeTestDriverDataPath() noexcept
+{
+  using namespace std::chrono;
+
+  const auto timestamp = duration_cast<microseconds>(
+    system_clock::now().time_since_epoch()).count();
+
+  StaticString<96> name;
+  name.Format("TestDriverDataPath-%lld-%lu",
+              (long long)timestamp,
+              GetProcessId());
+  return AllocatedPath::Build(Path("output"), name.c_str());
+}
 
 /*
  * Unit tests
@@ -2858,6 +2893,10 @@ TestMalformedInput()
 
 int main()
 {
+  const auto data_path = MakeTestDriverDataPath();
+  SetSingleDataPath(data_path);
+  CreateDataPath();
+
   plan_tests(1032 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
@@ -2931,5 +2970,6 @@ int main()
   TestGSA();
   TestMalformedInput();
 
+  DeinitialiseDataPath();
   return exit_status();
 }
