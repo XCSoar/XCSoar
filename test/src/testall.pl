@@ -19,4 +19,4 @@ my $harness = TAP::Harness->new({
 	},
 });
 my $aggregator = $harness->runtests(@ARGV);
-exit($aggregator->exit);
+exit($aggregator->all_passed ? 0 : 1);
