@@ -622,16 +622,33 @@ jobs:
         id: sign_ios
         if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
         run: |
-          if [ -f "darwin/xcsoar.mobileprovision" ]; then
-            export APPLE_DISTRIBUTION_CERTIFICATE_NAME="${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_NAME }}"
-            export IOS_PROFILE_PATH="darwin/xcsoar.mobileprovision"
-            
-            echo "📝 Signing iOS IPA..."
-            bash darwin/sign.sh
-            echo "✅ iOS IPA signed successfully"
-          else
-            echo "⚠️ No provisioning profile found, skipping signing"
+          export APPLE_DISTRIBUTION_CERTIFICATE_NAME="${{ secrets.APPLE_DISTRIBUTION_CERTIFICATE_NAME }}"
+          export IOS_PROFILE_PATH="darwin/xcsoar.mobileprovision"
+
+          if [ -z "${{ secrets.APPLE_CERTIFICATES_BASE64 }}" ] || [ -z "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" ]; then
+            echo "❌ iOS signing certificate not configured"
+            exit 1
           fi
+
+          if [ -z "$APPLE_DISTRIBUTION_CERTIFICATE_NAME" ]; then
+            echo "❌ APPLE_DISTRIBUTION_CERTIFICATE_NAME not configured"
+            exit 1
+          fi
+
+          if [ ! -f "$IOS_PROFILE_PATH" ]; then
+            echo "❌ iOS provisioning profile not found: $IOS_PROFILE_PATH"
+            exit 1
+          fi
+
+          echo "📝 Signing iOS IPA..."
+          bash darwin/sign.sh
+
+          if [ ! -f "output/IOS64/xcsoar-signed.ipa" ]; then
+            echo "❌ Signed iOS IPA not found after signing"
+            exit 1
+          fi
+
+          echo "✅ iOS IPA signed successfully"
 
       - name: Sign macOS package
         id: sign_macos
@@ -642,17 +659,34 @@ jobs:
           MACOS_PROFILE_PATH: darwin/xcsoar.macos.provisionprofile
         run: |
           if [ -z "${{ secrets.APPLE_CERTIFICATES_BASE64 }}" ] || [ -z "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}" ]; then
-            echo "⚠️ macOS signing certificate not configured, skipping signing"
-            exit 0
+            echo "❌ macOS signing certificate not configured"
+            exit 1
           fi
 
-          if [ -f "$MACOS_PROFILE_PATH" ]; then
-            echo "📝 Signing macOS package..."
-            bash darwin/sign-macos.sh
-            echo "✅ macOS package signed successfully"
-          else
-            echo "⚠️ No provisioning profile found, skipping signing"
+          if [ -z "$APPLE_DISTRIBUTION_CERTIFICATE_NAME" ]; then
+            echo "❌ APPLE_DISTRIBUTION_CERTIFICATE_NAME not configured"
+            exit 1
           fi
+
+          if [ -z "$MACOS_INSTALLER_CERTIFICATE_NAME" ]; then
+            echo "❌ MACOS_INSTALLER_CERTIFICATE_NAME not configured"
+            exit 1
+          fi
+
+          if [ ! -f "$MACOS_PROFILE_PATH" ]; then
+            echo "❌ macOS provisioning profile not found: $MACOS_PROFILE_PATH"
+            exit 1
+          fi
+
+          echo "📝 Signing macOS package..."
+          bash darwin/sign-macos.sh
+
+          if [ ! -f "output/MACOS/XCSoar-signed.pkg" ]; then
+            echo "❌ Signed macOS package not found after signing"
+            exit 1
+          fi
+
+          echo "✅ macOS package signed successfully"
 
       - name: Upload to iOS TestFlight
         if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && steps.sign_ios.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
@@ -664,13 +698,13 @@ jobs:
           IPA_PATH="output/IOS64/xcsoar-signed.ipa"
           
           if [ ! -f "$IPA_PATH" ]; then
-            echo "⚠️ Signed IPA not found: $IPA_PATH, skipping upload"
-            exit 0
+            echo "❌ Signed IPA not found: $IPA_PATH"
+            exit 1
           fi
           
           if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
-            echo "⚠️ TestFlight credentials not configured, skipping upload"
-            exit 0
+            echo "❌ TestFlight credentials not configured"
+            exit 1
           fi
           
           echo "📱 Uploading to App Store Connect / TestFlight..."
@@ -703,13 +737,13 @@ jobs:
           PKG_PATH="output/MACOS/XCSoar-signed.pkg"
 
           if [ ! -f "$PKG_PATH" ]; then
-            echo "⚠️ Signed pkg not found: $PKG_PATH, skipping upload"
-            exit 0
+            echo "❌ Signed pkg not found: $PKG_PATH"
+            exit 1
           fi
 
           if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
-            echo "⚠️ App Store Connect credentials not configured, skipping upload"
-            exit 0
+            echo "❌ App Store Connect credentials not configured"
+            exit 1
           fi
 
           echo "🖥️  Uploading to App Store Connect / TestFlight..."
@@ -773,6 +807,11 @@ jobs:
           UNSIGNED_IPA="output/IOS64/xcsoar.ipa"
           if [ -f "$SIGNED_IPA" ]; then
             echo "DEPLOY_SOURCE=$SIGNED_IPA" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" = "refs/heads/master" ] || \
+               [ "${{ github.ref }}" = "refs/heads/apple-testing" ] || \
+               [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "❌ Signed IPA required for ${{ github.ref }}, but not found: $SIGNED_IPA"
+            exit 1
           else
             echo "DEPLOY_SOURCE=$UNSIGNED_IPA" >> $GITHUB_ENV
           fi
