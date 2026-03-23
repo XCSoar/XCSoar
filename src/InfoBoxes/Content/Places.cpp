@@ -103,12 +103,11 @@ InfoBoxContentHome::Update(InfoBoxData &data) noexcept
     return;
   }
 
+  data.SetTitle(_("Home"));
   if (data_components && data_components->waypoints) {
     auto wp = data_components->waypoints->LookupId(settings.poi.home_waypoint);
     if (wp)
       data.SetTitle(wp->name.c_str());
-    else
-      data.SetTitle(_("Home"));
   }
 
   const GlideResult result = ComputeHomeGlide(basic, settings, calculated);
