@@ -10,7 +10,18 @@
 #include "Language/Language.hpp"
 #include "Formatter/Units.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
+#include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "DataComponents.hpp"
+#include "Waypoint/WaypointGlue.hpp"
+#include "Protection.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/Profile.hpp"
 
 void
 UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept
@@ -64,10 +75,87 @@ UpdateInfoBoxHomeAltitudeDiff(InfoBoxData &data) noexcept
                      settings.polar.glide_polar_task,
                      glide_state);
 
-  // Display altitude difference and distance.
   data.SetValueFromArrival(result.
                            SelectAltitudeDifference(settings.task.glide));
   data.SetCommentFromDistance(common_stats.vector_home.distance);
+}
+
+void
+InfoBoxContentHome::Update(InfoBoxData &data) noexcept
+{
+  const MoreData &more_data = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+
+  if (!basic.location_available ||
+      !more_data.NavAltitudeAvailable() ||
+      !settings.polar.glide_polar_task.IsValid() ||
+      !common_stats.vector_home.IsValid() ||
+      !settings.poi.home_location_available ||
+      !settings.poi.home_elevation_available) {
+    data.SetInvalid();
+    data.SetCommentInvalid();
+    return;
+  }
+
+  if (data_components && data_components->waypoints) {
+    auto wp = data_components->waypoints->LookupId(settings.poi.home_waypoint);
+    if (wp)
+      data.SetTitle(wp->name.c_str());
+  }
+
+  const GlideState glide_state(
+    basic.location.DistanceBearing(settings.poi.home_location),
+    settings.poi.home_elevation + settings.task.safety_height_arrival,
+    more_data.nav_altitude,
+    calculated.GetWindOrZero());
+
+  const GlideResult &result =
+    MacCready::Solve(settings.task.glide,
+                     settings.polar.glide_polar_task,
+                     glide_state);
+
+  data.SetValueFromArrival(result.
+                           SelectAltitudeDifference(settings.task.glide));
+  data.SetCommentFromDistance(common_stats.vector_home.distance);
+}
+
+bool
+InfoBoxContentHome::HandleClick() noexcept
+{
+  if (!data_components || !data_components->waypoints)
+    return false;
+
+  if (!backend_components || !backend_components->device_blackboard)
+    return false;
+
+  const GeoPoint location = CommonInterface::Basic().location;
+  WaypointPtr waypoint;
+  try {
+    waypoint = ShowWaypointListDialog(*data_components->waypoints, location);
+  } catch (...) {
+    return false;
+  }
+  if (!waypoint)
+    return true;
+
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
+
+  {
+    ScopeSuspendAllThreads suspend;
+    settings_computer.poi.SetHome(*waypoint);
+    WaypointGlue::SetHome(*data_components->waypoints,
+                          data_components->terrain.get(),
+                          settings_computer.poi, settings_computer.team_code,
+                          backend_components->device_blackboard.get(), false);
+    WaypointGlue::SaveHome(Profile::map,
+                           settings_computer.poi, settings_computer.team_code);
+  }
+
+  Profile::Save();
+  return true;
 }
 
 void

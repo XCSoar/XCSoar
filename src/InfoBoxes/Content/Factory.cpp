@@ -1151,6 +1151,14 @@ static constexpr MetaData meta_data[] = {
     IBFHelperInt<InfoBoxContentAlternateAltDiff, 1>::Create,
   },
 
+  // e_Home
+  {
+    N_("Home"),
+    N_("Home"),
+    N_("Home waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to change the home waypoint."),
+    IBFHelper<InfoBoxContentHome>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
