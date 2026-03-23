@@ -5,6 +5,8 @@ Version 7.45 - not yet released
   - terrain: fix fluctuating hill-shading strength #2262
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
+  - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
+    distance; tap to change home waypoint) #2320
   - terrain: add new terrain shading orientation "fixed (Top Left)"
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330

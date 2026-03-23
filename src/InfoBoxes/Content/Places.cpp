@@ -7,6 +7,7 @@
 #include "InfoBoxes/Panel/ATCReference.hpp"
 #include "InfoBoxes/Panel/ATCSetup.hpp"
 #include "Interface.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/Units.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
@@ -45,7 +46,7 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept
 }
 
 static GlideResult
-ComputeHomeGlide(const NMEAInfo &basic,
+ComputeHomeGlide(const MoreData &basic,
                  const ComputerSettings &settings,
                  const DerivedInfo &calculated) noexcept
 {
@@ -63,7 +64,7 @@ ComputeHomeGlide(const NMEAInfo &basic,
 void
 UpdateInfoBoxHomeAltitudeDiff(InfoBoxData &data) noexcept
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
+  const MoreData &basic = CommonInterface::Basic();
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const DerivedInfo &calculated = CommonInterface::Calculated();
@@ -87,7 +88,7 @@ UpdateInfoBoxHomeAltitudeDiff(InfoBoxData &data) noexcept
 void
 InfoBoxContentHome::Update(InfoBoxData &data) noexcept
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
+  const MoreData &basic = CommonInterface::Basic();
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const DerivedInfo &calculated = CommonInterface::Calculated();
@@ -121,7 +122,7 @@ InfoBoxContentHome::HandleClick() noexcept
   if (!data_components || !data_components->waypoints)
     return false;
 
-  if (!backend_components || !backend_components->device_blackboard)
+  if (!backend_components)
     return false;
 
   const GeoPoint location = CommonInterface::Basic().location;
