@@ -44,17 +44,32 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data) noexcept
     data.SetCommentInvalid();
 }
 
+static GlideResult
+ComputeHomeGlide(const NMEAInfo &basic,
+                 const ComputerSettings &settings,
+                 const DerivedInfo &calculated) noexcept
+{
+  const GlideState glide_state(
+    basic.location.DistanceBearing(settings.poi.home_location),
+    settings.poi.home_elevation + settings.task.safety_height_arrival,
+    basic.nav_altitude,
+    calculated.GetWindOrZero());
+
+  return MacCready::Solve(settings.task.glide,
+                          settings.polar.glide_polar_task,
+                          glide_state);
+}
+
 void
 UpdateInfoBoxHomeAltitudeDiff(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const MoreData &more_data = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (!basic.location_available ||
-      !more_data.NavAltitudeAvailable() ||
+      !basic.NavAltitudeAvailable() ||
       !settings.polar.glide_polar_task.IsValid() ||
       !common_stats.vector_home.IsValid() ||
       !settings.poi.home_location_available ||
@@ -64,33 +79,21 @@ UpdateInfoBoxHomeAltitudeDiff(InfoBoxData &data) noexcept
     return;
   }
 
-  const GlideState glide_state(
-    basic.location.DistanceBearing(settings.poi.home_location),
-    settings.poi.home_elevation + settings.task.safety_height_arrival,
-    more_data.nav_altitude,
-    calculated.GetWindOrZero());
-
-  const GlideResult &result =
-    MacCready::Solve(settings.task.glide,
-                     settings.polar.glide_polar_task,
-                     glide_state);
-
-  data.SetValueFromArrival(result.
-                           SelectAltitudeDifference(settings.task.glide));
+  const GlideResult result = ComputeHomeGlide(basic, settings, calculated);
+  data.SetValueFromArrival(result.SelectAltitudeDifference(settings.task.glide));
   data.SetCommentFromDistance(common_stats.vector_home.distance);
 }
 
 void
 InfoBoxContentHome::Update(InfoBoxData &data) noexcept
 {
-  const MoreData &more_data = CommonInterface::Basic();
   const NMEAInfo &basic = CommonInterface::Basic();
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (!basic.location_available ||
-      !more_data.NavAltitudeAvailable() ||
+      !basic.NavAltitudeAvailable() ||
       !settings.polar.glide_polar_task.IsValid() ||
       !common_stats.vector_home.IsValid() ||
       !settings.poi.home_location_available ||
@@ -104,21 +107,12 @@ InfoBoxContentHome::Update(InfoBoxData &data) noexcept
     auto wp = data_components->waypoints->LookupId(settings.poi.home_waypoint);
     if (wp)
       data.SetTitle(wp->name.c_str());
+    else
+      data.SetTitle(_("Home"));
   }
 
-  const GlideState glide_state(
-    basic.location.DistanceBearing(settings.poi.home_location),
-    settings.poi.home_elevation + settings.task.safety_height_arrival,
-    more_data.nav_altitude,
-    calculated.GetWindOrZero());
-
-  const GlideResult &result =
-    MacCready::Solve(settings.task.glide,
-                     settings.polar.glide_polar_task,
-                     glide_state);
-
-  data.SetValueFromArrival(result.
-                           SelectAltitudeDifference(settings.task.glide));
+  const GlideResult result = ComputeHomeGlide(basic, settings, calculated);
+  data.SetValueFromArrival(result.SelectAltitudeDifference(settings.task.glide));
   data.SetCommentFromDistance(common_stats.vector_home.distance);
 }
 
