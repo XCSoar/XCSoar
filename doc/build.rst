@@ -263,6 +263,28 @@ To compile with the iOS simulator SDK, run::
 
   make TARGET=IOS64SIM ipa
 
+To build and run simulator tests automatically, run::
+
+  make check-ios-sim
+
+This target builds simulator artifacts (``TARGET=IOS64SIM``), installs
+``XCSoar.app`` into an available simulator (default: ``iPhone 16 Pro``), and
+executes selected test binaries in the simulator runtime.
+
+Implementation note: the runner uses a Python script
+(``darwin/check-ios-sim.py``) and discovers simulators via
+``xcrun simctl list devices available --json``.
+Execution is delegated to the existing Perl TAP harness
+(``test/src/testall.pl``) using generated simulator wrapper executables.
+
+Optional environment variables::
+
+  SIM_DEVICE_NAME="iPhone 16"      # Choose simulator model
+  SIM_TESTS_MODE=all               # Default mode: run all test_* / Test* binaries
+  SIM_TESTS_MODE=smoke             # Run only smoke subset from SIM_SMOKE_TESTS
+  SIM_SMOKE_TESTS="TestCRC8 ..."  # Override smoke test selection
+  SIM_SKIP_TESTS="TestWrapText"    # Space-separated tests to skip in simulator
+
 To compile for iOS / ARMv7, run::
 
   make TARGET=IOS32 ipa

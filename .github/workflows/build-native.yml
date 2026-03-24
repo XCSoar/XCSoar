@@ -360,8 +360,7 @@ jobs:
             if [ ${{ matrix.target }} = 'MACOS' ]; then
               ./ide/provisioning/install-darwin-packages.sh MACOS
             elif [ ${{ matrix.target }} = 'IOS64' ]; then
-              # Workaround: also install macOS deps so macOS tests can run on iOS CI
-              ./ide/provisioning/install-darwin-packages.sh IOS MACOS
+              ./ide/provisioning/install-darwin-packages.sh IOS
             fi
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
@@ -615,8 +614,11 @@ jobs:
         if: ${{ (matrix.target == 'IOS64' || matrix.target == 'MACOS') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
         run: |
           echo "🧪 Running unit tests..."
-          # Run macOS unit tests for Apple builds.
-          gmake TARGET=MACOS check
+          if [ ${{ matrix.target }} = 'IOS64' ]; then
+            gmake check-ios-sim
+          else
+            gmake TARGET=MACOS check
+          fi
 
       - name: Sign iOS IPA
         id: sign_ios
