@@ -803,6 +803,9 @@ check: $(TESTS) | $(OUT)/test/dirstamp
 check-no-build: $(OUT)/test/dirstamp
 	$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
 
+check-ios-sim:
+	$(Q)/usr/bin/env python3 $(topdir)/darwin/check-ios-sim.py
+
 DEBUG_PROGRAM_NAMES = \
 	test_reach \
 	test_route \
