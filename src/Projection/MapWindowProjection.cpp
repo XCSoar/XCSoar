@@ -36,10 +36,28 @@ static constexpr unsigned ScaleList[] = {
 
 static constexpr unsigned ScaleListCount = std::size(ScaleList);
 
+namespace {
+
+/**
+ * Largest #GetMapScale() at which this waypoint is still drawn (aligned with
+ * #ScaleList steps; lower threshold = hidden sooner when zooming out).
+ */
+static double
+WaypointDrawMaxScale(const Waypoint &wp) noexcept
+{
+  if (wp.IsLandable())
+    return 20000;
+  if (wp.type == Waypoint::Type::OBSTACLE)
+    return 5000;
+  return 10000;
+}
+
+} // namespace
+
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const noexcept
 {
-  return (GetMapScale() <= (way_point.IsLandable() ? 20000 : 10000));
+  return GetMapScale() <= WaypointDrawMaxScale(way_point);
 }
 
 double
