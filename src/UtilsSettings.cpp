@@ -90,8 +90,10 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   MainWindow &main_window = *CommonInterface::main_window;
 
-  if (LanguageChanged)
+  if (LanguageChanged) {
     ReadLanguageFile();
+    InfoBoxManager::InvalidateAfterLanguageChange();
+  }
 
   bool TerrainFileChanged = false, TopographyFileChanged = false;
   if (MapFileChanged) {
