@@ -33,6 +33,7 @@ public:
   [[gnu::pure]]
   double StepMapScale(double scale, int Step) const noexcept;
 
+  /** Current map scale within draw band for this waypoint type (#GetMapScale units). */
   [[gnu::pure]]
   bool WaypointInScaleFilter(const Waypoint &way_point) const noexcept;
 
