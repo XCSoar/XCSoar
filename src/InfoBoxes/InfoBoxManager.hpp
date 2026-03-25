@@ -19,6 +19,14 @@ ProcessTimer() noexcept;
 void
 SetDirty() noexcept;
 
+/**
+ * Call after the UI language was switched (#ReadLanguageFile) so
+ * captions and content use the new gettext catalogue on the next draw
+ * (#2314).
+ */
+void
+InvalidateAfterLanguageChange() noexcept;
+
 void
 ScheduleRedraw() noexcept;
 

@@ -119,6 +119,13 @@ InfoBoxManager::SetDirty() noexcept
 }
 
 void
+InfoBoxManager::InvalidateAfterLanguageChange() noexcept
+{
+  first = true;
+  SetDirty();
+}
+
+void
 InfoBoxManager::ScheduleRedraw() noexcept
 {
   if (infoboxes_hidden)
