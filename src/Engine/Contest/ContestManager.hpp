@@ -16,6 +16,7 @@
 #include "Solvers/XContestFree.hpp"
 #include "Solvers/XContestTriangle.hpp"
 #include "Solvers/OLCSISAT.hpp"
+#include "Solvers/NetCoupe.hpp"
 #include "Solvers/WeglideFree.hpp"
 #include "Solvers/WeglideDistance.hpp"
 #include "Solvers/WeglideFAI.hpp"
@@ -50,6 +51,7 @@ class ContestManager
   XContestFree dhv_xc_free;
   XContestTriangle dhv_xc_triangle;
   OLCSISAT sis_at;
+  NetCoupe net_coupe;
   WeglideFree weglide_free;
   WeglideDistance weglide_distance;
   WeglideFAI weglide_fai;
