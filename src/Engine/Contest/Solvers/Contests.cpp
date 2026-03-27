@@ -13,6 +13,7 @@ static const char *const contest_to_string[] = {
   "XContest",
   "DHV-XC",
   "SIS-AT",
+  "FFVV NetCoupe",
   "DMSt",
   "WeGlide FREE",
   "WeGlide Distance",
