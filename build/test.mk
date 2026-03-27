@@ -122,6 +122,7 @@ TEST_NAMES = \
 	TestPackedFloat \
 	TestVersionNumber \
 	TestWeglideScoring \
+	TestNetCoupeScoring \
 	TestDMStScoring \
 	TestHttpsVerify
 
@@ -2532,6 +2533,12 @@ TEST_WEGLIDE_SCORING_SOURCES = \
 	$(TEST_SRC_DIR)/TestWeglideScoring.cpp
 TEST_WEGLIDE_SCORING_DEPENDS = MATH
 $(eval $(call link-program,TestWeglideScoring,TEST_WEGLIDE_SCORING))
+
+TEST_NETCOUPE_SCORING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestNetCoupeScoring.cpp
+TEST_NETCOUPE_SCORING_DEPENDS = MATH
+$(eval $(call link-program,TestNetCoupeScoring,TEST_NETCOUPE_SCORING))
 
 TEST_DMST_SCORING_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
