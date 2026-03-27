@@ -10,8 +10,16 @@ ContestResult
 NetCoupe::CalculateResult() const noexcept
 {
   ContestResult result = ContestDijkstra::CalculateResult();
-  // 0.8 factor for free distance and 1/1000 m -> km
-  result.score = ApplyHandicap(result.distance * 0.0008);
+  /**
+   * FFVP Coupe Fédérale (WeGlide):
+   * https://docs.weglide.org/contests/national/ffvp_coupe_federale.html
+   *
+   * Points = Distance_km x (100 / Handicap) x Success_Index
+   *
+   * "Free" flight uses Success_Index = 1.0.  The in-flight optimiser does
+   * not know an electronically declared task, so we do not apply 1.2 here.
+   */
+  result.score = ApplyHandicap(result.distance / 1000.0);
   return result;
 }
 
