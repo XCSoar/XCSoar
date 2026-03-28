@@ -644,9 +644,9 @@ msgstr "Vario"
 #: src/Gauge/BigTrafficWidget.cpp:394 src/Renderer/MapItemListRenderer.cpp:60
 #: src/Renderer/MapItemListRenderer.cpp:66
 #: src/Renderer/WaypointListRenderer.cpp:142
-#: src/Renderer/FlightStatisticsRenderer.cpp:215
-#: src/Renderer/FlightStatisticsRenderer.cpp:234
-#: src/Renderer/FlightStatisticsRenderer.cpp:261
+#: src/Renderer/FlightStatisticsRenderer.cpp:216
+#: src/Renderer/FlightStatisticsRenderer.cpp:235
+#: src/Renderer/FlightStatisticsRenderer.cpp:262
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
@@ -1089,7 +1089,7 @@ msgid "Ordered task"
 msgstr "Probă ordonată"
 
 #: src/Input/InputEventsTask.cpp:249
-#: src/Renderer/FlightStatisticsRenderer.cpp:356
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:290
 msgid "No task"
@@ -1108,9 +1108,9 @@ msgid "Altitude"
 msgstr "Elevation"
 
 #: src/Input/InputEventsTask.cpp:337
-#: src/Renderer/FlightStatisticsRenderer.cpp:221
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
-#: src/Renderer/FlightStatisticsRenderer.cpp:266
+#: src/Renderer/FlightStatisticsRenderer.cpp:222
+#: src/Renderer/FlightStatisticsRenderer.cpp:241
+#: src/Renderer/FlightStatisticsRenderer.cpp:267
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1120,9 +1120,9 @@ msgstr "Viteza"
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:338
-#: src/Renderer/FlightStatisticsRenderer.cpp:219
-#: src/Renderer/FlightStatisticsRenderer.cpp:238
-#: src/Renderer/FlightStatisticsRenderer.cpp:264
+#: src/Renderer/FlightStatisticsRenderer.cpp:220
+#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:63
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
 #: src/Dialogs/Weather/RASPDialog.cpp:129
@@ -1574,39 +1574,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr "bază bclw"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "Score"
 msgstr "Scor"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "pts"
 msgstr "puncte"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:366
-#: src/Renderer/FlightStatisticsRenderer.cpp:376
-#: src/Renderer/FlightStatisticsRenderer.cpp:387
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
+#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:388
 msgid "Task to go"
 msgstr "Probă de traversat"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:367
-#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:368
+#: src/Renderer/FlightStatisticsRenderer.cpp:378
 msgid "AAT to go"
 msgstr "AAT de traversat"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:368
-#: src/Renderer/FlightStatisticsRenderer.cpp:378
-#: src/Renderer/FlightStatisticsRenderer.cpp:389
+#: src/Renderer/FlightStatisticsRenderer.cpp:369
+#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Renderer/FlightStatisticsRenderer.cpp:390
 #: src/Dialogs/dlgAnalysis.cpp:231
 msgid "Distance to go"
 msgstr "Distanță de traversat"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:370
-#: src/Renderer/FlightStatisticsRenderer.cpp:381
+#: src/Renderer/FlightStatisticsRenderer.cpp:371
+#: src/Renderer/FlightStatisticsRenderer.cpp:382
 msgid "Target speed"
 msgstr "Viteza de lucru"
 
@@ -6893,93 +6893,61 @@ msgstr ""
 "mult șase puncte de rută sunt evaluate. Partea bounding box cu 1 km = 1,0 "
 "punct și partea zic-zac suplimentară cu 1 km = 0,5 p."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:107
 #, no-c-format
-msgid ""
-"WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
-"free score is a combination of the free distance score and the area bonus. "
-"For the area bonus, the scoring program determines the largest FAI triangle "
-"and the largest Out & Return distance that can be fitted into the flight "
-"route."
-msgstr ""
-"WeGlide combina mai multe sisteme de scor în concursul WeGlide Free. Scorul "
-"liber este o combinație dintre scorul distanței libere și bonusul pentru "
-"zonă. Pentru bonusul pentru zonă, programul de scor determină cel mai mare "
-"triunghi FAI și cel mai lung drum de ieșire și întoarcere care pot fi puse "
-"în calea voliției."
+msgid "WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route."
+msgstr "WeGlide combina mai multe sisteme de scor în concursul WeGlide Free. Scorul liber este o combinație dintre scorul distanței libere și bonusul pentru zonă. Pentru bonusul pentru zonă, programul de scor determină cel mai mare triunghi FAI și cel mai lung drum de ieșire și întoarcere care pot fi puse în calea voliției."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
 #, no-c-format
-msgid ""
-"A start point, one turn point and a finish point are chosen from the flight "
-"path such that the distance between the start point and the turn point is "
-"maximized."
-msgstr ""
-"Se aleg un punct de început, un punct de tur și un punct final din calea "
-"voliției astfel încât distanța dintre punctul de început și punctul de tur "
-"să fie maximizată."
+msgid "A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized."
+msgstr "Se aleg un punct de început, un punct de tur și un punct final din calea voliției astfel încât distanța dintre punctul de început și punctul de tur să fie maximizată."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
 #, no-c-format
-msgid ""
-"LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
-"is 20km, 5 points per km."
-msgstr ""
-"LVZC Charron.online, 5 laturi sub 200km 6 laturi peste 200km. Distanța "
-"minimă per latură este 20km, 5 puncte pe km."
+msgid "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km."
+msgstr "LVZC Charron.online, 5 laturi sub 200km 6 laturi peste 200km. Distanța minimă per latură este 20km, 5 puncte pe km."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:117
 msgid "Contest"
 msgstr "Concurs"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:118
 msgid "Select the rules used for calculating optimal points for a contest."
-msgstr ""
-"Alege regulile folosite pentru calcularea celor mai bune puncte pentru un "
-"concurs."
+msgstr "Alege regulile folosite pentru calcularea celor mai bune puncte pentru un concurs."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
 msgid "Predict Contest"
 msgstr "Prezicere Concurs"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
-msgid ""
-"If enabled, then the next task point is included in the score calculation, "
-"assuming that you will reach it."
-msgstr ""
-"Dacă este activat, următorul punct de probă din calea voliției este inclus "
-"în calculul scorului, presupunând că veți ajunge la el."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+msgid "If enabled, then the next task point is included in the score calculation, assuming that you will reach it."
+msgstr "Dacă este activat, următorul punct de probă din calea voliției este inclus în calculul scorului, presupunând că veți ajunge la el."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "FAI triangle areas"
 msgstr "Arie triunghiuri FAI"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:130
 msgid "Show FAI triangle areas on the map."
 msgstr "Arată ariile triunghiurilor FAI pe harta."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:134
 msgid "FAI triangle threshold"
 msgstr "Hidrogramă triunghiuri FAI"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "Specifică care este limita folosită pentru \"triunghiuri FAI mari\"."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:144
 #, no-c-format
 msgid "95% dist. rule helpers"
 msgstr "Ajutători 95% distanță"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-msgid ""
-"Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
-"Distance Around Target InfoBox will show projected distance vs. maximum and "
-"change colors as you approach 95%."
-msgstr ""
-"Arată ajutoare pentru regulamentul „95% distanță” al Federației Argentines. "
-"InfoBox-ul AAT Distance Around Target va afișa distanța proiectată vs. "
-"maximă și va schimba culorile pe măsură ce te apropie de 95%."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:145
+msgid "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT Distance Around Target InfoBox will show projected distance vs. maximum and change colors as you approach 95%."
+msgstr "Arată ajutoare pentru regulamentul „95% distanță” al Federației Argentines. InfoBox-ul AAT Distance Around Target va afișa distanța proiectată vs. maximă și va schimba culorile pe măsură ce te apropie de 95%."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 msgid "Terrain display"
@@ -12141,4 +12109,9 @@ msgstr "negăsit"
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr "G"
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#, no-c-format
+msgid "FFVP Federal Cup (NetCoupe) on WeGlide. The scored path has at most three turnpoints between start and finish and at least 25 km total. Points are proportional to credited distance, 100 divided by the glider handicap (DAeC-style index), and a success factor of 1.0 for a free flight or 1.2 for a task declared electronically before takeoff. XCSoar live scoring uses a success factor of 1.0 only, not the 1.2 multiplier for declared tasks."
+msgstr ""
 

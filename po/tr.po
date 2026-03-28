@@ -632,9 +632,9 @@ msgstr "Vario"
 #: src/Gauge/BigTrafficWidget.cpp:394 src/Renderer/MapItemListRenderer.cpp:60
 #: src/Renderer/MapItemListRenderer.cpp:66
 #: src/Renderer/WaypointListRenderer.cpp:142
-#: src/Renderer/FlightStatisticsRenderer.cpp:215
-#: src/Renderer/FlightStatisticsRenderer.cpp:234
-#: src/Renderer/FlightStatisticsRenderer.cpp:261
+#: src/Renderer/FlightStatisticsRenderer.cpp:216
+#: src/Renderer/FlightStatisticsRenderer.cpp:235
+#: src/Renderer/FlightStatisticsRenderer.cpp:262
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
@@ -1065,7 +1065,7 @@ msgid "Ordered task"
 msgstr "Sıra belirtilen görev"
 
 #: src/Input/InputEventsTask.cpp:249
-#: src/Renderer/FlightStatisticsRenderer.cpp:356
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:290
 msgid "No task"
@@ -1084,9 +1084,9 @@ msgid "Altitude"
 msgstr "Yükseklik"
 
 #: src/Input/InputEventsTask.cpp:337
-#: src/Renderer/FlightStatisticsRenderer.cpp:221
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
-#: src/Renderer/FlightStatisticsRenderer.cpp:266
+#: src/Renderer/FlightStatisticsRenderer.cpp:222
+#: src/Renderer/FlightStatisticsRenderer.cpp:241
+#: src/Renderer/FlightStatisticsRenderer.cpp:267
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1096,9 +1096,9 @@ msgstr "Hız"
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:338
-#: src/Renderer/FlightStatisticsRenderer.cpp:219
-#: src/Renderer/FlightStatisticsRenderer.cpp:238
-#: src/Renderer/FlightStatisticsRenderer.cpp:264
+#: src/Renderer/FlightStatisticsRenderer.cpp:220
+#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:63
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
 #: src/Dialogs/Weather/RASPDialog.cpp:129
@@ -1545,39 +1545,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr "bl bulut tabanı"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "Score"
 msgstr "Puan"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "pts"
 msgstr "puan"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:366
-#: src/Renderer/FlightStatisticsRenderer.cpp:376
-#: src/Renderer/FlightStatisticsRenderer.cpp:387
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
+#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:388
 msgid "Task to go"
 msgstr "Görev için kalan"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:367
-#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:368
+#: src/Renderer/FlightStatisticsRenderer.cpp:378
 msgid "AAT to go"
 msgstr "AAT için kalan"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:368
-#: src/Renderer/FlightStatisticsRenderer.cpp:378
-#: src/Renderer/FlightStatisticsRenderer.cpp:389
+#: src/Renderer/FlightStatisticsRenderer.cpp:369
+#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Renderer/FlightStatisticsRenderer.cpp:390
 #: src/Dialogs/dlgAnalysis.cpp:231
 msgid "Distance to go"
 msgstr "Kaldırımla kalan mesafe"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:370
-#: src/Renderer/FlightStatisticsRenderer.cpp:381
+#: src/Renderer/FlightStatisticsRenderer.cpp:371
+#: src/Renderer/FlightStatisticsRenderer.cpp:382
 msgid "Target speed"
 msgstr "Hedef hız"
 
@@ -6841,92 +6841,61 @@ msgstr ""
 "Avusturya çevrimiçi planer yarışı. En fazla altı yol noktası ile puanlanır. "
 "Döşeme kısım 1 km = 1.0 p ve ek zick-zack kısım 1 km = 0.5 p."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:107
 #, no-c-format
-msgid ""
-"WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
-"free score is a combination of the free distance score and the area bonus. "
-"For the area bonus, the scoring program determines the largest FAI triangle "
-"and the largest Out & Return distance that can be fitted into the flight "
-"route."
-msgstr ""
-"WeGlide Özgür yarışmasında PG birleşik puan sistemlerinin kombinasyonu "
-"kullanılır. Özgü puan, özgün uzaklık puanı ve alan bonusunun "
-"kombinasyonudur. Alan bonusu için puan programı uçuş yolu içinde en büyük "
-"FAI üçgeni ve en büyük Meydan Dışı ve Geri Dönüş mesafesini belirler."
+msgid "WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route."
+msgstr "WeGlide Özgür yarışmasında PG birleşik puan sistemlerinin kombinasyonu kullanılır. Özgü puan, özgün uzaklık puanı ve alan bonusunun kombinasyonudur. Alan bonusu için puan programı uçuş yolu içinde en büyük FAI üçgeni ve en büyük Meydan Dışı ve Geri Dönüş mesafesini belirler."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
 #, no-c-format
-msgid ""
-"A start point, one turn point and a finish point are chosen from the flight "
-"path such that the distance between the start point and the turn point is "
-"maximized."
-msgstr ""
-"Bir başlangıç noktası, bir dönme noktası ve bir bitiş noktası uçuş yolu "
-"seçilerek, başlangıç noktasından dönme noktasına olan uzaklığın "
-"maksimizasyonu için seçilir."
+msgid "A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized."
+msgstr "Bir başlangıç noktası, bir dönme noktası ve bir bitiş noktası uçuş yolu seçilerek, başlangıç noktasından dönme noktasına olan uzaklığın maksimizasyonu için seçilir."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
 #, no-c-format
-msgid ""
-"LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
-"is 20km, 5 points per km."
-msgstr ""
-"LVZC Charron.online, 5 kısım 200km den altı 6 kısım 200km den üstü. En kısa "
-"kısım uzunluğu 20km olmalıdır, her km başına 5 puan."
+msgid "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km."
+msgstr "LVZC Charron.online, 5 kısım 200km den altı 6 kısım 200km den üstü. En kısa kısım uzunluğu 20km olmalıdır, her km başına 5 puan."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:117
 msgid "Contest"
 msgstr "Yarışma"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:118
 msgid "Select the rules used for calculating optimal points for a contest."
-msgstr ""
-"Yarışma için en uygun nokta puanlarını hesaplamak için kullanılan kuralları "
-"seçin."
+msgstr "Yarışma için en uygun nokta puanlarını hesaplamak için kullanılan kuralları seçin."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
 msgid "Predict Contest"
 msgstr "Tahmini Yarışma"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
-msgid ""
-"If enabled, then the next task point is included in the score calculation, "
-"assuming that you will reach it."
-msgstr ""
-"Etkinleştirildiğinde, son görev noktası skor hesabına dahil edilir, ancak "
-"ulaşılacağını varsayılır."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+msgid "If enabled, then the next task point is included in the score calculation, assuming that you will reach it."
+msgstr "Etkinleştirildiğinde, son görev noktası skor hesabına dahil edilir, ancak ulaşılacağını varsayılır."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "FAI triangle areas"
 msgstr "FAI üçgen alanları"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:130
 msgid "Show FAI triangle areas on the map."
 msgstr "Hariton üzerinde FAI üçgen alanlarını göster."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:134
 msgid "FAI triangle threshold"
 msgstr "FAI üçgen eşik değeri"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "Büyük\" FAI üçgenler için kullanılan eşik değeri belirler."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:144
 #, no-c-format
 msgid "95% dist. rule helpers"
 msgstr "95% dağılım kural yardelpersone"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-msgid ""
-"Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
-"Distance Around Target InfoBox will show projected distance vs. maximum and "
-"change colors as you approach 95%."
-msgstr ""
-"Arjantin Federasyonu'nun \"%95 mesafe\" kuralı için yardımcıları gösterin. "
-"AAT Hedef Çevresindeki Mesafe Bilgi Kutusu, öngörülen mesafe ile maksimum "
-"mesafeyi gösterecek ve %95'e yaklaştığınızda renkleri değiştirecektir."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:145
+msgid "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT Distance Around Target InfoBox will show projected distance vs. maximum and change colors as you approach 95%."
+msgstr "Arjantin Federasyonu'nun \"%95 mesafe\" kuralı için yardımcıları gösterin. AAT Hedef Çevresindeki Mesafe Bilgi Kutusu, öngörülen mesafe ile maksimum mesafeyi gösterecek ve %95'e yaklaştığınızda renkleri değiştirecektir."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 msgid "Terrain display"
@@ -12074,4 +12043,9 @@ msgstr "bulunamadı"
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr "G"
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#, no-c-format
+msgid "FFVP Federal Cup (NetCoupe) on WeGlide. The scored path has at most three turnpoints between start and finish and at least 25 km total. Points are proportional to credited distance, 100 divided by the glider handicap (DAeC-style index), and a success factor of 1.0 for a free flight or 1.2 for a task declared electronically before takeoff. XCSoar live scoring uses a success factor of 1.0 only, not the 1.2 multiplier for declared tasks."
+msgstr ""
 

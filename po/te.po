@@ -622,9 +622,9 @@ msgstr "వేరియోమీటర్"
 #: src/Gauge/BigTrafficWidget.cpp:394 src/Renderer/MapItemListRenderer.cpp:60
 #: src/Renderer/MapItemListRenderer.cpp:66
 #: src/Renderer/WaypointListRenderer.cpp:142
-#: src/Renderer/FlightStatisticsRenderer.cpp:215
-#: src/Renderer/FlightStatisticsRenderer.cpp:234
-#: src/Renderer/FlightStatisticsRenderer.cpp:261
+#: src/Renderer/FlightStatisticsRenderer.cpp:216
+#: src/Renderer/FlightStatisticsRenderer.cpp:235
+#: src/Renderer/FlightStatisticsRenderer.cpp:262
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
@@ -1055,7 +1055,7 @@ msgid "Ordered task"
 msgstr "నిర్వహణం చేసిన టాస్క్‌"
 
 #: src/Input/InputEventsTask.cpp:249
-#: src/Renderer/FlightStatisticsRenderer.cpp:356
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:290
 msgid "No task"
@@ -1074,9 +1074,9 @@ msgid "Altitude"
 msgstr "Altitude ఉత్తరాలోని తరగతి"
 
 #: src/Input/InputEventsTask.cpp:337
-#: src/Renderer/FlightStatisticsRenderer.cpp:221
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
-#: src/Renderer/FlightStatisticsRenderer.cpp:266
+#: src/Renderer/FlightStatisticsRenderer.cpp:222
+#: src/Renderer/FlightStatisticsRenderer.cpp:241
+#: src/Renderer/FlightStatisticsRenderer.cpp:267
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1086,9 +1086,9 @@ msgstr "Speed గ్లైడర్ వేగం"
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:338
-#: src/Renderer/FlightStatisticsRenderer.cpp:219
-#: src/Renderer/FlightStatisticsRenderer.cpp:238
-#: src/Renderer/FlightStatisticsRenderer.cpp:264
+#: src/Renderer/FlightStatisticsRenderer.cpp:220
+#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:63
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
 #: src/Dialogs/Weather/RASPDialog.cpp:129
@@ -1514,39 +1514,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr "బ్లిక్‌బేస్"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "Score"
 msgstr "సూచన"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "pts"
 msgstr "ప్టీస్"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:366
-#: src/Renderer/FlightStatisticsRenderer.cpp:376
-#: src/Renderer/FlightStatisticsRenderer.cpp:387
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
+#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:388
 msgid "Task to go"
 msgstr "టాస్క్ తీసుకోవాల్సినది"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:367
-#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:368
+#: src/Renderer/FlightStatisticsRenderer.cpp:378
 msgid "AAT to go"
 msgstr "AAT తీసుకోవాల్సినది"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:368
-#: src/Renderer/FlightStatisticsRenderer.cpp:378
-#: src/Renderer/FlightStatisticsRenderer.cpp:389
+#: src/Renderer/FlightStatisticsRenderer.cpp:369
+#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Renderer/FlightStatisticsRenderer.cpp:390
 #: src/Dialogs/dlgAnalysis.cpp:231
 msgid "Distance to go"
 msgstr "వేగం తీసుకోవాల్సినది"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:370
-#: src/Renderer/FlightStatisticsRenderer.cpp:381
+#: src/Renderer/FlightStatisticsRenderer.cpp:371
+#: src/Renderer/FlightStatisticsRenderer.cpp:382
 msgid "Target speed"
 msgstr "కొరకు వేగం"
 
@@ -6671,87 +6671,61 @@ msgid ""
 "part with 1 km = 0.5 p."
 msgstr "WeGlide ఫ్రీ నట్యంలో ముఖ్యంగా కళాకథ మరియు FAI నియమాలను అవసరంగా"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:107
 #, no-c-format
-msgid ""
-"WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
-"free score is a combination of the free distance score and the area bonus. "
-"For the area bonus, the scoring program determines the largest FAI triangle "
-"and the largest Out & Return distance that can be fitted into the flight "
-"route."
-msgstr ""
-"WELLGlide విలేచిన మరuvu సోంతాల అవసరమైన పద్ధతులను కలిగి ఉంది. జరుగుతే నిబియట సోంతా మరియు ప్రాంత "
-"బొన్నికి సంబంధించిన నిబియట రెండు శాఖలు తమరికవచ్చతాయి. ప్రాంత బొన్నికి సంబంధించిన సోంతాలకు, సోంతా "
-"ప్రవేశాన్ని కార్యక్రమం ఫైట్‌ర్‌ల రణ రేస్‌లో ప్రతిస్థాపిత దీవ్యామ్ల చెక్‌బుక్‌ని నిర్వహించుతుంది."
+msgid "WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route."
+msgstr "WELLGlide విలేచిన మరuvu సోంతాల అవసరమైన పద్ధతులను కలిగి ఉంది. జరుగుతే నిబియట సోంతా మరియు ప్రాంత బొన్నికి సంబంధించిన నిబియట రెండు శాఖలు తమరికవచ్చతాయి. ప్రాంత బొన్నికి సంబంధించిన సోంతాలకు, సోంతా ప్రవేశాన్ని కార్యక్రమం ఫైట్‌ర్‌ల రణ రేస్‌లో ప్రతిస్థాపిత దీవ్యామ్ల చెక్‌బుక్‌ని నిర్వహించుతుంది."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
 #, no-c-format
-msgid ""
-"A start point, one turn point and a finish point are chosen from the flight "
-"path such that the distance between the start point and the turn point is "
-"maximized."
-msgstr ""
-"ప్రారంభ బిందువు, ఒక టర్న్ బిందువు మరియు అవసరమైన పోల్‌లో ఒక ప్రారంభ బిందువు ఎలా చేరాలని "
-"నిర్ధారిస్తున్నారో విశ్లేషణకు, ప్రారంభ బిందువు మరియు టర్న్ బిందువు వచ్చిన దూరం అతి పెద్దదానికి "
-"నిర్ధారిస్తుంది."
+msgid "A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized."
+msgstr "ప్రారంభ బిందువు, ఒక టర్న్ బిందువు మరియు అవసరమైన పోల్‌లో ఒక ప్రారంభ బిందువు ఎలా చేరాలని నిర్ధారిస్తున్నారో విశ్లేషణకు, ప్రారంభ బిందువు మరియు టర్న్ బిందువు వచ్చిన దూరం అతి పెద్దదానికి నిర్ధారిస్తుంది."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
 #, no-c-format
-msgid ""
-"LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
-"is 20km, 5 points per km."
-msgstr ""
-"LVZC చారోనల్.online, 5 మైగ్రెట్‌లు 200కిమీ కంటే, 6 మైగ్రెట్‌లు 200కిమీ అయో. నాణ్య మైగ్రెట్ దూరం 20కిమీ, "
-"5 కిమీ లేదా తల్లి పునరుత్పత్తులో ఒక నిష్పత్తి 5."
+msgid "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km."
+msgstr "LVZC చారోనల్.online, 5 మైగ్రెట్‌లు 200కిమీ కంటే, 6 మైగ్రెట్‌లు 200కిమీ అయో. నాణ్య మైగ్రెట్ దూరం 20కిమీ, 5 కిమీ లేదా తల్లి పునరుత్పత్తులో ఒక నిష్పత్తి 5."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:117
 msgid "Contest"
 msgstr "పర్యావరణ శాస్త్రం"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:118
 msgid "Select the rules used for calculating optimal points for a contest."
 msgstr "ఫలితాలను కన్ఫైడెల్చర్ ద్వారా నిర్ణయపరమైన నియంత్రణలను ఎంచేసిన రెక్టీవ్"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
 msgid "Predict Contest"
 msgstr "ఫలితాలను ప్రదర్శించడానికి నిర్ణయాలను కన్ఫైడెల్చర్"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
-msgid ""
-"If enabled, then the next task point is included in the score calculation, "
-"assuming that you will reach it."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+msgid "If enabled, then the next task point is included in the score calculation, assuming that you will reach it."
 msgstr "ఇప్పుడు తదుపరి వేపాయింట్‌ను సహకారంతో ఫలితాలను నిర్ణయాలో ఎంచేసిన రెక్టీవ్"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "FAI triangle areas"
 msgstr "FAI త్రిభుజాలు"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:130
 msgid "Show FAI triangle areas on the map."
 msgstr "FAI త్రిభుజాలను మండలపు పేర్కొనుతూ ప్రదర్శించడం"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:134
 msgid "FAI triangle threshold"
 msgstr "FAI త్రిభుజాల గరిష్ఠ విలోమం"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "గరిష్ఠ\" FAI త్రిభుజాలకు ఉపయోగించాలను సూచించే విలోమం"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:144
 #, no-c-format
 msgid "95% dist. rule helpers"
 msgstr "95% జిల్లా. పాలన సహాయకులు"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-msgid ""
-"Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
-"Distance Around Target InfoBox will show projected distance vs. maximum and "
-"change colors as you approach 95%."
-msgstr ""
-"అర్జెంటీనా ఫెడరేషన్ \"95% దూరం\" నియమం కోసం సహాయకులను చూపు. టార్గెట్ ఇన్ఫోబాక్స్ చుట్టూ ఉన్న AAT "
-"దూరం గరిష్టంగా అంచనా వేసిన దూరాన్ని చూపుతుంది మరియు మీరు 95%కి చేరుకున్నప్పుడు రంగులను "
-"మారుస్తుంది."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:145
+msgid "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT Distance Around Target InfoBox will show projected distance vs. maximum and change colors as you approach 95%."
+msgstr "అర్జెంటీనా ఫెడరేషన్ \"95% దూరం\" నియమం కోసం సహాయకులను చూపు. టార్గెట్ ఇన్ఫోబాక్స్ చుట్టూ ఉన్న AAT దూరం గరిష్టంగా అంచనా వేసిన దూరాన్ని చూపుతుంది మరియు మీరు 95%కి చేరుకున్నప్పుడు రంగులను మారుస్తుంది."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 msgid "Terrain display"
@@ -11733,4 +11707,9 @@ msgstr "దొరకలేదు"
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr "G"
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#, no-c-format
+msgid "FFVP Federal Cup (NetCoupe) on WeGlide. The scored path has at most three turnpoints between start and finish and at least 25 km total. Points are proportional to credited distance, 100 divided by the glider handicap (DAeC-style index), and a success factor of 1.0 for a free flight or 1.2 for a task declared electronically before takeoff. XCSoar live scoring uses a success factor of 1.0 only, not the 1.2 multiplier for declared tasks."
+msgstr ""
 

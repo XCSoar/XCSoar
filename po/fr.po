@@ -648,9 +648,9 @@ msgstr "Vario"
 #: src/Gauge/BigTrafficWidget.cpp:394 src/Renderer/MapItemListRenderer.cpp:60
 #: src/Renderer/MapItemListRenderer.cpp:66
 #: src/Renderer/WaypointListRenderer.cpp:142
-#: src/Renderer/FlightStatisticsRenderer.cpp:215
-#: src/Renderer/FlightStatisticsRenderer.cpp:234
-#: src/Renderer/FlightStatisticsRenderer.cpp:261
+#: src/Renderer/FlightStatisticsRenderer.cpp:216
+#: src/Renderer/FlightStatisticsRenderer.cpp:235
+#: src/Renderer/FlightStatisticsRenderer.cpp:262
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
@@ -1093,7 +1093,7 @@ msgid "Ordered task"
 msgstr "Circuit défini"
 
 #: src/Input/InputEventsTask.cpp:249
-#: src/Renderer/FlightStatisticsRenderer.cpp:356
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:290
 msgid "No task"
@@ -1112,9 +1112,9 @@ msgid "Altitude"
 msgstr "Altitude"
 
 #: src/Input/InputEventsTask.cpp:337
-#: src/Renderer/FlightStatisticsRenderer.cpp:221
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
-#: src/Renderer/FlightStatisticsRenderer.cpp:266
+#: src/Renderer/FlightStatisticsRenderer.cpp:222
+#: src/Renderer/FlightStatisticsRenderer.cpp:241
+#: src/Renderer/FlightStatisticsRenderer.cpp:267
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1124,9 +1124,9 @@ msgstr "Vitesse"
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:338
-#: src/Renderer/FlightStatisticsRenderer.cpp:219
-#: src/Renderer/FlightStatisticsRenderer.cpp:238
-#: src/Renderer/FlightStatisticsRenderer.cpp:264
+#: src/Renderer/FlightStatisticsRenderer.cpp:220
+#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:63
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
 #: src/Dialogs/Weather/RASPDialog.cpp:129
@@ -1577,39 +1577,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr "blcwbase"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "Score"
 msgstr "Résultat"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "pts"
 msgstr "pts"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:366
-#: src/Renderer/FlightStatisticsRenderer.cpp:376
-#: src/Renderer/FlightStatisticsRenderer.cpp:387
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
+#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:388
 msgid "Task to go"
 msgstr "Circuit restant"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:367
-#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:368
+#: src/Renderer/FlightStatisticsRenderer.cpp:378
 msgid "AAT to go"
 msgstr "Durée restante AAT"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:368
-#: src/Renderer/FlightStatisticsRenderer.cpp:378
-#: src/Renderer/FlightStatisticsRenderer.cpp:389
+#: src/Renderer/FlightStatisticsRenderer.cpp:369
+#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Renderer/FlightStatisticsRenderer.cpp:390
 #: src/Dialogs/dlgAnalysis.cpp:231
 msgid "Distance to go"
 msgstr "Distance à faire"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:370
-#: src/Renderer/FlightStatisticsRenderer.cpp:381
+#: src/Renderer/FlightStatisticsRenderer.cpp:371
+#: src/Renderer/FlightStatisticsRenderer.cpp:382
 msgid "Target speed"
 msgstr "Vitesse de la cible"
 
@@ -6903,94 +6903,61 @@ msgstr ""
 "virage. La boite englobante vaut 1 point par km, les branches additionnelles "
 "valent 0,5 point par km."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:107
 #, no-c-format
-msgid ""
-"WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
-"free score is a combination of the free distance score and the area bonus. "
-"For the area bonus, the scoring program determines the largest FAI triangle "
-"and the largest Out & Return distance that can be fitted into the flight "
-"route."
-msgstr ""
-"WeGlide combine plusieurs systèmes de notation dans le concours libre "
-"WeGlide. Le score libre est une combinaison du score de la distance libre et "
-"du bonus de zone. Pour le bonus de zone, le programme de notation détermine "
-"le plus grand triangle FAI et la plus grande distance aller-retour qui "
-"peuvent être intégrés dans la route de vol."
+msgid "WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route."
+msgstr "WeGlide combine plusieurs systèmes de notation dans le concours libre WeGlide. Le score libre est une combinaison du score de la distance libre et du bonus de zone. Pour le bonus de zone, le programme de notation détermine le plus grand triangle FAI et la plus grande distance aller-retour qui peuvent être intégrés dans la route de vol."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
 #, no-c-format
-msgid ""
-"A start point, one turn point and a finish point are chosen from the flight "
-"path such that the distance between the start point and the turn point is "
-"maximized."
-msgstr ""
-"Un point de départ, un point de virage et un point d'arrivée sont choisis "
-"sur la trajectoire de vol de telle sorte que la distance entre le point de "
-"départ et le point de virage soit maximale"
+msgid "A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized."
+msgstr "Un point de départ, un point de virage et un point d'arrivée sont choisis sur la trajectoire de vol de telle sorte que la distance entre le point de départ et le point de virage soit maximale"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
 #, no-c-format
-msgid ""
-"LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
-"is 20km, 5 points per km."
-msgstr ""
-"LVZC Charron.online, 5 branches de moins de 200 km 6 branches au-dessus. La "
-"distance minimale d'une branche est de 20 km, 5 points par km."
+msgid "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km."
+msgstr "LVZC Charron.online, 5 branches de moins de 200 km 6 branches au-dessus. La distance minimale d'une branche est de 20 km, 5 points par km."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:117
 msgid "Contest"
 msgstr "Concours"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:118
 msgid "Select the rules used for calculating optimal points for a contest."
-msgstr ""
-"Sélectionnez les règles utilisées pour calculer les points optimaux d'un "
-"concours."
+msgstr "Sélectionnez les règles utilisées pour calculer les points optimaux d'un concours."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
 msgid "Predict Contest"
 msgstr "Prédict. Score"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
-msgid ""
-"If enabled, then the next task point is included in the score calculation, "
-"assuming that you will reach it."
-msgstr ""
-"Si activé, alors le prochain point est pris en compte dans le calcul du "
-"score, en supposant que vous l'atteignez."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+msgid "If enabled, then the next task point is included in the score calculation, assuming that you will reach it."
+msgstr "Si activé, alors le prochain point est pris en compte dans le calcul du score, en supposant que vous l'atteignez."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "FAI triangle areas"
 msgstr "Secteurs de triangle FAI"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:130
 msgid "Show FAI triangle areas on the map."
 msgstr "Montrer les secteurs de triangle FAI sur la carte."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:134
 msgid "FAI triangle threshold"
 msgstr "Seuil du triangle FAI"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "Définit quel seuil est utilisé pour les \"grands\" triangles FAI."
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:144
 #, no-c-format
 msgid "95% dist. rule helpers"
 msgstr "Aide pour la règle \"95% distance\" de l'Fédération argentine"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-msgid ""
-"Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
-"Distance Around Target InfoBox will show projected distance vs. maximum and "
-"change colors as you approach 95%."
-msgstr ""
-"Afficher les aides pour la règle de la Fédération argentine \"95% de "
-"distance\". La boîte d'information AAT Distance Around Target affichera la "
-"distance projetée par rapport au maximum et changera de couleur à mesure que "
-"vous approchez de 95%."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:145
+msgid "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT Distance Around Target InfoBox will show projected distance vs. maximum and change colors as you approach 95%."
+msgstr "Afficher les aides pour la règle de la Fédération argentine \"95% de distance\". La boîte d'information AAT Distance Around Target affichera la distance projetée par rapport au maximum et changera de couleur à mesure que vous approchez de 95%."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 msgid "Terrain display"
@@ -12213,4 +12180,9 @@ msgstr "introuvable"
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr "G"
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#, no-c-format
+msgid "FFVP Federal Cup (NetCoupe) on WeGlide. The scored path has at most three turnpoints between start and finish and at least 25 km total. Points are proportional to credited distance, 100 divided by the glider handicap (DAeC-style index), and a success factor of 1.0 for a free flight or 1.2 for a task declared electronically before takeoff. XCSoar live scoring uses a success factor of 1.0 only, not the 1.2 multiplier for declared tasks."
+msgstr ""
 

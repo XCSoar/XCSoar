@@ -608,9 +608,9 @@ msgstr "高度計"
 #: src/Gauge/BigTrafficWidget.cpp:394 src/Renderer/MapItemListRenderer.cpp:60
 #: src/Renderer/MapItemListRenderer.cpp:66
 #: src/Renderer/WaypointListRenderer.cpp:142
-#: src/Renderer/FlightStatisticsRenderer.cpp:215
-#: src/Renderer/FlightStatisticsRenderer.cpp:234
-#: src/Renderer/FlightStatisticsRenderer.cpp:261
+#: src/Renderer/FlightStatisticsRenderer.cpp:216
+#: src/Renderer/FlightStatisticsRenderer.cpp:235
+#: src/Renderer/FlightStatisticsRenderer.cpp:262
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:51
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:104
 #: src/Dialogs/Airspace/AirspaceList.cpp:448
@@ -1053,7 +1053,7 @@ msgid "Ordered task"
 msgstr "安排好的任務"
 
 #: src/Input/InputEventsTask.cpp:249
-#: src/Renderer/FlightStatisticsRenderer.cpp:356
+#: src/Renderer/FlightStatisticsRenderer.cpp:357
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:290
 msgid "No task"
@@ -1072,9 +1072,9 @@ msgid "Altitude"
 msgstr "高度"
 
 #: src/Input/InputEventsTask.cpp:337
-#: src/Renderer/FlightStatisticsRenderer.cpp:221
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
-#: src/Renderer/FlightStatisticsRenderer.cpp:266
+#: src/Renderer/FlightStatisticsRenderer.cpp:222
+#: src/Renderer/FlightStatisticsRenderer.cpp:241
+#: src/Renderer/FlightStatisticsRenderer.cpp:267
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:60
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "Speed"
@@ -1084,9 +1084,9 @@ msgstr "速度"
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
 #: src/Input/InputEventsTask.cpp:338
-#: src/Renderer/FlightStatisticsRenderer.cpp:219
-#: src/Renderer/FlightStatisticsRenderer.cpp:238
-#: src/Renderer/FlightStatisticsRenderer.cpp:264
+#: src/Renderer/FlightStatisticsRenderer.cpp:220
+#: src/Renderer/FlightStatisticsRenderer.cpp:239
+#: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:63
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
 #: src/Dialogs/Weather/RASPDialog.cpp:129
@@ -1513,39 +1513,39 @@ msgstr ""
 msgid "blcwbase"
 msgstr "blcwbase參數"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "Score"
 msgstr "分數"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:218
-#: src/Renderer/FlightStatisticsRenderer.cpp:237
-#: src/Renderer/FlightStatisticsRenderer.cpp:263
+#: src/Renderer/FlightStatisticsRenderer.cpp:219
+#: src/Renderer/FlightStatisticsRenderer.cpp:238
+#: src/Renderer/FlightStatisticsRenderer.cpp:264
 msgid "pts"
 msgstr "pts參數"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:366
-#: src/Renderer/FlightStatisticsRenderer.cpp:376
-#: src/Renderer/FlightStatisticsRenderer.cpp:387
+#: src/Renderer/FlightStatisticsRenderer.cpp:367
+#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:388
 msgid "Task to go"
 msgstr "任務出發"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:367
-#: src/Renderer/FlightStatisticsRenderer.cpp:377
+#: src/Renderer/FlightStatisticsRenderer.cpp:368
+#: src/Renderer/FlightStatisticsRenderer.cpp:378
 msgid "AAT to go"
 msgstr "指定區域任務出發"
 
 #. landscape: info above buttons
-#: src/Renderer/FlightStatisticsRenderer.cpp:368
-#: src/Renderer/FlightStatisticsRenderer.cpp:378
-#: src/Renderer/FlightStatisticsRenderer.cpp:389
+#: src/Renderer/FlightStatisticsRenderer.cpp:369
+#: src/Renderer/FlightStatisticsRenderer.cpp:379
+#: src/Renderer/FlightStatisticsRenderer.cpp:390
 #: src/Dialogs/dlgAnalysis.cpp:231
 msgid "Distance to go"
 msgstr "距離"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:370
-#: src/Renderer/FlightStatisticsRenderer.cpp:381
+#: src/Renderer/FlightStatisticsRenderer.cpp:371
+#: src/Renderer/FlightStatisticsRenderer.cpp:382
 msgid "Target speed"
 msgstr "目標速度"
 
@@ -6610,83 +6610,61 @@ msgstr ""
 "奧地利線上滑翔機比賽。圍繞最大6個航點的軌跡得分。包圍部分為1 km＝1點，另外的"
 "Zig-ZACK部分為1 km＝0.5點。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:107
 #, no-c-format
-msgid ""
-"WeGlide combines multiple scoring systems in the WeGlide Free contest. The "
-"free score is a combination of the free distance score and the area bonus. "
-"For the area bonus, the scoring program determines the largest FAI triangle "
-"and the largest Out & Return distance that can be fitted into the flight "
-"route."
-msgstr ""
-"WeGlide在WeGlide免費競賽中結合了多種評分系統。免費得分是由免費距離得分和區域"
-"獎勵組成。對於區域獎勵，評分程序會確定可以嵌入飛行路徑的最大FAI三角形以及最大"
-"出發與返回距離。"
+msgid "WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out & Return distance that can be fitted into the flight route."
+msgstr "WeGlide在WeGlide免費競賽中結合了多種評分系統。免費得分是由免費距離得分和區域獎勵組成。對於區域獎勵，評分程序會確定可以嵌入飛行路徑的最大FAI三角形以及最大出發與返回距離。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:111
 #, no-c-format
-msgid ""
-"A start point, one turn point and a finish point are chosen from the flight "
-"path such that the distance between the start point and the turn point is "
-"maximized."
+msgid "A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized."
 msgstr "從飛行路徑中選擇起點、一個轉彎點和終點，使得起點到轉彎點的距離最大化。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
 #, no-c-format
-msgid ""
-"LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance "
-"is 20km, 5 points per km."
-msgstr ""
-"LVZC Charron.online，5個短於200公里的 Legs 和6個長於200公里的 Legs。最小Leg距"
-"離為20公里，每公里5分。"
+msgid "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km."
+msgstr "LVZC Charron.online，5個短於200公里的 Legs 和6個長於200公里的 Legs。最小Leg距離為20公里，每公里5分。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:117
 msgid "Contest"
 msgstr "內容"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:118
 msgid "Select the rules used for calculating optimal points for a contest."
 msgstr "選擇用於線上競賽最佳點計算的規則。執行符合官方2010年9月23日發佈的。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
 msgid "Predict Contest"
 msgstr "預測競賽"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:114
-msgid ""
-"If enabled, then the next task point is included in the score calculation, "
-"assuming that you will reach it."
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+msgid "If enabled, then the next task point is included in the score calculation, assuming that you will reach it."
 msgstr "如果啟用，那麼下一個任務點被包含在分數計算中，假設您將到達它。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:129
 msgid "FAI triangle areas"
 msgstr "FAI三角區域"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:130
 msgid "Show FAI triangle areas on the map."
 msgstr "在地圖上顯示FAI三角區域。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:126
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:134
 msgid "FAI triangle threshold"
 msgstr "FAI三角航線閾值"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:127
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:135
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
 msgstr "指定用於大FAI三角形的閾值。"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:144
 #, no-c-format
 msgid "95% dist. rule helpers"
 msgstr "95% 距離規則助手"
 
-#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-msgid ""
-"Show helpers for Argentinean Federation \"95% distance\" rule. The AAT "
-"Distance Around Target InfoBox will show projected distance vs. maximum and "
-"change colors as you approach 95%."
-msgstr ""
-"顯示阿根廷聯邦「95% 距離」規則的助手。 AAT 目標周圍距離資訊框將顯示預計距離與"
-"最大距離，並在接近 95% 時改變顏色。"
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:145
+msgid "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT Distance Around Target InfoBox will show projected distance vs. maximum and change colors as you approach 95%."
+msgstr "顯示阿根廷聯邦「95% 距離」規則的助手。 AAT 目標周圍距離資訊框將顯示預計距離與最大距離，並在接近 95% 時改變顏色。"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 msgid "Terrain display"
@@ -11601,4 +11579,9 @@ msgstr "找不到"
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr "G"
+
+#: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:99
+#, no-c-format
+msgid "FFVP Federal Cup (NetCoupe) on WeGlide. The scored path has at most three turnpoints between start and finish and at least 25 km total. Points are proportional to credited distance, 100 divided by the glider handicap (DAeC-style index), and a success factor of 1.0 for a free flight or 1.2 for a task declared electronically before takeoff. XCSoar live scoring uses a success factor of 1.0 only, not the 1.2 multiplier for declared tasks."
+msgstr ""
 
