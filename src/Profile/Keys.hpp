@@ -185,6 +185,13 @@ constexpr std::string_view EnableExternalTriggerCruise = "EnableExternalTriggerC
 constexpr std::string_view CruiseToCirclingModeSwitchThreshold = "CruiseToCirclingModeSwitchThreshold";
 constexpr std::string_view CirclingToCruiseModeSwitchThreshold = "CirclingToCruiseModeSwitchThreshold";
 constexpr std::string_view OLCRules = "OLCRules"; // legacy name, key contains contest rules
+/**
+ * Encoding version for #OLCRules numeric values (Contest enum).
+ * Value >= 2: matches current enum (NET_COUPE before NONE).  Missing or < 2:
+ * apply ContestProfile legacy migration for profiles from v7.44 without
+ * NET_COUPE in the enum.
+ */
+constexpr std::string_view ContestEnumLayout = "ContestEnumLayout";
 constexpr std::string_view PredictContest = "PredictContest";
 constexpr std::string_view Handicap = "Handicap";
 constexpr std::string_view SnailWidthScale = "SnailWidthScale";

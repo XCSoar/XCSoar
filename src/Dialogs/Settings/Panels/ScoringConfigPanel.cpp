@@ -3,6 +3,7 @@
 
 #include "ScoringConfigPanel.hpp"
 #include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -176,6 +177,14 @@ ScoringConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(SHOW_95_PERCENT_RULE_HELPERS,
                        ProfileKeys::Show95PercentRuleHelpers,
                        map_settings.show_95_percent_rule_helpers);
+
+  /* Mark profile as using current Contest enum encoding (see ContestProfile). */
+  unsigned contest_enum_layout = 0;
+  if (!Profile::Get(ProfileKeys::ContestEnumLayout, contest_enum_layout) ||
+      contest_enum_layout < 2U) {
+    Profile::Set(ProfileKeys::ContestEnumLayout, 2U);
+    changed = true;
+  }
 
   _changed |= changed;
 
