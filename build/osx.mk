@@ -18,7 +18,9 @@ endif
 
 # App Store version (must be X.Y.Z format)
 MACOS_PATCH_VERSION ?= 0
-MACOS_APP_VERSION ?= $(shell cat VERSION.txt).$(MACOS_PATCH_VERSION)
+# Same rule as ios.mk: full semver in VERSION.txt, or X.Y + patch.
+MACOS_APP_VERSION ?= $(shell awk -v patch="$(MACOS_PATCH_VERSION)" -F. \
+	'NF>=3 {print; exit} {print $$0 "." patch}' $(topdir)/VERSION.txt)
 MACOS_APP_BUILD_NUMBER ?= 1
 
 # App name and package names are always the same

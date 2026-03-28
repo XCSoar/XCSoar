@@ -1,3 +1,6 @@
+Version 7.44.4
+* (patch release for App Store versioning)
+
 Version 7.44 - 2026-03-22
 * WaypointDetails
   - Add pan capability to the waypoint details image #1127

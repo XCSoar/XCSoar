@@ -12,7 +12,10 @@ $(error VERSION.txt is missing)
 endif
 
 IOS_PATCH_VERSION ?= 0
-IOS_APP_VERSION ?= $(shell cat VERSION.txt).$(IOS_PATCH_VERSION)
+# Use VERSION.txt as X.Y.Z when it already has three components; otherwise
+# append IOS_PATCH_VERSION (X.Y + patch → X.Y.Z for App Store).
+IOS_APP_VERSION ?= $(shell awk -v patch="$(IOS_PATCH_VERSION)" -F. \
+	'NF>=3 {print; exit} {print $$0 "." patch}' $(topdir)/VERSION.txt)
 IOS_APP_BUILD_NUMBER ?= 1
 
 ifeq ($(TESTING),y)
