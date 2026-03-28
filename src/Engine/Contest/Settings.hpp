@@ -19,7 +19,6 @@ enum class Contest : uint8_t {
   XCONTEST,
   DHV_XC,
   SIS_AT,
-  NET_COUPE,
 
   /**
    * Deutsche Meisterschaft im Streckensegelflug (Germany).
@@ -32,6 +31,12 @@ enum class Contest : uint8_t {
   WEGLIDE_OR,
 
   CHARRON,
+
+  /**
+   * FFVP Federal Cup (NetCoupe); placed before #NONE so profile values
+   * 0..13 stay aligned with v7.44 after NET_COUPE was removed from the enum.
+   */
+  NET_COUPE,
 
   NONE,
 };

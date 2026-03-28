@@ -4,6 +4,9 @@ Version 7.44 - 2026-03-22
   - Show waypoint type and runway width
 * calculations
   - restore FFVV NetCoupe contest optimisation (#2330)
+  - contest enum / profile: NetCoupe slot placed after Charron so v7.44
+    OLCRules indices 0--13 stay valid; legacy NONE (14) maps to the new
+    NONE; open Configuration / Scoring once to store ContestEnumLayout (#2330)
   - update sprint/league time window to 2 hours (as per OLC and DMSt rules)
   - update OLC League calculation to latest ruleset
   - improved circling wind algorithm: uses cosine curve fitting with True
