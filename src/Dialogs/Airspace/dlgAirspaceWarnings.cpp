@@ -299,12 +299,12 @@ AirspaceWarningListWidget::Enable()
   try {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
     AirspaceWarning *warning = lease->GetWarningPtr(*airspace);
-    if (warning == NULL)
-      return;
 
     lease->AcknowledgeDay(airspace, false);
-    warning->AcknowledgeInside(false);
-    warning->AcknowledgeWarning(false);
+    if (warning != NULL) {
+      warning->AcknowledgeInside(false);
+      warning->AcknowledgeWarning(false);
+    }
   } catch (const std::exception &e) {
     LogFmt("Failed to re-enable airspace warning: {}", e.what());
     Message::AddMessage(_("Failed to re-enable airspace warning"));

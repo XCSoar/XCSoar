@@ -10,6 +10,9 @@
 #include "util/Serial.hpp"
 
 #include <list>
+#include <string>
+#include <string_view>
+#include <unordered_set>
 
 class TaskStats;
 class GlidePolar;
@@ -41,7 +44,32 @@ class AirspaceWarningManager {
 
   using AirspaceWarningList = std::list<AirspaceWarning>;
 
+  struct TransparentStringHash {
+    using is_transparent = void;
+
+    std::size_t operator()(std::string_view s) const noexcept {
+      return std::hash<std::string_view>{}(s);
+    }
+  };
+
+  struct TransparentStringEqual {
+    using is_transparent = void;
+
+    bool operator()(std::string_view a, std::string_view b) const noexcept {
+      return a == b;
+    }
+  };
+
   AirspaceWarningList warnings;
+
+  /**
+   * NOTAM areas are removed and re-created when the NOTAM list is refreshed,
+   * so #warnings cannot match the new #AbstractAirspace by pointer.  "Ack
+   * day" for NOTAM is also keyed by NOTAM number (#GetStationName()) so it
+   * survives updates.
+   */
+  std::unordered_set<std::string, TransparentStringHash,
+                     TransparentStringEqual> notam_day_ack_by_station;
 
   /**
    * This number is incremented each time this object is modified.
@@ -102,7 +130,7 @@ public:
    */
   bool Update(const AircraftState &state, const GlidePolar &glide_polar,
               const TaskStats &task_stats,
-              bool circling, std::chrono::duration<unsigned> dt) noexcept;
+              bool circling, std::chrono::duration<unsigned> dt);
 
   /**
    * Adjust time of glide predictor
@@ -125,7 +153,7 @@ public:
    *
    * @return Reference to airspace warning item
    */
-  AirspaceWarning &GetWarning(ConstAirspacePtr airspace) noexcept;
+  AirspaceWarning &GetWarning(ConstAirspacePtr airspace);
 
   /**
    * Find corresponding airspace warning item in store by airspace
@@ -143,7 +171,7 @@ public:
    *
    * @return Pointer to airspace warning item (or nullptr if not found)
    */
-  AirspaceWarning *GetNewWarningPtr(ConstAirspacePtr airspace) noexcept;
+  AirspaceWarning *GetNewWarningPtr(ConstAirspacePtr airspace);
 
   const AirspaceWarning *GetWarningPtr(const AbstractAirspace &airspace) const noexcept {
     return const_cast<AirspaceWarningManager *>(this)
@@ -166,6 +194,7 @@ public:
   void clear() {
     ++serial;
     warnings.clear();
+    notam_day_ack_by_station.clear();
   }
 
   /**
@@ -205,7 +234,7 @@ public:
    * @param set Whether to set or cancel acknowledgement
    */
   void AcknowledgeWarning(ConstAirspacePtr airspace,
-                          const bool set = true) noexcept;
+                          const bool set = true);
 
   /**
    * Acknowledge an airspace inside
@@ -214,7 +243,7 @@ public:
    * @param set Whether to set or cancel acknowledgement
    */
   void AcknowledgeInside(ConstAirspacePtr airspace,
-                         const bool set = true) noexcept;
+                         const bool set = true);
 
   /**
    * Acknowledge all warnings for airspace for whole day
@@ -223,7 +252,7 @@ public:
    * @param set Whether to set or cancel acknowledgement
    */
   void AcknowledgeDay(ConstAirspacePtr airspace,
-                      const bool set = true) noexcept;
+                      const bool set = true);
 
   /**
    * Returns whether the given airspace is acknowledged for the whole day
@@ -245,6 +274,10 @@ public:
   bool IsActive(const AbstractAirspace &airspace) const noexcept;
 
 private:
+  AirspaceWarning *FindWarningByNotamDayAckKey(std::string_view key) noexcept;
+  const AirspaceWarning *
+  FindWarningByNotamDayAckKey(std::string_view key) const noexcept;
+
   bool UpdateTask(const AircraftState &state, const GlidePolar &glide_polar,
                   const TaskStats &task_stats);
   bool UpdateFilter(const AircraftState& state, const bool circling);
