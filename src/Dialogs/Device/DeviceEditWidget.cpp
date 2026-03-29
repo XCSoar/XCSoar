@@ -46,6 +46,7 @@ FillBaudRates(DataFieldEnum &dfe) noexcept
 static void
 FillTCPPorts(DataFieldEnum &dfe) noexcept
 {
+  dfe.addEnumText("55278 (Condor UDP)", 55278);
   dfe.addEnumText("4353", 4353);
   dfe.addEnumText("10110", 10110);
   dfe.addEnumText("4352", 4352);
