@@ -38,7 +38,8 @@ install_ios() {
   echo Installing dependencies for the iOS target...
   brew install automake autoconf \
     libtool \
-    cmake ninja
+    cmake ninja \
+    lua
   echo
 }
 

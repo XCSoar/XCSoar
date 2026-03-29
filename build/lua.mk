@@ -6,7 +6,12 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
 LIBLUA_LDLIBS = -llua
 LIBLUA_CPPFLAGS =
 else
+# Homebrew provides pkg-config module "lua"; Debian/Ubuntu use "lua5.4".
+ifeq ($(TARGET_IS_DARWIN),y)
+$(eval $(call pkg-config-library,LIBLUA,lua))
+else
 $(eval $(call pkg-config-library,LIBLUA,lua5.4))
+endif
 endif
 
 LUA_SOURCES = \
