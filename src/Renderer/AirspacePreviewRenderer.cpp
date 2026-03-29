@@ -79,13 +79,14 @@ AirspacePreviewRenderer::PrepareFill(
 }
 
 void
-AirspacePreviewRenderer::UnprepareFill([[maybe_unused]] Canvas &canvas)
+AirspacePreviewRenderer::UnprepareFill([[maybe_unused]] Canvas &canvas,
+                                       [[maybe_unused]] Color text_color) noexcept
 {
 #ifdef ENABLE_OPENGL
   ::glDisable(GL_BLEND);
 #elif defined(USE_GDI)
-  canvas.SetTextColor(COLOR_BLACK);
   canvas.SetMixCopy();
+  canvas.SetTextColor(text_color);
 #endif
 }
 
@@ -133,9 +134,10 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
   if (shape == AbstractAirspace::Shape::POLYGON)
     GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 
+  const Color text_color = canvas.GetTextColor();
   if (PrepareFill(canvas, as_type_or_class, look, settings)) {
     DrawShape(canvas, shape, pt, radius, pts);
-    UnprepareFill(canvas);
+    UnprepareFill(canvas, text_color);
   }
 
   if (PrepareOutline(canvas, as_type_or_class, look, settings))
