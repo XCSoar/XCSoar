@@ -2,8 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="@PACKAGE_NAME@"
           android:installLocation="auto"
-          android:versionCode="182"
-          android:versionName="7.44">
+          android:versionCode="74500000"
+          android:versionName="7.45">
+  <!--
+    versionCode / versionName are replaced for CI Android jobs in
+    .github/workflows/build-native.yml (master and release tags only).
+    versionCode = major*10^7 + minor*10^5 + patch*10^4 + build, where
+    build is 0 for a tag build and GITHUB_RUN_NUMBER otherwise.
+    android/AndroidManifest.xml is not updated by that step.
+  -->
   <!-- requestLegacyExternalStorage: Deprecated but still needed for
        compatibility with /sdcard/XCSoarData on Android 10 devices.
        On Android 11+ (API 30+), scoped storage is used regardless.
