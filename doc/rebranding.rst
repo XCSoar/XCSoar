@@ -128,7 +128,7 @@ Android Files
 -------------
 
 - :file:`android/res/values/strings.xml` - App display name
-- :file:`android/AndroidManifest.xml.in` - Android manifest
+- :file:`android/AndroidManifest.xml.template` - Android manifest template
 
 
 What Needs Manual Changes
