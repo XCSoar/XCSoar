@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "WaypointRenderer.hpp"
+#include "Renderer/MapWaypointDrawLimits.hpp"
 #include "WaypointRendererSettings.hpp"
 #include "WaypointIconRenderer.hpp"
 #include "WaypointLabelList.hpp"
@@ -144,7 +145,7 @@ class WaypointVisitorMap final
    * should ensure that the drawing methods don't need to hold a
    * mutex.
    */
-  StaticArray<VisibleWaypoint, 256> waypoints;
+  StaticArray<VisibleWaypoint, MAX_MAP_WAYPOINT_DRAW> waypoints;
 
   WaypointIconRenderer icon_renderer;
 

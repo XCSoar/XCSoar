@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Renderer/MapWaypointDrawLimits.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/Rect.hpp"
@@ -29,7 +30,7 @@ public:
 protected:
   PixelRect clip_rect;
 
-  StaticArray<Label, 256u> labels;
+  StaticArray<Label, MAX_MAP_WAYPOINT_DRAW> labels;
 
 public:
   explicit WaypointLabelList(PixelRect _rect) noexcept
