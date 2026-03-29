@@ -77,10 +77,11 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
     const int padding = Layout::GetTextPadding();
 
+    const Color text_color = canvas.GetTextColor();
     if (AirspacePreviewRenderer::PrepareFill(
         canvas, (AirspaceClass)i, look, renderer)) {
       canvas.DrawRectangle({second_x, rc.top + padding, rc.right - padding, rc.bottom - padding});
-      AirspacePreviewRenderer::UnprepareFill(canvas);
+      AirspacePreviewRenderer::UnprepareFill(canvas, text_color);
     }
     if (AirspacePreviewRenderer::PrepareOutline(
         canvas, (AirspaceClass)i, look, renderer)) {
