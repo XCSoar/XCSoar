@@ -4,6 +4,8 @@ Version 7.45 - not yet released
   - draw up to 1024 waypoints at once (was 256) #2327
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
+* calculations
+  - restore FFVV NetCoupe contest optimisation #2330
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
