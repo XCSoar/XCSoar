@@ -24,13 +24,26 @@
 #include "TransponderMode.hpp"
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
+#include "util/UTF8.hpp"
 
 #include <cstring>
 #include <cassert>
 #include <exception>
+#include <string>
 
 namespace {
 
+[[nodiscard]]
+static std::string
+SafeString(const std::string &input)
+{
+  if (input.empty())
+    return {};
+
+  return ValidateUTF8(input)
+    ? input
+    : std::string(_("[Invalid text]"));
+}
 
 void
 FormatAltitudeWithReference(char *buffer, size_t buffer_size,
@@ -241,17 +254,20 @@ NOTAMDetailsWidget::AddNOTAMIdentifiers(const char *notam_number,
 
   // Display ICAO location if we found the NOTAM
   if (notam_opt && !notam_opt->location.empty()) {
-    AddReadOnly(_("Location"), nullptr, notam_opt->location.c_str());
+    const auto location = SafeString(notam_opt->location);
+    AddReadOnly(_("Location"), nullptr, location.c_str());
   }
 
   // Display Q-code (feature type)
   if (notam_opt && !notam_opt->feature_type.empty()) {
-    AddReadOnly(_("Q-Code"), nullptr, notam_opt->feature_type.c_str());
+    const auto feature_type = SafeString(notam_opt->feature_type);
+    AddReadOnly(_("Q-Code"), nullptr, feature_type.c_str());
   }
 
   // NOTAM Series (if available)
   if (notam_opt && !notam_opt->series.empty()) {
-    AddReadOnly(_("Series"), nullptr, notam_opt->series.c_str());
+    const auto series = SafeString(notam_opt->series);
+    AddReadOnly(_("Series"), nullptr, series.c_str());
   }
 }
 
@@ -331,7 +347,7 @@ NOTAMDetailsWidget::AddNOTAMValidity(
     // Currently active
     buffer = _("Active");
   }
-  AddReadOnly(_("Now"), nullptr, buffer);
+  AddReadOnly(_("Status"), nullptr, buffer);
 }
 
 void
@@ -372,9 +388,11 @@ NOTAMDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddNOTAMIdentifiers(notam_number, notam_opt);
   
   // NOTAM text (stored in name field)
-  AddMultiLine(notam_opt && !notam_opt->text.empty()
-               ? notam_opt->text.c_str()
-               : airspace->GetName());
+  const auto text =
+    notam_opt && !notam_opt->text.empty()
+    ? SafeString(notam_opt->text)
+    : SafeString(airspace->GetName());
+  AddMultiLine(text.c_str());
 
   AddNOTAMValidity(notam_opt, buffer);
   AddNOTAMAltitudes(buffer);
