@@ -10,6 +10,8 @@
 #include "util/Serial.hpp"
 
 #include <list>
+#include <string>
+#include <unordered_set>
 
 class TaskStats;
 class GlidePolar;
@@ -42,6 +44,14 @@ class AirspaceWarningManager {
   using AirspaceWarningList = std::list<AirspaceWarning>;
 
   AirspaceWarningList warnings;
+
+  /**
+   * NOTAM areas are removed and re-created when the NOTAM list is refreshed,
+   * so #warnings cannot match the new #AbstractAirspace by pointer.  "Ack
+   * day" for NOTAM is also keyed by NOTAM number (#GetStationName()) so it
+   * survives updates.
+   */
+  std::unordered_set<std::string> notam_day_ack_by_station;
 
   /**
    * This number is incremented each time this object is modified.

@@ -5,11 +5,33 @@
 #include "Geo/GeoVector.hpp"
 #include "Airspaces.hpp"
 #include "AbstractAirspace.hpp"
+#include "Engine/Airspace/AirspaceClass.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
 
 static constexpr double CRUISE_FILTER_FACT = 0.5;
+
+[[gnu::const]]
+static bool
+IsNotamAirspace(const AbstractAirspace &airspace) noexcept
+{
+  return airspace.GetClassOrType() == AirspaceClass::NOTAM ||
+         airspace.GetTypeOrClass() == AirspaceClass::NOTAM;
+}
+
+/**
+ * Stable id for NOTAM day-ack: short identifier in #GetStationName().
+ */
+[[gnu::pure]]
+static const char *
+NotamDayAckKey(const AbstractAirspace &airspace) noexcept
+{
+  if (!IsNotamAirspace(airspace))
+    return nullptr;
+  const char *const s = airspace.GetStationName();
+  return (s != nullptr && s[0] != '\0') ? s : nullptr;
+}
 
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
                                                const Airspaces &_airspaces)
@@ -435,12 +457,24 @@ void
 AirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
                                        const bool set) noexcept
 {
+  if (const char *key = NotamDayAckKey(*airspace); key != nullptr) {
+    if (set)
+      notam_day_ack_by_station.emplace(key);
+    else
+      notam_day_ack_by_station.erase(key);
+  }
+
   GetWarning(std::move(airspace)).AcknowledgeDay(set);
 }
 
 bool
 AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexcept
 {
+  if (const char *key = NotamDayAckKey(airspace);
+      key != nullptr &&
+      notam_day_ack_by_station.find(key) != notam_day_ack_by_station.end())
+    return true;
+
   const AirspaceWarning *warning = GetWarningPtr(airspace);
   return warning != nullptr && warning->GetAckDay();
 }
