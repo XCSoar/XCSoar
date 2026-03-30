@@ -7,6 +7,15 @@ Version 7.45 - not yet released
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
     distance; tap to change home waypoint) #2320
+  - alternates: Alternate 1/2 InfoBoxes can follow the computed list (AUTO) or
+    a pilot-chosen field (MANUAL); tap the InfoBox to open the alternates list,
+    switch mode, and assign the selected row to that slot (runtime only; AUTO
+    clears the pin).  Titles show Altn 1/2 with AUTO or MAN.
+  - alternates: list holds up to 10 options (was 6); if the task only has one
+    automatic alternate, Alternate 2 no longer shows the same as Alternate 1.
+    Displayed glide is re-solved with the current aircraft state; value colour
+    encodes not reachable, final glide, need climb, and MANUAL on/below glide.
+    Manual updated en/de/fr/pt_BR #2347
   - android/ios: configure built-in GPS & sensors in the last device slot by
     default
   - status: show G-load availability in device list and variometer source in
