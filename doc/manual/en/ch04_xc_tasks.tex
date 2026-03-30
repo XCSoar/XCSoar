@@ -697,7 +697,7 @@ task details.
 \subsection*{Alternates}\label{sec:alternates}
 Alternates are maintained throughout the flight, reflecting good airmenship by 
 always keeping an eye on possible alternates.\menulabelr{\bmenug{Nav 1/2}\blink
-\bmenug{Alternates}} Six landing 
+\bmenug{Alternates}} Up to ten landing
 options are maintained. They are filtered by the configured ``alternates mode'' 
 criteria (Simple, Task, or Home). \config{alternatesmode} 
 Choosing Task or Home puts some bias on the presentation of alternates to the 
@@ -705,6 +705,14 @@ heading, you were taking whilst still task oriented.
 
 As is with every waypoint list, additional information might be called by tapping \bmenuw{Details} before deciding which final to go. Select a waypoint from the list and push \bmenuw{Goto}.
 \sketch{figures/alternates_list.png}
+
+The Alternate 1 / Alternate 2 InfoBoxes and their variants can be used either
+in \textbf{AUTO} mode or in \textbf{MANUAL} mode. AUTO is the default and
+shows the best automatically selected alternates. In MANUAL mode, a reachable
+alternate can be selected from the alternates list for each slot independently.
+This manual selection is runtime-only: it is not saved when XCSoar is
+restarted, and it remains active until the pilot changes it again or switches
+the slot back to AUTO.
 
 Although the items on the alternate list obey different rules they interact 
 in the same way 

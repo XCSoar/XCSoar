@@ -575,12 +575,21 @@ Hierbei werden alle navigatorischen Berechnungen der aktuellen Aufgabe abgebroch
 Wenn dies gewählt wurde,  ist jede Aufgabe, was immer auch vorher programmiert, abgebrochen.
 Die Berechnung der Landefelder erfolgt unter Berücksichtigung des eingestellten Sicherheits MC-Wert.
 
-\config{alternatesmode} Die Alternativ-Wegpunkliste ist nun gefüllt mit den nächsten zu erreichenden Flugplätzen, sortiert gemäß den Angaben des  "Alternativen-Modus" in den Konfigurations -Einstellungen
+\config{alternatesmode} Die Alternativ-Wegpunkliste ist nun mit bis zu zehn erreichbaren Flugplätzen gefüllt, sortiert gemäß den Angaben des  "Alternativen-Modus" in den Konfigurations -Einstellungen
 
 Die Anzeige wechselt in der Art, als daß ausschließlich mit \menulabel{\bmenut{Konfig}{2/3}\blink\bmenus{System}} der derzeit vorhandenen Höhe erreichbare
 Landefelder angezeigt werden.
 
 Das Verhalten, welche Landefelder in welcher Priorität angezeigt werden, kann \menulabel{\hspace{2.5em}\button{Endanflugrechner}\blink} unter \button{Alternativen Modus} voreingestellt werden.
+
+Die InfoBoxen \textbf{Alternative 1} / \textbf{Alternative 2} und deren
+Varianten können entweder im Modus \textbf{AUTO} oder \textbf{MANUELL}
+verwendet werden. AUTO ist die Voreinstellung und zeigt die automatisch
+ermittelten besten Alternativen an. Im manuellen Modus kann für jeden Slot
+unabhängig eine erreichbare Alternative aus der Alternativenliste ausgewählt
+werden. Diese Auswahl gilt nur zur Laufzeit: sie wird beim Neustart von
+\textsf{XCSoar} nicht gespeichert und bleibt aktiv, bis sie erneut geändert
+oder der Slot wieder auf AUTO zurückgestellt wird.
 
 Folgende Optionen sind dabei möglich:
 \begin{description}

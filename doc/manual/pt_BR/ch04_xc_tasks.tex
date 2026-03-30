@@ -431,11 +431,19 @@ Se as condições melhorarem, a prova pode ser retomada selecionando o mesmo bot
 
 \subsection*{Alternativos} \label{sec:alternates}
 Os pontos alternativos são mantidos durante o vôo, refletindo que o piloto mantém seus olhos nestes pontos.\menulabelr{\bmenug{Nav 1/2}\blink
-\bmenug{Alternativos}}.  Seis opções de pousos serão mantidas.  São filtradas pelos critérios de configuração (simples, prova ou casa). \config{alternatesmode} 
+\bmenug{Alternativos}}.  Até dez opções de pouso são mantidas.  São filtradas pelos critérios de configuração (simples, prova ou casa). \config{alternatesmode} 
 Escolhendo Prova ou Casa, há a inserção de alguns conceitos na apresentação dos alternativos, enquanto você está sendo orientado pela prova. 
 
 Igualmente quando se tem toda a lista de waypoints, as informações adicionais podem ser vistas clicando em \bmenuw{Detalhes} antes de decidir para qual ponto se navegara.  Selecione um waypoint da lista e clique em \bmenuw{Ir Para}.
 \sketch{figures/alternates_list.png}
+
+As InfoBoxes \textbf{Alternativo 1} / \textbf{Alternativo 2} e suas variantes
+podem funcionar em modo \textbf{AUTO} ou \textbf{MANUAL}. AUTO é o padrão e
+mostra os melhores alternativos escolhidos automaticamente. No modo MANUAL, um
+alternativo alcançável pode ser selecionado na lista de alternativos para cada
+slot de forma independente. Esta seleção manual vale apenas durante a execução
+atual: ela não é salva ao reiniciar o \textsf{XCSoar} e permanece ativa até o
+piloto alterá-la novamente ou voltar o slot para AUTO.
 
 Todavia, os itens na lista de alternativos obedecem regras diferentes e interagem da mesma forma com a prova atual.  Escolher um ponto na lista de alternativos aborta a prova; uma vez que as condições melhores, o resumo da prova pode ser realizado pelo botão já mencionado.
 
@@ -688,4 +696,3 @@ O botão “Calculador” abre a calculadora de prova (ex. para ajustar o alcanc
 O XCSoar computa a hora do nascer e pôr do sol, mostrado na janela de Estado da aeronave (veja seção ~\ref{sec:time-status}).  Observe que o terreno local e condições atmosféricas podem resultar em má visibilidade antes do pôr do sol.
 Para sistemas PDA, o relógio é ajustado para a luz solar economizando tempo de acordo com os ajustes no menu de operação.  Para o Altair, o deslocamento de hora UTC deve ser ajustado manualmente para hora correta na janela de ajuste de configurações.
 Se o tempo esperado de chegada no waypoint final da prova é posterior ao pôr do sol, haverá uma mensagem de alerta informando esta ação.
-
