@@ -10,6 +10,8 @@ Version 7.45 - not yet released
   - terrain: add new terrain shading orientation "fixed (Top Left)"
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
+* bug fixes
+  - Form/DataField/Enum: remove the limit of 128 internal entries (It was dropping the newest InfoBoxes, as we have 130 of them now)
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
