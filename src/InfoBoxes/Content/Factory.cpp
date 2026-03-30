@@ -655,7 +655,9 @@ static constexpr MetaData meta_data[] = {
     N_("Alternate 1"),
     N_("Altn 1"),
     N_("Name and bearing to the best alternate landing location."),
-    IBFHelperInt<InfoBoxContentAlternateName, 0>::Create,
+    []() noexcept -> InfoBoxContent * {
+      return new InfoBoxContentAlternateName(AlternateInfoBoxSlot::FIRST);
+    },
   },
 
   // e_Alternate_2_Name
@@ -663,7 +665,9 @@ static constexpr MetaData meta_data[] = {
     N_("Alternate 2"),
     N_("Altn 2"),
     N_("Name and bearing to the second-best alternate landing location."),
-    IBFHelperInt<InfoBoxContentAlternateName, 1>::Create,
+    []() noexcept -> InfoBoxContent * {
+      return new InfoBoxContentAlternateName(AlternateInfoBoxSlot::SECOND);
+    },
   },
 
   // e_Alternate_1_GR
@@ -671,7 +675,9 @@ static constexpr MetaData meta_data[] = {
     N_("Alternate 1 GR"),
     N_("Altn 1 GR"),
     N_("Geometric gradient to the arrival height above the best alternate landing location. This is not adjusted for total energy."),
-    IBFHelperInt<InfoBoxContentAlternateGR, 0>::Create,
+    []() noexcept -> InfoBoxContent * {
+      return new InfoBoxContentAlternateGR(AlternateInfoBoxSlot::FIRST);
+    },
   },
 
   // e_H_QFE
@@ -1060,7 +1066,9 @@ static constexpr MetaData meta_data[] = {
     N_("Alternate 2 GR"),
     N_("Altn 2 GR"),
     N_("Geometric gradient to the arrival height above the second-best alternate landing location. This is not adjusted for total energy."),
-    IBFHelperInt<InfoBoxContentAlternateGR, 1>::Create,
+    []() noexcept -> InfoBoxContent * {
+      return new InfoBoxContentAlternateGR(AlternateInfoBoxSlot::SECOND);
+    },
   },
 
   // e_HeartRate
@@ -1140,7 +1148,9 @@ static constexpr MetaData meta_data[] = {
     N_("Alternate 1 altitude difference"),
     N_("Altn 1 AltD"),
     N_("Arrival altitude at the best alternate landing location relative to the safety arrival height."),
-    IBFHelperInt<InfoBoxContentAlternateAltDiff, 0>::Create,
+    []() noexcept -> InfoBoxContent * {
+      return new InfoBoxContentAlternateAltDiff(AlternateInfoBoxSlot::FIRST);
+    },
   },
 
   // e_Alternate_2_AltDiff
@@ -1148,7 +1158,9 @@ static constexpr MetaData meta_data[] = {
     N_("Alternate 2 altitude difference"),
     N_("Altn 2 AltD"),
     N_("Arrival altitude at the second-best alternate landing location relative to the safety arrival height."),
-    IBFHelperInt<InfoBoxContentAlternateAltDiff, 1>::Create,
+    []() noexcept -> InfoBoxContent * {
+      return new InfoBoxContentAlternateAltDiff(AlternateInfoBoxSlot::SECOND);
+    },
   },
 
   // e_Home

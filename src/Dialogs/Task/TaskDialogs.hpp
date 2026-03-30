@@ -3,7 +3,11 @@
 
 #pragma once
 
+#include "InfoBoxes/Content/Alternate.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
+
 #include <memory>
+#include <optional>
 
 class OrderedTask;
 class Waypoints;
@@ -49,5 +53,23 @@ dlgTaskOptionalStarts(Waypoints &waypoints, OrderedTask &task);
 void
 dlgTargetShowModal(int TargetPoint = -1);
 
+/**
+ * Shows the current alternates list.
+ *
+ * @param slot if set, the dialog exposes the manual/auto controls for
+ * the specified alternate InfoBox slot; otherwise it behaves as a
+ * generic alternates list dialog
+ */
 void
-dlgAlternatesListShowModal(Waypoints *waypoints) noexcept;
+dlgAlternatesListShowModal(Waypoints *waypoints,
+                           std::optional<AlternateInfoBoxSlot> slot =
+                             std::nullopt) noexcept;
+
+/**
+ * Shows the current alternates list and returns the selected waypoint.
+ *
+ * This is the generic selection flow used by the manual alternate
+ * feature and does not expose slot-specific controls.
+ */
+WaypointPtr
+dlgAlternatesListSelectWaypoint() noexcept;
