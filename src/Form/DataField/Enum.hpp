@@ -4,10 +4,10 @@
 #pragma once
 
 #include "Base.hpp"
-#include "util/StaticArray.hxx"
 
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 /**
  * A struct that is used for static initialisation of the enum list.
@@ -87,7 +87,7 @@ public:
   };
 
 private:
-  StaticArray<Entry, 128> entries;
+  std::vector<Entry> entries;
   std::size_t value = 0;
 
 public:
@@ -119,23 +119,23 @@ public:
 
   bool AddChoice(unsigned id, const char *text,
                  const char *display_string=nullptr,
-                 const char *help=nullptr) noexcept;
+                 const char *help=nullptr);
 
   /**
    * Add choices from the specified nullptr-terminated list (the last
    * entry has a nullptr display_string).  All display strings and help
    * texts are translated with gettext() by this method.
    */
-  void AddChoices(const StaticEnumChoice *list) noexcept;
+  void AddChoices(const StaticEnumChoice *list);
 
   bool addEnumText(const char *text, unsigned id,
-                   const char *help=nullptr) noexcept {
+                   const char *help=nullptr) {
     return AddChoice(id, text, nullptr, help);
   }
 
   unsigned addEnumText(const char *Text, const char *display_string=nullptr,
-                       const char *ItemHelpText=nullptr) noexcept;
-  void addEnumTexts(const char *const*list) noexcept;
+                       const char *ItemHelpText=nullptr);
+  void addEnumTexts(const char *const*list);
 
   /**
    * @return help of current enum item or nullptr if current item has no help
@@ -183,7 +183,7 @@ public:
    *
    * @return the new integer value
    */
-  int SetStringAutoAdd(const char *text) noexcept;
+  int SetStringAutoAdd(const char *text);
 
   void Sort(std::size_t startindex = 0) noexcept;
 
