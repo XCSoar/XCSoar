@@ -14,6 +14,7 @@
 #include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "Dialogs/DataManagement/BackupRestorePanel.hpp"
 #include "Dialogs/DataManagement/ImportDataPanel.hpp"
+#include "Dialogs/DataManagement/AdvancedFileExplorer.hpp"
 #include "Dialogs/Message.hpp"
 
 class DataManagementWidget : public RowFormWidget {
@@ -28,6 +29,7 @@ public:
     AddButton(_("Export flights"), [](){ ShowExportFlightsDialog(); });
     AddButton(_("Import data"), [](){ ShowImportDataDialog(); });
     AddButton(_("Backup manager"), [](){ ShowBackupManagerDialog(); });
+    AddButton(_("Advanced File Explorer"), [](){ ShowAdvancedFileExplorerDialog(); });
   }
 };
 
