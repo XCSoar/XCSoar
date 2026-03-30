@@ -7,11 +7,11 @@ Version 7.45 - not yet released
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
     distance; tap to change home waypoint) #2320
+  - infoboxen: InfoBox setup is no longer limited to 128 types; you can select
+    every available type (XCSoar now has more than 128) #2343
   - terrain: add new terrain shading orientation "fixed (Top Left)"
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
-* bug fixes
-  - Form/DataField/Enum: remove the limit of 128 internal entries (It was dropping the newest InfoBoxes, as we have 130 of them now)
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
