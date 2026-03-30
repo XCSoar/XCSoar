@@ -11,6 +11,8 @@
 #include <cctype>
 #include <cstring>
 #include <string>
+#include <vector>
+#include <dirent.h>
 
 struct StorageVolume {
   AllocatedPath device;
@@ -18,12 +20,18 @@ struct StorageVolume {
   std::string fs_type;
 };
 
+static void TriggerAutofsMounts();
 static std::vector<StorageVolume> ParseMounts();
 static bool IsRemovableBlock(const AllocatedPath &device_path);
 
 std::vector<std::shared_ptr<StorageDevice>>
 LinuxStorageMonitor::Enumerate()
 {
+  /* Wake any autofs-managed mount points before reading the mount
+     table.  systemd .automount units only populate /proc/self/mounts
+     with the real block device after the mount point is accessed. */
+  TriggerAutofsMounts();
+
   std::vector<std::shared_ptr<StorageDevice>> result;
 
   for (auto &vol : ParseMounts()) {
@@ -34,6 +42,51 @@ LinuxStorageMonitor::Enumerate()
   }
 
   return result;
+}
+
+/**
+ * Scan /proc/self/mounts for autofs entries and access each mount
+ * point to trigger the automounter.  This is a no-op when no autofs
+ * mounts exist.
+ */
+static void
+TriggerAutofsMounts()
+try {
+  FileLineReaderA reader(Path("/proc/self/mounts"));
+
+  const char *line;
+  while ((line = reader.ReadLine()) != nullptr) {
+    const char *device = line;
+    const char *sep1 = std::strchr(device, ' ');
+    if (sep1 == nullptr)
+      continue;
+
+    const char *mount = sep1 + 1;
+    const char *sep2 = std::strchr(mount, ' ');
+    if (sep2 == nullptr)
+      continue;
+
+    const char *fstype = sep2 + 1;
+    const char *sep3 = std::strchr(fstype, ' ');
+
+    const std::string fs_str = sep3 != nullptr
+      ? std::string(fstype, sep3) : std::string(fstype);
+
+    if (fs_str != "autofs")
+      continue;
+
+    std::string mount_str(mount, sep2);
+    const std::string mount_path = UnescapeCString(mount_str);
+
+    /* Opening the directory triggers the automount daemon.
+       A plain stat() is not sufficient — autofs responds to
+       stat() with its own metadata without mounting.  opendir()
+       forces the kernel to resolve the underlying filesystem. */
+    DIR *d = ::opendir(mount_path.c_str());
+    if (d != nullptr)
+      ::closedir(d);
+  }
+} catch (...) {
 }
 
 static std::vector<StorageVolume>
@@ -88,7 +141,8 @@ IsRemovableBlock(const AllocatedPath &device_path)
   if (dev_utf8.rfind("/dev/", 0) != 0)
     return false;
 
-  // Prefer sysfs partition metadata to resolve the base device name.
+  // Resolve the base (whole-disk) device name for a partition so that
+  // sysfs attributes like "removable" are read from the right entry.
   std::string name = dev_utf8.substr(5);
   const std::string sysfs_class = "/sys/class/block/" + name;
   {
@@ -101,22 +155,34 @@ IsRemovableBlock(const AllocatedPath &device_path)
         const Path base = Path(parent).GetBase();
         if (base != nullptr) {
           const std::string base_name = base.ToUTF8();
-          if (!base_name.empty())
+          // Verify the resolved name is a real block device in sysfs;
+          // some kernel versions use a flat symlink layout that makes
+          // the parent path point to a non-device directory.
+          if (!base_name.empty() &&
+              File::Exists(AllocatedPath(
+                ("/sys/class/block/" + base_name).c_str())))
             name = base_name;
         }
       }
     }
   }
 
-  if (name == dev_utf8.substr(5)) {
-    const std::string sysfs_base = "/sys/class/block/" + name;
-    if (!File::Exists(AllocatedPath(sysfs_base.c_str()))) {
-      // Fallback: strip partition suffix (digits and optional 'p').
-      // Assumes common Linux naming: sdXN, mmcblkNpM, nvmeXnYpZ.
-      while (!name.empty() && std::isdigit(static_cast<unsigned char>(name.back())))
-        name.pop_back();
-      if (!name.empty() && name.back() == 'p')
-        name.pop_back();
+  /* If the name still looks like a partition (no "removable" sysfs
+     attribute), derive the base device by stripping the numeric
+     partition suffix.  This handles kernels where the sysfs symlink
+     layout changed. */
+  {
+    const std::string removable_path =
+      "/sys/class/block/" + name + "/removable";
+    if (!File::Exists(AllocatedPath(removable_path.c_str()))) {
+      std::string stripped = dev_utf8.substr(5);
+      while (!stripped.empty() &&
+             std::isdigit(static_cast<unsigned char>(stripped.back())))
+        stripped.pop_back();
+      if (!stripped.empty() && stripped.back() == 'p')
+        stripped.pop_back();
+      if (!stripped.empty() && stripped != dev_utf8.substr(5))
+        name = stripped;
     }
   }
 
