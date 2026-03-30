@@ -73,6 +73,12 @@ public:
   }
 
 private:
+  [[nodiscard]] [[gnu::pure]]
+  bool
+  HasValidSelection() const noexcept {
+    return !alternates.empty() && GetCursorIndex() < alternates.size();
+  }
+
   /**
    * Returns the configured alternate slot for the slot-aware dialog
    * path.  This must only be used when slot-specific controls have
@@ -131,6 +137,11 @@ public:
 
 private:
   void UpdateButtons() noexcept {
+
+    // Check if window is initialized (widget is prepared)
+    if (!IsDefined())
+      return;
+
     if (set_active_freq_button == nullptr || set_standby_freq_button == nullptr)
       return;
 
@@ -141,21 +152,11 @@ private:
                                 : _("Altn mode: AUTO"));
     }
 
-    if (alternates.empty()) {
-      set_active_freq_button->SetEnabled(false);
-      set_standby_freq_button->SetEnabled(false);
-      if (manual_button != nullptr)
-        manual_button->SetEnabled(false);
-      return;
-    }
-
-    // Check if window is initialized (widget is prepared)
-    if (!IsDefined())
-      return;
-
-    // Check if we have a valid cursor index
-    const unsigned cursor_index = GetCursorIndex();
-    if (cursor_index >= alternates.size()) {
+    if (!HasValidSelection()) {
+      if (goto_button != nullptr)
+        goto_button->SetEnabled(false);
+      if (details_button != nullptr)
+        details_button->SetEnabled(false);
       set_active_freq_button->SetEnabled(false);
       set_standby_freq_button->SetEnabled(false);
       if (manual_button != nullptr)
@@ -165,6 +166,10 @@ private:
 
     const auto &waypoint = GetSelectedWaypoint();
     const bool has_freq = waypoint.radio_frequency.IsDefined();
+    if (goto_button != nullptr)
+      goto_button->SetEnabled(true);
+    if (details_button != nullptr)
+      details_button->SetEnabled(true);
     set_active_freq_button->SetEnabled(has_freq);
     set_standby_freq_button->SetEnabled(has_freq);
     if (manual_button != nullptr) {
@@ -179,6 +184,9 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 {
   if (!select_mode) {
     goto_button = dialog.AddButton(_("Goto"), [this](){
+      if (!HasValidSelection())
+        return;
+
       // Remove old temporary goto waypoint when selecting a regular waypoint
       if (data_components != nullptr && data_components->waypoints != nullptr) {
         auto &way_points = *data_components->waypoints;
@@ -207,6 +215,9 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
     });
 
     manual_button = dialog.AddButton(_("Select as Alternate"), [this](){
+      if (!HasValidSelection())
+        return;
+
       const auto slot = GetConfiguredSlot();
       SetManualAlternateWaypoint(slot, GetSelectedWaypointPtr());
       SetAlternateInfoBoxMode(slot, AlternateInfoBoxMode::MANUAL);
@@ -214,15 +225,22 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
     });
   }
 
-  details_button = dialog.AddButton(_("Details"), DETAILS_MODAL_RESULT);
+  if (!select_mode)
+    details_button = dialog.AddButton(_("Details"), DETAILS_MODAL_RESULT);
 
   set_active_freq_button = dialog.AddButton(_("Set Active Frequency"), [this](){
+    if (!HasValidSelection())
+      return;
+
     auto const &waypoint = GetSelectedWaypoint();
     ActionInterface::SetActiveFrequency(waypoint.radio_frequency,
                                         waypoint.name.c_str());
   });
 
   set_standby_freq_button = dialog.AddButton(_("Set Standby Frequency"), [this](){
+    if (!HasValidSelection())
+      return;
+
     auto const &waypoint = GetSelectedWaypoint();
     ActionInterface::SetStandbyFrequency(waypoint.radio_frequency,
                                          waypoint.name.c_str());
@@ -249,7 +267,10 @@ AlternatesListWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 void
 AlternatesListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 {
-  details_button->Click();
+  if (select_mode && select_button != nullptr)
+    select_button->Click();
+  else if (details_button != nullptr)
+    details_button->Click();
 }
 
 void
@@ -263,7 +284,8 @@ dlgAlternatesListShowModal(Waypoints *waypoints,
 
   auto widget = std::make_unique<AlternatesListWidget>(dialog_look, false,
                                                        slot);
-  if (!widget->Update()) {
+  const bool has_alternates = widget->Update();
+  if (!has_alternates && !slot.has_value()) {
     /* no alternates: don't show the dialog */
     Message::AddMessage(_("No alternates available"));
     return;

@@ -541,7 +541,7 @@ qui était actif avant l'abandon du circuit est alors réactivé, ainsi que tous
 \subsection*{Dégagements}\label{sec:alternates}
 Les terrains de dégagements sont mis à jour tout au long du vol, ce qui permet un bonne conscience
 de la situation en jetant un coup d'œil aux dégagements possibles.\menulabelr{\bmenug{Nav. 1/2}\blink
-\bmenug{Dégagements}} Six options d'atterrissages
+\bmenug{Dégagements}} Jusqu'à dix options d'atterrissages
 sont considérées. Elles sont filtrées par les critères de configuration de l'``ordre de dégagement''
 (simple, circuit ou base). \config{alternatesmode}.
 Choisir ``Circuit'' ou ``Base'' modifie l'ordre proposé des dégagements en favorisant 
@@ -549,6 +549,15 @@ la direction que vous aviez lorsque vous étiez encore en circuit.
 
 Comme avec toute liste de points de virage, des informations supplémentaires peuvent être affichées en appuyant sur \bmenuw{Détails} avant de décider de son choix. Sélectionner le point de virage de la liste et appuyer sur \bmenuw{Aller à}.
 \sketch{figures/alternates_list.png}
+
+Les InfoBoxes \textbf{Dégagement 1} / \textbf{Dégagement 2} et leurs variantes
+peuvent fonctionner en mode \textbf{AUTO} ou en mode \textbf{MANUEL}. AUTO est
+le mode par défaut et affiche les meilleurs dégagements choisis
+automatiquement. En mode MANUEL, il est possible de choisir séparément pour
+chaque emplacement un dégagement atteignable dans la liste des dégagements.
+Cette sélection manuelle n'est valable que pendant l'exécution en cours : elle
+n'est pas sauvegardée au redémarrage de \xc{} et reste active jusqu'à
+ce qu'elle soit modifiée ou que l'emplacement soit remis sur AUTO.
 
 Bien que les éléments de la liste des dégagements suivent des règles différentes, ils ont le même comportement vis-à-vis du circuit en cours. Faire sa sélection dans la liste des dégagements annule le circuit en cours. Une fois que les conditions s'améliorent, la reprise du circuit en utilisant le bouton déjà mentionné.
 
