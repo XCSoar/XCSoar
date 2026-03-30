@@ -25,7 +25,7 @@ class AlternateTask final : public AbortTask
   using DivertVector = std::vector<Divert>;
 
   /// number of alternates
-  static constexpr DivertVector::size_type max_alternates = 6;
+  static constexpr DivertVector::size_type max_alternates = 10;
 
   AlternateList alternates;
   GeoPoint destination;
