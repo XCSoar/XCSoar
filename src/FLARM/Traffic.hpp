@@ -137,6 +137,15 @@ struct FlarmTraffic {
   /** Has the geographical location been calculated yet? */
   bool location_available;
 
+  /**
+   * Does this target have an absolute geographic location that was
+   * received from an external traffic source (e.g. ADS-B)?
+   *
+   * If true, FLARM post-processing must not overwrite #location from
+   * #relative_north/#relative_east.
+   */
+  bool absolute_location;
+
   /** Was the direction of the target received from the flarm or calculated? */
   bool track_received;
 
@@ -145,6 +154,15 @@ struct FlarmTraffic {
 
   /** Has the absolute altitude of the target been calculated yet? */
   bool altitude_available;
+
+  /**
+   * Does this target have an absolute altitude received from an
+   * external traffic source?
+   *
+   * If true, FLARM post-processing must not overwrite #altitude from
+   * #relative_altitude and ownship GPS altitude.
+   */
+  bool absolute_altitude;
 
   /** Was the turn rate of the target received from the flarm or calculated? */
   bool turn_rate_received;
@@ -182,6 +200,8 @@ struct FlarmTraffic {
     rssi = 0;
     rssi_available = false;
     no_track = false;
+    absolute_location = false;
+    absolute_altitude = false;
   }
 
   Angle Bearing() const noexcept {

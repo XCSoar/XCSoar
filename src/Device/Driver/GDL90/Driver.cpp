@@ -310,13 +310,16 @@ GDL90Device::ParseTrafficReport(std::span<const uint8_t> payload,
 
   slot->location = GeoPoint(Angle::Degrees(lon_deg), Angle::Degrees(lat_deg));
   slot->location_available = true;
+  slot->absolute_location = true;
 
   if (altitude_available) {
     slot->altitude = altitude;
     slot->altitude_available = true;
+    slot->absolute_altitude = true;
   } else {
     slot->altitude = 0;
     slot->altitude_available = false;
+    slot->absolute_altitude = false;
   }
 
   if (track_received) {

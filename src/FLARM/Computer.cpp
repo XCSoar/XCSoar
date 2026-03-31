@@ -55,12 +55,22 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
         traffic.name = fname;
     }
 
+    if (traffic.absolute_location && traffic.location.IsValid() &&
+        basic.location_available) {
+      const GeoVector vec{basic.location, traffic.location};
+      traffic.relative_north = vec.distance * vec.bearing.cos();
+      traffic.relative_east = vec.distance * vec.bearing.sin();
+    }
+
     // Calculate distance
     traffic.distance = hypot(traffic.relative_north, traffic.relative_east);
 
     // Calculate Location
-    traffic.location_available = basic.location_available;
-    if (traffic.location_available) {
+    traffic.location_available = traffic.absolute_location
+      ? traffic.location.IsValid()
+      : basic.location_available;
+
+    if (!traffic.absolute_location && traffic.location_available) {
       traffic.location.latitude =
           Angle::Degrees(traffic.relative_north * north_to_latitude) +
           basic.location.latitude;
@@ -71,9 +81,14 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     }
 
     // Calculate absolute altitude
-    traffic.altitude_available = basic.gps_altitude_available;
-    if (traffic.altitude_available)
-      traffic.altitude = traffic.relative_altitude + RoughAltitude(basic.gps_altitude);
+    if (!traffic.absolute_altitude) {
+      traffic.altitude_available = basic.gps_altitude_available;
+      if (traffic.altitude_available)
+        traffic.altitude = traffic.relative_altitude +
+          RoughAltitude(basic.gps_altitude);
+    } else if (basic.gps_altitude_available && traffic.altitude_available) {
+      traffic.relative_altitude = traffic.altitude - RoughAltitude(basic.gps_altitude);
+    }
 
     // Calculate average climb rate
     traffic.climb_rate_avg30s_available = traffic.altitude_available;
