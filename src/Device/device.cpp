@@ -114,7 +114,7 @@ devStartup(MultipleDevices &devices, const SystemSettings &settings)
     config.Clear();
     config.port_type = DeviceConfig::PortType::INTERNAL;
 
-    DeviceDescriptor &device = devices[0];
+    DeviceDescriptor &device = devices[INTERNAL_DEVICE_SLOT];
     devInitOne(device, config);
 #endif
   }
