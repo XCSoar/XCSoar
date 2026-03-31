@@ -2,15 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "VarioSynthesiser.hpp"
-#include "Math/FastMath.hpp"
 
 #include <algorithm>
 #include <cassert>
-
-/**
- * The minimum and maximum vario range for the constants below [cm/s].
- */
-static constexpr int min_vario = -500, max_vario = 500;
 
 unsigned
 VarioSynthesiser::VarioToFrequency(int ivario)
@@ -18,7 +12,44 @@ VarioSynthesiser::VarioToFrequency(int ivario)
   return ivario > 0
     ? (zero_frequency + (unsigned)ivario * (max_frequency - zero_frequency)
        / (unsigned)max_vario)
-    : (zero_frequency - (unsigned)(ivario * (int)(zero_frequency - min_frequency) / min_vario));
+    : (zero_frequency -
+       (unsigned)(ivario * (int)(zero_frequency - min_frequency) / min_vario));
+}
+
+void
+VarioSynthesiser::UpdateEnvelopeParameters()
+{
+  env_attack_samples = std::max(1u, sample_rate * ATTACK_MS / 1000);
+  env_release_samples = std::max(1u, sample_rate * RELEASE_MS / 1000);
+}
+
+void
+VarioSynthesiser::UpdateGateFromVario(int ivario)
+{
+  if (ivario <= 0) {
+    /* sink/neutral: continuous */
+    gate_on = true;
+    gate_on_samples = 1;
+    gate_off_samples = 0;
+    gate_remaining = 0;
+    return;
+  }
+
+  const unsigned period_samples = sample_rate *
+    (min_period_ms + (max_vario - (unsigned)ivario) *
+     (max_period_ms - min_period_ms) / (unsigned)max_vario) / 1000;
+
+  /* 2/3 on, 1/3 off */
+  const unsigned off = std::max(1u, period_samples / 3);
+  const unsigned on = std::max(1u, period_samples - off);
+
+  gate_on_samples = on;
+  gate_off_samples = off;
+
+  if (gate_remaining == 0) {
+    gate_on = true;
+    gate_remaining = gate_on_samples;
+  }
 }
 
 void
@@ -26,64 +57,27 @@ VarioSynthesiser::SetVario(double vario)
 {
   const std::lock_guard lock{mutex};
 
+  UpdateEnvelopeParameters();
+
   const int ivario = std::clamp((int)(vario * 100), min_vario, max_vario);
 
   if (dead_band_enabled && InDeadBand(ivario)) {
-    /* inside the "dead band" */
-    UnsafeSetSilence();
+    env_target = 0;
     return;
   }
 
-  /* update the ToneSynthesiser base class */
   SetTone(VarioToFrequency(ivario));
+  UpdateGateFromVario(ivario);
 
-  if (ivario > 0) {
-    /* while climbing, the vario sound gets interrupted by silence
-       periodically */
-
-    const unsigned period_ms = sample_rate
-      * (min_period_ms + (max_vario - ivario)
-         * (max_period_ms - min_period_ms) / max_vario)
-      / 1000;
-
-    silence_count = period_ms / 3;
-    audible_count = period_ms - silence_count;
-
-    /* preserve the old "_remaining" values as much as possible, to
-       avoid chopping off the previous tone */
-
-    if (audible_remaining > audible_count)
-      audible_remaining = audible_count;
-
-    if (silence_remaining > silence_count)
-      silence_remaining = silence_count;
-  } else {
-    /* continuous tone while sinking */
-    audible_count = 1;
-    silence_count = 0;
-  }
+  /* set target based on gate */
+  env_target = gate_on ? ENV_MAX : 0;
 }
 
 void
 VarioSynthesiser::SetSilence()
 {
   const std::lock_guard lock{mutex};
-  UnsafeSetSilence();
-}
-
-void
-VarioSynthesiser::UnsafeSetSilence()
-{
-  audible_count = 0;
-  silence_count = 1;
-
-  if (audible_remaining > 0)
-    /* quit the current period as early as possible; the method
-       Synthesise() will take care for finishing the current sine
-       wave to avoid clicking noise */
-    audible_remaining = 1;
-
-  silence_remaining = 0;
+  env_target = 0;
 }
 
 
@@ -92,49 +86,35 @@ VarioSynthesiser::Synthesise(int16_t *buffer, size_t n)
 {
   const std::lock_guard lock{mutex};
 
-  assert(audible_count > 0 || silence_count > 0);
+  assert(env_attack_samples > 0);
+  assert(env_release_samples > 0);
 
-  if (silence_count == 0) {
-    /* magic value for "continuous tone" */
-    ToneSynthesiser::Synthesise(buffer, n);
-    return;
-  }
+  ToneSynthesiser::Synthesise(buffer, n);
 
-  while (n > 0) {
-    if (audible_remaining > 0) {
-      /* generate a period of audible tone */
-
-      unsigned o = silence_count > 0
-        ? std::min(n, audible_remaining)
-        : n;
-      ToneSynthesiser::Synthesise(buffer, o);
-      buffer += o;
-      n -= o;
-      audible_remaining -= o;
-
-      if (audible_remaining == 0 && silence_remaining > 0) {
-        /* finish the current sine wave to avoid clicking noise */
-        audible_remaining = ToZero();
-        if (audible_remaining == 0)
-          /* finished, we can now emit a period of silence */
-          Restart();
+  for (size_t i = 0; i < n; ++i) {
+    /* gate timing (climb beep mode) */
+    if (gate_off_samples > 0) {
+      if (gate_remaining == 0) {
+        gate_on = !gate_on;
+        gate_remaining = gate_on ? gate_on_samples : gate_off_samples;
+        env_target = gate_on ? ENV_MAX : 0;
       }
-    } else if (silence_remaining > 0) {
-      /* generate a period of silence (climbing) */
 
-      unsigned o = audible_count > 0
-        ? std::min(n, silence_remaining)
-        : n;
-      /* the "silence" PCM sample value is zero */
-      std::fill_n(buffer, o, 0);
-      buffer += o;
-      n -= o;
-      silence_remaining -= o;
-    } else {
-      /* period finished, begin next one */
-
-      audible_remaining = audible_count;
-      silence_remaining = silence_count;
+      --gate_remaining;
     }
+
+    /* envelope */
+    if (env < env_target) {
+      const int step = std::max(1, ENV_MAX / (int)env_attack_samples);
+      env = std::min(env_target, env + step);
+    } else if (env > env_target) {
+      const int step = std::max(1, ENV_MAX / (int)env_release_samples);
+      env = std::max(env_target, env - step);
+    }
+
+    buffer[i] = (int16_t)((int)buffer[i] * env / ENV_MAX);
   }
+
+  if (env == 0)
+    Restart();
 }

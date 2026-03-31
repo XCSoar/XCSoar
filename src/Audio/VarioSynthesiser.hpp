@@ -11,28 +11,29 @@
  */
 class VarioSynthesiser final : public ToneSynthesiser {
   /**
-   * This mutex protects all atttributes below.  It is locked
-   * automatically by all public methods.
+   * This mutex protects all attributes below. It is locked automatically
+   * by all public methods.
    */
   Mutex mutex;
 
-  /**
-   * The number of audible samples in each period.
-   */
-  size_t audible_count;
+  static constexpr int min_vario = -500, max_vario = 500;
+
+  /* envelope (Q15: 0..32767) */
+  static constexpr int ENV_MAX = 32767;
+  static constexpr unsigned ATTACK_MS = 3;
+  static constexpr unsigned RELEASE_MS = 5;
+
+  int env = 0;
+  int env_target = 0;
+  unsigned env_attack_samples = 1;
+  unsigned env_release_samples = 1;
 
   /**
-   * The number of silent samples in each period.  If this is zero,
-   * then no silence will be generated (continuous tone).
+   * Gating for climb "beep" mode.
    */
-  size_t silence_count;
-
-  /**
-   * The number of audible/silence samples remaining in the current
-   * period.  These two attributes will be reset to the according
-   * _count value when both reach zero.
-   */
-  size_t audible_remaining, silence_remaining;
+  unsigned gate_on_samples = 1, gate_off_samples = 1;
+  unsigned gate_remaining = 0;
+  bool gate_on = true;
 
   bool dead_band_enabled;
 
@@ -70,12 +71,21 @@ class VarioSynthesiser final : public ToneSynthesiser {
 public:
   explicit VarioSynthesiser(unsigned sample_rate)
     :ToneSynthesiser(sample_rate),
-     audible_count(0), silence_count(1),
-     audible_remaining(0), silence_remaining(0),
      dead_band_enabled(false),
      min_frequency(200), zero_frequency(500), max_frequency(1500),
      min_period_ms(150), max_period_ms(600),
      min_dead(-30), max_dead(10) {}
+
+  /**
+   * Set the (software) volume of the generated tone.
+   *
+   * This method is thread-safe and may be called while playback is
+   * running.
+   */
+  void SetVarioVolume(unsigned volume) {
+    const std::lock_guard lock{mutex};
+    ToneSynthesiser::SetVolume(volume);
+  }
 
   /**
    * Update the vario value.  This calculates a new tone frequency and
@@ -94,6 +104,7 @@ public:
    * Enable/disable the dead band silence
    */
   void SetDeadBand(bool enabled) {
+    const std::lock_guard lock{mutex};
     dead_band_enabled = enabled;
   }
 
@@ -101,6 +112,7 @@ public:
    * Set the base frequencies for minimum, zero and maximum lift
    */
   void SetFrequencies(unsigned min, unsigned zero, unsigned max) {
+    const std::lock_guard lock{mutex};
     min_frequency = min;
     zero_frequency = zero;
     max_frequency = max;
@@ -110,6 +122,7 @@ public:
    * Set the time periods for minimum and maximum lift
    */
   void SetPeriods(unsigned min, unsigned max) {
+    const std::lock_guard lock{mutex};
     min_period_ms = min;
     max_period_ms = max;
   }
@@ -118,6 +131,7 @@ public:
    * Set the vario range of the "dead band" during which no sound is emitted
    */
   void SetDeadBandRange(double min, double max) {
+    const std::lock_guard lock{mutex};
     min_dead = (int)(min * 100);
     max_dead = (int)(max * 100);
   }
@@ -126,10 +140,7 @@ public:
   virtual void Synthesise(int16_t *buffer, size_t n);
 
 private:
-  /**
-   * Same as SetSilence(), but doesn't lock the mutex.
-   */
-  void UnsafeSetSilence();
+  void UpdateEnvelopeParameters();
 
   /**
    * Convert a vario value to a tone frequency.
@@ -142,4 +153,6 @@ private:
   bool InDeadBand(int ivario) {
     return ivario >= min_dead && ivario <= max_dead;
   }
+
+  void UpdateGateFromVario(int ivario);
 };

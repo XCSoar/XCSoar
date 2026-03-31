@@ -69,7 +69,7 @@ AudioVarioGlue::Configure(const VarioSoundSettings &settings)
   assert(synthesiser != nullptr);
 
   if (settings.enabled) {
-    synthesiser->SetVolume(settings.volume);
+    synthesiser->SetVarioVolume(settings.volume);
     synthesiser->SetDeadBand(settings.dead_band_enabled);
     synthesiser->SetFrequencies(settings.min_frequency, settings.zero_frequency,
                                 settings.max_frequency);
