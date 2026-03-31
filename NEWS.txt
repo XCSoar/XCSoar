@@ -9,6 +9,8 @@ Version 7.45 - not yet released
     distance; tap to change home waypoint) #2320
   - android/ios: configure built-in GPS & sensors in the last device slot by
     default
+  - status: show G-load availability in device list and variometer source in
+    system status
   - terrain: add new terrain shading orientation "fixed (Top Left)"
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
