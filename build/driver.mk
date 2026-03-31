@@ -98,6 +98,10 @@ THERMALEXPRESS_SOURCES = \
 STRATUX_SOURCES = \
 	$(DRIVER_SRC_DIR)/Stratux/Driver.cpp
 
+GDL90_SOURCES = \
+	$(DRIVER_SRC_DIR)/GDL90/Driver.cpp \
+	$(DRIVER_SRC_DIR)/GDL90/Register.cpp
+
 DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -113,6 +117,7 @@ DRIVER_SOURCES = \
 	$(XCTRACER_SOURCES) \
 	$(THERMALEXPRESS_SOURCES) \
 	$(STRATUX_SOURCES) \
+	$(GDL90_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/XCVario.cpp \
