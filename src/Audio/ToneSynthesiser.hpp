@@ -5,15 +5,28 @@
 
 #include "PCMSynthesiser.hpp"
 
+#include <algorithm>
+
 /**
  * This class generates tones with a sine wave.
  */
 class ToneSynthesiser : public PCMSynthesiser {
-  unsigned volume = 100, angle = 0, increment = 0;
+  unsigned volume = 100;
+  unsigned angle = 0;
+  unsigned increment = 0, target_increment = 0;
+
+  /**
+   * Higher value means slower pitch changes.
+   *
+   * This smoothes the tone when input updates are low-rate/noisy
+   * (e.g. GPS vario).
+   */
+  unsigned slew_divisor;
 
 public:
-  explicit ToneSynthesiser(unsigned _sample_rate) : sample_rate(_sample_rate) {
-  }
+  explicit ToneSynthesiser(unsigned _sample_rate)
+    :slew_divisor(std::max(64u, _sample_rate / 4u)),
+     sample_rate(_sample_rate) {}
 
   unsigned GetSampleRate() const {
     return sample_rate;

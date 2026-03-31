@@ -5,15 +5,23 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 
 unsigned
 VarioSynthesiser::VarioToFrequency(int ivario)
 {
-  return ivario > 0
-    ? (zero_frequency + (unsigned)ivario * (max_frequency - zero_frequency)
-       / (unsigned)max_vario)
-    : (zero_frequency -
-       (unsigned)(ivario * (int)(zero_frequency - min_frequency) / min_vario));
+  if (ivario > 0) {
+    const double x = (double)ivario / (double)max_vario;
+    const double f = (double)zero_frequency +
+      x * (double)(max_frequency - zero_frequency);
+    return (unsigned)std::lround(f);
+  } else if (ivario < 0) {
+    const double x = (double)ivario / (double)min_vario; // both negative
+    const double f = (double)zero_frequency -
+      x * (double)(zero_frequency - min_frequency);
+    return (unsigned)std::lround(f);
+  } else
+    return zero_frequency;
 }
 
 void
@@ -59,7 +67,7 @@ VarioSynthesiser::SetVario(double vario)
 
   UpdateEnvelopeParameters();
 
-  const int ivario = std::clamp((int)(vario * 100), min_vario, max_vario);
+  const int ivario = std::clamp((int)lround(vario * 100), min_vario, max_vario);
 
   if (dead_band_enabled && InDeadBand(ivario)) {
     env_target = 0;
