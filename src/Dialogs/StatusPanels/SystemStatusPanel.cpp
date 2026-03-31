@@ -72,8 +72,14 @@ SystemStatusPanel::Refresh() noexcept
     // valid but unknown number of sats
     SetText(NumSat, _("Unknown"));
 
-  SetText(Vario, basic.total_energy_vario_available
-          ? _("Connected") : _("Disconnected"));
+  if (basic.netto_vario_available)
+    SetText(Vario, _("Netto"));
+  else if (basic.total_energy_vario_available)
+    SetText(Vario, _("Total energy"));
+  else if (basic.noncomp_vario_available)
+    SetText(Vario, _("Uncompensated"));
+  else
+    SetText(Vario, _("Disconnected"));
 
   Temp = basic.flarm.status.available
     ? _("Connected")

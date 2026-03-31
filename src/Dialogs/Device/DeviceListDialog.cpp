@@ -65,6 +65,7 @@ class DeviceListWidget final
     bool temperature:1;
     bool humidity:1;
     bool imu:1;
+    bool accel:1;
     bool radio:1, transponder:1;
     bool engine:1;
     bool debug:1;
@@ -115,6 +116,7 @@ class DeviceListWidget final
       temperature = basic.temperature_available;
       humidity = basic.humidity_available;
       imu = basic.gyroscope.available;
+      accel = basic.acceleration.available;
       debug = device != nullptr && device->IsDumpEnabled();
       radio = basic.settings.has_active_frequency ||
         basic.settings.has_standby_frequency;
@@ -438,6 +440,9 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       buffer.append("; ");
       buffer.append(_("IMU"));
     }
+
+    if (flags.accel)
+      buffer.append("; G");
 
     if (flags.radio) {
       buffer.append("; ");

@@ -11,6 +11,8 @@ Version 7.45 - not yet released
     every available type (XCSoar now has more than 128) #2343
   - android/ios: configure built-in GPS & sensors in the last device slot by
     default
+  - status: show G-load availability in device list and variometer source in
+    system status
   - terrain: add new terrain shading orientation "fixed (Top Left)"
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
