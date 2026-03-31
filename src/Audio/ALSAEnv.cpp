@@ -20,6 +20,7 @@ static constexpr char ALSA_LATENCY_ENV[] = "ALSA_LATENCY";
 
 static constexpr char DEFAULT_ALSA_DEVICE[] = "default";
 static constexpr unsigned DEFAULT_ALSA_LATENCY = 100000;
+static constexpr unsigned MIN_ALSA_LATENCY = 20000;
 
 
 static const char *InitALSADeviceName()
@@ -44,9 +45,13 @@ static unsigned InitALSALatency()
     latency = ParseUnsigned(latency_env_value, &p);
     if (*p != '\0') {
       LogFormat("Invalid %s value: %s", ALSA_LATENCY_ENV, latency_env_value);
-      return false;
+      latency = DEFAULT_ALSA_LATENCY;
     }
   }
+
+  if (latency < MIN_ALSA_LATENCY)
+    latency = MIN_ALSA_LATENCY;
+
   LogFormat("Using ALSA PCM latency: %u μs (use environment variable %s to override)",
             latency, ALSA_LATENCY_ENV);
   return latency;

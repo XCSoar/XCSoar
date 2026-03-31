@@ -26,7 +26,7 @@ namespace ALSAEnv
    * underruns.
    *
    * @return Value of the environment variable "ALSA_LATENCY", parsed as
-   * unsigned, or 10000 if not set, or unparsable. The unit is μs.
+   * unsigned, or 100000 if not set, or unparsable. The unit is μs.
    */
   unsigned GetALSALatency();
 }
