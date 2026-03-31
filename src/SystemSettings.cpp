@@ -3,6 +3,7 @@
 
 #include "SystemSettings.hpp"
 #include "Asset.hpp"
+#include "Device/Features.hpp"
 
 void
 SystemSettings::SetDefaults()
@@ -11,7 +12,7 @@ SystemSettings::SetDefaults()
     devices[i].Clear();
 
   if (IsAndroid() || IsApple()) {
-    devices[0].port_type = DeviceConfig::PortType::INTERNAL;
+    devices[INTERNAL_DEVICE_SLOT].port_type = DeviceConfig::PortType::INTERNAL;
   } else {
     devices[0].port_type = DeviceConfig::PortType::SERIAL;
 #ifdef _WIN32
