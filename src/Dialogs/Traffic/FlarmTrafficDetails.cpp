@@ -235,9 +235,11 @@ FlarmTrafficDetailsWidget::Update()
   SetText(RADIO, value);
 
   // Fill the callsign field (+ registration)
-  // note: don't use target->Name here since it is not updated
-  //       yet if it was changed
-  const char* cs = info.callsign;
+  const char *cs = info.callsign;
+  if ((cs == nullptr || cs[0] == 0) &&
+      target != nullptr && target->HasName() && !StringIsEmpty(target->name))
+    cs = target->name.c_str();
+
   if (cs != nullptr && cs[0] != 0) {
     try {
       BasicStringBuilder<char> builder(tmp, ARRAY_SIZE(tmp));

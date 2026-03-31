@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Device/Driver.hpp"
-
 #include <cstdint>
 #include <span>
 #include <vector>
