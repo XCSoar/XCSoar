@@ -62,6 +62,7 @@ class DeviceListWidget final
     bool duplicate:1;
     bool open:1, error:1;
     bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
+    bool gdl90:1;
     bool temperature:1;
     bool humidity:1;
     bool imu:1;
@@ -113,6 +114,7 @@ class DeviceListWidget final
         basic.dyn_pressure_available;
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
+      gdl90 = traffic && config.UsesDriver() && config.driver_name == "GDL90";
       temperature = basic.temperature_available;
       humidity = basic.humidity_available;
       imu = basic.gyroscope.available;
@@ -429,7 +431,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     if (flags.traffic)
-      buffer.append("; FLARM");
+      buffer.append(flags.gdl90 ? "; GDL90" : "; FLARM");
 
     if (flags.temperature || flags.humidity) {
       buffer.append("; ");
