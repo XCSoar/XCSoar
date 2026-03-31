@@ -211,7 +211,7 @@ FlarmTrafficDetailsWidget::Update()
 
   // Set the dialog caption
   StringFormatUnsafe(tmp, "%s (%s)",
-                     _("FLARM Traffic Details"), target_id.Format(tmp_id));
+                     _("Traffic Details"), target_id.Format(tmp_id));
   dialog.SetCaption(tmp);
 
   const FlarmTraffic* target =
@@ -344,7 +344,7 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("FLARM Traffic Details"));
+                      look, _("Traffic Details"));
 
   FlarmTrafficDetailsWidget *widget =
     new FlarmTrafficDetailsWidget(dialog, id);
