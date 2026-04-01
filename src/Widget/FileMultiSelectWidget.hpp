@@ -7,6 +7,7 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "system/Path.hpp"
+#include "util/StringAPI.hxx"
 #include "ui/canvas/Icon.hpp"
 #include <functional>
 #include <vector>
@@ -29,6 +30,17 @@ public:
 
     /** true if the file was found on disk during scanning */
     bool exists = true;
+
+    /**
+     * Comparator: ".." first, then directories, then files,
+     * each group sorted by base name using locale collation.
+     */
+    static bool Compare(const FileItem &a, const FileItem &b) noexcept {
+      if (a.is_up != b.is_up) return a.is_up;
+      if (a.is_dir != b.is_dir) return a.is_dir;
+      return StringCollate(a.path.GetBase().c_str(),
+                           b.path.GetBase().c_str()) < 0;
+    }
   };
 
   using TextProvider = std::function<const char*(const FileItem&)>;

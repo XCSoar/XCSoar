@@ -187,12 +187,7 @@ struct ImportContainer : public PropertyWidgetContainer {
         file_metadata.Build(dir_entries, current_path);
       }
 
-      std::sort(out.begin(), out.end(), [](const auto &a, const auto &b) noexcept {
-        if (a.is_up != b.is_up) return a.is_up;
-        if (a.is_dir != b.is_dir) return a.is_dir;
-        return StringCollate(a.path.GetBase().c_str(),
-                             b.path.GetBase().c_str()) < 0;
-      });
+      std::sort(out.begin(), out.end(), FileMultiSelectWidget::FileItem::Compare);
 
       return out;
     };
