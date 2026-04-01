@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 
 void
 PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
@@ -25,4 +26,28 @@ PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
   port.FullWrite(checksum, env, timeout);
+}
+
+void
+PortWriteNMEAFormat(Port &port, OperationEnvironment &env,
+                    const char *format, ...)
+{
+  assert(format != nullptr);
+
+  char line[256];
+
+  va_list ap;
+  va_start(ap, format);
+  const int n = vsnprintf(line, sizeof(line), format, ap);
+  va_end(ap);
+
+  if (n <= 0)
+    return;
+
+  if ((size_t)n >= sizeof(line)) {
+    /* truncated; refuse to send incomplete payload */
+    return;
+  }
+
+  PortWriteNMEA(port, line, env);
 }
