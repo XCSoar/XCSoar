@@ -3,6 +3,7 @@
 
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -72,15 +73,13 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info, bool reciprocal_wind)
 bool
 CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$LXWP0"sv) return cLXWP0(line, info, reciprocal_wind);
-  else
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$LXWP0"sv)
+      return cLXWP0(line, info, reciprocal_wind);
+    else
+      return false;
+  });
 }
 
 static Device *

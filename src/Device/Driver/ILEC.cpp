@@ -3,6 +3,7 @@
 
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -47,20 +48,17 @@ ParsePDA1(NMEAInputLine &line, NMEAInfo &info)
 bool
 ILECDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  auto type = line.ReadView();
-  if (type == "$PILC"sv) {
-    type = line.ReadView();
-    if (type == "PDA1"sv)
-      return ParsePDA1(line, info);
-    else
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    auto type = line.ReadView();
+    if (type == "$PILC"sv) {
+      type = line.ReadView();
+      if (type == "PDA1"sv)
+        return ParsePDA1(line, info);
+      else
+        return false;
+    } else
       return false;
-  } else
-    return false;
+  });
 }
 
 static Device *

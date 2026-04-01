@@ -6,6 +6,7 @@
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/LX/Parsers.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Derived.hpp"
@@ -106,25 +107,22 @@ LXEosDevice::PutBugs(double bugs, OperationEnvironment& env)
 bool
 LXEosDevice::ParseNMEA(const char* String, NMEAInfo& info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$LXWP0"sv)
-    return LXWP0(line, info);
-  else if (type == "$LXWP1"sv) {
-    // LXWP1 sentence is identical to LXNAV, using shared parser
-    LX::LXWP1(line, info.device);
-    altitude_offset.reliable = HasReliableAltOffset(info.device);
-    return true;
-  } else if (type == "$LXWP2"sv)
-    return LXWP2(line, info);
-  else if (type == "$LXWP3"sv)
-    return LXWP3(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$LXWP0"sv)
+      return LXWP0(line, info);
+    else if (type == "$LXWP1"sv) {
+      // LXWP1 sentence is identical to LXNAV, using shared parser
+      LX::LXWP1(line, info.device);
+      altitude_offset.reliable = HasReliableAltOffset(info.device);
+      return true;
+    } else if (type == "$LXWP2"sv)
+      return LXWP2(line, info);
+    else if (type == "$LXWP3"sv)
+      return LXWP3(line, info);
+    else
+      return false;
+  });
 }
 
 bool

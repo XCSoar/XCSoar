@@ -4,6 +4,7 @@
 #include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -118,20 +119,15 @@ PWES1(NMEAInputLine &line, NMEAInfo &info)
 bool
 WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$PWES0"sv)
-    return PWES0(line, info);
-
-  else if (type == "$PWES1"sv)
-    return PWES1(line, info);
-
-  else
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PWES0"sv)
+      return PWES0(line, info);
+    else if (type == "$PWES1"sv)
+      return PWES1(line, info);
+    else
+      return false;
+  });
 }
 
 bool

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Device.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
@@ -31,14 +32,11 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line)
 bool
 FlarmDevice::ParseNMEA(const char *_line, [[maybe_unused]] NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  const auto type = line.ReadView();
-  if (type == "$PFLAC"sv)
-    return ParsePFLAC(line);
-  else
-    return false;
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PFLAC"sv)
+      return ParsePFLAC(line);
+    else
+      return false;
+  });
 }

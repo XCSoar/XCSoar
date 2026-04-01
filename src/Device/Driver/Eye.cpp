@@ -3,6 +3,7 @@
 
 #include "Device/Driver/Eye.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -27,18 +28,15 @@ protected:
 bool
 EyeDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  const auto type = line.ReadView();
-  if (type == "$PEYA"sv)
-    return PEYA(line, info);
-  else if (type == "$PEYI"sv)
-    return PEYI(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PEYA"sv)
+      return PEYA(line, info);
+    else if (type == "$PEYI"sv)
+      return PEYI(line, info);
+    else
+      return false;
+  });
 }
 
 inline bool

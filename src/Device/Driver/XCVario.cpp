@@ -4,6 +4,7 @@
 #include "Device/Driver/XCVario.hpp"
 #include "Device/Driver/CAI302/PocketNav.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -194,20 +195,19 @@ bool XVCDevice::EnableNMEA([[maybe_unused]] OperationEnvironment &env)
 bool
 XVCDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PXCV"sv) { // cyclic data from device useful for channel supervision
+      xcvario_protocol_up = true;
+      if (protocol_version != XCV_VERSION_UNKNOWN) // only parse NMEA once protocol version is set
+        return PXCV(line, info);
+
+      return true;
+    } else if (type == "!xcv"sv)
+      return XCV(line, info);
+
     return false;
-  NMEAInputLine line(String);
-  const auto type = line.ReadView();
-  if (type == "$PXCV"sv) {                // cyclic data from device useful for channel supervision
-    xcvario_protocol_up = true;
-    if (protocol_version != XCV_VERSION_UNKNOWN) {   // only parse NMEA once protocol version is set
-      return PXCV(line, info);
-    }
-    return true;
-  } else if (type == "!xcv"sv) {
-    return XCV(line, info);
-  }
-  return false;
+  });
 }
 
 // For documentation refer to chapter 10.1.3 Device Driver/XCVario in mulilingual handbook: https://xcvario.de/handbuch

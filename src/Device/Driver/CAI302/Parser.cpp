@@ -6,6 +6,7 @@
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
+#include "Device/Util/NMEAParser.hpp"
 
 using std::string_view_literals::operator""sv;
 
@@ -126,18 +127,15 @@ cai_w(NMEAInputLine &line, NMEAInfo &info)
 bool
 CAI302Device::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$PCAIB"sv)
-    return cai_PCAIB(line, info);
-  else if (type == "$PCAID"sv)
-    return cai_PCAID(line, info);
-  else if (type == "!w"sv)
-    return cai_w(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PCAIB"sv)
+      return cai_PCAIB(line, info);
+    else if (type == "$PCAID"sv)
+      return cai_PCAID(line, info);
+    else if (type == "!w"sv)
+      return cai_w(line, info);
+    else
+      return false;
+  });
 }

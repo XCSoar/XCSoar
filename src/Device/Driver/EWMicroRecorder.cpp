@@ -10,6 +10,7 @@
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
@@ -68,27 +69,24 @@ ReadAltitude(NMEAInputLine &line, double &value_r)
 bool
 EWMicroRecorderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PGRMZ"sv) {
+      double value;
 
-  NMEAInputLine line(String);
+      /* The normal Garmin $PGRMZ line contains the "true" barometric
+         altitude above MSL (corrected with QNH), but EWMicroRecorder
+         differs here slightly: it emits the uncorrected barometric
+         altitude.  That is the only reason why we catch this sentence
+         in the driver instead of letting the generic class NMEAParser
+         do it. */
+      if (ReadAltitude(line, value))
+        info.ProvidePressureAltitude(value);
 
-  const auto type = line.ReadView();
-  if (type == "$PGRMZ"sv) {
-    double value;
-
-    /* The normal Garmin $PGRMZ line contains the "true" barometric
-       altitude above MSL (corrected with QNH), but EWMicroRecorder
-       differs here slightly: it emits the uncorrected barometric
-       altitude.  That is the only reason why we catch this sentence
-       in the driver instead of letting the generic class NMEAParser
-       do it. */
-    if (ReadAltitude(line, value))
-      info.ProvidePressureAltitude(value);
-
-    return true;
-  } else
-    return false;
+      return true;
+    } else
+      return false;
+  });
 }
 
 static bool

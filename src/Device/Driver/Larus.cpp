@@ -11,6 +11,7 @@
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -70,33 +71,30 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
 bool
 LarusDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type.starts_with("$PLAR"sv)) {
+      switch (type[5]) {
+      case 'A':
+        return PLARA(line, info);
+      case 'B':
+        return PLARB(line, info);
+      case 'D':
+        return PLARD(line, info);
+      case 'V':
+        return PLARV(line, info);
+      case 'W':
+        return PLARW(line, info);
+      case 'S':
+        return PLARS(line, info);
+      default:
+        break;
+      }
+    } else if (type == "$HCHDT"sv)
+      return HCHDT(line, info);
+
     return false;
-
-  NMEAInputLine line(_line);
-  const auto type = line.ReadView();
-  if (type.starts_with("$PLAR"sv)) {
-    switch (type[5]) {
-    case 'A':
-      return PLARA(line, info);
-    case 'B':
-      return PLARB(line, info);
-    case 'D':
-      return PLARD(line, info);
-    case 'V':
-      return PLARV(line, info);
-    case 'W':
-      return PLARW(line, info);
-    case 'S':
-      return PLARS(line, info);
-    default:
-      break;
-    }
-  }
-  else if (type == "$HCHDT"sv)
-    return HCHDT(line, info);
-
-  return false;
+  });
 }
 
 bool
