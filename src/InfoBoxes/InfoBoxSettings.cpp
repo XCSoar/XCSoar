@@ -11,6 +11,7 @@ void
 InfoBoxSettings::Panel::Clear() noexcept
 {
   name.clear();
+  geometry = Geometry::SPLIT_8;
   std::fill_n(contents, MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
 }
 
@@ -60,6 +61,9 @@ InfoBoxSettings::SetDefaults() noexcept
 
   for (unsigned i = PREASSIGNED_PANELS; i < MAX_PANELS; i++)
     panels[i].name.Format("AUX-%u", i-2);
+
+  for (auto &panel : panels)
+    panel.geometry = geometry;
 
   for (unsigned i = 0; i < DFLT_CONFIG_PANELS; i++)
     for (unsigned j = 0; j < DFLT_CONFIG_BOXES; j++)

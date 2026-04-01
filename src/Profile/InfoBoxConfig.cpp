@@ -146,6 +146,10 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
       }
     }
 
+    sprintf(profileKey, "InfoBoxPanel%uGeometry", i);
+    if (!map.GetEnum(profileKey, panel.geometry))
+      panel.geometry = settings.geometry;
+
     for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
       const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", i, j);
       if (n < 0 || static_cast<size_t>(n) >= sizeof(profileKey))
@@ -167,6 +171,9 @@ Profile::Save(ProfileMap &map,
     if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
       map.Set(profileKey, panel.name);
   }
+
+  sprintf(profileKey, "InfoBoxPanel%uGeometry", index);
+  map.Set(profileKey, (unsigned)panel.geometry);
 
   for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
     const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", index, j);

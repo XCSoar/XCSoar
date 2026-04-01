@@ -17,28 +17,6 @@ struct InfoBoxSettings {
     PANEL_AUXILIARY,
   };
 
-  struct Panel {
-    static constexpr unsigned MAX_CONTENTS = 24;
-
-    StaticString<32u> name;
-    InfoBoxFactory::Type contents[MAX_CONTENTS];
-
-    void Clear() noexcept;
-
-    [[gnu::pure]]
-    bool IsEmpty() const noexcept;
-  };
-
-  static constexpr unsigned MAX_PANELS = 8;
-  static constexpr unsigned PREASSIGNED_PANELS = 3;
-
-  /**
-   * Auto-switch to the "final glide" panel if above final glide?
-   * This setting affects the #DisplayMode, and is checked by
-   * GetNewDisplayMode().
-   */
-  bool use_final_glide;
-
   enum class Geometry : uint8_t {
     /** 8 infoboxes split bottom/top or left/right */
     SPLIT_8,
@@ -107,7 +85,32 @@ struct InfoBoxSettings {
     /** 18 infoboxes 3X6 split bottom/top or left/right */
     SPLIT_3X6 = 26,
 
-  } geometry;
+  };
+
+  struct Panel {
+    static constexpr unsigned MAX_CONTENTS = 24;
+
+    StaticString<32u> name;
+    Geometry geometry;
+    InfoBoxFactory::Type contents[MAX_CONTENTS];
+
+    void Clear() noexcept;
+
+    [[nodiscard]] [[gnu::pure]]
+    bool IsEmpty() const noexcept;
+  };
+
+  static constexpr unsigned MAX_PANELS = 8;
+  static constexpr unsigned PREASSIGNED_PANELS = 3;
+
+  /**
+   * Auto-switch to the "final glide" panel if above final glide?
+   * This setting affects the #DisplayMode, and is checked by
+   * GetNewDisplayMode().
+   */
+  bool use_final_glide;
+
+  Geometry geometry;
 
 /*
  * scales the font for InfoBox titles and comments between 50% and 150%

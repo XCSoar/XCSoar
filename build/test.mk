@@ -336,8 +336,13 @@ $(eval $(call link-program,TestWrapClock,TEST_WRAP_CLOCK))
 
 TEST_PROFILE_SOURCES = \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(SRC)/PageSettings.cpp \
 	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/InfoBoxConfig.cpp \
+	$(SRC)/Profile/PageProfile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestProfile.cpp
 TEST_PROFILE_DEPENDS = PROFILE MATH IO OS UTIL

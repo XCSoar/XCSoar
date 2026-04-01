@@ -3,6 +3,9 @@
 
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
+#include "Profile/InfoBoxConfig.hpp"
+#include "Profile/Map.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "io/FileLineReader.hpp"
 #include "system/Path.hpp"
 #include "TestUtil.hpp"
@@ -11,6 +14,7 @@
 #include "util/PrintException.hxx"
 
 #include <stdlib.h>
+#include <fmt/core.h>
 
 static void
 TestMap()
@@ -150,7 +154,7 @@ TestMigration()
   /* verify migrated watched waypoint list */
   {
     StaticString<256> value;
-    ok1(Profile::Get(ProfileKeys::WatchedWaypointFileList, value));
+    ok1(Profile::Get(ProfileKeys::WatchedWaypointFileList, fmt::detail::value));
     ok1(value == "/path/to/watched.cup");
   }
 
@@ -162,14 +166,48 @@ TestMigration()
   }
 }
 
+static void
+TestInfoBoxPanelGeometryProfileSave()
+{
+  ProfileMap map;
+
+  InfoBoxSettings::Panel panel;
+  panel.Clear();
+  panel.geometry = InfoBoxSettings::Geometry::TOP_LEFT_12;
+
+  Profile::Save(map, panel, 4);
+
+  unsigned value;
+  ok1(map.Get("InfoBoxPanel4Geometry", value));
+  ok1(value == static_cast<unsigned>(InfoBoxSettings::Geometry::TOP_LEFT_12));
+}
+
+static void
+TestInfoBoxPanelGeometryProfileMigration()
+{
+  ProfileMap map;
+  map.Set(ProfileKeys::InfoBoxGeometry, static_cast<unsigned>(InfoBoxSettings::Geometry::RIGHT_16));
+
+  InfoBoxSettings settings;
+  settings.SetDefaults();
+
+  Profile::Load(map, settings);
+
+  ok1(settings.panels[0].geometry == InfoBoxSettings::Geometry::RIGHT_16);
+  ok1(settings.panels[InfoBoxSettings::PANEL_AUXILIARY].geometry ==
+      InfoBoxSettings::Geometry::RIGHT_16);
+}
+
 int main()
 try {
-  plan_tests(44);
+  plan_tests(48);
 
   TestMap();
   TestWriter();
   TestReader();
   TestMigration();
+  TestInfoBoxPanelGeometryProfileSave();
+  TestInfoBoxPanelGeometryProfileMigration();
 
   return exit_status();
 } catch (...) {

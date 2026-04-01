@@ -194,8 +194,8 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddDummy();
 #endif
 
-  AddEnum(_("InfoBox geometry"),
-          _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
+  AddEnum(_("Default InfoBox geometry"),
+          _("Default InfoBox layout for new InfoBox sets and for migrating existing profiles."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
   AddInteger(_("InfoBox title size"), _("Zoom factor for InfoBox title and comment text"),
@@ -279,16 +279,14 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   }
 #endif
 
-  bool info_box_geometry_changed = false;
-
-  info_box_geometry_changed |=
+  changed |=
     SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
-  info_box_geometry_changed |=
+  const bool info_box_title_scale_changed =
     SaveValueInteger(InfoBoxTitleScale, ProfileKeys::InfoBoxTitleScale,
                   ui_settings.info_boxes.scale_title_font);
 
-  changed |= info_box_geometry_changed;
+  changed |= info_box_title_scale_changed;
 
   changed |= SaveValueEnum(AppStatusMessageAlignment, ProfileKeys::AppStatusMessageAlignment,
                            ui_settings.popup_message_position);
@@ -339,7 +337,7 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 #endif
 
     CommonInterface::main_window->CheckResize();
-  } else if (info_box_geometry_changed)
+  } else if (info_box_title_scale_changed)
     CommonInterface::main_window->ReinitialiseLayout();
 
   _changed |= changed;

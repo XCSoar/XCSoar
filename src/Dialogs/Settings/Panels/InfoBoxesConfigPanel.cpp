@@ -6,10 +6,13 @@
 #include "Profile/Profile.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/InfoBoxConfig.hpp"
+#include "ActionInterface.hpp"
 #include "Form/Button.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "UIState.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -35,17 +38,26 @@ InfoBoxesConfigPanel::OnAction(int id) noexcept
 
   unsigned i = (unsigned)id;
   InfoBoxSettings::Panel &data = settings.panels[i];
+  const auto old_geometry = data.geometry;
+  const bool is_active_panel = i == CommonInterface::GetUIState().panel_index;
 
   bool changed =
     dlgConfigInfoboxesShowModal(UIGlobals::GetMainWindow(),
                                 UIGlobals::GetDialogLook(),
                                 UIGlobals::GetLook().info_box,
-                                InfoBoxManager::layout.geometry, data,
+                                data,
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
     Profile::Save(Profile::map, data, i);
     Profile::Save();
     ((Button &)GetRow(i)).SetCaption(gettext(data.name));
+
+    if (is_active_panel) {
+      if (data.geometry != old_geometry)
+        CommonInterface::main_window->ReinitialiseLayout();
+
+      ActionInterface::SendUIState();
+    }
   }
 }
 

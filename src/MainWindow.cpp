@@ -57,6 +57,18 @@
 
 static constexpr unsigned separator_height = 2;
 
+static InfoBoxSettings::Geometry
+GetCurrentInfoBoxGeometry() noexcept
+{
+  const auto &ui_state = CommonInterface::GetUIState();
+  const auto &info_boxes = CommonInterface::GetUISettings().info_boxes;
+
+  if (ui_state.panel_index < InfoBoxSettings::MAX_PANELS)
+    return info_boxes.panels[ui_state.panel_index].geometry;
+
+  return info_boxes.geometry;
+}
+
 [[gnu::pure]]
 static bool
 ShowMapOverlayZoomButtons(const UISettings &settings) noexcept
@@ -452,7 +464,7 @@ MainWindow::InitialiseConfigured()
   PixelRect rc = GetClientRect();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, GetCurrentInfoBoxGeometry());
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -678,7 +690,7 @@ MainWindow::ReinitialiseLayout() noexcept
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, GetCurrentInfoBoxGeometry());
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
 
@@ -828,11 +840,9 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 void
 MainWindow::ReinitialiseLook() noexcept
 {
-  const auto &ui_settings = CommonInterface::GetUISettings();
-
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(GetClientRect(),
-                             ui_settings.info_boxes.geometry);
+                             GetCurrentInfoBoxGeometry());
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
