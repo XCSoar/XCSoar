@@ -154,7 +154,7 @@ TestMigration()
   /* verify migrated watched waypoint list */
   {
     StaticString<256> value;
-    ok1(Profile::Get(ProfileKeys::WatchedWaypointFileList, fmt::detail::value));
+    ok1(Profile::Get(ProfileKeys::WatchedWaypointFileList, value));
     ok1(value == "/path/to/watched.cup");
   }
 
