@@ -6,7 +6,7 @@
 #include "Formatter/UserUnits.hpp"
 #include "Levels.hpp"
 #include "TileStore.hpp"
-#include "MbTilesOverlay.hpp"
+#include "MapWindow/Overlays/MbTilesOverlay.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -149,7 +149,7 @@ OverlayVisible() noexcept
 {
   const auto *map = UIGlobals::GetMap();
   return map != nullptr &&
-    dynamic_cast<const MbTilesOverlay *>(map->GetOverlay()) != nullptr;
+    dynamic_cast<const MbTiles::Overlay *>(map->GetOverlay()) != nullptr;
 }
 
 void
@@ -186,7 +186,7 @@ ApplyOverlay(Path path)
   /* Reuse the generic overlay HUD by exposing the active EDL state as
      the overlay label instead of showing this mapping only in a widget. */
   const auto label = GetOverlayLabel();
-  auto overlay = std::make_unique<MbTilesOverlay>(path, label.c_str());
+  auto overlay = std::make_unique<MbTiles::Overlay>(path, label.c_str());
 
   if (auto *map = UIGlobals::GetMap()) {
     map->SetOverlay(std::move(overlay));

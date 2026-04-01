@@ -658,9 +658,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/Levels.cpp \
 	$(SRC)/Weather/EDL/TileStore.cpp \
 	$(SRC)/Weather/EDL/StateController.cpp \
-	$(SRC)/Weather/EDL/Sqlite.cpp \
-	$(SRC)/Weather/EDL/MbTilesDatabase.cpp \
-	$(SRC)/Weather/EDL/MbTilesOverlay.cpp
+	$(SRC)/io/Sqlite.cpp \
+	$(SRC)/MapWindow/Overlays/MbTilesDatabase.cpp \
+	$(SRC)/MapWindow/Overlays/MbTilesOverlay.cpp
 endif
 else
 XCSOAR_SOURCES += \

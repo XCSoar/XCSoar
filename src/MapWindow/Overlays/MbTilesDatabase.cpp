@@ -10,12 +10,13 @@
 #include "util/NumberParser.hpp"
 #include "util/StringSplit.hxx"
 
+#include <algorithm>
 #include <cmath>
 #include <numbers>
 #include <stdexcept>
 #include <string_view>
 
-namespace EDL {
+namespace MbTiles {
 
 static constexpr double MAX_MERCATOR_LATITUDE = 85.05112878;
 
@@ -76,7 +77,7 @@ ParseExact(std::string_view value, unsigned &out) noexcept
 {
   char *end = nullptr;
   unsigned parsed = ParseUnsigned(value.data(), &end);
-  if ( end == value.data() + value.size()) {
+  if (end == value.data() + value.size()) {
     out = parsed;
     return true;
   }
@@ -178,7 +179,7 @@ TileKey::GetSouthEast() const noexcept
   };
 }
 
-MbTilesDatabase::MbTilesDatabase(Path path)
+Database::Database(Path path)
   :db(path)
 {
   {
@@ -201,7 +202,8 @@ MbTilesDatabase::MbTilesDatabase(Path path)
   }
 
   if (metadata.max_zoom == 0 || metadata.min_zoom == 0) {
-    auto stmt = db.CreateStatement("SELECT MIN(zoom_level), MAX(zoom_level) FROM tiles");
+    auto stmt = db.CreateStatement("SELECT MIN(zoom_level), MAX(zoom_level) "
+                                   "FROM tiles");
     if (stmt.StepRow()) {
       if (metadata.min_zoom == 0)
         metadata.min_zoom = stmt.GetIntColumn(0);
@@ -213,7 +215,7 @@ MbTilesDatabase::MbTilesDatabase(Path path)
 }
 
 bool
-MbTilesDatabase::HasTile(TileKey key) const
+Database::HasTile(TileKey key) const
 {
   auto stmt = db.CreateStatement("SELECT 1 FROM tiles "
                                  "WHERE zoom_level=? AND tile_column=? AND tile_row=?");
@@ -224,7 +226,7 @@ MbTilesDatabase::HasTile(TileKey key) const
 }
 
 Bitmap
-MbTilesDatabase::LoadTile(TileKey key) const
+Database::LoadTile(TileKey key) const
 {
   auto stmt = db.CreateStatement("SELECT tile_data FROM tiles "
                                  "WHERE zoom_level=? AND tile_column=? AND tile_row=?");
@@ -260,4 +262,5 @@ MbTilesDatabase::LoadTile(TileKey key) const
   return bitmap;
 }
 
-} // namespace EDL
+} // namespace MbTiles
+
