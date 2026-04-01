@@ -3,6 +3,7 @@
 
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -139,20 +140,17 @@ VaulterDevice::PutBallast(double fraction, [[maybe_unused]] double overload, Ope
 bool
 VaulterDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  const auto type = line.ReadView();
-  if (type == "$PITV3"sv)
-    return ParsePITV3(line, info);
-  else if (type == "$PITV4"sv)
-    return ParsePITV4(line, info);
-  else if (type == "$PITV5"sv)
-    return ParsePITV5(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PITV3"sv)
+      return ParsePITV3(line, info);
+    else if (type == "$PITV4"sv)
+      return ParsePITV4(line, info);
+    else if (type == "$PITV5"sv)
+      return ParsePITV5(line, info);
+    else
+      return false;
+  });
 }
 
 static Device *

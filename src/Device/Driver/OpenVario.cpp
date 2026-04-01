@@ -3,6 +3,7 @@
 
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -236,14 +237,12 @@ OpenVarioDevice::PutBugs(double bugs, OperationEnvironment &env)
 bool
 OpenVarioDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    if (line.ReadCompare("$POV"))
+      return POV(line, info);
+
     return false;
-
-  NMEAInputLine line(_line);
-  if (line.ReadCompare("$POV"))
-    return POV(line, info);
-
-  return false;
+  });
 }
 
 bool

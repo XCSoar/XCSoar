@@ -3,6 +3,7 @@
 
 #include "Device/Driver/LoEFGREN.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -59,16 +60,13 @@ LoEFGRENDevice::ParseNMEA(const char *line, NMEAInfo &info)
   if (line == nullptr)
     return false;
 
-  if (!VerifyNMEAChecksum(line))
+  return ParseNMEAWithChecksum(line, [&](NMEAInputLine &input){
+    const auto type = input.ReadView();
+    if (type == "$PLOF"sv)
+      return PLOF(input, info);
+
     return false;
-
-  NMEAInputLine input(line);
-  const auto type = input.ReadView();
-
-  if (type == "$PLOF"sv)
-    return PLOF(input, info);
-
-  return false;
+  });
 }
 
 static Device *

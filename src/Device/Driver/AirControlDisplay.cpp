@@ -3,6 +3,7 @@
 
 #include "Device/Driver/AirControlDisplay.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -221,15 +222,12 @@ ACDDevice::ExchangeRadioFrequencies(OperationEnvironment &env,
 bool
 ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  if (line.ReadCompare("$PAAVS"))
-    return ParsePAAVS(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    if (line.ReadCompare("$PAAVS"))
+      return ParsePAAVS(line, info);
+    else
+      return false;
+  });
 }
 
 void
