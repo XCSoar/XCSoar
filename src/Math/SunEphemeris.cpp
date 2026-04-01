@@ -12,6 +12,7 @@
 #include "time/RoughTime.hpp"
 
 #include <cstdint>
+#include <cmath>
 
 /** Sun radius in degrees (?) */
 static constexpr double SUN_DIAMETER = 0.53;
@@ -20,6 +21,16 @@ static constexpr double SUN_DIAMETER = 0.53;
 static constexpr double AIR_REFRACTION = 34.0 / 60.0;
 
 namespace SunEphemeris {
+
+double
+NormalizeHourOfDay(double t) noexcept
+{
+  t = std::fmod(t, 24.);
+  if (t < 0)
+    t += 24;
+
+  return t;
+}
 
 /**
  * Get the days to J2000

@@ -15,6 +15,13 @@ class RoughTimeDelta;
  */
 namespace SunEphemeris {
 
+/**
+ * Normalize "hours since midnight" to the interval [0, 24).
+ */
+[[gnu::const]]
+double
+NormalizeHourOfDay(double t) noexcept;
+
 struct Result {
   double day_length, morning_twilight, evening_twilight;
   double time_of_noon, time_of_sunset, time_of_sunrise;
