@@ -196,10 +196,8 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info, ACDDevice *dev) noexcept
 bool
 ACDDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
-  char buffer[100];
   unsigned qnh = uround(pres.GetPascal());
-  sprintf(buffer, "PAAVC,S,ALT,QNH,%u", qnh);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,ALT,QNH,%u", qnh);
   return true;
 }
 
@@ -237,9 +235,7 @@ ACDDevice::PutActiveFrequency(RadioFrequency frequency,
 bool
 ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 {
-  char buffer[100];
-  sprintf(buffer, "PAAVC,S,COM,RXVOL1,%u", volume);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,COM,RXVOL1,%u", volume);
   return true;
 }
 
@@ -248,10 +244,8 @@ ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
                                    [[maybe_unused]] const char *name,
                                    OperationEnvironment &env)
 {
-  char buffer[100];
   unsigned freq = frequency.GetKiloHertz();
-  sprintf(buffer, "PAAVC,S,COM,CHN2,%u", freq);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,COM,CHN2,%u", freq);
   cached_com_standby_khz.store(freq, std::memory_order_relaxed);
   com_standby_khz_known.store(true, std::memory_order_release);
   return true;
@@ -260,9 +254,7 @@ ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
 bool
 ACDDevice::PutTransponderCode(TransponderCode code, OperationEnvironment &env)
 {
-  char buffer[100];
-  sprintf(buffer, "PAAVC,S,XPDR,SQUAWK,%04o", code.GetCode());
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,XPDR,SQUAWK,%04o", code.GetCode());
   return true;
 }
 

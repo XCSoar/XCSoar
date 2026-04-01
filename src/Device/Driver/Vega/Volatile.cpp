@@ -19,8 +19,6 @@ Vega::VolatileData::CopyFrom(const DerivedInfo &calculated)
 void
 Vega::VolatileData::SendTo(Port &port, OperationEnvironment &env) const
 {
-  char buffer[100];
-  sprintf(buffer, "PDVMC,%u,%u,%u,%d,%u",
-          mc, stf, circling, terrain_altitude, qnh);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PDVMC,%u,%u,%u,%d,%u",
+                      mc, stf, circling, terrain_altitude, qnh);
 }
