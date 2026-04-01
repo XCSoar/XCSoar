@@ -5,6 +5,7 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "time/TimeoutClock.hpp"
 #include "util/Macros.hpp"
@@ -155,11 +156,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
   port.StopRxThread();
 
   char buffer[256];
-  strcpy(buffer, "$PBRTL,");
-  AppendNMEAChecksum(buffer);
-  strcat(buffer, "\r\n");
-
-  port.Write(buffer);
+  PortFullWriteNMEA(port, "PBRTL,", env, std::chrono::seconds{1});
   ExpectXOff(port, env, std::chrono::seconds{1});
 
   unsigned tracks = 0;

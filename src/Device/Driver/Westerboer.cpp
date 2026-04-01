@@ -5,6 +5,7 @@
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAParser.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -136,11 +137,8 @@ WesterboerDevice::PutMacCready(double _mac_cready, OperationEnvironment &env)
   /* 0 .. 60 -> 0.0 .. 6.0 m/s */
   unsigned mac_cready = std::min(uround(_mac_cready * 10), 60u);
 
-  char buffer[64];
-  sprintf(buffer, "$PWES4,,%02u,,,,,,,", mac_cready);
-  AppendNMEAChecksum(buffer);
-  strcat(buffer, "\r\n");
-  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
+  PortFullWriteNMEAFormat(port, env, std::chrono::milliseconds{100},
+                          "PWES4,,%02u,,,,,,,", mac_cready);
 
   return true;
 }
@@ -151,11 +149,8 @@ WesterboerDevice::PutBugs(double _bugs, OperationEnvironment &env)
   // Dirtyness from 0 until 20 %
   unsigned bugs = 100 - (unsigned)(_bugs * 100);
 
-  char buffer[64];
-  sprintf(buffer, "$PWES4,,,,,%02u,,,,", bugs);
-  AppendNMEAChecksum(buffer);
-  strcat(buffer, "\r\n");
-  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
+  PortFullWriteNMEAFormat(port, env, std::chrono::milliseconds{100},
+                          "PWES4,,,,,%02u,,,,", bugs);
 
   return true;
 }
