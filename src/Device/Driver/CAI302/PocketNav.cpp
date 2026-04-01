@@ -8,35 +8,33 @@
 
 #include <stdio.h>
 
+static bool
+PutGCommand(Port &port, const char *command, unsigned value,
+            OperationEnvironment &env)
+{
+  char buffer[32];
+  sprintf(buffer, "!g,%s%u\r", command, value);
+  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
+  return true;
+}
+
 bool
 CAI302::PutMacCready(Port &port, double mc, OperationEnvironment &env)
 {
   unsigned mac_cready = uround(Units::ToUserUnit(mc * 10, Unit::KNOTS));
-
-  char buffer[32];
-  sprintf(buffer, "!g,m%u\r", mac_cready);
-  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
-  return true;
+  return PutGCommand(port, "m", mac_cready, env);
 }
 
 bool
 CAI302::PutBugs(Port &port, double bugs, OperationEnvironment &env)
 {
   unsigned bugs2 = uround(bugs * 100);
-
-  char buffer[32];
-  sprintf(buffer, "!g,u%u\r", bugs2);
-  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
-  return true;
+  return PutGCommand(port, "u", bugs2, env);
 }
 
 bool
 CAI302::PutBallast(Port &port, double fraction, OperationEnvironment &env)
 {
   unsigned ballast = uround(fraction * 10);
-
-  char buffer[32];
-  sprintf(buffer, "!g,b%u\r", ballast);
-  port.FullWrite(buffer, env, std::chrono::milliseconds{100});
-  return true;
+  return PutGCommand(port, "b", ballast, env);
 }
