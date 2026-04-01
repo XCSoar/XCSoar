@@ -18,17 +18,13 @@ VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
       settings.erase(name);
   }
 
-  char buffer[64];
-  sprintf(buffer, "PDVSC,S,%s,%d", name, value);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PDVSC,S,%s,%d", name, value);
 }
 
 void
 VegaDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
-  char buffer[64];
-  sprintf(buffer, "PDVSC,R,%s", name);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PDVSC,R,%s", name);
 }
 
 std::optional<int>

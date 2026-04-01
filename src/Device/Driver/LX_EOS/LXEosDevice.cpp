@@ -128,15 +128,10 @@ bool
 LXEosDevice::SendNewSettings(OperationEnvironment& env)
 {
   if (vario_settings.uptodate == true) {
-    char buffer[64];
-    snprintf(buffer,
-             64,
-             "PFLX2,%.1f,%.2f,%.0f,,,,,",
-             vario_settings.mc,
-             vario_settings.bal,
-             vario_settings.bugs);
-
-    PortWriteNMEA(port, buffer, env);
+    PortWriteNMEAFormat(port, env, "PFLX2,%.1f,%.2f,%.0f,,,,,",
+                        vario_settings.mc,
+                        vario_settings.bal,
+                        vario_settings.bugs);
     return true;
   } else
     return false;

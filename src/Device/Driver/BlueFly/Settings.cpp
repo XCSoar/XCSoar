@@ -29,12 +29,9 @@ void
 BlueFlyDevice::WriteDeviceSetting(const char *name, int value,
                                   OperationEnvironment &env)
 {
-  char buffer[64];
-
   assert(strlen(name) == 3);
 
-  sprintf(buffer, "%s %d", name, value);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "%s %d", name, value);
 }
 
 void
