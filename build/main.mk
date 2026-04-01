@@ -656,6 +656,7 @@ XCSOAR_SOURCES += \
 ifeq ($(OPENGL),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/Levels.cpp \
+	$(SRC)/io/DirectoryUtil.cpp \
 	$(SRC)/Weather/EDL/TileStore.cpp \
 	$(SRC)/Weather/EDL/StateController.cpp \
 	$(SRC)/io/Sqlite.cpp \

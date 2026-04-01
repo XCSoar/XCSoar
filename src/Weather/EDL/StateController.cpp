@@ -13,6 +13,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "UIGlobals.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "time/Convert.hxx"
 
 #include <algorithm>
@@ -20,14 +21,6 @@
 #include <memory>
 
 namespace EDL {
-
-static BrokenDateTime
-ToLocalBrokenDateTime(BrokenDateTime utc) noexcept
-{
-  const auto tm = LocalTime(utc.ToTimePoint());
-  return BrokenDateTime(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-                        tm.tm_hour, tm.tm_min, tm.tm_sec);
-}
 
 static bool
 HasDedicatedPageOverlayOwnership() noexcept
@@ -235,7 +228,7 @@ BrokenDateTime
 GetForecastTimeLocal() noexcept
 {
   EnsureInitialised();
-  return ToLocalBrokenDateTime(GetForecastTime());
+  return ToBrokenDateTime(LocalTime(GetForecastTime().ToTimePoint()));
 }
 
 StaticString<64>

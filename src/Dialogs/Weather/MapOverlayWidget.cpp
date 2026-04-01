@@ -17,6 +17,7 @@
 #include "Language/Language.hpp"
 #include "Weather/PCMet/Overlays.hpp"
 #include "Interface.hpp"
+#include "io/DirectoryUtil.hpp"
 #include "LocalPath.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "co/Task.hxx"
@@ -221,20 +222,14 @@ WeatherMapOverlayListWidget::UpdateList()
     for (auto &i : PCMet::CollectOverlays())
       items.emplace_back(std::move(i));
 
-  struct Visitor : public File::Visitor {
-    std::vector<Item> &items;
-
-    explicit Visitor(std::vector<Item> &_items):items(_items) {}
-
-    void Visit(Path path, Path filename) override {
-      items.emplace_back(filename.c_str(), path);
-    }
-  } visitor(items);
-
   const auto weather_path = LocalPath("weather");
   const auto overlay_path = AllocatedPath::Build(weather_path, "overlay");
-  Directory::VisitSpecificFiles(overlay_path, "*.tif", visitor);
-  Directory::VisitSpecificFiles(overlay_path, "*.tiff", visitor);
+  auto add_item = [this](Path path, Path filename) {
+    items.emplace_back(filename.c_str(), path);
+  };
+
+  DirectoryUtil::VisitSpecificFiles(overlay_path, "*.tif", add_item);
+  DirectoryUtil::VisitSpecificFiles(overlay_path, "*.tiff", add_item);
 
   const unsigned n = items.size();
 

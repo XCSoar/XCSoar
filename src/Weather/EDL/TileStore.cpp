@@ -3,9 +3,10 @@
 
 #include "TileStore.hpp"
 #include "LocalPath.hpp"
+#include "io/DirectoryUtil.hpp"
 #include "Operation/ProgressListener.hpp"
-#include "net/http/CoDownloadToFile.hpp"
 #include "system/FileUtil.hpp"
+#include "net/http/CoDownloadToFile.hpp"
 
 #include <algorithm>
 #include <map>
@@ -64,14 +65,10 @@ TileRequest::BuildCacheFileName() const noexcept
 AllocatedPath
 BuildCacheDirectory()
 {
-  const auto weather_path = LocalPath("weather");
-  Directory::Create(weather_path);
-  auto edl_path = AllocatedPath::Build(weather_path, Path("edl"));
-  Directory::Create(edl_path);
-  auto mbtiles_path = AllocatedPath::Build(edl_path, Path("mbtiles"));
-  Directory::Create(mbtiles_path);
-
-  return mbtiles_path;
+  auto path = MakeCacheDirectory("edl");
+  path = AllocatedPath::Build(path, Path("mbtiles"));
+  Directory::Create(path);
+  return path;
 }
 
 AllocatedPath
@@ -177,43 +174,27 @@ std::vector<CachedDay>
 ListDownloadedDays()
 {
   CachedDayVisitor visitor;
-  Directory::VisitSpecificFiles(BuildCacheDirectory(), "*.mbtiles", visitor);
+  DirectoryUtil::VisitSpecificFiles(BuildCacheDirectory(), "*.mbtiles",
+                                    [&visitor](Path path, Path filename) {
+                                      visitor.Visit(path, filename);
+                                    });
   return visitor.Export();
 }
-
-class DeleteOtherDaysVisitor final : public File::Visitor {
-  const BrokenDateTime keep_day;
-  unsigned deleted = 0;
-
-public:
-  explicit DeleteOtherDaysVisitor(BrokenDateTime _keep_day) noexcept
-    :keep_day(NormaliseDay(_keep_day)) {}
-
-  void Visit(Path path, Path filename) override
-  {
-    BrokenDateTime forecast;
-    if (!ParseCacheFileName(filename, forecast))
-      return;
-
-    if (forecast.AtMidnight() == keep_day)
-      return;
-
-    if (File::Delete(path))
-      ++deleted;
-  }
-
-  unsigned GetDeleted() const noexcept
-  {
-    return deleted;
-  }
-};
 
 unsigned
 DeleteOtherDownloadedDays(BrokenDateTime keep_day)
 {
-  DeleteOtherDaysVisitor visitor(keep_day);
-  Directory::VisitSpecificFiles(BuildCacheDirectory(), "*.mbtiles", visitor);
-  return visitor.GetDeleted();
+  const auto keep_day_utc = NormaliseDay(keep_day);
+
+  return DirectoryUtil::DeleteSpecificFilesExcept(
+    BuildCacheDirectory(), "*.mbtiles",
+    [keep_day_utc](Path, Path filename) {
+      BrokenDateTime forecast;
+      if (!ParseCacheFileName(filename, forecast))
+        return true;
+
+      return forecast.AtMidnight() == keep_day_utc;
+    });
 }
 
 } // namespace EDL

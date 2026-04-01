@@ -23,7 +23,7 @@
 BrokenDateTime::BrokenDateTime(std::chrono::system_clock::time_point tp) noexcept
   :BrokenDateTime(FromUnixTimeUTC(std::chrono::system_clock::to_time_t(tp))) {}
 
-static const BrokenDateTime
+BrokenDateTime
 ToBrokenDateTime(const struct tm &tm) noexcept
 {
   BrokenDateTime dt;
