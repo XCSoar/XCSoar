@@ -105,7 +105,8 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
-	TestStrings TestUTF8 TestWrapText \
+	TestStrings TestStringParser TestUTF8 TestWrapText \
+	TestStringHelpers \
 	TestInputConfig \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
@@ -558,6 +559,20 @@ TEST_STRINGS_SOURCES = \
 	$(TEST_SRC_DIR)/TestStrings.cpp
 TEST_STRINGS_DEPENDS = UTIL
 $(eval $(call link-program,TestStrings,TEST_STRINGS))
+
+TEST_STRING_PARSER_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestStringParser.cpp
+TEST_STRING_PARSER_DEPENDS = UTIL
+$(eval $(call link-program,TestStringParser,TEST_STRING_PARSER))
+
+TEST_STRING_HELPERS_SOURCES = \
+	$(SRC)/util/StringCompare.cxx \
+	$(SRC)/util/StringStrip.cxx \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestStringHelpers.cpp
+TEST_STRING_HELPERS_DEPENDS = UTIL
+$(eval $(call link-program,TestStringHelpers,TEST_STRING_HELPERS))
 
 TEST_UTF8_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
