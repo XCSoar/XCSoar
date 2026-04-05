@@ -273,7 +273,7 @@ ParseJsonValue(const std::string &json, boost::json::value &value)
   return true;
 }
 
-static std::string
+static bool
 ParseNOTAMsFromApiValue(const boost::json::value &value,
                         std::vector<NOTAMStruct> &notams,
                         const char *context)
@@ -526,11 +526,8 @@ NOTAMGlue::ForceUpdateLocation(const GeoPoint &location,
 }
 
 void
-NOTAMGlue::LoadNOTAMs(const GeoPoint &location,
-                      OperationEnvironment &operation)
+NOTAMGlue::LoadNOTAMs(const GeoPoint &location)
 {
-  (void)operation; // Suppress unused parameter warning
-
   // Check if location is valid
   if (!location.IsValid()) {
     return;
@@ -1177,8 +1174,7 @@ NOTAMGlue::LoadCachedNOTAMs()
   std::string cache_api_base_url;
   boost::json::value cached_api;
   
-  LogFmt("NOTAM: Attempting to load cache from: {}",
-         GetNOTAMCacheFilePath().c_str());
+  LogFmt("NOTAM: Attempting to load NOTAM cache");
   
   // Try to load from cache file
   if (LoadNOTAMsFromFile(cached_notams, &cache_location, &cache_radius_km,
@@ -1205,8 +1201,7 @@ NOTAMGlue::LoadCachedNOTAMs()
     return count;
   }
   
-  LogFmt("NOTAM: No cached NOTAMs found at: {}",
-         GetNOTAMCacheFilePath().c_str());
+  LogFmt("NOTAM: No cached NOTAMs found");
   return 0;
 }
 
@@ -1294,7 +1289,7 @@ NOTAMGlue::InvalidateCache()
 {
   auto file_path = GetNOTAMCacheFilePath();
   
-  LogFmt("NOTAM: Invalidating cache file: {}", file_path.c_str());
+  LogFmt("NOTAM: Invalidating NOTAM cache file");
   NOTAMCache::InvalidateFile(file_path);
 
   {
@@ -1557,8 +1552,7 @@ NOTAMGlue::LoadNOTAMsFromFile(std::vector<NOTAMStruct> &notams,
 {
   try {
     const auto file_path = GetNOTAMCacheFilePath();
-    LogFmt("NOTAM: LoadNOTAMsFromFile attempting to load: {}",
-           file_path.c_str());
+    LogFmt("NOTAM: LoadNOTAMsFromFile attempting to load cache");
 
     boost::json::value root;
     if (!NOTAMCache::LoadJsonValue(file_path, root) || !root.is_object()) {
@@ -1648,6 +1642,9 @@ NOTAMGlue::IsCacheExpired() const
     if (!meta.location.IsValid())
       return true;
 
+    if (meta.radius_km == 0)
+      return true;
+
     std::time_t current_time = std::time(nullptr);
     std::time_t max_age_seconds = settings_snapshot.refresh_interval_min * 60;
 
@@ -1655,7 +1652,7 @@ NOTAMGlue::IsCacheExpired() const
         (current_time - meta.timestamp) > max_age_seconds)
       return true;
 
-    if (meta.radius_km > 0 && meta.radius_km != settings_snapshot.radius_km)
+    if (meta.radius_km != settings_snapshot.radius_km)
       return true;
 
     if (meta.api_base_url != settings_snapshot.api_base_url.c_str())
