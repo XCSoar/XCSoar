@@ -18,6 +18,8 @@ constexpr std::string_view AirspaceBlackOutline = "AirspaceBlackOutline";
 constexpr std::string_view AirspaceTransparency = "AirspaceTransparency";
 constexpr std::string_view AirspaceFillMode = "AirspaceFillMode";
 constexpr std::string_view AirspaceLabelSelection = "AirspaceLabelSelection";
+constexpr std::string_view AirspaceShowNOTAMLabels =
+  "AirspaceShowNOTAMLabels";
 constexpr std::string_view AltMargin = "AltMargin";
 constexpr std::string_view AltMode = "AltitudeMode";
 constexpr std::string_view AltitudeUnitsValue = "AltitudeUnit";

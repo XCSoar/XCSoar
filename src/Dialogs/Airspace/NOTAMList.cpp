@@ -173,10 +173,10 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       const bool is_perm = notam.end_time >= NOTAMTime::PermanentEndTime();
       if (now < notam.start_time) {
         const auto starts_in = FormatRelativeNotamTime(notam.start_time - now);
-  StaticString<64> status;
-  status.Format(_("Starts in %s"), starts_in.c_str());
-  first_row_text += " • ";
-  first_row_text += status.c_str();
+        StaticString<64> status;
+        status.Format(_("Starts in %s"), starts_in.c_str());
+        first_row_text += " • ";
+        first_row_text += status.c_str();
       } else if (!is_perm && now > notam.end_time) {
         first_row_text += " • ";
         first_row_text += _("Expired");
@@ -261,11 +261,22 @@ NOTAMListWidget::UpdateList()
   items.clear();
 
   if (net_components && net_components->notam) {
+    const auto snapshot = net_components->notam->GetSnapshot();
+    const auto &notams = snapshot.notams;
+    const auto now = GetCurrentNOTAMTimeUTC();
+    const auto &settings =
+      CommonInterface::GetComputerSettings().airspace.notam;
+    const unsigned visible_count =
+      static_cast<unsigned>(std::count_if(notams.begin(), notams.end(),
+        [&](const auto &notam) {
+          return NOTAMFilter::ShouldDisplay(notam, settings, now, false);
+        }));
+
     // Add header items with statistics
     NOTAMStruct header1, header2, header3, header4;
     
     // Last Update time
-    std::time_t last_update = net_components->notam->GetLastUpdateTime();
+    std::time_t last_update = snapshot.last_update_time;
     header1.number = _("Last Update (local)");
     if (last_update > 0) {
       struct tm tm_buf;
@@ -291,7 +302,7 @@ NOTAMListWidget::UpdateList()
     
     // Distance from last update
     const auto &basic = CommonInterface::Basic();
-    GeoPoint last_loc = net_components->notam->GetLastUpdateLocation();
+    GeoPoint last_loc = snapshot.last_update_location;
     header2.number = _("Distance");
     if (basic.location_available && basic.location.IsValid() &&
         last_loc.IsValid()) {
@@ -302,16 +313,15 @@ NOTAMListWidget::UpdateList()
     }
     
     // NOTAM counts
-    NOTAMGlue::FilterStats stats = net_components->notam->GetFilterStats();
     char count_buffer[64];
     header3.number = _("NOTAMs");
     StringFormat(count_buffer, sizeof(count_buffer), _("%u total"),
-                 stats.total);
+                 static_cast<unsigned>(notams.size()));
     header3.text = count_buffer;
     
     header4.number = _("After Filtering");
     StringFormat(count_buffer, sizeof(count_buffer), _("%u visible"),
-                 stats.final_count);
+                 visible_count);
     header4.text = count_buffer;
     
     const std::array<NOTAMStruct, HEADER_COUNT> headers = {
@@ -319,8 +329,6 @@ NOTAMListWidget::UpdateList()
     };
     items.insert(items.end(), headers.begin(), headers.end());
     
-    // Get all NOTAMs (max_count=0 means no limit)
-    auto notams = net_components->notam->GetNOTAMs(0);
     items.insert(items.end(), notams.begin(), notams.end());
   } else {
     LogFmt("NOTAM: UpdateList - net_components or notam is null");
