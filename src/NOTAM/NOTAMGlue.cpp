@@ -327,11 +327,8 @@ NOTAMGlue::ForceUpdateLocation(const GeoPoint &location,
 }
 
 void
-NOTAMGlue::LoadNOTAMs(const GeoPoint &location,
-                      OperationEnvironment &operation)
+NOTAMGlue::LoadNOTAMs(const GeoPoint &location)
 {
-  (void)operation; // Suppress unused parameter warning
-
   // Check if location is valid
   if (!location.IsValid()) {
     return;
@@ -814,8 +811,7 @@ NOTAMGlue::LoadCachedNOTAMs()
   std::string cache_api_base_url;
   boost::json::value cached_api;
   
-  LogFmt("NOTAM: Attempting to load cache from: {}",
-         GetNOTAMCacheFilePath().c_str());
+  LogFmt("NOTAM: Attempting to load NOTAM cache");
   
   // Try to load from cache file
   if (LoadNOTAMsFromFile(cached_notams, &cache_location, &cache_radius_km,
@@ -842,8 +838,7 @@ NOTAMGlue::LoadCachedNOTAMs()
     return count;
   }
   
-  LogFmt("NOTAM: No cached NOTAMs found at: {}",
-         GetNOTAMCacheFilePath().c_str());
+  LogFmt("NOTAM: No cached NOTAMs found");
   return 0;
 }
 
@@ -948,7 +943,7 @@ NOTAMGlue::InvalidateCache()
 {
   auto file_path = GetNOTAMCacheFilePath();
   
-  LogFmt("NOTAM: Invalidating cache file: {}", file_path.c_str());
+  LogFmt("NOTAM: Invalidating NOTAM cache file");
   NOTAMCache::InvalidateFile(file_path);
 
   {

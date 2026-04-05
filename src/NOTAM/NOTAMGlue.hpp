@@ -23,7 +23,6 @@
 
 class CurlGlobal;
 class Airspaces;
-class OperationEnvironment;
 struct NOTAMImpl; // Forward declaration for pimpl
 
 namespace NOTAMFilter {
@@ -127,7 +126,7 @@ class NOTAMGlue final : public RateLimiter {
 
 public:
   NOTAMGlue(const NOTAMSettings &_settings, CurlGlobal &_curl);
-  virtual ~NOTAMGlue();
+  ~NOTAMGlue();
   
   /**
    * Register a listener for NOTAM update notifications
@@ -175,7 +174,7 @@ public:
   /**
    * Load NOTAMs for the given location
    */
-  void LoadNOTAMs(const GeoPoint &location, OperationEnvironment &operation);
+  void LoadNOTAMs(const GeoPoint &location);
   
   /**
    * Get currently loaded NOTAMs (thread-safe)
@@ -183,6 +182,17 @@ public:
    * (0 = no limit).
    */
   std::vector<struct NOTAM> GetNOTAMs(unsigned max_count = 0) const;
+
+  struct Snapshot {
+    std::vector<struct NOTAM> notams;
+    std::time_t last_update_time = 0;
+    GeoPoint last_update_location = GeoPoint::Invalid();
+  };
+
+  /**
+   * Get a consistent snapshot of NOTAMs and fetch metadata.
+   */
+  [[nodiscard]] Snapshot GetSnapshot() const;
   
   /**
    * Clear all loaded NOTAMs
