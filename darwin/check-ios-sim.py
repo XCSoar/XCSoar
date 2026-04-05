@@ -130,7 +130,19 @@ def main() -> int:
     app_test_dir = app_path / "tests"
 
     print(f"check-ios-sim: building simulator app and tests for target {target}")
-    run([make_bin, f"-j{cpu_count()}", f"TARGET={target}", "build-check", "ipa"])
+    # -Oline serializes job output; V=0 reduces noise. Helps avoid gmake
+    # "write error: stdout" on CI when parallel build output is very large.
+    run(
+        [
+            make_bin,
+            "-Oline",
+            f"-j{cpu_count()}",
+            f"TARGET={target}",
+            "V=0",
+            "build-check",
+            "ipa",
+        ]
+    )
 
     if not app_path.is_dir():
         print(f"Error: app bundle not found at {app_path}", file=sys.stderr)

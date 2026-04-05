@@ -600,7 +600,7 @@ jobs:
         id: tests
         if: ${{ (matrix.target == 'IOS64' || matrix.target == 'MACOS') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
         run: |
-          echo "🧪 Running unit tests..."
+          echo "Running unit tests..."
           if [ ${{ matrix.target }} = 'IOS64' ]; then
             gmake check-ios-sim
           else
