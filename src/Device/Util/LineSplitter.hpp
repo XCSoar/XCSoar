@@ -4,7 +4,7 @@
 #pragma once
 
 #include "io/DataHandler.hpp"
-#include "LineHandler.hpp"
+#include "Device/Util/LineHandler.hpp"
 #include "util/StaticFifoBuffer.hxx"
 
 class PortLineSplitter : public DataHandler, protected PortLineHandler {
