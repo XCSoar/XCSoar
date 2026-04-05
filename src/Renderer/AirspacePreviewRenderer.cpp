@@ -10,11 +10,11 @@
 #include "Geo/GeoBounds.hpp"
 #include "Projection/WindowProjection.hpp"
 
+#include <vector>
+
 #if defined(USE_GDI) && !defined(NDEBUG)
 #include "util/PrintException.hxx"
 #endif
-
-#include <vector>
 
 static void
 GetPolygonPoints(std::vector<BulkPixelPoint> &pts,

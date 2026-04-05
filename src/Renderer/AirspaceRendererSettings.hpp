@@ -106,6 +106,9 @@ struct AirspaceRendererSettings {
     ALL,
   } label_selection;
 
+  /** Show brief NOTAM text labels on the map when zoomed in enough */
+  bool show_notam_labels;
+
   AirspaceClassRendererSettings classes[AIRSPACECLASSCOUNT];
 
   void SetDefaults();

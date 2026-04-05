@@ -117,7 +117,8 @@ MapWindow::RenderAirspace(Canvas &canvas) noexcept
                                  render_projection,
                                  Basic(), Calculated(),
                                  GetComputerSettings().airspace,
-                                 GetMapSettings().airspace);
+                                 GetMapSettings().airspace,
+                                 &label_block);
   }
 }
 

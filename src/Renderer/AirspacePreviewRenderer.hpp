@@ -19,7 +19,7 @@ namespace AirspacePreviewRenderer
                    const AirspaceRendererSettings &settings);
 
   /**
-   * Restore GDI text drawing after #PrepareFill. Pass the text color that
+   * Restore text drawing state after #PrepareFill. Pass the text color that
    * was active before #PrepareFill (e.g. from Canvas::GetTextColor()).
    */
   void UnprepareFill(Canvas &canvas, Color text_color) noexcept;

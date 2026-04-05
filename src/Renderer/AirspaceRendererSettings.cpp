@@ -30,6 +30,7 @@ AirspaceRendererSettings::SetDefaults()
 
   fill_mode = FillMode::DEFAULT;
   label_selection = LabelSelection::NONE;
+  show_notam_labels = true;
 
   for (auto it = classes; it != classes + AIRSPACECLASSCOUNT; ++it)
     it->SetDefaults();

@@ -2,9 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "AirspaceConfig.hpp"
-#ifdef HAVE_HTTP
-#include "NotamConfig.hpp"
-#endif
 #include "Map.hpp"
 #include "Keys.hpp"
 #include "ui/canvas/Features.hpp"
@@ -15,6 +12,10 @@
 
 #include <string.h>
 #include <stdio.h>
+
+#ifdef HAVE_HTTP
+#include "NotamConfig.hpp"
+#endif
 
 static const char *
 MakeAirspaceSettingName(char *buffer, const char *prefix, unsigned n)
@@ -59,6 +60,7 @@ void
 Profile::Load(const ProfileMap &map, AirspaceRendererSettings &settings)
 {
   map.GetEnum(ProfileKeys::AirspaceLabelSelection, settings.label_selection);
+  map.Get(ProfileKeys::AirspaceShowNOTAMLabels, settings.show_notam_labels);
   map.Get(ProfileKeys::AirspaceBlackOutline, settings.black_outline);
   map.GetEnum(ProfileKeys::AltMode, settings.altitude_mode);
   map.Get(ProfileKeys::ClipAlt, settings.clip_altitude);

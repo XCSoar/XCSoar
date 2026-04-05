@@ -378,14 +378,18 @@ ParseNOTAMProperties(NOTAM &notam, const boost::json::object &notam_obj)
   // Parse altitude limits using airspace altitude parsing system
   if (auto it = notam_obj.find("lowerLimit"); it != notam_obj.end()) {
     const auto lower_str = boost::json::value_to<std::string>(it->value());
-    notam.lower_altitude = ParseAltitudeString(lower_str);
-    has_lower_limit = true;
+    if (!Strip(std::string_view{lower_str}).empty()) {
+      notam.lower_altitude = ParseAltitudeString(lower_str);
+      has_lower_limit = true;
+    }
   }
   
   if (auto it = notam_obj.find("upperLimit"); it != notam_obj.end()) {
     const auto upper_str = boost::json::value_to<std::string>(it->value());
-    notam.upper_altitude = ParseAltitudeString(upper_str);
-    has_upper_limit = true;
+    if (!Strip(std::string_view{upper_str}).empty()) {
+      notam.upper_altitude = ParseAltitudeString(upper_str);
+      has_upper_limit = true;
+    }
   }
   
   if (auto it = notam_obj.find("classification"); it != notam_obj.end()) {
@@ -408,13 +412,19 @@ ParseNOTAMProperties(NOTAM &notam, const boost::json::object &notam_obj)
   }
   
   // Parse flight level limits
-  if (auto it = notam_obj.find("minimumFL"); it != notam_obj.end()) {
+  auto it = notam_obj.find("minimumFL");
+  if (it == notam_obj.end())
+    it = notam_obj.find("minimumFl");
+  if (it != notam_obj.end()) {
     notam.minimum_fl = boost::json::value_to<std::string>(it->value());
     if (!has_lower_limit)
       notam.lower_altitude = ParseFlightLevelLimit(notam.minimum_fl);
   }
   
-  if (auto it = notam_obj.find("maximumFL"); it != notam_obj.end()) {
+  it = notam_obj.find("maximumFL");
+  if (it == notam_obj.end())
+    it = notam_obj.find("maximumFl");
+  if (it != notam_obj.end()) {
     notam.maximum_fl = boost::json::value_to<std::string>(it->value());
     if (!has_upper_limit)
       notam.upper_altitude = ParseFlightLevelLimit(notam.maximum_fl);
@@ -461,6 +471,9 @@ ParseNOTAMGeometries(const NOTAM &base_notam,
         } else {
           radius_nm = value.to_number<double>();
         }
+
+        if (!std::isfinite(radius_nm))
+          throw std::invalid_argument("non-finite NOTAM radius");
 
         if (radius_nm <= 0)
           throw std::invalid_argument("non-positive NOTAM radius");
@@ -719,6 +732,8 @@ ParseNOTAMResponse(const boost::json::value &json)
       throw std::runtime_error(
         "Invalid NOTAM response: 'items' is present but is not an array");
     response.notams = ParseNOTAMItems(it->value().as_array());
+  } else if (!response.is_delta) {
+    throw std::runtime_error("Invalid NOTAM response: missing items array");
   }
 
   return response;
@@ -799,14 +814,9 @@ FetchNOTAMsResponse(CurlGlobal &curl, const NOTAMSettings &settings,
          static_cast<unsigned long>(http_response.body.size()));
 
   if (http_response.status != 200) {
-    if (!http_response.body.empty()) {
-      constexpr size_t max_snippet = 512;
-      std::string snippet(http_response.body, 0,
-                          std::min(max_snippet, http_response.body.size()));
-      snippet.resize(CropIncompleteUTF8(snippet.data()) - snippet.data());
-      LogFmt("NOTAM: Response body (first {} bytes): {}",
-         static_cast<unsigned long>(snippet.size()), snippet.c_str());
-    }
+    LogFmt("NOTAM: HTTP {} with {} response bytes",
+           http_response.status,
+           static_cast<unsigned long>(http_response.body.size()));
     throw std::runtime_error(
       fmt::format("Failed to fetch NOTAMs: HTTP {}", http_response.status));
   }
