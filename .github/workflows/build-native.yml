@@ -690,82 +690,19 @@ jobs:
 
           echo "✅ macOS package signed successfully"
 
-      - name: Upload to iOS TestFlight
+      - name: Upload artifact for TestFlight (iOS)
         if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && steps.sign_ios.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
-          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
-        run: |
-          IPA_PATH="output/IOS64/xcsoar-signed.ipa"
-          
-          if [ ! -f "$IPA_PATH" ]; then
-            echo "❌ Signed IPA not found: $IPA_PATH"
-            exit 1
-          fi
-          
-          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
-            echo "❌ TestFlight credentials not configured"
-            exit 1
-          fi
-          
-          echo "📱 Uploading to App Store Connect / TestFlight..."
-          
-          # Use altool to upload (matches build-release.sh)
-          if [ -n "$ASC_PROVIDER" ]; then
-            xcrun altool --upload-app \
-              -f "$IPA_PATH" \
-              -t ios \
-              -u "$APPLE_ID" \
-              -p "$APP_SPECIFIC_PASSWORD" \
-              --asc-provider "$ASC_PROVIDER"
-          else
-            xcrun altool --upload-app \
-              -f "$IPA_PATH" \
-              -t ios \
-              -u "$APPLE_ID" \
-              -p "$APP_SPECIFIC_PASSWORD"
-          fi
-          
-          echo "✅ Upload completed successfully"
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-testflight-ipa
+          path: output/IOS64/xcsoar-signed.ipa
 
-      - name: Upload to macOS TestFlight
+      - name: Upload artifact for TestFlight (macOS)
         if: ${{ matrix.target == 'MACOS' && steps.tests.outcome == 'success' && steps.sign_macos.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
-        env:
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
-          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
-        run: |
-          PKG_PATH="output/MACOS/XCSoar-signed.pkg"
-
-          if [ ! -f "$PKG_PATH" ]; then
-            echo "❌ Signed pkg not found: $PKG_PATH"
-            exit 1
-          fi
-
-          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
-            echo "❌ App Store Connect credentials not configured"
-            exit 1
-          fi
-
-          echo "🖥️  Uploading to App Store Connect / TestFlight..."
-
-          if [ -n "$ASC_PROVIDER" ]; then
-            xcrun altool --upload-app \
-              -f "$PKG_PATH" \
-              -t macos \
-              -u "$APPLE_ID" \
-              -p "$APP_SPECIFIC_PASSWORD" \
-              --asc-provider "$ASC_PROVIDER"
-          else
-            xcrun altool --upload-app \
-              -f "$PKG_PATH" \
-              -t macos \
-              -u "$APPLE_ID" \
-              -p "$APP_SPECIFIC_PASSWORD"
-          fi
-
-          echo "✅ Upload completed successfully"
+        uses: actions/upload-artifact@v7
+        with:
+          name: macos-testflight-pkg
+          path: output/MACOS/XCSoar-signed.pkg
 
       - name: Cleanup iOS keychain
         if: ${{ always() && matrix.target == 'IOS64' }}
@@ -905,3 +842,117 @@ jobs:
       - name: Remove key
         if: always()
         run: rm -f play-key.json
+
+  upload-to-testflight:
+    name: Upload to TestFlight (iOS / macOS)
+    runs-on: macos-15
+    needs: [build]
+    if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+    steps:
+      - name: Download iOS IPA
+        id: ios_ipa
+        continue-on-error: true
+        uses: actions/download-artifact@v8
+        with:
+          name: ios-testflight-ipa
+
+      - name: Download macOS PKG
+        id: macos_pkg
+        continue-on-error: true
+        uses: actions/download-artifact@v8
+        with:
+          name: macos-testflight-pkg
+
+      - name: Upload iOS to App Store Connect / TestFlight
+        if: steps.ios_ipa.outcome == 'success'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
+        run: |
+          IPA_PATH=""
+          for candidate in \
+            "ios-testflight-ipa/output/IOS64/xcsoar-signed.ipa" \
+            "ios-testflight-ipa/xcsoar-signed.ipa" \
+            "xcsoar-signed.ipa"; do
+            if [ -f "$candidate" ]; then
+              IPA_PATH="$candidate"
+              break
+            fi
+          done
+          if [ -z "$IPA_PATH" ]; then
+            echo "Signed IPA not found after download"
+            exit 1
+          fi
+          echo "Using IPA at: $IPA_PATH"
+
+          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
+            echo "TestFlight credentials not configured"
+            exit 1
+          fi
+
+          echo "Uploading iOS build to App Store Connect / TestFlight..."
+          if [ -n "$ASC_PROVIDER" ]; then
+            xcrun altool --upload-app \
+              -f "$IPA_PATH" \
+              -t ios \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD" \
+              --asc-provider "$ASC_PROVIDER"
+          else
+            xcrun altool --upload-app \
+              -f "$IPA_PATH" \
+              -t ios \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD"
+          fi
+
+      - name: Upload macOS to App Store Connect / TestFlight
+        if: steps.macos_pkg.outcome == 'success'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
+        run: |
+          PKG_PATH=""
+          for candidate in \
+            "macos-testflight-pkg/output/MACOS/XCSoar-signed.pkg" \
+            "macos-testflight-pkg/XCSoar-signed.pkg" \
+            "XCSoar-signed.pkg"; do
+            if [ -f "$candidate" ]; then
+              PKG_PATH="$candidate"
+              break
+            fi
+          done
+          if [ -z "$PKG_PATH" ]; then
+            echo "Signed pkg not found after download"
+            exit 1
+          fi
+          echo "Using pkg at: $PKG_PATH"
+
+          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
+            echo "App Store Connect credentials not configured"
+            exit 1
+          fi
+
+          echo "Uploading macOS build to App Store Connect / TestFlight..."
+          if [ -n "$ASC_PROVIDER" ]; then
+            xcrun altool --upload-app \
+              -f "$PKG_PATH" \
+              -t macos \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD" \
+              --asc-provider "$ASC_PROVIDER"
+          else
+            xcrun altool --upload-app \
+              -f "$PKG_PATH" \
+              -t macos \
+              -u "$APPLE_ID" \
+              -p "$APP_SPECIFIC_PASSWORD"
+          fi
+
+      - name: Require at least one TestFlight artifact
+        if: ${{ steps.ios_ipa.outcome != 'success' && steps.macos_pkg.outcome != 'success' }}
+        run: |
+          echo "No iOS or macOS TestFlight artifacts were produced by the build job."
+          exit 1
