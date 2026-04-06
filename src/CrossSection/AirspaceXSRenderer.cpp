@@ -79,6 +79,7 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
                                             AirspaceClass type) const
 {
   const Color text_color = canvas.GetTextColor();
+
   if (AirspacePreviewRenderer::PrepareFill(canvas, type, airspace_look,
                                            settings)) {
     const auto &class_settings = settings.classes[type];
