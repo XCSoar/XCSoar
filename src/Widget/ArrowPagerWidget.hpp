@@ -62,6 +62,11 @@ private:
   /** Optional guard that blocks forward page navigation */
   CanAdvanceCallback can_advance_callback;
 
+  [[gnu::pure]]
+  bool HasNextPage() const noexcept {
+    return GetCurrentIndex() + 1 < GetSize();
+  }
+
 public:
   ArrowPagerWidget(const ButtonLook &_look,
                    std::function<void()> _close_callback,
