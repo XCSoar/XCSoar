@@ -13,7 +13,7 @@ from build.musl import MuslProject
 
 binutils = BinutilsProject(
     (
-        "https://ftpmirror.gnu.org/binutils/binutils-2.42.tar.xz",
+        "https://ftp.gnu.org/gnu/binutils/binutils-2.42.tar.xz",
         "https://sourceware.org/pub/binutils/releases/binutils-2.42.tar.xz",
     ),
     "f6e4d41fd5fc778b06b7891457b3620da5ecea1006c6a4a41ae998109f85a800",
