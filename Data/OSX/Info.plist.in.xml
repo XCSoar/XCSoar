@@ -27,8 +27,8 @@
     <string>12.0.0</string>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.navigation</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>XCSoar uses your location for navigation and flight logging with GPS devices.</string>
+    <key>NSLocationUsageDescription</key>
+    <string>XCSoar uses your location to provide onboard GPS navigation and to record your flight track.</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
   </dict>
