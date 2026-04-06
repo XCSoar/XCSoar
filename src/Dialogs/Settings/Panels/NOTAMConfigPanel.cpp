@@ -39,6 +39,7 @@
 enum ControlIndex {
 #ifdef HAVE_HTTP
   ENABLE_NOTAM,
+  NOTICE,
   API_URL,
   NOTAM_RADIUS,
   REFRESH_INTERVAL,
@@ -97,6 +98,8 @@ NOTAMConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddBoolean(_("NOTAM Support"),
              _("Enable downloading and display of NOTAMs from aviation authorities."),
              computer.notam.enabled, this);
+  AddMultiLine(_("Notice: NOTAM display is for situational awareness only\n"
+                 "and does not replace proper pre-flight NOTAM briefing."));
 
   AddText(_("API URL"),
           _("Base URL of the NOTAM proxy API. Must be configured before NOTAMs can be fetched."),
