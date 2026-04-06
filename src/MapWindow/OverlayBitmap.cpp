@@ -29,7 +29,11 @@ using ClippedPolygon = boost::geometry::model::polygon<DoublePoint2D>;
 using ClippedMultiPolygon =
   boost::geometry::model::multi_polygon<ClippedPolygon>;
 
+#ifdef USE_GEOTIFF
 MapOverlayBitmap::MapOverlayBitmap(Path path)
+#else
+[[noreturn]] MapOverlayBitmap::MapOverlayBitmap(Path path)
+#endif
   :label((path.GetBase() != nullptr ? path.GetBase() : path).c_str())
 {
   bounds = bitmap.LoadGeoFile(path);
