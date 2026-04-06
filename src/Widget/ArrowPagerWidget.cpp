@@ -116,7 +116,7 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent,
   next_button.Create(parent, layout.next_button, style,
                      std::make_unique<SymbolButtonRenderer>(look, ">"),
                      [this](){
-                       if (CanAdvance())
+                       if (HasNextPage() && CanAdvance())
                          Next(false);
                      });
   close_button.Create(parent, look,
@@ -225,7 +225,7 @@ void
 ArrowPagerWidget::UpdateNextButtonState() noexcept
 {
   if (next_button.IsDefined())
-    next_button.SetEnabled(GetSize() >= 2 && CanAdvance());
+    next_button.SetEnabled(HasNextPage() && CanAdvance());
 }
 
 void
@@ -233,5 +233,5 @@ ArrowPagerWidget::UpdateButtons() noexcept
 {
   const bool enable = GetSize() >= 2;
   previous_button.SetEnabled(enable);
-  next_button.SetEnabled(enable && CanAdvance());
+  next_button.SetEnabled(enable && HasNextPage() && CanAdvance());
 }
