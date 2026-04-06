@@ -49,7 +49,6 @@ class CirclingWind {
   Angle current_circle;
 
   Angle last_track = Angle::Zero();
-  Angle last_wind_dir = Angle::Zero();
 
   boost::circular_buffer<Sample> samples{80};
 
