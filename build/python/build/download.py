@@ -2,7 +2,6 @@ from typing import Sequence, Union
 import os
 from tempfile import NamedTemporaryFile
 import urllib.request
-import sys
 
 from .verify import verify_file_digest
 from .lockfile import lockfile
@@ -28,14 +27,38 @@ def __download(urls: Sequence[str], path: str) -> None:
         try:
             __download_one(url, path)
             return
-        except:
-            print("download error:", sys.exc_info()[0])
+        except Exception as e:
+            print("download error:", type(e).__name__)
     __download_one(urls[-1], path)
 
 def __download_and_verify_to(urls: Sequence[str], md5: str, path: str) -> None:
-    __download(urls, path)
-    if not verify_file_digest(path, md5):
-        raise RuntimeError("Digest mismatch")
+    had_download_error = False
+    had_digest_mismatch = False
+    last_download_error: Exception = RuntimeError("download failed")
+
+    for url in urls:
+        try:
+            __download_one(url, path)
+        except Exception as e:
+            print("download error:", type(e).__name__)
+            had_download_error = True
+            last_download_error = e
+            continue
+
+        try:
+            if verify_file_digest(path, md5):
+                return
+            print("digest mismatch:", url)
+            had_digest_mismatch = True
+        except Exception as e:
+            print("digest verification error:", type(e).__name__)
+            had_digest_mismatch = True
+
+    if had_download_error and had_digest_mismatch:
+        raise RuntimeError("All download URLs failed: download errors and digest mismatches") from last_download_error
+    if had_download_error:
+        raise RuntimeError("All download URLs failed due to download errors") from last_download_error
+    raise RuntimeError("Digest mismatch")
 
 def download_basename(urls: Union[str, Sequence[str]]) -> str:
     return os.path.basename(__get_any(urls))
