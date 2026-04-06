@@ -88,6 +88,7 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "CTA", CTA },
   { "ACCSEC", ACC_SECTOR },
   { "AERIAL_SPORTING_RECREATIONAL", AERIAL_SPORTING_RECREATIONAL },
+  { "ASRA", AERIAL_SPORTING_RECREATIONAL },
   { "OFR", OVERFLIGHT_RESTRICTION },
   { "MRT", MRT },
   { "TFR", TFR },
