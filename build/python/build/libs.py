@@ -29,7 +29,7 @@ binutils = BinutilsProject(
 
 linux_headers = SabotageLinuxHeadersProject(
     (
-        "http://ftp.barfooze.de/pub/sabotage/tarballs/linux-headers-4.19.88.tar.xz",
+        "https://ftp.barfooze.de/pub/sabotage/tarballs/linux-headers-4.19.88.tar.xz",
         "https://mirrors.2f30.org/sabotage/tarballs/linux-headers-4.19.88.tar.xz",
     ),
     "5a975ba49b577869f2338aa80f44efd4e94f76e5b4bda11a6a1761a6d646848fdeaad7c820339b2c1c20d55f9bbf0e686121d621ac1cfa1dfc6cd71a166ade3a",
