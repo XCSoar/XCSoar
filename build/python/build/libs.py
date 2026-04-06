@@ -325,7 +325,7 @@ libpng = CmakeProject(
 libjpeg = CmakeProject(
     (
         "http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.1/libjpeg-turbo-3.0.1.tar.gz",
-        "https://netcologne.dl.sourceforge.net/project/libjpeg-turbo/3.0.1/libjpeg-turbo-3.0.1.tar.gz",
+        "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.0.1/libjpeg-turbo-3.0.1.tar.gz",
     ),
     "22429507714ae147b3acacd299e82099fce5d9f456882fc28e252e4579ba2a75",
     "lib/libjpeg.a",
