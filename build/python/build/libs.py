@@ -476,8 +476,8 @@ lua = LuaProject(
 
 libsalsa = AutotoolsProject(
     (
+        "https://ftp.suse.com/pub/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2",
         "ftp://ftp.suse.com/pub/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2",
-        "https://mirror.linux-ia64.org/ftp_suse_com/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2",
     ),
     "08a6481cdbf4c79e05a9cba3b6c48375",
     "lib/libsalsa.a",
