@@ -3,6 +3,10 @@
 
 #pragma once
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 class Args;
 
 namespace CommandLine {
@@ -17,7 +21,8 @@ namespace CommandLine {
   static constexpr bool full_screen = false;
 #endif
 
-#if defined(__linux__) && !defined(ANDROID)
+#if (defined(__linux__) && !defined(ANDROID)) || \
+    (defined(__APPLE__) && !TARGET_OS_IPHONE)
 #define HAVE_CMDLINE_REPLAY
   extern const char *replay_path;
 #endif
