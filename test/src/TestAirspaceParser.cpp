@@ -269,7 +269,7 @@ TestOpenAirExtended()
     return;
   }
 
-  ok1(airspaces.GetSize() == 3);
+  ok1(airspaces.GetSize() == 4);
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
@@ -279,6 +279,9 @@ TestOpenAirExtended()
     } else if (StringIsEqual("Type-GLIDING_SECTOR-Test", airspace.GetName())) {
       ok1(AirspaceClass::UNCLASSIFIED == airspace.GetClass());
       ok1(AirspaceClass::GLIDING_SECTOR == airspace.GetType());
+    } else if (StringIsEqual("Type-ASRA-Test", airspace.GetName())) {
+      ok1(AirspaceClass::UNCLASSIFIED == airspace.GetClass());
+      ok1(AirspaceClass::AERIAL_SPORTING_RECREATIONAL == airspace.GetType());
     } else if (StringIsEqual("NO-Type-Test", airspace.GetName())) {
       ok1(AirspaceClass::CLASSA == airspace.GetClass());
       ok1(AirspaceClass::OTHER == airspace.GetType());
@@ -288,7 +291,7 @@ TestOpenAirExtended()
 
 int main()
 try {
-  plan_tests(113);
+  plan_tests(115);
 
   TestOpenAir();
   TestTNP();

@@ -25,6 +25,8 @@ Version 7.45 - not yet released
     dropping the newest InfoBoxes, as we have 130 of them now)
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
+* data files
+  - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
