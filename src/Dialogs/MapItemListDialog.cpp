@@ -29,8 +29,11 @@
 #include "Geo/GeoVector.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Protection.hpp"
+#include "LogFile.hpp"
+#include <Message.hpp>
 
 #include <limits>
+#include <exception>
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -136,18 +139,23 @@ public:
   }
 
   bool CanAckItem(unsigned index) const noexcept {
-    return CanAckItem(*list[index]);
+    const MapItem *item = list[index];
+    return item != nullptr && CanAckItem(*item);
   }
 
   static bool CanAckItem(const MapItem &item) noexcept {
     if (backend_components == nullptr)
       return false;
 
-    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    if (item.type != MapItem::Type::AIRSPACE)
+      return false;
 
-    return item.type == MapItem::Type::AIRSPACE &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
-      !backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
+    auto *warnings = backend_components->GetAirspaceWarnings();
+    if (warnings == nullptr)
+      return false;
+
+    const auto &as_item = static_cast<const AirspaceMapItem &>(item);
+    return !warnings->GetAckDay(*as_item.airspace);
   }
 
   bool CanEnableItem(unsigned index) const noexcept {
@@ -325,9 +333,40 @@ MapItemListWidget::OnGotoClicked()
 inline void
 MapItemListWidget::OnAckClicked()
 {
-  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
-    list[GetCursorIndex()];
-  backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
+  const MapItem *item = list[GetCursorIndex()];
+  if (item == nullptr || item->type != MapItem::Type::AIRSPACE) {
+    LogFmt("Failed to acknowledge airspace warning for day: invalid map item selection");
+    return;
+  }
+
+  const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
+
+  if (backend_components == nullptr) {
+    LogFmt("Failed to acknowledge airspace warning for day: missing backend components");
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  }
+
+  auto *warnings = backend_components->GetAirspaceWarnings();
+  if (warnings == nullptr) {
+    LogFmt("Failed to acknowledge airspace warning for day: missing warning manager");
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  }
+
+  try {
+    warnings->AcknowledgeDay(as_item.airspace);
+  } catch (const std::exception &e) {
+    LogFmt("Failed to acknowledge airspace warning for day: {}", e.what());
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to acknowledge airspace warning for day");
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  }
+
   UpdateButtons();
 }
 

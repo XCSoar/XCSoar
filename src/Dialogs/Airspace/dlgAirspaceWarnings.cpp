@@ -138,18 +138,20 @@ AirspaceWarningListWidget::UpdateButtons()
     return;
   }
 
-  bool ack_expired, ack_day;
-
-  {
-    ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
-    const AirspaceWarning &warning = lease->GetWarning(airspace);
-    ack_expired = warning.IsAckExpired();
-    ack_day = warning.GetAckDay();
+  ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
+  const AirspaceWarning *warning = lease->GetWarningPtr(*airspace);
+  if (warning == nullptr) {
+    ack_button->SetEnabled(false);
+    ack_day_button->SetEnabled(false);
+    enable_button->SetEnabled(false);
+    radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
+    details_button->SetEnabled(true);
+    return;
   }
 
-  ack_button->SetEnabled(ack_expired);
-  ack_day_button->SetEnabled(!ack_day);
-  enable_button->SetEnabled(!ack_expired);
+  ack_button->SetEnabled(warning->IsAckExpired());
+  ack_day_button->SetEnabled(!warning->GetAckDay());
+  enable_button->SetEnabled(!warning->IsAckExpired());
   radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
   details_button->SetEnabled(true);
 }
@@ -269,7 +271,7 @@ AirspaceWarningListWidget::Enable()
 
     warning->AcknowledgeInside(false);
     warning->AcknowledgeWarning(false);
-    warning->AcknowledgeDay(false);
+    lease->AcknowledgeDay(airspace, false);
   } catch (const std::exception &e) {
     LogFmt("Failed to re-enable airspace warning: {}", e.what());
     Message::AddMessage(_("Failed to re-enable airspace warning"));
