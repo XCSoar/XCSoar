@@ -6,6 +6,7 @@
 #include "net/http/Features.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 #include "io/FileLineReader.hpp"
 #include "LocalPath.hpp"
 
@@ -44,6 +45,31 @@ GetUserRepositories()
   }
 
   return result;
+}
+
+void
+PurgeChangedUserRepositoryFiles(const char *old_list,
+                                const char *new_list) noexcept
+{
+  std::vector<std::string_view> old_entries, new_entries;
+
+  if (old_list != nullptr)
+    for (auto e : TIterableSplitString(old_list, '|'))
+      if (!e.empty())
+        old_entries.push_back(e);
+
+  if (new_list != nullptr)
+    for (auto e : TIterableSplitString(new_list, '|'))
+      if (!e.empty())
+        new_entries.push_back(e);
+
+  for (int i = 0; i < (int)old_entries.size(); ++i) {
+    if (i >= (int)new_entries.size() || old_entries[i] != new_entries[i]) {
+      char filename[32];
+      StringFormat(filename, std::size(filename), "user_repository_%d", i + 1);
+      File::Delete(LocalPath(filename));
+    }
+  }
 }
 
 bool
