@@ -276,6 +276,8 @@ public:
       LogFormat("Airspace intersection failed: %s", e.what());
 #ifndef NDEBUG
       PrintException(e);
+#else
+      (void)e;
 #endif
     } catch (...) {
       LogError(std::current_exception(), "Airspace intersection failed");
@@ -572,7 +574,7 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexce
 {
   if (const char *key = NotamDayAckKey(airspace);
       key != nullptr &&
-      notam_day_ack_by_station.find(key) != notam_day_ack_by_station.end())
+      notam_day_ack_by_station.contains(key))
     return true;
 
   const AirspaceWarning *warning = GetWarningPtr(airspace);
