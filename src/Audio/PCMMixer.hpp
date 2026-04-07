@@ -24,7 +24,7 @@ class PCMMixer final {
 
 public:
   PCMMixer(unsigned sample_rate, std::unique_ptr<PCMPlayer> &&player);
-  virtual ~PCMMixer() = default;
+  ~PCMMixer() = default;
 
   PCMMixer(PCMMixer &) = delete;
   PCMMixer &operator=(PCMMixer &) = delete;
