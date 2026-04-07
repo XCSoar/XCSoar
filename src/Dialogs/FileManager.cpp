@@ -674,9 +674,10 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
 
     downloads.erase(name.c_str());
 
-    if (name.c_str() == "repository"sv ||
-        IsUserRepositoryFile(name.c_str())) {
+    if (name.c_str() == "repository"sv) {
       repository_failed = false;
+      repository_modified = true;
+    } else if (IsUserRepositoryFile(name.c_str())) {
       repository_modified = true;
     }
   }

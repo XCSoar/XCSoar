@@ -213,7 +213,8 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative) noexcept
 
   if (is_main || is_user) {
     const std::lock_guard lock{mutex};
-    repository_failed = false;
+    if (is_main)
+      repository_failed = false;
     repository_modified = true;
   }
 
@@ -259,7 +260,8 @@ DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
   else if (repository_failed2)
     ShowMessageBox(_("Failed to download the repository index."),
                    _("Error"), MB_OK);
-  else if (repository_modified2)
+
+  if (repository_modified2)
     RefreshList();
 }
 
