@@ -274,6 +274,8 @@ public:
     } catch (const std::exception &e) {
 #ifndef NDEBUG
       PrintException(e);
+#else
+      (void)e;
 #endif
     } catch (...) {
 #ifndef NDEBUG
@@ -569,7 +571,7 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexce
 {
   if (const char *key = NotamDayAckKey(airspace);
       key != nullptr &&
-      notam_day_ack_by_station.find(key) != notam_day_ack_by_station.end())
+      notam_day_ack_by_station.contains(key))
     return true;
 
   const AirspaceWarning *warning = GetWarningPtr(airspace);

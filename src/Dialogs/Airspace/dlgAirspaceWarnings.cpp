@@ -147,21 +147,27 @@ AirspaceWarningListWidget::UpdateButtons()
     enable_button->SetEnabled(false);
     radio_button->SetEnabled(false);
     details_button->SetEnabled(false);
+    if (self_dialog != nullptr)
+      self_dialog->ResyncButtonPanelSelection();
     return;
   }
 
-  bool ack_expired, ack_day;
-
-  {
-    ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
-    const AirspaceWarning &warning = lease->GetWarning(airspace);
-    ack_expired = warning.IsAckExpired();
-    ack_day = warning.GetAckDay();
+  ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
+  const AirspaceWarning *warning = lease->GetWarningPtr(*airspace);
+  if (warning == nullptr) {
+    ack_button->SetEnabled(false);
+    ack_day_button->SetEnabled(false);
+    enable_button->SetEnabled(false);
+    radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
+    details_button->SetEnabled(true);
+    if (self_dialog != nullptr)
+      self_dialog->ResyncButtonPanelSelection();
+    return;
   }
 
-  ack_button->SetEnabled(ack_expired);
-  ack_day_button->SetEnabled(!ack_day);
-  enable_button->SetEnabled(!ack_expired);
+  ack_button->SetEnabled(warning->IsAckExpired());
+  ack_day_button->SetEnabled(!warning->GetAckDay());
+  enable_button->SetEnabled(!warning->IsAckExpired());
   radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
   details_button->SetEnabled(true);
 
