@@ -9,6 +9,7 @@ class InfoBoxContentActiveRadioFrequency : public InfoBoxContent
 {
 public:
   const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleShowDialog(unsigned infobox_id) noexcept override;
   void Update(InfoBoxData &data) noexcept override;
 };
 
@@ -16,6 +17,7 @@ class InfoBoxContentStandbyRadioFrequency : public InfoBoxContent
 {
 public:
   const InfoBoxPanel *GetDialogContent() noexcept override;
+  bool HandleShowDialog(unsigned infobox_id) noexcept override;
   void Update(InfoBoxData &data) noexcept override;
 };
 

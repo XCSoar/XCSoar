@@ -12,6 +12,7 @@
 #include "Timer.hpp"
 #include "Geo.hpp"
 #include "Map.hpp"
+#include "Radio.hpp"
 #include "Blackboard.hpp"
 #include "Dialogs.hpp"
 #include "Legacy.hpp"
@@ -42,6 +43,7 @@ Lua::NewFullState()
   InitTimer(L);
   InitGeo(L);
   InitMap(L);
+  InitRadio(L);
   InitBlackboard(L);
   InitDialogs(L);
   InitLegacy(L);
