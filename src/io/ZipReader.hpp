@@ -19,7 +19,7 @@ public:
    */
   ZipReader(struct zzip_dir *dir, const char *path);
 
-  virtual ~ZipReader();
+  ~ZipReader();
 
   [[gnu::pure]]
   uint_least64_t GetSize() const;

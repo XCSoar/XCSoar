@@ -32,7 +32,7 @@ class PortTerminalBridge final : public DataHandler {
 public:
   PortTerminalBridge(TerminalWindow &_terminal)
     :terminal(_terminal) {}
-  virtual ~PortTerminalBridge() {}
+  ~PortTerminalBridge() {}
 
   bool DataReceived(std::span<const std::byte> s) noexcept {
     {
