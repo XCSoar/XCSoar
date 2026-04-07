@@ -28,6 +28,14 @@ std::vector<RepositoryLink> GetUserRepositories();
 [[gnu::pure]] bool IsUserRepositoryFile(std::string_view name) noexcept;
 
 /**
+ * Delete cached repository files for user repository entries that have
+ * changed position or been removed, comparing @a old_list with @a new_list.
+ * Call this before downloading new user repositories when the URL list changes.
+ */
+void PurgeChangedUserRepositoryFiles(const char *old_list,
+                                     const char *new_list) noexcept;
+
+/**
  * Load the main repository file and all user repository files into
  * @a repository.  Files not yet downloaded are silently skipped.
  */

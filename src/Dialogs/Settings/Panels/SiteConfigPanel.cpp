@@ -9,6 +9,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "UIGlobals.hpp"
+#include "Repository/Glue.hpp"
 #include "UtilsSettings.hpp"
 #include "Waypoint/Patterns.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -140,9 +141,12 @@ SiteConfigPanel::Save(bool &_changed) noexcept
 
   ChecklistFileChanged = SaveValueFileReader(ChecklistFile, ProfileKeys::ChecklistFile);
 
-  std::string buffer{Profile::Get(ProfileKeys::UserRepositoriesList, "")};
+  const std::string old_repos{Profile::Get(ProfileKeys::UserRepositoriesList, "")};
+  std::string new_repos = old_repos;
   UserRepositoriesListChanged = SaveValue(
-      UserRepositoriesList, ProfileKeys::UserRepositoriesList, buffer);
+      UserRepositoriesList, ProfileKeys::UserRepositoriesList, new_repos);
+  if (UserRepositoriesListChanged)
+    PurgeChangedUserRepositoryFiles(old_repos.c_str(), new_repos.c_str());
 
   changed = WaypointFileChanged || AirfieldFileChanged ||
             AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
