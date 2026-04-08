@@ -23,6 +23,7 @@
 #include "util/StaticArray.hxx"
 
 #include <cassert>
+#include <fmt/format.h>
 
 using namespace UI;
 
@@ -222,9 +223,8 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
 
   DataFieldEnum *dfe = new DataFieldEnum(this);
   for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
-    char label[32];
-    sprintf(label, "%u", i + 1);
-    dfe->addEnumText(label, i);
+    const auto label = fmt::format_int(i + 1);
+    dfe->addEnumText(label.c_str(), i);
   }
 
   Add(_("InfoBox"), nullptr, dfe);
