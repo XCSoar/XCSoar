@@ -7,6 +7,7 @@
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
 #include "util/StringCompare.hxx"
+#include "util/StaticString.hxx"
 #include "Interface.hpp"
 #include "Language/Table.hpp"
 #include "Asset.hpp"
@@ -86,8 +87,8 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     DataFieldEnum &df = *(DataFieldEnum *)wp_dpi->GetDataField();
     df.AddChoice(0, _("Automatic"));
     for (const unsigned *dpi = dpi_choices; dpi != dpi_choices_end; ++dpi) {
-      char buffer[20];
-      sprintf(buffer, _("%d dpi"), *dpi);
+      StaticString<20> buffer;
+      buffer.Format(_("%u dpi"), *dpi);
       df.AddChoice(*dpi, buffer);
     }
     df.SetValue(settings.custom_dpi);
