@@ -9,9 +9,10 @@
 #include <stdio.h>
 
 void
-FormatUserWingLoading(double value, char *buffer, bool include_unit) noexcept
+FormatUserWingLoading(double value, char *buffer, size_t size,
+                      bool include_unit) noexcept
 {
-  FormatWingLoading(buffer, value, Units::GetUserWingLoadingUnit(),
+  FormatWingLoading(buffer, size, value, Units::GetUserWingLoadingUnit(),
                     include_unit);
 }
 
