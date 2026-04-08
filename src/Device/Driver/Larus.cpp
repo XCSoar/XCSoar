@@ -9,6 +9,7 @@
 
 
 #include "Device/Driver/Larus.hpp"
+#include "util/StringFormat.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
@@ -402,7 +403,13 @@ LarusDevice::PutBugs(double bugs, OperationEnvironment &env)
 {
   // $PLARS,H,BUGS,0*0B
   char buffer[50];
-  sprintf(buffer, "PLARS,H,BUGS,%0.0f", (1.0-bugs) * 100.0);
+  const int n = StringFormat(buffer, sizeof(buffer), "PLARS,H,BUGS,%0.0f",
+                         (1.0-bugs) * 100.0);
+  if (n < 0 || (size_t)n >= sizeof(buffer)) {
+    LogFmt("Larus: failed to format BUGS command");
+    return false;
+  }
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -412,7 +419,12 @@ LarusDevice::PutMacCready(double mc, OperationEnvironment &env)
 {
   // $PLARS,H,MC,2.1*1B
   char buffer[50];
-  sprintf(buffer, "PLARS,H,MC,%0.1f", mc);
+  const int n = StringFormat(buffer, sizeof(buffer), "PLARS,H,MC,%0.1f", mc);
+  if (n < 0 || (size_t)n >= sizeof(buffer)) {
+    LogFmt("Larus: failed to format MC command");
+    return false;
+  }
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -423,7 +435,12 @@ LarusDevice::PutBallast(double fraction, [[maybe_unused]] double overload,
 { 
   // $PLARS,H,BAL,1.00*68
   char buffer[50];
-  sprintf(buffer, "PLARS,H,BAL,%0.3f", fraction);
+  const int n = StringFormat(buffer, sizeof(buffer), "PLARS,H,BAL,%0.3f", fraction);
+  if (n < 0 || (size_t)n >= sizeof(buffer)) {
+    LogFmt("Larus: failed to format BAL command");
+    return false;
+  }
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -434,7 +451,13 @@ LarusDevice::PutQNH(const AtmosphericPressure &pres,
 { 
   // $PLARS,H,QNH,1031.4*76
   char buffer[50];
-  sprintf(buffer, "PLARS,H,QNH,%0.1f", pres.GetHectoPascal());
+  const int n = StringFormat(buffer, sizeof(buffer), "PLARS,H,QNH,%0.1f",
+                         pres.GetHectoPascal());
+  if (n < 0 || (size_t)n >= sizeof(buffer)) {
+    LogFmt("Larus: failed to format QNH command");
+    return false;
+  }
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }

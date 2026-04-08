@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Internal.hpp"
+#include "util/StringFormat.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 
 #include <stdio.h>
@@ -29,11 +30,15 @@ void
 BlueFlyDevice::WriteDeviceSetting(const char *name, int value,
                                   OperationEnvironment &env)
 {
+  if (name == nullptr || name[0] == '\0' ||
+      name[1] == '\0' || name[2] == '\0' || name[3] != '\0')
+    return;
+
   char buffer[64];
 
   assert(strlen(name) == 3);
 
-  sprintf(buffer, "%s %d", name, value);
+  StringFormat(buffer, sizeof(buffer), "%s %d", name, value);
   PortWriteNMEA(port, buffer, env);
 }
 

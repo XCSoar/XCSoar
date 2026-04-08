@@ -11,6 +11,7 @@
 #include <fmt/format.h>
 #include <cassert>
 #include <cmath>
+#include <optional>
 #include <string>
 
 namespace LXNavDeclare {
@@ -158,13 +159,13 @@ FormatOZLine(const Declaration &declaration, unsigned tp_index)
  *
  * Format: C<lat><lon><name>::<elevation>
  */
-inline std::string
+inline std::optional<std::string>
 FormatTurnPointCRecord(const Declaration::TurnPoint &tp)
 {
   char loc_buf[32];
   char *p = FormatIGCLocation(loc_buf, tp.waypoint.location);
   if (p == nullptr)
-    return {};
+    return std::nullopt;
 
   *p = '\0';
 

@@ -31,6 +31,7 @@
 // VLAPI-Includes
 #include "vlconv.h"
 #include "vlapihlp.h"
+#include "util/StringFormat.hpp"
 
 // C-Includes
 #include <string.h>
@@ -246,7 +247,7 @@ public:
       // print Turnpoints
       for (unsigned i = 0; i < NTP; i++) {
         char is[20];
-        sprintf(is, "TP%02u   ", i + 1);
+        StringFormat(is, sizeof(is), "TP%02u   ", i + 1);
         TP[i].print(version, aus, is);
       }
 
@@ -814,15 +815,17 @@ convert_gcs(FILE *Ausgabedatei,
         // sonstiges einlesen
         wordtoserno(igcheader.A, 256 * p2[1] + p2[2]);
 
-        sprintf(igcheader.DTM, "%03u", p2[3]);
-        sprintf(igcheader.RHW, "%0X.%0X", p2[4] >> 4, (p2[4] & 0xf));
-        sprintf(igcheader.RFW, "%0X.%0X", p2[5] >> 4, (p2[5] & 0xf));
-        sprintf(igcheader.FXA, "%03u", p2[7]);
+        StringFormat(igcheader.DTM, sizeof(igcheader.DTM), "%03u", p2[3]);
+        StringFormat(igcheader.RHW, sizeof(igcheader.RHW), "%0X.%0X",
+                     p2[4] >> 4, p2[4] & 0xf);
+        StringFormat(igcheader.RFW, sizeof(igcheader.RFW), "%0X.%0X",
+                     p2[5] >> 4, p2[5] & 0xf);
+        StringFormat(igcheader.FXA, sizeof(igcheader.FXA), "%03u", p2[7]);
 
         // neuer obligatorischer H-Record
         if (igcfile_version >= 421)
-          sprintf(igcheader.FTY,
-              "GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0");
+          StringFormat(igcheader.FTY, sizeof(igcheader.FTY), "%s",
+                       "GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0");
         break;
       }
       ;
@@ -856,7 +859,8 @@ convert_gcs(FILE *Ausgabedatei,
   if (tzn != 4000) {
     tzh = abs(tzn) / 60;
     tzm = abs(tzn) % 60;
-    sprintf(igcheader.TZN, "UTC%c%02d:%02d", (tzn < 0 ? '-' : '+'), tzh, tzm);
+    StringFormat(igcheader.TZN, sizeof(igcheader.TZN), "UTC%c%02d:%02d",
+                 tzn < 0 ? '-' : '+', tzh, tzm);
   }
 
   snprintf(igcheader.DTE, sizeof(igcheader.DTE), "%02u%02u%02u",
