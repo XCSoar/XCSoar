@@ -23,6 +23,7 @@
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Sound.hpp"
+#include "util/StringFormat.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -320,20 +321,26 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   if (const auto &solution = warning.GetSolution();
       warning.IsWarning() && !warning.IsInside() && solution.IsValid()) {
+    StringFormat(buffer, ARRAY_SIZE(buffer), _("%d secs"),
+                 (int)solution.elapsed_time.count());
 
-    sprintf(buffer, "%d secs",
-              (int)solution.elapsed_time.count());
-
-    if (solution.distance > 0)
-      sprintf(buffer + strlen(buffer), " dist %d m",
-                (int)solution.distance);
-    else {
+    if (solution.distance > 0) {
+      const size_t len = strlen(buffer);
+      StringFormat(buffer + len, ARRAY_SIZE(buffer) - len,
+                   _(" dist %d m"), (int)solution.distance);
+    } else {
       /* the airspace is right above or below us - show the vertical
          distance */
-      strcat(buffer, " vertical ");
+      const size_t len = strlen(buffer);
+      StringFormat(buffer + len, ARRAY_SIZE(buffer) - len,
+                   "%s", _(" vertical "));
 
+      const size_t len2 = strlen(buffer);
       auto delta = solution.altitude - CommonInterface::Basic().nav_altitude;
-      FormatRelativeUserAltitude(delta, buffer + strlen(buffer), true);
+      char relative_altitude[ARRAY_SIZE(buffer)];
+      FormatRelativeUserAltitude(delta, relative_altitude, true);
+      StringFormat(buffer + len2, ARRAY_SIZE(buffer) - len2,
+                   "%s", relative_altitude);
     }
 
     row_renderer.DrawSecondRow(canvas, text_rc, buffer);
