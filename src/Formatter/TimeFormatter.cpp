@@ -4,6 +4,7 @@
 #include "TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Math/Util.hpp"
+#include "util/StringFormat.hpp"
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
 
@@ -13,16 +14,16 @@
 void
 FormatISO8601(char *buffer, const BrokenDate &date) noexcept
 {
-  sprintf(buffer, "%04u-%02u-%02u",
-          date.year, date.month, date.day);
+  StringFormat(buffer, 11, "%04u-%02u-%02u",
+               date.year, date.month, date.day);
 }
 
 void
 FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
 {
-  sprintf(buffer, "%04u-%02u-%02uT%02u:%02u:%02uZ",
-          stamp.year, stamp.month, stamp.day,
-          stamp.hour, stamp.minute, stamp.second);
+  StringFormat(buffer, 21, "%04u-%02u-%02uT%02u:%02u:%02uZ",
+               stamp.year, stamp.month, stamp.day,
+               stamp.hour, stamp.minute, stamp.second);
 }
 
 
@@ -35,8 +36,8 @@ FormatTime(char *buffer, FloatDuration _time) noexcept
   }
 
   const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
-  sprintf(buffer, "%02u:%02u:%02u",
-            time.hour, time.minute, time.second);
+  StringFormat(buffer, 9, "%02u:%02u:%02u",
+               time.hour, time.minute, time.second);
 }
 
 void
@@ -47,13 +48,18 @@ FormatTimeLong(char *buffer, FloatDuration _time) noexcept
     _time = -_time;
   }
 
-  const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
+  auto time = BrokenTime::FromSinceMidnightChecked(_time);
 
   _time -= FloatDuration{trunc(_time.count())};
   unsigned millisecond = uround(_time.count() * 1000);
 
-  sprintf(buffer, "%02u:%02u:%02u.%03u",
-            time.hour, time.minute, time.second, millisecond);
+  if (millisecond == 1000) {
+    millisecond = 0;
+    time = time + std::chrono::seconds{1};
+  }
+
+  StringFormat(buffer, 13, "%02u:%02u:%02u.%03u",
+               time.hour, time.minute, time.second, millisecond);
 }
 
 void
@@ -65,7 +71,7 @@ FormatSignedTimeHHMM(char *buffer, std::chrono::seconds _time) noexcept
   }
 
   const BrokenTime time = BrokenTime::FromSinceMidnightChecked(_time);
-  sprintf(buffer, "%02u:%02u", time.hour, time.minute);
+  StringFormat(buffer, 6, "%02u:%02u", time.hour, time.minute);
 }
 
 void
@@ -90,10 +96,10 @@ FormatTimeTwoLines(char *buffer1, char *buffer2, std::chrono::seconds _time) noe
 
   if (time.hour > 0) { // hh:mm, ss
     // Set Value
-    sprintf(buffer1, "%02u:%02u", time.hour, time.minute);
-    sprintf(buffer2, "%02u", time.second);
+    StringFormat(buffer1, 6, "%02u:%02u", time.hour, time.minute);
+    StringFormat(buffer2, 3, "%02u", time.second);
   } else { // mm'ss
-    sprintf(buffer1, "%02u'%02u", time.minute, time.second);
+    StringFormat(buffer1, 6, "%02u'%02u", time.minute, time.second);
     buffer2[0] = '\0';
   }
 }
