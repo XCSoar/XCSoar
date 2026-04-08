@@ -4,6 +4,7 @@
 #include "DeviceConfig.hpp"
 #include "Map.hpp"
 #include "util/Macros.hpp"
+#include "util/StringFormat.hpp"
 #include "Interface.hpp"
 #include "Device/Config.hpp"
 
@@ -37,16 +38,23 @@ static const char *const port_type_strings[] = {
   NULL
 };
 
+[[nodiscard]]
 static const char *
-MakeDeviceSettingName(char *buffer, const char *prefix, unsigned n,
+MakeDeviceSettingName(char *buffer, size_t buffer_size,
+                      const char *prefix, unsigned n,
                       const char *suffix)
 {
-  strcpy(buffer, prefix);
+  if (prefix == nullptr)
+    prefix = "";
+  if (suffix == nullptr)
+    suffix = "";
 
-  if (n > 0)
-    sprintf(buffer + strlen(buffer), "%u", n + 1);
+  const int written = n > 0
+    ? StringFormat(buffer, buffer_size, "%s%u%s", prefix, n + 1, suffix)
+    : StringFormat(buffer, buffer_size, "%s%s", prefix, suffix);
 
-  strcat(buffer, suffix);
+  if (written < 0 || (size_t)written >= buffer_size)
+    return nullptr;
 
   return buffer;
 }
@@ -69,7 +77,8 @@ ReadPortType(const ProfileMap &map, unsigned n, DeviceConfig::PortType &type)
 {
   char name[64];
 
-  MakeDeviceSettingName(name, "Port", n, "Type");
+  if (MakeDeviceSettingName(name, sizeof(name), "Port", n, "Type") == nullptr)
+    return false;
 
   const char *value = map.Get(name);
   return value != NULL && StringToPortType(value, type);
@@ -79,7 +88,9 @@ static bool
 LoadPath(const ProfileMap &map, DeviceConfig &config, unsigned n)
 {
   char buffer[64];
-  MakeDeviceSettingName(buffer, "Port", n, "Path");
+  if (MakeDeviceSettingName(buffer, sizeof(buffer), "Port", n, "Path") == nullptr)
+    return false;
+
   return map.Get(buffer, config.path);
 }
 
@@ -87,7 +98,8 @@ static bool
 LoadPortIndex(const ProfileMap &map, DeviceConfig &config, unsigned n)
 {
   char buffer[64];
-  MakeDeviceSettingName(buffer, "Port", n, "Index");
+  if (MakeDeviceSettingName(buffer, sizeof(buffer), "Port", n, "Index") == nullptr)
+    return false;
 
   unsigned index;
   if (!map.Get(buffer, index))
@@ -100,7 +112,10 @@ LoadPortIndex(const ProfileMap &map, DeviceConfig &config, unsigned n)
     index = 0;
 
   char path[64];
-  sprintf(path, "COM%u:", index);
+  const int written = StringFormat(path, sizeof(path), "COM%u:", index);
+  if (written < 0 || static_cast<size_t>(written) >= sizeof(path))
+    return false;
+
   config.path = path;
   return true;
 }
@@ -110,21 +125,24 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
                          DeviceConfig &config)
 {
   char buffer[64];
+  const auto make_port_name = [&](const char *suffix) {
+    return MakeDeviceSettingName(buffer, sizeof(buffer), "Port", n, suffix);
+  };
 
   bool have_port_type = ReadPortType(map, n, config.port_type);
 
-  MakeDeviceSettingName(buffer, "Port", n, "BluetoothMAC");
-  map.Get(buffer, config.bluetooth_mac);
+  if (const char *name = make_port_name("BluetoothMAC"); name != nullptr)
+    map.Get(name, config.bluetooth_mac);
 
-  MakeDeviceSettingName(buffer, "Port", n, "IOIOUartID");
-  map.Get(buffer, config.ioio_uart_id);
+  if (const char *name = make_port_name("IOIOUartID"); name != nullptr)
+    map.Get(name, config.ioio_uart_id);
 
-  MakeDeviceSettingName(buffer, "Port", n, "IPAddress");
-  if (!map.Get(buffer, config.ip_address))
+  if (const char *name = make_port_name("IPAddress");
+      name == nullptr || !map.Get(name, config.ip_address))
     config.ip_address.clear();
 
-  MakeDeviceSettingName(buffer, "Port", n, "TCPPort");
-  if (!map.Get(buffer, config.tcp_port))
+  if (const char *name = make_port_name("TCPPort");
+      name == nullptr || !map.Get(name, config.tcp_port))
     config.tcp_port = 4353;
 
   config.path.clear();
@@ -134,8 +152,8 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
       !LoadPath(map, config, n) && LoadPortIndex(map, config, n))
     config.port_type = DeviceConfig::PortType::SERIAL;
 
-  MakeDeviceSettingName(buffer, "Port", n, "BaudRate");
-  if (!map.Get(buffer, config.baud_rate)) {
+  if (const char *name = make_port_name("BaudRate");
+      name == nullptr || !map.Get(name, config.baud_rate)) {
     /* XCSoar before 6.2 used to store a "speed index", not the real
        baud rate - try to import the old settings */
 
@@ -150,61 +168,62 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
       115200
     };
 
-    MakeDeviceSettingName(buffer, "Speed", n, "Index");
     unsigned speed_index;
-    if (map.Get(buffer, speed_index) &&
+    if (const char *speed_name =
+          MakeDeviceSettingName(buffer, sizeof(buffer), "Speed", n, "Index");
+        speed_name != nullptr && map.Get(speed_name, speed_index) &&
         speed_index < ARRAY_SIZE(speed_index_table))
       config.baud_rate = speed_index_table[speed_index];
   }
 
-  MakeDeviceSettingName(buffer, "Port", n, "BulkBaudRate");
-  if (!map.Get(buffer, config.bulk_baud_rate))
+  if (const char *name = make_port_name("BulkBaudRate");
+      name == nullptr || !map.Get(name, config.bulk_baud_rate))
     config.bulk_baud_rate = 0;
 
   strcpy(buffer, "DeviceA");
   buffer[strlen(buffer) - 1] += n;
   map.Get(buffer, config.driver_name);
 
-  MakeDeviceSettingName(buffer, "Port", n, "Enabled");
-  map.Get(buffer, config.enabled);
+  if (const char *name = make_port_name("Enabled"); name != nullptr)
+    map.Get(name, config.enabled);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
-  map.Get(buffer, config.sync_from_device);
+  if (const char *name = make_port_name("SyncFromDevice"); name != nullptr)
+    map.Get(name, config.sync_from_device);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SyncToDevice");
-  map.Get(buffer, config.sync_to_device);
+  if (const char *name = make_port_name("SyncToDevice"); name != nullptr)
+    map.Get(name, config.sync_to_device);
 
-  MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
-  map.Get(buffer, config.k6bt);
+  if (const char *name = make_port_name("K6Bt"); name != nullptr)
+    map.Get(name, config.k6bt);
 
-  MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
-  map.Get(buffer, config.i2c_bus);
+  if (const char *name = make_port_name("I2C_Bus"); name != nullptr)
+    map.Get(name, config.i2c_bus);
 
-  MakeDeviceSettingName(buffer, "Port", n, "I2C_Addr");
-  map.Get(buffer, config.i2c_addr);
+  if (const char *name = make_port_name("I2C_Addr"); name != nullptr)
+    map.Get(name, config.i2c_addr);
 
-  MakeDeviceSettingName(buffer, "Port", n, "PressureUse");
-  map.GetEnum(buffer, config.press_use);
+  if (const char *name = make_port_name("PressureUse"); name != nullptr)
+    map.GetEnum(name, config.press_use);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SensorOffset");
-  map.Get(buffer, config.sensor_offset);
+  if (const char *name = make_port_name("SensorOffset"); name != nullptr)
+    map.Get(name, config.sensor_offset);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SensorFactor");
-  map.Get(buffer, config.sensor_factor);
+  if (const char *name = make_port_name("SensorFactor"); name != nullptr)
+    map.Get(name, config.sensor_factor);
 
-  MakeDeviceSettingName(buffer, "Port", n, "UseSecondDevice");
-  map.Get(buffer, config.use_second_device);
+  if (const char *name = make_port_name("UseSecondDevice"); name != nullptr)
+    map.Get(name, config.use_second_device);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SecondDevice");
-  map.Get(buffer, config.driver2_name);
+  if (const char *name = make_port_name("SecondDevice"); name != nullptr)
+    map.Get(name, config.driver2_name);
 
-  MakeDeviceSettingName(buffer, "Port", n, "EngineType");
-  if (!map.GetEnum(buffer, config.engine_type) ||
+  if (const char *name = make_port_name("EngineType");
+      name == nullptr || !map.GetEnum(name, config.engine_type) ||
       unsigned(config.engine_type) >= unsigned(DeviceConfig::EngineType::MAX))
     config.engine_type = DeviceConfig::EngineType::NONE;
 
-  MakeDeviceSettingName(buffer, "Port", n, "PolarSync");
-  if (!map.GetEnum(buffer, config.polar_sync) ||
+  if (const char *name = make_port_name("PolarSync");
+      name == nullptr || !map.GetEnum(name, config.polar_sync) ||
       unsigned(config.polar_sync) >= unsigned(DeviceConfig::PolarSync::COUNT))
     config.polar_sync = DeviceConfig::PolarSync::OFF;
 }
@@ -226,7 +245,9 @@ WritePortType(ProfileMap &map, unsigned n, DeviceConfig::PortType type)
     return;
 
   char name[64];
-  MakeDeviceSettingName(name, "Port", n, "Type");
+  if (MakeDeviceSettingName(name, sizeof(name), "Port", n, "Type") == nullptr)
+    return;
+
   map.Set(name, value);
 }
 
@@ -235,78 +256,81 @@ Profile::SetDeviceConfig(ProfileMap &map,
                          unsigned n, const DeviceConfig &config)
 {
   char buffer[64];
+  const auto make_port_name = [&](const char *suffix) {
+    return MakeDeviceSettingName(buffer, sizeof(buffer), "Port", n, suffix);
+  };
 
   WritePortType(map, n, config.port_type);
 
-  MakeDeviceSettingName(buffer, "Port", n, "BluetoothMAC");
-  map.Set(buffer, config.bluetooth_mac);
+  if (const char *name = make_port_name("BluetoothMAC"); name != nullptr)
+    map.Set(name, config.bluetooth_mac);
 
-  MakeDeviceSettingName(buffer, "Port", n, "IOIOUartID");
-  map.Set(buffer, config.ioio_uart_id);
+  if (const char *name = make_port_name("IOIOUartID"); name != nullptr)
+    map.Set(name, config.ioio_uart_id);
 
-  MakeDeviceSettingName(buffer, "Port", n, "Path");
-  map.Set(buffer, config.path);
+  if (const char *name = make_port_name("Path"); name != nullptr)
+    map.Set(name, config.path);
 
-  MakeDeviceSettingName(buffer, "Port", n, "BaudRate");
-  map.Set(buffer, config.baud_rate);
+  if (const char *name = make_port_name("BaudRate"); name != nullptr)
+    map.Set(name, config.baud_rate);
 
-  MakeDeviceSettingName(buffer, "Port", n, "BulkBaudRate");
-  map.Set(buffer, config.bulk_baud_rate);
+  if (const char *name = make_port_name("BulkBaudRate"); name != nullptr)
+    map.Set(name, config.bulk_baud_rate);
 
-  MakeDeviceSettingName(buffer, "Port", n, "IPAddress");
-  map.Set(buffer, config.ip_address);
+  if (const char *name = make_port_name("IPAddress"); name != nullptr)
+    map.Set(name, config.ip_address);
 
-  MakeDeviceSettingName(buffer, "Port", n, "TCPPort");
-  map.Set(buffer, config.tcp_port);
+  if (const char *name = make_port_name("TCPPort"); name != nullptr)
+    map.Set(name, config.tcp_port);
 
   strcpy(buffer, "DeviceA");
   buffer[strlen(buffer) - 1] += n;
   map.Set(buffer, config.driver_name);
 
-  MakeDeviceSettingName(buffer, "Port", n, "Enabled");
-  map.Set(buffer, config.enabled);
+  if (const char *name = make_port_name("Enabled"); name != nullptr)
+    map.Set(name, config.enabled);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
-  map.Set(buffer, config.sync_from_device);
+  if (const char *name = make_port_name("SyncFromDevice"); name != nullptr)
+    map.Set(name, config.sync_from_device);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SyncToDevice");
-  map.Set(buffer, config.sync_to_device);
+  if (const char *name = make_port_name("SyncToDevice"); name != nullptr)
+    map.Set(name, config.sync_to_device);
 
-  MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
-  map.Set(buffer, config.k6bt);
+  if (const char *name = make_port_name("K6Bt"); name != nullptr)
+    map.Set(name, config.k6bt);
 
-  MakeDeviceSettingName(buffer, "Port", n, "I2C_Bus");
-  map.Set(buffer, config.i2c_bus);
+  if (const char *name = make_port_name("I2C_Bus"); name != nullptr)
+    map.Set(name, config.i2c_bus);
 
-  MakeDeviceSettingName(buffer, "Port", n, "I2C_Addr");
-  map.Set(buffer, config.i2c_addr);
+  if (const char *name = make_port_name("I2C_Addr"); name != nullptr)
+    map.Set(name, config.i2c_addr);
 
-  MakeDeviceSettingName(buffer, "Port", n, "PressureUse");
-  map.SetEnum(buffer, config.press_use);
+  if (const char *name = make_port_name("PressureUse"); name != nullptr)
+    map.SetEnum(name, config.press_use);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SensorOffset");
   auto offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : 0;
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     offset = CommonInterface::Basic().sensor_calibration_offset;
-  map.Set(buffer, offset);
+  if (const char *name = make_port_name("SensorOffset"); name != nullptr)
+    map.Set(name, offset);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SensorFactor");
   auto factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : 0;
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     factor = CommonInterface::Basic().sensor_calibration_factor;
-  map.Set(buffer, factor);
+  if (const char *name = make_port_name("SensorFactor"); name != nullptr)
+    map.Set(name, factor);
 
-  MakeDeviceSettingName(buffer, "Port", n, "UseSecondDevice");
-  map.Set(buffer, config.use_second_device);
+  if (const char *name = make_port_name("UseSecondDevice"); name != nullptr)
+    map.Set(name, config.use_second_device);
 
-  MakeDeviceSettingName(buffer, "Port", n, "SecondDevice");
-  map.Set(buffer, config.driver2_name);
+  if (const char *name = make_port_name("SecondDevice"); name != nullptr)
+    map.Set(name, config.driver2_name);
 
-  MakeDeviceSettingName(buffer, "Port", n, "EngineType");
-  map.Set(buffer, static_cast<unsigned>(config.engine_type));
+  if (const char *name = make_port_name("EngineType"); name != nullptr)
+    map.SetEnum(name, config.engine_type);
 
-  MakeDeviceSettingName(buffer, "Port", n, "PolarSync");
-  map.Set(buffer, static_cast<unsigned>(config.polar_sync));
+  if (const char *name = make_port_name("PolarSync"); name != nullptr)
+    map.SetEnum(name, config.polar_sync);
 }
