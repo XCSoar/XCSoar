@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "RaspStore.hpp"
+#include "util/StringFormat.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "system/ConvertPathName.hpp"
@@ -108,13 +109,23 @@ bool
 RaspStore::WeatherFilename(char *filename, Path name,
                                           unsigned time_index)
 {
+  if (filename == nullptr || MAX_PATH <= 0)
+    return false;
+
+  filename[0] = '\0';
+
   const NarrowPathName narrow_name(name);
   if (!narrow_name.IsDefined())
     return false;
 
   const BrokenTime t = IndexToTime(time_index);
-  sprintf(filename, RASP_FORMAT,
-          (const char *)narrow_name, t.hour, t.minute);
+  const int n = StringFormat(filename, MAX_PATH, RASP_FORMAT,
+                         (const char *)narrow_name, t.hour, t.minute);
+  if (n < 0 || n >= MAX_PATH) {
+    filename[0] = '\0';
+    return false;
+  }
+
   return true;
 }
 
