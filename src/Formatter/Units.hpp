@@ -5,6 +5,8 @@
 
 #include "Units/Unit.hpp"
 
+#include <cstddef>
+
 class AtmosphericPressure;
 
 /**
@@ -34,13 +36,13 @@ FormatMass(char *buffer, double value, Unit unit,
 /**
  * Converts a wing loading into a formatted string
  * @param buffer buffer string to write to (pointer)
- * @param size Size of the buffer
+ * @param buffer_size size of the buffer in bytes
  * @param value the wing loading
  * @param unit the wing loading unit (e.g. kg/m2, ...)
  * @param include_unit include the unit into the string?
  */
 void
-FormatWingLoading(char *buffer, double value, Unit unit,
+FormatWingLoading(char *buffer, size_t buffer_size, double value, Unit unit,
                   bool include_unit = true);
 
 /**
