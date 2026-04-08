@@ -3,6 +3,7 @@
 // author: Max Kellermann <mk@cm4all.com>
 
 #include "Resolver.hxx"
+#include "util/StringFormat.hpp"
 #include "AddressInfo.hxx"
 #include "HostParser.hxx"
 #include "lib/fmt/RuntimeError.hxx"
@@ -17,6 +18,7 @@
 #endif
 
 #include <cstring>
+#include <stdexcept>
 
 #include <stdio.h>
 
@@ -69,7 +71,10 @@ FindAndResolveInterfaceName(char *host, size_t size)
 	if (i == 0)
 		throw FmtRuntimeError("No such interface: {}", interface);
 
-	sprintf(interface, "%u", i);
+	const size_t remaining = host + size - interface;
+	const int n = StringFormat(interface, remaining, "%u", i);
+	if (n < 0 || static_cast<size_t>(n) >= remaining)
+		throw std::runtime_error("Interface index formatting failed");
 }
 
 #endif
@@ -80,6 +85,14 @@ Resolve(const char *host_and_port, int default_port,
 {
 	const char *host, *port;
 	char buffer[256], port_string[16];
+
+	auto make_default_port = [&]() {
+		const int n = StringFormat(port_string, sizeof(port_string), "%d",
+					  default_port);
+		if (n < 0 || n >= (int)sizeof(port_string))
+			throw std::runtime_error("Default port formatting failed");
+		return port_string;
+	};
 
 	if (host_and_port != nullptr) {
 		const auto eh = ExtractHost(host_and_port);
@@ -102,8 +115,7 @@ Resolve(const char *host_and_port, int default_port,
 			++port;
 		} else if (*port == 0) {
 			/* no port specified */
-			snprintf(port_string, sizeof(port_string), "%d", default_port);
-			port = port_string;
+			port = make_default_port();
 		} else
 			throw std::runtime_error("Garbage after host name");
 
@@ -111,8 +123,7 @@ Resolve(const char *host_and_port, int default_port,
 			host = nullptr;
 	} else {
 		host = nullptr;
-		snprintf(port_string, sizeof(port_string), "%d", default_port);
-		port = port_string;
+		port = make_default_port();
 	}
 
 	return Resolve(host, port, hints);
