@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Device.hpp"
+#include "util/StringFormat.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Device/Port/Port.hpp"
@@ -156,7 +157,9 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
 
   char buffer[256];
   strcpy(buffer, "$PBRTL,");
-  AppendNMEAChecksum(buffer);
+  if (!AppendNMEAChecksum(buffer, sizeof(buffer)))
+    return false;
+
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
@@ -235,8 +238,14 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
 
   // Request flight record
   char buffer[256];
-  sprintf(buffer, "$PBRTR,%02d", flight.internal.flytec);
-  AppendNMEAChecksum(buffer);
+  const int written = StringFormat(buffer, sizeof(buffer), "$PBRTR,%02u",
+                                   flight.internal.flytec);
+  if (written < 0 || written >= (int)sizeof(buffer))
+    return false;
+
+  if (!AppendNMEAChecksum(buffer, sizeof(buffer)))
+    return false;
+
   strcat(buffer, "\r\n");
 
   port.Write(buffer);

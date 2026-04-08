@@ -5,8 +5,7 @@
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "RadioFrequency.hpp"
-
-#include <stdio.h>
+#include "util/StringFormat.hpp"
 
 class XCOM760Device : public AbstractDevice {
 private:
@@ -31,7 +30,10 @@ bool
 XCOM760Device::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   char szTmp[32];
-  sprintf(szTmp, "$RVOL=%u\r\n", volume);
+  const int written = StringFormat(szTmp, sizeof(szTmp), "$RVOL=%u\r\n", volume);
+  if (written < 0 || written >= (int)sizeof(szTmp))
+    return false;
+
   port.FullWrite(szTmp, env, std::chrono::milliseconds{100});
   return true;
 }
@@ -42,9 +44,12 @@ XCOM760Device::PutActiveFrequency(RadioFrequency frequency,
                                   OperationEnvironment &env)
 {
   char szTmp[32];
-  sprintf(szTmp, "$TXAF=%u.%03u\r\n",
-          frequency.GetKiloHertz() / 1000,
-          frequency.GetKiloHertz() % 1000);
+  const int written = StringFormat(szTmp, sizeof(szTmp), "$TXAF=%u.%03u\r\n",
+                                   frequency.GetKiloHertz() / 1000,
+                                   frequency.GetKiloHertz() % 1000);
+  if (written < 0 || written >= (int)sizeof(szTmp))
+    return false;
+
   port.FullWrite(szTmp, env, std::chrono::milliseconds{100});
   return true;
 }
@@ -55,9 +60,12 @@ XCOM760Device::PutStandbyFrequency(RadioFrequency frequency,
                                    OperationEnvironment &env)
 {
   char szTmp[32];
-  sprintf(szTmp, "$TXSF=%u.%03u\r\n",
-          frequency.GetKiloHertz() / 1000,
-          frequency.GetKiloHertz() % 1000);
+  const int written = StringFormat(szTmp, sizeof(szTmp), "$TXSF=%u.%03u\r\n",
+                                   frequency.GetKiloHertz() / 1000,
+                                   frequency.GetKiloHertz() % 1000);
+  if (written < 0 || written >= (int)sizeof(szTmp))
+    return false;
+
   port.FullWrite(szTmp, env, std::chrono::milliseconds{100});
   return true;
 }

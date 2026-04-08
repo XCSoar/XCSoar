@@ -11,6 +11,7 @@
 #include "NMEA/InputLine.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Operation/Operation.hpp"
+#include "lib/fmt/ToBuffer.hxx"
 
 #include <algorithm> // for std::clamp()
 
@@ -234,10 +235,9 @@ bool
 XVCDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
   /* the XCVario understands "!g,q<NNNN>" command for QNH updates */
-  char buffer[32];
   unsigned qnh = uround(pres.GetHectoPascal());
-  int msg_len = sprintf(buffer,"!g,q%u\r", std::min(qnh,(unsigned)2000));
-  port.FullWrite(std::as_bytes(std::span{buffer}.first(msg_len)), env, std::chrono::seconds(2));
+  const auto buffer = FmtBuffer<32>("!g,q{}\r", std::min(qnh, (unsigned)2000));
+  port.FullWrite(buffer.c_str(), env, std::chrono::seconds(2));
   return true;
 }
 
@@ -265,26 +265,27 @@ XVCDevice::PutBallast(double fraction, [[maybe_unused]] double overload,
 {
   /* the XCVario understands CAI302 like command for ballast "!g,b" with
      float precision */
-  char buffer[32];
   double ballast = fraction * 10.;
-  int msg_len = sprintf(buffer,"!g,b%.3f\r", ballast);
-  port.FullWrite(std::as_bytes(std::span{buffer}.first(msg_len)), env, std::chrono::seconds(2));
+  const auto buffer = FmtBuffer<32>("!g,b{:.3f}\r", ballast);
+  port.FullWrite(buffer.c_str(), env, std::chrono::seconds(2));
   return true;
 }
 
 bool
 XVCDevice::SendNMEAItem(const char *which, unsigned int value)
 {
+  if (which == nullptr || which[0] == '\0')
+    return false;
+
   /* the new xcs protocol for various int items e.g. with absolute weights or protocol version including the NMEA checksum
    * We are using Port::Write() as do no need reliable and maybe blocking transmission here, there is retry on application layer
    * */
-  char line[32];
-  sprintf(line,"xcs,%s,%u", which, value);
+  const auto line = FmtBuffer<32>("xcs,{},{}", which, value);
+  const auto checksum = FmtBuffer<16>("*{:02X}\r\n", NMEAChecksum(line.c_str()));
+
   port.Write('!');
-  port.Write(line);
-  char checksum[16];
-  sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  port.Write(checksum);
+  port.Write(line.c_str());
+  port.Write(checksum.c_str());
   return true;
 }
 

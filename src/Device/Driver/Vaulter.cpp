@@ -8,6 +8,8 @@
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
+#include <fmt/format.h>
+
 using std::string_view_literals::operator""sv;
 
 static bool
@@ -121,9 +123,9 @@ VaulterDevice::PutMacCready(double mc, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
-  char buffer[30];
-  sprintf(buffer,"PITV1,MC=%0.2f", mc);
-  PortWriteNMEA(port, buffer, env);
+
+  const auto msg = fmt::format("PITV1,MC={:.2f}", mc);
+  PortWriteNMEA(port, msg.c_str(), env);
   return true;
 }
 
@@ -132,11 +134,12 @@ VaulterDevice::PutBallast(double fraction, [[maybe_unused]] double overload, Ope
 {
   if (!EnableNMEA(env))
     return false;
-  char buffer[30];
+
   // vaulter defines the wing loading factor as ratio of no-ballast to weight
   fraction = fraction + 1;
-  sprintf(buffer,"PITV1,WL=%0.2f", fraction);
-  PortWriteNMEA(port, buffer, env);
+
+  const auto msg = fmt::format("PITV1,WL={:.2f}", fraction);
+  PortWriteNMEA(port, msg.c_str(), env);
   return true;
 }
 
