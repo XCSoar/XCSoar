@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Angle.hpp"
+#include "util/StringFormat.hpp"
 #include "ComboList.hpp"
 #include "util/Macros.hpp"
 
@@ -53,14 +54,14 @@ AngleDataField::ModifyValue(Angle _value) noexcept
 const char *
 AngleDataField::GetAsString() const noexcept
 {
-  sprintf(string_buffer, "%u", GetIntegerValue());
+  StringFormat(string_buffer, sizeof(string_buffer), "%u", GetIntegerValue());
   return string_buffer;
 }
 
 const char *
 AngleDataField::GetAsDisplayString() const noexcept
 {
-  sprintf(string_buffer, "%u°", GetIntegerValue());
+  StringFormat(string_buffer, sizeof(string_buffer), "%u°", GetIntegerValue());
   return string_buffer;
 }
 
@@ -89,8 +90,8 @@ static void
 AppendComboValue(ComboList &combo_list, unsigned value) noexcept
 {
   char buffer1[16], buffer2[16];
-  sprintf(buffer1, "%u", value);
-  sprintf(buffer2, "%u°", value);
+  StringFormat(buffer1, sizeof(buffer1), "%u", value);
+  StringFormat(buffer2, sizeof(buffer2), "%u°", value);
   combo_list.Append(value, buffer1, buffer2);
 }
 
