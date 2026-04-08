@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "NMEA/Checksum.hpp"
+#include "util/StringFormat.hpp"
 
 #include <cassert>
 #include <cstring>
@@ -30,12 +31,24 @@ VerifyNMEAChecksum(const char *p) noexcept
   return CalcCheckSum == ReadCheckSum;
 }
 
-void
-AppendNMEAChecksum(char *p) noexcept
+bool
+AppendNMEAChecksum(char *p, size_t capacity) noexcept
 {
   assert(p != nullptr);
 
-  const std::size_t length = strlen(p);
+  if (p == nullptr || capacity < 4)
+    return false;
 
-  sprintf(p + length, "*%02X", NMEAChecksum({p, length}));
+  const char *const terminator = (const char *)memchr(p, '\0', capacity);
+  if (terminator == nullptr)
+    return false;
+
+  const std::size_t length = terminator - p;
+  assert(length + 4 <= capacity);
+  if (length + 4 > capacity)
+    return false;
+
+  const auto checksum = static_cast<unsigned>(NMEAChecksum({p, length}));
+  const int written = StringFormat(p + length, 4, "*%02X", checksum);
+  return written >= 0 && written < 4;
 }
