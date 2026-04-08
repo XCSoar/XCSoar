@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 struct PixelRect;
 class Canvas;
 struct ChartLook;
@@ -13,7 +15,7 @@ class TaskManager;
 class GlidePolar;
 
 void
-TaskSpeedCaption(char *sTmp,
+TaskSpeedCaption(char *s_tmp, size_t buffer_size,
                  const FlightStatistics &fs,
                  const GlidePolar &glide_polar);
 

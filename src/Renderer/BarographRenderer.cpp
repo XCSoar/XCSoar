@@ -15,28 +15,40 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
 #include "GradientRenderer.hpp"
+#include "util/UTF8.hpp"
+
+#include <fmt/format.h>
 
 void
-BarographCaption(char *sTmp, const FlightStatistics &fs)
+BarographCaption(char *sTmp, size_t buffer_size, const FlightStatistics &fs)
 {
+  if (sTmp == nullptr || buffer_size == 0)
+    return;
+
   const std::lock_guard lock{fs.mutex};
+
   if (!fs.altitude_ceiling.HasResult() || fs.altitude_base.IsEmpty()) {
     sTmp[0] = '\0';
   } else if (fs.altitude_ceiling.GetCount() < 4) {
-    StringFormatUnsafe(sTmp, "%s:\r\n  %.0f-%.0f %s",
-                       _("Working band"),
-                       (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
-                       (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
-                       Units::GetAltitudeName());
+    auto result = fmt::format_to_n(sTmp, buffer_size - 1, "{}:\r\n  {:.0f}-{:.0f} {}",
+                                   _("Working band"),
+                                   (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
+                                   (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
+                                   Units::GetAltitudeName());
+    *result.out = '\0';
+    CropIncompleteUTF8(sTmp);
   } else {
-    StringFormatUnsafe(sTmp, "%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr",
-                       _("Working band"),
-                       (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
-                       (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
-                       Units::GetAltitudeName(),
-                       _("Ceiling trend"),
-                       (double)Units::ToUserAltitude(fs.altitude_ceiling.GetGradient()),
-                       Units::GetAltitudeName());
+    auto result = fmt::format_to_n(sTmp, buffer_size - 1,
+                                   "{}:\r\n  {:.0f}-{:.0f} {}\r\n\r\n{}:\r\n  {:.0f} {}/hr",
+                                   _("Working band"),
+                                   (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
+                                   (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
+                                   Units::GetAltitudeName(),
+                                   _("Ceiling trend"),
+                                   (double)Units::ToUserAltitude(fs.altitude_ceiling.GetGradient()),
+                                   Units::GetAltitudeName());
+    *result.out = '\0';
+    CropIncompleteUTF8(sTmp);
   }
 }
 

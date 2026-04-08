@@ -13,25 +13,33 @@
 #include "TaskLegRenderer.hpp"
 #include "GradientRenderer.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "util/UTF8.hpp"
+
+#include <fmt/format.h>
 
 void
-TaskSpeedCaption(char *sTmp,
+TaskSpeedCaption(char *s_tmp, size_t buffer_size,
                  const FlightStatistics &fs,
                  const GlidePolar &glide_polar)
 {
+  if (s_tmp == nullptr || buffer_size == 0)
+    return;
+
   if (!glide_polar.IsValid() || fs.task_speed.IsEmpty()) {
-    *sTmp = '\0';
+    *s_tmp = '\0';
     return;
   }
 
-  sprintf(sTmp,
-            "%s: %d %s\r\n%s: %d %s",
-            C_("Average velocity abbreviation", "Vave"),
-            (int)Units::ToUserTaskSpeed(fs.task_speed.GetAverageY()),
-            Units::GetTaskSpeedName(),
-            _("Vest"),
-            (int)Units::ToUserTaskSpeed(glide_polar.GetAverageSpeed()),
-            Units::GetTaskSpeedName());
+  auto result = fmt::format_to_n(s_tmp, buffer_size - 1,
+                                 "{}: {} {}\r\n{}: {} {}",
+                                 C_("Average velocity abbreviation", "Vave"),
+                                 (int)Units::ToUserTaskSpeed(fs.task_speed.GetAverageY()),
+                                 Units::GetTaskSpeedName(),
+                                 _("Vest"),
+                                 (int)Units::ToUserTaskSpeed(glide_polar.GetAverageSpeed()),
+                                 Units::GetTaskSpeedName());
+  *result.out = '\0';
+  CropIncompleteUTF8(s_tmp);
 }
 
 void
