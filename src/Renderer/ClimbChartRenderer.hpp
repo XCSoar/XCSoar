@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 struct PixelRect;
 class Canvas;
 struct ChartLook;
@@ -13,7 +15,7 @@ struct DerivedInfo;
 class TaskManager;
 
 void
-ClimbChartCaption(char *buffer,
+ClimbChartCaption(char *buffer, size_t buffer_size,
                   const FlightStatistics &fs);
 
 void

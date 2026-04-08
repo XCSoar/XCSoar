@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 struct PixelRect;
 class Canvas;
 struct ChartLook;
@@ -10,7 +12,8 @@ class ClimbHistory;
 class GlidePolar;
 
 void
-GlidePolarCaption(char *buffer, const GlidePolar &glide_polar);
+GlidePolarCaption(char *buffer, size_t buffer_size,
+                  const GlidePolar &glide_polar);
 
 void
 RenderGlidePolar(Canvas &canvas, const PixelRect rc,

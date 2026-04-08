@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 struct PixelRect;
 class Canvas;
 struct ChartLook;
@@ -14,7 +16,7 @@ class ProtectedTaskManager;
 class TaskManager;
 
 void
-BarographCaption(char *buffer, const FlightStatistics &fs);
+BarographCaption(char *buffer, size_t buffer_size, const FlightStatistics &fs);
 
 void
 RenderBarographSpark(Canvas &canvas, const PixelRect rc,

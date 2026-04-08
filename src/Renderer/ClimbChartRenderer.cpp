@@ -14,28 +14,36 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
 #include "GradientRenderer.hpp"
+#include "util/UTF8.hpp"
 
 void
-ClimbChartCaption(char *sTmp,
+ClimbChartCaption(char *sTmp, size_t buffer_size,
                   const FlightStatistics &fs)
 {
+  if (sTmp == nullptr || buffer_size == 0)
+    return;
+
   const std::lock_guard lock{fs.mutex};
+
   if (fs.thermal_average.IsEmpty()) {
     sTmp[0] = '\0';
+    return;
   } else if (fs.thermal_average.GetCount() == 1) {
-    StringFormatUnsafe(sTmp, "%s:\r\n  %3.1f %s",
-                       _("Avg. climb"),
-                       (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
-                       Units::GetVerticalSpeedName());
+    StringFormat(sTmp, buffer_size, "%s:\r\n  %3.1f %s",
+                 _("Avg. climb"),
+                 (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
+                 Units::GetVerticalSpeedName());
   } else {
-    StringFormatUnsafe(sTmp, "%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s/hr",
-                       _("Avg. climb"),
-                       (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
-                       Units::GetVerticalSpeedName(),
-                       _("Climb trend"),
-                       (double)Units::ToUserVSpeed(fs.thermal_average.GetGradient()),
-                       Units::GetVerticalSpeedName());
+    StringFormat(sTmp, buffer_size, "%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s/hr",
+                 _("Avg. climb"),
+                 (double)Units::ToUserVSpeed(fs.thermal_average.GetAverageY()),
+                 Units::GetVerticalSpeedName(),
+                 _("Climb trend"),
+                 (double)Units::ToUserVSpeed(fs.thermal_average.GetGradient()),
+                 Units::GetVerticalSpeedName());
   }
+
+  CropIncompleteUTF8(sTmp);
 }
 
 void
