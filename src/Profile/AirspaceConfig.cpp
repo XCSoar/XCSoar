@@ -9,15 +9,21 @@
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "util/Macros.hpp"
+#include "util/StringFormat.hpp"
 
-#include <string.h>
-#include <stdio.h>
+#include <cassert>
 
+template <size_t N>
 static const char *
-MakeAirspaceSettingName(char *buffer, const char *prefix, unsigned n)
+MakeAirspaceSettingName(char (&buffer)[N], const char *prefix, unsigned n)
 {
-  strcpy(buffer, prefix);
-  sprintf(buffer + strlen(buffer), "%u", n);
+  if (prefix == nullptr || prefix[0] == '\0')
+    prefix = "";
+
+  const int written = StringFormat(buffer, N, "%s%u", prefix, n);
+  assert(written > 0 && written < (int)N);
+  if (written <= 0 || static_cast<size_t>(written) >= N)
+    buffer[0] = '\0';
 
   return buffer;
 }
@@ -25,8 +31,6 @@ MakeAirspaceSettingName(char *buffer, const char *prefix, unsigned n)
 /**
  * This function and the "ColourXX" profile keys are deprecated and
  * are only used as a fallback for old profiles.
- *
- * @see Load(unsigned, AirspaceClassRendererSettings &)
  */
 static bool
 GetAirspaceColor(const ProfileMap &map, unsigned i, RGB8Color &color)
