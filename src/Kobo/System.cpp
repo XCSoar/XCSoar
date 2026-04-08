@@ -179,8 +179,8 @@ bool
 IsKoboWifiOn()
 {
 #ifdef KOBO
-  char path[64];
-  sprintf(path, "/sys/class/net/%s", GetKoboWifiInterface());
+  StaticString<64> path;
+  path.Format("/sys/class/net/%s", GetKoboWifiInterface());
   return Directory::Exists(Path{path});
 #else
   return false;
