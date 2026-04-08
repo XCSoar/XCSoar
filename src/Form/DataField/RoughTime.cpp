@@ -2,9 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "RoughTime.hpp"
+#include "util/StringFormat.hpp"
 #include "time/BrokenDateTime.hpp"
-
-#include <stdio.h>
 
 static char buffer[8];
 
@@ -24,7 +23,7 @@ RoughTimeDataField::GetAsString() const noexcept
   if (!value.IsValid())
     return "";
 
-  sprintf(buffer, "%02u:%02u", value.GetHour(), value.GetMinute());
+  StringFormat(buffer, sizeof(buffer), "%02u:%02u", value.GetHour(), value.GetMinute());
   return buffer;
 }
 
@@ -35,8 +34,8 @@ RoughTimeDataField::GetAsDisplayString() const noexcept
     return "";
 
   RoughTime local_value = value + time_zone;
-  sprintf(buffer, "%02u:%02u",
-            local_value.GetHour(), local_value.GetMinute());
+  StringFormat(buffer, sizeof(buffer), "%02u:%02u",
+           local_value.GetHour(), local_value.GetMinute());
   return buffer;
 }
 
