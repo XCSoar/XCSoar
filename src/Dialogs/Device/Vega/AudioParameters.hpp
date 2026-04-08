@@ -9,7 +9,7 @@
 #include "Language/Language.hpp"
 #include "util/StaticString.hxx"
 
-#include <stdio.h>
+#include <array>
 
 static constexpr StaticEnumChoice beep_types[] = {
   { 0, "Silence" },
@@ -61,7 +61,7 @@ static constexpr StaticEnumChoice pitch_and_period_scales[] = {
 class VegaAudioParametersWidget : public VegaParametersWidget {
   const char *mode;
 
-  char names[5][64];
+  std::array<StaticString<64>, 5> names;
 
 public:
   VegaAudioParametersWidget(const DialogLook &look, VegaDevice &device,
@@ -81,19 +81,23 @@ public:
                const PixelRect &rc) noexcept override {
     VegaParametersWidget::Prepare(parent, rc);
 
-    sprintf(names[0], "Tone%sBeepType", mode);
-    AddEnum(names[0], _("Beep type"), NULL, beep_types);
+    const char *safe_mode = (mode != nullptr && mode[0] != '\0')
+      ? mode
+      : "DefaultMode";
 
-    sprintf(names[1], "Tone%sPitchScheme", mode);
-    AddEnum(names[1], _("Pitch scheme"), NULL, pitch_schemes);
+    names[0].Format("Tone%sBeepType", safe_mode);
+    AddEnum(names[0].c_str(), _("Beep type"), NULL, beep_types);
 
-    sprintf(names[2], "Tone%sPitchScale", mode);
-    AddEnum(names[2], _("Pitch scale"), NULL, pitch_and_period_scales);
+    names[1].Format("Tone%sPitchScheme", safe_mode);
+    AddEnum(names[1].c_str(), _("Pitch scheme"), NULL, pitch_schemes);
 
-    sprintf(names[3], "Tone%sPeriodScheme", mode);
-    AddEnum(names[3], _("Period scheme"), NULL, period_schemes);
+    names[2].Format("Tone%sPitchScale", safe_mode);
+    AddEnum(names[2].c_str(), _("Pitch scale"), NULL, pitch_and_period_scales);
 
-    sprintf(names[4], "Tone%sPeriodScale", mode);
-    AddEnum(names[4], _("Period scale"), NULL, pitch_and_period_scales);
+    names[3].Format("Tone%sPeriodScheme", safe_mode);
+    AddEnum(names[3].c_str(), _("Period scheme"), NULL, period_schemes);
+
+    names[4].Format("Tone%sPeriodScale", safe_mode);
+    AddEnum(names[4].c_str(), _("Period scale"), NULL, pitch_and_period_scales);
   }
 };
