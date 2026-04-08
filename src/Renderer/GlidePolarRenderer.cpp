@@ -11,30 +11,39 @@
 #include "NMEA/ClimbHistory.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "util/StaticString.hxx"
+#include "util/UTF8.hpp"
 #include "GlidePolarInfoRenderer.hpp"
 
-#include <stdio.h>
+#include <fmt/format.h>
 
 void
-GlidePolarCaption(char *sTmp, const GlidePolar &glide_polar)
+GlidePolarCaption(char *sTmp, size_t buffer_size,
+                  const GlidePolar &glide_polar)
 {
+  if (sTmp == nullptr || buffer_size == 0)
+    return;
+
   if (!glide_polar.IsValid()) {
     *sTmp = '\0';
     return;
   }
 
-  sprintf(sTmp, Layout::landscape ?
-                  "%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n  %3.2f %s\r\n  at %d %s" :
-                  "%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s",
-            _("L/D"),
-            (int)glide_polar.GetBestLD(),
-            (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
-            Units::GetSpeedName(),
-            _("Min. sink"),
-            (double)Units::ToUserVSpeed(glide_polar.GetSMin()),
-            Units::GetVerticalSpeedName(),
-            (int)Units::ToUserSpeed(glide_polar.GetVMin()),
-            Units::GetSpeedName());
+  const char *const format = Layout::landscape
+    ? "{}:\r\n  {}\r\n  at {} {}\r\n\r\n{}:\r\n  {:.2f} {}\r\n  at {} {}"
+    : "{}:\r\n  {} at {} {}\r\n{}:\r\n  {:.2f} {} at {} {}";
+
+  auto result = fmt::format_to_n(sTmp, buffer_size - 1, fmt::runtime(format),
+                                 _("L/D"),
+                                 (int)glide_polar.GetBestLD(),
+                                 (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
+                                 Units::GetSpeedName(),
+                                 _("Min. sink"),
+                                 (double)Units::ToUserVSpeed(glide_polar.GetSMin()),
+                                 Units::GetVerticalSpeedName(),
+                                 (int)Units::ToUserSpeed(glide_polar.GetVMin()),
+                                 Units::GetSpeedName());
+  *result.out = '\0';
+  CropIncompleteUTF8(sTmp);
 }
 
 void
