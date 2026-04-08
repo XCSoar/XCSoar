@@ -3,6 +3,7 @@
 
 #include "Map.hpp"
 #include "util/NumberParser.hpp"
+#include "util/StringFormat.hpp"
 
 bool
 ProfileMap::Get(std::string_view key, int &value) const noexcept
@@ -119,7 +120,10 @@ void
 ProfileMap::Set(std::string_view key, int value) noexcept
 {
   char tmp[50];
-  sprintf(tmp, "%d", value);
+  const int written = StringFormat(tmp, sizeof(tmp), "%d", value);
+  if (written < 0 || written >= (int)sizeof(tmp))
+    return;
+
   Set(key, tmp);
 }
 
@@ -127,7 +131,10 @@ void
 ProfileMap::Set(std::string_view key, long value) noexcept
 {
   char tmp[50];
-  sprintf(tmp, "%ld", value);
+  const int written = StringFormat(tmp, sizeof(tmp), "%ld", value);
+  if (written < 0 || written >= (int)sizeof(tmp))
+    return;
+
   Set(key, tmp);
 }
 
@@ -135,7 +142,10 @@ void
 ProfileMap::Set(std::string_view key, unsigned value) noexcept
 {
   char tmp[50];
-  sprintf(tmp, "%u", value);
+  const int written = StringFormat(tmp, sizeof(tmp), "%u", value);
+  if (written < 0 || written >= (int)sizeof(tmp))
+    return;
+
   Set(key, tmp);
 }
 
@@ -143,6 +153,9 @@ void
 ProfileMap::Set(std::string_view key, double value) noexcept
 {
   char tmp[50];
-  sprintf(tmp, "%f", value);
+  const int written = StringFormat(tmp, sizeof(tmp), "%.17g", value);
+  if (written < 0 || written >= (int)sizeof(tmp))
+    return;
+
   Set(key, tmp);
 }
