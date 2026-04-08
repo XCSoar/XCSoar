@@ -9,6 +9,7 @@
 #include "Math/FastRotation.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+#include "lib/fmt/ToBuffer.hxx"
 
 #include <algorithm> // for std::clamp()
 
@@ -515,12 +516,11 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   }
 
   if (!IsPersistent() || (dirty && di.value.last_value != value)) {
-    char buffer[18];
+    const auto buffer = FmtBuffer<18>("{:.1f}", value);
     canvas.SetBackgroundColor(look.background_color);
     canvas.SetTextColor(look.text_color);
-    sprintf(buffer, "%.1f", (double)value);
     canvas.Select(look.value_font);
-    const unsigned width = canvas.CalcTextSize(buffer).width;
+    const unsigned width = canvas.CalcTextSize(buffer.c_str()).width;
 
     const PixelPoint text_position{g.value_right - (int)width, g.value_y};
 
@@ -531,12 +531,12 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
       rc.right = g.value_right;
       rc.bottom = g.value_bottom;
 
-      canvas.DrawOpaqueText(text_position, rc, buffer);
+      canvas.DrawOpaqueText(text_position, rc, buffer.c_str());
 
       di.value.last_width = width;
       di.value.last_value = value;
     } else {
-      canvas.DrawText(text_position, buffer);
+      canvas.DrawText(text_position, buffer.c_str());
     }
   }
 
@@ -706,14 +706,13 @@ GaugeVario::RenderBallast(Canvas &canvas) noexcept
 
     // new ballast 0, hide value
     if (ballast > 0) {
-      char buffer[18];
-      sprintf(buffer, "%u%%", ballast);
+      const auto buffer = FmtBuffer<18>("{}%", ballast);
       canvas.SetTextColor(look.text_color);
 
       if (IsPersistent())
-        canvas.DrawOpaqueText(g.value_pos, g.value_rect, buffer);
+        canvas.DrawOpaqueText(g.value_pos, g.value_rect, buffer.c_str());
       else
-        canvas.DrawText(g.value_pos, buffer);
+        canvas.DrawText(g.value_pos, buffer.c_str());
     } else if (IsPersistent())
       canvas.DrawFilledRectangle(g.value_rect, look.background_color);
 
@@ -749,13 +748,12 @@ GaugeVario::RenderBugs(Canvas &canvas) noexcept
     }
 
     if (bugs > 0) {
-      char buffer[18];
-      sprintf(buffer, "%d%%", bugs);
+      const auto buffer = FmtBuffer<18>("{}%", bugs);
       canvas.SetTextColor(look.text_color);
       if (IsPersistent())
-        canvas.DrawOpaqueText(g.value_pos, g.value_rect, buffer);
+        canvas.DrawOpaqueText(g.value_pos, g.value_rect, buffer.c_str());
       else
-        canvas.DrawText(g.value_pos, buffer);
+        canvas.DrawText(g.value_pos, buffer.c_str());
     } else if (IsPersistent())
       canvas.DrawFilledRectangle(g.value_rect, look.background_color);
 
