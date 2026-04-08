@@ -163,6 +163,9 @@ FormatTurnPointCRecord(const Declaration::TurnPoint &tp)
 {
   char loc_buf[32];
   char *p = FormatIGCLocation(loc_buf, tp.waypoint.location);
+  if (p == nullptr)
+    return {};
+
   *p = '\0';
 
   const double elevation = tp.waypoint.GetElevationOrZero();

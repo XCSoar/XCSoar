@@ -28,14 +28,15 @@ IGCMakeTaskLanding() noexcept
  * IGC GNSS specification 3.6.1
  */
 void
-FormatIGCTaskTimestamp(char *buffer, const BrokenDateTime &date_time,
+FormatIGCTaskTimestamp(std::span<char> buffer,
+                       const BrokenDateTime &date_time,
                        unsigned number_of_turnpoints) noexcept;
 
 /**
  * @return a pointer to the end of the buffer
  */
 char *
-FormatIGCLocation(char *buffer, const GeoPoint &location) noexcept;
+FormatIGCLocation(std::span<char> buffer, const GeoPoint &location) noexcept;
 
 void
 FormatIGCTaskTurnPoint(std::span<char> dest, const GeoPoint &location,

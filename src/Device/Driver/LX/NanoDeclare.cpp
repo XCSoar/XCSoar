@@ -84,6 +84,9 @@ NanoWriteStartDeclaration(Port &port, OperationEnvironment &env,
 
   char buffer[64];
   FormatIGCTaskTimestamp(buffer, date_time, declaration.Size());
+  if (buffer[0] == '\0')
+    return false;
+
   return NanoWriteDecl(port, env, reader, 7, total_size, buffer);
 }
 

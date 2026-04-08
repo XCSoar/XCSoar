@@ -1954,9 +1954,10 @@ TestLXNavDeclare()
     Declaration::TurnPoint tp(wp);
     const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
 
-    ok1(c_record.starts_with("C"));
-    ok1(c_record.find("EBENSEE") != std::string::npos);
-    ok1(c_record.find("::420.00000") != std::string::npos);
+    ok1(c_record.has_value());
+    ok1(c_record->starts_with("C"));
+    ok1(c_record->find("EBENSEE") != std::string::npos);
+    ok1(c_record->find("::420.00000") != std::string::npos);
   }
 
   /* Test C-record without elevation (defaults to 0) */
@@ -1968,7 +1969,8 @@ TestLXNavDeclare()
     Declaration::TurnPoint tp(wp);
     const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
 
-    ok1(c_record.find("::0.00000") != std::string::npos);
+    ok1(c_record.has_value());
+    ok1(c_record->find("::0.00000") != std::string::npos);
   }
 }
 
