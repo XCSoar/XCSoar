@@ -17,6 +17,10 @@
 #include "Math/Util.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "LogFile.hpp"
+
+#include <fmt/format.h>
+#include <exception>
 
 static double VegaDemoW = 0;
 static double VegaDemoV = 0;
@@ -29,13 +33,21 @@ VegaWriteDemo()
   if (!last_time.CheckUpdate(std::chrono::milliseconds(250)))
     return;
 
-  char dbuf[100];
-  sprintf(dbuf, "PDVDD,%d,%d",
-            iround(VegaDemoW * 10),
-            iround(VegaDemoV * 10));
+  std::string payload;
+  try {
+    payload = fmt::format("PDVDD,{},{}",
+                          iround(VegaDemoW * 10),
+                          iround(VegaDemoV * 10));
+  } catch (const std::exception &e) {
+    LogFmt("VegaDemo: failed to format payload: {}", e.what());
+    return;
+  } catch (...) {
+    LogFmt("VegaDemo: failed to format payload");
+    return;
+  }
 
   PopupOperationEnvironment env;
-  backend_components->devices->VegaWriteNMEA(dbuf, env);
+  backend_components->devices->VegaWriteNMEA(payload.c_str(), env);
 }
 
 class VegaDemoWidget final
