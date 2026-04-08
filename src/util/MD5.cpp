@@ -3,9 +3,9 @@
 
 #include "util/MD5.hpp"
 #include "util/ByteOrder.hxx"
+#include "util/HexFormat.hxx"
 
 #include <algorithm>
-#include <stdio.h>
 
 static constexpr uint32_t k[64] = {
   // k[i] := floor(abs(sin(i)) * (2 pow 32))
@@ -215,7 +215,13 @@ MD5::Process512() noexcept
 char *
 MD5::GetDigest(char *buffer) const noexcept
 {
-  sprintf(buffer, "%08x%08x%08x%08x",
-          ByteSwap32(state.a), ByteSwap32(state.b), ByteSwap32(state.c), ByteSwap32(state.d));
-  return buffer + DIGEST_LENGTH;
+  if (buffer == nullptr)
+    return nullptr;
+
+  char *p = HexFormatUint32Fixed(buffer, ByteSwap32(state.a));
+  p = HexFormatUint32Fixed(p, ByteSwap32(state.b));
+  p = HexFormatUint32Fixed(p, ByteSwap32(state.c));
+  p = HexFormatUint32Fixed(p, ByteSwap32(state.d));
+  *p = '\0';
+  return p;
 }
