@@ -67,9 +67,30 @@ MetadataValid(std::string_view json)
 int
 main()
 {
-  plan_tests(54);
+  plan_tests(59);
 
   const auto now = system_clock::now();
+
+  {
+    const auto notams = NOTAMClient::ParseNOTAMGeoJSON(WrapItems(MakeFeature(
+      R"({"id":"n1","lastUpdated":"2026-04-09T10:00:00Z","number":"A1234/26","effectiveStart":"2026-04-09T08:00:00Z","effectiveEnd":"2026-04-09T12:00:00Z","minimumFl":"000","maximumFl":"999","radius":"005"})",
+      R"({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[8.522111,47.973519]}]})")));
+
+    ok1(notams.size() == 1);
+    ok1(notams.size() == 1 &&
+        notams[0].geometry.type == NOTAM::NOTAMGeometry::Type::CIRCLE);
+    ok1(notams.size() == 1 &&
+        equals(notams[0].geometry.center.longitude.Degrees(), 8.522111));
+  }
+
+  {
+    const auto notams = NOTAMClient::ParseNOTAMGeoJSON(WrapItems(MakeFeature(
+      R"({"id":"NMS_ID_1758719983653283","series":"C","number":"C2311/25","year":"2025","type":"R","issued":"2025-06-26T08:33:00Z","affectedFir":"EDGG","selectionCode":"QPACH","traffic":"I","purpose":"NBO","scope":"A","minimumFl":"000","maximumFl":"999","location":"EDTD","effectiveStart":"2025-06-26T08:32:00Z","effectiveEnd":"PERM","text":"STAR CHG","classification":"INTL","accountId":"EDDZYNYX","lastUpdated":"2025-06-26T08:33:00Z","icaoLocation":"EDTD","coordinates":"4758N00831E","radius":"005"})",
+      R"({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[8.522111,47.973519]}]})")));
+
+    ok1(notams.size() == 1);
+    ok1(notams.size() == 1 && notams[0].end_time == NOTAMTime::PermanentEndTime());
+  }
 
   {
     const auto notams = NOTAMClient::ParseNOTAMGeoJSON(WrapItems(MakeFeature(
