@@ -101,7 +101,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   const DisplayOnlineTrafficMapMode online_mode =
     GetMapSettings().online_traffic_map_mode;
 
-  // Circle through the FLARM targets
+  // Circle through the traffic targets
   for (const auto &traffic : flarm.list) {
     if (!traffic.location_available)
       continue;
@@ -110,8 +110,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
         online_mode == DisplayOnlineTrafficMapMode::OFF)
       continue;
 
-  // No position traffic (relative_east=0) does not make sense in map display
-    if (traffic.relative_east)
+    /* Historically, we skipped targets with relative vectors == 0 to
+       avoid drawing "no position" FLARM targets.  Absolute-position
+       traffic (e.g. ADS-B) may legitimately have relative vectors not
+       computed yet, so allow those as well. */
+    if (traffic.relative_east != 0 || traffic.absolute_location)
       DrawFlarmTraffic(canvas, projection, traffic_look, false,
                        aircraft_pos, traffic, online_mode);
   }
@@ -124,8 +127,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
           online_mode == DisplayOnlineTrafficMapMode::OFF)
         continue;
 
-  // No position traffic (relative_east=0) does not make sense in map display
-      if (traffic.relative_east)
+      if (traffic.relative_east != 0 || traffic.absolute_location)
         DrawFlarmTraffic(canvas, projection, traffic_look, true,
                          aircraft_pos, traffic, online_mode);
     }

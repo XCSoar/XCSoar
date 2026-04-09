@@ -394,7 +394,7 @@ Draw(Canvas &canvas, PixelRect rc,
     else if (traffic != nullptr && traffic->HasName())
       title_string = traffic->name.c_str();
     else
-      title_string = _("FLARM Traffic");
+      title_string = _("Traffic");
 
     if (!info.registration.empty() &&
         !title_string.equals(info.registration.c_str())) {
