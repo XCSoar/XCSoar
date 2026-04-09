@@ -5,7 +5,7 @@
 
 #include "Features.hpp"
 #include "Config.hpp"
-#include "Device/Util/LineSplitter.hpp"
+#include "Util/LineSplitter.hpp"
 #include "Port/State.hpp"
 #include "Port/Listener.hpp"
 #include "Device/Parser.hpp"
