@@ -6,6 +6,7 @@
 #include "Vega/VegaDialogs.hpp"
 #include "BlueFly/BlueFlyDialogs.hpp"
 #include "Stratux/ConfigurationDialog.hpp"
+#include "GDL90/ConfigurationDialog.hpp"
 #include "ManageI2CPitotDialog.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
@@ -62,6 +63,9 @@ class DeviceListWidget final
     bool duplicate:1;
     bool open:1, error:1;
     bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
+    bool gdl90:1;
+    bool foreflight_id:1;
+    bool foreflight_ahrs:1;
     bool temperature:1;
     bool humidity:1;
     bool imu:1;
@@ -115,6 +119,13 @@ class DeviceListWidget final
         basic.total_energy_vario_available ||
         basic.noncomp_vario_available;
       traffic = basic.flarm.IsDetected();
+      gdl90 = traffic && config.UsesDriver() && config.driver_name == "GDL90";
+      foreflight_id = config.UsesDriver() && config.driver_name == "GDL90" &&
+        basic.device.license.equals("ForeFlight");
+      foreflight_ahrs = config.UsesDriver() && config.driver_name == "GDL90" &&
+        (basic.attitude.bank_angle_available ||
+         basic.attitude.pitch_angle_available ||
+         basic.attitude.heading_available);
       temperature = basic.temperature_available;
       humidity = basic.humidity_available;
       imu = basic.gyroscope.available;
@@ -431,7 +442,13 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     if (flags.traffic)
-      buffer.append("; FLARM");
+      buffer.append(flags.gdl90 ? "; GDL90" : "; FLARM");
+
+    if (flags.foreflight_ahrs)
+      buffer.append("; ForeFlight AHRS");
+
+    if (flags.foreflight_id)
+      buffer.append("; ForeFlight ID");
 
     if (flags.temperature || flags.humidity) {
       buffer.append("; ");
@@ -670,6 +687,11 @@ DeviceListWidget::ManageCurrent()
     return;
   }
 #endif
+
+  if (descriptor.IsDriver("GDL90")) {
+    ManageGDL90Dialog();
+    return;
+  }
 
   if (descriptor.GetState() != PortState::READY) {
     ShowMessageBox(_("Device is not connected"), _("Manage"),
