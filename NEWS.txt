@@ -470,6 +470,9 @@ Version 7.45 - not yet released
   - fix crash when queuing many background file downloads while others
     complete (download manager queue race) #2624
 * devices
+  - add GDL 90 input driver (standard ADS-B traffic and ownship over serial or
+    UDP; optional ForeFlight geometric altitude and AHRS; horizontal/vertical
+    traffic filters) #2356
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
   - Polar sync device setting is offered only for drivers that register polar
     support (currently LXNAV); PutPolar is skipped on other drivers even if an old
