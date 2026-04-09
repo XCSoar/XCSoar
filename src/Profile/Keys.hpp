@@ -301,6 +301,10 @@ constexpr std::string_view RaspFile = "RaspFile";
 constexpr std::string_view StratuxHorizontalRange = "StratuxHorizontalRange";
 constexpr std::string_view StratuxVerticalRange = "StratuxVerticalRange";
 
+constexpr std::string_view GDL90HorizontalRange = "GDL90HorizontalRange";
+constexpr std::string_view GDL90VerticalRange = "GDL90VerticalRange";
+constexpr std::string_view GDL90UseSystemUtcDate = "GDL90UseSystemUtcDate";
+
 constexpr std::string_view HideQuickGuideDialogOnStartup =
   "HideQuickGuideDialogOnStartup";
 constexpr std::string_view DisclaimerAcknowledgedVersion =

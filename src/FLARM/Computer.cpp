@@ -11,9 +11,10 @@ void
 FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
                        const NMEAInfo &basic) noexcept
 {
+  const TimeStamp now = basic.time_available ? basic.time : basic.clock;
+
   // Cleanup old calculation instances
-  if (basic.time_available)
-    flarm_calculations.CleanUp(basic.time);
+  flarm_calculations.CleanUp(now);
 
   // if (FLARM data is available)
   if (!flarm.IsDetected())
@@ -44,6 +45,13 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
 
   // for each item in traffic
   for (auto &traffic : flarm.traffic.list) {
+    const bool ownship_altitude_available = basic.pressure_altitude_available ||
+      basic.gps_altitude_available;
+
+    const RoughAltitude ownship_altitude = basic.pressure_altitude_available
+      ? RoughAltitude(basic.pressure_altitude)
+      : RoughAltitude(basic.gps_altitude);
+
     // Keep the cached display name (callsign) in sync with current sources.
     // Skip for no_track targets and random IDs: they must not be resolved
     // against databases (FTD-012 NoTrack / random ID semantics).
@@ -55,12 +63,22 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
         traffic.name = fname;
     }
 
+    if (traffic.absolute_location && traffic.location.IsValid() &&
+        basic.location_available) {
+      const GeoVector vec{basic.location, traffic.location};
+      traffic.relative_north = vec.distance * vec.bearing.cos();
+      traffic.relative_east = vec.distance * vec.bearing.sin();
+    }
+
     // Calculate distance
     traffic.distance = hypot(traffic.relative_north, traffic.relative_east);
 
     // Calculate Location
-    traffic.location_available = basic.location_available;
-    if (traffic.location_available) {
+    traffic.location_available = traffic.absolute_location
+      ? traffic.location.IsValid()
+      : basic.location_available;
+
+    if (!traffic.absolute_location && traffic.location_available) {
       traffic.location.latitude =
           Angle::Degrees(traffic.relative_north * north_to_latitude) +
           basic.location.latitude;
@@ -71,15 +89,20 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     }
 
     // Calculate absolute altitude
-    traffic.altitude_available = basic.gps_altitude_available;
-    if (traffic.altitude_available)
-      traffic.altitude = traffic.relative_altitude + RoughAltitude(basic.gps_altitude);
+    if (!traffic.absolute_altitude) {
+      traffic.altitude_available = ownship_altitude_available;
+      if (traffic.altitude_available)
+        traffic.altitude = traffic.relative_altitude +
+          ownship_altitude;
+    } else if (ownship_altitude_available && traffic.altitude_available) {
+      traffic.relative_altitude = traffic.altitude - ownship_altitude;
+    }
 
     // Calculate average climb rate
     traffic.climb_rate_avg30s_available = traffic.altitude_available;
     if (traffic.climb_rate_avg30s_available)
       traffic.climb_rate_avg30s =
-        flarm_calculations.Average30s(traffic.id, basic.time, traffic.altitude);
+        flarm_calculations.Average30s(traffic.id, now, traffic.altitude);
 
     // The following calculations are only relevant for targets
     // where information is missing

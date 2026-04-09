@@ -328,10 +328,15 @@ Draw(Canvas &canvas, PixelRect rc,
   if (info.pilot != nullptr)
     title_string = info.pilot;
   else
-    title_string = _("FLARM Traffic");
+    title_string = _("Traffic");
 
   // Append name to the title, if it exists
   const char *callsign = info.callsign;
+  if ((callsign == nullptr || StringIsEmpty(callsign)) &&
+      traffic != nullptr && traffic->HasName() &&
+      !StringIsEmpty(traffic->name))
+    callsign = traffic->name.c_str();
+
   if (callsign != nullptr && !StringIsEmpty(callsign)) {
     title_string.append(", ");
     title_string.append(callsign);
