@@ -115,6 +115,8 @@ TEST_NAMES = \
 	TestTimeFormatter \
 	TestIGCFilenameFormatter \
 	TestNMEAFormatter \
+	TestGDL90 \
+	TestGDL90Driver \
 	TestLXNToIGC \
 	TestLeastSquares \
 	TestHexString \
@@ -154,6 +156,22 @@ TEST_CRC8_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC8.cpp
 $(eval $(call link-program,TestCRC8,TEST_CRC8))
+
+TEST_GDL90_SOURCES = \
+	$(SRC)/util/CRC16CCITT.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGDL90.cpp
+$(eval $(call link-program,TestGDL90,TEST_GDL90))
+
+TEST_GDL90_DRIVER_SOURCES = \
+	$(SRC)/util/CRC16CCITT.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
+	$(TEST_SRC_DIR)/FakeGeoidNonZero.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGDL90Driver.cpp
+TEST_GDL90_DRIVER_DEPENDS = DRIVER NMEA FLARM GLIDE GEO TIME MATH UTIL UNITS
+$(eval $(call link-program,TestGDL90Driver,TEST_GDL90_DRIVER))
 
 TEST_LEASTSQUARES_SOURCES = \
 	$(SRC)/Math/LeastSquares.cpp \
@@ -1471,6 +1489,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
 RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT LIBNMEA ASYNC LIBNET OPERATION IO OS THREAD GEO TIME MATH UTIL
@@ -1494,6 +1513,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
 RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC LIBNMEA LIBNET OPERATION IO OS THREAD GEO TIME MATH UTIL
