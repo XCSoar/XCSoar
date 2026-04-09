@@ -12,7 +12,7 @@
 
 #include <stdio.h>
 
-static void
+static bool
 GenerateNMEA(BufferedOutputStream &os,
              const NMEAInfo basic) noexcept
 {
@@ -20,7 +20,9 @@ GenerateNMEA(BufferedOutputStream &os,
   FormatGPRMC(gprmc_buffer, sizeof(gprmc_buffer), basic);
   StaticString<256> gprmc("$");
   gprmc.append(gprmc_buffer);
-  AppendNMEAChecksum(gprmc.buffer());
+  if (!AppendNMEAChecksum(gprmc.buffer(), gprmc.capacity()))
+    return false;
+
   os.Write(gprmc);
   os.NewLine();
 
@@ -28,7 +30,9 @@ GenerateNMEA(BufferedOutputStream &os,
   FormatGPGGA(gpgga_buffer, sizeof(gpgga_buffer), basic);
   StaticString<256> gpgga("$");
   gpgga.append(gpgga_buffer);
-  AppendNMEAChecksum(gpgga.buffer());
+  if (!AppendNMEAChecksum(gpgga.buffer(), gpgga.capacity()))
+    return false;
+
   os.Write(gpgga);
   os.NewLine();
 
@@ -36,9 +40,13 @@ GenerateNMEA(BufferedOutputStream &os,
   FormatPGRMZ(pgrmz_buffer, sizeof(pgrmz_buffer), basic);
   StaticString<256> pgrmz("$");
   pgrmz.append(pgrmz_buffer);
-  AppendNMEAChecksum(pgrmz.buffer());
+  if (!AppendNMEAChecksum(pgrmz.buffer(), pgrmz.capacity()))
+    return false;
+
   os.Write(pgrmz);
   os.NewLine();
+
+  return true;
 }
 
 int
@@ -57,7 +65,8 @@ try {
 
   while (replay->Next()) {
     const NMEAInfo &basic = replay->Basic();
-    GenerateNMEA(bos, basic);
+    if (!GenerateNMEA(bos, basic))
+      return EXIT_FAILURE;
   }
 
   bos.Flush();
