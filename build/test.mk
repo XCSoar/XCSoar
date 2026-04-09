@@ -138,6 +138,10 @@ ifeq ($(HAVE_WIN32),y)
 TEST_NAMES += TestUTF8Win
 endif
 
+ifeq ($(HAVE_HTTP),y)
+TEST_NAMES += TestNOTAM
+endif
+
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
 TEST_HEX_STRING_SOURCES = \
@@ -204,6 +208,18 @@ TEST_EDL_SOURCES = \
 	$(TEST_SRC_DIR)/TestEDL.cpp
 TEST_EDL_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD MATH TIME UTIL
 $(eval $(call link-program,TestEDL,TEST_EDL))
+
+TEST_NOTAM_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/NOTAM/Client.cpp \
+	$(SRC)/NOTAM/NOTAMCache.cpp \
+	$(SRC)/NOTAM/Filter.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestNOTAM.cpp
+TEST_NOTAM_DEPENDS = JSON LIBHTTP CO ASYNC LIBNET IO OS THREAD GEO TIME MATH UTIL UNITS FMT
+$(eval $(call link-program,TestNOTAM,TEST_NOTAM))
 endif
 
 TEST_AIRSPACE_PARSER_SOURCES = \
