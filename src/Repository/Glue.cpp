@@ -55,22 +55,34 @@ void
 PurgeChangedUserRepositoryFiles(const char *old_list,
                                 const char *new_list) noexcept
 {
-  std::vector<std::string_view> old_entries, new_entries;
+  const auto next_token = [](std::string_view &s) noexcept -> std::string_view {
+    while (!s.empty()) {
+      const auto pos = s.find('|');
+      std::string_view token;
+      if (pos == std::string_view::npos) {
+        token = s;
+        s = {};
+      } else {
+        token = s.substr(0, pos);
+        s = s.substr(pos + 1);
+      }
+      if (!token.empty())
+        return token;
+    }
+    return {};
+  };
 
-  if (old_list != nullptr)
-    for (auto e : TIterableSplitString(old_list, '|'))
-      if (!e.empty())
-        old_entries.push_back(e);
+  std::string_view old_remaining{old_list != nullptr ? old_list : ""};
+  std::string_view new_remaining{new_list != nullptr ? new_list : ""};
 
-  if (new_list != nullptr)
-    for (auto e : TIterableSplitString(new_list, '|'))
-      if (!e.empty())
-        new_entries.push_back(e);
-
-  for (int i = 0; i < (int)old_entries.size(); ++i) {
-    if (i >= (int)new_entries.size() || old_entries[i] != new_entries[i]) {
+  for (int i = 1; ; ++i) {
+    const auto old_entry = next_token(old_remaining);
+    if (old_entry.empty())
+      break;
+    const auto new_entry = next_token(new_remaining);
+    if (old_entry != new_entry) {
       char filename[32];
-      StringFormat(filename, std::size(filename), "user_repository_%d", i + 1);
+      StringFormat(filename, std::size(filename), "user_repository_%d", i);
       File::Delete(LocalPath(filename));
     }
   }
