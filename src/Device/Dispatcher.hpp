@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Device/Util/LineHandler.hpp"
+#include "Util/LineHandler.hpp"
 
 class MultipleDevices;
 
