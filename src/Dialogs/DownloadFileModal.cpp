@@ -69,7 +69,7 @@ private:
         got_size = true;
         set_range = true;
       }
-      set_position = got_size;
+      set_position = got_size && position >= 0;
     }
 
     if (set_range)
