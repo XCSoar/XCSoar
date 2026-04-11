@@ -835,7 +835,7 @@ jobs:
     name: Upload to TestFlight (iOS / macOS)
     runs-on: macos-15
     needs: [build]
-    if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
+    if: ${{ (github.repository == 'XCSoar/XCSoar' || github.repository == 'yorickreum/XCSoar') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
     steps:
       - name: Download iOS IPA
         id: ios_ipa
