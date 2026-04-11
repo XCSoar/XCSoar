@@ -197,7 +197,11 @@ void InternalSensors::Init()
   
 #if TARGET_OS_IPHONE
   // Configure location manager for background operation
-  location_manager.distanceFilter = 10.0; // Update every 10 meters
+  /* XCSoar expires the internal GPS fix after 10 seconds without a
+     fresh location.  A distance filter allows CoreLocation to stay
+     quiet while the GPS is still healthy, which makes the UI fall
+     back to "GPS waiting for fix". */
+  location_manager.distanceFilter = kCLDistanceFilterNone;
   location_manager.pausesLocationUpdatesAutomatically = NO;
   
   if ([location_manager
