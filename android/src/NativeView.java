@@ -252,7 +252,10 @@ class NativeView extends SurfaceView
     android.graphics.Rect r = getHolder().getSurfaceFrame();
     android.util.Log.d(TAG, "runNative: getSurfaceFrame() size=" + r.width() + "x" + r.height());
     DisplayMetrics metrics = new DisplayMetrics();
-    ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+    /* Physical display size and xdpi/ydpi; getMetrics() can follow reduced
+       application window metrics on some devices (XCSoar #1784). */
+    ((Activity)context).getWindowManager().getDefaultDisplay()
+      .getRealMetrics(metrics);
 
     try {
       /* Clear the shutdown flag from any previous session so the
