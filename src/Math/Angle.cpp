@@ -4,6 +4,32 @@
 #include "Angle.hpp"
 
 #include <cassert>
+#include <cmath>
+
+namespace {
+
+/**
+ * Reduce \a v radians to the half-open interval [0, 2π) in O(1) time.
+ * NaN and infinity map to 0 so callers never spin on pathological values.
+ */
+double
+NormalizeFullCircleRadians(const double v) noexcept
+{
+  if (std::isnan(v) || std::isinf(v))
+    return 0;
+
+  const double two_pi = Angle::FullCircle().Native();
+  double r = std::fmod(v, two_pi);
+  if (r < 0)
+    r += two_pi;
+  return r;
+}
+
+/** Beyond this |radian| magnitude, iterated wrap is too slow on the UI thread. */
+constexpr double kAsBearingFmodThresholdRadians =
+    1024 * Angle::FullCircle().Native();
+
+} // namespace
 
 Angle::DMS
 Angle::ToDMS() const noexcept
@@ -54,22 +80,16 @@ Angle::AbsoluteRadians() const noexcept
 Angle
 Angle::AsBearing() const noexcept
 {
-  assert(!isnan(value));
-  assert(!isinf(value));
-  assert(fabs(value) < 100 * FullCircle().Native());
+  assert(!std::isnan(value));
+  assert(!std::isinf(value));
 
-#ifndef FIXED_MATH
-  /* Workaround for endless loops below; this is only for release
-     builds.  Debug builds will crash due to assertion failure.  Right
-     now, I don't know where those abnormal values come from, but I
-     hope we'll find out soon - until that happens, this workaround
-     reduces some user frustration with XCSoar freezes. */
-  if (!isnormal(value))
-    return Zero();
-#endif
+  const double v = value;
+  if (fabs(v) >= kAsBearingFmodThresholdRadians)
+    return Native(NormalizeFullCircleRadians(v));
 
-  Angle retval(value);
-
+  /* Historic path: repeated ±2π matches prior floating-point rounding in
+     typical ranges (see unit tests). */
+  Angle retval(v);
   while (retval < Zero())
     retval += FullCircle();
 
@@ -82,18 +102,19 @@ Angle::AsBearing() const noexcept
 Angle
 Angle::AsDelta() const noexcept
 {
-  assert(!isnan(value));
-  assert(!isinf(value));
-  assert(fabs(value) < 100 * FullCircle().Native());
+  assert(!std::isnan(value));
+  assert(!std::isinf(value));
 
-#ifndef FIXED_MATH
-  /* same workaround as in AsBearing() */
-  if (!isnormal(value))
-    return Zero();
-#endif
+  const double v = value;
+  if (fabs(v) >= kAsBearingFmodThresholdRadians) {
+    double r = NormalizeFullCircleRadians(v);
+    const double half = HalfCircle().Native();
+    if (r > half)
+      r -= FullCircle().Native();
+    return Native(r);
+  }
 
-  Angle retval(value);
-
+  Angle retval(v);
   while (retval <= -HalfCircle())
     retval += FullCircle();
 
