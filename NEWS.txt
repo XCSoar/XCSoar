@@ -27,6 +27,8 @@ Version 7.45 - not yet released
   - restore FFVV NetCoupe contest optimisation #2330
 * data files
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
+* devices
+  - fix native crash on device reconnect (stale delayed reopen timer) #2382
 * iOS
   - disable Core Location distance filter for built-in GPS so fixes are not
     suppressed while stationary #2380
