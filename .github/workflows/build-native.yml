@@ -1,6 +1,14 @@
 ---
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        description: >
+          Git branch, tag, or commit SHA to check out and build. Leave empty
+          to build the ref selected in "Use workflow from" (same as before).
+        required: false
+        default: ''
+        type: string
   push:
     paths-ignore:
       - '.clang-format'
@@ -74,6 +82,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
           submodules: true
 
       - name: Parse changelog
@@ -219,6 +228,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
           submodules: true
 
       - name: Verify Xcode version
@@ -768,6 +778,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
           submodules: true
 
       - name: Download Android bundle
