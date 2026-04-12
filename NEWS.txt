@@ -25,6 +25,8 @@ Version 7.45 - not yet released
     dropping the newest InfoBoxes, as we have 130 of them now)
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
+  - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
+    are extremely large; suspected Android freeze #1292)
 * data files
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
 * devices

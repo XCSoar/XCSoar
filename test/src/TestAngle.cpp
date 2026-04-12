@@ -4,11 +4,12 @@
 #include "Math/Angle.hpp"
 #include "TestUtil.hpp"
 
+#include <cmath>
 #include <stdio.h>
 
 int main()
 {
-  plan_tests(97);
+  plan_tests(97 + 4);
 
   // Test Native() and Native()
   ok1(equals(Angle::Native(0).Native(), 0));
@@ -79,6 +80,27 @@ int main()
   ok1(equals(Angle::Degrees(179).AsDelta(), 179));
   ok1(equals(Angle::Degrees(-179).AsDelta(), -179));
   ok1(equals(Angle::Degrees(270).AsDelta(), -90));
+
+  /* O(1) normalization: many full turns plus a remainder must match the
+     remainder alone (avoids main-thread stalls from iterated wrap;
+     see issue #1292).  Use moderate turn counts so doubles still hold the
+     added radians. */
+  {
+    const double two_pi = Angle::FullCircle().Native();
+    const Angle ref = Angle::Degrees(42);
+    const double huge = 100 * two_pi + ref.Native();
+    ok1(equals(Angle::Native(huge).AsBearing(), ref.AsBearing()));
+    ok1(equals(Angle::Native(huge).AsDelta(), ref.AsDelta()));
+
+    const Angle ref_neg = Angle::Degrees(-13);
+    const double huge_neg = -100 * two_pi + ref_neg.Native();
+    ok1(equals(Angle::Native(huge_neg).AsDelta(), ref_neg.AsDelta()));
+
+    /* Magnitudes far beyond float precision must still land in [0, 2π). */
+    const Angle extreme = Angle::Native(1e22 * two_pi).AsBearing();
+    ok1(std::isfinite(extreme.Native()) && extreme.Native() >= 0 &&
+         extreme.Native() < two_pi);
+  }
 
   // Test Between()
   ok1(Angle::QuarterCircle().Between(Angle::Zero(), Angle::HalfCircle()));
