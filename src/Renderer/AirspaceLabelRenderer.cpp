@@ -7,34 +7,14 @@
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/AirspaceIteration.hxx"
+#include "Airspace/AirspaceMapVisible.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Sizes.h"
-
-class AirspaceMapVisible
-{
-  const AirspaceVisibility visible_predicate;
-  const AirspaceWarningCopy &warnings;
-
-public:
-  AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
-                     const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState &_state,
-                     const AirspaceWarningCopy &_warnings) noexcept
-    :visible_predicate(_computer_settings, _renderer_settings, _state),
-     warnings(_warnings) {}
-
-  [[gnu::pure]]
-  bool operator()(const AbstractAirspace& airspace) const noexcept {
-    return visible_predicate(airspace) ||
-      warnings.IsInside(airspace) ||
-      warnings.HasWarning(airspace);
-  }
-};
 
 void
 AirspaceLabelRenderer::Draw(Canvas &canvas,
@@ -72,21 +52,11 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 {
   AirspaceLabelList labels;
 
-  if (airspaces != nullptr) {
-    for (const auto &i :
-           airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                       projection.GetScreenDistanceMeters())) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        labels.Add(airspace.GetCenter(), airspace.GetClass(),
-                   airspace.GetBase(), airspace.GetTop());
-    }
-  }
-
-  for (const auto &ea : external_airspaces)
-    if (visible(*ea))
-      labels.Add(ea->GetCenter(), ea->GetClass(),
-                 ea->GetBase(), ea->GetTop());
+  ForEachAirspaceInView(airspaces, external_airspaces, projection, visible,
+                        [&](const AbstractAirspace &airspace) {
+                          labels.Add(airspace.GetCenter(), airspace.GetClass(),
+                                     airspace.GetBase(), airspace.GetTop());
+                        });
 
   labels.Sort(config);
 

@@ -17,6 +17,22 @@
 
 using namespace std::chrono;
 
+namespace {
+
+[[gnu::const]]
+static AirspaceAltitude
+AirspaceAltitudeMsl(double meters) noexcept
+{
+  AirspaceAltitude a{};
+  a.reference = AltitudeReference::MSL;
+  a.altitude = meters;
+  a.flight_level = 0;
+  a.altitude_above_terrain = 0;
+  return a;
+}
+
+} // namespace
+
 WarningComputer::WarningComputer(const AirspaceWarningConfig &_config,
                                  Airspaces &_airspaces)
   :airspaces(_airspaces),
@@ -110,22 +126,12 @@ WarningComputer::UpdateFlarmZones(const FlarmData &flarm,
       cache.top = zone.top;
       cache.zone_type = zone.zone_type;
 
-      AirspaceAltitude base{}, top{};
-      base.reference = AltitudeReference::MSL;
-      base.altitude = zone.bottom;
-      base.flight_level = 0;
-      base.altitude_above_terrain = 0;
-      top.reference = AltitudeReference::MSL;
-      top.altitude = zone.top;
-      top.flight_level = 0;
-      top.altitude_above_terrain = 0;
-
       cache.airspace->SetProperties(
         fmt::format("FLARM: {}",
                     FlarmAlertZone::GetZoneTypeString(zone.zone_type)),
         std::string{}, TransponderCode::Null(),
         AirspaceClass::ALERT, AirspaceClass::ALERT,
-        base, top);
+        AirspaceAltitudeMsl(zone.bottom), AirspaceAltitudeMsl(zone.top));
     }
 
     external.push_back(cache.airspace);
