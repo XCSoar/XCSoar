@@ -233,14 +233,15 @@ TabDisplay::OnPaint(Canvas &canvas) noexcept
                ? DarkColor(look.background_color)
                : COLOR_BLACK);
 
-  const bool is_focused = !HasCursorKeys() || HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {
     const auto &button = *buttons[i];
 
     const bool is_down = dragging && i == down_index && !drag_off_button;
     const bool is_selected = i == current_index;
 
-    button.Draw(canvas, look, is_focused, is_down, is_selected);
+    /* don't pass focus state to button drawing; the colored indicator
+       line below marks the selected tab independently */
+    button.Draw(canvas, look, false, is_down, is_selected);
   }
 
   if (!buttons.empty()) {
