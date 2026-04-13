@@ -13,6 +13,7 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspaceIteration.hxx"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "MapWindow/StencilMapCanvas.hpp"
@@ -201,19 +202,11 @@ AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
   AirspaceVisitorMap v(helper, awc, settings,
                        look);
 
-  if (airspaces != nullptr) {
-    for (const auto &i :
-           airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                       projection.GetScreenDistanceMeters())) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        v.Visit(airspace);
-    }
-  }
-
-  for (const auto &ea : awc.GetExternalAirspaces())
-    if (visible(*ea))
-      v.Visit(*ea);
+  ForEachAirspaceInView(airspaces, awc.GetExternalAirspaces(), projection,
+                        visible,
+                        [&](const AbstractAirspace &airspace) {
+                          v.Visit(airspace);
+                        });
 
   return v.Commit();
 }
@@ -260,19 +253,11 @@ AirspaceRenderer::DrawOutline(Canvas &canvas,
 {
   AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
 
-  if (airspaces != nullptr) {
-    for (const auto &i :
-           airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                       projection.GetScreenDistanceMeters())) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        outline_renderer.Visit(airspace);
-    }
-  }
-
-  for (const auto &ea : awc.GetExternalAirspaces())
-    if (visible(*ea))
-      outline_renderer.Visit(*ea);
+  ForEachAirspaceInView(airspaces, awc.GetExternalAirspaces(), projection,
+                        visible,
+                        [&](const AbstractAirspace &airspace) {
+                          outline_renderer.Visit(airspace);
+                        });
 }
 
 void

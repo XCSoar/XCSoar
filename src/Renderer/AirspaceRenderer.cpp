@@ -6,32 +6,12 @@
 #include "Projection/WindowProjection.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
-#include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/AirspaceMapVisible.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "NMEA/Aircraft.hpp"
-
-class AirspaceMapVisible
-{
-  const AirspaceVisibility visible_predicate;
-  const AirspaceWarningCopy &warnings;
-
-public:
-  AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
-                     const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState& _state,
-                     const AirspaceWarningCopy& _warnings)
-    :visible_predicate(_computer_settings, _renderer_settings, _state),
-     warnings(_warnings) {}
-
-  bool operator()(const AbstractAirspace& airspace) const {
-    return visible_predicate(airspace) ||
-      warnings.IsInside(airspace) ||
-      warnings.HasWarning(airspace);
-  }
-};
 
 void
 AirspaceRenderer::DrawIntersections(Canvas &canvas,
