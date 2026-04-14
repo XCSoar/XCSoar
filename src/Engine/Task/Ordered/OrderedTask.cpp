@@ -27,6 +27,7 @@
 #include "Task/PathSolvers/TaskDijkstraMax.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Navigation/Aircraft.hpp"
 
 /**
  * According to "FAI Sporting Code / Annex A to Section 3 - Gliding",
@@ -1093,8 +1094,10 @@ OrderedTask::CalcGradient(const AircraftState &state) const noexcept
   if (distance <= 0)
     return 0;
 
-  // Calculate gradient to the last turnpoint of the remaining task
-  return (state.altitude - task_points.back()->GetElevation()) / distance;
+  // Gradient to the last turnpoint: height uses total energy when available
+  return (GlideHeightForMacCready(state) -
+          task_points.back()->GetElevation()) /
+         distance;
 }
 
 static void

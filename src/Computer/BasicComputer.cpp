@@ -7,11 +7,11 @@
 #include "Settings.hpp"
 #include "Atmosphere/AirDensity.hpp"
 #include "Geo/Gravity.hpp"
+#include "Math/EnergyHeight.hpp"
 #include "Math/Util.hpp"
 #include "time/Cast.hxx"
 
 static constexpr double INVERSE_G = 1. / GRAVITY;
-static constexpr double INVERSE_2G = INVERSE_G / 2.;
 
 /**
  * Fill vario values when they are provided by the external vario.
@@ -209,21 +209,20 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated) noexcept
 }
 
 /**
- * Calculates energy height on TAS basis
- *
- * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
+ * Sets #MoreData::energy_height (kinetic \f$v^2/(2g)\f$ from TAS) and
+ * #MoreData::total_energy_height (nav + kinetic).
  */
 static void
 ComputeEnergyHeight(MoreData &basic) noexcept
 {
   if (basic.airspeed_available)
-    basic.energy_height = Square(basic.true_airspeed) * INVERSE_2G;
+    basic.energy_height = KineticHeight(basic.true_airspeed);
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
     basic.energy_height = 0;
 
-  basic.TE_altitude = basic.nav_altitude + basic.energy_height;
+  basic.total_energy_height = basic.nav_altitude + basic.energy_height;
 }
 
 /**

@@ -20,6 +20,8 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
     ? info.nav_altitude
     : 0.;
 
+  aircraft.total_energy_height = GlideEnergyHeight(info);
+
   aircraft.working_band_fraction = calculated.common_stats.height_fraction_working;
 
   aircraft.altitude_agl =

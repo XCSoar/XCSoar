@@ -16,11 +16,17 @@ struct MoreData : public NMEAInfo {
   /** Altitude used for navigation (GPS or Baro) */
   double nav_altitude;
 
-  /** Energy height excess to slow to best glide speed */
+  /**
+   * Kinetic height \f$v^2/(2g)\f$ from current true airspeed [m].  Zero if
+   * airspeed is unavailable.  Not geometric altitude.
+   */
   double energy_height;
 
-  /** Nav Altitude + Energy height (m) */
-  double TE_altitude;
+  /**
+   * Total mechanical energy as height: #nav_altitude + #energy_height [m].
+   * Same physical units as altitude but not the aircraft geometric position.
+   */
+  double total_energy_height;
 
   /** GPS-based vario */
   double gps_vario;
@@ -42,5 +48,17 @@ struct MoreData : public NMEAInfo {
     return baro_altitude_available || gps_altitude_available;
   }
 };
+
+/**
+ * Total mechanical energy height for glide/MacCready (see
+ * #MoreData::total_energy_height), or zero when navigation altitude is
+ * unavailable.
+ */
+[[gnu::pure]]
+inline double
+GlideEnergyHeight(const MoreData &basic) noexcept
+{
+  return basic.NavAltitudeAvailable() ? basic.total_energy_height : 0.;
+}
 
 static_assert(std::is_trivial<MoreData>::value, "type is not trivial");
