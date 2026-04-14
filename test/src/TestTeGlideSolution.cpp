@@ -5,18 +5,26 @@
 // total-energy altitude (nav altitude + kinetic height from TAS), matching
 // MoreData::total_energy_height / Math/EnergyHeight.hpp / BasicComputer.
 //
-// The Engine layer only sees a scalar altitude in GlideState; these tests
-// document the contract: equal TE inputs → equal MacCready solutions.
+// Covers: MacCready TE contract; Math/EnergyHeight; GlideHeightForMacCready;
+// GlideEnergyHeight; ToAircraftState wiring; AircraftStateFilter prediction
+// keeping (TE − nav) invariant when both heights get the same vario offset.
 
+#include "NMEA/Aircraft.hpp"
+#include "NMEA/Derived.hpp"
+#include "NMEA/MoreData.hpp"
+#include "Engine/GlideSolvers/GlideSettings.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Engine/GlideSolvers/GlideResult.hpp"
+#include "Engine/GlideSolvers/GlideState.hpp"
+#include "Engine/GlideSolvers/MacCready.hpp"
+#include "Engine/Util/AircraftStateFilter.hpp"
 #include "Geo/Gravity.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Math/EnergyHeight.hpp"
 #include "Math/Util.hpp"
-#include "Engine/GlideSolvers/GlideSettings.hpp"
-#include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Engine/GlideSolvers/GlideState.hpp"
-#include "Engine/GlideSolvers/GlideResult.hpp"
-#include "Engine/GlideSolvers/MacCready.hpp"
+#include "Navigation/Aircraft.hpp"
+#include "time/FloatDuration.hxx"
+#include "time/Stamp.hpp"
 
 #include "TestUtil.hpp"
 
@@ -108,13 +116,124 @@ TestTeNotBelowNavOnlyMargin()
   ok1(r_te.altitude_difference >= r_nav.altitude_difference);
 }
 
+static void
+TestEnergyHeightMath()
+{
+  ok1(equals(2. * GRAVITY * Inverse2G(), 1.));
+  ok1(equals(KineticHeight(0.), 0.));
+  ok1(equals(TotalEnergyHeight(1200., 0.), 1200.));
+
+  constexpr double tas = 22.5;
+  const double ke = KineticHeight(tas);
+  const double tas_back = std::sqrt(std::max(0., 2. * GRAVITY * ke));
+  ok1(equals(tas, tas_back));
+
+  const double nav = 900.;
+  ok1(equals(TotalEnergyHeight(nav, tas), nav + KineticHeight(tas)));
+}
+
+static void
+TestGlideHeightForMacCready()
+{
+  AircraftState ac{};
+  ac.altitude = 900.;
+  ac.total_energy_height = 0.;
+  ok1(equals(GlideHeightForMacCready(ac), 900.));
+
+  ac.total_energy_height = 100.;
+  ok1(equals(GlideHeightForMacCready(ac), 100.));
+
+  ac.total_energy_height = -1.;
+  ok1(equals(GlideHeightForMacCready(ac), ac.altitude));
+}
+
+static void
+TestGlideEnergyHeight()
+{
+  MoreData m;
+  m.Reset();
+  m.total_energy_height = 9999.;
+  ok1(equals(GlideEnergyHeight(m), 0.));
+
+  m.clock = TimeStamp{FloatDuration{1.}};
+  m.gps_altitude_available.Update(m.clock);
+  m.nav_altitude = 500.;
+  m.total_energy_height = 530.;
+  ok1(equals(GlideEnergyHeight(m), 530.));
+}
+
+static void
+TestToAircraftStateAndGlideHeight()
+{
+  DerivedInfo calculated{};
+  calculated.wind_available.Clear();
+  calculated.terrain_valid = false;
+
+  MoreData info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{3600.}};
+  info.gps_altitude = 1500.;
+  info.nav_altitude = 1500.;
+  info.gps_altitude_available.Update(info.clock);
+  constexpr double tas = 25.;
+  info.true_airspeed = tas;
+  info.airspeed_available.Update(info.clock);
+  info.energy_height = KineticHeight(tas);
+  info.total_energy_height = info.nav_altitude + info.energy_height;
+
+  const AircraftState ac = ToAircraftState(info, calculated);
+  ok1(equals(ac.altitude, info.nav_altitude));
+  ok1(equals(ac.total_energy_height, GlideEnergyHeight(info)));
+  ok1(equals(GlideHeightForMacCready(ac), ac.total_energy_height));
+
+  MoreData no_nav = info;
+  no_nav.gps_altitude_available.Clear();
+  no_nav.baro_altitude_available.Clear();
+  ok1(equals(GlideEnergyHeight(no_nav), 0.));
+
+  const AircraftState ac2 = ToAircraftState(no_nav, calculated);
+  ok1(equals(ac2.altitude, 0.));
+  ok1(equals(ac2.total_energy_height, 0.));
+  ok1(equals(GlideHeightForMacCready(ac2), 0.));
+}
+
+static void
+TestAircraftStateFilterKineticGapInPrediction()
+{
+  AircraftStateFilter f(30.);
+
+  AircraftState s0{};
+  s0.time = TimeStamp{FloatDuration{100.}};
+  s0.location = GeoPoint(Angle::Degrees(8.5), Angle::Degrees(47.2));
+  s0.altitude = 1000.;
+  s0.total_energy_height = 1045.;
+
+  AircraftState s1 = s0;
+  s1.time = TimeStamp{FloatDuration{101.}};
+  s1.altitude = 1003.;
+  s1.total_energy_height = 1048.;
+
+  f.Reset(s0);
+  f.Update(s1);
+
+  const AircraftState pred = f.GetPredictedState(FloatDuration{2.});
+  const double gap_last = s1.total_energy_height - s1.altitude;
+  const double gap_pred = pred.total_energy_height - pred.altitude;
+  ok1(equals(gap_last, gap_pred));
+}
+
 int
 main()
 {
-  plan_tests(11);
+  plan_tests(29);
 
   TestEquivalentTeSameSolution();
   TestTeNotBelowNavOnlyMargin();
+  TestEnergyHeightMath();
+  TestGlideHeightForMacCready();
+  TestGlideEnergyHeight();
+  TestToAircraftStateAndGlideHeight();
+  TestAircraftStateFilterKineticGapInPrediction();
 
   return exit_status();
 }

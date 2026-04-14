@@ -93,7 +93,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestGeoPoint TestDiffFilter \
-	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
+	TestFileUtil TestPolars TestCSVLine TestGlidePolar TestGlideSolversExtras \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestTeGlideSolution TestGlideRatioCalculator TestOrderedTask \
 	TestAATPoint TestTaskSave \
@@ -255,11 +255,16 @@ TEST_MAC_CREADY_OBJS = $(call SRC_TO_OBJ,$(TEST_MAC_CREADY_SOURCES))
 TEST_MAC_CREADY_DEPENDS = GLIDE GEO MATH UTIL
 $(eval $(call link-program,TestMacCready,TEST_MAC_CREADY))
 
+# ToAircraftState pulls libnmea; NMEAInfo/AirDensity and ExternalSettings/UTF8
+# are linked from those objects (not all of libnmea is single-unit friendly).
 TEST_TE_GLIDE_SOLUTION_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestTeGlideSolution.cpp
+	$(TEST_SRC_DIR)/TestTeGlideSolution.cpp \
+	$(SRC)/Engine/Util/AircraftStateFilter.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/util/StaticString.cxx
 TEST_TE_GLIDE_SOLUTION_OBJS = $(call SRC_TO_OBJ,$(TEST_TE_GLIDE_SOLUTION_SOURCES))
-TEST_TE_GLIDE_SOLUTION_DEPENDS = GLIDE GEO MATH UTIL
+TEST_TE_GLIDE_SOLUTION_DEPENDS = GLIDE GEO MATH UTIL LIBNMEA
 $(eval $(call link-program,TestTeGlideSolution,TEST_TE_GLIDE_SOLUTION))
 
 TEST_GLIDE_RATIO_CALCULATOR_SOURCES = \
@@ -626,6 +631,18 @@ TEST_GLIDE_POLAR_SOURCES = \
 	$(TEST_SRC_DIR)/TestGlidePolar.cpp
 TEST_GLIDE_POLAR_DEPENDS = GEO MATH IO UNITS
 $(eval $(call link-program,TestGlidePolar,TEST_GLIDE_POLAR))
+
+TEST_GLIDE_SOLVERS_EXTRAS_SOURCES = \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideState.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/InstantSpeed.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGlideSolversExtras.cpp
+TEST_GLIDE_SOLVERS_EXTRAS_DEPENDS = GEO MATH IO UNITS
+$(eval $(call link-program,TestGlideSolversExtras,TEST_GLIDE_SOLVERS_EXTRAS))
 
 TEST_FILE_UTIL_SOURCES = \
 	$(SRC)/system/FileUtil.cpp \
