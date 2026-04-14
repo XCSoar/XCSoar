@@ -269,7 +269,7 @@ static constexpr MetaData meta_data[] = {
   {
     "Final GR (TE) deprecated",
     "---",
-    "Deprecated, there is no TE compensation on GR, you should switch to the \"Final GR\" info box.",
+    "Deprecated: the \"Final GR\" info box now uses total energy height when true airspeed is available.",
     UpdateInfoBoxFinalGR,
   },
 
@@ -646,7 +646,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Final GR"),
     N_("Fin GR"),
-    N_("Required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height."),
+    N_("Required glide ratio over ground to finish the task: distance to go divided by height above the final elevation. Height uses total energy (navigation altitude plus kinetic height from true airspeed) when airspeed is available."),
     UpdateInfoBoxFinalGR,
   },
 
@@ -674,7 +674,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Alternate 1 GR"),
     N_("Altn 1 GR"),
-    N_("Geometric gradient to the arrival height above the best alternate landing location. This is not adjusted for total energy."),
+    N_("Gradient to the arrival height above the best alternate; glide is solved using total energy height when true airspeed is available."),
     []() noexcept -> InfoBoxContent * {
       return new InfoBoxContentAlternateGR(AlternateInfoBoxSlot::FIRST);
     },
@@ -1065,7 +1065,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Alternate 2 GR"),
     N_("Altn 2 GR"),
-    N_("Geometric gradient to the arrival height above the second-best alternate landing location. This is not adjusted for total energy."),
+    N_("Gradient to the arrival height above the second-best alternate; glide is solved using total energy height when true airspeed is available."),
     []() noexcept -> InfoBoxContent * {
       return new InfoBoxContentAlternateGR(AlternateInfoBoxSlot::SECOND);
     },

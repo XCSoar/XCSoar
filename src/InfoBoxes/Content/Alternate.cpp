@@ -5,6 +5,7 @@
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Components.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/Task/Solvers/TaskSolution.hpp"
@@ -115,7 +116,7 @@ SolveManualAlternate(const Waypoint &waypoint) noexcept
     basic.location, waypoint.location,
     (waypoint.has_elevation ? waypoint.elevation : 0.) +
       settings.task.safety_height_arrival,
-    basic.nav_altitude, calculated.GetWindOrZero(),
+    GlideEnergyHeight(basic), calculated.GetWindOrZero(),
     settings.task.glide, calculated.glide_polar_safety);
 }
 

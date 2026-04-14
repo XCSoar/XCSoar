@@ -5,6 +5,7 @@
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Dialogs.h"
@@ -323,7 +324,8 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetValueFromAltitude(next_solution.GetArrivalAltitude(basic.nav_altitude));
+  data.SetValueFromAltitude(
+    next_solution.GetArrivalAltitude(GlideEnergyHeight(basic)));
 }
 
 

@@ -26,6 +26,9 @@ Version 7.45 - not yet released
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
 * calculations
+  - task glide (MacCready): use total energy height (navigation altitude plus
+    kinetic height from true airspeed when available) so final glide and related
+    solutions are not inflated or deflated by airspeed changes alone (#508)
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)
