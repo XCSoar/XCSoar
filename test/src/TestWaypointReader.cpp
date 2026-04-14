@@ -497,14 +497,38 @@ CreateOriginalWaypoints()
   return org_wp;
 }
 
+static void
+TestPgLandingCupStyle()
+{
+  Waypoints wps;
+  NullOperationEnvironment env;
+  try {
+    ReadWaypointFile(Path("test/data/pg_landing.cup"), wps,
+                     WaypointFactory(WaypointOrigin::NONE), env);
+    ok1(true);
+  } catch (...) {
+    ok1(false);
+    skip(3, 0, "pg_landing.cup");
+    return;
+  }
+
+  wps.Optimise();
+  ok1(wps.size() == 1);
+  const WaypointPtr wp = wps.LookupName("PG Land Test");
+  ok1(wp != nullptr);
+  if (wp)
+    ok1(wp->type == Waypoint::Type::PGLANDING);
+}
+
 int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(507 + 4);
+  plan_tests(507 + 4 + 4);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
+  TestPgLandingCupStyle();
   TestCupx();
   TestZander(org_wp);
   TestFS(org_wp);
