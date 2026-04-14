@@ -110,7 +110,7 @@ TEST_NAMES = \
 	TestIGCParser \
 	TestStrings TestUTF8 TestWrapText \
 	TestInputConfig \
-	TestCRC16 TestCRC8 TestRadioFrequency \
+	TestCRC16 TestCRC8 TestRadioFrequency TestNMEAExtras \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
 	TestHexColorFormatter \
@@ -164,6 +164,23 @@ TEST_RADIO_FREQUENCY_SOURCES = \
 	$(TEST_SRC_DIR)/TestRadioFrequency.cpp
 TEST_RADIO_FREQUENCY_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestRadioFrequency,TEST_RADIO_FREQUENCY))
+
+TEST_NMEA_EXTRAS_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(SRC)/io/CSVLine.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Driver/FLARM/StaticParser.cpp \
+	$(SRC)/FLARM/Error.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/Id.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeTraffic.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestNMEAExtras.cpp
+TEST_NMEA_EXTRAS_DEPENDS = LIBNMEA GEO MATH UTIL UNITS IO OS THREAD
+$(eval $(call link-program,TestNMEAExtras,TEST_NMEA_EXTRAS))
 
 TEST_LEASTSQUARES_SOURCES = \
 	$(SRC)/Math/LeastSquares.cpp \
