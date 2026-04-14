@@ -96,6 +96,7 @@ TEST_NAMES = \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar TestGlideSolversExtras \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestTeGlideSolution TestGlideRatioCalculator TestPathSolvers \
+	TestEngineAirspace \
 	TestOrderedTask \
 	TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
@@ -282,6 +283,13 @@ TEST_PATH_SOLVERS_SOURCES = \
 TEST_PATH_SOLVERS_OBJS = $(call SRC_TO_OBJ,$(TEST_PATH_SOLVERS_SOURCES))
 TEST_PATH_SOLVERS_DEPENDS = TASK GEO MATH UTIL
 $(eval $(call link-program,TestPathSolvers,TEST_PATH_SOLVERS))
+
+TEST_ENGINE_AIRSPACE_SOURCES = \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestEngineAirspace.cpp
+TEST_ENGINE_AIRSPACE_DEPENDS = AIRSPACE GEO MATH UTIL
+$(eval $(call link-program,TestEngineAirspace,TEST_ENGINE_AIRSPACE))
 
 TEST_ORDERED_TASK_SOURCES = \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
