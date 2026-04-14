@@ -52,7 +52,8 @@ GlideRatioCalculator::Initialize(const ComputerSettings &settings)
 }
 
 void
-GlideRatioCalculator::Add(unsigned distance, int altitude)
+GlideRatioCalculator::Add(unsigned distance, int altitude,
+                          int total_energy_height)
 {
   static short errs = 0;
 
@@ -77,13 +78,15 @@ GlideRatioCalculator::Add(unsigned distance, int altitude)
   totaldistance += distance;
   records[start].distance = distance;
   records[start].altitude = altitude;
+  records[start].total_energy_height = total_energy_height;
+
 }
 
 /*
  * returns 0 if invalid, 999 if too high
  */
 double
-GlideRatioCalculator::Calculate() const
+GlideRatioCalculator::Calculate(bool use_te) const
 {
   int altdiff;
   short bcold;
@@ -102,8 +105,15 @@ GlideRatioCalculator::Calculate() const
     else
       bcold = 0;
   }
-
-  altdiff = records[bcold].altitude - records[start].altitude;
+  /* TE mode: height loss from total mechanical energy; otherwise nav altitude
+     only (matches InfoBox "Average efficiency" TE setting). */
+  if (use_te && records[bcold].total_energy_height > 0 &&
+      records[start].total_energy_height > 0)
+    altdiff = records[bcold].total_energy_height -
+              records[start].total_energy_height;
+  else
+    altdiff = records[bcold].altitude - records[start].altitude;
+ 
   if (altdiff == 0)
     return INVALID_GR; // infinitum
 

@@ -105,7 +105,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
                       settings);
 
   GR(basic, calculated.flight, calculated);
-  CruiseGR(basic, calculated);
+  CruiseGR(basic, calculated,settings);
 
   average_vario.Compute(basic, calculated.circling, last_circling,
                         calculated);
@@ -172,7 +172,7 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
     current_thermal.start_time = circling.climb_start_time;
     current_thermal.end_time = basic.time;
     current_thermal.gain =
-      basic.TE_altitude - circling.climb_start_altitude_te;
+      basic.total_energy_height - circling.climb_start_altitude_te;
     current_thermal.CalculateAll();
   } else
     current_thermal.Clear();
@@ -195,21 +195,29 @@ GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
 }
 
 inline void
-GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
+GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated,const ComputerSettings &settings)
 {
+    double alt_diff=0;
   if (!calculated.circling && basic.location_available &&
       basic.NavAltitudeAvailable()) {
     if (!calculated.cruise_start_time.IsDefined()) {
       calculated.cruise_start_location = basic.location;
       calculated.cruise_start_altitude = basic.nav_altitude;
+      calculated.cruise_start_altitude_te = basic.total_energy_height;
       calculated.cruise_start_time = basic.time;
     } else {
       auto DistanceFlown =
         basic.location.DistanceS(calculated.cruise_start_location);
-
+      if (settings.eff_altitude==tealtitude && calculated.cruise_start_altitude_te>0 &&
+          basic.total_energy_height>0){
+            alt_diff= calculated.cruise_start_altitude_te - basic.total_energy_height;
+          }
+          else{
+            alt_diff = calculated.cruise_start_altitude - basic.nav_altitude;
+          }
       calculated.cruise_gr =
-          UpdateGR(calculated.cruise_gr, DistanceFlown,
-                   calculated.cruise_start_altitude - basic.nav_altitude,
+          UpdateGR(calculated.cruise_gr, DistanceFlown, alt_diff
+                   ,
                    0.5);
     }
   }

@@ -97,7 +97,7 @@ private:
                       OneClimbInfo &current_thermal);
   void GR(const MoreData &basic, const FlyingState &flying,
           VarioInfo &vario_info);
-  void CruiseGR(const MoreData &basic, DerivedInfo &calculated);
+  void CruiseGR(const MoreData &basic, DerivedInfo &calculated,const ComputerSettings &settings);
 
   void TerrainHeight(const MoreData &basic, TerrainInfo &calculated);
   void FlightState(const NMEAInfo &basic,
@@ -138,5 +138,5 @@ private:
    * same average speed) to the current MacCready setting.
    */
   void NextLegEqThermal(const NMEAInfo &basic, DerivedInfo &calculated,
-                        const ComputerSettings &settings);
+                                         const ComputerSettings &settings);
 };
