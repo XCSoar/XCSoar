@@ -35,6 +35,8 @@ Version 7.45 - not yet released
 * data files
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
 * devices
+  - radio: VHF channel validation also rejects the unused 8.33 kHz offset 15
+    within each 25 kHz block (offset 20 was already rejected) #2225
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
 * iOS
   - disable Core Location distance filter for built-in GPS so fixes are not

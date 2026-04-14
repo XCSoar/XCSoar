@@ -110,7 +110,7 @@ TEST_NAMES = \
 	TestIGCParser \
 	TestStrings TestUTF8 TestWrapText \
 	TestInputConfig \
-	TestCRC16 TestCRC8 \
+	TestCRC16 TestCRC8 TestRadioFrequency \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
 	TestHexColorFormatter \
@@ -157,6 +157,13 @@ TEST_CRC8_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC8.cpp
 $(eval $(call link-program,TestCRC8,TEST_CRC8))
+
+TEST_RADIO_FREQUENCY_SOURCES = \
+	$(SRC)/RadioFrequency.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestRadioFrequency.cpp
+TEST_RADIO_FREQUENCY_DEPENDS = MATH UTIL
+$(eval $(call link-program,TestRadioFrequency,TEST_RADIO_FREQUENCY))
 
 TEST_LEASTSQUARES_SOURCES = \
 	$(SRC)/Math/LeastSquares.cpp \
