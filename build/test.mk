@@ -95,7 +95,8 @@ TEST_NAMES = \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar TestGlideSolversExtras \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
-	TestMacCready TestTeGlideSolution TestGlideRatioCalculator TestOrderedTask \
+	TestMacCready TestTeGlideSolution TestGlideRatioCalculator TestPathSolvers \
+	TestOrderedTask \
 	TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
 	TestPlanes \
@@ -274,6 +275,13 @@ TEST_GLIDE_RATIO_CALCULATOR_SOURCES = \
 TEST_GLIDE_RATIO_CALCULATOR_OBJS = $(call SRC_TO_OBJ,$(TEST_GLIDE_RATIO_CALCULATOR_SOURCES))
 TEST_GLIDE_RATIO_CALCULATOR_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestGlideRatioCalculator,TEST_GLIDE_RATIO_CALCULATOR))
+
+TEST_PATH_SOLVERS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPathSolvers.cpp
+TEST_PATH_SOLVERS_OBJS = $(call SRC_TO_OBJ,$(TEST_PATH_SOLVERS_SOURCES))
+TEST_PATH_SOLVERS_DEPENDS = TASK GEO MATH UTIL
+$(eval $(call link-program,TestPathSolvers,TEST_PATH_SOLVERS))
 
 TEST_ORDERED_TASK_SOURCES = \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
