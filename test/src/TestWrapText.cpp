@@ -4,7 +4,6 @@
 #include "ui/canvas/TextWrapper.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
 #include "ui/canvas/Font.hpp"
-#include "ui/window/Init.hpp"
 #include "util/UTF8.hpp"
 #include "Screen/Layout.hpp"
 #include "Fonts.hpp"
@@ -157,8 +156,22 @@ TestLongUTF8Line(const Font &font) noexcept
 
 int main()
 {
-  ScreenGlobalInit screen_init;
-  Layout::Initialise(screen_init.GetDisplay(), {100, 100});
+  /* Avoid creating a full UI Display (and OpenGL/EGL) for this unit
+     test.  Initialise the minimal Layout globals and the font
+     subsystem directly. */
+  Layout::scale_1024 = 1024;
+  Layout::scale = 1;
+  Layout::font_scale = 1024;
+  Layout::vdpi = 72;
+  Layout::pt_scale = 1024;
+  Layout::vpt_scale = 1024;
+
+  /* mark screen initialized so components that assert on it succeed */
+  ScreenInitialized();
+
+#ifdef USE_FREETYPE
+  Font::Initialise();
+#endif
 
   InitialiseFonts();
 
@@ -179,6 +192,12 @@ int main()
   TestLongUTF8Line(normal_font);
 
   DeinitialiseFonts();
+
+#ifdef USE_FREETYPE
+  Font::Deinitialise();
+#endif
+
+  ScreenDeinitialized();
 
   return exit_status();
 }
