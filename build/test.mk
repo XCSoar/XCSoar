@@ -446,7 +446,13 @@ TEST_FLARM_MESSAGING_SOURCES = \
 	$(SRC)/FLARM/MessagingRecord.cpp \
 	$(SRC)/FLARM/MessagingDatabase.cpp \
 	$(SRC)/FLARM/MessagingFile.cpp \
+	$(SRC)/FLARM/Details.cpp \
+	$(SRC)/FLARM/Global.cpp \
+	$(SRC)/FLARM/TrafficDatabases.cpp \
+	$(SRC)/FLARM/FlarmNetDatabase.cpp \
+	$(SRC)/FLARM/NameDatabase.cpp \
 	$(SRC)/thread/Thread.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmMessaging.cpp
 TEST_FLARM_MESSAGING_DEPENDS = IO OS MATH UTIL THREAD

@@ -78,7 +78,7 @@ FindIdsByCallSign(const char *cn, FlarmId array[], unsigned size) noexcept
 }
 
 ResolvedInfo
-ResolveInfo(FlarmId id) noexcept
+ResolveInfo(FlarmId id)
 {
   ResolvedInfo out;
   if (traffic_databases == nullptr)
@@ -87,29 +87,29 @@ ResolveInfo(FlarmId id) noexcept
   const auto msg = std::as_const(traffic_databases->flarm_messages).FindRecordById(id);
   const auto *net = traffic_databases->flarm_net.FindRecordById(id);
 
-  out.callsign = traffic_databases->FindNameById(id);
-
-  static thread_local StaticString<256> pilot_buf, plane_buf, reg_buf, airfield_buf;
+  const char *name = traffic_databases->FindNameById(id);
+  if (name != nullptr)
+    out.callsign = name;
 
   if (msg.has_value()) {
     out.source = ResolvedSource::MESSAGING;
 
-    out.pilot = msg->Format(pilot_buf, msg->pilot);
-    out.plane_type = msg->Format(plane_buf, msg->plane_type);
-    out.registration = msg->Format(reg_buf, msg->registration);
+    out.pilot = msg->pilot;
+    out.plane_type = msg->plane_type;
+    out.registration = msg->registration;
 
     if (msg->frequency.IsDefined())
       out.frequency = msg->frequency;
   } else if (net != nullptr) {
     out.source = ResolvedSource::FLARMNET;
 
-    out.pilot = net->Format(pilot_buf, net->pilot.c_str());
-    out.plane_type = net->Format(plane_buf, net->plane_type.c_str());
-    out.registration = net->Format(reg_buf, net->registration.c_str());
+    if (!net->pilot.empty()) out.pilot = net->pilot.c_str();
+    if (!net->plane_type.empty()) out.plane_type = net->plane_type.c_str();
+    if (!net->registration.empty()) out.registration = net->registration.c_str();
 
-    const char *af = net->Format(airfield_buf, net->airfield.c_str());
-    if (af != nullptr && (out.registration == nullptr || !StringIsEqual(af, out.registration)))
-      out.airfield = af;
+    if (!net->airfield.empty() &&
+        (out.registration.empty() || net->airfield != out.registration.c_str()))
+      out.airfield = net->airfield.c_str();
 
     if (net->frequency.IsDefined())
       out.frequency = net->frequency;

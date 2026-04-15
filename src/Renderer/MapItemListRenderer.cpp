@@ -325,23 +325,22 @@ Draw(Canvas &canvas, PixelRect rc,
   const ResolvedInfo info = FlarmDetails::ResolveInfo(item.id);
 
   StaticString<256> title_string;
-  if (info.pilot != nullptr)
-    title_string = info.pilot;
+  if (!info.pilot.empty())
+    title_string = info.pilot.c_str();
   else
     title_string = _("FLARM Traffic");
 
   // Append name to the title, if it exists
-  const char *callsign = info.callsign;
-  if (callsign != nullptr && !StringIsEmpty(callsign)) {
+  if (!info.callsign.empty()) {
     title_string.append(", ");
-    title_string.append(callsign);
+    title_string.append(info.callsign.c_str());
   }
 
   row_renderer.DrawFirstRow(canvas, rc, title_string);
 
   StaticString<256> info_string;
-  if (info.plane_type != nullptr)
-    info_string = info.plane_type;
+  if (!info.plane_type.empty())
+    info_string = info.plane_type.c_str();
   else if (traffic != nullptr)
     info_string = FlarmTraffic::GetTypeString(traffic->type);
   else

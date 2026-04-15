@@ -4,6 +4,9 @@
 #include "FLARM/MessagingFile.hpp"
 #include "FLARM/MessagingDatabase.hpp"
 #include "FLARM/MessagingRecord.hpp"
+#include "FLARM/Details.hpp"
+#include "FLARM/Global.hpp"
+#include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/Id.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
@@ -57,6 +60,20 @@ UpdateMessagingRecord(FlarmMessagingDatabase &db, const MessagingRecord &base,
   if (callsign != nullptr)
     record.callsign = callsign;
   db.Update(record);
+}
+
+static void
+InsertMessaging(FlarmMessagingDatabase &db, const char *hex,
+                const char *pilot, const char *plane_type,
+                const char *registration, const char *callsign)
+{
+  MessagingRecord r;
+  r.id = FlarmId::Parse(hex, nullptr);
+  r.pilot = pilot;
+  r.plane_type = plane_type;
+  r.registration = registration;
+  r.callsign = callsign;
+  db.Insert(r);
 }
 
 static void
@@ -304,14 +321,48 @@ TestFlarmMessagingThreadSafety()
   }
 }
 
+static void
+TestFlarmMessagingResolveInfo()
+{
+  TrafficDatabases dbs;
+  traffic_databases = &dbs;
+
+  InsertMessaging(dbs.flarm_messages, "AA0001",
+                  "Orville", "ASW 28", "D-1111", "AA");
+  InsertMessaging(dbs.flarm_messages, "BB0002",
+                  "Wilbur", "Discus 2", "D-2222", "BB");
+
+  const ResolvedInfo info1 = FlarmDetails::ResolveInfo(FlarmId::Parse("AA0001", nullptr));
+  const ResolvedInfo info2 = FlarmDetails::ResolveInfo(FlarmId::Parse("BB0002", nullptr));
+
+  /* info1 must still carry Orville's data, not Wilbur's */
+  ok1(info1.pilot == "Orville");
+  ok1(info1.plane_type == "ASW 28");
+  ok1(info1.registration == "D-1111");
+  ok1(info1.callsign == "AA");
+  ok1(info1.source == ResolvedSource::MESSAGING);
+
+  ok1(info2.pilot == "Wilbur");
+  ok1(info2.plane_type == "Discus 2");
+  ok1(info2.registration == "D-2222");
+  ok1(info2.callsign == "BB");
+
+  /* unknown ID returns empty */
+  const ResolvedInfo empty = FlarmDetails::ResolveInfo(FlarmId::Parse("999999", nullptr));
+  ok1(empty.IsEmpty());
+
+  traffic_databases = nullptr;
+}
+
 int main()
 {
-  plan_tests(31);
+  plan_tests(41);
 
   TestFlarmMessagingIO();
   TestFlarmMessagingFile();
   TestFlarmMessagingCycle();
   TestFlarmMessagingThreadSafety();
+  TestFlarmMessagingResolveInfo();
 
   return exit_status();
 }
