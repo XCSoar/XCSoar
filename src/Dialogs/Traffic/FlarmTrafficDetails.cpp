@@ -220,14 +220,14 @@ FlarmTrafficDetailsWidget::Update()
   const ResolvedInfo info = FlarmDetails::ResolveInfo(target_id);
 
   // Shared fields: pilot/plane/airfield direct from resolver
-  SetText(PILOT, info.pilot != nullptr ? info.pilot : "--");
+  SetText(PILOT, !info.pilot.empty() ? info.pilot.c_str() : "--");
 
-  const char *plane_value = info.plane_type;
+  const char *plane_value = !info.plane_type.empty() ? info.plane_type.c_str() : nullptr;
   if (plane_value == nullptr && target != nullptr)
     plane_value = FlarmTraffic::GetTypeString(target->type);
   SetText(PLANE, plane_value != nullptr ? plane_value : "--");
 
-  SetText(AIRPORT, info.airfield != nullptr ? info.airfield : "--");
+  SetText(AIRPORT, !info.airfield.empty() ? info.airfield.c_str() : "--");
 
   char fbuf[16];
   const char *freq = info.frequency.Format(fbuf, 16);
@@ -237,16 +237,15 @@ FlarmTrafficDetailsWidget::Update()
   // Fill the callsign field (+ registration)
   // note: don't use target->Name here since it is not updated
   //       yet if it was changed
-  const char* cs = info.callsign;
-  if (cs != nullptr && cs[0] != 0) {
+  if (!info.callsign.empty()) {
     try {
       BasicStringBuilder<char> builder(tmp, ARRAY_SIZE(tmp));
-      builder.Append(cs);
-      if (info.registration != nullptr)
-        builder.Append(" (", info.registration, ")");
+      builder.Append(info.callsign.c_str());
+      if (!info.registration.empty())
+        builder.Append(" (", info.registration.c_str(), ")");
       value = tmp;
     } catch (BasicStringBuilder<char>::Overflow) {
-      value = cs;
+      value = info.callsign.c_str();
     }
   } else
     value = "--";
