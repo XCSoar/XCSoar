@@ -23,6 +23,9 @@ Version 7.45 - not yet released
   - status: show G-load availability in device list and variometer source in
     system status
   - terrain: add new terrain shading orientation "fixed (Top Left)"
+  - airspace list & map item list: grey text for airspaces with a day
+    acknowledgement; map item list adds an "Enable" button to clear it (like the
+    airspace warnings list) #2404
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
 * calculations
