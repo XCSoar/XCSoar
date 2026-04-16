@@ -74,7 +74,7 @@ class MapItemListWidget final
   MapItemListRenderer renderer;
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
-  Button *ack_button;
+  Button *ack_button, *enable_button;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -101,10 +101,12 @@ protected:
     details_button->SetEnabled(HasDetails(*list[current]));
     goto_button->SetEnabled(CanGotoItem(current));
     ack_button->SetEnabled(CanAckItem(current));
+    enable_button->SetEnabled(CanEnableItem(current));
   }
 
   void OnGotoClicked();
   void OnAckClicked();
+  void OnEnableClicked();
 
 public:
   /* virtual methods from class Widget */
@@ -148,6 +150,21 @@ public:
       !backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
 
+  bool CanEnableItem(unsigned index) const noexcept {
+    return CanEnableItem(*list[index]);
+  }
+
+  static bool CanEnableItem(const MapItem &item) noexcept {
+    if (backend_components == nullptr)
+      return false;
+
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+
+    return item.type == MapItem::Type::AIRSPACE &&
+      backend_components->GetAirspaceWarnings() != nullptr &&
+      backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
+  }
+
   void OnActivateItem(unsigned index) noexcept override;
 };
 
@@ -162,6 +179,10 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 
   ack_button = dialog.AddButton(_("Ack Day"), [this](){
     OnAckClicked();
+  });
+
+  enable_button = dialog.AddButton(_("Enable"), [this](){
+    OnEnableClicked();
   });
 
   settings_button = dialog.AddButton(_("Settings"), [](){
@@ -307,6 +328,16 @@ MapItemListWidget::OnAckClicked()
   const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
     list[GetCursorIndex()];
   backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
+  UpdateButtons();
+}
+
+inline void
+MapItemListWidget::OnEnableClicked()
+{
+  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
+    list[GetCursorIndex()];
+  backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace,
+                                                            false);
   UpdateButtons();
 }
 
