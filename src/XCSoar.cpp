@@ -28,8 +28,9 @@
 #include "io/async/AsioThread.hpp"
 #include "util/PrintException.hxx"
 #include "Profile/Profile.hpp"
+#include "Profile/File.hpp"
 #include "Profile/Map.hpp"
-#include "Profile/Current.hpp"
+#include "Profile/Keys.hpp"
 
 #ifdef ENABLE_SDL
 /* this is necessary on macOS, to let libSDL bootstrap Quartz
@@ -49,20 +50,25 @@
 static int
 Main()
 {
-  // Load anti-aliasing setting early before initializing the display
+  // Peek at the profile for the AA setting without modifying global
+  // Profile state - Profile::GetPath() must remain nullptr so that
+  // dlgStartupShowModal() is still shown later.
   unsigned antialiasing_samples = 0;
   try {
-    if (Profile::GetPath() == nullptr)
-      Profile::SetFiles(nullptr);
-    
-    Profile::LoadFile(Profile::GetPath());
-    Profile::map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
+    Path path = Profile::GetPath();
+    AllocatedPath default_path;
+    if (path == nullptr) {
+      default_path = LocalPath("default.prf");
+      path = default_path;
+    }
+    ProfileMap temp_map;
+    Profile::LoadFile(temp_map, path);
+    temp_map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
     if (antialiasing_samples != 0 && antialiasing_samples != 2 &&
         antialiasing_samples != 4 && antialiasing_samples != 8 &&
         antialiasing_samples != 16)
       antialiasing_samples = 0;
   } catch (...) {
-    // Ignore errors loading profile at this stage
   }
 
   ScreenGlobalInit screen_init(antialiasing_samples);
