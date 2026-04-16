@@ -19,6 +19,7 @@
 #include "Weather/Features.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Look/DialogLook.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
@@ -213,6 +214,16 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned idx) noexcept
 {
   const MapItem &item = *list[idx];
+
+  if (item.type == MapItem::Type::AIRSPACE &&
+      backend_components != nullptr &&
+      backend_components->GetAirspaceWarnings() != nullptr &&
+      backend_components->GetAirspaceWarnings()->GetAckDay(
+        *static_cast<const AirspaceMapItem &>(item).airspace))
+    canvas.SetTextColor(COLOR_GRAY);
+  else
+    canvas.SetTextColor(dialog_look.list.text_color);
+
   renderer.Draw(canvas, rc, item,
                 &CommonInterface::Basic().flarm.traffic);
 
