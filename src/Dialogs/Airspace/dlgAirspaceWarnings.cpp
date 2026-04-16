@@ -49,6 +49,8 @@ class AirspaceWarningListWidget final
   Button *ack_button;
   Button *ack_day_button;
   Button *enable_button;
+  Button *clearance_button;
+  Button *revoke_clearance_button;
   Button *details_button;
 
   std::vector<AirspaceWarning> warning_list;
@@ -76,6 +78,10 @@ public:
     ack_button = dialog.AddButton(_("ACK"), [this](){ Ack(); });
     ack_day_button = dialog.AddButton(_("ACK Day"), [this](){ AckDay(); });
     enable_button = dialog.AddButton(_("Enable"), [this](){ Enable(); });
+    clearance_button = dialog.AddButton(_("Clearance"),
+                                         [this](){ SetClearance(); });
+    revoke_clearance_button = dialog.AddButton(_("Revoke Clearance"),
+                                         [this](){ RevokeClearance(); });
     details_button = dialog.AddButton(_("Details"), [this](){ Details(); });
   }
 
@@ -92,6 +98,8 @@ public:
   void Ack();
   void AckDay();
   void Enable();
+  void SetClearance();
+  void RevokeClearance();
   void Details() noexcept;
 
   /* virtual methods from Widget */
@@ -138,22 +146,27 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetEnabled(false);
     ack_day_button->SetEnabled(false);
     enable_button->SetEnabled(false);
+    clearance_button->SetEnabled(false);
+    revoke_clearance_button->SetEnabled(false);
     details_button->SetEnabled(false);
     return;
   }
 
-  bool ack_expired, ack_day;
+  bool ack_expired, ack_day, cleared;
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
     const AirspaceWarning &warning = lease->GetWarning(airspace);
     ack_expired = warning.IsAckExpired();
     ack_day = warning.GetAckDay();
+    cleared = warning.IsCleared();
   }
 
   ack_button->SetEnabled(ack_expired);
   ack_day_button->SetEnabled(!ack_day);
   enable_button->SetEnabled(!ack_expired);
+  clearance_button->SetEnabled(!cleared);
+  revoke_clearance_button->SetEnabled(cleared);
   details_button->SetEnabled(true);
 
   /* #EnableCursorSelection(0) may leave #selected_index on a disabled
@@ -265,6 +278,26 @@ AirspaceWarningListWidget::AckDay()
     airspace_warnings.AcknowledgeDay(airspace, true);
     UpdateList();
     AutoHide();
+  }
+}
+
+void
+AirspaceWarningListWidget::SetClearance()
+{
+  const auto &airspace = selected_airspace;
+  if (airspace != NULL) {
+    airspace_warnings.SetCleared(airspace, true);
+    UpdateList();
+  }
+}
+
+void
+AirspaceWarningListWidget::RevokeClearance()
+{
+  const auto &airspace = selected_airspace;
+  if (airspace != NULL) {
+    airspace_warnings.SetCleared(airspace, false);
+    UpdateList();
   }
 }
 
