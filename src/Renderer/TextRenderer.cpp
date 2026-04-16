@@ -11,8 +11,10 @@
 
 #include <winuser.h>
 
-static tstring_view
-EnsureValidUTF8(tstring_view text, char *buffer,
+#include <string_view>
+
+static std::string_view
+EnsureValidUTF8(std::string_view text, char *buffer,
                 std::size_t buffer_size) noexcept
 {
 #ifndef UNICODE
@@ -21,8 +23,7 @@ EnsureValidUTF8(tstring_view text, char *buffer,
   const std::size_t n = SanitizeUTF8(text, {buffer, buffer_size - 1});
   if (n == 0)
     return text;
-  buffer[n] = '\0';
-  return buffer;
+  return {buffer, n};
 #else
   (void)buffer;
   (void)buffer_size;
@@ -35,7 +36,8 @@ TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
                         std::string_view text) const noexcept
 {
   char sanitized[1024];
-  const tstring_view safe = EnsureValidUTF8(text, sanitized, sizeof(sanitized));
+  const std::string_view safe =
+    EnsureValidUTF8(text, sanitized, sizeof(sanitized));
   return canvas.DrawFormattedText(rc, safe, DT_CALCRECT);
 }
 
@@ -78,6 +80,7 @@ TextRenderer::Draw(Canvas &canvas, PixelRect rc,
 #endif
 
   char sanitized[1024];
-  const tstring_view safe = EnsureValidUTF8(text, sanitized, sizeof(sanitized));
+  const std::string_view safe =
+    EnsureValidUTF8(text, sanitized, sizeof(sanitized));
   canvas.DrawFormattedText(rc, safe, format);
 }

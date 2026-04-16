@@ -9,11 +9,11 @@
 #include "util/UTF8.hpp"
 #endif
 
-#include <tchar.h>
+#include <string_view>
 
 #ifndef UNICODE
-static tstring_view
-SafeForTextSize(tstring_view text, char *buffer,
+static std::string_view
+SafeForTextSize(std::string_view text, char *buffer,
                 std::size_t buffer_size) noexcept
 {
   if (ValidateUTF8(text))
@@ -21,15 +21,14 @@ SafeForTextSize(tstring_view text, char *buffer,
   const std::size_t n = SanitizeUTF8(text, {buffer, buffer_size - 1});
   if (n == 0)
     return text;
-  buffer[n] = '\0';
-  return buffer;
+  return {buffer, n};
 }
 #endif
 
 void
 TextButtonRenderer::SetCaption2(StaticString<32>::const_pointer _caption2) noexcept
 {
-  caption2 = _caption2 != nullptr ? _caption2 : _T("");
+  caption2 = _caption2 != nullptr ? _caption2 : "";
   if (caption2.empty())
     caption3.clear();
   text_renderer.InvalidateLayout();
@@ -38,7 +37,7 @@ TextButtonRenderer::SetCaption2(StaticString<32>::const_pointer _caption2) noexc
 void
 TextButtonRenderer::SetCaption3(StaticString<32>::const_pointer _caption3) noexcept
 {
-  caption3 = _caption3 != nullptr ? _caption3 : _T("");
+  caption3 = _caption3 != nullptr ? _caption3 : "";
   text_renderer.InvalidateLayout();
 }
 
@@ -48,7 +47,8 @@ TextButtonRenderer::GetMinimumButtonWidth(const ButtonLook &look,
 {
 #ifndef UNICODE
   char sanitized[256];
-  const tstring_view safe = SafeForTextSize(caption, sanitized, sizeof(sanitized));
+  const std::string_view safe =
+    SafeForTextSize(caption, sanitized, sizeof(sanitized));
   return 2 * (ButtonFrameRenderer::GetMargin() + Layout::GetTextPadding())
     + look.font->TextSize(safe).width;
 #else
@@ -122,18 +122,18 @@ TextButtonRenderer::GetMinimumButtonWidth() const noexcept
 {
 #ifndef UNICODE
   char sanitized[256];
-  const tstring_view safe_caption =
+  const std::string_view safe_caption =
     SafeForTextSize(caption.c_str(), sanitized, sizeof(sanitized));
   unsigned w = GetLook().font->TextSize(safe_caption).width;
   if (!caption2.empty()) {
-    const tstring_view safe_caption2 =
+    const std::string_view safe_caption2 =
       SafeForTextSize(caption2.c_str(), sanitized, sizeof(sanitized));
     const unsigned w2 = GetLook().font->TextSize(safe_caption2).width;
     if (w2 > w)
       w = w2;
   }
   if (!caption3.empty()) {
-    const tstring_view safe_caption3 =
+    const std::string_view safe_caption3 =
       SafeForTextSize(caption3.c_str(), sanitized, sizeof(sanitized));
     const unsigned w3 = GetLook().font->TextSize(safe_caption3).width;
     if (w3 > w)
