@@ -273,12 +273,16 @@ RasterRenderer::GenerateImage(bool do_shading,
       new ColumnContourPending[height_matrix.GetSize().x];
   }
 
-  if (quantisation_effective == 0)
+  // At extreme zoom out, terrain features are too small to be meaningful;
+  // disable both slope shading and contours.
+  if (quantisation_effective == 0) {
     do_shading = false;
+    contour_spacing = 0;
+  }
 
   // Convert spacing to scale, with scale=16: effectively no contours
   unsigned contour_height_scale = 16;
-  if (contour_spacing > 0 && quantisation_effective > 0) {
+  if (contour_spacing > 0) {
     unsigned s = 0;
     while ((1u << s) < contour_spacing)
       ++s;
