@@ -26,6 +26,8 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "util/StringCompare.hxx"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #include <cassert>
 #include <stdio.h>
@@ -334,6 +336,12 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   assert(i < items.size());
 
   const AbstractAirspace &airspace = items[i].GetAirspace();
+
+  if (airspace_warnings != nullptr &&
+      airspace_warnings->GetAckDay(airspace))
+    canvas.SetTextColor(COLOR_GRAY);
+  else
+    canvas.SetTextColor(UIGlobals::GetDialogLook().list.text_color);
 
   AirspaceListRenderer::Draw(
       canvas, rc, airspace,
