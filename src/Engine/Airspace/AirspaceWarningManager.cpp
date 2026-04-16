@@ -445,6 +445,20 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexce
   return warning != nullptr && warning->GetAckDay();
 }
 
+void
+AirspaceWarningManager::SetCleared(ConstAirspacePtr airspace,
+                                   const bool set) noexcept
+{
+  GetWarning(std::move(airspace)).SetCleared(set);
+}
+
+bool
+AirspaceWarningManager::GetCleared(const AbstractAirspace &airspace) const noexcept
+{
+  const AirspaceWarning *warning = GetWarningPtr(airspace);
+  return warning != nullptr && warning->IsCleared();
+}
+
 bool
 AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcept
 {

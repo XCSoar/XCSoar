@@ -234,6 +234,23 @@ public:
   bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
   /**
+   * Set or revoke clearance for an airspace for the whole day
+   *
+   * @param airspace The airspace subject
+   * @param set Whether to set or revoke clearance
+   */
+  void SetCleared(ConstAirspacePtr airspace,
+                  bool set = true) noexcept;
+
+  /**
+   * Returns whether the given airspace has clearance for the day
+   *
+   * @param airspace The airspace subject
+   */
+  [[gnu::pure]]
+  bool GetCleared(const AbstractAirspace &airspace) const noexcept;
+
+  /**
    * Returns true if this airspace would be warned about,
    * i.e. trespassing it would not be possible.
    *

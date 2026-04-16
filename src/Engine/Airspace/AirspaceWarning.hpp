@@ -44,6 +44,8 @@ private:
   Duration acktime_inside{};
   Duration debounce_time = std::chrono::minutes{1};
   bool ack_day = false;
+  bool cleared_day = false;
+  bool is_exit_warning = false;
   bool expired = true;
   bool expired_last = true;
 
@@ -211,6 +213,48 @@ public:
    */
   void AcknowledgeDay(const bool set=true) noexcept {
     ack_day = set;
+  }
+
+  /**
+   * Set or revoke airspace clearance for the whole day.
+   *
+   * Clearance marks airspace you are allowed
+   * to be inside. This suppresses entry and inside warnings
+   * for both this airspace and all other airspaces at this location.
+   * The warning system then alerts when approaching
+   * the exit boundary if that leads into another airspace that is 
+   * not cleared.
+   *
+   * @param set Whether to set or revoke clearance
+   */
+  void SetCleared(const bool set=true) noexcept {
+    cleared_day = set;
+  }
+
+  /**
+   * Determine if clearance is set
+   */
+  [[gnu::pure]]
+  bool IsCleared() const noexcept {
+    return cleared_day;
+  }
+
+  /**
+   * Mark this warning as an exit warning (approaching exit
+   * boundary of a cleared airspace into restricted airspace).
+   *
+   * This flag is recomputed each update cycle.
+   */
+  void SetExitWarning(const bool set) noexcept {
+    is_exit_warning = set;
+  }
+
+  /**
+   * Determine if this is an exit warning for a cleared airspace
+   */
+  [[gnu::pure]]
+  bool IsExitWarning() const noexcept {
+    return is_exit_warning;
   }
 
   /**
