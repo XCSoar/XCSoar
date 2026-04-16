@@ -9,6 +9,7 @@
 #include "Operation/Operation.hpp"
 #include "system/ConvertPathName.hpp"
 #include "util/ScopeExit.hxx"
+#include "LogFile.hpp"
 
 extern "C" {
 #include "jasper/jp2/jp2_cod.h"
@@ -125,6 +126,11 @@ TerrainLoader::ParseBounds(const char *data)
 void
 TerrainLoader::ProcessComment(const char *data, unsigned size)
 {
+  if (size > 1000000) {
+    LogFmt("Terrain: skipping comment of unreasonable size {}", size);
+    return;
+  }
+
   if (scan_overview) try {
     const std::string comment{data, size};
     ParseBounds(comment.c_str());
