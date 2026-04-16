@@ -53,6 +53,8 @@ class AirspaceWarningListWidget final
   Button *ack_button;
   Button *ack_day_button;
   Button *enable_button;
+  Button *clearance_button;
+  Button *revoke_clearance_button;
   Button *radio_button;
   Button *details_button;
 
@@ -75,6 +77,10 @@ public:
     ack_button = dialog.AddButton(_("ACK"), [this](){ Ack(); });
     ack_day_button = dialog.AddButton(_("Ack Day"), [this](){ AckDay(); });
     enable_button = dialog.AddButton(_("Enable"), [this](){ Enable(); });
+    clearance_button = dialog.AddButton(_("Clearance"),
+                                         [this](){ SetClearance(); });
+    revoke_clearance_button = dialog.AddButton(_("Revoke Clearance"),
+                                         [this](){ RevokeClearance(); });
     radio_button = dialog.AddButton(_("Radio"), [this](){ Radio(); });
     details_button = dialog.AddButton(_("Details"), [this](){ Details(); });
   }
@@ -92,6 +98,8 @@ public:
   void Ack();
   void AckDay();
   void Enable();
+  void SetClearance();
+  void RevokeClearance();
   void Radio() noexcept;
   void Details() noexcept;
 
@@ -135,6 +143,8 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetEnabled(false);
     ack_day_button->SetEnabled(false);
     enable_button->SetEnabled(false);
+    clearance_button->SetEnabled(false);
+    revoke_clearance_button->SetEnabled(false);
     radio_button->SetEnabled(false);
     details_button->SetEnabled(false);
     if (self_dialog != nullptr)
@@ -148,6 +158,8 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetEnabled(false);
     ack_day_button->SetEnabled(false);
     enable_button->SetEnabled(false);
+    clearance_button->SetEnabled(false);
+    revoke_clearance_button->SetEnabled(false);
     radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
     details_button->SetEnabled(true);
     if (self_dialog != nullptr)
@@ -155,9 +167,12 @@ AirspaceWarningListWidget::UpdateButtons()
     return;
   }
 
+  const bool cleared = warning->IsCleared();
   ack_button->SetEnabled(warning->IsAckExpired());
   ack_day_button->SetEnabled(!warning->GetAckDay());
   enable_button->SetEnabled(!warning->IsAckExpired());
+  clearance_button->SetEnabled(!cleared);
+  revoke_clearance_button->SetEnabled(cleared);
   radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
   details_button->SetEnabled(true);
 
@@ -281,6 +296,26 @@ AirspaceWarningListWidget::AckDay()
 
     UpdateList();
     AutoHide();
+  }
+}
+
+void
+AirspaceWarningListWidget::SetClearance()
+{
+  const auto &airspace = selected_airspace;
+  if (airspace != NULL) {
+    airspace_warnings.SetCleared(airspace, true);
+    UpdateList();
+  }
+}
+
+void
+AirspaceWarningListWidget::RevokeClearance()
+{
+  const auto &airspace = selected_airspace;
+  if (airspace != NULL) {
+    airspace_warnings.SetCleared(airspace, false);
+    UpdateList();
   }
 }
 
