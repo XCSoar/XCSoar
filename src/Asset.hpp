@@ -148,9 +148,12 @@ HasPointer() noexcept
  * sizing controls, as a touch screen may require bigger areas.
  */
 #if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
-[[gnu::pure]]
 bool
 HasTouchScreen() noexcept;
+
+/** Override HasTouchScreen() from command line (-touchscreen / -notouchscreen) */
+void
+SetTouchScreenOverride(bool value) noexcept;
 #else
 constexpr
 static inline bool

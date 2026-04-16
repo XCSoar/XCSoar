@@ -63,6 +63,10 @@ static const char *const Usage = "\n"
 #ifdef HAVE_CMDLINE_FULLSCREEN
   "  -fullscreen     full-screen mode\n"
 #endif
+#if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
+  "  -touchscreen    assume touch screen present\n"
+  "  -notouchscreen assume no touch screen\n"
+#endif
 #ifdef HAVE_CMDLINE_RESIZABLE
   "  -resizable      resizable window\n"
 #endif

@@ -4,6 +4,7 @@
 #include "MenuBar.hpp"
 #include "ui/window/ContainerWindow.hpp"
 #include "Input/InputEvents.hpp"
+#include "Screen/Layout.hpp"
 
 #include <cassert>
 
@@ -11,12 +12,14 @@
 static PixelRect
 GetButtonPosition(unsigned i, PixelRect rc)
 {
-  unsigned hwidth = rc.GetWidth(), hheight = rc.GetHeight();
+  /* Use constant touch height so button size does not change on widget
+     or layout change. */
+  const unsigned touch_height = Layout::GetMaximumControlHeight();
+  unsigned hwidth = rc.GetWidth();
+  unsigned hheight = touch_height;
 
-  if (hheight > hwidth) {
+  if (rc.GetHeight() > rc.GetWidth()) {
     // portrait
-
-    hheight /= menubar_height_scale_factor;
 
     if (i == 0) {
       rc.left = rc.right;
@@ -39,7 +42,6 @@ GetButtonPosition(unsigned i, PixelRect rc)
     // landscape
 
     hwidth /= 5;
-    hheight /= 5;
 
     if (i == 0) {
       rc.left = rc.right;

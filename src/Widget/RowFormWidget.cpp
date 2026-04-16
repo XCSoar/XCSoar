@@ -26,8 +26,9 @@ GetMinimumHeight(const WndProperty &control, const DialogLook &look,
     height *= 2;
   height += padding * 2;
 
-  if (!control.IsReadOnly() && height < Layout::GetMinimumControlHeight())
-    height = Layout::GetMinimumControlHeight();
+  /* Editable (tappable) fields use button height for reliable touch targets. */
+  if (!control.IsReadOnly() && height < Layout::GetMaximumControlHeight())
+    height = Layout::GetMaximumControlHeight();
 
   return height;
 }
@@ -62,7 +63,7 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
     return ::GetMinimumHeight(GetControl(), look, vertical);
 
   case Type::BUTTON:
-    return Layout::GetMinimumControlHeight();
+    return Layout::GetMaximumControlHeight();
 
   case Type::MULTI_LINE:
     return Layout::GetMinimumControlHeight();

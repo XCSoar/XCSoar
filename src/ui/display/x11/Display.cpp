@@ -13,6 +13,8 @@
 #include "LogFile.hpp"
 #endif
 
+#include <X11/Xlib.h>
+#include <cstdlib>
 #include <stdexcept>
 
 namespace X11 {
@@ -98,6 +100,16 @@ PixelSize
 Display::GetSizeMM() const noexcept
 {
   return {DisplayWidthMM(display, 0), DisplayHeightMM(display, 0)};
+}
+
+unsigned
+Display::GetXftDPI() const noexcept
+{
+  if (const char *dpi_str = XGetDefault(display, "Xft", "dpi")) {
+    const int dpi = atoi(dpi_str);
+    return dpi >= 48 && dpi <= 480 ? static_cast<unsigned>(dpi) : 0;
+  }
+  return 0;
 }
 
 } // namespace X11
