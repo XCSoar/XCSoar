@@ -34,6 +34,7 @@ public:
      airspace(std::move(_airspace)), warnings(_warnings) {}
 
   void AckDayOrEnable() noexcept;
+  void ToggleClearance() noexcept;
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -117,6 +118,17 @@ AirspaceDetailsWidget::AckDayOrEnable() noexcept
 }
 
 void
+AirspaceDetailsWidget::ToggleClearance() noexcept
+{
+  assert(warnings != nullptr);
+
+  const bool cleared = warnings->GetCleared(*airspace);
+  warnings->SetCleared(airspace, !cleared);
+
+  dialog->SetModalResult(mrOK);
+}
+
+void
 dlgAirspaceDetails(ConstAirspacePtr airspace,
                    ProtectedAirspaceWarningManager *warnings)
 {
@@ -128,6 +140,10 @@ dlgAirspaceDetails(ConstAirspacePtr airspace,
 
   if (warnings != nullptr) {
     widget->dialog = &dialog;
+    dialog.AddButton(warnings->GetCleared(*airspace)
+                     ? _("Revoke Clearance")
+                     : _("Set Clearance"),
+                     [widget](){ widget->ToggleClearance(); });
     dialog.AddButton(warnings->GetAckDay(*airspace)
                      ? _("Enable") : _("Ack Day"),
                      [widget](){ widget->AckDayOrEnable(); });
