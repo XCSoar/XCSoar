@@ -193,6 +193,12 @@ public:
       CommonInterface::main_window->SetBottomBannerWidget(nullptr);
     });
 
+    AddButton(_("Clearance"), [this](){
+      manager.SetCleared(airspace);
+      monitor.Schedule();
+      PageActions::RestoreBottom();
+    });
+
     AddButton(_("More"), [this](){
       dlgAirspaceWarningsShowModal(manager);
     });
