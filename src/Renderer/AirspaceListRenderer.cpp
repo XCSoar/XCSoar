@@ -12,6 +12,7 @@
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Language/Language.hpp"
 #include "util/StaticString.hxx"
 
 #include <cstring>
@@ -37,7 +38,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const char *primary_text, const char *secondary_text,
      const TwoTextRowsRenderer &row_renderer,
      const AirspaceLook &look,
-     const AirspaceRendererSettings &renderer_settings)
+     const AirspaceRendererSettings &renderer_settings,
+     bool cleared)
 {
   const char *safe_primary = primary_text != nullptr ? primary_text : "";
   const char *safe_secondary = secondary_text != nullptr ? secondary_text : "";
@@ -62,7 +64,21 @@ Draw(Canvas &canvas, PixelRect rc,
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
   const int bottom_x = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-  rc.right = std::min(top_x, bottom_x);
+  int right_column_x = std::min(top_x, bottom_x);
+
+  // Draw "[Cleared]" tag left of the altitude column.
+  // The caller has already chosen a readable text colour.
+  if (cleared) {
+    const char *tag = _("Cleared");
+    StaticString<32> tag_text;
+    tag_text.Format("[%s]", tag);
+    PixelRect tag_rc = rc;
+    tag_rc.right = right_column_x;
+    right_column_x =
+      row_renderer.DrawRightSecondRow(canvas, tag_rc, tag_text);
+  }
+
+  rc.right = right_column_x;
 
   // Draw secondary row
   row_renderer.DrawSecondRow(canvas, rc, safe_secondary);
@@ -76,7 +92,8 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AbstractAirspace &airspace,
                            const TwoTextRowsRenderer &row_renderer,
                            const AirspaceLook &look,
-                           const AirspaceRendererSettings &renderer_settings)
+                           const AirspaceRendererSettings &renderer_settings,
+                           bool cleared)
 {
   const char *class_or_type = AirspaceFormatter::GetClassOrType(airspace);
   const char *notam_type = AirspaceFormatter::GetType(airspace);
@@ -86,10 +103,10 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Others: display name as primary, class/type as secondary
   if (is_notam) {
     ::Draw(canvas, rc, airspace, notam_type, normalized_name.c_str(),
-           row_renderer, look, renderer_settings);
+           row_renderer, look, renderer_settings, cleared);
   } else {
     ::Draw(canvas, rc, airspace, normalized_name.c_str(), class_or_type,
-           row_renderer, look, renderer_settings);
+           row_renderer, look, renderer_settings, cleared);
   }
 }
 
@@ -99,7 +116,8 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const GeoVector &vector,
                            const TwoTextRowsRenderer &row_renderer,
                            const AirspaceLook &look,
-                           const AirspaceRendererSettings &renderer_settings)
+                           const AirspaceRendererSettings &renderer_settings,
+                           bool cleared)
 {
   const char *class_or_type = AirspaceFormatter::GetClassOrType(airspace);
   const char *notam_type = AirspaceFormatter::GetType(airspace);
@@ -117,9 +135,9 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   if (is_notam) {
     // NOTAMs: class/type + distance + bearing as primary, name as secondary
     ::Draw(canvas, rc, airspace, type_with_location, normalized_name.c_str(),
-           row_renderer, look, renderer_settings);
+           row_renderer, look, renderer_settings, cleared);
   } else {
     ::Draw(canvas, rc, airspace, normalized_name.c_str(), type_with_location,
-           row_renderer, look, renderer_settings);
+           row_renderer, look, renderer_settings, cleared);
   }
 }
