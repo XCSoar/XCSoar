@@ -5,12 +5,14 @@
 #include "TwoTextRowsRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/Colors.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Language/Language.hpp"
 #include "util/StaticString.hxx"
 
 static void
@@ -19,7 +21,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const char *comment,
      const TwoTextRowsRenderer &row_renderer,
      const AirspaceLook &look,
-     const AirspaceRendererSettings &renderer_settings)
+     const AirspaceRendererSettings &renderer_settings,
+     bool cleared)
 {
   const unsigned padding = Layout::GetTextPadding();
   const unsigned line_height = rc.GetHeight();
@@ -41,7 +44,23 @@ Draw(Canvas &canvas, PixelRect rc,
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
   const int bottom_x = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-  rc.right = std::min(top_x, bottom_x);
+  int right_column_x = std::min(top_x, bottom_x);
+
+  // Draw "[Cleared]" tag left of the altitude column
+  if (cleared) {
+    const Color saved_color = canvas.GetTextColor();
+    canvas.SetTextColor(COLOR_CLEARANCE);
+    const char *tag = _("Cleared");
+    StaticString<32> tag_text;
+    tag_text.Format("[%s]", tag);
+    PixelRect tag_rc = rc;
+    tag_rc.right = right_column_x;
+    right_column_x =
+      row_renderer.DrawRightSecondRow(canvas, tag_rc, tag_text);
+    canvas.SetTextColor(saved_color);
+  }
+
+  rc.right = right_column_x;
 
   // Draw comment line
   row_renderer.DrawSecondRow(canvas, rc, comment);
@@ -55,10 +74,12 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AbstractAirspace &airspace,
                            const TwoTextRowsRenderer &row_renderer,
                            const AirspaceLook &look,
-                           const AirspaceRendererSettings &renderer_settings)
+                           const AirspaceRendererSettings &renderer_settings,
+                           bool cleared)
 {
-  ::Draw(canvas, rc, airspace, AirspaceFormatter::GetClassOrType(airspace),
-         row_renderer, look, renderer_settings);
+  ::Draw(canvas, rc, airspace,
+         AirspaceFormatter::GetClassOrType(airspace),
+         row_renderer, look, renderer_settings, cleared);
 }
 
 void
@@ -67,14 +88,16 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const GeoVector &vector,
                            const TwoTextRowsRenderer &row_renderer,
                            const AirspaceLook &look,
-                           const AirspaceRendererSettings &renderer_settings)
+                           const AirspaceRendererSettings &renderer_settings,
+                           bool cleared)
 {
-  StaticString<256> comment(AirspaceFormatter::GetClassOrType(airspace));
+  StaticString<256> comment(
+    AirspaceFormatter::GetClassOrType(airspace));
 
   comment.AppendFormat(" - %s - %s",
                        FormatUserDistanceSmart(vector.distance).c_str(),
                        FormatBearing(vector.bearing).c_str());
 
   ::Draw(canvas, rc, airspace, comment,
-         row_renderer, look, renderer_settings);
+         row_renderer, look, renderer_settings, cleared);
 }

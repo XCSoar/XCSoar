@@ -38,5 +38,6 @@ public:
   unsigned CalculateLayout(const DialogLook &dialog_look);
 
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
-            const TrafficList *traffic_list=nullptr);
+            const TrafficList *traffic_list=nullptr,
+            bool airspace_cleared=false);
 };

@@ -27,6 +27,7 @@
 #include "Language/Language.hpp"
 #include "util/StringCompare.hxx"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Look/Colors.hpp"
 #include "ui/canvas/Canvas.hpp"
 
 #include <cassert>
@@ -315,15 +316,21 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const AbstractAirspace &airspace = items[i].GetAirspace();
 
-  if (airspace_warnings != nullptr &&
-      airspace_warnings->GetAckDay(airspace))
+  const bool cleared = airspace_warnings != nullptr &&
+    airspace_warnings->GetCleared(airspace);
+
+  if (cleared)
+    canvas.SetTextColor(COLOR_CLEARANCE);
+  else if (airspace_warnings != nullptr &&
+           airspace_warnings->GetAckDay(airspace))
     canvas.SetTextColor(COLOR_GRAY);
 
   AirspaceListRenderer::Draw(
       canvas, rc, airspace,
       items[i].GetVector(location, airspaces->GetProjection()),
       row_renderer, UIGlobals::GetMapLook().airspace,
-      CommonInterface::GetMapSettings().airspace);
+      CommonInterface::GetMapSettings().airspace,
+      cleared);
 }
 
 [[gnu::pure]]

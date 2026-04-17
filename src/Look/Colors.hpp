@@ -57,4 +57,9 @@ static constexpr Color COLOR_ADMONITION_TIP =
  */
 static constexpr Color COLOR_LIGHT_GREEN = Color(0x00, 0xc0, 0x00);
 
+/**
+ * Dark green text color for airspaces with ATC clearance.
+ */
+static constexpr Color COLOR_CLEARANCE = Color(0x00, 0x80, 0x00);
+
 static constexpr uint8_t ALPHA_OVERLAY = 0xA0;

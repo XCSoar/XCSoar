@@ -22,6 +22,7 @@
 #include "util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Look/Colors.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Sound.hpp"
@@ -382,7 +383,9 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
 
-  if (!warning.IsActive())
+  if (warning.IsCleared())
+    canvas.SetTextColor(COLOR_CLEARANCE);
+  else if (!warning.IsActive())
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
@@ -427,15 +430,25 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   /* draw the warning state indicator */
 
+  static constexpr Color cleared_color(50, 200, 50);
+
   Color state_color;
   const char *state_text;
 
-  if (warning.IsInside()) {
-    state_color = warning.IsActive() ? inside_color : inside_ack_color;
+  if (warning.IsCleared() && warning.IsInside()) {
+    state_color = cleared_color;
+    state_text = "inside";
+  } else if (warning.IsInside()) {
+    state_color = warning.IsActive()
+      ? inside_color : inside_ack_color;
     state_text = "inside";
   } else if (warning.IsWarning()) {
-    state_color = warning.IsActive() ? near_color : near_ack_color;
+    state_color = warning.IsActive()
+      ? near_color : near_ack_color;
     state_text = "near";
+  } else if (warning.IsCleared()) {
+    state_color = cleared_color;
+    state_text = "cleared";
   } else {
     state_color = COLOR_WHITE;
     state_text = NULL;
