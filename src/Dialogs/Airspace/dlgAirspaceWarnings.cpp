@@ -24,6 +24,7 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
+#include "Look/Colors.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "LogFile.hpp"
@@ -432,7 +433,9 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
 
-  if (!warning.IsActive())
+  if (warning.IsCleared())
+    canvas.SetTextColor(COLOR_CLEARANCE);
+  else if (!warning.IsActive())
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
@@ -477,12 +480,23 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   /* draw the warning state indicator */
   AirspaceWarningStatusBadge status;
-  if (warning.IsWarning()) {
-    status.active = warning.IsActive();
+  status.active = warning.IsActive();
+
+  if (warning.IsCleared()) {
+    /* a clearance overrides the warning colour; the caption still
+       tells the pilot where the airspace is relative to us */
+    if (warning.IsInside())
+      status.kind = AirspaceWarningStatusBadge::Kind::ClearedInside;
+    else if (warning.IsWarning())
+      status.kind = AirspaceWarningStatusBadge::Kind::ClearedNear;
+    else
+      status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
+  } else if (warning.IsWarning()) {
     status.kind = warning.IsInside()
       ? AirspaceWarningStatusBadge::Kind::Inside
       : AirspaceWarningStatusBadge::Kind::Near;
   }
+
   DrawAirspaceWarningStatus(canvas, list_font, status_rc, status);
 }
 

@@ -13,8 +13,10 @@
 static int
 CaptionWidth(Canvas &canvas) noexcept
 {
-  return std::max(canvas.CalcTextWidth(C_("Status", "Inside")),
-                  canvas.CalcTextWidth(_("Near")));
+  return std::max({canvas.CalcTextWidth(C_("Status", "Inside")),
+                   canvas.CalcTextWidth(_("Near")),
+                   canvas.CalcTextWidth(_("(Near)")),
+                   canvas.CalcTextWidth(_("Cleared"))});
 }
 
 int
@@ -47,6 +49,21 @@ DrawAirspaceWarningStatus(Canvas &canvas, const Font &font,
       ? COLOR_AIRSPACE_WARNING_NEAR
       : COLOR_AIRSPACE_WARNING_NEAR_ACK;
     state_text = _("Near");
+    break;
+
+  case AirspaceWarningStatusBadge::Kind::ClearedInside:
+    state_color = COLOR_AIRSPACE_WARNING_CLEARED;
+    state_text = C_("Status", "Inside");
+    break;
+
+  case AirspaceWarningStatusBadge::Kind::ClearedNear:
+    state_color = COLOR_AIRSPACE_WARNING_CLEARED;
+    state_text = _("(Near)");
+    break;
+
+  case AirspaceWarningStatusBadge::Kind::Cleared:
+    state_color = COLOR_AIRSPACE_WARNING_CLEARED;
+    state_text = _("Cleared");
     break;
 
   case AirspaceWarningStatusBadge::Kind::None:

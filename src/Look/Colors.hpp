@@ -74,6 +74,30 @@ static constexpr Color COLOR_AIRSPACE_WARNING_INSIDE_ACK =
   Color(254, 100, 100);
 static constexpr Color COLOR_AIRSPACE_WARNING_NEAR_ACK =
   Color(254, 254, 100);
+static constexpr Color COLOR_AIRSPACE_WARNING_CLEARED =
+  Color(50, 200, 50);
+
+/**
+ * Dark green text color for airspaces with ATC clearance.
+ */
+static constexpr Color COLOR_CLEARANCE = Color(0x00, 0x80, 0x00);
+
+/**
+ * Text colour for an airspace that has clearance.
+ *
+ * The name is dimmed so a cleared row reads as quieter than an
+ * active warning.  On a light list, keep white when the list has
+ * already chosen it for the cursor: this green disappears on that
+ * blue bar.
+ */
+[[nodiscard]]
+constexpr Color
+AirspaceClearanceTextColor(bool dark_mode, Color row_text) noexcept
+{
+  if (!dark_mode && row_text == COLOR_WHITE)
+    return row_text;
+  return COLOR_CLEARANCE;
+}
 
 /**
  * XCTherm overlay palette.

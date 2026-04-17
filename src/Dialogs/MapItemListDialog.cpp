@@ -24,6 +24,8 @@
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/AirspaceWarningStatusRenderer.hpp"
+#include "Asset.hpp"
+#include "Look/Colors.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
@@ -63,13 +65,26 @@ QueryWarningStatusNoThrow(ProtectedAirspaceWarningManager &warnings,
   try {
     const ProtectedAirspaceWarningManager::Lease lease(warnings);
     const AirspaceWarning *warning = lease->GetWarningPtr(airspace);
-    if (warning == nullptr || !warning->IsWarning())
+    if (warning == nullptr)
       return true;
 
     status.active = warning->IsActive();
-    status.kind = warning->IsInside()
-      ? AirspaceWarningStatusBadge::Kind::Inside
-      : AirspaceWarningStatusBadge::Kind::Near;
+
+    if (warning->IsCleared()) {
+      /* a clearance overrides the warning colour; the caption still
+         tells the pilot where the airspace is relative to us */
+      if (warning->IsInside())
+        status.kind = AirspaceWarningStatusBadge::Kind::ClearedInside;
+      else if (warning->IsWarning())
+        status.kind = AirspaceWarningStatusBadge::Kind::ClearedNear;
+      else
+        status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
+    } else if (warning->IsWarning()) {
+      status.kind = warning->IsInside()
+        ? AirspaceWarningStatusBadge::Kind::Inside
+        : AirspaceWarningStatusBadge::Kind::Near;
+    }
+
     return true;
   } catch (const std::exception &e) {
     LogFmt("Failed to query airspace warning status: {}", e.what());
@@ -272,14 +287,12 @@ public:
   }
 
   static bool CanSetClearanceItem(const MapItem &item) noexcept {
-    if (backend_components == nullptr)
+    if (backend_components == nullptr ||
+        item.type != MapItem::Type::AIRSPACE)
       return false;
 
-    const AirspaceMapItem &as_item =
-      (const AirspaceMapItem &)item;
-
-    return item.type == MapItem::Type::AIRSPACE &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    return backend_components->GetAirspaceWarnings() != nullptr &&
       !backend_components->GetAirspaceWarnings()
         ->GetCleared(*as_item.airspace);
   }
@@ -288,17 +301,13 @@ public:
     return CanRevokeClearanceItem(*list[index]);
   }
 
-  static bool CanRevokeClearanceItem(const MapItem &item)
-    noexcept
-  {
-    if (backend_components == nullptr)
+  static bool CanRevokeClearanceItem(const MapItem &item) noexcept {
+    if (backend_components == nullptr ||
+        item.type != MapItem::Type::AIRSPACE)
       return false;
 
-    const AirspaceMapItem &as_item =
-      (const AirspaceMapItem &)item;
-
-    return item.type == MapItem::Type::AIRSPACE &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    return backend_components->GetAirspaceWarnings() != nullptr &&
       backend_components->GetAirspaceWarnings()
         ->GetCleared(*as_item.airspace);
   }
@@ -402,21 +411,28 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
+  bool cleared = false;
   bool ack_day = false;
   AirspaceWarningStatusBadge warning_status;
   if (item->type == MapItem::Type::AIRSPACE &&
       backend_components != nullptr) {
     if (auto *warnings = backend_components->GetAirspaceWarnings();
         warnings != nullptr) {
-      const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
-      QueryAckDayNoThrow(*warnings, *as_item.airspace, ack_day);
-      QueryWarningStatusNoThrow(*warnings, *as_item.airspace,
-                               warning_status);
+      const auto &as = *static_cast<const AirspaceMapItem &>(*item).airspace;
+      cleared = warnings->GetCleared(as);
+      QueryAckDayNoThrow(*warnings, as, ack_day);
+      QueryWarningStatusNoThrow(*warnings, as, warning_status);
     }
   }
 
-  if (ack_day)
+  if (cleared) {
+    if (!IsDithered())
+      canvas.SetTextColor(AirspaceClearanceTextColor(
+        dialog_look.dark_mode, canvas.GetTextColor()));
+  } else if (ack_day)
     canvas.SetTextColor(COLOR_GRAY);
+  else
+    canvas.SetTextColor(dialog_look.list.text_color);
 
   PixelRect draw_rc = rc;
   PixelRect status_rc{};
@@ -435,7 +451,8 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   renderer.Draw(canvas, draw_rc, *item,
-                &CommonInterface::Basic().flarm.traffic);
+                &CommonInterface::Basic().flarm.traffic,
+                cleared);
 
   if (show_status)
     DrawAirspaceWarningStatus(canvas, *dialog_look.list.font,
