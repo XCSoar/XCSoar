@@ -75,6 +75,7 @@ class MapItemListWidget final
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
   Button *ack_button, *enable_button;
+  Button *clearance_button, *revoke_clearance_button;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -102,11 +103,16 @@ protected:
     goto_button->SetEnabled(CanGotoItem(current));
     ack_button->SetEnabled(CanAckItem(current));
     enable_button->SetEnabled(CanEnableItem(current));
+    clearance_button->SetEnabled(CanSetClearanceItem(current));
+    revoke_clearance_button->SetEnabled(
+      CanRevokeClearanceItem(current));
   }
 
   void OnGotoClicked();
   void OnAckClicked();
   void OnEnableClicked();
+  void OnSetClearanceClicked();
+  void OnRevokeClearanceClicked();
 
 public:
   /* virtual methods from class Widget */
@@ -165,6 +171,42 @@ public:
       backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
 
+  bool CanSetClearanceItem(unsigned index) const noexcept {
+    return CanSetClearanceItem(*list[index]);
+  }
+
+  static bool CanSetClearanceItem(const MapItem &item) noexcept {
+    if (backend_components == nullptr)
+      return false;
+
+    const AirspaceMapItem &as_item =
+      (const AirspaceMapItem &)item;
+
+    return item.type == MapItem::Type::AIRSPACE &&
+      backend_components->GetAirspaceWarnings() != nullptr &&
+      !backend_components->GetAirspaceWarnings()
+        ->GetCleared(*as_item.airspace);
+  }
+
+  bool CanRevokeClearanceItem(unsigned index) const noexcept {
+    return CanRevokeClearanceItem(*list[index]);
+  }
+
+  static bool CanRevokeClearanceItem(const MapItem &item)
+    noexcept
+  {
+    if (backend_components == nullptr)
+      return false;
+
+    const AirspaceMapItem &as_item =
+      (const AirspaceMapItem &)item;
+
+    return item.type == MapItem::Type::AIRSPACE &&
+      backend_components->GetAirspaceWarnings() != nullptr &&
+      backend_components->GetAirspaceWarnings()
+        ->GetCleared(*as_item.airspace);
+  }
+
   void OnActivateItem(unsigned index) noexcept override;
 };
 
@@ -184,6 +226,16 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
   enable_button = dialog.AddButton(_("Enable"), [this](){
     OnEnableClicked();
   });
+
+  clearance_button = dialog.AddButton(_("Set Clearance"),
+                                      [this](){
+    OnSetClearanceClicked();
+  });
+
+  revoke_clearance_button =
+    dialog.AddButton(_("Revoke Clearance"), [this](){
+      OnRevokeClearanceClicked();
+    });
 
   settings_button = dialog.AddButton(_("Settings"), [](){
     ShowMapItemListSettingsDialog();
@@ -336,6 +388,26 @@ MapItemListWidget::OnEnableClicked()
     list[GetCursorIndex()];
   backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace,
                                                             false);
+  UpdateButtons();
+}
+
+inline void
+MapItemListWidget::OnSetClearanceClicked()
+{
+  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
+    list[GetCursorIndex()];
+  backend_components->GetAirspaceWarnings()->SetCleared(
+    as_item.airspace, true);
+  UpdateButtons();
+}
+
+inline void
+MapItemListWidget::OnRevokeClearanceClicked()
+{
+  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
+    list[GetCursorIndex()];
+  backend_components->GetAirspaceWarnings()->SetCleared(
+    as_item.airspace, false);
   UpdateButtons();
 }
 
