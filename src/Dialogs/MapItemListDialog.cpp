@@ -20,6 +20,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/Colors.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
@@ -176,14 +177,12 @@ public:
   }
 
   static bool CanSetClearanceItem(const MapItem &item) noexcept {
-    if (backend_components == nullptr)
+    if (backend_components == nullptr ||
+        item.type != MapItem::Type::AIRSPACE)
       return false;
 
-    const AirspaceMapItem &as_item =
-      (const AirspaceMapItem &)item;
-
-    return item.type == MapItem::Type::AIRSPACE &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    return backend_components->GetAirspaceWarnings() != nullptr &&
       !backend_components->GetAirspaceWarnings()
         ->GetCleared(*as_item.airspace);
   }
@@ -192,17 +191,13 @@ public:
     return CanRevokeClearanceItem(*list[index]);
   }
 
-  static bool CanRevokeClearanceItem(const MapItem &item)
-    noexcept
-  {
-    if (backend_components == nullptr)
+  static bool CanRevokeClearanceItem(const MapItem &item) noexcept {
+    if (backend_components == nullptr ||
+        item.type != MapItem::Type::AIRSPACE)
       return false;
 
-    const AirspaceMapItem &as_item =
-      (const AirspaceMapItem &)item;
-
-    return item.type == MapItem::Type::AIRSPACE &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    return backend_components->GetAirspaceWarnings() != nullptr &&
       backend_components->GetAirspaceWarnings()
         ->GetCleared(*as_item.airspace);
   }
@@ -288,15 +283,29 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const MapItem &item = *list[idx];
 
+  bool cleared = false;
   if (item.type == MapItem::Type::AIRSPACE &&
       backend_components != nullptr &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
-      backend_components->GetAirspaceWarnings()->GetAckDay(
-        *static_cast<const AirspaceMapItem &>(item).airspace))
-    canvas.SetTextColor(COLOR_GRAY);
+      backend_components->GetAirspaceWarnings() != nullptr) {
+    const auto &as = *static_cast<const AirspaceMapItem &>(
+      item).airspace;
+    cleared =
+      backend_components->GetAirspaceWarnings()->GetCleared(as);
+
+    if (cleared)
+      canvas.SetTextColor(COLOR_CLEARANCE);
+    else if (backend_components->GetAirspaceWarnings()
+               ->GetAckDay(as))
+      canvas.SetTextColor(COLOR_GRAY);
+    else
+      canvas.SetTextColor(dialog_look.list.text_color);
+  } else {
+    canvas.SetTextColor(dialog_look.list.text_color);
+  }
 
   renderer.Draw(canvas, rc, item,
-                &CommonInterface::Basic().flarm.traffic);
+                &CommonInterface::Basic().flarm.traffic,
+                cleared);
 
   if ((settings.item_list.add_arrival_altitude &&
        item.type == MapItem::Type::ARRIVAL_ALTITUDE) ||
