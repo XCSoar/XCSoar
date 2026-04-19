@@ -191,7 +191,7 @@ jobs:
             target_ext: .exe
             target_upload: true
             target_container: debian:trixie-slim
-          - os: macos-15
+          - os: macos-26
             target: MACOS
             target_bin: XCSoar
             target_bin_path: ''
@@ -199,7 +199,7 @@ jobs:
             target_ext: .dmg
             target_upload: true
             target_container: ''
-          - os: macos-15
+          - os: macos-26
             target: IOS64
             target_bin: xcsoar-signed
             target_bin_path: ''
@@ -372,7 +372,7 @@ jobs:
             if [ ${{ matrix.target }} = 'OSX64' ]; then
               ./ide/provisioning/install-darwin-packages.sh OSX64
             fi
-          elif [ ${{ matrix.os }} = 'macos-14' ] || [ ${{ matrix.os }} = 'macos-15' ] ; then
+          elif [ ${{ matrix.os }} = 'macos-14' ] || [ ${{ matrix.os }} = 'macos-15' ] || [ ${{ matrix.os }} = 'macos-26' ] ; then
             ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'MACOS' ]; then
               ./ide/provisioning/install-darwin-packages.sh MACOS
@@ -833,7 +833,7 @@ jobs:
 
   upload-to-testflight:
     name: Upload to TestFlight (iOS / macOS)
-    runs-on: macos-15
+    runs-on: macos-26
     needs: [build]
     if: ${{ (github.repository == 'XCSoar/XCSoar' || github.repository == 'yorickreum/XCSoar') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
     steps:
