@@ -17,7 +17,7 @@ BOOST_UNTAR_STAMP = $(OUT)/src/stamp-$(BOOST_BASE_NAME)
 $(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCHES) | $(OUT)/src/dirstamp
 	@$(NQ)echo "  UNTAR   $(BOOST_TARBALL_NAME)"
 	$(Q)rm -rf $(BOOST_SRC)
-	$(Q)tar xjfC $< $(OUT)/src
+	$(Q)tar xjfC $< $(OUT)/src $(BOOST_BASE_NAME)/boost
 	$(Q)cd $(BOOST_SRC) && QUILT_PATCHES=$(abspath $(BOOST_PATCHES_DIR)) quilt push -a -q
 	@touch $@
 
