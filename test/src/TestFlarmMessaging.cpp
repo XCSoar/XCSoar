@@ -5,6 +5,7 @@
 #include "FLARM/MessagingDatabase.hpp"
 #include "FLARM/MessagingRecord.hpp"
 #include "FLARM/Details.hpp"
+#include "FLARM/Glue.hpp"
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/Id.hpp"
@@ -22,6 +23,11 @@
 #include <utility>
 
 #include "thread/Thread.hpp"
+
+void
+SaveFlarmMessagingPeriodic() noexcept
+{
+}
 
 template<typename F>
 class LambdaThread : public Thread {
