@@ -102,6 +102,7 @@ TEST_NAMES = \
 	TestTaskWaypoint \
 	TestTeamCode \
 	TestZeroFinder \
+	TestAirspaceWarningManager \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
@@ -223,6 +224,14 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 TEST_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
 TEST_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE UNITS ZZIP GEO MATH UTIL UNITS
 $(eval $(call link-program,TestAirspaceParser,TEST_AIRSPACE_PARSER))
+
+TEST_AIRSPACE_WARNING_MANAGER_SOURCES = \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAirspaceWarningManager.cpp
+TEST_AIRSPACE_WARNING_MANAGER_DEPENDS = $(TEST1_DEPENDS) UNITS
+$(eval $(call link-program,TestAirspaceWarningManager,TEST_AIRSPACE_WARNING_MANAGER))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
