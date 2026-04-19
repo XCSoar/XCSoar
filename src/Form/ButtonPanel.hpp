@@ -45,6 +45,12 @@ public:
     buttons[selected_index]->SetSelected(true);
   }
 
+  /**
+   * When #EnableCursorSelection() is active, keep the strip selection
+   * aligned with keyboard focus (e.g. after Tab between buttons).
+   */
+  void SyncSelectionToFocusedButton(Button &button) noexcept;
+
   const ButtonLook &GetLook() const noexcept {
     return look;
   }
