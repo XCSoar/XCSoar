@@ -316,7 +316,8 @@ PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(P
 SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
 SOUND_FILES = $(patsubst %,$(RAW_DIR)/%.ogg,$(SOUNDS))
 
-OGGENC = oggenc --quiet --quality 1
+# Vorbis -q 5: nominal quality (~160 kb/s class); was 1 for smallest APK
+OGGENC = oggenc --quiet --quality 5
 
 $(SOUND_FILES): $(RAW_DIR)/%.ogg: Data/sound/%.wav | $(RAW_DIR)/dirstamp
 	@$(NQ)echo "  OGGENC  $@"

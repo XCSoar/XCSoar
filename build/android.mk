@@ -250,7 +250,8 @@ $(RES_DIR)/drawable-xxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)
 $(RES_DIR)/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
-OGGENC = oggenc --quiet --quality 1
+# Vorbis -q 5: nominal quality (~160 kb/s class); was 1 for smallest APK
+OGGENC = oggenc --quiet --quality 5
 
 SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
 SOUND_FILES = $(patsubst %,$(RAW_DIR)/%.ogg,$(SOUNDS))

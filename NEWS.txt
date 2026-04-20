@@ -24,6 +24,7 @@ Version 7.45 - not yet released
     airspace warnings list) #2404
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
+  - encode bundled UI OGG sound assets at Vorbis quality 5 (was 1)
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - native debug symbols for Google Play (symbols.zip), lib/<ABI>/ layout for
