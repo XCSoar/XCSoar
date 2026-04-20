@@ -463,24 +463,11 @@ dlgQuickGuideShowModal(bool force_info)
   // Track page titles for the caption callback
   std::vector<const char *> titles;
 
-  /* Gesture callback for pager navigation via horizontal swipe */
-  auto pager_gesture = [pager_ptr](bool next) {
-    if (next) {
-      if (pager_ptr->CanAdvance())
-        pager_ptr->Next(true);
-    } else {
-      pager_ptr->Previous(true);
-    }
+  /* Helper: wrap content in VScrollWidget (horizontal swipe is wired in
+     ArrowPagerWidget::Prepare). */
+  auto make_scroll_page = [&look](std::unique_ptr<Widget> &&w) {
+    return std::make_unique<VScrollWidget>(std::move(w), look, true);
   };
-
-  /* Helper: create a VScrollWidget with swipe gesture support */
-  auto make_scroll_page =
-    [&look, &pager_gesture](std::unique_ptr<Widget> &&w) {
-      auto scroll =
-        std::make_unique<VScrollWidget>(std::move(w), look, true);
-      scroll->SetGestureCallback(pager_gesture);
-      return scroll;
-    };
 
   /* ---- Logo / Welcome page (always shown) ---- */
   pager->Add(make_scroll_page(
@@ -504,12 +491,6 @@ dlgQuickGuideShowModal(bool force_info)
       });
     state.warranty_widget = page.get();
 
-    /* QuickGuidePageWidget already has its own VScrollWidget
-       inside, so do NOT wrap it in another one (causes double
-       scrolling and inflated virtual height).  Set the gesture
-       callback directly instead. */
-    page->SetGestureCallback(pager_gesture);
-
     pager->Add(std::move(page));
     titles.push_back(_("Safety Disclaimer"));
   }
@@ -530,7 +511,6 @@ dlgQuickGuideShowModal(bool force_info)
         false,
         [](bool) { /* state is read on dialog close */ });
       page->SetParseLinks(false);
-      page->SetGestureCallback(pager_gesture);
 
       pager->Add(std::move(page));
       titles.push_back(_("What's New"));
@@ -551,7 +531,6 @@ dlgQuickGuideShowModal(bool force_info)
       _("Enable XCSoar Cloud"),
       cloud_currently_enabled,
       [](bool) { /* state is read on dialog close */ });
-    page->SetGestureCallback(pager_gesture);
 
     pager->Add(std::move(page));
     titles.push_back(_("XCSoar Cloud"));
@@ -589,7 +568,6 @@ dlgQuickGuideShowModal(bool force_info)
       },
       _("Not Now"),
       skip_permissions);
-    page->SetGestureCallback(pager_gesture);
 
     pager->Add(std::move(page));
     titles.push_back(_("Location Access"));
@@ -606,7 +584,6 @@ dlgQuickGuideShowModal(bool force_info)
       },
       _("Not Now"),
       skip_permissions);
-    page->SetGestureCallback(pager_gesture);
 
     pager->Add(std::move(page));
     titles.push_back(_("Notifications"));
@@ -657,7 +634,6 @@ dlgQuickGuideShowModal(bool force_info)
         _("Don't show this guide again"),
         IsQuickGuideHidden(),
         [](bool) { /* state is read on dialog close */ });
-      done_page->SetGestureCallback(pager_gesture);
       pager->Add(std::move(done_page));
     }
     titles.push_back(_("Done"));

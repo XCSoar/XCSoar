@@ -29,6 +29,10 @@ Version 7.45 - not yet released
     cursor keys and the strip has keyboard focus (or always on devices without
     cursor keys, where the indicator is informational only)
   - checklist rich text: Enter on a checkbox advances focus like Down #2405
+  - checklist, credits, Quick Guide, configuration: horizontal swipe to flip
+    pager pages (same behaviour as arrow keys); wiring lives in
+    ArrowPagerWidget::Prepare; red trail while drawing the swipe; fix crash when
+    swiping (pager change deferred until after mouse-up) #2122 #2414
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or

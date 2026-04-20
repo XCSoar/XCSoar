@@ -24,6 +24,7 @@ VScrollPanel::VScrollPanel(ContainerWindow &parent, const DialogLook &look,
    listener(_listener),
    scroll_bar(look.button)
 {
+  gesture_look.Initialise();
 }
 
 VScrollPanel::~VScrollPanel() noexcept = default;
@@ -158,6 +159,8 @@ VScrollPanel::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();
   smooth_scroll_timer.Cancel();
+  defer_swipe_timer.Cancel();
+  defer_swipe_queue.clear();
   PanelControl::OnDestroy();
 }
 
@@ -218,14 +221,20 @@ bool
 VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 {
   /* Finish gesture tracking and check for horizontal swipe */
+  const bool had_gesture_trail = gesture_tracking;
+
   const char *gesture =
     gesture_tracking ? gestures.Finish() : nullptr;
   gesture_tracking = false;
 
+  if (had_gesture_trail)
+    Invalidate();
+
   if (gesture != nullptr &&
       (StringIsEqual(gesture, "L") ||
        StringIsEqual(gesture, "R"))) {
-    /* Horizontal swipe detected - forward to listener */
+    /* Horizontal swipe detected — defer listener: flipping the pager
+       from here would hide this panel during OnMouseUp (crash). */
     if (dragging) {
       dragging = false;
       ReleaseCapture();
@@ -234,8 +243,11 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
       potential_tap = false;
       ReleaseCapture();
     }
-    if (listener.OnVScrollPanelGesture(gesture))
-      return true;
+    defer_swipe_queue.push_back(
+      StringIsEqual(gesture, "R") ? DeferredSwipeDirection::RIGHT
+                                  : DeferredSwipeDirection::LEFT);
+    defer_swipe_timer.Schedule(std::chrono::milliseconds(0));
+    return true;
   }
 
   if (scroll_bar.IsDragging()) {
@@ -268,8 +280,10 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 bool
 VScrollPanel::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
-  if (gesture_tracking)
+  if (gesture_tracking) {
     gestures.Update(p);
+    Invalidate();
+  }
 
   if (scroll_bar.IsDragging()) {
     origin = scroll_bar.DragMove(virtual_height, GetSize().height, p.y);
@@ -375,7 +389,15 @@ VScrollPanel::OnCancelMode() noexcept
 {
   PanelControl::OnCancelMode();
 
+  defer_swipe_timer.Cancel();
+  defer_swipe_queue.clear();
+
+  const bool had_gesture_trail = gesture_tracking;
+  if (gesture_tracking)
+    gestures.Finish();
   gesture_tracking = false;
+  if (had_gesture_trail)
+    Invalidate();
   scroll_bar.DragEnd(this);
   if (dragging) {
     dragging = false;
@@ -391,6 +413,40 @@ VScrollPanel::OnCancelMode() noexcept
 }
 
 void
+VScrollPanel::OnDeferredSwipeGesture() noexcept
+{
+  defer_swipe_timer.Cancel();
+
+  if (defer_swipe_queue.empty())
+    return;
+
+  const bool swipe_next =
+    defer_swipe_queue.front() == DeferredSwipeDirection::RIGHT;
+  defer_swipe_queue.pop_front();
+
+  listener.OnVScrollPanelGesture(swipe_next ? "R" : "L");
+
+  if (!defer_swipe_queue.empty())
+    defer_swipe_timer.Schedule(std::chrono::milliseconds(0));
+}
+
+void
+VScrollPanel::DrawGesture(Canvas &canvas) const noexcept
+{
+  if (!gestures.HasPoints())
+    return;
+
+  canvas.Select(gesture_look.pen);
+  canvas.SelectHollowBrush();
+
+  const auto &points = gestures.GetPoints();
+  auto it = points.begin();
+  auto it_last = it++;
+  for (auto it_end = points.end(); it != it_end; it_last = it++)
+    canvas.DrawLinePiece(*it_last, *it);
+}
+
+void
 VScrollPanel::OnPaint(Canvas &canvas) noexcept
 {
   {
@@ -400,6 +456,13 @@ VScrollPanel::OnPaint(Canvas &canvas) noexcept
 #endif
 
     PanelControl::OnPaint(canvas);
+  }
+
+  if (gesture_tracking && gestures.HasPoints()) {
+#ifdef ENABLE_OPENGL
+    const GLCanvasScissor scissor{GetPhysicalRect(canvas.GetSize())};
+#endif
+    DrawGesture(canvas);
   }
 
   if (scroll_bar.IsDefined()) {

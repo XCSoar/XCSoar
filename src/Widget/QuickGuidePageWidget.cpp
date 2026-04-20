@@ -20,6 +20,15 @@ QuickGuidePageWidget::QuickGuidePageWidget(
 
 QuickGuidePageWidget::~QuickGuidePageWidget() noexcept = default;
 
+void
+QuickGuidePageWidget::SetGestureCallback(std::function<void(bool)> cb) noexcept
+{
+  gesture_callback = std::move(cb);
+  if (scroll_widget != nullptr)
+    static_cast<VScrollWidget &>(*scroll_widget).SetGestureCallback(
+      gesture_callback);
+}
+
 std::unique_ptr<QuickGuidePageWidget>
 QuickGuidePageWidget::CreateContentPage(
   const DialogLook &look,
@@ -150,13 +159,14 @@ QuickGuidePageWidget::Initialise(ContainerWindow &parent,
   auto scroll = std::make_unique<VScrollWidget>(
     std::move(rich_text), look, true);
 
-  if (gesture_callback)
-    scroll->SetGestureCallback(gesture_callback);
-
   scroll_widget = std::move(scroll);
 
   const auto layout = CalcLayout(rc);
   scroll_widget->Initialise(parent, layout.content);
+
+  if (gesture_callback)
+    static_cast<VScrollWidget &>(*scroll_widget).SetGestureCallback(
+      gesture_callback);
 }
 
 void
