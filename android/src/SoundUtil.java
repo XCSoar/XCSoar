@@ -8,9 +8,13 @@ import java.util.HashMap;
 import java.io.File;
 import android.media.MediaPlayer;
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.util.Log;
 
 public class SoundUtil {
+  private static final String TAG = "SoundUtil";
+
   private static Map<String, Integer> resources = new HashMap<String, Integer>();
 
   static {
@@ -27,7 +31,15 @@ public class SoundUtil {
     if (id == null)
       return false;
 
-    return run(MediaPlayer.create(context, id));
+    try {
+      return run(MediaPlayer.create(context, id));
+    } catch (Resources.NotFoundException e) {
+      /* Can happen if the installed APK's resources table does not match the
+         R class (e.g. broken/partial install, sideload mismatch). */
+      Log.e(TAG, "Missing res/raw sound for \"" + name + "\" (id=0x"
+          + Integer.toHexString(id) + ")", e);
+      return false;
+    }
   }
 
   public static boolean playExternal(Context context, String path) {
