@@ -11,4 +11,13 @@ public:
   virtual bool ClickPage(unsigned i) noexcept = 0;
   virtual bool PreviousPage() noexcept = 0;
   virtual bool NextPage() noexcept = 0;
+
+  /**
+   * True when the tab control has keyboard focus (strip or page) so the
+   * active tab can use #DialogLook::ListLook focused colors.
+   */
+  [[gnu::pure]]
+  virtual bool TabControlHasKeyboardFocus() const noexcept {
+    return false;
+  }
 };
