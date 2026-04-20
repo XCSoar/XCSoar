@@ -266,6 +266,9 @@ public class XCSoar extends Activity implements PermissionManager {
           decorView.post(new Runnable() {
             @Override
             public void run() {
+              if (nativeView == null)
+                return;
+
               int display_width = nativeView.getWidth();
               int display_height = nativeView.getHeight();
               int inset_left = 0, inset_top = 0, inset_right = 0, inset_bottom = 0;
