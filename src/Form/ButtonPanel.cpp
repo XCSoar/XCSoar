@@ -11,32 +11,6 @@
 
 #include <algorithm>
 
-namespace {
-
-/**
- * Notifies its #ButtonPanel when it receives keyboard focus so
- * #EnableCursorSelection() state stays aligned with #SetSelectedIndex().
- */
-class CursorPanelButton final : public Button {
-  ButtonPanel &panel;
-
-public:
-  CursorPanelButton(ButtonPanel &_panel,
-                    ContainerWindow &parent, const PixelRect &rc,
-                    WindowStyle style,
-                    std::unique_ptr<ButtonRenderer> &&renderer,
-                    Callback callback) noexcept
-    : Button(parent, rc, style, std::move(renderer), std::move(callback)),
-      panel(_panel) {}
-
-  void OnSetFocus() noexcept override {
-    Button::OnSetFocus();
-    panel.SyncSelectionToFocusedButton(*this);
-  }
-};
-
-} // namespace
-
 ButtonPanel::ButtonPanel(ContainerWindow &_parent,
                          const ButtonLook &_look) noexcept
   :parent(_parent), look(_look), selected_index(-1) {
@@ -47,21 +21,6 @@ ButtonPanel::~ButtonPanel() noexcept
 {
   for (const auto i : buttons)
     delete i;
-}
-
-void
-ButtonPanel::SyncSelectionToFocusedButton(Button &button) noexcept
-{
-  if (selected_index < 0)
-    return;
-
-  for (unsigned i = 0; i < buttons.size(); ++i) {
-    if (buttons[i] == &button) {
-      if ((int)i != selected_index)
-        SetSelectedIndex(i);
-      return;
-    }
-  }
 }
 
 PixelRect
@@ -88,9 +47,8 @@ Button *
 ButtonPanel::Add(std::unique_ptr<ButtonRenderer> &&renderer,
                  Button::Callback callback) noexcept
 {
-  auto *button = new CursorPanelButton(*this, parent, dummy_rc, style,
-                                       std::move(renderer),
-                                       std::move(callback));
+  auto *button = new Button(parent, dummy_rc, style,
+                            std::move(renderer), std::move(callback));
   keys[buttons.size()] = 0;
   buttons.append(button);
 
@@ -340,7 +298,6 @@ ButtonPanel::SetSelectedIndex(unsigned _index) noexcept
   buttons[selected_index]->SetSelected(false);
   selected_index = _index;
   buttons[selected_index]->SetSelected(true);
-  buttons[selected_index]->SetFocus();
 }
 
 bool
