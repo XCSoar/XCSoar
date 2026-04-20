@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "NMEAWriter.hpp"
+#include "util/StringFormat.hpp"
 #include "Device/Port/Port.hpp"
 #include "NMEA/Checksum.hpp"
 
@@ -23,6 +24,6 @@ PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
   port.FullWrite(line, env, timeout);
 
   char checksum[16];
-  sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
+  StringFormat(checksum, sizeof(checksum), "*%02X\r\n", NMEAChecksum(line));
   port.FullWrite(checksum, env, timeout);
 }

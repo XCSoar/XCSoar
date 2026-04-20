@@ -469,7 +469,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Barograph"));
     dialog.SetCaption(sTmp);
-    BarographCaption(sTmp, glide_computer.GetFlightStats());
+    BarographCaption(sTmp, sizeof(sTmp), glide_computer.GetFlightStats());
     info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
@@ -478,7 +478,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Climb"));
     dialog.SetCaption(sTmp);
-    ClimbChartCaption(sTmp, glide_computer.GetFlightStats());
+    ClimbChartCaption(sTmp, sizeof(sTmp), glide_computer.GetFlightStats());
     info.SetText(sTmp);
     SetCalcCaption(_("Task Calc"));
     break;
@@ -487,7 +487,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Thermal Band"));
     dialog.SetCaption(sTmp);
-    ClimbChartCaption(sTmp, glide_computer.GetFlightStats());
+    ClimbChartCaption(sTmp, sizeof(sTmp), glide_computer.GetFlightStats());
     info.SetText(sTmp);
     SetCalcCaption("");
     break;
@@ -513,7 +513,7 @@ AnalysisWidget::Update()
                        _("Glide Polar"), _("Mass"),
                        (int)settings_computer.polar.glide_polar_task.GetTotalMass());
     dialog.SetCaption(sTmp);
-    GlidePolarCaption(sTmp, settings_computer.polar.glide_polar_task);
+    GlidePolarCaption(sTmp, sizeof(sTmp), settings_computer.polar.glide_polar_task);
     info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
@@ -522,7 +522,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("MacCready Speeds"));
     dialog.SetCaption(sTmp);
-    MacCreadyCaption(sTmp, settings_computer.polar.glide_polar_task);
+    MacCreadyCaption(sTmp, sizeof(sTmp), settings_computer.polar.glide_polar_task);
     info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
@@ -540,7 +540,7 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Task Speed"));
     dialog.SetCaption(sTmp);
-    TaskSpeedCaption(sTmp, glide_computer.GetFlightStats(),
+    TaskSpeedCaption(sTmp, sizeof(sTmp), glide_computer.GetFlightStats(),
                      settings_computer.polar.glide_polar_task);
     info.SetText(sTmp);
     SetCalcCaption(_("Task Calc"));

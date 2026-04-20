@@ -309,13 +309,15 @@ CommandMode(Port &port, OperationEnvironment &env);
  * Send a command, but don't wait for the next command prompt.
  */
 void
-SendCommandQuick(Port &port, const char *cmd, OperationEnvironment &env);
+SendCommandQuick(Port &port, std::string_view cmd,
+                 OperationEnvironment &env);
 
 /**
  * Send a command, and wait for the next command prompt.
  */
 void
-SendCommand(Port &port, const char *cmd, OperationEnvironment &env,
+SendCommand(Port &port, std::string_view cmd,
+            OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
 /**
@@ -371,7 +373,7 @@ ReadLargeReply(Port &port, std::span<std::byte> dest,
  * header), -1 on error
  */
 int
-UploadShort(Port &port, const char *command,
+UploadShort(Port &port, std::string_view command,
             std::span<std::byte> response,
             OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
@@ -388,7 +390,7 @@ UploadShort(Port &port, const char *command,
  * header), -1 on error
  */
 int
-UploadLarge(Port &port, const char *command,
+UploadLarge(Port &port, std::string_view command,
             std::span<std::byte> response,
             OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout=std::chrono::seconds(8));
@@ -453,7 +455,7 @@ DownloadMode(Port &port, OperationEnvironment &env);
  * Throws on error.
  */
 void
-DownloadCommand(Port &port, const char *command,
+DownloadCommand(Port &port, std::string_view command,
                 OperationEnvironment &env,
                 std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 

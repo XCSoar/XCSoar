@@ -13,6 +13,8 @@
 #include "Math/Screen.hpp"
 #include "Look/MapLook.hpp"
 
+#include <fmt/format.h>
+
 void
 MapWindow::DrawTask(Canvas &canvas) noexcept
 {
@@ -129,11 +131,10 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas) noexcept
     int idist = iround((distance - 1) * 100);
     
     if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
-      char Buffer[5];
-      sprintf(Buffer, "%d", idist);
+      const fmt::format_int text{idist};
       auto sc = render_projection.GeoToScreen(dloc);
-      PixelSize tsize = canvas.CalcTextSize(Buffer);
-      canvas.DrawText(sc - tsize / 2u, Buffer);
+      PixelSize tsize = canvas.CalcTextSize(text.c_str());
+      canvas.DrawText(sc - tsize / 2u, text.c_str());
       ilast = idist;
     }
   }

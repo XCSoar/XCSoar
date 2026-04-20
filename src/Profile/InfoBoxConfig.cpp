@@ -5,6 +5,9 @@
 #include "Keys.hpp"
 #include "Map.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "util/StringFormat.hpp"
+
+#include <cstring>
 
 using namespace InfoBoxFactory;
 
@@ -17,7 +20,10 @@ GetV60InfoBoxManagerConfig(const ProfileMap &map, InfoBoxSettings &settings)
   strcpy(profileKey, "Info");
 
   for (unsigned i = 0; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i) {
-    sprintf(profileKey + 4, "%u", i);
+    const int n = StringFormat(profileKey + 4, sizeof(profileKey) - 4, "%u", i);
+    if (n < 0 || static_cast<size_t>(n) >= sizeof(profileKey) - 4)
+      continue;
+
     unsigned int temp = 0;
     if (map.Get(profileKey, temp)) {
       settings.panels[0].contents[i] = (Type)( temp       & 0xFF);
@@ -125,14 +131,26 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
     InfoBoxSettings::Panel &panel = settings.panels[i];
 
     if (i >= settings.PREASSIGNED_PANELS) {
-      sprintf(profileKey, "InfoBoxPanel%uName", i);
-      map.Get(profileKey, panel.name);
-      if (panel.name.empty())
-        sprintf(panel.name.buffer(), "AUX-%u", i-2);
+      const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uName", i);
+      if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
+        map.Get(profileKey, panel.name);
+
+      if (panel.name.empty()) {
+        const unsigned aux_index = i - settings.PREASSIGNED_PANELS + 1;
+        const int written = StringFormat(panel.name.buffer(),
+                                         panel.name.capacity(),
+                                         "AUX-%u", aux_index);
+        if (written < 0 ||
+            static_cast<size_t>(written) >= panel.name.capacity())
+          panel.name.clear();
+      }
     }
 
     for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
-      sprintf(profileKey, "InfoBoxPanel%uBox%u", i, j);
+      const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", i, j);
+      if (n < 0 || static_cast<size_t>(n) >= sizeof(profileKey))
+        continue;
+
       GetIBType(map, profileKey, panel.contents[j]);
     }
   }
@@ -145,12 +163,14 @@ Profile::Save(ProfileMap &map,
   char profileKey[32];
 
   if (index >= InfoBoxSettings::PREASSIGNED_PANELS) {
-    sprintf(profileKey, "InfoBoxPanel%uName", index);
-    map.Set(profileKey, panel.name);
+    const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uName", index);
+    if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
+      map.Set(profileKey, panel.name);
   }
 
   for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
-    sprintf(profileKey, "InfoBoxPanel%uBox%u", index, j);
-    map.Set(profileKey, panel.contents[j]);
+    const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", index, j);
+    if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
+      map.Set(profileKey, panel.contents[j]);
   }
 }

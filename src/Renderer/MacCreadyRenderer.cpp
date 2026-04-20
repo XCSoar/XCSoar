@@ -16,21 +16,25 @@ static constexpr double MAX_MACCREADY = 5.2;
 static constexpr unsigned STEPS_MACCREADY = 25;
 
 void
-MacCreadyCaption(char *sTmp, const GlidePolar &glide_polar)
+MacCreadyCaption(char *sTmp, size_t buffer_size,
+                 const GlidePolar &glide_polar)
 {
+  if (sTmp == nullptr || buffer_size == 0)
+    return;
+
   if (!glide_polar.IsValid()) {
     *sTmp = '\0';
     return;
   }
 
-  sprintf(sTmp,
-            "%s: %d %s\r\n%s: %d %s",
-            _("Vopt"),
-            (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
-            Units::GetSpeedName(),
-            C_("Average velocity abbreviation", "Vave"),
-            (int)Units::ToUserTaskSpeed(glide_polar.GetAverageSpeed()),
-            Units::GetTaskSpeedName());
+  StringFormat(sTmp, buffer_size,
+               "%s: %d %s\r\n%s: %d %s",
+               _("Vopt"),
+               (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
+               Units::GetSpeedName(),
+               C_("Average velocity abbreviation", "Vave"),
+               (int)Units::ToUserTaskSpeed(glide_polar.GetAverageSpeed()),
+               Units::GetTaskSpeedName());
 }
 
 

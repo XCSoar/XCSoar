@@ -6,6 +6,9 @@
 #include "Map.hpp"
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "util/StringFormat.hpp"
+
+#include <stdio.h>
 
 /**
  * Old enum moved from PageSettings.
@@ -20,8 +23,8 @@ static void
 Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
 {
   char profileKey[32];
-  unsigned prefixLen = sprintf(profileKey, "Page%u", page);
-  if (prefixLen <= 0)
+  int prefixLen = StringFormat(profileKey, sizeof(profileKey), "Page%u", page);
+  if (prefixLen <= 0 || (size_t)prefixLen >= sizeof(profileKey))
     return;
 
   PageLayout pl = PageLayout::Default();
@@ -78,8 +81,8 @@ void
 Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 {
   char profileKey[32];
-  unsigned prefixLen = sprintf(profileKey, "Page%u", i);
-  if (prefixLen <= 0)
+  int prefixLen = StringFormat(profileKey, sizeof(profileKey), "Page%u", i);
+  if (prefixLen <= 0 || (size_t)prefixLen >= sizeof(profileKey))
     return;
   strcpy(profileKey + prefixLen, "InfoBoxMode");
   map.Set(profileKey, page.infobox_config.auto_switch);

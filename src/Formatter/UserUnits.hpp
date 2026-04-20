@@ -7,6 +7,8 @@
 #include "util/StringBuffer.hxx"
 #include "util/Compiler.h"
 
+#include <cstddef>
+
 class AtmosphericPressure;
 
 /**
@@ -16,7 +18,7 @@ class AtmosphericPressure;
  * @param size Size of the buffer
  */
 void
-FormatUserWingLoading(double value, char *buffer,
+FormatUserWingLoading(double value, char *buffer, size_t size,
                       bool include_unit = true) noexcept;
 
 /**

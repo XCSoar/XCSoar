@@ -33,7 +33,7 @@ RenderGlidePolarInfo(Canvas &canvas, const PixelRect rc,
 
   double wl = glide_polar.GetWingLoading();
   if (wl != 0) {
-    FormatUserWingLoading(wl, value.buffer(), true);
+    FormatUserWingLoading(wl, value.buffer(), value.capacity(), true);
 
     text.Format("%s: %s", _("Wing loading"), value.c_str());
 

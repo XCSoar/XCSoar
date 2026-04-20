@@ -31,17 +31,20 @@ FormatMass(char *buffer, double value, Unit unit,
 }
 
 void
-FormatWingLoading(char *buffer, double value, Unit unit,
+FormatWingLoading(char *buffer, size_t buffer_size, double value, Unit unit,
                   bool include_unit)
 {
+  if (buffer == nullptr || buffer_size == 0)
+    return;
+
   const auto uvalue = Units::ToUserUnit(value, unit);
   int precision = uvalue > 20 ? 0 : 1;
 
-    if (include_unit)
-      sprintf(buffer, "%.*f %s", precision, (double)uvalue,
-                Units::GetUnitName(unit));
-    else
-      sprintf(buffer, "%.*f", precision, (double)uvalue);
+  if (include_unit)
+    StringFormat(buffer, buffer_size, "%.*f %s", precision, (double)uvalue,
+                 Units::GetUnitName(unit));
+  else
+    StringFormat(buffer, buffer_size, "%.*f", precision, (double)uvalue);
 }
 
 void

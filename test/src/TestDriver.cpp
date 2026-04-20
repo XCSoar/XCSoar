@@ -1954,9 +1954,14 @@ TestLXNavDeclare()
     Declaration::TurnPoint tp(wp);
     const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
 
-    ok1(c_record.starts_with("C"));
-    ok1(c_record.find("EBENSEE") != std::string::npos);
-    ok1(c_record.find("::420.00000") != std::string::npos);
+    ok1(c_record.has_value());
+    if (c_record.has_value()) {
+      ok1(c_record->starts_with("C"));
+      ok1(c_record->find("EBENSEE") != std::string::npos);
+      ok1(c_record->find("::420.00000") != std::string::npos);
+    } else {
+      skip(3, 0, "c_record missing");
+    }
   }
 
   /* Test C-record without elevation (defaults to 0) */
@@ -1968,7 +1973,11 @@ TestLXNavDeclare()
     Declaration::TurnPoint tp(wp);
     const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
 
-    ok1(c_record.find("::0.00000") != std::string::npos);
+    ok1(c_record.has_value());
+    if (c_record.has_value())
+      ok1(c_record->find("::0.00000") != std::string::npos);
+    else
+      skip(1, 0, "c_record missing");
   }
 }
 
@@ -2897,7 +2906,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1032 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1032 + 2 /* LXNav C-record optional */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 107 /* LXNav protocol 1.05 */

@@ -7,6 +7,7 @@
 #include "Contest/Solvers/ContestDijkstra.hpp"
 #include "system/ConvertPathName.hpp"
 #include "test_debug.hpp"
+#include "util/StringFormat.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -167,6 +168,12 @@ ParseArgs(int argc, char** argv)
 const char* GetTestName(const char* in, int task_num, int wind_num)
 {
   static char buffer[100];
-  sprintf(buffer,"%s (task %s, wind %s)", in, task_name(task_num), wind_name(wind_num));
+  const char *safe_in = (in != nullptr && *in != '\0') ? in : "<null>";
+  const int written = StringFormat(buffer, sizeof(buffer),
+                                   "%s (task %s, wind %s)",
+                                   safe_in, task_name(task_num), wind_name(wind_num));
+  if (written < 0 || written >= (int)sizeof(buffer))
+    StringFormat(buffer, sizeof(buffer), "task %d wind %d", task_num, wind_num);
+
   return buffer;
 }

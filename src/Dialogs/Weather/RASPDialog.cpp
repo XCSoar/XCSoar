@@ -17,7 +17,8 @@
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 
-#include <stdio.h>
+#include <algorithm>
+#include <fmt/format.h>
 
 class RASPSettingsPanel final
   : public RowFormWidget {
@@ -86,8 +87,11 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
     time_df.addEnumText(_("Now"));
 
     rasp->ForEachTime(item_index, [&time_df](BrokenTime t){
-        char timetext[10];
-        sprintf(timetext, "%02u:%02u", t.hour, t.minute);
+        char timetext[8];
+        const auto result = fmt::format_to_n(timetext, sizeof(timetext) - 1,
+                                             "{:02}:{:02}", t.hour, t.minute);
+        const size_t length = std::min(result.size, sizeof(timetext) - 1);
+        timetext[length] = '\0';
         time_df.addEnumText(timetext, t.GetMinuteOfDay());
       });
 

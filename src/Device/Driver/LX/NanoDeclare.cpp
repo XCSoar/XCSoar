@@ -12,6 +12,7 @@
 #include "time/TimeoutClock.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Operation/Operation.hpp"
+#include "LogFile.hpp"
 
 static bool
 NanoWriteDecl(Port &port, OperationEnvironment &env, PortNMEAReader &reader,
@@ -84,6 +85,12 @@ NanoWriteStartDeclaration(Port &port, OperationEnvironment &env,
 
   char buffer[64];
   FormatIGCTaskTimestamp(buffer, date_time, declaration.Size());
+  if (buffer[0] == '\0') {
+    LogFmt("NanoDeclare: FormatIGCTaskTimestamp returned empty for {} turnpoints",
+           declaration.Size());
+    return false;
+  }
+
   return NanoWriteDecl(port, env, reader, 7, total_size, buffer);
 }
 
@@ -99,6 +106,13 @@ NanoBeginDeclaration(Port &port, OperationEnvironment &env,
                      PortNMEAReader &reader,
                      const Declaration &declaration, unsigned total_size)
 {
+  if (declaration.Size() <= 2) {
+    LogFmt("NanoDeclare: rejecting declaration with {} turnpoints; "
+           "FormatIGCTaskTimestamp requires >2, while LoadTask accepts >=2",
+           declaration.Size());
+    return false;
+  }
+
   return NanoWriteDeclMeta(port, env, reader, declaration, total_size) &&
     NanoWriteStartDeclaration(port, env, reader, declaration, total_size) &&
     NanoWriteTakeoff(port, env, reader, total_size);
@@ -119,7 +133,10 @@ NanoWriteTurnPoint(Port &port, OperationEnvironment &env,
                    const Declaration::TurnPoint &tp)
 {
   const auto content = LXNavDeclare::FormatTurnPointCRecord(tp);
-  return NanoWriteDecl(port, env, reader, row, total_size, content.c_str());
+  if (!content.has_value())
+    return false;
+
+  return NanoWriteDecl(port, env, reader, row, total_size, content->c_str());
 }
 
 static bool

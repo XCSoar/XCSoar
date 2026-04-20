@@ -6,34 +6,41 @@
 #include "Math/Util.hpp"
 #include "Atmosphere/Pressure.hpp"
 
-#include <stdio.h>
+#include "lib/fmt/ToBuffer.hxx"
 
 void
 VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 {
+  if (name == nullptr || name[0] == '\0')
+    return;
+
   /* erase the old value from the settings map, because we expect to
      receive the new one now */
   {
-      const std::lock_guard<Mutex> lock(settings);
-      settings.erase(name);
+    const std::lock_guard<Mutex> lock(settings);
+    settings.erase(name);
   }
 
-  char buffer[64];
-  sprintf(buffer, "PDVSC,S,%s,%d", name, value);
-  PortWriteNMEA(port, buffer, env);
+  const auto command = FmtBuffer<64>("PDVSC,S,{},{}", name, value);
+  PortWriteNMEA(port, command.c_str(), env);
 }
 
 void
 VegaDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
-  char buffer[64];
-  sprintf(buffer, "PDVSC,R,%s", name);
-  PortWriteNMEA(port, buffer, env);
+  if (name == nullptr || name[0] == '\0')
+    return;
+
+  const auto command = FmtBuffer<64>("PDVSC,R,{}", name);
+  PortWriteNMEA(port, command.c_str(), env);
 }
 
 std::optional<int>
 VegaDevice::GetSetting(const char *name) const noexcept
 {
+  if (name == nullptr || name[0] == '\0')
+    return std::nullopt;
+
   std::lock_guard<Mutex> lock(settings);
   auto i = settings.find(name);
   if (i == settings.end())

@@ -18,6 +18,9 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/HexFormat.hxx"
 
+#include <fmt/format.h>
+#include <stdexcept>
+
 #ifdef KOBO
 #include "Model.hpp"
 #else
@@ -291,9 +294,12 @@ WifiListWidget::Connect()
 void
 WifiListWidget::EnsureConnected()
 {
-  char path[64];
-  sprintf(path, "/var/run/wpa_supplicant/%s", GetKoboWifiInterface());
-  wpa_supplicant.EnsureConnected(path);
+  const auto path = fmt::format("/var/run/wpa_supplicant/{}",
+                                GetKoboWifiInterface());
+  if (path.size() >= 64)
+    throw std::runtime_error("wpa_supplicant control path too long");
+
+  wpa_supplicant.EnsureConnected(path.c_str());
 }
 
 inline WifiListWidget::NetworkInfo *

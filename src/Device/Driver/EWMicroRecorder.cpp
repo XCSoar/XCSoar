@@ -7,6 +7,7 @@
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "Device/Driver/EWMicroRecorder.hpp"
+#include "util/StringFormat.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
@@ -242,11 +243,14 @@ WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
   MinLon = (tmp - DegLon) * 60 * 1000;
 
   char buffer[64];
-  sprintf(buffer, "%02d%05d%c%03d%05d%c",
-          DegLat, (int)MinLat, NoS,
-          DegLon, (int)MinLon, EoW);
+  const int ret = StringFormat(buffer, sizeof(buffer), "%02d%05d%c%03d%05d%c",
+                           DegLat, (int)MinLat, NoS,
+                           DegLon, (int)MinLon, EoW);
+  if (ret < 0 || ret >= (int)sizeof(buffer))
+    return;
 
-  port.FullWrite(buffer, env, std::chrono::seconds(1));
+  port.FullWrite(std::string_view{buffer, (size_t)ret},
+                 env, std::chrono::seconds(1));
 }
 
 static void

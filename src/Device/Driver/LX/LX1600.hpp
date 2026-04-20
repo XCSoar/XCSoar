@@ -9,14 +9,34 @@
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
+#include "lib/fmt/ToBuffer.hxx"
+
+#include <fmt/format.h>
 
 #include <cassert>
 #include <cstdint>
+#include <utility>
 
 /**
  * Code specific to LX Navigation varios (e.g. LX1600).
  */
 namespace LX1600 {
+  template<size_t N, typename... Args>
+  static inline bool
+  WriteFormattedNMEA(Port &port, OperationEnvironment &env,
+                     fmt::format_string<Args...> format, Args&&... args)
+  {
+    auto buffer = FmtBuffer<N>("");
+    auto result = fmt::format_to_n(buffer.data(), N, format,
+                                   std::forward<Args>(args)...);
+    if (result.size >= N)
+      return false;
+
+    buffer[result.size] = '\0';
+    PortWriteNMEA(port, buffer.c_str(), env);
+    return true;
+  }
+
   enum class SCMode : uint8_t {
     EXTERNAL = 0,
     ON_CIRCLING = 1,
@@ -68,9 +88,11 @@ namespace LX1600 {
   {
     assert(mc >= 0.0 && mc <= 5.0);
 
-    char buffer[32];
-    sprintf(buffer, "PFLX2,%1.1f,,,,,,", mc);
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<32>(port, env,
+                                "PFLX2,{:.1f},,,,,,", mc)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -85,9 +107,11 @@ namespace LX1600 {
     // This is a copy of the routine done in LK8000 for LX MiniMap, realized
     // by Lx developers.
 
-    char buffer[100];
-    sprintf(buffer, "PFLX2,,%.2f,,,,", overload);
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX2,,{:.2f},,,,", overload)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -102,9 +126,11 @@ namespace LX1600 {
     // This is a copy of the routine done in LK8000 for LX MiniMap, realized
     // by Lx developers.
 
-    char buffer[100];
-    sprintf(buffer, "PFLX2,,,%u,,,", bugs);
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX2,,,{},,,", bugs)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -115,9 +141,12 @@ namespace LX1600 {
   SetAltitudeOffset(Port &port, OperationEnvironment &env,
                     double altitude_offset)
   {
-    char buffer[100];
-    sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", altitude_offset);
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX3,{:.2f},,,,,,,,,,,,",
+                                 altitude_offset)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -144,9 +173,11 @@ namespace LX1600 {
   static inline void
   SetPolar(Port &port, OperationEnvironment &env, double a, double b, double c)
   {
-    char buffer[100];
-    sprintf(buffer, "PFLX2,,,,%.2f,%.2f,%.2f,", a, b, c);
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX2,,,,{:.2f},{:.2f},{:.2f},", a, b, c)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -176,9 +207,11 @@ namespace LX1600 {
     if (volume > 99)
       volume = 99;
 
-    char buffer[100];
-    sprintf(buffer, "PFLX2,,,,,,,%u", volume);
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX2,,,,,,,{}", volume)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -197,10 +230,12 @@ namespace LX1600 {
     assert(te_filter >= 0.1 && te_filter <= 2.0);
     assert((te_level >= 50 && te_level <= 150) || te_level == 0);
 
-    char buffer[100];
-    sprintf(buffer, "PFLX3,,,%.1f,%.1f,%u",
-            vario_filter, te_filter, te_level);
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX3,,,{:.1f},{:.1f},{}",
+                                 vario_filter, te_filter, te_level)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -224,16 +259,22 @@ namespace LX1600 {
     assert(mode != SCMode::AUTO_IAS ||
            (threshold_speed >= 50 && threshold_speed <= 150));
 
-    char buffer[100];
-    if (mode == SCMode::AUTO_IAS)
-      sprintf(buffer, "PFLX3,,%u,,,,,,%.1f,%u,%.0f",
-              (unsigned)mode, deadband, (unsigned)control_mode,
-              threshold_speed);
-    else
-      sprintf(buffer, "PFLX3,,%u,,,,,,%.1f,%u",
-              (unsigned)mode, deadband, (unsigned)control_mode);
-
-    PortWriteNMEA(port, buffer, env);
+    if (mode == SCMode::AUTO_IAS) {
+      if (!WriteFormattedNMEA<100>(port, env,
+                                   "PFLX3,,{},,,,,,{:.1f},{},{:.0f}",
+                                   (unsigned)mode, deadband, (unsigned)control_mode,
+                                   threshold_speed)) {
+        assert(false);
+        return;
+      }
+    } else {
+      if (!WriteFormattedNMEA<100>(port, env,
+                                   "PFLX3,,{},,,,,,{:.1f},{}",
+                                   (unsigned)mode, deadband, (unsigned)control_mode)) {
+        assert(false);
+        return;
+      }
+    }
   }
 
   /**
@@ -250,10 +291,11 @@ namespace LX1600 {
     assert(avg_time >= 5 && avg_time <= 30);
     assert(range >= 2.5 && range <= 10);
 
-    char buffer[100];
-    sprintf(buffer, "PFLX3,,,,,,%u,%.1f", avg_time, range);
-
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX3,,,,,,{},{:.1f}", avg_time, range)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -263,10 +305,11 @@ namespace LX1600 {
   static inline void
   SetSmartDiffFilter(Port &port, OperationEnvironment &env, double filter)
   {
-    char buffer[100];
-    sprintf(buffer, "PFLX3,,,,,,,,,,,%.1f", filter);
-
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX3,,,,,,,,,,,{:.1f}", filter)) {
+      assert(false);
+      return;
+    }
   }
 
   /**
@@ -278,9 +321,10 @@ namespace LX1600 {
   {
     assert(offset >= -14 && offset <= 14);
 
-    char buffer[100];
-    sprintf(buffer, "PFLX3,,,,,,,,,,,,,%d", offset);
-
-    PortWriteNMEA(port, buffer, env);
+    if (!WriteFormattedNMEA<100>(port, env,
+                                 "PFLX3,,,,,,,,,,,,,{:d}", offset)) {
+      assert(false);
+      return;
+    }
   }
 }
