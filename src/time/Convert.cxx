@@ -51,10 +51,13 @@ TimeGm(struct tm &tm) noexcept
 #ifdef __GLIBC__
 	/* timegm() is a GNU extension */
 	const auto t = timegm(&tm);
+#elif defined(_WIN32)
+	tm.tm_isdst = 0;
+	const auto t = _mkgmtime(&tm);
 #else
 	tm.tm_isdst = 0;
 	const auto t = mktime(&tm) + GetTimeZoneOffset();
-#endif /* !__GLIBC__ */
+#endif
 
 	return std::chrono::system_clock::from_time_t(t);
 }

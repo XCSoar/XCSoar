@@ -6,6 +6,10 @@
 
 #include <stdio.h>
 
+#include <chrono>
+#include <cstdint>
+#include <ctime>
+
 using namespace std::chrono;
 
 static void
@@ -173,11 +177,39 @@ TestDateTime()
       BrokenDateTime(2010, 1, 1, 0, 0 ,0) == std::chrono::hours(1));
   ok1(BrokenDateTime(2010, 1, 2, 0, 0 ,0) -
       BrokenDateTime(2010, 1, 1, 0, 0 ,0) == std::chrono::hours(24));
+
+  /* `BrokenDateTime(system_clock::time_point)` (all platforms) */
+  {
+    const auto tp = std::chrono::system_clock::from_time_t(1262434530);
+    ok1(BrokenDateTime{tp} ==
+        BrokenDateTime(2010, 1, 2, 12, 15, 30));
+  }
+
+  ok1(BrokenDateTime::FromUnixTime(1262434530) ==
+      BrokenDateTime(2010, 1, 2, 12, 15, 30));
+  ok1(std::chrono::system_clock::to_time_t(
+        BrokenDateTime::FromUnixTime(1262434530).ToTimePoint()) ==
+      1262434530);
+  ok1(BrokenDateTime::FromUnixTime(0) ==
+      BrokenDateTime(1970, 1, 1, 0, 0, 0));
+
+  /* Beyond 32-bit signed time_t: int64_t must not narrow to time_t. */
+  ok1(BrokenDateTime::FromUnixTime(int64_t(2) << 32) ==
+      BrokenDateTime(2242, 3, 16, 12, 56, 32));
+
+  {
+    const auto tp = std::chrono::system_clock::now();
+    const std::time_t t = std::chrono::system_clock::to_time_t(tp);
+    ok1(BrokenDateTime{tp} == BrokenDateTime::FromUnixTime(t));
+  }
+
+  ok1(BrokenDateTime::NowUTC().IsPlausible());
+  ok1(BrokenDateTime::NowLocal().IsPlausible());
 }
 
 int main()
 {
-  plan_tests(110);
+  plan_tests(110 + 8);
 
   TestDate();
   TestTime();

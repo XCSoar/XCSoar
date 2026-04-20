@@ -69,6 +69,10 @@ FileDescriptor::Open(FileDescriptor dir, const char *pathname,
 bool
 FileDescriptor::Open(const char *pathname, int flags, mode_t mode) noexcept
 {
+#ifdef _WIN32
+	/* Text mode translates CRLF and breaks binary formats (ZIP, etc.). */
+	flags |= O_BINARY;
+#endif
 	fd = ::open(pathname, flags | O_NOCTTY | O_CLOEXEC, mode);
 	return IsDefined();
 }
@@ -78,6 +82,7 @@ FileDescriptor::Open(const char *pathname, int flags, mode_t mode) noexcept
 bool
 FileDescriptor::Open(const wchar_t *pathname, int flags, mode_t mode) noexcept
 {
+	flags |= O_BINARY;
 	fd = ::_wopen(pathname, flags | O_NOCTTY | O_CLOEXEC, mode);
 	return IsDefined();
 }

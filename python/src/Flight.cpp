@@ -242,7 +242,7 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
   if (py_begin != nullptr && PyDateTime_Check(py_begin))
     begin = Python::PyToBrokenDateTime(py_begin);
   else
-    begin = BrokenDateTime::FromUnixTimeUTC(0);
+    begin = BrokenDateTime::FromUnixTime(0);
 
   if (py_end != nullptr && PyDateTime_Check(py_end))
     end = Python::PyToBrokenDateTime(py_end);
@@ -250,7 +250,7 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
     /* numeric_limits<int64_t>::max() doesn't work here, because
        that's an invalid date in BrokenDate's eyes. 1970 + 2^33 secs
        is about the year 2242, which is far enough in the future :-) */
-    end = BrokenDateTime::FromUnixTimeUTC(int64_t(2)<<32);
+    end = BrokenDateTime::FromUnixTime(int64_t(2)<<32);
 
   if ((end - begin).count() < 0) {
     PyErr_SetString(PyExc_ValueError, "Start time later then end time.");
