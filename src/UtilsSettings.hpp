@@ -16,5 +16,21 @@ extern bool RaspFileChanged;
 extern bool LanguageChanged;
 extern bool require_restart;
 
+struct UISettings;
+
+/**
+ * Reset change flags and suspend worker threads before opening a
+ * standalone settings panel (see #SettingsLeave).
+ */
+void
+SettingsEnter() noexcept;
+
+/**
+ * Apply profile-driven changes (waypoints, airspace, terrain, …)
+ * after a settings panel saved.  Pairs with #SettingsEnter.
+ */
+void
+SettingsLeave(const UISettings &old_ui_settings);
+
 void
 SystemConfiguration();

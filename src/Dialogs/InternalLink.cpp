@@ -27,6 +27,8 @@
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Profile/Profile.hpp"
+#include "UtilsSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
@@ -36,15 +38,28 @@ void
 ShowConfigPanel(const char *title,
                 std::unique_ptr<Widget> (*create_panel)())
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, title);
-  auto panel = create_panel();
-  dialog.FinishPreliminary(std::move(panel));
-  dialog.AddButton(_("Close"), mrOK);
-  dialog.ShowModal();
-  if (dialog.GetChanged())
-    Profile::Save();
+  const UISettings old_ui_settings = CommonInterface::GetUISettings();
+  SettingsEnter();
+
+  try {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        look, title);
+    auto panel = create_panel();
+    dialog.FinishPreliminary(std::move(panel));
+    dialog.AddButton(_("Close"), mrOK);
+    dialog.ShowModal();
+    if (dialog.GetChanged())
+      Profile::Save();
+  } catch (...) {
+    SettingsLeave(old_ui_settings);
+    throw;
+  }
+
+  /* Always run leave: resumes threads suspended in SettingsEnter() and
+     applies any change flags set by the panel Save() (same as
+     SystemConfiguration after dlgConfigurationShowModal). */
+  SettingsLeave(old_ui_settings);
 }
 
 /**

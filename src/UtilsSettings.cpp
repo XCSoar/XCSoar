@@ -58,8 +58,8 @@ bool InputFileChanged = false;
 bool LanguageChanged = false;
 bool require_restart;
 
-static void
-SettingsEnter()
+void
+SettingsEnter() noexcept
 {
   CommonInterface::main_window->SuspendThreads();
 
@@ -78,7 +78,7 @@ SettingsEnter()
   require_restart = false;
 }
 
-static void
+void
 SettingsLeave(const UISettings &old_ui_settings)
 {
   if (!global_running)
