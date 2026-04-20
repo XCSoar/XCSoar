@@ -263,7 +263,12 @@ public final class SoundUtil {
         source.attachTo(player);
         player.prepare();
         return player;
-      } catch (IOException | Resources.NotFoundException e) {
+      } catch (IOException e) {
+        player.release();
+        throw e;
+      } catch (RuntimeException e) {
+        /* IllegalStateException, IllegalArgumentException, SecurityException,
+         * Resources.NotFoundException, etc. — always release before propagate */
         player.release();
         throw e;
       }
@@ -340,10 +345,18 @@ public final class SoundUtil {
       } catch (IOException e) {
         Log.e(TAG, "Failed to open/play bundled token=\"" + token + "\"", e);
         return false;
+      } catch (RuntimeException e) {
+        Log.e(TAG, "Bundled sound failed token=\"" + token + "\"", e);
+        return false;
       }
     }
 
     static boolean playExternalFile(Context app, String path) {
+      if (path == null || path.isEmpty()) {
+        Log.w(TAG, "playExternalFile: null or empty path");
+        return false;
+      }
+
       File file = new File(path);
       if (!file.exists())
         return false;
@@ -357,6 +370,9 @@ public final class SoundUtil {
         return OneShotMediaPlayer.start(app, prepared);
       } catch (IOException e) {
         Log.e(TAG, "Failed to play external \"" + path + "\"", e);
+        return false;
+      } catch (RuntimeException e) {
+        Log.e(TAG, "MediaPlayer failed for external \"" + path + "\"", e);
         return false;
       }
     }
