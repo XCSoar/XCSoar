@@ -5,6 +5,7 @@
 #include "UncompressedImage.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 
 #ifdef USE_GEOTIFF
 #include "LibTiff.hpp"
@@ -13,11 +14,17 @@
 #include <stdexcept>
 
 #ifdef USE_GEOTIFF
+/* Smallest useful GeoTIFF is far larger; skip obvious truncation before LibTiff. */
+static constexpr unsigned kMinTiffGeoFileSize = 100;
+
 GeoQuadrilateral
 Bitmap::LoadGeoFile(Path path)
 {
   if (path.EndsWithIgnoreCase(".tif") ||
       path.EndsWithIgnoreCase(".tiff")) {
+    if (File::GetSize(path) < kMinTiffGeoFileSize)
+      return {};
+
     auto result = LoadGeoTiff(path);
     if (!Load(std::move(result.first)))
       throw std::runtime_error("Failed to use geo image file");
