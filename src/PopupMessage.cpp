@@ -19,13 +19,15 @@ void
 PopupMessage::Message::Set(Type _type,
                            std::chrono::steady_clock::duration _tshow,
                            const char *_text,
-                           std::chrono::steady_clock::time_point now) noexcept
+                           std::chrono::steady_clock::time_point now,
+                           const char *_sound) noexcept
 {
   type = _type;
   tshow = _tshow;
   tstart = now;
   texpiry = now;
   text = _text;
+  sound = _sound;
 }
 
 bool
@@ -241,12 +243,12 @@ PopupMessage::GetEmptySlot() noexcept
 
 void
 PopupMessage::AddMessage(std::chrono::steady_clock::duration tshow, Type type,
-                         const char *Text) noexcept
+                         const char *Text, const char *snd) noexcept
 {
   const auto now = std::chrono::steady_clock::now();
 
   int i = GetEmptySlot();
-  messages[i].Set(type, tshow, Text, now);
+  messages[i].Set(type, tshow, Text, now, snd);
 }
 
 void
@@ -273,6 +275,8 @@ PopupMessage::Repeat(Type type) noexcept
   if (imax >= 0) {
     messages[imax].tstart = now;
     messages[imax].texpiry = messages[imax].tstart;
+    if (enable_sound && messages[imax].sound != nullptr)
+      PlayResource(messages[imax].sound);
   }
 }
 
@@ -327,6 +331,6 @@ PopupMessage::AddMessage(const char* text, const char *data) noexcept
       strcat(msgcache, data);
     }
 
-    AddMessage(msg.delay, MSG_USERINTERFACE, msgcache);
+    AddMessage(msg.delay, MSG_USERINTERFACE, msgcache, msg.sound);
   }
 }
