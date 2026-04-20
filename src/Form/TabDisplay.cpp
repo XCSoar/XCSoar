@@ -233,8 +233,7 @@ TabDisplay::OnPaint(Canvas &canvas) noexcept
                ? DarkColor(look.background_color)
                : COLOR_BLACK);
 
-  const bool tab_control_focused =
-    handler.TabControlHasKeyboardFocus();
+  const bool is_focused = !HasCursorKeys() || HasFocus();
 
   for (unsigned i = 0; i < buttons.size(); i++) {
     const auto &button = *buttons[i];
@@ -242,10 +241,7 @@ TabDisplay::OnPaint(Canvas &canvas) noexcept
     const bool is_down = dragging && i == down_index && !drag_off_button;
     const bool is_selected = i == current_index;
 
-    /* List focused colors on the active tab when the tab control has
-       keyboard focus (strip or page); same look as a focused list row. */
-    const bool draw_focused = tab_control_focused && is_selected;
-    button.Draw(canvas, look, draw_focused, is_down, is_selected);
+    button.Draw(canvas, look, is_focused, is_down, is_selected);
   }
 
   if (!buttons.empty()) {
