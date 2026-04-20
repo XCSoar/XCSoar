@@ -10,6 +10,7 @@
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -17,7 +18,25 @@ class Font;
 struct WrappedText;
 struct SegmentedLine;
 struct TextSegment;
-struct FocusItem;
+
+/**
+ * A focusable item (link or checkbox) for keyboard navigation in
+ * RichTextWindow.  Sorted by vertical position so UP/DOWN moves in
+ * document order.
+ */
+struct FocusItem {
+  int y_pos;          ///< Content-space Y coordinate
+  int height;         ///< Approximate item height
+  bool is_checkbox;
+  std::size_t index;  ///< style_index for checkboxes, link_index for links
+
+  bool operator<(const FocusItem &other) const noexcept {
+    if (y_pos != other.y_pos)
+      return y_pos < other.y_pos;
+    /* Checkboxes before links at the same position */
+    return is_checkbox && !other.is_checkbox;
+  }
+};
 
 /**
  * A window showing multi-line text with Markdown formatting.
@@ -32,8 +51,9 @@ struct FocusItem;
  * - Keyboard and mouse navigation (inherited from LinkableWindow)
  *
  * Keyboard navigation:
- * - Up/Down: navigate between links or scroll text
- * - Enter: activate focused link
+ * - Up/Down: navigate between links/checkboxes or scroll text
+ * - Enter: toggle a focused checkbox (then advance like Down) or activate a
+ *   focused link
  *
  * Mouse:
  * - Click on link to activate
@@ -192,6 +212,15 @@ private:
   /** Set focus to a FocusItem and scroll to make it visible. */
   void ScrollToFocusItem(const FocusItem &item,
                          int text_line_height) noexcept;
+
+  /**
+   * Move focus to the next link or checkbox (same rules as KEY_DOWN when
+   * focus is already set), including max_jump and end-of-list handling.
+   */
+  bool AdvanceFocusToNextFrom(const std::vector<FocusItem> &items,
+                              std::optional<std::size_t> current_pos,
+                              int max_jump,
+                              int text_line_height) noexcept;
 
 public:
   RichTextWindow() noexcept;
