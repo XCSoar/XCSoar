@@ -16,10 +16,6 @@ Version 7.45 - not yet released
     Displayed glide is re-solved with the current aircraft state; value colour
     encodes not reachable, final glide, need climb, and MANUAL on/below glide.
     Manual updated en/de/fr/pt_BR #2347
-  - android: use physical display metrics for startup DPI (getRealMetrics)
-    #1784
-  - android/ios: configure built-in GPS & sensors in the last device slot by
-    default
   - status: show G-load availability in device list and variometer source in
     system status
   - terrain: add new terrain shading orientation "fixed (Top Left)"
@@ -28,6 +24,13 @@ Version 7.45 - not yet released
     airspace warnings list) #2404
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
+* android
+  - use physical display metrics for startup DPI (getRealMetrics) #1784
+  - native debug symbols for Google Play (symbols.zip), lib/<ABI>/ layout for
+    single-ABI and multi-ABI (AAB) builds; Makefile fix so parallel builds
+    reliably produce the symbol ZIP in CI
+  - configure built-in GPS & sensors in the last device slot by default (same on
+    iOS)
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles

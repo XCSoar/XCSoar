@@ -6,6 +6,8 @@ on:
         description: >
           Git branch, tag, or commit SHA to check out and build. Leave empty
           to build the ref selected in "Use workflow from" (same as before).
+          For Play upload: a version tag (v* or refs/tags/v*) uses the production
+          track; other refs use internal.
         required: false
         default: ''
         type: string
@@ -512,10 +514,12 @@ jobs:
               ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
               make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=n USE_CCACHE=y V=2 \
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
+              output/${{ matrix.target }}/symbols.zip \
               ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
             else
               make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
+              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
+              output/${{ matrix.target }}/symbols.zip
               mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
               if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
@@ -571,10 +575,12 @@ jobs:
               ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
               make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
+              output/${{ matrix.target }}/symbols.zip \
               ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
             else
               make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
+              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
+              output/${{ matrix.target }}/symbols.zip
             fi
           elif [ ${{ matrix.target }} = "WIN64" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
@@ -687,7 +693,9 @@ jobs:
         if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
         with:
           name: android-bundle
-          path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
+          path: |
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
+            output/${{ matrix.target }}/symbols.zip
 
       - name: Upload artifact for VirusTotal (Win64)
         if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'WIN64' }}
@@ -785,6 +793,10 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: android-bundle
+          # upload-artifact uses the least common ancestor of the uploaded paths
+          # (output/ANDROID_BUNDLE/) as the artifact root, so the zip contains
+          # bin/XCSoar.aab and symbols.zip — not output/ANDROID_BUNDLE/...
+          path: android-bundle
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -804,27 +816,45 @@ jobs:
 
       - name: Upload AAB and metadata to Play Store
         run: |
-          AAB_PATH=""
-          for candidate in \
-            "android-bundle/output/ANDROID_BUNDLE/bin/XCSoar.aab" \
-            "android-bundle/XCSoar.aab" \
-            "XCSoar.aab"; do
-            if [ -f "$candidate" ]; then
-              AAB_PATH="$candidate"
-              break
-            fi
-          done
-          if [ -z "$AAB_PATH" ]; then
-            echo "AAB not found in expected locations"
+          # Release = version tag v* (same idea as elsewhere in this workflow): production.
+          # Non-release (master pushes, other tags, manual branch builds): internal.
+          EVENT_NAME="${{ github.event_name }}"
+          GITHUB_REF_VAL="${{ github.ref }}"
+          REF_INPUT="${{ github.event.inputs.ref }}"
+          if [[ "$GITHUB_REF_VAL" == refs/tags/v* ]]; then
+            PLAY_TRACK=production
+          elif [[ "$EVENT_NAME" == "workflow_dispatch" ]] && [[ -n "$REF_INPUT" ]]; then
+            case "$REF_INPUT" in
+              refs/tags/v*|v*) PLAY_TRACK=production ;;
+              *) PLAY_TRACK=internal ;;
+            esac
+          else
+            PLAY_TRACK=internal
+          fi
+          echo "Play track: $PLAY_TRACK (ref=$GITHUB_REF_VAL, dispatch ref=$REF_INPUT)"
+
+          # Paths under android-bundle/ match the artifact layout (see Download step).
+          AAB_PATH="android-bundle/bin/XCSoar.aab"
+          if [ ! -f "$AAB_PATH" ]; then
+            echo "AAB not found at $AAB_PATH (expected download layout for artifact android-bundle)"
             exit 1
           fi
           echo "Using AAB at: $AAB_PATH"
+          SYMBOLS_ZIP="android-bundle/symbols.zip"
+          MAPPING_PATH=""
+          if [ -f "$SYMBOLS_ZIP" ]; then
+            MAPPING_PATH="$SYMBOLS_ZIP"
+            echo "Uploading native debug symbols: $MAPPING_PATH"
+          else
+            echo "::warning::Native debug symbols not found at $SYMBOLS_ZIP (expected CI artifact layout); Play native stacks may stay obfuscated"
+          fi
           fastlane supply \
             --package_name org.xcsoar.play \
             --aab "$AAB_PATH" \
+            ${MAPPING_PATH:+--mapping "$MAPPING_PATH"} \
             --metadata_path fastlane/metadata/android \
             --json_key play-key.json \
-            --track internal \
+            --track "$PLAY_TRACK" \
             --skip_upload_changelogs true
 
       - name: Remove key
