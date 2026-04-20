@@ -95,14 +95,12 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
     return BrokenDateTime(*this, BrokenTime::Midnight());
   }
 
-#ifdef HAVE_POSIX
   /**
    * Convert a UNIX UTC time stamp (seconds since epoch) to a
    * BrokenDateTime object.
    */
   [[gnu::const]]
-  static BrokenDateTime FromUnixTimeUTC(int64_t t) noexcept;
-#endif
+  static BrokenDateTime FromUnixTime(int64_t t) noexcept;
 
   [[gnu::pure]]
   std::chrono::system_clock::time_point ToTimePoint() const noexcept;

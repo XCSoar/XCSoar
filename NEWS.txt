@@ -40,10 +40,14 @@ Version 7.45 - not yet released
   - configure built-in GPS & sensors in the last device slot by default (same on
     iOS)
 * calculations
+  - BrokenDateTime: unified UTC conversion (rename FromUnixTimeUTC to
+    FromUnixTime); Windows TimeGm uses _mkgmtime
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)
 * data files
+  - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
+    is read correctly
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
 * devices
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
