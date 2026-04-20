@@ -238,10 +238,12 @@ jobs:
         run: |
           xcodebuild -version
 
+      # APK and AAB matrix legs both compile ANDROIDFAT; a single shared key made
+      # parallel jobs race on save and duplicate work. Use one key per leg.
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && 'ANDROIDFAT-ccache' || format('{0}-ccache', matrix.target) }}
+          key: ${{ matrix.target == 'ANDROID_BUNDLE' && 'ANDROID_BUNDLE-ccache' || (matrix.target == 'ANDROID' && 'ANDROIDFAT-ccache') || format('{0}-ccache', matrix.target) }}
           max-size: 3G
 
       - name: Configure ccache for cross-compilation
