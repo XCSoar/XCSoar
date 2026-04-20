@@ -137,4 +137,10 @@ protected:
 
 private:
   void UpdateButtons() noexcept;
+
+  /**
+   * Attach horizontal swipe-to-page on each child that supports it
+   * (#VScrollWidget, #QuickGuidePageWidget).  Called from #Prepare().
+   */
+  void WireHorizontalSwipeToPages() noexcept;
 };

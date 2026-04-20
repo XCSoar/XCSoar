@@ -71,16 +71,16 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                   dialog.MakeModalResultCallback(mrOK));
-  ArrowPagerWidget *pager_ptr = pager.get();
+  ArrowPagerWidget *const pager_ptr = pager.get();
 
-  pager->Add(std::make_unique<VScrollWidget>(
-    std::make_unique<RichTextWidget>(look, GetLogoText()), look, true));
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<RichTextWidget>
-             (look, authors.c_str()), look, true));
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<RichTextWidget>
-             (look, news.c_str(), false), look, true));
-  pager->Add(std::make_unique<VScrollWidget>(std::make_unique<RichTextWidget>
-             (look, license.c_str(), false), look, true));
+  auto add_scroll_page = [&](std::unique_ptr<RichTextWidget> &&content) {
+    pager->Add(std::make_unique<VScrollWidget>(std::move(content), look, true));
+  };
+
+  add_scroll_page(std::make_unique<RichTextWidget>(look, GetLogoText()));
+  add_scroll_page(std::make_unique<RichTextWidget>(look, authors.c_str()));
+  add_scroll_page(std::make_unique<RichTextWidget>(look, news.c_str(), false));
+  add_scroll_page(std::make_unique<RichTextWidget>(look, license.c_str(), false));
 
   /* Caption update on page flip */
   static constexpr const char *const titles[] = {

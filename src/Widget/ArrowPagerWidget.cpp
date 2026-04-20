@@ -2,6 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "ArrowPagerWidget.hpp"
+#include "ArrowPagerGesture.hpp"
+#include "QuickGuidePageWidget.hpp"
+#include "VScrollWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Language/Language.hpp"
@@ -125,6 +128,25 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent,
                       layout.close_button,
                       style, close_callback);
   pending_close_caption = nullptr;
+
+  WireHorizontalSwipeToPages();
+}
+
+void
+ArrowPagerWidget::WireHorizontalSwipeToPages() noexcept
+{
+  if (GetSize() < 2)
+    return;
+
+  const auto swipe = MakeArrowPagerSwipeCallback(this);
+
+  for (unsigned i = 0; i < GetSize(); ++i) {
+    Widget &w = GetWidget(i);
+    if (auto *vs = dynamic_cast<VScrollWidget *>(&w))
+      vs->SetGestureCallback(swipe);
+    else if (auto *pg = dynamic_cast<QuickGuidePageWidget *>(&w))
+      pg->SetGestureCallback(swipe);
+  }
 }
 
 void

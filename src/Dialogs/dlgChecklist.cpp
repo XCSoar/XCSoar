@@ -181,18 +181,22 @@ dlgChecklistShowModal()
 
   auto pager = std::make_unique<ArrowPagerWidget>(look.button,
                                                    dialog.MakeModalResultCallback(mrOK));
-  for (const auto &i : checklist)
-    pager->Add(std::make_unique<VScrollWidget>(
-      std::make_unique<RichTextWidget>(look, i.text.c_str()), look, true));
+  ArrowPagerWidget *const pager_ptr = pager.get();
+
+  for (const auto &i : checklist) {
+    auto scroll = std::make_unique<VScrollWidget>(
+      std::make_unique<RichTextWidget>(look, i.text.c_str()), look, true);
+    pager->Add(std::move(scroll));
+  }
 
   pager->SetCurrent(current_page);
 
   const std::size_t total_pages = checklist.size();
 
   pager->SetPageFlippedCallback(
-    [&checklist, &dialog, &pager=*pager, total_pages](){
+    [&checklist, &dialog, pager_ptr, total_pages]() {
       UpdateCaption(dialog, checklist,
-                    pager.GetCurrentIndex(), total_pages);
+                    pager_ptr->GetCurrentIndex(), total_pages);
     });
 
   UpdateCaption(dialog, checklist,

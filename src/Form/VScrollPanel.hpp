@@ -6,8 +6,14 @@
 #include "Panel.hpp"
 #include "ui/control/ScrollBar.hpp"
 #include "ui/event/PeriodicTimer.hpp"
+#include "Look/GestureLook.hpp"
 #include "UIUtil/KineticManager.hpp"
-#include "UIUtil/GestureManager.hpp"
+#include "UIUtil/TrackingGestureManager.hpp"
+
+#include <cstdint>
+#include <deque>
+
+class Canvas;
 
 class VScrollPanelListener {
 public:
@@ -74,10 +80,16 @@ class VScrollPanel final : public PanelControl {
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
   /**
-   * Detects swipe gestures (L/R/U/D) from mouse/touch movement.
-   * Only active when #gesture_tracking is true.
+   * Visual style for the swipe trail (same as map gesture feedback).
    */
-  GestureManager gestures;
+  GestureLook gesture_look;
+
+  /**
+   * Detects swipe gestures (L/R/U/D) from mouse/touch movement and
+   * records points for trail rendering.  Only active when
+   * #gesture_tracking is true.
+   */
+  TrackingGestureManager gestures;
 
   /**
    * True when gesture tracking has been started (i.e. the mouse-down
@@ -94,6 +106,21 @@ class VScrollPanel final : public PanelControl {
    * Timer for smooth scroll animation (~60fps).
    */
   UI::PeriodicTimer smooth_scroll_timer{[this]{ OnSmoothScrollTimer(); }};
+
+  /**
+   * Horizontal swipe handling must not run synchronously from
+   * #OnMouseUp: listeners (e.g. pager page change) may hide this
+   * panel while it is still processing the mouse-up stack.
+   */
+  UI::PeriodicTimer defer_swipe_timer{[this]{ OnDeferredSwipeGesture(); }};
+
+  /**
+   * Queued horizontal swipes for deferred pager navigation.
+   * A queue avoids dropping a swipe if another is armed before the
+   * deferred timer runs.
+   */
+  enum class DeferredSwipeDirection : std::uint8_t { LEFT, RIGHT };
+  std::deque<DeferredSwipeDirection> defer_swipe_queue;
 
 public:
   VScrollPanel(ContainerWindow &parent, const DialogLook &look,
@@ -139,6 +166,10 @@ private:
   void SetOriginClamped(int new_origin) noexcept;
   void OnKineticTimer() noexcept;
   void OnSmoothScrollTimer() noexcept;
+
+  void DrawGesture(Canvas &canvas) const noexcept;
+
+  void OnDeferredSwipeGesture() noexcept;
 
   /**
    * Start smooth scrolling to a target position with easing.
