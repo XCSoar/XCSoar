@@ -107,6 +107,8 @@ public class XCSoar extends Activity implements PermissionManager {
 
     NetUtil.initialise(this);
 
+    SoundUtil.preload(this);
+
     IOIOHelper.onCreateContext(this);
 
     final Window window = getWindow();
