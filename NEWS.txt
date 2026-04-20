@@ -25,6 +25,9 @@ Version 7.45 - not yet released
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
   - encode bundled UI OGG sound assets at Vorbis quality 5 (was 1)
+  - tabbed dialogs: show list-style focus on the tab strip when the device has
+    cursor keys and the strip has keyboard focus (or always on devices without
+    cursor keys, where the indicator is informational only)
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or
