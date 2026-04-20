@@ -1072,25 +1072,6 @@ RichTextWindow::IsCheckboxFocused(std::size_t style_index) const noexcept
 }
 
 /**
- * A focusable item (link or checkbox) identified during keyboard
- * navigation.  Sorted by vertical position so UP/DOWN moves in
- * document order.
- */
-struct FocusItem {
-  int y_pos;          ///< Content-space Y coordinate
-  int height;         ///< Approximate item height
-  bool is_checkbox;
-  std::size_t index;  ///< style_index for checkboxes, link_index for links
-
-  bool operator<(const FocusItem &other) const noexcept {
-    if (y_pos != other.y_pos)
-      return y_pos < other.y_pos;
-    /* Checkboxes before links at the same position */
-    return is_checkbox && !other.is_checkbox;
-  }
-};
-
-/**
  * Build a sorted list of all focusable items (links and checkboxes)
  * from the pre-computed segmented lines and line layout data.
  */
@@ -1209,6 +1190,42 @@ RichTextWindow::ScrollToFocusItem(const FocusItem &item,
 }
 
 bool
+RichTextWindow::AdvanceFocusToNextFrom(
+  const std::vector<FocusItem> &items,
+  std::optional<std::size_t> current_pos,
+  int max_jump,
+  int text_line_height) noexcept
+{
+  if (!current_pos.has_value())
+    return false;
+
+  if (current_pos.value() + 1 < items.size()) {
+    const auto &cur = items[current_pos.value()];
+    const auto &next = items[current_pos.value() + 1];
+    if (next.y_pos - cur.y_pos > max_jump) {
+      /* Next item is too far away — clear focus and let
+         the scroll widget handle line-by-line scrolling. */
+      focused_checkbox_style.reset();
+      focused_link.reset();
+      focus_exhausted_down = true;
+      Invalidate();
+      return false;
+    }
+    focus_exhausted_up = false;
+    ScrollToFocusItem(next, text_line_height);
+    return true;
+  }
+
+  focused_checkbox_style.reset();
+  focused_link.reset();
+  focus_exhausted_down = true;
+  Invalidate();
+  if (ContainerWindow *parent = GetParent())
+    return parent->InjectKeyPress(KEY_DOWN);
+  return LinkableWindow::OnKeyDown(KEY_DOWN);
+}
+
+bool
 RichTextWindow::OnKeyDown(unsigned key_code) noexcept
 {
   EnsureSegmentedLines();
@@ -1274,30 +1291,9 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
       }
       /* No suitable item — let scroll widget handle it */
       return false;
-    } else if (current_pos.value() + 1 < items.size()) {
-      const auto &cur = items[current_pos.value()];
-      const auto &next = items[current_pos.value() + 1];
-      if (next.y_pos - cur.y_pos > max_jump) {
-        /* Next item is too far away — clear focus and let
-           the scroll widget handle line-by-line scrolling. */
-        focused_checkbox_style.reset();
-        focused_link.reset();
-        focus_exhausted_down = true;
-        Invalidate();
-        return false;
-      }
-      focus_exhausted_up = false;
-      ScrollToFocusItem(next, text_line_height);
-      return true;
-    } else {
-      focused_checkbox_style.reset();
-      focused_link.reset();
-      focus_exhausted_down = true;
-      Invalidate();
-      if (ContainerWindow *parent = GetParent())
-        return parent->InjectKeyPress(key_code);
     }
-    break;
+    return AdvanceFocusToNextFrom(items, current_pos, max_jump,
+                                  text_line_height);
 
   case KEY_UP:
     if (!current_pos.has_value()) {
@@ -1352,6 +1348,8 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
   case KEY_RETURN:
     if (focused_checkbox_style.has_value()) {
       ToggleCheckbox(focused_checkbox_style.value());
+      AdvanceFocusToNextFrom(items, current_pos, max_jump,
+                            text_line_height);
       return true;
     }
     if (focused_link.has_value()) {
