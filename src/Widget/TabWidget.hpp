@@ -141,5 +141,4 @@ private:
   bool ClickPage(unsigned i) noexcept override;
   bool NextPage() noexcept override;
   bool PreviousPage() noexcept override;
-  bool TabControlHasKeyboardFocus() const noexcept override;
 };

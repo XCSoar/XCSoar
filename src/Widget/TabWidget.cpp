@@ -121,12 +121,6 @@ TabWidget::PreviousPage() noexcept
   return Previous(HasPointer());
 }
 
-bool
-TabWidget::TabControlHasKeyboardFocus() const noexcept
-{
-  return HasFocus();
-}
-
 PixelSize
 TabWidget::GetMinimumSize() const noexcept
 {
@@ -243,9 +237,6 @@ TabWidget::SetFocus() noexcept
   if (!PagerWidget::SetFocus())
     tab_display->SetFocus();
 
-  /* Tab bar uses TabControlHasKeyboardFocus(); repaint when focus
-     moves between strip and page without TabDisplay focus events. */
-  tab_display->Invalidate();
   return true;
 }
 
