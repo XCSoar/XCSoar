@@ -63,12 +63,25 @@ public final class BluetoothSensor
            * Change auto connect = false and remove transport hint, which
            * should be more stable and widespread supported.
            */
-          gatt = device.connectGatt(context, false, BluetoothSensor.this);
+          try {
+            gatt = device.connectGatt(context, false, BluetoothSensor.this);
+          } catch (SecurityException e) {
+            /* Android 12+: BLUETOOTH_CONNECT required; may be denied or revoked. */
+            submitError("Bluetooth connect not permitted");
+            return;
+          }
+          if (gatt == null)
+            submitError("Bluetooth GATT connect failed");
         }
       });
     }
-    else
-      gatt = device.connectGatt(context, true, this);
+    else {
+      try {
+        gatt = device.connectGatt(context, true, this);
+      } catch (SecurityException e) {
+        throw new IOException("Bluetooth GATT connect not permitted", e);
+      }
+    }
 
     if (gatt == null)
       throw new IOException("Bluetooth GATT connect failed");
@@ -77,7 +90,8 @@ public final class BluetoothSensor
   @Override
   public void close() {
     safeDestruct.beginShutdown();
-    gatt.close();
+    if (gatt != null)
+      gatt.close();
     safeDestruct.finishShutdown();
   }
 
