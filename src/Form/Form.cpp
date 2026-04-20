@@ -369,6 +369,9 @@ WndForm::ShowModal()
             FocusNextControl();
           else
             FocusPreviousControl();
+          /* Tabbed dialogs draw the active tab using tab-widget focus;
+             repaint after focus moves (e.g. to/from OK). */
+          GetClientAreaWindow().Invalidate();
           continue;
         }
       }
