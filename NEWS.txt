@@ -28,6 +28,9 @@ Version 7.45 - not yet released
     airspace warnings list) #2404
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
+  - tabbed dialogs: show list-style focus on the tab strip when the device has
+    cursor keys and the strip has keyboard focus (or always on devices without
+    cursor keys, where the indicator is informational only)
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
