@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="ic_launcher_background">#00000000</color>
+  <!-- #00000000 reads as a dark plate on many light-theme launchers (compositor
+       fills “empty” background oddly).  Opaque white matches typical light
+       home surfaces so the icon does not pick up a grey/black halo. -->
+  <color name="ic_launcher_background">#FFFFFFFF</color>
 </resources>
