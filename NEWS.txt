@@ -27,6 +27,10 @@ Version 7.45 - not yet released
   - encode bundled UI OGG sound assets at Vorbis quality 5 (was 1)
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
+  - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or
+    external .wav); AudioAttributes before prepare; transient audio focus with
+    flush between SoundPool plays; volume scaled from media/notification streams;
+    log warnings/errors only on failure #2411
   - native debug symbols for Google Play (symbols.zip), lib/<ABI>/ layout for
     single-ABI and multi-ABI (AAB) builds; Makefile fix so parallel builds
     reliably produce the symbol ZIP in CI
