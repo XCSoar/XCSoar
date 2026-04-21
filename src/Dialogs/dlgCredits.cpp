@@ -28,29 +28,35 @@ extern "C"
 
 /**
  * Build the logo/about page as markdown text.
+ * @param dark_title use light/white title art on dark dialog backgrounds
  */
 static const char *
-GetLogoText() noexcept
+GetLogoText(bool dark_title) noexcept
 {
   static StaticString<512> text;
+
+  const char *const title_res =
+    dark_title ? "IDB_TITLE_HD_WHITE" : "IDB_TITLE_HD";
 
 #ifdef GIT_COMMIT_ID
   text.Format(
     "![XCSoar Logo](resource:IDB_LOGO_HD)\n\n"
-    "![XCSoar](resource:IDB_TITLE_HD)\n\n"
+    "![XCSoar](resource:%s)\n\n"
     "**Version %s**\n\n"
     "git: %s\n\n"
     "Visit us at:\n"
     "[https://xcsoar.org](https://xcsoar.org)",
+    title_res,
     XCSoar_VersionString,
     GIT_COMMIT_ID);
 #else
   text.Format(
     "![XCSoar Logo](resource:IDB_LOGO_HD)\n\n"
-    "![XCSoar](resource:IDB_TITLE_HD)\n\n"
+    "![XCSoar](resource:%s)\n\n"
     "**Version %s**\n\n"
     "Visit us at:\n"
     "[https://xcsoar.org](https://xcsoar.org)",
+    title_res,
     XCSoar_VersionString);
 #endif
 
@@ -77,7 +83,8 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
     pager->Add(std::make_unique<VScrollWidget>(std::move(content), look, true));
   };
 
-  add_scroll_page(std::make_unique<RichTextWidget>(look, GetLogoText()));
+  add_scroll_page(std::make_unique<RichTextWidget>(
+    look, GetLogoText(look.dark_mode)));
   add_scroll_page(std::make_unique<RichTextWidget>(look, authors.c_str()));
   add_scroll_page(std::make_unique<RichTextWidget>(look, news.c_str(), false));
   add_scroll_page(std::make_unique<RichTextWidget>(look, license.c_str(), false));
