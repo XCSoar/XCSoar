@@ -133,7 +133,8 @@ struct ParsedMarkdown {
  * Supports:
  * - Bold: **text** or __text__
  * - Headings: # H1, ## H2, ### H3 (at line start)
- * - List items: - item or * item (at line start)
+ * - List items: - item or * item (at line start); a leading "word:" prefix
+ *   (label with optional /._- in the name, then colon and whitespace) is bold
  * - Checkboxes: - [ ] unchecked, - [x] checked (at line start)
  * - Markdown links: [display text](url)
  * - Raw URLs: http://, https://, xcsoar://, vhf:

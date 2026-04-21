@@ -175,6 +175,55 @@ SkipListMarker(const char *str) noexcept
   return str;
 }
 
+[[gnu::const]]
+static constexpr bool
+IsLeadLabelChar(char c) noexcept
+{
+  return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+         (c >= '0' && c <= '9');
+}
+
+[[gnu::const]]
+static constexpr bool
+IsLabelChar(char c) noexcept
+{
+  return IsLeadLabelChar(c) || c == '/' || c == '.' || c == '_' || c == '-';
+}
+
+/**
+ * If @p p is at "label: " (after optional spaces), append "label:" as bold and
+ * advance @p past whitespace following the colon.
+ */
+static void
+MaybeAppendBoldListLeadLabel(std::string &text, std::vector<StyledSpan> &styles,
+                             const char *&p, const char *line_end)
+{
+  const char *q = p;
+  while (q < line_end && (*q == ' ' || *q == '\t'))
+    ++q;
+  const char *const label_start = q;
+  if (label_start >= line_end || !IsLeadLabelChar(*label_start))
+    return;
+
+  const char *r = label_start + 1;
+  while (r < line_end && IsLabelChar(*r))
+    ++r;
+
+  if (r >= line_end || *r != ':' || r + 1 >= line_end)
+    return;
+  if (r[1] != ' ' && r[1] != '\t')
+    return;
+
+  const std::size_t bold_start = text.size();
+  text.append(label_start, r + 1);
+  styles.push_back({bold_start, text.size(), TextStyle::Bold});
+  /* One space after the bold "label:" (not bold); source spaces are skipped. */
+  text += ' ';
+  p = r + 1;
+  while (p < line_end && (*p == ' ' || *p == '\t'))
+    ++p;
+}
+
 /**
  * For vhf: links, replace display_text with "name - MHz" or "MHz" only;
  * keeps url unchanged. Sets link.end from display length.
@@ -308,6 +357,8 @@ ParseMarkdown(const char *input)
 
         // Now process the content for inline formatting (bold, links)
         const char *p = content;
+
+        MaybeAppendBoldListLeadLabel(result.text, result.styles, p, line_end);
 
         while (p < line_end) {
           // Check for bold marker
