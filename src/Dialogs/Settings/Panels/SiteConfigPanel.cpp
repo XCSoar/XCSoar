@@ -129,7 +129,7 @@ SiteConfigPanel::Save(bool &_changed) noexcept
 
   RaspFileChanged = SaveValueFileReader(RaspFile, ProfileKeys::RaspFile);
 
-  bool ChecklistFileChanged = SaveValueFileReader(ChecklistFile, ProfileKeys::ChecklistFile);
+  ChecklistFileChanged = SaveValueFileReader(ChecklistFile, ProfileKeys::ChecklistFile);
 
   changed = WaypointFileChanged || AirfieldFileChanged ||
             AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||

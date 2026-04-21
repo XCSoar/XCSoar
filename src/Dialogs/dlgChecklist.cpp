@@ -126,10 +126,19 @@ try {
   return {};
 }
 
+static std::size_t checklist_current_page = 0;
+
+void
+dlgChecklistNotifySiteFileChanged() noexcept
+{
+  /* Profile::GetPath(ChecklistFile) is already updated; reset page so a
+     different file's page count does not keep a stale index. */
+  checklist_current_page = 0;
+}
+
 void
 dlgChecklistShowModal()
 {
-  static std::size_t current_page = 0;
 
   auto path = Profile::GetPath(ProfileKeys::ChecklistFile);
   if (path == nullptr || path.empty())
@@ -171,8 +180,8 @@ dlgChecklistShowModal()
         });
     }
 
-  if (current_page >= checklist.size())
-    current_page = 0;
+  if (checklist_current_page >= checklist.size())
+    checklist_current_page = 0;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -189,7 +198,7 @@ dlgChecklistShowModal()
     pager->Add(std::move(scroll));
   }
 
-  pager->SetCurrent(current_page);
+  pager->SetCurrent(checklist_current_page);
 
   const std::size_t total_pages = checklist.size();
 
@@ -205,5 +214,6 @@ dlgChecklistShowModal()
   dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
 
-  current_page = ((ArrowPagerWidget &)dialog.GetWidget()).GetCurrentIndex();
+  checklist_current_page =
+    static_cast<ArrowPagerWidget &>(dialog.GetWidget()).GetCurrentIndex();
 }
