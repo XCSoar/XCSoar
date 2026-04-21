@@ -64,7 +64,7 @@ private:
 
   bool visible = false;
 
-  /** Whether to parse markdown links in the content text */
+  /** Passed to RichTextWidget as parse_markdown (full Markdown, not links only). */
   bool parse_links = true;
 
   /**
@@ -78,7 +78,8 @@ public:
                                 const char *_markdown_text) noexcept;
 
   /**
-   * Disable link parsing in the content text.
+   * When false, the inner #RichTextWidget passes parse_markdown=false to
+   * #RichTextWindow::SetText (no Markdown at all: no lists, bold, or links).
    * Must be called before Initialise().
    */
   void SetParseLinks(bool enabled) noexcept {

@@ -24,6 +24,16 @@ $(call SRC_TO_OBJ,$(SRC)/Math/FastMath.cpp): $(OUT)/include/MathTables.h
 $(call SRC_TO_OBJ,$(SRC)/Math/FastTrig.cpp): $(OUT)/include/MathTables.h
 $(call SRC_TO_OBJ,$(SRC)/Computer/ThermalRecency.cpp): $(OUT)/include/MathTables.h
 
+# Quick Guide: compile-time Markdown slice of NEWS.txt (headings + list items)
+$(OUT)/include/QuickGuideNEWS.hpp: $(topdir)/NEWS.txt \
+	$(topdir)/tools/news_to_quickguide_md.py | $(OUT)/include/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)/usr/bin/env python3 $(topdir)/tools/news_to_quickguide_md.py \
+		$(topdir)/NEWS.txt >$@.$(RANDOM_NUMBER).tmp
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
+
+$(call SRC_TO_OBJ,$(SRC)/Dialogs/dlgQuickGuide.cpp): $(OUT)/include/QuickGuideNEWS.hpp
+
 $(OUT)/include/InputEvents_Text2Event.cpp: $(SRC)/Input/InputEvents.hpp \
 	$(topdir)/tools/Text2Event.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
@@ -81,7 +91,8 @@ $(SM_OBJ): $(OUT)/include/Status_defaults.cpp
 generate:: $(OUT)/include/MathTables.h $(XCI_HEADERS) \
 	$(OUT)/include/Status_defaults.cpp \
 	$(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp \
-	$(OUT)/include/InputEvents_Char2GCE.cpp $(OUT)/include/InputEvents_Char2NE.cpp
+	$(OUT)/include/InputEvents_Char2GCE.cpp $(OUT)/include/InputEvents_Char2NE.cpp \
+	$(OUT)/include/QuickGuideNEWS.hpp
 
 # UNIX resources
 

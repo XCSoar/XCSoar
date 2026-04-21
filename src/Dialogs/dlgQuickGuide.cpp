@@ -15,8 +15,8 @@
 #include "system/Path.hpp"
 #include "Language/Language.hpp"
 #include "Version.hpp"
+#include "QuickGuideNEWS.hpp"
 #include "Simulator.hpp"
-#include "Inflate.hpp"
 #include "Message.hpp"
 #include "Interface.hpp"
 #include "Device/Config.hpp"
@@ -27,17 +27,10 @@
 #ifdef ANDROID
 #include "Android/Permissions.hpp"
 #endif
-#include "util/AllocatedString.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
 
 #include <vector>
-
-extern "C"
-{
-  extern const uint8_t NEWS_txt_gz[];
-  extern const size_t NEWS_txt_gz_size;
-}
 
 // Page indices for the can-advance guard
 static constexpr unsigned INVALID_PAGE = ~0u;
@@ -231,32 +224,6 @@ GetPostflightText() noexcept
 }
 
 /* ---- Helpers ---- */
-
-/**
- * Truncate the NEWS text to only the first (current) version
- * section.  Sections are delimited by lines starting with "Version ".
- * This avoids wrapping the entire multi-year release history which
- * would cause a multi-second stall on slow devices (e.g. RPi 3).
- */
-static void
-TruncateToCurrentVersion(char *text) noexcept
-{
-  /* Skip past the first "Version ..." line */
-  char *p = text;
-  while (*p != '\0' && *p != '\n')
-    ++p;
-  if (*p == '\n')
-    ++p;
-
-  /* Find the next "Version " line and terminate there */
-  while (*p != '\0') {
-    if (*p == '\n' && StringStartsWith(p + 1, "Version ")) {
-      *p = '\0';
-      return;
-    }
-    ++p;
-  }
-}
 
 /**
  * Check if the warranty has already been acknowledged for the
@@ -496,25 +463,20 @@ dlgQuickGuideShowModal(bool force_info)
   }
 
   /* ---- What's New page (conditional, shown on version change) ---- */
-  /* Inflate NEWS.txt at function scope so the text remains valid
-     until after ShowModal() returns. */
-  AllocatedString news_inflated;
-  if (news_needed) {
-    news_inflated = InflateToString(NEWS_txt_gz, NEWS_txt_gz_size);
-    TruncateToCurrentVersion(news_inflated.data());
-    if (!news_inflated.empty()) {
-      state.news_page_index = pager->GetSize();
+  /* Body is Markdown generated at build time from the first block of NEWS.txt
+     (see tools/news_to_quickguide_md.py and QuickGuideNEWS.hpp).  The Credits
+     dialog still loads the full gzipped NEWS history as plain text. */
+  if (news_needed && quick_guide_news_markdown[0] != '\0') {
+    state.news_page_index = pager->GetSize();
 
-      auto page = QuickGuidePageWidget::CreateCheckboxPage(
-        look, news_inflated.c_str(),
-        _("Don't show these release notes again"),
-        false,
-        [](bool) { /* state is read on dialog close */ });
-      page->SetParseLinks(false);
+    auto page = QuickGuidePageWidget::CreateCheckboxPage(
+      look, quick_guide_news_markdown,
+      _("Don't show these release notes again"),
+      false,
+      [](bool) { /* state is read on dialog close */ });
 
-      pager->Add(std::move(page));
-      titles.push_back(_("What's New"));
-    }
+    pager->Add(std::move(page));
+    titles.push_back(_("What's New"));
   }
 
   /* ---- Cloud consent page (conditional, fly mode only) ---- */
