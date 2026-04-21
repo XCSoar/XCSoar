@@ -3,6 +3,7 @@
 
 #include "RichTextWindow.hpp"
 #include "ui/canvas/TextWrapper.hpp"
+#include "ui/canvas/Font.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/SubCanvas.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
@@ -101,6 +102,12 @@ struct SegmentedLine {
       paragraph (i.e. not the first line, but the paragraph starts
       with "- ").  Used to apply a hanging indent. */
   bool is_list_continuation = false;
+
+  /**
+   * For #is_list_continuation: x offset from #padding to where body text
+   * should start (same as x after drawing the list prefix on the first line).
+   */
+  int list_hang_offset = 0;
 };
 
 /**
@@ -490,6 +497,86 @@ FindNextBoundary(const std::vector<MarkdownLink> &links,
   return next;
 }
 
+[[gnu::pure]]
+static bool
+TextStartsWithNumberedList(const std::string &text,
+                           std::size_t line_start,
+                           std::size_t line_length) noexcept
+{
+  const std::size_t end = line_start + line_length;
+  std::size_t i = line_start;
+  if (i >= end || text[i] < '0' || text[i] > '9')
+    return false;
+  while (i < end && text[i] >= '0' && text[i] <= '9')
+    ++i;
+  return i < end && text[i] == '.' &&
+         i + 1 < end && text[i + 1] == ' ';
+}
+
+[[gnu::pure]]
+static int
+MeasureNumberedListPrefixWidth(const Font &font, const std::string &text,
+                               std::size_t line_start,
+                               std::size_t line_length) noexcept
+{
+  const std::size_t end = line_start + line_length;
+  std::size_t i = line_start;
+  if (i >= end || text[i] < '0' || text[i] > '9')
+    return 0;
+  while (i < end && text[i] >= '0' && text[i] <= '9')
+    ++i;
+  if (i >= end || text[i] != '.' || i + 1 >= end || text[i + 1] != ' ')
+    return 0;
+  const std::size_t n = i + 2 - line_start;
+  return font.TextSize(std::string_view(text.c_str() + line_start, n)).width;
+}
+
+/**
+ * Width of checkbox + gap after it (must match #RenderCheckboxSegment).
+ */
+[[gnu::pure]]
+static int
+CheckboxPrefixWidth(const Font &font) noexcept
+{
+  const int text_line_height = font.GetLineSpacing();
+  const int box_margin = Layout::ScalePenWidth(2);
+  const int box_size =
+    IsTouchLayout()
+      ? std::max(text_line_height - box_margin,
+                 static_cast<int>(Layout::GetMinimumControlHeight()) / 2)
+      : text_line_height - box_margin * 2;
+  const int box_gap = Layout::Scale(4);
+  return box_size + box_gap;
+}
+
+/**
+ * Horizontal distance from content #padding to where body text begins on the
+ * first line of a list paragraph (same as x after drawing the list prefix).
+ */
+[[gnu::pure]]
+static int
+ComputeListBodyOffsetFromPadding(const Font &font,
+                                 const SegmentedLine &first_line,
+                                 const std::string &text,
+                                 std::size_t line_start,
+                                 std::size_t line_length,
+                                 int list_indent) noexcept
+{
+  if (!first_line.segments.empty()) {
+    const auto &first = first_line.segments.front();
+    if (first.IsListItem())
+      return list_indent + font.TextSize("- ").width +
+             font.TextSize(" ").width;
+    if (first.IsCheckbox())
+      return list_indent + CheckboxPrefixWidth(font);
+  }
+  if (TextStartsWithNumberedList(text, line_start, line_length))
+    return MeasureNumberedListPrefixWidth(font, text, line_start,
+                                          line_length);
+
+  return list_indent;
+}
+
 void
 RichTextWindow::EnsureSegmentedLines() const noexcept
 {
@@ -514,36 +601,31 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
   /* Track whether the current paragraph is a list item so we can
      mark continuation (wrapped) lines for hanging-indent rendering. */
   bool in_list_paragraph = false;
+  int current_list_hang = 0;
   const auto &text = parsed.text;
 
-  /* Check if a paragraph starts with a numbered list marker
-     (e.g. "1. ", "12. ") in the processed text.  These are not
-     tracked by the markdown parser as styled spans. */
-  auto StartsWithNumberedList = [&text](std::size_t start,
-                                        std::size_t length) noexcept {
-    const std::size_t end = start + length;
-    std::size_t i = start;
-    if (i >= end || text[i] < '0' || text[i] > '9')
-      return false;
-    while (i < end && text[i] >= '0' && text[i] <= '9')
-      ++i;
-    return i < end && text[i] == '.' &&
-           i + 1 < end && text[i + 1] == ' ';
-  };
+  const int list_indent =
+    (font != nullptr) ? font->TextSize("  ").width : 0;
 
   /* Detect if a new paragraph starts with a list marker, checkbox,
      or numbered item so wrapped continuation lines get indented. */
   auto IsListParagraphStart =
-    [&StartsWithNumberedList](const SegmentedLine &seg_line,
-                              std::size_t line_start,
-                              std::size_t line_length) noexcept {
+    [&text](const SegmentedLine &seg_line,
+            std::size_t line_start,
+            std::size_t line_length) noexcept {
     if (!seg_line.segments.empty()) {
       const auto &first = seg_line.segments.front();
       if (first.IsListItem() || first.IsCheckbox())
         return true;
     }
-    return StartsWithNumberedList(line_start, line_length);
+    return TextStartsWithNumberedList(text, line_start, line_length);
   };
+
+  /* Plain-text "- " bullet (e.g. Credits NEWS without Markdown). */
+  auto PlainLineStartsWithBullet =
+    [&text](std::size_t start, std::size_t length) noexcept {
+      return length >= 2 && text[start] == '-' && text[start + 1] == ' ';
+    };
 
   // If no links and no styles, each line is a single normal segment
   if (parsed.links.empty() && parsed.styles.empty()) {
@@ -555,11 +637,24 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
       if (line.length > 0)
         seg_line.segments.push_back({line.start, line.length, SIZE_MAX, TextStyle::Normal});
 
-      if (is_new_para)
+      if (is_new_para) {
         in_list_paragraph =
-          IsListParagraphStart(seg_line, line.start, line.length);
-      else if (in_list_paragraph)
+          IsListParagraphStart(seg_line, line.start, line.length) ||
+          PlainLineStartsWithBullet(line.start, line.length);
+        if (in_list_paragraph && font != nullptr) {
+          if (TextStartsWithNumberedList(text, line.start, line.length))
+            current_list_hang = MeasureNumberedListPrefixWidth(
+              *font, text, line.start, line.length);
+          else if (PlainLineStartsWithBullet(line.start, line.length))
+            current_list_hang = font->TextSize("- ").width;
+          else
+            current_list_hang = list_indent;
+        } else
+          current_list_hang = 0;
+      } else if (in_list_paragraph) {
         seg_line.is_list_continuation = true;
+        seg_line.list_hang_offset = current_list_hang;
+      }
 
       segmented_lines->push_back(std::move(seg_line));
     }
@@ -606,8 +701,14 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
     if (is_new_para) {
       in_list_paragraph =
         IsListParagraphStart(seg_line, line.start, line.length);
+      if (in_list_paragraph && font != nullptr)
+        current_list_hang = ComputeListBodyOffsetFromPadding(
+          *font, seg_line, text, line.start, line.length, list_indent);
+      else
+        current_list_hang = 0;
     } else if (in_list_paragraph) {
       seg_line.is_list_continuation = true;
+      seg_line.list_hang_offset = current_list_hang;
     }
 
     segmented_lines->push_back(std::move(seg_line));
@@ -944,8 +1045,8 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
       y + (cur_line_height - effective_text_height) / 2;
     int x = padding;
     if (line.is_list_continuation) {
-      /* Hanging indent for wrapped continuation of a list item */
-      x += list_indent;
+      /* Align with body text after bullet / "1. " on the first line */
+      x += line.list_hang_offset > 0 ? line.list_hang_offset : list_indent;
     } else if (!line.segments.empty()) {
       const TextSegment &first_seg = line.segments.front();
       if (first_seg.IsCheckbox() || first_seg.IsListItem())
