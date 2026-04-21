@@ -8,6 +8,12 @@ namespace UI { class SingleWindow; }
 void dlgBasicSettingsShowModal();
 
 void dlgChecklistShowModal();
+
+/**
+ * Called from #SettingsLeave when the checklist file path in Site Files
+ * was saved so the next checklist open uses the new profile entry.
+ */
+void dlgChecklistNotifySiteFileChanged() noexcept;
 void dlgConfigurationShowModal();
 void dlgConfigFontsShowModal();
 

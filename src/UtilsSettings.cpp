@@ -54,6 +54,7 @@ bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
 bool FlarmFileChanged = false;
 bool RaspFileChanged = false;
+bool ChecklistFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
 bool require_restart;
@@ -72,6 +73,7 @@ SettingsEnter() noexcept
   WaypointFileChanged = false;
   FlarmFileChanged = false;
   RaspFileChanged = false;
+  ChecklistFileChanged = false;
   InputFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
@@ -188,6 +190,9 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (RaspFileChanged)
     DataGlobals::SetRasp(LoadConfiguredRasp(false));
+
+  if (ChecklistFileChanged)
+    dlgChecklistNotifySiteFileChanged();
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
