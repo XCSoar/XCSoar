@@ -2,9 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "MarkdownParser.hpp"
+#include "RadioFrequency.hpp"
+#include "util/StringCompare.hxx"
 #include "util/UriSchemes.hpp"
 
 #include <cstring>
+#include <string_view>
 
 /**
  * Check if character can be part of a URL.
@@ -170,6 +173,46 @@ SkipListMarker(const char *str) noexcept
   if (*str == ' ' || *str == '\t')
     ++str;
   return str;
+}
+
+/**
+ * For vhf: links, replace display_text with "name - MHz" or "MHz" only;
+ * keeps url unchanged. Sets link.end from display length.
+ */
+static void
+FinishVhfMarkdownLink(MarkdownLink &link)
+{
+  if (!StringStartsWith(link.url.c_str(), "vhf:")) {
+    link.end = link.start + link.display_text.size();
+    return;
+  }
+
+  const char *u = link.url.c_str();
+  const char *hash = std::strchr(u, '#');
+  if (hash == nullptr) {
+    link.end = link.start + link.display_text.size();
+    return;
+  }
+
+  const std::string_view mhz_part(u + 4, std::size_t(hash - (u + 4)));
+  RadioFrequency rf = RadioFrequency::Parse(mhz_part);
+  if (!rf.IsDefined()) {
+    link.end = link.start + link.display_text.size();
+    return;
+  }
+
+  char buf[32];
+  if (rf.Format(buf, sizeof(buf)) == nullptr) {
+    link.end = link.start + link.display_text.size();
+    return;
+  }
+
+  if (!link.station_name.empty())
+    link.display_text = link.station_name + " - " + buf + " MHz";
+  else
+    link.display_text = std::string(buf) + " MHz";
+
+  link.end = link.start + link.display_text.size();
 }
 
 ParsedMarkdown
@@ -339,7 +382,9 @@ ParseMarkdown(const char *input)
                 link.start = result.text.size();
                 link.display_text.assign(link_text_begin, link_text_end);
                 link.url.assign(url_begin, url_end);
-                link.end = link.start + link.display_text.size();
+                if (StringStartsWith(link.url.c_str(), "vhf:"))
+                  link.station_name.assign(link_text_begin, link_text_end);
+                FinishVhfMarkdownLink(link);
 
                 result.text.append(link.display_text);
                 result.links.push_back(std::move(link));
@@ -377,7 +422,7 @@ ParseMarkdown(const char *input)
               link.start = result.text.size();
               link.display_text.assign(url_start, url_end);
               link.url.assign(url_start, url_end);
-              link.end = link.start + link.display_text.size();
+              FinishVhfMarkdownLink(link);
 
               result.text.append(link.display_text);
               result.links.push_back(std::move(link));
@@ -500,7 +545,9 @@ ParseMarkdown(const char *input)
           link.start = result.text.size();
           link.display_text.assign(link_text_begin, link_text_end);
           link.url.assign(url_begin, url_end);
-          link.end = link.start + link.display_text.size();
+          if (StringStartsWith(link.url.c_str(), "vhf:"))
+            link.station_name.assign(link_text_begin, link_text_end);
+          FinishVhfMarkdownLink(link);
 
           // Add display text to processed text
           result.text.append(link.display_text);
@@ -541,7 +588,7 @@ ParseMarkdown(const char *input)
         link.start = result.text.size();
         link.display_text.assign(url_start, url_end);
         link.url.assign(url_start, url_end);
-        link.end = link.start + link.display_text.size();
+        FinishVhfMarkdownLink(link);
 
         result.text.append(link.display_text);
         result.links.push_back(std::move(link));

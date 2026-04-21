@@ -123,6 +123,21 @@ Phone and messaging::
     [Email](mailto:pilot@example.com?subject=Flight%20Report)
     [SMS](sms:+1234567890?body=Status%20update)
 
+VHF radio (vhf:)
+~~~~~~~~~~~~~~~~
+
+Set the COM **standby** or **active** frequency in XCSoar (and forward it to
+compatible devices when configured). The link must end with ``#standby`` or
+``#active`` after the MHz value. Use a markdown link ``[name](vhf:…#…)`` so the
+station or service name is stored for the radio; the on-screen label combines
+name and frequency. A short confirmation appears after a successful tap;
+invalid links show a warning.
+
+**Examples**::
+
+    [Tower](vhf:118.650#active)
+    [Information](vhf:122.800#standby)
+
 Messaging Apps
 ~~~~~~~~~~~~~~
 
@@ -245,6 +260,8 @@ Supported URI Schemes
 | ``https://``      | Secure web pages                 | All                    |
 +-------------------+----------------------------------+------------------------+
 | ``xcsoar://``     | Internal dialogs                 | All                    |
++-------------------+----------------------------------+------------------------+
+| ``vhf:``          | Set COM standby or active        | All                    |
 +-------------------+----------------------------------+------------------------+
 | ``tel:``          | Phone calls                      | Mobile, Desktop*       |
 +-------------------+----------------------------------+------------------------+

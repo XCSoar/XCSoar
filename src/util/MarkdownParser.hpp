@@ -52,6 +52,12 @@ struct MarkdownLink {
 
   /** The URL to open when activated */
   std::string url;
+
+  /**
+   * For vhf: links from [text](url): original bracket text for radio name;
+   * empty otherwise.
+   */
+  std::string station_name;
 };
 
 /**
@@ -130,13 +136,12 @@ struct ParsedMarkdown {
  * - List items: - item or * item (at line start)
  * - Checkboxes: - [ ] unchecked, - [x] checked (at line start)
  * - Markdown links: [display text](url)
- * - Raw URLs: http://, https://, xcsoar://
+ * - Raw URLs: http://, https://, xcsoar://, vhf:
  * - Admonitions: !!! warning, !!! note, !!! important, !!! tip,
  *   !!! caution (at line start; colours the next heading)
  *
  * @param input The raw text to parse
  * @return Processed text with extracted links and style spans
  */
-[[gnu::pure]]
 ParsedMarkdown
 ParseMarkdown(const char *input);

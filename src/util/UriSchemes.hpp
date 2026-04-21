@@ -33,6 +33,7 @@ static constexpr UriScheme kUriSchemes[] = {
   {"http://", 7, true},
   {"skype:", 6, true},
   {"tg://", 5, true},
+  {"vhf:", 4, false},
   {"sms:", 4, true},
   {"tel:", 4, true},
   {"geo:", 4, true},
@@ -59,7 +60,7 @@ FindUriScheme(const char *str) noexcept
  * messaging apps (sms, whatsapp, signal, telegram), geo locations,
  * video calls (skype, facetime), and local files (file://).
  *
- * Does NOT include xcsoar:// internal links.
+ * Does NOT include xcsoar:// or vhf: internal links.
  */
 [[gnu::pure]]
 static inline bool
