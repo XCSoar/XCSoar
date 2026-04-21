@@ -312,6 +312,14 @@ constexpr std::string_view WaveAssistant = "WaveAssistant";
 constexpr std::string_view MasterAudioVolume = "MasterAudioVolume";
 
 constexpr std::string_view RaspFile = "RaspFile";
+constexpr std::string_view XCThermEnabled = "XCThermEnabled";
+constexpr std::string_view XCThermShowOnMainMap = "XCThermShowOnMainMap";
+constexpr std::string_view XCThermEmail = "XCThermEmail";
+constexpr std::string_view XCThermPassword = "XCThermPassword";
+constexpr std::string_view XCThermModel = "XCThermModel";
+constexpr std::string_view XCThermParameter = "XCThermParameter";
+constexpr std::string_view XCThermWaveHeight = "XCThermWaveHeight";
+constexpr std::string_view XCThermVerticalWindAGL = "XCThermVerticalWindAGL";
 
 constexpr std::string_view StratuxHorizontalRange = "StratuxHorizontalRange";
 constexpr std::string_view StratuxVerticalRange = "StratuxVerticalRange";

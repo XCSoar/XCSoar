@@ -25,6 +25,10 @@ enum ControlIndex {
 
 #ifdef HAVE_HTTP
   ENABLE_TIM,
+  XCTHERM_ENABLED,
+  XCTHERM_SHOW_ON_MAIN_MAP,
+  XCTHERM_EMAIL,
+  XCTHERM_PASSWORD,
 #endif
 };
 
@@ -69,6 +73,22 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean("Thermal Information Map",
              _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
              settings.enable_tim);
+
+  AddBoolean("XCTherm enabled",
+             "Enable XCTherm wave forecast download and overlay.",
+             settings.xctherm.enabled);
+
+  AddBoolean("XCTherm overlay on map",
+             "Show XCTherm forecast overlay on normal map pages.",
+             settings.xctherm.show_on_main_map);
+
+  AddText("XCTherm email",
+          "Email address for your XCTherm account.",
+          settings.xctherm.credentials.email);
+
+  AddPassword("XCTherm password",
+              "Password for your XCTherm account.",
+              settings.xctherm.credentials.password);
 #endif
 }
 
@@ -101,6 +121,19 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 #ifdef HAVE_HTTP
   changed |= SaveValue(ENABLE_TIM, ProfileKeys::EnableThermalInformationMap,
                        settings.enable_tim);
+
+  changed |= SaveValue(XCTHERM_ENABLED, ProfileKeys::XCThermEnabled,
+                       settings.xctherm.enabled);
+
+  changed |= SaveValue(XCTHERM_SHOW_ON_MAIN_MAP,
+                       ProfileKeys::XCThermShowOnMainMap,
+                       settings.xctherm.show_on_main_map);
+
+  changed |= SaveValue(XCTHERM_EMAIL, ProfileKeys::XCThermEmail,
+                       settings.xctherm.credentials.email);
+
+  changed |= SaveValue(XCTHERM_PASSWORD, ProfileKeys::XCThermPassword,
+                       settings.xctherm.credentials.password);
 #endif
 
   _changed |= changed;
