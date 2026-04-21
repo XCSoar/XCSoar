@@ -37,6 +37,9 @@ Version 7.45 - not yet released
     pager pages (same behaviour as arrow keys); wiring lives in
     ArrowPagerWidget::Prepare; red trail while drawing the swipe; fix crash when
     swiping (pager change deferred until after mouse-up) #2122 #2414
+  - Quick Guide "What's New": release notes are Markdown generated at build time
+    from NEWS.txt (headings + merged list lines) instead of truncating the
+    gzipped file at runtime
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or
