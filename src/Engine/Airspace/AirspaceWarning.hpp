@@ -4,6 +4,7 @@
 #pragma once
 
 #include "AirspaceInterceptSolution.hpp"
+#include "AirspaceWarningInterval.hpp"
 #include "Ptr.hpp"
 
 #include <chrono>
@@ -48,6 +49,17 @@ private:
   bool is_exit_warning = false;
   bool expired = true;
   bool expired_last = true;
+
+  /**
+   * Distance intervals along predicted path, one per
+   * prediction method.  Reset each cycle in SaveState().
+   */
+  AirspaceWarningInterval interval_task_ =
+    AirspaceWarningInterval::Invalid();
+  AirspaceWarningInterval interval_filter_ =
+    AirspaceWarningInterval::Invalid();
+  AirspaceWarningInterval interval_glide_ =
+    AirspaceWarningInterval::Invalid();
 
   static constexpr auto null_acktime = Duration::max();
 
@@ -255,6 +267,46 @@ public:
   [[gnu::pure]]
   bool IsExitWarning() const noexcept {
     return is_exit_warning;
+  }
+
+  /**
+   * Set the distance interval for a prediction method.
+   *
+   * @param method WARNING_TASK, WARNING_FILTER, or WARNING_GLIDE
+   */
+  void SetInterval(State method,
+                   const AirspaceWarningInterval &iv) noexcept;
+
+  /**
+   * Get the distance interval for a prediction method.
+   */
+  [[gnu::pure]]
+  const AirspaceWarningInterval &GetInterval(
+      State method) const noexcept;
+
+  /**
+   * Check whether a valid interval exists for a method.
+   */
+  [[gnu::pure]]
+  bool HasInterval(State method) const noexcept;
+
+  /**
+   * Force warning state to a specific value.  Used only by
+   * clearance post-processing to suppress fully-covered
+   * warnings.
+   */
+  void ForceState(State s) noexcept {
+    state = s;
+  }
+
+  /**
+   * Replace the intercept solution directly.  Used by
+   * clearance post-processing after interval subtraction
+   * adjusts the effective warning point.
+   */
+  void SetSolution(
+      const AirspaceInterceptSolution &s) noexcept {
+    solution = s;
   }
 
   /**
