@@ -13,6 +13,9 @@ AirspaceWarning::SaveState() noexcept
   state = WARNING_CLEAR;
   expired_last = expired;
   is_exit_warning = false;
+  interval_task_ = AirspaceWarningInterval::Invalid();
+  interval_filter_ = AirspaceWarningInterval::Invalid();
+  interval_glide_ = AirspaceWarningInterval::Invalid();
 }
 
 void
@@ -136,6 +139,54 @@ AirspaceWarning::AcknowledgeWarning(const bool set) noexcept
     acktime_warning = null_acktime;
   else
     acktime_warning = {};
+}
+
+void
+AirspaceWarning::SetInterval(
+    const State method,
+    const AirspaceWarningInterval &iv) noexcept
+{
+  switch (method) {
+  case WARNING_TASK:
+    interval_task_ = iv;
+    break;
+  case WARNING_FILTER:
+    interval_filter_ = iv;
+    break;
+  case WARNING_GLIDE:
+    interval_glide_ = iv;
+    break;
+  case WARNING_CLEAR:
+  case WARNING_INSIDE:
+    break;
+  }
+}
+
+const AirspaceWarningInterval &
+AirspaceWarning::GetInterval(const State method) const noexcept
+{
+  switch (method) {
+  case WARNING_TASK:
+    return interval_task_;
+  case WARNING_FILTER:
+    return interval_filter_;
+  case WARNING_GLIDE:
+    return interval_glide_;
+  case WARNING_CLEAR:
+  case WARNING_INSIDE:
+    break;
+  }
+
+  /* static invalid instance for unsupported states */
+  static constexpr auto invalid =
+    AirspaceWarningInterval::Invalid();
+  return invalid;
+}
+
+bool
+AirspaceWarning::HasInterval(const State method) const noexcept
+{
+  return GetInterval(method).IsValid();
 }
 
 bool
