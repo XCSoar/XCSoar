@@ -47,7 +47,7 @@ struct FocusItem {
  * - Headings: # H1, ## H2, ### H3
  * - List items: - item or * item
  * - Markdown links: [display text](url)
- * - Raw URL detection: http://, https://, xcsoar://
+ * - Raw URL detection: http://, https://, xcsoar://, vhf:
  * - Keyboard and mouse navigation (inherited from LinkableWindow)
  *
  * Keyboard navigation:
@@ -355,7 +355,7 @@ protected:
 
   /**
    * Called when a link is activated (clicked or Enter pressed).
-   * Override to handle custom URI schemes (e.g., xcsoar://).
+   * Override to handle custom URI schemes (e.g., xcsoar://, vhf:).
    * Default implementation handles http:// and https:// only.
    * @return true if the link was handled
    */

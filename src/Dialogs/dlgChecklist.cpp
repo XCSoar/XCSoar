@@ -161,7 +161,8 @@ dlgChecklistShowModal()
         "- [ ] %s\n"
         "- [ ] %s\n"
         "- [ ] %s\n"
-        "- [ ] %s",
+        "- [ ] %s\n"
+        "- [ ] %s [%s](vhf:122.800#standby)",
         _("Getting Started"),
         _("Download the example checklist or create your own:"),
         _("Download Example"),
@@ -173,7 +174,9 @@ dlgChecklistShowModal()
         N_("**Bold** and # Headings"),
         _("Clickable links"),
         _("Phone: tel: / SMS: sms: / Email: mailto:"),
-        _("Maps: geo:47.5,8.5"));
+        _("Maps: geo:47.5,8.5"),
+        _("Set standby from a link"),
+        _("Information"));
       checklist.emplace_back(ChecklistPage{
           _("No checklist loaded"),
           body.c_str(),

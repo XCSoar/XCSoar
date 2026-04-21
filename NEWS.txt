@@ -29,6 +29,10 @@ Version 7.45 - not yet released
     cursor keys and the strip has keyboard focus (or always on devices without
     cursor keys, where the indicator is informational only)
   - checklist rich text: Enter on a checkbox advances focus like Down #2405
+  - checklist/help markdown: vhf:…#standby / vhf:…#active links set COM standby or
+    active (optional station name in [text](url); label shows name and MHz);
+    confirmation after tap; documented in doc/checklist.rst; example on the
+    default getting-started checklist
   - checklist, credits, Quick Guide, configuration: horizontal swipe to flip
     pager pages (same behaviour as arrow keys); wiring lives in
     ArrowPagerWidget::Prepare; red trail while drawing the swipe; fix crash when

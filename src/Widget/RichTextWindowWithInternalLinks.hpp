@@ -5,6 +5,7 @@
 
 #include "ui/control/RichTextWindow.hpp"
 #include "Dialogs/InternalLink.hpp"
+#include "Dialogs/VhfLink.hpp"
 #include "util/UriSchemes.hpp"
 #include "system/OpenLink.hpp"
 #include "LogFile.hpp"
@@ -12,7 +13,7 @@
 #include <functional>
 
 /**
- * A RichTextWindow subclass that handles xcsoar:// internal links
+ * A RichTextWindow subclass that handles xcsoar:// and vhf: internal links
  * in addition to http:// and https:// external links.
  *
  * This class lives in the Widget layer (not ui/control) because it
@@ -39,6 +40,12 @@ protected:
     const char *url = links[index].url.c_str();
 
     try {
+      const char *station_name = links[index].station_name.empty()
+        ? nullptr
+        : links[index].station_name.c_str();
+      if (HandleVhfLink(url, station_name))
+        return true;
+
       // Handle internal xcsoar:// links
       if (StringStartsWith(url, "xcsoar://")) {
         bool result = HandleInternalLink(url);

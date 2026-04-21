@@ -19,11 +19,12 @@ struct DialogLook;
  * - List items: - item or * item
  * - Checkboxes: - [ ] unchecked, - [x] checked
  * - Links: [display text](url)
- * - Raw URLs: http://, https://, xcsoar://
+ * - Raw URLs: http://, https://, xcsoar://, vhf:
  *
  * Link handling:
  * - http:// and https:// URLs open in browser
  * - xcsoar:// URLs trigger internal dialogs (see Dialogs/InternalLink.hpp)
+ * - vhf:…#standby / vhf:…#active set COM frequencies (see Dialogs/VhfLink.hpp)
  *
  * Use with VScrollWidget for scrolling support.
  */
