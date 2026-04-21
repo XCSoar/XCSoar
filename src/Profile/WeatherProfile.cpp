@@ -32,5 +32,15 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 
 #ifdef HAVE_HTTP
   map.Get(ProfileKeys::EnableThermalInformationMap, settings.enable_tim);
+  map.Get(ProfileKeys::XCThermEnabled, settings.xctherm.enabled);
+  map.Get(ProfileKeys::XCThermShowOnMainMap, settings.xctherm.show_on_main_map);
 #endif
+
+  map.Get(ProfileKeys::XCThermEmail, settings.xctherm.credentials.email);
+  map.Get(ProfileKeys::XCThermPassword, settings.xctherm.credentials.password);
+  map.Get(ProfileKeys::XCThermModel, settings.xctherm.model);
+  map.Get(ProfileKeys::XCThermParameter, settings.xctherm.parameter);
+  map.Get(ProfileKeys::XCThermWaveHeight, settings.xctherm.wave_height);
+  map.Get(ProfileKeys::XCThermVerticalWindAGL,
+          settings.xctherm.vertical_wind_agl);
 }
