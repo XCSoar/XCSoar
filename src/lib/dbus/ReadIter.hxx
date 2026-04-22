@@ -11,106 +11,118 @@
 namespace ODBus {
 
 class ReadMessageIter : public MessageIter {
-	struct RecurseTag {};
-	ReadMessageIter(RecurseTag, ReadMessageIter &parent) noexcept {
-		dbus_message_iter_recurse(&parent.iter, &iter);
-	}
+  struct RecurseTag {};
+  ReadMessageIter(RecurseTag, ReadMessageIter &parent) noexcept {
+    dbus_message_iter_recurse(&parent.iter, &iter);
+  }
 
 public:
-	explicit ReadMessageIter(DBusMessage &msg) noexcept {
-		dbus_message_iter_init(&msg, &iter);
-	}
+  explicit ReadMessageIter(DBusMessage &msg) noexcept {
+    dbus_message_iter_init(&msg, &iter);
+  }
 
-	bool HasNext() noexcept {
-		return dbus_message_iter_has_next(&iter);
-	}
+  bool HasNext() noexcept {
+    return dbus_message_iter_has_next(&iter);
+  }
 
-	bool Next() noexcept {
-		return dbus_message_iter_next(&iter);
-	}
+  bool Next() noexcept {
+    return dbus_message_iter_next(&iter);
+  }
 
-	int GetArgType() noexcept {
-		return dbus_message_iter_get_arg_type(&iter);
-	}
+  int GetArgType() noexcept {
+    return dbus_message_iter_get_arg_type(&iter);
+  }
 
-	const char *GetSignature() noexcept {
-		return dbus_message_iter_get_signature(&iter);
-	}
+  /**
+   * Valid when #GetArgType() is #DBUS_TYPE_ARRAY: the element type
+   * (e.g. #DBUS_TYPE_BYTE for a byte array, #DBUS_TYPE_STRING for
+   * an array of strings).
+   */
+  [[gnu::pure]]
+  int GetArrayElementType() const noexcept
+  {
+    return dbus_message_iter_get_element_type(
+      const_cast<DBusMessageIter *>(&iter));
+  }
 
-	void GetBasic(void *value) noexcept {
-		dbus_message_iter_get_basic(&iter, value);
-	}
+  const char *GetSignature() noexcept {
+    return dbus_message_iter_get_signature(&iter);
+  }
 
-	bool GetBool() noexcept {
-		dbus_bool_t value;
-		GetBasic(&value);
-		return value;
-	}
+  void GetBasic(void *value) noexcept {
+    dbus_message_iter_get_basic(&iter, value);
+  }
 
-	const char *GetString() noexcept {
-		const char *value;
-		GetBasic(&value);
-		return value;
-	}
+  bool GetBool() noexcept {
+    dbus_bool_t value;
+    GetBasic(&value);
+    return value;
+  }
 
-	template<typename T>
-	std::span<const T> GetFixedArray() noexcept {
-		void *value;
-		int n_elements;
-		dbus_message_iter_get_fixed_array(&iter, &value, &n_elements);
-		return {(const T *)value, size_t(n_elements)};
-	}
+  const char *GetString() noexcept {
+    const char *value;
+    GetBasic(&value);
+    return value;
+  }
 
-	/**
-	 * Create a new iterator which recurses into a container
-	 * value.
-	 */
-	ReadMessageIter Recurse() noexcept {
-		return {RecurseTag(), *this};
-	}
+  template<typename T>
+  std::span<const T> GetFixedArray() noexcept {
+    void *value;
+    int n_elements;
+    dbus_message_iter_get_fixed_array(&iter, &value, &n_elements);
+    return {(const T *)value, size_t(n_elements)};
+  }
 
-	/**
-	 * Invoke a function for each element (including the current
-	 * one), as long as the argument type is the specified one.
-	 */
-	template<typename F>
-	void ForEach(int arg_type, F &&f) {
-		for (; GetArgType() == arg_type; Next())
-			f(*this);
-	}
+  /**
+   * Create a new iterator which recurses into a container
+   * value.
+   */
+  ReadMessageIter Recurse() noexcept {
+    return {RecurseTag(), *this};
+  }
 
-	/**
-	 * Wrapper for ForEach() which passes a recursed iterator for
-	 * each element.
-	 */
-	template<typename F>
-	void ForEachRecurse(int arg_type, F &&f) {
-		ForEach(arg_type, [&f](auto &&i){
-				f(i.Recurse());
-			});
-	}
+  /**
+   * Invoke a function for each element (including the current
+   * one), as long as the argument type is the specified one.
+   */
+  template<typename F>
+  void ForEach(int arg_type, F &&f) {
+    for (; GetArgType() == arg_type; Next())
+      f(*this);
+  }
 
-	/**
-	 * Invoke a function for each name/value pair (string/variant)
-	 * in a dictionary (array containing #DBUS_TYPE_DICT_ENTRY).
-	 * The function gets two parameters: the property name (as C
-	 * string) and the variant value (as #ReadMessageIter).
-	 */
-	template<typename F>
-	void ForEachProperty(F &&f) {
-		ForEachRecurse(DBUS_TYPE_DICT_ENTRY, [&f](auto &&i){
-				if (i.GetArgType() != DBUS_TYPE_STRING)
-					return;
+  /**
+   * Wrapper for ForEach() which passes a recursed iterator for
+   * each element.
+   */
+  template<typename F>
+  void ForEachRecurse(int arg_type, F &&f) {
+    ForEach(arg_type, [&f](auto &&i){
+        f(i.Recurse());
+      });
+  }
 
-				const char *name = i.GetString();
-				i.Next();
+  /**
+   * Invoke a function for each name/value pair (string/variant)
+   * in a dictionary (array containing #DBUS_TYPE_DICT_ENTRY).
+   * The function gets two parameters: the property name (as C
+   * string) and the variant value (as #ReadMessageIter).
+   */
+  template<typename F>
+  void ForEachProperty(F &&f) {
+    ForEachRecurse(DBUS_TYPE_DICT_ENTRY, [&f](auto &&i){
+        if (i.GetArgType() != DBUS_TYPE_STRING)
+          return;
 
-				if (i.GetArgType() != DBUS_TYPE_VARIANT)
-					return;
+        const char *name = i.GetString();
+        i.Next();
 
-				f(name, i.Recurse());
-			});
-	}
+        if (i.GetArgType() != DBUS_TYPE_VARIANT)
+          return;
+
+        f(name, i.Recurse());
+      });
+  }
 };
 
 } /* namespace ODBus */
