@@ -13,7 +13,7 @@
  *
  * Two entry points:
  *  - IsInternetReachable()  — always triggers a probe (if none pending).
- *  - PollInternetReachable() — throttled to one probe every 30 s.
+ *  - PollInternetReachable() — throttled to one probe every few seconds.
  */
 
 #ifdef HAVE_NET_STATE
@@ -27,7 +27,9 @@ IsInternetReachable() noexcept;
 
 /**
  * Throttled variant for callers that poll every frame (e.g. render
- * thread).  Only triggers a probe every 30 seconds.
+ * thread).  Uses #GetNetState on every call.  The TCP connect probe is
+ * throttled to one attempt every few seconds while the link is up, but
+ * a change in #GetNetState resets the throttle.
  */
 bool
 PollInternetReachable() noexcept;

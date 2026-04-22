@@ -34,6 +34,16 @@ GetNetState()
 #include <cstdio>
 #include <dirent.h>
 #include "system/FileUtil.hpp"
+#  if defined(HAVE_NET_STATE_NM_DBUS)
+#  include "StateNMDbus.hpp"
+#  endif
+#  if defined(HAVE_NET_STATE_CONNMAN_DBUS)
+#  include "StateConnmanDbus.hpp"
+#  endif
+#  if defined(HAVE_NET_STATE_NM_DBUS) || \
+    defined(HAVE_NET_STATE_CONNMAN_DBUS)
+#  include <optional>
+#  endif
 #endif
 
 #if defined(__APPLE__)
@@ -96,11 +106,20 @@ InitPathMonitor() noexcept
 #endif
 
 /**
- * True if any non-loopback interface in sysfs reports #operstate "up".
- * Used on all Linux when no other backend applies; on #KOBO it is the only
- * option (no NetworkManager or system D-Bus stack to query).
+ * True if a non-loopback, non-virtual (docker/veth/…) interface in sysfs
+ * reports #operstate "up".  Virtual bridges are often "up" while a WiFi
+ * link is off; they must not keep #NetState "connected".  On #KOBO this
+ * is the only link-level source (D-Bus NM path is not used there).
  */
 #if defined(__linux__)
+static bool
+IsContainerOrBridgeIfName(const char *name) noexcept
+{
+  return strncmp(name, "docker", 6) == 0 || strncmp(name, "veth", 4) == 0 ||
+         strncmp(name, "br-", 3) == 0 || strncmp(name, "virbr", 5) == 0 ||
+         strncmp(name, "cni", 3) == 0;
+}
+
 static NetState
 PollNetStateLinuxSysfs() noexcept
 {
@@ -112,6 +131,8 @@ PollNetStateLinuxSysfs() noexcept
   struct dirent *entry;
   while ((entry = readdir(dir)) != nullptr) {
     if (entry->d_name[0] == '.' || strcmp(entry->d_name, "lo") == 0)
+      continue;
+    if (IsContainerOrBridgeIfName(entry->d_name))
       continue;
 
     char path[64];
@@ -133,9 +154,19 @@ static NetState
 PollNetState() noexcept
 {
 #if defined(__linux__)
-  /* Kobo: keep sysfs; there is no NetworkManager on device. If a D-Bus-based
-     check is added for desktop Linux, it must be gated (e.g. !defined(KOBO))
-     and fall back to #PollNetStateLinuxSysfs. */
+#  if defined(HAVE_NET_STATE_NM_DBUS)
+  if (const std::optional<NetState> nm{
+        TryGetNetStateFromNetworkManager()};
+      nm.has_value()) {
+    return *nm;
+  }
+#  endif
+#  if defined(HAVE_NET_STATE_CONNMAN_DBUS)
+  if (const std::optional<NetState> cm{TryGetNetStateFromConnMan()};
+      cm.has_value()) {
+    return *cm;
+  }
+#  endif
   return PollNetStateLinuxSysfs();
 
 #elif defined(_WIN32)
@@ -167,8 +198,16 @@ GetNetState() noexcept
 {
   std::lock_guard<std::mutex> lock(net_state_mutex);
 
+#if defined(__linux__)
+  /* Slightly faster refresh so link up/down and NM updates reach the
+     map icon and reachability after toggling the radio, without waiting
+     two 2s periods for a new sample. */
+  if (last_update.CheckUpdate(std::chrono::seconds(1)))
+    cached_net_state = PollNetState();
+#else
   if (last_update.CheckUpdate(std::chrono::seconds(2)))
     cached_net_state = PollNetState();
+#endif
 
   return cached_net_state;
 }

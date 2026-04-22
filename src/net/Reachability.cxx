@@ -21,10 +21,22 @@
 
 namespace {
 
+/* Re-check interval for #PollInternetReachable: 30s was too slow when
+   #GetNetState still says "connected" after WiFi off; the map icon only
+   updated on the next TCP probe. */
+static constexpr std::chrono::seconds kPollProbeInterval{4};
+
 std::atomic<bool> cached_reachable{false};
 std::atomic<bool> probe_pending{false};
-unsigned fail_count{0};
 PeriodClock last_probe;
+
+/**
+ * Last #GetNetState in #PollInternetReachable (map draw / main; single-thread
+ * w.r.t. this function).  When the value changes, the TCP-probe clock is
+ * reset so a new probe can run without waiting for #kPollProbeInterval
+ * (e.g. UNKNOWN or cached state flipping without a DISCONNECT sample).
+ */
+static NetState last_poll_link_net_state{NetState::UNKNOWN};
 
 bool
 ProbeOnce(uint8_t a, uint8_t b, uint8_t c, uint8_t d) noexcept
@@ -67,12 +79,11 @@ void
 ProbeThread() noexcept
 {
   if (ProbeInternet()) {
-    fail_count = 0;
     cached_reachable.store(true, std::memory_order_relaxed);
   } else {
-    /* require two consecutive failures before reporting unreachable */
-    if (++fail_count >= 2)
-      cached_reachable.store(false, std::memory_order_relaxed);
+    /* One failed probe is enough: e.g. WiFi radio off must drop the
+       map icon on the first check, not after two slow-spaced attempts. */
+    cached_reachable.store(false, std::memory_order_relaxed);
   }
 
   probe_pending.store(false, std::memory_order_release);
@@ -103,7 +114,24 @@ IsInternetReachable() noexcept
 bool
 PollInternetReachable() noexcept
 {
-  if (!last_probe.CheckUpdate(std::chrono::seconds(30)))
+  const NetState ns = GetNetState();
+
+  /* Any change in link-level state: allow a new #IsInternetReachable probe
+     soon.  Without this, only a DISCONNECTED→!DISCONNECTED path reset the
+     clock, so e.g. UNKNOWN or cached state flips could leave a stale
+     #cached_reachable for one #kPollProbeInterval. */
+  if (ns != last_poll_link_net_state) {
+    last_probe.Reset();
+    last_poll_link_net_state = ns;
+  }
+
+  /* No link at OS level: do not use a stale "reachable" from TCP cache. */
+  if (ns == NetState::DISCONNECTED) {
+    cached_reachable.store(false, std::memory_order_relaxed);
+    return false;
+  }
+
+  if (!last_probe.CheckUpdate(kPollProbeInterval))
     return cached_reachable.load(std::memory_order_relaxed);
 
   return IsInternetReachable();
