@@ -7,6 +7,7 @@
 #include "NMEA/Info.hpp"
 #include "lib/curl/Global.hxx"
 #include "LogFile.hpp"
+#include "net/State.hpp"
 
 namespace TIM {
 
@@ -23,6 +24,10 @@ Glue::OnTimer(const NMEAInfo &basic) noexcept
 {
   if (!basic.gps.real || !basic.location_available)
     /* we need a real GPS location */
+    return;
+
+  if (GetNetState() == NetState::DISCONNECTED)
+    /* no link; do not start ThermalInfoMap request (see SkyLines Glue) */
     return;
 
   if (inject_task)
