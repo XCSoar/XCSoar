@@ -33,6 +33,18 @@ public:
 		return dbus_message_iter_get_arg_type(&iter);
 	}
 
+	/**
+	 * Valid when #GetArgType() is #DBUS_TYPE_ARRAY: the element type
+	 * (e.g. #DBUS_TYPE_BYTE for a byte array, #DBUS_TYPE_STRING for
+	 * an array of strings).
+	 */
+	[[gnu::pure]]
+	int GetArrayElementType() const noexcept
+	{
+		return dbus_message_iter_get_element_type(
+			const_cast<DBusMessageIter *>(&iter));
+	}
+
 	const char *GetSignature() noexcept {
 		return dbus_message_iter_get_signature(&iter);
 	}

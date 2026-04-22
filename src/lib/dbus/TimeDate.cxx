@@ -3,10 +3,11 @@
 // author: Max Kellermann <mk@cm4all.com>
 
 #include "TimeDate.hxx"
+#include "CallMethodSync.hxx"
 #include "Connection.hxx"
 #include "Message.hxx"
+#include "Properties.hxx"
 #include "AppendIter.hxx"
-#include "PendingCall.hxx"
 #include "ReadIter.hxx"
 #include "Error.hxx"
 
@@ -17,23 +18,9 @@ IsNTPSynchronized(ODBus::Connection &connection)
 {
 	using namespace ODBus;
 
-	auto msg = Message::NewMethodCall("org.freedesktop.timedate1",
-					  "/org/freedesktop/timedate1",
-					  "org.freedesktop.DBus.Properties",
-					  "Get");
-
-	AppendMessageIter{*msg.Get()}
-		.Append("org.freedesktop.timedate1")
-		.Append("NTPSynchronized");
-
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	Message reply = PropertiesGet(
+		connection, "org.freedesktop.timedate1", "/org/freedesktop/timedate1",
+		"org.freedesktop.timedate1", "NTPSynchronized");
 
 	ReadMessageIter iter = ReadMessageIter{*reply.Get()}.Recurse();
 	return iter.GetBool();
@@ -53,14 +40,7 @@ SetTime(ODBus::Connection &connection,
 	const int64_t usec = std::chrono::duration_cast<std::chrono::microseconds>(t.time_since_epoch()).count();
 	AppendMessageIter{*msg.Get()}.Append(usec).Append(Boolean{false}).Append(Boolean{false});
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	(void)CallMethodSync(connection, msg);
 }
 
 } // namespace TimeDate

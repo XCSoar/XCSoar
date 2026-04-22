@@ -3,10 +3,11 @@
 // author: Max Kellermann <mk@cm4all.com>
 
 #include "Systemd.hxx"
+#include "CallMethodSync.hxx"
 #include "Connection.hxx"
 #include "Message.hxx"
+#include "Properties.hxx"
 #include "AppendIter.hxx"
-#include "PendingCall.hxx"
 #include "ReadIter.hxx"
 #include "Error.hxx"
 #include "util/StringAPI.hxx"
@@ -121,19 +122,12 @@ GetUnitFileState(ODBus::Connection &connection, const char *name)
 
 	AppendMessageIter{*msg.Get()}.Append(name);
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	Message reply = CallMethodSync(connection, msg);
 
 	Error error;
 	const char *state;
 	if (!reply.GetArgs(error, DBUS_TYPE_STRING, &state))
-		error.Throw("StartUnit reply failed");
+		error.Throw("GetUnitFileState reply failed");
 
 	return ParseUnitFileState(state);
 }
@@ -169,14 +163,7 @@ EnableUnitFile(ODBus::Connection &connection, const char *name,
 		.CloseContainer(args);
 	args.Append(Boolean{runtime}).Append(Boolean{force});
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	(void)CallMethodSync(connection, msg);
 }
 
 void
@@ -197,14 +184,7 @@ DisableUnitFile(ODBus::Connection &connection, const char *name,
 		.CloseContainer(args);
 	args.Append(Boolean{runtime});
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	(void)CallMethodSync(connection, msg);
 }
 
 static ActiveState
@@ -238,13 +218,7 @@ GetUnit(ODBus::Connection &connection, const char *name)
 
 	AppendMessageIter{*msg.Get()}.Append(name);
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
+	Message reply = CallMethodSync(connection, msg, false);
 	if (reply.IsError("org.freedesktop.systemd1.NoSuchUnit"))
 		return {};
 
@@ -267,23 +241,9 @@ GetUnitActiveState(ODBus::Connection &connection, const char *name)
 	if (path.empty())
 		return ActiveState::INACTIVE;
 
-	auto msg = Message::NewMethodCall("org.freedesktop.systemd1",
-					  path.c_str(),
-					  "org.freedesktop.DBus.Properties",
-					  "Get");
-
-	AppendMessageIter{*msg.Get()}
-		.Append("org.freedesktop.systemd1.Unit")
-		.Append("ActiveState");
-
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	Message reply = PropertiesGet(
+		connection, "org.freedesktop.systemd1", path.c_str(),
+		"org.freedesktop.systemd1.Unit", "ActiveState");
 
 	ReadMessageIter iter = ReadMessageIter{*reply.Get()}.Recurse();
 	return ParseActiveState(iter.GetString());
@@ -314,14 +274,7 @@ StartUnit(ODBus::Connection &connection,
 
 	AppendMessageIter{*msg.Get()}.Append(name).Append(mode);
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	Message reply = CallMethodSync(connection, msg);
 
 	Error error;
 	const char *object_path;
@@ -344,14 +297,7 @@ StopUnit(ODBus::Connection &connection,
 
 	AppendMessageIter{*msg.Get()}.Append(name).Append(mode);
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	Message reply = CallMethodSync(connection, msg);
 
 	Error error;
 	const char *object_path;
@@ -373,14 +319,7 @@ ResetFailedUnit(ODBus::Connection &connection, const char *name)
 
 	AppendMessageIter{*msg.Get()}.Append(name);
 
-	auto pending = PendingCall::SendWithReply(connection, msg.Get());
-
-	dbus_connection_flush(connection);
-
-	pending.Block();
-
-	Message reply = Message::StealReply(*pending.Get());
-	reply.CheckThrowError();
+	(void)CallMethodSync(connection, msg);
 }
 
 } // namespace Systemd
