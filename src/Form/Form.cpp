@@ -133,6 +133,9 @@ WndForm::OnResize(PixelSize new_size) noexcept
   ContainerWindow::OnResize(new_size);
   UpdateLayout();
   client_area.Move(client_rect);
+
+  if (client_layout_function)
+    client_layout_function();
 }
 
 void

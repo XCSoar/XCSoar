@@ -55,6 +55,12 @@ protected:
   KeyDownFunction key_down_function;
   CharacterFunction character_function;
 
+  /**
+   * If set, invoked from @ref OnResize after the client @ref client_area
+   * is moved, so the dialog can reposition in-dialog controls.
+   */
+  std::function<void()> client_layout_function;
+
   PixelPoint last_drag;
 
   void OnPaint(Canvas &canvas) noexcept override;
@@ -176,6 +182,14 @@ public:
 
   void SetCharacterFunction(CharacterFunction function) {
     character_function = function;
+  }
+
+  void SetClientLayoutFunction(std::function<void()> f) {
+    client_layout_function = std::move(f);
+  }
+
+  void ClearClientLayoutFunction() {
+    client_layout_function = {};
   }
 
   /**
