@@ -25,6 +25,8 @@ Version 7.45 - not yet released
   - terrain: add new terrain shading orientation "fixed (Top Left)"
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
+  - Linux: Config → Setup → Network for WiFi (NetworkManager or ConnMan
+    via D-Bus)
 * calculations
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles

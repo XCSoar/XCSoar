@@ -62,6 +62,7 @@
 #endif
 
 #include "Panels/WeGlideConfigPanel.hpp"
+#include "Panels/NetworkConfigPanel.hpp"
 
 #include <cassert>
 
@@ -134,6 +135,7 @@ static constexpr TabMenuPage setup_pages[] = {
 #ifdef HAVE_VOLUME_CONTROLLER
   { N_("Audio"), CreateAudioConfigPanel },
 #endif
+  { N_("Network"), CreateNetworkConfigPanel },
   { nullptr, nullptr }
 };
 

@@ -385,6 +385,10 @@ public:
   WndProperty *AddEnum(const char *label, const char *help,
                        DataFieldListener *listener=nullptr) noexcept;
 
+  /**
+   * Add a string #DataField (editable).  To show read-only text that you
+   * update with #SetText, use #AddReadOnly instead.
+   */
   WndProperty *AddText(const char *label, const char *help,
                        const char *content,
                        DataFieldListener *listener=nullptr) noexcept;
@@ -510,7 +514,10 @@ public:
   }
 
   /**
-   * Update the text of a multi line control.
+   * Update the text of a read-only label row (no #DataField on the control).
+   * Use with rows from #AddReadOnly (plain string), or #Add (label, help, true)
+   * without a data field.  Do not use for #AddText (string editor), #AddInteger,
+   * #AddEnum, etc.; use #LoadValue / #LoadValueEnum instead.
    */
   void SetText(unsigned i, const char *text) noexcept {
     assert(text != nullptr);
