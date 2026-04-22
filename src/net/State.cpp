@@ -95,14 +95,15 @@ InitPathMonitor() noexcept
 }
 #endif
 
-static NetState
-PollNetState() noexcept
-{
 /**
- * Detect network connectivity by checking the operstate of network interfaces
- * in the sysfs (/sys/class/net) directory.
+ * True if any non-loopback interface in sysfs reports #operstate "up".
+ * Used on all Linux when no other backend applies; on #KOBO it is the only
+ * option (no NetworkManager or system D-Bus stack to query).
  */
 #if defined(__linux__)
+static NetState
+PollNetStateLinuxSysfs() noexcept
+{
   DIR *dir = opendir("/sys/class/net");
   if (dir == nullptr)
     return NetState::UNKNOWN;
@@ -125,6 +126,17 @@ PollNetState() noexcept
 
   closedir(dir);
   return result;
+}
+#endif
+
+static NetState
+PollNetState() noexcept
+{
+#if defined(__linux__)
+  /* Kobo: keep sysfs; there is no NetworkManager on device. If a D-Bus-based
+     check is added for desktop Linux, it must be gated (e.g. !defined(KOBO))
+     and fall back to #PollNetStateLinuxSysfs. */
+  return PollNetStateLinuxSysfs();
 
 #elif defined(_WIN32)
   DWORD flags = 0;
