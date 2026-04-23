@@ -38,7 +38,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Kobo/SystemDialog.cpp \
 	$(SRC)/Kobo/ToolsDialog.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \
-	$(SRC)/Kobo/WifiDialog.cpp \
+	$(SRC)/Dialogs/WifiDialog.cpp \
 	$(SRC)/Kobo/FakeSymbols.cpp \
 	$(SRC)/Kobo/KoboMenu.cpp
 KOBO_MENU_DEPENDS = WIDGET FORM EVENT RESOURCE ASYNC LIBNET OS IO THREAD MATH UTIL LIBCRYPTO

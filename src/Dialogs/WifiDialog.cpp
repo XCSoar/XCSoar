@@ -13,7 +13,7 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
-#include "PlatformWifiBackend.hpp"
+#include "Kobo/PlatformWifiBackend.hpp"
 #include "net/IPv4Address.hxx"
 #include "ui/event/PeriodicTimer.hpp"
 
@@ -41,7 +41,7 @@ class WifiListWidget final
 
   TwoTextRowsRenderer row_renderer;
 
-  UniqueWifiBackend backend_;
+  std::unique_ptr<WifiBackend> backend_;
 
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
@@ -55,7 +55,7 @@ public:
   void CreateButtons(WidgetDialog &dialog) {
     dialog.AddButton(_("Scan"), [this](){
       try {
-        EnsureConnected();
+        backend_->EnsureConnected();
         backend_->Scan();
         UpdateList();
       } catch (...) {
@@ -96,13 +96,6 @@ public:
   }
 
 private:
-  /**
-   * Ensure that we're connected to wpa_supplicant.
-   *
-   * Throws on error.
-   */
-  void EnsureConnected();
-
   [[gnu::pure]]
   NetworkInfo *FindByID(int id) noexcept;
 
@@ -203,8 +196,6 @@ WifiListWidget::Connect()
   if (backend_ == nullptr)
     return;
 
-  EnsureConnected();
-
   const unsigned i = GetList().GetCursorIndex();
   if (i >= networks.size())
     return;
@@ -230,12 +221,6 @@ WifiListWidget::Connect()
   }
 
   UpdateList();
-}
-
-void
-WifiListWidget::EnsureConnected()
-{
-  backend_->EnsureConnected();
 }
 
 inline WifiListWidget::NetworkInfo *
@@ -390,9 +375,16 @@ void
 WifiListWidget::UpdateList()
 {
   status.Clear();
+  networks.clear();
+
+  if (backend_ == nullptr) {
+    GetList().SetLength(0);
+    UpdateButtons();
+    return;
+  }
 
   try {
-    EnsureConnected();
+    backend_->EnsureConnected();
     backend_->Status(status);
 
     for (auto &i : networks)
