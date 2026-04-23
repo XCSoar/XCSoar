@@ -7,7 +7,9 @@
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 #include "UIGlobals.hpp"
+#include "Repository/Glue.hpp"
 #include "UtilsSettings.hpp"
 #include "Waypoint/Patterns.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -23,6 +25,7 @@ enum ControlIndex {
   FlarmFile,
   RaspFile,
   ChecklistFile,
+  UserRepositoriesList
 };
 
 class SiteConfigPanel final : public RowFormWidget {
@@ -104,6 +107,13 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           _("The checklist file containing pre-flight and other checklists."),
           ProfileKeys::ChecklistFile, "*.xcc\0xcsoar-checklist.txt\0",
           FileType::CHECKLIST);
+  
+  const char *user_repositories_list_value = Profile::Get(ProfileKeys::UserRepositoriesList, "");
+
+  AddText(_("User repositories"),
+          _("List of additional user repository URIs, separated by '|' character."),
+          user_repositories_list_value);
+  SetExpertRow(UserRepositoriesList);
 }
 
 bool
@@ -131,9 +141,17 @@ SiteConfigPanel::Save(bool &_changed) noexcept
 
   bool ChecklistFileChanged = SaveValueFileReader(ChecklistFile, ProfileKeys::ChecklistFile);
 
+  const std::string old_repos{Profile::Get(ProfileKeys::UserRepositoriesList, "")};
+  std::string new_repos = old_repos;
+  UserRepositoriesListChanged = SaveValue(
+      UserRepositoriesList, ProfileKeys::UserRepositoriesList, new_repos);
+  if (UserRepositoriesListChanged)
+    PurgeChangedUserRepositoryFiles(old_repos.c_str(), new_repos.c_str());
+
   changed = WaypointFileChanged || AirfieldFileChanged ||
             AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
-            RaspFileChanged || ChecklistFileChanged;
+            RaspFileChanged || ChecklistFileChanged ||
+            UserRepositoriesListChanged;
 
   _changed |= changed;
 
