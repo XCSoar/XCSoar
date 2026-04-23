@@ -91,15 +91,35 @@ type=key
 data=RETURN
 event=Traffic details
 
-# Adjacent F-keys: previous / next (F3 is Flarm on map, overridden on traffic)
+# Traffic radar: F2/F3 zoom in/out, UP/DOWN and F1/F4 = next/prev target
 mode=default.Traffic Display1.Traffic Display2.Traffic
 type=key
-data=F2
+data=UP
+event=Traffic next
+
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
+data=DOWN
 event=Traffic previous
 
 mode=default.Traffic Display1.Traffic Display2.Traffic
 type=key
+data=F1
+event=Traffic previous
+
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
+data=F2
+event=Traffic zoom in
+
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
 data=F3
+event=Traffic zoom out
+
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
+data=F4
 event=Traffic next
 
 ###### pan mode
@@ -154,7 +174,7 @@ location=4
 
 mode=pan
 type=key
-data=F1
+data=F2
 event=Zoom in
 location=5
 
@@ -169,6 +189,42 @@ type=key
 data=RETURN
 event=NearestMapItems
 location=7
+
+# Waypoint image: F2 / F3 = same zoom in/out as map and pan; F1 = reset, F4 optional in custom
+mode=wptimg
+type=key
+data=F1
+event=WaypointImage reset
+
+mode=wptimg
+type=key
+data=F2
+event=WaypointImage magnify
+
+mode=wptimg
+type=key
+data=F3
+event=WaypointImage shrink
+
+mode=wptimg
+type=key
+data=LEFT
+event=WaypointImage left
+
+mode=wptimg
+type=key
+data=RIGHT
+event=WaypointImage right
+
+mode=wptimg
+type=key
+data=UP
+event=WaypointImage up
+
+mode=wptimg
+type=key
+data=DOWN
+event=WaypointImage down
 
 # ------------
 # mode=mc (MacCready adjustment)
@@ -239,70 +295,69 @@ type=key
 data=F1
 event=QuickMenu
 
+# F2/F3: zoom in/out (same F-keys as pan, wptimg, traffic). Former F2…F10 moved to F4…F12.
 mode=default
 type=key
 data=F2
+event=Zoom in
+
+mode=default
+type=key
+data=F3
+event=Zoom out
+
+mode=default
+type=key
+data=F4
 event=Checklist
 event=Mode default
 
 mode=default
 type=key
-data=F3
+data=F5
 event=FlarmTraffic
 event=Mode default
 
 mode=default
 type=key
-data=F4
+data=F6
 event=AirspaceWarnings
 event=Mode default
 
 mode=default
 type=key
-data=F5
+data=F7
 event=Setup Alternates
 event=Mode default
 
 mode=default
 type=key
-data=F6
+data=F8
 event=GotoLookup
 event=Mode default
 
 mode=default
 type=key
-data=F7
+data=F9
 event=Setup Target
 event=Mode default
 
 mode=default
 type=key
-data=F8
+data=F10
 event=Setup Task
 event=Mode default
 
 mode=default
 type=key
-data=F9
+data=F11
 event=Analysis
 event=Mode default
 
 mode=default
 type=key
-data=F10
-event=ThermalAssistant
-event=Mode default
-
-mode=default
-type=key
-data=F11
-event=Status all
-event=Mode default
-
-mode=default
-type=key
 data=F12
-event=Setup Basic
+event=ThermalAssistant
 event=Mode default
 
 mode=default
