@@ -5,10 +5,11 @@
 
 #include "util/StaticString.hxx"
 
-enum WifiSecurity {
-  WPA_SECURITY,
-  WEP_SECURITY,
-  OPEN_SECURITY,
+enum class WifiSecurity {
+  Unknown,
+  WPA,
+  WEP,
+  Open,
 };
 
 enum class WifiAuthMode {
@@ -30,17 +31,26 @@ enum class WifiConnectionState {
   Connected,
 };
 
+enum class WifiNetworkKind {
+  VisibleAccessPoint,
+  SavedProfile,
+  ConnectedNetwork,
+};
+
 [[gnu::const]]
 static constexpr WifiAuthMode
 ToWifiAuthMode(WifiSecurity security) noexcept
 {
   switch (security) {
-  case WPA_SECURITY:
-  case WEP_SECURITY:
+  case WifiSecurity::WPA:
+  case WifiSecurity::WEP:
     return WifiAuthMode::Passphrase;
 
-  case OPEN_SECURITY:
+  case WifiSecurity::Open:
     return WifiAuthMode::Open;
+
+  case WifiSecurity::Unknown:
+    return WifiAuthMode::Unsupported;
   }
 
   return WifiAuthMode::Unsupported;
@@ -60,7 +70,7 @@ struct WifiVisibleNetwork {
   StaticString<32> bssid;
   StaticString<256> ssid;
   signed signal_level;
-  enum WifiSecurity security;
+  WifiSecurity security = WifiSecurity::Unknown;
 };
 
 struct WifiConfiguredNetworkInfo {
@@ -90,24 +100,26 @@ struct WifiNetworkEntry {
   StaticString<32> bssid;
   StaticString<256> ssid;
   signed signal_level = 0;
-  WifiSecurity security = OPEN_SECURITY;
-  WifiAuthMode auth = WifiAuthMode::Unsupported;
+  WifiSecurity security = WifiSecurity::Unknown;
   WifiSignalUnit signal_unit = WifiSignalUnit::Unknown;
+  WifiNetworkKind kind = WifiNetworkKind::VisibleAccessPoint;
   bool is_visible = false;
-  bool is_saved = false;
-  bool is_connected = false;
+  bool can_connect = false;
+  bool can_disconnect = false;
+  bool can_forget = false;
 
   void Clear() {
     profile_id.clear();
     bssid.clear();
     ssid.clear();
     signal_level = 0;
-    security = OPEN_SECURITY;
-    auth = WifiAuthMode::Unsupported;
+    security = WifiSecurity::Unknown;
     signal_unit = WifiSignalUnit::Unknown;
+    kind = WifiNetworkKind::VisibleAccessPoint;
     is_visible = false;
-    is_saved = false;
-    is_connected = false;
+    can_connect = false;
+    can_disconnect = false;
+    can_forget = false;
   }
 };
 
@@ -115,14 +127,12 @@ struct WifiConnectRequest {
   StaticString<256> profile_id;
   StaticString<256> ssid;
   StaticString<64> secret;
-  WifiSecurity security = OPEN_SECURITY;
-  WifiAuthMode auth = WifiAuthMode::Unsupported;
+  WifiSecurity security = WifiSecurity::Unknown;
 
   void Clear() {
     profile_id.clear();
     ssid.clear();
     secret.clear();
-    security = OPEN_SECURITY;
-    auth = WifiAuthMode::Unsupported;
+    security = WifiSecurity::Unknown;
   }
 };
