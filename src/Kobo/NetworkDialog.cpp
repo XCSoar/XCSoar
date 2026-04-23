@@ -4,6 +4,7 @@
 #include "NetworkDialog.hpp"
 #include "Dialogs/WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Kobo/PlatformWifiBackend.hpp"
 #include "UIGlobals.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Language/Language.hpp"
@@ -56,7 +57,7 @@ NetworkWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]
   toggle_wifi_button = AddButton(GetWifiToggleCaption(),
                                  [this](){ ToggleWifi(); });
 
-  wifi_button = AddButton(_("Wifi"), [](){ ShowWifiDialog(); });
+  wifi_button = AddButton(_("Wifi"), [](){ ShowWifiDialog(CreatePlatformWifiBackend()); });
 
   AddButton("Telnet server", [](){ KoboRunTelnetd(); });
 
