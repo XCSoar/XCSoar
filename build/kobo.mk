@@ -30,6 +30,8 @@ KOBO_MENU_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \
+	$(SRC)/Kobo/WPASupplicantBackend.cpp \
+	$(SRC)/Kobo/PlatformWifiBackend.cpp \
 	$(SRC)/Kobo/System.cpp \
 	$(SRC)/Kobo/Kernel.cpp \
 	$(SRC)/Kobo/NetworkDialog.cpp \
