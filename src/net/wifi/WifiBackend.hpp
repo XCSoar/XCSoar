@@ -31,8 +31,8 @@ public:
   /* Name of the network interface used by the backend (e.g. "wlan0"). */
   virtual const char *GetInterfaceName() const = 0;
 
-  /* Whether signal levels returned by this backend are dBm values. */
-  virtual bool IsSignalLevelInDbm() const = 0;
+  /* Signal level unit returned by this backend. */
+  virtual WifiSignalUnit GetSignalUnit() const = 0;
 
   /**
    * Compatibility API for future backends: returns a merged list of visible
@@ -59,9 +59,10 @@ public:
       entry.ssid = visible[i].ssid;
       entry.signal_level = visible[i].signal_level;
       entry.security = visible[i].security;
-      entry.auth = ToWifiAuthMode(visible[i].security);
       entry.signal_unit = status.signal_unit;
+      entry.kind = WifiNetworkKind::VisibleAccessPoint;
       entry.is_visible = true;
+      entry.can_connect = ToWifiAuthMode(visible[i].security) != WifiAuthMode::Unsupported;
     }
 
     auto configured = std::make_unique<WifiConfiguredNetworkInfo[]>(max);
@@ -100,11 +101,14 @@ public:
       }
 
       entry->profile_id = FormatProfileId(network.id);
-      entry->is_saved = true;
+      entry->kind = WifiNetworkKind::SavedProfile;
+      entry->can_connect = false;
+      entry->can_forget = true;
     }
 
     for (std::size_t i = 0; i < count; ++i)
-      dest[i].is_connected = !status.bssid.empty() && dest[i].bssid == status.bssid;
+      if (!status.bssid.empty() && dest[i].bssid == status.bssid)
+        dest[i].kind = WifiNetworkKind::ConnectedNetwork;
 
     return count;
   }
@@ -123,9 +127,7 @@ public:
 
     WifiBackendStatus status;
     status.interface_name = GetInterfaceName();
-    status.signal_unit = IsSignalLevelInDbm()
-      ? WifiSignalUnit::Dbm
-      : WifiSignalUnit::Relative;
+    status.signal_unit = GetSignalUnit();
     status.bssid = legacy_status.bssid;
     status.ssid = legacy_status.ssid;
     status.state = ok && !legacy_status.bssid.empty()

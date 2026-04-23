@@ -21,6 +21,28 @@
 #include <memory>
 #include <utility>
 
+namespace {
+
+[[gnu::pure]]
+static const char *
+GetAuthLabel(WifiSecurity security) noexcept
+{
+  switch (ToWifiAuthMode(security)) {
+  case WifiAuthMode::Open:
+    return "Open";
+
+  case WifiAuthMode::Passphrase:
+    return "Passphrase";
+
+  case WifiAuthMode::Unsupported:
+    return "Unsupported";
+  }
+
+  return "Unsupported";
+}
+
+} // namespace
+
 class WifiListWidget final
   : public ListWidget {
 
@@ -99,11 +121,14 @@ WifiListWidget::UpdateButtons()
   if (cursor < networks.size()) {
     const auto &info = networks[cursor];
 
-    if (info.is_saved) {
-      connect_button->SetCaption(_("Remove"));
+    if (info.can_disconnect) {
+      connect_button->SetCaption(_("Disconnect"));
       connect_button->SetEnabled(true);
-    } else if (info.is_visible && info.auth != WifiAuthMode::Unsupported) {
+    } else if (info.can_connect) {
       connect_button->SetCaption(_("Connect"));
+      connect_button->SetEnabled(true);
+    } else if (info.can_forget) {
+      connect_button->SetCaption(_("Remove"));
       connect_button->SetEnabled(true);
     } else {
       connect_button->SetCaption(_("Connect"));
@@ -119,21 +144,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned idx) noexcept
 {
   const auto &info = networks[idx];
-
-  const char *auth = nullptr;
-  switch (info.auth) {
-  case WifiAuthMode::Open:
-    auth = "Open";
-    break;
-
-  case WifiAuthMode::Passphrase:
-    auth = "Passphrase";
-    break;
-
-  case WifiAuthMode::Unsupported:
-    auth = "Unsupported";
-    break;
-  }
+  const char *auth = GetAuthLabel(info.security);
 
   row_renderer.DrawFirstRow(canvas, rc, info.ssid);
   row_renderer.DrawSecondRow(canvas, rc, info.bssid);
@@ -141,7 +152,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const char *state = nullptr;
   StaticString<40> state_buffer;
 
-  if (info.is_connected) {
+  if (info.kind == WifiNetworkKind::ConnectedNetwork) {
     state = _("Connected");
 
     /* look up ip address for wlan0 or eth0 */
@@ -154,7 +165,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       }
     }
   }
-  else if (info.is_saved)
+  else if (info.kind == WifiNetworkKind::SavedProfile)
     state = info.is_visible
       ? _("Saved and visible")
       : _("Saved, but not visible");
@@ -197,7 +208,10 @@ WifiListWidget::Connect()
     return;
 
   const auto &info = networks[i];
-  if (!info.is_saved) {
+  if (info.can_disconnect) {
+    /* Placeholder for manager-style backends; Kobo does not use this yet. */
+    return;
+  } else if (info.can_connect) {
     const auto ssid = info.ssid;
 
     StaticString<256> caption;
@@ -205,7 +219,7 @@ WifiListWidget::Connect()
 
     StaticString<32> passphrase;
     passphrase.clear();
-    if (info.auth == WifiAuthMode::Open)
+    if (ToWifiAuthMode(info.security) == WifiAuthMode::Open)
       passphrase.clear();
     else if (!TextEntryDialog(passphrase, caption, false))
       return;
@@ -214,9 +228,8 @@ WifiListWidget::Connect()
     request.ssid = info.ssid;
     request.secret = passphrase;
     request.security = info.security;
-    request.auth = info.auth;
     backend_->Connect(request);
-  } else {
+  } else if (info.can_forget) {
     backend_->ForgetNetwork(info.profile_id);
   }
 
