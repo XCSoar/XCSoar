@@ -13,6 +13,11 @@
 #include "java/Global.hxx"
 #endif
 
+#ifdef __APPLE__
+#include "Apple/Services.hpp"
+#include "Apple/BluetoothHelper.hpp"
+#endif
+
 bool
 DeviceConfig::IsAvailable() const noexcept
 {
@@ -32,7 +37,7 @@ DeviceConfig::IsAvailable() const noexcept
   case PortType::RFCOMM_SERVER:
   case PortType::GLIDER_LINK:
   case PortType::ANDROID_USB_SERIAL:
-    return IsAndroid();
+    return IsAndroid() || IsApple();
 
   case PortType::IOIOUART:
   case PortType::DROIDSOAR_V2:
@@ -161,6 +166,16 @@ DeviceConfig::BluetoothNameStartsWith([[maybe_unused]] const char *prefix) const
     bluetooth_helper->GetNameFromAddress(Java::GetEnv(),
                                          bluetooth_mac.c_str());
   return name != nullptr && StringStartsWith(name, prefix);
+#elif defined(__APPLE__)
+  if (port_type != PortType::RFCOMM)
+    return false;
+
+  if (bluetooth_helper == nullptr)
+    return false;
+
+  const char *name =
+    bluetooth_helper->GetNameFromAddress(bluetooth_mac.c_str());
+  return name != nullptr && StringStartsWith(name, prefix);
 #else
   return false;
 #endif
@@ -209,6 +224,13 @@ DeviceConfig::GetPortName(char *buffer, size_t max_size) const noexcept
       if (name2 != nullptr)
         name = name2;
     }
+#elif defined(__APPLE__)
+    if (bluetooth_helper != nullptr) {
+      const char *name2 =
+        bluetooth_helper->GetNameFromAddress(name);
+      if (name2 != nullptr)
+        name = name2;
+    }
 #endif
 
     StringFormat(buffer, max_size, "%s: %s",
@@ -225,6 +247,13 @@ DeviceConfig::GetPortName(char *buffer, size_t max_size) const noexcept
       if (name2 != nullptr)
         name = name2;
     }
+#elif defined(__APPLE__)
+    if (bluetooth_helper != nullptr) {
+      const char *name2 =
+        bluetooth_helper->GetNameFromAddress(name);
+      if (name2 != nullptr)
+        name = name2;
+    }
 #endif
 
     StringFormat(buffer, max_size, "%s: %s",
@@ -238,6 +267,13 @@ DeviceConfig::GetPortName(char *buffer, size_t max_size) const noexcept
     if (bluetooth_helper != nullptr) {
       const char *name2 =
         bluetooth_helper->GetNameFromAddress(Java::GetEnv(), name);
+      if (name2 != nullptr)
+        name = name2;
+    }
+#elif defined(__APPLE__)
+    if (bluetooth_helper != nullptr) {
+      const char *name2 =
+        bluetooth_helper->GetNameFromAddress(name);
       if (name2 != nullptr)
         name = name2;
     }
