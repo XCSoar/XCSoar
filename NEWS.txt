@@ -1,4 +1,8 @@
 Version 7.45 - not yet released
+* input
+  - Traffic: ``next`` and ``previous`` events to cycle the selected FLARM
+    target; default key bindings on the traffic radar: F2 = previous,
+    F3 = next
 * map
   - obstacles hidden at wider map scales than other non-landables (5000 vs 10000)
   - draw up to 1024 waypoints at once (was 256) #2327

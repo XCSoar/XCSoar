@@ -53,6 +53,10 @@ InputEvents::eventTraffic(const char *misc)
     traffic_widget->OpenDetails();
   } else if (StringIsEqual(misc, "label toggle")) {
     traffic_widget->SwitchData();
+  } else if (StringIsEqual(misc, "next")) {
+    traffic_widget->NextTarget();
+  } else if (StringIsEqual(misc, "previous")) {
+    traffic_widget->PreviousTarget();
   }
 }
 

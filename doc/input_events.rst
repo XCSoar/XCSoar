@@ -427,7 +427,9 @@ Event list
    - Controls the FLARM traffic radar widget. Possible arguments:
      ``show`` (open radar page), ``zoom auto toggle``, ``zoom in``,
      ``zoom out``, ``northup toggle``, ``details`` (open selected
-     traffic details), ``label toggle`` (cycle data labels).
+     traffic details), ``label toggle`` (cycle data labels),
+     ``next`` (select next traffic target), ``previous`` (select
+     previous traffic target).
  * - ``UploadIGCFile``
    - Opens a file picker to select an IGC file and uploads it to
      WeGlide.

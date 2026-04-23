@@ -91,6 +91,17 @@ type=key
 data=RETURN
 event=Traffic details
 
+# Adjacent F-keys: previous / next (F3 is Flarm on map, overridden on traffic)
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
+data=F2
+event=Traffic previous
+
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
+data=F3
+event=Traffic next
+
 ###### pan mode
 
 mode=pan
