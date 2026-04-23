@@ -78,6 +78,14 @@ dlgWaypointDetailsShowModalForBrowseParent(
   Waypoints *waypoints, WaypointPtr &&waypoint, bool allow_navigation,
   bool allow_edit) noexcept;
 
+/**
+ * Forward the ``WaypointImage`` input event to an open waypoint-details
+ * dialog (embedded image only).  No effect if the dialog is not on an
+ * image page.
+ */
+void
+WaypointDetailsDispatchImageInput(const char *misc) noexcept;
+
 bool
 PopupNearestWaypointDetails(Waypoints &waypoints,
                             const GeoPoint &location,

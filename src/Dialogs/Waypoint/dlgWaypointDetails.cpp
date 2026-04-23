@@ -46,6 +46,10 @@
 #include "Protection.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Pan.hpp"
+#include "Input/InputEvents.hpp"
+#include "util/StringAPI.hxx"
+#include <functional>
+#include <optional>
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -118,6 +122,7 @@ class DrawPanFrame final : public WndOwnerDrawFrame {
 
   std::function<void(Canvas &canvas, const PixelRect &rc, PixelPoint &offset,
     PixelPoint &img_pos)> mOnPaintCallback2;
+  std::function<bool(unsigned key_code)> m_try_key_input{};
 
   public:
     template<typename CB>
@@ -128,6 +133,21 @@ class DrawPanFrame final : public WndOwnerDrawFrame {
       PaintWindow::Create(parent, rc, style);
     }
 
+  void
+  SetTryKeyInput(std::function<bool(unsigned key_code)>&& f) noexcept
+  {
+    m_try_key_input = std::move(f);
+  }
+
+  /**
+   * Apply one paint-step nudge the same as an arrow key (50 px equivalent).
+   */
+  void
+  NudgeViewByPixelOffset(PixelPoint o) noexcept
+  {
+    offset = o;
+    Invalidate();
+  }
 
   protected:
     /** from class Window */
@@ -362,8 +382,28 @@ public:
        (!images.empty() && image_window.HasFocus());
   }
 
+  private:
+  std::optional<InputEvents::Mode> wptimg_mode;
+  bool TryWaypointImageKey(unsigned key_code) noexcept;
+
+  friend void WaypointDetailsDispatchImageInput(const char *misc) noexcept;
+
+  void OnWaypointImageEvent(const char *misc) noexcept;
+
+  public:
   bool KeyPress(unsigned key_code) noexcept override;
 };
+
+static WaypointDetailsWidget *waypoint_image_input_target = nullptr;
+
+void
+WaypointDetailsDispatchImageInput(const char *misc) noexcept
+{
+  if (waypoint_image_input_target == nullptr || misc == nullptr)
+    return;
+
+  waypoint_image_input_target->OnWaypointImageEvent(misc);
+}
 
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 #ifdef HAVE_RUN_FILE
@@ -562,19 +602,35 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   commands_widget.Initialise(parent, layout.main);
   commands_widget.Prepare();
 
-  if (!images.empty())
+  if (!images.empty()) {
     image_window.Create(parent, layout.main, dock_style,
                         [this](Canvas &canvas, const PixelRect &rc, PixelPoint offset,
                           PixelPoint &img_pos) {
                                  OnImagePaint(canvas, rc, offset, img_pos);
                         });
 
+    waypoint_image_input_target = this;
+    const int mode_id = InputEvents::GetModeId("wptimg");
+    wptimg_mode = (mode_id >= 0)
+                      ? std::make_optional(
+                            static_cast<InputEvents::Mode>(mode_id))
+                      : std::nullopt;
+    image_window.SetTryKeyInput(
+        [this](unsigned k) { return TryWaypointImageKey(k); });
+  } else {
+    wptimg_mode.reset();
+  }
   last_page = 2 + images.size();
 }
 
 void
 WaypointDetailsWidget::Unprepare() noexcept
 {
+  if (waypoint_image_input_target == this)
+    waypoint_image_input_target = nullptr;
+  wptimg_mode.reset();
+  if (!images.empty())
+    image_window.SetTryKeyInput(nullptr);
   info_widget.Unprepare();
   commands_widget.Unprepare();
 }
@@ -653,6 +709,9 @@ WaypointDetailsWidget::OnShrinkClicked()
 
 bool
 WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
+  if (TryWaypointImageKey(key_code))
+    return true;
+
   switch (key_code) {
   case KEY_F1:
     if (!images.empty() && image_window.IsVisible()) {
@@ -720,6 +779,66 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
     default:
       return false;
     }
+}
+
+bool
+WaypointDetailsWidget::TryWaypointImageKey(unsigned key_code) noexcept
+{
+  if (!wptimg_mode.has_value())
+    return false;
+  if (images.empty() || !image_window.IsVisible())
+    return false;
+  return InputEvents::ProcessKeyInMode(*wptimg_mode, key_code);
+}
+
+void
+WaypointDetailsWidget::OnWaypointImageEvent(const char *misc) noexcept
+{
+  if (images.empty() || !image_window.IsVisible())
+    return;
+
+  if (StringIsEqual(misc, "magnify")) {
+    OnMagnifyClicked();
+    image_window.Invalidate();
+    return;
+  }
+  if (StringIsEqual(misc, "shrink")) {
+    OnShrinkClicked();
+    image_window.Invalidate();
+    return;
+  }
+  if (StringIsEqual(misc, "reset") && zoom > 0) {
+    zoom = 0;
+    UpdateZoomControls();
+    image_window.Invalidate();
+    goto_button.SetFocus();
+    return;
+  }
+
+  // Pan / page: match prior behaviour
+  if (StringIsEqual(misc, "left")) {
+    if (zoom == 0) {
+      previous_button.SetFocus();
+      NextPage(-1);
+    } else
+      image_window.NudgeViewByPixelOffset({-50, 0});
+    return;
+  }
+  if (StringIsEqual(misc, "right")) {
+    if (zoom == 0) {
+      next_button.SetFocus();
+      NextPage(+1);
+    } else
+      image_window.NudgeViewByPixelOffset({50, 0});
+    return;
+  }
+  if (zoom == 0)
+    return;
+
+  if (StringIsEqual(misc, "up"))
+    image_window.NudgeViewByPixelOffset({0, -50});
+  else if (StringIsEqual(misc, "down"))
+    image_window.NudgeViewByPixelOffset({0, 50});
 }
 
 void
@@ -843,6 +962,9 @@ DrawPanFrame::OnKeyCheck(unsigned key_code) const noexcept
 bool
 DrawPanFrame::OnKeyDown(unsigned key_code) noexcept
 {
+  if (m_try_key_input && m_try_key_input(key_code))
+    return true;
+
   switch (key_code) {
     case KEY_LEFT: {
       offset = {-50, 0};
