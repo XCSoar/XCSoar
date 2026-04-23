@@ -16,6 +16,80 @@
 #include <openssl/evp.h> // for PKCS5_PBKDF2_HMAC_SHA1()
 #undef UI
 
+namespace {
+
+[[gnu::pure]]
+static unsigned
+ParseProfileId(const char *profile_id)
+{
+  if (profile_id == nullptr || *profile_id == 0)
+    throw std::runtime_error{"Missing profile identifier"};
+
+  char *end = nullptr;
+  const auto id = std::strtoul(profile_id, &end, 10);
+  if (end == profile_id || *end != 0)
+    throw std::runtime_error{"Unsupported profile identifier"};
+
+  return (unsigned)id;
+}
+
+static void
+ValidateConnectParameters(const char *ssid, const char *psk,
+                         WifiSecurity security)
+{
+  if (ssid == nullptr || *ssid == '\0')
+    throw std::runtime_error{"Missing WiFi network name"};
+
+  if ((security == WifiSecurity::WPA || security == WifiSecurity::WEP) &&
+      (psk == nullptr || *psk == '\0'))
+    throw std::runtime_error{"Missing WiFi passphrase"};
+}
+
+static void
+ConfigureNetwork(WPASupplicant &wpa, unsigned id, const char *ssid,
+                 const char *psk, WifiSecurity security)
+{
+  ValidateConnectParameters(ssid, psk, security);
+
+  char *endPsk_ptr;
+
+  wpa.SetNetworkSSID(id, ssid);
+
+  if (security == WifiSecurity::WPA) {
+    std::array<std::byte, 32> pmk;
+    if (PKCS5_PBKDF2_HMAC_SHA1(psk, (int)std::strlen(psk),
+                               (const unsigned char *)ssid,
+                               (int)std::strlen(ssid),
+                               4096,
+                               (int)pmk.size(),
+                               (unsigned char *)pmk.data()) != 1)
+      throw std::runtime_error{"Failed to derive WPA PSK"};
+
+    std::array<char, sizeof(pmk) * 2 + 1> hex;
+    *HexFormat(hex.data(), pmk) = 0;
+
+    wpa.SetNetworkPSK(id, hex.data());
+  } else if (security == WifiSecurity::WEP) {
+    wpa.SetNetworkID(id, "key_mgmt", "NONE");
+
+    (void)strtoll(psk, &endPsk_ptr, 16);
+
+    if ((*endPsk_ptr == '\0') &&
+        (std::strlen(psk) >= 2) && (psk[0] != '0') && (psk[1] != 'x'))
+      wpa.SetNetworkID(id, "wep_key0", psk);
+    else
+      wpa.SetNetworkString(id, "wep_key0", psk);
+
+    wpa.SetNetworkID(id, "auth_alg", "OPEN\tSHARED");
+  } else if (security == WifiSecurity::Open) {
+    wpa.SetNetworkID(id, "key_mgmt", "NONE");
+  } else {
+    throw std::runtime_error{"Unsupported Wifi security type"};
+  }
+}
+
+} // namespace
+
 WPASupplicantBackend::WPASupplicantBackend(const char *interface_name)
 {
   if (interface_name == nullptr || *interface_name == '\0')
@@ -51,39 +125,10 @@ WPASupplicantBackend::ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t 
 void
 WPASupplicantBackend::Connect(const char *ssid, const char *psk, WifiSecurity security)
 {
+  ValidateConnectParameters(ssid, psk, security);
+
   const unsigned id = wpa_.AddNetwork();
-  char *endPsk_ptr;
-
-  wpa_.SetNetworkSSID(id, ssid);
-
-  if (security == WPA_SECURITY) {
-    std::array<std::byte, 32> pmk;
-    PKCS5_PBKDF2_HMAC_SHA1(psk, (int)std::strlen(psk),
-                           (const unsigned char *)ssid, (int)std::strlen(ssid),
-                           4096,
-                           (int)pmk.size(), (unsigned char *)pmk.data());
-
-    std::array<char, sizeof(pmk) * 2 + 1> hex;
-    *HexFormat(hex.data(), pmk) = 0;
-
-    wpa_.SetNetworkPSK(id, hex.data());
-  } else if (security == WEP_SECURITY) {
-    wpa_.SetNetworkID(id, "key_mgmt", "NONE");
-
-    (void) strtoll(psk, &endPsk_ptr, 16);
-
-    if ((*endPsk_ptr == '\0') &&                                   // confirm strtoll processed all of psk
-        (std::strlen(psk) >= 2) && (psk[0] != '0') && (psk[1] != 'x'))  // and the first two characters were no "0x"
-      wpa_.SetNetworkID(id, "wep_key0", psk);
-    else
-      wpa_.SetNetworkString(id, "wep_key0", psk);
-
-    wpa_.SetNetworkID(id, "auth_alg", "OPEN\tSHARED");
-  } else if (security == OPEN_SECURITY){
-    wpa_.SetNetworkID(id, "key_mgmt", "NONE");
-  } else
-    throw std::runtime_error{"Unsupported Wifi security type"};
-
+  ConfigureNetwork(wpa_, id, ssid, psk, security);
   wpa_.EnableNetwork(id);
   wpa_.SaveConfig();
 }
@@ -106,8 +151,33 @@ WPASupplicantBackend::Status(WifiStatus &status)
   return wpa_.Status(status);
 }
 
-bool
-WPASupplicantBackend::IsSignalLevelInDbm() const
+WifiSignalUnit
+WPASupplicantBackend::GetSignalUnit() const
 {
-  return !StringIsEqual(interface_name_.c_str(), "eth0");
+  return StringIsEqual(interface_name_.c_str(), "eth0")
+    ? WifiSignalUnit::Relative
+    : WifiSignalUnit::Dbm;
+}
+
+void
+WPASupplicantBackend::Connect(const WifiConnectRequest &request)
+{
+  EnsureConnected();
+
+  if (!request.profile_id.empty() && request.ssid.empty()) {
+    wpa_.SelectNetwork(ParseProfileId(request.profile_id));
+    return;
+  }
+
+  Connect(request.ssid.empty() ? nullptr : request.ssid.c_str(),
+          request.secret.empty() ? nullptr : request.secret.c_str(),
+          request.security);
+}
+
+void
+WPASupplicantBackend::ForgetNetwork(const char *profile_id)
+{
+  EnsureConnected();
+  wpa_.RemoveNetwork(ParseProfileId(profile_id));
+  wpa_.SaveConfig();
 }

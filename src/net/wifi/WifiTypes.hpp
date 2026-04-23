@@ -90,6 +90,7 @@ struct WifiNetworkEntry {
   StaticString<32> bssid;
   StaticString<256> ssid;
   signed signal_level = 0;
+  WifiSecurity security = OPEN_SECURITY;
   WifiAuthMode auth = WifiAuthMode::Unsupported;
   WifiSignalUnit signal_unit = WifiSignalUnit::Unknown;
   bool is_visible = false;
@@ -101,6 +102,7 @@ struct WifiNetworkEntry {
     bssid.clear();
     ssid.clear();
     signal_level = 0;
+    security = OPEN_SECURITY;
     auth = WifiAuthMode::Unsupported;
     signal_unit = WifiSignalUnit::Unknown;
     is_visible = false;
@@ -113,12 +115,14 @@ struct WifiConnectRequest {
   StaticString<256> profile_id;
   StaticString<256> ssid;
   StaticString<64> secret;
+  WifiSecurity security = OPEN_SECURITY;
   WifiAuthMode auth = WifiAuthMode::Unsupported;
 
   void Clear() {
     profile_id.clear();
     ssid.clear();
     secret.clear();
+    security = OPEN_SECURITY;
     auth = WifiAuthMode::Unsupported;
   }
 };

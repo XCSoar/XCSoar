@@ -58,6 +58,7 @@ public:
       entry.bssid = visible[i].bssid;
       entry.ssid = visible[i].ssid;
       entry.signal_level = visible[i].signal_level;
+      entry.security = visible[i].security;
       entry.auth = ToWifiAuthMode(visible[i].security);
       entry.signal_unit = status.signal_unit;
       entry.is_visible = true;
@@ -140,10 +141,7 @@ public:
    */
   virtual void Connect(const WifiConnectRequest &request)
   {
-    Connect(request.ssid.c_str(), request.secret.c_str(),
-            request.auth == WifiAuthMode::Open
-            ? OPEN_SECURITY
-            : WPA_SECURITY);
+    Connect(request.ssid.c_str(), request.secret.c_str(), request.security);
   }
 
   /**

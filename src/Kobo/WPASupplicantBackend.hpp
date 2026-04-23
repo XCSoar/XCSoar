@@ -21,7 +21,9 @@ public:
   void SaveConfig() override;
   bool Status(WifiStatus &status) override;
   const char *GetInterfaceName() const override { return interface_name_.c_str(); }
-  bool IsSignalLevelInDbm() const override;
+  WifiSignalUnit GetSignalUnit() const override;
+  void Connect(const WifiConnectRequest &request) override;
+  void ForgetNetwork(const char *profile_id) override;
 
 private:
   WPASupplicant wpa_;

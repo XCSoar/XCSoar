@@ -152,11 +152,11 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
     return false;
 
   if (flags.find("WPA"sv) != flags.npos)
-    dest.security = WPA_SECURITY;
+    dest.security = WifiSecurity::WPA;
   else if (flags.find("WEP"sv) != flags.npos)
-    dest.security = WEP_SECURITY;
+    dest.security = WifiSecurity::WEP;
   else
-    dest.security = OPEN_SECURITY;
+    dest.security = WifiSecurity::Open;
 
   dest.ssid = ssid;
   return true;
