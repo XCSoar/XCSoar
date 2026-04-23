@@ -876,24 +876,11 @@ FlarmTrafficControl::OnCancelMode() noexcept
 bool
 FlarmTrafficControl::OnKeyDown(unsigned key_code) noexcept
 {
-  switch (key_code) {
-  case KEY_UP:
-    if (!HasPointer())
-      break;
-
-    ZoomIn();
+  /* D-pad zoom was hard-coded here; zoom and target cycling are
+     defined in the ``.xci`` ``Traffic`` mode (e.g. F2/F4, UP/DOWN). */
+  if (InputEvents::processKey(key_code))
     return true;
-
-  case KEY_DOWN:
-    if (!HasPointer())
-      break;
-
-    ZoomOut();
-    return true;
-  }
-
-  return FlarmTrafficWindow::OnKeyDown(key_code) ||
-    InputEvents::processKey(key_code);
+  return FlarmTrafficWindow::OnKeyDown(key_code);
 }
 
 void
