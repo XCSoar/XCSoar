@@ -123,6 +123,14 @@ struct InputConfig {
   [[gnu::pure]]
   unsigned GetKeyEvent(unsigned mode, unsigned key_code) const noexcept;
 
+  /**
+   * Return the event bound in #mode for #key_code only, never
+   * falling back to the default (mode 0) key map.  Returns 0 if
+   * unbound in that mode.
+   */
+  [[gnu::pure]]
+  unsigned GetKeyEventInModeNoFallback(unsigned mode, unsigned key_code) const noexcept;
+
   void SetKeyEvent(unsigned mode, unsigned key_code,
                    unsigned event_id) noexcept;
 

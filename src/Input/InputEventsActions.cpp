@@ -398,6 +398,12 @@ InputEvents::eventWaypointEditor([[maybe_unused]] const char *misc)
   dlgConfigWaypointsShowModal(*data_components->waypoints);
 }
 
+void
+InputEvents::eventWaypointImage(const char *misc)
+{
+  WaypointDetailsDispatchImageInput(misc);
+}
+
 // StatusMessage
 // Displays a user defined status message.
 //    The argument is the text to be displayed.

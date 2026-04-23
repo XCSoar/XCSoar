@@ -95,6 +95,19 @@ ProcessKey(Mode mode, unsigned key_code) noexcept;
 bool
 processKey(unsigned key) noexcept;
 
+/**
+ * Look up the input mode id from a name (from the ``.xci`` file) or
+ * -1 if unknown.  For use with #ProcessKeyInMode.
+ */
+[[gnu::pure]]
+int GetModeId(const char *name) noexcept;
+
+/**
+ * Dispatch a key for exactly one mode's map (no overlay, no
+ * default-mode key fallback), then run the event.
+ */
+bool ProcessKeyInMode(Mode mode, unsigned key_code) noexcept;
+
 bool
 processGesture(const char *data) noexcept;
 
@@ -169,6 +182,7 @@ void eventTerrainTopography(const char *misc);
 void eventTerrainTopology(const char *misc);
 void eventWaypointDetails(const char *misc);
 void eventWaypointDetailsPersistent(const char *misc);
+void eventWaypointImage(const char *misc);
 void eventWaypointEditor(const char *misc);
 void eventZoom(const char *misc);
 void eventBrightness(const char *misc);

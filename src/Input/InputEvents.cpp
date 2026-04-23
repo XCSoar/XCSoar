@@ -365,6 +365,37 @@ InputEvents::processKey(unsigned key_code) noexcept
   return ProcessKey(getModeID(), key_code);
 }
 
+int
+InputEvents::GetModeId(const char *name) noexcept
+{
+  return input_config.LookupMode(name);
+}
+
+bool
+InputEvents::ProcessKeyInMode(Mode mode, unsigned key_code) noexcept
+{
+  if (!global_running)
+    return false;
+
+#ifdef KOBO
+#ifdef ENABLE_SDL
+  if (key_code == SDLK_POWER)
+    key_code = KEY_MENU;
+#endif
+#endif
+
+  if (Lua::FireKey(key_code)) {
+  }
+
+  const unsigned event_id = input_config.GetKeyEventInModeNoFallback(
+      (unsigned)mode, key_code);
+  if (event_id == 0)
+    return false;
+
+  ProcessEvent(event_id);
+  return true;
+}
+
 unsigned
 InputEvents::gesture_to_event(const char *data) noexcept
 {

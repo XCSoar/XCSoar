@@ -92,6 +92,41 @@ InputConfig::GetKeyEvent(unsigned mode, unsigned key_code) const noexcept
   return event_id;
 }
 
+unsigned
+InputConfig::GetKeyEventInModeNoFallback(unsigned mode,
+                                        unsigned key_code) const noexcept
+{
+  if (mode >= MAX_MODE)
+    return 0;
+
+  bool is_arrow_key = (key_code == KEY_UP || key_code == KEY_DOWN ||
+                       key_code == KEY_LEFT || key_code == KEY_RIGHT);
+
+  if (!is_arrow_key && key_code >= 'a' && key_code <= 'z') {
+    key_code = ToUpperASCII(static_cast<char>(key_code));
+  }
+
+  unsigned key_code_idx = key_code;
+  auto k2e = Key2Event;
+#ifdef ENABLE_SDL
+  if (key_code & SDLK_SCANCODE_MASK) {
+    key_code_idx = key_code & ~SDLK_SCANCODE_MASK;
+    k2e = Key2EventNonChar;
+  }
+#endif
+#ifdef USE_X11
+  if (key_code_idx >= 0xff00) {
+    key_code_idx -= 0xff00;
+    k2e = Key2EventFF00;
+  }
+#endif
+
+  if (key_code_idx >= MAX_KEY)
+    return 0;
+
+  return k2e[mode][key_code_idx];
+}
+
 void
 InputConfig::SetKeyEvent(unsigned mode, unsigned key_code,
                          unsigned event_id) noexcept
