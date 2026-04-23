@@ -48,13 +48,13 @@ Default key bindings
 The built-in ``type=key`` mapping in :file:`Data/Input/default.xci`
 currently uses this grouped layout for ``F1`` -- ``F12``:
 
-- **F1 -- F4 (safety / immediate cockpit use)**: quick access to
-  immediate in-flight interactions (quick menu, checklist, FLARM
-  traffic, airspace warnings).
-- **F5 -- F8 (navigation / task flow)**: lookup and task workflow
-  actions (alternates, goto, target, task setup).
-- **F9 -- F12 (analysis / system views)**: analysis and status pages,
-  plus basic setup.
+- **F1**: quick menu.
+- **F2 / F3** (on the main map, ``mode=default`` only): ``Checklist`` and
+  ``FlarmTraffic``.  **F2 / F3** are zoom in / out in ``pan`` mode, on
+  the FLARM traffic radar, and in waypoint image ``wptimg``; they do not
+  zoom the map while in the normal (non-pan) map view.
+- **F4 -- F12** (on the main map): airspace, alternates, task workflow,
+  analysis, thermal assistant, then status and basic setup.
 
 .. list-table::
  :widths: 15 45 40
@@ -65,40 +65,40 @@ currently uses this grouped layout for ``F1`` -- ``F12``:
    - Group
  * - ``F1``
    - ``QuickMenu``
-   - Safety / immediate cockpit use
+   - Map (default)
  * - ``F2``
    - ``Checklist``
-   - Safety / immediate cockpit use
+   - Map (default); in ``pan`` / traffic / ``wptimg`` = zoom in
  * - ``F3``
    - ``FlarmTraffic``
-   - Safety / immediate cockpit use
+   - Map (default); in ``pan`` / traffic / ``wptimg`` = zoom out
  * - ``F4``
    - ``AirspaceWarnings``
-   - Safety / immediate cockpit use
+   - Map (default)
  * - ``F5``
    - ``Setup Alternates``
-   - Navigation / task flow
+   - Map (default)
  * - ``F6``
    - ``GotoLookup``
-   - Navigation / task flow
+   - Map (default)
  * - ``F7``
    - ``Setup Target``
-   - Navigation / task flow
+   - Map (default)
  * - ``F8``
    - ``Setup Task``
-   - Navigation / task flow
+   - Map (default)
  * - ``F9``
    - ``Analysis``
-   - Analysis / system views
+   - Map (default)
  * - ``F10``
    - ``ThermalAssistant``
-   - Analysis / system views
+   - Map (default)
  * - ``F11``
    - ``Status all``
-   - Analysis / system views
+   - Map (default)
  * - ``F12``
    - ``Setup Basic``
-   - Analysis / system views
+   - Map (default)
 
 In ``mode=default``, the number row currently uses this grouping:
 
@@ -443,6 +443,16 @@ Event list
 
      ``select``: brings up the waypoint selector; if the user
      selects a waypoint, the details dialog is shown.
+ * - ``WaypointImage S``
+   - When the waypoint-details dialog is on an **embedded image**
+     page, applies zoom/pan.  Keys are read from the ``wptimg`` mode
+     (see *Built-in modes*); the handler does not fall back to
+     ``default`` so ``F1`` is not the quick menu while viewing an
+     image.  Possible arguments: ``magnify``, ``shrink``,
+     ``reset`` (same as clearing zoom to fit), ``left``,
+     ``right``, ``up``, ``down`` (at zoom 0, **left**/**right** move
+     to the previous/next page; with zoom, they pan; **up**/**down**
+     nudge the image only if zoomed in).
  * - ``WaypointEditor``
    - Opens the waypoint editor/configuration dialog.
  * - ``Weather``
@@ -473,6 +483,10 @@ Built-in modes
 - ``infobox`` -- an InfoBox has been selected.
 - ``pan`` -- pan mode is active.
 - ``Menu`` -- a menu level is open.
+- ``wptimg`` -- the waypoint details dialog is on an **image** page;
+  key bindings in this map control zoom and pan of the image (the
+  ``WaypointImage`` event) without inheriting the normal ``default``
+  key table for that lookup.
 
 You may define any additional mode names to build custom menu
 hierarchies.
