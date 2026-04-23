@@ -37,7 +37,6 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Kobo/NetworkDialog.cpp \
 	$(SRC)/Kobo/SystemDialog.cpp \
 	$(SRC)/Kobo/ToolsDialog.cpp \
-	$(SRC)/Kobo/WPASupplicant.cpp \
 	$(SRC)/Dialogs/WifiDialog.cpp \
 	$(SRC)/Kobo/FakeSymbols.cpp \
 	$(SRC)/Kobo/KoboMenu.cpp
