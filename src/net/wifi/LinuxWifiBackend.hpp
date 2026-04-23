@@ -5,5 +5,24 @@
 
 #include "WifiBackend.hpp"
 
+enum class LinuxWifiBackendKind {
+  None,
+  NetworkManager,
+  ConnMan,
+};
+
+LinuxWifiBackendKind
+QueryLinuxWifiBackendKind();
+
+[[gnu::pure]]
+bool
+HasLinuxWifiRadioToggle(LinuxWifiBackendKind backend_kind) noexcept;
+
+bool
+GetLinuxWifiRadioEnabled(LinuxWifiBackendKind backend_kind);
+
+void
+SetLinuxWifiRadioEnabled(LinuxWifiBackendKind backend_kind, bool enabled);
+
 UniqueWifiBackend
 CreateLinuxWifiBackend();
