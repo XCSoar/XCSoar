@@ -13,28 +13,11 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
-#include "WPASupplicant.hpp"
+#include "PlatformWifiBackend.hpp"
 #include "net/IPv4Address.hxx"
 #include "ui/event/PeriodicTimer.hpp"
-#include "util/HexFormat.hxx"
 
-#ifdef KOBO
-#include "Model.hpp"
-#else
-static const char *
-GetKoboWifiInterface() noexcept
-{
-  /* dummy implementation for builds on (regular) Linux so KoboMenu
-     can be debugged there */
-  return "dummy";
-}
-#endif
-
-/* workaround because OpenSSL has a typedef called "UI", which clashes
-   with our "UI" namespace */
-#define UI OPENSSL_UI
-#include <openssl/evp.h> // for PKCS5_PBKDF2_HMAC_SHA1()
-#undef UI
+#include <memory>
 
 class WifiListWidget final
   : public ListWidget {
@@ -58,18 +41,22 @@ class WifiListWidget final
 
   TwoTextRowsRenderer row_renderer;
 
-  WPASupplicant wpa_supplicant;
+  UniqueWifiBackend backend_;
 
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
-  const bool signal_level_in_dbm = !StringIsEqual(GetKoboWifiInterface(), "eth0");
+  bool signal_level_in_dbm;
 
 public:
+  WifiListWidget(): backend_(CreatePlatformWifiBackend()) {
+    signal_level_in_dbm = backend_ != nullptr && backend_->IsSignalLevelInDbm();
+  }
+
   void CreateButtons(WidgetDialog &dialog) {
     dialog.AddButton(_("Scan"), [this](){
       try {
         EnsureConnected();
-        wpa_supplicant.Scan();
+        backend_->Scan();
         UpdateList();
       } catch (...) {
         ShowError(std::current_exception(), _("Error"));
@@ -183,7 +170,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     state = _("Connected");
 
     /* look up ip address for wlan0 or eth0 */
-    const auto addr = IPv4Address::GetDeviceAddress(GetKoboWifiInterface());
+    const auto addr = IPv4Address::GetDeviceAddress(backend_->GetInterfaceName());
     if (addr.IsDefined()) { /* valid address? */
       StaticString<40> addr_str;
       if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
@@ -210,55 +197,12 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 }
 
-static void
-WifiConnect(enum WifiSecurity security, WPASupplicant &wpa_supplicant, const char *ssid, const char *psk)
-{
-  const unsigned id = wpa_supplicant.AddNetwork();
-  char *endPsk_ptr;
-
-  wpa_supplicant.SetNetworkSSID(id, ssid);
-
-  if (security == WPA_SECURITY) {
-    std::array<std::byte, 32> pmk;
-    PKCS5_PBKDF2_HMAC_SHA1(psk, strlen(psk),
-                           (const unsigned char *)ssid, strlen(ssid),
-                           4096,
-                           pmk.size(), (unsigned char *)pmk.data());
-
-    std::array<char, sizeof(pmk) * 2 + 1> hex;
-    *HexFormat(hex.data(), pmk) = 0;
-
-    wpa_supplicant.SetNetworkPSK(id, hex.data());
-  } else if (security == WEP_SECURITY) {
-    wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
-
-    /*
-     * If psk is all hexidecimal should SetNetworkID, assuming user provided key in hex.
-     * Use strtoll to confirm the psk is entirely in hex.
-     * Also to need to check that it does not begin with 0x which WPA supplicant does not like.
-     */
-
-    (void) strtoll(psk, &endPsk_ptr, 16);
-
-    if ((*endPsk_ptr == '\0') &&                                   // confirm strtoll processed all of psk
-        (strlen(psk) >= 2) && (psk[0] != '0') && (psk[1] != 'x'))  // and the first two characters were no "0x"
-      wpa_supplicant.SetNetworkID(id, "wep_key0", psk);
-    else
-      wpa_supplicant.SetNetworkString(id, "wep_key0", psk);
-
-    wpa_supplicant.SetNetworkID(id, "auth_alg", "OPEN\tSHARED");
-  } else if (security == OPEN_SECURITY){
-    wpa_supplicant.SetNetworkID(id, "key_mgmt", "NONE");
-  } else
-    throw std::runtime_error{"Unsupported Wifi security type"};
-
-  wpa_supplicant.EnableNetwork(id);
-  wpa_supplicant.SaveConfig();
-}
-
 inline void
 WifiListWidget::Connect()
 {
+  if (backend_ == nullptr)
+    return;
+
   EnsureConnected();
 
   const unsigned i = GetList().GetCursorIndex();
@@ -279,10 +223,10 @@ WifiListWidget::Connect()
     else if (!TextEntryDialog(passphrase, caption, false))
       return;
 
-    WifiConnect(info.security, wpa_supplicant, info.ssid, passphrase);
+    backend_->Connect(info.ssid.c_str(), passphrase.c_str(), info.security);
   } else {
-    wpa_supplicant.RemoveNetwork(info.id);
-    wpa_supplicant.SaveConfig();
+    backend_->RemoveNetwork(info.id);
+    backend_->SaveConfig();
   }
 
   UpdateList();
@@ -291,9 +235,7 @@ WifiListWidget::Connect()
 void
 WifiListWidget::EnsureConnected()
 {
-  char path[64];
-  sprintf(path, "/var/run/wpa_supplicant/%s", GetKoboWifiInterface());
-  wpa_supplicant.EnsureConnected(path);
+  backend_->EnsureConnected();
 }
 
 inline WifiListWidget::NetworkInfo *
@@ -360,7 +302,7 @@ inline void
 WifiListWidget::UpdateScanResults()
 {
   WifiVisibleNetwork *buffer = new WifiVisibleNetwork[networks.capacity()];
-  int n = wpa_supplicant.ScanResults(buffer, networks.capacity());
+  int n = (int)backend_->ScanResults(buffer, networks.capacity());
   if (n >= 0)
     MergeList(buffer, n);
 
@@ -413,7 +355,7 @@ WifiListWidget::UpdateConfigured()
 {
   WifiConfiguredNetworkInfo *buffer =
     new WifiConfiguredNetworkInfo[networks.capacity()];
-  int n = wpa_supplicant.ListNetworks(buffer, networks.capacity());
+  int n = (int)backend_->ListNetworks(buffer, networks.capacity());
   if (n >= 0)
     MergeList(buffer, n);
 
@@ -451,7 +393,7 @@ WifiListWidget::UpdateList()
 
   try {
     EnsureConnected();
-    wpa_supplicant.Status(status);
+    backend_->Status(status);
 
     for (auto &i : networks)
       i.old_visible = i.old_configured = true;
