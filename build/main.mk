@@ -663,6 +663,8 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
+include $(topdir)/build/net-wifi.mk
+
 XCSOAR_DEPENDS = \
 	FMT \
 	DBUS \
