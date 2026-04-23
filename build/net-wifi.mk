@@ -11,8 +11,11 @@ endif
 ifeq ($(HAVE_LINUX_NET_WIFI),y)
 XCSOAR_SOURCES += \
 	$(SRC)/net/wifi/LinuxNetWifiDbus.cpp \
+	$(SRC)/net/wifi/LinuxWifiBackend.cpp \
 	$(SRC)/net/wifi/NetworkManagerClient.cpp \
+	$(SRC)/net/wifi/NetworkManagerWifiBackend.cpp \
 	$(SRC)/net/wifi/ConnmanClient.cpp \
+	$(SRC)/net/wifi/ConnmanWifiBackend.cpp \
 	$(SRC)/net/wifi/WifiError.cpp
 
 XCSOAR_CPPFLAGS += -DHAVE_LINUX_NET_WIFI

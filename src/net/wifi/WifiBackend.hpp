@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cstddef>
 #include <memory>
+#include <stdexcept>
 
 class WifiBackend {
 public:
@@ -27,6 +28,10 @@ public:
   virtual void RemoveNetwork(unsigned id) = 0;
   virtual void SaveConfig() = 0;
   virtual bool Status(WifiStatus &status) = 0;
+  virtual void Disconnect()
+  {
+    throw std::runtime_error{"Disconnect is not supported by this backend"};
+  }
 
   /* Name of the network interface used by the backend (e.g. "wlan0"). */
   virtual const char *GetInterfaceName() const = 0;
