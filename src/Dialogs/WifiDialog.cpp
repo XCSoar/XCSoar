@@ -209,8 +209,7 @@ WifiListWidget::Connect()
 
   const auto &info = networks[i];
   if (info.can_disconnect) {
-    /* Placeholder for manager-style backends; Kobo does not use this yet. */
-    return;
+    backend_->Disconnect();
   } else if (info.can_connect) {
     const auto ssid = info.ssid;
 
@@ -225,6 +224,7 @@ WifiListWidget::Connect()
       return;
 
     WifiConnectRequest request;
+    request.profile_id = info.profile_id;
     request.ssid = info.ssid;
     request.secret = passphrase;
     request.security = info.security;
