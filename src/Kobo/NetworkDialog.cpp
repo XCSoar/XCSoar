@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "NetworkDialog.hpp"
-#include "WifiDialog.hpp"
+#include "Dialogs/WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "ui/event/KeyCode.hpp"
