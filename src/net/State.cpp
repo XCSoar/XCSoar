@@ -30,9 +30,11 @@ GetNetState()
 #include "time/PeriodClock.hpp"
 
 #if defined(__linux__)
+#include <cstdlib>
 #include <cstring>
 #include <cstdio>
 #include <dirent.h>
+#include <net/if.h>
 #include "system/FileUtil.hpp"
 #endif
 
@@ -50,6 +52,7 @@ namespace {
 
 static std::mutex net_state_mutex;
 static NetState cached_net_state = NetState::UNKNOWN;
+static bool net_state_refresh_pending = false;
 static PeriodClock last_update;
 
 #if defined(__APPLE__)
@@ -101,6 +104,42 @@ InitPathMonitor() noexcept
  * option (no NetworkManager or system D-Bus stack to query).
  */
 #if defined(__linux__)
+static bool
+ReadLinuxSysfsNetFlags(const char *name, unsigned long &flags) noexcept
+{
+  char path[64];
+  snprintf(path, sizeof(path), "/sys/class/net/%s/flags", name);
+
+  char buf[32] = {};
+  if (!File::ReadString(Path(path), buf, sizeof(buf)))
+    return false;
+
+  char *end = nullptr;
+  const auto value = std::strtoul(buf, &end, 0);
+  if (end == buf)
+    return false;
+
+  flags = value;
+  return true;
+}
+
+static bool
+IgnoreLinuxSysfsNetInterface(const char *name) noexcept
+{
+  unsigned long flags;
+  if (ReadLinuxSysfsNetFlags(name, flags))
+    return (flags & IFF_LOOPBACK) != 0 ||
+      (flags & IFF_POINTOPOINT) != 0;
+
+  return strcmp(name, "lo") == 0 ||
+    strncmp(name, "docker", 6) == 0 ||
+    strncmp(name, "veth", 4) == 0 ||
+    strncmp(name, "br-", 3) == 0 ||
+    strncmp(name, "virbr", 5) == 0 ||
+    strncmp(name, "cni", 3) == 0 ||
+    strncmp(name, "podman", 6) == 0;
+}
+
 static NetState
 PollNetStateLinuxSysfs() noexcept
 {
@@ -111,7 +150,7 @@ PollNetStateLinuxSysfs() noexcept
   NetState result = NetState::DISCONNECTED;
   struct dirent *entry;
   while ((entry = readdir(dir)) != nullptr) {
-    if (entry->d_name[0] == '.' || strcmp(entry->d_name, "lo") == 0)
+    if (entry->d_name[0] == '.' || IgnoreLinuxSysfsNetInterface(entry->d_name))
       continue;
 
     char path[64];
@@ -165,12 +204,25 @@ PollNetState() noexcept
 NetState
 GetNetState() noexcept
 {
-  std::lock_guard<std::mutex> lock(net_state_mutex);
+  {
+    std::lock_guard<std::mutex> lock(net_state_mutex);
 
-  if (last_update.CheckUpdate(std::chrono::seconds(2)))
-    cached_net_state = PollNetState();
+    if (net_state_refresh_pending ||
+        !last_update.Check(std::chrono::seconds(2)))
+      return cached_net_state;
 
-  return cached_net_state;
+    net_state_refresh_pending = true;
+  }
+
+  const NetState net_state = PollNetState();
+
+  {
+    std::lock_guard<std::mutex> lock(net_state_mutex);
+    cached_net_state = net_state;
+    last_update.Update();
+    net_state_refresh_pending = false;
+    return cached_net_state;
+  }
 }
 
 #endif // defined(HAVE_NET_STATE)
