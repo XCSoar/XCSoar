@@ -35,60 +35,6 @@ static constexpr const char *kNmIfaceDeviceWireless =
 static constexpr unsigned kNmDeviceTypeWifi = 2;
 static constexpr std::uint32_t kApFlagPrivacy = 0x1U;
 static constexpr std::uint32_t kNmDeviceStateDisconnected = 30U;
-static constexpr std::uint32_t kNmDeviceStateFailed = 120U;
-
-static bool
-NmStateShowsTargetAssociation(std::uint32_t st) noexcept
-{
-  return st == 50U || st == 70U || st == 80U || st == 90U || st == 100U;
-}
-
-static bool
-TargetApIsNowActive(ODBus::Connection &c, const char *wifi_device,
-                    const NmClient::AccessPoint &target)
-{
-  try {
-    std::string ap;
-    LinuxNetWifi::DbusGetProperty(
-      c, wifi_device, kNmIfaceDeviceWireless, "ActiveAccessPoint", &ap,
-      nullptr, nullptr);
-    if (LinuxNetWifi::DbusObjectPathIsEmpty(ap)) {
-      return false;
-    }
-    if (ap == target.ap_path) {
-      return true;
-    }
-    std::string s;
-    LinuxNetWifi::DbusGetByteStringProperty(
-      c, ap.c_str(), "org.freedesktop.NetworkManager.AccessPoint", "Ssid", s);
-    return !target.ssid_text.empty() && s == target.ssid_text;
-  } catch (...) {
-    return false;
-  }
-}
-
-static void
-WaitForNmWifiResult(ODBus::Connection &c, const char *wifi_device,
-                    const NmClient::AccessPoint &target)
-{
-  using namespace std::chrono_literals;
-  const auto interval = 200ms;
-  constexpr int kMaxIters = 200;
-  for (int left = kMaxIters; left > 0; --left) {
-    std::uint32_t st = 0;
-    LinuxNetWifi::DbusGetProperty(
-      c, wifi_device, kNmIfaceDevice, "State", nullptr, &st, nullptr);
-    if (st == kNmDeviceStateFailed) {
-      throw std::runtime_error(WifiError::NM_FAIL);
-    }
-    if (TargetApIsNowActive(c, wifi_device, target) &&
-        NmStateShowsTargetAssociation(st)) {
-      return;
-    }
-    std::this_thread::sleep_for(interval);
-  }
-  throw std::runtime_error(WifiError::NM_TIMEOUT);
-}
 
 static std::string
 NewConnectionUuid()
@@ -426,7 +372,6 @@ NmClient::ConnectToAp(ODBus::Connection &c, const char *wifi_device, const Acces
   } else {
     AddConnectionAndActivate(c, wifi_device, ap, nullptr);
   }
-  WaitForNmWifiResult(c, wifi_device, ap);
 }
 
 std::string
