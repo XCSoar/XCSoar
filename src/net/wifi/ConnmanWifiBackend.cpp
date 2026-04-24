@@ -51,18 +51,6 @@ ConnmanWifiBackend::Scan()
   EnsureConnected();
 }
 
-std::size_t
-ConnmanWifiBackend::ScanResults(WifiVisibleNetwork *, unsigned)
-{
-  return 0;
-}
-
-std::size_t
-ConnmanWifiBackend::ListNetworks(WifiConfiguredNetworkInfo *, std::size_t)
-{
-  return 0;
-}
-
 void
 ConnmanWifiBackend::Connect(const char *ssid, const char *passphrase,
                             WifiSecurity security)
