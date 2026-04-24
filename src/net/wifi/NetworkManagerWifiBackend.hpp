@@ -18,9 +18,6 @@ class NetworkManagerWifiBackend final : public WifiBackend {
 public:
   void EnsureConnected() override;
   void Scan() override;
-  std::size_t ScanResults(WifiVisibleNetwork *dest, unsigned max) override;
-  std::size_t ListNetworks(WifiConfiguredNetworkInfo *dest,
-                           std::size_t max) override;
   void Connect(const char *ssid, const char *passphrase,
                WifiSecurity security) override;
   void Connect(const WifiConnectRequest &request) override;

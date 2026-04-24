@@ -158,18 +158,6 @@ NetworkManagerWifiBackend::Scan()
   }
 }
 
-std::size_t
-NetworkManagerWifiBackend::ScanResults(WifiVisibleNetwork *, unsigned)
-{
-  return 0;
-}
-
-std::size_t
-NetworkManagerWifiBackend::ListNetworks(WifiConfiguredNetworkInfo *, std::size_t)
-{
-  return 0;
-}
-
 void
 NetworkManagerWifiBackend::Connect(const char *ssid, const char *passphrase,
                                    WifiSecurity security)

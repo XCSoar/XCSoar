@@ -17,9 +17,15 @@ public:
 
   virtual void EnsureConnected() = 0;
   virtual void Scan() = 0;
-  virtual std::size_t ScanResults(WifiVisibleNetwork *dest, unsigned max) = 0;
-  virtual std::size_t ListNetworks(WifiConfiguredNetworkInfo *dest,
-                                   std::size_t max) = 0;
+  virtual std::size_t ScanResults(WifiVisibleNetwork *, unsigned)
+  {
+    throw std::runtime_error{"ScanResults is not supported by this backend"};
+  }
+
+  virtual std::size_t ListNetworks(WifiConfiguredNetworkInfo *, std::size_t)
+  {
+    throw std::runtime_error{"ListNetworks is not supported by this backend"};
+  }
 
   /* Connect using SSID + passphrase; backend handles PSK/PMK derivation. */
   virtual void Connect(const char *ssid, const char *passphrase,
