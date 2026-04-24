@@ -466,7 +466,6 @@ NmClient::RequestScan(ODBus::Connection &c, const char *wifi_device)
     o.CloseContainer(t);
   }
   (void)CallMethodSync(c, m);
-  std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
 std::vector<NmClient::AccessPoint>
