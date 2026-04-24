@@ -9,6 +9,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Color.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
@@ -18,10 +19,125 @@
 #include "ui/event/PeriodicTimer.hpp"
 
 #include <array>
-#include <memory>
+#include <algorithm>
+#include <cstring>
 #include <utility>
+#include <memory>
 
 namespace {
+
+[[gnu::pure]]
+static unsigned
+SortRank(const WifiNetworkEntry &entry) noexcept
+{
+  if (entry.kind == WifiNetworkKind::ConnectedNetwork)
+    return 0;
+
+  if (entry.is_visible)
+    return 1;
+
+  return 2;
+}
+
+[[gnu::pure]]
+static bool
+NetworkEntrySortLess(const WifiNetworkEntry &a,
+                     const WifiNetworkEntry &b) noexcept
+{
+  const auto a_rank = SortRank(a);
+  const auto b_rank = SortRank(b);
+  if (a_rank != b_rank)
+    return a_rank < b_rank;
+
+  if (a.is_visible && b.is_visible && a.signal_level != b.signal_level)
+    return a.signal_level > b.signal_level;
+
+  return std::strcmp(a.ssid.c_str(), b.ssid.c_str()) < 0;
+}
+
+[[gnu::pure]]
+static bool
+CanMergeNetworkEntries(const WifiNetworkEntry &a,
+                       const WifiNetworkEntry &b) noexcept
+{
+  if (!a.profile_id.empty() && !b.profile_id.empty() &&
+      a.profile_id == b.profile_id)
+    return true;
+
+  if (!a.ssid.empty() && !b.ssid.empty() && a.ssid == b.ssid)
+    return true;
+
+  return a.is_visible && b.is_visible &&
+    !a.bssid.empty() && !b.bssid.empty() &&
+    a.bssid == b.bssid;
+}
+
+[[gnu::pure]]
+static const char *
+GetPrimaryText(const WifiNetworkEntry &entry) noexcept
+{
+  if (!entry.ssid.empty())
+    return entry.ssid.c_str();
+
+  if (!entry.bssid.empty())
+    return entry.bssid.c_str();
+
+  if (!entry.profile_id.empty())
+    return entry.profile_id.c_str();
+
+  return _("Hidden network");
+}
+
+[[gnu::pure]]
+static const char *
+GetSecondaryText(const WifiNetworkEntry &entry) noexcept
+{
+  if (!entry.ssid.empty()) {
+    if (!entry.bssid.empty())
+      return entry.bssid.c_str();
+
+    if (!entry.profile_id.empty())
+      return entry.profile_id.c_str();
+
+    return "";
+  }
+
+  if (!entry.bssid.empty() && !entry.profile_id.empty())
+    return entry.profile_id.c_str();
+
+  return "";
+}
+
+static void
+MergeNetworkEntry(WifiNetworkEntry &dest, const WifiNetworkEntry &src) noexcept
+{
+  if (dest.profile_id.empty() && !src.profile_id.empty())
+    dest.profile_id = src.profile_id;
+
+  if (dest.ssid.empty() && !src.ssid.empty())
+    dest.ssid = src.ssid;
+
+  if (dest.bssid.empty() && !src.bssid.empty())
+    dest.bssid = src.bssid;
+
+  if (!dest.is_visible && src.is_visible) {
+    dest.bssid = src.bssid;
+    dest.signal_level = src.signal_level;
+    dest.security = src.security;
+    dest.signal_unit = src.signal_unit;
+    dest.kind = src.kind;
+    dest.is_visible = true;
+  } else if (src.kind == WifiNetworkKind::ConnectedNetwork) {
+    dest.kind = WifiNetworkKind::ConnectedNetwork;
+  } else if (dest.kind != WifiNetworkKind::ConnectedNetwork &&
+             src.kind == WifiNetworkKind::VisibleAccessPoint) {
+    dest.kind = WifiNetworkKind::VisibleAccessPoint;
+  }
+
+  dest.can_connect = dest.can_connect || src.can_connect;
+  dest.can_disconnect = dest.can_disconnect || src.can_disconnect;
+  dest.can_forget = dest.can_forget || src.can_forget;
+}
 
 [[gnu::pure]]
 static const char *
@@ -46,6 +162,7 @@ GetAuthLabel(WifiSecurity security) noexcept
 class WifiListWidget final
   : public ListWidget {
 
+  Button *scan_button;
   Button *connect_button;
 
   WifiBackendStatus status;
@@ -54,22 +171,26 @@ class WifiListWidget final
   TwoTextRowsRenderer row_renderer;
 
   UniqueWifiBackend backend_;
+  bool scan_pending = false;
 
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
 public:
   explicit WifiListWidget(UniqueWifiBackend _backend)
-    :backend_(std::move(_backend)) {}
+    :scan_button(nullptr), connect_button(nullptr),
+     backend_(std::move(_backend)) {}
 
   void CreateButtons(WidgetDialog &dialog) {
-    dialog.AddButton(_("Scan"), [this](){
+    scan_button = dialog.AddButton(_("Scan"), [this](){
       try {
         if (backend_ == nullptr)
           return;
 
         backend_->EnsureConnected();
         backend_->Scan();
-        UpdateList();
+        scan_pending = true;
+        scan_button->SetCaption(_("Scanning..."));
+        scan_button->SetEnabled(false);
       } catch (...) {
         ShowError(std::current_exception(), _("Error"));
       }
@@ -146,13 +267,14 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const auto &info = networks[idx];
   const char *auth = GetAuthLabel(info.security);
 
-  row_renderer.DrawFirstRow(canvas, rc, info.ssid);
-  row_renderer.DrawSecondRow(canvas, rc, info.bssid);
+  row_renderer.DrawFirstRow(canvas, rc, GetPrimaryText(info));
+  row_renderer.DrawSecondRow(canvas, rc, GetSecondaryText(info));
 
   const char *state = nullptr;
   StaticString<40> state_buffer;
+  const bool connected = info.kind == WifiNetworkKind::ConnectedNetwork;
 
-  if (info.kind == WifiNetworkKind::ConnectedNetwork) {
+  if (connected) {
     state = _("Connected");
 
     /* look up ip address for wlan0 or eth0 */
@@ -164,16 +286,22 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
         state = state_buffer;
       }
     }
-  }
-  else if (info.kind == WifiNetworkKind::SavedProfile)
-    state = info.is_visible
-      ? _("Saved and visible")
-      : _("Saved, but not visible");
-  else if (info.is_visible)
+  } else if (info.kind == WifiNetworkKind::SavedProfile) {
+    state = _("Saved");
+  } else if (info.is_visible) {
     state = _("Visible");
+  }
 
-  if (state != nullptr)
+  if (state != nullptr) {
+    const auto old_text_color = canvas.GetTextColor();
+    if (connected)
+      canvas.SetTextColor(COLOR_GREEN);
+
     row_renderer.DrawRightFirstRow(canvas, rc, state);
+
+    if (connected)
+      canvas.SetTextColor(old_text_color);
+  }
 
   if (info.is_visible) {
     StaticString<64> text;
@@ -183,7 +311,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       break;
 
     case WifiSignalUnit::Relative:
-      text.UnsafeFormat("%s %d", auth, info.signal_level);
+      text.UnsafeFormat("%s %d%%", auth, info.signal_level);
       break;
 
     case WifiSignalUnit::Unknown:
@@ -211,10 +339,10 @@ WifiListWidget::Connect()
   if (info.can_disconnect) {
     backend_->Disconnect();
   } else if (info.can_connect) {
-    const auto ssid = info.ssid;
+    const char *name = GetPrimaryText(info);
 
     StaticString<256> caption;
-    caption.Format(_("Passphrase of network '%s'"), ssid.c_str());
+    caption.Format(_("Passphrase of network '%s'"), name);
 
     StaticString<32> passphrase;
     passphrase.clear();
@@ -254,10 +382,34 @@ WifiListWidget::UpdateList()
 
     std::array<WifiNetworkEntry, 64> buffer;
     const auto n = backend_->GetNetworks(buffer.data(), buffer.size());
-    for (std::size_t i = 0; i < n; ++i)
-      networks.append(buffer[i]);
+    std::stable_sort(buffer.begin(), buffer.begin() + n, NetworkEntrySortLess);
+
+    for (std::size_t i = 0; i < n; ++i) {
+      const auto &candidate = buffer[i];
+
+      WifiNetworkEntry *existing = nullptr;
+      for (std::size_t j = 0; j < networks.size(); ++j) {
+        if (CanMergeNetworkEntries(networks[j], candidate)) {
+          existing = &networks[j];
+          break;
+        }
+      }
+
+      if (existing != nullptr) {
+        MergeNetworkEntry(*existing, candidate);
+        continue;
+      }
+
+      networks.append(candidate);
+    }
   } catch (...) {
     networks.clear();
+  }
+
+  if (scan_pending && scan_button != nullptr) {
+    scan_pending = false;
+    scan_button->SetCaption(_("Scan"));
+    scan_button->SetEnabled(true);
   }
 
   GetList().SetLength(networks.size());
