@@ -35,9 +35,6 @@ void
 Connect(ODBus::Connection &c, const char *path);
 
 void
-WaitForServiceConnected(ODBus::Connection &c, const char *path);
-
-void
 Disconnect(ODBus::Connection &c, const char *path);
 
 } // namespace CmClient

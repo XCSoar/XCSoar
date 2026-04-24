@@ -187,14 +187,6 @@ NetworkManagerWifiBackend::Connect(const WifiConnectRequest &request)
     if (found == access_points.end())
       throw std::runtime_error{WifiError::GONE};
 
-    const std::string active_ap =
-      NmClient::GetActiveAccessPointPath(c, wifi_device.c_str());
-    if (!LinuxNetWifi::DbusObjectPathIsEmpty(active_ap) &&
-        !NmClient::IsSameBssidAsActive(c, active_ap.c_str(), *found)) {
-      NmClient::Disconnect(c, wifi_device.c_str());
-      NmClient::WaitUntilWifiDisconnected(c, wifi_device.c_str());
-    }
-
     const char *secret = request.secret.empty() ? nullptr : request.secret.c_str();
     NmClient::ConnectToAp(c, wifi_device.c_str(), *found, secret);
   } catch (const std::exception &e) {
@@ -232,7 +224,6 @@ NetworkManagerWifiBackend::Disconnect()
 
     RefreshDevice(c);
     NmClient::Disconnect(c, wifi_device.c_str());
-    NmClient::WaitUntilWifiDisconnected(c, wifi_device.c_str());
   } catch (const std::exception &e) {
     throw TranslateWifiException(e);
   }

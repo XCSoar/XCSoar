@@ -14,10 +14,8 @@
 #include "lib/dbus/Values.hxx"
 #include "util/StringAPI.hxx"
 
-#include <chrono>
 #include <stdexcept>
 #include <string>
-#include <thread>
 #include <vector>
 
 static constexpr const char *kCM = "net.connman";
@@ -45,49 +43,6 @@ CmClient::Connect(ODBus::Connection &c, const char *path)
   using namespace ODBus;
   auto m = Message::NewMethodCall(kCM, path, "net.connman.Service", "Connect");
   (void)CallMethodSync(c, m);
-}
-
-static std::string
-GetServiceState(ODBus::Connection &c, const char *path) noexcept
-{
-  try {
-    using namespace ODBus;
-    Message r = PropertiesGet(
-      c, kCM, path, "net.connman.Service", "State");
-    ReadMessageIter t{*r.Get()};
-    if (t.GetArgType() != DBUS_TYPE_VARIANT) {
-      return {};
-    }
-    ReadMessageIter v = t.Recurse();
-    if (v.GetArgType() != DBUS_TYPE_STRING) {
-      return {};
-    }
-    const char *s = v.GetString();
-    if (s == nullptr) {
-      return {};
-    }
-    return s;
-  } catch (...) {
-    return {};
-  }
-}
-
-void
-CmClient::WaitForServiceConnected(ODBus::Connection &c, const char *path)
-{
-  using namespace std::chrono_literals;
-  constexpr int kMaxIters = 150;
-  for (int left = kMaxIters; left > 0; --left) {
-    const std::string s{GetServiceState(c, path)};
-    if (s == "failure") {
-      throw std::runtime_error(WifiError::CM_FAIL);
-    }
-    if (IsActiveServiceState(s)) {
-      return;
-    }
-    std::this_thread::sleep_for(200ms);
-  }
-  throw std::runtime_error(WifiError::CM_TIMEOUT);
 }
 
 void

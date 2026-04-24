@@ -87,7 +87,6 @@ ConnmanWifiBackend::Connect(const WifiConnectRequest &request)
       CmClient::SetPassphrase(c, found->path.c_str(), request.secret.c_str());
 
     CmClient::Connect(c, found->path.c_str());
-    CmClient::WaitForServiceConnected(c, found->path.c_str());
   } catch (const std::exception &e) {
     throw TranslateWifiException(e);
   }
