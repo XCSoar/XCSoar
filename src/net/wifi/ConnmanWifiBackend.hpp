@@ -6,6 +6,8 @@
 #include "WifiBackend.hpp"
 
 class ConnmanWifiBackend final : public WifiBackend {
+  mutable StaticString<32> interface_name;
+
 public:
   void EnsureConnected() override;
   void Scan() override;

@@ -80,6 +80,21 @@ ReadVInt(ODBus::ReadMessageIter &i)
   return 0;
 }
 
+static void
+ReadVDictStringProperty(ODBus::ReadMessageIter &i, const char *name,
+                        std::string &value)
+{
+  if (i.GetArgType() != DBUS_TYPE_ARRAY)
+    return;
+
+  auto properties = i.Recurse();
+  properties.ForEachProperty(
+    [&](const char *key, ODBus::ReadMessageIter v) {
+      if (StringIsEqual(key, name))
+        ReadVString(v, value);
+    });
+}
+
 std::vector<CmClient::ServiceEntry>
 CmClient::ListServices(ODBus::Connection &c)
 {
@@ -113,6 +128,8 @@ CmClient::ListServices(ODBus::Connection &c)
           ReadVString(v, name);
         else if (StringIsEqual(k, "Type"))
           ReadVString(v, type);
+        else if (StringIsEqual(k, "Ethernet"))
+          ReadVDictStringProperty(v, "Interface", se.interface_name);
         else if (StringIsEqual(k, "State"))
           ReadVString(v, se.state);
         else if (StringIsEqual(k, "Security")) {
