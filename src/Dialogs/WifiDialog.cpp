@@ -278,12 +278,14 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     state = _("Connected");
 
     /* look up ip address for wlan0 or eth0 */
-    const auto addr = IPv4Address::GetDeviceAddress(status.interface_name);
-    if (addr.IsDefined()) { /* valid address? */
-      StaticString<40> addr_str;
-      if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
-        state_buffer.Format("%s (%s)", state, addr_str.c_str());
-        state = state_buffer;
+    if (!status.interface_name.empty()) {
+      const auto addr = IPv4Address::GetDeviceAddress(status.interface_name);
+      if (addr.IsDefined()) { /* valid address? */
+        StaticString<40> addr_str;
+        if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
+          state_buffer.Format("%s (%s)", state, addr_str.c_str());
+          state = state_buffer;
+        }
       }
     }
   } else if (info.kind == WifiNetworkKind::SavedProfile) {

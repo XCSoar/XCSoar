@@ -131,7 +131,7 @@ ConnmanWifiBackend::Disconnect()
 const char *
 ConnmanWifiBackend::GetInterfaceName() const
 {
-  return "";
+  return interface_name.c_str();
 }
 
 WifiSignalUnit
@@ -150,13 +150,16 @@ ConnmanWifiBackend::GetBackendStatus()
 
     WifiBackendStatus status;
     status.signal_unit = WifiSignalUnit::Relative;
+    interface_name.clear();
 
     for (const auto &service : CmClient::ListServices(c)) {
       if (!CmClient::IsActiveServiceState(service.state))
         continue;
 
       status.state = WifiConnectionState::Connected;
+      status.interface_name = service.interface_name.c_str();
       status.ssid = service.ssid_text.c_str();
+      interface_name = status.interface_name;
       return status;
     }
 

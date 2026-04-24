@@ -14,6 +14,7 @@ struct ServiceEntry {
   std::string path;
   /** ESSID for display. */
   std::string ssid_text;
+  std::string interface_name;
   std::string state;
   bool needs_key{false};
   int strength{0};
