@@ -73,20 +73,20 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
              _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
              settings.enable_tim);
 
-  AddBoolean(_("XCTherm enabled"),
-             _("Enable XCTherm weather download and controls."),
+  AddBoolean("XCTherm enabled",
+             "Enable XCTherm wave forecast download and overlay.",
              settings.xctherm.enabled);
 
-  AddBoolean(_("XCTherm overlay on map"),
-             _("Keep XCTherm weather overlay visible on normal map pages."),
+  AddBoolean("XCTherm overlay on map",
+             "Show XCTherm forecast overlay on normal map pages.",
              settings.xctherm.show_on_main_map);
 
-  AddText(_("XCTherm email"),
-          _("E-mail used for XCTherm login."),
+  AddText("XCTherm email",
+          "Email address for your XCTherm account.",
           settings.xctherm.credentials.email);
 
-  AddPassword(_("XCTherm password"),
-              _("Password used for XCTherm login."),
+  AddPassword("XCTherm password",
+              "Password for your XCTherm account.",
               settings.xctherm.credentials.password);
 #endif
 }

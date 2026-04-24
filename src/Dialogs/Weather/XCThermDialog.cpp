@@ -2,57 +2,64 @@
 // Copyright The XCSoar Project
 
 #include "XCThermDialog.hpp"
+#include "Dialogs/Message.hpp"
+#include "Dialogs/ListPicker.hpp"
+#include "Weather/Features.hpp"
 
-#include "Widget/RowFormWidget.hpp"
+#ifdef HAVE_HTTP
+
+#include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
+#include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
+#include "Widget/ListWidget.hpp"
+#include "Widget/LargeTextWidget.hpp"
+#include "Widget/ButtonPanelWidget.hpp"
+#include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "Interface.hpp"
-#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
+#include "Renderer/TextRowRenderer.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "util/StaticString.hxx"
+#include "Weather/xctherm/XCThermAuth.hpp"
+#include "LogFile.hpp"
 
 namespace {
-
-enum ControlIndex {
-  MODEL,
-  PARAMETER,
-  WAVE_HEIGHT,
-  VERTICAL_WIND_AGL,
-};
 
 constexpr unsigned XCTHERM_MODEL_CH = 0;
 constexpr unsigned XCTHERM_MODEL_UK = 1;
 
-constexpr unsigned XCTHERM_PARAMETER_WAVE = 0;
-constexpr unsigned XCTHERM_PARAMETER_VERTICAL = 1;
-
-static constexpr StaticEnumChoice model_list[] = {
-  { XCTHERM_MODEL_CH, N_("ICON-CH") },
-  { XCTHERM_MODEL_UK, N_("ICON-UK") },
-  nullptr,
+struct LayerInfo {
+  const char *label;       // display text
+  unsigned value;          // altitude value in meters
+  bool is_agl;             // true = AGL, false = AMSL
 };
 
-static constexpr StaticEnumChoice parameter_list[] = {
-  { XCTHERM_PARAMETER_WAVE, N_("Wave") },
-  { XCTHERM_PARAMETER_VERTICAL, N_("Vertical wind") },
-  nullptr,
+static constexpr LayerInfo CH_LAYERS[] = {
+  { "Vertical wind 1500 m AMSL", 1500, false },
+  { "Vertical wind 2000 m AMSL", 2000, false },
+  { "Vertical wind 3000 m AMSL", 3000, false },
+  { "Vertical wind 4000 m AMSL", 4000, false },
+  { "Vertical wind 5000 m AMSL", 5000, false },
+  { "Vertical wind 6000 m AMSL", 6000, false },
+  { "Vertical wind 7000 m AMSL", 7000, false },
+  { "Vertical wind 8000 m AMSL", 8000, false },
+  { "Vertical wind 100 m AGL",   100,  true },
+  { "Vertical wind 400 m AGL",   400,  true },
 };
 
-constexpr unsigned CH_WAVE_HEIGHTS[] = {
-  1500, 2000, 3000, 4000, 5000, 6000, 7000, 8000,
-};
-
-constexpr unsigned UK_WAVE_HEIGHTS[] = {
-  1000, 1500, 2000, 2500, 3000, 4200,
-};
-
-constexpr unsigned CH_VERTICAL_WIND_AGL[] = {
-  100, 400,
-};
-
-constexpr unsigned UK_VERTICAL_WIND_AGL[] = {
-  100, 200, 400, 800,
+static constexpr LayerInfo UK_LAYERS[] = {
+  { "Vertical wind 1000 m AMSL", 1000, false },
+  { "Vertical wind 1500 m AMSL", 1500, false },
+  { "Vertical wind 2000 m AMSL", 2000, false },
+  { "Vertical wind 2500 m AMSL", 2500, false },
+  { "Vertical wind 3000 m AMSL", 3000, false },
+  { "Vertical wind 4200 m AMSL", 4200, false },
+  { "Vertical wind 100 m AGL",   100,  true },
+  { "Vertical wind 200 m AGL",   200,  true },
+  { "Vertical wind 400 m AGL",   400,  true },
+  { "Vertical wind 800 m AGL",   800,  true },
 };
 
 [[gnu::pure]]
@@ -62,159 +69,297 @@ IsUKModel(unsigned model) noexcept
   return model == XCTHERM_MODEL_UK;
 }
 
+static const LayerInfo *
+GetLayers(unsigned model, size_t &size) noexcept
+{
+  if (IsUKModel(model)) {
+    size = std::size(UK_LAYERS);
+    return UK_LAYERS;
+  }
+  size = std::size(CH_LAYERS);
+  return CH_LAYERS;
+}
+
 [[gnu::pure]]
 static bool
-IsVerticalParameter(unsigned parameter) noexcept
+IsActiveLayer(const LayerInfo &layer,
+              unsigned active_parameter,
+              unsigned active_wave_height,
+              unsigned active_vertical_agl) noexcept
 {
-  return parameter == XCTHERM_PARAMETER_VERTICAL;
+  if (layer.is_agl)
+    return active_parameter == 1 && layer.value == active_vertical_agl;
+  else
+    return active_parameter == 0 && layer.value == active_wave_height;
 }
 
-[[gnu::pure]]
-static const unsigned *
-GetWaveHeights(unsigned model, size_t &size) noexcept
-{
-  if (IsUKModel(model)) {
-    size = std::size(UK_WAVE_HEIGHTS);
-    return UK_WAVE_HEIGHTS;
-  }
+/* ---- List item renderer ---- */
 
-  size = std::size(CH_WAVE_HEIGHTS);
-  return CH_WAVE_HEIGHTS;
-}
+class XCThermRowRenderer {
+  TwoTextRowsRenderer row_renderer;
 
-[[gnu::pure]]
-static const unsigned *
-GetVerticalWindOptions(unsigned model, size_t &size) noexcept
-{
-  if (IsUKModel(model)) {
-    size = std::size(UK_VERTICAL_WIND_AGL);
-    return UK_VERTICAL_WIND_AGL;
-  }
-
-  size = std::size(CH_VERTICAL_WIND_AGL);
-  return CH_VERTICAL_WIND_AGL;
-}
-
-class XCThermSettingsPanel final
-  : public RowFormWidget, DataFieldListener {
 public:
-  XCThermSettingsPanel() noexcept
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font_bold,
+                                       look.small_font);
+  }
 
-private:
-  void UpdateOptionChoices() noexcept;
-  void FillIntegerEnum(unsigned row, const unsigned *values, size_t size,
-                       unsigned current_value) noexcept;
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
-
-  void OnModified(DataField &df) noexcept override;
+  void Draw(Canvas &canvas, const PixelRect rc, unsigned index,
+            unsigned model, unsigned active_parameter,
+            unsigned active_wave_height,
+            unsigned active_vertical_agl);
 };
 
 void
-XCThermSettingsPanel::FillIntegerEnum(unsigned row,
-                                      const unsigned *values,
-                                      size_t size,
-                                      unsigned current_value) noexcept
+XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          unsigned index, unsigned model,
+                          unsigned active_parameter,
+                          unsigned active_wave_height,
+                          unsigned active_vertical_agl)
 {
-  auto &df = (DataFieldEnum &)GetDataField(row);
+  size_t count = 0;
+  const auto *layers = GetLayers(model, count);
+  if (index >= count)
+    return;
 
-  df.ClearChoices();
+  const auto &layer = layers[index];
+  const bool active = IsActiveLayer(layer, active_parameter,
+                                     active_wave_height,
+                                     active_vertical_agl);
 
-  unsigned selected = 0;
-  for (unsigned i = 0; i < size; ++i) {
-    StaticString<32> label;
-    label.Format("%u", values[i]);
-    df.addEnumText(label, values[i]);
-    if (values[i] == current_value)
-      selected = i;
-  }
-
-  df.SetValue(selected);
-  GetControl(row).RefreshDisplay();
-}
-
-void
-XCThermSettingsPanel::UpdateOptionChoices() noexcept
-{
-  const auto model = GetValueEnum(MODEL);
-  const bool vertical = IsVerticalParameter(GetValueEnum(PARAMETER));
-
-  SetRowVisible(WAVE_HEIGHT, !vertical);
-  SetRowVisible(VERTICAL_WIND_AGL, vertical);
-
-  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
-
-  size_t size = 0;
-  if (!vertical) {
-    const auto *values = GetWaveHeights(model, size);
-    FillIntegerEnum(WAVE_HEIGHT, values, size, settings.wave_height);
-  } else {
-    const auto *values = GetVerticalWindOptions(model, size);
-    FillIntegerEnum(VERTICAL_WIND_AGL, values, size,
-                    settings.vertical_wind_agl);
-  }
-}
-
-void
-XCThermSettingsPanel::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
-{
-  RowFormWidget::Prepare(parent, rc);
-
-  const auto &settings = CommonInterface::GetComputerSettings().weather.xctherm;
-
-  AddEnum(_("Model"),
-          _("Select XCTherm model domain."),
-          model_list,
-          settings.model,
-          this);
-
-  AddEnum(_("Parameter"),
-          _("Select weather parameter."),
-          parameter_list,
-          settings.parameter,
-          this);
-
-  AddEnum(_("Wave height"),
-          _("Wave height above mean sea level in meters."));
-
-  AddEnum(_("Vertical wind AGL"),
-          _("Vertical wind layer above ground level in meters."));
-
-  UpdateOptionChoices();
-}
-
-bool
-XCThermSettingsPanel::Save(bool &_changed) noexcept
-{
-  bool changed = false;
-
-  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
-
-  changed |= SaveValueEnum(MODEL, ProfileKeys::XCThermModel,
-                           settings.model);
-  changed |= SaveValueEnum(PARAMETER, ProfileKeys::XCThermParameter,
-                           settings.parameter);
-
-  if (!IsVerticalParameter(settings.parameter))
-    changed |= SaveValueInteger(WAVE_HEIGHT, ProfileKeys::XCThermWaveHeight,
-                                settings.wave_height);
+  StaticString<80> first_row;
+  if (active)
+    first_row.Format("%s  [ACTIVE]", layer.label);
   else
-    changed |= SaveValueInteger(VERTICAL_WIND_AGL,
-                                ProfileKeys::XCThermVerticalWindAGL,
-                                settings.vertical_wind_agl);
+    first_row = layer.label;
 
-  _changed |= changed;
-  return true;
+  const char *second_row = active ? "Currently selected" : "";
+
+  row_renderer.DrawFirstRow(canvas, rc, first_row);
+  row_renderer.DrawSecondRow(canvas, rc, second_row);
+}
+
+/* ---- String choice renderer for model picker ---- */
+
+class StringChoiceRenderer final : public ListItemRenderer {
+  TextRowRenderer row_renderer;
+  const char *const *choices;
+
+public:
+  explicit StringChoiceRenderer(const char *const *_choices) noexcept
+    : choices(_choices) {}
+
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
+
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned i) noexcept override {
+    row_renderer.DrawTextRow(canvas, rc, choices[i]);
+  }
+};
+
+/* ---- Main widget ---- */
+
+class XCThermWidget final : public ListWidget {
+  ButtonPanelWidget *buttons_widget = nullptr;
+  Button *activate_button = nullptr;
+  Button *update_button = nullptr;
+  Button *model_button = nullptr;
+
+  XCThermRowRenderer row_renderer;
+
+public:
+  void SetButtonPanel(ButtonPanelWidget &_buttons) {
+    buttons_widget = &_buttons;
+  }
+
+  void CreateButtons(ButtonPanel &buttons);
+
+private:
+  void UpdateList();
+  void SaveSettings();
+
+  void ActivateClicked();
+  void UpdateClicked();
+  void ModelClicked();
+
+public:
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+
+protected:
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
+
+  void OnCursorMoved(unsigned index) noexcept override;
+
+  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
+    return true;
+  }
+
+  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
+    ActivateClicked();
+  }
+};
+
+void
+XCThermWidget::CreateButtons(ButtonPanel &buttons)
+{
+  activate_button = buttons.Add("Activate", [this]() { ActivateClicked(); });
+  update_button = buttons.Add("Update", [this]() { UpdateClicked(); });
+  model_button = buttons.Add("Model", [this]() { ModelClicked(); });
 }
 
 void
-XCThermSettingsPanel::OnModified(DataField &df) noexcept
+XCThermWidget::SaveSettings()
 {
-  if (IsDataField(MODEL, df) || IsDataField(PARAMETER, df))
-    UpdateOptionChoices();
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  Profile::Set(ProfileKeys::XCThermModel, (int)settings.model);
+  Profile::Set(ProfileKeys::XCThermParameter, (int)settings.parameter);
+  Profile::Set(ProfileKeys::XCThermWaveHeight, (int)settings.wave_height);
+  Profile::Set(ProfileKeys::XCThermVerticalWindAGL,
+               (int)settings.vertical_wind_agl);
+}
+
+void
+XCThermWidget::UpdateList()
+{
+  ListControl &list = GetList();
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+
+  size_t count = 0;
+  const auto *layers = GetLayers(settings.model, count);
+
+  list.SetLength(count);
+
+  /* Find the currently active row */
+  int active_index = -1;
+  for (unsigned i = 0; i < count; ++i) {
+    if (IsActiveLayer(layers[i], settings.parameter,
+                       settings.wave_height,
+                       settings.vertical_wind_agl)) {
+      active_index = (int)i;
+      break;
+    }
+  }
+
+  if (active_index >= 0)
+    list.SetCursorIndex(active_index);
+
+  list.Invalidate();
+
+  /* Update model button label */
+  model_button->SetCaption(IsUKModel(settings.model)
+                           ? "Model: UK" : "Model: CH");
+
+  /* Update activate/update button state based on cursor */
+  OnCursorMoved(list.GetCursorIndex());
+}
+
+void
+XCThermWidget::OnCursorMoved(unsigned index) noexcept
+{
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+
+  size_t count = 0;
+  const auto *layers = GetLayers(settings.model, count);
+
+  const bool cursor_is_active = index < count &&
+    IsActiveLayer(layers[index], settings.parameter,
+                   settings.wave_height, settings.vertical_wind_agl);
+
+  if (cursor_is_active) {
+    activate_button->SetCaption("Active");
+    activate_button->SetEnabled(false);
+  } else {
+    activate_button->SetCaption("Activate");
+    activate_button->SetEnabled(true);
+  }
+}
+
+void
+XCThermWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                            unsigned idx) noexcept
+{
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  row_renderer.Draw(canvas, rc, idx,
+                    settings.model, settings.parameter,
+                    settings.wave_height, settings.vertical_wind_agl);
+}
+
+void
+XCThermWidget::ActivateClicked()
+{
+  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
+
+  const int index = GetList().GetCursorIndex();
+  size_t count = 0;
+  const auto *layers = GetLayers(settings.model, count);
+
+  if (index < 0 || (unsigned)index >= count)
+    return;
+
+  const auto &layer = layers[index];
+
+  if (layer.is_agl) {
+    settings.parameter = 1;
+    settings.vertical_wind_agl = layer.value;
+  } else {
+    settings.parameter = 0;
+    settings.wave_height = layer.value;
+  }
+
+  SaveSettings();
+  UpdateList();
+}
+
+void
+XCThermWidget::UpdateClicked()
+{
+  /* TODO: trigger actual tile download via XCThermAPI */
+  ShowMessageBox(
+    "Update not yet implemented.\n\n"
+    "This will download the forecast tiles\n"
+    "for the currently active layer.",
+    "XCTherm", MB_OK);
+}
+
+void
+XCThermWidget::ModelClicked()
+{
+  static constexpr const char *choices[] = { "CH (Alps)", "UK" };
+
+  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
+  StringChoiceRenderer item_renderer(choices);
+
+  int index = IsUKModel(settings.model) ? 1 : 0;
+  index = ListPicker("Select model",
+                     std::size(choices), index,
+                     item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
+                     item_renderer,
+                     false, nullptr, nullptr, nullptr);
+
+  if (index < 0)
+    return;
+
+  settings.model = index == 1 ? XCTHERM_MODEL_UK : XCTHERM_MODEL_CH;
+  SaveSettings();
+  UpdateList();
+}
+
+void
+XCThermWidget::Prepare(ContainerWindow &parent,
+                        const PixelRect &rc) noexcept
+{
+  CreateButtons(buttons_widget->GetButtonPanel());
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  CreateList(parent, look, rc, row_renderer.CalculateLayout(look));
+  UpdateList();
 }
 
 } // namespace
@@ -222,5 +367,26 @@ XCThermSettingsPanel::OnModified(DataField &df) noexcept
 std::unique_ptr<Widget>
 CreateXCThermWidget() noexcept
 {
-  return std::make_unique<XCThermSettingsPanel>();
+  /*
+   * If no XCTherm account is configured, show a simple message
+   * (same pattern as pc_met).
+   */
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+
+  if (!settings.credentials.IsDefined())
+    return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
+                                             "No XCTherm account configured.\n\n"
+                                             "Enter your credentials in\n"
+                                             "Config > System > Weather.");
+
+  auto widget = std::make_unique<XCThermWidget>();
+  auto buttons = std::make_unique<ButtonPanelWidget>(
+    std::move(widget),
+    ButtonPanelWidget::Alignment::BOTTOM);
+  auto *widget_ptr = (XCThermWidget *)&buttons->GetWidget();
+  widget_ptr->SetButtonPanel(*buttons);
+  return buttons;
 }
+
+#endif

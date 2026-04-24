@@ -633,7 +633,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAFormatter.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
-	$(SRC)/Weather/NOAAUpdater.cpp
+	$(SRC)/Weather/NOAAUpdater.cpp \
+	$(SRC)/Weather/xctherm/XCThermAuth.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
