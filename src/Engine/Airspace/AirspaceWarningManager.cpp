@@ -157,6 +157,8 @@ class AirspaceIntersectionWarningVisitor final
   AirspaceWarningManager &warning_manager;
   const AirspaceWarning::State warning_state;
   const FloatDuration max_time;
+  const GeoPoint location_predicted;
+  const FlatProjection &projection;
   bool found = false;
   const double max_alt;
   bool mode_inside = false;
@@ -170,22 +172,29 @@ public:
    * @param warning_manager Warning manager to add items to
    * @param warning_state Type of warning
    * @param max_time Time limit of intercept
+   * @param location_predicted Location of intercept
+   * @param projection Projected location of intercept
    * @param max_alt Maximum height of base to allow (optional)
    *
    * @return Initialised object
    */
-  AirspaceIntersectionWarningVisitor(const AircraftState &_state,
-                                     const AirspaceAircraftPerformance &_perf,
-                                     AirspaceWarningManager &_warning_manager,
-                                     const AirspaceWarning::State _warning_state,
-                                     const FloatDuration _max_time,
-                                     const double _max_alt = -1):
-    state(_state),
-    perf(_perf),
-    warning_manager(_warning_manager),
-    warning_state(_warning_state),
-    max_time(_max_time),
-    max_alt(_max_alt)
+  AirspaceIntersectionWarningVisitor(
+      const AircraftState &_state,
+      const AirspaceAircraftPerformance &_perf,
+      AirspaceWarningManager &_warning_manager,
+      const AirspaceWarning::State _warning_state,
+      const FloatDuration _max_time,
+      const GeoPoint &_location_predicted,
+      const FlatProjection &_projection,
+      const double _max_alt = -1)
+    :state(_state),
+     perf(_perf),
+     warning_manager(_warning_manager),
+     warning_state(_warning_state),
+     max_time(_max_time),
+     location_predicted(_location_predicted),
+     projection(_projection),
+     max_alt(_max_alt)
   {
   }
 
@@ -197,31 +206,82 @@ public:
   void Intersection(ConstAirspacePtr &airspace_ptr) noexcept {
     const auto &airspace = *airspace_ptr;
     if (!airspace.IsActive())
-      return; // ignore inactive airspaces completely
+      return;
 
-    if (!(warning_manager.GetConfig().IsClassEnabled(airspace.GetClassOrType()) || 
-	      warning_manager.GetConfig().IsClassEnabled(airspace.GetTypeOrClass())) ||
+    if (!(warning_manager.GetConfig()
+            .IsClassEnabled(airspace.GetClassOrType()) ||
+          warning_manager.GetConfig()
+            .IsClassEnabled(airspace.GetTypeOrClass())) ||
         ExcludeAltitude(airspace))
       return;
 
-    AirspaceWarning *warning = warning_manager.GetWarningPtr(airspace);
-    if (warning == nullptr || warning->IsStateAccepted(warning_state)) {
+    AirspaceWarning *warning =
+      warning_manager.GetWarningPtr(airspace);
 
-      AirspaceInterceptSolution solution;
+    /* Compute distance interval along predicted path.
+       Always captured regardless of state acceptance,
+       because clearance suppression needs intervals from
+       all prediction methods. */
+    AirspaceWarningInterval iv =
+      AirspaceWarningInterval::Invalid();
 
-      if (mode_inside) {
-        solution = airspace.Intercept(state, perf,
-                                      state.location, state.location);
-      } else {
-        solution = Intercept(airspace, state, perf);
+    if (!mode_inside) {
+      if (!intersections.empty()) {
+        const auto &p = intersections.front();
+        double d0 = state.location.Distance(p.first);
+        double d1 = state.location.Distance(p.second);
+        if (d0 <= d1)
+          iv = {{d0, p.first}, {d1, p.second}};
+        else
+          iv = {{d1, p.second}, {d0, p.first}};
       }
+    } else {
+      /* Aircraft is inside this airspace. Find exit
+         along the predicted path direction. */
+      auto isv = airspace.Intersects(
+        state.location, location_predicted, projection);
+      if (isv.empty()) {
+        /* entire predicted path inside airspace */
+        double len =
+          state.location.Distance(location_predicted);
+        iv = {{0, state.location},
+              {len, location_predicted}};
+      } else {
+        /* all() returns (entry, exit) pairs; when starting
+           inside, the first pair is (start_pos, exit_point),
+           so .second is the exit boundary */
+        double d =
+          state.location.Distance(isv.front().second);
+        iv = {{0, state.location},
+              {d, isv.front().second}};
+      }
+    }
+
+    if (!iv.IsValid() && warning == nullptr)
+      return;
+
+    if (warning == nullptr)
+      warning =
+        warning_manager.GetNewWarningPtr(
+          std::move(airspace_ptr));
+
+    if (iv.IsValid())
+      warning->SetInterval(warning_state, iv);
+
+    /* Upgrade state and solution only when the new state
+       is at least as severe as the current one */
+    if (warning->IsStateAccepted(warning_state)) {
+      AirspaceInterceptSolution solution;
+      if (mode_inside)
+        solution = airspace.Intercept(
+          state, perf, state.location, state.location);
+      else
+        solution = Intercept(airspace, state, perf);
+
       if (!solution.IsValid())
         return;
       if (solution.elapsed_time > max_time)
         return;
-
-      if (warning == nullptr)
-        warning = warning_manager.GetNewWarningPtr(std::move(airspace_ptr));
 
       warning->UpdateSolution(warning_state, solution);
       found = true;
@@ -232,11 +292,6 @@ public:
     Intersection(as);
   }
 
-  /**
-   * Determine whether intersections for this type were found (new or modified)
-   *
-   * @return True if intersections were found
-   */
   bool Found() const {
     return found;
   }
@@ -246,11 +301,11 @@ public:
   }
 
 private:
-  bool ExcludeAltitude(const AbstractAirspace& airspace) {
+  bool ExcludeAltitude(const AbstractAirspace &airspace) {
     if (max_alt <= 0)
       return false;
 
-    return (airspace.GetBaseAltitude(state) > max_alt);
+    return airspace.GetBaseAltitude(state) > max_alt;
   }
 };
 
@@ -280,10 +335,9 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   const auto ceiling = state.altitude
     + std::max((unsigned)1000, config.altitude_warning_margin);
 
-  AirspaceIntersectionWarningVisitor visitor(state, perf, 
-                                             *this, 
-                                             warning_state, max_time_limit,
-                                             ceiling);
+  AirspaceIntersectionWarningVisitor visitor(
+    state, perf, *this, warning_state, max_time_limit,
+    location_predicted, GetProjection(), ceiling);
 
   airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
