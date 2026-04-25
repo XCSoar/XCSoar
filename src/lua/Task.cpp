@@ -8,6 +8,7 @@
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
 #include "Interface.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Util/Gradient.hpp"
@@ -123,7 +124,8 @@ l_task_index(lua_State *L)
         return 0;
       }
 
-      Lua::Push(L, next_solution.GetArrivalAltitude(basic.nav_altitude));
+      Lua::Push(L,
+                next_solution.GetArrivalAltitude(GlideEnergyHeight(basic)));
   } else if (StringIsEqual(name, "next_gr")) {
       if (!CommonInterface::Calculated().task_stats.task_valid) 
         return 0;

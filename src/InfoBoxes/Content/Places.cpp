@@ -53,7 +53,7 @@ ComputeHomeGlide(const MoreData &basic,
   const GlideState glide_state(
     basic.location.DistanceBearing(settings.poi.home_location),
     settings.poi.home_elevation + settings.task.safety_height_arrival,
-    basic.nav_altitude,
+    GlideEnergyHeight(basic),
     calculated.GetWindOrZero());
 
   return MacCready::Solve(settings.task.glide,

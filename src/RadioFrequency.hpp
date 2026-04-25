@@ -22,6 +22,11 @@ class RadioFrequency {
    */
   uint_least16_t value;
 
+  static constexpr bool ChannelKhzValid(unsigned khz) noexcept {
+    return khz >= MIN_KHZ && khz < MAX_KHZ && (khz % 5 == 0) &&
+           (khz % 25) != 15 && (khz % 25) != 20;
+  }
+
   constexpr RadioFrequency(unsigned _value) noexcept:value(_value) {}
 
 public:
@@ -57,13 +62,9 @@ public:
   constexpr bool IsDefined() const noexcept {
     if (value == 0)
       return false;
-    
-    // Validate that the value represents a valid frequency
-    // Check if the frequency would be in valid range and meet validation criteria
+
     const unsigned khz = BASE_KHZ + value;
-    return (khz >= MIN_KHZ && khz < MAX_KHZ) &&
-           (khz % 5 == 0) &&
-           (khz % 25 != 20);
+    return ChannelKhzValid(khz);
   }
 
   /**
@@ -80,25 +81,38 @@ public:
   }
 
   /**
-   * VHF Voice channels range from 118000 kHz up to not including 137000 kHz
-   * Valid 8.33 kHz channels must be a multiple of 5 kHz
-   * Due to rounding from 8.33 kHz to multiples of 5 (for displaying), some
-   * channels are invalid. These are matched by (value % 25) == 20.
+   * VHF voice band is 118000 kHz up to (not including) 137000 kHz.
+   * Channels are on a 5 kHz grid; in each 25 kHz block only offsets 0, 5 and
+   * 10 kHz are real 8.33 kHz channels (offsets 15 and 20 are unused).
    */
   constexpr void SetKiloHertz(unsigned khz) noexcept {
-    value = (khz >= MIN_KHZ && khz < MAX_KHZ) &&
-            (khz % 5 == 0) &&
-            (khz % 25 != 20)
-      ? (khz - BASE_KHZ)
-      : 0;
+    value = ChannelKhzValid(khz) ? (khz - BASE_KHZ) : 0;
   }
 
   constexpr void OffsetKiloHertz(int khz_offset) noexcept {
-    auto new_khz = GetKiloHertz() + khz_offset;
-    if ((new_khz % 25) == 20) {
-      new_khz += khz_offset > 0 ? 5 : -5;
+    int new_khz = static_cast<int>(GetKiloHertz()) + khz_offset;
+    const int dir = khz_offset > 0 ? 5 : (khz_offset < 0 ? -5 : 0);
+
+    if (dir != 0) {
+      for (unsigned n = 0; n < 5u; ++n) {
+        if (new_khz < static_cast<int>(MIN_KHZ) ||
+            new_khz >= static_cast<int>(MAX_KHZ))
+          break;
+        const unsigned u = static_cast<unsigned>(new_khz);
+        if (u % 5 != 0)
+          break;
+        const unsigned r = u % 25;
+        if (r != 15 && r != 20)
+          break;
+        new_khz += dir;
+      }
     }
-    SetKiloHertz(new_khz);
+
+    if (new_khz < static_cast<int>(MIN_KHZ) ||
+        new_khz >= static_cast<int>(MAX_KHZ))
+      Clear();
+    else
+      SetKiloHertz(static_cast<unsigned>(new_khz));
   }
 
   char *Format(char *buffer, size_t max_size) const noexcept;

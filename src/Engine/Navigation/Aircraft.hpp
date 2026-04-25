@@ -68,10 +68,19 @@ struct AltitudeState
   /** Altitude over terrain */
   double altitude_agl;
 
+  /**
+   * Total mechanical energy expressed as height (see #Math/EnergyHeight.hpp),
+   * in metres MSL-equivalent — not the aircraft geometric altitude.
+   * Glide/MacCready input only; never use for airspace or map vertical
+   * position.
+   */
+  double total_energy_height;
+
   constexpr void Reset() noexcept {
     altitude = 0;
     working_band_fraction = 0;
     altitude_agl = 0;
+    total_energy_height = 0;
   }
 };
 
@@ -172,5 +181,16 @@ struct AircraftState:
     flying = false;
   }
 };
+
+/**
+ * Height input for MacCready / GlideState: total energy when available,
+ * otherwise geometric #AircraftState::altitude.
+ */
+[[gnu::pure]]
+inline double
+GlideHeightForMacCready(const AircraftState &ac) noexcept
+{
+  return ac.total_energy_height > 0 ? ac.total_energy_height : ac.altitude;
+}
 
 static_assert(std::is_trivial<AircraftState>::value, "type is not trivial");

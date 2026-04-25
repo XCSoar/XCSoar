@@ -100,6 +100,7 @@ constexpr std::string_view NettoSpeed = "NettoSpeed";
 constexpr std::string_view AccelerometerZero = "AccelerometerZero";
 
 constexpr std::string_view AverEffTime = "AverEffTime";
+constexpr std::string_view EffAltitudeSource = "EffAltitudeSource";
 constexpr std::string_view VarioGauge = "VarioGauge";
 
 constexpr std::string_view AppIndLandable = "AppIndLandable";

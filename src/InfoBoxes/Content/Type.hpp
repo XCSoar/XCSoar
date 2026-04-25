@@ -79,10 +79,10 @@ namespace InfoBoxFactory
     e_Climb_Avg, /* Time-average climb rate in all thermals */
     e_RH_Trend, /* Task Req. Total Height Trend */
     e_Battery, /* Displays percentage of device battery remaining (where applicable) and status/voltage of external power supply */
-    e_Fin_GR, /* Geometric gradient to the arrival height above the final waypoint. This is not adjusted for total energy */
+    e_Fin_GR, /* Glide ratio to finish: distance to go over height above final (total energy height when TAS available) */
     e_Alternate_1_Name, /* Displays name and bearing to the best alternate landing location */
     e_Alternate_2_Name, /* Displays name and bearing to the second alternate landing location */
-    e_Alternate_1_GR, /* Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy */
+    e_Alternate_1_GR, /* Glide to best alternate (total energy height when TAS available) */
     /* 70..79 */
     e_H_QFE, /* Height on automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
     e_GR_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. */
@@ -136,7 +136,7 @@ namespace InfoBoxFactory
     e_ActiveRadio, /* Active Radio Frequency */
     e_StandbyRadio, /* Standby Radio Frequency */
     e_Thermal_Time, /* Time in Thermal*/
-    e_Alternate_2_GR, /* Geometric gradient to the arrival height above the second alternate. This is not adjusted for total energy */
+    e_Alternate_2_GR, /* Glide to second alternate (total energy height when TAS available) */
     e_HeartRate,
     /* 120..129 */
     e_TransponderCode, /* Transponder code */

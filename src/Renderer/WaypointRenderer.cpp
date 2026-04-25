@@ -74,7 +74,7 @@ struct VisibleWaypoint {
     const auto elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const GlideState state(GeoVector(basic.location, waypoint->location),
-                           elevation, basic.nav_altitude, wind);
+                           elevation, GlideEnergyHeight(basic), wind);
 
     const GlideResult result = mac_cready.SolveStraight(state);
     if (!result.IsOk())
@@ -234,7 +234,7 @@ protected:
 
       const auto safety_height = task_behaviour.safety_height_arrival;
       const auto target_altitude = way_point.elevation + safety_height;
-      const auto delta_h = basic.nav_altitude - target_altitude;
+      const auto delta_h = GlideEnergyHeight(basic) - target_altitude;
       if (delta_h <= 0)
         /* no L/D if below waypoint */
         return;

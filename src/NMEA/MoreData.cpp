@@ -8,7 +8,7 @@ MoreData::Reset() noexcept
 {
   nav_altitude = 0;
   energy_height = 0;
-  TE_altitude = 0;
+  total_energy_height = 0;
 
   gps_vario = 0;
   gps_vario_available.Clear();

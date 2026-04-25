@@ -11,5 +11,6 @@ AircraftState::GetPredictedState(FloatDuration in_time) const noexcept
   GeoVector vec(ground_speed * in_time.count(), track);
   state_next.location = vec.EndPoint(location);
   state_next.altitude += vario * in_time.count();
+  state_next.total_energy_height += vario * in_time.count();
   return state_next;
 }

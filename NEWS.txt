@@ -37,12 +37,17 @@ Version 7.45 - not yet released
   - configure built-in GPS & sensors in the last device slot by default (same on
     iOS)
 * calculations
+  - task glide (MacCready): use total energy height (navigation altitude plus
+    kinetic height from true airspeed when available) so final glide and related
+    solutions are not inflated or deflated by airspeed changes alone (#508)
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)
 * data files
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
 * devices
+  - radio: VHF channel validation also rejects the unused 8.33 kHz offset 15
+    within each 25 kHz block (offset 20 was already rejected) #2225
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
 * iOS
   - disable Core Location distance filter for built-in GPS so fixes are not

@@ -18,5 +18,5 @@ GlideState::Remaining(const TaskPoint &tp,
 
   return GlideState(tp.GetVectorRemaining(aircraft.location),
                     std::max(min_h, tp.GetElevation()),
-                    aircraft.altitude, aircraft.wind);
+                    GlideHeightForMacCready(aircraft), aircraft.wind);
 }

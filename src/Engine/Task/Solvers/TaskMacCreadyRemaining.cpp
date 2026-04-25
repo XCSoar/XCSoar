@@ -6,6 +6,7 @@
 #include "GlideSolvers/MacCready.hpp"
 #include "Task/Points/TaskPoint.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
+#include "Math/EnergyHeight.hpp"
 
 GlideResult
 TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
@@ -37,6 +38,8 @@ TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
     AircraftState aircraft2 = aircraft;
     aircraft2.location = tp.GetLocation();
     aircraft2.altitude = tp.GetElevation();
+    aircraft2.total_energy_height =
+      TotalEnergyHeight(aircraft2.altitude, aircraft2.true_airspeed);
     return aircraft2;
   } else
     return aircraft;
