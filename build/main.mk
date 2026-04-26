@@ -100,6 +100,7 @@ DIALOG_SOURCES = \
 	\
 	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/NavigatorConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WindConfigPanel.cpp \
