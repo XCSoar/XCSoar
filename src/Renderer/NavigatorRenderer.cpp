@@ -36,6 +36,7 @@
 #include "util/StaticString.hxx"
 
 // standard
+#include <algorithm>
 #include <cmath>
 
 namespace {
@@ -87,9 +88,6 @@ NavigatorRenderer::Update(const Canvas &canvas) noexcept
       canvas_height != canvas.GetHeight()) {
     canvas_width = canvas.GetWidth();
     canvas_height = canvas.GetHeight();
-    hasCanvasSizeChanged = true;
-  } else {
-    hasCanvasSizeChanged = false;
   }
 
   basic = &CommonInterface::Basic();
@@ -97,61 +95,17 @@ NavigatorRenderer::Update(const Canvas &canvas) noexcept
 
   has_started = calculated->ordered_task_stats.start.HasStarted();
   utc_offset = CommonInterface::GetComputerSettings().utc_offset;
-
-  ratio_dpi = 1.0 / Layout::vdpi * 100;
-}
-
-void
-NavigatorRenderer::GenerateFrame(const PixelRect &rc,
-                                 const bool is_frame_main) noexcept
-{
-  const int rc_height = rc.GetHeight();
-  const int rc_width = rc.GetWidth();
-  const auto rc_top_left = rc.GetTopLeft();
-
-  /* the divisions below are not simplified deliberately to understand frame
-     construction */
-  const PixelPoint pt0 = {rc_top_left.x + rc_height * 5 / 20, rc_top_left.y};
-  const PixelPoint pt1 = {rc_top_left.x + rc_width - rc_height * 4 / 20,
-                          pt0.y};
-  const PixelPoint pt2 = {rc_top_left.x + rc_width - rc_height * 2 / 20,
-                          rc_top_left.y + rc_height * 1 / 20};
-  const PixelPoint pt3 = {rc_top_left.x + rc_width,
-                          rc_top_left.y + rc_height * 10 / 20};
-  const PixelPoint pt4 = {pt2.x, rc_top_left.y + rc_height * 19 / 20};
-  const PixelPoint pt5 = {pt1.x, rc_top_left.y + rc_height};
-  const PixelPoint pt6 = {pt0.x, pt5.y};
-  const PixelPoint pt7 = {rc_top_left.x + rc_height * 2 / 20, pt4.y};
-  const PixelPoint pt8 = {rc_top_left.x, pt3.y};
-  const PixelPoint pt9 = {pt7.x, pt2.y};
-
-  const std::array<BulkPixelPoint, 10> frame{
-      pt0, pt1, pt2, pt3, pt4, pt5, pt6, pt7, pt8, pt9,
-  };
-  if (is_frame_main)
-    polygon_frame_main = frame;
-  else
-    polygon_frame_detailed = frame;
 }
 
 void
 NavigatorRenderer::DrawFrame(Canvas &canvas, const PixelRect &rc,
-                             const NavigatorLook &look_nav,
-                             const bool is_frame_main) noexcept
+                             const NavigatorLook &look_nav) noexcept
 {
-  if (hasCanvasSizeChanged) {
-    GenerateFrame(rc, is_frame_main);
-  }
-
   canvas.Select(look_nav.pen_frame);
   canvas.Select(look_nav.brush_frame);
 
-  if (is_frame_main) {
-    canvas.DrawPolygon(polygon_frame_main.data(), polygon_frame_main.size());
-  } else {
-    canvas.DrawPolygon(polygon_frame_detailed.data(),
-                       polygon_frame_detailed.size());
-  }
+  const unsigned corner_radius = Layout::Scale(8);
+  canvas.DrawRoundRectangle(rc, {corner_radius * 2, corner_radius * 2});
 }
 
 void
@@ -429,9 +383,11 @@ NavigatorRenderer::DrawWaypointInfoValueUnit(
     const char *text_for_width) noexcept
 {
   unit_height = static_cast<unsigned int>(font_height * 4 / 10);
-  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(font_height)));
   size_text = canvas.CalcTextSize(text_for_width);
-  font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+  font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(unit_height)));
   ascent_height = UnitSymbolRenderer::GetAscentHeight(font, unit);
   pp_pos_unit = pxpt_pos_infos_waypoint.At(
       size_text.width, size_text.height - static_cast<int>(ascent_height * 1.6));
@@ -465,7 +421,8 @@ NavigatorRenderer::DrawWaypointInfos(Canvas &canvas,
     break;
   }
 
-  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(font_height)));
   canvas.Select(font);
 
   text_size_infos_waypoint =
@@ -538,7 +495,8 @@ NavigatorRenderer::DrawCurrentFlightInfos(
                                    : font_height = canvas_height * 30 / 200;
   }
 
-  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(font_height)));
   // grow artificially the current_speed_s string ('format tricks')
   StaticString<7> sz_tmp_current_speed_s;
   sz_tmp_current_speed_s.clear();
@@ -600,7 +558,8 @@ NavigatorRenderer::DrawCurrentFlightInfos(
     // Draw speed units ---------------------------------------------
     unit = Units::GetUserSpeedUnit();
     unit_height = static_cast<unsigned int>(font_height * 38 / 100);
-    font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+    font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(unit_height)));
     size_text = canvas.CalcTextSize(current_speed_s.c_str());
     pp_pos_unit =
         pxpt_pos_current_speed.At(size_text.width, size_text.height / 10);
@@ -609,7 +568,8 @@ NavigatorRenderer::DrawCurrentFlightInfos(
                              look_infobox.unit_fraction_pen);
 
     // Current Altitude --------------------------------------------
-    font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+    font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(font_height)));
     const PixelPoint pxpt_pos_altitude{pos_x_speed_altitude,
                                        pos_y_current_altitude};
     canvas.Select(font);
@@ -619,7 +579,8 @@ NavigatorRenderer::DrawCurrentFlightInfos(
     // Draw Altitude unit -------------------------------------------
     unit = Units::GetUserAltitudeUnit();
     unit_height = static_cast<unsigned int>(font_height * 0.5);
-    font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+    font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(unit_height)));
     size_text = canvas.CalcTextSize(current_altitude_s.c_str());
     pp_pos_unit =
         pxpt_pos_altitude.At(size_text.width, size_text.height * 53 / 100);
@@ -652,7 +613,8 @@ NavigatorRenderer::DrawWaypointName(Canvas &canvas,
     break;
   }
 
-  font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+  font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(font_height)));
   canvas.Select(font);
 
   sz_waypoint_name = canvas.CalcTextSize(waypoint_name_s).width;
@@ -721,10 +683,10 @@ NavigatorRenderer::DrawTimesInfo(Canvas &canvas, const PixelRect &rc,
   if (nav_type == NavType::NAVIGATOR_DETAILED) {
     if (canvas_width > canvas_height * 3.6) {
       font.Load(FontDescription(
-          Layout::VptScale(canvas_height * ratio_dpi * 32 / 200)));
+          Layout::VptScaleFromDesignPixel(canvas_height * 32 / 200)));
     } else {
       font.Load(FontDescription(
-          Layout::VptScale(canvas_height * ratio_dpi * 24 / 200)));
+          Layout::VptScaleFromDesignPixel(canvas_height * 24 / 200)));
     }
 
     size_text = canvas.CalcTextSize(times_local_elapsed_s.c_str());
@@ -778,7 +740,8 @@ NavigatorRenderer::DrawAverageSpeed(Canvas &canvas,
     } else {
       font_height = canvas_height * 24 / 200;
     }
-    font.Load(FontDescription(Layout::VptScale(font_height * ratio_dpi)));
+    font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(font_height)));
     size_text = canvas.CalcTextSize(waypoint_average_speed_s.c_str());
     PixelPoint pxpt_pos_average_speed{
         static_cast<int>(canvas_width * 5 / 200 + 6),
@@ -790,7 +753,8 @@ NavigatorRenderer::DrawAverageSpeed(Canvas &canvas,
     // Draw average speed unit --------------------------------------
     unit = Units::GetUserTaskSpeedUnit();
     unit_height = static_cast<unsigned int>(font_height * 0.5);
-    font.Load(FontDescription(Layout::VptScale(unit_height * ratio_dpi)));
+    font.Load(FontDescription(
+      Layout::VptScaleFromDesignPixel(unit_height)));
     pp_pos_unit =
         pxpt_pos_average_speed.At(size_text.width, size_text.height / 10);
     UnitSymbolRenderer::Draw(canvas, pp_pos_unit, unit,
@@ -944,9 +908,10 @@ NavigatorRenderer::DrawProgressTask(const TaskSummary &summary, Canvas &canvas,
   const int rc_height = rc.GetHeight();
   const int rc_width = rc.GetWidth();
 
-  // render the progress bar
+  /* Bar must reach rc.bottom: the old margin left a foot strip where the
+     frame stroke (light in dark mode) showed over the clear. */
   PixelRect r{rc_height * 5 / 24, rc_height - rc_height * 5 / 48,
-              rc_width - rc_height * 10 / 48, rc_height - rc_height * 1 / 48};
+              rc_width - rc_height * 10 / 48, rc.bottom};
 
   bool task_has_started =
       CommonInterface::Calculated().task_stats.start.HasStarted();
@@ -955,17 +920,31 @@ NavigatorRenderer::DrawProgressTask(const TaskSummary &summary, Canvas &canvas,
 
   unsigned int progression{};
 
-  if (task_has_started && !task_is_finished)
-    progression = 100 * (1 - summary.p_remaining);
-  else if (task_has_started && task_is_finished) progression = 100;
-  else progression = 0;
+  if (task_has_started && !task_is_finished) {
+    double p{1.0 - summary.p_remaining};
+    if (!std::isfinite(p))
+      p = 0.0;
+    p = std::clamp(p, 0.0, 1.0);
+    progression = static_cast<unsigned>(std::lround(100.0 * p));
+  } else if (task_has_started && task_is_finished) {
+    progression = 100;
+  } else {
+    progression = 0;
+  }
 
-  DrawSimpleProgressBar(canvas, r, progression, 0, 100);
+  const Color &progress_bg = look_nav.inverse
+                                 ? NavigatorLook::color_background_frame_inv
+                                 : NavigatorLook::color_background_frame;
+  DrawSimpleProgressBar(canvas, r, progression, 0, 100, &progress_bg);
 
   canvas.Select(look_nav.brush_frame);
 
   // render the waypoints on the progress bar
-  const Pen pen_waypoint(Layout::ScalePenWidth(1), COLOR_BLACK);
+  /* Outlines: avoid color_frame_inv (white) in dark mode here; many small
+     draw_rectangle calls with a white pen read as a bright line on the bar. */
+  const Pen pen_waypoint(Layout::ScalePenWidth(1),
+                         look_nav.inverse ? COLOR_GRAY
+                                          : NavigatorLook::color_frame);
   const Pen pen_indications(Layout::ScalePenWidth(1),
                             look_nav.inverse ? COLOR_GRAY : COLOR_DARK_GRAY);
   canvas.Select(pen_indications);
@@ -1018,7 +997,10 @@ NavigatorRenderer::DrawProgressTask(const TaskSummary &summary, Canvas &canvas,
       w = Layout::Scale(2);
     } else {
       if (it->achieved) canvas.Select(look_task.hbGreen);
-      else canvas.Select(look_task.hbLightGray);
+      else
+        /* hbLightGray is near-white; on a dark track it looks like a white band */
+        canvas.Select(look_nav.inverse ? look_task.hbGray
+                                       : look_task.hbLightGray);
 
       w = Layout::Scale(1);
     }
@@ -1058,6 +1040,9 @@ NavigatorRenderer::DrawWaypointsIconsTitle(
   /// without using costing calculation inside renderer
   WaypointReachability wr_before{WaypointReachability::UNREACHABLE};
   WaypointReachability wr_current{WaypointReachability::UNREACHABLE};
+
+  if (backend_components == nullptr)
+    return;
 
   auto *protected_task_manager =
       backend_components->protected_task_manager.get();

@@ -14,10 +14,8 @@
 #include "ui/dim/Rect.hpp"
 #include "util/StaticString.hxx"
 
-#include <array>
 #include <cstdint>
 
-struct BulkPixelPoint;
 struct NavigatorLook;
 struct TaskLook;
 struct TaskSummary;
@@ -32,13 +30,8 @@ enum class NavType : std::uint8_t {
 
 class NavigatorRenderer {
   /* ---- layout / Update() cache ------------------------------------ */
-  bool hasCanvasSizeChanged{};
   unsigned int canvas_width{};
   unsigned int canvas_height{};
-  double ratio_dpi{};
-
-  std::array<BulkPixelPoint, 10> polygon_frame_main;
-  std::array<BulkPixelPoint, 10> polygon_frame_detailed;
 
   const MoreData *basic{};
   const DerivedInfo *calculated{};
@@ -89,8 +82,6 @@ class NavigatorRenderer {
   unsigned pos_x_end_waypoint_name{};
   unsigned sz_waypoint_name{};
 
-  void GenerateFrame(const PixelRect &rc, bool is_frame_main) noexcept;
-
   void GenerateStringsWaypointInfos(NavType nav_type, TaskType tp) noexcept;
 
   void GenerateStringsCurrentFlightInfo(TaskType tp) noexcept;
@@ -129,7 +120,7 @@ public:
   void Update(const Canvas &canvas) noexcept;
 
   void DrawFrame(Canvas &canvas, const PixelRect &rc,
-                 const NavigatorLook &look_nav, bool is_frame_main) noexcept;
+                 const NavigatorLook &look_nav) noexcept;
 
   void DrawTaskTextsArrow(Canvas &canvas, TaskType tp,
                           const Waypoint &wp_current, const PixelRect &rc,
