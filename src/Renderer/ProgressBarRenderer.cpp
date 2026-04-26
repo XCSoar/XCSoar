@@ -34,8 +34,18 @@ DrawSimpleProgressBar(Canvas &canvas, const PixelRect &r,
     CalcProgressBarPosition(current_value, min_value, max_value,
                             r.GetWidth());
 
-  auto a = r, b = r;
-  a.right = b.left = a.left + position;
+  const Color &bg = background_color != nullptr ? *background_color
+                                                 : COLOR_WHITE;
+  /* Full track first so the completed segment can sit on top without a gap. */
+  canvas.DrawFilledRectangle(r, bg);
+
+  if (position <= 0)
+    return;
+
+  auto a = r;
+  a.right = a.left + position;
+  if (a.right > r.right)
+    a.right = r.right;
 
   const Color fill_color = IsDithered()
     ? COLOR_BLACK
@@ -43,9 +53,6 @@ DrawSimpleProgressBar(Canvas &canvas, const PixelRect &r,
       ? HasColors() ? *progress_color : COLOR_BLACK
       : COLOR_GREEN;
   canvas.DrawFilledRectangle(a, fill_color);
-  canvas.DrawFilledRectangle(b,
-                             background_color != nullptr
-                             ? *background_color : COLOR_WHITE);
 }
 
 void
