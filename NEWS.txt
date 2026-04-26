@@ -22,6 +22,11 @@ Version 7.45 - not yet released
     a pilot-chosen field (MANUAL); tap the InfoBox to open the alternates list,
     switch mode, and assign the selected row to that slot (runtime only; AUTO
     clears the pin).  Titles show Altn 1/2 with AUTO or MAN.
+  - list dialogs: Up/Down move the list (when the list is focused) so
+    filter rows in the same dialog (e.g. waypoint file) still get those keys;
+    Left/Right move the action bar with cursor key selection; current
+    action uses list-focus colours in the light theme and the bright
+    focus colour in dark, like other dialog focus
   - alternates: list holds up to 10 options (was 6); if the task only has one
     automatic alternate, Alternate 2 no longer shows the same as Alternate 1.
     Displayed glide is re-solved with the current aircraft state; value colour
