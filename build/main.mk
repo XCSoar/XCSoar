@@ -254,6 +254,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/WarningRibbonRenderer.cpp \
+	$(SRC)/Renderer/NavigatorRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
 	$(SRC)/Renderer/TransparentRendererCache.cpp \
