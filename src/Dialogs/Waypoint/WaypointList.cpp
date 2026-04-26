@@ -574,6 +574,9 @@ void
 ShowWaypointListPersistentDialog(const GeoPoint &_location,
                                  bool allow_navigation, bool allow_edit)
 {
+  if (data_components == nullptr || data_components->waypoints == nullptr)
+    return;
+
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   const Angle heading = CommonInterface::Basic().attitude.heading;
