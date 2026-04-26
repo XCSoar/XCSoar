@@ -332,12 +332,45 @@ InputEvents::eventStatus(const char *misc)
 void
 InputEvents::eventAnalysis([[maybe_unused]] const char *misc)
 {
+  AnalysisPage analysis_page;
+
+  if (StringIsEqual(misc, "AnalysisPage::BAROGRAPH")) {
+    analysis_page = AnalysisPage::BAROGRAPH;
+  } else if (StringIsEqual(misc, "AnalysisPage::COUNT")) {
+    analysis_page = AnalysisPage::COUNT;
+  } else if (StringIsEqual(misc, "AnalysisPage::CLIMB")) {
+    analysis_page = AnalysisPage::CLIMB;
+  } else if (StringIsEqual(misc, "AnalysisPage::VARIO_HISTOGRAM")) {
+    analysis_page = AnalysisPage::VARIO_HISTOGRAM;
+  } else if (StringIsEqual(misc, "AnalysisPage::THERMAL_BAND")) {
+    analysis_page = AnalysisPage::THERMAL_BAND;
+  } else if (StringIsEqual(misc, "AnalysisPage::WIND")) {
+    analysis_page = AnalysisPage::WIND;
+  } else if (StringIsEqual(misc, "AnalysisPage::POLAR")) {
+    analysis_page = AnalysisPage::POLAR;
+  } else if (StringIsEqual(misc, "AnalysisPage::MACCREADY")) {
+    analysis_page = AnalysisPage::MACCREADY;
+  } else if (StringIsEqual(misc, "AnalysisPage::TEMPTRACE")) {
+    analysis_page = AnalysisPage::TEMPTRACE;
+  } else if (StringIsEqual(misc, "AnalysisPage::TASK")) {
+    analysis_page = AnalysisPage::TASK;
+  } else if (StringIsEqual(misc, "AnalysisPage::CONTEST")) {
+    analysis_page = AnalysisPage::CONTEST;
+  } else if (StringIsEqual(misc, "AnalysisPage::TASK_SPEED")) {
+    analysis_page = AnalysisPage::TASK_SPEED;
+  } else if (StringIsEqual(misc, "AnalysisPage::AIRSPACE")) {
+    analysis_page = AnalysisPage::AIRSPACE;
+  } else {
+    analysis_page = AnalysisPage::CONTEST;
+  }
+
   dlgAnalysisShowModal(*CommonInterface::main_window,
                        CommonInterface::main_window->GetLook(),
                        CommonInterface::Full(),
                        *backend_components->glide_computer,
                        data_components->airspaces.get(),
-                       data_components->terrain.get());
+                       data_components->terrain.get(),
+                       analysis_page);
 }
 
 // WaypointDetails
