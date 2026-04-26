@@ -3,6 +3,15 @@
 
 #include "NMEAFormatter.hpp"
 #include "Units/Units.hpp"
+#include "Geo/GeoVector.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "util/UTF8.hpp"
+
+#include <algorithm>
+#include <cstring>
+
+/** Distance under which GPRMB reports "arrived" (metres). */
+static constexpr double ARRIVAL_RADIUS_M = 1000.0;
 
 void
 FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
@@ -68,6 +77,56 @@ FormatGPGGA(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
                  "%s",
                  "GPGGA,,,,,,,,,,M,,,,");
   }
+}
+
+bool
+FormatGPRMB(char *buffer, size_t buffer_size,
+            const GeoPoint &here, const AGeoPoint &destination,
+            std::string_view destination_name) noexcept
+{
+  if (!here.IsValid() || !destination.IsValid())
+    return false;
+
+  const GeoVector vector(here, destination);
+  const bool has_arrived = vector.distance < ARRIVAL_RADIUS_M;
+  const double range_nm =
+    (double)Units::ToUserUnit(vector.distance, Unit::NAUTICAL_MILES);
+  const double bearing_deg = (double)vector.bearing.Degrees();
+  const char arrival = has_arrived ? 'A' : 'V';
+
+  /* NB: legacy `cai_lnav` emits the arrival flag in field 12 (the spec
+     reserves field 12 for closing velocity, field 13 for arrival).
+     We preserve that byte-for-byte so this lift is a pure refactor of
+     CaiLNav's helper.  The LX160 ignores fields beyond 11 anyway. */
+
+  if (destination_name.empty()) {
+    snprintf(buffer, buffer_size,
+             "GPRMB,A,,,,,,,,,%06.1f,%04.1f,%c",
+             range_nm, bearing_deg, arrival);
+    return true;
+  }
+
+  /* truncate the name to a NMEA-friendly size, preserving valid UTF-8
+     and stripping any embedded commas that would forge extra fields */
+  char name_buf[16];
+  const auto name_len =
+    std::min(destination_name.size(), sizeof(name_buf) - 1);
+  std::memcpy(name_buf, destination_name.data(), name_len);
+  name_buf[name_len] = '\0';
+  CropIncompleteUTF8(name_buf);
+  for (char *p = name_buf; *p != '\0'; ++p)
+    if (*p == ',')
+      *p = '_';
+
+  char lat_buffer[20], lon_buffer[20];
+  FormatLatitude(lat_buffer, sizeof(lat_buffer), destination.latitude);
+  FormatLongitude(lon_buffer, sizeof(lon_buffer), destination.longitude);
+
+  snprintf(buffer, buffer_size,
+           "GPRMB,A,,,,%s,%s,%s,%06.1f,%04.1f,%c",
+           name_buf, lat_buffer, lon_buffer,
+           range_nm, bearing_deg, arrival);
+  return true;
 }
 
 void

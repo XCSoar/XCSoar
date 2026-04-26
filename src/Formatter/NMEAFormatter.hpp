@@ -5,6 +5,11 @@
 
 #include "NMEA/Info.hpp"
 
+#include <string_view>
+
+struct GeoPoint;
+struct AGeoPoint;
+
 /**
  * GPRMC,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>
  * 
@@ -89,6 +94,40 @@ FormatGPGGA(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
  */
 void
 FormatGPGSA(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
+
+/**
+ * GPRMB,<1>,,,,<5>,<6>,<7>,<8>,<9>,<10>,<11>,<12>
+ *
+ * Recommended Minimum Navigation Information (waypoint info)
+ * NMEA 2.00 Standard
+ *
+ * <1>  Position Valid (A = valid, V = invalid)
+ * <5>  Destination waypoint identifier
+ * <6>  Destination latitude, ddmm.mmm
+ * <7>  Destination latitude hemisphere, N or S
+ * <8>  Destination longitude, dddmm.mmm
+ * <9>  Destination longitude hemisphere, E or W
+ * <10> Range from present position to destination, nautical miles XXXX.X
+ * <11> Bearing from present position to destination, degrees true XXX.X
+ * <12> Arrival flag (A = arrival, V = not arrival)
+ *
+ * Note: the NMEA 0183 spec reserves field 12 for closing velocity and
+ * places the arrival flag in field 13.  We deliberately emit the arrival
+ * flag in field 12 (with no closing velocity) to preserve byte-for-byte
+ * compatibility with the long-standing Cambridge L-Nav (cai_lnav) output;
+ * the LX160 (and other consumers of cai_lnav's dialect) ignore fields
+ * beyond 11 anyway.
+ *
+ * If `destination_name` is empty, fields 5-9 are emitted blank, matching
+ * the long-standing output of the Cambridge L-Nav driver.
+ *
+ * Returns false (and leaves @buffer untouched) when @here or @destination
+ * is invalid.
+ */
+bool
+FormatGPRMB(char *buffer, size_t buffer_size,
+            const GeoPoint &here, const AGeoPoint &destination,
+            std::string_view destination_name = {}) noexcept;
 
 /*
  * PGRMZ,<1>,<2>,<3>
