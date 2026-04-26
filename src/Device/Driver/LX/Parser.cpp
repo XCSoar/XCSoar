@@ -102,10 +102,8 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-} // namespace LX
-
 void
-LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
+LXWP1(NMEAInputLine &line, DeviceInfo &device)
 {
   /*
    * $LXWP1,
@@ -122,8 +120,6 @@ LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
   device.hardware_version = line.ReadView();
   device.license = line.ReadView();
 }
-
-namespace LX {
 
 bool
 LXWP2(NMEAInputLine &line, NMEAInfo &info)
@@ -488,7 +484,7 @@ PLXVC(NMEAInputLine &line, NMEAInfo &info,
 
     const auto name = line.ReadView();
     if (name == "LXWP1"sv) {
-      LXDevice::LXWP1(line, info.secondary_device);
+      LX::LXWP1(line, info.secondary_device);
     } else if (name == "INFO"sv) {
       const auto type2 = line.ReadView();
       if (type2.starts_with('A'))
@@ -707,7 +703,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     DeviceInfo &device_info = mode == Mode::PASS_THROUGH
       ? info.secondary_device
       : info.device;
-    LXWP1(line, device_info);
+    LX::LXWP1(line, device_info);
     UpdateDeviceFlags(device_info, mode == Mode::PASS_THROUGH);
     return true;
   }
