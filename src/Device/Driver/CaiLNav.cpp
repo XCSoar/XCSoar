@@ -8,7 +8,7 @@
 #include "Operation/Operation.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "Units/Units.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Formatter/NMEAFormatter.hpp"
 #include "util/SpanCast.hxx"
 
@@ -20,37 +20,6 @@ PortWriteNMEANoChecksum(Port &port, const char *line,
   constexpr auto timeout = std::chrono::seconds(1);
 
   port.FullWrite(AsBytes(std::string_view{line}), env, timeout);
-}
-
-/*
-$GPRMB,<1>,,,,<5>,,,,,<10>,<11>,,<13>*hh<CR><LF>
-
-<1>  Position Valid (A = valid, V = invalid)
-<5>  Destination waypoint identifier, three digits
-     (leading zeros will be transmitted)
-<10> Range from present position to distination waypoint, format XXXX.X,
-     nautical miles (leading zeros will be transmitted)
-<11> Bearing from present position to destination waypoint, format XXX.X,
-     degrees true (leading zeros will be transmitted)
-<13> Arrival flag <A = arrival, V = not arrival)
-*/
-static bool
-FormatGPRMB(char *buffer, size_t buffer_size, const GeoPoint& here,
-            const AGeoPoint &destination)
-{
-  if (!here.IsValid() || !destination.IsValid())
-    return false;
-
-  const GeoVector vector(here, destination);
-  const bool has_arrived = vector.distance < 1000; // < 1km ?
-
-  snprintf(buffer, buffer_size, "GPRMB,%c,,,,,,,,,%06.1f,%04.1f,%c",
-           here.IsValid() ? 'A' : 'V',
-           (double)Units::ToUserUnit(vector.distance, Unit::NAUTICAL_MILES),
-           (double)vector.bearing.Degrees(),
-           has_arrived ? 'A' : 'V');
-
-  return true;
 }
 
 /*
