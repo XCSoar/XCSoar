@@ -670,6 +670,14 @@ LoadBottom(const PageLayout &layout)
     CommonInterface::main_window->SetBottomWidget(nullptr);
     break;
 
+  case PageLayout::Bottom::NAVIGATOR:
+  case PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE:
+  case PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES:
+  case PageLayout::Bottom::NAVIGATOR_DETAILED:
+    /* Filled in when NavigatorWidget is added; no bottom strip yet. */
+    CommonInterface::main_window->SetBottomWidget(nullptr);
+    break;
+
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */
     break;
