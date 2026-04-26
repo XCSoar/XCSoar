@@ -194,8 +194,8 @@ QuickGuidePageWidget::CreateBottomBar(ContainerWindow &parent,
 
   case BottomBarType::CHECKBOX:
     checkbox = std::make_unique<CheckBoxControl>();
-    checkbox->Create(parent, look, checkbox_label.c_str(), rc,
-                     style, checkbox_callback);
+    checkbox->CreateInDialogForm(parent, look, checkbox_label.c_str(), rc,
+                                 checkbox_callback);
     checkbox->SetState(checkbox_initial_state);
     break;
 

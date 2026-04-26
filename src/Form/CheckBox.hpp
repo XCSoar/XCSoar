@@ -42,6 +42,16 @@ public:
               const WindowStyle style,
               Callback _callback) noexcept;
 
+  /**
+   * Same as @ref Create, but with the @c WindowStyle that dialog bottom
+   * bars and configuration panels use (@c Hide + @c TabStop) — the pattern
+   * used for the configuration dialog "Expert" check box and the quick
+   * guide.
+   */
+  void CreateInDialogForm(ContainerWindow &parent, const DialogLook &look,
+                          std::string::const_pointer caption, const PixelRect &rc,
+                          Callback callback) noexcept;
+
   [[gnu::pure]]
   static unsigned GetMinimumWidth(const DialogLook &look, unsigned height,
                                   std::string::const_pointer caption) noexcept;

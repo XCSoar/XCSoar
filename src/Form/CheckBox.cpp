@@ -3,6 +3,7 @@
 
 #include "Form/CheckBox.hpp"
 #include "Look/DialogLook.hpp"
+#include "ui/window/Window.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Layout.hpp"
@@ -69,6 +70,19 @@ CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &_look,
   callback = std::move(_callback);
 
   PaintWindow::Create(parent, rc, style);
+}
+
+void
+CheckBoxControl::CreateInDialogForm(ContainerWindow &parent,
+                                    const DialogLook &look,
+                                    std::string::const_pointer caption,
+                                    const PixelRect &rc,
+                                    Callback callback) noexcept
+{
+  WindowStyle style;
+  style.Hide();
+  style.TabStop();
+  Create(parent, look, caption, rc, style, std::move(callback));
 }
 
 unsigned

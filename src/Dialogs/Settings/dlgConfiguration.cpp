@@ -211,13 +211,12 @@ protected:
                const PixelRect &rc) noexcept override {
     Layout layout(rc);
 
+    expert.CreateInDialogForm(parent, look, _("Expert"), layout.expert,
+                              [](bool value){ OnUserLevel(value); });
+
     WindowStyle style;
     style.Hide();
     style.TabStop();
-
-    expert.Create(parent, look, _("Expert"),
-                  layout.expert, style,
-                  [](bool value){ OnUserLevel(value); });
 
     button2.Create(parent, look.button, "", layout.button2, style);
     button1.Create(parent, look.button, "", layout.button1, style);

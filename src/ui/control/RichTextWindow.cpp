@@ -12,6 +12,7 @@
 #include "Screen/Layout.hpp"
 #include "Look/Colors.hpp"
 #include "ResourceLookup.hpp"
+#include "Form/CheckBox.hpp"
 #include "system/OpenLink.hpp"
 #include "util/StringCompare.hxx"
 #include "util/UriSchemes.hpp"
@@ -38,6 +39,44 @@ IsTouchLayout() noexcept
 {
   return Layout::GetMaximumControlHeight() >
          Layout::GetMinimumControlHeight();
+}
+
+/**
+ * The processed line starts a checkbox span (first line of a list item
+ * with "- [ ]" / "- [x]"), not a wrapped continuation line.
+ */
+[[gnu::pure]]
+static bool
+LineSpanStartsWithCheckbox(const ParsedMarkdown &p,
+                           std::size_t line_start) noexcept
+{
+  for (const auto &span : p.styles) {
+    if ((span.style == TextStyle::Checkbox ||
+         span.style == TextStyle::CheckboxChecked) &&
+        span.start == line_start)
+      return true;
+  }
+  return false;
+}
+
+/**
+ * Pixel size of the square checkbox cell (not including suffix gap).
+ * Touch layouts use at least the standard control row height so
+ * checkboxes are as tappable as buttons in dialogs.
+ */
+[[gnu::pure]]
+static int
+CheckboxBoxSize(const Font &font) noexcept
+{
+  const int text_line_height = font.GetLineSpacing();
+  const int box_margin = static_cast<int>(Layout::ScalePenWidth(2));
+  if (!IsTouchLayout())
+    return text_line_height - 2 * box_margin;
+
+  const int from_text = text_line_height - 2 * box_margin;
+  const int from_row = static_cast<int>(Layout::GetMaximumControlHeight()) -
+                       2 * box_margin;
+  return std::max({from_text, from_row, 4});
 }
 
 /**
@@ -344,6 +383,13 @@ RichTextWindow::EnsureLineLayout() const noexcept
       }
     }
 
+    if (IsTouchLayout() && font != nullptr &&
+        block_img == nullptr &&
+        LineSpanStartsWithCheckbox(parsed, line.start)) {
+      const int need = CheckboxBoxSize(*font) + Layout::Scale(4);
+      line_heights[i] = std::max(line_heights[i], need);
+    }
+
     y += line_heights[i];
   }
 
@@ -538,15 +584,8 @@ MeasureNumberedListPrefixWidth(const Font &font, const std::string &text,
 static int
 CheckboxPrefixWidth(const Font &font) noexcept
 {
-  const int text_line_height = font.GetLineSpacing();
-  const int box_margin = Layout::ScalePenWidth(2);
-  const int box_size =
-    IsTouchLayout()
-      ? std::max(text_line_height - box_margin,
-                 static_cast<int>(Layout::GetMinimumControlHeight()) / 2)
-      : text_line_height - box_margin * 2;
-  const int box_gap = Layout::Scale(4);
-  return box_size + box_gap;
+  const int box_size = CheckboxBoxSize(font);
+  return box_size + Layout::Scale(4);
 }
 
 /**
@@ -869,31 +908,37 @@ RichTextWindow::RenderLinkSegment(Canvas &canvas,
 void
 RichTextWindow::RenderCheckboxSegment(Canvas &canvas,
                                       const TextSegment &seg,
-                                      int &x, int text_y,
-                                      int visible_top,
-                                      int text_line_height) noexcept
+                                      int &x, int y_line, int visible_top,
+                                      int row_height) noexcept
 {
   const std::size_t style_idx = FindCheckboxStyleIndex(seg.start);
-
-  const int box_margin = Layout::ScalePenWidth(2);
-  const int box_size = IsTouchLayout()
-    ? std::max(text_line_height - box_margin,
-               static_cast<int>(
-                 Layout::GetMinimumControlHeight()) / 2)
-    : text_line_height - box_margin * 2;
-  const int box_y = text_y + (text_line_height - box_size) / 2;
+  const int box_size = CheckboxBoxSize(*font);
+  const int box_y = y_line + (row_height - box_size) / 2;
   PixelRect box_rc{x, box_y, x + box_size, box_y + box_size};
 
   bool checked = (style_idx != SIZE_MAX)
     ? IsCheckboxChecked(style_idx)
     : seg.IsCheckboxChecked();
-  bool focused = (style_idx != SIZE_MAX) &&
-                 IsCheckboxFocused(style_idx);
-  DrawSimpleCheckbox(canvas, box_rc, checked, focused, dark_mode);
+  const bool key_focused = (style_idx != SIZE_MAX) &&
+                          IsCheckboxFocused(style_idx);
+  if (dialog_look != nullptr) {
+    /* Outer focus square (same idea as #RenderLinkSegment); DrawCheckBox
+       only changes inner border, not a visible selection frame. */
+    if (key_focused && HasFocus()) {
+      const unsigned focus_w = Layout::ScalePenWidth(2);
+      PixelRect focus_rc = box_rc;
+      focus_rc.Grow((int)focus_w);
+      canvas.Select(Pen(focus_w, COLOR_XCSOAR_LIGHT));
+      canvas.SelectHollowBrush();
+      canvas.DrawRectangle(focus_rc);
+    }
+    DrawCheckBox(canvas, *dialog_look, box_rc, checked, key_focused, false, true);
+  } else
+    DrawSimpleCheckbox(canvas, box_rc, checked, key_focused, dark_mode);
 
   if (style_idx != SIZE_MAX) {
     /* Expand hit area on touch screens for easier tapping */
-    const int cb_expand = IsTouchLayout() ? Layout::Scale(4) : 0;
+    const int cb_expand = IsTouchLayout() ? Layout::Scale(6) : 0;
     PixelRect click_rc{x - cb_expand,
                        box_y + visible_top - cb_expand,
                        x + box_size + cb_expand,
@@ -1072,8 +1117,8 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
                           text_line_height);
       else if (seg.IsCheckbox())
         RenderCheckboxSegment(sub_canvas, seg,
-                              x, text_y, visible_top,
-                              text_line_height);
+                              x, y, visible_top,
+                              cur_line_height);
       else
         RenderPlainSegment(sub_canvas, seg, text_data,
                            x, text_y);
@@ -1248,8 +1293,7 @@ FindCurrentFocusIndex(
 }
 
 void
-RichTextWindow::ScrollToFocusItem(const FocusItem &item,
-                                  int text_line_height) noexcept
+RichTextWindow::ScrollToFocusItem(const FocusItem &item) noexcept
 {
   if (item.is_checkbox) {
     focused_checkbox_style = item.index;
@@ -1268,8 +1312,7 @@ RichTextWindow::ScrollToFocusItem(const FocusItem &item,
 
     /* Convert content-space Y to parent coordinates */
     const int item_top = item.y_pos + window_rect.top;
-    const int item_bottom =
-      item.y_pos + text_line_height + window_rect.top;
+    const int item_bottom = item.y_pos + item.height + window_rect.top;
 
     if (item_top < scroll_margin ||
         item_bottom > parent_height - scroll_margin) {
@@ -1280,7 +1323,7 @@ RichTextWindow::ScrollToFocusItem(const FocusItem &item,
         scroll_rc.top = item.y_pos - scroll_margin;
         scroll_rc.bottom = scroll_rc.top + 1;
       } else {
-        scroll_rc.top = item.y_pos + text_line_height + scroll_margin;
+        scroll_rc.top = item.y_pos + item.height + scroll_margin;
         scroll_rc.bottom = scroll_rc.top + 1;
       }
       parent->ScrollTo(scroll_rc);
@@ -1294,8 +1337,7 @@ bool
 RichTextWindow::AdvanceFocusToNextFrom(
   const std::vector<FocusItem> &items,
   std::optional<std::size_t> current_pos,
-  int max_jump,
-  int text_line_height) noexcept
+  int max_jump) noexcept
 {
   if (!current_pos.has_value())
     return false;
@@ -1313,7 +1355,7 @@ RichTextWindow::AdvanceFocusToNextFrom(
       return false;
     }
     focus_exhausted_up = false;
-    ScrollToFocusItem(next, text_line_height);
+    ScrollToFocusItem(next);
     return true;
   }
 
@@ -1387,14 +1429,13 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
       if (best != nullptr && best->y_pos <= visible_bottom) {
         focus_exhausted_down = false;
         focus_exhausted_up = false;
-        ScrollToFocusItem(*best, text_line_height);
+        ScrollToFocusItem(*best);
         return true;
       }
       /* No suitable item — let scroll widget handle it */
       return false;
     }
-    return AdvanceFocusToNextFrom(items, current_pos, max_jump,
-                                  text_line_height);
+    return AdvanceFocusToNextFrom(items, current_pos, max_jump);
 
   case KEY_UP:
     if (!current_pos.has_value()) {
@@ -1416,7 +1457,7 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
       if (best != nullptr && best->y_pos >= visible_top - text_line_height) {
         focus_exhausted_up = false;
         focus_exhausted_down = false;
-        ScrollToFocusItem(*best, text_line_height);
+        ScrollToFocusItem(*best);
         return true;
       }
       /* No suitable item — let scroll widget handle it */
@@ -1434,7 +1475,7 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
         return false;
       }
       focus_exhausted_down = false;
-      ScrollToFocusItem(prev, text_line_height);
+      ScrollToFocusItem(prev);
       return true;
     } else {
       focused_checkbox_style.reset();
@@ -1449,8 +1490,7 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
   case KEY_RETURN:
     if (focused_checkbox_style.has_value()) {
       ToggleCheckbox(focused_checkbox_style.value());
-      AdvanceFocusToNextFrom(items, current_pos, max_jump,
-                            text_line_height);
+      AdvanceFocusToNextFrom(items, current_pos, max_jump);
       return true;
     }
     if (focused_link.has_value()) {
