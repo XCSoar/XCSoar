@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "WaypointDialogs.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 
@@ -25,13 +26,7 @@ class WaypointCommandsWidget final
 
   const bool allow_edit;
 
-  /**
-   * When not null, set to true if the user completed an action that should
-   * dismiss a parent "search" dialog (GoTo, task change, set home, pan, …).
-   * Pan sets this so the map is visible; otherwise the list stays fullscreen
-   * on top of the panned view.
-   */
-  bool *const state_change_committed;
+  const WaypointDetailsNesting nesting;
 
   bool has_freq;
   enum Buttons {
@@ -48,17 +43,22 @@ class WaypointCommandsWidget final
 
   Button *replace_button, *insert_button, *append_button, *remove_button, *home_button, *pan_button, *set_active_button, *set_standby_button, *edit_button;
 
+  /**
+   * Mark a parent browse-search as committed and close this form (no-op if
+   * #form is null).
+   */
+  void CommitParentSearchAndCloseForm() noexcept;
+
 public:
   WaypointCommandsWidget(const DialogLook &look, WndForm *_form,
                          Waypoints *_waypoints,
                          WaypointPtr _waypoint,
-                         ProtectedTaskManager *_task_manager,
-                         bool _allow_edit,
-                         bool *state_change_committed = nullptr) noexcept
+                         ProtectedTaskManager *_task_manager, bool _allow_edit,
+                         const WaypointDetailsNesting &_nesting) noexcept
     :RowFormWidget(look), form(_form),
      waypoints(_waypoints),
      waypoint(std::move(_waypoint)), task_manager(_task_manager),
-     allow_edit(_allow_edit), state_change_committed(state_change_committed) {}
+     allow_edit(_allow_edit), nesting(_nesting) {}
   void UpdateButtons();
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
