@@ -126,6 +126,10 @@ public:
     buttons.EnableCursorSelection(_index);
   }
 
+  void ResyncButtonPanelSelection() noexcept {
+    buttons.ReselectToFirstEnabled();
+  }
+
   int ShowModal();
 
   /* virtual methods from class WndForm */
