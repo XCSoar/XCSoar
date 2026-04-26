@@ -241,6 +241,9 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
         if (w == nullptr)
           return;
 
+        /* allow_navigation + allow_edit: like the persistent list;
+         * alternates are task-adjacent; editing user waypoints
+         * (e.g. user.cup) stays available from this entry point. */
         if (dlgWaypointDetailsShowModalForBrowseParent(
               wpts, std::move(w), true, true))
           dialog.SetModalResult(mrOK);
