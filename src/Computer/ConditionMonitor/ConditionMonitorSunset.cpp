@@ -38,7 +38,16 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
   const auto d1 = (time_local + res.time_elapsed).Cast<Hours>();
   const auto d0 = time_local.Cast<Hours>();
 
-  bool past_sunset = (d1.count() > sun.time_of_sunset) && (d0.count() < sun.time_of_sunset);
+  const double sunset = SunEphemeris::NormalizeHourOfDay(sun.time_of_sunset);
+  const double t0 = SunEphemeris::NormalizeHourOfDay(d0.count());
+  const double t1 = SunEphemeris::NormalizeHourOfDay(d1.count());
+
+  /* Detect crossing the sunset time-of-day; this works even if the
+     local time range crosses midnight (t1 wraps to a smaller value). */
+  const bool past_sunset = t1 >= t0
+    ? (t0 < sunset && t1 >= sunset)
+    : (t0 < sunset || t1 >= sunset);
+
   return past_sunset;
 }
 

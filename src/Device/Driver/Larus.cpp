@@ -11,6 +11,7 @@
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -70,33 +71,30 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
 bool
 LarusDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type.starts_with("$PLAR"sv)) {
+      switch (type[5]) {
+      case 'A':
+        return PLARA(line, info);
+      case 'B':
+        return PLARB(line, info);
+      case 'D':
+        return PLARD(line, info);
+      case 'V':
+        return PLARV(line, info);
+      case 'W':
+        return PLARW(line, info);
+      case 'S':
+        return PLARS(line, info);
+      default:
+        break;
+      }
+    } else if (type == "$HCHDT"sv)
+      return HCHDT(line, info);
+
     return false;
-
-  NMEAInputLine line(_line);
-  const auto type = line.ReadView();
-  if (type.starts_with("$PLAR"sv)) {
-    switch (type[5]) {
-    case 'A':
-      return PLARA(line, info);
-    case 'B':
-      return PLARB(line, info);
-    case 'D':
-      return PLARD(line, info);
-    case 'V':
-      return PLARV(line, info);
-    case 'W':
-      return PLARW(line, info);
-    case 'S':
-      return PLARS(line, info);
-    default:
-      break;
-    }
-  }
-  else if (type == "$HCHDT"sv)
-    return HCHDT(line, info);
-
-  return false;
+  });
 }
 
 bool
@@ -401,9 +399,8 @@ bool
 LarusDevice::PutBugs(double bugs, OperationEnvironment &env)
 {
   // $PLARS,H,BUGS,0*0B
-  char buffer[50];
-  sprintf(buffer, "PLARS,H,BUGS,%0.0f", (1.0-bugs) * 100.0);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PLARS,H,BUGS,%0.0f",
+                      (1.0 - bugs) * 100.0);
   return true;
 }
 
@@ -411,9 +408,7 @@ bool
 LarusDevice::PutMacCready(double mc, OperationEnvironment &env)
 {
   // $PLARS,H,MC,2.1*1B
-  char buffer[50];
-  sprintf(buffer, "PLARS,H,MC,%0.1f", mc);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PLARS,H,MC,%0.1f", mc);
   return true;
 }
 
@@ -422,9 +417,7 @@ LarusDevice::PutBallast(double fraction, [[maybe_unused]] double overload,
                         OperationEnvironment &env)
 { 
   // $PLARS,H,BAL,1.00*68
-  char buffer[50];
-  sprintf(buffer, "PLARS,H,BAL,%0.3f", fraction);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PLARS,H,BAL,%0.3f", fraction);
   return true;
 }
 
@@ -433,9 +426,8 @@ LarusDevice::PutQNH(const AtmosphericPressure &pres,
                           OperationEnvironment &env) 
 { 
   // $PLARS,H,QNH,1031.4*76
-  char buffer[50];
-  sprintf(buffer, "PLARS,H,QNH,%0.1f", pres.GetHectoPascal());
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PLARS,H,QNH,%0.1f",
+                      pres.GetHectoPascal());
   return true;
 }
 

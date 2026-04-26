@@ -3,8 +3,8 @@
 
 #include "Time.hpp"
 #include "ComboList.hpp"
+#include "Format.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "util/StringFormat.hpp"
 #include "util/NumberParser.hpp"
 
 static bool data_field_key_up = false;
@@ -12,7 +12,7 @@ static bool data_field_key_up = false;
 const char *
 DataFieldTime::GetAsString() const noexcept
 {
-  StringFormatUnsafe(string_buffer, "%d", value);
+  FormatDataField(string_buffer, "%d", value);
   return string_buffer;
 }
 
@@ -71,7 +71,7 @@ DataFieldTime::AppendComboValue(ComboList &combo_list,
                                 std::chrono::seconds value) const noexcept
 {
   char buffer2[32];
-  StringFormatUnsafe(buffer2, "%ld", (long)value.count());
+  FormatDataField(buffer2, "%ld", (long)value.count());
   combo_list.Append(value.count(), buffer2,
                     FormatTimespanSmart(value, max_tokens));
 }

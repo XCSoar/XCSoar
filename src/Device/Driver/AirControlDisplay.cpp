@@ -3,6 +3,7 @@
 
 #include "Device/Driver/AirControlDisplay.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -172,19 +173,15 @@ public:
 bool
 ACDDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
-  char buffer[100];
   unsigned qnh = uround(pres.GetPascal());
-  sprintf(buffer, "PAAVC,S,ALT,QNH,%u", qnh);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,ALT,QNH,%u", qnh);
   return true;
 }
 
 bool
 ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 {
-  char buffer[100];
-  sprintf(buffer, "PAAVC,S,COM,RXVOL1,%u", volume);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,COM,RXVOL1,%u", volume);
   return true;
 }
 
@@ -193,19 +190,15 @@ ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
                                    [[maybe_unused]] const char *name,
                                    OperationEnvironment &env)
 {
-  char buffer[100];
   unsigned freq = frequency.GetKiloHertz();
-  sprintf(buffer, "PAAVC,S,COM,CHN2,%u", freq);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,COM,CHN2,%u", freq);
   return true;
 }
 
 bool
 ACDDevice::PutTransponderCode(TransponderCode code, OperationEnvironment &env)
 {
-  char buffer[100];
-  sprintf(buffer, "PAAVC,S,XPDR,SQUAWK,%04o", code.GetCode());
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PAAVC,S,XPDR,SQUAWK,%04o", code.GetCode());
   return true;
 }
 
@@ -221,15 +214,12 @@ ACDDevice::ExchangeRadioFrequencies(OperationEnvironment &env,
 bool
 ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  if (line.ReadCompare("$PAAVS"))
-    return ParsePAAVS(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    if (line.ReadCompare("$PAAVS"))
+      return ParsePAAVS(line, info);
+    else
+      return false;
+  });
 }
 
 void

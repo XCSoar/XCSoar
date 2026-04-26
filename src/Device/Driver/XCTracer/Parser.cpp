@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "../XCTracer/Internal.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
@@ -249,18 +250,13 @@ XCTracerDevice::XCTRC(NMEAInputLine &line, NMEAInfo &info)
 bool
 XCTracerDevice::ParseNMEA(const char *string, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(string))
-    return false;
-
-  NMEAInputLine line(string);
-
-  const auto type = line.ReadView();
-  if (type == "$LXWP0"sv)
-    return LXWP0(line, info);
-
-  else if (type == "$XCTRC"sv)
-    return XCTRC(line, info);
-
-  else
-    return false;
+  return ParseNMEAWithChecksum(string, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$LXWP0"sv)
+      return LXWP0(line, info);
+    else if (type == "$XCTRC"sv)
+      return XCTRC(line, info);
+    else
+      return false;
+  });
 }

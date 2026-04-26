@@ -552,7 +552,8 @@ $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp
+	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
+	$(SRC)/Dialogs/Weather/EdlControlsWidget.cpp
 endif
 endif
 
@@ -652,6 +653,17 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp \
 	$(SRC)/NetComponents.cpp
+
+ifeq ($(OPENGL),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Weather/EDL/Levels.cpp \
+	$(SRC)/io/DirectoryUtil.cpp \
+	$(SRC)/Weather/EDL/TileStore.cpp \
+	$(SRC)/Weather/EDL/StateController.cpp \
+	$(SRC)/io/Sqlite.cpp \
+	$(SRC)/MapWindow/Overlays/MbTilesDatabase.cpp \
+	$(SRC)/MapWindow/Overlays/MbTilesOverlay.cpp
+endif
 else
 XCSOAR_SOURCES += \
 	$(SRC)/NetComponentsStub.cpp
@@ -692,6 +704,10 @@ ifeq ($(HAVE_HTTP),y)
 XCSOAR_DEPENDS += \
 	LIBHTTP \
 	LIBCLIENT
+
+ifeq ($(OPENGL),y)
+XCSOAR_DEPENDS += SQLITE
+endif
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)

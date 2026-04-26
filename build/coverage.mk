@@ -35,3 +35,7 @@ covend:	FORCE | $(COVERAGE_DATA_DIR)/dirstamp $(COVERAGE_HTML_DIR)/dirstamp
 	@$(Q)$(COVMERGE)
 	@$(Q)$(COVCLEAN)
 	@$(Q)$(COVPROC)
+
+coverage-check: covstart check covend
+
+coverage-check-no-build: covstart check-no-build covend

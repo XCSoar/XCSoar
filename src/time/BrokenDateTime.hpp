@@ -9,6 +9,8 @@
 #include <chrono>
 #include <type_traits>
 
+struct tm;
+
 /**
  * A broken-down representation of date and time.
  */
@@ -146,4 +148,12 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
 };
 
 static_assert(std::is_trivial<BrokenDateTime>::value, "type is not trivial");
+
+/**
+ * Convert a "struct tm" (UTC or local, as provided by the caller) to a
+ * #BrokenDateTime object.
+ */
+[[gnu::const]]
+BrokenDateTime
+ToBrokenDateTime(const struct tm &tm) noexcept;
 

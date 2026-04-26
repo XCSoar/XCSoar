@@ -3,6 +3,7 @@
 
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -71,16 +72,13 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
 bool
 FlymasterF1Device::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$VARIO"sv)
-    return VARIO(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$VARIO"sv)
+      return VARIO(line, info);
+    else
+      return false;
+  });
 }
 
 static Device *

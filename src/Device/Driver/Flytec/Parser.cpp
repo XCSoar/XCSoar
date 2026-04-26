@@ -3,6 +3,7 @@
 
 #include "Device.hpp"
 #include "Device/Parser.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
@@ -227,18 +228,15 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 bool
 FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  const auto type = line.ReadView();
-  if (type == "$BRSF"sv)
-    return FlytecParseBRSF(line, info);
-  else if (type == "$VMVABD"sv)
-    return FlytecParseVMVABD(line, info);
-  else if (type == "$FLYSEN"sv)
-    return ParseFLYSEN(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$BRSF"sv)
+      return FlytecParseBRSF(line, info);
+    else if (type == "$VMVABD"sv)
+      return FlytecParseVMVABD(line, info);
+    else if (type == "$FLYSEN"sv)
+      return ParseFLYSEN(line, info);
+    else
+      return false;
+  });
 }

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Internal.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
@@ -44,14 +45,11 @@ vl_PGCS1(NMEAInputLine &line, NMEAInfo &info)
 bool
 VolksloggerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$PGCS"sv)
-    return vl_PGCS1(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PGCS"sv)
+      return vl_PGCS1(line, info);
+    else
+      return false;
+  });
 }

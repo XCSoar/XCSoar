@@ -4,6 +4,7 @@
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/CAI302/PocketNav.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -106,16 +107,13 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
 bool
 B50Device::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$PBB50"sv)
-    return PBB50(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PBB50"sv)
+      return PBB50(line, info);
+    else
+      return false;
+  });
 }
 
 bool

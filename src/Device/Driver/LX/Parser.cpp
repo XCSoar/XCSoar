@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Internal.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
@@ -685,60 +686,57 @@ LXDevice::UpdateDeviceFlags(const DeviceInfo &device_info,
 bool
 LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$LXWP0"sv)
+      return LXWP0(line, info);
 
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-  if (type == "$LXWP0"sv)
-    return LXWP0(line, info);
-
-  if (type == "$LXWP1"sv) {
-    DeviceInfo &device_info = mode == Mode::PASS_THROUGH
-      ? info.secondary_device
-      : info.device;
-    LXWP1(line, device_info);
-    UpdateDeviceFlags(device_info, mode == Mode::PASS_THROUGH);
-    return true;
-  }
-
-  if (type == "$LXWP2"sv)
-    return LXWP2(line, info);
-
-  if (type == "$LXWP3"sv)
-    return LXWP3(line, info);
-
-  if (type == "$PLXV0"sv) {
-    is_colibri = false;
-    return PLXV0(line, lxnav_vario_settings, info);
-  }
-
-  if (type == "$PLXVC"sv) {
-    is_colibri = false;
-    PLXVC(line, info, nano_settings, device_declaration, mutex);
-
-    {
-      const std::lock_guard lock{mutex};
-      is_forwarded_nano =
-        IsNanoProduct(info.secondary_device.product);
-      const bool was_vario = IsLXNAVVario();
-      IdDeviceByNameLocked(info.device.product, info.device);
-      if (!was_vario && IsLXNAVVario())
-        vario_just_detected = true;
+    if (type == "$LXWP1"sv) {
+      DeviceInfo &device_info = mode == Mode::PASS_THROUGH
+        ? info.secondary_device
+        : info.device;
+      LXWP1(line, device_info);
+      UpdateDeviceFlags(device_info, mode == Mode::PASS_THROUGH);
+      return true;
     }
-    return true;
-  }
 
-  if (type == "$PLXVF"sv) {
-    is_colibri = false;
-    return PLXVF(line, info);
-  }
+    if (type == "$LXWP2"sv)
+      return LXWP2(line, info);
 
-  if (type == "$PLXVS"sv) {
-    is_colibri = false;
-    return PLXVS(line, info);
-  }
+    if (type == "$LXWP3"sv)
+      return LXWP3(line, info);
 
-  return false;
+    if (type == "$PLXV0"sv) {
+      is_colibri = false;
+      return PLXV0(line, lxnav_vario_settings, info);
+    }
+
+    if (type == "$PLXVC"sv) {
+      is_colibri = false;
+      PLXVC(line, info, nano_settings, device_declaration, mutex);
+
+      {
+        const std::lock_guard lock{mutex};
+        is_forwarded_nano =
+          IsNanoProduct(info.secondary_device.product);
+        const bool was_vario = IsLXNAVVario();
+        IdDeviceByNameLocked(info.device.product, info.device);
+        if (!was_vario && IsLXNAVVario())
+          vario_just_detected = true;
+      }
+      return true;
+    }
+
+    if (type == "$PLXVF"sv) {
+      is_colibri = false;
+      return PLXVF(line, info);
+    }
+
+    if (type == "$PLXVS"sv) {
+      is_colibri = false;
+      return PLXVS(line, info);
+    }
+
+    return false;
+  });
 }

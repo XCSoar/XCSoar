@@ -41,7 +41,7 @@ ToBrokenDateTimeUtcSeconds(int64_t t) noexcept
   return dt;
 }
 
-static const BrokenDateTime
+BrokenDateTime
 ToBrokenDateTime(const struct tm &tm) noexcept
 {
   BrokenDateTime dt;

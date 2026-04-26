@@ -3,6 +3,7 @@
 
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
@@ -109,30 +110,22 @@ PZAN5(NMEAInputLine &line, NMEAInfo &info)
 bool
 ZanderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
-    return false;
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
 
-  NMEAInputLine line(String);
-
-  const auto type = line.ReadView();
-
-  if (type == "$PZAN1"sv)
-    return PZAN1(line, info);
-
-  else if (type == "$PZAN2"sv)
-    return PZAN2(line, info);
-
-  else if (type == "$PZAN3"sv)
-    return PZAN3(line, info);
-
-  else if (type == "$PZAN4"sv)
-    return PZAN4(line, info);
-
-  else if (type == "$PZAN5"sv)
-    return PZAN5(line, info);
-
-  else
-    return false;
+    if (type == "$PZAN1"sv)
+      return PZAN1(line, info);
+    else if (type == "$PZAN2"sv)
+      return PZAN2(line, info);
+    else if (type == "$PZAN3"sv)
+      return PZAN3(line, info);
+    else if (type == "$PZAN4"sv)
+      return PZAN4(line, info);
+    else if (type == "$PZAN5"sv)
+      return PZAN5(line, info);
+    else
+      return false;
+  });
 }
 
 static Device *

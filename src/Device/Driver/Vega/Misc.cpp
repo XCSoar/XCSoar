@@ -30,14 +30,11 @@ VegaDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
 
 #ifdef UAV_APPLICATION
   const ThermalLocatorInfo &t = calculated.thermal_locator;
-  char tbuf[100];
-  sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
-          (int)(t.estimate_valid),
-          t.estimate_location.Longitude.Degrees(),
-          t.estimate_location.Latitude.Degrees(),
-          0.,
-          0.);
-
-  PortWriteNMEA(port, tbuf);
+  PortWriteNMEAFormat(port, env, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
+                      (int)(t.estimate_valid),
+                      t.estimate_location.Longitude.Degrees(),
+                      t.estimate_location.Latitude.Degrees(),
+                      0.,
+                      0.);
 #endif
 }

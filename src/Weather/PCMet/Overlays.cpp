@@ -7,6 +7,7 @@
 #include "net/http/CoDownloadToFile.hpp"
 #include "Job/Runner.hpp"
 #include "co/Task.hxx"
+#include "io/DirectoryUtil.hpp"
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
 #include "util/Macros.hpp"
@@ -64,31 +65,29 @@ MakeOverlayLabel(PCMet::OverlayInfo &info)
 static void
 FindLatestOverlay(PCMet::OverlayInfo &info)
 {
-  struct Visitor : public File::Visitor {
-    PCMet::OverlayInfo &info;
-    std::chrono::system_clock::time_point latest_modification = std::chrono::system_clock::time_point::min();
-    const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-
-    explicit Visitor(PCMet::OverlayInfo &_info)
-      :info(_info) {}
-
-    void Visit(Path path, Path) override {
-      const auto last_modification = File::GetLastModification(path);
-      if (last_modification > latest_modification &&
-          last_modification <= now) {
-        latest_modification = last_modification;
-        info.path = path;
-      }
-    }
-  } visitor(info);
-
   const auto cache_path = MakeCacheDirectory("pc_met");
   StaticString<256> pattern;
   pattern.Format("%s_%s_lv_%06u_p_%03u_*.tiff",
                  type_names[unsigned(info.type)],
                  area_names[unsigned(info.area)],
                  info.level, info.step);
-  Directory::VisitSpecificFiles(cache_path, pattern, visitor);
+
+  std::chrono::system_clock::time_point latest_modification =
+    std::chrono::system_clock::time_point::min();
+  const std::chrono::system_clock::time_point now =
+    std::chrono::system_clock::now();
+
+  DirectoryUtil::VisitSpecificFiles(cache_path, pattern,
+                                   [&info, &latest_modification, &now]
+                                   (Path path, Path) {
+                                     const auto last_modification =
+                                       File::GetLastModification(path);
+                                     if (last_modification > latest_modification &&
+                                         last_modification <= now) {
+                                       latest_modification = last_modification;
+                                       info.path = path;
+                                     }
+                                   });
 }
 
 std::list<PCMet::OverlayInfo>

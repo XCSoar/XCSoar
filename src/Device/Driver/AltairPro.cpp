@@ -3,6 +3,7 @@
 
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
@@ -94,25 +95,22 @@ PTFRS(NMEAInputLine &line, NMEAInfo &info)
 bool
 AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(String))
+  return ParseNMEAWithChecksum(String, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+
+    // no propriatary sentence
+
+    if (type == "$PGRMZ"sv) {
+      double value;
+      if (ReadAltitude(line, value))
+        info.ProvidePressureAltitude(value);
+
+      return true;
+    } else if (type == "$PTFRS"sv)
+      return PTFRS(line, info);
+
     return false;
-
-  NMEAInputLine line(String);
-  const auto type = line.ReadView();
-
-  // no propriatary sentence
-
-  if (type == "$PGRMZ"sv) {
-    double value;
-    if (ReadAltitude(line, value))
-      info.ProvidePressureAltitude(value);
-
-    return true;
-  } else if (type == "$PTFRS"sv) {
-    return PTFRS(line, info);
-  }
-
-  return false;
+  });
 }
 
 bool

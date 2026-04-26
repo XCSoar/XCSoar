@@ -3,6 +3,7 @@
 
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAParser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -121,9 +122,7 @@ VaulterDevice::PutMacCready(double mc, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
-  char buffer[30];
-  sprintf(buffer,"PITV1,MC=%0.2f", mc);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PITV1,MC=%0.2f", mc);
   return true;
 }
 
@@ -132,31 +131,26 @@ VaulterDevice::PutBallast(double fraction, [[maybe_unused]] double overload, Ope
 {
   if (!EnableNMEA(env))
     return false;
-  char buffer[30];
   // vaulter defines the wing loading factor as ratio of no-ballast to weight
   fraction = fraction + 1;
-  sprintf(buffer,"PITV1,WL=%0.2f", fraction);
-  PortWriteNMEA(port, buffer, env);
+  PortWriteNMEAFormat(port, env, "PITV1,WL=%0.2f", fraction);
   return true;
 }
 
 bool
 VaulterDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
-  if (!VerifyNMEAChecksum(_line))
-    return false;
-
-  NMEAInputLine line(_line);
-
-  const auto type = line.ReadView();
-  if (type == "$PITV3"sv)
-    return ParsePITV3(line, info);
-  else if (type == "$PITV4"sv)
-    return ParsePITV4(line, info);
-  else if (type == "$PITV5"sv)
-    return ParsePITV5(line, info);
-  else
-    return false;
+  return ParseNMEAWithChecksum(_line, [&](NMEAInputLine &line){
+    const auto type = line.ReadView();
+    if (type == "$PITV3"sv)
+      return ParsePITV3(line, info);
+    else if (type == "$PITV4"sv)
+      return ParsePITV4(line, info);
+    else if (type == "$PITV5"sv)
+      return ParsePITV5(line, info);
+    else
+      return false;
+  });
 }
 
 static Device *
