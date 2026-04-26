@@ -278,6 +278,15 @@ struct DeviceConfig {
   bool sync_from_device;
 
   /**
+   * Should XCSoar send its current GPS position to the device as
+   * $GPGGA / $GPRMC sentences?  Only honored by drivers that advertise
+   * #DeviceRegister::SEND_POSITION (e.g. LX160).  When this is false the
+   * driver still emits navigation context such as $GPRMB.  Defaults to
+   * true; turn off when an upstream GPS source already feeds the device.
+   */
+  bool send_position;
+
+  /**
    * Polar synchronization direction (off, receive, or send).
    */
   PolarSync polar_sync;

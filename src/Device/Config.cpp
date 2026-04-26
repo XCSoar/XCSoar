@@ -182,6 +182,7 @@ DeviceConfig::Clear() noexcept
   enabled = true;
   sync_from_device = true;
   sync_to_device = true;
+  send_position = true;
   k6bt = false;
   polar_sync = PolarSync::OFF;
   engine_type = EngineType::NONE;
