@@ -8,6 +8,7 @@
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/Units.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Gauge/NavigatorSettings.hpp"
 #include "Interface.hpp"
 #include "Look/FontDescription.hpp"
 #include "Look/InfoBoxLook.hpp"
@@ -176,17 +177,60 @@ NavigatorRenderer::GenerateStringsWaypointInfos(NavType nav_type,
   FormatUserDistance(waypoint_distance, waypoint_distance_s.data(), false,
                      precision_waypoint_distance);
 
-  // waypoint_altitude_s; before navigator settings exist, use required
-  // altitude. The widget commit restores configurable WP_AltReq / diff /
-  // arrival modes.
-  const auto waypoint_altitude =
-      (tp == TaskType::ORDERED)
-          ? calculated->ordered_task_stats.current_leg.solution_remaining
-                .GetRequiredAltitude()
-          : calculated->task_stats.current_leg.solution_remaining
-                .GetRequiredAltitude();
-  FormatAltitude(waypoint_altitude_s.data(), waypoint_altitude,
-                 Units::GetUserAltitudeUnit(), false);
+  // waypoint_altitude_s (configurable choice: WP_AltReq WP_AltDiff
+  // WP_AltArrival)
+  auto waypoint_altitude{.0};
+  const auto &navigatorAltitudeType =
+      CommonInterface::GetUISettings().navigator.navigator_altitude_type;
+
+  if (tp == TaskType::ORDERED) {
+    switch (navigatorAltitudeType) {
+    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltReq:
+      waypoint_altitude = calculated->ordered_task_stats.current_leg
+                              .solution_remaining.GetRequiredAltitude();
+      break;
+    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff:
+      waypoint_altitude = calculated->ordered_task_stats.current_leg
+                              .solution_remaining.altitude_difference;
+      break;
+    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltArrival:
+      waypoint_altitude = calculated->ordered_task_stats.current_leg
+                              .solution_remaining.GetArrivalAltitude();
+      break;
+    default:
+      waypoint_altitude = calculated->ordered_task_stats.current_leg
+                              .solution_remaining.GetRequiredAltitude();
+      break;
+    }
+  } else {
+    switch (navigatorAltitudeType) {
+    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltReq:
+      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
+                              .GetRequiredAltitude();
+      break;
+    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff:
+      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
+                              .altitude_difference;
+      break;
+    case NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltArrival:
+      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
+                              .GetArrivalAltitude();
+      break;
+    default:
+      waypoint_altitude = calculated->task_stats.current_leg.solution_remaining
+                              .GetRequiredAltitude();
+      break;
+    }
+  }
+
+  if (navigatorAltitudeType !=
+      NavigatorSettings::NavigatorWidgetAltitudeType::WP_AltDiff) {
+    FormatAltitude(waypoint_altitude_s.data(), waypoint_altitude,
+                   Units::GetUserAltitudeUnit(), false);
+  } else {
+    FormatRelativeAltitude(waypoint_altitude_s.data(), waypoint_altitude,
+                           Units::GetUserAltitudeUnit(), false);
+  }
 
   // waypoint_GR_s; // e_WP_GR glide ratio
   auto waypoint_GR{0};
