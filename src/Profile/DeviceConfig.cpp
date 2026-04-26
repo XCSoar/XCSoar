@@ -174,6 +174,9 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
   MakeDeviceSettingName(buffer, "Port", n, "SyncToDevice");
   map.Get(buffer, config.sync_to_device);
 
+  MakeDeviceSettingName(buffer, "Port", n, "SendPosition");
+  map.Get(buffer, config.send_position);
+
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   map.Get(buffer, config.k6bt);
 
@@ -271,6 +274,9 @@ Profile::SetDeviceConfig(ProfileMap &map,
 
   MakeDeviceSettingName(buffer, "Port", n, "SyncToDevice");
   map.Set(buffer, config.sync_to_device);
+
+  MakeDeviceSettingName(buffer, "Port", n, "SendPosition");
+  map.Set(buffer, config.send_position);
 
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   map.Set(buffer, config.k6bt);

@@ -426,6 +426,13 @@ struct DeviceRegister {
      * EnablePassThrough() is implemented.
      */
     PASS_THROUGH = 0x200,
+
+    /**
+     * Does this driver emit GPGGA/GPRMC position sentences to the
+     * device?  When set, the user can suppress that emission via
+     * #DeviceConfig::send_position.
+     */
+    SEND_POSITION = 0x400,
   };
 
   /**
@@ -522,5 +529,12 @@ struct DeviceRegister {
    */
   bool HasPassThrough() const {
     return (flags & PASS_THROUGH) != 0;
+  }
+
+  /**
+   * Does this driver emit GPGGA/GPRMC position sentences?
+   */
+  bool CanSendPosition() const {
+    return (flags & SEND_POSITION) != 0;
   }
 };

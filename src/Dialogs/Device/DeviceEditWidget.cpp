@@ -20,7 +20,7 @@ enum ControlIndex {
   IP_ADDRESS,
   TCPPort,
   I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
-  SyncFromDevice, SyncToDevice, PolarSyncMode,
+  SyncFromDevice, SyncToDevice, SendPosition, PolarSyncMode,
   K6Bt,
 };
 
@@ -152,6 +152,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   LoadValueEnum(Driver, config.driver_name);
   LoadValue(SyncFromDevice, config.sync_from_device);
   LoadValue(SyncToDevice, config.sync_to_device);
+  LoadValue(SendPosition, config.send_position);
   LoadValueEnum(PolarSyncMode, config.polar_sync);
   LoadValue(K6Bt, config.k6bt);
   LoadValueEnum(EngineTypes, config.engine_type);
@@ -206,6 +207,21 @@ CanSendSettings(const DataField &df) noexcept
 
 [[gnu::pure]]
 static bool
+CanSendPosition(const DataField &df) noexcept
+{
+  const char *driver_name = df.GetAsString();
+  if (driver_name == nullptr)
+    return false;
+
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == nullptr)
+    return false;
+
+  return driver->CanSendPosition();
+}
+
+[[gnu::pure]]
+static bool
 CanPassThrough(const DataField &df) noexcept
 {
   const char *driver_name = df.GetAsString();
@@ -252,10 +268,13 @@ DeviceEditWidget::UpdateVisibilities() noexcept
 
   const bool can_receive = CanReceiveSettings(GetDataField(Driver));
   const bool can_send = CanSendSettings(GetDataField(Driver));
+  const bool can_send_position = CanSendPosition(GetDataField(Driver));
   SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
                 can_receive);
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
                 can_send);
+  SetRowVisible(SendPosition, DeviceConfig::UsesDriver(type) &&
+                can_send_position);
   SetRowVisible(PolarSyncMode, DeviceConfig::UsesDriver(type) &&
                 (can_receive || can_send));
   if (can_receive || can_send) {
@@ -365,6 +384,15 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
                "like the MacCready value, bugs and ballast to the device."),
              config.sync_to_device, this);
   SetExpertRow(SyncToDevice);
+
+  AddBoolean(_("Emit GPGGA/GPRMC"),
+             _("Tells XCSoar to send its current GPS position to the "
+               "device as $GPGGA and $GPRMC sentences. Turn off when "
+               "another GPS source is already feeding the device on "
+               "the same line. Changes take effect after reconnecting "
+               "the device."),
+             config.send_position, this);
+  SetExpertRow(SendPosition);
 
   DataFieldEnum *polar_sync_df = new DataFieldEnum(this);
   FillPolarSync(*polar_sync_df,
@@ -497,6 +525,9 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 
     if (CanSendSettings(GetDataField(Driver)))
       changed |= SaveValue(SyncToDevice, config.sync_to_device);
+
+    if (CanSendPosition(GetDataField(Driver)))
+      changed |= SaveValue(SendPosition, config.send_position);
 
     if (CanReceiveSettings(GetDataField(Driver)) ||
         CanSendSettings(GetDataField(Driver)))
