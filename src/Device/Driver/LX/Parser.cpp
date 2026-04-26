@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Internal.hpp"
+#include "Parsers.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
@@ -53,7 +54,9 @@ ShouldSwitchHostBaudForNinc(const DeviceInfo &device_info) noexcept
           device_info.hardware_version.equals("8"));
 }
 
-static bool
+namespace LX {
+
+bool
 LXWP0(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
@@ -99,6 +102,8 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
+} // namespace LX
+
 void
 LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
 {
@@ -118,7 +123,9 @@ LXDevice::LXWP1(NMEAInputLine &line, DeviceInfo &device)
   device.license = line.ReadView();
 }
 
-static bool
+namespace LX {
+
+bool
 LXWP2(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
@@ -165,7 +172,7 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-static bool
+bool
 LXWP3(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
@@ -196,6 +203,8 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
 
   return true;
 }
+
+} // namespace LX
 
 /**
  * Parse double from a string_view value field.
@@ -692,7 +701,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   const auto type = line.ReadView();
   if (type == "$LXWP0"sv)
-    return LXWP0(line, info);
+    return LX::LXWP0(line, info);
 
   if (type == "$LXWP1"sv) {
     DeviceInfo &device_info = mode == Mode::PASS_THROUGH
@@ -704,10 +713,10 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   }
 
   if (type == "$LXWP2"sv)
-    return LXWP2(line, info);
+    return LX::LXWP2(line, info);
 
   if (type == "$LXWP3"sv)
-    return LXWP3(line, info);
+    return LX::LXWP3(line, info);
 
   if (type == "$PLXV0"sv) {
     is_colibri = false;
