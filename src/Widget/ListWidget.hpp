@@ -37,4 +37,6 @@ public:
     GetList().SetFocus();
     return true;
   }
+
+  bool KeyPress(unsigned key_code) noexcept override;
 };
