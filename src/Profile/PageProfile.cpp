@@ -55,6 +55,11 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
       unsigned(pl.bottom) >= unsigned(PageLayout::Bottom::MAX))
     pl.bottom = PageLayout::Bottom::NOTHING;
 
+  strcpy(profileKey + prefixLen, "Top");
+  if (!map.GetEnum(profileKey, pl.top) ||
+      unsigned(pl.top) >= unsigned(PageLayout::Top::MAX))
+    pl.top = PageLayout::Top::NOTHING;
+
   strcpy(profileKey + prefixLen, "Main");
   if (!map.GetEnum(profileKey, pl.main) ||
       unsigned(pl.main) >= unsigned(PageLayout::Main::MAX))
@@ -96,6 +101,9 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "Bottom");
   map.Set(profileKey, (unsigned)page.bottom);
+
+  strcpy(profileKey + prefixLen, "Top");
+  map.Set(profileKey, (unsigned)page.top);
 
   strcpy(profileKey + prefixLen, "Main");
   map.Set(profileKey, (unsigned)page.main);

@@ -388,7 +388,30 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     buffer.AppendFormat(", %s", _("Cross section"));
     break;
 
+  case PageLayout::Bottom::NAVIGATOR:
+  case PageLayout::Bottom::NAVIGATOR_LITE_ONE_LINE:
+  case PageLayout::Bottom::NAVIGATOR_LITE_TWO_LINES:
+  case PageLayout::Bottom::NAVIGATOR_DETAILED:
+    /* Labels: extended when navigator settings page is added. */
+    break;
+
   case PageLayout::Bottom::MAX:
+    gcc_unreachable();
+  }
+
+  switch (value.top) {
+  case PageLayout::Top::NOTHING:
+  case PageLayout::Top::CUSTOM:
+    break;
+
+  case PageLayout::Top::NAVIGATOR:
+  case PageLayout::Top::NAVIGATOR_LITE_ONE_LINE:
+  case PageLayout::Top::NAVIGATOR_LITE_TWO_LINES:
+  case PageLayout::Top::NAVIGATOR_DETAILED:
+    /* Labels: extended when navigator settings page is added. */
+    break;
+
+  case PageLayout::Top::MAX:
     gcc_unreachable();
   }
 
