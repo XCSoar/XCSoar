@@ -502,11 +502,10 @@ WaypointListPersistentWidget::OnWaypointListEnter()
     return;
   }
 
-  bool state_change = false;
-  dlgWaypointDetailsShowModal(data_components->waypoints.get(),
-                              items[GetList().GetCursorIndex()].waypoint,
-                              allow_navigation, allow_edit, &state_change);
-  if (state_change)
+  if (dlgWaypointDetailsShowModalForBrowseParent(
+        data_components->waypoints.get(),
+        WaypointPtr(items[GetList().GetCursorIndex()].waypoint), allow_navigation,
+        allow_edit))
     dialog.SetModalResult(mrOK);
 }
 
