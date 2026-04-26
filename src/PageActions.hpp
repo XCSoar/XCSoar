@@ -97,6 +97,11 @@ namespace PageActions
   void RestoreBottom();
 
   /**
+   * Like Restore(), but affects only the top area.
+   */
+  void RestoreTop();
+
+  /**
    * Show a page with the map, or restore the current page if it was
    * configured with a map (for example if the user has activated the
    * FLARM radar page).
@@ -156,4 +161,10 @@ namespace PageActions
    */
   [[gnu::pure]]
   bool AllowMapOverlayButtons() noexcept;
+
+  /**
+   * Use a custom widget for the "top" area.  This is a wrapper for
+   * MainWindow::SetTopWidget().  Call RestoreTop() to undo this.
+   */
+  void SetCustomTop(Widget *widget);
 };
