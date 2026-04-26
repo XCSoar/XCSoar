@@ -24,7 +24,15 @@ class WaypointCommandsWidget final
   ProtectedTaskManager *const task_manager;
 
   const bool allow_edit;
-  
+
+  /**
+   * When not null, set to true if the user completed an action that should
+   * dismiss a parent "search" dialog (GoTo, task change, set home, pan, …).
+   * Pan sets this so the map is visible; otherwise the list stays fullscreen
+   * on top of the panned view.
+   */
+  bool *const state_change_committed;
+
   bool has_freq;
   enum Buttons {
     REPLACE_IN_TASK,
@@ -45,11 +53,12 @@ public:
                          Waypoints *_waypoints,
                          WaypointPtr _waypoint,
                          ProtectedTaskManager *_task_manager,
-                         bool _allow_edit) noexcept
+                         bool _allow_edit,
+                         bool *state_change_committed = nullptr) noexcept
     :RowFormWidget(look), form(_form),
      waypoints(_waypoints),
      waypoint(std::move(_waypoint)), task_manager(_task_manager),
-     allow_edit(_allow_edit) {}
+     allow_edit(_allow_edit), state_change_committed(state_change_committed) {}
   void UpdateButtons();
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;

@@ -168,6 +168,7 @@ void eventTaskTransition(const char *misc);
 void eventTerrainTopography(const char *misc);
 void eventTerrainTopology(const char *misc);
 void eventWaypointDetails(const char *misc);
+void eventWaypointDetailsPersistent(const char *misc);
 void eventWaypointEditor(const char *misc);
 void eventZoom(const char *misc);
 void eventBrightness(const char *misc);
