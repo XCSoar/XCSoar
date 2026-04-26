@@ -40,6 +40,11 @@ Version 7.45 - not yet released
   - Quick Guide "What's New": release notes are Markdown generated at build time
     from NEWS.txt (headings + merged list lines) instead of truncating the
     gzipped file at runtime
+  - Quick Guide, getting started: "Safety factors" and "Terrain display" lines
+    use live settings vs factory defaults (not hardcoded unchecked) #2324
+  - Quick Guide, help & configuration checklists: list checkboxes use dialog
+    look and min touch row height; keyboard focus frame on the checkbox; override
+    touch autodetection with -touchscreen or -notouchscreen (non-Android) #2325
   - waypoint search: stays open until Esc or a successful GoTo / task / home / pan
     action (pan ends the search so the map is not hidden under the list); same for
     WaypointDetails select and WaypointDetailsPersistent (was: only after closing

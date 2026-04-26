@@ -29,7 +29,10 @@
 #endif
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
+#include "MapSettings.hpp"
+#include "Computer/Settings.hpp"
 
+#include <cmath>
 #include <vector>
 
 // Page indices for the can-advance guard
@@ -135,6 +138,54 @@ IsAnyDeviceConfigured() noexcept
   return false;
 }
 
+/**
+ * @return true when safety-related settings have been changed from
+ *         factory defaults (or when we cannot use defaults for comparison).
+ */
+static bool
+SafetyFactorsDifferFromDefaults() noexcept
+{
+  const auto &cs = CommonInterface::GetComputerSettings();
+  const auto &t = cs.task;
+  const auto &p = cs.polar;
+
+  TaskBehaviour d_task;
+  d_task.SetDefaults();
+  PolarSettings d_pol;
+  d_pol.SetDefaults();
+
+  static constexpr double eps = 1e-4;
+  if (std::abs(t.safety_height_arrival - d_task.safety_height_arrival) > eps)
+    return true;
+  if (std::abs(t.route_planner.safety_height_terrain -
+               d_task.route_planner.safety_height_terrain) > eps)
+    return true;
+  if (t.abort_task_mode != d_task.abort_task_mode)
+    return true;
+  if (std::abs(p.degradation_factor - d_pol.degradation_factor) > eps)
+    return true;
+  if (p.auto_bugs != d_pol.auto_bugs)
+    return true;
+  if (std::abs(t.safety_mc - d_task.safety_mc) > eps)
+    return true;
+  if (std::abs(t.risk_gamma - d_task.risk_gamma) > eps)
+    return true;
+  return false;
+}
+
+/**
+ * @return true when terrain or topography display was customized away from
+ *         the default look (ramp, shading, contours, enable flags, …).
+ */
+static bool
+TerrainDisplayDiffersFromDefaults() noexcept
+{
+  MapSettings d;
+  d.SetDefaults();
+  const auto &m = CommonInterface::GetMapSettings();
+  return m.terrain != d.terrain || m.topography_enabled != d.topography_enabled;
+}
+
 static const char *
 GetConfigurationHelpText()
 {
@@ -151,6 +202,9 @@ GetConfigurationHelpText()
 
   bool tim_enabled = false;
   Profile::Get(ProfileKeys::EnableThermalInformationMap, tim_enabled);
+
+  const bool has_safety = SafetyFactorsDifferFromDefaults();
+  const bool has_terrain_display = TerrainDisplayDiffersFromDefaults();
 
   static StaticString<1536> text;
   text.Format(
@@ -169,9 +223,9 @@ GetConfigurationHelpText()
     "Upload flights automatically to WeGlide\n\n"
     "- [%s] [Thermal Information Map](xcsoar://config/weather) - "
     "Show thermal locations from thermalmap.info on the map\n\n"
-    "- [ ] [Safety factors](xcsoar://config/safety) - "
+    "- [%s] [Safety factors](xcsoar://config/safety) - "
     "Set arrival height, terrain clearance and polar degradation\n\n"
-    "- [ ] [Terrain display](xcsoar://config/terrain) - "
+    "- [%s] [Terrain display](xcsoar://config/terrain) - "
     "Choose terrain colors, shading and contour lines\n\n"
     "- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - "
     "Share your position via SkyLines or LiveTrack24\n\n"
@@ -182,7 +236,9 @@ GetConfigurationHelpText()
     has_pilot ? "x" : " ",
     has_device ? "x" : " ",
     weglide_enabled ? "x" : " ",
-    tim_enabled ? "x" : " ");
+    tim_enabled ? "x" : " ",
+    has_safety ? "x" : " ",
+    has_terrain_display ? "x" : " ");
   return text.c_str();
 }
 
