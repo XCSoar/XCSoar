@@ -125,6 +125,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/MapOverlaysConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TrafficConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/DisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/NavigatorConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WindConfigPanel.cpp \
