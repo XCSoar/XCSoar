@@ -5,10 +5,13 @@
 
 #include "BackendComponents.hpp"
 #include "Components.hpp"
+#include "Engine/Task/AbstractTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Input/InputEvents.hpp"
+#include "Language/Language.hpp"
 #include "PageActions.hpp"
 #include "Screen/Layout.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -51,34 +54,45 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
 
   unsigned task_size{};
 
-  auto *protected_task_manager =
-      backend_components->protected_task_manager.get();
-  if (protected_task_manager != nullptr) {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const auto &stats = lease->GetStats();
+  if (backend_components != nullptr) {
+    auto *protected_task_manager =
+        backend_components->protected_task_manager.get();
+    if (protected_task_manager != nullptr) {
+      ProtectedTaskManager::Lease lease(*protected_task_manager);
+      const auto &stats = lease->GetStats();
 
-    tp = lease->GetMode();
+      tp = lease->GetMode();
 
-    if (stats.task_valid) {
-      if (tp == TaskType::ORDERED) {
+      if (stats.task_valid) {
+        if (tp == TaskType::ORDERED) {
 
-        const OrderedTask &task = lease->GetOrderedTask();
+          const OrderedTask &task = lease->GetOrderedTask();
 
-        task_size = task.TaskSize();
+          task_size = task.TaskSize();
 
-        wp_current = task.GetActiveTaskPoint()->GetWaypointPtr();
+          if (TaskWaypoint *atp = task.GetActiveTaskPoint())
+            wp_current = atp->GetWaypointPtr();
+          else
+            wp_current = nullptr;
 
-        auto i = task.GetActiveIndex();
-        if (i == 0) wp_before = nullptr;
-        else wp_before = task.GetPoint(i - 1).GetWaypointPtr();
+          const auto i = task.GetActiveIndex();
+          if (i == 0) wp_before = nullptr;
+          else wp_before = task.GetPoint(i - 1).GetWaypointPtr();
+        } else {
+          const AbstractTask *const active_task = lease->GetActiveTask();
+          if (active_task != nullptr) {
+            if (TaskWaypoint *atp = active_task->GetActiveTaskPoint())
+              wp_current = atp->GetWaypointPtr();
+            else
+              wp_current = nullptr;
+          } else
+            wp_current = nullptr;
+          wp_before = nullptr;
+        }
       } else {
-        wp_current =
-            lease->GetActiveTask()->GetActiveTaskPoint()->GetWaypointPtr();
+        wp_current = nullptr;
         wp_before = nullptr;
       }
-    } else {
-      wp_current = nullptr;
-      wp_before = nullptr;
     }
   }
 
@@ -96,15 +110,28 @@ NavigatorWindow::OnPaint(Canvas &canvas) noexcept
   case NavType::NAVIGATOR_LITE_ONE_LINE:
   case NavType::NAVIGATOR_LITE_TWO_LINES:
   case NavType::NAVIGATOR:
-    renderer.DrawFrame(canvas, frame_navigator, look_nav, true);
+    renderer.DrawFrame(canvas, frame_navigator, look_nav);
     break;
   case NavType::NAVIGATOR_DETAILED:
-    renderer.DrawFrame(canvas, frame_navigator, look_nav, true);
-    renderer.DrawFrame(canvas, frame_navigator_waypoint, look_nav, false);
+    renderer.DrawFrame(canvas, frame_navigator, look_nav);
+    renderer.DrawFrame(canvas, frame_navigator_waypoint, look_nav);
     break;
   default:
-    renderer.DrawFrame(canvas, frame_navigator, look_nav, true);
+    renderer.DrawFrame(canvas, frame_navigator, look_nav);
     break;
+  }
+
+  if (!CommonInterface::Calculated().task_stats.task_valid) {
+    canvas.SetBackgroundTransparent();
+    canvas.Select(look_infobox.value_font);
+    canvas.SetTextColor(look_nav.inverse ? COLOR_WHITE : COLOR_BLACK);
+    const char *const no_task_text = _("No task");
+    const PixelSize text_size = canvas.CalcTextSize(no_task_text);
+    const PixelRect &client = canvas.GetRect();
+    const PixelPoint pt{client.left + (int)(client.GetWidth() - text_size.width) / 2,
+                        client.top + (int)(client.GetHeight() - text_size.height) / 2};
+    canvas.DrawText(pt, no_task_text);
+    return;
   }
 
   const auto task_summary =
@@ -185,8 +212,12 @@ NavigatorWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
   StopDragging();
   ignore_single_click = true;
 
+  if (!CommonInterface::Calculated().task_stats.task_valid) {
+    InputEvents::eventSetup("Task");
+    return true;
+  }
   InputEvents::ShowMenu();
-  InputEvents::setMode("Navigator1");
+  InputEvents::setMode("Nav1");
   return true;
 }
 
@@ -227,8 +258,12 @@ NavigatorWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 
     if (click_time > std::chrono::milliseconds(0) &&
         click_time <= std::chrono::milliseconds(200)) {
+      if (!CommonInterface::Calculated().task_stats.task_valid) {
+        InputEvents::eventSetup("Task");
+        return true;
+      }
       InputEvents::ShowMenu();
-      InputEvents::setMode("Navigator1");
+      InputEvents::setMode("Nav1");
     }
 
     else if (click_time > std::chrono::milliseconds(200) &&
