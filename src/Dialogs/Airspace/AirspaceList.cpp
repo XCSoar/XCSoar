@@ -115,28 +115,6 @@ public:
                const PixelRect &rc) noexcept override;
 };
 
-class AirspaceListButtons final : public RowFormWidget {
-  WndForm &dialog;
-  AirspaceListWidget *list;
-
-public:
-  AirspaceListButtons(const DialogLook &look, WndForm &_dialog) noexcept
-    :RowFormWidget(look), dialog(_dialog) {}
-
-  void SetList(AirspaceListWidget *_list) {
-    list = _list;
-  }
-
-  void Prepare([[maybe_unused]] ContainerWindow &parent,
-               [[maybe_unused]] const PixelRect &rc) noexcept override {
-    AddButton(_("Details"), [this](){
-      list->ShowDetails();
-    });
-
-    AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
-  }
-};
-
 /**
  * Special enum integer value for "filter disabled".
  */
@@ -474,17 +452,18 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   auto filter_widget = std::make_unique<AirspaceFilterWidget>(look);
 
   auto list_widget = std::make_unique<AirspaceListWidget>(*filter_widget);
+  AirspaceListWidget *const list = list_widget.get();
 
-  auto buttons_widget = std::make_unique<AirspaceListButtons>(look, dialog);
+  filter_widget->SetListener(list);
 
-  filter_widget->SetListener(list_widget.get());
-  buttons_widget->SetList(list_widget.get());
-
-  auto left_widget = std::make_unique<TwoWidgets>(std::move(filter_widget),
-                                                  std::move(buttons_widget),
-                                                  true);
-
-  dialog.FinishPreliminary(new TwoWidgets(std::move(left_widget),
-                                          std::move(list_widget), false));
+  /* Details/Close are in the dialog #ButtonPanel so tab/Up/Down from
+     the list (after the last item) go to the actions, like other list
+     dialogs, instead of wrapping to the name filter. */
+  dialog.FinishPreliminary(
+    new TwoWidgets(std::move(filter_widget), std::move(list_widget), false));
+  dialog.AddButton(_("Details"), [list](){
+    list->ShowDetails();
+  });
+  dialog.AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
   dialog.ShowModal();
 }
