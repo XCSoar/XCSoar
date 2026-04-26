@@ -59,6 +59,8 @@ static const char *const Usage = "\n"
 #if !defined(ANDROID)
   "  -dpi=DPI        force usage of DPI for pixel density\n"
   "  -dpi=XDPIxYDPI  force usage of XDPI and YDPI for pixel density\n"
+  "  -touchscreen     use touch UI (larger controls); overrides detection\n"
+  "  -notouchscreen   use non-touch UI; overrides touch detection\n"
 #endif
 #ifdef HAVE_CMDLINE_FULLSCREEN
   "  -fullscreen     full-screen mode\n"

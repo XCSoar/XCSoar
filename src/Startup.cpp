@@ -375,6 +375,10 @@ Startup(UI::Display &display)
   /* Log device capabilities and features after initialization */
   LogFormat("Device capabilities: HasIOIOLib()=%s",
             HasIOIOLib() ? "yes" : "no");
+  if (CommandLine::touch_input == CommandLine::TouchInput::Force)
+    LogFormat("Touch input mode: forced on (see command line)");
+  else if (CommandLine::touch_input == CommandLine::TouchInput::Disable)
+    LogFormat("Touch input mode: forced off (see command line)");
 #if !defined(NON_INTERACTIVE) && !defined(USE_X11)
   LogFormat("Device capabilities: HasPointer()=%s",
             HasPointer() ? "yes" : "no");

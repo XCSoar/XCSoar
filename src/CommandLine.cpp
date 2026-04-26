@@ -96,6 +96,10 @@ CommandLine::Parse(Args &args)
     } else if (StringIsEqual(s, "-small")) {
       width = 320;
       height = 240;
+    } else if (StringIsEqual(s, "-touchscreen")) {
+      touch_input = TouchInput::Force;
+    } else if (StringIsEqual(s, "-notouchscreen")) {
+      touch_input = TouchInput::Disable;
 #ifdef HAVE_CMDLINE_FULLSCREEN
     } else if (StringIsEqual(s, "-fullscreen")) {
       full_screen = true;

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
@@ -10,6 +12,33 @@
 class Args;
 
 namespace CommandLine {
+
+  /**
+   * If Auto, @ref HasTouchScreen follows device detection.  Force/Disable
+   * come from the @c -touchscreen and @c -notouchscreen switches; if both
+   * are given, the last one wins.
+   */
+  enum class TouchInput : uint8_t { Auto, Force, Disable };
+  inline TouchInput touch_input = TouchInput::Auto;
+
+  /**
+   * Apply the command-line @ref touch_input override to a hardware
+   * detection value.
+   */
+  inline bool
+  ApplyTouchInputOverride(bool from_hardware) noexcept
+  {
+    switch (touch_input) {
+    case TouchInput::Force:
+      return true;
+    case TouchInput::Disable:
+      return false;
+    case TouchInput::Auto:
+    default:
+      return from_hardware;
+    }
+  }
+
   extern unsigned width, height;
 
 #ifdef KOBO
