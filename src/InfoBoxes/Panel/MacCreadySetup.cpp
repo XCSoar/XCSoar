@@ -27,12 +27,9 @@ void
 MacCreadySetupPanel::Prepare(ContainerWindow &parent,
                              const PixelRect &rc) noexcept
 {
-  WindowStyle style;
-  style.Hide();
-  style.TabStop();
-
   auto w = std::make_unique<CheckBoxControl>();
-  w->Create(parent, UIGlobals::GetDialogLook(), _("Auto"), rc, style, [](bool value){
+  w->CreateInDialogForm(parent, UIGlobals::GetDialogLook(), _("Auto"), rc,
+                        [](bool value) {
     TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
     task_behaviour.auto_mc = value;
     Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);

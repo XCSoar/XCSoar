@@ -15,6 +15,7 @@
 #include <vector>
 
 class Font;
+struct DialogLook;
 struct WrappedText;
 struct SegmentedLine;
 struct TextSegment;
@@ -71,6 +72,14 @@ class RichTextWindow : public LinkableWindow {
 
   /** Background color (from DialogLook) */
   Color background_color = COLOR_WHITE;
+
+  /**
+   * When set, Markdown list checkboxes use the same `DrawCheckBox` styling
+   * as `CheckBoxControl` (e.g. quick guide, configuration).  Otherwise
+   * a simple outline is drawn.  The embedding `RichTextWidget` sets this
+   * from the dialog look.
+   */
+  const DialogLook *dialog_look = nullptr;
 
   /** Parsed text with links and styles extracted */
   ParsedMarkdown parsed;
@@ -201,8 +210,8 @@ private:
 
   /** Render a checkbox segment with hit-rect registration. */
   void RenderCheckboxSegment(Canvas &canvas, const TextSegment &seg,
-                             int &x, int text_y, int visible_top,
-                             int text_line_height) noexcept;
+                             int &x, int y_line, int visible_top,
+                             int row_height) noexcept;
 
   /** Render a plain text segment (heading, bold, list item, normal). */
   void RenderPlainSegment(Canvas &canvas, const TextSegment &seg,
@@ -210,8 +219,7 @@ private:
                           int &x, int text_y) const noexcept;
 
   /** Set focus to a FocusItem and scroll to make it visible. */
-  void ScrollToFocusItem(const FocusItem &item,
-                         int text_line_height) noexcept;
+  void ScrollToFocusItem(const FocusItem &item) noexcept;
 
   /**
    * Move focus to the next link or checkbox (same rules as KEY_DOWN when
@@ -219,8 +227,7 @@ private:
    */
   bool AdvanceFocusToNextFrom(const std::vector<FocusItem> &items,
                               std::optional<std::size_t> current_pos,
-                              int max_jump,
-                              int text_line_height) noexcept;
+                              int max_jump) noexcept;
 
 public:
   RichTextWindow() noexcept;
@@ -256,6 +263,10 @@ public:
                    Color _background_color = COLOR_WHITE) noexcept {
     dark_mode = _dark_mode;
     background_color = _background_color;
+  }
+
+  void SetDialogLook(const DialogLook &look) noexcept {
+    dialog_look = &look;
   }
 
   [[gnu::pure]]
