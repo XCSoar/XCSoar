@@ -49,6 +49,7 @@ ButtonPanel::Add(std::unique_ptr<ButtonRenderer> &&renderer,
 {
   auto *button = new Button(parent, dummy_rc, style,
                             std::move(renderer), std::move(callback));
+  button->SetCursorKeyGroup(this);
   keys[buttons.size()] = 0;
   buttons.append(button);
 
@@ -262,6 +263,53 @@ PixelRect
 ButtonPanel::BottomLayout() noexcept
 {
   return BottomLayout(parent.GetClientRect());
+}
+
+void
+ButtonPanel::ReselectToFirstEnabled() noexcept
+{
+  if (selected_index < 0)
+    return;
+
+  const auto is_usable = [this](unsigned i) {
+    return buttons[i]->IsVisible() && buttons[i]->IsEnabled();
+  };
+
+  if (selected_index < (int)buttons.size() &&
+      is_usable((unsigned)selected_index))
+    return;
+
+  if (selected_index < (int)buttons.size() && selected_index >= 0)
+    buttons[selected_index]->SetSelected(false);
+
+  for (unsigned i = 0; i < buttons.size(); ++i) {
+    if (is_usable(i)) {
+      selected_index = (int)i;
+      buttons[selected_index]->SetSelected(true);
+      return;
+    }
+  }
+}
+
+void
+ButtonPanel::OnButtonGainedFocus(Button &b) noexcept
+{
+  if (selected_index < 0)
+    return;
+
+  unsigned i;
+  for (i = 0; i < buttons.size(); ++i) {
+    if (buttons[i] == &b)
+      break;
+  }
+  if (i >= buttons.size() || (int)i == selected_index)
+    return;
+
+  if (selected_index >= 0 && (unsigned)selected_index < buttons.size())
+    buttons[selected_index]->SetSelected(false);
+
+  selected_index = (int)i;
+  b.SetSelected(true);
 }
 
 void

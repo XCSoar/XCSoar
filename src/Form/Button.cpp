@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
@@ -193,6 +194,8 @@ void
 Button::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
+  if (cursor_key_group != nullptr)
+    cursor_key_group->OnButtonGainedFocus(*this);
   Invalidate();
 }
 
