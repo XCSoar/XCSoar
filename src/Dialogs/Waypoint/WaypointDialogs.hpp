@@ -14,6 +14,10 @@ WaypointPtr
 ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0);
+void
+ShowWaypointListPersistentDialog(
+  const GeoPoint &location, bool allow_navigation = true,
+  bool allow_edit = true);
 
 void
 dlgConfigWaypointsShowModal(Waypoints &waypoints) noexcept;
@@ -36,9 +40,9 @@ WaypointEditResult
 dlgWaypointEditShowModal(Waypoint &way_point);
 
 void
-dlgWaypointDetailsShowModal(Waypoints *waypoints, WaypointPtr waypoint,
-                            bool allow_navigation = true,
-                            bool allow_edit = false);
+dlgWaypointDetailsShowModal(
+  Waypoints *waypoints, WaypointPtr waypoint, bool allow_navigation = true,
+  bool allow_edit = false, bool *state_change_committed = nullptr) noexcept;
 
 bool
 PopupNearestWaypointDetails(Waypoints &waypoints,

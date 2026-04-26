@@ -103,22 +103,21 @@ struct WaypointListDialogState
 
 class WaypointFilterWidget;
 
-class WaypointListWidget final
+class WaypointListWidget
   : public ListWidget, public DataFieldListener,
     NullBlackboardListener {
   Waypoints &way_points;
+  TwoTextRowsRenderer row_renderer;
 
+protected:
   WndForm &dialog;
+  WaypointList items;
 
   WaypointFilterWidget &filter_widget;
 
-  WaypointList items;
-
-  TwoTextRowsRenderer row_renderer;
-
+private:
   const GeoPoint location;
   Angle last_heading;
-
   OrderedTask *const ordered_task;
   const unsigned ordered_task_index;
 
@@ -136,7 +135,7 @@ public:
 
   void UpdateList();
 
-  void OnWaypointListEnter();
+  virtual void OnWaypointListEnter();
 
   WaypointPtr GetCursorObject() const {
     return items.empty()
@@ -176,6 +175,23 @@ public:
 private:
   /* virtual methods from BlackboardListener */
   void OnGPSUpdate([[maybe_unused]] const MoreData &basic) override;
+};
+
+class WaypointListPersistentWidget final
+  : public WaypointListWidget {
+  const bool allow_navigation;
+  const bool allow_edit;
+
+public:
+  WaypointListPersistentWidget(Waypoints &_way_points, WndForm &_dialog,
+                               WaypointFilterWidget &_filter_widget,
+                               GeoPoint _location, Angle _heading,
+                               bool _allow_navigation, bool _allow_edit)
+    :WaypointListWidget(_way_points, _dialog, _filter_widget, _location, _heading,
+                        nullptr, 0),
+     allow_navigation(_allow_navigation), allow_edit(_allow_edit) {}
+
+  void OnWaypointListEnter() override;
 };
 
 class WaypointFilterWidget : public RowFormWidget {
@@ -288,6 +304,7 @@ FillLastUsedList(WaypointList &list,
     list.emplace_back(std::move(waypoint));
   }
 }
+
 
 void
 WaypointListWidget::UpdateList()
@@ -478,6 +495,22 @@ WaypointListWidget::OnWaypointListEnter()
 }
 
 void
+WaypointListPersistentWidget::OnWaypointListEnter()
+{
+  if (items.empty()) {
+    filter_widget.GetControl(NAME).BeginEditing();
+    return;
+  }
+
+  bool state_change = false;
+  dlgWaypointDetailsShowModal(data_components->waypoints.get(),
+                              items[GetList().GetCursorIndex()].waypoint,
+                              allow_navigation, allow_edit, &state_change);
+  if (state_change)
+    dialog.SetModalResult(mrOK);
+}
+
+void
 WaypointListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 {
   OnWaypointListEnter();
@@ -537,3 +570,40 @@ ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
     ? list_widget_.GetCursorObject()
     : nullptr;
 }
+
+void
+ShowWaypointListPersistentDialog(const GeoPoint &_location,
+                                 bool allow_navigation, bool allow_edit)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  const Angle heading = CommonInterface::Basic().attitude.heading;
+
+  dialog_state.name.clear();
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Select Waypoint"));
+
+  auto left_widget =
+    std::make_unique<TwoWidgets>(std::make_unique<WaypointFilterWidget>(look, heading),
+                                 std::make_unique<WaypointListButtons>(look, dialog),
+                                 true);
+
+  auto &filter_widget = (WaypointFilterWidget &)left_widget->GetFirst();
+  auto &buttons_widget = (WaypointListButtons &)left_widget->GetSecond();
+
+  auto list_widget = std::make_unique<WaypointListPersistentWidget>(
+    *data_components->waypoints, dialog, filter_widget, _location, heading,
+    allow_navigation, allow_edit);
+
+  filter_widget.SetListener(list_widget.get());
+  buttons_widget.SetList(list_widget.get());
+
+  TwoWidgets *widget = new TwoWidgets(std::move(left_widget),
+                                      std::move(list_widget),
+                                      false);
+
+  dialog.FinishPreliminary(widget);
+  dialog.ShowModal();
+}
+

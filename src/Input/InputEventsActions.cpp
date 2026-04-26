@@ -343,8 +343,9 @@ InputEvents::eventAnalysis([[maybe_unused]] const char *misc)
 // WaypointDetails
 // Displays waypoint details
 //         current: the current active waypoint
-//          select: brings up the waypoint selector, if the user then
-//                  selects a waypoint, then the details dialog is shown.
+//          select: opens waypoint search; details on selection; search stays
+//                  open until Esc or a successful GoTo / task / home / pan in
+//                  details (pan dismisses search so the map is visible).
 //  See the waypoint dialog section of the reference manual
 // for more info.
 void
@@ -373,12 +374,22 @@ InputEvents::eventWaypointDetails(const char *misc)
     allow_navigation = false;
     allow_edit = false;
   } else if (StringIsEqual(misc, "select")) {
-    wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
+    /* List stays open until Esc or a navigation/task change in details. */
+    ShowWaypointListPersistentDialog(basic.location, true, true);
+    return;
   }
   if (wp)
-    dlgWaypointDetailsShowModal(data_components->waypoints.get(),
-                                std::move(wp),
+    dlgWaypointDetailsShowModal(data_components->waypoints.get(), std::move(wp),
                                 allow_navigation, allow_edit);
+}
+
+// WaypointDetailsPersistent: same list+details flow as "WaypointDetails" select
+// (kept for existing .xci configurations).
+void
+InputEvents::eventWaypointDetailsPersistent(gcc_unused const char *misc)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  ShowWaypointListPersistentDialog(basic.location, true, true);
 }
 
 void

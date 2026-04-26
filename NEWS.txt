@@ -40,6 +40,10 @@ Version 7.45 - not yet released
   - Quick Guide "What's New": release notes are Markdown generated at build time
     from NEWS.txt (headings + merged list lines) instead of truncating the
     gzipped file at runtime
+  - waypoint search: stays open until Esc or a successful GoTo / task / home / pan
+    action (pan ends the search so the map is not hidden under the list); same for
+    WaypointDetails select and WaypointDetailsPersistent (was: only after closing
+    details) #749
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or
@@ -783,7 +787,6 @@ Version 7.21 - 2021/12/11
   - Control backlight brightness of the Kobo Glo HD
 * Android
   - re-enable background location and comply with Google Play Store policy
-
 Version 7.20 - 2021/10/22
 * map
   - fix crash in the topography loader
