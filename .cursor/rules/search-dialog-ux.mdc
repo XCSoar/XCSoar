@@ -1,0 +1,73 @@
+---
+description: Stacked search dialogs (filter + list + optional details) — lifecycle and commit contract
+globs:
+  - "src/Dialogs/**/*.cpp"
+  - "src/Dialogs/**/*.hpp"
+  - "src/Input/InputEvents*.cpp"
+  - "src/Input/InputEvents*.hpp"
+alwaysApply: false
+---
+
+# Search dialog UX (general)
+
+Applies to **modal search UIs**: filter controls + result list, optionally opening a **second modal** (details, preview, editor) on top. Not every list dialog uses this pattern—see **Pick-only** vs **Browse** below.
+
+## Pick-only vs browse (persistent outer dialog)
+
+1. **Pick-only** — User chooses a row and the **outer** dialog closes immediately with a return value (or callback). No nested “return to list after closing child” loop.  
+   *Example:* `ShowWaypointListDialog` for Goto lookup or task relocate.
+
+2. **Browse** — Outer search **stays open** while the user opens and closes a **child** dialog on top. The user can inspect several rows without restarting the search.  
+   *Example:* `ShowWaypointListPersistentDialog` + waypoint details.
+
+Do not mix these casually: pick-only callers expect a single modal lifetime; browse mode requires an explicit **commit** signal to close the outer dialog.
+
+## When the outer search should dismiss
+
+The **outer** dialog should close only when:
+
+- The user **cancels** from the outer UI (**Esc**, outer **Close**), **or**
+- The **child** reports a **committed action** that should end the whole flow (navigation change, task change, data saved, etc.).
+
+Closing the **child** with “no commit” (e.g. **Close** / browse done) must return to the **outer** list **without** dismissing the outer dialog.
+
+## Communicating commit: optional out-parameter
+
+When the child modal is shared between “standalone” and “nested under search” contexts, use an optional trailing **`bool *committed`** (or equivalent name):
+
+- **`nullptr`** — Child behaves as today; no parent search to coordinate.
+- **Non-null** — Reset to **`false`** when opening the child. Set **`true`** only before `SetModalResult` / close when the action should **dismiss the parent search**.
+
+**Child “Close” / browse exit** must set **`false`** (or leave **`false`**).
+
+**Set `true` only on success paths** that actually changed state (avoid **`true`** on validation errors or cancelled sub-dialogs).
+
+## Visibility: parent must not hide the result
+
+If the **outer** dialog is **fullscreen or covers the main map**, and a child action updates something the user must **see on the map** (pan, zoom, centre, obvious map redraw), then that action should typically set **`committed = true`** so the **outer** closes and the map is visible.
+
+If the outer were non-blocking or transparent, a different rule might apply; XCSoar search UIs are usually opaque modals.
+
+## Adding actions on the child
+
+For each new button or flow that closes the child:
+
+- **Browse / cancel / no lasting change** → do **not** set committed (or set **`false`** explicitly on the dismiss path).
+- **Lasting change** the user should see on the underlying app (map, task, profile, list data) → set **`*committed = true`** before closing when the pointer is non-null.
+
+## Input events and aliases
+
+Prefer **one** documented event path for a given browse search (e.g. `WaypointDetails` `select`). Keep **legacy event names** only for **`.xci` / profile compatibility** when they duplicate behaviour; document them as aliases in code comments.
+
+## Reference implementation (waypoint search)
+
+- **Pick-only:** `ShowWaypointListDialog` in `Dialogs/Waypoint/WaypointList.cpp`
+- **Browse + details:** `ShowWaypointListPersistentDialog`, `WaypointListPersistentWidget::OnWaypointListEnter`
+- **Child + flag:** `dlgWaypointDetailsShowModal(..., bool *state_change_committed)` in `Dialogs/Waypoint/dlgWaypointDetails.cpp` and command buttons in `WaypointCommandsWidget`
+- **Input:** `InputEvents::eventWaypointDetails` (`select` vs `current`), `eventWaypointDetailsPersistent` (alias)
+
+Reuse the same **ideas** for other search+details stacks (airspace lists, alternates, map item lists, etc.); reuse **names** only where it stays readable.
+
+## NEWS
+
+User-visible behaviour changes belong in **`NEWS.txt`** under the current unreleased version.
