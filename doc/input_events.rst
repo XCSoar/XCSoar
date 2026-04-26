@@ -137,6 +137,44 @@ In ``mode=default``, the number row currently uses this grouping:
    - ``ArmAdvance toggle``
    - Task control toggle
 
+**Nav** menu (``Nav1`` / ``Nav2``) — opened with **APP1** from the map
+(``default``) or the main menu, and also by a **short or double tap** on the
+**navigator** strip (same ``Nav1`` / ``Nav2`` modes, no separate navigator
+input modes). ``Nav1`` has **Status**, **Analysis**, and **Target** on keys
+``2``--``4``, then task manager, waypoint arms, list, and alternates. ``Nav2``
+is **abort task**, **marker drop**, and **pilot event**; **Target** is on
+``Nav1`` page~1.
+
+Navigator strip (gestures)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When a **navigator** strip is shown above or below the map, touch or mouse
+gestures invoke input events. With no valid task, the strip can show the
+translatable *No task* string (reused from elsewhere in the UI).
+
+- **Short tap** (about 0--200 ms): if there is no valid task, opens the task
+  manager (``Setup`` / ``Task``). Otherwise opens the on-screen **Nav** button
+  overlay and switches to **mode** ``Nav1`` (same idea as **Display1** for the
+  display sidebar).
+- **Double-tap**: same: task manager if no valid task, else overlay and
+  **mode** ``Nav1``.
+- **Medium hold** (about 200--500 ms): ``Status`` with argument ``task``.
+- **Longer hold** (about 500 ms--2 s): ``Analysis`` with argument
+  ``AnalysisPage::TASK`` (task statistics page).
+- **Long hold** (about 2--10 s): ``Setup`` with argument ``Task`` (task
+  editor).
+
+**Swipe gestures** (when a drag is classified as a gesture instead of a tap):
+**left** / **right** call ``AdjustWaypoint`` with ``previouswrap`` or
+``nextwrap`` (see **navigator swipe** in look / UI settings). **RL** opens
+``Setup`` ``Target``; **LR** opens ``Setup`` ``Alternates``. **Up** / **down**
+(and other patterns) may open the **MainMenu** overlay. Unrecognised
+gestures fall through to ``processGesture``.
+
+**Escape** in :file:`Data/Input/default.xci` includes ``Nav1`` and ``Nav2`` on
+the shared key record, so it returns to **mode** ``default`` from the
+overlay, like other button modes.
+
 File format
 -----------
 
@@ -213,7 +251,15 @@ Event list
  * - ``AirspaceWarnings``
    - Opens the airspace warnings dialog.
  * - ``Analysis``
-   - Displays the analysis/statistics dialog.
+   - Displays the analysis/statistics dialog. Optional argument selects the
+     initial tab, e.g. ``AnalysisPage::TASK`` (task), ``AnalysisPage::BAROGRAPH``,
+     ``AnalysisPage::CLIMB``, ``AnalysisPage::VARIO_HISTOGRAM``,
+     ``AnalysisPage::THERMAL_BAND``, ``AnalysisPage::WIND``,
+     ``AnalysisPage::POLAR``, ``AnalysisPage::MACCREADY``,
+     ``AnalysisPage::TEMPTRACE``, ``AnalysisPage::CONTEST``,
+     ``AnalysisPage::TASK_SPEED``, ``AnalysisPage::AIRSPACE``.
+     If the argument is missing or not recognised,
+     the **Contest** page is shown.
  * - ``ArmAdvance``
    - Controls waypoint advance trigger arming. Possible arguments:
      ``on`` (arm), ``off`` (disarm), ``toggle``, ``show``
@@ -312,8 +358,10 @@ Event list
    - Marks the current location and creates a user waypoint marker.
      Use ``reset`` to erase all user markers.
  * - ``Mode M``
-   - Sets the current input event mode. The argument is the label
-     of the mode to activate (e.g. ``default``, ``Menu``).
+   - Sets the current input event mode. The argument is the name of the
+     mode to activate (e.g. ``default``, ``Menu``, ``Nav1``, ``Nav2``,
+     ``Display1``, ``pan``). Mode names are whatever labels
+     appear in ``mode=...`` lines in the active ``.xci`` file.
  * - ``NearestAirspaceDetails``
    - If airspace warnings are active, opens the airspace warnings
      dialog. Otherwise, finds the nearest airspace (within 30
