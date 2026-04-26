@@ -5,6 +5,7 @@
 
 class NMEAInputLine;
 struct NMEAInfo;
+struct DeviceInfo;
 
 /* LXWP parsers exposed for reuse by sibling drivers (e.g. LX160).
    The full LX driver wires these into LXDevice::ParseNMEA in Parser.cpp;
@@ -15,6 +16,9 @@ namespace LX {
 
 bool
 LXWP0(NMEAInputLine &line, NMEAInfo &info);
+
+void
+LXWP1(NMEAInputLine &line, DeviceInfo &device);
 
 bool
 LXWP2(NMEAInputLine &line, NMEAInfo &info);

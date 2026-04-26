@@ -4,6 +4,7 @@
 #include "LXEosDevice.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Driver/LX/Internal.hpp"
+#include "Device/Driver/LX/Parsers.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
@@ -114,8 +115,8 @@ LXEosDevice::ParseNMEA(const char* String, NMEAInfo& info)
   if (type == "$LXWP0"sv)
     return LXWP0(line, info);
   else if (type == "$LXWP1"sv) {
-    // LXWP1 sentence is identical to LXNAV, using method from LXNAV driver
-    LXDevice::LXWP1(line, info.device);
+    // LXWP1 sentence is identical to LXNAV, using shared parser
+    LX::LXWP1(line, info.device);
     altitude_offset.reliable = HasReliableAltOffset(info.device);
     return true;
   } else if (type == "$LXWP2"sv)

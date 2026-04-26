@@ -452,9 +452,6 @@ public:
 
   bool ReadLXGPSBaudrate(unsigned &baudrate, OperationEnvironment &env);
 
-  // These methods are reused by the LX Eos driver
-  static void LXWP1(NMEAInputLine &line, DeviceInfo &device);
-
 public:
   /* virtual methods from class Device */
   void LinkTimeout() override;
