@@ -414,14 +414,13 @@ $$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp: FORCE
 $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so: $(NATIVE_HEADERS) generate boost FORCE
 	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
-# extract symbolication files for Google Play (paths lib/<ABI>/ must match
-# the APK/AAB and Play Console native debug symbols upload format)
-# Depend on lib$(1).so (submake) not lib$(1)-ns.so: FAT_BINARY builds omit
-# main.mk, so the parent Make has no rule for -ns; the submake still leaves
-# the unstripped sibling next to the stripped .so when lib$(1).so is built.
+# Unstripped .so (paths lib/<ABI>/) for Google Play; must retain debug info.
+# Rely on lib$(1).so (submake) not lib$(1)-ns.so: fat-binary build omits -ns in
+# the parent graph; the submake still leaves the unstripped sibling when the
+# stripped .so is built.
 ANDROID_SYMBOLICATION_BUILD += $$(BUNDLE_BUILD_DIR)/symbols/lib/$(2)/lib$(1).so
 $$(BUNDLE_BUILD_DIR)/symbols/lib/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(BUNDLE_BUILD_DIR)/symbols/lib/$(2)/dirstamp
-	$$(Q)$$(TCPREFIX)objcopy$$(EXE) --strip-debug $$(dir $$<)lib$(1)-ns.so $$@
+	$$(Q)cp $$(dir $$<)lib$(1)-ns.so $$@
 
 endef
 
@@ -463,11 +462,10 @@ ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
 	$(Q)cp $< $@
 
-# Native debug symbols for Google Play (single-ABI builds).  Same lib/<ABI>/
-# layout as the fat-binary symbols.zip.
+# Native debug symbols for Google Play (single-ABI).  Same lib/<ABI>/ layout.
 ANDROID_NATIVE_SYMBOL_LIBS = $(foreach N,$(ANDROID_LIB_NAMES),$(BUNDLE_BUILD_DIR)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/lib$(N).so)
 $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/dirstamp
-	$(Q)$(TCPREFIX)objcopy$(EXE) --strip-debug $(ABI_BIN_DIR)/lib$*-ns.so $@
+	$(Q)cp $(ABI_BIN_DIR)/lib$*-ns.so $@
 
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_NATIVE_SYMBOL_LIBS)
 	cd $(BUNDLE_BUILD_DIR)/native-debug-symbols && $(ZIP) -r $(abspath $@) lib
