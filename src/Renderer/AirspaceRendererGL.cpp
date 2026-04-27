@@ -12,6 +12,7 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspaceIteration.hxx"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
@@ -297,25 +298,23 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
                                const AirspaceWarningCopy &awc,
                                const AirspacePredicate &visible)
 {
-  const auto range =
-    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                projection.GetScreenDistanceMeters());
-
   if (settings.fill_mode == AirspaceRendererSettings::FillMode::ALL ||
       settings.fill_mode == AirspaceRendererSettings::FillMode::NONE) {
     AirspaceFillRenderer renderer(canvas, projection, look, awc, settings);
-    for (const auto &i : range) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        renderer.Visit(airspace);
-    }
+
+    ForEachAirspaceInView(airspaces, awc.GetExternalAirspaces(), projection,
+                          visible,
+                          [&](const AbstractAirspace &airspace) {
+                            renderer.Visit(airspace);
+                          });
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings);
-    for (const auto &i : range) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        renderer.Visit(airspace);
-    }
+
+    ForEachAirspaceInView(airspaces, awc.GetExternalAirspaces(), projection,
+                          visible,
+                          [&](const AbstractAirspace &airspace) {
+                            renderer.Visit(airspace);
+                          });
   }
 }
 

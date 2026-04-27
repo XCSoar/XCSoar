@@ -7,34 +7,14 @@
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/AirspaceIteration.hxx"
+#include "Airspace/AirspaceMapVisible.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Sizes.h"
-
-class AirspaceMapVisible
-{
-  const AirspaceVisibility visible_predicate;
-  const AirspaceWarningCopy &warnings;
-
-public:
-  AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
-                     const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState &_state,
-                     const AirspaceWarningCopy &_warnings) noexcept
-    :visible_predicate(_computer_settings, _renderer_settings, _state),
-     warnings(_warnings) {}
-
-  [[gnu::pure]]
-  bool operator()(const AbstractAirspace& airspace) const noexcept {
-    return visible_predicate(airspace) ||
-      warnings.IsInside(airspace) ||
-      warnings.HasWarning(airspace);
-  }
-};
 
 void
 AirspaceLabelRenderer::Draw(Canvas &canvas,
@@ -43,36 +23,40 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
                             const AirspaceComputerSettings &computer_settings,
                             const AirspaceRendererSettings &settings) noexcept
 {
-  if (settings.label_selection != AirspaceRendererSettings::LabelSelection::ALL ||
-      airspaces == nullptr || airspaces->IsEmpty())
+  if (settings.label_selection != AirspaceRendererSettings::LabelSelection::ALL)
     return;
 
   AirspaceWarningCopy awc;
   if (warning_manager != nullptr)
     awc.Visit(*warning_manager);
 
+  if ((airspaces == nullptr || airspaces->IsEmpty()) &&
+      awc.GetExternalAirspaces().empty())
+    return;
+
   const AircraftState aircraft = ToAircraftState(basic, calculated);
   const AirspaceMapVisible visible(computer_settings, settings,
                                    aircraft, awc);
 
   DrawInternal(canvas,
-               projection, visible, computer_settings.warnings);
+               projection, visible, computer_settings.warnings,
+               awc.GetExternalAirspaces());
 }
 
 inline void
 AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const WindowProjection &projection,
                                     AirspacePredicate visible,
-                                    const AirspaceWarningConfig &config) noexcept
+                                    const AirspaceWarningConfig &config,
+                                    std::span<const ConstAirspacePtr> external_airspaces) noexcept
 {
   AirspaceLabelList labels;
-  for (const auto &i : airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                                   projection.GetScreenDistanceMeters())) {
-    const AbstractAirspace &airspace = i.GetAirspace();
-    if (visible(airspace))
-      labels.Add(airspace.GetCenter(), airspace.GetClass(), airspace.GetBase(),
-                 airspace.GetTop());
-  }
+
+  ForEachAirspaceInView(airspaces, external_airspaces, projection, visible,
+                        [&](const AbstractAirspace &airspace) {
+                          labels.Add(airspace.GetCenter(), airspace.GetClass(),
+                                     airspace.GetBase(), airspace.GetTop());
+                        });
 
   labels.Sort(config);
 
