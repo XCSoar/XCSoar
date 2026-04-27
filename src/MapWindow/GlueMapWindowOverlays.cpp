@@ -21,6 +21,7 @@
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
+#include "net/Reachability.hxx"
 
 #include <algorithm> // for std::clamp()
 
@@ -141,35 +142,51 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 }
 
 void
-GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
-                             const NMEAInfo &info) const noexcept
+GlueMapWindow::DrawSystemStatus(Canvas &canvas, const PixelRect &rc) const noexcept
 {
-  const char *txt;
-  const MaskedIcon *icon;
+  // Draw network status in upper-left corner
+  const int top = rc.top + Layout::FastScale(4);
+  PixelPoint p(rc.left + Layout::FastScale(4), top);
+  int offset_x = 0;
+
+  const MaskedIcon &net_icon = PollInternetReachable()
+    ? look.network_connected_icon
+    : look.network_disconnected_icon;
+
+  net_icon.Draw(canvas, p);
+  offset_x += net_icon.GetSize().width + Layout::FastScale(4);
+
+  const auto &info = Basic();
+  const MaskedIcon *gps_icon = nullptr;
+  const char *gps_txt = nullptr;
 
   if (!info.alive) {
-    icon = &look.no_gps_icon;
-    txt = _("GPS not connected");
+    gps_icon = &look.no_gps_icon;
+    gps_txt = _("GPS not connected");
   } else if (!info.location_available) {
-    icon = &look.waiting_for_fix_icon;
-    txt = _("GPS waiting for fix");
-  } else
-    // early exit
-    return;
+    gps_icon = &look.waiting_for_fix_icon;
+    gps_txt = _("GPS waiting for fix");
+  }
 
-  PixelPoint p(rc.left + Layout::FastScale(2),
-               rc.bottom - Layout::FastScale(35));
-  icon->Draw(canvas, p);
+  if (gps_icon != nullptr) {
+    PixelPoint gps_p = p;
+    gps_p.x += offset_x;
+    gps_icon->Draw(canvas, gps_p);
 
-  p.x += icon->GetSize().width + Layout::FastScale(4);
-  p.y = rc.bottom - Layout::FastScale(34);
+    if (gps_txt != nullptr) {
+      const Font &font = *look.overlay.overlay_font;
+      canvas.Select(font);
 
-  TextInBoxMode mode;
-  mode.shape = LabelShape::ROUNDED_BLACK;
+      PixelPoint text_p = gps_p;
+      text_p.x += gps_icon->GetSize().width + Layout::FastScale(4);
+      text_p.y += std::max(0, static_cast<int>(gps_icon->GetSize().height - font.GetHeight()) / 2);
 
-  const Font &font = *look.overlay.overlay_font;
-  canvas.Select(font);
-  TextInBox(canvas, txt, p, mode, rc, nullptr);
+      TextInBoxMode mode;
+      mode.shape = LabelShape::ROUNDED_BLACK;
+
+      TextInBox(canvas, gps_txt, text_p, mode, rc, nullptr);
+    }
+  }
 }
 
 void
@@ -424,8 +441,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas,
   PixelRect tb_rect;
   tb_rect.left = rc.left;
   tb_rect.right = rc.left+Layout::Scale(25);
-  tb_rect.top = Layout::Scale(2);
-  tb_rect.bottom = (rc.bottom-rc.top)/5 - Layout::Scale(2);
+  tb_rect.top = Layout::Scale(30);
+  tb_rect.bottom = (rc.bottom-rc.top)/5 + Layout::Scale(26);
 
   const ThermalBandRenderer &renderer = thermal_band_renderer;
   if (task != nullptr) {
