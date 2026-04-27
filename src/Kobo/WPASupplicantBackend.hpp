@@ -19,9 +19,8 @@ public:
   void Connect(const char *ssid, const char *passphrase, WifiSecurity security) override;
   void RemoveNetwork(unsigned id) override;
   void SaveConfig() override;
-  bool Status(WifiStatus &status) override;
-  const char *GetInterfaceName() const override { return interface_name_.c_str(); }
-  WifiSignalUnit GetSignalUnit() const override;
+  void Disconnect() override;
+  WifiBackendStatus GetBackendStatus() override;
   void Connect(const WifiConnectRequest &request) override;
   void ForgetNetwork(const char *profile_id) override;
 
