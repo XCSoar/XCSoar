@@ -8,9 +8,9 @@
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
-#include "Patterns.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
+#include "Repository/FileType.hpp"
 #include "io/BufferedReader.hxx"
 #include "io/FileReader.hxx"
 #include "io/MapFile.hpp"
@@ -80,7 +80,7 @@ ReadAirspace(Airspaces &airspaces,
 
   // Read the airspace filenames from the registry
   const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
-                                               AIRSPACE_FILE_PATTERNS);
+                                               GetFileTypePatterns(FileType::AIRSPACE));
   for (const auto& path : paths) {
   airspace_ok |= ParseAirspaceFile(airspaces, path, operation);
   }

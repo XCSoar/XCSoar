@@ -113,9 +113,63 @@ LocalPath(const char *file) noexcept
 AllocatedPath
 MakeLocalPath(const char *name)
 {
+  return MakeLocalPath(Path(name));
+}
+
+AllocatedPath
+MakeLocalPath(Path name)
+{
   auto path = LocalPath(name);
   Directory::Create(path);
   return path;
+}
+
+AllocatedPath
+MakeLocalPathRecursively(Path name, int max_creation_depth)
+{
+  assert(name != nullptr);
+  assert(max_creation_depth >= 0);
+
+  AllocatedPath path = LocalPath(name);
+
+  if (Directory::Exists(path))
+    return path;
+
+  if (max_creation_depth == 0)
+    return nullptr;
+
+  // Collect paths from target up to first existing ancestor
+  std::list<AllocatedPath> to_create;
+  to_create.push_back(std::move(path));
+  const Path primary_data_path = GetPrimaryDataPath();
+
+  while (!Directory::Exists(to_create.front())) {
+    if (to_create.size() > static_cast<size_t>(max_creation_depth))
+      return nullptr;
+
+    AllocatedPath parent = to_create.front().GetParent();
+
+    if (parent == primary_data_path)
+      /* reached the data root, which is assumed to exist already */
+      break;
+
+    if (parent == nullptr || parent == Path("."))
+      /* walked past the root without finding primary_data_path - should
+         not happen since all paths here are children of it */
+      return nullptr;
+
+    to_create.push_front(std::move(parent));
+  }
+
+  // Create directories from parent to child
+  for (const auto &dir : to_create) {
+    Directory::Create(dir);
+
+    if (!Directory::Exists(dir))
+      return nullptr;
+  }
+
+  return LocalPath(name);
 }
 
 Path

@@ -80,6 +80,13 @@ public:
   [[gnu::pure]]
   bool IsBase() const noexcept;
 
+ /**
+   * Is this path a "valid filename"?
+   * Must be not empty and a base name
+   */
+  [[gnu::pure]]
+  bool IsValidFilename() const noexcept;
+
   /**
    * Returns the parent of the specified path, i.e. the part before
    * the last separator.  Returns "." if there is no directory name.
@@ -248,6 +255,11 @@ public:
   [[gnu::pure]]
   bool IsBase() const noexcept {
     return Path(*this).IsBase();
+  }
+
+  [[gnu::pure]]
+  bool IsValidFilename() const noexcept {
+    return Path(*this).IsValidFilename();
   }
 
   AllocatedPath GetParent() const noexcept {
