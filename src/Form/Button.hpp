@@ -87,6 +87,18 @@ public:
    */
   void SetCaption(const char *caption);
 
+  /**
+   * Set optional second line (e.g. toggle state).  Only used with
+   * #TextButtonRenderer.  Pass nullptr to clear.
+   */
+  void SetCaption2(const char *caption2);
+
+  /**
+   * Set optional third line.  Only used with #TextButtonRenderer.
+   * Pass nullptr to clear.
+   */
+  void SetCaption3(const char *caption3);
+
   void SetSelected(bool _selected);
 
   [[gnu::pure]]

@@ -18,6 +18,17 @@ bool
 ValidateUTF8(const char *p) noexcept;
 
 /**
+ * Copy string to buffer, replacing invalid UTF-8 sequences and
+ * control characters with space.  Use before rendering text from
+ * external sources (waypoints, files) that may be malformed.
+ *
+ * @return number of bytes written, or 0 if dest is too small
+ * (dest.size() must be at least src.size() + 1 for null terminator)
+ */
+std::size_t
+SanitizeUTF8(std::string_view src, std::span<char> dest) noexcept;
+
+/**
  * Is this a valid UTF-8 string?
  */
 [[gnu::pure]]

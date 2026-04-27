@@ -155,14 +155,14 @@ mode=pan
 type=key
 data=APP2
 event=Zoom in
-label=Zoom\n+
+label=Zoom +
 location=2
 
 mode=pan
 type=key
 data=APP3
 event=Zoom out
-label=Zoom\n-
+label=Zoom -
 location=3
 
 mode=pan
@@ -261,7 +261,7 @@ mode=mc
 type=key
 data=0
 event=Mode default
-label=Exit\n(ESC)
+label=Exit (ESC)
 location=1
 
 mode=mc
@@ -269,7 +269,7 @@ type=key
 data=0
 event=MacCready auto show
 event=MacCready auto toggle
-label=$(CheckAutoMc)MC $(MacCreadyToggleActionName)\n(RETURN)
+label=$(CheckAutoMc)MC $(MacCreadyToggleActionName) (RETURN)
 location=6
 
 mode=mc
@@ -277,7 +277,7 @@ type=key
 data=0
 event=MacCready show
 event=MacCready up
-label=MC+\n(UP)
+label=MC+ (UP)
 location=7
 
 mode=mc
@@ -285,7 +285,7 @@ type=key
 data=0
 event=MacCready show
 event=MacCready down
-label=MC-\n(DOWN)
+label=MC- (DOWN)
 location=8
 
 ###### main entry buttons
@@ -536,7 +536,7 @@ mode=Nav1
 type=key
 data=APP1
 event=Mode Nav2
-label=Nav\nPage 2/2
+label=Nav Page 2/2
 location=1
 
 mode=Nav1
@@ -593,7 +593,7 @@ type=key
 data=6
 event=Mode default
 event=AbortTask toggle
-label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+label=Task $(TaskAbortToggleActionName)$(CheckWaypointFile)
 location=5
 
 mode=Nav2
@@ -632,7 +632,7 @@ mode=Display1
 type=key
 data=APP2
 event=Mode Display2
-label=Display\nPage 2/2
+label=Display Page 2/2
 location=2
 
 
@@ -640,14 +640,14 @@ mode=Display1
 type=key
 data=6
 event=Zoom in
-label=Zoom\n+
+label=Zoom +
 location=5
 
 mode=Display1
 type=key
 data=7
 event=Zoom out
-label=Zoom\n-
+label=Zoom -
 location=6
 
 mode=Display1
@@ -655,14 +655,14 @@ type=key
 data=8
 event=Zoom auto show
 event=Zoom auto toggle
-label=Zoom\n$(ZoomAutoToggleActionName)
+label=Zoom $(ZoomAutoToggleActionName)
 location=7
 
 mode=Display1
 type=key
 data=9
 event=ScreenModes cycle
-label=Page Show\n$(NextPageName)
+label=Page Show $(NextPageName)
 location=8
 
 mode=Display1
@@ -688,7 +688,7 @@ type=key
 data=6
 event=DeclutterLabels show
 event=DeclutterLabels toggle
-label=Labels\n$(MapLabelsToggleActionName)
+label=Labels $(MapLabelsToggleActionName)
 location=5
 
 mode=Display2
@@ -696,28 +696,28 @@ type=key
 data=7
 event=SnailTrail show
 event=SnailTrail toggle
-label=Trail\n$(SnailTrailToggleName)
+label=Trail $(SnailTrailToggleName)
 location=6
 
 mode=Display2
 type=key
 data=8
 event=TerrainTopography terrain toggle
-label=Terrain\n$(TerrainToggleActionName)
+label=Terrain $(TerrainToggleActionName)
 location=7
 
 mode=Display2
 type=key
 data=9
 event=TerrainTopography topography toggle
-label=Topo.\n$(TopographyToggleActionName)
+label=Topography $(TopographyToggleActionName)
 location=8
 
 mode=Display2
 type=key
 data=0
 event=AirSpace toggle
-label=Airspace\n$(AirspaceToggleActionName)
+label=Airspace $(AirspaceToggleActionName)
 location=9
 
 # -------------
@@ -727,7 +727,7 @@ mode=Config1
 type=key
 data=APP3
 event=Mode Config2
-label=Config\nPage 2/3
+label=Config Page 2/3
 location=3
 
 mode=Config1
@@ -777,7 +777,7 @@ mode=Config2
 type=key
 data=APP3
 event=Mode Config3
-label=Config\nPage 3/3
+label=Config Page 3/3
 location=3
 
 mode=Config2
@@ -835,7 +835,7 @@ type=key
 data=6
 event=Logger show
 event=Logger toggle ask
-label=Logger\n$(LoggerActive)$(CheckLogger)
+label=Logger $(LoggerActive)$(CheckLogger)
 location=5
 
 mode=Config3
@@ -868,7 +868,7 @@ mode=Vario1
 type=key
 data=APP3
 event=Mode Vario2
-label=Vega\nPage 2/2
+label=Vega Page 2/2
 location=3
 
 mode=Vario1
@@ -908,7 +908,7 @@ mode=Vario2
 type=key
 data=APP3
 event=Mode default
-label=Vega\n2/2
+label=Vega 2/2
 location=3
 
 mode=Vario2
@@ -955,7 +955,7 @@ mode=Info1
 type=key
 data=APP4
 event=Mode Info2
-label=Info\nPage 2/3
+label=Info Page 2/3
 location=4
 
 mode=Info1
@@ -1005,7 +1005,7 @@ mode=Info2
 type=key
 data=APP4
 event=Mode Info3
-label=Info\nPage 3/3
+label=Info Page 3/3
 location=4
 
 mode=Info2
@@ -1150,21 +1150,21 @@ mode=Display1.Traffic
 type=key
 data=6
 event=Traffic zoom in
-label=Zoom\n+
+label=Zoom +
 location=5
 
 mode=Display1.Traffic
 type=key
 data=7
 event=Traffic zoom out
-label=Zoom\n-
+label=Zoom -
 location=6
 
 mode=Display1.Traffic
 type=key
 data=8
 event=Traffic zoom auto toggle
-label=Zoom\n$(TrafficZoomAutoToggleActionName)
+label=Zoom $(TrafficZoomAutoToggleActionName)
 location=7
 
 mode=Display1.Traffic
@@ -1242,7 +1242,7 @@ type=key
 data=0
 event=DeclutterLabels show
 event=DeclutterLabels toggle
-label=Labels\n$(MapLabelsToggleActionName)
+label=Labels $(MapLabelsToggleActionName)
 location=7
 
 mode=RemoteStick
@@ -1250,21 +1250,21 @@ type=key
 data=0
 event=SnailTrail show
 event=SnailTrail toggle
-label=Trail\n$(SnailTrailToggleName)
+label=Trail $(SnailTrailToggleName)
 location=8
 
 mode=RemoteStick
 type=key
 data=0
 event=TerrainTopography terrain toggle
-label=Terrain\n$(TerrainToggleActionName)
+label=Terrain $(TerrainToggleActionName)
 location=9
 
 mode=RemoteStick
 type=key
 data=0
 event=TerrainTopography topography toggle
-label=Topo.\n$(TopographyToggleActionName)
+label=Topography $(TopographyToggleActionName)
 location=10
 
 # Priority 2: Task management (inner ring)
@@ -1295,7 +1295,7 @@ type=key
 data=0
 event=Mode default
 event=AbortTask toggle
-label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
+label=Task $(TaskAbortToggleActionName)$(CheckWaypointFile)
 location=14
 
 mode=RemoteStick
@@ -1336,7 +1336,7 @@ mode=RemoteStick
 type=key
 data=0
 event=AirSpace toggle
-label=Airspace\n$(AirspaceToggleActionName)
+label=Airspace $(AirspaceToggleActionName)
 location=19
 
 mode=RemoteStick
@@ -1417,7 +1417,7 @@ type=key
 data=0
 event=Zoom auto show
 event=Zoom auto toggle
-label=Zoom\n$(ZoomAutoToggleActionName)
+label=Zoom $(ZoomAutoToggleActionName)
 location=29
 
 # Analysis and info screens (outer ring)
@@ -1459,7 +1459,7 @@ type=key
 data=0
 event=Logger show
 event=Logger toggle ask
-label=Logger\n$(LoggerActive)$(CheckLogger)
+label=Logger $(LoggerActive)$(CheckLogger)
 location=34
 
 mode=RemoteStick
