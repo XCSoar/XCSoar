@@ -11,6 +11,9 @@ Version 7.45 - not yet released
     and F1/F4 = next/prev target, F2/F3 = zoom. The radar no longer hard-codes
     d-pad to zoom; bindings come from the ``.xci`` file
 * map
+  - dynamically adjust contour line density to zoom factor #2233
+  - provide different contour density profile settings for mountains, 
+    low lands, etc. to have sensible contours in a given landscape type
   - obstacles hidden at wider map scales than other non-landables (5000 vs 10000)
   - draw up to 1024 waypoints at once (was 256) #2327
   - terrain: fix fluctuating hill-shading strength #2262

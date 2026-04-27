@@ -31,6 +31,7 @@ protected:
   Angle last_sun_azimuth = Angle::Zero();
 
   const ColorRamp *last_color_ramp = nullptr;
+  double last_projection_scale = 0;
 
   RasterRenderer raster_renderer;
 

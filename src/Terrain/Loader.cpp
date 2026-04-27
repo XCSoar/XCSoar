@@ -9,6 +9,7 @@
 #include "Operation/Operation.hpp"
 #include "system/ConvertPathName.hpp"
 #include "util/ScopeExit.hxx"
+#include "LogFile.hpp"
 
 extern "C" {
 #include "jasper/jp2/jp2_cod.h"
@@ -125,13 +126,15 @@ TerrainLoader::ParseBounds(const char *data)
 void
 TerrainLoader::ProcessComment(const char *data, unsigned size)
 {
-  if (scan_overview) {
-    char buffer[128];
-    if (size < sizeof(buffer)) {
-      memcpy(buffer, data, size);
-      buffer[size] = 0;
-      ParseBounds(buffer);
-    }
+  if (size > 1000000) {
+    LogFmt("Terrain: skipping comment of unreasonable size {}", size);
+    return;
+  }
+
+  if (scan_overview) try {
+    const std::string comment{data, size};
+    ParseBounds(comment.c_str());
+  } catch (...) { // return without bounds set, loading cancelled gracefully
   }
 }
 
@@ -162,7 +165,15 @@ TerrainLoader::PutTileData(unsigned index,
 
   if (scan_tiles) {
     const std::lock_guard lock{mutex};
-    raster_tile_cache.PutTileData(index, m);
+
+    if (scan_overview)
+      /* When loading all data at once (e.g. small RASP files),
+         PutOverviewTile() already called Set() on the tile. So:
+         copy tile data directly, with no IsRequested() check
+         which would discard the tile immediately */
+      raster_tile_cache.tiles.GetLinear(index).CopyFrom(m);
+    else
+      raster_tile_cache.PutTileData(index, m);
   }
 }
 
