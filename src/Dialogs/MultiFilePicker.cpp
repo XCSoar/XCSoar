@@ -77,7 +77,7 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
 
   select_button->SetCallback([file_widget, UpdateButtons]() mutable {
     if (file_widget->GetSelectedPaths().empty())
-      file_widget->SetAllSelected(true);
+      file_widget->SelectAll();
     else
       file_widget->ClearSelection();
     UpdateButtons();

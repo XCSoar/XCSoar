@@ -105,7 +105,7 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
-	TestStrings TestUTF8 TestWrapText \
+	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
 	TestInputConfig \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
@@ -113,11 +113,13 @@ TEST_NAMES = \
 	TestHexColorFormatter \
 	TestByteSizeFormatter \
 	TestTimeFormatter \
+	TestFileMetadataFormatter \
 	TestIGCFilenameFormatter \
 	TestNMEAFormatter \
 	TestLXNToIGC \
 	TestLeastSquares \
 	TestHexString \
+	TestUriUtil \
 	TestThermalBand \
 	TestPackedFloat \
 	TestVersionNumber \
@@ -143,6 +145,11 @@ TEST_HEX_STRING_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestHexString.cpp
 $(eval $(call link-program,TestHexString,TEST_HEX_STRING))
+
+TEST_URI_UTIL_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUriUtil.cpp
+$(eval $(call link-program,TestUriUtil,TEST_URI_UTIL))
 
 TEST_CRC16_SOURCES = \
 	$(SRC)/util/CRC16CCITT.cpp \
@@ -516,6 +523,16 @@ TEST_BYTE_SIZE_FORMATTER_SOURCES = \
 TEST_BYTE_SIZE_FORMATTER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestByteSizeFormatter,TEST_BYTE_SIZE_FORMATTER))
 
+TEST_FILE_METADATA_FORMATTER_SOURCES = \
+	$(SRC)/Formatter/ByteSizeFormatter.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFileMetadataFormatter.cpp
+TEST_FILE_METADATA_FORMATTER_DEPENDS = MATH UTIL TIME
+$(eval $(call link-program,TestFileMetadataFormatter,TEST_FILE_METADATA_FORMATTER))
+
 TEST_TIME_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -552,6 +569,13 @@ TEST_STRINGS_SOURCES = \
 	$(TEST_SRC_DIR)/TestStrings.cpp
 TEST_STRINGS_DEPENDS = UTIL
 $(eval $(call link-program,TestStrings,TEST_STRINGS))
+
+TEST_UNESCAPE_CSTRING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUnescapeCString.cpp \
+	$(SRC)/util/UnescapeCString.cpp
+TEST_UNESCAPE_CSTRING_DEPENDS = UTIL
+$(eval $(call link-program,TestUnescapeCString,TEST_UNESCAPE_CSTRING))
 
 TEST_UTF8_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

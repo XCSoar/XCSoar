@@ -87,6 +87,18 @@ class NativeView extends SurfaceView
   }
 
   /**
+   * Launch the SAF document-tree picker for a given volume UUID.
+   * Called from native code when the user selects a volume that
+   * does not yet have a persisted SAF tree permission.
+   */
+  void launchSAFTreePicker(String volumeUuid) {
+    final Context ctx = getContext();
+    if (ctx instanceof XCSoar) {
+      ((XCSoar) ctx).launchSAFTreePicker(volumeUuid);
+    }
+  }
+
+  /**
    * Start the foreground service.  Called from native code after the
    * user chooses Fly mode (not called in Simulator mode because
    * IGC logging and safety warnings are not needed in simulation).
