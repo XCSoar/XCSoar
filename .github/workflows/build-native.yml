@@ -804,7 +804,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0.3'
-          bundler-cache: true
+          # No Gemfile in-tree; we install fastlane via gem (bundler-cache would
+          # run bundle install to no purpose).
+          bundler-cache: false
 
       - name: Install Fastlane
         run: gem install fastlane
