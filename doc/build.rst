@@ -268,8 +268,11 @@ To build and run simulator tests automatically, run::
   make check-ios-sim
 
 This target builds simulator artifacts (``TARGET=IOS64SIM``), installs
-``XCSoar.app`` into an available simulator (default: ``iPhone 16 Pro``), and
-executes selected test binaries in the simulator runtime.
+``XCSoar.app`` into an available iPhone simulator, and runs selected test
+binaries. There is no fixed default device name (``simctl`` depends on
+installed runtimes and Xcode). With ``SIM_DEVICE_NAME`` unset, the script
+picks an available iPhone from ``simctl list``; you can set ``SIM_DEVICE_NAME``
+to require a specific model.
 
 Implementation note: the runner uses a Python script
 (``darwin/check-ios-sim.py``) and discovers simulators via
@@ -279,7 +282,7 @@ Execution is delegated to the existing Perl TAP harness
 
 Optional environment variables::
 
-  SIM_DEVICE_NAME="iPhone 16"      # Choose simulator model
+  SIM_DEVICE_NAME="iPhone 16"      # Optional: require this model; else any iPhone
   SIM_TESTS_MODE=all               # Default mode: run all test_* / Test* binaries
   SIM_TESTS_MODE=smoke             # Run only smoke subset from SIM_SMOKE_TESTS
   SIM_SMOKE_TESTS="TestCRC8 ..."  # Override smoke test selection
