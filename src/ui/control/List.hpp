@@ -265,6 +265,17 @@ public:
    */
   void MoveOrigin(int delta) noexcept;
 
+  /**
+   * Forwards a key to #OnKeyDown from a #ListWidget, before the
+   * dialog's normal key dispatch.  @return the result of
+   * #OnKeyDown; when false, the dialog can move focus (e.g. list
+   * edge, KEY_UP/KEY_DOWN) or dispatch the key.
+   * @see #ListWidget::KeyPress
+   */
+  bool OnKeyFromWidgetParent(unsigned key_code) noexcept {
+    return OnKeyDown(key_code);
+  }
+
 private:
   [[gnu::pure]]
   bool CanActivateItem() const noexcept;

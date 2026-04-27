@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
@@ -193,6 +194,8 @@ void
 Button::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
+  if (cursor_key_group != nullptr)
+    cursor_key_group->OnButtonGainedFocus(*this);
   Invalidate();
 }
 
@@ -227,10 +230,13 @@ Button::GetState() const noexcept
     return ButtonState::DISABLED;
   else if (down)
     return ButtonState::PRESSED;
-  else if (HasCursorKeys() && HasFocus())
-    return ButtonState::FOCUSED;
+  /* #ButtonPanel cursor selection uses `look.selected` (bright); that
+     must come before #HasFocus (`look.focused`) so the current action
+     is not downgraded when the list still holds focus. */
   else if (HasCursorKeys() && selected)
     return ButtonState::SELECTED;
+  else if (HasCursorKeys() && HasFocus())
+    return ButtonState::FOCUSED;
   else
     return ButtonState::ENABLED;
 }

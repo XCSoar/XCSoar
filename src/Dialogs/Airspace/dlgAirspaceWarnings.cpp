@@ -10,6 +10,7 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
@@ -18,7 +19,6 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
-#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
@@ -35,12 +35,18 @@ class AirspaceWarningListWidget final
 
   ProtectedAirspaceWarningManager &airspace_warnings;
 
+  /**
+   * Non-owning: only valid for the #ShowModal scope after
+   * #CreateButtons.
+   */
+  WidgetDialog *self_dialog{nullptr};
+
   UI::PeriodicTimer update_list_timer{[this]{ UpdateList(); }};
 
   Button *ack_button;
   Button *ack_day_button;
   Button *enable_button;
-  Button *radio_button;
+  Button *details_button;
 
   std::vector<AirspaceWarning> warning_list;
 
@@ -62,11 +68,12 @@ public:
      sound_interval_counter(1)
   {}
 
-  void CreateButtons(WidgetDialog &buttons) {
-    ack_button = buttons.AddButton(_("ACK"), [this](){ Ack(); });
-    ack_day_button = buttons.AddButton(_("ACK Day"), [this](){ AckDay(); });
-    enable_button = buttons.AddButton(_("Enable"), [this](){ Enable(); });
-    radio_button = buttons.AddButton(_("Radio"), [this](){ Radio(); });
+  void CreateButtons(WidgetDialog &dialog) {
+    self_dialog = &dialog;
+    ack_button = dialog.AddButton(_("ACK"), [this](){ Ack(); });
+    ack_day_button = dialog.AddButton(_("ACK Day"), [this](){ AckDay(); });
+    enable_button = dialog.AddButton(_("Enable"), [this](){ Enable(); });
+    details_button = dialog.AddButton(_("Details"), [this](){ Details(); });
   }
 
   void CopyList();
@@ -82,9 +89,10 @@ public:
   void Ack();
   void AckDay();
   void Enable();
-  void Radio() noexcept;
+  void Details() noexcept;
 
   /* virtual methods from Widget */
+  bool KeyPress(unsigned key_code) noexcept override;
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
@@ -127,7 +135,7 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetEnabled(false);
     ack_day_button->SetEnabled(false);
     enable_button->SetEnabled(false);
-    radio_button->SetEnabled(false);
+    details_button->SetEnabled(false);
     return;
   }
 
@@ -143,7 +151,13 @@ AirspaceWarningListWidget::UpdateButtons()
   ack_button->SetEnabled(ack_expired);
   ack_day_button->SetEnabled(!ack_day);
   enable_button->SetEnabled(!ack_expired);
-  radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
+  details_button->SetEnabled(true);
+
+  /* #EnableCursorSelection(0) may leave #selected_index on a disabled
+     #Button when ACK is inactive but ACK Day is not; re-arm the first
+     operable action for KEY_LEFT/KEY_RIGHT/KEY_RETURN. */
+  if (self_dialog != nullptr)
+    self_dialog->ResyncButtonPanelSelection();
 }
 
 void
@@ -154,6 +168,23 @@ AirspaceWarningListWidget::Prepare(ContainerWindow &parent,
 
   CreateList(parent, look, rc,
              row_renderer.CalculateLayout(*look.list.font, *look.list.font));
+}
+
+bool
+AirspaceWarningListWidget::KeyPress(unsigned key_code) noexcept
+{
+  /* Up/Down: list; Left/Right: #ButtonPanel (see #WidgetDialog::OnAnyKeyDown);
+     when focus is on the action bar, Up only returns to the list. */
+  if (key_code == KEY_UP && IsDefined() && !GetList().HasFocus() &&
+      self_dialog != nullptr) {
+    GetList().SetFocus();
+    return true;
+  }
+
+  if (key_code == KEY_UP || key_code == KEY_DOWN)
+    return ListWidget::KeyPress(key_code);
+
+  return false;
 }
 
 void
@@ -255,13 +286,11 @@ AirspaceWarningListWidget::Enable()
   UpdateList();
 }
 
-inline void
-AirspaceWarningListWidget::Radio() noexcept
+void
+AirspaceWarningListWidget::Details() noexcept
 {
-  if (selected_airspace != nullptr &&
-      selected_airspace->GetRadioFrequency().IsDefined())
-    ActionInterface::SetActiveFrequency(selected_airspace->GetRadioFrequency(),
-                                        selected_airspace->GetName());
+  if (selected_airspace != nullptr)
+    dlgAirspaceDetails(selected_airspace, &airspace_warnings);
 }
 
 void

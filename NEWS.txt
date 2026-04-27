@@ -22,6 +22,13 @@ Version 7.45 - not yet released
     a pilot-chosen field (MANUAL); tap the InfoBox to open the alternates list,
     switch mode, and assign the selected row to that slot (runtime only; AUTO
     clears the pin).  Titles show Altn 1/2 with AUTO or MAN.
+  - list dialogs: Up/Down move the list (when the list is focused) so
+    filter rows in the same dialog (e.g. waypoint file) still get those keys;
+    Left/Right move the action bar with cursor key selection; current
+    action uses list-focus colours in the light theme and the bright
+    focus colour in dark, like other dialog focus.  Select Airspace: Details
+    and Close are on the main dialog action bar (bottom/edge) so the same
+    keys can reach them after the list, like other list dialogs
   - alternates: list holds up to 10 options (was 6); if the task only has one
     automatic alternate, Alternate 2 no longer shows the same as Alternate 1.
     Displayed glide is re-solved with the current aircraft state; value colour
@@ -33,6 +40,11 @@ Version 7.45 - not yet released
   - airspace list & map item list: grey text for airspaces with a day
     acknowledgement; map item list adds an "Enable" button to clear it (like the
     airspace warnings list) #2404
+  - airspace warnings: keep the cursor key action in sync with which actions
+    are enabled, and the armed action with keyboard focus (no double
+    highlight when e.g. Close is focused and another is cursor-selected);
+    replace Radio with Details; Up/Down move the list, Left/Right the action
+    row, Up from the action row returns to the list
   - Form/DataField/Enum: remove the limit of 128 internal entries (It was
     dropping the newest InfoBoxes, as we have 130 of them now)
   - encode bundled UI OGG sound assets at Vorbis quality 5 (was 1)
