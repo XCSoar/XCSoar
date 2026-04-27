@@ -29,9 +29,14 @@ def cpu_count() -> int:
     return os.cpu_count() or 4
 
 
-def find_simulator_udid(device_name: str) -> str:
+def _simctl_devices_payload() -> dict:
     proc = run(["xcrun", "simctl", "list", "devices", "available", "--json"], capture_output=True)
-    payload = json.loads(proc.stdout)
+    return json.loads(proc.stdout)
+
+
+def find_simulator_udid(device_name: str, payload: dict | None = None) -> str:
+    if payload is None:
+        payload = _simctl_devices_payload()
 
     matches: list[tuple[bool, str, str]] = []
     for runtime, devices in payload.get("devices", {}).items():
@@ -54,6 +59,55 @@ def find_simulator_udid(device_name: str) -> str:
     # Prefer already booted device; otherwise prefer highest runtime key.
     matches.sort(key=lambda item: (item[0], item[1]))
     return matches[-1][2]
+
+
+def find_any_available_iphone_simulator(payload: dict) -> tuple[str, str] | None:
+    """Pick any available iPhone-class simulator, newest runtime if possible."""
+
+    matches: list[tuple[bool, str, str, str]] = []
+    for runtime, devices in payload.get("devices", {}).items():
+        for device in devices:
+            if not device.get("isAvailable"):
+                continue
+            name = device.get("name", "")
+            if not name.startswith("iPhone "):
+                continue
+            udid = device.get("udid")
+            if not udid:
+                continue
+            is_booted = device.get("state", "") == "Booted"
+            matches.append((is_booted, runtime, name, udid))
+
+    if not matches:
+        return None
+
+    matches.sort(key=lambda item: (item[0], item[1], item[2]))
+    best = matches[-1]
+    return (best[2], best[3])
+
+
+def resolve_simulator_udid() -> tuple[str, str] | None:
+    """Return (device name, udid) for a usable simulator, or None.
+
+    simctl has no single portable default name (device labels change with Xcode
+    and installed runtimes). The implicit default is: an available
+    iPhone-class simulator, preferring booted then newest iOS in the list.
+    Optional env SIM_DEVICE_NAME requests a specific model; if that name is
+    not present, the same auto pick is used and a line is written to stderr.
+    """
+
+    payload = _simctl_devices_payload()
+    env_name = (os.environ.get("SIM_DEVICE_NAME") or "").strip()
+    if env_name:
+        udid = find_simulator_udid(env_name, payload)
+        if udid:
+            return (env_name, udid)
+        print(
+            f"check-ios-sim: simulator {env_name!r} is not available; using any iPhone",
+            file=sys.stderr,
+        )
+
+    return find_any_available_iphone_simulator(payload)
 
 
 def collect_all_test_names(bin_dir: Path) -> list[str]:
@@ -119,7 +173,6 @@ def main() -> int:
 
     make_bin = os.environ.get("MAKE_BIN", "gmake")
     target = os.environ.get("TARGET", "IOS64SIM")
-    sim_device_name = os.environ.get("SIM_DEVICE_NAME", "iPhone 16 Pro")
     sim_tests_mode = os.environ.get("SIM_TESTS_MODE", "all")
     smoke_tests_env = os.environ.get("SIM_SMOKE_TESTS", "TestCRC8 TestCRC16 TestHexString")
     sim_skip_tests_env = os.environ.get("SIM_SKIP_TESTS", "TestWrapText")
@@ -176,12 +229,14 @@ def main() -> int:
         print("Error: no tests left after applying SIM_SKIP_TESTS", file=sys.stderr)
         return 1
 
-    device_udid = find_simulator_udid(sim_device_name)
-    if not device_udid:
-        print(f"Error: could not find an available simulator named '{sim_device_name}'", file=sys.stderr)
-        print("Hint: set SIM_DEVICE_NAME to one from 'xcrun simctl list devices available --json'", file=sys.stderr)
+    resolved = resolve_simulator_udid()
+    if resolved is None:
+        print("Error: could not find any available iPhone simulator", file=sys.stderr)
+        print("Hint: install an iOS Simulator runtime in Xcode, or set SIM_DEVICE_NAME to a", file=sys.stderr)
+        print("name from: xcrun simctl list devices available --json", file=sys.stderr)
         return 1
 
+    sim_device_name, device_udid = resolved
     print(f"check-ios-sim: using simulator {sim_device_name} ({device_udid})")
     run(["xcrun", "simctl", "boot", device_udid], check=False)
     run(["xcrun", "simctl", "bootstatus", device_udid, "-b"])
