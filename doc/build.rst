@@ -268,8 +268,9 @@ To build and run simulator tests automatically, run::
   make check-ios-sim
 
 This target builds simulator artifacts (``TARGET=IOS64SIM``), installs
-``XCSoar.app`` into an available simulator (default: ``iPhone 16 Pro``), and
-executes selected test binaries in the simulator runtime.
+``XCSoar.app`` into an available iPhone simulator (tries a small built-in
+preference list, then any iPhone if none match), and executes selected test
+binaries in the simulator runtime.
 
 Implementation note: the runner uses a Python script
 (``darwin/check-ios-sim.py``) and discovers simulators via
