@@ -2,6 +2,28 @@
 // Copyright The XCSoar Project
 
 #include "../ContainerWindow.hpp"
+#include "../Window.hpp"
+
+Window *
+ContainerWindow::GetFocusedWindow() noexcept
+{
+  const HWND h_focus = ::GetFocus();
+  if (h_focus == nullptr)
+    return nullptr;
+
+  for (HWND h = h_focus; h != nullptr; h = ::GetParent(h)) {
+    if (h == hWnd)
+      return GetChecked(hWnd);
+
+    if (!::IsChild(hWnd, h))
+      return nullptr;
+
+    if (Window *const w = GetChecked(h); w != nullptr)
+      return w;
+  }
+
+  return nullptr;
+}
 
 bool
 ContainerWindow::FocusFirstControl() noexcept

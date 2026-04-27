@@ -159,5 +159,14 @@ public:
    * If this is a scrollable window, then attempt to make the given
    * rectangle visible in the view port.
    */
-  virtual void ScrollTo(const PixelRect &rc) noexcept;
+  virtual   void ScrollTo(const PixelRect &rc) noexcept;
+
+#ifdef USE_WINUSER
+  /**
+   * Win32 tracks focus via #HWND; walk from @c ::GetFocus() to the deepest
+   * #Window peer under this container.
+   */
+  [[gnu::pure]]
+  Window *GetFocusedWindow() noexcept;
+#endif
 };
