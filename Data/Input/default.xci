@@ -530,6 +530,7 @@ event=ArmAdvance toggle
 
 # -------------
 # mode=Nav1
+# (Status / Analysis / Target on keys 2--4.)
 # -------------
 
 mode=Nav1
@@ -538,6 +539,30 @@ data=APP1
 event=Mode Nav2
 label=Nav\nPage 2/2
 location=1
+
+mode=Nav1
+type=key
+data=2
+event=Status all
+event=Mode default
+label=Status
+location=2
+
+mode=Nav1
+type=key
+data=3
+event=Analysis
+event=Mode default
+label=Analysis
+location=3
+
+mode=Nav1
+type=key
+data=4
+event=Setup Target
+event=Mode default
+label=Target Show$(CheckTask)$(CheckTaskResumed)
+location=4
 
 mode=Nav1
 type=key
@@ -616,13 +641,7 @@ event=PilotEvent
 label=Pilot Event Announce
 location=7
 
-mode=Nav2
-type=key
-data=9
-event=Setup Target
-event=Mode default
-label=Target Show$(CheckTask)$(CheckTaskResumed)
-location=8
+# (Target moved to Nav1)
 
 # -------------
 # mode=Display1
