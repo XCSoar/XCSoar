@@ -16,5 +16,6 @@ enum class FileType : uint8_t {
   RASP,
   XCI,
   TASK,
+  FREQUENCIES,
   CHECKLIST,
 };

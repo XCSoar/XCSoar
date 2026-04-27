@@ -72,6 +72,7 @@ constexpr std::string_view AcknowledgementTime = "AcknowledgementTime";
 constexpr std::string_view AirfieldFileList = "AirfieldFileList"; // pL
 constexpr std::string_view AirspaceFileList = "AirspaceFileList";
 constexpr std::string_view FlarmFile = "FlarmFile";
+constexpr std::string_view FrequenciesFile = "FrequenciesFile";
 constexpr std::string_view PolarFile = "PolarFile"; // pL
 constexpr std::string_view WaypointFileList = "WPFileList";           // pL
 constexpr std::string_view WatchedWaypointFileList = "WatchedWPFileList"; // pL

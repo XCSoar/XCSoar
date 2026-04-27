@@ -12,6 +12,7 @@ extern bool AirfieldFileChanged;
 extern bool InputFileChanged;
 extern bool MapFileChanged;
 extern bool FlarmFileChanged;
+extern bool FrequenciesFileChanged;
 extern bool RaspFileChanged;
 extern bool ChecklistFileChanged;
 extern bool LanguageChanged;

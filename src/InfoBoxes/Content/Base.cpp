@@ -27,3 +27,9 @@ InfoBoxContent::GetDialogContent() noexcept
 {
   return nullptr;
 }
+
+bool
+InfoBoxContent::HandleShowDialog([[maybe_unused]] unsigned infobox_id) noexcept
+{
+  return false;
+}

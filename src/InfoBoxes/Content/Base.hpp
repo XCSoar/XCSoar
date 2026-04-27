@@ -28,4 +28,11 @@ public:
 
   [[gnu::pure]]
   virtual const InfoBoxPanel *GetDialogContent() noexcept;
+
+  /**
+   * If this returns true, #InfoBoxWindow will not open the tabbed
+   * InfoBox access dialog (#dlgInfoBoxAccessShowModeless); the
+   * implementation is responsible for any UI (e.g. a full-screen modal).
+   */
+  virtual bool HandleShowDialog(unsigned infobox_id) noexcept;
 };
