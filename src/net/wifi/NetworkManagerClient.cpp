@@ -6,6 +6,7 @@
 #include "WifiTypes.hpp"
 #include "WifiError.hpp"
 #include "Language/Language.hpp"
+#include "LogFile.hpp"
 #include "lib/dbus/AppendIter.hxx"
 #include "lib/dbus/CallMethodSync.hxx"
 #include "lib/dbus/Connection.hxx"
@@ -169,7 +170,7 @@ ParseGetSettingsForWifi(ODBus::ReadMessageIter &t, std::string &ssid_out,
         }
       }
       if (connection_id_out != nullptr && StringIsEqual(section, "connection") &&
-           StringIsEqual(k, "id") && v.GetArgType() == DBUS_TYPE_STRING) {
+          StringIsEqual(k, "id") && v.GetArgType() == DBUS_TYPE_STRING) {
         const char *idv = v.GetString();
         if (idv != nullptr) {
           *connection_id_out = idv;
@@ -195,29 +196,37 @@ ParseGetSettingsForWifi(ODBus::ReadMessageIter &t, std::string &ssid_out,
   }
 }
 
-static std::string
-FindSavedWifiConnectionPath(ODBus::Connection &c, const std::string &ssid_wanted)
+std::vector<NmClient::SavedConnection>
+NmClient::ListSavedWifiConnections(ODBus::Connection &c)
 {
+  std::vector<SavedConnection> out;
   std::vector<std::string> paths;
   NMDbusObjectPaths(
     c, kNm, kNmSettingsPath, kNmIfaceSettings, "ListConnections", paths);
-  for (const std::string &p : paths) {
+
+  for (const auto &path : paths) {
     try {
       using namespace ODBus;
       auto m = Message::NewMethodCall(
-        kNm, p.c_str(), kNmIfaceSettingsConnection, "GetSettings");
+        kNm, path.c_str(), kNmIfaceSettingsConnection, "GetSettings");
       Message r = CallMethodSync(c, m);
       ReadMessageIter t{*r.Get()};
-      std::string ssid;
+      SavedConnection saved;
       bool wifi = false;
-      ParseGetSettingsForWifi(t, ssid, &wifi);
-      if (wifi && ssid == ssid_wanted) {
-        return p;
-      }
+      ParseGetSettingsForWifi(t, saved.ssid_text, &wifi,
+                              &saved.connection_id);
+      if (!wifi)
+        continue;
+
+      saved.path = path;
+      out.push_back(std::move(saved));
     } catch (...) {
+      LogFmt("Skipping NetworkManager saved connection '{}'", path);
+      LogError(std::current_exception());
     }
   }
-  return {};
+
+  return out;
 }
 
 static std::string
@@ -235,7 +244,6 @@ MakeConnectionId(const NmClient::AccessPoint &ap)
         id.push_back(static_cast<char>(ch));
       else
         id.push_back('_');
-    }
 
     if (id.find_first_not_of(' ') != std::string::npos)
       return id;
@@ -249,19 +257,57 @@ NmClient::HasSavedConnectionForSsid(ODBus::Connection &c,
                                     const std::string &ssid) noexcept
 {
   try {
-    if (ssid.empty()) {
+    if (ssid.empty())
       return false;
-    }
-    return !FindSavedWifiConnectionPath(c, ssid).empty();
+
+    for (const auto &saved : NmClient::ListSavedWifiConnections(c))
+      if (saved.ssid_text == ssid)
+        return true;
+
+    return false;
   } catch (...) {
     return false;
   }
 }
 
-static void
-ActivateSavedConnection(ODBus::Connection &c, const char *connection_path,
-                        const char *wifi_device, const char *ap_path)
+static const char *
+RequireConnectionPath(const char *connection_path, const char *method)
 {
+  if (connection_path == nullptr || *connection_path == 0)
+    throw std::runtime_error{std::string{"Missing NetworkManager connection path for "} + method};
+
+  return connection_path;
+}
+
+void
+NmClient::DeleteSavedConnection(ODBus::Connection &c, const char *connection_path)
+{
+  connection_path = RequireConnectionPath(connection_path, "Remove");
+
+  using namespace ODBus;
+  auto m = Message::NewMethodCall(kNm, connection_path,
+             kNmIfaceSettingsConnection, "Delete");
+  (void)CallMethodSync(c, m);
+}
+
+static const char *
+RequireWifiDevicePath(const char *wifi_device, const char *method)
+{
+  if (wifi_device == nullptr || *wifi_device == '\0')
+    throw std::runtime_error{std::string{"Missing NetworkManager Wi-Fi device path for "} + method};
+
+  return wifi_device;
+}
+
+void
+NmClient::ConnectSaved(ODBus::Connection &c, const char *wifi_device,
+                       const char *connection_path, const char *ap_path)
+{
+  connection_path = RequireConnectionPath(connection_path, "ActivateConnection");
+  wifi_device = RequireWifiDevicePath(wifi_device, "ActivateConnection");
+  if (ap_path == nullptr || *ap_path == '\0')
+    ap_path = "/";
+
   using namespace ODBus;
   auto m = Message::NewMethodCall(kNm, kNmPath, kNm, "ActivateConnection");
   DBusMessage *msg = m.Get();
@@ -356,19 +402,20 @@ void
 NmClient::ConnectToAp(ODBus::Connection &c, const char *wifi_device, const AccessPoint &ap,
                       const char *wpa2_psk_or_null)
 {
+  wifi_device = RequireWifiDevicePath(wifi_device, "Connect");
+
+  if (!ap.saved_path.empty()) {
+    ConnectSaved(c, wifi_device, ap.saved_path.c_str(), ap.ap_path.c_str());
+    return;
+  }
+
   const char *pw = ((wpa2_psk_or_null != nullptr) && wpa2_psk_or_null[0] != '\0')
     ? wpa2_psk_or_null
     : nullptr;
   if (pw != nullptr) {
     AddConnectionAndActivate(c, wifi_device, ap, pw);
   } else if (ap.needs_key) {
-    const std::string saved{FindSavedWifiConnectionPath(c, ap.ssid_text)};
-    if (!saved.empty()) {
-      ActivateSavedConnection(
-        c, saved.c_str(), wifi_device, ap.ap_path.c_str());
-    } else {
-      throw std::runtime_error(WifiError::NEED_KEY);
-    }
+    throw std::runtime_error(WifiError::NEED_KEY);
   } else {
     AddConnectionAndActivate(c, wifi_device, ap, nullptr);
   }

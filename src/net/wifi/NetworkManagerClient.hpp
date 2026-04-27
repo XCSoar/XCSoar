@@ -16,6 +16,8 @@ struct AccessPoint {
   std::string ssid_text;
   /** D-Bus path of the AccessPoint (can change when NM rescans new objects). */
   std::string ap_path;
+  /** Matching saved NetworkManager connection path, if one is known. */
+  std::string saved_path;
   /**
    * "HwAddress" from the AP object (BSSID, e.g. "AA:BB:.."); stable for a
    * cell, used to match a user’s selection when #ap_path changes.
@@ -25,6 +27,12 @@ struct AccessPoint {
   int strength{0};
   /** Need WPA(2) PSK or similar. */
   bool needs_key{false};
+};
+
+struct SavedConnection {
+  std::string path;
+  std::string ssid_text;
+  std::string connection_id;
 };
 
 std::string
@@ -45,12 +53,22 @@ FormatStatus(ODBus::Connection &c, const char *wifi_device);
 std::string
 GetActiveAccessPointPath(ODBus::Connection &c, const char *wifi_device);
 
+std::vector<SavedConnection>
+ListSavedWifiConnections(ODBus::Connection &c);
+
 void
 ConnectToAp(ODBus::Connection &c, const char *wifi_device, const AccessPoint &ap,
             const char *wpa2_psk_or_null);
 
+void
+ConnectSaved(ODBus::Connection &c, const char *wifi_device,
+       const char *connection_path, const char *ap_path = nullptr);
+
 bool
 HasSavedConnectionForSsid(ODBus::Connection &c, const std::string &ssid) noexcept;
+
+void
+DeleteSavedConnection(ODBus::Connection &c, const char *connection_path);
 
 void
 Disconnect(ODBus::Connection &c, const char *wifi_device);
