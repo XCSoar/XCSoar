@@ -38,6 +38,8 @@ NATIVE_INCLUDE_DIR = $(TARGET_OUTPUT_DIR)/include
 
 BUNDLE_BUILD_DIR = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
 ANDROID_BUNDLE_BASE = $(BUNDLE_BUILD_DIR)/base_module
+# Embedded by bundletool build-bundle; final APKs honor it via the AAB.
+BUNDLE_CONFIG = $(NO_ARCH_OUTPUT_DIR)/BundleConfig.json
 ANDROID_ABI_DIR = $(ANDROID_BUNDLE_BASE)/lib/$(ANDROID_APK_LIB_ABI)
 
 ANDROID_BIN = $(TARGET_BIN_DIR)
@@ -312,7 +314,9 @@ PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(P
 	$(RES_DIR)/drawable-xxhdpi/notification_icon.png \
 	$(RES_DIR)/drawable-xxxhdpi/notification_icon.png
 
-# Sounds
+# Sounds.  Raw .ogg must be stored uncompressed in the APK (-0 ogg on aapt2
+# link) and in the App Bundle (BUNDLE_CONFIG / build-bundle --config):
+# SoundPool uses openRawResourceFd, which does not work on deflated res/raw ogg.
 SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
 SOUND_FILES = $(patsubst %,$(RAW_DIR)/%.ogg,$(SOUNDS))
 
@@ -339,6 +343,7 @@ $(PROTOBUF_OUT_DIR)/dirstamp: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPI
 		--dir $(RES_DIR)
 	$(Q)rm -f $(COMPILED_RES_DIR)/*dirstamp.flat
 	$(Q)$(AAPT2) link --proto-format --auto-add-overlay \
+		-0 ogg \
 		--custom-package $(JAVA_PACKAGE) \
 		--manifest $(MANIFEST) \
 		-R $(COMPILED_RES_DIR)/*.flat \
@@ -502,6 +507,11 @@ endif
 
 ### Bundle and final APK build
 
+$(BUNDLE_CONFIG): | $(NO_ARCH_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)printf '%s\n' \
+		'{ "compression": { "uncompressedGlob": ["**/*.ogg"] } }' > $@
+
 $(BUNDLE_BUILD_DIR)/base.zip: $(PROTOBUF_OUT_DIR)/dirstamp $(NO_ARCH_OUTPUT_DIR)/classes.dex $(ANDROID_LIB_BUILD) | $(BUNDLE_BUILD_DIR)/dirstamp
 	@$(NQ)echo "  ZIP     $(notdir $@)"
 	$(Q)mkdir -p $(ANDROID_BUNDLE_BASE) && \
@@ -512,9 +522,10 @@ $(BUNDLE_BUILD_DIR)/base.zip: $(PROTOBUF_OUT_DIR)/dirstamp $(NO_ARCH_OUTPUT_DIR)
 		cp $(NO_ARCH_OUTPUT_DIR)/classes.dex $(ANDROID_BUNDLE_BASE)/dex/
 	$(Q)cd $(ANDROID_BUNDLE_BASE) && $(ZIP) -r $(abspath $@) . --exclude "*/dirstamp"
 
-$(BUNDLE_BUILD_DIR)/unsigned.aab: $(BUNDLE_BUILD_DIR)/base.zip
+$(BUNDLE_BUILD_DIR)/unsigned.aab: $(BUNDLE_BUILD_DIR)/base.zip $(BUNDLE_CONFIG)
 	@$(NQ)echo "  BUNDLE  $(notdir $@)"
-	$(Q)$(BUNDLETOOL) build-bundle --overwrite --modules $< --output $@
+	$(Q)$(BUNDLETOOL) build-bundle --overwrite --config=$(BUNDLE_CONFIG) \
+		--modules $< --output $@
 
 # Debug targets
 .DELETE_ON_ERROR: $(ANDROID_BIN)/XCSoar-debug.aab

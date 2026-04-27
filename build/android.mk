@@ -253,6 +253,7 @@ $(RES_DIR)/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR
 # Vorbis -q 5: nominal quality (~160 kb/s class); was 1 for smallest APK
 OGGENC = oggenc --quiet --quality 5
 
+# Uncompressed in resources.apk: see android_bundle.mk (-0 ogg) for why.
 SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
 SOUND_FILES = $(patsubst %,$(RAW_DIR)/%.ogg,$(SOUNDS))
 
@@ -340,7 +341,7 @@ $(RES_DIR)/values/strings.xml: android/res/values/strings.xml | $(RES_DIR)/value
 $(ANDROID_OUTPUT_DIR)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES_NO_STRINGS) $(RES_DIR)/values/strings.xml $(MANIFEST) | $(GEN_DIR)/dirstamp
 	@$(NQ)echo "  AAPT"
 	$(Q)find $(RES_DIR) -name dirstamp -type f -delete
-	$(Q)$(AAPT) package -f -m --auto-add-overlay \
+	$(Q)$(AAPT) package -f -m --auto-add-overlay -0 ogg \
 		--custom-package $(JAVA_PACKAGE) \
 		-M $(MANIFEST) \
 		-S $(RES_DIR) \
