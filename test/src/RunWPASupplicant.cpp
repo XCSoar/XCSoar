@@ -25,7 +25,7 @@ try {
 
   for (std::size_t i = 0; i < n; ++i) {
     const auto &network = networks[i];
-    printf("%d\t%s\t%s\n", network.id,
+    printf("%u\t%s\t%s\n", network.id,
            network.ssid.c_str(), network.bssid.c_str());
   }
 

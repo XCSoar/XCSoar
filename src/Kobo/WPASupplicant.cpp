@@ -67,7 +67,7 @@ WPASupplicant::ExpectResponse(std::string_view expected)
 }
 
 static bool
-ParseStatusLine(WifiStatus &status, std::string_view src) noexcept
+ParseStatusLine(WifiBackendStatus &status, std::string_view src) noexcept
 {
   const auto [name, value] = Split(src, '=');
   if (value.data() == nullptr)
@@ -81,9 +81,9 @@ ParseStatusLine(WifiStatus &status, std::string_view src) noexcept
 }
 
 static bool
-ParseStatus(WifiStatus &status, std::string_view src) noexcept
+ParseStatus(WifiBackendStatus &status, std::string_view src) noexcept
 {
-  status.Clear();
+  status = {};
 
   for (const auto line : IterableSplitString(src, '\n'))
     ParseStatusLine(status, line);
@@ -92,7 +92,7 @@ ParseStatus(WifiStatus &status, std::string_view src) noexcept
 }
 
 bool
-WPASupplicant::Status(WifiStatus &status)
+WPASupplicant::Status(WifiBackendStatus &status)
 {
   SendCommand("STATUS");
 

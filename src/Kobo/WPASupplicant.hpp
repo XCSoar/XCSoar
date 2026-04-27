@@ -54,7 +54,7 @@ public:
     ExpectOK();
   }
 
-  bool Status(WifiStatus &status);
+  bool Status(WifiBackendStatus &status);
 
   void Scan() {
     SendCommand("SCAN");

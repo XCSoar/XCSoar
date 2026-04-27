@@ -18,21 +18,6 @@
 
 namespace {
 
-[[gnu::pure]]
-static unsigned
-ParseProfileId(const char *profile_id)
-{
-  if (profile_id == nullptr || *profile_id == 0)
-    throw std::runtime_error{"Missing profile identifier"};
-
-  char *end = nullptr;
-  const auto id = std::strtoul(profile_id, &end, 10);
-  if (end == profile_id || *end != 0)
-    throw std::runtime_error{"Unsupported profile identifier"};
-
-  return (unsigned)id;
-}
-
 static void
 ValidateConnectParameters(const char *ssid, const char *psk,
                          WifiSecurity security)
@@ -145,18 +130,27 @@ WPASupplicantBackend::SaveConfig()
   wpa_.SaveConfig();
 }
 
-bool
-WPASupplicantBackend::Status(WifiStatus &status)
+void
+WPASupplicantBackend::Disconnect()
 {
-  return wpa_.Status(status);
 }
 
-WifiSignalUnit
-WPASupplicantBackend::GetSignalUnit() const
+WifiBackendStatus
+WPASupplicantBackend::GetBackendStatus()
 {
-  return StringIsEqual(interface_name_.c_str(), "eth0")
+  EnsureConnected();
+
+  WifiBackendStatus status;
+  status.interface_name = interface_name_.c_str();
+  status.signal_unit = StringIsEqual(interface_name_.c_str(), "eth0")
     ? WifiSignalUnit::Relative
     : WifiSignalUnit::Dbm;
+
+  (void)wpa_.Status(status);
+  status.state = !status.bssid.empty()
+    ? WifiConnectionState::Connected
+    : WifiConnectionState::Disconnected;
+  return status;
 }
 
 void
@@ -165,7 +159,7 @@ WPASupplicantBackend::Connect(const WifiConnectRequest &request)
   EnsureConnected();
 
   if (!request.profile_id.empty() && request.ssid.empty()) {
-    wpa_.SelectNetwork(ParseProfileId(request.profile_id));
+    wpa_.SelectNetwork(WifiBackend::ParseProfileId(request.profile_id));
     return;
   }
 
@@ -178,6 +172,6 @@ void
 WPASupplicantBackend::ForgetNetwork(const char *profile_id)
 {
   EnsureConnected();
-  wpa_.RemoveNetwork(ParseProfileId(profile_id));
+  wpa_.RemoveNetwork(WifiBackend::ParseProfileId(profile_id));
   wpa_.SaveConfig();
 }
