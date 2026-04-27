@@ -642,7 +642,10 @@ XCSOAR_SOURCES += \
 XCSOAR_SOURCES += \
 	$(SRC)/Tracking/LiveTrack24/SessionID.cpp \
 	$(SRC)/Tracking/LiveTrack24/Glue.cpp \
-	$(SRC)/Tracking/LiveTrack24/Client.cpp
+	$(SRC)/Tracking/LiveTrack24/Client.cpp \
+	$(SRC)/Tracking/PureTrack/Protocol.cpp \
+	$(SRC)/Tracking/PureTrack/Glue.cpp \
+	$(SRC)/Tracking/PureTrack/Client.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/net/client/tim/Glue.cpp \
