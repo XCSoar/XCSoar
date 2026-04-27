@@ -403,12 +403,10 @@ $$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp: FORCE
 $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so: $(NATIVE_HEADERS) generate boost FORCE
 	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
-# extract symbolication files for Google Play (paths lib/<ABI>/ must match
-# the APK and Play Console native debug symbols upload format)
-# Depend on lib$(1).so (submake) not lib$(1)-ns.so — see android_bundle.mk.
+# Unstripped .so for Google Play; same -ns rationale as android_bundle.mk.
 ANDROID_SYMBOLICATION_BUILD += $$(ANDROID_BUILD)/symbols/lib/$(2)/lib$(1).so
 $$(ANDROID_BUILD)/symbols/lib/$(2)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/symbols/lib/$(2)/dirstamp
-	$$(Q)$$(TCPREFIX)objcopy$$(EXE) --strip-debug $$(dir $$<)lib$(1)-ns.so $$@
+	$$(Q)cp $$(dir $$<)lib$(1)-ns.so $$@
 
 endef
 
@@ -452,7 +450,7 @@ $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(AND
 # Native debug symbols for Google Play (single-ABI builds).
 ANDROID_NATIVE_SYMBOL_LIBS = $(foreach N,$(ANDROID_LIB_NAMES),$(ANDROID_BUILD)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/lib$(N).so)
 $(ANDROID_BUILD)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_BUILD)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/dirstamp
-	$(Q)$(TCPREFIX)objcopy$(EXE) --strip-debug $(ABI_BIN_DIR)/lib$*-ns.so $@
+	$(Q)cp $(ABI_BIN_DIR)/lib$*-ns.so $@
 
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_NATIVE_SYMBOL_LIBS)
 	cd $(ANDROID_BUILD)/native-debug-symbols && $(ZIP) -r $(abspath $@) lib
