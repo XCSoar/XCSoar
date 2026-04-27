@@ -2,6 +2,144 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":dependencyDashboard"
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "ignorePaths": [
+    "output/**",
+    "lib/glm/**",
+    "android/ioio/**",
+    "android/UsbSerial/**"
+  ],
+  "minimumReleaseAge": "3 days",
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
+    },
+    {
+      "description": "Group Python dependencies",
+      "matchManagers": ["pip_requirements"],
+      "groupName": "Python dependencies",
+      "groupSlug": "python-deps"
+    },
+    {
+      "description": "Group Rust dependencies",
+      "matchManagers": ["cargo"],
+      "groupName": "Rust dependencies",
+      "groupSlug": "rust-deps"
+    },
+    {
+      "description": "Separate PRs for major version updates",
+      "matchUpdateTypes": ["major"],
+      "groupName": null
+    },
+    {
+      "description": "Security updates should be created immediately",
+      "matchUpdateTypes": ["patch"],
+      "matchPackageNames": ["*"],
+      "schedule": ["at any time"],
+      "minimumReleaseAge": null
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Parse fmt library version and checksum from libs.py",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/fmtlib/fmt/archive/(?<currentValue>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "fmtlib/fmt",
+      "packageNameTemplate": "fmt-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Parse libsodium library version and checksum from libs.py",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/jedisct1/libsodium/releases/download/[^/]+/libsodium-(?<currentValue>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "jedisct1/libsodium",
+      "packageNameTemplate": "libsodium-{{version}}-RELEASE.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Parse zlib library version and checksum from libs.py",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/madler/zlib/releases/download/[^/]+/zlib-(?<currentValue>\\d+[\\d.]+)\\.tar\\.xz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "madler/zlib",
+      "packageNameTemplate": "zlib-{{version}}.tar.xz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Parse curl library version and checksum from libs.py (GitHub)",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/curl/curl/releases/download/curl-\\d+_\\d+_\\d+/curl-(?<currentValue>\\d+(?:\\.\\d+)+)\\.tar\\.xz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "curl/curl",
+      "packageNameTemplate": "curl-{{version}}.tar.xz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Parse openssl library version and checksum from libs.py (GitHub)",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/openssl/openssl/releases/download/[^/]+/openssl-(?<currentValue>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "openssl/openssl",
+      "packageNameTemplate": "openssl-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Parse c-ares library version and checksum from libs.py",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/c-ares/c-ares/releases/download/cares-\\d+_\\d+_\\d+/c-ares-(?<currentValue>\\d+(?:\\.\\d+)+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "c-ares/c-ares",
+      "packageNameTemplate": "c-ares-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Parse libusb library version and checksum from libs.py",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/libusb/libusb/releases/download/[^/]+/libusb-(?<currentValue>\\d+[\\d.]+)\\.tar\\.bz2[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{32,64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "libusb/libusb",
+      "packageNameTemplate": "libusb-{{version}}.tar.bz2",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Parse SDL2 library version and checksum from libs.py",
+      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
+      "matchStrings": [
+        "(?s)https://github\\.com/libsdl-org/SDL/releases/download/[^/]+/SDL2-(?<currentValue>\\d+[\\d.]+)\\.tar\\.gz[^\\n]*\\n[^\\n]*\"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "depNameTemplate": "libsdl-org/SDL",
+      "packageNameTemplate": "SDL2-{{version}}.tar.gz",
+      "versioningTemplate": "semver"
+    }
   ]
 }
