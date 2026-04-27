@@ -74,18 +74,17 @@ endif
 
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
+	$(SCREEN_CUSTOM_SOURCES_IMG) \
 	$(SCREEN_CUSTOM_SOURCES) \
 	$(SRC)/ui/display/egl/Display.cpp \
 	$(SRC)/ui/display/egl/ConfigChooser.cpp \
+	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(WINDOW_SRC_DIR)/android/Window.cpp \
 	$(WINDOW_SRC_DIR)/android/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/android/SingleWindow.cpp \
 	$(CANVAS_SRC_DIR)/android/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/android/Font.cpp
-ifeq ($(TIFF),y)
-SCREEN_SOURCES += $(CANVAS_SRC_DIR)/custom/LibTiff.cpp
-endif
 endif
 
 ifeq ($(DITHER),y)

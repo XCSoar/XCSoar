@@ -32,5 +32,7 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 
 #ifdef HAVE_HTTP
   map.Get(ProfileKeys::EnableThermalInformationMap, settings.enable_tim);
+  map.Get(ProfileKeys::EnableEDLWeather, settings.edl.enabled);
+  map.Get(ProfileKeys::ShowEDLOnMainMap, settings.edl.show_on_main_map);
 #endif
 }
