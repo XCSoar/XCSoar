@@ -56,16 +56,6 @@ ToWifiAuthMode(WifiSecurity security) noexcept
   return WifiAuthMode::Unsupported;
 }
 
-struct WifiStatus {
-  StaticString<32> bssid;
-  StaticString<256> ssid;
-
-  void Clear() {
-    bssid.clear();
-    ssid.clear();
-  }
-};
-
 struct WifiVisibleNetwork {
   StaticString<32> bssid;
   StaticString<256> ssid;
@@ -74,7 +64,7 @@ struct WifiVisibleNetwork {
 };
 
 struct WifiConfiguredNetworkInfo {
-  int id;
+  unsigned id;
   StaticString<256> ssid;
   StaticString<32> bssid;
 };

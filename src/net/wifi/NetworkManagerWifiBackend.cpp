@@ -195,26 +195,6 @@ NetworkManagerWifiBackend::Connect(const WifiConnectRequest &request)
 }
 
 void
-NetworkManagerWifiBackend::RemoveNetwork(unsigned)
-{
-  ThrowUnsupported("Removing saved NetworkManager profiles is not supported");
-}
-
-void
-NetworkManagerWifiBackend::SaveConfig()
-{
-}
-
-bool
-NetworkManagerWifiBackend::Status(WifiStatus &status)
-{
-  const auto s = GetBackendStatus();
-  status.bssid = s.bssid;
-  status.ssid = s.ssid;
-  return s.state == WifiConnectionState::Connected;
-}
-
-void
 NetworkManagerWifiBackend::Disconnect()
 {
   try {
@@ -227,18 +207,6 @@ NetworkManagerWifiBackend::Disconnect()
   } catch (const std::exception &e) {
     throw TranslateWifiException(e);
   }
-}
-
-const char *
-NetworkManagerWifiBackend::GetInterfaceName() const
-{
-  return interface_name.c_str();
-}
-
-WifiSignalUnit
-NetworkManagerWifiBackend::GetSignalUnit() const
-{
-  return WifiSignalUnit::Relative;
 }
 
 WifiBackendStatus

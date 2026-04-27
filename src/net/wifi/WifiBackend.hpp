@@ -31,19 +31,18 @@ public:
   virtual void Connect(const char *ssid, const char *passphrase,
                        WifiSecurity security) = 0;
 
-  virtual void RemoveNetwork(unsigned id) = 0;
-  virtual void SaveConfig() = 0;
-  virtual bool Status(WifiStatus &status) = 0;
+  virtual void RemoveNetwork(unsigned)
+  {
+    throw std::runtime_error{"RemoveNetwork is not supported by this backend"};
+  }
+
+  virtual void SaveConfig() {}
+
   virtual void Disconnect()
   {
     throw std::runtime_error{"Disconnect is not supported by this backend"};
   }
-
-  /* Name of the network interface used by the backend (e.g. "wlan0"). */
-  virtual const char *GetInterfaceName() const = 0;
-
-  /* Signal level unit returned by this backend. */
-  virtual WifiSignalUnit GetSignalUnit() const = 0;
+  virtual WifiBackendStatus GetBackendStatus() = 0;
 
   /**
    * Compatibility API for future backends: returns a merged list of visible
@@ -125,29 +124,6 @@ public:
   }
 
   /**
-   * Compatibility API for future backends: returns backend-neutral status and
-   * presentation metadata derived from the older Kobo-style API.
-   */
-  virtual WifiBackendStatus GetBackendStatus()
-  {
-    EnsureConnected();
-
-    WifiStatus legacy_status;
-    legacy_status.Clear();
-    const bool ok = Status(legacy_status);
-
-    WifiBackendStatus status;
-    status.interface_name = GetInterfaceName();
-    status.signal_unit = GetSignalUnit();
-    status.bssid = legacy_status.bssid;
-    status.ssid = legacy_status.ssid;
-    status.state = ok && !legacy_status.bssid.empty()
-      ? WifiConnectionState::Connected
-      : WifiConnectionState::Disconnected;
-    return status;
-  }
-
-  /**
    * Compatibility API for future backends: connect using a backend-neutral
    * request. Existing Kobo-style backends may keep implementing the legacy
    * Connect() overload.
@@ -164,24 +140,31 @@ public:
    */
   virtual void ForgetNetwork(const char *profile_id)
   {
+    RemoveNetwork(ParseProfileId(profile_id));
+    SaveConfig();
+  }
+
+protected:
+  [[gnu::pure]]
+  static unsigned ParseProfileId(const char *profile_id)
+  {
     if (profile_id == nullptr || *profile_id == 0)
-      return;
+      throw std::runtime_error{"Missing profile identifier"};
 
     char *end = nullptr;
     const auto id = std::strtoul(profile_id, &end, 10);
     if (end == profile_id || *end != 0)
       throw std::runtime_error{"Unsupported profile identifier"};
 
-    RemoveNetwork((unsigned)id);
-    SaveConfig();
+    return (unsigned)id;
   }
 
 private:
   [[gnu::pure]]
-  static StaticString<32> FormatProfileId(int id)
+  static StaticString<32> FormatProfileId(unsigned id)
   {
     StaticString<32> value;
-    value.UnsafeFormat("%d", id);
+    value.UnsafeFormat("%u", id);
     return value;
   }
 };
