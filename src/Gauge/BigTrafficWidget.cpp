@@ -287,23 +287,25 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
     return;
 
   canvas.Select(look.radar_pen);
-  canvas.SelectHollowBrush();
+  canvas.Select(look.radar_brush);
 
-  BulkPixelPoint triangle[3];
-  triangle[0].x = 0;
-  triangle[0].y = -(int)radar_renderer.GetRadius() / Layout::FastScale(1) + 15;
-  triangle[1].x = 7;
-  triangle[1].y = triangle[0].y + 30;
-  triangle[2].x = -triangle[1].x;
-  triangle[2].y = triangle[1].y;
+  BulkPixelPoint arrow[] = {
+    { -1, -40 },
+    { -1, -62 },
+    { -6, -62 },
+    {  0, -70 },
+    {  6, -62 },
+    {  1, -62 },
+    {  1, -40 },
+  };
 
-  PolygonRotateShift(triangle, radar_renderer.GetCenter(),
+  PolygonRotateShift(arrow, radar_renderer.GetCenter(),
                      task_direction - (enable_north_up ?
                                        Angle::Zero() : heading),
-                     Layout::FastScale(100u));
+                     radar_renderer.GetRadius());
 
   // Draw the arrow
-  canvas.DrawPolygon(triangle, 3);
+  canvas.DrawPolygon(arrow, 7);
 }
 
 void
