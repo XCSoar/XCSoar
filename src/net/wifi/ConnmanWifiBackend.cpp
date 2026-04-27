@@ -93,26 +93,6 @@ ConnmanWifiBackend::Connect(const WifiConnectRequest &request)
 }
 
 void
-ConnmanWifiBackend::RemoveNetwork(unsigned)
-{
-  ThrowUnsupported("Removing saved ConnMan services is not supported");
-}
-
-void
-ConnmanWifiBackend::SaveConfig()
-{
-}
-
-bool
-ConnmanWifiBackend::Status(WifiStatus &status)
-{
-  const auto s = GetBackendStatus();
-  status.bssid = s.bssid;
-  status.ssid = s.ssid;
-  return s.state == WifiConnectionState::Connected;
-}
-
-void
 ConnmanWifiBackend::Disconnect()
 {
   try {
@@ -128,18 +108,6 @@ ConnmanWifiBackend::Disconnect()
   }
 }
 
-const char *
-ConnmanWifiBackend::GetInterfaceName() const
-{
-  return interface_name.c_str();
-}
-
-WifiSignalUnit
-ConnmanWifiBackend::GetSignalUnit() const
-{
-  return WifiSignalUnit::Relative;
-}
-
 WifiBackendStatus
 ConnmanWifiBackend::GetBackendStatus()
 {
@@ -150,7 +118,6 @@ ConnmanWifiBackend::GetBackendStatus()
 
     WifiBackendStatus status;
     status.signal_unit = WifiSignalUnit::Relative;
-    interface_name.clear();
 
     for (const auto &service : CmClient::ListServices(c)) {
       if (!CmClient::IsActiveServiceState(service.state))
@@ -159,7 +126,6 @@ ConnmanWifiBackend::GetBackendStatus()
       status.state = WifiConnectionState::Connected;
       status.interface_name = service.interface_name.c_str();
       status.ssid = service.ssid_text.c_str();
-      interface_name = status.interface_name;
       return status;
     }
 
