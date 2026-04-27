@@ -15,10 +15,13 @@ LIBHTTP_SOURCES = \
 	$(SRC)/net/http/Init.cpp
 
 ifeq ($(TARGET_IS_OSX)$(USE_HOMEBREW),yn)
-# We use the libcurl which is included in macOS.
-# macOS SDKs contain the required headers / library stubs,
-# but no pkg-config file.
-LIBHTTP_LDLIBS = -lcurl -lz
+# On macOS without Homebrew/pkg-config, link libcurl manually.
+# Depending on the active search paths this may resolve to either:
+# - the curl stubs from the macOS SDK/system, or
+# - a third-party static libcurl.
+# In both cases we provide the required Apple frameworks explicitly for
+# SecureTransport/Security symbols used by curl.
+LIBHTTP_LDLIBS = -lcurl -lz -framework Security -framework CoreFoundation -framework CoreServices
 else
 $(eval $(call pkg-config-library,CURL,libcurl))
 
