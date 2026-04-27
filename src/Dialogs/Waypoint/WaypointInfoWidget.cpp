@@ -17,6 +17,7 @@
 #include "Interface.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 
 static const char *
@@ -102,26 +103,6 @@ WaypointInfoWidget::AddGlideResult(const char *label,
                                 result, settings.task.glide));
 }
 
-[[gnu::const]]
-static BrokenTime
-BreakHourOfDay(double t) noexcept
-{
-  /* depending on the time zone, the SunEphemeris library may return a
-     negative time of day; the following check catches this before we
-     cast the value to "unsigned" */
-  if (t < 0)
-    t += 24;
-
-  unsigned i = uround(t * 3600);
-
-  BrokenTime result;
-  result.hour = i / 3600;
-  i %= 3600;
-  result.minute = i / 60;
-  result.second = i % 60;
-  return result;
-}
-
 void
 WaypointInfoWidget::Prepare(ContainerWindow &parent,
                             const PixelRect &rc) noexcept
@@ -189,13 +170,10 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
       SunEphemeris::CalcSunTimes(waypoint->location, basic.date_time_utc,
                                  settings.utc_offset);
 
-    const BrokenTime sunrise = BreakHourOfDay(sun.time_of_sunrise);
-    const BrokenTime sunset = BreakHourOfDay(sun.time_of_sunset);
-
-    buffer.UnsafeFormat("%02u:%02u - %02u:%02u",
-                        sunrise.hour, sunrise.minute,
-                        sunset.hour, sunset.minute);
-    AddReadOnly(_("Daylight time"), nullptr, buffer);
+    char daylight_buffer[32];
+    FormatDaylightTimeRangeHHMM(daylight_buffer, sun.time_of_sunrise,
+                                sun.time_of_sunset);
+    AddReadOnly(_("Daylight time"), nullptr, daylight_buffer);
   }
 
   if (basic.location_available) {
