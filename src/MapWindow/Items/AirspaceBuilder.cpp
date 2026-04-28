@@ -103,7 +103,7 @@ MapItemListBuilder::AddVisibleAirspace(
     if (list.full())
       break;
 
-    if (ea->Inside(location))
+    if (predicate(*ea))
       list.append(new AirspaceMapItem(ea));
   }
 }

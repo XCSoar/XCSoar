@@ -11,6 +11,8 @@
 #include "util/PrintException.hxx"
 #include "LogFileDecl.hpp"
 
+#include <ranges>
+
 static constexpr double CRUISE_FILTER_FACT = 0.5;
 
 /**
@@ -62,8 +64,20 @@ AirspaceWarningManager::Reset(const AircraftState &state)
   ++serial;
   warnings.clear();
   notam_day_ack_by_station.clear();
+  external_airspaces.clear();
   cruise_filter.Reset(state);
   circling_filter.Reset(state);
+}
+
+void
+AirspaceWarningManager::SetExternalAirspaces(
+    std::span<const ConstAirspacePtr> airspaces)
+{
+  if (std::ranges::equal(external_airspaces, airspaces))
+    return;
+
+  external_airspaces.assign(airspaces.begin(), airspaces.end());
+  ++serial;
 }
 
 void 
@@ -159,7 +173,9 @@ AirspaceWarningManager::Update(const AircraftState& state,
     if (!warnings.empty()) {
       warnings.clear();
       ++serial;
+      return true;
     }
+
     return false;
   }
 

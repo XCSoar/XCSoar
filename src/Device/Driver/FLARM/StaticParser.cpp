@@ -366,6 +366,9 @@ ParsePFLAO(NMEAInputLine &line, FlarmAlertZoneList &zones,
   if (!line.ReadChecked(top_val))
     return;
 
+  if (top_val < bottom_val)
+    return;
+
   unsigned activity_limit_val;
   if (!line.ReadChecked(activity_limit_val))
     return;

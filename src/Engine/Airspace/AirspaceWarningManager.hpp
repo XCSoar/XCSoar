@@ -205,6 +205,7 @@ public:
     ++serial;
     warnings.clear();
     notam_day_ack_by_station.clear();
+    external_airspaces.clear();
   }
 
   /**
@@ -288,9 +289,7 @@ public:
    * These are checked by the same detection passes as normal
    * airspaces during the next Update() cycle.
    */
-  void SetExternalAirspaces(std::span<const ConstAirspacePtr> airspaces) {
-    external_airspaces.assign(airspaces.begin(), airspaces.end());
-  }
+  void SetExternalAirspaces(std::span<const ConstAirspacePtr> airspaces);
 
   [[gnu::pure]]
   std::span<const ConstAirspacePtr> GetExternalAirspaces() const noexcept {

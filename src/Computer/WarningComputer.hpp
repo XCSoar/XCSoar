@@ -63,6 +63,7 @@ public:
   void Reset() {
     delta_time.Reset();
     initialised = false;
+    flarm_zone_airspaces.clear();
   }
 
   void Update(const ComputerSettings &settings_computer,
