@@ -242,22 +242,20 @@ jobs:
         run: |
           xcodebuild -version
 
-      # APK and AAB matrix legs both compile ANDROIDFAT; a single shared key made
-      # parallel jobs race on save and duplicate work. Use one key per leg.
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ matrix.target == 'ANDROID_BUNDLE' && 'ANDROID_BUNDLE-ccache' || (matrix.target == 'ANDROID' && 'ANDROIDFAT-ccache') || format('{0}-ccache', matrix.target) }}
+          key: ${{ matrix.target == 'ANDROID_BUNDLE' && format('ANDROID_BUNDLE-{0}-ccache', env.DEBUG) || (matrix.target == 'ANDROID' && format('ANDROIDFAT-{0}-ccache', env.DEBUG)) || format('{0}-{1}-ccache', matrix.target, env.DEBUG) }}
+          restore-keys: |
+            ${{ matrix.target == 'ANDROID_BUNDLE' && 'ANDROID_BUNDLE-ccache' || (matrix.target == 'ANDROID' && 'ANDROIDFAT-ccache' || format('{0}-ccache', matrix.target)) }}
           max-size: 3G
 
       - name: Configure ccache for cross-compilation
-        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'WIN64' || matrix.target == 'PC' }}
         run: |
-          # Configure ccache to ignore compiler path for cross-compilation
-          # This is important because cross-compilers have different paths
-          # but produce the same output, so we want to cache based on content
           ccache --set-config compiler_check=content
           ccache --set-config hard_link=false
+          ccache --set-config compression=true
 
       - name: "Cache common downloads"
         uses: actions/cache@v5
@@ -375,11 +373,6 @@ jobs:
               ./ide/provisioning/install-android-tools.sh BUNDLETOOL
             fi
             ./ide/provisioning/install-debian-packages.sh CLEAN
-          elif [ ${{ matrix.os }} = 'macos-12' ] ; then
-            ./ide/provisioning/install-darwin-packages.sh BASE
-            if [ ${{ matrix.target }} = 'OSX64' ]; then
-              ./ide/provisioning/install-darwin-packages.sh OSX64
-            fi
           elif [ ${{ matrix.os }} = 'macos-14' ] || [ ${{ matrix.os }} = 'macos-15' ] || [ ${{ matrix.os }} = 'macos-26' ] ; then
             ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'MACOS' ]; then
@@ -539,8 +532,6 @@ jobs:
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          elif [ ${{ matrix.target }} = "OSX64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
           elif [ ${{ matrix.target }} = "MACOS" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" dmg pkg
           elif [ ${{ matrix.target }} = "IOS64" ]; then
@@ -594,8 +585,6 @@ jobs:
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          elif [ ${{ matrix.target }} = "OSX64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0" dmg pkg
           elif [ ${{ matrix.target }} = "MACOS" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 dmg pkg
           elif [ ${{ matrix.target }} = "IOS64" ]; then
