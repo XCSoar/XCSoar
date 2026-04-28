@@ -440,9 +440,10 @@ compile: $(ANDROID_LIB_BUILD)
 
 # Generate symbols.zip (native debug symbols) for Google Play, which
 # allows Google Play to symbolicate native crash stack traces.
-# Zip from inside lib/ so entries are <ABI>/lib*.so (Play rejects lib/<ABI>/...)
+# Zip from inside lib/ so entries are <ABI>/lib*.so (Play rejects lib/<ABI>/...).
+# Only *.so: zipping "." also picked up Make dirstamps and failed Play validation.
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_SYMBOLICATION_BUILD)
-	cd $(BUNDLE_BUILD_DIR)/symbols/lib && $(ZIP) -r $(abspath $@) .
+	cd $(BUNDLE_BUILD_DIR)/symbols/lib && find . -name '*.so' -print | $(ZIP) -r $(abspath $@) -@
 
 else # !FAT_BINARY
 
@@ -469,7 +470,7 @@ $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/lib%.so: $(A
 	$(Q)cp $(ABI_BIN_DIR)/lib$*-ns.so $@
 
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_NATIVE_SYMBOL_LIBS)
-	cd $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib && $(ZIP) -r $(abspath $@) .
+	cd $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib && find . -name '*.so' -print | $(ZIP) -r $(abspath $@) -@
 
 endif # !FAT_BINARY
 
