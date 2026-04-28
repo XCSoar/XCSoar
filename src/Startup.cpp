@@ -49,6 +49,9 @@
 #include "Audio/VolumeController.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
+#ifdef HAVE_HTTP
+#include "NOTAM/NOTAMGlue.hpp"
+#endif
 #include "Computer/GlideComputer.hpp"
 #include "Computer/GlideComputerInterface.hpp"
 #include "Computer/Events.hpp"
@@ -177,6 +180,25 @@ AfterStartup()
   InfoBoxManager::SetDirty();
 
   ForceCalculation();
+
+#ifdef HAVE_HTTP
+  if (net_components != nullptr && net_components->notam != nullptr &&
+      data_components != nullptr && data_components->airspaces != nullptr) {
+    try {
+      const ScopeSuspendAllThreads suspend;
+      const auto &basic = CommonInterface::Basic();
+      if (net_components->notam->LoadCachedNOTAMsAndUpdate(
+            *data_components->airspaces,
+            basic.location_available ? basic.location : GeoPoint::Invalid()) &&
+          data_components->terrain != nullptr) {
+        SetAirspaceGroundLevels(*data_components->airspaces,
+                                *data_components->terrain);
+      }
+    } catch (...) {
+      LogError(std::current_exception());
+    }
+  }
+#endif
 }
 
 void
@@ -635,9 +657,8 @@ Startup(UI::Display &display)
 
 #ifdef HAVE_HTTP
   net_components = new NetComponents(*asio_thread, *Net::curl,
-                                     computer_settings.tracking);
-#endif
-#ifdef HAVE_HTTP
+                                     computer_settings.tracking,
+                                     computer_settings.airspace.notam);
 #ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());

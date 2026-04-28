@@ -8,8 +8,22 @@
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
+#include "util/PrintException.hxx"
 
 static constexpr double CRUISE_FILTER_FACT = 0.5;
+
+/**
+ * Stable id for NOTAM day-ack: short identifier in #GetStationName().
+ */
+[[gnu::pure]]
+static const char *
+NotamDayAckKey(const AbstractAirspace &airspace) noexcept
+{
+  if (airspace.GetType() != AirspaceClass::NOTAM)
+    return nullptr;
+  const char *const s = airspace.GetStationName();
+  return (s != nullptr && s[0] != '\0') ? s : nullptr;
+}
 
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
                                                const Airspaces &_airspaces)
@@ -46,6 +60,7 @@ AirspaceWarningManager::Reset(const AircraftState &state)
 {
   ++serial;
   warnings.clear();
+  notam_day_ack_by_station.clear();
   cruise_filter.Reset(state);
   circling_filter.Reset(state);
 }
@@ -67,7 +82,7 @@ AirspaceWarningManager::SetPredictionTimeFilter(FloatDuration time) noexcept
 }
 
 AirspaceWarning& 
-AirspaceWarningManager::GetWarning(ConstAirspacePtr airspace) noexcept
+AirspaceWarningManager::GetWarning(ConstAirspacePtr airspace)
 {
   AirspaceWarning* warning = GetWarningPtr(*airspace);
   if (warning)
@@ -91,7 +106,28 @@ AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace) noexcept
 }
 
 AirspaceWarning *
-AirspaceWarningManager::GetNewWarningPtr(ConstAirspacePtr airspace) noexcept
+AirspaceWarningManager::FindWarningByNotamDayAckKey(
+    const std::string_view key) noexcept
+{
+  for (auto &warning : warnings) {
+    const char *const warning_key = NotamDayAckKey(warning.GetAirspace());
+    if (warning_key != nullptr && key == warning_key)
+      return &warning;
+  }
+
+  return nullptr;
+}
+
+const AirspaceWarning *
+AirspaceWarningManager::FindWarningByNotamDayAckKey(
+    const std::string_view key) const noexcept
+{
+  return const_cast<AirspaceWarningManager *>(this)
+    ->FindWarningByNotamDayAckKey(key);
+}
+
+AirspaceWarning *
+AirspaceWarningManager::GetNewWarningPtr(ConstAirspacePtr airspace)
 {
   ++serial;
   warnings.emplace_back(airspace);
@@ -103,7 +139,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
                                const GlidePolar &glide_polar,
                                const TaskStats &task_stats,
                                const bool circling,
-                               const std::chrono::duration<unsigned> dt) noexcept
+                               const std::chrono::duration<unsigned> dt)
 {
   bool changed = false;
 
@@ -195,36 +231,48 @@ public:
    * @param airspace Airspace corresponding to current intersection
    */
   void Intersection(ConstAirspacePtr &airspace_ptr) noexcept {
-    const auto &airspace = *airspace_ptr;
-    if (!airspace.IsActive())
-      return; // ignore inactive airspaces completely
+    try {
+      const auto &airspace = *airspace_ptr;
+      if (!airspace.IsActive())
+        return; // ignore inactive airspaces completely
 
-    if (!(warning_manager.GetConfig().IsClassEnabled(airspace.GetClassOrType()) || 
-	      warning_manager.GetConfig().IsClassEnabled(airspace.GetTypeOrClass())) ||
-        ExcludeAltitude(airspace))
-      return;
+      if (!(warning_manager.GetConfig().IsClassEnabled(airspace.GetClassOrType()) ||
+            warning_manager.GetConfig().IsClassEnabled(airspace.GetTypeOrClass())) ||
+          ExcludeAltitude(airspace))
+        return;
 
-    AirspaceWarning *warning = warning_manager.GetWarningPtr(airspace);
-    if (warning == nullptr || warning->IsStateAccepted(warning_state)) {
+      AirspaceWarning *warning = warning_manager.GetWarningPtr(airspace);
+      if (warning == nullptr || warning->IsStateAccepted(warning_state)) {
 
-      AirspaceInterceptSolution solution;
+        AirspaceInterceptSolution solution;
 
-      if (mode_inside) {
-        solution = airspace.Intercept(state, perf,
-                                      state.location, state.location);
-      } else {
-        solution = Intercept(airspace, state, perf);
+        if (mode_inside) {
+          solution = airspace.Intercept(state, perf,
+                                        state.location, state.location);
+        } else {
+          solution = Intercept(airspace, state, perf);
+        }
+        if (!solution.IsValid())
+          return;
+        if (solution.elapsed_time > max_time)
+          return;
+
+        if (warning == nullptr)
+          warning = warning_manager.GetNewWarningPtr(std::move(airspace_ptr));
+
+        warning->UpdateSolution(warning_state, solution);
+        found = true;
       }
-      if (!solution.IsValid())
-        return;
-      if (solution.elapsed_time > max_time)
-        return;
-
-      if (warning == nullptr)
-        warning = warning_manager.GetNewWarningPtr(std::move(airspace_ptr));
-
-      warning->UpdateSolution(warning_state, solution);
-      found = true;
+    } catch (const std::exception &e) {
+#ifndef NDEBUG
+      PrintException(e);
+#else
+      (void)e;
+#endif
+    } catch (...) {
+#ifndef NDEBUG
+      PrintException(std::current_exception());
+#endif
     }
   }
 
@@ -419,28 +467,90 @@ AirspaceWarningManager::Acknowledge(ConstAirspacePtr airspace) noexcept
 
 void
 AirspaceWarningManager::AcknowledgeWarning(ConstAirspacePtr airspace,
-                                           const bool set) noexcept
+                                           const bool set)
 {
-  GetWarning(std::move(airspace)).AcknowledgeWarning(set);
+  AirspaceWarning *warning = nullptr;
+  if (set) {
+    warning = &GetWarning(std::move(airspace));
+  } else {
+    // Avoid creating a warning when just clearing an acknowledgement.
+    warning = GetWarningPtr(*airspace);
+    if (warning == nullptr)
+      return;
+  }
+
+  const bool was_acknowledged = warning->IsWarningAcknowledged();
+  warning->AcknowledgeWarning(set);
+  if (warning->IsWarningAcknowledged() != was_acknowledged)
+    ++serial;
 }
 
 void
 AirspaceWarningManager::AcknowledgeInside(ConstAirspacePtr airspace,
-                                          const bool set) noexcept
+                                          const bool set)
 {
-  GetWarning(std::move(airspace)).AcknowledgeInside(set);
+  AirspaceWarning *warning = nullptr;
+  if (set) {
+    warning = &GetWarning(std::move(airspace));
+  } else {
+    // Avoid creating a warning when just clearing an acknowledgement.
+    warning = GetWarningPtr(*airspace);
+    if (warning == nullptr)
+      return;
+  }
+
+  const bool was_acknowledged = warning->IsInsideAcknowledged();
+  warning->AcknowledgeInside(set);
+  if (warning->IsInsideAcknowledged() != was_acknowledged)
+    ++serial;
 }
 
 void
 AirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
-                                       const bool set) noexcept
+                                       const bool set)
 {
-  GetWarning(std::move(airspace)).AcknowledgeDay(set);
+  const char *const key = NotamDayAckKey(*airspace);
+  const bool was_member = key != nullptr &&
+    notam_day_ack_by_station.contains(key);
+
+  AirspaceWarning *warning = nullptr;
+  if (set) {
+    warning = &GetWarning(std::move(airspace));
+  } else {
+    // Avoid creating a warning when just clearing an acknowledgement.
+    warning = GetWarningPtr(*airspace);
+    if (warning == nullptr && key != nullptr)
+      warning = FindWarningByNotamDayAckKey(key);
+    if (warning == nullptr && !was_member)
+      return;
+  }
+
+  const bool was_acknowledged = warning != nullptr && warning->GetAckDay();
+
+  bool membership_changed = false;
+  if (key != nullptr) {
+    if (set && !was_member)
+      membership_changed = notam_day_ack_by_station.emplace(key).second;
+    else if (!set && was_member)
+      membership_changed = notam_day_ack_by_station.erase(key) > 0;
+  }
+
+  if (warning != nullptr)
+    warning->AcknowledgeDay(set);
+
+  const bool is_acknowledged = warning != nullptr && warning->GetAckDay();
+  if (membership_changed || is_acknowledged != was_acknowledged)
+    ++serial;
 }
 
 bool
 AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexcept
 {
+  if (const char *key = NotamDayAckKey(airspace);
+      key != nullptr &&
+      notam_day_ack_by_station.contains(key))
+    return true;
+
   const AirspaceWarning *warning = GetWarningPtr(airspace);
   return warning != nullptr && warning->GetAckDay();
 }

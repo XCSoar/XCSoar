@@ -5,6 +5,7 @@
 #include "LabelBlock.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "util/UTF8.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -76,6 +77,9 @@ TextInBox(Canvas &canvas, const char *text, PixelPoint p,
           LabelBlock *label_block) noexcept
 {
   // landable waypoint label inside white box
+
+  if (text == nullptr || text[0] == '\0' || !ValidateUTF8(text))
+    text = "?";
 
   PixelSize tsize = canvas.CalcTextSize(text);
 

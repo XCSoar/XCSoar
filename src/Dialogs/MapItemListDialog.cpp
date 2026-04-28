@@ -29,8 +29,11 @@
 #include "Geo/GeoVector.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Protection.hpp"
+#include "LogFile.hpp"
+#include <Message.hpp>
 
 #include <limits>
+#include <exception>
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -91,17 +94,38 @@ public:
      renderer(_look, _traffic_look, _final_glide_look,
               _settings, CommonInterface::GetComputerSettings().utc_offset) {}
 
+  const MapItem *GetItem(unsigned index) const noexcept {
+    return index < list.size() ? list[index] : nullptr;
+  }
+
+  static bool QueryAckDayNoThrow(
+      ProtectedAirspaceWarningManager &warnings,
+      const AbstractAirspace &airspace,
+      bool &ack_day) noexcept {
+    try {
+      ack_day = warnings.GetAckDay(airspace);
+      return true;
+    } catch (const std::exception &e) {
+      LogFmt("Failed to query airspace ACK day: {}", e.what());
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to query airspace ACK day");
+    }
+
+    ack_day = false;
+    return false;
+  }
+
   unsigned GetCursorIndex() const {
     return GetList().GetCursorIndex();
   }
 
 protected:
   void UpdateButtons() {
-    const unsigned current = GetCursorIndex();
-    details_button->SetEnabled(HasDetails(*list[current]));
-    goto_button->SetEnabled(CanGotoItem(current));
-    ack_button->SetEnabled(CanAckItem(current));
-    enable_button->SetEnabled(CanEnableItem(current));
+    const MapItem *item = GetItem(GetCursorIndex());
+    details_button->SetEnabled(item != nullptr && HasDetails(*item));
+    goto_button->SetEnabled(item != nullptr && CanGotoItem(*item));
+    ack_button->SetEnabled(item != nullptr && CanAckItem(*item));
+    enable_button->SetEnabled(item != nullptr && CanEnableItem(*item));
   }
 
   void OnGotoClicked();
@@ -121,11 +145,13 @@ public:
   }
 
   bool CanActivateItem(unsigned index) const noexcept override {
-    return HasDetails(*list[index]);
+    const MapItem *item = GetItem(index);
+    return item != nullptr && HasDetails(*item);
   }
 
   bool CanGotoItem(unsigned index) const noexcept {
-    return CanGotoItem(*list[index]);
+    const MapItem *item = GetItem(index);
+    return item != nullptr && CanGotoItem(*item);
   }
 
   static bool CanGotoItem(const MapItem &item) noexcept {
@@ -136,33 +162,48 @@ public:
   }
 
   bool CanAckItem(unsigned index) const noexcept {
-    return CanAckItem(*list[index]);
+    const MapItem *item = GetItem(index);
+    return item != nullptr && CanAckItem(*item);
   }
 
   static bool CanAckItem(const MapItem &item) noexcept {
     if (backend_components == nullptr)
       return false;
 
-    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    if (item.type != MapItem::Type::AIRSPACE)
+      return false;
 
-    return item.type == MapItem::Type::AIRSPACE &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
-      !backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
+    auto *warnings = backend_components->GetAirspaceWarnings();
+    if (warnings == nullptr)
+      return false;
+
+    const auto &as_item = static_cast<const AirspaceMapItem &>(item);
+    bool ack_day = false;
+    return QueryAckDayNoThrow(*warnings, *as_item.airspace, ack_day) &&
+      !ack_day;
   }
 
   bool CanEnableItem(unsigned index) const noexcept {
-    return CanEnableItem(*list[index]);
+    const MapItem *item = GetItem(index);
+    return item != nullptr && CanEnableItem(*item);
   }
 
   static bool CanEnableItem(const MapItem &item) noexcept {
     if (backend_components == nullptr)
       return false;
 
-    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    if (item.type != MapItem::Type::AIRSPACE)
+      return false;
 
-    return item.type == MapItem::Type::AIRSPACE &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
-      backend_components->GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
+    auto *warnings = backend_components->GetAirspaceWarnings();
+    if (warnings == nullptr)
+      return false;
+
+    const auto &as_item = static_cast<const AirspaceMapItem &>(item);
+
+    bool ack_day = false;
+    return QueryAckDayNoThrow(*warnings, *as_item.airspace, ack_day) &&
+      ack_day;
   }
 
   void OnActivateItem(unsigned index) noexcept override;
@@ -234,24 +275,32 @@ void
 MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned idx) noexcept
 {
-  const MapItem &item = *list[idx];
-
-  if (item.type == MapItem::Type::AIRSPACE &&
-      backend_components != nullptr &&
-      backend_components->GetAirspaceWarnings() != nullptr &&
-      backend_components->GetAirspaceWarnings()->GetAckDay(
-        *static_cast<const AirspaceMapItem &>(item).airspace))
-    canvas.SetTextColor(COLOR_GRAY);
-  else
+  const MapItem *item = GetItem(idx);
+  if (item == nullptr) {
     canvas.SetTextColor(dialog_look.list.text_color);
+    return;
+  }
 
-  renderer.Draw(canvas, rc, item,
+  bool ack_day = false;
+  if (item->type == MapItem::Type::AIRSPACE &&
+      backend_components != nullptr) {
+    if (auto *warnings = backend_components->GetAirspaceWarnings();
+        warnings != nullptr) {
+      const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
+      QueryAckDayNoThrow(*warnings, *as_item.airspace, ack_day);
+    }
+  }
+
+  if (ack_day)
+    canvas.SetTextColor(COLOR_GRAY);
+
+  renderer.Draw(canvas, rc, *item,
                 &CommonInterface::Basic().flarm.traffic);
 
   if ((settings.item_list.add_arrival_altitude &&
-       item.type == MapItem::Type::ARRIVAL_ALTITUDE) ||
+       item->type == MapItem::Type::ARRIVAL_ALTITUDE) ||
       (!settings.item_list.add_arrival_altitude &&
-       item.type == MapItem::Type::LOCATION)) {
+       item->type == MapItem::Type::LOCATION)) {
     canvas.SelectBlackPen();
     canvas.DrawLine({rc.left, rc.bottom - 1}, {rc.right, rc.bottom - 1});
   }
@@ -325,19 +374,79 @@ MapItemListWidget::OnGotoClicked()
 inline void
 MapItemListWidget::OnAckClicked()
 {
-  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
-    list[GetCursorIndex()];
-  backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace);
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr || item->type != MapItem::Type::AIRSPACE) {
+    LogFmt("Failed to acknowledge airspace warning for day: invalid map item selection");
+    return;
+  }
+
+  const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
+
+  if (backend_components == nullptr) {
+    LogFmt("Failed to acknowledge airspace warning for day: missing backend components");
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  }
+
+  auto *warnings = backend_components->GetAirspaceWarnings();
+  if (warnings == nullptr) {
+    LogFmt("Failed to acknowledge airspace warning for day: missing warning manager");
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  }
+
+  try {
+    warnings->AcknowledgeDay(as_item.airspace);
+  } catch (const std::exception &e) {
+    LogFmt("Failed to acknowledge airspace warning for day: {}", e.what());
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to acknowledge airspace warning for day");
+    Message::AddMessage(_("Failed to acknowledge airspace warning"));
+    return;
+  }
+
   UpdateButtons();
 }
 
 inline void
 MapItemListWidget::OnEnableClicked()
 {
-  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
-    list[GetCursorIndex()];
-  backend_components->GetAirspaceWarnings()->AcknowledgeDay(as_item.airspace,
-                                                            false);
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr || item->type != MapItem::Type::AIRSPACE) {
+    LogFmt("Failed to re-enable airspace warning for day: invalid map item selection");
+    return;
+  }
+
+  const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
+
+  if (backend_components == nullptr) {
+    LogFmt("Failed to re-enable airspace warning for day: missing backend components");
+    Message::AddMessage(_("Failed to re-enable airspace warning"));
+    return;
+  }
+
+  auto *warnings = backend_components->GetAirspaceWarnings();
+  if (warnings == nullptr) {
+    LogFmt("Failed to re-enable airspace warning for day: missing warning manager");
+    Message::AddMessage(_("Failed to re-enable airspace warning"));
+    return;
+  }
+
+  try {
+    warnings->AcknowledgeDay(as_item.airspace, false);
+  } catch (const std::exception &e) {
+    LogFmt("Failed to re-enable airspace warning for day: {}", e.what());
+    Message::AddMessage(_("Failed to re-enable airspace warning"));
+    return;
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to re-enable airspace warning for day");
+    Message::AddMessage(_("Failed to re-enable airspace warning"));
+    return;
+  }
   UpdateButtons();
 }
 

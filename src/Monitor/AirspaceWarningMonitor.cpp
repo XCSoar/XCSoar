@@ -17,6 +17,10 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "LogFile.hpp"
+#include "Message.hpp"
+
+#include <exception>
 
 class AirspaceWarningWidget final
   : public QuestionWidget {
@@ -53,16 +57,32 @@ public:
      monitor(_monitor), manager(_manager),
      airspace(std::move(_airspace)), state(_state) {
     AddButton(_("ACK"), [this](){
-      if (state == AirspaceWarning::WARNING_INSIDE)
-        manager.AcknowledgeInside(airspace);
-      else
-        manager.AcknowledgeWarning(airspace);
+      try {
+        if (state == AirspaceWarning::WARNING_INSIDE)
+          manager.AcknowledgeInside(airspace);
+        else
+          manager.AcknowledgeWarning(airspace);
+      } catch (...) {
+        LogError(std::current_exception(),
+                 "Failed to acknowledge airspace warning");
+        Message::AddMessage(_("Failed to acknowledge airspace warning"));
+        return;
+      }
+
       monitor.Schedule();
       PageActions::RestoreBottom();
     });
 
     AddButton(_("ACK Day"), [this](){
-      manager.AcknowledgeDay(airspace);
+      try {
+        manager.AcknowledgeDay(airspace);
+      } catch (...) {
+        LogError(std::current_exception(),
+                 "Failed to acknowledge airspace warning for day");
+        Message::AddMessage(_("Failed to acknowledge airspace warning for day"));
+        return;
+      }
+
       monitor.Schedule();
       PageActions::RestoreBottom();
     });

@@ -184,6 +184,16 @@ public:
     return ack_day;
   }
 
+  [[gnu::pure]]
+  bool IsWarningAcknowledged() const noexcept {
+    return acktime_warning == null_acktime || acktime_warning > Duration{};
+  }
+
+  [[gnu::pure]]
+  bool IsInsideAcknowledged() const noexcept {
+    return acktime_inside == null_acktime || acktime_inside > Duration{};
+  }
+
   /**
    * Acknowledge an airspace warning or airspace inside (depending on
    * the state).

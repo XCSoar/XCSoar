@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Airspace/AirspaceClass.hpp"
+#include "ui/canvas/Color.hpp"
 
 struct PixelPoint;
 class Canvas;
@@ -17,7 +18,11 @@ namespace AirspacePreviewRenderer
                    const AirspaceLook &look,
                    const AirspaceRendererSettings &settings);
 
-  void UnprepareFill(Canvas &canvas);
+  /**
+   * Restore text drawing state after #PrepareFill. Pass the text color that
+   * was active before #PrepareFill (e.g. from Canvas::GetTextColor()).
+   */
+  void UnprepareFill(Canvas &canvas, Color text_color) noexcept;
 
   bool PrepareOutline(Canvas &canvas, AirspaceClass type,
                       const AirspaceLook &look,

@@ -54,6 +54,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Airspace/NOTAMList.cpp) \
 	$(SRC)/Dialogs/Settings/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/Settings/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
@@ -99,6 +100,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Waypoint/NearestWaypoint.cpp \
 	\
 	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
@@ -481,6 +483,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/DeviceConfig.cpp \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Profile/NotamConfig.cpp) \
 	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/Profile/FlarmProfile.cpp \
 	\
@@ -691,7 +694,8 @@ XCSOAR_DEPENDS = \
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_DEPENDS += \
 	LIBHTTP \
-	LIBCLIENT
+	LIBCLIENT \
+	LIBNOTAM
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)

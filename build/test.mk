@@ -102,6 +102,7 @@ TEST_NAMES = \
 	TestTaskWaypoint \
 	TestTeamCode \
 	TestZeroFinder \
+	TestAirspaceWarningManager \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
@@ -135,6 +136,10 @@ endif
 
 ifeq ($(HAVE_WIN32),y)
 TEST_NAMES += TestUTF8Win
+endif
+
+ifeq ($(HAVE_HTTP),y)
+TEST_NAMES += TestNOTAM
 endif
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
@@ -192,6 +197,20 @@ TEST_METAR_PARSER_SOURCES = \
 TEST_METAR_PARSER_DEPENDS = MATH UTIL UNITS
 $(eval $(call link-program,TestMETARParser,TEST_METAR_PARSER))
 
+ifeq ($(HAVE_HTTP),y)
+TEST_NOTAM_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/NOTAM/Client.cpp \
+	$(SRC)/NOTAM/NOTAMCache.cpp \
+	$(SRC)/NOTAM/Filter.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestNOTAM.cpp
+TEST_NOTAM_DEPENDS = JSON LIBHTTP CO ASYNC LIBNET IO OS THREAD GEO TIME MATH UTIL UNITS FMT
+$(eval $(call link-program,TestNOTAM,TEST_NOTAM))
+endif
+
 TEST_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -205,6 +224,14 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 TEST_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
 TEST_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE UNITS ZZIP GEO MATH UTIL UNITS
 $(eval $(call link-program,TestAirspaceParser,TEST_AIRSPACE_PARSER))
+
+TEST_AIRSPACE_WARNING_MANAGER_SOURCES = \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAirspaceWarningManager.cpp
+TEST_AIRSPACE_WARNING_MANAGER_DEPENDS = $(TEST1_DEPENDS) UNITS
+$(eval $(call link-program,TestAirspaceWarningManager,TEST_AIRSPACE_WARNING_MANAGER))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -1865,6 +1892,7 @@ RUN_MAP_WINDOW_SOURCES = \
 
 ifeq ($(HAVE_HTTP),y)
 RUN_MAP_WINDOW_SOURCES += \
+	$(SRC)/Profile/NotamConfig.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
 endif
@@ -2323,6 +2351,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \

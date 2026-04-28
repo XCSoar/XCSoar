@@ -10,7 +10,8 @@
 #include "NetComponents.hpp"
 
 NetComponents::NetComponents(EventLoop &, CurlGlobal &,
-                             const TrackingSettings &) noexcept
+                             const TrackingSettings &,
+                             const NOTAMSettings &)
 {
 }
 
