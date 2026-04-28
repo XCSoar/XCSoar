@@ -101,6 +101,7 @@ AssignNetworkEntryFromAccessPoint(WifiNetworkEntry &entry,
   entry.Clear();
   if (saved != nullptr && !saved->path.empty()) {
     entry.profile_id = saved->path.c_str();
+    entry.has_stored_credentials = true;
     entry.can_forget = true;
   } else {
     entry.profile_id = MakeProfileId(ap);
@@ -142,6 +143,7 @@ AssignSavedNetworkEntry(WifiNetworkEntry &entry,
   entry.ssid = !saved.ssid_text.empty()
     ? saved.ssid_text.c_str()
     : saved.connection_id.c_str();
+  entry.has_stored_credentials = true;
   if (!saved.connection_id.empty() && saved.connection_id != saved.ssid_text)
     entry.bssid = saved.connection_id.c_str();
   entry.kind = WifiNetworkKind::SavedProfile;
@@ -160,6 +162,9 @@ ShouldReplaceDuplicateSsidEntry(const WifiNetworkEntry &existing,
   if (existing.kind == WifiNetworkKind::ConnectedNetwork)
     return false;
 
+  if (candidate.has_stored_credentials != existing.has_stored_credentials)
+    return candidate.has_stored_credentials;
+
   if (candidate.signal_level != existing.signal_level)
     return candidate.signal_level > existing.signal_level;
 
@@ -176,12 +181,6 @@ TranslateWifiException(const std::exception &e)
   return std::runtime_error{FormatWifiErrorForUser(e.what())};
 }
 
-[[noreturn]]
-static void
-ThrowUnsupported(const char *message)
-{
-  throw std::runtime_error{message};
-}
 
 } // namespace
 

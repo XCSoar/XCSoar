@@ -92,6 +92,7 @@ WPASupplicantBackend::EnsureConnected()
 void
 WPASupplicantBackend::Scan()
 {
+  EnsureConnected();
   wpa_.Scan();
 }
 

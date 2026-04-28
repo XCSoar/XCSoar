@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "net/wifi/WifiTypes.hpp"
+#include "net/wifi/WifiData.hpp"
 #include "net/SocketDescriptor.hxx"
 
 #include <cstddef>

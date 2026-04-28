@@ -15,7 +15,7 @@
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "net/wifi/WifiBackend.hpp"
-#include "net/IPv4Address.hxx"
+#include "net/wifi/WifiFormat.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include <array>
@@ -89,20 +89,31 @@ GetPrimaryText(const WifiNetworkEntry &entry) noexcept
 }
 
 [[gnu::pure]]
+static bool
+IsOpaqueProfileId(const WifiNetworkEntry &entry) noexcept
+{
+  return !entry.profile_id.empty() && entry.profile_id.c_str()[0] == '/';
+}
+
+[[gnu::pure]]
 static const char *
 GetSecondaryText(const WifiNetworkEntry &entry) noexcept
 {
+  if (entry.kind == WifiNetworkKind::SavedProfile)
+    return "";
+
   if (!entry.ssid.empty()) {
     if (!entry.bssid.empty())
       return entry.bssid.c_str();
 
-    if (!entry.profile_id.empty())
+    if (!entry.profile_id.empty() && !IsOpaqueProfileId(entry))
       return entry.profile_id.c_str();
 
     return "";
   }
 
-  if (!entry.bssid.empty() && !entry.profile_id.empty())
+  if (!entry.bssid.empty() && !entry.profile_id.empty() &&
+      !IsOpaqueProfileId(entry))
     return entry.profile_id.c_str();
 
   return "";
@@ -120,6 +131,9 @@ MergeNetworkEntry(WifiNetworkEntry &dest, const WifiNetworkEntry &src) noexcept
   if (dest.bssid.empty() && !src.bssid.empty())
     dest.bssid = src.bssid;
 
+  if (dest.interface_name.empty() && !src.interface_name.empty())
+    dest.interface_name = src.interface_name;
+
   if (!dest.is_visible && src.is_visible) {
     dest.bssid = src.bssid;
     dest.signal_level = src.signal_level;
@@ -134,27 +148,19 @@ MergeNetworkEntry(WifiNetworkEntry &dest, const WifiNetworkEntry &src) noexcept
     dest.kind = WifiNetworkKind::VisibleAccessPoint;
   }
 
+  dest.has_stored_credentials = dest.has_stored_credentials ||
+    src.has_stored_credentials;
   dest.can_connect = dest.can_connect || src.can_connect;
   dest.can_disconnect = dest.can_disconnect || src.can_disconnect;
   dest.can_forget = dest.can_forget || src.can_forget;
 }
 
 [[gnu::pure]]
-static const char *
-GetAuthLabel(WifiSecurity security) noexcept
+static bool
+NeedsPassphrasePrompt(const WifiNetworkEntry &entry) noexcept
 {
-  switch (ToWifiAuthMode(security)) {
-  case WifiAuthMode::Open:
-    return "Open";
-
-  case WifiAuthMode::Passphrase:
-    return "Passphrase";
-
-  case WifiAuthMode::Unsupported:
-    return "Unsupported";
-  }
-
-  return "Unsupported";
+  return ToWifiAuthMode(entry.security) == WifiAuthMode::Passphrase &&
+    !entry.has_stored_credentials;
 }
 
 } // namespace
@@ -164,8 +170,7 @@ class WifiListWidget final
 
   Button *scan_button;
   Button *connect_button;
-
-  WifiBackendStatus status;
+  Button *forget_button;
   TrivialArray<WifiNetworkEntry, 64> networks;
 
   TwoTextRowsRenderer row_renderer;
@@ -177,7 +182,7 @@ class WifiListWidget final
 
 public:
   explicit WifiListWidget(UniqueWifiBackend _backend)
-    :scan_button(nullptr), connect_button(nullptr),
+    :scan_button(nullptr), connect_button(nullptr), forget_button(nullptr),
      backend_(std::move(_backend)) {}
 
   void CreateButtons(WidgetDialog &dialog) {
@@ -186,7 +191,6 @@ public:
         if (backend_ == nullptr)
           return;
 
-        backend_->EnsureConnected();
         backend_->Scan();
         scan_pending = true;
         scan_button->SetCaption(_("Scanning..."));
@@ -199,6 +203,14 @@ public:
     connect_button = dialog.AddButton(_("Connect"), [this](){
       try {
         Connect();
+      } catch (...) {
+        ShowError(std::current_exception(), _("Error"));
+      }
+    });
+
+    forget_button = dialog.AddButton(_("Forget"), [this](){
+      try {
+        Forget();
       } catch (...) {
         ShowError(std::current_exception(), _("Error"));
       }
@@ -232,6 +244,7 @@ private:
   void UpdateList();
 
   void Connect();
+  void Forget();
 };
 
 void
@@ -248,15 +261,15 @@ WifiListWidget::UpdateButtons()
     } else if (info.can_connect) {
       connect_button->SetCaption(_("Connect"));
       connect_button->SetEnabled(true);
-    } else if (info.can_forget) {
-      connect_button->SetCaption(_("Remove"));
-      connect_button->SetEnabled(true);
     } else {
       connect_button->SetCaption(_("Connect"));
       connect_button->SetEnabled(false);
     }
+
+    forget_button->SetEnabled(info.can_forget);
   } else {
     connect_button->SetEnabled(false);
+    forget_button->SetEnabled(false);
   }
 }
 
@@ -265,41 +278,23 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned idx) noexcept
 {
   const auto &info = networks[idx];
-  const char *auth = GetAuthLabel(info.security);
+  const char *auth = !info.is_visible &&
+    info.kind == WifiNetworkKind::SavedProfile
+    ? nullptr
+    : FormatWifiSecurityLabel(info.security);
 
   row_renderer.DrawFirstRow(canvas, rc, GetPrimaryText(info));
   row_renderer.DrawSecondRow(canvas, rc, GetSecondaryText(info));
 
-  const char *state = nullptr;
-  StaticString<40> state_buffer;
   const bool connected = info.kind == WifiNetworkKind::ConnectedNetwork;
+  const auto state = WifiNetworkEntry::FormatState(info);
 
-  if (connected) {
-    state = _("Connected");
-
-    /* look up ip address for wlan0 or eth0 */
-    if (!status.interface_name.empty()) {
-      const auto addr = IPv4Address::GetDeviceAddress(status.interface_name);
-      if (addr.IsDefined()) { /* valid address? */
-        StaticString<40> addr_str;
-        if (addr.ToString(addr_str.buffer(), addr_str.capacity()) != nullptr) {
-          state_buffer.Format("%s (%s)", state, addr_str.c_str());
-          state = state_buffer;
-        }
-      }
-    }
-  } else if (info.kind == WifiNetworkKind::SavedProfile) {
-    state = _("Saved");
-  } else if (info.is_visible) {
-    state = _("Visible");
-  }
-
-  if (state != nullptr) {
+  if (!state.empty()) {
     const auto old_text_color = canvas.GetTextColor();
     if (connected)
       canvas.SetTextColor(COLOR_GREEN);
 
-    row_renderer.DrawRightFirstRow(canvas, rc, state);
+    row_renderer.DrawRightFirstRow(canvas, rc, state.c_str());
 
     if (connected)
       canvas.SetTextColor(old_text_color);
@@ -318,6 +313,9 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
     case WifiSignalUnit::Unknown:
       text = auth;
+      break;
+
+    case WifiSignalUnit::COUNT:
       break;
     }
 
@@ -341,35 +339,57 @@ WifiListWidget::Connect()
   if (info.can_disconnect) {
     backend_->Disconnect();
   } else if (info.can_connect) {
-    const char *name = GetPrimaryText(info);
-
-    StaticString<256> caption;
-    caption.Format(_("Passphrase of network '%s'"), name);
-
-    StaticString<32> passphrase;
-    passphrase.clear();
-    if (ToWifiAuthMode(info.security) == WifiAuthMode::Open)
-      passphrase.clear();
-    else if (!TextEntryDialog(passphrase, caption, false))
-      return;
-
     WifiConnectRequest request;
     request.profile_id = info.profile_id;
-    request.ssid = info.ssid;
-    request.secret = passphrase;
     request.security = info.security;
+
+    const bool needs_passphrase = NeedsPassphrasePrompt(info);
+
+    if (info.profile_id.empty() || needs_passphrase) {
+      request.ssid = info.ssid;
+
+      if (needs_passphrase) {
+        const char *name = GetPrimaryText(info);
+
+        StaticString<256> caption;
+        caption.Format(_("Passphrase of network '%s'"), name);
+
+        StaticString<256> passphrase;
+        passphrase.clear();
+        if (!TextEntryDialog(passphrase, caption, false))
+          return;
+
+        request.secret = passphrase;
+      }
+    }
+
     backend_->Connect(request);
-  } else if (info.can_forget) {
-    backend_->ForgetNetwork(info.profile_id);
   }
 
   UpdateList();
 }
 
 void
+WifiListWidget::Forget()
+{
+  if (backend_ == nullptr)
+    return;
+
+  const unsigned i = GetList().GetCursorIndex();
+  if (i >= networks.size())
+    return;
+
+  const auto &info = networks[i];
+  if (!info.can_forget)
+    return;
+
+  backend_->ForgetNetwork(info.profile_id);
+  UpdateList();
+}
+
+void
 WifiListWidget::UpdateList()
 {
-  status.Clear();
   networks.clear();
 
   if (backend_ == nullptr) {
@@ -379,9 +399,6 @@ WifiListWidget::UpdateList()
   }
 
   try {
-    backend_->EnsureConnected();
-    status = backend_->GetBackendStatus();
-
     std::array<WifiNetworkEntry, 64> buffer;
     const auto n = backend_->GetNetworks(buffer.data(), buffer.size());
     std::stable_sort(buffer.begin(), buffer.begin() + n, NetworkEntrySortLess);
