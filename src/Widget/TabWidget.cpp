@@ -247,6 +247,12 @@ TabWidget::HasFocus() const noexcept
 }
 
 bool
+TabWidget::TabDisplayHasFocus() const noexcept
+{
+  return tab_display != nullptr && tab_display->HasFocus();
+}
+
+bool
 TabWidget::KeyPress(unsigned key_code) noexcept
 {
   // TODO: implement a few hotkeys

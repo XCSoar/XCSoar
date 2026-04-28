@@ -4,6 +4,7 @@
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Content/Radio.hpp"
 #include "InfoBoxes/Panel/RadioEdit.hpp"
+#include "Dialogs/FrequencyBrowserDialog.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
@@ -66,11 +67,13 @@ UpdateInfoBoxTransponderCode(InfoBoxData &data,
 
 static constexpr InfoBoxPanel active_frequency_panels[] = {
   { N_("Edit"), LoadActiveRadioFrequencyEditPanel },
+  { N_("Browse"), LoadFrequencyBrowserPanel },
   { nullptr, nullptr }
 };
 
 static constexpr InfoBoxPanel standby_frequency_panels[] = {
   { N_("Edit"), LoadStandbyRadioFrequencyEditPanel },
+  { N_("Browse"), LoadFrequencyBrowserPanel },
   { nullptr, nullptr }
 };
 
@@ -78,6 +81,13 @@ const InfoBoxPanel *
 InfoBoxContentActiveRadioFrequency::GetDialogContent() noexcept
 {
   return active_frequency_panels;
+}
+
+bool
+InfoBoxContentActiveRadioFrequency::HandleShowDialog(unsigned) noexcept
+{
+  ShowFrequencyBrowserDialog(nullptr, FrequencyBrowserPrimary::ActiveFirst);
+  return true;
 }
 
 void
@@ -93,6 +103,13 @@ const InfoBoxPanel *
 InfoBoxContentStandbyRadioFrequency::GetDialogContent() noexcept
 {
   return standby_frequency_panels;
+}
+
+bool
+InfoBoxContentStandbyRadioFrequency::HandleShowDialog(unsigned) noexcept
+{
+  ShowFrequencyBrowserDialog(nullptr, FrequencyBrowserPrimary::StandbyFirst);
+  return true;
 }
 
 void

@@ -136,6 +136,9 @@ protected:
   /* virtual methods from class PagerWidget */
   void OnPageFlipped() noexcept override;
 
+  [[gnu::pure]]
+  bool TabDisplayHasFocus() const noexcept;
+
 private:
   /* virtual methods from class TabHandler */
   bool ClickPage(unsigned i) noexcept override;

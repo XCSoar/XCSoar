@@ -1018,18 +1018,26 @@ location=5
 
 mode=Info2
 type=key
-data=8
+data=7
 event=Setup Teamcode
 event=Mode default
 label=Team Code
+location=6
+
+mode=Info2
+type=key
+data=8
+event=FlarmDetails
+event=Mode default
+label=Traffic List
 location=7
 
 mode=Info2
 type=key
 data=9
-event=FlarmDetails
+event=ThermalAssistant
 event=Mode default
-label=Traffic List
+label=Thermal Assistant
 location=8
 
 mode=Info2
@@ -1061,18 +1069,26 @@ location=5
 
 mode=Info3
 type=key
+data=5
+event=FrequencyCard
+event=Mode default
+label=Frequencies
+location=6
+
+mode=Info3
+type=key
 data=7
 event=AirSpace list
 event=Mode default
 label=Airspaces
-location=6
+location=7
 
 mode=Info3
 type=key
 data=8
 event=RepeatStatusMessage
 label=Message Repeat
-location=7
+location=8
 
 mode=Info3
 type=key
@@ -1080,7 +1096,7 @@ data=9
 event=GestureHelp
 event=Mode default
 label=Gesture Help
-location=8
+location=9
 
 mode=Info3
 type=key
@@ -1088,7 +1104,7 @@ data=0
 event=QuickGuide
 event=Mode default
 label=Quick Guide
-location=9
+location=10
 
 # -------------
 # mode=Menu
@@ -1448,10 +1464,18 @@ location=32
 mode=RemoteStick
 type=key
 data=0
+event=FrequencyCard
+event=Mode default
+label=Frequencies
+location=33
+
+mode=RemoteStick
+type=key
+data=0
 event=AirSpace list
 event=Mode default
 label=Airspaces
-location=33
+location=34
 
 # Low priority: System functions (far from center)
 mode=RemoteStick
@@ -1460,14 +1484,14 @@ data=0
 event=Logger show
 event=Logger toggle ask
 label=Logger\n$(LoggerActive)$(CheckLogger)
-location=34
+location=35
 
 mode=RemoteStick
 type=key
 data=0
 event=Logger nmea
 label=NMEA Logger$(CheckLogger)
-location=35
+location=36
 
 mode=RemoteStick
 type=key
@@ -1475,7 +1499,7 @@ data=0
 event=Device list
 event=Mode default
 label=Devices
-location=36
+location=37
 
 mode=RemoteStick
 type=key
@@ -1483,14 +1507,14 @@ data=0
 event=FileManager
 event=Mode default
 label=File Manager
-location=37
+location=38
 
 mode=RemoteStick
 type=key
 data=0
 event=RepeatStatusMessage
 label=Message Repeat
-location=38
+location=39
 
 mode=RemoteStick
 type=key

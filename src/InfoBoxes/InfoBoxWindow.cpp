@@ -260,7 +260,8 @@ InfoBoxWindow::ShowDialog()
   force_draw_selector = true;
   Invalidate();
 
-  dlgInfoBoxAccessShowModeless(id, GetDialogContent());
+  if (content == nullptr || !content->HandleShowDialog(id))
+    dlgInfoBoxAccessShowModeless(id, GetDialogContent());
 
   force_draw_selector = false;
   Invalidate();

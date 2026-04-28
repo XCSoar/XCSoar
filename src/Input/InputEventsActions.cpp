@@ -30,6 +30,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "UIState.hpp"
 #include "Computer/Settings.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/FrequencyBrowserDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/Device/Vega/SwitchesDialog.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
@@ -302,6 +303,16 @@ void
 InputEvents::eventChecklist([[maybe_unused]] const char *misc)
 {
   dlgChecklistShowModal();
+}
+
+// Frequency Card
+// Displays the frequency card dialog
+//  See the frequency card dialog section of the reference manual for more info.
+void
+InputEvents::eventFrequencyCard(const char *misc)
+{
+  const char *tab = (misc != nullptr && *misc != '\0') ? misc : nullptr;
+  ShowFrequencyBrowserDialog(tab);
 }
 
 // Status
