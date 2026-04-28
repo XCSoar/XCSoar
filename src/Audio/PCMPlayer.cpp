@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#if !defined(ANDROID) && !defined(_WIN32)
+#if !defined(ANDROID) && (!defined(_WIN32) || defined(ENABLE_SDL))
 
 #include "PCMPlayer.hpp"
 
