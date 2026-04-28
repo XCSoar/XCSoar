@@ -108,6 +108,11 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
       return true;
     }
 
+    if (type2 == "PFLAO"sv) {
+      ParsePFLAO(line, info.flarm.alert_zones, info.clock);
+      return true;
+    }
+
     if (type2 == "PFLAM"sv) {
       ParsePFLAM(line);
       return true;
