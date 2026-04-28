@@ -440,8 +440,9 @@ compile: $(ANDROID_LIB_BUILD)
 
 # Generate symbols.zip (native debug symbols) for Google Play, which
 # allows Google Play to symbolicate native crash stack traces.
+# Zip from inside lib/ so entries are <ABI>/lib*.so (Play rejects lib/<ABI>/...)
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_SYMBOLICATION_BUILD)
-	cd $(BUNDLE_BUILD_DIR)/symbols && $(ZIP) -r $(abspath $@) lib
+	cd $(BUNDLE_BUILD_DIR)/symbols/lib && $(ZIP) -r $(abspath $@) .
 
 else # !FAT_BINARY
 
@@ -462,13 +463,13 @@ ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
 	$(Q)cp $< $@
 
-# Native debug symbols for Google Play (single-ABI).  Same lib/<ABI>/ layout.
+# Native debug symbols for Google Play (single-ABI).  Staged under lib/<ABI>/.
 ANDROID_NATIVE_SYMBOL_LIBS = $(foreach N,$(ANDROID_LIB_NAMES),$(BUNDLE_BUILD_DIR)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/lib$(N).so)
 $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib/$(ANDROID_APK_LIB_ABI)/dirstamp
 	$(Q)cp $(ABI_BIN_DIR)/lib$*-ns.so $@
 
 $(TARGET_OUTPUT_DIR)/symbols.zip: $(ANDROID_NATIVE_SYMBOL_LIBS)
-	cd $(BUNDLE_BUILD_DIR)/native-debug-symbols && $(ZIP) -r $(abspath $@) lib
+	cd $(BUNDLE_BUILD_DIR)/native-debug-symbols/lib && $(ZIP) -r $(abspath $@) .
 
 endif # !FAT_BINARY
 
