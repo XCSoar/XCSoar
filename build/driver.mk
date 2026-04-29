@@ -68,7 +68,8 @@ FLARM_SOURCES = \
 	$(DRIVER_SRC_DIR)/FLARM/Logger.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/CRC16.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/BinaryProtocol.cpp \
-	$(DRIVER_SRC_DIR)/FLARM/TextProtocol.cpp
+	$(DRIVER_SRC_DIR)/FLARM/TextProtocol.cpp \
+	$(DRIVER_SRC_DIR)/FLARM/Pflam.cpp
 
 FLYTEC_SOURCES = \
 	$(DRIVER_SRC_DIR)/Flytec/Register.cpp \

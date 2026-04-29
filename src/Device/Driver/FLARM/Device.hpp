@@ -7,6 +7,7 @@
 #include "util/AllocatedArray.hxx"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
+#include "RadioFrequency.hpp"
 
 #include <cstdint>
 #include <optional>
@@ -17,6 +18,7 @@ struct Declaration;
 class OperationEnvironment;
 class RecordedFlightList;
 struct RecordedFlightInfo;
+struct NMEAInfo;
 class NMEAInputLine;
 
 class FlarmDevice: public AbstractDevice
@@ -109,6 +111,10 @@ public:
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;
   bool PutPilotEvent(OperationEnvironment &env) override;
+  bool PutActiveFrequency(RadioFrequency frequency, const char *name,
+                          OperationEnvironment &env) override;
+  bool ExchangeRadioFrequencies(OperationEnvironment &env,
+                                NMEAInfo &info) override;
 
   bool GetPilot(char *buffer, size_t length, OperationEnvironment &env);
   bool SetPilot(const char *pilot_name, OperationEnvironment &env);
@@ -147,10 +153,14 @@ public:
   void RunSimulation(unsigned scenario, OperationEnvironment &env);
 
 private:
+  /// Last active frequency for $PFLAM,S VHF (single channel, see FTD-109).
+  RadioFrequency pflam_vhf{RadioFrequency::Null()};
+
   /**
    * Sends the supplied sentence with a $ prepended and a line break appended
    */
   void Send(const char *sentence, OperationEnvironment &env);
+  void SendPflamVhf(OperationEnvironment &env);
   bool Receive(const char *prefix, char *buffer, size_t length,
                OperationEnvironment &env,
                std::chrono::steady_clock::duration timeout);

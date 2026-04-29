@@ -85,6 +85,9 @@ Version 7.45 - not yet released
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
 * devices
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
+  - FLARM: when "Sync to device" is enabled, the active VHF frequency is sent to
+    the unit as $PFLAM,S,VHF (FTD-109); frequency exchange sends the new active
+    only
 * iOS
   - disable Core Location distance filter for built-in GPS so fixes are not
     suppressed while stationary #2380
