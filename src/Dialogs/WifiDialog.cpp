@@ -446,5 +446,6 @@ ShowWifiDialog(UniqueWifiBackend backend)
   dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(std::move(backend));
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.EnableCursorSelection();
   dialog.ShowModal();
 }
