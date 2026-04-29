@@ -297,7 +297,9 @@ Compiling for macOS (with Homebrew)
 
 Install the required Homebrew packages via the provisioning script::
 
-  ./ide/provisioning/install-darwin-packages.sh MACOS
+  ./ide/provisioning/install-darwin-packages.sh BASE MACOS
+
+Note that you always need to install the BASE packages and the specific IOS or MACOS packages.
 
 To compile for macOS / ARM64, run::
 
