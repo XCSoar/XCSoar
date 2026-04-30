@@ -72,6 +72,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
       builder.Append(", XS");
       break;
 
+    case Bottom::XCTHERM:
+      builder.Append(", XCTherm");
+      break;
+
     case Bottom::MAX:
       gcc_unreachable();
     }
