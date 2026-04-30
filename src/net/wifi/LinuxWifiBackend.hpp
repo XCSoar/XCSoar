@@ -25,4 +25,7 @@ void
 SetLinuxWifiRadioEnabled(LinuxWifiBackendKind backend_kind, bool enabled);
 
 UniqueWifiBackend
+CreateLinuxWifiBackend(LinuxWifiBackendKind backend_kind);
+
+UniqueWifiBackend
 CreateLinuxWifiBackend();
