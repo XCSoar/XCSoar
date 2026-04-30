@@ -10,6 +10,7 @@
 
 class DeviceBlackboard;
 class MultipleDevices;
+class TraceComputer;
 
 /**
  * The MergeThread collects new data from the DeviceBlackboard, merges
@@ -19,6 +20,12 @@ class MergeThread final : public WorkerThread {
   DeviceBlackboard &device_blackboard;
 
   MultipleDevices *const devices;
+
+  /**
+   * Optional sink for high-rate netto vario (snail trail colouring).
+   * Must not be called while #DeviceBlackboard::mutex is locked.
+   */
+  TraceComputer *trail_vario_sink = nullptr;
 
   /**
    * The previous values at the time of the last GPS fix (last
@@ -37,7 +44,8 @@ class MergeThread final : public WorkerThread {
 
 public:
   MergeThread(DeviceBlackboard &_device_blackboard,
-              MultipleDevices *_devices) noexcept;
+              MultipleDevices *_devices,
+              TraceComputer *_trail_vario_sink=nullptr) noexcept;
 
   /**
    * This method is called during XCSoar startup, for the initial run

@@ -3,13 +3,16 @@
 
 #include "MergeThread.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "Computer/TraceComputer.hpp"
 #include "Protection.hpp"
 #include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Device/MultipleDevices.hpp"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
-                         MultipleDevices *_devices) noexcept
+                         MultipleDevices *_devices,
+                         TraceComputer *_trail_vario_sink) noexcept
   :WorkerThread("MergeThread",
 #ifdef KOBO
                 /* throttle more on the Kobo, because the EPaper
@@ -22,7 +25,8 @@ MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
 #endif
                 std::chrono::milliseconds{10}),
    device_blackboard(_device_blackboard),
-   devices(_devices)
+   devices(_devices),
+   trail_vario_sink(_trail_vario_sink)
 {
   last_fix.Reset();
   last_any.Reset();
@@ -57,12 +61,28 @@ MergeThread::Tick() noexcept
   double vario;
 #endif
 
+  TracePoint::Time trail_push_time{};
+  float trail_push_vario = 0;
+  bool do_trail_vario_push = false;
+
   {
     const std::lock_guard lock{device_blackboard.mutex};
 
     Process();
 
     const MoreData &basic = device_blackboard.Basic();
+    const DerivedInfo &calculated = device_blackboard.Calculated();
+
+    if (trail_vario_sink != nullptr &&
+        basic.time_available &&
+        basic.location_available &&
+        basic.NavAltitudeAvailable() &&
+        calculated.flight.flying &&
+        basic.netto_vario_available) {
+      do_trail_vario_push = true;
+      trail_push_time = basic.time.Cast<TracePoint::Time>();
+      trail_push_vario = (float)basic.netto_vario;
+    }
 
     /* call Driver::OnSensorUpdate() on all devices */
     if (devices != nullptr)
@@ -91,6 +111,9 @@ MergeThread::Tick() noexcept
         basic.location_available != last_fix.location_available)
       last_fix = basic;
   }
+
+  if (do_trail_vario_push && trail_vario_sink != nullptr)
+    trail_vario_sink->PushMergeVarioSample(trail_push_time, trail_push_vario);
 
 #ifdef HAVE_PCM_PLAYER
   if (vario_available)

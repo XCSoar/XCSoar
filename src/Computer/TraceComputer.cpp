@@ -25,6 +25,7 @@ TraceComputer::Reset()
   {
     const std::lock_guard lock{mutex};
     full.clear();
+    merge_vario_samples.clear();
   }
 
   contest.clear();
@@ -39,6 +40,26 @@ TraceComputer::LockedCopyTo(TracePointVector &v) const
 }
 
 void
+TraceComputer::CopyMergeVarioSamplesUnlocked(
+    std::vector<TrailVarioSample> &vario_samples) const
+{
+  vario_samples.clear();
+  constexpr unsigned max_items = MERGE_VARIO_SAMPLES_CAPACITY - 1;
+  vario_samples.reserve(max_items);
+  for (const auto &s : merge_vario_samples)
+    vario_samples.push_back(s);
+}
+
+void
+TraceComputer::LockedCopySnapshot(TracePointVector &v,
+                                  std::vector<TrailVarioSample> &vario_samples) const
+{
+  const std::lock_guard lock{mutex};
+  full.GetPoints(v);
+  CopyMergeVarioSamplesUnlocked(vario_samples);
+}
+
+void
 TraceComputer::LockedCopyTo(TracePointVector &v,
                             std::chrono::duration<unsigned> min_time,
                             const GeoPoint &location,
@@ -46,6 +67,32 @@ TraceComputer::LockedCopyTo(TracePointVector &v,
 {
   const std::lock_guard lock{mutex};
   full.GetPoints(v, min_time, location, resolution);
+}
+
+void
+TraceComputer::LockedCopySnapshot(TracePointVector &v,
+                                   std::vector<TrailVarioSample> &vario_samples,
+                                   std::chrono::duration<unsigned> min_time,
+                                   const GeoPoint &location,
+                                   double resolution) const
+{
+  const std::lock_guard lock{mutex};
+  full.GetPoints(v, min_time, location, resolution);
+  CopyMergeVarioSamplesUnlocked(vario_samples);
+}
+
+void
+TraceComputer::PushMergeVarioSample(TracePoint::Time time, float vario) noexcept
+{
+  const std::lock_guard lock{mutex};
+  /* Drop stale samples after replay / backward clock jumps; keep samples at
+     equal timestamps (several merge ticks per GPS second). */
+  if (!merge_vario_samples.empty()) {
+    const TracePoint::Time newest = merge_vario_samples.last().time;
+    if (time < newest)
+      merge_vario_samples.clear();
+  }
+  merge_vario_samples.push({time, vario});
 }
 
 void

@@ -121,6 +121,10 @@ public:
     return task_computer.GetTraceComputer();
   }
 
+  TraceComputer &GetTraceComputer() noexcept {
+    return task_computer.GetTraceComputer();
+  }
+
   const ProtectedTaskManager &GetProtectedTaskManager() const {
     return task_computer.GetProtectedTaskManager();
   }

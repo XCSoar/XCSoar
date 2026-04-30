@@ -52,6 +52,10 @@ public:
     return trace;
   }
 
+  TraceComputer &GetTraceComputer() noexcept {
+    return trace;
+  }
+
   void LockedCopyTraceTo(TracePointVector &v) const {
     trace.LockedCopyTo(v);
   }

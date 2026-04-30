@@ -4,9 +4,12 @@
 #pragma once
 
 #include "util/AllocatedArray.hxx"
+#include "Computer/TraceComputer.hpp"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
 #include "time/Stamp.hpp"
+
+#include <vector>
 
 struct PixelPoint;
 struct BulkPixelPoint;
@@ -30,6 +33,7 @@ class TrailRenderer {
   const TrailLook &look;
 
   TracePointVector trace;
+  std::vector<TrailVarioSample> merge_vario_samples;
   AllocatedArray<BulkPixelPoint> points;
 
 public:

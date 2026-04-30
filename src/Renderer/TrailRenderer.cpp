@@ -12,16 +12,77 @@
 #include "Geo/Math.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
 #include "Math/Constants.hpp"
+#include "Math/Point2D.hpp"
 
 #include <algorithm>
+#include <new>
+#include <utility>
 #include <vector>
 #include <cmath>
+
+namespace {
+
+void
+BuildVarioKnots(TracePoint::Time t0, double v0,
+                TracePoint::Time t1, double v1,
+                const std::vector<TrailVarioSample> &samples,
+                std::vector<std::pair<TracePoint::Time, double>> &knots) noexcept
+{
+  knots.clear();
+  if (!(t1 > t0))
+    return;
+
+  knots.reserve(samples.size() + 2);
+  knots.emplace_back(t0, v0);
+  for (const auto &s : samples) {
+    if (s.time > t0 && s.time < t1)
+      knots.emplace_back(s.time, (double)s.vario);
+  }
+  knots.emplace_back(t1, v1);
+  /* merge_vario_samples are time-ordered; unstable sort would scramble ties */
+}
+
+[[gnu::pure]]
+double
+LookupVarioFromKnots(TracePoint::Time t_query,
+                       const std::vector<std::pair<TracePoint::Time, double>> &knots) noexcept
+{
+  if (knots.empty())
+    return 0;
+  if (t_query <= knots.front().first)
+    return knots.front().second;
+  if (t_query >= knots.back().first)
+    return knots.back().second;
+  for (size_t i = 0; i + 1 < knots.size(); ++i) {
+    const auto &a = knots[i];
+    const auto &b = knots[i + 1];
+    if (t_query <= b.first) {
+      const double da = (double)a.first.count();
+      const double db = (double)b.first.count();
+      const double dq = (double)t_query.count();
+      if (db <= da)
+        return b.second;
+      const double u = (dq - da) / (db - da);
+      return a.second * (1. - u) + b.second * u;
+    }
+  }
+  return knots.back().second;
+}
+
+} // namespace
 
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer) noexcept
 {
   trace.clear();
-  trace_computer.LockedCopyTo(trace);
+  merge_vario_samples.clear();
+  try {
+    trace_computer.LockedCopySnapshot(trace, merge_vario_samples);
+  } catch (const std::bad_alloc &) {
+    trace.clear();
+    merge_vario_samples.clear();
+    return false;
+  }
   return !trace.empty();
 }
 
@@ -31,10 +92,17 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
                          const WindowProjection &projection) noexcept
 {
   trace.clear();
-  trace_computer.LockedCopyTo(trace,
-                              min_time.Cast<std::chrono::duration<unsigned>>(),
-                              projection.GetGeoScreenCenter(),
-                              projection.DistancePixelsToMeters(3));
+  merge_vario_samples.clear();
+  try {
+    trace_computer.LockedCopySnapshot(trace, merge_vario_samples,
+                                      min_time.Cast<std::chrono::duration<unsigned>>(),
+                                      projection.GetGeoScreenCenter(),
+                                      projection.DistancePixelsToMeters(3));
+  } catch (const std::bad_alloc &) {
+    trace.clear();
+    merge_vario_samples.clear();
+    return false;
+  }
   return !trace.empty();
 }
 
@@ -123,24 +191,22 @@ CatmullRomInterpolate(const PixelPoint &p0, const PixelPoint &p1,
 }
 
 /**
- * Calculate the angle between two vectors (in degrees)
+ * Turn angle at \a p1 between segments p0–p1 and p1–p2 (degrees).
  */
 [[gnu::pure]]
 static double
 CalculateAngle(const PixelPoint &p0, const PixelPoint &p1, const PixelPoint &p2) noexcept
 {
-  const int dx1 = p1.x - p0.x;
-  const int dy1 = p1.y - p0.y;
-  const int dx2 = p2.x - p1.x;
-  const int dy2 = p2.y - p1.y;
-  
-  const double len1 = std::sqrt(dx1 * dx1 + dy1 * dy1);
-  const double len2 = std::sqrt(dx2 * dx2 + dy2 * dy2);
-  
+  const IntPoint2D v1 = p1 - p0;
+  const IntPoint2D v2 = p2 - p1;
+
+  const double len1 = v1.Magnitude();
+  const double len2 = v2.Magnitude();
+
   if (len1 < 1.0 || len2 < 1.0)
     return 0.0;
-  
-  const double dot = (dx1 * dx2 + dy1 * dy2) / (len1 * len2);
+
+  const double dot = DotProduct(v1, v2) / (len1 * len2);
   const double clamped = std::clamp(dot, -1.0, 1.0);
   return std::acos(clamped) * 180.0 / M_PI;
 }
@@ -244,6 +310,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   struct PointData {
     PixelPoint point;
     double value; // vario or altitude
+    TracePoint::Time time{};
   };
   std::vector<PointData> valid_points;
   valid_points.reserve(trace.size());
@@ -260,7 +327,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     const double value = (settings.type == TrailSettings::Type::ALTITUDE)
       ? i.GetAltitude() : i.GetVario();
 
-    valid_points.push_back({pt, value});
+    valid_points.push_back({pt, value, i.GetTime()});
   }
 
   if (valid_points.empty())
@@ -333,19 +400,54 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       if (use_smoothing && i >= 1) {
         // Use spline interpolation for smooth curves
         auto interpolated = InterpolateSegment(p0, p1, p2, p3, num_segments);
-        
+
+        std::vector<std::pair<TracePoint::Time, double>> vario_knots;
+        const bool use_merge_vario =
+          settings.type != TrailSettings::Type::ALTITUDE &&
+          !merge_vario_samples.empty();
+        if (use_merge_vario)
+          BuildVarioKnots(prev_data.time, prev_data.value,
+                          curr_data.time, curr_data.value,
+                          merge_vario_samples, vario_knots);
+
+        /* Colour parameter spans drawn line pieces (n−1), not vertex count n */
+        const double piece_count =
+          interpolated.size() > 1
+            ? static_cast<double>(interpolated.size() - 1)
+            : 1.0;
+
         // Interpolate values for smooth color transitions
         for (size_t j = 0; j + 1 < interpolated.size(); ++j) {
-          const double t = static_cast<double>(j + 1) / interpolated.size();
-          const double interp_value = prev_data.value * (1.0 - t) + curr_data.value * t;
-          
+          double interp_value;
+          if (settings.type == TrailSettings::Type::ALTITUDE) {
+            const double t =
+              static_cast<double>(j + 1) / piece_count;
+            interp_value =
+              prev_data.value * (1.0 - t) + curr_data.value * t;
+          } else if (use_merge_vario && !vario_knots.empty()) {
+            const double u =
+              static_cast<double>(j + 0.5) / piece_count;
+            const double tc =
+              (double)prev_data.time.count() +
+              ((double)curr_data.time.count() -
+               (double)prev_data.time.count()) *
+                u;
+            const TracePoint::Time t_query(
+              std::chrono::duration<unsigned>((unsigned)std::lround(tc)));
+            interp_value = LookupVarioFromKnots(t_query, vario_knots);
+          } else {
+            const double t =
+              static_cast<double>(j + 1) / piece_count;
+            interp_value =
+              prev_data.value * (1.0 - t) + curr_data.value * t;
+          }
+
           unsigned seg_color_index;
           if (settings.type == TrailSettings::Type::ALTITUDE) {
             seg_color_index = GetAltitudeColorIndex(interp_value, value_min, value_max);
           } else {
             seg_color_index = GetSnailColorIndex(interp_value, value_min, value_max);
           }
-
 
           if (scaled_trail)
             canvas.Select(look.scaled_trail_pens[seg_color_index]);

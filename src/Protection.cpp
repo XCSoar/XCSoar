@@ -75,8 +75,10 @@ CreateCalculationThread() noexcept
 
   /* create and run MergeThread, because GlideComputer's first
      iteration depends on MergeThread's results */
-  backend_components->merge_thread = std::make_unique<MergeThread>(*backend_components->device_blackboard,
-                                                                   backend_components->devices.get());
+  backend_components->merge_thread =
+    std::make_unique<MergeThread>(*backend_components->device_blackboard,
+                                  backend_components->devices.get(),
+                                  &backend_components->glide_computer->GetTraceComputer());
   backend_components->merge_thread->FirstRun();
 
   /* copy the MergeThead::FirstRun() results to the
