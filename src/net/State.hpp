@@ -21,6 +21,10 @@ enum class NetState {
   ROAMING,
 };
 
+struct NetStateText {
+  static const char *ToString(NetState state) noexcept;
+};
+
 /**
  * Do we have an internet connection?
  */
