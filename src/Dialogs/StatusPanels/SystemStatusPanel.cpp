@@ -38,20 +38,6 @@ GetGPSStatus(const NMEAInfo &basic) noexcept
     return N_("3D fix");
 }
 
-static const char *const net_state_strings[] = {
-  N_("Unknown"),
-  N_("Disconnected"),
-  N_("Connected"),
-  N_("Roaming"),
-};
-
-[[gnu::pure]]
-static const char *
-ToString(NetState state) noexcept
-{
-  return gettext(net_state_strings[unsigned(state)]);
-}
-
 void
 SystemStatusPanel::Refresh() noexcept
 {
@@ -114,7 +100,7 @@ SystemStatusPanel::Refresh() noexcept
 
   SetText(Battery, Temp);
 
-  SetText(Network, ToString(GetNetState()));
+  SetText(Network, NetStateText::ToString(GetNetState()));
 }
 
 void

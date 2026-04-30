@@ -3,6 +3,21 @@
 
 #include "State.hpp"
 
+#include "Language/Language.hpp"
+
+static const char *const net_state_strings[] = {
+  N_("Unknown"),
+  N_("Disconnected"),
+  N_("Connected"),
+  N_("Roaming"),
+};
+
+const char *
+NetStateText::ToString(NetState state) noexcept
+{
+  return gettext(net_state_strings[unsigned(state)]);
+}
+
 #ifdef ANDROID
 #define NO_SCREEN
 #include "Android/Main.hpp"
