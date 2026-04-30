@@ -145,6 +145,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     case Bottom::EDL_CONTROLS:
       break;
 
+    case Bottom::XCTHERM:
+      builder.Append(", XCTherm");
+      break;
+
     case Bottom::MAX:
       gcc_unreachable();
     }

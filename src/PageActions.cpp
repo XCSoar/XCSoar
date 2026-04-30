@@ -16,11 +16,15 @@
 #include "Components.hpp"
 #include "DataGlobals.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "ActionInterface.hpp"
 #ifdef HAVE_EDL
 #include "Dialogs/Weather/MapOverlayControlsWidget.hpp"
 #include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/StateController.hpp"
+#endif
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_HTTP
+#include "Dialogs/Weather/XCThermControlsWidget.hpp"
 #endif
 
 #if defined(ENABLE_SDL) && defined(main)
@@ -345,6 +349,12 @@ LoadBottom(const PageLayout &layout)
     CommonInterface::main_window->SetBottomWidget(nullptr);
 #endif
     break;
+
+#ifdef HAVE_HTTP
+  case PageLayout::Bottom::XCTHERM:
+    CommonInterface::main_window->SetBottomWidget(new XCThermControlsWidget());
+    break;
+#endif
 
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */
