@@ -13,8 +13,9 @@
 #include <string>
 
 #if defined(HAVE_LINUX_NET_WIFI)
+#include "net/State.hpp"
 #include "net/wifi/LinuxWifiBackend.hpp"
-#include "net/wifi/WifiFormat.hpp"
+#include "net/wifi/WifiError.hpp"
 #endif
 
 #if defined(HAVE_LINUX_NET_WIFI)
@@ -31,38 +32,15 @@ BackendName(LinuxWifiBackendKind b) noexcept
     return _("ConnMan");
   }
 
-  return "";
-}
-
-static StaticString<256>
-FormatStatusLine(const WifiBackendStatus &status)
-{
-  StaticString<256> text;
-
-  switch (status.state) {
-  case WifiConnectionState::Connected:
-    if (!status.ssid.empty())
-      text.Format(_("Connected to %s"), status.ssid.c_str());
-    else
-      text = FormatWifiConnectionStateLabel(status.state);
-    break;
-
-  case WifiConnectionState::Connecting:
-  case WifiConnectionState::Disconnected:
-  case WifiConnectionState::Unknown:
-  case WifiConnectionState::COUNT:
-    text = FormatWifiConnectionStateLabel(status.state);
-    break;
-  }
-
-  return text;
+  return _("Unknown");
 }
 
 class NetworkConfigWidget final
   : public RowFormWidget, public DataFieldListener {
   LinuxWifiBackendKind backend_kind = LinuxWifiBackendKind::None;
 
-  unsigned row_status{0}, row_backend{0}, row_radio{0};
+  unsigned row_status{0}, row_connectivity{0}, row_ip{0};
+  unsigned row_backend{0}, row_radio{0};
   bool have_radio{false};
 
 public:
@@ -93,6 +71,16 @@ NetworkConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
       "D-Bus (e.g. Linux with Wayland or KMS). Open WiFi list to scan and "
       "connect when a service is available."),
     _("Checking network services..."));
+  row_connectivity = n++;
+  AddReadOnly(
+    _("Connectivity"),
+    _("Current network connectivity state."),
+    NetStateText::ToString(NetState::UNKNOWN));
+  row_ip = n++;
+  AddReadOnly(
+    _("IP address"),
+    _("IPv4 address of the active WiFi interface."),
+    _("Unknown"));
   row_backend = n++;
   AddReadOnly(
     _("Backend"),
@@ -124,10 +112,9 @@ NetworkConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
 
       ShowWifiDialog(std::move(backend));
       OnRefresh();
-    } catch (const std::exception &e) {
-      ShowMessageBox(e.what(), _("Network"), MB_OK);
     } catch (...) {
-      ShowMessageBox(_("The operation failed."), _("Network"), MB_OK);
+      const auto message = WifiError::Format(std::current_exception());
+      ShowMessageBox(message.c_str(), _("Network"), MB_OK);
     }
   });
 
@@ -137,21 +124,34 @@ NetworkConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
 void
 NetworkConfigWidget::OnRefresh() noexcept
 {
+  const auto set_error_state = [this](const char *status) {
+    SetText(row_status, status);
+    SetText(row_connectivity, NetStateText::ToString(NetState::UNKNOWN));
+    SetText(row_ip, _("Unknown"));
+    SetText(row_backend, _("Unknown"));
+  };
+
   try {
     backend_kind = QueryLinuxWifiBackendKind();
     SetText(row_backend, BackendName(backend_kind));
+    SetText(row_connectivity, NetStateText::ToString(GetNetState()));
 
-    auto backend = CreateLinuxWifiBackend();
+    auto backend = CreateLinuxWifiBackend(backend_kind);
     if (backend == nullptr) {
       SetText(row_status,
               _("No network service (NetworkManager or ConnMan) found on D-Bus."));
+      SetText(row_ip, _("Unknown"));
     } else {
-      SetText(row_status, FormatStatusLine(backend->GetBackendStatus()));
+      const auto status = backend->GetBackendStatus();
+      SetText(row_status, WifiBackendStatus::Format(status));
+      SetText(row_ip, WifiBackendStatus::FormatIpAddress(status));
     }
 
     if (have_radio)
       LoadValue(row_radio, GetLinuxWifiRadioEnabled(backend_kind));
   } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    set_error_state(message.c_str());
   }
 }
 
@@ -163,9 +163,9 @@ NetworkConfigWidget::OnModified(DataField &df) noexcept
     try {
       SetLinuxWifiRadioEnabled(backend_kind, GetValueBoolean(row_radio));
       OnRefresh();
-    } catch (const std::exception &e) {
-      ShowMessageBox(e.what(), _("Network"), MB_OK);
     } catch (...) {
+      const auto message = WifiError::Format(std::current_exception());
+      ShowMessageBox(message.c_str(), _("Network"), MB_OK);
     }
   }
 }
