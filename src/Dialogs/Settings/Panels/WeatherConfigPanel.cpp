@@ -27,6 +27,7 @@ enum ControlIndex {
   ENABLE_TIM,
   XCTHERM_ENABLED,
   XCTHERM_SHOW_ON_MAIN_MAP,
+  XCTHERM_AUTO_SWITCH,
   XCTHERM_EMAIL,
   XCTHERM_PASSWORD,
 #endif
@@ -82,6 +83,10 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
              "Show XCTherm forecast overlay on normal map pages.",
              settings.xctherm.show_on_main_map);
 
+  AddBoolean("XCTherm Auto Layer/Time",
+             "Automatically switch altitude layer based on GPS altitude and forecast time based on UTC clock.",
+             settings.xctherm.auto_switch);
+
   AddText("XCTherm email",
           "Email address for your XCTherm account.",
           settings.xctherm.credentials.email);
@@ -128,6 +133,10 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(XCTHERM_SHOW_ON_MAIN_MAP,
                        ProfileKeys::XCThermShowOnMainMap,
                        settings.xctherm.show_on_main_map);
+
+  changed |= SaveValue(XCTHERM_AUTO_SWITCH,
+                       ProfileKeys::XCThermAutoSwitch,
+                       settings.xctherm.auto_switch);
 
   changed |= SaveValue(XCTHERM_EMAIL, ProfileKeys::XCThermEmail,
                        settings.xctherm.credentials.email);

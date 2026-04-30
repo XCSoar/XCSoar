@@ -31,6 +31,12 @@ struct XCThermSettings {
 #ifdef HAVE_HTTP
   bool enabled;
   bool show_on_main_map;
+
+  /**
+   * Automatically switch altitude layer and forecast time
+   * based on current GPS altitude and UTC time.
+   */
+  bool auto_switch;
 #endif
 
   WeatherCredentialsSettings credentials;
@@ -43,6 +49,7 @@ struct XCThermSettings {
 #ifdef HAVE_HTTP
     enabled = true;
     show_on_main_map = false;
+    auto_switch = true;
 #endif
 
     credentials.SetDefaults();

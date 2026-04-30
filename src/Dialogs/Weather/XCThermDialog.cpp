@@ -23,7 +23,13 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "util/StaticString.hxx"
 #include "Weather/xctherm/XCThermAuth.hpp"
+#include "Weather/xctherm/XCThermGeoJSON.hpp"
+#include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "LogFile.hpp"
+
+#include <fstream>
+#include <sstream>
 
 namespace {
 
@@ -32,34 +38,35 @@ constexpr unsigned XCTHERM_MODEL_UK = 1;
 
 struct LayerInfo {
   const char *label;       // display text
+  const char *file_suffix; // e.g. "5000amsl" or "100agl"
   unsigned value;          // altitude value in meters
   bool is_agl;             // true = AGL, false = AMSL
 };
 
 static constexpr LayerInfo CH_LAYERS[] = {
-  { "Vertical wind 1500 m AMSL", 1500, false },
-  { "Vertical wind 2000 m AMSL", 2000, false },
-  { "Vertical wind 3000 m AMSL", 3000, false },
-  { "Vertical wind 4000 m AMSL", 4000, false },
-  { "Vertical wind 5000 m AMSL", 5000, false },
-  { "Vertical wind 6000 m AMSL", 6000, false },
-  { "Vertical wind 7000 m AMSL", 7000, false },
-  { "Vertical wind 8000 m AMSL", 8000, false },
-  { "Vertical wind 100 m AGL",   100,  true },
-  { "Vertical wind 400 m AGL",   400,  true },
+  { "Vertical wind 1500 m AMSL", "1500amsl", 1500, false },
+  { "Vertical wind 2000 m AMSL", "2000amsl", 2000, false },
+  { "Vertical wind 3000 m AMSL", "3000amsl", 3000, false },
+  { "Vertical wind 4000 m AMSL", "4000amsl", 4000, false },
+  { "Vertical wind 5000 m AMSL", "5000amsl", 5000, false },
+  { "Vertical wind 6000 m AMSL", "6000amsl", 6000, false },
+  { "Vertical wind 7000 m AMSL", "7000amsl", 7000, false },
+  { "Vertical wind 8000 m AMSL", "8000amsl", 8000, false },
+  { "Vertical wind 100 m AGL",   "100agl",   100,  true },
+  { "Vertical wind 400 m AGL",   "400agl",   400,  true },
 };
 
 static constexpr LayerInfo UK_LAYERS[] = {
-  { "Vertical wind 1000 m AMSL", 1000, false },
-  { "Vertical wind 1500 m AMSL", 1500, false },
-  { "Vertical wind 2000 m AMSL", 2000, false },
-  { "Vertical wind 2500 m AMSL", 2500, false },
-  { "Vertical wind 3000 m AMSL", 3000, false },
-  { "Vertical wind 4200 m AMSL", 4200, false },
-  { "Vertical wind 100 m AGL",   100,  true },
-  { "Vertical wind 200 m AGL",   200,  true },
-  { "Vertical wind 400 m AGL",   400,  true },
-  { "Vertical wind 800 m AGL",   800,  true },
+  { "Vertical wind 1000 m AMSL", "1000amsl", 1000, false },
+  { "Vertical wind 1500 m AMSL", "1500amsl", 1500, false },
+  { "Vertical wind 2000 m AMSL", "2000amsl", 2000, false },
+  { "Vertical wind 2500 m AMSL", "2500amsl", 2500, false },
+  { "Vertical wind 3000 m AMSL", "3000amsl", 3000, false },
+  { "Vertical wind 4200 m AMSL", "4200amsl", 4200, false },
+  { "Vertical wind 100 m AGL",   "100agl",   100,  true },
+  { "Vertical wind 200 m AGL",   "200agl",   200,  true },
+  { "Vertical wind 400 m AGL",   "400agl",   400,  true },
+  { "Vertical wind 800 m AGL",   "800agl",   800,  true },
 };
 
 [[gnu::pure]]
@@ -321,12 +328,96 @@ XCThermWidget::ActivateClicked()
 void
 XCThermWidget::UpdateClicked()
 {
-  /* TODO: trigger actual tile download via XCThermAPI */
-  ShowMessageBox(
-    "Update not yet implemented.\n\n"
-    "This will download the forecast tiles\n"
-    "for the currently active layer.",
-    "XCTherm", MB_OK);
+  auto *map = UIGlobals::GetMap();
+  if (map == nullptr) {
+    ShowMessageBox("Map not available.", "XCTherm", MB_OK);
+    return;
+  }
+
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+
+  /* Find the active layer */
+  size_t count = 0;
+  const auto *layers = GetLayers(settings.model, count);
+
+  const LayerInfo *active = nullptr;
+  for (unsigned i = 0; i < count; ++i) {
+    if (IsActiveLayer(layers[i], settings.parameter,
+                      settings.wave_height,
+                      settings.vertical_wind_agl)) {
+      active = &layers[i];
+      break;
+    }
+  }
+
+  if (active == nullptr) {
+    ShowMessageBox("No layer activated.\nSelect a layer and press Activate first.",
+                   "XCTherm", MB_OK);
+    return;
+  }
+
+  /* Build path to local example GeoJSON file.
+   * TODO: replace with HTTP download from XCTherm API */
+  StaticString<256> filename;
+  filename.Format("vertical_wind_%s.geojson", active->file_suffix);
+
+  /* Try unzipped first, then zipped */
+  const std::string base_path =
+    "/Users/pheinrich/Documents/Fliegen/xctherm/xcsoar_wave/geojson_example/";
+  std::string file_path = base_path + filename.c_str();
+
+  /* Check if the unzipped file is in a subdirectory (macOS unzip artifact) */
+  std::ifstream file(file_path);
+  if (!file.is_open()) {
+    /* Try subdirectory */
+    file_path = base_path + filename.c_str() + "/" + filename.c_str();
+    file.open(file_path);
+  }
+
+  if (!file.is_open()) {
+    StaticString<512> msg;
+    msg.Format("File not found:\n%s\n\nPlease unzip the .geojson.zip first.",
+               filename.c_str());
+    ShowMessageBox(msg, "XCTherm", MB_OK);
+    return;
+  }
+
+  LogFmt("xctherm: loading {}", file_path);
+
+  /* Read entire file */
+  std::ostringstream ss;
+  ss << file.rdbuf();
+  file.close();
+  std::string content = ss.str();
+
+  LogFmt("xctherm: read {} bytes", content.size());
+
+  /* Parse GeoJSON */
+  auto forecast = XCThermGeoJSON::Parse(content, true);
+
+  if (forecast.IsEmpty()) {
+    ShowMessageBox("GeoJSON parsed but no data found.", "XCTherm", MB_OK);
+    return;
+  }
+
+  forecast.layer_name = active->label;
+
+  /* Capture stats before move */
+  const unsigned n_polys = forecast.TotalPolygons();
+  const unsigned n_bands = forecast.bands.size();
+
+  /* Create overlay and set it on the map */
+  auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
+  overlay->SetForecast(std::move(forecast), active->label);
+  map->SetOverlay(std::move(overlay));
+
+  StaticString<256> msg;
+  msg.Format("Loaded: %s\n%u polygons in %u wind bands.",
+             active->label, n_polys, n_bands);
+  ShowMessageBox(msg, "XCTherm", MB_OK);
+
+  UpdateList();
 }
 
 void

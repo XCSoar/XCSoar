@@ -281,6 +281,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 #ifdef HAVE_EDL
     { PageLayout::Bottom::EDL_CONTROLS, N_("Weather controls") },
 #endif
+#ifdef HAVE_HTTP
+    { PageLayout::Bottom::XCTHERM, N_("XCTherm") },
+#endif
     nullptr
   };
   AddEnum(_("Bottom area"),

@@ -315,6 +315,7 @@ constexpr std::string_view MasterAudioVolume = "MasterAudioVolume";
 constexpr std::string_view RaspFile = "RaspFile";
 constexpr std::string_view XCThermEnabled = "XCThermEnabled";
 constexpr std::string_view XCThermShowOnMainMap = "XCThermShowOnMainMap";
+constexpr std::string_view XCThermAutoSwitch = "XCThermAutoSwitch";
 constexpr std::string_view XCThermEmail = "XCThermEmail";
 constexpr std::string_view XCThermPassword = "XCThermPassword";
 constexpr std::string_view XCThermModel = "XCThermModel";
