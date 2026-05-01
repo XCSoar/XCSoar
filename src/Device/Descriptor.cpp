@@ -993,6 +993,9 @@ DeviceDescriptor::PutPolar(const GlidePolar &polar,
       config.polar_sync != DeviceConfig::PolarSync::SEND)
     return true;
 
+  if (driver == nullptr || !driver->CanSendPolar())
+    return true;
+
   if (!Borrow())
     return false;
 

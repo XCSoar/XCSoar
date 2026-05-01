@@ -20,6 +20,7 @@
 #include "Operation/Operation.hpp"
 #include "time/PeriodClock.hpp"
 
+#include <atomic>
 #include <cassert>
 
 using std::string_view_literals::operator""sv;
@@ -36,8 +37,8 @@ class ACDDevice : public AbstractDevice {
    * PutStandbyFrequency.  CHN1 is read-only on the ACD; tuning active uses
    * CHN2 + swap + restore (see PutActiveFrequency).
    */
-  unsigned cached_com_standby_khz = 0;
-  bool com_standby_khz_known = false;
+  std::atomic<unsigned> cached_com_standby_khz{0};
+  std::atomic<bool> com_standby_khz_known{false};
 
 public:
   ACDDevice(Port &_port):port(_port) {}
@@ -110,8 +111,9 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info, ACDDevice *dev) noexcept
       info.settings.has_standby_frequency.Update(info.clock);
       info.settings.standby_frequency = RadioFrequency::FromKiloHertz(value);
       if (dev != nullptr) {
-        dev->cached_com_standby_khz = uround(value);
-        dev->com_standby_khz_known = true;
+        dev->cached_com_standby_khz.store(uround(value),
+                                          std::memory_order_relaxed);
+        dev->com_standby_khz_known.store(true, std::memory_order_relaxed);
       }
     }
 
@@ -211,10 +213,11 @@ ACDDevice::PutActiveFrequency(RadioFrequency frequency,
    LK8000 devAirControlDisplay: load standby (CHN2) with the desired active,
    swap active/standby, then restore the previous standby on CHN2.
    */
-  if (!com_standby_khz_known)
+  if (!com_standby_khz_known.load(std::memory_order_relaxed))
     return false;
 
-  const unsigned old_standby_khz = cached_com_standby_khz;
+  const unsigned old_standby_khz =
+    cached_com_standby_khz.load(std::memory_order_relaxed);
   const unsigned new_active_khz = frequency.GetKiloHertz();
 
   char buffer[100];
@@ -247,8 +250,8 @@ ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
   unsigned freq = frequency.GetKiloHertz();
   sprintf(buffer, "PAAVC,S,COM,CHN2,%u", freq);
   PortWriteNMEA(port, buffer, env);
-  cached_com_standby_khz = freq;
-  com_standby_khz_known = true;
+  cached_com_standby_khz.store(freq, std::memory_order_relaxed);
+  com_standby_khz_known.store(true, std::memory_order_relaxed);
   return true;
 }
 
