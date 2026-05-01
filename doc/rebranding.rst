@@ -58,6 +58,16 @@ Android Configuration
 ``ANDROID_PACKAGE``
   Android package name in reverse domain notation (e.g., ``"org.xcsoar"``).
 
+Web URLs
+--------
+
+``PRODUCT_WEB_SITE_URL``
+  Project home page (default ``https://xcsoar.org/``), used e.g. in command-line
+  ``--help`` footers.
+
+``PRODUCT_BUGS_URL``
+  Bug tracker or contact URL (default XCSoar GitHub issues), same use cases.
+
 Data Directory Paths
 --------------------
 

@@ -30,6 +30,15 @@
 #define ANDROID_PACKAGE "org.xcsoar"
 #endif
 
+/* HTTPS URLs for --help footers, credits, etc.; override when rebranding. */
+#ifndef PRODUCT_WEB_SITE_URL
+#define PRODUCT_WEB_SITE_URL "https://xcsoar.org/"
+#endif
+
+#ifndef PRODUCT_BUGS_URL
+#define PRODUCT_BUGS_URL "https://github.com/XCSoar/XCSoar/issues"
+#endif
+
 /* Data directory names by platform:
  * - Windows: %LOCALAPPDATA%\XCSoarData
  * - macOS: ~/XCSoarData (visible, macOS users prefer this)
