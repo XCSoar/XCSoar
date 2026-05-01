@@ -110,6 +110,12 @@ QNHProcessTimer(OperationEnvironment &env) noexcept
     settings_computer.pressure = basic.settings.qnh;
     settings_computer.pressure_available = basic.settings.qnh_available;
     modified = true;
+
+    /* Propagate to every device that accepts QNH (e.g. LXNAV), not only when
+       DerivedInfo pressure changes.  Without this, QNH learned from one port
+       (e.g. AIR Control Display) updated XCSoar but was never sent to others. */
+    if (backend_components && backend_components->devices)
+      backend_components->devices->PutQNH(settings_computer.pressure, env);
   }
 
   if (calculated.pressure_available.Modified(settings_computer.pressure_available)) {
