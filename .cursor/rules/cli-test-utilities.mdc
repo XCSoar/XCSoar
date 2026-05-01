@@ -1,0 +1,58 @@
+---
+description: CLI conventions for XCSoar test harness programs (flags, stdout/stderr)
+globs: test/**/*.cpp
+alwaysApply: false
+---
+
+# Command-Line Test Utilities (Loose Standards)
+
+XCSoar is **not** a GNU package. When adding or editing **standalone test /
+debug executables** under `test/`, aim for behaviour familiar from common Unix
+tools and the **spirit** of GNU Coding Standards §4.8 (POSIX-style options where
+reasonable), without implying FSF/GNU affiliation.
+
+## `--help` / `-h`
+
+- Write **brief** invocation and option summary to **standard output**.
+- Exit with **success** (`EXIT_SUCCESS`). Do not run the tool’s main job.
+- After `--help` is seen, **do not** process further options/arguments (caller
+  exits immediately).
+- End with two footer lines pointing at **this project**, not generic GNU support:
+  - `Report bugs to: <PRODUCT_BUGS_URL>`
+  - `<PRODUCT_NAME> home page: <PRODUCT_WEB_SITE_URL>`
+- Define URLs in `src/ProductName.hpp` (`PRODUCT_BUGS_URL`,
+  `PRODUCT_WEB_SITE_URL`) so forks can rebrand.
+
+## `--version`
+
+- Write to **standard output**, exit **success**. Ignore remaining arguments once
+  seen (same pattern as `--help`).
+- Use a **constant canonical program name** (string literal); **do not** derive
+  the primary name from `argv[0]` (paths vary).
+- Typical first line shape: `toolname (PRODUCT_NAME) <version>` using strings
+  from `Version.hpp` (e.g. `XCSoar_Version` or `XCSoar_VersionString`).
+- `CompileDateYear()` in `Version.hpp`; `PrintStandardVersion(...)` in
+  `system/StandardVersion.hpp` / `system/StandardVersion.cpp`.
+- Include short **GPLv2+** notice with license URL where appropriate for shipped
+  binaries.
+
+## Usage errors and diagnostics
+
+- Wrong/missing operands: print short **`Usage:`** on **stderr** (e.g. via
+  `Args::UsageError()`), **non-zero** exit.
+- Operational errors (unknown polar, I/O failure): message on **stderr**,
+  sensible exit code (often non-zero).
+
+## Streams
+
+- **stdout**: normal tool output and **`--help` / `--version`** text.
+- **stderr**: usage errors, warnings, failure diagnostics.
+
+## Implementation hints
+
+- Shared replay helpers live under `test/src/` (e.g. `DebugReplay`,
+  `CreateDebugReplay`); keep CLI parsing in the tool’s `main` / option scanner.
+- Document new harness programs in `doc/test_debug_utilities.rst`.
+- **RunFlyingComputer**: built-in default glide polar when `--polar` is omitted;
+  do **not** add a `--polar-default` flag — omission is the only way to select
+  that default.
