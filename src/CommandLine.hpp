@@ -57,6 +57,20 @@ namespace CommandLine {
 #endif
 
 /**
+ * Multi-line option text for Args (printed by UsageError on stderr);
+ * begins with a newline.
+ */
+[[nodiscard]] const char *
+OptionSummary() noexcept;
+
+/**
+ * Print full option summary to standard output (--help), then the caller
+ * should exit successfully.
+ */
+void
+PrintHelp() noexcept;
+
+/**
  * Reads and parses arguments/options from the command line
  * @param CommandLine command line argument string
  */

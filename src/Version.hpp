@@ -13,3 +13,14 @@ extern const char XCSoar_VersionString[];
 extern const char XCSoar_VersionStringOld[];
 /** XCSoar v5.2.5F-PC */
 extern const char XCSoar_ProductToken[];
+
+/**
+ * Four-digit calendar year from the compiler's \c __DATE__ macro (format
+ * "MMM DD YYYY").  The value is fixed when each translation unit is compiled.
+ */
+[[nodiscard]] constexpr int
+CompileDateYear() noexcept
+{
+  return (__DATE__[7] - '0') * 1000 + (__DATE__[8] - '0') * 100 +
+         (__DATE__[9] - '0') * 10 + (__DATE__[10] - '0');
+}

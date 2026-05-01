@@ -1574,6 +1574,7 @@ RUN_FLYING_COMPUTER_SOURCES = \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
 	$(TEST_SRC_DIR)/RunFlyingComputer.cpp
 RUN_FLYING_COMPUTER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL UNITS
 $(eval $(call link-program,RunFlyingComputer,RUN_FLYING_COMPUTER))

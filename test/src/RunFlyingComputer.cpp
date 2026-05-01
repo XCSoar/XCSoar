@@ -11,7 +11,7 @@
 #include "Plane/Plane.hpp"
 #include "ProductName.hpp"
 #include "Version.hpp"
-#include "util/CompileDate.hxx"
+#include "system/StandardVersion.hpp"
 #include "util/Macros.hpp"
 #include "util/StringCompare.hxx"
 
@@ -22,12 +22,7 @@
 /** Canonical name for `--version` (do not derive from argv[0]). */
 static constexpr const char canonical_name[] = "RunFlyingComputer";
 
-/**
- * `--help`: brief how-to-invoke text on standard output, then exit
- * successfully — same idea as GNU Coding Standards §4.8.2 / common CLI tools,
- * without implying this program is part of the GNU project.  Closing lines
- * point at XCSoar bug tracking and the project site only.
- */
+/** Print usage and project URLs to stdout (for --help). */
 static void
 PrintStandardHelp() noexcept
 {
@@ -51,24 +46,6 @@ PrintStandardHelp() noexcept
       "%s home page: <%s>\n",
       canonical_name, canonical_name, PRODUCT_BUGS_URL, PRODUCT_NAME,
       PRODUCT_WEB_SITE_URL);
-}
-
-/**
- * `--version`: name, version, copyright and license on standard output
- * (same spirit as GNU Coding Standards §4.8.1).
- */
-static void
-PrintStandardVersion() noexcept
-{
-  std::printf("%s (%s) %s\n"
-              "Copyright (C) %d The XCSoar Project\n"
-              "License GPLv2+: GNU GPL version 2 or later "
-              "<https://www.gnu.org/licenses/gpl.html>\n"
-              "This is free software: you are free to change and "
-              "redistribute it.\n"
-              "There is NO WARRANTY, to the extent permitted by law.\n",
-              canonical_name, PRODUCT_NAME, XCSoar_Version,
-              CompileDateYear());
 }
 
 [[gnu::pure]]
@@ -136,9 +113,7 @@ ApplyPolarOption(bool &have_override, GlidePolar &polar_override,
   have_override = true;
 }
 
-/**
- * Strips leading optional arguments from `args`.
- */
+/** Consume optional flags at the start of the command line. */
 static void
 ParsePolarCliOptions(Args &args, bool &have_override,
                      GlidePolar &polar_override, bool &list_polars) noexcept
@@ -157,7 +132,7 @@ ParsePolarCliOptions(Args &args, bool &have_override,
 
     if (StringIsEqual(peek, "--version")) {
       args.Skip();
-      PrintStandardVersion();
+      PrintStandardVersion(canonical_name, XCSoar_Version);
       std::exit(EXIT_SUCCESS);
     }
 

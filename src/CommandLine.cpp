@@ -12,10 +12,12 @@
 #include "util/StringAPI.hxx"
 #include "util/NumberParser.hpp"
 #include "Asset.hpp"
+#include "ProductName.hpp"
 #include "Version.hpp"
+#include "system/StandardVersion.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #ifdef _WIN32
 #include <windows.h> /* for AllocConsole() */
 #endif
@@ -31,6 +33,60 @@ namespace CommandLine {
 #ifdef HAVE_CMDLINE_REPLAY
   const char *replay_path;
 #endif
+}
+
+/** Option list for Args::UsageError (stderr); leading newline continues Usage:. */
+static const char option_summary[] =
+  "\n"
+  "  -h, --help          display this help on standard output and exit\n"
+  "  -version, --version display version on standard output and exit\n"
+  "  -datapath=PATH      path to " PRODUCT_NAME_A " data files\n"
+#ifdef SIMULATOR_AVAILABLE
+  "  -simulator          bypass startup-screen, use simulator mode directly\n"
+  "  -fly                bypass startup-screen, use fly mode directly\n"
+#endif
+  "  -profile=FNAME      load profile from file FNAME\n"
+  "  -WIDTHxHEIGHT       use screen resolution WIDTH x HEIGHT\n"
+  "  -portrait           use a 480x640 screen resolution\n"
+  "  -square             use a 480x480 screen resolution\n"
+  "  -small              use a 320x240 screen resolution\n"
+#if !defined(ANDROID)
+  "  -dpi=DPI            force DPI for pixel density\n"
+  "  -dpi=XDPIxYDPI      force XDPI and YDPI for pixel density\n"
+  "  -touchscreen        use touch UI (larger controls); overrides detection\n"
+  "  -notouchscreen      use non-touch UI; overrides touch detection\n"
+#endif
+#ifdef HAVE_CMDLINE_FULLSCREEN
+  "  -fullscreen         full-screen mode\n"
+#endif
+#ifdef HAVE_CMDLINE_RESIZABLE
+  "  -resizable          resizable window\n"
+#endif
+#ifdef HAVE_CMDLINE_REPLAY
+  "  -replay=PATH        replay flight from IGC at PATH (desktop Unix/macOS)\n"
+#endif
+#ifdef _WIN32
+  "  -console            open debug output console\n"
+#endif
+  ;
+
+const char *
+CommandLine::OptionSummary() noexcept
+{
+  return option_summary;
+}
+
+void
+CommandLine::PrintHelp() noexcept
+{
+  std::printf("Usage: %s [OPTION]...\n\n"
+              "Options:\n",
+              PRODUCT_NAME_LC);
+  /* skip leading newline from option_summary */
+  std::fputs(option_summary + 1, stdout);
+  std::printf("\nReport bugs to: <%s>\n"
+              "%s home page: <%s>\n",
+              PRODUCT_BUGS_URL, PRODUCT_NAME, PRODUCT_WEB_SITE_URL);
 }
 
 void
@@ -51,8 +107,13 @@ CommandLine::Parse(Args &args)
     if (s[1] == '-')
       s++;
 
+    if (StringIsEqual(s, "-h") || StringIsEqual(s, "-help")) {
+      PrintHelp();
+      exit(EXIT_SUCCESS);
+    }
+
     if (StringIsEqual(s, "-version")) {
-      printf("%s\n", XCSoar_ProductToken);
+      PrintStandardVersion(PRODUCT_NAME_LC, XCSoar_VersionString);
       exit(EXIT_SUCCESS);
     } else if (StringIsEqual(s, "-profile=", 9)) {
       s += 9;

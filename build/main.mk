@@ -461,6 +461,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Profile/Profile.cpp \

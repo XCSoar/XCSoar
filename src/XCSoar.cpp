@@ -9,7 +9,6 @@
 #include "Startup.hpp"
 #include "LocalPath.hpp"
 #include "Version.hpp"
-#include "ProductName.hpp"
 #include "LogFile.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
@@ -43,35 +42,6 @@
 #endif
 
 #include <cassert>
-
-static const char *const Usage = "\n"
-  "  -version       display version information and exit\n"
-  "  -datapath=      path to " PRODUCT_NAME_A " data can be defined\n"
-#ifdef SIMULATOR_AVAILABLE
-  "  -simulator      bypass startup-screen, use simulator mode directly\n"
-  "  -fly            bypass startup-screen, use fly mode directly\n"
-#endif
-  "  -profile=fname  load profile from file fname\n"
-  "  -WIDTHxHEIGHT   use screen resolution WIDTH x HEIGHT\n"
-  "  -portrait       use a 480x640 screen resolution\n"
-  "  -square         use a 480x480 screen resolution\n"
-  "  -small          use a 320x240 screen resolution\n"
-#if !defined(ANDROID)
-  "  -dpi=DPI        force usage of DPI for pixel density\n"
-  "  -dpi=XDPIxYDPI  force usage of XDPI and YDPI for pixel density\n"
-  "  -touchscreen     use touch UI (larger controls); overrides detection\n"
-  "  -notouchscreen   use non-touch UI; overrides touch detection\n"
-#endif
-#ifdef HAVE_CMDLINE_FULLSCREEN
-  "  -fullscreen     full-screen mode\n"
-#endif
-#ifdef HAVE_CMDLINE_RESIZABLE
-  "  -resizable      resizable window\n"
-#endif
-#ifdef _WIN32
-  "  -console        open debug output console\n"
-#endif
-  ;
 
 static int
 Main()
@@ -133,9 +103,9 @@ try {
   // Read options from the command line
   {
 #ifdef _WIN32
-    Args args(GetCommandLine(), Usage);
+    Args args(GetCommandLine(), CommandLine::OptionSummary());
 #else
-    Args args(argc, argv, Usage);
+    Args args(argc, argv, CommandLine::OptionSummary());
 #endif
     CommandLine::Parse(args);
   }
