@@ -6,6 +6,10 @@
 #include "Math/Angle.hpp"
 #include "Point2D.hpp"
 
+#include <algorithm>
+#include <cstdint>
+#include <limits>
+
 /**
  * Rotate coordinates around the zero origin.
  */
@@ -66,8 +70,16 @@ public:
     :cost(angle.ifastcosine()), sint(angle.ifastsine()) {}
 
   void Scale(int multiply, int divide=1) noexcept {
-    cost = cost * multiply / divide;
-    sint = sint * multiply / divide;
+    // Use int64_t for intermediate calculations to prevent overflow
+    // This is especially important on high-DPI devices where values can be large
+    const int64_t cost64 = static_cast<int64_t>(cost) * multiply / divide;
+    const int64_t sint64 = static_cast<int64_t>(sint) * multiply / divide;
+
+    // Clamp to int range to prevent overflow
+    constexpr int64_t MAX_INT = static_cast<int64_t>(std::numeric_limits<int>::max());
+    constexpr int64_t MIN_INT = static_cast<int64_t>(std::numeric_limits<int>::min());
+    cost = static_cast<int>(std::clamp(cost64, MIN_INT, MAX_INT));
+    sint = static_cast<int>(std::clamp(sint64, MIN_INT, MAX_INT));
   }
 
   constexpr Point RotateRaw(Point p) const noexcept {
