@@ -433,6 +433,18 @@ struct DeviceRegister {
      * #DeviceConfig::send_position.
      */
     SEND_POSITION = 0x400,
+
+    /**
+     * Can adopt a glide polar from the device into XCSoar (device
+     * configuration: PolarSync::RECEIVE).  Distinct from generic
+     * RECEIVE_SETTINGS (MC/bugs/ballast).
+     */
+    RECEIVE_POLAR = 0x800,
+
+    /**
+     * Can accept XCSoar's glide polar via PutPolar (PolarSync::SEND).
+     */
+    SEND_POLAR = 0x1000,
   };
 
   /**
@@ -536,5 +548,19 @@ struct DeviceRegister {
    */
   bool CanSendPosition() const {
     return (flags & SEND_POSITION) != 0;
+  }
+
+  /**
+   * Does this driver support receiving a glide polar from the device?
+   */
+  bool CanReceivePolar() const {
+    return (flags & RECEIVE_POLAR) != 0;
+  }
+
+  /**
+   * Does this driver support PutPolar (send glide polar to device)?
+   */
+  bool CanSendPolar() const {
+    return (flags & SEND_POLAR) != 0;
   }
 };

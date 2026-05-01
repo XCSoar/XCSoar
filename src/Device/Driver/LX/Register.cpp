@@ -25,6 +25,7 @@ const struct DeviceRegister lx_driver = {
   DeviceRegister::DECLARE | DeviceRegister::LOGGER |
   DeviceRegister::PASS_THROUGH |
   DeviceRegister::BULK_BAUD_RATE |
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
+  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS |
+  DeviceRegister::RECEIVE_POLAR | DeviceRegister::SEND_POLAR,
   LXCreateOnPort,
 };
