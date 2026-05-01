@@ -320,6 +320,51 @@ Tests wind estimation algorithms.
 - Outputs wind estimates over time
 - Useful for debugging wind calculation algorithms
 
+RunFlyingComputer
+~~~~~~~~~~~~~~~~~
+
+Prints **take-off**, **release**, and **landing** lines from the same
+``FlyingComputer`` logic as ``DebugReplay`` (optionally with a polar from
+``PolarStore`` instead of the built-in default).
+
+**Synopsis** (``[]`` = optional, ``<>`` = operands; full text with ``--help``):
+
+.. code-block:: text
+
+   RunFlyingComputer [OPTION]... <driver> <file>
+       RunFlyingComputer [OPTION]... <file>
+
+**Usage**:
+
+.. code-block:: bash
+
+   ./output/UNIX/bin/RunFlyingComputer flight.igc
+   ./output/UNIX/bin/RunFlyingComputer --polar="Para EN C/DHV2" INTERNAL flight.nmea
+   ./output/UNIX/bin/RunFlyingComputer --list-polars
+   ./output/UNIX/bin/RunFlyingComputer --help
+   ./output/UNIX/bin/RunFlyingComputer --version
+
+**Polar options**:
+
+- ``--polar=name`` or ``--polar name`` — catalog polar (case-insensitive name
+  match); unknown names suggest ``--list-polars``. Omit ``--polar`` to use
+  ``DebugReplay``'s built-in default glide polar (``GlidePolar(1)``); there is
+  no separate ``--polar-default`` option.
+- ``--list-polars`` — print all catalog names and exit.
+
+**CLI conventions** (same behaviour as many Unix utilities and the GNU Coding
+Standards §4.8 model; XCSoar is not a GNU package):
+
+- ``-h`` / ``--help`` — brief usage on standard output; exits successfully; does
+  not run replay (remaining arguments are ignored once ``--help`` is seen).
+  Ends with ``Report bugs to:`` and ``<product> home page:`` (URLs from
+  ``ProductName.hpp``).
+- ``--version`` — canonical tool name, ``XCSoar`` package version, copyright and
+  GPLv2+ notice on standard output; exits successfully.
+
+At most one ``--polar`` selection. Options must appear before ``<driver> <file>``
+or before ``<file>`` (single-operand form).
+
 RunDeviceDriver
 ~~~~~~~~~~~~~~~
 

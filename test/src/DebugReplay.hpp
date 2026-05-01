@@ -76,6 +76,13 @@ public:
     qnh = _qnh;
   }
 
+  /**
+   * Replace the glide polar used for takeoff/landing speed in
+   * FlyingComputer::Compute(). Resets flying state so replay starts
+   * from a clean detector state (call before the first Next()).
+   */
+  void SetGlidePolar(GlidePolar polar) noexcept;
+
 protected:
   void Compute();
 };

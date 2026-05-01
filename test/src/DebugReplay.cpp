@@ -28,6 +28,14 @@ DebugReplay::~DebugReplay()
 }
 
 void
+DebugReplay::SetGlidePolar(GlidePolar polar) noexcept
+{
+  glide_polar = polar;
+  flying_computer.Reset();
+  calculated.flight.Reset();
+}
+
+void
 DebugReplay::Compute()
 {
   computed_basic.Reset();
