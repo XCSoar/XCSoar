@@ -311,6 +311,12 @@ Two modes are available inside the XCSoar application:
 The program can be run by opening the explorer window, finding the directory
 that has the XCSoar.exe executable, and double clicking on that program file.
 
+Command-line options may use either one or two dashes where listed below (e.g.\
+\texttt{-h} and \texttt{--help}).
+\texttt{-h}/\texttt{--help} prints the option list and exits;
+\texttt{-version}/\texttt{--version} prints version and licence text and exits.
+Invalid options print a brief usage reminder on standard error.
+
 The program command line options allows the screen orientation of
 the display to be defined:
 \begin{description}
@@ -330,6 +336,12 @@ In the field ``Target'' add one of the desired options listed above.
 Run \verb|xcsoar| from a command line, or create a shortcut on the
 desktop.  The location of the executable file may be found using
 \verb|which xcsoar|.  Only landscape mode is  supported for now.
+
+Useful options include \verb|-datapath=...| for the data directory,
+\verb|-profile=...| to load a profile file, \verb|-simulator| or \verb|-fly|
+when available to skip the startup mode prompt, and geometry switches such as
+\verb|-portrait|, \verb|-square|, and \verb|-small|.
+On desktop Unix/macOS builds, \verb|-replay=PATH| may load flight replay data.
 
 \subsection*{Loading data files}\label{sec:loaddatafiles}
 The first time that XCSoar is run, it does not automatically load the 

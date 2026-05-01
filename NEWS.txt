@@ -1,4 +1,7 @@
 Version 7.45 - not yet released
+* desktop
+  - command-line: -h/--help and -version/--version print to stdout and exit;
+    unknown options print a short usage line on stderr
 * ui
   - Waypoint details embedded image: new input mode ``wptimg`` and
     ``WaypointImage`` events (magnify, shrink, reset, arrows) so keys
