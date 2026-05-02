@@ -14,6 +14,8 @@ Version 7.45 - not yet released
   - obstacles hidden at wider map scales than other non-landables (5000 vs 10000)
   - draw up to 1024 waypoints at once (was 256) #2327
   - terrain: fix fluctuating hill-shading strength #2262
+  - snail trail: Catmull-Rom smoothing between fixes; vario colouring samples
+    high-rate netto from the merge thread between GPS points #2447
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
