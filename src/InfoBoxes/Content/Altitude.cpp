@@ -8,9 +8,12 @@
 #include "InfoBoxes/Panel/AltitudeInfo.hpp"
 #include "InfoBoxes/Panel/AltitudeSimulator.hpp"
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
+#include "NMEA/Info.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+
+#include <optional>
 
 /*
  * Subpart callback function pointers
@@ -31,6 +34,37 @@ const InfoBoxPanel *
 InfoBoxContentAltitude::GetDialogContent() noexcept
 {
   return altitude_infobox_panels;
+}
+
+namespace {
+
+/**
+ * Logger / IGC pressure or ISA pressure altitude only (no QNH baro, no GPS).
+ */
+[[gnu::pure]] std::optional<double>
+IgcOrIsaPressureAltitudeOrInvalid(const NMEAInfo &basic) noexcept
+{
+  if (basic.igc_pressure_altitude_available)
+    return basic.igc_pressure_altitude;
+  if (basic.pressure_altitude_available)
+    return basic.pressure_altitude;
+  return std::nullopt;
+}
+
+} // namespace
+
+void
+UpdateInfoBoxAltitudeIGC(InfoBoxData &data) noexcept
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const auto a = IgcOrIsaPressureAltitudeOrInvalid(basic);
+  if (!a) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetValueFromAltitude(*a);
+  data.SetCommentFromAlternateAltitude(*a);
 }
 
 void

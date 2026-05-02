@@ -1171,6 +1171,15 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentHome>::Create,
   },
 
+  // e_AltitudeIGC
+  {
+    N_("Altitude IGC"),
+    N_("Alt IGC"),
+    N_("Logger pressure altitude when the device provides it (igc_pressure_altitude), otherwise ISA pressure altitude only (1013.25 hPa; not QNH-corrected). Does not show barometric AMSL or GPS height — use other InfoBoxes for navigation."),
+    UpdateInfoBoxAltitudeIGC,
+    altitude_infobox_panels,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

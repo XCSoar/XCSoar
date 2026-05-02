@@ -151,6 +151,7 @@ namespace InfoBoxFactory
     e_Alternate_2_AltDiff, /* Arrival altitude at the second-best alternate landing location relative to the safety arrival height */
     /* 130 */
     e_Home, /* Combined home waypoint infobox: shows waypoint name, arrival altitude diff, and distance */
+    e_AltitudeIGC, /* Logger or ISA pressure altitude only (no QNH baro / GPS) */
     e_NUM_TYPES /* Last item */
   };
 
