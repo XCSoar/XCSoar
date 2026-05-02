@@ -1171,6 +1171,15 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentHome>::Create,
   },
 
+  // e_AltitudeIGC
+  {
+    N_("Altitude IGC"),
+    N_("Alt IGC"),
+    N_("ISA / logger pressure altitude used for IGC recording (igc_pressure_altitude when available, else the same fallback as the internal IGC writer: pressure altitude, barometric altitude, GPS altitude). When this shows ISA pressure (e.g. FLARM), it is not QNH-corrected; airspace and navigation altitude use barometric height from your setup (merged device order). Task and glide logic use GPS altitude where applicable."),
+    UpdateInfoBoxAltitudeIGC,
+    altitude_infobox_panels,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

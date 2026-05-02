@@ -1,4 +1,9 @@
 Version 7.45 - not yet released
+* devices
+  - FLARM $PGRMZ (when FLARM is detected) also feeds igc_pressure_altitude for
+    the same ISA pressure datum as weak pressure altitude
+* ui
+  - infoboxen: new Altitude IGC InfoBox (logger / IGC altitude chain)
 * desktop
   - command-line: -h/--help and -version/--version print to stdout and exit;
     unknown options print a short usage line on stderr

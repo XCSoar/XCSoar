@@ -8,9 +8,12 @@
 #include "InfoBoxes/Panel/AltitudeInfo.hpp"
 #include "InfoBoxes/Panel/AltitudeSimulator.hpp"
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
+#include "NMEA/Info.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+
+#include <optional>
 
 /*
  * Subpart callback function pointers
@@ -33,6 +36,42 @@ InfoBoxContentAltitude::GetDialogContent() noexcept
   return altitude_infobox_panels;
 }
 
+namespace {
+
+/**
+ * Altitude used for IGC / logger display.  Keep in sync with
+ * IGCFix::Apply (NMEAInfo field order).
+ */
+[[gnu::pure]] std::optional<double>
+LoggerAltitudeOrInvalid(const NMEAInfo &basic) noexcept
+{
+  if (basic.igc_pressure_altitude_available)
+    return basic.igc_pressure_altitude;
+  if (basic.pressure_altitude_available)
+    return basic.pressure_altitude;
+  if (basic.baro_altitude_available)
+    return basic.baro_altitude;
+  if (basic.gps_altitude_available)
+    return basic.gps_altitude;
+  return std::nullopt;
+}
+
+} // namespace
+
+void
+UpdateInfoBoxAltitudeIGC(InfoBoxData &data) noexcept
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const auto a = LoggerAltitudeOrInvalid(basic);
+  if (!a) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetValueFromAltitude(*a);
+  data.SetCommentFromAlternateAltitude(*a);
+}
+
 void
 UpdateInfoBoxAltitudeNav(InfoBoxData &data) noexcept
 {
@@ -47,7 +86,8 @@ UpdateInfoBoxAltitudeNav(InfoBoxData &data) noexcept
     return;
   }
 
-  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer =
+      CommonInterface::GetComputerSettings();
 
   if (basic.baro_altitude_available &&
       settings_computer.features.nav_baro_altitude_enabled)

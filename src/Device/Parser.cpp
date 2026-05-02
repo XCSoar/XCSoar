@@ -658,6 +658,18 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
          here */
       info.ProvideWeakPressureAltitude(value);
 
+      /* Mirror logger altitude only when this sentence fed weak pressure
+         altitude.  Stale igc when strong pressure replaces weak is cleared in
+         NMEAInfo::ProvidePressureAltitude (same NMEAInfo / mux feed). */
+      if (info.pressure_altitude_weak) {
+        info.igc_pressure_altitude = value;
+        info.igc_pressure_altitude_available.Update(info.clock);
+      }
+
+      /* Same datum precedence as IGCFix::Apply when igc_pressure_altitude is
+         valid. Multiple devices: merged Basic() first valid igc wins (port
+         order). */
+
       /* when a FLARM gets detected too late, the previous call to
          this function may have filled the PGRMZ value into
          "barometric altitude"; that was a misapprehension, and the
