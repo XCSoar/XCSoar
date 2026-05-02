@@ -2021,6 +2021,8 @@ TestVega()
   ok1(parser.ParseLine("$PGRMZ,2447,F,2*0F", nmea_info));
   ok1(nmea_info.pressure_altitude_available);
   ok1(equals(nmea_info.pressure_altitude, 745.845));
+  ok1(nmea_info.igc_pressure_altitude_available);
+  ok1(equals(nmea_info.igc_pressure_altitude, nmea_info.pressure_altitude));
 
   ok1(device->ParseNMEA("$PDSWC,0,1002000,100,115*54", nmea_info));
   ok1(nmea_info.settings.mac_cready_available);
@@ -2038,11 +2040,13 @@ TestVega()
   ok1(!nmea_info.baro_altitude_available);
   ok1(nmea_info.pressure_altitude_available);
   ok1(equals(nmea_info.pressure_altitude, 762));
+  ok1(!nmea_info.igc_pressure_altitude_available);
 
   /* parse $PGRMZ again, it should be ignored */
   ok1(parser.ParseLine("$PGRMZ,2447,F,2*0F", nmea_info));
   ok1(nmea_info.pressure_altitude_available);
   ok1(equals(nmea_info.pressure_altitude, 762));
+  ok1(!nmea_info.igc_pressure_altitude_available);
 
   delete device;
 }
@@ -2897,7 +2901,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1032 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1036 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 107 /* LXNav protocol 1.05 */

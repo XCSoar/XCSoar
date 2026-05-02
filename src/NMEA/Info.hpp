@@ -425,6 +425,12 @@ struct NMEAInfo {
    * the previous altitude was not present or the same/lower priority.
    */
   constexpr void ProvidePressureAltitude(double value) noexcept {
+    /* Replacing weak pressure (e.g. FLARM $PGRMZ) with strong pressure clears
+       the FLARM igc mirror so IGCFix does not prefer stale igc_pressure_altitude.
+       Logger igc from another sentence (e.g. $PLXVS) can be applied after. */
+    if (pressure_altitude_available && pressure_altitude_weak)
+      igc_pressure_altitude_available.Clear();
+
     pressure_altitude = value;
     pressure_altitude_weak = false;
     pressure_altitude_available.Update(clock);

@@ -656,7 +656,15 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
          altitude above 1013.25 hPa - since the don't have a "FLARM"
          device driver, we use the auto-detected "isFlarm" flag
          here */
+      info.igc_pressure_altitude = value;
+      info.igc_pressure_altitude_available.Update(info.clock);
       info.ProvideWeakPressureAltitude(value);
+      if (!info.pressure_altitude_weak)
+        info.igc_pressure_altitude_available.Clear();
+
+      /* One parsed value: logger igc + weak pressure_altitude; strong pressure
+         skips weak (see NMEAInfo::ProvidePressureAltitude). Complement merge:
+         first valid igc wins across devices. */
 
       /* when a FLARM gets detected too late, the previous call to
          this function may have filled the PGRMZ value into
