@@ -245,8 +245,13 @@ InfoBoxContentActiveWaypoint::HandleClick() noexcept
   }
 
   if (target_index >= 0) {
-    if ((unsigned)target_index != ordered_task_index)
-      ptm.IncrementActiveTaskPoint(target_index - (int)ordered_task_index);
+    std::unique_ptr<OrderedTask> current_task = ptm.TaskClone();
+    const unsigned current_active_index =
+      (current_task && current_task->TaskSize() > 0)
+        ? current_task->GetActiveIndex()
+        : ordered_task_index;
+    if ((unsigned)target_index != current_active_index)
+      ptm.IncrementActiveTaskPoint(target_index - (int)current_active_index);
   } else {
     {
       ScopeSuspendAllThreads suspend;
