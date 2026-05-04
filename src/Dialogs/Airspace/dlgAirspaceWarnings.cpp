@@ -383,7 +383,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
 
-  if (warning.IsCleared())
+  if (warning.IsCleared() || warning.IsCoveredByClearance())
     canvas.SetTextColor(COLOR_CLEARANCE);
   else if (!warning.IsActive())
     canvas.SetTextColor(COLOR_GRAY);
@@ -436,6 +436,9 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   const char *state_text;
 
   if (warning.IsCleared() && warning.IsInside()) {
+    state_color = cleared_color;
+    state_text = "inside";
+  } else if (warning.IsCoveredByClearance() && warning.IsInside()) {
     state_color = cleared_color;
     state_text = "inside";
   } else if (warning.IsInside()) {
@@ -518,6 +521,8 @@ AirspaceWarningListWidget::UpdateList()
         /* Find smallest time to nearest aispace (cannot always rely
            on fact that closest airspace should be in the beginning of
            the list) */
+        if (!i.IsActive())
+          continue;
         if (!i.IsInside())
           tt_closest_airspace = std::min(tt_closest_airspace,
                                          i.GetSolution().elapsed_time);
