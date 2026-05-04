@@ -134,6 +134,11 @@ WPASupplicantBackend::SaveConfig()
 void
 WPASupplicantBackend::Disconnect()
 {
+  EnsureConnected();
+
+  unsigned active_network_id;
+  if (wpa_.GetCurrentNetworkId(active_network_id))
+    wpa_.DisableNetwork(active_network_id);
 }
 
 WifiBackendStatus
