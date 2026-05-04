@@ -268,9 +268,31 @@ private:
   bool UpdateGlide(const AircraftState& state, const GlidePolar &glide_polar);
   bool UpdateInside(const AircraftState& state, const GlidePolar &glide_polar);
 
-  bool UpdatePredicted(const AircraftState& state, 
+  bool UpdatePredicted(const AircraftState& state,
                        const GeoPoint &location_predicted,
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
                        FloatDuration max_time) noexcept;
+
+  /**
+   * Apply clearance suppression to the warning list.
+   *
+   * Two passes:
+   * 1. If the aircraft is physically inside any cleared
+   *    airspace, subtract the cleared
+   *    coverage along each warning interval.
+   *    Fully covered warnings keep WARNING_INSIDE state but
+   *    are marked SetCoveredByClearance(true). Partially 
+   *    covered warnings with (time-to-arrival <= warning_time)
+   *    become "near" warnings and set to the corresponding 
+   *    state
+   * 2. For non-INSIDE warnings, subtract cleared intervals
+   *    from approach intervals; suppress fully-covered
+   *    warnings.
+   */
+  void ProcessClearanceIntervals(
+      const AircraftState &state,
+      const GlidePolar &glide_polar,
+      bool circling,
+      const TaskStats &task_stats) noexcept;
 };

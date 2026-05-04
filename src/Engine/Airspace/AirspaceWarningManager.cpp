@@ -9,6 +9,10 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
 
+#include <algorithm>
+#include <array>
+#include <cstddef>
+
 static constexpr double CRUISE_FILTER_FACT = 0.5;
 
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
@@ -123,6 +127,9 @@ AirspaceWarningManager::Update(const AircraftState& state,
   UpdateGlide(state, glide_polar);
   UpdateFilter(state, circling);
   UpdateTask(state, glide_polar, task_stats);
+
+  // apply clearance suppression / exit-warning generation
+  ProcessClearanceIntervals(state, glide_polar, circling, task_stats);
 
   // action changes
   for (auto it = warnings.begin(), end = warnings.end(); it != end;) {
@@ -520,11 +527,267 @@ AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcep
     !GetAckDay(airspace);
 }
 
-void 
+void
 AirspaceWarningManager::AcknowledgeAll()
 {
   for (auto &w : warnings) {
     w.AcknowledgeWarning(true);
     w.AcknowledgeInside(true);
+  }
+}
+
+namespace {
+
+constexpr AirspaceWarning::State kPredictionMethods[] = {
+  AirspaceWarning::WARNING_GLIDE,
+  AirspaceWarning::WARNING_FILTER,
+  AirspaceWarning::WARNING_TASK,
+};
+
+/** Minimum residual path fragment length to keep, in meters. */
+constexpr double kMinFragmentLength = 50.0;
+
+/** Capacity for small stack-allocated cleared-airspace buffers. */
+constexpr std::size_t kClearedBufCap = 8;
+
+[[gnu::pure]]
+static bool
+VerticalOverlap(const AirspaceWarning &a,
+                const AirspaceWarning &b,
+                const AltitudeState &altitude) noexcept
+{
+  const auto &as_a = a.GetAirspace();
+  const auto &as_b = b.GetAirspace();
+  return as_a.GetBaseAltitude(altitude) <
+           as_b.GetTopAltitude(altitude) &&
+         as_b.GetBaseAltitude(altitude) <
+           as_a.GetTopAltitude(altitude);
+}
+
+[[gnu::pure]]
+static AirspaceAircraftPerformance
+PerfFor(AirspaceWarning::State method,
+        const GlidePolar &glide_polar,
+        const AircraftStateFilter &cruise_filter,
+        const AircraftStateFilter &circling_filter,
+        bool circling,
+        const TaskStats &task_stats) noexcept
+{
+  switch (method) {
+  case AirspaceWarning::WARNING_GLIDE:
+    if (glide_polar.IsValid())
+      return AirspaceAircraftPerformance{glide_polar};
+    break;
+
+  case AirspaceWarning::WARNING_FILTER:
+    return circling
+      ? AirspaceAircraftPerformance{circling_filter}
+      : AirspaceAircraftPerformance{cruise_filter};
+
+  case AirspaceWarning::WARNING_TASK:
+    if (glide_polar.IsValid() && task_stats.task_valid) {
+      const auto &solution =
+        task_stats.current_leg.solution_remaining;
+      if (solution.IsOk() && solution.IsAchievable())
+        return AirspaceAircraftPerformance{glide_polar, solution};
+    }
+    break;
+
+  case AirspaceWarning::WARNING_CLEAR:
+  case AirspaceWarning::WARNING_INSIDE:
+    break;
+  }
+  return AirspaceAircraftPerformance{
+    AirspaceAircraftPerformance::Simple{}};
+}
+
+/**
+ * Sort a small array of warning pointers by the entry distance
+ * of their interval for the given prediction method.
+ */
+static void
+SortByEntryDistance(AirspaceWarning **first,
+                    AirspaceWarning **last,
+                    AirspaceWarning::State method) noexcept
+{
+  std::sort(first, last,
+            [method](const AirspaceWarning *a,
+                     const AirspaceWarning *b) {
+              return a->GetInterval(method).entry.distance <
+                     b->GetInterval(method).entry.distance;
+            });
+}
+
+} // namespace
+
+void
+AirspaceWarningManager::ProcessClearanceIntervals(
+    const AircraftState &state,
+    const GlidePolar &glide_polar,
+    const bool circling,
+    const TaskStats &task_stats) noexcept
+{
+  // Fast path + collect cleared airspaces the aircraft is
+  // physically inside.
+  std::array<AirspaceWarning *, kClearedBufCap> cleared_inside_buf{};
+  std::size_t n_cleared_inside = 0;
+  bool any_cleared = false;
+
+  for (auto &w : warnings) {
+    if (!w.IsCleared()) continue;
+    any_cleared = true;
+    if (w.GetAirspace().Inside(state) &&
+        n_cleared_inside < cleared_inside_buf.size())
+      cleared_inside_buf[n_cleared_inside++] = &w;
+  }
+  if (!any_cleared) return;
+
+  const bool inside_cleared = n_cleared_inside > 0;
+  const FloatDuration warning_time{config.warning_time};
+
+  // Step 1: convert WARNING_INSIDE warnings of non-cleared
+  // airspaces while inside another, cleared, airspace.
+  if (inside_cleared) {
+    for (auto &w : warnings) {
+      if (w.IsCleared()) continue;
+      if (w.GetWarningState() != AirspaceWarning::WARNING_INSIDE)
+        continue;
+
+      for (const auto m : kPredictionMethods) {
+        AirspaceWarningInterval iv = w.GetInterval(m);
+        if (!iv.IsValid()) continue;
+
+        std::array<AirspaceWarning *, kClearedBufCap> buf{};
+        std::size_t n = 0;
+        for (std::size_t i = 0; i < n_cleared_inside; ++i) {
+          AirspaceWarning *c = cleared_inside_buf[i];
+          if (c->HasInterval(m))
+            buf[n++] = c;
+        }
+        SortByEntryDistance(buf.data(), buf.data() + n, m);
+        for (std::size_t i = 0; i < n; ++i) {
+          SubtractInterval(iv, buf[i]->GetInterval(m));
+          if (!iv.IsValid()) break;
+        }
+        w.SetInterval(m, iv);
+      }
+
+      // Find nearest residual entry across surviving methods
+      double nearest_distance = -1;
+      GeoPoint nearest_location{};
+      AirspaceWarning::State nearest_method =
+        AirspaceWarning::WARNING_CLEAR;
+      for (const auto m : kPredictionMethods) {
+        const AirspaceWarningInterval &iv = w.GetInterval(m);
+        if (!iv.IsValid()) continue;
+        if (iv.Length() < kMinFragmentLength) continue;
+        if (nearest_distance < 0 ||
+            iv.entry.distance < nearest_distance) {
+          nearest_distance = iv.entry.distance;
+          nearest_location = iv.entry.location;
+          nearest_method = m;
+        }
+      }
+
+      if (n_res == 0) {
+        // No meaningful remaining intervals along any method.
+        // Aircraft is fully covered by cleared coverage.
+        w.SetCoveredByClearance(true);
+        continue;
+      }
+
+      // Residual exists: estimate time-to-residual-entry
+      const AirspaceAircraftPerformance perf = PerfFor(
+        nearest_method, glide_polar, cruise_filter,
+        circling_filter, circling, task_stats);
+      AirspaceInterceptSolution sol =
+        w.GetAirspace().Intercept(state, perf,
+                                  nearest_location,
+                                  nearest_location);
+
+      if (!sol.IsValid() || sol.elapsed_time > warning_time) {
+        // Still far from the residual entry: treat as covered
+        w.SetCoveredByClearance(true);
+      } else {
+        w.ForceState(nearest_method);
+        w.SetSolution(sol);
+        w.SetExitWarning(true);
+      }
+    }
+  }
+
+  // Step 2: clip approach warnings (state in GLIDE/FILTER/TASK)
+  // by cleared coverage along the same method's predicted path.
+  for (auto &w : warnings) {
+    if (w.IsCleared()) continue;
+    const auto cur_state = w.GetWarningState();
+    if (cur_state == AirspaceWarning::WARNING_CLEAR ||
+        cur_state == AirspaceWarning::WARNING_INSIDE)
+      continue;
+
+    bool any_changed = false;
+    bool any_survives = false;
+    double surv_distance = -1;
+    GeoPoint surv_location{};
+    AirspaceWarning::State surv_method =
+      AirspaceWarning::WARNING_CLEAR;
+
+    for (const auto m : kPredictionMethods) {
+      AirspaceWarningInterval iv = w.GetInterval(m);
+      if (!iv.IsValid()) continue;
+      const AirspaceWarningInterval iv_orig = iv;
+
+      // Collect cleared with valid interval and vertical
+      // overlap with W; sort near-to-far.
+      std::array<AirspaceWarning *, kClearedBufCap> buf{};
+      std::size_t n = 0;
+      for (auto &c : warnings) {
+        if (!c.IsCleared()) continue;
+        if (!c.HasInterval(m)) continue;
+        if (!VerticalOverlap(w, c, state)) continue;
+        if (n >= buf.size()) break;
+        buf[n++] = &c;
+      }
+      SortByEntryDistance(buf.data(), buf.data() + n, m);
+      for (std::size_t i = 0; i < n; ++i) {
+        SubtractInterval(iv, buf[i]->GetInterval(m));
+        if (!iv.IsValid()) break;
+      }
+
+      const bool changed = !iv.IsValid()
+        || iv.entry.distance != iv_orig.entry.distance
+        || iv.exit.distance != iv_orig.exit.distance;
+      if (changed) any_changed = true;
+
+      if (!iv.IsValid() ||
+          (changed && iv.Length() < kMinFragmentLength)) {
+        w.SetInterval(m, AirspaceWarningInterval::Invalid());
+      } else {
+        w.SetInterval(m, iv);
+        any_survives = true;
+        if (surv_distance < 0 ||
+            iv.entry.distance < surv_distance) {
+          surv_distance = iv.entry.distance;
+          surv_location = iv.entry.location;
+          surv_method = m;
+        }
+      }
+    }
+
+    if (any_changed && !any_survives) {
+      // All approach intervals fully covered by clearance.
+      w.ForceState(AirspaceWarning::WARNING_CLEAR);
+    } else if (any_changed && surv_distance >= 0) {
+      // Rebuild solution at the new nearest entry point.
+      const AirspaceAircraftPerformance perf = PerfFor(
+        surv_method, glide_polar, cruise_filter,
+        circling_filter, circling, task_stats);
+      AirspaceInterceptSolution sol =
+        w.GetAirspace().Intercept(state, perf,
+                                  surv_location,
+                                  surv_location);
+      if (sol.IsValid())
+        w.SetSolution(sol);
+    }
   }
 }
