@@ -114,9 +114,18 @@ WPASupplicantBackend::Connect(const char *ssid, const char *psk, WifiSecurity se
   ValidateConnectParameters(ssid, psk, security);
 
   const unsigned id = wpa_.AddNetwork();
-  ConfigureNetwork(wpa_, id, ssid, psk, security);
-  wpa_.EnableNetwork(id);
-  wpa_.SaveConfig();
+  try {
+    ConfigureNetwork(wpa_, id, ssid, psk, security);
+    wpa_.EnableNetwork(id);
+    wpa_.SaveConfig();
+  } catch (...) {
+    try {
+      wpa_.RemoveNetwork(id);
+    } catch (...) {
+    }
+
+    throw;
+  }
 }
 
 void
