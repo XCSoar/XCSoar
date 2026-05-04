@@ -118,6 +118,7 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestAirspaceLabelPlacement \
 	TestOGNAprsParser \
+	TestAirspaceIntervalMath \
 	TestMETARParser \
 	TestIGCParser TestIGCFlightTimes \
 	TestNanoFileTransfer \
@@ -478,6 +479,12 @@ TEST_OGN_APRS_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
 TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS
 $(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
+
+TEST_AIRSPACE_INTERVAL_MATH_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAirspaceIntervalMath.cpp
+TEST_AIRSPACE_INTERVAL_MATH_DEPENDS = GEO MATH UTIL
+$(eval $(call link-program,TestAirspaceIntervalMath,TEST_AIRSPACE_INTERVAL_MATH))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
