@@ -32,16 +32,6 @@ using namespace UI;
 static constexpr unsigned GEOMETRY_INHERIT_ID =
     InfoBoxSettings::Panel::INHERIT_GEOMETRY;
 
-std::vector<StaticEnumChoice> CreateInfoBoxGeometryListWithInherit() {
-  std::vector<StaticEnumChoice> list;
-  list.push_back({ GEOMETRY_INHERIT_ID, _("Inherit from global settings"), nullptr });
-  for (const StaticEnumChoice* e = info_box_geometry_list; e && e->display_string != nullptr; ++e) {
-    list.push_back(*e);
-  }
-  list.emplace_back(nullptr);
-  return list;
-}
-
 static InfoBoxSettings::Panel clipboard;
 static unsigned clipboard_size;
 
