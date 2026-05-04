@@ -86,6 +86,7 @@ public:
   void SelectNetwork(unsigned id);
   void EnableNetwork(unsigned id);
   void DisableNetwork(unsigned id);
+  bool GetCurrentNetworkId(unsigned &id);
   void RemoveNetwork(unsigned id);
 
   /**
