@@ -47,6 +47,7 @@ private:
   bool ack_day = false;
   bool cleared_day = false;
   bool is_exit_warning = false;
+  bool covered_by_clearance = false;
   bool expired = true;
   bool expired_last = true;
 
@@ -199,6 +200,19 @@ public:
   }
 
   /**
+   * Check if this warning has an explicit acknowledgement (ack_day or
+   * a still-running timed ack), independent of covered_by_clearance.
+   * Used by the renderer to distinguish "acked by the pilot" from
+   * "silenced only because the path is covered by a clearance".
+   */
+  [[gnu::pure]]
+  bool HasExplicitAck() const noexcept {
+    return ack_day
+      || acktime_warning.count() > 0
+      || acktime_inside.count() > 0;
+  }
+
+  /**
    * Acknowledge an airspace warning or airspace inside (depending on
    * the state).
    */
@@ -267,6 +281,27 @@ public:
   [[gnu::pure]]
   bool IsExitWarning() const noexcept {
     return is_exit_warning;
+  }
+
+  /**
+   * Mark this warning as covered by another airspace's
+   * clearance.
+   *
+   * Warning object remains in manager, but
+   * creates no warning message. IsAckExpired() returns 
+   * false while the flag is set.
+   */
+  void SetCoveredByClearance(const bool set) noexcept {
+    covered_by_clearance = set;
+  }
+
+  /**
+   * Is this warning currently covered by another 
+   * airspace's clearance?
+   */
+  [[gnu::pure]]
+  bool IsCoveredByClearance() const noexcept {
+    return covered_by_clearance;
   }
 
   /**
