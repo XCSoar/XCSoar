@@ -54,11 +54,11 @@ std::string
 GetActiveAccessPointPath(ODBus::Connection &c, const char *wifi_device);
 
 std::vector<SavedConnection>
-ListSavedWifiConnections(ODBus::Connection &c);
+ListSavedConnections(ODBus::Connection &c);
 
 void
-ConnectToAp(ODBus::Connection &c, const char *wifi_device, const AccessPoint &ap,
-            const char *wpa2_psk_or_null);
+Connect(ODBus::Connection &c, const char *wifi_device, const AccessPoint &ap,
+        const char *wpa2_psk_or_null);
 
 void
 ConnectSaved(ODBus::Connection &c, const char *wifi_device,
@@ -68,7 +68,7 @@ bool
 HasSavedConnectionForSsid(ODBus::Connection &c, const std::string &ssid) noexcept;
 
 void
-DeleteSavedConnection(ODBus::Connection &c, const char *connection_path);
+Remove(ODBus::Connection &c, const char *connection_path);
 
 void
 Disconnect(ODBus::Connection &c, const char *wifi_device);

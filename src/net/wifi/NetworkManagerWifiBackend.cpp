@@ -278,7 +278,7 @@ NetworkManagerWifiBackend::Connect(const WifiConnectRequest &request)
       throw std::runtime_error{WifiError::GONE};
 
     const char *secret = request.secret.empty() ? nullptr : request.secret.c_str();
-    NmClient::ConnectToAp(c, wifi_device.c_str(), *found, secret);
+    NmClient::Connect(c, wifi_device.c_str(), *found, secret);
   } catch (const std::exception &e) {
     throw TranslateWifiException(e);
   }
@@ -352,7 +352,7 @@ NetworkManagerWifiBackend::GetNetworks(WifiNetworkEntry *dest, std::size_t max)
     const std::string active_ap =
       NmClient::GetActiveAccessPointPath(c, wifi_device.c_str());
     auto access_points = NmClient::ListAccessPoints(c, wifi_device.c_str());
-    const auto saved_connections = NmClient::ListSavedWifiConnections(c);
+    const auto saved_connections = NmClient::ListSavedConnections(c);
     PopulateSavedProfilePaths(access_points, saved_connections);
 
     std::size_t count = 0;
@@ -417,7 +417,7 @@ NetworkManagerWifiBackend::ForgetNetwork(const char *profile_id)
     if (!LinuxNetWifi::NameHasOwner(c, NM_NAME))
       throw std::runtime_error{"NetworkManager is not available"};
 
-    NmClient::DeleteSavedConnection(c, profile_id);
+    NmClient::Remove(c, profile_id);
   } catch (const std::exception &e) {
     throw TranslateWifiException(e);
   }

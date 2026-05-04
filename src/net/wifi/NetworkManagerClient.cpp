@@ -13,7 +13,6 @@
 #include "lib/dbus/Message.hxx"
 #include "lib/dbus/ReadIter.hxx"
 #include "util/StringAPI.hxx"
-#include "util/StringCompare.hxx"
 
 #include <chrono>
 #include <random>
@@ -108,8 +107,8 @@ AppendSettingsSection(DBusMessageIter *arr, const char *section_name, F &&fn)
 }
 
 static void
-NMDbusObjectPaths(ODBus::Connection &c, const char *dest, const char *obj_path,
-                  const char *iface, const char *method, std::vector<std::string> &out)
+ListObjectPaths(ODBus::Connection &c, const char *dest, const char *obj_path,
+                const char *iface, const char *method, std::vector<std::string> &out)
 {
   out.clear();
   using namespace ODBus;
@@ -128,8 +127,8 @@ NMDbusObjectPaths(ODBus::Connection &c, const char *dest, const char *obj_path,
 }
 
 static void
-ParseGetSettingsForWifi(ODBus::ReadMessageIter &t, std::string &ssid_out,
-                        bool *wifi, std::string *connection_id_out = nullptr)
+ParseWifiSettings(ODBus::ReadMessageIter &t, std::string &ssid_out,
+                  bool *wifi, std::string *connection_id_out = nullptr)
 {
   ssid_out.clear();
   *wifi = false;
@@ -197,11 +196,11 @@ ParseGetSettingsForWifi(ODBus::ReadMessageIter &t, std::string &ssid_out,
 }
 
 std::vector<NmClient::SavedConnection>
-NmClient::ListSavedWifiConnections(ODBus::Connection &c)
+NmClient::ListSavedConnections(ODBus::Connection &c)
 {
   std::vector<SavedConnection> out;
   std::vector<std::string> paths;
-  NMDbusObjectPaths(
+  ListObjectPaths(
     c, kNm, kNmSettingsPath, kNmIfaceSettings, "ListConnections", paths);
 
   for (const auto &path : paths) {
@@ -213,8 +212,8 @@ NmClient::ListSavedWifiConnections(ODBus::Connection &c)
       ReadMessageIter t{*r.Get()};
       SavedConnection saved;
       bool wifi = false;
-      ParseGetSettingsForWifi(t, saved.ssid_text, &wifi,
-                              &saved.connection_id);
+      ParseWifiSettings(t, saved.ssid_text, &wifi,
+                        &saved.connection_id);
       if (!wifi)
         continue;
 
@@ -244,6 +243,7 @@ MakeConnectionId(const NmClient::AccessPoint &ap)
         id.push_back(static_cast<char>(ch));
       else
         id.push_back('_');
+    }
 
     if (id.find_first_not_of(' ') != std::string::npos)
       return id;
@@ -260,7 +260,7 @@ NmClient::HasSavedConnectionForSsid(ODBus::Connection &c,
     if (ssid.empty())
       return false;
 
-    for (const auto &saved : NmClient::ListSavedWifiConnections(c))
+    for (const auto &saved : NmClient::ListSavedConnections(c))
       if (saved.ssid_text == ssid)
         return true;
 
@@ -280,7 +280,7 @@ RequireConnectionPath(const char *connection_path, const char *method)
 }
 
 void
-NmClient::DeleteSavedConnection(ODBus::Connection &c, const char *connection_path)
+NmClient::Remove(ODBus::Connection &c, const char *connection_path)
 {
   connection_path = RequireConnectionPath(connection_path, "Remove");
 
@@ -395,12 +395,13 @@ AddConnectionAndActivate(ODBus::Connection &c, const char *wifi_device,
       throw std::runtime_error("AddAndActivateConnection: device paths");
     }
   }
-  (void)CallMethodSync(c, m);
+  Message reply = CallMethodSync(c, m);
+  (void)reply;
 }
 
 void
-NmClient::ConnectToAp(ODBus::Connection &c, const char *wifi_device, const AccessPoint &ap,
-                      const char *wpa2_psk_or_null)
+NmClient::Connect(ODBus::Connection &c, const char *wifi_device, const AccessPoint &ap,
+                  const char *wpa2_psk_or_null)
 {
   wifi_device = RequireWifiDevicePath(wifi_device, "Connect");
 
@@ -425,7 +426,7 @@ std::string
 NmClient::FindWifiDevice(ODBus::Connection &c)
 {
   std::vector<std::string> devs;
-  NMDbusObjectPaths(c, kNm, kNmPath, kNm, "GetDevices", devs);
+  ListObjectPaths(c, kNm, kNmPath, kNm, "GetDevices", devs);
   for (const auto &d : devs) {
     std::uint32_t t = 0;
     LinuxNetWifi::DbusGetProperty(
@@ -448,6 +449,8 @@ NmClient::SetWirelessEnabled(ODBus::Connection &c, bool on)
 void
 NmClient::RequestScan(ODBus::Connection &c, const char *wifi_device)
 {
+  wifi_device = RequireWifiDevicePath(wifi_device, "RequestScan");
+
   using namespace ODBus;
   auto m = Message::NewMethodCall(
     kNm, wifi_device, kNmIfaceDeviceWireless,
@@ -463,9 +466,11 @@ NmClient::RequestScan(ODBus::Connection &c, const char *wifi_device)
 std::vector<NmClient::AccessPoint>
 NmClient::ListAccessPoints(ODBus::Connection &c, const char *wifi_device)
 {
+  wifi_device = RequireWifiDevicePath(wifi_device, "ListAccessPoints");
+
   std::vector<AccessPoint> aps;
   std::vector<std::string> paths;
-  NMDbusObjectPaths(
+  ListObjectPaths(
     c, kNm, wifi_device, kNmIfaceDeviceWireless,
     "GetAllAccessPoints", paths);
   for (const std::string &p : paths) {
@@ -503,6 +508,8 @@ NmClient::ListAccessPoints(ODBus::Connection &c, const char *wifi_device)
 std::string
 NmClient::GetActiveAccessPointPath(ODBus::Connection &c, const char *wifi_device)
 {
+  wifi_device = RequireWifiDevicePath(wifi_device, "GetActiveAccessPointPath");
+
   std::string p;
   LinuxNetWifi::DbusGetProperty(
     c, wifi_device, kNmIfaceDeviceWireless, "ActiveAccessPoint",
@@ -529,6 +536,8 @@ ActiveSsid(ODBus::Connection &c, const char *wifi_device)
 std::string
 NmClient::FormatStatus(ODBus::Connection &c, const char *wifi_device)
 {
+  wifi_device = RequireWifiDevicePath(wifi_device, "FormatStatus");
+
   bool wifion = true;
   LinuxNetWifi::DbusGetProperty(c, kNmPath, kNm, "WirelessEnabled", nullptr, 
                                 nullptr, &wifion);
@@ -545,6 +554,8 @@ NmClient::FormatStatus(ODBus::Connection &c, const char *wifi_device)
 void
 NmClient::Disconnect(ODBus::Connection &c, const char *wifi_device)
 {
+  wifi_device = RequireWifiDevicePath(wifi_device, "Disconnect");
+
   std::string ac;
   LinuxNetWifi::DbusGetProperty(
     c, wifi_device, kNmIfaceDevice, "ActiveConnection", &ac,
@@ -600,6 +611,8 @@ NmClient::IsSameBssidAsActive(ODBus::Connection &c,
 void
 NmClient::WaitUntilWifiDisconnected(ODBus::Connection &c, const char *wifi_device)
 {
+  wifi_device = RequireWifiDevicePath(wifi_device, "WaitUntilWifiDisconnected");
+
   using namespace std::chrono_literals;
   for (int i = 0; i < 150; i++) {
     std::uint32_t st = 0;
