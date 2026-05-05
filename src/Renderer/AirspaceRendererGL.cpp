@@ -27,15 +27,17 @@
 static constexpr GLuint FILL_STENCIL = 1;
 static constexpr GLuint OUTLINE_STENCIL = 2;
 static constexpr GLuint POLYGON_STENCIL = 4;
-/** Cleared-airspace mask.  Bit 2 is already POLYGON_STENCIL. */
+/** Cleared-airspace interior.  Bit 2 is already POLYGON_STENCIL. */
 static constexpr GLuint CLEARANCE_STENCIL = 8;
+/** Thick-pen ring along a cleared boundary. */
+static constexpr GLuint CLEARED_RING_STENCIL = 16;
 static constexpr GLint EVEN_ODD_STENCIL_BITS = 3;
 
 static_assert(POLYGON_STENCIL < (1u << EVEN_ODD_STENCIL_BITS));
 static_assert((FILL_STENCIL | OUTLINE_STENCIL | POLYGON_STENCIL |
-               CLEARANCE_STENCIL) ==
+               CLEARANCE_STENCIL | CLEARED_RING_STENCIL) ==
               FILL_STENCIL + OUTLINE_STENCIL + POLYGON_STENCIL +
-              CLEARANCE_STENCIL);
+              CLEARANCE_STENCIL + CLEARED_RING_STENCIL);
 
 /**
  * The maximum number of vertices handled by the allocation-free even-odd
@@ -421,6 +423,16 @@ private:
         canvas.Select(pen_donut);
         canvas.DrawCircle(screen_center,
                           screen_radius - look.thick_pen.GetWidth() / 4);
+
+        /* Continue the padding across a cleared boundary.  Skip
+           pixels already covered by this circle's padding, the
+           cleared interior, or an outline. */
+        canvas.Select(Brush(color.WithAlpha(90)));
+        canvas.SelectNullPen();
+        glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
+                      FILL_STENCIL | OUTLINE_STENCIL |
+                      CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
+        canvas.DrawCircle(screen_center, screen_radius);
       }
     }
 
@@ -476,6 +488,17 @@ private:
                            fill_airspace ? 0 : FILL_STENCIL,
                            FILL_STENCIL | OUTLINE_STENCIL |
                            CLEARANCE_STENCIL);
+
+        if (!fill_airspace) {
+          /* Continue the padding across a cleared boundary.  Skip
+             pixels already covered by this airspace's padding, the
+             cleared interior, or an outline. */
+          DrawEvenOddPolygon(canvas, raster_points.data(),
+                             num_raster_points, POLYGON_STENCIL,
+                             CLEARED_RING_STENCIL,
+                             FILL_STENCIL | OUTLINE_STENCIL |
+                             CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
+        }
       }
 
       if (!fill_airspace) {
@@ -504,14 +527,16 @@ public:
   }
 
   /**
-   * Pre-pass: stamp every cleared airspace into CLEARANCE_STENCIL.
+   * Pre-pass: stamp each cleared airspace's interior into
+   * CLEARANCE_STENCIL and its thick-pen ring into
+   * CLEARED_RING_STENCIL.  The interior suppresses warning fill.
+   * The ring extends a neighbour's padding across the boundary.
    */
   void VisitClearance(const AbstractAirspace &airspace) {
     if (!warning_manager.IsCleared(airspace))
       return;
 
     const GLEnable<GL_STENCIL_TEST> stencil;
-    SetClearanceStencil();
 
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE: {
@@ -520,6 +545,11 @@ public:
         projection.GeoToScreen(circle.GetReferenceLocation());
       unsigned screen_radius =
         projection.GeoToScreenDistance(circle.GetRadius());
+
+      SetClearanceStencil();
+      canvas.DrawCircle(screen_center, screen_radius);
+
+      SetClearedRingStencil();
       canvas.DrawCircle(screen_center, screen_radius);
       break;
     }
@@ -529,15 +559,16 @@ public:
       if (!PreparePolygon(polygon.GetPoints()))
         break;
 
-      /* Match the fill path: even-odd for the polygons that use it,
-         otherwise the generic polygon fill. */
       if (use_even_odd && num_raster_points <= MAX_AIRSPACE_VERTICES)
         StampEvenOddClearance(canvas, raster_points.data(),
                               num_raster_points);
       else {
-        canvas.SelectBlackBrush();
+        SetClearanceStencil();
         DrawPrepared();
       }
+
+      SetClearedRingStencil();
+      DrawPrepared();
       break;
     }
     }
@@ -569,6 +600,13 @@ private:
         SetupInterior(airspace, !fill_airspace);
         const GLEnable<GL_BLEND> blend;
         DrawPrepared();
+
+        if (!fill_airspace) {
+          glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
+                        FILL_STENCIL | OUTLINE_STENCIL |
+                        CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
+          DrawPrepared();
+        }
       }
 
       if (!fill_airspace) {
@@ -659,6 +697,17 @@ private:
 
     canvas.SelectNullPen();
     canvas.SelectBlackBrush();
+  }
+
+  /** Write the thick-pen ring along a cleared boundary. */
+  void SetClearedRingStencil() {
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, CLEARED_RING_STENCIL, CLEARED_RING_STENCIL);
+    glStencilMask(CLEARED_RING_STENCIL);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.SelectHollowBrush();
+    canvas.Select(look.thick_pen);
   }
 
   void SetFillStencil() {
