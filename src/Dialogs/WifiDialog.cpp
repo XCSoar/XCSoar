@@ -8,21 +8,25 @@
 #include "Dialogs/TextEntry.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "LogFile.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
+#include "util/Exception.hxx"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "net/wifi/WifiBackend.hpp"
+#include "net/wifi/WifiError.hpp"
 #include "net/wifi/WifiFormat.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include <array>
 #include <algorithm>
 #include <cstring>
-#include <utility>
 #include <memory>
+#include <string>
+#include <utility>
 
 namespace {
 
@@ -163,6 +167,13 @@ NeedsPassphrasePrompt(const WifiNetworkEntry &entry) noexcept
     !entry.has_stored_credentials;
 }
 
+static void
+ShowWifiError(std::exception_ptr error, const char *caption) noexcept
+{
+  ShowMessageBox(WifiError::Format(std::move(error)).c_str(), caption,
+                 MB_OK | MB_ICONEXCLAMATION);
+}
+
 } // namespace
 
 class WifiListWidget final
@@ -176,6 +187,7 @@ class WifiListWidget final
   TwoTextRowsRenderer row_renderer;
 
   UniqueWifiBackend backend_;
+  std::string refresh_error;
   bool scan_pending = false;
 
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
@@ -196,7 +208,7 @@ public:
         scan_button->SetCaption(_("Scanning..."));
         scan_button->SetEnabled(false);
       } catch (...) {
-        ShowError(std::current_exception(), _("Error"));
+        ShowWifiError(std::current_exception(), _("Error"));
       }
     });
 
@@ -204,7 +216,7 @@ public:
       try {
         Connect();
       } catch (...) {
-        ShowError(std::current_exception(), _("Error"));
+        ShowWifiError(std::current_exception(), _("Error"));
       }
     });
 
@@ -212,7 +224,7 @@ public:
       try {
         Forget();
       } catch (...) {
-        ShowError(std::current_exception(), _("Error"));
+        ShowWifiError(std::current_exception(), _("Error"));
       }
     });
   }
@@ -277,6 +289,12 @@ void
 WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned idx) noexcept
 {
+  if (idx >= networks.size()) {
+    row_renderer.DrawFirstRow(canvas, rc, _("WiFi update failed"));
+    row_renderer.DrawSecondRow(canvas, rc, refresh_error.c_str());
+    return;
+  }
+
   const auto &info = networks[idx];
   const char *auth = !info.is_visible &&
     info.kind == WifiNetworkKind::SavedProfile
@@ -421,7 +439,15 @@ WifiListWidget::UpdateList()
 
       networks.append(candidate);
     }
+    refresh_error.clear();
+  } catch (const std::exception &e) {
+    const auto error = std::current_exception();
+    LogFmt("WiFi dialog refresh failed: {}", GetFullMessage(error));
+    refresh_error = WifiError::Format(error);
+    networks.clear();
   } catch (...) {
+    LogFormat("WiFi dialog refresh failed: unknown exception");
+    refresh_error = _("The operation failed.");
     networks.clear();
   }
 
@@ -431,7 +457,7 @@ WifiListWidget::UpdateList()
     scan_button->SetEnabled(true);
   }
 
-  GetList().SetLength(networks.size());
+  GetList().SetLength(networks.size() + (refresh_error.empty() ? 0U : 1U));
 
   UpdateButtons();
 }
