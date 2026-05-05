@@ -61,9 +61,11 @@ ConfigureNetwork(WPASupplicant &wpa, unsigned id, const char *ssid,
     wpa.SetNetworkID(id, "key_mgmt", "NONE");
 
     (void)strtoll(psk, &endPsk_ptr, 16);
+    const std::size_t psk_length = std::strlen(psk);
+    const bool has_hex_prefix = psk_length >= 2 &&
+      psk[0] == '0' && psk[1] == 'x';
 
-    if ((*endPsk_ptr == '\0') &&
-        (std::strlen(psk) >= 2) && (psk[0] != '0') && (psk[1] != 'x'))
+    if ((*endPsk_ptr == '\0') && !has_hex_prefix)
       wpa.SetNetworkID(id, "wep_key0", psk);
     else
       wpa.SetNetworkString(id, "wep_key0", psk);
