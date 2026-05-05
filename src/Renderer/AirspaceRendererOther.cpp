@@ -213,6 +213,41 @@ AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
       v.Visit(airspace);
   }
 
+  /* Clearance erasure post-pass: punch holes in the warning fill at
+     cleared airspace shapes. White in the buffer is transparent in
+     the final alpha-blend; white in the stencil is "no fill" after
+     CopyOr. */
+  if (v.buffer_drawn) {
+    helper.buffer.SelectWhiteBrush();
+    helper.buffer.SelectNullPen();
+    if (helper.use_stencil) {
+      helper.stencil.SelectWhiteBrush();
+      helper.stencil.SelectNullPen();
+    }
+    for (const auto &i : range) {
+      const AbstractAirspace &airspace = i.GetAirspace();
+      if (!visible(airspace) || !awc.IsCleared(airspace))
+        continue;
+
+      switch (airspace.GetShape()) {
+      case AbstractAirspace::Shape::CIRCLE: {
+        const auto &circle = (const AirspaceCircle &)airspace;
+        auto center =
+          projection.GeoToScreen(circle.GetReferenceLocation());
+        unsigned radius =
+          projection.GeoToScreenDistance(circle.GetRadius());
+        helper.DrawCircle(center, radius);
+        break;
+      }
+      case AbstractAirspace::Shape::POLYGON: {
+        const auto &polygon = (const AirspacePolygon &)airspace;
+        helper.DrawSearchPointVector(polygon.GetPoints());
+        break;
+      }
+      }
+    }
+  }
+
   return v.Commit();
 }
 
