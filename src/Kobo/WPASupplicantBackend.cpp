@@ -3,10 +3,13 @@
 
 #include "WPASupplicantBackend.hpp"
 #include "lib/fmt/ToBuffer.hxx"
+#include "net/wifi/WifiError.hpp"
+#include "system/Error.hxx"
 #include "util/HexFormat.hxx"
 #include "util/StringAPI.hxx"
 
 #include <array>
+#include <exception>
 #include <cstring>
 #include <stdexcept>
 
@@ -86,7 +89,14 @@ WPASupplicantBackend::WPASupplicantBackend(const char *interface_name)
 void
 WPASupplicantBackend::EnsureConnected()
 {
-  wpa_.EnsureConnected(FmtBuffer<64>("/var/run/wpa_supplicant/{}", interface_name_).c_str());
+  try {
+    wpa_.EnsureConnected(FmtBuffer<64>("/var/run/wpa_supplicant/{}", interface_name_).c_str());
+  } catch (const std::system_error &e) {
+    if (IsErrno(e, ENOENT) || IsErrno(e, ENODEV) || IsErrno(e, EIO))
+      std::throw_with_nested(WifiError::Exception{WifiError::Code::NoInterface});
+
+    throw;
+  }
 }
 
 void

@@ -416,7 +416,7 @@ NmClient::Connect(ODBus::Connection &c, const char *wifi_device, const AccessPoi
   if (pw != nullptr) {
     AddConnectionAndActivate(c, wifi_device, ap, pw);
   } else if (ap.needs_key) {
-    throw std::runtime_error(WifiError::NEED_KEY);
+    throw WifiError::Exception{WifiError::Code::NeedKey};
   } else {
     AddConnectionAndActivate(c, wifi_device, ap, nullptr);
   }

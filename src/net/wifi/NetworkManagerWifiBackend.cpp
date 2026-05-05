@@ -9,6 +9,7 @@
 #include "lib/dbus/Connection.hxx"
 
 #include <algorithm>
+#include <exception>
 #include <stdexcept>
 
 namespace {
@@ -18,6 +19,22 @@ static constexpr const char *NM_DEVICE_IFACE =
   "org.freedesktop.NetworkManager.Device";
 static constexpr const char *NM_ACCESS_POINT_IFACE =
   "org.freedesktop.NetworkManager.AccessPoint";
+
+static ODBus::Connection
+GetSystemConnection()
+{
+  try {
+    auto c = ODBus::Connection::GetSystem();
+    if (!c)
+      throw WifiError::Exception{WifiError::Code::NoDbusConnection};
+
+    return c;
+  } catch (const WifiError::Exception &) {
+    throw;
+  } catch (...) {
+    std::throw_with_nested(WifiError::Exception{WifiError::Code::NoDbusConnection});
+  }
+}
 
 [[gnu::pure]]
 static StaticString<256>
@@ -175,24 +192,17 @@ ShouldReplaceDuplicateSsidEntry(const WifiNetworkEntry &existing,
   return false;
 }
 
-static std::runtime_error
-TranslateWifiException(const std::exception &e)
-{
-  return std::runtime_error{FormatWifiErrorForUser(e.what())};
-}
-
-
 } // namespace
 
 void
 NetworkManagerWifiBackend::RefreshDevice(ODBus::Connection &c)
 {
   if (!LinuxNetWifi::NameHasOwner(c, NM_NAME))
-    throw std::runtime_error{"NetworkManager is not available"};
+    throw WifiError::Exception{WifiError::Code::NetworkManagerUnavailable};
 
   wifi_device = NmClient::FindWifiDevice(c);
   if (wifi_device.empty())
-    throw std::runtime_error{"No WiFi device found"};
+    throw WifiError::Exception{WifiError::Code::NoInterface};
 
   std::string iface;
   LinuxNetWifi::DbusGetProperty(c, wifi_device.c_str(), NM_DEVICE_IFACE,
@@ -203,30 +213,16 @@ NetworkManagerWifiBackend::RefreshDevice(ODBus::Connection &c)
 void
 NetworkManagerWifiBackend::EnsureConnected()
 {
-  try {
-    auto c = ODBus::Connection::GetSystem();
-    if (!c)
-      throw std::runtime_error{"No D-Bus connection"};
-
-    RefreshDevice(c);
-  } catch (const std::exception &e) {
-    throw TranslateWifiException(e);
-  }
+  auto c = GetSystemConnection();
+  RefreshDevice(c);
 }
 
 void
 NetworkManagerWifiBackend::Scan()
 {
-  try {
-    auto c = ODBus::Connection::GetSystem();
-    if (!c)
-      throw std::runtime_error{"No D-Bus connection"};
-
-    RefreshDevice(c);
-    NmClient::RequestScan(c, wifi_device.c_str());
-  } catch (const std::exception &e) {
-    throw TranslateWifiException(e);
-  }
+  auto c = GetSystemConnection();
+  RefreshDevice(c);
+  NmClient::RequestScan(c, wifi_device.c_str());
 }
 
 void
@@ -243,16 +239,12 @@ NetworkManagerWifiBackend::Connect(const char *ssid, const char *passphrase,
 void
 NetworkManagerWifiBackend::Connect(const WifiConnectRequest &request)
 {
-  try {
-    auto c = ODBus::Connection::GetSystem();
-    if (!c)
-      throw std::runtime_error{"No D-Bus connection"};
+  auto c = GetSystemConnection();
+  RefreshDevice(c);
 
-    RefreshDevice(c);
-
-    auto access_points = NmClient::ListAccessPoints(c, wifi_device.c_str());
-    const auto saved_connections = NmClient::ListSavedWifiConnections(c);
-    PopulateSavedProfilePaths(access_points, saved_connections);
+  auto access_points = NmClient::ListAccessPoints(c, wifi_device.c_str());
+  const auto saved_connections = NmClient::ListSavedConnections(c);
+  PopulateSavedProfilePaths(access_points, saved_connections);
 
   if (!request.profile_id.empty() && request.ssid.empty() &&
       IsSavedConnectionPath(request.profile_id.c_str())) {
@@ -261,7 +253,7 @@ NetworkManagerWifiBackend::Connect(const WifiConnectRequest &request)
                                       return ap.saved_path == request.profile_id.c_str();
                                     });
     if (saved != access_points.end()) {
-        NmClient::ConnectToAp(c, wifi_device.c_str(), *saved, nullptr);
+      NmClient::Connect(c, wifi_device.c_str(), *saved, nullptr);
     } else {
       NmClient::ConnectSaved(c, wifi_device.c_str(),
                              request.profile_id.c_str(), nullptr);
@@ -275,65 +267,48 @@ NetworkManagerWifiBackend::Connect(const WifiConnectRequest &request)
                                     return MatchesRequest(ap, request);
                                   });
   if (found == access_points.end())
-      throw std::runtime_error{WifiError::GONE};
+    throw WifiError::Exception{WifiError::Code::Gone};
 
-    const char *secret = request.secret.empty() ? nullptr : request.secret.c_str();
-    NmClient::Connect(c, wifi_device.c_str(), *found, secret);
-  } catch (const std::exception &e) {
-    throw TranslateWifiException(e);
-  }
+  const char *secret = request.secret.empty() ? nullptr : request.secret.c_str();
+  NmClient::Connect(c, wifi_device.c_str(), *found, secret);
 }
 
 void
 NetworkManagerWifiBackend::Disconnect()
 {
-  try {
-    auto c = ODBus::Connection::GetSystem();
-    if (!c)
-      throw std::runtime_error{"No D-Bus connection"};
-
-    RefreshDevice(c);
-    NmClient::Disconnect(c, wifi_device.c_str());
-  } catch (const std::exception &e) {
-    throw TranslateWifiException(e);
-  }
+  auto c = GetSystemConnection();
+  RefreshDevice(c);
+  NmClient::Disconnect(c, wifi_device.c_str());
 }
 
 WifiBackendStatus
 NetworkManagerWifiBackend::GetBackendStatus()
 {
-  try {
-    auto c = ODBus::Connection::GetSystem();
-    if (!c)
-      throw std::runtime_error{"No D-Bus connection"};
+  auto c = GetSystemConnection();
+  RefreshDevice(c);
 
-    RefreshDevice(c);
+  WifiBackendStatus status;
+  status.interface_name = interface_name;
+  status.signal_unit = WifiSignalUnit::Relative;
 
-    WifiBackendStatus status;
-    status.interface_name = interface_name;
-    status.signal_unit = WifiSignalUnit::Relative;
-
-    const std::string active_ap =
-      NmClient::GetActiveAccessPointPath(c, wifi_device.c_str());
-    if (active_ap.empty()) {
-      status.state = WifiConnectionState::Disconnected;
-      return status;
-    }
-
-    std::string ssid;
-    LinuxNetWifi::DbusGetByteStringProperty(c, active_ap.c_str(),
-      NM_ACCESS_POINT_IFACE, "Ssid", ssid);
-    std::string hw_address;
-    LinuxNetWifi::DbusGetProperty(c, active_ap.c_str(), NM_ACCESS_POINT_IFACE,
-                                  "HwAddress", &hw_address, nullptr, nullptr);
-
-    status.state = WifiConnectionState::Connected;
-    status.ssid = ssid.c_str();
-    status.bssid = hw_address.c_str();
+  const std::string active_ap =
+    NmClient::GetActiveAccessPointPath(c, wifi_device.c_str());
+  if (active_ap.empty()) {
+    status.state = WifiConnectionState::Disconnected;
     return status;
-  } catch (const std::exception &e) {
-    throw TranslateWifiException(e);
   }
+
+  std::string ssid;
+  LinuxNetWifi::DbusGetByteStringProperty(c, active_ap.c_str(),
+    NM_ACCESS_POINT_IFACE, "Ssid", ssid);
+  std::string hw_address;
+  LinuxNetWifi::DbusGetProperty(c, active_ap.c_str(), NM_ACCESS_POINT_IFACE,
+                                "HwAddress", &hw_address, nullptr, nullptr);
+
+  status.state = WifiConnectionState::Connected;
+  status.ssid = ssid.c_str();
+  status.bssid = hw_address.c_str();
+  return status;
 }
 
 std::size_t
@@ -342,83 +317,69 @@ NetworkManagerWifiBackend::GetNetworks(WifiNetworkEntry *dest, std::size_t max)
   if (dest == nullptr || max == 0)
     return 0;
 
-  try {
-    auto c = ODBus::Connection::GetSystem();
-    if (!c)
-      throw std::runtime_error{"No D-Bus connection"};
+  auto c = GetSystemConnection();
+  RefreshDevice(c);
 
-    RefreshDevice(c);
+  const std::string active_ap =
+    NmClient::GetActiveAccessPointPath(c, wifi_device.c_str());
+  auto access_points = NmClient::ListAccessPoints(c, wifi_device.c_str());
+  const auto saved_connections = NmClient::ListSavedConnections(c);
+  PopulateSavedProfilePaths(access_points, saved_connections);
 
-    const std::string active_ap =
-      NmClient::GetActiveAccessPointPath(c, wifi_device.c_str());
-    auto access_points = NmClient::ListAccessPoints(c, wifi_device.c_str());
-    const auto saved_connections = NmClient::ListSavedConnections(c);
-    PopulateSavedProfilePaths(access_points, saved_connections);
-
-    std::size_t count = 0;
-    for (const auto &ap : access_points) {
-      const bool active = !active_ap.empty() &&
-        NmClient::IsSameBssidAsActive(c, active_ap.c_str(), ap);
-      if (ap.ssid_text.empty() && !active)
-        continue;
+  std::size_t count = 0;
+  for (const auto &ap : access_points) {
+    const bool active = !active_ap.empty() &&
+      NmClient::IsSameBssidAsActive(c, active_ap.c_str(), ap);
+    if (ap.ssid_text.empty() && !active)
+      continue;
 
     WifiNetworkEntry candidate;
     AssignNetworkEntryFromAccessPoint(candidate, ap,
-                    FindUniqueSavedConnection(saved_connections, ap),
-                    active);
+                                  FindUniqueSavedConnection(saved_connections, ap),
+                                  active);
     if (active)
       candidate.interface_name = interface_name;
 
-      WifiNetworkEntry *existing = nullptr;
-      if (!candidate.ssid.empty())
-        for (std::size_t i = 0; i < count; ++i)
-          if (dest[i].ssid == candidate.ssid) {
-            existing = &dest[i];
-            break;
-          }
+    WifiNetworkEntry *existing = nullptr;
+    if (!candidate.ssid.empty())
+      for (std::size_t i = 0; i < count; ++i)
+        if (dest[i].ssid == candidate.ssid) {
+          existing = &dest[i];
+          break;
+        }
 
-      if (existing != nullptr) {
-        if (ShouldReplaceDuplicateSsidEntry(*existing, candidate))
-          *existing = candidate;
+    if (existing != nullptr) {
+      if (ShouldReplaceDuplicateSsidEntry(*existing, candidate))
+        *existing = candidate;
 
-        continue;
-      }
-
-      if (count >= max)
-        break;
-
-      dest[count++] = candidate;
+      continue;
     }
 
-    for (const auto &saved : saved_connections) {
-      if (count >= max)
-        break;
+    if (count >= max)
+      break;
 
-      if (HasVisibleCounterpart(dest, count, saved))
-        continue;
-
-      AssignSavedNetworkEntry(dest[count++], saved);
-    }
-
-    return count;
-  } catch (const std::exception &e) {
-    throw TranslateWifiException(e);
+    dest[count++] = candidate;
   }
+
+  for (const auto &saved : saved_connections) {
+    if (count >= max)
+      break;
+
+    if (HasVisibleCounterpart(dest, count, saved))
+      continue;
+
+    AssignSavedNetworkEntry(dest[count++], saved);
+  }
+
+  return count;
 }
 
 void
 NetworkManagerWifiBackend::ForgetNetwork(const char *profile_id)
 {
-  try {
-    auto c = ODBus::Connection::GetSystem();
-    if (!c)
-      throw std::runtime_error{"No D-Bus connection"};
+  auto c = GetSystemConnection();
+  if (!LinuxNetWifi::NameHasOwner(c, NM_NAME))
+    throw WifiError::Exception{WifiError::Code::NetworkManagerUnavailable};
 
-    if (!LinuxNetWifi::NameHasOwner(c, NM_NAME))
-      throw std::runtime_error{"NetworkManager is not available"};
-
-    NmClient::Remove(c, profile_id);
-  } catch (const std::exception &e) {
-    throw TranslateWifiException(e);
-  }
+  NmClient::Remove(c, profile_id);
 }
