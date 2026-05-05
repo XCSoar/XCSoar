@@ -18,7 +18,7 @@ private:
   StaticArray<GeoPoint,32> locations;
 
   /* List of cleared airspaces.
-     These are user-set with no upper limit, and not reduced by warning-manager 
+     These are user-set with no upper limit, and not reduced by warning-manager
      proximity heuristics, so use a vector with a small reservation. */
   std::vector<const AbstractAirspace *> ids_cleared;
 
@@ -34,16 +34,19 @@ public:
   }
 
   void Visit(const AirspaceWarning& as) noexcept {
-    if (as.IsInside()) {
-      ids_inside.checked_append(&as.GetAirspace());
-    } else if (as.IsWarning()) {
-      ids_warning.checked_append(&as.GetAirspace());
-      if (as.IsAckExpired())
-        locations.checked_append(as.GetSolution().location);
-    }
+    if (!as.IsCoveredByClearance() &&
+        !(as.IsCleared() && !as.IsExitWarning())) {
+      if (as.IsInside()) {
+        ids_inside.checked_append(&as.GetAirspace());
+      } else if (as.IsWarning()) {
+        ids_warning.checked_append(&as.GetAirspace());
+        if (as.IsAckExpired())
+          locations.checked_append(as.GetSolution().location);
+      }
 
-    if (!as.IsAckExpired())
-      ids_acked.checked_append(&as.GetAirspace());
+      if (!as.IsAckExpired())
+        ids_acked.checked_append(&as.GetAirspace());
+    }
 
     if (as.IsCleared())
       ids_cleared.push_back(&as.GetAirspace());

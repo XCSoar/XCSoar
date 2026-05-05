@@ -155,7 +155,6 @@ public:
         projection.GeoToScreen(circle.GetReferenceLocation());
       unsigned screen_radius =
         projection.GeoToScreenDistance(circle.GetRadius());
-      canvas.SelectBlackBrush();
       canvas.DrawCircle(screen_center, screen_radius);
       break;
     }
@@ -218,6 +217,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     canvas.SelectNullPen();
+    canvas.SelectBlackBrush();
   }
 
   void SetFillStencil() {
