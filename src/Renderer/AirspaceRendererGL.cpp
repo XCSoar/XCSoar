@@ -138,6 +138,39 @@ public:
     }
   }
 
+  /**
+   * Pre-pass: Stamp the area of every cleared airspace into stencil bit 2.
+   */
+  void VisitClearance(const AbstractAirspace &airspace) {
+    if (!warning_manager.IsCleared(airspace))
+      return;
+
+    const GLEnable<GL_STENCIL_TEST> stencil;
+    SetClearanceStencil();
+
+    switch (airspace.GetShape()) {
+    case AbstractAirspace::Shape::CIRCLE: {
+      const auto &circle = (const AirspaceCircle &)airspace;
+      auto screen_center =
+        projection.GeoToScreen(circle.GetReferenceLocation());
+      unsigned screen_radius =
+        projection.GeoToScreenDistance(circle.GetRadius());
+      canvas.SelectBlackBrush();
+      canvas.DrawCircle(screen_center, screen_radius);
+      break;
+    }
+
+    case AbstractAirspace::Shape::POLYGON: {
+      const auto &polygon = (const AirspacePolygon &)airspace;
+      if (PreparePolygon(polygon.GetPoints()))
+        DrawPrepared();
+      break;
+    }
+    }
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  }
+
 private:
   bool SetupOutline(const AbstractAirspace &airspace) {
     AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
@@ -165,14 +198,25 @@ private:
 	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
-    // restrict drawing area and don't paint over previously drawn outlines
+    /* Restrict drawing area: don't paint over previously drawn
+       outlines (bit 1) and don't paint inside cleared airspaces
+       (bit 2, set by DrawClearancePrePass). */
     if (check_fillstencil)
-      glStencilFunc(GL_EQUAL, 1, 3);
+      glStencilFunc(GL_EQUAL, 1, 3 | 4);
     else
-      glStencilFunc(GL_EQUAL, 0, 2);
+      glStencilFunc(GL_EQUAL, 0, 2 | 4);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     canvas.Select(Brush(class_look.fill_color.WithAlpha(90)));
+    canvas.SelectNullPen();
+  }
+
+  void SetClearanceStencil() {
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 4, 4);
+    glStencilMask(4);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
     canvas.SelectNullPen();
   }
 
@@ -311,6 +355,12 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
     }
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings);
+
+    // Init pass: stamp cleared airspaces into stencil bit 2 
+    for (const auto &i : range)
+      renderer.VisitClearance(i.GetAirspace());
+
+    // Main pass: draw warnings and outlines
     for (const auto &i : range) {
       const AbstractAirspace &airspace = i.GetAirspace();
       if (visible(airspace))
