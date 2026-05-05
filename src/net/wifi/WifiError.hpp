@@ -3,27 +3,41 @@
 
 #pragma once
 
+#include <cstdint>
+#include <exception>
+#include <stdexcept>
 #include <string>
 
 /**
- * @brief Fixed exception messages from net/wifi code. Translated in
- * #FormatWifiErrorForUser for message boxes; keep stable for mapping.
+ * Stable Wi-Fi failure reasons carried by Wi-Fi backends and translated by
+ * #Format at the UI boundary.
  */
 namespace WifiError {
-inline constexpr const char GONE[] = "XCSOAR_WIFI_GONE";
-inline constexpr const char NEED_KEY[] = "XCSOAR_WIFI_NEED_KEY";
-/** NetworkManager: device in FAILED state. */
-inline constexpr const char NM_FAIL[] = "XCSOAR_WIFI_NM_FAIL";
-/** NetworkManager: no ACTIVATED before timeout. */
-inline constexpr const char NM_TIMEOUT[] = "XCSOAR_WIFI_NM_TIMEOUT";
-/** ConnMan: #Service.State failure / disconnect after connect. */
-inline constexpr const char CM_FAIL[] = "XCSOAR_WIFI_CM_FAIL";
-inline constexpr const char CM_TIMEOUT[] = "XCSOAR_WIFI_CM_TIMEOUT";
-} // namespace WifiError
+enum class Code : std::uint8_t {
+  Gone,
+  NeedKey,
+  NoInterface,
+  NoDbusConnection,
+  ConnmanUnavailable,
+  NoBackendAvailable,
+  NetworkManagerUnavailable,
+};
 
-/**
- * Map #std::exception::what() to a string suitable for the UI (translated
- * for known D-Bus / tagged errors, English for unknown short technical text).
- */
+class Exception final : public std::runtime_error {
+  Code code;
+
+public:
+  explicit Exception(Code _code);
+
+  [[gnu::pure]]
+  Code GetCode() const noexcept {
+    return code;
+  }
+};
+
 std::string
-FormatWifiErrorForUser(const char *what);
+Format(const std::exception &e);
+
+std::string
+Format(std::exception_ptr e);
+} // namespace WifiError

@@ -12,26 +12,43 @@
 #include "lib/dbus/Connection.hxx"
 #include "util/Compiler.h"
 
+#include <exception>
+
 namespace {
 
 static constexpr const char *NM_NAME = "org.freedesktop.NetworkManager";
 static constexpr const char *NM_PATH = "/org/freedesktop/NetworkManager";
 static constexpr const char *CONNMAN_NAME = "net.connman";
 
+static ODBus::Connection
+GetSystemConnection()
+{
+  try {
+    auto c = ODBus::Connection::GetSystem();
+    if (!c)
+      throw WifiError::Exception{WifiError::Code::NoDbusConnection};
+
+    return c;
+  } catch (const WifiError::Exception &) {
+    throw;
+  } catch (...) {
+    std::throw_with_nested(WifiError::Exception{WifiError::Code::NoDbusConnection});
+  }
+}
+
 } // namespace
 
 LinuxWifiBackendKind
 QueryLinuxWifiBackendKind()
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    return LinuxWifiBackendKind::None;
+  auto c = GetSystemConnection();
 
   if (LinuxNetWifi::NameHasOwner(c, NM_NAME) &&
       !NmClient::FindWifiDevice(c).empty())
     return LinuxWifiBackendKind::NetworkManager;
 
-  if (LinuxNetWifi::NameHasOwner(c, CONNMAN_NAME))
+  if (LinuxNetWifi::NameHasOwner(c, CONNMAN_NAME) &&
+      CmClient::HasWifiTechnology(c))
     return LinuxWifiBackendKind::ConnMan;
 
   return LinuxWifiBackendKind::None;
@@ -40,18 +57,20 @@ QueryLinuxWifiBackendKind()
 bool
 HasLinuxWifiRadioToggle(LinuxWifiBackendKind backend_kind) noexcept
 {
-  return backend_kind == LinuxWifiBackendKind::NetworkManager;
+  return backend_kind == LinuxWifiBackendKind::NetworkManager ||
+    backend_kind == LinuxWifiBackendKind::ConnMan;
 }
 
 bool
 GetLinuxWifiRadioEnabled(LinuxWifiBackendKind backend_kind)
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw std::runtime_error{FormatWifiErrorForUser("No D-Bus connection")};
+  auto c = GetSystemConnection();
 
   switch (backend_kind) {
   case LinuxWifiBackendKind::NetworkManager: {
+    if (!LinuxNetWifi::NameHasOwner(c, NM_NAME))
+      throw WifiError::Exception{WifiError::Code::NetworkManagerUnavailable};
+
     bool enabled = true;
     LinuxNetWifi::DbusGetProperty(c, NM_PATH, NM_NAME, "WirelessEnabled",
                                   nullptr, nullptr, &enabled);
@@ -59,39 +78,49 @@ GetLinuxWifiRadioEnabled(LinuxWifiBackendKind backend_kind)
   }
 
   case LinuxWifiBackendKind::ConnMan:
-    throw std::runtime_error{
-      FormatWifiErrorForUser("ConnMan radio control not available yet")};
+    if (!LinuxNetWifi::NameHasOwner(c, CONNMAN_NAME))
+      throw WifiError::Exception{WifiError::Code::ConnmanUnavailable};
+
+    if (!CmClient::HasWifiTechnology(c))
+      throw WifiError::Exception{WifiError::Code::NoInterface};
+
+    return CmClient::IsWifiTechnologyPowered(c);
 
   case LinuxWifiBackendKind::None:
-    throw std::runtime_error{
-      FormatWifiErrorForUser("No Wi-Fi backend available")};
+    throw WifiError::Exception{WifiError::Code::NoBackendAvailable};
   }
 
-  throw std::runtime_error{FormatWifiErrorForUser("No Wi-Fi backend available")};
+  throw WifiError::Exception{WifiError::Code::NoBackendAvailable};
 }
 
 void
 SetLinuxWifiRadioEnabled(LinuxWifiBackendKind backend_kind, bool enabled)
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw std::runtime_error{FormatWifiErrorForUser("No D-Bus connection")};
+  auto c = GetSystemConnection();
 
   switch (backend_kind) {
   case LinuxWifiBackendKind::NetworkManager:
+    if (!LinuxNetWifi::NameHasOwner(c, NM_NAME))
+      throw WifiError::Exception{WifiError::Code::NetworkManagerUnavailable};
+
     NmClient::SetWirelessEnabled(c, enabled);
     return;
 
   case LinuxWifiBackendKind::ConnMan:
-    throw std::runtime_error{
-      FormatWifiErrorForUser("ConnMan radio control not available yet")};
+    if (!LinuxNetWifi::NameHasOwner(c, CONNMAN_NAME))
+      throw WifiError::Exception{WifiError::Code::ConnmanUnavailable};
+
+    if (!CmClient::HasWifiTechnology(c))
+      throw WifiError::Exception{WifiError::Code::NoInterface};
+
+    CmClient::SetWifiTechnologyPowered(c, enabled);
+    return;
 
   case LinuxWifiBackendKind::None:
-    throw std::runtime_error{
-      FormatWifiErrorForUser("No Wi-Fi backend available")};
+    throw WifiError::Exception{WifiError::Code::NoBackendAvailable};
   }
 
-  throw std::runtime_error{FormatWifiErrorForUser("No Wi-Fi backend available")};
+  throw WifiError::Exception{WifiError::Code::NoBackendAvailable};
 }
 
 UniqueWifiBackend

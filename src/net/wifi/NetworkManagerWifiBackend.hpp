@@ -24,7 +24,7 @@ public:
   void Disconnect() override;
   WifiBackendStatus GetBackendStatus() override;
   std::size_t GetNetworks(WifiNetworkEntry *dest, std::size_t max) override;
-  [[noreturn]] void ForgetNetwork(const char *profile_id) override;
+  void ForgetNetwork(const char *profile_id) override;
 
 private:
   void RefreshDevice(ODBus::Connection &c);

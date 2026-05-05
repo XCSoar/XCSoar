@@ -19,6 +19,9 @@ FormatWifiAuthModeLabel(WifiAuthMode mode) noexcept
 
   case WifiAuthMode::Unsupported:
     return _("Unsupported");
+
+  case WifiAuthMode::COUNT:
+    break;
   }
 
   return _("Unsupported");
@@ -47,6 +50,9 @@ FormatWifiConnectionStateLabel(WifiConnectionState state) noexcept
 
   case WifiConnectionState::Unknown:
     return _("Status unknown");
+
+  case WifiConnectionState::COUNT:
+    break;
   }
 
   return _("Status unknown");

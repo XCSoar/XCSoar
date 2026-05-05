@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "WifiTypes.hpp"
+#include "WifiData.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -112,13 +112,18 @@ public:
 
       entry->profile_id = FormatProfileId(network.id);
       entry->kind = WifiNetworkKind::SavedProfile;
-      entry->can_connect = false;
+      entry->has_stored_credentials = true;
+      entry->can_connect = true;
       entry->can_forget = true;
     }
 
     for (std::size_t i = 0; i < count; ++i)
-      if (!status.bssid.empty() && dest[i].bssid == status.bssid)
+      if (!status.bssid.empty() && dest[i].bssid == status.bssid) {
         dest[i].kind = WifiNetworkKind::ConnectedNetwork;
+        dest[i].can_connect = false;
+        dest[i].can_disconnect = true;
+        dest[i].interface_name = status.interface_name;
+      }
 
     return count;
   }

@@ -50,6 +50,7 @@ FormatStatusLine(const WifiBackendStatus &status)
   case WifiConnectionState::Connecting:
   case WifiConnectionState::Disconnected:
   case WifiConnectionState::Unknown:
+  case WifiConnectionState::COUNT:
     text = FormatWifiConnectionStateLabel(status.state);
     break;
   }

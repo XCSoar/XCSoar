@@ -35,6 +35,7 @@ GetAuthLabel(WifiSecurity security) noexcept
     return "Passphrase";
 
   case WifiAuthMode::Unsupported:
+  case WifiAuthMode::COUNT:
     return "Unsupported";
   }
 
@@ -187,6 +188,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       break;
 
     case WifiSignalUnit::Unknown:
+    case WifiSignalUnit::COUNT:
       text = auth;
       break;
     }
