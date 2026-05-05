@@ -54,9 +54,20 @@ public:
   void FirstRun() noexcept {
     assert(!IsDefined());
 
-    Process();
+    ProcessUnlocked();
   }
 
+  /**
+   * Run one merge cycle synchronously from the main thread while this
+   * worker thread is suspended.  Omits UI/device triggers when false is
+   * passed (bulk replay seek).
+   */
+  void RunMergeCycle(bool notify_triggers) noexcept;
+
+private:
+  void ProcessUnlocked() noexcept;
+
+public:
   /**
    * Throws on error.
    */
@@ -64,9 +75,6 @@ public:
     WorkerThread::Start(suspended);
     SetLowPriority();
   }
-
-private:
-  void Process() noexcept;
 
 protected:
   void Tick() noexcept override;

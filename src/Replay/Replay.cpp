@@ -10,11 +10,34 @@
 #include "Logger/Logger.hpp"
 #include "Interface.hpp"
 #include "CatmullRomInterpolator.hpp"
+#include "CalculationThread.hpp"
+#include "Geo/GeoVector.hpp"
+#include "MergeThread.hpp"
+#include "Protection.hpp"
 #include "time/Cast.hxx"
 
 #include <algorithm> // for std::clamp()
 #include <cassert>
 #include <stdexcept>
+
+namespace {
+
+void
+ApplyReplayFix(DeviceBlackboard &device_blackboard,
+               MergeThread &merge_thread,
+               CalculationThread &calculation_thread,
+               const NMEAInfo &fix) noexcept
+{
+  {
+    const std::lock_guard lock{device_blackboard.mutex};
+    device_blackboard.SetReplayState() = fix;
+  }
+
+  merge_thread.RunMergeCycle(false);
+  calculation_thread.RunTickDirect(false);
+}
+
+} // namespace
 
 void
 Replay::Stop()
@@ -67,6 +90,117 @@ Replay::Start(Path _path)
   next_data.Reset();
 
   timer.Schedule(std::chrono::milliseconds(100));
+}
+
+bool
+Replay::SeekToFlightElapsedMinutes(unsigned minutes,
+                                    MergeThread &merge_thread,
+                                    CalculationThread &calculation_thread) noexcept
+{
+  constexpr unsigned MAX_MINUTES = 24 * 60;
+  if (minutes > MAX_MINUTES)
+    return false;
+
+  timer.Cancel();
+
+  const AllocatedPath saved_path{GetFilename()};
+
+  try {
+    Stop();
+    Start(saved_path);
+  } catch (...) {
+    return false;
+  }
+
+  timer.Cancel();
+
+  struct ScopedSuspend final {
+    MergeThread &merge_thread;
+    CalculationThread &calculation_thread;
+
+    ScopedSuspend(MergeThread &m, CalculationThread &c) noexcept
+      :merge_thread(m), calculation_thread(c)
+    {
+      calculation_thread.Suspend();
+      merge_thread.Suspend();
+    }
+
+    ~ScopedSuspend() noexcept
+    {
+      merge_thread.Resume();
+      calculation_thread.Resume();
+    }
+  } suspend{merge_thread, calculation_thread};
+
+  next_data.Reset();
+
+  while (!next_data.time_available) {
+    if (!replay->Update(next_data))
+      return false;
+  }
+
+  const TimeStamp anchor = next_data.time;
+  const TimeStamp target_ts =
+    anchor + FloatDuration{(double)minutes * 60.};
+
+  while (next_data.time_available && next_data.time <= target_ts) {
+    ApplyReplayFix(device_blackboard, merge_thread, calculation_thread,
+                   next_data);
+
+    if (cli != nullptr && next_data.time_available)
+      cli->Update(next_data.time, next_data.location,
+                  next_data.gps_altitude, next_data.pressure_altitude);
+
+    if (!replay->Update(next_data))
+      break;
+  }
+
+  virtual_time = target_ts;
+
+  if (cli != nullptr) {
+    while (cli->NeedData(virtual_time)) {
+      if (!replay->Update(next_data))
+        break;
+
+      if (next_data.time_available)
+        cli->Update(next_data.time, next_data.location,
+                    next_data.gps_altitude, next_data.pressure_altitude);
+    }
+
+    if (cli->Ready()) {
+      const CatmullRomInterpolator::Record r =
+        cli->Interpolate(virtual_time);
+      const GeoVector v = cli->GetVector(virtual_time);
+
+      NMEAInfo data = next_data;
+      data.clock = virtual_time;
+      data.alive.Update(data.clock);
+      data.ProvideTime(virtual_time);
+      data.location = r.location;
+      data.location_available.Update(data.clock);
+      data.ground_speed = v.distance;
+      data.ground_speed_available.Update(data.clock);
+      data.track = v.bearing;
+      data.track_available.Update(data.clock);
+      data.gps_altitude = r.gps_altitude;
+      data.gps_altitude_available.Update(data.clock);
+      data.ProvidePressureAltitude(r.baro_altitude);
+      data.ProvideBaroAltitudeTrue(r.baro_altitude);
+
+      ApplyReplayFix(device_blackboard, merge_thread, calculation_thread,
+                     data);
+    }
+  }
+
+  fast_forward = TimeStamp::Undefined();
+  clock.Update();
+
+  CommonInterface::ReadBlackboardBasic(device_blackboard.Basic());
+  TriggerCalculatedUpdate();
+  TriggerVarioUpdate();
+
+  timer.Schedule(std::chrono::milliseconds(100));
+  return true;
 }
 
 bool

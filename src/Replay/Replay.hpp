@@ -14,6 +14,8 @@ class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
 class CatmullRomInterpolator;
+class MergeThread;
+class CalculationThread;
 class Error;
 
 class Replay final
@@ -117,6 +119,15 @@ public:
   TimeStamp GetVirtualTime() const noexcept {
     return virtual_time;
   }
+
+  /**
+   * Restart the current recording and replay synchronously up to the given
+   * number of minutes after the first fix, merging every fix into the
+   * blackboard.
+   */
+  bool SeekToFlightElapsedMinutes(unsigned minutes,
+                                  MergeThread &merge_thread,
+                                  CalculationThread &calculation_thread) noexcept;
 
 private:
   void OnTimer();
