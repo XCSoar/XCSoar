@@ -237,10 +237,18 @@ public:
         const auto &p = intersections.front();
         double d0 = state.location.Distance(p.first);
         double d1 = state.location.Distance(p.second);
-        if (d0 <= d1)
+        if (d0 < d1)
           iv = {{d0, p.first}, {d1, p.second}};
-        else
+        else if (d1 < d0)
           iv = {{d1, p.second}, {d0, p.first}};
+        else {
+          /* p.first == p.second: the path enters the airspace but
+             the predicted endpoint lies inside it. Use the prediction
+             endpoint as the interval end instead */
+          const double d_end =
+            state.location.Distance(location_predicted);
+          iv = {{d0, p.first}, {d_end, location_predicted}};
+        }
       }
     } else {
       /* Aircraft is inside this airspace. Find exit
@@ -776,7 +784,7 @@ AirspaceWarningManager::ProcessClearanceIntervals(
 
     if (any_changed && !any_survives) {
       // All approach intervals fully covered by clearance.
-      w.ForceState(AirspaceWarning::WARNING_CLEAR);
+      w.SetCoveredByClearance(true);
     } else if (any_changed && surv_distance >= 0) {
       // Rebuild solution at the new nearest entry point.
       const AirspaceAircraftPerformance perf = PerfFor(
@@ -786,8 +794,11 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         w.GetAirspace().Intercept(state, perf,
                                   surv_location,
                                   surv_location);
-      if (sol.IsValid())
+      if (!sol.IsValid() || sol.elapsed_time > warning_time) {
+        w.SetCoveredByClearance(true);     // or ForceState(WARNING_CLEAR)
+      } else if (sol.IsValid()) {
         w.SetSolution(sol);
+      }
     }
   }
 }
