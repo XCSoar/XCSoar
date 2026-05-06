@@ -27,7 +27,8 @@ public:
       ids_inside.checked_append(&as.GetAirspace());
     } else if (as.IsWarning()) {
       ids_warning.checked_append(&as.GetAirspace());
-      locations.checked_append(as.GetSolution().location);
+      if (as.IsAckExpired())
+        locations.checked_append(as.GetSolution().location);
     }
 
     if (!as.IsAckExpired())
