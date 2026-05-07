@@ -74,10 +74,20 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
                          _("Select the SkySight region used for live weather layers."));
   if (region != nullptr) {
     auto &df = *(DataFieldEnum *)region->GetDataField();
-    for (const auto &candidate : skysight_regions)
-      df.AddChoice(unsigned(candidate.value), gettext(candidate.name));
+    const auto skysight = DataGlobals::GetSkySight();
+    if (skysight != nullptr) {
+      for (const auto &candidate : skysight->GetRegions())
+        df.addEnumText(candidate.id.c_str(), candidate.name.c_str());
 
-    df.SetValue(FindSkySightRegionById(settings.skysight.region.c_str()).value);
+      if (!df.SetValue(settings.skysight.region.c_str()))
+        df.SetValue(skysight->GetRegion().data());
+    } else {
+      for (const auto &candidate : skysight_regions)
+        df.addEnumText(candidate.id, gettext(candidate.name));
+
+      df.SetValue(FindSkySightRegionById(settings.skysight.region.c_str()).id);
+    }
+
     region->RefreshDisplay();
   }
 #endif
@@ -106,12 +116,8 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
                                 ProfileKeys::SkySightPassword,
                                 settings.skysight.password);
 
-  const auto &new_region = FindSkySightRegionByValue(GetValueEnum(SKYSIGHT_REGION));
-  if (std::string_view{settings.skysight.region.c_str()} != new_region.id) {
-    settings.skysight.region = new_region.id;
-    Profile::Set(ProfileKeys::SkySightRegion, new_region.id);
-    skysight_changed = true;
-  }
+  skysight_changed |= SaveValue(SKYSIGHT_REGION, ProfileKeys::SkySightRegion,
+                                settings.skysight.region);
 
   if (skysight_changed)
     if (auto skysight = DataGlobals::GetSkySight())
