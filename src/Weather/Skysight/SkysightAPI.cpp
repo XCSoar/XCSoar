@@ -7,6 +7,7 @@
 #include "time/Convert.hxx"
 #include "util/StaticString.hxx"
 #include "LogFile.hpp"
+#include "system/FileUtil.hpp"
 
 #include <chrono>
 #include <algorithm>
@@ -79,6 +80,30 @@ ParseLegend(const boost::json::object &entry, SkySight::Layer &layer)
                            color_array[2].to_number<uint8_t>(),
                          });
   }
+}
+
+static std::string_view
+StripUrlQuery(std::string_view url) noexcept
+{
+  const auto split = url.find_first_of("?#");
+  return split == std::string_view::npos
+    ? url
+    : url.substr(0, split);
+}
+
+static std::string
+GetUrlSuffix(std::string_view url)
+{
+  const auto clean = StripUrlQuery(url);
+  const auto slash = clean.find_last_of('/');
+  const auto filename = slash == std::string_view::npos
+    ? clean
+    : clean.substr(slash + 1);
+  const auto dot = filename.find_last_of('.');
+  if (dot == std::string_view::npos)
+    return ".zip";
+
+  return std::string{filename.substr(dot)};
 }
 
 } // namespace
@@ -270,6 +295,19 @@ SkysightAPI::GetTilePath(const SkySight::Layer &layer, time_t timestamp,
   return AllocatedPath::Build(cache_path, filename);
 }
 
+AllocatedPath
+SkysightAPI::GetDatafilePath(const SkySight::Layer &layer,
+                             time_t forecast_time,
+                             std::string_view suffix) const
+{
+  StaticString<128> filename;
+  filename.Format("%s-%s-%s%s",
+                  region.c_str(), layer.id.c_str(),
+                  FormatFileTimestamp(forecast_time).c_str(),
+                  std::string{suffix}.c_str());
+  return AllocatedPath::Build(cache_path, filename);
+}
+
 void
 SkysightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
                         const GeoBitmap::TileData &tile)
@@ -277,6 +315,16 @@ SkysightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
   request->DownloadFile(MakeTileUrl(layer, timestamp, tile),
                         GetTilePath(layer, timestamp, tile),
                         layer.requires_auth);
+}
+
+void
+SkysightAPI::EnsureDatafile(const SkySight::Layer &layer,
+                            time_t forecast_time,
+                            std::string_view link)
+{
+  request->DownloadDatafile(layer.id, forecast_time, link,
+                            GetDatafilePath(layer, forecast_time,
+                                            GetUrlSuffix(link)));
 }
 
 void
@@ -504,6 +552,8 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
   bool found = false;
   time_t first_time = 0;
   time_t last_time = 0;
+  time_t newest_time = 0;
+  std::string newest_link;
 
   try {
     for (const auto &entry_value : value.as_array()) {
@@ -524,6 +574,12 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
         first_time = std::min(first_time, update_time);
         last_time = std::max(last_time, update_time);
       }
+
+      if (const auto *link = entry.if_contains("link");
+          link != nullptr && link->is_string() && update_time >= newest_time) {
+        newest_time = update_time;
+        newest_link = link->as_string().c_str();
+      }
     }
   } catch (...) {
     LogError(std::current_exception(), "SkySight datafiles parsing failed");
@@ -535,6 +591,9 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     layer->from = first_time;
     layer->to = last_time;
     layer->last_update = std::max(layer->last_update, last_time);
+
+    if (!newest_link.empty())
+      EnsureDatafile(*layer, newest_time, newest_link);
   }
 
   SyncSelectedLayer(layer_id);
@@ -557,6 +616,30 @@ SkysightAPI::OnDatafilesError(std::string_view layer_id) noexcept
 void
 SkysightAPI::OnDownloadComplete() noexcept
 {
+  owner.OnDataUpdated();
+}
+
+void
+SkysightAPI::OnDatafileDownloaded(std::string_view layer_id,
+                                  time_t forecast_time,
+                                  Path path) noexcept
+{
+  auto *layer = GetLayer(layer_id);
+  if (layer == nullptr)
+    return;
+
+  layer->last_update = std::max(layer->last_update, forecast_time);
+  layer->mtime = std::chrono::system_clock::to_time_t(
+    File::GetLastModification(path));
+  SyncSelectedLayer(layer_id);
+  owner.OnDataUpdated();
+}
+
+void
+SkysightAPI::OnDatafileError(std::string_view layer_id,
+                             [[maybe_unused]] time_t forecast_time) noexcept
+{
+  SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
 }
 

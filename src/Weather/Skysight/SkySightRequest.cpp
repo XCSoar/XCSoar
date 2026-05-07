@@ -10,14 +10,18 @@
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/curl/Slist.hxx"
+#include "io/ZipArchive.hpp"
+#include "io/ZipReader.hpp"
 #include "io/FileOutputStream.hxx"
 #include "lib/fmt/RuntimeError.hxx"
 #include "lib/curl/Global.hxx"
 #include "LogFile.hpp"
+#include "system/FileUtil.hpp"
 
 #include <boost/json.hpp>
 
 #include <algorithm>
+#include <array>
 #include <cstdlib>
 #include <ctime>
 #include <utility>
@@ -30,6 +34,57 @@ public:
     :std::runtime_error("SkySight HTTP request failed"),
      status(_status) {}
 };
+
+static bool
+HasForecastDataSuffix(std::string_view path) noexcept
+{
+  return path.ends_with(".nc") ||
+    path.ends_with(".tif") || path.ends_with(".tiff") ||
+    path.ends_with(".png") ||
+    path.ends_with(".jpg") || path.ends_with(".jpeg");
+}
+
+static AllocatedPath
+ExtractForecastArchive(Path archive_path)
+{
+  if (!archive_path.EndsWithIgnoreCase(".zip"))
+    return archive_path;
+
+  ZipArchive archive(archive_path);
+
+  std::string entry_name;
+  while (true) {
+    entry_name = archive.NextName();
+    if (entry_name.empty())
+      throw std::runtime_error("SkySight forecast archive is empty");
+
+    if (entry_name.back() != '/' && HasForecastDataSuffix(entry_name))
+      break;
+  }
+
+  const auto suffix = Path{entry_name.c_str()}.GetSuffix();
+  if (suffix == nullptr)
+    throw std::runtime_error("SkySight forecast archive entry has no suffix");
+
+  const auto output_path = archive_path.WithSuffix(suffix);
+  if (File::Exists(output_path))
+    return AllocatedPath(output_path.c_str());
+
+  ZipReader reader(archive.get(), entry_name.c_str());
+  FileOutputStream output(output_path);
+  std::array<std::byte, 64 * 1024> buffer;
+
+  while (true) {
+    const auto nbytes = reader.Read(buffer);
+    if (nbytes == 0)
+      break;
+
+    output.Write(std::span<const std::byte>{buffer.data(), nbytes});
+  }
+
+  output.Commit();
+  return AllocatedPath(output_path.c_str());
+}
 
 static std::string
 EscapeJsonString(std::string_view value)
@@ -247,10 +302,15 @@ SkySightRequest::PumpQueue()
     auto active_job = std::make_unique<FileJob>(curl.GetEventLoop());
     auto *job_ptr = active_job.get();
     const auto key = job.key;
+    job_ptr->kind = job.kind;
+    job_ptr->path = std::move(job.path);
+    job_ptr->layer_id = job.layer_id;
+    job_ptr->forecast_time = job.forecast_time;
 
     file_jobs.emplace(key, std::move(active_job));
     job_ptr->function.Start(
-      DownloadFileTask(curl, std::move(job.url), std::move(job.path),
+      DownloadFileTask(curl, std::move(job.url),
+                       AllocatedPath(job_ptr->path.c_str()),
                        job.requires_auth ? api_key : std::string{}),
       [this, key](AllocatedPath) {
         OnFileSuccess(key);
@@ -342,6 +402,37 @@ SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires
 
   pending_jobs.emplace_back(key, std::string{url},
                             AllocatedPath(filename.c_str()), requires_auth);
+  PumpQueue();
+}
+
+void
+SkySightRequest::DownloadDatafile(std::string_view layer_id,
+                                  time_t forecast_time,
+                                  std::string_view url,
+                                  Path filename)
+{
+  PumpQueue();
+
+  const std::string key{filename.c_str()};
+  if (file_jobs.find(key) != file_jobs.end() || IsQueued(key))
+    return;
+
+  if (File::Exists(filename)) {
+    try {
+      api.OnDatafileDownloaded(layer_id, forecast_time,
+                               ExtractForecastArchive(filename));
+    } catch (...) {
+      LogError(std::current_exception(), "SkySight forecast archive extraction failed");
+      api.OnDatafileError(layer_id, forecast_time);
+    }
+
+    return;
+  }
+
+  pending_jobs.emplace_back(FileJob::Kind::ForecastData,
+                            key, std::string{url},
+                            AllocatedPath(filename.c_str()), true,
+                            std::string{layer_id}, forecast_time);
   PumpQueue();
 }
 
@@ -577,10 +668,26 @@ SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
 void
 SkySightRequest::OnFileSuccess(const std::string &key) noexcept
 {
-  if (auto i = file_jobs.find(key); i != file_jobs.end())
+  if (auto i = file_jobs.find(key); i != file_jobs.end()) {
     i->second->finished = true;
 
-  api.OnDownloadComplete();
+    try {
+      switch (i->second->kind) {
+      case FileJob::Kind::Generic:
+        api.OnDownloadComplete();
+        break;
+
+      case FileJob::Kind::ForecastData:
+        api.OnDatafileDownloaded(i->second->layer_id,
+                                 i->second->forecast_time,
+                                 ExtractForecastArchive(i->second->path));
+        break;
+      }
+    } catch (...) {
+      LogError(std::current_exception(), "SkySight forecast archive extraction failed");
+      api.OnDatafileError(i->second->layer_id, i->second->forecast_time);
+    }
+  }
   PumpQueue();
 }
 

@@ -19,7 +19,16 @@ class SkysightAPI;
 
 class SkySightRequest final {
   struct FileJob {
+    enum class Kind {
+      Generic,
+      ForecastData,
+    };
+
     UI::CoInjectFunction<AllocatedPath> function;
+    Kind kind = Kind::Generic;
+    AllocatedPath path;
+    std::string layer_id;
+    time_t forecast_time = 0;
     bool finished = false;
 
     explicit FileJob(EventLoop &event_loop) noexcept
@@ -27,17 +36,32 @@ class SkySightRequest final {
   };
 
   struct PendingJob {
+    FileJob::Kind kind = FileJob::Kind::Generic;
     std::string key;
     std::string url;
     AllocatedPath path;
     bool requires_auth;
+    std::string layer_id;
+    time_t forecast_time = 0;
 
-      PendingJob(std::string _key, std::string _url,
-        AllocatedPath _path, bool _requires_auth) noexcept
-     :key(std::move(_key)),
-      url(std::move(_url)),
-      path(std::move(_path)),
+    PendingJob(std::string _key, std::string _url,
+               AllocatedPath _path, bool _requires_auth) noexcept
+      :key(std::move(_key)),
+       url(std::move(_url)),
+       path(std::move(_path)),
        requires_auth(_requires_auth) {}
+
+    PendingJob(FileJob::Kind _kind,
+               std::string _key, std::string _url,
+               AllocatedPath _path, bool _requires_auth,
+               std::string _layer_id, time_t _forecast_time) noexcept
+      :kind(_kind),
+       key(std::move(_key)),
+       url(std::move(_url)),
+       path(std::move(_path)),
+       requires_auth(_requires_auth),
+       layer_id(std::move(_layer_id)),
+       forecast_time(_forecast_time) {}
   };
 
   static constexpr unsigned MAX_ACTIVE_DOWNLOADS = 1;
@@ -80,6 +104,8 @@ public:
   bool IsLoggedIn() const noexcept;
 
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
+  void DownloadDatafile(std::string_view layer_id, time_t forecast_time,
+                        std::string_view url, Path filename);
   void RequestRegions();
   void RequestLayers(std::string_view region_id);
   void RequestLastUpdates(std::string_view region_id);
