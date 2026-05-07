@@ -55,6 +55,20 @@ ContourSpacing(Contours contours, unsigned height_scale,
   if (contours == Contours::OFF)
     return 0;
 
+  /* Fixed-spacing modes: return a constant interval (in meters) regardless
+     of zoom.  Very-far-zoom suppression is handled in RasterRenderer via
+     quantisation_effective == 0. */
+  switch (contours) {
+  case Contours::FIXED_256:
+    return 256u;
+  case Contours::FIXED_128:
+    return 128u;
+  case Contours::FIXED_64:
+    return 64u;
+  default:
+    break;
+  }
+
   const auto &params = [&]() -> const ContourModeParams & {
     switch (contours) {
     case Contours::HIGHLANDS:
