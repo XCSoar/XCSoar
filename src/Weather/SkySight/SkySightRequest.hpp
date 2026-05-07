@@ -50,10 +50,12 @@ class SkySightRequest final {
   UI::CoInjectFunction<boost::json::value> regions_job;
   UI::CoInjectFunction<boost::json::value> layers_job;
   UI::CoInjectFunction<boost::json::value> last_updates_job;
+  UI::CoInjectFunction<boost::json::value> datafiles_job;
   bool login_running = false;
   bool regions_running = false;
   bool layers_running = false;
   bool last_updates_running = false;
+  bool datafiles_running = false;
   std::map<std::string, std::unique_ptr<FileJob>> file_jobs;
   std::deque<PendingJob> pending_jobs;
   std::map<std::string, time_t> retry_after;
@@ -61,6 +63,7 @@ class SkySightRequest final {
   std::string password;
   std::string api_key;
   std::string last_updates_layer_id;
+  std::string datafiles_layer_id;
   time_t valid_until = 0;
   time_t last_login_request = 0;
   time_t throttle_until = 0;
@@ -82,6 +85,8 @@ public:
   void RequestLayers(std::string_view region_id);
   void RequestLastUpdates(std::string_view region_id,
                           std::string_view layer_id);
+  void RequestDatafiles(std::string_view region_id, std::string_view layer_id,
+                        time_t from_time);
 
 private:
   void CancelAll() noexcept;
@@ -97,6 +102,8 @@ private:
   void OnLayersError(std::exception_ptr error) noexcept;
   void OnLastUpdatesSuccess(boost::json::value value);
   void OnLastUpdatesError(std::exception_ptr error) noexcept;
+  void OnDatafilesSuccess(boost::json::value value);
+  void OnDatafilesError(std::exception_ptr error) noexcept;
   void OnFileSuccess(const std::string &key) noexcept;
   void OnFileError(const std::string &key, std::exception_ptr error) noexcept;
 };

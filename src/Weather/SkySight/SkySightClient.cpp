@@ -58,6 +58,7 @@ SkySightClient::Init()
   const auto &settings = CommonInterface::GetComputerSettings().weather.skysight;
   api->Configure(settings.email.c_str(), settings.password.c_str(),
                  settings.region.c_str());
+  ReloadSelectedLayersFromProfile();
   api->PollRegions();
   api->PollLayers();
 
@@ -96,6 +97,36 @@ SkySightClient::GetRegion() const noexcept
   return api->GetRegion();
 }
 
+std::size_t
+SkySightClient::NumSelectedLayers() const noexcept
+{
+  return api->NumSelectedLayers();
+}
+
+const SkySight::Layer *
+SkySightClient::GetSelectedLayer(std::size_t index) const noexcept
+{
+  return api->GetSelectedLayer(index);
+}
+
+const SkySight::Layer *
+SkySightClient::GetSelectedLayer(std::string_view id) const noexcept
+{
+  return const_cast<SkySightAPI &>(*api).GetSelectedLayer(id);
+}
+
+bool
+SkySightClient::IsSelectedLayer(std::string_view id) const noexcept
+{
+  return api->IsSelectedLayer(id);
+}
+
+bool
+SkySightClient::SelectedLayersFull() const noexcept
+{
+  return api->SelectedLayersFull();
+}
+
 bool
 SkySightClient::HasCredentials() const noexcept
 {
@@ -108,6 +139,113 @@ SkySightClient::GetActiveLayerId() const noexcept
   return active_layer != nullptr
     ? std::string_view{active_layer->id}
     : std::string_view{};
+}
+
+std::string_view
+SkySightClient::GetDisplayedLayerId() const noexcept
+{
+  return displayed_layer != nullptr
+    ? std::string_view{displayed_layer->id}
+    : std::string_view{};
+}
+
+bool
+SkySightClient::AddSelectedLayer(std::string_view id)
+{
+  return AddSelectedLayer(id, true);
+}
+
+bool
+SkySightClient::AddSelectedLayer(std::string_view id, bool save_profile)
+{
+  if (id.empty() || api->SelectedLayersFull() || api->IsSelectedLayer(id))
+    return false;
+
+  const auto *layer = api->GetLayer(id);
+  if (layer == nullptr)
+    return false;
+
+  auto selected = *layer;
+  if (!selected.SupportsLiveTiles())
+    selected.updating = true;
+
+  if (!api->AddSelectedLayer(selected))
+    return false;
+
+  if (save_profile)
+    SaveSelectedLayers();
+
+  api->PollSelectedDatafiles();
+  return true;
+}
+
+bool
+SkySightClient::RemoveSelectedLayer(std::string_view id)
+{
+  if (!api->RemoveSelectedLayer(id))
+    return false;
+
+  SaveSelectedLayers();
+  return true;
+}
+
+void
+SkySightClient::ReloadSelectedLayersFromProfile()
+{
+  api->ClearSelectedLayers();
+
+  const char *configured_layers = Profile::Get(ProfileKeys::SkySightSelectedLayers);
+  if (configured_layers == nullptr || *configured_layers == '\0')
+    return;
+
+  std::string remaining{configured_layers};
+  while (!remaining.empty()) {
+    const auto split = remaining.find(',');
+    const auto layer_id = remaining.substr(0, split);
+    if (!layer_id.empty())
+      (void)AddSelectedLayer(layer_id, false);
+
+    if (split == std::string::npos)
+      break;
+
+    remaining.erase(0, split + 1);
+  }
+
+  api->PollSelectedDatafiles();
+}
+
+void
+SkySightClient::SaveSelectedLayers() const
+{
+  std::string value;
+
+  for (std::size_t i = 0; i < api->NumSelectedLayers(); ++i) {
+    const auto *layer = api->GetSelectedLayer(i);
+    if (layer == nullptr)
+      continue;
+
+    if (!value.empty())
+      value.push_back(',');
+
+    value += layer->id;
+  }
+
+  Profile::Set(ProfileKeys::SkySightSelectedLayers, value.c_str());
+}
+
+void
+SkySightClient::OnLayerCatalogChanged(std::string_view active_id,
+                                std::string_view displayed_id) noexcept
+{
+  active_layer = active_id.empty()
+    ? nullptr
+    : api->GetLayer(active_id);
+  displayed_layer = displayed_id.empty()
+    ? nullptr
+    : api->GetLayer(displayed_id);
+
+  if (active_layer == nullptr)
+    ResetTiles();
 }
 
 void
@@ -130,7 +268,7 @@ bool
 SkySightClient::SetLayerActive(std::string_view id)
 {
   auto *layer = api->GetLayer(id);
-  if (layer == nullptr)
+  if (layer == nullptr || !layer->SupportsLiveTiles())
     return false;
 
   active_layer = layer;
