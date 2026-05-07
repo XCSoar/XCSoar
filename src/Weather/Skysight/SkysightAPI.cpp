@@ -163,24 +163,15 @@ SkysightAPI::HasCredentials() const noexcept
 std::size_t
 SkysightAPI::NumLayers() const noexcept
 {
-  return std::count_if(layers.begin(), layers.end(),
-                       [](const auto &layer) {
-                         return layer.SupportsLiveTiles();
-                       });
+  return layers.size();
 }
 
 const SkySight::Layer *
 SkysightAPI::GetLayer(std::size_t index) const noexcept
 {
-  for (const auto &layer : layers)
-    if (layer.SupportsLiveTiles()) {
-      if (index == 0)
-        return &layer;
-
-      --index;
-    }
-
-  return nullptr;
+  return index < layers.size()
+    ? &layers[index]
+    : nullptr;
 }
 
 SkySight::Layer *
