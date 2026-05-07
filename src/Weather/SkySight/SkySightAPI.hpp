@@ -64,10 +64,15 @@ public:
 
   AllocatedPath GetTilePath(const SkySight::Layer &layer, time_t timestamp,
                             const GeoBitmap::TileData &tile) const;
+  AllocatedPath GetDatafilePath(const SkySight::Layer &layer,
+                                time_t forecast_time,
+                                std::string_view suffix) const;
   void EnsureTile(const SkySight::Layer &layer, time_t timestamp,
                   const GeoBitmap::TileData &tile);
   void OnLiveTileProbeSucceeded(std::string_view layer_id,
                                 time_t timestamp) noexcept;
+  void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
+                      std::string_view link);
   void PollRegions() noexcept;
   void PollLayers() noexcept;
   void PollLastUpdates() noexcept;
@@ -82,6 +87,9 @@ public:
                      boost::json::value value) noexcept;
   void OnDatafiles(std::string_view layer_id, boost::json::value value) noexcept;
   void OnDatafilesError(std::string_view layer_id) noexcept;
+  void OnDatafileDownloaded(std::string_view layer_id, time_t forecast_time,
+                            Path path) noexcept;
+  void OnDatafileError(std::string_view layer_id, time_t forecast_time) noexcept;
   void OnDownloadComplete() noexcept;
 
 private:
