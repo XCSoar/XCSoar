@@ -38,18 +38,31 @@ public:
   const SkySight::Layer *GetLayer(std::size_t index) const noexcept;
   const std::vector<SkysightRegionEntry> &GetRegions() const noexcept;
   std::string_view GetRegion() const noexcept;
+  std::size_t NumSelectedLayers() const noexcept;
+  const SkySight::Layer *GetSelectedLayer(std::size_t index) const noexcept;
+  const SkySight::Layer *GetSelectedLayer(std::string_view id) const noexcept;
+  bool IsSelectedLayer(std::string_view id) const noexcept;
+  bool SelectedLayersFull() const noexcept;
+  bool AddSelectedLayer(std::string_view id);
+  bool RemoveSelectedLayer(std::string_view id);
 
   bool HasCredentials() const noexcept;
 
   std::string_view GetActiveLayerId() const noexcept;
+  std::string_view GetDisplayedLayerId() const noexcept;
 
   bool SetLayerActive(std::string_view id);
   void DeactivateLayer();
   void Render();
 
+  void ReloadSelectedLayersFromProfile();
+  void OnLayerCatalogChanged(std::string_view active_id,
+                             std::string_view displayed_id) noexcept;
   void OnDataUpdated() noexcept;
 
 private:
+  bool AddSelectedLayer(std::string_view id, bool save_profile);
+  void SaveSelectedLayers() const;
   void CleanupFiles() noexcept;
   void ResetTiles() noexcept;
   bool UpdateActiveLayer(unsigned index, Path path,

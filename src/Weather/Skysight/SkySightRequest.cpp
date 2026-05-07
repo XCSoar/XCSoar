@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <utility>
 
 class HttpStatusError final : public std::runtime_error {
 public:
@@ -145,7 +146,8 @@ SkySightRequest::SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl) noexcept
    login_job(curl.GetEventLoop()),
    regions_job(curl.GetEventLoop()),
    layers_job(curl.GetEventLoop()),
-   last_updates_job(curl.GetEventLoop())
+   last_updates_job(curl.GetEventLoop()),
+   datafiles_job(curl.GetEventLoop())
 {
 }
 
@@ -161,10 +163,13 @@ SkySightRequest::CancelAll() noexcept
   regions_job.Cancel();
   layers_job.Cancel();
   last_updates_job.Cancel();
+  datafiles_job.Cancel();
   login_running = false;
   regions_running = false;
   layers_running = false;
   last_updates_running = false;
+  datafiles_running = false;
+  datafiles_layer_id.clear();
 
   for (auto &i : file_jobs)
     i.second->function.Cancel();
@@ -476,6 +481,42 @@ SkySightRequest::RequestLastUpdates(std::string_view region_id)
 }
 
 void
+SkySightRequest::RequestDatafiles(std::string_view region_id,
+                                  std::string_view layer_id,
+                                  time_t from_time)
+{
+  if (region_id.empty() || layer_id.empty() || datafiles_running)
+    return;
+
+  if (!HasCredentials())
+    return;
+
+  if (!IsLoggedIn()) {
+    EnsureLoggedIn();
+    return;
+  }
+
+  datafiles_running = true;
+  datafiles_layer_id = std::string{layer_id};
+
+  std::string url{"https://skysight.io/api/data?region_id="};
+  url += region_id;
+  url += "&layer_ids=";
+  url += layer_id;
+  url += "&from_time=";
+  url += std::to_string(from_time);
+
+  datafiles_job.Start(
+    JsonTask(curl, std::move(url), api_key),
+    [this](boost::json::value value) {
+      OnDatafilesSuccess(std::move(value));
+    },
+    [this](std::exception_ptr error) {
+      OnDatafilesError(std::move(error));
+    });
+}
+
+void
 SkySightRequest::OnLastUpdatesSuccess(boost::json::value value)
 {
   last_updates_running = false;
@@ -499,6 +540,38 @@ SkySightRequest::OnLastUpdatesError(std::exception_ptr error) noexcept
   } catch (...) {
     LogError(error, "SkySight last-updated request failed");
   }
+}
+
+void
+SkySightRequest::OnDatafilesSuccess(boost::json::value value)
+{
+  datafiles_running = false;
+
+  const auto layer_id = std::exchange(datafiles_layer_id, std::string{});
+  api.OnDatafiles(layer_id, std::move(value));
+}
+
+void
+SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
+{
+  datafiles_running = false;
+
+  const auto layer_id = std::exchange(datafiles_layer_id, std::string{});
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const HttpStatusError &http_error) {
+    if (http_error.status == 401 || http_error.status == 403) {
+      api_key.clear();
+      valid_until = 0;
+    }
+
+    LogFmt("SkySight datafiles request failed with HTTP %u", http_error.status);
+  } catch (...) {
+    LogError(error, "SkySight datafiles request failed");
+  }
+
+  api.OnDatafilesError(layer_id);
 }
 
 void
