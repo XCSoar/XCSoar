@@ -20,6 +20,9 @@ enum class Contours: uint8_t {
   HIGHLANDS,
   LOWLANDS,
   SUPERFINE,
+  FIXED_256,
+  FIXED_128,
+  FIXED_64,
   COUNT,
 };
 

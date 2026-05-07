@@ -306,6 +306,12 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
       N_("More line density for gentler slopes."), },
     { Contours::SUPERFINE, N_("Superfine"),
       N_("Maximum density"), },
+    { Contours::FIXED_256, N_("Fixed 256m"),
+      N_("Fixed 256m spacing, no zoom dependence"), },
+    { Contours::FIXED_128, N_("Fixed 128m"),
+      N_("Fixed 128m spacing, no zoom dependence"), },
+    { Contours::FIXED_64, N_("Fixed 64m"),
+      N_("Fixed 64m spacing, no zoom dependence"), },
     nullptr
   };
 
