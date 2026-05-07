@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Regions.hpp"
 #include "util/StaticString.hxx"
 
 struct SkysightSettings {
@@ -17,6 +18,6 @@ struct SkysightSettings {
   void SetDefaults() noexcept {
     email.clear();
     password.clear();
-    region = "EUROPE";
+    region = GetDefaultSkysightRegion().id;
   }
 };

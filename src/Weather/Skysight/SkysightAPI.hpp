@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Layers.hpp"
+#include "Regions.hpp"
 #include "system/Path.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 
@@ -21,7 +22,7 @@ class SkysightAPI final {
   std::unique_ptr<SkySightRequest> request;
   std::vector<SkySight::Layer> layers;
   const AllocatedPath cache_path;
-  std::string region = "EUROPE";
+  std::string region = GetDefaultSkysightRegion().id;
 
 public:
   SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path);

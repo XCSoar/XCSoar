@@ -52,7 +52,9 @@ void
 SkysightAPI::Configure(std::string_view email, std::string_view password,
                        std::string_view new_region)
 {
-  region = new_region.empty() ? "EUROPE" : std::string{new_region};
+  region = FindSkysightRegionById(new_region.empty()
+                                  ? std::string_view{GetDefaultSkysightRegion().id}
+                                  : new_region).id;
   request->Configure(email, password);
 }
 

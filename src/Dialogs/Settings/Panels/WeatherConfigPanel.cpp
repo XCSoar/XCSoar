@@ -9,6 +9,7 @@
 #include "Weather/Settings.hpp"
 #include "Weather/Features.hpp"
 #ifdef HAVE_HTTP
+#include "Weather/Skysight/Regions.hpp"
 #include "Weather/Skysight/Skysight.hpp"
 #endif
 #include "Widget/RowFormWidget.hpp"
@@ -32,62 +33,8 @@ enum ControlIndex {
 #endif
 };
 
-#ifdef HAVE_HTTP
-static constexpr StaticEnumChoice skysight_region_list[] = {
-  { 0, N_("Europe") },
-  { 1, N_("South Africa") },
-  { 2, N_("Western US") },
-  { 3, N_("Eastern US") },
-  { 4, N_("Argentina/Chile") },
-  { 5, N_("Brazil") },
-  { 6, N_("Japan") },
-  { 7, N_("New Zealand") },
-  { 8, N_("Western Australia") },
-  { 9, N_("Eastern Australia") },
-  nullptr,
-};
-
-static const char *
-GetSkysightRegionId(unsigned index) noexcept
-{
-  switch (index) {
-  case 0:
-    return "EUROPE";
-  case 1:
-    return "SANEW";
-  case 2:
-    return "WEST_US";
-  case 3:
-    return "EAST_US";
-  case 4:
-    return "ARGENTINA_CHILE";
-  case 5:
-    return "BRAZIL";
-  case 6:
-    return "JAPAN";
-  case 7:
-    return "NZ";
-  case 8:
-    return "WA";
-  case 9:
-    return "EAST_AUS";
-  default:
-    return "EUROPE";
-  }
-}
-
-static unsigned
-FindSkysightRegionIndex(std::string_view region) noexcept
-{
-  for (unsigned i = 0; skysight_region_list[i].display_string != nullptr; ++i)
-    if (region == GetSkysightRegionId(i))
-      return i;
-
-  return 0;
-}
-#endif
-
-class WeatherConfigPanel final : public RowFormWidget {
+class WeatherConfigPanel final
+  : public RowFormWidget {
 public:
   WeatherConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -122,10 +69,17 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
   AddPassword(_("SkySight Password"),
               _("Your SkySight password."),
               settings.skysight.password);
-  AddEnum(_("SkySight Region"),
-          _("Select the SkySight region used for live weather layers."),
-          skysight_region_list,
-          FindSkysightRegionIndex(settings.skysight.region.c_str()));
+
+  auto *region = AddEnum(_("SkySight Region"),
+                         _("Select the SkySight region used for live weather layers."));
+  if (region != nullptr) {
+    auto &df = *(DataFieldEnum *)region->GetDataField();
+    for (const auto &candidate : skysight_regions)
+      df.AddChoice(unsigned(candidate.value), gettext(candidate.name));
+
+    df.SetValue(FindSkysightRegionById(settings.skysight.region.c_str()).value);
+    region->RefreshDisplay();
+  }
 #endif
 }
 
@@ -152,10 +106,10 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
                                 ProfileKeys::SkysightPassword,
                                 settings.skysight.password);
 
-  const char *new_region = GetSkysightRegionId(GetValueEnum(SKYSIGHT_REGION));
-  if (std::string_view{settings.skysight.region.c_str()} != new_region) {
-    settings.skysight.region = new_region;
-    Profile::Set(ProfileKeys::SkysightRegion, new_region);
+  const auto &new_region = FindSkysightRegionByValue(GetValueEnum(SKYSIGHT_REGION));
+  if (std::string_view{settings.skysight.region.c_str()} != new_region.id) {
+    settings.skysight.region = new_region.id;
+    Profile::Set(ProfileKeys::SkysightRegion, new_region.id);
     skysight_changed = true;
   }
 
