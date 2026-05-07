@@ -6,9 +6,30 @@
 #include "SkySightClient.hpp"
 #include "time/Convert.hxx"
 #include "util/StaticString.hxx"
+#include "LogFile.hpp"
 
 #include <chrono>
+#include <cstdlib>
 #include <ctime>
+
+namespace {
+
+static constexpr time_t INITIAL_LAST_UPDATE_POLL_SECONDS = 30;
+static constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
+
+static time_t
+ParseUpdateTime(const boost::json::value &value)
+{
+  if (value.is_number())
+    return value.to_number<time_t>();
+
+  if (value.is_string())
+    return std::strtoll(value.as_string().c_str(), nullptr, 10);
+
+  return 0;
+}
+
+} // namespace
 
 SkySightAPI::SkySightAPI(SkySightClient &_owner, CurlGlobal &curl, Path _cache_path)
   :owner(_owner),
@@ -55,6 +76,10 @@ SkySightAPI::Configure(std::string_view email, std::string_view password,
   region = FindSkySightRegionById(new_region.empty()
                                   ? std::string_view{GetDefaultSkySightRegion().id}
                                   : new_region).id;
+  ResetLastUpdates();
+  for (auto &layer : layers)
+    layer.last_update = 0;
+
   request->Configure(email, password);
 }
 
@@ -135,8 +160,101 @@ SkySightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
 }
 
 void
+SkySightAPI::PollLastUpdates() noexcept
+{
+  if (!HasCredentials() || region.empty())
+    return;
+
+  const auto now = std::time(nullptr);
+  const auto active_layer_id = owner.GetActiveLayerId();
+  auto *active_layer = active_layer_id.empty()
+    ? nullptr
+    : GetLayer(active_layer_id);
+  if (active_layer == nullptr)
+    return;
+
+  if (!active_layer->IsLiveMetadataPollDue(now,
+                                           INITIAL_LAST_UPDATE_POLL_SECONDS,
+                                           LAST_UPDATE_POLL_SECONDS))
+    return;
+
+  active_layer->last_update_request = now;
+  request->RequestLastUpdates(region, active_layer->id);
+}
+
+void
+SkySightAPI::ResetLastUpdates() noexcept
+{
+  for (auto &layer : layers)
+    layer.last_update_request = 0;
+}
+
+void
 SkySightAPI::OnAuthenticated() noexcept
 {
+  ResetLastUpdates();
+  owner.OnDataUpdated();
+}
+
+void
+SkySightAPI::OnLastUpdates(std::string_view requested_layer_id,
+                           boost::json::value value) noexcept
+{
+  bool active_layer_changed = false;
+  bool requested_layer_found = false;
+
+  try {
+    const auto active_layer_id = owner.GetActiveLayerId();
+
+    for (const auto &entry_value : value.as_array()) {
+      const auto &entry = entry_value.as_object();
+      auto *layer = GetLayer(entry.at("layer_id").as_string().c_str());
+      if (layer == nullptr)
+        continue;
+
+      requested_layer_found = requested_layer_found ||
+        layer->id == requested_layer_id;
+
+      const auto update_time = ParseUpdateTime(entry.at("time"));
+      if (update_time <= 0)
+        continue;
+
+      const bool changed = update_time != layer->last_update ||
+        layer->live_timestamp_from_probe;
+      layer->last_update = update_time;
+      layer->live_timestamp_from_probe = false;
+      layer->live_metadata_support = SkySight::LiveMetadataSupport::Supported;
+      active_layer_changed = active_layer_changed ||
+        (changed && active_layer_id == layer->id);
+    }
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight last-updated parsing failed");
+    return;
+  }
+
+  if (!requested_layer_found) {
+    if (auto *requested_layer = GetLayer(requested_layer_id);
+        requested_layer != nullptr) {
+      requested_layer->live_metadata_support =
+        SkySight::LiveMetadataSupport::Unsupported;
+      requested_layer->live_timestamp_from_probe = true;
+    }
+  }
+
+  if (active_layer_changed)
+    owner.OnDataUpdated();
+}
+
+void
+SkySightAPI::OnLiveTileProbeSucceeded(std::string_view layer_id,
+                                      time_t timestamp) noexcept
+{
+  auto *layer = GetLayer(layer_id);
+  if (layer == nullptr || timestamp <= 0)
+    return;
+
+  layer->last_update = timestamp;
+  layer->live_timestamp_from_probe = true;
   owner.OnDataUpdated();
 }
 

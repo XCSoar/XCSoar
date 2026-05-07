@@ -191,6 +191,8 @@ SkySightClient::DisplayTileLayer()
   if (map_window == nullptr || active_layer == nullptr)
     return false;
 
+  api->PollLastUpdates();
+
   const auto base_tile = GeoBitmap::GetTile(map_window->VisibleProjection(),
                                             active_layer->zoom_min,
                                             active_layer->zoom_max);
@@ -204,8 +206,16 @@ SkySightClient::DisplayTileLayer()
     displayed_zoom = base_tile.zoom;
   }
 
-  const time_t refresh_time = (std::time(nullptr) / 600) * 600;
+  const time_t current_slot = (std::time(nullptr) / 600) * 600;
+  const bool probe_next_slot = !active_layer->HasKnownLiveTimestamp() ||
+    (active_layer->live_timestamp_from_probe &&
+     active_layer->last_update < current_slot);
+  const bool has_known_timestamp = !probe_next_slot;
+  const time_t refresh_time = probe_next_slot
+    ? current_slot
+    : active_layer->last_update;
   bool any_visible = false;
+  bool probe_queued = false;
   unsigned slot = 0;
   for (int x = int(base_tile.x) - 1; x <= int(base_tile.x) + 1; ++x) {
     for (int y = int(base_tile.y) - 1; y <= int(base_tile.y) + 1; ++y, ++slot) {
@@ -219,7 +229,8 @@ SkySightClient::DisplayTileLayer()
 
       any_visible = true;
       bool found = false;
-      for (unsigned step = 0; step < 3; ++step) {
+      const unsigned fallback_steps = has_known_timestamp ? 3 : 24;
+      for (unsigned step = 0; step < fallback_steps; ++step) {
         const auto candidate_time = refresh_time - (time_t(step) * 600);
         const auto path = api->GetTilePath(*active_layer, candidate_time, tile);
         if (!File::Exists(path))
@@ -234,10 +245,26 @@ SkySightClient::DisplayTileLayer()
         break;
       }
 
-      if (!found) {
+      if (has_known_timestamp && !found) {
         api->EnsureTile(*active_layer, refresh_time, tile);
         map_window->SetOverlay(slot, nullptr);
         tile_filenames[slot].clear();
+      } else if (!has_known_timestamp && !probe_queued) {
+        /* /data/last_updated does not currently publish timestamps for every
+           live pseudo-layer.  Probe one visible tile only; once it succeeds,
+           the cached file below establishes the timestamp without fanning an
+           unverified timestamp out across the whole viewport. */
+        const auto probe_path =
+          api->GetTilePath(*active_layer, refresh_time, tile);
+        if (File::Exists(probe_path)) {
+          active_layer->last_update = refresh_time;
+          active_layer->live_timestamp_from_probe = true;
+          api->OnLiveTileProbeSucceeded(active_layer->id, refresh_time);
+          probe_queued = true;
+        } else {
+          api->EnsureTile(*active_layer, refresh_time, tile);
+          probe_queued = true;
+        }
       }
     }
   }

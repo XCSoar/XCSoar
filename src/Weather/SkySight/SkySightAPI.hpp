@@ -8,6 +8,9 @@
 #include "system/Path.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 
+#include <boost/json.hpp>
+
+#include <ctime>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -44,8 +47,14 @@ public:
                             const GeoBitmap::TileData &tile) const;
   void EnsureTile(const SkySight::Layer &layer, time_t timestamp,
                   const GeoBitmap::TileData &tile);
+  void OnLiveTileProbeSucceeded(std::string_view layer_id,
+                                time_t timestamp) noexcept;
+  void PollLastUpdates() noexcept;
+  void ResetLastUpdates() noexcept;
 
   void OnAuthenticated() noexcept;
+  void OnLastUpdates(std::string_view requested_layer_id,
+                     boost::json::value value) noexcept;
   void OnDownloadComplete() noexcept;
 
 private:

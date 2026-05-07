@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Weather/WeatherUIState.hpp"
+#include "Weather/SkySight/Layers.hpp"
 #include "TestUtil.hpp"
 
 static void
@@ -86,14 +87,40 @@ TestWeatherUiStateXcthermCursor()
   ok1(!weather.xctherm_cursor.time_manual_override);
 }
 
+static void
+TestSkySightKnownLiveTimestamp()
+{
+  constexpr time_t NOW = 10'000;
+  SkySight::Layer layer;
+  ok1(!layer.HasKnownLiveTimestamp());
+  ok1(layer.IsLiveMetadataPollDue(NOW, 30, 300));
+
+  layer.last_update = 1234;
+  ok1(layer.HasKnownLiveTimestamp());
+  layer.live_timestamp_from_probe = true;
+  ok1(layer.live_timestamp_from_probe);
+  layer.last_update_request = NOW;
+  ok1(!layer.IsLiveMetadataPollDue(NOW + 299, 30, 300));
+  ok1(layer.IsLiveMetadataPollDue(NOW + 300, 30, 300));
+
+  SkySight::Layer rain;
+  ok1(rain.IsLiveMetadataPollDue(NOW + 1, 30, 300));
+  rain.last_update_request = NOW;
+  ok1(!rain.IsLiveMetadataPollDue(NOW + 29, 30, 300));
+  ok1(rain.IsLiveMetadataPollDue(NOW + 30, 30, 300));
+  rain.live_metadata_support = SkySight::LiveMetadataSupport::Unsupported;
+  ok1(!rain.IsLiveMetadataPollDue(NOW + 300, 30, 300));
+}
+
 int
 main()
 {
-  plan_tests(32);
+  plan_tests(32 + 10 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
   TestWeatherUiStateXcthermCursor();
+  TestSkySightKnownLiveTimestamp();
 
   return exit_status();
 }
