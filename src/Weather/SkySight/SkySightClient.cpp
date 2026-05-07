@@ -177,6 +177,25 @@ SkySightClient::RemoveSelectedLayer(std::string_view id)
   return true;
 }
 
+bool
+SkySightClient::HasForecastLayers() const noexcept
+{
+  for (std::size_t i = 0; i < api->NumLayers(); ++i) {
+    const auto *layer = api->GetLayer(i);
+    if (layer != nullptr && !layer->SupportsLiveTiles())
+      return true;
+  }
+
+  return false;
+}
+
+void
+SkySightClient::RefreshCatalog() noexcept
+{
+  api->PollRegions();
+  api->PollLayers();
+}
+
 void
 SkySightClient::ReloadSelectedLayersFromProfile()
 {
@@ -258,7 +277,7 @@ SkySightClient::SetLayerActive(std::string_view id)
   if (layer == nullptr)
     return false;
 
-  if (!layer->SupportsLiveTiles() && !api->IsSelectedLayer(id) && !AddSelectedLayer(id))
+  if (!api->IsSelectedLayer(id) && !AddSelectedLayer(id))
     return false;
 
   active_layer = layer;
