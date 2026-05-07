@@ -24,6 +24,7 @@ class SkySightAPI final {
   SkySightClient &owner;
   std::unique_ptr<SkySightRequest> request;
   std::vector<SkySight::Layer> layers;
+  std::vector<SkySightRegionEntry> regions = GetDefaultSkySightRegions();
   const AllocatedPath cache_path;
   std::string region = GetDefaultSkySightRegion().id;
 
@@ -35,6 +36,14 @@ public:
                  std::string_view new_region);
 
   bool HasCredentials() const noexcept;
+
+  const std::vector<SkySightRegionEntry> &GetRegions() const noexcept {
+    return regions;
+  }
+
+  std::string_view GetRegion() const noexcept {
+    return region;
+  }
 
   std::size_t NumLayers() const noexcept {
     return layers.size();
@@ -49,17 +58,22 @@ public:
                   const GeoBitmap::TileData &tile);
   void OnLiveTileProbeSucceeded(std::string_view layer_id,
                                 time_t timestamp) noexcept;
+  void PollRegions() noexcept;
   void PollLayers() noexcept;
   void PollLastUpdates() noexcept;
+  void ResetRegions() noexcept;
   void ResetLastUpdates() noexcept;
 
   void OnAuthenticated() noexcept;
+  void OnRegions(boost::json::value value) noexcept;
   void OnLayers(boost::json::value value) noexcept;
   void OnLastUpdates(std::string_view requested_layer_id,
                      boost::json::value value) noexcept;
   void OnDownloadComplete() noexcept;
 
 private:
+  bool regions_loaded = false;
+  time_t last_regions_request = 0;
   bool layers_loaded = false;
   time_t last_layers_request = 0;
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);

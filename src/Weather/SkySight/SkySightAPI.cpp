@@ -14,6 +14,7 @@
 
 namespace {
 
+static constexpr time_t REGIONS_RETRY_SECONDS = 30;
 static constexpr time_t LAYERS_RETRY_SECONDS = 30;
 static constexpr time_t INITIAL_LAST_UPDATE_POLL_SECONDS = 30;
 static constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
@@ -77,6 +78,7 @@ SkySightAPI::Configure(std::string_view email, std::string_view password,
   region = FindSkySightRegionById(new_region.empty()
                                   ? std::string_view{GetDefaultSkySightRegion().id}
                                   : new_region).id;
+  ResetRegions();
   layers_loaded = false;
   last_layers_request = 0;
   ResetLastUpdates();
@@ -163,6 +165,20 @@ SkySightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
 }
 
 void
+SkySightAPI::PollRegions() noexcept
+{
+  if (!HasCredentials() || regions_loaded)
+    return;
+
+  const auto now = std::time(nullptr);
+  if (last_regions_request != 0 && now < last_regions_request + REGIONS_RETRY_SECONDS)
+    return;
+
+  last_regions_request = now;
+  request->RequestRegions();
+}
+
+void
 SkySightAPI::PollLayers() noexcept
 {
   if (!HasCredentials() || region.empty() || layers_loaded)
@@ -200,6 +216,14 @@ SkySightAPI::PollLastUpdates() noexcept
 }
 
 void
+SkySightAPI::ResetRegions() noexcept
+{
+  regions = GetDefaultSkySightRegions();
+  regions_loaded = false;
+  last_regions_request = 0;
+}
+
+void
 SkySightAPI::ResetLastUpdates() noexcept
 {
   for (auto &layer : layers)
@@ -209,8 +233,54 @@ SkySightAPI::ResetLastUpdates() noexcept
 void
 SkySightAPI::OnAuthenticated() noexcept
 {
+  PollRegions();
   PollLayers();
   ResetLastUpdates();
+  owner.OnDataUpdated();
+}
+
+void
+SkySightAPI::OnRegions(boost::json::value value) noexcept
+{
+  try {
+    std::vector<SkySightRegionEntry> new_regions;
+
+    for (const auto &entry_value : value.as_array()) {
+      const auto &entry = entry_value.as_object();
+
+      const auto id = entry.at("id").as_string().c_str();
+      std::string name{id};
+      if (const auto *name_value = entry.if_contains("name");
+          name_value != nullptr && name_value->is_string())
+        name = name_value->as_string().c_str();
+
+      std::string projection;
+      if (const auto *projection_value = entry.if_contains("projection");
+          projection_value != nullptr && projection_value->is_string())
+        projection = projection_value->as_string().c_str();
+
+      new_regions.push_back({id, std::move(name), std::move(projection)});
+    }
+
+    if (!new_regions.empty()) {
+      regions = std::move(new_regions);
+      regions_loaded = true;
+
+      bool found = false;
+      for (const auto &candidate : regions)
+        if (candidate.id == region) {
+          found = true;
+          break;
+        }
+
+      if (!found)
+        region = FindSkySightRegionById({}).id;
+    }
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight regions parsing failed");
+    return;
+  }
+
   owner.OnDataUpdated();
 }
 
