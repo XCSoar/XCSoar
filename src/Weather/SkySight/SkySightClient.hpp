@@ -46,6 +46,8 @@ public:
   bool SelectedLayersFull() const noexcept;
   bool AddSelectedLayer(std::string_view id);
   bool RemoveSelectedLayer(std::string_view id);
+  bool HasForecastLayers() const noexcept;
+  void RefreshCatalog() noexcept;
 
   bool HasCredentials() const noexcept;
 
