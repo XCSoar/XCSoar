@@ -45,6 +45,7 @@ public:
   void OnDataUpdated() noexcept;
 
 private:
+  void CleanupFiles() noexcept;
   void ResetTiles() noexcept;
   bool UpdateActiveLayer(unsigned index, Path path,
                          const GeoBitmap::TileData &tile);

@@ -13,6 +13,25 @@
 #include "MapWindow/OverlayBitmap.hpp"
 #include "system/FileUtil.hpp"
 
+#include <chrono>
+
+namespace {
+
+class OlderThanFileVisitor final : public File::Visitor {
+  const std::chrono::system_clock::time_point cutoff;
+
+public:
+  explicit OlderThanFileVisitor(std::chrono::system_clock::time_point _cutoff) noexcept
+    :cutoff(_cutoff) {}
+
+  void Visit(Path full_path, [[maybe_unused]] Path filename) override {
+    if (File::GetLastModification(full_path) < cutoff)
+      File::Delete(full_path);
+  }
+};
+
+} // namespace
+
 Skysight::Skysight(CurlGlobal &curl)
   :api(std::make_unique<SkysightAPI>(*this, curl, GetLocalPath()))
 {
@@ -30,6 +49,8 @@ Skysight::GetLocalPath() noexcept
 void
 Skysight::Init()
 {
+  CleanupFiles();
+
   ResetTiles();
   active_layer = nullptr;
 
@@ -40,6 +61,20 @@ Skysight::Init()
   const char *configured_layer = Profile::Get(ProfileKeys::WeatherLayerDisplayed);
   if (configured_layer != nullptr && !std::string_view{configured_layer}.empty())
     (void)SetLayerActive(configured_layer);
+}
+
+void
+Skysight::CleanupFiles() noexcept
+{
+  const auto now = std::chrono::system_clock::now();
+  OlderThanFileVisitor delete_tiles{now - std::chrono::hours{12}};
+  OlderThanFileVisitor delete_tmp{now - std::chrono::hours{6}};
+  OlderThanFileVisitor delete_json{now - std::chrono::hours{1}};
+
+  const auto path = GetLocalPath();
+  Directory::VisitSpecificFiles(path, "*.jpg", delete_tiles);
+  Directory::VisitSpecificFiles(path, "*.tmp", delete_tmp);
+  Directory::VisitSpecificFiles(path, "*.json", delete_json);
 }
 
 std::size_t
