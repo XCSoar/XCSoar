@@ -6,6 +6,7 @@ from build.autotools import AutotoolsProject
 from build.meson import MesonProject
 from build.cmake import CmakeProject
 from build.openssl import OpenSSLProject
+from build.angle import AngleProject
 from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
 from build.lua import LuaProject
@@ -440,7 +441,9 @@ sdl2 = CmakeProject(
         "-DSDL_POWER=OFF",
         "-DSDL_TIMERS=ON", # needs to be enabled for SDL_Delay() to work on iOS
         "-DSDL_FILE=OFF",
-        "-DSDL_LOADSO=OFF",
+        # Required on macOS: with SDL_LOADSO=OFF startup fails with
+        # "SDL_LoadObject() not implemented" while creating the SDL window.
+        "-DSDL_LOADSO=ON",
         "-DSDL_CPUINFO=OFF",
         "-DSDL_FILESYSTEM=OFF",
         "-DSDL_SENSOR=OFF",
@@ -450,7 +453,8 @@ sdl2 = CmakeProject(
         "-DSDL_DISKAUDIO=OFF",
         "-DSDL_DUMMYAUDIO=OFF",
         "-DSDL_DUMMYVIDEO=OFF",
-        "-DSDL_OPENGL=OFF",
+        # SDL_cocoawindow.m uses SDLOpenGLContext APIs on macOS.
+        "-DSDL_OPENGL=ON",
         "-DSDL_OPENGLES=ON",
         "-DSDL_OSS=OFF",
         "-DSDL_JACK=OFF",
@@ -459,10 +463,11 @@ sdl2 = CmakeProject(
         "-DSDL_NAS=OFF",
         "-DSDL_SNDIO=OFF",
         "-DSDL_LIBSAMPLERATE=OFF",
-        "-DSDL_COCOA=OFF",
     ],
     patches=abspath("lib/sdl2/patches"),
 )
+
+angle = AngleProject()
 
 lua = LuaProject(
     (

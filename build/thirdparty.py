@@ -38,6 +38,11 @@ toolchain = Toolchain(xcsoar_path, lib_path,
 from build.libs import *
 
 geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
+use_angle_env = os.environ.get('USE_ANGLE', 'auto')
+if use_angle_env == 'auto':
+    use_angle = toolchain.is_darwin and not toolchain.is_target_ios
+else:
+    use_angle = (use_angle_env == 'y')
 
 if toolchain.is_windows:
     thirdparty_libs = [
@@ -48,6 +53,10 @@ if toolchain.is_windows:
         curl,
         lua,
     ]
+    if use_angle:
+        thirdparty_libs += [
+            angle,
+        ]
 
     # Some libraries (such as CURL) want to use the min()/max() macros
     toolchain.cppflags = cppflags.replace('-DNOMINMAX', '')
@@ -64,6 +73,12 @@ elif toolchain.is_darwin:
         cares,
         curl,
         lua,
+    ]
+    if use_angle:
+        thirdparty_libs += [
+            angle,
+        ]
+    thirdparty_libs += [
         sdl2
     ]
     if geotiff_enabled:
