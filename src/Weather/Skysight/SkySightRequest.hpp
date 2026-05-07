@@ -47,7 +47,9 @@ class SkySightRequest final {
   SkysightAPI &api;
   CurlGlobal &curl;
   UI::CoInjectFunction<boost::json::value> login_job;
+  UI::CoInjectFunction<boost::json::value> last_updates_job;
   bool login_running = false;
+  bool last_updates_running = false;
   std::map<std::string, std::unique_ptr<FileJob>> file_jobs;
   std::deque<PendingJob> pending_jobs;
   std::map<std::string, time_t> retry_after;
@@ -71,6 +73,7 @@ public:
   bool IsLoggedIn() const noexcept;
 
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
+  void RequestLastUpdates(std::string_view region_id);
 
 private:
   void CancelAll() noexcept;
@@ -80,6 +83,8 @@ private:
   void PumpQueue();
   void OnLoginSuccess(boost::json::value value);
   void OnLoginError(std::exception_ptr error) noexcept;
+  void OnLastUpdatesSuccess(boost::json::value value);
+  void OnLastUpdatesError(std::exception_ptr error) noexcept;
   void OnFileSuccess(const std::string &key) noexcept;
   void OnFileError(const std::string &key, std::exception_ptr error) noexcept;
 };

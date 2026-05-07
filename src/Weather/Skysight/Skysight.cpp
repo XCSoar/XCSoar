@@ -120,6 +120,8 @@ Skysight::SetLayerActive(std::string_view id)
     return false;
 
   active_layer = layer;
+  active_layer->last_update = 0;
+  api->ResetLastUpdates();
   Profile::Set(ProfileKeys::WeatherLayerDisplayed, layer->id.c_str());
   ResetTiles();
   OnDataUpdated();
@@ -191,6 +193,8 @@ Skysight::DisplayTileLayer()
   if (map_window == nullptr || active_layer == nullptr)
     return false;
 
+  api->PollLastUpdates();
+
   const auto base_tile = GeoBitmap::GetTile(map_window->VisibleProjection(),
                                             active_layer->zoom_min,
                                             active_layer->zoom_max);
@@ -204,7 +208,9 @@ Skysight::DisplayTileLayer()
     displayed_zoom = base_tile.zoom;
   }
 
-  const time_t refresh_time = (std::time(nullptr) / 600) * 600;
+  const time_t refresh_time = active_layer->last_update != 0
+    ? active_layer->last_update
+    : (std::time(nullptr) / 600) * 600;
   bool any_visible = false;
   unsigned slot = 0;
   for (int x = int(base_tile.x) - 1; x <= int(base_tile.x) + 1; ++x) {
