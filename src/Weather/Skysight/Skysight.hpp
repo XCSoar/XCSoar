@@ -11,6 +11,9 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <vector>
+
+struct SkysightRegionEntry;
 
 class CurlGlobal;
 class Path;
@@ -33,6 +36,8 @@ public:
 
   std::size_t NumLayers() const noexcept;
   const SkySight::Layer *GetLayer(std::size_t index) const noexcept;
+  const std::vector<SkysightRegionEntry> &GetRegions() const noexcept;
+  std::string_view GetRegion() const noexcept;
 
   bool HasCredentials() const noexcept;
 

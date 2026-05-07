@@ -3,38 +3,36 @@
 
 #pragma once
 
+#include <string>
 #include <string_view>
-
-enum class SkysightRegion : unsigned {
-  EUROPE,
-  SOUTH_AFRICA,
-  WESTERN_US,
-  EASTERN_US,
-  ARGENTINA_CHILE,
-  BRAZIL,
-  JAPAN,
-  NEW_ZEALAND,
-  WESTERN_AUSTRALIA,
-  EASTERN_AUSTRALIA,
-};
+#include <vector>
 
 struct SkysightRegionInfo {
-  SkysightRegion value;
   const char *name;
   const char *id;
 };
 
 inline constexpr SkysightRegionInfo skysight_regions[] = {
-  { SkysightRegion::EUROPE, "Europe", "EUROPE" },
-  { SkysightRegion::SOUTH_AFRICA, "South Africa", "SANEW" },
-  { SkysightRegion::WESTERN_US, "Western US", "WEST_US" },
-  { SkysightRegion::EASTERN_US, "Eastern US", "EAST_US" },
-  { SkysightRegion::ARGENTINA_CHILE, "Argentina/Chile", "ARGENTINA_CHILE" },
-  { SkysightRegion::BRAZIL, "Brazil", "BRAZIL" },
-  { SkysightRegion::JAPAN, "Japan", "JAPAN" },
-  { SkysightRegion::NEW_ZEALAND, "New Zealand", "NZ" },
-  { SkysightRegion::WESTERN_AUSTRALIA, "Western Australia", "WA" },
-  { SkysightRegion::EASTERN_AUSTRALIA, "Eastern Australia", "EAST_AUS" },
+  { "Europe", "EUROPE" },
+  { "South Africa", "SANEW" },
+  { "Western US", "WEST_US" },
+  { "Eastern US", "EAST_US" },
+  { "Argentina/Chile", "ARGENTINA_CHILE" },
+  { "Brazil", "BRAZIL" },
+  { "Japan", "JAPAN" },
+  { "New Zealand", "NZ" },
+  { "Western Australia", "WA" },
+  { "Eastern Australia", "EAST_AUS" },
+};
+
+struct SkysightRegionEntry {
+  std::string id;
+  std::string name;
+  std::string projection;
+
+  bool operator==(std::string_view other) const noexcept {
+    return id == other;
+  }
 };
 
 [[gnu::const]]
@@ -55,13 +53,21 @@ FindSkysightRegionById(std::string_view region_id) noexcept
   return GetDefaultSkysightRegion();
 }
 
-[[gnu::pure]]
-static constexpr const SkysightRegionInfo &
-FindSkysightRegionByValue(unsigned value) noexcept
+inline void
+ResetDefaultSkysightRegions(std::vector<SkysightRegionEntry> &result)
 {
-  for (const auto &region : skysight_regions)
-    if (value == unsigned(region.value))
-      return region;
+  result.clear();
+  if (result.capacity() < std::size(skysight_regions))
+    result.reserve(std::size(skysight_regions));
 
-  return GetDefaultSkysightRegion();
+  for (const auto &region : skysight_regions)
+    result.push_back({region.id, region.name, {}});
+}
+
+[[nodiscard]] inline std::vector<SkysightRegionEntry>
+GetDefaultSkysightRegions()
+{
+  std::vector<SkysightRegionEntry> result;
+  ResetDefaultSkysightRegions(result);
+  return result;
 }

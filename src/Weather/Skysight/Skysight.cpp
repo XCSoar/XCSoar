@@ -58,6 +58,8 @@ Skysight::Init()
   const auto &settings = CommonInterface::GetComputerSettings().weather.skysight;
   api->Configure(settings.email.c_str(), settings.password.c_str(),
                  settings.region.c_str());
+  api->PollRegions();
+  api->PollLayers();
 
   const char *configured_layer = Profile::Get(ProfileKeys::WeatherLayerDisplayed);
   if (configured_layer != nullptr && !std::string_view{configured_layer}.empty())
@@ -80,6 +82,18 @@ const SkySight::Layer *
 Skysight::GetLayer(std::size_t index) const noexcept
 {
   return api->GetLayer(index);
+}
+
+const std::vector<SkysightRegionEntry> &
+Skysight::GetRegions() const noexcept
+{
+  return api->GetRegions();
+}
+
+std::string_view
+Skysight::GetRegion() const noexcept
+{
+  return api->GetRegion();
 }
 
 bool

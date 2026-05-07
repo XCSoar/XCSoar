@@ -143,6 +143,7 @@ SkySightRequest::SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl) noexcept
   :api(_api),
    curl(_curl),
    login_job(curl.GetEventLoop()),
+   regions_job(curl.GetEventLoop()),
    layers_job(curl.GetEventLoop()),
    last_updates_job(curl.GetEventLoop())
 {
@@ -157,9 +158,11 @@ void
 SkySightRequest::CancelAll() noexcept
 {
   login_job.Cancel();
+  regions_job.Cancel();
   layers_job.Cancel();
   last_updates_job.Cancel();
   login_running = false;
+  regions_running = false;
   layers_running = false;
   last_updates_running = false;
 
@@ -335,6 +338,57 @@ SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires
   pending_jobs.emplace_back(key, std::string{url},
                             AllocatedPath(filename.c_str()), requires_auth);
   PumpQueue();
+}
+
+void
+SkySightRequest::RequestRegions()
+{
+  if (regions_running)
+    return;
+
+  if (!HasCredentials())
+    return;
+
+  if (!IsLoggedIn()) {
+    EnsureLoggedIn();
+    return;
+  }
+
+  regions_running = true;
+  regions_job.Start(
+    JsonTask(curl, "https://skysight.io/api/regions", api_key),
+    [this](boost::json::value value) {
+      OnRegionsSuccess(std::move(value));
+    },
+    [this](std::exception_ptr error) {
+      OnRegionsError(std::move(error));
+    });
+}
+
+void
+SkySightRequest::OnRegionsSuccess(boost::json::value value)
+{
+  regions_running = false;
+  api.OnRegions(std::move(value));
+}
+
+void
+SkySightRequest::OnRegionsError(std::exception_ptr error) noexcept
+{
+  regions_running = false;
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const HttpStatusError &http_error) {
+    if (http_error.status == 401 || http_error.status == 403) {
+      api_key.clear();
+      valid_until = 0;
+    }
+
+    LogFmt("SkySight regions request failed with HTTP %u", http_error.status);
+  } catch (...) {
+    LogError(error, "SkySight regions request failed");
+  }
 }
 
 void
