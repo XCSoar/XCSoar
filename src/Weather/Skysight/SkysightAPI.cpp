@@ -14,6 +14,7 @@
 
 namespace {
 
+static constexpr time_t LAYERS_RETRY_SECONDS = 30;
 static constexpr time_t INITIAL_LAST_UPDATE_POLL_SECONDS = 30;
 static constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
 
@@ -76,6 +77,8 @@ SkysightAPI::Configure(std::string_view email, std::string_view password,
   region = FindSkysightRegionById(new_region.empty()
                                   ? std::string_view{GetDefaultSkysightRegion().id}
                                   : new_region).id;
+  layers_loaded = false;
+  last_layers_request = 0;
   ResetLastUpdates();
   for (auto &layer : layers)
     layer.last_update = 0;
@@ -160,6 +163,20 @@ SkysightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
 }
 
 void
+SkysightAPI::PollLayers() noexcept
+{
+  if (!HasCredentials() || region.empty() || layers_loaded)
+    return;
+
+  const auto now = std::time(nullptr);
+  if (last_layers_request != 0 && now < last_layers_request + LAYERS_RETRY_SECONDS)
+    return;
+
+  last_layers_request = now;
+  request->RequestLayers(region);
+}
+
+void
 SkysightAPI::PollLastUpdates() noexcept
 {
   if (!HasCredentials() || region.empty())
@@ -188,7 +205,35 @@ SkysightAPI::ResetLastUpdates() noexcept
 void
 SkysightAPI::OnAuthenticated() noexcept
 {
+  PollLayers();
   ResetLastUpdates();
+  owner.OnDataUpdated();
+}
+
+void
+SkysightAPI::OnLayers(boost::json::value value) noexcept
+{
+  try {
+    for (const auto &entry_value : value.as_array()) {
+      const auto &entry = entry_value.as_object();
+      auto *layer = GetLayer(entry.at("id").as_string().c_str());
+      if (layer == nullptr)
+        continue;
+
+      if (const auto *name = entry.if_contains("name"); name != nullptr && name->is_string())
+        layer->name = name->as_string().c_str();
+
+      if (const auto *description = entry.if_contains("description");
+          description != nullptr && description->is_string())
+        layer->description = description->as_string().c_str();
+    }
+
+    layers_loaded = true;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight layers parsing failed");
+    return;
+  }
+
   owner.OnDataUpdated();
 }
 

@@ -143,6 +143,7 @@ SkySightRequest::SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl) noexcept
   :api(_api),
    curl(_curl),
    login_job(curl.GetEventLoop()),
+   layers_job(curl.GetEventLoop()),
    last_updates_job(curl.GetEventLoop())
 {
 }
@@ -156,8 +157,10 @@ void
 SkySightRequest::CancelAll() noexcept
 {
   login_job.Cancel();
+  layers_job.Cancel();
   last_updates_job.Cancel();
   login_running = false;
+  layers_running = false;
   last_updates_running = false;
 
   for (auto &i : file_jobs)
@@ -332,6 +335,61 @@ SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires
   pending_jobs.emplace_back(key, std::string{url},
                             AllocatedPath(filename.c_str()), requires_auth);
   PumpQueue();
+}
+
+void
+SkySightRequest::RequestLayers(std::string_view region_id)
+{
+  if (region_id.empty() || layers_running)
+    return;
+
+  if (!HasCredentials())
+    return;
+
+  if (!IsLoggedIn()) {
+    EnsureLoggedIn();
+    return;
+  }
+
+  layers_running = true;
+
+  std::string url{"https://skysight.io/api/layers?region_id="};
+  url += region_id;
+
+  layers_job.Start(
+    JsonTask(curl, std::move(url), api_key),
+    [this](boost::json::value value) {
+      OnLayersSuccess(std::move(value));
+    },
+    [this](std::exception_ptr error) {
+      OnLayersError(std::move(error));
+    });
+}
+
+void
+SkySightRequest::OnLayersSuccess(boost::json::value value)
+{
+  layers_running = false;
+  api.OnLayers(std::move(value));
+}
+
+void
+SkySightRequest::OnLayersError(std::exception_ptr error) noexcept
+{
+  layers_running = false;
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const HttpStatusError &http_error) {
+    if (http_error.status == 401 || http_error.status == 403) {
+      api_key.clear();
+      valid_until = 0;
+    }
+
+    LogFmt("SkySight layers request failed with HTTP %u", http_error.status);
+  } catch (...) {
+    LogError(error, "SkySight layers request failed");
+  }
 }
 
 void

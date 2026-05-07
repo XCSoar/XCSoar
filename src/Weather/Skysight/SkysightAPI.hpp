@@ -47,14 +47,18 @@ public:
                             const GeoBitmap::TileData &tile) const;
   void EnsureTile(const SkySight::Layer &layer, time_t timestamp,
                   const GeoBitmap::TileData &tile);
+  void PollLayers() noexcept;
   void PollLastUpdates() noexcept;
   void ResetLastUpdates() noexcept;
 
   void OnAuthenticated() noexcept;
+  void OnLayers(boost::json::value value) noexcept;
   void OnLastUpdates(boost::json::value value) noexcept;
   void OnDownloadComplete() noexcept;
 
 private:
+  bool layers_loaded = false;
+  time_t last_layers_request = 0;
   time_t last_updates_request = 0;
 
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);
