@@ -13,6 +13,12 @@
 #include <chrono>
 #include <cstdio>
 
+namespace {
+constexpr auto CONNECT_TIMEOUT = std::chrono::seconds(15);
+constexpr auto RECONNECT_DELAY = std::chrono::seconds(25);
+constexpr std::size_t RX_BUFFER_CAPACITY = 16384;
+} // namespace
+
 OGNClient::OGNClient(EventLoop &_loop, Cares::Channel &_cares,
                      OGNAprsHandler &_handler,
                      std::string &&_host, unsigned _port,
@@ -60,7 +66,7 @@ OGNClient::TryConnect(std::forward_list<AllocatedSocketAddress> addresses) noexc
 {
   for (AllocatedSocketAddress &a : addresses) {
     connector.Cancel();
-    if (connector.Connect(a, std::chrono::seconds(15)))
+    if (connector.Connect(a, CONNECT_TIMEOUT))
       return;
   }
 
@@ -73,6 +79,7 @@ OGNClient::OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept
   read_event.Open(fd.Release());
   read_event.ScheduleRead();
   rx_buffer.clear();
+  rx_buffer.reserve(RX_BUFFER_CAPACITY);
   SendLogin();
 }
 
@@ -108,7 +115,7 @@ void
 OGNClient::ScheduleReconnect() noexcept
 {
   CloseConnection();
-  reconnect_timer.Schedule(std::chrono::seconds(25));
+  reconnect_timer.Schedule(RECONNECT_DELAY);
 }
 
 void
@@ -146,19 +153,22 @@ OGNClient::ConsumeInput(std::string_view chunk) noexcept
 {
   rx_buffer.append(chunk.data(), chunk.size());
 
+  std::size_t cut = 0;
   while (true) {
-    const auto nl = rx_buffer.find('\n');
+    const auto nl = rx_buffer.find('\n', cut);
     if (nl == std::string::npos)
       break;
 
-    std::string_view line(rx_buffer.data(), nl);
+    std::string_view line(rx_buffer.data() + cut, nl - cut);
     while (!line.empty() && line.back() == '\r')
       line.remove_suffix(1);
 
     handler.OnAprsLine(line);
-
-    rx_buffer.erase(0, nl + 1);
+    cut = nl + 1;
   }
+
+  if (cut > 0)
+    rx_buffer.erase(0, cut);
 
   static constexpr std::size_t MAX_ACCUM = 256 * 1024;
   if (rx_buffer.size() > MAX_ACCUM)
