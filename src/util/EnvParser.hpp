@@ -6,6 +6,7 @@
 #include "NumberParser.hpp"
 
 #include <cstdlib>
+#include <cstring>
 
 /**
  * Parse an integer from an environment variable with validation.
@@ -65,4 +66,31 @@ GetEnvInt(const char *env_name, int &value, int min_value = 0,
 
   value = parsed;
   return true;
+}
+
+/**
+ * Return an environment variable value, or @p default_value if unset or empty.
+ */
+[[gnu::pure]]
+static inline const char *
+GetEnvString(const char *env_name, const char *default_value) noexcept
+{
+  const char *env_value = getenv(env_name);
+  return (env_value != nullptr && env_value[0] != '\0')
+    ? env_value
+    : default_value;
+}
+
+/**
+ * Parse a boolean environment variable ("1" is true, anything else is false).
+ */
+[[gnu::pure]]
+static inline bool
+GetEnvBool(const char *env_name, bool default_value = false) noexcept
+{
+  const char *env_value = getenv(env_name);
+  if (env_value == nullptr)
+    return default_value;
+
+  return std::strcmp(env_value, "1") == 0;
 }
