@@ -11,8 +11,10 @@
 
 #include <chrono>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 
 /**
@@ -52,6 +54,9 @@ struct OGNTrafficEntry
 
   unsigned aircraft_type = 0;
 
+  /** Cached #OGNPilotIdFromStation(station_id); set on insert. */
+  uint32_t pilot_id = 0;
+
   template<typename S>
   OGNTrafficEntry(S &&_station, const GeoPoint &_loc, int _altitude,
                   unsigned _track_deg, bool _track_valid,
@@ -76,8 +81,50 @@ struct OGNTrafficIndexable {
   }
 };
 
+namespace OGNTrafficDetail {
+
+struct StationHash {
+  using is_transparent = void;
+
+  [[gnu::pure]]
+  std::size_t operator()(std::string_view s) const noexcept {
+    return std::hash<std::string_view>{}(s);
+  }
+
+  std::size_t operator()(const std::string &s) const noexcept {
+    return (*this)(std::string_view(s));
+  }
+};
+
+struct StationEqual {
+  using is_transparent = void;
+
+  bool operator()(std::string_view a, std::string_view b) const noexcept {
+    return a == b;
+  }
+
+  bool operator()(std::string_view a, const std::string &b) const noexcept {
+    return a == std::string_view(b);
+  }
+
+  bool operator()(const std::string &a, std::string_view b) const noexcept {
+    return std::string_view(a) == b;
+  }
+
+  bool operator()(const std::string &a, const std::string &b) const noexcept {
+    return a == b;
+  }
+};
+
+} // namespace OGNTrafficDetail
+
 /**
  * In-memory OGN-derived traffic positions (not persisted in cloud DB).
+ *
+ * CRUD-style API:
+ * - Create / update: #Upsert
+ * - Read: #Find, #QueryWithinRange
+ * - Delete: #Erase, #Expire (time threshold), #clear
  */
 class OGNTrafficContainer {
   typedef boost::geometry::index::rtree<
@@ -92,7 +139,10 @@ class OGNTrafficContainer {
   Tree rtree;
   List list;
 
-  std::unordered_map<std::string, OGNTrafficPtr> by_station;
+  std::unordered_map<std::string, OGNTrafficPtr,
+                     OGNTrafficDetail::StationHash,
+                     OGNTrafficDetail::StationEqual>
+    by_station;
 
 public:
   OGNTrafficContainer();
@@ -106,6 +156,11 @@ public:
   bool empty() const noexcept {
     return list.empty();
   }
+
+  [[gnu::pure]]
+  OGNTrafficEntry *Find(std::string_view station_id) const noexcept;
+
+  bool Erase(std::string_view station_id) noexcept;
 
   OGNTrafficEntry &Upsert(std::string_view station_id, const GeoPoint &location,
                           int altitude, unsigned track_deg, bool track_valid,
