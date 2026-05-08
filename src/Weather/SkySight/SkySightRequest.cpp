@@ -352,7 +352,7 @@ SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires
   PumpQueue();
 }
 
-void
+SkySightRequest::DownloadDatafileResult
 SkySightRequest::DownloadDatafile(std::string_view layer_id,
                                   time_t forecast_time,
                                   std::string_view url,
@@ -362,7 +362,7 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
 
   const std::string key{filename.c_str()};
   if (file_jobs.find(key) != file_jobs.end() || IsQueued(key))
-    return;
+    return DownloadDatafileResult::Duplicate;
 
   if (File::Exists(filename)) {
     try {
@@ -374,7 +374,7 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
       api.OnDatafileError(layer_id, forecast_time);
     }
 
-    return;
+    return DownloadDatafileResult::Available;
   }
 
   pending_jobs.emplace_back(FileJob::Kind::ForecastData,
@@ -382,6 +382,7 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
                             AllocatedPath(filename.c_str()), true,
                             std::string{layer_id}, forecast_time);
   PumpQueue();
+  return DownloadDatafileResult::Queued;
 }
 
 void
