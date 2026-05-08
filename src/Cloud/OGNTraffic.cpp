@@ -47,6 +47,27 @@ OGNTrafficContainer::Remove(OGNTrafficEntry &t) noexcept
   rtree.remove(t.shared_from_this());
 }
 
+OGNTrafficEntry *
+OGNTrafficContainer::Find(std::string_view station_sv) const noexcept
+{
+  const auto it = by_station.find(station_sv);
+  if (it == by_station.end())
+    return nullptr;
+
+  return it->second.get();
+}
+
+bool
+OGNTrafficContainer::Erase(std::string_view station_sv) noexcept
+{
+  const auto it = by_station.find(station_sv);
+  if (it == by_station.end())
+    return false;
+
+  Remove(*it->second);
+  return true;
+}
+
 OGNTrafficEntry &
 OGNTrafficContainer::Upsert(std::string_view station_sv,
                             const GeoPoint &location, int altitude,
@@ -54,14 +75,15 @@ OGNTrafficContainer::Upsert(std::string_view station_sv,
                             uint32_t flarm_id, bool flarm_valid,
                             unsigned aircraft_type) noexcept
 {
-  std::string station{station_sv};
-  auto it = by_station.find(station);
+  auto it = by_station.find(station_sv);
   const auto now = std::chrono::steady_clock::now();
 
   if (it == by_station.end()) {
+    std::string station{station_sv};
     auto p = std::make_shared<OGNTrafficEntry>(
       std::move(station), location, altitude, track_deg, track_valid,
       flarm_id, flarm_valid, aircraft_type);
+    p->pilot_id = OGNPilotIdFromStation(p->station_id);
     by_station.emplace(p->station_id, p);
     Insert(*p);
     return *p;
