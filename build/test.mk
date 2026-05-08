@@ -105,6 +105,7 @@ TEST_NAMES = \
 	TestZeroFinder \
 	TestAirspaceWarningManager \
 	TestAirspaceParser \
+	TestOGNAprsParser \
 	TestMETARParser \
 	TestIGCParser \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
@@ -264,6 +265,13 @@ TEST_AIRSPACE_WARNING_MANAGER_SOURCES = \
 	$(TEST_SRC_DIR)/TestAirspaceWarningManager.cpp
 TEST_AIRSPACE_WARNING_MANAGER_DEPENDS = $(TEST1_DEPENDS) UNITS
 $(eval $(call link-program,TestAirspaceWarningManager,TEST_AIRSPACE_WARNING_MANAGER))
+
+TEST_OGN_APRS_PARSER_SOURCES = \
+	$(SRC)/Cloud/OGNAprs.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
+TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL
+$(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
