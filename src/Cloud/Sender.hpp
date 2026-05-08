@@ -9,8 +9,27 @@
 #include "net/StaticSocketAddress.hxx"
 
 #include <array>
+#include <cstdint>
 
 struct GeoPoint;
+
+/**
+ * Packed extensions for #SkyLinesTracking::TrafficResponsePacket::Traffic
+ * reserved fields (host byte order here; converted in #TrafficResponseSender).
+ *
+ * - reserved: bit 15 TRACK_VALID; bits 0-8 ground track [deg]; bits 9-13 aircraft
+ *   type (0-31).
+ * - reserved2: bit 31 FLARM_VALID; bits 0-23 FLARM address when valid.
+ */
+struct TrafficRecordExtensions {
+  uint16_t reserved = 0;
+  uint32_t reserved2 = 0;
+
+  static TrafficRecordExtensions FromOgn(unsigned track_deg, bool track_valid,
+                                         unsigned aircraft_type,
+                                         uint32_t flarm_id,
+                                         bool flarm_valid) noexcept;
+};
 
 class TrafficResponseSender {
   SkyLinesTracking::Server &server;
@@ -41,7 +60,8 @@ public:
   }
 
   void Add(uint32_t pilot_id, uint32_t time,
-           GeoPoint location, int altitude);
+           GeoPoint location, int altitude,
+           TrafficRecordExtensions ext = {});
   void Flush();
 };
 
