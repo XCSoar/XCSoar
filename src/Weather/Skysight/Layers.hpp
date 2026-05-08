@@ -50,8 +50,11 @@ struct Layer {
   double mtime = 0;
   bool requires_auth = false;
   bool updating = false;
+  bool datafiles_pending = false;
+  bool preload_requested = false;
   bool tile_layer = false;
   bool live_layer = false;
+  unsigned pending_downloads = 0;
   unsigned zoom_min = 1;
   unsigned zoom_max = GeoBitmap::MAX_TILE_ZOOM;
   float alpha = 0.6f;

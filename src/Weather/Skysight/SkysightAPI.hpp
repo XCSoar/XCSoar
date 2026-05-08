@@ -5,12 +5,14 @@
 
 #include "Layers.hpp"
 #include "Regions.hpp"
+#include "SkySightFileDecoder.hpp"
 #include "system/Path.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 
 #include <boost/json.hpp>
 
 #include <ctime>
+#include <deque>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -18,13 +20,20 @@
 
 class CurlGlobal;
 class Skysight;
-class SkySightFileDecodeJob;
 class SkySightRequest;
 
 class SkysightAPI final {
   Skysight &owner;
   std::unique_ptr<SkySightRequest> request;
   std::unique_ptr<SkySightFileDecodeJob> decode_job;
+  struct PendingDecodeJob {
+    SkySightPreparedData prepared;
+    std::string variable_name;
+    std::map<float, SkySight::LegendColor> legend;
+    std::string layer_id;
+    time_t forecast_time = 0;
+  };
+  std::deque<PendingDecodeJob> pending_decode_jobs;
   std::vector<SkySight::Layer> layers;
   std::vector<SkySight::Layer> selected_layers;
   std::vector<SkysightRegionEntry> regions = GetDefaultSkysightRegions();
@@ -73,6 +82,10 @@ public:
                   const GeoBitmap::TileData &tile);
   void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
                       std::string_view link);
+  bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,
+                             std::string_view link) noexcept;
+  bool PreloadDatafiles(std::string_view layer_id) noexcept;
+  bool PreloadAllDatafiles() noexcept;
   void PollRegions() noexcept;
   void PollLayers() noexcept;
   void PollLastUpdates() noexcept;
@@ -101,6 +114,12 @@ private:
   time_t last_updates_request = 0;
 
   void SyncSelectedLayer(std::string_view id) noexcept;
+  static void UpdateBusyState(SkySight::Layer &layer) noexcept;
+  bool QueueForecastDatafile(SkySight::Layer &layer, time_t forecast_time,
+                             std::string_view link) noexcept;
+  void QueueDecodeJob(Path path, const SkySight::Layer &layer,
+                      time_t forecast_time) noexcept;
+  void StartNextDecodeJob() noexcept;
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);
   static std::string FormatUrlTimestamp(time_t timestamp);
   static std::string FormatFileTimestamp(time_t timestamp);

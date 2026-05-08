@@ -152,8 +152,10 @@ Skysight::AddSelectedLayer(std::string_view id, bool save_profile)
     return false;
 
   auto selected = *layer;
-  if (!selected.SupportsLiveTiles())
+  if (!selected.SupportsLiveTiles()) {
+    selected.datafiles_pending = true;
     selected.updating = true;
+  }
 
   if (!api->AddSelectedLayer(selected))
     return false;
@@ -232,9 +234,8 @@ Skysight::SelectForecastTime(std::string_view id, time_t forecast_time)
     layer->mtime = mtime;
     selected->mtime = mtime;
   } else {
-    layer->updating = true;
-    selected->updating = true;
-    api->EnsureDatafile(*layer, i->time, i->link);
+    if (!api->QueueForecastDatafile(id, i->time, i->link))
+      return false;
   }
 
   if (active_layer == layer)
@@ -242,6 +243,18 @@ Skysight::SelectForecastTime(std::string_view id, time_t forecast_time)
 
   OnDataUpdated();
   return true;
+}
+
+bool
+Skysight::PreloadForecast(std::string_view id) noexcept
+{
+  return api->PreloadDatafiles(id);
+}
+
+bool
+Skysight::PreloadAllForecasts() noexcept
+{
+  return api->PreloadAllDatafiles();
 }
 
 void

@@ -157,6 +157,12 @@ SkysightAPI::SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path)
 SkysightAPI::~SkysightAPI() = default;
 
 void
+SkysightAPI::UpdateBusyState(SkySight::Layer &layer) noexcept
+{
+  layer.updating = layer.datafiles_pending || layer.pending_downloads > 0;
+}
+
+void
 SkysightAPI::InitialiseLayers(std::vector<SkySight::Layer> &new_layers)
 {
   new_layers.clear();
@@ -183,9 +189,9 @@ SkysightAPI::Configure(std::string_view email, std::string_view password,
   ResetLastUpdates();
   if (decode_job != nullptr)
     decode_job->Cancel();
+  pending_decode_jobs.clear();
+  InitialiseLayers(layers);
   selected_layers.clear();
-  for (auto &layer : layers)
-    layer.last_update = 0;
 
   request->Configure(email, password);
 }
@@ -358,6 +364,136 @@ SkysightAPI::EnsureDatafile(const SkySight::Layer &layer,
                                             GetUrlSuffix(link)));
 }
 
+bool
+SkysightAPI::QueueForecastDatafile(SkySight::Layer &layer,
+                                   time_t forecast_time,
+                                   std::string_view link) noexcept
+{
+  if (link.empty())
+    return false;
+
+  const auto suffix = GetUrlSuffix(link);
+  if (!SkySightFileDecoder::IsNetCdfDecodeAvailable() &&
+      NeedsNetCdfDecodeSuffix(suffix))
+    return false;
+
+  switch (request->DownloadDatafile(layer.id, forecast_time, link,
+                                    GetDatafilePath(layer, forecast_time, suffix))) {
+  case SkySightRequest::DownloadDatafileResult::Duplicate:
+  case SkySightRequest::DownloadDatafileResult::Available:
+    return true;
+
+  case SkySightRequest::DownloadDatafileResult::Queued:
+    ++layer.pending_downloads;
+    UpdateBusyState(layer);
+    return true;
+  }
+
+  return false;
+}
+
+void
+SkysightAPI::QueueDecodeJob(Path path, const SkySight::Layer &layer,
+                            time_t forecast_time) noexcept
+{
+  pending_decode_jobs.push_back(PendingDecodeJob{
+    SkySightPreparedData{
+      SkySightPreparedDataKind::NeedsNetCdfDecode,
+      AllocatedPath(path.c_str()),
+      path.WithSuffix(".tif"),
+    },
+    std::string{layer.id},
+    layer.legend,
+    std::string{layer.id},
+    forecast_time,
+  });
+}
+
+void
+SkysightAPI::StartNextDecodeJob() noexcept
+{
+  if (pending_decode_jobs.empty())
+    return;
+
+  if (decode_job == nullptr)
+    decode_job = std::make_unique<SkySightFileDecodeJob>();
+
+  if (decode_job->GetStatus() != SkySightFileDecodeJob::Status::Idle)
+    return;
+
+  auto job = std::move(pending_decode_jobs.front());
+  pending_decode_jobs.pop_front();
+
+  decode_job->Start(
+    std::move(job.prepared),
+    std::move(job.variable_name),
+    std::move(job.legend),
+    [this, layer_id = std::move(job.layer_id), forecast_time = job.forecast_time](AllocatedPath output_path) {
+      OnDatafileDownloaded(layer_id, forecast_time, output_path);
+    },
+    [this, layer_id = std::move(job.layer_id), forecast_time = job.forecast_time](std::exception_ptr error) {
+      LogError(error, "SkySight forecast decode failed");
+      OnDatafileError(layer_id, forecast_time);
+    });
+}
+
+bool
+SkysightAPI::QueueForecastDatafile(std::string_view layer_id,
+                                   time_t forecast_time,
+                                   std::string_view link) noexcept
+{
+  auto *layer = GetLayer(layer_id);
+  if (layer == nullptr)
+    return false;
+
+  const bool success = QueueForecastDatafile(*layer, forecast_time, link);
+  SyncSelectedLayer(layer_id);
+  return success;
+}
+
+bool
+SkysightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
+{
+  auto *layer = GetLayer(layer_id);
+  if (layer == nullptr || layer->SupportsLiveTiles())
+    return false;
+
+  bool success = false;
+
+  if (layer->forecast_datafiles.empty()) {
+    layer->preload_requested = true;
+    layer->datafiles_pending = true;
+    UpdateBusyState(*layer);
+    success = true;
+  } else {
+    layer->preload_requested = false;
+    for (const auto &datafile : layer->forecast_datafiles)
+      success = QueueForecastDatafile(*layer, datafile.time, datafile.link) || success;
+
+    UpdateBusyState(*layer);
+  }
+
+  SyncSelectedLayer(layer_id);
+  owner.OnDataUpdated();
+
+  if (layer->datafiles_pending)
+    PollSelectedDatafiles();
+
+  return success;
+}
+
+bool
+SkysightAPI::PreloadAllDatafiles() noexcept
+{
+  bool success = false;
+
+  for (const auto &selected : selected_layers)
+    if (!selected.SupportsLiveTiles())
+      success = PreloadDatafiles(selected.id) || success;
+
+  return success;
+}
+
 void
 SkysightAPI::PollRegions() noexcept
 {
@@ -413,7 +549,7 @@ SkysightAPI::PollSelectedDatafiles() noexcept
     return;
 
   for (const auto &selected : selected_layers) {
-    if (!selected.updating || selected.SupportsLiveTiles())
+    if (!selected.datafiles_pending || selected.SupportsLiveTiles())
       continue;
 
     request->RequestDatafiles(region, selected.id, GetInitialDatafilesTime());
@@ -497,16 +633,60 @@ SkysightAPI::OnLayers(boost::json::value value) noexcept
     const auto active_layer_id = std::string{owner.GetActiveLayerId()};
     const auto displayed_layer_id = std::string{owner.GetDisplayedLayerId()};
 
+    std::vector<SkySight::Layer> new_layers;
+    InitialiseLayers(new_layers);
+
+    auto *const old_layers = &layers;
+    const auto find_old_layer = [old_layers](std::string_view id) noexcept
+      -> const SkySight::Layer * {
+      for (const auto &layer : *old_layers)
+        if (layer == id)
+          return &layer;
+
+      return nullptr;
+    };
+
+    const auto copy_runtime_state = [&find_old_layer](SkySight::Layer &layer) noexcept {
+      const auto *existing = find_old_layer(layer.id);
+      if (existing == nullptr)
+        return;
+
+      layer.time_name = existing->time_name;
+      layer.forecast_datafiles = existing->forecast_datafiles;
+      layer.from = existing->from;
+      layer.to = existing->to;
+      layer.mtime = existing->mtime;
+      layer.updating = existing->updating;
+      layer.datafiles_pending = existing->datafiles_pending;
+      layer.preload_requested = existing->preload_requested;
+      layer.pending_downloads = existing->pending_downloads;
+      layer.last_update = existing->last_update;
+      layer.forecast_time = existing->forecast_time;
+    };
+
+    for (auto &layer : new_layers)
+      copy_runtime_state(layer);
+
     if (value.is_array())
-      layers.reserve(layers.size() + value.as_array().size());
+      new_layers.reserve(new_layers.size() + value.as_array().size());
+
+    const auto find_new_layer = [&new_layers](std::string_view id) noexcept
+      -> SkySight::Layer * {
+      for (auto &layer : new_layers)
+        if (layer == id)
+          return &layer;
+
+      return nullptr;
+    };
 
     for (const auto &entry_value : value.as_array()) {
       const auto &entry = entry_value.as_object();
       const auto id = entry.at("id").as_string().c_str();
-      auto *layer = GetLayer(id);
+      auto *layer = find_new_layer(id);
       if (layer == nullptr) {
-        layers.emplace_back(id, id, std::string{}, true, false, false);
-        layer = &layers.back();
+        new_layers.emplace_back(id, id, std::string{}, true, false, false);
+        layer = &new_layers.back();
+        copy_runtime_state(*layer);
       }
 
       if (const auto *name = entry.if_contains("name");
@@ -526,9 +706,9 @@ SkysightAPI::OnLayers(boost::json::value value) noexcept
         layer->data_type = data_type->as_string().c_str();
 
       ParseLegend(entry, *layer);
-      SyncSelectedLayer(layer->id);
     }
 
+    layers = std::move(new_layers);
     layers_loaded = true;
     owner.OnLayerCatalogChanged(active_layer_id, displayed_layer_id);
     owner.ReloadSelectedLayersFromProfile();
@@ -578,7 +758,7 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
   if (layer == nullptr)
     return;
 
-  layer->updating = false;
+  layer->datafiles_pending = false;
   layer->forecast_datafiles.clear();
 
   bool found = false;
@@ -670,16 +850,19 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
                                          return candidate.time == layer->forecast_time;
                                        });
 
-    if (selected != layer->forecast_datafiles.end() &&
-        (SkySightFileDecoder::IsNetCdfDecodeAvailable() ||
-         !NeedsNetCdfDecodeSuffix(GetUrlSuffix(selected->link)))) {
-      layer->updating = true;
-      EnsureDatafile(*layer, selected->time, selected->link);
+    const bool preload_requested = std::exchange(layer->preload_requested, false);
+    if (preload_requested) {
+      for (const auto &datafile : layer->forecast_datafiles)
+        (void)QueueForecastDatafile(*layer, datafile.time, datafile.link);
+    } else if (selected != layer->forecast_datafiles.end()) {
+      (void)QueueForecastDatafile(*layer, selected->time, selected->link);
     }
   } else {
+    layer->preload_requested = false;
     layer->forecast_time = 0;
   }
 
+  UpdateBusyState(*layer);
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
   PollSelectedDatafiles();
@@ -689,7 +872,9 @@ void
 SkysightAPI::OnDatafilesError(std::string_view layer_id) noexcept
 {
   if (auto *layer = GetLayer(layer_id); layer != nullptr) {
-    layer->updating = false;
+    layer->datafiles_pending = false;
+    layer->preload_requested = false;
+    UpdateBusyState(*layer);
     SyncSelectedLayer(layer_id);
   }
 
@@ -713,54 +898,41 @@ SkysightAPI::OnDatafileDownloaded(std::string_view layer_id,
     return;
 
   if (path.EndsWithIgnoreCase(".nc")) {
-    if (decode_job == nullptr)
-      decode_job = std::make_unique<SkySightFileDecodeJob>();
-
-    if (decode_job->GetStatus() != SkySightFileDecodeJob::Status::Idle) {
-      LogFmt("SkySight decoder is already active, skipping %s", layer->id.c_str());
-      OnDatafileError(layer_id, forecast_time);
-      return;
-    }
-
     layer->updating = true;
     SyncSelectedLayer(layer_id);
     owner.OnDataUpdated();
 
-    decode_job->Start(
-      SkySightPreparedData{
-        SkySightPreparedDataKind::NeedsNetCdfDecode,
-        AllocatedPath(path.c_str()),
-        path.WithSuffix(".tif"),
-      },
-      std::string{layer->id},
-      layer->legend,
-      [this, layer_id = std::string{layer_id}, forecast_time](AllocatedPath output_path) {
-        OnDatafileDownloaded(layer_id, forecast_time, output_path);
-      },
-      [this, layer_id = std::string{layer_id}, forecast_time](std::exception_ptr error) {
-        LogError(error, "SkySight forecast decode failed");
-        OnDatafileError(layer_id, forecast_time);
-      });
+    QueueDecodeJob(path, *layer, forecast_time);
+    StartNextDecodeJob();
     return;
   }
 
-  layer->updating = false;
+  if (layer->pending_downloads > 0)
+    --layer->pending_downloads;
+
+  UpdateBusyState(*layer);
   layer->last_update = std::max(layer->last_update, forecast_time);
   layer->mtime = std::chrono::system_clock::to_time_t(
     File::GetLastModification(path));
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
+  StartNextDecodeJob();
 }
 
 void
 SkysightAPI::OnDatafileError(std::string_view layer_id,
                              [[maybe_unused]] time_t forecast_time) noexcept
 {
-  if (auto *layer = GetLayer(layer_id); layer != nullptr)
-    layer->updating = false;
+  if (auto *layer = GetLayer(layer_id); layer != nullptr) {
+    if (layer->pending_downloads > 0)
+      --layer->pending_downloads;
+
+    UpdateBusyState(*layer);
+  }
 
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
+  StartNextDecodeJob();
 }
 
 void

@@ -85,10 +85,13 @@ public:
 
     StaticString<256> second_row;
     if (layer->updating) {
-      if (!layer->SupportsLiveTiles() && layer->forecast_datafiles.empty())
+      if (!layer->SupportsLiveTiles() && layer->datafiles_pending)
         second_row = _("Loading forecast steps...");
+      else if (!layer->SupportsLiveTiles() && layer->pending_downloads > 1)
+        second_row.Format(_("Preloading %u forecast steps..."),
+                          layer->pending_downloads);
       else if (!layer->SupportsLiveTiles())
-        second_row = _("Forecast steps loaded. Downloading data...");
+        second_row = _("Downloading forecast data...");
       else
         second_row = _("Updating...");
     } else if (layer->SupportsLiveTiles()) {
@@ -219,6 +222,8 @@ class SkysightWidget final : public ListWidget {
   Button *activate_button = nullptr;
   Button *add_button = nullptr;
   Button *time_button = nullptr;
+  Button *preload_button = nullptr;
+  Button *preload_all_button = nullptr;
   Button *remove_button = nullptr;
   SelectedLayerRenderer row_renderer;
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
@@ -276,6 +281,12 @@ private:
     time_button = buttons.Add(_("Time"), [this]() {
       SelectTimeClicked();
     });
+    preload_button = buttons.Add(_("Preload"), [this]() {
+      PreloadClicked();
+    });
+    preload_all_button = buttons.Add(_("Preload All"), [this]() {
+      PreloadAllClicked();
+    });
     remove_button = buttons.Add(_("Remove"), [this]() {
       RemoveClicked();
     });
@@ -284,7 +295,8 @@ private:
 
   void UpdateButtons() {
     if (activate_button == nullptr || add_button == nullptr ||
-        time_button == nullptr || remove_button == nullptr)
+        time_button == nullptr || preload_button == nullptr ||
+        preload_all_button == nullptr || remove_button == nullptr)
       return;
 
     const auto empty = skysight == nullptr || skysight->NumSelectedLayers() == 0;
@@ -299,9 +311,26 @@ private:
     const auto *layer = empty ? nullptr : skysight->GetSelectedLayer(index);
     const auto active = layer != nullptr && skysight->GetActiveLayerId() == layer->id;
 
+    bool any_forecast_layer = false;
+    bool any_idle_forecast_layer = false;
+    if (skysight != nullptr) {
+      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+        const auto *selected_layer = skysight->GetSelectedLayer(i);
+        if (selected_layer == nullptr || selected_layer->SupportsLiveTiles())
+          continue;
+
+        any_forecast_layer = true;
+        any_idle_forecast_layer = any_idle_forecast_layer || !selected_layer->updating;
+      }
+    }
+
     time_button->SetEnabled(layer != nullptr && !layer->SupportsLiveTiles() &&
                             !layer->forecast_datafiles.empty() &&
                             (skysight->IsForecastDecodeAvailable() || layer->mtime != 0));
+    preload_button->SetEnabled(layer != nullptr && !layer->SupportsLiveTiles() &&
+                               skysight->HasCredentials() && !layer->updating);
+    preload_all_button->SetEnabled(skysight != nullptr && skysight->HasCredentials() &&
+                                   any_forecast_layer && any_idle_forecast_layer);
     remove_button->SetEnabled(layer != nullptr && !layer->updating);
 
     if (active) {
@@ -416,6 +445,36 @@ private:
 
     if (!skysight->SelectForecastTime(layer->id, renderer.GetForecastTime(selected)))
       ShowMessageBox(_("Couldn't load the selected time step."),
+                     _("SkySight"), MB_OK);
+
+    UpdateList();
+  }
+
+  void PreloadClicked() {
+    if (skysight == nullptr)
+      return;
+
+    const auto index = GetList().GetCursorIndex();
+    if (index >= skysight->NumSelectedLayers())
+      return;
+
+    const auto *layer = skysight->GetSelectedLayer(index);
+    if (layer == nullptr || layer->SupportsLiveTiles())
+      return;
+
+    if (!skysight->PreloadForecast(layer->id))
+      ShowMessageBox(_("Couldn't preload forecast data."),
+                     _("SkySight"), MB_OK);
+
+    UpdateList();
+  }
+
+  void PreloadAllClicked() {
+    if (skysight == nullptr)
+      return;
+
+    if (!skysight->PreloadAllForecasts())
+      ShowMessageBox(_("Couldn't preload forecast data."),
                      _("SkySight"), MB_OK);
 
     UpdateList();
