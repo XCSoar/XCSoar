@@ -6,9 +6,27 @@
 #include "Geo/GeoPoint.hpp"
 #include "util/CRC16CCITT.hpp"
 
+TrafficRecordExtensions
+TrafficRecordExtensions::FromOgn(unsigned track_deg, bool track_valid,
+                                 unsigned aircraft_type,
+                                 uint32_t flarm_id,
+                                 bool flarm_valid) noexcept
+{
+  TrafficRecordExtensions e{};
+  if (track_valid && track_deg <= 359)
+    e.reserved = uint16_t(0x8000u | (track_deg & 0x1FFu) |
+                          ((aircraft_type & 0x1Fu) << 9));
+
+  if (flarm_valid && flarm_id <= 0xFFFFFFu)
+    e.reserved2 = 0x80000000u | (flarm_id & 0xFFFFFFu);
+
+  return e;
+}
+
 void
 TrafficResponseSender::Add(uint32_t pilot_id, uint32_t time,
-                           GeoPoint location, int altitude)
+                           GeoPoint location, int altitude,
+                           TrafficRecordExtensions ext)
 {
   assert(n_traffic < MAX_TRAFFIC);
 
@@ -17,8 +35,8 @@ TrafficResponseSender::Add(uint32_t pilot_id, uint32_t time,
   traffic.time = ToBE32(time);
   traffic.location = SkyLinesTracking::ExportGeoPoint(location);
   traffic.altitude = ToBE16(altitude);
-  traffic.reserved = 0;
-  traffic.reserved2 = 0;
+  traffic.reserved = ToBE16(ext.reserved);
+  traffic.reserved2 = ToBE32(ext.reserved2);
 
   if (n_traffic == MAX_TRAFFIC)
     Flush();
