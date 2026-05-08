@@ -93,6 +93,12 @@ class SkySightRequest final {
   time_t throttle_until = 0;
 
 public:
+  enum class DownloadDatafileResult {
+    Duplicate,
+    Queued,
+    Available,
+  };
+
   SkySightRequest(SkySightAPI &_api, CurlGlobal &_curl) noexcept;
   ~SkySightRequest() noexcept;
 
@@ -105,8 +111,9 @@ public:
   bool IsLoggedIn() const noexcept;
 
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
-  void DownloadDatafile(std::string_view layer_id, time_t forecast_time,
-                        std::string_view url, Path filename);
+  DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
+                                          time_t forecast_time,
+                                          std::string_view url, Path filename);
   void RequestRegions();
   void RequestLayers(std::string_view region_id);
   void RequestLastUpdates(std::string_view region_id,
