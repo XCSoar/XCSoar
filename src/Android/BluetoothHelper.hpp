@@ -60,7 +60,7 @@ public:
 
   PortBridge *connect(JNIEnv *env, const char *address);
 
-  PortBridge *connectHM10(JNIEnv *env, const char *address);
+  PortBridge *connectBleSerial(JNIEnv *env, const char *address);
 
   PortBridge *createServer(JNIEnv *env);
 };

@@ -21,6 +21,6 @@ OpenAndroidBluetoothServerPort(BluetoothHelper &bluetooth_helper,
                                PortListener *_listener, DataHandler &_handler);
 
 std::unique_ptr<Port>
-OpenAndroidBleHm10Port(BluetoothHelper &bluetooth_helper,
-                       const char *address, PortListener *_listener,
-                       DataHandler &_handler);
+OpenAndroidBleSerialPort(BluetoothHelper &bluetooth_helper,
+                         const char *address, PortListener *_listener,
+                         DataHandler &_handler);

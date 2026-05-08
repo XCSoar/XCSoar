@@ -258,7 +258,7 @@ final class BluetoothHelper
     return new BluetoothSensor(context, device, listener);
   }
 
-  public AndroidPort connectHM10(String address)
+  public AndroidPort connectBleSerial(String address)
     throws IOException {
     if (!hasLe)
       throw new IOException("No Bluetooth adapter found");
@@ -272,7 +272,7 @@ final class BluetoothHelper
 
     Log.d(TAG, String.format("Bluetooth device \"%s\" is a LE device, trying to connect using GATT...",
                              getDisplayString(device)));
-    return HM10Port.create(context, device);
+    return BleSerialPort.create(context, device);
   }
 
   public AndroidPort connect(String address)
@@ -306,7 +306,9 @@ final class BluetoothHelper
     for (ParcelUuid puuid : serviceUuids) {
       UUID uuid = puuid.getUuid();
       if (BluetoothUuids.HM10_SERVICE.equals(uuid))
-        features |= DetectDeviceListener.FEATURE_HM10;
+        features |= DetectDeviceListener.FEATURE_BLE_SERIAL;
+      else if (BluetoothUuids.NORDIC_UART_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_BLE_SERIAL;
       else if (BluetoothUuids.HEART_RATE_SERVICE.equals(uuid))
         features |= DetectDeviceListener.FEATURE_HEART_RATE;
       else if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(uuid))

@@ -43,6 +43,25 @@ public final class BluetoothUuids {
   static final UUID HM10_RX_TX_CHARACTERISTIC =
     UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
 
+  /**
+   * Nordic UART Service (NUS) - provides a BLE serial bridge using
+   * separate RX and TX characteristics.
+   */
+  static final UUID NORDIC_UART_SERVICE =
+    UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
+
+  /**
+   * Nordic UART RX characteristic - XCSoar writes data to it.
+   */
+  static final UUID NORDIC_UART_RX_CHARACTERISTIC =
+    UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
+
+  /**
+   * Nordic UART TX characteristic - XCSoar receives data from here.
+   */
+  static final UUID NORDIC_UART_TX_CHARACTERISTIC =
+    UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
+
   /* Flytec Sensbox */
   static final UUID FLYTEC_SENSBOX_SERVICE =
     UUID.fromString("aba27100-143b-4b81-a444-edcd0000f020");
@@ -65,6 +84,7 @@ public final class BluetoothUuids {
                           HEART_RATE_SERVICE,
                           ENGINE_SENSORS_SERVICE,
                           HM10_SERVICE,
+                          NORDIC_UART_SERVICE,
                           FLYTEC_SENSBOX_SERVICE
                         };
   }
@@ -76,6 +96,8 @@ public final class BluetoothUuids {
                         HEART_RATE_MEASUREMENT_CHARACTERISTIC,
                         ENGINE_SENSORS_CHARACTERISTIC,
                         HM10_RX_TX_CHARACTERISTIC,
+                        NORDIC_UART_RX_CHARACTERISTIC,
+                        NORDIC_UART_TX_CHARACTERISTIC,
                         FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC,
                         FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC,
                         FLYTEC_SENSBOX_SECOND_GPS_CHARACTERISTIC,

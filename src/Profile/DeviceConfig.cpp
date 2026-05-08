@@ -31,7 +31,7 @@ static const char *const port_type_strings[] = {
   "udp_listener",
   "pty",
   "ble_sensor",
-  "ble_hm10",
+  "ble_hm10",   // For BLE_SERIAL; using old name to not break user configs.
   "glider_link",
   "android_usb_serial",
   NULL

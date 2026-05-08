@@ -1,4 +1,7 @@
 Version 7.45 - not yet released
+* android
+  - BLE serial ports now support Nordic UART Service (NUS) in addition to
+    HM-10; the protocol is auto-detected at connection time #2260
 * devices
   - Android: multi-port USB serial adapters (e.g. dual FTDI) use 0-based port
     suffixes (#0, #1) in both the port list and device list #2481

@@ -20,7 +20,7 @@ static jfieldID hasLe_field;
 static jmethodID isEnabled_method;
 static jmethodID getNameFromAddress_method;
 static jmethodID connect_method, createServer_method;
-static jmethodID hm10connect_method;
+static jmethodID bleSerialConnect_method;
 static jmethodID connectSensor_method;
 static jmethodID addDetectDeviceListener_method;
 static jmethodID removeDetectDeviceListener_method;
@@ -61,9 +61,9 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
   createServer_method = env->GetMethodID(cls, "createServer",
                                          "()Lorg/xcsoar/AndroidPort;");
 
-  hm10connect_method = env->GetMethodID(cls, "connectHM10",
-                                        "(Ljava/lang/String;)"
-                                        "Lorg/xcsoar/AndroidPort;");
+  bleSerialConnect_method = env->GetMethodID(cls, "connectBleSerial",
+                                             "(Ljava/lang/String;)"
+                                             "Lorg/xcsoar/AndroidPort;");
   addDetectDeviceListener_method =
     env->GetMethodID(cls, "addDetectDeviceListener",
                      "(Lorg/xcsoar/DetectDeviceListener;)V");
@@ -172,12 +172,12 @@ BluetoothHelper::createServer(JNIEnv *env)
 }
 
 PortBridge *
-BluetoothHelper::connectHM10(JNIEnv *env, const char *address)
+BluetoothHelper::connectBleSerial(JNIEnv *env, const char *address)
 {
-  /* call BluetoothHelper.connectHM10() */
+  /* call BluetoothHelper.connectBleSerial() */
 
   const Java::String address2(env, address);
-  auto obj = Java::CallObjectMethodRethrow(env, Get(), hm10connect_method,
+  auto obj = Java::CallObjectMethodRethrow(env, Get(), bleSerialConnect_method,
                                            address2.Get());
   assert(obj);
 
