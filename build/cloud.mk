@@ -10,7 +10,7 @@ CLOUD_SERVER_SOURCES = \
 	$(SRC)/Cloud/OGNClient.cpp \
 	$(SRC)/Cloud/Sender.cpp \
 	$(SRC)/Cloud/Main.cpp
-CLOUD_SERVER_DEPENDS = ASYNC LIBNET IO OS GEO MATH UTIL TIME
+CLOUD_SERVER_DEPENDS = ASYNC LIBNET IO OS GEO MATH UTIL TIME UNITS
 $(eval $(call link-program,xcsoar-cloud-server,CLOUD_SERVER))
 
 CLOUD_TO_KML_SOURCES = \
