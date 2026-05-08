@@ -49,7 +49,7 @@ private:
     case DeviceConfig::PortType::RFCOMM:
       return "Bluetooth";
 
-    case DeviceConfig::PortType::BLE_HM10:
+    case DeviceConfig::PortType::BLE_SERIAL:
       return _("BLE port");
 
     case DeviceConfig::PortType::BLE_SENSOR:
@@ -239,8 +239,8 @@ PortPickerWidget::OnDeviceDetected(Type type, const char *address,
     break;
 
   case Type::BLUETOOTH_LE:
-    port_type = (features & DetectDeviceListener::FEATURE_HM10) != 0
-      ? DeviceConfig::PortType::BLE_HM10
+    port_type = (features & DetectDeviceListener::FEATURE_BLE_SERIAL) != 0
+      ? DeviceConfig::PortType::BLE_SERIAL
       : DeviceConfig::PortType::BLE_SENSOR;
     break;
 

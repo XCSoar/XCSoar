@@ -494,7 +494,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
     return true;
 
   case DeviceConfig::PortType::RFCOMM:
-  case DeviceConfig::PortType::BLE_HM10:
+  case DeviceConfig::PortType::BLE_SERIAL:
   case DeviceConfig::PortType::BLE_SENSOR:
     /* Bluetooth */
     if (new_type == config.port_type &&

@@ -706,8 +706,8 @@
 		5CBFD48D2D742FA600F05795 /* GlueIOIOPort.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GlueIOIOPort.java; sourceTree = "<group>"; };
 		5CBFD48E2D742FA600F05795 /* GlueNunchuck.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GlueNunchuck.java; sourceTree = "<group>"; };
 		5CBFD48F2D742FA600F05795 /* GlueVoltage.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = GlueVoltage.java; sourceTree = "<group>"; };
-		5CBFD4902D742FA600F05795 /* HM10Port.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = HM10Port.java; sourceTree = "<group>"; };
-		5CBFD4912D742FA600F05795 /* HM10WriteBuffer.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = HM10WriteBuffer.java; sourceTree = "<group>"; };
+		5CBFD4902D742FA600F05795 /* BleSerialPort.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = BleSerialPort.java; sourceTree = "<group>"; };
+		5CBFD4912D742FA600F05795 /* BleSerialWriteBuffer.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = BleSerialWriteBuffer.java; sourceTree = "<group>"; };
 		5CBFD4922D742FA600F05795 /* I2Cbaro.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = I2Cbaro.java; sourceTree = "<group>"; };
 		5CBFD4932D742FA600F05795 /* InputListener.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = InputListener.java; sourceTree = "<group>"; };
 		5CBFD4942D742FA600F05795 /* InputThread.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = InputThread.java; sourceTree = "<group>"; };
@@ -10288,8 +10288,8 @@
 				5CBFD48D2D742FA600F05795 /* GlueIOIOPort.java */,
 				5CBFD48E2D742FA600F05795 /* GlueNunchuck.java */,
 				5CBFD48F2D742FA600F05795 /* GlueVoltage.java */,
-				5CBFD4902D742FA600F05795 /* HM10Port.java */,
-				5CBFD4912D742FA600F05795 /* HM10WriteBuffer.java */,
+				5CBFD4902D742FA600F05795 /* BleSerialPort.java */,
+				5CBFD4912D742FA600F05795 /* BleSerialWriteBuffer.java */,
 				5CBFD4922D742FA600F05795 /* I2Cbaro.java */,
 				5CBFD4932D742FA600F05795 /* InputListener.java */,
 				5CBFD4942D742FA600F05795 /* InputThread.java */,

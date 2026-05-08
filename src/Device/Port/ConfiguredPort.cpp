@@ -86,17 +86,17 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     path = config.path.c_str();
     break;
 
-  case DeviceConfig::PortType::BLE_HM10:
+  case DeviceConfig::PortType::BLE_SERIAL:
 #ifdef ANDROID
     if (config.bluetooth_mac.empty())
       throw std::runtime_error("No Bluetooth MAC configured");
 
     if (bluetooth_helper == nullptr)
       throw std::runtime_error("Bluetooth not available");
-                         
-    return OpenAndroidBleHm10Port(*bluetooth_helper,
-                                  config.bluetooth_mac,
-                                  listener, handler);
+
+    return OpenAndroidBleSerialPort(*bluetooth_helper,
+                                    config.bluetooth_mac,
+                                    listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif

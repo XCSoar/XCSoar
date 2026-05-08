@@ -17,15 +17,14 @@ import android.os.Build;
 import android.util.Log;
 
 /**
- * An #AndroidPort implementation for connecting to a HM-10 (Bluetooth
- * LE).
+ * An #AndroidPort implementation for BLE serial bridge devices.
+ * Supports HM-10 and Nordic UART Service, with auto-detection based
+ * on the service UUID.
  */
-public class HM10Port
+public class BleSerialPort
     extends BluetoothGattCallback
     implements AndroidPort  {
   private static final String TAG = "XCSoar";
-
-  private static final int MAX_WRITE_CHUNK_SIZE = 20;
 
   /* Maximum number of milliseconds to wait for disconnected state after
      calling BluetoothGatt.disconnect() in close() */
@@ -36,11 +35,19 @@ public class HM10Port
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   private BluetoothGatt gatt;
-  private BluetoothGattCharacteristic dataCharacteristic;
+
+  /* For NUS, RX characteristic. For HM-10, RX and TX use the same one. */
+  private BluetoothGattCharacteristic writeCharacteristic;
+
+  private BluetoothGattCharacteristic notifyCharacteristic;
+
+  /* For NUS, stays null. For HM-10, used as a workaround to avoid a
+     race condition. */
   private BluetoothGattCharacteristic deviceNameCharacteristic;
+
   private volatile boolean shutdown = false;
 
-  private final HM10WriteBuffer writeBuffer = new HM10WriteBuffer();
+  private final BleSerialWriteBuffer writeBuffer = new BleSerialWriteBuffer();
 
   private volatile int portState = STATE_LIMBO;
 
@@ -53,20 +60,20 @@ public class HM10Port
    * Private constructor. All fields are initialized to their default values.
    * Use create() factory method to instantiate.
    */
-  private HM10Port() {
+  private BleSerialPort() {
     // All fields are initialized to their default values
   }
 
   /**
-   * Factory method to create and initialize HM10Port.
+   * Factory method to create and initialize BleSerialPort.
    * This pattern avoids the this-escape warning by ensuring
    * the object is fully constructed before passing it to connectGatt().
    */
-  public static HM10Port create(Context context, BluetoothDevice device)
+  public static BleSerialPort create(Context context, BluetoothDevice device)
     throws IOException
   {
-    HM10Port port = new HM10Port();
-    
+    BleSerialPort port = new BleSerialPort();
+
     // Now that the object is fully constructed, we can safely pass it
     BluetoothGatt connectedGatt;
     if (Build.VERSION.SDK_INT >= 23)
@@ -76,42 +83,57 @@ public class HM10Port
 
     if (connectedGatt == null)
       throw new IOException("Bluetooth GATT connect failed");
-    
+
     // Assign to field after successful connection
     port.gatt = connectedGatt;
-    
+
     return port;
   }
 
   private void findCharacteristics() throws Error {
-    dataCharacteristic = null;
+    writeCharacteristic = null;
+    notifyCharacteristic = null;
     deviceNameCharacteristic = null;
 
-    BluetoothGattService service = gatt.getService(BluetoothUuids.HM10_SERVICE);
+    /* Prefer Nordic UART Service if available */
+    BluetoothGattService service = gatt.getService(BluetoothUuids.NORDIC_UART_SERVICE);
     if (service != null) {
-      dataCharacteristic = service.getCharacteristic(BluetoothUuids.HM10_RX_TX_CHARACTERISTIC);
+      writeCharacteristic =
+        service.getCharacteristic(BluetoothUuids.NORDIC_UART_RX_CHARACTERISTIC);
+      notifyCharacteristic =
+        service.getCharacteristic(BluetoothUuids.NORDIC_UART_TX_CHARACTERISTIC);
+      /* deviceNameCharacteristic stays null */
+    } else {
+      service = gatt.getService(BluetoothUuids.HM10_SERVICE);
+      if (service != null) {
+        writeCharacteristic =
+          service.getCharacteristic(BluetoothUuids.HM10_RX_TX_CHARACTERISTIC);
+        notifyCharacteristic = writeCharacteristic;
+
+        BluetoothGattService genericAccess =
+          gatt.getService(BluetoothUuids.GENERIC_ACCESS_SERVICE);
+        if (genericAccess != null) {
+          deviceNameCharacteristic =
+            genericAccess.getCharacteristic(BluetoothUuids.DEVICE_NAME_CHARACTERISTIC);
+        }
+
+        if (deviceNameCharacteristic == null)
+          throw new Error("GATT device name characteristic not found");
+      }
     }
 
-    service = gatt.getService(BluetoothUuids.GENERIC_ACCESS_SERVICE);
-    if (service != null) {
-      deviceNameCharacteristic = service.getCharacteristic(BluetoothUuids.DEVICE_NAME_CHARACTERISTIC);
-    }
-
-    if (dataCharacteristic == null)
-      throw new Error("HM10 data characteristic not found");
-
-    if (deviceNameCharacteristic == null)
-      throw new Error("GATT device name characteristic not found");
+    if (writeCharacteristic == null || notifyCharacteristic == null)
+      throw new Error("BLE serial service not found");
   }
 
   private void setupCharacteristics() throws Error {
     findCharacteristics();
 
-    if (!gatt.setCharacteristicNotification(dataCharacteristic, true))
+    if (!gatt.setCharacteristicNotification(notifyCharacteristic, true))
       throw new Error("Could not enable GATT characteristic notification");
 
     BluetoothGattDescriptor descriptor =
-      dataCharacteristic.getDescriptor(BluetoothUuids.CLIENT_CHARACTERISTIC_CONFIGURATION);
+      notifyCharacteristic.getDescriptor(BluetoothUuids.CLIENT_CHARACTERISTIC_CONFIGURATION);
     descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
     gatt.writeDescriptor(descriptor);
     portState = STATE_READY;
@@ -127,7 +149,8 @@ public class HM10Port
         if (!gatt.discoverServices())
           throw new Error("Discovering GATT services request failed");
       } else {
-        dataCharacteristic = null;
+        writeCharacteristic = null;
+        notifyCharacteristic = null;
         deviceNameCharacteristic = null;
 
         if ((BluetoothProfile.STATE_DISCONNECTED == newState) && !shutdown &&
@@ -169,14 +192,14 @@ public class HM10Port
   @Override
   public void onCharacteristicRead(BluetoothGatt gatt,
       BluetoothGattCharacteristic characteristic, int status) {
-    writeBuffer.beginWriteNextChunk(gatt, dataCharacteristic);
+    writeBuffer.beginWriteNextChunk(gatt, writeCharacteristic);
   }
 
   @Override
   public void onCharacteristicWrite(BluetoothGatt gatt,
       BluetoothGattCharacteristic characteristic, int status) {
     if (BluetoothGatt.GATT_SUCCESS == status) {
-      writeBuffer.beginWriteNextChunk(gatt, dataCharacteristic);
+      writeBuffer.beginWriteNextChunk(gatt, writeCharacteristic);
     } else {
       Log.e(TAG, "GATT characteristic write failed");
       writeBuffer.setError();
@@ -186,8 +209,8 @@ public class HM10Port
   @Override
   public void onCharacteristicChanged(BluetoothGatt gatt,
       BluetoothGattCharacteristic characteristic) {
-    if ((dataCharacteristic != null) &&
-        (dataCharacteristic.getUuid().equals(characteristic.getUuid()))) {
+    if ((notifyCharacteristic != null) &&
+        (notifyCharacteristic.getUuid().equals(characteristic.getUuid()))) {
       if (listener != null && safeDestruct.increment()) {
         try {
           byte[] data = characteristic.getValue();
@@ -287,10 +310,9 @@ public class HM10Port
     if (portState != STATE_READY)
       return 0;
 
-    assert(dataCharacteristic != null);
-    assert(deviceNameCharacteristic != null);
+    assert(writeCharacteristic != null);
 
-    return writeBuffer.write(gatt, dataCharacteristic,
+    return writeBuffer.write(gatt, writeCharacteristic,
                              deviceNameCharacteristic,
                              data, length);
   }

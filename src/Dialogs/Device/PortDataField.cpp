@@ -308,7 +308,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
     return;
 
   case DeviceConfig::PortType::BLE_SENSOR:
-  case DeviceConfig::PortType::BLE_HM10:
+  case DeviceConfig::PortType::BLE_SERIAL:
   case DeviceConfig::PortType::RFCOMM:
     SetBluetoothPort(df, config.port_type, config.bluetooth_mac);
     return;

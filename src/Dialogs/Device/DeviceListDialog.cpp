@@ -554,7 +554,7 @@ DeviceListWidget::ReconnectCurrent()
   const DeviceConfig &config =
     CommonInterface::SetSystemSettings().devices[current];
   if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
-       config.port_type == DeviceConfig::PortType::BLE_HM10 ||
+       config.port_type == DeviceConfig::PortType::BLE_SERIAL ||
        config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
       bluetooth_helper != nullptr &&
       !bluetooth_helper->IsEnabled(Java::GetEnv())) {

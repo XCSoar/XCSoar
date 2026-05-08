@@ -12,17 +12,17 @@ import android.os.Build;
 import android.util.Log;
 
 /**
- * This class helps with writing chunked data to a Bluetooth LE HM10
- * device.
+ * This class helps with writing chunked data to a Bluetooth LE serial
+ * bridge device (HM-10 or Nordic UART Service).
  */
-final class HM10WriteBuffer {
+final class BleSerialWriteBuffer {
   private static final String TAG = "XCSoar";
 
   private static final int BUFFER_SIZE = 256;
 
   /**
    * The current mtu.  May be updated by
-   * BluetoothGattCallback.onMtuChanged() (via class HM10Port).
+   * BluetoothGattCallback.onMtuChanged() (via class BleSerialPort).
    */
   private int mtu = 20;
 
@@ -34,7 +34,7 @@ final class HM10WriteBuffer {
   /**
    * Is the BluetoothGatt object currently busy, i.e. did we call
    * readCharacteristic() or writeCharacteristic() and are we waiting
-   * for a beginWriteNextChunk() call from HM10Port?
+   * for a beginWriteNextChunk() call from BleSerialPort?
    *
    * We need to track this because only one pending
    * readCharacteristic()/writeCharacteristic() operation is allowed,
@@ -163,7 +163,6 @@ final class HM10WriteBuffer {
                          BluetoothGattCharacteristic deviceNameCharacteristic,
                          byte[] data, int length) {
     assert(dataCharacteristic != null);
-    assert(deviceNameCharacteristic != null);
     assert(length > 0);
 
     if (!drainSome())
@@ -187,10 +186,18 @@ final class HM10WriteBuffer {
        operation in the read callback so that the write operation is performed
        int the GATT event handling thread. */
     if (!gattBusy) {
-      if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
-        Log.e(TAG, "GATT characteristic read request failed");
-        clear();
-        return 0;
+      if (deviceNameCharacteristic != null) {
+        if (!gatt.readCharacteristic(deviceNameCharacteristic)) {
+          Log.e(TAG, "GATT characteristic read request failed");
+          clear();
+          return 0;
+        }
+      } else {
+        /* NUS path: no workaround needed; start the write right away */
+        if (!beginWriteNextChunk(gatt, dataCharacteristic))
+          return 0;
+        /* already set gattBusy = true */
+        return nbytes;
       }
 
       gattBusy = true;
