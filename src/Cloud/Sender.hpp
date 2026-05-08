@@ -12,6 +12,7 @@
 #include <cstdint>
 
 struct GeoPoint;
+struct OGNTrafficEntry;
 
 /**
  * Packed extensions for #SkyLinesTracking::TrafficResponsePacket::Traffic
@@ -29,6 +30,9 @@ struct TrafficRecordExtensions {
                                          unsigned aircraft_type,
                                          uint32_t flarm_id,
                                          bool flarm_valid) noexcept;
+
+  static TrafficRecordExtensions
+  FromOgn(const OGNTrafficEntry &t) noexcept;
 };
 
 class TrafficResponseSender {

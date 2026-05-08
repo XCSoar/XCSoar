@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Sender.hpp"
+#include "OGNTraffic.hpp"
 #include "Tracking/SkyLines/Export.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/CRC16CCITT.hpp"
@@ -21,6 +22,13 @@ TrafficRecordExtensions::FromOgn(unsigned track_deg, bool track_valid,
     e.reserved2 = 0x80000000u | (flarm_id & 0xFFFFFFu);
 
   return e;
+}
+
+TrafficRecordExtensions
+TrafficRecordExtensions::FromOgn(const OGNTrafficEntry &t) noexcept
+{
+  return FromOgn(t.track_deg, t.track_valid, t.aircraft_type,
+                 t.flarm_id, t.flarm_valid);
 }
 
 void
