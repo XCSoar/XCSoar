@@ -5,6 +5,7 @@ CLOUD_SERVER_SOURCES = \
 	$(SRC)/Cloud/Client.cpp \
 	$(SRC)/Cloud/Thermal.cpp \
 	$(SRC)/Cloud/Data.cpp \
+	$(SRC)/Cloud/OGNTraffic.cpp \
 	$(SRC)/Cloud/Sender.cpp \
 	$(SRC)/Cloud/Main.cpp
 CLOUD_SERVER_DEPENDS = ASYNC LIBNET IO OS GEO MATH UTIL
@@ -16,6 +17,7 @@ CLOUD_TO_KML_SOURCES = \
 	$(SRC)/Cloud/Client.cpp \
 	$(SRC)/Cloud/Thermal.cpp \
 	$(SRC)/Cloud/Data.cpp \
+	$(SRC)/Cloud/OGNTraffic.cpp \
 	$(SRC)/Cloud/ToKML.cpp
 CLOUD_TO_KML_DEPENDS = ASYNC LIBNET IO OS GEO MATH UTIL
 $(eval $(call link-program,xcsoar-cloud-to-kml,CLOUD_TO_KML))
