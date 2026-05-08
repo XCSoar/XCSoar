@@ -4,14 +4,13 @@
 #include "OGNAprs.hpp"
 
 #include "Math/Angle.hpp"
+#include "Math/Util.hpp"
+#include "Units/System.hpp"
+#include "util/CharUtil.hxx"
+#include "util/NumberParser.hxx"
+#include "util/StringStrip.hxx"
 
 using std::string_view;
-
-static constexpr bool
-IsDigit(char ch) noexcept
-{
-  return ch >= '0' && ch <= '9';
-}
 
 /**
  * Parse APRS uncompressed latitude/longitude after the 'h' time-field
@@ -32,20 +31,22 @@ ParseAprsLatLon(string_view payload, GeoPoint &location) noexcept
 
   unsigned lat_deg = 0, lat_min_int = 0, lat_min_frac = 0;
   unsigned i = 0;
-  if (!IsDigit(p[i]) || !IsDigit(p[i + 1]))
+  if (!IsDigitASCII(p[i]) || !IsDigitASCII(p[i + 1]))
     return false;
   lat_deg = unsigned(p[i] - '0') * 10u + unsigned(p[i + 1] - '0');
   i += 2;
-  if (!IsDigit(p[i]) || !IsDigit(p[i + 1]))
+  if (!IsDigitASCII(p[i]) || !IsDigitASCII(p[i + 1]))
     return false;
   lat_min_int = unsigned(p[i] - '0') * 10u + unsigned(p[i + 1] - '0');
   i += 2;
+  if (lat_min_int >= 60)
+    return false;
   if (p[i] != '.')
     return false;
   ++i;
   unsigned frac_digits = 0;
   lat_min_frac = 0;
-  while (i < p.size() && IsDigit(p[i]) && frac_digits < 2) {
+  while (i < p.size() && IsDigitASCII(p[i]) && frac_digits < 2) {
     lat_min_frac = lat_min_frac * 10u + unsigned(p[i] - '0');
     ++frac_digits;
     ++i;
@@ -65,21 +66,24 @@ ParseAprsLatLon(string_view payload, GeoPoint &location) noexcept
     return false;
 
   unsigned lon_deg = 0, lon_min_int = 0, lon_min_frac = 0;
-  if (!IsDigit(p[i]) || !IsDigit(p[i + 1]) || !IsDigit(p[i + 2]))
+  if (!IsDigitASCII(p[i]) || !IsDigitASCII(p[i + 1]) ||
+      !IsDigitASCII(p[i + 2]))
     return false;
   lon_deg = unsigned(p[i] - '0') * 100u + unsigned(p[i + 1] - '0') * 10u +
             unsigned(p[i + 2] - '0');
   i += 3;
-  if (!IsDigit(p[i]) || !IsDigit(p[i + 1]))
+  if (!IsDigitASCII(p[i]) || !IsDigitASCII(p[i + 1]))
     return false;
   lon_min_int = unsigned(p[i] - '0') * 10u + unsigned(p[i + 1] - '0');
   i += 2;
+  if (lon_min_int >= 60)
+    return false;
   if (p[i] != '.')
     return false;
   ++i;
   frac_digits = 0;
   lon_min_frac = 0;
-  while (i < p.size() && IsDigit(p[i]) && frac_digits < 2) {
+  while (i < p.size() && IsDigitASCII(p[i]) && frac_digits < 2) {
     lon_min_frac = lon_min_frac * 10u + unsigned(p[i] - '0');
     ++frac_digits;
     ++i;
@@ -101,7 +105,7 @@ ParseAprsLatLon(string_view payload, GeoPoint &location) noexcept
     lon = -lon;
 
   location = GeoPoint(Angle::Degrees(lon), Angle::Degrees(lat));
-  return location.IsValid();
+  return location.Check();
 }
 
 /**
@@ -116,14 +120,14 @@ ParseAltitudeFeet(string_view payload, int &altitude_m) noexcept
 
   unsigned feet = 0;
   auto i = a + 3;
-  while (i < payload.size() && IsDigit(payload[i])) {
+  while (i < payload.size() && IsDigitASCII(payload[i])) {
     feet = feet * 10u + unsigned(payload[i] - '0');
     ++i;
     if (feet > 999999u)
       return false;
   }
 
-  altitude_m = int(double(feet) * 0.3048 + 0.5);
+  altitude_m = iround(Units::ToSysUnit(double(feet), Unit::FEET));
   return true;
 }
 
@@ -136,37 +140,27 @@ ParseOgnIdTag(string_view line, uint32_t &id, bool &valid) noexcept
   valid = false;
   id = 0;
 
-  /* Case-sensitive tag as emitted by OGN devices */
-  const char *const tags[] = {" id06", " id03", " id21"};
-  for (const char *tag : tags) {
-    const auto tag_len = std::char_traits<char>::length(tag);
+  static constexpr string_view tags[] = {
+      " id06", " id03", " id21",
+  };
+
+  for (const string_view tag : tags) {
     auto pos = line.find(tag);
     if (pos == string_view::npos)
       continue;
 
-    pos += tag_len;
-    unsigned value = 0;
-    unsigned digits = 0;
-    while (pos < line.size() && digits < 6) {
-      const char ch = line[pos];
-      unsigned nybble = 16;
-      if (ch >= '0' && ch <= '9')
-        nybble = unsigned(ch - '0');
-      else if (ch >= 'A' && ch <= 'F')
-        nybble = 10u + unsigned(ch - 'A');
-      else if (ch >= 'a' && ch <= 'f')
-        nybble = 10u + unsigned(ch - 'a');
-      if (nybble >= 16)
-        break;
-      value = (value << 4u) | nybble;
-      ++digits;
-      ++pos;
-    }
-    if (digits == 6) {
-      id = value & 0xFFFFFFu;
-      valid = true;
-      return true;
-    }
+    pos += tag.size();
+    if (pos + 6 > line.size())
+      continue;
+
+    const string_view hex = line.substr(pos, 6);
+    uint32_t value = 0;
+    if (!ParseIntegerTo(hex, value, 16))
+      continue;
+
+    id = value & 0xFFFFFFu;
+    valid = true;
+    return true;
   }
 
   return false;
@@ -177,11 +171,7 @@ ParseOGNAprsLine(string_view line) noexcept
 {
   OGNAprsParseResult r;
 
-  while (!line.empty() && (line.front() == '\r' || line.front() == '\n'))
-    line.remove_prefix(1);
-  while (!line.empty() &&
-         (line.back() == '\r' || line.back() == '\n'))
-    line.remove_suffix(1);
+  line = Strip(line);
 
   if (line.empty() || line[0] == '#')
     return r;
