@@ -28,6 +28,7 @@
 #include <iostream>
 #include <iomanip>
 #include <memory>
+#include <optional>
 
 #include <signal.h>
 
@@ -44,6 +45,8 @@ static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE =
 
 static constexpr std::chrono::steady_clock::duration REQUEST_EXPIRY =
   std::chrono::minutes(5);
+
+static constexpr unsigned MAX_TRAFFIC_TARGETS_PER_RESPONSE = 64;
 
 using std::cout;
 using std::cerr;
@@ -156,6 +159,23 @@ private:
 
   void PushOgnTraffic(const OGNTrafficEntry &t) noexcept;
 
+  template<typename F>
+  void ForEachTrafficInterestedNear(
+    const ::GeoPoint &origin,
+    std::chrono::steady_clock::time_point now,
+    std::optional<uint64_t> exclude_key, F &&f) noexcept(
+    noexcept(f(std::declval<const CloudClient &>()))) {
+    for (const auto &i : clients.QueryWithinRange(origin, TRAFFIC_RANGE)) {
+      if (exclude_key && i->key == *exclude_key)
+        continue;
+
+      if (now > i->wants_traffic)
+        continue;
+
+      f(*i);
+    }
+  }
+
   /* OGNAprsHandler */
   void OnAprsLine(std::string_view line) noexcept override;
 
@@ -216,7 +236,7 @@ void
 CloudServer::OnAprsLine(std::string_view line) noexcept
 {
   const OGNAprsParseResult p = ParseOGNAprsLine(line);
-  if (!p.valid || !p.location.IsValid())
+  if (!p.valid)
     return;
 
   OGNTrafficEntry &t =
@@ -235,21 +255,14 @@ CloudServer::PushOgnTraffic(const OGNTrafficEntry &t) noexcept
   if (t.stamp < min_stamp)
     return;
 
-  const TrafficRecordExtensions ext =
-    TrafficRecordExtensions::FromOgn(t.track_deg, t.track_valid,
-                                   t.aircraft_type,
-                                   t.flarm_id, t.flarm_valid);
+  const TrafficRecordExtensions ext = TrafficRecordExtensions::FromOgn(t);
   const uint32_t time_ms = MsUtcMidnight();
-  const uint32_t pilot = OGNPilotIdFromStation(t.station_id);
 
-  for (const auto &i : clients.QueryWithinRange(t.location, TRAFFIC_RANGE)) {
-    if (now > i->wants_traffic)
-      continue;
-
-    TrafficResponseSender s(*this, i->address, i->key);
-    s.Add(pilot, time_ms, t.location, t.altitude, ext);
+  ForEachTrafficInterestedNear(t.location, now, {}, [&](const CloudClient &i) {
+    TrafficResponseSender s(*this, i.address, i.key);
+    s.Add(t.pilot_id, time_ms, t.location, t.altitude, ext);
     s.Flush();
-  }
+  });
 }
 
 void
@@ -284,21 +297,14 @@ CloudServer::OnFix(const Client &c,
   /* send this new traffic location to all interested clients
      immediately */
   const auto now = std::chrono::steady_clock::now();
-  for (const auto &i : clients.QueryWithinRange(location, TRAFFIC_RANGE)) {
-    if (i->key == c.key)
-      /* ignore this client's own submissions - he knows them
-         already */
-      continue;
-
-    if (now > i->wants_traffic)
-      /* not interested (anymore) */
-      continue;
-
-    TrafficResponseSender s(*this, i->address, i->key);
-    s.Add(client->id, 0, //TODO: time?
-          client->location, client->altitude);
-    s.Flush();
-  }
+  ForEachTrafficInterestedNear(location, now, c.key,
+                               [&](const CloudClient &i) {
+                                 TrafficResponseSender s(*this, i.address,
+                                                         i.key);
+                                 s.Add(client->id, 0, //TODO: time?
+                                       client->location, client->altitude);
+                                 s.Flush();
+                               });
 }
 
 void
@@ -335,26 +341,21 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
     s.Add(traffic->id, 0, //TODO: time?
           traffic->location, traffic->altitude);
 
-    if (++n > 64)
+    if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
       break;
   }
 
-  if (n <= 64) {
+  if (n <= MAX_TRAFFIC_TARGETS_PER_RESPONSE) {
     const uint32_t time_ms = MsUtcMidnight();
     for (const auto &og :
          ogn_traffic.QueryWithinRange(client->location, TRAFFIC_RANGE)) {
       if (og->stamp < min_stamp)
         continue;
 
-      const TrafficRecordExtensions ext =
-        TrafficRecordExtensions::FromOgn(og->track_deg, og->track_valid,
-                                         og->aircraft_type,
-                                         og->flarm_id, og->flarm_valid);
-      s.Add(OGNPilotIdFromStation(og->station_id),
-            time_ms,
-            og->location, og->altitude, ext);
+      s.Add(og->pilot_id, time_ms, og->location, og->altitude,
+            TrafficRecordExtensions::FromOgn(*og));
 
-      if (++n > 64)
+      if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
         break;
     }
   }
