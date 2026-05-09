@@ -6,6 +6,7 @@
 #include "Geo/GeoPoint.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <type_traits>
 
 /**
@@ -32,7 +33,7 @@ static_assert(std::is_trivially_copyable_v<AirspaceIntervalPoint>);
 
 /**
  * A distance interval along the predicted flight path through
- * an airspace.  entry is the nearer boundary (lower distance),
+ * an airspace. Entry is the nearer boundary (lower distance),
  * exit is the farther boundary (higher distance).
  *
  * For airspaces the aircraft is currently inside,
@@ -122,4 +123,117 @@ SubtractInterval(AirspaceWarningInterval &target,
     target = nearest;
   else
     target = farther;
+}
+
+/**
+ * Linear altitude profile along a straight predicted path.
+ *
+ * Holds the start and end of the predicted path for one
+ * prediction method (TASK / FILTER / GLIDE), in both location
+ * and altitude. Used to convert a 2D-projected interval into a
+ * 3D-aware one: along a straight path with linear vertical rate,
+ * the aircraft's altitude is a linear function of distance.
+ *
+ * Linear is a deliberate approximation; the pre-existing predicted-
+ * warning intercept code uses the same model internally.
+ */
+struct PathAltitudeProfile {
+  GeoPoint start_location;
+  GeoPoint end_location;
+  /** Total straight-line distance, metres. */
+  double total_distance;
+  /** Aircraft altitude at start_location (m MSL). */
+  double start_altitude;
+  /** Predicted altitude at end_location (m MSL). */
+  double end_altitude;
+
+  [[gnu::pure]]
+  bool IsFlat() const noexcept {
+    return std::abs(end_altitude - start_altitude) < 1e-3;
+  }
+
+  [[gnu::pure]]
+  double AltitudeAt(double d) const noexcept {
+    if (total_distance <= 0)
+      return start_altitude;
+    return start_altitude +
+      (end_altitude - start_altitude) * (d / total_distance);
+  }
+
+  /**
+   * Distance along the path at which altitude reaches @p alt.
+   * Caller must ensure !IsFlat().
+   */
+  [[gnu::pure]]
+  double DistanceAtAltitude(double alt) const noexcept {
+    const double slope =
+      (end_altitude - start_altitude) / total_distance;
+    return (alt - start_altitude) / slope;
+  }
+
+  [[gnu::pure]]
+  GeoPoint LocationAt(double d) const noexcept {
+    if (total_distance <= 0)
+      return start_location;
+    return start_location.Interpolate(end_location,
+                                      d / total_distance);
+  }
+};
+
+/**
+ * Clip a 2D-projected path interval to the sub-segment along
+ * which the aircraft's altitude profile is inside the band
+ * [band_base, band_top].  Returns Invalid() if the clipped
+ * segment is empty.
+ *
+ * Because altitude is linear (monotonic) in distance along the
+ * straight predicted path, the set { d : alt(d) in band } is a
+ * single contiguous interval, so the result is well-defined.
+ */
+[[gnu::pure]]
+inline AirspaceWarningInterval
+ClipByAltitudeBand(const AirspaceWarningInterval &iv,
+                   const PathAltitudeProfile &alt,
+                   double band_base,
+                   double band_top) noexcept
+{
+  if (!iv.IsValid())
+    return AirspaceWarningInterval::Invalid();
+
+  if (alt.IsFlat()) {
+    const double a = alt.start_altitude;
+    if (a < band_base || a > band_top)
+      return AirspaceWarningInterval::Invalid();
+    return iv;
+  }
+
+  double d_band_min, d_band_max;
+  if (alt.start_altitude > alt.end_altitude) {
+    // Descending: alt decreases as d grows.
+    d_band_min = alt.DistanceAtAltitude(band_top);
+    d_band_max = alt.DistanceAtAltitude(band_base);
+  } else {
+    // Climbing: alt increases as d grows.
+    d_band_min = alt.DistanceAtAltitude(band_base);
+    d_band_max = alt.DistanceAtAltitude(band_top);
+  }
+
+  const double new_entry =
+    std::max(iv.entry.distance, d_band_min);
+  const double new_exit =
+    std::min(iv.exit.distance, d_band_max);
+
+  if (new_entry >= new_exit)
+    return AirspaceWarningInterval::Invalid();
+
+  AirspaceWarningInterval out;
+  out.entry.distance = new_entry;
+  out.exit.distance = new_exit;
+  out.entry.location = (new_entry == iv.entry.distance)
+    ? iv.entry.location
+    : alt.LocationAt(new_entry);
+  out.exit.location = (new_exit == iv.exit.distance)
+    ? iv.exit.location
+    : alt.LocationAt(new_exit);
+  return out;
 }

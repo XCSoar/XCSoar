@@ -270,6 +270,7 @@ private:
 
   bool UpdatePredicted(const AircraftState& state,
                        const GeoPoint &location_predicted,
+                       double altitude_predicted,
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
                        FloatDuration max_time) noexcept;

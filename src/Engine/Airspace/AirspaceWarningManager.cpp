@@ -169,6 +169,7 @@ class AirspaceIntersectionWarningVisitor final
   bool found = false;
   const double max_alt;
   bool mode_inside = false;
+  PathAltitudeProfile path;
 
 public:
   /**
@@ -192,6 +193,7 @@ public:
       const AirspaceWarning::State _warning_state,
       const FloatDuration _max_time,
       const GeoPoint &_location_predicted,
+      const double _altitude_predicted,
       const FlatProjection &_projection,
       const double _max_alt = -1)
     :state(_state),
@@ -201,7 +203,10 @@ public:
      max_time(_max_time),
      location_predicted(_location_predicted),
      projection(_projection),
-     max_alt(_max_alt)
+     max_alt(_max_alt),
+     path{_state.location, _location_predicted,
+          _state.location.Distance(_location_predicted),
+          _state.altitude, _altitude_predicted}
   {
   }
 
@@ -272,6 +277,14 @@ public:
       }
     }
 
+    /* Clip the 2D-projected interval to the sub-segment where
+       the aircraft's predicted altitude profile is in this
+       airspace's vertical band. */
+    if (iv.IsValid())
+      iv = ClipByAltitudeBand(iv, path,
+                              airspace.GetBaseAltitude(state),
+                              airspace.GetTopAltitude(state));
+
     if (!iv.IsValid() && warning == nullptr)
       return;
 
@@ -328,9 +341,10 @@ private:
 };
 
 
-bool 
-AirspaceWarningManager::UpdatePredicted(const AircraftState& state, 
+bool
+AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
                                         const GeoPoint &location_predicted,
+                                        const double altitude_predicted,
                                         const AirspaceAircraftPerformance &perf,
                                         const AirspaceWarning::State warning_state,
                                         const FloatDuration max_time) noexcept
@@ -355,7 +369,8 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
 
   AirspaceIntersectionWarningVisitor visitor(
     state, perf, *this, warning_state, max_time_limit,
-    location_predicted, GetProjection(), ceiling);
+    location_predicted, altitude_predicted,
+    GetProjection(), ceiling);
 
   airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
@@ -399,30 +414,38 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
        the configured warning time */
     location_tp = state.location.IntermediatePoint(location_tp, max_distance);
 
-  return UpdatePredicted(state, location_tp, perf_task,
+  /* TASK: pass state.altitude as a flat-profile fallback.
+     Deriving the predicted altitude at location_tp from the leg
+     glide solution requires careful interpretation of GlideResult
+     fields and the max-distance truncation; left for a follow-up.
+     Flat profile here matches today's behaviour for TASK warnings. */
+  return UpdatePredicted(state, location_tp, state.altitude,
+                          perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);
 }
 
 
-bool 
+bool
 AirspaceWarningManager::UpdateFilter(const AircraftState& state, const bool circling)
 {
   // update both filters even though we are using only one
   cruise_filter.Update(state);
   circling_filter.Update(state);
 
-  const GeoPoint location_predicted = circling?
-    circling_filter.GetPredictedState(prediction_time_filter).location:
-    cruise_filter.GetPredictedState(prediction_time_filter).location;
+  const AircraftState predicted = circling
+    ? circling_filter.GetPredictedState(prediction_time_filter)
+    : cruise_filter.GetPredictedState(prediction_time_filter);
 
-  if (circling) 
-    return UpdatePredicted(state, location_predicted,
+  if (circling)
+    return UpdatePredicted(state, predicted.location, predicted.altitude,
                            AirspaceAircraftPerformance(circling_filter),
-                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
+                           AirspaceWarning::WARNING_FILTER,
+                           prediction_time_filter);
   else
-    return UpdatePredicted(state, location_predicted,
+    return UpdatePredicted(state, predicted.location, predicted.altitude,
                            AirspaceAircraftPerformance(cruise_filter),
-                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
+                           AirspaceWarning::WARNING_FILTER,
+                           prediction_time_filter);
 }
 
 
@@ -433,11 +456,11 @@ AirspaceWarningManager::UpdateGlide(const AircraftState &state,
   if (!glide_polar.IsValid())
     return false;
 
-  const GeoPoint location_predicted = 
-    state.GetPredictedState(prediction_time_glide).location;
+  const AircraftState predicted =
+    state.GetPredictedState(prediction_time_glide);
 
   const AirspaceAircraftPerformance perf_glide(glide_polar);
-  return UpdatePredicted(state, location_predicted,
+  return UpdatePredicted(state, predicted.location, predicted.altitude,
                           perf_glide,
                           AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
 }
@@ -567,20 +590,6 @@ constexpr double kMinFragmentLength = 50.0;
 
 /** Capacity for small stack-allocated cleared-airspace buffers. */
 constexpr std::size_t kClearedBufCap = 8;
-
-[[gnu::pure]]
-static bool
-VerticalOverlap(const AirspaceWarning &a,
-                const AirspaceWarning &b,
-                const AltitudeState &altitude) noexcept
-{
-  const auto &as_a = a.GetAirspace();
-  const auto &as_b = b.GetAirspace();
-  return as_a.GetBaseAltitude(altitude) <
-           as_b.GetTopAltitude(altitude) &&
-         as_b.GetBaseAltitude(altitude) <
-           as_a.GetTopAltitude(altitude);
-}
 
 [[gnu::pure]]
 static AirspaceAircraftPerformance
@@ -762,7 +771,18 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       for (auto &c : warnings) {
         if (!c.IsCleared()) continue;
         if (!c.HasInterval(m)) continue;
-        if (!VerticalOverlap(w, c, state)) continue;
+        if (step1_handled) {
+          /* Aircraft is currently inside this clearance and step
+             1 already subtracted it from w's interval; skip the
+             redundant idempotent subtraction. */
+          bool in_inside_buf = false;
+          for (std::size_t i = 0; i < n_cleared_inside; ++i)
+            if (cleared_inside_buf[i] == &c) {
+              in_inside_buf = true;
+              break;
+            }
+          if (in_inside_buf) continue;
+        }
         if (n >= buf.size()) break;
         buf[n++] = &c;
       }
