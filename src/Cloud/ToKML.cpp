@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "CloudPolicy.hpp"
 #include "Data.hpp"
 #include "Serialiser.hpp"
 #include "io/FileOutputStream.hxx"
@@ -10,9 +11,6 @@
 #include "util/Compiler.h"
 
 #include <iostream>
-
-static constexpr std::chrono::steady_clock::duration MAX_TRAFFIC_AGE = std::chrono::hours(12);
-static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE = std::chrono::hours(12);
 
 using std::cout;
 using std::cerr;
@@ -61,7 +59,8 @@ ToKML(BufferedOutputStream &os, const CloudClientContainer &clients)
   os.Write("    <Folder>\n"
            "      <name>Traffic</name>\n");
 
-  const auto min_stamp = std::chrono::steady_clock::now() - MAX_TRAFFIC_AGE;
+  const auto min_stamp =
+    std::chrono::steady_clock::now() - cloud_policy.export_max_traffic_age;
 
   for (const auto &client : clients)
     if (client.stamp >= min_stamp)
@@ -99,7 +98,8 @@ ToKML(BufferedOutputStream &os, const CloudThermalContainer &thermals)
   os.Write("    <Folder>\n"
            "      <name>Thermals</name>\n");
 
-  const auto min_time = std::chrono::steady_clock::now() - MAX_THERMAL_AGE;
+  const auto min_time =
+    std::chrono::steady_clock::now() - cloud_policy.export_max_thermal_age;
 
   for (const auto &thermal : thermals)
     if (thermal.time >= min_time)

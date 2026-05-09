@@ -6,13 +6,32 @@
 #include "Geo/GeoPoint.hpp"
 #include "util/CRC16CCITT.hpp"
 
+template<typename Traits>
+void
+SkyLinesBatchResponseSender<Traits>::Flush() noexcept
+{
+  if (n_items == 0)
+    return;
+
+  const size_t size =
+    sizeof(data.header) + sizeof(typename Traits::Item) * n_items;
+
+  Traits::SetCount(data.header, n_items);
+  n_items = 0;
+
+  data.header.header.crc = 0;
+  data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
+  server.SendBuffer(address, {(const std::byte *)&data, size});
+}
+
+template class SkyLinesBatchResponseSender<CloudSenderTraits::ThermalBatch>;
+template class SkyLinesBatchResponseSender<CloudSenderTraits::TrafficBatch>;
+
 void
 TrafficResponseSender::Add(uint32_t pilot_id, uint32_t time,
-                           GeoPoint location, int altitude)
+                             GeoPoint location, int altitude)
 {
-  assert(n_traffic < MAX_TRAFFIC);
-
-  auto &traffic = data.traffic[n_traffic++];
+  typename CloudSenderTraits::TrafficBatch::Item traffic{};
   traffic.pilot_id = ToBE32(pilot_id);
   traffic.time = ToBE32(time);
   traffic.location = SkyLinesTracking::ExportGeoPoint(location);
@@ -20,49 +39,5 @@ TrafficResponseSender::Add(uint32_t pilot_id, uint32_t time,
   traffic.reserved = 0;
   traffic.reserved2 = 0;
 
-  if (n_traffic == MAX_TRAFFIC)
-    Flush();
-}
-
-void
-TrafficResponseSender::Flush()
-{
-  if (n_traffic == 0)
-    return;
-
-  size_t size = sizeof(data.header) + sizeof(data.traffic[0]) * n_traffic;
-
-  data.header.traffic_count = n_traffic;
-  n_traffic = 0;
-
-  data.header.header.crc = 0;
-  data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-  server.SendBuffer(address, {(const std::byte *)&data, size});
-}
-
-void
-ThermalResponseSender::Add(SkyLinesTracking::Thermal t)
-{
-  assert(n_thermal < MAX_THERMAL);
-
-  data.thermal[n_thermal++] = t;
-
-  if (n_thermal == MAX_THERMAL)
-    Flush();
-}
-
-void
-ThermalResponseSender::Flush()
-{
-  if (n_thermal == 0)
-    return;
-
-  size_t size = sizeof(data.header) + sizeof(data.thermal[0]) * n_thermal;
-
-  data.header.thermal_count = n_thermal;
-  n_thermal = 0;
-
-  data.header.header.crc = 0;
-  data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-  server.SendBuffer(address, {(const std::byte *)&data, size});
+  SkyLinesBatchResponseSender::Add(traffic);
 }

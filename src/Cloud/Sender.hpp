@@ -9,70 +9,114 @@
 #include "net/StaticSocketAddress.hxx"
 
 #include <array>
+#include <cassert>
+#include <cstddef>
 
 struct GeoPoint;
 
-class TrafficResponseSender {
-  SkyLinesTracking::Server &server;
-  const SocketAddress address;
+namespace CloudSenderTraits {
 
-  static constexpr size_t MAX_TRAFFIC_SIZE = 1024;
-  static constexpr size_t MAX_TRAFFIC =
-    MAX_TRAFFIC_SIZE / sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic);
+struct TrafficBatch {
+  using Item = SkyLinesTracking::TrafficResponsePacket::Traffic;
+  using HeaderPrefix = SkyLinesTracking::TrafficResponsePacket;
+  static constexpr SkyLinesTracking::Type PACKET_TYPE =
+    SkyLinesTracking::Type::TRAFFIC_RESPONSE;
 
-  struct Packet {
-    SkyLinesTracking::TrafficResponsePacket header;
-    std::array<SkyLinesTracking::TrafficResponsePacket::Traffic, MAX_TRAFFIC> traffic;
-  } data;
-
-  unsigned n_traffic = 0;
-
-public:
-  TrafficResponseSender(SkyLinesTracking::Server &_server,
-                        SocketAddress client_address, uint64_t key)
-    :server(_server), address(client_address) {
-    data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
-    data.header.header.type = ToBE16(SkyLinesTracking::Type::TRAFFIC_RESPONSE);
-    data.header.header.key = ToBE64(key);
-
-    data.header.reserved = 0;
-    data.header.reserved2 = 0;
-    data.header.reserved3 = 0;
+  static void
+  InitHeader(HeaderPrefix &h, uint64_t key) noexcept
+  {
+    h.header.magic = ToBE32(SkyLinesTracking::MAGIC);
+    h.header.type = ToBE16(PACKET_TYPE);
+    h.header.key = ToBE64(key);
+    h.reserved = 0;
+    h.reserved2 = 0;
+    h.reserved3 = 0;
   }
 
-  void Add(uint32_t pilot_id, uint32_t time,
-           GeoPoint location, int altitude);
-  void Flush();
+  static void
+  SetCount(HeaderPrefix &h, unsigned n) noexcept
+  {
+    h.traffic_count = static_cast<uint8_t>(n);
+  }
 };
 
-class ThermalResponseSender {
+struct ThermalBatch {
+  using Item = SkyLinesTracking::Thermal;
+  using HeaderPrefix = SkyLinesTracking::ThermalResponsePacket;
+  static constexpr SkyLinesTracking::Type PACKET_TYPE =
+    SkyLinesTracking::Type::THERMAL_RESPONSE;
+
+  static void
+  InitHeader(HeaderPrefix &h, uint64_t key) noexcept
+  {
+    h.header.magic = ToBE32(SkyLinesTracking::MAGIC);
+    h.header.type = ToBE16(PACKET_TYPE);
+    h.header.key = ToBE64(key);
+    h.reserved1 = 0;
+    h.reserved2 = 0;
+    h.reserved3 = 0;
+  }
+
+  static void
+  SetCount(HeaderPrefix &h, unsigned n) noexcept
+  {
+    h.thermal_count = static_cast<uint8_t>(n);
+  }
+};
+
+} // namespace CloudSenderTraits
+
+/**
+ * Batches SkyLines variable-length TRAFFIC_RESPONSE / THERMAL_RESPONSE
+ * datagrams (CRC16, MTU-sized chunks).
+ */
+template<typename Traits>
+class SkyLinesBatchResponseSender {
   SkyLinesTracking::Server &server;
   const SocketAddress address;
 
-  static constexpr size_t MAX_THERMAL_SIZE = 1024;
-  static constexpr size_t MAX_THERMAL =
-    MAX_THERMAL_SIZE / sizeof(SkyLinesTracking::Thermal);
+  static constexpr size_t MAX_PACKET_BYTES = 1024;
+  static constexpr size_t MAX_ITEMS =
+    MAX_PACKET_BYTES / sizeof(typename Traits::Item);
 
   struct Packet {
-    SkyLinesTracking::ThermalResponsePacket header;
-    std::array<SkyLinesTracking::Thermal, MAX_THERMAL> thermal;
+    typename Traits::HeaderPrefix header;
+    std::array<typename Traits::Item, MAX_ITEMS> items;
   } data;
 
-  unsigned n_thermal = 0;
+  unsigned n_items = 0;
 
 public:
-  ThermalResponseSender(SkyLinesTracking::Server &_server,
-                        SocketAddress client_address, uint64_t key) noexcept
-    :server(_server), address(client_address) {
-    data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
-    data.header.header.type = ToBE16(SkyLinesTracking::Type::THERMAL_RESPONSE);
-    data.header.header.key = ToBE64(key);
-
-    data.header.reserved1 = 0;
-    data.header.reserved2 = 0;
-    data.header.reserved3 = 0;
+  SkyLinesBatchResponseSender(SkyLinesTracking::Server &_server,
+                              SocketAddress client_address,
+                              uint64_t key) noexcept
+    :server(_server), address(client_address)
+  {
+    Traits::InitHeader(data.header, key);
   }
 
-  void Add(SkyLinesTracking::Thermal t);
-  void Flush();
+  void
+  Add(const typename Traits::Item &item) noexcept
+  {
+    assert(n_items < MAX_ITEMS);
+    data.items[n_items++] = item;
+
+    if (n_items == MAX_ITEMS)
+      Flush();
+  }
+
+  void
+  Flush() noexcept;
+};
+
+using ThermalResponseSender =
+  SkyLinesBatchResponseSender<CloudSenderTraits::ThermalBatch>;
+
+class TrafficResponseSender
+  : public SkyLinesBatchResponseSender<CloudSenderTraits::TrafficBatch> {
+public:
+  using SkyLinesBatchResponseSender::SkyLinesBatchResponseSender;
+
+  void
+  Add(uint32_t pilot_id, uint32_t time, GeoPoint location, int altitude);
 };

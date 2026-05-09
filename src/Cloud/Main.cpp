@@ -2,12 +2,11 @@
 // Copyright The XCSoar Project
 
 #include "Data.hpp"
+#include "CloudPolicy.hpp"
 #include "Dump.hpp"
 #include "Sender.hpp"
 #include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
-#include "Tracking/SkyLines/Protocol.hpp"
-#include "util/ByteOrder.hxx"
 #include "event/Loop.hxx"
 #include "event/CoarseTimerEvent.hxx"
 #include "event/SignalMonitor.hxx"
@@ -19,20 +18,10 @@
 #include "util/Compiler.h"
 #include "util/ScopeExit.hxx"
 
-#include <array>
 #include <iostream>
 #include <iomanip>
 
 #include <signal.h>
-
-// TODO: review these settings
-static constexpr double TRAFFIC_RANGE = 50000;
-static constexpr double THERMAL_RANGE = 50000;
-
-static constexpr std::chrono::steady_clock::duration MAX_TRAFFIC_AGE = std::chrono::minutes(15);
-static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE = std::chrono::minutes(30);
-
-static constexpr std::chrono::steady_clock::duration REQUEST_EXPIRY = std::chrono::minutes(5);
 
 using std::cout;
 using std::cerr;
@@ -75,17 +64,18 @@ private:
   }
 
   void ScheduleSave() {
-    save_timer.Schedule(std::chrono::minutes(1));
+    save_timer.Schedule(cloud_policy.save_interval);
   }
 
   void OnExpireTimer() noexcept {
-    clients.Expire(GetEventLoop().SteadyNow() - std::chrono::minutes(10));
+    clients.Expire(GetEventLoop().SteadyNow() -
+                   cloud_policy.client_expire_cutoff);
     if (!clients.empty())
       ScheduleExpire();
   }
 
   void ScheduleExpire() {
-    expire_timer.Schedule(std::chrono::minutes(5));
+    expire_timer.Schedule(cloud_policy.expire_timer_interval);
   }
 
 protected:
@@ -172,8 +162,8 @@ CloudServer::OnFix(const Client &c,
 
   /* send this new traffic location to all interested clients
      immediately */
-  const auto now = std::chrono::steady_clock::now();
-  for (const auto &i : clients.QueryWithinRange(location, TRAFFIC_RANGE)) {
+  const auto now = GetEventLoop().SteadyNow();
+  for (const auto &i : clients.QueryWithinRange(location, cloud_policy.traffic_query_range_m)) {
     if (i->key == c.key)
       /* ignore this client's own submissions - he knows them
          already */
@@ -203,17 +193,17 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
        us yet */
     return;
 
-  const auto now = std::chrono::steady_clock::now();
+  const auto now = GetEventLoop().SteadyNow();
 
-  client->wants_traffic = now + REQUEST_EXPIRY;
+  client->wants_traffic = now + cloud_policy.subscription_ttl;
 
-  const auto min_stamp = now - MAX_TRAFFIC_AGE;
+  const auto min_stamp = now - cloud_policy.live_max_traffic_age;
 
   TrafficResponseSender s(*this, c.address, c.key);
 
   unsigned n = 0;
   for (const auto &traffic : clients.QueryWithinRange(client->location,
-                                                      TRAFFIC_RANGE)) {
+                                                      cloud_policy.traffic_query_range_m)) {
     if (traffic.get() == client)
       continue;
 
@@ -224,7 +214,7 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
     s.Add(traffic->id, 0, //TODO: time?
           traffic->location, traffic->altitude);
 
-    if (++n > 64)
+    if (++n > cloud_policy.max_traffic_per_response)
       break;
   }
 
@@ -287,9 +277,9 @@ CloudServer::OnThermalSubmit(const Client &c,
                   lift);
 
   /* send this new thermal to all interested clients immediately */
-  const auto now = std::chrono::steady_clock::now();
+  const auto now = GetEventLoop().SteadyNow();
   for (const auto &i : clients.QueryWithinRange(bottom_location,
-                                                THERMAL_RANGE)) {
+                                                cloud_policy.thermal_query_range_m)) {
     if (i->key == c.key)
       /* ignore this client's own submissions - he knows them
          already */
@@ -314,17 +304,17 @@ CloudServer::OnThermalRequest(const Client &c)
        us yet */
     return;
 
-  const auto now = std::chrono::steady_clock::now();
+  const auto now = GetEventLoop().SteadyNow();
 
-  client->wants_thermals = now + REQUEST_EXPIRY;
+  client->wants_thermals = now + cloud_policy.subscription_ttl;
 
-  const auto min_time = now - MAX_THERMAL_AGE;
+  const auto min_time = now - cloud_policy.live_max_thermal_age;
 
   ThermalResponseSender s(*this, c.address, c.key);
 
   unsigned n = 0;
   for (const auto &thermal : thermals.QueryWithinRange(client->location,
-                                                       THERMAL_RANGE)) {
+                                                       cloud_policy.thermal_query_range_m)) {
     if (thermal->client_key == c.key)
       /* ignore this client's own submissions - he knows them
          already */
@@ -336,7 +326,7 @@ CloudServer::OnThermalRequest(const Client &c)
 
     s.Add(thermal->Pack());
 
-    if (++n > 256)
+    if (++n > cloud_policy.max_thermal_per_response)
       break;
   }
 
