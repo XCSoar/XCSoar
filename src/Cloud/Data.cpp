@@ -6,12 +6,10 @@
 #include "Serialiser.hpp"
 #include "net/ToString.hxx"
 
-#include <iostream>
-#include <iomanip>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
 
-using std::cout;
-using std::cerr;
-using std::endl;
+#include <cstdio>
 
 static constexpr uint32_t CLOUD_MAGIC = 0x5753f60f;
 static constexpr uint32_t CLOUD_VERSION = 1;
@@ -20,14 +18,16 @@ void
 CloudData::DumpClients()
 {
   for (const auto &client : clients) {
-    cout << ToString(client.address) << '\t'
-         << std::hex << client.key << std::dec << '\t'
-         << client.id << '\t'
-         << client.location << '\t'
-         << client.altitude << "m\n";
+    fmt::print(stdout,
+               "{}\t{:x}\t{}\t{}\t{}m\n",
+               ToString(client.address),
+               client.key,
+               client.id,
+               fmt::streamed(client.location),
+               client.altitude);
   }
 
-  cout.flush();
+  fflush(stdout);
 }
 
 void

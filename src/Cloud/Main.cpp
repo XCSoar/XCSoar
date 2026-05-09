@@ -18,13 +18,12 @@
 #include "util/Compiler.h"
 #include "util/ScopeExit.hxx"
 
-#include <iostream>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
+
+#include <cstdio>
 
 #include <signal.h>
-
-using std::cout;
-using std::cerr;
-using std::endl;
 
 class CloudServer final : public SkyLinesTracking::Server {
   const AllocatedPath db_path;
@@ -107,13 +106,14 @@ protected:
 
   void OnSendError(SocketAddress address,
                    std::exception_ptr e) noexcept override {
-    cerr << "Failed to send to " << address
-         << ": " << GetFullMessage(e)
-         << endl;
+    fmt::print(stderr,
+               "Failed to send to {}: {}\n",
+               fmt::streamed(address),
+               GetFullMessage(e));
   }
 
   void OnError(std::exception_ptr e) override {
-    cerr << GetFullMessage(e) << endl;
+    fmt::print(stderr, "{}\n", GetFullMessage(e));
     GetEventLoop().Break();
   }
 
@@ -194,7 +194,7 @@ CloudServer::Load()
 void
 CloudServer::Save()
 {
-  cout << "Saving data to " << db_path.c_str() << endl;
+  fmt::print(stdout, "Saving data to {}\n", db_path.c_str());
 
   FileOutputStream fos(db_path);
 
@@ -211,7 +211,7 @@ int
 main(int argc, char **argv)
 try {
   if (argc != 2) {
-    cerr << "Usage: " << argv[0] << " DBPATH" << endl;
+    fmt::print(stderr, "Usage: {} DBPATH\n", argv[0]);
     return EXIT_FAILURE;
   }
 
@@ -227,7 +227,7 @@ try {
   try {
     server.Load();
   } catch (const std::runtime_error &e) {
-    cerr << "Failed to load database" << endl;
+    fmt::print(stderr, "Failed to load database\n");
     PrintException(e);
   }
 
