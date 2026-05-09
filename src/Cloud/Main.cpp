@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Data.hpp"
+#include "CloudGlue.hpp"
 #include "CloudPolicy.hpp"
+#include "Data.hpp"
 #include "Dump.hpp"
-#include "Sender.hpp"
 #include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "event/Loop.hxx"
@@ -19,7 +19,6 @@
 #include "util/ScopeExit.hxx"
 
 #include <iostream>
-#include <iomanip>
 
 #include <signal.h>
 
@@ -27,10 +26,11 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-class CloudServer final
-  : public SkyLinesTracking::Server, CloudData
-{
+class CloudServer final : public SkyLinesTracking::Server {
   const AllocatedPath db_path;
+
+  CloudData data;
+  CloudGlue glue;
 
   CoarseTimerEvent save_timer, expire_timer;
 
@@ -39,6 +39,7 @@ public:
               SocketAddress bind_address)
     :SkyLinesTracking::Server(event_loop, bind_address),
      db_path(std::move(_db_path)),
+     glue(data, cloud_policy, *this),
      save_timer(event_loop, BIND_THIS_METHOD(OnSaveTimer)),
      expire_timer(event_loop, BIND_THIS_METHOD(OnExpireTimer))
   {
@@ -57,6 +58,8 @@ public:
   void Load();
   void Save();
 
+  void DumpClients() { data.DumpClients(); }
+
 private:
   void OnSaveTimer() noexcept {
     Save();
@@ -68,9 +71,9 @@ private:
   }
 
   void OnExpireTimer() noexcept {
-    clients.Expire(GetEventLoop().SteadyNow() -
-                   cloud_policy.client_expire_cutoff);
-    if (!clients.empty())
+    data.clients.Expire(GetEventLoop().SteadyNow() -
+                        cloud_policy.client_expire_cutoff);
+    if (!data.clients.empty())
       ScheduleExpire();
   }
 
@@ -79,13 +82,11 @@ private:
   }
 
 protected:
-  /* virtual methods from class SkyLinesTracking::Server */
   void OnFix(const Client &client,
              std::chrono::milliseconds time_of_day,
              const ::GeoPoint &location, int altitude) override;
 
-  void OnTrafficRequest(const Client &client,
-                        bool near) override;
+  void OnTrafficRequest(const Client &client, bool near) override;
 
   void OnWaveSubmit(const Client &client,
                     std::chrono::milliseconds time_of_day,
@@ -132,205 +133,54 @@ protected:
 };
 
 void
-CloudServer::OnFix(const Client &c,
+CloudServer::OnFix(const Client &client,
                    std::chrono::milliseconds time_of_day,
                    const ::GeoPoint &location, int altitude)
 {
-  (void)time_of_day; // TODO: use this parameter
-
-  CloudClient *client;
-  if (location.IsValid()) {
-    bool was_empty = clients.empty();
-
-    client = &clients.Make(c.address, c.key, location, altitude);
-
-    cout << "FIX\t"
-         << client->address << '\t'
-         << std::hex << client->key << std::dec << '\t'
-         << client->id << '\t'
-         << client->location << '\t'
-         << client->altitude << 'm'
-         << endl;
-
-    if (was_empty)
-      ScheduleExpire();
-  } else {
-    client = clients.Find(c.key);
-    if (client != nullptr)
-      clients.Refresh(*client, c.address);
-  }
-
-  /* send this new traffic location to all interested clients
-     immediately */
-  const auto now = GetEventLoop().SteadyNow();
-  for (const auto &i : clients.QueryWithinRange(location, cloud_policy.traffic_query_range_m)) {
-    if (i->key == c.key)
-      /* ignore this client's own submissions - he knows them
-         already */
-      continue;
-
-    if (now > i->wants_traffic)
-      /* not interested (anymore) */
-      continue;
-
-    TrafficResponseSender s(*this, i->address, i->key);
-    s.Add(client->id, 0, //TODO: time?
-          client->location, client->altitude);
-    s.Flush();
-  }
+  bool schedule_expire = false;
+  glue.OnFix(client, time_of_day, location, altitude,
+             GetEventLoop().SteadyNow(), schedule_expire);
+  if (schedule_expire)
+    ScheduleExpire();
 }
 
 void
-CloudServer::OnTrafficRequest(const Client &c, bool near)
+CloudServer::OnTrafficRequest(const Client &client, bool near)
 {
-  if (!near)
-    /* "near" is the only selection flag we know */
-    return;
-
-  auto *client = clients.Find(c.key);
-  if (client == nullptr)
-    /* we don't send our data to clients who didn't sent anything to
-       us yet */
-    return;
-
-  const auto now = GetEventLoop().SteadyNow();
-
-  client->wants_traffic = now + cloud_policy.subscription_ttl;
-
-  const auto min_stamp = now - cloud_policy.live_max_traffic_age;
-
-  TrafficResponseSender s(*this, c.address, c.key);
-
-  unsigned n = 0;
-  for (const auto &traffic : clients.QueryWithinRange(client->location,
-                                                      cloud_policy.traffic_query_range_m)) {
-    if (traffic.get() == client)
-      continue;
-
-    if (traffic->stamp < min_stamp)
-      /* don't send stale traffic, it's probably not there anymore */
-      continue;
-
-    s.Add(traffic->id, 0, //TODO: time?
-          traffic->location, traffic->altitude);
-
-    if (++n > cloud_policy.max_traffic_per_response)
-      break;
-  }
-
-  s.Flush();
+  glue.OnTrafficRequest(client, near, GetEventLoop().SteadyNow());
 }
 
 void
-CloudServer::OnWaveSubmit(const Client &c,
-                          [[maybe_unused]] std::chrono::milliseconds time_of_day,
+CloudServer::OnWaveSubmit(const Client &client,
+                          std::chrono::milliseconds time_of_day,
                           const ::GeoPoint &a, const ::GeoPoint &b,
                           int bottom_altitude,
                           int top_altitude,
                           double lift)
 {
-  auto *client = clients.Find(c.key);
-  if (client == nullptr)
-    /* we don't trust the client if he didn't sent anything to us
-       yet */
-    return;
-
-  cout << "WAVE\t"
-       << client->address << '\t'
-       << std::hex << client->key << std::dec << '\t'
-       << client->id << '\t'
-       << a << '\t'
-       << b << '\t'
-       << bottom_altitude << '-' << top_altitude << "m\t"
-       << lift << "m/s"
-       << endl;
+  glue.OnWaveSubmit(client, time_of_day, a, b,
+                    bottom_altitude, top_altitude, lift);
 }
 
 void
-CloudServer::OnThermalSubmit(const Client &c,
-                             [[maybe_unused]] std::chrono::milliseconds time_of_day,
+CloudServer::OnThermalSubmit(const Client &client,
+                             std::chrono::milliseconds time_of_day,
                              const ::GeoPoint &bottom_location,
                              int bottom_altitude,
                              const ::GeoPoint &top_location,
                              int top_altitude,
                              double lift)
 {
-  auto *client = clients.Find(c.key);
-  if (client == nullptr)
-    /* we don't trust the client if he didn't sent anything to us
-       yet */
-    return;
-
-  cout << "THERMAL\t"
-       << client->address << '\t'
-       << std::hex << client->key << std::dec << '\t'
-       << client->id << '\t'
-       << top_location << '\t'
-       << bottom_altitude << '-' << top_altitude << "m\t"
-       << lift << "m/s"
-       << endl;
-
-  const auto &thermal =
-    thermals.Make(c.key,
-                  AGeoPoint(bottom_location, bottom_altitude),
-                  AGeoPoint(top_location, top_altitude),
-                  lift);
-
-  /* send this new thermal to all interested clients immediately */
-  const auto now = GetEventLoop().SteadyNow();
-  for (const auto &i : clients.QueryWithinRange(bottom_location,
-                                                cloud_policy.thermal_query_range_m)) {
-    if (i->key == c.key)
-      /* ignore this client's own submissions - he knows them
-         already */
-      continue;
-
-    if (now > i->wants_thermals)
-      /* not interested (anymore) */
-      continue;
-
-    ThermalResponseSender s(*this, i->address, i->key);
-    s.Add(thermal.Pack());
-    s.Flush();
-  }
+  glue.OnThermalSubmit(client, time_of_day,
+                       bottom_location, bottom_altitude,
+                       top_location, top_altitude, lift,
+                       GetEventLoop().SteadyNow());
 }
 
 void
-CloudServer::OnThermalRequest(const Client &c)
+CloudServer::OnThermalRequest(const Client &client)
 {
-  auto *client = clients.Find(c.key);
-  if (client == nullptr)
-    /* we don't send our data to clients who didn't sent anything to
-       us yet */
-    return;
-
-  const auto now = GetEventLoop().SteadyNow();
-
-  client->wants_thermals = now + cloud_policy.subscription_ttl;
-
-  const auto min_time = now - cloud_policy.live_max_thermal_age;
-
-  ThermalResponseSender s(*this, c.address, c.key);
-
-  unsigned n = 0;
-  for (const auto &thermal : thermals.QueryWithinRange(client->location,
-                                                       cloud_policy.thermal_query_range_m)) {
-    if (thermal->client_key == c.key)
-      /* ignore this client's own submissions - he knows them
-         already */
-      continue;
-
-    if (thermal->time < min_time)
-      /* don't send old thermals, they're useless */
-      continue;
-
-    s.Add(thermal->Pack());
-
-    if (++n > cloud_policy.max_thermal_per_response)
-      break;
-  }
-
-  s.Flush();
+  glue.OnThermalRequest(client, GetEventLoop().SteadyNow());
 }
 
 void
@@ -338,7 +188,7 @@ CloudServer::Load()
 {
   FileReader fr(db_path);
   Deserialiser s(fr);
-  CloudData::Load(s);
+  data.Load(s);
 }
 
 void
@@ -350,7 +200,7 @@ CloudServer::Save()
 
   {
     Serialiser s(fos);
-    CloudData::Save(s);
+    data.Save(s);
     s.Flush();
   }
 
