@@ -25,9 +25,8 @@ CloudData::DumpClients()
                client.id,
                fmt::streamed(client.location),
                client.altitude);
+    fflush(stdout);
   }
-
-  fflush(stdout);
 }
 
 void

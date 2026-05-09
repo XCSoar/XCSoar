@@ -195,6 +195,7 @@ void
 CloudServer::Save()
 {
   fmt::print(stdout, "Saving data to {}\n", db_path.c_str());
+  fflush(stdout);
 
   FileOutputStream fos(db_path);
 

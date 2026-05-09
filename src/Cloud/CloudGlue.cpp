@@ -29,6 +29,25 @@ MsSinceMidnightUtc(std::chrono::milliseconds time_of_day) noexcept
   return static_cast<uint32_t>(c);
 }
 
+/**
+ * One stdout line for this client: TAG, address, hex key, public id
+ * (tab-separated), then tail_fmt / tail_args. fflush when stdout is piped.
+ */
+inline void
+PrintCloudClientLogLine(const CloudClient &client, std::string_view tag,
+                        fmt::string_view tail_fmt,
+                        fmt::format_args tail_args)
+{
+  fmt::print(stdout,
+             "{}\t{}\t{:x}\t{}\t",
+             tag,
+             ToString(client.address),
+             client.key,
+             client.id);
+  fmt::vprint(stdout, tail_fmt, tail_args);
+  fflush(stdout);
+}
+
 } // namespace
 
 void
@@ -49,13 +68,11 @@ CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
     client = &clients.Make(c.address, c.key, location, altitude);
     client->traffic_time_ms = MsSinceMidnightUtc(time_of_day);
 
-    fmt::print(stdout,
-               "FIX\t{}\t{:x}\t{}\t{}\t{}m\n",
-               ToString(client->address),
-               client->key,
-               client->id,
-               fmt::streamed(client->location),
-               client->altitude);
+    const auto location_fmt = fmt::streamed(client->location);
+    PrintCloudClientLogLine(*client, "FIX",
+                           "{}\t{}m\n",
+                           fmt::make_format_args(location_fmt,
+                                                 client->altitude));
 
     if (was_empty)
       schedule_expire = true;
@@ -135,16 +152,15 @@ CloudGlue::OnWaveSubmit(const SkyLinesTracking::Server::Client &c,
   if (client == nullptr)
     return;
 
-  fmt::print(stdout,
-             "WAVE\t{}\t{:x}\t{}\t{}\t{}\t{}-{}m\t{}m/s\n",
-             ToString(client->address),
-             client->key,
-             client->id,
-             fmt::streamed(a),
-             fmt::streamed(b),
-             bottom_altitude,
-             top_altitude,
-             lift);
+  const auto a_fmt = fmt::streamed(a);
+  const auto b_fmt = fmt::streamed(b);
+  PrintCloudClientLogLine(*client, "WAVE",
+                         "{}\t{}\t{}-{}m\t{}m/s\n",
+                         fmt::make_format_args(a_fmt,
+                                               b_fmt,
+                                               bottom_altitude,
+                                               top_altitude,
+                                               lift));
 }
 
 void
@@ -161,15 +177,13 @@ CloudGlue::OnThermalSubmit(const SkyLinesTracking::Server::Client &c,
   if (client == nullptr)
     return;
 
-  fmt::print(stdout,
-             "THERMAL\t{}\t{:x}\t{}\t{}\t{}-{}m\t{}m/s\n",
-             ToString(client->address),
-             client->key,
-             client->id,
-             fmt::streamed(top_location),
-             bottom_altitude,
-             top_altitude,
-             lift);
+  const auto top_fmt = fmt::streamed(top_location);
+  PrintCloudClientLogLine(*client, "THERMAL",
+                         "{}\t{}-{}m\t{}m/s\n",
+                         fmt::make_format_args(top_fmt,
+                                               bottom_altitude,
+                                               top_altitude,
+                                               lift));
 
   auto &thermals = data.thermals;
   auto &clients = data.clients;
