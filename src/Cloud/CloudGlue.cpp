@@ -12,6 +12,25 @@
 
 #include <cstdio>
 
+namespace {
+
+/** SkyLines traffic time is ms since UTC midnight; clamp to one day. */
+constexpr uint32_t
+MsSinceMidnightUtc(std::chrono::milliseconds time_of_day) noexcept
+{
+  const auto c = time_of_day.count();
+  if (c <= 0)
+    return 0;
+
+  constexpr auto day_ms = 86400000LL;
+  if (c >= day_ms)
+    return static_cast<uint32_t>(day_ms - 1);
+
+  return static_cast<uint32_t>(c);
+}
+
+} // namespace
+
 void
 CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
                  std::chrono::milliseconds time_of_day,
@@ -19,8 +38,6 @@ CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
                  std::chrono::steady_clock::time_point now,
                  bool &schedule_expire)
 {
-  (void)time_of_day; // TODO: use this parameter
-
   CloudClient *client = nullptr;
   schedule_expire = false;
 
@@ -30,6 +47,7 @@ CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
     const bool was_empty = clients.empty();
 
     client = &clients.Make(c.address, c.key, location, altitude);
+    client->traffic_time_ms = MsSinceMidnightUtc(time_of_day);
 
     fmt::print(stdout,
                "FIX\t{}\t{:x}\t{}\t{}\t{}m\n",
@@ -59,7 +77,7 @@ CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
       continue;
 
     TrafficResponseSender s(server, i->address, i->key);
-    s.Add(client->id, 0, // TODO: time?
+    s.Add(client->id, client->traffic_time_ms,
           client->location, client->altitude);
     s.Flush();
   }
@@ -95,7 +113,7 @@ CloudGlue::OnTrafficRequest(const SkyLinesTracking::Server::Client &c,
     if (traffic->stamp < min_stamp)
       continue;
 
-    s.Add(traffic->id, 0, // TODO: time?
+    s.Add(traffic->id, traffic->traffic_time_ms,
           traffic->location, traffic->altitude);
 
     if (++n > policy.max_traffic_per_response)

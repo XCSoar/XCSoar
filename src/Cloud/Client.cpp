@@ -156,7 +156,7 @@ CloudClient::Save(Serialiser &s) const
   if (altitude != -1)
     flags |= SkyLinesTracking::FixPacket::FLAG_ALTITUDE;
 
-  s.WriteT(SkyLinesTracking::MakeFix(key, flags, 0,
+  s.WriteT(SkyLinesTracking::MakeFix(key, flags, traffic_time_ms,
                                      location, Angle::Zero(), 0, 0,
                                      altitude, 0, 0));
 
@@ -186,6 +186,10 @@ CloudClient::Load(Deserialiser &s)
                      SkyLinesTracking::ImportGeoPoint(fix.location),
                      (int16_t)FromBE16(fix.altitude));
   client.stamp = stamp;
+  const auto t = SkyLinesTracking::ImportTimeMs(fix.time).count();
+  client.traffic_time_ms =
+    t <= 0 ? 0
+           : (t >= 86400000LL ? 86399999U : static_cast<uint32_t>(t));
   return client;
 }
 

@@ -74,6 +74,12 @@ struct CloudClient
    */
   int altitude;
 
+  /**
+   * UTC milliseconds since midnight from the client's last submitted fix
+   * (#TrafficResponsePacket::Traffic::time).
+   */
+  uint32_t traffic_time_ms = 0;
+
   struct KeyHash {
     constexpr std::size_t operator()(uint64_t key) const {
       return key;
