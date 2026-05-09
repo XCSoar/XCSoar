@@ -21,7 +21,7 @@ CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
 {
   (void)time_of_day; // TODO: use this parameter
 
-  CloudClient *client;
+  CloudClient *client = nullptr;
   schedule_expire = false;
 
   auto &clients = data.clients;
@@ -46,6 +46,9 @@ CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
     if (client != nullptr)
       clients.Refresh(*client, c.address);
   }
+
+  if (client == nullptr)
+    return;
 
   for (const auto &i : clients.QueryWithinRange(location,
                                                  policy.traffic_query_range_m)) {
