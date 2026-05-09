@@ -5,28 +5,12 @@
 #include "Data.hpp"
 #include "Dump.hpp"
 #include "Sender.hpp"
+#include "net/ToString.hxx"
 
-#include <iostream>
-#include <iomanip>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
 
-using std::cout;
-using std::endl;
-
-namespace {
-
-/**
- * Tab-separated address, hex SkyLines key, decimal public id (matches
- * FIX/WAVE/THERMAL log lines).
- */
-inline std::ostream &
-FormatCloudClientPrefix(std::ostream &os, const CloudClient &client)
-{
-  return os << client.address << '\t'
-            << std::hex << client.key << std::dec << '\t'
-            << client.id << '\t';
-}
-
-} // namespace
+#include <cstdio>
 
 void
 CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
@@ -47,11 +31,13 @@ CloudGlue::OnFix(const SkyLinesTracking::Server::Client &c,
 
     client = &clients.Make(c.address, c.key, location, altitude);
 
-    cout << "FIX\t";
-    FormatCloudClientPrefix(cout, *client)
-      << client->location << '\t'
-      << client->altitude << 'm'
-      << endl;
+    fmt::print(stdout,
+               "FIX\t{}\t{:x}\t{}\t{}\t{}m\n",
+               ToString(client->address),
+               client->key,
+               client->id,
+               fmt::streamed(client->location),
+               client->altitude);
 
     if (was_empty)
       schedule_expire = true;
@@ -128,13 +114,16 @@ CloudGlue::OnWaveSubmit(const SkyLinesTracking::Server::Client &c,
   if (client == nullptr)
     return;
 
-  cout << "WAVE\t";
-  FormatCloudClientPrefix(cout, *client)
-    << a << '\t'
-    << b << '\t'
-    << bottom_altitude << '-' << top_altitude << "m\t"
-    << lift << "m/s"
-    << endl;
+  fmt::print(stdout,
+             "WAVE\t{}\t{:x}\t{}\t{}\t{}\t{}-{}m\t{}m/s\n",
+             ToString(client->address),
+             client->key,
+             client->id,
+             fmt::streamed(a),
+             fmt::streamed(b),
+             bottom_altitude,
+             top_altitude,
+             lift);
 }
 
 void
@@ -151,12 +140,15 @@ CloudGlue::OnThermalSubmit(const SkyLinesTracking::Server::Client &c,
   if (client == nullptr)
     return;
 
-  cout << "THERMAL\t";
-  FormatCloudClientPrefix(cout, *client)
-    << top_location << '\t'
-    << bottom_altitude << '-' << top_altitude << "m\t"
-    << lift << "m/s"
-    << endl;
+  fmt::print(stdout,
+             "THERMAL\t{}\t{:x}\t{}\t{}\t{}-{}m\t{}m/s\n",
+             ToString(client->address),
+             client->key,
+             client->id,
+             fmt::streamed(top_location),
+             bottom_altitude,
+             top_altitude,
+             lift);
 
   auto &thermals = data.thermals;
   auto &clients = data.clients;
