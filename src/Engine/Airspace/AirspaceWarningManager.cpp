@@ -518,7 +518,14 @@ void
 AirspaceWarningManager::SetCleared(ConstAirspacePtr airspace,
                                    const bool set) noexcept
 {
-  GetWarning(std::move(airspace)).SetCleared(set);
+  auto &warning = GetWarning(std::move(airspace));
+  if (warning.IsCleared() != set) {
+    warning.SetCleared(set);
+    // The renderer fill cache keys on the manager serial; without this
+    // bump, toggling clearance on an existing warning would not refresh
+    // the cached fill on the non-GL renderer.
+    ++serial;
+  }
 }
 
 bool
