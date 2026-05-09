@@ -313,6 +313,9 @@ public:
 
   void SetMode(bool m) {
     mode_inside = m;
+    /* Drop any stale intersections from the prior pass: Otherwise 
+    outdated intersction info will not be cleared in the inside pass stage */
+    SetIntersections({});
   }
 
 private:
