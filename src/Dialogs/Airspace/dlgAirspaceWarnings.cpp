@@ -6,6 +6,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/Button.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/MapLook.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -16,6 +17,7 @@
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
+#include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
@@ -317,6 +319,21 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   const auto &warning = warning_list[i];
   const AbstractAirspace &airspace = warning.GetAirspace();
 
+  PixelRect layout_rc = paint_rc;
+  const unsigned line_height = paint_rc.GetHeight();
+  {
+    const AirspaceLook &airspace_look = UIGlobals::GetMapLook().airspace;
+    const AirspaceRendererSettings &airspace_renderer =
+      CommonInterface::GetMapSettings().airspace;
+
+    const PixelPoint pt(layout_rc.left + line_height / 2,
+                        layout_rc.top + line_height / 2);
+    const unsigned radius = line_height / 2 - padding;
+    AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
+                                  airspace_renderer, airspace_look);
+    layout_rc.left += line_height + padding;
+  }
+
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
   const int status_width = canvas.CalcTextWidth("inside");
@@ -326,7 +343,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   // Dynamic columns scaling - "name" column is flexible, altitude and state
   // columns are fixed-width.
   auto [text_altitude_rc, status_rc] =
-    paint_rc.VerticalSplit(paint_rc.right - (2 * padding + status_width));
+    layout_rc.VerticalSplit(layout_rc.right - (2 * padding + status_width));
   auto text_rc =
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
