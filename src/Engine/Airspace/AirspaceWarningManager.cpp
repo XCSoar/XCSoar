@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <cstddef>
 
 static constexpr double CRUISE_FILTER_FACT = 0.5;
@@ -242,10 +243,10 @@ public:
         const auto &p = intersections.front();
         double d0 = state.location.Distance(p.first);
         double d1 = state.location.Distance(p.second);
+
+        assert(d0 <= d1);
         if (d0 < d1)
           iv = {{d0, p.first}, {d1, p.second}};
-        else if (d1 < d0)
-          iv = {{d1, p.second}, {d0, p.first}};
         else {
           /* p.first == p.second: the path enters the airspace but
              the predicted endpoint lies inside it. Use the prediction
