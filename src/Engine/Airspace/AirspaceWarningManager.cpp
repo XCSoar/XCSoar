@@ -672,6 +672,16 @@ AirspaceWarningManager::ProcessClearanceIntervals(
   const bool inside_cleared = n_cleared_inside > 0;
   const FloatDuration warning_time{config.warning_time};
 
+  /* Warnings that step 1 downgraded out of WARNING_INSIDE. Step 2
+     re-processes these (they're no longer INSIDE), but should not
+     re-subtract clearances already applied in step 1 (i.e. those
+     the aircraft is currently 3D-inside) since that's redundant.
+     Bounded by the number of non-cleared INSIDE warnings, normally
+     0-3 in practice; if it exceeds capacity we fall back to the
+     regular re-subtraction. */
+  std::array<AirspaceWarning *, 16> step1_downgraded{};
+  std::size_t n_step1_downgraded = 0;
+
   // Step 1: convert WARNING_INSIDE warnings of non-cleared
   // airspaces while inside another, cleared, airspace.
   if (inside_cleared) {
@@ -742,6 +752,8 @@ AirspaceWarningManager::ProcessClearanceIntervals(
           w.ForceState(r.method);
           w.SetSolution(sol);
           resolved = true;
+          if (n_step1_downgraded < step1_downgraded.size())
+            step1_downgraded[n_step1_downgraded++] = &w;
           break;
         }
       }
@@ -762,6 +774,13 @@ AirspaceWarningManager::ProcessClearanceIntervals(
     if (cur_state == AirspaceWarning::WARNING_CLEAR ||
         cur_state == AirspaceWarning::WARNING_INSIDE)
       continue;
+
+    /* Did step 1 already downgrade this warning?  If so, the
+       cleared were already subtracted in step 1 */
+    const bool step1_handled = std::find(
+      step1_downgraded.begin(),
+      step1_downgraded.begin() + n_step1_downgraded,
+      &w) != step1_downgraded.begin() + n_step1_downgraded;
 
     bool any_changed = false;
     struct Residual {
@@ -787,7 +806,7 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         if (step1_handled) {
           /* Aircraft is currently inside this clearance and step
              1 already subtracted it from w's interval; skip the
-             redundant idempotent subtraction. */
+             redundant subtraction. */
           bool in_inside_buf = false;
           for (std::size_t i = 0; i < n_cleared_inside; ++i)
             if (cleared_inside_buf[i] == &c) {
