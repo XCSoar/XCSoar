@@ -110,6 +110,9 @@ Version 7.45 - not yet released
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)
+* weather
+  - METAR/TAF station list: accept lowercase ICAO codes when adding a station;
+    codes are normalized to upper-case for download and profile storage
 * data files
   - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
     is read correctly

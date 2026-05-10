@@ -2,13 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "NOAAStore.hpp"
+#include "util/CharUtil.hxx"
 
 bool
 NOAAStore::IsValidCode(const char *code)
 {
   for (unsigned i = 0; i < 4; ++i)
-    if (! ((code[i] >= 'A' && code[i] <= 'Z') ||
-           (code[i] >= '0' && code[i] <= '9')))
+    if (!IsAlphaNumericASCII(code[i]))
       return false;
 
   if (code[4] != 0)
@@ -24,8 +24,8 @@ NOAAStore::AddStation(const char *code)
 
   Item item;
 
-  // Copy station code
-  strncpy(item.code, code, 4);
+  for (unsigned i = 0; i < 4; ++i)
+    item.code[i] = ToUpperASCII(code[i]);
   item.code[4] = 0;
 
   // Reset available flags
