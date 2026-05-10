@@ -699,21 +699,22 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         w.SetInterval(m, iv);
       }
 
-      // Find nearest residual entry across surviving methods
-      double nearest_distance = -1;
-      GeoPoint nearest_location{};
-      AirspaceWarning::State nearest_method =
-        AirspaceWarning::WARNING_CLEAR;
+      // Collect surviving intervals across methods, sort by
+      // nearest entry distance, and try each in turn until one
+      // produces a valid intercept solution.
+      struct Residual {
+        AirspaceWarning::State method;
+        double distance;
+        GeoPoint location;
+      };
+      std::array<Residual, std::size(kPredictionMethods)> residuals;
+      std::size_t n_res = 0;
       for (const auto m : kPredictionMethods) {
         const AirspaceWarningInterval &iv = w.GetInterval(m);
         if (!iv.IsValid()) continue;
         if (iv.Length() < kMinFragmentLength) continue;
-        if (nearest_distance < 0 ||
-            iv.entry.distance < nearest_distance) {
-          nearest_distance = iv.entry.distance;
-          nearest_location = iv.entry.location;
-          nearest_method = m;
-        }
+        residuals[n_res++] = {m, iv.entry.distance,
+                              iv.entry.location};
       }
 
       if (n_res == 0) {
@@ -723,21 +724,32 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         continue;
       }
 
-      // Residual exists: estimate time-to-residual-entry
-      const AirspaceAircraftPerformance perf = PerfFor(
-        nearest_method, glide_polar, cruise_filter,
-        circling_filter, circling, task_stats);
-      AirspaceInterceptSolution sol =
-        w.GetAirspace().Intercept(state, perf,
-                                  nearest_location,
-                                  nearest_location);
+      std::sort(residuals.begin(), residuals.begin() + n_res,
+                [](const Residual &a, const Residual &b) {
+                  return a.distance < b.distance;
+                });
 
-      if (!sol.IsValid() || sol.elapsed_time > warning_time) {
-        // Still far from the residual entry: treat as covered
+      bool resolved = false;
+      for (std::size_t i = 0; i < n_res; ++i) {
+        const auto &r = residuals[i];
+        const AirspaceAircraftPerformance perf = PerfFor(
+          r.method, glide_polar, cruise_filter,
+          circling_filter, circling, task_stats);
+        AirspaceInterceptSolution sol =
+          w.GetAirspace().Intercept(state, perf,
+                                    r.location, r.location);
+        if (sol.IsValid() && sol.elapsed_time <= warning_time) {
+          w.ForceState(r.method);
+          w.SetSolution(sol);
+          resolved = true;
+          break;
+        }
+      }
+
+      if (!resolved) {
+        // Every interval is too far / unreachable; treat as
+        // covered.
         w.SetCoveredByClearance(true);
-      } else {
-        w.ForceState(nearest_method);
-        w.SetSolution(sol);
       }
     }
   }
@@ -752,11 +764,13 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       continue;
 
     bool any_changed = false;
-    bool any_survives = false;
-    double surv_distance = -1;
-    GeoPoint surv_location{};
-    AirspaceWarning::State surv_method =
-      AirspaceWarning::WARNING_CLEAR;
+    struct Residual {
+      AirspaceWarning::State method;
+      double distance;
+      GeoPoint location;
+    };
+    std::array<Residual, std::size(kPredictionMethods)> residuals;
+    std::size_t n_res = 0;
 
     for (const auto m : kPredictionMethods) {
       AirspaceWarningInterval iv = w.GetInterval(m);
@@ -801,33 +815,45 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         w.SetInterval(m, AirspaceWarningInterval::Invalid());
       } else {
         w.SetInterval(m, iv);
-        any_survives = true;
-        if (surv_distance < 0 ||
-            iv.entry.distance < surv_distance) {
-          surv_distance = iv.entry.distance;
-          surv_location = iv.entry.location;
-          surv_method = m;
-        }
+        residuals[n_res++] = {m, iv.entry.distance,
+                              iv.entry.location};
       }
     }
 
-    if (any_changed && !any_survives) {
+    if (!any_changed) continue;
+
+    if (n_res == 0) {
       // All approach intervals fully covered by clearance.
       w.SetCoveredByClearance(true);
-    } else if (any_changed && surv_distance >= 0) {
-      // Rebuild solution at the new nearest entry point.
+      continue;
+    }
+
+    // Sort surviving residuals by entry distance and rebuild the
+    // solution at the nearest one whose Intercept solves; try
+    // the next-nearest method if it fails.
+    std::sort(residuals.begin(), residuals.begin() + n_res,
+              [](const Residual &a, const Residual &b) {
+                return a.distance < b.distance;
+              });
+
+    bool resolved = false;
+    for (std::size_t i = 0; i < n_res; ++i) {
+      const auto &r = residuals[i];
       const AirspaceAircraftPerformance perf = PerfFor(
-        surv_method, glide_polar, cruise_filter,
+        r.method, glide_polar, cruise_filter,
         circling_filter, circling, task_stats);
       AirspaceInterceptSolution sol =
         w.GetAirspace().Intercept(state, perf,
-                                  surv_location,
-                                  surv_location);
-      if (!sol.IsValid() || sol.elapsed_time > warning_time) {
-        w.SetCoveredByClearance(true);     // or ForceState(WARNING_CLEAR)
-      } else if (sol.IsValid()) {
+                                  r.location, r.location);
+      if (sol.IsValid() && sol.elapsed_time <= warning_time) {
         w.SetSolution(sol);
+        resolved = true;
+        break;
       }
+    }
+
+    if (!resolved) {
+      w.SetCoveredByClearance(true);
     }
   }
 }
