@@ -119,6 +119,7 @@ TEST_NAMES = \
 	TestAirspaceLabelPlacement \
 	TestOGNAprsParser \
 	TestAirspaceIntervalMath \
+	TestAirspaceClearance \
 	TestMETARParser \
 	TestIGCParser TestIGCFlightTimes \
 	TestNanoFileTransfer \
@@ -485,6 +486,16 @@ TEST_AIRSPACE_INTERVAL_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/TestAirspaceIntervalMath.cpp
 TEST_AIRSPACE_INTERVAL_MATH_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,TestAirspaceIntervalMath,TEST_AIRSPACE_INTERVAL_MATH))
+
+TEST_AIRSPACE_CLEARANCE_SOURCES = \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAirspaceClearance.cpp
+TEST_AIRSPACE_CLEARANCE_DEPENDS = AIRSPACE GLIDE TASK GEO MATH UTIL UNITS TIME FMT
+$(eval $(call link-program,TestAirspaceClearance,TEST_AIRSPACE_CLEARANCE))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
