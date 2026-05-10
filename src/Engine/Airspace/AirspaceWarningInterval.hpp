@@ -72,8 +72,8 @@ static_assert(std::is_trivially_copyable_v<AirspaceWarningInterval>);
  * 2. Cleared clips start: target.entry = cleared.exit
  * 3. Cleared clips end: target.exit = cleared.entry
  * 4. Cleared fully covers: target = Invalid
- * 5. Cleared creates hole: keep nearest fragment if its
- *    length >= tolerance, otherwise keep the farther fragment
+ * 5. Cleared creates hole: keep nearest fragment if >= tolerance,
+ *    else keep farther fragment if >= tolerance, else Invalid
  *
  * @param target Modified in-place; set to Invalid if fully covered
  * @param cleared The cleared interval to subtract
@@ -121,8 +121,10 @@ SubtractInterval(AirspaceWarningInterval &target,
 
   if (nearest.Length() >= tolerance)
     target = nearest;
-  else
+  else if (farther.Length() >= tolerance)
     target = farther;
+  else
+    target = AirspaceWarningInterval::Invalid();
 }
 
 /**
