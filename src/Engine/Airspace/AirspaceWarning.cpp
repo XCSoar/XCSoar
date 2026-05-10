@@ -42,7 +42,8 @@ AirspaceWarning::WarningLive(const Duration ack_time,
 
   if ((state != WARNING_CLEAR)
       && (state < state_last)
-      && (state_last == WARNING_INSIDE))
+      && (state_last == WARNING_INSIDE)
+      && !covered_by_clearance)
     // if inside was acknowledged, consider warning to be acknowledged
     acktime_warning = std::max(acktime_warning, acktime_inside);
 
