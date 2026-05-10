@@ -589,7 +589,7 @@ constexpr AirspaceWarning::State kPredictionMethods[] = {
 constexpr double kMinFragmentLength = 50.0;
 
 /** Capacity for small stack-allocated cleared-airspace buffers. */
-constexpr std::size_t kClearedBufCap = 8;
+constexpr std::size_t kClearedBufCap = 32;
 
 [[gnu::pure]]
 static AirspaceAircraftPerformance
