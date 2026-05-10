@@ -255,8 +255,20 @@ zh_Hang (Traditional Chinese)
 *Contributions attributed to the LK8000 project (http://www.lk8000.it/)
 
 Libraries and code segments are included from the following projects:
+ Boost C++ libraries
+ https://www.boost.org/
+
  CM4all libcommon
  https://github.com/CM4all/libcommon
+
+ OpenGL Mathematics (GLM)
+ https://github.com/g-truc/glm
+
+ IOIO
+ https://github.com/ytai/ioio
+
+ UsbSerial for Android
+ https://github.com/felHR85/UsbSerial
 
  JasPer
  http://www.ece.uvic.ca/~mdadams/jasper/
