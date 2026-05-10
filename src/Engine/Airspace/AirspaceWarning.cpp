@@ -72,7 +72,7 @@ AirspaceWarning::WarningLive(const Duration ack_time,
 bool
 AirspaceWarning::ChangedState() const noexcept
 {
-  if (expired > expired_last)
+  if (expired != expired_last)
     return true;
 
   if ((state_last == WARNING_CLEAR) && (state > WARNING_CLEAR))
