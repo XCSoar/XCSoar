@@ -255,6 +255,9 @@ zh_Hang (Traditional Chinese)
 *Contributions attributed to the LK8000 project (http://www.lk8000.it/)
 
 Libraries and code segments are included from the following projects:
+ CM4all libcommon
+ https://github.com/CM4all/libcommon
+
  JasPer
  http://www.ece.uvic.ca/~mdadams/jasper/
 

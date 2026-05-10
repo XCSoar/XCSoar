@@ -215,7 +215,7 @@ endif
 
 #######
 
-TEXT_FILES = AUTHORS COPYING NEWS.txt
+TEXT_FILES = AUTHORS COPYING NEWS.txt THIRD_PARTY_NOTICES.txt
 
 TEXT_COMPRESSED = $(patsubst %,$(DATA)/%.gz,$(TEXT_FILES))
 $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
