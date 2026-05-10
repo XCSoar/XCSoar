@@ -364,13 +364,12 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
     text_color = look.list.focused.text_color;
   } else if (IsEnabled()) {
     if (IsReadOnly()) {
-      background_color = look.dark_mode
-        ? DarkColor(look.list.background_color)
-        : Color(0xf0, 0xf0, 0xf0);
+      background_color = look.ReadOnlyValueBackground();
+      text_color = look.list.text_color;
     } else {
       background_color = look.list.background_color;
+      text_color = look.list.text_color;
     }
-    text_color = look.list.text_color;
   } else {
     background_color = look.dark_mode
       ? DarkColor(look.list.background_color)
@@ -383,7 +382,7 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
 
     canvas.SelectHollowBrush();
     canvas.Select(Pen(Layout::ScaleFinePenWidth(1),
-                      look.dark_mode ? COLOR_GRAY : COLOR_BLACK));
+                      look.ReadOnlyValueBorderColor()));
     canvas.DrawRectangle(visible_edit_rc);
   }
 

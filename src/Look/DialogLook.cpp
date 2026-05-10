@@ -138,3 +138,15 @@ DialogLook::SetBackgroundColor(Color color)
   background_gradient_top_color = color;
   background_brush.Create(color);
 }
+
+Color
+DialogLook::ReadOnlyValueBackground() const noexcept
+{
+  return dark_mode ? DarkColor(list.background_color) : Color(0xf0, 0xf0, 0xf0);
+}
+
+Color
+DialogLook::ReadOnlyValueBorderColor() const noexcept
+{
+  return dark_mode ? COLOR_GRAY : COLOR_BLACK;
+}
