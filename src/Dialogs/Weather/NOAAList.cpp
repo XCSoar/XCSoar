@@ -169,8 +169,9 @@ NOAAListWidget::AddClicked()
   }
 
   if (!NOAAStore::IsValidCode(code)) {
-    ShowMessageBox(_("Please don't use special characters in the four letter code of the desired station."),
-                  _("Error"), MB_OK);
+    ShowMessageBox(
+      _("Please enter four letters or digits only (ICAO station code)."),
+      _("Error"), MB_OK);
     return;
   }
 
