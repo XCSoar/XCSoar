@@ -583,8 +583,8 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
 #ifndef USE_WINUSER
   details_text.SetFont(look.text_font);
 #endif
-  details_text.SetColors(look.background_color, look.text_color,
-                         look.dark_mode ? COLOR_GRAY : COLOR_BLACK);
+  details_text.SetColors(look.ReadOnlyValueBackground(), look.list.text_color,
+                         look.ReadOnlyValueBorderColor());
   details_text.SetText(waypoint->details.c_str());
 
 #ifdef HAVE_RUN_FILE

@@ -105,4 +105,11 @@ struct DialogLook {
   void Initialise(bool dark_mode = false);
 
   void SetBackgroundColor(Color color);
+
+  /** Unfocused read-only value fill (#WndProperty, #LargeTextWindow). */
+  [[gnu::pure]]
+  Color ReadOnlyValueBackground() const noexcept;
+
+  [[gnu::pure]]
+  Color ReadOnlyValueBorderColor() const noexcept;
 };
