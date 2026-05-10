@@ -62,7 +62,7 @@ $(APP_BUNDLE): $(TARGET_BIN_DIR)/xcsoar Data/OSX/Info.plist.in.xml $(OSX_LOGO) $
 	@$(NQ)echo "  COPY    icon"
 	$(Q)cp $(OSX_LOGO) $(APP_RESOURCES)/logo_1024.icns
 	@$(NQ)echo "  COPY    third-party notices"
-	$(Q)cp doc/THIRD_PARTY_NOTICES.txt $(APP_RESOURCES)/ThirdPartyNotices.txt
+	$(Q)cp THIRD_PARTY_NOTICES.txt $(APP_RESOURCES)/ThirdPartyNotices.txt
 ifeq ($(USE_ANGLE),y)
 	@$(NQ)echo "  BUNDLE  ANGLE libraries"
 	$(Q)cp -a $(ANGLE_PREFIX)/lib/libEGL.dylib $(APP_FRAMEWORKS)/

@@ -24,6 +24,9 @@ extern "C"
 
   extern const uint8_t AUTHORS_gz[];
   extern const size_t AUTHORS_gz_size;
+
+  extern const uint8_t THIRD_PARTY_NOTICES_txt_gz[];
+  extern const size_t THIRD_PARTY_NOTICES_txt_gz_size;
 }
 
 /**
@@ -69,9 +72,11 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   const auto authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
-  const auto news = InflateToString(NEWS_txt_gz, NEWS_txt_gz_size);  
+  const auto news = InflateToString(NEWS_txt_gz, NEWS_txt_gz_size);
+  const auto third_party = InflateToString(THIRD_PARTY_NOTICES_txt_gz,
+                                           THIRD_PARTY_NOTICES_txt_gz_size);
   const auto license = InflateToString(COPYING_gz, COPYING_gz_size);
-  
+
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Credits"));
 
@@ -87,24 +92,33 @@ dlgCreditsShowModal([[maybe_unused]] UI::SingleWindow &parent)
     look, GetLogoText(look.dark_mode)));
   add_scroll_page(std::make_unique<RichTextWidget>(look, authors.c_str()));
   add_scroll_page(std::make_unique<RichTextWidget>(look, news.c_str(), false));
+  add_scroll_page(std::make_unique<RichTextWidget>(look, third_party.c_str()));
   add_scroll_page(std::make_unique<RichTextWidget>(look, license.c_str(), false));
 
-  /* Caption update on page flip */
+  /* Caption update on page flip (order matches add_scroll_page calls). */
   static constexpr const char *const titles[] = {
     N_("About"),
     N_("Authors"),
     N_("News"),
     N_("License"),
   };
+  static constexpr unsigned third_party_page_index = 3;
+  static constexpr unsigned license_page_index = 4;
   const unsigned total_pages = pager->GetSize();
 
   auto update_caption = [&dialog, pager_ptr, total_pages]() {
     const unsigned current = pager_ptr->GetCurrentIndex();
     StaticString<128> caption;
-    if (current < std::size(titles))
-      caption.Format("%s (%u/%u)",
-                     gettext(titles[current]),
-                     current + 1, total_pages);
+    const char *page_title = nullptr;
+    if (current < third_party_page_index)
+      page_title = gettext(titles[current]);
+    else if (current == third_party_page_index)
+      page_title = "Third-party";
+    else if (current == license_page_index)
+      page_title = gettext(titles[3]);
+
+    if (page_title != nullptr)
+      caption.Format("%s (%u/%u)", page_title, current + 1, total_pages);
     else
       caption = _("Credits");
     dialog.SetCaption(caption);
