@@ -1,0 +1,46 @@
+---
+description: Where to record credits, authors, and third-party legal notices in XCSoar
+globs:
+  - "AUTHORS"
+  - "THIRD_PARTY_NOTICES.txt"
+  - "src/Dialogs/dlgCredits.cpp"
+  - "build/resource.mk"
+  - "build/osx.mk"
+alwaysApply: false
+---
+
+# Credits and third-party attribution
+
+When adding or updating **attribution** for people or **bundled third-party code**, use these locations only—do not invent parallel files under `doc/` or scattered README-only notices without also updating the canonical places below.
+
+## AUTHORS (repository root)
+
+- **People:** Keep contributor credits in `AUTHORS` using the existing sections and tone.
+- **Libraries and packaged code:** Add a short line under **“Libraries and code segments are included from the following projects:”** (name, optional upstream URL). This is the human-readable index shipped inside the app on the Credits **Authors** tab.
+
+## THIRD_PARTY_NOTICES.txt (repository root)
+
+- **Full license / notice text** required for in-app disclosure (BSD/MIT-style notices, copyright blocks, etc.) belongs in **`THIRD_PARTY_NOTICES.txt` at the repository root**, not under `doc/`.
+- Organise by component (markdown headings work in the Credits viewer). Keep UTF-8 valid; prefer markdown links for URLs where helpful.
+- **Do not** replace or duplicate the main XCSoar **GPL** text here—that remains `COPYING` on its own Credits tab.
+
+## Build embedding (`build/resource.mk`)
+
+- Gzip-embedded text files for the Credits dialog are listed in **`TEXT_FILES`** in `build/resource.mk`. Any new root-level notice file that must appear in Credits must be added there (today: `AUTHORS`, `COPYING`, `NEWS.txt`, `THIRD_PARTY_NOTICES.txt`).
+- After changing `TEXT_FILES`, the linker exposes `*_gz` / `*_gz_size` symbols consumed by `dlgCredits.cpp`.
+
+## macOS bundle (`build/osx.mk`)
+
+- If third-party notices must ship as a loose file in the `.app` bundle, mirror the pattern for **`THIRD_PARTY_NOTICES.txt`** (copy target under `APP_RESOURCES`) when touching packaging.
+
+## Credits UI (`src/Dialogs/dlgCredits.cpp`)
+
+- **Order and captions:** New scroll pages must stay consistent with **`add_scroll_page`** order and the **`third_party_page_index` / `license_page_index`** logic (and `titles[]`) so pager captions stay correct.
+- **Third-party tab content** is markdown-enabled (`RichTextWidget`); **GPL** (`COPYING`) stays plain text.
+- The **Third-party** pager label is intentionally fixed English (not passed through `gettext()`); do not mark it for translation unless the project explicitly changes that policy.
+
+## Checklist for a new bundled dependency
+
+1. Line (and URL if useful) in **`AUTHORS`** under libraries/code segments.
+2. If required: section + full notice wording in **`THIRD_PARTY_NOTICES.txt`**.
+3. Confirm **`TEXT_FILES`** / **`dlgCredits.cpp`** still match if filenames or page order changes.
