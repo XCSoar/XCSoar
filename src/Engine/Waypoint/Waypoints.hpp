@@ -292,6 +292,18 @@ public:
   void VisitNamePrefix(std::string_view prefix, WaypointVisitor visitor) const;
 
   /**
+   * Call visitor function on waypoints whose normalised name (or
+   * shortname) contains the specified substring.  An empty
+   * substring matches every waypoint.
+   *
+   * This is a linear scan over all waypoints; cost is
+   * O(N * avg_name_length).  Each waypoint is visited at most
+   * once even if it matches via both name and shortname.
+   */
+  void VisitNameSubstring(std::string_view substring,
+                          WaypointVisitor visitor) const;
+
+  /**
    * Returns a set of possible characters following the specified
    * prefix.
    */
@@ -300,6 +312,28 @@ public:
                            char *dest, size_t max_length) const noexcept {
     return name_tree.SuggestNormalisedPrefix(prefix, dest, max_length);
   }
+
+  /**
+   * Returns the set of characters that, when appended to the
+   * given (normalised) input, still yield a substring match in
+   * some waypoint's name or shortname.  The output buffer is
+   * filled with each candidate character once (in ASCII order),
+   * NUL-terminated.
+   *
+   * Used to grey out impossible keys on the on-screen keyboard
+   * during substring search.  Returns nullptr if nothing matches
+   * (caller should treat that as "allow everything", so the user
+   * can backspace and try again).
+   *
+   * For an empty input, returns the set of distinct characters
+   * that appear anywhere in any waypoint name/shortname.
+   *
+   * Cost: O(N * avg_name_length) per call.  Suitable for
+   * per-keystroke updates.
+   */
+  [[gnu::pure]]
+  char *SuggestNameSubstring(std::string_view input,
+                             char *dest, size_t max_length) const noexcept;
 
   /**
    * Looks up nearest waypoint to the search location.
