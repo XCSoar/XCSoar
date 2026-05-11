@@ -40,15 +40,11 @@ class MapOverlayBitmap final : public MapOverlay {
 
 public:
   /**
-   * Load a GeoTIFF file.
+  * Load a georeferenced image file.
    *
    * Throws on error.
    */
-#ifdef USE_GEOTIFF
   MapOverlayBitmap(Path path);
-#else
-  [[noreturn]] MapOverlayBitmap(Path path);
-#endif
 
   /**
    * Move an existing #Bitmap with a geo reference.

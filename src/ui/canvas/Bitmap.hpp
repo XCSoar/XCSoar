@@ -180,14 +180,10 @@ public:
   bool LoadFile(Path path);
 
   /**
-   * Load a georeferenced image (e.g. GeoTIFF) and return its bounds.
+   * Load a georeferenced image and return its bounds.
    * Throws a std::runtime_error on error.
    */
-#ifdef USE_GEOTIFF
   GeoQuadrilateral LoadGeoFile(Path path);
-#else
-  [[noreturn]] GeoQuadrilateral LoadGeoFile(Path path);
-#endif
 
   void Reset() noexcept;
 
