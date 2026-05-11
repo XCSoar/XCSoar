@@ -2,21 +2,22 @@
 // Copyright The XCSoar Project
 
 #include "Waypoints.hpp"
+#include "NameSearch.hpp"
 #include "util/AllocatedArray.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 #include "util/StringUtil.hpp"
 #include "Math/Classify.hpp"
 
 #include <cassert>
 
-static constexpr std::size_t NORMALIZE_BUFFER_SIZE = 4096;
-
 inline WaypointPtr
 Waypoints::WaypointNameTree::Get(std::string_view name) const noexcept
 {
-  if (name.size() >= NORMALIZE_BUFFER_SIZE)
+  if (name.size() >= NAME_SEARCH_BUFFER_SIZE)
     return {};
 
-  char normalized_name[NORMALIZE_BUFFER_SIZE];
+  char normalized_name[NAME_SEARCH_BUFFER_SIZE];
   NormalizeSearchString(normalized_name, name);
   return RadixTree<WaypointPtr>::Get(normalized_name, nullptr);
 }
@@ -25,10 +26,10 @@ inline void
 Waypoints::WaypointNameTree::VisitNormalisedPrefix(std::string_view prefix,
                                                    const WaypointVisitor &visitor) const
 {
-  if (prefix.size() >= NORMALIZE_BUFFER_SIZE)
+  if (prefix.size() >= NAME_SEARCH_BUFFER_SIZE)
     return;
 
-  char normalized[NORMALIZE_BUFFER_SIZE];
+  char normalized[NAME_SEARCH_BUFFER_SIZE];
   NormalizeSearchString(normalized, prefix);
   VisitPrefix(normalized, visitor);
 }
@@ -38,10 +39,10 @@ Waypoints::WaypointNameTree::SuggestNormalisedPrefix(std::string_view prefix,
                                                      char *dest,
                                                      size_t max_length) const noexcept
 {
-  if (prefix.size() >= NORMALIZE_BUFFER_SIZE)
+  if (prefix.size() >= NAME_SEARCH_BUFFER_SIZE)
     return nullptr;
 
-  char normalized[NORMALIZE_BUFFER_SIZE];
+  char normalized[NAME_SEARCH_BUFFER_SIZE];
   NormalizeSearchString(normalized, prefix);
   return Suggest(normalized, dest, max_length);
 }
@@ -244,6 +245,124 @@ Waypoints::VisitNamePrefix(std::string_view prefix,
                            WaypointVisitor visitor) const
 {
   name_tree.VisitNormalisedPrefix(prefix, visitor);
+}
+
+/* Bitset of ASCII codepoints, indexed by unsigned char value.
+   Normalised waypoint names contain only uppercase alphanumerics
+   (0..127), so a 128-entry table is sufficient. */
+using SeenSet = bool[128];
+
+/**
+ * Mark every distinct character of the NUL-terminated normalised
+ * @p haystack in @p seen.  Used when the search needle is empty:
+ * every character that appears anywhere is a candidate next key.
+ */
+static void
+CollectAllChars(const char *haystack, SeenSet &seen) noexcept
+{
+  for (const char *p = haystack; *p != '\0'; ++p) {
+    const auto c = static_cast<unsigned char>(*p);
+    if (c < std::size(seen))
+      seen[c] = true;
+  }
+}
+
+/**
+ * Find every occurrence of NUL-terminated @p needle in
+ * NUL-terminated normalised @p haystack and mark the character
+ * immediately following each occurrence in @p seen.  Overlapping
+ * matches are considered (e.g. "AA" appears twice in "AAA").
+ *
+ * @return true if at least one occurrence was found.
+ */
+static bool
+CollectFollowingChars(const char *haystack, const char *needle,
+                      std::size_t needle_len, SeenSet &seen) noexcept
+{
+  bool any = false;
+
+  for (const char *p = haystack;
+       (p = StringFind(p, needle)) != nullptr;
+       ++p) {
+    any = true;
+    const char next = p[needle_len];
+    if (next == '\0')
+      continue;
+    const auto c = static_cast<unsigned char>(next);
+    if (c < std::size(seen))
+      seen[c] = true;
+  }
+
+  return any;
+}
+
+char *
+Waypoints::SuggestNameSubstring(std::string_view input,
+                                char *dest,
+                                size_t max_length) const noexcept
+{
+  if (max_length == 0)
+    return nullptr;
+
+  if (input.size() >= NAME_SEARCH_BUFFER_SIZE)
+    return nullptr;
+
+  char needle[NAME_SEARCH_BUFFER_SIZE];
+  NormalizeSearchString(needle, input);
+  const std::size_t needle_len = strlen(needle);
+
+  SeenSet seen{};
+  bool any_match = false;
+
+  char haystack[NAME_SEARCH_BUFFER_SIZE];
+
+  auto scan = [&](std::string_view src) noexcept {
+    if (src.size() >= NAME_SEARCH_BUFFER_SIZE)
+      return;
+    NormalizeSearchString(haystack, src);
+
+    if (needle_len == 0) {
+      CollectAllChars(haystack, seen);
+      if (haystack[0] != '\0')
+        any_match = true;
+    } else if (CollectFollowingChars(haystack, needle, needle_len, seen)) {
+      any_match = true;
+    }
+  };
+
+  for (const auto &wp : waypoint_tree) {
+    scan(wp->name);
+    if (!wp->shortname.empty())
+      scan(wp->shortname);
+  }
+
+  if (!any_match)
+    /* tell the keyboard to enable every key so the user can
+       backspace and try a different pattern */
+    return nullptr;
+
+  char *const retval = dest;
+  char *const end = dest + max_length - 1;
+  for (unsigned c = 0; c < std::size(seen) && dest < end; ++c)
+    if (seen[c])
+      *dest++ = static_cast<char>(c);
+  *dest = '\0';
+  return retval;
+}
+
+void
+Waypoints::VisitNameSubstring(std::string_view substring,
+                              WaypointVisitor visitor) const
+{
+  if (substring.size() >= NAME_SEARCH_BUFFER_SIZE)
+    return;
+
+  char needle[NAME_SEARCH_BUFFER_SIZE];
+  NormalizeSearchString(needle, substring);
+
+  for (const auto &wp : waypoint_tree)
+    if (WaypointMatchesNormalisedSubstring(*wp, needle))
+      visitor(wp);
 }
 
 void
