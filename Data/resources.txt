@@ -176,6 +176,11 @@ bitmap_graphic IDB_TITLE_UHD_WHITE "title_white_640_rgba"
 #endif
 #endif
 bitmap_icon_scaled IDB_WEATHER_STATION "map_weather_station"
+bitmap_icon_scaled IDB_PLANE "plane"
+bitmap_icon_scaled IDB_RADIO "radio"
+bitmap_icon_scaled IDB_BEACON "beacon"
+bitmap_icon_scaled IDB_CLOUD "cloud"
+
 
 // Audio
 
