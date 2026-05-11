@@ -59,18 +59,34 @@ static constexpr int direction_filter_items[] = {
   -1, -1, 0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
-static const char *const type_filter_items[] = {
-  "*", "Airport", "Landable",
-  "Turnpoint", 
-  "Start", 
-  "Finish", 
-  "Left FAI Triangle",
-  "Right FAI Triangle",
-  "Custom",
-  // File entries are dynamically added in CreateTypeDataField
-  "Map file",
-  "Recently Used",
-  nullptr
+/* Static dropdown entries for the Type filter, indexed by their
+   own TypeFilter id rather than by array position so the layout
+   of the enum and the layout of the dropdown can evolve
+   independently.  TypeFilter::FILE is intentionally absent --
+   that filter is only meaningful with a concrete file_num and
+   is fed into the dropdown by the dynamic per-file entries
+   added inside CreateTypeDataField (IDs >= _DYNAMIC_FILE_ID_START).
+   TypeFilter::MAP is included here but only added to the
+   dropdown when at least one MAP-origin waypoint is loaded
+   (issue #1376), and its label is replaced with the actual
+   .xcm filename when available. */
+struct TypeFilterChoice {
+  TypeFilter id;
+  const char *label;
+};
+
+static constexpr TypeFilterChoice type_filter_choices[] = {
+  {TypeFilter::ALL, "*"},
+  {TypeFilter::AIRPORT, "Airport"},
+  {TypeFilter::LANDABLE, "Landable"},
+  {TypeFilter::TURNPOINT, "Turnpoint"},
+  {TypeFilter::START, "Start"},
+  {TypeFilter::FINISH, "Finish"},
+  {TypeFilter::FAI_TRIANGLE_LEFT, "Left FAI Triangle"},
+  {TypeFilter::FAI_TRIANGLE_RIGHT, "Right FAI Triangle"},
+  {TypeFilter::USER, "Custom"},
+  {TypeFilter::MAP, "Map file"},
+  {TypeFilter::LAST_USED, "Recently Used"},
 };
 
 struct WaypointListDialogState
@@ -377,48 +393,52 @@ static DataField *
 CreateTypeDataField(DataFieldListener *listener,
                     const Waypoints &waypoints)
 {
+  constexpr unsigned DYNAMIC_FILE_ID_START =
+    (unsigned)TypeFilter::_DYNAMIC_FILE_ID_START;
+
   DataFieldEnum *df = new DataFieldEnum(listener);
-  df->addEnumTexts(type_filter_items);
 
-  // Dynamically add file entries based on loaded waypoint files
-  // Use IDs >= _DYNAMIC_FILE_ID_START to encode file index
-  constexpr unsigned DYNAMIC_FILE_ID_START = (unsigned)TypeFilter::_DYNAMIC_FILE_ID_START;
-  
-  const auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
-                                               nullptr);
-  for (size_t i = 0; i < paths.size(); ++i) {
-    const auto &path = paths[i];
-    const auto filename = path.GetBase();
-    if (filename != nullptr) {
-      // Insert before "Map file" entry with unique ID
-      df->addEnumText(filename.c_str(), DYNAMIC_FILE_ID_START + i);
-    }
-  }
-
-  /* Show the map archive (.xcm) filename in place of the
-     generic "Map file" entry only when waypoints from that
+  /* Only show the MAP entry when waypoints from the .xcm
      archive are actually loaded.  WaypointGlue only loads the
      embedded waypoints.cup/waypoints.xcw when no other waypoint
      file produced any result (see WaypointGlue::LoadWaypoints),
-     so a configured .xcm with WPFileList also configured would
-     otherwise advertise a filter that yields zero matches.
-     Issue #1376. */
-  const auto map_path = Profile::map.GetPathBase(ProfileKeys::MapFile);
+     so a configured .xcm alongside a WPFileList would otherwise
+     advertise a filter that yields zero matches (issue #1376).
+     The label is replaced with the actual .xcm filename below. */
   const bool has_map_waypoints =
     std::any_of(waypoints.begin(), waypoints.end(),
                 [](const auto &wp){
                   return wp->origin == WaypointOrigin::MAP;
                 });
-  if (map_path != nullptr && has_map_waypoints)
-    df->replaceEnumText((unsigned)TypeFilter::MAP, map_path.c_str());
+  const auto map_path = Profile::map.GetPathBase(ProfileKeys::MapFile);
 
-  // Set current value based on type_index and file_num
-  unsigned value;
-  if (dialog_state.type_index == TypeFilter::FILE && dialog_state.file_num >= 0) {
-    value = DYNAMIC_FILE_ID_START + dialog_state.file_num;
-  } else {
-    value = (unsigned)dialog_state.type_index;
+  for (const auto &c : type_filter_choices) {
+    if (c.id == TypeFilter::MAP) {
+      if (!has_map_waypoints)
+        continue;
+      df->addEnumText(map_path != nullptr ? map_path.c_str() : c.label,
+                      unsigned(c.id));
+      continue;
+    }
+    df->addEnumText(c.label, unsigned(c.id));
   }
+
+  // Dynamically add file entries based on loaded waypoint files.
+  // IDs >= _DYNAMIC_FILE_ID_START encode the file index.
+  const auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
+                                               nullptr);
+  for (size_t i = 0; i < paths.size(); ++i) {
+    const auto filename = paths[i].GetBase();
+    if (filename != nullptr)
+      df->addEnumText(filename.c_str(), DYNAMIC_FILE_ID_START + i);
+  }
+
+  // Set current value based on type_index and file_num.
+  unsigned value;
+  if (dialog_state.type_index == TypeFilter::FILE && dialog_state.file_num >= 0)
+    value = DYNAMIC_FILE_ID_START + dialog_state.file_num;
+  else
+    value = (unsigned)dialog_state.type_index;
   df->SetValue(value);
 
   return df;
