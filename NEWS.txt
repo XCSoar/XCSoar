@@ -1,4 +1,7 @@
 Version 7.45 - not yet released
+* replay (mockup / experimental — not release-ready)
+  - Replay dialog: seek to a chosen number of minutes after the first fix,
+    restarting the file and applying every merged fix (dense snail trail)
 * devices
   - FLARM $PGRMZ (when FLARM is detected) feeds igc_pressure_altitude for the
     ISA logger datum; cleared when strong pressure replaces weak pressure or

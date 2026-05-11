@@ -33,10 +33,8 @@ MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
 }
 
 void
-MergeThread::Process() noexcept
+MergeThread::ProcessUnlocked() noexcept
 {
-  assert(!IsDefined() || IsInside());
-
   device_blackboard.Merge();
 
   const MoreData &basic = device_blackboard.Basic();
@@ -52,7 +50,7 @@ MergeThread::Process() noexcept
 }
 
 void
-MergeThread::Tick() noexcept
+MergeThread::RunMergeCycle(bool notify_triggers) noexcept
 {
   bool gps_updated, calculated_updated;
 
@@ -68,7 +66,7 @@ MergeThread::Tick() noexcept
   {
     const std::lock_guard lock{device_blackboard.mutex};
 
-    Process();
+    ProcessUnlocked();
 
     const MoreData &basic = device_blackboard.Basic();
     const DerivedInfo &calculated = device_blackboard.Calculated();
@@ -84,8 +82,7 @@ MergeThread::Tick() noexcept
       trail_push_vario = (float)basic.netto_vario;
     }
 
-    /* call Driver::OnSensorUpdate() on all devices */
-    if (devices != nullptr)
+    if (notify_triggers && devices != nullptr)
       devices->NotifySensorUpdate(basic);
 
     /* trigger update if gps has become available or dropped out */
@@ -116,17 +113,27 @@ MergeThread::Tick() noexcept
     trail_vario_sink->PushMergeVarioSample(trail_push_time, trail_push_vario);
 
 #ifdef HAVE_PCM_PLAYER
-  if (vario_available)
-    AudioVarioGlue::SetValue(vario);
-  else
-    AudioVarioGlue::NoValue();
+  if (notify_triggers) {
+    if (vario_available)
+      AudioVarioGlue::SetValue(vario);
+    else
+      AudioVarioGlue::NoValue();
+  }
 #endif
 
-  if (gps_updated)
-    TriggerGPSUpdate();
+  if (notify_triggers) {
+    if (gps_updated)
+      TriggerGPSUpdate();
 
-  if (calculated_updated)
-    TriggerCalculatedUpdate();
+    if (calculated_updated)
+      TriggerCalculatedUpdate();
 
-  TriggerVarioUpdate();
+    TriggerVarioUpdate();
+  }
+}
+
+void
+MergeThread::Tick() noexcept
+{
+  RunMergeCycle(true);
 }

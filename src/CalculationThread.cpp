@@ -49,11 +49,8 @@ CalculationThread::SetScreenDistanceMeters(double new_value) noexcept
   screen_distance_meters = new_value;
 }
 
-/**
- * Main loop of the CalculationThread
- */
 void
-CalculationThread::Tick() noexcept
+CalculationThread::RunTickDirect(bool notify_ui) noexcept
 {
 #ifdef HAVE_CPU_FREQUENCY
   const ScopeLockCPU cpu;
@@ -65,7 +62,9 @@ CalculationThread::Tick() noexcept
   {
     const std::lock_guard lock{device_blackboard.mutex};
 
-    gps_updated = device_blackboard.Basic().location_available.Modified(glide_computer.Basic().location_available);
+    gps_updated =
+      device_blackboard.Basic().location_available.Modified(
+        glide_computer.Basic().location_available);
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());
@@ -101,14 +100,22 @@ CalculationThread::Tick() noexcept
   }
 
   // if (new GPS data)
-  if (gps_updated || force)
-    // inform map new data is ready
+  if (notify_ui && (gps_updated || force))
     TriggerCalculatedUpdate();
 
   if (do_idle) {
     // do slow calculations last, to minimise latency
     glide_computer.ProcessIdle();
   }
+}
+
+/**
+ * Main loop of the CalculationThread
+ */
+void
+CalculationThread::Tick() noexcept
+{
+  RunTickDirect(true);
 }
 
 void

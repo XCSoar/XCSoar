@@ -56,6 +56,12 @@ public:
 
   void ForceTrigger() noexcept;
 
+  /**
+   * Run one calculation cycle synchronously from the main thread while
+   * this worker is suspended (bulk replay seek).
+   */
+  void RunTickDirect(bool notify_ui) noexcept;
+
 protected:
   void Tick() noexcept override;
 };

@@ -3,9 +3,11 @@
 
 #include "ReplayDialog.hpp"
 #include "Dialogs/Error.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "BackendComponents.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
 #include "Form/DataField/Base.hpp"
@@ -17,6 +19,7 @@ class ReplayControlWidget final
   enum Controls {
     FILE,
     RATE,
+    FLIGHT_MINUTES,
   };
 
   Replay &replay;
@@ -29,12 +32,14 @@ public:
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
     dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
     dialog.AddButton("+10'", [this](){ OnFastForwardClicked(); });
+    dialog.AddButton(_("Seek"), [this](){ OnSeekClicked(); });
   }
 
 private:
   void OnStopClicked() noexcept;
   void OnStartClicked() noexcept;
   void OnFastForwardClicked() noexcept;
+  void OnSeekClicked() noexcept;
 
 public:
   /* virtual methods from class Widget */
@@ -60,6 +65,12 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   GetDataField(RATE).SetOnModified([this]{
     replay.SetTimeScale(GetValueFloat(RATE));
   });
+
+  AddInteger(_("Flight min"),
+             _("Minutes after the first fix to seek to. Restarts replay "
+               "and applies every fix up to that time."),
+             "%u", "%u",
+             0, 24 * 60, 1, 0);
 }
 
 inline void
@@ -84,6 +95,23 @@ inline void
 ReplayControlWidget::OnFastForwardClicked() noexcept
 {
   replay.FastForward(std::chrono::minutes{10});
+}
+
+inline void
+ReplayControlWidget::OnSeekClicked() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return;
+
+  const unsigned minutes =
+    static_cast<unsigned>(GetValueInteger(FLIGHT_MINUTES));
+
+  if (!replay.SeekToFlightElapsedMinutes(
+        minutes, *backend_components->merge_thread,
+        *backend_components->calculation_thread))
+    ShowMessageBox(_("Could not seek replay."), _("Replay"), MB_OK);
 }
 
 void
