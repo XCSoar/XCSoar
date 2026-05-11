@@ -271,6 +271,8 @@ Event list
      of the automatic radar display.
  * - ``FlarmTraffic``
    - Opens the full-screen FLARM traffic radar page.
+ * - ``Frequencies``
+   - Displays the frequency dialog
  * - ``GestureHelp``
    - Opens the gesture help dialog showing available touch gestures.
  * - ``GotoLookup``

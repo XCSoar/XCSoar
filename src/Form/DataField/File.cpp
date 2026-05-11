@@ -34,6 +34,7 @@ IsInternalFile(const char *str) noexcept
     "xcsoar.log",
     "xcsoar-rasp.dat",
     "user.cup",
+    "user.freq",
     nullptr
   };
 

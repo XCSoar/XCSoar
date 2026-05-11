@@ -74,6 +74,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Dialogs/Frequency/dlgUserFrequencyList.hpp"
 
 #include <cassert>
 #include <algorithm>
@@ -302,6 +303,13 @@ void
 InputEvents::eventChecklist([[maybe_unused]] const char *misc)
 {
   dlgChecklistShowModal();
+}
+
+// User Frequencies List
+void
+InputEvents::eventFrequencies([[maybe_unused]] const char *misc)
+{
+  dlgUserFrequencyListWidgetShowModal(UserFrequencyListWidget::DialogMode::BROWSE);
 }
 
 // Status
