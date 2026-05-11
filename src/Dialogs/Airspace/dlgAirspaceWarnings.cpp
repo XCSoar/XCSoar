@@ -368,10 +368,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
                                   airspace_renderer, airspace_look);
     layout_rc.left += line_height + padding;
   }
-
-  // word "inside" is used as the etalon, because it is longer than "near" and
-  // currently (9.4.2011) there is no other possibility for the status text.
-  const int status_width = canvas.CalcTextWidth("inside");
+  
+  const int status_width = canvas.CalcTextWidth("(inside)");
   // "1888" is used in order to have enough space for 4-digit heights with "AGL"
   const int altitude_width = canvas.CalcTextWidth("1888 m AGL");
 
@@ -435,16 +433,17 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   Color state_color;
   const char *state_text;
 
-  if (warning.IsCleared() && warning.IsInside()) {
+  if ((warning.IsCleared() || warning.IsCoveredByClearance()) &&
+      warning.IsInside()) {
     state_color = cleared_color;
-    state_text = "inside";
-  } else if (warning.IsCoveredByClearance() && warning.IsInside()) {
-    state_color = cleared_color;
-    state_text = "inside";
+    state_text = "(inside)";
   } else if (warning.IsInside()) {
     state_color = warning.IsActive()
       ? inside_color : inside_ack_color;
     state_text = "inside";
+  } else if (warning.IsCoveredByClearance() && warning.IsWarning()) {
+    state_color = cleared_color;
+    state_text = "(near)";
   } else if (warning.IsWarning()) {
     state_color = warning.IsActive()
       ? near_color : near_ack_color;
