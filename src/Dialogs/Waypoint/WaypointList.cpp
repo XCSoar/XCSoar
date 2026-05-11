@@ -386,9 +386,16 @@ WaypointListWidget::Prepare(ContainerWindow &parent,
 static DataField *
 CreateNameDataField(Waypoints &waypoints, DataFieldListener *listener)
 {
-  return new PrefixDataField("", [&waypoints](const char *prefix){
+  /* Substring search variant of the on-screen-keyboard hint:
+     enable only those keys that, when appended to the current
+     input, still yield at least one substring match against any
+     waypoint's name or shortname.  When nothing matches, the
+     callback returns nullptr and the keyboard re-enables every
+     key so the user can backspace and try again. */
+  return new PrefixDataField("", [&waypoints](const char *input){
     static char buffer[256];
-    return waypoints.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
+    return waypoints.SuggestNameSubstring(input, buffer,
+                                          ARRAY_SIZE(buffer));
   }, listener);
 }
 

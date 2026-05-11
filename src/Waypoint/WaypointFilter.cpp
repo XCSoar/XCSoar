@@ -4,7 +4,9 @@
 #include "WaypointFilter.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Engine/Task/Shapes/FAITrianglePointValidator.hpp"
+#include "Engine/Waypoint/NameSearch.hpp"
 #include "util/Compiler.h"
+#include "util/StringUtil.hpp"
 
 inline bool
 WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
@@ -124,7 +126,13 @@ WaypointFilter::CompareDirection(const Waypoint &waypoint,
 inline bool
 WaypointFilter::CompareName(const Waypoint &waypoint, const char *name)
 {
-  return StringIsEqualIgnoreCase(waypoint.name.c_str(), name, strlen(name));
+  /* Substring match against the normalised waypoint name (and
+     shortname).  Goes through the shared helper so this filter
+     path (within-range + name) agrees with the name-only path
+     (Waypoints::VisitNameSubstring). */
+  char needle[NAME_SEARCH_BUFFER_SIZE];
+  NormalizeSearchString(needle, name);
+  return WaypointMatchesNormalisedSubstring(waypoint, needle);
 }
 
 inline bool
