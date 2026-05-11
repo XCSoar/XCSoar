@@ -1,0 +1,44 @@
+---
+description: Where to register a new Waypoint::Type or TypeFilter value across the codebase
+globs:
+  - "src/Engine/Waypoint/Waypoint.hpp"
+  - "src/Waypoint/**"
+  - "src/Renderer/WaypointIconRenderer.cpp"
+  - "src/Look/Waypoint*"
+  - "src/Dialogs/Waypoint/**"
+  - "Data/resources.txt"
+alwaysApply: false
+---
+
+# Waypoint Types
+
+Waypoint type information is duplicated across many sites; the compiler does **not** flag missing cases (the enums have no `default:` fallthrough catch in some sites and most arrays carry no size sentinel). When adding or changing values, walk this checklist or you will silently break round-trip, rendering, or UI.
+
+## Adding a new `Waypoint::Type`
+
+The enum is in `src/Engine/Waypoint/Waypoint.hpp`. Every new value needs:
+
+1. **CUP round-trip** — both directions must agree:
+   - Reader: `src/Waypoint/WaypointReaderSeeYou.cpp` (`case <cup-id>:` → `Waypoint::Type::X`)
+   - Writer: `src/Waypoint/CupWriter.cpp` (`case Waypoint::Type::X:` → `"<cup-id>"sv`)
+2. **Editor dropdown** — `waypoint_types[]` in `src/Dialogs/Waypoint/dlgWaypointEdit.cpp` (`N_("...")` label).
+3. **Details label** — `GetWaypointTypeName()` in `src/Dialogs/Waypoint/WaypointInfoWidget.cpp` (`_("...")` label; **must match** the editor dropdown so po entries are reused).
+4. **Map icon** — only if visually distinct:
+   - `src/Look/WaypointLook.hpp` (declare `Icon foo_icon`)
+   - `src/Look/WaypointLook.cpp` (`foo_icon.LoadResource(IDB_FOO_ALL)`)
+   - `Data/resources.txt` (register `IDB_FOO`)
+   - `src/Renderer/WaypointIconRenderer.cpp` (`case Waypoint::Type::X: return look.foo_icon;`)
+5. **Search filter** — see "Adding a `TypeFilter`" below; the dropdown label must match step 3.
+6. **Visibility threshold** *(rare)* — `src/Projection/MapWindowProjection.cpp` only if the type warrants a non-default scale (e.g. obstacles).
+
+## Adding a `TypeFilter` value
+
+`enum class TypeFilter` lives in `src/Waypoint/WaypointFilter.hpp`. The `static_assert(ARRAY_SIZE(type_filter_choices) == unsigned(TypeFilter::COUNT) - 1, ...)` in `src/Dialogs/Waypoint/WaypointList.cpp` will catch a missing dropdown entry at compile time, but the other sites are silent:
+
+1. Add the value **before `COUNT`** and keep it `< _DYNAMIC_FILE_ID_START` (= 100).
+2. `WaypointFilter::CompareType()` in `src/Waypoint/WaypointFilter.cpp` — add the `case`.
+3. `type_filter_choices[]` in `src/Dialogs/Waypoint/WaypointList.cpp` — add the label (reuse the `GetWaypointTypeName` string verbatim so translations apply).
+
+## Translations
+
+Any new English label introduced in the steps above is exposed via `_()` / `N_()`. Run `make update-po` to refresh `po/*.po` and `po/xcsoar.pot` before committing translation changes (commit them at the **end** of the branch, separately, per `xcsoar-project-rules.mdc`).
