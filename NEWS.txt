@@ -5,6 +5,13 @@ Version 7.45 - not yet released
     ignores the sentence
 * ui
   - infoboxen: new Altitude IGC InfoBox (logger pressure or ISA pressure only)
+  - waypoint search: name filter matches anywhere in the long name and the
+    shortname (typically the ICAO code in SeeYou .cup files), not only at
+    the start, so e.g. "FIELD" finds "AIRFIELD" and "INGEN" finds
+    "DITTINGEN" #2483
+  - waypoint search: each waypoint appears at most once in the result list,
+    even when the typed substring matches both its long name and its
+    shortname #1316
   - waypoint search: Type filter no longer lists the .xcm map archive as a
     selectable filter when its embedded waypoints are not loaded (e.g. when
     a separate WPFileList already supplied the database), so the dropdown

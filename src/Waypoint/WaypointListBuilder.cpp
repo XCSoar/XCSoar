@@ -12,7 +12,7 @@ WaypointListBuilder::Visit(const Waypoints &waypoints) noexcept
   if (filter.distance > 0)
     waypoints.VisitWithinRange(location, filter.distance, *this);
   else
-    waypoints.VisitNamePrefix(filter.name, *this);
+    waypoints.VisitNameSubstring(filter.name, *this);
 }
 
 inline void
