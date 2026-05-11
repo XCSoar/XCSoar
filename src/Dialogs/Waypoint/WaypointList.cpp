@@ -374,7 +374,8 @@ CreateDirectionDataField(DataFieldListener *listener, Angle last_heading)
 }
 
 static DataField *
-CreateTypeDataField(DataFieldListener *listener)
+CreateTypeDataField(DataFieldListener *listener,
+                    const Waypoints &waypoints)
 {
   DataFieldEnum *df = new DataFieldEnum(listener);
   df->addEnumTexts(type_filter_items);
@@ -394,9 +395,21 @@ CreateTypeDataField(DataFieldListener *listener)
     }
   }
 
-  // Replace "Map file" text with actual filename if available
+  /* Show the map archive (.xcm) filename in place of the
+     generic "Map file" entry only when waypoints from that
+     archive are actually loaded.  WaypointGlue only loads the
+     embedded waypoints.cup/waypoints.xcw when no other waypoint
+     file produced any result (see WaypointGlue::LoadWaypoints),
+     so a configured .xcm with WPFileList also configured would
+     otherwise advertise a filter that yields zero matches.
+     Issue #1376. */
   const auto map_path = Profile::map.GetPathBase(ProfileKeys::MapFile);
-  if (map_path != nullptr)
+  const bool has_map_waypoints =
+    std::any_of(waypoints.begin(), waypoints.end(),
+                [](const auto &wp){
+                  return wp->origin == WaypointOrigin::MAP;
+                });
+  if (map_path != nullptr && has_map_waypoints)
     df->replaceEnumText((unsigned)TypeFilter::MAP, map_path.c_str());
 
   // Set current value based on type_index and file_num
@@ -418,7 +431,8 @@ WaypointFilterWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   Add(_("Name"), nullptr, CreateNameDataField(*data_components->waypoints, listener));
   Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
   Add(_("Direction"), nullptr, CreateDirectionDataField(listener, last_heading));
-  Add(_("Type"), nullptr, CreateTypeDataField(listener));
+  Add(_("Type"), nullptr,
+      CreateTypeDataField(listener, *data_components->waypoints));
 }
 
 void
