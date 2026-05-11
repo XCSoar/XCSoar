@@ -87,7 +87,37 @@ static constexpr TypeFilterChoice type_filter_choices[] = {
   {TypeFilter::USER, "Custom"},
   {TypeFilter::MAP, "Map file"},
   {TypeFilter::LAST_USED, "Recently Used"},
+
+  /* Specific Waypoint::Type filters.  Labels match the strings
+     returned by GetWaypointTypeName() in WaypointInfoWidget so
+     the dropdown matches the "Type" row in the details dialog
+     and reuses existing po entries. */
+  {TypeFilter::MOUNTAIN_TOP, "Mountain Top"},
+  {TypeFilter::MOUNTAIN_PASS, "Mountain Pass"},
+  {TypeFilter::BRIDGE, "Bridge"},
+  {TypeFilter::TUNNEL, "Tunnel"},
+  {TypeFilter::TOWER, "Tower"},
+  {TypeFilter::POWERPLANT, "Power Plant"},
+  {TypeFilter::OBSTACLE, "Transmitter Mast"},
+  {TypeFilter::THERMAL_HOTSPOT, "Thermal hotspot"},
+  {TypeFilter::MARKER, "Marker"},
+  {TypeFilter::VOR, "VOR"},
+  {TypeFilter::NDB, "NDB"},
+  {TypeFilter::DAM, "Dam"},
+  {TypeFilter::CASTLE, "Castle"},
+  {TypeFilter::INTERSECTION, "Intersection"},
+  {TypeFilter::REPORTING_POINT, "Control Point"},
+  {TypeFilter::PG_TAKEOFF, "PG Take Off"},
+  {TypeFilter::PG_LANDING, "PG Landing Zone"},
 };
+
+/* The dropdown table must list every TypeFilter value except
+   FILE (which is only ever set via the dynamic per-file
+   entries inserted in CreateTypeDataField).  Compile-time
+   guard so adding a new TypeFilter value prompts the developer
+   to add a corresponding label here. */
+static_assert(ARRAY_SIZE(type_filter_choices) == unsigned(TypeFilter::COUNT) - 1,
+              "type_filter_choices must cover every TypeFilter value except FILE");
 
 struct WaypointListDialogState
 {

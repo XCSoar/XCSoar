@@ -25,6 +25,31 @@ enum class TypeFilter : uint8_t {
   MAP,
   LAST_USED,
 
+  /* One filter per Waypoint::Type value not already covered by
+     the categorical filters above (AIRFIELD via AIRPORT,
+     OUTLANDING via LANDABLE, NORMAL effectively via TURNPOINT). */
+  MOUNTAIN_TOP,
+  MOUNTAIN_PASS,
+  BRIDGE,
+  TUNNEL,
+  TOWER,
+  POWERPLANT,
+  OBSTACLE,
+  THERMAL_HOTSPOT,
+  MARKER,
+  VOR,
+  NDB,
+  DAM,
+  CASTLE,
+  INTERSECTION,
+  REPORTING_POINT,
+  PG_TAKEOFF,
+  PG_LANDING,
+
+  /** Sentinel: number of real TypeFilter values (excluding the
+      dynamic file ID range below). */
+  COUNT,
+
   /**
    * Reserved range for dynamic entries in UI:
    * IDs 100+ are used for individual waypoint files in the filter dropdown.
@@ -33,7 +58,7 @@ enum class TypeFilter : uint8_t {
   _DYNAMIC_FILE_ID_START = 100,
 };
 
-static_assert((unsigned)TypeFilter::LAST_USED < (unsigned)TypeFilter::_DYNAMIC_FILE_ID_START,
+static_assert((unsigned)TypeFilter::COUNT < (unsigned)TypeFilter::_DYNAMIC_FILE_ID_START,
               "TypeFilter enum values must be < 100 to avoid collision with dynamic file IDs");
 
 struct WaypointFilter
