@@ -5,6 +5,18 @@ Version 7.45 - not yet released
     ignores the sentence
 * ui
   - infoboxen: new Altitude IGC InfoBox (logger pressure or ISA pressure only)
+  - waypoint search: Type filter no longer lists the .xcm map archive as a
+    selectable filter when its embedded waypoints are not loaded (e.g. when
+    a separate WPFileList already supplied the database), so the dropdown
+    no longer offers a filter that always yields zero matches #1376
+  - waypoint search: "Recently Used" Type filter entry shows the
+    recently-visited waypoints again; it had been silently aliased to the
+    unrelated "Map file" filter since the multi-file rework (#1994) due to
+    a positional dropdown/enum mismatch
+  - waypoint search: Type filter now lists every CUP waypoint type
+    (Mountain Top/Pass, Bridge, Tunnel, Tower, Power Plant, Obstacle,
+    Thermal Hotspot, Marker, VOR, NDB, Dam, Castle, Intersection,
+    Reporting Point, PG Take Off / Landing Zone) #2485
 * desktop
   - command-line: -h/--help and -version/--version print to stdout and exit;
     unknown options print a short usage line on stderr
