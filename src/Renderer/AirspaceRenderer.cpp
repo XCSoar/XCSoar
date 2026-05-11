@@ -3,8 +3,15 @@
 
 #include "AirspaceRenderer.hpp"
 #include "AirspaceRendererSettings.hpp"
-#include "Projection/WindowProjection.hpp"
+#include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspacePolygon.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Look/AirspaceLook.hpp"
+#include "MapWindow/MapCanvas.hpp"
+#include "Projection/WindowProjection.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Pen.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AirspaceWarning.hpp"
@@ -113,4 +120,35 @@ AirspaceRenderer::Draw(Canvas &canvas,
        stencil_canvas,
 #endif
        projection, settings, awc, visible);
+}
+
+void
+AirspaceRenderer::DrawOutlineGeometry(MapCanvas &mc,
+                                      const AbstractAirspace &airspace) noexcept
+{
+  switch (airspace.GetShape()) {
+  case AbstractAirspace::Shape::CIRCLE:
+    mc.DrawCircle(static_cast<const AirspaceCircle &>(airspace)
+                    .GetReferenceLocation(),
+                  static_cast<const AirspaceCircle &>(airspace).GetRadius());
+    break;
+
+  case AbstractAirspace::Shape::POLYGON:
+    mc.DrawPolygon(static_cast<const AirspacePolygon &>(airspace).GetPoints());
+    break;
+  }
+}
+
+void
+AirspaceRenderer::DrawOutlineHighlight(Canvas &canvas,
+                                       const WindowProjection &proj,
+                                       const AbstractAirspace &airspace,
+                                       const AirspaceRendererSettings &settings) noexcept
+{
+  canvas.SelectHollowBrush();
+  canvas.Select(Pen(Layout::ScalePenWidth(3),
+                    settings.black_outline ? COLOR_BLACK : COLOR_YELLOW));
+
+  MapCanvas mc(canvas, proj, proj.GetScreenBounds().Scale(1.1));
+  DrawOutlineGeometry(mc, airspace);
 }

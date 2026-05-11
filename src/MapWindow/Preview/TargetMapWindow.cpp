@@ -3,11 +3,11 @@
 
 #include "TargetMapWindow.hpp"
 #include "Topography/TopographyRenderer.hpp"
-#include "Renderer/TaskRenderer.hpp"
-#include "Renderer/TaskPointRenderer.hpp"
-#include "Renderer/OZRenderer.hpp"
+#include "Renderer/ActiveTaskGeometryRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
+#include "Renderer/WaypointRendererSettings.hpp"
+#include "Task/TaskPreviewValidation.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -19,8 +19,6 @@
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
-#else
-#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 static const ComputerSettings &
@@ -57,21 +55,18 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
                                  const AircraftLook &_aircraft_look,
                                  const TopographyLook &_topography_look,
                                  const OverlayLook &_overlay_look) noexcept
-  :task_look(_task_look),
-   aircraft_look(_aircraft_look),
-   topography_look(_topography_look),
-   overlay_look(_overlay_look),
-   airspace_renderer(_airspace_look),
-   way_point_renderer(nullptr, waypoint_look),
-   trail_renderer(_trail_look)
+  : MapPreviewBufferWindow(_airspace_look, _topography_look),
+    task_look(_task_look),
+    aircraft_look(_aircraft_look),
+    overlay_look(_overlay_look),
+    way_point_renderer(nullptr, waypoint_look),
+    trail_renderer(_trail_look)
 {
 }
 
 TargetMapWindow::~TargetMapWindow() noexcept
 {
   Destroy();
-
-  delete topography_renderer;
 }
 
 void
@@ -84,39 +79,9 @@ TargetMapWindow::Create(ContainerWindow &parent, PixelRect rc,
 }
 
 inline void
-TargetMapWindow::RenderTerrain(Canvas &canvas) noexcept
-{
-  background.SetShadingAngle(projection, GetMapSettings().terrain,
-                             Calculated());
-  background.Draw(canvas, projection, GetMapSettings().terrain);
-}
-
-inline void
-TargetMapWindow::RenderTopography(Canvas &canvas) noexcept
-{
-  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
-    topography_renderer->Draw(canvas, projection);
-}
-
-inline void
 TargetMapWindow::RenderTopographyLabels(Canvas &canvas) noexcept
 {
-  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
-    topography_renderer->DrawLabels(canvas, projection, label_block);
-}
-
-inline void
-TargetMapWindow::RenderAirspace(Canvas &canvas) noexcept
-{
-  if (GetMapSettings().airspace.enable)
-    airspace_renderer.Draw(canvas,
-#ifndef ENABLE_OPENGL
-                           buffer_canvas,
-#endif
-                           projection,
-                           Basic(), Calculated(),
-                           GetComputerSettings().airspace,
-                           GetMapSettings().airspace);
+  layers.RenderTopographyLabels(canvas, projection, label_block);
 }
 
 inline void
@@ -125,22 +90,20 @@ TargetMapWindow::DrawTask(Canvas &canvas) noexcept
   if (task == nullptr)
     return;
 
-  ProtectedTaskManager::Lease task_manager(*task);
-  const AbstractTask *task = task_manager->GetActiveTask();
-  if (task && !IsError(task->CheckTask())) {
-    OZRenderer ozv(task_look, airspace_renderer.GetLook(),
-                   GetMapSettings().airspace);
-    TaskPointRenderer tpv(canvas, projection, task_look,
-                          /* we're accessing the OrderedTask here,
-                             which may be invalid at this point, but it
-                             will be used only if active, so it's ok */
-                          task_manager->GetOrderedTask().GetTaskProjection(),
-                          ozv, false,
-                          TaskPointRenderer::TargetVisibility::ALL,
-                          Basic().GetLocationOrInvalid());
-    tpv.SetTaskFinished(Calculated().task_stats.task_finished);
-    TaskRenderer dv(tpv, projection.GetScreenBounds());
-    dv.Draw(*task);
+  ProtectedTaskManager::Lease lease(*task);
+  const AbstractTask *active_task = lease->GetActiveTask();
+  if (IsLiveTaskPreviewValid(active_task)) {
+    /* we're accessing the OrderedTask here,
+       which may be invalid at this point, but it
+       will be used only if active, so it's ok */
+    DrawActiveTaskForProjection(canvas, projection, task_look,
+                                *active_task,
+                                lease->GetOrderedTask().GetTaskProjection(),
+                                layers.GetAirspaceRenderer(),
+                                GetMapSettings(), false,
+                                TaskPointRenderer::TargetVisibility::ALL,
+                                Basic().GetLocationOrInvalid(),
+                                Calculated().task_stats.task_finished);
   }
 }
 
@@ -148,8 +111,8 @@ inline void
 TargetMapWindow::DrawWaypoints(Canvas &canvas) noexcept
 {
   const MapSettings &settings_map = GetMapSettings();
-  WaypointRendererSettings settings = settings_map.waypoint;
-  settings.display_text_type = WaypointRendererSettings::DisplayTextType::NAME;
+  const WaypointRendererSettings settings =
+    WaypointRendererSettingsForTargetDialog(settings_map.waypoint);
 
   way_point_renderer.Render(canvas, label_block,
                             projection, settings,
@@ -185,12 +148,8 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
   // reset label over-write preventer
   label_block.reset();
 
-  // Render terrain, groundline and topography
-  RenderTerrain(canvas);
-  RenderTopography(canvas);
-
-  // Render airspace
-  RenderAirspace(canvas);
+  PaintTerrainAndTopography(canvas);
+  PaintAirspace(canvas, GetMapSettings().airspace.enable);
 
 #ifdef ENABLE_OPENGL
   /* desaturate the map background, to focus on the task */
@@ -236,16 +195,13 @@ TargetMapWindow::OnPaint(Canvas &canvas) noexcept
 void
 TargetMapWindow::SetTerrain(RasterTerrain *terrain) noexcept
 {
-  background.SetTerrain(terrain);
+  layers.SetTerrain(terrain);
 }
 
 void
-TargetMapWindow::SetTopograpgy(TopographyStore *topography) noexcept
+TargetMapWindow::SetTopography(TopographyStore *topography) noexcept
 {
-  delete topography_renderer;
-  topography_renderer = topography != nullptr
-    ? new TopographyRenderer(*topography, topography_look)
-    : nullptr;
+  layers.SetTopography(topography);
 }
 
 [[gnu::pure]]
@@ -311,13 +267,7 @@ TargetMapWindow::OnResize(PixelSize new_size) noexcept
 {
   BufferWindow::OnResize(new_size);
 
-#ifndef ENABLE_OPENGL
-  buffer_canvas.Grow(new_size);
-#endif
-
-  projection.SetScreenSize(new_size);
-  projection.SetScreenOrigin(PixelRect{new_size}.GetCenter());
-  projection.UpdateScreenBounds();
+  ResizePreviewProjection(new_size);
 }
 
 void
@@ -327,23 +277,18 @@ TargetMapWindow::OnCreate()
 
   drag_mode = DRAG_NONE;
 
-#ifndef ENABLE_OPENGL
-  WindowCanvas canvas(*this);
-  buffer_canvas.Create(canvas);
-#endif
+  InitialiseAirspaceBuffer();
 }
 
 void
 TargetMapWindow::OnDestroy() noexcept
 {
-  SetTerrain(nullptr);
-  SetTopograpgy(nullptr);
+  layers.SetTerrain(nullptr);
+  layers.SetTopography(nullptr);
   SetAirspaces(nullptr);
   SetWaypoints(nullptr);
 
-#ifndef ENABLE_OPENGL
-  buffer_canvas.Destroy();
-#endif
+  DeinitialiseAirspaceBuffer();
 
   BufferWindow::OnDestroy();
 }

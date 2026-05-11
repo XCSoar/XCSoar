@@ -163,29 +163,12 @@ protected:
     return true;
   }
 
-private:
-  void VisitCircle(const AirspaceCircle &airspace) {
-    DrawCircle(airspace.GetReferenceLocation(), airspace.GetRadius());
-  }
-
-  void VisitPolygon(const AirspacePolygon &airspace) {
-    DrawPolygon(airspace.GetPoints());
-  }
-
 public:
   void Visit(const AbstractAirspace &airspace) {
     if (!SetupCanvas(airspace))
       return;
 
-    switch (airspace.GetShape()) {
-    case AbstractAirspace::Shape::CIRCLE:
-      VisitCircle((const AirspaceCircle &)airspace);
-      break;
-
-    case AbstractAirspace::Shape::POLYGON:
-      VisitPolygon((const AirspacePolygon &)airspace);
-      break;
-    }
+    AirspaceRenderer::DrawOutlineGeometry(*this, airspace);
   }
 };
 

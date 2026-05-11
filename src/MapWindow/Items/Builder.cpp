@@ -60,7 +60,8 @@ MapItemListBuilder::AddArrivalAltitudes(
 
   // Calculate arrival altitudes
   if (auto reach = route_planner.FindPositiveArrival(destination))
-    list.append(new ArrivalAltitudeMapItem(elevation, *reach, safety_height));
+    list.append(new ArrivalAltitudeMapItem(location, elevation, *reach,
+                                            safety_height));
 }
 
 void

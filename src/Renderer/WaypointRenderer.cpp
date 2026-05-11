@@ -3,6 +3,7 @@
 
 #include "WaypointRenderer.hpp"
 #include "Renderer/MapWaypointDrawLimits.hpp"
+#include "Renderer/TextInBox.hpp"
 #include "WaypointRendererSettings.hpp"
 #include "WaypointIconRenderer.hpp"
 #include "WaypointLabelList.hpp"
@@ -15,6 +16,7 @@
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/AbstractTask.hpp"
 #include "Engine/Task/Unordered/UnorderedTaskPoint.hpp"
@@ -32,7 +34,8 @@
 #include "Look/WaypointLook.hpp"
 
 #include <cassert>
-#include <stdio.h>
+#include <climits>
+#include <cstdio>
 
 /**
  * Metadata for a Waypoint that is about to be drawn.
@@ -126,6 +129,199 @@ struct VisibleWaypoint {
   }
 };
 
+static void
+FormatWaypointMapTitle(char *buffer, size_t buffer_size,
+                       const WaypointRendererSettings &settings,
+                       const Waypoint &way_point) noexcept
+{
+  buffer[0] = '\0';
+
+  switch (settings.display_text_type) {
+  case WaypointRendererSettings::DisplayTextType::NAME:
+    CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
+    break;
+
+  case WaypointRendererSettings::DisplayTextType::FIRST_FIVE:
+    CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 5);
+    break;
+
+  case WaypointRendererSettings::DisplayTextType::FIRST_THREE:
+    CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 3);
+    break;
+
+  case WaypointRendererSettings::DisplayTextType::NONE:
+    buffer[0] = '\0';
+    break;
+
+  case WaypointRendererSettings::DisplayTextType::FIRST_WORD: {
+    CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
+    char *tmp = strstr(buffer, " ");
+    if (tmp != nullptr)
+      tmp[0] = '\0';
+    break;
+  }
+
+  case WaypointRendererSettings::DisplayTextType::SHORT_NAME:
+    if (!way_point.shortname.empty())
+      CopyTruncateString(buffer, buffer_size, way_point.shortname.c_str());
+    else
+      CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 5);
+    break;
+
+  case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NUMBER:
+  case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NAMEIFINTASK:
+    assert(false);
+    gcc_unreachable();
+  }
+}
+
+static void
+FormatWaypointMapLabel(char *buffer, size_t buffer_size,
+                       const WaypointRendererSettings &settings,
+                       const TaskBehaviour &task_behaviour,
+                       const MoreData &basic,
+                       const char altitude_unit[4],
+                       const Waypoint &way_point,
+                       WaypointReachability reachable,
+                       const ReachResult &reach) noexcept
+{
+  FormatWaypointMapTitle(buffer, buffer_size - 20, settings, way_point);
+
+  if (!way_point.IsLandable() && !way_point.flags.watched)
+    return;
+
+  if (settings.arrival_height_display ==
+          WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR ||
+      settings.arrival_height_display ==
+          WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN) {
+    if (!basic.location_available || !basic.NavAltitudeAvailable() ||
+        !way_point.has_elevation)
+      return;
+
+    const auto safety_height = task_behaviour.safety_height_arrival;
+    const auto target_altitude = way_point.elevation + safety_height;
+    const auto delta_h = basic.nav_altitude - target_altitude;
+    if (delta_h <= 0)
+      /* no L/D if below waypoint */
+      return;
+
+    const auto distance = basic.location.DistanceS(way_point.location);
+    const auto gr = distance / delta_h;
+    if (!GradientValid(gr))
+      return;
+
+    size_t length = strlen(buffer);
+    if (length > 0)
+      buffer[length++] = ':';
+
+    if (settings.arrival_height_display ==
+            WaypointRendererSettings::ArrivalHeightDisplay::
+                REQUIRED_GR_AND_TERRAIN &&
+        reach.IsReachableTerrain()) {
+      int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
+      StringFormatUnsafe(buffer + length, "%.1f/%d%s", (double)gr,
+                         uah_terrain, altitude_unit);
+      return;
+    }
+
+    StringFormatUnsafe(buffer + length, "%.1f", (double)gr);
+    return;
+  }
+
+  if (reachable == WaypointReachability::INVALID)
+    return;
+
+  if (!reach.IsReachableDirect() && !way_point.flags.watched)
+    return;
+
+  if (settings.arrival_height_display ==
+      WaypointRendererSettings::ArrivalHeightDisplay::NONE)
+    return;
+
+  size_t length = strlen(buffer);
+  int uah_glide = (int)Units::ToUserAltitude(reach.direct);
+  int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
+
+  if (settings.arrival_height_display ==
+      WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN) {
+    if (reach.IsReachableTerrain()) {
+      if (length > 0)
+        buffer[length++] = ':';
+      StringFormatUnsafe(buffer + length, "%d%s",
+                         uah_terrain, altitude_unit);
+    }
+    return;
+  }
+
+  if (length > 0)
+    buffer[length++] = ':';
+
+  if (settings.arrival_height_display ==
+          WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN &&
+      reach.IsReachableDirect() && reach.IsReachableTerrain() &&
+      reach.IsDeltaConsiderable()) {
+    StringFormatUnsafe(buffer + length, "%d/%d%s", uah_glide,
+                       uah_terrain, altitude_unit);
+    return;
+  }
+
+  StringFormatUnsafe(buffer + length, "%d%s", uah_glide, altitude_unit);
+}
+
+static void
+WaypointMapLabelStyle(TextInBoxMode &text_mode, bool &bold,
+                      const WaypointRendererSettings &settings,
+                      const VisibleWaypoint &vwp,
+                      const Waypoint &way_point) noexcept
+{
+  text_mode = TextInBoxMode{};
+  bold = false;
+  const bool watched_waypoint = way_point.flags.watched;
+  if (vwp.IsReachable() && way_point.IsLandable()) {
+    text_mode.shape = settings.landable_render_mode;
+    bold = true;
+    text_mode.move_in_view = true;
+  } else if (vwp.in_task) {
+    text_mode.shape = LabelShape::OUTLINED_INVERTED;
+    bold = true;
+  } else if (watched_waypoint) {
+    text_mode.shape = LabelShape::OUTLINED;
+    text_mode.move_in_view = true;
+  }
+}
+
+static PixelPoint
+WaypointMapLabelScreenPosition(const VisibleWaypoint &vwp,
+                               const WaypointRendererSettings &settings) noexcept
+{
+  PixelPoint sc = vwp.point;
+  sc.x += 5;
+  if ((vwp.IsReachable() &&
+       settings.landable_style ==
+         WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
+      settings.vector_landable_rendering)
+    sc.x += 5;
+  return sc;
+}
+
+static void
+AppendWaypointMapLabelFromVisible(WaypointLabelList &labels,
+                                  const VisibleWaypoint &vwp,
+                                  const WaypointRendererSettings &settings,
+                                  const char *buffer) noexcept
+{
+  const Waypoint &way_point = *vwp.waypoint;
+  TextInBoxMode text_mode;
+  bool bold;
+  WaypointMapLabelStyle(text_mode, bold, settings, vwp, way_point);
+  const PixelPoint sc = WaypointMapLabelScreenPosition(vwp, settings);
+  labels.Add(buffer, sc, text_mode, bold,
+               vwp.reachable != WaypointReachability::INVALID ? vwp.reach.direct
+                                                             : INT_MIN,
+               vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
+               way_point.flags.watched);
+}
+
 class WaypointVisitorMap final
   : public TaskPointConstVisitor
 {
@@ -174,127 +370,12 @@ public:
 
 
 protected:
-  void FormatTitle(char *buffer, size_t buffer_size,
-                   const Waypoint &way_point) const noexcept {
-    buffer[0] = '\0';
-
-    switch (settings.display_text_type) {
-    case WaypointRendererSettings::DisplayTextType::NAME:
-      CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
-      break;
-
-    case WaypointRendererSettings::DisplayTextType::FIRST_FIVE:
-      CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 5);
-      break;
-
-    case WaypointRendererSettings::DisplayTextType::FIRST_THREE:
-      CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 3);
-      break;
-
-    case WaypointRendererSettings::DisplayTextType::NONE:
-      buffer[0] = '\0';
-      break;
-
-    case WaypointRendererSettings::DisplayTextType::FIRST_WORD:
-      CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
-      char *tmp;
-      tmp = strstr(buffer, " ");
-      if (tmp != nullptr)
-        tmp[0] = '\0';
-      break;
-
-    case WaypointRendererSettings::DisplayTextType::SHORT_NAME:
-      if (!way_point.shortname.empty())
-        CopyTruncateString(buffer, buffer_size, way_point.shortname.c_str());
-      else
-        CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 5);
-      break;
-
-    case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NUMBER:
-    case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NAMEIFINTASK:
-      assert(false);
-      gcc_unreachable();
-    }
-  }
-
   void FormatLabel(char *buffer, size_t buffer_size,
                    const Waypoint &way_point,
                    WaypointReachability reachable,
                    const ReachResult &reach) const noexcept {
-    FormatTitle(buffer, buffer_size - 20, way_point);
-
-    if (!way_point.IsLandable() && !way_point.flags.watched)
-      return;
-
-    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR ||
-        settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN) {
-      if (!basic.location_available || !basic.NavAltitudeAvailable() ||
-          !way_point.has_elevation)
-        return;
-
-      const auto safety_height = task_behaviour.safety_height_arrival;
-      const auto target_altitude = way_point.elevation + safety_height;
-      const auto delta_h = basic.nav_altitude - target_altitude;
-      if (delta_h <= 0)
-        /* no L/D if below waypoint */
-        return;
-
-      const auto distance = basic.location.DistanceS(way_point.location);
-      const auto gr = distance / delta_h;
-      if (!GradientValid(gr))
-        return;
-
-      size_t length = strlen(buffer);
-      if (length > 0)
-        buffer[length++] = ':';
-
-      if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN &&
-         reach.IsReachableTerrain()) {
-          int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
-          StringFormatUnsafe(buffer + length, "%.1f/%d%s", (double) gr,
-                            uah_terrain, altitude_unit);
-          return;
-         }
-
-      StringFormatUnsafe(buffer + length, "%.1f", (double) gr);
-      return;
-    }
-
-    if (reachable == WaypointReachability::INVALID)
-      return;
-
-    if (!reach.IsReachableDirect() && !way_point.flags.watched)
-      return;
-
-    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::NONE)
-      return;
-
-    size_t length = strlen(buffer);
-    int uah_glide = (int)Units::ToUserAltitude(reach.direct);
-    int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
-
-    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN) {
-      if (reach.IsReachableTerrain()) {
-        if (length > 0)
-          buffer[length++] = ':';
-        StringFormatUnsafe(buffer + length, "%d%s",
-                           uah_terrain, altitude_unit);
-      }
-      return;
-    }
-
-    if (length > 0)
-      buffer[length++] = ':';
-
-    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN &&
-        reach.IsReachableDirect() && reach.IsReachableTerrain() &&
-        reach.IsDeltaConsiderable()) {
-      StringFormatUnsafe(buffer + length, "%d/%d%s", uah_glide,
-                         uah_terrain, altitude_unit);
-      return;
-    }
-
-    StringFormatUnsafe(buffer + length, "%d%s", uah_glide, altitude_unit);
+    FormatWaypointMapLabel(buffer, buffer_size, settings, task_behaviour, basic,
+                           altitude_unit, way_point, reachable, reach);
   }
 
   void DrawWaypoint(const VisibleWaypoint &vwp) noexcept {
@@ -329,36 +410,11 @@ protected:
       break;
     }
 
-    TextInBoxMode text_mode;
-    bool bold = false;
-    if (vwp.IsReachable() && way_point.IsLandable()) {
-      text_mode.shape = settings.landable_render_mode;
-      bold = true;
-      text_mode.move_in_view = true;
-    } else if (vwp.in_task) {
-      text_mode.shape = LabelShape::OUTLINED_INVERTED;
-      bold = true;
-    } else if (watchedWaypoint) {
-      text_mode.shape = LabelShape::OUTLINED;
-      text_mode.move_in_view = true;
-    }
-
-    char buffer[NAME_SIZE+1];
+    char buffer[NAME_SIZE + 1];
     FormatLabel(buffer, ARRAY_SIZE(buffer),
                 way_point, vwp.reachable, vwp.reach);
 
-    auto sc = vwp.point;
-    sc.x += 5;
-    if ((vwp.IsReachable() &&
-         settings.landable_style == WaypointRendererSettings::LandableStyle::PURPLE_CIRCLE) ||
-        settings.vector_landable_rendering)
-      // make space for the green circle
-      sc.x += 5;
-
-    labels.Add(buffer, sc, text_mode, bold,
-               vwp.reachable != WaypointReachability::INVALID ? vwp.reach.direct : INT_MIN,
-               vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
-               watchedWaypoint);
+    AppendWaypointMapLabelFromVisible(labels, vwp, settings, buffer);
   }
 
   void AddWaypoint(const WaypointPtr &way_point, bool in_task) noexcept {
@@ -445,11 +501,11 @@ public:
   }
 };
 
-static void
-MapWaypointLabelRender(Canvas &canvas, PixelSize clip_size,
-                       LabelBlock &label_block,
-                       WaypointLabelList &labels,
-                       const WaypointLook &look) noexcept
+void
+RenderWaypointLabelList(Canvas &canvas, PixelSize clip_size,
+                        LabelBlock &label_block,
+                        WaypointLabelList &labels,
+                        const WaypointLook &look) noexcept
 {
   labels.Sort();
 
@@ -458,6 +514,110 @@ MapWaypointLabelRender(Canvas &canvas, PixelSize clip_size,
 
     TextInBox(canvas, l.Name, l.Pos, l.Mode, clip_size, &label_block);
   }
+}
+
+void
+RenderOrderedTaskWaypointLabels(Canvas &canvas,
+                                LabelBlock &label_block,
+                                const MapWindowProjection &projection,
+                                const WaypointRendererSettings &settings,
+                                const WaypointLook &look,
+                                const OrderedTask &task) noexcept
+{
+  if (look.font == nullptr || look.bold_font == nullptr)
+    return;
+
+  WaypointLabelList labels(projection.GetScreenRect());
+
+  TextInBoxMode text_mode{};
+  text_mode.shape = LabelShape::OUTLINED_INVERTED;
+
+  for (unsigned i = 0; i < task.TaskSize(); ++i) {
+    const OrderedTaskPoint &tp = task.GetTaskPoint(i);
+    const WaypointPtr wp = tp.GetWaypointPtr();
+    if (!wp)
+      continue;
+
+    const auto sc_opt =
+      projection.GeoToScreenIfVisible(tp.GetLocationRemaining());
+    if (!sc_opt)
+      continue;
+
+    PixelPoint sc = *sc_opt;
+    sc.x += 5;
+
+    char buffer[NAME_SIZE + 1];
+    FormatWaypointMapTitle(buffer, ARRAY_SIZE(buffer), settings, *wp);
+    if (buffer[0] == '\0')
+      continue;
+
+    labels.Add(buffer, sc, text_mode, true, INT_MIN,
+               true, wp->IsLandable(), wp->IsAirport(),
+               wp->flags.watched);
+  }
+
+  RenderWaypointLabelList(canvas, projection.GetScreenSize(),
+                          label_block, labels, look);
+}
+
+void
+RenderWaypointForMapPreview(Canvas &canvas, LabelBlock &label_block,
+                            const MapWindowProjection &projection,
+                            const WaypointRendererSettings &settings,
+                            const WaypointLook &look,
+                            const TaskBehaviour &task_behaviour,
+                            const PolarSettings &polar_settings,
+                            const MoreData &basic,
+                            const DerivedInfo &calculated,
+                            WaypointPtr waypoint,
+                            bool in_task) noexcept
+{
+  if (!waypoint || look.font == nullptr || look.bold_font == nullptr)
+    return;
+
+  const auto sc_opt =
+    projection.GeoToScreenIfVisible(waypoint->location);
+  if (!sc_opt)
+    return;
+
+  VisibleWaypoint vwp;
+  PixelPoint pt = *sc_opt;
+  vwp.Set(waypoint, pt, in_task);
+
+  if (basic.location_available && basic.NavAltitudeAvailable() &&
+      (waypoint->IsLandable() || waypoint->flags.watched)) {
+    const GlidePolar &glide_polar =
+      task_behaviour.route_planner.reach_polar_mode ==
+          RoutePlannerConfig::Polar::TASK
+        ? polar_settings.glide_polar_task
+        : calculated.glide_polar_safety;
+    const MacCready mac_cready(task_behaviour.glide, glide_polar);
+    vwp.CalculateReachabilityDirect(basic, calculated.GetWindOrZero(),
+                                    mac_cready, task_behaviour);
+  }
+
+  WaypointIconRenderer icon_renderer(settings, look, canvas,
+                                     projection.GetMapScale() > 4000,
+                                     projection.GetScreenAngle());
+  vwp.DrawSymbol(icon_renderer);
+
+  char altitude_unit[4];
+  strcpy(altitude_unit, Units::GetAltitudeName());
+
+  const Waypoint &way_point = *waypoint;
+
+  char buffer[NAME_SIZE + 1];
+  FormatWaypointMapLabel(buffer, ARRAY_SIZE(buffer), settings, task_behaviour,
+                         basic, altitude_unit, way_point, vwp.reachable,
+                         vwp.reach);
+  if (buffer[0] == '\0')
+    return;
+
+  WaypointLabelList labels(projection.GetScreenRect());
+  AppendWaypointMapLabelFromVisible(labels, vwp, settings, buffer);
+
+  RenderWaypointLabelList(canvas, projection.GetScreenSize(), label_block,
+                          labels, look);
 }
 
 void
@@ -498,6 +658,6 @@ WaypointRenderer::Render(Canvas &canvas, LabelBlock &label_block,
 
   v.Draw();
 
-  MapWaypointLabelRender(canvas, projection.GetScreenSize(),
-                         label_block, v.labels, look);
+  RenderWaypointLabelList(canvas, projection.GetScreenSize(),
+                          label_block, v.labels, look);
 }

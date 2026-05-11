@@ -3,17 +3,9 @@
 
 #pragma once
 
-#include "Projection/MapWindowProjection.hpp"
-#include "Renderer/AirspaceRenderer.hpp"
-#include "ui/window/BufferWindow.hpp"
-#include "Renderer/LabelBlock.hpp"
-#include "Renderer/BackgroundRenderer.hpp"
+#include "MapPreviewBufferWindow.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
-
-#ifndef ENABLE_OPENGL
-#include "ui/canvas/BufferCanvas.hpp"
-#endif
 
 struct WaypointLook;
 struct TaskLook;
@@ -28,26 +20,10 @@ class Airspaces;
 class ProtectedTaskManager;
 class GlideComputer;
 
-class TargetMapWindow : public BufferWindow {
+class TargetMapWindow : public MapPreviewBufferWindow {
   const TaskLook &task_look;
   const AircraftLook &aircraft_look;
-  const TopographyLook &topography_look;
   const OverlayLook &overlay_look;
-
-#ifndef ENABLE_OPENGL
-  // graphics vars
-
-  BufferCanvas buffer_canvas;
-#endif
-
-  MapWindowProjection projection;
-
-  LabelBlock label_block;
-
-  BackgroundRenderer background;
-  TopographyRenderer *topography_renderer = nullptr;
-
-  AirspaceRenderer airspace_renderer;
 
   WaypointRenderer way_point_renderer;
 
@@ -98,10 +74,10 @@ public:
   void Create(ContainerWindow &parent, PixelRect rc, WindowStyle style) noexcept;
 
   void SetTerrain(RasterTerrain *terrain) noexcept;
-  void SetTopograpgy(TopographyStore *topography) noexcept;
+  void SetTopography(TopographyStore *topography) noexcept;
 
   void SetAirspaces(Airspaces *airspace_database) noexcept {
-    airspace_renderer.SetAirspaces(airspace_database);
+    layers.GetAirspaceRenderer().SetAirspaces(airspace_database);
   }
 
   void SetWaypoints(const Waypoints *way_points) noexcept {
@@ -120,28 +96,10 @@ public:
 
 private:
   /**
-   * Renders the terrain background
-   * @param canvas The drawing canvas
-   */
-  void RenderTerrain(Canvas &canvas) noexcept;
-
-  /**
-   * Renders the topography
-   * @param canvas The drawing canvas
-   */
-  void RenderTopography(Canvas &canvas) noexcept;
-
-  /**
    * Renders the topography labels
    * @param canvas The drawing canvas
    */
   void RenderTopographyLabels(Canvas &canvas) noexcept;
-
-  /**
-   * Renders the airspace
-   * @param canvas The drawing canvas
-   */
-  void RenderAirspace(Canvas &canvas) noexcept;
 
   void RenderTrail(Canvas &canvas) noexcept;
 

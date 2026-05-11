@@ -24,16 +24,13 @@ class BackgroundRenderer {
   std::unique_ptr<TerrainRenderer> renderer;
   Angle shading_angle = DEFAULT_SHADING_ANGLE;
 
-#ifdef ENABLE_OPENGL
   /** force full terrain resolution regardless of user idle state */
   bool full_resolution = false;
-#endif
 
 public:
   BackgroundRenderer() noexcept;
   ~BackgroundRenderer() noexcept;
 
-#ifdef ENABLE_OPENGL
   /**
    * Force full terrain resolution.  Useful for static renderings
    * (analysis dialog, previews) where the idle-based dynamic
@@ -42,7 +39,6 @@ public:
   void SetFullResolution() noexcept {
     full_resolution = true;
   }
-#endif
 
   /**
    * Flush all caches.
@@ -57,6 +53,25 @@ public:
                        const TerrainRendererSettings &settings,
                        const DerivedInfo &calculated) noexcept;
   void SetTerrain(const RasterTerrain *terrain) noexcept;
+
+  /**
+   * Configure slope shading (and optionally force full-resolution terrain
+   * quantisation for static previews) before #Draw().
+   * @param high_resolution_preview if true, calls #SetFullResolution()
+   */
+  void PrepareTerrainDraw(const WindowProjection &projection,
+                          const TerrainRendererSettings &settings,
+                          const DerivedInfo &calculated,
+                          bool high_resolution_preview) noexcept;
+
+  /**
+   * Configure shading (#PrepareTerrainDraw) then paint terrain (#Draw).
+   */
+  void PaintTerrainLayer(Canvas &canvas,
+                         const WindowProjection &projection,
+                         const TerrainRendererSettings &settings,
+                         const DerivedInfo &calculated,
+                         bool high_resolution_preview) noexcept;
 
 private:
   void SetShadingAngle(const WindowProjection& proj, Angle angle) noexcept;

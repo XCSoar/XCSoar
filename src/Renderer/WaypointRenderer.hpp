@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "ui/dim/Size.hpp"
+
+#include "Engine/Waypoint/Ptr.hpp"
 #include "util/NonCopyable.hpp"
 
 struct WaypointRendererSettings;
@@ -17,6 +20,36 @@ struct MoreData;
 struct DerivedInfo;
 class ProtectedTaskManager;
 class ProtectedRoutePlanner;
+class WaypointLabelList;
+class OrderedTask;
+
+void RenderWaypointLabelList(Canvas &canvas, PixelSize clip_size,
+                             LabelBlock &label_block,
+                             WaypointLabelList &labels,
+                             const WaypointLook &look) noexcept;
+
+void RenderOrderedTaskWaypointLabels(Canvas &canvas,
+                                     LabelBlock &label_block,
+                                     const MapWindowProjection &projection,
+                                     const WaypointRendererSettings &settings,
+                                     const WaypointLook &look,
+                                     const OrderedTask &task) noexcept;
+
+/**
+ * Draw one waypoint using main-map icon and #TextInBox label styling
+ * (e.g. What's Here preview).
+ */
+void
+RenderWaypointForMapPreview(Canvas &canvas, LabelBlock &label_block,
+                            const MapWindowProjection &projection,
+                            const WaypointRendererSettings &settings,
+                            const WaypointLook &look,
+                            const TaskBehaviour &task_behaviour,
+                            const PolarSettings &polar_settings,
+                            const MoreData &basic,
+                            const DerivedInfo &calculated,
+                            WaypointPtr waypoint,
+                            bool in_task) noexcept;
 
 /**
  * Renders way point icons and labels into a #Canvas.

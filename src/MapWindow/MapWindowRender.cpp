@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MapWindow.hpp"
+#include "MapGroundLayers.hpp"
 #include "Overlay.hpp"
 #include "Look/MapLook.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
@@ -27,8 +28,8 @@ MapWindow::RenderTrackBearing(Canvas &canvas,
 inline void
 MapWindow::RenderTerrain(Canvas &canvas) noexcept
 {
-  background.SetShadingAngle(render_projection, GetMapSettings().terrain,
-                             Calculated());
+  background.PrepareTerrainDraw(render_projection, GetMapSettings().terrain,
+                                Calculated(), false);
   background.Draw(canvas, render_projection, GetMapSettings().terrain);
 }
 
@@ -72,15 +73,18 @@ MapWindow::RenderRasp(Canvas &canvas) noexcept
 inline void
 MapWindow::RenderTopography(Canvas &canvas) noexcept
 {
-  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
-    topography_renderer->Draw(canvas, render_projection);
+  MapGroundLayers::PaintTopographyLayer(topography_renderer,
+                                        GetMapSettings().topography_enabled,
+                                        canvas, render_projection);
 }
 
 inline void
 MapWindow::RenderTopographyLabels(Canvas &canvas) noexcept
 {
-  if (topography_renderer != nullptr && GetMapSettings().topography_enabled)
-    topography_renderer->DrawLabels(canvas, render_projection, label_block);
+  MapGroundLayers::PaintTopographyLabelsLayer(topography_renderer,
+                                              GetMapSettings().topography_enabled,
+                                              canvas, render_projection,
+                                              label_block);
 }
 
 inline void
@@ -103,22 +107,17 @@ MapWindow::RenderFinalGlideShading(Canvas &canvas) noexcept
 inline void
 MapWindow::RenderAirspace(Canvas &canvas) noexcept
 {
-  if (GetMapSettings().airspace.enable) {
-    airspace_renderer.Draw(canvas,
+  if (GetMapSettings().airspace.enable)
+    MapGroundLayers::PaintAirspaceMapLayers(airspace_renderer,
+                                            &airspace_label_renderer,
+                                            canvas,
 #ifndef ENABLE_OPENGL
-                           buffer_canvas,
+                                            buffer_canvas,
 #endif
-                           render_projection,
-                           Basic(), Calculated(),
-                           GetComputerSettings().airspace,
-                           GetMapSettings().airspace);
-
-    airspace_label_renderer.Draw(canvas,
-                                 render_projection,
-                                 Basic(), Calculated(),
-                                 GetComputerSettings().airspace,
-                                 GetMapSettings().airspace);
-  }
+                                            render_projection,
+                                            Basic(), Calculated(),
+                                            GetComputerSettings().airspace,
+                                            GetMapSettings().airspace);
 }
 
 inline void

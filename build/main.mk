@@ -180,6 +180,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/DefaultTask.cpp \
 	$(SRC)/Task/MapTaskManager.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
+	$(SRC)/Task/WaypointInActiveTask.cpp \
 	$(SRC)/Task/FileProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
@@ -338,6 +339,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/TaskPointRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
+	$(SRC)/Renderer/ActiveTaskGeometryRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRendererGL.cpp \
