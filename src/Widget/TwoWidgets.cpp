@@ -3,8 +3,28 @@
 
 #include "TwoWidgets.hpp"
 
+#include "Screen/Layout.hpp"
+#include "util/Compiler.h"
+
 #include <algorithm>
 #include <cassert>
+
+bool
+TwoWidgets::EffectiveVertical() const noexcept
+{
+  switch (split) {
+  case TwoWidgetsSplit::VERTICAL:
+    return true;
+
+  case TwoWidgetsSplit::HORIZONTAL:
+    return false;
+
+  case TwoWidgetsSplit::SCREEN_ORIENTATION:
+    return !Layout::landscape;
+  }
+
+  gcc_unreachable();
+}
 
 void
 TwoWidgets::UpdateLayout() noexcept
@@ -50,7 +70,7 @@ TwoWidgets::CalculateSplit(const PixelRect &rc) const noexcept
   const PixelSize min_b = second->GetMinimumSize();
   const PixelSize max_b = second->GetMaximumSize();
 
-  return vertical
+  return EffectiveVertical()
     ? ::CalculateSplit(rc.top, rc.bottom, min_a.height,
                        min_b.height, max_b.height)
     : ::CalculateSplit(rc.left, rc.right, min_a.width,
@@ -61,7 +81,7 @@ std::pair<PixelRect,PixelRect>
 TwoWidgets::CalculateLayout(const PixelRect &rc) const noexcept
 {
   PixelRect a = rc, b = rc;
-  if (vertical)
+  if (EffectiveVertical())
     a.bottom = b.top = CalculateSplit(rc);
   else
     a.right = b.left = CalculateSplit(rc);
@@ -74,7 +94,7 @@ TwoWidgets::GetMinimumSize() const noexcept
   const PixelSize a = first->GetMinimumSize();
   const PixelSize b = second->GetMinimumSize();
 
-  return vertical
+  return EffectiveVertical()
     ? PixelSize{ std::max(a.width, b.width), a.height + b.height }
     : PixelSize{ a.width + b.width, std::max(a.height, b.height) };
 }
@@ -85,7 +105,7 @@ TwoWidgets::GetMaximumSize() const noexcept
   const PixelSize a = first->GetMaximumSize();
   const PixelSize b = second->GetMaximumSize();
 
-  return vertical
+  return EffectiveVertical()
     ? PixelSize{ std::max(a.width, b.width), a.height + b.height }
     : PixelSize{ a.width + b.width, std::max(a.height, b.height) };
 }
@@ -95,7 +115,7 @@ TwoWidgets::GetMaximumSize() const noexcept
  * TwoWidgets::Initialise() and TwoWidgets::Prepare(), we are not
  * allowed to call Widget::GetMinimumSize() yet.
  */
-static constexpr std::pair<PixelRect,PixelRect>
+static std::pair<PixelRect, PixelRect>
 DummyLayout(const PixelRect rc, bool vertical) noexcept
 {
   if (vertical)
@@ -108,7 +128,7 @@ void
 TwoWidgets::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   this->rc = rc;
-  const auto layout = DummyLayout(rc, vertical);
+  const auto layout = DummyLayout(rc, EffectiveVertical());
   first->Initialise(parent, layout.first);
   second->Initialise(parent, layout.second);
 }
@@ -117,7 +137,7 @@ void
 TwoWidgets::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   this->rc = rc;
-  const auto layout = DummyLayout(rc, vertical);
+  const auto layout = DummyLayout(rc, EffectiveVertical());
   first->Prepare(parent, layout.first);
   second->Prepare(parent, layout.second);
 }

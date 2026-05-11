@@ -16,6 +16,7 @@
 #include "lib/fmt/RuntimeError.hxx"
 #include "lib/fmt/ToBuffer.hxx"
 #include "io/StringOutputStream.hxx"
+#include "util/StringCompare.hxx"
 
 #include <boost/json.hpp>
 
@@ -24,6 +25,23 @@
 using std::string_view_literals::operator""sv;
 
 namespace WeGlide {
+
+/**
+ * Strip MIME parameters (e.g. "; charset=utf-8") for comparisons.
+ */
+[[gnu::pure]]
+static std::string_view
+MediaType(std::string_view content_type) noexcept
+{
+  const auto semi = content_type.find(';');
+  if (semi != std::string_view::npos)
+    content_type = content_type.substr(0, semi);
+  while (!content_type.empty() && content_type.front() == ' ')
+    content_type.remove_prefix(1);
+  while (!content_type.empty() && content_type.back() == ' ')
+    content_type.remove_suffix(1);
+  return content_type;
+}
 
 static Co::Task<std::unique_ptr<OrderedTask>>
 DownloadTask(CurlGlobal &curl, CurlEasy easy,
@@ -39,7 +57,8 @@ DownloadTask(CurlGlobal &curl, CurlEasy easy,
     co_await Curl::CoStreamRequest(curl, std::move(easy), sos);
 
   if (const auto i = response.headers.find("content-type"sv);
-      i != response.headers.end() && i->second == "application/json"sv) {
+      i != response.headers.end() &&
+      StringIsEqualIgnoreCase(MediaType(i->second), "application/json"sv)) {
     /* on error, WeGlide returns a JSON document, and if a user does
        not have a declared task (or if the user does not exist), it
        returns a JSON "null" value */
@@ -64,6 +83,9 @@ DownloadTask(CurlGlobal &curl, CurlEasy easy,
 
   auto task = std::make_unique<OrderedTask>(task_behaviour);
   LoadTask(*task, data_node, waypoints);
+  /* Same as #TaskStore::Item::GetTask: XML load leaves projections and
+     bounds stale until geometry is rebuilt (map preview framing + draw). */
+  task->UpdateGeometry();
   co_return task;
 }
 

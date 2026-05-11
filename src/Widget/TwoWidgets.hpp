@@ -9,6 +9,16 @@
 #include <memory>
 #include <utility>
 
+enum class TwoWidgetsSplit : uint8_t {
+  VERTICAL,
+  HORIZONTAL,
+  /**
+   * Stack vertically in portrait; place second widget to the right in
+   * landscape (#Layout::landscape). Recomputed on each layout pass.
+   */
+  SCREEN_ORIENTATION,
+};
+
 /**
  * A #Widget that contains two other widgets, the second one following
  * below the first one.  The two #Widget pointers are deleted in the
@@ -18,17 +28,27 @@
  * will be right of the first one.
  */
 class TwoWidgets : public NullWidget {
-  const bool vertical;
+  const TwoWidgetsSplit split;
 
   const std::unique_ptr<Widget> first, second;
 
   PixelRect rc;
 
+  [[gnu::pure]]
+  bool EffectiveVertical() const noexcept;
+
 public:
-  TwoWidgets(std::unique_ptr<Widget> &&_first, std::unique_ptr<Widget> &&_second, bool _vertical=true) noexcept
-    :vertical(_vertical),
+  TwoWidgets(std::unique_ptr<Widget> &&_first, std::unique_ptr<Widget> &&_second,
+             TwoWidgetsSplit _split) noexcept
+    :split(_split),
      first(std::move(_first)),
      second(std::move(_second)) {}
+
+  TwoWidgets(std::unique_ptr<Widget> &&_first, std::unique_ptr<Widget> &&_second,
+             bool _vertical = true) noexcept
+    :TwoWidgets(std::move(_first), std::move(_second),
+               _vertical ? TwoWidgetsSplit::VERTICAL
+                         : TwoWidgetsSplit::HORIZONTAL) {}
 
   /**
    * Update the layout after one of the widgets has indicated a size

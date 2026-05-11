@@ -10,7 +10,8 @@ TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
                              std::unique_ptr<OrderedTask> &_active_task,
                              bool *_task_modified) noexcept
 {
-  Add(std::make_unique<TaskActionsPanel>(dialog, *this, _active_task, _task_modified));
+  Add(std::make_unique<TaskActionsPanel>(dialog, *this, _active_task,
+                                         _task_modified));
 
   Add(CreateTaskListPanel(dialog, _active_task, _task_modified));
   Add(CreateWeGlideTasksPanel(dialog, WeGlideTaskSelection::USER,

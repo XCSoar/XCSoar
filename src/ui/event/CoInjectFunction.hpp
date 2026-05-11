@@ -47,8 +47,14 @@ public:
   }
 
   void Cancel() noexcept {
+    /* #InjectTask::Cancel() is a no-op once the coroutine has finished
+       (#alive already false), but we must not drop a pending
+       #SendNotification() from that completion — otherwise UI callbacks
+       (e.g. WeGlide preview map updates) never run. */
+    const bool had_running = inject_task.operator bool();
     inject_task.Cancel();
-    notify.ClearNotification();
+    if (had_running)
+      notify.ClearNotification();
   }
 
 private:
