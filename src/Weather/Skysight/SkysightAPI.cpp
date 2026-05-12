@@ -6,13 +6,17 @@
 #include "SkySightFileDecoder.hpp"
 #include "SkySightRequest.hpp"
 #include "Skysight.hpp"
+#include "io/FileLineReader.hpp"
+#include "io/FileOutputStream.hxx"
+#include "json/Serialize.hxx"
 #include "time/Convert.hxx"
 #include "util/StaticString.hxx"
+#include "util/UTF8.hpp"
 #include "LogFile.hpp"
 #include "system/FileUtil.hpp"
 
-#include <chrono>
 #include <algorithm>
+#include <chrono>
 #include <cstdlib>
 #include <ctime>
 
@@ -20,8 +24,10 @@ namespace {
 
 static constexpr time_t REGIONS_RETRY_SECONDS = 30;
 static constexpr time_t LAYERS_RETRY_SECONDS = 30;
+static constexpr time_t CATALOG_CACHE_MAX_AGE = 12 * 60 * 60;
 static constexpr time_t INITIAL_LAST_UPDATE_POLL_SECONDS = 30;
 static constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
+static constexpr const char *REGIONS_CACHE_FILE = "regions-v1.cache";
 
 static time_t
 GetInitialDatafilesTime() noexcept
@@ -144,6 +150,48 @@ NeedsNetCdfDecodeSuffix(std::string_view suffix) noexcept
   return suffix == ".nc" || suffix == ".nc.min" || suffix == ".min";
 }
 
+[[nodiscard]] static bool
+MetadataCacheFresh(time_t last_refresh, time_t now) noexcept
+{
+  return last_refresh != 0 && now < last_refresh + CATALOG_CACHE_MAX_AGE;
+}
+
+static time_t
+GetMetadataCacheTime(Path path) noexcept
+{
+  const auto modification = File::GetLastModification(path);
+  return modification == std::chrono::system_clock::time_point{}
+    ? 0
+    : std::chrono::system_clock::to_time_t(modification);
+}
+
+static bool
+LoadMetadataCache(Path path, boost::json::value &value) noexcept
+{
+  std::string json;
+
+  try {
+    FileLineReaderA reader(path);
+    const char *line;
+    while ((line = reader.ReadLine()) != nullptr) {
+      json += line;
+      json += '\n';
+    }
+  } catch (...) {
+    return false;
+  }
+
+  if (json.empty())
+    return false;
+
+  try {
+    value = boost::json::parse(json);
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
 } // namespace
 
 SkysightAPI::SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path)
@@ -161,6 +209,201 @@ void
 SkysightAPI::UpdateBusyState(SkySight::Layer &layer) noexcept
 {
   layer.updating = layer.datafiles_pending || layer.pending_downloads > 0;
+}
+
+AllocatedPath
+SkysightAPI::GetRegionsCachePath() const noexcept
+{
+  return AllocatedPath::Build(cache_path, REGIONS_CACHE_FILE);
+}
+
+AllocatedPath
+SkysightAPI::GetLayersCachePath() const noexcept
+{
+  StaticString<128> filename;
+  filename.Format("layers-%s-v1.cache", region.c_str());
+  return AllocatedPath::Build(cache_path, filename.c_str());
+}
+
+void
+SkysightAPI::LoadCachedRegions() noexcept
+{
+  boost::json::value value;
+  const auto path = GetRegionsCachePath();
+  if (!LoadMetadataCache(path, value) ||
+      !ParseRegions(value, "SkySight cached regions parsing failed"))
+    return;
+
+  last_regions_refresh = GetMetadataCacheTime(path);
+}
+
+void
+SkysightAPI::LoadCachedLayers() noexcept
+{
+  boost::json::value value;
+  const auto path = GetLayersCachePath();
+  if (!LoadMetadataCache(path, value) ||
+      !ParseLayers(value, "SkySight cached layers parsing failed"))
+    return;
+
+  last_layers_refresh = GetMetadataCacheTime(path);
+}
+
+void
+SkysightAPI::StoreMetadataCache(Path path,
+                                const boost::json::value &value) const noexcept
+{
+  try {
+    Directory::Create(cache_path);
+    FileOutputStream file(path);
+    Json::Serialize(file, value);
+    file.Commit();
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight metadata cache write failed");
+  }
+}
+
+bool
+SkysightAPI::ParseRegions(const boost::json::value &value,
+                          const char *error_context) noexcept
+{
+  try {
+    std::vector<SkysightRegionEntry> new_regions;
+
+    for (const auto &entry_value : value.as_array()) {
+      const auto &entry = entry_value.as_object();
+
+      const auto id = entry.at("id").as_string().c_str();
+      std::string name{id};
+      if (const auto *name_value = entry.if_contains("name");
+          name_value != nullptr && name_value->is_string())
+        name = name_value->as_string().c_str();
+
+      std::string projection;
+      if (const auto *projection_value = entry.if_contains("projection");
+          projection_value != nullptr && projection_value->is_string())
+        projection = projection_value->as_string().c_str();
+
+      new_regions.push_back({id, std::move(name), std::move(projection)});
+    }
+
+    if (!new_regions.empty()) {
+      regions = std::move(new_regions);
+      regions_loaded = true;
+
+      bool found = false;
+      for (const auto &candidate : regions)
+        if (candidate.id == region) {
+          found = true;
+          break;
+        }
+
+      if (!found)
+        region = FindSkysightRegionById({}).id;
+    }
+
+    return true;
+  } catch (...) {
+    LogError(std::current_exception(), error_context);
+    return false;
+  }
+}
+
+bool
+SkysightAPI::ParseLayers(const boost::json::value &value,
+                         const char *error_context) noexcept
+{
+  try {
+    std::vector<SkySight::Layer> new_layers;
+    InitialiseLayers(new_layers);
+
+    auto *const old_layers = &layers;
+    const auto find_old_layer = [old_layers](std::string_view id) noexcept
+      -> const SkySight::Layer * {
+      for (const auto &layer : *old_layers)
+        if (layer == id)
+          return &layer;
+
+      return nullptr;
+    };
+
+    const auto copy_runtime_state = [&find_old_layer](SkySight::Layer &layer) {
+      const auto *existing = find_old_layer(layer.id);
+      if (existing == nullptr)
+        return;
+
+      layer.time_name = existing->time_name;
+      layer.forecast_datafiles = existing->forecast_datafiles;
+      layer.from = existing->from;
+      layer.to = existing->to;
+      layer.mtime = existing->mtime;
+      layer.updating = existing->updating;
+      layer.datafiles_pending = existing->datafiles_pending;
+      layer.preload_requested = existing->preload_requested;
+      layer.pending_downloads = existing->pending_downloads;
+      layer.last_update = existing->last_update;
+      layer.forecast_time = existing->forecast_time;
+    };
+
+    for (auto &layer : new_layers)
+      copy_runtime_state(layer);
+
+    if (value.is_array())
+      new_layers.reserve(new_layers.size() + value.as_array().size());
+
+    const auto find_new_layer = [&new_layers](std::string_view id) noexcept
+      -> SkySight::Layer * {
+      for (auto &layer : new_layers)
+        if (layer == id)
+          return &layer;
+
+      return nullptr;
+    };
+
+    for (const auto &entry_value : value.as_array()) {
+      const auto &entry = entry_value.as_object();
+      const auto id = entry.at("id").as_string().c_str();
+      auto *layer = find_new_layer(id);
+      if (layer == nullptr) {
+        new_layers.emplace_back(id, id, std::string{}, true, false, false);
+        layer = &new_layers.back();
+        copy_runtime_state(*layer);
+      }
+
+      if (const auto *name = entry.if_contains("name");
+          name != nullptr && name->is_string()) {
+        const std::string_view text{name->as_string().c_str(),
+                                    name->as_string().size()};
+        layer->name = ValidateUTF8(text) ? std::string{text} : layer->id;
+      }
+
+      if (const auto *description = entry.if_contains("description");
+          description != nullptr && description->is_string()) {
+        const std::string_view text{description->as_string().c_str(),
+                                    description->as_string().size()};
+        layer->description = ValidateUTF8(text)
+          ? std::string{text}
+          : std::string{};
+      }
+
+      if (const auto *projection = entry.if_contains("projection");
+          projection != nullptr && projection->is_string())
+        layer->projection = projection->as_string().c_str();
+
+      if (const auto *data_type = entry.if_contains("data_type");
+          data_type != nullptr && data_type->is_string())
+        layer->data_type = data_type->as_string().c_str();
+
+      ParseLegend(entry, *layer);
+    }
+
+    layers = std::move(new_layers);
+    layers_loaded = true;
+    return true;
+  } catch (...) {
+    LogError(std::current_exception(), error_context);
+    return false;
+  }
 }
 
 void
@@ -195,6 +438,8 @@ SkysightAPI::Configure(std::string_view email, std::string_view password,
   selected_layers.clear();
 
   request->Configure(email, password);
+  LoadCachedRegions();
+  LoadCachedLayers();
 }
 
 bool
@@ -506,10 +751,13 @@ SkysightAPI::PreloadAllDatafiles() noexcept
 void
 SkysightAPI::PollRegions() noexcept
 {
-  if (!HasCredentials() || regions_loaded)
+  if (!HasCredentials())
     return;
 
   const auto now = std::time(nullptr);
+  if (regions_loaded && MetadataCacheFresh(last_regions_refresh, now))
+    return;
+
   if (last_regions_request != 0 && now < last_regions_request + REGIONS_RETRY_SECONDS)
     return;
 
@@ -520,10 +768,13 @@ SkysightAPI::PollRegions() noexcept
 void
 SkysightAPI::PollLayers() noexcept
 {
-  if (!HasCredentials() || region.empty() || layers_loaded)
+  if (!HasCredentials() || region.empty())
     return;
 
   const auto now = std::time(nullptr);
+  if (layers_loaded && MetadataCacheFresh(last_layers_refresh, now))
+    return;
+
   if (last_layers_request != 0 && now < last_layers_request + LAYERS_RETRY_SECONDS)
     return;
 
@@ -572,6 +823,7 @@ SkysightAPI::ResetRegions() noexcept
   regions = GetDefaultSkysightRegions();
   regions_loaded = false;
   last_regions_request = 0;
+  last_regions_refresh = 0;
 }
 
 void
@@ -593,44 +845,11 @@ SkysightAPI::OnAuthenticated() noexcept
 void
 SkysightAPI::OnRegions(boost::json::value value) noexcept
 {
-  try {
-    std::vector<SkysightRegionEntry> new_regions;
-
-    for (const auto &entry_value : value.as_array()) {
-      const auto &entry = entry_value.as_object();
-
-      const auto id = entry.at("id").as_string().c_str();
-      std::string name{id};
-      if (const auto *name_value = entry.if_contains("name");
-          name_value != nullptr && name_value->is_string())
-        name = name_value->as_string().c_str();
-
-      std::string projection;
-      if (const auto *projection_value = entry.if_contains("projection");
-          projection_value != nullptr && projection_value->is_string())
-        projection = projection_value->as_string().c_str();
-
-      new_regions.push_back({id, std::move(name), std::move(projection)});
-    }
-
-    if (!new_regions.empty()) {
-      regions = std::move(new_regions);
-      regions_loaded = true;
-
-      bool found = false;
-      for (const auto &candidate : regions)
-        if (candidate.id == region) {
-          found = true;
-          break;
-        }
-
-      if (!found)
-        region = FindSkysightRegionById({}).id;
-    }
-  } catch (...) {
-    LogError(std::current_exception(), "SkySight regions parsing failed");
+  if (!ParseRegions(value, "SkySight regions parsing failed"))
     return;
-  }
+
+  last_regions_refresh = std::time(nullptr);
+  StoreMetadataCache(GetRegionsCachePath(), value);
 
   owner.OnDataUpdated();
 }
@@ -642,91 +861,18 @@ SkysightAPI::OnLayers(boost::json::value value) noexcept
     const auto active_layer_id = std::string{owner.GetActiveLayerId()};
     const auto displayed_layer_id = std::string{owner.GetDisplayedLayerId()};
 
-    std::vector<SkySight::Layer> new_layers;
-    InitialiseLayers(new_layers);
+    if (!ParseLayers(value, "SkySight layers parsing failed"))
+      return;
 
-    auto *const old_layers = &layers;
-    const auto find_old_layer = [old_layers](std::string_view id) noexcept
-      -> const SkySight::Layer * {
-      for (const auto &layer : *old_layers)
-        if (layer == id)
-          return &layer;
-
-      return nullptr;
-    };
-
-    const auto copy_runtime_state = [&find_old_layer](SkySight::Layer &layer) noexcept {
-      const auto *existing = find_old_layer(layer.id);
-      if (existing == nullptr)
-        return;
-
-      layer.time_name = existing->time_name;
-      layer.forecast_datafiles = existing->forecast_datafiles;
-      layer.from = existing->from;
-      layer.to = existing->to;
-      layer.mtime = existing->mtime;
-      layer.updating = existing->updating;
-      layer.datafiles_pending = existing->datafiles_pending;
-      layer.preload_requested = existing->preload_requested;
-      layer.pending_downloads = existing->pending_downloads;
-      layer.last_update = existing->last_update;
-      layer.forecast_time = existing->forecast_time;
-    };
-
-    for (auto &layer : new_layers)
-      copy_runtime_state(layer);
-
-    if (value.is_array())
-      new_layers.reserve(new_layers.size() + value.as_array().size());
-
-    const auto find_new_layer = [&new_layers](std::string_view id) noexcept
-      -> SkySight::Layer * {
-      for (auto &layer : new_layers)
-        if (layer == id)
-          return &layer;
-
-      return nullptr;
-    };
-
-    for (const auto &entry_value : value.as_array()) {
-      const auto &entry = entry_value.as_object();
-      const auto id = entry.at("id").as_string().c_str();
-      auto *layer = find_new_layer(id);
-      if (layer == nullptr) {
-        new_layers.emplace_back(id, id, std::string{}, true, false, false);
-        layer = &new_layers.back();
-        copy_runtime_state(*layer);
-      }
-
-      if (const auto *name = entry.if_contains("name");
-          name != nullptr && name->is_string())
-        layer->name = name->as_string().c_str();
-
-      if (const auto *description = entry.if_contains("description");
-          description != nullptr && description->is_string())
-        layer->description = description->as_string().c_str();
-
-      if (const auto *projection = entry.if_contains("projection");
-          projection != nullptr && projection->is_string())
-        layer->projection = projection->as_string().c_str();
-
-      if (const auto *data_type = entry.if_contains("data_type");
-          data_type != nullptr && data_type->is_string())
-        layer->data_type = data_type->as_string().c_str();
-
-      ParseLegend(entry, *layer);
-    }
-
-    layers = std::move(new_layers);
-    layers_loaded = true;
+    last_layers_refresh = std::time(nullptr);
+    StoreMetadataCache(GetLayersCachePath(), value);
     owner.OnLayerCatalogChanged(active_layer_id, displayed_layer_id);
     owner.ReloadSelectedLayersFromProfile();
-  } catch (...) {
-    LogError(std::current_exception(), "SkySight layers parsing failed");
-    return;
-  }
 
-  owner.OnDataUpdated();
+    owner.OnDataUpdated();
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight layer catalog update failed");
+  }
 }
 
 void

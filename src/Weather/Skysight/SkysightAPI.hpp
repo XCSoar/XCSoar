@@ -110,12 +110,24 @@ private:
 
   bool regions_loaded = false;
   time_t last_regions_request = 0;
+  time_t last_regions_refresh = 0;
   bool layers_loaded = false;
   time_t last_layers_request = 0;
+  time_t last_layers_refresh = 0;
   time_t last_updates_request = 0;
 
   void SyncSelectedLayer(std::string_view id) noexcept;
   static void UpdateBusyState(SkySight::Layer &layer) noexcept;
+  [[gnu::pure]] AllocatedPath GetRegionsCachePath() const noexcept;
+  [[gnu::pure]] AllocatedPath GetLayersCachePath() const noexcept;
+  void LoadCachedRegions() noexcept;
+  void LoadCachedLayers() noexcept;
+  bool ParseRegions(const boost::json::value &value,
+                    const char *error_context) noexcept;
+  bool ParseLayers(const boost::json::value &value,
+                   const char *error_context) noexcept;
+  void StoreMetadataCache(Path path,
+                          const boost::json::value &value) const noexcept;
   bool QueueForecastDatafile(SkySight::Layer &layer, time_t forecast_time,
                              std::string_view link) noexcept;
   void QueueDecodeJob(Path path, const SkySight::Layer &layer,
