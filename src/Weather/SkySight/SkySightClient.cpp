@@ -38,6 +38,7 @@ void
 SkySightClient::Init()
 {
   CleanupFiles();
+  forecast_cleanup_pending = !SkySightCache::IsTrustedTimeAvailableForCleanup();
 
   ResetTiles();
   active_layer = nullptr;
@@ -52,6 +53,17 @@ SkySightClient::Init()
   const char *configured_layer = Profile::Get(ProfileKeys::WeatherLayerDisplayed);
   if (configured_layer != nullptr && !std::string_view{configured_layer}.empty())
     (void)SetLayerActive(configured_layer);
+}
+
+void
+SkySightClient::MaybeCleanupFiles() noexcept
+{
+  if (!forecast_cleanup_pending ||
+      !SkySightCache::IsTrustedTimeAvailableForCleanup())
+    return;
+
+  CleanupFiles();
+  forecast_cleanup_pending = false;
 }
 
 void
@@ -233,6 +245,7 @@ SkySightClient::IsForecastDecodeAvailable() const noexcept
 void
 SkySightClient::RefreshCatalog() noexcept
 {
+  MaybeCleanupFiles();
   api->PollRegions();
   api->PollLayers();
 }
@@ -240,6 +253,7 @@ SkySightClient::RefreshCatalog() noexcept
 void
 SkySightClient::PollPendingDatafiles() noexcept
 {
+  MaybeCleanupFiles();
   api->PollSelectedDatafiles();
 }
 
@@ -412,6 +426,7 @@ SkySightClient::DeactivateLayer()
 void
 SkySightClient::OnDataUpdated() noexcept
 {
+  MaybeCleanupFiles();
   forecast_image_dirty = true;
 
   if (auto *map = UIGlobals::GetMapIfActive())
@@ -571,12 +586,26 @@ SkySightClient::DisplayTileLayer()
   const time_t refresh_time = probe_next_slot
     ? current_slot
     : active_layer->last_update;
+  const int tiles_per_axis = 1 << base_tile.zoom;
+  const auto normalize_x = [tiles_per_axis](int value) {
+    int result = value % tiles_per_axis;
+    if (result < 0)
+      result += tiles_per_axis;
+
+    return (uint16_t)result;
+  };
   bool any_visible = false;
   bool probe_queued = false;
   unsigned slot = 0;
   for (int x = int(base_tile.x) - 1; x <= int(base_tile.x) + 1; ++x) {
     for (int y = int(base_tile.y) - 1; y <= int(base_tile.y) + 1; ++y, ++slot) {
-      GeoBitmap::TileData tile{base_tile.zoom, (uint16_t)x, (uint16_t)y};
+      if (y < 0 || y >= tiles_per_axis) {
+        map_window->SetOverlay(slot, nullptr);
+        tile_filenames[slot].clear();
+        continue;
+      }
+
+      GeoBitmap::TileData tile{base_tile.zoom, normalize_x(x), (uint16_t)y};
 
       if (!GeoBitmap::GetBounds(tile).Overlaps(map_bounds)) {
         map_window->SetOverlay(slot, nullptr);
