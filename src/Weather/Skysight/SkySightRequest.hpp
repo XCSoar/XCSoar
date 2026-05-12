@@ -156,10 +156,11 @@ private:
   void LogForecastPreparationError(std::string_view layer_id,
                                    time_t forecast_time,
                                    std::exception_ptr error) noexcept;
-  void LogTileHttpError(std::string_view layer_id,
-                        time_t forecast_time,
-                        unsigned status,
-                        std::string_view key) noexcept;
+  void LogDownloadHttpError(bool forecast_download,
+                            std::string_view layer_id,
+                            time_t forecast_time,
+                            unsigned status,
+                            std::string_view key) noexcept;
   AllocatedPath GetThrottleCachePath() const noexcept;
   void LoadThrottleState() noexcept;
   void StoreThrottleState() noexcept;

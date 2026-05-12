@@ -49,20 +49,219 @@ HasForecastDataSuffix(std::string_view path) noexcept
     path.ends_with(".jpg") || path.ends_with(".jpeg");
 }
 
+enum class ForecastPayloadType : uint8_t {
+  Unknown,
+  Zip,
+  Gzip,
+  NetCdf,
+  Tiff,
+  Png,
+  Jpeg,
+};
+
+struct PreparedForecastPayload {
+  AllocatedPath source_path;
+  AllocatedPath cleanup_download_path;
+  ForecastPayloadType type = ForecastPayloadType::Unknown;
+};
+
 [[nodiscard]] static bool
-IsDisplayReadySuffix(Path path) noexcept
+StartsWith(std::span<const std::byte> buffer,
+           std::initializer_list<uint8_t> prefix) noexcept
 {
-  return path.EndsWithIgnoreCase(".tif") ||
-    path.EndsWithIgnoreCase(".tiff") ||
-    path.EndsWithIgnoreCase(".png") ||
-    path.EndsWithIgnoreCase(".jpg") ||
-    path.EndsWithIgnoreCase(".jpeg");
+  if (buffer.size() < prefix.size())
+    return false;
+
+  std::size_t index = 0;
+  for (const auto value : prefix)
+    if (buffer[index++] != std::byte{value})
+      return false;
+
+  return true;
+}
+
+[[nodiscard]] static std::span<const std::byte>
+ReadMagic(Path path, std::span<std::byte> buffer) noexcept
+{
+  try {
+    FileReader file(path);
+    const auto nbytes = file.Read(buffer);
+    return {buffer.data(), nbytes};
+  } catch (...) {
+    return {};
+  }
+}
+
+[[nodiscard]] static ForecastPayloadType
+DetectForecastPayloadType(Path path) noexcept
+{
+  std::array<std::byte, 16> buffer;
+  const auto magic = ReadMagic(path, buffer);
+
+  if (StartsWith(magic, {'P', 'K', 0x03, 0x04}) ||
+      StartsWith(magic, {'P', 'K', 0x05, 0x06}) ||
+      StartsWith(magic, {'P', 'K', 0x07, 0x08}))
+    return ForecastPayloadType::Zip;
+
+  if (StartsWith(magic, {0x1f, 0x8b}))
+    return ForecastPayloadType::Gzip;
+
+  if (StartsWith(magic, {'C', 'D', 'F', 0x01}) ||
+      StartsWith(magic, {'C', 'D', 'F', 0x02}) ||
+      StartsWith(magic, {0x89, 'H', 'D', 'F', 0x0d, 0x0a, 0x1a, 0x0a}))
+    return ForecastPayloadType::NetCdf;
+
+  if (StartsWith(magic, {'I', 'I', 0x2a, 0x00}) ||
+      StartsWith(magic, {'M', 'M', 0x00, 0x2a}) ||
+      StartsWith(magic, {'I', 'I', 0x2b, 0x00}) ||
+      StartsWith(magic, {'M', 'M', 0x00, 0x2b}))
+    return ForecastPayloadType::Tiff;
+
+  if (StartsWith(magic, {0x89, 'P', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a}))
+    return ForecastPayloadType::Png;
+
+  if (StartsWith(magic, {0xff, 0xd8, 0xff}))
+    return ForecastPayloadType::Jpeg;
+
+  if (path.EndsWithIgnoreCase(".zip"))
+    return ForecastPayloadType::Zip;
+
+  if (path.EndsWithIgnoreCase(".min"))
+    return ForecastPayloadType::Gzip;
+
+  if (path.EndsWithIgnoreCase(".nc"))
+    return ForecastPayloadType::NetCdf;
+
+  if (path.EndsWithIgnoreCase(".tif") || path.EndsWithIgnoreCase(".tiff"))
+    return ForecastPayloadType::Tiff;
+
+  if (path.EndsWithIgnoreCase(".png"))
+    return ForecastPayloadType::Png;
+
+  if (path.EndsWithIgnoreCase(".jpg") || path.EndsWithIgnoreCase(".jpeg"))
+    return ForecastPayloadType::Jpeg;
+
+  return ForecastPayloadType::Unknown;
+}
+
+[[nodiscard]] static bool
+IsDisplayReadyType(ForecastPayloadType type) noexcept
+{
+  return type == ForecastPayloadType::Tiff ||
+    type == ForecastPayloadType::Png ||
+    type == ForecastPayloadType::Jpeg;
+}
+
+[[nodiscard]] static const char *
+GetPayloadSuffix(ForecastPayloadType type) noexcept
+{
+  switch (type) {
+  case ForecastPayloadType::Tiff:
+    return ".tif";
+
+  case ForecastPayloadType::Png:
+    return ".png";
+
+  case ForecastPayloadType::Jpeg:
+    return ".jpg";
+
+  case ForecastPayloadType::NetCdf:
+    return ".nc";
+
+  default:
+    return nullptr;
+  }
+}
+
+[[nodiscard]] static AllocatedPath
+ReplacePath(Path source_path, AllocatedPath target_path)
+{
+  if (target_path == source_path)
+    return CopyPath(source_path);
+
+  File::Delete(target_path);
+  if (!File::Replace(source_path, target_path))
+    throw std::runtime_error("Failed to normalise SkySight forecast payload suffix");
+
+  return target_path;
+}
+
+[[nodiscard]] static AllocatedPath
+GetNormalisedPayloadTarget(Path source_path, const char *suffix)
+{
+  if (!source_path.EndsWithIgnoreCase(".min"))
+    return AllocatedPath(source_path.WithSuffix(suffix).c_str());
+
+  std::string base{source_path.c_str()};
+  base.resize(base.size() - 4);
+
+  Path base_path{base.c_str()};
+  if (base_path.EndsWithIgnoreCase(suffix))
+    return AllocatedPath(base_path.c_str());
+
+  return AllocatedPath(base_path.WithSuffix(suffix).c_str());
+}
+
+[[nodiscard]] static AllocatedPath
+NormalisePayloadPath(Path source_path, ForecastPayloadType type)
+{
+  const auto *suffix = GetPayloadSuffix(type);
+  if (suffix == nullptr)
+    return CopyPath(source_path);
+
+  return ReplacePath(source_path,
+                     GetNormalisedPayloadTarget(source_path, suffix));
 }
 
 [[nodiscard]] static bool
 NeedsNetCdfDecode(Path path) noexcept
 {
   return path.EndsWithIgnoreCase(".nc");
+}
+
+static void
+DeleteIfExists(Path path) noexcept
+{
+  if (File::Exists(path))
+    File::Delete(path);
+}
+
+[[nodiscard]] static bool
+NeedsGunzipForecastPayload(Path path) noexcept;
+
+[[nodiscard]] static AllocatedPath
+GetGunzipOutputPath(Path compressed_path);
+
+static void
+DeleteNetCdfDisplayArtifact(Path path) noexcept
+{
+  if (NeedsNetCdfDecode(path))
+    DeleteIfExists(path.WithSuffix(".tif"));
+}
+
+static void
+DeleteArchiveExtractionVariants(Path archive_path) noexcept
+{
+  DeleteIfExists(archive_path.WithSuffix(".min"));
+  DeleteIfExists(archive_path.WithSuffix(".nc"));
+  DeleteIfExists(archive_path.WithSuffix(".tif"));
+  DeleteIfExists(archive_path.WithSuffix(".tiff"));
+  DeleteIfExists(archive_path.WithSuffix(".png"));
+  DeleteIfExists(archive_path.WithSuffix(".jpg"));
+  DeleteIfExists(archive_path.WithSuffix(".jpeg"));
+}
+
+static void
+DeletePreparedPayloadArtifacts(Path path) noexcept
+{
+  if (NeedsGunzipForecastPayload(path)) {
+    const auto inflated_path = GetGunzipOutputPath(path);
+    DeleteIfExists(inflated_path);
+    DeleteNetCdfDisplayArtifact(inflated_path);
+    return;
+  }
+
+  DeleteNetCdfDisplayArtifact(path);
 }
 
 static void
@@ -119,21 +318,34 @@ ExtractArchiveEntry(Path archive_path)
 {
   ZipArchive archive(archive_path);
 
+  std::string fallback_entry_name;
   std::string entry_name;
   while (true) {
     entry_name = archive.NextName();
     if (entry_name.empty())
-      throw std::runtime_error("SkySight forecast archive is empty");
+      break;
 
-    if (entry_name.back() != '/' && HasForecastDataSuffix(entry_name))
+    if (entry_name.back() == '/')
+      continue;
+
+    if (fallback_entry_name.empty())
+      fallback_entry_name = entry_name;
+
+    if (HasForecastDataSuffix(entry_name))
       break;
   }
 
-  const auto suffix = Path{entry_name.c_str()}.GetSuffix();
-  if (suffix == nullptr)
-    throw std::runtime_error("SkySight forecast archive entry has no suffix");
+  if (entry_name.empty())
+    entry_name = fallback_entry_name;
 
-  const auto output_path = archive_path.WithSuffix(suffix);
+  if (entry_name.empty())
+    throw std::runtime_error("SkySight forecast archive is empty");
+
+  const auto suffix = Path{entry_name.c_str()}.GetSuffix();
+  const auto output_path = suffix != nullptr
+    ? archive_path.WithSuffix(suffix)
+    : archive_path.WithSuffix(".payload");
+
   if (File::Exists(output_path))
     return AllocatedPath(output_path.c_str());
 
@@ -151,6 +363,69 @@ ExtractArchiveEntry(Path archive_path)
 
   output.Commit();
   return AllocatedPath(output_path.c_str());
+}
+
+[[nodiscard]] static PreparedForecastPayload
+PrepareForecastPayload(Path path)
+{
+  PreparedForecastPayload payload{
+    AllocatedPath(path.c_str()),
+    {},
+    DetectForecastPayloadType(path),
+  };
+
+  if (payload.type == ForecastPayloadType::Zip) {
+    payload.source_path = ExtractArchiveEntry(payload.source_path);
+    payload.type = DetectForecastPayloadType(payload.source_path);
+  }
+
+  if (payload.type == ForecastPayloadType::Gzip) {
+    payload.source_path = InflateForecastPayload(payload.source_path);
+    payload.type = DetectForecastPayloadType(payload.source_path);
+  }
+
+  if (payload.type == ForecastPayloadType::NetCdf ||
+      IsDisplayReadyType(payload.type))
+    payload.source_path = NormalisePayloadPath(payload.source_path,
+                                              payload.type);
+
+  if (payload.source_path != path)
+    payload.cleanup_download_path = AllocatedPath(path.c_str());
+
+  return payload;
+}
+
+[[nodiscard]] static SkySightPreparedData
+MakeDisplayReadyData(Path path)
+{
+  return {
+    SkySightPreparedDataKind::DisplayReady,
+    CopyPath(path),
+    CopyPath(path),
+  };
+}
+
+[[nodiscard]] static SkySightPreparedData
+PrepareNetCdfPayload(PreparedForecastPayload payload)
+{
+  auto display_path = payload.source_path.WithSuffix(".tif");
+  auto cleanup_source_path = CopyPath(payload.source_path);
+
+  if (File::Exists(display_path) &&
+      File::GetLastModification(display_path) >=
+        File::GetLastModification(payload.source_path)) {
+    DeleteIfExists(payload.source_path);
+    DeleteIfExists(payload.cleanup_download_path);
+    return MakeDisplayReadyData(display_path);
+  }
+
+  SkySightPreparedData prepared;
+  prepared.kind = SkySightPreparedDataKind::NeedsNetCdfDecode;
+  prepared.source_path = std::move(payload.source_path);
+  prepared.display_path = std::move(display_path);
+  prepared.cleanup_source_path = std::move(cleanup_source_path);
+  prepared.cleanup_download_path = std::move(payload.cleanup_download_path);
+  return prepared;
 }
 
 #if defined(USE_GEOTIFF) && defined(HAVE_SKYSIGHT_NETCDF)
@@ -473,39 +748,28 @@ SkySightFileDecodeJob::OnNotification() noexcept
 SkySightPreparedData
 SkySightFileDecoder::Prepare(Path path)
 {
-  AllocatedPath source_path = path.EndsWithIgnoreCase(".zip")
-    ? ExtractArchiveEntry(path)
-    : AllocatedPath(path.c_str());
+  auto payload = PrepareForecastPayload(path);
 
-  if (NeedsGunzipForecastPayload(source_path))
-    source_path = InflateForecastPayload(source_path);
+  if (payload.type == ForecastPayloadType::NetCdf)
+    return PrepareNetCdfPayload(std::move(payload));
 
-  if (NeedsNetCdfDecode(source_path)) {
-    auto display_path = source_path.WithSuffix(".tif");
-    if (File::Exists(display_path) &&
-        File::GetLastModification(display_path) >=
-          File::GetLastModification(source_path))
-      return {
-        SkySightPreparedDataKind::DisplayReady,
-        CopyPath(source_path),
-        CopyPath(display_path),
-      };
-
-    return {
-      SkySightPreparedDataKind::NeedsNetCdfDecode,
-      std::move(source_path),
-      std::move(display_path),
-    };
-  }
-
-  if (IsDisplayReadySuffix(source_path))
-    return {
-      SkySightPreparedDataKind::DisplayReady,
-      CopyPath(source_path),
-      CopyPath(source_path),
-    };
+  if (IsDisplayReadyType(payload.type))
+    return MakeDisplayReadyData(payload.source_path);
 
   throw std::runtime_error("Unsupported SkySight forecast payload");
+}
+
+void
+SkySightFileDecoder::InvalidateCache(Path path) noexcept
+{
+  DeleteIfExists(path);
+
+  if (path.EndsWithIgnoreCase(".zip")) {
+    DeleteArchiveExtractionVariants(path);
+    return;
+  }
+
+  DeletePreparedPayloadArtifacts(path);
 }
 
 bool
