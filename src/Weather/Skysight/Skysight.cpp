@@ -211,7 +211,9 @@ Skysight::AddSelectedLayer(std::string_view id, bool save_profile)
   if (save_profile)
     SaveSelectedLayers();
 
-  api->PollSelectedDatafiles();
+  if (save_profile)
+    api->PollSelectedDatafiles();
+
   return true;
 }
 
@@ -255,7 +257,6 @@ void
 Skysight::PollPendingDatafiles() noexcept
 {
   MaybeCleanupFiles();
-  api->PollSelectedDatafiles();
 }
 
 bool

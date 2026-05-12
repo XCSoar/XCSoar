@@ -830,13 +830,42 @@ SkysightAPI::PollSelectedDatafiles() noexcept
   if (!HasCredentials() || region.empty())
     return;
 
-  for (const auto &selected : selected_layers) {
-    if (!selected.datafiles_pending || selected.SupportsLiveTiles())
-      continue;
+  const auto request_pending = [this](const SkySight::Layer &layer) {
+    request->RequestDatafiles(region, layer.id, GetInitialDatafilesTime());
+  };
 
-    request->RequestDatafiles(region, selected.id, GetInitialDatafilesTime());
+  const auto is_pending_forecast = [](const SkySight::Layer &layer) noexcept {
+    return layer.datafiles_pending && !layer.SupportsLiveTiles();
+  };
+
+  if (const auto active_layer_id = owner.GetActiveLayerId(); !active_layer_id.empty()) {
+    if (const auto active = std::find_if(selected_layers.begin(), selected_layers.end(),
+                                         [active_layer_id, &is_pending_forecast](const auto &layer) {
+                                           return layer.id == active_layer_id &&
+                                             is_pending_forecast(layer);
+                                         });
+        active != selected_layers.end()) {
+      request_pending(*active);
+      return;
+    }
+  }
+
+  if (const auto preload = std::find_if(selected_layers.begin(), selected_layers.end(),
+                                        [&is_pending_forecast](const auto &layer) {
+                                          return layer.preload_requested &&
+                                            is_pending_forecast(layer);
+                                        });
+      preload != selected_layers.end()) {
+    request_pending(*preload);
     return;
   }
+
+  if (const auto selected = std::find_if(selected_layers.begin(), selected_layers.end(),
+                                         [&is_pending_forecast](const auto &layer) {
+                                           return is_pending_forecast(layer);
+                                         });
+      selected != selected_layers.end())
+    request_pending(*selected);
 }
 
 void
@@ -1032,7 +1061,8 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
       for (const auto *datafile :
            SkySight::GetForecastPreloadDatafiles(*layer, now))
         (void)QueueForecastDatafile(*layer, datafile->time, datafile->link);
-    } else if (selected != layer->forecast_datafiles.end()) {
+    } else if (owner.GetActiveLayerId() == layer_id &&
+               selected != layer->forecast_datafiles.end()) {
       (void)QueueForecastDatafile(*layer, selected->time, selected->link);
     }
   } else {
