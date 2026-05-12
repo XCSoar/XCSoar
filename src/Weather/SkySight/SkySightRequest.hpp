@@ -99,6 +99,7 @@ class SkySightRequest final {
   time_t valid_until = 0;
   time_t last_login_request = 0;
   time_t throttle_until = 0;
+  time_t last_throttle_notice = 0;
 
 public:
   enum class DownloadDatafileResult {
@@ -137,7 +138,7 @@ public:
   bool RequestLayers(std::string_view region_id);
   bool RequestLastUpdates(std::string_view region_id,
                           std::string_view layer_id);
-  void RequestDatafiles(std::string_view region_id, std::string_view layer_id,
+  bool RequestDatafiles(std::string_view region_id, std::string_view layer_id,
                         time_t from_time);
 
 private:
@@ -168,6 +169,7 @@ private:
                             time_t forecast_time,
                             unsigned status,
                             std::string_view key) noexcept;
+  void LogThrottleNotice(bool server_retry_after) noexcept;
   AllocatedPath GetThrottleCachePath() const noexcept;
   void LoadThrottleState() noexcept;
   void StoreThrottleState() noexcept;

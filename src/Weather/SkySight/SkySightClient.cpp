@@ -23,6 +23,25 @@
 #include <cassert>
 #include <chrono>
 
+namespace {
+
+[[nodiscard]] static bool
+HasExactForecastImage(std::string_view region,
+                      const SkySight::Layer &layer) noexcept
+{
+  if (layer.forecast_time <= 0)
+    return false;
+
+  const auto candidate = SkySightCache::FindForecastImage(SkySightClient::GetLocalPath(),
+                                                          region,
+                                                          layer.id,
+                                                          layer.forecast_time);
+  return candidate.path != nullptr &&
+    candidate.forecast_time == layer.forecast_time &&
+    File::Exists(candidate.path);
+}
+
+} // namespace
 SkySightClient::SkySightClient(CurlGlobal &curl)
   :api(std::make_unique<SkySightAPI>(*this, curl, GetLocalPath()))
 {
@@ -474,9 +493,16 @@ SkySightClient::SetLayerActive(std::string_view id)
   active_layer = layer;
   if (!active_layer->SupportsLiveTiles()) {
     if (auto *selected = api->GetSelectedLayer(id); selected != nullptr) {
+      const bool has_exact_forecast_image =
+        HasExactForecastImage(GetRegion(), *selected);
+
       selected->updating = selected->ShouldShowUpdating();
       active_layer->updating = selected->updating;
-      api->PollSelectedDatafiles();
+
+      if (!has_exact_forecast_image)
+        (void)api->PreloadDefaultDatafile(id);
+      else
+        api->PollSelectedDatafiles();
     }
   }
   ResetTiles();

@@ -458,9 +458,9 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
 
   if (File::Exists(filename)) {
     try {
-      const auto prepared = SkySightFileDecoder::Prepare(filename);
+      auto prepared = SkySightFileDecoder::Prepare(filename);
       api.OnDatafileDownloaded(layer_id, forecast_time,
-                               prepared.GetAvailablePath());
+                               std::move(prepared));
       return DownloadDatafileResult::Available;
     } catch (...) {
       LogForecastPreparationError(layer_id, forecast_time,
@@ -635,24 +635,24 @@ SkySightRequest::RequestLastUpdates(std::string_view region_id,
   return true;
 }
 
-void
+bool
 SkySightRequest::RequestDatafiles(std::string_view region_id,
                                   std::string_view layer_id,
                                   time_t from_time)
 {
   if (region_id.empty() || layer_id.empty() || datafiles_running)
-    return;
+    return false;
 
   if (!HasCredentials())
-    return;
+    return false;
 
   if (!IsLoggedIn()) {
     EnsureLoggedIn();
-    return;
+    return false;
   }
 
   if (std::time(nullptr) < throttle_until)
-    return;
+    return false;
 
   datafiles_running = true;
   datafiles_layer_id = std::string{layer_id};
@@ -673,6 +673,8 @@ SkySightRequest::RequestDatafiles(std::string_view region_id,
     [this](std::exception_ptr error) {
       OnDatafilesError(std::move(error));
     });
+
+  return true;
 }
 
 void
@@ -743,9 +745,8 @@ SkySightRequest::HandleJsonRequestHttpStatus(unsigned status, time_t retry_at,
     SetThrottleUntil(retry_at > now
                      ? retry_at
                      : now + THROTTLE_RETRY_SECONDS);
-    LogFmt("SkySight throttled by server (HTTP 429), pausing requests for {} "
-           "seconds ({})", unsigned(throttle_until - now),
-           retry_at > now ? "server Retry-After" : "client fallback");
+    api.OnThrottle();
+    LogThrottleNotice(retry_at > now);
     return true;
   }
 
@@ -771,10 +772,10 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
         break;
 
       case FileJob::Kind::ForecastData: {
-        const auto prepared = SkySightFileDecoder::Prepare(i->second->path);
+        auto prepared = SkySightFileDecoder::Prepare(i->second->path);
         api.OnDatafileDownloaded(i->second->layer_id,
                                  i->second->forecast_time,
-                                 prepared.GetAvailablePath());
+                                 std::move(prepared));
         break;
       }
       }
@@ -814,10 +815,8 @@ SkySightRequest::OnFileError(const std::string &key,
 
     if (http_error.status == 429) {
       SetThrottleUntil(decision.ready_at);
-      LogFmt("SkySight throttled by server (HTTP 429), pausing tile downloads "
-             "for {} seconds ({})", unsigned(decision.ready_at - now),
-             http_error.retry_at > now
-             ? "server Retry-After" : "client fallback");
+      api.OnThrottle();
+      LogThrottleNotice(http_error.retry_at > now);
     } else if (decision.action == SkySight::RequestFailureAction::Reauthenticate) {
       api_key.clear();
       valid_until = 0;
@@ -913,6 +912,20 @@ SkySightRequest::SetThrottleUntil(time_t value) noexcept
     StoreThrottleState();
   else
     ClearThrottleState();
+}
+
+void
+SkySightRequest::LogThrottleNotice(bool server_retry_after) noexcept
+{
+  const auto now = std::time(nullptr);
+  if (last_throttle_notice != 0 &&
+      now < last_throttle_notice + THROTTLE_RETRY_SECONDS)
+    return;
+
+  last_throttle_notice = now;
+  LogFmt("SkySight throttled by server (HTTP 429), pausing requests for {} "
+         "seconds ({})", unsigned(GetThrottleRemainingSeconds()),
+         server_retry_after ? "server Retry-After" : "client fallback");
 }
 
 void
