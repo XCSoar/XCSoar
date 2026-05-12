@@ -196,7 +196,7 @@ LoadMetadataCache(Path path, boost::json::value &value) noexcept
 
 SkysightAPI::SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path)
   :owner(_owner),
-   request(std::make_unique<SkySightRequest>(*this, curl)),
+   request(std::make_unique<SkySightRequest>(*this, curl, _cache_path)),
    decode_job(std::make_unique<SkySightFileDecodeJob>()),
    cache_path(_cache_path)
 {
@@ -446,6 +446,12 @@ bool
 SkysightAPI::HasCredentials() const noexcept
 {
   return request->HasCredentials();
+}
+
+bool
+SkysightAPI::IsThrottled() const noexcept
+{
+  return request->IsThrottled();
 }
 
 std::size_t
@@ -761,8 +767,12 @@ SkysightAPI::PollRegions() noexcept
   if (last_regions_request != 0 && now < last_regions_request + REGIONS_RETRY_SECONDS)
     return;
 
-  last_regions_request = now;
-  request->RequestRegions();
+  try {
+    if (request->RequestRegions())
+      last_regions_request = now;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight regions polling failed");
+  }
 }
 
 void
@@ -778,8 +788,12 @@ SkysightAPI::PollLayers() noexcept
   if (last_layers_request != 0 && now < last_layers_request + LAYERS_RETRY_SECONDS)
     return;
 
-  last_layers_request = now;
-  request->RequestLayers(region);
+  try {
+    if (request->RequestLayers(region))
+      last_layers_request = now;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight layers polling failed");
+  }
 }
 
 void
@@ -798,8 +812,12 @@ SkysightAPI::PollLastUpdates() noexcept
   if (last_updates_request != 0 && now < last_updates_request + interval)
     return;
 
-  last_updates_request = now;
-  request->RequestLastUpdates(region);
+  try {
+    if (request->RequestLastUpdates(region))
+      last_updates_request = now;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight last-updated polling failed");
+  }
 }
 
 void

@@ -7,12 +7,14 @@
 #include "Version.hpp"
 #include "co/Task.hxx"
 #include "json/Serialize.hxx"
+#include "io/FileOutputStream.hxx"
+#include "io/StringOutputStream.hxx"
+#include "io/FileLineReader.hpp"
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/curl/Slist.hxx"
-#include "io/FileOutputStream.hxx"
-#include "io/StringOutputStream.hxx"
+#include "lib/fmt/ToBuffer.hxx"
 #include "lib/fmt/RuntimeError.hxx"
 #include "lib/curl/Global.hxx"
 #include "LogFile.hpp"
@@ -21,8 +23,10 @@
 #include <boost/json.hpp>
 
 #include <algorithm>
+#include <cstring>
 #include <cstdlib>
 #include <ctime>
+#include <span>
 #include <utility>
 
 class HttpStatusError final : public std::runtime_error {
@@ -128,15 +132,18 @@ DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
   co_return path;
 }
 
-SkySightRequest::SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl) noexcept
+SkySightRequest::SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl,
+                                 Path _cache_path) noexcept
   :api(_api),
    curl(_curl),
+   cache_path(_cache_path),
    login_job(curl.GetEventLoop()),
    regions_job(curl.GetEventLoop()),
    layers_job(curl.GetEventLoop()),
    last_updates_job(curl.GetEventLoop()),
    datafiles_job(curl.GetEventLoop())
 {
+  LoadThrottleState();
 }
 
 SkySightRequest::~SkySightRequest() noexcept
@@ -165,7 +172,6 @@ SkySightRequest::CancelAll() noexcept
   file_jobs.clear();
   pending_jobs.clear();
   retry_after.clear();
-  throttle_until = 0;
 }
 
 void
@@ -241,6 +247,9 @@ SkySightRequest::PumpQueue()
   if (now < throttle_until)
     return;
 
+  if (throttle_until != 0)
+    SetThrottleUntil(0);
+
   while (file_jobs.size() < MAX_ACTIVE_DOWNLOADS && !pending_jobs.empty()) {
     auto job = std::move(pending_jobs.front());
     pending_jobs.pop_front();
@@ -268,7 +277,8 @@ SkySightRequest::PumpQueue()
 
     file_jobs.emplace(key, std::move(active_job));
     job_ptr->function.Start(
-      DownloadFileTask(curl, std::move(job.url), std::move(job.path),
+      DownloadFileTask(curl, std::move(job.url),
+                       AllocatedPath(job_ptr->path.c_str()),
                        job.requires_auth ? api_key : std::string{}),
       [this, key](AllocatedPath) {
         OnFileSuccess(key);
@@ -381,7 +391,8 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
       api.OnDatafileDownloaded(layer_id, forecast_time,
                                prepared.GetAvailablePath());
     } catch (...) {
-      LogError(std::current_exception(), "SkySight forecast file preparation failed");
+      LogForecastPreparationError(layer_id, forecast_time,
+                                  std::current_exception());
       api.OnDatafileError(layer_id, forecast_time);
     }
 
@@ -396,19 +407,22 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
   return DownloadDatafileResult::Queued;
 }
 
-void
+bool
 SkySightRequest::RequestRegions()
 {
   if (regions_running)
-    return;
+    return false;
 
   if (!HasCredentials())
-    return;
+    return false;
 
   if (!IsLoggedIn()) {
     EnsureLoggedIn();
-    return;
+    return false;
   }
+
+  if (std::time(nullptr) < throttle_until)
+    return false;
 
   regions_running = true;
   regions_job.Start(
@@ -419,6 +433,8 @@ SkySightRequest::RequestRegions()
     [this](std::exception_ptr error) {
       OnRegionsError(std::move(error));
     });
+
+  return true;
 }
 
 void
@@ -436,30 +452,30 @@ SkySightRequest::OnRegionsError(std::exception_ptr error) noexcept
   try {
     std::rethrow_exception(error);
   } catch (const HttpStatusError &http_error) {
-    if (http_error.status == 401 || http_error.status == 403) {
-      api_key.clear();
-      valid_until = 0;
-    }
-
-    LogFmt("SkySight regions request failed with HTTP %u", http_error.status);
+    if (HandleJsonRequestHttpStatus(http_error.status,
+                                    "SkySight regions request failed"))
+      return;
   } catch (...) {
     LogError(error, "SkySight regions request failed");
   }
 }
 
-void
+bool
 SkySightRequest::RequestLayers(std::string_view region_id)
 {
   if (region_id.empty() || layers_running)
-    return;
+    return false;
 
   if (!HasCredentials())
-    return;
+    return false;
 
   if (!IsLoggedIn()) {
     EnsureLoggedIn();
-    return;
+    return false;
   }
+
+  if (std::time(nullptr) < throttle_until)
+    return false;
 
   layers_running = true;
 
@@ -474,6 +490,8 @@ SkySightRequest::RequestLayers(std::string_view region_id)
     [this](std::exception_ptr error) {
       OnLayersError(std::move(error));
     });
+
+  return true;
 }
 
 void
@@ -491,30 +509,30 @@ SkySightRequest::OnLayersError(std::exception_ptr error) noexcept
   try {
     std::rethrow_exception(error);
   } catch (const HttpStatusError &http_error) {
-    if (http_error.status == 401 || http_error.status == 403) {
-      api_key.clear();
-      valid_until = 0;
-    }
-
-    LogFmt("SkySight layers request failed with HTTP %u", http_error.status);
+    if (HandleJsonRequestHttpStatus(http_error.status,
+                                    "SkySight layers request failed"))
+      return;
   } catch (...) {
     LogError(error, "SkySight layers request failed");
   }
 }
 
-void
+bool
 SkySightRequest::RequestLastUpdates(std::string_view region_id)
 {
   if (region_id.empty() || last_updates_running)
-    return;
+    return false;
 
   if (!HasCredentials())
-    return;
+    return false;
 
   if (!IsLoggedIn()) {
     EnsureLoggedIn();
-    return;
+    return false;
   }
+
+  if (std::time(nullptr) < throttle_until)
+    return false;
 
   last_updates_running = true;
 
@@ -529,6 +547,8 @@ SkySightRequest::RequestLastUpdates(std::string_view region_id)
     [this](std::exception_ptr error) {
       OnLastUpdatesError(std::move(error));
     });
+
+  return true;
 }
 
 void
@@ -546,6 +566,9 @@ SkySightRequest::RequestDatafiles(std::string_view region_id,
     EnsureLoggedIn();
     return;
   }
+
+  if (std::time(nullptr) < throttle_until)
+    return;
 
   datafiles_running = true;
   datafiles_layer_id = std::string{layer_id};
@@ -582,12 +605,9 @@ SkySightRequest::OnLastUpdatesError(std::exception_ptr error) noexcept
   try {
     std::rethrow_exception(error);
   } catch (const HttpStatusError &http_error) {
-    if (http_error.status == 401 || http_error.status == 403) {
-      api_key.clear();
-      valid_until = 0;
-    }
-
-    LogFmt("SkySight last-updated request failed with HTTP %u", http_error.status);
+    if (HandleJsonRequestHttpStatus(http_error.status,
+                                    "SkySight last-updated request failed"))
+      return;
   } catch (...) {
     LogError(error, "SkySight last-updated request failed");
   }
@@ -612,12 +632,9 @@ SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
   try {
     std::rethrow_exception(error);
   } catch (const HttpStatusError &http_error) {
-    if (http_error.status == 401 || http_error.status == 403) {
-      api_key.clear();
-      valid_until = 0;
-    }
-
-    LogFmt("SkySight datafiles request failed with HTTP %u", http_error.status);
+    if (HandleJsonRequestHttpStatus(http_error.status,
+                                    "SkySight datafiles request failed"))
+      return;
   } catch (...) {
     LogError(error, "SkySight datafiles request failed");
   }
@@ -625,11 +642,33 @@ SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
   api.OnDatafilesError(layer_id);
 }
 
+bool
+SkySightRequest::HandleJsonRequestHttpStatus(unsigned status,
+                                             const char *context) noexcept
+{
+  if (status == 401 || status == 403) {
+    api_key.clear();
+    valid_until = 0;
+  }
+
+  if (status == 429) {
+    SetThrottleUntil(std::time(nullptr) + THROTTLE_RETRY_SECONDS);
+    LogFmt("SkySight throttled by server (HTTP 429), pausing requests for {} seconds",
+           unsigned(THROTTLE_RETRY_SECONDS));
+    return true;
+  }
+
+  LogFmt("{} with HTTP {}", context, status);
+  return false;
+}
+
 void
 SkySightRequest::OnFileSuccess(const std::string &key) noexcept
 {
   if (auto i = file_jobs.find(key); i != file_jobs.end()) {
     i->second->finished = true;
+    const auto layer_id = i->second->layer_id;
+    const auto forecast_time = i->second->forecast_time;
 
     try {
       switch (i->second->kind) {
@@ -646,8 +685,9 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
       }
       }
     } catch (...) {
-      LogError(std::current_exception(), "SkySight forecast file preparation failed");
-      api.OnDatafileError(i->second->layer_id, i->second->forecast_time);
+      LogForecastPreparationError(layer_id, forecast_time,
+                                  std::current_exception());
+      api.OnDatafileError(layer_id, forecast_time);
     }
   }
   PumpQueue();
@@ -657,27 +697,162 @@ void
 SkySightRequest::OnFileError(const std::string &key,
                              std::exception_ptr error) noexcept
 {
-  if (auto i = file_jobs.find(key); i != file_jobs.end())
+  std::string layer_id;
+  time_t forecast_time = 0;
+  if (auto i = file_jobs.find(key); i != file_jobs.end()) {
     i->second->finished = true;
+    layer_id = i->second->layer_id;
+    forecast_time = i->second->forecast_time;
+  }
 
   try {
     std::rethrow_exception(error);
   } catch (const HttpStatusError &http_error) {
-    const auto retry_time = std::time(nullptr) +
-      (http_error.status == 429 ? THROTTLE_RETRY_SECONDS : ERROR_RETRY_SECONDS);
+    const auto retry_delay = http_error.status == 429
+      ? THROTTLE_RETRY_SECONDS
+      : (http_error.status == 404 ? NOT_FOUND_RETRY_SECONDS : ERROR_RETRY_SECONDS);
+    const auto retry_time = std::time(nullptr) + retry_delay;
     retry_after[key] = retry_time;
 
     if (http_error.status == 429) {
-      throttle_until = retry_time;
-      LogFmt("SkySight throttled by server (HTTP 429), pausing tile downloads for %u seconds",
+      SetThrottleUntil(retry_time);
+      LogFmt("SkySight throttled by server (HTTP 429), pausing tile downloads for {} seconds",
              unsigned(THROTTLE_RETRY_SECONDS));
     } else {
-      LogFmt("SkySight tile download failed with HTTP %u", http_error.status);
+      LogTileHttpError(layer_id, forecast_time, http_error.status, key);
     }
   } catch (...) {
     retry_after[key] = std::time(nullptr) + ERROR_RETRY_SECONDS;
+    if (!layer_id.empty()) {
+      LogFmt("SkySight tile download failed for layer '{}' (forecast_time={})",
+             layer_id, (long long)forecast_time);
+    }
     LogError(error, "SkySight tile download failed");
   }
 
   PumpQueue();
+}
+
+AllocatedPath
+SkySightRequest::GetThrottleCachePath() const noexcept
+{
+  return AllocatedPath::Build(cache_path, "throttle-v1.cache");
+}
+
+void
+SkySightRequest::LoadThrottleState() noexcept
+{
+  const auto path = GetThrottleCachePath();
+
+  try {
+    FileLineReaderA reader(path);
+    const char *line = reader.ReadLine();
+    if (line == nullptr || *line == 0) {
+      ClearThrottleState();
+      return;
+    }
+
+    const auto persisted_until = std::strtoll(line, nullptr, 10);
+    const auto now = std::time(nullptr);
+    if (persisted_until <= now) {
+      ClearThrottleState();
+      return;
+    }
+
+    throttle_until = persisted_until;
+  } catch (...) {
+    ClearThrottleState();
+  }
+}
+
+void
+SkySightRequest::StoreThrottleState() noexcept
+{
+  if (throttle_until <= std::time(nullptr)) {
+    ClearThrottleState();
+    return;
+  }
+
+  try {
+    FileOutputStream file{GetThrottleCachePath()};
+    const auto buffer = FmtBuffer<32>("{}\n", (long long)throttle_until);
+    file.Write(std::as_bytes(std::span{buffer.c_str(), std::strlen(buffer.c_str())}));
+    file.Commit();
+  } catch (...) {
+  }
+}
+
+void
+SkySightRequest::ClearThrottleState() noexcept
+{
+  throttle_until = 0;
+  File::Delete(GetThrottleCachePath());
+}
+
+void
+SkySightRequest::SetThrottleUntil(time_t value) noexcept
+{
+  throttle_until = value;
+  if (throttle_until > std::time(nullptr))
+    StoreThrottleState();
+  else
+    ClearThrottleState();
+}
+
+void
+SkySightRequest::LogForecastPreparationError(std::string_view layer_id,
+                                             time_t forecast_time,
+                                             std::exception_ptr error) noexcept
+{
+  if (layer_id.empty()) {
+    LogError(error, "SkySight forecast file preparation failed");
+    return;
+  }
+
+  auto &count = forecast_prepare_error_count[std::string{layer_id}];
+  ++count;
+
+  if (count == 1) {
+    LogFmt("SkySight forecast file preparation failed for layer '{}' (forecast_time={}); suppressing repeats",
+           layer_id, (long long)forecast_time);
+    return;
+  }
+
+  if ((count % 20) == 0) {
+    LogFmt("SkySight forecast file preparation still failing for layer '{}' ({} failures)",
+           layer_id, count);
+  }
+}
+
+void
+SkySightRequest::LogTileHttpError(std::string_view layer_id,
+                                  time_t forecast_time,
+                                  unsigned status,
+                                  std::string_view key) noexcept
+{
+  const std::string bucket = (layer_id.empty() ? std::string{"*"} : std::string{layer_id}) +
+                             "|" + std::to_string(status);
+  auto &count = tile_http_error_count[bucket];
+  ++count;
+
+  if (count == 1) {
+    if (!layer_id.empty()) {
+      LogFmt("SkySight tile download failed with HTTP {} for layer '{}' (forecast_time={}); suppressing repeats",
+             status, layer_id, (long long)forecast_time);
+    } else {
+      LogFmt("SkySight tile download failed with HTTP {} (request='{}'); suppressing repeats",
+             status, key);
+    }
+    return;
+  }
+
+  if ((count % 20) == 0) {
+    if (!layer_id.empty()) {
+      LogFmt("SkySight tile download still failing with HTTP {} for layer '{}' ({} failures)",
+             status, layer_id, count);
+    } else {
+      LogFmt("SkySight tile download still failing with HTTP {} ({} failures)",
+             status, count);
+    }
+  }
 }
