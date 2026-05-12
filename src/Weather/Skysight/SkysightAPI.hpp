@@ -88,6 +88,7 @@ public:
                       std::string_view link);
   bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,
                              std::string_view link) noexcept;
+  bool PreloadDefaultDatafile(std::string_view layer_id) noexcept;
   bool PreloadDatafiles(std::string_view layer_id) noexcept;
   bool PreloadAllDatafiles() noexcept;
   void PollRegions() noexcept;
@@ -104,10 +105,11 @@ public:
   void OnDatafiles(std::string_view layer_id, boost::json::value value) noexcept;
   void OnDatafilesError(std::string_view layer_id) noexcept;
   void OnDatafileDownloaded(std::string_view layer_id, time_t forecast_time,
-                            Path path) noexcept;
+                            SkySightPreparedData prepared) noexcept;
   void OnDatafileError(std::string_view layer_id, time_t forecast_time,
                        bool preparation_failed=false) noexcept;
   void OnDownloadComplete() noexcept;
+  void OnThrottle() noexcept;
 
 private:
   static constexpr std::size_t MAX_SELECTED_LAYERS = 8;
@@ -134,7 +136,7 @@ private:
                           const boost::json::value &value) const noexcept;
   bool QueueForecastDatafile(SkySight::Layer &layer, time_t forecast_time,
                              std::string_view link) noexcept;
-  void QueueDecodeJob(Path path, const SkySight::Layer &layer,
+  void QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer &layer,
                       time_t forecast_time) noexcept;
   void StartNextDecodeJob() noexcept;
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);

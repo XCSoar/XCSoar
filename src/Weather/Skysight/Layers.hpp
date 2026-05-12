@@ -59,6 +59,7 @@ struct Layer {
   /** Metadata request for available forecast steps is still pending. */
   bool datafiles_pending = false;
   bool preload_requested = false;
+  bool default_preload_requested = false;
   bool tile_layer = false;
   bool live_layer = false;
   /** Number of queued/download/decode jobs still outstanding. */
