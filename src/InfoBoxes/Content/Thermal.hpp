@@ -15,6 +15,9 @@ UpdateInfoBoxVarioNetto(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxThermal30s(InfoBoxData &data) noexcept;
 
+void 
+UpdateInfoBoxThermalTurnAvg(InfoBoxData &data) noexcept;
+
 void
 UpdateInfoBoxThermalLastAvg(InfoBoxData &data) noexcept;
 

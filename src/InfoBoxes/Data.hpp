@@ -209,6 +209,10 @@ struct InfoBoxData {
   void SetCommentFromSpeed(double value, bool precision=true) noexcept;
 
   /**
+   * Set the InfoBox comment toa time in seconds
+   */
+  void SetCommentFromTimeSeconds(int dd) noexcept;
+  /**
    * Set the InfoBox comment to the specified task speed.
    */
   void SetCommentFromTaskSpeed(double value, bool precision=true) noexcept;

@@ -61,6 +61,11 @@ InfoBoxData::SetCommentFromPercent(double dd) noexcept
   FmtComment("{} %", (int)(dd));
 }
 
+void  
+InfoBoxData::SetCommentFromTimeSeconds(int dd) noexcept{
+    FmtComment(_T("{} s"), (int)(dd));
+}
+
 void
 InfoBoxData::SetValueFromVoltage(double dd) noexcept
 {
