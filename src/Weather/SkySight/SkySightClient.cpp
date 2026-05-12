@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SkySightClient.hpp"
+#include "SkySightCache.hpp"
 #include "SkySightAPI.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
@@ -66,15 +67,7 @@ SkySightClient::Init()
 void
 SkySightClient::CleanupFiles() noexcept
 {
-  const auto now = std::chrono::system_clock::now();
-  OlderThanFileVisitor delete_tiles{now - std::chrono::hours{12}};
-  OlderThanFileVisitor delete_tmp{now - std::chrono::hours{6}};
-  OlderThanFileVisitor delete_json{now - std::chrono::hours{1}};
-
-  const auto path = GetLocalPath();
-  Directory::VisitSpecificFiles(path, "*.jpg", delete_tiles);
-  Directory::VisitSpecificFiles(path, "*.tmp", delete_tmp);
-  Directory::VisitSpecificFiles(path, "*.json", delete_json);
+  SkySightCache::Cleanup(GetLocalPath());
 }
 
 std::size_t
