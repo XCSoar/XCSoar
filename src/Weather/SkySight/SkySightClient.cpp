@@ -126,6 +126,12 @@ SkySightClient::IsThrottled() const noexcept
   return api->IsThrottled();
 }
 
+time_t
+SkySightClient::GetThrottleRemainingSeconds() const noexcept
+{
+  return api->GetThrottleRemainingSeconds();
+}
+
 std::string_view
 SkySightClient::GetActiveLayerId() const noexcept
 {
@@ -155,14 +161,34 @@ SkySightClient::AddSelectedLayer(std::string_view id, bool save_profile,
   if (id.empty() || api->SelectedLayersFull() || api->IsSelectedLayer(id))
     return false;
 
-  const auto *layer = api->GetLayer(id);
+  auto *layer = api->GetLayer(id);
   if (layer == nullptr)
     return false;
+
+  if (!layer->SupportsLiveTiles()) {
+    const auto cached_times = SkySightCache::CollectForecastTimes(GetCachePath(),
+                                                                  GetRegion(),
+                                                                  layer->id);
+    if (!cached_times.empty()) {
+      SkySight::MergeCachedForecastTimes(*layer, cached_times,
+                                         std::time(nullptr));
+
+      const auto candidate = SkySightCache::FindForecastImage(GetCachePath(),
+                                                              GetRegion(),
+                                                              layer->id,
+                                                              layer->forecast_time);
+      if (candidate.path != nullptr &&
+          candidate.forecast_time == layer->forecast_time) {
+        layer->mtime = std::chrono::system_clock::to_time_t(
+          File::GetLastModification(candidate.path));
+      }
+    }
+  }
 
   auto selected = *layer;
   if (!selected.SupportsLiveTiles()) {
     selected.datafiles_pending = request_datafiles || layer->datafiles_pending;
-    selected.updating = selected.datafiles_pending;
+    selected.updating = selected.ShouldShowUpdating();
   }
 
   if (!api->AddSelectedLayer(selected))
@@ -209,6 +235,12 @@ SkySightClient::RefreshCatalog() noexcept
 {
   api->PollRegions();
   api->PollLayers();
+}
+
+void
+SkySightClient::PollPendingDatafiles() noexcept
+{
+  api->PollSelectedDatafiles();
 }
 
 bool
@@ -356,8 +388,8 @@ SkySightClient::SetLayerActive(std::string_view id)
   active_layer = layer;
   if (!active_layer->SupportsLiveTiles()) {
     if (auto *selected = api->GetSelectedLayer(id); selected != nullptr) {
-      selected->updating = true;
-      active_layer->updating = true;
+      selected->updating = selected->ShouldShowUpdating();
+      active_layer->updating = selected->updating;
       api->PollSelectedDatafiles();
     }
   }
