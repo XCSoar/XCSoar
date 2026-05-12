@@ -99,14 +99,37 @@ InputEvents::eventCalculator([[maybe_unused]] const char *misc)
 }
 
 void
-InputEvents::eventGotoLookup([[maybe_unused]] const char *misc)
+InputEvents::eventGotoLookup(const char *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
   if (!backend_components->protected_task_manager)
     return;
 
-  auto wp = ShowWaypointListDialog(*data_components->waypoints, basic.location);
+  /* Optional ``misc`` keyword: pre-select the Type filter when the
+     dialog opens, so a gesture/key binding can jump directly to a
+     category (e.g. recently-used waypoints).  Unknown values are
+     silently ignored, preserving backward compatibility with the
+     argument-less form. */
+  std::optional<TypeFilter> initial_type;
+  if (misc != nullptr && *misc != '\0') {
+    if (StringIsEqual(misc, "recent") ||
+        StringIsEqual(misc, "last_used"))
+      initial_type = TypeFilter::LAST_USED;
+    else if (StringIsEqual(misc, "airport"))
+      initial_type = TypeFilter::AIRPORT;
+    else if (StringIsEqual(misc, "landable"))
+      initial_type = TypeFilter::LANDABLE;
+    else if (StringIsEqual(misc, "turnpoint"))
+      initial_type = TypeFilter::TURNPOINT;
+    else if (StringIsEqual(misc, "start"))
+      initial_type = TypeFilter::START;
+    else if (StringIsEqual(misc, "finish"))
+      initial_type = TypeFilter::FINISH;
+  }
+
+  auto wp = ShowWaypointListDialog(*data_components->waypoints, basic.location,
+                                   nullptr, 0, initial_type);
   if (wp != NULL) {
     // Remove old temporary goto waypoint when selecting a regular waypoint
     auto &way_points = *data_components->waypoints;
