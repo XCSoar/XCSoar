@@ -13,25 +13,9 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "MapWindow/OverlayBitmap.hpp"
 #include "system/FileUtil.hpp"
+#include "time/BrokenDateTime.hpp"
 
 #include <chrono>
-
-namespace {
-
-class OlderThanFileVisitor final : public File::Visitor {
-  const std::chrono::system_clock::time_point cutoff;
-
-public:
-  explicit OlderThanFileVisitor(std::chrono::system_clock::time_point _cutoff) noexcept
-    :cutoff(_cutoff) {}
-
-  void Visit(Path full_path, [[maybe_unused]] Path filename) override {
-    if (File::GetLastModification(full_path) < cutoff)
-      File::Delete(full_path);
-  }
-};
-
-} // namespace
 
 Skysight::Skysight(CurlGlobal &curl)
   :api(std::make_unique<SkysightAPI>(*this, curl, GetLocalPath()))
@@ -260,6 +244,7 @@ Skysight::ResetTiles() noexcept
   for (auto &i : tile_filenames)
     i.clear();
 
+  forecast_image_dirty = true;
   displayed_layer = nullptr;
   displayed_zoom = 0;
 }
@@ -268,12 +253,24 @@ bool
 Skysight::SetLayerActive(std::string_view id)
 {
   auto *layer = api->GetLayer(id);
-  if (layer == nullptr || !layer->SupportsLiveTiles())
+  if (layer == nullptr)
+    return false;
+
+  if (!layer->SupportsLiveTiles() && !api->IsSelectedLayer(id) && !AddSelectedLayer(id))
     return false;
 
   active_layer = layer;
-  active_layer->last_update = 0;
-  api->ResetLastUpdates();
+  if (active_layer->SupportsLiveTiles()) {
+    active_layer->last_update = 0;
+    api->ResetLastUpdates();
+  } else {
+    if (auto *selected = api->GetSelectedLayer(id); selected != nullptr) {
+      selected->updating = true;
+      active_layer->updating = true;
+      api->PollSelectedDatafiles();
+    }
+  }
+
   Profile::Set(ProfileKeys::WeatherLayerDisplayed, layer->id.c_str());
   ResetTiles();
   OnDataUpdated();
@@ -292,6 +289,8 @@ Skysight::DeactivateLayer()
 void
 Skysight::OnDataUpdated() noexcept
 {
+  forecast_image_dirty = true;
+
   if (auto *map = UIGlobals::GetMapIfActive())
     map->DeferRedraw();
 
@@ -325,12 +324,85 @@ Skysight::UpdateActiveLayer(unsigned index, Path path,
 
   bitmap->SetAlpha(active_layer->alpha);
 
-  char label[128];
-  std::snprintf(label, sizeof(label), "SkySight: %s (%u/%u/%u)",
-                active_layer->name.c_str(), tile.zoom, tile.x, tile.y);
-  bitmap->SetLabel(label);
+  StaticString<160> label;
+  label.Format("SkySight: %s", active_layer->name.c_str());
+  if (active_layer->SupportsLiveTiles()) {
+    label.AppendFormat(" (%u/%u/%u)", tile.zoom, tile.x, tile.y);
+  } else if (active_layer->forecast_time != 0) {
+    const BrokenDateTime forecast_date_time{
+      std::chrono::system_clock::from_time_t(active_layer->forecast_time)};
+    label.AppendFormat(" (%04u-%02u-%02u %02u:%02u)",
+                       forecast_date_time.year,
+                       forecast_date_time.month,
+                       forecast_date_time.day,
+                       forecast_date_time.hour,
+                       forecast_date_time.minute);
+  }
+
+  bitmap->SetLabel(label.c_str());
 
   map->SetOverlay(index, std::move(bitmap));
+  return true;
+#endif
+}
+
+bool
+Skysight::DisplayForecastLayer()
+{
+#ifndef ENABLE_OPENGL
+  return false;
+#else
+  auto *map_window = UIGlobals::GetMapIfActive();
+  if (map_window == nullptr || active_layer == nullptr)
+    return false;
+
+  if (displayed_layer != active_layer) {
+    ResetTiles();
+    displayed_layer = active_layer;
+  }
+
+  if (active_layer->updating)
+    api->PollSelectedDatafiles();
+
+  if (!forecast_image_dirty) {
+    if (!tile_filenames[0].empty() && File::Exists(Path{tile_filenames[0].c_str()}))
+      return true;
+
+    forecast_image_dirty = true;
+  }
+
+  const auto candidate = SkysightCache::FindForecastImage(GetLocalPath(),
+                                                          GetRegion(),
+                                                          active_layer->id);
+  if (candidate.path == nullptr) {
+    map_window->SetOverlay(0, nullptr);
+    tile_filenames[0].clear();
+    forecast_image_dirty = false;
+    return false;
+  }
+
+  active_layer->forecast_time = candidate.forecast_time;
+
+  if (tile_filenames[0] != candidate.path.c_str()) {
+    if (!UpdateActiveLayer(0, candidate.path,
+                           GeoBitmap::TileData{0, 0, 0})) {
+      map_window->SetOverlay(0, nullptr);
+      tile_filenames[0].clear();
+      forecast_image_dirty = false;
+      return false;
+    }
+
+    tile_filenames[0] = candidate.path.c_str();
+  }
+
+  for (unsigned i = 1; i < tile_filenames.size(); ++i) {
+    if (!tile_filenames[i].empty()) {
+      map_window->SetOverlay(i, nullptr);
+      tile_filenames[i].clear();
+    }
+  }
+
+  forecast_image_dirty = false;
   return true;
 #endif
 }
@@ -407,6 +479,11 @@ Skysight::DisplayTileLayer()
 void
 Skysight::Render()
 {
-  if (active_layer != nullptr)
+  if (active_layer == nullptr)
+    return;
+
+  if (active_layer->SupportsLiveTiles())
     (void)DisplayTileLayer();
+  else
+    (void)DisplayForecastLayer();
 }

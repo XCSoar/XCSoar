@@ -14,6 +14,7 @@
 #include "system/Path.hpp"
 #include "util/StaticArray.hxx"
 
+#include <algorithm>
 #include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/geometries/multi_polygon.hpp>
@@ -109,6 +110,30 @@ MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p) noexcept
                             GeoTo2D(p));
 }
 
+[[gnu::pure]]
+static GeoPoint
+InterpolateQuadrilateral(const GeoQuadrilateral &q,
+                         double u, double v) noexcept
+{
+  const auto top = q.top_left.Interpolate(q.top_right, u);
+  const auto bottom = q.bottom_left.Interpolate(q.bottom_right, u);
+  return top.Interpolate(bottom, v);
+}
+
+[[gnu::pure]]
+static GeoQuadrilateral
+SliceQuadrilateral(const GeoQuadrilateral &q,
+                   double u0, double v0,
+                   double u1, double v1) noexcept
+{
+  return {
+    InterpolateQuadrilateral(q, u0, v0),
+    InterpolateQuadrilateral(q, u1, v0),
+    InterpolateQuadrilateral(q, u0, v1),
+    InterpolateQuadrilateral(q, u1, v1),
+  };
+}
+
 bool
 MapOverlayBitmap::IsInside(GeoPoint p) const noexcept
 {
@@ -120,12 +145,9 @@ void
 MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
                        [[maybe_unused]] const WindowProjection &projection) noexcept
 {
-  if (!simple_bounds.Overlaps(projection.GetScreenBounds()))
+  const auto screen_bounds = projection.GetScreenBounds();
+  if (!simple_bounds.Overlaps(screen_bounds))
     /* not visible, outside of screen area */
-    return;
-
-  auto clipped = Clip(bounds, projection.GetScreenBounds());
-  if (clipped.empty())
     return;
 
   GLTexture &texture = *bitmap.GetNative();
@@ -146,6 +168,58 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
 
+  if (texture.GetWidth() > 512 || texture.GetHeight() > 512) {
+    const unsigned x_steps = std::clamp((texture.GetWidth() + 127u) / 128u,
+                                        1u, 32u);
+    const unsigned y_steps = std::clamp((texture.GetHeight() + 127u) / 128u,
+                                        1u, 32u);
+
+    for (unsigned y = 0; y < y_steps; ++y) {
+      const double v0 = double(y) / y_steps;
+      const double v1 = double(y + 1) / y_steps;
+
+      for (unsigned x = 0; x < x_steps; ++x) {
+        const double u0 = double(x) / x_steps;
+        const double u1 = double(x + 1) / x_steps;
+
+        const auto cell = SliceQuadrilateral(bounds, u0, v0, u1, v1);
+        if (!cell.GetBounds().Overlaps(screen_bounds))
+          continue;
+
+        const GeoPoint geo[4] = {
+          cell.top_left,
+          cell.top_right,
+          cell.bottom_right,
+          cell.bottom_left,
+        };
+        const double uv[4][2] = {
+          {u0, v0},
+          {u1, v0},
+          {u1, v1},
+          {u0, v1},
+        };
+
+        for (unsigned i = 0; i < 4; ++i) {
+          coord[i].x = uv[i][0] * x_factor;
+          coord[i].y = (bitmap.IsFlipped() ? 1 - uv[i][1] : uv[i][1]) * y_factor;
+
+          vertices[i] = projection.GeoToScreen(geo[i]);
+        }
+
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+      }
+    }
+
+    glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+    return;
+  }
+
+  auto clipped = Clip(bounds, screen_bounds);
+  if (clipped.empty()) {
+    glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+    return;
+  }
+
   for (const auto &polygon : clipped) {
     const auto &ring = polygon.outer();
 
@@ -158,10 +232,7 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
 
       auto p = MapInQuadrilateral(bounds, v);
       coord[i].x = p.x * x_factor;
-      coord[i].y = p.y * y_factor;
-
-      if (bitmap.IsFlipped())
-        coord[i].y = 1 - coord[i].y;
+      coord[i].y = (bitmap.IsFlipped() ? 1 - p.y : p.y) * y_factor;
 
       vertices[i] = projection.GeoToScreen(v);
     }

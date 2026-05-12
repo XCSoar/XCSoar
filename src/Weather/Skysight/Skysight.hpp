@@ -24,6 +24,7 @@ class Skysight final {
   SkySight::Layer *active_layer = nullptr;
   SkySight::Layer *displayed_layer = nullptr;
   unsigned displayed_zoom = 0;
+  bool forecast_image_dirty = true;
   std::array<std::string, 9> tile_filenames;
 
 public:
@@ -67,5 +68,6 @@ private:
   void ResetTiles() noexcept;
   bool UpdateActiveLayer(unsigned index, Path path,
                          const GeoBitmap::TileData &tile);
+  bool DisplayForecastLayer();
   bool DisplayTileLayer();
 };
