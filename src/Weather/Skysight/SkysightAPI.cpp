@@ -208,7 +208,7 @@ SkysightAPI::~SkysightAPI() = default;
 void
 SkysightAPI::UpdateBusyState(SkySight::Layer &layer) noexcept
 {
-  layer.updating = layer.datafiles_pending || layer.pending_downloads > 0;
+  layer.updating = layer.ShouldShowUpdating();
 }
 
 AllocatedPath
@@ -452,6 +452,12 @@ bool
 SkysightAPI::IsThrottled() const noexcept
 {
   return request->IsThrottled();
+}
+
+time_t
+SkysightAPI::GetThrottleRemainingSeconds() const noexcept
+{
+  return request->GetThrottleRemainingSeconds();
 }
 
 std::size_t
@@ -1072,7 +1078,7 @@ SkysightAPI::OnDatafileDownloaded(std::string_view layer_id,
     return;
 
   if (path.EndsWithIgnoreCase(".nc")) {
-    layer->updating = true;
+    UpdateBusyState(*layer);
     SyncSelectedLayer(layer_id);
     owner.OnDataUpdated();
 

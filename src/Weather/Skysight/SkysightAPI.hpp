@@ -50,6 +50,8 @@ public:
   bool HasCredentials() const noexcept;
   bool IsThrottled() const noexcept;
 
+  time_t GetThrottleRemainingSeconds() const noexcept;
+
   const std::vector<SkysightRegionEntry> &GetRegions() const noexcept {
     return regions;
   }

@@ -49,11 +49,14 @@ struct Layer {
   double to = 0;
   double mtime = 0;
   bool requires_auth = false;
+  /** True while the UI should present this layer as busy. */
   bool updating = false;
+  /** Metadata request for available forecast steps is still pending. */
   bool datafiles_pending = false;
   bool preload_requested = false;
   bool tile_layer = false;
   bool live_layer = false;
+  /** Number of queued/download/decode jobs still outstanding. */
   unsigned pending_downloads = 0;
   unsigned zoom_min = 1;
   unsigned zoom_max = GeoBitmap::MAX_TILE_ZOOM;
@@ -80,6 +83,22 @@ struct Layer {
 
   [[nodiscard]] bool SupportsLiveTiles() const noexcept {
     return live_layer && tile_layer;
+  }
+
+  /**
+   * Forecast layers may keep metadata loading in the background while cached
+   * steps or rendered data are already usable in the UI.
+   */
+  [[nodiscard]] bool HasUsableForecastData() const noexcept {
+    return !SupportsLiveTiles() && (!forecast_datafiles.empty() || mtime != 0);
+  }
+
+  /**
+   * A forecast layer is only shown as "updating" for metadata fetches if no
+   * cached data is usable yet; active downloads/decodes are always busy.
+   */
+  [[nodiscard]] bool ShouldShowUpdating() const noexcept {
+    return pending_downloads > 0 || (datafiles_pending && !HasUsableForecastData());
   }
 
   bool operator==(std::string_view other) const noexcept {

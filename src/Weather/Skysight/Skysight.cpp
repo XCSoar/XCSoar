@@ -125,6 +125,12 @@ Skysight::IsThrottled() const noexcept
   return api->IsThrottled();
 }
 
+time_t
+Skysight::GetThrottleRemainingSeconds() const noexcept
+{
+  return api->GetThrottleRemainingSeconds();
+}
+
 std::string_view
 Skysight::GetActiveLayerId() const noexcept
 {
@@ -160,7 +166,31 @@ Skysight::AddSelectedLayer(std::string_view id, bool save_profile)
   auto selected = *layer;
   if (!selected.SupportsLiveTiles()) {
     selected.datafiles_pending = true;
-    selected.updating = true;
+
+    const auto cached_times = SkysightCache::CollectForecastTimes(GetLocalPath(),
+                                                                  GetRegion(),
+                                                                  selected.id);
+    if (!cached_times.empty()) {
+      selected.forecast_datafiles.clear();
+      selected.forecast_datafiles.reserve(cached_times.size());
+      for (const auto t : cached_times)
+        selected.forecast_datafiles.emplace_back(t, "");
+
+      selected.forecast_time = cached_times.front();
+      selected.from = cached_times.back();
+      selected.to = cached_times.front();
+
+      const auto candidate = SkysightCache::FindForecastImage(GetLocalPath(),
+                                                              GetRegion(),
+                                                              selected.id,
+                                                              selected.forecast_time);
+      if (candidate.path != nullptr) {
+        selected.mtime = std::chrono::system_clock::to_time_t(
+          File::GetLastModification(candidate.path));
+      }
+    }
+
+    selected.updating = selected.ShouldShowUpdating();
   }
 
   if (!api->AddSelectedLayer(selected))
@@ -206,6 +236,12 @@ Skysight::RefreshCatalog() noexcept
 {
   api->PollRegions();
   api->PollLayers();
+}
+
+void
+Skysight::PollPendingDatafiles() noexcept
+{
+  api->PollSelectedDatafiles();
 }
 
 bool
@@ -358,8 +394,8 @@ Skysight::SetLayerActive(std::string_view id)
     api->ResetLastUpdates();
   } else {
     if (auto *selected = api->GetSelectedLayer(id); selected != nullptr) {
-      selected->updating = true;
-      active_layer->updating = true;
+      selected->updating = selected->ShouldShowUpdating();
+      active_layer->updating = selected->updating;
       api->PollSelectedDatafiles();
     }
   }

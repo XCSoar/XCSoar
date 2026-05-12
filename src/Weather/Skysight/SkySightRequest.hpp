@@ -117,6 +117,11 @@ public:
     return std::time(nullptr) < throttle_until;
   }
 
+  time_t GetThrottleRemainingSeconds() const noexcept {
+    const auto now = std::time(nullptr);
+    return throttle_until > now ? throttle_until - now : 0;
+  }
+
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
   void CancelTileDownloads() noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
