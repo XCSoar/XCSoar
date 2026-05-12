@@ -21,7 +21,29 @@ static constexpr time_t REGIONS_RETRY_SECONDS = 30;
 static constexpr time_t LAYERS_RETRY_SECONDS = 30;
 static constexpr time_t INITIAL_LAST_UPDATE_POLL_SECONDS = 30;
 static constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
-static constexpr time_t INITIAL_DATAFILES_TIME = 0;
+
+static time_t
+GetInitialDatafilesTime() noexcept
+{
+  return std::time(nullptr) - 18 * 60 * 60;
+}
+
+struct ForecastDatafileChoice {
+  time_t time = 0;
+  std::string link;
+};
+
+[[nodiscard]] static ForecastDatafileChoice
+ChooseDefaultForecastDatafile(time_t latest_past_time,
+                              std::string latest_past_link,
+                              time_t earliest_future_time,
+                              std::string earliest_future_link) noexcept
+{
+  if (latest_past_time > 0)
+    return {latest_past_time, std::move(latest_past_link)};
+
+  return {earliest_future_time, std::move(earliest_future_link)};
+}
 
 static time_t
 ParseUpdateTime(const boost::json::value &value)
@@ -100,11 +122,25 @@ GetUrlSuffix(std::string_view url)
   const auto filename = slash == std::string_view::npos
     ? clean
     : clean.substr(slash + 1);
+
+  if (filename.ends_with(".min")) {
+    const auto inner = filename.substr(0, filename.size() - 4);
+    const auto inner_dot = inner.find_last_of('.');
+    if (inner_dot != std::string_view::npos)
+      return std::string{filename.substr(inner_dot)};
+  }
+
   const auto dot = filename.find_last_of('.');
   if (dot == std::string_view::npos)
     return ".zip";
 
   return std::string{filename.substr(dot)};
+}
+
+[[nodiscard]] static bool
+NeedsNetCdfDecodeSuffix(std::string_view suffix) noexcept
+{
+  return suffix == ".nc" || suffix == ".nc.min" || suffix == ".min";
 }
 
 } // namespace
@@ -380,7 +416,7 @@ SkysightAPI::PollSelectedDatafiles() noexcept
     if (!selected.updating || selected.SupportsLiveTiles())
       continue;
 
-    request->RequestDatafiles(region, selected.id, INITIAL_DATAFILES_TIME);
+    request->RequestDatafiles(region, selected.id, GetInitialDatafilesTime());
     return;
   }
 }
@@ -543,12 +579,17 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     return;
 
   layer->updating = false;
+  layer->forecast_datafiles.clear();
 
   bool found = false;
   time_t first_time = 0;
   time_t last_time = 0;
-  time_t newest_time = 0;
-  std::string newest_link;
+  time_t latest_past_time = 0;
+  std::string latest_past_link;
+  time_t earliest_future_time = 0;
+  std::string earliest_future_link;
+  const auto now = std::time(nullptr);
+  std::vector<SkySight::ForecastDatafile> forecast_datafiles;
 
   try {
     for (const auto &entry_value : value.as_array()) {
@@ -571,9 +612,27 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
       }
 
       if (const auto *link = entry.if_contains("link");
-          link != nullptr && link->is_string() && update_time >= newest_time) {
-        newest_time = update_time;
-        newest_link = link->as_string().c_str();
+          link != nullptr && link->is_string()) {
+        const std::string link_value{link->as_string().c_str()};
+        if (const auto existing = std::find_if(forecast_datafiles.begin(),
+                                               forecast_datafiles.end(),
+                                               [update_time](const auto &candidate) {
+                                                 return candidate.time == update_time;
+                                               });
+            existing == forecast_datafiles.end())
+          forecast_datafiles.emplace_back(update_time, link_value);
+        else
+          existing->link = link_value;
+
+        if (update_time <= now) {
+          if (latest_past_time == 0 || update_time > latest_past_time) {
+            latest_past_time = update_time;
+            latest_past_link = link_value;
+          }
+        } else if (earliest_future_time == 0 || update_time < earliest_future_time) {
+          earliest_future_time = update_time;
+          earliest_future_link = link_value;
+        }
       }
     }
   } catch (...) {
@@ -583,12 +642,42 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
   }
 
   if (found) {
+    std::sort(forecast_datafiles.begin(), forecast_datafiles.end(),
+              [](const auto &a, const auto &b) {
+                return a.time > b.time;
+              });
+    layer->forecast_datafiles = std::move(forecast_datafiles);
     layer->from = first_time;
     layer->to = last_time;
     layer->last_update = std::max(layer->last_update, last_time);
 
-    if (!newest_link.empty())
-      EnsureDatafile(*layer, newest_time, newest_link);
+    const auto default_choice = ChooseDefaultForecastDatafile(latest_past_time,
+                                                              std::move(latest_past_link),
+                                                              earliest_future_time,
+                                                              std::move(earliest_future_link));
+
+    if (layer->forecast_time == 0 ||
+        std::none_of(layer->forecast_datafiles.begin(),
+                     layer->forecast_datafiles.end(),
+                     [layer](const auto &candidate) {
+                       return candidate.time == layer->forecast_time;
+                     }))
+      layer->forecast_time = default_choice.time;
+
+    const auto selected = std::find_if(layer->forecast_datafiles.begin(),
+                                       layer->forecast_datafiles.end(),
+                                       [layer](const auto &candidate) {
+                                         return candidate.time == layer->forecast_time;
+                                       });
+
+    if (selected != layer->forecast_datafiles.end() &&
+        (SkySightFileDecoder::IsNetCdfDecodeAvailable() ||
+         !NeedsNetCdfDecodeSuffix(GetUrlSuffix(selected->link)))) {
+      layer->updating = true;
+      EnsureDatafile(*layer, selected->time, selected->link);
+    }
+  } else {
+    layer->forecast_time = 0;
   }
 
   SyncSelectedLayer(layer_id);
@@ -667,6 +756,9 @@ void
 SkysightAPI::OnDatafileError(std::string_view layer_id,
                              [[maybe_unused]] time_t forecast_time) noexcept
 {
+  if (auto *layer = GetLayer(layer_id); layer != nullptr)
+    layer->updating = false;
+
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
 }

@@ -6,6 +6,7 @@
 #include "system/FileUtil.hpp"
 #include "time/BrokenDateTime.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <cstdio>
 
@@ -66,10 +67,16 @@ namespace SkysightCache {
 
 ForecastImageCandidate
 FindForecastImage(Path directory, std::string_view region,
-                  std::string_view layer_id)
+                  std::string_view layer_id,
+                  time_t preferred_time)
 {
-  ForecastImageCandidate best;
-  std::chrono::system_clock::time_point best_mtime{};
+  ForecastImageCandidate exact;
+  ForecastImageCandidate latest_past;
+  ForecastImageCandidate earliest_future;
+  std::chrono::system_clock::time_point exact_mtime{};
+  std::chrono::system_clock::time_point latest_past_mtime{};
+  std::chrono::system_clock::time_point earliest_future_mtime{};
+  const auto now = std::time(nullptr);
   std::string prefix{region};
   prefix += '-';
   prefix += layer_id;
@@ -77,12 +84,31 @@ FindForecastImage(Path directory, std::string_view region,
 
   struct Visitor final : public File::Visitor {
     const std::string_view prefix;
-    ForecastImageCandidate &best;
-    std::chrono::system_clock::time_point &best_mtime;
+    const time_t preferred_time;
+    const time_t now;
+    ForecastImageCandidate &exact;
+    ForecastImageCandidate &latest_past;
+    ForecastImageCandidate &earliest_future;
+    std::chrono::system_clock::time_point &exact_mtime;
+    std::chrono::system_clock::time_point &latest_past_mtime;
+    std::chrono::system_clock::time_point &earliest_future_mtime;
 
-    Visitor(std::string_view _prefix, ForecastImageCandidate &_best,
-            std::chrono::system_clock::time_point &_best_mtime) noexcept
-      :prefix(_prefix), best(_best), best_mtime(_best_mtime) {}
+    Visitor(std::string_view _prefix, time_t _preferred_time, time_t _now,
+            ForecastImageCandidate &_exact,
+            ForecastImageCandidate &_latest_past,
+            ForecastImageCandidate &_earliest_future,
+            std::chrono::system_clock::time_point &_exact_mtime,
+            std::chrono::system_clock::time_point &_latest_past_mtime,
+            std::chrono::system_clock::time_point &_earliest_future_mtime) noexcept
+      :prefix(_prefix),
+       preferred_time(_preferred_time),
+       now(_now),
+       exact(_exact),
+       latest_past(_latest_past),
+       earliest_future(_earliest_future),
+       exact_mtime(_exact_mtime),
+       latest_past_mtime(_latest_past_mtime),
+       earliest_future_mtime(_earliest_future_mtime) {}
 
     void Visit(Path full_path, Path filename) override {
       const auto forecast_time =
@@ -91,19 +117,83 @@ FindForecastImage(Path directory, std::string_view region,
         return;
 
       const auto mtime = File::GetLastModification(full_path);
-      if (best.path != nullptr &&
-          (forecast_time < best.forecast_time ||
-           (forecast_time == best.forecast_time && mtime <= best_mtime)))
-        return;
+      if (preferred_time > 0 && forecast_time == preferred_time) {
+        if (exact.path == nullptr || mtime > exact_mtime) {
+          exact.path = AllocatedPath(full_path.c_str());
+          exact.forecast_time = forecast_time;
+          exact_mtime = mtime;
+        }
 
-      best.path = AllocatedPath(full_path.c_str());
-      best.forecast_time = forecast_time;
-      best_mtime = mtime;
+        return;
+      }
+
+      if (forecast_time <= now) {
+        if (latest_past.path == nullptr ||
+            forecast_time > latest_past.forecast_time ||
+            (forecast_time == latest_past.forecast_time &&
+             mtime > latest_past_mtime)) {
+          latest_past.path = AllocatedPath(full_path.c_str());
+          latest_past.forecast_time = forecast_time;
+          latest_past_mtime = mtime;
+        }
+      } else if (earliest_future.path == nullptr ||
+                 forecast_time < earliest_future.forecast_time ||
+                 (forecast_time == earliest_future.forecast_time &&
+                  mtime > earliest_future_mtime)) {
+        earliest_future.path = AllocatedPath(full_path.c_str());
+        earliest_future.forecast_time = forecast_time;
+        earliest_future_mtime = mtime;
+      }
     }
-  } visitor(prefix, best, best_mtime);
+  } visitor(prefix, preferred_time, now,
+            exact, latest_past, earliest_future,
+            exact_mtime, latest_past_mtime, earliest_future_mtime);
 
   VisitForecastImageFiles(directory, visitor);
-  return best;
+
+  if (exact.path != nullptr)
+    return exact;
+
+  if (latest_past.path != nullptr)
+    return latest_past;
+
+  return earliest_future;
+}
+
+std::vector<time_t>
+CollectForecastTimes(Path directory, std::string_view region,
+                     std::string_view layer_id)
+{
+  std::vector<time_t> times;
+
+  std::string prefix{region};
+  prefix += '-';
+  prefix += layer_id;
+  prefix += '-';
+
+  struct Visitor final : public File::Visitor {
+    const std::string_view prefix;
+    std::vector<time_t> &times;
+
+    Visitor(std::string_view _prefix, std::vector<time_t> &_times) noexcept
+      :prefix(_prefix), times(_times) {}
+
+    void Visit([[maybe_unused]] Path full_path, Path filename) override {
+      const auto forecast_time =
+        ParseForecastFileTimestamp(filename.c_str(), prefix);
+      if (forecast_time <= 0)
+        return;
+
+      times.push_back(forecast_time);
+    }
+  } visitor(prefix, times);
+
+  VisitForecastImageFiles(directory, visitor);
+
+  std::sort(times.begin(), times.end());
+  times.erase(std::unique(times.begin(), times.end()), times.end());
+  std::reverse(times.begin(), times.end());
+  return times;
 }
 
 void

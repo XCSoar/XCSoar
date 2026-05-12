@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace SkySight {
 
@@ -25,6 +26,16 @@ struct LegendColor {
     :red(_red), green(_green), blue(_blue) {}
 };
 
+struct ForecastDatafile {
+  time_t time = 0;
+  std::string link;
+
+  ForecastDatafile() = default;
+
+  ForecastDatafile(time_t _time, std::string _link) noexcept
+    :time(_time), link(std::move(_link)) {}
+};
+
 struct Layer {
   std::string id;
   std::string name;
@@ -33,6 +44,7 @@ struct Layer {
   std::string data_type;
   std::map<float, LegendColor> legend;
   std::string time_name;
+  std::vector<ForecastDatafile> forecast_datafiles;
   double from = 0;
   double to = 0;
   double mtime = 0;
