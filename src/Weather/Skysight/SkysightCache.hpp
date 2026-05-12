@@ -11,6 +11,9 @@
 
 namespace SkysightCache {
 
+[[nodiscard]] bool
+IsTrustedTimeAvailableForCleanup() noexcept;
+
 struct ForecastImageCandidate {
   AllocatedPath path;
   time_t forecast_time = 0;

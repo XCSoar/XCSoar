@@ -3,14 +3,43 @@
 
 #include "SkysightCache.hpp"
 
+#include "Interface.hpp"
 #include "system/FileUtil.hpp"
 #include "time/BrokenDateTime.hpp"
+
+#if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
+#include "lib/dbus/Connection.hxx"
+#include "lib/dbus/TimeDate.hxx"
+#endif
 
 #include <algorithm>
 #include <chrono>
 #include <cstdio>
 
 namespace {
+
+static constexpr auto FORECAST_RETENTION = std::chrono::hours{12};
+
+[[nodiscard]] static bool
+IsGpsTimeValidForForecastCleanup() noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+  return basic.gps.real && basic.time_available &&
+    basic.date_time_utc.IsDatePlausible();
+}
+
+#if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
+[[nodiscard]] static bool
+HasNtpSynchronizedSystemTimeForForecastCleanup() noexcept
+{
+  try {
+    auto connection = ODBus::Connection::GetSystem();
+    return TimeDate::IsNTPSynchronized(connection);
+  } catch (...) {
+    return false;
+  }
+}
+#endif
 
 template<typename V>
 static void
@@ -23,6 +52,114 @@ VisitForecastImageFiles(Path directory, V &visitor)
   Directory::VisitSpecificFiles(directory, "*.jpeg", visitor);
 }
 
+[[nodiscard]] static bool
+StripSuffix(std::string_view &value, std::string_view suffix) noexcept
+{
+  if (!value.ends_with(suffix))
+    return false;
+
+  value.remove_suffix(suffix.size());
+  return true;
+}
+
+[[nodiscard]] static std::string_view
+ExtractTimestampPrefix(std::string_view stem) noexcept
+{
+  if (stem.size() < 16 || stem[stem.size() - 16] != '-')
+    return {};
+
+  return stem.substr(0, stem.size() - 16);
+}
+
+[[nodiscard]] static bool
+IsUnsignedNumber(std::string_view value) noexcept
+{
+  return !value.empty() &&
+    std::all_of(value.begin(), value.end(), [](char ch) {
+      return ch >= '0' && ch <= '9';
+    });
+}
+
+[[nodiscard]] static bool
+LooksLikeTileCacheStem(std::string_view stem) noexcept
+{
+  auto prefix = ExtractTimestampPrefix(stem);
+  if (prefix.empty())
+    return false;
+
+  const auto split3 = prefix.rfind('-');
+  if (split3 == std::string_view::npos ||
+      !IsUnsignedNumber(prefix.substr(split3 + 1)))
+    return false;
+
+  prefix = prefix.substr(0, split3);
+  const auto split2 = prefix.rfind('-');
+  if (split2 == std::string_view::npos ||
+      !IsUnsignedNumber(prefix.substr(split2 + 1)))
+    return false;
+
+  prefix = prefix.substr(0, split2);
+  const auto split1 = prefix.rfind('-');
+  if (split1 == std::string_view::npos ||
+      !IsUnsignedNumber(prefix.substr(split1 + 1)))
+    return false;
+
+  return true;
+}
+
+[[nodiscard]] static std::string_view
+StripForecastArtifactSuffix(std::string_view filename) noexcept
+{
+  auto stem = filename;
+
+  if (StripSuffix(stem, ".min")) {
+    if (StripSuffix(stem, ".nc") ||
+        StripSuffix(stem, ".tif") ||
+        StripSuffix(stem, ".tiff") ||
+        StripSuffix(stem, ".png"))
+      return stem;
+
+    return {};
+  }
+
+  if (StripSuffix(stem, ".zip") ||
+      StripSuffix(stem, ".nc") ||
+    StripSuffix(stem, ".jpg") ||
+      StripSuffix(stem, ".tif") ||
+      StripSuffix(stem, ".tiff") ||
+      StripSuffix(stem, ".png") ||
+      StripSuffix(stem, ".jpeg"))
+    return stem;
+
+  return {};
+}
+
+[[nodiscard]] static time_t
+ParseAnyForecastFileTimestamp(std::string_view filename) noexcept
+{
+  const bool is_jpg = filename.ends_with(".jpg");
+  auto stem = StripForecastArtifactSuffix(filename);
+  if (stem.size() < 16)
+    return 0;
+
+  if (is_jpg && LooksLikeTileCacheStem(stem))
+    return 0;
+
+  const auto timestamp = stem.substr(stem.size() - 15);
+  if (stem[stem.size() - 16] != '-')
+    return 0;
+
+  unsigned year, month, day, hour, minute;
+  if (std::sscanf(std::string{timestamp}.c_str(), "%4u-%2u-%2u-%2u%2u",
+                  &year, &month, &day, &hour, &minute) != 5)
+    return 0;
+
+  const BrokenDateTime date_time{year, month, day, hour, minute};
+  if (!date_time.IsPlausible())
+    return 0;
+
+  return std::chrono::system_clock::to_time_t(date_time.ToTimePoint());
+}
 [[nodiscard]] static time_t
 ParseForecastFileTimestamp(std::string_view filename,
                            std::string_view prefix) noexcept
@@ -61,9 +198,45 @@ public:
   }
 };
 
+class OlderThanForecastTimeVisitor final : public File::Visitor {
+  const time_t cutoff;
+  const std::chrono::system_clock::time_point fallback_cutoff;
+
+public:
+  explicit OlderThanForecastTimeVisitor(time_t _cutoff) noexcept
+    :cutoff(_cutoff),
+     fallback_cutoff(std::chrono::system_clock::from_time_t(_cutoff)) {}
+
+  void Visit(Path full_path, Path filename) override {
+    const auto forecast_time = ParseAnyForecastFileTimestamp(filename.c_str());
+    if (forecast_time > 0) {
+      if (forecast_time < cutoff)
+        File::Delete(full_path);
+
+      return;
+    }
+
+    if (File::GetLastModification(full_path) < fallback_cutoff)
+      File::Delete(full_path);
+  }
+};
+
 } // namespace
 
 namespace SkysightCache {
+
+bool
+IsTrustedTimeAvailableForCleanup() noexcept
+{
+  if (IsGpsTimeValidForForecastCleanup())
+    return true;
+
+#if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
+  return HasNtpSynchronizedSystemTimeForForecastCleanup();
+#else
+  return false;
+#endif
+}
 
 ForecastImageCandidate
 FindForecastImage(Path directory, std::string_view region,
@@ -199,14 +372,25 @@ CollectForecastTimes(Path directory, std::string_view region,
 void
 Cleanup(Path directory) noexcept
 {
-  const auto now = std::chrono::system_clock::now();
-  OlderThanFileVisitor delete_tiles{now - std::chrono::hours{12}};
-  OlderThanFileVisitor delete_tmp{now - std::chrono::hours{6}};
-  OlderThanFileVisitor delete_json{now - std::chrono::hours{1}};
+  try {
+    const auto now = std::chrono::system_clock::now();
+    OlderThanFileVisitor delete_tiles{now - std::chrono::hours{12}};
+    OlderThanFileVisitor delete_tmp{now - std::chrono::hours{6}};
+    OlderThanFileVisitor delete_json{now - std::chrono::hours{1}};
 
-  Directory::VisitSpecificFiles(directory, "*.jpg", delete_tiles);
-  Directory::VisitSpecificFiles(directory, "*.tmp", delete_tmp);
-  Directory::VisitSpecificFiles(directory, "*.json", delete_json);
+    Directory::VisitSpecificFiles(directory, "*.jpg", delete_tiles);
+
+    OlderThanForecastTimeVisitor delete_forecasts{
+      std::chrono::system_clock::to_time_t(now - FORECAST_RETENTION)};
+    VisitForecastImageFiles(directory, delete_forecasts);
+    Directory::VisitSpecificFiles(directory, "*.nc", delete_forecasts);
+    Directory::VisitSpecificFiles(directory, "*.min", delete_forecasts);
+    Directory::VisitSpecificFiles(directory, "*.zip", delete_forecasts);
+
+    Directory::VisitSpecificFiles(directory, "*.tmp", delete_tmp);
+    Directory::VisitSpecificFiles(directory, "*.json", delete_json);
+  } catch (...) {
+  }
 }
 
 } // namespace SkysightCache
