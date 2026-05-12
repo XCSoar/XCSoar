@@ -25,6 +25,7 @@ class SkySightClient final {
   SkySight::Layer *displayed_layer = nullptr;
   unsigned displayed_zoom = 0;
   bool forecast_image_dirty = true;
+  bool forecast_cleanup_pending = true;
   std::array<std::string, 9> tile_filenames;
 
 public:
@@ -75,6 +76,7 @@ public:
 private:
   bool AddSelectedLayer(std::string_view id, bool save_profile,
                         bool request_datafiles);
+  void MaybeCleanupFiles() noexcept;
   void SaveSelectedLayers() const;
   void CleanupFiles() noexcept;
   void ResetTiles() noexcept;
