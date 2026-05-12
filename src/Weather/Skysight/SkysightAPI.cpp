@@ -5,6 +5,7 @@
 #include "ForecastUtils.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkySightRequest.hpp"
+#include "SkySightURL.hpp"
 #include "Skysight.hpp"
 #include "io/FileLineReader.hpp"
 #include "io/FileOutputStream.hxx"
@@ -572,11 +573,8 @@ SkysightAPI::MakeTileUrl(const SkySight::Layer &layer,
                          time_t timestamp,
                          const GeoBitmap::TileData &tile)
 {
-  StaticString<256> url;
-  url.Format("https://skysight.io/api/%s/%u/%u/%u/%s",
-             layer.id.c_str(), tile.zoom, tile.x, tile.y,
-             FormatUrlTimestamp(timestamp).c_str());
-  return url.c_str();
+  return SkySightUrl::Tile(layer.id, tile.zoom, tile.x, tile.y,
+                           FormatUrlTimestamp(timestamp));
 }
 
 AllocatedPath

@@ -4,6 +4,7 @@
 #include "SkySightRequest.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkysightAPI.hpp"
+#include "SkySightURL.hpp"
 #include "Version.hpp"
 #include "co/Task.hxx"
 #include "json/Serialize.hxx"
@@ -53,7 +54,8 @@ ParseJsonResponse(std::string_view body, const char *context)
 static Co::Task<boost::json::value>
 LoginTask(CurlGlobal &curl, std::string email, std::string password)
 {
-  CurlEasy easy{"https://skysight.io/api/auth"};
+  const auto url = SkySightUrl::Api("auth");
+  CurlEasy easy{url.c_str()};
   Curl::Setup(easy);
 
   CurlSlist headers;
@@ -428,7 +430,7 @@ SkySightRequest::RequestRegions()
 
   regions_running = true;
   regions_job.Start(
-    JsonTask(curl, "https://skysight.io/api/regions", api_key),
+    JsonTask(curl, SkySightUrl::Api("regions"), api_key),
     [this](boost::json::value value) {
       OnRegionsSuccess(std::move(value));
     },
@@ -481,7 +483,8 @@ SkySightRequest::RequestLayers(std::string_view region_id)
 
   layers_running = true;
 
-  std::string url{"https://skysight.io/api/layers?region_id="};
+  auto url = SkySightUrl::Api("layers");
+  url += "?region_id=";
   url += region_id;
 
   layers_job.Start(
@@ -538,7 +541,8 @@ SkySightRequest::RequestLastUpdates(std::string_view region_id)
 
   last_updates_running = true;
 
-  std::string url{"https://skysight.io/api/data/last_updated?region_id="};
+  auto url = SkySightUrl::Api("data/last_updated");
+  url += "?region_id=";
   url += region_id;
 
   last_updates_job.Start(
@@ -575,7 +579,8 @@ SkySightRequest::RequestDatafiles(std::string_view region_id,
   datafiles_running = true;
   datafiles_layer_id = std::string{layer_id};
 
-  std::string url{"https://skysight.io/api/data?region_id="};
+  auto url = SkySightUrl::Api("data");
+  url += "?region_id=";
   url += region_id;
   url += "&layer_ids=";
   url += layer_id;
