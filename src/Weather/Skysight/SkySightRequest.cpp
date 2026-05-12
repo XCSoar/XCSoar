@@ -379,7 +379,8 @@ SkySightRequest::DownloadDatafileResult
 SkySightRequest::DownloadDatafile(std::string_view layer_id,
                                   time_t forecast_time,
                                   std::string_view url,
-                                  Path filename)
+                                  Path filename,
+                                  bool high_priority)
 {
   PumpQueue();
 
@@ -403,10 +404,15 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
     }
   }
 
-  pending_jobs.emplace_back(FileJob::Kind::ForecastData,
-                            key, std::string{url},
-                            AllocatedPath(filename.c_str()), true,
-                            std::string{layer_id}, forecast_time);
+  PendingJob job{FileJob::Kind::ForecastData,
+                 key, std::string{url},
+                 AllocatedPath(filename.c_str()), true,
+                 std::string{layer_id}, forecast_time};
+  if (high_priority)
+    pending_jobs.push_front(std::move(job));
+  else
+    pending_jobs.push_back(std::move(job));
+
   PumpQueue();
   return DownloadDatafileResult::Queued;
 }

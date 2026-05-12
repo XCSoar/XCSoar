@@ -126,7 +126,8 @@ public:
   void CancelTileDownloads() noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
                                           time_t forecast_time,
-                                          std::string_view url, Path filename);
+                                          std::string_view url, Path filename,
+                                          bool high_priority = false);
   bool RequestRegions();
   bool RequestLayers(std::string_view region_id);
   bool RequestLastUpdates(std::string_view region_id);

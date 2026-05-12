@@ -639,8 +639,11 @@ SkysightAPI::QueueForecastDatafile(SkySight::Layer &layer,
       NeedsNetCdfDecodeSuffix(suffix))
     return false;
 
+  const bool high_priority = owner.GetActiveLayerId() == layer.id;
+
   switch (request->DownloadDatafile(layer.id, forecast_time, link,
-                                    GetDatafilePath(layer, forecast_time, suffix))) {
+                                    GetDatafilePath(layer, forecast_time, suffix),
+                                    high_priority)) {
   case SkySightRequest::DownloadDatafileResult::Duplicate:
   case SkySightRequest::DownloadDatafileResult::Available:
     return true;
