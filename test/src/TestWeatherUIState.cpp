@@ -93,7 +93,7 @@ static void
 TestSkySightKnownLiveTimestamp()
 {
   constexpr time_t NOW = 10'000;
-  SkySight::Layer layer;
+  SkySight::Layer layer{"satellite", "Satellite", "", true, true, true};
   ok1(!layer.HasKnownLiveTimestamp());
   ok1(layer.IsLiveMetadataPollDue(NOW, 30, 300));
 
@@ -105,13 +105,16 @@ TestSkySightKnownLiveTimestamp()
   ok1(!layer.IsLiveMetadataPollDue(NOW + 299, 30, 300));
   ok1(layer.IsLiveMetadataPollDue(NOW + 300, 30, 300));
 
-  SkySight::Layer rain;
+  SkySight::Layer rain{"rain", "Rain", "", true, true, true};
   ok1(rain.IsLiveMetadataPollDue(NOW + 1, 30, 300));
   rain.last_update_request = NOW;
   ok1(!rain.IsLiveMetadataPollDue(NOW + 29, 30, 300));
   ok1(rain.IsLiveMetadataPollDue(NOW + 30, 30, 300));
   rain.live_metadata_support = SkySight::LiveMetadataSupport::Unsupported;
   ok1(!rain.IsLiveMetadataPollDue(NOW + 300, 30, 300));
+
+  layer.live_layer = false;
+  ok1(!layer.HasKnownLiveTimestamp());
 }
 
 static void

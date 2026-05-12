@@ -52,10 +52,13 @@ public:
   bool HasForecastLayers() const noexcept;
   bool IsForecastDecodeAvailable() const noexcept;
   void RefreshCatalog() noexcept;
+  void PollPendingDatafiles() noexcept;
 
   bool HasCredentials() const noexcept;
 
   bool IsThrottled() const noexcept;
+
+  time_t GetThrottleRemainingSeconds() const noexcept;
 
   std::string_view GetActiveLayerId() const noexcept;
   std::string_view GetDisplayedLayerId() const noexcept;
