@@ -119,6 +119,12 @@ Skysight::HasCredentials() const noexcept
   return api->HasCredentials();
 }
 
+bool
+Skysight::IsThrottled() const noexcept
+{
+  return api->IsThrottled();
+}
+
 std::string_view
 Skysight::GetActiveLayerId() const noexcept
 {

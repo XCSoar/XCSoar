@@ -55,6 +55,8 @@ public:
 
   bool HasCredentials() const noexcept;
 
+  bool IsThrottled() const noexcept;
+
   std::string_view GetActiveLayerId() const noexcept;
   std::string_view GetDisplayedLayerId() const noexcept;
 
