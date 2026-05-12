@@ -18,11 +18,13 @@
 
 class CurlGlobal;
 class Skysight;
+class SkySightFileDecodeJob;
 class SkySightRequest;
 
 class SkysightAPI final {
   Skysight &owner;
   std::unique_ptr<SkySightRequest> request;
+  std::unique_ptr<SkySightFileDecodeJob> decode_job;
   std::vector<SkySight::Layer> layers;
   std::vector<SkySight::Layer> selected_layers;
   std::vector<SkysightRegionEntry> regions = GetDefaultSkysightRegions();

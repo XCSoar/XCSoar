@@ -256,8 +256,7 @@ SkySightRequest::PumpQueue()
 
     file_jobs.emplace(key, std::move(active_job));
     job_ptr->function.Start(
-      DownloadFileTask(curl, std::move(job.url),
-                       AllocatedPath(job_ptr->path.c_str()),
+      DownloadFileTask(curl, std::move(job.url), std::move(job.path),
                        job.requires_auth ? api_key : std::string{}),
       [this, key](AllocatedPath) {
         OnFileSuccess(key);
@@ -367,10 +366,6 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
   if (File::Exists(filename)) {
     try {
       const auto prepared = SkySightFileDecoder::Prepare(filename);
-      if (prepared.NeedsDecode())
-        LogFmt("SkySight decoder prototype staged %s -> %s",
-               prepared.source_path.c_str(), prepared.display_path.c_str());
-
       api.OnDatafileDownloaded(layer_id, forecast_time,
                                prepared.GetAvailablePath());
     } catch (...) {
@@ -624,21 +619,18 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
     i->second->finished = true;
 
     try {
-      const auto prepared = SkySightFileDecoder::Prepare(i->second->path);
       switch (i->second->kind) {
       case FileJob::Kind::Generic:
         api.OnDownloadComplete();
         break;
 
-      case FileJob::Kind::ForecastData:
-        if (prepared.NeedsDecode())
-          LogFmt("SkySight decoder prototype staged %s -> %s",
-                 prepared.source_path.c_str(), prepared.display_path.c_str());
-
+      case FileJob::Kind::ForecastData: {
+        const auto prepared = SkySightFileDecoder::Prepare(i->second->path);
         api.OnDatafileDownloaded(i->second->layer_id,
                                  i->second->forecast_time,
                                  prepared.GetAvailablePath());
         break;
+      }
       }
     } catch (...) {
       LogError(std::current_exception(), "SkySight forecast file preparation failed");

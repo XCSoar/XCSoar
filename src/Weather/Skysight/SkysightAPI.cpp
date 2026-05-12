@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SkysightAPI.hpp"
+#include "SkySightFileDecoder.hpp"
 #include "SkySightRequest.hpp"
 #include "Skysight.hpp"
 #include "time/Convert.hxx"
@@ -111,6 +112,7 @@ GetUrlSuffix(std::string_view url)
 SkysightAPI::SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path)
   :owner(_owner),
    request(std::make_unique<SkySightRequest>(*this, curl)),
+   decode_job(std::make_unique<SkySightFileDecodeJob>()),
    cache_path(_cache_path)
 {
   InitialiseLayers(layers);
@@ -143,6 +145,8 @@ SkysightAPI::Configure(std::string_view email, std::string_view password,
   layers_loaded = false;
   last_layers_request = 0;
   ResetLastUpdates();
+  if (decode_job != nullptr)
+    decode_job->Cancel();
   selected_layers.clear();
   for (auto &layer : layers)
     layer.last_update = 0;
@@ -628,6 +632,39 @@ SkysightAPI::OnDatafileDownloaded(std::string_view layer_id,
   if (layer == nullptr)
     return;
 
+  if (path.EndsWithIgnoreCase(".nc")) {
+    if (decode_job == nullptr)
+      decode_job = std::make_unique<SkySightFileDecodeJob>();
+
+    if (decode_job->GetStatus() != SkySightFileDecodeJob::Status::Idle) {
+      LogFmt("SkySight decoder is already active, skipping %s", layer->id.c_str());
+      OnDatafileError(layer_id, forecast_time);
+      return;
+    }
+
+    layer->updating = true;
+    SyncSelectedLayer(layer_id);
+    owner.OnDataUpdated();
+
+    decode_job->Start(
+      SkySightPreparedData{
+        SkySightPreparedDataKind::NeedsNetCdfDecode,
+        AllocatedPath(path.c_str()),
+        path.WithSuffix(".tif"),
+      },
+      std::string{layer->id},
+      layer->legend,
+      [this, layer_id = std::string{layer_id}, forecast_time](AllocatedPath output_path) {
+        OnDatafileDownloaded(layer_id, forecast_time, output_path);
+      },
+      [this, layer_id = std::string{layer_id}, forecast_time](std::exception_ptr error) {
+        LogError(error, "SkySight forecast decode failed");
+        OnDatafileError(layer_id, forecast_time);
+      });
+    return;
+  }
+
+  layer->updating = false;
   layer->last_update = std::max(layer->last_update, forecast_time);
   layer->mtime = std::chrono::system_clock::to_time_t(
     File::GetLastModification(path));
