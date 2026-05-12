@@ -42,6 +42,9 @@ Version 7.45 - not yet released
     filter on entry (``recent``/``last_used``, ``airport``, ``landable``,
     ``turnpoint``, ``start``, ``finish``), so a gesture or key binding can
     open the waypoint list focused on a category #336
+  - default Left-Up (LU) map gesture opens the Waypoint Selection dialog
+    pre-filtered to recently-used waypoints; listed in the Gesture Help
+    dialog with its own icon #336
 * map
   - obstacles hidden at wider map scales than other non-landables (5000 vs 10000)
   - draw up to 1024 waypoints at once (was 256) #2327

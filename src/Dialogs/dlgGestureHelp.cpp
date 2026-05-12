@@ -23,6 +23,7 @@ GetGestureHelpText() noexcept
     "- ![DU](resource:IDB_GESTURE_DU) **Down-Up** (DU): Menu\n"
     "- ![DR](resource:IDB_GESTURE_DR) **Down-Right** (DR): Waypoint details\n"
     "- ![DL](resource:IDB_GESTURE_DL) **Down-Left** (DL): Alternates\n"
+    "- ![LU](resource:IDB_GESTURE_LU) **Left-Up** (LU): Recently used waypoints\n"
     "- ![RD](resource:IDB_GESTURE_RD) **Right-Down** (RD): Task manager\n"
     "- ![URD](resource:IDB_GESTURE_URD) **Up-Right-Down** (URD): Analysis\n"
     "- ![LDR](resource:IDB_GESTURE_LDR) **Left-Down-Right** (LDR): Checklist\n"

@@ -276,7 +276,7 @@ $(PNG5): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstam
 	$(Q)$(IM_PREFIX)convert $< $@
 
 ####### gesture icons from SVG sources
-GESTURES_ANDROID = down dl dr du left ldr ldrdl right rd rl up ud uldr urd urdl
+GESTURES_ANDROID = down dl dr du left ldr ldrdl lu right rd rl up ud uldr urd urdl
 PNG6 := $(addprefix $(DRAWABLE_DIR)/gesture_,$(addsuffix .png,$(GESTURES_ANDROID)))
 $(PNG6): $(DRAWABLE_DIR)/gesture_%.png: doc/manual/figures/gesture_%.svg | $(DRAWABLE_DIR)/dirstamp
 	$(Q)rsvg-convert --width=82 --height=82 $< -o $@

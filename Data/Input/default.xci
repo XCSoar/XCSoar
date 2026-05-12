@@ -484,6 +484,11 @@ type=gesture
 data=LDRDL
 event=Status all
 
+mode=default
+type=gesture
+data=LU
+event=GotoLookup recent
+
 ###
 
 mode=default
