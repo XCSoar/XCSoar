@@ -5,13 +5,14 @@
 #include "SkySightFileDecoder.hpp"
 #include "SkysightAPI.hpp"
 #include "Version.hpp"
-#include "json/ParserOutputStream.hxx"
 #include "co/Task.hxx"
+#include "json/Serialize.hxx"
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/curl/Slist.hxx"
 #include "io/FileOutputStream.hxx"
+#include "io/StringOutputStream.hxx"
 #include "lib/fmt/RuntimeError.hxx"
 #include "lib/curl/Global.hxx"
 #include "LogFile.hpp"
@@ -33,36 +34,16 @@ public:
      status(_status) {}
 };
 
-static std::string
-EscapeJsonString(std::string_view value)
+static boost::json::value
+ParseJsonResponse(std::string_view body, const char *context)
 {
-  std::string escaped;
-  escaped.reserve(value.size() + 8);
+  boost::system::error_code ec;
+  auto value = boost::json::parse(body, ec);
+  if (!ec)
+    return value;
 
-  for (const char ch : value) {
-    switch (ch) {
-    case '\\':
-      escaped += "\\\\";
-      break;
-    case '"':
-      escaped += "\\\"";
-      break;
-    case '\n':
-      escaped += "\\n";
-      break;
-    case '\r':
-      escaped += "\\r";
-      break;
-    case '\t':
-      escaped += "\\t";
-      break;
-    default:
-      escaped.push_back(ch);
-      break;
-    }
-  }
-
-  return escaped;
+  throw FmtRuntimeError("{} returned invalid JSON: {}",
+                        context, ec.message());
 }
 
 static Co::Task<boost::json::value>
@@ -79,20 +60,24 @@ LoginTask(CurlGlobal &curl, std::string email, std::string password)
   easy.SetPost();
   easy.SetRequestHeaders(headers.Get());
 
-  const auto json = std::string{"{\"username\":\""} +
-                    EscapeJsonString(email) +
-                    "\",\"password\":\"" +
-                    EscapeJsonString(password) +
-                    "\"}";
+  const boost::json::object payload{
+    {"username", email},
+    {"password", password},
+  };
+
+  StringOutputStream json_stream;
+  Json::Serialize(json_stream, payload);
+  auto json = std::move(json_stream).GetValue();
   easy.SetRequestBody(json);
   easy.SetFailOnError(false);
 
-  Json::ParserOutputStream parser;
-  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
+  StringOutputStream body_stream;
+  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), body_stream);
+  auto body = std::move(body_stream).GetValue();
   if (response.status != 200 && response.status != 201)
     throw FmtRuntimeError("SkySight login failed with status {}", response.status);
 
-  co_return parser.Finish();
+  co_return ParseJsonResponse(body, "SkySight login");
 }
 
 static Co::Task<boost::json::value>
@@ -109,12 +94,13 @@ JsonTask(CurlGlobal &curl, std::string url, std::string api_key)
     easy.SetRequestHeaders(headers.Get());
   }
 
-  Json::ParserOutputStream parser;
-  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
+  StringOutputStream body_stream;
+  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), body_stream);
+  auto body = std::move(body_stream).GetValue();
   if (response.status != 200 && response.status != 201)
     throw HttpStatusError(response.status);
 
-  co_return parser.Finish();
+  co_return ParseJsonResponse(body, "SkySight request");
 }
 
 static Co::Task<AllocatedPath>
