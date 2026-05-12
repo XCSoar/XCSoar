@@ -4,6 +4,7 @@
 #pragma once
 
 #define HAVE_TCP
+#define HAVE_IPV6
 
 #ifdef HAVE_POSIX
 #define HAVE_UN
