@@ -8,6 +8,7 @@
 #include "DataGlobals.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Form/Button.hpp"
@@ -19,11 +20,15 @@
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/ListWidget.hpp"
+#include "Widget/MultiSelectListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Weather/Skysight/Skysight.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include "util/StaticString.hxx"
+
+#include <algorithm>
+#include <functional>
 
 static StaticString<32>
 FormatForecastTimeLabel(time_t forecast_time) noexcept
@@ -61,12 +66,15 @@ public:
       if (!skysight->HasCredentials())
         row_renderer.DrawSecondRow(canvas, rc,
                                    _("Configure SkySight credentials in Weather settings."));
+      else if (skysight->IsThrottled())
+        row_renderer.DrawSecondRow(canvas, rc,
+                                   _("SkySight API rate-limited. Retrying shortly."));
       else if (!skysight->HasForecastLayers())
         row_renderer.DrawSecondRow(canvas, rc,
                                    _("Loading SkySight catalog..."));
       else
         row_renderer.DrawSecondRow(canvas, rc,
-                                   _("No SkySight layers selected. Press Add to choose a parameter."));
+                                   _("No SkySight layers selected. Press Select to choose parameters."));
 
       return;
     }
@@ -85,8 +93,12 @@ public:
 
     StaticString<256> second_row;
     if (layer->updating) {
-      if (!layer->SupportsLiveTiles() && layer->datafiles_pending)
-        second_row = _("Loading forecast steps...");
+      if (!layer->SupportsLiveTiles() && layer->datafiles_pending) {
+        if (skysight->IsThrottled())
+          second_row = _("Rate-limited by SkySight, retrying forecast steps shortly...");
+        else
+          second_row = _("Loading forecast steps...");
+      }
       else if (!layer->SupportsLiveTiles() && layer->pending_downloads > 1)
         second_row.Format(_("Preloading %u forecast steps..."),
                           layer->pending_downloads);
@@ -139,46 +151,6 @@ public:
   }
 };
 
-class LayerPickerRenderer final : public ListItemRenderer {
-  TextRowRenderer row_renderer;
-  std::shared_ptr<Skysight> skysight;
-
-public:
-  LayerPickerRenderer()
-    :skysight(DataGlobals::GetSkysight()) {}
-
-  unsigned CalculateLayout(const DialogLook &look) noexcept {
-    return row_renderer.CalculateLayout(*look.list.font);
-  }
-
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned index) noexcept override {
-    if (skysight == nullptr || index >= skysight->NumLayers())
-      return;
-
-    if (const auto *layer = skysight->GetLayer(index); layer != nullptr)
-      row_renderer.DrawTextRow(canvas, rc, layer->name.c_str());
-  }
-
-  static const char *HelpCallback(unsigned index) noexcept {
-    static StaticString<512> help;
-
-    const auto skysight = DataGlobals::GetSkysight();
-    if (!skysight || index >= skysight->NumLayers()) {
-      help = _("No description available.");
-      return help.c_str();
-    }
-
-    const auto *layer = skysight->GetLayer(index);
-    if (layer == nullptr || layer->description.empty())
-      help = _("No description available.");
-    else
-      help = layer->description.c_str();
-
-    return help.c_str();
-  }
-};
-
 class ForecastStepRenderer final : public ListItemRenderer {
   TextRowRenderer row_renderer;
   std::vector<time_t> forecast_times;
@@ -216,15 +188,66 @@ public:
   }
 };
 
+class MultiLayerPickerWidget final : public MultiSelectListWidget {
+  TextRowRenderer row_renderer;
+  std::shared_ptr<Skysight> skysight;
+  std::function<void()> selection_changed_callback;
+
+public:
+  explicit MultiLayerPickerWidget(std::shared_ptr<Skysight> _skysight)
+    :skysight(std::move(_skysight)) {}
+
+  void SetSelectionChangedCallback(std::function<void()> callback) noexcept {
+    selection_changed_callback = std::move(callback);
+  }
+
+  unsigned CalculateLayout(const DialogLook &look) noexcept {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    CreateList(parent, look, rc, row_renderer.CalculateLayout(*look.list.font));
+    SetLengthWithSelection(skysight ? skysight->NumLayers() : 0);
+    MultiSelectListWidget::Prepare(parent, rc);
+
+    if (skysight == nullptr)
+      return;
+
+    for (unsigned i = 0; i < skysight->NumLayers(); ++i) {
+      const auto *layer = skysight->GetLayer(i);
+      if (layer != nullptr && skysight->IsSelectedLayer(layer->id))
+        SetSelected(i, true);
+    }
+  }
+
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override {
+    if (skysight == nullptr || idx >= skysight->NumLayers())
+      return;
+
+    const auto *layer = skysight->GetLayer(idx);
+    if (layer == nullptr)
+      return;
+
+    DrawCheckboxText(canvas, rc, layer->name.c_str(), IsSelected(idx));
+  }
+
+protected:
+  void OnSelectionChanged() noexcept override {
+    if (selection_changed_callback)
+      selection_changed_callback();
+  }
+};
+
 class SkysightWidget final : public ListWidget {
   std::shared_ptr<Skysight> skysight;
   ButtonPanelWidget *buttons_widget = nullptr;
   Button *activate_button = nullptr;
-  Button *add_button = nullptr;
+  Button *select_button = nullptr;
   Button *time_button = nullptr;
   Button *preload_button = nullptr;
   Button *preload_all_button = nullptr;
-  Button *remove_button = nullptr;
   SelectedLayerRenderer row_renderer;
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
@@ -275,8 +298,8 @@ private:
     activate_button = buttons.Add(_("Activate"), [this]() {
       ActivateClicked(GetList().GetCursorIndex());
     });
-    add_button = buttons.Add(_("Add"), [this]() {
-      AddClicked();
+    select_button = buttons.Add(_("Select"), [this]() {
+      SelectClicked();
     });
     time_button = buttons.Add(_("Time"), [this]() {
       SelectTimeClicked();
@@ -287,25 +310,22 @@ private:
     preload_all_button = buttons.Add(_("Preload All"), [this]() {
       PreloadAllClicked();
     });
-    remove_button = buttons.Add(_("Remove"), [this]() {
-      RemoveClicked();
-    });
     buttons.EnableCursorSelection();
   }
 
   void UpdateButtons() {
-    if (activate_button == nullptr || add_button == nullptr ||
+    if (activate_button == nullptr || select_button == nullptr ||
         time_button == nullptr || preload_button == nullptr ||
-        preload_all_button == nullptr || remove_button == nullptr)
+        preload_all_button == nullptr)
       return;
 
     const auto empty = skysight == nullptr || skysight->NumSelectedLayers() == 0;
     const auto catalog_loading = skysight != nullptr && skysight->HasCredentials() &&
       !skysight->HasForecastLayers();
-    add_button->SetCaption(catalog_loading ? _("Loading") : _("Add"));
-    add_button->SetEnabled(skysight != nullptr && !catalog_loading &&
-                           !skysight->SelectedLayersFull() &&
-                           skysight->NumLayers() > 0);
+
+    select_button->SetCaption(catalog_loading ? _("Loading") : _("Select"));
+    select_button->SetEnabled(skysight != nullptr && !catalog_loading &&
+                  skysight->NumLayers() > 0);
 
     const auto index = empty ? 0u : GetList().GetCursorIndex();
     const auto *layer = empty ? nullptr : skysight->GetSelectedLayer(index);
@@ -331,7 +351,6 @@ private:
                                skysight->HasCredentials() && !layer->updating);
     preload_all_button->SetEnabled(skysight != nullptr && skysight->HasCredentials() &&
                                    any_forecast_layer && any_idle_forecast_layer);
-    remove_button->SetEnabled(layer != nullptr && !layer->updating);
 
     if (active) {
       activate_button->SetEnabled(true);
@@ -350,7 +369,9 @@ private:
     if (skysight == nullptr)
       return;
 
-    if (skysight->HasCredentials() && !skysight->HasForecastLayers())
+    skysight->PollPendingDatafiles();
+
+    if (skysight->HasCredentials() && !skysight->HasForecastLayers() && !skysight->IsThrottled())
       skysight->RefreshCatalog();
 
     GetList().SetLength(std::max<std::size_t>(1, skysight->NumSelectedLayers()));
@@ -358,7 +379,7 @@ private:
     UpdateButtons();
   }
 
-  void AddClicked() {
+  void SelectClicked() {
     if (skysight == nullptr)
       return;
 
@@ -374,29 +395,82 @@ private:
       return;
     }
 
-    LayerPickerRenderer renderer;
-    const int index = ListPicker(_("Choose a parameter"),
-                                 skysight->NumLayers(), 0,
-                                 renderer.CalculateLayout(UIGlobals::GetDialogLook()),
-                                 renderer,
-                                 false,
-                                 nullptr,
-                                 &LayerPickerRenderer::HelpCallback);
-    if (index < 0)
+    auto *picker = new MultiLayerPickerWidget(skysight);
+    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                        UIGlobals::GetDialogLook(), _("Select SkySight Layers"));
+    dialog.AddButton(_("OK"), mrOK);
+
+    Button *select_button = dialog.AddButton("", [](){});
+    std::function<void()> update_buttons = [picker, select_button]() {
+      select_button->SetCaption(picker->GetSelectedCount() == 0
+                                ? _("Select all")
+                                : _("Select none"));
+    };
+    select_button->SetCallback([picker, update_buttons]() mutable {
+      if (picker->GetSelectedCount() == 0)
+        picker->SelectAll();
+      else
+        picker->ClearSelection();
+      update_buttons();
+    });
+
+    dialog.AddButton(_("Cancel"), mrCancel);
+    dialog.FinishPreliminary(picker);
+
+    update_buttons();
+    picker->SetSelectionChangedCallback(update_buttons);
+
+    if (dialog.ShowModal() != mrOK)
       return;
 
-    const auto *layer = skysight->GetLayer(index);
-    if (layer == nullptr)
-      return;
+    const auto selected_indices = picker->GetSelectedIndices();
 
-    if (!skysight->AddSelectedLayer(layer->id)) {
-      ShowMessageBox(_("The selected layer is already in the list or the list is full."),
-                     _("SkySight"), MB_OK);
-      return;
+    std::vector<std::string> selected_ids;
+    selected_ids.reserve(selected_indices.size());
+    for (const auto idx : selected_indices) {
+      const auto *layer = skysight->GetLayer(idx);
+      if (layer != nullptr)
+        selected_ids.emplace_back(layer->id);
     }
 
+    std::vector<std::string> current_ids;
+    current_ids.reserve(skysight->NumSelectedLayers());
+    for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+      const auto *layer = skysight->GetSelectedLayer(i);
+      if (layer != nullptr)
+        current_ids.emplace_back(layer->id);
+    }
+
+    const auto active_layer_id = skysight->GetActiveLayerId();
+    for (const auto &id : current_ids) {
+      if (std::find(selected_ids.begin(), selected_ids.end(), id) != selected_ids.end())
+        continue;
+
+      if (active_layer_id == id)
+        skysight->DeactivateLayer();
+
+      (void)skysight->RemoveSelectedLayer(id);
+    }
+
+    bool add_failed = false;
+    for (const auto &id : selected_ids) {
+      if (skysight->IsSelectedLayer(id))
+        continue;
+
+      if (!skysight->AddSelectedLayer(id))
+        add_failed = true;
+    }
+
+    if (add_failed)
+      ShowMessageBox(_("Some selected layers couldn't be added (the list may be full)."),
+                     _("SkySight"), MB_OK);
+
     UpdateList();
-    GetList().SetCursorIndex(skysight->NumSelectedLayers() - 1);
+    if (skysight->NumSelectedLayers() > 0) {
+      const auto max_index = (unsigned)(skysight->NumSelectedLayers() - 1);
+      const auto current_index = GetList().GetCursorIndex();
+      GetList().SetCursorIndex(std::min(current_index, max_index));
+    }
     GetList().Invalidate();
     UpdateButtons();
   }
@@ -450,6 +524,14 @@ private:
     UpdateList();
   }
 
+  void ShowPreloadThrottledMessage() const {
+    StaticString<256> message;
+    message.Format(_("SkySight is rate-limited for about %s. Cached/older forecast data will remain visible. Please try preload again later."),
+                   FormatTimespanSmart(std::chrono::seconds(
+                     skysight->GetThrottleRemainingSeconds())).c_str());
+    ShowMessageBox(message, _("SkySight"), MB_OK);
+  }
+
   void PreloadClicked() {
     if (skysight == nullptr)
       return;
@@ -462,9 +544,13 @@ private:
     if (layer == nullptr || layer->SupportsLiveTiles())
       return;
 
-    if (!skysight->PreloadForecast(layer->id))
+    const bool success = skysight->PreloadForecast(layer->id);
+    if (skysight->IsThrottled()) {
+      ShowPreloadThrottledMessage();
+    } else if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
                      _("SkySight"), MB_OK);
+    }
 
     UpdateList();
   }
@@ -473,9 +559,13 @@ private:
     if (skysight == nullptr)
       return;
 
-    if (!skysight->PreloadAllForecasts())
+    const bool success = skysight->PreloadAllForecasts();
+    if (skysight->IsThrottled()) {
+      ShowPreloadThrottledMessage();
+    } else if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
                      _("SkySight"), MB_OK);
+    }
 
     UpdateList();
   }
@@ -483,31 +573,6 @@ private:
   void DeactivateClicked() {
     if (skysight != nullptr)
       skysight->DeactivateLayer();
-
-    UpdateList();
-  }
-
-  void RemoveClicked() {
-    if (skysight == nullptr)
-      return;
-
-    const auto index = GetList().GetCursorIndex();
-    if (index >= skysight->NumSelectedLayers())
-      return;
-
-    const auto *layer = skysight->GetSelectedLayer(index);
-    if (layer == nullptr)
-      return;
-
-    StaticString<256> prompt;
-    prompt.Format(_("Do you want to remove \"%s\"?"), layer->name.c_str());
-    if (ShowMessageBox(prompt, _("Remove"), MB_YESNO) == IDNO)
-      return;
-
-    if (skysight->GetActiveLayerId() == layer->id)
-      skysight->DeactivateLayer();
-
-    (void)skysight->RemoveSelectedLayer(layer->id);
 
     UpdateList();
   }
