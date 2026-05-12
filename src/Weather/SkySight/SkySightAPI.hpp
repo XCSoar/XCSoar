@@ -48,6 +48,7 @@ public:
                  std::string_view new_region);
 
   bool HasCredentials() const noexcept;
+  bool IsThrottled() const noexcept;
 
   const std::vector<SkySightRegionEntry> &GetRegions() const noexcept {
     return regions;
