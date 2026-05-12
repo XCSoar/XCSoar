@@ -38,6 +38,10 @@ Version 7.45 - not yet released
     and FLARM as before). Traffic: ``next`` and ``previous`` events; FLARM: UP/DOWN
     and F1/F4 = next/prev target, F2/F3 = zoom. The radar no longer hard-codes
     d-pad to zoom; bindings come from the ``.xci`` file
+  - ``GotoLookup`` accepts an optional argument to pre-select the Type
+    filter on entry (``recent``/``last_used``, ``airport``, ``landable``,
+    ``turnpoint``, ``start``, ``finish``), so a gesture or key binding can
+    open the waypoint list focused on a category #336
 * map
   - obstacles hidden at wider map scales than other non-landables (5000 vs 10000)
   - draw up to 1024 waypoints at once (was 256) #2327

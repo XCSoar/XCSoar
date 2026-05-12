@@ -4,16 +4,31 @@
 #pragma once
 
 #include "Engine/Waypoint/Ptr.hpp"
+#include "Waypoint/WaypointFilter.hpp"
+
+#include <optional>
 
 struct GeoPoint;
 struct Waypoint;
 class Waypoints;
 class OrderedTask;
 
+/**
+ * Open the modal Waypoint Selection dialog.
+ *
+ * @param initial_type If set, force the Type filter dropdown to the
+ * given value on entry and clear the name/distance/direction filters
+ * so the user sees a focused list (e.g. only the recently-used
+ * waypoints).  When unset, the dialog opens with whatever filter
+ * state was left by the previous invocation, except the name field
+ * which is always cleared.  Used by ``event=GotoLookup <misc>`` to
+ * jump straight to a category.
+ */
 WaypointPtr
 ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
-                       unsigned ordered_task_index = 0);
+                       unsigned ordered_task_index = 0,
+                       std::optional<TypeFilter> initial_type = std::nullopt);
 void
 ShowWaypointListPersistentDialog(
   const GeoPoint &location, bool allow_navigation = true,

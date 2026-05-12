@@ -603,13 +603,26 @@ WaypointListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 
 WaypointPtr
 ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
-                       OrderedTask *_ordered_task, unsigned _ordered_task_index)
+                       OrderedTask *_ordered_task, unsigned _ordered_task_index,
+                       std::optional<TypeFilter> initial_type)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   const Angle heading = CommonInterface::Basic().attitude.heading;
 
   dialog_state.name.clear();
+
+  /* When the caller forces an initial Type filter (e.g. via
+     ``event=GotoLookup recent``), also reset the other filter
+     dimensions so the user sees a focused list of just that
+     category instead of an arbitrary intersection with stale
+     distance/direction settings from an earlier invocation. */
+  if (initial_type) {
+    dialog_state.type_index = *initial_type;
+    dialog_state.file_num = -1;
+    dialog_state.distance_index = 0;
+    dialog_state.direction_index = 0;
+  }
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Select Waypoint"));

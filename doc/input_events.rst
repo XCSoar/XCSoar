@@ -276,6 +276,26 @@ Event list
  * - ``GotoLookup``
    - Opens the waypoint selector and sets the selected waypoint as
      a goto target.
+
+     With no argument, the dialog opens with the previous Type
+     filter (and a cleared name field).  An optional argument
+     pre-selects the Type filter so a gesture or key binding can
+     jump straight to a category:
+
+     ``recent`` (alias ``last_used``): show recently-visited
+     waypoints
+
+     ``airport``: show airports
+
+     ``landable``: show landable waypoints (airports + outlandings)
+
+     ``turnpoint``: show turnpoints
+
+     ``start``: show start points
+
+     ``finish``: show finish points
+
+     Unknown arguments are ignored.
  * - ``LockScreen``
    - Displays the screen lock dialog.
  * - ``Logger C``
