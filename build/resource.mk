@@ -295,7 +295,7 @@ $(eval $(call convert-to-bmp-white,$(BMP_DISCLOSURE_WIN),%.bmp,%.png))
 
 ####### add gesture icons from docs
 
-GESTURES = down dl dr du left ldr ldrdl right rd rl up ud uldr urd urdl
+GESTURES = down dl dr du left ldr ldrdl lu right rd rl up ud uldr urd urdl
 GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_, \
 	$(addsuffix .png,$(GESTURES)))
 GESTURES_PNG_WIN = $(addprefix $(DATA)/graphics/gesture_, \
