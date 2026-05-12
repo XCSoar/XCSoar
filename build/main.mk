@@ -638,6 +638,7 @@ endif
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/SkySight/SkySightClient.cpp \
+	$(SRC)/Weather/SkySight/SkySightCache.cpp \
 	$(SRC)/Weather/SkySight/SkySightAPI.cpp \
 	$(SRC)/Weather/SkySight/SkySightRequest.cpp
 endif
