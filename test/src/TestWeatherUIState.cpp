@@ -4,6 +4,7 @@
 #include "Weather/WeatherUIState.hpp"
 #include "Weather/SkySight/Layers.hpp"
 #include "Weather/SkySight/ForecastUtils.hpp"
+#include "Weather/SkySight/SkySightRequestPolicy.hpp"
 #include "TestUtil.hpp"
 
 static void
@@ -149,16 +150,87 @@ TestSkySightForecastPreloadSelection()
   ok1(!SkySight::HasForecastCatalogLinks(layer));
 }
 
+static void
+TestSkySightRequestFailurePolicy()
+{
+  constexpr time_t NOW = 1000;
+  SkySight::RequestFailurePolicy policy;
+
+  ok1(SkySight::ParseRetryAfterSeconds("123", NOW) == NOW + 123);
+  ok1(policy.CanQueue("missing-tile", NOW));
+  auto decision = policy.OnHttpFailure("missing-tile", 404, NOW);
+  ok1(decision.action == SkySight::RequestFailureAction::Terminal);
+  ok1(!policy.CanQueue("missing-tile", NOW + 24 * 60 * 60));
+
+  decision = policy.OnHttpFailure("bad-tile", 400, NOW);
+  ok1(decision.action == SkySight::RequestFailureAction::Terminal);
+  decision = policy.OnHttpFailure("forbidden-tile", 403, NOW);
+  ok1(decision.action == SkySight::RequestFailureAction::Terminal);
+
+  decision = policy.OnHttpFailure("unauthorized", 401, NOW);
+  ok1(decision.action == SkySight::RequestFailureAction::Reauthenticate);
+  ok1(policy.CanQueue("unauthorized", NOW));
+  decision = policy.OnHttpFailure("unauthorized", 401, NOW);
+  ok1(decision.action == SkySight::RequestFailureAction::Terminal);
+  ok1(!policy.CanQueue("unauthorized", NOW + 24 * 60 * 60));
+
+  decision = policy.OnHttpFailure("throttled", 429, NOW, NOW + 123);
+  ok1(decision.action == SkySight::RequestFailureAction::Retry);
+  ok1(decision.ready_at == NOW + 123);
+  ok1(!policy.CanQueue("throttled", NOW + 122));
+  ok1(policy.CanQueue("throttled", NOW + 123));
+
+  decision = policy.OnHttpFailure("server-error", 503, NOW);
+  ok1(decision.ready_at == NOW + 10);
+  decision = policy.OnHttpFailure("server-error", 503, NOW + 10);
+  ok1(decision.ready_at == NOW + 30);
+  for (unsigned i = 0; i < 10; ++i)
+    decision = policy.OnTransportFailure("server-error", decision.ready_at);
+  ok1(decision.ready_at <= NOW + 30 + 10 * 60 * 10);
+
+  policy.Clear();
+  ok1(policy.CanQueue("missing-tile", NOW));
+
+  SkySight::AuthenticationFailurePolicy authentication;
+  ok1(authentication.CanAttempt(NOW));
+  auto login_decision = authentication.OnHttpFailure(401, NOW);
+  ok1(login_decision.action ==
+      SkySight::AuthenticationFailureAction::Rejected);
+  ok1(!authentication.CanAttempt(NOW + 24 * 60 * 60));
+  authentication.Reset();
+  ok1(authentication.CanAttempt(NOW));
+
+  login_decision = authentication.OnHttpFailure(429, NOW, NOW + 123);
+  ok1(login_decision.action ==
+      SkySight::AuthenticationFailureAction::Throttle);
+  ok1(login_decision.ready_at == NOW + 123);
+  ok1(!authentication.CanAttempt(NOW + 122));
+  ok1(authentication.CanAttempt(NOW + 123));
+
+  authentication.Reset();
+  login_decision = authentication.OnHttpFailure(429, NOW);
+  ok1(login_decision.ready_at == NOW + 30);
+  ok1(!authentication.CanAttempt(NOW + 29));
+
+  authentication.Reset();
+  login_decision = authentication.OnHttpFailure(503, NOW);
+  ok1(login_decision.action == SkySight::AuthenticationFailureAction::Retry);
+  ok1(login_decision.ready_at == NOW + 30);
+  login_decision = authentication.OnTransportFailure(NOW + 30);
+  ok1(login_decision.ready_at == NOW + 90);
+}
+
 int
 main()
 {
-  plan_tests(32 + 10 + 9 + 2 + 1);
+  plan_tests(32 + 10 + 9 + 31 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
   TestWeatherUiStateXcthermCursor();
   TestSkySightKnownLiveTimestamp();
   TestSkySightForecastPreloadSelection();
+  TestSkySightRequestFailurePolicy();
 
   return exit_status();
 }

@@ -5,12 +5,14 @@
 
 #include "system/Path.hpp"
 #include "ui/event/CoInjectFunction.hpp"
+#include "SkySightRequestPolicy.hpp"
 
 #include <boost/json.hpp>
 
 #include <deque>
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <string_view>
 
@@ -70,6 +72,7 @@ class SkySightRequest final {
 
   SkySightAPI &api;
   CurlGlobal &curl;
+  const AllocatedPath cache_path;
   UI::CoInjectFunction<boost::json::value> login_job;
   UI::CoInjectFunction<boost::json::value> regions_job;
   UI::CoInjectFunction<boost::json::value> layers_job;
@@ -82,7 +85,12 @@ class SkySightRequest final {
   bool datafiles_running = false;
   std::map<std::string, std::unique_ptr<FileJob>> file_jobs;
   std::deque<PendingJob> pending_jobs;
-  std::map<std::string, time_t> retry_after;
+  SkySight::AuthenticationFailurePolicy authentication_failures;
+  SkySight::RequestFailurePolicy download_failures;
+  std::map<std::string, time_t> payload_retry_at;
+  std::set<std::string, std::less<>> generic_keys;
+  std::map<std::string, unsigned> tile_http_error_count;
+  std::map<std::string, unsigned> forecast_prepare_error_count;
   std::string email;
   std::string password;
   std::string api_key;
@@ -99,7 +107,7 @@ public:
     Available,
   };
 
-  SkySightRequest(SkySightAPI &_api, CurlGlobal &_curl) noexcept;
+  SkySightRequest(SkySightAPI &_api, CurlGlobal &_curl, Path _cache_path) noexcept;
   ~SkySightRequest() noexcept;
 
   void Configure(std::string_view new_email, std::string_view new_password);
@@ -110,14 +118,18 @@ public:
 
   bool IsLoggedIn() const noexcept;
 
+  bool IsThrottled() const noexcept {
+    return std::time(nullptr) < throttle_until;
+  }
+
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
   void CancelTileDownloads() noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
                                           time_t forecast_time,
                                           std::string_view url, Path filename);
-  void RequestRegions();
-  void RequestLayers(std::string_view region_id);
-  void RequestLastUpdates(std::string_view region_id,
+  bool RequestRegions();
+  bool RequestLayers(std::string_view region_id);
+  bool RequestLastUpdates(std::string_view region_id,
                           std::string_view layer_id);
   void RequestDatafiles(std::string_view region_id, std::string_view layer_id,
                         time_t from_time);
@@ -138,6 +150,20 @@ private:
   void OnLastUpdatesError(std::exception_ptr error) noexcept;
   void OnDatafilesSuccess(boost::json::value value);
   void OnDatafilesError(std::exception_ptr error) noexcept;
+  bool HandleJsonRequestHttpStatus(unsigned status, time_t retry_at,
+                                   const char *context) noexcept;
   void OnFileSuccess(const std::string &key) noexcept;
   void OnFileError(const std::string &key, std::exception_ptr error) noexcept;
+  void LogForecastPreparationError(std::string_view layer_id,
+                                   time_t forecast_time,
+                                   std::exception_ptr error) noexcept;
+  void LogTileHttpError(std::string_view layer_id,
+                        time_t forecast_time,
+                        unsigned status,
+                        std::string_view key) noexcept;
+  AllocatedPath GetThrottleCachePath() const noexcept;
+  void LoadThrottleState() noexcept;
+  void StoreThrottleState() noexcept;
+  void ClearThrottleState() noexcept;
+  void SetThrottleUntil(time_t value) noexcept;
 };
