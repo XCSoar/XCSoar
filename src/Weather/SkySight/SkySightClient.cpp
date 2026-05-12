@@ -254,7 +254,6 @@ void
 SkySightClient::PollPendingDatafiles() noexcept
 {
   MaybeCleanupFiles();
-  api->PollSelectedDatafiles();
 }
 
 bool
