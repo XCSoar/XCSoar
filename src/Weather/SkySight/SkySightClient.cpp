@@ -4,6 +4,7 @@
 #include "SkySightClient.hpp"
 #include "SkySightCache.hpp"
 #include "SkySightAPI.hpp"
+#include "SkySightFileDecoder.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
@@ -189,11 +190,61 @@ SkySightClient::HasForecastLayers() const noexcept
   return false;
 }
 
+bool
+SkySightClient::IsForecastDecodeAvailable() const noexcept
+{
+  return SkySightFileDecoder::IsNetCdfDecodeAvailable();
+}
+
 void
 SkySightClient::RefreshCatalog() noexcept
 {
   api->PollRegions();
   api->PollLayers();
+}
+
+bool
+SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time)
+{
+  if (forecast_time <= 0)
+    return false;
+
+  auto *layer = api->GetLayer(id);
+  auto *selected = api->GetSelectedLayer(id);
+  if (layer == nullptr || selected == nullptr || layer->SupportsLiveTiles())
+    return false;
+
+  const auto i = std::find_if(layer->forecast_datafiles.begin(),
+                              layer->forecast_datafiles.end(),
+                              [forecast_time](const auto &candidate) {
+                                return candidate.time == forecast_time;
+                              });
+  if (i == layer->forecast_datafiles.end())
+    return false;
+
+  layer->forecast_time = forecast_time;
+  selected->forecast_time = forecast_time;
+
+  const auto candidate = SkySightCache::FindForecastImage(GetLocalPath(),
+                                                          GetRegion(),
+                                                          layer->id,
+                                                          forecast_time);
+  if (candidate.path != nullptr) {
+    const auto mtime = std::chrono::system_clock::to_time_t(
+      File::GetLastModification(candidate.path));
+    layer->mtime = mtime;
+    selected->mtime = mtime;
+  } else {
+    layer->updating = true;
+    selected->updating = true;
+    api->EnsureDatafile(*layer, i->time, i->link);
+  }
+
+  if (active_layer == layer)
+    tile_filenames[0].clear();
+
+  OnDataUpdated();
+  return true;
 }
 
 void
@@ -390,7 +441,8 @@ SkySightClient::DisplayForecastLayer()
 
   const auto candidate = SkySightCache::FindForecastImage(GetLocalPath(),
                                                           GetRegion(),
-                                                          active_layer->id);
+                                                          active_layer->id,
+                                                          active_layer->forecast_time);
   if (candidate.path == nullptr) {
     map_window->SetOverlay(0, nullptr);
     tile_filenames[0].clear();
@@ -399,6 +451,13 @@ SkySightClient::DisplayForecastLayer()
   }
 
   active_layer->forecast_time = candidate.forecast_time;
+  active_layer->mtime = std::chrono::system_clock::to_time_t(
+    File::GetLastModification(candidate.path));
+  if (auto *selected = api->GetSelectedLayer(active_layer->id);
+      selected != nullptr) {
+    selected->forecast_time = candidate.forecast_time;
+    selected->mtime = active_layer->mtime;
+  }
 
   if (tile_filenames[0] != candidate.path.c_str()) {
     if (!UpdateActiveLayer(0, candidate.path,

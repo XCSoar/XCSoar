@@ -46,7 +46,9 @@ public:
   bool SelectedLayersFull() const noexcept;
   bool AddSelectedLayer(std::string_view id);
   bool RemoveSelectedLayer(std::string_view id);
+  bool SelectForecastTime(std::string_view id, time_t forecast_time);
   bool HasForecastLayers() const noexcept;
+  bool IsForecastDecodeAvailable() const noexcept;
   void RefreshCatalog() noexcept;
 
   bool HasCredentials() const noexcept;
