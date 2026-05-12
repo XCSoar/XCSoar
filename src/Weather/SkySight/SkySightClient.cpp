@@ -120,6 +120,12 @@ SkySightClient::HasCredentials() const noexcept
   return api->HasCredentials();
 }
 
+bool
+SkySightClient::IsThrottled() const noexcept
+{
+  return api->IsThrottled();
+}
+
 std::string_view
 SkySightClient::GetActiveLayerId() const noexcept
 {
