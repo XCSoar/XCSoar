@@ -13,6 +13,18 @@
 #include <algorithm>
 
 [[gnu::pure]]
+static unsigned
+MapIconTargetHeight(const MaskedIcon &icon, unsigned percent) noexcept
+{
+  const unsigned h = icon.GetSize().height;
+  if (h == 0)
+    return 0;
+
+  const unsigned scaled = (h * percent + 50U) / 100U;
+  return std::max(1U, scaled);
+}
+
+[[gnu::pure]]
 static const MaskedIcon &
 GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
                 bool small_icons, const bool in_task) noexcept
@@ -136,8 +148,14 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
 
     if (icon_size > 0)
       icon->Draw(canvas, point, icon_size);
-    else
-      icon->Draw(canvas, point);
+    else {
+      const unsigned th =
+        MapIconTargetHeight(*icon, (unsigned)settings.map_waypoint_icon_scale);
+      if (th != 0 && th != icon->GetSize().height)
+        icon->Draw(canvas, point, th);
+      else
+        icon->Draw(canvas, point);
+    }
     return;
   }
 
@@ -150,6 +168,8 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
      30 * scale.  Derive scale so the full icon fits icon_size. */
   if (icon_size > 0)
     scale = icon_size / 30.;
+  else
+    scale *= double(settings.map_waypoint_icon_scale) / 100.;
 
   double radius = 10 * scale;
 
@@ -216,7 +236,16 @@ WaypointIconRenderer::Draw(const Waypoint &waypoint, const PixelPoint &point,
   if (waypoint.IsLandable())
     DrawLandable(waypoint, point, reachable);
   else if (icon_size > 0)
-    GetWaypointIcon(look, waypoint, small_icons, in_task).Draw(canvas, point, icon_size);
-  else
-    GetWaypointIcon(look, waypoint, small_icons, in_task).Draw(canvas, point);
+    GetWaypointIcon(look, waypoint, small_icons, in_task).Draw(canvas, point,
+                                                                icon_size);
+  else {
+    const auto &icon =
+      GetWaypointIcon(look, waypoint, small_icons, in_task);
+    const unsigned th =
+      MapIconTargetHeight(icon, (unsigned)settings.map_waypoint_icon_scale);
+    if (th != 0 && th != icon.GetSize().height)
+      icon.Draw(canvas, point, th);
+    else
+      icon.Draw(canvas, point);
+  }
 }

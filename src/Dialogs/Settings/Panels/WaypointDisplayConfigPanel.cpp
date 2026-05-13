@@ -16,6 +16,7 @@ enum ControlIndex {
   WaypointLabelStyle,
   WaypointLabelSelection,
   AppIndLandable,
+  MapWaypointIconScale,
   AppUseSWLandablesRendering,
   AppLandableRenderingScale,
   AppScaleRunwayLength
@@ -168,6 +169,11 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
               "field and airport. All styles mark the waypoints within reach green."),
           wp_style_list, (unsigned)settings.landable_style);
 
+  AddInteger(_("Waypoint icon size"),
+             _("Size of waypoint symbols on the map as a percentage of the "
+               "built-in artwork (list dialogs keep a fixed row icon size)."),
+             "%u %%", "%u", 50, 200, 10, settings.map_waypoint_icon_scale);
+
   AddBoolean(_("Detailed landables"),
              _("[Off] Display fixed icons for landables.\n"
                  "[On] Show landables with variable information like runway length and heading."),
@@ -207,6 +213,9 @@ WaypointDisplayConfigPanel::Save(bool &_changed) noexcept
                            settings.label_selection);
 
   changed |= SaveValueEnum(AppIndLandable, ProfileKeys::AppIndLandable, settings.landable_style);
+
+  changed |= SaveValueInteger(MapWaypointIconScale, ProfileKeys::MapWaypointIconScale,
+                              settings.map_waypoint_icon_scale);
 
   changed |= SaveValue(AppUseSWLandablesRendering, ProfileKeys::AppUseSWLandablesRendering,
                        settings.vector_landable_rendering);

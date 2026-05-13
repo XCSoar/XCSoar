@@ -32,4 +32,5 @@ WaypointRendererSettings::LoadFromProfile() noexcept
   Get(ProfileKeys::AppUseSWLandablesRendering, vector_landable_rendering);
   Get(ProfileKeys::AppScaleRunwayLength, scale_runway_length);
   Get(ProfileKeys::AppLandableRenderingScale, landable_rendering_scale);
+  Get(ProfileKeys::MapWaypointIconScale, map_waypoint_icon_scale);
 }
