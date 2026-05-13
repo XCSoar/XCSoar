@@ -11,6 +11,7 @@
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/LiveTrack24/Glue.hpp"
+#include "Tracking/PureTrack/Glue.hpp"
 
 struct TrackingSettings;
 struct MoreData;
@@ -25,6 +26,7 @@ class TrackingGlue final
   SkyLinesTracking::Data skylines_data;
 
   LiveTrack24::Glue livetrack24;
+  PureTrack::Glue puretrack;
 
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;

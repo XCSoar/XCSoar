@@ -9,7 +9,8 @@
 TrackingGlue::TrackingGlue(EventLoop &event_loop,
                            CurlGlobal &curl) noexcept
   :skylines(event_loop, this),
-   livetrack24(curl)
+   livetrack24(curl),
+   puretrack(curl)
 {
 }
 
@@ -18,6 +19,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
   skylines.SetSettings(_settings.skylines);
   livetrack24.SetSettings(_settings.livetrack24);
+  puretrack.SetSettings(_settings.puretrack);
 }
 
 void
@@ -30,6 +32,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   }
 
   livetrack24.OnTimer(basic, calculated);
+  puretrack.OnTimer(basic, calculated);
 }
 
 void
