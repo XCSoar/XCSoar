@@ -45,6 +45,9 @@ public:
 
       if (!as.IsAckExpired())
         ids_acked.checked_append(&as.GetAirspace());
+    } else if (!as.IsCleared() && as.HasExplicitAck()) {
+      // Covered by clearance but explicitly acked: suppress fill
+      ids_acked.checked_append(&as.GetAirspace());
     }
 
     if (as.IsCleared())
