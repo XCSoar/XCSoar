@@ -13,8 +13,11 @@ FlarmMessagingDatabase::Insert(const MessagingRecord &record) noexcept
   if (!record.id.IsDefined())
     return;
 
+  MessagingRecord sanitized = record;
+  sanitized.SanitizeTextFields();
+
   const std::lock_guard<SharedMutex> lock(mutex);
-  map.insert(std::make_pair(record.id, record));
+  map.insert(std::make_pair(sanitized.id, std::move(sanitized)));
 }
 
 void
@@ -42,13 +45,18 @@ FlarmMessagingDatabase::Update(const MessagingRecord &record) noexcept
     auto f = static_cast<MessagingRecord::Field>(i);
     if (!record.GetFieldValueConst(f).empty()) {
       field = f;
-      existing.GetFieldValue(f) = record.GetFieldValueConst(f);
       break;
     }
   }
 
   if (field == MessagingRecord::Field::Count)
     return;  // No field to process
+
+  const std::string &incoming_value = record.GetFieldValueConst(field);
+  if (MessagingRecord::IsMissingFieldValue(incoming_value))
+    existing.GetFieldValue(field).clear();
+  else
+    existing.GetFieldValue(field) = incoming_value;
 
   /*
     Epoch-based cycle detection: repeating the same field within the

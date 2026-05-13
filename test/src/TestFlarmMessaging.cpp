@@ -226,6 +226,43 @@ TestFlarmMessagingCycle()
 }
 
 static void
+TestFlarmMessagingUndefinedValue()
+{
+  FlarmMessagingDatabase db;
+  MessagingRecord base;
+  base.id = FlarmId::Parse("F00BAA", nullptr);
+
+  UpdateMessagingRecord(db, base, nullptr, "Orville");
+
+  auto mr = db.FindRecordById(base.id);
+  if (!ok1(mr.has_value()))
+    return;
+
+  ok1(StringIsEqual(mr->pilot.c_str(), "Orville"));
+
+  MessagingRecord clear = base;
+  clear.pilot = " undefined ";
+  db.Update(clear);
+
+  mr = db.FindRecordById(base.id);
+  if (!ok1(mr.has_value()))
+    return;
+
+  ok1(mr->pilot.empty());
+
+  InsertMessaging(db, "F00BAB", "Undefined", "LS8", " undefined ", "N1");
+
+  auto inserted = FindMessagingRecord(db, "F00BAB");
+  if (!ok1(inserted.has_value()))
+    return;
+
+  ok1(inserted->pilot.empty());
+  ok1(inserted->registration.empty());
+  ok1(StringIsEqual(inserted->plane_type.c_str(), "LS8"));
+  ok1(StringIsEqual(inserted->callsign.c_str(), "N1"));
+}
+
+static void
 TestFlarmMessagingThreadSafety()
 {
   // Scenario 1: Concurrent reads and writes
@@ -362,11 +399,12 @@ TestFlarmMessagingResolveInfo()
 
 int main()
 {
-  plan_tests(41);
+  plan_tests(50);
 
   TestFlarmMessagingIO();
   TestFlarmMessagingFile();
   TestFlarmMessagingCycle();
+  TestFlarmMessagingUndefinedValue();
   TestFlarmMessagingThreadSafety();
   TestFlarmMessagingResolveInfo();
 

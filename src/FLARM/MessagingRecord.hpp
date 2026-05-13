@@ -9,6 +9,7 @@
 #include "util/Macros.hpp"
 
 #include <string>
+#include <string_view>
 #include <cstdint>
 
 struct MessagingRecord {
@@ -84,6 +85,21 @@ struct MessagingRecord {
    * Number of fields tracked in `kFields`.
    */
   static inline constexpr uint8_t GetFieldCount() noexcept { return kFieldCount; }
+
+  /**
+   * Returns true if a field value should be treated as missing.
+   */
+  static bool IsMissingFieldValue(std::string_view value) noexcept;
+
+  /**
+   * Clears one text field if it contains only a missing-value sentinel.
+   */
+  void SanitizeFieldValue(Field f) noexcept;
+
+  /**
+   * Clears all text fields that contain missing-value sentinels.
+   */
+  void SanitizeTextFields() noexcept;
 
   /**
    * Format a UTF-8 value into the provided buffer; returns nullptr if empty/invalid. 
