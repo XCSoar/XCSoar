@@ -68,6 +68,9 @@ Version 7.45 - not yet released
     focus colour in dark, like other dialog focus.  Select Airspace: Details
     and Close are on the main dialog action bar (bottom/edge) so the same
     keys can reach them after the list, like other list dialogs
+  - map item list and airspace list: respect list focus/selection text colours
+    (was unreadable focused row on e-ink: paint reset colour to black on a
+    black focused background) #2495
   - alternates: list holds up to 10 options (was 6); if the task only has one
     automatic alternate, Alternate 2 no longer shows the same as Alternate 1.
     Displayed glide is re-solved with the current aircraft state; value colour

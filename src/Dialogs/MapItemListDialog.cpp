@@ -242,8 +242,6 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       backend_components->GetAirspaceWarnings()->GetAckDay(
         *static_cast<const AirspaceMapItem &>(item).airspace))
     canvas.SetTextColor(COLOR_GRAY);
-  else
-    canvas.SetTextColor(dialog_look.list.text_color);
 
   renderer.Draw(canvas, rc, item,
                 &CommonInterface::Basic().flarm.traffic);

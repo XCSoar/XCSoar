@@ -318,8 +318,6 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (airspace_warnings != nullptr &&
       airspace_warnings->GetAckDay(airspace))
     canvas.SetTextColor(COLOR_GRAY);
-  else
-    canvas.SetTextColor(UIGlobals::GetDialogLook().list.text_color);
 
   AirspaceListRenderer::Draw(
       canvas, rc, airspace,
