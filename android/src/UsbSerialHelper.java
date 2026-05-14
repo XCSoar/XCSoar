@@ -86,13 +86,28 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     return id;
   }
 
+  /**
+   * Counts USB interfaces we treat as serial (same filter as addAvailable()).
+   */
+  private static int countSerialInterfaces(UsbDevice device) {
+    int n = 0;
+    for (int i = 0; i < device.getInterfaceCount(); ++i) {
+      int iclass = device.getInterface(i).getInterfaceClass();
+      if (iclass == UsbConstants.USB_CLASS_VENDOR_SPEC ||
+          iclass == UsbConstants.USB_CLASS_CDC_DATA)
+        ++n;
+    }
+    return n;
+  }
+
   private static String makePortId(UsbDevice device, int iface,
-                                   boolean withSerialNumber) {
+                                   boolean withSerialNumber,
+                                   boolean multiSerial) {
     String id = makeDeviceId(device, withSerialNumber);
 
-    if (iface > 0)
-      /* a secondary interface on the same device: append the
-         interface index */
+    if (multiSerial)
+      /* 0-based port index, consistent with IOIO UART numbering and with
+         getDisplayName() */
       id += "#" + iface;
 
     return id;
@@ -110,17 +125,24 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     public final String oldId;
 
     /**
+     * More than one serial-capable interface on this device (same notion as
+     * addAvailable()).
+     */
+    private final boolean multiSerial;
+
+    /**
      * If not null, then this port instance is currently being used by
      * native code.  It may be waiting for permission from the
      * UsbManager, or it may already be open.
      */
     public UsbSerialPort port;
 
-    public UsbDeviceInterface(UsbDevice dev_,int iface_) {
+    public UsbDeviceInterface(UsbDevice dev_, int iface_) {
       device = dev_;
       iface = iface_;
-      id = makePortId(device, iface, true);
-      oldId = makePortId(device, iface, false);
+      multiSerial = countSerialInterfaces(device) > 1;
+      id = makePortId(device, iface, true, multiSerial);
+      oldId = makePortId(device, iface, false, multiSerial);
     }
 
     public boolean isDevice(UsbDevice otherDevice) {
@@ -137,7 +159,9 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     public String getDisplayName() {
       String name = device.getProductName();
       if (name == null)
-        name = id;
+        /* makeDeviceId only: id includes #port for multi-serial and would
+           duplicate the suffix appended below */
+        name = makeDeviceId(device, true);
 
       String manufacturer = device.getManufacturerName();
       if (manufacturer != null)
@@ -148,9 +172,8 @@ public final class UsbSerialHelper extends BroadcastReceiver {
         name += " [" + serialNumber + "]";
       }
 
-      // add interface number to name only when more than one interface
-      if (device.getInterfaceCount() > 1)
-        name += "#" + (iface + 1);
+      if (multiSerial)
+        name += "#" + iface;
 
       return name;
     }

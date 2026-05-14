@@ -1,5 +1,7 @@
 Version 7.45 - not yet released
 * devices
+  - Android: multi-port USB serial adapters (e.g. dual FTDI) use 0-based port
+    suffixes (#0, #1) in both the port list and device list #2481
   - FLARM $PGRMZ (when FLARM is detected) feeds igc_pressure_altitude for the
     ISA logger datum; cleared when strong pressure replaces weak pressure or
     ignores the sentence
