@@ -32,13 +32,10 @@ TimesStatusPanel::Refresh() noexcept
       SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
                                  settings.utc_offset);
 
-    const unsigned sunrisehours = (int)sun.time_of_sunrise;
-    const unsigned sunrisemins = (int)((sun.time_of_sunrise - double(sunrisehours)) * 60);
-    const unsigned sunsethours = (int)sun.time_of_sunset;
-    const unsigned sunsetmins = (int)((sun.time_of_sunset - double(sunsethours)) * 60);
-
-    temp.Format("%02u:%02u - %02u:%02u", sunrisehours, sunrisemins, sunsethours, sunsetmins);
-    SetText(Daylight, temp);
+    char buffer[32];
+    FormatDaylightTimeRangeHHMM(buffer, sun.time_of_sunrise,
+                                sun.time_of_sunset);
+    SetText(Daylight, buffer);
   } else {
     ClearText(Daylight);
   }

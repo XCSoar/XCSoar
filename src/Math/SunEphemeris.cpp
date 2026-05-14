@@ -12,6 +12,7 @@
 #include "time/RoughTime.hpp"
 
 #include <cstdint>
+#include <cmath>
 
 /** Sun radius in degrees (?) */
 static constexpr double SUN_DIAMETER = 0.53;
@@ -20,6 +21,16 @@ static constexpr double SUN_DIAMETER = 0.53;
 static constexpr double AIR_REFRACTION = 34.0 / 60.0;
 
 namespace SunEphemeris {
+
+double
+NormalizeHourOfDay(double t) noexcept
+{
+  t = std::fmod(t, 24.);
+  if (t < 0)
+    t += 24;
+
+  return t;
+}
 
 /**
  * Get the days to J2000
@@ -192,11 +203,13 @@ CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
     + time_zone.AsMinutes() / 60.
     - location.longitude.Degrees() / 15. + equation / 60.;
 
-  if (result.time_of_sunrise > 24)
-    result.time_of_sunrise -= 24;
-
-  result.time_of_sunset = result.time_of_sunrise + result.day_length;
-  result.time_of_noon = result.time_of_sunrise + hour_angle.Hours();
+  /* These are "hours since midnight" and may wrap around depending on
+     the time zone; normalise to [0,24) to simplify downstream code. */
+  result.time_of_sunrise = NormalizeHourOfDay(result.time_of_sunrise);
+  result.time_of_sunset = NormalizeHourOfDay(result.time_of_sunrise +
+                                             result.day_length);
+  result.time_of_noon = NormalizeHourOfDay(result.time_of_sunrise +
+                                           hour_angle.Hours());
 
   // morning twilight begin
   result.morning_twilight = result.time_of_sunrise - twilight_hours;

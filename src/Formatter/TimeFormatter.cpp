@@ -4,6 +4,7 @@
 #include "TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Math/Util.hpp"
+#include "Math/SunEphemeris.hpp"
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
 
@@ -96,6 +97,30 @@ FormatTimeTwoLines(char *buffer1, char *buffer2, std::chrono::seconds _time) noe
     sprintf(buffer1, "%02u'%02u", time.minute, time.second);
     buffer2[0] = '\0';
   }
+}
+
+[[gnu::const]]
+static BrokenTime
+BreakHourOfDay(double t) noexcept
+{
+  unsigned i = uround(SunEphemeris::NormalizeHourOfDay(t) * 3600);
+
+  BrokenTime result;
+  result.hour = i / 3600;
+  i %= 3600;
+  result.minute = i / 60;
+  result.second = 0;
+  return result;
+}
+
+void
+FormatDaylightTimeRangeHHMM(char *buffer, double sunrise,
+                            double sunset) noexcept
+{
+  const BrokenTime a = BreakHourOfDay(sunrise);
+  const BrokenTime b = BreakHourOfDay(sunset);
+  sprintf(buffer, "%02u:%02u - %02u:%02u",
+          a.hour, a.minute, b.hour, b.minute);
 }
 
 static void

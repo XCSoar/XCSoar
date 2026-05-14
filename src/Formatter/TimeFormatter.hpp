@@ -84,6 +84,15 @@ void
 FormatTimeTwoLines(char *buffer1, char *buffer2,
                    std::chrono::seconds time) noexcept;
 
+/**
+ * Format a daylight time range based on hours since midnight
+ * (SunEphemeris output), as "HH:MM - HH:MM". The inputs may be negative
+ * depending on time zone.
+ */
+void
+FormatDaylightTimeRangeHHMM(char *buffer, double sunrise,
+                            double sunset) noexcept;
+
 void
 FormatTimespanSmart(char *buffer, std::chrono::seconds timespan,
                     unsigned max_tokens = 1,
