@@ -25,6 +25,28 @@ BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain) noexcept
 }
 
 void
+BackgroundRenderer::PrepareTerrainDraw(
+  const WindowProjection &projection,
+  const TerrainRendererSettings &settings,
+  const DerivedInfo &calculated,
+  bool high_resolution_preview) noexcept
+{
+  if (high_resolution_preview)
+    SetFullResolution();
+  SetShadingAngle(projection, settings, calculated);
+}
+
+void
+BackgroundRenderer::PaintTerrainLayer(
+  Canvas &canvas, const WindowProjection &projection,
+  const TerrainRendererSettings &settings, const DerivedInfo &calculated,
+  bool high_resolution_preview) noexcept
+{
+  PrepareTerrainDraw(projection, settings, calculated, high_resolution_preview);
+  Draw(canvas, projection, settings);
+}
+
+void
 BackgroundRenderer::Draw(Canvas& canvas,
                          const WindowProjection& proj,
                          const TerrainRendererSettings &terrain_settings) noexcept
@@ -38,10 +60,8 @@ BackgroundRenderer::Draw(Canvas& canvas,
       // loaded terrain properties
       renderer.reset(new TerrainRenderer(*terrain));
 
-#ifdef ENABLE_OPENGL
       if (full_resolution)
         renderer->SetQuantisationPixels(1);
-#endif
     }
 
     renderer->SetSettings(terrain_settings);

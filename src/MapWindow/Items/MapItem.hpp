@@ -110,6 +110,9 @@ struct ArrivalAltitudeMapItem: public MapItem
    */
   static constexpr double UNKNOWN_ELEVATION_THRESHOLD = -1e4;
 
+  /** Map location this arrival altitude applies to (preview framing). */
+  GeoPoint destination;
+
   /**
    * Terrain elevation of the point in MSL.  If that is unknown, it is
    * nan().
@@ -123,10 +126,12 @@ struct ArrivalAltitudeMapItem: public MapItem
   double safety_height;
 
 
-  ArrivalAltitudeMapItem(double _elevation,
+  ArrivalAltitudeMapItem(const GeoPoint &_destination,
+                         double _elevation,
                          ReachResult _reach,
                          double _safety_height)
     :MapItem(Type::ARRIVAL_ALTITUDE),
+     destination(_destination),
      elevation(_elevation), reach(_reach), safety_height(_safety_height) {}
 
   bool HasElevation() const {

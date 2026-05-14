@@ -26,9 +26,12 @@ LIBMAPWINDOW_SOURCES = \
 	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \
 	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp \
 	$(SRC)/MapWindow/GlueMapWindowDisplayMode.cpp \
-	$(SRC)/MapWindow/TargetMapWindow.cpp \
-	$(SRC)/MapWindow/TargetMapWindowEvents.cpp \
-	$(SRC)/MapWindow/TargetMapWindowDrag.cpp
+	$(SRC)/MapWindow/Preview/MapPreviewLayers.cpp \
+	$(SRC)/MapWindow/Preview/MapPreviewBufferWindow.cpp \
+	$(SRC)/MapWindow/Preview/MapPreviewWindow.cpp \
+	$(SRC)/MapWindow/Preview/TargetMapWindow.cpp \
+	$(SRC)/MapWindow/Preview/TargetMapWindowEvents.cpp \
+	$(SRC)/MapWindow/Preview/TargetMapWindowDrag.cpp
 
 ifeq ($(OPENGL),y)
 LIBMAPWINDOW_SOURCES += \

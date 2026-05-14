@@ -3,9 +3,20 @@
 
 #pragma once
 
-struct PixelSize;
+#include "ui/dim/Size.hpp"
+
 struct PixelRect;
 class ContainerWindow;
+
+/**
+ * Maximum size for #Widget::GetMaximumSize when the widget should expand with
+ * the dialog layout (legacy 16-bit extent).
+ */
+[[nodiscard]] constexpr PixelSize
+WidgetMaximumSizeUnbounded() noexcept
+{
+  return PixelSize{32767U, 32767U};
+}
 
 /**
  * A Widget is an area on the screen that the user can interact with

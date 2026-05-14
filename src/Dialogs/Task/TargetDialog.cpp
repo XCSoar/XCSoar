@@ -17,7 +17,7 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
-#include "MapWindow/TargetMapWindow.hpp"
+#include "MapWindow/Preview/TargetMapWindow.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
@@ -117,7 +117,7 @@ public:
      speed_remaining(dialog_look),
      speed_achieved(dialog_look) {
     map.SetTerrain(data_components->terrain.get());
-    map.SetTopograpgy(data_components->topography.get());
+    map.SetTopography(data_components->topography.get());
     map.SetAirspaces(data_components->airspaces.get());
     map.SetWaypoints(data_components->waypoints.get());
     map.SetTask(backend_components->protected_task_manager.get());

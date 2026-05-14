@@ -25,3 +25,4 @@ struct WeatherUIState {
     time = BrokenTime::Invalid();
   }
 };
+

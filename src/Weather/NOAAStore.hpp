@@ -68,15 +68,14 @@ public:
   }
 
   /**
-   * Check if the four letter code is valid
-   * @param code Four letter code of the station/airport (upper case)
+   * Check if the four letter code is valid (ASCII letters or digits).
    */
   static bool IsValidCode(const char *code);
 
   /**
    * Add a station to the set of stations for which
-   * weather information should be downloaded
-   * @param code Four letter code of the station/airport (upper case)
+   * weather information should be downloaded.
+   * @param code Four letter ICAO-style code; stored upper-case
    */
   iterator AddStation(const char *code);
 

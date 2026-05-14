@@ -17,6 +17,7 @@
 #include "Look/TaskLook.hpp"
 #include "Look/MapLook.hpp"
 #include "MapSettings.hpp"
+#include "Interface.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "ui/canvas/BufferCanvas.hpp"
@@ -98,6 +99,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 
   BackgroundRenderer background;
   background.SetTerrain(terrain);
+  background.PrepareTerrainDraw(projection, settings_map.terrain,
+                              CommonInterface::Calculated(), true);
   background.Draw(canvas, projection, settings_map.terrain);
 
   if (airspaces != NULL) {

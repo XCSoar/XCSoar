@@ -3,6 +3,8 @@
 
 #pragma once
 
+struct GeoPoint;
+
 class MapItemList;
 struct DialogLook;
 struct MapLook;
@@ -14,6 +16,7 @@ class ProtectedAirspaceWarningManager;
 
 void
 ShowMapItemListDialog(const MapItemList &_list,
+                      const GeoPoint &query_location,
                       const DialogLook &_dialog_look,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,

@@ -40,11 +40,9 @@ public:
     background_renderer.SetTerrain(terrain);
   }
 
-#ifdef ENABLE_OPENGL
   void SetFullResolution() noexcept {
     background_renderer.SetFullResolution();
   }
-#endif
 
   void SetAirspaces(const Airspaces *_airspaces) noexcept {
     airspace_renderer.SetAirspaces(_airspaces);

@@ -22,6 +22,8 @@ class ProtectedAirspaceWarningManager;
 class AirspaceWarningCopy;
 class Canvas;
 class WindowProjection;
+class MapCanvas;
+class AbstractAirspace;
 
 class AirspaceRenderer
 {
@@ -144,4 +146,22 @@ public:
 
   void DrawIntersections(Canvas &canvas,
                          const WindowProjection &projection) const;
+
+  /**
+   * Draw border geometry on a prepared #MapCanvas (circle / polygon dispatch).
+   * Caller selects pen and brush.  Used by map outlines and internally by the
+   * non-OpenGL outline pass.
+   */
+  static void DrawOutlineGeometry(MapCanvas &mc,
+                                  const AbstractAirspace &airspace) noexcept;
+
+  /**
+   * Draw a high-contrast outline for one airspace (e.g. list row map strip,
+   * airspace warning widget).  Uses #AirspaceRendererSettings::black_outline:
+   * black when enabled (same as main map), yellow when disabled.
+   */
+  static void DrawOutlineHighlight(Canvas &canvas,
+                                   const WindowProjection &proj,
+                                   const AbstractAirspace &airspace,
+                                   const AirspaceRendererSettings &settings) noexcept;
 };

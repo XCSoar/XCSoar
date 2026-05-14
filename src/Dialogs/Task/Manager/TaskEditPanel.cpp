@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskEditPanel.hpp"
+#include "TaskEditMapPreviewWindow.hpp"
 #include "Internal.hpp"
 #include "../TaskDialogs.hpp"
 #include "../dlgTaskHelpers.hpp"
@@ -16,9 +17,12 @@
 #include "Widget/ListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
+#include "TaskEditMapPreviewWidget.hpp"
+#include "MapWindow/Preview/MapPreviewFocus.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/TopographyLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
@@ -33,6 +37,7 @@
 #include "DataComponents.hpp"
 
 #include <cassert>
+#include <memory>
 
 class TaskEditPanel
   : public ListWidget {
@@ -54,6 +59,8 @@ class TaskEditPanel
 
   TwoWidgets *two_widgets;
 
+  TaskEditMapPreviewWindow *preview_map = nullptr;
+
   TwoTextRowsRenderer row_renderer;
 
 public:
@@ -68,6 +75,10 @@ public:
 
   void SetTwoWidgets(TwoWidgets &_two_widgets) {
     two_widgets = &_two_widgets;
+  }
+
+  void SetPreviewMap(TaskEditMapPreviewWindow *p) noexcept {
+    preview_map = p;
   }
 
   void SetButtons(ButtonPanelWidget &_buttons) noexcept {
@@ -95,6 +106,8 @@ public:
 
 protected:
   void RefreshView();
+
+  void SyncPreviewMap() noexcept;
 
 private:
   /* virtual methods from List::Handler */
@@ -158,6 +171,25 @@ TaskEditPanel::RefreshView()
 
   if (GetList().IsVisible() && two_widgets != nullptr)
     two_widgets->UpdateLayout();
+
+  SyncPreviewMap();
+}
+
+void
+TaskEditPanel::SyncPreviewMap() noexcept
+{
+  if (preview_map == nullptr || ordered_task == nullptr)
+    return;
+
+  preview_map->SetQueryFallbackLocation(
+    CommonInterface::Basic().GetLocationOrInvalid());
+
+  const unsigned idx = GetList().GetCursorIndex();
+  if (ordered_task->TaskSize() == 0 || idx >= ordered_task->TaskSize())
+    preview_map->SetPreviewFocus(MapPreviewFocusTaskWhole{ordered_task});
+  else
+    preview_map->SetPreviewFocus(
+      MapPreviewFocusTaskTurnpoint{ordered_task, idx});
 }
 
 void TaskEditPanel::ReverseTask()
@@ -328,6 +360,7 @@ void
 TaskEditPanel::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
 {
   UpdateButtons();
+  SyncPreviewMap();
 }
 
 void
@@ -413,6 +446,7 @@ std::unique_ptr<Widget>
 CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const TaskLook &task_look,
                     const AirspaceLook &airspace_look,
+                    const TopographyLook &topography_look,
                     std::unique_ptr<OrderedTask> &active_task,
                     bool *task_modified) noexcept
 {
@@ -423,13 +457,26 @@ CreateTaskEditPanel(TaskManagerDialog &dialog,
   auto tw1 = std::make_unique<TwoWidgets>(std::move(widget),
                                           std::move(summary));
 
-  auto &w = (TaskEditPanel &)tw1->GetFirst();
-  w.SetTwoWidgets(*tw1);
+  auto &panel = static_cast<TaskEditPanel &>(tw1->GetFirst());
 
-  auto buttons = std::make_unique<ButtonPanelWidget>(std::move(tw1),
+  auto preview = std::make_unique<TaskEditMapPreviewWindow>(
+    airspace_look, topography_look, task_look);
+  TaskEditMapPreviewWindow *const preview_raw = preview.get();
+  auto preview_widget =
+    std::make_unique<TaskEditMapPreviewWidget>(std::move(preview));
+
+  panel.SetPreviewMap(preview_raw);
+
+  auto full_split = std::make_unique<TwoWidgets>(
+    std::move(tw1), std::move(preview_widget),
+    TwoWidgetsSplit::VERTICAL);
+
+  panel.SetTwoWidgets(*full_split);
+
+  auto buttons = std::make_unique<ButtonPanelWidget>(std::move(full_split),
                                                      ButtonPanelWidget::Alignment::BOTTOM);
 
-  w.SetButtons(*buttons);
+  panel.SetButtons(*buttons);
 
   return buttons;
 }

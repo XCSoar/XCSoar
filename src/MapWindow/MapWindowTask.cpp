@@ -6,11 +6,10 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Renderer/TaskRenderer.hpp"
-#include "Renderer/TaskPointRenderer.hpp"
-#include "Renderer/OZRenderer.hpp"
+#include "Renderer/ActiveTaskGeometryRenderer.hpp"
+#include "Renderer/PlannedRouteRenderer.hpp"
 #include "Screen/Layout.hpp"
-#include "Math/Screen.hpp"
+#include "Task/TaskPreviewValidation.hpp"
 #include "Look/MapLook.hpp"
 
 void
@@ -33,8 +32,8 @@ MapWindow::DrawTask(Canvas &canvas) noexcept
   }
 
   ProtectedTaskManager::Lease task_manager(*task);
-  const AbstractTask *task = task_manager->GetActiveTask();
-  if (task && !IsError(task->CheckTask())) {
+  const AbstractTask *active_task = task_manager->GetActiveTask();
+  if (IsLiveTaskPreviewValid(active_task)) {
     const auto target_visibility = IsNearSelf()
       ? TaskPointRenderer::TargetVisibility::ACTIVE
       : TaskPointRenderer::TargetVisibility::ALL;
@@ -44,19 +43,17 @@ MapWindow::DrawTask(Canvas &canvas) noexcept
        uninitialized dummy reference when this is not an
        OrderedTask */
     const FlatProjection dummy_flat_projection{};
-    const auto &flat_projection = task->GetType() == TaskType::ORDERED
-      ? ((const OrderedTask *)task)->GetTaskProjection()
+    const auto &flat_projection = active_task->GetType() == TaskType::ORDERED
+      ? ((const OrderedTask *)active_task)->GetTaskProjection()
       : dummy_flat_projection;
 
-    OZRenderer ozv(look.task, airspace_renderer.GetLook(),
-                   GetMapSettings().airspace);
-    TaskPointRenderer tpv(canvas, render_projection, look.task,
-                          flat_projection,
-                          ozv, draw_bearing, target_visibility,
-                          Basic().GetLocationOrInvalid());
-    tpv.SetTaskFinished(Calculated().task_stats.task_finished);
-    TaskRenderer dv(tpv, render_projection.GetScreenBounds());
-    dv.Draw(*task);
+    DrawActiveTaskForProjection(canvas, render_projection, look.task,
+                                *active_task,
+                                flat_projection, airspace_renderer,
+                                GetMapSettings(), draw_bearing,
+                                target_visibility,
+                                Basic().GetLocationOrInvalid(),
+                                Calculated().task_stats.task_finished);
   }
 
   if (draw_route)
@@ -66,20 +63,8 @@ MapWindow::DrawTask(Canvas &canvas) noexcept
 void
 MapWindow::DrawRoute(Canvas &canvas) noexcept
 {
-  const auto &route = Calculated().planned_route;
-
-  const auto r_size = route.size();
-  constexpr std::size_t capacity = std::decay_t<decltype(route)>::capacity();
-  BulkPixelPoint p[capacity];
-  std::transform(route.begin(), route.end(), p,
-                 [this](const auto &i) {
-                   return render_projection.GeoToScreen(i);
-                 });
-
-  p[r_size - 1] = ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], Layout::Scale(20));
-
-  canvas.Select(look.task.bearing_pen);
-  canvas.DrawPolyline(p, r_size);
+  DrawPlannedRoutePolyline(canvas, render_projection, look.task.bearing_pen,
+                           Calculated().planned_route);
 }
 
 void

@@ -29,6 +29,8 @@ Version 7.45 - not yet released
 * desktop
   - command-line: -h/--help and -version/--version print to stdout and exit;
     unknown options print a short usage line on stderr
+  - command-line: -replay=PATH (IGC flight replay) supported on macOS like other desktop
+    builds
 * ui
   - Waypoint details embedded image: new input mode ``wptimg`` and
     ``WaypointImage`` events (magnify, shrink, reset, arrows) so keys
@@ -48,6 +50,7 @@ Version 7.45 - not yet released
     pre-filtered to recently-used waypoints; listed in the Gesture Help
     dialog with its own icon #336
 * map
+  - thermal hotspot map icon updated (map_thermal_hotspot.svg)
   - obstacles hidden at wider map scales than other non-landables (5000 vs 10000)
   - draw up to 1024 waypoints at once (was 256) #2327
   - terrain: fix fluctuating hill-shading strength #2262
@@ -99,6 +102,8 @@ Version 7.45 - not yet released
     pager pages (same behaviour as arrow keys); wiring lives in
     ArrowPagerWidget::Prepare; red trail while drawing the swipe; fix crash when
     swiping (pager change deferred until after mouse-up) #2122 #2414
+  - credits: third-party library notices are embedded in the dialog (Boost, GLM,
+    IOIO, UsbSerial, and other bundled components)
   - Quick Guide "What's New": release notes are Markdown generated at build time
     from NEWS.txt (headings + merged list lines) instead of truncating the
     gzipped file at runtime
@@ -113,6 +118,7 @@ Version 7.45 - not yet released
     details) #749
   - waypoint list & alternates: waypoint details open above the list; Close without
     a committed action returns to the list, not the map #620
+  - status messages: "Message Repeat" replays the status sound (not only the text)
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or
@@ -124,21 +130,37 @@ Version 7.45 - not yet released
     reliably produce the symbol ZIP in CI
   - configure built-in GPS & sensors in the last device slot by default (same on
     iOS)
+  - Bluetooth sensor (GATT): handle missing BLUETOOTH_CONNECT permission on Android 12+
+    without crashing the connect runnable
 * calculations
   - BrokenDateTime: unified UTC conversion (rename FromUnixTimeUTC to
     FromUnixTime); Windows TimeGm uses _mkgmtime
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)
+* weather
+  - METAR/TAF station list: accept lowercase ICAO codes when adding a station;
+    codes are normalized to upper-case for download and profile storage
 * data files
   - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
     is read correctly
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
+  - Site Files: optional user-defined repository URL(s); indices are merged with the
+    official catalog; changing URLs runs a modal download with progress; picker lists
+    refresh when user downloads finish; File Manager includes user entries; still
+    works when the main repository file is missing; HTTP redirects followed for
+    downloads
 * devices
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
+  - QNH merged from external device settings is forwarded to every device that
+    accepts QNH (e.g. LXNAV), not only when calculated pressure changes #2453
+  - Air Control Display: set active COM via standby channel (CHN2), swap, and
+    restore previous standby; active channel is read-only on the hardware #2454
   - Polar sync device setting is offered only for drivers that register polar
     support (currently LXNAV); PutPolar is skipped on other drivers even if an old
-    profile had Polar sync enabled #2457
+    profile had Polar sync enabled #2455
+  - LX Navigation LX160 variometer: new driver #2424
+  - LX EOS / Era: task declare and IGC logger support enabled in the driver #2433
 * iOS
   - disable Core Location distance filter for built-in GPS so fixes are not
     suppressed while stationary #2380
@@ -190,7 +212,6 @@ Version 7.44 - 2026-03-22
   - checklists: add Markdown support (bold, links, checkboxes)
   - fix home waypoint lost on restart due to async terrain loading #2169
   - fix profile migration ordering of old waypoint/airspace keys
-  - add ability to configure user-defined repositories
 * ui
   - enable goto and waypoint details for location map items (clicking on empty map locations)
   - streamlined, and optimized icons

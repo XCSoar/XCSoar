@@ -12,6 +12,8 @@
 #include "Widget/TextWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
+#include "TaskEditMapPreviewWindow.hpp"
+#include "TaskEditMapPreviewWidget.hpp"
 #include "Task/TaskStore.hpp"
 #include "Task/ValidationErrorStrings.hpp"
 #include "LocalPath.hpp"
@@ -19,7 +21,10 @@
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Renderer/TextRowRenderer.hpp"
+#include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/MapLook.hpp"
+#include "MapWindow/Preview/MapPreviewFocus.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "util/StringCompare.hxx"
 #include "UIGlobals.hpp"
@@ -27,6 +32,7 @@
 #include "DataComponents.hpp"
 
 #include <cassert>
+#include <variant>
 
 static unsigned task_list_serial;
 
@@ -58,6 +64,8 @@ class TaskListPanel final
   TwoWidgets *two_widgets;
   ButtonPanelWidget *buttons;
 
+  TaskEditMapPreviewWindow *browse_preview_map = nullptr;
+
 public:
   TaskListPanel(TaskManagerDialog &_dialog,
                 std::unique_ptr<OrderedTask> &_active_task, bool *_task_modified,
@@ -74,6 +82,12 @@ public:
   void SetButtonPanel(ButtonPanelWidget &_buttons) {
     buttons = &_buttons;
   }
+
+  void SetBrowsePreviewMap(TaskEditMapPreviewWindow *p) noexcept {
+    browse_preview_map = p;
+  }
+
+  void SyncBrowsePreviewMap() noexcept;
 
   void CreateButtons(ButtonPanel &buttons) {
     buttons.Add(_("Load"), [this](){ LoadTask(); });
@@ -161,6 +175,22 @@ TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
+TaskListPanel::SyncBrowsePreviewMap() noexcept
+{
+  if (browse_preview_map == nullptr)
+    return;
+
+  browse_preview_map->SetQueryFallbackLocation(
+    CommonInterface::Basic().GetLocationOrInvalid());
+
+  const OrderedTask *const t = get_cursor_task();
+  if (t != nullptr && t->TaskSize() > 0)
+    browse_preview_map->SetPreviewFocus(MapPreviewFocusTaskWhole{t});
+  else
+    browse_preview_map->SetPreviewFocus(std::monostate{});
+}
+
+void
 TaskListPanel::RefreshView()
 {
   GetList().SetLength(task_store.Size());
@@ -180,6 +210,8 @@ TaskListPanel::RefreshView()
 
   if (GetList().IsVisible() && two_widgets != nullptr)
     two_widgets->UpdateLayout();
+
+  SyncBrowsePreviewMap();
 }
 
 void
@@ -350,13 +382,27 @@ CreateTaskListPanel(TaskManagerDialog &dialog,
                                                 *summary);
   auto tw = std::make_unique<TwoWidgets>(std::move(widget),
                                          std::move(summary));
-  auto &list = (TaskListPanel &)tw->GetFirst();
+  auto &list = static_cast<TaskListPanel &>(tw->GetFirst());
 
-  list.SetTwoWidgets(*tw);
+  const MapLook &map_look = UIGlobals::GetMapLook();
+  auto preview = std::make_unique<TaskEditMapPreviewWindow>(
+    map_look.airspace, map_look.topography, map_look.task);
+  TaskEditMapPreviewWindow *const preview_raw = preview.get();
+
+  auto preview_widget =
+    std::make_unique<TaskEditMapPreviewWidget>(std::move(preview));
+
+  list.SetBrowsePreviewMap(preview_raw);
+
+  auto full_split = std::make_unique<TwoWidgets>(
+    std::move(tw), std::move(preview_widget),
+    TwoWidgetsSplit::SCREEN_ORIENTATION);
+
+  list.SetTwoWidgets(*full_split);
 
   auto buttons =
-    std::make_unique<ButtonPanelWidget>(std::move(tw),
-                                        ButtonPanelWidget::Alignment::BOTTOM);
+    std::make_unique<ButtonPanelWidget>(std::move(full_split),
+                                          ButtonPanelWidget::Alignment::BOTTOM);
   list.SetButtonPanel(*buttons);
 
   return buttons;

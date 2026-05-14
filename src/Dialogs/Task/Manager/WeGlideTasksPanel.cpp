@@ -15,9 +15,12 @@
 #include "Widget/ListWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
+#include "TaskEditMapPreviewWindow.hpp"
+#include "TaskEditMapPreviewWidget.hpp"
 #include "Task/ValidationErrorStrings.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
+#include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
 #include "Look/DialogLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -25,6 +28,8 @@
 #include "ui/event/CoInjectFunction.hpp"
 #include "net/client/WeGlide/ListTasks.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
+#include "Look/MapLook.hpp"
+#include "MapWindow/Preview/MapPreviewFocus.hpp"
 #include "net/http/Init.hpp"
 #include "lib/curl/Global.hxx"
 #include "util/Compiler.h"
@@ -34,6 +39,8 @@
 #include "Interface.hpp"
 
 #include <cassert>
+#include <memory>
+#include <variant>
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
@@ -60,6 +67,13 @@ class WeGlideTasksPanel final
 
   NullOperationEnvironment null_progress_listener;
   UI::CoInjectFunction<List> inject_reload{Net::curl->GetEventLoop()};
+  UI::CoInjectFunction<std::unique_ptr<OrderedTask>> inject_preview_task{
+    Net::curl->GetEventLoop()};
+
+  TaskEditMapPreviewWindow *weglide_preview_map = nullptr;
+
+  std::unique_ptr<OrderedTask> cursor_preview_task;
+  uint_least64_t cursor_preview_for_id = 0;
 
   const WeGlideTaskSelection selection;
 
@@ -81,6 +95,10 @@ public:
     buttons = &_buttons;
   }
 
+  void SetWeGlidePreviewMap(TaskEditMapPreviewWindow *p) noexcept {
+    weglide_preview_map = p;
+  }
+
   void CreateButtons(ButtonPanel &buttons) noexcept {
     load_button = buttons.Add(_("Load"), [this](){ LoadTask(); });
     buttons.Add(_("Refresh"), [this](){ ReloadList(); });
@@ -93,6 +111,8 @@ public:
   void ReloadList() noexcept;
 
   void RefreshView() noexcept;
+
+  void SyncWeGlidePreviewMap() noexcept;
 
   void LoadTask() noexcept;
 
@@ -199,13 +219,79 @@ LoadTaskList(WeGlideTaskSelection selection,
   gcc_unreachable();
 }
 
+void
+WeGlideTasksPanel::SyncWeGlidePreviewMap() noexcept
+{
+  if (weglide_preview_map == nullptr)
+    return;
+
+  weglide_preview_map->SetQueryFallbackLocation(
+    CommonInterface::Basic().GetLocationOrInvalid());
+
+  const auto &cs = CommonInterface::GetComputerSettings();
+  if (!cs.weglide.enabled || list.empty() ||
+      GetList().GetCursorIndex() >= list.size()) {
+    inject_preview_task.Cancel();
+    cursor_preview_task.reset();
+    cursor_preview_for_id = 0;
+    weglide_preview_map->SetPreviewFocus(std::monostate{});
+    return;
+  }
+
+  const auto &info = list[GetList().GetCursorIndex()];
+  const uint_least64_t task_id = info.id;
+
+  if (cursor_preview_task != nullptr && cursor_preview_for_id == task_id) {
+    weglide_preview_map->SetPreviewFocus(
+      MapPreviewFocusTaskWhole{cursor_preview_task.get()});
+    return;
+  }
+
+  inject_preview_task.Cancel();
+  cursor_preview_task.reset();
+  cursor_preview_for_id = 0;
+  weglide_preview_map->SetPreviewFocus(std::monostate{});
+
+  inject_preview_task.Start(
+    WeGlide::DownloadTask(*Net::curl, cs.weglide, task_id, cs.task,
+                          data_components != nullptr
+                            ? data_components->waypoints.get()
+                            : nullptr,
+                          null_progress_listener),
+    [this, task_id](std::unique_ptr<OrderedTask> task) noexcept {
+      if (!task)
+        return;
+
+      const unsigned idx = GetList().GetCursorIndex();
+      if (idx >= list.size() || list[idx].id != task_id)
+        return;
+
+      cursor_preview_task = std::move(task);
+      cursor_preview_for_id = task_id;
+
+      if (weglide_preview_map != nullptr)
+        weglide_preview_map->SetPreviewFocus(
+          MapPreviewFocusTaskWhole{cursor_preview_task.get()});
+    },
+    [this](std::exception_ptr) noexcept {
+      cursor_preview_task.reset();
+      cursor_preview_for_id = 0;
+      if (weglide_preview_map != nullptr)
+        weglide_preview_map->SetPreviewFocus(std::monostate{});
+    });
+}
+
 inline void
 WeGlideTasksPanel::ReloadList() noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings();
 
+  inject_preview_task.Cancel();
+
   if (!settings.weglide.enabled) {
     list.clear();
+    cursor_preview_task.reset();
+    cursor_preview_for_id = 0;
     GetList().SetLength(1);
     UpdateButtons();
     RefreshView();
@@ -216,6 +302,9 @@ WeGlideTasksPanel::ReloadList() noexcept
   inject_reload.Start(LoadTaskList(selection, settings.weglide,
                                    null_progress_listener),
                       [this](List &&_list){
+                        inject_preview_task.Cancel();
+                        cursor_preview_task.reset();
+                        cursor_preview_for_id = 0;
                         list = std::move(_list);
                         GetList().SetLength(list.empty() ? 1 : list.size());
                         UpdateButtons();
@@ -263,6 +352,8 @@ WeGlideTasksPanel::RefreshView() noexcept
 
   if (GetList().IsVisible() && two_widgets != nullptr)
     two_widgets->UpdateLayout();
+
+  SyncWeGlidePreviewMap();
 }
 
 inline void
@@ -328,6 +419,7 @@ void
 WeGlideTasksPanel::Hide() noexcept
 {
   inject_reload.Cancel();
+  inject_preview_task.Cancel();
   ListWidget::Hide();
 }
 
@@ -343,12 +435,26 @@ CreateWeGlideTasksPanel(TaskManagerDialog &dialog,
                                                     *summary);
   auto tw = std::make_unique<TwoWidgets>(std::move(widget),
                                          std::move(summary));
-  auto &list = (WeGlideTasksPanel &)tw->GetFirst();
+  auto &list = static_cast<WeGlideTasksPanel &>(tw->GetFirst());
 
-  list.SetTwoWidgets(*tw);
+  const MapLook &map_look = UIGlobals::GetMapLook();
+  auto preview = std::make_unique<TaskEditMapPreviewWindow>(
+    map_look.airspace, map_look.topography, map_look.task);
+  TaskEditMapPreviewWindow *const preview_raw = preview.get();
+
+  auto preview_widget =
+    std::make_unique<TaskEditMapPreviewWidget>(std::move(preview));
+
+  list.SetWeGlidePreviewMap(preview_raw);
+
+  auto full_split = std::make_unique<TwoWidgets>(
+    std::move(tw), std::move(preview_widget),
+    TwoWidgetsSplit::SCREEN_ORIENTATION);
+
+  list.SetTwoWidgets(*full_split);
 
   auto buttons =
-    std::make_unique<ButtonPanelWidget>(std::move(tw),
+    std::make_unique<ButtonPanelWidget>(std::move(full_split),
                                         ButtonPanelWidget::Alignment::BOTTOM);
   list.SetButtonPanel(*buttons);
 

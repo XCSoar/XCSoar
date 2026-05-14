@@ -104,7 +104,7 @@ TaskManagerDialog::Initialise(ContainerWindow &parent,
   const auto *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
   const auto *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
 
-  AddTab(CreateTaskEditPanel(*this, look.task, look.airspace,
+  AddTab(CreateTaskEditPanel(*this, look.task, look.airspace, look.topography,
                              task, &modified),
          _("Turn Points"), TurnPointIcon);
   AddTab(std::make_unique<TaskMiscPanel>(*this, task, &modified),

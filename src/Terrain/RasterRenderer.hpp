@@ -78,11 +78,6 @@ public:
     return height_matrix.GetSize();
   }
 
-#ifdef ENABLE_OPENGL
-  void Invalidate() noexcept {
-    bounds.SetInvalid();
-  }
-
   /**
    * Force a specific quantisation value.  Useful for preview
    * windows that should always render at full resolution
@@ -93,6 +88,11 @@ public:
 #ifdef ENABLE_OPENGL
     fixed_quantisation = true;
 #endif
+  }
+
+#ifdef ENABLE_OPENGL
+  void Invalidate() noexcept {
+    bounds.SetInvalid();
   }
 
   /**

@@ -2,8 +2,14 @@
 // Copyright The XCSoar Project
 
 #include "Dialogs/MapItemListDialog.hpp"
+#include "Dialogs/MapItemPreviewWindow.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "MapWindow/Preview/MapPreviewFocus.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/window/Window.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
@@ -11,6 +17,7 @@
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Language/Language.hpp"
 #include "MapSettings.hpp"
+#include "Screen/Layout.hpp"
 #include "MapWindow/Items/MapItem.hpp"
 #include "MapWindow/Items/List.hpp"
 #include "Renderer/MapItemListRenderer.hpp"
@@ -30,7 +37,10 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Protection.hpp"
 
+#include <cassert>
 #include <limits>
+#include <memory>
+#include <variant>
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -64,6 +74,77 @@ HasDetails(const MapItem &item)
   return false;
 }
 
+static MapPreviewFocus
+MapItemToFocus(const MapItem &item) noexcept
+{
+  switch (item.type) {
+  case MapItem::Type::AIRSPACE:
+    return static_cast<const AirspaceMapItem &>(item).airspace;
+
+  case MapItem::Type::WAYPOINT:
+    return static_cast<const WaypointMapItem &>(item).waypoint;
+
+  case MapItem::Type::LOCATION:
+    return MapPreviewFocusLocationLeg{
+      static_cast<const LocationMapItem &>(item).location};
+
+  case MapItem::Type::TASK_OZ:
+    return MapPreviewFocusTaskOZ{
+      (unsigned)static_cast<const TaskOZMapItem &>(item).index};
+
+  case MapItem::Type::TRAFFIC: {
+    const auto &t = static_cast<const TrafficMapItem &>(item);
+    return MapPreviewFocusTraffic{t.id, t.color};
+  }
+
+  case MapItem::Type::THERMAL:
+    return static_cast<const ThermalMapItem &>(item).thermal.location;
+
+  case MapItem::Type::SELF:
+    return static_cast<const SelfMapItem &>(item).location;
+
+  case MapItem::Type::ARRIVAL_ALTITUDE:
+    return MapPreviewFocusLocationLeg{
+      static_cast<const ArrivalAltitudeMapItem &>(item).destination};
+
+#ifdef HAVE_NOAA
+  case MapItem::Type::WEATHER:
+#endif
+  case MapItem::Type::OVERLAY:
+  case MapItem::Type::RASP:
+#ifdef HAVE_SKYLINES_TRACKING
+  case MapItem::Type::SKYLINES_TRAFFIC:
+#endif
+    return std::monostate{};
+  }
+
+  return std::monostate{};
+}
+
+class MapItemPreviewWidget final : public WindowWidget {
+public:
+  explicit MapItemPreviewWidget(std::unique_ptr<MapItemPreviewWindow> w) noexcept
+    : WindowWidget(std::move(w)) {}
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
+    auto &map = static_cast<MapItemPreviewWindow &>(GetWindow());
+
+    WindowStyle style;
+    style.Hide();
+    style.Border();
+
+    map.Create(parent, rc, style);
+  }
+
+  PixelSize GetMinimumSize() const noexcept override {
+    return {Layout::Scale(120), Layout::Scale(100)};
+  }
+
+  PixelSize GetMaximumSize() const noexcept override {
+    return WidgetMaximumSizeUnbounded();
+  }
+};
+
 class MapItemListWidget final
   : public ListWidget {
   const MapItemList &list;
@@ -71,7 +152,11 @@ class MapItemListWidget final
   const DialogLook &dialog_look;
   const MapSettings &settings;
 
+  const GeoPoint query_location;
+
   MapItemListRenderer renderer;
+
+  MapItemPreviewWindow *preview_map = nullptr;
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
   Button *ack_button, *enable_button;
@@ -84,12 +169,26 @@ public:
                     const DialogLook &_dialog_look, const MapLook &_look,
                     const TrafficLook &_traffic_look,
                     const FinalGlideBarLook &_final_glide_look,
-                    const MapSettings &_settings)
+                    const MapSettings &_settings,
+                    GeoPoint _query_location) noexcept
     :list(_list),
      dialog_look(_dialog_look),
      settings(_settings),
+     query_location(_query_location),
      renderer(_look, _traffic_look, _final_glide_look,
               _settings, CommonInterface::GetComputerSettings().utc_offset) {}
+
+  void SetPreviewMap(MapItemPreviewWindow *p) noexcept {
+    preview_map = p;
+  }
+
+  void SyncPreviewMap() noexcept {
+    if (preview_map == nullptr)
+      return;
+
+    preview_map->SetQueryFallbackLocation(query_location);
+    preview_map->SetPreviewFocus(MapItemToFocus(*list[GetCursorIndex()]));
+  }
 
   unsigned GetCursorIndex() const {
     return GetList().GetCursorIndex();
@@ -118,6 +217,7 @@ public:
 
   void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
     UpdateButtons();
+    SyncPreviewMap();
   }
 
   bool CanActivateItem(unsigned index) const noexcept override {
@@ -228,6 +328,8 @@ MapItemListWidget::Prepare(ContainerWindow &parent,
     GetList().SetCursorIndex(selected_index);
     UpdateButtons();
   }
+
+  SyncPreviewMap();
 }
 
 void
@@ -342,24 +444,47 @@ MapItemListWidget::OnEnableClicked()
 }
 
 static int
-ShowMapItemListDialog(const MapItemList &list,
-                      const DialogLook &dialog_look, const MapLook &look,
-                      const TrafficLook &traffic_look,
-                      const FinalGlideBarLook &final_glide_look,
-                      const MapSettings &settings)
+RunMapItemListModal(const MapItemList &list,
+                    GeoPoint query_location,
+                    const DialogLook &dialog_look, const MapLook &look,
+                    const TrafficLook &traffic_look,
+                    const FinalGlideBarLook &final_glide_look,
+                    const MapSettings &settings)
 {
-  TWidgetDialog<MapItemListWidget>
-    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-           dialog_look, _("Map elements at this location"));
-  dialog.SetWidget(list, dialog_look, look,
-                   traffic_look, final_glide_look,
-                   settings);
-  dialog.GetWidget().CreateButtons(dialog);
+  auto preview_window =
+    std::make_unique<MapItemPreviewWindow>(look, traffic_look);
+  preview_window->SetQueryFallbackLocation(query_location);
+  MapItemPreviewWindow *const preview_raw = preview_window.get();
+
+  auto preview_widget =
+    std::make_unique<MapItemPreviewWidget>(std::move(preview_window));
+
+  auto list_widget = std::make_unique<MapItemListWidget>(
+    list, dialog_look, look, traffic_look, final_glide_look, settings,
+    query_location);
+  list_widget->SetPreviewMap(preview_raw);
+
+  auto split = std::make_unique<TwoWidgets>(
+    std::move(list_widget), std::move(preview_widget),
+    TwoWidgetsSplit::SCREEN_ORIENTATION);
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      dialog_look, _("Map elements at this location"),
+                      split.get());
+
+  auto &list_ref = static_cast<MapItemListWidget &>(split->GetFirst());
+
+  list_ref.CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
-  return dialog.ShowModal() == mrOK
-    ? (int)dialog.GetWidget().GetCursorIndex()
+  const int result = dialog.ShowModal() == mrOK
+    ? (int)list_ref.GetCursorIndex()
     : -1;
+
+  assert(dialog.StealWidget() == split.get());
+  split.reset();
+
+  return result;
 }
 
 static void
@@ -444,6 +569,7 @@ ShowMapItemDialog(const MapItem &item,
 
 void
 ShowMapItemListDialog(const MapItemList &list,
+                      const GeoPoint &query_location,
                       const DialogLook &dialog_look,
                       const MapLook &look,
                       const TrafficLook &traffic_look,
@@ -457,8 +583,8 @@ ShowMapItemListDialog(const MapItemList &list,
     return;
 
   /* always show list dialog when there are items, so user can choose action */
-  int i = ShowMapItemListDialog(list, dialog_look, look,
-                                traffic_look, final_glide_look, settings);
+  int i = RunMapItemListModal(list, query_location, dialog_look, look,
+                              traffic_look, final_glide_look, settings);
   assert(i >= -1 && i < (int)list.size());
   if (i >= 0)
     ShowMapItemDialog(*list[i], waypoints, airspace_warnings);

@@ -69,3 +69,17 @@ struct WaypointRendererSettings {
 
   void LoadFromProfile() noexcept;
 };
+
+/**
+ * Small target-map dialog: always show full waypoint names regardless of
+ * the user's global abbreviation preference (#DisplayTextType).
+ */
+[[gnu::pure]]
+inline WaypointRendererSettings
+WaypointRendererSettingsForTargetDialog(const WaypointRendererSettings &base) noexcept
+{
+  WaypointRendererSettings copy = base;
+  copy.display_text_type = WaypointRendererSettings::DisplayTextType::NAME;
+  return copy;
+}
+

@@ -58,7 +58,9 @@ WindowWidget::Hide() noexcept
 {
   assert(window != nullptr);
   assert(window->IsDefined());
-  assert(window->IsVisible());
+
+  if (!window->IsVisible())
+    return;
 
   window->FastHide();
 }

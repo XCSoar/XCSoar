@@ -117,6 +117,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   }
 
   ShowMapItemListDialog(list,
+                        location,
                         UIGlobals::GetDialogLook(), look, traffic_look,
                         final_glide_bar_renderer.GetLook(), settings,
                         waypoints,

@@ -44,6 +44,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/FLARM/ConfigWidget.cpp \
 	$(SRC)/Dialogs/Device/FLARM/RangeConfigWidget.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
+	$(SRC)/Dialogs/MapItemPreviewWindow.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsPanel.cpp \
 	$(SRC)/Dialogs/ColorListDialog.cpp \
@@ -54,6 +55,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
+	$(SRC)/Dialogs/Airspace/AirspaceWarningPreviewWindow.cpp \
 	$(SRC)/Dialogs/Settings/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/Settings/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
@@ -132,6 +134,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Manager/TaskManagerDialog.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskClosePanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskEditPanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskEditMapPreviewWindow.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskEditMapPreviewWidget.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskPropertiesPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskMiscPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskActionsPanel.cpp \
@@ -180,6 +184,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/DefaultTask.cpp \
 	$(SRC)/Task/MapTaskManager.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
+	$(SRC)/Task/WaypointInActiveTask.cpp \
 	$(SRC)/Task/FileProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
@@ -338,6 +343,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/TaskPointRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
+	$(SRC)/Renderer/ActiveTaskGeometryRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRendererGL.cpp \

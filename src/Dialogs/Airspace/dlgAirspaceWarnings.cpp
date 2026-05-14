@@ -6,6 +6,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/Button.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/MapLook.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -16,24 +17,57 @@
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
+#include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Widget/WindowWidget.hpp"
+#include "Dialogs/Airspace/AirspaceWarningPreviewWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Sound.hpp"
 
 #include <algorithm>
 #include <cassert>
+#include <memory>
 #include <vector>
 
 #include <stdio.h>
+
+class AirspaceWarningPreviewWidget final : public WindowWidget {
+public:
+  explicit AirspaceWarningPreviewWidget(
+    std::unique_ptr<AirspaceWarningPreviewWindow> w) noexcept
+    : WindowWidget(std::move(w)) {}
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
+    auto &map =
+      static_cast<AirspaceWarningPreviewWindow &>(GetWindow());
+
+    WindowStyle style;
+    style.Hide();
+    style.Border();
+
+    map.Create(parent, rc, style);
+  }
+
+  PixelSize GetMinimumSize() const noexcept override {
+    return {Layout::Scale(120), Layout::Scale(100)};
+  }
+
+  PixelSize GetMaximumSize() const noexcept override {
+    return WidgetMaximumSizeUnbounded();
+  }
+};
 
 class AirspaceWarningListWidget final
   : public ListWidget {
 
   ProtectedAirspaceWarningManager &airspace_warnings;
+
+  AirspaceWarningPreviewWindow *preview_map = nullptr;
 
   /**
    * Non-owning: only valid for the #ShowModal scope after
@@ -68,6 +102,10 @@ public:
      sound_interval_counter(1)
   {}
 
+  void SetPreviewMap(AirspaceWarningPreviewWindow *map) noexcept {
+    preview_map = map;
+  }
+
   void CreateButtons(WidgetDialog &dialog) {
     self_dialog = &dialog;
     ack_button = dialog.AddButton(_("ACK"), [this](){ Ack(); });
@@ -96,6 +134,7 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
+  void Unprepare() noexcept override;
 
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -195,6 +234,9 @@ AirspaceWarningListWidget::OnCursorMoved(unsigned i) noexcept
     : nullptr;
 
   UpdateButtons();
+
+  if (preview_map != nullptr)
+    preview_map->SetHighlight(selected_airspace);
 }
 
 void
@@ -210,7 +252,20 @@ void
 AirspaceWarningListWidget::Hide() noexcept
 {
   update_list_timer.Cancel();
+  /* #TwoWidgets destroys the preview (#second) before this list (#first);
+     drop the raw pointer before the preview window is destroyed. */
+  preview_map = nullptr;
+
   ListWidget::Hide();
+}
+
+void
+AirspaceWarningListWidget::Unprepare() noexcept
+{
+  preview_map = nullptr;
+  update_list_timer.Cancel();
+
+  ListWidget::Unprepare();
 }
 
 void
@@ -317,6 +372,21 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   const auto &warning = warning_list[i];
   const AbstractAirspace &airspace = warning.GetAirspace();
 
+  PixelRect layout_rc = paint_rc;
+  const unsigned line_height = paint_rc.GetHeight();
+  {
+    const AirspaceLook &airspace_look = UIGlobals::GetMapLook().airspace;
+    const AirspaceRendererSettings &airspace_renderer =
+      CommonInterface::GetMapSettings().airspace;
+
+    const PixelPoint pt(layout_rc.left + line_height / 2,
+                        layout_rc.top + line_height / 2);
+    const unsigned radius = line_height / 2 - padding;
+    AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
+                                  airspace_renderer, airspace_look);
+    layout_rc.left += line_height + padding;
+  }
+
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
   const int status_width = canvas.CalcTextWidth("inside");
@@ -326,7 +396,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   // Dynamic columns scaling - "name" column is flexible, altitude and state
   // columns are fixed-width.
   auto [text_altitude_rc, status_rc] =
-    paint_rc.VerticalSplit(paint_rc.right - (2 * padding + status_width));
+    layout_rc.VerticalSplit(layout_rc.right - (2 * padding + status_width));
   auto text_rc =
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
@@ -471,6 +541,10 @@ AirspaceWarningListWidget::UpdateList()
 
   GetList().Invalidate();
   UpdateButtons();
+
+  if (preview_map != nullptr)
+    preview_map->SetHighlight(selected_airspace);
+
   AutoHide();
 }
 
@@ -489,18 +563,46 @@ dlgAirspaceWarningsShowModal(ProtectedAirspaceWarningManager &_warnings,
 
   auto_close = _auto_close;
 
-  list = new AirspaceWarningListWidget(_warnings);
+  const MapLook &map_look = UIGlobals::GetMapLook();
+
+  auto preview_window =
+    std::make_unique<AirspaceWarningPreviewWindow>(map_look, _warnings);
+  AirspaceWarningPreviewWindow *const preview_raw = preview_window.get();
+
+  auto preview_widget =
+    std::make_unique<AirspaceWarningPreviewWidget>(std::move(preview_window));
+
+  auto list_widget = std::make_unique<AirspaceWarningListWidget>(_warnings);
+  AirspaceWarningListWidget *const list_raw = list_widget.get();
+  list_widget->SetPreviewMap(preview_raw);
+  list = list_raw;
+
+  auto split = std::make_unique<TwoWidgets>(
+    std::move(list_widget), std::move(preview_widget),
+    TwoWidgetsSplit::SCREEN_ORIENTATION);
 
   WidgetDialog dialog2(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                        UIGlobals::GetDialogLook(),
-                       _("Airspace Warnings"), list);
-  list->CreateButtons(dialog2);
+                       _("Airspace Warnings"), split.get());
+
+  auto &list_ref =
+    static_cast<AirspaceWarningListWidget &>(split->GetFirst());
+  list_ref.CreateButtons(dialog2);
+
   dialog2.AddButton(_("Close"), mrOK);
   dialog2.EnableCursorSelection();
 
   dialog = &dialog2;
 
   dialog2.ShowModal();
+
+  /* #ManagedWidget::~ManagedWidget deletes its widget; `split` owns the
+     same pointer — without stealing, the tree is freed twice (SIGSEGV on
+     Close/ESC). Same pattern as #DefaultWidgetDialog(). */
+  assert(dialog2.StealWidget() == split.get());
+  split.reset();
+
+  list = nullptr;
 
   // Needed for dlgAirspaceWarningVisible()
   dialog = NULL;
