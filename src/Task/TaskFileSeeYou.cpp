@@ -27,6 +27,8 @@
 
 #include <stdlib.h>
 
+#include <string>
+
 using std::string_view_literals::operator""sv;
 
 static constexpr std::size_t CUP_MAX_TPS = 30;
@@ -475,11 +477,15 @@ try {
   if (line == nullptr)
     return nullptr;
 
+  /* CupSplitColumns stores string_views into its input; further
+     BufferedReader::ReadLine calls can reuse that memory (#2496). */
+  const std::string task_line_storage(line);
+
   // Read waypoint list
   // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
   //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
   std::array<std::string_view, CUP_MAX_TPS> wps;
-  CupSplitColumns(line, wps);
+  CupSplitColumns(std::string_view(task_line_storage), wps);
 
   std::size_t n_waypoints = 0;
   for (std::size_t i = 0; i < wps.size(); ++i)
@@ -490,7 +496,7 @@ try {
   if (n_waypoints < 5)
     return nullptr;
 
-  // Remove taskname, start point and landing point from count
+  // Remove taskname, takeoff and landing from count
   n_waypoints -= 3;
 
   SeeYouTaskInformation task_info;
