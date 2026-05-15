@@ -24,6 +24,7 @@
 #include "Geo/GeoVector.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <string>
 
 static void
@@ -894,6 +895,80 @@ TryLegEtaToStartForStartReach(FloatDuration &out_eta) noexcept
   return true;
 }
 
+enum class StartGateComment {
+  NONE,
+  TOO_EARLY,
+  CAN_START,
+  TOO_LATE,
+};
+
+static StartGateComment
+StartGateCommentAt(const TimeSpan &window, FineTime when) noexcept
+{
+  if (!when.IsValid())
+    return StartGateComment::NONE;
+
+  if (!window.HasBegun(when))
+    return StartGateComment::TOO_EARLY;
+
+  if (window.HasEnded(when))
+    return StartGateComment::TOO_LATE;
+
+  return StartGateComment::CAN_START;
+}
+
+static void
+ApplyStartOpenGateNowStyle(InfoBoxData &data,
+                           StartGateComment state) noexcept
+{
+  data.SetCommentColor(0);
+
+  switch (state) {
+  case StartGateComment::TOO_EARLY:
+    data.SetComment(_("Waiting"));
+    data.SetValueColor(2);
+    break;
+  case StartGateComment::CAN_START:
+    data.SetComment(_("Open"));
+    data.SetValueColor(3);
+    break;
+  case StartGateComment::TOO_LATE:
+    data.SetComment(_("Closed"));
+    data.SetValueColor(1);
+    break;
+  default:
+    data.SetCommentInvalid();
+    data.SetValueColor(0);
+    break;
+  }
+}
+
+static void
+ApplyStartGateReachStyle(InfoBoxData &data,
+                         StartGateComment state) noexcept
+{
+  data.SetCommentColor(0);
+
+  switch (state) {
+  case StartGateComment::TOO_EARLY:
+    data.SetComment(_("Too early"));
+    data.SetValueColor(2);
+    break;
+  case StartGateComment::CAN_START:
+    data.SetComment(_("Can start"));
+    data.SetValueColor(3);
+    break;
+  case StartGateComment::TOO_LATE:
+    data.SetComment(_("Too late"));
+    data.SetValueColor(1);
+    break;
+  default:
+    data.SetCommentInvalid();
+    data.SetValueColor(0);
+    break;
+  }
+}
+
 void
 UpdateInfoBoxStartOpen(InfoBoxData &data) noexcept
 {
@@ -915,9 +990,9 @@ InfoBoxContentStartOpen::HandleClick() noexcept
 }
 
 /**
- * @param projected_start_time_s time reference for gate checks: "now" for
- * Start open, or estimated arrival time at the start for Start reach.
- * @param at_reach_time true for Start reach (title left to factory caption).
+ * @param projected_start_time_s gate reference for Start open (current time);
+ *     ignored for Start reach (value is leg time to the start line).
+ * @param at_reach_time true for Start reach.
  */
 static void
 UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_s,
@@ -953,12 +1028,27 @@ UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_
 
   const FineTime projected_start_time{projected_start_time_s};
 
-  const bool gate_is_open = eff_start_window.HasBegun(projected_start_time) &&
-                            !eff_start_window.HasEnded(projected_start_time);
-  if (!at_reach_time) {
-    /* Start open only; Start reach keeps the default caption. */
-    data.SetTitle(gate_is_open ? _("Start open") : _("Start closed"));
+  if (at_reach_time) {
+    FloatDuration leg_eta{};
+    if (!TryLegEtaToStartForStartReach(leg_eta)) {
+      data.SetInvalid();
+      data.SetTitle(_("Start reach"));
+      return;
+    }
+
+    const int leg_sec = static_cast<int>(std::lround(leg_eta.count()));
+    FormatCountdownSignedMMSS(data, leg_sec);
+
+    const FineTime at_arrival{basic.time + leg_eta};
+    ApplyStartGateReachStyle(data,
+                             StartGateCommentAt(eff_start_window, at_arrival));
+    return;
   }
+
+  data.SetTitle(_("Start open"));
+
+  const StartGateComment gate_now =
+      StartGateCommentAt(eff_start_window, projected_start_time);
 
   if (!eff_start_window.HasBegun(projected_start_time)) {
     const int sec = eff_start_window.GetStart().IsValid()
@@ -966,43 +1056,23 @@ UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_
                                                eff_start_window.GetStart())
                         : 0;
     FormatCountdownSignedMMSS(data, sec);
-    /* Red value when still too early at start ETA; blue when at current time. */
-    data.SetValueColor(at_reach_time ? 1 : 2);
-    /* "Too early" on Start open only when Start reach would too: gate still
-       closed at the same ETA-to-start (requires leg ETA). */
-    if (at_reach_time)
-      data.SetComment(_("Too early"));
-    else {
-      bool same_as_reach = false;
-      FloatDuration leg_eta{};
-      if (basic.time_available && TryLegEtaToStartForStartReach(leg_eta)) {
-        const TimeStamp arrival_s = basic.time + leg_eta;
-        const FineTime at_arrival{arrival_s};
-        same_as_reach = !eff_start_window.HasBegun(at_arrival);
-      }
-      if (same_as_reach)
-        data.SetComment(_("Too early"));
-      else
-        data.SetCommentInvalid();
-    }
+    ApplyStartOpenGateNowStyle(data, gate_now);
   } else if (!eff_start_window.HasEnded(projected_start_time)) {
     if (eff_start_window.GetEnd().IsValid()) {
       const int sec = SignedSecondsUntil(projected_start_time_s,
                                          eff_start_window.GetEnd());
       FormatCountdownSignedMMSS(data, sec);
-      data.SetValueColor(3);
     } else
       data.SetValueInvalid();
 
-    data.SetComment(_("Can start"));
+    ApplyStartOpenGateNowStyle(data, gate_now);
   } else {
     const int sec = eff_start_window.GetEnd().IsValid()
                         ? SignedSecondsUntil(projected_start_time_s,
                                              eff_start_window.GetEnd())
                         : 0;
     FormatCountdownSignedMMSS(data, sec);
-    data.SetComment(_("Too late"));
-    data.SetValueColor(1);
+    ApplyStartOpenGateNowStyle(data, gate_now);
   }
 }
 
@@ -1010,15 +1080,13 @@ void
 UpdateInfoBoxStartOpenArrival(InfoBoxData &data) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  FloatDuration leg_eta{};
-  if (!TryLegEtaToStartForStartReach(leg_eta) || !basic.time_available) {
+  if (!basic.time_available) {
     data.SetValueColor(0);
     data.SetInvalid();
     return;
   }
 
-  const auto arrival_s = basic.time + leg_eta;
-  UpdateStartOpenInfobox(data, arrival_s, true);
+  UpdateStartOpenInfobox(data, basic.time, true);
 }
 
 void

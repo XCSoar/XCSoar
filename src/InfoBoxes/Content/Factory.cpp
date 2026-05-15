@@ -924,21 +924,20 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Start open/close countdown"),
     N_("Start open"),
-    N_("Time until the start gate opens or closes (now). Title is "
-       "Start unknown, Start open, or Start closed; comment shows can start "
-       "or too late when applicable. Before open, Too early appears only when "
-       "the gate is still closed at the same estimated arrival used for Start "
-       "reach (requires leg ETA). PEV window overrides task gate when set."),
+    N_("Signed countdown until the start gate opens or closes (now). "
+       "Value colour and secondary line reflect gate state at the current "
+       "time: Waiting (blue), Open (green), Closed (red). PEV window overrides "
+       "task gate when set."),
     IBFHelper<InfoBoxContentStartOpen>::Create,
   },
 
   {
     N_("Start open/close countdown at reaching"),
     N_("Start reach"),
-    N_("Same gate as Start open, at estimated arrival at the start (not now). "
-       "Comment Too early when the gate is still closed at that time, else can "
-       "start or too late; uses MacCready leg time when available, else "
-       "distance / ground speed."),
+    N_("Same gate as Start open. Main value is estimated time to reach the "
+       "start line (MacCready leg when available, else distance / ground speed). "
+       "Value colour and secondary line reflect gate state at that ETA: "
+       "Too early (blue), Can start (green), Too late (red)."),
     IBFHelper<InfoBoxContentStartOpenArrival>::Create,
   },
 

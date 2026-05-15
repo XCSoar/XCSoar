@@ -17,13 +17,12 @@ Version 7.45 - not yet released
     "45 sec", "2 min") not HH:MM so sub-minute offsets are not shown as 00:00
   - infoboxen: Start reach uses remaining distance / ground speed when the
     MacCready leg solution is not OK, so it matches Start open again in the
-    common MC-too-low / wind cases; Start open / Start reach show a signed
-    countdown (e.g. -1:30 past close at ETA) instead of a blank value #2502;
-    short comments (can start, too late; Start reach shows Too early when the
-    gate is still closed at ETA) stay within the InfoBox comment field (31
-    UTF-8 bytes); Start open title is Start unknown / Start open / Start closed
-    (Start reach caption unchanged); Start open shows Too early in that phase only
-    when Start reach would too (same ETA-to-start and gate check)
+    common MC-too-low / wind cases; Start open shows a signed gate countdown at
+    now instead of a blank value #2502; Start reach main value is time to the
+    start line (leg ETA), not gate countdown at arrival; Start open value colour
+    and comment reflect gate state at now (Waiting/Open/Closed, blue/green/red);
+    Start reach value colour and comment reflect gate state at leg ETA
+    (Too early/Can start/Too late, blue/green/red)
   - infoboxen: new Altitude IGC InfoBox (logger pressure or ISA pressure only)
   - waypoint search: name filter matches anywhere in the long name and the
     shortname (typically the ICAO code in SeeYou .cup files), not only at
