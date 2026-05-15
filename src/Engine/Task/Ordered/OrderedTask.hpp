@@ -7,6 +7,7 @@
 #include "Task/AbstractTask.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Waypoint/Ptr.hpp"
+#include "time/RoughTime.hpp"
 #include "util/DereferenceIterator.hxx"
 #include "util/StaticString.hxx"
 
@@ -75,6 +76,9 @@ private:
 
   StaticString<64> name;
 
+  /** Snapshot from #TaskManager for PEV offset at start recording. */
+  TimeSpan pilot_pev_window_snapshot{TimeSpan::Invalid()};
+
 public:
   /**
    * Constructor.
@@ -88,6 +92,14 @@ public:
    */
   explicit OrderedTask(const TaskBehaviour &tb) noexcept;
   ~OrderedTask() noexcept;
+
+  /**
+   * Copy the current PEV window from #CommonStats before each
+   * #Update(); used when recording start offset at crossing.
+   */
+  void SetPilotPevWindowSnapshot(const TimeSpan &span) noexcept {
+    pilot_pev_window_snapshot = span;
+  }
 
   /**
    * Accessor for factory system for constructing tasks

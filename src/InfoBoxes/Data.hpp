@@ -30,6 +30,7 @@ struct InfoBoxData {
 
   StaticString<32> title;
   StaticString<32> value;
+  /** UTF-8; truncated to fit (31 bytes + NUL). Keep user-visible msgids short. */
   StaticString<32> comment;
 
   Unit value_unit;

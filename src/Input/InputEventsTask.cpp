@@ -10,6 +10,7 @@
 #include "Protection.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
@@ -26,6 +27,10 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+
+#include "util/StaticString.hxx"
+
+#include <chrono>
 
 static void
 trigger_redraw()
@@ -354,15 +359,29 @@ InputEvents::eventTaskTransition(const char *misc)
     if (!start_stats.HasStarted())
       return;
 
-    char TempAll[120];
-    StringFormatUnsafe(
-        TempAll, "\r\n%s: %s\r\n%s:%s\r\n%s: %s", _("Altitude"),
-        FormatUserAltitude(start_stats.altitude).c_str(), _("Speed"),
-        FormatUserSpeed(start_stats.ground_speed, true).c_str(), _("Time"),
-        FormatLocalTimeHHMM(start_stats.time,
-                            CommonInterface::GetComputerSettings().utc_offset)
-            .c_str());
-    Message::AddMessage(_("Task start"), TempAll);
+    StaticString<512> TempAll;
+    if (start_stats.pev_offset_available) {
+      const auto pev_s = FormatTimespanSmart(
+          std::chrono::seconds{start_stats.pev_offset_seconds}, 3);
+      TempAll.UnsafeFormat(
+          "\r\n%s: %s\r\n%s: %s\r\n%s: %s\r\n%s: %s",
+          _("Altitude"),
+          FormatUserAltitude(start_stats.altitude).c_str(), _("Speed"),
+          FormatUserSpeed(start_stats.ground_speed, true).c_str(), _("Time"),
+          FormatLocalTimeHHMM(start_stats.time,
+                              CommonInterface::GetComputerSettings().utc_offset)
+              .c_str(),
+          _("PEV offset at start"), pev_s.c_str());
+    } else {
+      TempAll.UnsafeFormat(
+          "\r\n%s: %s\r\n%s: %s\r\n%s: %s", _("Altitude"),
+          FormatUserAltitude(start_stats.altitude).c_str(), _("Speed"),
+          FormatUserSpeed(start_stats.ground_speed, true).c_str(), _("Time"),
+          FormatLocalTimeHHMM(start_stats.time,
+                              CommonInterface::GetComputerSettings().utc_offset)
+              .c_str());
+    }
+    Message::AddMessage(_("Task start"), TempAll.c_str());
   } else if (StringIsEqual(misc, "next")) {
     Message::AddMessage(_("Next turnpoint"));
   } else if (StringIsEqual(misc, "finish")) {

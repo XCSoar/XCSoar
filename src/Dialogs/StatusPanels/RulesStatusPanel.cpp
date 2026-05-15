@@ -7,6 +7,7 @@
 #include "Interface.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
@@ -15,12 +16,15 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
+#include <chrono>
+
 enum Controls {
   ValidStart,
   StartTime,
   StartHeight,
   StartPoint,
   StartSpeed,
+  PevOffsetAtStart,
   FinishAlt,
   ValidFinish,
 };
@@ -50,10 +54,18 @@ RulesStatusPanel::Refresh() noexcept
             FormatUserTaskSpeed(start_stats.ground_speed));
 
     SetText(StartHeight, FormatUserAltitude(start_stats.altitude));
+
+    if (start_stats.pev_offset_available) {
+      const auto buf = FormatTimespanSmart(
+          std::chrono::seconds{start_stats.pev_offset_seconds}, 3);
+      SetText(PevOffsetAtStart, buf.c_str());
+    } else
+      SetText(PevOffsetAtStart, _("—"));
   } else {
     ClearValue(StartTime);
     ClearValue(StartSpeed);
     ClearValue(StartHeight);
+    ClearValue(PevOffsetAtStart);
   }
 
   Temp[0] = '\0';
@@ -85,6 +97,7 @@ RulesStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Start alt."));
   AddReadOnly(_("Start point"));
   AddReadOnly(_("Start speed"));
+  AddReadOnly(_("PEV offset at start"));
   AddReadOnly(_("Finish min. alt."));
   AddReadOnly(_("Valid finish"));
 }
