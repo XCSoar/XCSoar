@@ -530,7 +530,10 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   if (TaskStarted()) {
     const AircraftState &start_state = taskpoint_start->GetExitedState();
     assert(start_state.HasTime());
-    stats.start.SetStarted(start_state);
+    stats.start.SetStarted(
+        start_state,
+        pilot_pev_window_snapshot.IsDefined() ? &pilot_pev_window_snapshot
+                                             : nullptr);
 
     if (taskpoint_finish != nullptr)
       taskpoint_finish->SetFaiFinishHeight(start_state.altitude - 1000);

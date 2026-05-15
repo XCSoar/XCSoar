@@ -263,6 +263,7 @@ TaskManager::Update(const AircraftState &state,
     Reset();
 
   if (ordered_task->TaskSize() > 1) {
+    ordered_task->SetPilotPevWindowSnapshot(common_stats.pev_start_time_span);
     // always update ordered task
     retval |= ordered_task->Update(state, state_last, glide_polar);
   }
