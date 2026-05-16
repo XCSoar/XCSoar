@@ -22,6 +22,8 @@ private:
      proximity heuristics, so use a vector with a small reservation. */
   std::vector<const AbstractAirspace *> ids_cleared;
 
+  const AirspaceWarningConfig *warning_config = nullptr;
+
   Serial serial;
 
 public:
@@ -56,6 +58,7 @@ public:
 
   void Visit(const AirspaceWarningManager &awm) noexcept {
     serial = awm.GetSerial();
+    warning_config = &awm.GetConfig();
 
     for (const auto &i : awm)
       Visit(i);
@@ -87,6 +90,12 @@ public:
       if (p == &as)
         return true;
     return false;
+  }
+
+  bool IsWarningCapable(const AbstractAirspace &as) const noexcept {
+    return warning_config != nullptr &&
+      (warning_config->IsClassEnabled(as.GetClassOrType()) ||
+       warning_config->IsClassEnabled(as.GetTypeOrClass()));
   }
 
 private:
