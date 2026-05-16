@@ -424,15 +424,19 @@ private:
         canvas.DrawCircle(screen_center,
                           screen_radius - look.thick_pen.GetWidth() / 4);
 
-        /* Continue the padding across a cleared boundary.  Skip
-           pixels already covered by this circle's padding, the
-           cleared interior, or an outline. */
-        canvas.Select(Brush(color.WithAlpha(90)));
-        canvas.SelectNullPen();
-        glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
-                      FILL_STENCIL | OUTLINE_STENCIL |
-                      CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
-        canvas.DrawCircle(screen_center, screen_radius);
+        if (warning_manager.IsWarningCapable(airspace) &&
+            !warning_manager.IsCleared(airspace)) {
+          /* Continue the padding across a cleared boundary.  Skip
+             pixels already covered by this circle's padding, the
+             cleared interior, or an outline.  Informative airspaces
+             and the cleared airspace itself do not draw this. */
+          canvas.Select(Brush(color.WithAlpha(90)));
+          canvas.SelectNullPen();
+          glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
+                        FILL_STENCIL | OUTLINE_STENCIL |
+                        CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
+          canvas.DrawCircle(screen_center, screen_radius);
+        }
       }
     }
 
@@ -489,10 +493,13 @@ private:
                            FILL_STENCIL | OUTLINE_STENCIL |
                            CLEARANCE_STENCIL);
 
-        if (!fill_airspace) {
+        if (!fill_airspace &&
+            warning_manager.IsWarningCapable(airspace) &&
+            !warning_manager.IsCleared(airspace)) {
           /* Continue the padding across a cleared boundary.  Skip
              pixels already covered by this airspace's padding, the
-             cleared interior, or an outline. */
+             cleared interior, or an outline.  Informative airspaces
+             and the cleared airspace itself do not draw this. */
           DrawEvenOddPolygon(canvas, raster_points.data(),
                              num_raster_points, POLYGON_STENCIL,
                              CLEARED_RING_STENCIL,
@@ -601,7 +608,9 @@ private:
         const GLEnable<GL_BLEND> blend;
         DrawPrepared();
 
-        if (!fill_airspace) {
+        if (!fill_airspace &&
+            warning_manager.IsWarningCapable(airspace) &&
+            !warning_manager.IsCleared(airspace)) {
           glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
                         FILL_STENCIL | OUTLINE_STENCIL |
                         CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
@@ -938,11 +947,15 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings,
                                      use_even_odd, use_outline_stencil);
 
-    /* Stamp cleared airspaces so the warning fill leaves those areas
-       empty.  Needs a fourth stencil bit; bit 2 is POLYGON_STENCIL. */
+    /* Stamp visible cleared airspaces so the warning fill leaves
+       those areas empty.  Needs a fourth stencil bit; bit 2 is
+       POLYGON_STENCIL. */
     if (stencil_bits >= 4) {
-      for (const auto &i : range)
-        renderer.VisitClearance(i.GetAirspace());
+      for (const auto &i : range) {
+        const AbstractAirspace &airspace = i.GetAirspace();
+        if (visible(airspace))
+          renderer.VisitClearance(airspace);
+      }
     }
 
     for (const auto &i : range) {
