@@ -73,16 +73,20 @@ private:
         canvas.DrawCircle(screen_center,
                           screen_radius - look.thick_pen.GetWidth() / 4);
 
-        /* Second pass: fill cleared-airspace ring pixels (bit 3)
-           inside this circle, completing the padding at the
-           cleared/active boundary.  Bit 0 must be clear (those pixels
-           are already drawn above), bit 2 must be clear (not inside
-           the cleared area), and bit 1 must be clear (not on an
-           outline). */
-        canvas.Select(Brush(color.WithAlpha(90)));
-        canvas.SelectNullPen();
-        glStencilFunc(GL_EQUAL, 8, 3 | 4 | 8);
-        canvas.DrawCircle(screen_center, screen_radius);
+        if (warning_manager.IsWarningCapable(airspace) &&
+            !warning_manager.IsCleared(airspace)) {
+          /* Second pass: fill cleared-airspace ring pixels (bit 3)
+             inside this circle, completing the padding at the
+             cleared/active boundary. Bit 0 must be clear (those
+             pixels are already drawn above), bit 2 must be clear (not
+             inside the cleared area), and bit 1 must be clear (not on
+             an outline). Skipped for purely informative airspaces and
+             for the cleared airspace itself. */
+          canvas.Select(Brush(color.WithAlpha(90)));
+          canvas.SelectNullPen();
+          glStencilFunc(GL_EQUAL, 8, 3 | 4 | 8);
+          canvas.DrawCircle(screen_center, screen_radius);
+        }
       }
     }
 
@@ -122,12 +126,14 @@ private:
         const GLEnable<GL_BLEND> blend;
         DrawPrepared();
 
-        if (!fill_airspace) {
+        if (!fill_airspace && warning_manager.IsWarningCapable(airspace) &&
+            !warning_manager.IsCleared(airspace)) {
           /* Second pass: also fill where the cleared-airspace ring
              (bit 3) overlaps this airspace's geometry, but only where
              the pixel isn't already covered by bit 0 (to avoid double
              blending), not inside a cleared area (bit 2), and not on
-             an outline (bit 1). */
+             an outline (bit 1). Skipped for purely informative
+             airspaces and for the cleared airspace itself. */
           glStencilFunc(GL_EQUAL, 8, 3 | 4 | 8);
           DrawPrepared();
         }
