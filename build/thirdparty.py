@@ -4,12 +4,14 @@ import os, os.path
 import re
 import sys
 
-if len(sys.argv) != 14:
-    print("Usage: build.py LIB_PATH HOST_TRIPLET TARGET_IS_IOS ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES", file=sys.stderr)
+if len(sys.argv) < 14 or len(sys.argv) > 15:
+    print("Usage: build.py LIB_PATH HOST_TRIPLET TARGET_IS_IOS ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES [ENABLE_SDL]", file=sys.stderr)
     sys.exit(1)
 
-lib_path, host_triplet, target_is_ios, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:]
+lib_path, host_triplet, target_is_ios, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:14]
+enable_sdl = sys.argv[14] if len(sys.argv) > 14 else ''
 target_is_ios = (target_is_ios == 'y') # convert to boolean
+enable_sdl = (enable_sdl == 'y') # convert to boolean
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -48,6 +50,15 @@ if toolchain.is_windows:
         curl,
         lua,
     ]
+
+    # Add SDL2 and its dependencies for OpenGL/ANGLE builds
+    if enable_sdl:
+        thirdparty_libs.extend([
+            freetype,
+            libpng,
+            libjpeg,
+            sdl2,
+        ])
 
     # Some libraries (such as CURL) want to use the min()/max() macros
     toolchain.cppflags = cppflags.replace('-DNOMINMAX', '')

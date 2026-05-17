@@ -190,6 +190,14 @@ jobs:
             target_upload: true
             target_container: debian:trixie-slim
           - os: ubuntu-24.04
+            target: WIN64OPENGL
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .zip
+            target_upload: true
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: PC
             target_bin: XCSoar
             target_bin_path: bin
@@ -355,7 +363,7 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh KOBO
             fi
-            if [ ${{ matrix.target }} = 'WIN64' ]; then
+            if [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
@@ -526,9 +534,11 @@ jobs:
                 output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
               fi
             fi
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
+          elif [ ${{ matrix.target }} = 'WIN64' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
+          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
+          elif [ ${{ matrix.target }} = 'PC' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -579,9 +589,11 @@ jobs:
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
               output/${{ matrix.target }}/symbols.zip
             fi
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
+          elif [ ${{ matrix.target }} = 'WIN64' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
+          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
+          elif [ ${{ matrix.target }} = 'PC' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -692,6 +704,13 @@ jobs:
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}.aab
             output/${{ matrix.target }}/symbols.zip
 
+      - name: Upload artifact (Installer)
+        uses: actions/upload-artifact@v6
+        if: ${{ matrix.target == 'WIN64OPENGL' }}
+        with:
+          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}-Installer.exe
+          path: output/${{ matrix.target }}/bin/XCSoar-*-WIN64OPENGL-Installer.exe
+
       - name: Upload artifact for VirusTotal (Win64)
         if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'WIN64' }}
         uses: actions/upload-artifact@v7
@@ -706,6 +725,13 @@ jobs:
           name: ${{ env.VT_ARTIFACT_PC }}
           path: output/PC/bin/XCSoar.exe
 
+      - name: Upload artifact for VirusTotal (OpenGL)
+        if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'WIN64OPENGL' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: virustotal-opengl
+          path: output/WIN64OPENGL/bin/XCSoar.exe
+
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -717,6 +743,17 @@ jobs:
           asset_path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           asset_name: ${{ matrix.target_final }}-${{ matrix.target }}${{ matrix.target_ext }}
           asset_content_type: application/zip
+
+      - name: Upload Release Asset (Installer)
+        uses: actions/upload-release-asset@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target == 'WIN64OPENGL' && needs.release.outputs.upload_url != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: output/${{ matrix.target }}/bin/${{ matrix.target_final }}-${{ needs.release.outputs.version }}-${{ matrix.target }}-Installer.exe
+          asset_name: ${{ matrix.target_final }}-${{ matrix.target }}-Installer.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
 
       - name: Choose iOS deploy artifact
         if: ${{ matrix.target == 'IOS64' }}

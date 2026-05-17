@@ -15,6 +15,12 @@
 #include <winuser.h>
 #endif
 
+#if defined(_WIN32) && defined(ENABLE_OPENGL)
+#include "ui/display/sdl/Display.hpp"
+#include <SDL_video.h>
+#include <algorithm>
+#endif
+
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
@@ -77,6 +83,24 @@ SystemWindowSize() noexcept
   return PixelSize{ CommandLine::width, CommandLine::height };
 #else
   /// @todo implement this properly for SDL/UNIX
+#if defined(_WIN32) && defined(ENABLE_OPENGL)
+  /* The OpenGL build declares per-monitor DPI awareness (via SDL), so Windows
+   * no longer auto-scales the window.  Query the system DPI via SDL and scale
+   * the requested window size so it appears at the intended physical size. */
+  const auto dpi = SDL::Display::GetDPI();
+  const auto overhead = GetWindowDecorationOverhead();
+  PixelSize size = PixelSize{
+    CommandLine::width * dpi.x / 96u,
+    CommandLine::height * dpi.y / 96u,
+  } + overhead;
+  SDL_Rect usable;
+  if (SDL_GetDisplayUsableBounds(0, &usable) == 0) {
+    size.width = std::min(size.width, (unsigned)usable.w-overhead.width);
+    size.height = std::min(size.height, (unsigned)usable.h-overhead.height);
+  }
+  return size;
+#else
   return PixelSize{ CommandLine::width, CommandLine::height } + GetWindowDecorationOverhead();
+#endif
 #endif
 }
