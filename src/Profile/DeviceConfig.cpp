@@ -14,6 +14,9 @@
 
 #include <stdio.h>
 
+/* PortType::BLE_SERIAL uses the legacy profile string "ble_hm10" in
+   port_type_strings so existing .prf files keep working. */
+
 static const char *const port_type_strings[] = {
   "disabled",
   "serial",
@@ -31,7 +34,7 @@ static const char *const port_type_strings[] = {
   "udp_listener",
   "pty",
   "ble_sensor",
-  "ble_hm10",   // For BLE_SERIAL; using old name to not break user configs.
+  "ble_hm10",
   "glider_link",
   "android_usb_serial",
   NULL
