@@ -17,6 +17,8 @@ class TextButtonRenderer : public ButtonRenderer {
   TextRenderer text_renderer;
 
   StaticString<64> caption;
+  StaticString<32> caption2;
+  StaticString<32> caption3;
 
 public:
   explicit TextButtonRenderer(const ButtonLook &_look) noexcept
@@ -29,6 +31,8 @@ public:
   TextButtonRenderer(const ButtonLook &_look,
                      StaticString<64>::const_pointer _caption) noexcept
     :frame_renderer(_look), caption(_caption) {
+    caption2.clear();
+    caption3.clear();
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
     text_renderer.SetControl();
@@ -48,8 +52,16 @@ public:
 
   void SetCaption(StaticString<64>::const_pointer _caption) noexcept {
     caption = _caption;
+    caption2.clear();
+    caption3.clear();
     text_renderer.InvalidateLayout();
   }
+
+  /** Optional second line (e.g. toggle state); empty = single line */
+  void SetCaption2(StaticString<32>::const_pointer _caption2) noexcept;
+
+  /** Optional third line; empty = at most two lines */
+  void SetCaption3(StaticString<32>::const_pointer _caption3) noexcept;
 
   [[gnu::pure]]
   unsigned GetMinimumButtonWidth() const noexcept override;

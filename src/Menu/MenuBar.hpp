@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Form/Button.hpp"
+#include "ui/dim/Rect.hpp"
 
 /*
     Menubar button height as a fraction of the screen height
@@ -36,9 +37,8 @@ protected:
 public:
   MenuBar(ContainerWindow &parent, const ButtonLook &look);
 
-public:
   void ShowButton(unsigned i, bool enabled, const char *text,
-                  unsigned event);
+                  const char *text2, const char *text3, unsigned event);
   void HideButton(unsigned i);
 
   bool IsButtonEnabled(unsigned i) const {

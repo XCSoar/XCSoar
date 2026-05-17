@@ -82,13 +82,15 @@ MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
 
 void
 MenuBar::ShowButton(unsigned i, bool enabled, const char *text,
-                    unsigned event)
+                    const char *text2, const char *text3, unsigned event)
 {
   assert(i < MAX_BUTTONS);
 
   Button &button = buttons[i];
 
   button.SetCaption(text);
+  button.SetCaption2(text2);
+  button.SetCaption3(text3);
   button.SetEnabled(enabled && event > 0);
   button.SetEvent(event);
   button.ShowOnTop();

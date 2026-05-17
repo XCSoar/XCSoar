@@ -275,6 +275,33 @@ SequenceLengthUTF8(const char *p) noexcept
     return 0;
 }
 
+std::size_t
+SanitizeUTF8(std::string_view src, std::span<char> dest) noexcept
+{
+  if (dest.size() < src.size() + 1)
+    return 0;
+
+  char *out = dest.data();
+  while (!src.empty()) {
+    const unsigned char ch = src.front();
+    if (ch < 0x20) {
+      *out++ = ' ';
+      src.remove_prefix(1);
+      continue;
+    }
+    const std::size_t seq = SequenceLengthUTF8(src.data());
+    if (seq != 0 && seq <= src.size()) {
+      for (std::size_t i = 0; i < seq; ++i)
+        *out++ = src[i];
+      src.remove_prefix(seq);
+    } else {
+      *out++ = ' ';
+      src.remove_prefix(1);
+    }
+  }
+  return out - dest.data();
+}
+
 static const char *
 FindNonASCIIOrZero(const char *p) noexcept
 {

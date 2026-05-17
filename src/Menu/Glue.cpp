@@ -15,7 +15,8 @@ SetLabelText(MenuBar &bar, unsigned index,
   char buffer[100];
   const auto expanded = ButtonLabel::Expand(text, std::span{buffer});
   if (expanded.visible)
-    bar.ShowButton(index, expanded.enabled, expanded.text, event);
+    bar.ShowButton(index, expanded.enabled, expanded.text, expanded.text2,
+                   expanded.text3, event);
   else
     bar.HideButton(index);
 }
