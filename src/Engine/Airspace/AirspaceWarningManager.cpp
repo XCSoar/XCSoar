@@ -268,13 +268,16 @@ public:
         iv = {{0, state.location},
               {len, location_predicted}};
       } else {
-        /* all() returns (entry, exit) pairs; when starting
-           inside, the first pair is (start_pos, exit_point),
-           so .second is the exit boundary */
+        /* all() returns inside-segments of the predicted path
+           as (start, end) pairs, usually a single segment.
+           When state.location coincides with an
+           airspace boundary there is a degenerate
+           (state.location, state.location) pair before the real
+           inside-segment. Drop that pair by using last. */
         double d =
-          state.location.Distance(isv.front().second);
+          state.location.Distance(isv.back().second);
         iv = {{0, state.location},
-              {d, isv.front().second}};
+              {d, isv.back().second}};
       }
     }
 

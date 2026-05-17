@@ -23,6 +23,8 @@
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/Task/Stats/TaskStats.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
+#include "Geo/Flat/FlatPoint.hpp"
 #include "TransponderCode.hpp"
 #include "TestUtil.hpp"
 
@@ -88,7 +90,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(13);
+  plan_tests(15);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -286,6 +288,102 @@ main()
          and between c1 and c2 if not overlapping. */
       ok1(!w_warn->IsCoveredByClearance());
     }
+  }
+
+  /* --- Scenario 6: traversal across cleared A's entry boundary ---
+     A (cleared) starts slightly before B (non-cleared) along the
+     path. Across many cycles, B's warning must stay suppressed.
+     Regression coverage for the "warning briefly appears for one
+     cycle as the plane enters A" glitch. */
+  {
+    Airspaces airspaces;
+    /* A: cleared, large. Centre at (10.01, 50.0), radius 500m.
+       Entry on path at ~10.0029, exit at ~10.0171. */
+    auto a = MakeCircle(P(10.01, 50.0), 500.0, 0.0, 3000.0);
+    /* B: non-cleared, smaller, fully inside A.  Entry on path
+       at ~10.0098, exit at ~10.0107. */
+    auto b = MakeCircle(P(10.01025, 50.0), 30.0, 0.0, 3000.0);
+    airspaces.Add(a);
+    airspaces.Add(b);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.SetCleared(a, true);
+
+    bool ever_spuriously_warned = false;
+    /* Step plane eastward in increments fine enough to hit cycles
+       both before and right after A's entry. */
+    for (int i = 0; i < 60; ++i) {
+      state.location = P(10.0 + 0.00005 * i, 50.0);
+      state.time += std::chrono::seconds{1};
+      mgr.Update(state, polar, task_stats, false,
+                 std::chrono::seconds{1});
+
+      auto *bw = mgr.GetWarningPtr(*b);
+      if (bw != nullptr
+          && bw->GetWarningState() > AirspaceWarning::WARNING_CLEAR
+          && !bw->IsCoveredByClearance()
+          && bw->IsAckExpired()) {
+        printf("step %d lon=%.5f: B fires unexpectedly "
+               "(state=%d covered=%d)\n",
+               i, state.location.longitude.Degrees(),
+               bw->GetWarningState(),
+               bw->IsCoveredByClearance());
+        ever_spuriously_warned = true;
+      }
+    }
+    ok1(!ever_spuriously_warned);
+  }
+
+  /* --- Scenario 7: state.location exactly on cleared A's entry
+         boundary ---
+     make sure no glitch occurs. */
+  {
+    Airspaces airspaces;
+    /* A: cleared, large, centred east of origin. */
+    const GeoPoint a_center = P(10.01, 50.0);
+    constexpr double a_radius = 500.0;
+    auto a = MakeCircle(a_center, a_radius, 0.0, 3000.0);
+    /* B: non-cleared, fully inside A on the predicted path. */
+    auto b = MakeCircle(P(10.011, 50.0), 60.0, 0.0, 3000.0);
+    airspaces.Add(a);
+    airspaces.Add(b);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.SetCleared(a, true);
+
+    /* Place the aircraft exactly on A's algebraic western flat
+       boundary: unproject (f_center.x - f_radius, f_center.y) so
+       AirspaceCircle::Intersects gets f_p1 == f_state and the
+       parametric position for that intersection is zero modulo
+       floating-point noise. */
+    const FlatProjection &proj = airspaces.GetProjection();
+    const FlatPoint f_center = proj.ProjectFloat(a_center);
+    const double f_radius = proj.ProjectRangeFloat(a_center, a_radius);
+    state.location = proj.Unproject(FlatPoint{f_center.x - f_radius,
+                                              f_center.y});
+    state.time += std::chrono::seconds{1};
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+
+    auto *bw = mgr.GetWarningPtr(*b);
+    /* B exists because its path-interval is non-empty, but it
+       must be covered by A's clearance and therefore silent. */
+    ok1(bw == nullptr || bw->IsCoveredByClearance() ||
+        !bw->IsAckExpired());
   }
 
   return exit_status();

@@ -8,6 +8,8 @@
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
+#include <algorithm>
+
 AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const double _radius) noexcept
   :AbstractAirspace(Shape::CIRCLE), m_center(loc), m_radius(_radius)
 {
@@ -61,12 +63,19 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
   const bool in_range = (t1 < mag) || (t2 < mag);
   // if at least one point is within range, capture both points
 
-  AirspaceIntersectSort sorter(start, *this);
-  if (t1 >= 0 && in_range)
-    sorter.add(t1 * inv_mag, projection.Unproject(f_p1));
+  /* Give T_EPS tolerance to avoid effectively degenerate segment when
+     starting point coincides with boundary after rounding */
+  constexpr double T_EPS = 1e-9;
+  const double t_lo = -mag * T_EPS;
 
-  if (t2 >= 0 && in_range)
-    sorter.add(t2 * inv_mag, projection.Unproject(f_p2));
+  AirspaceIntersectSort sorter(start, *this);
+  if (t1 >= t_lo && in_range)
+    sorter.add(std::max(0.0, t1 * inv_mag),
+               projection.Unproject(f_p1));
+
+  if (t2 >= t_lo && in_range)
+    sorter.add(std::max(0.0, t2 * inv_mag),
+               projection.Unproject(f_p2));
 
   return sorter.all();
 }
