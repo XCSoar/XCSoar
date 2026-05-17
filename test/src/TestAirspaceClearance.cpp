@@ -15,6 +15,7 @@
  * degenerate (filter history empty); we don't assert on them. */
 
 #include "Engine/Airspace/AirspaceCircle.hpp"
+#include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -61,6 +62,26 @@ MakeCircle(const GeoPoint &center, double radius_m,
   return as;
 }
 
+AirspacePtr
+MakeRectangle(double west_lon, double south_lat,
+              double east_lon, double north_lat,
+              double base_m, double top_m)
+{
+  std::vector<GeoPoint> pts = {
+    P(west_lon, south_lat),
+    P(east_lon, south_lat),
+    P(east_lon, north_lat),
+    P(west_lon, north_lat),
+  };
+  auto as = std::make_shared<AirspacePolygon>(pts);
+  TransponderCode code;
+  as->SetProperties("test", "", std::move(code),
+                    AirspaceClass::RESTRICTED,
+                    AirspaceClass::RESTRICTED,
+                    Alt(base_m), Alt(top_m));
+  return as;
+}
+
 AircraftState
 MakeAircraft(const GeoPoint &loc, double altitude,
              Angle track, double ground_speed)
@@ -90,7 +111,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(15);
+  plan_tests(17);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -382,6 +403,103 @@ main()
     auto *bw = mgr.GetWarningPtr(*b);
     /* B exists because its path-interval is non-empty, but it
        must be covered by A's clearance and therefore silent. */
+    ok1(bw == nullptr || bw->IsCoveredByClearance() ||
+        !bw->IsAckExpired());
+  }
+
+  /* --- Scenario 8: polygon analogue of Scenario 6 ---
+     Same setup but with rectangular polygons. Regression coverage
+     for the polygon-edge analogue of the circle boundary glitch:
+     FlatRay::DistinctIntersection rejects t==0 on the edge that
+     contains state.location, which used to corrupt A's interval
+     and unmask B for a single cycle as the aircraft crossed A's
+     western edge. */
+  {
+    Airspaces airspaces;
+    /* A: cleared rectangle, ~10.003..10.017 east-west,
+       50.0 - 0.005 .. 50.0 + 0.005 (~700m N/S). */
+    auto a = MakeRectangle(10.003, 49.995, 10.017, 50.005,
+                           0.0, 3000.0);
+    /* B: smaller non-cleared rectangle fully inside A on the path. */
+    auto b = MakeRectangle(10.0098, 49.999, 10.0107, 50.001,
+                           0.0, 3000.0);
+    airspaces.Add(a);
+    airspaces.Add(b);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.SetCleared(a, true);
+
+    bool ever_spuriously_warned = false;
+    for (int i = 0; i < 80; ++i) {
+      state.location = P(10.0 + 0.00005 * i, 50.0);
+      state.time += std::chrono::seconds{1};
+      mgr.Update(state, polar, task_stats, false,
+                 std::chrono::seconds{1});
+
+      auto *bw = mgr.GetWarningPtr(*b);
+      if (bw != nullptr
+          && bw->GetWarningState() > AirspaceWarning::WARNING_CLEAR
+          && !bw->IsCoveredByClearance()
+          && bw->IsAckExpired()) {
+        printf("step %d lon=%.5f: B fires unexpectedly "
+               "(state=%d covered=%d)\n",
+               i, state.location.longitude.Degrees(),
+               bw->GetWarningState(),
+               bw->IsCoveredByClearance());
+        ever_spuriously_warned = true;
+      }
+    }
+    ok1(!ever_spuriously_warned);
+  }
+
+  /* --- Scenario 9: state.location exactly on cleared rectangle
+         A's western edge ---
+     Polygon analogue of Scenario 7: place state at the integer-
+     projected western edge of A so AirspacePolygon::Intersects sees
+     a t==0 hit that DistinctIntersection used to drop. */
+  {
+    Airspaces airspaces;
+    constexpr double a_west = 10.005;
+    constexpr double a_east = 10.020;
+    auto a = MakeRectangle(a_west, 49.995, a_east, 50.005,
+                           0.0, 3000.0);
+    auto b = MakeRectangle(10.010, 49.999, 10.012, 50.001,
+                           0.0, 3000.0);
+    airspaces.Add(a);
+    airspaces.Add(b);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.SetCleared(a, true);
+
+    /* Snap state to the integer-projected western edge of A so
+       AirspacePolygon::Intersects encounters a t==0 case. */
+    const FlatProjection &proj = airspaces.GetProjection();
+    const FlatGeoPoint f_nw =
+      proj.ProjectInteger(P(a_west, 50.005));
+    const FlatGeoPoint f_sw =
+      proj.ProjectInteger(P(a_west, 49.995));
+    const FlatGeoPoint f_on_edge{f_nw.x,
+                                 (f_nw.y + f_sw.y) / 2};
+    state.location = proj.Unproject(f_on_edge);
+    state.time += std::chrono::seconds{1};
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+
+    auto *bw = mgr.GetWarningPtr(*b);
     ok1(bw == nullptr || bw->IsCoveredByClearance() ||
         !bw->IsAckExpired());
   }
