@@ -89,6 +89,9 @@ struct DeviceConfig {
      * Nordic UART Service).  Unlike #BLE_SENSOR, this provides a
      * bidirectional data stream and XCSoar accesses it through the
      * #Port interface.
+     *
+     * @note The profile stores this mode under the legacy port type string
+     * @c ble_hm10 (see Profile/DeviceConfig.cpp).
      */
     BLE_SERIAL,
 

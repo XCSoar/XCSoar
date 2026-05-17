@@ -134,6 +134,10 @@ public class BleSerialPort
 
     BluetoothGattDescriptor descriptor =
       notifyCharacteristic.getDescriptor(BluetoothUuids.CLIENT_CHARACTERISTIC_CONFIGURATION);
+    if (descriptor == null) {
+      Log.e(TAG, "BLE notify characteristic missing CCCD descriptor");
+      throw new Error("GATT client characteristic configuration descriptor not found");
+    }
     descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
     gatt.writeDescriptor(descriptor);
     portState = STATE_READY;
