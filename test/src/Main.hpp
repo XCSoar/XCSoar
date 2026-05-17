@@ -105,6 +105,12 @@ Main(UI::Display &display);
 
 #ifdef ENABLE_LOOK
 static Look *look;
+
+const MapLook &
+UIGlobals::GetMapLook()
+{
+  return look->map;
+}
 #endif
 
 #ifdef ENABLE_DIALOG_LOOK

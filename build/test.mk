@@ -2310,6 +2310,20 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
+	$(SRC)/Renderer/AirspacePreviewRenderer.cpp \
+	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/MapSettings.cpp \
+	$(SRC)/UISettings.cpp \
+	$(SRC)/DisplaySettings.cpp \
+	$(SRC)/PageSettings.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(SRC)/Gauge/VarioSettings.cpp \
+	$(SRC)/Gauge/TrafficSettings.cpp \
+	$(SRC)/Audio/Settings.cpp \
+	$(SRC)/Audio/VarioSettings.cpp \
+	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
@@ -2333,7 +2347,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_LDADD = $(FAKE_LIBS)
-RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET OPERATION DATA_FIELD SCREEN AUDIO EVENT RESOURCE ASYNC IO OS THREAD AIRSPACE ZZIP UTIL GEO MATH TIME UNITS
+RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET OPERATION DATA_FIELD SCREEN LOOK AUDIO EVENT RESOURCE ASYNC IO OS THREAD AIRSPACE ZZIP UTIL GEO MATH TIME UNITS
 $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG))
 
 RUN_PROFILE_LIST_DIALOG_SOURCES = \
