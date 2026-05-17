@@ -3,6 +3,7 @@
 
 #define ENABLE_DIALOG
 #define ENABLE_MAIN_WINDOW
+#define ENABLE_LOOK
 
 #include "ActionInterface.hpp"
 #include "Airspace/AirspaceGlue.hpp"
@@ -62,6 +63,8 @@ LoadFiles(Airspaces &airspace_database)
 static void
 Main([[maybe_unused]] TestMainWindow &main_window)
 {
+  CommonInterface::Private::blackboard.SetUISettings().SetDefaults();
+
   Airspaces airspace_database;
 
   AirspaceWarningConfig airspace_warning_config;
