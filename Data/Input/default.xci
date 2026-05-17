@@ -146,7 +146,7 @@ event=Pan right
 
 mode=pan
 type=key
-data=APP1
+data=ESCAPE
 event=Pan off
 label=Cancel
 location=1
@@ -588,7 +588,7 @@ location=9
 
 mode=Nav2
 type=key
-data=APP1
+data=ESCAPE
 event=Mode default
 label=Cancel
 location=1
@@ -683,7 +683,7 @@ location=9
 
 mode=Display2
 type=key
-data=APP2
+data=ESCAPE
 event=Mode default
 label=Cancel
 location=2
@@ -830,7 +830,7 @@ location=9
 # -------------
 mode=Config3
 type=key
-data=APP3
+data=ESCAPE
 event=Mode default
 label=Cancel
 location=3
@@ -1050,7 +1050,7 @@ location=9
 # -------------
 mode=Info3
 type=key
-data=APP4
+data=ESCAPE
 event=Mode default
 label=Cancel
 location=4
@@ -1134,6 +1134,13 @@ event=LockScreen
 event=Mode default
 label=Lock Screen
 location=7
+
+mode=Menu
+type=key
+data=ESCAPE
+event=Mode default
+label=Cancel
+location=8
 
 mode=Menu
 type=key
