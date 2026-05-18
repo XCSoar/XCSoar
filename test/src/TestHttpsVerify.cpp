@@ -30,6 +30,35 @@ FetchOk(CurlGlobal &curl, const char *url)
   }
 }
 
+struct FetchResults {
+  bool internet_available = false;
+  bool sha256_ok = false;
+  bool wrong_host_ok = false;
+  bool xcsoar_ok = false;
+};
+
+static Co::Task<FetchResults>
+FetchAll(CurlGlobal &curl)
+{
+  FetchResults results;
+
+  /* Run all fetches in one coroutine; CoInstance's EventLoop cannot be
+     restarted after Run() breaks it on completion. */
+  results.internet_available =
+    co_await FetchOk(curl, "http://http.badssl.com/");
+
+  if (results.internet_available) {
+    results.sha256_ok =
+      co_await FetchOk(curl, "https://sha256.badssl.com/");
+    results.wrong_host_ok =
+      co_await FetchOk(curl, "https://wrong.host.badssl.com/");
+    results.xcsoar_ok =
+      co_await FetchOk(curl, "https://download.xcsoar.org/repository");
+  }
+
+  co_return results;
+}
+
 int
 main()
 {
@@ -40,13 +69,20 @@ main()
   plan_skip_all("TLS verification disabled on this platform");
   return exit_status();
 #else
-  plan_tests(2);
+  plan_tests(3);
 
   Instance instance;
+  const auto results = instance.Run(FetchAll(*Net::curl));
 
-  ok1(instance.Run(FetchOk(*Net::curl,
-                           "https://download.xcsoar.org/repository")));
-  ok1(!instance.Run(FetchOk(*Net::curl, "https://wrong.host.badssl.com/")));
+  /* Avoid failing the TLS tests when the test host is simply offline. */
+  if (!results.internet_available) {
+    skip(3, 1, "internet unavailable");
+    return exit_status();
+  }
+
+  ok1(results.sha256_ok);
+  ok1(!results.wrong_host_ok);
+  ok1(results.xcsoar_ok);
 
   return exit_status();
 #endif
