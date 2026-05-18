@@ -115,7 +115,7 @@ AirspaceRendererSettings::SetDefaults()
   classes[ATZ].SetColors(RGB8_GRAYISH_VIOLET);
   classes[AWY].SetColors(RGB8_BLUE);
   classes[MTR].SetColors(RGB8_LIGHT_GRAY);
-  classes[ALERT].SetColors(RGB8_DARK_GRAY);
+  classes[ALERT].SetColors(RGB8_RED);
   classes[WARNING].SetColors(RGB8_DARK_GRAY);
   classes[PROTECTED].SetColors(RGB8_GREEN.Darken());
   classes[HTZ].SetColors(RGB8_GREEN.Darken());

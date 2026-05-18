@@ -6,10 +6,32 @@
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "FLARM/AlertZone.hpp"
+#include "FLARM/Data.hpp"
+#include "TransponderCode.hpp"
+
+#include <fmt/format.h>
 
 using namespace std::chrono;
+
+namespace {
+
+[[gnu::const]]
+static AirspaceAltitude
+AirspaceAltitudeMsl(double meters) noexcept
+{
+  AirspaceAltitude a{};
+  a.reference = AltitudeReference::MSL;
+  a.altitude = meters;
+  a.flight_level = 0;
+  a.altitude_above_terrain = 0;
+  return a;
+}
+
+} // namespace
 
 WarningComputer::WarningComputer(const AirspaceWarningConfig &_config,
                                  Airspaces &_airspaces)
@@ -61,9 +83,59 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
     lease->Reset(as);
   }
 
+  {
+    AirspaceWarningManager &mgr = lease;
+    UpdateFlarmZones(basic.flarm, mgr);
+  }
+
   if (lease->Update(as, settings_computer.polar.glide_polar_task,
                     calculated.task_stats,
                     calculated.circling,
                     round<duration<unsigned>>(dt)))
     result.latest.Update(basic.clock);
+}
+
+void
+WarningComputer::UpdateFlarmZones(const FlarmData &flarm,
+                                  AirspaceWarningManager &mgr)
+{
+  const auto &zones = flarm.alert_zones;
+
+  // Remove cached airspaces for zones no longer present
+  std::erase_if(flarm_zone_airspaces, [&](const auto &pair) {
+    return zones.FindZone(pair.first) == nullptr;
+  });
+
+  std::vector<ConstAirspacePtr> external;
+
+  for (const auto &zone : zones.list) {
+    if (!zone.valid.IsValid())
+      continue;
+
+    auto &cache = flarm_zone_airspaces[zone.id];
+    const bool changed = cache.airspace == nullptr ||
+      cache.center != zone.center || cache.radius != zone.radius ||
+      cache.bottom != zone.bottom || cache.top != zone.top ||
+      cache.zone_type != zone.zone_type;
+
+    if (changed) {
+      cache.airspace = std::make_shared<AirspaceCircle>(zone.center, zone.radius);
+      cache.center = zone.center;
+      cache.radius = zone.radius;
+      cache.bottom = zone.bottom;
+      cache.top = zone.top;
+      cache.zone_type = zone.zone_type;
+
+      cache.airspace->SetProperties(
+        fmt::format("FLARM: {}",
+                    FlarmAlertZone::GetZoneTypeString(zone.zone_type)),
+        std::string{}, TransponderCode::Null(),
+        AirspaceClass::ALERT, AirspaceClass::ALERT,
+        AirspaceAltitudeMsl(zone.bottom), AirspaceAltitudeMsl(zone.top));
+    }
+
+    external.push_back(cache.airspace);
+  }
+
+  mgr.SetExternalAirspaces(external);
 }
