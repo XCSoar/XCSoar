@@ -50,6 +50,8 @@ struct PageLayout
 
     MAP_NORTH_UP,
 
+    EDL_MAP,
+
     /**
      * A dummy entry that is used for validating profile values.
      */
@@ -68,6 +70,8 @@ struct PageLayout
      * Show a cross section below the map.
      */
     CROSS_SECTION,
+
+    EDL_CONTROLS,
 
     /**
      * A custom #Widget is being displayed.  This is not a

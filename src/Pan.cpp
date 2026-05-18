@@ -7,6 +7,10 @@
 #include "Interface.hpp"
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
+#include "Weather/Features.hpp"
+#ifdef HAVE_EDL
+#include "Weather/EDL/StateController.hpp"
+#endif
 
 #include <cassert>
 
@@ -22,9 +26,21 @@ EnterPan()
 {
   assert(CommonInterface::main_window != nullptr);
 
+#ifdef HAVE_EDL
+  const bool suspending_dedicated_page =
+    PageActions::GetCurrentLayout().main == PageLayout::Main::EDL_MAP;
+  if (suspending_dedicated_page)
+    EDL::SuspendDedicatedPageForPan();
+#endif
+
   GlueMapWindow *map = PageActions::ShowOnlyMap();
-  if (map == nullptr || map->IsPanning())
+  if (map == nullptr || map->IsPanning()) {
+#ifdef HAVE_EDL
+    if (suspending_dedicated_page)
+      EDL::ResumeDedicatedPageAfterPan();
+#endif
     return;
+  }
 
   map->SetPan(true);
 
@@ -37,9 +53,21 @@ PanTo(const GeoPoint &location)
 {
   assert(CommonInterface::main_window != nullptr);
 
+#ifdef HAVE_EDL
+  const bool suspending_dedicated_page =
+    PageActions::GetCurrentLayout().main == PageLayout::Main::EDL_MAP;
+  if (suspending_dedicated_page)
+    EDL::SuspendDedicatedPageForPan();
+#endif
+
   GlueMapWindow *map = PageActions::ShowOnlyMap();
-  if (map == nullptr)
+  if (map == nullptr) {
+#ifdef HAVE_EDL
+    if (suspending_dedicated_page)
+      EDL::ResumeDedicatedPageAfterPan();
+#endif
     return false;
+  }
 
   map->PanTo(location);
 
@@ -58,6 +86,9 @@ DisablePan()
   map->SetPan(false);
 
   InputEvents::UpdatePan();
+#ifdef HAVE_EDL
+  EDL::ResumeDedicatedPageAfterPan();
+#endif
 }
 
 void
@@ -71,6 +102,9 @@ LeavePan()
 
   InputEvents::UpdatePan();
   PageActions::Restore();
+#ifdef HAVE_EDL
+  EDL::ResumeDedicatedPageAfterPan();
+#endif
 }
 
 void

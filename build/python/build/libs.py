@@ -4,12 +4,33 @@ from os.path import abspath
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.meson import MesonProject
-from build.cmake import CmakeProject
+from build.cmake import CmakeProject, configure as configure_cmake
 from build.openssl import OpenSSLProject
 from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
 from build.lua import LuaProject
 from build.musl import MuslProject
+
+
+class LibPngProject(CmakeProject):
+    def configure(self, toolchain):
+        src = self.unpack(toolchain)
+        build = self.make_build_path(toolchain)
+
+        configure_args = list(self.configure_args)
+        if toolchain.is_windows:
+            configure_args += self.windows_configure_args
+        if toolchain.is_android:
+            configure_args += self.android_configure_args
+            if toolchain.is_aarch64:
+                # libpng 1.6.43 enables arm/filter_neon.S for aarch64, but that
+                # source is ARM32 assembly and fails with the Android arm64 toolchain.
+                configure_args.append("-DPNG_ARM_NEON=off")
+        if toolchain.is_darwin:
+            configure_args += self.darwin_configure_args
+
+        configure_cmake(toolchain, src, build, configure_args, self.env)
+        return build
 
 binutils = BinutilsProject(
     (
@@ -304,7 +325,7 @@ proj = CmakeProject(
     patches=abspath("lib/proj/patches"),
 )
 
-libpng = CmakeProject(
+libpng = LibPngProject(
     (
         "https://pub.sortix.org/mirror/libpng/libpng-1.6.43.tar.xz",
         "http://downloads.sourceforge.net/project/libpng/libpng16/1.6.43/libpng-1.6.43.tar.xz",

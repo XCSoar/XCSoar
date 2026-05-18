@@ -5,19 +5,33 @@
 #include "NOAAList.hpp"
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
+#include "Weather/Features.hpp"
 #if 0
 #include "MapOverlayWidget.hpp"
 #endif
+#include "Widget/TextWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
+#ifdef HAVE_EDL
+#include "EdlControlsWidget.hpp"
+#endif
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
-#include "Weather/Features.hpp"
 #include "util/StaticString.hxx"
 
 static int weather_page = 0;
+
+#ifndef HAVE_EDL
+static std::unique_ptr<Widget>
+CreateEDLUnavailableWidget() noexcept
+{
+  auto widget = std::make_unique<TextWidget>();
+  widget->SetText(_("EDL weather is not available because this build has no OpenGL renderer."));
+  return widget;
+}
+#endif
 
 static void
 SetTitle(WndForm &form, const TabWidget &pager)
@@ -63,6 +77,15 @@ ShowWeatherDialog(const char *page)
     start_page = widget.GetSize();
 
   widget.AddTab(CreateRaspWidget(), "RASP");
+
+  if (page != nullptr && StringIsEqual(page, "edl"))
+    start_page = widget.GetSize();
+
+#ifdef HAVE_EDL
+  widget.AddTab(CreateEdlControlsOverlayWidget(), "EDL");
+#else
+  widget.AddTab(CreateEDLUnavailableWidget(), "EDL");
+#endif
 
 #ifdef HAVE_PCMET
   if (page != nullptr && StringIsEqual(page, "pc_met"))

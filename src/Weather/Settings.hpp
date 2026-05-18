@@ -12,6 +12,27 @@
 
 #endif
 
+struct EDLSettings {
+#ifdef HAVE_HTTP
+  /**
+   * Enables the EDL weather page and downloader.
+   */
+  bool enabled;
+
+  /**
+   * Keeps the EDL overlay visible on normal map pages.
+   */
+  bool show_on_main_map;
+#endif
+
+  void SetDefaults() {
+#ifdef HAVE_HTTP
+    enabled = true;
+    show_on_main_map = false;
+#endif
+  }
+};
+
 struct WeatherSettings {
 #ifdef HAVE_PCMET
   PCMetSettings pcmet;
@@ -22,15 +43,18 @@ struct WeatherSettings {
    * Enable Thermal Information Map?
    */
   bool enable_tim;
+
+  EDLSettings edl;
 #endif
 
-  void SetDefaults() {
+  void SetDefaults() noexcept {
 #ifdef HAVE_PCMET
     pcmet.SetDefaults();
 #endif
 
 #ifdef HAVE_HTTP
     enable_tim = false;
+    edl.SetDefaults();
 #endif
   }
 };
