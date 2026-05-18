@@ -9,11 +9,13 @@
 #include "lib/curl/Setup.hxx"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
+#include "util/StringAPI.hxx"
 #include "util/StringSplit.hxx"
 
 #include <stdexcept>
 
 #include <stdio.h>
+#include <string>
 
 #define PCMET_URI "https://www.flugwetter.de"
 
@@ -55,8 +57,22 @@ static constexpr PCMet::ImageArea rad_lokal_areas[] = {
 };
 
 static constexpr PCMet::ImageArea rad_areas[] = {
-  { "de", "Deutschland" },
+  { "rx", "Deutschland" },
+  { "rxn", "Deutschland Nord" },
+  { "rxm", "Deutschland Mitte" },
+  { "rxs", "Deutschland Süd" },
   { "eu", "Europa" },
+  { "fa", "Alpen" },
+  { nullptr, nullptr }
+};
+
+static constexpr PCMet::ImageArea satradblitz_areas[] = {
+  { "eh", "Europa" },
+  { nullptr, nullptr }
+};
+
+static constexpr PCMet::ImageArea blitzkarte_areas[] = {
+  { "0", "Europa" },
   { nullptr, nullptr }
 };
 
@@ -82,6 +98,8 @@ static constexpr PCMet::ImageArea sat_areas[] = {
 const PCMet::ImageType PCMet::image_types[] = {
   { "rad_lokal/einzelstandorte.htm", "Lokale RADAR-Bilder", rad_lokal_areas },
   { "rad/index.htm", "RADAR", rad_areas },
+  { "satradblitz/index.htm", "SAT RAD BLITZ", satradblitz_areas },
+  { "blitzkarte_bild.htm", "Blitzkarte", blitzkarte_areas },
   { "sat/index.htm", "Satellitenbilder", sat_areas },
   { nullptr, nullptr, nullptr },
 };
@@ -105,37 +123,109 @@ CoGet(CurlGlobal &curl, const char *url,
   co_return co_await Curl::CoRequest(curl, std::move(easy));
 }
 
+[[gnu::pure]]
+static bool
+IsBlitzkartePage(const char *type) noexcept
+{
+  return StringIsEqual(type, "blitzkarte_bild.htm");
+}
+
+/**
+ * Resolve a pc_met image src attribute to an absolute path (from site root).
+ */
+[[gnu::pure]]
+static std::string
+ResolveImageSrc(std::string_view src) noexcept
+{
+  if (!src.empty() && src.front() == '/')
+    return std::string(src);
+
+  if (src.starts_with("../scripts/"))
+    return std::string("/fw/") + std::string(src.substr(3));
+
+  return std::string(src);
+}
+
+/**
+ * Parse the main image URL from a pc_met HTML page.
+ */
+[[gnu::pure]]
+static std::string_view
+FindImageSrc(const char *html) noexcept
+{
+  static constexpr char bild_needle[] = "<img name=\"bild\" src=\"/";
+  if (const char *img = StringFind(html, bild_needle)) {
+    const char *src = img + sizeof(bild_needle) - 2;
+    const char *end = StringFind(src + 1, '"');
+    if (end != nullptr)
+      return {src, std::size_t(end - src)};
+  }
+
+  static constexpr char karte_needle[] = "src=\"../scripts/karte.php?";
+  if (const char *img = StringFind(html, karte_needle)) {
+    const char *src = img + sizeof("src=\"") - 1;
+    const char *end = StringFind(src, '"');
+    if (end != nullptr)
+      return {src, std::size_t(end - src)};
+  }
+
+  return {};
+}
+
+/**
+ * Derive a safe local cache file name from an image URL path.
+ */
+[[gnu::pure]]
+static std::string
+CacheFileNameFromImageSrc(std::string_view src) noexcept
+{
+  static constexpr char src_param[] = "src=";
+  if (const auto pos = src.find(src_param);
+      pos != std::string_view::npos)
+    src = src.substr(pos + sizeof(src_param) - 1);
+
+  if (const auto q = src.find_first_of("?#");
+      q != std::string_view::npos)
+    src = src.substr(0, q);
+
+  const std::string_view name = SplitLast(src, '/').second;
+  if (name.empty())
+    return {};
+
+  if (name == "karte.php")
+    return "blitzkarte.png";
+
+  return std::string(name);
+}
+
 Co::Task<AllocatedPath>
 PCMet::DownloadLatestImage(const char *type, const char *area,
                            const PCMetSettings &settings,
                            CurlGlobal &curl, ProgressListener &progress)
 {
   char url[256];
-  snprintf(url, sizeof(url),
-           PCMET_URI "/fw/bilder/%s?type=%s",
-           type, area);
+  if (IsBlitzkartePage(type))
+    snprintf(url, sizeof(url),
+             PCMET_URI "/fw/bilder/%s?maxage=%s",
+             type, area);
+  else
+    snprintf(url, sizeof(url),
+             PCMET_URI "/fw/bilder/%s?type=%s",
+             type, area);
 
   // download the HTML page
   const auto response =
     co_await CoGet(curl, url, settings.www_credentials.username,
                    settings.www_credentials.password, progress);
 
-  static constexpr char img_needle[] = "<img name=\"bild\" src=\"/";
-  const char *img = strstr(response.body.c_str(), img_needle);
-  if (img == nullptr)
+  const std::string_view src_view = FindImageSrc(response.body.c_str());
+  if (src_view.empty())
     throw std::runtime_error("No IMG tag found in pc_met HTML");
 
-  const char *_src = img + sizeof(img_needle) - 2;
-  const char *end = strchr(_src + 1, '"');
-  if (end == nullptr)
+  const std::string src = ResolveImageSrc(src_view);
+  const std::string name = CacheFileNameFromImageSrc(src);
+  if (name.empty())
     throw std::runtime_error("Malformed IMG tag in pc_met HTML");
-
-  const std::string_view src{_src, std::size_t(end - _src)};
-  const std::string_view _name = SplitLast(src, '/').second;
-  if (_name.empty())
-    throw std::runtime_error("Malformed IMG tag in pc_met HTML");
-
-  const std::string name{_name};
 
   // TODO: verify file name
 
@@ -144,9 +234,7 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
   auto path = AllocatedPath::Build(cache_path, name.c_str());
 
   if (!File::Exists(path)) {
-    // URI for a single page of a selected 'Satellitenbilder"-page with link
-    // to the latest image and the namelist array of all stored images
-    snprintf(url, sizeof(url), PCMET_URI "%.*s", int(src.size()), src.data());
+    snprintf(url, sizeof(url), PCMET_URI "%s", src.c_str());
 
     const auto ignored_response = co_await
       Net::CoDownloadToFile(curl, url, settings.www_credentials.username,
