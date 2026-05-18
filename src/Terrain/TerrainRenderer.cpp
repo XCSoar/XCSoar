@@ -380,7 +380,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     Layout::ScalePenWidth(1024u) / 1024.0;
   const double contour_pixel_size = screen_pixel_size * dpi_factor *
     std::max(1u, raster_renderer.GetQuantisationPixels() / 2u);
-  const unsigned contour_spacing = is_terrain
+  last_contour_spacing = is_terrain
     ? ContourSpacing(settings.contours, height_scale,
                      contour_pixel_size)
     : 0u;
@@ -400,7 +400,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
-                                contour_spacing);
+                                last_contour_spacing);
 
   last_projection_scale = map_projection.GetScale();
 

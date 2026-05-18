@@ -104,6 +104,15 @@ public:
     return quantisation_pixels;
   }
 
+  /**
+   * Returns true if contour lines are currently rendered (i.e. not
+   * suppressed due to extreme zoom-out).
+   */
+  [[gnu::pure]]
+  bool AreContoursVisible() const noexcept {
+    return quantisation_effective > 0;
+  }
+
 #ifdef ENABLE_OPENGL
   void Invalidate() noexcept {
     bounds.SetInvalid();
