@@ -83,6 +83,7 @@ bitmap_graphic IDB_LAUNCHER2_RGBA "launcher_640_rgba_2"
 #endif
 bitmap_icon_scaled IDB_MAPSCALE_LEFT "scalearrow_left"
 bitmap_icon_scaled IDB_MAPSCALE_RIGHT "scalearrow_right"
+bitmap_icon_scaled IDB_CONTOUR_SPACING "contour_spacing_icon"
 bitmap_icon_scaled IDB_MARK "map_flag"
 bitmap_icon_scaled IDB_OBSTACLE "map_obstacle"
 bitmap_icon_scaled IDB_OUTFIELD_REACHABLE "alt_reachable_field"
