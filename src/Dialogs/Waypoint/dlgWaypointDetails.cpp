@@ -14,6 +14,8 @@
 #include "Renderer/TextRowRenderer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "Widget/Widget.hpp"
+#include "Widget/ImageZoomView.hpp"
+#include "Widget/ImageZoomFrame.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "LocalPath.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -48,6 +50,7 @@
 #include "Pan.hpp"
 #include "Input/InputEvents.hpp"
 #include "util/StringAPI.hxx"
+
 #include <functional>
 #include <optional>
 
@@ -115,59 +118,6 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
 }
 #endif
 
-class DrawPanFrame final : public WndOwnerDrawFrame {
-  protected:
-    PixelPoint last_mouse_pos, img_pos, offset;
-    bool is_dragging = false;
-
-  std::function<void(Canvas &canvas, const PixelRect &rc, PixelPoint &offset,
-    PixelPoint &img_pos)> mOnPaintCallback2;
-  std::function<bool(unsigned key_code)> m_try_key_input{};
-
-  public:
-    template<typename CB>
-    void Create(ContainerWindow &parent,
-                PixelRect rc, const WindowStyle style,
-                  CB &&_paint) {
-      mOnPaintCallback2 = std::move(_paint);
-      PaintWindow::Create(parent, rc, style);
-    }
-
-  void
-  SetTryKeyInput(std::function<bool(unsigned key_code)>&& f) noexcept
-  {
-    m_try_key_input = std::move(f);
-  }
-
-  /**
-   * Apply one paint-step nudge the same as an arrow key (50 px equivalent).
-   */
-  void
-  NudgeViewByPixelOffset(PixelPoint o) noexcept
-  {
-    offset = o;
-    Invalidate();
-  }
-
-  protected:
-    /** from class Window */
-    bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
-    bool OnMouseDown(PixelPoint p) noexcept override;
-    bool OnMouseUp(PixelPoint p) noexcept override;
-
-    bool OnKeyCheck(unsigned key_code) const noexcept override;
-    bool OnKeyDown(unsigned key_code) noexcept override;
-
-  void
-  OnPaint(Canvas &canvas) noexcept override
-  {
-    if (mOnPaintCallback2 == nullptr)
-      return;
-
-    mOnPaintCallback2(canvas, GetClientRect(), offset, img_pos);
-  }
-};
-
 class WaypointDetailsWidget final
   : public NullWidget {
   struct Layout {
@@ -214,7 +164,7 @@ class WaypointDetailsWidget final
   ManagedWidget info_widget{new WaypointInfoWidget(look, waypoint)};
   PanelControl details_panel;
   ManagedWidget commands_widget;
-  DrawPanFrame image_window;
+  ImageZoomFrame image_window;
 
 #ifdef HAVE_RUN_FILE
   ListControl file_list{look};
@@ -264,10 +214,9 @@ public:
   void OnMagnifyClicked();
   void OnShrinkClicked();
 
-  void OnGotoClicked();
+  void AdjustViewForZoomChange(int old_zoom, int new_zoom) noexcept;
 
-  void OnImagePaint(Canvas &canvas, const PixelRect &rc, PixelPoint &offset,
-    PixelPoint &img_pos);
+  void OnGotoClicked();
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -603,11 +552,8 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   commands_widget.Prepare();
 
   if (!images.empty()) {
-    image_window.Create(parent, layout.main, dock_style,
-                        [this](Canvas &canvas, const PixelRect &rc, PixelPoint offset,
-                          PixelPoint &img_pos) {
-                                 OnImagePaint(canvas, rc, offset, img_pos);
-                        });
+    image_window.Create(parent, layout.main, dock_style);
+    image_window.SetContent(&images[0], &zoom);
 
     waypoint_image_input_target = this;
     const int mode_id = InputEvents::GetModeId("wptimg");
@@ -642,11 +588,13 @@ WaypointDetailsWidget::UpdatePage() noexcept
   details_panel.SetVisible(page == 1);
   commands_widget.SetVisible(page == 2);
 
-  bool image_page = page >= 3;
+  const bool image_page = page >= 3;
   if (!images.empty()) {
     image_window.SetVisible(image_page);
     magnify_button.SetVisible(image_page);
     shrink_button.SetVisible(image_page);
+    if (image_page)
+      image_window.SetContent(&images[page - 3], &zoom);
   }
 
   UpdateCaption();
@@ -655,8 +603,23 @@ WaypointDetailsWidget::UpdatePage() noexcept
 void
 WaypointDetailsWidget::UpdateZoomControls()
 {
-  magnify_button.SetEnabled(zoom < 5);
+  magnify_button.SetEnabled(zoom < ImageZoomView::max_zoom_level);
   shrink_button.SetEnabled(zoom > 0);
+}
+
+void
+WaypointDetailsWidget::AdjustViewForZoomChange(const int old_zoom,
+                                               const int new_zoom) noexcept
+{
+  if (images.empty() || page < 3 || !image_window.IsDefined())
+    return;
+
+  const PixelRect rc = image_window.GetClientRect();
+  ImageZoomView::AdjustImageViewOnZoomChange(old_zoom, new_zoom,
+                                             image_window.GetViewPosition(),
+                                             rc.GetSize(),
+                                             images[page - 3].GetSize());
+  image_window.ClearPendingOffset();
 }
 
 void
@@ -682,7 +645,9 @@ WaypointDetailsWidget::NextPage(int step)
     image_window.Invalidate();
 
   if (page >= 3) {
+    const int old_zoom = zoom;
     zoom = 0;
+    AdjustViewForZoomChange(old_zoom, zoom);
     UpdateZoomControls();
   }
 }
@@ -690,10 +655,13 @@ WaypointDetailsWidget::NextPage(int step)
 void
 WaypointDetailsWidget::OnMagnifyClicked()
 {
-  if (zoom >= 5)
+  if (zoom >= ImageZoomView::max_zoom_level)
     return;
-  zoom++;
 
+  const int old_zoom = zoom;
+  ++zoom;
+  AdjustViewForZoomChange(old_zoom, zoom);
+  image_window.Invalidate();
   UpdateZoomControls();
 }
 
@@ -702,9 +670,71 @@ WaypointDetailsWidget::OnShrinkClicked()
 {
   if (zoom <= 0)
     return;
-  zoom--;
 
+  const int old_zoom = zoom;
+  --zoom;
+  AdjustViewForZoomChange(old_zoom, zoom);
+  image_window.Invalidate();
   UpdateZoomControls();
+}
+
+bool
+WaypointDetailsWidget::TryWaypointImageKey(unsigned key_code) noexcept
+{
+  if (!wptimg_mode.has_value())
+    return false;
+  if (images.empty() || !image_window.IsVisible())
+    return false;
+  return InputEvents::ProcessKeyInMode(*wptimg_mode, key_code);
+}
+
+void
+WaypointDetailsWidget::OnWaypointImageEvent(const char *misc) noexcept
+{
+  if (images.empty() || !image_window.IsVisible())
+    return;
+
+  if (StringIsEqual(misc, "magnify")) {
+    OnMagnifyClicked();
+    return;
+  }
+  if (StringIsEqual(misc, "shrink")) {
+    OnShrinkClicked();
+    return;
+  }
+  if (StringIsEqual(misc, "reset") && zoom > 0) {
+    const int old_zoom = zoom;
+    zoom = 0;
+    AdjustViewForZoomChange(old_zoom, zoom);
+    UpdateZoomControls();
+    image_window.Invalidate();
+    goto_button.SetFocus();
+    return;
+  }
+
+  if (StringIsEqual(misc, "left")) {
+    if (zoom == 0) {
+      previous_button.SetFocus();
+      NextPage(-1);
+    } else
+      image_window.NudgeViewByPixelOffset({-50, 0});
+    return;
+  }
+  if (StringIsEqual(misc, "right")) {
+    if (zoom == 0) {
+      next_button.SetFocus();
+      NextPage(+1);
+    } else
+      image_window.NudgeViewByPixelOffset({50, 0});
+    return;
+  }
+  if (zoom == 0)
+    return;
+
+  if (StringIsEqual(misc, "up"))
+    image_window.NudgeViewByPixelOffset({0, -50});
+  else if (StringIsEqual(misc, "down"))
+    image_window.NudgeViewByPixelOffset({0, 50});
 }
 
 bool
@@ -754,9 +784,11 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
 
     case KEY_ESCAPE:
       if (!images.empty() && zoom > 0) {
+        const int old_zoom = zoom;
         zoom = 0;
+        AdjustViewForZoomChange(old_zoom, zoom);
         image_window.Invalidate();
-        shrink_button.SetEnabled(false);
+        UpdateZoomControls();
         goto_button.SetFocus();
         return true;
       }
@@ -781,66 +813,6 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
     }
 }
 
-bool
-WaypointDetailsWidget::TryWaypointImageKey(unsigned key_code) noexcept
-{
-  if (!wptimg_mode.has_value())
-    return false;
-  if (images.empty() || !image_window.IsVisible())
-    return false;
-  return InputEvents::ProcessKeyInMode(*wptimg_mode, key_code);
-}
-
-void
-WaypointDetailsWidget::OnWaypointImageEvent(const char *misc) noexcept
-{
-  if (images.empty() || !image_window.IsVisible())
-    return;
-
-  if (StringIsEqual(misc, "magnify")) {
-    OnMagnifyClicked();
-    image_window.Invalidate();
-    return;
-  }
-  if (StringIsEqual(misc, "shrink")) {
-    OnShrinkClicked();
-    image_window.Invalidate();
-    return;
-  }
-  if (StringIsEqual(misc, "reset") && zoom > 0) {
-    zoom = 0;
-    UpdateZoomControls();
-    image_window.Invalidate();
-    goto_button.SetFocus();
-    return;
-  }
-
-  // Pan / page: match prior behaviour
-  if (StringIsEqual(misc, "left")) {
-    if (zoom == 0) {
-      previous_button.SetFocus();
-      NextPage(-1);
-    } else
-      image_window.NudgeViewByPixelOffset({-50, 0});
-    return;
-  }
-  if (StringIsEqual(misc, "right")) {
-    if (zoom == 0) {
-      next_button.SetFocus();
-      NextPage(+1);
-    } else
-      image_window.NudgeViewByPixelOffset({50, 0});
-    return;
-  }
-  if (zoom == 0)
-    return;
-
-  if (StringIsEqual(misc, "up"))
-    image_window.NudgeViewByPixelOffset({0, -50});
-  else if (StringIsEqual(misc, "down"))
-    image_window.NudgeViewByPixelOffset({0, 50});
-}
-
 void
 WaypointDetailsWidget::OnGotoClicked()
 {
@@ -862,131 +834,6 @@ WaypointDetailsWidget::OnGotoClicked()
   dialog.SetModalResult(mrOK);
 
   CommonInterface::main_window->FullRedraw();
-}
-
-void
-WaypointDetailsWidget::OnImagePaint(Canvas &canvas, [[maybe_unused]] const PixelRect &rc,
-                  PixelPoint &offset, PixelPoint &img_pos)
-{
-  const auto &dlook = UIGlobals::GetDialogLook();
-  canvas.Clear(dlook.background_color);
-
-  if (page < 3 || page >= 3 + static_cast<int>(images.size())) {
-    return;
-  }
-
-  Bitmap &img = images[page - 3];
-  static constexpr int zoom_factors[] = {1, 2, 4, 8, 16, 32};
-  PixelSize img_size = img.GetSize();
-  double scale = std::min(static_cast<double>(canvas.GetWidth()) / img_size.width,
-                          static_cast<double>(canvas.GetHeight()) / img_size.height) *
-                 zoom_factors[zoom];
-
-  PixelPoint screen_pos;
-  PixelSize screen_size;
-
-  // Calculate horizontal scaling and positioning
-  double scaled_width = img_size.width * scale;
-  if (scaled_width <= canvas.GetWidth()) {
-    img_pos.x = zoom == 0 ? 0 : img_pos.x + offset.x / scale;
-    screen_pos.x = (canvas.GetWidth() - static_cast<int>(scaled_width)) / 2;
-    screen_size.width = static_cast<unsigned>(scaled_width);
-  } else {
-    double visible_width = canvas.GetWidth() / scale;
-    img_pos.x = zoom == 0 ? (img_size.width - visible_width) / 2 : img_pos.x + offset.x / scale;
-    img_pos.x = std::clamp(img_pos.x, 0, static_cast<int>(img_size.width - visible_width));
-    img_size.width = static_cast<unsigned>(visible_width);
-    screen_pos.x = 0;
-    screen_size.width = canvas.GetWidth();
-  }
-
-  // Calculate vertical scaling and positioning
-  double scaled_height = img_size.height * scale;
-  if (scaled_height <= canvas.GetHeight()) {
-    img_pos.y = 0;
-    screen_pos.y = (canvas.GetHeight() - static_cast<int>(scaled_height)) / 2;
-    screen_size.height = static_cast<unsigned>(scaled_height);
-  } else {
-    double visible_height = canvas.GetHeight() / scale;
-    img_pos.y = zoom == 0 ? (img_size.height - visible_height) / 2 : img_pos.y + offset.y / scale;
-    img_pos.y = std::clamp(img_pos.y, 0, static_cast<int>(img_size.height - visible_height));
-    img_size.height = static_cast<unsigned>(visible_height);
-    screen_pos.y = 0;
-    screen_size.height = canvas.GetHeight();
-  }
-  canvas.Stretch(screen_pos, screen_size, img, img_pos, img_size);
-}
-
-bool
-DrawPanFrame::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept
-{
-  if (!is_dragging)
-    return false;
-
-  offset = last_mouse_pos - p;
-  last_mouse_pos = p;
-  Invalidate();
-  return true;
-}
-
-bool
-DrawPanFrame::OnMouseDown(PixelPoint p) noexcept
-{
-  is_dragging = true;
-  last_mouse_pos = p;
-  return true;
-}
-
-bool
-DrawPanFrame::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
-{
-  is_dragging = false;
-  return true;
-}
-
-bool
-DrawPanFrame::OnKeyCheck(unsigned key_code) const noexcept
-{
-  switch (key_code) {
-    case KEY_LEFT:
-    case KEY_RIGHT:
-    case KEY_UP:
-    case KEY_DOWN:
-    return true;
-
-  default:
-    return false;
-  }
-}
-
-bool
-DrawPanFrame::OnKeyDown(unsigned key_code) noexcept
-{
-  if (m_try_key_input && m_try_key_input(key_code))
-    return true;
-
-  switch (key_code) {
-    case KEY_LEFT: {
-      offset = {-50, 0};
-      break;
-    }
-    case KEY_RIGHT: {
-      offset = {50, 0};
-      break;
-    }
-    case KEY_UP: {
-      offset = {0, -50};
-      break;
-    }
-    case KEY_DOWN: {
-      offset = {0, 50};
-      break;
-    }
-    default:
-      return false;
-  }
-  Invalidate();
-  return true;
 }
 
 /**
