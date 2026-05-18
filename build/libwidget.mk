@@ -33,6 +33,8 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/KeyboardWidget.cpp \
 	$(SRC)/Widget/QuickGuidePageWidget.cpp \
 	$(SRC)/Widget/ViewImageWidget.cpp \
+	$(SRC)/Widget/ImageZoomView.cpp \
+	$(SRC)/Widget/ImageZoomFrame.cpp \
 	$(SRC)/Widget/MultiSelectListWidget.cpp \
 	$(SRC)/Widget/FileMultiSelectWidget.cpp
 
