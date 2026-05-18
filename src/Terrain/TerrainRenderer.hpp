@@ -58,6 +58,11 @@ public:
     return settings;
   }
 
+  [[gnu::pure]]
+  bool AreContoursVisible() const noexcept {
+    return raster_renderer.AreContoursVisible();
+  }
+
   void SetSettings(const TerrainRendererSettings &_settings) {
     settings = _settings;
   }

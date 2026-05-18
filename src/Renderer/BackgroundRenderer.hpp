@@ -58,6 +58,13 @@ public:
                        const DerivedInfo &calculated) noexcept;
   void SetTerrain(const RasterTerrain *terrain) noexcept;
 
+  /**
+   * Returns true if contour lines are currently being rendered (not
+   * suppressed due to extreme zoom-out, and terrain renderer exists).
+   */
+  [[gnu::pure]]
+  bool AreContoursVisible() const noexcept;
+
 private:
   void SetShadingAngle(const WindowProjection& proj, Angle angle) noexcept;
 };
