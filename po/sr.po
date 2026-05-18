@@ -28,8 +28,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
-#: Data/Input/default.xci:601 Data/Input/default.xci:1295
-#: Data/Input/default.xci:1303
+#: Data/Input/default.xci:601 Data/Input/default.xci:1302
+#: Data/Input/default.xci:1310
 #, no-c-format
 msgid "Task"
 msgstr "Задатак"
@@ -468,7 +468,7 @@ msgstr "ID upravljačkog zadataka"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:108
 #: src/net/client/WeGlide/UploadIGCFile.cpp:121 Data/Input/default.xci:801
-#: Data/Input/default.xci:1505
+#: Data/Input/default.xci:1512
 msgid "WeGlide Upload"
 msgstr "Računar klizanja"
 
@@ -585,13 +585,13 @@ msgstr "Ne kriluje"
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:93
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:80
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:109
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:121
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:192
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:135
 #: src/Dialogs/Airspace/AirspaceList.cpp:465
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:515
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:522
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:386
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:257
@@ -601,7 +601,7 @@ msgstr "Ne kriluje"
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:362 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:104 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:571
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:520
 #: src/Dialogs/Waypoint/Manager.cpp:289
 #: src/Dialogs/Waypoint/WaypointList.cpp:281
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
@@ -612,7 +612,7 @@ msgstr "Ne kriluje"
 #: src/Dialogs/Task/AlternatesListDialog.cpp:271
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/dlgQuickGuide.cpp:512 src/Dialogs/dlgGestureHelp.cpp:46
-#: src/Dialogs/Weather/PCMetDialog.cpp:36
+#: src/Dialogs/Weather/PCMetDialog.cpp:191
 #: src/Dialogs/Weather/NOAADetails.cpp:125
 msgid "Close"
 msgstr "Zatvori"
@@ -655,7 +655,7 @@ msgstr "Relativna visina"
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:174
 #: src/Dialogs/Airspace/AirspaceList.cpp:462
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:79
 #: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Waypoint/WaypointList.cpp:277
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
@@ -834,7 +834,7 @@ msgstr "Puno"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:101
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
@@ -857,7 +857,7 @@ msgstr "Isk."
 #: src/Input/InputEventsSettings.cpp:493 src/Input/InputEventsSettings.cpp:497
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:100
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:174
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
@@ -1106,7 +1106,7 @@ msgstr "Brzina"
 #: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:78
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
-#: src/Dialogs/Weather/RASPDialog.cpp:129
+#: src/Dialogs/Weather/RASPDialog.cpp:133
 #, no-c-format
 msgid "Time"
 msgstr "Vreme"
@@ -1372,182 +1372,87 @@ msgstr "Visina za dolazak"
 msgid " ("
 msgstr "("
 
-#: src/Weather/Rasp/RaspStore.cpp:27 src/Weather/Rasp/RaspStore.cpp:32
+#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
 #, no-c-format
 msgid "W*"
 msgstr "V*"
 
-#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
+#: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
 #, no-c-format
-msgid ""
-"Average dry thermal updraft strength near mid-BL height. Subtract glider "
-"descent rate to get average vario reading for cloudless thermals. Updraft "
-"strengths will be stronger than this forecast if convective clouds are "
-"present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
-"\"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
-msgstr ""
-"Prosečna snaga topovitog povrtnog pritiska okoli srednje visine BL-a. Oduzmi "
-"opad glidera da dobiješ prosečnu čitanju variometra za besklopu topove. "
-"Snage povrtnog pritiska će biti veće od ove prognoze ako postoje konvektivne "
-"oblaci, jer se vlažnost u oblaku dodatno približava (tj. to zanemaruje "
-"\"oblacnu suku\")."
+msgid "Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
+msgstr "Prosečna snaga topovitog povrtnog pritiska okoli srednje visine BL-a. Oduzmi opad glidera da dobiješ prosečnu čitanju variometra za besklopu topove. Snage povrtnog pritiska će biti veće od ove prognoze ako postoje konvektivne oblaci, jer se vlažnost u oblaku dodatno približava (tj. to zanemaruje \"oblacnu suku\")."
 
-#: src/Weather/Rasp/RaspStore.cpp:37
+#: src/Weather/Rasp/RaspStore.cpp:38
 #, no-c-format
 msgid "BL Wind spd"
 msgstr "Brzina BL-a"
 
-#: src/Weather/Rasp/RaspStore.cpp:38
+#: src/Weather/Rasp/RaspStore.cpp:39
 #, no-c-format
-msgid ""
-"The speed and direction of the vector-averaged wind in the BL. This "
-"prediction can be misleading if there is a large change in wind direction "
-"through the BL."
-msgstr ""
-"Brzina i smjer vektorskih srednjepriječnih vetra u BL-u. Ova prognoza može "
-"biti loša ukoliko postoji velika promjena smjera vjetra kroz BL."
+msgid "The speed and direction of the vector-averaged wind in the BL. This prediction can be misleading if there is a large change in wind direction through the BL."
+msgstr "Brzina i smjer vektorskih srednjepriječnih vetra u BL-u. Ova prognoza može biti loša ukoliko postoji velika promjena smjera vjetra kroz BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:42
+#: src/Weather/Rasp/RaspStore.cpp:43
 #, no-c-format
 msgid "H bl"
 msgstr "Visina bl"
 
-#: src/Weather/Rasp/RaspStore.cpp:43
+#: src/Weather/Rasp/RaspStore.cpp:44
 #, no-c-format
-msgid ""
-"Height of the top of the mixing layer, which for thermal convection is the "
-"average top of a dry thermal. Over flat terrain, maximum thermalling heights "
-"will be lower due to the glider descent rate and other factors. In the "
-"presence of clouds (which release additional buoyancy aloft, creating "
-"\"cloudsuck\") the updraft top will be above this forecast, but the maximum "
-"thermalling height will then be limited by the cloud base. Further, when the "
-"mixing results from shear turbulence rather than thermal mixing this "
-"parameter is not useful for glider flying."
-msgstr ""
-"Visina vrha miješanih slojeva, koja za konvektivne topove predstavlja "
-"srednju visinu topova bez vlažnosti. Na ravnom području maksimalne visine "
-"topovanja će biti niže zbog opada glidera i drugih faktora. U prisutnosti "
-"oblaka (koji rješavaju dodatnu vlažnost u gornjem sloju, stvarajući "
-"\"oblacnu suku\") vrh povrtnog pritiska će biti iznad ove prognoze, ali "
-"maksimalna visina topovanja će tada biti ograničena podnom oblaka. Njegova "
-"vrijednost nije korisna za gliderovu ljetnju kada se miješanje rezultira "
-"vrtikalnim vetrom i ne topovitim miješanjem."
+msgid "Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal. Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors. In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base. Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying."
+msgstr "Visina vrha miješanih slojeva, koja za konvektivne topove predstavlja srednju visinu topova bez vlažnosti. Na ravnom području maksimalne visine topovanja će biti niže zbog opada glidera i drugih faktora. U prisutnosti oblaka (koji rješavaju dodatnu vlažnost u gornjem sloju, stvarajući \"oblacnu suku\") vrh povrtnog pritiska će biti iznad ove prognoze, ali maksimalna visina topovanja će tada biti ograničena podnom oblaka. Njegova vrijednost nije korisna za gliderovu ljetnju kada se miješanje rezultira vrtikalnim vetrom i ne topovitim miješanjem."
 
-#: src/Weather/Rasp/RaspStore.cpp:47
+#: src/Weather/Rasp/RaspStore.cpp:48
 #, no-c-format
 msgid "dwcrit"
 msgstr "kritickaVisina"
 
-#: src/Weather/Rasp/RaspStore.cpp:48
+#: src/Weather/Rasp/RaspStore.cpp:49
 #, no-c-format
-msgid ""
-"This parameter estimates the height above ground at which the average dry "
-"updraft strength drops below 225 fpm and is expected to give better "
-"quantitative numbers for the maximum cloudless thermalling height than the "
-"BL Top height, especially when mixing results from vertical wind shear "
-"rather than thermals. (Note: the present assumptions tend to underpredict "
-"the max. thermalling height for dry conditions.) In the presence of clouds "
-"the maximum thermalling height may instead be limited by the cloud base. "
-"Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Ovaj parametar procjenjava visinu iznad zemlje na kojoj prosečna snaga "
-"povrtnog pritiska spada ispod 225 fpm, što daje bolju kvantitetnu procjenu "
-"maksimalne visine topovanja bez vlažnosti u odnosu na predviđenu visinu vrha "
-"BL-a. Specifično kada se miješanje rezultira vertikalnim vetrom i ne "
-"topovitim miješanjem, ova parametar daje bolju procjenu maksimalne visine "
-"topovanja bez vlažnosti. (Napomena: trenutni pretpostavki često "
-"underpredictujo maksimalnu visinu topovanja u besklopu situaciji.) U "
-"prisutnosti oblaka, maksimalna visina topovanja može se ograničiti podnom "
-"oblaka. Bilo je za \"besklopu\" topove, ova parametar zanemaruje utjecaj "
-"\"oblacne suke\"."
+msgid "This parameter estimates the height above ground at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Ovaj parametar procjenjava visinu iznad zemlje na kojoj prosečna snaga povrtnog pritiska spada ispod 225 fpm, što daje bolju kvantitetnu procjenu maksimalne visine topovanja bez vlažnosti u odnosu na predviđenu visinu vrha BL-a. Specifično kada se miješanje rezultira vertikalnim vetrom i ne topovitim miješanjem, ova parametar daje bolju procjenu maksimalne visine topovanja bez vlažnosti. (Napomena: trenutni pretpostavki često underpredictujo maksimalnu visinu topovanja u besklopu situaciji.) U prisutnosti oblaka, maksimalna visina topovanja može se ograničiti podnom oblaka. Bilo je za \"besklopu\" topove, ova parametar zanemaruje utjecaj \"oblacne suke\"."
 
-#: src/Weather/Rasp/RaspStore.cpp:52
+#: src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "bl cloud"
 msgstr "bl oblak"
 
-#: src/Weather/Rasp/RaspStore.cpp:53
+#: src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
-msgid ""
-"This parameter provides an additional means of evaluating the formation of "
-"clouds within the BL and might be used either in conjunction with or instead "
-"of the other cloud prediction parameters. It assumes a very simple "
-"relationship between cloud cover percentage and the maximum relative "
-"humidity within the BL. The cloud base height is not predicted, but is "
-"expected to be below the BL Top height."
-msgstr ""
-"Ovaj parametar pružava dodatnu metodu za ocenu formiranja oblaka unutar BL-a "
-"i može se koristiti zajedno sa ili umesto drugih parametara predviđanja "
-"oblaka. Pretpostavlja vrlo jednostavnu vezu između procene procenta "
-"pokrivenosti oblakom i maksimalne relativne vlage unutar BL-a. Visina osnove "
-"oblaka nije predviđena, ali se očekuje da bude ispod visine vrha BL-a."
+msgid "This parameter provides an additional means of evaluating the formation of clouds within the BL and might be used either in conjunction with or instead of the other cloud prediction parameters. It assumes a very simple relationship between cloud cover percentage and the maximum relative humidity within the BL. The cloud base height is not predicted, but is expected to be below the BL Top height."
+msgstr "Ovaj parametar pružava dodatnu metodu za ocenu formiranja oblaka unutar BL-a i može se koristiti zajedno sa ili umesto drugih parametara predviđanja oblaka. Pretpostavlja vrlo jednostavnu vezu između procene procenta pokrivenosti oblakom i maksimalne relativne vlage unutar BL-a. Visina osnove oblaka nije predviđena, ali se očekuje da bude ispod visine vrha BL-a."
 
-#: src/Weather/Rasp/RaspStore.cpp:57
+#: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
 msgstr "Površinska temperatura"
 
-#: src/Weather/Rasp/RaspStore.cpp:58
+#: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
-msgid ""
-"The temperature at a height of 2m above ground level. This can be compared "
-"to observed surface temperatures as an indication of model simulation "
-"accuracy; e.g. if observed surface temperatures are significantly below "
-"those forecast, then soaring conditions will be poorer than forecast."
-msgstr ""
-"Temperatura na visini od 2 metra iznad površine. Može se uspoređivati sa "
-"observiranim temperaturem na površini kao pokazatelj točnosti modela; npr., "
-"ako su observirane temperature na povрšини signifikantno niže od "
-"predviđenih, kondicije za jedrilicarstvo će biti gornje od predviđenih."
+msgid "The temperature at a height of 2m above ground level. This can be compared to observed surface temperatures as an indication of model simulation accuracy; e.g. if observed surface temperatures are significantly below those forecast, then soaring conditions will be poorer than forecast."
+msgstr "Temperatura na visini od 2 metra iznad površine. Može se uspoređivati sa observiranim temperaturem na površini kao pokazatelj točnosti modela; npr., ako su observirane temperature na povрšини signifikantno niže od predviđenih, kondicije za jedrilicarstvo će biti gornje od predviđenih."
 
-#: src/Weather/Rasp/RaspStore.cpp:62
+#: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "hwcrit"
 msgstr "kritična voda"
 
-#: src/Weather/Rasp/RaspStore.cpp:63
+#: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
-msgid ""
-"This parameter estimates the height at which the average dry updraft "
-"strength drops below 225 fpm and is expected to give better quantitative "
-"numbers for the maximum cloudless thermalling height than the BL Top height, "
-"especially when mixing results from vertical wind shear rather than "
-"thermals. (Note: the present assumptions tend to underpredict the max. "
-"thermalling height for dry conditions.) In the presence of clouds the "
-"maximum thermalling height may instead be limited by the cloud base. Being "
-"for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Ovaj parametar procjenjuje visinu na kojoj srednja sečna snaga prehvatnog "
-"vjetra smanji ispod 225 fpm i očekuje da će dati bolje kvantitativne brojke "
-"za maksimalnu visinu bez oblaka klizanja nego visina vrha BL-a, posebno kada "
-"se rezultati vertikalnog vjetra slika kombiniraju umesto termala. (Napomena: "
-"trenutni pretpostavci često underpredictuju maksimalnu visinu klizanja za "
-"susjedne uslove.) U prisustvu oblaka, maksimalna visina klizanja može se "
-"umjesto toga ograničiti na osnovu osnove oblaka. Bilo je odlomak za "
-"\"susjedne\" klizanje, parametar omiija utjecaj \"oblaksucka\"."
+msgid "This parameter estimates the height at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Ovaj parametar procjenjuje visinu na kojoj srednja sečna snaga prehvatnog vjetra smanji ispod 225 fpm i očekuje da će dati bolje kvantitativne brojke za maksimalnu visinu bez oblaka klizanja nego visina vrha BL-a, posebno kada se rezultati vertikalnog vjetra slika kombiniraju umesto termala. (Napomena: trenutni pretpostavci često underpredictuju maksimalnu visinu klizanja za susjedne uslove.) U prisustvu oblaka, maksimalna visina klizanja može se umjesto toga ograničiti na osnovu osnove oblaka. Bilo je odlomak za \"susjedne\" klizanje, parametar omiija utjecaj \"oblaksucka\"."
 
-#: src/Weather/Rasp/RaspStore.cpp:67
+#: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "wblmaxmin"
 msgstr "maks/min vodeni balast"
 
-#: src/Weather/Rasp/RaspStore.cpp:68
+#: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
-msgid ""
-"Maximum grid-area-averaged extensive upward or downward motion within the BL "
-"as created by horizontal wind convergence. Positive convergence is "
-"associated with local small-scale convergence lines. Negative convergence "
-"(divergence) produces subsiding vertical motion, creating low-level "
-"inversions which limit thermalling heights."
-msgstr ""
-"Maksimalna mrežno-površinska srednja intenzivna vertikalna potezanje ili "
-"opadanje unutar BL-a stvorljivo horizontalnim konvergencijom vjetra. "
-"Pozitivna konvergencija je vezana za lokalne mali skali linije "
-"konvergencije. Negativna konvergencija (divergencija) proizvodi opadajući "
-"vertikalni potezanje, stvarajući nivo podniva inverzije koje ograničavaju "
-"visinu klizanja."
+msgid "Maximum grid-area-averaged extensive upward or downward motion within the BL as created by horizontal wind convergence. Positive convergence is associated with local small-scale convergence lines. Negative convergence (divergence) produces subsiding vertical motion, creating low-level inversions which limit thermalling heights."
+msgstr "Maksimalna mrežno-površinska srednja intenzivna vertikalna potezanje ili opadanje unutar BL-a stvorljivo horizontalnim konvergencijom vjetra. Pozitivna konvergencija je vezana za lokalne mali skali linije konvergencije. Negativna konvergencija (divergencija) proizvodi opadajući vertikalni potezanje, stvarajući nivo podniva inverzije koje ograničavaju visinu klizanja."
 
-#: src/Weather/Rasp/RaspStore.cpp:72
+#: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "blcwbase"
 msgstr "osnovica vodene sajle"
@@ -1588,28 +1493,28 @@ msgstr "Distancija do cilja"
 msgid "Target speed"
 msgstr "Ciljna brzina"
 
-#: src/Renderer/BarographRenderer.cpp:27 src/Renderer/BarographRenderer.cpp:33
+#: src/Renderer/BarographRenderer.cpp:34 src/Renderer/BarographRenderer.cpp:43
 msgid "Working band"
 msgstr "Radna širina"
 
-#: src/Renderer/BarographRenderer.cpp:37
+#: src/Renderer/BarographRenderer.cpp:47
 msgid "Ceiling trend"
 msgstr "Pravac plafona"
 
-#: src/Renderer/ClimbChartRenderer.cpp:27
-#: src/Renderer/ClimbChartRenderer.cpp:32
+#: src/Renderer/ClimbChartRenderer.cpp:33
+#: src/Renderer/ClimbChartRenderer.cpp:38
 msgid "Avg. climb"
 msgstr "Srednja klima"
 
-#: src/Renderer/ClimbChartRenderer.cpp:35
+#: src/Renderer/ClimbChartRenderer.cpp:41
 msgid "Climb trend"
 msgstr "Pravac penjanja"
 
-#: src/Renderer/GlidePolarRenderer.cpp:29
+#: src/Renderer/GlidePolarRenderer.cpp:36
 msgid "L/D"
 msgstr "odnos klizanja"
 
-#: src/Renderer/GlidePolarRenderer.cpp:33
+#: src/Renderer/GlidePolarRenderer.cpp:40
 msgid "Min. sink"
 msgstr "Minimalni opad"
 
@@ -1632,12 +1537,12 @@ msgstr "Termička visina"
 msgid "Cloud base"
 msgstr "Baza oblaka"
 
-#: src/Renderer/MacCreadyRenderer.cpp:28 src/InfoBoxes/Content/Factory.cpp:464
+#: src/Renderer/MacCreadyRenderer.cpp:33 src/InfoBoxes/Content/Factory.cpp:464
 #, no-c-format
 msgid "Vopt"
 msgstr "optimalna brzina"
 
-#: src/Renderer/TaskSpeedRenderer.cpp:32
+#: src/Renderer/TaskSpeedRenderer.cpp:38
 msgid "Vest"
 msgstr "eksplozivna brzina"
 
@@ -1826,7 +1731,7 @@ msgstr "Fajlovi sa mesta"
 #: src/Dialogs/InternalLink.cpp:77
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:128
-#: Data/Input/default.xci:843 Data/Input/default.xci:1467
+#: Data/Input/default.xci:843 Data/Input/default.xci:1474
 #, no-c-format
 msgid "Logger"
 msgstr "Dnevnik rada"
@@ -1854,7 +1759,7 @@ msgstr "Glajder"
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:979
-#: Data/Input/default.xci:1392
+#: Data/Input/default.xci:1399
 #, no-c-format
 msgid "Weather"
 msgstr ""
@@ -1923,7 +1828,7 @@ msgstr "Ponovo"
 #: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:281
 #: Data/Input/default.xci:151 Data/Input/default.xci:593
 #: Data/Input/default.xci:688 Data/Input/default.xci:835
-#: Data/Input/default.xci:1055
+#: Data/Input/default.xci:1055 Data/Input/default.xci:1142
 msgid "Cancel"
 msgstr "Prekid"
 
@@ -1977,7 +1882,7 @@ msgstr "Neuspešno je preuzeto indeks repozitorija."
 
 #: src/Dialogs/FileManager.cpp:739 src/Dialogs/FileManager.cpp:764
 #: src/Dialogs/DownloadFilePicker.cpp:274 Data/Input/default.xci:817
-#: Data/Input/default.xci:1490
+#: Data/Input/default.xci:1497
 msgid "File Manager"
 msgstr "Menadzer datoteka"
 
@@ -2167,7 +2072,7 @@ msgstr "Debugiranje"
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 #: src/Dialogs/MapItemListDialog.cpp:184
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "Uključi"
@@ -2203,7 +2108,7 @@ msgid "Pitot"
 msgstr "Pitotov senzor"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:423
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid "Airspeed"
 msgstr "Brzinu zraka"
 
@@ -2260,7 +2165,7 @@ msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "Komunikacija s ovim uređajem će biti zapravljena sljedećih %u minuta."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:782 Data/Input/default.xci:759
-#: Data/Input/default.xci:1482
+#: Data/Input/default.xci:1489
 msgid "Devices"
 msgstr "Aparati"
 
@@ -2556,42 +2461,30 @@ msgstr "Postaviti novi zvukovni shema? Stari vrednosti će biti izgubljene."
 msgid "Vario Configuration"
 msgstr "Konfiguracija variometra"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 msgid "TE vario"
 msgstr "TE variometar"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
-msgid ""
-"This produces a fake TE vario gross vertical velocity. It can be used when "
-"in circling mode to demonstrate the lift tones. When not in circling mode, "
-"set this to a realistic negative value so speed command tones are produced."
-msgstr ""
-"Ovo proizvodi fakšni TE variometar brzinu visinskog kliza. Može se koristiti "
-"u režimu okreta da bi se demonstrirale tonovi povezanosti sa vrtljom. Kada "
-"ne bude u režimu okreta, postavite ovaj na realističnu negativnu vrednost da "
-"bi se proizveli tonovi komandiranja brzine."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+msgid "This produces a fake TE vario gross vertical velocity. It can be used when in circling mode to demonstrate the lift tones. When not in circling mode, set this to a realistic negative value so speed command tones are produced."
+msgstr "Ovo proizvodi fakšni TE variometar brzinu visinskog kliza. Može se koristiti u režimu okreta da bi se demonstrirale tonovi povezanosti sa vrtljom. Kada ne bude u režimu okreta, postavite ovaj na realističnu negativnu vrednost da bi se proizveli tonovi komandiranja brzine."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
-msgid ""
-"This produces a fake airspeed. It can be used when not in circling mode to "
-"demonstrate the speed command tones."
-msgstr ""
-"Ovo proizvodi fakšni hitrost vazduha. Može se koristiti u režimu kada nije u "
-"režimu okreta da bi se demonstrirale tonovi komandiranja brzine."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:101
+msgid "This produces a fake airspeed. It can be used when not in circling mode to demonstrate the speed command tones."
+msgstr "Ovo proizvodi fakšni hitrost vazduha. Može se koristiti u režimu kada nije u režimu okreta da bi se demonstrirale tonovi komandiranja brzine."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:105
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:57
 #, no-c-format
 msgid "Circling"
 msgstr "Kruženje"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "This forces the variometer into circling or cruise mode"
-msgstr ""
-"Ovo obilježava variometar u režim okretanja ili leta na konstantnoj visini"
+msgstr "Ovo obilježava variometar u režim okretanja ili leta na konstantnoj visini"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:120
 msgid "Vario Demo"
 msgstr "Demo variometra"
 
@@ -2884,7 +2777,7 @@ msgstr "UPOZ."
 #: src/Dialogs/Settings/dlgConfiguration.cpp:83 src/Dialogs/dlgAnalysis.cpp:570
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:83
-#: Data/Input/default.xci:725 Data/Input/default.xci:1344
+#: Data/Input/default.xci:725 Data/Input/default.xci:1351
 #, no-c-format
 msgid "Airspace"
 msgstr "Vazdušni prost."
@@ -2948,7 +2841,7 @@ msgid "Heading"
 msgstr "Smer"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:431
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:218
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:105
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:488
@@ -3016,12 +2909,12 @@ msgid "Defines how the airspace is filled with the configured color."
 msgstr ""
 "Definiše način sa kojeg je vazdušni prostor popunjeno konfigurisanim bojom."
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:75
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "ACK Dan"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "ACK Dan"
@@ -3029,11 +2922,11 @@ msgstr "ACK Dan"
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:313
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:314
 msgid "No Warnings"
 msgstr "Nema upozorenja"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:513 Data/Input/default.xci:1375
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:520 Data/Input/default.xci:1382
 msgid "Airspace Warnings"
 msgstr "Upozorenja vazd.prost."
 
@@ -3111,7 +3004,7 @@ msgstr ""
 "Отворити конфигурацију авиона сада?"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:175
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1201
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1208
 msgid "Flight Setup"
 msgstr "Konfiguracija leta"
 
@@ -3201,7 +3094,7 @@ msgstr "Elementi"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:711
-#: Data/Input/default.xci:1265
+#: Data/Input/default.xci:1272
 #, no-c-format
 msgid "Terrain"
 msgstr "Teren"
@@ -3300,7 +3193,7 @@ msgstr "Konfiguracija"
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Promene u konfiguraciji su sačuvane. Ponovo pokrenite XCSoar da bi se primenili promene."
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:220
 msgid "The name of this InfoBox panel configuration."
 msgstr "Назив ове конфигурације ИнфоБок панела."
 
@@ -3483,7 +3376,7 @@ msgstr "Digitron"
 #: src/Dialogs/dlgAnalysis.cpp:540 src/Dialogs/dlgAnalysis.cpp:550
 #: src/Dialogs/dlgAnalysis.cpp:559 src/Dialogs/dlgAnalysis.cpp:569
 #: src/Dialogs/dlgAnalysis.cpp:718 Data/Input/default.xci:1003
-#: Data/Input/default.xci:1434
+#: Data/Input/default.xci:1441
 msgid "Analysis"
 msgstr "Analize"
 
@@ -3534,7 +3427,7 @@ msgstr "Upozorenja"
 
 #: src/Dialogs/dlgChecklist.cpp:55 src/Dialogs/dlgChecklist.cpp:192
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:106
-#: Data/Input/default.xci:995 Data/Input/default.xci:1322
+#: Data/Input/default.xci:995 Data/Input/default.xci:1329
 msgid "Checklist"
 msgstr "Spisak provjere"
 
@@ -3766,7 +3659,7 @@ msgstr "Avijski polar"
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:126
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:278
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:300
-#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:183
+#: src/Dialogs/Weather/PCMetDialog.cpp:208 src/Dialogs/Weather/NOAAList.cpp:183
 #: src/Dialogs/Weather/NOAAList.cpp:199 src/Dialogs/Weather/NOAADetails.cpp:88
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:355
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:390
@@ -3788,7 +3681,7 @@ msgstr "Izabrani 'Waypoint'"
 msgid "Switch InfoBox"
 msgstr "Izmeni InfoBox"
 
-#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
+#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:113
 msgid "File"
 msgstr "Fajl"
 
@@ -3819,7 +3712,7 @@ msgstr "Ponavljanje"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:48 src/Dialogs/StartupDialog.cpp:83
 #: src/Dialogs/dlgQuickGuide.cpp:513 src/Dialogs/dlgQuickGuide.cpp:708
-#: Data/Input/default.xci:1143
+#: Data/Input/default.xci:1150
 msgid "Quit"
 msgstr "Izlaz"
 
@@ -3850,7 +3743,7 @@ msgstr "Unesite novu lozinku"
 
 #: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
 #: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:1021
-#: Data/Input/default.xci:1442
+#: Data/Input/default.xci:1449
 msgid "Status"
 msgstr "Статус"
 
@@ -4208,15 +4101,15 @@ msgstr "Set kao novu kuću"
 msgid "Pan to Waypoint"
 msgstr "Prikazi na putnoj točki"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:538 Data/Input/default.xci:1400
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:487 Data/Input/default.xci:1407
 msgid "GoTo"
 msgstr "Idi na"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:541
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:490
 msgid "Pan To"
 msgstr "Pan mod UKLJUČEN"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:1030
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:877
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -4229,7 +4122,7 @@ msgstr "Obriši putnu točku?"
 #: src/Dialogs/Waypoint/Manager.cpp:286
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:809
-#: Data/Input/default.xci:1241
+#: Data/Input/default.xci:1248
 msgid "Waypoint Editor"
 msgstr "Ažuriranje tačaka"
 
@@ -4406,7 +4299,7 @@ msgid "Display airspaces below the glider or within a margin."
 msgstr "Prikazujte vazdusne prostore ispod jedrilice ili u blizini."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
@@ -5109,104 +5002,77 @@ msgstr ""
 "Kontrolira da li treba koristiti \"finalni kliz\" InfoBox režim na "
 "stranicama \"auto\"."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:72
 msgid "Text size"
 msgstr "Veličina teksta"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
 msgid "Display Resolution"
 msgstr "Lokalno vreme"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
-msgid ""
-"The display resolution is used to adapt line widths, font size, landable "
-"size and more."
-msgstr ""
-"Resolucija prikaza se koristi za prilagođavanje širine linija, veličine "
-"fonta, veličine letljivih površina i mnogo drugih."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:78
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
+msgstr "Resolucija prikaza se koristi za prilagođavanje širine linija, veličine fonta, veličine letljivih površina i mnogo drugih."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:87
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:113
 msgid "Automatic"
 msgstr "Automatski"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:90
-#, c-format
-msgid "%d dpi"
-msgstr "%d DPI"
-
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:98
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
 msgid "Events"
 msgstr "Dogadjaji"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-msgid ""
-"The Input Events file defines the menu system and how XCSoar responds to "
-"button presses and events from external devices."
-msgstr ""
-"Fajl sa događajima unosa definira menijski sustav i način na koji XCSoar "
-"odgovara na pritiskove dugmeta i događaje izvanrednih uređaja."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
+msgid "The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices."
+msgstr "Fajl sa događajima unosa definira menijski sustav i način na koji XCSoar odgovara na pritiskove dugmeta i događaje izvanrednih uređaja."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 msgid "Language"
 msgstr "Jezik"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
-msgid ""
-"The language options selects translations for English texts to other "
-"languages. Select English for a native interface or Automatic to localise "
-"XCSoar according to the system settings."
-msgstr ""
-"Opcije jezika odabiraju prevodiove za tekstove na engleskom jeziku u druge "
-"jezike. Odaberite Engleski za nativni interfejs ili Automatizovano da biste "
-"lokalizovali XCSoar prema postavkama sistema."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:108
+msgid "The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings."
+msgstr "Opcije jezika odabiraju prevodiove za tekstove na engleskom jeziku u druge jezike. Odaberite Engleski za nativni interfejs ili Automatizovano da biste lokalizovali XCSoar prema postavkama sistema."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
 msgid "Menu timeout"
 msgstr "Vreme Menija"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
-msgid ""
-"This determines how long menus will appear on screen if the user does not "
-"make any button presses or interacts with the computer."
-msgstr ""
-"Ovo određuje koliko duže će meni se pojavljivati na ekranu ukoliko korisnik "
-"ne pritisne ni jedan dugme ili ne interagira sa računarskim uređajem."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:147
+msgid "This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer."
+msgstr "Ovo određuje koliko duže će meni se pojavljivati na ekranu ukoliko korisnik ne pritisne ni jedan dugme ili ne interagira sa računarskim uređajem."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:155
 #, no-c-format
 msgid "Keyboard"
 msgstr "Tastatura"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:156
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:157
 #, no-c-format
 msgid "HighScore Style"
 msgstr "Stil visokog rezultata"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
 msgid "Text input style"
 msgstr "Unosni stil teksta"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
-msgid ""
-"Determines how the user is prompted for text input (filename, teamcode etc.)"
-msgstr ""
-"Određuje način na koji se korisnik upozorava za unosenje tekstualnih "
-"podataka (ime datoteke, timovni kod itd.)"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
+msgid "Determines how the user is prompted for text input (filename, teamcode etc.)"
+msgstr "Određuje način na koji se korisnik upozorava za unosenje tekstualnih podataka (ime datoteke, timovni kod itd.)"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #, no-c-format
 msgid "OS settings"
 msgstr "Postavke operativne sistema"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
 msgid "Haptic feedback"
 msgstr "Haptična povratna informacija"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:179
 msgid "Determines if haptic feedback like vibration is used."
-msgstr ""
-"Određuje da li se korišćenjem haptične povratne informacije poput vibracije."
+msgstr "Određuje da li se korišćenjem haptične povratne informacije poput vibracije."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:56
 #, no-c-format
@@ -7816,12 +7682,12 @@ msgstr "Nema alternativa dostupne"
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:316
 #: src/Dialogs/Task/AlternatesListDialog.cpp:349 Data/Input/default.xci:582
-#: Data/Input/default.xci:1367
+#: Data/Input/default.xci:1374
 msgid "Alternates"
 msgstr "Alternative"
 
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
+#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:87
+#: src/Dialogs/Weather/RASPDialog.cpp:139
 msgid "Now"
 msgstr "Sada"
 
@@ -7835,7 +7701,7 @@ msgstr "Vraćanje"
 msgid "METAR and TAF"
 msgstr "METAR i TAF"
 
-#: src/Dialogs/Weather/RASPDialog.cpp:122
+#: src/Dialogs/Weather/RASPDialog.cpp:126
 msgid "Field"
 msgstr "Polje"
 
@@ -10796,23 +10662,23 @@ msgstr "Skala tonova"
 msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr "Prilagodbu osnovne skale tonova u svim režimovima."
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:85
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:89
 msgid "Beep type"
 msgstr "Tip zvuka"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:88
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:92
 msgid "Pitch scheme"
 msgstr "Schemata tonova"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:91
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:95
 msgid "Pitch scale"
 msgstr "Skala tonova"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:94
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:98
 msgid "Period scheme"
 msgstr "Schemata perioda"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:97
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:101
 msgid "Period scale"
 msgstr "Skala perioda"
 
@@ -11131,9 +10997,9 @@ msgstr "Krajnje klizanje kroz terena"
 
 #: Data/Input/default.xci:158 Data/Input/default.xci:165
 #: Data/Input/default.xci:648 Data/Input/default.xci:655
-#: Data/Input/default.xci:663 Data/Input/default.xci:1158
-#: Data/Input/default.xci:1165 Data/Input/default.xci:1172
-#: Data/Input/default.xci:1425
+#: Data/Input/default.xci:663 Data/Input/default.xci:1165
+#: Data/Input/default.xci:1172 Data/Input/default.xci:1179
+#: Data/Input/default.xci:1432
 msgid "Zoom"
 msgstr "Uvećanje"
 
@@ -11170,7 +11036,7 @@ msgid "Previous waypoint"
 msgstr "Претходна тачка пута"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:618
-#: Data/Input/default.xci:1310
+#: Data/Input/default.xci:1317
 msgid "Pilot event announced"
 msgstr "Obaveštenje o događaju pilot-a"
 
@@ -11180,23 +11046,23 @@ msgid ""
 "Page 2/2"
 msgstr "Navigacija"
 
-#: Data/Input/default.xci:574 Data/Input/default.xci:1359
+#: Data/Input/default.xci:574 Data/Input/default.xci:1366
 msgid "Waypoint List"
 msgstr "Ažuriranje tačaka"
 
-#: Data/Input/default.xci:608 Data/Input/default.xci:1414
+#: Data/Input/default.xci:608 Data/Input/default.xci:1421
 msgid "Dropped marker"
 msgstr "Pomerena marka"
 
-#: Data/Input/default.xci:611 Data/Input/default.xci:1417
+#: Data/Input/default.xci:611 Data/Input/default.xci:1424
 msgid "Marker Drop"
 msgstr "Opadanje marke"
 
-#: Data/Input/default.xci:621 Data/Input/default.xci:1313
+#: Data/Input/default.xci:621 Data/Input/default.xci:1320
 msgid "Pilot Event Announce"
 msgstr "Obaveštenje o događaju pilot-a"
 
-#: Data/Input/default.xci:629 Data/Input/default.xci:1330
+#: Data/Input/default.xci:629 Data/Input/default.xci:1337
 msgid "Target Show"
 msgstr "Cilj"
 
@@ -11210,19 +11076,19 @@ msgstr "Ekran"
 msgid "Page Show"
 msgstr "Stranica Prikaz"
 
-#: Data/Input/default.xci:677 Data/Input/default.xci:1351
+#: Data/Input/default.xci:677 Data/Input/default.xci:1358
 msgid "Pan Mode"
 msgstr "Pan mod UKLJUČEN"
 
-#: Data/Input/default.xci:696 Data/Input/default.xci:1250
+#: Data/Input/default.xci:696 Data/Input/default.xci:1257
 msgid "Labels"
 msgstr "Nalepnica"
 
-#: Data/Input/default.xci:704 Data/Input/default.xci:1258
+#: Data/Input/default.xci:704 Data/Input/default.xci:1265
 msgid "Trail"
 msgstr "Staza"
 
-#: Data/Input/default.xci:718 Data/Input/default.xci:1272
+#: Data/Input/default.xci:718 Data/Input/default.xci:1279
 msgid "Topo."
 msgstr "Topografski."
 
@@ -11238,7 +11104,7 @@ msgid ""
 "Page 3/3"
 msgstr "Konfiguracija"
 
-#: Data/Input/default.xci:850 Data/Input/default.xci:1474
+#: Data/Input/default.xci:850 Data/Input/default.xci:1481
 msgid "NMEA Logger"
 msgstr "Dnevnik rada"
 
@@ -11310,7 +11176,7 @@ msgid ""
 "Page 2/3"
 msgstr "Informacije"
 
-#: Data/Input/default.xci:971 Data/Input/default.xci:1407
+#: Data/Input/default.xci:971 Data/Input/default.xci:1414
 msgid "FLARM Radar"
 msgstr "Radar FLARM"
 
@@ -11324,15 +11190,15 @@ msgstr "Informacije"
 msgid "Traffic List"
 msgstr "Spisak Traffic-a"
 
-#: Data/Input/default.xci:1045 Data/Input/default.xci:1450
+#: Data/Input/default.xci:1045 Data/Input/default.xci:1457
 msgid "Thermal Assistant"
 msgstr "Pomoću Termike"
 
-#: Data/Input/default.xci:1072 Data/Input/default.xci:1458
+#: Data/Input/default.xci:1072 Data/Input/default.xci:1465
 msgid "Airspaces"
 msgstr "Vazdusni prostori"
 
-#: Data/Input/default.xci:1079 Data/Input/default.xci:1497
+#: Data/Input/default.xci:1079 Data/Input/default.xci:1504
 msgid "Message Repeat"
 msgstr "Smer"
 
@@ -11352,41 +11218,37 @@ msgstr "Konfig."
 msgid "Lock Screen"
 msgstr "Zatvorena ekrana"
 
-#: Data/Input/default.xci:1186
+#: Data/Input/default.xci:1193
 msgid "AVG/ALT"
 msgstr "Srednja visina / Visina"
 
-#: Data/Input/default.xci:1209
+#: Data/Input/default.xci:1216
 msgid "Setup Wind"
 msgstr "Pod.Vetra"
 
-#: Data/Input/default.xci:1217
+#: Data/Input/default.xci:1224
 msgid "Setup System"
 msgstr "Sistem"
 
-#: Data/Input/default.xci:1225
+#: Data/Input/default.xci:1232
 msgid "Settings Airspace"
 msgstr "Izbor vazd.prostora"
 
-#: Data/Input/default.xci:1233
+#: Data/Input/default.xci:1240
 msgid "Setup Plane"
 msgstr "Postavke letačke"
 
-#: Data/Input/default.xci:1337
+#: Data/Input/default.xci:1344
 msgid "MacCready"
 msgstr "Auto MacCready UKLJUČEN"
 
-#: Data/Input/default.xci:1383
+#: Data/Input/default.xci:1390
 msgid "Nearest Airspace"
 msgstr "Vazdušni prost."
 
-#: Data/Input/default.xci:1512
+#: Data/Input/default.xci:1519
 msgid "Quit XCSoar"
 msgstr "Izlazak iz XCSoar-a"
-#: src/net/client/WeGlide/UploadIGCFile.cpp:119
-msgid "Please set WeGlide Aircraft Type in Plane profile before uploading."
-msgstr "Поставите ВеГлиде Аирцрафт Типе у профил авиона пре отпремања."
-
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:53
 msgid "unknown"
 msgstr "непознато"
@@ -11408,7 +11270,7 @@ msgstr "Изаберите ВеГлиде Типе"
 msgid "Thermal hotspot"
 msgstr "Тхермал хотспот"
 
-#: src/Renderer/MacCreadyRenderer.cpp:31 src/Renderer/TaskSpeedRenderer.cpp:29
+#: src/Renderer/MacCreadyRenderer.cpp:36 src/Renderer/TaskSpeedRenderer.cpp:35
 #, no-c-format
 msgctxt "Average velocity abbreviation"
 msgid "Vave"
@@ -11718,5 +11580,24 @@ msgstr ""
 #. Title is StaticString<32> (31 bytes + NUL).
 #: src/InfoBoxes/Content/Task.cpp:1024
 msgid "Start unknown"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:370
+#, c-format
+msgid "%d secs"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:376
+#, c-format
+msgid " dist %d m"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:382
+msgid " vertical "
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:91
+#, c-format
+msgid "%u dpi"
 msgstr ""
 
