@@ -12,4 +12,5 @@ void
 RenderMapScale(Canvas &canvas,
                const WindowProjection& projection,
                const PixelRect &rc,
-               const OverlayLook &look);
+               const OverlayLook &look,
+               unsigned contour_spacing_m = 0);
