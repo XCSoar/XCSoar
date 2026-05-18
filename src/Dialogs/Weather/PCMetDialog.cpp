@@ -9,6 +9,7 @@
 #ifdef HAVE_PCMET
 
 #include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
@@ -16,8 +17,10 @@
 #include "ui/canvas/Canvas.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/TextListWidget.hpp"
-#include "Widget/ViewImageWidget.hpp"
 #include "Widget/LargeTextWidget.hpp"
+#include "Widget/ImageZoomView.hpp"
+#include "Widget/ImageZoomFrame.hpp"
+#include "Widget/Widget.hpp"
 #include "Weather/PCMet/Images.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "co/InvokeTask.hxx"
@@ -25,16 +28,170 @@
 #include "net/http/Init.hpp"
 #include "system/Path.hpp"
 #include "Interface.hpp"
+#include "ui/event/KeyCode.hpp"
+
+class PCMetImageWidget final : public NullWidget {
+  const Bitmap &bitmap;
+  ImageZoomFrame image_window;
+  int zoom = 0;
+
+  Button *magnify_button = nullptr;
+  Button *shrink_button = nullptr;
+
+  void UpdateZoomControls() noexcept
+  {
+    if (magnify_button != nullptr)
+      magnify_button->SetEnabled(zoom < ImageZoomView::max_zoom_level);
+    if (shrink_button != nullptr)
+      shrink_button->SetEnabled(zoom > 0);
+  }
+
+  void AdjustView(const int old_zoom, const int new_zoom) noexcept
+  {
+    if (!image_window.IsDefined())
+      return;
+
+    const PixelRect rc = image_window.GetClientRect();
+    ImageZoomView::AdjustImageViewOnZoomChange(old_zoom, new_zoom,
+                                               image_window.GetViewPosition(),
+                                               rc.GetSize(), bitmap.GetSize());
+    image_window.ClearPendingOffset();
+  }
+
+public:
+  explicit PCMetImageWidget(const Bitmap &_bitmap) noexcept
+    :bitmap(_bitmap) {}
+
+  void SetZoomButtons(Button *magnify, Button *shrink) noexcept
+  {
+    magnify_button = magnify;
+    shrink_button = shrink;
+    UpdateZoomControls();
+  }
+
+  void Magnify() noexcept
+  {
+    if (zoom >= ImageZoomView::max_zoom_level)
+      return;
+
+    const int old_zoom = zoom;
+    ++zoom;
+    AdjustView(old_zoom, zoom);
+    image_window.Invalidate();
+    UpdateZoomControls();
+  }
+
+  void Shrink() noexcept
+  {
+    if (zoom <= 0)
+      return;
+
+    const int old_zoom = zoom;
+    --zoom;
+    AdjustView(old_zoom, zoom);
+    image_window.Invalidate();
+    UpdateZoomControls();
+  }
+
+  bool
+  TryImageKey(unsigned key_code) noexcept
+  {
+    switch (key_code) {
+    case KEY_F2:
+      Magnify();
+      return true;
+
+    case KEY_F3:
+      Shrink();
+      return true;
+
+    case KEY_LEFT:
+      if (zoom == 0)
+        return false;
+      image_window.NudgeViewByPixelOffset({-50, 0});
+      return true;
+
+    case KEY_RIGHT:
+      if (zoom == 0)
+        return false;
+      image_window.NudgeViewByPixelOffset({50, 0});
+      return true;
+
+    case KEY_UP:
+      if (zoom == 0)
+        return false;
+      image_window.NudgeViewByPixelOffset({0, -50});
+      return true;
+
+    case KEY_DOWN:
+      if (zoom == 0)
+        return false;
+      image_window.NudgeViewByPixelOffset({0, 50});
+      return true;
+
+    default:
+      return false;
+    }
+  }
+
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override
+  {
+    WindowStyle image_style;
+    image_style.Hide();
+    image_style.ControlParent();
+
+    image_window.Create(parent, rc, image_style);
+    image_window.SetContent(&bitmap, &zoom);
+    image_window.SetTryKeyInput(
+      [this](unsigned key_code) { return TryImageKey(key_code); });
+    UpdateZoomControls();
+  }
+
+  void Unprepare() noexcept override
+  {
+    image_window.SetTryKeyInput(nullptr);
+  }
+
+  void Show(const PixelRect &rc) noexcept override
+  {
+    image_window.MoveAndShow(rc);
+    image_window.SetFocus();
+  }
+
+  void Hide() noexcept override
+  {
+    image_window.Hide();
+  }
+
+  bool SetFocus() noexcept override
+  {
+    if (!image_window.IsDefined())
+      return false;
+
+    image_window.SetFocus();
+    return true;
+  }
+
+  bool KeyPress(unsigned key_code) noexcept override
+  {
+    return TryImageKey(key_code);
+  }
+};
 
 static void
 BitmapDialog(const Bitmap &bitmap)
 {
-  TWidgetDialog<ViewImageWidget>
-    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-           UIGlobals::GetDialogLook(),
-           "pc_met", new ViewImageWidget(bitmap));
+  WidgetDialog dialog(WidgetDialog::Full{},
+                      UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      "pc_met", new PCMetImageWidget(bitmap));
+  auto &image = static_cast<PCMetImageWidget &>(dialog.GetWidget());
+
   dialog.AddButton(_("Close"), mrOK);
-//  dialog.SetWidget();
+  image.SetZoomButtons(
+    dialog.AddSymbolButton("+", [&image]() { image.Magnify(); }),
+    dialog.AddSymbolButton("-", [&image]() { image.Shrink(); }));
   dialog.ShowModal();
 }
 
