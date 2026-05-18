@@ -16,9 +16,12 @@
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Protection.hpp"
 #include "Profile/Current.hpp"
@@ -149,6 +152,114 @@ InfoBoxContentHome::HandleClick() noexcept
   }
 
   Profile::Save();
+  return true;
+}
+
+static GlideResult
+ComputeActiveWaypointGlide(const MoreData &basic,
+                           const ComputerSettings &settings,
+                           const DerivedInfo &calculated,
+                           const Waypoint &waypoint) noexcept
+{
+  const GlideState glide_state(
+    basic.location.DistanceBearing(waypoint.location),
+    waypoint.elevation + settings.task.safety_height_arrival,
+    basic.nav_altitude,
+    calculated.GetWindOrZero());
+
+  return MacCready::Solve(settings.task.glide,
+                          settings.polar.glide_polar_task,
+                          glide_state);
+}
+
+void
+InfoBoxContentActiveWaypoint::Update(InfoBoxData &data) noexcept
+{
+  const MoreData &basic = CommonInterface::Basic();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+
+  data.SetTitle(_("Active WP"));
+
+  const auto waypoint =
+    (backend_components && backend_components->protected_task_manager)
+    ? backend_components->protected_task_manager->GetActiveWaypoint()
+    : nullptr;
+
+  if (!waypoint ||
+      !basic.location_available ||
+      !basic.NavAltitudeAvailable() ||
+      !settings.polar.glide_polar_task.IsValid()) {
+    data.SetInvalid();
+    data.SetCommentInvalid();
+    return;
+  }
+
+  data.SetTitle(waypoint->name.c_str());
+
+  const GlideResult result =
+    ComputeActiveWaypointGlide(basic, settings, calculated, *waypoint);
+  data.SetValueFromArrival(result.SelectAltitudeDifference(settings.task.glide));
+  data.SetCommentFromDistance(basic.location.DistanceS(waypoint->location));
+}
+
+bool
+InfoBoxContentActiveWaypoint::HandleClick() noexcept
+{
+  if (!data_components || !data_components->waypoints)
+    return false;
+  if (!backend_components || !backend_components->protected_task_manager)
+    return false;
+
+  auto &waypoints = *data_components->waypoints;
+  auto &ptm = *backend_components->protected_task_manager;
+  const GeoPoint location = CommonInterface::Basic().location;
+
+  std::unique_ptr<OrderedTask> task_clone = ptm.TaskClone();
+  const bool has_ordered_task = task_clone && task_clone->TaskSize() > 0;
+  const unsigned ordered_task_index =
+    has_ordered_task ? task_clone->GetActiveIndex() : 0;
+
+  WaypointPtr selected;
+  try {
+    selected = ShowWaypointListDialog(waypoints, location,
+                                      has_ordered_task ? task_clone.get()
+                                                       : nullptr,
+                                      ordered_task_index,
+                                      std::nullopt,
+                                      has_ordered_task);
+  } catch (...) {
+    return false;
+  }
+  if (!selected)
+    return true;
+
+  int target_index = -1;
+  if (has_ordered_task) {
+    for (unsigned i = 0; i < task_clone->TaskSize(); ++i) {
+      if (task_clone->GetPoint(i).GetWaypoint() == *selected) {
+        target_index = (int)i;
+        break;
+      }
+    }
+  }
+
+  if (target_index >= 0) {
+    std::unique_ptr<OrderedTask> current_task = ptm.TaskClone();
+    const unsigned current_active_index =
+      (current_task && current_task->TaskSize() > 0)
+        ? current_task->GetActiveIndex()
+        : ordered_task_index;
+    if ((unsigned)target_index != current_active_index)
+      ptm.IncrementActiveTaskPoint(target_index - (int)current_active_index);
+  } else {
+    {
+      ScopeSuspendAllThreads suspend;
+      waypoints.EraseTempGoto();
+    }
+    ptm.DoGoto(std::move(selected));
+  }
+
   return true;
 }
 

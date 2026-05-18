@@ -1186,6 +1186,14 @@ static constexpr MetaData meta_data[] = {
     altitude_infobox_panels,
   },
 
+  // e_ActiveWaypoint
+  {
+    N_("Active Waypoint"),
+    N_("Active WP"),
+    N_("Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."),
+    IBFHelper<InfoBoxContentActiveWaypoint>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

@@ -152,6 +152,7 @@ namespace InfoBoxFactory
     /* 130 */
     e_Home, /* Combined home waypoint infobox: shows waypoint name, arrival altitude diff, and distance */
     e_AltitudeIGC, /* Logger or ISA pressure altitude only (no QNH baro / GPS) */
+    e_ActiveWaypoint, /* Active waypoint infobox: shows the current task's next waypoint name (or Goto waypoint if no task), arrival altitude diff, and distance */
     e_NUM_TYPES /* Last item */
   };
 

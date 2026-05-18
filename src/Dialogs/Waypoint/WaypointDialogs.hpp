@@ -23,12 +23,19 @@ class OrderedTask;
  * state was left by the previous invocation, except the name field
  * which is always cleared.  Used by ``event=GotoLookup <misc>`` to
  * jump straight to a category.
+ *
+ * @param prepopulate_with_task If true and @p ordered_task is non-null,
+ * open the list pre-populated with the task's waypoints in task order
+ * (with a leading "Choose a filter" prompt row), instead of the
+ * filter-driven full database.  Used by the Active Waypoint InfoBox
+ * tap action.
  */
 WaypointPtr
 ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0,
-                       std::optional<TypeFilter> initial_type = std::nullopt);
+                       std::optional<TypeFilter> initial_type = std::nullopt,
+                       bool prepopulate_with_task = false);
 void
 ShowWaypointListPersistentDialog(
   const GeoPoint &location, bool allow_navigation = true,
