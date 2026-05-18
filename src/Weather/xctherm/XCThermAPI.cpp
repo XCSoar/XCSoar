@@ -351,40 +351,6 @@ XCThermAPI::GetAvailableForecastHours(const std::string &parameter) const noexce
 }
 
 /* ------------------------------------------------------------------ */
-/* Find best slot for a target hour                                    */
-/* ------------------------------------------------------------------ */
-
-bool
-XCThermAPI::FindSlotForHour(const std::string &parameter,
-                            unsigned target_utc_hour,
-                            std::string &out_date,
-                            std::string &out_run_hour,
-                            unsigned &out_step) const noexcept
-{
-  for (const auto &p : available_parameters) {
-    if (p.name != parameter)
-      continue;
-
-    /* Prefer the latest run (last slot in the list) */
-    for (int i = (int)p.slots.size() - 1; i >= 0; --i) {
-      const auto &slot = p.slots[i];
-      unsigned run_h = (unsigned)std::atoi(slot.run_hour.c_str());
-
-      for (unsigned s = slot.step_min; s <= slot.step_max; s += slot.step_step) {
-        if ((run_h + s) % 24 == target_utc_hour) {
-          out_date = slot.run_date;
-          out_run_hour = slot.run_hour;
-          out_step = s;
-          return true;
-        }
-      }
-    }
-  }
-
-  return false;
-}
-
-/* ------------------------------------------------------------------ */
 /* Find best slot for an offset from current time                      */
 /* ------------------------------------------------------------------ */
 
@@ -560,33 +526,19 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
          wire_bytes > 0 ? (double)out_geojson.size() / wire_bytes : 1.0,
          speed_bps / 1024.0);
 
-  /* Store in cache so ControlsWidget can use without re-downloading */
-  geojson_cache[parameter][step] = out_geojson;
-  /* Also index by the actual UTC hour this step corresponds to */
-  {
-    unsigned run_h = (unsigned)std::atoi(run_hour.c_str());
-    unsigned forecast_utc = (run_h + step) % 24;
-    geojson_cache[parameter][forecast_utc] = out_geojson;
-  }
+  /* Build the cache entry once; commit it atomically only after the
+     curl handle reported success above. ControlsWidget reads from
+     geojson_cache by UTC hour. */
+  CachedSlice slice;
+  slice.geojson = out_geojson;
+  slice.run_date = date;
+  slice.run_hour = run_hour;
+
+  const unsigned run_h = (unsigned)std::atoi(run_hour.c_str());
+  const unsigned forecast_utc = (run_h + step) % 24;
+  geojson_cache[parameter][forecast_utc] = std::move(slice);
 
   return !out_geojson.empty();
-}
-
-bool
-XCThermAPI::DownloadLayerForHour(const std::string &parameter,
-                                 unsigned target_utc_hour,
-                                 std::string &out_geojson,
-                                 OperationEnvironment *env) noexcept
-{
-  std::string date, run_hour;
-  unsigned step;
-
-  if (!FindSlotForHour(parameter, target_utc_hour, date, run_hour, step)) {
-    LogFmt("xctherm: no slot for {}@{}h", parameter, target_utc_hour);
-    return false;
-  }
-
-  return DownloadGeoJSON(parameter, date, run_hour, step, out_geojson, env);
 }
 
 /* ------------------------------------------------------------------ */
@@ -603,17 +555,37 @@ XCThermAPI::IsLayerCached(const std::string &parameter,
   return it->second.find(utc_hour) != it->second.end();
 }
 
+bool
+XCThermAPI::IsCachedAtRun(const std::string &parameter,
+                          unsigned utc_hour,
+                          const std::string &run_date,
+                          const std::string &run_hour) const noexcept
+{
+  const auto *slice = GetCachedSlice(parameter, utc_hour);
+  return slice != nullptr
+    && slice->run_date == run_date
+    && slice->run_hour == run_hour;
+}
+
 const std::string &
 XCThermAPI::GetCachedGeoJSON(const std::string &parameter,
                               unsigned utc_hour) const noexcept
 {
+  const auto *slice = GetCachedSlice(parameter, utc_hour);
+  return slice != nullptr ? slice->geojson : kEmptyString;
+}
+
+const XCThermAPI::CachedSlice *
+XCThermAPI::GetCachedSlice(const std::string &parameter,
+                           unsigned utc_hour) const noexcept
+{
   auto it = geojson_cache.find(parameter);
   if (it == geojson_cache.end())
-    return kEmptyString;
+    return nullptr;
   auto it2 = it->second.find(utc_hour);
   if (it2 == it->second.end())
-    return kEmptyString;
-  return it2->second;
+    return nullptr;
+  return &it2->second;
 }
 
 std::vector<unsigned>
@@ -626,16 +598,6 @@ XCThermAPI::GetCachedHours(const std::string &parameter) const noexcept
   for (const auto &kv : it->second)
     result.push_back(kv.first);
   std::sort(result.begin(), result.end());
-  return result;
-}
-
-std::vector<std::string>
-XCThermAPI::GetCachedParameters() const noexcept
-{
-  std::vector<std::string> result;
-  for (const auto &kv : geojson_cache)
-    if (!kv.second.empty())
-      result.push_back(kv.first);
   return result;
 }
 
