@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Volatile.hpp"
+#include "util/StringFormat.hpp"
 #include "NMEA/Derived.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "Math/Util.hpp"
@@ -20,7 +21,7 @@ void
 Vega::VolatileData::SendTo(Port &port, OperationEnvironment &env) const
 {
   char buffer[100];
-  sprintf(buffer, "PDVMC,%u,%u,%u,%d,%u",
-          mc, stf, circling, terrain_altitude, qnh);
+  StringFormat(buffer, sizeof(buffer), "PDVMC,%u,%u,%u,%d,%u",
+           mc, stf, circling, terrain_altitude, qnh);
   PortWriteNMEA(port, buffer, env);
 }

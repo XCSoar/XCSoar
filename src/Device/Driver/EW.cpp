@@ -15,6 +15,7 @@
 #include "Operation/Operation.hpp"
 #include "util/TruncateString.hpp"
 #include "util/ScopeExit.hxx"
+#include "lib/fmt/ToBuffer.hxx"
 
 #include <algorithm>
 
@@ -52,9 +53,8 @@ WriteWithChecksum(Port &port, const char *String, OperationEnvironment &env)
 {
   port.FullWrite(String, env, std::chrono::seconds{1});
 
-  char sTmp[8];
-  sprintf(sTmp, "%02X\r\n", ::NMEAChecksum(String));
-  port.FullWrite(sTmp, env, std::chrono::seconds{1});
+  const auto checksum = FmtBuffer<8>("{:02X}\r\n", ::NMEAChecksum(String));
+  port.FullWrite(checksum.c_str(), env, std::chrono::seconds{1});
 }
 
 bool
@@ -79,19 +79,10 @@ EWDevice::TryConnect(OperationEnvironment &env)
   return false;
 }
 
-static void
-convert_string(char *dest, size_t size, const char *src)
-{
-  strncpy(dest, src, size - 1);
-  dest[size - 1] = '\0';
-}
-
 bool
 EWDevice::DeclareInner(const struct Declaration &declaration,
                        OperationEnvironment &env)
 {
-  char sTmp[72];
-
   ewDecelTpIndex = 0;
 
   if (!TryConnect(env))
@@ -102,15 +93,17 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   env.Sleep(std::chrono::milliseconds(50));
 
   char sPilot[13], sGliderType[9], sGliderID[9];
-  convert_string(sPilot, sizeof(sPilot), declaration.pilot_name);
-  convert_string(sGliderType, sizeof(sGliderType), declaration.aircraft_type);
-  convert_string(sGliderID, sizeof(sGliderID), declaration.aircraft_registration);
+  CopyTruncateString(sPilot, sizeof(sPilot), declaration.pilot_name);
+  CopyTruncateString(sGliderType, sizeof(sGliderType), declaration.aircraft_type);
+  CopyTruncateString(sGliderID, sizeof(sGliderID), declaration.aircraft_registration);
 
   // build string (field 4-5 are GPS info, no idea what to write)
-  sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r", sPilot, sGliderType, sGliderID,
-          "" /* GPS Model */, "" /* GPS Serial No. */, "" /* Flight Date */
-          /* format unknown, left blank (GPS has a RTC) */);
-  port.FullWrite(sTmp, env, std::chrono::seconds{1});
+  const auto pilot_info = FmtBuffer<72>(
+    "{:<12}{:<8}{:<8}{:<12}{:<12}{:<6}\r",
+    sPilot, sGliderType, sGliderID,
+    "" /* GPS Model */, "" /* GPS Serial No. */, "" /* Flight Date */
+    /* format unknown, left blank (GPS has a RTC) */);
+  port.FullWrite(pilot_info.c_str(), env, std::chrono::seconds{1});
 
   port.ExpectString("OK\r", env);
 
@@ -142,8 +135,8 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
 
   // clear all 6 TP's
   for (int i = 0; i < 6; i++) {
-    sprintf(sTmp, "#CTP%02d", i);
-    WriteWithChecksum(port, sTmp, env);
+    const auto clear_tp = FmtBuffer<16>("#CTP{:02d}", i);
+    WriteWithChecksum(port, clear_tp.c_str(), env);
     port.ExpectString("OK\r", env);
   }
 
@@ -185,7 +178,6 @@ EWDevice::Declare(const struct Declaration &declaration,
 bool
 EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
 {
-  char EWRecord[100];
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
   char NoS, EoW;
@@ -198,10 +190,10 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
     return false;
 
   char IDString[12];
-  char *end = CopyTruncateString(IDString, 7, way_point.name.data());
+  char *end = CopyTruncateString(IDString, 9, way_point.name.data());
 
   // fill up with spaces
-  std::fill(end, IDString + 6, ' ');
+  std::fill(end, IDString + 8, ' ');
 
   // prepare lat
   tmp = (double)way_point.location.latitude.Degrees();
@@ -233,11 +225,18 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
   const unsigned EW_Flags = (short)(EoW_Flag | NoS_Flag);
 
   // setup command string
-  sprintf(EWRecord, "#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X",
-          ewDecelTpIndex, IDString[0], IDString[1], IDString[2], IDString[3],
-          IDString[4], IDString[5], EW_Flags, DegLat, (int)MinLat / 10, DegLon,
-          (int)MinLon / 10);
-  WriteWithChecksum(port, EWRecord, env);
+  const auto ew_record = FmtBuffer<100>(
+    "#STP{:02X}{:02X}{:02X}{:02X}{:02X}"
+    "{:02X}{:02X}{:02X}{:02X}{:02X}"
+    "{:04X}{:02X}{:04X}{:02X}",
+    ewDecelTpIndex,
+    (unsigned char)IDString[0], (unsigned char)IDString[1],
+    (unsigned char)IDString[2], (unsigned char)IDString[3],
+    (unsigned char)IDString[4], (unsigned char)IDString[5],
+    (unsigned char)IDString[6], (unsigned char)IDString[7],
+    EW_Flags, DegLat, (int)MinLat / 10,
+    DegLon, (int)MinLon / 10);
+  WriteWithChecksum(port, ew_record.c_str(), env);
 
   // wait for response
   port.ExpectString("OK\r", env);

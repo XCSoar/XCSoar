@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <string_view>
 
@@ -67,5 +68,6 @@ VerifyNMEAChecksum(const char *p) noexcept;
  * Caclulates the checksum of the specified string, and appends it at
  * the end, preceded by an asterisk ('*').
  */
-void
-AppendNMEAChecksum(char *p) noexcept;
+[[nodiscard]]
+bool
+AppendNMEAChecksum(char *p, size_t capacity) noexcept;

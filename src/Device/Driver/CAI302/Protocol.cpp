@@ -7,8 +7,12 @@
 #include "util/ByteOrder.hxx"
 #include "util/SpanCast.hxx"
 
+#include <fmt/format.h>
+
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
+#include <string>
 #include <string.h>
 #include <stdio.h>
 
@@ -40,7 +44,7 @@ CAI302::CommandMode(Port &port, OperationEnvironment &env)
 }
 
 void
-CAI302::SendCommandQuick(Port &port, const char *cmd,
+CAI302::SendCommandQuick(Port &port, std::string_view cmd,
                          OperationEnvironment &env)
 {
   CommandMode(port, env);
@@ -49,7 +53,7 @@ CAI302::SendCommandQuick(Port &port, const char *cmd,
 }
 
 void
-CAI302::SendCommand(Port &port, const char *cmd,
+CAI302::SendCommand(Port &port, std::string_view cmd,
                     OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout)
 {
@@ -152,7 +156,7 @@ CAI302::ReadLargeReply(Port &port, std::span<std::byte> dest,
 }
 
 int
-CAI302::UploadShort(Port &port, const char *command,
+CAI302::UploadShort(Port &port, std::string_view command,
                     std::span<std::byte> response,
                     OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout)
@@ -169,7 +173,7 @@ CAI302::UploadShort(Port &port, const char *command,
 }
 
 int
-CAI302::UploadLarge(Port &port, const char *command,
+CAI302::UploadLarge(Port &port, std::string_view command,
                     std::span<std::byte> response,
                     OperationEnvironment &env,
                     std::chrono::steady_clock::duration timeout)
@@ -209,9 +213,7 @@ CAI302::UploadFileList(Port &port, unsigned i, FileList &data,
 {
   assert(i < 8);
 
-  char cmd[16];
-  snprintf(cmd, sizeof(cmd), "B %u\r", 196 + i);
-  return UploadLarge(port, cmd,
+  return UploadLarge(port, fmt::format("B {}\r", 196 + i),
                      ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
@@ -222,9 +224,7 @@ CAI302::UploadFileASCII(Port &port, unsigned i, FileASCII &data,
 {
   assert(i < 64);
 
-  char cmd[16];
-  snprintf(cmd, sizeof(cmd), "B %u\r", 64 + i);
-  return UploadLarge(port, cmd,
+  return UploadLarge(port, fmt::format("B {}\r", 64 + i),
                      ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
@@ -235,9 +235,7 @@ CAI302::UploadFileBinary(Port &port, unsigned i, FileBinary &data,
 {
   assert(i < 64);
 
-  char cmd[16];
-  snprintf(cmd, sizeof(cmd), "B %u\r", 256 + i);
-  return UploadLarge(port, cmd,
+  return UploadLarge(port, fmt::format("B {}\r", 256 + i),
                      ReferenceAsWritableBytes(data),
                      env) == sizeof(data);
 }
@@ -296,9 +294,7 @@ bool
 CAI302::UploadPilot(Port &port, unsigned i, Pilot &data,
                     OperationEnvironment &env)
 {
-  char cmd[16];
-  snprintf(cmd, sizeof(cmd), "O %u\r", i);
-  return UploadShort(port, cmd,
+  return UploadShort(port, fmt::format("O {}\r", i),
                      ReferenceAsWritableBytes(data),
                      env) > 0;
 }
@@ -308,12 +304,10 @@ CAI302::UploadPilotBlock(Port &port, unsigned start, unsigned count,
                          unsigned record_size, std::byte *buffer,
                          OperationEnvironment &env)
 {
-  char cmd[16];
-  snprintf(cmd, sizeof(cmd), "O B %u %u\r", start, count);
-
   /* the CAI302 data port user's guide 2.2 says that the "O B"
      response is "large", but this seems wrong */
-  int nbytes = UploadShort(port, cmd, {buffer, count * record_size}, env);
+  int nbytes = UploadShort(port, fmt::format("O B {} {}\r", start, count),
+                           {buffer, count * record_size}, env);
   return nbytes >= 0 && nbytes % record_size == 0
     ? nbytes / record_size
     : -1;
@@ -334,7 +328,7 @@ CAI302::DownloadMode(Port &port, OperationEnvironment &env)
 }
 
 void
-CAI302::DownloadCommand(Port &port, const char *command,
+CAI302::DownloadCommand(Port &port, std::string_view command,
                         OperationEnvironment &env,
                         [[maybe_unused]] std::chrono::steady_clock::duration timeout)
 {
@@ -342,53 +336,62 @@ CAI302::DownloadCommand(Port &port, const char *command,
   WaitDownloadPrompt(port, env);
 }
 
+template<std::size_t N>
+static std::string_view
+MakeStringView(const char (&value)[N]) noexcept
+{
+  return {value, strnlen(value, N)};
+}
+
+static std::string_view
+MakeStringView(const char *value, std::size_t max_size) noexcept
+{
+  return {value, strnlen(value, max_size)};
+}
+
 void
 CAI302::DownloadPilot(Port &port, const Pilot &pilot, unsigned ordinal,
                       OperationEnvironment &env)
 {
-  char buffer[256];
-  snprintf(buffer, sizeof(buffer),
-           "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
-           pilot.name,
-           (ordinal << 8) | pilot.old_units,
-           pilot.old_temperatur_units,
-           pilot.sink_tone,
-           pilot.total_energy_final_glide,
-           pilot.show_final_glide_altitude_difference,
-           pilot.map_datum,
-           FromBE16(pilot.approach_radius),
-           FromBE16(pilot.arrival_radius),
-           FromBE16(pilot.enroute_logging_interval),
-           FromBE16(pilot.close_logging_interval),
-           FromBE16(pilot.time_between_flight_logs),
-           FromBE16(pilot.minimum_speed_to_force_flight_logging),
-           pilot.stf_dead_band,
-           pilot.reserved_vario,
-           FromBE16(pilot.unit_word),
-           FromBE16(pilot.margin_height));
-
-  DownloadCommand(port, buffer, env);
+  DownloadCommand(port, fmt::format(
+                    "O,{:<24},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\r",
+                    MakeStringView(pilot.name),
+                    (ordinal << 8) | pilot.old_units,
+                    pilot.old_temperatur_units,
+                    pilot.sink_tone,
+                    pilot.total_energy_final_glide,
+                    pilot.show_final_glide_altitude_difference,
+                    pilot.map_datum,
+                    FromBE16(pilot.approach_radius),
+                    FromBE16(pilot.arrival_radius),
+                    FromBE16(pilot.enroute_logging_interval),
+                    FromBE16(pilot.close_logging_interval),
+                    FromBE16(pilot.time_between_flight_logs),
+                    FromBE16(pilot.minimum_speed_to_force_flight_logging),
+                    pilot.stf_dead_band,
+                    pilot.reserved_vario,
+                    FromBE16(pilot.unit_word),
+                    FromBE16(pilot.margin_height)),
+                  env);
 }
 
 void
 CAI302::DownloadPolar(Port &port, const Polar &polar,
                       OperationEnvironment &env)
 {
-  char buffer[256];
-  snprintf(buffer, sizeof(buffer),
-           "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
-           polar.glider_type,
-           polar.glider_id,
-           polar.best_ld,
-           polar.best_glide_speed,
-           polar.two_ms_sink_at_speed,
-           FromBE16(polar.weight_in_litres),
-           FromBE16(polar.ballast_capacity),
-           0,
-           FromBE16(polar.config_word),
-           FromBE16(polar.wing_area));
-
-  DownloadCommand(port, buffer, env);
+  DownloadCommand(port, fmt::format(
+                    "G,{:<12},{:<12},{},{},{},{},{},{},{},{}\r",
+                    MakeStringView(polar.glider_type),
+                    MakeStringView(polar.glider_id),
+                    polar.best_ld,
+                    polar.best_glide_speed,
+                    polar.two_ms_sink_at_speed,
+                    FromBE16(polar.weight_in_litres),
+                    FromBE16(polar.ballast_capacity),
+                    0,
+                    FromBE16(polar.config_word),
+                    FromBE16(polar.wing_area)),
+                  env);
 }
 
 bool
@@ -404,15 +407,13 @@ bool
 CAI302::UploadNavpoint(Port &port, unsigned i, Navpoint &data,
                        OperationEnvironment &env)
 {
-  char cmd[16];
-  snprintf(cmd, sizeof(cmd), "C %u\r", i);
-  return UploadShort(port, cmd,
+  return UploadShort(port, fmt::format("C {}\r", i),
                      ReferenceAsWritableBytes(data),
                      env) > 0;
 }
 
-static void
-FormatGeoPoint(char *buffer, const GeoPoint &location)
+static std::string
+FormatGeoPoint(const GeoPoint &location)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -436,9 +437,9 @@ FormatGeoPoint(char *buffer, const GeoPoint &location)
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60;
 
-  sprintf(buffer, "%02d%07.4f%c,%03d%07.4f%c",
-          DegLat, MinLat, NoS,
-          DegLon, MinLon, EoW);
+  return fmt::format("{:02d}{:07.4f}{},{:03d}{:07.4f}{}",
+                     DegLat, MinLat, NoS,
+                     DegLon, MinLon, EoW);
 }
 
 void
@@ -453,8 +454,7 @@ CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
 {
   assert(name != nullptr);
 
-  char location_string[32];
-  FormatGeoPoint(location_string, location);
+  const auto location_string = FormatGeoPoint(location);
 
   unsigned attr = turnpoint | (airfield << 1) | (markpoint << 2) |
     (landing_point << 3) | (start_point << 4) | (finish_point << 5) |
@@ -464,10 +464,11 @@ CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
   if (remark == nullptr)
     remark = "";
 
-  char buffer[256];
-  snprintf(buffer, sizeof(buffer), "C,0,%s,%d,%u,%u,%-12s,%-12s\r",
-           location_string, altitude, id, attr, name, remark);
-  DownloadCommand(port, buffer, env);
+  DownloadCommand(port, fmt::format("C,0,{},{},{},{},{:<12},{:<12}\r",
+                                    location_string, altitude, id, attr,
+                                    MakeStringView(name, 12),
+                                    MakeStringView(remark, 12)),
+                  env);
 }
 
 void
@@ -480,17 +481,10 @@ void
 CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
                   int altitude, const char *name, OperationEnvironment &env)
 {
-  char location_string[32];
-  FormatGeoPoint(location_string, location);
-
-  char buffer[256];
-  snprintf(buffer, sizeof(buffer),
-           "D,%d,%s,%s,%d\r",
-           128 + i, location_string,
-           name,
-           altitude);
-
-  DownloadCommand(port, buffer, env);
+  DownloadCommand(port, fmt::format("D,{},{},{},{}\r",
+                                    128 + i, FormatGeoPoint(location),
+                                    name, altitude),
+                  env);
 }
 
 void
@@ -526,9 +520,7 @@ CAI302::StopLogging(Port &port, OperationEnvironment &env)
 void
 CAI302::SetVolume(Port &port, unsigned volume, OperationEnvironment &env)
 {
-  char cmd[16];
-  sprintf(cmd, "VOL %u\r", volume);
-  SendCommand(port, cmd, env);
+  SendCommand(port, fmt::format("VOL {}\r", volume), env);
 }
 
 void
@@ -572,7 +564,5 @@ CAI302::SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env)
   if (n == 0)
     throw std::runtime_error("Baud rate not supported by CAI302");
 
-  char cmd[20];
-  sprintf(cmd, "BAUD %u\r", n);
-  SendCommandQuick(port, cmd, env);
+  SendCommandQuick(port, fmt::format("BAUD {}\r", n), env);
 }

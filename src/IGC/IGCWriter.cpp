@@ -7,6 +7,7 @@
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 #include "system/Path.hpp"
+#include "util/StringFormat.hpp"
 #include "util/SpanCast.hxx"
 
 #include <cassert>
@@ -92,13 +93,19 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
   char buffer[100];
 
   // Flight recorder ID number MUST go first..
-  sprintf(buffer, "AXCS%s", logger_id);
-  WriteLine(buffer);
+  const int logger_id_length = StringFormat(buffer, sizeof(buffer), "AXCS%s", logger_id);
+  assert(logger_id_length >= 0 &&
+         static_cast<size_t>(logger_id_length) < sizeof(buffer));
+  if (logger_id_length >= 0 && static_cast<size_t>(logger_id_length) < sizeof(buffer))
+    WriteLine(buffer);
 
   if (date_time.IsDatePlausible()) {
-    sprintf(buffer, "HFDTE%02u%02u%02u",
-            date_time.day, date_time.month, date_time.year % 100);
-    WriteLine(buffer);
+    const int dte_length = StringFormat(buffer, sizeof(buffer), "HFDTE%02u%02u%02u",
+                                        date_time.day, date_time.month, date_time.year % 100);
+    assert(dte_length >= 0 &&
+           static_cast<size_t>(dte_length) < sizeof(buffer));
+    if (dte_length >= 0 && static_cast<size_t>(dte_length) < sizeof(buffer))
+      WriteLine(buffer);
   }
 
   if (!simulator)
@@ -122,9 +129,10 @@ IGCWriter::StartDeclaration(const BrokenDateTime &date_time,
                             const int number_of_turnpoints)
 {
   if (date_time.IsPlausible()) {
-    char buffer[64];
+    char buffer[64] = {};
     FormatIGCTaskTimestamp(buffer, date_time, number_of_turnpoints);
-    WriteLine(buffer);
+    if (buffer[0] != '\0')
+      WriteLine(buffer);
   }
 
   WriteLine(IGCMakeTaskTakeoff());
@@ -179,17 +187,25 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 {
   char b_record[128];
   char *p = b_record;
+  char *const end = b_record + sizeof(b_record);
 
-  sprintf(p, "B%02d%02d%02d", fix.time.hour, fix.time.minute, fix.time.second);
-  p += strlen(p);
+  int written = StringFormat(p, end - p, "B%02d%02d%02d",
+                             fix.time.hour, fix.time.minute, fix.time.second);
+  if (written < 0 || written >= end - p)
+    return;
+  p += written;
 
-  p = FormatIGCLocation(p, fix.location);
+  p = FormatIGCLocation({p, static_cast<size_t>(end - p)}, fix.location);
+  if (p == nullptr)
+    return;
 
-  sprintf(p, "%c%05d%05d%03d%02d",
-          fix.gps_valid ? 'A' : 'V',
-          NormalizeIGCAltitude(fix.pressure_altitude),
-          NormalizeIGCAltitude(fix.gps_altitude),
-          epe, satellites);
+  written = StringFormat(p, end - p, "%c%05d%05d%03d%02d",
+                         fix.gps_valid ? 'A' : 'V',
+                         NormalizeIGCAltitude(fix.pressure_altitude),
+                         NormalizeIGCAltitude(fix.gps_altitude),
+                         epe, satellites);
+  if (written < 0 || written >= end - p)
+    return;
 
   WriteLine(b_record);
   Flush();
@@ -208,8 +224,10 @@ void
 IGCWriter::LogEvent(const BrokenTime &time, const char *event)
 {
   char e_record[30];
-  sprintf(e_record, "E%02d%02d%02d%s",
-          time.hour, time.minute, time.second, event);
+  const int n = StringFormat(e_record, sizeof(e_record), "E%02d%02d%02d%s",
+                             time.hour, time.minute, time.second, event);
+  if (n < 0 || n >= (int)sizeof(e_record))
+    return;
 
   WriteLine(e_record);
 }
@@ -237,7 +255,11 @@ void
 IGCWriter::LogEmptyFRecord(const BrokenTime &time)
 {
   char f_record[32];
-  sprintf(f_record, "F%02u%02u%02u", time.hour, time.minute, time.second);
+  const int length = StringFormat(f_record, sizeof(f_record), "F%02u%02u%02u",
+                                  time.hour, time.minute, time.second);
+  if (length < 0 || static_cast<size_t>(length) >= sizeof(f_record))
+    return;
+
   WriteLine(f_record);
 }
 
@@ -245,12 +267,21 @@ void
 IGCWriter::LogFRecord(const BrokenTime &time, const int *satellite_ids)
 {
   char f_record[32];
-  sprintf(f_record, "F%02u%02u%02u", time.hour, time.minute, time.second);
+  int length = StringFormat(f_record, sizeof(f_record), "F%02u%02u%02u",
+                            time.hour, time.minute, time.second);
+  if (length < 0 || static_cast<size_t>(length) >= sizeof(f_record))
+    return;
 
-  for (unsigned i = 0, length = 7; i < GPSState::MAXSATELLITES; ++i) {
+  for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
     if (satellite_ids[i] > 0) {
-      sprintf(f_record + length, "%02d", satellite_ids[i]);
-      length += 2;
+      const int written = StringFormat(f_record + length, sizeof(f_record) - length,
+                                       "%02d", satellite_ids[i]);
+      if (written < 0 || static_cast<size_t>(written) >= sizeof(f_record) - length) {
+        f_record[length] = '\0';
+        break;
+      }
+
+      length += written;
     }
   }
 

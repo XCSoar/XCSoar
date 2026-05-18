@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Device/Driver/OpenVario.hpp"
+#include "util/StringFormat.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
@@ -95,7 +96,11 @@ OpenVarioDevice::ComposeWrite(const char p_type,PolarCoefficients &p,
 
   char buffer[50];
   // Compose Polar String
-  sprintf(buffer,"POV,C,%cPO,%f,%f,%f", p_type, p.a, p.b, p.c);
+  const int written = StringFormat(buffer, sizeof(buffer), "POV,C,%cPO,%f,%f,%f",
+                               p_type, p.a, p.b, p.c);
+  if (written < 0 || written >= (int)sizeof(buffer))
+    return false;
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -193,7 +198,10 @@ OpenVarioDevice::RepeatMacCready(OperationEnvironment &env)
   }
   
   char buffer[20];
-  sprintf(buffer,"POV,C,MC,%0.2f", (double)_mc);
+  const int written = StringFormat(buffer, sizeof(buffer), "POV,C,MC,%0.2f", (double)_mc);
+  if (written < 0 || written >= (int)sizeof(buffer))
+    return false;
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -214,7 +222,10 @@ OpenVarioDevice::RepeatBallast(OperationEnvironment &env)
   }
   
   char buffer[20];
-  sprintf(buffer,"POV,C,WL,%1.3f",(float)_overload);
+  const int written = StringFormat(buffer, sizeof(buffer), "POV,C,WL,%1.3f", (float)_overload);
+  if (written < 0 || written >= (int)sizeof(buffer))
+    return false;
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }
@@ -235,7 +246,10 @@ OpenVarioDevice::RepeatBugs(OperationEnvironment &env)
   }
   
   char buffer[32];
-  sprintf(buffer, "POV,C,BU,%0.2f",(float)_bugs);
+  const int written = StringFormat(buffer, sizeof(buffer), "POV,C,BU,%0.2f", (float)_bugs);
+  if (written < 0 || written >= (int)sizeof(buffer))
+    return false;
+
   PortWriteNMEA(port, buffer, env);
   return true;
 }

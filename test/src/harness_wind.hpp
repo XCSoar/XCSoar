@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Math/Angle.hpp"
+#include "util/StringFormat.hpp"
 
 #include <stdio.h>
 
@@ -31,7 +32,7 @@ static inline const char*
 wind_name(int n_wind)
 {
   static char buffer[80];
-  sprintf(buffer,"%d m/s @ %d", (int)wind_to_mag(n_wind),
-          (int)wind_to_dir(n_wind).Degrees());
+  StringFormat(buffer, sizeof(buffer), "%d m/s @ %d", (int)wind_to_mag(n_wind),
+           (int)wind_to_dir(n_wind).Degrees());
   return buffer;
 }
