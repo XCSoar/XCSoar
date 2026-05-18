@@ -51,6 +51,9 @@ Version 7.45 - not yet released
     ``WaypointImage`` events (magnify, shrink, reset, arrows) so keys
     can be set in the ``.xci`` file without the map's ``default`` key
     fallback
+  - Waypoint details embedded image and PC-Met satellite viewer: zoom and
+    pan with focal-point centering when magnifying; supports +/- buttons,
+    F2/F3, and arrow keys (#1127, #1246)
 * input
   - F2 = zoom in, F3 = zoom out in pan, on the FLARM radar, and in waypoint
     image ``wptimg`` (not on the main non-pan map, where F2/F3 stay Checklist
@@ -157,6 +160,9 @@ Version 7.45 - not yet released
 * weather
   - METAR/TAF station list: accept lowercase ICAO codes when adding a station;
     codes are normalized to upper-case for download and profile storage
+  - pc_met www images: add RADAR Deutschland Nord/Mitte/Süd, Alpen, SAT RAD
+    BLITZ, and Blitzkarte Europa; local radar list uses Borkum instead of
+    the removed Emden site
 * data files
   - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
     is read correctly
