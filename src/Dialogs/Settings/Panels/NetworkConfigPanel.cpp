@@ -10,12 +10,147 @@
 #include "Form/DataField/Listener.hpp"
 
 #include <memory>
+#include <stdexcept>
 #include <string>
+
+#if defined(KOBO)
+#include "Kobo/PlatformWifiBackend.hpp"
+#include "Kobo/System.hpp"
+#include "net/wifi/WifiError.hpp"
+#endif
 
 #if defined(HAVE_LINUX_NET_WIFI)
 #include "net/State.hpp"
 #include "net/wifi/LinuxWifiBackend.hpp"
 #include "net/wifi/WifiError.hpp"
+#endif
+
+#if defined(KOBO)
+
+class KoboNetworkConfigWidget final
+  : public RowFormWidget, public DataFieldListener {
+  unsigned row_status{0}, row_ip{0}, row_backend{0}, row_radio{0};
+
+public:
+  KoboNetworkConfigWidget()
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
+
+private:
+  void OnRefresh() noexcept;
+  void OnModified(DataField &df) noexcept override;
+};
+
+void
+KoboNetworkConfigWidget::Prepare(ContainerWindow &parent,
+                                 const PixelRect &rc) noexcept
+{
+  RowFormWidget::Prepare(parent, rc);
+
+  unsigned n = 0U;
+  row_status = n++;
+  AddReadOnly(
+    _("Status"),
+    _("This page shows Kobo WiFi status. Open WiFi list to scan and connect."),
+    _("Checking WiFi..."));
+  row_ip = n++;
+  AddReadOnly(
+    _("IP address"),
+    _("IPv4 address of the active WiFi interface."),
+    _("Unknown"));
+  row_backend = n++;
+  AddReadOnly(
+    _("Backend"),
+    _("WiFi on Kobo is managed by wpa_supplicant."),
+    "wpa_supplicant");
+  row_radio = n++;
+  AddBoolean(
+    _("WiFi Enabled"),
+    _("Turns the Kobo WiFi interface on or off."),
+    IsKoboWifiOn(), this);
+
+  AddButton(_("WiFi List"), [this]() {
+    try {
+      auto backend = CreatePlatformWifiBackend();
+      if (backend == nullptr) {
+        ShowMessageBox(
+          _("WiFi backend is not available in this Kobo build."),
+          _("Network"), MB_OK);
+        return;
+      }
+
+      ShowWifiDialog(std::move(backend));
+      OnRefresh();
+    } catch (...) {
+      const auto message = WifiError::Format(std::current_exception());
+      ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+    }
+  });
+
+  OnRefresh();
+}
+
+void
+KoboNetworkConfigWidget::OnRefresh() noexcept
+{
+  SetText(row_backend, "wpa_supplicant");
+  LoadValue(row_radio, IsKoboWifiOn());
+
+  if (!IsKoboWifiOn()) {
+    SetText(row_status, _("Disabled"));
+    SetText(row_ip, _("Unknown"));
+    return;
+  }
+
+  try {
+    auto backend = CreatePlatformWifiBackend();
+    if (backend == nullptr) {
+      SetText(row_status, _("WiFi backend is not available in this Kobo build."));
+      SetText(row_ip, _("Unknown"));
+      return;
+    }
+
+    const auto status = backend->GetBackendStatus();
+    SetText(row_status, WifiBackendStatus::Format(status));
+    SetText(row_ip, WifiBackendStatus::FormatIpAddress(status));
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    SetText(row_status, message.c_str());
+    SetText(row_ip, _("Unknown"));
+  }
+}
+
+void
+KoboNetworkConfigWidget::OnModified(DataField &df) noexcept
+{
+  if (!IsDataField(row_radio, df))
+    return;
+
+  try {
+    const bool enabled = GetValueBoolean(row_radio);
+    const bool success = enabled ? KoboWifiOn() : KoboWifiOff();
+    if (!success)
+      throw std::runtime_error{enabled
+        ? _("Failed to enable WiFi.")
+        : _("Failed to disable WiFi.")};
+
+    OnRefresh();
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+    OnRefresh();
+  }
+}
+
+bool
+KoboNetworkConfigWidget::Save(bool &changed) noexcept
+{
+  (void)changed;
+  return true;
+}
+
 #endif
 
 #if defined(HAVE_LINUX_NET_WIFI)
@@ -179,7 +314,7 @@ NetworkConfigWidget::Save(bool &changed) noexcept
 
 #endif /* HAVE_LINUX_NET_WIFI */
 
-#if !defined(HAVE_LINUX_NET_WIFI)
+#if !defined(HAVE_LINUX_NET_WIFI) && !defined(KOBO)
 class NetworkConfigStub final : public RowFormWidget {
 public:
   explicit NetworkConfigStub()
@@ -199,7 +334,9 @@ public:
 std::unique_ptr<Widget>
 CreateNetworkConfigPanel()
 {
-#if defined(HAVE_LINUX_NET_WIFI)
+#if defined(KOBO)
+  return std::make_unique<KoboNetworkConfigWidget>();
+#elif defined(HAVE_LINUX_NET_WIFI)
   return std::make_unique<NetworkConfigWidget>();
 #else
   return std::make_unique<NetworkConfigStub>();
