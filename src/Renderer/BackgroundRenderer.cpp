@@ -10,6 +10,18 @@
 BackgroundRenderer::BackgroundRenderer() noexcept = default;
 BackgroundRenderer::~BackgroundRenderer() noexcept = default;
 
+bool
+BackgroundRenderer::AreContoursVisible() const noexcept
+{
+  return renderer && renderer->AreContoursVisible();
+}
+
+unsigned
+BackgroundRenderer::GetContourSpacing() const noexcept
+{
+  return renderer ? renderer->GetContourSpacing() : 0;
+}
+
 void
 BackgroundRenderer::Flush() noexcept
 {

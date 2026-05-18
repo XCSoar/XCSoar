@@ -306,12 +306,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   unsigned contour_spacing_m = 0;
   const auto &terrain = GetMapSettings().terrain;
-  if (terrain.enable && terrain.contours != Contours::OFF) {
-    const double screen_pixel_size = 1.0 / projection.GetScale();
-    const double dpi_factor = Layout::ScalePenWidth(1024u) / 1024.0;
-    contour_spacing_m = ContourSpacing(terrain.contours, 4,
-                                       screen_pixel_size * dpi_factor);
-  }
+  if (projection.IsValid() &&
+      terrain.enable && terrain.contours != Contours::OFF &&
+      background.AreContoursVisible())
+    contour_spacing_m = background.GetContourSpacing();
 
   RenderMapScale(canvas, projection, scale_pos, look.overlay, contour_spacing_m);
 

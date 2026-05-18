@@ -32,6 +32,7 @@ protected:
 
   const ColorRamp *last_color_ramp = nullptr;
   double last_projection_scale = 0;
+  unsigned last_contour_spacing = 0;
 
   RasterRenderer raster_renderer;
 
@@ -56,6 +57,20 @@ public:
 public:
   const TerrainRendererSettings &GetSettings() const {
     return settings;
+  }
+
+  [[gnu::pure]]
+  bool AreContoursVisible() const noexcept {
+    return raster_renderer.AreContoursVisible();
+  }
+
+  /**
+   * Contour spacing (metres) used for the last generated terrain
+   * image, or 0 if contours were disabled for that render.
+   */
+  [[gnu::pure]]
+  unsigned GetContourSpacing() const noexcept {
+    return last_contour_spacing;
   }
 
   void SetSettings(const TerrainRendererSettings &_settings) {
