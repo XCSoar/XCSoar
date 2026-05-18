@@ -3995,7 +3995,7 @@ msgstr "Verbleibende Distanz"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:133
 msgid "Speed estimated"
-msgstr "Geschätze Geschwindigkeit"
+msgstr "Geschätzte Geschwindigkeit"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:134
 msgid "Speed average"
@@ -10408,7 +10408,7 @@ msgstr "Zeigt AAT-Delta-Zeit und geschätzte Ankunftszeit bei einer AAT-Aufgabe 
 #: src/InfoBoxes/Content/Factory.cpp:1130
 #, no-c-format
 msgid "Speed task estimated"
-msgstr "Geschätze Geschwindigkeit"
+msgstr "Geschätzte Geschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:1131
 #, no-c-format
@@ -10423,7 +10423,7 @@ msgstr "Geschätzte Lokalzeit nach Vollendung der Aufgabe, basierend auf dem ide
 #: src/InfoBoxes/Content/Factory.cpp:1138
 #, no-c-format
 msgid "Home altitude difference"
-msgstr "Nächster Wegpunkt - relative Ankunftshöhe"
+msgstr "Höhendifferenz zum Heimatplatz"
 
 #: src/InfoBoxes/Content/Factory.cpp:1139
 #, no-c-format
@@ -10438,7 +10438,7 @@ msgstr "Ankunftshöhe am letzten Wendepunkt der Aufgabe, relativ zur eingestellt
 #: src/InfoBoxes/Content/Factory.cpp:1146
 #, no-c-format
 msgid "Speed task leg"
-msgstr "Aufgabe - Durchschnittsgeschwindigkeit"
+msgstr "Schenkel - Durchschnittsgeschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:1147
 #, no-c-format
@@ -10453,7 +10453,7 @@ msgstr "Mittlere Geschwindigkeit über die Aufgabe, nicht höhenkompensiert."
 #: src/InfoBoxes/Content/Factory.cpp:1154
 #, no-c-format
 msgid "Alternate 1 altitude difference"
-msgstr "Nächster Wegpunkt - relative Ankunftshöhe"
+msgstr "Alternative 1 - Höhendifferenz"
 
 #: src/InfoBoxes/Content/Factory.cpp:1155
 #, no-c-format
@@ -10468,7 +10468,7 @@ msgstr "Ankunftshöhe am letzten Wendepunkt der Aufgabe, relativ zur eingestellt
 #: src/InfoBoxes/Content/Factory.cpp:1164
 #, no-c-format
 msgid "Alternate 2 altitude difference"
-msgstr "Nächster Wegpunkt - relative Ankunftshöhe"
+msgstr "Alternative 2 - Höhendifferenz"
 
 #: src/InfoBoxes/Content/Factory.cpp:1165
 #, no-c-format
