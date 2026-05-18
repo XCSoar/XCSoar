@@ -22,14 +22,14 @@
 #include "Renderer/TextRowRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "util/StaticString.hxx"
-#include "Weather/xctherm/XCThermAuth.hpp"
+#include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
 #include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "LogFile.hpp"
 
-#include <fstream>
-#include <sstream>
+#include <ctime>
+#include <chrono>
 
 namespace {
 
@@ -100,6 +100,34 @@ IsActiveLayer(const LayerInfo &layer,
     return active_parameter == 0 && layer.value == active_wave_height;
 }
 
+/**
+ * Download metadata for a layer — shown in the second row.
+ * For a span download, sizes/speed are totals across all hourly slices,
+ * span_hours is the number of slices successfully fetched, and
+ * pending_index/pending_total animate progress during the loop.
+ */
+struct LayerDownloadInfo {
+  enum Status { NONE, PENDING, DONE, FAILED };
+  Status status = NONE;
+  double wire_mb = 0.0;           // total bytes over the network
+  double size_mb = 0.0;           // total uncompressed size in memory
+  double speed_mbs = 0.0;         // average download speed
+  unsigned span_hours = 0;        // number of hourly slices downloaded
+  unsigned pending_index = 0;     // current slice being fetched (1-based)
+  unsigned pending_total = 0;     // total slices in this span
+  std::string download_time;      // "HH:MM:SS" local time
+};
+
+/** Per-layer download info (indexed by layer position in the list) */
+static LayerDownloadInfo download_info_ch[std::size(CH_LAYERS)];
+static LayerDownloadInfo download_info_uk[std::size(UK_LAYERS)];
+
+static LayerDownloadInfo *
+GetDownloadInfo(unsigned model) noexcept
+{
+  return IsUKModel(model) ? download_info_uk : download_info_ch;
+}
+
 /* ---- List item renderer ---- */
 
 class XCThermRowRenderer {
@@ -140,7 +168,36 @@ XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
   else
     first_row = layer.label;
 
-  const char *second_row = active ? "Currently selected" : "";
+  /* Second row: download status */
+  StaticString<200> second_row;
+  const auto *info = GetDownloadInfo(model);
+  switch (info[index].status) {
+  case LayerDownloadInfo::PENDING:
+    if (info[index].pending_total > 0)
+      second_row.Format("Downloading %u/%uh...",
+                        info[index].pending_index,
+                        info[index].pending_total);
+    else
+      second_row = "Downloading...";
+    break;
+  case LayerDownloadInfo::DONE:
+    second_row.Format("Heruntergeladen %uh: %.2f MB (%.2f MB wire, %.1f MB/s) | %s",
+                      info[index].span_hours,
+                      info[index].size_mb,
+                      info[index].wire_mb,
+                      info[index].speed_mbs,
+                      info[index].download_time.c_str());
+    break;
+  case LayerDownloadInfo::FAILED:
+    second_row = "Download fehlgeschlagen";
+    break;
+  default:
+    if (active)
+      second_row = "Nicht heruntergeladen";
+    else
+      second_row = "";
+    break;
+  }
 
   row_renderer.DrawFirstRow(canvas, rc, first_row);
   row_renderer.DrawSecondRow(canvas, rc, second_row);
@@ -171,8 +228,9 @@ public:
 class XCThermWidget final : public ListWidget {
   ButtonPanelWidget *buttons_widget = nullptr;
   Button *activate_button = nullptr;
-  Button *update_button = nullptr;
+  Button *download_button = nullptr;
   Button *model_button = nullptr;
+  Button *span_button = nullptr;
 
   XCThermRowRenderer row_renderer;
 
@@ -188,8 +246,9 @@ private:
   void SaveSettings();
 
   void ActivateClicked();
-  void UpdateClicked();
+  void DownloadClicked();
   void ModelClicked();
+  void SpanClicked();
 
 public:
   void Prepare(ContainerWindow &parent,
@@ -214,8 +273,9 @@ void
 XCThermWidget::CreateButtons(ButtonPanel &buttons)
 {
   activate_button = buttons.Add("Activate", [this]() { ActivateClicked(); });
-  update_button = buttons.Add("Update", [this]() { UpdateClicked(); });
+  download_button = buttons.Add("Download", [this]() { DownloadClicked(); });
   model_button = buttons.Add("Model", [this]() { ModelClicked(); });
+  span_button = buttons.Add("Span", [this]() { SpanClicked(); });
 }
 
 void
@@ -228,6 +288,8 @@ XCThermWidget::SaveSettings()
   Profile::Set(ProfileKeys::XCThermWaveHeight, (int)settings.wave_height);
   Profile::Set(ProfileKeys::XCThermVerticalWindAGL,
                (int)settings.vertical_wind_agl);
+  Profile::Set(ProfileKeys::XCThermDownloadSpan,
+               (int)settings.download_span_hours);
 }
 
 void
@@ -261,6 +323,13 @@ XCThermWidget::UpdateList()
   /* Update model button label */
   model_button->SetCaption(IsUKModel(settings.model)
                            ? "Model: UK" : "Model: CH");
+
+  /* Update span button label */
+  {
+    StaticString<16> span_caption;
+    span_caption.Format("Span: %uh", settings.download_span_hours);
+    span_button->SetCaption(span_caption);
+  }
 
   /* Update activate/update button state based on cursor */
   OnCursorMoved(list.GetCursorIndex());
@@ -325,99 +394,158 @@ XCThermWidget::ActivateClicked()
   UpdateList();
 }
 
+/* ---- Download span ---- */
+
 void
-XCThermWidget::UpdateClicked()
+XCThermWidget::DownloadClicked()
 {
   auto *map = UIGlobals::GetMap();
-  if (map == nullptr) {
-    ShowMessageBox("Map not available.", "XCTherm", MB_OK);
+  if (map == nullptr)
     return;
-  }
 
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
 
-  /* Find the active layer */
+  const unsigned span_hours = settings.download_span_hours;
+  if (span_hours == 0)
+    return;
+
+  /* Download targets the cursor-selected row, not the active layer.
+     This lets the user inspect/download any layer without first
+     committing to it via Activate. */
   size_t count = 0;
   const auto *layers = GetLayers(settings.model, count);
 
-  const LayerInfo *active = nullptr;
-  for (unsigned i = 0; i < count; ++i) {
-    if (IsActiveLayer(layers[i], settings.parameter,
-                      settings.wave_height,
-                      settings.vertical_wind_agl)) {
-      active = &layers[i];
-      break;
+  const int cursor_index = GetList().GetCursorIndex();
+  if (cursor_index < 0 || (unsigned)cursor_index >= count) {
+    ShowMessageBox("No layer selected.", "XCTherm", MB_OK);
+    return;
+  }
+  const auto &target = layers[cursor_index];
+  const int target_index = cursor_index;
+
+  /* Build parameter name for API */
+  StaticString<64> param;
+  param.Format("vertical_wind_%s", target.file_suffix);
+
+  /* Current UTC hour */
+  unsigned current_utc = 12;
+  const auto &basic = CommonInterface::Basic();
+  if (basic.date_time_utc.IsPlausible())
+    current_utc = basic.date_time_utc.hour;
+
+  auto &api = XCThermAPI::Instance();
+  api.SetCredentials(settings.credentials.email.c_str(),
+                     settings.credentials.password.c_str());
+
+  /* Ensure index is loaded */
+  if (!api.IsIndexLoaded()) {
+    if (!api.FetchIndex()) {
+      ShowMessageBox("Failed to fetch forecast index.",
+                     "XCTherm", MB_OK);
+      return;
     }
   }
 
-  if (active == nullptr) {
-    ShowMessageBox("No layer activated.\nSelect a layer and press Activate first.",
-                   "XCTherm", MB_OK);
+  auto *info = GetDownloadInfo(settings.model);
+  auto &row_info = info[target_index];
+
+  /* Reset and mark as pending */
+  row_info = LayerDownloadInfo{};
+  row_info.status = LayerDownloadInfo::PENDING;
+  row_info.pending_total = span_hours;
+  row_info.pending_index = 0;
+  UpdateList();
+
+  /* Loop over every hour from +1h to +span_hours, downloading and
+     caching each. The map overlay is set to the first slice (closest
+     to now) so the user gets immediate visual feedback. */
+  XCThermGeoJSON::ForecastLayer first_forecast;
+  bool any_failed = false;
+  unsigned succeeded = 0;
+  double total_wire_mb = 0.0;
+  double total_disk_mb = 0.0;
+  auto span_start = std::chrono::steady_clock::now();
+
+  for (unsigned offset = 1; offset <= span_hours; ++offset) {
+    row_info.pending_index = offset;
+    UpdateList();
+
+    std::string slot_date, slot_run_hour;
+    unsigned slot_step;
+    if (!api.FindSlotForOffset(param.c_str(), current_utc, offset,
+                               slot_date, slot_run_hour, slot_step)) {
+      LogFmt("xctherm: no slot for +{}h, skipping", offset);
+      any_failed = true;
+      continue;
+    }
+
+    std::string geojson;
+    int64_t wire_bytes = 0;
+    if (!api.DownloadGeoJSON(param.c_str(), slot_date,
+                             slot_run_hour, slot_step, geojson,
+                             nullptr, &wire_bytes)) {
+      any_failed = true;
+      continue;
+    }
+
+    total_wire_mb += (double)wire_bytes / (1024.0 * 1024.0);
+    total_disk_mb += (double)geojson.size() / (1024.0 * 1024.0);
+    ++succeeded;
+
+    /* Parse the first slice that yields data so the map always
+       gets refreshed (even if +1h is unavailable). */
+    if (first_forecast.IsEmpty()) {
+      auto forecast = XCThermGeoJSON::Parse(geojson, true);
+      if (!forecast.IsEmpty()) {
+        forecast.layer_name = target.label;
+        first_forecast = std::move(forecast);
+      }
+    }
+  }
+
+  auto span_end = std::chrono::steady_clock::now();
+  double span_secs = std::chrono::duration<double>(span_end - span_start).count();
+  double speed_mbs = span_secs > 0 ? total_wire_mb / span_secs : 0.0;
+
+  if (succeeded == 0) {
+    row_info.status = LayerDownloadInfo::FAILED;
+    UpdateList();
     return;
   }
 
-  /* Build path to local example GeoJSON file.
-   * TODO: replace with HTTP download from XCTherm API */
-  StaticString<256> filename;
-  filename.Format("vertical_wind_%s.geojson", active->file_suffix);
-
-  /* Try unzipped first, then zipped */
-  const std::string base_path =
-    "/Users/pheinrich/Documents/Fliegen/xctherm/xcsoar_wave/geojson_example/";
-  std::string file_path = base_path + filename.c_str();
-
-  /* Check if the unzipped file is in a subdirectory (macOS unzip artifact) */
-  std::ifstream file(file_path);
-  if (!file.is_open()) {
-    /* Try subdirectory */
-    file_path = base_path + filename.c_str() + "/" + filename.c_str();
-    file.open(file_path);
+  /* Replace the map overlay with this layer's forecast — regardless
+     of which layer was previously active, the user-facing behaviour is
+     "Download what I just selected, show what I just downloaded". */
+  if (!first_forecast.IsEmpty()) {
+    auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
+    overlay->SetForecast(std::move(first_forecast), target.label);
+    map->SetOverlay(std::move(overlay));
   }
 
-  if (!file.is_open()) {
-    StaticString<512> msg;
-    msg.Format("File not found:\n%s\n\nPlease unzip the .geojson.zip first.",
-               filename.c_str());
-    ShowMessageBox(msg, "XCTherm", MB_OK);
-    return;
-  }
+  row_info.status = LayerDownloadInfo::DONE;
+  row_info.size_mb = total_disk_mb;
+  row_info.wire_mb = total_wire_mb;
+  row_info.speed_mbs = speed_mbs;
+  row_info.span_hours = succeeded;
+  row_info.pending_index = 0;
+  row_info.pending_total = 0;
 
-  LogFmt("xctherm: loading {}", file_path);
-
-  /* Read entire file */
-  std::ostringstream ss;
-  ss << file.rdbuf();
-  file.close();
-  std::string content = ss.str();
-
-  LogFmt("xctherm: read {} bytes", content.size());
-
-  /* Parse GeoJSON */
-  auto forecast = XCThermGeoJSON::Parse(content, true);
-
-  if (forecast.IsEmpty()) {
-    ShowMessageBox("GeoJSON parsed but no data found.", "XCTherm", MB_OK);
-    return;
-  }
-
-  forecast.layer_name = active->label;
-
-  /* Capture stats before move */
-  const unsigned n_polys = forecast.TotalPolygons();
-  const unsigned n_bands = forecast.bands.size();
-
-  /* Create overlay and set it on the map */
-  auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-  overlay->SetForecast(std::move(forecast), active->label);
-  map->SetOverlay(std::move(overlay));
-
-  StaticString<256> msg;
-  msg.Format("Loaded: %s\n%u polygons in %u wind bands.",
-             active->label, n_polys, n_bands);
-  ShowMessageBox(msg, "XCTherm", MB_OK);
+  std::time_t now = std::time(nullptr);
+  std::tm *lt = std::localtime(&now);
+  char tbuf[16];
+  std::strftime(tbuf, sizeof(tbuf), "%H:%M:%S", lt);
+  row_info.download_time = tbuf;
 
   UpdateList();
+
+  if (any_failed) {
+    StaticString<128> msg;
+    msg.Format("Downloaded %u of %u hourly slices.\n"
+               "Some slots were unavailable.",
+               succeeded, span_hours);
+    ShowMessageBox(msg, "XCTherm", MB_OK);
+  }
 }
 
 void
@@ -439,6 +567,39 @@ XCThermWidget::ModelClicked()
     return;
 
   settings.model = index == 1 ? XCTHERM_MODEL_UK : XCTHERM_MODEL_CH;
+  SaveSettings();
+  UpdateList();
+}
+
+void
+XCThermWidget::SpanClicked()
+{
+  static constexpr const char *choices[] = {
+    "1 hour", "3 hours", "6 hours", "12 hours", "18 hours", "24 hours",
+  };
+  static constexpr unsigned spans[] = { 1, 3, 6, 12, 18, 24 };
+
+  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
+
+  /* Pre-select the current value */
+  int initial = 0;
+  for (unsigned i = 0; i < std::size(spans); ++i) {
+    if (spans[i] == settings.download_span_hours) {
+      initial = (int)i;
+      break;
+    }
+  }
+
+  StringChoiceRenderer item_renderer(choices);
+  int index = ListPicker("Download span",
+                         std::size(choices), initial,
+                         item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
+                         item_renderer,
+                         false, nullptr, nullptr, nullptr);
+  if (index < 0)
+    return;
+
+  settings.download_span_hours = spans[index];
   SaveSettings();
   UpdateList();
 }

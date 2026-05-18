@@ -23,7 +23,7 @@ struct WeatherCredentialsSettings {
 
   void SetDefaults() noexcept {
     email = "xcthermdev@gmail.com";
-    password = "Duodiscus2026!";
+    password = "DiePerfekteWelle!26";
   }
 };
 
@@ -45,6 +45,12 @@ struct XCThermSettings {
   unsigned wave_height;
   unsigned vertical_wind_agl;
 
+  /**
+   * How many hours of hourly forecasts the Download button fetches,
+   * starting from the next full hour. E.g. 12 → download +1h, +2h, ..., +12h.
+   */
+  unsigned download_span_hours;
+
   void SetDefaults() noexcept {
 #ifdef HAVE_HTTP
     enabled = true;
@@ -57,6 +63,7 @@ struct XCThermSettings {
     parameter = 0;
     wave_height = 3000;
     vertical_wind_agl = 100;
+    download_span_hours = 6;
   }
 };
 

@@ -10,6 +10,7 @@
 #include "LogFile.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <vector>
 
 void
@@ -102,9 +103,16 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
   const auto screen_rect = projection.GetScreenRect();
 
   for (const auto &band : forecast.bands) {
-    /* Set color for this wind band */
+    /* Set color for this wind band.
+     * Alpha ramps down with intensity so the underlying map stays
+     * readable through the stronger lift/sink colors (which would
+     * otherwise saturate). |mid| = 0  → 140, |mid| = 4 → 68. */
     const Color color = WindToColor(band.min_ms, band.max_ms);
-    const Color fill_color = ColorWithAlpha(color, 170);
+    const double abs_mid = std::abs((band.min_ms + band.max_ms) / 2.0);
+    int alpha = (int)std::lround(140.0 - 18.0 * abs_mid);
+    if (alpha < 60) alpha = 60;
+    if (alpha > 150) alpha = 150;
+    const Color fill_color = ColorWithAlpha(color, (uint8_t)alpha);
 
     Brush brush(fill_color);
     canvas.Select(brush);
