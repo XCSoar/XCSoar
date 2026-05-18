@@ -53,7 +53,8 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const AirspaceWarningCopy &awc,
                        const AirspacePredicate &visible)
 {
-  if (airspaces == nullptr || airspaces->IsEmpty())
+  if ((airspaces == nullptr || airspaces->IsEmpty()) &&
+      awc.GetExternalAirspaces().empty())
     return;
 
   DrawInternal(canvas,
@@ -73,9 +74,6 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const WindowProjection &projection,
                        const AirspaceRendererSettings &settings)
 {
-  if (airspaces == nullptr)
-    return;
-
   AirspaceWarningCopy awc;
   if (warning_manager != nullptr)
     awc.Visit(*warning_manager);
@@ -98,9 +96,6 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const AirspaceComputerSettings &computer_settings,
                        const AirspaceRendererSettings &settings)
 {
-  if (airspaces == nullptr)
-    return;
-
   AirspaceWarningCopy awc;
   if (warning_manager != nullptr)
     awc.Visit(*warning_manager);

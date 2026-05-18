@@ -9,9 +9,12 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Airspace/Ptr.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "NMEA/Aircraft.hpp"
+
+#include <vector>
 
 class AirspaceWarningList
 {
@@ -72,8 +75,15 @@ MapItemListBuilder::AddVisibleAirspace(
     const MoreData &basic, const DerivedInfo &calculated)
 {
   AirspaceWarningList warnings;
-  if (warning_manager != nullptr)
-    warnings.Fill(*warning_manager);
+  std::vector<ConstAirspacePtr> external_airspaces;
+
+  if (warning_manager != nullptr) {
+    const ProtectedAirspaceWarningManager::Lease lease(*warning_manager);
+    const AirspaceWarningManager &mgr = lease;
+    warnings.Fill(mgr);
+    const auto ext = mgr.GetExternalAirspaces();
+    external_airspaces.assign(ext.begin(), ext.end());
+  }
 
   const AircraftState aircraft = ToAircraftState(basic, calculated);
   AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
@@ -87,5 +97,13 @@ MapItemListBuilder::AddVisibleAirspace(
     auto airspace = i.GetAirspacePtr();
     if (predicate(*airspace))
       list.append(new AirspaceMapItem(std::move(airspace)));
+  }
+
+  for (const auto &ea : external_airspaces) {
+    if (list.full())
+      break;
+
+    if (ea->Inside(location))
+      list.append(new AirspaceMapItem(ea));
   }
 }
