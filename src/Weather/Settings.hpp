@@ -48,6 +48,11 @@ struct XCThermSettings {
   /**
    * How many hours of hourly forecasts the Download button fetches,
    * starting from the next full hour. E.g. 12 → download +1h, +2h, ..., +12h.
+   *
+   * Session-only: always resets to the default on startup. The user can
+   * change it via the "Span" button during a session, but the value is
+   * never persisted to the profile — by design, so each session starts
+   * with the cheap quick-look default.
    */
   unsigned download_span_hours;
 
@@ -63,7 +68,7 @@ struct XCThermSettings {
     parameter = 0;
     wave_height = 3000;
     vertical_wind_agl = 100;
-    download_span_hours = 6;
+    download_span_hours = 1;
   }
 };
 

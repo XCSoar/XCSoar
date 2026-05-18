@@ -80,23 +80,6 @@ public:
     const std::string &parameter) const noexcept;
 
   /**
-   * Find the best slot (run + step) for a given parameter and target UTC hour.
-   * Prefers the most recent run that covers the target hour.
-   *
-   * @param parameter e.g. "vertical_wind_3000amsl"
-   * @param target_utc_hour 0-23
-   * @param out_date filled with YYYYMMDD
-   * @param out_run_hour filled with HH
-   * @param out_step filled with step number
-   * @return true if a valid slot was found
-   */
-  bool FindSlotForHour(const std::string &parameter,
-                       unsigned target_utc_hour,
-                       std::string &out_date,
-                       std::string &out_run_hour,
-                       unsigned &out_step) const noexcept;
-
-  /**
    * Find the best slot for a forecast N hours into the future.
    *
    * Unlike FindSlotForHour, this handles the offset correctly across
@@ -138,24 +121,40 @@ public:
                        OperationEnvironment *env = nullptr,
                        int64_t *out_wire_bytes = nullptr) noexcept;
 
-  /**
-   * Convenience: download a layer for a target UTC hour.
-   * Calls FindSlotForHour + DownloadGeoJSON.
-   */
-  bool DownloadLayerForHour(const std::string &parameter,
-                            unsigned target_utc_hour,
-                            std::string &out_geojson,
-                            OperationEnvironment *env = nullptr) noexcept;
-
   bool IsIndexLoaded() const noexcept { return index_loaded; }
 
   /* ---- Download cache ---- */
+
+  /**
+   * One cached forecast slice.
+   *
+   * @c run_date / @c run_hour identify the model run that issued the
+   * forecast (e.g. "20260518" / "12"). We track this so we can decide
+   * whether a cached entry is still fresh when the API offers a newer
+   * run for the same UTC hour.
+   */
+  struct CachedSlice {
+    std::string geojson;
+    std::string run_date;
+    std::string run_hour;
+  };
 
   /**
    * Check if a layer has already been downloaded for the given UTC hour.
    */
   bool IsLayerCached(const std::string &parameter,
                      unsigned utc_hour) const noexcept;
+
+  /**
+   * Check if the cached entry for (parameter, utc_hour) was produced by
+   * the given run. Used to decide whether a Download click for an
+   * already-cached hour should be skipped (cache matches latest run) or
+   * re-issued (a newer run is now available).
+   */
+  bool IsCachedAtRun(const std::string &parameter,
+                     unsigned utc_hour,
+                     const std::string &run_date,
+                     const std::string &run_hour) const noexcept;
 
   /**
    * Get cached GeoJSON for a layer/hour combination.
@@ -165,15 +164,17 @@ public:
                                        unsigned utc_hour) const noexcept;
 
   /**
+   * Get the model run (date, hour) that produced the cached slice.
+   * Returns nullptr if not cached.
+   */
+  const CachedSlice *GetCachedSlice(const std::string &parameter,
+                                    unsigned utc_hour) const noexcept;
+
+  /**
    * Get all UTC hours that are cached for a given parameter.
    * Returns sorted list.
    */
   std::vector<unsigned> GetCachedHours(const std::string &parameter) const noexcept;
-
-  /**
-   * Get all parameters that have at least one cached entry.
-   */
-  std::vector<std::string> GetCachedParameters() const noexcept;
 
   /**
    * Clear the entire download cache.
@@ -186,8 +187,8 @@ private:
   std::vector<ParameterInfo> available_parameters;
   bool index_loaded = false;
 
-  /** Cache: parameter -> (utc_hour -> geojson) */
-  std::map<std::string, std::map<unsigned, std::string>> geojson_cache;
+  /** Cache: parameter -> (utc_hour -> CachedSlice) */
+  std::map<std::string, std::map<unsigned, CachedSlice>> geojson_cache;
 
   static const std::string kEmptyString;
 

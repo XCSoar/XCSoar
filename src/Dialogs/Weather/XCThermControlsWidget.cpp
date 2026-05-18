@@ -205,7 +205,6 @@ public:
     auto_switch.OnManualLayerStep();
 
     auto &api = XCThermAPI::Instance();
-    const auto params = api.GetCachedParameters();
 
     /* Collect layer indices that have cached data */
     std::vector<unsigned> cached;
@@ -489,15 +488,10 @@ private:
       }
     });
 
-    auto_switch.SetTimeSwitchCallback([this](unsigned time_pos) {
-      if (time_pos < available_hours.size()) {
-        current_time_index = time_pos;
-        if (layer_available[current_layer])
-          DownloadAndApplyLayerForHour(current_layer,
-                                       available_hours[current_time_index]);
-        UpdateTimeLabel();
-      }
-    });
+    /* Time auto-switch is driven directly by TimerUpdate() picking the
+       correct cached hour every GPS tick; we don't register a time-switch
+       callback on XCThermAutoSwitch because that path would also try to
+       download on a miss (UI-thread blocking is unacceptable in flight). */
 
     const auto &settings =
       CommonInterface::GetComputerSettings().weather.xctherm;
@@ -517,24 +511,6 @@ private:
     } else {
       LogFmt("xctherm: no cached data for layer {}",
              LAYERS[layer_index].short_label);
-    }
-  }
-
-  /**
-   * (Legacy) Download a specific layer for a specific UTC hour.
-   * Used by auto-switch callbacks.
-   */
-  void DownloadAndApplyLayerForHour(unsigned layer_index,
-                                     unsigned utc_hour) noexcept {
-    auto &api = XCThermAPI::Instance();
-    if (api.IsLayerCached(LAYERS[layer_index].api_parameter, utc_hour)) {
-      ApplyCachedLayer(layer_index, utc_hour);
-    } else {
-      /* Not in cache — download now */
-      std::string geojson;
-      if (api.DownloadLayerForHour(LAYERS[layer_index].api_parameter,
-                                   utc_hour, geojson))
-        ApplyGeoJSONOverlay(geojson, LAYERS[layer_index].short_label);
     }
   }
 
@@ -589,11 +565,29 @@ private:
                   "%s%d:%02d",
                   offset_min >= 0 ? "+" : "-", oh, om);
 
-    StaticString<80> text;
+    /* Look up the issued time of the currently-displayed slice so the
+       pilot can tell whether they're looking at a fresh run. */
+    char issued_buf[24] = {0};
+    auto &api = XCThermAPI::Instance();
+    const auto *slice = api.GetCachedSlice(
+      LAYERS[current_layer].api_parameter, fcast_h);
+    if (slice != nullptr &&
+        slice->run_date.size() == 8 &&
+        slice->run_hour.size() == 2) {
+      std::snprintf(issued_buf, sizeof(issued_buf),
+                    " | run %.2s.%.2s %sZ",
+                    slice->run_date.c_str() + 6,  // DD
+                    slice->run_date.c_str() + 4,  // MM
+                    slice->run_hour.c_str());
+    }
+
+    StaticString<96> text;
     if (auto_switch.IsTimeAutoActive())
-      text.Format("AUTO: %02u:00 UTC (%s)", fcast_h, offset_buf);
+      text.Format("AUTO: %02u:00 UTC (%s)%s",
+                  fcast_h, offset_buf, issued_buf);
     else
-      text.Format("%02u:00 UTC (%s)", fcast_h, offset_buf);
+      text.Format("%02u:00 UTC (%s)%s",
+                  fcast_h, offset_buf, issued_buf);
 
     time_label.SetText(text);
     time_label.SetAvailable(true);

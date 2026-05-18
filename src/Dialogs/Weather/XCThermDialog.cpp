@@ -112,10 +112,12 @@ struct LayerDownloadInfo {
   double wire_mb = 0.0;           // total bytes over the network
   double size_mb = 0.0;           // total uncompressed size in memory
   double speed_mbs = 0.0;         // average download speed
-  unsigned span_hours = 0;        // number of hourly slices downloaded
+  unsigned span_hours = 0;        // hours of forecast cached (incl. reuse)
+  unsigned new_downloads = 0;     // slices newly fetched this run
   unsigned pending_index = 0;     // current slice being fetched (1-based)
   unsigned pending_total = 0;     // total slices in this span
   std::string download_time;      // "HH:MM:SS" local time
+  std::string issued_utc;         // "YYYY-MM-DD HH UTC" of the model run
 };
 
 /** Per-layer download info (indexed by layer position in the list) */
@@ -181,12 +183,22 @@ XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
       second_row = "Downloading...";
     break;
   case LayerDownloadInfo::DONE:
-    second_row.Format("Heruntergeladen %uh: %.2f MB (%.2f MB wire, %.1f MB/s) | %s",
-                      info[index].span_hours,
-                      info[index].size_mb,
-                      info[index].wire_mb,
-                      info[index].speed_mbs,
-                      info[index].download_time.c_str());
+    /* Show issued time so the user can tell whether a layer is from the
+       latest run; new_downloads vs span_hours shows how much of this
+       click was reused from cache vs newly fetched. */
+    if (info[index].new_downloads == 0)
+      second_row.Format("Cached %uh | Issued %s | %s",
+                        info[index].span_hours,
+                        info[index].issued_utc.c_str(),
+                        info[index].download_time.c_str());
+    else
+      second_row.Format("%uh (%u new) | Issued %s | %.2f MB wire %.1f MB/s | %s",
+                        info[index].span_hours,
+                        info[index].new_downloads,
+                        info[index].issued_utc.c_str(),
+                        info[index].wire_mb,
+                        info[index].speed_mbs,
+                        info[index].download_time.c_str());
     break;
   case LayerDownloadInfo::FAILED:
     second_row = "Download fehlgeschlagen";
@@ -228,7 +240,6 @@ public:
 class XCThermWidget final : public ListWidget {
   ButtonPanelWidget *buttons_widget = nullptr;
   Button *activate_button = nullptr;
-  Button *download_button = nullptr;
   Button *model_button = nullptr;
   Button *span_button = nullptr;
 
@@ -273,7 +284,7 @@ void
 XCThermWidget::CreateButtons(ButtonPanel &buttons)
 {
   activate_button = buttons.Add("Activate", [this]() { ActivateClicked(); });
-  download_button = buttons.Add("Download", [this]() { DownloadClicked(); });
+  buttons.Add("Download", [this]() { DownloadClicked(); });
   model_button = buttons.Add("Model", [this]() { ModelClicked(); });
   span_button = buttons.Add("Span", [this]() { SpanClicked(); });
 }
@@ -288,8 +299,7 @@ XCThermWidget::SaveSettings()
   Profile::Set(ProfileKeys::XCThermWaveHeight, (int)settings.wave_height);
   Profile::Set(ProfileKeys::XCThermVerticalWindAGL,
                (int)settings.vertical_wind_agl);
-  Profile::Set(ProfileKeys::XCThermDownloadSpan,
-               (int)settings.download_span_hours);
+  /* download_span_hours is session-only — not persisted. */
 }
 
 void
@@ -448,23 +458,38 @@ XCThermWidget::DownloadClicked()
   }
 
   auto *info = GetDownloadInfo(settings.model);
+  /* Snapshot the previous row info: we'll only commit the new info if
+     the download produces something usable. Same idea for the map
+     overlay — "never replace a forecast until the new one is fully
+     downloaded". */
+  const LayerDownloadInfo prev_row_info = info[target_index];
   auto &row_info = info[target_index];
 
-  /* Reset and mark as pending */
-  row_info = LayerDownloadInfo{};
   row_info.status = LayerDownloadInfo::PENDING;
   row_info.pending_total = span_hours;
   row_info.pending_index = 0;
   UpdateList();
 
-  /* Loop over every hour from +1h to +span_hours, downloading and
-     caching each. The map overlay is set to the first slice (closest
-     to now) so the user gets immediate visual feedback. */
+  /* Loop +1h..+span_hours. For each target hour:
+     - look up the latest slot (run + step) from the index
+     - if the cache already holds that exact run for that hour, skip
+       (this is what "only download what it doesn't have" means once
+       you account for newer runs invalidating older cached slices)
+     - otherwise download
+
+     We build a staging plan first so that if every slot is already
+     cached at the latest run, we don't touch the overlay at all —
+     "atomic": the old overlay stays visible until a successful new
+     download is parsed in.
+   */
   XCThermGeoJSON::ForecastLayer first_forecast;
   bool any_failed = false;
-  unsigned succeeded = 0;
+  unsigned succeeded_or_cached = 0;
+  unsigned newly_downloaded = 0;
   double total_wire_mb = 0.0;
   double total_disk_mb = 0.0;
+  std::string latest_run_date;
+  std::string latest_run_hour;
   auto span_start = std::chrono::steady_clock::now();
 
   for (unsigned offset = 1; offset <= span_hours; ++offset) {
@@ -480,23 +505,47 @@ XCThermWidget::DownloadClicked()
       continue;
     }
 
-    std::string geojson;
-    int64_t wire_bytes = 0;
-    if (!api.DownloadGeoJSON(param.c_str(), slot_date,
-                             slot_run_hour, slot_step, geojson,
-                             nullptr, &wire_bytes)) {
-      any_failed = true;
-      continue;
+    const unsigned run_h = (unsigned)std::atoi(slot_run_hour.c_str());
+    const unsigned forecast_utc = (run_h + slot_step) % 24;
+
+    /* Track the freshest run seen so we can display its timestamp. */
+    if (slot_date > latest_run_date ||
+        (slot_date == latest_run_date && slot_run_hour > latest_run_hour)) {
+      latest_run_date = slot_date;
+      latest_run_hour = slot_run_hour;
     }
 
-    total_wire_mb += (double)wire_bytes / (1024.0 * 1024.0);
-    total_disk_mb += (double)geojson.size() / (1024.0 * 1024.0);
-    ++succeeded;
+    const std::string *slice_geojson = nullptr;
+    std::string fresh_geojson;
 
-    /* Parse the first slice that yields data so the map always
-       gets refreshed (even if +1h is unavailable). */
-    if (first_forecast.IsEmpty()) {
-      auto forecast = XCThermGeoJSON::Parse(geojson, true);
+    if (api.IsCachedAtRun(param.c_str(), forecast_utc,
+                          slot_date, slot_run_hour)) {
+      /* Already have this exact hour from this exact run. */
+      LogFmt("xctherm: +{}h ({}UTC) already cached at run {}/{}Z — reused",
+             offset, forecast_utc, slot_date, slot_run_hour);
+      slice_geojson = &api.GetCachedGeoJSON(param.c_str(), forecast_utc);
+      ++succeeded_or_cached;
+    } else {
+      int64_t wire_bytes = 0;
+      if (!api.DownloadGeoJSON(param.c_str(), slot_date,
+                               slot_run_hour, slot_step, fresh_geojson,
+                               nullptr, &wire_bytes)) {
+        any_failed = true;
+        continue;
+      }
+      total_wire_mb += (double)wire_bytes / (1024.0 * 1024.0);
+      total_disk_mb += (double)fresh_geojson.size() / (1024.0 * 1024.0);
+      ++succeeded_or_cached;
+      ++newly_downloaded;
+      slice_geojson = &fresh_geojson;
+    }
+
+    /* Parse the first slice that yields data so the map overlay can be
+       refreshed atomically once the loop has produced *something* to
+       show. */
+    if (first_forecast.IsEmpty() && slice_geojson != nullptr &&
+        !slice_geojson->empty()) {
+      auto forecast = XCThermGeoJSON::Parse(*slice_geojson, true);
       if (!forecast.IsEmpty()) {
         forecast.layer_name = target.label;
         first_forecast = std::move(forecast);
@@ -508,15 +557,23 @@ XCThermWidget::DownloadClicked()
   double span_secs = std::chrono::duration<double>(span_end - span_start).count();
   double speed_mbs = span_secs > 0 ? total_wire_mb / span_secs : 0.0;
 
-  if (succeeded == 0) {
-    row_info.status = LayerDownloadInfo::FAILED;
+  /* If nothing usable was produced (no cache hits, no successful
+     downloads), revert the row and leave the existing overlay alone —
+     never replace a forecast with an empty one. */
+  if (succeeded_or_cached == 0) {
+    row_info = prev_row_info;
+    if (row_info.status == LayerDownloadInfo::NONE)
+      row_info.status = LayerDownloadInfo::FAILED;
     UpdateList();
+    ShowMessageBox("Forecast download failed.\nKeeping previous data.",
+                   "XCTherm", MB_OK);
     return;
   }
 
-  /* Replace the map overlay with this layer's forecast — regardless
-     of which layer was previously active, the user-facing behaviour is
-     "Download what I just selected, show what I just downloaded". */
+  /* Atomic overlay swap: only at this point — after we know we have at
+     least one parsed slice — do we touch the map. If the loop produced
+     no parseable slice (cache was empty AND every parse failed), keep
+     the previous overlay. */
   if (!first_forecast.IsEmpty()) {
     auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
     overlay->SetForecast(std::move(first_forecast), target.label);
@@ -527,9 +584,23 @@ XCThermWidget::DownloadClicked()
   row_info.size_mb = total_disk_mb;
   row_info.wire_mb = total_wire_mb;
   row_info.speed_mbs = speed_mbs;
-  row_info.span_hours = succeeded;
+  row_info.span_hours = succeeded_or_cached;
+  row_info.new_downloads = newly_downloaded;
   row_info.pending_index = 0;
   row_info.pending_total = 0;
+
+  /* Format the issued time of the freshest run seen in this download. */
+  if (latest_run_date.size() == 8 && latest_run_hour.size() == 2) {
+    char issued[24];
+    std::snprintf(issued, sizeof(issued), "%.4s-%.2s-%.2s %s UTC",
+                  latest_run_date.c_str(),
+                  latest_run_date.c_str() + 4,
+                  latest_run_date.c_str() + 6,
+                  latest_run_hour.c_str());
+    row_info.issued_utc = issued;
+  } else {
+    row_info.issued_utc = "?";
+  }
 
   std::time_t now = std::time(nullptr);
   std::tm *lt = std::localtime(&now);
@@ -541,9 +612,9 @@ XCThermWidget::DownloadClicked()
 
   if (any_failed) {
     StaticString<128> msg;
-    msg.Format("Downloaded %u of %u hourly slices.\n"
+    msg.Format("Got %u of %u hourly slices (%u newly downloaded).\n"
                "Some slots were unavailable.",
-               succeeded, span_hours);
+               succeeded_or_cached, span_hours, newly_downloaded);
     ShowMessageBox(msg, "XCTherm", MB_OK);
   }
 }
@@ -575,9 +646,9 @@ void
 XCThermWidget::SpanClicked()
 {
   static constexpr const char *choices[] = {
-    "1 hour", "3 hours", "6 hours", "12 hours", "18 hours", "24 hours",
+    "1 hour", "3 hours", "6 hours", "12 hours", "18 hours",
   };
-  static constexpr unsigned spans[] = { 1, 3, 6, 12, 18, 24 };
+  static constexpr unsigned spans[] = { 1, 3, 6, 12, 18 };
 
   auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
 
