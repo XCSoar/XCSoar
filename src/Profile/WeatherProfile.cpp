@@ -56,4 +56,6 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
   map.Get(ProfileKeys::XCThermWaveHeight, settings.xctherm.wave_height);
   map.Get(ProfileKeys::XCThermVerticalWindAGL,
           settings.xctherm.vertical_wind_agl);
+  map.Get(ProfileKeys::XCThermDownloadSpan,
+          settings.xctherm.download_span_hours);
 }
