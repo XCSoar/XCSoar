@@ -29,8 +29,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
-#: Data/Input/default.xci:601 Data/Input/default.xci:1295
-#: Data/Input/default.xci:1303
+#: Data/Input/default.xci:601 Data/Input/default.xci:1302
+#: Data/Input/default.xci:1310
 #, no-c-format
 msgid "Task"
 msgstr "任務"
@@ -441,7 +441,7 @@ msgstr "競賽ID"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:108
 #: src/net/client/WeGlide/UploadIGCFile.cpp:121 Data/Input/default.xci:801
-#: Data/Input/default.xci:1505
+#: Data/Input/default.xci:1512
 msgid "WeGlide Upload"
 msgstr "交通工具類型"
 
@@ -558,13 +558,13 @@ msgstr "不盤轉"
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:93
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:80
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:109
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:121
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:192
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:135
 #: src/Dialogs/Airspace/AirspaceList.cpp:465
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:515
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:522
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:386
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:257
@@ -574,7 +574,7 @@ msgstr "不盤轉"
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:362 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:104 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:571
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:520
 #: src/Dialogs/Waypoint/Manager.cpp:289
 #: src/Dialogs/Waypoint/WaypointList.cpp:281
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
@@ -585,7 +585,7 @@ msgstr "不盤轉"
 #: src/Dialogs/Task/AlternatesListDialog.cpp:271
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/dlgQuickGuide.cpp:512 src/Dialogs/dlgGestureHelp.cpp:46
-#: src/Dialogs/Weather/PCMetDialog.cpp:36
+#: src/Dialogs/Weather/PCMetDialog.cpp:191
 #: src/Dialogs/Weather/NOAADetails.cpp:125
 msgid "Close"
 msgstr "關閉"
@@ -628,7 +628,7 @@ msgstr "真實高度。"
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:174
 #: src/Dialogs/Airspace/AirspaceList.cpp:462
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:79
 #: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Waypoint/WaypointList.cpp:277
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
@@ -819,7 +819,7 @@ msgstr "完全"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:101
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
@@ -842,7 +842,7 @@ msgstr "關"
 #: src/Input/InputEventsSettings.cpp:493 src/Input/InputEventsSettings.cpp:497
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:100
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:174
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
@@ -1091,7 +1091,7 @@ msgstr "速度"
 #: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:78
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
-#: src/Dialogs/Weather/RASPDialog.cpp:129
+#: src/Dialogs/Weather/RASPDialog.cpp:133
 #, no-c-format
 msgid "Time"
 msgstr "時間"
@@ -1357,160 +1357,87 @@ msgstr "到達高度"
 msgid " ("
 msgstr "("
 
-#: src/Weather/Rasp/RaspStore.cpp:27 src/Weather/Rasp/RaspStore.cpp:32
+#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
 #, no-c-format
 msgid "W*"
 msgstr "W*"
 
-#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
+#: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
 #, no-c-format
-msgid ""
-"Average dry thermal updraft strength near mid-BL height. Subtract glider "
-"descent rate to get average vario reading for cloudless thermals. Updraft "
-"strengths will be stronger than this forecast if convective clouds are "
-"present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
-"\"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
-msgstr ""
-"幹熱氣流平均上升強度接近中等BL高度。減去滑翔機下降率以獲得無雲熱氣流高度計平"
-"均讀數。如果對流雲存在，則上升氣流強度將強於此預測，因為雲凝結增加高空浮力"
-"（即忽略了“雲吸”）。W*取決於表面加熱和BL深度。"
+msgid "Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
+msgstr "幹熱氣流平均上升強度接近中等BL高度。減去滑翔機下降率以獲得無雲熱氣流高度計平均讀數。如果對流雲存在，則上升氣流強度將強於此預測，因為雲凝結增加高空浮力（即忽略了“雲吸”）。W*取決於表面加熱和BL深度。"
 
-#: src/Weather/Rasp/RaspStore.cpp:37
+#: src/Weather/Rasp/RaspStore.cpp:38
 #, no-c-format
 msgid "BL Wind spd"
 msgstr "BL風速"
 
-#: src/Weather/Rasp/RaspStore.cpp:38
+#: src/Weather/Rasp/RaspStore.cpp:39
 #, no-c-format
-msgid ""
-"The speed and direction of the vector-averaged wind in the BL. This "
-"prediction can be misleading if there is a large change in wind direction "
-"through the BL."
-msgstr ""
-"BL中的向量平均風速的速度和方向。如果在BL中風向有很大的變化，則這種預測可能是"
-"誤導性的。"
+msgid "The speed and direction of the vector-averaged wind in the BL. This prediction can be misleading if there is a large change in wind direction through the BL."
+msgstr "BL中的向量平均風速的速度和方向。如果在BL中風向有很大的變化，則這種預測可能是誤導性的。"
 
-#: src/Weather/Rasp/RaspStore.cpp:42
+#: src/Weather/Rasp/RaspStore.cpp:43
 #, no-c-format
 msgid "H bl"
 msgstr "bl高度"
 
-#: src/Weather/Rasp/RaspStore.cpp:43
+#: src/Weather/Rasp/RaspStore.cpp:44
 #, no-c-format
-msgid ""
-"Height of the top of the mixing layer, which for thermal convection is the "
-"average top of a dry thermal. Over flat terrain, maximum thermalling heights "
-"will be lower due to the glider descent rate and other factors. In the "
-"presence of clouds (which release additional buoyancy aloft, creating "
-"\"cloudsuck\") the updraft top will be above this forecast, but the maximum "
-"thermalling height will then be limited by the cloud base. Further, when the "
-"mixing results from shear turbulence rather than thermal mixing this "
-"parameter is not useful for glider flying."
-msgstr ""
-"混合層頂部的高度，用於熱對流是幹燥熱氣流的平均頂部高度。在平坦的地形上，由於"
-"滑翔機下降速率和其他因素，最大的熱氣流高度將較低。在雲層的存在下（在高空釋放"
-"額外的浮力，產生“雲吸”），上升氣流頂部將高於這個預測，但是最大的熱氣流高度將"
-"被雲底所限制。此外，當混合來自剪切湍流而不是混合熱氣流時，該參數對於滑翔機飛"
-"行是不有用的。 "
+msgid "Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal. Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors. In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base. Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying."
+msgstr "混合層頂部的高度，用於熱對流是幹燥熱氣流的平均頂部高度。在平坦的地形上，由於滑翔機下降速率和其他因素，最大的熱氣流高度將較低。在雲層的存在下（在高空釋放額外的浮力，產生“雲吸”），上升氣流頂部將高於這個預測，但是最大的熱氣流高度將被雲底所限制。此外，當混合來自剪切湍流而不是混合熱氣流時，該參數對於滑翔機飛行是不有用的。 "
 
-#: src/Weather/Rasp/RaspStore.cpp:47
+#: src/Weather/Rasp/RaspStore.cpp:48
 #, no-c-format
 msgid "dwcrit"
 msgstr "dwcrit參數"
 
-#: src/Weather/Rasp/RaspStore.cpp:48
+#: src/Weather/Rasp/RaspStore.cpp:49
 #, no-c-format
-msgid ""
-"This parameter estimates the height above ground at which the average dry "
-"updraft strength drops below 225 fpm and is expected to give better "
-"quantitative numbers for the maximum cloudless thermalling height than the "
-"BL Top height, especially when mixing results from vertical wind shear "
-"rather than thermals. (Note: the present assumptions tend to underpredict "
-"the max. thermalling height for dry conditions.) In the presence of clouds "
-"the maximum thermalling height may instead be limited by the cloud base. "
-"Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"這個參數估計地面上的平均幹式上升氣流強度下降到低於225英尺的高度，並期望比BL頂"
-"部高度提供更大的無雲熱氣流高度的數量更好，特別是當混合結果是垂直風切變，而不"
-"是熱氣流時。（注：目前的假設往往低估了幹式摩擦的最大熱高度）。在雲的存在下，"
-"熱氣流的最大高度可能被雲底所限制。對於“幹”的熱氣流，這個參數省略了“雲吸”的影"
-"響。"
+msgid "This parameter estimates the height above ground at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "這個參數估計地面上的平均幹式上升氣流強度下降到低於225英尺的高度，並期望比BL頂部高度提供更大的無雲熱氣流高度的數量更好，特別是當混合結果是垂直風切變，而不是熱氣流時。（注：目前的假設往往低估了幹式摩擦的最大熱高度）。在雲的存在下，熱氣流的最大高度可能被雲底所限制。對於“幹”的熱氣流，這個參數省略了“雲吸”的影響。"
 
-#: src/Weather/Rasp/RaspStore.cpp:52
+#: src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "bl cloud"
 msgstr "bl雲"
 
-#: src/Weather/Rasp/RaspStore.cpp:53
+#: src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
-msgid ""
-"This parameter provides an additional means of evaluating the formation of "
-"clouds within the BL and might be used either in conjunction with or instead "
-"of the other cloud prediction parameters. It assumes a very simple "
-"relationship between cloud cover percentage and the maximum relative "
-"humidity within the BL. The cloud base height is not predicted, but is "
-"expected to be below the BL Top height."
-msgstr ""
-"該參數提供了一種評估BL內雲的形成的附加手段，並且可以與其它雲的預測參數結合使"
-"用或代替其它雲的預測參數。它假定雲覆蓋率與BL內的最大相對濕度之間非常簡單的關"
-"係。雲底高度未被預測，但預計低於BL頂部高度。"
+msgid "This parameter provides an additional means of evaluating the formation of clouds within the BL and might be used either in conjunction with or instead of the other cloud prediction parameters. It assumes a very simple relationship between cloud cover percentage and the maximum relative humidity within the BL. The cloud base height is not predicted, but is expected to be below the BL Top height."
+msgstr "該參數提供了一種評估BL內雲的形成的附加手段，並且可以與其它雲的預測參數結合使用或代替其它雲的預測參數。它假定雲覆蓋率與BL內的最大相對濕度之間非常簡單的關係。雲底高度未被預測，但預計低於BL頂部高度。"
 
-#: src/Weather/Rasp/RaspStore.cpp:57
+#: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
 msgstr "Sfc溫度"
 
-#: src/Weather/Rasp/RaspStore.cpp:58
+#: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
-msgid ""
-"The temperature at a height of 2m above ground level. This can be compared "
-"to observed surface temperatures as an indication of model simulation "
-"accuracy; e.g. if observed surface temperatures are significantly below "
-"those forecast, then soaring conditions will be poorer than forecast."
-msgstr ""
-"地面2m以上的溫度。這可以與觀察到的表面溫度作為指示類比精度模型進行比較；例"
-"如，如果觀察到的表面溫度明顯低於那些預測，那麼翱翔的條件將比預測差。"
+msgid "The temperature at a height of 2m above ground level. This can be compared to observed surface temperatures as an indication of model simulation accuracy; e.g. if observed surface temperatures are significantly below those forecast, then soaring conditions will be poorer than forecast."
+msgstr "地面2m以上的溫度。這可以與觀察到的表面溫度作為指示類比精度模型進行比較；例如，如果觀察到的表面溫度明顯低於那些預測，那麼翱翔的條件將比預測差。"
 
-#: src/Weather/Rasp/RaspStore.cpp:62
+#: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "hwcrit"
 msgstr "hwcrit參數"
 
-#: src/Weather/Rasp/RaspStore.cpp:63
+#: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
-msgid ""
-"This parameter estimates the height at which the average dry updraft "
-"strength drops below 225 fpm and is expected to give better quantitative "
-"numbers for the maximum cloudless thermalling height than the BL Top height, "
-"especially when mixing results from vertical wind shear rather than "
-"thermals. (Note: the present assumptions tend to underpredict the max. "
-"thermalling height for dry conditions.) In the presence of clouds the "
-"maximum thermalling height may instead be limited by the cloud base. Being "
-"for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"這個參數估計平均幹式上升氣流強度低於225fpm的高度，並預期比BL頂部高度給出最大"
-"無雲熱氣流高度的數量更好。特別是當混合的結果來自垂直風切變，而不是熱氣流。"
-"（注：目前的假設往往低估了幹式摩擦的最大熱氣流高度）。在雲的存在下，最大的熱"
-"氣流高度可能被雲底所限制。對於“幹”的熱氣流，這個參數省略了“雲吸”的影響。"
+msgid "This parameter estimates the height at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "這個參數估計平均幹式上升氣流強度低於225fpm的高度，並預期比BL頂部高度給出最大無雲熱氣流高度的數量更好。特別是當混合的結果來自垂直風切變，而不是熱氣流。（注：目前的假設往往低估了幹式摩擦的最大熱氣流高度）。在雲的存在下，最大的熱氣流高度可能被雲底所限制。對於“幹”的熱氣流，這個參數省略了“雲吸”的影響。"
 
-#: src/Weather/Rasp/RaspStore.cpp:67
+#: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "wblmaxmin"
 msgstr "wbl最大最小參數"
 
-#: src/Weather/Rasp/RaspStore.cpp:68
+#: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
-msgid ""
-"Maximum grid-area-averaged extensive upward or downward motion within the BL "
-"as created by horizontal wind convergence. Positive convergence is "
-"associated with local small-scale convergence lines. Negative convergence "
-"(divergence) produces subsiding vertical motion, creating low-level "
-"inversions which limit thermalling heights."
-msgstr ""
-"最大平均網格面積由水準風輻合產生在BL內向上或向下運動正收斂是與當地小的輻合線"
-"有關。負收斂（發散）產生下限垂直運動，產生低高度逆溫層限制熱氣流高度。"
+msgid "Maximum grid-area-averaged extensive upward or downward motion within the BL as created by horizontal wind convergence. Positive convergence is associated with local small-scale convergence lines. Negative convergence (divergence) produces subsiding vertical motion, creating low-level inversions which limit thermalling heights."
+msgstr "最大平均網格面積由水準風輻合產生在BL內向上或向下運動正收斂是與當地小的輻合線有關。負收斂（發散）產生下限垂直運動，產生低高度逆溫層限制熱氣流高度。"
 
-#: src/Weather/Rasp/RaspStore.cpp:72
+#: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "blcwbase"
 msgstr "blcwbase參數"
@@ -1551,28 +1478,28 @@ msgstr "距離"
 msgid "Target speed"
 msgstr "目標速度"
 
-#: src/Renderer/BarographRenderer.cpp:27 src/Renderer/BarographRenderer.cpp:33
+#: src/Renderer/BarographRenderer.cpp:34 src/Renderer/BarographRenderer.cpp:43
 msgid "Working band"
 msgstr "工作波段"
 
-#: src/Renderer/BarographRenderer.cpp:37
+#: src/Renderer/BarographRenderer.cpp:47
 msgid "Ceiling trend"
 msgstr "上限趨勢"
 
-#: src/Renderer/ClimbChartRenderer.cpp:27
-#: src/Renderer/ClimbChartRenderer.cpp:32
+#: src/Renderer/ClimbChartRenderer.cpp:33
+#: src/Renderer/ClimbChartRenderer.cpp:38
 msgid "Avg. climb"
 msgstr "平均爬升率"
 
-#: src/Renderer/ClimbChartRenderer.cpp:35
+#: src/Renderer/ClimbChartRenderer.cpp:41
 msgid "Climb trend"
 msgstr "爬升趨勢"
 
-#: src/Renderer/GlidePolarRenderer.cpp:29
+#: src/Renderer/GlidePolarRenderer.cpp:36
 msgid "L/D"
 msgstr "滑翔比"
 
-#: src/Renderer/GlidePolarRenderer.cpp:33
+#: src/Renderer/GlidePolarRenderer.cpp:40
 msgid "Min. sink"
 msgstr "最小下沉率"
 
@@ -1595,12 +1522,12 @@ msgstr "熱氣流高度"
 msgid "Cloud base"
 msgstr "雲底"
 
-#: src/Renderer/MacCreadyRenderer.cpp:28 src/InfoBoxes/Content/Factory.cpp:464
+#: src/Renderer/MacCreadyRenderer.cpp:33 src/InfoBoxes/Content/Factory.cpp:464
 #, no-c-format
 msgid "Vopt"
 msgstr "優化速度"
 
-#: src/Renderer/TaskSpeedRenderer.cpp:32
+#: src/Renderer/TaskSpeedRenderer.cpp:38
 msgid "Vest"
 msgstr "Vest"
 
@@ -1791,7 +1718,7 @@ msgstr "場地文件"
 #: src/Dialogs/InternalLink.cpp:77
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:128
-#: Data/Input/default.xci:843 Data/Input/default.xci:1467
+#: Data/Input/default.xci:843 Data/Input/default.xci:1474
 #, no-c-format
 msgid "Logger"
 msgstr "記錄器"
@@ -1819,7 +1746,7 @@ msgstr "滑翔機"
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:979
-#: Data/Input/default.xci:1392
+#: Data/Input/default.xci:1399
 #, no-c-format
 msgid "Weather"
 msgstr "天氣"
@@ -1886,7 +1813,7 @@ msgstr "重試"
 #: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:281
 #: Data/Input/default.xci:151 Data/Input/default.xci:593
 #: Data/Input/default.xci:688 Data/Input/default.xci:835
-#: Data/Input/default.xci:1055
+#: Data/Input/default.xci:1055 Data/Input/default.xci:1142
 msgid "Cancel"
 msgstr "取消"
 
@@ -1940,7 +1867,7 @@ msgstr "下載存儲庫索引失敗。"
 
 #: src/Dialogs/FileManager.cpp:739 src/Dialogs/FileManager.cpp:764
 #: src/Dialogs/DownloadFilePicker.cpp:274 Data/Input/default.xci:817
-#: Data/Input/default.xci:1490
+#: Data/Input/default.xci:1497
 msgid "File Manager"
 msgstr "此設備上沒有檔案管理員"
 
@@ -2130,7 +2057,7 @@ msgstr "調試"
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 #: src/Dialogs/MapItemListDialog.cpp:184
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "准許"
@@ -2166,7 +2093,7 @@ msgid "Pitot"
 msgstr "Pitot埠"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:423
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid "Airspeed"
 msgstr "空速"
 
@@ -2223,7 +2150,7 @@ msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "與該設備的通信將被記錄到下一%u分鐘。"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:782 Data/Input/default.xci:759
-#: Data/Input/default.xci:1482
+#: Data/Input/default.xci:1489
 msgid "Devices"
 msgstr "設備"
 
@@ -2519,38 +2446,30 @@ msgstr "設置新的音訊方案？舊值將會丟失。"
 msgid "Vario Configuration"
 msgstr "Vario配置"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 msgid "TE vario"
 msgstr "高度表總能量"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
-msgid ""
-"This produces a fake TE vario gross vertical velocity. It can be used when "
-"in circling mode to demonstrate the lift tones. When not in circling mode, "
-"set this to a realistic negative value so speed command tones are produced."
-msgstr ""
-"這產生了一個假的高度表總能量的總垂直速度。它可以用於在迴圈模式中演示提升音"
-"調。當不處於迴圈模式時，把這個設定成一個真實的負值，這樣就產生了速度指令音"
-"調。"
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+msgid "This produces a fake TE vario gross vertical velocity. It can be used when in circling mode to demonstrate the lift tones. When not in circling mode, set this to a realistic negative value so speed command tones are produced."
+msgstr "這產生了一個假的高度表總能量的總垂直速度。它可以用於在迴圈模式中演示提升音調。當不處於迴圈模式時，把這個設定成一個真實的負值，這樣就產生了速度指令音調。"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
-msgid ""
-"This produces a fake airspeed. It can be used when not in circling mode to "
-"demonstrate the speed command tones."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:101
+msgid "This produces a fake airspeed. It can be used when not in circling mode to demonstrate the speed command tones."
 msgstr "這會產生偽造的空速。不在迴圈模式下能被使用演示速度命令音調。"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:105
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:57
 #, no-c-format
 msgid "Circling"
 msgstr "盤轉"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "This forces the variometer into circling or cruise mode"
 msgstr "這迫使高度計進入盤旋或巡航模式"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:120
 msgid "Vario Demo"
 msgstr "高度計演示"
 
@@ -2839,7 +2758,7 @@ msgstr "警告"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:83 src/Dialogs/dlgAnalysis.cpp:570
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:83
-#: Data/Input/default.xci:725 Data/Input/default.xci:1344
+#: Data/Input/default.xci:725 Data/Input/default.xci:1351
 #, no-c-format
 msgid "Airspace"
 msgstr "空域"
@@ -2903,7 +2822,7 @@ msgid "Heading"
 msgstr "航向"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:431
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:218
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:105
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:488
@@ -2968,12 +2887,12 @@ msgstr "填充模式"
 msgid "Defines how the airspace is filled with the configured color."
 msgstr "定義空域如何填充配置的顏色。"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:75
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "ACK"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "確認日"
@@ -2981,11 +2900,11 @@ msgstr "確認日"
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:313
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:314
 msgid "No Warnings"
 msgstr "無告警"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:513 Data/Input/default.xci:1375
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:520 Data/Input/default.xci:1382
 msgid "Airspace Warnings"
 msgstr "空域告警"
 
@@ -3060,7 +2979,7 @@ msgstr ""
 "現在打開平面配置嗎？"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:175
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1201
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1208
 msgid "Flight Setup"
 msgstr "飛行設置"
 
@@ -3140,7 +3059,7 @@ msgstr "元素"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:711
-#: Data/Input/default.xci:1265
+#: Data/Input/default.xci:1272
 #, no-c-format
 msgid "Terrain"
 msgstr "地形"
@@ -3239,7 +3158,7 @@ msgstr "配置"
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "保存更改配置。重新啟動XCSOAR以應用更改。"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:220
 msgid "The name of this InfoBox panel configuration."
 msgstr "此資訊框面板配置的名稱。"
 
@@ -3422,7 +3341,7 @@ msgstr "任務計算"
 #: src/Dialogs/dlgAnalysis.cpp:540 src/Dialogs/dlgAnalysis.cpp:550
 #: src/Dialogs/dlgAnalysis.cpp:559 src/Dialogs/dlgAnalysis.cpp:569
 #: src/Dialogs/dlgAnalysis.cpp:718 Data/Input/default.xci:1003
-#: Data/Input/default.xci:1434
+#: Data/Input/default.xci:1441
 msgid "Analysis"
 msgstr "分析"
 
@@ -3473,7 +3392,7 @@ msgstr "告警"
 
 #: src/Dialogs/dlgChecklist.cpp:55 src/Dialogs/dlgChecklist.cpp:192
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:106
-#: Data/Input/default.xci:995 Data/Input/default.xci:1322
+#: Data/Input/default.xci:995 Data/Input/default.xci:1329
 msgid "Checklist"
 msgstr "檢查表"
 
@@ -3705,7 +3624,7 @@ msgstr "飛機極曲線"
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:126
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:278
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:300
-#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:183
+#: src/Dialogs/Weather/PCMetDialog.cpp:208 src/Dialogs/Weather/NOAAList.cpp:183
 #: src/Dialogs/Weather/NOAAList.cpp:199 src/Dialogs/Weather/NOAADetails.cpp:88
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:355
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:390
@@ -3727,7 +3646,7 @@ msgstr "選擇設定檔"
 msgid "Switch InfoBox"
 msgstr "變換資訊框"
 
-#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
+#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:113
 msgid "File"
 msgstr "文件"
 
@@ -3756,7 +3675,7 @@ msgstr "重放"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:48 src/Dialogs/StartupDialog.cpp:83
 #: src/Dialogs/dlgQuickGuide.cpp:513 src/Dialogs/dlgQuickGuide.cpp:708
-#: Data/Input/default.xci:1143
+#: Data/Input/default.xci:1150
 msgid "Quit"
 msgstr "退出"
 
@@ -3787,7 +3706,7 @@ msgstr "輸入新密碼"
 
 #: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
 #: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:1021
-#: Data/Input/default.xci:1442
+#: Data/Input/default.xci:1449
 msgid "Status"
 msgstr "狀態"
 
@@ -4139,15 +4058,15 @@ msgstr "設置為新家"
 msgid "Pan to Waypoint"
 msgstr "Pan to 航點"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:538 Data/Input/default.xci:1400
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:487 Data/Input/default.xci:1407
 msgid "GoTo"
 msgstr "GoTo轉到"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:541
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:490
 msgid "Pan To"
 msgstr "移動至"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:1030
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:877
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -4160,7 +4079,7 @@ msgstr "刪除航點？"
 #: src/Dialogs/Waypoint/Manager.cpp:286
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:809
-#: Data/Input/default.xci:1241
+#: Data/Input/default.xci:1248
 msgid "Waypoint Editor"
 msgstr "航點編輯器"
 
@@ -4337,7 +4256,7 @@ msgid "Display airspaces below the glider or within a margin."
 msgstr "顯示滑翔機下方或空隙內的空域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
@@ -4990,95 +4909,75 @@ msgid ""
 "pages."
 msgstr "控制最終滑翔資訊框模式是否應用於自動頁。"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:72
 msgid "Text size"
 msgstr "文本大小"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
 msgid "Display Resolution"
 msgstr "顯示解析度"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
-msgid ""
-"The display resolution is used to adapt line widths, font size, landable "
-"size and more."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:78
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "顯示解析度用於適應線寬、字體大小、可著陸區大小等。"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:87
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:113
 msgid "Automatic"
 msgstr "自動"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:90
-#, c-format
-msgid "%d dpi"
-msgstr "%d dpi"
-
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:98
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
 msgid "Events"
 msgstr "事件"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-msgid ""
-"The Input Events file defines the menu system and how XCSoar responds to "
-"button presses and events from external devices."
-msgstr ""
-"輸入事件檔定義功能表系統以及XCSoar如何回應來自外部設備的按鈕按壓和事件。"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
+msgid "The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices."
+msgstr "輸入事件檔定義功能表系統以及XCSoar如何回應來自外部設備的按鈕按壓和事件。"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 msgid "Language"
 msgstr "語言"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
-msgid ""
-"The language options selects translations for English texts to other "
-"languages. Select English for a native interface or Automatic to localise "
-"XCSoar according to the system settings."
-msgstr ""
-"語言選項選擇翻譯英文文本到其他語言。為本國介面選擇英語，或根據系統自動設置"
-"XCSOAR到當地語言。"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:108
+msgid "The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings."
+msgstr "語言選項選擇翻譯英文文本到其他語言。為本國介面選擇英語，或根據系統自動設置XCSOAR到當地語言。"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
 msgid "Menu timeout"
 msgstr "菜單超時"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
-msgid ""
-"This determines how long menus will appear on screen if the user does not "
-"make any button presses or interacts with the computer."
-msgstr ""
-"這決定了如果使用者不進行任何按鈕按壓或與電腦交互，螢幕上的功能表會顯示多長時"
-"間。"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:147
+msgid "This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer."
+msgstr "這決定了如果使用者不進行任何按鈕按壓或與電腦交互，螢幕上的功能表會顯示多長時間。"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:155
 #, no-c-format
 msgid "Keyboard"
 msgstr "鍵盤"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:156
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:157
 #, no-c-format
 msgid "HighScore Style"
 msgstr "高分樣式"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
 msgid "Text input style"
 msgstr "文本輸入樣式"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
-msgid ""
-"Determines how the user is prompted for text input (filename, teamcode etc.)"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
+msgid "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr "確定如何提示使用者輸入文本（檔案名、團隊代碼等。）"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #, no-c-format
 msgid "OS settings"
 msgstr "OS設置"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
 msgid "Haptic feedback"
 msgstr "觸覺回饋"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:179
 msgid "Determines if haptic feedback like vibration is used."
 msgstr "確定是否使用觸覺回饋，如振動。"
 
@@ -7596,12 +7495,12 @@ msgstr "沒有替代場地可用"
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:316
 #: src/Dialogs/Task/AlternatesListDialog.cpp:349 Data/Input/default.xci:582
-#: Data/Input/default.xci:1367
+#: Data/Input/default.xci:1374
 msgid "Alternates"
 msgstr "交替"
 
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
+#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:87
+#: src/Dialogs/Weather/RASPDialog.cpp:139
 msgid "Now"
 msgstr "現在"
 
@@ -7615,7 +7514,7 @@ msgstr "預設"
 msgid "METAR and TAF"
 msgstr "METAR和TAF"
 
-#: src/Dialogs/Weather/RASPDialog.cpp:122
+#: src/Dialogs/Weather/RASPDialog.cpp:126
 msgid "Field"
 msgstr "欄位"
 
@@ -10473,23 +10372,23 @@ msgstr "音調音階"
 msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr "調整所有模式基音音調音階。"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:85
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:89
 msgid "Beep type"
 msgstr "嗶嗶聲類型"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:88
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:92
 msgid "Pitch scheme"
 msgstr "俯仰方案"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:91
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:95
 msgid "Pitch scale"
 msgstr "俯仰角度"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:94
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:98
 msgid "Period scheme"
 msgstr "週期方案"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:97
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:101
 msgid "Period scale"
 msgstr "週期尺度"
 
@@ -10792,9 +10691,9 @@ msgstr "通過地形最後的滑翔"
 
 #: Data/Input/default.xci:158 Data/Input/default.xci:165
 #: Data/Input/default.xci:648 Data/Input/default.xci:655
-#: Data/Input/default.xci:663 Data/Input/default.xci:1158
-#: Data/Input/default.xci:1165 Data/Input/default.xci:1172
-#: Data/Input/default.xci:1425
+#: Data/Input/default.xci:663 Data/Input/default.xci:1165
+#: Data/Input/default.xci:1172 Data/Input/default.xci:1179
+#: Data/Input/default.xci:1432
 msgid "Zoom"
 msgstr "縮放"
 
@@ -10833,7 +10732,7 @@ msgid "Previous waypoint"
 msgstr "上一個航點"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:618
-#: Data/Input/default.xci:1310
+#: Data/Input/default.xci:1317
 msgid "Pilot event announced"
 msgstr "飛行員事件宣布"
 
@@ -10843,27 +10742,27 @@ msgid ""
 "Page 2/2"
 msgstr "导航"
 
-#: Data/Input/default.xci:574 Data/Input/default.xci:1359
+#: Data/Input/default.xci:574 Data/Input/default.xci:1366
 msgid "Waypoint List"
 msgstr ""
 "航點\n"
 "表"
 
-#: Data/Input/default.xci:608 Data/Input/default.xci:1414
+#: Data/Input/default.xci:608 Data/Input/default.xci:1421
 msgid "Dropped marker"
 msgstr "下降標記"
 
-#: Data/Input/default.xci:611 Data/Input/default.xci:1417
+#: Data/Input/default.xci:611 Data/Input/default.xci:1424
 msgid "Marker Drop"
 msgstr ""
 "標記\n"
 "落下"
 
-#: Data/Input/default.xci:621 Data/Input/default.xci:1313
+#: Data/Input/default.xci:621 Data/Input/default.xci:1320
 msgid "Pilot Event Announce"
 msgstr "飛行員"
 
-#: Data/Input/default.xci:629 Data/Input/default.xci:1330
+#: Data/Input/default.xci:629 Data/Input/default.xci:1337
 msgid "Target Show"
 msgstr "目標"
 
@@ -10877,19 +10776,19 @@ msgstr "顯示"
 msgid "Page Show"
 msgstr "頁面顯示"
 
-#: Data/Input/default.xci:677 Data/Input/default.xci:1351
+#: Data/Input/default.xci:677 Data/Input/default.xci:1358
 msgid "Pan Mode"
 msgstr "全方位模式"
 
-#: Data/Input/default.xci:696 Data/Input/default.xci:1250
+#: Data/Input/default.xci:696 Data/Input/default.xci:1257
 msgid "Labels"
 msgstr "標籤"
 
-#: Data/Input/default.xci:704 Data/Input/default.xci:1258
+#: Data/Input/default.xci:704 Data/Input/default.xci:1265
 msgid "Trail"
 msgstr "軌跡"
 
-#: Data/Input/default.xci:718 Data/Input/default.xci:1272
+#: Data/Input/default.xci:718 Data/Input/default.xci:1279
 msgid "Topo."
 msgstr "地貌。"
 
@@ -10905,7 +10804,7 @@ msgid ""
 "Page 3/3"
 msgstr "設定"
 
-#: Data/Input/default.xci:850 Data/Input/default.xci:1474
+#: Data/Input/default.xci:850 Data/Input/default.xci:1481
 msgid "NMEA Logger"
 msgstr "NMEA記錄器"
 
@@ -10991,7 +10890,7 @@ msgid ""
 "Page 2/3"
 msgstr "資訊"
 
-#: Data/Input/default.xci:971 Data/Input/default.xci:1407
+#: Data/Input/default.xci:971 Data/Input/default.xci:1414
 msgid "FLARM Radar"
 msgstr "FLARM雷達"
 
@@ -11005,15 +10904,15 @@ msgstr "資訊"
 msgid "Traffic List"
 msgstr "交通列表"
 
-#: Data/Input/default.xci:1045 Data/Input/default.xci:1450
+#: Data/Input/default.xci:1045 Data/Input/default.xci:1457
 msgid "Thermal Assistant"
 msgstr "熱氣流輔助"
 
-#: Data/Input/default.xci:1072 Data/Input/default.xci:1458
+#: Data/Input/default.xci:1072 Data/Input/default.xci:1465
 msgid "Airspaces"
 msgstr "空域"
 
-#: Data/Input/default.xci:1079 Data/Input/default.xci:1497
+#: Data/Input/default.xci:1079 Data/Input/default.xci:1504
 msgid "Message Repeat"
 msgstr ""
 "資訊\n"
@@ -11035,49 +10934,45 @@ msgstr "配置"
 msgid "Lock Screen"
 msgstr "锁屏"
 
-#: Data/Input/default.xci:1186
+#: Data/Input/default.xci:1193
 msgid "AVG/ALT"
 msgstr "平均/高度"
 
-#: Data/Input/default.xci:1209
+#: Data/Input/default.xci:1216
 msgid "Setup Wind"
 msgstr ""
 "設置\n"
 "風"
 
-#: Data/Input/default.xci:1217
+#: Data/Input/default.xci:1224
 msgid "Setup System"
 msgstr ""
 "設置\n"
 "系統"
 
-#: Data/Input/default.xci:1225
+#: Data/Input/default.xci:1232
 msgid "Settings Airspace"
 msgstr ""
 "設置\n"
 "空域"
 
-#: Data/Input/default.xci:1233
+#: Data/Input/default.xci:1240
 msgid "Setup Plane"
 msgstr "設置飛機"
 
-#: Data/Input/default.xci:1337
+#: Data/Input/default.xci:1344
 msgid "MacCready"
 msgstr "MacCready參數 "
 
-#: Data/Input/default.xci:1383
+#: Data/Input/default.xci:1390
 msgid "Nearest Airspace"
 msgstr ""
 "最近的\n"
 "空域"
 
-#: Data/Input/default.xci:1512
+#: Data/Input/default.xci:1519
 msgid "Quit XCSoar"
 msgstr "退出XCSoar"
-#: src/net/client/WeGlide/UploadIGCFile.cpp:119
-msgid "Please set WeGlide Aircraft Type in Plane profile before uploading."
-msgstr "上傳前請在飛機設定檔中設定 WeGlide 飛機類型。"
-
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:53
 msgid "unknown"
 msgstr "未知"
@@ -11099,7 +10994,7 @@ msgstr "選擇 WeGlide 類型"
 msgid "Thermal hotspot"
 msgstr "熱點"
 
-#: src/Renderer/MacCreadyRenderer.cpp:31 src/Renderer/TaskSpeedRenderer.cpp:29
+#: src/Renderer/MacCreadyRenderer.cpp:36 src/Renderer/TaskSpeedRenderer.cpp:35
 #, no-c-format
 msgctxt "Average velocity abbreviation"
 msgid "Vave"
@@ -11409,5 +11304,24 @@ msgstr ""
 #. Title is StaticString<32> (31 bytes + NUL).
 #: src/InfoBoxes/Content/Task.cpp:1024
 msgid "Start unknown"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:370
+#, c-format
+msgid "%d secs"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:376
+#, c-format
+msgid " dist %d m"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:382
+msgid " vertical "
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:91
+#, c-format
+msgid "%u dpi"
 msgstr ""
 

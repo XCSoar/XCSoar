@@ -33,8 +33,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
-#: Data/Input/default.xci:601 Data/Input/default.xci:1295
-#: Data/Input/default.xci:1303
+#: Data/Input/default.xci:601 Data/Input/default.xci:1302
+#: Data/Input/default.xci:1310
 #, no-c-format
 msgid "Task"
 msgstr "Zadanie"
@@ -474,7 +474,7 @@ msgstr "Znaki konk."
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:108
 #: src/net/client/WeGlide/UploadIGCFile.cpp:121 Data/Input/default.xci:801
-#: Data/Input/default.xci:1505
+#: Data/Input/default.xci:1512
 msgid "WeGlide Upload"
 msgstr "Typ statku pow."
 
@@ -591,13 +591,13 @@ msgstr "Nie krążysz"
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:93
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:80
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:109
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:121
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:192
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:135
 #: src/Dialogs/Airspace/AirspaceList.cpp:465
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:515
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:522
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:386
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:257
@@ -607,7 +607,7 @@ msgstr "Nie krążysz"
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:362 src/Dialogs/HelpDialog.cpp:30
 #: src/Dialogs/dlgInfoBoxAccess.cpp:104 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:571
+#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:520
 #: src/Dialogs/Waypoint/Manager.cpp:289
 #: src/Dialogs/Waypoint/WaypointList.cpp:281
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
@@ -618,7 +618,7 @@ msgstr "Nie krążysz"
 #: src/Dialogs/Task/AlternatesListDialog.cpp:271
 #: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
 #: src/Dialogs/dlgQuickGuide.cpp:512 src/Dialogs/dlgGestureHelp.cpp:46
-#: src/Dialogs/Weather/PCMetDialog.cpp:36
+#: src/Dialogs/Weather/PCMetDialog.cpp:191
 #: src/Dialogs/Weather/NOAADetails.cpp:125
 msgid "Close"
 msgstr "Zamknij"
@@ -661,7 +661,7 @@ msgstr "Wys. wzgl."
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:174
 #: src/Dialogs/Airspace/AirspaceList.cpp:462
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:79
 #: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Waypoint/WaypointList.cpp:277
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
@@ -856,7 +856,7 @@ msgstr "Pełny"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:101
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
@@ -879,7 +879,7 @@ msgstr "Nie"
 #: src/Input/InputEventsSettings.cpp:493 src/Input/InputEventsSettings.cpp:497
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:100
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:174
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
@@ -1128,7 +1128,7 @@ msgstr "Prędkość"
 #: src/Renderer/FlightStatisticsRenderer.cpp:265
 #: src/Dialogs/InternalLink.cpp:78
 #: src/Dialogs/Settings/dlgConfiguration.cpp:125
-#: src/Dialogs/Weather/RASPDialog.cpp:129
+#: src/Dialogs/Weather/RASPDialog.cpp:133
 #, no-c-format
 msgid "Time"
 msgstr "Czas"
@@ -1394,182 +1394,87 @@ msgstr "Wys przylotu"
 msgid " ("
 msgstr "("
 
-#: src/Weather/Rasp/RaspStore.cpp:27 src/Weather/Rasp/RaspStore.cpp:32
+#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
 #, no-c-format
 msgid "W*"
 msgstr "W*"
 
-#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
+#: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
 #, no-c-format
-msgid ""
-"Average dry thermal updraft strength near mid-BL height. Subtract glider "
-"descent rate to get average vario reading for cloudless thermals. Updraft "
-"strengths will be stronger than this forecast if convective clouds are "
-"present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
-"\"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
-msgstr ""
-"Średnia wartość noszenia termiki bezchmurnej w pobliżu wysokości mid-BL. "
-"Odejmij prędkość opadania szybowca w celu uzyskania średniego noszenia "
-"termiki bezchmurnej. Noszenia będą silniejsze niż wynika z tej prognozy w "
-"przypadku obecności chmur konweksyjnych, gdyż kondensacja zwieksza sił "
-"wyporu (efekt 'zasysania' przez chmury). W* zależy od stopnia ogrzania "
-"powierzchni ziemi i zasięgu wysokości warstwy BL."
+msgid "Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
+msgstr "Średnia wartość noszenia termiki bezchmurnej w pobliżu wysokości mid-BL. Odejmij prędkość opadania szybowca w celu uzyskania średniego noszenia termiki bezchmurnej. Noszenia będą silniejsze niż wynika z tej prognozy w przypadku obecności chmur konweksyjnych, gdyż kondensacja zwieksza sił wyporu (efekt 'zasysania' przez chmury). W* zależy od stopnia ogrzania powierzchni ziemi i zasięgu wysokości warstwy BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:37
+#: src/Weather/Rasp/RaspStore.cpp:38
 #, no-c-format
 msgid "BL Wind spd"
 msgstr "BL - prędkość wiatru"
 
-#: src/Weather/Rasp/RaspStore.cpp:38
+#: src/Weather/Rasp/RaspStore.cpp:39
 #, no-c-format
-msgid ""
-"The speed and direction of the vector-averaged wind in the BL. This "
-"prediction can be misleading if there is a large change in wind direction "
-"through the BL."
-msgstr ""
-"Prędkość i kierunek wektorowo uśrednionego wiatru w warstwie BL. To "
-"szacowanie może nie być dokładne, jeżeli wewnątrz BL następuje istotna "
-"zmiana kierunku wiatru."
+msgid "The speed and direction of the vector-averaged wind in the BL. This prediction can be misleading if there is a large change in wind direction through the BL."
+msgstr "Prędkość i kierunek wektorowo uśrednionego wiatru w warstwie BL. To szacowanie może nie być dokładne, jeżeli wewnątrz BL następuje istotna zmiana kierunku wiatru."
 
-#: src/Weather/Rasp/RaspStore.cpp:42
+#: src/Weather/Rasp/RaspStore.cpp:43
 #, no-c-format
 msgid "H bl"
 msgstr "H bl"
 
-#: src/Weather/Rasp/RaspStore.cpp:43
+#: src/Weather/Rasp/RaspStore.cpp:44
 #, no-c-format
-msgid ""
-"Height of the top of the mixing layer, which for thermal convection is the "
-"average top of a dry thermal. Over flat terrain, maximum thermalling heights "
-"will be lower due to the glider descent rate and other factors. In the "
-"presence of clouds (which release additional buoyancy aloft, creating "
-"\"cloudsuck\") the updraft top will be above this forecast, but the maximum "
-"thermalling height will then be limited by the cloud base. Further, when the "
-"mixing results from shear turbulence rather than thermal mixing this "
-"parameter is not useful for glider flying."
-msgstr ""
-"Pionowy zasięg wysokości warstwy mieszania, co odpowiada średniemu zaięgowi "
-"pionowemu kominów termiki bezchmurnej. Ponad terenem płaskim, maksymalny "
-"zasięg pionowy kominów termicznych będzie mniejszy ze względu na opadanie "
-"własne szybowca i inne czynniki. W przypadku wystąpienia chmur maksymalny "
-"zasięg termiki do wykorzystania może być ograniczony ich podstawą. Ponadto, "
-"gdy mieszanie następuje na skutek np. wiatrów gradientowych, a nie termiki, "
-"ten parametr nie jest przydatny w lotach szybowcowych. "
+msgid "Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal. Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors. In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base. Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying."
+msgstr "Pionowy zasięg wysokości warstwy mieszania, co odpowiada średniemu zaięgowi pionowemu kominów termiki bezchmurnej. Ponad terenem płaskim, maksymalny zasięg pionowy kominów termicznych będzie mniejszy ze względu na opadanie własne szybowca i inne czynniki. W przypadku wystąpienia chmur maksymalny zasięg termiki do wykorzystania może być ograniczony ich podstawą. Ponadto, gdy mieszanie następuje na skutek np. wiatrów gradientowych, a nie termiki, ten parametr nie jest przydatny w lotach szybowcowych. "
 
-#: src/Weather/Rasp/RaspStore.cpp:47
+#: src/Weather/Rasp/RaspStore.cpp:48
 #, no-c-format
 msgid "dwcrit"
 msgstr "dwcrit"
 
-#: src/Weather/Rasp/RaspStore.cpp:48
+#: src/Weather/Rasp/RaspStore.cpp:49
 #, no-c-format
-msgid ""
-"This parameter estimates the height above ground at which the average dry "
-"updraft strength drops below 225 fpm and is expected to give better "
-"quantitative numbers for the maximum cloudless thermalling height than the "
-"BL Top height, especially when mixing results from vertical wind shear "
-"rather than thermals. (Note: the present assumptions tend to underpredict "
-"the max. thermalling height for dry conditions.) In the presence of clouds "
-"the maximum thermalling height may instead be limited by the cloud base. "
-"Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Ten parametr pozwala oszacować wysokość nad terenem na jakiej średnie "
-"noszenie termiki bezchmurnej spadnie poniżej 1.25 m/s (225 fpm ) i oczekuje "
-"się, że dzięki niemu uzyskany jest dokładniejszy pułap termiki bezchmurnej "
-"niż maks. wysokość granicy BL, szczególnie gdy mieszanie następuje na skutek "
-"pionowego uskoku wiatru a nie termiki. (Uwaga: obecne założenia "
-"niedoszacowują maksymalny zasięg termiki bezchmurnej.) W przypadku "
-"wystąpienia chmur maksymalny zasięg użytecznej termiki może być ograniczany "
-"przez ich podstawę. Ponieważ jest to parametr dla \"suchej\" termiki "
-"(bezchmurnej), nie uwzględnia efektu \"zasysania\"przez chmury."
+msgid "This parameter estimates the height above ground at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Ten parametr pozwala oszacować wysokość nad terenem na jakiej średnie noszenie termiki bezchmurnej spadnie poniżej 1.25 m/s (225 fpm ) i oczekuje się, że dzięki niemu uzyskany jest dokładniejszy pułap termiki bezchmurnej niż maks. wysokość granicy BL, szczególnie gdy mieszanie następuje na skutek pionowego uskoku wiatru a nie termiki. (Uwaga: obecne założenia niedoszacowują maksymalny zasięg termiki bezchmurnej.) W przypadku wystąpienia chmur maksymalny zasięg użytecznej termiki może być ograniczany przez ich podstawę. Ponieważ jest to parametr dla \"suchej\" termiki (bezchmurnej), nie uwzględnia efektu \"zasysania\"przez chmury."
 
-#: src/Weather/Rasp/RaspStore.cpp:52
+#: src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "bl cloud"
 msgstr "bl cloud"
 
-#: src/Weather/Rasp/RaspStore.cpp:53
+#: src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
-msgid ""
-"This parameter provides an additional means of evaluating the formation of "
-"clouds within the BL and might be used either in conjunction with or instead "
-"of the other cloud prediction parameters. It assumes a very simple "
-"relationship between cloud cover percentage and the maximum relative "
-"humidity within the BL. The cloud base height is not predicted, but is "
-"expected to be below the BL Top height."
-msgstr ""
-"Ten parametr pozwala na oszacowanie możliwości powstania chmur w warstwie BL "
-"i może być używany albo w połączeniu albo zamiast innych parametrów "
-"służących do przewidywania tworzenia chmur. Zakładana jest uproszczona "
-"zależność pomiędzy wyrażonym procentowo zachmurzeniem i maksymalną "
-"wilgotnością względną wewnątrz warstwy BL. Wysokość podstawy nie jest "
-"wyznaczana, ale oczekuje się, że jest poniżej gónej granicy BL."
+msgid "This parameter provides an additional means of evaluating the formation of clouds within the BL and might be used either in conjunction with or instead of the other cloud prediction parameters. It assumes a very simple relationship between cloud cover percentage and the maximum relative humidity within the BL. The cloud base height is not predicted, but is expected to be below the BL Top height."
+msgstr "Ten parametr pozwala na oszacowanie możliwości powstania chmur w warstwie BL i może być używany albo w połączeniu albo zamiast innych parametrów służących do przewidywania tworzenia chmur. Zakładana jest uproszczona zależność pomiędzy wyrażonym procentowo zachmurzeniem i maksymalną wilgotnością względną wewnątrz warstwy BL. Wysokość podstawy nie jest wyznaczana, ale oczekuje się, że jest poniżej gónej granicy BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:57
+#: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
 msgstr "Temp. na ziemi"
 
-#: src/Weather/Rasp/RaspStore.cpp:58
+#: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
-msgid ""
-"The temperature at a height of 2m above ground level. This can be compared "
-"to observed surface temperatures as an indication of model simulation "
-"accuracy; e.g. if observed surface temperatures are significantly below "
-"those forecast, then soaring conditions will be poorer than forecast."
-msgstr ""
-"Temperatura na wysokości 2m nad poziomem gruntu. Można to porównać do "
-"obserwowanych temperatur powierzchni jako wskaźnik dokładności symulacji "
-"modelu;n.p. jeśli obserwowane temperatury są wyraźnie niższe od tych "
-"prognoz, wtedy noszenia będą gorsze niż w prognozie."
+msgid "The temperature at a height of 2m above ground level. This can be compared to observed surface temperatures as an indication of model simulation accuracy; e.g. if observed surface temperatures are significantly below those forecast, then soaring conditions will be poorer than forecast."
+msgstr "Temperatura na wysokości 2m nad poziomem gruntu. Można to porównać do obserwowanych temperatur powierzchni jako wskaźnik dokładności symulacji modelu;n.p. jeśli obserwowane temperatury są wyraźnie niższe od tych prognoz, wtedy noszenia będą gorsze niż w prognozie."
 
-#: src/Weather/Rasp/RaspStore.cpp:62
+#: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "hwcrit"
 msgstr "hwcrit"
 
-#: src/Weather/Rasp/RaspStore.cpp:63
+#: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
-msgid ""
-"This parameter estimates the height at which the average dry updraft "
-"strength drops below 225 fpm and is expected to give better quantitative "
-"numbers for the maximum cloudless thermalling height than the BL Top height, "
-"especially when mixing results from vertical wind shear rather than "
-"thermals. (Note: the present assumptions tend to underpredict the max. "
-"thermalling height for dry conditions.) In the presence of clouds the "
-"maximum thermalling height may instead be limited by the cloud base. Being "
-"for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Ten parametr określa wysokość na jakiej średnie noszenie termiki bezchmurnej "
-"spada poniżej 1.14m/s (225 fpm) i oczekuje się, że da on lepszą ilościowo "
-"wartość pozwalającą określić maksymalny pułap termiki bezchmurnej, niż BL "
-"Top height, szczególnie gdy przyczyną mieszania w atmosferze jest wiatr "
-"gradientowy, a nie kominy termiczne. (Uwaga: skutkiem przyjętych założeń "
-"może być zbyt mały zasięg pionowy termiki.) W przypadku wystąpienia chmur "
-"maksymalny zasięg termiki może być ograniczony ich podstawą. Dla termiki "
-"bezchmurnej ten parametr nie uwzględnia efektu 'zasysania' przez chmury."
+msgid "This parameter estimates the height at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Ten parametr określa wysokość na jakiej średnie noszenie termiki bezchmurnej spada poniżej 1.14m/s (225 fpm) i oczekuje się, że da on lepszą ilościowo wartość pozwalającą określić maksymalny pułap termiki bezchmurnej, niż BL Top height, szczególnie gdy przyczyną mieszania w atmosferze jest wiatr gradientowy, a nie kominy termiczne. (Uwaga: skutkiem przyjętych założeń może być zbyt mały zasięg pionowy termiki.) W przypadku wystąpienia chmur maksymalny zasięg termiki może być ograniczony ich podstawą. Dla termiki bezchmurnej ten parametr nie uwzględnia efektu 'zasysania' przez chmury."
 
-#: src/Weather/Rasp/RaspStore.cpp:67
+#: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "wblmaxmin"
 msgstr "wblmaxmin"
 
-#: src/Weather/Rasp/RaspStore.cpp:68
+#: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
-msgid ""
-"Maximum grid-area-averaged extensive upward or downward motion within the BL "
-"as created by horizontal wind convergence. Positive convergence is "
-"associated with local small-scale convergence lines. Negative convergence "
-"(divergence) produces subsiding vertical motion, creating low-level "
-"inversions which limit thermalling heights."
-msgstr ""
-"Maksimum, uśrednionej w rastrze, intensywności ruchów wznoszących lub "
-"opadających w warstwie BL wywołana poziomą zbieżnością wiatru. Dodatnia "
-"zbieżność jest związana z lokalnymi liniami konwergencji małej skali. Ujemna "
-"konwergencja (dywergencja) wywołuje pionowe ruchy zstępujące, czego skutkiem "
-"może być inwersja ograniczająca zasięg pionowy termiki."
+msgid "Maximum grid-area-averaged extensive upward or downward motion within the BL as created by horizontal wind convergence. Positive convergence is associated with local small-scale convergence lines. Negative convergence (divergence) produces subsiding vertical motion, creating low-level inversions which limit thermalling heights."
+msgstr "Maksimum, uśrednionej w rastrze, intensywności ruchów wznoszących lub opadających w warstwie BL wywołana poziomą zbieżnością wiatru. Dodatnia zbieżność jest związana z lokalnymi liniami konwergencji małej skali. Ujemna konwergencja (dywergencja) wywołuje pionowe ruchy zstępujące, czego skutkiem może być inwersja ograniczająca zasięg pionowy termiki."
 
-#: src/Weather/Rasp/RaspStore.cpp:72
+#: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "blcwbase"
 msgstr "blcwbase"
@@ -1610,28 +1515,28 @@ msgstr "Pozostała odległość"
 msgid "Target speed"
 msgstr "Prędkość docelowa"
 
-#: src/Renderer/BarographRenderer.cpp:27 src/Renderer/BarographRenderer.cpp:33
+#: src/Renderer/BarographRenderer.cpp:34 src/Renderer/BarographRenderer.cpp:43
 msgid "Working band"
 msgstr "Przedział wysokości"
 
-#: src/Renderer/BarographRenderer.cpp:37
+#: src/Renderer/BarographRenderer.cpp:47
 msgid "Ceiling trend"
 msgstr "Trend puł."
 
-#: src/Renderer/ClimbChartRenderer.cpp:27
-#: src/Renderer/ClimbChartRenderer.cpp:32
+#: src/Renderer/ClimbChartRenderer.cpp:33
+#: src/Renderer/ClimbChartRenderer.cpp:38
 msgid "Avg. climb"
 msgstr "Śr. wznoszenie"
 
-#: src/Renderer/ClimbChartRenderer.cpp:35
+#: src/Renderer/ClimbChartRenderer.cpp:41
 msgid "Climb trend"
 msgstr "Trend wznoszenia"
 
-#: src/Renderer/GlidePolarRenderer.cpp:29
+#: src/Renderer/GlidePolarRenderer.cpp:36
 msgid "L/D"
 msgstr "L/D"
 
-#: src/Renderer/GlidePolarRenderer.cpp:33
+#: src/Renderer/GlidePolarRenderer.cpp:40
 msgid "Min. sink"
 msgstr "Min. opadanie"
 
@@ -1654,12 +1559,12 @@ msgstr "Wysokość komina"
 msgid "Cloud base"
 msgstr "Podstawa chmur"
 
-#: src/Renderer/MacCreadyRenderer.cpp:28 src/InfoBoxes/Content/Factory.cpp:464
+#: src/Renderer/MacCreadyRenderer.cpp:33 src/InfoBoxes/Content/Factory.cpp:464
 #, no-c-format
 msgid "Vopt"
 msgstr "V MCdelf"
 
-#: src/Renderer/TaskSpeedRenderer.cpp:32
+#: src/Renderer/TaskSpeedRenderer.cpp:38
 msgid "Vest"
 msgstr "Zachód"
 
@@ -1850,7 +1755,7 @@ msgstr "Pliki danych"
 #: src/Dialogs/InternalLink.cpp:77
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:128
-#: Data/Input/default.xci:843 Data/Input/default.xci:1467
+#: Data/Input/default.xci:843 Data/Input/default.xci:1474
 #, no-c-format
 msgid "Logger"
 msgstr "Rejestrat."
@@ -1878,7 +1783,7 @@ msgstr "Szybow."
 #: src/Dialogs/Weather/WeatherDialog.cpp:26
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:979
-#: Data/Input/default.xci:1392
+#: Data/Input/default.xci:1399
 #, no-c-format
 msgid "Weather"
 msgstr "Pogoda"
@@ -1945,7 +1850,7 @@ msgstr "Ponów"
 #: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:281
 #: Data/Input/default.xci:151 Data/Input/default.xci:593
 #: Data/Input/default.xci:688 Data/Input/default.xci:835
-#: Data/Input/default.xci:1055
+#: Data/Input/default.xci:1055 Data/Input/default.xci:1142
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -1999,7 +1904,7 @@ msgstr "Błąd pobierania indeksu stron"
 
 #: src/Dialogs/FileManager.cpp:739 src/Dialogs/FileManager.cpp:764
 #: src/Dialogs/DownloadFilePicker.cpp:274 Data/Input/default.xci:817
-#: Data/Input/default.xci:1490
+#: Data/Input/default.xci:1497
 msgid "File Manager"
 msgstr "Menedżer plików"
 
@@ -2189,7 +2094,7 @@ msgstr "Diagnostyka"
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 #: src/Dialogs/MapItemListDialog.cpp:184
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "Aktywne"
@@ -2225,7 +2130,7 @@ msgid "Pitot"
 msgstr "Dajnik ciśnienia całk. Pitota"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:423
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid "Airspeed"
 msgstr "V pow."
 
@@ -2282,7 +2187,7 @@ msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "Komunikacja z tym urządzeniem będzie zapisywana w dzienniku przez następne %u minut(y)."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:782 Data/Input/default.xci:759
-#: Data/Input/default.xci:1482
+#: Data/Input/default.xci:1489
 msgid "Devices"
 msgstr "Urządz."
 
@@ -2579,41 +2484,30 @@ msgstr "Ustawić nowe dźwięki? Stare wartości zostaną usunięte."
 msgid "Vario Configuration"
 msgstr "Konfiguracja wariometru"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 msgid "TE vario"
 msgstr "War. TE"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
-msgid ""
-"This produces a fake TE vario gross vertical velocity. It can be used when "
-"in circling mode to demonstrate the lift tones. When not in circling mode, "
-"set this to a realistic negative value so speed command tones are produced."
-msgstr ""
-"Ustwienie symulowanej wartości brutto prędkości pionowej jakby pochodziła z "
-"wariometru z sondą TE. W celu przeprowadzenia testowej demonstracji można "
-"użyć w trybie krążenia. W trybie przeskoku ustaw realistyczne wartości "
-"ujemne aby odsłuchać dzwięki poleceń dostosowania prędkości."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+msgid "This produces a fake TE vario gross vertical velocity. It can be used when in circling mode to demonstrate the lift tones. When not in circling mode, set this to a realistic negative value so speed command tones are produced."
+msgstr "Ustwienie symulowanej wartości brutto prędkości pionowej jakby pochodziła z wariometru z sondą TE. W celu przeprowadzenia testowej demonstracji można użyć w trybie krążenia. W trybie przeskoku ustaw realistyczne wartości ujemne aby odsłuchać dzwięki poleceń dostosowania prędkości."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
-msgid ""
-"This produces a fake airspeed. It can be used when not in circling mode to "
-"demonstrate the speed command tones."
-msgstr ""
-"Można symulować prędkość powietrzną, w celu zademonstrowania tonów poleceń "
-"dostosowania prędkości na przeskoku."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:101
+msgid "This produces a fake airspeed. It can be used when not in circling mode to demonstrate the speed command tones."
+msgstr "Można symulować prędkość powietrzną, w celu zademonstrowania tonów poleceń dostosowania prędkości na przeskoku."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:105
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:57
 #, no-c-format
 msgid "Circling"
 msgstr "Krążenie"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "This forces the variometer into circling or cruise mode"
 msgstr "Przełącza tryb wariometru krążenie/przeskok"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:120
 msgid "Vario Demo"
 msgstr "Wario demo"
 
@@ -2906,7 +2800,7 @@ msgstr "Ostrzegaj"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:83 src/Dialogs/dlgAnalysis.cpp:570
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:83
-#: Data/Input/default.xci:725 Data/Input/default.xci:1344
+#: Data/Input/default.xci:725 Data/Input/default.xci:1351
 #, no-c-format
 msgid "Airspace"
 msgstr "Strefy"
@@ -2970,7 +2864,7 @@ msgid "Heading"
 msgstr "Kurs"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:431
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:218
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:105
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
 #: src/Dialogs/Waypoint/WaypointList.cpp:488
@@ -3037,12 +2931,12 @@ msgid "Defines how the airspace is filled with the configured color."
 msgstr ""
 "Określa jak obszar strefy przestrzeni jest wypełniany wybranym kolorem."
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:75
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "Przyjąłem"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "ZATW dziś"
@@ -3050,11 +2944,11 @@ msgstr "ZATW dziś"
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:313
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:314
 msgid "No Warnings"
 msgstr "Brak ostrzeżeń"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:513 Data/Input/default.xci:1375
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:520 Data/Input/default.xci:1382
 msgid "Airspace Warnings"
 msgstr "Ostrzeżenia o naruszeniu stref"
 
@@ -3134,7 +3028,7 @@ msgstr ""
 "Konfiguracja Open Plane teraz?"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:175
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1201
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1208
 msgid "Flight Setup"
 msgstr "Ustawienia lotu"
 
@@ -3227,7 +3121,7 @@ msgstr "Elementy"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:711
-#: Data/Input/default.xci:1265
+#: Data/Input/default.xci:1272
 #, no-c-format
 msgid "Terrain"
 msgstr "Teren"
@@ -3326,7 +3220,7 @@ msgstr "Konfiguracja"
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Zapisano zmiany w konfiguracji. Ponownie uruchom XCSoar, aby je zastosować."
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:220
 msgid "The name of this InfoBox panel configuration."
 msgstr "Nazwa tej konfiguracji panelu InfoBox."
 
@@ -3509,7 +3403,7 @@ msgstr "Kalk. Zad."
 #: src/Dialogs/dlgAnalysis.cpp:540 src/Dialogs/dlgAnalysis.cpp:550
 #: src/Dialogs/dlgAnalysis.cpp:559 src/Dialogs/dlgAnalysis.cpp:569
 #: src/Dialogs/dlgAnalysis.cpp:718 Data/Input/default.xci:1003
-#: Data/Input/default.xci:1434
+#: Data/Input/default.xci:1441
 msgid "Analysis"
 msgstr "Analiza"
 
@@ -3560,7 +3454,7 @@ msgstr "Ostrzeżenia"
 
 #: src/Dialogs/dlgChecklist.cpp:55 src/Dialogs/dlgChecklist.cpp:192
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:106
-#: Data/Input/default.xci:995 Data/Input/default.xci:1322
+#: Data/Input/default.xci:995 Data/Input/default.xci:1329
 msgid "Checklist"
 msgstr "Lista kontrolna"
 
@@ -3792,7 +3686,7 @@ msgstr "Biegunowa prędkości"
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:126
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:278
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:300
-#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:183
+#: src/Dialogs/Weather/PCMetDialog.cpp:208 src/Dialogs/Weather/NOAAList.cpp:183
 #: src/Dialogs/Weather/NOAAList.cpp:199 src/Dialogs/Weather/NOAADetails.cpp:88
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:355
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:390
@@ -3814,7 +3708,7 @@ msgstr "Wybierz profil"
 msgid "Switch InfoBox"
 msgstr "Zmień InfoBox"
 
-#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
+#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:113
 msgid "File"
 msgstr "Plik"
 
@@ -3845,7 +3739,7 @@ msgstr "Odtwórz"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:48 src/Dialogs/StartupDialog.cpp:83
 #: src/Dialogs/dlgQuickGuide.cpp:513 src/Dialogs/dlgQuickGuide.cpp:708
-#: Data/Input/default.xci:1143
+#: Data/Input/default.xci:1150
 msgid "Quit"
 msgstr "Zakończ"
 
@@ -3876,7 +3770,7 @@ msgstr "Wpisz nowe hasło"
 
 #: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
 #: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:1021
-#: Data/Input/default.xci:1442
+#: Data/Input/default.xci:1449
 msgid "Status"
 msgstr "Status"
 
@@ -4237,15 +4131,15 @@ msgstr "Ustaw jako Dom"
 msgid "Pan to Waypoint"
 msgstr "Przesuń do PT"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:538 Data/Input/default.xci:1400
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:487 Data/Input/default.xci:1407
 msgid "GoTo"
 msgstr "Leć do"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:541
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:490
 msgid "Pan To"
 msgstr "Włącz tryb ręcznego przesuwania"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:1030
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:877
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -4258,7 +4152,7 @@ msgstr "Czy usunąć Punkt Trasy?"
 #: src/Dialogs/Waypoint/Manager.cpp:286
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:809
-#: Data/Input/default.xci:1241
+#: Data/Input/default.xci:1248
 msgid "Waypoint Editor"
 msgstr "Edytor PTrasy"
 
@@ -4435,7 +4329,7 @@ msgid "Display airspaces below the glider or within a margin."
 msgstr "Pokazywane są Strefy poniżej szybowca lub w jego zasięgu."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
@@ -5133,99 +5027,75 @@ msgstr ""
 "Okkreśla, czy zestaw infoboxów \"Dolot\" powinien być używany w trybie "
 "\"auto\" przełączania stron."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:72
 msgid "Text size"
 msgstr "Rozmiar tekstu"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
 msgid "Display Resolution"
 msgstr "Rozdzielczość wyświetlacza"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
-msgid ""
-"The display resolution is used to adapt line widths, font size, landable "
-"size and more."
-msgstr ""
-"Rozdzielczość wyświetlacza pomaga dostosować szerokość linii, rozmiar "
-"czcionki, lądowisk i innych."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:78
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
+msgstr "Rozdzielczość wyświetlacza pomaga dostosować szerokość linii, rozmiar czcionki, lądowisk i innych."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:87
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:113
 msgid "Automatic"
 msgstr "Automatycznie"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:90
-#, c-format
-msgid "%d dpi"
-msgstr "%d dpi"
-
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:98
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
 msgid "Events"
 msgstr "Zdarzenia"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-msgid ""
-"The Input Events file defines the menu system and how XCSoar responds to "
-"button presses and events from external devices."
-msgstr ""
-"Plik Zdarzeń określa system menu i to jak XCSoar reaguje na wciśnięcia "
-"przycisków oraz zdarzenia wywołane przez urządzenia zewnętrzne."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
+msgid "The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices."
+msgstr "Plik Zdarzeń określa system menu i to jak XCSoar reaguje na wciśnięcia przycisków oraz zdarzenia wywołane przez urządzenia zewnętrzne."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 msgid "Language"
 msgstr "Język"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
-msgid ""
-"The language options selects translations for English texts to other "
-"languages. Select English for a native interface or Automatic to localise "
-"XCSoar according to the system settings."
-msgstr ""
-"W opcjach językowych wybiera się tłumaczenie angielskich tekstów na inne "
-"języki. Wybierz \"angielski\" dla oryginalnego interfejsu lub "
-"\"automatycznie\" aby XCSoar wybrał zgodnie z ustawieniami systemowymi."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:108
+msgid "The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings."
+msgstr "W opcjach językowych wybiera się tłumaczenie angielskich tekstów na inne języki. Wybierz \"angielski\" dla oryginalnego interfejsu lub \"automatycznie\" aby XCSoar wybrał zgodnie z ustawieniami systemowymi."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
 msgid "Menu timeout"
 msgstr "Czas wyśw. menu"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
-msgid ""
-"This determines how long menus will appear on screen if the user does not "
-"make any button presses or interacts with the computer."
-msgstr ""
-"Określa jak długo menu będą na ekranie jeśli użytkownik nie naciśnie żadnego "
-"klawisza lub nie będzie współpracował z komputerem."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:147
+msgid "This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer."
+msgstr "Określa jak długo menu będą na ekranie jeśli użytkownik nie naciśnie żadnego klawisza lub nie będzie współpracował z komputerem."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:155
 #, no-c-format
 msgid "Keyboard"
 msgstr "Klawiatura"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:156
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:157
 #, no-c-format
 msgid "HighScore Style"
 msgstr "HighScore"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
 msgid "Text input style"
 msgstr "Styl wprow. tekstu"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
-msgid ""
-"Determines how the user is prompted for text input (filename, teamcode etc.)"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
+msgid "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr "Określa sposób wprowadzania tekstu (nazwa pliku, kod zespołu itp. )"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #, no-c-format
 msgid "OS settings"
 msgstr "Ustawienia systemu operacyjnego"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
 msgid "Haptic feedback"
 msgstr "Reakcja na dotyk"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:179
 msgid "Determines if haptic feedback like vibration is used."
 msgstr "Określa czy będzie stosowana reakcja na  dotknięcie ekranu (wibracja)."
 
@@ -7843,12 +7713,12 @@ msgstr "Brak alternatyw"
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:316
 #: src/Dialogs/Task/AlternatesListDialog.cpp:349 Data/Input/default.xci:582
-#: Data/Input/default.xci:1367
+#: Data/Input/default.xci:1374
 msgid "Alternates"
 msgstr "Lądow."
 
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
+#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:87
+#: src/Dialogs/Weather/RASPDialog.cpp:139
 msgid "Now"
 msgstr "Teraz"
 
@@ -7862,7 +7732,7 @@ msgstr "Przywróć standardowe"
 msgid "METAR and TAF"
 msgstr "METAR i TAF"
 
-#: src/Dialogs/Weather/RASPDialog.cpp:122
+#: src/Dialogs/Weather/RASPDialog.cpp:126
 msgid "Field"
 msgstr "Pole"
 
@@ -10862,23 +10732,23 @@ msgstr "Skala dźwięków"
 msgid "Adjustment to base pitch scale of tones in all modes."
 msgstr "Dopasowanie podstawowej skali tonów we wszyskich trybach."
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:85
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:89
 msgid "Beep type"
 msgstr "Typ dźwięku"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:88
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:92
 msgid "Pitch scheme"
 msgstr "Rodzaj wzn."
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:91
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:95
 msgid "Pitch scale"
 msgstr "Skala wzn."
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:94
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:98
 msgid "Period scheme"
 msgstr "Rodzaj przerw."
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:97
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:101
 msgid "Period scale"
 msgstr "Skala przerw."
 
@@ -11195,9 +11065,9 @@ msgstr "Linia dolotu przecina teren!"
 
 #: Data/Input/default.xci:158 Data/Input/default.xci:165
 #: Data/Input/default.xci:648 Data/Input/default.xci:655
-#: Data/Input/default.xci:663 Data/Input/default.xci:1158
-#: Data/Input/default.xci:1165 Data/Input/default.xci:1172
-#: Data/Input/default.xci:1425
+#: Data/Input/default.xci:663 Data/Input/default.xci:1165
+#: Data/Input/default.xci:1172 Data/Input/default.xci:1179
+#: Data/Input/default.xci:1432
 msgid "Zoom"
 msgstr "Zoom"
 
@@ -11236,7 +11106,7 @@ msgid "Previous waypoint"
 msgstr "Poprzedni punkt trasy"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:618
-#: Data/Input/default.xci:1310
+#: Data/Input/default.xci:1317
 msgid "Pilot event announced"
 msgstr "Zgłoszono zdarzenie pilota"
 
@@ -11246,27 +11116,27 @@ msgid ""
 "Page 2/2"
 msgstr "Nauk"
 
-#: Data/Input/default.xci:574 Data/Input/default.xci:1359
+#: Data/Input/default.xci:574 Data/Input/default.xci:1366
 msgid "Waypoint List"
 msgstr ""
 "Punkty\n"
 "Trasy"
 
-#: Data/Input/default.xci:608 Data/Input/default.xci:1414
+#: Data/Input/default.xci:608 Data/Input/default.xci:1421
 msgid "Dropped marker"
 msgstr "Wstawiono znacznik"
 
-#: Data/Input/default.xci:611 Data/Input/default.xci:1417
+#: Data/Input/default.xci:611 Data/Input/default.xci:1424
 msgid "Marker Drop"
 msgstr ""
 "Postaw\n"
 "Znacznik"
 
-#: Data/Input/default.xci:621 Data/Input/default.xci:1313
+#: Data/Input/default.xci:621 Data/Input/default.xci:1320
 msgid "Pilot Event Announce"
 msgstr "Pilot"
 
-#: Data/Input/default.xci:629 Data/Input/default.xci:1330
+#: Data/Input/default.xci:629 Data/Input/default.xci:1337
 msgid "Target Show"
 msgstr "Punkty Trasy"
 
@@ -11280,19 +11150,19 @@ msgstr "Pokazuj"
 msgid "Page Show"
 msgstr "Strona"
 
-#: Data/Input/default.xci:677 Data/Input/default.xci:1351
+#: Data/Input/default.xci:677 Data/Input/default.xci:1358
 msgid "Pan Mode"
 msgstr "Włącz tryb ręcznego przesuwania"
 
-#: Data/Input/default.xci:696 Data/Input/default.xci:1250
+#: Data/Input/default.xci:696 Data/Input/default.xci:1257
 msgid "Labels"
 msgstr "Opisy:"
 
-#: Data/Input/default.xci:704 Data/Input/default.xci:1258
+#: Data/Input/default.xci:704 Data/Input/default.xci:1265
 msgid "Trail"
 msgstr "Ślad"
 
-#: Data/Input/default.xci:718 Data/Input/default.xci:1272
+#: Data/Input/default.xci:718 Data/Input/default.xci:1279
 msgid "Topo."
 msgstr "Topo."
 
@@ -11308,7 +11178,7 @@ msgid ""
 "Page 3/3"
 msgstr "Konfiguracja"
 
-#: Data/Input/default.xci:850 Data/Input/default.xci:1474
+#: Data/Input/default.xci:850 Data/Input/default.xci:1481
 msgid "NMEA Logger"
 msgstr "Logger NMEA"
 
@@ -11394,7 +11264,7 @@ msgid ""
 "Page 2/3"
 msgstr "Strony Infobox"
 
-#: Data/Input/default.xci:971 Data/Input/default.xci:1407
+#: Data/Input/default.xci:971 Data/Input/default.xci:1414
 msgid "FLARM Radar"
 msgstr "radaru FLARM"
 
@@ -11408,15 +11278,15 @@ msgstr "Strony Infobox"
 msgid "Traffic List"
 msgstr "Lista FLARM"
 
-#: Data/Input/default.xci:1045 Data/Input/default.xci:1450
+#: Data/Input/default.xci:1045 Data/Input/default.xci:1457
 msgid "Thermal Assistant"
 msgstr "Asystent krążenia"
 
-#: Data/Input/default.xci:1072 Data/Input/default.xci:1458
+#: Data/Input/default.xci:1072 Data/Input/default.xci:1465
 msgid "Airspaces"
 msgstr "Strefy podstawowe"
 
-#: Data/Input/default.xci:1079 Data/Input/default.xci:1497
+#: Data/Input/default.xci:1079 Data/Input/default.xci:1504
 msgid "Message Repeat"
 msgstr ""
 "Pokaż\n"
@@ -11438,49 +11308,45 @@ msgstr "Konfig"
 msgid "Lock Screen"
 msgstr "Szczelina blokująca"
 
-#: Data/Input/default.xci:1186
+#: Data/Input/default.xci:1193
 msgid "AVG/ALT"
 msgstr "ŚRED/WYS"
 
-#: Data/Input/default.xci:1209
+#: Data/Input/default.xci:1216
 msgid "Setup Wind"
 msgstr ""
 "Ustawienia\n"
 "Wiatru"
 
-#: Data/Input/default.xci:1217
+#: Data/Input/default.xci:1224
 msgid "Setup System"
 msgstr ""
 "Ustawienia\n"
 "System"
 
-#: Data/Input/default.xci:1225
+#: Data/Input/default.xci:1232
 msgid "Settings Airspace"
 msgstr ""
 "Ustawienia\n"
 "Strefa"
 
-#: Data/Input/default.xci:1233
+#: Data/Input/default.xci:1240
 msgid "Setup Plane"
 msgstr "Ustawienia szybowca"
 
-#: Data/Input/default.xci:1337
+#: Data/Input/default.xci:1344
 msgid "MacCready"
 msgstr "MCread"
 
-#: Data/Input/default.xci:1383
+#: Data/Input/default.xci:1390
 msgid "Nearest Airspace"
 msgstr ""
 "Najbliższa\n"
 "Strefa"
 
-#: Data/Input/default.xci:1512
+#: Data/Input/default.xci:1519
 msgid "Quit XCSoar"
 msgstr "XCSoar"
-#: src/net/client/WeGlide/UploadIGCFile.cpp:119
-msgid "Please set WeGlide Aircraft Type in Plane profile before uploading."
-msgstr "Przed przesłaniem ustaw typ statku powietrznego WeGlide w profilu samolotu."
-
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:53
 msgid "unknown"
 msgstr "nieznany"
@@ -11502,7 +11368,7 @@ msgstr "Wybierz typ WeGlide"
 msgid "Thermal hotspot"
 msgstr "Hotspot termiczny"
 
-#: src/Renderer/MacCreadyRenderer.cpp:31 src/Renderer/TaskSpeedRenderer.cpp:29
+#: src/Renderer/MacCreadyRenderer.cpp:36 src/Renderer/TaskSpeedRenderer.cpp:35
 #, no-c-format
 msgctxt "Average velocity abbreviation"
 msgid "Vave"
@@ -11812,5 +11678,24 @@ msgstr ""
 #. Title is StaticString<32> (31 bytes + NUL).
 #: src/InfoBoxes/Content/Task.cpp:1024
 msgid "Start unknown"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:370
+#, c-format
+msgid "%d secs"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:376
+#, c-format
+msgid " dist %d m"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:382
+msgid " vertical "
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:91
+#, c-format
+msgid "%u dpi"
 msgstr ""
 
