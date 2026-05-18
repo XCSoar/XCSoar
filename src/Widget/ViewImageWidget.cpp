@@ -2,68 +2,31 @@
 // Copyright The XCSoar Project
 
 #include "ViewImageWidget.hpp"
-#include "ui/canvas/Canvas.hpp"
+#include "ImageZoomFrame.hpp"
 #include "ui/canvas/Bitmap.hpp"
-#include "ui/canvas/Features.hpp"
-#include "ui/window/PaintWindow.hpp"
-#include "Look/DialogLook.hpp"
-#include "UIGlobals.hpp"
-
-class ViewImageWindow final : public PaintWindow {
-  const Bitmap *bitmap;
-
-public:
-  explicit ViewImageWindow(const Bitmap *_bitmap):bitmap(_bitmap) {}
-
-  void SetBitmap(const Bitmap *_bitmap) {
-    bitmap = _bitmap;
-    Invalidate();
-  }
-
-  /* virtual methods from class PaintWindow */
-  void OnPaint(Canvas &canvas) noexcept override;
-};
 
 void
-ViewImageWidget::SetBitmap(const Bitmap *_bitmap)
+ViewImageWidget::SetBitmap(const Bitmap *_bitmap) noexcept
 {
   bitmap = _bitmap;
 
-  if (IsDefined())
-    ((ViewImageWindow &)GetWindow()).SetBitmap(_bitmap);
+  if (!IsDefined())
+    return;
+
+  auto &frame = (ImageZoomFrame &)GetWindow();
+  frame.SetContent(bitmap, &zoom);
+  frame.Invalidate();
 }
 
 void
-ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+ViewImageWidget::Prepare(ContainerWindow &parent,
+                         const PixelRect &rc) noexcept
 {
   WindowStyle hidden;
   hidden.Hide();
 
-  auto w = std::make_unique<ViewImageWindow>(bitmap);
-  w->Create(parent, rc, hidden);
-  SetWindow(std::move(w));
-}
-
-void
-ViewImageWindow::OnPaint(Canvas &canvas) noexcept
-{
-  const auto &look = UIGlobals::GetDialogLook();
-  if (HaveClipping())
-    canvas.Clear(look.background_color);
-
-  if (bitmap == nullptr)
-    return;
-
-  const PixelSize bitmap_size = bitmap->GetSize();
-  const PixelRect rc = GetClientRect();
-  const PixelSize window_size = rc.GetSize();
-
-  PixelSize fit_size(window_size.width,
-                     window_size.width * bitmap_size.height / bitmap_size.width);
-  if (fit_size.height > window_size.height) {
-    fit_size.height = window_size.height;
-    fit_size.width = window_size.height * bitmap_size.width / bitmap_size.height;
-  }
-
-  canvas.Stretch(rc.CenteredTopLeft(fit_size), fit_size, *bitmap);
+  auto frame = std::make_unique<ImageZoomFrame>();
+  frame->Create(parent, rc, hidden);
+  frame->SetContent(bitmap, &zoom);
+  SetWindow(std::move(frame));
 }
