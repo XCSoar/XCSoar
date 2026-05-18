@@ -21,7 +21,7 @@ static constexpr PCMet::ImageArea rad_lokal_areas[] = {
   { "pro", "Prötzel" },
   { "drs", "Dresden" },
   { "eis", "Eisberg" },
-  { "emd", "Emden" },
+  { "asb", "Borkum" },
   { "ess", "Essen" },
   { "fbg", "Feldberg" },
   { "fld", "Flechtdorf" },
