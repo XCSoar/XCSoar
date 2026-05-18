@@ -13,7 +13,8 @@ void
 RenderMapScale(Canvas &canvas,
                const WindowProjection& projection,
                const PixelRect &rc,
-               const OverlayLook &look)
+               const OverlayLook &look,
+               unsigned contour_spacing_m)
 {
   if (!projection.IsValid())
     return;
@@ -50,4 +51,27 @@ RenderMapScale(Canvas &canvas,
 
   x += text_padding_x + text_size.width;
   look.map_scale_right_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
+
+  if (contour_spacing_m > 0) {
+    x += look.map_scale_right_icon.GetSize().width;
+    x += text_padding_x * 2;
+
+    const auto contour_buf = FormatUserAltitude((double)contour_spacing_m);
+    PixelSize contour_size = canvas.CalcTextSize(contour_buf.c_str());
+    const int icon_width = look.contour_spacing_icon.GetSize().width;
+
+    canvas.DrawFilledRectangle(
+      {{x, rc.bottom - height},
+       PixelSize{icon_width + 2 * text_padding_x + (int)contour_size.width, height}},
+      COLOR_WHITE);
+
+    look.contour_spacing_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
+
+    canvas.SetBackgroundTransparent();
+    canvas.SetTextColor(COLOR_BLACK);
+    canvas.DrawText(
+      {x + icon_width + text_padding_x,
+       rc.bottom - (int)(font.GetAscentHeight() + Layout::Scale(1u))},
+      contour_buf.c_str());
+  }
 }
