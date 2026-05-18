@@ -17,92 +17,56 @@
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
 #include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
+#include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/Settings.hpp"
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
 
-#include <fstream>
-#include <sstream>
+#include <algorithm>
+#include <cstdlib>
 #include <memory>
 
 namespace {
 
 struct LayerDef {
   const char *short_label;
-  const char *file_suffix;
+  const char *api_parameter;  // e.g. "vertical_wind_3000amsl"
   unsigned altitude_m;
   bool is_agl;
 };
 
-/* Available layers matching CH model — keep in sync with XCThermDialog.cpp */
+/* Available layers — names must match index.json parameter names */
 static constexpr LayerDef LAYERS[] = {
-  { "1500m AMSL", "1500amsl", 1500, false },
-  { "2000m AMSL", "2000amsl", 2000, false },
-  { "3000m AMSL", "3000amsl", 3000, false },
-  { "4000m AMSL", "4000amsl", 4000, false },
-  { "5000m AMSL", "5000amsl", 5000, false },
-  { "6000m AMSL", "6000amsl", 6000, false },
-  { "7000m AMSL", "7000amsl", 7000, false },
-  { "8000m AMSL", "8000amsl", 8000, false },
-  { "100m AGL",   "100agl",   100,  true },
-  { "400m AGL",   "400agl",   400,  true },
+  { "1500m AMSL", "vertical_wind_1500amsl", 1500, false },
+  { "2000m AMSL", "vertical_wind_2000amsl", 2000, false },
+  { "3000m AMSL", "vertical_wind_3000amsl", 3000, false },
+  { "4000m AMSL", "vertical_wind_4000amsl", 4000, false },
+  { "5000m AMSL", "vertical_wind_5000amsl", 5000, false },
+  { "6000m AMSL", "vertical_wind_6000amsl", 6000, false },
+  { "7000m AMSL", "vertical_wind_7000amsl", 7000, false },
+  { "8000m AMSL", "vertical_wind_8000amsl", 8000, false },
+  { "100m AGL",   "vertical_wind_100agl",   100,  true },
+  { "400m AGL",   "vertical_wind_400agl",   400,  true },
+  { "800m AGL",   "vertical_wind_800agl",   800,  true },
 };
 
 static constexpr unsigned N_LAYERS = std::size(LAYERS);
 
-/* Available forecast hours (placeholder until API) */
-static constexpr unsigned FORECAST_HOURS[] = {
-  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
-};
-static constexpr unsigned N_HOURS = std::size(FORECAST_HOURS);
-
-static const std::string BASE_PATH =
-  "/Users/pheinrich/Documents/Fliegen/xctherm/xcsoar_wave/geojson_example/";
-
 /**
- * Check if a GeoJSON file exists for the given layer suffix.
- */
-static bool
-IsLayerFileAvailable(const char *suffix)
-{
-  StaticString<256> filename;
-  filename.Format("vertical_wind_%s.geojson", suffix);
-  std::string file_path = BASE_PATH + filename.c_str();
-  std::ifstream file(file_path);
-  return file.is_open();
-}
-
-/**
- * Try to load a GeoJSON file for the given layer suffix and
- * set it as the map overlay.
+ * Apply a GeoJSON string as the map overlay.
  */
 static void
-LoadLayerOverlay(const char *suffix, const char *label)
+ApplyGeoJSONOverlay(const std::string &geojson, const char *label)
 {
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
     return;
 
-  StaticString<256> filename;
-  filename.Format("vertical_wind_%s.geojson", suffix);
-  std::string file_path = BASE_PATH + filename.c_str();
-
-  std::ifstream file(file_path);
-  if (!file.is_open()) {
-    LogFmt("xctherm controls: file not found: {}", file_path);
+  auto forecast = XCThermGeoJSON::Parse(geojson, true);
+  if (forecast.IsEmpty()) {
+    LogFmt("xctherm: parse failed for {}", label);
     return;
   }
-
-  LogFmt("xctherm controls: loading {}", file_path);
-
-  std::ostringstream ss;
-  ss << file.rdbuf();
-  file.close();
-  std::string content = ss.str();
-
-  auto forecast = XCThermGeoJSON::Parse(content, true);
-  if (forecast.IsEmpty())
-    return;
 
   forecast.layer_name = label;
 
@@ -114,7 +78,7 @@ LoadLayerOverlay(const char *suffix, const char *label)
 } // anonymous namespace
 
 /**
- * A label that draws centered text.
+ * A label that draws centered text with availability coloring.
  */
 class XCThermLabel final : public PaintWindow {
   const DialogLook &look;
@@ -166,9 +130,13 @@ class XCThermControlsWidget::ControlsWindow final : public ContainerWindow {
   static constexpr int SEPARATOR_H = 1;
 
   unsigned current_layer = 4; /* default: 5000m AMSL */
-  unsigned current_time = 6;  /* default: 12:00 UTC (index 6 = 12h) */
+  unsigned current_time_index = 0;
   bool layer_available[N_LAYERS] = {};
-  bool time_available[N_HOURS] = {};
+
+  /* Cached forecast hours for the current layer (from API cache) */
+  std::vector<unsigned> cached_hours;
+  /* All available hours from index.json (kept for auto-switch) */
+  std::vector<unsigned> available_hours;
 
   /* Row 1: layer */
   Button layer_prev, layer_next;
@@ -181,6 +149,9 @@ class XCThermControlsWidget::ControlsWindow final : public ContainerWindow {
   /* Auto-switch manager */
   XCThermAutoSwitch auto_switch;
 
+  /* Track if we've loaded the index */
+  bool index_loaded = false;
+
 public:
   explicit ControlsWindow(const DialogLook &_look) noexcept
     :look(_look), layer_label(_look), time_label(_look) {}
@@ -190,9 +161,6 @@ public:
     style.Hide();
     style.ControlParent();
     ContainerWindow::Create(parent, rc, style);
-
-    /* Check file availability */
-    ScanAvailableLayers();
 
     const int total_h = rc.GetHeight();
     const int row_h = (total_h - SEPARATOR_H) / 2;
@@ -226,8 +194,8 @@ public:
       time_label.Create(*this, {btn_w, row2_y, w - btn_w, row2_y + row_h}, ts);
     }
 
-    /* Initialize auto-switch */
-    InitAutoSwitch();
+    /* Initialize from API */
+    InitFromAPI();
 
     UpdateLayerLabel();
     UpdateTimeLabel();
@@ -236,30 +204,112 @@ public:
   void ManualStepLayer(int delta) noexcept {
     auto_switch.OnManualLayerStep();
 
-    int next = (int)current_layer + delta;
-    if (next < 0) next = (int)N_LAYERS - 1;
-    if (next >= (int)N_LAYERS) next = 0;
-    current_layer = (unsigned)next;
+    auto &api = XCThermAPI::Instance();
+    const auto params = api.GetCachedParameters();
 
-    LoadLayerOverlay(LAYERS[current_layer].file_suffix,
-                     LAYERS[current_layer].short_label);
+    /* Collect layer indices that have cached data */
+    std::vector<unsigned> cached;
+    for (unsigned i = 0; i < N_LAYERS; ++i) {
+      if (api.IsLayerCached(LAYERS[i].api_parameter,
+                             GetCurrentForecastHour()))
+        cached.push_back(i);
+    }
+
+    if (cached.empty()) {
+      layer_label.SetText("No data – use Info→Weather");
+      layer_label.SetAvailable(false);
+      return;
+    }
+
+    /* Find position of current_layer in cached list, then step */
+    auto it = std::find(cached.begin(), cached.end(), current_layer);
+    int pos = (it != cached.end()) ? (int)(it - cached.begin()) : 0;
+    pos += delta;
+    if (pos < 0) pos = (int)cached.size() - 1;
+    if (pos >= (int)cached.size()) pos = 0;
+    current_layer = cached[pos];
+
+    /* Apply from cache — no download */
+    ApplyCachedLayer(current_layer, GetCurrentForecastHour());
     UpdateLayerLabel();
   }
 
   void ManualStepTime(int delta) noexcept {
     auto_switch.OnManualTimeStep();
 
-    int next = (int)current_time + delta;
-    if (next < 0) next = (int)N_HOURS - 1;
-    if (next >= (int)N_HOURS) next = 0;
-    current_time = (unsigned)next;
+    auto &api = XCThermAPI::Instance();
+    const std::string &param = LAYERS[current_layer].api_parameter;
 
+    /* Collect hours cached for current layer */
+    cached_hours = api.GetCachedHours(param);
+
+    if (cached_hours.empty()) {
+      time_label.SetText("No data – use Info→Weather");
+      time_label.SetAvailable(false);
+      return;
+    }
+
+    int next = (int)current_time_index + delta;
+    if (next < 0) next = (int)cached_hours.size() - 1;
+    if (next >= (int)cached_hours.size()) next = 0;
+    current_time_index = (unsigned)next;
+
+    /* Apply from cache */
+    ApplyCachedLayer(current_layer, cached_hours[current_time_index]);
     UpdateTimeLabel();
-    /* TODO: load the time-specific forecast when API is available */
   }
 
   /**
-   * Called periodically to run auto-switch logic.
+   * Pick the cached-hour index that should be shown in auto-time mode,
+   * following the XCTHERM.md rule:
+   *
+   *   - Before :45 of the current UTC hour, display the forecast valid
+   *     for this hour (utc_h).
+   *   - At/after :45, display the forecast for the next hour (utc_h+1).
+   *
+   * The selected hour must never be in the past. If the exact target
+   * hour is not cached, prefer the smallest cached hour ≥ target
+   * (within 12 h forward). Only if there is no future hour at all do
+   * we fall back to the latest cached past hour.
+   *
+   * @return index into @p cached, or -1 if @p cached is empty.
+   */
+  static int
+  PickAutoTimeIndex(const std::vector<unsigned> &cached,
+                    unsigned utc_h, unsigned utc_min) noexcept {
+    if (cached.empty())
+      return -1;
+
+    const unsigned target = (utc_min >= 45) ? (utc_h + 1) % 24 : utc_h;
+
+    int best_future = -1;
+    unsigned best_future_dist = 25;
+    int best_past = -1;
+    unsigned best_past_dist = 25;
+
+    for (size_t i = 0; i < cached.size(); ++i) {
+      const unsigned fwd = (cached[i] + 24 - target) % 24;
+      if (fwd <= 12) {
+        /* future (0 = exact match) */
+        if (fwd < best_future_dist) {
+          best_future_dist = fwd;
+          best_future = (int)i;
+        }
+      } else {
+        const unsigned back = 24 - fwd;
+        if (back < best_past_dist) {
+          best_past_dist = back;
+          best_past = (int)i;
+        }
+      }
+    }
+
+    return best_future >= 0 ? best_future : best_past;
+  }
+
+  /**
+   * Called periodically (driven by GPS updates) to run auto-switch
+   * logic for both altitude and time.
    */
   void TimerUpdate() noexcept {
     const auto &settings =
@@ -269,22 +319,36 @@ public:
     if (!auto_switch.IsEnabled())
       return;
 
-    /* Get current flight data */
     const auto &basic = CommonInterface::Basic();
     double gps_alt = basic.gps_altitude_available
       ? basic.gps_altitude : -1.0;
     double baro_alt = basic.baro_altitude_available
       ? basic.baro_altitude : -1.0;
 
-    /* Get UTC time */
     unsigned utc_hour = 12, utc_minute = 0;
     if (basic.date_time_utc.IsPlausible()) {
       utc_hour = basic.date_time_utc.hour;
       utc_minute = basic.date_time_utc.minute;
     }
 
+    /* Altitude auto-switch still flows through XCThermAutoSwitch
+       (midpoint thresholds + 20 s hysteresis). */
     auto_switch.Update(gps_alt, baro_alt, utc_hour, utc_minute,
                        basic.time);
+
+    /* Time auto-switch: keep the displayed forecast hour at the
+       current/next hour per the :45 rule, and never let it lag into
+       the past as time progresses. */
+    if (auto_switch.IsTimeAutoActive()) {
+      RefreshCachedHours();
+      const int desired = PickAutoTimeIndex(cached_hours,
+                                            utc_hour, utc_minute);
+      if (desired >= 0 && (unsigned)desired != current_time_index) {
+        current_time_index = (unsigned)desired;
+        ApplyCachedLayer(current_layer, cached_hours[current_time_index]);
+      }
+      UpdateTimeLabel();
+    }
   }
 
   void LayoutChildren(const PixelRect &rc) noexcept {
@@ -294,7 +358,6 @@ public:
     const int btn_w = row_h * 2;
     const int w = rc.GetWidth();
 
-    /* Row 1 */
     if (layer_prev.IsDefined())
       layer_prev.Move({0, 0, btn_w, row_h});
     if (layer_next.IsDefined())
@@ -302,7 +365,6 @@ public:
     if (layer_label.IsDefined())
       layer_label.Move({btn_w, 0, w - btn_w, row_h});
 
-    /* Row 2 */
     if (time_prev.IsDefined())
       time_prev.Move({0, row2_y, btn_w, row2_y + row_h});
     if (time_next.IsDefined())
@@ -312,17 +374,101 @@ public:
   }
 
 private:
-  void ScanAvailableLayers() noexcept {
-    for (unsigned i = 0; i < N_LAYERS; ++i)
-      layer_available[i] = IsLayerFileAvailable(LAYERS[i].file_suffix);
+  void InitFromAPI() noexcept {
+    auto &api = XCThermAPI::Instance();
 
-    /* No time-specific files yet — mark all as unavailable */
-    for (unsigned i = 0; i < N_HOURS; ++i)
-      time_available[i] = false;
+    const auto &settings =
+      CommonInterface::GetComputerSettings().weather.xctherm;
+    api.SetCredentials(settings.credentials.email.c_str(),
+                       settings.credentials.password.c_str());
+
+    /* Fetch index.json only if not yet loaded */
+    if (!api.IsIndexLoaded()) {
+      if (api.FetchIndex()) {
+        index_loaded = true;
+        const auto &params = api.GetAvailableParameters();
+        for (unsigned i = 0; i < N_LAYERS; ++i) {
+          layer_available[i] = false;
+          for (const auto &p : params)
+            if (p.name == LAYERS[i].api_parameter) {
+              layer_available[i] = true;
+              break;
+            }
+        }
+        if (layer_available[current_layer])
+          available_hours = api.GetAvailableForecastHours(
+            LAYERS[current_layer].api_parameter);
+      } else {
+        LogFmt("xctherm: index fetch failed — using offline mode");
+        for (unsigned i = 0; i < N_LAYERS; ++i)
+          layer_available[i] = false;
+      }
+    }
+
+    /* Populate cached_hours from the download cache for current layer */
+    RefreshCachedHours();
+
+    /* Pick the best default time index (closest to current UTC) */
+    SelectBestTimeIndex();
+
+    InitAutoSwitch();
   }
 
+  /**
+   * Refresh cached_hours from the API cache for the current layer.
+   */
+  void RefreshCachedHours() noexcept {
+    auto &api = XCThermAPI::Instance();
+    cached_hours = api.GetCachedHours(LAYERS[current_layer].api_parameter);
+  }
+
+  /**
+   * Get the UTC hour of the currently displayed forecast.
+   */
+  unsigned GetCurrentForecastHour() const noexcept {
+    if (current_time_index < cached_hours.size())
+      return cached_hours[current_time_index];
+    if (!available_hours.empty())
+      return available_hours[0];
+    return 12;
+  }
+
+  /**
+   * Select the initial time index using the same future-preferred rule
+   * as the auto-switch loop (see PickAutoTimeIndex).
+   */
+  void SelectBestTimeIndex() noexcept {
+    if (cached_hours.empty())
+      return;
+
+    const auto &basic = CommonInterface::Basic();
+    unsigned utc_h = 12, utc_min = 0;
+    if (basic.date_time_utc.IsPlausible()) {
+      utc_h = basic.date_time_utc.hour;
+      utc_min = basic.date_time_utc.minute;
+    }
+
+    const int idx = PickAutoTimeIndex(cached_hours, utc_h, utc_min);
+    if (idx >= 0)
+      current_time_index = (unsigned)idx;
+  }
+
+  /**
+   * Apply a layer from the API cache (no download).
+   */
+  void ApplyCachedLayer(unsigned layer_index, unsigned utc_hour) noexcept {
+    auto &api = XCThermAPI::Instance();
+    const std::string &cached =
+      api.GetCachedGeoJSON(LAYERS[layer_index].api_parameter, utc_hour);
+    if (!cached.empty())
+      ApplyGeoJSONOverlay(cached, LAYERS[layer_index].short_label);
+    else
+      LogFmt("xctherm: cache miss {}@{}h",
+             LAYERS[layer_index].api_parameter, utc_hour);
+  }
+
+
   void InitAutoSwitch() noexcept {
-    /* Register only available layers */
     std::vector<XCThermAutoSwitch::LayerInfo> layers;
     for (unsigned i = 0; i < N_LAYERS; ++i) {
       if (layer_available[i])
@@ -331,28 +477,24 @@ private:
     auto_switch.SetLoadedLayers(std::move(layers));
     auto_switch.SetCurrentLayerPos((int)current_layer);
 
-    /* Register available times */
-    std::vector<unsigned> times;
-    for (unsigned i = 0; i < N_HOURS; ++i) {
-      if (time_available[i])
-        times.push_back(FORECAST_HOURS[i]);
-    }
-    auto_switch.SetLoadedTimes(std::move(times));
-    auto_switch.SetCurrentTimePos((int)current_time);
+    auto_switch.SetLoadedTimes(available_hours);
+    if (!available_hours.empty())
+      auto_switch.SetCurrentTimePos(0);
 
-    /* Set callbacks */
     auto_switch.SetLayerSwitchCallback([this](unsigned layer_index) {
       if (layer_index < N_LAYERS && layer_available[layer_index]) {
         current_layer = layer_index;
-        LoadLayerOverlay(LAYERS[current_layer].file_suffix,
-                         LAYERS[current_layer].short_label);
+        DownloadAndApplyLayer(current_layer);
         UpdateLayerLabel();
       }
     });
 
     auto_switch.SetTimeSwitchCallback([this](unsigned time_pos) {
-      if (time_pos < N_HOURS) {
-        current_time = time_pos;
+      if (time_pos < available_hours.size()) {
+        current_time_index = time_pos;
+        if (layer_available[current_layer])
+          DownloadAndApplyLayerForHour(current_layer,
+                                       available_hours[current_time_index]);
         UpdateTimeLabel();
       }
     });
@@ -362,34 +504,99 @@ private:
     auto_switch.SetEnabled(settings.auto_switch);
   }
 
-  void UpdateLayerLabel() noexcept {
-    StaticString<64> text;
-    bool avail = layer_available[current_layer];
+  /**
+   * Download a layer via API and apply as overlay.
+   * Uses the current time selection.
+   */
+  void DownloadAndApplyLayer(unsigned layer_index) noexcept {
+    RefreshCachedHours();
+    if (!cached_hours.empty()) {
+      ApplyCachedLayer(layer_index,
+                       cached_hours[current_time_index < cached_hours.size()
+                                    ? current_time_index : 0]);
+    } else {
+      LogFmt("xctherm: no cached data for layer {}",
+             LAYERS[layer_index].short_label);
+    }
+  }
 
-    if (!avail)
-      text.Format("%s  [N/A]", LAYERS[current_layer].short_label);
+  /**
+   * (Legacy) Download a specific layer for a specific UTC hour.
+   * Used by auto-switch callbacks.
+   */
+  void DownloadAndApplyLayerForHour(unsigned layer_index,
+                                     unsigned utc_hour) noexcept {
+    auto &api = XCThermAPI::Instance();
+    if (api.IsLayerCached(LAYERS[layer_index].api_parameter, utc_hour)) {
+      ApplyCachedLayer(layer_index, utc_hour);
+    } else {
+      /* Not in cache — download now */
+      std::string geojson;
+      if (api.DownloadLayerForHour(LAYERS[layer_index].api_parameter,
+                                   utc_hour, geojson))
+        ApplyGeoJSONOverlay(geojson, LAYERS[layer_index].short_label);
+    }
+  }
+
+  void UpdateLayerLabel() noexcept {
+    auto &api = XCThermAPI::Instance();
+    const unsigned fcast_h = GetCurrentForecastHour();
+    const bool has_cache = api.IsLayerCached(
+      LAYERS[current_layer].api_parameter, fcast_h);
+
+    StaticString<80> text;
+    if (!has_cache)
+      text.Format("%s  [no data]", LAYERS[current_layer].short_label);
     else if (auto_switch.IsAltitudeAutoActive())
       text.Format("AUTO: %s", LAYERS[current_layer].short_label);
     else
       text.Format("%s", LAYERS[current_layer].short_label);
 
     layer_label.SetText(text);
-    layer_label.SetAvailable(avail);
+    layer_label.SetAvailable(has_cache);
   }
 
   void UpdateTimeLabel() noexcept {
-    StaticString<64> text;
-    bool avail = time_available[current_time];
+    RefreshCachedHours();
 
-    if (!avail)
-      text.Format("%02u:00 UTC  [N/A]", FORECAST_HOURS[current_time]);
-    else if (auto_switch.IsTimeAutoActive())
-      text.Format("AUTO: %02u:00 UTC", FORECAST_HOURS[current_time]);
+    if (cached_hours.empty()) {
+      time_label.SetText("No forecast – download first");
+      time_label.SetAvailable(false);
+      return;
+    }
+
+    const unsigned fcast_h = cached_hours[
+      current_time_index < cached_hours.size() ? current_time_index : 0];
+
+    /* Compute offset: forecast_time - current_time */
+    const auto &basic = CommonInterface::Basic();
+    int offset_min = 0;
+    if (basic.date_time_utc.IsPlausible()) {
+      int cur_min = (int)basic.date_time_utc.hour * 60
+                  + (int)basic.date_time_utc.minute;
+      int fc_min  = (int)fcast_h * 60;
+      offset_min  = fc_min - cur_min;
+      /* Clamp to -12h..+12h range */
+      if (offset_min >  720) offset_min -= 1440;
+      if (offset_min < -720) offset_min += 1440;
+    }
+
+    int abs_min = std::abs(offset_min);
+    int oh = abs_min / 60;
+    int om = abs_min % 60;
+    char offset_buf[16];
+    std::snprintf(offset_buf, sizeof(offset_buf),
+                  "%s%d:%02d",
+                  offset_min >= 0 ? "+" : "-", oh, om);
+
+    StaticString<80> text;
+    if (auto_switch.IsTimeAutoActive())
+      text.Format("AUTO: %02u:00 UTC (%s)", fcast_h, offset_buf);
     else
-      text.Format("%02u:00 UTC", FORECAST_HOURS[current_time]);
+      text.Format("%02u:00 UTC (%s)", fcast_h, offset_buf);
 
     time_label.SetText(text);
-    time_label.SetAvailable(avail);
+    time_label.SetAvailable(true);
   }
 
 protected:
@@ -442,12 +649,24 @@ XCThermControlsWidget::Show(const PixelRect &rc) noexcept
   w.LayoutChildren({0, 0, (int)rc.GetWidth(), (int)rc.GetHeight()});
 
   WindowWidget::Show(rc);
+
+  /* Listen for GPS updates so the auto-switch logic actually runs.
+     Without this, the widget would only reflect state from Prepare(). */
+  CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
 
 void
 XCThermControlsWidget::Hide() noexcept
 {
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+
   WindowWidget::Hide();
+}
+
+void
+XCThermControlsWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
+{
+  static_cast<ControlsWindow &>(GetWindow()).TimerUpdate();
 }
 
 #endif /* HAVE_HTTP */
