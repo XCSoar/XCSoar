@@ -313,4 +313,12 @@ LoadTask(OrderedTask &task, const ConstDataNode &node,
   for (const auto &i : children) {
     DeserialiseTaskpoint(fact, *i, waypoints);
   }
+
+  /* 
+    Normalize deserialized taskpoint types to match the task factory type.
+    Some exporters (e.g., WeGlide) may serialize intermediate points with
+    generic types (e.g., "turn") even when the task is declared as AAT.
+  */
+  if (fact.MutateTPsToTaskType())
+    fact.UpdateGeometry();
 }
