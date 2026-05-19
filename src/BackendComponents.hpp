@@ -17,6 +17,7 @@ class ProtectedAirspaceWarningManager;
 class GlideComputer;
 class CalculationThread;
 class Replay;
+class StorageManager;
 
 /**
  * This singleton manages components that are part of XCSoar's backend
@@ -37,6 +38,8 @@ struct BackendComponents {
   std::unique_ptr<CalculationThread> calculation_thread;
 
   std::unique_ptr<Replay> replay;
+
+  std::unique_ptr<StorageManager> storage_manager;
 
   BackendComponents() noexcept;
   ~BackendComponents() noexcept;

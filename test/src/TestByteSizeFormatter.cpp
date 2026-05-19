@@ -8,7 +8,7 @@
 
 int main()
 {
-  plan_tests(31);
+  plan_tests(33);
 
   char buffer[256];
 
@@ -63,6 +63,8 @@ int main()
   FormatByteSize(buffer, ARRAY_SIZE(buffer), 1 * 1024 * 1024 * 1024);
   ok1(StringIsEqual(buffer, "1.00 GB"));
 
+  FormatByteSize(buffer, ARRAY_SIZE(buffer), (uint64_t) 1 * 1024 * 1024 * 1024 * 1024);
+  ok1(StringIsEqual(buffer, "1.00 TB"));
 
   FormatByteSize(buffer, ARRAY_SIZE(buffer), 0, true);
   ok1(StringIsEqual(buffer, "0B"));
@@ -112,6 +114,8 @@ int main()
   FormatByteSize(buffer, ARRAY_SIZE(buffer), 1 * 1024 * 1024 * 1024, true);
   ok1(StringIsEqual(buffer, "1.0G"));
 
+  FormatByteSize(buffer, ARRAY_SIZE(buffer), (uint64_t) 1 * 1024 * 1024 * 1024 * 1024, true);
+  ok1(StringIsEqual(buffer, "1.0T"));
 
   return exit_status();
 }

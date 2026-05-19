@@ -14,6 +14,7 @@
 
 #include <cstdint>
 #include <cassert>
+#include <memory>
 
 #include "Menu/ShowButton.hpp"
 
@@ -30,6 +31,9 @@ class TopographyStore;
 class MapWindowProjection;
 class PopupMessage;
 class PluggableOperationEnvironment;
+class StorageEventListener;
+struct StorageEventInfo;
+
 namespace InfoBoxLayout { struct Layout; }
 
 /**
@@ -96,6 +100,14 @@ public:
   PopupMessage *popup = nullptr;
 
 private:
+  std::unique_ptr<StorageEventListener> storage_event_adapter_;
+
+  /**
+   * Called by #StorageManager from a background thread when the
+   * device list may have changed.  Marshals to the UI thread.
+   */
+  UI::Notify storage_notify_{[this]{ OnStorageNotify(); }};
+
   UI::Notify terrain_loader_notify{[this]{ OnTerrainLoaded(); }};
 
   std::unique_ptr<PluggableOperationEnvironment> terrain_loader_env;
@@ -141,7 +153,7 @@ private:
   bool late_initialised = false;
 
 public:
-  using SingleWindow::SingleWindow;
+  explicit MainWindow(UI::Display &display) noexcept;
   ~MainWindow() noexcept override;
 
 protected:
@@ -193,6 +205,27 @@ public:
 
   void Initialise();
   void InitialiseConfigured();
+
+  /**
+   * Wire up the StorageEventDispatcher to the StorageManager
+   * owned by BackendComponents.  Must be called after
+   * BackendComponents is initialised.
+   */
+  void InitialiseStorage() noexcept;
+
+  /**
+   * Tear down storage event wiring.
+   * Must be called before BackendComponents is destroyed.
+   */
+  void DeinitialiseStorage() noexcept;
+
+  /**
+   * Send a storage change notification to the UI thread.
+   * Safe to call from any thread.
+   */
+  void SendStorageNotification() noexcept {
+    storage_notify_.SendNotification();
+  }
 
   /**
    * Destroy the components of the main view (map, info boxes,
@@ -415,6 +448,9 @@ private:
 
   void OnTerrainLoaded() noexcept;
 
+  void OnStorageNotify() noexcept;
+  void OnStorageEvent(const StorageEventInfo &info) noexcept;
+
 #ifdef ANDROID
   void OnRotationSuggestion() noexcept;
   void OnRotateButtonTimeout() noexcept;
@@ -426,6 +462,11 @@ protected:
   void OnResize(PixelSize new_size) noexcept override;
   void OnSetFocus() noexcept override;
   void OnCancelMode() noexcept override;
+
+#ifdef USE_WINUSER
+  LRESULT OnMessage(HWND hWnd, UINT message,
+                    WPARAM wParam, LPARAM lParam) noexcept override;
+#endif
   bool OnMouseDown(PixelPoint p) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;
   bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;

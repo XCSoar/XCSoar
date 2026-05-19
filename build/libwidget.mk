@@ -36,7 +36,8 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/ImageZoomView.cpp \
 	$(SRC)/Widget/ImageZoomFrame.cpp \
 	$(SRC)/Widget/MultiSelectListWidget.cpp \
-	$(SRC)/Widget/FileMultiSelectWidget.cpp
+	$(SRC)/Widget/FileMultiSelectWidget.cpp \
+	$(SRC)/Widget/PropertyWidgetContainer.cpp
 
 WIDGET_DEPENDS = SCREEN
 

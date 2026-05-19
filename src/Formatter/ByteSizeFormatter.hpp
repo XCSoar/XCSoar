@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 
 void FormatByteSize(char *buffer, size_t size,
-                    unsigned long bytes, bool simple = false);
+                    uint64_t bytes, bool simple = false);

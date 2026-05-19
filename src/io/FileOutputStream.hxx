@@ -145,7 +145,7 @@ public:
 	 *
 	 * Throws on error.
 	 */
-	void Commit();
+	void Commit() override;
 
 	/**
 	 * Attempt to roll back all changes.

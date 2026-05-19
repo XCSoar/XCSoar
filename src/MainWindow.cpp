@@ -35,6 +35,12 @@
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "Storage/StorageManager.hpp"
+#include "Storage/StorageEvents.hpp"
+
+#ifdef USE_WINUSER
+#include "Storage/win/WinHotplugForward.hpp"
+#endif
 
 #ifdef ANDROID
 #include "Android/ReceiveTask.hpp"
@@ -199,6 +205,9 @@ GetMapRectBelow(const PixelRect &rc, const PixelRect &top_rect) noexcept
   return result;
 }
 
+MainWindow::MainWindow(UI::Display &display) noexcept
+  : SingleWindow(display) {}
+
 /**
  * Destructor of the MainWindow-Class
  * @return
@@ -295,6 +304,42 @@ MainWindow::InitialiseConfigured()
 
   popup = new PopupMessage(*this, look->dialog, ui_settings);
   popup->Create(map_rect);
+}
+
+void
+MainWindow::InitialiseStorage() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->storage_manager == nullptr)
+    return;
+
+  /* Create a small adapter that forwards storage events to our
+     private OnStorageEvent() method and register it directly
+     with the StorageManager. */
+  class Adapter final : public StorageEventListener {
+    MainWindow &window_;
+  public:
+    explicit Adapter(MainWindow &w) noexcept : window_(w) {}
+    void OnStorageEvent(const StorageEventInfo &info) noexcept override {
+      window_.OnStorageEvent(info);
+    }
+  };
+
+  storage_event_adapter_ = std::make_unique<Adapter>(*this);
+  backend_components->storage_manager->AddEventListener(
+    *storage_event_adapter_);
+}
+
+void
+MainWindow::DeinitialiseStorage() noexcept
+{
+  if (storage_event_adapter_ &&
+      backend_components != nullptr &&
+      backend_components->storage_manager != nullptr)
+    backend_components->storage_manager->RemoveEventListener(
+      *storage_event_adapter_);
+
+  storage_event_adapter_.reset();
 }
 
 void
@@ -718,7 +763,52 @@ MainWindow::FullRedraw() noexcept
     map->FullRedraw();
 }
 
+void
+MainWindow::OnStorageNotify() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->storage_manager == nullptr)
+    return;
+
+  backend_components->storage_manager->ProcessPendingChanges();
+}
+
+void
+MainWindow::OnStorageEvent(const StorageEventInfo &info) noexcept
+{
+  /* Show a popup only when the map is active and no dialog is
+     currently open.  This avoids queueing stale storage popups while
+     a modal dialog is shown and replaying them afterwards. */
+  if (GetMapIfActive() == nullptr || HasDialog())
+    return;
+
+  if (!popup)
+    return;
+
+  const std::string msg = info.Format();
+  if (!msg.empty())
+    popup->AddMessage(msg.c_str());
+}
+
 // Windows event handlers
+
+#ifdef USE_WINUSER
+LRESULT
+MainWindow::OnMessage(HWND hWnd, UINT message,
+                      WPARAM wParam, LPARAM lParam) noexcept
+{
+  switch (message) {
+  case WM_DEVICECHANGE:
+    /* Forward device change notifications to the storage hotplug
+       forwarder which will call the registered
+       WindowsStorageHotplugMonitor. */
+    Storage::Win::ForwardDeviceChange(wParam, lParam);
+    break;
+  }
+
+  return SingleWindow::OnMessage(hWnd, message, wParam, lParam);
+}
+#endif
 
 void
 MainWindow::OnResize(PixelSize new_size) noexcept

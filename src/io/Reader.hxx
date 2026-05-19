@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <span>
 #include <type_traits>
 
@@ -20,6 +21,15 @@ public:
 	Reader(const Reader &) = delete;
 
 	virtual ~Reader() noexcept = default;
+
+	/**
+	 * Return the total size of the stream in bytes, or 0 if
+	 * unknown.  Used for progress reporting.
+	 */
+	[[nodiscard]] [[gnu::pure]]
+	virtual uint_least64_t GetSize() const noexcept {
+		return 0;
+	}
 
 	/**
 	 * Read data from the stream.

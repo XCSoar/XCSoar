@@ -67,7 +67,7 @@ ProgressWindow::UpdateLayout(PixelRect rc) noexcept
 
   message_position = rc;
   message_position.bottom -= progress_border_height + height / 48;
-  message_position.top = message_position.bottom - text_height;
+  message_position.top = message_position.bottom - text_height * 2;
 
   bottom_position = rc;
   bottom_position.top = bottom_position.bottom - progress_border_height;
@@ -145,10 +145,8 @@ ProgressWindow::OnPaint(Canvas &canvas) noexcept
 #endif
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(dark_mode ? COLOR_WHITE : COLOR_BLACK);
-  canvas.DrawText({(message_position.left + message_position.right
-                    - (int)canvas.CalcTextWidth(message.c_str())) / 2,
-      message_position.top},
-                  message.c_str());
+  canvas.DrawFormattedText(message_position, message.c_str(),
+                           DT_CENTER);
 
   ContainerWindow::OnPaint(canvas);
 }
