@@ -140,6 +140,8 @@ Version 7.45 - not yet released
     details) #749
   - waypoint list & alternates: waypoint details open above the list; Close without
     a committed action returns to the list, not the map #620
+  - Linux: Config → Setup → Network for WiFi (NetworkManager or ConnMan
+    via D-Bus)
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or

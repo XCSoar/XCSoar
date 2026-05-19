@@ -67,7 +67,7 @@ WPASupplicant::ExpectResponse(std::string_view expected)
 }
 
 static bool
-ParseStatusLine(WifiStatus &status, std::string_view src) noexcept
+ParseStatusLine(WifiBackendStatus &status, std::string_view src) noexcept
 {
   const auto [name, value] = Split(src, '=');
   if (value.data() == nullptr)
@@ -81,9 +81,9 @@ ParseStatusLine(WifiStatus &status, std::string_view src) noexcept
 }
 
 static bool
-ParseStatus(WifiStatus &status, std::string_view src) noexcept
+ParseStatus(WifiBackendStatus &status, std::string_view src) noexcept
 {
-  status.Clear();
+  status = {};
 
   for (const auto line : IterableSplitString(src, '\n'))
     ParseStatusLine(status, line);
@@ -92,7 +92,7 @@ ParseStatus(WifiStatus &status, std::string_view src) noexcept
 }
 
 bool
-WPASupplicant::Status(WifiStatus &status)
+WPASupplicant::Status(WifiBackendStatus &status)
 {
   SendCommand("STATUS");
 
@@ -152,11 +152,11 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, std::string_view line) noexcept
     return false;
 
   if (flags.find("WPA"sv) != flags.npos)
-    dest.security = WPA_SECURITY;
+    dest.security = WifiSecurity::WPA;
   else if (flags.find("WEP"sv) != flags.npos)
-    dest.security = WEP_SECURITY;
+    dest.security = WifiSecurity::WEP;
   else
-    dest.security = OPEN_SECURITY;
+    dest.security = WifiSecurity::Open;
 
   dest.ssid = ssid;
   return true;
@@ -284,6 +284,20 @@ ParseListResultsLine(WifiConfiguredNetworkInfo &dest, std::string_view line)
   return true;
 }
 
+static bool
+ParseCurrentNetworkIdLine(unsigned &id, std::string_view line) noexcept
+{
+  const auto [id_text, rest1] = Split(line, '\t');
+  const auto [ssid, rest2] = Split(rest1, '\t');
+  const auto [bssid, flags] = Split(rest2, '\t');
+
+  if (ssid.data() == nullptr || bssid.data() == nullptr || flags.data() == nullptr)
+    return false;
+
+  return flags.find("[CURRENT]"sv) != flags.npos &&
+    ParseIntegerTo(id_text, id);
+}
+
 static std::size_t
 ParseListResults(WifiConfiguredNetworkInfo *dest, std::size_t max, std::string_view src)
 {
@@ -324,6 +338,31 @@ WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, std::size_t max)
     throw std::runtime_error{"Malformed wpa_supplicant response"};
 
   return ParseListResults(dest, max, src);
+}
+
+bool
+WPASupplicant::GetCurrentNetworkId(unsigned &id)
+{
+  SendCommand("LIST_NETWORKS");
+
+  char buffer[4096];
+  const auto src = ReadStringTimeout(buffer);
+  if (!src.starts_with("network id"sv))
+    throw std::runtime_error{"Malformed wpa_supplicant response"};
+
+  const auto lines = Split(src, '\n').second;
+  if (lines.data() == nullptr)
+    throw std::runtime_error{"Malformed wpa_supplicant response"};
+
+  for (const auto line : IterableSplitString(lines, '\n')) {
+    if (line.empty())
+      break;
+
+    if (ParseCurrentNetworkIdLine(id, line))
+      return true;
+  }
+
+  return false;
 }
 
 void

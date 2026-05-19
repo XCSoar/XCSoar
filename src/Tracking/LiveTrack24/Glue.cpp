@@ -9,6 +9,7 @@
 #include "LogFile.hpp"
 #include "co/Task.hxx"
 #include "lib/curl/Global.hxx"
+#include "net/State.hpp"
 #include "util/Macros.hpp"
 
 namespace LiveTrack24 {
@@ -67,6 +68,10 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* note that we are allowed to read "settings" without locking the
        mutex, because the background thread never writes to this
        attribute */
+    return;
+
+  if (GetNetState() == NetState::DISCONNECTED)
+    /* no link; do not start HTTP to LiveTrack24 (see SkyLines Glue) */
     return;
 
   if (!basic.time_available || !basic.gps.real || !basic.location_available)
@@ -171,4 +176,4 @@ Glue::OnCompletion(std::exception_ptr error) noexcept
     LogError(error, "LiveTrack24 error");
 }
 
-} // namespace Livetrack24
+} // namespace LiveTrack24

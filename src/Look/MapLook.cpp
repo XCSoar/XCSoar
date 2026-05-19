@@ -61,10 +61,6 @@ MapLook::Initialise(const MapSettings &settings,
 
   thermal_source_icon.LoadResource(IDB_THERMALSOURCE_ALL);
 
-  traffic_safe_icon.LoadResource(IDB_TRAFFIC_SAFE_ALL, false);
-  traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING_ALL, false);
-  traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM_ALL, false);
-
   cruise_mode_icon.LoadResource(IDB_CRUISE_ALL, false);
   climb_mode_icon.LoadResource(IDB_CLIMB_ALL, false);
   final_glide_mode_icon.LoadResource(IDB_FINALGLIDE_ALL, false);
