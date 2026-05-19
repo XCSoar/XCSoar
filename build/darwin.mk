@@ -2,6 +2,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
 
 TARGET_LDLIBS += -framework Foundation
 TARGET_LDLIBS += -framework AVFoundation
+TARGET_LDLIBS += -framework CoreBluetooth
 
 ifneq ($(DARWIN_LIBS),)
 TARGET_CPPFLAGS += -isystem $(DARWIN_LIBS)/include
