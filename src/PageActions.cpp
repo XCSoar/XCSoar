@@ -13,6 +13,11 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_HTTP
+#include "Dialogs/Weather/XCThermControlsWidget.hpp"
+#endif
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -199,6 +204,10 @@ LoadMain(PageLayout::Main main)
 static void
 LoadBottom(PageLayout::Bottom bottom)
 {
+  /* The XCTherm cursor widget is installed here ONLY when the user
+     explicitly selects it as a page's Bottom area in Aussehen → Seiten
+     (Config → System → Pages). Never auto-installed. Same opt-in model
+     as CrossSection. */
   switch (bottom) {
   case PageLayout::Bottom::NOTHING:
     CommonInterface::main_window->SetBottomWidget(nullptr);
@@ -207,6 +216,12 @@ LoadBottom(PageLayout::Bottom bottom)
   case PageLayout::Bottom::CROSS_SECTION:
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget(*data_components));
     break;
+
+#ifdef HAVE_HTTP
+  case PageLayout::Bottom::XCTHERM:
+    CommonInterface::main_window->SetBottomWidget(new XCThermControlsWidget());
+    break;
+#endif
 
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */

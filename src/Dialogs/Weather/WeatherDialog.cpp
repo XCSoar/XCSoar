@@ -5,6 +5,7 @@
 #include "NOAAList.hpp"
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
+#include "XCThermDialog.hpp"
 #if 0
 #include "MapOverlayWidget.hpp"
 #endif
@@ -69,6 +70,13 @@ ShowWeatherDialog(const char *page)
     start_page = widget.GetSize();
 
   widget.AddTab(CreatePCMetWidget(), "pc_met");
+#endif
+
+#ifdef HAVE_HTTP
+  if (page != nullptr && StringIsEqual(page, "xctherm"))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateXCThermWidget(), "XC Therm");
 #endif
 
 #if 0

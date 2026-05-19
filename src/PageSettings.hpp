@@ -70,6 +70,11 @@ struct PageLayout
     CROSS_SECTION,
 
     /**
+     * Show XCTherm wave forecast controls below the map.
+     */
+    XCTHERM,
+
+    /**
      * A custom #Widget is being displayed.  This is not a
      * user-accessible option, it's only used for runtime state.
      */
