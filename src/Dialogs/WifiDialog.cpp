@@ -30,6 +30,9 @@
 
 namespace {
 
+static constexpr auto kWifiRefreshInterval = std::chrono::seconds{1};
+static constexpr auto kWifiAutoScanInterval = std::chrono::seconds{30};
+
 [[gnu::pure]]
 static unsigned
 SortRank(const WifiNetworkEntry &entry) noexcept
@@ -191,6 +194,7 @@ class WifiListWidget final
   bool scan_pending = false;
 
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
+  UI::PeriodicTimer scan_timer{[this]{ Scan(false, false); }};
 
 public:
   explicit WifiListWidget(UniqueWifiBackend _backend)
@@ -199,17 +203,8 @@ public:
 
   void CreateButtons(WidgetDialog &dialog) {
     scan_button = dialog.AddButton(_("Scan"), [this](){
-      try {
-        if (backend_ == nullptr)
-          return;
-
-        backend_->Scan();
-        scan_pending = true;
-        scan_button->SetCaption(_("Scanning..."));
-        scan_button->SetEnabled(false);
-      } catch (...) {
-        ShowWifiError(std::current_exception(), _("Error"));
-      }
+      Scan(true, true);
+      scan_timer.Schedule(kWifiAutoScanInterval);
     });
 
     connect_button = dialog.AddButton(_("Connect"), [this](){
@@ -240,7 +235,9 @@ public:
                row_renderer.CalculateLayout(look.text_font,
                                             look.small_font));
     UpdateList();
-    update_timer.Schedule(std::chrono::seconds(1));
+    Scan(false, true);
+    update_timer.Schedule(kWifiRefreshInterval);
+    scan_timer.Schedule(kWifiAutoScanInterval);
   }
 
   /* virtual methods from class ListItemRenderer */
@@ -253,11 +250,32 @@ public:
   }
 
 private:
+  void Scan(bool show_error, bool show_progress) noexcept;
   void UpdateList();
 
   void Connect();
   void Forget();
 };
+
+void
+WifiListWidget::Scan(bool show_error, bool show_progress) noexcept
+{
+  if (backend_ == nullptr)
+    return;
+
+  try {
+    backend_->Scan();
+
+    if (show_progress && scan_button != nullptr) {
+      scan_pending = true;
+      scan_button->SetCaption(_("Scanning..."));
+      scan_button->SetEnabled(false);
+    }
+  } catch (...) {
+    if (show_error)
+      ShowWifiError(std::current_exception(), _("Error"));
+  }
+}
 
 void
 WifiListWidget::UpdateButtons()
