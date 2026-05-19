@@ -32,7 +32,7 @@ FetchOk(CurlGlobal &curl, const char *url)
 
 struct FetchResults {
   bool internet_available = false;
-  bool sha256_ok = false;
+  bool badssl_ok = false;
   bool wrong_host_ok = false;
   bool xcsoar_ok = false;
 };
@@ -48,8 +48,8 @@ FetchAll(CurlGlobal &curl)
     co_await FetchOk(curl, "http://http.badssl.com/");
 
   if (results.internet_available) {
-    results.sha256_ok =
-      co_await FetchOk(curl, "https://sha256.badssl.com/");
+    results.badssl_ok =
+      co_await FetchOk(curl, "https://badssl.com/");
     results.wrong_host_ok =
       co_await FetchOk(curl, "https://wrong.host.badssl.com/");
     results.xcsoar_ok =
@@ -80,7 +80,7 @@ main()
     return exit_status();
   }
 
-  ok1(results.sha256_ok);
+  ok1(results.badssl_ok);
   ok1(!results.wrong_host_ok);
   ok1(results.xcsoar_ok);
 
