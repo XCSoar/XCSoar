@@ -33,8 +33,9 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 
 #ifdef HAVE_HTTP
   map.Get(ProfileKeys::EnableThermalInformationMap, settings.enable_tim);
-  map.Get(ProfileKeys::XCThermEnabled, settings.xctherm.enabled);
-  map.Get(ProfileKeys::XCThermShowOnMainMap, settings.xctherm.show_on_main_map);
+  map.GetEnum(ProfileKeys::XCThermOverlayLocation,
+              settings.xctherm.overlay_location);
+  map.Get(ProfileKeys::XCThermAutoSwitch, settings.xctherm.auto_switch);
 #endif
 
   {

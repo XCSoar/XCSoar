@@ -330,6 +330,10 @@ LoadMain(PageLayout::Main main)
 static void
 LoadBottom(const PageLayout &layout)
 {
+  /* The XCTherm cursor widget is installed here ONLY when the user
+     explicitly selects it as a page's Bottom area in Aussehen → Seiten
+     (Config → System → Pages). Never auto-installed. Same opt-in model
+     as CrossSection. */
   switch (layout.bottom) {
   case PageLayout::Bottom::NOTHING:
     CommonInterface::main_window->SetBottomWidget(nullptr);

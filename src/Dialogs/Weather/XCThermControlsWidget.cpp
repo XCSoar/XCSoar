@@ -19,6 +19,7 @@
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/Settings.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
 
@@ -97,9 +98,12 @@ public:
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
     const auto rc = GetClientRect();
-    canvas.Clear(COLOR_WHITE);
+    /* Themed colors — match dark mode when the dialog look is dark.
+       Previously hardcoded to COLOR_WHITE / COLOR_BLACK which looked
+       jarring against the rest of the app in dark mode. */
+    canvas.Clear(look.background_color);
     canvas.SetBackgroundTransparent();
-    canvas.SetTextColor(is_available ? COLOR_BLACK : COLOR_GRAY);
+    canvas.SetTextColor(is_available ? look.text_color : COLOR_GRAY);
     canvas.Select(look.text_font);
 
     const auto text_size = canvas.CalcTextSize(text);
@@ -350,6 +354,25 @@ public:
     }
   }
 
+  /**
+   * Re-apply the cached overlay for the currently selected layer / time
+   * to the map. Used by the outer widget on Show() when SEPARATE_MAP
+   * mode is active, so the forecast reappears when the XCTherm page
+   * comes back into view.
+   */
+  void RestoreOverlayFromCache() noexcept {
+    auto &api = XCThermAPI::Instance();
+    RefreshCachedHours();
+    if (cached_hours.empty())
+      return;
+    const unsigned hour = cached_hours[
+      current_time_index < cached_hours.size() ? current_time_index : 0];
+    const std::string &cached =
+      api.GetCachedGeoJSON(LAYERS[current_layer].api_parameter, hour);
+    if (!cached.empty())
+      ApplyGeoJSONOverlay(cached, LAYERS[current_layer].short_label);
+  }
+
   void LayoutChildren(const PixelRect &rc) noexcept {
     const int total_h = rc.GetHeight();
     const int row_h = (total_h - SEPARATOR_H) / 2;
@@ -544,50 +567,61 @@ private:
     const unsigned fcast_h = cached_hours[
       current_time_index < cached_hours.size() ? current_time_index : 0];
 
-    /* Compute offset: forecast_time - current_time */
-    const auto &basic = CommonInterface::Basic();
+    /* Compute the real signed offset against current UTC using the
+       slice's absolute datetime (run_date + run_hour + step) — needed
+       because a span longer than 12 h crosses midnight, and the old
+       ±12 h modular clamp would flip "tomorrow 02:00" to "-11:15"
+       instead of "+12:45". */
     int offset_min = 0;
-    if (basic.date_time_utc.IsPlausible()) {
+    bool has_real_offset = false;
+    auto &api = XCThermAPI::Instance();
+    const auto *slice = api.GetCachedSlice(
+      LAYERS[current_layer].api_parameter, fcast_h);
+
+    if (slice != nullptr && slice->run_date.size() == 8 &&
+        slice->run_hour.size() == 2 &&
+        BrokenDateTime::NowUTC().IsPlausible()) {
+      const unsigned year  = (unsigned)std::atoi(slice->run_date.substr(0, 4).c_str());
+      const unsigned month = (unsigned)std::atoi(slice->run_date.substr(4, 2).c_str());
+      const unsigned day   = (unsigned)std::atoi(slice->run_date.substr(6, 2).c_str());
+      const unsigned run_h = (unsigned)std::atoi(slice->run_hour.c_str());
+      const BrokenDateTime run_dt(year, month, day, run_h, 0, 0);
+      const BrokenDateTime forecast_dt =
+        run_dt + std::chrono::hours{slice->step};
+      const auto delta = forecast_dt - BrokenDateTime::NowUTC();
+      offset_min = (int)std::chrono::duration_cast<std::chrono::minutes>(delta).count();
+      has_real_offset = true;
+    } else if (CommonInterface::Basic().date_time_utc.IsPlausible()) {
+      /* Fallback (no slice metadata yet): use the same-day approximation
+         so we still show *something*. Only really matters for a brief
+         window during the first download. */
+      const auto &basic = CommonInterface::Basic();
       int cur_min = (int)basic.date_time_utc.hour * 60
                   + (int)basic.date_time_utc.minute;
       int fc_min  = (int)fcast_h * 60;
       offset_min  = fc_min - cur_min;
-      /* Clamp to -12h..+12h range */
-      if (offset_min >  720) offset_min -= 1440;
-      if (offset_min < -720) offset_min += 1440;
+      if (offset_min < 0) offset_min += 1440;
+      has_real_offset = true;
     }
 
-    int abs_min = std::abs(offset_min);
-    int oh = abs_min / 60;
-    int om = abs_min % 60;
-    char offset_buf[16];
-    std::snprintf(offset_buf, sizeof(offset_buf),
-                  "%s%d:%02d",
-                  offset_min >= 0 ? "+" : "-", oh, om);
-
-    /* Look up the issued time of the currently-displayed slice so the
-       pilot can tell whether they're looking at a fresh run. */
-    char issued_buf[24] = {0};
-    auto &api = XCThermAPI::Instance();
-    const auto *slice = api.GetCachedSlice(
-      LAYERS[current_layer].api_parameter, fcast_h);
-    if (slice != nullptr &&
-        slice->run_date.size() == 8 &&
-        slice->run_hour.size() == 2) {
-      std::snprintf(issued_buf, sizeof(issued_buf),
-                    " | run %.2s.%.2s %sZ",
-                    slice->run_date.c_str() + 6,  // DD
-                    slice->run_date.c_str() + 4,  // MM
-                    slice->run_hour.c_str());
+    char offset_buf[16] = {0};
+    if (has_real_offset) {
+      const int abs_min = std::abs(offset_min);
+      const int oh = abs_min / 60;
+      const int om = abs_min % 60;
+      std::snprintf(offset_buf, sizeof(offset_buf),
+                    "%s%d:%02d",
+                    offset_min >= 0 ? "+" : "-", oh, om);
     }
 
-    StaticString<96> text;
+    /* Issued-time / run timestamp intentionally omitted — too much info
+       for the small bottom cursor. The full run is still visible in the
+       Info → Weather → XCTherm dialog row. */
+    StaticString<64> text;
     if (auto_switch.IsTimeAutoActive())
-      text.Format("AUTO: %02u:00 UTC (%s)%s",
-                  fcast_h, offset_buf, issued_buf);
+      text.Format("AUTO: %02u:00 UTC (%s)", fcast_h, offset_buf);
     else
-      text.Format("%02u:00 UTC (%s)%s",
-                  fcast_h, offset_buf, issued_buf);
+      text.Format("%02u:00 UTC (%s)", fcast_h, offset_buf);
 
     time_label.SetText(text);
     time_label.SetAvailable(true);
@@ -597,12 +631,15 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override {
     ContainerWindow::OnPaint(canvas);
 
-    /* Draw separator line between rows */
+    /* Draw separator line between rows. Use the themed text color so
+       the line stays visible in both light and dark mode (was a
+       hardcoded black pen — invisible against the dark background). */
     const int total_h = (int)GetClientRect().GetHeight();
     const int row_h = (total_h - SEPARATOR_H) / 2;
     const int w = (int)GetClientRect().GetWidth();
 
-    canvas.SelectBlackPen();
+    const Pen separator_pen(1, look.text_color);
+    canvas.Select(separator_pen);
     canvas.DrawLine({0, row_h}, {w, row_h});
   }
 };
@@ -647,12 +684,31 @@ XCThermControlsWidget::Show(const PixelRect &rc) noexcept
   /* Listen for GPS updates so the auto-switch logic actually runs.
      Without this, the widget would only reflect state from Prepare(). */
   CommonInterface::GetLiveBlackboard().AddListener(*this);
+
+  /* In SEPARATE_MAP mode, the overlay is bound to this widget's
+     visibility (Hide() clears it). Restore it now so opening the
+     XCTherm page re-shows the forecast from cache. */
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  if (settings.overlay_location ==
+      XCThermSettings::OverlayLocation::SEPARATE_MAP)
+    w.RestoreOverlayFromCache();
 }
 
 void
 XCThermControlsWidget::Hide() noexcept
 {
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+
+  /* If the overlay is gated to this page, drop it on hide so it
+     doesn't appear on the regular map pages. */
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  if (settings.overlay_location ==
+      XCThermSettings::OverlayLocation::SEPARATE_MAP) {
+    if (auto *map = UIGlobals::GetMap())
+      map->SetOverlay(nullptr);
+  }
 
   WindowWidget::Hide();
 }

@@ -7,6 +7,8 @@
 #include "net/http/Features.hpp"
 #include "util/StaticString.hxx"
 
+#include <cstdint>
+
 #ifdef HAVE_PCMET
 
 #include "PCMet/Settings.hpp"
@@ -29,8 +31,21 @@ struct WeatherCredentialsSettings {
 
 struct XCThermSettings {
 #ifdef HAVE_HTTP
-  bool enabled;
-  bool show_on_main_map;
+  /**
+   * Where the XCTherm forecast overlay is rendered.
+   */
+  enum class OverlayLocation : uint8_t {
+    /** Render on every map page (current behaviour, simplest setup). */
+    MAIN_MAP,
+    /**
+     * Render only when the dedicated XCTherm page is visible (i.e. the
+     * page that has XCThermControlsWidget as its Bottom area).
+     * The user must configure such a page in Config → System → Pages.
+     */
+    SEPARATE_MAP,
+  };
+
+  OverlayLocation overlay_location;
 
   /**
    * Automatically switch altitude layer and forecast time
@@ -58,8 +73,7 @@ struct XCThermSettings {
 
   void SetDefaults() noexcept {
 #ifdef HAVE_HTTP
-    enabled = true;
-    show_on_main_map = false;
+    overlay_location = OverlayLocation::MAIN_MAP;
     auto_switch = true;
 #endif
 
