@@ -212,6 +212,20 @@ VptScale(unsigned pt) noexcept
 }
 
 /**
+ * Map a widget-relative "design" pixel (e.g. a fraction of a custom
+ * gauge height) to virtual points for @ref VptScale, using a 100:vdpi
+ * reference. Custom gauges (navigator, etc.) use this instead of
+ * re-implementing 100/vdpi at each call site.
+ */
+[[gnu::const]]
+static inline unsigned
+VptScaleFromDesignPixel(unsigned design_pixel) noexcept
+{
+  const unsigned d = vdpi == 0 ? 1u : vdpi;
+  return VptScale((design_pixel * 100) / d);
+}
+
+/**
  * Scale a font size in points (1/72th inch) to pixels.  Additional
  * scaling factors may be applied to consider small screens
  * (i.e. viewing distance) and user preference.

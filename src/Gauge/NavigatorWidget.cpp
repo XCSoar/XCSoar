@@ -1,0 +1,402 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "Gauge/NavigatorWidget.hpp"
+
+#include "BackendComponents.hpp"
+#include "Components.hpp"
+#include "Engine/Task/AbstractTask.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/Points/TaskWaypoint.hpp"
+#include "Engine/Task/TaskManager.hpp"
+#include "Input/InputEvents.hpp"
+#include "Language/Language.hpp"
+#include "PageActions.hpp"
+#include "Screen/Layout.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+#include "UIGlobals.hpp"
+#include "Look/InfoBoxLook.hpp"
+
+NavigatorWindow::NavigatorWindow(const NavigatorLook &_look_nav,
+                                 const TaskLook &_look_task,
+                                 const InfoBoxLook &_look_infobox,
+                                 NavType nav_type_param, bool is_nav_top) noexcept
+  : look_nav(_look_nav),
+    look_task(_look_task),
+    look_infobox(_look_infobox),
+    nav_type(nav_type_param),
+    is_navigator_top_position(is_nav_top),
+    dragging(false)
+{
+}
+
+void
+NavigatorWindow::ReadBlackboard(const AttitudeState &_attitude) noexcept
+{
+  attitude = _attitude;
+}
+
+void
+NavigatorWindow::OnPaint(Canvas &canvas) noexcept
+{
+  renderer.Update(canvas);
+
+  if (look_nav.inverse) {
+    canvas.Clear(COLOR_BLACK);
+  } else {
+    canvas.ClearWhite();
+  }
+
+  TaskType tp{TaskType::NONE};
+  WaypointPtr wp_before;
+  WaypointPtr wp_current;
+
+  unsigned task_size{};
+
+  if (backend_components != nullptr) {
+    auto *protected_task_manager =
+        backend_components->protected_task_manager.get();
+    if (protected_task_manager != nullptr) {
+      ProtectedTaskManager::Lease lease(*protected_task_manager);
+      const auto &stats = lease->GetStats();
+
+      tp = lease->GetMode();
+
+      if (stats.task_valid) {
+        if (tp == TaskType::ORDERED) {
+
+          const OrderedTask &task = lease->GetOrderedTask();
+
+          task_size = task.TaskSize();
+
+          if (TaskWaypoint *atp = task.GetActiveTaskPoint())
+            wp_current = atp->GetWaypointPtr();
+          else
+            wp_current = nullptr;
+
+          const auto i = task.GetActiveIndex();
+          if (i == 0) wp_before = nullptr;
+          else wp_before = task.GetPoint(i - 1).GetWaypointPtr();
+        } else {
+          const AbstractTask *const active_task = lease->GetActiveTask();
+          if (active_task != nullptr) {
+            if (TaskWaypoint *atp = active_task->GetActiveTaskPoint())
+              wp_current = atp->GetWaypointPtr();
+            else
+              wp_current = nullptr;
+          } else
+            wp_current = nullptr;
+          wp_before = nullptr;
+        }
+      } else {
+        wp_current = nullptr;
+        wp_before = nullptr;
+      }
+    }
+  }
+
+  const PixelRect frame_navigator =
+      canvas.GetRect().WithPadding(Layout::Scale(1));
+
+  const int canvas_height = canvas.GetHeight();
+  const int canvas_width = canvas.GetWidth();
+
+  PixelPoint pt_origin{canvas_width * 18 / 100, canvas_height * 1 / 10};
+  PixelSize frame_size{canvas_width * 8 / 10, canvas_height * 55 / 100};
+  PixelRect frame_navigator_waypoint{pt_origin, frame_size};
+
+  switch (nav_type) {
+  case NavType::NAVIGATOR_LITE_ONE_LINE:
+  case NavType::NAVIGATOR_LITE_TWO_LINES:
+  case NavType::NAVIGATOR:
+    renderer.DrawFrame(canvas, frame_navigator, look_nav);
+    break;
+  case NavType::NAVIGATOR_DETAILED:
+    renderer.DrawFrame(canvas, frame_navigator, look_nav);
+    renderer.DrawFrame(canvas, frame_navigator_waypoint, look_nav);
+    break;
+  default:
+    renderer.DrawFrame(canvas, frame_navigator, look_nav);
+    break;
+  }
+
+  if (!CommonInterface::Calculated().task_stats.task_valid) {
+    canvas.SetBackgroundTransparent();
+    canvas.Select(look_infobox.value_font);
+    canvas.SetTextColor(look_nav.inverse ? COLOR_WHITE : COLOR_BLACK);
+    const char *const no_task_text = _("No task");
+    const PixelSize text_size = canvas.CalcTextSize(no_task_text);
+    const PixelRect &client = canvas.GetRect();
+    const PixelPoint pt{client.left + (int)(client.GetWidth() - text_size.width) / 2,
+                        client.top + (int)(client.GetHeight() - text_size.height) / 2};
+    canvas.DrawText(pt, no_task_text);
+    return;
+  }
+
+  const auto task_summary =
+      CommonInterface::Calculated().common_stats.ordered_summary;
+
+  if (tp == TaskType::ORDERED)
+    renderer.DrawProgressTask(task_summary, canvas, canvas.GetRect(), look_nav,
+                              look_task);
+
+  renderer.DrawWaypointsIconsTitle(canvas, wp_before, wp_current, task_size,
+                                   look_nav, nav_type);
+
+  if (wp_current != nullptr)
+    renderer.DrawTaskTextsArrow(canvas, tp, *wp_current, canvas.GetRect(),
+                                nav_type, is_navigator_top_position, look_nav,
+                                look_task, look_infobox);
+}
+
+void
+NavigatorWindow::StopDragging()
+{
+  if (!dragging) return;
+
+  dragging = false;
+  ReleaseCapture();
+}
+
+bool
+NavigatorWindow::OnMouseGesture(const char *gesture) noexcept
+{
+  if (StringIsEqual(gesture, "U")) {
+    InputEvents::ShowMenu();
+    return true;
+  }
+  if (StringIsEqual(gesture, "D")) {
+    InputEvents::ShowMenu();
+    return true;
+  }
+  const bool swipe_reversed =
+      CommonInterface::GetUISettings().navigator.navigator_swipe;
+  if (StringIsEqual(gesture, "R")) {
+    swipe_reversed ? InputEvents::eventAdjustWaypoint("previouswrap")
+                   : InputEvents::eventAdjustWaypoint("nextwrap");
+    return true;
+  }
+  if (StringIsEqual(gesture, "L")) {
+    swipe_reversed ? InputEvents::eventAdjustWaypoint("nextwrap")
+                   : InputEvents::eventAdjustWaypoint("previouswrap");
+    return true;
+  }
+  if (StringIsEqual(gesture, "UD")) {
+    InputEvents::ShowMenu();
+    return true;
+  }
+  if (StringIsEqual(gesture, "DR")) {
+    InputEvents::ShowMenu();
+    return true;
+  }
+  if (StringIsEqual(gesture, "RL")) {
+    InputEvents::eventSetup("Target");
+    return true;
+  }
+  if (StringIsEqual(gesture, "LR")) {
+    InputEvents::eventSetup("Alternates");
+    return true;
+  }
+  if (gesture) {
+    InputEvents::ShowMenu();
+    return true;
+  }
+
+  return InputEvents::processGesture(gesture);
+}
+
+bool
+NavigatorWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
+{
+  StopDragging();
+  ignore_single_click = true;
+
+  if (!CommonInterface::Calculated().task_stats.task_valid) {
+    InputEvents::eventSetup("Task");
+    return true;
+  }
+  InputEvents::ShowMenu();
+  InputEvents::setMode("Nav1");
+  return true;
+}
+
+bool
+NavigatorWindow::OnMouseDown(PixelPoint p) noexcept
+{
+  // Ignore single click event if double click detected
+  if (ignore_single_click) return true;
+
+  mouse_down_clock.Update();
+
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+    gestures.Start(p, Layout::Scale(20));
+  }
+
+  return true;
+}
+
+bool
+NavigatorWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
+{
+  // Ignore single click event if double click detected
+  if (ignore_single_click) {
+    ignore_single_click = false;
+    return true;
+  }
+
+  const auto click_time = mouse_down_clock.Elapsed();
+  mouse_down_clock.Reset();
+
+  if (dragging) {
+    StopDragging();
+
+    const char *gesture = gestures.Finish();
+    if (gesture && OnMouseGesture(gesture)) return true;
+
+    if (click_time > std::chrono::milliseconds(0) &&
+        click_time <= std::chrono::milliseconds(200)) {
+      if (!CommonInterface::Calculated().task_stats.task_valid) {
+        InputEvents::eventSetup("Task");
+        return true;
+      }
+      InputEvents::ShowMenu();
+      InputEvents::setMode("Nav1");
+    }
+
+    else if (click_time > std::chrono::milliseconds(200) &&
+             click_time <= std::chrono::milliseconds(500))
+      // quickClick
+      InputEvents::eventStatus("task");
+
+    else if (click_time > std::chrono::milliseconds(500) &&
+             click_time <= std::chrono::milliseconds(2000))
+      // simpleClick
+      InputEvents::eventAnalysis("AnalysisPage::TASK");
+
+    else if (click_time > std::chrono::milliseconds(2000) &&
+             click_time < std::chrono::milliseconds(10000))
+      // longClick
+      InputEvents::eventSetup("Task");
+
+    else return false;
+  }
+
+  return false;
+}
+
+bool
+NavigatorWindow::OnMouseMove(PixelPoint p,
+                             [[maybe_unused]] unsigned keys) noexcept
+{
+  if (dragging) gestures.Update(p);
+
+  return true;
+}
+
+void
+NavigatorWindow::OnCancelMode() noexcept
+{
+#ifndef USE_WINUSER
+  ReleaseCapture();
+#endif
+  StopDragging();
+}
+
+bool
+NavigatorWindow::OnKeyDown(unsigned key_code) noexcept
+{
+  return InputEvents::processKey(key_code);
+}
+
+void
+NavigatorWidget::Update([[maybe_unused]] const MoreData &basic) noexcept
+{
+  navigator_window->ReadBlackboard(basic.attitude);
+}
+
+void
+NavigatorWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+{
+  const Look &look = UIGlobals::GetLook();
+
+  WindowStyle style;
+  style.Hide();
+  style.Disable();
+
+  navigator_window = std::make_unique<NavigatorWindow>(
+      look.navigator, look.map.task, look.info_box, nav_type,
+      is_navigator_top_position);
+  navigator_window->Create(parent, rc, style);
+  navigator_window->Move(rc);
+}
+
+void
+NavigatorWidget::Show([[maybe_unused]] const PixelRect &rc) noexcept
+{
+  Update(CommonInterface::Basic());
+  CommonInterface::GetLiveBlackboard().AddListener(*this);
+  navigator_window->Show();
+}
+
+void
+NavigatorWidget::Hide() noexcept
+{
+  navigator_window->Hide();
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+}
+
+void
+NavigatorWidget::Move(const PixelRect &rc) noexcept
+{
+  navigator_window->Move(rc);
+}
+
+bool
+NavigatorWidget::SetFocus() noexcept
+{
+  return false;
+}
+
+PixelSize
+NavigatorWidget::GetMinimumSize() const noexcept
+{
+  unsigned int navHeight{};
+
+  const auto &navSettings = CommonInterface::GetUISettings().navigator;
+
+  switch (nav_type) {
+  case NavType::NAVIGATOR_LITE_ONE_LINE:
+    navHeight = navSettings.navigator_lite_1_line_height;
+    break;
+  case NavType::NAVIGATOR_LITE_TWO_LINES:
+    navHeight = navSettings.navigator_lite_2_lines_height;
+    break;
+  case NavType::NAVIGATOR:
+    navHeight = navSettings.navigator_height;
+    break;
+  case NavType::NAVIGATOR_DETAILED:
+    navHeight = navSettings.navigator_detailed_height;
+    break;
+  default:
+    navHeight = navSettings.navigator_height;
+    break;
+  }
+
+  return PixelSize{navHeight};
+}
+
+void
+NavigatorWidget::OnGPSUpdate(const MoreData &basic) noexcept
+{
+  Update(basic);
+}
+
+void
+NavigatorWidget::UpdateLayout() noexcept
+{
+  const PixelRect rc = navigator_window->GetClientRect();
+  navigator_window->Move(rc);
+}

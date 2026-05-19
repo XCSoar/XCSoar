@@ -7,6 +7,7 @@
 #include "Asset.hpp"
 
 #include <algorithm>
+#include <cstdint>
 
 static constexpr unsigned
 CalcProgressBarPosition(unsigned current_value,
@@ -17,7 +18,9 @@ CalcProgressBarPosition(unsigned current_value,
     return 0;
 
   const unsigned value = std::clamp(current_value, min_value, max_value);
-  return (value - min_value) * width / (max_value - min_value);
+  const uint64_t num =
+      uint64_t{value - min_value} * uint64_t{width};
+  return static_cast<unsigned>(num / uint64_t{max_value - min_value});
 }
 
 void
@@ -30,13 +33,20 @@ DrawSimpleProgressBar(Canvas &canvas, const PixelRect &r,
     CalcProgressBarPosition(current_value, min_value, max_value,
                             r.GetWidth());
 
-  auto a = r, b = r;
-  a.right = b.left = a.left + position;
+  const Color &bg = background_color != nullptr ? *background_color
+                                                 : COLOR_WHITE;
+  /* Full track first so the completed segment can sit on top without a gap. */
+  canvas.DrawFilledRectangle(r, bg);
+
+  if (position <= 0)
+    return;
+
+  auto a = r;
+  a.right = a.left + position;
+  if (a.right > r.right)
+    a.right = r.right;
 
   canvas.DrawFilledRectangle(a, IsDithered() ? COLOR_BLACK : COLOR_GREEN);
-  canvas.DrawFilledRectangle(b,
-                             background_color != nullptr
-                             ? *background_color : COLOR_WHITE);
 }
 
 void

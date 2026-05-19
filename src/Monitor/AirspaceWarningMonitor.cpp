@@ -59,12 +59,14 @@ public:
         manager.AcknowledgeWarning(airspace);
       monitor.Schedule();
       PageActions::RestoreBottom();
+      PageActions::RestoreTop();
     });
 
     AddButton(_("ACK Day"), [this](){
       manager.AcknowledgeDay(airspace);
       monitor.Schedule();
       PageActions::RestoreBottom();
+      PageActions::RestoreTop();
     });
 
     AddButton(_("More"), [this](){
@@ -100,8 +102,11 @@ AirspaceWarningMonitor::Reset() noexcept
 void
 AirspaceWarningMonitor::HideWidget() noexcept
 {
-  if (widget != nullptr)
+  if (widget != nullptr) {
     PageActions::RestoreBottom();
+    PageActions::RestoreTop();
+  }
+  
   assert(widget == nullptr);
 }
 
