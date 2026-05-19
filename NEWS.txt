@@ -173,6 +173,7 @@ Version 7.45 - not yet released
     support (currently LXNAV); PutPolar is skipped on other drivers even if an old
     profile had Polar sync enabled #2457
 * iOS
+  - fix audio vario playback through the device speaker
   - disable Core Location distance filter for built-in GPS so fixes are not
     suppressed while stationary #2380
 * kobo
