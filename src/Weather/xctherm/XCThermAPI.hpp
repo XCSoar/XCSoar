@@ -8,7 +8,9 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <functional>
 #include <map>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -103,6 +105,18 @@ public:
                          unsigned &out_step) const noexcept;
 
   /**
+   * Progress / cancel callback. Called periodically from inside
+   * DownloadGeoJSON during the libcurl transfer.
+   *
+   * @param bytes_now   bytes received so far on the current slice
+   * @param bytes_total expected total in bytes (0 if not yet known)
+   * @return true to continue; false to abort the transfer
+   *         (curl will return failure)
+   */
+  using ProgressFn = std::function<bool(uint64_t bytes_now,
+                                        uint64_t bytes_total)>;
+
+  /**
    * Download a single GeoJSON layer.
    *
    * @param parameter e.g. "vertical_wind_3000amsl"
@@ -110,7 +124,8 @@ public:
    * @param run_hour HH (00, 03, etc.)
    * @param step forecast step (0, 1, 2, ...)
    * @param out_geojson receives the uncompressed GeoJSON string
-   * @param env optional progress reporting (SetText + SetProgressRange/Position)
+   * @param progress optional progress / cancel callback. Safe to call
+   *   from any thread (callback fires on the calling thread).
    * @return true on success
    */
   bool DownloadGeoJSON(const std::string &parameter,
@@ -118,8 +133,8 @@ public:
                        const std::string &run_hour,
                        unsigned step,
                        std::string &out_geojson,
-                       OperationEnvironment *env = nullptr,
-                       int64_t *out_wire_bytes = nullptr) noexcept;
+                       int64_t *out_wire_bytes = nullptr,
+                       ProgressFn progress = nullptr) noexcept;
 
   bool IsIndexLoaded() const noexcept { return index_loaded; }
 
@@ -132,11 +147,18 @@ public:
    * forecast (e.g. "20260518" / "12"). We track this so we can decide
    * whether a cached entry is still fresh when the API offers a newer
    * run for the same UTC hour.
+   *
+   * @c step is the forecast offset from the run (in hours). Together
+   * with run_date/run_hour it pinpoints the absolute UTC moment the
+   * forecast is valid for — needed because spans longer than 12 h
+   * cross midnight and would otherwise be ambiguous when looked up by
+   * UTC hour alone.
    */
   struct CachedSlice {
     std::string geojson;
     std::string run_date;
     std::string run_hour;
+    unsigned step = 0;
   };
 
   /**
@@ -187,8 +209,16 @@ private:
   std::vector<ParameterInfo> available_parameters;
   bool index_loaded = false;
 
-  /** Cache: parameter -> (utc_hour -> CachedSlice) */
+  /**
+   * Cache: parameter -> (utc_hour -> CachedSlice).
+   *
+   * Guarded by cache_mutex because the download worker thread (run from
+   * the dialog) writes to it while the UI thread (controls widget,
+   * dialog re-renders) reads from it. Hold only for the brief actual
+   * map operation — never across a curl call.
+   */
   std::map<std::string, std::map<unsigned, CachedSlice>> geojson_cache;
+  mutable std::mutex cache_mutex;
 
   static const std::string kEmptyString;
 
