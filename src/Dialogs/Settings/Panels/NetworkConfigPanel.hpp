@@ -3,9 +3,9 @@
 
 #pragma once
 
-#define HAVE_TCP
-#define HAVE_IPV6
+#include <memory>
 
-#ifdef HAVE_POSIX
-#define HAVE_UN
-#endif
+class Widget;
+
+std::unique_ptr<Widget>
+CreateNetworkConfigPanel();

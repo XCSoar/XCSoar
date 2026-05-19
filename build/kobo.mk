@@ -30,13 +30,14 @@ KOBO_MENU_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \
+	$(SRC)/Kobo/WPASupplicantBackend.cpp \
+	$(SRC)/Kobo/PlatformWifiBackend.cpp \
 	$(SRC)/Kobo/System.cpp \
 	$(SRC)/Kobo/Kernel.cpp \
 	$(SRC)/Kobo/NetworkDialog.cpp \
 	$(SRC)/Kobo/SystemDialog.cpp \
 	$(SRC)/Kobo/ToolsDialog.cpp \
-	$(SRC)/Kobo/WPASupplicant.cpp \
-	$(SRC)/Kobo/WifiDialog.cpp \
+	$(SRC)/Dialogs/WifiDialog.cpp \
 	$(SRC)/Kobo/FakeSymbols.cpp \
 	$(SRC)/Kobo/KoboMenu.cpp
 KOBO_MENU_DEPENDS = WIDGET FORM EVENT RESOURCE ASYNC LIBNET OS IO THREAD MATH UTIL LIBCRYPTO
