@@ -292,6 +292,7 @@ TEST_TASKFILE_SEEYOU_PARSING_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	$(SRC)/RadioFrequency.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskFileSeeYouParsing.cpp
@@ -336,6 +337,7 @@ TEST_TEAM_CODE_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,TestTeamCode,TEST_TEAM_CODE))
 
 TEST_TROUTE_SOURCES = \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_troute.cpp
@@ -343,6 +345,7 @@ TEST_TROUTE_DEPENDS = TERRAIN OPERATION IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_troute,TEST_TROUTE))
 
 TEST_REACH_SOURCES = \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_reach.cpp
@@ -356,6 +359,7 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/AirspacePrinting.cpp \
 	$(TEST_SRC_DIR)/harness_airspace.cpp \
@@ -1219,6 +1223,7 @@ LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
 LOAD_TERRAIN_SOURCES = \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_CPPFLAGS = $(SCREEN_CPPFLAGS)
@@ -1226,6 +1231,7 @@ LOAD_TERRAIN_DEPENDS = TERRAIN OPERATION GEO MATH OS IO ZZIP UTIL
 $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
 
 RUN_HEIGHT_MATRIX_SOURCES = \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \

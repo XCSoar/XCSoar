@@ -3,6 +3,7 @@
 
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Screen/Layout.hpp"
 #include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
@@ -342,9 +343,16 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth) &&
-      !raster_renderer.UpdateQuantisation())
-    /* no change since previous frame */
-    return true;
+      !raster_renderer.UpdateQuantisation()) {
+    /* The existing terrain image is suitable for reuse.
+       But with contours: Re-use only without zoom change.
+       Otherwise we can re-use as a fast preview, but
+       re-render the higher quality views (q=2 and q=1) */
+    if (settings.contours == Contours::OFF ||
+        raster_renderer.GetQuantisationPixels() > 2 ||
+        map_projection.GetScale() == last_projection_scale)
+      return true;
+  }
 
 #else
   if (compare_projection.Compare(map_projection) &&
@@ -366,8 +374,16 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   const bool is_terrain = true;
   const bool do_shading = is_terrain &&
                           settings.slope_shading != SlopeShading::OFF;
-  const bool do_contour = is_terrain &&
-                          settings.contours != Contours::OFF;
+  const double screen_pixel_size =
+    1.0 / map_projection.GetScale();
+  const double dpi_factor =
+    Layout::ScalePenWidth(1024u) / 1024.0;
+  const double contour_pixel_size = screen_pixel_size * dpi_factor *
+    std::max(1u, raster_renderer.GetQuantisationPixels() / 2u);
+  const unsigned contour_spacing = is_terrain
+    ? ContourSpacing(settings.contours, height_scale,
+                     contour_pixel_size)
+    : 0u;
 
   const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
   if (color_ramp != last_color_ramp) {
@@ -384,6 +400,9 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
-                                do_contour);
+                                contour_spacing);
+
+  last_projection_scale = map_projection.GetScale();
+
   return true;
 }

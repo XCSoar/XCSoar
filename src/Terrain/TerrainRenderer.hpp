@@ -31,6 +31,7 @@ protected:
   Angle last_sun_azimuth = Angle::Zero();
 
   const ColorRamp *last_color_ramp = nullptr;
+  double last_projection_scale = 0;
 
   RasterRenderer raster_renderer;
 
@@ -55,6 +56,11 @@ public:
 public:
   const TerrainRendererSettings &GetSettings() const {
     return settings;
+  }
+
+  [[gnu::pure]]
+  bool AreContoursVisible() const noexcept {
+    return raster_renderer.AreContoursVisible();
   }
 
   void SetSettings(const TerrainRendererSettings &_settings) {
