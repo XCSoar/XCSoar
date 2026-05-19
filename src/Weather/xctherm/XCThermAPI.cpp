@@ -29,13 +29,12 @@ CurlWriteCallback(void *contents, size_t size, size_t nmemb,
 }
 
 /**
- * Progress context passed to CURL xferinfo callback.
- * Updates the OperationEnvironment with MB downloaded and speed.
+ * Progress context passed to CURL xferinfo callback. The callback
+ * forwards (bytes_now, bytes_total) to the caller-supplied ProgressFn
+ * and aborts the transfer when it returns false (Stop pressed).
  */
 struct CurlProgressCtx {
-  OperationEnvironment *env;
-  curl_off_t total_expected = 0;  // bytes expected (0 = unknown)
-  char text_buf[128];
+  const XCThermAPI::ProgressFn *progress = nullptr;
 };
 
 static int
@@ -45,36 +44,12 @@ CurlProgressCallback(void *userp,
                      [[maybe_unused]] curl_off_t ulnow)
 {
   auto *ctx = static_cast<CurlProgressCtx *>(userp);
-  if (!ctx || !ctx->env)
+  if (ctx == nullptr || ctx->progress == nullptr || !*ctx->progress)
     return 0;
 
-  /* Update progress range when total becomes known */
-  if (dltotal > 0 && ctx->total_expected != dltotal) {
-    ctx->total_expected = dltotal;
-    ctx->env->SetProgressRange(100);
-  }
-
-  /* Update progress position */
-  if (dltotal > 0) {
-    const int pct = (int)((dlnow * 100) / dltotal);
-    ctx->env->SetProgressPosition(pct);
-  }
-
-  /* Build status text: MB downloaded + speed */
-  double mb_now = (double)dlnow / (1024.0 * 1024.0);
-
-
-  if (dltotal > 0) {
-    double mb_total = (double)dltotal / (1024.0 * 1024.0);
-    std::snprintf(ctx->text_buf, sizeof(ctx->text_buf),
-                  "Downloading: %.2f / %.2f MB", mb_now, mb_total);
-  } else {
-    std::snprintf(ctx->text_buf, sizeof(ctx->text_buf),
-                  "Downloading: %.2f MB", mb_now);
-  }
-
-  ctx->env->SetText(ctx->text_buf);
-  return 0; /* non-zero = abort */
+  /* Returning non-zero aborts curl with CURLE_ABORTED_BY_CALLBACK,
+     which is how the Stop button becomes effective mid-transfer. */
+  return (*ctx->progress)((uint64_t)dlnow, (uint64_t)dltotal) ? 0 : 1;
 }
 
 /* ------------------------------------------------------------------ */
@@ -429,13 +404,10 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
                             const std::string &run_hour,
                             unsigned step,
                             std::string &out_geojson,
-                            OperationEnvironment *env,
-                            int64_t *out_wire_bytes) noexcept
+                            int64_t *out_wire_bytes,
+                            ProgressFn progress) noexcept
 {
   out_geojson.clear();
-
-  /* Ensure we have a valid auth token */
-  if (env) env->SetText("Authenticating...");
 
   if (!auth.EnsureValidToken()) {
     LogFmt("xctherm: cannot download — auth failed");
@@ -449,21 +421,13 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
 
   LogFmt("xctherm: downloading {}", url);
 
-  if (env) {
-    char msg[128];
-    std::snprintf(msg, sizeof(msg), "Connecting to server...");
-    env->SetText(msg);
-    env->SetProgressRange(0);
-  }
-
   CURL *curl = curl_easy_init();
   if (!curl)
     return false;
 
   std::vector<uint8_t> response_buffer;
   CurlProgressCtx progress_ctx;
-  progress_ctx.env = env;
-  progress_ctx.total_expected = 0;
+  progress_ctx.progress = progress ? &progress : nullptr;
 
   struct curl_slist *headers = nullptr;
   const std::string auth_header = auth.GetAuthHeader();
@@ -481,7 +445,10 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
   curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
   curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
-  if (env) {
+  if (progress) {
+    /* Wire the progress callback so the worker thread can update the
+       per-slice byte counter and, by returning false, abort mid-fetch
+       when the user presses Stop. */
     curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, CurlProgressCallback);
     curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &progress_ctx);
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
@@ -510,7 +477,8 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
     LogFmt("xctherm: 401, re-authenticating");
     if (!auth.ForceReauthenticate())
       return false;
-    return DownloadGeoJSON(parameter, date, run_hour, step, out_geojson, env);
+    return DownloadGeoJSON(parameter, date, run_hour, step, out_geojson,
+                           out_wire_bytes, std::move(progress));
   }
 
   if (res != CURLE_OK || http_code != 200) {
@@ -528,15 +496,20 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
 
   /* Build the cache entry once; commit it atomically only after the
      curl handle reported success above. ControlsWidget reads from
-     geojson_cache by UTC hour. */
+     geojson_cache by UTC hour on the UI thread, so we must lock — but
+     only across the short map insert, never across the curl call. */
   CachedSlice slice;
   slice.geojson = out_geojson;
   slice.run_date = date;
   slice.run_hour = run_hour;
+  slice.step = step;
 
   const unsigned run_h = (unsigned)std::atoi(run_hour.c_str());
   const unsigned forecast_utc = (run_h + step) % 24;
-  geojson_cache[parameter][forecast_utc] = std::move(slice);
+  {
+    const std::lock_guard lock{cache_mutex};
+    geojson_cache[parameter][forecast_utc] = std::move(slice);
+  }
 
   return !out_geojson.empty();
 }
@@ -545,10 +518,14 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
 /* Cache accessors                                                     */
 /* ------------------------------------------------------------------ */
 
+/* All cache accessors lock briefly to coordinate with the download
+   worker thread that may be writing entries concurrently. */
+
 bool
 XCThermAPI::IsLayerCached(const std::string &parameter,
                            unsigned utc_hour) const noexcept
 {
+  const std::lock_guard lock{cache_mutex};
   auto it = geojson_cache.find(parameter);
   if (it == geojson_cache.end())
     return false;
@@ -561,24 +538,47 @@ XCThermAPI::IsCachedAtRun(const std::string &parameter,
                           const std::string &run_date,
                           const std::string &run_hour) const noexcept
 {
-  const auto *slice = GetCachedSlice(parameter, utc_hour);
-  return slice != nullptr
-    && slice->run_date == run_date
-    && slice->run_hour == run_hour;
+  const std::lock_guard lock{cache_mutex};
+  auto it = geojson_cache.find(parameter);
+  if (it == geojson_cache.end())
+    return false;
+  auto it2 = it->second.find(utc_hour);
+  if (it2 == it->second.end())
+    return false;
+  return it2->second.run_date == run_date
+    && it2->second.run_hour == run_hour;
 }
 
 const std::string &
 XCThermAPI::GetCachedGeoJSON(const std::string &parameter,
                               unsigned utc_hour) const noexcept
 {
-  const auto *slice = GetCachedSlice(parameter, utc_hour);
-  return slice != nullptr ? slice->geojson : kEmptyString;
+  /* This accessor returns a reference into the cache, which would race
+     if the worker thread reallocates the entry. The dialog only calls
+     this on the UI thread between successful downloads (the worker
+     completes the cache write before notifying done), so it's safe in
+     practice; the lock here just guards the lookup itself.
+
+     If a future use case needs a worker-thread-safe copy, expose a
+     value-returning accessor instead. */
+  const std::lock_guard lock{cache_mutex};
+  auto it = geojson_cache.find(parameter);
+  if (it == geojson_cache.end())
+    return kEmptyString;
+  auto it2 = it->second.find(utc_hour);
+  if (it2 == it->second.end())
+    return kEmptyString;
+  return it2->second.geojson;
 }
 
 const XCThermAPI::CachedSlice *
 XCThermAPI::GetCachedSlice(const std::string &parameter,
                            unsigned utc_hour) const noexcept
 {
+  /* Same caveat as GetCachedGeoJSON: pointer into the cache, only safe
+     from the UI thread when the worker isn't actively rewriting that
+     parameter's entries. */
+  const std::lock_guard lock{cache_mutex};
   auto it = geojson_cache.find(parameter);
   if (it == geojson_cache.end())
     return nullptr;
@@ -592,6 +592,7 @@ std::vector<unsigned>
 XCThermAPI::GetCachedHours(const std::string &parameter) const noexcept
 {
   std::vector<unsigned> result;
+  const std::lock_guard lock{cache_mutex};
   auto it = geojson_cache.find(parameter);
   if (it == geojson_cache.end())
     return result;
@@ -604,5 +605,6 @@ XCThermAPI::GetCachedHours(const std::string &parameter) const noexcept
 void
 XCThermAPI::ClearCache() noexcept
 {
+  const std::lock_guard lock{cache_mutex};
   geojson_cache.clear();
 }
