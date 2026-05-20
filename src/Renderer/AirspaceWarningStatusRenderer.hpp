@@ -6,6 +6,7 @@
 #include <cstdint>
 
 struct PixelRect;
+class AirspaceWarning;
 class Canvas;
 class Font;
 
@@ -47,12 +48,21 @@ struct AirspaceWarningStatusBadge {
 };
 
 /**
+ * Badge for @p warning.  Kind::None when the warning is quiet.
+ * Clearance and coverage override the warning colour; the caption
+ * still says where the airspace is relative to the aircraft.
+ */
+[[nodiscard]]
+AirspaceWarningStatusBadge
+AirspaceWarningStatusFrom(const AirspaceWarning &warning) noexcept;
+
+/**
  * Width to reserve at the right of a row for
  * DrawAirspaceWarningStatus().  Uses @p font for the caption measure.
  */
 [[nodiscard]]
 int
-AirspaceWarningStatusWidth(Canvas &canvas, const Font &font) noexcept;
+AirspaceWarningStatusWidth(const Font &font) noexcept;
 
 void
 DrawAirspaceWarningStatus(Canvas &canvas, const Font &font,

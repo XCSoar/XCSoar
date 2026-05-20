@@ -74,11 +74,17 @@ static constexpr Color COLOR_AIRSPACE_WARNING_INSIDE_ACK =
   Color(254, 100, 100);
 static constexpr Color COLOR_AIRSPACE_WARNING_NEAR_ACK =
   Color(254, 254, 100);
-static constexpr Color COLOR_AIRSPACE_WARNING_CLEARED =
-  Color(50, 200, 50);
 
 /**
- * Dark green text color for airspaces with ATC clearance.
+ * Badge fill for a clearance status.  Saturated so it sits with the
+ * red Inside and yellow Near badges.  The caption is black.  The
+ * row name stays dim; see COLOR_CLEARANCE.
+ */
+static constexpr Color COLOR_AIRSPACE_CLEARED = Color(0x00, 0xc8, 0x00);
+
+/**
+ * Dim green for a cleared airspace name, analogous to COLOR_GRAY
+ * for a day-acknowledged row.
  */
 static constexpr Color COLOR_CLEARANCE = Color(0x00, 0x80, 0x00);
 
