@@ -796,7 +796,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '4.0.4'
+          ruby-version: '4.0.5'
           # No Gemfile in-tree; we install fastlane via gem (bundler-cache would
           # run bundle install to no purpose).
           bundler-cache: false
