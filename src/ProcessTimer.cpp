@@ -23,9 +23,14 @@
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "BackendComponents.hpp"
+#include "LogFile.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
+#endif
+
+#ifdef HAVE_HTTP
+#include "NOTAM/NOTAMGlue.hpp"
 #endif
 
 static void
@@ -259,6 +264,26 @@ ProcessTimer() noexcept
     if (net_components->tim != nullptr &&
         CommonInterface::GetComputerSettings().weather.enable_tim)
       net_components->tim->OnTimer(CommonInterface::Basic());
+
+    const NMEAInfo &basic = CommonInterface::Basic();
+    if (net_components->notam != nullptr) {
+      const auto &notam_settings =
+        CommonInterface::GetComputerSettings().airspace.notam;
+      net_components->notam->SetSettings(notam_settings);
+      if (notam_settings.enabled && basic.location_available) {
+        const auto current_time_utc =
+          basic.time_available && basic.date_time_utc.IsDatePlausible()
+            ? basic.date_time_utc.ToTimePoint()
+            : std::chrono::system_clock::now();
+        try {
+          net_components->notam->OnTimer(basic.location, current_time_utc);
+        } catch (const std::exception &e) {
+          LogFmt("NOTAM: OnTimer failed: {}", e.what());
+        } catch (...) {
+          LogFmt("NOTAM: OnTimer failed");
+        }
+      }
+    }
 #endif
   }
 }

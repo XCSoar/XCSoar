@@ -21,14 +21,14 @@ public:
   const FlatProjection &GetProjection() const noexcept;
 
   void Clear() noexcept;
-  void AcknowledgeAll() noexcept;
+  void AcknowledgeAll();
 
   [[gnu::pure]]
   bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
-  void AcknowledgeDay(ConstAirspacePtr airspace, bool set=true) noexcept;
-  void AcknowledgeWarning(ConstAirspacePtr airspace, bool set=true) noexcept;
-  void AcknowledgeInside(ConstAirspacePtr airspace, bool set=true) noexcept;
+  void AcknowledgeDay(ConstAirspacePtr airspace, bool set=true);
+  void AcknowledgeWarning(ConstAirspacePtr airspace, bool set=true);
+  void AcknowledgeInside(ConstAirspacePtr airspace, bool set=true);
   void Acknowledge(ConstAirspacePtr airspace) noexcept;
 
   [[gnu::pure]]
