@@ -440,7 +440,7 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (warning_status.HasStatus()) {
     /* Reserve a status column only when the main text still has room. */
     const int needed =
-      AirspaceWarningStatusWidth(canvas, *dialog_look.list.font);
+      AirspaceWarningStatusWidth(*dialog_look.list.font);
     const int min_main = Layout::Scale(80);
     if ((int)rc.GetWidth() > needed + min_main) {
       const auto split = rc.VerticalSplit(rc.right - needed);

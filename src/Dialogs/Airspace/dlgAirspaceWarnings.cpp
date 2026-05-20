@@ -422,7 +422,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   }
 
   const Font &list_font = *UIGlobals::GetDialogLook().list.font;
-  const int status_width = AirspaceWarningStatusWidth(canvas, list_font);
+  const int status_width = AirspaceWarningStatusWidth(list_font);
   // "1888" is used in order to have enough space for 4-digit heights with "AGL"
   const int altitude_width = canvas.CalcTextWidth("1888 m AGL");
 
