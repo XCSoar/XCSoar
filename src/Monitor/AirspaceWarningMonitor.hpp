@@ -12,7 +12,9 @@
  */
 class AirspaceWarningMonitor {
   friend class AirspaceWarningWidget;
-  class AirspaceWarningWidget *widget = nullptr;
+  friend class CurrentAirspacesWidget;
+  class AirspaceWarningWidget *warning_widget = nullptr;
+  class CurrentAirspacesWidget *current_widget = nullptr;
 
   Validity last;
   unsigned sound_interval_counter = 0;
