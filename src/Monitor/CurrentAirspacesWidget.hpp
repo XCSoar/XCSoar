@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Widget/SolidWidget.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Engine/Airspace/Ptr.hpp"
 
 #include <array>
@@ -14,10 +14,11 @@ class AirspaceWarningMonitor;
 class ProtectedAirspaceWarningManager;
 
 /**
- * Bottom-area widget that lists airspaces the aircraft is currently
- * inside, for when the related INSIDE warning is suppressed by a clearance
+ * Bottom-area widget shown when the aircraft is inside an airspace
+ * whose INSIDE warning is suppressed by a clearance. Lists up to two
+ * rows: suppressed warnings first, then clearances with a "Revoke" button.
  */
-class CurrentAirspacesWidget final : public SolidWidget {
+class CurrentAirspacesWidget final : public WindowWidget {
 public:
   enum class Role : uint8_t {
     Suppressed,
@@ -53,6 +54,18 @@ public:
    */
   [[gnu::pure]]
   bool Matches(std::span<const Entry> other) const noexcept;
+
+  /**
+   * Invoked by a row's "revoke" button: drop the clearance on the given
+   * airspace. This might cause the object to have been destroyed by the time
+   * this call returns; the caller must not touch it afterwards.
+   */
+  void RevokeClearance(ConstAirspacePtr airspace) noexcept;
+
+  /* virtual methods from class Widget */
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
 private:
   AirspaceWarningMonitor &monitor;

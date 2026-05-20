@@ -428,7 +428,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   /* draw the warning state indicator */
 
-  static constexpr Color cleared_color(50, 200, 50);
+  static constexpr Color cleared_color = COLOR_AIRSPACE_CLEARED;
 
   Color state_color;
   const char *state_text;

@@ -62,4 +62,11 @@ static constexpr Color COLOR_LIGHT_GREEN = Color(0x00, 0xc0, 0x00);
  */
 static constexpr Color COLOR_CLEARANCE = Color(0x00, 0x80, 0x00);
 
+/**
+ * Background colour used by the airspace warning list and the
+ * "currently inside" widget to mark a row whose warning is suppressed
+ * by clearance (or whose clearance is set).
+ */
+static constexpr Color COLOR_AIRSPACE_CLEARED = Color(50, 200, 50);
+
 static constexpr uint8_t ALPHA_OVERLAY = 0xA0;
