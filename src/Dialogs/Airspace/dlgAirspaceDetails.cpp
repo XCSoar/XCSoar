@@ -49,6 +49,15 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddMultiLine(airspace->GetName());
 
+  // const char *activation_times = airspace->GetActivationTimes();
+  if (airspace->HasActivationTime()) {
+    if (airspace->IsActiveToday()) {
+      AddMultiLine(airspace->GetActivationTimes());
+    } else {
+      AddMultiLine(_("not active today"));     // translation only at display time
+    }
+  }
+
   const TransponderCode transponderCode = airspace->GetTransponderCode();
   char buffer2[5];
 

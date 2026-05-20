@@ -1,6 +1,8 @@
 HARNESS_SOURCES = \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Info.cpp \
+        $(SRC)/time/BrokenDateTime.cpp \
+	$(SRC)/time/Zone.cxx \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -24,6 +26,7 @@ HARNESS_SOURCES = \
 	$(TEST_SRC_DIR)/test_debug.cpp \
 	$(TEST_SRC_DIR)/harness_aircraft.cpp \
 	$(TEST_SRC_DIR)/harness_airspace.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/harness_flight.cpp \
 	$(TEST_SRC_DIR)/harness_waypoints.cpp \
 	$(TEST_SRC_DIR)/harness_task.cpp \

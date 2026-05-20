@@ -53,6 +53,15 @@ protected:
   /** Airspace name (identifier) */
   std::string name;
 
+  /** Activation times related variables are meaningless
+   ** unless has_activation_time == true
+   */
+  bool has_activation_time = false;
+  std::string activation_times;
+  bool active_today = true;
+  bool never_active = false;
+  /** end of Activation times related variables */
+
   /** Airspace type */
   AirspaceClass astype;
 
@@ -197,18 +206,33 @@ public:
    * Set fundamental properties of airspace
    *
    * @param _Name Name of airspace
+   * @param _activation_times, _has_activation_time
+   * @param _active_today, _never_active
    * @param _classs Class
    * @param _type Type
    * @param _base Lower limit
    * @param _top Upper limit
    */
 
-  void SetProperties(std::string &&_name, std::string &&_station_name,
+  void SetProperties(std::string &&_name, std::string &&_activation_times,
+                     bool _has_activation_time,
+                     bool _active_today, bool _never_active,
+                     std::string &&_station_name,
                      TransponderCode &&_transponder_code,
                      const AirspaceClass _class, const AirspaceClass _type,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept
   {
+    has_activation_time = std::move(_has_activation_time);
+    if (has_activation_time) {
+      activation_times = std::move(_activation_times);
+      never_active = std::move(_never_active);
+      active_today = std::move(_active_today);
+    } else {
+      activation_times.clear();
+      never_active = false;
+      active_today = true;
+    }
     name = std::move(_name);
     station_name = std::move(_station_name);
     transponder_code = std::move(_transponder_code);
@@ -361,6 +385,26 @@ public:
   [[gnu::pure]]
   const char *GetName() const noexcept {
     return name.c_str();
+  }
+
+  [[gnu::pure]]
+  const char *GetActivationTimes() const noexcept {
+    return activation_times.c_str();
+  }
+
+  [[gnu::pure]]
+  bool HasActivationTime() const noexcept {
+    return has_activation_time;
+  }
+
+  [[gnu::pure]]
+  bool IsNeverActive() const noexcept {
+    return never_active;
+  }
+
+  [[gnu::pure]]
+  bool IsActiveToday() const noexcept {
+    return active_today;
   }
 
   [[gnu::pure]]
