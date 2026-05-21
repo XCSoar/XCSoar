@@ -421,6 +421,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/TaskLegRenderer.cpp \
 	$(SRC)/Renderer/TaskSpeedRenderer.cpp \
 	$(SRC)/Renderer/MapScaleRenderer.cpp \
+	$(SRC)/Renderer/DistanceRingsRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
