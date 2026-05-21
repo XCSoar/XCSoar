@@ -265,9 +265,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   draw_sw.Mark("RenderMisc1");
   DrawTaskOffTrackIndicator(canvas);
 
-  // Draw the Turn Back Point (TBP) on the track line
+  // Draw the Turn Back Marker (TBM) on the track line
   if (IsNearSelf() && !Calculated().circling)
-    DrawTurnBackPoint(canvas, aircraft_pos);
+    DrawTurnBackMarker(canvas, aircraft_pos);
 
   draw_sw.Mark("RenderMisc2");
   DrawBestCruiseTrack(canvas, aircraft_pos);

@@ -55,9 +55,9 @@ MapLook::Initialise(const MapSettings &settings,
 
   track_line_pen.Create(Layout::ScalePenWidth(3), COLOR_GRAY);
   
-  // Create green pen and brush for the Turn Back Point (TBP)
-  tbp_pen.Create(Layout::ScalePenWidth(2), COLOR_GREEN);
-  tbp_brush.Create(COLOR_GREEN);
+  // Create green pen and brush for the Turn Back Marker (TBM)
+  tbm_pen.Create(Layout::ScalePenWidth(2), COLOR_GREEN);
+  tbm_brush.Create(COLOR_GREEN);
 
   distance_rings_pen.Create(Layout::ScalePenWidth(1),
                             HasColors() ? COLOR_GRAY : COLOR_BLACK);
