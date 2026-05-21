@@ -93,6 +93,7 @@ Version 7.45 - not yet released
   - terrain: fix fluctuating hill-shading strength #2262
   - snail trail: Catmull-Rom smoothing between fixes; vario colouring samples
     high-rate netto from the merge thread between GPS points #2447
+  - Add renderer to display distance rings around the current location #2522
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
