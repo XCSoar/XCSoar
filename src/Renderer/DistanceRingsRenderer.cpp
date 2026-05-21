@@ -6,8 +6,10 @@
 #include "Projection/WindowProjection.hpp"
 #include "Look/MapLook.hpp"
 #include "util/StringFormat.hpp"
+#include "Units/Units.hpp"
 
 #include <span>
+#include <cmath>
 
 static void
 DrawRingLabel(Canvas &canvas, const char *text, PixelPoint p) noexcept
@@ -33,42 +35,109 @@ DrawRingLabel(Canvas &canvas, const char *text, PixelPoint p) noexcept
 static void
 FormatRingDistance(char *buf, size_t buf_size, double distance_m) noexcept
 {
-  double km = distance_m / 1000.0;
-  if (km == (double)(int)km)
-    StringFormat(buf, buf_size, "%d km", (int)km);
+  const Unit unit = Units::GetUserDistanceUnit();
+  const double value = Units::ToUserUnit(distance_m, unit);
+  const char *unit_name = Units::GetDistanceName();
+
+  const int int_val = (int)(value + 0.5);
+  if (std::abs(value - int_val) < 0.01)
+    StringFormat(buf, buf_size, "%d %s", int_val, unit_name);
   else
-    StringFormat(buf, buf_size, "%.1f km", km);
+    StringFormat(buf, buf_size, "%.1f %s", value, unit_name);
 }
 
-// Ring radius presets in meters for each zoom level tier
-static constexpr double kRingsVeryNarrow[] = {
+// Ring radius presets in meters
+
+// Kilometers: round values in km
+static constexpr double kRingsKmVeryNarrow[] = {
   1000, 2000, 3000, 4000, 5000, 7500, 10000,
 };
-static constexpr double kRingsNarrow[] = {
+static constexpr double kRingsKmNarrow[] = {
   2500, 5000, 7500, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 100000,
 };
-static constexpr double kRingsMedium[] = {
+static constexpr double kRingsKmMedium[] = {
   5000, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 100000,
 };
-static constexpr double kRingsWide[] = {
+static constexpr double kRingsKmWide[] = {
   10000, 20000, 30000, 40000, 50000, 75000, 100000,
 };
-static constexpr double kRingsVeryWide[] = {
+static constexpr double kRingsKmVeryWide[] = {
   50000, 100000,
+};
+
+// Statute miles: round values in mi (1 mi = 1609.344 m)
+static constexpr double kSmToM = 1609.344;
+static constexpr double kRingsSmVeryNarrow[] = {
+  1*kSmToM, 2*kSmToM, 3*kSmToM, 5*kSmToM,
+};
+static constexpr double kRingsSmNarrow[] = {
+  2*kSmToM, 4*kSmToM, 6*kSmToM, 8*kSmToM, 10*kSmToM, 15*kSmToM,
+};
+static constexpr double kRingsSmMedium[] = {
+  5*kSmToM, 10*kSmToM, 15*kSmToM, 20*kSmToM, 25*kSmToM, 30*kSmToM,
+};
+static constexpr double kRingsSmWide[] = {
+  10*kSmToM, 20*kSmToM, 30*kSmToM, 40*kSmToM, 50*kSmToM, 75*kSmToM,
+};
+static constexpr double kRingsSmVeryWide[] = {
+  50*kSmToM, 100*kSmToM,
+};
+
+// Nautical miles: round values in NM (1 NM = 1852 m)
+static constexpr double kNmToM = 1852.0;
+static constexpr double kRingsNmVeryNarrow[] = {
+  1*kNmToM, 2*kNmToM, 3*kNmToM, 4*kNmToM,
+};
+static constexpr double kRingsNmNarrow[] = {
+  2*kNmToM, 4*kNmToM, 6*kNmToM, 8*kNmToM, 10*kNmToM, 12*kNmToM,
+};
+static constexpr double kRingsNmMedium[] = {
+  5*kNmToM, 10*kNmToM, 15*kNmToM, 20*kNmToM, 25*kNmToM,
+};
+static constexpr double kRingsNmWide[] = {
+  10*kNmToM, 20*kNmToM, 30*kNmToM, 40*kNmToM, 50*kNmToM, 75*kNmToM,
+};
+static constexpr double kRingsNmVeryWide[] = {
+  50*kNmToM, 100*kNmToM,
 };
 
 static std::span<const double>
 SelectRingSet(double screen_distance_m) noexcept
 {
-  if (screen_distance_m <= 8000.0) // 1km steps
-    return kRingsVeryNarrow;
-  if (screen_distance_m <= 25000.0) // 2.5km steps
-    return kRingsNarrow;
-  if (screen_distance_m <= 50000.0) // 5km steps
-    return kRingsMedium;
-  if (screen_distance_m <= 150000.0) // 10km steps
-    return kRingsWide;
-  return kRingsVeryWide; // 50km steps
+  switch (Units::GetUserDistanceUnit()) {
+  case Unit::STATUTE_MILES:
+    if (screen_distance_m <= 8000.0)
+      return kRingsSmVeryNarrow;
+    if (screen_distance_m <= 25000.0)
+      return kRingsSmNarrow;
+    if (screen_distance_m <= 50000.0)
+      return kRingsSmMedium;
+    if (screen_distance_m <= 150000.0)
+      return kRingsSmWide;
+    return kRingsSmVeryWide;
+
+  case Unit::NAUTICAL_MILES:
+    if (screen_distance_m <= 8000.0)
+      return kRingsNmVeryNarrow;
+    if (screen_distance_m <= 25000.0)
+      return kRingsNmNarrow;
+    if (screen_distance_m <= 50000.0)
+      return kRingsNmMedium;
+    if (screen_distance_m <= 150000.0)
+      return kRingsNmWide;
+    return kRingsNmVeryWide;
+
+  default: // KILOMETER and any other unit
+    if (screen_distance_m <= 8000.0)
+      return kRingsKmVeryNarrow;
+    if (screen_distance_m <= 25000.0)
+      return kRingsKmNarrow;
+    if (screen_distance_m <= 50000.0)
+      return kRingsKmMedium;
+    if (screen_distance_m <= 150000.0)
+      return kRingsKmWide;
+    return kRingsKmVeryWide;
+  }
 }
 
 void
