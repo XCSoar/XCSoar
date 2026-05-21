@@ -5,6 +5,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Look/MapLook.hpp"
+#include "Screen/Layout.hpp"
 #include "util/StringFormat.hpp"
 #include "Units/Units.hpp"
 
@@ -18,15 +19,15 @@ DrawRingLabel(Canvas &canvas, const char *text, PixelPoint p) noexcept
 
   // 8-direction white halo to visually cut the ring line behind the text
   canvas.SetTextColor(COLOR_WHITE);
-  static constexpr int kOffset = 2;
-  canvas.DrawText({p.x - kOffset, p.y - kOffset}, text);
-  canvas.DrawText({p.x,           p.y - kOffset}, text);
-  canvas.DrawText({p.x + kOffset, p.y - kOffset}, text);
-  canvas.DrawText({p.x - kOffset, p.y           }, text);
-  canvas.DrawText({p.x + kOffset, p.y           }, text);
-  canvas.DrawText({p.x - kOffset, p.y + kOffset}, text);
-  canvas.DrawText({p.x,           p.y + kOffset}, text);
-  canvas.DrawText({p.x + kOffset, p.y + kOffset}, text);
+  static constexpr int HALO_OFFSET = 2;
+  canvas.DrawText({p.x - HALO_OFFSET, p.y - HALO_OFFSET}, text);
+  canvas.DrawText({p.x,               p.y - HALO_OFFSET}, text);
+  canvas.DrawText({p.x + HALO_OFFSET, p.y - HALO_OFFSET}, text);
+  canvas.DrawText({p.x - HALO_OFFSET, p.y              }, text);
+  canvas.DrawText({p.x + HALO_OFFSET, p.y              }, text);
+  canvas.DrawText({p.x - HALO_OFFSET, p.y + HALO_OFFSET}, text);
+  canvas.DrawText({p.x,               p.y + HALO_OFFSET}, text);
+  canvas.DrawText({p.x + HALO_OFFSET, p.y + HALO_OFFSET}, text);
 
   canvas.SetTextColor(COLOR_BLACK);
   canvas.DrawText(p, text);
@@ -49,57 +50,59 @@ FormatRingDistance(char *buf, size_t buf_size, double distance_m) noexcept
 // Ring radius presets in meters
 
 // Kilometers: round values in km
-static constexpr double kRingsKmVeryNarrow[] = {
+static constexpr double RINGS_KM_VERY_NARROW[] = {
   1000, 2000, 3000, 4000, 5000, 7500, 10000,
 };
-static constexpr double kRingsKmNarrow[] = {
+static constexpr double RINGS_KM_NARROW[] = {
   2500, 5000, 7500, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 100000,
 };
-static constexpr double kRingsKmMedium[] = {
+static constexpr double RINGS_KM_MEDIUM[] = {
   5000, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 100000,
 };
-static constexpr double kRingsKmWide[] = {
+static constexpr double RINGS_KM_WIDE[] = {
   10000, 20000, 30000, 40000, 50000, 75000, 100000,
 };
-static constexpr double kRingsKmVeryWide[] = {
+static constexpr double RINGS_KM_VERY_WIDE[] = {
   50000, 100000,
 };
 
 // Statute miles: round values in mi (1 mi = 1609.344 m)
-static constexpr double kSmToM = 1609.344;
-static constexpr double kRingsSmVeryNarrow[] = {
-  1*kSmToM, 2*kSmToM, 3*kSmToM, 5*kSmToM,
+static constexpr double SM_TO_M = 1609.344;
+static constexpr double RINGS_SM_VERY_NARROW[] = {
+  1*SM_TO_M, 2*SM_TO_M, 3*SM_TO_M, 5*SM_TO_M,
 };
-static constexpr double kRingsSmNarrow[] = {
-  2*kSmToM, 4*kSmToM, 6*kSmToM, 8*kSmToM, 10*kSmToM, 15*kSmToM,
+static constexpr double RINGS_SM_NARROW[] = {
+  2*SM_TO_M, 4*SM_TO_M, 6*SM_TO_M, 8*SM_TO_M, 10*SM_TO_M, 15*SM_TO_M,
 };
-static constexpr double kRingsSmMedium[] = {
-  5*kSmToM, 10*kSmToM, 15*kSmToM, 20*kSmToM, 25*kSmToM, 30*kSmToM,
+static constexpr double RINGS_SM_MEDIUM[] = {
+  5*SM_TO_M, 10*SM_TO_M, 15*SM_TO_M, 20*SM_TO_M, 25*SM_TO_M, 30*SM_TO_M,
 };
-static constexpr double kRingsSmWide[] = {
-  10*kSmToM, 20*kSmToM, 30*kSmToM, 40*kSmToM, 50*kSmToM, 75*kSmToM,
+static constexpr double RINGS_SM_WIDE[] = {
+  10*SM_TO_M, 20*SM_TO_M, 30*SM_TO_M, 40*SM_TO_M, 50*SM_TO_M, 75*SM_TO_M,
 };
-static constexpr double kRingsSmVeryWide[] = {
-  50*kSmToM, 100*kSmToM,
+static constexpr double RINGS_SM_VERY_WIDE[] = {
+  50*SM_TO_M, 100*SM_TO_M,
 };
 
 // Nautical miles: round values in NM (1 NM = 1852 m)
-static constexpr double kNmToM = 1852.0;
-static constexpr double kRingsNmVeryNarrow[] = {
-  1*kNmToM, 2*kNmToM, 3*kNmToM, 4*kNmToM,
+static constexpr double NM_TO_M = 1852.0;
+static constexpr double RINGS_NM_VERY_NARROW[] = {
+  1*NM_TO_M, 2*NM_TO_M, 3*NM_TO_M, 4*NM_TO_M,
 };
-static constexpr double kRingsNmNarrow[] = {
-  2*kNmToM, 4*kNmToM, 6*kNmToM, 8*kNmToM, 10*kNmToM, 12*kNmToM,
+static constexpr double RINGS_NM_NARROW[] = {
+  2*NM_TO_M, 4*NM_TO_M, 6*NM_TO_M, 8*NM_TO_M, 10*NM_TO_M, 12*NM_TO_M,
 };
-static constexpr double kRingsNmMedium[] = {
-  5*kNmToM, 10*kNmToM, 15*kNmToM, 20*kNmToM, 25*kNmToM,
+static constexpr double RINGS_NM_MEDIUM[] = {
+  5*NM_TO_M, 10*NM_TO_M, 15*NM_TO_M, 20*NM_TO_M, 25*NM_TO_M,
 };
-static constexpr double kRingsNmWide[] = {
-  10*kNmToM, 20*kNmToM, 30*kNmToM, 40*kNmToM, 50*kNmToM, 75*kNmToM,
+static constexpr double RINGS_NM_WIDE[] = {
+  10*NM_TO_M, 20*NM_TO_M, 30*NM_TO_M, 40*NM_TO_M, 50*NM_TO_M, 75*NM_TO_M,
 };
-static constexpr double kRingsNmVeryWide[] = {
-  50*kNmToM, 100*kNmToM,
+static constexpr double RINGS_NM_VERY_WIDE[] = {
+  50*NM_TO_M, 100*NM_TO_M,
 };
+
+static constexpr unsigned MIN_RING_RADIUS_PX = 20;
 
 static std::span<const double>
 SelectRingSet(double screen_distance_m) noexcept
@@ -107,36 +110,36 @@ SelectRingSet(double screen_distance_m) noexcept
   switch (Units::GetUserDistanceUnit()) {
   case Unit::STATUTE_MILES:
     if (screen_distance_m <= 8000.0)
-      return kRingsSmVeryNarrow;
+      return RINGS_SM_VERY_NARROW;
     if (screen_distance_m <= 25000.0)
-      return kRingsSmNarrow;
+      return RINGS_SM_NARROW;
     if (screen_distance_m <= 50000.0)
-      return kRingsSmMedium;
+      return RINGS_SM_MEDIUM;
     if (screen_distance_m <= 150000.0)
-      return kRingsSmWide;
-    return kRingsSmVeryWide;
+      return RINGS_SM_WIDE;
+    return RINGS_SM_VERY_WIDE;
 
   case Unit::NAUTICAL_MILES:
     if (screen_distance_m <= 8000.0)
-      return kRingsNmVeryNarrow;
+      return RINGS_NM_VERY_NARROW;
     if (screen_distance_m <= 25000.0)
-      return kRingsNmNarrow;
+      return RINGS_NM_NARROW;
     if (screen_distance_m <= 50000.0)
-      return kRingsNmMedium;
+      return RINGS_NM_MEDIUM;
     if (screen_distance_m <= 150000.0)
-      return kRingsNmWide;
-    return kRingsNmVeryWide;
+      return RINGS_NM_WIDE;
+    return RINGS_NM_VERY_WIDE;
 
   default: // KILOMETER and any other unit
     if (screen_distance_m <= 8000.0)
-      return kRingsKmVeryNarrow;
+      return RINGS_KM_VERY_NARROW;
     if (screen_distance_m <= 25000.0)
-      return kRingsKmNarrow;
+      return RINGS_KM_NARROW;
     if (screen_distance_m <= 50000.0)
-      return kRingsKmMedium;
+      return RINGS_KM_MEDIUM;
     if (screen_distance_m <= 150000.0)
-      return kRingsKmWide;
-    return kRingsKmVeryWide;
+      return RINGS_KM_WIDE;
+    return RINGS_KM_VERY_WIDE;
   }
 }
 
@@ -158,13 +161,11 @@ DrawDistanceRings(Canvas &canvas,
 
   const Font &font = *look.overlay.overlay_font;
   canvas.Select(font);
-  const int font_height = (int)font.GetHeight();
 
   for (double radius_m : rings) {
     const unsigned radius_px = projection.GeoToScreenDistance(radius_m);
 
-    // Skip rings too small to be useful
-    if (radius_px < 20)
+    if (radius_px < Layout::Scale(MIN_RING_RADIUS_PX))
       continue;
 
     canvas.DrawCircle(aircraft_px, radius_px);
@@ -179,14 +180,14 @@ DrawDistanceRings(Canvas &canvas,
 
     const PixelPoint label_pos{
       label_center_x - (int)text_size.width / 2,
-      label_center_y - font_height / 2,
+      label_center_y - (int)text_size.height / 2,
     };
 
     // Only draw label if it's within screen bounds
     if (label_pos.x >= screen_rect.left &&
         label_pos.x + (int)text_size.width <= screen_rect.right &&
         label_pos.y >= screen_rect.top &&
-        label_pos.y + font_height <= screen_rect.bottom) {
+        label_pos.y + (int)text_size.height <= screen_rect.bottom) {
       DrawRingLabel(canvas, buf, label_pos);
     }
   }
