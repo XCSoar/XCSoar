@@ -220,6 +220,11 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   draw_sw.Mark("RenderAirspace");
   RenderAirspace(canvas);
 
+  //////////////////////////////////////////////// distance rings
+
+  draw_sw.Mark("DrawDistanceRings");
+  DrawDistanceRings(canvas);
+
   //////////////////////////////////////////////// task
 
   // Render task, waypoints

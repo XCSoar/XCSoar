@@ -286,6 +286,7 @@ protected:
 #endif
 
   void DrawTeammate(Canvas &canvas) const noexcept;
+  void DrawDistanceRings(Canvas &canvas) const noexcept;
   void DrawContest(Canvas &canvas) noexcept;
   void DrawTask(Canvas &canvas) noexcept;
   void DrawRoute(Canvas &canvas) noexcept;
