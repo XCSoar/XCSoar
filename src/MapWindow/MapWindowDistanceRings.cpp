@@ -8,6 +8,9 @@
 void
 MapWindow::DrawDistanceRings(Canvas &canvas) const noexcept
 {
+  if (!GetMapSettings().distance_rings_enabled)
+    return;
+
   const auto &basic = Basic();
   if (!basic.location_available)
     return;
