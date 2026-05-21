@@ -164,6 +164,9 @@ struct MapSettings {
   /** Display climb band on map */
   bool show_thermal_profile;
 
+  /** Display distance rings around the aircraft */
+  bool distance_rings_enabled;
+
   /** Show FinalGlideBar mc0 arrow */
   bool final_glide_bar_mc0_enabled;
 
