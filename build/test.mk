@@ -1861,6 +1861,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/WaypointLabelList.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Renderer/WaveRenderer.cpp \
+	$(SRC)/Renderer/DistanceRingsRenderer.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
