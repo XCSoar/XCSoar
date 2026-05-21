@@ -22,7 +22,7 @@ class TurnBackMarkerRenderer {
   const MapLook &look;
 
 public:
-  constexpr TurnBackMarkerRenderer(const MapLook &_look) noexcept:look(_look) {}
+  explicit constexpr TurnBackMarkerRenderer(const MapLook &_look) noexcept:look(_look) {}
 
   /**
    * Draw the TBM on the track line
