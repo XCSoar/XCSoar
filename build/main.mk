@@ -370,6 +370,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/MapItemListRenderer.cpp \
 	$(SRC)/Renderer/OZPreviewRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
+	$(SRC)/Renderer/TurnBackMarkerRenderer.cpp \
 	$(SRC)/Renderer/TrafficRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/Renderer/UnitSymbolRenderer.cpp \
@@ -683,7 +684,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
 	$(SRC)/Repository/Glue.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
-	$(SRC)/Renderer/TurnBackPointRenderer.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
 	$(SRC)/Weather/PCMet/Overlays.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \

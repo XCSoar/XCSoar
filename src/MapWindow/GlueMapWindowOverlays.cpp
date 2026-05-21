@@ -470,8 +470,8 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas,
 }
 
 void
-GlueMapWindow::DrawTurnBackPoint(Canvas &canvas,
-                                const PixelPoint aircraft_pos) const noexcept
+GlueMapWindow::DrawTurnBackMarker(Canvas &canvas,
+                                  const PixelPoint aircraft_pos) const noexcept
 {
   if (!Basic().location_available || !Basic().track_available)
     return;
@@ -480,7 +480,7 @@ GlueMapWindow::DrawTurnBackPoint(Canvas &canvas,
   if (Calculated().circling)
     return;
 
- turn_back_point_renderer.Draw(canvas, render_projection,
-                              aircraft_pos, Basic(), Calculated(),
-                              GetComputerSettings()); // Pass ComputerSettings
+ turn_back_marker_renderer.Draw(canvas, render_projection,
+                                aircraft_pos, Basic(), Calculated(),
+                                GetComputerSettings()); // Pass ComputerSettings
 }

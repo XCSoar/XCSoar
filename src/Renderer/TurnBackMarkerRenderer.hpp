@@ -14,18 +14,18 @@ struct MapSettings;
 struct ComputerSettings;
 
 /**
- * Renderer for the Turn Back Point (TBP)
+ * Renderer for the Turn Back Marker (TBM)
  * Displays a green triangle on the track line at the point where
  * the aircraft would reach zero altitude difference to the task.
  */
-class TurnBackPointRenderer {
+class TurnBackMarkerRenderer {
   const MapLook &look;
 
 public:
-  constexpr TurnBackPointRenderer(const MapLook &_look) noexcept:look(_look) {}
+  constexpr TurnBackMarkerRenderer(const MapLook &_look) noexcept:look(_look) {}
 
   /**
-   * Draw the TBP on the track line
+   * Draw the TBM on the track line
    * @param canvas The canvas to draw on
    * @param projection The map projection
    * @param pos The aircraft position on screen

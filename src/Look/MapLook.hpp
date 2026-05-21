@@ -60,9 +60,9 @@ struct MapLook {
 
   Pen track_line_pen;
   
-  /** Pen and brush for the Turn Back Point (TBP) */
-  Pen tbp_pen;
-  Brush tbp_brush;
+  /** Pen and brush for the Turn Back Marker (TBM) */
+  Pen tbm_pen;
+  Brush tbm_brush;
 
   Pen distance_rings_pen;
 
