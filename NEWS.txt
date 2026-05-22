@@ -43,6 +43,9 @@ Version 7.45 - not yet released
     (Mountain Top/Pass, Bridge, Tunnel, Tower, Power Plant, Obstacle,
     Thermal Hotspot, Marker, VOR, NDB, Dam, Castle, Intersection,
     Reporting Point, PG Take Off / Landing Zone) #2485
+  - infoboxen: new "Active Waypoint" InfoBox (next task waypoint, or Goto
+    waypoint when no task is loaded; shows name, arrival height above safety,
+    and distance; tap to pick a different task leg or set a new Goto)
 * desktop
   - command-line: -h/--help and -version/--version print to stdout and exit;
     unknown options print a short usage line on stderr
