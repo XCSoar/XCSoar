@@ -13,10 +13,12 @@
 #include <cstdio>
 #include <cstring>
 #include <ctime>
+#include <exception>
 #include <set>
 #include <span>
 #include <vector>
 
+#include <boost/json.hpp>
 #include <curl/curl.h>
 
 /* ------------------------------------------------------------------ */
@@ -147,56 +149,26 @@ XCThermAPI::FetchIndex() noexcept
 }
 
 /* ------------------------------------------------------------------ */
-/* Simple JSON parsing (no external library)                           */
+/* Index.json parsing                                                  */
 /* ------------------------------------------------------------------ */
 
-/**
- * Find a JSON string value: "key": "value" (handles optional whitespace)
- * Returns empty string if not found.
- */
-static std::string
-JsonFindString(const std::string &json, size_t start,
-               const char *key) noexcept
+static unsigned
+GetUintMember(const boost::json::object &obj, const char *key,
+              unsigned default_val) noexcept
 {
-  std::string needle = std::string("\"") + key + "\"";
-  size_t pos = json.find(needle, start);
-  if (pos == std::string::npos)
-    return {};
-
-  pos += needle.size();
-  /* Skip : and whitespace */
-  while (pos < json.size() && (json[pos] == ':' || json[pos] == ' '))
-    ++pos;
-  /* Expect opening quote */
-  if (pos >= json.size() || json[pos] != '"')
-    return {};
-  ++pos;
-
-  size_t end = json.find('"', pos);
-  if (end == std::string::npos)
-    return {};
-
-  return json.substr(pos, end - pos);
-}
-
-/**
- * Find a JSON number value: "key": <number> (handles optional whitespace)
- */
-static int
-JsonFindInt(const std::string &json, size_t start,
-            const char *key, int default_val = 0) noexcept
-{
-  std::string needle = std::string("\"") + key + "\"";
-  size_t pos = json.find(needle, start);
-  if (pos == std::string::npos)
+  const auto *v = obj.if_contains(key);
+  if (v == nullptr)
     return default_val;
 
-  pos += needle.size();
-  /* Skip : and whitespace */
-  while (pos < json.size() && (json[pos] == ':' || json[pos] == ' '))
-    ++pos;
+  if (v->is_uint64())
+    return (unsigned)v->as_uint64();
 
-  return std::atoi(json.c_str() + pos);
+  if (v->is_int64()) {
+    const auto n = v->as_int64();
+    return n >= 0 ? (unsigned)n : default_val;
+  }
+
+  return default_val;
 }
 
 bool
@@ -205,112 +177,69 @@ XCThermAPI::ParseIndex(const std::string &json) noexcept
   available_parameters.clear();
   index_loaded = false;
 
-  /* Find "parameters" object */
-  size_t params_pos = json.find("\"parameters\"");
-  if (params_pos == std::string::npos) {
-    LogFmt("xctherm: no 'parameters' in index.json");
-    return false;
-  }
+  try {
+    const boost::json::value jv = boost::json::parse(json);
+    if (!jv.is_object())
+      return false;
 
-  /* Scan for vertical_wind parameters */
-  const char *vw_prefix = "\"vertical_wind_";
-  size_t search_pos = params_pos;
-
-  while (true) {
-    size_t pos = json.find(vw_prefix, search_pos);
-    if (pos == std::string::npos)
-      break;
-
-    /* Extract parameter name */
-    pos += 1; // skip opening quote
-    size_t name_end = json.find('"', pos);
-    if (name_end == std::string::npos)
-      break;
-
-    std::string param_name = json.substr(pos, name_end - pos);
-    search_pos = name_end + 1;
-
-    /* Find the slots array for this parameter */
-    size_t slots_pos = json.find("\"slots\"", search_pos);
-    if (slots_pos == std::string::npos)
-      break;
-
-    /* Find the opening bracket of the slots array */
-    size_t arr_start = json.find('[', slots_pos);
-    if (arr_start == std::string::npos)
-      break;
-
-    /* Find matching closing bracket (handle nesting) */
-    int depth = 1;
-    size_t arr_end = arr_start + 1;
-    while (arr_end < json.size() && depth > 0) {
-      if (json[arr_end] == '[') ++depth;
-      else if (json[arr_end] == ']') --depth;
-      ++arr_end;
+    const auto *parameters = jv.as_object().if_contains("parameters");
+    if (parameters == nullptr || !parameters->is_object()) {
+      LogFmt("xctherm: no 'parameters' in index.json");
+      return false;
     }
 
-    ParameterInfo info;
-    info.name = param_name;
-
-    /* Parse each slot object within the array */
-    size_t slot_search = arr_start;
-    while (true) {
-      size_t slot_start = json.find('{', slot_search);
-      if (slot_start == std::string::npos || slot_start >= arr_end)
-        break;
-
-      /* Find matching closing brace (handle nested "steps": {...}) */
-      int obj_depth = 1;
-      size_t slot_end = slot_start + 1;
-      while (slot_end < json.size() && obj_depth > 0) {
-        if (json[slot_end] == '{') ++obj_depth;
-        else if (json[slot_end] == '}') --obj_depth;
-        ++slot_end;
-      }
-      --slot_end; /* point at the closing brace */
-      if (obj_depth != 0)
-        break;
-
-      /* Parse "run" datetime */
-      std::string run_str = JsonFindString(json, slot_start, "run");
-      if (run_str.empty()) {
-        slot_search = slot_end + 1;
+    for (const auto &[name, param_v] : parameters->as_object()) {
+      if (!name.starts_with("vertical_wind_") || !param_v.is_object())
         continue;
-      }
 
-      ForecastSlot slot;
+      const auto *slots = param_v.as_object().if_contains("slots");
+      if (slots == nullptr || !slots->is_array())
+        continue;
 
-      /* Parse run datetime: "2026-05-06T03:00:00+00:00" */
-      /* Extract date YYYYMMDD */
-      if (run_str.size() >= 10) {
+      ParameterInfo info;
+      info.name = std::string{name};
+
+      for (const auto &slot_v : slots->as_array()) {
+        if (!slot_v.is_object())
+          continue;
+
+        const auto &slot_obj = slot_v.as_object();
+        const auto *run_v = slot_obj.if_contains("run");
+        if (run_v == nullptr || !run_v->is_string())
+          continue;
+
+        const std::string run_str = std::string{run_v->as_string()};
+        if (run_str.size() < 13)
+          continue;
+
+        ForecastSlot slot;
         slot.run_date = run_str.substr(0, 4) +
                         run_str.substr(5, 2) +
                         run_str.substr(8, 2);
-      }
-      /* Extract hour HH */
-      if (run_str.size() >= 13) {
         slot.run_hour = run_str.substr(11, 2);
+
+        const auto *steps_v = slot_obj.if_contains("steps");
+        if (steps_v != nullptr && steps_v->is_object()) {
+          const auto &steps = steps_v->as_object();
+          slot.step_min = GetUintMember(steps, "min", 0);
+          slot.step_max = GetUintMember(steps, "max", 0);
+          slot.step_step = GetUintMember(steps, "step", 1);
+          if (slot.step_step == 0)
+            slot.step_step = 1;
+        }
+
+        info.slots.push_back(std::move(slot));
       }
 
-      /* Parse steps */
-      size_t steps_pos = json.find("\"steps\"", slot_start);
-      if (steps_pos != std::string::npos && steps_pos <= slot_end) {
-        slot.step_min = (unsigned)JsonFindInt(json, steps_pos, "min", 0);
-        slot.step_max = (unsigned)JsonFindInt(json, steps_pos, "max", 0);
-        slot.step_step = (unsigned)JsonFindInt(json, steps_pos, "step", 1);
-        if (slot.step_step == 0) slot.step_step = 1;
+      if (!info.slots.empty()) {
+        LogFmt("xctherm: param '{}' — {} slots",
+               info.name, info.slots.size());
+        available_parameters.push_back(std::move(info));
       }
-
-      info.slots.push_back(std::move(slot));
-      slot_search = slot_end + 1;
     }
-
-    if (!info.slots.empty()) {
-      LogFmt("xctherm: param '{}' — {} slots", info.name, info.slots.size());
-      available_parameters.push_back(std::move(info));
-    }
-
-    search_pos = arr_end;
+  } catch (const std::exception &e) {
+    LogFmt("xctherm: index parse failed: {}", e.what());
+    return false;
   }
 
   index_loaded = !available_parameters.empty();
