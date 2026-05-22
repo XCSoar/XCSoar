@@ -18,6 +18,7 @@
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "UIGlobals.hpp"
+#include "net/http/Features.hpp"
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
@@ -218,7 +219,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+#ifdef HAVE_HTTP
     { PageLayout::Bottom::XCTHERM, N_("XCTherm") },
+#endif
     nullptr
   };
   AddEnum(_("Bottom area"),
@@ -389,9 +392,11 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     buffer.AppendFormat(", %s", _("Cross section"));
     break;
 
+#ifdef HAVE_HTTP
   case PageLayout::Bottom::XCTHERM:
-    buffer.AppendFormat(", %s", "XCTherm");
+    buffer.AppendFormat(", %s", _("XCTherm"));
     break;
+#endif
 
   case PageLayout::Bottom::MAX:
     gcc_unreachable();

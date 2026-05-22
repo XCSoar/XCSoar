@@ -46,22 +46,14 @@ static constexpr StaticEnumChoice xctherm_overlay_location_list[] = {
     N_("On every map"),
     N_("Show the XCTherm wave forecast overlay on every map page.\n"
        "The altitude/time cursor at the bottom only appears on pages "
-       "where you assigned it as the \"Unten\" widget in Aussehen → "
-       "Seiten (Config → System → Pages).") },
+       "where you assigned it as the bottom widget in "
+       "Config → System → Pages.") },
   { (unsigned)XCThermSettings::OverlayLocation::SEPARATE_MAP,
     N_("Only on dedicated XCTherm page"),
     N_("Show the overlay only on pages that have the XCTherm cursor as "
-       "their \"Unten\" widget. Assign it in Aussehen → Seiten "
-       "(Config → System → Pages). Pages without that cursor stay "
-       "overlay-free.") },
+       "their bottom widget. Assign it in Config → System → Pages. "
+       "Pages without that cursor stay overlay-free.") },
   nullptr
-};
-
-/* The CH/UK constants live as numbered model IDs in XCThermDialog.cpp;
-   re-declare them here as named enums so the picker stays readable. */
-enum class XCThermRegion : unsigned {
-  CH = 0,
-  UK = 1,
 };
 
 static constexpr StaticEnumChoice xctherm_region_list[] = {
@@ -135,7 +127,7 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
           _("Forecast region. Changes which model XCTherm fetches data "
             "from. Restart or re-download after changing."),
           xctherm_region_list,
-          settings.xctherm.model);
+          (unsigned)settings.xctherm.model);
 
   AddBoolean(_("XCTherm Auto Layer/Time"),
              _("Automatically switch altitude layer based on GPS altitude "
