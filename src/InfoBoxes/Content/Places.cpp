@@ -18,9 +18,11 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/TaskType.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Protection.hpp"
@@ -216,18 +218,27 @@ InfoBoxContentActiveWaypoint::HandleClick() noexcept
   const GeoPoint location = CommonInterface::Basic().location;
 
   std::unique_ptr<OrderedTask> task_clone = ptm.TaskClone();
-  const bool has_ordered_task = task_clone && task_clone->TaskSize() > 0;
-  const unsigned ordered_task_index =
-    has_ordered_task ? task_clone->GetActiveIndex() : 0;
+
+  bool task_mode_ordered = false;
+  unsigned ordered_task_index = 0;
+  {
+    ProtectedTaskManager::Lease lease(ptm);
+    task_mode_ordered = lease->GetMode() == TaskType::ORDERED;
+    if (task_mode_ordered)
+      ordered_task_index = lease->GetActiveTaskPointIndex();
+  }
+
+  const bool prepopulate_with_task = task_mode_ordered && task_clone &&
+                                     task_clone->TaskSize() > 0;
 
   WaypointPtr selected;
   try {
     selected = ShowWaypointListDialog(waypoints, location,
-                                      has_ordered_task ? task_clone.get()
-                                                       : nullptr,
+                                      prepopulate_with_task ? task_clone.get()
+                                                            : nullptr,
                                       ordered_task_index,
                                       std::nullopt,
-                                      has_ordered_task);
+                                      prepopulate_with_task);
   } catch (...) {
     return false;
   }
@@ -235,9 +246,9 @@ InfoBoxContentActiveWaypoint::HandleClick() noexcept
     return true;
 
   int target_index = -1;
-  if (has_ordered_task) {
+  if (prepopulate_with_task) {
     for (unsigned i = 0; i < task_clone->TaskSize(); ++i) {
-      if (task_clone->GetPoint(i).GetWaypoint() == *selected) {
+      if (task_clone->GetPoint(i).GetWaypointPtr() == selected) {
         target_index = (int)i;
         break;
       }
@@ -245,8 +256,13 @@ InfoBoxContentActiveWaypoint::HandleClick() noexcept
   }
 
   if (target_index >= 0) {
-    if ((unsigned)target_index != ordered_task_index)
-      ptm.IncrementActiveTaskPoint(target_index - (int)ordered_task_index);
+    std::unique_ptr<OrderedTask> current_task = ptm.TaskClone();
+    const unsigned current_active_index =
+      (current_task && current_task->TaskSize() > 0)
+        ? current_task->GetActiveIndex()
+        : ordered_task_index;
+    if ((unsigned)target_index != current_active_index)
+      ptm.IncrementActiveTaskPoint(target_index - (int)current_active_index);
   } else {
     {
       ScopeSuspendAllThreads suspend;
