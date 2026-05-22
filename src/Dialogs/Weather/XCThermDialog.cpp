@@ -26,7 +26,7 @@
 #include "util/StaticString.hxx"
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
-#include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
+#include "Weather/xctherm/Glue.hpp"
 #include "Weather/xctherm/Layers.hpp"
 #include "Weather/Settings.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -638,16 +638,11 @@ XCThermWidget::FinishDownload()
   /* Atomic overlay swap: only after the worker has produced a parseable
      slice (and only if any actual transfer happened — pure cache hits
      reuse the existing overlay if there is one). */
-  try {
+  {
     std::lock_guard lock{job->result_mutex};
-    if (map != nullptr && !job->first_forecast.IsEmpty()) {
-      auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-      overlay->SetForecast(std::move(job->first_forecast),
-                           job->target_label.c_str());
-      map->SetOverlay(std::move(overlay));
-    }
-  } catch (...) {
-    ShowError(std::current_exception(), "XCTherm");
+    if (!job->first_forecast.IsEmpty())
+      XCTherm::ApplyForecastToMap(std::move(job->first_forecast),
+                                  job->target_label.c_str());
   }
 
   const double span_secs = std::chrono::duration<double>(

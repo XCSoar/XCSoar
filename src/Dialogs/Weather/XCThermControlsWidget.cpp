@@ -16,10 +16,9 @@
 #include "ui/window/PaintWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Dialogs/Error.hpp"
-#include "Weather/xctherm/XCThermGeoJSON.hpp"
-#include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
+#include "Weather/xctherm/Glue.hpp"
 #include "Weather/xctherm/Layers.hpp"
 #include "Weather/Settings.hpp"
 #include "time/BrokenDateTime.hpp"
@@ -46,29 +45,6 @@ CurrentLayers(std::size_t &count) noexcept
   return XCThermLayers::Get(settings.model, count);
 }
 
-/**
- * Apply a GeoJSON string as the map overlay.
- */
-static void
-ApplyGeoJSONOverlay(const std::string &geojson, const char *label)
-{
-  auto *map = UIGlobals::GetMap();
-  if (map == nullptr)
-    return;
-
-  try {
-    auto forecast = XCThermGeoJSON::Parse(geojson, true);
-    if (forecast.IsEmpty())
-      throw std::runtime_error("Failed to parse forecast data");
-
-    forecast.layer_name = label;
-
-    auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-    overlay->SetForecast(std::move(forecast), label);
-    map->SetOverlay(std::move(overlay));
-  } catch (...) {
-    ShowError(std::current_exception(), "XCTherm");
-  }
 }
 
 } // anonymous namespace
@@ -279,35 +255,9 @@ public:
    */
   static int
   PickAutoTimeIndex(const std::vector<unsigned> &cached,
-                    unsigned utc_h, unsigned utc_min) noexcept {
-    if (cached.empty())
-      return -1;
-
-    const unsigned target = (utc_min >= 45) ? (utc_h + 1) % 24 : utc_h;
-
-    int best_future = -1;
-    unsigned best_future_dist = 25;
-    int best_past = -1;
-    unsigned best_past_dist = 25;
-
-    for (size_t i = 0; i < cached.size(); ++i) {
-      const unsigned fwd = (cached[i] + 24 - target) % 24;
-      if (fwd <= 12) {
-        /* future (0 = exact match) */
-        if (fwd < best_future_dist) {
-          best_future_dist = fwd;
-          best_future = (int)i;
-        }
-      } else {
-        const unsigned back = 24 - fwd;
-        if (back < best_past_dist) {
-          best_past_dist = back;
-          best_past = (int)i;
-        }
-      }
-    }
-
-    return best_future >= 0 ? best_future : best_past;
+                    unsigned utc_h, unsigned utc_min) noexcept
+  {
+    return XCThermAutoSwitch::PickCachedTimeIndex(cached, utc_h, utc_min);
   }
 
   /**
@@ -373,7 +323,7 @@ public:
       api.GetCachedGeoJSON(XCThermLayers::BuildApiParameter(
                              layers[current_layer]), hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, layers[current_layer].short_label);
+      XCTherm::ApplyForecastToMap(cached, layers[current_layer].short_label);
   }
 
   void LayoutChildren(const PixelRect &rc) noexcept {
@@ -503,7 +453,7 @@ private:
       XCThermLayers::BuildApiParameter(layers[layer_index]);
     const std::string cached = api.GetCachedGeoJSON(param, utc_hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, layers[layer_index].short_label);
+      XCTherm::ApplyForecastToMap(cached, layers[layer_index].short_label);
     else
       LogFmt("xctherm: cache miss {}@{}h", param, utc_hour);
   }
