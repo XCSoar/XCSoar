@@ -3,8 +3,7 @@
 
 #pragma once
 
-class SingleWindow;
-struct DialogLook;
+#include "net/wifi/WifiBackend.hpp"
 
 void
-ShowWifiDialog();
+ShowWifiDialog(UniqueWifiBackend backend);
