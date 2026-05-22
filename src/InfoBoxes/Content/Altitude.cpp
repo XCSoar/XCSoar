@@ -208,3 +208,30 @@ UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data) noexcept
     data.SetInvalid();
   }
 }
+
+void
+UpdateInfoBoxAltitudeQNH(InfoBoxData &data) noexcept
+{
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
+
+  if (!settings_computer.pressure_available) {
+    data.SetInvalid();
+    data.SetComment(_("no QNH"));
+    return;
+  }
+
+  const AtmosphericPressure &qnh = settings_computer.pressure;
+  const Unit unit = Units::current.pressure_unit;
+  const double value = Units::ToUserPressure(qnh);
+
+  data.SetCommentInvalid();
+
+  if (unit == Unit::INCH_MERCURY) {
+    data.FmtValue("{:.2f}", value);
+  } else {
+    data.FmtValue("{}", iround(value));
+  }
+
+  data.SetValueUnit(unit);
+}

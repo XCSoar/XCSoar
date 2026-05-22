@@ -1186,6 +1186,15 @@ static constexpr MetaData meta_data[] = {
     altitude_infobox_panels,
   },
 
+  // e_QNH
+  {
+    N_("QNH"),
+    N_("QNH"),
+    N_("Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."),
+    UpdateInfoBoxAltitudeQNH,
+    altitude_infobox_panels,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
