@@ -169,6 +169,7 @@ private:
   OrderedTask *const ordered_task;
   const unsigned ordered_task_index;
   const bool prepopulate_with_task;
+  bool has_filter_prompt_row = false;
 
 public:
   WaypointListWidget(Waypoints &_way_points, WndForm &_dialog,
@@ -189,9 +190,17 @@ public:
   virtual void OnWaypointListEnter();
 
   WaypointPtr GetCursorObject() const {
-    return items.empty()
-      ? nullptr
-      : items[GetList().GetCursorIndex()].waypoint;
+    if (items.empty())
+      return nullptr;
+    unsigned i = GetList().GetCursorIndex();
+    if (has_filter_prompt_row) {
+      if (i == 0)
+        return nullptr;
+      --i;
+    }
+    if (i >= items.size())
+      return nullptr;
+    return items[i].waypoint;
   }
 
   /* virtual methods from class Widget */
@@ -383,10 +392,15 @@ WaypointListWidget::UpdateList()
              dialog_state,
              ordered_task, ordered_task_index);
 
+  has_filter_prompt_row = prepopulate_with_task && ordered_task != nullptr &&
+                          !dialog_state.IsDefined() && !items.empty();
+
   auto &list = GetList();
-  list.SetLength(std::max(1u, (unsigned)items.size()));
+  const unsigned extra = has_filter_prompt_row ? 1u : 0u;
+  list.SetLength(std::max(1u, (unsigned)items.size() + extra));
   list.SetOrigin(0);
-  list.SetCursorIndex(0);
+  // Skip the prompt row by default so the cursor lands on the first task wp.
+  list.SetCursorIndex(has_filter_prompt_row ? 1u : 0u);
   list.Invalidate();
 }
 
@@ -563,7 +577,15 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  assert(i < items.size());
+  if (has_filter_prompt_row) {
+    if (i == 0) {
+      // prompt row prepended above task waypoints
+      row_renderer.DrawFirstRow(canvas, rc,
+                                _("Choose a filter or click here"));
+      return;
+    }
+    --i;
+  }
 
   const struct WaypointListItem &info = items[i];
 
@@ -577,10 +599,18 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 WaypointListWidget::OnWaypointListEnter()
 {
-  if (!items.empty())
-    dialog.SetModalResult(mrOK);
-  else
+  if (items.empty()) {
     filter_widget.GetControl(NAME).BeginEditing();
+    return;
+  }
+
+  if (has_filter_prompt_row && GetList().GetCursorIndex() == 0) {
+    // user activated the leading "Choose a filter" prompt row
+    filter_widget.GetControl(NAME).BeginEditing();
+    return;
+  }
+
+  dialog.SetModalResult(mrOK);
 }
 
 void
