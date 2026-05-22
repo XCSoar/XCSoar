@@ -20,6 +20,7 @@
 #include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
+#include "Weather/xctherm/Layers.hpp"
 #include "Weather/Settings.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "LogFile.hpp"
@@ -32,29 +33,18 @@
 
 namespace {
 
-struct LayerDef {
-  const char *short_label;
-  const char *api_parameter;  // e.g. "vertical_wind_3000amsl"
-  unsigned altitude_m;
-  bool is_agl;
-};
+static constexpr unsigned MAX_LAYERS =
+  XCThermLayers::CH_COUNT > XCThermLayers::UK_COUNT
+  ? XCThermLayers::CH_COUNT : XCThermLayers::UK_COUNT;
 
-/* Available layers — names must match index.json parameter names */
-static constexpr LayerDef LAYERS[] = {
-  { "1500m AMSL", "vertical_wind_1500amsl", 1500, false },
-  { "2000m AMSL", "vertical_wind_2000amsl", 2000, false },
-  { "3000m AMSL", "vertical_wind_3000amsl", 3000, false },
-  { "4000m AMSL", "vertical_wind_4000amsl", 4000, false },
-  { "5000m AMSL", "vertical_wind_5000amsl", 5000, false },
-  { "6000m AMSL", "vertical_wind_6000amsl", 6000, false },
-  { "7000m AMSL", "vertical_wind_7000amsl", 7000, false },
-  { "8000m AMSL", "vertical_wind_8000amsl", 8000, false },
-  { "100m AGL",   "vertical_wind_100agl",   100,  true },
-  { "400m AGL",   "vertical_wind_400agl",   400,  true },
-  { "800m AGL",   "vertical_wind_800agl",   800,  true },
-};
-
-static constexpr unsigned N_LAYERS = std::size(LAYERS);
+[[gnu::pure]]
+const XCThermLayers::Layer *
+CurrentLayers(std::size_t &count) noexcept
+{
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  return XCThermLayers::Get(settings.model, count);
+}
 
 /**
  * Apply a GeoJSON string as the map overlay.
@@ -140,7 +130,7 @@ class XCThermControlsWidget::ControlsWindow final : public ContainerWindow {
 
   unsigned current_layer = 4; /* default: 5000m AMSL */
   unsigned current_time_index = 0;
-  bool layer_available[N_LAYERS] = {};
+  bool layer_available[MAX_LAYERS] = {};
 
   /* Cached forecast hours for the current layer (from API cache) */
   std::vector<unsigned> cached_hours;
@@ -217,8 +207,10 @@ public:
 
     /* Collect layer indices that have cached data */
     std::vector<unsigned> cached;
-    for (unsigned i = 0; i < N_LAYERS; ++i) {
-      if (api.IsLayerCached(LAYERS[i].api_parameter,
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
+    for (unsigned i = 0; i < n_layers; ++i) {
+      if (api.IsLayerCached(XCThermLayers::BuildApiParameter(layers[i]),
                              GetCurrentForecastHour()))
         cached.push_back(i);
     }
@@ -246,7 +238,10 @@ public:
     auto_switch.OnManualTimeStep();
 
     auto &api = XCThermAPI::Instance();
-    const std::string &param = LAYERS[current_layer].api_parameter;
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
+    const std::string &param =
+      XCThermLayers::BuildApiParameter(layers[current_layer]);
 
     /* Collect hours cached for current layer */
     cached_hours = api.GetCachedHours(param);
@@ -370,12 +365,15 @@ public:
     RefreshCachedHours();
     if (cached_hours.empty())
       return;
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
     const unsigned hour = cached_hours[
       current_time_index < cached_hours.size() ? current_time_index : 0];
     const std::string cached =
-      api.GetCachedGeoJSON(LAYERS[current_layer].api_parameter, hour);
+      api.GetCachedGeoJSON(XCThermLayers::BuildApiParameter(
+                             layers[current_layer]), hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, LAYERS[current_layer].short_label);
+      ApplyGeoJSONOverlay(cached, layers[current_layer].short_label);
   }
 
   void LayoutChildren(const PixelRect &rc) noexcept {
@@ -408,28 +406,33 @@ private:
       CommonInterface::GetComputerSettings().weather.xctherm;
     api.SetCredentials(settings.credentials.email.c_str(),
                        settings.credentials.password.c_str());
-    api.SetModel(settings.model == XCThermRegion::UK ? "icon-uk" : "icon-ch");
+    api.SetModel(XCThermLayers::ModelString(settings.model));
     api.LoadDiskCache();
+
+    std::size_t n_layers = 0;
+    const auto *layer_defs = CurrentLayers(n_layers);
 
     /* Fetch index.json only if not yet loaded */
     if (!api.IsIndexLoaded()) {
       if (api.FetchIndex()) {
         index_loaded = true;
         const auto &params = api.GetAvailableParameters();
-        for (unsigned i = 0; i < N_LAYERS; ++i) {
+        for (unsigned i = 0; i < n_layers; ++i) {
           layer_available[i] = false;
+          const std::string param =
+            XCThermLayers::BuildApiParameter(layer_defs[i]);
           for (const auto &p : params)
-            if (p.name == LAYERS[i].api_parameter) {
+            if (p.name == param) {
               layer_available[i] = true;
               break;
             }
         }
         if (layer_available[current_layer])
           available_hours = api.GetAvailableForecastHours(
-            LAYERS[current_layer].api_parameter);
+            XCThermLayers::BuildApiParameter(layer_defs[current_layer]));
       } else {
         LogFmt("xctherm: index fetch failed — using offline mode");
-        for (unsigned i = 0; i < N_LAYERS; ++i)
+        for (unsigned i = 0; i < MAX_LAYERS; ++i)
           layer_available[i] = false;
       }
     }
@@ -448,7 +451,11 @@ private:
    */
   void RefreshCachedHours() noexcept {
     auto &api = XCThermAPI::Instance();
-    cached_hours = api.GetCachedHours(LAYERS[current_layer].api_parameter);
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
+    if (current_layer < n_layers)
+      cached_hours = api.GetCachedHours(
+        XCThermLayers::BuildApiParameter(layers[current_layer]));
   }
 
   /**
@@ -487,21 +494,30 @@ private:
    */
   void ApplyCachedLayer(unsigned layer_index, unsigned utc_hour) noexcept {
     auto &api = XCThermAPI::Instance();
-    const std::string cached =
-      api.GetCachedGeoJSON(LAYERS[layer_index].api_parameter, utc_hour);
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
+    if (layer_index >= n_layers)
+      return;
+
+    const std::string param =
+      XCThermLayers::BuildApiParameter(layers[layer_index]);
+    const std::string cached = api.GetCachedGeoJSON(param, utc_hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, LAYERS[layer_index].short_label);
+      ApplyGeoJSONOverlay(cached, layers[layer_index].short_label);
     else
-      LogFmt("xctherm: cache miss {}@{}h",
-             LAYERS[layer_index].api_parameter, utc_hour);
+      LogFmt("xctherm: cache miss {}@{}h", param, utc_hour);
   }
 
 
   void InitAutoSwitch() noexcept {
+    std::size_t n_layers = 0;
+    const auto *layer_defs = CurrentLayers(n_layers);
+
     std::vector<XCThermAutoSwitch::LayerInfo> layers;
-    for (unsigned i = 0; i < N_LAYERS; ++i) {
+    for (unsigned i = 0; i < n_layers; ++i) {
       if (layer_available[i])
-        layers.push_back({i, LAYERS[i].altitude_m, LAYERS[i].is_agl});
+        layers.push_back({i, layer_defs[i].altitude_m,
+                          layer_defs[i].is_agl});
     }
     auto_switch.SetLoadedLayers(std::move(layers));
     auto_switch.SetCurrentLayerPos((int)current_layer);
@@ -511,7 +527,9 @@ private:
       auto_switch.SetCurrentTimePos(0);
 
     auto_switch.SetLayerSwitchCallback([this](unsigned layer_index) {
-      if (layer_index < N_LAYERS && layer_available[layer_index]) {
+      std::size_t count = 0;
+      [[maybe_unused]] const auto *layer_defs = CurrentLayers(count);
+      if (layer_index < count && layer_available[layer_index]) {
         current_layer = layer_index;
         DownloadAndApplyLayer(current_layer);
         UpdateLayerLabel();
@@ -534,29 +552,36 @@ private:
    */
   void DownloadAndApplyLayer(unsigned layer_index) noexcept {
     RefreshCachedHours();
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
     if (!cached_hours.empty()) {
       ApplyCachedLayer(layer_index,
                        cached_hours[current_time_index < cached_hours.size()
                                     ? current_time_index : 0]);
-    } else {
+    } else if (layer_index < n_layers) {
       LogFmt("xctherm: no cached data for layer {}",
-             LAYERS[layer_index].short_label);
+             layers[layer_index].short_label);
     }
   }
 
   void UpdateLayerLabel() noexcept {
     auto &api = XCThermAPI::Instance();
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
+    if (current_layer >= n_layers)
+      return;
+
     const unsigned fcast_h = GetCurrentForecastHour();
     const bool has_cache = api.IsLayerCached(
-      LAYERS[current_layer].api_parameter, fcast_h);
+      XCThermLayers::BuildApiParameter(layers[current_layer]), fcast_h);
 
     StaticString<80> text;
     if (!has_cache)
-      text.Format("%s  %s", LAYERS[current_layer].short_label, _("[no data]"));
+      text.Format("%s  %s", layers[current_layer].short_label, _("[no data]"));
     else if (auto_switch.IsAltitudeAutoActive())
-      text.Format("%s %s", _("AUTO:"), LAYERS[current_layer].short_label);
+      text.Format("%s %s", _("AUTO:"), layers[current_layer].short_label);
     else
-      text.Format("%s", LAYERS[current_layer].short_label);
+      text.Format("%s", layers[current_layer].short_label);
 
     layer_label.SetText(text);
     layer_label.SetAvailable(has_cache);
@@ -582,9 +607,14 @@ private:
     int offset_min = 0;
     bool has_real_offset = false;
     auto &api = XCThermAPI::Instance();
+    std::size_t n_layers = 0;
+    const auto *layers = CurrentLayers(n_layers);
+    if (current_layer >= n_layers)
+      return;
+
     XCThermAPI::CachedSlice slice;
     const bool has_slice = api.GetCachedSlice(
-      LAYERS[current_layer].api_parameter, fcast_h, slice);
+      XCThermLayers::BuildApiParameter(layers[current_layer]), fcast_h, slice);
 
     if (has_slice && slice.run_date.size() == 8 &&
         slice.run_hour.size() == 2 &&
