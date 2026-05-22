@@ -660,7 +660,7 @@ ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
 
   const Angle heading = CommonInterface::Basic().attitude.heading;
 
-  dialog_state.name.clear();
+  dialog_state = {};
 
   /* When the caller forces an initial Type filter (e.g. via
      ``event=GotoLookup recent``), also reset the other filter
