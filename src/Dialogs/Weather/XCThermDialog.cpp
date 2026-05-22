@@ -120,6 +120,46 @@ GetDownloadInfo(XCThermRegion model) noexcept
   return XCThermLayers::IsUK(model) ? download_info_uk : download_info_ch;
 }
 
+static void
+RefreshDownloadInfoFromDisk(XCThermRegion model) noexcept
+{
+  auto &api = XCThermAPI::Instance();
+  api.LoadDiskCache();
+
+  std::size_t count = 0;
+  const auto *layers = XCThermLayers::Get(model, count);
+  auto *info = GetDownloadInfo(model);
+
+  for (unsigned i = 0; i < count; ++i) {
+    const auto summary = api.GetParameterCacheSummary(
+      XCThermLayers::BuildApiParameter(layers[i]));
+    if (summary.slice_count == 0)
+      continue;
+
+    info[i].status = LayerDownloadInfo::DONE;
+    info[i].span_hours = summary.slice_count;
+    info[i].new_downloads = 0;
+    info[i].wire_mb = 0;
+    info[i].size_mb = 0;
+    info[i].speed_mbs = 0;
+
+    if (summary.latest_run_date.size() == 8 &&
+        summary.latest_run_hour.size() == 2) {
+      char issued[24];
+      std::snprintf(issued, sizeof(issued), "%.4s-%.2s-%.2s %s UTC",
+                    summary.latest_run_date.c_str(),
+                    summary.latest_run_date.c_str() + 4,
+                    summary.latest_run_date.c_str() + 6,
+                    summary.latest_run_hour.c_str());
+      info[i].issued_utc = issued;
+    } else {
+      info[i].issued_utc = "?";
+    }
+
+    info[i].download_time = "Cached";
+  }
+}
+
 /* ---- List item renderer ---- */
 
 class XCThermRowRenderer {
@@ -877,15 +917,18 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   CreateButtons(buttons_widget->GetButtonPanel());
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc, row_renderer.CalculateLayout(look));
+
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  RefreshDownloadInfoFromDisk(settings.model);
+
   UpdateList();
 
   /* Seed the cursor to the currently active layer — but only here,
      once, on initial display. UpdateList() deliberately does NOT touch
      the cursor on subsequent calls so a user who downloads layer X
      while layer Y is active stays parked on X after the download. */
-  const auto &settings =
-    CommonInterface::GetComputerSettings().weather.xctherm;
-  size_t count = 0;
+  std::size_t count = 0;
   const auto *layers = XCThermLayers::Get(settings.model, count);
   for (unsigned i = 0; i < count; ++i) {
     if (XCThermLayers::IsActive(layers[i], settings.parameter,

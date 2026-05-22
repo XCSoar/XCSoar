@@ -211,6 +211,18 @@ public:
    */
   void LoadDiskCache() noexcept;
 
+  /**
+   * Summary of cached slices for one parameter (from memory/disk cache).
+   */
+  struct ParameterCacheSummary {
+    unsigned slice_count = 0;
+    std::string latest_run_date;
+    std::string latest_run_hour;
+  };
+
+  ParameterCacheSummary
+  GetParameterCacheSummary(const std::string &parameter) const noexcept;
+
 private:
   XCThermAuth auth;
   std::string model = "icon-ch";
