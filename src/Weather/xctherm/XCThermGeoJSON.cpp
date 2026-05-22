@@ -4,6 +4,7 @@
 #include "XCThermGeoJSON.hpp"
 #include "LogFile.hpp"
 #include "io/FileReader.hxx"
+#include "json/Geo.hpp"
 
 #include <boost/json.hpp>
 
@@ -41,16 +42,12 @@ ParseFile(Path path, bool skip_neutral) noexcept
 static bool
 TryParseCoord(const boost::json::value &v, GeoPoint &out) noexcept
 {
-  if (!v.is_array())
+  try {
+    out = boost::json::value_to<GeoPoint>(v);
+    return true;
+  } catch (...) {
     return false;
-
-  const auto &arr = v.as_array();
-  if (arr.size() < 2 || !arr[0].is_number() || !arr[1].is_number())
-    return false;
-
-  out = GeoPoint{Angle::Degrees(arr[0].as_double()),
-                 Angle::Degrees(arr[1].as_double())};
-  return out.Check();
+  }
 }
 
 static bool
