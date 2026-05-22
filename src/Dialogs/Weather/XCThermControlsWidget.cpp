@@ -15,6 +15,7 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/window/PaintWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Dialogs/Error.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
 #include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
@@ -27,6 +28,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <memory>
+#include <stdexcept>
 
 namespace {
 
@@ -64,17 +66,19 @@ ApplyGeoJSONOverlay(const std::string &geojson, const char *label)
   if (map == nullptr)
     return;
 
-  auto forecast = XCThermGeoJSON::Parse(geojson, true);
-  if (forecast.IsEmpty()) {
-    LogFmt("xctherm: parse failed for {}", label);
-    return;
+  try {
+    auto forecast = XCThermGeoJSON::Parse(geojson, true);
+    if (forecast.IsEmpty())
+      throw std::runtime_error("Failed to parse forecast data");
+
+    forecast.layer_name = label;
+
+    auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
+    overlay->SetForecast(std::move(forecast), label);
+    map->SetOverlay(std::move(overlay));
+  } catch (...) {
+    ShowError(std::current_exception(), "XCTherm");
   }
-
-  forecast.layer_name = label;
-
-  auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-  overlay->SetForecast(std::move(forecast), label);
-  map->SetOverlay(std::move(overlay));
 }
 
 } // anonymous namespace

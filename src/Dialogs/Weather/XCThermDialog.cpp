@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "XCThermDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Weather/Features.hpp"
@@ -34,6 +35,7 @@
 #include <ctime>
 #include <memory>
 #include <mutex>
+#include <stdexcept>
 #include <thread>
 
 namespace {
@@ -165,6 +167,7 @@ struct DownloadJob {
 
   /* Final results, written once by worker before setting done=true */
   std::mutex result_mutex;
+  std::exception_ptr error;
   XCThermGeoJSON::ForecastLayer first_forecast;
   std::string latest_run_date;
   std::string latest_run_hour;
@@ -573,48 +576,48 @@ XCThermWidget::StartDownload()
   }
 
   auto &api = XCThermAPI::Instance();
-  api.SetCredentials(settings.credentials.email.c_str(),
-                     settings.credentials.password.c_str());
 
-  /* Index fetch happens synchronously on the UI thread once, before
-     spawning the worker — it's a small payload and the worker can
-     then assume index_loaded == true. */
-  if (!api.IsIndexLoaded()) {
-    if (!api.FetchIndex()) {
-      ShowMessageBox(_("Failed to fetch forecast index.\n"
-                     "Check internet and credentials."),
-                     _("XCTherm"), MB_OK);
-      return;
-    }
+  try {
+    api.SetCredentials(settings.credentials.email.c_str(),
+                       settings.credentials.password.c_str());
+
+    /* Index fetch happens synchronously on the UI thread once, before
+       spawning the worker — it's a small payload and the worker can
+       then assume index_loaded == true. */
+    if (!api.IsIndexLoaded() && !api.FetchIndex())
+      throw std::runtime_error("Failed to fetch forecast index");
+
+    /* Initialise per-row UI state and the job descriptor. */
+    auto job = std::make_shared<DownloadJob>();
+    job->model = (unsigned)settings.model;
+    job->target_index = cursor_index;
+    job->target_label = target.label;
+    job->param = std::string("vertical_wind_") + target.file_suffix;
+    job->span_hours = span_hours;
+    job->current_utc = current_utc;
+    job->started_at = std::chrono::steady_clock::now();
+
+    auto *info = GetDownloadInfo((unsigned)settings.model);
+    auto &row_info = info[cursor_index];
+    /* Preserve the previous DONE info so FinishDownload can restore it
+       if nothing usable comes out of the new run. The PENDING row text
+       is rendered from atomics, not from these fields. */
+    row_info.status = LayerDownloadInfo::PENDING;
+    row_info.pending_total = span_hours;
+    row_info.pending_index = 0;
+    row_info.pending_bytes_now = 0;
+    row_info.pending_bytes_total = 0;
+    row_info.retry_attempt = 0;
+    row_info.retry_seconds_left = 0;
+
+    active_job = job;
+    /* Spawn the worker. It captures its own shared_ptr to the job so the
+       state survives even if the widget is destroyed mid-flight. */
+    active_job_thread = std::thread(&XCThermWidget::DownloadWorker, job);
+  } catch (...) {
+    ShowError(std::current_exception(), "XCTherm");
+    return;
   }
-
-  /* Initialise per-row UI state and the job descriptor. */
-  auto job = std::make_shared<DownloadJob>();
-  job->model = (unsigned)settings.model;
-  job->target_index = cursor_index;
-  job->target_label = target.label;
-  job->param = std::string("vertical_wind_") + target.file_suffix;
-  job->span_hours = span_hours;
-  job->current_utc = current_utc;
-  job->started_at = std::chrono::steady_clock::now();
-
-  auto *info = GetDownloadInfo((unsigned)settings.model);
-  auto &row_info = info[cursor_index];
-  /* Preserve the previous DONE info so FinishDownload can restore it
-     if nothing usable comes out of the new run. The PENDING row text
-     is rendered from atomics, not from these fields. */
-  row_info.status = LayerDownloadInfo::PENDING;
-  row_info.pending_total = span_hours;
-  row_info.pending_index = 0;
-  row_info.pending_bytes_now = 0;
-  row_info.pending_bytes_total = 0;
-  row_info.retry_attempt = 0;
-  row_info.retry_seconds_left = 0;
-
-  active_job = job;
-  /* Spawn the worker. It captures its own shared_ptr to the job so the
-     state survives even if the widget is destroyed mid-flight. */
-  active_job_thread = std::thread(&XCThermWidget::DownloadWorker, job);
 
   /* Refresh button labels (Download → Stop) and start the UI poll. */
   UpdateList();
@@ -683,21 +686,30 @@ XCThermWidget::FinishDownload()
     row_info.retry_attempt = 0;
     row_info.retry_seconds_left = 0;
     UpdateList();
-    if (!canceled)
-      ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
-                     _("XCTherm"), MB_OK);
+    if (!canceled) {
+      if (job->error)
+        ShowError(job->error, "XCTherm");
+      else
+        ShowError(std::make_exception_ptr(
+                    std::runtime_error("Forecast download failed")),
+                  "XCTherm");
+    }
     return;
   }
 
   /* Atomic overlay swap: only after the worker has produced a parseable
      slice (and only if any actual transfer happened — pure cache hits
      reuse the existing overlay if there is one). */
-  std::lock_guard lock{job->result_mutex};
-  if (map != nullptr && !job->first_forecast.IsEmpty()) {
-    auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-    overlay->SetForecast(std::move(job->first_forecast),
-                         job->target_label.c_str());
-    map->SetOverlay(std::move(overlay));
+  try {
+    std::lock_guard lock{job->result_mutex};
+    if (map != nullptr && !job->first_forecast.IsEmpty()) {
+      auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
+      overlay->SetForecast(std::move(job->first_forecast),
+                           job->target_label.c_str());
+      map->SetOverlay(std::move(overlay));
+    }
+  } catch (...) {
+    ShowError(std::current_exception(), "XCTherm");
   }
 
   const double span_secs = std::chrono::duration<double>(
@@ -744,7 +756,7 @@ XCThermWidget::FinishDownload()
     msg.Format("Got %u of %u hourly slices (%u newly downloaded).\n"
                "Some slots were unavailable.",
                ok, span, nu);
-    ShowMessageBox(msg, "XCTherm", MB_OK);
+    ShowMessageBox(msg, _("XCTherm"), MB_OK);
   }
 }
 
@@ -753,9 +765,10 @@ XCThermWidget::FinishDownload()
 void
 XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
 {
-  auto &api = XCThermAPI::Instance();
+  try {
+    auto &api = XCThermAPI::Instance();
 
-  for (unsigned offset = 1; offset <= job->span_hours; ++offset) {
+    for (unsigned offset = 1; offset <= job->span_hours; ++offset) {
     if (job->cancel.load())
       break;
 
@@ -879,9 +892,14 @@ XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
 
     if (!slot_ok && !job->cancel.load())
       job->any_slot_missing.store(true);
+    }
+
+    job->finished_at = std::chrono::steady_clock::now();
+  } catch (...) {
+    const std::lock_guard lock{job->result_mutex};
+    job->error = std::current_exception();
   }
 
-  job->finished_at = std::chrono::steady_clock::now();
   job->done.store(true);
 }
 
