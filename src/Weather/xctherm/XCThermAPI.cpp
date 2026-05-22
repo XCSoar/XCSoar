@@ -5,7 +5,10 @@
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
+#include "Weather/xctherm/XCThermIndexJson.hpp"
+#include "Weather/xctherm/Http.hpp"
 #include "io/FileOutputStream.hxx"
+#include "lib/curl/Slist.hxx"
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
 
@@ -19,44 +22,6 @@
 #include <vector>
 
 #include <boost/json.hpp>
-#include <curl/curl.h>
-
-/* ------------------------------------------------------------------ */
-/* CURL helpers                                                        */
-/* ------------------------------------------------------------------ */
-
-static size_t
-CurlWriteCallback(void *contents, size_t size, size_t nmemb,
-                  std::vector<uint8_t> *buffer) {
-  const size_t total = size * nmemb;
-  auto *ptr = static_cast<uint8_t *>(contents);
-  buffer->insert(buffer->end(), ptr, ptr + total);
-  return total;
-}
-
-/**
- * Progress context passed to CURL xferinfo callback. The callback
- * forwards (bytes_now, bytes_total) to the caller-supplied ProgressFn
- * and aborts the transfer when it returns false (Stop pressed).
- */
-struct CurlProgressCtx {
-  const XCThermAPI::ProgressFn *progress = nullptr;
-};
-
-static int
-CurlProgressCallback(void *userp,
-                     curl_off_t dltotal, curl_off_t dlnow,
-                     [[maybe_unused]] curl_off_t ultotal,
-                     [[maybe_unused]] curl_off_t ulnow)
-{
-  auto *ctx = static_cast<CurlProgressCtx *>(userp);
-  if (ctx == nullptr || ctx->progress == nullptr || !*ctx->progress)
-    return 0;
-
-  /* Returning non-zero aborts curl with CURLE_ABORTED_BY_CALLBACK,
-     which is how the Stop button becomes effective mid-transfer. */
-  return (*ctx->progress)((uint64_t)dlnow, (uint64_t)dltotal) ? 0 : 1;
-}
 
 /* ------------------------------------------------------------------ */
 /* Singleton                                                           */
@@ -107,32 +72,10 @@ XCThermAPI::FetchIndex() noexcept
   const std::string url =
     "https://tiles.xctherm.com/forecast/" + model + "/index.json";
 
-  CURL *curl = curl_easy_init();
-  if (!curl) {
-    const std::string cached = XCThermGeoJSON::ReadFile(BuildIndexPath());
-    if (!cached.empty())
-      return ParseIndex(cached);
-    return false;
-  }
-
-  std::vector<uint8_t> response_buffer;
-
-  /* index.json is gzip-compressed; tell curl to decompress */
-  curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlWriteCallback);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
-  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
-  curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-
-  CURLcode res = curl_easy_perform(curl);
-  long http_code = 0;
-  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-  curl_easy_cleanup(curl);
-
-  if (res != CURLE_OK || http_code != 200) {
-    LogFmt("xctherm: index fetch failed curl={} http={}", (int)res, http_code);
+  XCThermHttp::Response response;
+  if (!XCThermHttp::PerformGet(url.c_str(), nullptr, true, response) ||
+      response.http_code != 200) {
+    LogFmt("xctherm: index fetch failed http={}", response.http_code);
     const std::string cached = XCThermGeoJSON::ReadFile(BuildIndexPath());
     if (!cached.empty()) {
       LogFmt("xctherm: using cached index.json ({} bytes)", cached.size());
@@ -141,35 +84,15 @@ XCThermAPI::FetchIndex() noexcept
     return false;
   }
 
-  std::string json(response_buffer.begin(), response_buffer.end());
-  LogFmt("xctherm: index fetched, {} bytes", json.size());
+  LogFmt("xctherm: index fetched, {} bytes", response.body.size());
 
-  WriteTextFile(BuildIndexPath(), json);
-  return ParseIndex(json);
+  WriteTextFile(BuildIndexPath(), response.body);
+  return ParseIndex(response.body);
 }
 
 /* ------------------------------------------------------------------ */
 /* Index.json parsing                                                  */
 /* ------------------------------------------------------------------ */
-
-static unsigned
-GetUintMember(const boost::json::object &obj, const char *key,
-              unsigned default_val) noexcept
-{
-  const auto *v = obj.if_contains(key);
-  if (v == nullptr)
-    return default_val;
-
-  if (v->is_uint64())
-    return (unsigned)v->as_uint64();
-
-  if (v->is_int64()) {
-    const auto n = v->as_int64();
-    return n >= 0 ? (unsigned)n : default_val;
-  }
-
-  return default_val;
-}
 
 bool
 XCThermAPI::ParseIndex(const std::string &json) noexcept
@@ -203,32 +126,13 @@ XCThermAPI::ParseIndex(const std::string &json) noexcept
         if (!slot_v.is_object())
           continue;
 
-        const auto &slot_obj = slot_v.as_object();
-        const auto *run_v = slot_obj.if_contains("run");
-        if (run_v == nullptr || !run_v->is_string())
+        try {
+          ForecastSlot slot =
+            boost::json::value_to<ForecastSlot>(slot_v);
+          info.slots.push_back(std::move(slot));
+        } catch (const std::exception &) {
           continue;
-
-        const std::string run_str = std::string{run_v->as_string()};
-        if (run_str.size() < 13)
-          continue;
-
-        ForecastSlot slot;
-        slot.run_date = run_str.substr(0, 4) +
-                        run_str.substr(5, 2) +
-                        run_str.substr(8, 2);
-        slot.run_hour = run_str.substr(11, 2);
-
-        const auto *steps_v = slot_obj.if_contains("steps");
-        if (steps_v != nullptr && steps_v->is_object()) {
-          const auto &steps = steps_v->as_object();
-          slot.step_min = GetUintMember(steps, "min", 0);
-          slot.step_max = GetUintMember(steps, "max", 0);
-          slot.step_step = GetUintMember(steps, "step", 1);
-          if (slot.step_step == 0)
-            slot.step_step = 1;
         }
-
-        info.slots.push_back(std::move(slot));
       }
 
       if (!info.slots.empty()) {
@@ -509,6 +413,29 @@ XCThermAPI::LoadDiskCache() noexcept
   LoadCacheFromDisk();
 }
 
+XCThermAPI::ParameterCacheSummary
+XCThermAPI::GetParameterCacheSummary(
+  const std::string &parameter) const noexcept
+{
+  ParameterCacheSummary summary;
+  const std::lock_guard lock{cache_mutex};
+  const auto it = geojson_cache.find(parameter);
+  if (it == geojson_cache.end())
+    return summary;
+
+  for (const auto &kv : it->second) {
+    ++summary.slice_count;
+    if (kv.second.run_date > summary.latest_run_date ||
+        (kv.second.run_date == summary.latest_run_date &&
+         kv.second.run_hour > summary.latest_run_hour)) {
+      summary.latest_run_date = kv.second.run_date;
+      summary.latest_run_hour = kv.second.run_hour;
+    }
+  }
+
+  return summary;
+}
+
 bool
 XCThermAPI::DownloadGeoJSON(const std::string &parameter,
                             const std::string &date,
@@ -546,51 +473,19 @@ XCThermAPI::DownloadGeoJSONOnce(const std::string &parameter,
 
   LogFmt("xctherm: downloading {}", url);
 
-  CURL *curl = curl_easy_init();
-  if (!curl)
+  CurlSlist headers;
+  headers.Append(auth.GetAuthHeader().c_str());
+
+  XCThermHttp::Response response;
+  if (!XCThermHttp::PerformGet(url.c_str(), headers.Get(), true, response,
+                               std::move(progress))) {
+    LogFmt("xctherm: download failed");
     return false;
-
-  std::vector<uint8_t> response_buffer;
-  CurlProgressCtx progress_ctx;
-  progress_ctx.progress = progress ? &progress : nullptr;
-
-  struct curl_slist *headers = nullptr;
-  const std::string auth_header = auth.GetAuthHeader();
-  headers = curl_slist_append(headers, auth_header.c_str());
-
-  curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-  curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlWriteCallback);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
-  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
-  curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-  if (progress) {
-    /* Wire the progress callback so the worker thread can update the
-       per-slice byte counter and, by returning false, abort mid-fetch
-       when the user presses Stop. */
-    curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, CurlProgressCallback);
-    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &progress_ctx);
-    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
   }
 
-  CURLcode res = curl_easy_perform(curl);
-  long http_code = 0;
-  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-
-  /* Wire size = bytes actually received over the network (compressed) */
-  curl_off_t wire_bytes = 0;
-  curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD_T, &wire_bytes);
-
-  /* Average download speed (bytes/sec) */
-  curl_off_t speed_bps = 0;
-  curl_easy_getinfo(curl, CURLINFO_SPEED_DOWNLOAD_T, &speed_bps);
-
-  curl_slist_free_all(headers);
-  curl_easy_cleanup(curl);
+  const long http_code = response.http_code;
+  const int64_t wire_bytes = response.size_download;
+  const int64_t speed_bps = response.speed_download;
 
   if (out_wire_bytes)
     *out_wire_bytes = (int64_t)wire_bytes;
@@ -608,12 +503,12 @@ XCThermAPI::DownloadGeoJSONOnce(const std::string &parameter,
                                out_wire_bytes, std::move(progress), true);
   }
 
-  if (res != CURLE_OK || http_code != 200) {
-    LogFmt("xctherm: download failed curl={} http={}", (int)res, http_code);
+  if (http_code != 200) {
+    LogFmt("xctherm: download failed http={}", http_code);
     return false;
   }
 
-  out_geojson.assign(response_buffer.begin(), response_buffer.end());
+  out_geojson = std::move(response.body);
 
   LogFmt("xctherm: {:.1f} KB over wire -> {:.1f} KB decompressed ({:.1f}x), {:.0f} KB/s",
          wire_bytes / 1024.0,
