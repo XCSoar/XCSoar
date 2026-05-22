@@ -9,6 +9,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "Form/Button.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/window/ContainerWindow.hpp"
@@ -219,7 +220,7 @@ public:
     }
 
     if (cached.empty()) {
-      layer_label.SetText("No data – use Info→Weather");
+      layer_label.SetText(_("No data – use Info→Weather"));
       layer_label.SetAvailable(false);
       return;
     }
@@ -247,7 +248,7 @@ public:
     cached_hours = api.GetCachedHours(param);
 
     if (cached_hours.empty()) {
-      time_label.SetText("No data – use Info→Weather");
+      time_label.SetText(_("No data – use Info→Weather"));
       time_label.SetAvailable(false);
       return;
     }
@@ -367,7 +368,7 @@ public:
       return;
     const unsigned hour = cached_hours[
       current_time_index < cached_hours.size() ? current_time_index : 0];
-    const std::string &cached =
+    const std::string cached =
       api.GetCachedGeoJSON(LAYERS[current_layer].api_parameter, hour);
     if (!cached.empty())
       ApplyGeoJSONOverlay(cached, LAYERS[current_layer].short_label);
@@ -480,7 +481,7 @@ private:
    */
   void ApplyCachedLayer(unsigned layer_index, unsigned utc_hour) noexcept {
     auto &api = XCThermAPI::Instance();
-    const std::string &cached =
+    const std::string cached =
       api.GetCachedGeoJSON(LAYERS[layer_index].api_parameter, utc_hour);
     if (!cached.empty())
       ApplyGeoJSONOverlay(cached, LAYERS[layer_index].short_label);
@@ -545,9 +546,9 @@ private:
 
     StaticString<80> text;
     if (!has_cache)
-      text.Format("%s  [no data]", LAYERS[current_layer].short_label);
+      text.Format("%s  %s", LAYERS[current_layer].short_label, _("[no data]"));
     else if (auto_switch.IsAltitudeAutoActive())
-      text.Format("AUTO: %s", LAYERS[current_layer].short_label);
+      text.Format("%s %s", _("AUTO:"), LAYERS[current_layer].short_label);
     else
       text.Format("%s", LAYERS[current_layer].short_label);
 
@@ -559,7 +560,7 @@ private:
     RefreshCachedHours();
 
     if (cached_hours.empty()) {
-      time_label.SetText("No forecast – download first");
+      time_label.SetText(_("No forecast – download first"));
       time_label.SetAvailable(false);
       return;
     }
@@ -575,19 +576,20 @@ private:
     int offset_min = 0;
     bool has_real_offset = false;
     auto &api = XCThermAPI::Instance();
-    const auto *slice = api.GetCachedSlice(
-      LAYERS[current_layer].api_parameter, fcast_h);
+    XCThermAPI::CachedSlice slice;
+    const bool has_slice = api.GetCachedSlice(
+      LAYERS[current_layer].api_parameter, fcast_h, slice);
 
-    if (slice != nullptr && slice->run_date.size() == 8 &&
-        slice->run_hour.size() == 2 &&
+    if (has_slice && slice.run_date.size() == 8 &&
+        slice.run_hour.size() == 2 &&
         BrokenDateTime::NowUTC().IsPlausible()) {
-      const unsigned year  = (unsigned)std::atoi(slice->run_date.substr(0, 4).c_str());
-      const unsigned month = (unsigned)std::atoi(slice->run_date.substr(4, 2).c_str());
-      const unsigned day   = (unsigned)std::atoi(slice->run_date.substr(6, 2).c_str());
-      const unsigned run_h = (unsigned)std::atoi(slice->run_hour.c_str());
+      const unsigned year  = (unsigned)std::atoi(slice.run_date.substr(0, 4).c_str());
+      const unsigned month = (unsigned)std::atoi(slice.run_date.substr(4, 2).c_str());
+      const unsigned day   = (unsigned)std::atoi(slice.run_date.substr(6, 2).c_str());
+      const unsigned run_h = (unsigned)std::atoi(slice.run_hour.c_str());
       const BrokenDateTime run_dt(year, month, day, run_h, 0, 0);
       const BrokenDateTime forecast_dt =
-        run_dt + std::chrono::hours{slice->step};
+        run_dt + std::chrono::hours{slice.step};
       const auto delta = forecast_dt - BrokenDateTime::NowUTC();
       offset_min = (int)std::chrono::duration_cast<std::chrono::minutes>(delta).count();
       has_real_offset = true;
@@ -619,7 +621,7 @@ private:
        Info → Weather → XCTherm dialog row. */
     StaticString<64> text;
     if (auto_switch.IsTimeAutoActive())
-      text.Format("AUTO: %02u:00 UTC (%s)", fcast_h, offset_buf);
+      text.Format("%s %02u:00 UTC (%s)", _("AUTO:"), fcast_h, offset_buf);
     else
       text.Format("%02u:00 UTC (%s)", fcast_h, offset_buf);
 

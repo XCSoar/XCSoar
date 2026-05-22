@@ -275,14 +275,14 @@ XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
                         info[index].download_time.c_str());
     break;
   case LayerDownloadInfo::FAILED:
-    second_row = "Download fehlgeschlagen";
+    second_row = _("Download failed");
     break;
   case LayerDownloadInfo::CANCELED:
-    second_row = "Abgebrochen";
+    second_row = _("Cancelled");
     break;
   default:
     if (active)
-      second_row = "Nicht heruntergeladen";
+      second_row = _("Not downloaded");
     else
       second_row = "";
     break;
@@ -418,7 +418,7 @@ XCThermWidget::UpdateList()
     CommonInterface::GetComputerSettings().weather.xctherm;
 
   size_t count = 0;
-  GetLayers(settings.model, count);
+  GetLayers((unsigned)settings.model, count);
 
   list.SetLength(count);
 
@@ -456,7 +456,7 @@ XCThermWidget::OnCursorMoved(unsigned index) noexcept
     CommonInterface::GetComputerSettings().weather.xctherm;
 
   size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto *layers = GetLayers((unsigned)settings.model, count);
 
   const bool cursor_is_active = index < count &&
     IsActiveLayer(layers[index], settings.parameter,
@@ -483,7 +483,7 @@ XCThermWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
   row_renderer.Draw(canvas, rc, idx,
-                    settings.model, settings.parameter,
+                    (unsigned)settings.model, settings.parameter,
                     settings.wave_height, settings.vertical_wind_agl);
 }
 
@@ -494,7 +494,7 @@ XCThermWidget::ActivateClicked()
 
   const int index = GetList().GetCursorIndex();
   size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto *layers = GetLayers((unsigned)settings.model, count);
 
   if (index < 0 || (unsigned)index >= count)
     return;
@@ -554,11 +554,11 @@ XCThermWidget::StartDownload()
 
   /* Download targets the cursor-selected row, not the active layer. */
   size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto *layers = GetLayers((unsigned)settings.model, count);
 
   const int cursor_index = GetList().GetCursorIndex();
   if (cursor_index < 0 || (unsigned)cursor_index >= count) {
-    ShowMessageBox("No layer selected.", "XCTherm", MB_OK);
+    ShowMessageBox(_("No layer selected."), _("XCTherm"), MB_OK);
     return;
   }
   const auto &target = layers[cursor_index];
@@ -581,16 +581,16 @@ XCThermWidget::StartDownload()
      then assume index_loaded == true. */
   if (!api.IsIndexLoaded()) {
     if (!api.FetchIndex()) {
-      ShowMessageBox("Failed to fetch forecast index.\n"
-                     "Check internet and credentials.",
-                     "XCTherm", MB_OK);
+      ShowMessageBox(_("Failed to fetch forecast index.\n"
+                     "Check internet and credentials."),
+                     _("XCTherm"), MB_OK);
       return;
     }
   }
 
   /* Initialise per-row UI state and the job descriptor. */
   auto job = std::make_shared<DownloadJob>();
-  job->model = settings.model;
+  job->model = (unsigned)settings.model;
   job->target_index = cursor_index;
   job->target_label = target.label;
   job->param = std::string("vertical_wind_") + target.file_suffix;
@@ -598,7 +598,7 @@ XCThermWidget::StartDownload()
   job->current_utc = current_utc;
   job->started_at = std::chrono::steady_clock::now();
 
-  auto *info = GetDownloadInfo(settings.model);
+  auto *info = GetDownloadInfo((unsigned)settings.model);
   auto &row_info = info[cursor_index];
   /* Preserve the previous DONE info so FinishDownload can restore it
      if nothing usable comes out of the new run. The PENDING row text
@@ -684,8 +684,8 @@ XCThermWidget::FinishDownload()
     row_info.retry_seconds_left = 0;
     UpdateList();
     if (!canceled)
-      ShowMessageBox("Forecast download failed.\nKeeping previous data.",
-                     "XCTherm", MB_OK);
+      ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
+                     _("XCTherm"), MB_OK);
     return;
   }
 
@@ -798,7 +798,7 @@ XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
       {
         std::lock_guard lock{job->result_mutex};
         if (job->first_forecast.IsEmpty()) {
-          const std::string &cached =
+          const std::string cached =
             api.GetCachedGeoJSON(job->param, forecast_utc);
           if (!cached.empty()) {
             auto forecast = XCThermGeoJSON::Parse(cached, true);
@@ -892,6 +892,7 @@ XCThermWidget::SpanClicked()
     "1 hour", "3 hours", "6 hours", "12 hours", "18 hours",
   };
   static constexpr unsigned spans[] = { 1, 3, 6, 12, 18 };
+  static_assert(std::size(choices) == std::size(spans));
 
   auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
 
@@ -934,7 +935,7 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
   size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto *layers = GetLayers((unsigned)settings.model, count);
   for (unsigned i = 0; i < count; ++i) {
     if (IsActiveLayer(layers[i], settings.parameter,
                       settings.wave_height,
@@ -959,15 +960,16 @@ CreateXCThermWidget() noexcept
 
   if (!settings.credentials.IsDefined())
     return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
-                                             "No XCTherm account configured.\n\n"
-                                             "Enter your credentials in\n"
-                                             "Config > System > Weather.");
+                                             _("No XCTherm account configured.\n\n"
+                                               "Enter your credentials in\n"
+                                               "Config > System > Weather."));
 
   auto widget = std::make_unique<XCThermWidget>();
   auto buttons = std::make_unique<ButtonPanelWidget>(
     std::move(widget),
     ButtonPanelWidget::Alignment::BOTTOM);
-  auto *widget_ptr = (XCThermWidget *)&buttons->GetWidget();
+  auto *widget_ptr =
+    static_cast<XCThermWidget *>(&buttons->GetWidget());
   widget_ptr->SetButtonPanel(*buttons);
   return buttons;
 }
