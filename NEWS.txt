@@ -263,6 +263,7 @@ Version 7.44 - 2026-03-22
   - show station names in airspace details dialog
   - show squawk code in airspace details dialog
   - ability to send squawk code from airspace details dialog to transponder
+  - prioritize airfields over outlanding sites for reachable alternates
   - add support for a dedicated north-up map page layout
   - the thermal assistant InfoBox is now clickable
   - nearest airspace InfoBoxes (horizontal and vertical) are now clickable
