@@ -16,6 +16,7 @@
 #include "Form/Edit.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Math/Util.hpp"
@@ -47,6 +48,8 @@ AltitudeSetupPanel::OnModified(DataField &_df) noexcept
     DataFieldFloat &df = (DataFieldFloat &)_df;
     settings.pressure = Units::FromUserPressure(df.GetValue());
     settings.pressure_available.Update(CommonInterface::Basic().clock);
+    InfoBoxManager::SetDirty();
+    InfoBoxManager::ProcessTimer();
 
     if (backend_components && backend_components->devices) {
       MessageOperationEnvironment env;
