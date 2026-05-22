@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Geo/GeoPoint.hpp"
+#include "system/Path.hpp"
 
 #include <cstdint>
 #include <string>
@@ -75,6 +76,20 @@ struct ForecastLayer {
     return n;
   }
 };
+
+/**
+ * Read a GeoJSON file using FileReader.
+ * Returns empty string on error or if the file is too large.
+ */
+std::string
+ReadFile(Path path) noexcept;
+
+/**
+ * Parse a newline-delimited GeoJSON file (one Feature per line) using
+ * boost::json.
+ */
+ForecastLayer
+ParseFile(Path path, bool skip_neutral = true) noexcept;
 
 /**
  * Parse a newline-delimited GeoJSON string (one Feature per line) using

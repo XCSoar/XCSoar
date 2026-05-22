@@ -237,6 +237,7 @@ private:
                                const std::string &run_date,
                                const std::string &run_hour,
                                unsigned step) const noexcept;
+  AllocatedPath BuildIndexPath() const noexcept;
 
   static bool ParseSliceBasename(std::string_view basename,
                                  std::string &parameter,

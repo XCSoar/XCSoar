@@ -3,13 +3,40 @@
 
 #include "XCThermGeoJSON.hpp"
 #include "LogFile.hpp"
+#include "io/FileReader.hxx"
 
 #include <boost/json.hpp>
 
 #include <exception>
+#include <span>
 #include <string>
 
 namespace XCThermGeoJSON {
+
+std::string
+ReadFile(Path path) noexcept
+{
+  try {
+    FileReader reader(path);
+    const uint64_t size = reader.GetSize();
+    if (size == 0 || size > 32 * 1024 * 1024)
+      return {};
+
+    std::string content(size, '\0');
+    const std::size_t nbytes = reader.Read(std::span{
+      reinterpret_cast<std::byte *>(content.data()), size});
+    content.resize(nbytes);
+    return content;
+  } catch (...) {
+    return {};
+  }
+}
+
+ForecastLayer
+ParseFile(Path path, bool skip_neutral) noexcept
+{
+  return Parse(ReadFile(path), skip_neutral);
+}
 
 static bool
 TryParseCoord(const boost::json::value &v, GeoPoint &out) noexcept

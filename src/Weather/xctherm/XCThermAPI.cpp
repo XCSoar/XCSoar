@@ -4,7 +4,7 @@
 #include "XCThermAPI.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-#include "io/FileReader.hxx"
+#include "Weather/xctherm/XCThermGeoJSON.hpp"
 #include "io/FileOutputStream.hxx"
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
@@ -95,6 +95,8 @@ XCThermAPI::SetModel(const std::string &m) noexcept
 /* Index.json                                                          */
 /* ------------------------------------------------------------------ */
 
+static bool WriteTextFile(Path path, std::string_view content) noexcept;
+
 bool
 XCThermAPI::FetchIndex() noexcept
 {
@@ -104,8 +106,12 @@ XCThermAPI::FetchIndex() noexcept
     "https://tiles.xctherm.com/forecast/" + model + "/index.json";
 
   CURL *curl = curl_easy_init();
-  if (!curl)
+  if (!curl) {
+    const std::string cached = XCThermGeoJSON::ReadFile(BuildIndexPath());
+    if (!cached.empty())
+      return ParseIndex(cached);
     return false;
+  }
 
   std::vector<uint8_t> response_buffer;
 
@@ -125,12 +131,18 @@ XCThermAPI::FetchIndex() noexcept
 
   if (res != CURLE_OK || http_code != 200) {
     LogFmt("xctherm: index fetch failed curl={} http={}", (int)res, http_code);
+    const std::string cached = XCThermGeoJSON::ReadFile(BuildIndexPath());
+    if (!cached.empty()) {
+      LogFmt("xctherm: using cached index.json ({} bytes)", cached.size());
+      return ParseIndex(cached);
+    }
     return false;
   }
 
   std::string json(response_buffer.begin(), response_buffer.end());
   LogFmt("xctherm: index fetched, {} bytes", json.size());
 
+  WriteTextFile(BuildIndexPath(), json);
   return ParseIndex(json);
 }
 
@@ -409,27 +421,8 @@ XCThermAPI::FormatStep(unsigned step) noexcept
 /* On-disk cache (GetCachePath + LocalPath/weather/xctherm)            */
 /* ------------------------------------------------------------------ */
 
-static std::string
-ReadGeoJSONFile(Path path) noexcept
-{
-  try {
-    FileReader reader(path);
-    const uint64_t size = reader.GetSize();
-    if (size == 0 || size > 32 * 1024 * 1024)
-      return {};
-
-    std::string content(size, '\0');
-    const std::size_t nbytes = reader.Read(std::span{
-      reinterpret_cast<std::byte *>(content.data()), size});
-    content.resize(nbytes);
-    return content;
-  } catch (...) {
-    return {};
-  }
-}
-
 static bool
-WriteGeoJSONFile(Path path, std::string_view content) noexcept
+WriteTextFile(Path path, std::string_view content) noexcept
 {
   try {
     FileOutputStream file(path);
@@ -438,9 +431,18 @@ WriteGeoJSONFile(Path path, std::string_view content) noexcept
     file.Commit();
     return true;
   } catch (...) {
-    LogFmt("xctherm: failed to write cache file {}", path.c_str());
+    LogFmt("xctherm: failed to write file {}", path.c_str());
     return false;
   }
+}
+
+AllocatedPath
+XCThermAPI::BuildIndexPath() const noexcept
+{
+  const auto cache_root = MakeCacheDirectory("xctherm");
+  const auto model_path = AllocatedPath::Build(cache_root, model.c_str());
+  Directory::Create(model_path);
+  return AllocatedPath::Build(model_path, "index.json");
 }
 
 bool
@@ -510,7 +512,7 @@ XCThermAPI::SaveSliceToDisk(const CachedSlice &slice,
 
   const auto path = BuildSlicePath(parameter, slice.run_date,
                                    slice.run_hour, slice.step);
-  return WriteGeoJSONFile(path, slice.geojson);
+  return WriteTextFile(path, slice.geojson);
 }
 
 void
@@ -522,7 +524,7 @@ XCThermAPI::ImportCacheFile(Path path, Path filename) noexcept
                           parameter, run_date, run_hour, step))
     return;
 
-  const std::string geojson = ReadGeoJSONFile(path);
+  const std::string geojson = XCThermGeoJSON::ReadFile(path);
   if (geojson.empty())
     return;
 
