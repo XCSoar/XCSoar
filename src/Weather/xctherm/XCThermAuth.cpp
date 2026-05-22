@@ -6,6 +6,7 @@
 
 #include <cstring>
 #include <ctime>
+#include <string_view>
 #include <vector>
 
 #include <curl/curl.h>
@@ -13,6 +14,37 @@
 /* ------------------------------------------------------------------ */
 /* CURL helpers                                                        */
 /* ------------------------------------------------------------------ */
+
+static std::string
+EscapeJsonString(std::string_view s)
+{
+  std::string out;
+  out.reserve(s.size() + 8);
+  for (const char c : s) {
+    switch (c) {
+    case '\\':
+      out += "\\\\";
+      break;
+    case '"':
+      out += "\\\"";
+      break;
+    case '\n':
+      out += "\\n";
+      break;
+    case '\r':
+      out += "\\r";
+      break;
+    case '\t':
+      out += "\\t";
+      break;
+    default:
+      if ((unsigned char)c >= 0x20)
+        out += c;
+      break;
+    }
+  }
+  return out;
+}
 
 static size_t
 WriteCallback(void *contents, size_t size, size_t nmemb,
@@ -114,11 +146,11 @@ XCThermAuth::Authenticate() noexcept
     return false;
   }
 
-  LogFmt("xctherm: authenticating user='{}'", credentials.email);
+  LogFmt("xctherm: authenticating");
 
   const std::string post_data =
-    R"({"email":")" + credentials.email +
-    R"(","password":")" + credentials.password + R"("})";
+    R"({"email":")" + EscapeJsonString(credentials.email) +
+    R"(","password":")" + EscapeJsonString(credentials.password) + R"("})";
 
   CURL *curl = curl_easy_init();
   if (!curl)
@@ -140,8 +172,6 @@ XCThermAuth::Authenticate() noexcept
   curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_capture);
   curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 15L);
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
   curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 
   CURLcode res = curl_easy_perform(curl);
@@ -214,8 +244,6 @@ XCThermAuth::RefreshJWT() noexcept
   curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_capture);
   curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
   curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 
   CURLcode res = curl_easy_perform(curl);

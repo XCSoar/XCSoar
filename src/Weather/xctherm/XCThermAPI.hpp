@@ -182,15 +182,16 @@ public:
    * Get cached GeoJSON for a layer/hour combination.
    * Returns empty string if not cached.
    */
-  const std::string &GetCachedGeoJSON(const std::string &parameter,
-                                       unsigned utc_hour) const noexcept;
+  std::string GetCachedGeoJSON(const std::string &parameter,
+                               unsigned utc_hour) const noexcept;
 
   /**
    * Get the model run (date, hour) that produced the cached slice.
-   * Returns nullptr if not cached.
+   * Returns false if not cached.
    */
-  const CachedSlice *GetCachedSlice(const std::string &parameter,
-                                    unsigned utc_hour) const noexcept;
+  bool GetCachedSlice(const std::string &parameter,
+                      unsigned utc_hour,
+                      CachedSlice &out) const noexcept;
 
   /**
    * Get all UTC hours that are cached for a given parameter.
@@ -220,8 +221,6 @@ private:
   std::map<std::string, std::map<unsigned, CachedSlice>> geojson_cache;
   mutable std::mutex cache_mutex;
 
-  static const std::string kEmptyString;
-
   /**
    * Parse the index.json response and populate available_parameters.
    */
@@ -231,4 +230,13 @@ private:
    * Format step as 3-digit string (e.g. 9 → "009").
    */
   static std::string FormatStep(unsigned step) noexcept;
+
+  bool DownloadGeoJSONOnce(const std::string &parameter,
+                           const std::string &date,
+                           const std::string &run_hour,
+                           unsigned step,
+                           std::string &out_geojson,
+                           int64_t *out_wire_bytes,
+                           ProgressFn progress,
+                           bool reauth_attempted) noexcept;
 };

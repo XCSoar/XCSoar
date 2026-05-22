@@ -13,8 +13,6 @@
 
 #include <curl/curl.h>
 
-const std::string XCThermAPI::kEmptyString;
-
 /* ------------------------------------------------------------------ */
 /* CURL helpers                                                        */
 /* ------------------------------------------------------------------ */
@@ -107,8 +105,6 @@ XCThermAPI::FetchIndex() noexcept
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
   curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
   curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 
   CURLcode res = curl_easy_perform(curl);
@@ -407,6 +403,20 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
                             int64_t *out_wire_bytes,
                             ProgressFn progress) noexcept
 {
+  return DownloadGeoJSONOnce(parameter, date, run_hour, step, out_geojson,
+                             out_wire_bytes, std::move(progress), false);
+}
+
+bool
+XCThermAPI::DownloadGeoJSONOnce(const std::string &parameter,
+                                const std::string &date,
+                                const std::string &run_hour,
+                                unsigned step,
+                                std::string &out_geojson,
+                                int64_t *out_wire_bytes,
+                                ProgressFn progress,
+                                bool reauth_attempted) noexcept
+{
   out_geojson.clear();
 
   if (!auth.EnsureValidToken()) {
@@ -440,8 +450,6 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
   curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
   curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
   curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
   curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
@@ -474,11 +482,15 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
 
   /* Handle 401: try re-auth once */
   if (http_code == 401) {
+    if (reauth_attempted) {
+      LogFmt("xctherm: 401 after re-auth");
+      return false;
+    }
     LogFmt("xctherm: 401, re-authenticating");
     if (!auth.ForceReauthenticate())
       return false;
-    return DownloadGeoJSON(parameter, date, run_hour, step, out_geojson,
-                           out_wire_bytes, std::move(progress));
+    return DownloadGeoJSONOnce(parameter, date, run_hour, step, out_geojson,
+                               out_wire_bytes, std::move(progress), true);
   }
 
   if (res != CURLE_OK || http_code != 200) {
@@ -549,43 +561,34 @@ XCThermAPI::IsCachedAtRun(const std::string &parameter,
     && it2->second.run_hour == run_hour;
 }
 
-const std::string &
+std::string
 XCThermAPI::GetCachedGeoJSON(const std::string &parameter,
-                              unsigned utc_hour) const noexcept
+                             unsigned utc_hour) const noexcept
 {
-  /* This accessor returns a reference into the cache, which would race
-     if the worker thread reallocates the entry. The dialog only calls
-     this on the UI thread between successful downloads (the worker
-     completes the cache write before notifying done), so it's safe in
-     practice; the lock here just guards the lookup itself.
-
-     If a future use case needs a worker-thread-safe copy, expose a
-     value-returning accessor instead. */
   const std::lock_guard lock{cache_mutex};
   auto it = geojson_cache.find(parameter);
   if (it == geojson_cache.end())
-    return kEmptyString;
+    return {};
   auto it2 = it->second.find(utc_hour);
   if (it2 == it->second.end())
-    return kEmptyString;
+    return {};
   return it2->second.geojson;
 }
 
-const XCThermAPI::CachedSlice *
+bool
 XCThermAPI::GetCachedSlice(const std::string &parameter,
-                           unsigned utc_hour) const noexcept
+                           unsigned utc_hour,
+                           CachedSlice &out) const noexcept
 {
-  /* Same caveat as GetCachedGeoJSON: pointer into the cache, only safe
-     from the UI thread when the worker isn't actively rewriting that
-     parameter's entries. */
   const std::lock_guard lock{cache_mutex};
   auto it = geojson_cache.find(parameter);
   if (it == geojson_cache.end())
-    return nullptr;
+    return false;
   auto it2 = it->second.find(utc_hour);
   if (it2 == it->second.end())
-    return nullptr;
-  return &it2->second;
+    return false;
+  out = it2->second;
+  return true;
 }
 
 std::vector<unsigned>
