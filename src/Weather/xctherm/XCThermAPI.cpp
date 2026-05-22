@@ -3,12 +3,18 @@
 
 #include "XCThermAPI.hpp"
 #include "LogFile.hpp"
+#include "LocalPath.hpp"
+#include "io/FileReader.hxx"
+#include "io/FileOutputStream.hxx"
+#include "system/FileUtil.hpp"
+#include "util/StaticString.hxx"
 
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
 #include <ctime>
 #include <set>
+#include <span>
 #include <vector>
 
 #include <curl/curl.h>
@@ -77,6 +83,11 @@ XCThermAPI::SetModel(const std::string &m) noexcept
     model = m;
     available_parameters.clear();
     index_loaded = false;
+    {
+      const std::lock_guard lock{cache_mutex};
+      geojson_cache.clear();
+    }
+    disk_cache_loaded = false;
   }
 }
 
@@ -394,6 +405,179 @@ XCThermAPI::FormatStep(unsigned step) noexcept
   return buf;
 }
 
+/* ------------------------------------------------------------------ */
+/* On-disk cache (GetCachePath + LocalPath/weather/xctherm)            */
+/* ------------------------------------------------------------------ */
+
+static std::string
+ReadGeoJSONFile(Path path) noexcept
+{
+  try {
+    FileReader reader(path);
+    const uint64_t size = reader.GetSize();
+    if (size == 0 || size > 32 * 1024 * 1024)
+      return {};
+
+    std::string content(size, '\0');
+    const std::size_t nbytes = reader.Read(std::span{
+      reinterpret_cast<std::byte *>(content.data()), size});
+    content.resize(nbytes);
+    return content;
+  } catch (...) {
+    return {};
+  }
+}
+
+static bool
+WriteGeoJSONFile(Path path, std::string_view content) noexcept
+{
+  try {
+    FileOutputStream file(path);
+    file.Write(std::span{
+      reinterpret_cast<const std::byte *>(content.data()), content.size()});
+    file.Commit();
+    return true;
+  } catch (...) {
+    LogFmt("xctherm: failed to write cache file {}", path.c_str());
+    return false;
+  }
+}
+
+bool
+XCThermAPI::ParseSliceBasename(std::string_view base,
+                               std::string &parameter,
+                               std::string &run_date,
+                               std::string &run_hour,
+                               unsigned &step) noexcept
+{
+  constexpr std::string_view suffix = ".geojson";
+  if (base.size() <= suffix.size() ||
+      base.substr(base.size() - suffix.size()) != suffix)
+    return false;
+  base.remove_suffix(suffix.size());
+
+  const auto strip_segment = [&base](std::size_t len) -> std::string {
+    if (base.size() < len + 1 || base[base.size() - len - 1] != '_')
+      return {};
+    const std::string segment(base.substr(base.size() - len));
+    base.remove_suffix(len + 1);
+    return segment;
+  };
+
+  const std::string step_str = strip_segment(3);
+  if (step_str.empty())
+    return false;
+  step = (unsigned)std::atoi(step_str.c_str());
+
+  run_hour = strip_segment(2);
+  if (run_hour.size() != 2)
+    return false;
+
+  run_date = strip_segment(8);
+  if (run_date.size() != 8)
+    return false;
+
+  if (base.empty())
+    return false;
+
+  parameter = std::string(base);
+  return true;
+}
+
+AllocatedPath
+XCThermAPI::BuildSlicePath(const std::string &parameter,
+                           const std::string &run_date,
+                           const std::string &run_hour,
+                           unsigned step) const noexcept
+{
+  StaticString<256> basename;
+  basename.Format("%s_%s_%s_%03u.geojson",
+                  parameter.c_str(), run_date.c_str(),
+                  run_hour.c_str(), step);
+
+  const auto cache_root = MakeCacheDirectory("xctherm");
+  const auto model_path = AllocatedPath::Build(cache_root, model.c_str());
+  Directory::Create(model_path);
+  return AllocatedPath::Build(model_path, basename);
+}
+
+bool
+XCThermAPI::SaveSliceToDisk(const CachedSlice &slice,
+                            const std::string &parameter) const noexcept
+{
+  if (slice.geojson.empty())
+    return false;
+
+  const auto path = BuildSlicePath(parameter, slice.run_date,
+                                   slice.run_hour, slice.step);
+  return WriteGeoJSONFile(path, slice.geojson);
+}
+
+void
+XCThermAPI::ImportCacheFile(Path path, Path filename) noexcept
+{
+  std::string parameter, run_date, run_hour;
+  unsigned step = 0;
+  if (!ParseSliceBasename(filename.GetBase().c_str(),
+                          parameter, run_date, run_hour, step))
+    return;
+
+  const std::string geojson = ReadGeoJSONFile(path);
+  if (geojson.empty())
+    return;
+
+  CachedSlice slice;
+  slice.geojson = geojson;
+  slice.run_date = std::move(run_date);
+  slice.run_hour = std::move(run_hour);
+  slice.step = step;
+
+  const unsigned run_h = (unsigned)std::atoi(slice.run_hour.c_str());
+  const unsigned forecast_utc = (run_h + step) % 24;
+
+  const std::lock_guard lock{cache_mutex};
+  geojson_cache[parameter][forecast_utc] = std::move(slice);
+}
+
+void
+XCThermAPI::LoadCacheFromDisk() noexcept
+{
+  struct Visitor final : public File::Visitor {
+    XCThermAPI &api;
+
+    explicit Visitor(XCThermAPI &_api):api(_api) {}
+
+    void Visit(Path path, Path filename) override {
+      api.ImportCacheFile(path, filename);
+    }
+  };
+
+  const auto cache_root = MakeCacheDirectory("xctherm");
+  const auto model_cache = AllocatedPath::Build(cache_root, model.c_str());
+  Directory::Create(model_cache);
+  Visitor visitor{*this};
+  Directory::VisitSpecificFiles(model_cache, "*.geojson", visitor);
+
+  const auto weather_root =
+    AllocatedPath::Build(MakeLocalPath("weather"), "xctherm");
+  Directory::Create(weather_root);
+  const auto model_weather =
+    AllocatedPath::Build(weather_root, model.c_str());
+  Directory::Create(model_weather);
+  Directory::VisitSpecificFiles(model_weather, "*.geojson", visitor, true);
+
+  disk_cache_loaded = true;
+  LogFmt("xctherm: loaded disk cache for model '{}'", model);
+}
+
+void
+XCThermAPI::LoadDiskCache() noexcept
+{
+  if (disk_cache_loaded)
+    return;
+  LoadCacheFromDisk();
+}
+
 bool
 XCThermAPI::DownloadGeoJSON(const std::string &parameter,
                             const std::string &date,
@@ -520,8 +704,9 @@ XCThermAPI::DownloadGeoJSONOnce(const std::string &parameter,
   const unsigned forecast_utc = (run_h + step) % 24;
   {
     const std::lock_guard lock{cache_mutex};
-    geojson_cache[parameter][forecast_utc] = std::move(slice);
+    geojson_cache[parameter][forecast_utc] = slice;
   }
+  SaveSliceToDisk(slice, parameter);
 
   return !out_geojson.empty();
 }
@@ -608,6 +793,19 @@ XCThermAPI::GetCachedHours(const std::string &parameter) const noexcept
 void
 XCThermAPI::ClearCache() noexcept
 {
-  const std::lock_guard lock{cache_mutex};
-  geojson_cache.clear();
+  {
+    const std::lock_guard lock{cache_mutex};
+    geojson_cache.clear();
+  }
+
+  struct Deleter final : public File::Visitor {
+    void Visit(Path path, Path) override {
+      File::Delete(path);
+    }
+  } deleter;
+
+  const auto cache_root = MakeCacheDirectory("xctherm");
+  const auto model_path = AllocatedPath::Build(cache_root, model.c_str());
+  if (Directory::Exists(model_path))
+    Directory::VisitSpecificFiles(model_path, "*.geojson", deleter);
 }

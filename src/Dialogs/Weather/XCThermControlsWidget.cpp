@@ -408,6 +408,8 @@ private:
       CommonInterface::GetComputerSettings().weather.xctherm;
     api.SetCredentials(settings.credentials.email.c_str(),
                        settings.credentials.password.c_str());
+    api.SetModel(settings.model == XCThermRegion::UK ? "icon-uk" : "icon-ch");
+    api.LoadDiskCache();
 
     /* Fetch index.json only if not yet loaded */
     if (!api.IsIndexLoaded()) {

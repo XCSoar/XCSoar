@@ -27,6 +27,7 @@
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
 #include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
+#include "Weather/Settings.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "LogFile.hpp"
 
@@ -580,6 +581,8 @@ XCThermWidget::StartDownload()
   try {
     api.SetCredentials(settings.credentials.email.c_str(),
                        settings.credentials.password.c_str());
+    api.SetModel(settings.model == XCThermRegion::UK ? "icon-uk" : "icon-ch");
+    api.LoadDiskCache();
 
     /* Index fetch happens synchronously on the UI thread once, before
        spawning the worker — it's a small payload and the worker can

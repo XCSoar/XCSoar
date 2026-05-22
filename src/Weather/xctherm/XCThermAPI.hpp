@@ -5,6 +5,7 @@
 
 #include "XCThermAuth.hpp"
 #include "Operation/Operation.hpp"
+#include "system/Path.hpp"
 
 #include <cstdint>
 #include <cstddef>
@@ -12,6 +13,7 @@
 #include <map>
 #include <mutex>
 #include <string>
+#include <string_view>
 #include <vector>
 
 /**
@@ -204,6 +206,11 @@ public:
    */
   void ClearCache() noexcept;
 
+  /**
+   * Load cached GeoJSON slices from disk for the current model.
+   */
+  void LoadDiskCache() noexcept;
+
 private:
   XCThermAuth auth;
   std::string model = "icon-ch";
@@ -220,6 +227,22 @@ private:
    */
   std::map<std::string, std::map<unsigned, CachedSlice>> geojson_cache;
   mutable std::mutex cache_mutex;
+  bool disk_cache_loaded = false;
+
+  void LoadCacheFromDisk() noexcept;
+  void ImportCacheFile(Path path, Path filename) noexcept;
+  bool SaveSliceToDisk(const CachedSlice &slice,
+                       const std::string &parameter) const noexcept;
+  AllocatedPath BuildSlicePath(const std::string &parameter,
+                               const std::string &run_date,
+                               const std::string &run_hour,
+                               unsigned step) const noexcept;
+
+  static bool ParseSliceBasename(std::string_view basename,
+                                 std::string &parameter,
+                                 std::string &run_date,
+                                 std::string &run_hour,
+                                 unsigned &step) noexcept;
 
   /**
    * Parse the index.json response and populate available_parameters.
