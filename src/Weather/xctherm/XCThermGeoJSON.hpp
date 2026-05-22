@@ -77,7 +77,8 @@ struct ForecastLayer {
 };
 
 /**
- * Parse a newline-delimited GeoJSON string (one Feature per line).
+ * Parse a newline-delimited GeoJSON string (one Feature per line) using
+ * boost::json.
  *
  * Each Feature must have:
  *   properties: { "min": <float>, "max": <float> }
