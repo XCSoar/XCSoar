@@ -6,6 +6,49 @@
 #include <algorithm>
 #include <cmath>
 
+unsigned
+XCThermAutoSwitch::ForecastHourAtMinute(unsigned utc_hour,
+                                        unsigned utc_minute) noexcept
+{
+  if (utc_minute >= 45)
+    return (utc_hour + 1) % 24;
+  return utc_hour;
+}
+
+int
+XCThermAutoSwitch::PickCachedTimeIndex(
+  const std::vector<unsigned> &cached,
+  unsigned utc_h, unsigned utc_minute) noexcept
+{
+  if (cached.empty())
+    return -1;
+
+  const unsigned target = ForecastHourAtMinute(utc_h, utc_minute);
+
+  int best_future = -1;
+  unsigned best_future_dist = 25;
+  int best_past = -1;
+  unsigned best_past_dist = 25;
+
+  for (size_t i = 0; i < cached.size(); ++i) {
+    const unsigned fwd = (cached[i] + 24 - target) % 24;
+    if (fwd <= 12) {
+      if (fwd < best_future_dist) {
+        best_future_dist = fwd;
+        best_future = (int)i;
+      }
+    } else {
+      const unsigned back = 24 - fwd;
+      if (back < best_past_dist) {
+        best_past_dist = back;
+        best_past = (int)i;
+      }
+    }
+  }
+
+  return best_future >= 0 ? best_future : best_past;
+}
+
 void
 XCThermAutoSwitch::SetLoadedLayers(std::vector<LayerInfo> layers) noexcept
 {
@@ -174,9 +217,8 @@ XCThermAutoSwitch::UpdateTime(unsigned utc_hour, unsigned utc_minute) noexcept
     return;
 
   /* Switch at :45 — use the NEXT hour's forecast */
-  unsigned target_hour = utc_hour;
-  if (utc_minute >= 45)
-    target_hour = (utc_hour + 1) % 24;
+  const unsigned target_hour =
+    ForecastHourAtMinute(utc_hour, utc_minute);
 
   /* If manual override, check if a new hour boundary was crossed */
   if (time_manual_override) {

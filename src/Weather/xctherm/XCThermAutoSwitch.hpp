@@ -100,12 +100,21 @@ public:
   }
 
   /**
+   * UTC forecast hour to display at the given clock time (:45 rule).
+   */
+  static unsigned ForecastHourAtMinute(unsigned utc_hour,
+                                       unsigned utc_minute) noexcept;
+
+  /**
+   * Pick the cached-hour index for auto-time display (:45 rule).
+   * Returns -1 if @p cached is empty.
+   */
+  static int PickCachedTimeIndex(const std::vector<unsigned> &cached,
+                                 unsigned utc_hour,
+                                 unsigned utc_minute) noexcept;
+
+  /**
    * Called periodically (~1 Hz) with current flight data.
-   * @param gps_alt GPS altitude in meters (negative if unavailable)
-   * @param baro_alt barometric altitude in meters (negative if unavailable)
-   * @param utc_hour current UTC hour (0-23)
-   * @param utc_minute current UTC minute (0-59)
-   * @param now monotonic timestamp for hysteresis timing
    */
   void Update(double gps_alt, double baro_alt,
               unsigned utc_hour, unsigned utc_minute,
