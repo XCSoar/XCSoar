@@ -6,9 +6,11 @@
 
 #include <cstring>
 #include <ctime>
+#include <exception>
 #include <string_view>
 #include <vector>
 
+#include <boost/json.hpp>
 #include <curl/curl.h>
 
 /* ------------------------------------------------------------------ */
@@ -280,26 +282,27 @@ XCThermAuth::RefreshJWT() noexcept
 }
 
 /* ------------------------------------------------------------------ */
-/* JSON/Cookie parsing (simple, no external JSON lib)                  */
+/* JSON/Cookie parsing                                                 */
 /* ------------------------------------------------------------------ */
 
 bool
 XCThermAuth::ParseJWTFromResponse(const std::string &response,
                                   std::string &out_token) noexcept
 {
-  /* Find "jwtToken":"<value>" */
-  const char *needle = "\"jwtToken\":\"";
-  size_t pos = response.find(needle);
-  if (pos == std::string::npos)
-    return false;
+  try {
+    const boost::json::value jv = boost::json::parse(response);
+    if (!jv.is_object())
+      return false;
 
-  pos += std::strlen(needle);
-  size_t end = response.find('"', pos);
-  if (end == std::string::npos)
-    return false;
+    const auto *token = jv.as_object().if_contains("jwtToken");
+    if (token == nullptr || !token->is_string())
+      return false;
 
-  out_token = response.substr(pos, end - pos);
-  return !out_token.empty();
+    out_token = std::string{token->as_string()};
+    return !out_token.empty();
+  } catch (const std::exception &) {
+    return false;
+  }
 }
 
 bool
