@@ -225,24 +225,27 @@ InfoBoxContentActiveWaypoint::HandleClick() noexcept
     selected = ShowWaypointListDialog(waypoints, location,
                                       has_ordered_task ? task_clone.get()
                                                        : nullptr,
-                                      ordered_task_index);
+                                      ordered_task_index,
+                                      std::nullopt,
+                                      has_ordered_task);
   } catch (...) {
     return false;
   }
   if (!selected)
     return true;
 
+  int target_index = -1;
   if (has_ordered_task) {
-    int target_index = -1;
     for (unsigned i = 0; i < task_clone->TaskSize(); ++i) {
       if (task_clone->GetPoint(i).GetWaypoint() == *selected) {
         target_index = (int)i;
         break;
       }
     }
+  }
 
-    if (target_index >= 0 &&
-        (unsigned)target_index != ordered_task_index)
+  if (target_index >= 0) {
+    if ((unsigned)target_index != ordered_task_index)
       ptm.IncrementActiveTaskPoint(target_index - (int)ordered_task_index);
   } else {
     {
