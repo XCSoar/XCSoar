@@ -20,6 +20,13 @@ public:
   bool HandleClick() noexcept override;
 };
 
+class InfoBoxContentActiveWaypoint : public InfoBoxContent
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
 void
 UpdateInfoBoxTakeoffDistance(InfoBoxData &data) noexcept;
 
