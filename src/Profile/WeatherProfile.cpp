@@ -38,21 +38,14 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
   map.Get(ProfileKeys::XCThermAutoSwitch, settings.xctherm.auto_switch);
 #endif
 
-  {
-    StaticString<64> xctherm_email;
-    map.Get(ProfileKeys::XCThermEmail, xctherm_email);
-    if (!xctherm_email.empty())
-      settings.xctherm.credentials.email = xctherm_email;
-  }
+  map.Get(ProfileKeys::XCThermEmail, settings.xctherm.credentials.email);
+  map.Get(ProfileKeys::XCThermPassword, settings.xctherm.credentials.password);
 
-  {
-    StaticString<64> xctherm_password;
-    map.Get(ProfileKeys::XCThermPassword, xctherm_password);
-    if (!xctherm_password.empty())
-      settings.xctherm.credentials.password = xctherm_password;
-  }
-
+#ifdef HAVE_HTTP
+  map.GetEnum(ProfileKeys::XCThermModel, settings.xctherm.model);
+#else
   map.Get(ProfileKeys::XCThermModel, settings.xctherm.model);
+#endif
   map.Get(ProfileKeys::XCThermParameter, settings.xctherm.parameter);
   map.Get(ProfileKeys::XCThermWaveHeight, settings.xctherm.wave_height);
   map.Get(ProfileKeys::XCThermVerticalWindAGL,

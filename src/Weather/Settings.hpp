@@ -24,10 +24,19 @@ struct WeatherCredentialsSettings {
   }
 
   void SetDefaults() noexcept {
-    email = "xcthermdev@gmail.com";
-    password = "DiePerfekteWelle!26";
+    email.clear();
+    password.clear();
   }
 };
+
+#ifdef HAVE_HTTP
+
+enum class XCThermRegion : unsigned {
+  CH = 0,
+  UK = 1,
+};
+
+#endif
 
 struct XCThermSettings {
 #ifdef HAVE_HTTP
@@ -55,7 +64,11 @@ struct XCThermSettings {
 #endif
 
   WeatherCredentialsSettings credentials;
+#ifdef HAVE_HTTP
+  XCThermRegion model;
+#else
   unsigned model;
+#endif
   unsigned parameter;
   unsigned wave_height;
   unsigned vertical_wind_agl;
@@ -78,7 +91,11 @@ struct XCThermSettings {
 #endif
 
     credentials.SetDefaults();
+#ifdef HAVE_HTTP
+    model = XCThermRegion::CH;
+#else
     model = 0;
+#endif
     parameter = 0;
     wave_height = 3000;
     vertical_wind_agl = 100;
