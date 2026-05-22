@@ -6,6 +6,7 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <string>
 
 namespace XCThermGeoJSON {
 
@@ -204,11 +205,9 @@ Parse(std::string_view content, bool skip_neutral) noexcept
 
     // Skip empty lines
     if (eol > start) {
-      // Null-terminate this line (safe: we have a copy or mmap)
-      // We work with const pointers so we don't modify — the parser
-      // only reads forward.
+      const std::string line(start, eol - start);
       WindBand band;
-      if (ParseFeature(start, band)) {
+      if (ParseFeature(line.c_str(), band)) {
         // Skip neutral band if requested
         if (skip_neutral && band.min_ms >= -0.2 && band.max_ms <= 0.2) {
           // don't add
@@ -218,6 +217,8 @@ Parse(std::string_view content, bool skip_neutral) noexcept
       }
     }
 
+    if (eol >= end)
+      break;
     start = eol + 1;
   }
 

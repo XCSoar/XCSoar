@@ -35,7 +35,8 @@ XCThermGeoJSONOverlay::HasData() const noexcept
 const char *
 XCThermGeoJSONOverlay::GetLabel() const noexcept
 {
-  return "XCTherm";
+  const std::lock_guard lock{mutex};
+  return label.c_str();
 }
 
 bool
