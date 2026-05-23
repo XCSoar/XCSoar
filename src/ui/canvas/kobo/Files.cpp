@@ -11,32 +11,35 @@ static constexpr const char *const font_search_paths[] = {
   nullptr
 };
 
+/* Roboto is bundled in KoboRoot (see build/kobo.mk) and supports Cyrillic.
+   Prefer it over DejaVu/Vera so topography labels (rivers, lakes, etc.)
+   use the same font family as city labels. */
 static constexpr const char *const all_font_paths[] = {
-  "DejaVuSansCondensed.ttf",
   "Roboto-Regular.ttf",
+  "DejaVuSansCondensed.ttf",
   "DroidSans.ttf",
   "Vera.ttf",
   nullptr
 };
 
 static constexpr const char *const all_bold_font_paths[] = {
-  "DejaVuSansCondensed-Bold.ttf",
   "Roboto-Bold.ttf",
+  "DejaVuSansCondensed-Bold.ttf",
   "DroidSans-Bold.ttf",
   "VeraBd.ttf",
   nullptr
 };
 
 static constexpr const char *const all_italic_font_paths[] = {
-  "DejaVuSansCondensed-Oblique.ttf",
   "Roboto-Italic.ttf",
+  "DejaVuSansCondensed-Oblique.ttf",
   "VeraIt.ttf",
   nullptr
 };
 
 static constexpr const char *const all_bold_italic_font_paths[] = {
-  "DejaVuSansCondensed-BoldOblique.ttf",
   "Roboto-BoldItalic.ttf",
+  "DejaVuSansCondensed-BoldOblique.ttf",
   "VeraBI.ttf",
   nullptr
 };
