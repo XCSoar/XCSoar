@@ -115,8 +115,15 @@
 #include "Apple/Services.hpp"
 #endif
 
+#ifdef HAVE_EDL
+#include "Weather/EDL/Glue.hpp"
+#endif
+
 static TaskManager *task_manager;
 static GlideComputerEvents *glide_computer_events;
+#ifdef HAVE_EDL
+static EDL::Glue *edl_glue;
+#endif
 static AllMonitors *all_monitors;
 static GlideComputerTaskEvents *task_events;
 static DeviceFactory *device_factory;
@@ -612,6 +619,11 @@ Startup(UI::Display &display)
   glide_computer_events->Reset();
   live_blackboard.AddListener(*glide_computer_events);
 
+#ifdef HAVE_EDL
+  edl_glue = new EDL::Glue();
+  live_blackboard.AddListener(*edl_glue);
+#endif
+
   all_monitors = new AllMonitors();
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
@@ -701,6 +713,14 @@ Shutdown()
     delete glide_computer_events;
     glide_computer_events = nullptr;
   }
+
+#ifdef HAVE_EDL
+  if (edl_glue != nullptr) {
+    live_blackboard.RemoveListener(*edl_glue);
+    delete edl_glue;
+    edl_glue = nullptr;
+  }
+#endif
 
   SaveFlarmColors();
   SaveFlarmMessaging();

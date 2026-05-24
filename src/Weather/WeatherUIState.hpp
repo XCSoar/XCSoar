@@ -92,4 +92,25 @@ struct WeatherUIState {
     rasp_page_entered = false;
     edl.Clear();
   }
+
+  /**
+   * Mark the current RASP page as entered.
+   *
+   * @return true if this is the first entry since the last leave
+   */
+  bool EnterRaspDedicatedPage() noexcept {
+    if (rasp_page_entered)
+      return false;
+
+    rasp_page_entered = true;
+    return true;
+  }
+
+  /**
+   * Reset RASP forecast selection for entering a dedicated page.
+   */
+  void ResetRaspForDedicatedPage() noexcept {
+    time_auto_advance = true;
+    time = BrokenTime::Invalid();
+  }
 };
