@@ -4,6 +4,7 @@
 #pragma once
 
 #include "WifiData.hpp"
+#include "util/Exception.hxx"
 
 #include <cstdio>
 #include <cstdlib>
@@ -19,12 +20,14 @@ public:
   virtual void Scan() = 0;
   virtual std::size_t ScanResults(WifiVisibleNetwork *, unsigned)
   {
-    throw std::runtime_error{"ScanResults is not supported by this backend"};
+    ThrowException(std::runtime_error{
+        "ScanResults is not supported by this backend"});
   }
 
   virtual std::size_t ListNetworks(WifiConfiguredNetworkInfo *, std::size_t)
   {
-    throw std::runtime_error{"ListNetworks is not supported by this backend"};
+    ThrowException(std::runtime_error{
+        "ListNetworks is not supported by this backend"});
   }
 
   /* Connect using SSID + passphrase; backend handles PSK/PMK derivation. */
@@ -33,14 +36,16 @@ public:
 
   virtual void RemoveNetwork(unsigned)
   {
-    throw std::runtime_error{"RemoveNetwork is not supported by this backend"};
+    ThrowException(std::runtime_error{
+        "RemoveNetwork is not supported by this backend"});
   }
 
   virtual void SaveConfig() {}
 
   virtual void Disconnect()
   {
-    throw std::runtime_error{"Disconnect is not supported by this backend"};
+    ThrowException(std::runtime_error{
+        "Disconnect is not supported by this backend"});
   }
   virtual WifiBackendStatus GetBackendStatus() = 0;
 
