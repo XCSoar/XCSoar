@@ -9,11 +9,28 @@
 #include "lib/dbus/Connection.hxx"
 
 #include <algorithm>
+#include <exception>
 #include <stdexcept>
 
 namespace {
 
 static constexpr const char *CONNMAN_NAME = "net.connman";
+
+static ODBus::Connection
+GetSystemConnection()
+{
+  try {
+    auto c = ODBus::Connection::GetSystem();
+    if (!c)
+      throw WifiError::Exception{WifiError::Code::NoDbusConnection};
+
+    return c;
+  } catch (const WifiError::Exception &) {
+    throw;
+  } catch (...) {
+    std::throw_with_nested(WifiError::Exception{WifiError::Code::NoDbusConnection});
+  }
+}
 
 static void
 RequireWifiInterface(ODBus::Connection &c)
@@ -38,10 +55,7 @@ CanForgetService(const CmClient::ServiceEntry &service) noexcept
 void
 ConnmanWifiBackend::EnsureConnected()
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw WifiError::Exception{WifiError::Code::NoDbusConnection};
-
+  auto c = GetSystemConnection();
   RequireWifiInterface(c);
 }
 
@@ -50,10 +64,7 @@ ConnmanWifiBackend::Scan()
 {
   EnsureConnected();
 
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw WifiError::Exception{WifiError::Code::NoDbusConnection};
-
+  auto c = GetSystemConnection();
   CmClient::EnableWifiTechnology(c);
   CmClient::ScanWifiTechnology(c);
 }
@@ -72,10 +83,7 @@ ConnmanWifiBackend::Connect(const char *ssid, const char *passphrase,
 void
 ConnmanWifiBackend::Connect(const WifiConnectRequest &request)
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw WifiError::Exception{WifiError::Code::NoDbusConnection};
-
+  auto c = GetSystemConnection();
   RequireWifiInterface(c);
   CmClient::EnableWifiTechnology(c);
 
@@ -108,10 +116,7 @@ ConnmanWifiBackend::Connect(const WifiConnectRequest &request)
 void
 ConnmanWifiBackend::Disconnect()
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw WifiError::Exception{WifiError::Code::NoDbusConnection};
-
+  auto c = GetSystemConnection();
   RequireWifiInterface(c);
   for (const auto &service : CmClient::ListServices(c))
     if (CmClient::IsActiveServiceState(service.state))
@@ -121,10 +126,7 @@ ConnmanWifiBackend::Disconnect()
 WifiBackendStatus
 ConnmanWifiBackend::GetBackendStatus()
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw WifiError::Exception{WifiError::Code::NoDbusConnection};
-
+  auto c = GetSystemConnection();
   RequireWifiInterface(c);
 
   WifiBackendStatus status;
@@ -150,10 +152,7 @@ ConnmanWifiBackend::GetNetworks(WifiNetworkEntry *dest, std::size_t max)
   if (dest == nullptr || max == 0)
     return 0;
 
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw WifiError::Exception{WifiError::Code::NoDbusConnection};
-
+  auto c = GetSystemConnection();
   RequireWifiInterface(c);
 
   const auto services = CmClient::ListServices(c);
@@ -194,10 +193,7 @@ ConnmanWifiBackend::GetNetworks(WifiNetworkEntry *dest, std::size_t max)
 void
 ConnmanWifiBackend::ForgetNetwork(const char *profile_id)
 {
-  auto c = ODBus::Connection::GetSystem();
-  if (!c)
-    throw WifiError::Exception{WifiError::Code::NoDbusConnection};
-
+  auto c = GetSystemConnection();
   RequireWifiInterface(c);
   CmClient::Remove(c, profile_id);
 }
