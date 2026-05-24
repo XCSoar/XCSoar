@@ -96,6 +96,17 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   }
 
   /**
+   * Returns a copy with seconds set to zero (minute resolution).
+   */
+  constexpr BrokenDateTime FloorToMinute() const noexcept
+  {
+    if (!IsPlausible())
+      return *this;
+
+    return BrokenDateTime(year, month, day, hour, minute, 0);
+  }
+
+  /**
    * Convert a UNIX UTC time stamp (seconds since epoch) to a
    * BrokenDateTime object.
    */

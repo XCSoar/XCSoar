@@ -12,6 +12,9 @@ Version 7.45 - not yet released
     ISA logger datum; cleared when strong pressure replaces weak pressure or
     ignores the sentence
 * ui
+  - status dialog, Times: flight time matches takeoff and landing after
+    minute rounding (including across midnight); landing time clears on a
+    new takeoff in the same session #957
   - status dialog, Rules: after a valid start, show PEV offset at start (time
     from PEV window start to the crossing) when known, as a duration (e.g.
     "45 sec", "2 min") not HH:MM so sub-minute offsets are not shown as 00:00
