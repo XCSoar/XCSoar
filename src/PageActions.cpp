@@ -8,11 +8,18 @@
 #include "ActionInterface.hpp"
 #include "MainWindow.hpp"
 #include "CrossSection/CrossSectionWidget.hpp"
+#include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "DataGlobals.hpp"
+#include "ActionInterface.hpp"
+#ifdef HAVE_EDL
+#include "Dialogs/Weather/MapOverlayControlsWidget.hpp"
+#include "Weather/EDL/StateController.hpp"
+#endif
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -37,12 +44,94 @@ namespace PageActions {
    * #UIState.
    */
   static void LoadLayout(const PageLayout &layout);
+
+  static const PageLayout &
+  GetActiveLayout() noexcept;
+
+  static void ClearPageOverlays() noexcept;
+
+  static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 };
+
+const PageLayout &
+PageActions::GetActiveLayout() noexcept
+{
+  const PagesState &state = CommonInterface::GetUIState().pages;
+
+  return state.special_page.IsDefined()
+    ? state.special_page
+    : GetConfiguredLayout();
+}
+
+void
+PageActions::ClearPageOverlays() noexcept
+{
+  WeatherUIState &weather = CommonInterface::SetUIState().weather;
+  weather.map = -1;
+
+#ifdef HAVE_EDL
+  if (!EDL::IsDedicatedPageSuspendedForPan())
+    EDL::ClearOverlay();
+#endif
+}
+
+void
+PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
+{
+  ClearPageOverlays();
+
+  switch (layout.overlay) {
+  case PageLayout::Overlay::NONE:
+    break;
+
+  case PageLayout::Overlay::RASP: {
+    WeatherUIState &weather = CommonInterface::SetUIState().weather;
+    if (layout.rasp_field >= 0)
+      weather.map = layout.rasp_field;
+
+    if (weather.EnterRaspDedicatedPage())
+      weather.ResetRaspForDedicatedPage();
+    break;
+  }
+
+  case PageLayout::Overlay::EDL:
+#ifdef HAVE_EDL
+    if (layout.UsesEdlOverlay()) {
+      if (EDL::EnterDedicatedPage())
+        EDL::ResetForDedicatedPage();
+      else
+        EDL::EnsureInitialised();
+
+      EDL::TryApplyOverlayFromCache();
+    }
+#endif
+    break;
+
+  case PageLayout::Overlay::MAX:
+    gcc_unreachable();
+  }
+
+  ActionInterface::SendUIState(true);
+}
 
 void
 PageActions::LeavePage()
 {
   PagesState &state = CommonInterface::SetUIState().pages;
+
+  const PageLayout &layout = GetActiveLayout();
+
+  if (layout.UsesEdlOverlay()) {
+#ifdef HAVE_EDL
+    if (!EDL::IsDedicatedPageSuspendedForPan()) {
+      EDL::LeaveDedicatedPage();
+      EDL::ClearOverlay();
+    }
+#endif
+  } else if (layout.overlay == PageLayout::Overlay::RASP) {
+    ClearPageOverlays();
+    CommonInterface::SetUIState().weather.rasp_page_entered = false;
+  }
 
   if (state.special_page.IsDefined())
     return;
@@ -55,6 +144,31 @@ PageActions::LeavePage()
     page.circling_scale = map_settings.circling_scale;
     page.auto_zoom_enabled = map_settings.auto_zoom_enabled;
   }
+}
+
+void
+PageActions::Restore()
+{
+  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
+  if (!special_page.IsDefined())
+    return;
+
+  if (special_page.UsesEdlOverlay()) {
+#ifdef HAVE_EDL
+    if (!EDL::IsDedicatedPageSuspendedForPan()) {
+      EDL::LeaveDedicatedPage();
+      EDL::ClearOverlay();
+    }
+#endif
+  } else if (special_page.overlay == PageLayout::Overlay::RASP) {
+    ClearPageOverlays();
+    CommonInterface::SetUIState().weather.rasp_page_entered = false;
+  }
+
+  special_page.SetUndefined();
+
+  LoadLayout(GetConfiguredLayout());
+  RestoreMapZoom();
 }
 
 void
@@ -174,9 +288,9 @@ static void
 LoadMain(PageLayout::Main main)
 {
   switch (main) {
-  case PageLayout::Main::EDL_MAP:
   case PageLayout::Main::MAP:
   case PageLayout::Main::MAP_NORTH_UP:
+  case PageLayout::Main::EDL_MAP:
     CommonInterface::main_window->ActivateMap();
     break;
 
@@ -198,9 +312,9 @@ LoadMain(PageLayout::Main main)
 }
 
 static void
-LoadBottom(PageLayout::Bottom bottom)
+LoadBottom(const PageLayout &layout)
 {
-  switch (bottom) {
+  switch (layout.bottom) {
   case PageLayout::Bottom::NOTHING:
     CommonInterface::main_window->SetBottomWidget(nullptr);
     break;
@@ -209,11 +323,19 @@ LoadBottom(PageLayout::Bottom bottom)
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget(*data_components));
     break;
 
-  case PageLayout::Bottom::CUSTOM:
-    /* don't touch */
+  case PageLayout::Bottom::EDL_CONTROLS:
+#ifdef HAVE_EDL
+    {
+      auto widget = CreateMapOverlayControlsBottomWidget(layout.overlay);
+      CommonInterface::main_window->SetBottomWidget(widget.release());
+    }
+#else
+    CommonInterface::main_window->SetBottomWidget(nullptr);
+#endif
     break;
 
-  case PageLayout::Bottom::EDL_CONTROLS:
+  case PageLayout::Bottom::CUSTOM:
+    /* don't touch */
     break;
 
   case PageLayout::Bottom::MAX:
@@ -248,11 +370,15 @@ PageActions::LoadLayout(const PageLayout &layout)
   if (!layout.valid)
     return;
 
+  PageLayout active = layout;
+  active.Normalise();
+
   DisablePan();
 
-  LoadInfoBoxes(layout.infobox_config);
-  LoadBottom(layout.bottom);
-  LoadMain(layout.main);
+  LoadInfoBoxes(active.infobox_config);
+  LoadMain(active.main);
+  ApplyPageOverlay(active);
+  LoadBottom(active);
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState();
@@ -269,18 +395,6 @@ PageActions::OpenLayout(const PageLayout &layout)
   LoadLayout(layout);
 }
 
-void
-PageActions::Restore()
-{
-  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
-  if (!special_page.IsDefined())
-    return;
-
-  special_page.SetUndefined();
-
-  LoadLayout(GetConfiguredLayout());
-  RestoreMapZoom();
-}
 
 void
 PageActions::DeferredRestore()
@@ -303,22 +417,23 @@ PageActions::RestoreBottom()
   if (special_page == configured_page)
     special_page.SetUndefined();
 
-  LoadBottom(configured_page.bottom);
+  LoadBottom(configured_page);
 }
 
 GlueMapWindow *
 PageActions::ShowMap()
 {
   PageLayout layout = GetCurrentLayout();
-  if (layout.main != PageLayout::Main::MAP && layout.main != PageLayout::Main::MAP_NORTH_UP) {
+  if (!layout.IsMapMain()) {
     /* not showing map currently: activate it */
 
-    if (GetConfiguredLayout().main == PageLayout::Main::MAP || GetConfiguredLayout().main == PageLayout::Main::MAP_NORTH_UP)
+    if (GetConfiguredLayout().IsMapMain())
       /* the configured page is a map page: restore it */
       Restore();
     else {
       /* generate a "special" map page based on the current page */
       layout.main = PageLayout::Main::MAP;
+      layout.overlay = PageLayout::Overlay::NONE;
       OpenLayout(layout);
     }
   }
@@ -370,6 +485,21 @@ PageActions::ShowThermalAssistant()
     layout.bottom = PageLayout::Bottom::NOTHING;
     OpenLayout(layout);
   }
+}
+
+void
+PageActions::ShowWeatherPage()
+{
+#ifdef HAVE_EDL
+  PageLayout layout = GetCurrentLayout();
+  if (!layout.IsMapMain())
+    layout.main = PageLayout::Main::MAP;
+  layout.overlay = PageLayout::Overlay::EDL;
+  layout.bottom = PageLayout::Bottom::EDL_CONTROLS;
+  OpenLayout(layout);
+#else
+  ShowWeatherDialog("edl");
+#endif
 }
 
 void
