@@ -662,7 +662,10 @@ ifeq ($(OPENGL),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/Levels.cpp \
 	$(SRC)/Weather/EDL/TileStore.cpp \
-	$(SRC)/Weather/EDL/StateController.cpp
+	$(SRC)/Weather/EDL/StateController.cpp \
+	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
+	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
+	$(SRC)/Weather/EDL/Glue.cpp
 endif
 else
 XCSOAR_SOURCES += \
