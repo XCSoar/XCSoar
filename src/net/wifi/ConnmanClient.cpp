@@ -433,6 +433,16 @@ FindTechnology(ODBus::Connection &c, const char *type)
   return {};
 }
 
+static TechnologyEntry
+RequireWifiTechnology(ODBus::Connection &c)
+{
+  const auto technology = FindTechnology(c, "wifi");
+  if (technology.path.empty())
+    throw WifiError::Exception{WifiError::Code::NoInterface};
+
+  return technology;
+}
+
 template<typename T>
 static void
 SetProperty(ODBus::Connection &c, const char *path,
@@ -496,20 +506,14 @@ CmClient::Remove(ODBus::Connection &c, const char *path)
 bool
 CmClient::IsWifiTechnologyPowered(ODBus::Connection &c)
 {
-  const auto technology = FindTechnology(c, "wifi");
-  if (technology.path.empty())
-    throw std::runtime_error{"No Wi-Fi technology available"};
-
+  const auto technology = RequireWifiTechnology(c);
   return technology.powered;
 }
 
 void
 CmClient::SetWifiTechnologyPowered(ODBus::Connection &c, bool enabled)
 {
-  const auto technology = FindTechnology(c, "wifi");
-  if (technology.path.empty())
-    throw std::runtime_error{"No Wi-Fi technology available"};
-
+  const auto technology = RequireWifiTechnology(c);
   SetTechnologyPowered(c, technology.path.c_str(), enabled);
 }
 
@@ -531,10 +535,7 @@ CmClient::EnableWifiTechnology(ODBus::Connection &c)
 void
 CmClient::ScanWifiTechnology(ODBus::Connection &c)
 {
-  const auto technology = FindTechnology(c, "wifi");
-  if (technology.path.empty())
-    throw std::runtime_error{"No Wi-Fi technology available"};
-
+  const auto technology = RequireWifiTechnology(c);
   ScanTechnology(c, technology.path.c_str());
 }
 
