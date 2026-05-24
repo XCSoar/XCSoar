@@ -326,7 +326,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   const UIState &ui_state = GetUIState();
-  if (ui_state.auxiliary_enabled) {
+  if (!ui_state.map_scale_page_title.empty()) {
+    buffer += ui_state.map_scale_page_title;
+    buffer += " ";
+  } else if (ui_state.auxiliary_enabled) {
     buffer += ui_state.panel_name;
     buffer += " ";
   }
@@ -343,7 +346,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
         "BALLAST %d LITERS ",
         (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
 
-  if (rasp_renderer != nullptr) {
+  if (rasp_renderer != nullptr &&
+      ui_state.page_overlay != PageLayout::Overlay::RASP) {
     const char *label = rasp_renderer->GetLabel();
     if (label != nullptr)
       buffer += gettext(label);

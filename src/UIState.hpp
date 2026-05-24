@@ -55,6 +55,18 @@ struct UIState {
    */
   StaticString<32u> panel_name;
 
+  /**
+   * Pre-rendered map page title for the map scale overlay (draw thread).
+   * Empty when the current page has no weather overlay.
+   */
+  StaticString<64> map_scale_page_title;
+
+  /**
+   * Overlay of the current map page.  Used by the draw thread to decide
+   * whether legacy RASP HUD text is shown.
+   */
+  PageLayout::Overlay page_overlay;
+
   PagesState pages;
 
   WeatherUIState weather;
