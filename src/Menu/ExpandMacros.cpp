@@ -417,7 +417,8 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     const PageLayout &page =
       CommonInterface::GetUISettings().pages.pages[PageActions::NextIndex()];
     return page.MakeTitle(CommonInterface::GetUISettings().info_boxes,
-                          std::span{label}, true);
+                          std::span{label}, DataGlobals::GetRasp().get(),
+                          true);
   } else if (name == "CheckWeGlide") {
     invalid |= !CommonInterface::GetComputerSettings().weglide.enabled;
     return nullptr;

@@ -174,6 +174,7 @@ static void
 LoadMain(PageLayout::Main main)
 {
   switch (main) {
+  case PageLayout::Main::EDL_MAP:
   case PageLayout::Main::MAP:
   case PageLayout::Main::MAP_NORTH_UP:
     CommonInterface::main_window->ActivateMap();
@@ -210,6 +211,9 @@ LoadBottom(PageLayout::Bottom bottom)
 
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */
+    break;
+
+  case PageLayout::Bottom::EDL_CONTROLS:
     break;
 
   case PageLayout::Bottom::MAX:

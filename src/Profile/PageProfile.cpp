@@ -63,6 +63,20 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
       unsigned(pl.main) >= unsigned(PageLayout::Main::MAX))
     pl.main = PageLayout::Main::MAP;
 
+  strcpy(profileKey + prefixLen, "Overlay");
+  if (!map.GetEnum(profileKey, pl.overlay) ||
+      unsigned(pl.overlay) >= unsigned(PageLayout::Overlay::MAX))
+    pl.overlay = PageLayout::Overlay::NONE;
+
+  strcpy(profileKey + prefixLen, "RaspField");
+  map.Get(profileKey, pl.rasp_field);
+
+  if (pl.overlay == PageLayout::Overlay::NONE &&
+      pl.bottom == PageLayout::Bottom::EDL_CONTROLS)
+    pl.overlay = PageLayout::Overlay::EDL;
+
+  pl.Normalise();
+
   _pl = pl;
 }
 
@@ -102,6 +116,12 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "Main");
   map.Set(profileKey, (unsigned)page.main);
+
+  strcpy(profileKey + prefixLen, "Overlay");
+  map.Set(profileKey, (unsigned)page.overlay);
+
+  strcpy(profileKey + prefixLen, "RaspField");
+  map.Set(profileKey, page.rasp_field);
 }
 
 
