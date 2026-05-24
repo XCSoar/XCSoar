@@ -97,6 +97,14 @@ BrokenDateTime::NowLocal() noexcept
 }
 
 BrokenDateTime
+BrokenDateTime::ToLocal() const noexcept
+{
+  assert(IsPlausible());
+
+  return ToBrokenDateTime(LocalTime(ToTimePoint()));
+}
+
+BrokenDateTime
 BrokenDateTime::FromUnixTime(int64_t t) noexcept
 {
   return ToBrokenDateTimeUtcSeconds(t);
