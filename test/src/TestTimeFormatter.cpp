@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Formatter/TimeFormatter.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "time/RoughTime.hpp"
 #include "time/Stamp.hpp"
 #include "util/Macros.hpp"
@@ -258,9 +259,26 @@ TestFlightTimeFromRoundedTakeoffLanding()
                   "01:44"));
 }
 
+static void
+TestFlightTimeFromRoundedBrokenDateTime()
+{
+  const BrokenDateTime takeoff{2024, 1, 1, 23, 3, 30};
+  const BrokenDateTime landing{2024, 1, 2, 0, 47, 29};
+  const auto raw = landing - takeoff;
+
+  ok1(StringIsEqual(FormatSignedTimeHHMM(
+        std::chrono::duration_cast<std::chrono::seconds>(raw)).c_str(),
+        "01:43"));
+
+  const auto rounded = landing.FloorToMinute() - takeoff.FloorToMinute();
+  ok1(StringIsEqual(FormatSignedTimeHHMM(
+        std::chrono::duration_cast<std::chrono::seconds>(rounded)).c_str(),
+        "01:44"));
+}
+
 int main()
 {
-  plan_tests(113);
+  plan_tests(115);
 
   TestFormat();
   TestFormatLong();
@@ -268,6 +286,7 @@ int main()
   TestTwoLines();
   TestSmart();
   TestFlightTimeFromRoundedTakeoffLanding();
+  TestFlightTimeFromRoundedBrokenDateTime();
 
   return exit_status();
 }
