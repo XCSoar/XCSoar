@@ -13,6 +13,10 @@
 #include "Profile/PageProfile.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
+#include "DataGlobals.hpp"
+#include "Weather/Features.hpp"
+#include "Weather/Rasp/FieldControls.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
@@ -37,6 +41,8 @@ private:
     MAIN,
     INFO_BOX_PANEL,
     BOTTOM,
+    OVERLAY,
+    RASP_FIELD,
   };
 
   static constexpr unsigned IBP_NONE = 0x7000;
@@ -45,6 +51,9 @@ private:
   PageLayout value;
 
   Listener &listener;
+
+  void UpdateOverlayControls() noexcept;
+  void FillRaspFieldControl() noexcept;
 
 public:
   PageLayoutEditWidget(const DialogLook &_look, Listener &_listener)
@@ -165,6 +174,47 @@ public:
 };
 
 void
+PageLayoutEditWidget::FillRaspFieldControl() noexcept
+{
+  auto &control = GetControl(RASP_FIELD);
+  auto &df = (DataFieldEnum &)*control.GetDataField();
+
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0) {
+    df.ClearChoices();
+    df.AddChoice(-1, _("No RASP file loaded"));
+    df.SetValue(-1);
+    control.RefreshDisplay();
+    return;
+  }
+
+  Rasp::FillFieldChoices(df, rasp.get());
+
+  if (value.rasp_field >= 0 &&
+      unsigned(value.rasp_field) < rasp->GetItemCount())
+    df.SetValue(value.rasp_field);
+  else
+    df.SetValue(0U);
+
+  control.RefreshDisplay();
+}
+
+void
+PageLayoutEditWidget::UpdateOverlayControls() noexcept
+{
+  const bool map_page = value.IsMapMain();
+  const auto rasp = DataGlobals::GetRasp();
+  const bool rasp_available = rasp != nullptr && rasp->GetItemCount() > 0;
+  const bool rasp_overlay = value.overlay == PageLayout::Overlay::RASP;
+
+  SetRowAvailable(OVERLAY, map_page);
+  SetRowAvailable(RASP_FIELD, map_page && rasp_overlay);
+
+  SetRowEnabled(OVERLAY, map_page);
+  SetRowEnabled(RASP_FIELD, map_page && rasp_overlay && rasp_available);
+}
+
+void
 PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
 {
   const InfoBoxSettings &info_box_settings =
@@ -218,21 +268,46 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+#ifdef HAVE_EDL
+    { PageLayout::Bottom::EDL_CONTROLS, N_("Weather controls") },
+#endif
     nullptr
   };
   AddEnum(_("Bottom area"),
           _("Specifies what should be displayed below the main area."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
+
+  static constexpr StaticEnumChoice overlay_list[] = {
+    { PageLayout::Overlay::NONE, N_("None") },
+    { PageLayout::Overlay::RASP, N_("RASP") },
+#ifdef HAVE_EDL
+    { PageLayout::Overlay::EDL, N_("EDL") },
+#endif
+    nullptr
+  };
+  AddEnum(_("Map overlay"),
+          _("Optional weather overlay drawn on map pages."),
+          overlay_list,
+          (unsigned)PageLayout::Overlay::NONE, this);
+
+  AddEnum(_("RASP layer"),
+          _("RASP weather layer to display on this map page."),
+          this);
+  GetControl(RASP_FIELD).GetDataField()->EnableItemHelp(true);
+  FillRaspFieldControl();
+  UpdateOverlayControls();
 }
 
 void
 PageLayoutEditWidget::SetValue(const PageLayout &_value)
 {
   value = _value;
+  value.Normalise();
 
   LoadValueEnum(MAIN, value.main);
   LoadValueEnum(BOTTOM, value.bottom);
+  LoadValueEnum(OVERLAY, value.overlay);
 
   unsigned ib = IBP_NONE;
   if (value.infobox_config.enabled) {
@@ -246,6 +321,9 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
   }
 
   LoadValueEnum(INFO_BOX_PANEL, ib);
+
+  FillRaspFieldControl();
+  UpdateOverlayControls();
 }
 
 void
@@ -254,6 +332,8 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   if (&df == &GetDataField(MAIN)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.main = (PageLayout::Main)dfe.GetValue();
+    if (!value.IsMapMain())
+      value.overlay = PageLayout::Overlay::NONE;
   } else if (&df == &GetDataField(INFO_BOX_PANEL)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     const unsigned ibp = dfe.GetValue();
@@ -271,10 +351,22 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   } else if (&df == &GetDataField(BOTTOM)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.bottom = (PageLayout::Bottom)dfe.GetValue();
+  } else if (&df == &GetDataField(OVERLAY)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.overlay = (PageLayout::Overlay)dfe.GetValue();
+    if (value.overlay == PageLayout::Overlay::RASP)
+      FillRaspFieldControl();
+  } else if (&df == &GetDataField(RASP_FIELD)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.rasp_field = dfe.GetValue();
   } else {
     gcc_unreachable();
   }
 
+  value.Normalise();
+  LoadValueEnum(BOTTOM, value.bottom);
+  GetControl(BOTTOM).RefreshDisplay();
+  UpdateOverlayControls();
   listener.OnModified(value);
 }
 
@@ -312,6 +404,9 @@ PageListWidget::Save(bool &_changed) noexcept
             settings.pages.end(),
             PageLayout::Undefined());
 
+  for (unsigned i = 0; i < settings.n_pages; ++i)
+    settings.pages[i].Normalise();
+
   PageSettings &_settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; ++i) {
     PageLayout &dest = _settings.pages[i];
@@ -342,57 +437,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const auto &value = settings.pages[idx];
 
   StaticString<64> buffer;
-
-  switch (value.main) {
-  case PageLayout::Main::MAP:
-    buffer = _("Map");
-    break;
-
-  case PageLayout::Main::MAP_NORTH_UP:
-    buffer = _("Map (north-up)");
-    break;
-
-  case PageLayout::Main::FLARM_RADAR:
-    buffer = _("FLARM radar");
-    break;
-
-  case PageLayout::Main::THERMAL_ASSISTANT:
-    buffer = _("Thermal assistant");
-    break;
-
-  case PageLayout::Main::HORIZON:
-    buffer = _("Horizon");
-    break;
-
-  case PageLayout::Main::MAX:
-    gcc_unreachable();
-  }
-
-  if (value.infobox_config.enabled) {
-    buffer.AppendFormat(", %s", _("InfoBoxes"));
-
-    if (!value.infobox_config.auto_switch &&
-        value.infobox_config.panel < InfoBoxSettings::MAX_PANELS)
-      buffer.AppendFormat(" (%s)",
-                          gettext(info_box_settings.panels[value.infobox_config.panel].name));
-    else
-      buffer.AppendFormat(" (%s)", _("Auto"));
-  }
-
-  switch (value.bottom) {
-  case PageLayout::Bottom::NOTHING:
-  case PageLayout::Bottom::CUSTOM:
-    break;
-
-  case PageLayout::Bottom::CROSS_SECTION:
-    buffer.AppendFormat(", %s", _("Cross section"));
-    break;
-
-  case PageLayout::Bottom::MAX:
-    gcc_unreachable();
-  }
-
-  row_renderer.DrawTextRow(canvas, rc, buffer);
+  row_renderer.DrawTextRow(canvas, rc,
+                           value.MakeTitle(info_box_settings,
+                                           std::span{buffer.data(), buffer.capacity()},
+                                           DataGlobals::GetRasp().get()));
 }
 
 void
