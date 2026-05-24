@@ -132,6 +132,9 @@ RaspStore::WeatherFilename(char *filename, Path name,
 std::unique_ptr<ZipArchive>
 RaspStore::OpenArchive() const
 {
+  if (path == nullptr || path.empty())
+    return nullptr;
+
   return std::make_unique<ZipArchive>(path);
 }
 
