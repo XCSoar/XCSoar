@@ -1,4 +1,9 @@
 Version 7.45 - not yet released
+* map
+  - FLARM traffic targets use aircraft-type icons (glider, helicopter, etc.)
+    instead of triangles when type is known; body colour still reflects
+    relative altitude and alarms, with a contrasting outline on the map and
+    in the traffic radar #921
 * android
   - BLE serial ports now support Nordic UART Service (NUS) for e.g. Naviter
     dongles, in addition to HM-10; the protocol is auto-detected at connection
