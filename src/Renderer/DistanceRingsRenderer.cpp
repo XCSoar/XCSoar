@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "DistanceRingsRenderer.hpp"
+#include "TextInBox.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Look/MapLook.hpp"
@@ -11,27 +12,6 @@
 
 #include <span>
 #include <cmath>
-
-static void
-DrawRingLabel(Canvas &canvas, const char *text, PixelPoint p) noexcept
-{
-  canvas.SetBackgroundTransparent();
-
-  // 8-direction white halo to visually cut the ring line behind the text
-  canvas.SetTextColor(COLOR_WHITE);
-  static constexpr int HALO_OFFSET = 2;
-  canvas.DrawText({p.x - HALO_OFFSET, p.y - HALO_OFFSET}, text);
-  canvas.DrawText({p.x,               p.y - HALO_OFFSET}, text);
-  canvas.DrawText({p.x + HALO_OFFSET, p.y - HALO_OFFSET}, text);
-  canvas.DrawText({p.x - HALO_OFFSET, p.y              }, text);
-  canvas.DrawText({p.x + HALO_OFFSET, p.y              }, text);
-  canvas.DrawText({p.x - HALO_OFFSET, p.y + HALO_OFFSET}, text);
-  canvas.DrawText({p.x,               p.y + HALO_OFFSET}, text);
-  canvas.DrawText({p.x + HALO_OFFSET, p.y + HALO_OFFSET}, text);
-
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.DrawText(p, text);
-}
 
 static void
 FormatRingDistance(char *buf, size_t buf_size, double distance_m) noexcept
@@ -188,7 +168,7 @@ DrawDistanceRings(Canvas &canvas,
         label_pos.x + (int)text_size.width <= screen_rect.right &&
         label_pos.y >= screen_rect.top &&
         label_pos.y + (int)text_size.height <= screen_rect.bottom) {
-      DrawRingLabel(canvas, buf, label_pos);
+      RenderShadowedText(canvas, buf, label_pos, false);
     }
   }
 }
