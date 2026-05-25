@@ -351,7 +351,6 @@ static void
 LoadInfoBoxes(const PageLayout::InfoBoxConfig &config)
 {
   UIState &ui_state = CommonInterface::SetUIState();
-
   if (!config.enabled) {
     CommonInterface::main_window->SetFullScreen(true);
     ui_state.auxiliary_enabled = false;
@@ -385,6 +384,7 @@ PageActions::LoadLayout(const PageLayout &layout)
   LoadBottom(active);
 
   ActionInterface::UpdateDisplayMode();
+  CommonInterface::main_window->ReinitialiseLayout();
   ActionInterface::SendUIState();
 }
 
