@@ -7,10 +7,13 @@
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Icon.hpp"
+#include "FLARM/Traffic.hpp"
 
 class Font;
 
 struct TrafficLook {
+  static constexpr bool aircraft_type_icons = true;
+
   static constexpr Color safe_above_color{0x1d,0x9b,0xc5};
   static constexpr Color safe_below_color{0x1d,0xc5,0x10};
   static constexpr Color warning_color{0xfe,0x84,0x38};
@@ -42,8 +45,16 @@ struct TrafficLook {
   Pen team_pen_magenta;
 
   MaskedIcon teammate_icon;
+  MaskedIcon aircraft_type_icon[16];
 
   const Font *font;
 
   void Initialise(const Font &font);
+
+  [[gnu::pure]]
+  const MaskedIcon &
+  GetAircraftTypeIcon(FlarmTraffic::AircraftType type) const noexcept;
+
+  [[gnu::pure]]
+  Color GetTrafficDisplayColor(const FlarmTraffic &traffic) const noexcept;
 };

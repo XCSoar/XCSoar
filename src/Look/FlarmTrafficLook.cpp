@@ -9,6 +9,7 @@
 void
 FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
 {
+  traffic_look = &other;
   passive_color = Color(0x99, 0x99, 0x99);
   warning_color = other.warning_color;
   alarm_color = other.alarm_color;
