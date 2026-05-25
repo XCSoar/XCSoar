@@ -7,25 +7,10 @@
 #include "Projection/WindowProjection.hpp"
 #include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
-#include "util/StringFormat.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
 
 #include <span>
-#include <cmath>
-
-static void
-FormatRingDistance(char *buf, size_t buf_size, double distance_m) noexcept
-{
-  const Unit unit = Units::GetUserDistanceUnit();
-  const double value = Units::ToUserUnit(distance_m, unit);
-  const char *unit_name = Units::GetDistanceName();
-
-  const int int_val = (int)(value + 0.5);
-  if (std::abs(value - int_val) < 0.01)
-    StringFormat(buf, buf_size, "%d %s", int_val, unit_name);
-  else
-    StringFormat(buf, buf_size, "%.1f %s", value, unit_name);
-}
 
 // Ring radius presets in meters
 
@@ -154,8 +139,9 @@ DrawDistanceRings(Canvas &canvas,
     const int label_center_x = aircraft_px.x;
     const int label_center_y = aircraft_px.y - (int)radius_px;
 
-    char buf[16];
-    FormatRingDistance(buf, sizeof(buf), radius_m);
+    const double user_val = Units::ToUserUnit(radius_m, Units::GetUserDistanceUnit());
+    char buf[32];
+    FormatUserDistance(radius_m, buf, true, (user_val - (int)user_val) < 0.01 ? 0 : 1);
     const PixelSize text_size = canvas.CalcTextSize(buf);
 
     const PixelPoint label_pos{
