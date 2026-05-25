@@ -93,15 +93,16 @@ public:
   void ScanAll();
 
   bool IsTimeAvailable(unsigned item_index, unsigned time_index) const {
-    assert(item_index < maps.size());
-    assert(time_index < MAX_WEATHER_TIMES);
+    if (item_index >= maps.size() || time_index >= MAX_WEATHER_TIMES)
+      return false;
 
     return maps[item_index].times[time_index];
   }
 
   template<typename C>
   void ForEachTime(unsigned item_index, C &&c) {
-    assert(item_index < maps.size());
+    if (item_index >= maps.size())
+      return;
 
     const auto &mi = maps[item_index];
 
