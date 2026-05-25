@@ -82,6 +82,10 @@ public:
      usage(_usage),
      overlay(_overlay) {}
 
+  ~MapOverlayControlsWidget() noexcept override {
+    UnregisterBlackboardListener();
+  }
+
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;

@@ -23,7 +23,8 @@ LiveBlackboard::RemoveListener(BlackboardListener &listener) noexcept
   assert(!calling_listeners);
 
   auto i = std::find(listeners.begin(), listeners.end(), &listener);
-  assert(i != listeners.end());
+  if (i == listeners.end())
+    return;
 
   listeners.erase(i);
 }
