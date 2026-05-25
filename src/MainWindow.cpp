@@ -1006,6 +1006,15 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
   if (widget != nullptr)
     widget->Move(GetMainRect());
 
+  /* Overlapped gauges (FLARM, thermal assistant) use GetMainRect() for
+     "avoid InfoBoxes" corners; re-layout when fullscreen changes. */
+  const PixelRect rc = GetClientRect();
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(rc,
+                             CommonInterface::GetUISettings().info_boxes.geometry);
+  ReinitialiseLayout_flarm(rc, ib_layout);
+  ReinitialiseLayoutTA(rc, ib_layout);
+
   if (map != nullptr)
     map->FastMove(GetMainRect());
 
