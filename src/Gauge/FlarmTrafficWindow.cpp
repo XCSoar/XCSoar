@@ -422,64 +422,78 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                      Layout::Scale(100u));
 
   // Select pen and brush
+  if (target_brush == nullptr) {
+    target_brush = &look.passive_brush;
+    target_pen = &look.passive_pen;
+    text_color = &look.passive_color;
+  }
   canvas.Select(*target_pen);
-  if (target_brush == nullptr)
-    canvas.SelectHollowBrush();
-  else
-    canvas.Select(*target_brush);
+  canvas.Select(*target_brush);
+  canvas.SetTextColor(*text_color);
 
+  // Select font; prepare object sizes and distances by text height as reference
+  canvas.Select(look.label_font);
+  const PixelSize sx = canvas.CalcTextSize("X");
+
+  canvas.SetBackgroundTransparent();
   if (!traffic.relative_east) {
-    // Select font; prepare object sizes and distances by text height as reference
-    canvas.SetBackgroundTransparent();
-    canvas.Select(look.label_font);
-    const PixelSize sx = canvas.CalcTextSize("X");
-     // No position targets - Paint the dot
+    // No position targets - Paint the dot
     PaintNoPositionTarget(canvas, sc[i], radar_mid, scale, small, sx, target_pen, text_color);
-   } else
-     // All other targets - Draw the polygon
-     canvas.DrawPolygon(Arrow, 4);
+  } else
+    // All other targets - Draw the polygon
+    canvas.DrawPolygon(Arrow, 4);
 
   if (small) {
     if (!WarningMode() || traffic.HasAlarm())
       PaintTargetInfoSmall(canvas, traffic, i, *text_color, *arrow_brush);
-
     return;
   }
 
-  // if warning exists -> don't draw vertical speeds
+  // if warning exists -> don't draw side labels on other targets
   if (WarningMode())
     return;
 
-  // if vertical speed to small or negative -> skip this one
-  if (side_display_type == SideInfoType::VARIO &&
-      (!traffic.climb_rate_avg30s_available ||
-       traffic.climb_rate_avg30s < 0.5 ||
-       traffic.IsPowered()))
-      return;
-
-  // Select font
-  canvas.SetBackgroundTransparent();
   canvas.Select(look.side_info_font);
-
-  // Format string
-  char tmp[10];
-
-  if (side_display_type == SideInfoType::VARIO)
-    FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, false);
-  else
-    FormatRelativeUserAltitude(traffic.relative_altitude, tmp, true);
-
-  PixelSize sz = canvas.CalcTextSize(tmp);
-  const PixelPoint tp{
-    sc[i].x + int(Layout::FastScale(11u)),
-    sc[i].y - int(sz.height / 2),
-  };
-
-  // Select color
   canvas.SetTextColor(*text_color);
 
-  // Draw vertical speed
-  canvas.DrawText(tp, tmp);
+  // Draw callsign only in combination with relative altitude
+  if (traffic.HasName() &&
+      side_display_type == SideInfoType::RELATIVE_ALTITUDE) {
+    const PixelPoint ts{
+      sc[i].x + int(sx.height),
+      sc[i].y - int(sx.height * 3 / 2),
+    };
+
+    const size_t len = traffic.name.length();
+    const std::string_view text = (len > 2)
+      ? std::string_view(traffic.name.c_str() + (len - 2), 2)
+      : std::string_view(traffic.name);
+
+    canvas.DrawText(ts, text);
+  }
+
+  StaticString<10> side_text;
+
+  if (side_display_type == SideInfoType::VARIO) {
+    if (traffic.climb_rate_avg30s_available &&
+        traffic.climb_rate_avg30s > 0.5 &&
+        !traffic.IsPowered())
+      FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
+                              side_text.data(), false);
+  } else {
+    const int relalt =
+      iround(Units::ToUserAltitude(traffic.relative_altitude) / 100);
+    if (relalt != 0)
+      side_text.Format("%+d", relalt);
+  }
+
+  const PixelPoint tp{
+    sc[i].x + int(sx.height),
+    sc[i].y - int(sx.height / 2),
+  };
+
+  if (!side_text.empty())
+    canvas.DrawText(tp, side_text);
 }
 
 void
