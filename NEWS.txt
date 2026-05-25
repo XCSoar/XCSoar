@@ -42,6 +42,9 @@ Version 7.45 - not yet released
     recently-visited waypoints again; it had been silently aliased to the
     unrelated "Map file" filter since the multi-file rework (#1994) due to
     a positional dropdown/enum mismatch
+  - large FLARM radar: optional callsign and relative altitude (in hundreds,
+    as on the small gauge) beside targets when side data is in altitude mode;
+    passive targets use default colours when no altitude brush is set
   - waypoint search: Type filter now lists every CUP waypoint type
     (Mountain Top/Pass, Bridge, Tunnel, Tower, Power Plant, Obstacle,
     Thermal Hotspot, Marker, VOR, NDB, Dam, Castle, Intersection,
