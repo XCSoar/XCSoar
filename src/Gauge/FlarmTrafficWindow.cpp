@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "FlarmTrafficWindow.hpp"
+#include "Renderer/TrafficRenderer.hpp"
+#include "Look/TrafficLook.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/Friends.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -437,10 +439,23 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   canvas.SetBackgroundTransparent();
   if (!traffic.relative_east) {
-    // No position targets - Paint the dot
     PaintNoPositionTarget(canvas, sc[i], radar_mid, scale, small, sx, target_pen, text_color);
+  } else if (look.traffic_look != nullptr &&
+             TrafficLook::aircraft_type_icons) {
+    Color icon_color =
+      look.traffic_look->GetTrafficDisplayColor(traffic);
+    if (WarningMode() && !traffic.HasAlarm())
+      icon_color = look.passive_color;
+
+    const Angle icon_angle =
+      traffic.track - (enable_north_up ? Angle::Zero() : heading);
+    const unsigned icon_height =
+      small ? Layout::FastScale(32u) : Layout::FastScale(52u);
+
+    TrafficRenderer::DrawAircraftTypeIcon(canvas, *look.traffic_look,
+                                          traffic, icon_angle, sc[i],
+                                          icon_height, icon_color);
   } else
-    // All other targets - Draw the polygon
     canvas.DrawPolygon(Arrow, 4);
 
   if (small) {
