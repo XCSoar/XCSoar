@@ -4,6 +4,7 @@
 #include "RaspControlsModel.hpp"
 
 #include "ActionInterface.hpp"
+#include "DataGlobals.hpp"
 #include "Interface.hpp"
 #include "PageActions.hpp"
 #include "UIState.hpp"
@@ -20,7 +21,12 @@ RaspControlsModel::SyncFromPageLayout() noexcept
   if (layout.overlay != PageLayout::Overlay::RASP)
     return;
 
-  CommonInterface::SetUIState().weather.map = GetFieldIndex();
+  auto &weather = CommonInterface::SetUIState().weather;
+  weather.map = -1;
+
+  const int field_index = GetFieldIndex();
+  if (field_index >= 0)
+    weather.map = field_index;
 }
 
 int
@@ -30,10 +36,15 @@ RaspControlsModel::GetFieldIndex() const noexcept
   if (layout.overlay != PageLayout::Overlay::RASP)
     return -1;
 
-  if (layout.rasp_field >= 0)
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0)
+    return -1;
+
+  if (layout.rasp_field >= 0 &&
+      unsigned(layout.rasp_field) < rasp->GetItemCount())
     return layout.rasp_field;
 
-  return 0;
+  return rasp->GetItemCount() > 0 ? 0 : -1;
 }
 
 void

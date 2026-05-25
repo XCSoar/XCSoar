@@ -15,6 +15,7 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "DataGlobals.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "ActionInterface.hpp"
 #ifdef HAVE_EDL
 #include "Dialogs/Weather/MapOverlayControlsWidget.hpp"
@@ -86,7 +87,10 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::RASP: {
     WeatherUIState &weather = CommonInterface::SetUIState().weather;
-    if (layout.rasp_field >= 0)
+    weather.map = -1;
+    const auto rasp = DataGlobals::GetRasp();
+    if (rasp != nullptr && layout.rasp_field >= 0 &&
+        unsigned(layout.rasp_field) < rasp->GetItemCount())
       weather.map = layout.rasp_field;
 
     if (weather.EnterRaspDedicatedPage())
