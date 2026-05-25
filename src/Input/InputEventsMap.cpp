@@ -214,6 +214,29 @@ InputEvents::sub_SetZoom(double value)
 }
 
 void
+InputEvents::eventDistanceRings(const char *misc)
+{
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
+
+  if (StringIsEqual(misc, "toggle"))
+    settings_map.distance_rings_enabled = !settings_map.distance_rings_enabled;
+  else if (StringIsEqual(misc, "on"))
+    settings_map.distance_rings_enabled = true;
+  else if (StringIsEqual(misc, "off"))
+    settings_map.distance_rings_enabled = false;
+  else if (StringIsEqual(misc, "show")) {
+    Message::AddMessage(settings_map.distance_rings_enabled
+                        ? _("Distance rings on")
+                        : _("Distance rings off"));
+    return;
+  }
+
+  Profile::Set(ProfileKeys::DistanceRingsEnabled,
+               settings_map.distance_rings_enabled);
+  ActionInterface::SendMapSettings(true);
+}
+
+void
 InputEvents::sub_ScaleZoom(int vswitch)
 {
   const GlueMapWindow *map_window = PageActions::ShowMap();

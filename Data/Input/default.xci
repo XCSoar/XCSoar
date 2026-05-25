@@ -1507,6 +1507,14 @@ location=38
 mode=RemoteStick
 type=key
 data=0
+event=DistanceRings show
+event=DistanceRings toggle
+label=Dist. Rings\n$(DistanceRingsToggleActionName)
+location=39
+
+mode=RemoteStick
+type=key
+data=0
 event=UploadIGCFile
 event=Mode default
 label=WeGlide Upload$(CheckWeGlide)
