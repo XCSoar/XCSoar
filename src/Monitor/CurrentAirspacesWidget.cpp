@@ -68,8 +68,8 @@ public:
        monitor (which uses GetMinimumControlHeight). */
     row_height = font.GetHeight() + Layout::GetTextPadding();
 
-    status_column_width = std::max(font.TextSize("(inside)").width,
-                                   font.TextSize("cleared").width)
+    status_column_width = std::max(font.TextSize(_("(inside)")).width,
+                                   font.TextSize(_("cleared")).width)
       + 2 * Layout::GetTextPadding();
 
     WindowStyle style;
@@ -227,7 +227,7 @@ private:
     status_rc.left = status_rc.right - int(status_column_width);
     const char *state_text =
       entry.role == CurrentAirspacesWidget::Role::Suppressed
-      ? "(inside)" : "cleared";
+      ? _("(inside)") : _("cleared");
 
     // Reserve space on the right for the revoke button + status.
     layout_rc.right = status_rc.left - int(padding);

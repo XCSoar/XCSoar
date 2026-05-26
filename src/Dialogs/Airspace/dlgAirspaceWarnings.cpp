@@ -369,7 +369,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     layout_rc.left += line_height + padding;
   }
   
-  const int status_width = canvas.CalcTextWidth("(inside)");
+  const int status_width = canvas.CalcTextWidth(_("(inside)"));
   // "1888" is used in order to have enough space for 4-digit heights with "AGL"
   const int altitude_width = canvas.CalcTextWidth("1888 m AGL");
 
@@ -436,21 +436,21 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   if ((warning.IsCleared() || warning.IsCoveredByClearance()) &&
       warning.IsInside()) {
     state_color = cleared_color;
-    state_text = "(inside)";
+    state_text = _("(inside)");
   } else if (warning.IsInside()) {
     state_color = warning.IsActive()
       ? inside_color : inside_ack_color;
-    state_text = "inside";
+    state_text = _("inside");
   } else if (warning.IsCoveredByClearance() && warning.IsWarning()) {
     state_color = cleared_color;
-    state_text = "(near)";
+    state_text = _("(near)");
   } else if (warning.IsWarning()) {
     state_color = warning.IsActive()
       ? near_color : near_ack_color;
-    state_text = "near";
+    state_text = _("near");
   } else if (warning.IsCleared()) {
     state_color = cleared_color;
-    state_text = "cleared";
+    state_text = _("cleared");
   } else {
     state_color = COLOR_WHITE;
     state_text = NULL;
