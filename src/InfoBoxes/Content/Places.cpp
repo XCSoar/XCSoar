@@ -174,6 +174,22 @@ ComputeActiveWaypointGlide(const MoreData &basic,
                           glide_state);
 }
 
+/* Shared by the Active and Previous Waypoint InfoBoxes so the "place"
+   InfoBoxes display name / arrival height / distance consistently. */
+static void
+SetInfoBoxWaypointGlideData(InfoBoxData &data, const MoreData &basic,
+                            const ComputerSettings &settings,
+                            const DerivedInfo &calculated,
+                            const Waypoint &waypoint) noexcept
+{
+  data.SetTitle(waypoint.name.c_str());
+
+  const GlideResult result =
+    ComputeActiveWaypointGlide(basic, settings, calculated, waypoint);
+  data.SetValueFromArrival(result.SelectAltitudeDifference(settings.task.glide));
+  data.SetCommentFromDistance(basic.location.DistanceS(waypoint.location));
+}
+
 void
 InfoBoxContentActiveWaypoint::Update(InfoBoxData &data) noexcept
 {
@@ -197,12 +213,7 @@ InfoBoxContentActiveWaypoint::Update(InfoBoxData &data) noexcept
     return;
   }
 
-  data.SetTitle(waypoint->name.c_str());
-
-  const GlideResult result =
-    ComputeActiveWaypointGlide(basic, settings, calculated, *waypoint);
-  data.SetValueFromArrival(result.SelectAltitudeDifference(settings.task.glide));
-  data.SetCommentFromDistance(basic.location.DistanceS(waypoint->location));
+  SetInfoBoxWaypointGlideData(data, basic, settings, calculated, *waypoint);
 }
 
 bool
@@ -270,6 +281,99 @@ InfoBoxContentActiveWaypoint::HandleClick() noexcept
     }
     ptm.DoGoto(std::move(selected));
   }
+
+  return true;
+}
+
+void
+InfoBoxContentPreviousWaypoint::Update(InfoBoxData &data) noexcept
+{
+  const MoreData &basic = CommonInterface::Basic();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+
+  data.SetTitle(_("Prev WP"));
+
+  WaypointPtr waypoint = override_waypoint;
+  if (waypoint == nullptr && backend_components &&
+      backend_components->protected_task_manager) {
+    /* Read the active task point under a lease instead of cloning the
+       whole task on every tick: we only need a single waypoint pointer. */
+    ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
+    if (lease->GetMode() == TaskType::ORDERED) {
+      const OrderedTask &task = lease->GetOrderedTask();
+      if (task.TaskSize() > 0) {
+        const unsigned active_index = task.GetActiveIndex();
+        const unsigned target_index = active_index > 0 ? active_index - 1 : 0;
+        waypoint = task.GetPoint(target_index).GetWaypointPtr();
+      }
+    }
+  }
+
+  if (!waypoint ||
+      !basic.location_available ||
+      !basic.NavAltitudeAvailable() ||
+      !settings.polar.glide_polar_task.IsValid()) {
+    data.SetInvalid();
+    data.SetCommentInvalid();
+    return;
+  }
+
+  SetInfoBoxWaypointGlideData(data, basic, settings, calculated, *waypoint);
+}
+
+bool
+InfoBoxContentPreviousWaypoint::HandleClick() noexcept
+{
+  if (!data_components || !data_components->waypoints)
+    return false;
+  if (!backend_components || !backend_components->protected_task_manager)
+    return false;
+
+  auto &waypoints = *data_components->waypoints;
+  auto &ptm = *backend_components->protected_task_manager;
+  const GeoPoint location = CommonInterface::Basic().location;
+
+  std::unique_ptr<OrderedTask> task_clone = ptm.TaskClone();
+
+  bool task_mode_ordered = false;
+  {
+    ProtectedTaskManager::Lease lease(ptm);
+    task_mode_ordered = lease->GetMode() == TaskType::ORDERED;
+  }
+
+  const bool has_ordered_task = task_mode_ordered && task_clone &&
+                                task_clone->TaskSize() > 0;
+  const unsigned ordered_task_index =
+    has_ordered_task ? task_clone->GetActiveIndex() : 0;
+
+  /* "Resume auto tracking" only makes sense when a task is loaded *and*
+     we currently have a manual override to clear. */
+  const char *const action_label =
+    (has_ordered_task && override_waypoint != nullptr)
+      ? _("Resume auto tracking")
+      : nullptr;
+  bool action_selected = false;
+
+  WaypointPtr selected;
+  try {
+    selected = ShowWaypointListDialog(waypoints, location,
+                                      has_ordered_task ? task_clone.get()
+                                                       : nullptr,
+                                      ordered_task_index,
+                                      std::nullopt,
+                                      has_ordered_task,
+                                      action_label,
+                                      &action_selected);
+  } catch (...) {
+    return false;
+  }
+
+  if (action_selected)
+    override_waypoint.reset();
+  else if (selected)
+    override_waypoint = std::move(selected);
+  /* else: cancelled - leave override_waypoint unchanged. */
 
   return true;
 }

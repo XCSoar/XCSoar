@@ -54,6 +54,11 @@ Version 7.45 - not yet released
   - infoboxen: new "Active Waypoint" InfoBox (next task waypoint, or Goto
     waypoint when no task is loaded; shows name, arrival height above safety,
     and distance; tap to pick a different task leg or set a new Goto)
+  - infoboxen: new "Previous Waypoint" InfoBox (task waypoint before the active
+    leg, or the start waypoint while on the first leg; shows name, arrival
+    height above safety, and distance; tap to display a different waypoint
+    without advancing the task or setting a Goto, or "Resume auto tracking" to
+    revert)
 * desktop
   - command-line: -h/--help and -version/--version print to stdout and exit;
     unknown options print a short usage line on stderr

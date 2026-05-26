@@ -4,6 +4,7 @@
 #pragma once
 
 #include "InfoBoxes/Content/Base.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
 struct InfoBoxData;
 
@@ -22,6 +23,17 @@ public:
 
 class InfoBoxContentActiveWaypoint : public InfoBoxContent
 {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
+class InfoBoxContentPreviousWaypoint : public InfoBoxContent
+{
+  /* User override. nullptr = "auto": track the task waypoint before
+     the active leg (or task[0] when on the first leg). */
+  WaypointPtr override_waypoint;
+
 public:
   void Update(InfoBoxData &data) noexcept override;
   bool HandleClick() noexcept override;
