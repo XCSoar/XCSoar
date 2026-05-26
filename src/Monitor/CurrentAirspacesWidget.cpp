@@ -21,8 +21,7 @@
 #include "UIGlobals.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/window/ContainerWindow.hpp"
-#include "util/Macros.hpp"
-#include "util/StringFormat.hpp"
+#include <fmt/format.h>
 
 #include <cassert>
 #include <memory>
@@ -237,14 +236,13 @@ private:
 
     // Name + class/type (left), vertically centred.
     canvas.SetTextColor(COLOR_CLEARANCE);
-    char buffer[128];
-    StringFormat(buffer, ARRAY_SIZE(buffer), "%s %s", airspace.GetName(),
-                 AirspaceFormatter::GetClassOrType(airspace));
-    const PixelSize text_size = canvas.CalcTextSize(buffer);
+    const auto text = fmt::format("{} {}", airspace.GetName(),
+                                  AirspaceFormatter::GetClassOrType(airspace));
+    const PixelSize text_size = canvas.CalcTextSize(text.c_str());
     const int text_y = layout_rc.top
       + (int(line_height) - int(text_size.height)) / 2;
     canvas.DrawClippedText({layout_rc.left, text_y},
-                           layout_rc.GetWidth(), buffer);
+                           layout_rc.GetWidth(), text.c_str());
 
     // Status badge: filled rectangle with centred text
     PixelRect badge_rc = status_rc;
