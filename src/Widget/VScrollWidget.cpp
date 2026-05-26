@@ -154,7 +154,12 @@ VScrollWidget::Hide() noexcept
 void
 VScrollWidget::Move(const PixelRect &rc) noexcept
 {
-  WindowWidget::Move(rc);
+  /* Match Prepare(): the scroll panel may exist but not be shown yet
+     (PagerWidget::Move during layout before Show, or after Hide). */
+  if (visible)
+    WindowWidget::Move(rc);
+  else if (IsDefined())
+    GetWindow().Move(rc);
 
   /* Update virtual height when moved (e.g., when expert mode toggles
      and child widget changes size) */
