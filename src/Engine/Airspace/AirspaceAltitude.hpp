@@ -4,6 +4,12 @@
 #pragma once
 
 #include "Geo/AltitudeReference.hpp"
+#include "util/StringAPI.hxx"
+#include "util/StringParser.hxx"
+
+#include <optional>
+#include <string>
+#include <string_view>
 
 class AtmosphericPressure;
 struct AltitudeState;
@@ -95,3 +101,41 @@ struct AirspaceAltitude
     return a.altitude > b.altitude;
   }
 };
+
+struct ParseAirspaceAltitudeOptions {
+  /** If true, unknown tokens make parsing fail instead of being skipped. */
+  bool strict_unknown_tokens = false;
+
+  /** If true, treat AMSL like MSL (used by NOTAM API strings). */
+  bool accept_amsl = false;
+
+  /**
+   * Ceiling altitude [m] used for UNL / UNLIMITED.
+   * OpenAir parsing historically uses 50000; NOTAM uses feet-converted value.
+   */
+  double unlimited_ceiling_m = 50000;
+};
+
+/**
+ * Parse an altitude limit string into #AirspaceAltitude.
+ *
+ * OpenAir and NOTAM altitude tokens (FL, GND, SFC, MSL, AGL, FT, M, STD, UNL).
+ *
+ * @return Parsed altitude, or std::nullopt when @p options.strict_unknown_tokens
+ * is true and an unknown token is encountered.
+ */
+[[nodiscard]] std::optional<AirspaceAltitude>
+ParseAirspaceAltitude(StringParser<> &input,
+                      const ParseAirspaceAltitudeOptions &options = {});
+
+[[nodiscard]] inline std::optional<AirspaceAltitude>
+ParseAirspaceAltitude(const std::string_view text,
+                      const ParseAirspaceAltitudeOptions &options = {})
+{
+  if (text.empty())
+    return std::nullopt;
+
+  const std::string owned{text};
+  StringParser<> input{owned.c_str()};
+  return ParseAirspaceAltitude(input, options);
+}

@@ -16,6 +16,7 @@
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "io/BufferedReader.hxx"
@@ -24,6 +25,7 @@
 #include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"
 
+#include <cassert>
 #include <stdexcept>
 
 using std::string_view_literals::operator""sv;
@@ -386,97 +388,14 @@ struct TempAirspace
 static AirspaceAltitude
 ReadAltitude(StringParser<> &input)
 {
-  auto unit = Unit::FEET;
-  enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
-  double value = 0;
+  ParseAirspaceAltitudeOptions options;
+  options.strict_unknown_tokens = false;
+  options.accept_amsl = false;
+  options.unlimited_ceiling_m = 50000;
 
-  while (true) {
-    input.Strip();
-
-    if (IsDigitASCII(input.front())) {
-      if (auto x = input.ReadDouble())
-        value = *x;
-    } else if (input.SkipMatchIgnoreCase("GND"sv) ||
-               input.SkipMatchIgnoreCase("AGL"sv)) {
-      type = AGL;
-    } else if (input.SkipMatchIgnoreCase("SFC"sv)) {
-      type = SFC;
-    } else if (input.SkipMatchIgnoreCase("FL"sv)) {
-      type = FL;
-    } else if (input.SkipMatchIgnoreCase("FT"sv)) {
-      unit = Unit::FEET;
-    } else if (input.SkipMatchIgnoreCase("MSL"sv)) {
-      type = MSL;
-    } else if (input.front() == 'M' || input.front() == 'm') {
-      unit = Unit::METER;
-      input.Skip();
-    } else if (input.SkipMatchIgnoreCase("STD"sv)) {
-      type = STD;
-    } else if (input.SkipMatchIgnoreCase("UNL"sv)) {
-      type = UNLIMITED;
-    } else if (input.IsEmpty())
-      break;
-    else
-      input.Skip();
-  }
-
-  AirspaceAltitude altitude;
-
-  switch (type) {
-  case FL:
-    altitude.reference = AltitudeReference::STD;
-    altitude.flight_level = value;
-
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = Units::ToSysUnit(value, Unit::FLIGHT_LEVEL);
-    return altitude;
-
-  case UNLIMITED:
-    altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = 50000;
-    return altitude;
-
-  case SFC:
-    altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = -1;
-
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = 0;
-    return altitude;
-
-  default:
-    break;
-  }
-
-  // For MSL, AGL and STD we convert the altitude to meters
-  value = Units::ToSysUnit(value, unit);
-  switch (type) {
-  case MSL:
-    altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = value;
-    return altitude;
-
-  case AGL:
-    altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = value;
-
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = value;
-    return altitude;
-
-  case STD:
-    altitude.reference = AltitudeReference::STD;
-    altitude.flight_level = Units::ToUserUnit(value, Unit::FLIGHT_LEVEL);
-
-    /* prepare fallback, just in case we have no QNH */
-    altitude.altitude = value;
-    return altitude;
-
-  default:
-    break;
-  }
-
-  return altitude;
+  const auto altitude = ParseAirspaceAltitude(input, options);
+  assert(altitude.has_value());
+  return *altitude;
 }
 
 /**
