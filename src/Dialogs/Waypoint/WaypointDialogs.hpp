@@ -29,13 +29,23 @@ class OrderedTask;
  * (with a leading "Choose a filter" prompt row), instead of the
  * filter-driven full database.  Used by the Active Waypoint InfoBox
  * tap action.
+ *
+ * @param action_row_label Optional non-waypoint row rendered at the top of
+ * the list (using the same style as the filter prompt). When set, it
+ * replaces the "Choose a filter or click here" prompt.
+ * @param action_selected Optional out-param. When non-null and the user
+ * activated the action row, set to true; on return, @p action_selected
+ * lets the caller distinguish "user picked the action row" from
+ * "user picked a waypoint" / "cancelled".
  */
 WaypointPtr
 ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0,
                        std::optional<TypeFilter> initial_type = std::nullopt,
-                       bool prepopulate_with_task = false);
+                       bool prepopulate_with_task = false,
+                       const char *action_row_label = nullptr,
+                       bool *action_selected = nullptr);
 void
 ShowWaypointListPersistentDialog(
   const GeoPoint &location, bool allow_navigation = true,
