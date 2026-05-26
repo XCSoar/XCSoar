@@ -234,6 +234,23 @@ public:
   bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
   /**
+   * Set or revoke clearance for an airspace for the whole day
+   *
+   * @param airspace The airspace subject
+   * @param set Whether to set or revoke clearance
+   */
+  void SetCleared(ConstAirspacePtr airspace,
+                  bool set = true) noexcept;
+
+  /**
+   * Returns whether the given airspace has clearance for the day
+   *
+   * @param airspace The airspace subject
+   */
+  [[gnu::pure]]
+  bool GetCleared(const AbstractAirspace &airspace) const noexcept;
+
+  /**
    * Returns true if this airspace would be warned about,
    * i.e. trespassing it would not be possible.
    *
@@ -251,9 +268,32 @@ private:
   bool UpdateGlide(const AircraftState& state, const GlidePolar &glide_polar);
   bool UpdateInside(const AircraftState& state, const GlidePolar &glide_polar);
 
-  bool UpdatePredicted(const AircraftState& state, 
+  bool UpdatePredicted(const AircraftState& state,
                        const GeoPoint &location_predicted,
+                       double altitude_predicted,
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
                        FloatDuration max_time) noexcept;
+
+  /**
+   * Apply clearance suppression to the warning list.
+   *
+   * Two passes:
+   * 1. If the aircraft is physically inside any cleared
+   *    airspace, subtract the cleared
+   *    coverage along each warning interval.
+   *    Fully covered warnings keep WARNING_INSIDE state but
+   *    are marked SetCoveredByClearance(true). Partially 
+   *    covered warnings with (time-to-arrival <= warning_time)
+   *    become "near" warnings and set to the corresponding 
+   *    state
+   * 2. For non-INSIDE warnings, subtract cleared intervals
+   *    from approach intervals; suppress fully-covered
+   *    warnings.
+   */
+  void ProcessClearanceIntervals(
+      const AircraftState &state,
+      const GlidePolar &glide_polar,
+      bool circling,
+      const TaskStats &task_stats) noexcept;
 };

@@ -22,6 +22,7 @@
 #include "util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Look/Colors.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Sound.hpp"
@@ -49,6 +50,8 @@ class AirspaceWarningListWidget final
   Button *ack_button;
   Button *ack_day_button;
   Button *enable_button;
+  Button *clearance_button;
+  Button *revoke_clearance_button;
   Button *details_button;
 
   std::vector<AirspaceWarning> warning_list;
@@ -76,6 +79,10 @@ public:
     ack_button = dialog.AddButton(_("ACK"), [this](){ Ack(); });
     ack_day_button = dialog.AddButton(_("ACK Day"), [this](){ AckDay(); });
     enable_button = dialog.AddButton(_("Enable"), [this](){ Enable(); });
+    clearance_button = dialog.AddButton(_("Clearance"),
+                                         [this](){ SetClearance(); });
+    revoke_clearance_button = dialog.AddButton(_("Revoke Clearance"),
+                                         [this](){ RevokeClearance(); });
     details_button = dialog.AddButton(_("Details"), [this](){ Details(); });
   }
 
@@ -92,6 +99,8 @@ public:
   void Ack();
   void AckDay();
   void Enable();
+  void SetClearance();
+  void RevokeClearance();
   void Details() noexcept;
 
   /* virtual methods from Widget */
@@ -138,22 +147,27 @@ AirspaceWarningListWidget::UpdateButtons()
     ack_button->SetEnabled(false);
     ack_day_button->SetEnabled(false);
     enable_button->SetEnabled(false);
+    clearance_button->SetEnabled(false);
+    revoke_clearance_button->SetEnabled(false);
     details_button->SetEnabled(false);
     return;
   }
 
-  bool ack_expired, ack_day;
+  bool ack_expired, ack_day, cleared;
 
   {
     ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
     const AirspaceWarning &warning = lease->GetWarning(airspace);
     ack_expired = warning.IsAckExpired();
     ack_day = warning.GetAckDay();
+    cleared = warning.IsCleared();
   }
 
   ack_button->SetEnabled(ack_expired);
   ack_day_button->SetEnabled(!ack_day);
   enable_button->SetEnabled(!ack_expired);
+  clearance_button->SetEnabled(!cleared);
+  revoke_clearance_button->SetEnabled(cleared);
   details_button->SetEnabled(true);
 
   /* #EnableCursorSelection(0) may leave #selected_index on a disabled
@@ -269,6 +283,26 @@ AirspaceWarningListWidget::AckDay()
 }
 
 void
+AirspaceWarningListWidget::SetClearance()
+{
+  const auto &airspace = selected_airspace;
+  if (airspace != NULL) {
+    airspace_warnings.SetCleared(airspace, true);
+    UpdateList();
+  }
+}
+
+void
+AirspaceWarningListWidget::RevokeClearance()
+{
+  const auto &airspace = selected_airspace;
+  if (airspace != NULL) {
+    airspace_warnings.SetCleared(airspace, false);
+    UpdateList();
+  }
+}
+
+void
 AirspaceWarningListWidget::Enable()
 {
   const auto &airspace = selected_airspace;
@@ -334,10 +368,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
                                   airspace_renderer, airspace_look);
     layout_rc.left += line_height + padding;
   }
-
-  // word "inside" is used as the etalon, because it is longer than "near" and
-  // currently (9.4.2011) there is no other possibility for the status text.
-  const int status_width = canvas.CalcTextWidth("inside");
+  
+  const int status_width = canvas.CalcTextWidth("(inside)");
   // "1888" is used in order to have enough space for 4-digit heights with "AGL"
   const int altitude_width = canvas.CalcTextWidth("1888 m AGL");
 
@@ -349,7 +381,9 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
 
-  if (!warning.IsActive())
+  if (warning.IsCleared() || warning.IsCoveredByClearance())
+    canvas.SetTextColor(COLOR_CLEARANCE);
+  else if (!warning.IsActive())
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
@@ -394,15 +428,29 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   /* draw the warning state indicator */
 
+  static constexpr Color cleared_color = COLOR_AIRSPACE_CLEARED;
+
   Color state_color;
   const char *state_text;
 
-  if (warning.IsInside()) {
-    state_color = warning.IsActive() ? inside_color : inside_ack_color;
+  if ((warning.IsCleared() || warning.IsCoveredByClearance()) &&
+      warning.IsInside()) {
+    state_color = cleared_color;
+    state_text = "(inside)";
+  } else if (warning.IsInside()) {
+    state_color = warning.IsActive()
+      ? inside_color : inside_ack_color;
     state_text = "inside";
+  } else if (warning.IsCoveredByClearance() && warning.IsWarning()) {
+    state_color = cleared_color;
+    state_text = "(near)";
   } else if (warning.IsWarning()) {
-    state_color = warning.IsActive() ? near_color : near_ack_color;
+    state_color = warning.IsActive()
+      ? near_color : near_ack_color;
     state_text = "near";
+  } else if (warning.IsCleared()) {
+    state_color = cleared_color;
+    state_text = "cleared";
   } else {
     state_color = COLOR_WHITE;
     state_text = NULL;
@@ -472,6 +520,8 @@ AirspaceWarningListWidget::UpdateList()
         /* Find smallest time to nearest aispace (cannot always rely
            on fact that closest airspace should be in the beginning of
            the list) */
+        if (!i.IsActive())
+          continue;
         if (!i.IsInside())
           tt_closest_airspace = std::min(tt_closest_airspace,
                                          i.GetSolution().elapsed_time);

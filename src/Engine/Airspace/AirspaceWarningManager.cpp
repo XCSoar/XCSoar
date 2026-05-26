@@ -9,6 +9,11 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
 
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cstddef>
+
 static constexpr double CRUISE_FILTER_FACT = 0.5;
 
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
@@ -124,6 +129,9 @@ AirspaceWarningManager::Update(const AircraftState& state,
   UpdateFilter(state, circling);
   UpdateTask(state, glide_polar, task_stats);
 
+  // apply clearance suppression / exit-warning generation
+  ProcessClearanceIntervals(state, glide_polar, circling, task_stats);
+
   // action changes
   for (auto it = warnings.begin(), end = warnings.end(); it != end;) {
     if (it->WarningLive(config.acknowledgement_time, dt)) {
@@ -157,9 +165,12 @@ class AirspaceIntersectionWarningVisitor final
   AirspaceWarningManager &warning_manager;
   const AirspaceWarning::State warning_state;
   const FloatDuration max_time;
+  const GeoPoint location_predicted;
+  const FlatProjection &projection;
   bool found = false;
   const double max_alt;
   bool mode_inside = false;
+  PathAltitudeProfile path;
 
 public:
   /**
@@ -170,22 +181,33 @@ public:
    * @param warning_manager Warning manager to add items to
    * @param warning_state Type of warning
    * @param max_time Time limit of intercept
+   * @param location_predicted Location of intercept
+   * @param projection Projected location of intercept
    * @param max_alt Maximum height of base to allow (optional)
    *
    * @return Initialised object
    */
-  AirspaceIntersectionWarningVisitor(const AircraftState &_state,
-                                     const AirspaceAircraftPerformance &_perf,
-                                     AirspaceWarningManager &_warning_manager,
-                                     const AirspaceWarning::State _warning_state,
-                                     const FloatDuration _max_time,
-                                     const double _max_alt = -1):
-    state(_state),
-    perf(_perf),
-    warning_manager(_warning_manager),
-    warning_state(_warning_state),
-    max_time(_max_time),
-    max_alt(_max_alt)
+  AirspaceIntersectionWarningVisitor(
+      const AircraftState &_state,
+      const AirspaceAircraftPerformance &_perf,
+      AirspaceWarningManager &_warning_manager,
+      const AirspaceWarning::State _warning_state,
+      const FloatDuration _max_time,
+      const GeoPoint &_location_predicted,
+      const double _altitude_predicted,
+      const FlatProjection &_projection,
+      const double _max_alt = -1)
+    :state(_state),
+     perf(_perf),
+     warning_manager(_warning_manager),
+     warning_state(_warning_state),
+     max_time(_max_time),
+     location_predicted(_location_predicted),
+     projection(_projection),
+     max_alt(_max_alt),
+     path{_state.location, _location_predicted,
+          _state.location.Distance(_location_predicted),
+          _state.altitude, _altitude_predicted}
   {
   }
 
@@ -197,31 +219,101 @@ public:
   void Intersection(ConstAirspacePtr &airspace_ptr) noexcept {
     const auto &airspace = *airspace_ptr;
     if (!airspace.IsActive())
-      return; // ignore inactive airspaces completely
+      return;
 
-    if (!(warning_manager.GetConfig().IsClassEnabled(airspace.GetClassOrType()) || 
-	      warning_manager.GetConfig().IsClassEnabled(airspace.GetTypeOrClass())) ||
+    if (!(warning_manager.GetConfig()
+            .IsClassEnabled(airspace.GetClassOrType()) ||
+          warning_manager.GetConfig()
+            .IsClassEnabled(airspace.GetTypeOrClass())) ||
         ExcludeAltitude(airspace))
       return;
 
-    AirspaceWarning *warning = warning_manager.GetWarningPtr(airspace);
-    if (warning == nullptr || warning->IsStateAccepted(warning_state)) {
+    AirspaceWarning *warning =
+      warning_manager.GetWarningPtr(airspace);
 
-      AirspaceInterceptSolution solution;
+    /* Compute distance interval along predicted path.
+       Always captured regardless of state acceptance,
+       because clearance suppression needs intervals from
+       all prediction methods. */
+    AirspaceWarningInterval iv =
+      AirspaceWarningInterval::Invalid();
 
-      if (mode_inside) {
-        solution = airspace.Intercept(state, perf,
-                                      state.location, state.location);
-      } else {
-        solution = Intercept(airspace, state, perf);
+    if (!mode_inside) {
+      if (!intersections.empty()) {
+        const auto &p = intersections.front();
+        double d0 = state.location.Distance(p.first);
+        double d1 = state.location.Distance(p.second);
+
+        assert(d0 <= d1);
+        if (d0 < d1)
+          iv = {{d0, p.first}, {d1, p.second}};
+        else {
+          /* p.first == p.second: the path enters the airspace but
+             the predicted endpoint lies inside it. Use the prediction
+             endpoint as the interval end instead */
+          const double d_end =
+            state.location.Distance(location_predicted);
+          iv = {{d0, p.first}, {d_end, location_predicted}};
+        }
       }
+    } else {
+      /* Aircraft is inside this airspace. Find exit
+         along the predicted path direction. */
+      auto isv = airspace.Intersects(
+        state.location, location_predicted, projection);
+      if (isv.empty()) {
+        /* entire predicted path inside airspace */
+        double len =
+          state.location.Distance(location_predicted);
+        iv = {{0, state.location},
+              {len, location_predicted}};
+      } else {
+        /* all() returns inside-segments of the predicted path
+           as (start, end) pairs, usually a single segment.
+           When state.location coincides with an
+           airspace boundary there is a degenerate
+           (state.location, state.location) pair before the real
+           inside-segment. Drop that pair by using last. */
+        double d =
+          state.location.Distance(isv.back().second);
+        iv = {{0, state.location},
+              {d, isv.back().second}};
+      }
+    }
+
+    /* Clip the 2D-projected interval to the sub-segment where
+       the aircraft's predicted altitude profile is in this
+       airspace's vertical band. */
+    if (iv.IsValid())
+      iv = ClipByAltitudeBand(iv, path,
+                              airspace.GetBaseAltitude(state),
+                              airspace.GetTopAltitude(state));
+
+    if (!iv.IsValid() && warning == nullptr)
+      return;
+
+    if (warning == nullptr)
+      warning =
+        warning_manager.GetNewWarningPtr(
+          std::move(airspace_ptr));
+
+    if (iv.IsValid())
+      warning->SetInterval(warning_state, iv);
+
+    /* Upgrade state and solution only when the new state
+       is at least as severe as the current one */
+    if (warning->IsStateAccepted(warning_state)) {
+      AirspaceInterceptSolution solution;
+      if (mode_inside)
+        solution = airspace.Intercept(
+          state, perf, state.location, state.location);
+      else
+        solution = Intercept(airspace, state, perf);
+
       if (!solution.IsValid())
         return;
       if (solution.elapsed_time > max_time)
         return;
-
-      if (warning == nullptr)
-        warning = warning_manager.GetNewWarningPtr(std::move(airspace_ptr));
 
       warning->UpdateSolution(warning_state, solution);
       found = true;
@@ -232,32 +324,31 @@ public:
     Intersection(as);
   }
 
-  /**
-   * Determine whether intersections for this type were found (new or modified)
-   *
-   * @return True if intersections were found
-   */
   bool Found() const {
     return found;
   }
 
   void SetMode(bool m) {
     mode_inside = m;
+    /* Drop any stale intersections from the prior pass: Otherwise 
+    outdated intersction info will not be cleared in the inside pass stage */
+    SetIntersections({});
   }
 
 private:
-  bool ExcludeAltitude(const AbstractAirspace& airspace) {
+  bool ExcludeAltitude(const AbstractAirspace &airspace) {
     if (max_alt <= 0)
       return false;
 
-    return (airspace.GetBaseAltitude(state) > max_alt);
+    return airspace.GetBaseAltitude(state) > max_alt;
   }
 };
 
 
-bool 
-AirspaceWarningManager::UpdatePredicted(const AircraftState& state, 
+bool
+AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
                                         const GeoPoint &location_predicted,
+                                        const double altitude_predicted,
                                         const AirspaceAircraftPerformance &perf,
                                         const AirspaceWarning::State warning_state,
                                         const FloatDuration max_time) noexcept
@@ -280,10 +371,10 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   const auto ceiling = state.altitude
     + std::max((unsigned)1000, config.altitude_warning_margin);
 
-  AirspaceIntersectionWarningVisitor visitor(state, perf, 
-                                             *this, 
-                                             warning_state, max_time_limit,
-                                             ceiling);
+  AirspaceIntersectionWarningVisitor visitor(
+    state, perf, *this, warning_state, max_time_limit,
+    location_predicted, altitude_predicted,
+    GetProjection(), ceiling);
 
   airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
@@ -327,30 +418,38 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
        the configured warning time */
     location_tp = state.location.IntermediatePoint(location_tp, max_distance);
 
-  return UpdatePredicted(state, location_tp, perf_task,
+  /* TASK: pass state.altitude as a flat-profile fallback.
+     Deriving the predicted altitude at location_tp from the leg
+     glide solution requires careful interpretation of GlideResult
+     fields and the max-distance truncation; left for a follow-up.
+     Flat profile here matches today's behaviour for TASK warnings. */
+  return UpdatePredicted(state, location_tp, state.altitude,
+                          perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);
 }
 
 
-bool 
+bool
 AirspaceWarningManager::UpdateFilter(const AircraftState& state, const bool circling)
 {
   // update both filters even though we are using only one
   cruise_filter.Update(state);
   circling_filter.Update(state);
 
-  const GeoPoint location_predicted = circling?
-    circling_filter.GetPredictedState(prediction_time_filter).location:
-    cruise_filter.GetPredictedState(prediction_time_filter).location;
+  const AircraftState predicted = circling
+    ? circling_filter.GetPredictedState(prediction_time_filter)
+    : cruise_filter.GetPredictedState(prediction_time_filter);
 
-  if (circling) 
-    return UpdatePredicted(state, location_predicted,
+  if (circling)
+    return UpdatePredicted(state, predicted.location, predicted.altitude,
                            AirspaceAircraftPerformance(circling_filter),
-                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
+                           AirspaceWarning::WARNING_FILTER,
+                           prediction_time_filter);
   else
-    return UpdatePredicted(state, location_predicted,
+    return UpdatePredicted(state, predicted.location, predicted.altitude,
                            AirspaceAircraftPerformance(cruise_filter),
-                            AirspaceWarning::WARNING_FILTER, prediction_time_filter);
+                           AirspaceWarning::WARNING_FILTER,
+                           prediction_time_filter);
 }
 
 
@@ -361,11 +460,11 @@ AirspaceWarningManager::UpdateGlide(const AircraftState &state,
   if (!glide_polar.IsValid())
     return false;
 
-  const GeoPoint location_predicted = 
-    state.GetPredictedState(prediction_time_glide).location;
+  const AircraftState predicted =
+    state.GetPredictedState(prediction_time_glide);
 
   const AirspaceAircraftPerformance perf_glide(glide_polar);
-  return UpdatePredicted(state, location_predicted,
+  return UpdatePredicted(state, predicted.location, predicted.altitude,
                           perf_glide,
                           AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
 }
@@ -445,6 +544,27 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexce
   return warning != nullptr && warning->GetAckDay();
 }
 
+void
+AirspaceWarningManager::SetCleared(ConstAirspacePtr airspace,
+                                   const bool set) noexcept
+{
+  auto &warning = GetWarning(std::move(airspace));
+  if (warning.IsCleared() != set) {
+    warning.SetCleared(set);
+    // The renderer fill cache keys on the manager serial; without this
+    // bump, toggling clearance on an existing warning would not refresh
+    // the cached fill on the non-GL renderer.
+    ++serial;
+  }
+}
+
+bool
+AirspaceWarningManager::GetCleared(const AbstractAirspace &airspace) const noexcept
+{
+  const AirspaceWarning *warning = GetWarningPtr(airspace);
+  return warning != nullptr && warning->IsCleared();
+}
+
 bool
 AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcept
 {
@@ -452,11 +572,311 @@ AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcep
     !GetAckDay(airspace);
 }
 
-void 
+void
 AirspaceWarningManager::AcknowledgeAll()
 {
   for (auto &w : warnings) {
     w.AcknowledgeWarning(true);
     w.AcknowledgeInside(true);
+  }
+}
+
+namespace {
+
+constexpr AirspaceWarning::State kPredictionMethods[] = {
+  AirspaceWarning::WARNING_GLIDE,
+  AirspaceWarning::WARNING_FILTER,
+  AirspaceWarning::WARNING_TASK,
+};
+
+/** Minimum residual path fragment length to keep, in meters. */
+constexpr double kMinFragmentLength = 50.0;
+
+/** Capacity for small stack-allocated cleared-airspace buffers. */
+constexpr std::size_t kClearedBufCap = 32;
+
+[[gnu::pure]]
+static AirspaceAircraftPerformance
+PerfFor(AirspaceWarning::State method,
+        const GlidePolar &glide_polar,
+        const AircraftStateFilter &cruise_filter,
+        const AircraftStateFilter &circling_filter,
+        bool circling,
+        const TaskStats &task_stats) noexcept
+{
+  switch (method) {
+  case AirspaceWarning::WARNING_GLIDE:
+    if (glide_polar.IsValid())
+      return AirspaceAircraftPerformance{glide_polar};
+    break;
+
+  case AirspaceWarning::WARNING_FILTER:
+    return circling
+      ? AirspaceAircraftPerformance{circling_filter}
+      : AirspaceAircraftPerformance{cruise_filter};
+
+  case AirspaceWarning::WARNING_TASK:
+    if (glide_polar.IsValid() && task_stats.task_valid) {
+      const auto &solution =
+        task_stats.current_leg.solution_remaining;
+      if (solution.IsOk() && solution.IsAchievable())
+        return AirspaceAircraftPerformance{glide_polar, solution};
+    }
+    break;
+
+  case AirspaceWarning::WARNING_CLEAR:
+  case AirspaceWarning::WARNING_INSIDE:
+    break;
+  }
+  return AirspaceAircraftPerformance{
+    AirspaceAircraftPerformance::Simple{}};
+}
+
+/**
+ * Sort a small array of warning pointers by the entry distance
+ * of their interval for the given prediction method.
+ */
+static void
+SortByEntryDistance(AirspaceWarning **first,
+                    AirspaceWarning **last,
+                    AirspaceWarning::State method) noexcept
+{
+  std::sort(first, last,
+            [method](const AirspaceWarning *a,
+                     const AirspaceWarning *b) {
+              return a->GetInterval(method).entry.distance <
+                     b->GetInterval(method).entry.distance;
+            });
+}
+
+} // namespace
+
+void
+AirspaceWarningManager::ProcessClearanceIntervals(
+    const AircraftState &state,
+    const GlidePolar &glide_polar,
+    const bool circling,
+    const TaskStats &task_stats) noexcept
+{
+  // Fast path + collect cleared airspaces the aircraft is
+  // physically inside.
+  std::array<AirspaceWarning *, kClearedBufCap> cleared_inside_buf{};
+  std::size_t n_cleared_inside = 0;
+  bool any_cleared = false;
+
+  for (auto &w : warnings) {
+    if (!w.IsCleared()) continue;
+    any_cleared = true;
+    if (w.GetAirspace().Inside(state) &&
+        n_cleared_inside < cleared_inside_buf.size())
+      cleared_inside_buf[n_cleared_inside++] = &w;
+  }
+  if (!any_cleared) return;
+
+  const bool inside_cleared = n_cleared_inside > 0;
+  const FloatDuration warning_time{config.warning_time};
+
+  /* Warnings that step 1 downgraded out of WARNING_INSIDE. Step 2
+     re-processes these (they're no longer INSIDE), but should not
+     re-subtract clearances already applied in step 1 (i.e. those
+     the aircraft is currently 3D-inside) since that's redundant.
+     Bounded by the number of non-cleared INSIDE warnings, normally
+     0-3 in practice; if it exceeds capacity we fall back to the
+     regular re-subtraction. */
+  std::array<AirspaceWarning *, 16> step1_downgraded{};
+  std::size_t n_step1_downgraded = 0;
+
+  // Step 1: convert WARNING_INSIDE warnings of non-cleared
+  // airspaces while inside another, cleared, airspace.
+  if (inside_cleared) {
+    for (auto &w : warnings) {
+      if (w.IsCleared()) continue;
+      if (w.GetWarningState() != AirspaceWarning::WARNING_INSIDE)
+        continue;
+
+      for (const auto m : kPredictionMethods) {
+        AirspaceWarningInterval iv = w.GetInterval(m);
+        if (!iv.IsValid()) continue;
+
+        std::array<AirspaceWarning *, kClearedBufCap> buf{};
+        std::size_t n = 0;
+        for (std::size_t i = 0; i < n_cleared_inside; ++i) {
+          AirspaceWarning *c = cleared_inside_buf[i];
+          if (c->HasInterval(m))
+            buf[n++] = c;
+        }
+        SortByEntryDistance(buf.data(), buf.data() + n, m);
+        for (std::size_t i = 0; i < n; ++i) {
+          SubtractInterval(iv, buf[i]->GetInterval(m));
+          if (!iv.IsValid()) break;
+        }
+        w.SetInterval(m, iv);
+      }
+
+      // Collect surviving intervals across methods, sort by
+      // nearest entry distance, and try each in turn until one
+      // produces a valid intercept solution.
+      struct Residual {
+        AirspaceWarning::State method;
+        double distance;
+        GeoPoint location;
+      };
+      std::array<Residual, std::size(kPredictionMethods)> residuals;
+      std::size_t n_res = 0;
+      for (const auto m : kPredictionMethods) {
+        const AirspaceWarningInterval &iv = w.GetInterval(m);
+        if (!iv.IsValid()) continue;
+        if (iv.Length() < kMinFragmentLength) continue;
+        residuals[n_res++] = {m, iv.entry.distance,
+                              iv.entry.location};
+      }
+
+      if (n_res == 0) {
+        // No meaningful remaining intervals along any method.
+        // Aircraft is fully covered by cleared coverage.
+        w.SetCoveredByClearance(true);
+        continue;
+      }
+
+      std::sort(residuals.begin(), residuals.begin() + n_res,
+                [](const Residual &a, const Residual &b) {
+                  return a.distance < b.distance;
+                });
+
+      bool resolved = false;
+      for (std::size_t i = 0; i < n_res; ++i) {
+        const auto &r = residuals[i];
+        const AirspaceAircraftPerformance perf = PerfFor(
+          r.method, glide_polar, cruise_filter,
+          circling_filter, circling, task_stats);
+        AirspaceInterceptSolution sol =
+          w.GetAirspace().Intercept(state, perf,
+                                    r.location, r.location);
+        if (sol.IsValid() && sol.elapsed_time <= warning_time) {
+          w.ForceState(r.method);
+          w.SetSolution(sol);
+          resolved = true;
+          if (n_step1_downgraded < step1_downgraded.size())
+            step1_downgraded[n_step1_downgraded++] = &w;
+          break;
+        }
+      }
+
+      if (!resolved) {
+        // Every interval is too far / unreachable; treat as
+        // covered.
+        w.SetCoveredByClearance(true);
+      }
+    }
+  }
+
+  // Step 2: clip approach warnings (state in GLIDE/FILTER/TASK)
+  // by cleared coverage along the same method's predicted path.
+  for (auto &w : warnings) {
+    if (w.IsCleared()) continue;
+    const auto cur_state = w.GetWarningState();
+    if (cur_state == AirspaceWarning::WARNING_CLEAR ||
+        cur_state == AirspaceWarning::WARNING_INSIDE)
+      continue;
+
+    /* Did step 1 already downgrade this warning?  If so, the
+       cleared were already subtracted in step 1 */
+    const bool step1_handled = std::find(
+      step1_downgraded.begin(),
+      step1_downgraded.begin() + n_step1_downgraded,
+      &w) != step1_downgraded.begin() + n_step1_downgraded;
+
+    bool any_changed = false;
+    struct Residual {
+      AirspaceWarning::State method;
+      double distance;
+      GeoPoint location;
+    };
+    std::array<Residual, std::size(kPredictionMethods)> residuals;
+    std::size_t n_res = 0;
+
+    for (const auto m : kPredictionMethods) {
+      AirspaceWarningInterval iv = w.GetInterval(m);
+      if (!iv.IsValid()) continue;
+      const AirspaceWarningInterval iv_orig = iv;
+
+      // Collect cleared with valid interval and vertical
+      // overlap with W; sort near-to-far.
+      std::array<AirspaceWarning *, kClearedBufCap> buf{};
+      std::size_t n = 0;
+      for (auto &c : warnings) {
+        if (!c.IsCleared()) continue;
+        if (!c.HasInterval(m)) continue;
+        if (step1_handled) {
+          /* Aircraft is currently inside this clearance and step
+             1 already subtracted it from w's interval; skip the
+             redundant subtraction. */
+          bool in_inside_buf = false;
+          for (std::size_t i = 0; i < n_cleared_inside; ++i)
+            if (cleared_inside_buf[i] == &c) {
+              in_inside_buf = true;
+              break;
+            }
+          if (in_inside_buf) continue;
+        }
+        if (n >= buf.size()) break;
+        buf[n++] = &c;
+      }
+      SortByEntryDistance(buf.data(), buf.data() + n, m);
+      for (std::size_t i = 0; i < n; ++i) {
+        SubtractInterval(iv, buf[i]->GetInterval(m));
+        if (!iv.IsValid()) break;
+      }
+
+      const bool changed = !iv.IsValid()
+        || iv.entry.distance != iv_orig.entry.distance
+        || iv.exit.distance != iv_orig.exit.distance;
+      if (changed) any_changed = true;
+
+      if (!iv.IsValid() ||
+          (changed && iv.Length() < kMinFragmentLength)) {
+        w.SetInterval(m, AirspaceWarningInterval::Invalid());
+      } else {
+        w.SetInterval(m, iv);
+        residuals[n_res++] = {m, iv.entry.distance,
+                              iv.entry.location};
+      }
+    }
+
+    if (!any_changed) continue;
+
+    if (n_res == 0) {
+      // All approach intervals fully covered by clearance.
+      w.SetCoveredByClearance(true);
+      continue;
+    }
+
+    // Sort surviving residuals by entry distance and rebuild the
+    // solution at the nearest one whose Intercept solves; try
+    // the next-nearest method if it fails.
+    std::sort(residuals.begin(), residuals.begin() + n_res,
+              [](const Residual &a, const Residual &b) {
+                return a.distance < b.distance;
+              });
+
+    bool resolved = false;
+    for (std::size_t i = 0; i < n_res; ++i) {
+      const auto &r = residuals[i];
+      const AirspaceAircraftPerformance perf = PerfFor(
+        r.method, glide_polar, cruise_filter,
+        circling_filter, circling, task_stats);
+      AirspaceInterceptSolution sol =
+        w.GetAirspace().Intercept(state, perf,
+                                  r.location, r.location);
+      if (sol.IsValid() && sol.elapsed_time <= warning_time) {
+        w.SetSolution(sol);
+        resolved = true;
+        break;
+      }
+    }
+
+    if (!resolved) {
+      w.SetCoveredByClearance(true);
+    }
   }
 }

@@ -9,34 +9,56 @@
 #include "util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
+#include <vector>
+
 class AirspaceWarningCopy
 {
 private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
   StaticArray<GeoPoint,32> locations;
 
+  /* List of cleared airspaces.
+     These are user-set with no upper limit, and not reduced by warning-manager
+     proximity heuristics, so use a vector with a small reservation. */
+  std::vector<const AbstractAirspace *> ids_cleared;
+
+  const AirspaceWarningConfig *warning_config = nullptr;
+
   Serial serial;
 
 public:
+  AirspaceWarningCopy() noexcept {
+    ids_cleared.reserve(16);
+  }
+
   auto GetSerial() const noexcept {
     return serial;
   }
 
   void Visit(const AirspaceWarning& as) noexcept {
-    if (as.IsInside()) {
-      ids_inside.checked_append(&as.GetAirspace());
-    } else if (as.IsWarning()) {
-      ids_warning.checked_append(&as.GetAirspace());
-      if (as.IsAckExpired())
-        locations.checked_append(as.GetSolution().location);
+    if (!as.IsCoveredByClearance() && !as.IsCleared()) {
+      if (as.IsInside()) {
+        ids_inside.checked_append(&as.GetAirspace());
+      } else if (as.IsWarning()) {
+        ids_warning.checked_append(&as.GetAirspace());
+        if (as.IsAckExpired())
+          locations.checked_append(as.GetSolution().location);
+      }
+
+      if (!as.IsAckExpired())
+        ids_acked.checked_append(&as.GetAirspace());
+    } else if (!as.IsCleared() && as.HasExplicitAck()) {
+      // Covered by clearance but explicitly acked: suppress fill
+      ids_acked.checked_append(&as.GetAirspace());
     }
 
-    if (!as.IsAckExpired())
-      ids_acked.checked_append(&as.GetAirspace());
+    if (as.IsCleared())
+      ids_cleared.push_back(&as.GetAirspace());
   }
 
   void Visit(const AirspaceWarningManager &awm) noexcept {
     serial = awm.GetSerial();
+    warning_config = &awm.GetConfig();
 
     for (const auto &i : awm)
       Visit(i);
@@ -61,6 +83,19 @@ public:
 
   bool IsInside(const AbstractAirspace &as) const noexcept {
     return as.IsActive() && Find(as, ids_inside);
+  }
+
+  bool IsCleared(const AbstractAirspace &as) const noexcept {
+    for (const auto *p : ids_cleared)
+      if (p == &as)
+        return true;
+    return false;
+  }
+
+  bool IsWarningCapable(const AbstractAirspace &as) const noexcept {
+    return warning_config != nullptr &&
+      (warning_config->IsClassEnabled(as.GetClassOrType()) ||
+       warning_config->IsClassEnabled(as.GetTypeOrClass()));
   }
 
 private:

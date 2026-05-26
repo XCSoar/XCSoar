@@ -72,6 +72,21 @@ private:
         canvas.Select(pen_donut);
         canvas.DrawCircle(screen_center,
                           screen_radius - look.thick_pen.GetWidth() / 4);
+
+        if (warning_manager.IsWarningCapable(airspace) &&
+            !warning_manager.IsCleared(airspace)) {
+          /* Second pass: fill cleared-airspace ring pixels (bit 3)
+             inside this circle, completing the padding at the
+             cleared/active boundary. Bit 0 must be clear (those
+             pixels are already drawn above), bit 2 must be clear (not
+             inside the cleared area), and bit 1 must be clear (not on
+             an outline). Skipped for purely informative airspaces and
+             for the cleared airspace itself. */
+          canvas.Select(Brush(color.WithAlpha(90)));
+          canvas.SelectNullPen();
+          glStencilFunc(GL_EQUAL, 8, 3 | 4 | 8);
+          canvas.DrawCircle(screen_center, screen_radius);
+        }
       }
     }
 
@@ -110,6 +125,18 @@ private:
         SetupInterior(airspace, !fill_airspace);
         const GLEnable<GL_BLEND> blend;
         DrawPrepared();
+
+        if (!fill_airspace && warning_manager.IsWarningCapable(airspace) &&
+            !warning_manager.IsCleared(airspace)) {
+          /* Second pass: also fill where the cleared-airspace ring
+             (bit 3) overlaps this airspace's geometry, but only where
+             the pixel isn't already covered by bit 0 (to avoid double
+             blending), not inside a cleared area (bit 2), and not on
+             an outline (bit 1). Skipped for purely informative
+             airspaces and for the cleared airspace itself. */
+          glStencilFunc(GL_EQUAL, 8, 3 | 4 | 8);
+          DrawPrepared();
+        }
       }
 
       if (!fill_airspace) {
@@ -136,6 +163,56 @@ public:
       VisitPolygon((const AirspacePolygon &)airspace);
       break;
     }
+  }
+
+  /**
+   * Pre-pass: For every cleared airspace, stamp its full area into
+   * stencil bit 2 (mask=4) and its thick-pen ring area into stencil
+   * bit 3 (mask=8). Bit 2 suppresses interior fill for warning 
+   * airspaces; bit 3 is used to extend the padding ring of overlapping 
+   * active airspaces across the cleared/active boundary.
+   */
+  void VisitClearance(const AbstractAirspace &airspace) {
+    if (!warning_manager.IsCleared(airspace))
+      return;
+
+    const GLEnable<GL_STENCIL_TEST> stencil;
+
+    switch (airspace.GetShape()) {
+    case AbstractAirspace::Shape::CIRCLE: {
+      const auto &circle = (const AirspaceCircle &)airspace;
+      auto screen_center =
+        projection.GeoToScreen(circle.GetReferenceLocation());
+      unsigned screen_radius =
+        projection.GeoToScreenDistance(circle.GetRadius());
+
+      // bit 2: full circle area
+      SetClearanceStencil();
+      canvas.DrawCircle(screen_center, screen_radius);
+
+      // bit 3: thick-pen ring along the circle border
+      SetClearedRingStencil();
+      canvas.DrawCircle(screen_center, screen_radius);
+      break;
+    }
+
+    case AbstractAirspace::Shape::POLYGON: {
+      const auto &polygon = (const AirspacePolygon &)airspace;
+      if (!PreparePolygon(polygon.GetPoints()))
+        break;
+
+      // bit 2: full polygon area
+      SetClearanceStencil();
+      DrawPrepared();
+
+      // bit 3: thick-pen ring along the polygon border
+      SetClearedRingStencil();
+      DrawPrepared();
+      break;
+    }
+    }
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   }
 
 private:
@@ -165,15 +242,41 @@ private:
 	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
     const AirspaceClassLook &class_look = look.classes[as_type_or_class];
 
-    // restrict drawing area and don't paint over previously drawn outlines
+    /* Restrict drawing area: don't paint over previously drawn
+       outlines (bit 1) and don't paint inside cleared airspaces
+       (bit 2, set by DrawClearancePrePass). */
     if (check_fillstencil)
-      glStencilFunc(GL_EQUAL, 1, 3);
+      glStencilFunc(GL_EQUAL, 1, 3 | 4);
     else
-      glStencilFunc(GL_EQUAL, 0, 2);
+      glStencilFunc(GL_EQUAL, 0, 2 | 4);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     canvas.Select(Brush(class_look.fill_color.WithAlpha(90)));
     canvas.SelectNullPen();
+  }
+
+  void SetClearanceStencil() {
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 4, 4);
+    glStencilMask(4);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.SelectNullPen();
+    canvas.SelectBlackBrush();
+  }
+
+  /**
+   * Set up stencil writes for bit 3 (mask=8): the thick-pen ring
+   * area along the border of a cleared airspace.
+   */
+  void SetClearedRingStencil() {
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 8, 8);
+    glStencilMask(8);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.SelectHollowBrush();
+    canvas.Select(look.thick_pen);
   }
 
   void SetFillStencil() {
@@ -311,6 +414,12 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
     }
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings);
+
+    // Init pass: stamp cleared airspaces into stencil bit 2 
+    for (const auto &i : range)
+      renderer.VisitClearance(i.GetAirspace());
+
+    // Main pass: draw warnings and outlines
     for (const auto &i : range) {
       const AbstractAirspace &airspace = i.GetAirspace();
       if (visible(airspace))

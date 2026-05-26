@@ -49,6 +49,21 @@ ProtectedAirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
 }
 
 void
+ProtectedAirspaceWarningManager::SetCleared(ConstAirspacePtr airspace,
+                                            const bool set) noexcept
+{
+  ExclusiveLease lease(*this);
+  lease->SetCleared(std::move(airspace), set);
+}
+
+bool
+ProtectedAirspaceWarningManager::GetCleared(const AbstractAirspace &airspace) const noexcept
+{
+  Lease lease(*this);
+  return lease->GetCleared(airspace);
+}
+
+void
 ProtectedAirspaceWarningManager::AcknowledgeWarning(ConstAirspacePtr airspace,
                                                     const bool set) noexcept
 {

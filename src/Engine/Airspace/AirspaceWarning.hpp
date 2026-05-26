@@ -4,6 +4,7 @@
 #pragma once
 
 #include "AirspaceInterceptSolution.hpp"
+#include "AirspaceWarningInterval.hpp"
 #include "Ptr.hpp"
 
 #include <chrono>
@@ -44,8 +45,21 @@ private:
   Duration acktime_inside{};
   Duration debounce_time = std::chrono::minutes{1};
   bool ack_day = false;
+  bool cleared_day = false;
+  bool covered_by_clearance = false;
   bool expired = true;
   bool expired_last = true;
+
+  /**
+   * Distance intervals along predicted path, one per
+   * prediction method.  Reset each cycle in SaveState().
+   */
+  AirspaceWarningInterval interval_task_ =
+    AirspaceWarningInterval::Invalid();
+  AirspaceWarningInterval interval_filter_ =
+    AirspaceWarningInterval::Invalid();
+  AirspaceWarningInterval interval_glide_ =
+    AirspaceWarningInterval::Invalid();
 
   static constexpr auto null_acktime = Duration::max();
 
@@ -185,6 +199,19 @@ public:
   }
 
   /**
+   * Check if this warning has an explicit acknowledgement (ack_day or
+   * a still-running timed ack), independent of covered_by_clearance.
+   * Used by the renderer to distinguish "acked by the pilot" from
+   * "silenced only because the path is covered by a clearance".
+   */
+  [[gnu::pure]]
+  bool HasExplicitAck() const noexcept {
+    return ack_day
+      || acktime_warning.count() > 0
+      || acktime_inside.count() > 0;
+  }
+
+  /**
    * Acknowledge an airspace warning or airspace inside (depending on
    * the state).
    */
@@ -211,6 +238,91 @@ public:
    */
   void AcknowledgeDay(const bool set=true) noexcept {
     ack_day = set;
+  }
+
+  /**
+   * Set or revoke airspace clearance for the whole day.
+   *
+   * Clearance marks airspace you are allowed
+   * to be inside. This suppresses entry and inside warnings
+   * for both this airspace and all other airspaces at this location.
+   * The warning system then alerts when approaching
+   * the exit boundary if that leads into another airspace that is 
+   * not cleared.
+   *
+   * @param set Whether to set or revoke clearance
+   */
+  void SetCleared(const bool set=true) noexcept {
+    cleared_day = set;
+  }
+
+  /**
+   * Determine if clearance is set
+   */
+  [[gnu::pure]]
+  bool IsCleared() const noexcept {
+    return cleared_day;
+  }
+
+  /**
+   * Mark this warning as covered by another airspace's
+   * clearance.
+   *
+   * Warning object remains in manager, but
+   * creates no warning message. IsAckExpired() returns 
+   * false while the flag is set.
+   */
+  void SetCoveredByClearance(const bool set) noexcept {
+    covered_by_clearance = set;
+  }
+
+  /**
+   * Is this warning currently covered by another 
+   * airspace's clearance?
+   */
+  [[gnu::pure]]
+  bool IsCoveredByClearance() const noexcept {
+    return covered_by_clearance;
+  }
+
+  /**
+   * Set the distance interval for a prediction method.
+   *
+   * @param method WARNING_TASK, WARNING_FILTER, or WARNING_GLIDE
+   */
+  void SetInterval(State method,
+                   const AirspaceWarningInterval &iv) noexcept;
+
+  /**
+   * Get the distance interval for a prediction method.
+   */
+  [[gnu::pure]]
+  const AirspaceWarningInterval &GetInterval(
+      State method) const noexcept;
+
+  /**
+   * Check whether a valid interval exists for a method.
+   */
+  [[gnu::pure]]
+  bool HasInterval(State method) const noexcept;
+
+  /**
+   * Force warning state to a specific value.  Used only by
+   * clearance post-processing to suppress fully-covered
+   * warnings.
+   */
+  void ForceState(State s) noexcept {
+    state = s;
+  }
+
+  /**
+   * Replace the intercept solution directly.  Used by
+   * clearance post-processing after interval subtraction
+   * adjusts the effective warning point.
+   */
+  void SetSolution(
+      const AirspaceInterceptSolution &s) noexcept {
+    solution = s;
   }
 
   /**
