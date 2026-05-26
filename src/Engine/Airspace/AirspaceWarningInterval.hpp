@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <type_traits>
 
 /**
@@ -171,6 +172,10 @@ struct PathAltitudeProfile {
    */
   [[gnu::pure]]
   double DistanceAtAltitude(double alt) const noexcept {
+    if (std::fabs(total_distance) < 1e-12)
+      return (end_altitude == start_altitude)
+        ? 0.0
+        : std::numeric_limits<double>::quiet_NaN();
     const double slope =
       (end_altitude - start_altitude) / total_distance;
     return (alt - start_altitude) / slope;
