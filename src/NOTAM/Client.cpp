@@ -95,16 +95,10 @@ ToGeoPoint(const NOTAMPoint &point) noexcept
                   Angle::Degrees(point.latitude)};
 }
 
-/**
- * Parse altitude string to AirspaceAltitude using XCSoar's altitude parsing
- * logic
- * Based on ReadAltitude from AirspaceParser.cpp
- */
 static std::optional<AirspaceAltitude>
 ParseAltitudeString(const std::string &alt_str)
 {
   if (alt_str.empty()) {
-    // Return unknown/invalid altitude
     AirspaceAltitude altitude{};
     altitude.reference = AltitudeReference::MSL;
     altitude.altitude = NOTAMAltitude::INVALID_ALTITUDE;
@@ -113,102 +107,20 @@ ParseAltitudeString(const std::string &alt_str)
     return altitude;
   }
 
-  // Create a StringParser from our string
+  ParseAirspaceAltitudeOptions options;
+  options.strict_unknown_tokens = true;
+  options.accept_amsl = true;
+  options.unlimited_ceiling_m = Units::ToSysUnit(50000, Unit::FEET);
+
   StringParser<> input{alt_str.c_str()};
-  
-  auto unit = Unit::FEET;
-  enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
-  double value = 0;
-
-  while (true) {
-    input.Strip();
-
-    if (input.IsEmpty())
-      break;
-
-    if (IsDigitASCII(input.front())) {
-      if (auto x = input.ReadDouble())
-        value = *x;
-    } else if (input.SkipMatchIgnoreCase("GND"sv) ||
-               input.SkipMatchIgnoreCase("AGL"sv)) {
-      type = AGL;
-    } else if (input.SkipMatchIgnoreCase("SFC"sv)) {
-      type = SFC;
-    } else if (input.SkipMatchIgnoreCase("FL"sv)) {
-      type = FL;
-    } else if (input.SkipMatchIgnoreCase("FT"sv)) {
-      unit = Unit::FEET;
-    } else if (input.SkipMatchIgnoreCase("AMSL"sv) ||
-               input.SkipMatchIgnoreCase("MSL"sv)) {
-      type = MSL;
-    } else if (input.front() == 'M' || input.front() == 'm') {
-      unit = Unit::METER;
-      input.Skip();
-    } else if (input.SkipMatchIgnoreCase("STD"sv)) {
-      type = STD;
-    } else if (input.SkipMatchIgnoreCase("UNL"sv)) {
-      type = UNLIMITED;
-    } else {
-      LogFmt("NOTAM: Unexpected altitude token '{}' in '{}'",
-             input.front(), alt_str.c_str());
-      return std::nullopt;
-    }
+  const auto altitude = ParseAirspaceAltitude(input, options);
+  if (!altitude) {
+    LogFmt("NOTAM: Unexpected altitude token near '{}' in '{}'",
+           input.c_str(), alt_str.c_str());
+    return std::nullopt;
   }
 
-  AirspaceAltitude altitude{};
-
-  switch (type) {
-  case FL:
-    altitude.reference = AltitudeReference::STD;
-    altitude.flight_level = value;
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = Units::ToSysUnit(value, Unit::FLIGHT_LEVEL);
-    return altitude;
-
-  case UNLIMITED:
-    altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = Units::ToSysUnit(50000, Unit::FEET);
-    return altitude;
-
-  case SFC:
-    altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = -1;
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = 0;
-    return altitude;
-
-  default:
-    break;
-  }
-
-  // For MSL, AGL and STD we convert the altitude to meters
-  value = Units::ToSysUnit(value, unit);
-  switch (type) {
-  case MSL:
-    altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = value;
-    return altitude;
-
-  case AGL:
-    altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = value;
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = value;
-    return altitude;
-
-  case STD:
-    altitude.reference = AltitudeReference::STD;
-    altitude.flight_level = Units::ToUserUnit(value, Unit::FLIGHT_LEVEL);
-    /* prepare fallback, just in case we have no QNH */
-    altitude.altitude = value;
-    return altitude;
-
-  default:
-    // Default to MSL
-    altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = value;
-    return altitude;
-  }
+  return altitude;
 }
 
 static std::optional<AirspaceAltitude>
