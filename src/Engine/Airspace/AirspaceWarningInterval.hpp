@@ -64,6 +64,9 @@ struct AirspaceWarningInterval {
 
 static_assert(std::is_trivially_copyable_v<AirspaceWarningInterval>);
 
+/** Minimum fragment length (meters) kept by SubtractInterval. */
+static constexpr double kMinFragmentLength = 50.0;
+
 /**
  * Subtract a cleared interval from a target interval in-place.
  *
@@ -82,7 +85,7 @@ static_assert(std::is_trivially_copyable_v<AirspaceWarningInterval>);
 inline void
 SubtractInterval(AirspaceWarningInterval &target,
                  const AirspaceWarningInterval &cleared,
-                 double tolerance = 50.0) noexcept
+                 double tolerance = kMinFragmentLength) noexcept
 {
   if (!target.IsValid() || !cleared.IsValid())
     return;

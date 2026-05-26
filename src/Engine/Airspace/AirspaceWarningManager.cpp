@@ -589,9 +589,6 @@ constexpr AirspaceWarning::State kPredictionMethods[] = {
   AirspaceWarning::WARNING_TASK,
 };
 
-/** Minimum residual path fragment length to keep, in meters. */
-constexpr double kMinFragmentLength = 50.0;
-
 /** Capacity for small stack-allocated cleared-airspace buffers. */
 constexpr std::size_t kClearedBufCap = 32;
 
