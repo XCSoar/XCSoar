@@ -78,7 +78,7 @@ TEST_NAMES = \
 	test_task \
 	TestInputTransformMode \
 	TestOverwritingRingBuffer \
-	TestDateTime TestRoughTime TestWrapClock \
+	TestDateTime TestISO8601 TestRoughTime TestWrapClock \
 	TestPolylineDecoder \
 	TestTransponderCode \
 	TestMath \
@@ -224,6 +224,13 @@ TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/TestDateTime.cpp
 TEST_DATE_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestDateTime,TEST_DATE_TIME))
+
+TEST_ISO8601_SOURCES = \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestISO8601.cpp
+TEST_ISO8601_DEPENDS = MATH UTIL TIME
+$(eval $(call link-program,TestISO8601,TEST_ISO8601))
 
 TEST_POLYLINE_DECODER_SOURCES = \
 	$(SRC)/Task/PolylineDecoder.cpp \
