@@ -99,11 +99,12 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
            "%.1f %s", "%.1f",
            0, 1, 0.1, false,
            task_behaviour.risk_gamma);
- SetExpertRow(RiskFactor);
+  SetExpertRow(RiskFactor);
 
- AddBoolean(_("Turn back marker"),
-            _("Show a marker indicating the point of no return based on current conditions."),
-            task_behaviour.turn_back_marker_enabled);
+  AddBoolean(_("Turn back marker"),
+             _("Show a marker indicating the point of no return "
+               "based on current conditions."),
+             task_behaviour.turn_back_marker_enabled);
 }
 
 bool
