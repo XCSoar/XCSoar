@@ -13,7 +13,6 @@
 #include "Math/Screen.hpp"
 #include "Computer/Settings.hpp"
 #include <cmath>
-#include <limits>
 
 // Small value to avoid division by zero and floating point issues
 static constexpr double TBM_EPSILON = 1e-6;
@@ -21,7 +20,6 @@ static constexpr double TBM_EPSILON = 1e-6;
 void
 TurnBackMarkerRenderer::Draw(Canvas &canvas,
                              const WindowProjection &projection,
-                             [[maybe_unused]] const PixelPoint pos,
                              const NMEAInfo &basic,
                              const DerivedInfo &calculated,
                              const ComputerSettings &settings) const noexcept
@@ -35,12 +33,16 @@ TurnBackMarkerRenderer::Draw(Canvas &canvas,
   if (!task_stats.task_valid)
     return;
 
-  const ElementStat &total = task_stats.total;
-  const GlideResult &solution = total.solution_remaining;
+  const GlideResult &solution = task_stats.current_leg.solution_remaining;
 
   // Need a valid solution to proceed (even if below glide for the *old* TBM)
   if (!solution.IsOk())
     return;
+
+  const double alt_diff = solution.SelectAltitudeDifference(settings.task.glide);
+  if (alt_diff <= 0) {
+    return;
+  }
 
   // Check if we have a valid track
   if (!basic.track_available)
@@ -65,7 +67,7 @@ TurnBackMarkerRenderer::Draw(Canvas &canvas,
 
   // Estimate total altitude available above the target arrival point at the waypoint
   // This assumes solution targets waypoint altitude correctly.
-  const double Alt_Total = solution.height_glide + solution.altitude_difference;
+  const double Alt_Total = solution.height_glide + alt_diff;
 
   // We need positive altitude relative to the waypoint to glide there
   if (Alt_Total <= TBM_EPSILON) {
