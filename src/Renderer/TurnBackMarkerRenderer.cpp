@@ -11,12 +11,12 @@
 #include "Geo/Math.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
-#include "Computer/Settings.hpp" // Added for ComputerSettings
+#include "Computer/Settings.hpp"
 #include <cmath>
 #include <limits>
 
 // Small value to avoid division by zero and floating point issues
-constexpr double TBM_EPSILON = 1e-6;
+static constexpr double TBM_EPSILON = 1e-6;
 
 void
 TurnBackMarkerRenderer::Draw(Canvas &canvas,
@@ -40,7 +40,7 @@ TurnBackMarkerRenderer::Draw(Canvas &canvas,
 
   // Need a valid solution to proceed (even if below glide for the *old* TBM)
   if (!solution.IsOk())
-      return;
+    return;
 
   // Check if we have a valid track
   if (!basic.track_available)
@@ -69,19 +69,19 @@ TurnBackMarkerRenderer::Draw(Canvas &canvas,
 
   // We need positive altitude relative to the waypoint to glide there
   if (Alt_Total <= TBM_EPSILON) {
-      return; // Cannot reach waypoint even directly, let alone via TBM
+    return; // Cannot reach waypoint even directly, let alone via TBM
   }
 
   // Calculate the effective glide ratio *required* for the direct leg
   // Use this as an estimate for the detour legs. Need valid height_glide.
   if (solution.height_glide <= TBM_EPSILON) {
-      // Cannot reliably calculate required glide ratio
-      return;
+    // Cannot reliably calculate required glide ratio
+    return;
   }
   const double glide_ratio = C_direct_distance / solution.height_glide;
   if (glide_ratio <= TBM_EPSILON) {
-      // Invalid glide ratio
-      return;
+    // Invalid glide ratio
+    return;
   }
 
   // Calculate D_Total: Total horizontal distance achievable with Alt_Total
@@ -92,8 +92,8 @@ TurnBackMarkerRenderer::Draw(Canvas &canvas,
 
   // Check for degenerate case (denominator close to zero)
   if (std::abs(denominator) < TBM_EPSILON) {
-      // Geometric configuration prevents a stable solution here
-      return;
+    // Geometric configuration prevents a stable solution here
+    return;
   }
 
   // Calculate distance_to_tbm (x)
@@ -111,8 +111,8 @@ TurnBackMarkerRenderer::Draw(Canvas &canvas,
   // 2. The geometry requires D_Total - x >= 0 (from sqrt step)
   //    This means x <= D_Total. If x > D_Total, the geometry is impossible.
   if (distance_to_tbm > D_Total + TBM_EPSILON) { // Add epsilon for float tolerance
-     // This implies the required distance from TBM to WP would be negative.
-     return;
+    // This implies the required distance from TBM to WP would be negative.
+    return;
   }
 
   // --- TBM Calculation Successful ---
