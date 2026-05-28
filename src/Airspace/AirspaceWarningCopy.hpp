@@ -6,9 +6,11 @@
 #include "ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 #include "util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
+#include <optional>
 #include <vector>
 
 class AirspaceWarningCopy
@@ -26,6 +28,11 @@ private:
 
   Serial serial;
 
+  /* Current aircraft altitude, if known. When set, IsClearedAtCurrentAltitude()
+     additionally checks that the aircraft is within the cleared airspace's
+     vertical band. */
+  std::optional<AltitudeState> altitude_state;
+
 public:
   AirspaceWarningCopy() noexcept {
     ids_cleared.reserve(16);
@@ -33,6 +40,10 @@ public:
 
   auto GetSerial() const noexcept {
     return serial;
+  }
+
+  void SetAltitudeState(const AltitudeState &state) noexcept {
+    altitude_state = state;
   }
 
   void Visit(const AirspaceWarning& as) noexcept {
@@ -90,6 +101,21 @@ public:
       if (p == &as)
         return true;
     return false;
+  }
+
+  /**
+   * Returns true if the airspace is cleared AND the current aircraft
+   * altitude is within its vertical band. If no altitude state is set,
+   * falls back to the plain IsCleared() check. Renderers use this so
+   * that a clearance only affects drawing when it covers the current
+   * flight level.
+   */
+  bool IsClearedAtCurrentAltitude(const AbstractAirspace &as) const noexcept {
+    if (!IsCleared(as))
+      return false;
+    if (!altitude_state.has_value())
+      return true;
+    return as.Inside(*altitude_state);
   }
 
   bool IsWarningCapable(const AbstractAirspace &as) const noexcept {
