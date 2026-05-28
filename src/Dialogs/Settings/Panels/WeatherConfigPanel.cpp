@@ -12,9 +12,6 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "util/NumberParser.hpp"
-#ifdef HAVE_EDL
-#include "Dialogs/Weather/MapOverlayControlsWidget.hpp"
-#endif
 
 enum ControlIndex {
 #ifdef HAVE_PCMET
@@ -28,9 +25,6 @@ enum ControlIndex {
 
 #ifdef HAVE_HTTP
   ENABLE_TIM,
-#ifdef HAVE_EDL
-  ENABLE_EDL,
-#endif
 #endif
 };
 
@@ -75,17 +69,6 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean("Thermal Information Map",
              _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
              settings.enable_tim);
-#ifdef HAVE_EDL
-  AddBoolean(_("EDL Weather Page"),
-             _("Enable the dedicated EDL MBTiles weather page."),
-             settings.edl.enabled);
-  Add(CreateMapOverlayControlsOverlayWidget(PageLayout::Overlay::EDL));
-#else
-  AddReadOnly(_("EDL Weather Page"),
-              _("EDL weather requires an OpenGL renderer and is not available in this build."),
-              _("Unavailable"));
-  AddMultiLine(_("EDL weather is disabled in this build because the OpenGL renderer is not available."));
-#endif
 #endif
 }
 
@@ -118,10 +101,6 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 #ifdef HAVE_HTTP
   changed |= SaveValue(ENABLE_TIM, ProfileKeys::EnableThermalInformationMap,
                        settings.enable_tim);
-#ifdef HAVE_EDL
-  changed |= SaveValue(ENABLE_EDL, ProfileKeys::EnableEDLWeather,
-                       settings.edl.enabled);
-#endif
 #endif
 
   _changed |= changed;
