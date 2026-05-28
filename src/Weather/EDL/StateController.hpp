@@ -101,6 +101,10 @@ ClearGpsUiRefreshPending() noexcept;
 void
 ClearOverlay() noexcept;
 
+/**
+ * Return true when EDL should be active: the current page overlay is EDL,
+ * a temporary dedicated EDL layout is active, or an EDL overlay is on the map.
+ */
 bool
 OverlayEnabled() noexcept;
 
