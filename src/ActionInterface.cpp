@@ -337,7 +337,8 @@ ActionInterface::SendUIState() noexcept
 void
 ActionInterface::ScheduleSendUIState() noexcept
 {
-  main_window->ScheduleRefreshInfoBoxes();
+  if (main_window != nullptr)
+    main_window->ScheduleRefreshInfoBoxes();
 }
 
 void
