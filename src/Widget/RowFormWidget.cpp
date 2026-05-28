@@ -52,8 +52,10 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
   case Type::DUMMY:
     return 0;
 
-  case Type::WIDGET:
-    return widget->GetMinimumSize().height;
+  case Type::WIDGET: {
+    const unsigned height = widget->GetMinimumSize().height;
+    return height > 0 ? height : Layout::GetMinimumControlHeight();
+  }
 
   case Type::GENERIC:
     break;
@@ -236,6 +238,38 @@ RowFormWidget::SetExpertRow(unsigned i) noexcept
   Row &row = rows[i];
   assert(!row.expert);
   row.expert = true;
+}
+
+void
+RowFormWidget::PrepareWidgetRow(Row &row) noexcept
+{
+  assert(row.type == Row::Type::WIDGET);
+  assert(IsDefined());
+
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
+  const PixelRect rc = panel.GetClientRect();
+
+  if (!row.initialised) {
+    row.initialised = true;
+    row.widget->Initialise(panel, rc);
+  }
+
+  if (!row.prepared) {
+    row.prepared = true;
+    row.widget->Prepare(panel, rc);
+  }
+}
+
+Widget &
+RowFormWidget::Add(std::unique_ptr<Widget> widget) noexcept
+{
+  rows.emplace_back(std::move(widget));
+  Row &row = rows.back();
+
+  if (IsDefined())
+    PrepareWidgetRow(row);
+
+  return *row.widget;
 }
 
 Window &
@@ -480,8 +514,12 @@ RowFormWidget::Unprepare() noexcept
 void
 RowFormWidget::Show(const PixelRect &rc) noexcept
 {
+  PixelRect safe_rc = rc;
+  if (safe_rc.GetHeight() == 0)
+    safe_rc.bottom = safe_rc.top + 1;
+
   Window &panel = GetWindow();
-  panel.Move(rc);
+  panel.Move(safe_rc);
 
   UpdateLayout();
 

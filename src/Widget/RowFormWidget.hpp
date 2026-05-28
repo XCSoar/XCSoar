@@ -294,10 +294,7 @@ public:
   /**
    * Add a #Widget row.  The object will be deleted automatically.
    */
-  Widget &Add(std::unique_ptr<Widget> widget) noexcept {
-    rows.emplace_back(std::move(widget));
-    return *rows.back().widget;
-  }
+  Widget &Add(std::unique_ptr<Widget> widget) noexcept;
 
   Window &Add(std::unique_ptr<Window> window) noexcept {
     Add(Row::Type::GENERIC, std::move(window));
@@ -767,6 +764,8 @@ public:
   bool SaveValueFileReader(unsigned i, std::string_view profile_key) noexcept;
 
 private:
+  void PrepareWidgetRow(Row &row) noexcept;
+
   static void SetProfile(std::string_view profile_key, unsigned value) noexcept;
 
 protected:
@@ -775,6 +774,9 @@ protected:
 
   void NextControlRect(PixelRect &rc, unsigned height) noexcept {
     assert(IsDefined());
+
+    if (height == 0)
+      height = 1;
 
     rc.top = rc.bottom;
     rc.bottom = rc.top + height;
