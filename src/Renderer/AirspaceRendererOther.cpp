@@ -226,7 +226,7 @@ AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
     }
     for (const auto &i : range) {
       const AbstractAirspace &airspace = i.GetAirspace();
-      if (!visible(airspace) || !awc.IsCleared(airspace))
+      if (!visible(airspace) || !awc.IsClearedAtCurrentAltitude(airspace))
         continue;
 
       switch (airspace.GetShape()) {

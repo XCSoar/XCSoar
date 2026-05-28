@@ -106,6 +106,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
     awc.Visit(*warning_manager);
 
   const AircraftState aircraft = ToAircraftState(basic, calculated);
+  awc.SetAltitudeState(aircraft);
   const AirspaceMapVisible visible(computer_settings, settings,
                                    aircraft, awc);
   Draw(canvas,

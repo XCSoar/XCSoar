@@ -74,7 +74,7 @@ private:
                           screen_radius - look.thick_pen.GetWidth() / 4);
 
         if (warning_manager.IsWarningCapable(airspace) &&
-            !warning_manager.IsCleared(airspace)) {
+            !warning_manager.IsClearedAtCurrentAltitude(airspace)) {
           /* Second pass: fill cleared-airspace ring pixels (bit 3)
              inside this circle, completing the padding at the
              cleared/active boundary. Bit 0 must be clear (those
@@ -127,7 +127,7 @@ private:
         DrawPrepared();
 
         if (!fill_airspace && warning_manager.IsWarningCapable(airspace) &&
-            !warning_manager.IsCleared(airspace)) {
+            !warning_manager.IsClearedAtCurrentAltitude(airspace)) {
           /* Second pass: also fill where the cleared-airspace ring
              (bit 3) overlaps this airspace's geometry, but only where
              the pixel isn't already covered by bit 0 (to avoid double
@@ -173,7 +173,7 @@ public:
    * active airspaces across the cleared/active boundary.
    */
   void VisitClearance(const AbstractAirspace &airspace) {
-    if (!warning_manager.IsCleared(airspace))
+    if (!warning_manager.IsClearedAtCurrentAltitude(airspace))
       return;
 
     const GLEnable<GL_STENCIL_TEST> stencil;
