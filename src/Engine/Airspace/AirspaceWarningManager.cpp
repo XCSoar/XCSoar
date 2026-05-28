@@ -691,9 +691,12 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       if (w.GetWarningState() != AirspaceWarning::WARNING_INSIDE)
         continue;
 
+      bool any_meaningful_before = false;
       for (const auto m : kPredictionMethods) {
         AirspaceWarningInterval iv = w.GetInterval(m);
         if (!iv.IsValid()) continue;
+        if (iv.Length() >= kMinFragmentLength)
+          any_meaningful_before = true;
 
         std::array<AirspaceWarning *, kClearedBufCap> buf{};
         std::size_t n = 0;
@@ -729,9 +732,15 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       }
 
       if (n_res == 0) {
-        // No meaningful remaining intervals along any method.
-        // Aircraft is fully covered by cleared coverage.
-        w.SetCoveredByClearance(true);
+        /* Only claim clearance coverage when meaningful intervals
+           existed before subtraction and clearances consumed them.
+           If no method produced a meaningful interval to begin with
+           (e.g. all predictions land inside a narrow airspace that
+           is already < kMinFragmentLength away from the exit), the
+           WARNING_INSIDE is unrelated to clearance and must not be
+           silently suppressed. */
+        if (any_meaningful_before)
+          w.SetCoveredByClearance(true);
         continue;
       }
 
