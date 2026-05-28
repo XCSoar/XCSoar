@@ -6,6 +6,7 @@
 #include "Renderer/BestCruiseArrowRenderer.hpp"
 #include "Renderer/CompassRenderer.hpp"
 #include "Renderer/TrackLineRenderer.hpp"
+#include "Renderer/TurnBackMarkerRenderer.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 
 void
@@ -53,4 +54,19 @@ MapWindow::DrawTrackBearing(Canvas &canvas, const PixelPoint aircraft_pos,
   track_line_renderer.Draw(canvas, render_projection,
                            aircraft_pos, Basic(), Calculated(), GetMapSettings(),
                            wind_relative);
+}
+
+void
+MapWindow::DrawTurnBackMarker(Canvas &canvas) const noexcept
+{
+  if (!IsNearSelf() || !Basic().location_available || !Basic().track_available)
+    return;
+
+  // Only draw when we're not circling
+  if (Calculated().circling)
+    return;
+
+  turn_back_marker_renderer.Draw(canvas, render_projection,
+                                 Basic(), Calculated(),
+                                 GetComputerSettings());
 }

@@ -16,6 +16,7 @@
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
+#include "Renderer/TurnBackMarkerRenderer.hpp"
 #include "Weather/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 
@@ -125,6 +126,7 @@ protected:
   AirspaceLabelRenderer airspace_label_renderer;
 
   TrailRenderer trail_renderer;
+  TurnBackMarkerRenderer turn_back_marker_renderer;
 
   ProtectedTaskManager *task = nullptr;
   const ProtectedRoutePlanner *route_planner = nullptr;
@@ -362,14 +364,12 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderFinalGlideShading(Canvas &canvas) noexcept;
-  
+
   /**
    * Draw the Turn Back Marker (TBM) on the track line
    * @param canvas The drawing canvas
-   * @param aircraft_pos The aircraft position on screen
    */
-  virtual void DrawTurnBackMarker([[maybe_unused]] Canvas &canvas,
-                                  [[maybe_unused]] const PixelPoint aircraft_pos) const noexcept {}
+  void DrawTurnBackMarker(Canvas &canvas) const noexcept;
 
   /**
    * Renders the airspace

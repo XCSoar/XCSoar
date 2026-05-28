@@ -24,7 +24,8 @@ MapWindow::MapWindow(const MapLook &_look,
    waypoint_renderer(nullptr, look.waypoint),
    airspace_renderer(look.airspace),
    airspace_label_renderer(look.airspace),
-   trail_renderer(look.trail) {}
+   trail_renderer(look.trail),
+   turn_back_marker_renderer(look) {}
 
 MapWindow::~MapWindow() noexcept
 {
