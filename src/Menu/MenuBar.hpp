@@ -32,6 +32,7 @@ protected:
   };
 
   Button buttons[MAX_BUTTONS];
+  const ButtonLook &look;
 
 public:
   MenuBar(ContainerWindow &parent, const ButtonLook &look);

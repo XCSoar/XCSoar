@@ -6,6 +6,8 @@
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
+#include "util/StringAPI.hxx"
 #include "Hardware/Vibrator.hpp"
 
 Button::Button(ContainerWindow &parent, const PixelRect &rc,
@@ -74,6 +76,36 @@ Button::SetCaption(const char *caption)
 
   auto &r = (TextButtonRenderer &)*renderer;
   r.SetCaption(caption);
+
+  Invalidate();
+}
+
+[[gnu::pure]]
+static const char *
+MenuSymbolCaption(const char *caption) noexcept
+{
+  if (SymbolButtonRenderer::IsSymbolCaption(caption))
+    return caption;
+
+  const char *nl = StringFind(caption, '\n');
+  if (nl == nullptr || nl[1] == '\0' || nl[2] != '\0')
+    return nullptr;
+
+  const char *symbol = nl + 1;
+  return SymbolButtonRenderer::IsSymbolCaption(symbol) ? symbol : nullptr;
+}
+
+void
+Button::SetMenuCaption(const ButtonLook &look, const char *caption) noexcept
+{
+  assert(caption != nullptr);
+
+  const char *symbol = MenuSymbolCaption(caption);
+  if (symbol != nullptr)
+    renderer = std::make_unique<SymbolButtonRenderer>(
+      look, symbol, SymbolButtonRenderer::Style::MENU);
+  else
+    renderer = std::make_unique<TextButtonRenderer>(look, caption);
 
   Invalidate();
 }
