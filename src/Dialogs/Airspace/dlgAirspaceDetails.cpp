@@ -206,19 +206,19 @@ private:
   void AddNOTAMAltitudes(StaticString<128> &buffer);
 };
 
-void
-dlgAirspaceDetails(ConstAirspacePtr airspace,
-                   ProtectedAirspaceWarningManager *warnings)
+static bool
+dlgAirspaceDetailsModal(ConstAirspacePtr airspace,
+                        ProtectedAirspaceWarningManager *warnings,
+                        bool browse_parent) noexcept
 {
-  // Use specialized widget for NOTAMs
   const bool is_notam = airspace->GetType() == AirspaceClass::NOTAM;
-  
+
   AirspaceDetailsWidget *widget = is_notam
     ? new NOTAMDetailsWidget(airspace, warnings)
     : new AirspaceDetailsWidget(airspace, warnings);
-  
+
   const char *title = is_notam ? _("NOTAM Details") : _("Airspace Details");
-  
+
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
                       title, widget);
@@ -237,9 +237,30 @@ dlgAirspaceDetails(ConstAirspacePtr airspace,
 
     dialog.AddButton(label, [widget](){ widget->AckDayOrEnable(); });
   }
-  dialog.AddButton(_("Close"), mrOK);
 
-  dialog.ShowModal();
+  dialog.AddButton(_("Close"), browse_parent ? mrCancel : mrOK);
+
+  if (!browse_parent) {
+    dialog.ShowModal();
+    return false;
+  }
+
+  return dialog.ShowModal() == mrOK;
+}
+
+void
+dlgAirspaceDetails(ConstAirspacePtr airspace,
+                   ProtectedAirspaceWarningManager *warnings)
+{
+  dlgAirspaceDetailsModal(std::move(airspace), warnings, false);
+}
+
+bool
+dlgAirspaceDetailsForBrowseParent(
+  ConstAirspacePtr airspace,
+  ProtectedAirspaceWarningManager *warnings) noexcept
+{
+  return dlgAirspaceDetailsModal(std::move(airspace), warnings, true);
 }
 
 void

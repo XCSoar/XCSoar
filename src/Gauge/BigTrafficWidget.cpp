@@ -572,7 +572,7 @@ FlarmTrafficControl::OpenDetails()
     return;
 
   // Show the details dialog
-  dlgFlarmTrafficDetailsShowModal(traffic->id);
+  (void)dlgFlarmTrafficDetailsShowModal(traffic->id);
 }
 
 static Button
