@@ -109,7 +109,8 @@ ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end) noexcept
   const unsigned width = RangeMaxWidth(start, end);
   const unsigned total_height = rc.GetHeight();
   const unsigned max_height = n * Layout::GetMaximumControlHeight();
-  const unsigned row_height = std::min(total_height, max_height) / n;
+  const unsigned row_height =
+    std::max(1u, std::min(total_height, max_height) / n);
 
   auto button_rc = rc.CutLeftSafe(width).TopAligned(row_height);
 
@@ -133,12 +134,12 @@ ButtonPanel::HorizontalRange(PixelRect rc,
   const unsigned total_width = rc.GetWidth();
   const unsigned total_height = rc.GetHeight();
   const unsigned max_row_height = Layout::GetMaximumControlHeight();
-  const unsigned row_height = max_row_height < total_height / 2
-    ? max_row_height
-    : std::max(Layout::GetMinimumControlHeight(),
-               total_height / 2);
-  const unsigned width = total_width / n;
-  assert(width > 0);
+  const unsigned row_height = std::max(1u,
+    max_row_height < total_height / 2
+      ? max_row_height
+      : std::max(Layout::GetMinimumControlHeight(),
+                 total_height / 2));
+  const unsigned width = std::max(1u, total_width / n);
 
   auto button_rc = rc.CutBottomSafe(row_height).LeftAligned(width);
 
