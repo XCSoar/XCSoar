@@ -95,6 +95,12 @@ public:
    */
   void SetCaption(const char *caption);
 
+  /**
+   * Update a menu bar button: symbol captions (+, -, arrows, …) use
+   * #SymbolButtonRenderer; other captions use #TextButtonRenderer.
+   */
+  void SetMenuCaption(const ButtonLook &look, const char *caption) noexcept;
+
   void SetSelected(bool _selected);
 
   void SetCursorKeyGroup(ButtonPanel *p) noexcept { cursor_key_group = p; }

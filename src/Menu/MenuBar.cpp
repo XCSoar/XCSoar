@@ -5,6 +5,7 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "Input/InputEvents.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 [[gnu::pure]]
@@ -16,18 +17,18 @@ GetButtonPosition(unsigned i, PixelRect rc)
   if (hheight > hwidth) {
     // portrait
 
-    hheight /= menubar_height_scale_factor;
+    hheight = std::max(1u, hheight / menubar_height_scale_factor);
 
     if (i == 0) {
       rc.left = rc.right;
       rc.top = rc.bottom;
     } else if (i < 5) {
-      hwidth /= 4;
+      hwidth = std::max(1u, hwidth / 4);
 
       rc.left += hwidth * (i - 1);
       rc.top = rc.bottom - hheight;
     } else {
-      hwidth /= 3;
+      hwidth = std::max(1u, hwidth / 3);
 
       rc.left = rc.right - hwidth;
       rc.top += (i - 5) * hheight;
@@ -38,8 +39,8 @@ GetButtonPosition(unsigned i, PixelRect rc)
   } else {
     // landscape
 
-    hwidth /= 5;
-    hheight /= 5;
+    hwidth = std::max(1u, hwidth / 5);
+    hheight = std::max(1u, hheight / 5);
 
     if (i == 0) {
       rc.left = rc.right;
@@ -66,7 +67,8 @@ MenuBar::Button::OnClicked() noexcept
   return true;
 }
 
-MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &look)
+MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &_look)
+  :look(_look)
 {
   const PixelRect rc = parent.GetClientRect();
 
@@ -88,7 +90,7 @@ MenuBar::ShowButton(unsigned i, bool enabled, const char *text,
 
   Button &button = buttons[i];
 
-  button.SetCaption(text);
+  button.SetMenuCaption(look, text);
   button.SetEnabled(enabled && event > 0);
   button.SetEvent(event);
   button.ShowOnTop();
