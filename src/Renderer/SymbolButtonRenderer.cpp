@@ -54,6 +54,10 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc,
   // Draw symbols instead of + and -
   else if (ch == '+' || ch == '-')
     SymbolRenderer::DrawSign(canvas, rc, ch == '+');
+
+  // Draw hamburger menu icon (map overlay menu button)
+  else if (ch == 'h')
+    SymbolRenderer::DrawHamburger(canvas, rc);
 }
 
 void

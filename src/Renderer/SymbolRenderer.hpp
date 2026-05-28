@@ -17,4 +17,5 @@ namespace SymbolRenderer
 
   void DrawArrow(Canvas &canvas, PixelRect rc, Direction direction) noexcept;
   void DrawSign(Canvas &canvas, PixelRect rc, bool plus) noexcept;
+  void DrawHamburger(Canvas &canvas, PixelRect rc) noexcept;
 }
