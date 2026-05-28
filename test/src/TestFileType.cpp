@@ -96,11 +96,21 @@ TestFilenameMatchesFileType()
   // Case-insensitive
   ok1(FilenameMatchesFileType("INIT.LUA", FileType::LUA));
   ok1(FilenameMatchesFileType("XCSoar-Flarm.TXT", FileType::FLARMDB));
+
+  // RASP pattern has '*' both at the start and in the middle.
+  // Embedded '*' must be honoured as a wildcard, and matching must be
+  // case-insensitive (RASP files in the wild use mixed case).
+  ok1(FilenameMatchesFileType("xcsoar-rasp.dat", FileType::RASP));
+  ok1(FilenameMatchesFileType("SI-RASP-National-ThermalMap.dat",
+                              FileType::RASP));
+  ok1(FilenameMatchesFileType("xcsoar-rasp-eu.dat", FileType::RASP));
+  ok1(!FilenameMatchesFileType("xcsoar-waypoints.dat", FileType::RASP));
+  ok1(!FilenameMatchesFileType("xcsoar-rasp.txt", FileType::RASP));
 }
 
 int main()
 {
-  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 13);
+  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 18);
 
   TestDefaultDirs();
   TestPatterns();

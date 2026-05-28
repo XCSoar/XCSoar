@@ -70,15 +70,11 @@ IsDots(const char *str) noexcept
 static bool
 checkFilter(const char *filename, const char *filter) noexcept
 {
-  // filter = e.g. "*.igc" or "config/*.prf"
-  // todo: make filters like "config/*.prf" work
-
-  // if invalid or short filter "*" -> return true
-  // todo: check for asterisk
-  if (!filter || StringIsEmpty(filter + 1))
+  // filter = e.g. "*.igc" or "*-rasp*.dat"
+  if (!filter)
     return true;
 
-  return StringEndsWithIgnoreCase(filename, filter + 1);
+  return WildcardMatchIgnoreCase(filter, filename);
 }
 
 static bool

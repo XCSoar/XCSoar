@@ -143,8 +143,9 @@ FilenameMatchesFileType(const char *filename,
   size_t length;
   while ((length = std::strlen(p)) > 0) {
     if (p[0] == '*') {
-      /* suffix match: "*.lua" matches "init.lua" */
-      if (StringEndsWithIgnoreCase(filename, p + 1))
+      /* wildcard pattern: "*.lua" matches "init.lua",
+         "*-rasp*.dat" matches "SI-RASP-National-ThermalMap.dat" */
+      if (WildcardMatchIgnoreCase(p, filename))
         wildcard_match = true;
     } else {
       /* exact match: "xcsoar-flarm.txt" — return immediately */
