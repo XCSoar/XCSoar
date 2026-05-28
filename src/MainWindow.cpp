@@ -677,6 +677,11 @@ MainWindow::BeginShutdown() noexcept
 {
   timer.Cancel();
 
+  refresh_info_boxes_pending = false;
+  page_actions_update_pending = false;
+  refresh_info_boxes_notify.ClearNotification();
+  page_actions_update_notify.ClearNotification();
+
   KillTopWidget();
   KillBottomWidget();
 }
@@ -914,6 +919,46 @@ void
 MainWindow::OnCalculatedNotify() noexcept
 {
   UIReceiveCalculatedData();
+}
+
+void
+MainWindow::OnRefreshInfoBoxesNotify() noexcept
+{
+  refresh_info_boxes_pending = false;
+
+  if (!InfoBoxManager::IsReady())
+    return;
+
+  InfoBoxManager::SetDirty();
+  InfoBoxManager::ProcessTimer();
+  SetUIState(CommonInterface::GetUIState());
+}
+
+void
+MainWindow::ScheduleRefreshInfoBoxes() noexcept
+{
+  if (refresh_info_boxes_pending)
+    return;
+
+  refresh_info_boxes_pending = true;
+  refresh_info_boxes_notify.SendNotification();
+}
+
+void
+MainWindow::OnPageActionsUpdateNotify() noexcept
+{
+  page_actions_update_pending = false;
+  PageActions::Update();
+}
+
+void
+MainWindow::SchedulePageActionsUpdate() noexcept
+{
+  if (page_actions_update_pending)
+    return;
+
+  page_actions_update_pending = true;
+  page_actions_update_notify.SendNotification();
 }
 
 void

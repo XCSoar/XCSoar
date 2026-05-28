@@ -16,3 +16,8 @@ NetComponents::NetComponents(EventLoop &, CurlGlobal &,
 }
 
 NetComponents::~NetComponents() noexcept = default;
+
+void
+NetComponents::BeginShutdown() noexcept
+{
+}

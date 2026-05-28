@@ -44,6 +44,7 @@ namespace Net::DownloadManager {
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 bool Initialise() noexcept;
+/** Cancel queued and in-flight downloads (safe to call more than once). */
 void BeginDeinitialise() noexcept;
 void Deinitialise() noexcept;
 

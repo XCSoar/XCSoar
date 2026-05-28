@@ -19,6 +19,8 @@
 #include "ActionInterface.hpp"
 #ifdef HAVE_EDL
 #include "Dialogs/Weather/MapOverlayControlsWidget.hpp"
+#include "NetComponents.hpp"
+#include "Weather/EDL/DownloadGlue.hpp"
 #include "Weather/EDL/StateController.hpp"
 #endif
 
@@ -106,7 +108,9 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
       else
         EDL::EnsureInitialised();
 
-      EDL::TryApplyOverlayFromCache();
+      if (!EDL::TryApplyOverlayFromCache() &&
+          net_components != nullptr && net_components->edl != nullptr)
+        net_components->edl->RequestOverlayRefresh();
     }
 #endif
     break;
@@ -226,6 +230,13 @@ void
 PageActions::Update()
 {
   LoadLayout(GetCurrentLayout());
+}
+
+void
+PageActions::ScheduleUpdate() noexcept
+{
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->SchedulePageActionsUpdate();
 }
 
 
@@ -385,7 +396,9 @@ PageActions::LoadLayout(const PageLayout &layout)
   LoadBottom(active);
 
   ActionInterface::UpdateDisplayMode();
-  ActionInterface::SendUIState();
+  ActionInterface::SendUIState(true);
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->ScheduleRefreshInfoBoxes();
 }
 
 void

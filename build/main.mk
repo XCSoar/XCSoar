@@ -670,7 +670,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/StateController.cpp \
 	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
-	$(SRC)/Weather/EDL/Glue.cpp
+	$(SRC)/Weather/EDL/Glue.cpp \
+	$(SRC)/Weather/EDL/DownloadGlue.cpp
 endif
 else
 XCSOAR_SOURCES += \

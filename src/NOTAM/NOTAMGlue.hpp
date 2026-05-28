@@ -5,13 +5,12 @@
 
 #include "NOTAM.hpp"
 #include "Settings.hpp"
-#include "co/InjectTask.hxx"
+#include "net/AsyncTask.hpp"
 #include "thread/Mutex.hxx"
 #include "thread/SafeList.hxx"
 #include "ui/event/Notify.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "system/Path.hpp"
-#include "RateLimiter.hpp"
 #include <boost/json/fwd.hpp>
 #include <chrono>
 #include <cstdint>
@@ -67,7 +66,7 @@ public:
 /**
  * NOTAM manager that handles loading and refreshing NOTAMs
  */
-class NOTAMGlue final : public RateLimiter {
+class NOTAMGlue final {
   NOTAMSettings settings;
   CurlGlobal &curl;
   
@@ -121,12 +120,20 @@ class NOTAMGlue final : public RateLimiter {
   /** Incremented when data is explicitly cleared/invalidated. */
   uint64_t mutation_generation = 0;
 
+  bool shutting_down = false;
+
+  /** When to retry after a failed fetch (checked from OnTimer()). */
+  std::chrono::steady_clock::time_point retry_due{};
+
   /** Background task for loading NOTAMs.  Declared last so destroyed first. */
-  Co::InjectTask load_task;
+  Net::AsyncTask load_task;
 
 public:
   NOTAMGlue(const NOTAMSettings &_settings, CurlGlobal &_curl);
   ~NOTAMGlue();
+
+  /** Cancel timers/tasks before the UI event loop is torn down. */
+  void BeginShutdown() noexcept;
   
   /**
    * Register a listener for NOTAM update notifications
@@ -288,9 +295,11 @@ private:
   
   /** Notify all registered listeners that NOTAMs have been updated */
   void NotifyListeners() noexcept;
-  
-  /** RateLimiter callback for delayed retry */
-  void Run() override;
+
+  void OnRetryTimer();
+
+  void CancelRetry() noexcept;
+  void TriggerRetry() noexcept;
   
   /** Save raw API response to file */
   void SaveNOTAMsToFile(const boost::json::value &api_response,

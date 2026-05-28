@@ -31,9 +31,12 @@ public:
 
   void SetSettings(const TrackingSettings &_settings);
 
+  void BeginShutdown() noexcept;
+
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
 private:
+  bool shutting_down = false;
   /* virtual methods from SkyLinesTracking::Handler */
   virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                          const GeoPoint &location, int altitude) override;

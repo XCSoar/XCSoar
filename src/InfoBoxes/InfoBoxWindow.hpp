@@ -117,6 +117,11 @@ public:
   }
 
   void SetContentProvider(std::unique_ptr<InfoBoxContent> _content);
+
+  [[nodiscard]] bool HasContent() const noexcept {
+    return content != nullptr;
+  }
+
   void UpdateContent();
 
 private:

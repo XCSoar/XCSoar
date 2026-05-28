@@ -27,7 +27,16 @@ SkyLinesTracking::Glue::Glue(EventLoop &event_loop,
 
 SkyLinesTracking::Glue::~Glue()
 {
+  BeginShutdown();
+}
+
+void
+SkyLinesTracking::Glue::BeginShutdown() noexcept
+{
+  client.Close();
+  cloud_client.Close();
   delete queue;
+  queue = nullptr;
 }
 
 inline bool
