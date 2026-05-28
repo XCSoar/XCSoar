@@ -56,6 +56,11 @@ namespace PageActions
   void Update();
 
   /**
+   * Like Update(), but runs on the next event-loop iteration.
+   */
+  void ScheduleUpdate() noexcept;
+
+  /**
    * Restore the current page as it was configured.
    */
   void Restore();

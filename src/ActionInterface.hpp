@@ -125,6 +125,12 @@ void
 SendUIState() noexcept;
 
 /**
+ * Like SendUIState(), but runs on the next event-loop iteration.
+ */
+void
+ScheduleSendUIState() noexcept;
+
+/**
  * Update the Active Radio Frequency in #ComputerSettings, and
  * forward it to all XCSoar modules that want it.
  *

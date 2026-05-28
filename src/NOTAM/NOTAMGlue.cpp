@@ -80,14 +80,59 @@ PopulateImplFromCache(NOTAMImpl &impl,
 }
 
 NOTAMGlue::NOTAMGlue(const NOTAMSettings &_settings, CurlGlobal &_curl)
-  : RateLimiter(std::chrono::seconds(30), std::chrono::seconds(30)),
-    settings(_settings), curl(_curl), 
+  :settings(_settings), curl(_curl),
     current_notams_impl(std::make_unique<NOTAMImpl>()),
     load_task(curl.GetEventLoop())
 {
 }
 
-NOTAMGlue::~NOTAMGlue() = default;
+NOTAMGlue::~NOTAMGlue()
+{
+  BeginShutdown();
+}
+
+void
+NOTAMGlue::BeginShutdown() noexcept
+{
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    if (shutting_down)
+      return;
+
+    shutting_down = true;
+    loading = false;
+    retry_pending = false;
+    force_refresh_pending = false;
+    manual_refresh_requested = false;
+    load_complete_pending = false;
+    listener_update_pending = false;
+    listener_load_complete_pending.reset();
+    load_complete_error = {};
+    retry_due = {};
+  }
+
+  CancelRetry();
+  load_task.BeginShutdown();
+  load_complete_notify.ClearNotification();
+  listener_notify.ClearNotification();
+}
+
+void
+NOTAMGlue::CancelRetry() noexcept
+{
+  const std::lock_guard<Mutex> lock(mutex);
+  retry_due = {};
+}
+
+void
+NOTAMGlue::TriggerRetry() noexcept
+{
+  const std::lock_guard<Mutex> lock(mutex);
+  if (shutting_down)
+    return;
+
+  retry_due = std::chrono::steady_clock::now() + std::chrono::seconds(30);
+}
 
 NOTAMSettings
 NOTAMGlue::GetSettingsSnapshot() const noexcept
@@ -137,6 +182,8 @@ NOTAMGlue::OnTimer(const GeoPoint &current_location,
 {
   {
     const std::lock_guard<Mutex> lock(mutex);
+    if (shutting_down)
+      return;
     current_time_utc = current_time;
   }
 
@@ -201,6 +248,17 @@ NOTAMGlue::OnTimer(const GeoPoint &current_location,
     UpdateLocation(current_location);
     return;
   }
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    if (!retry_pending || retry_due == std::chrono::steady_clock::time_point{})
+      return;
+
+    if (std::chrono::steady_clock::now() < retry_due)
+      return;
+  }
+
+  OnRetryTimer();
 }
 
 void
@@ -213,7 +271,7 @@ NOTAMGlue::UpdateLocation(const GeoPoint &location)
   // Check if already loading
   {
     const std::lock_guard<Mutex> lock(mutex);
-    if (!settings.enabled || loading) {
+    if (shutting_down || !settings.enabled || loading) {
       return; // Already loading, skip this request
     }
     loading = true;
@@ -227,7 +285,7 @@ NOTAMGlue::UpdateLocation(const GeoPoint &location)
   LogFmt("NOTAM: Auto-refresh starting");
   
   // Cancel any pending retry since we're starting a new attempt
-  Cancel();
+  CancelRetry();
 
   // Start async loading
   try {
@@ -266,7 +324,7 @@ NOTAMGlue::ForceUpdateLocation(const GeoPoint &location,
 
   {
     const std::lock_guard<Mutex> lock(mutex);
-    if (!settings.enabled) {
+    if (shutting_down || !settings.enabled) {
       manual_refresh_requested = false;
       return false;
     }
@@ -298,7 +356,7 @@ NOTAMGlue::ForceUpdateLocation(const GeoPoint &location,
   }
 
   LogFmt("NOTAM: Manual refresh starting");
-  Cancel();
+  CancelRetry();
   try {
     load_task.Start(LoadNOTAMsInternal(location, true),
                     BIND_THIS_METHOD(OnLoadComplete));
@@ -337,7 +395,7 @@ NOTAMGlue::LoadNOTAMs(const GeoPoint &location)
   // Check if already loading
   {
     const std::lock_guard lock(mutex);
-    if (!settings.enabled || loading) {
+    if (shutting_down || !settings.enabled || loading) {
       return;
     }
     loading = true;
@@ -348,7 +406,7 @@ NOTAMGlue::LoadNOTAMs(const GeoPoint &location)
   }
   
   // Cancel any pending retry since we're starting a new attempt
-  Cancel();
+  CancelRetry();
   
   // Start async loading
   try {
@@ -543,6 +601,8 @@ NOTAMGlue::OnLoadComplete(std::exception_ptr error) noexcept
 {
   {
     const std::lock_guard<Mutex> lock(mutex);
+    if (shutting_down)
+      return;
     load_complete_error = std::move(error);
     load_complete_pending = true;
   }
@@ -556,7 +616,7 @@ NOTAMGlue::OnLoadCompleteNotification() noexcept
   std::exception_ptr error;
   {
     const std::lock_guard<Mutex> lock(mutex);
-    if (!load_complete_pending)
+    if (shutting_down || !load_complete_pending)
       return;
 
     error = std::move(load_complete_error);
@@ -617,7 +677,7 @@ NOTAMGlue::HandleLoadComplete(std::exception_ptr error) noexcept
   const auto apply_committed_load =
     [this, notify_load_complete, start_queued_refresh]() {
     // Success - cancel any pending retry
-    Cancel();
+    CancelRetry();
 
     // Update the airspace database
     if (data_components && data_components->airspaces) {
@@ -667,7 +727,7 @@ NOTAMGlue::HandleLoadComplete(std::exception_ptr error) noexcept
     if (load_committed)
       apply_committed_load();
     else
-      Cancel();
+      CancelRetry();
 
     LogFmt("NOTAM: Starting queued forced refresh");
     try {
@@ -712,12 +772,12 @@ NOTAMGlue::HandleLoadComplete(std::exception_ptr error) noexcept
     if (schedule_retry) {
       // Failed - schedule retry with fixed 30-second delay
       LogFmt("NOTAM: Fetch failed, scheduling retry in 30 seconds");
-      Trigger();
+      TriggerRetry();
     } else {
-      Cancel();
+      CancelRetry();
     }
   } else if (!load_committed) {
-    Cancel();
+    CancelRetry();
   } else {
     apply_committed_load();
   }
@@ -784,8 +844,11 @@ NOTAMGlue::OnListenerNotification() noexcept
 }
 
 void
-NOTAMGlue::Run()
+NOTAMGlue::OnRetryTimer()
 {
+  if (shutting_down)
+    return;
+
   LogFmt("NOTAM: Retry timer fired, attempting fetch again");
   
   GeoPoint location;

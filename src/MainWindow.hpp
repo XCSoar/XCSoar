@@ -116,6 +116,9 @@ private:
    */
   UI::Notify restore_page_notify{[this]{ OnRestorePageNotify(); }};
 
+  UI::Notify refresh_info_boxes_notify{[this]{ OnRefreshInfoBoxesNotify(); }};
+  UI::Notify page_actions_update_notify{[this]{ OnPageActionsUpdateNotify(); }};
+
   UI::PeriodicTimer timer{[this]{ RunTimer(); }};
 
   BatteryTimer battery_timer;
@@ -132,6 +135,8 @@ private:
 #endif
 
   bool restore_page_pending = false;
+  bool refresh_info_boxes_pending = false;
+  bool page_actions_update_pending = false;
 
   /**
    * Has "late" initialization been done already?  Those are things
@@ -356,6 +361,17 @@ public:
   void DeferredRestorePage() noexcept;
 
   /**
+   * Defer InfoBox refresh to the next event-loop iteration (avoids
+   * reentrant layout while InfoBox content is updating).
+   */
+  void ScheduleRefreshInfoBoxes() noexcept;
+
+  /**
+   * Defer PageActions::Update() to the next event-loop iteration.
+   */
+  void SchedulePageActionsUpdate() noexcept;
+
+  /**
    * Show this #Widget above the map.  This replaces (deletes) the
    * previous top widget, if any.  To disable this feature, call this
    * method with widget==nullptr.
@@ -412,6 +428,8 @@ private:
   void OnGpsNotify() noexcept;
   void OnCalculatedNotify() noexcept;
   void OnRestorePageNotify() noexcept;
+  void OnRefreshInfoBoxesNotify() noexcept;
+  void OnPageActionsUpdateNotify() noexcept;
 
   void OnTerrainLoaded() noexcept;
 

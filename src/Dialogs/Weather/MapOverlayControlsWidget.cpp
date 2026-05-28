@@ -4,9 +4,9 @@
 #include "MapOverlayControlsWidget.hpp"
 
 #include "Blackboard/BlackboardListener.hpp"
-#include "Dialogs/CoFunctionDialog.hpp"
-#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
+#include "Components.hpp"
+#include "NetComponents.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -14,7 +14,6 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
-#include "Operation/PluggableOperationEnvironment.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
 #include "Weather/MapOverlay/EdlControlsModel.hpp"
@@ -22,44 +21,24 @@
 #include "Weather/MapOverlay/Usage.hpp"
 #include "Weather/EDL/StateController.hpp"
 #include "Weather/EDL/TileStore.hpp"
+#ifdef HAVE_EDL
+#include "Weather/EDL/DownloadGlue.hpp"
+#endif
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/SolidWidget.hpp"
-#include "co/Task.hxx"
 #include "util/StaticString.hxx"
-
-#ifdef HAVE_HTTP
-#include "net/http/Init.hpp"
-#endif
 
 #include <memory>
 #include <vector>
 
-namespace {
-
-#ifdef HAVE_HTTP
-
-Co::Task<AllocatedPath>
-CoDownloadEdlTile(CurlGlobal &curl, ProgressListener &progress,
-                  EDL::TileRequest request)
-{
-  co_return co_await request.EnsureDownloaded(curl, progress);
-}
-
-Co::Task<unsigned>
-CoPrecacheEdlDay(CurlGlobal &curl, ProgressListener &progress,
-                 BrokenDateTime day)
-{
-  co_return co_await EDL::EnsureDayDownloaded(day, curl, progress);
-}
-
-#endif
-
-} // namespace
-
 class MapOverlayControlsWidget final
   : public RowFormWidget,
     private DataFieldListener,
-    NullBlackboardListener {
+    NullBlackboardListener
+#ifdef HAVE_EDL
+  , private EDL::DownloadListener
+#endif
+{
   const MapOverlay::Usage usage;
   const PageLayout::Overlay overlay;
   MapOverlay::EdlControlsModel edl;
@@ -108,6 +87,10 @@ private:
 
   void OnModified(DataField &df) noexcept override;
   void OnGPSUpdate(const MoreData &basic) override;
+
+#ifdef HAVE_EDL
+  void OnDownloadFinished() noexcept override;
+#endif
 };
 
 void
@@ -338,6 +321,12 @@ MapOverlayControlsWidget::Show(const PixelRect &rc) noexcept
 
   RegisterBlackboardListener();
 
+#ifdef HAVE_EDL
+  if (overlay == PageLayout::Overlay::EDL &&
+      net_components != nullptr && net_components->edl != nullptr)
+    net_components->edl->AddListener(*this);
+#endif
+
   if (refresh_edl)
     RefreshEdlOverlay();
 }
@@ -347,6 +336,13 @@ MapOverlayControlsWidget::Hide() noexcept
 {
   EDL::ClearGpsUiRefreshPending();
   UnregisterBlackboardListener();
+
+#ifdef HAVE_EDL
+  if (overlay == PageLayout::Overlay::EDL &&
+      net_components != nullptr && net_components->edl != nullptr)
+    net_components->edl->RemoveListener(*this);
+#endif
+
   WindowWidget::Hide();
 }
 
@@ -415,7 +411,7 @@ MapOverlayControlsWidget::Unprepare() noexcept
 void
 MapOverlayControlsWidget::RefreshEdlOverlay()
 {
-#if !defined(HAVE_HTTP)
+#if !defined(HAVE_HTTP) || !defined(HAVE_EDL)
   ShowMessageBox(_("HTTP support is not available in this build."),
                  _("Weather"), MB_OK);
 #else
@@ -424,76 +420,38 @@ MapOverlayControlsWidget::RefreshEdlOverlay()
     return;
   }
 
-  try {
-    PluggableOperationEnvironment env;
-    EDL::SetLoadingStatus();
+  if (net_components == nullptr || net_components->edl == nullptr) {
     RefreshControls();
-
-    if (EDL::TryApplyOverlayFromCache()) {
-      ActionInterface::SendUIState(true);
-      RefreshControls();
-      return;
-    }
-
-    const EDL::TileRequest download_request{
-      EDL::GetForecastTime(), EDL::GetIsobar()};
-    auto path = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
-                                     UIGlobals::GetDialogLook(),
-                                     _("Download"),
-                                     CoDownloadEdlTile(*Net::curl, env,
-                                                       download_request),
-                                     &env);
-    if (!path) {
-      EDL::SetIdleStatus();
-      RefreshControls();
-      return;
-    }
-
-    if (usage == MapOverlay::Usage::MAP_BOTTOM &&
-        overlay == PageLayout::Overlay::EDL)
-      EDL::ApplyOverlay(*path);
-    else
-      EDL::SetIdleStatus();
-
-    ActionInterface::SendUIState(true);
-  } catch (...) {
-    EDL::SetErrorStatus();
-    ShowError(std::current_exception(), _("Weather"));
+    return;
   }
 
   RefreshControls();
+  net_components->edl->RequestOverlayRefresh();
 #endif
 }
+
+#ifdef HAVE_EDL
+void
+MapOverlayControlsWidget::OnDownloadFinished() noexcept
+{
+  RefreshControls();
+}
+#endif
 
 void
 MapOverlayControlsWidget::PrecacheDay()
 {
-#if !defined(HAVE_HTTP)
+#if !defined(HAVE_HTTP) || !defined(HAVE_EDL)
   ShowMessageBox(_("HTTP support is not available in this build."),
                  _("Weather"), MB_OK);
 #else
   if (!EDL::OverlayEnabled())
     return;
 
-  try {
-    PluggableOperationEnvironment env;
-    const auto count = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
-                                            UIGlobals::GetDialogLook(),
-                                            _("Precache day"),
-                                            CoPrecacheEdlDay(*Net::curl, env,
-                                                             EDL::GetForecastTime()),
-                                            &env);
-    if (!count)
-      return;
+  if (net_components == nullptr || net_components->edl == nullptr)
+    return;
 
-    RefreshControls();
-
-    StaticString<64> message;
-    message.Format(_("Cached %u files for the selected UTC day."), *count);
-    ShowMessageBox(message, _("Weather"), MB_OK);
-  } catch (...) {
-    ShowError(std::current_exception(), _("Weather"));
-  }
+  net_components->edl->RequestPrecacheDay(EDL::GetForecastTime());
 #endif
 }
 

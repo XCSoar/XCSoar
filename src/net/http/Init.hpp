@@ -20,7 +20,7 @@ extern CurlGlobal *curl;
 void
 Initialise(EventLoop &event_loop);
 
-void Deinitialise();
+void Deinitialise() noexcept;
 
 #else
 

@@ -8,6 +8,10 @@
 #ifdef HAVE_HTTP
 #include "net/client/tim/Glue.hpp"
 #include "NOTAM/NOTAMGlue.hpp"
+#include "net/http/DownloadManager.hpp"
+#ifdef HAVE_EDL
+#include "Weather/EDL/DownloadGlue.hpp"
+#endif
 #endif
 
 NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
@@ -23,6 +27,9 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
 # else
   :tim(new TIM::Glue(curl)),
    notam(new NOTAMGlue(notam_settings, curl))
+# endif
+# ifdef HAVE_EDL
+  ,edl(new EDL::DownloadGlue(curl))
 # endif
 #endif
 {
@@ -41,3 +48,29 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
 }
 
 NetComponents::~NetComponents() noexcept = default;
+
+void
+NetComponents::BeginShutdown() noexcept
+{
+#ifdef HAVE_DOWNLOAD_MANAGER
+  Net::DownloadManager::BeginDeinitialise();
+#endif
+
+#ifdef HAVE_TRACKING
+  if (tracking != nullptr)
+    tracking->BeginShutdown();
+#endif
+
+#ifdef HAVE_HTTP
+  if (tim != nullptr)
+    tim->BeginShutdown();
+
+# ifdef HAVE_EDL
+  if (edl != nullptr)
+    edl->BeginShutdown();
+# endif
+
+  if (notam != nullptr)
+    notam->BeginShutdown();
+#endif
+}
