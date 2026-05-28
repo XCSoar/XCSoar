@@ -43,8 +43,8 @@ class MainWindow : public UI::SingleWindow {
   MenuBar *menu_bar = nullptr;
 
   ShowMenuButton *show_menu_button = nullptr;
-  ShowZoomOutButton *show_zoom_out_button = nullptr;
-  ShowZoomInButton *show_zoom_in_button = nullptr;
+  ShowZoomButton *show_zoom_out_button = nullptr;
+  ShowZoomButton *show_zoom_in_button = nullptr;
 
 #ifdef ANDROID
   ShowRotateButton *show_rotate_button = nullptr;
@@ -451,8 +451,8 @@ protected:
   bool OnKeyDown(unsigned key_code) noexcept override;
   void OnPaint(Canvas &canvas) noexcept override;
   PixelRect GetShowMenuButtonRect(const PixelRect rc) noexcept;
-  PixelRect GetShowZoomOutButtonRect(const PixelRect rc) noexcept;
-  PixelRect GetShowZoomInButtonRect(const PixelRect rc) noexcept;
+  PixelRect GetShowZoomButtonRect(const PixelRect rc,
+                                  ShowZoomButton::Sign sign) noexcept;
 
 #ifdef ANDROID
   static PixelRect GetShowRotateButtonRect(const PixelRect rc) noexcept;

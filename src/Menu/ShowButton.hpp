@@ -23,28 +23,24 @@ protected:
   bool OnClicked() noexcept override;
 };
 
-/* zoom out button */
-class ShowZoomOutButton : public Button {
+/* map overlay zoom button (+ or -) */
+class ShowZoomButton : public Button {
 public:
+  enum class Sign {
+    ZOOM_OUT,
+    ZOOM_IN,
+  };
+
   void Create(ContainerWindow &parent, const ButtonLook &look,
-              const PixelRect &rc,
+              const PixelRect &rc, Sign sign,
               WindowStyle style=WindowStyle()) noexcept;
 
 protected:
   /* virtual methods from class ButtonWindow */
   bool OnClicked() noexcept override;
-};
 
-/* zoom in button */
-class ShowZoomInButton : public Button {
-public:
-  void Create(ContainerWindow &parent, const ButtonLook &look,
-              const PixelRect &rc,
-              WindowStyle style=WindowStyle()) noexcept;
-
-protected:
-  /* virtual methods from class ButtonWindow */
-  bool OnClicked() noexcept override;
+private:
+  Sign sign;
 };
 
 #ifdef ANDROID

@@ -66,30 +66,20 @@ ShowMenuButton::OnClicked() noexcept
 }
 
 void
-ShowZoomOutButton::Create(ContainerWindow &parent, const ButtonLook &look,
-                          const PixelRect &rc, WindowStyle style) noexcept
+ShowZoomButton::Create(ContainerWindow &parent, const ButtonLook &look,
+                       const PixelRect &rc, Sign _sign,
+                       WindowStyle style) noexcept
 {
-  Button::Create(parent, rc, style, MakeMapOverlaySymbolButton(look, "-"));
+  sign = _sign;
+  Button::Create(parent, rc, style,
+                 MakeMapOverlaySymbolButton(look,
+                                          sign == Sign::ZOOM_IN ? "+" : "-"));
 }
 
 bool
-ShowZoomOutButton::OnClicked() noexcept
+ShowZoomButton::OnClicked() noexcept
 {
-  InputEvents::eventZoom("out");
-  return true;
-}
-
-void
-ShowZoomInButton::Create(ContainerWindow &parent, const ButtonLook &look,
-                         const PixelRect &rc, WindowStyle style) noexcept
-{
-  Button::Create(parent, rc, style, MakeMapOverlaySymbolButton(look, "+"));
-}
-
-bool
-ShowZoomInButton::OnClicked() noexcept
-{
-  InputEvents::eventZoom("in");
+  InputEvents::eventZoom(sign == Sign::ZOOM_IN ? "in" : "out");
   return true;
 }
 
