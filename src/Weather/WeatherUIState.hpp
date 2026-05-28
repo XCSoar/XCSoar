@@ -107,10 +107,11 @@ struct WeatherUIState {
   }
 
   /**
-   * Reset RASP forecast selection for entering a dedicated page.
+   * Resync RASP time when entering a page after leaving it.
+   * Keeps manual selection when auto advance is disabled.
    */
   void ResetRaspForDedicatedPage() noexcept {
-    time_auto_advance = true;
-    time = BrokenTime::Invalid();
+    if (time_auto_advance)
+      time = BrokenTime::Invalid();
   }
 };
