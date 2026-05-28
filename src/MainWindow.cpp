@@ -277,16 +277,30 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
   if (widget != nullptr || map == nullptr)
     return;
 
+  const bool overlay_buttons_active =
+    !CommonInterface::GetUIState().pages.special_page.IsDefined();
   const PixelRect rc = map->GetPosition();
 
-  if (show_menu_button != nullptr)
-    show_menu_button->Move(GetShowMenuButtonRect(rc));
-  if (show_zoom_out_button != nullptr)
-    show_zoom_out_button->Move(GetShowZoomButtonRect(rc,
-                                                     ShowZoomButton::Sign::ZOOM_OUT));
-  if (show_zoom_in_button != nullptr)
-    show_zoom_in_button->Move(GetShowZoomButtonRect(rc,
-                                                    ShowZoomButton::Sign::ZOOM_IN));
+  if (show_menu_button != nullptr) {
+    show_menu_button->SetVisible(overlay_buttons_active);
+    show_menu_button->SetEnabled(overlay_buttons_active);
+    if (overlay_buttons_active)
+      show_menu_button->Move(GetShowMenuButtonRect(rc));
+  }
+  if (show_zoom_out_button != nullptr) {
+    show_zoom_out_button->SetVisible(overlay_buttons_active);
+    show_zoom_out_button->SetEnabled(overlay_buttons_active);
+    if (overlay_buttons_active)
+      show_zoom_out_button->Move(GetShowZoomButtonRect(rc,
+                                                       ShowZoomButton::Sign::ZOOM_OUT));
+  }
+  if (show_zoom_in_button != nullptr) {
+    show_zoom_in_button->SetVisible(overlay_buttons_active);
+    show_zoom_in_button->SetEnabled(overlay_buttons_active);
+    if (overlay_buttons_active)
+      show_zoom_in_button->Move(GetShowZoomButtonRect(rc,
+                                                      ShowZoomButton::Sign::ZOOM_IN));
+  }
 
 #ifdef ANDROID
   if (show_rotate_button != nullptr)
