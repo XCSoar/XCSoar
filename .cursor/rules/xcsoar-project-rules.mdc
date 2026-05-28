@@ -284,7 +284,7 @@ XCSoar follows a layered architecture with clear separation of concerns:
 **Component Separation:**
 - `BackendComponents`: manages backend resources (devices, computers, threads)
 - `DataComponents`: manages data stores (waypoints, airspaces, terrain)
-- `NetComponents`: manages network resources
+- `NetComponents`: manages network resources (NOTAM, TIM, tracking, EDL `DownloadGlue`, …); long-lived HTTP uses `Net::AsyncTask` and `BeginShutdown()` before UI teardown (see `doc/architecture.rst`, Network thread and background HTTP)
 - Components are accessed through global pointers, not direct dependencies
 
 **Interface Access Patterns:**
@@ -312,6 +312,7 @@ XCSoar follows a layered architecture with clear separation of concerns:
 - Calculation thread: use `GlideComputerBlackboard` or lock `DeviceBlackboard`
 - Map rendering thread: use `MapWindowBlackboard`
 - Device threads: write to `DeviceBlackboard` (per-device slots), then notify merge thread
+- Network (asio) thread: curl and `Co::InjectTask` / `Net::AsyncTask`; never `CommonInterface`, `ActionInterface`, or window/layout code; snapshot UI parameters on main thread before starting work; complete via `UI::Notify` on main thread
 - Never access `InterfaceBlackboard` from non-UI threads
 
 ### Blackboard Usage Guide
@@ -496,6 +497,9 @@ if (data_components != nullptr) {
 - Call `ActionInterface` from device drivers or calculation threads
 - Include `Engine/`, `Computer/`, `Device/`, or `Blackboard/` headers in Foundation or Platform layers
 - Directly show dialogs or message boxes from Backend code (use event queue instead)
+- Call `CommonInterface::*()`, `SetUIState`, `PageActions::Update`, or `InfoBoxManager` from the asio/network thread or from coroutine bodies without marshalling to main thread
+- Destroy `CurlGlobal` on the main thread (`Net::Deinitialise` uses `DrainCurl` on the asio event loop)
+- Start long-lived HTTP from UI without `Net::AsyncTask` and `NetComponents::BeginShutdown()` registration
 
 **DO:**
 - Use `CommonInterface::*()` in UI code
@@ -539,6 +543,24 @@ if (data_components != nullptr) {
   - MapWindow (DrawThread): `MapWindowBlackboard`
   - Device drivers: write to `DeviceBlackboard::per_device_data[i]`, can implement `OnSensorUpdate()` (called from MergeThread) or `OnCalculatedUpdate()` (called from UI thread)
   - CalculationThread: lock `DeviceBlackboard` or use `GlideComputerBlackboard`
+  - Network thread: asio event loop; see `doc/architecture.rst` (Network thread and background HTTP)
+
+### Background HTTP and NetComponents
+
+- **Modal (UI-owned):** `ShowCoDialog` + `Co::InjectTask` — cancelled when the dialog closes
+- **Long-lived:** `Net::AsyncTask` in a `NetComponents` member; `BeginShutdown()` from `NetComponents::BeginShutdown()` before UI teardown
+- **Completion:** coroutine callback on network thread should only `UI::Notify::SendNotification()`; apply UI changes in the notify handler on main thread
+- **Startup:** create `net_components` before `AfterStartup()` when work needs running threads; start merge/calculation threads before NOTAM cache replay; defer `PageActions::Update` / InfoBox refresh via `SchedulePageActionsUpdate` / `ScheduleRefreshInfoBoxes` when called from async terrain or blackboard paths
+- **Shutdown:** `NetComponents::BeginShutdown()` early in `Shutdown()`; `delete net_components` after threads stopped; `Net::Deinitialise()` drains curl on asio thread
+
+### Adding background HTTP work
+
+1. Add `Net::AsyncTask` (or reuse glue with one) on the asio `EventLoop` from `CurlGlobal::GetEventLoop()`
+2. Snapshot any `CommonInterface` / UI state on the **main thread** before `task.Start()`
+3. Run download/parse in the coroutine; store results in glue members
+4. On completion, `UI::Notify` → main thread: update map overlay, status, `SendUIState`, listeners
+5. Implement `BeginShutdown()` (cancel task, clear pending notify); register in `NetComponents::BeginShutdown()`
+6. For GPS/time-driven state, use a `BlackboardListener` on the UI thread separate from download glue (EDL: `Glue` vs `DownloadGlue`)
 
 ### Adding JNI Methods (Android)
 

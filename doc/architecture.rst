@@ -125,6 +125,71 @@ thread, it is implemented with Java callbacks. For Bluetooth I/O, there
 are two threads implemented in Java (:file:`InputThread.java` and
 :file:`OutputThread.java`, managed by :file:`BluetoothHelper.java`).
 
+Network thread and background HTTP
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In addition to the sensor and UI threads above, XCSoar runs a dedicated
+**asio event-loop thread** (:file:`io/async/GlobalAsioThread.cpp`,
+started from :file:`XCSoar.cpp`). It hosts :file:`CurlGlobal` and runs
+coroutines injected with :file:`Co::InjectTask` / :file:`Net::AsyncTask`.
+
+Typical uses:
+
+- NOTAM fetches (:file:`NOTAM/NOTAMGlue.cpp`)
+- EDL tile downloads (:file:`Weather/EDL/DownloadGlue.cpp`)
+- TIM thermal index, LiveTrack24, SkyLines, and similar clients in
+  :file:`NetComponents.hpp`
+
+The **UI thread** (main event loop) must not perform blocking network
+I/O during flight. Long-lived background work belongs on the network
+thread; **modal** downloads tied to one dialog may still use
+:file:`ShowCoDialog` on the UI thread.
+
+Thread rules (same as for :file:`Interface.hpp` elsewhere):
+
+- **Do not** call :file:`CommonInterface`, :file:`ActionInterface`, or
+  other UI-only APIs from the network thread. ``InMainThread()`` checks
+  will fail.
+- **Do** read any UI state needed for a download on the **main thread**
+  before starting the coroutine (for example forecast time and isobar
+  for EDL tiles), and pass snapshots into the network work.
+- **Do** report completion to the UI with :file:`UI::Notify`
+  (:file:`ui/event/Notify.cpp`), which queues a callback on the main
+  event loop. Apply overlays, update status labels, and call
+  :file:`ActionInterface::SendUIState` only from that callback.
+
+**NetComponents** (:file:`NetComponents.hpp`) owns long-lived network
+clients. Each client that uses :file:`Net::AsyncTask` should implement
+``BeginShutdown()`` and be stopped from
+``NetComponents::BeginShutdown()`` before the map and other UI are
+torn down. The global pointer is cleared later in :file:`Startup.cpp`
+(``DestroyNetComponents``).
+
+**Shutdown order** (see :file:`Startup.cpp`):
+
+1. ``NetComponents::BeginShutdown()`` — cancel coroutines and queued
+   downloads; clear map pointers to TIM / SkyLines data
+2. Stop merge and calculation threads; destroy UI
+3. ``delete net_components``
+4. On process exit, :file:`Net::Deinitialise` destroys :file:`CurlGlobal`
+   on the **asio** thread (:file:`DrainCurl` in :file:`net/http/Init.cpp`)
+
+**Deferred UI refresh:** callbacks such as async terrain load or
+blackboard updates must not call :file:`PageActions::Update` or
+:file:`ActionInterface::SendUIState` synchronously if that can re-enter
+layout while InfoBoxes are being created. Use
+:file:`MainWindow::SchedulePageActionsUpdate` and
+:file:`ScheduleRefreshInfoBoxes` instead (next event-loop iteration).
+:file:`InfoBoxManager` skips work until ``Create()`` has finished
+(``infoboxes_ready``).
+
+**Weather overlays:** map overlays may combine a **blackboard listener**
+(ongoing GPS/time sync, for example :file:`Weather/EDL/Glue.cpp`) with a
+**download glue** in :file:`NetComponents` (HTTP fetch and cache, for
+example :file:`Weather/EDL/DownloadGlue.cpp`). New providers (such as
+XCTherm) should follow the same split: listener on the UI thread,
+network I/O on the asio thread, UI updates via :file:`UI::Notify`.
+
 Locking
 ~~~~~~~
 
