@@ -159,8 +159,7 @@ AfterStartup()
     if (File::Exists(init_path))
       Lua::StartFile(init_path);
     else
-      LogFormat("cannot open %s: No such file or directory",
-                init_path.c_str());
+      LogDebug("Optional %s not found", init_path.c_str());
   } catch (...) {
     LogError(std::current_exception());
   }
