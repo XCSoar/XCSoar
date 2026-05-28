@@ -7,6 +7,7 @@
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
+#include "Form/Form.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Language/Language.hpp"
@@ -38,6 +39,11 @@
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
 #endif
+
+static bool
+ShowMapItemDialog(const MapItem &item,
+                  Waypoints *waypoints,
+                  ProtectedAirspaceWarningManager *airspace_warnings);
 
 static bool
 HasDetails(const MapItem &item)
@@ -79,8 +85,16 @@ class MapItemListWidget final
   Button *settings_button, *details_button, *cancel_button, *goto_button;
   Button *ack_button, *enable_button;
 
+  WndForm *dialog = nullptr;
+  Waypoints *waypoints = nullptr;
+  ProtectedAirspaceWarningManager *airspace_warnings = nullptr;
+
+  void OnDetailsClicked() noexcept;
+
 public:
-  void CreateButtons(WidgetDialog &dialog);
+  void CreateButtons(WidgetDialog &dialog,
+                     Waypoints *_waypoints,
+                     ProtectedAirspaceWarningManager *_airspace_warnings);
 
 public:
   MapItemListWidget(const MapItemList &_list,
@@ -210,9 +224,17 @@ public:
 };
 
 void
-MapItemListWidget::CreateButtons(WidgetDialog &dialog)
+MapItemListWidget::CreateButtons(WidgetDialog &dialog,
+                                 Waypoints *_waypoints,
+                                 ProtectedAirspaceWarningManager *_airspace_warnings)
 {
-  details_button = dialog.AddButton(_("Details"), mrOK);
+  this->dialog = &dialog;
+  waypoints = _waypoints;
+  airspace_warnings = _airspace_warnings;
+
+  details_button = dialog.AddButton(_("Details"), [this](){
+    OnDetailsClicked();
+  });
 
   goto_button = dialog.AddButton(_("Goto"), [this](){
     OnGotoClicked();
@@ -309,7 +331,22 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 MapItemListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 {
-  details_button->Click();
+  OnDetailsClicked();
+}
+
+void
+MapItemListWidget::OnDetailsClicked() noexcept
+{
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr || !HasDetails(*item) || dialog == nullptr)
+    return;
+
+  if (ShowMapItemDialog(*item, waypoints, airspace_warnings))
+    dialog->SetModalResult(mrOK);
+  else {
+    UpdateButtons();
+    GetList().Invalidate();
+  }
 }
 
 inline void
@@ -452,28 +489,7 @@ MapItemListWidget::OnEnableClicked()
   GetList().Invalidate();
 }
 
-static int
-ShowMapItemListDialog(const MapItemList &list,
-                      const DialogLook &dialog_look, const MapLook &look,
-                      const TrafficLook &traffic_look,
-                      const FinalGlideBarLook &final_glide_look,
-                      const MapSettings &settings)
-{
-  TWidgetDialog<MapItemListWidget>
-    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-           dialog_look, _("Map elements at this location"));
-  dialog.SetWidget(list, dialog_look, look,
-                   traffic_look, final_glide_look,
-                   settings);
-  dialog.GetWidget().CreateButtons(dialog);
-  dialog.EnableCursorSelection();
-
-  return dialog.ShowModal() == mrOK
-    ? (int)dialog.GetWidget().GetCursorIndex()
-    : -1;
-}
-
-static void
+static bool
 ShowMapItemDialog(const MapItem &item,
                   Waypoints *waypoints,
                   ProtectedAirspaceWarningManager *airspace_warnings)
@@ -485,15 +501,15 @@ ShowMapItemDialog(const MapItem &item,
 #ifdef HAVE_SKYLINES_TRACKING
   case MapItem::Type::SKYLINES_TRAFFIC:
 #endif
-    break;
+    return false;
 
   case MapItem::Type::AIRSPACE:
-    dlgAirspaceDetails(((const AirspaceMapItem &)item).airspace,
-                       airspace_warnings);
-    break;
+    return dlgAirspaceDetailsForBrowseParent(
+      ((const AirspaceMapItem &)item).airspace,
+      airspace_warnings);
   case MapItem::Type::LOCATION: {
     if (waypoints == nullptr)
-      break;
+      return false;
 
     const auto &loc_item = static_cast<const LocationMapItem &>(item);
 
@@ -521,36 +537,42 @@ ShowMapItemDialog(const MapItem &item,
 
     // Lookup the waypoint we just created and show details
     auto wp = waypoints->LookupName(goto_name);
-    if (wp)
-      dlgWaypointDetailsShowModal(waypoints, wp, true, true);
-    break;
+    if (!wp)
+      return false;
+
+    return dlgWaypointDetailsShowModalForBrowseParent(
+      waypoints, std::move(wp), true, true);
   }
+
   case MapItem::Type::WAYPOINT:
-    dlgWaypointDetailsShowModal(waypoints,
-                                ((const WaypointMapItem &)item).waypoint,
-                                true, true);
-    break;
+    return dlgWaypointDetailsShowModalForBrowseParent(
+      waypoints,
+      WaypointPtr(((const WaypointMapItem &)item).waypoint),
+      true, true);
+
   case MapItem::Type::TASK_OZ:
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);
-    break;
+    return false;
+
   case MapItem::Type::TRAFFIC:
-    dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).id);
-    break;
+    return dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).id);
 
 #ifdef HAVE_NOAA
   case MapItem::Type::WEATHER:
     dlgNOAADetailsShowModal(((const WeatherStationMapItem &)item).station);
-    break;
+    return false;
 #endif
 
   case MapItem::Type::OVERLAY:
     ShowWeatherDialog("edl");
-    break;
+    return false;
 
   case MapItem::Type::RASP:
     ShowWeatherDialog("rasp");
-    break;
+    return false;
   }
+
+  return false;
 }
 
 void
@@ -567,10 +589,14 @@ ShowMapItemListDialog(const MapItemList &list,
     /* no map items in the list */
     return;
 
-  /* always show list dialog when there are items, so user can choose action */
-  int i = ShowMapItemListDialog(list, dialog_look, look,
-                                traffic_look, final_glide_look, settings);
-  assert(i >= -1 && i < (int)list.size());
-  if (i >= 0)
-    ShowMapItemDialog(*list[i], waypoints, airspace_warnings);
+  TWidgetDialog<MapItemListWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           dialog_look, _("Map elements at this location"));
+  dialog.SetWidget(list, dialog_look, look,
+                   traffic_look, final_glide_look,
+                   settings);
+  dialog.GetWidget().CreateButtons(dialog, waypoints, airspace_warnings);
+  dialog.EnableCursorSelection();
+
+  dialog.ShowModal();
 }
