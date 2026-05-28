@@ -227,6 +227,73 @@ GetMapRectBelow(const PixelRect &rc, const PixelRect &top_rect) noexcept
   return result;
 }
 
+[[gnu::pure]]
+static PixelRect
+ComputeMapAreaRect(const PixelRect &main_rect,
+                   const Widget *top_widget,
+                   const Widget *bottom_widget) noexcept
+{
+  PixelRect rc = main_rect;
+
+  const PixelRect top_rect = GetTopWidgetRect(rc, top_widget);
+  rc = GetMapRectBelow(rc, top_rect);
+
+  const PixelRect bottom_rect = GetBottomWidgetRect(rc, bottom_widget);
+  return GetMapRectAbove(rc, bottom_rect);
+}
+
+PixelRect
+MainWindow::GetMapAreaRect() const noexcept
+{
+  if (map != nullptr)
+    return map->GetPosition();
+
+  return ComputeMapAreaRect(GetMainRect(), top_widget, bottom_widget);
+}
+
+void
+MainWindow::LayoutMapArea() noexcept
+{
+  if (map == nullptr)
+    return;
+
+  PixelRect main_rect = GetMainRect();
+  const PixelRect top_rect = GetTopWidgetRect(main_rect, top_widget);
+  if (HaveTopWidget())
+    top_widget->Move(top_rect);
+
+  main_rect = GetMapRectBelow(main_rect, top_rect);
+
+  const PixelRect bottom_rect = GetBottomWidgetRect(main_rect, bottom_widget);
+  if (HaveBottomWidget())
+    bottom_widget->Move(bottom_rect);
+
+  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+}
+
+void
+MainWindow::UpdateMapOverlayButtonLayout() noexcept
+{
+  if (widget != nullptr || map == nullptr)
+    return;
+
+  const PixelRect rc = map->GetPosition();
+
+  if (show_menu_button != nullptr)
+    show_menu_button->Move(GetShowMenuButtonRect(rc));
+  if (show_zoom_out_button != nullptr)
+    show_zoom_out_button->Move(GetShowZoomButtonRect(rc,
+                                                     ShowZoomButton::Sign::ZOOM_OUT));
+  if (show_zoom_in_button != nullptr)
+    show_zoom_in_button->Move(GetShowZoomButtonRect(rc,
+                                                    ShowZoomButton::Sign::ZOOM_IN));
+
+#ifdef ANDROID
+  if (show_rotate_button != nullptr)
+    show_rotate_button->Move(GetShowRotateButtonRect(rc));
+#endif
+}
+
 /**
  * Destructor of the MainWindow-Class
  * @return
@@ -290,20 +357,22 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayout_flarm(rc, ib_layout);
 
   const UISettings &settings = CommonInterface::GetUISettings();
+  const PixelRect map_area_rect = GetMapAreaRect();
+
   if (settings.show_menu_button) {
     show_menu_button = new ShowMenuButton();
     show_menu_button->Create(*this, look->dialog.button,
-                             GetShowMenuButtonRect(map_rect));
+                             GetShowMenuButtonRect(map_area_rect));
   }
   if (ShowMapOverlayZoomButtons(settings)) {
     show_zoom_out_button = new ShowZoomButton();
     show_zoom_out_button->Create(*this, look->dialog.button,
-                                 GetShowZoomButtonRect(map_rect,
+                                 GetShowZoomButtonRect(map_area_rect,
                                                        ShowZoomButton::Sign::ZOOM_OUT),
                                  ShowZoomButton::Sign::ZOOM_OUT);
     show_zoom_in_button = new ShowZoomButton();
     show_zoom_in_button->Create(*this, look->dialog.button,
-                                GetShowZoomButtonRect(map_rect,
+                                GetShowZoomButtonRect(map_area_rect,
                                                       ShowZoomButton::Sign::ZOOM_IN),
                                 ShowZoomButton::Sign::ZOOM_IN);
   }
@@ -317,7 +386,7 @@ MainWindow::InitialiseConfigured()
       native_view != nullptr &&
       native_view->IsAutoRotateEnabled(Java::GetEnv())) {
     show_rotate_button = new ShowRotateButton();
-    show_rotate_button->Create(*this, GetShowRotateButtonRect(map_rect));
+    show_rotate_button->Create(*this, GetShowRotateButtonRect(map_area_rect));
     show_rotate_button->Hide();
   }
 #endif
@@ -499,41 +568,14 @@ MainWindow::ReinitialiseLayout() noexcept
     else
       InfoBoxManager::Show();
 
-    PixelRect main_rect = GetMainRect();
-    const PixelRect top_rect = GetTopWidgetRect(main_rect,
-                                                top_widget);
-    main_rect = GetMapRectBelow(main_rect, top_rect);
-
-    if (HaveTopWidget())
-      top_widget->Move(top_rect);
-
-    const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
-                                                      bottom_widget);
-
-    if (HaveBottomWidget())
-      bottom_widget->Move(bottom_rect);
-
-    PixelRect map_rect_final = GetMapRectAbove(main_rect, bottom_rect);
-    map->Move(map_rect_final);
+    LayoutMapArea();
     map->FullRedraw();
   }
 
   if (widget != nullptr)
     widget->Move(GetMainRect(rc));
 
-  if (show_menu_button != nullptr)
-    show_menu_button->Move(GetShowMenuButtonRect(GetMainRect()));
-  if (show_zoom_out_button != nullptr)
-    show_zoom_out_button->Move(GetShowZoomButtonRect(GetMainRect(),
-                                                     ShowZoomButton::Sign::ZOOM_OUT));
-  if (show_zoom_in_button != nullptr)
-    show_zoom_in_button->Move(GetShowZoomButtonRect(GetMainRect(),
-                                                    ShowZoomButton::Sign::ZOOM_IN));
-
-#ifdef ANDROID
-  if (show_rotate_button != nullptr)
-    show_rotate_button->Move(GetShowRotateButtonRect(GetMainRect()));
-#endif
+  UpdateMapOverlayButtonLayout();
 
   if (map != nullptr)
     map->BringToBottom();
@@ -1099,8 +1141,10 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
   ReinitialiseLayout_flarm(rc, ib_layout);
   ReinitialiseLayoutTA(rc, ib_layout);
 
-  if (map != nullptr)
-    map->FastMove(GetMainRect());
+  if (map != nullptr) {
+    LayoutMapArea();
+    UpdateMapOverlayButtonLayout();
+  }
 
   if (popup != nullptr)
     popup->UpdateLayout(GetMainRect());
@@ -1163,8 +1207,10 @@ MainWindow::ActivateMap() noexcept
 
   if (widget != nullptr) {
     KillWidget();
+    LayoutMapArea();
     map->Show();
     map->SetFocus();
+    UpdateMapOverlayButtonLayout();
 
     if (bottom_widget != nullptr) {
       assert(HaveBottomWidget());
@@ -1239,16 +1285,10 @@ MainWindow::SetTopWidget(Widget *_widget) noexcept
     top_widget->Show(top_rect);
   }
 
-  main_rect = GetMapRectBelow(main_rect, top_rect);
-
-  const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
-                                                    bottom_widget);
-
-  if (HaveBottomWidget())
-    bottom_widget->Move(bottom_rect);
-
-  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+  LayoutMapArea();
   map->FullRedraw();
+
+  UpdateMapOverlayButtonLayout();
 }
 
 void
@@ -1313,8 +1353,10 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
       bottom_widget->Move(bottom_rect);
   }
 
-  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+  LayoutMapArea();
   map->FullRedraw();
+
+  UpdateMapOverlayButtonLayout();
 }
 
 void
