@@ -5,13 +5,8 @@
 
 #ifdef HAVE_EDL
 
-#include "StateController.hpp"
 #include "TileStore.hpp"
-#include "ActionInterface.hpp"
 #include "Operation/ProgressListener.hpp"
-#include "Message.hpp"
-#include "Language/Language.hpp"
-#include "util/StaticString.hxx"
 #include "LogFile.hpp"
 #include "lib/curl/Global.hxx"
 #include "util/Macros.hpp"
@@ -65,44 +60,39 @@ DownloadGlue::RemoveListener(DownloadListener &listener) noexcept
 }
 
 void
-DownloadGlue::NotifyListeners() noexcept
+DownloadGlue::DeliverNotification(DownloadNotification notification) noexcept
 {
-  listeners.ForEach([](DownloadListener *listener) {
-    listener->OnDownloadFinished();
+  NotifyListeners(notification);
+}
+
+void
+DownloadGlue::NotifyListeners(const DownloadNotification &notification) noexcept
+{
+  listeners.ForEach([&notification](DownloadListener *listener) {
+    listener->OnDownloadFinished(notification);
   });
 }
 
 void
-DownloadGlue::RequestOverlayRefresh() noexcept
+DownloadGlue::StartOverlayDownload(BrokenDateTime forecast_time,
+                                    unsigned isobar) noexcept
 {
   if (shutting_down || task.IsRunning())
     return;
 
-  if (!OverlayEnabled()) {
-    NotifyListeners();
-    return;
-  }
-
-  if (TryApplyOverlayFromCache()) {
-    ActionInterface::SendUIState(true);
-    NotifyListeners();
-    return;
-  }
-
   pending_job = Job::OVERLAY;
   completion_error = {};
   completed_path.reset();
-  overlay_forecast_time = GetForecastTime();
-  overlay_isobar = GetIsobar();
+  overlay_forecast_time = forecast_time;
+  overlay_isobar = isobar;
 
-  SetLoadingStatus();
   task.Start(RunOverlayDownload(), BIND_THIS_METHOD(OnCompletion));
 }
 
 void
-DownloadGlue::RequestPrecacheDay(BrokenDateTime day) noexcept
+DownloadGlue::StartPrecacheDay(BrokenDateTime day) noexcept
 {
-  if (shutting_down || task.IsRunning() || !OverlayEnabled())
+  if (shutting_down || task.IsRunning())
     return;
 
   pending_job = Job::PRECACHE_DAY;
@@ -110,7 +100,6 @@ DownloadGlue::RequestPrecacheDay(BrokenDateTime day) noexcept
   completed_precache_count = 0;
   completed_path.reset();
 
-  SetLoadingStatus();
   task.Start(RunPrecacheDay(day), BIND_THIS_METHOD(OnCompletion));
 }
 
@@ -146,39 +135,30 @@ DownloadGlue::OnCompleteNotify() noexcept
   const Job job = pending_job;
   pending_job = Job::NONE;
 
-  if (job == Job::OVERLAY) {
-    if (completion_error) {
-      LogError(completion_error, "EDL overlay download failed");
-      SetErrorStatus();
-    } else if (completed_path) {
-      if (ShouldMaintainOverlay())
-        ApplyOverlay(*completed_path);
-      else
-        SetIdleStatus();
-    } else {
-      SetIdleStatus();
-    }
+  DownloadNotification notification;
+  if (job == Job::OVERLAY)
+    notification.job = DownloadJob::OVERLAY;
+  else if (job == Job::PRECACHE_DAY)
+    notification.job = DownloadJob::PRECACHE_DAY;
+  else
+    return;
 
-    completed_path.reset();
-    ActionInterface::SendUIState(true);
-  } else if (job == Job::PRECACHE_DAY) {
-    if (completion_error) {
-      LogError(completion_error, "EDL precache failed");
-      SetErrorStatus();
-    } else {
-      SetIdleStatus();
-
-      StaticString<64> message;
-      message.Format(_("Cached %u files for the selected UTC day."),
-                     completed_precache_count);
-      Message::AddMessage(message);
-    }
-
-    completed_precache_count = 0;
+  if (completion_error) {
+    notification.outcome = DownloadOutcome::ERROR;
+    notification.error = completion_error;
+  } else {
+    notification.outcome = DownloadOutcome::SUCCESS;
+    if (job == Job::OVERLAY)
+      notification.overlay_path = std::move(completed_path);
+    else
+      notification.precache_count = completed_precache_count;
   }
 
+  completed_path.reset();
+  completed_precache_count = 0;
   completion_error = {};
-  NotifyListeners();
+
+  NotifyListeners(notification);
 }
 
 } // namespace EDL

@@ -672,6 +672,10 @@ Startup(UI::Display &display)
                                      computer_settings.airspace.notam);
   if (net_components->notam != nullptr)
     InstallNOTAMMessageListener(*net_components->notam);
+# ifdef HAVE_EDL
+  if (edl_glue != nullptr && net_components->edl != nullptr)
+    edl_glue->AttachDownloadGlue(*net_components->edl);
+# endif
 # ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());
@@ -772,6 +776,7 @@ Shutdown()
 
 #ifdef HAVE_EDL
   if (edl_glue != nullptr) {
+    edl_glue->DetachDownloadGlue();
     live_blackboard.RemoveListener(*edl_glue);
     delete edl_glue;
     edl_glue = nullptr;

@@ -19,8 +19,7 @@
 #include "ActionInterface.hpp"
 #ifdef HAVE_EDL
 #include "Dialogs/Weather/MapOverlayControlsWidget.hpp"
-#include "NetComponents.hpp"
-#include "Weather/EDL/DownloadGlue.hpp"
+#include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/StateController.hpp"
 #endif
 
@@ -108,9 +107,7 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
       else
         EDL::EnsureInitialised();
 
-      if (!EDL::TryApplyOverlayFromCache() &&
-          net_components != nullptr && net_components->edl != nullptr)
-        net_components->edl->RequestOverlayRefresh();
+      EDL::RequestOverlayRefresh();
     }
 #endif
     break;
