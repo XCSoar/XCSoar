@@ -473,7 +473,7 @@ void
 GlueMapWindow::DrawTurnBackMarker(Canvas &canvas,
                                   const PixelPoint aircraft_pos) const noexcept
 {
-  if (!Basic().location_available || !Basic().track_available)
+  if (!IsNearSelf() || !Basic().location_available || !Basic().track_available)
     return;
 
   // Only draw when we're not circling
