@@ -702,7 +702,7 @@ TrafficListWidget::OpenDetails(unsigned index)
   Item &item = items[index];
 
   if (item.IsFlarm()) {
-    dlgFlarmTrafficDetailsShowModal(item.id);
+    (void)dlgFlarmTrafficDetailsShowModal(item.id);
     UpdateList();
   }
 }

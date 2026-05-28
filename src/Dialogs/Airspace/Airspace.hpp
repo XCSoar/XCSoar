@@ -14,6 +14,15 @@ void
 dlgAirspaceDetails(ConstAirspacePtr airspace,
                    ProtectedAirspaceWarningManager *_airspace_warnings);
 
+/**
+ * Like #dlgAirspaceDetails for a parent list: Close dismisses without
+ * committing; Ack Day / Enable commits and returns true.
+ */
+[[nodiscard]] bool
+dlgAirspaceDetailsForBrowseParent(
+  ConstAirspacePtr airspace,
+  ProtectedAirspaceWarningManager *airspace_warnings) noexcept;
+
 int dlgAirspacePatternsShowModal(const AirspaceLook &look);
 void dlgAirspaceShowModal(bool colored);
 
