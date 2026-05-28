@@ -146,9 +146,9 @@ event=Pan right
 
 mode=pan
 type=key
-data=ESCAPE
-event=Pan off
-label=Cancel
+data=APP4
+event=NearestMapItems
+label=What's here?
 location=1
 
 mode=pan
@@ -167,9 +167,9 @@ location=3
 
 mode=pan
 type=key
-data=APP4
-event=NearestMapItems
-label=What's here?
+data=ESCAPE
+event=Pan off
+label=Cancel
 location=4
 
 mode=pan
