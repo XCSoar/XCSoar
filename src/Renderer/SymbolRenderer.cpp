@@ -18,9 +18,13 @@ MinDimension(const PixelRect &rc) noexcept
 /** One fifth of the shorter rc side; used for arrows and bar symbols. */
 [[gnu::pure]]
 unsigned
-DrawSize(const PixelRect &rc) noexcept
+DrawSize(const PixelRect &rc, unsigned max_draw_size) noexcept
 {
-  return std::max(1u, MinDimension(rc) / 5);
+  unsigned size = std::max(1u, MinDimension(rc) / 5);
+  if (max_draw_size > 0)
+    size = std::min(size, max_draw_size);
+
+  return size;
 }
 
 /**
@@ -47,12 +51,13 @@ DrawBarAt(Canvas &canvas, PixelPoint center, PixelSize margin) noexcept
 
 void
 SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc,
-                          Direction direction) noexcept
+                          Direction direction,
+                          unsigned max_draw_size) noexcept
 {
   assert(direction == UP || direction == DOWN ||
          direction == LEFT || direction == RIGHT);
 
-  const unsigned size = DrawSize(rc);
+  const unsigned size = DrawSize(rc, max_draw_size);
   const auto center = rc.GetCenter();
   BulkPixelPoint arrow[3];
 
@@ -76,12 +81,13 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc,
 }
 
 void
-SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus) noexcept
+SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus,
+                         unsigned max_draw_size) noexcept
 {
   if (MinDimension(rc) == 0)
     return;
 
-  const unsigned draw_size = DrawSize(rc);
+  const unsigned draw_size = DrawSize(rc, max_draw_size);
   const auto center = rc.GetCenter();
   const PixelSize margin = BarMargin(draw_size, 0);
 
@@ -98,7 +104,7 @@ SymbolRenderer::DrawHamburger(Canvas &canvas, PixelRect rc) noexcept
   if (min_dim == 0)
     return;
 
-  const unsigned draw_size = DrawSize(rc);
+  const unsigned draw_size = DrawSize(rc, 0);
   const auto center = rc.GetCenter();
   const PixelSize margin = BarMargin(draw_size, min_dim);
   const int step = int(2 * margin.height + std::max(1u, draw_size / 3));
