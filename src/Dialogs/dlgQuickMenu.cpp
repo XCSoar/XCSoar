@@ -255,7 +255,8 @@ QuickMenu::CalculateConstrainedGridRect(const PixelRect &rc) const noexcept
   const unsigned constrained_height = available_height > row_height / 2
     ? available_height - row_height / 2
     : available_height;
-  return PixelRect(0, 0, rc.GetWidth(), constrained_height);
+  return PixelRect(0, 0, std::max(1u, rc.GetWidth()),
+                    std::max(1u, constrained_height));
 }
 
 void
