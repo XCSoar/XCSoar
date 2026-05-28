@@ -178,12 +178,14 @@ void
 ResetForDedicatedPage() noexcept
 {
   auto &state = CommonInterface::SetUIState().weather.edl;
-  /* Dedicated EDL pages always start from the next UTC forecast hour
-     and current aircraft altitude instead of preserving a stale view. */
-  state.forecast_datetime =
-    GetTrackedForecastTime(BrokenDateTime::NowUTC());
-  state.forecast_auto_advance = true;
-  UpdateCurrentLevel();
+
+  /* On first entry after leaving an EDL page, resync only when auto
+     advance is enabled; manual forecast/level choices are kept. */
+  if (state.forecast_auto_advance) {
+    state.forecast_datetime =
+      GetTrackedForecastTime(BrokenDateTime::NowUTC());
+    UpdateCurrentLevel();
+  }
 
   state.status = EDLWeatherUIState::Status::IDLE;
 }
