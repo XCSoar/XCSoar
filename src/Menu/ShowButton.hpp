@@ -5,14 +5,17 @@
 
 #include "Form/Button.hpp"
 
+struct ButtonLook;
+
 #ifdef ANDROID
 #include "ui/canvas/Bitmap.hpp"
 #endif
 
-/* "M" menu button */
+/* map overlay menu button (hamburger icon) */
 class ShowMenuButton : public Button {
 public:
-  void Create(ContainerWindow &parent, const PixelRect &rc,
+  void Create(ContainerWindow &parent, const ButtonLook &look,
+              const PixelRect &rc,
               WindowStyle style=WindowStyle()) noexcept;
 
 protected:
@@ -23,7 +26,8 @@ protected:
 /* zoom out button */
 class ShowZoomOutButton : public Button {
 public:
-  void Create(ContainerWindow &parent, const PixelRect &rc,
+  void Create(ContainerWindow &parent, const ButtonLook &look,
+              const PixelRect &rc,
               WindowStyle style=WindowStyle()) noexcept;
 
 protected:
@@ -34,7 +38,8 @@ protected:
 /* zoom in button */
 class ShowZoomInButton : public Button {
 public:
-  void Create(ContainerWindow &parent, const PixelRect &rc,
+  void Create(ContainerWindow &parent, const ButtonLook &look,
+              const PixelRect &rc,
               WindowStyle style=WindowStyle()) noexcept;
 
 protected:
