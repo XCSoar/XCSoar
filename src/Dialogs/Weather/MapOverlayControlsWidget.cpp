@@ -22,6 +22,7 @@
 #include "Weather/EDL/StateController.hpp"
 #include "Weather/EDL/TileStore.hpp"
 #ifdef HAVE_EDL
+#include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/DownloadGlue.hpp"
 #endif
 #include "Widget/RowFormWidget.hpp"
@@ -89,7 +90,7 @@ private:
   void OnGPSUpdate(const MoreData &basic) override;
 
 #ifdef HAVE_EDL
-  void OnDownloadFinished() noexcept override;
+  void OnDownloadFinished(const EDL::DownloadNotification &notification) noexcept override;
 #endif
 };
 
@@ -420,19 +421,15 @@ MapOverlayControlsWidget::RefreshEdlOverlay()
     return;
   }
 
-  if (net_components == nullptr || net_components->edl == nullptr) {
-    RefreshControls();
-    return;
-  }
-
   RefreshControls();
-  net_components->edl->RequestOverlayRefresh();
+  EDL::RequestOverlayRefresh();
 #endif
 }
 
 #ifdef HAVE_EDL
 void
-MapOverlayControlsWidget::OnDownloadFinished() noexcept
+MapOverlayControlsWidget::OnDownloadFinished(
+  const EDL::DownloadNotification &) noexcept
 {
   RefreshControls();
 }
@@ -448,10 +445,7 @@ MapOverlayControlsWidget::PrecacheDay()
   if (!EDL::OverlayEnabled())
     return;
 
-  if (net_components == nullptr || net_components->edl == nullptr)
-    return;
-
-  net_components->edl->RequestPrecacheDay(EDL::GetForecastTime());
+  EDL::RequestPrecacheDay(EDL::GetForecastTime());
 #endif
 }
 

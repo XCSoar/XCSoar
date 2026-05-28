@@ -21,15 +21,41 @@ class AllocatedPath;
 
 namespace EDL {
 
+enum class DownloadJob : uint8_t {
+  OVERLAY,
+  PRECACHE_DAY,
+};
+
+enum class DownloadOutcome : uint8_t {
+  SUCCESS,
+  ERROR,
+};
+
+struct DownloadNotification {
+  DownloadJob job = DownloadJob::OVERLAY;
+  DownloadOutcome outcome = DownloadOutcome::SUCCESS;
+  std::exception_ptr error;
+  std::optional<AllocatedPath> overlay_path;
+  unsigned precache_count = 0;
+
+  /** When true, the overlay was applied from cache before notification. */
+  bool overlay_from_cache = false;
+};
+
 class DownloadListener {
 public:
   virtual ~DownloadListener() = default;
 
-  virtual void OnDownloadFinished() noexcept = 0;
+  virtual void
+  OnDownloadFinished(const DownloadNotification &notification) noexcept = 0;
 };
 
 /**
  * Background EDL tile downloads (replaces modal ShowCoDialog usage).
+ *
+ * Performs HTTP work on the network thread and reports results to
+ * #DownloadListener instances on the UI thread.  UI state changes belong
+ * in #Glue or other UI-side listeners.
  */
 class DownloadGlue final {
   enum class Job {
@@ -70,15 +96,21 @@ public:
   void RemoveListener(DownloadListener &listener) noexcept;
 
   /**
-   * Apply a cached tile or download the current forecast/isobar in the
-   * background.
+   * Notify listeners from the UI thread (for example after applying a
+   * cached overlay without starting a download).
    */
-  void RequestOverlayRefresh() noexcept;
+  void DeliverNotification(DownloadNotification notification) noexcept;
+
+  /**
+   * Download the overlay for the given forecast/isobar in the background.
+   */
+  void StartOverlayDownload(BrokenDateTime forecast_time,
+                            unsigned isobar) noexcept;
 
   /**
    * Download all hours and isobars for one UTC day in the background.
    */
-  void RequestPrecacheDay(BrokenDateTime day) noexcept;
+  void StartPrecacheDay(BrokenDateTime day) noexcept;
 
 private:
   Co::InvokeTask RunOverlayDownload();
@@ -87,7 +119,7 @@ private:
   void OnCompletion(std::exception_ptr error) noexcept;
   void OnCompleteNotify() noexcept;
 
-  void NotifyListeners() noexcept;
+  void NotifyListeners(const DownloadNotification &notification) noexcept;
 };
 
 } // namespace EDL
