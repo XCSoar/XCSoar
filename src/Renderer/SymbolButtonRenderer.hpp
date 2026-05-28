@@ -15,10 +15,19 @@ class SymbolButtonRenderer : public ButtonRenderer {
 
   const StaticString<16> caption;
 
+  bool menu_scale;
+
 public:
+  enum class Style {
+    DEFAULT,
+    MENU,
+  };
+
   SymbolButtonRenderer(const ButtonLook &_look,
-                       StaticString<64>::const_pointer _caption) noexcept
-    :frame_renderer(_look), caption(_caption) {}
+                       StaticString<64>::const_pointer _caption,
+                       Style style=Style::DEFAULT) noexcept
+    :frame_renderer(_look), caption(_caption),
+     menu_scale(style == Style::MENU) {}
 
   const ButtonLook &GetLook() const noexcept {
     return frame_renderer.GetLook();
@@ -30,6 +39,9 @@ public:
 
   void DrawButton(Canvas &canvas, const PixelRect &rc,
                   ButtonState state) const noexcept override;
+
+  [[gnu::pure]]
+  static bool IsSymbolCaption(const char *caption) noexcept;
 
 private:
   void DrawSymbol(Canvas &canvas, PixelRect rc,
