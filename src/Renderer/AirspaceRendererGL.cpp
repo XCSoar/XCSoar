@@ -31,6 +31,10 @@ static constexpr GLuint POLYGON_STENCIL = 4;
 static constexpr GLuint CLEARANCE_STENCIL = 8;
 /** Thick-pen ring along a cleared boundary. */
 static constexpr GLuint CLEARED_RING_STENCIL = 16;
+/** Pixels already painted, or stamped as cleared interior or ring. */
+static constexpr GLuint CLEARED_RING_PADDING_MASK =
+  FILL_STENCIL | OUTLINE_STENCIL |
+  CLEARANCE_STENCIL | CLEARED_RING_STENCIL;
 static constexpr GLint EVEN_ODD_STENCIL_BITS = 3;
 
 static_assert(POLYGON_STENCIL < (1u << EVEN_ODD_STENCIL_BITS));
@@ -389,6 +393,24 @@ public:
   }
 
 private:
+  /**
+   * Continue a neighbour's inside padding across a cleared boundary.
+   * Informative airspaces and the cleared airspace itself do not.
+   */
+  [[nodiscard]]
+  bool WantsClearedBoundaryPadding(const AbstractAirspace &airspace,
+                                   bool fill_airspace) const noexcept {
+    return !fill_airspace &&
+           warning_manager.IsWarningCapable(airspace) &&
+           !warning_manager.IsClearedAtCurrentAltitude(airspace);
+  }
+
+  /** Draw only pixels stamped as the cleared-boundary ring. */
+  void SelectClearedRingPadding() noexcept {
+    glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
+                  CLEARED_RING_PADDING_MASK);
+  }
+
   void VisitCircle(const AirspaceCircle &airspace) {
     const auto type_or_class = airspace.GetTypeOrClass();
     AirspaceClass as_type_or_class = settings.classes[type_or_class].display
@@ -424,17 +446,10 @@ private:
         canvas.DrawCircle(screen_center,
                           screen_radius - look.thick_pen.GetWidth() / 4);
 
-        if (warning_manager.IsWarningCapable(airspace) &&
-            !warning_manager.IsCleared(airspace)) {
-          /* Continue the padding across a cleared boundary.  Skip
-             pixels already covered by this circle's padding, the
-             cleared interior, or an outline.  Informative airspaces
-             and the cleared airspace itself do not draw this. */
+        if (WantsClearedBoundaryPadding(airspace, false)) {
           canvas.Select(Brush(color.WithAlpha(90)));
           canvas.SelectNullPen();
-          glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
-                        FILL_STENCIL | OUTLINE_STENCIL |
-                        CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
+          SelectClearedRingPadding();
           canvas.DrawCircle(screen_center, screen_radius);
         }
       }
@@ -493,18 +508,11 @@ private:
                            FILL_STENCIL | OUTLINE_STENCIL |
                            CLEARANCE_STENCIL);
 
-        if (!fill_airspace &&
-            warning_manager.IsWarningCapable(airspace) &&
-            !warning_manager.IsCleared(airspace)) {
-          /* Continue the padding across a cleared boundary.  Skip
-             pixels already covered by this airspace's padding, the
-             cleared interior, or an outline.  Informative airspaces
-             and the cleared airspace itself do not draw this. */
+        if (WantsClearedBoundaryPadding(airspace, fill_airspace)) {
           DrawEvenOddPolygon(canvas, raster_points.data(),
                              num_raster_points, POLYGON_STENCIL,
                              CLEARED_RING_STENCIL,
-                             FILL_STENCIL | OUTLINE_STENCIL |
-                             CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
+                             CLEARED_RING_PADDING_MASK);
         }
       }
 
@@ -540,7 +548,7 @@ public:
    * The ring extends a neighbour's padding across the boundary.
    */
   void VisitClearance(const AbstractAirspace &airspace) {
-    if (!warning_manager.IsCleared(airspace))
+    if (!warning_manager.IsClearedAtCurrentAltitude(airspace))
       return;
 
     const GLEnable<GL_STENCIL_TEST> stencil;
@@ -608,12 +616,8 @@ private:
         const GLEnable<GL_BLEND> blend;
         DrawPrepared();
 
-        if (!fill_airspace &&
-            warning_manager.IsWarningCapable(airspace) &&
-            !warning_manager.IsCleared(airspace)) {
-          glStencilFunc(GL_EQUAL, CLEARED_RING_STENCIL,
-                        FILL_STENCIL | OUTLINE_STENCIL |
-                        CLEARANCE_STENCIL | CLEARED_RING_STENCIL);
+        if (WantsClearedBoundaryPadding(airspace, fill_airspace)) {
+          SelectClearedRingPadding();
           DrawPrepared();
         }
       }
