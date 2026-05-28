@@ -544,7 +544,7 @@ ShowMapItemDialog(const MapItem &item,
 #endif
 
   case MapItem::Type::OVERLAY:
-    ShowWeatherDialog("overlay");
+    ShowWeatherDialog("edl");
     break;
 
   case MapItem::Type::RASP:
