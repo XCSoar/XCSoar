@@ -248,12 +248,20 @@ public:
         if (d0 < d1)
           iv = {{d0, p.first}, {d1, p.second}};
         else {
-          /* p.first == p.second: the path enters the airspace but
-             the predicted endpoint lies inside it. Use the prediction
-             endpoint as the interval end instead */
-          const double d_end =
-            state.location.Distance(location_predicted);
-          iv = {{d0, p.first}, {d_end, location_predicted}};
+          /* d0 == d1: two cases share this branch.
+             (A) Polygon "enters, endpoint inside": DistinctIntersection
+             Use location_predicted as the interval end
+             (B) Circle tangent/near-tangent: IntersectOriginCircle
+             yields f_p1==f_p2 when det approx. 0, only one point reaches the
+             sorter, all() emits (T,T).  The path does not genuinely
+             enter, so no interval should be generated.
+             Distinguish by checking whether location_predicted is
+             inside the airspace (true for A, false for B). */
+          if (airspace.Inside(location_predicted)) {
+            const double d_end =
+              state.location.Distance(location_predicted);
+            iv = {{d0, p.first}, {d_end, location_predicted}};
+          }
         }
       }
     } else {
