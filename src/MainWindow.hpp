@@ -217,6 +217,22 @@ private:
   }
 
   /**
+   * The visible #GlueMapWindow area.  After layout, this is
+   * #GlueMapWindow::GetPosition(); otherwise it is computed from
+   * #GetMainRect() and top/bottom widgets.
+   */
+  [[gnu::pure]]
+  PixelRect GetMapAreaRect() const noexcept;
+
+  /**
+   * Move top/bottom widgets and the map into the area returned by
+   * #GetMapAreaRect().
+   */
+  void LayoutMapArea() noexcept;
+
+  void UpdateMapOverlayButtonLayout() noexcept;
+
+  /**
    * Adjust the flarm radar position
    */
   void ReinitialiseLayout_flarm(PixelRect rc,
