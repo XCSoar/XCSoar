@@ -393,7 +393,7 @@ PageActions::LoadLayout(const PageLayout &layout)
   LoadBottom(active);
 
   ActionInterface::UpdateDisplayMode();
-  ActionInterface::SendUIState(true);
+  ActionInterface::SendUIState(false);
   if (CommonInterface::main_window != nullptr)
     CommonInterface::main_window->ScheduleRefreshInfoBoxes();
 }

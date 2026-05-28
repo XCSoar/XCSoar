@@ -54,6 +54,9 @@ class MapOverlayControlsWidget final
   Button *precache_day_button = nullptr;
   Button *clean_other_days_button = nullptr;
   bool blackboard_listener_registered = false;
+#ifdef HAVE_EDL
+  EDL::DownloadGlue *edl_listener_glue = nullptr;
+#endif
 
 public:
   MapOverlayControlsWidget(MapOverlay::Usage _usage,
@@ -64,6 +67,9 @@ public:
 
   ~MapOverlayControlsWidget() noexcept override {
     UnregisterBlackboardListener();
+#ifdef HAVE_EDL
+    UnregisterEdlDownloadListener();
+#endif
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -74,6 +80,9 @@ public:
 private:
   void RegisterBlackboardListener() noexcept;
   void UnregisterBlackboardListener() noexcept;
+#ifdef HAVE_EDL
+  void UnregisterEdlDownloadListener() noexcept;
+#endif
   void RefreshControls() noexcept;
   void UpdateAutoAdvanceControls() noexcept;
 
@@ -115,6 +124,18 @@ MapOverlayControlsWidget::UnregisterBlackboardListener() noexcept
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
   blackboard_listener_registered = false;
 }
+
+#ifdef HAVE_EDL
+void
+MapOverlayControlsWidget::UnregisterEdlDownloadListener() noexcept
+{
+  if (edl_listener_glue == nullptr)
+    return;
+
+  edl_listener_glue->RemoveListener(*this);
+  edl_listener_glue = nullptr;
+}
+#endif
 
 void
 MapOverlayControlsWidget::UpdateAutoAdvanceControls() noexcept
@@ -324,8 +345,10 @@ MapOverlayControlsWidget::Show(const PixelRect &rc) noexcept
 
 #ifdef HAVE_EDL
   if (overlay == PageLayout::Overlay::EDL &&
-      net_components != nullptr && net_components->edl != nullptr)
-    net_components->edl->AddListener(*this);
+      net_components != nullptr && net_components->edl != nullptr) {
+    edl_listener_glue = net_components->edl.get();
+    edl_listener_glue->AddListener(*this);
+  }
 #endif
 
   if (refresh_edl)
@@ -339,9 +362,7 @@ MapOverlayControlsWidget::Hide() noexcept
   UnregisterBlackboardListener();
 
 #ifdef HAVE_EDL
-  if (overlay == PageLayout::Overlay::EDL &&
-      net_components != nullptr && net_components->edl != nullptr)
-    net_components->edl->RemoveListener(*this);
+  UnregisterEdlDownloadListener();
 #endif
 
   WindowWidget::Hide();

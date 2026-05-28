@@ -26,6 +26,8 @@ class TrackingGlue final
 
   LiveTrack24::Glue livetrack24;
 
+  bool shutting_down = false;
+
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 
@@ -35,8 +37,11 @@ public:
 
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
+  const SkyLinesTracking::Data &GetSkyLinesData() const {
+    return skylines_data;
+  }
+
 private:
-  bool shutting_down = false;
   /* virtual methods from SkyLinesTracking::Handler */
   virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                          const GeoPoint &location, int altitude) override;
@@ -47,11 +52,6 @@ private:
                  const AGeoPoint &bottom, const AGeoPoint &top,
                  double lift) override;
   void OnSkyLinesError(std::exception_ptr e) override;
-
-public:
-  const SkyLinesTracking::Data &GetSkyLinesData() const {
-    return skylines_data;
-  }
 };
 
 #endif /* HAVE_TRACKING */

@@ -31,6 +31,9 @@ Glue::BeginShutdown() noexcept
 void
 Glue::OnTimer(const NMEAInfo &basic) noexcept
 {
+  if (task.IsShuttingDown())
+    return;
+
   if (!basic.gps.real || !basic.location_available)
     /* we need a real GPS location */
     return;
