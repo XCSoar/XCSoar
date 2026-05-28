@@ -61,10 +61,29 @@ static PixelRect
 GetMapOverlayButtonRect(const PixelRect rc, int top) noexcept
 {
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned size = Layout::GetMaximumControlHeight();
-  const int right = rc.right - padding;
-  const int left = right - size;
-  const int bottom = top + size;
+  const unsigned size = std::max(1u, Layout::GetMaximumControlHeight());
+
+  if (rc.top >= rc.bottom || rc.left >= rc.right)
+    return PixelRect(rc.left, rc.top, rc.left + int(size), rc.top + int(size));
+
+  int bottom = top + int(size);
+  if (bottom > rc.bottom)
+    top = rc.bottom - int(size);
+  if (top < rc.top)
+    top = rc.top;
+
+  int right = rc.right - int(padding);
+  int left = right - int(size);
+  if (left < rc.left) {
+    left = rc.left;
+    right = left + int(size);
+  }
+  if (right > rc.right)
+    right = rc.right;
+
+  bottom = top + int(size);
+  if (bottom <= top)
+    bottom = top + int(size);
 
   return PixelRect(left, top, right, bottom);
 }
@@ -78,43 +97,40 @@ MainWindow::GetShowMenuButtonRect(const PixelRect rc) noexcept
 
 [[gnu::pure]]
 PixelRect
-MainWindow::GetShowZoomOutButtonRect(const PixelRect rc) noexcept
+MainWindow::GetShowZoomButtonRect(const PixelRect rc,
+                                  ShowZoomButton::Sign sign) noexcept
 {
   const UISettings &settings = CommonInterface::GetUISettings();
-  if (settings.show_menu_button && ShowMapOverlayZoomButtons(settings)) {
-    const PixelRect menu = GetShowMenuButtonRect(rc);
-    return GetMapOverlayButtonRect(rc, menu.bottom + Layout::GetTextPadding());
-  }
-
   const unsigned padding = Layout::GetTextPadding();
   const unsigned size = Layout::GetMaximumControlHeight();
-  const int left = rc.left + padding;
-  const int right = left + size;
-  const int bottom = rc.bottom -
-    GetLook().map.overlay.map_scale_left_icon.GetSize().height;
-  const int top = bottom - size;
 
-  return PixelRect(left, top, right, bottom);
-}
-
-[[gnu::pure]]
-PixelRect
-MainWindow::GetShowZoomInButtonRect(const PixelRect rc) noexcept
-{
-  const UISettings &settings = CommonInterface::GetUISettings();
   if (settings.show_menu_button && ShowMapOverlayZoomButtons(settings)) {
-    const PixelRect zoom_out = GetShowZoomOutButtonRect(rc);
-    return GetMapOverlayButtonRect(rc, zoom_out.bottom + Layout::GetTextPadding());
+    int top = GetShowMenuButtonRect(rc).bottom + int(padding);
+    if (sign == ShowZoomButton::Sign::ZOOM_IN) {
+      const PixelRect zoom_out =
+        GetShowZoomButtonRect(rc, ShowZoomButton::Sign::ZOOM_OUT);
+      top = zoom_out.bottom + int(padding);
+    }
+
+    return GetMapOverlayButtonRect(rc, top);
   }
 
-  const unsigned padding = Layout::GetTextPadding();
-  const unsigned size = Layout::GetMaximumControlHeight();
-  const int left = rc.left + padding;
-  const int right = left + size;
-  const int bottom = rc.bottom -
-    GetLook().map.overlay.map_scale_left_icon.GetSize().height -
-    size;
-  const int top = bottom - size;
+  const int scale_h =
+    int(GetLook().map.overlay.map_scale_left_icon.GetSize().height);
+  int bottom = rc.bottom - scale_h -
+    (sign == ShowZoomButton::Sign::ZOOM_IN ? int(size) : 0);
+  int top = bottom - int(size);
+  int left = rc.left + int(padding);
+  int right = left + int(size);
+
+  if (top < rc.top)
+    top = rc.top;
+  if (bottom > rc.bottom)
+    bottom = rc.bottom;
+  if (bottom <= top)
+    bottom = top + int(size);
+  if (right <= left)
+    right = left + int(size);
 
   return PixelRect(left, top, right, bottom);
 }
@@ -280,12 +296,16 @@ MainWindow::InitialiseConfigured()
                              GetShowMenuButtonRect(map_rect));
   }
   if (ShowMapOverlayZoomButtons(settings)) {
-    show_zoom_out_button = new ShowZoomOutButton();
+    show_zoom_out_button = new ShowZoomButton();
     show_zoom_out_button->Create(*this, look->dialog.button,
-                                 GetShowZoomOutButtonRect(map_rect));
-    show_zoom_in_button = new ShowZoomInButton();
+                                 GetShowZoomButtonRect(map_rect,
+                                                       ShowZoomButton::Sign::ZOOM_OUT),
+                                 ShowZoomButton::Sign::ZOOM_OUT);
+    show_zoom_in_button = new ShowZoomButton();
     show_zoom_in_button->Create(*this, look->dialog.button,
-                                GetShowZoomInButtonRect(map_rect));
+                                GetShowZoomButtonRect(map_rect,
+                                                      ShowZoomButton::Sign::ZOOM_IN),
+                                ShowZoomButton::Sign::ZOOM_IN);
   }
 
 #ifdef ANDROID
@@ -504,9 +524,11 @@ MainWindow::ReinitialiseLayout() noexcept
   if (show_menu_button != nullptr)
     show_menu_button->Move(GetShowMenuButtonRect(GetMainRect()));
   if (show_zoom_out_button != nullptr)
-    show_zoom_out_button->Move(GetShowZoomOutButtonRect(GetMainRect()));
+    show_zoom_out_button->Move(GetShowZoomButtonRect(GetMainRect(),
+                                                     ShowZoomButton::Sign::ZOOM_OUT));
   if (show_zoom_in_button != nullptr)
-    show_zoom_in_button->Move(GetShowZoomInButtonRect(GetMainRect()));
+    show_zoom_in_button->Move(GetShowZoomButtonRect(GetMainRect(),
+                                                    ShowZoomButton::Sign::ZOOM_IN));
 
 #ifdef ANDROID
   if (show_rotate_button != nullptr)
