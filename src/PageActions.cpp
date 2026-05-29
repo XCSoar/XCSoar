@@ -17,6 +17,7 @@
 
 #ifdef HAVE_HTTP
 #include "Dialogs/Weather/XCThermControlsWidget.hpp"
+#include "Weather/xctherm/XCThermAPI.hpp"
 #endif
 
 #if defined(ENABLE_SDL) && defined(main)
@@ -219,7 +220,15 @@ LoadBottom(PageLayout::Bottom bottom)
 
 #ifdef HAVE_HTTP
   case PageLayout::Bottom::XCTHERM:
-    CommonInterface::main_window->SetBottomWidget(new XCThermControlsWidget());
+    /* The user explicitly chose XCTherm as this page's bottom widget.
+       If they haven't downloaded any forecast yet, installing the
+       cursor bar would just show a permanent "No data" strip — confusing.
+       Collapse to no bottom widget instead; the next page load (after
+       a successful download) will recreate it. */
+    if (XCThermAPI::Instance().HasAnyCache())
+      CommonInterface::main_window->SetBottomWidget(new XCThermControlsWidget());
+    else
+      CommonInterface::main_window->SetBottomWidget(nullptr);
     break;
 #endif
 

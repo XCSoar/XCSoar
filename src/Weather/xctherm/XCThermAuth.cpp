@@ -3,49 +3,30 @@
 
 #include "XCThermAuth.hpp"
 #include "LogFile.hpp"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/Setup.hxx"
+#include "lib/curl/Slist.hxx"
 
+#include <cstdio>
 #include <cstring>
 #include <ctime>
+#include <string_view>
 #include <vector>
 
 #include <curl/curl.h>
 
 /* ------------------------------------------------------------------ */
-/* CURL helpers                                                        */
+/* Header capture                                                      */
 /* ------------------------------------------------------------------ */
 
-static size_t
-WriteCallback(void *contents, size_t size, size_t nmemb,
-              std::vector<uint8_t> *buffer) {
-  const size_t total = size * nmemb;
-  auto *ptr = static_cast<uint8_t *>(contents);
-  buffer->insert(buffer->end(), ptr, ptr + total);
-  return total;
-}
-
 /**
- * Header callback to capture Set-Cookie containing refreshToken.
- */
+ * Captures the Set-Cookie header containing the refresh token. The
+ * curl read/header callbacks themselves are now defined inline at the
+ * call sites as capture-less lambdas (after migration to CurlEasy
+ * wrappers); we only need the captured-state struct here. */
 struct HeaderCapture {
   std::string cookie_header;
 };
-
-static size_t
-HeaderCallback(char *buffer, size_t size, size_t nitems,
-               HeaderCapture *capture) {
-  const size_t total = size * nitems;
-  std::string line(buffer, total);
-
-  /* Look for Set-Cookie header containing refreshToken */
-  if (line.size() > 12 &&
-      (line.substr(0, 11) == "Set-Cookie:" ||
-       line.substr(0, 11) == "set-cookie:")) {
-    if (line.find("refreshToken") != std::string::npos)
-      capture->cookie_header = line.substr(12);
-  }
-
-  return total;
-}
 
 /* ------------------------------------------------------------------ */
 /* XCThermAuth                                                         */
@@ -103,6 +84,46 @@ XCThermAuth::ForceReauthenticate() noexcept
 }
 
 /* ------------------------------------------------------------------ */
+/* JSON string escaping                                                */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Escape a string for embedding in a JSON string literal.
+ *
+ * Without this, an email/password containing a backslash or double
+ * quote would either break the JSON syntax (auth fails) or — in the
+ * worst case — let a crafted value inject extra JSON fields into the
+ * auth payload.
+ */
+static std::string
+EscapeJsonString(std::string_view s) noexcept
+{
+  std::string out;
+  out.reserve(s.size() + 4);
+  for (char c : s) {
+    switch (c) {
+    case '"':  out += "\\\""; break;
+    case '\\': out += "\\\\"; break;
+    case '\b': out += "\\b";  break;
+    case '\f': out += "\\f";  break;
+    case '\n': out += "\\n";  break;
+    case '\r': out += "\\r";  break;
+    case '\t': out += "\\t";  break;
+    default:
+      if (static_cast<unsigned char>(c) < 0x20) {
+        char buf[8];
+        std::snprintf(buf, sizeof(buf), "\\u%04x",
+                      static_cast<unsigned>(static_cast<unsigned char>(c)));
+        out += buf;
+      } else {
+        out += c;
+      }
+    }
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------------ */
 /* Full authentication                                                 */
 /* ------------------------------------------------------------------ */
 
@@ -114,42 +135,59 @@ XCThermAuth::Authenticate() noexcept
     return false;
   }
 
-  LogFmt("xctherm: authenticating user='{}'", credentials.email);
+  /* Don't log the email — it identifies the account. Length only. */
+  LogFmt("xctherm: authenticating (user len={})", credentials.email.size());
 
   const std::string post_data =
-    R"({"email":")" + credentials.email +
-    R"(","password":")" + credentials.password + R"("})";
-
-  CURL *curl = curl_easy_init();
-  if (!curl)
-    return false;
+    R"({"email":")" + EscapeJsonString(credentials.email) +
+    R"(","password":")" + EscapeJsonString(credentials.password) + R"("})";
 
   std::vector<uint8_t> response_buffer;
   HeaderCapture header_capture;
 
-  struct curl_slist *headers = nullptr;
-  headers = curl_slist_append(headers, "Content-Type: application/json");
-
-  curl_easy_setopt(curl, CURLOPT_URL,
-                   "https://xctherm.com/api/accounts/authenticate");
-  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data.c_str());
-  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
-  curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, HeaderCallback);
-  curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_capture);
-  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 15L);
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-  curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-
-  CURLcode res = curl_easy_perform(curl);
+  CURLcode res = CURLE_OK;
   long http_code = 0;
-  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+  try {
+    CurlEasy easy{"https://xctherm.com/api/accounts/authenticate"};
+    Curl::Setup(easy);          // shared CA bundle, User-Agent, NoSignal
+    easy.SetTimeout(30);
+    easy.SetRequestBody(post_data);
 
-  curl_slist_free_all(headers);
-  curl_easy_cleanup(curl);
+    CurlSlist headers;
+    headers.Append("Content-Type: application/json");
+    easy.SetRequestHeaders(headers.Get());
+
+    easy.SetWriteFunction(
+      [](char *ptr, size_t size, size_t nmemb, void *userdata) -> size_t {
+        const size_t total = size * nmemb;
+        auto *buf = static_cast<std::vector<uint8_t> *>(userdata);
+        buf->insert(buf->end(),
+                    reinterpret_cast<uint8_t *>(ptr),
+                    reinterpret_cast<uint8_t *>(ptr) + total);
+        return total;
+      },
+      &response_buffer);
+    easy.SetHeaderFunction(
+      [](char *buffer, size_t size, size_t nitems,
+         void *userdata) -> size_t {
+        const size_t total = size * nitems;
+        std::string line(buffer, total);
+        auto *cap = static_cast<HeaderCapture *>(userdata);
+        if (line.size() > 12 &&
+            (line.substr(0, 11) == "Set-Cookie:" ||
+             line.substr(0, 11) == "set-cookie:")) {
+          if (line.find("refreshToken") != std::string::npos)
+            cap->cookie_header = line.substr(12);
+        }
+        return total;
+      },
+      &header_capture);
+
+    easy.Perform();
+    easy.GetInfo(CURLINFO_RESPONSE_CODE, &http_code);
+  } catch (const std::exception &) {
+    res = CURLE_OPERATION_TIMEDOUT;
+  }
 
   if (res != CURLE_OK || http_code != 200) {
     LogFmt("xctherm: auth failed curl={} http={}", (int)res, http_code);
@@ -189,41 +227,57 @@ XCThermAuth::RefreshJWT() noexcept
 
   LogFmt("xctherm: refreshing JWT");
 
-  CURL *curl = curl_easy_init();
-  if (!curl)
-    return false;
-
   std::vector<uint8_t> response_buffer;
   HeaderCapture header_capture;
 
   /* Send refresh token as cookie */
   const std::string cookie = "refreshToken=" + refresh_token;
 
-  struct curl_slist *headers = nullptr;
-  headers = curl_slist_append(headers, "Content-Type: application/json");
-
-  curl_easy_setopt(curl, CURLOPT_URL,
-                   "https://xctherm.com/api/accounts/refresh-token");
-  curl_easy_setopt(curl, CURLOPT_POST, 1L);
-  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "");
-  curl_easy_setopt(curl, CURLOPT_COOKIE, cookie.c_str());
-  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
-  curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, HeaderCallback);
-  curl_easy_setopt(curl, CURLOPT_HEADERDATA, &header_capture);
-  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-  curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-
-  CURLcode res = curl_easy_perform(curl);
+  CURLcode res = CURLE_OK;
   long http_code = 0;
-  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+  try {
+    CurlEasy easy{"https://xctherm.com/api/accounts/refresh-token"};
+    Curl::Setup(easy);
+    easy.SetTimeout(20);
+    easy.SetPost();
+    easy.SetRequestBody(std::string_view{});
+    easy.SetOption(CURLOPT_COOKIE, cookie.c_str());
 
-  curl_slist_free_all(headers);
-  curl_easy_cleanup(curl);
+    CurlSlist headers;
+    headers.Append("Content-Type: application/json");
+    easy.SetRequestHeaders(headers.Get());
+
+    easy.SetWriteFunction(
+      [](char *ptr, size_t size, size_t nmemb, void *userdata) -> size_t {
+        const size_t total = size * nmemb;
+        auto *buf = static_cast<std::vector<uint8_t> *>(userdata);
+        buf->insert(buf->end(),
+                    reinterpret_cast<uint8_t *>(ptr),
+                    reinterpret_cast<uint8_t *>(ptr) + total);
+        return total;
+      },
+      &response_buffer);
+    easy.SetHeaderFunction(
+      [](char *buffer, size_t size, size_t nitems,
+         void *userdata) -> size_t {
+        const size_t total = size * nitems;
+        std::string line(buffer, total);
+        auto *cap = static_cast<HeaderCapture *>(userdata);
+        if (line.size() > 12 &&
+            (line.substr(0, 11) == "Set-Cookie:" ||
+             line.substr(0, 11) == "set-cookie:")) {
+          if (line.find("refreshToken") != std::string::npos)
+            cap->cookie_header = line.substr(12);
+        }
+        return total;
+      },
+      &header_capture);
+
+    easy.Perform();
+    easy.GetInfo(CURLINFO_RESPONSE_CODE, &http_code);
+  } catch (const std::exception &) {
+    res = CURLE_OPERATION_TIMEDOUT;
+  }
 
   if (res != CURLE_OK || http_code != 200) {
     LogFmt("xctherm: refresh failed curl={} http={}", (int)res, http_code);

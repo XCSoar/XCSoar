@@ -24,6 +24,8 @@ XCThermAutoSwitch::SetLoadedLayers(std::vector<LayerInfo> layers) noexcept
   /* Reset hysteresis */
   threshold_pending = false;
   altitude_manual_override = false;
+  manual_step_band = -1;
+  last_known_band = -1;
 }
 
 void
@@ -52,6 +54,13 @@ void
 XCThermAutoSwitch::OnManualLayerStep() noexcept
 {
   altitude_manual_override = true;
+  /* Snapshot the altitude band the aircraft is currently in. Auto
+     resumes only once the aircraft has physically flown into a
+     different band — so picking 4000 m at ground level no longer
+     gets undone the moment the override grace window expires.
+     If we don't yet have an altitude reading, the snapshot is
+     deferred to the first UpdateAltitude() after this. */
+  manual_step_band = last_known_band;
   threshold_pending = false;
 }
 
@@ -88,7 +97,10 @@ XCThermAutoSwitch::FindLayerForAltitude(double altitude) const noexcept
   if (loaded_layers.empty())
     return -1;
 
-  /* Count AMSL layers */
+  /* Count AMSL layers. AGL layers are explicitly out of scope for
+     auto-switch — they're picked manually only. If the user has
+     downloaded only AGL forecasts (no AMSL), we return -1 so auto
+     does nothing and the manual choice stays put. */
   int n_amsl = 0;
   for (const auto &l : loaded_layers) {
     if (!l.is_agl)
@@ -96,9 +108,11 @@ XCThermAutoSwitch::FindLayerForAltitude(double altitude) const noexcept
   }
 
   if (n_amsl == 0)
-    return 0;
+    return -1;
 
-  /* Find which AMSL band the altitude falls into using thresholds */
+  /* Find which AMSL band the altitude falls into using thresholds.
+     loaded_layers is sorted AMSL-first, so positions 0..n_amsl-1 are
+     guaranteed to be AMSL — never AGL. */
   int amsl_pos = 0;
   for (size_t i = 0; i < thresholds.size(); ++i) {
     if (altitude >= thresholds[i])
@@ -122,17 +136,32 @@ XCThermAutoSwitch::UpdateAltitude(double altitude, TimeStamp now) noexcept
   if (target_pos < 0)
     return;
 
-  /* If manual override is active, check if we'd switch to a DIFFERENT
-     layer than the one the user manually selected. If so, that means
-     a new threshold was crossed → resume auto. */
+  /* Track the band the aircraft is currently flying in. OnManualLayerStep
+     reads this to snapshot the band at the moment of the manual press. */
+  last_known_band = target_pos;
+
+  /* Manual override: the pilot picked a layer. Auto resumes only once
+     the aircraft physically flies into a band other than the one it was
+     in when the pilot pressed. This means you can sit at 500 m and
+     park the forecast on 4000 m for as long as you want — auto won't
+     fight you. It re-engages naturally when you climb (or descend)
+     into a new altitude band. */
   if (altitude_manual_override) {
-    if (target_pos != current_layer_pos) {
-      /* A new threshold has been crossed — resume auto */
-      altitude_manual_override = false;
-    } else {
-      /* Still in the same zone as manual selection — stay manual */
+    if (manual_step_band < 0) {
+      /* No altitude was available when the manual step happened. Bind
+         the snapshot to the first altitude we see now. */
+      manual_step_band = target_pos;
       return;
     }
+    if (target_pos == manual_step_band) {
+      /* Aircraft is still in the same physical band as when the pilot
+         chose a layer → keep the manual choice. */
+      return;
+    }
+    /* Aircraft has flown into a new band → release the override and
+       fall through to normal auto-switch (which will apply the 20 s
+       hysteresis before actually moving the cursor). */
+    altitude_manual_override = false;
   }
 
   if (target_pos == current_layer_pos) {

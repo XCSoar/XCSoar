@@ -2,15 +2,27 @@
 // Copyright The XCSoar Project
 
 #include "XCThermAPI.hpp"
+#include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/FileReader.hxx"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/Setup.hxx"
+#include "lib/curl/Slist.hxx"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cstdio>
 #include <cstring>
 #include <ctime>
 #include <set>
+#include <span>
+#include <string_view>
 #include <vector>
 
+#include <boost/json.hpp>
 #include <curl/curl.h>
 
 const std::string XCThermAPI::kEmptyString;
@@ -18,15 +30,6 @@ const std::string XCThermAPI::kEmptyString;
 /* ------------------------------------------------------------------ */
 /* CURL helpers                                                        */
 /* ------------------------------------------------------------------ */
-
-static size_t
-CurlWriteCallback(void *contents, size_t size, size_t nmemb,
-                  std::vector<uint8_t> *buffer) {
-  const size_t total = size * nmemb;
-  auto *ptr = static_cast<uint8_t *>(contents);
-  buffer->insert(buffer->end(), ptr, ptr + total);
-  return total;
-}
 
 /**
  * Progress context passed to CURL xferinfo callback. The callback
@@ -86,39 +89,103 @@ XCThermAPI::SetModel(const std::string &m) noexcept
 /* Index.json                                                          */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Map a (curl result, HTTP code) pair to an XCThermAPIError with a
+ * user-readable message. Caller decides whether to retry or surface.
+ */
+static XCThermAPIError
+MakeApiError(CURLcode res, long http_code, const std::string &context)
+{
+  if (res != CURLE_OK) {
+    std::string msg = "Network error";
+    if (const char *what = curl_easy_strerror(res); what != nullptr) {
+      msg += ": ";
+      msg += what;
+    }
+    msg += " (" + context + ")";
+    return XCThermAPIError(XCThermAPIError::Kind::NETWORK, 0,
+                           std::move(msg));
+  }
+
+  XCThermAPIError::Kind kind;
+  std::string msg;
+  switch (http_code) {
+  case 401:
+    kind = XCThermAPIError::Kind::AUTH_FAILED;
+    msg = "Authentication expired or invalid. "
+          "Check XCTherm credentials in Config → System → Weather.";
+    break;
+  case 403:
+    kind = XCThermAPIError::Kind::FORBIDDEN;
+    msg = "Access denied by XCTherm server. "
+          "Your account may not have access to this region.";
+    break;
+  case 404:
+    kind = XCThermAPIError::Kind::NOT_FOUND;
+    msg = "Forecast slot not available on server (" + context + ").";
+    break;
+  default:
+    if (http_code >= 500 && http_code < 600) {
+      kind = XCThermAPIError::Kind::SERVER_ERROR;
+      msg = "XCTherm server error (HTTP " + std::to_string(http_code) +
+            "). Will retry.";
+    } else {
+      kind = XCThermAPIError::Kind::OTHER_HTTP;
+      msg = "Unexpected HTTP " + std::to_string(http_code) +
+            " from XCTherm server.";
+    }
+    break;
+  }
+  msg += " [" + context + "]";
+  return XCThermAPIError(kind, http_code, std::move(msg));
+}
+
 bool
-XCThermAPI::FetchIndex() noexcept
+XCThermAPI::FetchIndex()
 {
   LogFmt("xctherm: fetching index for model='{}'", model);
 
   const std::string url =
     "https://tiles.xctherm.com/forecast/" + model + "/index.json";
 
-  CURL *curl = curl_easy_init();
-  if (!curl)
-    return false;
+  /* RAII curl handle + XCSoar's shared Setup (User-Agent, CA bundle,
+     timeouts). Replaces the previous manual curl_easy_setopt
+     sequence. */
+  CurlEasy easy{url.c_str()};
+  Curl::Setup(easy);
+  /* index.json is gzip-compressed; tell curl to decompress. */
+  easy.SetOption(CURLOPT_ACCEPT_ENCODING, "gzip");
+  easy.SetTimeout(20);
 
   std::vector<uint8_t> response_buffer;
+  easy.SetWriteFunction(
+    [](char *ptr, size_t size, size_t nmemb, void *userdata) -> size_t {
+      const size_t total = size * nmemb;
+      auto *buf = static_cast<std::vector<uint8_t> *>(userdata);
+      buf->insert(buf->end(),
+                  reinterpret_cast<uint8_t *>(ptr),
+                  reinterpret_cast<uint8_t *>(ptr) + total);
+      return total;
+    },
+    &response_buffer);
 
-  /* index.json is gzip-compressed; tell curl to decompress */
-  curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlWriteCallback);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
-  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-  curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
+  CURLcode res = CURLE_OK;
+  try {
+    easy.Perform();   /* throws on network-level failure */
+  } catch (const std::exception &) {
+    /* Re-classify any throw out of Perform() as a NETWORK error so
+       the caller's catch sees XCThermAPIError, not a generic
+       std::runtime_error from Curl::MakeError. */
+    res = CURLE_OPERATION_TIMEDOUT;
+  }
 
-  CURLcode res = curl_easy_perform(curl);
   long http_code = 0;
-  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-  curl_easy_cleanup(curl);
+  easy.GetInfo(CURLINFO_RESPONSE_CODE, &http_code);
 
   if (res != CURLE_OK || http_code != 200) {
-    LogFmt("xctherm: index fetch failed curl={} http={}", (int)res, http_code);
-    return false;
+    LogFmt("xctherm: index fetch failed curl={} http={}",
+           (int)res, http_code);
+    throw MakeApiError(res, http_code, "index.json");
   }
 
   std::string json(response_buffer.begin(), response_buffer.end());
@@ -128,56 +195,47 @@ XCThermAPI::FetchIndex() noexcept
 }
 
 /* ------------------------------------------------------------------ */
-/* Simple JSON parsing (no external library)                           */
+/* index.json parsing via boost::json                                  */
 /* ------------------------------------------------------------------ */
 
 /**
- * Find a JSON string value: "key": "value" (handles optional whitespace)
- * Returns empty string if not found.
+ * Extract a YYYYMMDD date and HH hour from an ISO-8601 "run" timestamp
+ * like "2026-05-18T12:00:00+00:00". Conservative: returns false if the
+ * shape doesn't match the expected length and structure.
  */
-static std::string
-JsonFindString(const std::string &json, size_t start,
-               const char *key) noexcept
+static bool
+ParseRunTimestamp(std::string_view iso,
+                  std::string &out_date,
+                  std::string &out_hour) noexcept
 {
-  std::string needle = std::string("\"") + key + "\"";
-  size_t pos = json.find(needle, start);
-  if (pos == std::string::npos)
-    return {};
-
-  pos += needle.size();
-  /* Skip : and whitespace */
-  while (pos < json.size() && (json[pos] == ':' || json[pos] == ' '))
-    ++pos;
-  /* Expect opening quote */
-  if (pos >= json.size() || json[pos] != '"')
-    return {};
-  ++pos;
-
-  size_t end = json.find('"', pos);
-  if (end == std::string::npos)
-    return {};
-
-  return json.substr(pos, end - pos);
+  if (iso.size() < 13 || iso[4] != '-' || iso[7] != '-' ||
+      iso[10] != 'T')
+    return false;
+  out_date.clear();
+  out_date.append(iso.substr(0, 4));
+  out_date.append(iso.substr(5, 2));
+  out_date.append(iso.substr(8, 2));
+  out_hour = iso.substr(11, 2);
+  return true;
 }
 
 /**
- * Find a JSON number value: "key": <number> (handles optional whitespace)
+ * Convenience: try to get a uint from a json value, defaulting if the
+ * value is missing or of the wrong kind. Useful because the API may
+ * send `"step": null` for partially-filled runs.
  */
-static int
-JsonFindInt(const std::string &json, size_t start,
-            const char *key, int default_val = 0) noexcept
+static unsigned
+TryGetUInt(const boost::json::object &obj, std::string_view key,
+           unsigned default_val) noexcept
 {
-  std::string needle = std::string("\"") + key + "\"";
-  size_t pos = json.find(needle, start);
-  if (pos == std::string::npos)
+  auto it = obj.find(key);
+  if (it == obj.end())
     return default_val;
-
-  pos += needle.size();
-  /* Skip : and whitespace */
-  while (pos < json.size() && (json[pos] == ':' || json[pos] == ' '))
-    ++pos;
-
-  return std::atoi(json.c_str() + pos);
+  try {
+    return (unsigned)it->value().to_number<int64_t>();
+  } catch (...) {
+    return default_val;
+  }
 }
 
 bool
@@ -186,112 +244,75 @@ XCThermAPI::ParseIndex(const std::string &json) noexcept
   available_parameters.clear();
   index_loaded = false;
 
-  /* Find "parameters" object */
-  size_t params_pos = json.find("\"parameters\"");
-  if (params_pos == std::string::npos) {
-    LogFmt("xctherm: no 'parameters' in index.json");
+  boost::json::value root;
+  try {
+    root = boost::json::parse(json);
+  } catch (const std::exception &e) {
+    LogFmt("xctherm: index.json is not valid JSON: {}", e.what());
     return false;
   }
 
-  /* Scan for vertical_wind parameters */
-  const char *vw_prefix = "\"vertical_wind_";
-  size_t search_pos = params_pos;
+  if (!root.is_object()) {
+    LogFmt("xctherm: index.json root is not an object");
+    return false;
+  }
 
-  while (true) {
-    size_t pos = json.find(vw_prefix, search_pos);
-    if (pos == std::string::npos)
-      break;
+  const auto &root_obj = root.as_object();
+  auto it_params = root_obj.find("parameters");
+  if (it_params == root_obj.end() || !it_params->value().is_object()) {
+    LogFmt("xctherm: no 'parameters' object in index.json");
+    return false;
+  }
 
-    /* Extract parameter name */
-    pos += 1; // skip opening quote
-    size_t name_end = json.find('"', pos);
-    if (name_end == std::string::npos)
-      break;
+  for (const auto &param_kv : it_params->value().as_object()) {
+    std::string_view param_name{param_kv.key()};
+    /* We only consume "vertical_wind_*" — other params (CAPE, IR, …)
+       exist in some forecasts and are silently ignored. */
+    if (!param_name.starts_with("vertical_wind_"))
+      continue;
+    if (!param_kv.value().is_object())
+      continue;
 
-    std::string param_name = json.substr(pos, name_end - pos);
-    search_pos = name_end + 1;
-
-    /* Find the slots array for this parameter */
-    size_t slots_pos = json.find("\"slots\"", search_pos);
-    if (slots_pos == std::string::npos)
-      break;
-
-    /* Find the opening bracket of the slots array */
-    size_t arr_start = json.find('[', slots_pos);
-    if (arr_start == std::string::npos)
-      break;
-
-    /* Find matching closing bracket (handle nesting) */
-    int depth = 1;
-    size_t arr_end = arr_start + 1;
-    while (arr_end < json.size() && depth > 0) {
-      if (json[arr_end] == '[') ++depth;
-      else if (json[arr_end] == ']') --depth;
-      ++arr_end;
-    }
+    const auto &param_obj = param_kv.value().as_object();
+    auto it_slots = param_obj.find("slots");
+    if (it_slots == param_obj.end() || !it_slots->value().is_array())
+      continue;
 
     ParameterInfo info;
-    info.name = param_name;
+    info.name = std::string{param_name};
 
-    /* Parse each slot object within the array */
-    size_t slot_search = arr_start;
-    while (true) {
-      size_t slot_start = json.find('{', slot_search);
-      if (slot_start == std::string::npos || slot_start >= arr_end)
-        break;
-
-      /* Find matching closing brace (handle nested "steps": {...}) */
-      int obj_depth = 1;
-      size_t slot_end = slot_start + 1;
-      while (slot_end < json.size() && obj_depth > 0) {
-        if (json[slot_end] == '{') ++obj_depth;
-        else if (json[slot_end] == '}') --obj_depth;
-        ++slot_end;
-      }
-      --slot_end; /* point at the closing brace */
-      if (obj_depth != 0)
-        break;
-
-      /* Parse "run" datetime */
-      std::string run_str = JsonFindString(json, slot_start, "run");
-      if (run_str.empty()) {
-        slot_search = slot_end + 1;
+    for (const auto &slot_val : it_slots->value().as_array()) {
+      if (!slot_val.is_object())
         continue;
-      }
+      const auto &slot_obj = slot_val.as_object();
+
+      auto it_run = slot_obj.find("run");
+      if (it_run == slot_obj.end() || !it_run->value().is_string())
+        continue;
 
       ForecastSlot slot;
+      if (!ParseRunTimestamp(it_run->value().as_string().c_str(),
+                             slot.run_date, slot.run_hour))
+        continue;
 
-      /* Parse run datetime: "2026-05-06T03:00:00+00:00" */
-      /* Extract date YYYYMMDD */
-      if (run_str.size() >= 10) {
-        slot.run_date = run_str.substr(0, 4) +
-                        run_str.substr(5, 2) +
-                        run_str.substr(8, 2);
-      }
-      /* Extract hour HH */
-      if (run_str.size() >= 13) {
-        slot.run_hour = run_str.substr(11, 2);
-      }
-
-      /* Parse steps */
-      size_t steps_pos = json.find("\"steps\"", slot_start);
-      if (steps_pos != std::string::npos && steps_pos <= slot_end) {
-        slot.step_min = (unsigned)JsonFindInt(json, steps_pos, "min", 0);
-        slot.step_max = (unsigned)JsonFindInt(json, steps_pos, "max", 0);
-        slot.step_step = (unsigned)JsonFindInt(json, steps_pos, "step", 1);
-        if (slot.step_step == 0) slot.step_step = 1;
+      auto it_steps = slot_obj.find("steps");
+      if (it_steps != slot_obj.end() && it_steps->value().is_object()) {
+        const auto &steps_obj = it_steps->value().as_object();
+        slot.step_min  = TryGetUInt(steps_obj, "min", 0);
+        slot.step_max  = TryGetUInt(steps_obj, "max", 0);
+        slot.step_step = TryGetUInt(steps_obj, "step", 1);
+        if (slot.step_step == 0)
+          slot.step_step = 1;
       }
 
       info.slots.push_back(std::move(slot));
-      slot_search = slot_end + 1;
     }
 
     if (!info.slots.empty()) {
-      LogFmt("xctherm: param '{}' — {} slots", info.name, info.slots.size());
+      LogFmt("xctherm: param '{}' — {} slots",
+             info.name, info.slots.size());
       available_parameters.push_back(std::move(info));
     }
-
-    search_pos = arr_end;
   }
 
   index_loaded = !available_parameters.empty();
@@ -405,13 +426,15 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
                             unsigned step,
                             std::string &out_geojson,
                             int64_t *out_wire_bytes,
-                            ProgressFn progress) noexcept
+                            ProgressFn progress)
 {
   out_geojson.clear();
 
   if (!auth.EnsureValidToken()) {
     LogFmt("xctherm: cannot download — auth failed");
-    return false;
+    throw XCThermAPIError(XCThermAPIError::Kind::AUTH_FAILED, 0,
+                          "XCTherm authentication failed. Check "
+                          "credentials in Config → System → Weather.");
   }
 
   const std::string step_str = FormatStep(step);
@@ -421,69 +444,94 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
 
   LogFmt("xctherm: downloading {}", url);
 
-  CURL *curl = curl_easy_init();
-  if (!curl)
-    return false;
+  /* Helper: perform one curl request with our auth header + progress
+     callback. Returns (wire_bytes_added, http_code). Throws
+     std::runtime_error from CurlEasy::Perform() on network failure;
+     caller catches and re-classifies. */
+  auto perform = [&](std::vector<uint8_t> &response_buffer,
+                     CurlProgressCtx &ctx,
+                     curl_off_t &out_wire,
+                     curl_off_t &out_speed,
+                     long &out_http,
+                     CURLcode &out_curl) {
+    CurlEasy easy{url.c_str()};
+    Curl::Setup(easy);          // shared CA bundle, User-Agent, NoSignal
+    easy.SetOption(CURLOPT_ACCEPT_ENCODING, "gzip");
+    easy.SetOption(CURLOPT_FOLLOWLOCATION, 1L);
+    easy.SetTimeout(60);
+
+    CurlSlist headers;
+    headers.Append(auth.GetAuthHeader().c_str());
+    easy.SetRequestHeaders(headers.Get());
+
+    easy.SetWriteFunction(
+      [](char *ptr, size_t size, size_t nmemb, void *userdata) -> size_t {
+        const size_t total = size * nmemb;
+        auto *buf = static_cast<std::vector<uint8_t> *>(userdata);
+        buf->insert(buf->end(),
+                    reinterpret_cast<uint8_t *>(ptr),
+                    reinterpret_cast<uint8_t *>(ptr) + total);
+        return total;
+      },
+      &response_buffer);
+
+    if (progress)
+      easy.SetXferInfoFunction(CurlProgressCallback, &ctx);
+
+    out_curl = CURLE_OK;
+    try {
+      easy.Perform();
+    } catch (const std::exception &) {
+      out_curl = CURLE_OPERATION_TIMEDOUT;
+    }
+
+    easy.GetInfo(CURLINFO_RESPONSE_CODE, &out_http);
+    easy.GetInfo(CURLINFO_SIZE_DOWNLOAD_T, &out_wire);
+    easy.GetInfo(CURLINFO_SPEED_DOWNLOAD_T, &out_speed);
+    /* easy + headers destruct here — no manual cleanup, no leak on
+       throw. */
+  };
 
   std::vector<uint8_t> response_buffer;
   CurlProgressCtx progress_ctx;
   progress_ctx.progress = progress ? &progress : nullptr;
 
-  struct curl_slist *headers = nullptr;
-  const std::string auth_header = auth.GetAuthHeader();
-  headers = curl_slist_append(headers, auth_header.c_str());
-
-  curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-  curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlWriteCallback);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer);
-  curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10L);
-  curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-  curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-  if (progress) {
-    /* Wire the progress callback so the worker thread can update the
-       per-slice byte counter and, by returning false, abort mid-fetch
-       when the user presses Stop. */
-    curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, CurlProgressCallback);
-    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &progress_ctx);
-    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
-  }
-
-  CURLcode res = curl_easy_perform(curl);
-  long http_code = 0;
-  curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-
-  /* Wire size = bytes actually received over the network (compressed) */
   curl_off_t wire_bytes = 0;
-  curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD_T, &wire_bytes);
-
-  /* Average download speed (bytes/sec) */
   curl_off_t speed_bps = 0;
-  curl_easy_getinfo(curl, CURLINFO_SPEED_DOWNLOAD_T, &speed_bps);
-
-  curl_slist_free_all(headers);
-  curl_easy_cleanup(curl);
+  long http_code = 0;
+  CURLcode res = CURLE_OK;
+  perform(response_buffer, progress_ctx, wire_bytes, speed_bps,
+          http_code, res);
 
   if (out_wire_bytes)
     *out_wire_bytes = (int64_t)wire_bytes;
 
-  /* Handle 401: try re-auth once */
+  /* User cancelled via Stop — return false, not an error. */
+  if (res == CURLE_ABORTED_BY_CALLBACK)
+    return false;
+
+  /* 401: try re-auth ONCE (bounded — used to be unbounded recursive). */
   if (http_code == 401) {
     LogFmt("xctherm: 401, re-authenticating");
     if (!auth.ForceReauthenticate())
+      throw XCThermAPIError(XCThermAPIError::Kind::AUTH_FAILED, 401,
+                            "XCTherm authentication failed. Check "
+                            "credentials in Config → System → Weather.");
+    response_buffer.clear();
+    perform(response_buffer, progress_ctx, wire_bytes, speed_bps,
+            http_code, res);
+    if (out_wire_bytes)
+      *out_wire_bytes += (int64_t)wire_bytes;
+    if (res == CURLE_ABORTED_BY_CALLBACK)
       return false;
-    return DownloadGeoJSON(parameter, date, run_hour, step, out_geojson,
-                           out_wire_bytes, std::move(progress));
   }
 
   if (res != CURLE_OK || http_code != 200) {
-    LogFmt("xctherm: download failed curl={} http={}", (int)res, http_code);
-    return false;
+    LogFmt("xctherm: download failed curl={} http={}",
+           (int)res, http_code);
+    throw MakeApiError(res, http_code,
+                       parameter + " " + date + "/" + run_hour +
+                       "Z step " + step_str);
   }
 
   out_geojson.assign(response_buffer.begin(), response_buffer.end());
@@ -503,9 +551,18 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
   slice.run_date = date;
   slice.run_hour = run_hour;
   slice.step = step;
+  slice.downloaded_at = (int64_t)std::chrono::duration_cast<std::chrono::seconds>(
+    std::chrono::system_clock::now().time_since_epoch()).count();
 
   const unsigned run_h = (unsigned)std::atoi(run_hour.c_str());
   const unsigned forecast_utc = (run_h + step) % 24;
+
+  /* Persist to disk before committing to RAM — that way a crash mid-
+     write doesn't leave the RAM cache pointing at a slice that has no
+     on-disk backing. Disk write is best-effort: failure logs, doesn't
+     throw, doesn't prevent the RAM cache update below. */
+  WriteSliceToDisk(parameter, forecast_utc, slice);
+
   {
     const std::lock_guard lock{cache_mutex};
     geojson_cache[parameter][forecast_utc] = std::move(slice);
@@ -602,9 +659,376 @@ XCThermAPI::GetCachedHours(const std::string &parameter) const noexcept
   return result;
 }
 
+XCThermAPI::LayerCacheSummary
+XCThermAPI::GetCachedLayerSummary(const std::string &parameter) const noexcept
+{
+  LayerCacheSummary out;
+  const std::lock_guard lock{cache_mutex};
+  auto it = geojson_cache.find(parameter);
+  if (it == geojson_cache.end())
+    return out;
+
+  const auto now = std::chrono::system_clock::now();
+
+  for (const auto &kv : it->second) {
+    out.hours.push_back(kv.first);
+    const auto &s = kv.second;
+    if (s.downloaded_at != 0) {
+      if (out.earliest_downloaded_at == 0 ||
+          s.downloaded_at < out.earliest_downloaded_at)
+        out.earliest_downloaded_at = s.downloaded_at;
+      if (s.downloaded_at > out.latest_downloaded_at) {
+        out.latest_downloaded_at = s.downloaded_at;
+        /* Track the run identity of the most recently written slice
+           — assuming all slices in one download share a run, this
+           gives the dialog a coherent "Issued <run>" tag. */
+        out.latest_run_date = s.run_date;
+        out.latest_run_hour = s.run_hour;
+      }
+    }
+
+    /* Count slices that are still valid in the future. valid_time =
+       run_date (YYYYMMDD) + run_hour (HH) + step hours. Anything that
+       fails to parse is silently skipped — we'd rather under-report
+       than crash on malformed metadata. */
+    if (s.run_date.size() == 8 && s.run_hour.size() == 2) {
+      try {
+        const int y = std::stoi(s.run_date.substr(0, 4));
+        const unsigned mo = (unsigned)std::stoul(s.run_date.substr(4, 2));
+        const unsigned d = (unsigned)std::stoul(s.run_date.substr(6, 2));
+        const unsigned h = (unsigned)std::stoul(s.run_hour);
+        const std::chrono::year_month_day ymd{
+          std::chrono::year{y},
+          std::chrono::month{mo},
+          std::chrono::day{d}};
+        if (ymd.ok()) {
+          const auto valid_tp =
+            std::chrono::sys_days{ymd}
+            + std::chrono::hours{h}
+            + std::chrono::hours{s.step};
+          if (valid_tp > now)
+            ++out.future_hours;
+        }
+      } catch (...) {
+        /* skip */
+      }
+    }
+  }
+  std::sort(out.hours.begin(), out.hours.end());
+  return out;
+}
+
+bool
+XCThermAPI::HasAnyCache() const noexcept
+{
+  const std::lock_guard lock{cache_mutex};
+  for (const auto &kv : geojson_cache)
+    if (!kv.second.empty())
+      return true;
+  return false;
+}
+
+void
+XCThermAPI::ClearLayer(const std::string &parameter) noexcept
+{
+  std::vector<unsigned> dropped_hours;
+  {
+    const std::lock_guard lock{cache_mutex};
+    auto it = geojson_cache.find(parameter);
+    if (it != geojson_cache.end()) {
+      dropped_hours.reserve(it->second.size());
+      for (const auto &kv : it->second)
+        dropped_hours.push_back(kv.first);
+    }
+    geojson_cache.erase(parameter);
+  }
+
+  /* Disk cleanup outside the cache mutex — file I/O isn't a hot path
+     and FileUtil functions are noexcept but can still take a moment. */
+  for (unsigned utc : dropped_hours)
+    DeleteSliceFromDisk(parameter, utc);
+}
+
+unsigned
+XCThermAPI::PruneStaleRuns(const std::string &parameter,
+                           unsigned current_utc_hour) noexcept
+{
+  /* Sweep policy: for every cached UTC hour of @p parameter, ask
+     FindSlotForOffset which run is currently the freshest for that
+     hour and drop the cache entry if it doesn't match.
+
+     We compute the offset to the *next* occurrence of each hour from
+     @c current_utc_hour. For past hours that means an offset in
+     1..23 (wrapping into tomorrow); that's fine for matching the
+     latest model run because runs don't depend on whether the
+     forecast time has already passed.
+
+     The lock is held briefly per lookup; FindSlotForOffset reads
+     available_parameters which is only written by FetchIndex on the
+     UI thread, so no second mutex needed. */
+  std::vector<unsigned> hours_to_drop;
+
+  {
+    const std::lock_guard lock{cache_mutex};
+    auto it = geojson_cache.find(parameter);
+    if (it == geojson_cache.end())
+      return 0;
+
+    for (const auto &kv : it->second) {
+      const unsigned utc = kv.first;
+      const auto &slice = kv.second;
+
+      const unsigned offset = (utc + 24 - current_utc_hour) % 24;
+      std::string latest_date, latest_run;
+      unsigned latest_step;
+      if (!FindSlotForOffset(parameter, current_utc_hour, offset,
+                             latest_date, latest_run, latest_step))
+        /* Index doesn't cover this hour any more — keep the cached
+           slice, the user explicitly downloaded it. */
+        continue;
+
+      if (slice.run_date != latest_date ||
+          slice.run_hour != latest_run)
+        hours_to_drop.push_back(utc);
+    }
+
+    for (unsigned utc : hours_to_drop)
+      it->second.erase(utc);
+  }
+
+  for (unsigned utc : hours_to_drop)
+    DeleteSliceFromDisk(parameter, utc);
+
+  return (unsigned)hours_to_drop.size();
+}
+
 void
 XCThermAPI::ClearCache() noexcept
 {
-  const std::lock_guard lock{cache_mutex};
-  geojson_cache.clear();
+  {
+    const std::lock_guard lock{cache_mutex};
+    geojson_cache.clear();
+  }
+  WipeDiskCache();
+}
+
+/* ------------------------------------------------------------------ */
+/* Disk cache                                                          */
+/* ------------------------------------------------------------------ */
+
+/* On-disk file header: one-line metadata, then the original GeoJSON
+   bytes. v=1 lets future versions invalidate older format silently. */
+/* Current on-disk format marker. v2 added `downloaded_at=<unix_sec>`.
+   v1 files are still loaded for backwards compatibility, with the
+   timestamp falling back to the file mtime — see Loader::Visit. */
+static constexpr const char *kDiskHeaderV1 = "#XCTHERMv1";
+static constexpr const char *kDiskHeaderV2 = "#XCTHERMv2";
+static constexpr const char *kDiskHeader = kDiskHeaderV2;
+
+/* Files older than this on app startup are treated as stale and not
+   loaded back into RAM (and deleted to keep the directory tidy). */
+static constexpr std::chrono::hours kDiskTTL{24};
+
+void
+XCThermAPI::EnableDiskCache() noexcept
+{
+  if (disk_cache_dir != nullptr)
+    return;  /* idempotent */
+
+  try {
+    disk_cache_dir = MakeLocalPath("xctherm");
+  } catch (...) {
+    LogFmt("xctherm: could not create disk cache dir");
+    disk_cache_dir = nullptr;
+    return;
+  }
+  LogFmt("xctherm: disk cache dir = {}", disk_cache_dir.c_str());
+
+  /* Scan existing files and either load or delete them.
+     Visitor that captures `this`. */
+  struct Loader final : public File::Visitor {
+    XCThermAPI &api;
+    const std::chrono::system_clock::time_point cutoff;
+    unsigned loaded = 0;
+    unsigned dropped = 0;
+    Loader(XCThermAPI &_api,
+           std::chrono::system_clock::time_point _cutoff) noexcept
+      : api(_api), cutoff(_cutoff) {}
+
+    void Visit(Path path, Path filename) override {
+      /* Filename pattern: <param>_<utc>.xctcache */
+      const auto mtime_tp = File::GetLastModification(path);
+      if (mtime_tp < cutoff) {
+        File::Delete(path);
+        ++dropped;
+        return;
+      }
+
+      /* Parse filename to recover (parameter, utc). */
+      const std::string_view name{filename.c_str()};
+      const auto dot = name.rfind('.');
+      const auto under = name.rfind('_', dot);
+      if (dot == std::string_view::npos ||
+          under == std::string_view::npos ||
+          under >= dot)
+        return;
+      const std::string parameter{name.substr(0, under)};
+      unsigned utc;
+      try {
+        utc = (unsigned)std::stoul(std::string{name.substr(under + 1,
+                                                           dot - under - 1)});
+      } catch (...) {
+        return;
+      }
+      if (utc >= 24)
+        return;
+
+      /* Read file: header line + body. */
+      std::string contents;
+      try {
+        FileReader r{path};
+        char buf[64 * 1024];
+        while (true) {
+          const auto n = r.Read(std::as_writable_bytes(std::span{buf}));
+          if (n == 0)
+            break;
+          contents.append(buf, n);
+        }
+      } catch (...) {
+        return;
+      }
+
+      const auto eol = contents.find('\n');
+      if (eol == std::string::npos)
+        return;
+      const bool is_v2 = contents.compare(0, 10, kDiskHeaderV2) == 0;
+      const bool is_v1 = contents.compare(0, 10, kDiskHeaderV1) == 0;
+      if (!is_v2 && !is_v1)
+        return;
+
+      /* v1: "#XCTHERMv1 run_date=YYYYMMDD run_hour=HH step=N"
+         v2: same + " downloaded_at=<unix_sec>" */
+      CachedSlice slice;
+      auto extract = [&](const char *key) -> std::string_view {
+        const std::string_view header(contents.data(), eol);
+        const std::string needle = std::string{key} + "=";
+        const auto pos = header.find(needle);
+        if (pos == std::string_view::npos)
+          return {};
+        const auto v_start = pos + needle.size();
+        const auto v_end = header.find(' ', v_start);
+        return header.substr(v_start,
+          v_end == std::string_view::npos ? std::string_view::npos : v_end - v_start);
+      };
+      slice.run_date = std::string{extract("run_date")};
+      slice.run_hour = std::string{extract("run_hour")};
+      try {
+        slice.step = (unsigned)std::stoul(std::string{extract("step")});
+      } catch (...) {
+        return;
+      }
+      if (slice.run_date.size() != 8 || slice.run_hour.size() != 2)
+        return;
+
+      /* v2: read explicit timestamp. v1: fall back to file mtime so old
+         caches still display a sensible "downloaded at" in the dialog. */
+      const auto dl_at = extract("downloaded_at");
+      if (!dl_at.empty()) {
+        try {
+          slice.downloaded_at = (int64_t)std::stoll(std::string{dl_at});
+        } catch (...) {
+          slice.downloaded_at = 0;
+        }
+      }
+      if (slice.downloaded_at == 0) {
+        slice.downloaded_at =
+          (int64_t)std::chrono::duration_cast<std::chrono::seconds>(
+            mtime_tp.time_since_epoch()).count();
+      }
+
+      slice.geojson = contents.substr(eol + 1);
+
+      {
+        const std::lock_guard lock{api.cache_mutex};
+        api.geojson_cache[parameter][utc] = std::move(slice);
+      }
+      ++loaded;
+    }
+  };
+
+  const auto now = std::chrono::system_clock::now();
+  Loader loader(*this, now - kDiskTTL);
+  Directory::VisitSpecificFiles(disk_cache_dir, "*.xctcache", loader);
+  LogFmt("xctherm: disk cache loaded {} slices (dropped {} stale)",
+         loader.loaded, loader.dropped);
+}
+
+AllocatedPath
+XCThermAPI::SliceFilePath(const std::string &parameter,
+                          unsigned forecast_utc) const noexcept
+{
+  if (disk_cache_dir == nullptr)
+    return nullptr;
+  char name[128];
+  std::snprintf(name, sizeof(name), "%s_%02u.xctcache",
+                parameter.c_str(), forecast_utc);
+  return AllocatedPath::Build(disk_cache_dir, name);
+}
+
+void
+XCThermAPI::WriteSliceToDisk(const std::string &parameter,
+                             unsigned forecast_utc,
+                             const CachedSlice &slice) const noexcept
+{
+  const auto path = SliceFilePath(parameter, forecast_utc);
+  if (path == nullptr)
+    return;
+
+  try {
+    FileOutputStream out{path};
+    char header[128];
+    const int header_len = std::snprintf(
+      header, sizeof(header),
+      "%s run_date=%s run_hour=%s step=%u downloaded_at=%lld\n",
+      kDiskHeader,
+      slice.run_date.c_str(),
+      slice.run_hour.c_str(),
+      slice.step,
+      (long long)slice.downloaded_at);
+    if (header_len > 0)
+      out.Write(std::as_bytes(std::span(header, (size_t)header_len)));
+    out.Write(std::as_bytes(std::span(slice.geojson.data(),
+                                      slice.geojson.size())));
+    out.Commit();
+  } catch (const std::exception &e) {
+    LogFmt("xctherm: failed to persist {} @{:02}h: {}",
+           parameter, forecast_utc, e.what());
+  } catch (...) {
+    /* never let disk failures escape — cache will simply be RAM-only
+       this session. */
+  }
+}
+
+void
+XCThermAPI::DeleteSliceFromDisk(const std::string &parameter,
+                                unsigned forecast_utc) const noexcept
+{
+  const auto path = SliceFilePath(parameter, forecast_utc);
+  if (path == nullptr)
+    return;
+  File::Delete(path);
+}
+
+void
+XCThermAPI::WipeDiskCache() const noexcept
+{
+  if (disk_cache_dir == nullptr)
+    return;
+
+  struct Wiper final : public File::Visitor {
+    void Visit(Path path, Path) override {
+      File::Delete(path);
+    }
+  } wiper;
+  Directory::VisitSpecificFiles(disk_cache_dir, "*.xctcache", wiper);
 }

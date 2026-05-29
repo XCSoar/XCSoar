@@ -24,8 +24,11 @@ struct WeatherCredentialsSettings {
   }
 
   void SetDefaults() noexcept {
-    email = "xcthermdev@gmail.com";
-    password = "DiePerfekteWelle!26";
+    /* Never embed real credentials in source — they would ship in the
+       binary and end up reused across users. Users supply their own
+       credentials via Config → System → Weather. */
+    email.clear();
+    password.clear();
   }
 };
 
