@@ -240,38 +240,6 @@ RowFormWidget::SetExpertRow(unsigned i) noexcept
   row.expert = true;
 }
 
-void
-RowFormWidget::PrepareWidgetRow(Row &row) noexcept
-{
-  assert(row.type == Row::Type::WIDGET);
-  assert(IsDefined());
-
-  ContainerWindow &panel = (ContainerWindow &)GetWindow();
-  const PixelRect rc = panel.GetClientRect();
-
-  if (!row.initialised) {
-    row.initialised = true;
-    row.widget->Initialise(panel, rc);
-  }
-
-  if (!row.prepared) {
-    row.prepared = true;
-    row.widget->Prepare(panel, rc);
-  }
-}
-
-Widget &
-RowFormWidget::Add(std::unique_ptr<Widget> widget) noexcept
-{
-  rows.emplace_back(std::move(widget));
-  Row &row = rows.back();
-
-  if (IsDefined())
-    PrepareWidgetRow(row);
-
-  return *row.widget;
-}
-
 Window &
 RowFormWidget::Add(Row::Type type, std::unique_ptr<Window> window) noexcept
 {
@@ -464,9 +432,18 @@ RowFormWidget::GetMinimumSize() const noexcept
     : (GetRecommendedCaptionWidth() + value_width);
 
   PixelSize size(edit_width, 0u);
-  for (const auto &i : rows)
-    if (i.IsAvailable(expert))
-      size.height += i.GetMinimumHeight(look, vertical);
+  for (const auto &i : rows) {
+    if (!i.IsAvailable(expert))
+      continue;
+
+    size.height += i.GetMinimumHeight(look, vertical);
+
+    if (i.type == Row::Type::WIDGET) {
+      const unsigned width = i.widget->GetMinimumSize().width;
+      if (width > size.width)
+        size.width = width;
+    }
+  }
 
   return size;
 }
@@ -477,13 +454,25 @@ RowFormWidget::GetMaximumSize() const noexcept
   const unsigned value_width =
     look.text_font.TextSize("Foo Bar Foo Bar").width * 2;
 
+  const bool expert = UIGlobals::GetDialogSettings().expert;
+
   const unsigned edit_width = vertical
     ? std::max(GetRecommendedCaptionWidth(), value_width)
     : (GetRecommendedCaptionWidth() + value_width);
 
   PixelSize size(edit_width, 0u);
-  for (const auto &i : rows)
+  for (const auto &i : rows) {
+    if (!i.IsAvailable(expert))
+      continue;
+
     size.height += i.GetMaximumHeight(look, vertical);
+
+    if (i.type == Row::Type::WIDGET) {
+      const unsigned width = i.widget->GetMaximumSize().width;
+      if (width > size.width)
+        size.width = width;
+    }
+  }
 
   return size;
 }

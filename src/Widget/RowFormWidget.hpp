@@ -294,7 +294,10 @@ public:
   /**
    * Add a #Widget row.  The object will be deleted automatically.
    */
-  Widget &Add(std::unique_ptr<Widget> widget) noexcept;
+  Widget &Add(std::unique_ptr<Widget> widget) noexcept {
+    rows.emplace_back(std::move(widget));
+    return *rows.back().widget;
+  }
 
   Window &Add(std::unique_ptr<Window> window) noexcept {
     Add(Row::Type::GENERIC, std::move(window));
@@ -764,8 +767,6 @@ public:
   bool SaveValueFileReader(unsigned i, std::string_view profile_key) noexcept;
 
 private:
-  void PrepareWidgetRow(Row &row) noexcept;
-
   static void SetProfile(std::string_view profile_key, unsigned value) noexcept;
 
 protected:
