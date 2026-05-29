@@ -276,16 +276,22 @@ public:
         iv = {{0, state.location},
               {len, location_predicted}};
       } else {
-        /* all() returns inside-segments of the predicted path
-           as (start, end) pairs, usually a single segment.
-           When state.location coincides with an
-           airspace boundary there is a degenerate
-           (state.location, state.location) pair before the real
-           inside-segment. Drop that pair by using last. */
-        double d =
-          state.location.Distance(isv.back().second);
-        iv = {{0, state.location},
-              {d, isv.back().second}};
+        /* all() returns inside-segments as (entry, exit) pairs.
+           For circles, when state.location is exactly on the
+           boundary, Inside() returns true (<=) and all() emits a
+           degenerate (state.location, state.location) pair first;
+           skip it.  When more than one segment returned,
+           ignore all degenerate segements and use the first
+           genuine exit. */
+        const GeoPoint *exit_pt = &location_predicted;
+        for (const auto &seg : isv) {
+          if (seg.second != state.location) {
+            exit_pt = &seg.second;
+            break;
+          }
+        }
+        double d = state.location.Distance(*exit_pt);
+        iv = {{0, state.location}, {d, *exit_pt}};
       }
     }
 
