@@ -3,6 +3,7 @@
 
 #include "Canvas.hpp"
 #include "Triangulate.hpp"
+#include "Asset.hpp"
 #include "Globals.hpp"
 #include "Texture.hpp"
 #include "Scope.hpp"
@@ -162,8 +163,18 @@ Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points) noexcept
 
   pen.Bind();
 
-  const ScopeVertexPointer vp(points);
-  glDrawArrays(GL_LINE_STRIP, 0, num_points);
+  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
+  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+    unsigned strip_len = LineToTriangles(points, num_points, vertex_buffer,
+                                         pen.GetWidth(), false, false);
+    if (strip_len > 0) {
+      const ScopeVertexPointer vp{vertex_buffer.data()};
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
+    }
+  } else {
+    const ScopeVertexPointer vp(points);
+    glDrawArrays(GL_LINE_STRIP, 0, num_points);
+  }
 
   pen.Unbind();
 }
@@ -192,7 +203,7 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept
   if (IsPenOverBrush()) {
     pen.Bind();
 
-    if (pen.GetWidth() <= 2) {
+    if (pen.GetWidth() <= (IsMacOSX() ? 1u : 2u)) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
       unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
@@ -225,7 +236,7 @@ Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexc
   if (IsPenOverBrush()) {
     pen.Bind();
 
-    if (pen.GetWidth() <= 2) {
+    if (pen.GetWidth() <= (IsMacOSX() ? 1u : 2u)) {
       glDrawArrays(GL_LINE_LOOP, 0, num_points);
     } else {
       unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
@@ -299,8 +310,18 @@ Canvas::DrawLine(PixelPoint a, PixelPoint b) noexcept
   }
 
   const BulkPixelPoint v[] = { a, b };
-  const ScopeVertexPointer vp(v);
-  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
+  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+    unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
+                                         false, true);
+    if (strip_len > 0) {
+      const ScopeVertexPointer vp{vertex_buffer.data()};
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
+    }
+  } else {
+    const ScopeVertexPointer vp(v);
+    glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  }
 
   pen.Unbind();
 }
@@ -312,9 +333,21 @@ Canvas::DrawExactLine(PixelPoint a, PixelPoint b) noexcept
 
   pen.Bind();
 
-  const ExactPixelPoint v[] = { a, b };
-  const ScopeVertexPointer vp(v);
-  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
+  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+    const BulkPixelPoint v[] = { {(GLvalue)a.x, (GLvalue)a.y},
+                                 {(GLvalue)b.x, (GLvalue)b.y} };
+    unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
+                                         false, true);
+    if (strip_len > 0) {
+      const ScopeVertexPointer vp{vertex_buffer.data()};
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
+    }
+  } else {
+    const ExactPixelPoint v[] = { a, b };
+    const ScopeVertexPointer vp(v);
+    glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  }
 
   pen.Unbind();
 }
@@ -331,7 +364,7 @@ Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b) noexcept
   pen.Bind();
 
   const BulkPixelPoint v[] = { {a.x, a.y}, {b.x, b.y} };
-  if (pen.GetWidth() > 2) {
+  if (pen.GetWidth() > (IsMacOSX() ? 1u : 2u)) {
     unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
                                          false, true);
     if (strip_len > 0) {
@@ -354,8 +387,18 @@ Canvas::DrawTwoLines(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
   pen.Bind();
 
   const BulkPixelPoint v[] = { a, b, c };
-  const ScopeVertexPointer vp(v);
-  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
+  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+    unsigned strip_len = LineToTriangles(v, 3, vertex_buffer, pen.GetWidth(),
+                                         false, false);
+    if (strip_len > 0) {
+      const ScopeVertexPointer vp{vertex_buffer.data()};
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
+    }
+  } else {
+    const ScopeVertexPointer vp(v);
+    glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  }
 
   pen.Unbind();
 }
@@ -367,9 +410,22 @@ Canvas::DrawTwoLinesExact(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
 
   pen.Bind();
 
-  const ExactPixelPoint v[] = { a, b, c };
-  const ScopeVertexPointer vp(v);
-  glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
+  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+    const BulkPixelPoint v[] = { {(GLvalue)a.x, (GLvalue)a.y},
+                                 {(GLvalue)b.x, (GLvalue)b.y},
+                                 {(GLvalue)c.x, (GLvalue)c.y} };
+    unsigned strip_len = LineToTriangles(v, 3, vertex_buffer, pen.GetWidth(),
+                                         false, false);
+    if (strip_len > 0) {
+      const ScopeVertexPointer vp{vertex_buffer.data()};
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
+    }
+  } else {
+    const ExactPixelPoint v[] = { a, b, c };
+    const ScopeVertexPointer vp(v);
+    glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
+  }
 
   pen.Unbind();
 }
