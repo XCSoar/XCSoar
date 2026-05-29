@@ -47,6 +47,26 @@ private:
 
   bool altitude_manual_override = false;
 
+  /**
+   * Most recent altitude→layer band reported by UpdateAltitude().
+   * Tracked continuously so OnManualLayerStep() can snapshot it.
+   * -1 until the first altitude tick has arrived.
+   */
+  int last_known_band = -1;
+
+  /**
+   * The physical altitude band the aircraft was in when the pilot
+   * last pressed ◀/▶ on the altitude row. Auto-switch only resumes
+   * once the aircraft has flown into a *different* band — i.e. the
+   * pilot's manual choice sticks until the altitude actually changes
+   * to somewhere the auto logic would naturally re-evaluate.
+   *
+   * -1 means the snapshot is still pending (no altitude reading
+   * arrived between class construction / reset and the manual step);
+   * the next UpdateAltitude() tick binds it.
+   */
+  int manual_step_band = -1;
+
   /* --- Time auto-switch --- */
   std::vector<unsigned> loaded_times_utc; // available UTC hours (0-23)
   int current_time_pos = -1;

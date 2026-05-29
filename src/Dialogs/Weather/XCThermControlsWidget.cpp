@@ -19,6 +19,8 @@
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/Settings.hpp"
+#include "Asset.hpp"
+#include "Language/Language.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
@@ -156,9 +158,34 @@ class XCThermControlsWidget::ControlsWindow final : public ContainerWindow {
   /* Track if we've loaded the index */
   bool index_loaded = false;
 
+  /**
+   * Index into LAYERS of the active layer the last time
+   * SyncCurrentLayerFromSettings() actually wrote @c current_layer.
+   * -1 means "no sync yet" — first call always proceeds.
+   *
+   * Used by the GPS-tick path to skip re-syncing when nothing about the
+   * dialog's Activate setting has changed; otherwise the per-tick sync
+   * would silently undo manual ◀/▶ stepping and auto-switch decisions.
+   */
+  int last_synced_active_layer = -1;
+
 public:
   explicit ControlsWindow(const DialogLook &_look) noexcept
     :look(_look), layer_label(_look), time_label(_look) {}
+
+  /**
+   * Cursor-bar layout helper. On touch devices the user taps these
+   * with a finger; ~2× row height isn't enough hit area for accurate
+   * thumb operation in turbulence, so we widen by 50% when XCSoar
+   * reports a touch screen (Android/iOS/Kobo).
+   *
+   * On mouse-driven platforms (Linux desktop, macOS sim, Windows) the
+   * narrower buttons leave more space for the label text.
+   */
+  [[gnu::pure]]
+  static int CalcButtonWidth(int row_h) noexcept {
+    return HasTouchScreen() ? row_h * 3 : row_h * 2;
+  }
 
   void Create(ContainerWindow &parent, const PixelRect &rc) noexcept {
     WindowStyle style;
@@ -169,7 +196,7 @@ public:
     const int total_h = rc.GetHeight();
     const int row_h = (total_h - SEPARATOR_H) / 2;
     const int row2_y = row_h + SEPARATOR_H;
-    const int btn_w = row_h * 2;
+    const int btn_w = CalcButtonWidth(row_h);
     const int w = (int)rc.GetWidth();
 
     WindowStyle child_style;
@@ -219,7 +246,7 @@ public:
     }
 
     if (cached.empty()) {
-      layer_label.SetText("No data – use Info→Weather");
+      layer_label.SetText(_("No data – use Info → Weather"));
       layer_label.SetAvailable(false);
       return;
     }
@@ -247,7 +274,7 @@ public:
     cached_hours = api.GetCachedHours(param);
 
     if (cached_hours.empty()) {
-      time_label.SetText("No data – use Info→Weather");
+      time_label.SetText(_("No data – use Info → Weather"));
       time_label.SetAvailable(false);
       return;
     }
@@ -319,6 +346,12 @@ public:
       CommonInterface::GetComputerSettings().weather.xctherm;
     auto_switch.SetEnabled(settings.auto_switch);
 
+    /* Keep the widget's notion of the current layer in sync with the
+       dialog's Activate state and with whichever layer has cached
+       data. Cheap; runs once per GPS tick. */
+    SyncCurrentLayerFromSettings();
+    UpdateLayerLabel();
+
     if (!auto_switch.IsEnabled())
       return;
 
@@ -377,7 +410,7 @@ public:
     const int total_h = rc.GetHeight();
     const int row_h = (total_h - SEPARATOR_H) / 2;
     const int row2_y = row_h + SEPARATOR_H;
-    const int btn_w = row_h * 2;
+    const int btn_w = CalcButtonWidth(row_h);
     const int w = rc.GetWidth();
 
     if (layer_prev.IsDefined())
@@ -396,36 +429,129 @@ public:
   }
 
 private:
+  /**
+   * Sync @c current_layer with the active layer set by the dialog
+   * (Info → Weather → XCTherm → Activate).
+   *
+   * Idempotent across GPS ticks: it only writes to @c current_layer
+   * when the dialog's active-layer setting has actually changed since
+   * the last sync. Otherwise it returns immediately, so manual ◀/▶
+   * stepping on the cursor bar — and auto-switch decisions from
+   * XCThermAutoSwitch — are preserved between settings changes.
+   *
+   * On a real change (or the first call) we also pick the layer with
+   * cached data as a fallback if the active layer happens to have
+   * nothing cached, so the cursor bar can display *something*.
+   */
+  void SyncCurrentLayerFromSettings() noexcept {
+    const auto &settings =
+      CommonInterface::GetComputerSettings().weather.xctherm;
+    auto &api = XCThermAPI::Instance();
+
+    /* Find which LAYERS row matches the dialog's current Activate
+       state. -1 if no row matches (shouldn't happen for valid
+       settings, but be defensive). */
+    int active_layer = -1;
+    for (unsigned i = 0; i < N_LAYERS; ++i) {
+      const bool match = settings.parameter == 0
+        ? (!LAYERS[i].is_agl && LAYERS[i].altitude_m == settings.wave_height)
+        : (LAYERS[i].is_agl &&
+           LAYERS[i].altitude_m == settings.vertical_wind_agl);
+      if (match) {
+        active_layer = (int)i;
+        break;
+      }
+    }
+
+    /* No change since last sync → leave current_layer alone. This is
+       the path that runs on every GPS tick once the user has settled
+       on a layer; without it, manual ◀/▶ would be undone ~1 s later. */
+    if (active_layer == last_synced_active_layer)
+      return;
+
+    last_synced_active_layer = active_layer;
+
+    if (active_layer >= 0) {
+      current_layer = (unsigned)active_layer;
+      /* Active layer has cached data → done. */
+      if (!api.GetCachedHours(
+            LAYERS[active_layer].api_parameter).empty())
+        return;
+    }
+
+    /* Active layer has no cache (or no active layer found) — fall
+       through to any cached layer so the cursor bar can usefully
+       display *something* instead of "no data". */
+    for (unsigned i = 0; i < N_LAYERS; ++i) {
+      if (!api.GetCachedHours(LAYERS[i].api_parameter).empty()) {
+        current_layer = i;
+        return;
+      }
+    }
+  }
+
   void InitFromAPI() noexcept {
     auto &api = XCThermAPI::Instance();
+
+    /* Idempotent — first call wires up the persistent disk cache and
+       reloads anything from previous sessions (within 24 h TTL). */
+    api.EnableDiskCache();
 
     const auto &settings =
       CommonInterface::GetComputerSettings().weather.xctherm;
     api.SetCredentials(settings.credentials.email.c_str(),
                        settings.credentials.password.c_str());
 
-    /* Fetch index.json only if not yet loaded */
+    /* Fetch index.json only if not yet loaded.
+
+       FetchIndex now throws on network / HTTP failure — we MUST catch
+       here because this method is noexcept (the widget is constructed
+       during page setup and an escape would terminate the whole app).
+       On any failure we silently fall into "offline mode" — the user
+       just sees the layer list as unavailable, can still open the
+       dialog where errors are surfaced properly via ShowError. */
     if (!api.IsIndexLoaded()) {
-      if (api.FetchIndex()) {
-        index_loaded = true;
-        const auto &params = api.GetAvailableParameters();
-        for (unsigned i = 0; i < N_LAYERS; ++i) {
-          layer_available[i] = false;
-          for (const auto &p : params)
-            if (p.name == LAYERS[i].api_parameter) {
-              layer_available[i] = true;
-              break;
-            }
-        }
-        if (layer_available[current_layer])
-          available_hours = api.GetAvailableForecastHours(
-            LAYERS[current_layer].api_parameter);
-      } else {
-        LogFmt("xctherm: index fetch failed — using offline mode");
-        for (unsigned i = 0; i < N_LAYERS; ++i)
-          layer_available[i] = false;
+      try {
+        api.FetchIndex();
+      } catch (const std::exception &e) {
+        LogFmt("xctherm: index fetch failed in controls widget: {}",
+               e.what());
+      } catch (...) {
+        LogFmt("xctherm: index fetch failed in controls widget (unknown)");
       }
     }
+
+    /* Repopulate layer_available from whatever the API currently knows
+       about — every Prepare(), regardless of who fetched the index.
+       This used to live inside the `if (!IsIndexLoaded())` block, so
+       on a page reload triggered after the dialog had already loaded
+       the index, layer_available stayed at its default-init all-false
+       state and the cursor showed "no data" even with a full cache. */
+    index_loaded = api.IsIndexLoaded();
+    if (index_loaded) {
+      const auto &params = api.GetAvailableParameters();
+      for (unsigned i = 0; i < N_LAYERS; ++i) {
+        layer_available[i] = false;
+        for (const auto &p : params)
+          if (p.name == LAYERS[i].api_parameter) {
+            layer_available[i] = true;
+            break;
+          }
+      }
+      if (layer_available[current_layer])
+        available_hours = api.GetAvailableForecastHours(
+          LAYERS[current_layer].api_parameter);
+    } else {
+      LogFmt("xctherm: index not loaded — controls in offline mode");
+      for (unsigned i = 0; i < N_LAYERS; ++i)
+        layer_available[i] = false;
+    }
+
+    /* Sync current_layer with the dialog-activated layer / any layer
+       that actually has cached data — fixes the "no data" message that
+       used to appear when the user downloaded a layer other than the
+       widget's default 5000 m AMSL. */
+    SyncCurrentLayerFromSettings();
 
     /* Populate cached_hours from the download cache for current layer */
     RefreshCachedHours();
@@ -545,9 +671,11 @@ private:
 
     StaticString<80> text;
     if (!has_cache)
-      text.Format("%s  [no data]", LAYERS[current_layer].short_label);
+      text.Format("%s  %s", LAYERS[current_layer].short_label,
+                  _("[no data]"));
     else if (auto_switch.IsAltitudeAutoActive())
-      text.Format("AUTO: %s", LAYERS[current_layer].short_label);
+      text.Format("%s %s", _("AUTO:"),
+                  LAYERS[current_layer].short_label);
     else
       text.Format("%s", LAYERS[current_layer].short_label);
 
@@ -559,7 +687,7 @@ private:
     RefreshCachedHours();
 
     if (cached_hours.empty()) {
-      time_label.SetText("No forecast – download first");
+      time_label.SetText(_("No forecast – download first"));
       time_label.SetAvailable(false);
       return;
     }
@@ -619,7 +747,7 @@ private:
        Info → Weather → XCTherm dialog row. */
     StaticString<64> text;
     if (auto_switch.IsTimeAutoActive())
-      text.Format("AUTO: %02u:00 UTC (%s)", fcast_h, offset_buf);
+      text.Format("%s %02u:00 UTC (%s)", _("AUTO:"), fcast_h, offset_buf);
     else
       text.Format("%02u:00 UTC (%s)", fcast_h, offset_buf);
 
@@ -644,16 +772,22 @@ protected:
   }
 };
 
+/* Touch devices need a taller strip so the buttons + two label rows
+   stay readable when scaled up for finger taps. On mouse-driven
+   platforms we keep the lean 80 px to leave more screen for the map. */
+
 PixelSize
 XCThermControlsWidget::GetMinimumSize() const noexcept
 {
-  return {100, 80};
+  const unsigned h = HasTouchScreen() ? 110U : 80U;
+  return PixelSize{100U, h};
 }
 
 PixelSize
 XCThermControlsWidget::GetMaximumSize() const noexcept
 {
-  return {4096, 80};
+  const unsigned h = HasTouchScreen() ? 110U : 80U;
+  return PixelSize{4096U, h};
 }
 
 void

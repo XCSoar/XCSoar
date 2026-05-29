@@ -6,13 +6,44 @@
 #include "XCThermAuth.hpp"
 #include "Operation/Operation.hpp"
 
+#include "system/Path.hpp"
+
 #include <cstdint>
 #include <cstddef>
 #include <functional>
 #include <map>
 #include <mutex>
+#include <stdexcept>
 #include <string>
 #include <vector>
+
+/**
+ * Errors thrown by XCThermAPI on network / HTTP failures. Callers can
+ * inspect @c kind to decide whether to retry (transient: NETWORK,
+ * SERVER_ERROR, NOT_FOUND for a single slot) or surface to the user
+ * (persistent: AUTH_FAILED, FORBIDDEN, OTHER_HTTP).
+ *
+ * what() returns a short human-readable explanation already suitable
+ * for ShowError.
+ */
+class XCThermAPIError : public std::runtime_error {
+public:
+  enum class Kind {
+    NETWORK,        ///< curl-level transport failure (timeout, DNS, etc.)
+    AUTH_FAILED,    ///< 401 after re-auth attempt
+    FORBIDDEN,      ///< 403
+    NOT_FOUND,      ///< 404 — a single slot might genuinely be absent
+    SERVER_ERROR,   ///< 5xx
+    OTHER_HTTP,     ///< unexpected HTTP code
+  };
+
+  XCThermAPIError(Kind kind, long http_code, std::string message) noexcept
+    : std::runtime_error(std::move(message)),
+      kind(kind), http_code(http_code) {}
+
+  Kind kind;
+  long http_code;
+};
 
 /**
  * XCTherm GeoJSON API client.
@@ -63,9 +94,13 @@ public:
   /**
    * Fetch and parse index.json for the current model.
    * Populates available_parameters.
-   * Returns true on success.
+   *
+   * @throws XCThermAPIError on network / HTTP failure.
+   * @return true on success, false only if parsing yielded no
+   *   recognisable forecast parameters (server response not in the
+   *   expected shape — treated as a "no XCTherm data" non-error).
    */
-  bool FetchIndex() noexcept;
+  bool FetchIndex();
 
   /**
    * Get available vertical_wind parameters from the last FetchIndex().
@@ -126,7 +161,9 @@ public:
    * @param out_geojson receives the uncompressed GeoJSON string
    * @param progress optional progress / cancel callback. Safe to call
    *   from any thread (callback fires on the calling thread).
-   * @return true on success
+   * @return @c true on success; @c false only if the progress callback
+   *   returned false (i.e. user cancelled mid-transfer).
+   * @throws XCThermAPIError on network / HTTP failure.
    */
   bool DownloadGeoJSON(const std::string &parameter,
                        const std::string &date,
@@ -134,7 +171,7 @@ public:
                        unsigned step,
                        std::string &out_geojson,
                        int64_t *out_wire_bytes = nullptr,
-                       ProgressFn progress = nullptr) noexcept;
+                       ProgressFn progress = nullptr);
 
   bool IsIndexLoaded() const noexcept { return index_loaded; }
 
@@ -159,6 +196,16 @@ public:
     std::string run_date;
     std::string run_hour;
     unsigned step = 0;
+
+    /**
+     * Wall-clock moment this slice was first written to the cache
+     * (seconds since the Unix epoch). Persisted in the on-disk header
+     * so it survives across app restarts and is shown by the dialog
+     * to indicate forecast freshness. Zero for slices loaded from an
+     * older (#XCTHERMv1) file with no embedded timestamp — callers
+     * should fall back to the file mtime in that case.
+     */
+    int64_t downloaded_at = 0;
   };
 
   /**
@@ -199,6 +246,73 @@ public:
   std::vector<unsigned> GetCachedHours(const std::string &parameter) const noexcept;
 
   /**
+   * Summary of what's cached for a single forecast parameter — used by
+   * the XCTherm dialog on open to rehydrate per-row state from the
+   * persistent disk cache, without having to lock and look up every
+   * slice individually.
+   *
+   * All fields are empty / zero when nothing is cached for the
+   * parameter.
+   */
+  struct LayerCacheSummary {
+    std::vector<unsigned> hours;          ///< sorted cached UTC hours
+    int64_t earliest_downloaded_at = 0;   ///< oldest write time (unix s)
+    int64_t latest_downloaded_at = 0;     ///< newest write time (unix s)
+    std::string latest_run_date;          ///< run_date of the newest slice
+    std::string latest_run_hour;          ///< run_hour of the newest slice
+
+    /**
+     * How many of the cached slices are still valid in the future,
+     * computed at query time against wall-clock. A slice's "valid
+     * time" is run_date + run_hour + step. Used by the dialog to
+     * show "4 / 12 h" — meaning 4 cached future-hours remain of the
+     * 12 h span the user has configured.
+     */
+    unsigned future_hours = 0;
+  };
+
+  LayerCacheSummary GetCachedLayerSummary(
+      const std::string &parameter) const noexcept;
+
+  /**
+   * Quick "is there any cached forecast at all?" check, used by the
+   * controls widget to collapse itself to a sliver when no XCTherm
+   * data has been downloaded — so non-XCTherm users don't see an
+   * empty cursor bar.
+   */
+  bool HasAnyCache() const noexcept;
+
+  /**
+   * Initialise the persistent disk cache directory and load any
+   * existing files from previous sessions. Files older than the TTL
+   * (24 h) are discarded on load.
+   *
+   * Idempotent — safe to call repeatedly; only the first call does
+   * work. Call once at app startup from a UI-thread context.
+   */
+  void EnableDiskCache() noexcept;
+
+  /**
+   * Clear every cached entry for a single parameter (e.g. one altitude
+   * layer). Used by the dialog's Delete button.
+   */
+  void ClearLayer(const std::string &parameter) noexcept;
+
+  /**
+   * Stale-run prune: drop cached slices for @p parameter whose
+   * (run_date, run_hour) is older than the latest run the index
+   * currently advertises for that UTC hour.
+   *
+   * Only the cached entries are touched; nothing is re-downloaded.
+   * Slices for past hours are kept (the dialog lets the user browse
+   * back), but their run version is harmonised with the rest.
+   *
+   * Returns the number of entries removed.
+   */
+  unsigned PruneStaleRuns(const std::string &parameter,
+                          unsigned current_utc_hour) noexcept;
+
+  /**
    * Clear the entire download cache.
    */
   void ClearCache() noexcept;
@@ -220,7 +334,35 @@ private:
   std::map<std::string, std::map<unsigned, CachedSlice>> geojson_cache;
   mutable std::mutex cache_mutex;
 
+  /**
+   * Absolute path to the persistent cache directory (e.g.
+   * ~/XCSoarData/xctherm). Empty when disk caching is not (yet)
+   * enabled.
+   */
+  AllocatedPath disk_cache_dir = nullptr;
+
   static const std::string kEmptyString;
+
+  /* ---- Disk cache helpers ---- */
+
+  /**
+   * Compute the path of the on-disk cache file for one slice.
+   * Returns nullptr if disk_cache_dir is not set.
+   */
+  AllocatedPath SliceFilePath(const std::string &parameter,
+                              unsigned forecast_utc) const noexcept;
+
+  /** Write the slice to disk. No-op if disk cache disabled. */
+  void WriteSliceToDisk(const std::string &parameter,
+                        unsigned forecast_utc,
+                        const CachedSlice &slice) const noexcept;
+
+  /** Delete the on-disk file for one slice. No-op if disk cache disabled. */
+  void DeleteSliceFromDisk(const std::string &parameter,
+                           unsigned forecast_utc) const noexcept;
+
+  /** Wipe every *.xctcache file in the cache directory. */
+  void WipeDiskCache() const noexcept;
 
   /**
    * Parse the index.json response and populate available_parameters.

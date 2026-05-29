@@ -4,188 +4,135 @@
 #include "XCThermGeoJSON.hpp"
 #include "LogFile.hpp"
 
+#include <boost/json.hpp>
+
 #include <cstdlib>
-#include <cstring>
+#include <string_view>
 
 namespace XCThermGeoJSON {
 
 /**
- * Minimal JSON number parser — reads a double starting at pos,
- * advances pos past the number.
+ * Parse one [lon, lat] coordinate pair into a GeoPoint.
+ * @return false if @p arr doesn't hold two numeric elements.
  */
-static double
-ReadNumber(const char *&p) noexcept
+static bool
+ParseCoord(const boost::json::array &arr, GeoPoint &out) noexcept
 {
-  char *end;
-  double v = std::strtod(p, &end);
-  p = end;
-  return v;
+  if (arr.size() < 2)
+    return false;
+  try {
+    const double lon = arr.at(0).to_number<double>();
+    const double lat = arr.at(1).to_number<double>();
+    out = GeoPoint(Angle::Degrees(lon), Angle::Degrees(lat));
+    return true;
+  } catch (...) {
+    return false;
+  }
 }
 
 /**
- * Skip whitespace and commas.
+ * Parse a ring [[lon,lat], [lon,lat], …] into a Ring.
  */
 static void
-SkipWS(const char *&p) noexcept
+ParseRing(const boost::json::array &arr, Ring &ring)
 {
-  while (*p == ' ' || *p == '\t' || *p == ',' || *p == '\r')
-    ++p;
-}
-
-/**
- * Find the next occurrence of a key like "min": in the string.
- * Returns pointer to the character after the colon, or nullptr.
- */
-static const char *
-FindKey(const char *p, const char *key) noexcept
-{
-  const char *f = std::strstr(p, key);
-  if (f == nullptr)
-    return nullptr;
-  f += std::strlen(key);
-  while (*f == ' ' || *f == ':')
-    ++f;
-  return f;
-}
-
-/**
- * Parse one coordinate pair [lon, lat] starting at p.
- * p should point at the opening '['.
- * Advances p past the closing ']'.
- */
-static bool
-ParseCoord(const char *&p, GeoPoint &out) noexcept
-{
-  // find '['
-  while (*p && *p != '[') ++p;
-  if (*p == '\0') return false;
-  ++p; // skip '['
-
-  SkipWS(p);
-  double lon = ReadNumber(p);
-  SkipWS(p);
-  double lat = ReadNumber(p);
-
-  // find closing ']'
-  while (*p && *p != ']') ++p;
-  if (*p == ']') ++p;
-
-  out = GeoPoint(Angle::Degrees(lon), Angle::Degrees(lat));
-  return true;
-}
-
-/**
- * Parse a ring: [ [lon,lat], [lon,lat], ... ]
- * p should point at the opening '[' of the ring.
- */
-static bool
-ParseRing(const char *&p, Ring &ring) noexcept
-{
-  // find opening '['
-  while (*p && *p != '[') ++p;
-  if (*p == '\0') return false;
-  ++p; // skip ring-opening '['
-
-  while (*p) {
-    SkipWS(p);
-    if (*p == ']') {
-      ++p; // end of ring
-      return true;
-    }
-    if (*p == '[') {
-      GeoPoint pt;
-      if (ParseCoord(p, pt))
-        ring.push_back(pt);
-    } else {
-      ++p;
-    }
+  ring.reserve(arr.size());
+  for (const auto &pt_val : arr) {
+    if (!pt_val.is_array())
+      continue;
+    GeoPoint pt;
+    if (ParseCoord(pt_val.as_array(), pt))
+      ring.push_back(pt);
   }
-  return false;
 }
 
 /**
- * Parse a polygon: [ ring, ring, ... ]
- * (first ring = exterior, rest = holes)
+ * Parse one polygon — array of rings; ring 0 = exterior, rest = holes.
  */
-static bool
-ParsePolygon(const char *&p, std::vector<Ring> &polygon) noexcept
+static void
+ParsePolygon(const boost::json::array &arr, std::vector<Ring> &polygon)
 {
-  // find opening '['
-  while (*p && *p != '[') ++p;
-  if (*p == '\0') return false;
-  ++p; // skip polygon-opening '['
-
-  while (*p) {
-    SkipWS(p);
-    if (*p == ']') {
-      ++p;
-      return true;
-    }
-    if (*p == '[') {
-      Ring ring;
-      if (ParseRing(p, ring) && !ring.empty())
-        polygon.push_back(std::move(ring));
-    } else {
-      ++p;
-    }
+  polygon.reserve(arr.size());
+  for (const auto &ring_val : arr) {
+    if (!ring_val.is_array())
+      continue;
+    Ring ring;
+    ParseRing(ring_val.as_array(), ring);
+    if (!ring.empty())
+      polygon.push_back(std::move(ring));
   }
-  return false;
 }
 
 /**
- * Parse the coordinates array of a MultiPolygon:
- * [ polygon, polygon, ... ]
+ * Parse the "coordinates" of a MultiPolygon geometry into @p polygons.
+ */
+static void
+ParseMultiPolygonCoords(const boost::json::array &arr,
+                        std::vector<std::vector<Ring>> &polygons)
+{
+  polygons.reserve(arr.size());
+  for (const auto &poly_val : arr) {
+    if (!poly_val.is_array())
+      continue;
+    std::vector<Ring> polygon;
+    ParsePolygon(poly_val.as_array(), polygon);
+    if (!polygon.empty())
+      polygons.push_back(std::move(polygon));
+  }
+}
+
+/**
+ * Parse one Feature (one line of the GeoJSON stream).
+ *
+ * Expected shape:
+ *   { "type": "Feature",
+ *     "properties": { "min": <num>, "max": <num> },
+ *     "geometry": { "type": "MultiPolygon",
+ *                   "coordinates": [[[[lon,lat],...]]]} }
+ *
+ * Errors swallow into @return false — server occasionally serves
+ * Features without geometry on the edges of a tile and we just skip
+ * those.
  */
 static bool
-ParseMultiPolygonCoords(const char *&p,
-                        std::vector<std::vector<Ring>> &polygons) noexcept
+ParseFeature(std::string_view line, WindBand &band) noexcept
 {
-  // find "coordinates"
-  const char *coords = FindKey(p, "\"coordinates\"");
-  if (coords == nullptr)
+  try {
+    boost::json::value root = boost::json::parse(line);
+    if (!root.is_object())
+      return false;
+    const auto &feature = root.as_object();
+
+    /* properties.min / properties.max — band bounds in m/s */
+    auto it_props = feature.find("properties");
+    if (it_props == feature.end() || !it_props->value().is_object())
+      return false;
+    const auto &props = it_props->value().as_object();
+
+    auto it_min = props.find("min");
+    auto it_max = props.find("max");
+    if (it_min == props.end() || it_max == props.end())
+      return false;
+    band.min_ms = it_min->value().to_number<double>();
+    band.max_ms = it_max->value().to_number<double>();
+
+    /* geometry.coordinates */
+    auto it_geom = feature.find("geometry");
+    if (it_geom == feature.end() || !it_geom->value().is_object())
+      return false;
+    const auto &geom = it_geom->value().as_object();
+
+    auto it_coords = geom.find("coordinates");
+    if (it_coords == geom.end() || !it_coords->value().is_array())
+      return false;
+
+    ParseMultiPolygonCoords(it_coords->value().as_array(), band.polygons);
+    return true;
+  } catch (const std::exception &) {
+    /* Malformed line — skip silently (server sometimes ends a tile
+       with a partially-buffered Feature). */
     return false;
-  p = coords;
-
-  // find outer opening '['
-  while (*p && *p != '[') ++p;
-  if (*p == '\0') return false;
-  ++p; // skip MultiPolygon-opening '['
-
-  while (*p) {
-    SkipWS(p);
-    if (*p == ']') {
-      ++p;
-      return true;
-    }
-    if (*p == '[') {
-      std::vector<Ring> polygon;
-      if (ParsePolygon(p, polygon) && !polygon.empty())
-        polygons.push_back(std::move(polygon));
-    } else {
-      ++p;
-    }
   }
-  return false;
-}
-
-/**
- * Parse one line = one Feature.
- */
-static bool
-ParseFeature(const char *line, WindBand &band) noexcept
-{
-  // Extract min/max from properties
-  const char *min_ptr = FindKey(line, "\"min\"");
-  const char *max_ptr = FindKey(line, "\"max\"");
-  if (min_ptr == nullptr || max_ptr == nullptr)
-    return false;
-
-  band.min_ms = ReadNumber(min_ptr);
-  band.max_ms = ReadNumber(max_ptr);
-
-  // Parse geometry
-  const char *p = line;
-  return ParseMultiPolygonCoords(p, band.polygons);
 }
 
 ForecastLayer
@@ -193,32 +140,34 @@ Parse(std::string_view content, bool skip_neutral) noexcept
 {
   ForecastLayer layer;
 
-  const char *start = content.data();
-  const char *end = start + content.size();
+  /* The server streams one Feature per line (NDJSON style). Iterate
+     over lines, parse each as JSON, append to the layer's bands. */
+  std::size_t pos = 0;
+  while (pos < content.size()) {
+    const std::size_t eol = content.find('\n', pos);
+    const std::size_t end = (eol == std::string_view::npos)
+      ? content.size() : eol;
 
-  while (start < end) {
-    // Find next line
-    const char *eol = start;
-    while (eol < end && *eol != '\n')
-      ++eol;
+    if (end > pos) {
+      const std::string_view line = content.substr(pos, end - pos);
 
-    // Skip empty lines
-    if (eol > start) {
-      // Null-terminate this line (safe: we have a copy or mmap)
-      // We work with const pointers so we don't modify — the parser
-      // only reads forward.
       WindBand band;
-      if (ParseFeature(start, band)) {
-        // Skip neutral band if requested
-        if (skip_neutral && band.min_ms >= -0.2 && band.max_ms <= 0.2) {
-          // don't add
-        } else if (!band.polygons.empty()) {
+      if (ParseFeature(line, band)) {
+        const bool is_neutral =
+          band.min_ms >= -0.2 && band.max_ms <= 0.2;
+        if ((!skip_neutral || !is_neutral) && !band.polygons.empty()) {
+          /* push_back can throw bad_alloc; the function is noexcept
+             on the .hpp, so we keep allocations modest by reserving
+             nothing extra and trust that std::terminate on OOM is
+             acceptable here (consistent with the rest of the file). */
           layer.bands.push_back(std::move(band));
         }
       }
     }
 
-    start = eol + 1;
+    if (eol == std::string_view::npos)
+      break;
+    pos = eol + 1;
   }
 
   LogFmt("xctherm geojson: parsed {} bands, {} polygons, {} coords",
