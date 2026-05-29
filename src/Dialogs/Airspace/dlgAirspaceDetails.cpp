@@ -6,6 +6,8 @@
 #include "Widget/RowFormWidget.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/AirspaceWarningConfig.hpp"
+#include "Form/Button.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "UIGlobals.hpp"
@@ -140,10 +142,19 @@ dlgAirspaceDetails(ConstAirspacePtr airspace,
 
   if (warnings != nullptr) {
     widget->dialog = &dialog;
-    dialog.AddButton(warnings->GetCleared(*airspace)
-                     ? _("Revoke Clearance")
-                     : _("Set Clearance"),
-                     [widget](){ widget->ToggleClearance(); });
+    const bool cleared = warnings->GetCleared(*airspace);
+    const AirspaceWarningConfig &warning_config =
+      CommonInterface::GetComputerSettings().airspace.warnings;
+    const bool clearance_allowed =
+      warning_config.IsClassClearanceAllowed(airspace->GetTypeOrClass());
+
+    Button *clearance_button =
+      dialog.AddButton(cleared ? _("Revoke Clearance") : _("Set Clearance"),
+                       [widget](){ widget->ToggleClearance(); });
+
+    if (!cleared && !clearance_allowed)
+      clearance_button->SetEnabled(false);
+
     dialog.AddButton(warnings->GetAckDay(*airspace)
                      ? _("Enable") : _("Ack Day"),
                      [widget](){ widget->AckDayOrEnable(); });

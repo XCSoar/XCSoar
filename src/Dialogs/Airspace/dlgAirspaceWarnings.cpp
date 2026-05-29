@@ -163,10 +163,15 @@ AirspaceWarningListWidget::UpdateButtons()
     cleared = warning.IsCleared();
   }
 
+  const AirspaceWarningConfig &warning_config =
+    CommonInterface::GetComputerSettings().airspace.warnings;
+  const bool clearance_allowed =
+    warning_config.IsClassClearanceAllowed(airspace->GetTypeOrClass());
+
   ack_button->SetEnabled(ack_expired);
   ack_day_button->SetEnabled(!ack_day);
   enable_button->SetEnabled(!ack_expired);
-  clearance_button->SetEnabled(!cleared);
+  clearance_button->SetEnabled(!cleared && clearance_allowed);
   revoke_clearance_button->SetEnabled(cleared);
   details_button->SetEnabled(true);
 
