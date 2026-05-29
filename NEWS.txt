@@ -12,6 +12,7 @@ Version 7.45 - not yet released
     ISA logger datum; cleared when strong pressure replaces weak pressure or
     ignores the sentence
 * ui
+  - macOS: thick solid lines now render at their correct pixel width #2545
   - status dialog, Times: flight time matches takeoff and landing after
     minute rounding (including across midnight); landing time clears on a
     new takeoff in the same session #957
