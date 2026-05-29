@@ -13,7 +13,7 @@ GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   style.Disable();
 
   SetWindow(std::make_unique<GaugeVario>(blackboard, parent, look,
-                                         rc, style));
+                                         vario_bar_look, rc, style));
 }
 
 void

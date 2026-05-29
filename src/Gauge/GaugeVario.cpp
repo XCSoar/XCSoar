@@ -3,20 +3,370 @@
 
 #include "Gauge/GaugeVario.hpp"
 #include "Look/VarioLook.hpp"
+#include "Look/VarioBarLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Renderer/UnitSymbolRenderer.hpp"
-#include "Math/FastRotation.hpp"
 #include "Units/Units.hpp"
-#include "Units/Descriptor.hpp"
+#include "NMEA/SwitchState.hpp"
 #include "lib/fmt/ToBuffer.hxx"
+#include "util/StringUtil.hpp"
+#include "util/Macros.hpp"
 
-#include <algorithm> // for std::clamp()
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <cstring>
 
-static constexpr double DELTA_V_STEP = 4.0;
-static constexpr double DELTA_V_LIMIT = 16.0;
 #define TEXT_BUG "Bug"
 #define TEXT_BALLAST "Bal"
+
+/** Infobox accent indices — match #InfoBoxLook::colors. */
+static constexpr unsigned VARIO_ACCENT_NEUTRAL = 0;
+static constexpr unsigned VARIO_ACCENT_RED = 1;
+static constexpr unsigned VARIO_ACCENT_BLUE = 2;
+static constexpr unsigned VARIO_ACCENT_GREEN = 3;
+
+/* Larus sw_frontend_rs vario.rs / create_wallpaper_vario.py */
+static constexpr double LARUS_SCALE_DEGREES = 25.0;
+static constexpr double LARUS_SCALE_MAX_VALUE = 5.0;
+static constexpr double LARUS_SCALE_MAX_ANGLE_DEG =
+  LARUS_SCALE_MAX_VALUE * LARUS_SCALE_DEGREES;
+/** Annulus arc extends this % past the ±5 labels (then panel background shows). */
+static constexpr double LARUS_ANNULUS_OVERSHOOT_PERCENT = 2.0;
+static constexpr double LARUS_INNER_RADIUS_RATIO = 0.80;
+static constexpr double LARUS_NINE_O_CLOCK = 1.5 * M_PI;
+
+struct LarusScaleParams {
+  double max_value;
+  double deg_per_unit;
+  int tick_step;
+  int n_ticks;
+};
+
+struct LarusNeedleCoord {
+  double len;
+  double alpha;
+};
+
+static constexpr LarusNeedleCoord classic_needle[] = {
+  {1.0, 0.0},
+  {0.934, 0.0405},
+  {0.703, 0.0538},
+  {0.703, -0.0538},
+  {0.934, -0.0405},
+};
+
+/** Original Larus gross-needle inner extent in SVG coordinates. */
+static constexpr double LARUS_CLASSIC_NEEDLE_INNER_ORIG = 0.703;
+
+static constexpr LarusNeedleCoord simple_needle[] = {
+  {1.223, 0.0},
+  {1.012, -0.107},
+  {1.012, 0.107},
+};
+
+/** Furthest `len_frac` on #simple_needle — tip at outer scale when remapped. */
+static constexpr double LARUS_SIMPLE_NEEDLE_MAX_LEN = 1.223;
+
+/** Original Larus net/average-needle inner extent in SVG coordinates. */
+static constexpr double LARUS_SIMPLE_NEEDLE_INNER_ORIG = 1.012;
+
+struct LarusNeedleLengthMap {
+  double inner_orig;
+  double outer_orig;
+};
+
+static constexpr LarusNeedleLengthMap larus_classic_needle_map{
+  LARUS_CLASSIC_NEEDLE_INNER_ORIG, 1.0,
+};
+
+static constexpr LarusNeedleLengthMap larus_simple_needle_map{
+  LARUS_SIMPLE_NEEDLE_INNER_ORIG, LARUS_SIMPLE_NEEDLE_MAX_LEN,
+};
+
+/** Map SVG needle length so inner base sits on the annulus inner circle. */
+[[gnu::const]]
+static double
+RemapNeedleLength(double len_frac,
+                  const LarusNeedleLengthMap &map) noexcept
+{
+  if (len_frac >= map.outer_orig)
+    return 1.0;
+  if (len_frac <= map.inner_orig)
+    return LARUS_INNER_RADIUS_RATIO;
+  return LARUS_INNER_RADIUS_RATIO +
+    (len_frac - map.inner_orig) * (1.0 - LARUS_INNER_RADIUS_RATIO) /
+    (map.outer_orig - map.inner_orig);
+}
+
+static constexpr LarusNeedleCoord scale_marker[] = {
+  {1.014, -0.058},
+  {1.014, 0.058},
+  {0.878, 0.0},
+};
+
+static_assert(ARRAY_SIZE(classic_needle) == 5,
+              "Larus classic needle coordinate count");
+static_assert(ARRAY_SIZE(simple_needle) == 3,
+              "Larus simple needle coordinate count");
+static_assert(ARRAY_SIZE(scale_marker) == 3,
+              "Larus scale marker coordinate count");
+
+struct AverageDisplay {
+  const char *label;
+  double raw;
+};
+
+[[gnu::pure]]
+static AverageDisplay
+GetAverageDisplay(const DerivedInfo &calculated) noexcept
+{
+  if (calculated.circling)
+    return {"Avg.", calculated.average};
+
+  return {"Net.", calculated.netto_average};
+}
+
+[[gnu::const]]
+static LarusScaleParams
+GetLarusScaleParams() noexcept
+{
+  switch (Units::current.vertical_speed_unit) {
+  case Unit::FEET_PER_MINUTE:
+    return {1020.0, LARUS_SCALE_DEGREES / 200.0, 200, 5};
+
+  case Unit::KNOTS:
+    return {10.2, LARUS_SCALE_DEGREES / 2.0, 2, 5};
+
+  default:
+    return {5.1, LARUS_SCALE_DEGREES, 1, 5};
+  }
+}
+
+/** Scale limit for the annulus arc (±5 plus overshoot; needles use max_value). */
+[[gnu::const]]
+static double
+LarusAnnulusArcEnd(const LarusScaleParams &params) noexcept
+{
+  const double tick_limit = double(params.n_ticks) * params.tick_step;
+  return tick_limit * (1.0 + LARUS_ANNULUS_OVERSHOOT_PERCENT / 100.0);
+}
+
+[[gnu::const]]
+static Angle
+ValueToNeedleAngle(double value) noexcept
+{
+  const LarusScaleParams params = GetLarusScaleParams();
+  value = std::clamp(value, -params.max_value, params.max_value);
+  return Angle::Degrees(value * params.deg_per_unit);
+}
+
+[[gnu::const]]
+static double
+LarusScaleValueRadians(double scale_value,
+                       const LarusScaleParams &params) noexcept
+{
+  return scale_value * params.deg_per_unit * M_PI / 180.0;
+}
+
+[[gnu::const]]
+static PixelPoint
+LarusScalePoint(PixelPoint center, unsigned radius,
+                double scale_value, const LarusScaleParams &params) noexcept
+{
+  const double rad = LarusScaleValueRadians(scale_value, params);
+  return PixelPoint{
+    center.x - int(std::lround(std::cos(rad) * radius)),
+    center.y - int(std::lround(std::sin(rad) * radius)),
+  };
+}
+
+/** Canvas arc angle for a Larus scale value (matches CirclePoint convention). */
+[[gnu::const]]
+static Angle
+LarusScaleValueToCanvasAngle(double scale_value,
+                             const LarusScaleParams &params) noexcept
+{
+  const double rad = LarusScaleValueRadians(scale_value, params);
+  return Angle::Radians(std::atan2(-std::cos(rad), std::sin(rad)));
+}
+
+/** Horizontal extent of ±max scale value past the dial center (toward right). */
+[[gnu::const]]
+static double
+LarusScaleRightExtent() noexcept
+{
+  const double rad = LARUS_SCALE_MAX_ANGLE_DEG * M_PI / 180.0;
+  return -std::cos(rad);
+}
+
+/** Vertical extent of ±max scale value from the dial center. */
+[[gnu::const]]
+static double
+LarusScaleVerticalExtent() noexcept
+{
+  const double rad = LARUS_SCALE_MAX_ANGLE_DEG * M_PI / 180.0;
+  return std::sin(rad);
+}
+
+[[gnu::const]]
+static PixelPoint
+LarusNeedlePoint(PixelPoint center, int length, Angle rotation,
+                 double len_frac, double alpha) noexcept
+{
+  const double rad = LARUS_NINE_O_CLOCK + rotation.Radians() + alpha;
+  const double dist = len_frac * length;
+  return PixelPoint{
+    center.x + int(std::lround(std::sin(rad) * dist)),
+    center.y + int(std::lround(-std::cos(rad) * dist)),
+  };
+}
+
+static void
+DrawNeedlePolygon(Canvas &canvas, PixelPoint center, int length,
+                  Angle rotation, Color color,
+                  const LarusNeedleCoord *coords, unsigned count,
+                  const LarusNeedleLengthMap *length_map) noexcept
+{
+  std::array<BulkPixelPoint, 5> points{};
+  assert(count <= points.size());
+
+  for (unsigned i = 0; i < count; ++i) {
+    const double len_frac = length_map != nullptr
+      ? RemapNeedleLength(coords[i].len, *length_map)
+      : coords[i].len;
+    points[i] = LarusNeedlePoint(center, length, rotation, len_frac,
+                                 coords[i].alpha);
+  }
+
+  canvas.Select(Brush(color));
+  canvas.SelectNullPen();
+  canvas.DrawTriangleFan(points.data(), count);
+}
+
+[[gnu::const]]
+static Color
+VarioAccentColor(const VarioLook &look, unsigned index) noexcept
+{
+  assert(index < ARRAY_SIZE(look.accent));
+  if (!look.colors)
+    return look.inverse ? look.text_color : look.dimmed_text_color;
+  return look.accent[index];
+}
+
+/** MC accent — matches #InfoBoxContentMacCready::Update value color indices. */
+[[gnu::pure]]
+static Color
+McAccentColor(const VarioLook &look, bool auto_mc) noexcept
+{
+  return VarioAccentColor(look,
+                          auto_mc ? VARIO_ACCENT_BLUE : VARIO_ACCENT_GREEN);
+}
+
+/** Side length of the largest square inscribed in the inner hole. */
+[[gnu::const]]
+static unsigned
+InnerHoleInscribedSquareSide(unsigned inner_radius) noexcept
+{
+  return std::max(1u, unsigned(std::lround(double(inner_radius) * M_SQRT2)));
+}
+
+[[gnu::const]]
+static unsigned
+InnerTextWidth(unsigned square_side) noexcept
+{
+  return std::max(1u, square_side * VarioLook::INNER_TEXT_WIDTH_PERCENT / 100u);
+}
+
+/** Baseline that vertically centers capital letters in a row. */
+[[gnu::const]]
+static int
+RowTextBaselineY(const Font &font, int row_top, int row_bottom) noexcept
+{
+  const int cap_top =
+    (row_top + row_bottom - int(font.GetCapitalHeight())) / 2;
+  return cap_top - int(font.GetAscentHeight()) + int(font.GetCapitalHeight());
+}
+
+/** Text area and speed-arrow strip inside the inscribed inner hole. */
+struct InnerHoleTextLayout {
+  PixelRect text_area;
+  PixelRect speed_arrows;
+};
+
+[[gnu::pure]]
+static InnerHoleTextLayout
+ComputeInnerHoleTextLayout(PixelPoint dial_center,
+                           unsigned inner_square_side,
+                           const PixelRect &content_rect,
+                           int pad) noexcept
+{
+  const int cx = dial_center.x;
+  const int cy = dial_center.y;
+  const int half = int(inner_square_side) / 2;
+  const int square_left = cx - half;
+  const int square_top = cy - half;
+  const int square_bottom = square_top + int(inner_square_side);
+  const int text_width = int(InnerTextWidth(inner_square_side));
+  const int square_right = square_left + int(inner_square_side);
+  const int top = square_top + pad;
+  const int bottom = square_bottom - pad;
+  const int strip_gap = Layout::GetTextPadding();
+
+  return {
+    {
+      std::max(content_rect.left + pad, square_left + pad),
+      top,
+      std::min(content_rect.right - pad,
+               square_left + text_width - pad - strip_gap),
+      bottom,
+    },
+    {
+      square_left + text_width + strip_gap,
+      top,
+      std::min(content_rect.right - pad, square_right - pad),
+      bottom,
+    },
+  };
+}
+
+struct DialMetrics {
+  PixelPoint dial_center;
+  unsigned outer_radius;
+  unsigned inner_radius;
+};
+
+[[gnu::pure]]
+static DialMetrics
+ComputeDialMetrics(const PixelRect &rc) noexcept
+{
+  const unsigned panel_width = rc.GetWidth();
+  const unsigned panel_height = rc.GetHeight();
+
+  const double scale_right = LarusScaleRightExtent();
+  const double scale_vertical = LarusScaleVerticalExtent();
+
+  const unsigned max_radius_x =
+    unsigned(double(panel_width) / (1.0 + scale_right));
+  const unsigned max_radius_y =
+    unsigned(double(panel_height) / 2.0 / scale_vertical);
+  const unsigned outer_radius =
+    std::max(1u, std::min(max_radius_x, max_radius_y));
+
+  unsigned inner_radius = std::max(1u, unsigned(double(outer_radius)
+                                                  * LARUS_INNER_RADIUS_RATIO));
+  if (inner_radius >= outer_radius)
+    inner_radius = outer_radius - 1;
+
+  return {
+    {
+      rc.left + int(outer_radius),
+      rc.top + int(panel_height) / 2,
+    },
+    outer_radius,
+    inner_radius,
+  };
+}
 
 inline
 GaugeVario::BallastGeometry::BallastGeometry(const VarioLook &look,
@@ -24,43 +374,35 @@ GaugeVario::BallastGeometry::BallastGeometry(const VarioLook &look,
 {
   PixelSize tSize;
 
-  // position of ballast label
   label_pos.x = 1;
   label_pos.y = rc.top + 2
     + look.label_font.GetCapitalHeight() * 2
     - look.label_font.GetAscentHeight();
 
-  // position of ballast value
   value_pos.x = 1;
   value_pos.y = rc.top + 1
     + look.label_font.GetCapitalHeight()
     - look.label_font.GetAscentHeight();
 
-  // set upper left corner
   label_rect.left = label_pos.x;
   label_rect.top = label_pos.y
     + look.label_font.GetAscentHeight()
     - look.label_font.GetCapitalHeight();
 
-  // set upper left corner
   value_rect.left = value_pos.x;
   value_rect.top = value_pos.y
     + look.label_font.GetAscentHeight()
     - look.label_font.GetCapitalHeight();
 
-  // get max label size
   tSize = look.label_font.TextSize(TEXT_BALLAST);
 
-  // update back rect with max label size
   label_rect.right = label_rect.left + tSize.width;
   label_rect.bottom = label_rect.top +
     look.label_font.GetCapitalHeight();
 
-  // get max value size
   tSize = look.label_font.TextSize("100%");
 
   value_rect.right = value_rect.left + tSize.width;
-  // update back rect with max label size
   value_rect.bottom = value_rect.top +
     look.label_font.GetCapitalHeight();
 }
@@ -92,10 +434,8 @@ GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
   tSize = look.label_font.TextSize(TEXT_BUG);
 
   label_rect.right = label_rect.left + tSize.width;
-  label_rect.bottom = label_rect.top
-    + look.label_font.GetCapitalHeight()
-    + look.label_font.GetHeight()
-    - look.label_font.GetAscentHeight();
+  label_rect.bottom = label_rect.top +
+    look.label_font.GetCapitalHeight();
 
   tSize = look.label_font.TextSize("100%");
 
@@ -105,144 +445,244 @@ GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
 }
 
 inline
-GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
-                                                   PixelPoint position) noexcept
-  :label_right(position.x),
-   label_top(position.y + Layout::Scale(1)),
-   label_bottom(label_top + look.label_font.GetCapitalHeight()),
-   label_y(label_top + look.label_font.GetCapitalHeight()
-           - look.label_font.GetAscentHeight()),
-   // TODO: update after units got reconfigured?
-   value_right(position.x - UnitSymbolRenderer::GetSize(look.unit_font,
-                                                        Units::current.vertical_speed_unit).width),
-   value_top(label_bottom + Layout::Scale(2)),
-   value_bottom(value_top + look.value_font.GetCapitalHeight()),
-   value_y(value_top + look.value_font.GetCapitalHeight()
-           - look.value_font.GetAscentHeight())
-{
-}
-
-inline unsigned
-GaugeVario::LabelValueGeometry::GetHeight(const VarioLook &look) noexcept
-{
-  return Layout::Scale(4) + look.value_font.GetCapitalHeight()
-    + look.label_font.GetCapitalHeight();
-}
-
-inline
-GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
+GaugeVario::Geometry::Geometry(const VarioLook &look,
+                               const PixelRect &rc) noexcept
   :ballast(look, rc), bugs(look, rc)
 {
-  nlength0 = Layout::Scale(15);
-  nlength1 = Layout::Scale(6);
-  nwidth = Layout::Scale(4);
-  nline = Layout::Scale(8);
+  content_rect = rc;
+  row_gap = Layout::Scale(3);
+  speed_arrows_rect = {};
 
-  offset = rc.GetMiddleRight();
-  offset.x -= Layout::GetTextPadding();
-
-  const PixelSize value_offset{0u, LabelValueGeometry::GetHeight(look)};
-
-  const PixelPoint gross_position = offset - value_offset / 2u;
-  gross = {look, gross_position};
-  average = {look, gross_position - value_offset};
-  mc = {look, gross_position + value_offset};
+  const DialMetrics dial = ComputeDialMetrics(rc);
+  dial_center = dial.dial_center;
+  outer_radius = dial.outer_radius;
+  inner_radius = dial.inner_radius;
+  inner_square_side = InnerHoleInscribedSquareSide(inner_radius);
+  inner_row_slot = std::max(1u, inner_square_side / 3u);
 }
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
-                       ContainerWindow &parent, const VarioLook &_look,
+                       ContainerWindow &parent, VarioLook &_look,
+                       const VarioBarLook &vario_bar_look,
                        PixelRect rc, const WindowStyle style) noexcept
-  :blackboard(_blackboard), look(_look)
+  :blackboard(_blackboard), look(_look),
+   speed_bar_renderer(vario_bar_look)
 {
   Create(parent, rc, style);
 }
 
-static constexpr int
-WidthToHeight(int width) noexcept
+void
+GaugeVario::RecalculateGeometry() noexcept
 {
-  return width * 112 / 100;
+  const PixelRect rc = GetClientRect();
+  const unsigned panel_width = rc.GetWidth();
+  const unsigned scale_title =
+    blackboard.GetUISettings().info_boxes.scale_title_font;
+
+  const DialMetrics dial = ComputeDialMetrics(rc);
+  const unsigned square = InnerHoleInscribedSquareSide(dial.inner_radius);
+  const unsigned row_slot = std::max(1u, square / 3u);
+  const unsigned band = dial.outer_radius - dial.inner_radius;
+  const unsigned arc_w = std::max(4u, band / 2u);
+  const int pad = Layout::GetTextPadding();
+  const InnerHoleTextLayout layout = ComputeInnerHoleTextLayout(
+    dial.dial_center, square, rc, pad);
+  const unsigned layout_text_width =
+    std::max(1u, unsigned(layout.text_area.GetWidth()));
+
+  look.ReinitialiseLayout(panel_width, scale_title, layout_text_width,
+                          row_slot, arc_w);
+  geometry = {look, rc};
+
+  cached_scale_title_font = scale_title;
+
+  LayoutValueColumn();
+
+  background_dirty = true;
+  dirty = true;
+  cached_look_generation = look.layout_generation;
+
+  hero_di.Reset();
+  gross_di.Reset();
+  mc_di.Reset();
+
+  last_ballast = -1;
+  last_bugs = -1;
 }
 
-static constexpr PixelPoint
-TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset) noexcept
+void
+GaugeVario::LayoutValueColumn() noexcept
 {
-  return { pt.x + offset.x, WidthToHeight(pt.y) + offset.y + 1 };
+  const VarioSettings &settings = Settings();
+
+  struct RowSpec {
+    RowGeometry *row;
+    bool visible;
+  };
+
+  const RowSpec rows[] = {
+    {&geometry.hero_row, settings.show_average},
+    {&geometry.gross_row, settings.show_gross},
+    {&geometry.mc_row, settings.show_mc},
+  };
+
+  unsigned visible_count = 0;
+  for (const RowSpec &spec : rows) {
+    if (spec.visible)
+      ++visible_count;
+  }
+
+  const int cy = geometry.dial_center.y;
+  const int pad = Layout::GetTextPadding();
+  const InnerHoleTextLayout layout = ComputeInnerHoleTextLayout(
+    geometry.dial_center, geometry.inner_square_side,
+    geometry.content_rect, pad);
+  geometry.speed_arrows_rect = layout.speed_arrows;
+
+  if (visible_count == 0)
+    return;
+
+  static constexpr unsigned text_slots = 3;
+  const unsigned row_height = std::max(look.label_font.GetHeight(),
+                                       look.value_font.GetHeight());
+
+  const int square_top = cy - int(geometry.inner_square_side) / 2;
+  const int row_left = layout.text_area.left;
+  const int row_right = layout.text_area.right;
+  const int text_width = row_right - row_left;
+  const int split_x = row_left
+    + text_width * int(VarioLook::INNER_ROW_LABEL_WIDTH_PERCENT) / 100;
+
+  const unsigned first_slot = (text_slots - visible_count) / 2;
+  unsigned slot_index = 0;
+
+  for (const RowSpec &spec : rows) {
+    if (!spec.visible)
+      continue;
+
+    const int slot_y = square_top
+      + int((first_slot + slot_index) * geometry.inner_row_slot);
+    const int y = slot_y + (int(geometry.inner_row_slot) - int(row_height)) / 2;
+    const int row_bottom = y + int(row_height);
+
+    spec.row->label_background = {row_left, y, split_x, row_bottom};
+    spec.row->value_background = {split_x, y, row_right, row_bottom};
+
+    ++slot_index;
+  }
 }
 
-inline void
+void
 GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
 {
-  canvas.Clear(look.background_color);
+  canvas.DrawFilledRectangle(rc, look.background_color);
+}
 
-  canvas.Select(look.arc_pen);
+void
+GaugeVario::RenderSpeedArrows(Canvas &canvas) noexcept
+{
+  if (!Settings().show_speed_to_fly)
+    return;
 
-  std::array<BulkPixelPoint, 21> arc;
+  const PixelRect &rc = geometry.speed_arrows_rect;
+  if (rc.GetWidth() == 0 || rc.GetHeight() == 0)
+    return;
 
-  const int arc_padding = look.arc_label_font.GetHeight();
+  if (IsPersistent())
+    canvas.DrawFilledRectangle(rc, look.background_color);
 
-  const int x_radius = rc.GetWidth() - arc_padding;
-  const int y_radius = WidthToHeight(x_radius);
+  const int pad = Layout::GetTextPadding();
+  const unsigned max_half = std::max(1u,
+    (geometry.inner_square_side - 2u * unsigned(pad)) / 2u);
 
-  for (std::size_t i = 0; i < arc.size(); ++i) {
-    const unsigned angle = INT_ANGLE_RANGE / 2
-      + i * INT_ANGLE_RANGE / 2 / (arc.size() - 1);
-    const PixelPoint delta(ISINETABLE[NormalizeIntAngle(angle)] * x_radius / 1024,
-                           -ISINETABLE[NormalizeIntAngle(angle + INT_QUARTER_CIRCLE)] * y_radius / 1024);
+  speed_bar_renderer.DrawSpeedToFly(canvas, rc, Basic(), Calculated(),
+                                    max_half,
+                                    VarioAccentColor(look, VARIO_ACCENT_GREEN),
+                                    VarioAccentColor(look, VARIO_ACCENT_BLUE));
+}
 
-    arc[i] = geometry.offset + delta;
+void
+GaugeVario::RenderScale(Canvas &canvas) noexcept
+{
+  const LarusScaleParams params = GetLarusScaleParams();
+  const unsigned tick_outer = geometry.outer_radius;
+  const unsigned tick_inner = geometry.inner_radius;
+  const unsigned label_radius = tick_inner + (tick_outer - tick_inner) / 2;
+  const double arc_limit = LarusAnnulusArcEnd(params);
+
+  const Angle arc_start =
+    LarusScaleValueToCanvasAngle(-arc_limit, params);
+  const Angle arc_end =
+    LarusScaleValueToCanvasAngle(arc_limit, params);
+
+  canvas.Select(Brush(look.scale_face_color));
+  canvas.SelectNullPen();
+  canvas.DrawAnnulus(geometry.dial_center, tick_inner, tick_outer,
+                     arc_start, arc_end);
+
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1), look.scale_ink_color));
+  for (int i = -params.n_ticks; i <= params.n_ticks; ++i) {
+    const double value = i * params.tick_step;
+    canvas.DrawLine(LarusScalePoint(geometry.dial_center, tick_outer,
+                                    value, params),
+                    LarusScalePoint(geometry.dial_center, tick_inner,
+                                    value, params));
   }
 
-  canvas.DrawPolyline(arc.data(), arc.size());
-
-  canvas.Select(look.tick_pen);
   canvas.Select(look.arc_label_font);
-  canvas.SetTextColor(look.dimmed_text_color);
   canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(look.scale_ink_color);
+  for (int i = -params.n_ticks; i <= params.n_ticks; ++i) {
+    const double value = i * params.tick_step;
+    const PixelPoint anchor =
+      LarusScalePoint(geometry.dial_center, label_radius, value, params);
+    const auto label = FmtBuffer<8>("{}", std::abs(i * params.tick_step));
+    const PixelSize text_size = canvas.CalcTextSize(label.c_str());
+    const PixelRect text_rc = PixelRect::Centered(anchor, text_size);
+    if (!geometry.content_rect.OverlapsWith(text_rc))
+      continue;
 
-  int tick_value_step = 1;
-  const auto &unit_descriptor =
-    Units::unit_descriptors[(std::size_t)Units::current.vertical_speed_unit];
-  const double unit_factor = unit_descriptor.factor_to_user;
+    canvas.DrawText(text_rc.GetTopLeft(), label.c_str());
+  }
+}
 
-  switch (Units::current.vertical_speed_unit) {
-  case Unit::FEET_PER_MINUTE:
-    tick_value_step = 200;
-    break;
+void
+GaugeVario::RenderNeedles(Canvas &canvas) noexcept
+{
+  const int full_len = int(geometry.outer_radius);
 
-  default:
-    break;
+  double classic_value = Basic().brutto_vario;
+  if (Settings().show_thermal_average_needle) {
+    classic_value = Calculated().circling
+      ? Calculated().netto_average
+      : Calculated().last_thermal_average_smooth;
   }
 
-  const Angle tick_angle_step = Angle::QuarterCircle() * tick_value_step
-    / unit_factor / GAUGEVARIORANGE;
+  const double gross = Units::ToUserVSpeed(classic_value);
+  DrawNeedlePolygon(canvas, geometry.dial_center, full_len,
+                    ValueToNeedleAngle(gross),
+                    VarioAccentColor(look, VARIO_ACCENT_RED),
+                    classic_needle, ARRAY_SIZE(classic_needle),
+                    &larus_classic_needle_map);
 
-  const int n_ticks = GAUGEVARIORANGE / (tick_value_step / unit_factor);
+  if (Settings().show_average_needle) {
+    const AverageDisplay average = GetAverageDisplay(Calculated());
+    const double average_user = Units::ToUserVSpeed(average.raw);
+    DrawNeedlePolygon(canvas, geometry.dial_center, full_len,
+                      ValueToNeedleAngle(average_user),
+                      VarioAccentColor(look, VARIO_ACCENT_BLUE),
+                      simple_needle, ARRAY_SIZE(simple_needle),
+                      &larus_simple_needle_map);
+  }
 
-  const int tick_length = Layout::GetTextPadding() * 4;
-
-  const IntPoint2D tick_start{1 - x_radius, 0};
-  const IntPoint2D tick_end{-tick_length - x_radius, 0};
-  const IntPoint2D label_center{-x_radius - arc_padding / 2 - tick_length, 0};
-
-  for (int i = -n_ticks; i < n_ticks; ++i) {
-    Angle angle = tick_angle_step * i;
-    const FastIntegerRotation r{angle};
-
-    canvas.DrawLine(TransformRotatedPoint(r.Rotate(tick_start),
-                                          geometry.offset),
-                    TransformRotatedPoint(r.Rotate(tick_end),
-                                          geometry.offset));
-
-    char label[16];
-    StringFormatUnsafe(label, "%d", i * tick_value_step);
-
-    const auto label_size = canvas.CalcTextSize(label);
-
-    const auto label_position = TransformRotatedPoint(r.Rotate(label_center),
-                                                      geometry.offset)
-      - label_size / 2U;
-
-    canvas.DrawText(label_position, label);
+  if (Settings().show_mc) {
+    const double mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
+    const bool auto_mc = GetComputerSettings().task.auto_mc;
+    DrawNeedlePolygon(canvas, geometry.dial_center, full_len,
+                      ValueToNeedleAngle(mc),
+                      McAccentColor(look, auto_mc),
+                      scale_marker, ARRAY_SIZE(scale_marker),
+                      nullptr);
   }
 }
 
@@ -250,29 +690,25 @@ void
 GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
+  const unsigned scale_title =
+    blackboard.GetUISettings().info_boxes.scale_title_font;
+  if (rc.GetSize() != geometry.content_rect.GetSize() ||
+      look.layout_generation != cached_look_generation ||
+      cached_scale_title_font != scale_title)
+    RecalculateGeometry();
 
   if (!IsPersistent() || background_dirty) {
     RenderBackground(canvas, rc);
     background_dirty = false;
   }
 
-  if (Settings().show_average) {
-    // JMW averager now displays netto average if not circling
-    RenderValue(canvas, geometry.average, average_di,
-                Units::ToUserVSpeed(Calculated().circling ? Calculated().average : Calculated().netto_average),
-                Calculated().circling ? "Avg" : "NetAvg");
-  }
+  RenderScale(canvas);
+  RenderNeedles(canvas);
 
-  if (Settings().show_mc) {
-    auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
-    RenderValue(canvas, geometry.mc, mc_di,
-                mc,
-                GetComputerSettings().task.auto_mc ? "Auto MC" : "MC");
-  }
+  RenderInnerText(canvas);
+  RenderSpeedArrows(canvas);
 
-  if (Settings().show_speed_to_fly)
-    RenderSpeedToFly(canvas, rc.right - 11, (rc.top + rc.bottom) / 2);
-  else
+  if (!Settings().show_speed_to_fly)
     RenderClimb(canvas);
 
   if (Settings().show_ballast)
@@ -282,98 +718,90 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
     RenderBugs(canvas);
 
   dirty = false;
-  int ival, sval, ival_av = 0;
-  int ival_av_thermal = 0;
-  if (Settings().show_thermal_average_needle) {
-      ival_av_thermal = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
-  }
-
-  auto vval = Basic().brutto_vario;
-  ival = ValueToNeedlePos(vval);
-  sval = ValueToNeedlePos(Calculated().sink_rate);
-  if (Settings().show_average_needle) {
-    if (!Calculated().circling)
-      ival_av = ValueToNeedlePos(Calculated().netto_average);
-    else
-      ival_av = ValueToNeedlePos(Calculated().average);
-  }
-
-  // clear items first
-
-  if (Settings().show_average_needle) {
-    if (!IsPersistent() || ival_av != ival_last)
-      RenderNeedle(canvas, ival_last, true, true);
-
-    ival_last = ival_av;
-  }
-
-  if (!IsPersistent() || (sval != sval_last) || (ival != vval_last))
-    RenderVarioLine(canvas, vval_last, sval_last, true);
-
-  sval_last = sval;
-  if (Settings().show_thermal_average_needle) {
-      if (!IsPersistent() || ival_av_thermal != ival_av_last)
-          RenderNeedle(canvas, ival_av_last, false, true);
-
-      ival_av_last = ival_av_thermal;
-  } else {
-      if (!IsPersistent() || ival != vval_last)
-        RenderNeedle(canvas, vval_last, false, true);
-
-      vval_last = ival;
-  }
-
-  // now draw items
-  RenderVarioLine(canvas, ival, sval, false);
-  if (Settings().show_average_needle)
-    RenderNeedle(canvas, ival_av, true, false);
-
-  RenderNeedle(canvas,
-               Settings().show_thermal_average_needle ? ival_av_thermal : ival,
-               false, false);
-
-  if (Settings().show_gross) {
-    auto vvaldisplay = std::clamp(Units::ToUserVSpeed(vval),
-                                  -99.9, 99.9);
-
-    RenderValue(canvas, geometry.gross, gross_di,
-                vvaldisplay,
-                "Gross");
-  }
-
-  RenderZero(canvas);
 }
 
 void
-GaugeVario::MakePolygon(const int i) noexcept
+GaugeVario::RenderInnerText(Canvas &canvas) noexcept
 {
-  auto *bit = getPolygon(i);
-  auto *bline = &lines[i + gmax];
+  if (Settings().show_average) {
+    const AverageDisplay average = GetAverageDisplay(Calculated());
+    const double value =
+      (double)iround(Units::ToUserVSpeed(average.raw) * 10) / 10;
+    const auto buffer = FmtBuffer<18>("{:<+4.1f}", value);
+    RenderRow(canvas, geometry.hero_row, hero_di.label, hero_di.value,
+              average.label, buffer.c_str(), look.text_color);
+  }
 
-  const FastIntegerRotation r(Angle::Degrees(i));
+  if (Settings().show_gross) {
+    const auto vvaldisplay = std::clamp(Units::ToUserVSpeed(Basic().brutto_vario),
+                                        -99.9, 99.9);
+    const auto buffer = FmtBuffer<18>("{:<+4.1f}",
+                                      (double)iround(vvaldisplay * 10) / 10);
+    RenderRow(canvas, geometry.gross_row, gross_di.label, gross_di.value,
+              "Gross", buffer.c_str(), look.text_color);
+  }
 
-  bit[0] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength0, geometry.nwidth}),
-                                 geometry.offset);
-  bit[1] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength1, 0}),
-                                 geometry.offset);
-  bit[2] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength0, -geometry.nwidth}),
-                                 geometry.offset);
-
-  *bline = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nline, 0}),
-                                 geometry.offset);
+  if (Settings().show_mc) {
+    const auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
+    const auto buffer = FmtBuffer<18>("{:<+4.1f}",
+                                      (double)iround(mc * 10) / 10);
+    RenderRow(canvas, geometry.mc_row, mc_di.label, mc_di.value,
+              "MC", buffer.c_str(),
+              McAccentColor(look, GetComputerSettings().task.auto_mc));
+  }
 }
 
-inline BulkPixelPoint *
-GaugeVario::getPolygon(int i) noexcept
+void
+GaugeVario::RenderRow(Canvas &canvas, const RowGeometry &row,
+                      DrawInfo &label_di, DrawInfo &value_di,
+                      const char *label, const char *value_text,
+                      Color value_color) noexcept
 {
-  return polys + (i + gmax) * 3;
-}
+  if (row.label_background.GetWidth() == 0)
+    return;
 
-inline void
-GaugeVario::MakeAllPolygons() noexcept
-{
-  for (int i = gmin; i <= gmax; i++)
-    MakePolygon(i);
+  canvas.SetBackgroundColor(look.background_color);
+
+  const bool value_changed = dirty &&
+    !StringIsEqual(value_di.last_text, value_text);
+  const bool label_changed = dirty &&
+    !StringIsEqual(label_di.last_text, label);
+
+  if (!IsPersistent() || label_changed || value_changed) {
+    const int row_top = row.label_background.top;
+    const int row_bottom = row.label_background.bottom;
+
+    canvas.Select(look.label_font);
+    const PixelPoint label_position{
+      row.label_background.left,
+      RowTextBaselineY(look.label_font, row_top, row_bottom),
+    };
+
+    canvas.SetTextColor(look.dimmed_text_color);
+    canvas.Select(look.label_font);
+    if (IsPersistent()) {
+      canvas.DrawOpaqueText(label_position, row.label_background, label);
+      strcpy(label_di.last_text, label);
+    } else {
+      canvas.DrawText(label_position, label);
+    }
+
+    canvas.Select(look.value_font);
+    const unsigned value_width = canvas.CalcTextSize(value_text).width;
+    const PixelPoint value_position{
+      row.value_background.right - int(value_width),
+      RowTextBaselineY(look.value_font, row_top, row_bottom),
+    };
+
+    canvas.SetTextColor(value_color);
+    canvas.Select(look.value_font);
+    if (IsPersistent()) {
+      canvas.DrawOpaqueText(value_position, row.value_background, value_text);
+      strcpy(value_di.last_text, value_text);
+    } else {
+      canvas.DrawText(value_position, value_text);
+    }
+  }
 }
 
 void
@@ -395,293 +823,13 @@ GaugeVario::RenderClimb(Canvas &canvas) noexcept
                                look.background_color);
 }
 
-inline void
-GaugeVario::RenderZero(Canvas &canvas) noexcept
-{
-  if (look.inverse)
-    canvas.SelectWhitePen();
-  else
-    canvas.SelectBlackPen();
-
-  canvas.DrawLine({0, geometry.offset.y},
-                  {Layout::Scale(17), geometry.offset.y});
-  canvas.DrawLine({0, geometry.offset.y + 1},
-                  {Layout::Scale(17), geometry.offset.y + 1});
-}
-
-int
-GaugeVario::ValueToNeedlePos(double Value) noexcept
-{
-  constexpr double degrees_per_unit =
-    double(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
-
-  int i;
-
-  if (!needle_initialised){
-    MakeAllPolygons();
-    needle_initialised = true;
-  }
-
-
-  i = iround(Value * degrees_per_unit);
-  i = std::clamp(i, int(gmin), int(gmax));
-  return i;
-}
-
 void
-GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink,
-                            bool clear) noexcept
-{
-  dirty = true;
-  if (i == sink)
-    return;
-
-  canvas.Select(clear
-                ? look.thick_background_pen
-                : (i > sink ? look.thick_lift_pen : look.thick_sink_pen));
-
-  if (i > sink)
-    canvas.DrawPolyline(lines + gmax + sink, i - sink);
-  else
-    canvas.DrawPolyline(lines + gmax + i, sink - i);
-
-  if (!clear) {
-    canvas.SelectNullPen();
-
-    // clear up naked (sink) edge of polygon, this gives it a nice
-    // taper look
-    if (look.inverse) {
-      canvas.SelectBlackBrush();
-    } else {
-      canvas.SelectWhiteBrush();
-    }
-    canvas.DrawTriangleFan(getPolygon(sink), 3);
-  }
-}
-
-void
-GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average,
-                         bool clear) noexcept
-{
-  dirty = true;
-
-  canvas.SelectNullPen();
-
-  // legacy behaviour
-  if (clear ^ look.inverse) {
-    canvas.SelectWhiteBrush();
-    canvas.SelectWhitePen();
-  } else {
-    canvas.SelectBlackBrush();
-    canvas.SelectBlackPen();
-  }
-
-  if (average)
-    canvas.DrawPolyline(getPolygon(i), 3);
-  else
-    canvas.DrawTriangleFan(getPolygon(i), 3);
-}
-
-// TODO code: Optimise vario rendering, this is slow
-void
-GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
-                        LabelValueDrawInfo &di,
-                        double value, const char *label) noexcept
-{
-  value = (double)iround(value * 10) / 10; // prevent the -0.0 case
-
-  canvas.SetBackgroundTransparent();
-
-  if (!IsPersistent() || (dirty && !StringIsEqual(di.label.last_text, label))) {
-    canvas.SetTextColor(look.dimmed_text_color);
-    canvas.Select(look.label_font);
-    const unsigned width = canvas.CalcTextSize(label).width;
-
-    const PixelPoint text_position{g.label_right - (int)width, g.label_y};
-
-    if (IsPersistent()) {
-      PixelRect rc;
-      rc.left = text_position.x;
-      rc.top = g.label_top;
-      rc.right = g.label_right;
-      rc.bottom = g.label_bottom;
-
-      canvas.SetBackgroundColor(look.background_color);
-      canvas.DrawOpaqueText(text_position, rc, label);
-      di.label.last_width = width;
-      strcpy(di.label.last_text, label);
-    } else {
-      canvas.DrawText(text_position, label);
-    }
-  }
-
-  if (!IsPersistent() || (dirty && di.value.last_value != value)) {
-    const auto buffer = FmtBuffer<18>("{:.1f}", value);
-    canvas.SetBackgroundColor(look.background_color);
-    canvas.SetTextColor(look.text_color);
-    canvas.Select(look.value_font);
-    const unsigned width = canvas.CalcTextSize(buffer.c_str()).width;
-
-    const PixelPoint text_position{g.value_right - (int)width, g.value_y};
-
-    if (IsPersistent()) {
-      PixelRect rc;
-      rc.left = text_position.x;
-      rc.top = g.value_top;
-      rc.right = g.value_right;
-      rc.bottom = g.value_bottom;
-
-      canvas.DrawOpaqueText(text_position, rc, buffer.c_str());
-
-      di.value.last_width = width;
-      di.value.last_value = value;
-    } else {
-      canvas.DrawText(text_position, buffer.c_str());
-    }
-  }
-
-  if (!IsPersistent() ||
-      di.value.last_unit != Units::current.vertical_speed_unit) {
-    auto unit = di.value.last_unit = Units::current.vertical_speed_unit;
-
-    const int ascent_height = look.value_font.GetAscentHeight();
-    const int unit_height =
-      UnitSymbolRenderer::GetAscentHeight(look.unit_font, unit);
-
-    canvas.Select(look.unit_font);
-    canvas.SetTextColor(COLOR_GRAY);
-    UnitSymbolRenderer::Draw(canvas,
-                             PixelPoint(g.value_right,
-                                        g.value_y + ascent_height - unit_height),
-                             unit, look.unit_fraction_pen);
-  }
-}
-
-inline void
-GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
-{
-  if (!Basic().airspeed_available ||
-      !Basic().total_energy_vario_available)
-    return;
-
-  double v_diff;
-
-  const unsigned arrow_y_size = Layout::Scale(3);
-  const unsigned arrow_x_size = Layout::Scale(7);
-
-  const PixelRect rc = GetClientRect();
-
-  int nary = NARROWS * arrow_y_size;
-  int ytop = rc.top + YOFFSET + nary; // JMW
-  int ybottom = rc.bottom - YOFFSET - nary - Layout::FastScale(1);
-
-  ytop += Layout::Scale(14);
-  ybottom -= Layout::Scale(14);
-
-  x = rc.right - 2 * arrow_x_size;
-
-  // only draw speed command if flying and vario is not circling
-  if ((Calculated().flight.flying)
-      && (!Basic().gps.simulator || !Calculated().circling)) {
-    v_diff = Calculated().V_stf - Basic().indicated_airspeed;
-    v_diff = std::clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
-    v_diff = iround(v_diff/DELTA_V_STEP) * DELTA_V_STEP;
-  } else
-    v_diff = 0;
-
-  if (!IsPersistent() || last_v_diff != v_diff || dirty) {
-    last_v_diff = v_diff;
-
-    if (IsPersistent()) {
-      const unsigned height = nary + arrow_y_size + Layout::FastScale(2);
-
-      const PixelSize size{arrow_x_size * 2 + 1, height};
-
-      // bottom (too slow)
-      canvas.DrawFilledRectangle({{x, ybottom + YOFFSET}, size},
-                                 look.background_color);
-
-      // top (too fast)
-      canvas.DrawFilledRectangle({{x, ytop - YOFFSET + 1 - (int)height}, size},
-                                 look.background_color);
-    }
-
-    RenderClimb(canvas);
-
-    canvas.SelectNullPen();
-
-    if (look.colors) {
-      if (v_diff > 0) {
-        // too slow
-        canvas.Select(look.sink_brush);
-      } else {
-        canvas.Select(look.lift_brush);
-      }
-    } else {
-      if (look.inverse)
-        canvas.SelectWhiteBrush();
-      else
-        canvas.SelectBlackBrush();
-    }
-
-    if (v_diff > 0) {
-      // too slow
-      y = ybottom;
-      y += YOFFSET;
-
-      const PixelSize size{arrow_x_size * 2 + 1, arrow_y_size - 1};
-      while (v_diff > 0) {
-        if (v_diff > DELTA_V_STEP) {
-          canvas.DrawRectangle({{x, y}, size});
-        } else {
-          BulkPixelPoint arrow[3];
-          arrow[0].x = x;
-          arrow[0].y = y;
-          arrow[1].x = x + arrow_x_size;
-          arrow[1].y = y + arrow_y_size - 1;
-          arrow[2].x = x + 2 * arrow_x_size;
-          arrow[2].y = y;
-          canvas.DrawTriangleFan(arrow, 3);
-        }
-        v_diff -= DELTA_V_STEP;
-        y += arrow_y_size;
-      }
-    } else if (v_diff < 0) {
-      // too fast
-      y = ytop;
-      y -= YOFFSET;
-
-      const PixelSize size{arrow_x_size * 2 + 1, y - arrow_y_size + 1};
-      while (v_diff < 0) {
-        if (v_diff < -DELTA_V_STEP) {
-          canvas.DrawRectangle({{x, y + 1}, size});
-        } else {
-          BulkPixelPoint arrow[3];
-          arrow[0].x = x;
-          arrow[0].y = y;
-          arrow[1].x = x + arrow_x_size;
-          arrow[1].y = y - arrow_y_size + 1;
-          arrow[2].x = x + 2 * arrow_x_size;
-          arrow[2].y = y;
-          canvas.DrawTriangleFan(arrow, 3);
-        }
-        v_diff += DELTA_V_STEP;
-        y -= arrow_y_size;
-      }
-    }
-  }
-}
-
-inline void
 GaugeVario::RenderBallast(Canvas &canvas) noexcept
 {
   const GlidePolar &polar = GetGlidePolar();
-  const double ballast_fraction = polar.GetBallastFraction();
-  int ballast = iround(ballast_fraction * 100);
+  const int ballast = iround(polar.GetBallastFraction() * 100);
 
   if (!IsPersistent() || ballast != last_ballast) {
-    // ballast hase been changed
-
     canvas.Select(look.label_font);
 
     if (IsPersistent())
@@ -692,10 +840,8 @@ GaugeVario::RenderBallast(Canvas &canvas) noexcept
     const auto &g = geometry.ballast;
 
     if (IsPersistent() || last_ballast < 1 || ballast < 1) {
-      // new ballast is 0, hide label
       if (ballast > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
-        // ols ballast was 0, show label
         if (IsPersistent())
           canvas.DrawOpaqueText(g.label_pos, g.label_rect, TEXT_BALLAST);
         else
@@ -704,7 +850,6 @@ GaugeVario::RenderBallast(Canvas &canvas) noexcept
         canvas.DrawFilledRectangle(g.label_rect, look.background_color);
     }
 
-    // new ballast 0, hide value
     if (ballast > 0) {
       const auto buffer = FmtBuffer<18>("{}%", ballast);
       canvas.SetTextColor(look.text_color);
@@ -724,9 +869,9 @@ GaugeVario::RenderBallast(Canvas &canvas) noexcept
 inline void
 GaugeVario::RenderBugs(Canvas &canvas) noexcept
 {
-  int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
-  if (!IsPersistent() || bugs != last_bugs) {
+  const int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
 
+  if (!IsPersistent() || bugs != last_bugs) {
     canvas.Select(look.label_font);
 
     if (IsPersistent())
@@ -766,14 +911,5 @@ void
 GaugeVario::OnResize(PixelSize new_size) noexcept
 {
   AntiFlickerWindow::OnResize(new_size);
-
-  geometry = {look, GetClientRect()};
-
-  /* trigger reinitialisation */
-  background_dirty = true;
-  needle_initialised = false;
-
-  average_di.Reset();
-  mc_di.Reset();
-  gross_di.Reset();
+  RecalculateGeometry();
 }

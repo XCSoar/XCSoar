@@ -96,5 +96,7 @@ Look::ReinitialiseLayout(unsigned infobox_width, unsigned scale_title_font)
   dialog.LoadFonts();
 
   info_box.ReinitialiseLayout(infobox_width, scale_title_font);
-  vario.ReinitialiseLayout(infobox_width);
+  vario.ReinitialiseLayout(infobox_width, scale_title_font,
+                           std::max(1u, infobox_width / 2u), 32,
+                           Layout::Scale(8));
 }

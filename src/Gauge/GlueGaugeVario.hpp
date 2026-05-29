@@ -7,6 +7,7 @@
 #include "Blackboard/BlackboardListener.hpp"
 
 struct VarioLook;
+struct VarioBarLook;
 class LiveBlackboard;
 
 /**
@@ -16,11 +17,13 @@ class LiveBlackboard;
 class GlueGaugeVario final
   : public WindowWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
-  const VarioLook &look;
+  VarioLook &look;
+  const VarioBarLook &vario_bar_look;
 
 public:
-  GlueGaugeVario(LiveBlackboard &_blackboard, const VarioLook &_look) noexcept
-    :blackboard(_blackboard), look(_look) {}
+  GlueGaugeVario(LiveBlackboard &_blackboard, VarioLook &_look,
+                 const VarioBarLook &_vario_bar_look) noexcept
+    :blackboard(_blackboard), look(_look), vario_bar_look(_vario_bar_look) {}
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;

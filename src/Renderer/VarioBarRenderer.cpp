@@ -10,6 +10,9 @@
 #include "Look/VarioBarLook.hpp"
 #include "Formatter/UserUnits.hpp"
 
+#include <algorithm>
+#include <cmath>
+
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
@@ -213,4 +216,84 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     TextInBox(canvas, Value, {rc.right, y0}, style, rc);
   } else
     TextInBox(canvas, Value, {rc.right - Layout::Scale(18), y0}, style, rc);
+}
+
+void
+VarioBarRenderer::DrawSpeedToFly(Canvas &canvas, const PixelRect &rc,
+                                 const MoreData &basic,
+                                 const DerivedInfo &calculated,
+                                 unsigned max_bar_half_length,
+                                 Color pull_color, Color push_color) const
+{
+  if (!basic.airspeed_available || !calculated.flight.flying)
+    return;
+
+  const unsigned min_w = Layout::Scale(4u);
+  const unsigned min_h = Layout::Scale(8u);
+  if (rc.GetWidth() < min_w || rc.GetHeight() < min_h)
+    return;
+
+  double speed_cmd = basic.indicated_airspeed - calculated.V_stf;
+  speed_cmd = std::clamp(speed_cmd, -5.0, 5.0);
+
+  const int cx = (rc.left + rc.right) / 2;
+  const int y0 = (rc.top + rc.bottom) / 2;
+
+  const int tri_h = Layout::Scale(5);
+  const int bar_half_w = std::max(1, int(rc.GetWidth()) / 2);
+  const int tri_half_w = bar_half_w;
+  const int center_tick = std::max(2, int(rc.GetHeight()) / 12);
+
+  const int max_half = max_bar_half_length > 0
+    ? int(max_bar_half_length)
+    : int(rc.GetHeight()) / 2;
+  const int max_shaft = std::max(0, max_half - tri_h - center_tick / 2);
+
+  canvas.Select(look.pen_mc);
+  canvas.DrawLine({cx, y0 - center_tick}, {cx, y0 + center_tick});
+
+  if (std::abs(speed_cmd) < 0.05)
+    return;
+
+  const double magnitude = std::abs(speed_cmd) / 5.0;
+  const int bar_length = std::max(0, int(max_shaft * magnitude + 0.5));
+  if (bar_length < 1)
+    return;
+
+  const bool pull_up = speed_cmd > 0;
+  const Color fill = pull_up ? pull_color : push_color;
+  canvas.Select(Brush(fill));
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1), fill));
+
+  if (pull_up) {
+    const int shaft_top = y0 - bar_length;
+    canvas.DrawFilledRectangle({
+      cx - bar_half_w,
+      shaft_top,
+      cx + bar_half_w,
+      y0,
+    }, fill);
+
+    const BulkPixelPoint tri[] = {
+      { cx - tri_half_w, shaft_top },
+      { cx, shaft_top - tri_h },
+      { cx + tri_half_w, shaft_top },
+    };
+    canvas.DrawPolygon(tri, 3);
+  } else {
+    const int shaft_bottom = y0 + bar_length;
+    canvas.DrawFilledRectangle({
+      cx - bar_half_w,
+      y0,
+      cx + bar_half_w,
+      shaft_bottom,
+    }, fill);
+
+    const BulkPixelPoint tri[] = {
+      { cx - tri_half_w, shaft_bottom },
+      { cx, shaft_bottom + tri_h },
+      { cx + tri_half_w, shaft_bottom },
+    };
+    canvas.DrawPolygon(tri, 3);
+  }
 }

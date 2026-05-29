@@ -4,27 +4,21 @@
 #pragma once
 
 #include "ui/window/AntiFlickerWindow.hpp"
-#include "ui/dim/BulkPoint.hpp"
+#include "ui/canvas/Color.hpp"
 #include "Blackboard/FullBlackboard.hpp"
-#include "Math/Point2D.hpp"
+#include "Math/Angle.hpp"
+#include "Renderer/VarioBarRenderer.hpp"
 
 struct VarioLook;
+struct VarioBarLook;
 class ContainerWindow;
 
+/**
+ * Vario gauge based on the Larus Breeze frontend
+ * (https://github.com/larus-breeze/sw_frontend_rs).
+ */
 class GaugeVario : public AntiFlickerWindow
 {
-  static constexpr unsigned NARROWS = 3;
-  static constexpr int YOFFSET = 36;
-
-  /** 5 m/s */
-  static constexpr int GAUGEVARIORANGE = 5;
-
-  /** degrees total sweep */
-  static constexpr int GAUGEVARIOSWEEP = 90;
-
-  static constexpr int gmax = GAUGEVARIOSWEEP + 2;
-  static constexpr int gmin = -gmax;
-
   struct BallastGeometry {
     PixelRect label_rect, value_rect;
     PixelPoint label_pos, value_pos;
@@ -41,22 +35,23 @@ class GaugeVario : public AntiFlickerWindow
     BugsGeometry(const VarioLook &look, const PixelRect &rc) noexcept;
   };
 
-  struct LabelValueGeometry {
-    int label_right, label_top, label_bottom, label_y;
-    int value_right, value_top, value_bottom, value_y;
-
-    LabelValueGeometry() = default;
-    LabelValueGeometry(const VarioLook &look, PixelPoint position) noexcept;
-
-    static unsigned GetHeight(const VarioLook &look) noexcept;
+  struct RowGeometry {
+    PixelRect label_background, value_background;
   };
 
   struct Geometry {
-    int nlength0, nlength1, nwidth, nline;
+    PixelRect content_rect;
 
-    PixelPoint offset;
+    PixelPoint dial_center;
+    unsigned outer_radius;
+    unsigned inner_radius;
+    unsigned inner_square_side;
+    unsigned inner_row_slot;
+    unsigned row_gap;
 
-    LabelValueGeometry average, gross, mc;
+    PixelRect speed_arrows_rect;
+
+    RowGeometry hero_row, gross_row, mc_row;
 
     BallastGeometry ballast;
     BugsGeometry bugs;
@@ -91,32 +86,28 @@ class GaugeVario : public AntiFlickerWindow
 
   const FullBlackboard &blackboard;
 
-  const VarioLook &look;
+  VarioLook &look;
+
+  VarioBarRenderer speed_bar_renderer;
 
   bool dirty = true;
 
   bool background_dirty = true;
-  bool needle_initialised = false;
 
-  LabelValueDrawInfo average_di, mc_di, gross_di;
-
-  int ival_av_last = 0;
-  int vval_last = 0;
-  int sval_last = 0;
-  int ival_last = 0;
-
-  double last_v_diff = 0;
+  LabelValueDrawInfo hero_di, gross_di, mc_di;
 
   int last_ballast = -1;
 
   int last_bugs = -1;
 
-  BulkPixelPoint polys[(gmax * 2 + 1) * 3];
-  BulkPixelPoint lines[gmax * 2 + 1];
+  unsigned cached_look_generation = 0;
+
+  unsigned cached_scale_title_font = 0;
 
 public:
   GaugeVario(const FullBlackboard &blackboard,
-             ContainerWindow &parent, const VarioLook &look,
+             ContainerWindow &parent, VarioLook &look,
+             const VarioBarLook &vario_bar_look,
              PixelRect rc, const WindowStyle style=WindowStyle()) noexcept;
 
 protected:
@@ -148,20 +139,19 @@ protected:
   virtual void OnPaintBuffer(Canvas &canvas) noexcept override;
 
 private:
+  void RecalculateGeometry() noexcept;
+  void LayoutValueColumn() noexcept;
+
   void RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept;
-  void RenderZero(Canvas &canvas) noexcept;
-  void RenderValue(Canvas &canvas, const LabelValueGeometry &g,
-                   LabelValueDrawInfo &di,
-                   double Value, const char *Label) noexcept;
-  void RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept;
+  void RenderScale(Canvas &canvas) noexcept;
+  void RenderSpeedArrows(Canvas &canvas) noexcept;
+  void RenderNeedles(Canvas &canvas) noexcept;
+  void RenderInnerText(Canvas &canvas) noexcept;
+  void RenderRow(Canvas &canvas, const RowGeometry &row,
+                 DrawInfo &label_di, DrawInfo &value_di,
+                 const char *label, const char *value_text,
+                 Color value_color) noexcept;
   void RenderBallast(Canvas &canvas) noexcept;
   void RenderBugs(Canvas &canvas) noexcept;
-  int  ValueToNeedlePos(double Value) noexcept;
-  void RenderNeedle(Canvas &canvas, int i, bool average, bool clear) noexcept;
-  void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear) noexcept;
   void RenderClimb(Canvas &canvas) noexcept;
-
-  void MakePolygon(const int i) noexcept;
-  void MakeAllPolygons() noexcept;
-  BulkPixelPoint *getPolygon(const int i) noexcept;
 };
