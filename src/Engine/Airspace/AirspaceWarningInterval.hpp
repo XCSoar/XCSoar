@@ -123,6 +123,13 @@ SubtractInterval(AirspaceWarningInterval &target,
     cleared.exit, target.exit
   };
 
+  /* Keep only the nearest fragment if it meets the tolerance, 
+     in which case the the farther fragment is silently dropped.
+     this can lead to a delayed NEAR warning (warning will only
+     show after aircraft has passed first segment) if the nearer 
+     segment is later covered by another clearance, but this is
+     acceptable and also an extremely rare case. If first
+     fragment is too short, drop it and try the farther one */
   if (nearest.Length() >= tolerance)
     target = nearest;
   else if (farther.Length() >= tolerance)
@@ -213,6 +220,17 @@ ClipByAltitudeBand(const AirspaceWarningInterval &iv,
   if (alt.IsFlat()) {
     const double a = alt.start_altitude;
     if (a < band_base || a > band_top)
+      return AirspaceWarningInterval::Invalid();
+    return iv;
+  }
+
+  /* Degenerate path: near-zero horizontal distance but non-flat
+     altitude (IsFlat() already passed). DistanceAtAltitude()
+     would return NaN (slope = alt / ~0). The path is a single
+     point; use start_altitude as the representative altitude,
+     similar to IsFlat() logic. */
+  if (std::fabs(alt.total_distance) < 1e-12) {
+    if (alt.start_altitude < band_base || alt.start_altitude > band_top)
       return AirspaceWarningInterval::Invalid();
     return iv;
   }
