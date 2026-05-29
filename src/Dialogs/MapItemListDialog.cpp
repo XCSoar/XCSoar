@@ -22,6 +22,8 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
+#include "Engine/Airspace/AirspaceWarningConfig.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/AirspaceWarningStatusRenderer.hpp"
 #include "Asset.hpp"
@@ -292,9 +294,16 @@ public:
       return false;
 
     const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
-    return backend_components->GetAirspaceWarnings() != nullptr &&
-      !backend_components->GetAirspaceWarnings()
-        ->GetCleared(*as_item.airspace);
+    if (backend_components->GetAirspaceWarnings() == nullptr ||
+        backend_components->GetAirspaceWarnings()
+          ->GetCleared(*as_item.airspace))
+      return false;
+
+    /* respect the per-class permission set in the Filter dialog */
+    const AirspaceWarningConfig &warning_config =
+      CommonInterface::GetComputerSettings().airspace.warnings;
+    return warning_config.IsClassClearanceAllowed(
+      as_item.airspace->GetTypeOrClass());
   }
 
   bool CanRevokeClearanceItem(unsigned index) const noexcept {

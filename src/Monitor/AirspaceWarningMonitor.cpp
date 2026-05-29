@@ -20,6 +20,7 @@
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
+#include "Engine/Airspace/AirspaceWarningConfig.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -197,11 +198,14 @@ public:
       CommonInterface::main_window->SetBottomBannerWidget(nullptr);
     });
 
-    AddButton(_("Clearance"), [this](){
-      manager.SetCleared(airspace);
-      monitor.Schedule();
-      CommonInterface::main_window->SetBottomBannerWidget(nullptr);
-    });
+    const auto &warning_config =
+      CommonInterface::GetComputerSettings().airspace.warnings;
+    if (warning_config.IsClassClearanceAllowed(airspace->GetTypeOrClass()))
+      AddButton(_("Clearance"), [this](){
+        manager.SetCleared(airspace);
+        monitor.Schedule();
+        CommonInterface::main_window->SetBottomBannerWidget(nullptr);
+      });
 
     AddButton(_("More"), [this](){
       dlgAirspaceWarningsShowModal(manager);
