@@ -78,6 +78,17 @@ ListControl::ActivateItem() noexcept
 }
 
 void
+ListControl::ActivateItem(int x) noexcept
+{
+  assert(CanActivateItem());
+
+  unsigned index = GetCursorIndex();
+  assert(index < GetLength());
+  if (cursor_handler != nullptr)
+    cursor_handler->OnActivateItem(index, x);
+}
+
+void
 ListControl::ShowOrHideScrollBar() noexcept
 {
   const PixelSize size = GetSize();
@@ -498,7 +509,7 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   if (drag_mode == DragMode::CURSOR &&
       p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
     drag_end();
-    ActivateItem();
+    ActivateItem(p.x);
     return true;
   }
 

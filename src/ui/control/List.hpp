@@ -72,6 +72,15 @@ public:
   }
 
   virtual void OnActivateItem([[maybe_unused]] unsigned index) noexcept {}
+
+  /**
+   * Variant of #OnActivateItem invoked for pointer activation, which
+   * also carries the X coordinate of the click within the list row.
+   */
+  virtual void OnActivateItem(unsigned index,
+                              [[maybe_unused]] int x) noexcept {
+    OnActivateItem(index);
+  }
 };
 
 /**
@@ -195,6 +204,16 @@ public:
     return item_height;
   }
 
+  /**
+   * Returns the x coordinate (in window/client coordinates) of the
+   * right edge of the item rendering area, i.e. the left edge of the
+   * scroll bar when one is shown, or the full window width otherwise.
+   */
+  [[gnu::pure]]
+  unsigned GetItemAreaRight() const noexcept {
+    return scroll_bar.GetLeft(GetSize());
+  }
+
   void SetItemHeight(unsigned _item_height) noexcept;
 
   bool IsEmpty() const noexcept {
@@ -280,6 +299,7 @@ private:
   [[gnu::pure]]
   bool CanActivateItem() const noexcept;
   void ActivateItem() noexcept;
+  void ActivateItem(int x) noexcept;
 
   /** Checks whether a ScrollBar is needed and shows/hides it */
   void ShowOrHideScrollBar() noexcept;
