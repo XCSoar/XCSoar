@@ -201,6 +201,115 @@ of the airspace.
 Simultaneous airspace warnings can occur if the aircraft (or its
 estimated future track) penetrates multiple airspace regions.
 
+\section{Airspace Clearances}\label{sec:airspace-clearances}
+
+Airspace clearance is a status that can be granted to an airspace
+region to indicate that the pilot has received ATC clearance, or is
+otherwise permitted, to operate inside it.  It is distinct from the
+\emph{acknowledge} function: acknowledging an airspace suppresses
+warnings for an airspace the pilot wishes to \emph{avoid}, whereas
+granting clearance marks an airspace the pilot is \emph{allowed to
+enter}.
+
+\subsection*{Concept}
+
+The typical use case is a glider sector or club operating area
+situated inside a larger restricted airspace (e.g.\ a CTR or TMA).
+The glider sector has a lower ceiling than the surrounding restricted
+zone, so the pilot is permitted to fly within the sector but must
+stay below the ceiling and within its horizontal boundaries.
+
+\begin{center}
+\includegraphics[width=0.75\linewidth,keepaspectratio='true']{figures/airspace-clearance-composite.png}
+\end{center}
+\begin{quote}\small\emph{The large blue restricted airspace slab with
+the grey glider sector (lower ceiling) situated in one corner.}\end{quote}
+
+Once the pilot grants clearance on the outer (larger) airspace,
+XCSoar computes the volume that remains \emph{outside} the cleared
+area and treats only that volume as restricted for warning purposes.
+Warnings that would arise solely because the aircraft is inside the
+cleared sector---and nowhere else---are suppressed.
+
+\begin{center}
+\includegraphics[width=0.75\linewidth,keepaspectratio='true']{figures/airspace-clearance-restricted.png}
+\end{center}
+\begin{quote}\small\emph{Warning volume after clearance: only the blue L-shaped
+remainder (outside the cleared sector) triggers warnings.
+The dashed outline shows the cleared sector boundary.}\end{quote}
+
+\subsection*{Effect on warnings}
+
+The clearance suppression is applied in two passes after the normal
+warning computation:
+
+\begin{description}
+\item[Inside warnings] If the aircraft is physically inside a cleared
+  airspace and also inside a second, non-cleared airspace, the inside
+  warning for the second airspace is suppressed provided the aircraft's
+  position is fully covered by the cleared volume.
+
+\item[Approach warnings] If the predicted flight path enters a
+  non-cleared airspace but the portion of the path that triggers the
+  warning lies entirely within a cleared airspace, the approach warning
+  is suppressed.
+\end{description}
+
+Warnings are \emph{not} suppressed when the aircraft is approaching
+the boundary of the cleared airspace from the inside toward a
+restricted zone beyond it.  For example, if the pilot climbs toward
+the ceiling of the glider sector, XCSoar will still warn when the
+predicted track exits the sector ceiling into the surrounding
+restricted airspace.
+
+\subsection*{Granting and revoking clearance}
+
+Clearance is granted and revoked through the airspace details
+dialogue, which is accessible in two ways:
+\begin{itemize}
+\item Tap the airspace region on the map, select it from the map item
+  list and press \button{Details}.
+\item Open the airspace selection dialogue
+  (\bmenug{Info. 3}\blink\bmenug{Airspace}), locate the airspace and
+  press \button{Details}.
+\end{itemize}
+
+The details dialogue contains a \button{Set Clearance} button.
+Pressing it grants clearance for the selected airspace for the
+remainder of the flight session (until XCSoar is restarted).  When
+clearance is already active, the button label changes to
+\button{Revoke Clearance} and pressing it removes the clearance
+immediately.
+
+\tip Clearance is granted per individual airspace region, not per
+class.  To cover a glider sector you must open the details for that
+specific sector, not for the surrounding restricted space.
+
+\subsection*{Per-class clearance permission}
+
+Not every airspace class is appropriate for clearance.  Granting
+clearance on a very large region---such as a Flight Information Region
+(FIR) or UIR---would suppress warnings across an enormous area and is
+rarely the pilot's intent.  XCSoar therefore has a per-class
+\emph{clearance permitted} flag.
+
+This flag is configured in the Airspace Filter dialogue
+(Section~\ref{sec:airspace-filter}).  The filter list now shows three
+checkbox columns: \textbf{Show}, \textbf{Warn}, and \textbf{Clrnc}.
+The \textbf{Clrnc} column controls whether clearance may be granted
+for that airspace class.  When the box is unchecked, the
+\button{Set Clearance} button in the details dialogue is disabled for
+all airspaces of that class.
+
+By default, clearance is permitted for most classes and disabled for
+information regions (FIR, UIR, FIS Sector) where it serves no
+practical purpose.
+
+\warning Granting clearance on a large airspace such as a FIR will
+suppress warnings for all overlapping airspace within that region.
+Use this function only for well-defined, smaller areas where you have
+explicit permission to fly.
+
 
 \section{Airspace query and details}
 
@@ -231,8 +340,8 @@ displays all airspace details.
 
 \subsection*{Airspace filter dialogue}\label{sec:airspace-filter}
 
-The Airspace Filter dialogue allows warnings and display to be enabled
-or disabled for each class of airspace.  
+The Airspace Filter dialogue allows warnings, display and clearance
+permission to be enabled or disabled for each class of airspace.
 
 This may be accessed several ways:
 \begin{itemize}
@@ -241,8 +350,17 @@ This may be accessed several ways:
 \end{itemize}
 
 \sketch{figures/airspacefilter.png}
-To use the dialogue, move up or down the list and the enter key will
-cycle between the various warning and display options.
+The list shows one row per airspace class with three checkbox columns:
+\begin{description}
+\item[Show]  Controls whether the class is drawn on the map.
+\item[Warn]  Controls whether approach and inside warnings are generated.
+\item[Clrnc] Controls whether the \button{Set Clearance} function is
+  available for airspaces of this class.  See
+  Section~\ref{sec:airspace-clearances} for details.
+\end{description}
+To use the dialogue, tap or click a checkbox to toggle it directly, or
+move up or down the list and press the enter key to cycle the
+\textbf{Show} column.
 
 \subsection*{Airspace selection dialogue}
 
