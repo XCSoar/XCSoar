@@ -45,5 +45,10 @@ public:
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+
+private:
+  void CreateControls(ContainerWindow &panel, const PixelRect &rc) noexcept;
+  void UpdateGeometry(const PixelRect &rc) noexcept;
 };
