@@ -132,6 +132,9 @@ Profile::Load(const ProfileMap &map, AirspaceComputerSettings &settings)
       if (map.Get(name, value))
         settings.warnings.class_warnings[i] = (value & 0x2) != 0;
     }
+
+    MakeAirspaceSettingName(name, "AirspaceClearance", i);
+    map.Get(name, settings.warnings.class_clearance_allowed[i]);
   }
 }
 
@@ -146,6 +149,15 @@ Profile::SetAirspaceMode(ProfileMap &map,
 
   MakeAirspaceSettingName(name, "AirspaceWarning", i);
   map.Set(name, warning);
+}
+
+void
+Profile::SetAirspaceClearance(ProfileMap &map,
+                              unsigned i, bool clearance_allowed)
+{
+  char name[64];
+  MakeAirspaceSettingName(name, "AirspaceClearance", i);
+  map.Set(name, clearance_allowed);
 }
 
 void

@@ -20,4 +20,9 @@ AirspaceWarningConfig::SetDefaults()
   class_warnings[AATASK] = false;
   class_warnings[FIS_SECTOR] = false;
   class_warnings[FIR] = false;
+
+  std::fill_n(class_clearance_allowed, unsigned(AIRSPACECLASSCOUNT), true);
+  class_clearance_allowed[FIR] = false;
+  class_clearance_allowed[UIR] = false;
+  class_clearance_allowed[FIS_SECTOR] = false;
 }

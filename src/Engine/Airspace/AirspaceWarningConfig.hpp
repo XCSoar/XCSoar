@@ -27,11 +27,25 @@ struct AirspaceWarningConfig
   /** Class-specific warning flags */
   bool class_warnings[AIRSPACECLASSCOUNT];
 
+  /**
+   * Class-specific permission for the "set clearance" function. When
+   * false, the user cannot grant a clearance for an airspace of this
+   * class. Defaults to true for all classes except information
+   * regions (FIR, UIR, FIS_SECTOR).
+   */
+  bool class_clearance_allowed[AIRSPACECLASSCOUNT];
+
   void SetDefaults();
 
   bool IsClassEnabled(AirspaceClass cls) const {
     assert((unsigned)cls < AIRSPACECLASSCOUNT);
 
     return class_warnings[(unsigned)cls];
+  }
+
+  bool IsClassClearanceAllowed(AirspaceClass cls) const {
+    assert((unsigned)cls < AIRSPACECLASSCOUNT);
+
+    return class_clearance_allowed[(unsigned)cls];
   }
 };
