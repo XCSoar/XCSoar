@@ -11,8 +11,12 @@
 #include "LocalPath.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Profile/Profile.hpp"
+#include "Repository/FileType.hpp"
+#include "UtilsSettings.hpp"
 #include "system/FileUtil.hpp"
 #include "Formatter/FileMetadataFormatter.hpp"
+#include "util/IterableSplitString.hxx"
 #include "util/StaticString.hxx"
 #include "util/TruncateString.hpp"
 
@@ -22,6 +26,25 @@
 #include <memory>
 
 using FileMultiSelectWidgetItem = FileMultiSelectWidget::FileItem;
+
+struct MigrationEntry {
+  AllocatedPath source_path;
+  AllocatedPath destination_path;
+  FileType type = FileType::UNKNOWN;
+
+  MigrationEntry(AllocatedPath &&_source_path,
+                 AllocatedPath &&_destination_path,
+                 FileType _type) noexcept
+    : source_path(std::move(_source_path)),
+      destination_path(std::move(_destination_path)),
+      type(_type) {}
+};
+
+struct MigrationPlan {
+  std::vector<MigrationEntry> moves;
+  unsigned skipped_unknown = 0;
+  unsigned skipped_conflicts = 0;
+};
 
 struct AdvancedExplorerContainer : public PropertyWidgetContainer {
   std::unique_ptr<FileMultiSelectWidget> file_list;
@@ -248,6 +271,241 @@ PerformRename(FileMultiSelectWidget &file_list)
   file_list.Refresh();
 }
 
+[[gnu::pure]]
+static AllocatedPath
+ResolveMigrationRelativePath(Path source_path) noexcept
+{
+  const auto base = source_path.GetBase();
+  if (base == nullptr)
+    return nullptr;
+
+  const Path base_path(base);
+  if (!base_path.IsValidFilename())
+    return nullptr;
+
+  const auto type = DetectFileTypeByFilename(base.c_str());
+  if (type == FileType::UNKNOWN)
+    return nullptr;
+
+  const auto subdir = GetFileTypeDefaultDir(type);
+  if (subdir == nullptr)
+    return nullptr;
+
+  return AllocatedPath::Build(Path(subdir), base_path);
+}
+
+static MigrationPlan
+BuildMigrationPlan(Path root)
+{
+  MigrationPlan plan;
+
+  struct Visitor final : Directory::DirEntryVisitor {
+    Path root;
+    MigrationPlan &plan;
+
+    Visitor(Path _root, MigrationPlan &_plan) noexcept
+      : root(_root), plan(_plan) {}
+
+    void Visit(Path full, Path filename, bool is_dir) noexcept override {
+      if (is_dir || filename == nullptr)
+        return;
+
+      const auto relative_path = ResolveMigrationRelativePath(filename);
+      if (relative_path == nullptr) {
+        ++plan.skipped_unknown;
+        return;
+      }
+
+      auto destination_path = LocalPath(relative_path);
+      if (File::ExistsAny(destination_path)) {
+        ++plan.skipped_conflicts;
+        return;
+      }
+
+      plan.moves.emplace_back(AllocatedPath(full),
+                              std::move(destination_path),
+                              DetectFileTypeByFilename(filename.c_str()));
+    }
+  };
+
+  Visitor visitor(root, plan);
+  Directory::VisitDirectoriesAndFiles(root, visitor, false);
+  return plan;
+}
+
+static bool
+UpdateSingleProfilePath(std::string_view key, Path old_path, Path new_path)
+{
+  if (!Profile::GetPathIsEqual(key, old_path))
+    return false;
+
+  Profile::SetPath(key, new_path);
+  return true;
+}
+
+static bool
+UpdateMultipleProfilePaths(std::string_view key, Path old_path, Path new_path)
+{
+  std::string value;
+  if (!Profile::Get(key, value) || value.empty())
+    return false;
+
+  const auto contracted_new_path = ContractLocalPath(new_path);
+  const char *new_value = contracted_new_path != nullptr
+    ? contracted_new_path.c_str()
+    : new_path.c_str();
+
+  bool changed = false;
+  std::string updated_value;
+  for (const auto part : TIterableSplitString(value.c_str(), '|')) {
+    if (!updated_value.empty())
+      updated_value.push_back('|');
+
+    const std::string current(part);
+    const auto expanded = ExpandLocalPath(Path(current.c_str()));
+    if (expanded != nullptr && expanded == old_path) {
+      updated_value.append(new_value);
+      changed = true;
+    } else {
+      updated_value.append(current);
+    }
+  }
+
+  if (changed)
+    Profile::Set(key, updated_value);
+
+  return changed;
+}
+
+static bool
+UpdateProfileReferences(FileType type, Path old_path, Path new_path)
+{
+  bool changed = false;
+
+  switch (type) {
+  case FileType::MAP:
+    changed |= UpdateSingleProfilePath(ProfileKeys::MapFile, old_path, new_path);
+    MapFileChanged |= changed;
+    break;
+
+  case FileType::WAYPOINT:
+    changed |= UpdateMultipleProfilePaths(ProfileKeys::WaypointFileList,
+                                          old_path, new_path);
+    changed |= UpdateMultipleProfilePaths(ProfileKeys::WatchedWaypointFileList,
+                                          old_path, new_path);
+    WaypointFileChanged |= changed;
+    break;
+
+  case FileType::WAYPOINTDETAILS:
+    changed |= UpdateMultipleProfilePaths(ProfileKeys::AirfieldFileList,
+                                          old_path, new_path);
+    AirfieldFileChanged |= changed;
+    break;
+
+  case FileType::AIRSPACE:
+    changed |= UpdateMultipleProfilePaths(ProfileKeys::AirspaceFileList,
+                                          old_path, new_path);
+    AirspaceFileChanged |= changed;
+    break;
+
+  case FileType::FLARMNET:
+  case FileType::FLARMDB:
+    changed |= UpdateSingleProfilePath(ProfileKeys::FlarmFile, old_path, new_path);
+    FlarmFileChanged |= changed;
+    break;
+
+  case FileType::RASP:
+    changed |= UpdateSingleProfilePath(ProfileKeys::RaspFile, old_path, new_path);
+    RaspFileChanged |= changed;
+    break;
+
+  case FileType::CHECKLIST:
+    changed |= UpdateSingleProfilePath(ProfileKeys::ChecklistFile,
+                                       old_path, new_path);
+    ChecklistFileChanged |= changed;
+    break;
+
+  case FileType::XCI:
+    changed |= UpdateSingleProfilePath(ProfileKeys::InputFile, old_path, new_path);
+    InputFileChanged |= changed;
+    break;
+
+  case FileType::PLANE:
+    changed |= UpdateSingleProfilePath("PlanePath", old_path, new_path);
+    break;
+
+  case FileType::PROFILE:
+    if (Profile::GetPath() == old_path) {
+      Profile::SetFiles(new_path);
+      changed = true;
+    }
+    break;
+
+  case FileType::UNKNOWN:
+  case FileType::IGC:
+  case FileType::NMEA:
+  case FileType::TASK:
+  case FileType::LUA:
+  case FileType::COUNT:
+    break;
+  }
+
+  return changed;
+}
+
+static void
+PerformOrganizeFiles(FileMultiSelectWidget &file_list)
+{
+  const auto root = GetPrimaryDataPath();
+  const auto plan = BuildMigrationPlan(root);
+
+  if (plan.moves.empty()) {
+    StaticString<256> msg;
+    msg.Format(_("No files to organize.\nSkipped unknown: %u\nSkipped conflicts: %u"),
+               plan.skipped_unknown, plan.skipped_conflicts);
+    ShowMessageBox(msg, _("Organize files"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  StaticString<256> prompt;
+  prompt.Format(_("Organize %u file(s)?\nSkipped unknown: %u\nSkipped conflicts: %u"),
+                (unsigned)plan.moves.size(),
+                plan.skipped_unknown,
+                plan.skipped_conflicts);
+  if (ShowMessageBox(prompt, _("Organize files"), MB_YESNO) != IDYES)
+    return;
+
+  unsigned moved = 0, failed = 0, profile_updates = 0;
+  for (const auto &entry : plan.moves) {
+    const auto parent = entry.destination_path.GetParent();
+    if (parent != nullptr)
+      Directory::CreateRecursive(parent);
+
+    if (!File::Rename(entry.source_path, entry.destination_path)) {
+      ++failed;
+      continue;
+    }
+
+    ++moved;
+    profile_updates += UpdateProfileReferences(entry.type,
+                                               entry.source_path,
+                                               entry.destination_path)
+      ? 1u : 0u;
+  }
+
+  if (profile_updates > 0)
+    Profile::Save();
+
+  StaticString<256> msg;
+  msg.Format(_("Organized %u file(s). Failed %u.\nSkipped unknown: %u\nSkipped conflicts: %u"),
+             moved, failed, plan.skipped_unknown, plan.skipped_conflicts);
+  if (profile_updates > 0)
+    msg.append(_("\nRestart recommended for moved configured files."));
+
+  ShowMessageBox(msg, _("Organize files"), MB_OK | MB_ICONINFORMATION);
+  file_list.Refresh();
+}
+
 void
 ShowAdvancedFileExplorerDialog()
 {
@@ -265,6 +523,8 @@ ShowAdvancedFileExplorerDialog()
     explorer.SetCurrent(std::move(d));
   });
 
+  dialog.AddButton(_("Organize files"),
+                   [&file_list]() { PerformOrganizeFiles(file_list); });
   dialog.AddButton(_("Delete"), [&file_list]() { PerformDelete(file_list); });
   dialog.AddButton(_("Rename"), [&file_list]() { PerformRename(file_list); });
   dialog.AddButton(_("Select all"), [&file_list]() { file_list.SelectAllFiles(); });
