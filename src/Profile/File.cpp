@@ -12,6 +12,7 @@
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"
 #include "io/KeyValueFileWriter.hpp"
+#include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "util/StringAPI.hxx"
 
@@ -118,6 +119,9 @@ Profile::LoadFile(ProfileMap &map, Path path)
 void
 Profile::SaveFile(const ProfileMap &map, Path path)
 {
+  if (const auto parent = path.GetParent(); parent != nullptr)
+    Directory::CreateRecursive(parent);
+
   FileOutputStream file(path);
   BufferedOutputStream buffered(file);
   KeyValueFileWriter kvwriter(buffered);
