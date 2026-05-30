@@ -51,3 +51,12 @@ FileType SpecialFilenameType(const char *filename) noexcept;
 [[gnu::pure]]
 bool FilenameMatchesFileType(const char *filename,
                              FileType file_type) noexcept;
+
+/**
+ * Detect the unique #FileType for a filename.
+ *
+ * Exact-match patterns win.  If multiple wildcard-only file types
+ * match, then FileType::UNKNOWN is returned.
+ */
+[[gnu::pure]]
+FileType DetectFileTypeByFilename(const char *filename) noexcept;

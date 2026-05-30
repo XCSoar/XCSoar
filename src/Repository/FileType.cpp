@@ -99,7 +99,7 @@ GetFileTypeDefaultDir(const FileType file_type)
     return AllocatedPath("logs");
 
   case FileType::PLANE:
-    return AllocatedPath("planes");
+    return AllocatedPath::Build("profiles", "planes");
 
   case FileType::XCI:
     return AllocatedPath("input");
@@ -108,6 +108,8 @@ GetFileTypeDefaultDir(const FileType file_type)
     return AllocatedPath("lua");
 
   case FileType::PROFILE:
+    return AllocatedPath("profiles");
+
   case FileType::UNKNOWN:
   case FileType::COUNT:
     return nullptr;
@@ -162,4 +164,40 @@ FilenameMatchesFileType(const char *filename,
      not be identified as an airspace file via "*.txt") */
   const auto special = SpecialFilenameType(filename);
   return special == FileType::UNKNOWN || special == file_type;
+}
+
+FileType
+DetectFileTypeByFilename(const char *filename) noexcept
+{
+  if (filename == nullptr)
+    return FileType::UNKNOWN;
+
+  const auto special = SpecialFilenameType(filename);
+  if (special != FileType::UNKNOWN)
+    return special;
+
+  FileType match = FileType::UNKNOWN;
+  for (uint8_t i = 1; i < static_cast<uint8_t>(FileType::COUNT); ++i) {
+    const auto type = static_cast<FileType>(i);
+    if (!FilenameMatchesFileType(filename, type))
+      continue;
+
+    if (match != FileType::UNKNOWN) {
+      if (match == FileType::WAYPOINT &&
+          type == FileType::TASK &&
+          Path(filename).EndsWithIgnoreCase(".cup"))
+        return FileType::WAYPOINT;
+
+      if (match == FileType::TASK &&
+          type == FileType::WAYPOINT &&
+          Path(filename).EndsWithIgnoreCase(".cup"))
+        return FileType::WAYPOINT;
+
+      return FileType::UNKNOWN;
+    }
+
+    match = type;
+  }
+
+  return match;
 }
