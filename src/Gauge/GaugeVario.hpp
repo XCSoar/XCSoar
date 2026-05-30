@@ -53,6 +53,11 @@ class GaugeVario : public AntiFlickerWindow
 
     RowGeometry hero_row, gross_row, mc_row;
 
+    PixelRect mc_mode_rect;
+    int mc_mode_center_x = 0;
+
+    PixelRect unit_rect;
+
     BallastGeometry ballast;
     BugsGeometry bugs;
 
@@ -96,6 +101,8 @@ class GaugeVario : public AntiFlickerWindow
 
   LabelValueDrawInfo hero_di, gross_di, mc_di;
 
+  DrawInfo mc_mode_di;
+
   int last_ballast = -1;
 
   int last_bugs = -1;
@@ -104,11 +111,19 @@ class GaugeVario : public AntiFlickerWindow
 
   unsigned cached_scale_title_font = 0;
 
+  bool debug_overlay = false;
+
 public:
   GaugeVario(const FullBlackboard &blackboard,
              ContainerWindow &parent, VarioLook &look,
              const VarioBarLook &vario_bar_look,
              PixelRect rc, const WindowStyle style=WindowStyle()) noexcept;
+
+  /** Layout debug overlay for #RunGaugeVarioRenderer only. */
+  void SetDebugOverlay(bool enable) noexcept {
+    debug_overlay = enable;
+    Invalidate();
+  }
 
 protected:
   const MoreData &Basic() const noexcept {
@@ -141,12 +156,16 @@ protected:
 private:
   void RecalculateGeometry() noexcept;
   void LayoutValueColumn() noexcept;
+  void LayoutScaleUnit() noexcept;
+  void LayoutMcModeHint() noexcept;
 
   void RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept;
   void RenderScale(Canvas &canvas) noexcept;
   void RenderSpeedArrows(Canvas &canvas) noexcept;
   void RenderNeedles(Canvas &canvas) noexcept;
   void RenderInnerText(Canvas &canvas) noexcept;
+  void RenderMcModeHint(Canvas &canvas) noexcept;
+  void RenderUnit(Canvas &canvas) noexcept;
   void RenderRow(Canvas &canvas, const RowGeometry &row,
                  DrawInfo &label_di, DrawInfo &value_di,
                  const char *label, const char *value_text,
@@ -154,4 +173,5 @@ private:
   void RenderBallast(Canvas &canvas) noexcept;
   void RenderBugs(Canvas &canvas) noexcept;
   void RenderClimb(Canvas &canvas) noexcept;
+  void DrawDebugOverlay(Canvas &canvas) const noexcept;
 };

@@ -37,7 +37,7 @@ ComputeVarioRowFontHeights(unsigned text_width, unsigned row_slot,
   const unsigned value_column_w =
     std::max(1u, text_width - label_column_w);
   const unsigned value_budget = std::max(1u,
-    value_column_w * VarioLook::INNER_ROW_FONT_PERCENT / 100u);
+    value_column_w * VarioLook::INNER_VALUE_FONT_PERCENT / 100u);
   const unsigned label_budget = std::max(1u,
     label_column_w * VarioLook::INNER_ROW_FONT_PERCENT / 100u);
   const unsigned clamped_scale = std::clamp(scale_title_font, 50u, 150u);
@@ -79,7 +79,7 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   text_font = &_text_font;
 
   if (inverse) {
-    background_color = COLOR_BLACK;
+    background_color = COLOR_DARK_THEME_BACKGROUND;
     text_color = COLOR_WHITE;
     dimmed_text_color = Color(0xa0, 0xa0, 0xa0);
     sink_color = Color(0xc4, 0x80, 0x1e);
@@ -151,6 +151,16 @@ VarioLook::ReinitialiseLayout(unsigned /*panel_width*/,
                std::max(6u, arc_label_width), "5");
   arc_label_font.Load(small_value_font_d);
 
+  FontDescription scale_unit_font_d(std::max(6u,
+    arc_label_font.GetCapitalHeight() * SCALE_UNIT_FONT_PERCENT / 100u));
+  AutoSizeFont(scale_unit_font_d,
+               std::max(6u, arc_label_width), "m/s");
+  scale_unit_font_d.SetHeight(std::max(scale_unit_font_d.GetHeight(),
+    arc_label_font.GetCapitalHeight() * SCALE_UNIT_FONT_PERCENT / 100u));
+  scale_unit_font.Load(scale_unit_font_d);
+
+  hint_font.Load(FontDescription(std::max(6u, heights.label_height / 2u)));
+
   const unsigned unit_font_height =
     std::max(heights.value_height * 2u / 5u, 7u);
   unit_font.Load(FontDescription(unit_font_height));
@@ -159,4 +169,27 @@ VarioLook::ReinitialiseLayout(unsigned /*panel_width*/,
 #ifdef HAVE_TEXT_CACHE
   TextCache::Flush();
 #endif
+}
+
+void
+VarioLook::FitHintFont(unsigned max_height, unsigned max_width) noexcept
+{
+  if (max_height < 6 || max_width < 6) {
+    hint_font.Load(FontDescription(6));
+    return;
+  }
+
+  const unsigned cap = std::min(max_height,
+    std::max(6u, label_font.GetCapitalHeight() * HINT_FONT_PERCENT / 100u));
+  unsigned height = cap;
+
+  while (height >= 6) {
+    hint_font.Load(FontDescription(height));
+    if (hint_font.TextSize("Vario").width <= max_width)
+      break;
+    --height;
+  }
+
+  if (height < 6)
+    hint_font.Load(FontDescription(6));
 }

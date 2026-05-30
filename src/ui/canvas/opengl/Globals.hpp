@@ -58,6 +58,11 @@ extern UnsignedPoint2D window_size;
  */
 extern UnsignedPoint2D viewport_size;
 
+/**
+ * Ratio of the GL viewport pixel size to #viewport_size (supersampling).
+ */
+extern unsigned viewport_pixel_scale;
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
 extern DisplayOrientation display_orientation;
 #endif

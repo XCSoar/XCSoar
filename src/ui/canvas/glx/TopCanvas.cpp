@@ -3,6 +3,7 @@
 
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
+#include "ui/canvas/opengl/Init.hpp"
 #include "ui/display/Display.hpp"
 #include "ui/dim/Size.hpp"
 
@@ -19,6 +20,8 @@ TopCanvas::TopCanvas(UI::Display &_display,
   if (!glXMakeContextCurrent(display.GetXDisplay(), glx_window, glx_window,
                              display.GetGLXContext()))
     throw std::runtime_error("Failed to attach GLX context to GLX window");
+
+  OpenGL::ActivateMultisampling();
 
   const PixelSize effective_size = GetNativeSize();
   if (effective_size.width == 0 || effective_size.height == 0)

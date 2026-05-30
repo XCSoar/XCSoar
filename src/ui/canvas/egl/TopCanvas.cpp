@@ -3,6 +3,7 @@
 
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
+#include "ui/canvas/opengl/Init.hpp"
 #include "ui/display/Display.hpp"
 #include "ui/dim/Size.hpp"
 #include "system/Error.hxx"
@@ -72,6 +73,8 @@ TopCanvas::CreateSurface(EGLNativeWindowType native_window)
     throw std::runtime_error("eglQuerySurface() failed");
 
   display.MakeCurrent(surface);
+
+  OpenGL::ActivateMultisampling();
 
   SetupViewport(effective_size);
 }

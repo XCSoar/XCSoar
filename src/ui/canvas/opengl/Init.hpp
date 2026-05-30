@@ -26,6 +26,12 @@ void Initialise();
 void SetupContext();
 
 /**
+ * Enable and log multisampling after the context is bound to a
+ * drawable (window/surface).  No-op when MSAA is unavailable.
+ */
+void ActivateMultisampling() noexcept;
+
+/**
  * Set up the viewport and the matrices for 2D drawing.  Apply the
  * #DisplayOrientation via glRotatef() (OpenGL projection matrix).
  *

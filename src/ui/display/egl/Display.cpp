@@ -64,13 +64,14 @@ Display::InitDisplay(EGLNativeDisplayType native_display)
 
   chosen_config = EGL::ChooseConfig(display);
 
-  LogFormat("EGL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+  LogFormat("EGL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%d",
             GetConfigAttrib(display, chosen_config, EGL_RED_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_GREEN_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_BLUE_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_ALPHA_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_DEPTH_SIZE, 0),
-            GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0));
+            GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0),
+            GetConfigAttrib(display, chosen_config, EGL_SAMPLES, 0));
 }
 
 inline void

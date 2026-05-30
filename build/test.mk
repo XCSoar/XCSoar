@@ -922,6 +922,7 @@ DEBUG_PROGRAM_NAMES += \
 	RunWindArrowRenderer \
 	RunHorizonRenderer \
 	RunFinalGlideBarRenderer \
+	RunGaugeVarioRenderer \
 	RunFAITriangleSectorRenderer \
 	RunFlightListRenderer \
 	RunProgressWindow \
@@ -2161,6 +2162,33 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
 RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD TASK GLIDE LIBNMEA GEO MATH UTIL UNITS
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
+
+RUN_GAUGE_VARIO_RENDERER_SOURCES = \
+	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Gauge/GaugeVario.cpp \
+	$(SRC)/Renderer/VarioBarRenderer.cpp \
+	$(SRC)/Renderer/GradientRenderer.cpp \
+	$(SRC)/Renderer/UnitSymbolRenderer.cpp \
+	$(SRC)/Renderer/TextInBox.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(SRC)/Look/VarioLook.cpp \
+	$(SRC)/Look/VarioBarLook.cpp \
+	$(SRC)/Look/InfoBoxLook.cpp \
+	$(SRC)/Look/AutoFont.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(SRC)/Gauge/VarioSettings.cpp \
+	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
+	$(SRC)/Formatter/Units.cpp \
+	$(SRC)/Formatter/UserUnits.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/RunGaugeVarioRenderer.cpp
+RUN_GAUGE_VARIO_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD LIBNMEA GLIDE MATH UTIL UNITS GEO FORMATTER
+$(eval $(call link-program,RunGaugeVarioRenderer,RUN_GAUGE_VARIO_RENDERER))
 
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \

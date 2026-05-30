@@ -3,6 +3,7 @@
 
 #include "Display.hpp"
 #include "ui/dim/Size.hpp"
+#include "ui/opengl/Features.hpp"
 
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
@@ -18,6 +19,50 @@
 namespace X11 {
 
 #ifdef USE_GLX
+
+[[gnu::pure]]
+static GLXFBConfig *
+ChooseFBConfig(_XDisplay *display, int screen, int &fb_cfg_count) noexcept
+{
+#if OPENGL_MSAA_SAMPLES > 0
+  static constexpr int attributes_msaa[] = {
+    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+    GLX_RENDER_TYPE, GLX_RGBA_BIT,
+    GLX_X_RENDERABLE, true,
+    GLX_DOUBLEBUFFER, true,
+    GLX_RED_SIZE, 1,
+    GLX_GREEN_SIZE, 1,
+    GLX_BLUE_SIZE, 1,
+    GLX_ALPHA_SIZE, 1,
+    GLX_STENCIL_SIZE, 1,
+    GLX_SAMPLE_BUFFERS, 1,
+    GLX_SAMPLES, OPENGL_MSAA_SAMPLES,
+    0
+  };
+#endif
+
+  static constexpr int attributes[] = {
+    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+    GLX_RENDER_TYPE, GLX_RGBA_BIT,
+    GLX_X_RENDERABLE, true,
+    GLX_DOUBLEBUFFER, true,
+    GLX_RED_SIZE, 1,
+    GLX_GREEN_SIZE, 1,
+    GLX_BLUE_SIZE, 1,
+    GLX_ALPHA_SIZE, 1,
+    GLX_STENCIL_SIZE, 1,
+    0
+  };
+
+#if OPENGL_MSAA_SAMPLES > 0
+  GLXFBConfig *cfg = glXChooseFBConfig(display, screen,
+                                       attributes_msaa, &fb_cfg_count);
+  if (cfg != nullptr && fb_cfg_count > 0)
+    return cfg;
+#endif
+
+  return glXChooseFBConfig(display, screen, attributes, &fb_cfg_count);
+}
 
 [[gnu::pure]]
 static int
@@ -41,32 +86,19 @@ Display::Display()
 #ifdef USE_GLX
   const auto screen = DefaultScreen(display);
 
-  static constexpr int attributes[] = {
-    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-    GLX_RENDER_TYPE, GLX_RGBA_BIT,
-    GLX_X_RENDERABLE, true,
-    GLX_DOUBLEBUFFER, true,
-    GLX_RED_SIZE, 1,
-    GLX_GREEN_SIZE, 1,
-    GLX_BLUE_SIZE, 1,
-    GLX_ALPHA_SIZE, 1,
-    GLX_STENCIL_SIZE, 1,
-    0
-  };
-
   int fb_cfg_count;
-  fb_cfg = glXChooseFBConfig(display, screen,
-                             attributes, &fb_cfg_count);
+  fb_cfg = ChooseFBConfig(display, screen, fb_cfg_count);
   if (fb_cfg == nullptr || fb_cfg_count == 0)
     throw std::runtime_error("Failed to retrieve framebuffer configuration for GLX");
 
-  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+  LogFormat("GLX config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%d",
             GetConfigAttrib(display, *fb_cfg, GLX_RED_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_GREEN_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_BLUE_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_ALPHA_SIZE, 0),
             GetConfigAttrib(display, *fb_cfg, GLX_DEPTH_SIZE, 0),
-            GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0));
+            GetConfigAttrib(display, *fb_cfg, GLX_STENCIL_SIZE, 0),
+            GetConfigAttrib(display, *fb_cfg, GLX_SAMPLES, 0));
 
   glx_context = glXCreateNewContext(display, *fb_cfg,
                                     GLX_RGBA_TYPE,

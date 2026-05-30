@@ -4,7 +4,14 @@
 #include "Gauge/GaugeVario.hpp"
 #include "Look/VarioLook.hpp"
 #include "Look/VarioBarLook.hpp"
+#include "Renderer/GradientRenderer.hpp"
+#include "Look/Colors.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Color.hpp"
+
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#endif
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/SwitchState.hpp"
@@ -32,7 +39,7 @@ static constexpr double LARUS_SCALE_MAX_VALUE = 5.0;
 static constexpr double LARUS_SCALE_MAX_ANGLE_DEG =
   LARUS_SCALE_MAX_VALUE * LARUS_SCALE_DEGREES;
 /** Annulus arc extends this % past the ±5 labels (then panel background shows). */
-static constexpr double LARUS_ANNULUS_OVERSHOOT_PERCENT = 2.0;
+static constexpr double LARUS_ANNULUS_OVERSHOOT_PERCENT = 4.0;
 static constexpr double LARUS_INNER_RADIUS_RATIO = 0.80;
 static constexpr double LARUS_NINE_O_CLOCK = 1.5 * M_PI;
 
@@ -244,6 +251,68 @@ DrawNeedlePolygon(Canvas &canvas, PixelPoint center, int length,
   canvas.DrawTriangleFan(points.data(), count);
 }
 
+/** Needle colour faded for the zero-ward trail (alpha or panel blend). */
+[[gnu::const]]
+static Color
+NeedleTrailColor(Color color, uint8_t alpha, Color background) noexcept
+{
+#if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
+  (void)background;
+  return color.WithAlpha(alpha);
+#else
+  if (alpha >= 255)
+    return color;
+  if (alpha <= 0)
+    return background;
+
+#ifdef GREYSCALE
+  const uint8_t l = (unsigned(color.GetLuminosity()) * alpha
+                     + unsigned(background.GetLuminosity()) * (255 - alpha))
+                    / 255;
+  return Color(l);
+#else
+  const uint8_t r = (unsigned(color.Red()) * alpha
+                     + unsigned(background.Red()) * (255 - alpha)) / 255;
+  const uint8_t g = (unsigned(color.Green()) * alpha
+                     + unsigned(background.Green()) * (255 - alpha)) / 255;
+  const uint8_t b = (unsigned(color.Blue()) * alpha
+                     + unsigned(background.Blue()) * (255 - alpha)) / 255;
+  return Color(r, g, b);
+#endif
+#endif
+}
+
+/** Transparent tail swept from scale zero to the needle angle. */
+static void
+DrawNeedleTrail(Canvas &canvas, PixelPoint center, int length,
+                Angle rotation, Color color, Color background,
+                const LarusNeedleCoord *coords, unsigned count,
+                const LarusNeedleLengthMap *length_map) noexcept
+{
+  static constexpr unsigned TRAIL_STEPS = 16;
+  static constexpr uint8_t TRAIL_MAX_ALPHA = ALPHA_OVERLAY;
+
+  const double rot_rad = rotation.Radians();
+  if (std::abs(rot_rad) < 0.02)
+    return;
+
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+#endif
+
+  for (unsigned i = 1; i < TRAIL_STEPS; ++i) {
+    const double t = double(i) / double(TRAIL_STEPS);
+    const Angle angle = Angle::Radians(rot_rad * t);
+    const uint8_t alpha = uint8_t(unsigned(TRAIL_MAX_ALPHA) * t);
+    if (alpha < 8)
+      continue;
+
+    DrawNeedlePolygon(canvas, center, length, angle,
+                      NeedleTrailColor(color, alpha, background),
+                      coords, count, length_map);
+  }
+}
+
 [[gnu::const]]
 static Color
 VarioAccentColor(const VarioLook &look, unsigned index) noexcept
@@ -252,6 +321,21 @@ VarioAccentColor(const VarioLook &look, unsigned index) noexcept
   if (!look.colors)
     return look.inverse ? look.text_color : look.dimmed_text_color;
   return look.accent[index];
+}
+
+/** Gray text legible on #VarioLook::scale_face_color. */
+[[gnu::const]]
+static Color
+ScaleUnitColor(const VarioLook &look) noexcept
+{
+#ifdef GREYSCALE
+  (void)look;
+  return Color(0x80);
+#else
+  return look.inverse
+    ? Color(0x50, 0x50, 0x50)
+    : Color(0xa0, 0xa0, 0xa0);
+#endif
 }
 
 /** MC accent — matches #InfoBoxContentMacCready::Update value color indices. */
@@ -493,10 +577,13 @@ GaugeVario::RecalculateGeometry() noexcept
   look.ReinitialiseLayout(panel_width, scale_title, layout_text_width,
                           row_slot, arc_w);
   geometry = {look, rc};
+  geometry.inner_row_slot = row_slot;
 
   cached_scale_title_font = scale_title;
 
   LayoutValueColumn();
+  LayoutScaleUnit();
+  LayoutMcModeHint();
 
   background_dirty = true;
   dirty = true;
@@ -505,6 +592,7 @@ GaugeVario::RecalculateGeometry() noexcept
   hero_di.Reset();
   gross_di.Reset();
   mc_di.Reset();
+  mc_mode_di.Reset();
 
   last_ballast = -1;
   last_bugs = -1;
@@ -538,6 +626,7 @@ GaugeVario::LayoutValueColumn() noexcept
     geometry.dial_center, geometry.inner_square_side,
     geometry.content_rect, pad);
   geometry.speed_arrows_rect = layout.speed_arrows;
+  geometry.mc_mode_rect = {};
 
   if (visible_count == 0)
     return;
@@ -547,6 +636,8 @@ GaugeVario::LayoutValueColumn() noexcept
                                        look.value_font.GetHeight());
 
   const int square_top = cy - int(geometry.inner_square_side) / 2;
+  const unsigned row_slot = geometry.inner_row_slot;
+
   const int row_left = layout.text_area.left;
   const int row_right = layout.text_area.right;
   const int text_width = row_right - row_left;
@@ -560,9 +651,8 @@ GaugeVario::LayoutValueColumn() noexcept
     if (!spec.visible)
       continue;
 
-    const int slot_y = square_top
-      + int((first_slot + slot_index) * geometry.inner_row_slot);
-    const int y = slot_y + (int(geometry.inner_row_slot) - int(row_height)) / 2;
+    const int slot_y = square_top + int((first_slot + slot_index) * row_slot);
+    const int y = slot_y + (int(row_slot) - int(row_height)) / 2;
     const int row_bottom = y + int(row_height);
 
     spec.row->label_background = {row_left, y, split_x, row_bottom};
@@ -570,6 +660,66 @@ GaugeVario::LayoutValueColumn() noexcept
 
     ++slot_index;
   }
+}
+
+void
+GaugeVario::LayoutMcModeHint() noexcept
+{
+  geometry.mc_mode_rect = {};
+  geometry.mc_mode_center_x = 0;
+
+  if (!Settings().show_mc)
+    return;
+
+  const int pad = Layout::GetTextPadding();
+  const int half = int(geometry.inner_square_side) / 2;
+  const int cx = geometry.dial_center.x;
+  const int big_square_bottom = geometry.dial_center.y + half;
+  const int space_below = std::max(0,
+    geometry.content_rect.bottom - pad - big_square_bottom);
+  const unsigned max_w = std::max(1u, geometry.inner_square_side);
+  const unsigned max_h = std::max(6u, unsigned(space_below));
+
+  look.FitHintFont(max_h, max_w);
+
+  const PixelSize text_size = look.hint_font.TextSize("Vario");
+  if (text_size.width == 0 || text_size.height == 0)
+    return;
+
+  const int top = big_square_bottom;
+  const int bottom = top + int(text_size.height);
+  if (bottom > geometry.content_rect.bottom - pad)
+    return;
+
+  const int left = cx - int(text_size.width) / 2;
+
+  geometry.mc_mode_center_x = cx;
+  geometry.mc_mode_rect = {left, top, left + int(text_size.width), bottom};
+}
+
+void
+GaugeVario::LayoutScaleUnit() noexcept
+{
+  const LarusScaleParams params = GetLarusScaleParams();
+  const unsigned band = geometry.outer_radius - geometry.inner_radius;
+  if (band < 4) {
+    geometry.unit_rect = {};
+    return;
+  }
+
+  const char *unit_text = Units::GetVerticalSpeedName();
+  const PixelSize unit_size = look.scale_unit_font.TextSize(unit_text);
+  if (unit_size.width == 0 || unit_size.height > band) {
+    geometry.unit_rect = {};
+    return;
+  }
+
+  /** Between +4 and +5, mid-lower part of the scale band. */
+  const unsigned unit_radius = geometry.inner_radius + band * 1 / 2;
+  const double scale_value = 4.5 * double(params.tick_step);
+  const PixelPoint anchor =
+    LarusScalePoint(geometry.dial_center, unit_radius, scale_value, params);
+  geometry.unit_rect = PixelRect::Centered(anchor, unit_size);
 }
 
 void
@@ -607,7 +757,8 @@ GaugeVario::RenderScale(Canvas &canvas) noexcept
   const LarusScaleParams params = GetLarusScaleParams();
   const unsigned tick_outer = geometry.outer_radius;
   const unsigned tick_inner = geometry.inner_radius;
-  const unsigned label_radius = tick_inner + (tick_outer - tick_inner) / 2;
+  const unsigned band = tick_outer - tick_inner;
+  const unsigned label_radius = tick_inner + band * 2 / 5;
   const double arc_limit = LarusAnnulusArcEnd(params);
 
   const Angle arc_start =
@@ -620,12 +771,17 @@ GaugeVario::RenderScale(Canvas &canvas) noexcept
   canvas.DrawAnnulus(geometry.dial_center, tick_inner, tick_outer,
                      arc_start, arc_end);
 
-  canvas.Select(Pen(Layout::ScaleFinePenWidth(1), look.scale_ink_color));
+  DrawAnnulusEdgeShadowFade(canvas, geometry.dial_center, tick_inner, tick_outer,
+                            arc_start, arc_end, look.scale_face_color);
+
+  canvas.Select(Pen(Layout::ScalePenWidth(2), look.scale_ink_color));
+  const unsigned tick_len = std::max(1u, band / 5);
+  const unsigned tick_end = tick_outer - tick_len;
   for (int i = -params.n_ticks; i <= params.n_ticks; ++i) {
     const double value = i * params.tick_step;
     canvas.DrawLine(LarusScalePoint(geometry.dial_center, tick_outer,
                                     value, params),
-                    LarusScalePoint(geometry.dial_center, tick_inner,
+                    LarusScalePoint(geometry.dial_center, tick_end,
                                     value, params));
   }
 
@@ -659,18 +815,23 @@ GaugeVario::RenderNeedles(Canvas &canvas) noexcept
   }
 
   const double gross = Units::ToUserVSpeed(classic_value);
+  const Color gross_color = VarioAccentColor(look, VARIO_ACCENT_RED);
+  DrawNeedleTrail(canvas, geometry.dial_center, full_len,
+                  ValueToNeedleAngle(gross), gross_color,
+                  look.background_color,
+                  classic_needle, ARRAY_SIZE(classic_needle),
+                  &larus_classic_needle_map);
   DrawNeedlePolygon(canvas, geometry.dial_center, full_len,
-                    ValueToNeedleAngle(gross),
-                    VarioAccentColor(look, VARIO_ACCENT_RED),
+                    ValueToNeedleAngle(gross), gross_color,
                     classic_needle, ARRAY_SIZE(classic_needle),
                     &larus_classic_needle_map);
 
   if (Settings().show_average_needle) {
     const AverageDisplay average = GetAverageDisplay(Calculated());
     const double average_user = Units::ToUserVSpeed(average.raw);
+    const Color average_color = VarioAccentColor(look, VARIO_ACCENT_BLUE);
     DrawNeedlePolygon(canvas, geometry.dial_center, full_len,
-                      ValueToNeedleAngle(average_user),
-                      VarioAccentColor(look, VARIO_ACCENT_BLUE),
+                      ValueToNeedleAngle(average_user), average_color,
                       simple_needle, ARRAY_SIZE(simple_needle),
                       &larus_simple_needle_map);
   }
@@ -678,9 +839,9 @@ GaugeVario::RenderNeedles(Canvas &canvas) noexcept
   if (Settings().show_mc) {
     const double mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
     const bool auto_mc = GetComputerSettings().task.auto_mc;
+    const Color mc_color = McAccentColor(look, auto_mc);
     DrawNeedlePolygon(canvas, geometry.dial_center, full_len,
-                      ValueToNeedleAngle(mc),
-                      McAccentColor(look, auto_mc),
+                      ValueToNeedleAngle(mc), mc_color,
                       scale_marker, ARRAY_SIZE(scale_marker),
                       nullptr);
   }
@@ -704,9 +865,11 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
 
   RenderScale(canvas);
   RenderNeedles(canvas);
+  RenderUnit(canvas);
 
   RenderInnerText(canvas);
   RenderSpeedArrows(canvas);
+  RenderMcModeHint(canvas);
 
   if (!Settings().show_speed_to_fly)
     RenderClimb(canvas);
@@ -717,7 +880,64 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
   if (Settings().show_bugs)
     RenderBugs(canvas);
 
+  if (debug_overlay)
+    DrawDebugOverlay(canvas);
+
   dirty = false;
+}
+
+void
+GaugeVario::DrawDebugOverlay(Canvas &canvas) const noexcept
+{
+  const int pad = Layout::GetTextPadding();
+  const InnerHoleTextLayout hole_layout = ComputeInnerHoleTextLayout(
+    geometry.dial_center, geometry.inner_square_side,
+    geometry.content_rect, pad);
+
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1), COLOR_GRAY));
+  canvas.SelectHollowBrush();
+
+  const int half = int(geometry.inner_square_side) / 2;
+  const int cx = geometry.dial_center.x;
+  const int cy = geometry.dial_center.y;
+  const int square_top = cy - half;
+
+  canvas.DrawRectangle({cx - half, cy - half, cx + half, cy + half});
+  canvas.DrawRectangle(hole_layout.text_area);
+
+  if (hole_layout.speed_arrows.GetWidth() > 0 &&
+      hole_layout.speed_arrows.GetHeight() > 0)
+    canvas.DrawRectangle(hole_layout.speed_arrows);
+
+  for (unsigned i = 1; i < 3; ++i) {
+    const int y = square_top + int(i * geometry.inner_row_slot);
+    canvas.DrawLine({hole_layout.text_area.left, y},
+                    {hole_layout.text_area.right, y});
+  }
+
+  const int text_width = hole_layout.text_area.right - hole_layout.text_area.left;
+  const int split_x = hole_layout.text_area.left
+    + text_width * int(VarioLook::INNER_ROW_LABEL_WIDTH_PERCENT) / 100;
+  canvas.DrawLine({split_x, hole_layout.text_area.top},
+                  {split_x, hole_layout.text_area.bottom});
+
+  auto draw_row = [&](const RowGeometry &row) {
+    if (row.label_background.GetWidth() == 0)
+      return;
+
+    canvas.DrawRectangle(row.label_background);
+    canvas.DrawRectangle(row.value_background);
+  };
+
+  draw_row(geometry.hero_row);
+  draw_row(geometry.gross_row);
+  draw_row(geometry.mc_row);
+
+  if (geometry.mc_mode_rect.GetWidth() > 0)
+    canvas.DrawRectangle(geometry.mc_mode_rect);
+
+  if (geometry.unit_rect.GetWidth() > 0)
+    canvas.DrawRectangle(geometry.unit_rect);
 }
 
 void
@@ -749,6 +969,51 @@ GaugeVario::RenderInnerText(Canvas &canvas) noexcept
               "MC", buffer.c_str(),
               McAccentColor(look, GetComputerSettings().task.auto_mc));
   }
+}
+
+void
+GaugeVario::RenderMcModeHint(Canvas &canvas) noexcept
+{
+  if (!Settings().show_mc)
+    return;
+
+  const PixelRect &rc = geometry.mc_mode_rect;
+  if (rc.GetWidth() == 0 || rc.GetHeight() == 0)
+    return;
+
+  const char *text = Settings().show_speed_to_fly ? "SC" : "Vario";
+  const bool text_changed = dirty ||
+    !StringIsEqual(mc_mode_di.last_text, text);
+  if (IsPersistent() && !text_changed)
+    return;
+
+  canvas.Select(look.hint_font);
+  canvas.SetBackgroundColor(look.background_color);
+  canvas.SetTextColor(look.dimmed_text_color);
+
+  if (IsPersistent())
+    canvas.DrawFilledRectangle(rc, look.background_color);
+
+  const PixelSize text_size = canvas.CalcTextSize(text);
+  const int x = geometry.mc_mode_center_x - int(text_size.width) / 2;
+  const int y = RowTextBaselineY(look.hint_font, rc.top, rc.bottom);
+
+  canvas.DrawOpaqueText({x, y}, rc, text);
+  if (IsPersistent())
+    strcpy(mc_mode_di.last_text, text);
+}
+
+void
+GaugeVario::RenderUnit(Canvas &canvas) noexcept
+{
+  const PixelRect &unit_rect = geometry.unit_rect;
+  if (unit_rect.GetWidth() == 0 || unit_rect.GetHeight() == 0)
+    return;
+
+  canvas.Select(look.scale_unit_font);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(ScaleUnitColor(look));
+  canvas.DrawText(unit_rect.GetTopLeft(), Units::GetVerticalSpeedName());
 }
 
 void

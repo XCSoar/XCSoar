@@ -3,6 +3,7 @@
 
 #include "ConfigChooser.hpp"
 #include "lib/fmt/RuntimeError.hxx"
+#include "ui/opengl/Features.hpp"
 
 #ifdef MESA_KMS
 #include "ui/canvas/egl/GBM.hpp"
@@ -64,8 +65,11 @@ ConfigDistance(EGLDisplay display, EGLConfig config,
   int a = AttribDistance(display, config, EGL_ALPHA_SIZE, want_a);
   int d = AttribDistance(display, config, EGL_DEPTH_SIZE, want_depth);
   int s = AttribDistance(display, config, EGL_STENCIL_SIZE, want_stencil);
+  int ms = AttribDistance(display, config, EGL_SAMPLES, OPENGL_MSAA_SAMPLES);
+  int mb = AttribDistance(display, config, EGL_SAMPLE_BUFFERS,
+                          OPENGL_MSAA_SAMPLES > 0 ? 1 : 0);
 
-  return distance + r + g + b + a + d + s;
+  return distance + r + g + b + a + d + s + ms + mb;
 }
 
 [[gnu::pure]]
@@ -119,48 +123,102 @@ FindConfigWithAttribute(EGLDisplay display,
 
 #endif /* MESA_KMS */
 
+static bool
+QueryConfigs(EGLDisplay display, const EGLint *attributes,
+             std::array<EGLConfig, 64> &configs, EGLint &num_configs)
+{
+  if (!eglChooseConfig(display, attributes, configs.data(), configs.size(),
+                       &num_configs))
+    throw FmtRuntimeError("eglChooseConfig() failed: {:#x}", eglGetError());
+
+  return num_configs > 0;
+}
+
 EGLConfig
 ChooseConfig(EGLDisplay display)
 {
-  static constexpr EGLint attributes[] = {
-#ifdef ANDROID
-    /* EGL_STENCIL_SIZE not listed here because we have a fallback for
-       configurations without stencil (but we prefer native stencil)
-       (maybe we can just require a stencil and get rid of the
-       complicated and slow fallback code eventually?) */
+  std::array<EGLConfig, 64> configs;
+  EGLint num_configs = 0;
 
+#ifdef ANDROID
+  static constexpr EGLint attributes[] = {
     EGL_RED_SIZE, 4,
     EGL_GREEN_SIZE, 4,
     EGL_BLUE_SIZE, 4,
     EGL_ALPHA_SIZE, 4,
-
-#else //  !ANDROID
-
-    EGL_STENCIL_SIZE, 1,
-#ifdef MESA_KMS
-    EGL_RED_SIZE, 1,
-    EGL_GREEN_SIZE, 1,
-    EGL_BLUE_SIZE, 1,
-#ifndef RASPBERRY_PI /* the Raspberry Pi 4 doesn't have an alpha channel */
-    EGL_ALPHA_SIZE, 1,
-#endif
-#endif // MESA_KMS
-
-#endif // !ANDROID
-
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
     EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
     EGL_NONE
   };
 
-  std::array<EGLConfig, 64> configs;
-  EGLint num_configs;
-  if (!eglChooseConfig(display, attributes, configs.data(), configs.size(),
-                       &num_configs))
-    throw FmtRuntimeError("eglChooseConfig() failed: {:#x}", eglGetError());
-
-  if (num_configs == 0)
+  if (!QueryConfigs(display, attributes, configs, num_configs))
     throw std::runtime_error("eglChooseConfig() failed");
+
+#elif defined(MESA_KMS)
+
+#if OPENGL_MSAA_SAMPLES > 0
+  static constexpr EGLint attributes_msaa[] = {
+    EGL_STENCIL_SIZE, 1,
+    EGL_RED_SIZE, 1,
+    EGL_GREEN_SIZE, 1,
+    EGL_BLUE_SIZE, 1,
+#ifndef RASPBERRY_PI
+    EGL_ALPHA_SIZE, 1,
+#endif
+    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+    EGL_SAMPLE_BUFFERS, 1,
+    EGL_SAMPLES, OPENGL_MSAA_SAMPLES,
+    EGL_NONE
+  };
+#endif
+
+  static constexpr EGLint attributes[] = {
+    EGL_STENCIL_SIZE, 1,
+    EGL_RED_SIZE, 1,
+    EGL_GREEN_SIZE, 1,
+    EGL_BLUE_SIZE, 1,
+#ifndef RASPBERRY_PI
+    EGL_ALPHA_SIZE, 1,
+#endif
+    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+    EGL_NONE
+  };
+
+#if OPENGL_MSAA_SAMPLES > 0
+  if (!QueryConfigs(display, attributes_msaa, configs, num_configs))
+#endif
+    if (!QueryConfigs(display, attributes, configs, num_configs))
+      throw std::runtime_error("eglChooseConfig() failed");
+
+#else /* !ANDROID && !MESA_KMS */
+
+#if OPENGL_MSAA_SAMPLES > 0
+  static constexpr EGLint attributes_msaa[] = {
+    EGL_STENCIL_SIZE, 1,
+    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+    EGL_SAMPLE_BUFFERS, 1,
+    EGL_SAMPLES, OPENGL_MSAA_SAMPLES,
+    EGL_NONE
+  };
+#endif
+
+  static constexpr EGLint attributes[] = {
+    EGL_STENCIL_SIZE, 1,
+    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+    EGL_NONE
+  };
+
+#if OPENGL_MSAA_SAMPLES > 0
+  if (!QueryConfigs(display, attributes_msaa, configs, num_configs))
+#endif
+    if (!QueryConfigs(display, attributes, configs, num_configs))
+      throw std::runtime_error("eglChooseConfig() failed");
+
+#endif /* platform attribute lists */
 
 #ifdef MESA_KMS
   /* On some GBM targets, such as the Raspberry Pi 4,

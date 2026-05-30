@@ -10,30 +10,83 @@
 #include "Init.hpp"
 #include "Shaders.hpp"
 #include "Program.hpp"
+#include "ui/opengl/Features.hpp"
+#include "LogFile.hpp"
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "DisplayOrientation.hpp"
 #endif
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <cassert>
 
-void
-BufferCanvas::Create(PixelSize new_size) noexcept
+static void
+SetupOffscreenViewport(PixelSize render_size,
+                       PixelSize logical_size,
+                       unsigned pixel_scale) noexcept
 {
-  assert(!active);
+  glViewport(0, 0, int(render_size.width), int(render_size.height));
 
+  OpenGL::projection_matrix = glm::ortho<float>(
+    0.f, float(logical_size.width),
+    float(logical_size.height), 0.f, -1.f, 1.f);
+  OpenGL::viewport_size = {logical_size.width, logical_size.height};
+  OpenGL::viewport_pixel_scale = pixel_scale;
+  OpenGL::UpdateShaderProjectionMatrix();
+}
+
+void
+BufferCanvas::CreateRenderTarget(PixelSize render_size) noexcept
+{
   Destroy();
-  texture = new GLTexture(INTERNAL_FORMAT, new_size, FORMAT, TYPE, true);
+  texture = new GLTexture(INTERNAL_FORMAT, render_size, FORMAT, TYPE, true);
   frame_buffer = new GLFrameBuffer();
 
   if (OpenGL::render_buffer_stencil != GL_NONE) {
     stencil_buffer = new GLRenderBuffer();
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
-    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.width, size.height);
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil,
+                            size.width, size.height);
     stencil_buffer->Unbind();
   }
+}
 
+void
+BufferCanvas::EnsureRenderTarget(PixelSize render_size) noexcept
+{
+  if (!IsDefined()) {
+    CreateRenderTarget(render_size);
+    return;
+  }
+
+  if (texture->GetSize() == render_size)
+    return;
+
+  texture->ResizeDiscard(INTERNAL_FORMAT, render_size, FORMAT, TYPE);
+
+  if (stencil_buffer != nullptr) {
+    frame_buffer->Bind();
+    if (OpenGL::render_buffer_stencil == OpenGL::render_buffer_depth_stencil)
+      stencil_buffer->DetachFramebuffer(FBO::DEPTH_ATTACHMENT);
+    stencil_buffer->DetachFramebuffer(FBO::STENCIL_ATTACHMENT);
+    frame_buffer->Unbind();
+
+    stencil_buffer->Bind();
+    PixelSize size = texture->GetAllocatedSize();
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil,
+                            size.width, size.height);
+    stencil_buffer->Unbind();
+  }
+}
+
+void
+BufferCanvas::Create(PixelSize new_size) noexcept
+{
+  assert(!active);
+
+  CreateRenderTarget(new_size);
   Canvas::Create(new_size);
 }
 
@@ -59,35 +112,35 @@ BufferCanvas::Resize(PixelSize new_size) noexcept
 {
   assert(IsDefined());
 
-  if (new_size == GetSize())
+  if (new_size == GetSize() && texture->GetSize() == new_size)
     return;
 
-  texture->ResizeDiscard(INTERNAL_FORMAT, new_size, FORMAT, TYPE);
-
-  if (stencil_buffer != nullptr) {
-    /* the stencil buffer must be detached before we resize it */
-    frame_buffer->Bind();
-    if (OpenGL::render_buffer_stencil == OpenGL::render_buffer_depth_stencil)
-      stencil_buffer->DetachFramebuffer(FBO::DEPTH_ATTACHMENT);
-    stencil_buffer->DetachFramebuffer(FBO::STENCIL_ATTACHMENT);
-    frame_buffer->Unbind();
-
-    stencil_buffer->Bind();
-    PixelSize size = texture->GetAllocatedSize();
-    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.width, size.height);
-    stencil_buffer->Unbind();
-  }
-
+  EnsureRenderTarget(new_size);
   Canvas::Create(new_size);
 }
 
 void
 BufferCanvas::Begin(Canvas &other) noexcept
 {
-  assert(IsDefined());
   assert(!active);
 
-  Resize(other.GetSize());
+  const PixelSize logical_size = other.GetSize();
+  const unsigned scale = SupersampleScale();
+  const PixelSize render_size{
+    logical_size.width * scale,
+    logical_size.height * scale,
+  };
+
+  EnsureRenderTarget(render_size);
+  Canvas::Create(logical_size);
+
+#if OPENGL_BUFFER_SUPERSAMPLE > 1
+  static bool logged_supersample = false;
+  if (!logged_supersample && scale > 1) {
+    LogFormat("OpenGL buffer supersampling: %ux", scale);
+    logged_supersample = true;
+  }
+#endif
 
   /* activate the frame buffer */
   frame_buffer->Bind();
@@ -107,18 +160,17 @@ BufferCanvas::Begin(Canvas &other) noexcept
   glGetIntegerv(GL_VIEWPORT, old_viewport);
 
   old_projection_matrix = OpenGL::projection_matrix;
-  OpenGL::projection_matrix = glm::mat4(1);
-
   old_translate = OpenGL::translate;
   old_size = OpenGL::viewport_size;
+  old_viewport_pixel_scale = OpenGL::viewport_pixel_scale;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   old_orientation = OpenGL::display_orientation;
   OpenGL::display_orientation = DisplayOrientation::DEFAULT;
 #endif
 
-  /* configure a new viewport */
-  OpenGL::SetupViewport({GetWidth(), GetHeight()});
+  /* logical coordinates, supersampled pixel grid */
+  SetupOffscreenViewport(render_size, logical_size, scale);
   OpenGL::translate = {0, 0};
 
   OpenGL::UpdateShaderTranslate();
@@ -154,6 +206,7 @@ BufferCanvas::Commit(Canvas &other) noexcept
 
   OpenGL::translate = old_translate;
   OpenGL::viewport_size = old_size;
+  OpenGL::viewport_pixel_scale = old_viewport_pixel_scale;
 
   OpenGL::UpdateShaderTranslate();
 
@@ -178,5 +231,5 @@ BufferCanvas::CopyTo(Canvas &other) noexcept
   OpenGL::texture_shader->Use();
 
   texture->Bind();
-  texture->Draw(other.GetRect(), GetRect());
+  texture->Draw(other.GetRect(), PixelRect(texture->GetSize()));
 }

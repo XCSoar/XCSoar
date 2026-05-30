@@ -190,6 +190,24 @@ OpenGL::SetupContext()
   InitShaders();
 }
 
+void
+OpenGL::ActivateMultisampling() noexcept
+{
+  GLint sample_buffers = 0;
+  GLint samples = 0;
+  glGetIntegerv(GL_SAMPLE_BUFFERS, &sample_buffers);
+  glGetIntegerv(GL_SAMPLES, &samples);
+
+  if (sample_buffers <= 0 || samples <= 1)
+    return;
+
+#ifdef USE_GLX
+  glEnable(GL_MULTISAMPLE);
+#endif
+
+  LogFormat("GL multisampling: %d samples", int(samples));
+}
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
 
 /**
@@ -253,6 +271,7 @@ OpenGL::SetupViewport(UnsignedPoint2D size) noexcept
 #endif
 
   viewport_size = size;
+  viewport_pixel_scale = 1;
 
   UpdateShaderProjectionMatrix();
 

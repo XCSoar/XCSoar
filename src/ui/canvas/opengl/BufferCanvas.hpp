@@ -38,6 +38,7 @@ class BufferCanvas : public Canvas {
 
   PixelPoint old_translate;
   UnsignedPoint2D old_size;
+  unsigned old_viewport_pixel_scale = 1;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   DisplayOrientation old_orientation;
@@ -97,4 +98,18 @@ public:
   void Commit(Canvas &other) noexcept;
 
   void CopyTo(Canvas &other) noexcept;
+
+private:
+  void CreateRenderTarget(PixelSize render_size) noexcept;
+
+  void EnsureRenderTarget(PixelSize render_size) noexcept;
+
+  [[gnu::pure]]
+  static unsigned SupersampleScale() noexcept {
+#if OPENGL_BUFFER_SUPERSAMPLE > 1
+    return OPENGL_BUFFER_SUPERSAMPLE;
+#else
+    return 1;
+#endif
+  }
 };

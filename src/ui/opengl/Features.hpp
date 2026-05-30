@@ -11,6 +11,16 @@
 #error No OpenGL
 #endif
 
+/** Multisample anti-aliasing sample count (0 disables MSAA). */
+#ifndef OPENGL_MSAA_SAMPLES
+#define OPENGL_MSAA_SAMPLES 4
+#endif
+
+/** Off-screen buffer supersampling factor (1 disables, 2 = 2× render). */
+#ifndef OPENGL_BUFFER_SUPERSAMPLE
+#define OPENGL_BUFFER_SUPERSAMPLE 2
+#endif
+
 #define HAVE_TEXT_CACHE
 
 #if defined(_WIN32) || defined(MESA_KMS) || defined(USE_X11) || defined(ENABLE_SDL) || defined(USE_WAYLAND)

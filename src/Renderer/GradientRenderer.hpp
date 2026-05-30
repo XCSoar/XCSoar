@@ -3,9 +3,11 @@
 
 #pragma once
 
+class Angle;
 class Canvas;
 struct PixelRect;
 class Color;
+struct PixelPoint;
 
 /**
  * Fill the specified rectangle with a color gradient.
@@ -25,3 +27,13 @@ void DrawVerticalGradient(Canvas &canvas, const PixelRect &rc,
  */
 void DrawBandedVerticalGradient(Canvas &canvas, const PixelRect &rc,
                                 Color top_color, Color bottom_color);
+
+/**
+ * Sunken shadow on both edges of an annulus arc, fading toward the centre.
+ * Uses smooth OpenGL vertex colours when EYE_CANDY is enabled; otherwise
+ * banded Canvas::DrawAnnulus() strips.
+ */
+void DrawAnnulusEdgeShadowFade(Canvas &canvas, PixelPoint center,
+                               unsigned inner_radius, unsigned outer_radius,
+                               Angle arc_start, Angle arc_end,
+                               Color face_color) noexcept;

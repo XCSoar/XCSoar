@@ -17,6 +17,8 @@ GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
 UnsignedPoint2D window_size, viewport_size;
 
+unsigned viewport_pixel_scale = 1;
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
 DisplayOrientation display_orientation;
 #endif

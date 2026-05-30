@@ -26,6 +26,8 @@ struct VarioLook {
 
   Pen arc_pen, tick_pen;
   Font arc_label_font;
+  Font scale_unit_font;
+  Font hint_font;
 
   Brush background_brush;
   Brush sink_brush, lift_brush;
@@ -54,8 +56,17 @@ struct VarioLook {
   /** Extra width budget when fitting inner row fonts (110 = 10% larger). */
   static constexpr unsigned INNER_ROW_FONT_PERCENT = 110;
 
+  /** Extra width budget for inner value column (MC, Gross, Net.). */
+  static constexpr unsigned INNER_VALUE_FONT_PERCENT = 130;
+
   /** Label font height as % of value font height. */
   static constexpr unsigned INNER_LABEL_FONT_PERCENT = 72;
+
+  /** Scale unit label height as % of #arc_label_font height. */
+  static constexpr unsigned SCALE_UNIT_FONT_PERCENT = 78;
+
+  /** MC mode hint max height as % of #label_font when space allows. */
+  static constexpr unsigned HINT_FONT_PERCENT = 100;
 
   void Initialise(bool inverse, bool colors,
                   unsigned width,
@@ -67,4 +78,7 @@ struct VarioLook {
                           unsigned text_column_width,
                           unsigned max_row_height,
                           unsigned arc_label_width) noexcept;
+
+  /** Size #hint_font to fit the MC mode strip; does not bump #layout_generation. */
+  void FitHintFont(unsigned max_height, unsigned max_width) noexcept;
 };

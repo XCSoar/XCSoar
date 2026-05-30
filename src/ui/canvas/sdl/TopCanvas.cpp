@@ -81,17 +81,20 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
     throw FmtRuntimeError("SDL_GL_CreateContext({}) has failed: {}",
                           (const void *)window, ::SDL_GetError());
 
-  LogFormat("SDL_GL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+  LogFormat("SDL_GL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%d",
             GetConfigAttrib(SDL_GL_RED_SIZE, 0),
             GetConfigAttrib(SDL_GL_GREEN_SIZE, 0),
             GetConfigAttrib(SDL_GL_BLUE_SIZE, 0),
             GetConfigAttrib(SDL_GL_ALPHA_SIZE, 0),
             GetConfigAttrib(SDL_GL_DEPTH_SIZE, 0),
-            GetConfigAttrib(SDL_GL_STENCIL_SIZE, 0));
+            GetConfigAttrib(SDL_GL_STENCIL_SIZE, 0),
+            GetConfigAttrib(SDL_GL_MULTISAMPLESAMPLES, 0));
 
   /* this is usually done by OpenGL::Display, but libSDL doesn't allow
      that */
   OpenGL::SetupContext();
+
+  OpenGL::ActivateMultisampling();
 
   SetupViewport(GetNativeSize());
 #endif
