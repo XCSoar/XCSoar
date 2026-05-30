@@ -100,14 +100,28 @@ TestFilenameMatchesFileType()
   ok1(FilenameMatchesFileType("XCSoar-Flarm.TXT", FileType::FLARMDB));
 }
 
+static void
+TestDetectFileTypeByFilename()
+{
+  ok1(DetectFileTypeByFilename("xcsoar-flarm.txt") == FileType::FLARMDB);
+  ok1(DetectFileTypeByFilename("track.igc") == FileType::IGC);
+  ok1(DetectFileTypeByFilename("xcsoar-rasp-eu.dat") == FileType::RASP);
+  ok1(DetectFileTypeByFilename("profile.prf") == FileType::PROFILE);
+  ok1(DetectFileTypeByFilename("waypoints.cup") == FileType::WAYPOINT);
+  ok1(DetectFileTypeByFilename("WAYPOINTS.CUP") == FileType::WAYPOINT);
+  ok1(DetectFileTypeByFilename("london.txt") == FileType::UNKNOWN);
+  ok1(DetectFileTypeByFilename("readme.md") == FileType::UNKNOWN);
+}
+
 int main()
 {
-  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 15);
+  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 15 + 8);
 
   TestDefaultDirs();
   TestPatterns();
   TestSpecialFilenameType();
   TestFilenameMatchesFileType();
+  TestDetectFileTypeByFilename();
 
   return exit_status();
 }
