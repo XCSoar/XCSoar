@@ -228,7 +228,8 @@ PlaneListWidget::NewClicked() noexcept
     StaticString<42> filename(plane.registration);
     filename += ".xcp";
 
-    const auto path = LocalPath(filename);
+    const auto path = LocalPath(AllocatedPath::Build(
+      GetFileTypeDefaultDir(FileType::PLANE), filename));
 
     if (File::Exists(path)) {
       StaticString<256> tmp;

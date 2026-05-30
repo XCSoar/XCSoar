@@ -24,6 +24,12 @@
 
 static AllocatedPath startProfileFile = nullptr;
 
+static AllocatedPath
+BuildProfilePath(Path base_name) noexcept
+{
+  return LocalPath(AllocatedPath::Build(Path("profiles"), base_name));
+}
+
 Path
 Profile::GetPath() noexcept
 {
@@ -87,11 +93,11 @@ Profile::SetFiles(Path override_path) noexcept
   if (override_path != nullptr) {
     if (override_path.IsBase()) {
       if (StringFind(override_path.c_str(), '.') != nullptr)
-        startProfileFile = LocalPath(override_path);
+        startProfileFile = BuildProfilePath(override_path);
       else {
         std::string t(override_path.c_str());
         t += ".prf";
-        startProfileFile = LocalPath(t.c_str());
+        startProfileFile = BuildProfilePath(Path(t.c_str()));
       }
     } else
       startProfileFile = Path(override_path);
@@ -99,7 +105,7 @@ Profile::SetFiles(Path override_path) noexcept
   }
 
   // Set the default profile file
-  startProfileFile = LocalPath(XCSPROFILE);
+  startProfileFile = BuildProfilePath(Path(XCSPROFILE));
 }
 
 AllocatedPath
