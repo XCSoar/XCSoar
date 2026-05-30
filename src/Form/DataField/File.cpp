@@ -92,7 +92,17 @@ FileDataField::ScanDirectoryTop(const char *filter) noexcept
   }
 
   FileVisitor fv(*this);
-  VisitDataFiles(filter, fv);
+
+  const auto subdir = GetFileTypeDefaultDir(file_type);
+  if (file_type != FileType::UNKNOWN && subdir != nullptr) {
+    Directory::VisitSpecificFiles(GetPrimaryDataPath(), filter, fv, false);
+
+    const auto typed_path = LocalPath(subdir);
+    if (typed_path != nullptr && Directory::Exists(typed_path))
+      Directory::VisitSpecificFiles(typed_path, filter, fv, true);
+  } else {
+    VisitDataFiles(filter, fv);
+  }
 
   Sort();
 }
