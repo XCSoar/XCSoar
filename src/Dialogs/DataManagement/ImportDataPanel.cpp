@@ -12,7 +12,9 @@
 #include "Operation/SubOperationEnvironment.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Repository/FileType.hpp"
 #include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 #include "Widget/FileMultiSelectWidget.hpp"
 #include "Widget/PropertyWidgetContainer.hpp"
 #include "util/StaticString.hxx"
@@ -34,14 +36,35 @@ namespace {
 
 /**
  * Compute the import destination path for a source file.
- * All files are placed directly into the XCSoar data root
- * (no subdirectory structure is preserved).
+ * Recognized file types are imported into their typed data
+ * subdirectories; unknown files remain in the XCSoar data root.
  */
+static AllocatedPath
+ComputeRelativeDestination(Path src) noexcept
+{
+  const auto base = src.GetBase();
+  if (base == nullptr)
+    return nullptr;
+
+  const Path base_path(base);
+  if (!base_path.IsValidFilename())
+    return nullptr;
+
+  const auto subdir = GetLayoutSubdirForFilename(base.c_str());
+  if (subdir != nullptr)
+    return AllocatedPath::Build(Path(subdir), base_path);
+
+  return AllocatedPath(base_path);
+}
+
 static AllocatedPath
 ComputeDestination(Path src) noexcept
 {
-  AllocatedPath dest_root = GetPrimaryDataPath();
-  return AllocatedPath::Build(dest_root, src.GetBase().c_str());
+  const auto relative = ComputeRelativeDestination(src);
+  if (relative == nullptr)
+    return nullptr;
+
+  return LocalPath(relative);
 }
 
 struct ImportFile {
@@ -106,8 +129,6 @@ struct ImportJob : public Job {
       if (rel != nullptr && device->IsDirectoryEntry(rel))
         continue;
 
-      AllocatedPath dest = ComputeDestination(p);
-
       StaticString<128> status;
       status.Format("%s\n%s", _("Importing"), p.GetBase().c_str());
       env.SetText(status);
@@ -121,6 +142,18 @@ struct ImportJob : public Job {
       try {
         if (rel == nullptr)
           throw std::runtime_error("bad relative path");
+
+        AllocatedPath dest = ComputeDestination(p);
+        if (dest == nullptr)
+          throw std::runtime_error("Invalid import destination");
+
+        const auto parent = dest.GetParent();
+        if (parent != nullptr) {
+          Directory::CreateRecursive(parent);
+          if (!Directory::Exists(parent))
+            throw std::runtime_error("Import destination directory unavailable");
+        }
+
         device->CopyToLocal(rel, dest, &sub_env);
 
         ++completed;
@@ -361,7 +394,7 @@ ShowImportDataDialog()
       auto it = selected_files.begin();
       while (it != selected_files.end()) {
         AllocatedPath dest = ComputeDestination(*it);
-        if (File::Exists(dest)) {
+        if (dest != nullptr && File::Exists(dest)) {
           StaticString<256> prompt;
           const auto base = Path(dest).GetBase();
           prompt.Format(_("'%s' already exists. Overwrite?"),
