@@ -286,6 +286,7 @@ public:
 
 private:
   void ToggleColumn(unsigned class_index, unsigned col) noexcept;
+  void CycleShowWarn(unsigned class_index) noexcept;
 };
 
 void
@@ -420,6 +421,64 @@ AirspaceSettingsListWidget::ToggleColumn(unsigned class_index,
 }
 
 void
+AirspaceSettingsListWidget::CycleShowWarn(unsigned class_index) noexcept
+{
+  assert(class_index + 1 < AIRSPACECLASSCOUNT);
+
+  const AirspaceClass type = AirspaceClass(class_index + 1);
+
+  AirspaceComputerSettings &computer =
+    CommonInterface::SetComputerSettings().airspace;
+  AirspaceRendererSettings &renderer =
+    CommonInterface::SetMapSettings().airspace;
+
+  /* keyboard cycle: all four combinations of warn/clearance with
+     show=on, plus one "everything off" state.
+       (show, warn, clrnc):
+       (0,0,0) -> (1,0,0) -> (1,1,0) -> (1,1,1) -> (1,0,1) -> (0,0,0) */
+  struct State { bool show, warn, clrnc; };
+  static constexpr State cycle[] = {
+    {false, false, false},
+    {true,  false, false},
+    {true,  true,  false},
+    {true,  true,  true},
+    {true,  false, true},
+  };
+  static constexpr unsigned N = sizeof(cycle) / sizeof(cycle[0]);
+
+  const bool s = renderer.classes[type].display;
+  const bool w = computer.warnings.class_warnings[type];
+  const bool c = computer.warnings.class_clearance_allowed[type];
+
+  /* find current state in the cycle; if it does not match any cycle
+     entry (possible when individual checkboxes were toggled), jump
+     to (1,1,1) so the regular cycle can resume from there */
+  static constexpr unsigned FALLBACK = 3; // index of {1,1,1}
+  static_assert(cycle[FALLBACK].show && cycle[FALLBACK].warn &&
+                cycle[FALLBACK].clrnc);
+  unsigned next = FALLBACK;
+  for (unsigned i = 0; i < N; ++i) {
+    if (cycle[i].show == s && cycle[i].warn == w && cycle[i].clrnc == c) {
+      next = (i + 1) % N;
+      break;
+    }
+  }
+
+  renderer.classes[type].display = cycle[next].show;
+  computer.warnings.class_warnings[type] = cycle[next].warn;
+  computer.warnings.class_clearance_allowed[type] = cycle[next].clrnc;
+
+  Profile::SetAirspaceMode(Profile::map, type,
+                           cycle[next].show, cycle[next].warn);
+  Profile::SetAirspaceClearance(Profile::map, type,
+                                cycle[next].clrnc);
+
+  changed = true;
+  ActionInterface::SendMapSettings();
+  GetList().Invalidate();
+}
+
+void
 AirspaceSettingsListWidget::OnActivateItem(unsigned index) noexcept
 {
   assert(index + 1 < AIRSPACECLASSCOUNT);
@@ -440,9 +499,9 @@ AirspaceSettingsListWidget::OnActivateItem(unsigned index) noexcept
     return;
   }
 
-  /* keyboard activation (no x coordinate) defaults to toggling the
-     "Show" column */
-  ToggleColumn(index, 0);
+  /* keyboard activation (no x coordinate) cycles through the four
+     combinations of the show/warn columns */
+  CycleShowWarn(index);
 }
 
 void
