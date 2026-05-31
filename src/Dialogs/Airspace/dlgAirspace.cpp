@@ -3,6 +3,7 @@
 
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/HelpDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Profile/Current.hpp"
@@ -285,6 +286,8 @@ public:
   void OnActivateItem(unsigned index, int x) noexcept override;
 
 private:
+  void ApplyClassFlags(AirspaceClass type, bool show, bool warn,
+                       bool clrnc) noexcept;
   void ToggleColumn(unsigned class_index, unsigned col) noexcept;
   void CycleShowWarn(unsigned class_index) noexcept;
 };
@@ -379,6 +382,26 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 }
 
 void
+AirspaceSettingsListWidget::ApplyClassFlags(AirspaceClass type,
+                                            bool show, bool warn,
+                                            bool clrnc) noexcept
+{
+  auto &computer = CommonInterface::SetComputerSettings().airspace;
+  auto &renderer = CommonInterface::SetMapSettings().airspace;
+
+  renderer.classes[type].display = show;
+  computer.warnings.class_warnings[type] = warn;
+  computer.warnings.class_clearance_allowed[type] = clrnc;
+
+  Profile::SetAirspaceMode(Profile::map, type, show, warn);
+  Profile::SetAirspaceClearance(Profile::map, type, clrnc);
+
+  changed = true;
+  ActionInterface::SendMapSettings();
+  GetList().Invalidate();
+}
+
+void
 AirspaceSettingsListWidget::ToggleColumn(unsigned class_index,
                                          unsigned col) noexcept
 {
@@ -386,38 +409,20 @@ AirspaceSettingsListWidget::ToggleColumn(unsigned class_index,
   assert(col < AirspaceFilterColumns::COUNT);
 
   const AirspaceClass type = AirspaceClass(class_index + 1);
+  const auto &computer =
+    CommonInterface::GetComputerSettings().airspace;
+  const auto &renderer = CommonInterface::GetMapSettings().airspace;
 
-  AirspaceComputerSettings &computer =
-    CommonInterface::SetComputerSettings().airspace;
-  AirspaceRendererSettings &renderer =
-    CommonInterface::SetMapSettings().airspace;
-
+  bool show = renderer.classes[type].display;
+  bool warn = computer.warnings.class_warnings[type];
+  bool clrnc = computer.warnings.class_clearance_allowed[type];
   switch (col) {
-  case 0:
-    renderer.classes[type].display = !renderer.classes[type].display;
-    Profile::SetAirspaceMode(Profile::map, type,
-                             renderer.classes[type].display,
-                             computer.warnings.class_warnings[type]);
-    break;
-  case 1:
-    computer.warnings.class_warnings[type] =
-      !computer.warnings.class_warnings[type];
-    Profile::SetAirspaceMode(Profile::map, type,
-                             renderer.classes[type].display,
-                             computer.warnings.class_warnings[type]);
-    break;
-  case 2:
-    computer.warnings.class_clearance_allowed[type] =
-      !computer.warnings.class_clearance_allowed[type];
-    Profile::SetAirspaceClearance(
-        Profile::map, type,
-        computer.warnings.class_clearance_allowed[type]);
-    break;
+  case 0: show = !show; break;
+  case 1: warn = !warn; break;
+  case 2: clrnc = !clrnc; break;
   }
 
-  changed = true;
-  ActionInterface::SendMapSettings();
-  GetList().Invalidate();
+  ApplyClassFlags(type, show, warn, clrnc);
 }
 
 void
@@ -426,11 +431,9 @@ AirspaceSettingsListWidget::CycleShowWarn(unsigned class_index) noexcept
   assert(class_index + 1 < AIRSPACECLASSCOUNT);
 
   const AirspaceClass type = AirspaceClass(class_index + 1);
-
-  AirspaceComputerSettings &computer =
-    CommonInterface::SetComputerSettings().airspace;
-  AirspaceRendererSettings &renderer =
-    CommonInterface::SetMapSettings().airspace;
+  const auto &computer =
+    CommonInterface::GetComputerSettings().airspace;
+  const auto &renderer = CommonInterface::GetMapSettings().airspace;
 
   /* keyboard cycle: all four combinations of warn/clearance with
      show=on, plus one "everything off" state.
@@ -464,18 +467,8 @@ AirspaceSettingsListWidget::CycleShowWarn(unsigned class_index) noexcept
     }
   }
 
-  renderer.classes[type].display = cycle[next].show;
-  computer.warnings.class_warnings[type] = cycle[next].warn;
-  computer.warnings.class_clearance_allowed[type] = cycle[next].clrnc;
-
-  Profile::SetAirspaceMode(Profile::map, type,
-                           cycle[next].show, cycle[next].warn);
-  Profile::SetAirspaceClearance(Profile::map, type,
-                                cycle[next].clrnc);
-
-  changed = true;
-  ActionInterface::SendMapSettings();
-  GetList().Invalidate();
+  ApplyClassFlags(type, cycle[next].show, cycle[next].warn,
+                  cycle[next].clrnc);
 }
 
 void
@@ -565,6 +558,17 @@ dlgAirspaceShowModal(bool color_mode)
                       UIGlobals::GetDialogLook(),
                       _("Airspace"));
   dialog.AddButton(_("Close"), mrOK);
+  dialog.AddButton(_("Help"), [](){
+    HelpDialog(_("Airspace"),
+               _("Per-class filter settings. For airspaces where both\n"
+                 "type (CTR, FIR, ...) and class are given, the type\n"
+                 "takes precedence over class in XCSoar.\n"
+                 "Columns:\n"
+                 "  Show  - draw airspaces of this class on the map\n"
+                 "  Warn  - enable warnings when approaching / inside\n"
+                 "  Clrnc - allow granting a clearance to suppress\n"
+                 "           warnings from other overlapping airspaces"));
+  });
   dialog.FinishPreliminary(std::move(pair));
   dialog.ShowModal();
 
