@@ -6,6 +6,9 @@
 #include "time/Stamp.hpp"
 #include "util/StringBuffer.hxx"
 
+#include <chrono>
+#include <string_view>
+
 struct BrokenDate;
 struct BrokenDateTime;
 
@@ -17,6 +20,14 @@ FormatISO8601(char *buffer, const BrokenDate &date) noexcept;
  */
 void
 FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept;
+
+/**
+ * Parse a UTC ISO 8601 timestamp (YYYY-MM-DDTHH:MM:SS[.sss]Z).
+ *
+ * @throws std::runtime_error on invalid input (including non-UTC offsets).
+ */
+[[nodiscard]] std::chrono::system_clock::time_point
+ParseISO8601Utc(std::string_view iso_string);
 
 void
 FormatTime(char *buffer, FloatDuration time) noexcept;

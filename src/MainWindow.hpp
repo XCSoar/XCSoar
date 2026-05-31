@@ -43,8 +43,8 @@ class MainWindow : public UI::SingleWindow {
   MenuBar *menu_bar = nullptr;
 
   ShowMenuButton *show_menu_button = nullptr;
-  ShowZoomOutButton *show_zoom_out_button = nullptr;
-  ShowZoomInButton *show_zoom_in_button = nullptr;
+  ShowZoomButton *show_zoom_out_button = nullptr;
+  ShowZoomButton *show_zoom_in_button = nullptr;
 
 #ifdef ANDROID
   ShowRotateButton *show_rotate_button = nullptr;
@@ -116,6 +116,9 @@ private:
    */
   UI::Notify restore_page_notify{[this]{ OnRestorePageNotify(); }};
 
+  UI::Notify refresh_info_boxes_notify{[this]{ OnRefreshInfoBoxesNotify(); }};
+  UI::Notify page_actions_update_notify{[this]{ OnPageActionsUpdateNotify(); }};
+
   UI::PeriodicTimer timer{[this]{ RunTimer(); }};
 
   BatteryTimer battery_timer;
@@ -132,6 +135,8 @@ private:
 #endif
 
   bool restore_page_pending = false;
+  bool refresh_info_boxes_pending = false;
+  bool page_actions_update_pending = false;
 
   /**
    * Has "late" initialization been done already?  Those are things
@@ -210,6 +215,22 @@ private:
   PixelRect GetMainRect() const noexcept {
     return FullScreen ? GetClientRect() : map_rect;
   }
+
+  /**
+   * The visible #GlueMapWindow area.  After layout, this is
+   * #GlueMapWindow::GetPosition(); otherwise it is computed from
+   * #GetMainRect() and top/bottom widgets.
+   */
+  [[gnu::pure]]
+  PixelRect GetMapAreaRect() const noexcept;
+
+  /**
+   * Move top/bottom widgets and the map into the area returned by
+   * #GetMapAreaRect().
+   */
+  void LayoutMapArea() noexcept;
+
+  void UpdateMapOverlayButtonLayout() noexcept;
 
   /**
    * Adjust the flarm radar position
@@ -356,6 +377,17 @@ public:
   void DeferredRestorePage() noexcept;
 
   /**
+   * Defer InfoBox refresh to the next event-loop iteration (avoids
+   * reentrant layout while InfoBox content is updating).
+   */
+  void ScheduleRefreshInfoBoxes() noexcept;
+
+  /**
+   * Defer PageActions::Update() to the next event-loop iteration.
+   */
+  void SchedulePageActionsUpdate() noexcept;
+
+  /**
    * Show this #Widget above the map.  This replaces (deletes) the
    * previous top widget, if any.  To disable this feature, call this
    * method with widget==nullptr.
@@ -412,6 +444,8 @@ private:
   void OnGpsNotify() noexcept;
   void OnCalculatedNotify() noexcept;
   void OnRestorePageNotify() noexcept;
+  void OnRefreshInfoBoxesNotify() noexcept;
+  void OnPageActionsUpdateNotify() noexcept;
 
   void OnTerrainLoaded() noexcept;
 
@@ -433,8 +467,8 @@ protected:
   bool OnKeyDown(unsigned key_code) noexcept override;
   void OnPaint(Canvas &canvas) noexcept override;
   PixelRect GetShowMenuButtonRect(const PixelRect rc) noexcept;
-  PixelRect GetShowZoomOutButtonRect(const PixelRect rc) noexcept;
-  PixelRect GetShowZoomInButtonRect(const PixelRect rc) noexcept;
+  PixelRect GetShowZoomButtonRect(const PixelRect rc,
+                                  ShowZoomButton::Sign sign) noexcept;
 
 #ifdef ANDROID
   static PixelRect GetShowRotateButtonRect(const PixelRect rc) noexcept;

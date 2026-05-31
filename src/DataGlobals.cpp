@@ -53,7 +53,7 @@ DataGlobals::SetTerrain(std::unique_ptr<RasterTerrain> _terrain) noexcept
   /* re-create the bottom widget if it was deleted by
      UnsetTerrain() */
   if (global_running)
-    PageActions::Update();
+    PageActions::ScheduleUpdate();
 }
 
 std::shared_ptr<RaspStore>

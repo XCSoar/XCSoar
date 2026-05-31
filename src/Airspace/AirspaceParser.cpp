@@ -22,6 +22,7 @@
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "io/BufferedReader.hxx"
@@ -33,6 +34,7 @@
 #include "util/TruncateString.hpp"
 #include "LogFile.hpp"
 
+#include <cassert>
 #include <stdexcept>
 
 using std::string_view_literals::operator""sv;
@@ -184,8 +186,9 @@ struct TempAirspace
   std::optional<AirspaceAltitude> base;
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
-  std::string activation_times;
   bool has_activation_time;
+  BrokenDateTime activation_start_time;
+  BrokenDateTime activation_end_time;
   bool active_today;
   bool never_active;
 
@@ -208,8 +211,9 @@ struct TempAirspace
   Reset(unsigned line_number) noexcept
   {
     days_of_operation.SetAll();
-    activation_times.clear();
     has_activation_time = false;
+    activation_start_time = BrokenDateTime::Invalid();
+    activation_end_time   = BrokenDateTime::Invalid();
     active_today = false;
     never_active = false;
     name.clear();
@@ -278,9 +282,13 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), std::move(activation_times),
-                      std::move(has_activation_time), std::move(active_today),
-                      std::move(never_active), std::move(station_name),
+    as->SetProperties(std::move(name),
+                      std::move(has_activation_time),
+                      std::move(activation_start_time),
+                      std::move(activation_end_time),
+                      std::move(active_today),
+                      std::move(never_active),
+                      std::move(station_name),
                       std::move(transponder_code), asclass, astype, *base,
                       *top);
     as->SetRadioFrequency(radio_frequency);
@@ -319,9 +327,13 @@ struct TempAirspace
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), std::move(activation_times),
-                      std::move(has_activation_time), std::move(active_today),
-                      std::move(never_active), std::move(station_name),
+    as->SetProperties(std::move(name),
+                      std::move(has_activation_time),
+                      std::move(activation_start_time),
+                      std::move(activation_end_time),
+                      std::move(active_today),
+                      std::move(never_active),
+                      std::move(station_name),
                       std::move(transponder_code), asclass, astype, *base,
                       *top);
     as->SetRadioFrequency(radio_frequency);
@@ -418,97 +430,14 @@ struct TempAirspace
 static AirspaceAltitude
 ReadAltitude(StringParser<> &input)
 {
-  auto unit = Unit::FEET;
-  enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
-  double value = 0;
+  ParseAirspaceAltitudeOptions options;
+  options.strict_unknown_tokens = false;
+  options.accept_amsl = false;
+  options.unlimited_ceiling_m = 50000;
 
-  while (true) {
-    input.Strip();
-
-    if (IsDigitASCII(input.front())) {
-      if (auto x = input.ReadDouble())
-        value = *x;
-    } else if (input.SkipMatchIgnoreCase("GND"sv) ||
-               input.SkipMatchIgnoreCase("AGL"sv)) {
-      type = AGL;
-    } else if (input.SkipMatchIgnoreCase("SFC"sv)) {
-      type = SFC;
-    } else if (input.SkipMatchIgnoreCase("FL"sv)) {
-      type = FL;
-    } else if (input.SkipMatchIgnoreCase("FT"sv)) {
-      unit = Unit::FEET;
-    } else if (input.SkipMatchIgnoreCase("MSL"sv)) {
-      type = MSL;
-    } else if (input.front() == 'M' || input.front() == 'm') {
-      unit = Unit::METER;
-      input.Skip();
-    } else if (input.SkipMatchIgnoreCase("STD"sv)) {
-      type = STD;
-    } else if (input.SkipMatchIgnoreCase("UNL"sv)) {
-      type = UNLIMITED;
-    } else if (input.IsEmpty())
-      break;
-    else
-      input.Skip();
-  }
-
-  AirspaceAltitude altitude;
-
-  switch (type) {
-  case FL:
-    altitude.reference = AltitudeReference::STD;
-    altitude.flight_level = value;
-
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = Units::ToSysUnit(value, Unit::FLIGHT_LEVEL);
-    return altitude;
-
-  case UNLIMITED:
-    altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = 50000;
-    return altitude;
-
-  case SFC:
-    altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = -1;
-
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = 0;
-    return altitude;
-
-  default:
-    break;
-  }
-
-  // For MSL, AGL and STD we convert the altitude to meters
-  value = Units::ToSysUnit(value, unit);
-  switch (type) {
-  case MSL:
-    altitude.reference = AltitudeReference::MSL;
-    altitude.altitude = value;
-    return altitude;
-
-  case AGL:
-    altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = value;
-
-    /* prepare fallback, just in case we have no terrain */
-    altitude.altitude = value;
-    return altitude;
-
-  case STD:
-    altitude.reference = AltitudeReference::STD;
-    altitude.flight_level = Units::ToUserUnit(value, Unit::FLIGHT_LEVEL);
-
-    /* prepare fallback, just in case we have no QNH */
-    altitude.altitude = value;
-    return altitude;
-
-  default:
-    break;
-  }
-
-  return altitude;
+  const auto altitude = ParseAirspaceAltitude(input, options);
+  assert(altitude.has_value());
+  return *altitude;
 }
 
 /**
@@ -707,70 +636,20 @@ ReadISO8601(const char *ts, BrokenDateTime &dt) noexcept
   return false;
 }
 
-static void
-FormatActivationTime(const char *ts,
-                     char *buf,
-                     const size_t buf_len,
-                     const char *msg) noexcept
-{
-  char *e    = CopyTruncateString(buf, buf_len - 25, ts);
-  size_t len = buf_len - (e - buf);
-  CopyTruncateString(e, len, msg);
-}
-
-static size_t
-FormatActivationTime(const char *start_ts,
-                     const char *end_ts,
-                     char *buf,
-                     const size_t buf_len) noexcept
-{
-  size_t len = buf_len;
-  char *e    = buf;
-
-  if (StringIsEqualIgnoreCase(end_ts, "NONE")) {
-    e   = CopyTruncateString(e, len, _("active since "));
-    len = buf_len - (e - buf);
-
-    e   = CopyTruncateString(e, len, start_ts);
-    len = buf_len - (e - buf);
-
-  } else if (StringIsEqualIgnoreCase(start_ts, "NONE")) {
-    e   = CopyTruncateString(e, len, _("active until "));
-    len = buf_len - (e - buf);
-
-    e   = CopyTruncateString(e, len, end_ts);
-    len = buf_len - (e - buf);
-
-  } else {
-    e   = CopyTruncateString(e, len, _("active between "));
-    len = buf_len - (e - buf);
-
-    e   = CopyTruncateString(e, len, start_ts);
-    len = buf_len - (e - buf);
-
-    e   = CopyTruncateString(e, len, _("\n    and "));
-    len = buf_len - (e - buf);
-
-    e   = CopyTruncateString(e, len, end_ts);
-    len = buf_len - (e - buf);
-  }
-
-  e   = CopyTruncateString(e, len, "\n");
-  len = buf_len - (e - buf);
-
-  return len;
-}
-
 static AirspaceActivationDecode
 ParseActivationTime(const char *in,
-                    char *display_result,
-                    const size_t display_result_len) noexcept
+                    BrokenDateTime &start_time,
+                    BrokenDateTime &end_time) noexcept
 {
   char active_time_pair[80];
   BrokenDateTime dt              = BrokenDateTime::Invalid();
   const BrokenDateTime now       = BrokenDateTime::NowUTC();
   bool time_interval_has_started = false;
   bool time_interval_before_end  = false;
+
+
+  start_time = BrokenDateTime::Invalid();
+  end_time   = BrokenDateTime::Invalid();
 
   CopyTruncateString(active_time_pair, sizeof(active_time_pair), in);
 
@@ -790,37 +669,34 @@ ParseActivationTime(const char *in,
        * 18 hours should be enough to catch activation
        * times between now (parse time) and sunset.
        */
-      if ((dt - std::chrono::seconds(18 * 3600)) < now)
+      if ((dt - std::chrono::seconds(18 * 3600)) < now) {
         time_interval_has_started = true;
+        start_time = dt;
+      }
     } else {
-      FormatActivationTime(active_time_pair, display_result, display_result_len,
-                          _(" : not plausible"));
+      // can't recognize start time
       return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
     }
 
     if (StringIsEqualIgnoreCase(slash_loc + 1, "NONE")) {
       time_interval_before_end = true;
     } else if (ReadISO8601(slash_loc + 1, dt)) {
-      if (now < dt) time_interval_before_end = true;
+      if (now < dt) {
+        time_interval_before_end = true;
+        end_time = dt;
+      }
     } else {
-      FormatActivationTime(slash_loc + 1, display_result, display_result_len,
-                          _(" : not plausible"));
+      // can't recognize end time
       return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
     }
 
-    if (time_interval_has_started && time_interval_before_end) {
-      if (FormatActivationTime(active_time_pair,
-                               slash_loc + 1,
-                               display_result,
-                               display_result_len) > 0)
-        return AirspaceActivationDecode::IS_ACTIVE_NOW;
-      else
-        return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
-    }
-    return AirspaceActivationDecode::NOT_APPLICABLE;
+    if (time_interval_has_started && time_interval_before_end)
+      return AirspaceActivationDecode::IS_ACTIVE_NOW;
+    else
+      return AirspaceActivationDecode::NOT_APPLICABLE;
+
   } else {
-    FormatActivationTime(in, display_result, display_result_len,
-                        _(" : invalid format"));
+    // can't recognize the 2 time stamps
     return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
   }
 }
@@ -902,28 +778,30 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'a':
       if (input.SkipWhitespace()) {
         temp_area.has_activation_time = true;
-        char buf[200];
-        switch (ParseActivationTime(input.c_str(), buf, sizeof(buf))) {
+        BrokenDateTime activation_start_time;
+        BrokenDateTime activation_end_time;
+        switch (ParseActivationTime(input.c_str(),
+                                    activation_start_time,
+                                    activation_end_time)) {
+          case AirspaceActivationDecode::IS_ACTIVE_NOW :
+            if (temp_area.never_active)
+              break;
+            temp_area.active_today = true;
+            temp_area.activation_start_time = activation_start_time;
+            temp_area.activation_end_time   = activation_end_time;
+            break;
           case AirspaceActivationDecode::NOT_APPLICABLE :
             // this AA is not active, but more AAs may come
             break;
           case AirspaceActivationDecode::NEVER_ACTIVE :
             temp_area.never_active = true;
             temp_area.active_today = false;
-            temp_area.activation_times.clear();
-            break;
-          case AirspaceActivationDecode::IS_ACTIVE_NOW :
-            if (temp_area.never_active)
-              break;
-            temp_area.active_today = true;
-            temp_area.activation_times += buf;
             break;
           case AirspaceActivationDecode::UNDETECTABLE_CONTENT :
             if (temp_area.never_active)
               break;
             LogFormat("Airspace %s: Activation Time(s) not plausible : %s",
               temp_area.name.c_str(), input.c_str());
-            temp_area.activation_times += buf;
             break;
           }
         }

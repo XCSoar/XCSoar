@@ -4,6 +4,7 @@
 #pragma once
 
 #include "util/TriState.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
 #include "AirspaceActivity.hpp"
@@ -57,7 +58,8 @@ protected:
    ** unless has_activation_time == true
    */
   bool has_activation_time = false;
-  std::string activation_times;
+  BrokenDateTime activation_start_time = BrokenDateTime::Invalid();
+  BrokenDateTime activation_end_time = BrokenDateTime::Invalid();
   bool active_today = true;
   bool never_active = false;
   /** end of Activation times related variables */
@@ -206,7 +208,9 @@ public:
    * Set fundamental properties of airspace
    *
    * @param _Name Name of airspace
-   * @param _activation_times, _has_activation_time
+   * @param _has_activation_time
+   * @param _activation_start_time
+   * @param _activation_end_time
    * @param _active_today, _never_active
    * @param _classs Class
    * @param _type Type
@@ -214,8 +218,10 @@ public:
    * @param _top Upper limit
    */
 
-  void SetProperties(std::string &&_name, std::string &&_activation_times,
+  void SetProperties(std::string &&_name,
                      bool _has_activation_time,
+                     BrokenDateTime _activation_start_time,
+                     BrokenDateTime _activation_end_time,
                      bool _active_today, bool _never_active,
                      std::string &&_station_name,
                      TransponderCode &&_transponder_code,
@@ -223,15 +229,17 @@ public:
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept
   {
-    has_activation_time = std::move(_has_activation_time);
+    has_activation_time = _has_activation_time;
     if (has_activation_time) {
-      activation_times = std::move(_activation_times);
-      never_active = std::move(_never_active);
-      active_today = std::move(_active_today);
+      activation_start_time = std::move(_activation_start_time);
+      activation_end_time   = std::move(_activation_end_time);
+      never_active          = _never_active;
+      active_today          = _active_today;
     } else {
-      activation_times.clear();
-      never_active = false;
-      active_today = true;
+      activation_start_time = BrokenDateTime::Invalid();
+      activation_end_time   = BrokenDateTime::Invalid();
+      never_active          = false;
+      active_today          = true;
     }
     name = std::move(_name);
     station_name = std::move(_station_name);
@@ -388,13 +396,18 @@ public:
   }
 
   [[gnu::pure]]
-  const char *GetActivationTimes() const noexcept {
-    return activation_times.c_str();
-  }
-
-  [[gnu::pure]]
   bool HasActivationTime() const noexcept {
     return has_activation_time;
+  }
+
+  [[nodiscard]]
+  BrokenDateTime GetActivationStartTime() const noexcept {
+    return activation_start_time;
+  }
+
+  [[nodiscard]]
+  BrokenDateTime GetActivationEndTime() const noexcept {
+    return activation_end_time;
   }
 
   [[gnu::pure]]

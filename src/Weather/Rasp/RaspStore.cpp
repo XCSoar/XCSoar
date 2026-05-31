@@ -90,7 +90,9 @@ RaspStore::IndexToTime(unsigned index)
 unsigned
 RaspStore::GetNearestTime(unsigned item_index, unsigned time_index) const
 {
-  assert(item_index < maps.size());
+  if (item_index >= maps.size() || time_index >= MAX_WEATHER_TIMES)
+    return MAX_WEATHER_TIMES;
+
   assert(time_index < MAX_WEATHER_TIMES);
 
   // scan forward to next valid time
@@ -132,6 +134,9 @@ RaspStore::WeatherFilename(char *filename, Path name,
 std::unique_ptr<ZipArchive>
 RaspStore::OpenArchive() const
 {
+  if (path == nullptr || path.empty())
+    return nullptr;
+
   return std::make_unique<ZipArchive>(path);
 }
 

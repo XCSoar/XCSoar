@@ -96,6 +96,34 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   }
 
   /**
+   * Returns a copy with seconds set to zero (minute resolution).
+   */
+  constexpr BrokenDateTime FloorToMinute() const noexcept
+  {
+    if (!IsPlausible())
+      return *this;
+
+    return BrokenDateTime(year, month, day, hour, minute, 0);
+  }
+
+  /**
+   * Returns a copy with minutes and seconds set to zero (hour resolution).
+   */
+  constexpr BrokenDateTime FloorToHour() const noexcept
+  {
+    if (!IsPlausible())
+      return *this;
+
+    return BrokenDateTime(year, month, day, hour, 0, 0);
+  }
+
+  /**
+   * Convert this UTC timestamp to local time.
+   */
+  [[gnu::pure]]
+  BrokenDateTime ToLocal() const noexcept;
+
+  /**
    * Convert a UNIX UTC time stamp (seconds since epoch) to a
    * BrokenDateTime object.
    */

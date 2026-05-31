@@ -572,7 +572,7 @@ FlarmTrafficControl::OpenDetails()
     return;
 
   // Show the details dialog
-  dlgFlarmTrafficDetailsShowModal(traffic->id);
+  (void)dlgFlarmTrafficDetailsShowModal(traffic->id);
 }
 
 static Button
@@ -628,13 +628,13 @@ TrafficWidget::Windows::UpdateLayout(const PixelRect &rc) noexcept
   view.Move(rc);
 
   const unsigned margin = Layout::Scale(1);
-  const unsigned button_height = Layout::GetMinimumControlHeight();
-  const unsigned button_width = std::max(unsigned(rc.right / 6),
-                                         button_height);
+  const unsigned button_height =
+    std::max(1u, Layout::GetMinimumControlHeight());
+  const unsigned button_width = std::max({unsigned(rc.right / 6),
+                                          button_height, margin + 1u});
 
   const int x1 = rc.right / 2;
   const int x0 = x1 - button_width;
-  const int x2 = x1 + button_width;
 
   const int y0 = margin;
   const int y1 = y0 + button_height;
@@ -643,24 +643,26 @@ TrafficWidget::Windows::UpdateLayout(const PixelRect &rc) noexcept
 
   PixelRect button_rc;
 
+  const int btn_w = std::max(1, int(button_width) - int(margin));
+
   button_rc.left = x0;
   button_rc.top = y0;
-  button_rc.right = x1 - margin;
+  button_rc.right = button_rc.left + btn_w;
   button_rc.bottom = y1;
   zoom_in_button.Move(button_rc);
 
   button_rc.left = x1;
-  button_rc.right = x2 - margin;
+  button_rc.right = button_rc.left + btn_w;
   zoom_out_button.Move(button_rc);
 
   button_rc.left = x0;
   button_rc.top = y2;
-  button_rc.right = x1 - margin;
+  button_rc.right = button_rc.left + btn_w;
   button_rc.bottom = y3;
   previous_item_button.Move(button_rc);
 
   button_rc.left = x1;
-  button_rc.right = x2 - margin;
+  button_rc.right = button_rc.left + btn_w;
   next_item_button.Move(button_rc);
 
   button_rc.left = margin;

@@ -7,7 +7,7 @@
 #include "Client.hpp"
 #include "time/PeriodClock.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "co/InjectTask.hxx"
+#include "net/AsyncTask.hpp"
 #include "time/BrokenDateTime.hpp"
 
 struct MoreData;
@@ -52,10 +52,12 @@ class Glue final {
   Angle track;
   bool flying = false, last_flying;
 
-  Co::InjectTask inject_task;
+  Net::AsyncTask task;
 
 public:
   explicit Glue(CurlGlobal &curl) noexcept;
+
+  void BeginShutdown() noexcept;
 
   void SetSettings(const Settings &_settings);
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);

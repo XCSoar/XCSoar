@@ -8,8 +8,8 @@ class FlarmId;
 void
 dlgTeamCodeShowModal();
 
-void
-dlgFlarmTrafficDetailsShowModal(FlarmId id);
+[[nodiscard]] bool
+dlgFlarmTrafficDetailsShowModal(FlarmId id) noexcept;
 
 void
 TrafficListDialog();

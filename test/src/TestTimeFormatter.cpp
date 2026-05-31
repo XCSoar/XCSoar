@@ -2,9 +2,14 @@
 // Copyright The XCSoar Project
 
 #include "Formatter/TimeFormatter.hpp"
+#include "time/BrokenDateTime.hpp"
+#include "time/RoughTime.hpp"
+#include "time/Stamp.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 #include "TestUtil.hpp"
+
+using namespace std::chrono_literals;
 
 static void
 TestFormat()
@@ -235,15 +240,53 @@ TestSmart()
             "-3 days 19 h 47 min 5 sec");
 }
 
+/**
+ * Regression for #957: flight time must match takeoff/landing after
+ * minute rounding, not raw second-precision duration.
+ */
+static void
+TestFlightTimeFromRoundedTakeoffLanding()
+{
+  const TimeStamp takeoff{10h + 3min + 30s};
+  const TimeStamp landing{11h + 47min + 29s};
+  const FloatDuration raw_flight_time = landing - takeoff;
+
+  ok1(StringIsEqual(FormatSignedTimeHHMM(raw_flight_time).c_str(), "01:43"));
+
+  const RoughTime rough_takeoff = RoughTime::FromSinceMidnight(takeoff);
+  const RoughTime rough_landing = RoughTime::FromSinceMidnight(landing);
+  ok1(StringIsEqual(FormatSignedTimeHHMM(FloatDuration{rough_landing - rough_takeoff}).c_str(),
+                  "01:44"));
+}
+
+static void
+TestFlightTimeFromRoundedBrokenDateTime()
+{
+  const BrokenDateTime takeoff{2024, 1, 1, 23, 3, 30};
+  const BrokenDateTime landing{2024, 1, 2, 0, 47, 29};
+  const auto raw = landing - takeoff;
+
+  ok1(StringIsEqual(FormatSignedTimeHHMM(
+        std::chrono::duration_cast<std::chrono::seconds>(raw)).c_str(),
+        "01:43"));
+
+  const auto rounded = landing.FloorToMinute() - takeoff.FloorToMinute();
+  ok1(StringIsEqual(FormatSignedTimeHHMM(
+        std::chrono::duration_cast<std::chrono::seconds>(rounded)).c_str(),
+        "01:44"));
+}
+
 int main()
 {
-  plan_tests(111);
+  plan_tests(115);
 
   TestFormat();
   TestFormatLong();
   TestHHMM();
   TestTwoLines();
   TestSmart();
+  TestFlightTimeFromRoundedTakeoffLanding();
+  TestFlightTimeFromRoundedBrokenDateTime();
 
   return exit_status();
 }

@@ -79,9 +79,12 @@ SolidWidget::ReClick() noexcept
 void
 SolidWidget::Show(const PixelRect &rc) noexcept
 {
-  widget->Show(ToOrigin(rc));
-
+  /* Show the container first.  The child Show() may run nested UI (e.g.
+     a modal download dialog); layout code must be able to Move() the
+     container while that runs (OnTerrainLoaded during startup). */
   WindowWidget::Show(rc);
+
+  widget->Show(ToOrigin(rc));
 }
 
 bool
@@ -100,8 +103,14 @@ SolidWidget::Hide() noexcept
 void
 SolidWidget::Move(const PixelRect &rc) noexcept
 {
-  WindowWidget::Move(rc);
-  widget->Move(ToOrigin(rc));
+  if (!IsDefined())
+    return;
+
+  if (GetWindow().IsVisible()) {
+    WindowWidget::Move(rc);
+    widget->Move(ToOrigin(rc));
+  } else
+    GetWindow().Move(rc);
 }
 
 bool

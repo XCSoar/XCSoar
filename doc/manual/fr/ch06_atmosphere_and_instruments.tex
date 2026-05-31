@@ -308,19 +308,25 @@ En février 2014, le téléchargement des fichiers \verb|xcsoar.rasp.dat| n'est 
 Les prévisions RASP sont affichées comme des surcouches de couleur sur la carte de relief.\\ \\
 Assurez-vous que l'affichage du relief soit activé. \tip{} \\ \\
 
-Les surcouches de prévision RASP sont activables par le menu
+Sélectionnez un fichier \verb|xcsoar-rasp.dat| via le menu
 \menulabelr{\bmenug{Info}\blink\bmenug{Météo}}
-\bmenug{Info}.
+\bmenuw{RASP}.  La configuration des pages (Section~\ref{conf:screenpages})
+détermine où le RASP est affiché~: définissez \emph{Surcouche carte} sur
+\emph{RASP}, choisissez la \emph{Couche RASP} pour cette page et, si
+besoin, la \emph{Zone inférieure} sur \emph{Commandes météo} pour ajuster
+l'heure de prévision en vol.
 
-Le paramètre Champ détermine le type de donnée à afficher sur le carte.
-Le paramètre Temps détermine l'heure de la prévision affichée sur la carte. 
-Une fois les paramètres météo rentrés, le paramètre de temps sera mis à jour au moment le plus proche disponible dans le fichier RASP.\@
-Quand un champ n'est pas disponible dans une fichier RASP, son arrière-plan est vide.
-
-Les valeurs maximales et minimales du type de données apparaissant sur la carte sont dessinées 
 \marginpar{\includegraphics[angle=0,width=0.95\linewidth,keepaspectratio='true']{figures/dialog-weather.png}}
-à leurs localisations respectives.
-Le type de données est affiché dans le coin inférieur gauche de l'écran.
+Lorsque le panneau \emph{Commandes météo} est visible, \emph{Avancement
+automatique} suit l'heure locale courante par pas de 15~minutes.
+Désactivez-le pour choisir une heure de prévision fixe.  Lors de la
+première entrée sur une page avec surcouche RASP, \xc{} sélectionne la
+prochaine heure de prévision disponible dans le fichier RASP à partir de
+l'heure courante.
+
+Quand un champ n'est pas disponible dans un fichier RASP, son arrière-plan est vide.
+Le type de données est affiché dans le coin inférieur gauche de l'écran
+lorsque des données RASP sont affichées.
 
 Les types de données disponibles pour affichage sont~:
 \begin{description}
@@ -400,6 +406,74 @@ Les dégradés de couleurs utilisés pour représenter les contours RASP sont il
 \end{longtable}
 \end{maxipage}
 
+\section{Prévisions météo, EDL Soaring}\label{sec:weather-edl}
+
+\xc{} peut afficher des surcouches météo orientées onde fournies par
+le service public MBTiles d'EDL Soaring à l'adresse
+\url{https://www.edl-soaring.com/mbtiles/}. \xc{} télécharge les tuiles
+à la demande depuis le service public d'extraction d'EDL Soaring et les
+stocke localement comme fichiers \verb|.mbtiles| dans le cache météo.
+
+Avant d'utiliser EDL, activez \emph{Page météo EDL} dans la configuration
+système sous \emph{Configuration système / Météo} (nécessite une version
+OpenGL avec support HTTP).
+
+Les tuiles sont mises en cache localement.  Ouvrez l'onglet \bmenuw{EDL}
+dans \menulabelr{\bmenug{Info}\blink\bmenug{Météo}} ou la section EDL de
+\emph{Configuration système / Météo} pour gérer le cache~:
+\begin{description}
+\item[Jour en cache]
+  Afficher quels jours UTC sont déjà présents dans le cache local. Un
+  jour est marqué \emph{Complet} lorsque les 24 heures de prévision et
+  les cinq niveaux EDL sont disponibles localement ; sinon il est marqué
+  \emph{Partiel}.
+\item[Précharger le jour]
+  Télécharger les 24 heures et les cinq niveaux EDL pour le jour UTC
+  sélectionné. Cette fonction est destinée à la préparation du vol, afin
+  que les données EDL restent disponibles si la connexion Internet est
+  perdue en vol.
+\item[Nettoyer les autres jours]
+  Conserver uniquement le jour UTC sélectionné dans le cache et
+  supprimer les autres jours EDL stockés localement.
+\end{description}
+
+Configurez une page carte dans la boîte de dialogue de configuration des
+pages (Section~\ref{conf:screenpages})~: définissez \emph{Zone principale}
+sur \emph{Carte} (ou \emph{Carte (nord en haut)}), \emph{Surcouche carte}
+sur \emph{EDL} et \emph{Zone inférieure} sur \emph{Commandes météo}.  Le
+panneau inférieur en vol propose~:
+\begin{description}
+\item[Avancement automatique]
+  Lorsqu'il est activé, \xc{} suit la prochaine heure de prévision UTC et
+  sélectionne la plus basse isobare au-dessus de l'altitude actuelle du
+  planeur.  Les sélecteurs de prévision et de niveau sont désactivés tant
+  que l'avancement automatique est actif.
+\item[Prévision]
+  Sélectionner l'heure de prévision à afficher. \xc{} affiche cette
+  heure en heure locale pour le confort du pilote, mais interroge le
+  service EDL en UTC car le service distant attend des horodatages UTC.
+\item[Niveau]
+  Sélectionner l'un des niveaux de pression disponibles. La source EDL
+  fournit les isobares fixes 500, 600, 700, 800 et 900~hPa. \xc{}
+  affiche également l'altitude approximative correspondant à chaque
+  isobare avec le réglage de pression courant.
+\end{description}
+
+En entrant sur une page avec surcouche EDL, l'affichage revient à la
+prochaine heure de prévision UTC et l'avancement automatique est activé.
+La légende de surcouche en haut à droite affiche l'heure locale active,
+le niveau de pression sélectionné et son altitude approximative.
+
+La même surcouche EDL peut être activée sur n'importe quelle page carte en
+définissant \emph{Surcouche carte} sur \emph{EDL} dans la configuration
+des pages.
+
+La source EDL est destinée au vol d'onde et fournit des tuiles d'image
+rendues plutôt que des champs météorologiques bruts. \xc{} utilise donc
+l'imagerie EDL comme une surcouche de carte et n'expose pas de
+paramètres de modèle supplémentaires au-delà de l'heure de prévision et
+des niveaux isobares fixes publiés par le service EDL.
+
 \section{pc\_met, Deutscher Wetterdienst}\label{sec:pcmet}
 
 Le service météorologique allemand ``Deutscher Wetterdienst'' fournit plusieurs images météo utiles aux utilisateurs de \xc.
@@ -411,6 +485,6 @@ Cela peut être cher en fonction des caractéristiques de votre abonnement mobil
 Pour activer cette fonctionnalité, entrez vos identifiants \emph{pc\_met} dans le système de configuration d'\xc.
 Il y a deux paires nom d'utilisateur/mot de passe~: le premier est pour les services web du DWD (\url{www.flugwetter.de}), le second est le mot de passe FTP (\url{ftp.pcmet.de}).
 
-Au cours des vérifications pré-vol et pendant le vol, vous pouvez vérifier les prévisions météo et les données météo en temps réel dans le menu \menulabelr{\bmenug{Info}\blink\bmenug{Weather}} \bmenug{Info}.
+Au cours des vérifications pré-vol et pendant le vol, vous pouvez vérifier les prévisions météo et les données météo en temps réel dans le menu \menulabelr{\bmenug{Info}\blink\bmenug{Météo}}.
 Dans ``Surcouche'', vous pouvez choisir des couches pour la carte.
 ``pc\_met'' est une collection d'images en temps réel qui sont habituellement disponible sur le site web du DWD \url{www.flugwetter.de}.

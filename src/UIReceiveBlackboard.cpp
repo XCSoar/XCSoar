@@ -102,7 +102,7 @@ UIReceiveCalculatedData()
   XCSoarInterface::ReceiveCalculated();
 
   ActionInterface::UpdateDisplayMode();
-  ActionInterface::SendUIState();
+  ActionInterface::ScheduleSendUIState();
 
   if (backend_components->devices)
     backend_components->devices->NotifyCalculatedUpdate(CommonInterface::Basic(),

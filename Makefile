@@ -169,6 +169,7 @@ include $(topdir)/build/libio.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/libwaypoint.mk
 include $(topdir)/build/libairspace.mk
+include $(topdir)/build/libnotam.mk
 include $(topdir)/build/libtask.mk
 include $(topdir)/build/libxml.mk
 include $(topdir)/build/libcupfile.mk
@@ -184,6 +185,7 @@ include $(topdir)/build/libevent.mk
 include $(topdir)/build/freetype.mk
 include $(topdir)/build/libpng.mk
 include $(topdir)/build/libjpeg.mk
+include $(topdir)/build/libsqlite.mk
 include $(topdir)/build/libtiff.mk
 include $(topdir)/build/coregraphics.mk
 include $(topdir)/build/appkit.mk

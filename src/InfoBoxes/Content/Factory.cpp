@@ -1186,6 +1186,31 @@ static constexpr MetaData meta_data[] = {
     altitude_infobox_panels,
   },
 
+  // e_QNH
+  {
+    N_("QNH"),
+    N_("QNH"),
+    N_("Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."),
+    UpdateInfoBoxAltitudeQNH,
+    altitude_infobox_panels,
+  },
+
+  // e_ActiveWaypoint
+  {
+    N_("Active Waypoint"),
+    N_("Active WP"),
+    N_("Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."),
+    IBFHelper<InfoBoxContentActiveWaypoint>::Create,
+  },
+
+  // e_PreviousWaypoint
+  {
+    N_("Previous Waypoint"),
+    N_("Prev WP"),
+    N_("Previous waypoint: when an ordered task is loaded, automatically tracks the task waypoint before the active leg (the start waypoint when on the first leg). Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint to display (task waypoints when a task is loaded, otherwise the full waypoint list); selection is informational only and never advances the task or sets a Goto. With a task loaded, choose \"Resume auto tracking\" at the top of the list to revert to automatic tracking."),
+    IBFHelper<InfoBoxContentPreviousWaypoint>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

@@ -21,8 +21,22 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 }
 
 void
+TrackingGlue::BeginShutdown() noexcept
+{
+  if (shutting_down)
+    return;
+
+  shutting_down = true;
+  skylines.BeginShutdown();
+  livetrack24.BeginShutdown();
+}
+
+void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
+  if (shutting_down)
+    return;
+
   try {
     skylines.Tick(basic, calculated);
   } catch (...) {

@@ -31,8 +31,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:128
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:62
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:160
-#: Data/Input/default.xci:601 Data/Input/default.xci:1295
-#: Data/Input/default.xci:1303
+#: Data/Input/default.xci:601 Data/Input/default.xci:1302
+#: Data/Input/default.xci:1310
 #, no-c-format
 msgid "Task"
 msgstr "Задача"
@@ -470,7 +470,7 @@ msgstr "Соревновательный ID"
 
 #: src/net/client/WeGlide/UploadIGCFile.cpp:108
 #: src/net/client/WeGlide/UploadIGCFile.cpp:121 Data/Input/default.xci:801
-#: Data/Input/default.xci:1505
+#: Data/Input/default.xci:1512
 msgid "WeGlide Upload"
 msgstr "Тип транспортного средства"
 
@@ -484,7 +484,8 @@ msgstr "Скачать полет"
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:193
 #: src/Dialogs/Plane/PlaneListDialog.cpp:199
 #: src/Dialogs/Plane/PlaneListDialog.cpp:224
-#: src/Dialogs/Plane/PlaneListDialog.cpp:269
+#: src/Dialogs/Plane/PlaneListDialog.cpp:269 src/Dialogs/WifiDialog.cpp:232
+#: src/Dialogs/WifiDialog.cpp:240 src/Dialogs/WifiDialog.cpp:294
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:44
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:54
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:82
@@ -500,6 +501,7 @@ msgstr "Скачать полет"
 #: src/Dialogs/Weather/NOAADetails.cpp:137
 #: src/Dialogs/DownloadFilePicker.cpp:193
 #: src/Dialogs/DownloadFilePicker.cpp:262
+#: src/Weather/EDL/StateController.cpp:319
 msgid "Error"
 msgstr "Ошибка"
 
@@ -577,7 +579,7 @@ msgid "Not Circling"
 msgstr "Не в спирали"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:56
-#: src/Gauge/BigTrafficWidget.cpp:614 src/Dialogs/InternalLink.cpp:50
+#: src/Gauge/BigTrafficWidget.cpp:614 src/Dialogs/InternalLink.cpp:51
 #: src/Dialogs/FileManager.cpp:742 src/Dialogs/Device/DeviceListDialog.cpp:786
 #: src/Dialogs/Device/PortMonitor.cpp:166
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:139
@@ -587,34 +589,35 @@ msgstr "Не в спирали"
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:93
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:80
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:109
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:121
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:136
 #: src/Dialogs/MapItemListDialog.cpp:192
 #: src/Dialogs/Airspace/dlgAirspace.cpp:144
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:135
 #: src/Dialogs/Airspace/AirspaceList.cpp:465
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:515
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:522
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:21
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:386
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:390
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:257
 #: src/Dialogs/Traffic/TrafficList.cpp:348
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:351
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:210 src/Dialogs/dlgAnalysis.cpp:306
 #: src/Dialogs/ProfileListDialog.cpp:318
 #: src/Dialogs/Plane/PlaneListDialog.cpp:362 src/Dialogs/HelpDialog.cpp:30
-#: src/Dialogs/dlgInfoBoxAccess.cpp:104 src/Dialogs/ReplayDialog.cpp:97
-#: src/Dialogs/dlgStatus.cpp:42 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:571
+#: src/Dialogs/WifiDialog.cpp:508 src/Dialogs/dlgInfoBoxAccess.cpp:104
+#: src/Dialogs/ReplayDialog.cpp:97 src/Dialogs/dlgStatus.cpp:42
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:520
 #: src/Dialogs/Waypoint/Manager.cpp:289
-#: src/Dialogs/Waypoint/WaypointList.cpp:281
+#: src/Dialogs/Waypoint/WaypointList.cpp:295
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:117
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:69
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:42
 #: src/Dialogs/Task/TaskPointDialog.cpp:515
 #: src/Dialogs/Task/TargetDialog.cpp:395
 #: src/Dialogs/Task/AlternatesListDialog.cpp:271
-#: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:41
+#: src/Dialogs/KnobTextEntry.cpp:225 src/Dialogs/Weather/WeatherDialog.cpp:55
 #: src/Dialogs/dlgQuickGuide.cpp:512 src/Dialogs/dlgGestureHelp.cpp:46
-#: src/Dialogs/Weather/PCMetDialog.cpp:36
+#: src/Dialogs/Weather/PCMetDialog.cpp:191
 #: src/Dialogs/Weather/NOAADetails.cpp:125
 msgid "Close"
 msgstr "Закрыть"
@@ -627,7 +630,7 @@ msgstr "Нет трафика"
 #: src/Renderer/MapItemListRenderer.cpp:360
 #: src/Dialogs/Device/DeviceListDialog.cpp:428
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:18
-#: src/Dialogs/Settings/dlgConfiguration.cpp:98
+#: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:119
 #: src/InfoBoxes/Content/Factory.cpp:310 src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -645,7 +648,7 @@ msgstr "Варио"
 #: src/Dialogs/Airspace/AirspaceList.cpp:432
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:117
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:69
-#: src/Dialogs/Waypoint/WaypointList.cpp:489
+#: src/Dialogs/Waypoint/WaypointList.cpp:521
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
 #: src/Dialogs/Task/TargetDialog.cpp:358
 msgid "Distance"
@@ -657,9 +660,9 @@ msgstr "Отн. Выс."
 
 #: src/Gauge/BigTrafficWidget.cpp:611 src/Dialogs/MapItemListDialog.cpp:174
 #: src/Dialogs/Airspace/AirspaceList.cpp:462
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:79
 #: src/Dialogs/Traffic/TrafficList.cpp:346
-#: src/Dialogs/Waypoint/WaypointList.cpp:277
+#: src/Dialogs/Waypoint/WaypointList.cpp:291
 #: src/Dialogs/Task/TaskPointDialog.cpp:220
 #: src/Dialogs/Task/AlternatesListDialog.cpp:229
 #: src/Dialogs/Weather/NOAAList.cpp:97
@@ -786,12 +789,11 @@ msgstr "Вручную"
 
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:343
 #: src/Menu/ExpandMacros.cpp:364 src/Menu/ExpandMacros.cpp:414
-#: src/PageSettings.cpp:51 src/PageSettings.cpp:54
+#: src/PageSettings.cpp:120 src/PageSettings.cpp:123
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:42
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:31
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:379
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:237
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:67
 #: src/InfoBoxes/Panel/MacCreadySetup.cpp:31
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:13
@@ -811,7 +813,7 @@ msgstr "По треку"
 msgid "North up"
 msgstr "На север"
 
-#: src/Menu/ExpandMacros.cpp:297 src/Dialogs/Settings/dlgBasicSettings.cpp:129
+#: src/Menu/ExpandMacros.cpp:297 src/Dialogs/Settings/dlgBasicSettings.cpp:130
 #: src/Dialogs/ReplayDialog.cpp:30
 msgid "Stop"
 msgstr "Стоп"
@@ -845,10 +847,10 @@ msgstr "Полный"
 #: src/Input/InputEventsSettings.cpp:497
 #: src/Dialogs/Device/DeviceEditWidget.cpp:109
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:127
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:101
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:87
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:27
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:143
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:45
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:111
@@ -869,9 +871,9 @@ msgstr "Откл."
 #: src/Menu/ExpandMacros.cpp:366 src/Menu/ExpandMacros.cpp:412
 #: src/Input/InputEventsSettings.cpp:455 src/Input/InputEventsSettings.cpp:456
 #: src/Input/InputEventsSettings.cpp:493 src/Input/InputEventsSettings.cpp:497
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:100
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:86
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:29
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:174
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:145
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:43
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:66
@@ -921,14 +923,18 @@ msgid "Task & Landables"
 msgstr "Задачи и Посадки"
 
 #: src/Menu/ExpandMacros.cpp:356 src/Input/InputEventsSettings.cpp:323
+#: src/Weather/Rasp/FieldControls.cpp:23
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:172
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:38
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:163
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:238
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:282
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:80
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:91
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:245
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:12
 #, no-c-format
 msgid "None"
@@ -1092,7 +1098,7 @@ msgstr "задач нет"
 #: src/Input/InputEventsTask.cpp:368 src/Input/InputEventsTask.cpp:377
 #: src/Renderer/MapItemListRenderer.cpp:356
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:26
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:338
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:342
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:118
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:65
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:82
@@ -1118,9 +1124,8 @@ msgstr "Скорость"
 #: src/Renderer/FlightStatisticsRenderer.cpp:220
 #: src/Renderer/FlightStatisticsRenderer.cpp:239
 #: src/Renderer/FlightStatisticsRenderer.cpp:265
-#: src/Dialogs/InternalLink.cpp:78
-#: src/Dialogs/Settings/dlgConfiguration.cpp:125
-#: src/Dialogs/Weather/RASPDialog.cpp:129
+#: src/Dialogs/InternalLink.cpp:79
+#: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #, no-c-format
 msgid "Time"
 msgstr "Время"
@@ -1246,45 +1251,43 @@ msgstr "Не найдено"
 msgid "Select a file"
 msgstr "Выберите файл"
 
-#: src/PageSettings.cpp:25
+#: src/PageSettings.cpp:94
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:135
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:356
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:226
 #, no-c-format
 msgid "FLARM radar"
 msgstr "FLARM радар"
 
-#: src/PageSettings.cpp:28
+#: src/PageSettings.cpp:97
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:149
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:360
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:227
 #: src/InfoBoxes/Content/Factory.cpp:918
 #, no-c-format
 msgid "Thermal assistant"
 msgstr "Термический помощник"
 
-#: src/PageSettings.cpp:31 src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:364
+#: src/PageSettings.cpp:100
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:228
 #: src/InfoBoxes/Content/Factory.cpp:832
 #, no-c-format
 msgid "Horizon"
 msgstr "Горизонт"
 
-#: src/PageSettings.cpp:41 src/InfoBoxes/Content/Altitude.cpp:28
+#: src/PageSettings.cpp:110 src/InfoBoxes/Content/Altitude.cpp:28
 #: Data/Input/default.xci:1127
 #, no-c-format
 msgid "Info"
 msgstr "Инфо"
 
-#: src/PageSettings.cpp:41
+#: src/PageSettings.cpp:110
 msgid "Map and InfoBoxes"
 msgstr "Карта и Инфобокс"
 
-#: src/PageSettings.cpp:60
+#: src/PageSettings.cpp:129
 msgid "Info Hide"
 msgstr "Спрятать информацию"
 
-#: src/PageSettings.cpp:62
+#: src/PageSettings.cpp:131
 msgid "Map (Full screen)"
 msgstr "Карта (полноэкранный режим)"
 
@@ -1297,7 +1300,7 @@ msgstr "Нет данных"
 #: src/Renderer/MapItemListRenderer.cpp:66
 #: src/Dialogs/Airspace/AirspaceList.cpp:433
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:79
-#: src/Dialogs/Waypoint/WaypointList.cpp:490
+#: src/Dialogs/Waypoint/WaypointList.cpp:522
 msgid "Direction"
 msgstr "Курс"
 
@@ -1306,8 +1309,8 @@ msgstr "Курс"
 #: src/Renderer/WaypointListRenderer.cpp:26
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:150
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:121
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:124
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:127
 msgid "Elevation"
 msgstr "Высота"
 
@@ -1364,9 +1367,17 @@ msgstr "FLARM траффик"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:32
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:105
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:124
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:73
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:59
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:90
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:62
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:103
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:111
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:170
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:218
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:265
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:266
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:278
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:40
 #, no-c-format
 msgid "Unknown"
@@ -1386,184 +1397,87 @@ msgstr "Высота прибытия"
 msgid " ("
 msgstr "("
 
-#: src/Weather/Rasp/RaspStore.cpp:27 src/Weather/Rasp/RaspStore.cpp:32
+#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
 #, no-c-format
 msgid "W*"
 msgstr "В*"
 
-#: src/Weather/Rasp/RaspStore.cpp:28 src/Weather/Rasp/RaspStore.cpp:33
+#: src/Weather/Rasp/RaspStore.cpp:29 src/Weather/Rasp/RaspStore.cpp:34
 #, no-c-format
-msgid ""
-"Average dry thermal updraft strength near mid-BL height. Subtract glider "
-"descent rate to get average vario reading for cloudless thermals. Updraft "
-"strengths will be stronger than this forecast if convective clouds are "
-"present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
-"\"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
-msgstr ""
-"Прогноз средней скороподъемности сухого воздуха с высотой.  Вычтите скорости "
-"снижения планера, чтобы получить среднее значение Vario для безоблачной "
-"термики. Восходящие потоки будут сильнее, если этот прогнозируется развитие "
-"кучевой облачности, поскольку конденсация облаков добавляет неустойчивости в "
-"воздухе."
+msgid "Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth."
+msgstr "Прогноз средней скороподъемности сухого воздуха с высотой.  Вычтите скорости снижения планера, чтобы получить среднее значение Vario для безоблачной термики. Восходящие потоки будут сильнее, если этот прогнозируется развитие кучевой облачности, поскольку конденсация облаков добавляет неустойчивости в воздухе."
 
-#: src/Weather/Rasp/RaspStore.cpp:37
+#: src/Weather/Rasp/RaspStore.cpp:38
 #, no-c-format
 msgid "BL Wind spd"
 msgstr "BL Ветер скорость"
 
-#: src/Weather/Rasp/RaspStore.cpp:38
+#: src/Weather/Rasp/RaspStore.cpp:39
 #, no-c-format
-msgid ""
-"The speed and direction of the vector-averaged wind in the BL. This "
-"prediction can be misleading if there is a large change in wind direction "
-"through the BL."
-msgstr ""
-"Скорость и направление векторной средней скорости ветра в BL. Эта "
-"прогнозация может быть обманчивой при значительном изменении направления "
-"ветра через BL."
+msgid "The speed and direction of the vector-averaged wind in the BL. This prediction can be misleading if there is a large change in wind direction through the BL."
+msgstr "Скорость и направление векторной средней скорости ветра в BL. Эта прогнозация может быть обманчивой при значительном изменении направления ветра через BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:42
+#: src/Weather/Rasp/RaspStore.cpp:43
 #, no-c-format
 msgid "H bl"
 msgstr "H бл"
 
-#: src/Weather/Rasp/RaspStore.cpp:43
+#: src/Weather/Rasp/RaspStore.cpp:44
 #, no-c-format
-msgid ""
-"Height of the top of the mixing layer, which for thermal convection is the "
-"average top of a dry thermal. Over flat terrain, maximum thermalling heights "
-"will be lower due to the glider descent rate and other factors. In the "
-"presence of clouds (which release additional buoyancy aloft, creating "
-"\"cloudsuck\") the updraft top will be above this forecast, but the maximum "
-"thermalling height will then be limited by the cloud base. Further, when the "
-"mixing results from shear turbulence rather than thermal mixing this "
-"parameter is not useful for glider flying."
-msgstr ""
-"Высота верха смешивающего слоя, который для конвекции термиков является "
-"средней верхней точкой сухого термика. На плоской местности максимальные "
-"высоты полёта термиков будут ниже из-за скорости спуска планера и других "
-"факторов. В присутствии облак (которые выделяют дополнительную теплоту "
-"вверх, создавая \"облакосucked\"), верхняя граница подъёма будет выше этой "
-"прогнозной высоты, но максимальная высота полёта термиков будет ограничена "
-"базой облака. Кроме того, когда смешивание происходит из-за горизонтальной "
-"ветровой сhear турбулентности вместо термического смешивания этот параметр "
-"не будет полезен для полётов на планерах."
+msgid "Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal. Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors. In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base. Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying."
+msgstr "Высота верха смешивающего слоя, который для конвекции термиков является средней верхней точкой сухого термика. На плоской местности максимальные высоты полёта термиков будут ниже из-за скорости спуска планера и других факторов. В присутствии облак (которые выделяют дополнительную теплоту вверх, создавая \"облакосucked\"), верхняя граница подъёма будет выше этой прогнозной высоты, но максимальная высота полёта термиков будет ограничена базой облака. Кроме того, когда смешивание происходит из-за горизонтальной ветровой сhear турбулентности вместо термического смешивания этот параметр не будет полезен для полётов на планерах."
 
-#: src/Weather/Rasp/RaspStore.cpp:47
+#: src/Weather/Rasp/RaspStore.cpp:48
 #, no-c-format
 msgid "dwcrit"
 msgstr "dwкрит"
 
-#: src/Weather/Rasp/RaspStore.cpp:48
+#: src/Weather/Rasp/RaspStore.cpp:49
 #, no-c-format
-msgid ""
-"This parameter estimates the height above ground at which the average dry "
-"updraft strength drops below 225 fpm and is expected to give better "
-"quantitative numbers for the maximum cloudless thermalling height than the "
-"BL Top height, especially when mixing results from vertical wind shear "
-"rather than thermals. (Note: the present assumptions tend to underpredict "
-"the max. thermalling height for dry conditions.) In the presence of clouds "
-"the maximum thermalling height may instead be limited by the cloud base. "
-"Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Этот параметр оценивает высоту над землёй, на которой средняя сухая "
-"подъёмная скорость уменьшается ниже 225 фпм и ожидается, что он даст более "
-"точные численные значения для максимальной безоблачной высоты полёта "
-"термиков, чем высота верха BL. Особенно когда смешивание происходит из-за "
-"горизонтальной ветровой сhear турбулентности вместо термических процессов. "
-"(Примечание: текущие предположения могут занижать максимальную высоту полёта "
-"для сухих условий.) В присутствии облак максимальная высота полёта термиков "
-"может быть ограничена базой облака вместо этого. Будучи для \"сухих\" "
-"термиков, этот параметр исключает эффект \"облакосucked\"."
+msgid "This parameter estimates the height above ground at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Этот параметр оценивает высоту над землёй, на которой средняя сухая подъёмная скорость уменьшается ниже 225 фпм и ожидается, что он даст более точные численные значения для максимальной безоблачной высоты полёта термиков, чем высота верха BL. Особенно когда смешивание происходит из-за горизонтальной ветровой сhear турбулентности вместо термических процессов. (Примечание: текущие предположения могут занижать максимальную высоту полёта для сухих условий.) В присутствии облак максимальная высота полёта термиков может быть ограничена базой облака вместо этого. Будучи для \"сухих\" термиков, этот параметр исключает эффект \"облакосucked\"."
 
-#: src/Weather/Rasp/RaspStore.cpp:52
+#: src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "bl cloud"
 msgstr "bl облако"
 
-#: src/Weather/Rasp/RaspStore.cpp:53
+#: src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
-msgid ""
-"This parameter provides an additional means of evaluating the formation of "
-"clouds within the BL and might be used either in conjunction with or instead "
-"of the other cloud prediction parameters. It assumes a very simple "
-"relationship between cloud cover percentage and the maximum relative "
-"humidity within the BL. The cloud base height is not predicted, but is "
-"expected to be below the BL Top height."
-msgstr ""
-"Этот параметр предоставляет дополнительный способ оценки формирования облак "
-"в BL и может использоваться либо вместе с другими параметрами прогноза "
-"облак, либо вместо них. Он предполагает очень простую связь между процентом "
-"покрытия облаками и максимальной относительной влажностью в BL. Низшая "
-"граница облака не прогнозируется, но ожидается, что она будет ниже высоты "
-"верха BL."
+msgid "This parameter provides an additional means of evaluating the formation of clouds within the BL and might be used either in conjunction with or instead of the other cloud prediction parameters. It assumes a very simple relationship between cloud cover percentage and the maximum relative humidity within the BL. The cloud base height is not predicted, but is expected to be below the BL Top height."
+msgstr "Этот параметр предоставляет дополнительный способ оценки формирования облак в BL и может использоваться либо вместе с другими параметрами прогноза облак, либо вместо них. Он предполагает очень простую связь между процентом покрытия облаками и максимальной относительной влажностью в BL. Низшая граница облака не прогнозируется, но ожидается, что она будет ниже высоты верха BL."
 
-#: src/Weather/Rasp/RaspStore.cpp:57
+#: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "Sfc temp"
 msgstr "Степень поверхности"
 
-#: src/Weather/Rasp/RaspStore.cpp:58
+#: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
-msgid ""
-"The temperature at a height of 2m above ground level. This can be compared "
-"to observed surface temperatures as an indication of model simulation "
-"accuracy; e.g. if observed surface temperatures are significantly below "
-"those forecast, then soaring conditions will be poorer than forecast."
-msgstr ""
-"Температура на высоте 2 метра над уровнем земли.Можно сравнить с реальною "
-"для оценки точности моделирования погоды. Например, если реальная "
-"температура на поверхности значительно ниже прогнозированной, условия "
-"скорости набора высоты будут хуже, чем прогнозированные."
+msgid "The temperature at a height of 2m above ground level. This can be compared to observed surface temperatures as an indication of model simulation accuracy; e.g. if observed surface temperatures are significantly below those forecast, then soaring conditions will be poorer than forecast."
+msgstr "Температура на высоте 2 метра над уровнем земли.Можно сравнить с реальною для оценки точности моделирования погоды. Например, если реальная температура на поверхности значительно ниже прогнозированной, условия скорости набора высоты будут хуже, чем прогнозированные."
 
-#: src/Weather/Rasp/RaspStore.cpp:62
+#: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "hwcrit"
 msgstr "hwcрит"
 
-#: src/Weather/Rasp/RaspStore.cpp:63
+#: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
-msgid ""
-"This parameter estimates the height at which the average dry updraft "
-"strength drops below 225 fpm and is expected to give better quantitative "
-"numbers for the maximum cloudless thermalling height than the BL Top height, "
-"especially when mixing results from vertical wind shear rather than "
-"thermals. (Note: the present assumptions tend to underpredict the max. "
-"thermalling height for dry conditions.) In the presence of clouds the "
-"maximum thermalling height may instead be limited by the cloud base. Being "
-"for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"Этот параметр оценивает высоту над землёй, на которой средняя сухая "
-"подъёмная скорость уменьшается ниже 225 фпм и ожидается, что он даст более "
-"точные численные значения для максимальной безоблачной высоты полёта "
-"термиков, чем высота верха BL. Особенно когда смешивание происходит из-за "
-"горизонтальной ветровой сhear турбулентности вместо термических процессов. "
-"(Примечание: текущие предположения могут занижать максимальную высоту полёта "
-"для сухих условий.) В присутствии облак максимальная высота полёта термиков "
-"может быть ограничена базой облака вместо этого. Будучи для \"сухих\" "
-"термиков, этот параметр исключает эффект \"облакосucked\"."
+msgid "This parameter estimates the height at which the average dry updraft strength drops below 225 fpm and is expected to give better quantitative numbers for the maximum cloudless thermalling height than the BL Top height, especially when mixing results from vertical wind shear rather than thermals. (Note: the present assumptions tend to underpredict the max. thermalling height for dry conditions.) In the presence of clouds the maximum thermalling height may instead be limited by the cloud base. Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
+msgstr "Этот параметр оценивает высоту над землёй, на которой средняя сухая подъёмная скорость уменьшается ниже 225 фпм и ожидается, что он даст более точные численные значения для максимальной безоблачной высоты полёта термиков, чем высота верха BL. Особенно когда смешивание происходит из-за горизонтальной ветровой сhear турбулентности вместо термических процессов. (Примечание: текущие предположения могут занижать максимальную высоту полёта для сухих условий.) В присутствии облак максимальная высота полёта термиков может быть ограничена базой облака вместо этого. Будучи для \"сухих\" термиков, этот параметр исключает эффект \"облакосucked\"."
 
-#: src/Weather/Rasp/RaspStore.cpp:67
+#: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "wblmaxmin"
 msgstr "wблмаксмин"
 
-#: src/Weather/Rasp/RaspStore.cpp:68
+#: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
-msgid ""
-"Maximum grid-area-averaged extensive upward or downward motion within the BL "
-"as created by horizontal wind convergence. Positive convergence is "
-"associated with local small-scale convergence lines. Negative convergence "
-"(divergence) produces subsiding vertical motion, creating low-level "
-"inversions which limit thermalling heights."
-msgstr ""
-"Максимальная сетевая средняя вертикальная скорость в BL, созданная "
-"горизонтальным сжатием ветра. Положительное сжатие связано с локальными "
-"малыми линиями сжатия. Отрицательное сжатие (разрежение) создает "
-"вертикальное спускание, создающее нижние инверсии, ограничивающие высоту "
-"полёта термиков."
+msgid "Maximum grid-area-averaged extensive upward or downward motion within the BL as created by horizontal wind convergence. Positive convergence is associated with local small-scale convergence lines. Negative convergence (divergence) produces subsiding vertical motion, creating low-level inversions which limit thermalling heights."
+msgstr "Максимальная сетевая средняя вертикальная скорость в BL, созданная горизонтальным сжатием ветра. Положительное сжатие связано с локальными малыми линиями сжатия. Отрицательное сжатие (разрежение) создает вертикальное спускание, создающее нижние инверсии, ограничивающие высоту полёта термиков."
 
-#: src/Weather/Rasp/RaspStore.cpp:72
+#: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "blcwbase"
 msgstr "blc база"
@@ -1604,28 +1518,28 @@ msgstr "Расстояние до пункта назначения"
 msgid "Target speed"
 msgstr "Заданная скорость"
 
-#: src/Renderer/BarographRenderer.cpp:27 src/Renderer/BarographRenderer.cpp:33
+#: src/Renderer/BarographRenderer.cpp:34 src/Renderer/BarographRenderer.cpp:43
 msgid "Working band"
 msgstr "Рабочая частота"
 
-#: src/Renderer/BarographRenderer.cpp:37
+#: src/Renderer/BarographRenderer.cpp:47
 msgid "Ceiling trend"
 msgstr "Верхняя граница"
 
-#: src/Renderer/ClimbChartRenderer.cpp:27
-#: src/Renderer/ClimbChartRenderer.cpp:32
+#: src/Renderer/ClimbChartRenderer.cpp:33
+#: src/Renderer/ClimbChartRenderer.cpp:38
 msgid "Avg. climb"
 msgstr "Средн Набор"
 
-#: src/Renderer/ClimbChartRenderer.cpp:35
+#: src/Renderer/ClimbChartRenderer.cpp:41
 msgid "Climb trend"
 msgstr "Тенденции набора"
 
-#: src/Renderer/GlidePolarRenderer.cpp:29
+#: src/Renderer/GlidePolarRenderer.cpp:36
 msgid "L/D"
 msgstr "К/LД"
 
-#: src/Renderer/GlidePolarRenderer.cpp:33
+#: src/Renderer/GlidePolarRenderer.cpp:40
 msgid "Min. sink"
 msgstr "Мин сниж"
 
@@ -1635,7 +1549,7 @@ msgid "Mass"
 msgstr "Масса"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:38
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:308
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:312
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:219
 msgid "Wing loading"
 msgstr "Загрузка крыла"
@@ -1648,12 +1562,12 @@ msgstr "Высота потока"
 msgid "Cloud base"
 msgstr "База"
 
-#: src/Renderer/MacCreadyRenderer.cpp:28 src/InfoBoxes/Content/Factory.cpp:464
+#: src/Renderer/MacCreadyRenderer.cpp:33 src/InfoBoxes/Content/Factory.cpp:464
 #, no-c-format
 msgid "Vopt"
 msgstr "V оптим"
 
-#: src/Renderer/TaskSpeedRenderer.cpp:32
+#: src/Renderer/TaskSpeedRenderer.cpp:38
 msgid "Vest"
 msgstr "Спест"
 
@@ -1727,27 +1641,27 @@ msgstr "Профиль плоскости соответствует: {}"
 msgid "Plane profile created: {}"
 msgstr "Создан профиль самолета: {}"
 
-#: src/Startup.cpp:209
+#: src/Startup.cpp:216
 msgid "Loading Terrain File..."
 msgstr "Загружаю файл Местности"
 
-#: src/Startup.cpp:359
+#: src/Startup.cpp:366
 msgid "Initialising"
 msgstr "Инициализация"
 
-#: src/Startup.cpp:488
+#: src/Startup.cpp:495
 msgid "Loading Topography File..."
 msgstr "Загрузка файла Топографии"
 
-#: src/Startup.cpp:497 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
+#: src/Startup.cpp:504 src/Dialogs/Device/CAI302/WaypointUploader.cpp:17
 msgid "Loading Waypoints..."
 msgstr "Загрузка путевых точек..."
 
-#: src/Startup.cpp:506
+#: src/Startup.cpp:513
 msgid "Loading Airfield Details File..."
 msgstr "Загрузка файла с подробной информацией о аэродроме..."
 
-#: src/Startup.cpp:562
+#: src/Startup.cpp:569
 msgid "Starting devices"
 msgstr "Включение устройства"
 
@@ -1757,25 +1671,25 @@ msgstr "Включение устройства"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:574
+#: src/Startup.cpp:581
 msgid "Initialising display"
 msgstr "Инициализация дисплея"
 
 #. Show progress dialog
-#: src/Startup.cpp:676 src/Startup.cpp:712 src/Startup.cpp:780
+#: src/Startup.cpp:688 src/Startup.cpp:732 src/Startup.cpp:800
 msgid "Shutdown, please wait..."
 msgstr "Завершение работы, пожалуйста, подождите ..."
 
-#: src/Startup.cpp:687
+#: src/Startup.cpp:699
 msgid "Shutdown, saving logs..."
 msgstr "Завершение работы, сохраняю записи..."
 
 #. Save settings to profile
-#: src/Startup.cpp:709
+#: src/Startup.cpp:729
 msgid "Shutdown, saving profile..."
 msgstr "Завершение работы, сохраняю настройки ..."
 
-#: src/Startup.cpp:770
+#: src/Startup.cpp:790
 msgid "Shutdown, saving task..."
 msgstr "Завершение работы, сохраняю упражнения..."
 
@@ -1800,6 +1714,8 @@ msgstr "Загружаю историю полета"
 
 #: src/Device/Config.cpp:199 src/Dialogs/Device/PortDataField.cpp:32
 #: src/Dialogs/Device/DeviceListDialog.cpp:472
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:102
+#: src/Weather/EDL/StateController.cpp:311
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:19
 #, no-c-format
 msgid "Disabled"
@@ -1835,60 +1751,67 @@ msgstr "ГилдерЛинк receiver для трафика"
 msgid "USB serial"
 msgstr "USB последовательный интерфейс"
 
-#: src/Dialogs/InternalLink.cpp:76 src/Dialogs/Settings/dlgConfiguration.cpp:74
-#: src/Dialogs/Settings/dlgConfiguration.cpp:141
+#: src/Dialogs/InternalLink.cpp:77 src/Dialogs/Settings/dlgConfiguration.cpp:75
+#: src/Dialogs/Settings/dlgConfiguration.cpp:143
 #, no-c-format
 msgid "Site Files"
 msgstr "Файл местности"
 
-#: src/Dialogs/InternalLink.cpp:77
-#: src/Dialogs/Settings/dlgConfiguration.cpp:120
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:128
-#: Data/Input/default.xci:843 Data/Input/default.xci:1467
+#: src/Dialogs/InternalLink.cpp:78
+#: src/Dialogs/Settings/dlgConfiguration.cpp:121
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:114
+#: Data/Input/default.xci:843 Data/Input/default.xci:1474
 #, no-c-format
 msgid "Logger"
 msgstr "Логгер"
 
-#: src/Dialogs/InternalLink.cpp:79
-#: src/Dialogs/Settings/dlgConfiguration.cpp:115
+#: src/Dialogs/InternalLink.cpp:80
+#: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "InfoBox Sets"
 msgstr "Настройки ИнфоБоксов"
 
-#: src/Dialogs/InternalLink.cpp:80
-#: src/Dialogs/Settings/dlgConfiguration.cpp:114
+#: src/Dialogs/InternalLink.cpp:81
+#: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
 msgid "Pages"
 msgstr "Страницы"
 
-#: src/Dialogs/InternalLink.cpp:81
+#: src/Dialogs/InternalLink.cpp:82
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:157
 #, no-c-format
 msgid "WeGlide"
 msgstr "Планер"
 
-#: src/Dialogs/InternalLink.cpp:82
-#: src/Dialogs/Settings/dlgConfiguration.cpp:131
-#: src/Dialogs/Weather/WeatherDialog.cpp:26
+#: src/Dialogs/InternalLink.cpp:84
+#: src/Dialogs/Settings/dlgConfiguration.cpp:132
+#: src/Dialogs/Weather/WeatherDialog.cpp:40
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:320
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:416
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:457
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:469
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:489
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:491
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:511
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:520
 #: src/Weather/NOAAFormatter.cpp:175 Data/Input/default.xci:979
-#: Data/Input/default.xci:1392
+#: Data/Input/default.xci:1399
 #, no-c-format
 msgid "Weather"
 msgstr "Погода"
 
-#: src/Dialogs/InternalLink.cpp:83 src/Dialogs/Settings/dlgConfiguration.cpp:88
+#: src/Dialogs/InternalLink.cpp:85 src/Dialogs/Settings/dlgConfiguration.cpp:89
 #, no-c-format
 msgid "Safety Factors"
 msgstr "Безопасность"
 
-#: src/Dialogs/InternalLink.cpp:84
-#: src/Dialogs/Settings/dlgConfiguration.cpp:127
+#: src/Dialogs/InternalLink.cpp:86
+#: src/Dialogs/Settings/dlgConfiguration.cpp:128
 #, no-c-format
 msgid "Tracking"
 msgstr "Трекинг"
 
-#: src/Dialogs/InternalLink.cpp:85
+#: src/Dialogs/InternalLink.cpp:87
 #, no-c-format
 msgid "Terrain Display"
 msgstr "Показать ландшафт"
@@ -1939,7 +1862,7 @@ msgstr "Повтор"
 #: src/Dialogs/dlgQuickMenu.cpp:499 src/Dialogs/DownloadFilePicker.cpp:281
 #: Data/Input/default.xci:151 Data/Input/default.xci:593
 #: Data/Input/default.xci:688 Data/Input/default.xci:835
-#: Data/Input/default.xci:1055
+#: Data/Input/default.xci:1055 Data/Input/default.xci:1142
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -1965,7 +1888,7 @@ msgid "Update"
 msgstr "Обновить"
 
 #: src/Dialogs/FileManager.cpp:395
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:101
 #: src/Dialogs/Weather/NOAAList.cpp:98 src/Monitor/MatTaskMonitor.cpp:40
 msgid "Add"
 msgstr "Добавить"
@@ -1993,7 +1916,7 @@ msgstr "Не удалось загрузить индекс репозитори
 
 #: src/Dialogs/FileManager.cpp:739 src/Dialogs/FileManager.cpp:764
 #: src/Dialogs/DownloadFilePicker.cpp:274 Data/Input/default.xci:817
-#: Data/Input/default.xci:1490
+#: Data/Input/default.xci:1497
 msgid "File Manager"
 msgstr "Файловый менеджер"
 
@@ -2065,6 +1988,8 @@ msgid "The baud rate used for bulk transfers, such as task declaration or flight
 msgstr "Скорость передачи используемая для блочной передачи, например, описание задачи или загрузка полета"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:356
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:216
 msgid "IP address"
 msgstr "IP-адрес"
 
@@ -2183,7 +2108,7 @@ msgstr "Отладка"
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 #: src/Dialogs/MapItemListDialog.cpp:184
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:132
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:78
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:69
 msgid "Enable"
 msgstr "Включить"
@@ -2203,9 +2128,8 @@ msgid "Bad GPS"
 msgstr "Плохой сигнал GPS"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:408
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:85
-#, no-c-format
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:71
+#: src/net/wifi/ConnmanClient.cpp:620
 msgid "Connected"
 msgstr "Соединение установлено"
 
@@ -2219,7 +2143,7 @@ msgid "Pitot"
 msgstr "Порт Пито"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:423
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:88
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:100
 msgid "Airspeed"
 msgstr "Воздушная скорость"
 
@@ -2251,6 +2175,8 @@ msgid "Duplicate"
 msgstr "Дублировать"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:494
+#: src/net/wifi/NetworkManagerClient.cpp:561
+#: src/net/wifi/NetworkManagerClient.cpp:565 src/net/wifi/ConnmanClient.cpp:623
 msgid "Not connected"
 msgstr "Нет соединения"
 
@@ -2276,7 +2202,7 @@ msgid "Communication with this device will be logged for the next %u minutes."
 msgstr "Связь с этим устройством будет установлена в течение следующих %u минут."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:782 Data/Input/default.xci:759
-#: Data/Input/default.xci:1482
+#: Data/Input/default.xci:1489
 msgid "Devices"
 msgstr "Устройства"
 
@@ -2302,7 +2228,7 @@ msgstr "Монитор порта"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:47
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:68
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:73
-#: src/Dialogs/Settings/dlgConfiguration.cpp:121
+#: src/Dialogs/Settings/dlgConfiguration.cpp:122
 #, no-c-format
 msgid "Units"
 msgstr "Единицы измерения"
@@ -2311,7 +2237,7 @@ msgstr "Единицы измерения"
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:61
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:77
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:82
-#: src/Dialogs/Settings/dlgConfiguration.cpp:81
+#: src/Dialogs/Settings/dlgConfiguration.cpp:82
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:57
 #, no-c-format
 msgid "Waypoints"
@@ -2418,9 +2344,9 @@ msgstr "Полетный регистратор"
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:133
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:67
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:65
-#: src/Dialogs/Settings/dlgConfiguration.cpp:147
+#: src/Dialogs/Settings/dlgConfiguration.cpp:149
 #: src/InfoBoxes/Content/Altitude.cpp:29 src/InfoBoxes/Content/MacCready.cpp:29
-#: src/InfoBoxes/Content/Places.cpp:182
+#: src/InfoBoxes/Content/Places.cpp:304
 #, no-c-format
 msgid "Setup"
 msgstr "Установки"
@@ -2574,42 +2500,30 @@ msgstr "Установить новые звуковые схемы? Стары�
 msgid "Vario Configuration"
 msgstr "Конфигурация варио"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:81
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
 msgid "TE vario"
 msgstr "TE варио"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:82
-msgid ""
-"This produces a fake TE vario gross vertical velocity. It can be used when "
-"in circling mode to demonstrate the lift tones. When not in circling mode, "
-"set this to a realistic negative value so speed command tones are produced."
-msgstr ""
-"Это производит фиктивную скорость подъема TE. Его можно использовать в "
-"режиме круговой полет для демонстрации тонов подъемного потока воздуха. Вне "
-"режима кругового полета установите его на реалистичное отрицательное "
-"значение, чтобы генерировались тоны скорости."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+msgid "This produces a fake TE vario gross vertical velocity. It can be used when in circling mode to demonstrate the lift tones. When not in circling mode, set this to a realistic negative value so speed command tones are produced."
+msgstr "Это производит фиктивную скорость подъема TE. Его можно использовать в режиме круговой полет для демонстрации тонов подъемного потока воздуха. Вне режима кругового полета установите его на реалистичное отрицательное значение, чтобы генерировались тоны скорости."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:89
-msgid ""
-"This produces a fake airspeed. It can be used when not in circling mode to "
-"demonstrate the speed command tones."
-msgstr ""
-"Это производит фиктивную скорость воздуха. Его можно использовать вне режима "
-"кругового полета для демонстрации тональности команды скорости."
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:101
+msgid "This produces a fake airspeed. It can be used when not in circling mode to demonstrate the speed command tones."
+msgstr "Это производит фиктивную скорость воздуха. Его можно использовать вне режима кругового полета для демонстрации тональности команды скорости."
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:93
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:105
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:180
 #: src/InfoBoxes/InfoBoxSettings.cpp:57
 #, no-c-format
 msgid "Circling"
 msgstr "Спираль"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:94
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:106
 msgid "This forces the variometer into circling or cruise mode"
-msgstr ""
-"Это заставляет вариометр работать в режиме кругового полета или крейсера"
+msgstr "Это заставляет вариометр работать в режиме кругового полета или крейсера"
 
-#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:108
+#: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:120
 msgid "Vario Demo"
 msgstr "Демо вариометра"
 
@@ -2788,7 +2702,7 @@ msgstr "Статический объект"
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:144
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:140
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:86
-#: src/Dialogs/Waypoint/WaypointList.cpp:491
+#: src/Dialogs/Waypoint/WaypointList.cpp:523
 msgid "Type"
 msgstr "Тип"
 
@@ -2899,10 +2813,10 @@ msgid "Warn"
 msgstr "Предупредить"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:143
-#: src/Dialogs/Settings/dlgConfiguration.cpp:83 src/Dialogs/dlgAnalysis.cpp:570
+#: src/Dialogs/Settings/dlgConfiguration.cpp:84 src/Dialogs/dlgAnalysis.cpp:570
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:87
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:83
-#: Data/Input/default.xci:725 Data/Input/default.xci:1344
+#: Data/Input/default.xci:725 Data/Input/default.xci:1351
 #, no-c-format
 msgid "Airspace"
 msgstr "Воздушное пространство"
@@ -2957,7 +2871,7 @@ msgid "Airspace Details"
 msgstr "Подробн. Возд.простр."
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:310
-#: src/Dialogs/Waypoint/WaypointList.cpp:542
+#: src/Dialogs/Waypoint/WaypointList.cpp:574
 msgid "No Match!"
 msgstr "Нет совпадений!"
 
@@ -2966,10 +2880,10 @@ msgid "Heading"
 msgstr "По полету"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:431
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:218
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:105
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:75
-#: src/Dialogs/Waypoint/WaypointList.cpp:488
+#: src/Dialogs/Waypoint/WaypointList.cpp:520
 msgid "Name"
 msgstr "Название"
 
@@ -3033,12 +2947,12 @@ msgstr "Режим заливки"
 msgid "Defines how the airspace is filled with the configured color."
 msgstr "Определяет, как воздушное пространство заполняется настроенным цветом."
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:75
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
 #: src/Monitor/AirspaceWarningMonitor.cpp:55
 msgid "ACK"
 msgstr "ACK День"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:76
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:77
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "ACK Day"
 msgstr "ACK День"
@@ -3046,11 +2960,11 @@ msgstr "ACK День"
 #. the warnings were emptied between the opening of the dialog and
 #. this refresh, so only need to display "No Warnings" for top
 #. item, otherwise exit immediately
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:313
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:314
 msgid "No Warnings"
 msgstr "предостережения нет"
 
-#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:513 Data/Input/default.xci:1375
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:520 Data/Input/default.xci:1382
 msgid "Airspace Warnings"
 msgstr "Предупрежд. Возд.простр."
 
@@ -3114,12 +3028,12 @@ msgstr "Внешнее"
 msgid "Wind Settings"
 msgstr "Настройки ветра"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:129
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:382
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:130
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:386
 msgid "Dump"
 msgstr "Снимок"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:173
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:174
 msgid ""
 "Ballast dump time is 0 in plane profile.\n"
 "Open Plane configuration now?"
@@ -3127,109 +3041,85 @@ msgstr ""
 "Время сброса балласта равно 0 в профиле плоскости.\n"
 "Открыть конфигурацию Plane сейчас?"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:175
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:375 Data/Input/default.xci:1201
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:176
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:379 Data/Input/default.xci:1208
 msgid "Flight Setup"
 msgstr "Настройки полета"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:294
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:298
 msgid "Crew"
 msgstr "Команда"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:295
-msgid ""
-"All masses loaded to the glider beyond the empty weight including pilot and "
-"copilot, but not water ballast."
-msgstr ""
-"Общий вес, загруженный на планер сверх его пустого веса, включая пилота и "
-"копилота, но не водяной балласт."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:299
+msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
+msgstr "Общий вес, загруженный на планер сверх его пустого веса, включая пилота и копилота, но не водяной балласт."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:302
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:306
 msgid "Ballast"
 msgstr "Балласт"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:303
-msgid ""
-"Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the "
-"ballast volume according to the dump rate specified in the configuration "
-"settings."
-msgstr ""
-"Балласт планера. Нажмите \"Сброс/Стоп\", чтобы переключиться между подсчетом "
-"объема сброса по тарифу, установленному в настройках конфигурации, и "
-"остановкой процесса."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:307
+msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
+msgstr "Балласт планера. Нажмите \"Сброс/Стоп\", чтобы переключиться между подсчетом объема сброса по тарифу, установленному в настройках конфигурации, и остановкой процесса."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:309
-msgid ""
-"The current wing loading, calculated from the glider's empty weight, crew "
-"weight, and ballast."
-msgstr ""
-"Текущая нагрузка на крыло, рассчитанная на основе веса пустого планера, веса "
-"экипажа и балласта."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:313
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
+msgstr "Текущая нагрузка на крыло, рассчитанная на основе веса пустого планера, веса экипажа и балласта."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:316
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:320
 msgid "Bugs"
 msgstr "Ошибки"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:317
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:321
 #, no-c-format
-msgid ""
-"How clean the glider is. Set to 0% for clean, larger numbers as the wings "
-"pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."
-msgstr ""
-"Как очистить планер. Установите 0% для чистого, большие числа подбираются "
-"для крыльев с ошибками или намокшими. 50% указывает, скорость снижения "
-"планера удваивается."
+msgid "How clean the glider is. Set to 0% for clean, larger numbers as the wings pick up bugs or get wet. 50% indicates the glider's sink rate is doubled."
+msgstr "Как очистить планер. Установите 0% для чистого, большие числа подбираются для крыльев с ошибками или намокшими. 50% указывает, скорость снижения планера удваивается."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:325
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:77
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:329
+#: src/InfoBoxes/Content/Factory.cpp:1191
+#: src/InfoBoxes/Content/Factory.cpp:1192
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:80
+#, no-c-format
 msgid "QNH"
 msgstr "Давление на уровне моря (QNH)"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:326
-msgid ""
-"Area pressure for barometric altimeter calibration. This is set "
-"automatically if Vega is connected."
-msgstr ""
-"Значение давления для калибровки барометрического высотомера. "
-"Устанавливается автоматически, если Вега подключён."
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:330
+msgid "Area pressure for barometric altimeter calibration. This is set automatically if Vega is connected."
+msgstr "Значение давления для калибровки барометрического высотомера. Устанавливается автоматически, если Вега подключён."
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:341
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:345
 msgid "Max. temp."
 msgstr "Максимальная температура"
 
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:342
-msgid ""
-"Set to forecast ground temperature. Used by convection estimator "
-"(temperature trace page of Analysis dialog)."
-msgstr ""
-"Установите прогнозируемую приземную температуру. Используется для оценки "
-"конвекции (температурный трек в меню Анализ)"
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:346
+msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
+msgstr "Установите прогнозируемую приземную температуру. Используется для оценки конвекции (температурный трек в меню Анализ)"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:79
+#: src/Dialogs/Settings/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Orientation"
 msgstr "Ориентация"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:80
+#: src/Dialogs/Settings/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Elements"
 msgstr "Элементы"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:82
+#: src/Dialogs/Settings/dlgConfiguration.cpp:83
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:85
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68 Data/Input/default.xci:711
-#: Data/Input/default.xci:1265
+#: Data/Input/default.xci:1272
 #, no-c-format
 msgid "Terrain"
 msgstr "Ландшафт"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:89
-#: src/Dialogs/Settings/dlgConfiguration.cpp:143
+#: src/Dialogs/Settings/dlgConfiguration.cpp:90
+#: src/Dialogs/Settings/dlgConfiguration.cpp:145
 #, no-c-format
 msgid "Glide Computer"
 msgstr "Полетный компьютер"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:90
+#: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:272
 #: src/Weather/NOAAFormatter.cpp:78 src/Weather/NOAAFormatter.cpp:81
 #: src/InfoBoxes/Content/Factory.cpp:319 src/InfoBoxes/Content/Factory.cpp:327
@@ -3238,86 +3128,86 @@ msgstr "Полетный компьютер"
 msgid "Wind"
 msgstr "Ветер"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:91
+#: src/Dialogs/Settings/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Route"
 msgstr "Направление"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:92
+#: src/Dialogs/Settings/dlgConfiguration.cpp:93
 #, no-c-format
 msgid "Scoring"
 msgstr "Рейтинг"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:97
+#: src/Dialogs/Settings/dlgConfiguration.cpp:98
 #, no-c-format
 msgid "FLARM, Other"
 msgstr "FLARM, Другое"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:100
+#: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #, no-c-format
 msgid "Audio Vario"
 msgstr "Звуковой вариометр"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:106
+#: src/Dialogs/Settings/dlgConfiguration.cpp:107
 #, no-c-format
 msgid "Task Rules"
 msgstr "Задача"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:107
+#: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
 msgid "Turnpoint Types"
 msgstr "Тип поворотной точки"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:112
+#: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
 msgid "Language, Input"
 msgstr "Язык, ввод"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:113
+#: src/Dialogs/Settings/dlgConfiguration.cpp:114
 #, no-c-format
 msgid "Screen Layout"
 msgstr "Вид экрана"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:135
+#: src/Dialogs/Settings/dlgConfiguration.cpp:136
 #, no-c-format
 msgid "Audio"
 msgstr "Звуковой вариометр"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:142
+#: src/Dialogs/Settings/dlgConfiguration.cpp:144
 #, no-c-format
 msgid "Map Display"
 msgstr "Карта"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:144
+#: src/Dialogs/Settings/dlgConfiguration.cpp:146
 #, no-c-format
 msgid "Gauges"
 msgstr "Датчики"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:145
+#: src/Dialogs/Settings/dlgConfiguration.cpp:147
 #, no-c-format
 msgid "Task Defaults"
 msgstr "Задача по умолчанию"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:146
+#: src/Dialogs/Settings/dlgConfiguration.cpp:148
 #, no-c-format
 msgid "Look"
 msgstr "Просмотр"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:205
-#: src/Dialogs/Settings/dlgConfiguration.cpp:214
+#: src/Dialogs/Settings/dlgConfiguration.cpp:207
+#: src/Dialogs/Settings/dlgConfiguration.cpp:216
 msgid "Expert"
 msgstr "Эксперт"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:307
-#: src/Dialogs/Settings/dlgConfiguration.cpp:316
+#: src/Dialogs/Settings/dlgConfiguration.cpp:309
+#: src/Dialogs/Settings/dlgConfiguration.cpp:318
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:351
+#: src/Dialogs/Settings/dlgConfiguration.cpp:353
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Изменения в конфигурации сохранены. Перезагрузите XCSoar чтобы применить изменения."
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:219
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:220
 msgid "The name of this InfoBox panel configuration."
 msgstr "Имя этой конфигурации панели InfoBox."
 
@@ -3356,8 +3246,7 @@ msgid "Competition ID"
 msgstr "Соревновательный номер"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:347
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:174
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:348
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:224
 #, no-c-format
 msgid "Map"
 msgstr "Карта"
@@ -3500,7 +3389,7 @@ msgstr "Расч зад"
 #: src/Dialogs/dlgAnalysis.cpp:540 src/Dialogs/dlgAnalysis.cpp:550
 #: src/Dialogs/dlgAnalysis.cpp:559 src/Dialogs/dlgAnalysis.cpp:569
 #: src/Dialogs/dlgAnalysis.cpp:718 Data/Input/default.xci:1003
-#: Data/Input/default.xci:1434
+#: Data/Input/default.xci:1441
 msgid "Analysis"
 msgstr "Анализ"
 
@@ -3551,7 +3440,7 @@ msgstr "Предупреждения"
 
 #: src/Dialogs/dlgChecklist.cpp:55 src/Dialogs/dlgChecklist.cpp:192
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:106
-#: Data/Input/default.xci:995 Data/Input/default.xci:1322
+#: Data/Input/default.xci:995 Data/Input/default.xci:1329
 msgid "Checklist"
 msgstr "Перечень"
 
@@ -3629,7 +3518,7 @@ msgstr "Копировать"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:135
 #: src/Dialogs/Plane/PlaneListDialog.cpp:333
 #: src/Dialogs/Waypoint/Manager.cpp:109
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:102
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:111
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:81
 msgid "Delete"
 msgstr "Удалить"
@@ -3783,10 +3672,11 @@ msgstr "Поляра планера"
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:126
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:278
 #: src/Dialogs/Task/Manager/WeGlideTasksPanel.cpp:300
-#: src/Dialogs/Weather/PCMetDialog.cpp:51 src/Dialogs/Weather/NOAAList.cpp:183
+#: src/Dialogs/Weather/PCMetDialog.cpp:208 src/Dialogs/Weather/NOAAList.cpp:183
 #: src/Dialogs/Weather/NOAAList.cpp:199 src/Dialogs/Weather/NOAADetails.cpp:88
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:355
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:390
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:438
 #: src/Dialogs/DownloadFilePicker.cpp:164
 #: src/Dialogs/DownloadFilePicker.cpp:189
 #: src/Dialogs/DownloadFilePicker.cpp:280
@@ -3805,7 +3695,7 @@ msgstr "Выберите файл"
 msgid "Switch InfoBox"
 msgstr "Перейти в ИнфоБокс"
 
-#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:109
+#: src/Dialogs/ReplayDialog.cpp:49 src/Dialogs/Weather/RASPDialog.cpp:37
 msgid "File"
 msgstr "Файл"
 
@@ -3836,7 +3726,7 @@ msgstr "Повтор"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:48 src/Dialogs/StartupDialog.cpp:83
 #: src/Dialogs/dlgQuickGuide.cpp:513 src/Dialogs/dlgQuickGuide.cpp:708
-#: Data/Input/default.xci:1143
+#: Data/Input/default.xci:1150
 msgid "Quit"
 msgstr "Выйти из программы"
 
@@ -3866,8 +3756,11 @@ msgid "Enter a new password"
 msgstr "Введите новый пароль"
 
 #: src/Dialogs/dlgStatus.cpp:28 src/Dialogs/dlgStatus.cpp:39
-#: src/Dialogs/Weather/WeatherDialog.cpp:38 Data/Input/default.xci:1021
-#: Data/Input/default.xci:1442
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:327
+#: src/Dialogs/Weather/WeatherDialog.cpp:52 Data/Input/default.xci:1021
+#: Data/Input/default.xci:1449
 msgid "Status"
 msgstr "Статус"
 
@@ -3908,9 +3801,8 @@ msgid "Share"
 msgstr "Поделиться"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:32
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:43
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:82
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:86
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:68
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:72
 #: src/InfoBoxes/Content/Other.cpp:168
 #, no-c-format
 msgid "Disconnected"
@@ -3934,29 +3826,36 @@ msgstr "Фикс 2D"
 msgid "3D fix"
 msgstr "3D позиция"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:45
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:192
-#, no-c-format
 msgid "Roaming"
 msgstr "Перемещение"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:124
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:110
 msgid "GPS lock"
 msgstr "GPS блок."
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:125
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:111
 msgid "Satellites in view"
 msgstr "Видимые спутн."
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:126
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:112
 msgid "Variometer"
 msgstr "Вариометр"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:129
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:115
 msgid "Supply voltage"
 msgstr "Батарея"
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
+#: src/Dialogs/InternalLink.cpp:83
+#: src/Dialogs/Settings/dlgConfiguration.cpp:138
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:116
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:80
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:244
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:252
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:303
+#, no-c-format
 msgid "Network"
 msgstr "Сеть"
 
@@ -4224,15 +4123,15 @@ msgstr "Устан как Дом"
 msgid "Pan to Waypoint"
 msgstr "Перейти к точке"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:538 Data/Input/default.xci:1400
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:487 Data/Input/default.xci:1407
 msgid "GoTo"
 msgstr "Лететь к"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:541
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:490
 msgid "Pan To"
 msgstr "Панирование к"
 
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:1030
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:877
 #: src/Dialogs/Task/TaskPointDialog.cpp:511
 #: src/InfoBoxes/Panel/ATCReference.cpp:64
 msgid "Waypoint"
@@ -4245,7 +4144,7 @@ msgstr "Удалить путевую точку?"
 #: src/Dialogs/Waypoint/Manager.cpp:286
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:122
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129 Data/Input/default.xci:809
-#: Data/Input/default.xci:1241
+#: Data/Input/default.xci:1248
 msgid "Waypoint Editor"
 msgstr "Редактор точки"
 
@@ -4377,12 +4276,13 @@ msgstr ""
 "К сожалению, редактор путевых точек ещё не доступен для координат в формате "
 "UTM."
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:543
+#: src/Dialogs/Waypoint/WaypointList.cpp:575
+#: src/Dialogs/Waypoint/WaypointList.cpp:584
 msgid "Choose a filter or click here"
 msgstr "Выберите фильтр или нажмите здесь"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:628
-#: src/Dialogs/Waypoint/WaypointList.cpp:671
+#: src/Dialogs/Waypoint/WaypointList.cpp:678
+#: src/Dialogs/Waypoint/WaypointList.cpp:722
 msgid "Select Waypoint"
 msgstr "Выбор точки"
 
@@ -4424,7 +4324,7 @@ msgstr ""
 "области."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:50
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:153
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:54
 #, no-c-format
 msgid "Default"
@@ -5127,100 +5027,75 @@ msgstr ""
 "Управляет использованием режима \"финишный глайд\" InfoBox на страницах "
 "\"авто\"."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:72
 msgid "Text size"
 msgstr "ТЕКСТ"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
 msgid "Display Resolution"
 msgstr "Ориентация дисплея"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:77
-msgid ""
-"The display resolution is used to adapt line widths, font size, landable "
-"size and more."
-msgstr ""
-"Разрешение экрана используется для адаптации ширины линий, размера шрифта, "
-"размера посадочной площадки и т.д."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:78
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
+msgstr "Разрешение экрана используется для адаптации ширины линий, размера шрифта, размера посадочной площадки и т.д."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:87
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:113
 msgid "Automatic"
 msgstr "Автоматически"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:90
-#, c-format
-msgid "%d dpi"
-msgstr "%d точек на дюйм"
-
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:98
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
 msgid "Events"
 msgstr "События"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:99
-msgid ""
-"The Input Events file defines the menu system and how XCSoar responds to "
-"button presses and events from external devices."
-msgstr ""
-"Файл Событий ввода определяет системное меню и как XCSoar будет реагировать "
-"на нажатия кнопок и события с внешних устройств."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:100
+msgid "The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices."
+msgstr "Файл Событий ввода определяет системное меню и как XCSoar будет реагировать на нажатия кнопок и события с внешних устройств."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 msgid "Language"
 msgstr "Язык"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
-msgid ""
-"The language options selects translations for English texts to other "
-"languages. Select English for a native interface or Automatic to localise "
-"XCSoar according to the system settings."
-msgstr ""
-"Язык перевода. Выберите English для оригинального интерфейса или "
-"\"Автоматически\" для выбора в соответствии с системными настройками."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:108
+msgid "The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings."
+msgstr "Язык перевода. Выберите English для оригинального интерфейса или \"Автоматически\" для выбора в соответствии с системными настройками."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
 msgid "Menu timeout"
 msgstr "Время показа меню"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:146
-msgid ""
-"This determines how long menus will appear on screen if the user does not "
-"make any button presses or interacts with the computer."
-msgstr ""
-"Определяет, как долго будет отображаться меню на экране, если пользователь "
-"не делает никаких нажатий на кнопки или взаимодействует с компьютером."
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:147
+msgid "This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer."
+msgstr "Определяет, как долго будет отображаться меню на экране, если пользователь не делает никаких нажатий на кнопки или взаимодействует с компьютером."
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:155
 #, no-c-format
 msgid "Keyboard"
 msgstr "Клавиатура"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:156
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:157
 #, no-c-format
 msgid "HighScore Style"
 msgstr "Стиль рекорда"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
 msgid "Text input style"
 msgstr "Стиль текста"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:161
-msgid ""
-"Determines how the user is prompted for text input (filename, teamcode etc.)"
-msgstr ""
-"Определяет, как пользователю будет предложено ввести текст (имя файла, "
-"teamcode т.д.)"
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
+msgid "Determines how the user is prompted for text input (filename, teamcode etc.)"
+msgstr "Определяет, как пользователю будет предложено ввести текст (имя файла, teamcode т.д.)"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #, no-c-format
 msgid "OS settings"
 msgstr "настройки операционной системы"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
 msgid "Haptic feedback"
 msgstr "Виброотклик"
 
-#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:179
 msgid "Determines if haptic feedback like vibration is used."
 msgstr "Определяет использование тактильной обратной связи, например вибрации."
 
@@ -5804,88 +5679,72 @@ msgstr "Зум отдельных страниц"
 msgid "Maintain one map zoom level on each page."
 msgstr "Поддерживать одинаковый масштаб карты на каждой странице"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:352
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:225
 #, no-c-format
 msgid "Map (north-up)"
 msgstr "Карта (север вверх)"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:231
 msgid "Main area"
 msgstr "Главная область"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:232
 msgid "Specifies what should be displayed in the main area."
 msgstr "Указывает, что должно отображаться в главной области."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:237
 #, no-c-format
 msgid "Displays either the Circling, Cruise, or Final glide InfoBoxes."
-msgstr ""
-"Отображает либо InfoBox Плавания, либо Крейсирующего, либо Финишного "
-"глайдера."
+msgstr "Отображает либо InfoBox Плавания, либо Крейсирующего, либо Финишного глайдера."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:238
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
 msgstr "Полный экран (без InfoBox)"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:192
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:372
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:242
 msgid "InfoBoxes"
 msgstr "Инфобокс"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:243
 msgid "Specifies which InfoBoxes should be displayed on this page."
 msgstr "Определяет, какие Инфобоксы должны быть отображены на этой странице."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:247
 #, no-c-format
-msgid ""
-"For cruise mode. Displayed when 'Auto' is selected and glider is below final "
-"glide altitude."
-msgstr ""
-"Для режима Крейсирования. Отображается при выборе 'Авто' и при полете "
-"планера ниже уровня Финишного глайдера."
+msgid "For cruise mode. Displayed when 'Auto' is selected and glider is below final glide altitude."
+msgstr "Для режима Крейсирования. Отображается при выборе 'Авто' и при полете планера ниже уровня Финишного глайдера."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:198
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:248
 #, no-c-format
-msgid ""
-"For circling mode. Displayed when 'Auto' is selected and glider is circling."
-msgstr ""
-"Для режима Плавания. Отображается при выборе 'Авто' и при круговом полете "
-"планера."
+msgid "For circling mode. Displayed when 'Auto' is selected and glider is circling."
+msgstr "Для режима Плавания. Отображается при выборе 'Авто' и при круговом полете планера."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:199
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:249
 #, no-c-format
-msgid ""
-"For final glide mode. Displayed when 'Auto' is selected and glider is above "
-"final glide altitude."
-msgstr ""
-"Для режима Финишного глайдера. Отображается при выборе 'Авто' и при полете "
-"планера выше уровня Финишного глайдера."
+msgid "For final glide mode. Displayed when 'Auto' is selected and glider is above final glide altitude."
+msgstr "Для режима Финишного глайдера. Отображается при выборе 'Авто' и при полете планера выше уровня Финишного глайдера."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:201
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:251
 #, no-c-format
 msgid "A custom InfoBox set"
 msgstr "Настраиваемый InfoBox"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:219
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:269
 #, no-c-format
 msgid "Nothing"
 msgstr "Ничего"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:220
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:388
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:270
 #, no-c-format
 msgid "Cross section"
 msgstr "Сечение"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:223
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:276
 msgid "Bottom area"
 msgstr "Ниже главной области"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:224
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:277
 msgid "Specifies what should be displayed below the main area."
 msgstr "Указывает, что должно отображаться ниже главной области."
 
@@ -6111,7 +5970,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:64
 #: src/InfoBoxes/Content/Factory.cpp:1174
-#: src/InfoBoxes/Content/Factory.cpp:1175 src/InfoBoxes/Content/Places.cpp:107
+#: src/InfoBoxes/Content/Factory.cpp:1175 src/InfoBoxes/Content/Places.cpp:112
 #, no-c-format
 msgid "Home"
 msgstr "Дом"
@@ -7335,12 +7194,9 @@ msgstr ""
 "[Выкл] Показывать фикс длину для ВВП\n"
 "[Вкл] Показывать масштабируемую длину ВВП в соответствии с реальной"
 
-#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:69
-msgid ""
-"Show thermal locations downloaded from Thermal Information Map "
-"(thermalmap.info)."
-msgstr ""
-"Отображать локации термалов, загруженные из карты термалов (thermalmap.info)."
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:76
+msgid "Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."
+msgstr "Отображать локации термалов, загруженные из карты термалов (thermalmap.info)."
 
 #: src/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp:70
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
@@ -7854,12 +7710,11 @@ msgstr "Нет альтернативных точек"
 
 #: src/Dialogs/Task/AlternatesListDialog.cpp:316
 #: src/Dialogs/Task/AlternatesListDialog.cpp:349 Data/Input/default.xci:582
-#: Data/Input/default.xci:1367
+#: Data/Input/default.xci:1374
 msgid "Alternates"
 msgstr "Альтернативы"
 
-#: src/Dialogs/TimeEntry.cpp:48 src/Dialogs/Weather/RASPDialog.cpp:86
-#: src/Dialogs/Weather/RASPDialog.cpp:135
+#: src/Weather/Rasp/FieldControls.cpp:45 src/Dialogs/TimeEntry.cpp:48
 msgid "Now"
 msgstr "Текущее"
 
@@ -7867,15 +7722,11 @@ msgstr "Текущее"
 msgid "Reset"
 msgstr "Сброс"
 
-#: src/Dialogs/Weather/WeatherDialog.cpp:59
+#: src/Dialogs/Weather/WeatherDialog.cpp:73
 #: src/Dialogs/Weather/NOAADetails.cpp:64
 #: src/Dialogs/Weather/NOAADetails.cpp:122
 msgid "METAR and TAF"
 msgstr "METAR и TAF"
-
-#: src/Dialogs/Weather/RASPDialog.cpp:122
-msgid "Field"
-msgstr "Район"
 
 #: src/Dialogs/dlgCredits.cpp:81 src/Dialogs/dlgCredits.cpp:123
 #: Data/Input/default.xci:1064
@@ -9195,7 +9046,7 @@ msgstr ""
 msgid "Netto vario"
 msgstr "Нетто варио."
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:76
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:62
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Netto"
@@ -10489,13 +10340,14 @@ msgid "Arrival altitude at the second-best alternate landing location relative t
 msgstr "Высота прибытия к финальной точке поворота задания относительно безопасной высоты прибытия."
 
 #: src/InfoBoxes/Content/Altitude.cpp:27
-#: src/MapWindow/GlueMapWindowOverlays.cpp:337
+#: src/MapWindow/GlueMapWindowOverlays.cpp:340
 #, no-c-format
 msgid "Simulator"
 msgstr "Симулятор"
 
 #: src/InfoBoxes/Content/Altitude.cpp:79 src/InfoBoxes/Content/Altitude.cpp:137
 #: src/InfoBoxes/Content/Altitude.cpp:206
+#: src/InfoBoxes/Content/Altitude.cpp:220
 msgid "no QNH"
 msgstr "нет QNH"
 
@@ -10551,7 +10403,7 @@ msgstr "Открыт"
 msgid "Waiting"
 msgstr "Ожидание"
 
-#: src/InfoBoxes/Content/Places.cpp:181
+#: src/InfoBoxes/Content/Places.cpp:303
 #, no-c-format
 msgid "Reference"
 msgstr "Ссылка"
@@ -10566,16 +10418,12 @@ msgstr "Переход"
 msgid "FinalGlide"
 msgstr "Долет"
 
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:78
-msgid ""
-"Area pressure for barometric altimeter calibration.  This is set "
-"automatically if Vega connected."
-msgstr ""
-"Значение давления для калибровки барометрического высотомера. "
-"Устанавливается автоматически, если Вега подключён."
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:81
+msgid "Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."
+msgstr "Значение давления для калибровки барометрического высотомера. Устанавливается автоматически, если Вега подключён."
 
-#: src/InfoBoxes/Panel/AltitudeSetup.cpp:121
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:124
+#: src/InfoBoxes/Panel/AltitudeSetup.cpp:127
 msgid "Ground elevation for device calibration (meters)."
 msgstr "Высота земли для калибровки устройства (метры)."
 
@@ -10858,23 +10706,23 @@ msgstr ""
 "Настройки базовой пропорциональности тональности индикации тангажа во всех "
 "режимах."
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:85
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:89
 msgid "Beep type"
 msgstr "Тип бипа"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:88
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:92
 msgid "Pitch scheme"
 msgstr "Шаблон тангажа"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:91
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:95
 msgid "Pitch scale"
 msgstr "Масштаб наклона"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:94
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:98
 msgid "Period scheme"
 msgstr "Схема периода"
 
-#: src/Dialogs/Device/Vega/AudioParameters.hpp:97
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:101
 msgid "Period scale"
 msgstr "Масштаб периода"
 
@@ -11193,9 +11041,9 @@ msgstr "ФИНАЛЬНЫЙ ГЛАЙД ПЕРЕСЕКАЕТ РЕЛЬЕФ"
 
 #: Data/Input/default.xci:158 Data/Input/default.xci:165
 #: Data/Input/default.xci:648 Data/Input/default.xci:655
-#: Data/Input/default.xci:663 Data/Input/default.xci:1158
-#: Data/Input/default.xci:1165 Data/Input/default.xci:1172
-#: Data/Input/default.xci:1425
+#: Data/Input/default.xci:663 Data/Input/default.xci:1165
+#: Data/Input/default.xci:1172 Data/Input/default.xci:1179
+#: Data/Input/default.xci:1432
 msgid "Zoom"
 msgstr "Масштаб"
 
@@ -11234,7 +11082,7 @@ msgid "Previous waypoint"
 msgstr "Предыдущая путевая точка"
 
 #: Data/Input/default.xci:515 Data/Input/default.xci:618
-#: Data/Input/default.xci:1310
+#: Data/Input/default.xci:1317
 msgid "Pilot event announced"
 msgstr "Событие пилота объявлено"
 
@@ -11244,27 +11092,27 @@ msgid ""
 "Page 2/2"
 msgstr "Навигация"
 
-#: Data/Input/default.xci:574 Data/Input/default.xci:1359
+#: Data/Input/default.xci:574 Data/Input/default.xci:1366
 msgid "Waypoint List"
 msgstr ""
 "Список\n"
 "точек"
 
-#: Data/Input/default.xci:608 Data/Input/default.xci:1414
+#: Data/Input/default.xci:608 Data/Input/default.xci:1421
 msgid "Dropped marker"
 msgstr "Пропущенный маркер"
 
-#: Data/Input/default.xci:611 Data/Input/default.xci:1417
+#: Data/Input/default.xci:611 Data/Input/default.xci:1424
 msgid "Marker Drop"
 msgstr ""
 "Установить\n"
 "метку"
 
-#: Data/Input/default.xci:621 Data/Input/default.xci:1313
+#: Data/Input/default.xci:621 Data/Input/default.xci:1320
 msgid "Pilot Event Announce"
 msgstr "ПИЛОТ"
 
-#: Data/Input/default.xci:629 Data/Input/default.xci:1330
+#: Data/Input/default.xci:629 Data/Input/default.xci:1337
 msgid "Target Show"
 msgstr "Цель"
 
@@ -11278,19 +11126,19 @@ msgstr "Отобразить"
 msgid "Page Show"
 msgstr "Страница Показать"
 
-#: Data/Input/default.xci:677 Data/Input/default.xci:1351
+#: Data/Input/default.xci:677 Data/Input/default.xci:1358
 msgid "Pan Mode"
 msgstr "Режим Панорамы"
 
-#: Data/Input/default.xci:696 Data/Input/default.xci:1250
+#: Data/Input/default.xci:696 Data/Input/default.xci:1257
 msgid "Labels"
 msgstr "Обознач"
 
-#: Data/Input/default.xci:704 Data/Input/default.xci:1258
+#: Data/Input/default.xci:704 Data/Input/default.xci:1265
 msgid "Trail"
 msgstr "След"
 
-#: Data/Input/default.xci:718 Data/Input/default.xci:1272
+#: Data/Input/default.xci:718 Data/Input/default.xci:1279
 msgid "Topo."
 msgstr "Топо"
 
@@ -11306,7 +11154,7 @@ msgid ""
 "Page 3/3"
 msgstr "Настройки"
 
-#: Data/Input/default.xci:850 Data/Input/default.xci:1474
+#: Data/Input/default.xci:850 Data/Input/default.xci:1481
 msgid "NMEA Logger"
 msgstr "NMEA логгер"
 
@@ -11390,7 +11238,7 @@ msgid ""
 "Page 2/3"
 msgstr "Информация"
 
-#: Data/Input/default.xci:971 Data/Input/default.xci:1407
+#: Data/Input/default.xci:971 Data/Input/default.xci:1414
 msgid "FLARM Radar"
 msgstr "FLARM радар"
 
@@ -11404,15 +11252,15 @@ msgstr "Информация"
 msgid "Traffic List"
 msgstr "Список Трафика"
 
-#: Data/Input/default.xci:1045 Data/Input/default.xci:1450
+#: Data/Input/default.xci:1045 Data/Input/default.xci:1457
 msgid "Thermal Assistant"
 msgstr "Помощник в термике"
 
-#: Data/Input/default.xci:1072 Data/Input/default.xci:1458
+#: Data/Input/default.xci:1072 Data/Input/default.xci:1465
 msgid "Airspaces"
 msgstr "Воздушное пространство"
 
-#: Data/Input/default.xci:1079 Data/Input/default.xci:1497
+#: Data/Input/default.xci:1079 Data/Input/default.xci:1504
 msgid "Message Repeat"
 msgstr "Повторить сообщение"
 
@@ -11432,49 +11280,45 @@ msgstr "Настройки"
 msgid "Lock Screen"
 msgstr "Заблокировать экран"
 
-#: Data/Input/default.xci:1186
+#: Data/Input/default.xci:1193
 msgid "AVG/ALT"
 msgstr "СРЕДН\\ВЫС"
 
-#: Data/Input/default.xci:1209
+#: Data/Input/default.xci:1216
 msgid "Setup Wind"
 msgstr ""
 "Настройки\n"
 "ветер"
 
-#: Data/Input/default.xci:1217
+#: Data/Input/default.xci:1224
 msgid "Setup System"
 msgstr ""
 "Системные\n"
 "настроки"
 
-#: Data/Input/default.xci:1225
+#: Data/Input/default.xci:1232
 msgid "Settings Airspace"
 msgstr ""
 "Настройки\n"
 "Воздушное пространство"
 
-#: Data/Input/default.xci:1233
+#: Data/Input/default.xci:1240
 msgid "Setup Plane"
 msgstr "Установки планера"
 
-#: Data/Input/default.xci:1337
+#: Data/Input/default.xci:1344
 msgid "MacCready"
 msgstr "Маккриди"
 
-#: Data/Input/default.xci:1383
+#: Data/Input/default.xci:1390
 msgid "Nearest Airspace"
 msgstr ""
 "Ближайшее\n"
 "Воздушное пространство"
 
-#: Data/Input/default.xci:1512
+#: Data/Input/default.xci:1519
 msgid "Quit XCSoar"
 msgstr "XCSoar"
-#: src/net/client/WeGlide/UploadIGCFile.cpp:119
-msgid "Please set WeGlide Aircraft Type in Plane profile before uploading."
-msgstr "Перед загрузкой укажите тип самолета WeGlide в профиле самолета."
-
 #: src/Dialogs/Device/LX/ManageLXNAVVarioDialog.cpp:53
 msgid "unknown"
 msgstr "неизвестный"
@@ -11496,13 +11340,13 @@ msgstr "Выберите тип WeGlide"
 msgid "Thermal hotspot"
 msgstr "Термальная точка доступа"
 
-#: src/Renderer/MacCreadyRenderer.cpp:31 src/Renderer/TaskSpeedRenderer.cpp:29
+#: src/Renderer/MacCreadyRenderer.cpp:36 src/Renderer/TaskSpeedRenderer.cpp:35
 #, no-c-format
 msgctxt "Average velocity abbreviation"
 msgid "Vave"
 msgstr "Vср."
 
-#: src/Startup.cpp:201
+#: src/Startup.cpp:208
 msgid "Failed to open configured map file"
 msgstr "Не удалось открыть настроенный файл карты"
 
@@ -11548,7 +11392,7 @@ msgstr "Полярная W"
 msgid "not found"
 msgstr "не найдено"
 
-#: src/InfoBoxes/Content/Factory.cpp:1208
+#: src/InfoBoxes/Content/Factory.cpp:1225
 #, no-c-format
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
@@ -11606,11 +11450,11 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:64
 msgid "Total energy"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:80
+#: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:66
 msgid "Uncompensated"
 msgstr ""
 
@@ -11806,5 +11650,359 @@ msgstr ""
 #. Title is StaticString<32> (31 bytes + NUL).
 #: src/InfoBoxes/Content/Task.cpp:1024
 msgid "Start unknown"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:370
+#, c-format
+msgid "%d secs"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:376
+#, c-format
+msgid " dist %d m"
+msgstr ""
+
+#: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:382
+msgid " vertical "
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:109
+msgid "Hidden network"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:223 src/Dialogs/WifiDialog.cpp:492
+msgid "Scan"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:228 src/Dialogs/WifiDialog.cpp:310
+#: src/Dialogs/WifiDialog.cpp:313
+msgid "Connect"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:236
+msgid "Forget"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:289
+msgid "Scanning..."
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:307
+msgid "Disconnect"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:329
+msgid "WiFi update failed"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:409
+#, c-format
+msgid "Passphrase of network '%s'"
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:486 src/net/wifi/WifiError.cpp:74
+#: src/net/wifi/WifiError.cpp:87 src/net/wifi/WifiError.cpp:129
+#: src/net/wifi/WifiError.cpp:140
+msgid "The operation failed."
+msgstr ""
+
+#: src/Dialogs/WifiDialog.cpp:507
+msgid "WiFi"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:91
+#, c-format
+msgid "%u dpi"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:56
+msgid "This page shows Kobo WiFi status. Open WiFi list to scan and connect."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:57
+msgid "Checking WiFi..."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:217
+msgid "IPv4 address of the active WiFi interface."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:65
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:221
+msgid "Backend"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:66
+msgid "WiFi on Kobo is managed by wpa_supplicant."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:235
+msgid "WiFi Enabled"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:71
+msgid "Turns the Kobo WiFi interface on or off."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:74
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:238
+msgid "WiFi List"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:79
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:110
+msgid "WiFi backend is not available in this Kobo build."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:136
+msgid "Failed to enable WiFi."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:137
+msgid "Failed to disable WiFi."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:165
+msgid "NetworkManager"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:167
+msgid "ConnMan"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:205
+msgid "This page shows WiFi status when NetworkManager or ConnMan is on D-Bus (e.g. Linux with Wayland or KMS). Open WiFi list to scan and connect when a service is available."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:208
+msgid "Checking network services..."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:211
+msgid "Connectivity"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:212
+msgid "Current network connectivity state."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:222
+msgid "D-Bus provider used for WiFi (see WiFi list to manage networks)."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:243
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:277
+msgid "No network service (NetworkManager or ConnMan) found on D-Bus."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/NetworkConfigPanel.cpp:329
+msgid "In-app network settings are not available in this build."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:185
+msgid "No RASP file loaded"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:272
+#, no-c-format
+msgid "Weather controls"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:283
+#, no-c-format
+msgid "RASP"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:285
+#, no-c-format
+msgid "EDL"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:289
+msgid "Map overlay"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:290
+msgid "Optional weather overlay drawn on map pages."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:294
+msgid "RASP layer"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:295
+msgid "RASP weather layer to display on this map page."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:79
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:84
+msgid "EDL Weather Page"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:80
+msgid "Enable the dedicated EDL MBTiles weather page."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:85
+msgid "EDL weather requires an OpenGL renderer and is not available in this build."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:86
+msgid "Unavailable"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp:87
+msgid "EDL weather is disabled in this build because the OpenGL renderer is not available."
+msgstr ""
+
+#: src/Dialogs/Weather/WeatherDialog.cpp:31
+msgid "EDL weather is not available because this build has no OpenGL renderer."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:282
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:295
+msgid "Auto advance"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:283
+msgid "Automatically follow the next UTC forecast hour and the next lower pressure level below the aircraft."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:287
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:300
+msgid "Forecast"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:290
+msgid "Level"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:296
+msgid "Automatically follow the current local time in 15-minute steps."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:312
+msgid "Cached day"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:315
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:478
+msgid "Precache day"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:318
+msgid "Clean other days"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:415
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:468
+msgid "HTTP support is not available in this build."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:488
+#, c-format
+msgid "Cached %u files for the selected UTC day."
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:507
+#, c-format
+msgid "Keep only %04u-%02u-%02u and delete the other cached days?"
+msgstr ""
+
+#: src/Dialogs/Weather/MapOverlayControlsWidget.cpp:519
+#, c-format
+msgid "Deleted %u cached files."
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:313
+msgid "Idle"
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:315
+msgid "Loading"
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:317
+msgid "Ready"
+msgstr ""
+
+#: src/Weather/EDL/StateController.cpp:349
+#, c-format
+msgid "EDL %02u:00 %u hPa %s"
+msgstr ""
+
+#: src/Weather/MapOverlay/EdlControlsModel.cpp:100
+#, c-format
+msgid "%u hPa (%d m)"
+msgstr ""
+
+#: src/Weather/MapOverlay/EdlControlsModel.cpp:138
+msgid "Complete"
+msgstr ""
+
+#: src/Weather/MapOverlay/EdlControlsModel.cpp:138
+msgid "Partial"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:52
+msgid "The selected network is not available. Try scanning again."
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:55 src/net/wifi/WifiError.cpp:106
+msgid "A passphrase is required, or a saved network for this name must exist in the system settings."
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:59
+msgid "No Wi-Fi interface available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:62
+msgid "No D-Bus connection"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:65
+msgid "ConnMan is not available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:68
+msgid "No Wi-Fi backend available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:71
+msgid "NetworkManager is not available"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:93
+msgid "Permission denied. You may not be allowed to connect to this network."
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:97 src/net/wifi/WifiError.cpp:102
+msgid "A D-Bus error occurred. Is NetworkManager or ConnMan running on the bus?"
+msgstr ""
+
+#: src/net/wifi/WifiError.cpp:112
+msgid "Could not connect. Check the passphrase and try again."
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1193
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1200
+#, no-c-format
+msgid "Active Waypoint"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1201 src/InfoBoxes/Content/Places.cpp:184
+#, no-c-format
+msgid "Active WP"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1202
+#, no-c-format
+msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
 msgstr ""
 

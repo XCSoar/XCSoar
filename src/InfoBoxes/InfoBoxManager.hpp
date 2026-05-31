@@ -16,6 +16,9 @@ extern InfoBoxLayout::Layout layout;
 void
 ProcessTimer() noexcept;
 
+[[nodiscard]] bool
+IsReady() noexcept;
+
 void
 SetDirty() noexcept;
 

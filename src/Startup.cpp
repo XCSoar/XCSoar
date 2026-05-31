@@ -49,6 +49,9 @@
 #include "Audio/VolumeController.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
+#ifdef HAVE_HTTP
+#include "Dialogs/NOTAM/NOTAMMessageListener.hpp"
+#endif
 #include "Computer/GlideComputer.hpp"
 #include "Computer/GlideComputerInterface.hpp"
 #include "Computer/Events.hpp"
@@ -57,6 +60,7 @@
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
 #include "LocalPath.hpp"
+#include "system/FileUtil.hpp"
 #include "io/FileCache.hpp"
 #include "io/async/AsioThread.hpp"
 #include "io/async/GlobalAsioThread.hpp"
@@ -115,8 +119,15 @@
 #include "Apple/Services.hpp"
 #endif
 
+#ifdef HAVE_EDL
+#include "Weather/EDL/Glue.hpp"
+#endif
+
 static TaskManager *task_manager;
 static GlideComputerEvents *glide_computer_events;
+#ifdef HAVE_EDL
+static EDL::Glue *edl_glue;
+#endif
 static AllMonitors *all_monitors;
 static GlideComputerTaskEvents *task_events;
 static DeviceFactory *device_factory;
@@ -144,9 +155,13 @@ AfterStartup()
 {
   try {
     const auto lua_path = LocalPath("lua");
-    Lua::StartFile(AllocatedPath::Build(lua_path, "init.lua"));
+    const AllocatedPath init_path = AllocatedPath::Build(lua_path, "init.lua");
+    if (File::Exists(init_path))
+      Lua::StartFile(init_path);
+    else
+      LogDebug("Optional %s not found", init_path.c_str());
   } catch (...) {
-      LogError(std::current_exception());
+    LogError(std::current_exception());
   }
 
   if (is_simulator()) {
@@ -177,6 +192,25 @@ AfterStartup()
   InfoBoxManager::SetDirty();
 
   ForceCalculation();
+
+#ifdef HAVE_HTTP
+  if (net_components != nullptr && net_components->notam != nullptr &&
+      data_components != nullptr && data_components->airspaces != nullptr) {
+    try {
+      const ScopeSuspendAllThreads suspend;
+      const auto &basic = CommonInterface::Basic();
+      if (net_components->notam->LoadCachedNOTAMsAndUpdate(
+            *data_components->airspaces,
+            basic.location_available ? basic.location : GeoPoint::Invalid()) &&
+          data_components->terrain != nullptr) {
+        SetAirspaceGroundLevels(*data_components->airspaces,
+                                *data_components->terrain);
+      }
+    } catch (...) {
+      LogError(std::current_exception());
+    }
+  }
+#endif
 }
 
 void
@@ -612,6 +646,11 @@ Startup(UI::Display &display)
   glide_computer_events->Reset();
   live_blackboard.AddListener(*glide_computer_events);
 
+#ifdef HAVE_EDL
+  edl_glue = new EDL::Glue();
+  live_blackboard.AddListener(*edl_glue);
+#endif
+
   all_monitors = new AllMonitors();
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
@@ -624,27 +663,22 @@ Startup(UI::Display &display)
 
   LogString("ProgramStarted");
 
-  // Give focus to the map
   main_window->SetDefaultFocus();
-
-  // Start calculation thread
-  backend_components->merge_thread->Start();
-  backend_components->calculation_thread->Start();
-
-  PageActions::Update();
 
 #ifdef HAVE_HTTP
   net_components = new NetComponents(*asio_thread, *Net::curl,
-                                     computer_settings.tracking);
-#endif
-#ifdef HAVE_HTTP
-#ifdef HAVE_SKYLINES_TRACKING
+                                     computer_settings.tracking,
+                                     computer_settings.airspace.notam);
+  if (net_components->notam != nullptr)
+    InstallNOTAMMessageListener(*net_components->notam);
+# ifdef HAVE_EDL
+  if (edl_glue != nullptr && net_components->edl != nullptr)
+    edl_glue->AttachDownloadGlue(*net_components->edl);
+# endif
+# ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());
-#endif
-#endif
-
-#ifdef HAVE_HTTP
+# endif
   if (map_window != nullptr)
     map_window->SetThermalInfoMap(net_components->tim.get());
 #endif
@@ -652,14 +686,46 @@ Startup(UI::Display &display)
   assert(!global_running);
   global_running = true;
 
+  /* Threads must run before AfterStartup() (NOTAM cache uses
+     ScopeSuspendAllThreads, which needs a started calculation thread). */
+  backend_components->merge_thread->Start();
+  backend_components->calculation_thread->Start();
+
   AfterStartup();
 
   operation.Hide();
 
   main_window->FinishStartup();
+  main_window->SchedulePageActionsUpdate();
 
   return true;
 }
+
+#ifdef HAVE_HTTP
+static void
+BeginShutdownNetComponents(MainWindow &main_window) noexcept
+{
+  if (net_components == nullptr)
+    return;
+
+  net_components->BeginShutdown();
+  DeinitNOTAMMessageListener();
+
+  if (GlueMapWindow *map = main_window.GetMap()) {
+#ifdef HAVE_SKYLINES_TRACKING
+    map->SetSkyLinesData(nullptr);
+#endif
+    map->SetThermalInfoMap(nullptr);
+  }
+}
+
+static void
+DestroyNetComponents() noexcept
+{
+  delete net_components;
+  net_components = nullptr;
+}
+#endif
 
 void
 Shutdown()
@@ -671,6 +737,11 @@ Shutdown()
 
   // Turn off all displays first to prevent UI operations from blocking
   global_running = false;
+
+#ifdef HAVE_HTTP
+  if (main_window != nullptr)
+    BeginShutdownNetComponents(*main_window);
+#endif
 
   // Show progress dialog
   operation.SetText(_("Shutdown, please wait..."));
@@ -701,6 +772,15 @@ Shutdown()
     delete glide_computer_events;
     glide_computer_events = nullptr;
   }
+
+#ifdef HAVE_EDL
+  if (edl_glue != nullptr) {
+    edl_glue->DetachDownloadGlue();
+    live_blackboard.RemoveListener(*edl_glue);
+    delete edl_glue;
+    edl_glue = nullptr;
+  }
+#endif
 
   SaveFlarmColors();
   SaveFlarmMessaging();
@@ -807,11 +887,6 @@ Shutdown()
   noaa_store = nullptr;
 #endif
 
-#ifdef HAVE_HTTP
-  delete net_components;
-  net_components = nullptr;
-#endif
-
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Deinitialise();
 #endif
@@ -834,6 +909,10 @@ Shutdown()
 
   delete file_cache;
   file_cache = nullptr;
+
+#ifdef HAVE_HTTP
+  DestroyNetComponents();
+#endif
 
   LogString("Close Windows - main");
   main_window->Destroy();

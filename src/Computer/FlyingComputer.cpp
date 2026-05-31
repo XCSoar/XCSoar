@@ -80,6 +80,8 @@ FlyingComputer::Check(FlyingState &state, TimeStamp time) noexcept
       state.release_time = TimeStamp::Undefined();
       state.power_on_time = TimeStamp::Undefined();
       state.power_off_time = TimeStamp::Undefined();
+      state.landing_time = TimeStamp::Undefined();
+      state.landing_location.SetInvalid();
       state.far_location.SetInvalid();
       state.far_distance = -1;
     }

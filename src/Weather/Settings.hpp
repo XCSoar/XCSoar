@@ -24,7 +24,7 @@ struct WeatherSettings {
   bool enable_tim;
 #endif
 
-  void SetDefaults() {
+  void SetDefaults() noexcept {
 #ifdef HAVE_PCMET
     pcmet.SetDefaults();
 #endif

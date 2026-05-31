@@ -3,41 +3,12 @@
 
 #pragma once
 
-#include "util/StaticString.hxx"
+#include "net/wifi/WifiData.hpp"
 #include "net/SocketDescriptor.hxx"
 
 #include <cstddef>
 #include <span>
 #include <string_view>
-
-enum WifiSecurity {
-  WPA_SECURITY,
-  WEP_SECURITY,
-  OPEN_SECURITY,
-};
-
-struct WifiStatus {
-  StaticString<32> bssid;
-  StaticString<256> ssid;
-
-  void Clear() {
-    bssid.clear();
-    ssid.clear();
-  }
-};
-
-struct WifiVisibleNetwork {
-  StaticString<32> bssid;
-  StaticString<256> ssid;
-  signed signal_level;  // decibels (dBm) or other unknown unit of measurement, >=0
-  enum WifiSecurity security;
-};
-
-struct WifiConfiguredNetworkInfo {
-  int id;
-  StaticString<256> ssid;
-  StaticString<32> bssid;
-};
 
 /**
  * All methods that are not `noexcept` throw on error.
@@ -83,7 +54,7 @@ public:
     ExpectOK();
   }
 
-  bool Status(WifiStatus &status);
+  bool Status(WifiBackendStatus &status);
 
   void Scan() {
     SendCommand("SCAN");
@@ -115,6 +86,7 @@ public:
   void SelectNetwork(unsigned id);
   void EnableNetwork(unsigned id);
   void DisableNetwork(unsigned id);
+  bool GetCurrentNetworkId(unsigned &id);
   void RemoveNetwork(unsigned id);
 
   /**

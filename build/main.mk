@@ -54,6 +54,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Airspace/NOTAMList.cpp) \
 	$(SRC)/Dialogs/Settings/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/Settings/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
@@ -75,6 +76,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/FilePicker.cpp \
 	$(SRC)/Dialogs/MultiFilePicker.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
+	$(SRC)/Dialogs/WifiDialog.cpp \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/ReplayDialog.cpp \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
@@ -99,6 +101,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Waypoint/NearestWaypoint.cpp \
 	\
 	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp) \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/NOTAM/NOTAMMessageListener.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
@@ -108,6 +112,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/LayoutConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/LoggerConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/NetworkConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/RouteConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp \
@@ -373,6 +378,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
+	$(SRC)/Weather/Rasp/FieldControls.cpp \
 	$(SRC)/Weather/Rasp/Configured.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
@@ -482,6 +488,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/DeviceConfig.cpp \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Profile/NotamConfig.cpp) \
 	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/Profile/FlarmProfile.cpp \
 	\
@@ -553,7 +560,8 @@ $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp
+	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
+	$(SRC)/Dialogs/Weather/MapOverlayControlsWidget.cpp
 endif
 endif
 
@@ -654,6 +662,17 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp \
 	$(SRC)/NetComponents.cpp
+
+ifeq ($(OPENGL),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Weather/EDL/Levels.cpp \
+	$(SRC)/Weather/EDL/TileStore.cpp \
+	$(SRC)/Weather/EDL/StateController.cpp \
+	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
+	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
+	$(SRC)/Weather/EDL/Glue.cpp \
+	$(SRC)/Weather/EDL/DownloadGlue.cpp
+endif
 else
 XCSOAR_SOURCES += \
 	$(SRC)/NetComponentsStub.cpp
@@ -662,6 +681,8 @@ endif
 ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
+
+include $(topdir)/build/net-wifi.mk
 
 XCSOAR_DEPENDS = \
 	FMT \
@@ -693,7 +714,12 @@ XCSOAR_DEPENDS = \
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_DEPENDS += \
 	LIBHTTP \
-	LIBCLIENT
+	LIBCLIENT \
+	LIBNOTAM
+
+ifeq ($(OPENGL),y)
+XCSOAR_DEPENDS += SQLITE
+endif
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)

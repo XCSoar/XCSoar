@@ -337,8 +337,8 @@ FlarmTrafficDetailsWidget::OnFriendColorClicked(FlarmColor color)
 /**
  * The function opens the FLARM Traffic Details dialog
  */
-void
-dlgFlarmTrafficDetailsShowModal(FlarmId id)
+bool
+dlgFlarmTrafficDetailsShowModal(FlarmId id) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -350,5 +350,5 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
   widget->CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrCancel);
   dialog.FinishPreliminary(widget);
-  dialog.ShowModal();
+  return dialog.ShowModal() == mrOK;
 }

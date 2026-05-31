@@ -10,6 +10,8 @@
 
 struct InfoBoxSettings;
 
+class RaspStore;
+
 struct PageLayout
 {
   struct InfoBoxConfig {
@@ -50,6 +52,8 @@ struct PageLayout
 
     MAP_NORTH_UP,
 
+    EDL_MAP,
+
     /**
      * A dummy entry that is used for validating profile values.
      */
@@ -69,6 +73,8 @@ struct PageLayout
      */
     CROSS_SECTION,
 
+    EDL_CONTROLS,
+
     /**
      * A custom #Widget is being displayed.  This is not a
      * user-accessible option, it's only used for runtime state.
@@ -81,17 +87,37 @@ struct PageLayout
     MAX
   } bottom;
 
+  /**
+   * Optional weather overlay drawn on map pages.
+   */
+  enum class Overlay : uint8_t {
+    NONE,
+    RASP,
+    EDL,
+
+    MAX
+  } overlay;
+
+  /**
+   * Selected RASP field when #overlay is Overlay::RASP.
+   */
+  int rasp_field;
+
   PageLayout() = default;
 
   constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
     :valid(_valid), main(Main::MAP),
      infobox_config(_infobox_config),
-     bottom(Bottom::NOTHING) {}
+     bottom(Bottom::NOTHING),
+     overlay(Overlay::NONE),
+     rasp_field(-1) {}
 
   constexpr PageLayout(InfoBoxConfig _infobox_config)
     :valid(true), main(Main::MAP),
      infobox_config(_infobox_config),
-     bottom(Bottom::NOTHING) {}
+     bottom(Bottom::NOTHING),
+     overlay(Overlay::NONE),
+     rasp_field(-1) {}
 
   /**
    * Return an "undefined" page.  Its IsDefined() method will return
@@ -132,9 +158,38 @@ struct PageLayout
     valid = false;
   }
 
+  [[gnu::const]]
+  constexpr bool
+  IsMapMain() const noexcept
+  {
+    return main == Main::MAP || main == Main::MAP_NORTH_UP ||
+      main == Main::EDL_MAP;
+  }
+
+  [[gnu::const]]
+  constexpr bool
+  UsesEdlOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::EDL;
+  }
+
+  [[gnu::const]]
+  constexpr bool
+  UsesWeatherOverlay() const noexcept
+  {
+    return IsMapMain() &&
+      (overlay == Overlay::EDL || overlay == Overlay::RASP);
+  }
+
+  /**
+   * Convert legacy page layouts to the current representation.
+   */
+  void Normalise() noexcept;
+
   [[nodiscard]]
   const char *MakeTitle(const InfoBoxSettings &info_box_settings,
                          std::span<char> buffer,
+                         const RaspStore *rasp=nullptr,
                          const bool concise=false) const noexcept;
 
   constexpr bool operator==(const PageLayout &other) const noexcept = default;

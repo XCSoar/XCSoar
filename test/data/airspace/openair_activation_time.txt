@@ -1,0 +1,120 @@
+* ---- No AA tag (legacy airspace, always active) ----
+AC R
+AN AA-No-Tag-Test
+AL 1000ft MSL
+AH FL100
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- AA NONE: airspace is permanently inactive, must be omitted from database ----
+AC R
+AN AA-Never-NONE-Test
+AL 1000ft MSL
+AH FL100
+AA NONE
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Active now, start undefined in the past
+AC R
+AN AA-Active-Test-undef-Start
+AL 1000ft MSL
+AH FL100
+AA NONE/2099-12-31T23:59:59Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Active now, end undefined
+AC R
+AN AA-Active-Test-undef-End
+AL 1000ft MSL
+AH FL100
+AA 2000-01-01T00:00:00Z/NONE
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Active now: start far in past, end far in future ----
+AC R
+AN AA-Active-Test
+AL 1000ft MSL
+AH FL100
+AA 2000-01-01T00:00:00Z/2099-12-31T23:59:59Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Active now: start far in past, end far in future ----
+AC R
+AN AA-Active-Test-short-time
+AL 1000ft MSL
+AH FL100
+AA 2000-01-01T00:00Z/2099-12-31T23:59Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Past interval only: not active today ----
+AC R
+AN AA-Past-Test
+AL 1000ft MSL
+AH FL100
+AA 2000-01-01T00:00:00Z/2000-01-02T00:00:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Malformed timestamp: UNDETECTABLE_CONTENT ----
+AC R
+AN AA-Malformed-Test
+AL 1000ft MSL
+AH FL100
+AA BADSTUFF
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Multiple AA lines: past then active → should be active ----
+AC R
+AN AA-MultiLine-Active-Test
+AL 1000ft MSL
+AH FL100
+AA 2000-01-01T00:00:00Z/2000-01-02T00:00:00Z
+AA 2000-01-01T00:00:00Z/2099-12-31T23:59:59Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Multiple AA lines: active then NONE → NONE wins, omit from database ----
+AC R
+AN AA-MultiLine-NeverActive-Test
+AL 1000ft MSL
+AH FL100
+AA 2000-01-01T00:00:00Z/2099-12-31T23:59:59Z
+AA NONE
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E

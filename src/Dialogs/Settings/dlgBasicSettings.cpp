@@ -24,6 +24,7 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 #include <math.h>
 
@@ -247,6 +248,9 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
     MessageOperationEnvironment env;
     backend_components->devices->PutQNH(qnh, env);
   }
+
+  InfoBoxManager::SetDirty();
+  InfoBoxManager::ProcessTimer();
 
   RefreshAltitudeControl();
 }

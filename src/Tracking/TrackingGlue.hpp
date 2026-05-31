@@ -26,12 +26,20 @@ class TrackingGlue final
 
   LiveTrack24::Glue livetrack24;
 
+  bool shutting_down = false;
+
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 
   void SetSettings(const TrackingSettings &_settings);
 
+  void BeginShutdown() noexcept;
+
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
+
+  const SkyLinesTracking::Data &GetSkyLinesData() const {
+    return skylines_data;
+  }
 
 private:
   /* virtual methods from SkyLinesTracking::Handler */
@@ -44,11 +52,6 @@ private:
                  const AGeoPoint &bottom, const AGeoPoint &top,
                  double lift) override;
   void OnSkyLinesError(std::exception_ptr e) override;
-
-public:
-  const SkyLinesTracking::Data &GetSkyLinesData() const {
-    return skylines_data;
-  }
 };
 
 #endif /* HAVE_TRACKING */

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "co/InjectTask.hxx"
+#include "net/AsyncTask.hpp"
 #include "thread/Mutex.hxx"
 #include "event/DeferEvent.hxx"
 #include "time/PeriodClock.hpp"
@@ -30,11 +30,13 @@ class Glue {
 
   std::vector<Thermal> thermals;
 
-  Co::InjectTask inject_task;
+  Net::AsyncTask task;
 
 public:
   explicit Glue(CurlGlobal &_curl) noexcept;
   ~Glue() noexcept;
+
+  void BeginShutdown() noexcept;
 
   auto Lock() const noexcept {
     return std::lock_guard{mutex};

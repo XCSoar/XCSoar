@@ -36,3 +36,6 @@ UpdateInfoBoxAltitudeQFE(InfoBoxData &data) noexcept;
 
 void
 UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data) noexcept;
+
+void
+UpdateInfoBoxAltitudeQNH(InfoBoxData &data) noexcept;

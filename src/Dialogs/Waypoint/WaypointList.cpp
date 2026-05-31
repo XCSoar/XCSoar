@@ -20,6 +20,8 @@
 #include "Waypoint/WaypointListBuilder.hpp"
 #include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
@@ -166,27 +168,48 @@ private:
   Angle last_heading;
   OrderedTask *const ordered_task;
   const unsigned ordered_task_index;
+  const bool prepopulate_with_task;
+  const char *const action_row_label;
+  bool *const action_selected_out;
+  bool has_filter_prompt_row = false;
+  bool has_action_row = false;
 
 public:
   WaypointListWidget(Waypoints &_way_points, WndForm &_dialog,
                      WaypointFilterWidget &_filter_widget,
                      GeoPoint _location, Angle _heading,
                      OrderedTask *_ordered_task,
-                     unsigned _ordered_task_index)
+                     unsigned _ordered_task_index,
+                     bool _prepopulate_with_task,
+                     const char *_action_row_label = nullptr,
+                     bool *_action_selected_out = nullptr)
     :way_points(_way_points), dialog(_dialog),
      filter_widget(_filter_widget),
      location(_location), last_heading(_heading),
      ordered_task(_ordered_task),
-     ordered_task_index(_ordered_task_index) {}
+     ordered_task_index(_ordered_task_index),
+     prepopulate_with_task(_prepopulate_with_task),
+     action_row_label(_action_row_label),
+     action_selected_out(_action_selected_out) {}
 
   void UpdateList();
 
   virtual void OnWaypointListEnter();
 
   WaypointPtr GetCursorObject() const {
-    return items.empty()
-      ? nullptr
-      : items[GetList().GetCursorIndex()].waypoint;
+    unsigned i = GetList().GetCursorIndex();
+    if (has_action_row) {
+      if (i == 0)
+        return nullptr;
+      --i;
+    } else if (has_filter_prompt_row) {
+      if (i == 0)
+        return nullptr;
+      --i;
+    }
+    if (items.empty() || i >= items.size())
+      return nullptr;
+    return items[i].waypoint;
   }
 
   /* virtual methods from class Widget */
@@ -234,7 +257,7 @@ public:
                                GeoPoint _location, Angle _heading,
                                bool _allow_navigation, bool _allow_edit)
     :WaypointListWidget(_way_points, _dialog, _filter_widget, _location, _heading,
-                        nullptr, 0),
+                        nullptr, 0, false),
      allow_navigation(_allow_navigation), allow_edit(_allow_edit) {}
 
   void OnWaypointListEnter() override;
@@ -351,6 +374,16 @@ FillLastUsedList(WaypointList &list,
   }
 }
 
+static void
+FillTaskWaypointsList(WaypointList &list, const OrderedTask &task)
+{
+  for (unsigned i = 0; i < task.TaskSize(); ++i) {
+    auto wp = task.GetPoint(i).GetWaypointPtr();
+    if (wp != nullptr)
+      list.emplace_back(std::move(wp));
+  }
+}
+
 
 void
 WaypointListWidget::UpdateList()
@@ -360,15 +393,29 @@ WaypointListWidget::UpdateList()
   if (dialog_state.type_index == TypeFilter::LAST_USED)
     FillLastUsedList(items, LastUsedWaypoints::GetList(),
                      way_points);
+  else if (prepopulate_with_task && ordered_task != nullptr &&
+           !dialog_state.IsDefined())
+    FillTaskWaypointsList(items, *ordered_task);
   else
     FillList(items, way_points, location, last_heading,
              dialog_state,
              ordered_task, ordered_task_index);
 
+  has_action_row = action_row_label != nullptr;
+  has_filter_prompt_row = !has_action_row &&
+                          prepopulate_with_task && ordered_task != nullptr &&
+                          !dialog_state.IsDefined() && !items.empty();
+
   auto &list = GetList();
-  list.SetLength(std::max(1u, (unsigned)items.size()));
+  const unsigned extra = (has_action_row || has_filter_prompt_row) ? 1u : 0u;
+  const unsigned length = std::max(1u, (unsigned)items.size() + extra);
+  list.SetLength(length);
   list.SetOrigin(0);
-  list.SetCursorIndex(0);
+  // Skip the prompt row by default so the cursor lands on the first task wp,
+  // but clamp so a list containing only the action row stays activatable.
+  const unsigned desired_cursor =
+    (has_action_row || has_filter_prompt_row) ? 1u : 0u;
+  list.SetCursorIndex(std::min(desired_cursor, length - 1u));
   list.Invalidate();
 }
 
@@ -535,7 +582,15 @@ void
 WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                 unsigned i) noexcept
 {
+  if (has_action_row && i == 0) {
+    // caller-supplied action row prepended above the list
+    row_renderer.DrawFirstRow(canvas, rc, action_row_label);
+    return;
+  }
+
   if (items.empty()) {
+    // has_action_row + empty items is handled above; can only land here
+    // when there is no action row.
     assert(i == 0);
 
     const auto *text = dialog_state.IsDefined() || way_points.IsEmpty()
@@ -545,7 +600,17 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  assert(i < items.size());
+  if (has_action_row) {
+    --i;
+  } else if (has_filter_prompt_row) {
+    if (i == 0) {
+      // prompt row prepended above task waypoints
+      row_renderer.DrawFirstRow(canvas, rc,
+                                _("Choose a filter or click here"));
+      return;
+    }
+    --i;
+  }
 
   const struct WaypointListItem &info = items[i];
 
@@ -559,10 +624,26 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 WaypointListWidget::OnWaypointListEnter()
 {
-  if (!items.empty())
+  if (has_action_row && GetList().GetCursorIndex() == 0) {
+    // user activated the caller-supplied action row
+    if (action_selected_out != nullptr)
+      *action_selected_out = true;
     dialog.SetModalResult(mrOK);
-  else
+    return;
+  }
+
+  if (items.empty()) {
     filter_widget.GetControl(NAME).BeginEditing();
+    return;
+  }
+
+  if (has_filter_prompt_row && GetList().GetCursorIndex() == 0) {
+    // user activated the leading "Choose a filter" prompt row
+    filter_widget.GetControl(NAME).BeginEditing();
+    return;
+  }
+
+  dialog.SetModalResult(mrOK);
 }
 
 void
@@ -603,14 +684,23 @@ WaypointListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 
 WaypointPtr
 ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
-                       OrderedTask *_ordered_task, unsigned _ordered_task_index,
-                       std::optional<TypeFilter> initial_type)
+                       OrderedTask *_ordered_task,
+                       unsigned _ordered_task_index,
+                       std::optional<TypeFilter> initial_type,
+                       bool _prepopulate_with_task,
+                       const char *_action_row_label,
+                       bool *_action_selected)
 {
+  /* Initialise the out-parameter up front so callers never observe
+     stale state: only the action-row path below sets it true. */
+  if (_action_selected != nullptr)
+    *_action_selected = false;
+
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   const Angle heading = CommonInterface::Basic().attitude.heading;
 
-  dialog_state.name.clear();
+  dialog_state = {};
 
   /* When the caller forces an initial Type filter (e.g. via
      ``event=GotoLookup recent``), also reset the other filter
@@ -638,7 +728,10 @@ ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
   auto list_widget =
     std::make_unique<WaypointListWidget>(waypoints, dialog, filter_widget,
                                          _location, heading,
-                                         _ordered_task, _ordered_task_index);
+                                         _ordered_task, _ordered_task_index,
+                                         _prepopulate_with_task,
+                                         _action_row_label,
+                                         _action_selected);
   const auto &list_widget_ = *list_widget;
 
   filter_widget.SetListener(list_widget.get());

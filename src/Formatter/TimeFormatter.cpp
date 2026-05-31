@@ -3,13 +3,18 @@
 
 #include "TimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "time/Calendar.hxx"
+#include "time/Convert.hxx"
 #include "Math/Util.hpp"
+#include "util/CharUtil.hxx"
 #include "util/StringFormat.hpp"
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <stdexcept>
+#include <string>
 
 void
 FormatISO8601(char *buffer, const BrokenDate &date) noexcept
@@ -26,6 +31,76 @@ FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
                stamp.hour, stamp.minute, stamp.second);
 }
 
+std::chrono::system_clock::time_point
+ParseISO8601Utc(const std::string_view iso_string)
+{
+  const std::string iso(iso_string);
+
+  struct tm tm = {};
+  const char *str = iso.c_str();
+
+  int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0;
+  int consumed = 0;
+  const int scanned = sscanf(str, "%d-%d-%dT%d:%d:%d%n",
+                           &year, &month, &day, &hour, &min, &sec,
+                           &consumed);
+
+  if (scanned < 6)
+    throw std::runtime_error("Failed to parse ISO8601 timestamp: " + iso);
+
+  if (year < 0)
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                             "': year out of range");
+
+  if (month < 1 || month > 12)
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                             "': month out of range");
+
+  if (day < 1 || day > 31)
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                             "': day out of range");
+
+  if (static_cast<unsigned>(day) > DaysInMonth(month, year))
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                           "': impossible date");
+
+  if (hour < 0 || hour > 23)
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                             "': hour out of range");
+
+  if (min < 0 || min > 59)
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                             "': minute out of range");
+
+  if (sec < 0 || sec > 59)
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                             "': second out of range");
+
+  const char *suffix = str + consumed;
+  if (*suffix == '.') {
+    ++suffix;
+    if (!IsDigitASCII(*suffix))
+      throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                               "': non-UTC timezone or extra characters");
+
+    while (IsDigitASCII(*suffix))
+      ++suffix;
+  }
+
+  if (!(suffix[0] == 'Z' && suffix[1] == '\0'))
+    throw std::runtime_error("Invalid ISO8601 timestamp '" + iso +
+                             "': UTC suffix 'Z' required");
+
+  tm.tm_year = year - 1900;
+  tm.tm_mon = month - 1;
+  tm.tm_mday = day;
+  tm.tm_hour = hour;
+  tm.tm_min = min;
+  tm.tm_sec = sec;
+  tm.tm_isdst = 0;
+
+  return TimeGm(tm);
+}
 
 void
 FormatTime(char *buffer, FloatDuration _time) noexcept

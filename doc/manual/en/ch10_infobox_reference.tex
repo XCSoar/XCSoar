@@ -235,6 +235,24 @@ relative to the safety arrival height.}
 \ibi{Home}{Home}{Displays the home waypoint name, arrival altitude difference
 relative to the safety arrival height, and distance to the home waypoint. Tap to
 select or change the home waypoint.}
+\ibi{Active Waypoint}{Active WP}{Displays the active waypoint name, arrival
+altitude difference relative to the safety arrival height, and distance. The
+active waypoint is the next task waypoint when an ordered task is loaded, or
+the Goto waypoint otherwise. Tap to choose a different waypoint: when a task is
+loaded, selecting a task waypoint advances the active task point to that leg;
+without a task, the selection becomes the new Goto. If a task is loaded and
+you select a non-task waypoint from the list, the selection becomes the new
+Goto.}
+\ibi{Previous Waypoint}{Prev WP}{Displays the waypoint name, arrival altitude
+difference relative to the safety arrival height, and distance for the task
+waypoint before the active leg. While on the first leg (no prior point) the
+start waypoint is shown instead. Tap to choose a different waypoint to
+display: with an ordered task loaded the popup is prepopulated with task
+waypoints; without a task the full waypoint list is shown. The selection is
+informational only \textemdash{} it never advances the task and never sets a
+Goto. The override is sticky across leg advances. With a task loaded, tap
+again and choose ``Resume auto tracking'' at the top of the list to return to
+automatic tracking of the task.}
 
 
 %%%%%%%%%%%

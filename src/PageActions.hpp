@@ -56,6 +56,11 @@ namespace PageActions
   void Update();
 
   /**
+   * Like Update(), but runs on the next event-loop iteration.
+   */
+  void ScheduleUpdate() noexcept;
+
+  /**
    * Restore the current page as it was configured.
    */
   void Restore();
@@ -96,6 +101,11 @@ namespace PageActions
    * Show a page with the thermal assistant.
    */
   void ShowThermalAssistant();
+
+  /**
+   * Show the dedicated weather map page.
+   */
+  void ShowWeatherPage();
 
   /**
    * Use a custom widget for the "bottom" area.  This is a wrapper for

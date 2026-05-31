@@ -11,7 +11,15 @@ Version 7.45 - not yet released
   - FLARM $PGRMZ (when FLARM is detected) feeds igc_pressure_altitude for the
     ISA logger datum; cleared when strong pressure replaces weak pressure or
     ignores the sentence
+  - LXNAV: apply device vario filter time ($LXWP3 variofil) to gauge, map
+    vario bar, thermal rose, audio vario and snail-trail colouring
 * ui
+  - macOS: thick solid lines now render at their correct pixel width #2545
+  - plane details: WeGlide aircraft type can be configured even when WeGlide
+    upload is disabled #2323
+  - status dialog, Times: flight time matches takeoff and landing after
+    minute rounding (including across midnight); landing time clears on a
+    new takeoff in the same session #957
   - status dialog, Rules: after a valid start, show PEV offset at start (time
     from PEV window start to the crossing) when known, as a duration (e.g.
     "45 sec", "2 min") not HH:MM so sub-minute offsets are not shown as 00:00
@@ -24,6 +32,9 @@ Version 7.45 - not yet released
     Start reach value colour and comment reflect gate state at leg ETA
     (Too early/Can start/Too late, blue/green/red)
   - infoboxen: new Altitude IGC InfoBox (logger pressure or ISA pressure only)
+  - BigTrafficWidget: task direction arrow matches map best-cruise shape,
+    drawn as outline between range rings #2027
+  - plane polar dialog: fix polar coefficient grid layout and auto-sized width
   - waypoint search: name filter matches anywhere in the long name and the
     shortname (typically the ICAO code in SeeYou .cup files), not only at
     the start, so e.g. "FIELD" finds "AIRFIELD" and "INGEN" finds
@@ -39,13 +50,42 @@ Version 7.45 - not yet released
     recently-visited waypoints again; it had been silently aliased to the
     unrelated "Map file" filter since the multi-file rework (#1994) due to
     a positional dropdown/enum mismatch
+  - large FLARM radar: optional callsign and relative altitude (in hundreds,
+    as on the small gauge) beside targets when side data is in altitude mode;
+    passive targets use default colours when no altitude brush is set
   - waypoint search: Type filter now lists every CUP waypoint type
     (Mountain Top/Pass, Bridge, Tunnel, Tower, Power Plant, Obstacle,
     Thermal Hotspot, Marker, VOR, NDB, Dam, Castle, Intersection,
     Reporting Point, PG Take Off / Landing Zone) #2485
+  - infoboxen: new "Active Waypoint" InfoBox (next task waypoint, or Goto
+    waypoint when no task is loaded; shows name, arrival height above safety,
+    and distance; tap to pick a different task leg or set a new Goto)
+  - infoboxen: new "Previous Waypoint" InfoBox (task waypoint before the active
+    leg, or the start waypoint while on the first leg; shows name, arrival
+    height above safety, and distance; tap to display a different waypoint
+    without advancing the task or setting a Goto, or "Resume auto tracking" to
+    revert)
+  - new Data Management hub (menu, quick menu, and ``DataManagement`` input
+    event): site files, download manager, export flights, import data,
+    backup manager, and advanced file explorer in one place
+  - storage location picker lists removable and external volumes; the list
+    refreshes when media is plugged or unplugged (Linux udev, Windows
+    volumes, Android storage access framework)
+  - import data: pick files on external storage and copy recognized types
+    into the correct XCSoar data subdirectories (waypoints, airspaces,
+    terrain, and the rest); unknown files can stay in the data root #2289
+  - backup manager: create and restore ``.tar`` backups of the primary data
+    tree on a chosen volume; logs, existing archives, and ``cache/`` are
+    excluded; restore rejects paths outside the data tree
+  - advanced file explorer: browse any storage device, organize loose files
+    into typed subdirectories, transfer selections to another volume, and
+    rename or delete files #2289
 * desktop
   - command-line: -h/--help and -version/--version print to stdout and exit;
     unknown options print a short usage line on stderr
+  - flight export and data import use the shared storage picker and hotplug
+    refresh (extends external-storage export/import on Linux and Windows)
+    #1114
 * ui
   - Waypoint details embedded image: new input mode ``wptimg`` and
     ``WaypointImage`` events (magnify, shrink, reset, arrows) so keys
@@ -77,6 +117,7 @@ Version 7.45 - not yet released
   - terrain: fix fluctuating hill-shading strength #2262
   - snail trail: Catmull-Rom smoothing between fixes; vario colouring samples
     high-rate netto from the merge thread between GPS points #2447
+  - Add renderer to display distance rings around the current location #2522
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
@@ -140,6 +181,9 @@ Version 7.45 - not yet released
     details) #749
   - waypoint list & alternates: waypoint details open above the list; Close without
     a committed action returns to the list, not the map #620
+  - Added QNH InfoBox displaying current QNH pressure setting in hectopascals #2521
+  - Linux: Config → Setup → Network for WiFi (NetworkManager or ConnMan
+    via D-Bus)
 * android
   - use physical display metrics for startup DPI (getRealMetrics) #1784
   - UI sounds via preloaded SoundPool (MediaPlayer fallback for early play or
@@ -151,6 +195,8 @@ Version 7.45 - not yet released
     reliably produce the symbol ZIP in CI
   - configure built-in GPS & sensors in the last device slot by default (same on
     iOS)
+  - storage enumeration and permission grants update the device list when
+    the user picks a folder or when SAF access changes
 * calculations
   - BrokenDateTime: unified UTC conversion (rename FromUnixTimeUTC to
     FromUnixTime); Windows TimeGm uses _mkgmtime
@@ -160,14 +206,32 @@ Version 7.45 - not yet released
 * weather
   - METAR/TAF station list: accept lowercase ICAO codes when adding a station;
     codes are normalized to upper-case for download and profile storage
+  - add EDL weather support with per-page map overlays (None/RASP/EDL),
+    bottom-panel weather controls with auto-advance, day precaching,
+    and simplified RASP configuration (field/time on pages instead of the
+    weather dialog)
   - pc_met www images: add RADAR Deutschland Nord/Mitte/Süd, Alpen, SAT RAD
     BLITZ, and Blitzkarte Europa; local radar list uses Borkum instead of
     the removed Emden site
+* NOTAM integration #2018
+  - add support for downloading, caching and displaying NOTAM airspaces
+  - add manual refresh and auto-refresh with location/time based updates
+  - add NOTAM settings and filters (IFR, effective time, max radius, hidden Q-codes)
+  - add NOTAM details integration in airspace dialogs
 * data files
   - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
     is read correctly
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
   - openair airspace: support for openair activation times (AA label) #2520
+  - XCSoar data layout: waypoints, airspaces, terrain, profiles, logs, and
+    other repository types use typed subdirectories under the data root;
+    built-in and downloaded files save and resolve through the FileType API
+    instead of hard-coded extensions #2289
+  - on first start after upgrade, move legacy flat files in the primary data
+    directory into the matching subdirectories when the destination does not
+    yet exist; migration is marked complete only after at least one file was
+    moved #2289
+  - IGC and NMEA logs are stored under ``logs/`` #2289
 * devices
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
   - Polar sync device setting is offered only for drivers that register polar
@@ -260,6 +324,7 @@ Version 7.44 - 2026-03-22
   - show station names in airspace details dialog
   - show squawk code in airspace details dialog
   - ability to send squawk code from airspace details dialog to transponder
+  - prioritize airfields over outlanding sites for reachable alternates
   - add support for a dedicated north-up map page layout
   - the thermal assistant InfoBox is now clickable
   - nearest airspace InfoBoxes (horizontal and vertical) are now clickable
@@ -302,6 +367,7 @@ Version 7.44 - 2026-03-22
   - InfoBoxes with a single action now open their dialog directly on
     tap instead of showing a redundant menu #1442
   - fix Escape key not closing the waypoint details dialog
+  - add flight export and file import to external storage for linux and windows
   - fix UTF-8 text wrapping crash with non-ASCII characters #2184 #2185
   - display "---" instead of "???" for invalid map item values
   - fix profile not saved after team code, plane, or NOAA changes #2171

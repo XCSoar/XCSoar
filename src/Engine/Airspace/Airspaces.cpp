@@ -11,9 +11,26 @@
 #include <boost/geometry/strategies/strategies.hpp>
 #include <boost/geometry/geometries/segment.hpp>
 
+#include <utility>
+
 namespace bgi = boost::geometry::index;
 
 Airspaces::~Airspaces() noexcept = default;
+
+void
+Airspaces::Swap(Airspaces &other) noexcept
+{
+  using std::swap;
+
+  swap(qnh, other.qnh);
+  swap(activity_mask, other.activity_mask);
+  swap(airspace_tree, other.airspace_tree);
+  swap(task_projection, other.task_projection);
+  swap(tmp_as, other.tmp_as);
+
+  ++serial;
+  ++other.serial;
+}
 
 Airspaces::const_iterator_range
 Airspaces::QueryWithinRange(const GeoPoint &location, double range) const noexcept

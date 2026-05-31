@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "time/BrokenDateTime.hpp"
+#include "time/Convert.hxx"
 #include "TestUtil.hpp"
 
 #include <stdio.h>
@@ -205,11 +206,22 @@ TestDateTime()
 
   ok1(BrokenDateTime::NowUTC().IsPlausible());
   ok1(BrokenDateTime::NowLocal().IsPlausible());
+
+  ok1(BrokenDateTime(2026, 3, 12, 14, 37, 59).FloorToHour() ==
+      BrokenDateTime(2026, 3, 12, 14, 0, 0));
+
+  {
+    const BrokenDateTime utc(2010, 1, 2, 12, 15, 30);
+    const auto tm = LocalTime(utc.ToTimePoint());
+    const BrokenDateTime expected(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+                                  tm.tm_hour, tm.tm_min, tm.tm_sec);
+    ok1(utc.ToLocal() == expected);
+  }
 }
 
 int main()
 {
-  plan_tests(110 + 8);
+  plan_tests(110 + 10);
 
   TestDate();
   TestTime();

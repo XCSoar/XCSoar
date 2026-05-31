@@ -9,6 +9,7 @@
 #include "LogFile.hpp"
 #include "co/Task.hxx"
 #include "lib/curl/Global.hxx"
+#include "net/State.hpp"
 #include "util/Macros.hpp"
 
 namespace LiveTrack24 {
@@ -34,10 +35,16 @@ MapVehicleTypeToLivetrack24(Settings::VehicleType vt)
 
 Glue::Glue(CurlGlobal &curl) noexcept
   :client(curl),
-   inject_task(curl.GetEventLoop())
+   task(curl.GetEventLoop())
 {
   settings.SetDefaults();
   client.SetServer(settings.server);
+}
+
+void
+Glue::BeginShutdown() noexcept
+{
+  task.BeginShutdown();
 }
 
 void
@@ -47,7 +54,7 @@ Glue::SetSettings(const Settings &_settings)
       _settings.username != settings.username ||
       _settings.password != settings.password) {
     /* wait for the current job to finish */
-    inject_task.Cancel();
+    task.Cancel();
 
     /* now it's safe to access these variables */
     settings = _settings;
@@ -62,11 +69,18 @@ Glue::SetSettings(const Settings &_settings)
 void
 Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
+  if (task.IsShuttingDown())
+    return;
+
   if (!settings.enabled)
     /* disabled by configuration */
     /* note that we are allowed to read "settings" without locking the
        mutex, because the background thread never writes to this
        attribute */
+    return;
+
+  if (GetNetState() == NetState::DISCONNECTED)
+    /* no link; do not start HTTP to LiveTrack24 (see SkyLines Glue) */
     return;
 
   if (!basic.time_available || !basic.gps.real || !basic.location_available)
@@ -77,7 +91,7 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* later */
     return;
 
-  if (inject_task)
+  if (task.IsRunning())
     /* still running, skip this submission */
     return;
 
@@ -101,7 +115,7 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   last_flying = flying;
   flying = calculated.flight.flying;
 
-  inject_task.Start(Tick(settings), BIND_THIS_METHOD(OnCompletion));
+  task.Start(Tick(settings), BIND_THIS_METHOD(OnCompletion));
 }
 
 Co::InvokeTask
@@ -171,4 +185,4 @@ Glue::OnCompletion(std::exception_ptr error) noexcept
     LogError(error, "LiveTrack24 error");
 }
 
-} // namespace Livetrack24
+} // namespace LiveTrack24

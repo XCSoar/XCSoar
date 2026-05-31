@@ -18,6 +18,8 @@
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "DataGlobals.hpp"
+#include "PageSettings.hpp"
 
 using namespace CommonInterface;
 
@@ -278,6 +280,33 @@ GetPanelIndex(const UIState &ui_state)
     return InfoBoxSettings::PANEL_CRUISE;
 }
 
+static void
+UpdateMapScalePageInfo(UIState &state,
+                       const UISettings &settings) noexcept
+{
+  const PagesState &pages = state.pages;
+  const PageLayout &layout = pages.special_page.IsDefined()
+    ? pages.special_page
+    : settings.pages.pages[pages.current_index];
+
+  state.page_overlay = layout.IsMapMain()
+    ? layout.overlay
+    : PageLayout::Overlay::NONE;
+
+  state.map_scale_page_title.clear();
+
+  if (layout.IsMapMain() &&
+      layout.overlay != PageLayout::Overlay::NONE) {
+    const char *title = layout.MakeTitle(settings.info_boxes,
+                                         std::span{state.map_scale_page_title.data(),
+                                                   state.map_scale_page_title.capacity()},
+                                         DataGlobals::GetRasp().get(),
+                                         true);
+    if (title != nullptr)
+      state.map_scale_page_title = title;
+  }
+}
+
 void
 ActionInterface::UpdateDisplayMode() noexcept
 {
@@ -290,6 +319,8 @@ ActionInterface::UpdateDisplayMode() noexcept
 
   const auto &panel = settings.info_boxes.panels[state.panel_index];
   state.panel_name = gettext(panel.name);
+
+  UpdateMapScalePageInfo(state, settings);
 }
 
 void
@@ -301,6 +332,13 @@ ActionInterface::SendUIState() noexcept
   InfoBoxManager::ProcessTimer();
 
   main_window->SetUIState(GetUIState());
+}
+
+void
+ActionInterface::ScheduleSendUIState() noexcept
+{
+  if (main_window != nullptr)
+    main_window->ScheduleRefreshInfoBoxes();
 }
 
 void

@@ -42,6 +42,8 @@ public:
 
   void SetSettings(const Settings &settings);
 
+  void BeginShutdown() noexcept;
+
   void Tick(const NMEAInfo &basic, const DerivedInfo &calculated);
 
   void RequestUserName(uint32_t user_id) {

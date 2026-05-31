@@ -1,7 +1,9 @@
 HARNESS_SOURCES = \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Info.cpp \
-        $(SRC)/time/BrokenDateTime.cpp \
+	$(SRC)/time/BrokenDateTime.cpp \
+	$(SRC)/time/BrokenTime.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/time/Zone.cxx \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \

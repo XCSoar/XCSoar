@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "time/RoughTime.hpp"
+#include "time/Stamp.hpp"
 #include "TestUtil.hpp"
 
 using namespace std::chrono_literals;
@@ -148,6 +149,28 @@ static void test_time_span()
   ok1(!s.IsInside(d));
 }
 
+static void
+test_from_since_midnight()
+{
+  ok1(RoughTime::FromSinceMidnight(TimeStamp{10h + 3min + 30s}) ==
+      RoughTime(10, 3));
+  ok1(RoughTime::FromSinceMidnight(TimeStamp{10h + 3min + 59s + 900ms}) ==
+      RoughTime(10, 3));
+  ok1(RoughTime::FromSinceMidnight(TimeStamp{10h + 4min}) ==
+      RoughTime(10, 4));
+}
+
+static void
+test_rough_time_difference()
+{
+  const RoughTime takeoff = RoughTime::FromSinceMidnight(TimeStamp{10h + 3min + 30s});
+  const RoughTime landing = RoughTime::FromSinceMidnight(TimeStamp{11h + 47min + 29s});
+
+  ok1(takeoff == RoughTime(10, 3));
+  ok1(landing == RoughTime(11, 47));
+  ok1(landing - takeoff == 104min);
+}
+
 static void test_rough_time_delta()
 {
   /* test operator+(RoughTime, RoughTimeDelta) */
@@ -166,12 +189,14 @@ static void test_rough_time_delta()
 
 int main()
 {
-  plan_tests(136);
+  plan_tests(142);
 
   test_time<RoughTime>();
   test_time<FineTime>();
   test_conversions();
   test_time_span();
+  test_from_since_midnight();
+  test_rough_time_difference();
   test_rough_time_delta();
 
   return exit_status();

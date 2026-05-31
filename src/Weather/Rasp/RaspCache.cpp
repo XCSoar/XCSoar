@@ -27,12 +27,18 @@ ToQuarterHours(BrokenTime t)
 const char *
 RaspCache::GetMapName() const
 {
+  if (parameter >= store.GetItemCount())
+    return "";
+
   return store.GetItemInfo(parameter).name;
 }
 
 const char *
 RaspCache::GetMapLabel() const
 {
+  if (parameter >= store.GetItemCount())
+    return "";
+
   const auto &info = store.GetItemInfo(parameter);
   return info.label != nullptr
     ? gettext(info.label)
@@ -63,6 +69,9 @@ RaspCache::IsInside(GeoPoint p) const
 void
 RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 {
+  if (parameter >= store.GetItemCount())
+    return;
+
   unsigned effective_time = time;
   if (effective_time == 0) {
     // "Now" time, so find time in half hours
