@@ -108,9 +108,9 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 
   accent[0] = COLOR_GRAY;
   if (HasColors() && colors) {
-    accent[1] = inverse ? COLOR_INVERSE_RED : COLOR_INFOBOX_RED;
-    accent[2] = inverse ? COLOR_INFOBOX_BLUE_INVERSE : COLOR_INFOBOX_BLUE;
-    accent[3] = inverse ? COLOR_INFOBOX_GREEN_INVERSE : COLOR_INFOBOX_GREEN;
+    accent[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
+    accent[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
+    accent[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_LIGHT_GREEN;
     accent[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_YELLOW;
     accent[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
   } else
