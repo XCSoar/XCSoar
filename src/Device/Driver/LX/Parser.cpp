@@ -57,6 +57,26 @@ ShouldSwitchHostBaudForNinc(const DeviceInfo &device_info) noexcept
 namespace LX {
 
 bool
+ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario)
+{
+  static constexpr double fir_coefficients[] = {
+    -0.0421, 0.1628, 0.3793, 0.3793, 0.1628, -0.0421,
+  };
+
+  vario = 0;
+  bool vario_ok = true;
+  double value = 0;
+  for (double fir_b : fir_coefficients) {
+    if (!line.ReadChecked(value))
+      vario_ok = false;
+    else
+      vario += value * fir_b;
+  }
+
+  return vario_ok;
+}
+
+bool
 LXWP0(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
@@ -65,7 +85,7 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
    0 loger_stored (Y/N)
    1 IAS (kph) ----> Condor uses TAS!
    2 baroaltitude (m)
-   3-8 vario (m/s) (last 6 measurements in last second)
+   3-8 vario (m/s) (last 6 measurements in last second, FIR filtered)
    9 heading of plane
   10 windcourse (deg)
   11 windspeed (kph)
@@ -91,10 +111,10 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
      */
     info.ProvideTrueAirspeed(Units::ToSysUnit(airspeed, Unit::KILOMETER_PER_HOUR));
 
-  if (line.ReadChecked(value))
+  if (ReadFilteredLXWP0Vario(line, value))
     info.ProvideTotalEnergyVario(value);
 
-  line.Skip(6);
+  line.Skip(1); // heading
 
   if (SpeedVector wind; line.ReadSpeedVectorKPH(wind))
     info.ProvideExternalWind(wind);
