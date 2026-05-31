@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Geo/SpeedVector.hpp"
+#include "Device/Driver/LX/Parsers.hpp"
 #include "LXEosDevice.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
@@ -45,17 +46,8 @@ LXEosDevice::LXWP0(NMEAInputLine& line, NMEAInfo& info)
     info.ProvideTrueAirspeed(
       Units::ToSysUnit(airspeed, Unit::KILOMETER_PER_HOUR));
 
-  double vario = 0;
-  bool vario_ok = true;
-  double value = 0;
-  // Filter the 6 reading using 5th order low-pass FIR filter
-  static const double fir_coefficients[] = { -0.0421, 0.1628, 0.3793, 0.3793, 0.1628, -0.0421 };
-  for (double fir_b : fir_coefficients) {
-    vario_ok = vario_ok && line.ReadChecked(value);
-    vario += value * fir_b;
-  }
-
-  if (vario_ok)
+  double vario;
+  if (LX::ReadFilteredLXWP0Vario(line, vario))
     info.ProvideTotalEnergyVario(vario);
 
   line.Skip(1); // Heading
