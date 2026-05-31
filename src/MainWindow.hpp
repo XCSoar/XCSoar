@@ -137,6 +137,7 @@ private:
   bool restore_page_pending = false;
   bool refresh_info_boxes_pending = false;
   bool page_actions_update_pending = false;
+  bool vario_bar_redraw_pending = false;
 
   /**
    * Has "late" initialization been done already?  Those are things
@@ -304,9 +305,7 @@ public:
 
   void SetFullScreen(bool _full_screen) noexcept;
 
-  void SendGPSUpdate() noexcept {
-    gps_notify.SendNotification();
-  }
+  void SendGPSUpdate(bool vario_bar_redraw=false) noexcept;
 
   void SendCalculatedUpdate() noexcept {
     calculated_notify.SendNotification();

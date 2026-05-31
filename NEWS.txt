@@ -11,6 +11,8 @@ Version 7.45 - not yet released
   - FLARM $PGRMZ (when FLARM is detected) feeds igc_pressure_altitude for the
     ISA logger datum; cleared when strong pressure replaces weak pressure or
     ignores the sentence
+  - LXNAV: apply device vario filter time ($LXWP3 variofil) to gauge, map
+    vario bar, thermal rose, audio vario and snail-trail colouring
 * ui
   - macOS: thick solid lines now render at their correct pixel width #2545
   - status dialog, Times: flight time matches takeoff and landing after

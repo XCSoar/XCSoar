@@ -33,6 +33,8 @@
 #include "UIReceiveBlackboard.hpp"
 #include "UISettings.hpp"
 #include "Interface.hpp"
+
+#include <utility>
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
@@ -1004,10 +1006,23 @@ MainWindow::RunTimer() noexcept
 }
 
 void
+MainWindow::SendGPSUpdate(const bool vario_bar_redraw) noexcept
+{
+  vario_bar_redraw_pending = vario_bar_redraw;
+  gps_notify.SendNotification();
+}
+
+void
 MainWindow::OnGpsNotify() noexcept
 {
   PopupOperationEnvironment env;
   UIReceiveSensorData(env);
+
+  if (std::exchange(vario_bar_redraw_pending, false) &&
+      CommonInterface::GetMapSettings().vario_bar_enabled) {
+    if (GlueMapWindow *m = GetMapIfActive())
+      m->InjectRedraw();
+  }
 }
 
 void

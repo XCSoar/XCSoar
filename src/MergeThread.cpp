@@ -45,7 +45,7 @@ MergeThread::Process() noexcept
 
   computer.Fill(device_blackboard.SetMoreData(), settings_computer);
   computer.Compute(device_blackboard.SetMoreData(), last_any, last_fix,
-                   device_blackboard.Calculated());
+                   device_blackboard.Calculated(), settings_computer);
 
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
@@ -64,6 +64,7 @@ MergeThread::Tick() noexcept
   TracePoint::Time trail_push_time{};
   float trail_push_vario = 0;
   bool do_trail_vario_push = false;
+  bool vario_output_updated = false;
 
   {
     const std::lock_guard lock{device_blackboard.mutex};
@@ -77,11 +78,19 @@ MergeThread::Tick() noexcept
         basic.time_available &&
         basic.location_available &&
         basic.NavAltitudeAvailable() &&
-        calculated.flight.flying &&
-        basic.netto_vario_available) {
-      do_trail_vario_push = true;
-      trail_push_time = basic.time.Cast<TracePoint::Time>();
-      trail_push_vario = (float)basic.netto_vario;
+        calculated.flight.flying) {
+      if (!computer.FilteredVarioActive()) {
+        if (basic.netto_vario_available) {
+          do_trail_vario_push = true;
+          trail_push_time = basic.time.Cast<TracePoint::Time>();
+          trail_push_vario = (float)basic.netto_vario;
+        }
+      } else if (basic.brutto_vario_available &&
+                 computer.FilteredVarioSampleUpdated()) {
+        do_trail_vario_push = true;
+        trail_push_time = basic.time.Cast<TracePoint::Time>();
+        trail_push_vario = (float)basic.FilteredNettoVario();
+      }
     }
 
     /* call Driver::OnSensorUpdate() on all devices */
@@ -98,9 +107,18 @@ MergeThread::Tick() noexcept
       (bool)last_any.location_available != (bool)basic.location_available;
 
 #ifdef HAVE_PCM_PLAYER
-    vario_available = basic.brutto_vario_available;
-    vario = vario_available ? basic.brutto_vario : 0;
+    if (!computer.FilteredVarioActive()) {
+      vario_available = basic.brutto_vario_available;
+      vario = vario_available ? basic.brutto_vario : 0;
+    } else {
+      vario_available = basic.filtered_brutto_vario_available;
+      vario = vario_available ? basic.FilteredBruttoVario() : 0;
+    }
 #endif
+
+    /* Throttle map vario-bar redraws to ~1 Hz when the LX filter is active. */
+    vario_output_updated = !computer.FilteredVarioActive() ||
+      computer.FilteredVarioSampleUpdated();
 
     /* update last_any in every iteration */
     last_any = basic;
@@ -128,5 +146,5 @@ MergeThread::Tick() noexcept
   if (calculated_updated)
     TriggerCalculatedUpdate();
 
-  TriggerVarioUpdate();
+  TriggerVarioUpdate(vario_output_updated);
 }

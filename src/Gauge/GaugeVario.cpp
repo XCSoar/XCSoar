@@ -288,7 +288,11 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
       ival_av_thermal = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
   }
 
-  auto vval = Basic().brutto_vario;
+  auto vval = Basic().VarioOutputFilterActive()
+    ? (Basic().brutto_vario_available
+        ? Basic().FilteredBruttoVario()
+        : 0.)
+    : Basic().brutto_vario;
   ival = ValueToNeedlePos(vval);
   sval = ValueToNeedlePos(Calculated().sink_rate);
   if (Settings().show_average_needle) {
