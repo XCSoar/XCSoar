@@ -220,6 +220,11 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
     info.settings.ProvideQNH(qnh, info.clock);
   }
 
+  line.Skip(); // scmode
+
+  if (line.ReadChecked(value))
+    info.settings.ProvideVarioFilterPeriod(value, info.clock);
+
   return true;
 }
 

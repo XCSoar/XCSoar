@@ -13,6 +13,7 @@ ExternalSettings::Clear()
   bugs_available.Clear();
   qnh_available.Clear();
   volume_available.Clear();
+  vario_filter_period_available.Clear();
   elevation_available.Clear();
   has_active_frequency.Clear();
   active_frequency.Clear();
@@ -87,6 +88,12 @@ ExternalSettings::Complement(const ExternalSettings &add)
   if (add.volume_available.Modified(volume_available)) {
     volume = add.volume;
     volume_available = add.volume_available;
+  }
+
+  if (add.vario_filter_period_available.Modified(
+        vario_filter_period_available)) {
+    vario_filter_period = add.vario_filter_period;
+    vario_filter_period_available = add.vario_filter_period_available;
   }
 
   if (add.elevation_available.Modified(elevation_available)) {
@@ -367,6 +374,21 @@ ExternalSettings::ProvideVolume(unsigned value, TimeStamp time) noexcept
 
   volume = value;
   volume_available.Update(time);
+  return true;
+}
+
+bool
+ExternalSettings::ProvideVarioFilterPeriod(double value,
+                                           TimeStamp time) noexcept
+{
+  if (value < 0 || value > 60)
+    return false;
+
+  if (CompareVarioFilterPeriod(value))
+    return false;
+
+  vario_filter_period = value;
+  vario_filter_period_available.Update(time);
   return true;
 }
 

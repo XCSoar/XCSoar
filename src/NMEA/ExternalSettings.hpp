@@ -63,6 +63,11 @@ struct ExternalSettings {
   /** the volume of the device [0-100%] */
   unsigned volume;
 
+  Validity vario_filter_period_available;
+
+  /** Vario display filter time constant from device [s] */
+  double vario_filter_period;
+
   Validity elevation_available;
 
   /** the elevation setting [meters] */
@@ -222,6 +227,11 @@ struct ExternalSettings {
     return volume_available && abs(int(volume) - int(value)) < 3;
   }
 
+  bool CompareVarioFilterPeriod(double value) const {
+    return vario_filter_period_available &&
+      fabs(vario_filter_period - value) <= 0.05;
+  }
+
   /**
    * Compare the elevation setting with the specified value.
    *
@@ -277,6 +287,7 @@ struct ExternalSettings {
   bool ProvideBugs(double value, TimeStamp time) noexcept;
   bool ProvideQNH(AtmosphericPressure value, TimeStamp time) noexcept;
   bool ProvideVolume(unsigned value, TimeStamp time) noexcept;
+  bool ProvideVarioFilterPeriod(double value, TimeStamp time) noexcept;
   bool ProvideElevation(int value, TimeStamp time) noexcept;
   bool ProvidePolarCoefficients(double a, double b, double c, TimeStamp time) noexcept;
   bool ProvidePolarLoad(double value, TimeStamp time) noexcept;

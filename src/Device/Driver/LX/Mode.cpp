@@ -240,6 +240,8 @@ LXDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
   }
 
   if (should_request_settings) {
+    LXNAVVario::SetupNMEA(port, env);
+
     {
       const std::lock_guard lock{mutex};
       mc_requested = true;
