@@ -77,7 +77,7 @@ ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario)
 }
 
 bool
-LXWP0(NMEAInputLine &line, NMEAInfo &info)
+LXWP0(NMEAInputLine &line, NMEAInfo &info, bool provide_vario)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -111,8 +111,11 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
      */
     info.ProvideTrueAirspeed(Units::ToSysUnit(airspeed, Unit::KILOMETER_PER_HOUR));
 
-  if (ReadFilteredLXWP0Vario(line, value))
-    info.ProvideTotalEnergyVario(value);
+  if (provide_vario) {
+    if (ReadFilteredLXWP0Vario(line, value))
+      info.ProvideTotalEnergyVario(value);
+  } else
+    line.Skip(6);
 
   line.Skip(1); // heading
 
@@ -518,13 +521,15 @@ PLXVC(NMEAInputLine &line, NMEAInfo &info,
 }
 
 /**
- * Parse the $PLXVF sentence (LXNAV sVarios (including V7)).
+ * Parse the $PLXVF sentence (LXNAV sVarios (including V7, S80)).
  *
  * $PLXVF,time ,AccX,AccY,AccZ,Vario,IAS,PressAlt*CS<CR><LF>
  *
  * Example: $PLXVF,,1.00,0.87,-0.12,-0.25,90.2,244.3,*CS<CR><LF>
  *
- * @see http://www.xcsoar.org/trac/raw-attachment/ticket/1666/V7%20dataport%20specification%201.97.pdf
+ * The Vario field carries total-energy vario at the configured rate
+ * (typically 10–20 Hz).  $LXWP0 still sends six TE samples per second,
+ * but those are only used when $PLXVF is unavailable.
  */
 static bool
 PLXVF(NMEAInputLine &line, NMEAInfo &info)
@@ -543,7 +548,7 @@ PLXVF(NMEAInputLine &line, NMEAInfo &info)
 
   double vario;
   if (line.ReadChecked(vario))
-    info.ProvideNettoVario(vario);
+    info.ProvideTotalEnergyVario(vario);
 
   double ias;
   bool have_ias = line.ReadChecked(ias);
@@ -717,7 +722,8 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   const auto type = line.ReadView();
   if (type == "$LXWP0"sv)
-    return LX::LXWP0(line, info);
+    return LX::LXWP0(line, info,
+                      !(plxvf_received || IsLXNAVVario()));
 
   if (type == "$LXWP1"sv) {
     DeviceInfo &device_info = mode == Mode::PASS_THROUGH
@@ -757,6 +763,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (type == "$PLXVF"sv) {
     is_colibri = false;
+    plxvf_received = true;
     return PLXVF(line, info);
   }
 

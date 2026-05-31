@@ -1296,8 +1296,12 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
   nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* airspeed and vario available */
-  ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,1.71,1.71,1.71,1.71,1.71,239,174,10.1*5E",
-                        nmea_info));
+  if (condor)
+    ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
+                          nmea_info));
+  else
+    ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,1.71,1.71,1.71,1.71,1.71,239,174,10.1*5E",
+                          nmea_info));
   ok1((bool)nmea_info.pressure_altitude_available == !condor);
   ok1((bool)nmea_info.baro_altitude_available == condor);
   ok1(equals(condor ? nmea_info.baro_altitude : nmea_info.pressure_altitude,
@@ -1576,8 +1580,8 @@ TestLXV7()
   lx_device.ResetDeviceDetection();
 
   ok1(device->ParseNMEA("$PLXVF,,1.00,0.87,-0.12,-0.25,90.2,244.3,*64", basic));
-  ok1(basic.netto_vario_available);
-  ok1(equals(basic.netto_vario, -0.25));
+  ok1(basic.total_energy_vario_available);
+  ok1(equals(basic.total_energy_vario, -0.25));
   ok1(basic.airspeed_available);
   ok1(equals(basic.indicated_airspeed, 90.2));
   ok1(basic.pressure_altitude_available);

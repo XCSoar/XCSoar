@@ -220,6 +220,12 @@ private:
   bool vario_just_detected = false;
 
   /**
+   * Was $PLXVF received?  When set, $LXWP0 vario samples are ignored so
+   * the slower sentence cannot overwrite high-rate total-energy vario.
+   */
+  bool plxvf_received = false;
+
+  /**
    * Has the polar sync notification been shown this session?
    */
   bool polar_sync_notified = false;
@@ -314,6 +320,7 @@ public:
 
   void ResetDeviceDetection() noexcept {
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
+    plxvf_received = false;
     switch_host_baud_for_direct = true;
     polar_sync_notified = false;
     device_polar.valid = false;

@@ -22,7 +22,8 @@ bool
 ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario);
 
 bool
-LXWP0(NMEAInputLine &line, NMEAInfo &info);
+LXWP0(NMEAInputLine &line, NMEAInfo &info,
+      bool provide_vario=true);
 
 void
 LXWP1(NMEAInputLine &line, DeviceInfo &device);
