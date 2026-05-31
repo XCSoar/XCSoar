@@ -36,10 +36,48 @@ struct MoreData : public NMEAInfo {
 
   Validity brutto_vario_available;
 
+  /** Low-pass filtered brutto vario for output consumers (MergeThread) */
+  double filtered_brutto_vario;
+
+  Validity filtered_brutto_vario_available;
+
+  /** Low-pass filtered netto vario for output consumers (trail colouring) */
+  double filtered_netto_vario;
+
+  Validity filtered_netto_vario_available;
+
   void Reset() noexcept;
 
   constexpr bool NavAltitudeAvailable() const noexcept {
     return baro_altitude_available || gps_altitude_available;
+  }
+
+  [[gnu::pure]]
+  constexpr bool VarioOutputFilterActive() const noexcept {
+    return settings.vario_filter_period_available &&
+      settings.vario_filter_period > 0;
+  }
+
+  /** Brutto vario after the LX output filter; raw brutto otherwise. */
+  [[gnu::pure]]
+  constexpr double FilteredBruttoVario() const noexcept {
+    if (!VarioOutputFilterActive())
+      return brutto_vario;
+
+    return filtered_brutto_vario_available
+      ? filtered_brutto_vario
+      : brutto_vario;
+  }
+
+  /** Netto vario after the LX output filter; raw netto otherwise. */
+  [[gnu::pure]]
+  constexpr double FilteredNettoVario() const noexcept {
+    if (!VarioOutputFilterActive())
+      return netto_vario;
+
+    return filtered_netto_vario_available
+      ? filtered_netto_vario
+      : netto_vario;
   }
 };
 
