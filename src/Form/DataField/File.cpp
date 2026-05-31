@@ -311,42 +311,22 @@ FileDataField::Sort() noexcept
     postponed_sort = true;
     return;
   }
-
-  if (files.size() > 1) {
-    std::string filename = files[1].filename.c_str();
-    bool is_nmea = false;
-    bool is_igc = false;
-
-    size_t dot_pos = filename.find_last_of('.');
-    if (dot_pos != std::string::npos) {
-      std::string ext = filename.substr(dot_pos);
-      std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-
-      if (ext == ".nmea") is_nmea = true;
-      if (ext == ".igc") is_igc = true;
-    }
-
-    bool first_record_not_empty = !files[0].filename.empty();
-
-    if (is_igc && first_record_not_empty) {
+    if (GetFileType() == FileType::IGC) {
       // IGC-File-Picker sorted descending
       std::sort(files.begin(), files.end(), [](const Item &a, const Item &b) {
         return StringCollate(a.filename.c_str(), b.filename.c_str()) > 0;
       });
-    }
-    else if (is_nmea || is_igc) {
+    }else if (GetFileType() == FileType::REPLAY) {
       // Replay if first record blank then remainder sorted descending
       std::sort(std::next(files.begin()), files.end(), [](const Item &a, const Item &b) {
         return StringCollate(a.filename.c_str(), b.filename.c_str()) > 0;
       });
-    }
-    else {
+    } else {
       // All other lists sorted ascending
       std::sort(files.begin(), files.end(), [](const Item &a, const Item &b) {
         return StringCollate(a.filename.c_str(), b.filename.c_str()) < 0;
       });
     }
-  }
 }
 
 ComboList

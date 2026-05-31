@@ -10,6 +10,7 @@
 #include "Replay/Replay.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Language/Language.hpp"
+#include "Form/DataField/File.hpp"
 
 class ReplayControlWidget final
   : public RowFormWidget
@@ -51,6 +52,8 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
           {},
           "*.nmea\0*.igc\0",
           true);
+  auto &file_df = (FileDataField &)GetDataField(FILE);
+  file_df.SetFileType(FileType::REPLAY);
   LoadValue(FILE, replay.GetFilename());
 
   AddFloat(_("Rate"),

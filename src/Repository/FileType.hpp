@@ -17,4 +17,5 @@ enum class FileType : uint8_t {
   XCI,
   TASK,
   CHECKLIST,
+  REPLAY,
 };
