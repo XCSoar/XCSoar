@@ -1439,6 +1439,8 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
     ok1(device->ParseNMEA("$LXWP3,47.76,0,2.0,5.0,15,30,2.5,1.0,0,100,0.1,,0*08", nmea_info));
     ok1(nmea_info.settings.qnh_available);
     ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1015));
+    ok1(nmea_info.settings.vario_filter_period_available);
+    ok1(equals(nmea_info.settings.vario_filter_period, 2.0));
   }
 
   delete device;
@@ -2908,7 +2910,7 @@ int main()
   plan_tests(1036 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
-             + 107 /* LXNav protocol 1.05 */
+             + 109 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */

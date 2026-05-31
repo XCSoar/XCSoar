@@ -50,13 +50,13 @@ namespace LXNAVVario {
    *   when PLXVF is active)
    * - LXWP1 every 60 seconds
    * - LXWP2 every 5 seconds (contains MC, ballast, bugs - more frequent for better sync)
-   * - LXWP3 disabled (we don't parse it)
+   * - LXWP3 every 5 seconds (variofil; changes rarely on the vario)
    * - LXWP5 disabled (we don't parse it)
    */
   static inline void
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
-    PortWriteNMEA(port, "PLXV0,NMEARATE,W,10,5,1,60,5,0,0", env);
+    PortWriteNMEA(port, "PLXV0,NMEARATE,W,10,5,1,60,5,5,0", env);
   }
 
   /**
