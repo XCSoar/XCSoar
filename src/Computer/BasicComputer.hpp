@@ -4,6 +4,7 @@
 #pragma once
 
 #include "GroundSpeedComputer.hpp"
+#include "FilteredVarioComputer.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -18,6 +19,7 @@ struct ComputerSettings;
  */
 class BasicComputer {
   GroundSpeedComputer ground_speed;
+  FilteredVarioComputer filtered_vario;
 
 public:
   /**
@@ -38,5 +40,16 @@ public:
    * @param calculations the most up-to-date version of calculated values
    */
   void Compute(MoreData &data, const MoreData &last, const MoreData &last_gps,
-               const DerivedInfo &calculated) noexcept;
+               const DerivedInfo &calculated,
+               const ComputerSettings &settings) noexcept;
+
+  [[gnu::pure]]
+  bool FilteredVarioSampleUpdated() const noexcept {
+    return filtered_vario.SampleUpdated();
+  }
+
+  [[gnu::pure]]
+  bool FilteredVarioActive() const noexcept {
+    return filtered_vario.FilterActive();
+  }
 };

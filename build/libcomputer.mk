@@ -42,6 +42,7 @@ LIBCOMPUTER_SOURCES = \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/Computer/Events.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/FilteredVarioComputer.cpp \
 	$(SRC)/Computer/GroundSpeedComputer.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/Settings.cpp

@@ -5,6 +5,7 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Settings.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/AirDensity.hpp"
 #include "Geo/Gravity.hpp"
 #include "Math/Util.hpp"
@@ -316,16 +317,36 @@ ComputeBruttoVario(MoreData &basic) noexcept
 }
 
 /**
+ * Glider polar sink [m/s] for netto vario (negative when sinking).
+ */
+static double
+GetGliderSinkRate(const MoreData &basic, const DerivedInfo &calculated,
+                  const ComputerSettings &settings) noexcept
+{
+  if (calculated.flight.flying && basic.airspeed_available &&
+      settings.polar.glide_polar_task.IsValid()) {
+    const double g_load = basic.acceleration.available
+      ? basic.acceleration.g_load
+      : 1.;
+
+    return -settings.polar.glide_polar_task.SinkRate(
+      basic.indicated_airspeed, g_load);
+  }
+
+  return calculated.sink_rate;
+}
+
+/**
  * Compute the NettoVario value if it's unavailable.
  */
 static void
-ComputeNettoVario(MoreData &basic, const VarioInfo &vario) noexcept
+ComputeNettoVario(MoreData &basic, double sink_rate) noexcept
 {
   if (basic.netto_vario_available)
     /* got it already */
     return;
 
-  basic.netto_vario = basic.brutto_vario - vario.sink_rate;
+  basic.netto_vario = basic.brutto_vario - sink_rate;
 }
 
 /**
@@ -391,7 +412,8 @@ BasicComputer::Fill(MoreData &data,
 void
 BasicComputer::Compute(MoreData &data,
                        const MoreData &last, const MoreData &last_gps,
-                       const DerivedInfo &calculated) noexcept
+                       const DerivedInfo &calculated,
+                       const ComputerSettings &settings) noexcept
 {
   ComputeTrack(data, last_gps);
 
@@ -404,6 +426,8 @@ BasicComputer::Compute(MoreData &data,
   ComputeEnergyHeight(data);
   ComputeGPSVario(data, last, last_gps);
   ComputeBruttoVario(data);
-  ComputeNettoVario(data, calculated);
+  const double sink_rate = GetGliderSinkRate(data, calculated, settings);
+  ComputeNettoVario(data, sink_rate);
+  filtered_vario.Compute(data, sink_rate);
   ComputeDynamics(data, calculated);
 }

@@ -2,6 +2,7 @@ AIRSPACE_SRC_DIR = $(SRC)/Engine/Airspace
 
 AIRSPACE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Util/AircraftStateFilter.cpp \
+	$(ENGINE_SRC_DIR)/Util/VarioOutputFilter.cpp \
 	$(AIRSPACE_SRC_DIR)/AirspacesTerrain.cpp \
 	$(AIRSPACE_SRC_DIR)/Airspace.cpp \
 	$(AIRSPACE_SRC_DIR)/AirspaceAltitude.cpp \
