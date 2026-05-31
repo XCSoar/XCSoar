@@ -23,7 +23,7 @@ void
 ForceCalculation() noexcept;
 
 void
-TriggerVarioUpdate() noexcept;
+TriggerVarioUpdate(bool vario_bar_redraw=false) noexcept;
 
 /**
  * Trigger a redraw of the map window.

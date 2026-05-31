@@ -40,11 +40,11 @@ ForceCalculation() noexcept
 }
 
 void
-TriggerVarioUpdate() noexcept
+TriggerVarioUpdate(const bool vario_bar_redraw) noexcept
 {
   assert(CommonInterface::main_window != nullptr);
 
-  CommonInterface::main_window->SendGPSUpdate();
+  CommonInterface::main_window->SendGPSUpdate(vario_bar_redraw);
 }
 
 void
