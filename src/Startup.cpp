@@ -74,6 +74,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Storage/StorageManager.hpp"
+#include "DataLayoutMigration.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -144,6 +145,7 @@ LoadProfile()
   }
 
   Profile::Load();
+  MigrateDataLayoutToSubdirs();
   Profile::Use(Profile::map);
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);

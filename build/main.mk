@@ -215,6 +215,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/ThermalBand/ThermalSlice.cpp \
 	$(SRC)/Engine/ThermalBand/ThermalEncounterBand.cpp \
 	$(SRC)/Engine/ThermalBand/ThermalEncounterCollection.cpp \
+	$(SRC)/DataLayoutMigration.cpp \
 	$(SRC)/HorizonWidget.cpp \
 	$(SRC)/Renderer/TextRowRenderer.cpp \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
