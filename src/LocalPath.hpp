@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include "Repository/FileType.hpp"
+
+#include <initializer_list>
+
 class Path;
 class AllocatedPath;
 
@@ -115,7 +119,91 @@ ExpandLocalPath(Path src) noexcept;
 AllocatedPath
 ContractLocalPath(Path src) noexcept;
 
+/**
+ * Return @p path if it exists; otherwise, if the basename matches a
+ * typed data subdirectory layout, try that location (for profiles not
+ * updated after a data-layout migration).
+ */
+[[gnu::pure]]
+AllocatedPath
+ResolveLocalDataFile(AllocatedPath path,
+                     FileType file_type = FileType::UNKNOWN) noexcept;
+
+/**
+ * Canonical save path for a typed data file (under #GetFileTypeDefaultDir).
+ */
+AllocatedPath
+TypedDataSavePath(FileType file_type, const char *filename) noexcept;
+
+/**
+ * Resolve a typed data file for reading (subdir first, legacy root fallback).
+ */
+[[gnu::pure]]
+AllocatedPath
+ResolveTypedDataFilePath(FileType file_type,
+                         const char *filename) noexcept;
+
+[[gnu::pure]]
+AllocatedPath
+ResolveTypedDataFilePath(FileType file_type, const char *filename,
+                         std::initializer_list<const char *> legacy_names) noexcept;
+
+/** Canonical path under cache/ for repository manifest files. */
+AllocatedPath
+RepositoryDataSavePath(const char *filename) noexcept;
+
+/** Resolve repository manifest (cache/, legacy repository/, data root). */
+[[gnu::pure]]
+AllocatedPath
+ResolveRepositoryDataPath(const char *filename) noexcept;
+
+/**
+ * Relative path for repository downloads (e.g. cache/repository).
+ * Must be copied into #AllocatedPath before the temporary is destroyed.
+ */
+[[gnu::pure]]
+AllocatedPath
+RepositoryDownloadRelativePath(const char *filename) noexcept;
+
+/**
+ * Destination path for repository downloads (#GetCachePath() on Android,
+ * otherwise under the primary data directory).
+ */
+[[gnu::pure]]
+AllocatedPath
+RepositoryDownloadDestinationPath(const char *filename) noexcept;
+
+/**
+ * Resolve a download queue path (#LocalPath for relative paths).
+ */
+[[gnu::pure]]
+AllocatedPath
+ResolveDownloadDestinationPath(Path path) noexcept;
+
+AllocatedPath
+CacheDataSavePath(const char *filename) noexcept;
+
+[[gnu::pure]]
+AllocatedPath
+ResolveCacheDataPath(const char *filename) noexcept;
+
+AllocatedPath
+LogsDataSavePath(const char *filename) noexcept;
+
+[[gnu::pure]]
+AllocatedPath
+ResolveLogsDataPath(const char *filename) noexcept;
+
 void VisitDataFiles(const char* filter, File::Visitor &visitor);
+
+using DataPathCallback = void (*)(Path data_path, void *ctx) noexcept;
+
+/**
+ * Invoke @p callback once for each configured XCSoar data directory
+ * (primary first).
+ */
+void
+VisitDataPaths(DataPathCallback callback, void *ctx) noexcept;
 
 [[gnu::pure]]
 Path

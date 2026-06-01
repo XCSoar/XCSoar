@@ -3,6 +3,7 @@
 
 #include "LocalPath.hpp"
 #include "ProductName.hpp"
+#include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 #include "Compatibility/path.h"
 #include "util/StringCompare.hxx"
@@ -228,6 +229,159 @@ ContractLocalPath(Path src) noexcept
   return Path(local_path_code) + relative.c_str();
 }
 
+AllocatedPath
+ResolveLocalDataFile(AllocatedPath path, FileType file_type) noexcept
+{
+  if (path == nullptr || path.empty())
+    return nullptr;
+
+  if (File::Exists(path))
+    return path;
+
+  const Path base = path.GetBase();
+  if (base == nullptr || base.empty())
+    return path;
+
+  if (file_type == FileType::UNKNOWN)
+    file_type = ClassifyDataFilename(base.c_str());
+
+  const AllocatedPath subdir = GetFileTypeDefaultDir(file_type);
+  if (subdir == nullptr)
+    return path;
+
+  AllocatedPath alt = LocalPath(AllocatedPath::Build(subdir, base));
+  if (alt != nullptr && File::Exists(alt))
+    return alt;
+
+  return path;
+}
+
+AllocatedPath
+TypedDataSavePath(const FileType file_type, const char *filename) noexcept
+{
+  const AllocatedPath subdir = GetFileTypeDefaultDir(file_type);
+  if (subdir == nullptr)
+    return LocalPath(Path(filename));
+
+  return AllocatedPath::Build(MakeLocalPath(subdir), Path(filename));
+}
+
+AllocatedPath
+ResolveTypedDataFilePath(const FileType file_type,
+                         const char *filename) noexcept
+{
+  return ResolveTypedDataFilePath(file_type, filename, {});
+}
+
+AllocatedPath
+ResolveTypedDataFilePath(const FileType file_type, const char *filename,
+                         std::initializer_list<const char *> legacy_names) noexcept
+{
+  const AllocatedPath subdir = GetFileTypeDefaultDir(file_type);
+  if (subdir != nullptr) {
+    AllocatedPath path = LocalPath(AllocatedPath::Build(subdir, Path(filename)));
+    if (File::Exists(path))
+      return path;
+
+    for (const char *legacy : legacy_names) {
+      path = LocalPath(AllocatedPath::Build(subdir, Path(legacy)));
+      if (File::Exists(path))
+        return path;
+    }
+  }
+
+  return ResolveLocalDataFile(LocalPath(Path(filename)), file_type);
+}
+
+AllocatedPath
+CacheDataSavePath(const char *filename) noexcept
+{
+  Directory::Create(GetCachePath());
+  return AllocatedPath::Build(GetCachePath(), Path(filename));
+}
+
+AllocatedPath
+ResolveCacheDataPath(const char *filename) noexcept
+{
+  AllocatedPath path = AllocatedPath::Build(GetCachePath(), Path(filename));
+  if (File::Exists(path))
+    return path;
+
+#ifdef ANDROID
+  path = LocalPath(AllocatedPath::Build(Path("cache"), Path(filename)));
+  if (File::Exists(path))
+    return path;
+#endif
+
+  return ResolveLocalDataFile(LocalPath(Path(filename)));
+}
+
+static constexpr const char repository_legacy_dir[] = "repository";
+
+AllocatedPath
+RepositoryDataSavePath(const char *filename) noexcept
+{
+  return CacheDataSavePath(filename);
+}
+
+AllocatedPath
+RepositoryDownloadRelativePath(const char *filename) noexcept
+{
+  return AllocatedPath::Build(Path("cache"), Path(filename));
+}
+
+AllocatedPath
+RepositoryDownloadDestinationPath(const char *filename) noexcept
+{
+#ifdef ANDROID
+  return CacheDataSavePath(filename);
+#else
+  return LocalPath(RepositoryDownloadRelativePath(filename));
+#endif
+}
+
+AllocatedPath
+ResolveDownloadDestinationPath(Path path) noexcept
+{
+  if (path != nullptr && path.IsAbsolute())
+    return AllocatedPath(path.c_str());
+
+  return LocalPath(path);
+}
+
+AllocatedPath
+ResolveRepositoryDataPath(const char *filename) noexcept
+{
+  AllocatedPath path = CacheDataSavePath(filename);
+  if (File::Exists(path))
+    return path;
+
+#ifdef ANDROID
+  path = LocalPath(AllocatedPath::Build(Path("cache"), Path(filename)));
+  if (File::Exists(path))
+    return path;
+#endif
+
+  path = LocalPath(AllocatedPath::Build(Path(repository_legacy_dir),
+                                        Path(filename)));
+  if (File::Exists(path))
+    return path;
+
+  return ResolveLocalDataFile(LocalPath(Path(filename)));
+}
+
+AllocatedPath
+LogsDataSavePath(const char *filename) noexcept
+{
+  return TypedDataSavePath(FileType::IGC, filename);
+}
+
+AllocatedPath
+ResolveLogsDataPath(const char *filename) noexcept
+{
+  return ResolveTypedDataFilePath(FileType::IGC, filename);
+}
+
 #ifdef _WIN32
 
 /**
@@ -377,6 +531,13 @@ VisitDataFiles(const char* filter, File::Visitor &visitor)
 {
   for (const auto &i : data_paths)
     Directory::VisitSpecificFiles(i, filter, visitor, true);
+}
+
+void
+VisitDataPaths(DataPathCallback callback, void *ctx) noexcept
+{
+  for (const auto &i : data_paths)
+    callback(i, ctx);
 }
 
 Path
