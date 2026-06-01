@@ -202,6 +202,14 @@ jobs:
             target_upload: true
             target_container: debian:trixie-slim
           - os: ubuntu-24.04
+            target: WIN32OPENGL
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: .zip
+            target_upload: true
+            target_container: debian:trixie-slim
+          - os: ubuntu-24.04
             target: PC
             target_bin: XCSoar
             target_bin_path: bin
@@ -367,7 +375,7 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh KOBO
             fi
-            if [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+            if [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
@@ -540,7 +548,7 @@ jobs:
             fi
           elif [ ${{ matrix.target }} = 'WIN64' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
           elif [ ${{ matrix.target }} = 'PC' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
@@ -595,7 +603,7 @@ jobs:
             fi
           elif [ ${{ matrix.target }} = 'WIN64' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ]; then
+          elif [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
           elif [ ${{ matrix.target }} = 'PC' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
@@ -710,10 +718,10 @@ jobs:
 
       - name: Upload artifact (Installer)
         uses: actions/upload-artifact@v6
-        if: ${{ matrix.target == 'WIN64OPENGL' }}
+        if: ${{ matrix.target == 'WIN64OPENGL' || matrix.target == 'WIN32OPENGL' }}
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}-Installer.exe
-          path: output/${{ matrix.target }}/bin/XCSoar-*-WIN64OPENGL-Installer.exe
+          path: output/${{ matrix.target }}/bin/XCSoar-*-${{ matrix.target }}-Installer.exe
 
       - name: Upload artifact for VirusTotal (Win64)
         if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'WIN64' }}
@@ -730,11 +738,11 @@ jobs:
           path: output/PC/bin/XCSoar.exe
 
       - name: Upload artifact for VirusTotal (OpenGL)
-        if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'WIN64OPENGL' }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && (matrix.target == 'WIN64OPENGL' || matrix.target == 'WIN32OPENGL') }}
         uses: actions/upload-artifact@v7
         with:
-          name: virustotal-opengl
-          path: output/WIN64OPENGL/bin/XCSoar.exe
+          name: virustotal-opengl-${{ matrix.target }}
+          path: output/${{ matrix.target }}/bin/XCSoar.exe
 
       - name: Upload Release Asset
         id: upload-release-asset
@@ -750,7 +758,7 @@ jobs:
 
       - name: Upload Release Asset (Installer)
         uses: actions/upload-release-asset@v1
-        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target == 'WIN64OPENGL' && needs.release.outputs.upload_url != '' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && (matrix.target == 'WIN64OPENGL' || matrix.target == 'WIN32OPENGL') && needs.release.outputs.upload_url != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
