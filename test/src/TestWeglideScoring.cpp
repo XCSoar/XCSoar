@@ -1,10 +1,25 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "Engine/Contest/ContestResult.hpp"
+#include "Engine/Contest/Solvers/WeglideFree.hpp"
+
 #include "TestUtil.hpp"
 
 #include <cmath>
 #include <algorithm>
+
+/**
+ * Exposes WeglideFree::CalculateResult() for regression tests against the
+ * duplicated formulas below (keep in sync with WeglideFree.cpp).
+ */
+class TestableWeglideFree final : public WeglideFree {
+public:
+  [[nodiscard]] ContestResult
+  CalcResult() const noexcept {
+    return CalculateResult();
+  }
+};
 
 extern "C" {
 #include "tap.h"
@@ -124,6 +139,21 @@ TestWeglideOR()
 }
 
 static void
+TestWeglideFreeEngineMatchesFormulas()
+{
+  TestableWeglideFree wg;
+  wg.SetHandicap(107);
+  ContestResult rd{}, rf{}, ro{};
+  rd.distance = 149000;
+  rf.distance = 100000;
+  ro.distance = 80000;
+  wg.Feed(rd, {}, rf, {}, ro, {});
+  const ContestResult cr = wg.CalcResult();
+  const double expected = CalculateWeglideFreeScore(149000, 100000, 80000, 107);
+  ok1(equals(RoundScore(cr.score), RoundScore(expected)));
+}
+
+static void
 TestWeglideFree()
 {
   double expected = CalculateWeglideFreeScore(149000, 100000, 80000, 107);
@@ -191,8 +221,9 @@ TestScoreRounding()
 int
 main()
 {
-  plan_tests(4 + 3 + 3 + 4 + 4 + 5);
+  plan_tests(1 + 4 + 3 + 3 + 4 + 4 + 5);
 
+  TestWeglideFreeEngineMatchesFormulas();
   TestWeglideDistance();
   TestWeglideFAI();
   TestWeglideOR();
