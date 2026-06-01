@@ -186,7 +186,7 @@ struct AircraftState:
  * Convertible energy height for task/MacCready prediction when TAS and polar
  * are available; otherwise navigation #AircraftState::altitude.
  */
-[[gnu::const]]
+[[gnu::pure]]
 inline double
 GlideEnergyHeightForAircraft(const AircraftState &ac,
                              double best_glide_true_airspeed_m_s) noexcept

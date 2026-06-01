@@ -211,9 +211,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
       settings.polar.glide_polar_task.IsValid() &&
       waypoint->has_elevation) {
     const double v_best_glide =
-      settings.polar.glide_polar_task.IsValid()
-      ? settings.polar.glide_polar_task.GetVBestLD()
-      : 0.;
+      settings.polar.glide_polar_task.GetVBestLD();
 
     const GlideState glide_state(basic.location.DistanceBearing(waypoint->location),
                                  waypoint->elevation + settings.task.safety_height_arrival,
