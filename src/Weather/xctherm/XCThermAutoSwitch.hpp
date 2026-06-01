@@ -131,8 +131,6 @@ public:
               unsigned utc_hour, unsigned utc_minute,
               TimeStamp now) noexcept;
 
-  int GetCurrentLayerPos() const noexcept { return current_layer_pos; }
-  int GetCurrentTimePos() const noexcept { return current_time_pos; }
   bool IsAltitudeAutoActive() const noexcept { return enabled && !altitude_manual_override; }
   bool IsTimeAutoActive() const noexcept { return enabled && !time_manual_override; }
 
