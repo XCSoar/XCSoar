@@ -16,13 +16,19 @@ endif
 ifeq ($(USE_ANGLE),y)
 
 # Default to output directory if not specified
-ANGLE_PREFIX ?= $(OUT)/src/angle
+ANGLE_PREFIX ?= $(TARGET_OUTPUT_DIR)/src/angle
 
 # Auto-fetch ANGLE if not present
 ifeq ($(TARGET_IS_DARWIN),y)
 ANGLE_FETCH_SCRIPT = $(topdir)/darwin/fetch-angle-from-chrome.sh
+ANGLE_FETCH_ARCH =
 else ifeq ($(HAVE_WIN32),y)
-ANGLE_FETCH_SCRIPT = $(topdir)/windows/fetch-angle-from-chrome.sh
+ANGLE_FETCH_SCRIPT = $(topdir)/windows/fetch-angle-from-github.sh
+ifeq ($(X64),y)
+ANGLE_FETCH_ARCH = x64
+else
+ANGLE_FETCH_ARCH = x86
+endif
 endif
 
 ANGLE_FETCH_STAMP = $(ANGLE_PREFIX)/.stamp
@@ -30,7 +36,7 @@ ANGLE_FIX_STAMP = $(ANGLE_PREFIX)/.install_name_fixed
 
 $(ANGLE_FETCH_STAMP):
 	@$(NQ)echo "  FETCH   ANGLE libraries"
-	$(Q)$(ANGLE_FETCH_SCRIPT) $(ANGLE_PREFIX) $(OUT)/angle-download && touch $@
+	$(Q)$(ANGLE_FETCH_SCRIPT) $(ANGLE_PREFIX) $(OUT)/angle-download $(ANGLE_FETCH_ARCH) && touch $@
 
 ifeq ($(TARGET_IS_DARWIN),y)
 # Fix install names so executables can use rpath lookup
