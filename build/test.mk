@@ -94,7 +94,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestGeoPoint TestDiffFilter \
-	TestFileUtil TestRepository TestPath TestPolars TestCSVLine TestGlidePolar \
+	TestFileUtil TestRepository TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
@@ -135,6 +135,12 @@ ifeq ($(TARGET_IS_ANDROID),n)
 TEST_NAMES += \
 	TestProfile \
 	TestDriver
+endif
+
+ifeq ($(HAVE_WIN32),n)
+TEST_NAMES += \
+	TestDataLayoutMigration \
+	TestLocalPathResolve
 endif
 
 ifeq ($(HAVE_WIN32),y)
@@ -724,6 +730,43 @@ TEST_REPOSITORY_SOURCES = \
 	$(TEST_SRC_DIR)/TestRepository.cpp
 TEST_REPOSITORY_DEPENDS = UTIL
 $(eval $(call link-program,TestRepository,TEST_REPOSITORY))
+
+TEST_FILE_TYPE_SOURCES = \
+	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFileType.cpp
+TEST_FILE_TYPE_DEPENDS = UTIL
+$(eval $(call link-program,TestFileType,TEST_FILE_TYPE))
+
+TEST_DATA_LAYOUT_MIGRATION_SOURCES = \
+	$(SRC)/DataLayoutMigration.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/PathValue.cpp \
+	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
+	$(SRC)/io/FileOutputStream.cxx \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeUtilsSettings.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDataLayoutMigration.cpp
+TEST_DATA_LAYOUT_MIGRATION_DEPENDS = PROFILE IO OS UTIL
+$(eval $(call link-program,TestDataLayoutMigration,TEST_DATA_LAYOUT_MIGRATION))
+
+TEST_LOCAL_PATH_RESOLVE_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
+	$(SRC)/io/FileOutputStream.cxx \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLocalPathResolve.cpp
+TEST_LOCAL_PATH_RESOLVE_DEPENDS = IO OS UTIL
+$(eval $(call link-program,TestLocalPathResolve,TEST_LOCAL_PATH_RESOLVE))
 TEST_GEO_POINT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGeoPoint.cpp

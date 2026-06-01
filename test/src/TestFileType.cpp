@@ -89,7 +89,7 @@ TestFilenameMatchesFileType()
 
   // Regular .txt file should still match AIRSPACE (no exact claim)
   ok1(FilenameMatchesFileType("london.txt", FileType::AIRSPACE));
-  ok1(!FilenameMatchesFileType("gfs-rasp-forecast.dat", FileType::WAYPOINT));
+  ok1(FilenameMatchesFileType("gfs-rasp-forecast.dat", FileType::WAYPOINT));
 
   // No match at all
   ok1(!FilenameMatchesFileType("readme.md", FileType::LUA));
@@ -104,8 +104,8 @@ static void
 TestDetectFileTypeByFilename()
 {
   ok1(DetectFileTypeByFilename("xcsoar-flarm.txt") == FileType::FLARMDB);
-  ok1(DetectFileTypeByFilename("track.igc") == FileType::IGC);
-  ok1(DetectFileTypeByFilename("xcsoar-rasp-eu.dat") == FileType::RASP);
+  ok1(DetectFileTypeByFilename("track.igc") == FileType::UNKNOWN);
+  ok1(DetectFileTypeByFilename("xcsoar-rasp-eu.dat") == FileType::UNKNOWN);
   ok1(DetectFileTypeByFilename("profile.prf") == FileType::PROFILE);
   ok1(DetectFileTypeByFilename("waypoints.cup") == FileType::WAYPOINT);
   ok1(DetectFileTypeByFilename("WAYPOINTS.CUP") == FileType::WAYPOINT);
@@ -113,15 +113,32 @@ TestDetectFileTypeByFilename()
   ok1(DetectFileTypeByFilename("readme.md") == FileType::UNKNOWN);
 }
 
+static void
+TestLayoutClassification()
+{
+  ok1(ClassifyDataFilename("waypoints.cup") == FileType::WAYPOINT);
+  ok1(ClassifyDataFilename("track.igc") == FileType::IGC);
+  ok1(GetLayoutSubdirForFilename("waypoints.cup") == Path("waypoints"));
+  ok1(GetLayoutSubdirForFilename("task.tsk") == Path("tasks"));
+  ok1(GetLayoutSubdirForFilename("gfs-rasp-forecast.dat") == Path("weather/rasp"));
+  ok1(GetLayoutSubdirForFilename("track.igc") == Path("logs"));
+  ok1(GetLayoutSubdirForFilename("readme.md") == nullptr);
+  ok1(GetLayoutSubdirForFilename("profile.prf") == Path("profiles"));
+  ok1(GetLayoutSubdirForFilename("plane.xcp") == Path("profiles/planes"));
+  ok1(GetLayoutSubdirForFilename("repository") == Path("cache"));
+  ok1(GetLayoutSubdirForFilename("xcsoar.log") == nullptr);
+}
+
 int main()
 {
-  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 15 + 8);
+  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 15 + 8 + 11);
 
   TestDefaultDirs();
   TestPatterns();
   TestSpecialFilenameType();
   TestFilenameMatchesFileType();
   TestDetectFileTypeByFilename();
+  TestLayoutClassification();
 
   return exit_status();
 }
