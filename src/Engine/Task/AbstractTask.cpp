@@ -218,7 +218,7 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
   else
     stats.current_leg.travelled.Reset();
 
-  stats.total.gradient = ::AngleToGradient(CalcGradient(state));
+  stats.total.gradient = ::AngleToGradient(CalcGradient(state, glide_polar));
   stats.current_leg.gradient = ::AngleToGradient(CalcLegGradient(state));
 }
 

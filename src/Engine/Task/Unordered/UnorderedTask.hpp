@@ -28,7 +28,8 @@ public:
                   double& best) const noexcept override;
   double CalcRequiredGlide(const AircraftState &state_now,
                            const GlidePolar &glide_polar) const noexcept override;
-  double CalcGradient(const AircraftState &state_now) const noexcept override;
+  double CalcGradient(const AircraftState &state_now,
+                      const GlidePolar &polar) const noexcept override;
   TimeStamp ScanTotalStartTime() noexcept override;
   TimeStamp ScanLegStartTime() noexcept override;
   double ScanDistanceNominal() const noexcept override;

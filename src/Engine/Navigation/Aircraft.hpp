@@ -70,9 +70,9 @@ struct AltitudeState
   double altitude_agl;
 
   /**
-   * Convertible energy height for glide/MacCready (see #Math/EnergyHeight.hpp):
-   * navigation altitude plus \f$(v^2 - v_{bg}^2)/(2g)\f$ when airspeed and polar
-   * are available — not the aircraft geometric altitude.
+   * Kept equal to #altitude so short-term prediction can advance both.
+   * MacCready height is #altitude plus excess kinetic energy over the
+   * solution speed; it is not stored here.
    */
   double total_energy_height;
 
@@ -183,30 +183,21 @@ struct AircraftState:
 };
 
 /**
- * Convertible energy height for task/MacCready prediction when TAS and polar
- * are available; otherwise navigation #AircraftState::altitude.
- */
-[[gnu::const]]
-inline double
-GlideEnergyHeightForAircraft(const AircraftState &ac,
-                             double best_glide_true_airspeed_m_s) noexcept
-{
-  if (ac.true_airspeed > 0. && best_glide_true_airspeed_m_s > 0.)
-    return GlideConvertibleEnergyHeight(ac.altitude, ac.true_airspeed,
-                                        best_glide_true_airspeed_m_s);
-
-  return ac.altitude;
-}
-
-/**
- * Height input for MacCready / GlideState: convertible energy when available,
- * otherwise geometric #AircraftState::altitude.
+ * Height for a MacCready solution that arrives at @p speed_to_fly.
+ * Navigation altitude plus \f$(v^2 - v_{stf}^2)/(2g)\f$ when both speeds
+ * are known; geometric #AircraftState::altitude otherwise.  On speed the
+ * result equals geometric altitude.
  */
 [[gnu::pure]]
 inline double
-GlideHeightForMacCready(const AircraftState &ac) noexcept
+GlideHeightForMacCready(const AircraftState &ac,
+                        double speed_to_fly) noexcept
 {
-  return ac.total_energy_height > 0 ? ac.total_energy_height : ac.altitude;
+  if (ac.true_airspeed > 0. && speed_to_fly > 0.)
+    return GlideConvertibleEnergyHeight(ac.altitude, ac.true_airspeed,
+                                        speed_to_fly);
+
+  return ac.altitude;
 }
 
 static_assert(std::is_trivial<AircraftState>::value, "type is not trivial");

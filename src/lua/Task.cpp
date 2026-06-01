@@ -125,14 +125,13 @@ l_task_index(lua_State *L)
         return 0;
       }
 
-      const double v_best_glide =
-        calculated.glide_polar_safety.IsValid()
-        ? calculated.glide_polar_safety.GetVBestLD()
-        : 0.;
+      const auto &task_polar =
+        CommonInterface::GetComputerSettings().polar.glide_polar_task;
+      const double v_stf = task_polar.IsValid() ? task_polar.GetVBestLD() : 0.;
 
       Lua::Push(L,
                 next_solution.GetArrivalAltitude(
-                  GlideEnergyHeight(basic, v_best_glide)));
+                  GlideEnergyHeight(basic, v_stf)));
   } else if (StringIsEqual(name, "next_gr")) {
       if (!CommonInterface::Calculated().task_stats.task_valid) 
         return 0;

@@ -6,7 +6,8 @@
 // Math/EnergyHeight.hpp / GlideEnergyHeight / BasicComputer.
 //
 // Covers: MacCready convertible-energy contract; Math/EnergyHeight;
-// GlideHeightForMacCready; GlideEnergyHeight; ToAircraftState wiring;
+// GlideHeightForMacCready relative to speed-to-fly; GlideEnergyHeight;
+// ToAircraftState leaving geometric height for the solver;
 // AircraftStateFilter prediction keeping (TE − nav) invariant when both
 // heights get the same vario offset.
 
@@ -150,14 +151,52 @@ TestGlideHeightForMacCready()
 {
   AircraftState ac{};
   ac.altitude = 900.;
-  ac.total_energy_height = 0.;
-  ok1(equals(GlideHeightForMacCready(ac), 900.));
+  ac.true_airspeed = 0.;
+  ok1(equals(GlideHeightForMacCready(ac, 30.), 900.));
 
-  ac.total_energy_height = 100.;
-  ok1(equals(GlideHeightForMacCready(ac), 100.));
+  ac.true_airspeed = 30.;
+  ok1(equals(GlideHeightForMacCready(ac, 0.), 900.));
+  ok1(equals(GlideHeightForMacCready(ac, 30.), ac.altitude));
 
-  ac.total_energy_height = -1.;
-  ok1(equals(GlideHeightForMacCready(ac), ac.altitude));
+  constexpr double v_stf = 40.;
+  ac.true_airspeed = v_stf;
+  ok1(equals(GlideHeightForMacCready(ac, v_stf), ac.altitude));
+
+  ac.true_airspeed = v_stf + 5.;
+  ok1(GlideHeightForMacCready(ac, v_stf) > ac.altitude);
+
+  ac.true_airspeed = v_stf - 5.;
+  ok1(GlideHeightForMacCready(ac, v_stf) < ac.altitude);
+}
+
+/**
+ * Flying at the MacCready speed must not add height.  The arrival is the
+ * geometric one, so auto MacCready is not paid in kinetic energy.
+ */
+static void
+TestOnSpeedMatchesGeometric()
+{
+  GlideSettings settings;
+  settings.SetDefaults();
+  GlidePolar polar(0);
+  polar.SetMC(2.);
+  const double v_stf = polar.GetVBestLD();
+  ok1(v_stf > 0.);
+
+  AircraftState ac{};
+  ac.altitude = 1800.;
+  ac.true_airspeed = v_stf;
+  const double height = GlideHeightForMacCready(ac, v_stf);
+  ok1(equals(height, ac.altitude));
+
+  const GeoVector vector(8000., Angle::Zero());
+  const SpeedVector wind = SpeedVector::Zero();
+  constexpr double min_arrival = 300.;
+  const GlideState gs_height(vector, min_arrival, height, wind);
+  const GlideState gs_altitude(vector, min_arrival, ac.altitude, wind);
+
+  AssertSameGlideResult(MacCready::Solve(settings, polar, gs_height),
+                        MacCready::Solve(settings, polar, gs_altitude));
 }
 
 static void
@@ -205,8 +244,9 @@ TestToAircraftStateAndGlideHeight()
   const double v_bg = polar.GetVBestLD();
   const AircraftState ac = ToAircraftState(info, calculated);
   ok1(equals(ac.altitude, info.nav_altitude));
-  ok1(equals(ac.total_energy_height, GlideEnergyHeight(info, v_bg)));
-  ok1(equals(GlideHeightForMacCready(ac), ac.total_energy_height));
+  ok1(equals(ac.total_energy_height, ac.altitude));
+  ok1(equals(GlideHeightForMacCready(ac, v_bg),
+             GlideConvertibleEnergyHeight(ac.altitude, tas, v_bg)));
 
   MoreData no_nav = info;
   no_nav.gps_altitude_available.Clear();
@@ -216,7 +256,9 @@ TestToAircraftStateAndGlideHeight()
   const AircraftState ac2 = ToAircraftState(no_nav, calculated);
   ok1(equals(ac2.altitude, 0.));
   ok1(equals(ac2.total_energy_height, 0.));
-  ok1(equals(GlideHeightForMacCready(ac2), 0.));
+  /* TAS is still known; the adjustment is relative to altitude 0. */
+  ok1(equals(GlideHeightForMacCready(ac2, v_bg),
+             GlideConvertibleEnergyHeight(0., tas, v_bg)));
 }
 
 static void
@@ -275,8 +317,8 @@ RunBasicComputer(MoreData &basic, BasicComputer &computer,
 }
 
 /**
- * BasicComputer still stores full TE in MoreData; glide uses convertible energy
- * via GlideEnergyHeight / ToAircraftState after the merge path.
+ * BasicComputer still stores full TE in MoreData.  Glide height is
+ * applied from speed-to-fly when the solution is built.
  */
 static void
 TestBasicComputerConvertibleGlidePipeline()
@@ -325,8 +367,10 @@ TestBasicComputerConvertibleGlidePipeline()
 
   const AircraftState ac1 = ToAircraftState(basic1, calculated);
   const AircraftState ac2 = ToAircraftState(basic2, calculated);
-  ok1(equals(ac1.total_energy_height, glide1));
-  ok1(equals(ac2.total_energy_height, glide2));
+  ok1(equals(ac1.total_energy_height, nav1));
+  ok1(equals(ac2.total_energy_height, nav2));
+  ok1(equals(GlideHeightForMacCready(ac1, v_bg), glide1));
+  ok1(equals(GlideHeightForMacCready(ac2, v_bg), glide2));
 
   GlideSettings glide_settings;
   glide_settings.SetDefaults();
@@ -334,8 +378,10 @@ TestBasicComputerConvertibleGlidePipeline()
   const SpeedVector wind = SpeedVector::Zero();
   constexpr double min_arrival = 400.;
 
-  const GlideState gs1(vector, min_arrival, GlideHeightForMacCready(ac1), wind);
-  const GlideState gs2(vector, min_arrival, GlideHeightForMacCready(ac2), wind);
+  const GlideState gs1(vector, min_arrival,
+                       GlideHeightForMacCready(ac1, v_bg), wind);
+  const GlideState gs2(vector, min_arrival,
+                       GlideHeightForMacCready(ac2, v_bg), wind);
 
   const GlideResult r1 = MacCready::Solve(glide_settings, polar, gs1);
   const GlideResult r2 = MacCready::Solve(glide_settings, polar, gs2);
@@ -345,12 +391,13 @@ TestBasicComputerConvertibleGlidePipeline()
 int
 main()
 {
-  plan_tests(48);
+  plan_tests(61);
 
   TestEquivalentConvertibleSameSolution();
   TestConvertibleNotBelowNavOnlyMargin();
   TestEnergyHeightMath();
   TestGlideHeightForMacCready();
+  TestOnSpeedMatchesGeometric();
   TestGlideEnergyHeight();
   TestToAircraftStateAndGlideHeight();
   TestAircraftStateFilterKineticGapInPrediction();

@@ -568,12 +568,13 @@ as an arrow and in numeric form on the left-hand side of the map area
 of the screen.
 
 The altitude required is adjusted for energy, compensating for
-the fact that the kinetic energy of the glider can be converted to
-height (potential energy).  The kinetic energy that is convertible to
-height is calculated from the difference in the true airspeed to the
-true airspeed for best glide.  This compensation is most accurate when
-airspeed data is available to XCSoar, otherwise the true airspeed is
-estimated from the wind speed and ground speed.
+the fact that kinetic energy can be traded for height.  The adjustment
+is the difference between the current true airspeed and the MacCready
+speed to fly of the polar used for that calculation.  On that speed
+the adjustment is zero, so the arrival height is the altimeter height
+and the speed still carried at the finish is available for the pull-up.
+Flying faster adds height; flying slower subtracts it.  Without an
+airspeed the calculation uses navigation altitude alone.
 
 
 \section{Display of required altitude difference}

@@ -357,13 +357,12 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data) noexcept
     return;
   }
 
-  const double v_best_glide =
-    calculated.glide_polar_safety.IsValid()
-    ? calculated.glide_polar_safety.GetVBestLD()
-    : 0.;
+  const auto &task_polar =
+    CommonInterface::GetComputerSettings().polar.glide_polar_task;
+  const double v_stf = task_polar.IsValid() ? task_polar.GetVBestLD() : 0.;
 
   data.SetValueFromAltitude(
-    next_solution.GetArrivalAltitude(GlideEnergyHeight(basic, v_best_glide)));
+    next_solution.GetArrivalAltitude(GlideEnergyHeight(basic, v_stf)));
 }
 
 

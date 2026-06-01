@@ -185,7 +185,8 @@ UnorderedTask::ScanDistanceRemaining(const GeoPoint &location) noexcept
 }
 
 double
-UnorderedTask::CalcGradient(const AircraftState &state) const noexcept
+UnorderedTask::CalcGradient(const AircraftState &state,
+                            const GlidePolar &) const noexcept
 {
   return CalcLegGradient(state);
 }

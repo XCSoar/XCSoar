@@ -210,29 +210,27 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (basic.location_available && basic.NavAltitudeAvailable() &&
       settings.polar.glide_polar_task.IsValid() &&
       waypoint->HasElevation()) {
-    const double v_best_glide =
-      settings.polar.glide_polar_task.GetVBestLD();
+    const GeoVector vector =
+      basic.location.DistanceBearing(waypoint->location);
+    const double target = waypoint->elevation +
+      settings.task.safety_height_arrival;
+    const SpeedVector wind = calculated.GetWindOrZero();
 
-    const GlideState glide_state(basic.location.DistanceBearing(waypoint->location),
-                                 waypoint->elevation + settings.task.safety_height_arrival,
-                                 GlideEnergyHeight(basic, v_best_glide),
-                                 calculated.GetWindOrZero());
+    auto solve = [&](const GlidePolar &polar) {
+      const double v_stf = polar.IsValid() ? polar.GetVBestLD() : 0.;
+      const GlideState glide_state(vector, target,
+                                   GlideEnergyHeight(basic, v_stf),
+                                   wind);
+      return MacCready::Solve(settings.task.glide, polar, glide_state);
+    };
 
     GlidePolar gp0 = settings.polar.glide_polar_task;
     gp0.SetMC(0);
-    AddGlideResult(_("Alt. diff. MC 0"),
-                   MacCready::Solve(settings.task.glide,
-                                    gp0, glide_state));
-
+    AddGlideResult(_("Alt. diff. MC 0"), solve(gp0));
     AddGlideResult(_("Alt. diff. Safety MC"),
-                   MacCready::Solve(settings.task.glide,
-                                    calculated.glide_polar_safety,
-                                    glide_state));
-
+                   solve(calculated.glide_polar_safety));
     AddGlideResult(_("Alt. diff. Task MC"),
-                   MacCready::Solve(settings.task.glide,
-                                    settings.polar.glide_polar_task,
-                                    glide_state));
+                   solve(settings.polar.glide_polar_task));
   }
 
   if (basic.location_available && basic.NavAltitudeAvailable() &&

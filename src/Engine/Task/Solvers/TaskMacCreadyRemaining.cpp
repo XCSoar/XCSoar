@@ -13,7 +13,8 @@ TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
                                    const AircraftState &aircraft,
                                    double minH) const
 {
-  GlideState gs = GlideState::Remaining(tp, aircraft, minH);
+  GlideState gs = GlideState::Remaining(tp, aircraft, minH,
+                                        glide_polar.GetVBestLD());
 
   if (!include_travel_to_start && active_index == 0 &&
       tp.GetType() == TaskPointType::START &&
@@ -38,8 +39,7 @@ TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
     AircraftState aircraft2 = aircraft;
     aircraft2.location = tp.GetLocation();
     aircraft2.altitude = tp.GetElevation();
-    aircraft2.total_energy_height =
-      GlideEnergyHeightForAircraft(aircraft2, glide_polar.GetVBestLD());
+    aircraft2.total_energy_height = aircraft2.altitude;
     return aircraft2;
   } else
     return aircraft;

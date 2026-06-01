@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskSolution.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "GlideSolvers/GlideState.hpp"
@@ -46,7 +47,8 @@ TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
     return res;
   }
 
-  const GlideState gs = GlideState::Remaining(taskpoint, ac, min_h);
+  const GlideState gs =
+    GlideState::Remaining(taskpoint, ac, min_h, polar.GetVBestLD());
   return MacCready::Solve(settings, polar, gs);
 }
 
@@ -61,7 +63,8 @@ TaskSolution::GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
 
   GlideState gs(taskpoint.GetVectorPlanned(),
                 std::max(min_h, taskpoint.GetElevation()),
-                GlideHeightForMacCready(ac), ac.wind);
+                GlideHeightForMacCready(ac, polar.GetVBestLD()),
+                ac.wind);
   return MacCready::Solve(settings, polar, gs);
 }
 
@@ -76,7 +79,8 @@ TaskSolution::GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
 
   GlideState gs(taskpoint.GetVectorTravelled(),
                 std::max(min_h, taskpoint.GetElevation()),
-                GlideHeightForMacCready(ac), ac.wind);
+                GlideHeightForMacCready(ac, polar.GetVBestLD()),
+                ac.wind);
   return MacCready::Solve(settings, polar, gs);
 }
 
@@ -91,6 +95,7 @@ TaskSolution::GlideSolutionSink(const TaskPoint &taskpoint,
 
   GlideState gs(taskpoint.GetVectorRemaining(ac.location),
                 taskpoint.GetElevation(),
-                GlideHeightForMacCready(ac), ac.wind);
+                GlideHeightForMacCready(ac, polar.GetVBestLD()),
+                ac.wind);
   return MacCready::SolveSink(settings, polar, gs, s);
 }
