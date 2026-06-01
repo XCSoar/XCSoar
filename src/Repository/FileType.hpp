@@ -51,3 +51,25 @@ FileType SpecialFilenameType(const char *filename) noexcept;
 [[gnu::pure]]
 bool FilenameMatchesFileType(const char *filename,
                              FileType file_type) noexcept;
+
+/**
+ * Guess the #FileType of a data file from its basename, using the same
+ * rules as repository downloads and data-layout migration (enum order
+ * matters, e.g. RASP before WAYPOINT for "*.dat").
+ */
+[[gnu::pure]]
+FileType ClassifyDataFilename(const char *filename) noexcept;
+
+/**
+ * Subdirectory for a data file during layout migration (typed content
+ * plus built-in files such as repository, notams.json, app logs).
+ */
+[[gnu::pure]]
+AllocatedPath GetLayoutSubdirForFilename(const char *filename) noexcept;
+
+/**
+ * True for repository manifests and other files stored under product
+ * cache/ on desktop (Android uses #GetCachePath() instead).
+ */
+[[gnu::pure]]
+bool IsCacheLayoutFilename(const char *filename) noexcept;
