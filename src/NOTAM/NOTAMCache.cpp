@@ -43,7 +43,13 @@ GetJsonNumber(const boost::json::value &value, double &out) noexcept
 AllocatedPath
 NOTAMCache::GetFilePath()
 {
-  return LocalPath("notams.json");
+  return CacheDataSavePath("notams.json");
+}
+
+AllocatedPath
+NOTAMCache::ResolveFilePath()
+{
+  return ResolveCacheDataPath("notams.json");
 }
 
 bool

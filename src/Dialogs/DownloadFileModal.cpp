@@ -139,5 +139,5 @@ DownloadFileModal(const char *caption, const char *uri, const char *base)
     return nullptr;
   }
 
-  return LocalPath(base);
+  return ResolveDownloadDestinationPath(Path(base));
 }

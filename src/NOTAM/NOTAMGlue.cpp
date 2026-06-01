@@ -1092,7 +1092,7 @@ NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
 AllocatedPath
 NOTAMGlue::GetNOTAMCacheFilePath() const
 {
-  return NOTAMCache::GetFilePath();
+  return NOTAMCache::ResolveFilePath();
 }
 
 static CacheMetadata
@@ -1143,7 +1143,7 @@ NOTAMGlue::SaveNOTAMsToFile(const boost::json::value &api_response,
 
   LogFmt("NOTAM: Saving NOTAM cache");
   try {
-    NOTAMCache::SaveToFile(GetNOTAMCacheFilePath(), api_response, location,
+    NOTAMCache::SaveToFile(NOTAMCache::GetFilePath(), api_response, location,
                            settings_snapshot.radius_km,
                            settings_snapshot.refresh_interval_min,
                            settings_snapshot.api_base_url.c_str(),

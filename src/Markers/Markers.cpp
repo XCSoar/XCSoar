@@ -8,14 +8,16 @@
 #include "io/BufferedOutputStream.hxx"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 
 void
 MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 try {
   assert(time.IsPlausible());
 
-  FileOutputStream file(LocalPath("xcsoar-marks.txt"),
-                        FileOutputStream::Mode::APPEND_OR_CREATE);
+  FileOutputStream file(
+    TypedDataSavePath(FileType::AIRSPACE, "xcsoar-marks.txt"),
+    FileOutputStream::Mode::APPEND_OR_CREATE);
   BufferedOutputStream os(file);
   os.Fmt("{:02}.{:02}.{:04}\t{:02}:{:02}:{:02}\tLon:{:f}\tLat:{:f}\n",
          time.day, time.month, time.year,

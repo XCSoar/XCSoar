@@ -121,7 +121,8 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
     }
   }
   //Load user.cup
-  LoadWaypointFile(way_points, LocalPath("user.cup"),
+  LoadWaypointFile(way_points,
+                   ResolveTypedDataFilePath(FileType::WAYPOINT, "user.cup"),
                    WaypointFileType::SEEYOU,
                    WaypointOrigin::USER, 0, terrain, progress);
   // Optimise the waypoint list after attaching new waypoints

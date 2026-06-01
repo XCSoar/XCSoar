@@ -15,6 +15,7 @@
 #include "io/BufferedReader.hxx"
 #include "io/StringConverter.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "system/Path.hpp"
@@ -142,7 +143,8 @@ dlgChecklistShowModal()
 
   auto path = Profile::GetPath(ProfileKeys::ChecklistFile);
   if (path == nullptr || path.empty())
-    path = LocalPath("xcsoar-checklist.txt");
+    path = ResolveTypedDataFilePath(FileType::CHECKLIST,
+                                    "xcsoar-checklist.txt");
   auto checklist = LoadChecklist(path);
   if (checklist.empty())
     {

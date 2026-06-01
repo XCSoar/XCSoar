@@ -176,7 +176,7 @@ DownloadManagerThread::Start() noexcept
   current_position = 0;
 
   task.Start(DownloadToFile(*Net::curl, item.uri.c_str(),
-                            LocalPath(item.path_relative.c_str()),
+                            ResolveDownloadDestinationPath(item.path_relative),
                             nullptr, *this),
              BIND_THIS_METHOD(OnCompletion));
 }

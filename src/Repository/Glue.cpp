@@ -83,7 +83,7 @@ PurgeChangedUserRepositoryFiles(const char *old_list,
     if (old_entry != new_entry) {
       char filename[32];
       StringFormat(filename, std::size(filename), "user_repository_%d", i);
-      File::Delete(LocalPath(filename));
+      File::Delete(ResolveRepositoryDataPath(filename));
     }
   }
 }
@@ -100,7 +100,7 @@ void
 LoadAllRepositories(FileRepository &repository)
 {
   try {
-    FileLineReaderA reader(LocalPath("repository"));
+    FileLineReaderA reader(ResolveRepositoryDataPath("repository"));
     ParseFileRepository(repository, reader);
   } catch (const std::runtime_error &) {
     /* not yet downloaded - ignore */
@@ -108,7 +108,7 @@ LoadAllRepositories(FileRepository &repository)
 
   for (const auto &repo : GetUserRepositories()) {
     try {
-      FileLineReaderA reader(LocalPath(repo.filename.c_str()));
+      FileLineReaderA reader(ResolveRepositoryDataPath(repo.filename.c_str()));
       ParseFileRepository(repository, reader);
     } catch (const std::runtime_error &) {
       /* not yet downloaded - ignore */
@@ -122,14 +122,20 @@ EnqueueRepositoryDownload(bool force, bool main_repo, bool user_repo)
   if (main_repo) {
     if (!repository_downloaded || force) {
       repository_downloaded = true;
-      Net::DownloadManager::Enqueue(REPOSITORY_URI, Path("repository"));
+      Directory::Create(GetCachePath());
+      const auto path = RepositoryDownloadDestinationPath("repository");
+      Net::DownloadManager::Enqueue(REPOSITORY_URI, Path(path.c_str()));
     }
   }
 
   // Enqueue additional user-defined repository URIs, if set
   if (user_repo) {
-    for (const auto &repo : GetUserRepositories())
-      Net::DownloadManager::Enqueue(repo.uri.c_str(), Path(repo.filename.c_str()));
+    Directory::Create(GetCachePath());
+    for (const auto &repo : GetUserRepositories()) {
+      const auto path =
+        RepositoryDownloadDestinationPath(repo.filename.c_str());
+      Net::DownloadManager::Enqueue(repo.uri.c_str(), Path(path.c_str()));
+    }
   }
 }
 
@@ -140,7 +146,10 @@ DownloadRepositoriesModal(bool main_repo, bool user_repo)
 {
   if (main_repo) {
     try {
-      if (DownloadFileModal(_("Updating repository"), REPOSITORY_URI, "repository") == nullptr)
+      Directory::Create(GetCachePath());
+      const auto path = RepositoryDownloadDestinationPath("repository");
+      if (DownloadFileModal(_("Updating repository"), REPOSITORY_URI,
+                            path.c_str()) == nullptr)
         return; /* cancelled */
       repository_downloaded = true;
     } catch (...) {
@@ -151,8 +160,11 @@ DownloadRepositoriesModal(bool main_repo, bool user_repo)
   if (user_repo) {
     for (const auto &repo : GetUserRepositories()) {
       try {
-        if (DownloadFileModal(_("Updating repository"),
-                              repo.uri.c_str(), repo.filename.c_str()) == nullptr)
+        Directory::Create(GetCachePath());
+        const auto path =
+          RepositoryDownloadDestinationPath(repo.filename.c_str());
+        if (DownloadFileModal(_("Updating repository"), repo.uri.c_str(),
+                              path.c_str()) == nullptr)
           return; /* cancelled */
       } catch (...) {
         ShowError(std::current_exception(), _("Updating repository"));
