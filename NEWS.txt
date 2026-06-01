@@ -178,6 +178,9 @@ Version 7.45 - not yet released
 * calculations
   - BrokenDateTime: unified UTC conversion (rename FromUnixTimeUTC to
     FromUnixTime); Windows TimeGm uses _mkgmtime
+  - task glide (MacCready): use convertible energy height (navigation altitude
+    plus excess kinetic energy over best-glide speed when airspeed is available)
+    so final glide is not inflated or deflated by airspeed changes alone (#508)
   - restore FFVV NetCoupe contest optimisation #2330
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)

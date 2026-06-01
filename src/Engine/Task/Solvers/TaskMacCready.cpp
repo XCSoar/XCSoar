@@ -36,6 +36,10 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
     if (gr.altitude_difference > 0)
       /* .. but start higher if the last calculation allows it */
       aircraft_predict.altitude += gr.altitude_difference;
+
+    aircraft_predict.total_energy_height =
+      GlideEnergyHeightForAircraft(aircraft_predict,
+                                   glide_polar.GetVBestLD());
   }
 
   leg_solutions[active_index].CalcDeferred();
@@ -55,6 +59,7 @@ TaskMacCready::glide_sink(const AircraftState &aircraft, const double S) const
                                       settings, glide_polar, S);
 
     aircraft_predict.altitude -= gr.height_glide;
+    aircraft_predict.total_energy_height -= gr.height_glide;
     if (i == 0)
       acc_gr = gr;
     else

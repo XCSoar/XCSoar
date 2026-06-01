@@ -93,7 +93,9 @@ AircraftStateFilter::GetPredictedState(const FloatDuration in_time) const noexce
   AircraftState state_next = last_state;
   state_next.ground_speed = GetSpeed();
   state_next.vario = GetClimbRate();
-  state_next.altitude = last_state.altitude + state_next.vario * in_time.count();
+  const double dh = state_next.vario * in_time.count();
+  state_next.altitude = last_state.altitude + dh;
+  state_next.total_energy_height = last_state.total_energy_height + dh;
   state_next.location = GeoVector(state_next.ground_speed * in_time.count(),
                                   GetBearing()).EndPoint(last_state.location);
   return state_next;

@@ -210,9 +210,12 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
   if (basic.location_available && basic.NavAltitudeAvailable() &&
       settings.polar.glide_polar_task.IsValid() &&
       waypoint->has_elevation) {
+    const double v_best_glide =
+      settings.polar.glide_polar_task.GetVBestLD();
+
     const GlideState glide_state(basic.location.DistanceBearing(waypoint->location),
                                  waypoint->elevation + settings.task.safety_height_arrival,
-                                 basic.nav_altitude,
+                                 GlideEnergyHeight(basic, v_best_glide),
                                  calculated.GetWindOrZero());
 
     GlidePolar gp0 = settings.polar.glide_polar_task;
@@ -239,7 +242,13 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
 
     const auto safety_height = task_behaviour.safety_height_arrival;
     const auto target_altitude = waypoint->elevation + safety_height;
-    const auto delta_h = basic.nav_altitude - target_altitude;
+    const double v_best_glide =
+      calculated.glide_polar_safety.IsValid()
+      ? calculated.glide_polar_safety.GetVBestLD()
+      : 0.;
+
+    const auto delta_h =
+      GlideEnergyHeight(basic, v_best_glide) - target_altitude;
     if (delta_h > 0) {
       const auto distance = basic.location.Distance(waypoint->location);
       const auto gr = distance / delta_h;

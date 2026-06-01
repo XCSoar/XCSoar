@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Math/EnergyHeight.hpp"
 #include "NMEA/Info.hpp"
 
 #include <type_traits>
@@ -16,11 +17,17 @@ struct MoreData : public NMEAInfo {
   /** Altitude used for navigation (GPS or Baro) */
   double nav_altitude;
 
-  /** Energy height excess to slow to best glide speed */
+  /**
+   * Kinetic height \f$v^2/(2g)\f$ from current true airspeed [m].  Zero if
+   * airspeed is unavailable.  Not geometric altitude.
+   */
   double energy_height;
 
-  /** Nav Altitude + Energy height (m) */
-  double TE_altitude;
+  /**
+   * Total mechanical energy as height: #nav_altitude + #energy_height [m].
+   * Same physical units as altitude but not the aircraft geometric position.
+   */
+  double total_energy_height;
 
   /** GPS-based vario */
   double gps_vario;
@@ -80,5 +87,30 @@ struct MoreData : public NMEAInfo {
       : netto_vario;
   }
 };
+
+/**
+ * Convertible energy height for glide/MacCready: navigation altitude plus
+ * \f$(v^2 - v_{bg}^2)/(2g)\f$ when airspeed and best-glide TAS are known;
+ * otherwise navigation altitude alone.  Zero when navigation altitude is
+ * unavailable.
+ *
+ * @param best_glide_true_airspeed_m_s Best-glide true airspeed from the glide
+ * polar (still air); pass zero when unknown
+ */
+[[gnu::pure]]
+inline double
+GlideEnergyHeight(const MoreData &basic,
+                  double best_glide_true_airspeed_m_s = 0.) noexcept
+{
+  if (!basic.NavAltitudeAvailable())
+    return 0.;
+
+  if (basic.airspeed_available && best_glide_true_airspeed_m_s > 0.)
+    return GlideConvertibleEnergyHeight(basic.nav_altitude,
+                                        basic.true_airspeed,
+                                        best_glide_true_airspeed_m_s);
+
+  return basic.nav_altitude;
+}
 
 static_assert(std::is_trivial<MoreData>::value, "type is not trivial");

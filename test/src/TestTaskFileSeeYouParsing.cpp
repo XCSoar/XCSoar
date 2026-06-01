@@ -180,6 +180,7 @@ TestAngleParsingWithDecimals()
 static void
 TestLineZoneWithDecimalRadius()
 {
+  /* CUP R1 is half the line length; LineSectorZone uses full length (#2029). */
   // Test line zone with decimal radius (should be multiplied by 2)
   const char *cup_content =
     "name,code,country,lat,lon,elev,style,rwdir,rwlen,freq,desc\n"

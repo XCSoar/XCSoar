@@ -55,10 +55,15 @@ ComputeHomeGlide(const MoreData &basic,
                  const ComputerSettings &settings,
                  const DerivedInfo &calculated) noexcept
 {
+  const double v_best_glide =
+    settings.polar.glide_polar_task.IsValid()
+    ? settings.polar.glide_polar_task.GetVBestLD()
+    : 0.;
+
   const GlideState glide_state(
     basic.location.DistanceBearing(settings.poi.home_location),
     settings.poi.home_elevation + settings.task.safety_height_arrival,
-    basic.nav_altitude,
+    GlideEnergyHeight(basic, v_best_glide),
     calculated.GetWindOrZero());
 
   return MacCready::Solve(settings.task.glide,
@@ -163,10 +168,15 @@ ComputeActiveWaypointGlide(const MoreData &basic,
                            const DerivedInfo &calculated,
                            const Waypoint &waypoint) noexcept
 {
+  const double v_best_glide =
+    settings.polar.glide_polar_task.IsValid()
+    ? settings.polar.glide_polar_task.GetVBestLD()
+    : 0.;
+
   const GlideState glide_state(
     basic.location.DistanceBearing(waypoint.location),
     waypoint.elevation + settings.task.safety_height_arrival,
-    basic.nav_altitude,
+    GlideEnergyHeight(basic, v_best_glide),
     calculated.GetWindOrZero());
 
   return MacCready::Solve(settings.task.glide,
