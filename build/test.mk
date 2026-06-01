@@ -568,6 +568,7 @@ $(eval $(call link-program,TestByteSizeFormatter,TEST_BYTE_SIZE_FORMATTER))
 
 TEST_TIME_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Math/SunEphemeris.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTimeFormatter.cpp
 TEST_TIME_FORMATTER_DEPENDS = MATH UTIL TIME
