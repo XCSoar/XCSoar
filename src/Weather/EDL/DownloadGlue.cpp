@@ -144,7 +144,7 @@ DownloadGlue::OnCompleteNotify() noexcept
     return;
 
   if (completion_error) {
-    notification.outcome = DownloadOutcome::ERROR;
+    notification.outcome = DownloadOutcome::DOWNLOAD_ERROR;
     notification.error = completion_error;
   } else {
     notification.outcome = DownloadOutcome::SUCCESS;
