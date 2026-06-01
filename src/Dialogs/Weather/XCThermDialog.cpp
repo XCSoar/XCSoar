@@ -239,27 +239,31 @@ XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
   switch (info[index].status) {
   case LayerDownloadInfo::PENDING: {
     const auto &p = info[index];
+    /* pending_index is the 1-based slot number being fetched (1 = the
+       previous-hour slice we always prepend, 2..pending_total = future
+       hours). "Slot N/M" rather than "+Nh of M" because the offset for
+       N=1 is actually -1h. */
     if (p.retry_seconds_left > 0) {
       /* Network seems down — show countdown to next attempt. */
-      second_row.Format(_("+%uh: reconnect in %us (try #%u)"),
+      second_row.Format(_("Slot %u: reconnect in %us (try #%u)"),
                         p.pending_index,
                         p.retry_seconds_left,
                         p.retry_attempt + 1);
     } else if (p.pending_bytes_total > 0) {
       const double now_mb = (double)p.pending_bytes_now / (1024.0 * 1024.0);
       const double tot_mb = (double)p.pending_bytes_total / (1024.0 * 1024.0);
-      second_row.Format(_("+%uh of %uh: %.2f / %.2f MB"),
+      second_row.Format(_("Slot %u/%u: %.2f / %.2f MB"),
                         p.pending_index,
                         p.pending_total,
                         now_mb, tot_mb);
     } else if (p.pending_bytes_now > 0) {
       const double now_mb = (double)p.pending_bytes_now / (1024.0 * 1024.0);
-      second_row.Format(_("+%uh of %uh: %.2f MB"),
+      second_row.Format(_("Slot %u/%u: %.2f MB"),
                         p.pending_index,
                         p.pending_total,
                         now_mb);
     } else if (p.pending_total > 0) {
-      second_row.Format(_("+%uh of %uh: connecting..."),
+      second_row.Format(_("Slot %u/%u: connecting..."),
                         p.pending_index,
                         p.pending_total);
     } else {
@@ -698,7 +702,8 @@ XCThermWidget::StartDownload()
      if nothing usable comes out of the new run. The PENDING row text
      is rendered from atomics, not from these fields. */
   row_info.status = LayerDownloadInfo::PENDING;
-  row_info.pending_total = span_hours;
+  /* Worker fetches (span + 1) slices (past + future). */
+  row_info.pending_total = span_hours + 1;
   row_info.pending_index = 0;
   row_info.pending_bytes_now = 0;
   row_info.pending_bytes_total = 0;
@@ -728,7 +733,7 @@ XCThermWidget::PollDownload()
   auto *info = GetDownloadInfo(job.model);
   auto &row_info = info[job.target_index];
   row_info.pending_index = job.current_offset.load();
-  row_info.pending_total = job.span_hours;
+  row_info.pending_total = job.span_hours + 1;
   row_info.pending_bytes_now = job.bytes_now.load();
   row_info.pending_bytes_total = job.bytes_total.load();
   row_info.retry_attempt = job.retry_attempt.load();
@@ -893,19 +898,35 @@ XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
 {
   auto &api = XCThermAPI::Instance();
 
-  for (unsigned offset = 1; offset <= job->span_hours; ++offset) {
+  /* We fetch (span_hours + 1) hourly slices per download: the previous
+     hour first, followed by span_hours future hours. The past slot
+     gives the pilot context about what was forecast an hour ago — e.g.
+     to compare against what actually happened — without making the
+     download disproportionately bigger. */
+  const unsigned total_slots = job->span_hours + 1;
+  for (unsigned slot_i = 0; slot_i < total_slots; ++slot_i) {
     if (job->cancel.load())
       break;
 
-    job->current_offset.store(offset);
+    /* slot_i == 0 → previous-hour forecast (base shifted back by 1,
+       offset 0). slot_i >= 1 → future offsets 1..span_hours from the
+       current UTC hour. */
+    const bool is_past = (slot_i == 0);
+    const unsigned slot_base = is_past
+      ? (job->current_utc + 23) % 24
+      : job->current_utc;
+    const unsigned slot_offset = is_past ? 0u : slot_i;
+
+    job->current_offset.store(slot_i + 1);  // 1-based for UI progress
     job->bytes_now.store(0);
     job->bytes_total.store(0);
 
     std::string slot_date, slot_run_hour;
     unsigned slot_step = 0;
-    if (!api.FindSlotForOffset(job->param, job->current_utc, offset,
+    if (!api.FindSlotForOffset(job->param, slot_base, slot_offset,
                                slot_date, slot_run_hour, slot_step)) {
-      LogFmt("xctherm: no slot for +{}h — skipping", offset);
+      LogFmt("xctherm: no slot for slot#{} (base={}UTC +{}h) — skipping",
+             slot_i, slot_base, slot_offset);
       job->any_slot_missing.store(true);
       continue;
     }
@@ -927,8 +948,8 @@ XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
     /* Skip slices that are already cached from this exact run. */
     if (api.IsCachedAtRun(job->param, forecast_utc,
                           slot_date, slot_run_hour)) {
-      LogFmt("xctherm: +{}h ({}UTC) cached at run {}/{}Z — reused",
-             offset, forecast_utc, slot_date, slot_run_hour);
+      LogFmt("xctherm: slot#{} ({}UTC) cached at run {}/{}Z — reused",
+             slot_i, forecast_utc, slot_date, slot_run_hour);
       job->succeeded_or_cached.fetch_add(1);
 
       /* Use the cached slice for the overlay if this is the first
@@ -1018,7 +1039,7 @@ XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
         case XCThermAPIError::Kind::NOT_FOUND:
           /* This particular slot doesn't exist on the server — give up
              on this offset but keep going with the rest of the span. */
-          LogFmt("xctherm: +{}h: {}", offset, e.what());
+          LogFmt("xctherm: slot#{}: {}", slot_i, e.what());
           slot_abandon = true;
           break;
         case XCThermAPIError::Kind::AUTH_FAILED:
@@ -1044,8 +1065,8 @@ XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
 
       if (transient_failure) {
         constexpr unsigned RETRY_SECONDS = 5;
-        LogFmt("xctherm: +{}h attempt {} transient failure — retry in {}s",
-               offset, attempt + 1, RETRY_SECONDS);
+        LogFmt("xctherm: slot#{} attempt {} transient failure — retry in {}s",
+               slot_i, attempt + 1, RETRY_SECONDS);
         for (unsigned s = RETRY_SECONDS; s > 0 && !job->cancel.load(); --s) {
           job->retry_seconds_left.store(s);
           for (int t = 0; t < 10 && !job->cancel.load(); ++t)
