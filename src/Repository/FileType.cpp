@@ -7,6 +7,7 @@
 #include "util/StringCompare.hxx"
 
 #include <cstring>
+#include <string_view>
 
 const char *
 GetFileTypePatterns(const FileType file_type) noexcept
@@ -200,4 +201,60 @@ DetectFileTypeByFilename(const char *filename) noexcept
   }
 
   return match;
+}
+
+FileType
+ClassifyDataFilename(const char *filename) noexcept
+{
+  const auto special = SpecialFilenameType(filename);
+  if (special != FileType::UNKNOWN &&
+      GetFileTypeDefaultDir(special) != nullptr)
+    return special;
+
+  for (uint8_t i = 1; i < static_cast<uint8_t>(FileType::COUNT); ++i) {
+    const auto type = static_cast<FileType>(i);
+    if (GetFileTypeDefaultDir(type) == nullptr)
+      continue;
+
+    if (FilenameMatchesFileType(filename, type))
+      return type;
+  }
+
+  return FileType::UNKNOWN;
+}
+
+static bool
+IsUserRepositoryFilename(const char *filename) noexcept
+{
+  static constexpr std::string_view prefix{"user_repository_"};
+  return filename != nullptr &&
+         StringStartsWith(filename, prefix);
+}
+
+AllocatedPath
+GetLayoutSubdirForFilename(const char *filename) noexcept
+{
+  if (filename == nullptr || *filename == '\0')
+    return nullptr;
+
+  const FileType type = ClassifyDataFilename(filename);
+  if (type != FileType::UNKNOWN) {
+    AllocatedPath dir = GetFileTypeDefaultDir(type);
+    if (dir != nullptr)
+      return dir;
+  }
+
+  if (StringIsEqualIgnoreCase(filename, "notams.json") ||
+      StringIsEqualIgnoreCase(filename, "repository") ||
+      IsUserRepositoryFilename(filename))
+    return AllocatedPath("cache");
+
+  return nullptr;
+}
+
+bool
+IsCacheLayoutFilename(const char *filename) noexcept
+{
+  const AllocatedPath subdir = GetLayoutSubdirForFilename(filename);
+  return subdir != nullptr && subdir == AllocatedPath("cache");
 }
