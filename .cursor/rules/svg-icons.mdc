@@ -1,0 +1,135 @@
+---
+description: SVG icon format, sizing, and colour rules for Data/icons assets
+globs:
+  - "Data/icons/**"
+  - "Data/resources.txt"
+  - "build/resource.mk"
+  - "build/svg_preprocess.xsl"
+  - "src/Look/WaypointLook.*"
+  - "src/Renderer/WaypointIconRenderer.cpp"
+alwaysApply: false
+---
+
+# SVG Icons (`Data/icons/`)
+
+XCSoar icons are **SVG sources** built into masked BMP tiles (96 / 160 / 300 PPI)
+via `build/resource.mk`. They render on **OpenGL, GDI, and memory canvas**
+(including Kobo e-paper). Follow these rules so icons stay sharp, invert
+correctly in dark mode, and survive the rsvg → ImageMagick pipeline.
+
+## Canvas size
+
+| Category | viewBox | Examples |
+|----------|---------|----------|
+| **Map / waypoint** | `0 0 14 14` | `map_turnpoint.svg`, `map_obstacle.svg`, `map_vor.svg` |
+| **UI / toolbar** | `0 0 22 22` | `mode_cruise.svg`, `settings.svg`, `task.svg` |
+| **Exceptions** | `0 0 24 24` | rare; match an existing neighbour if adding one |
+
+- Start from `Data/icons/icon_template.svg` for new files.
+- Keep artwork **centred** with ~1 px margin inside the viewBox; do not rely
+  on negative coordinates outside the box.
+- Filename prefix: `map_*` (map symbols), `alt_*` / `alt2_*` (landable
+  variants), `mode_*` (flight mode), `winpilot_*` (legacy landables).
+
+## SVG structure
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+  <!-- paths here -->
+</svg>
+```
+
+**Do:**
+
+- Use plain SVG 1.1 elements: `path`, `circle`, `rect`, `ellipse`, `g`.
+- Flatten transforms where practical; artwork should fit the viewBox without
+  huge `matrix(...)` offsets (legacy icons still have these — do not add more).
+- Export **pure SVG**: no Inkscape/Sodipodi metadata, no embedded fonts,
+  raster images, or external `xlink:href` assets.
+- Prefer explicit `fill`, `stroke`, `stroke-width` attributes over CSS classes.
+
+**Do not:**
+
+- Leave editor cruft (`inkscape:*`, `sodipodi:*`, `-inkscape-stroke`, unused
+  `id`s, `<defs>` clutter).
+- Use SVG filters, blurs, gradients, or opacity stacks unless the icon is
+  explicitly a full-colour asset (see below).
+
+## Build pipeline (why the rules matter)
+
+1. `xsltproc` + `build/svg_preprocess.xsl` copies the SVG (optionally disables
+   anti-aliasing for elements whose `id` / `inkscape:label` starts with
+   `MASK_` or `NOAA_`).
+2. `rsvg-convert` renders at 1.0× / 1.6316× / 3.0× zoom (96 / 160 / 300 PPI).
+3. ImageMagick splits **alpha → left half**, **RGB → right half**, tiles into
+   `_tile.png`, then BMP. `MaskedIcon` composites mask + icon at runtime.
+
+Design for **crisp edges at 14×14**; thin hairlines disappear on e-paper and
+low-DPI panels.
+
+## Monochrome vs colour icons
+
+### Monochrome (mask-tinted)
+
+Most `map_*` symbols and UI icons. Drawn black-on-transparent; the renderer
+**inverts on dark backgrounds** unless the bitmap carries meaningful colour.
+
+- Use a **solid dark fill** (`#000` or near-black). Avoid light grey fills.
+- Do not bake background squares into the SVG.
+- Semantic hue in the SVG (e.g. `#2c5aa0`) still works on OpenGL but is treated
+  as colour on some paths — prefer the standard colours below when colour is
+  intentional.
+
+### Full-colour (semantic — do not invert)
+
+Landable / traffic / status icons where hue carries meaning. The runtime sets
+`has_colors` and **skips dark-mode inversion**.
+
+| Role | Fill / pattern | Files |
+|------|----------------|-------|
+| Landable reachable | green | `alt_reachable_*`, `winpilot_reachable` |
+| Landable unreachable | red | `alt_landable_*`, `winpilot_landable` |
+| Marginal | orange / magenta | `alt_marginal_*`, `winpilot_marginal` |
+| Obstacle | `#d40000` | `map_obstacle.svg` |
+| Town (ICAO) | `#dfdf00` stroke/fill | `map_town.svg` |
+| Navaid (VOR/NDB/…) | `#2c5aa0` | `map_vor.svg`, `map_ndb.svg`, … |
+| Small waypoint | `#624e90` | `map_small.svg` |
+
+When adding a new **semantic-colour** icon, keep colours explicit in the SVG
+and verify on **light and dark** map themes.
+
+## Visual design
+
+- **Readable in flight**: simple silhouettes, no fine interior detail; test at
+  14 px on a map screenshot.
+- **Distinct at glance**: new map symbols must not duplicate an existing
+  waypoint icon shape (see `doc/mapfile.rst` and `waypoint-types.mdc`).
+- **Aviation conventions** where applicable (ICAO town symbol, obstacle colour,
+  navaid palette).
+- **Stroke vs fill**: turnpoint-style symbols may use thick stroke +
+  `paint-order:stroke markers fill`; prefer filled paths when possible.
+- **E-paper**: icons must remain recognisable in greyscale (Kobo); do not rely
+  on colour alone unless the icon is in the semantic-colour set above.
+
+## Wiring a new icon
+
+1. Add `Data/icons/<name>.svg` following this file.
+2. Register in `Data/resources.txt` (`bitmap_icon_scaled IDB_FOO "name"` —
+   omit `map_` / `alt_` prefix in the string if the file includes it).
+3. For waypoint types, also update `WaypointLook`, `WaypointIconRenderer`, and
+   see `.cursor/rules/waypoint-types.mdc`.
+4. Rebuild icons: `make -j$(nproc) TARGET=UNIX` (or your target) so
+   `output/.../icons/*_{96,160,300}.bmp` regenerate.
+5. Check **Android** drawables if the icon is exposed in the Java UI
+   (`build/android.mk` + `build/android_bundle.mk`).
+
+## Review checklist
+
+- [ ] Correct viewBox (14×14 map, 22×22 UI)
+- [ ] No Inkscape/editor metadata
+- [ ] Artwork centred, no stray transforms
+- [ ] Monochrome **or** intentional semantic colours — not both ambiguously
+- [ ] Legible at 14 px and on e-paper greyscale
+- [ ] `Data/resources.txt` + Look/Renderer wired if new
+- [ ] Built and eyeball-tested light + dark map background
