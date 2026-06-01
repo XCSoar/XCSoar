@@ -46,7 +46,8 @@ WaypointReach
 CalculateWaypointReachDirect(const Waypoint &waypoint, const MoreData &basic,
                              const SpeedVector &wind,
                              const MacCready &mac_cready,
-                             const TaskBehaviour &task_behaviour) noexcept;
+                             const TaskBehaviour &task_behaviour,
+                             double speed_to_fly) noexcept;
 
 /**
  * Calculate the reachability of the given waypoint the same way the
