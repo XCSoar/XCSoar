@@ -117,7 +117,6 @@ struct LayerDownloadInfo {
   enum Status { NONE, PENDING, DONE, FAILED, CANCELED };
   Status status = NONE;
   double wire_mb = 0.0;           // total bytes over the network
-  double size_mb = 0.0;           // total uncompressed size in memory
   double speed_mbs = 0.0;         // average download speed
   unsigned span_hours = 0;        // hours of forecast cached (incl. reuse)
   unsigned future_hours = 0;      // cached hours still in the future from now
@@ -159,7 +158,6 @@ struct DownloadJob {
   std::atomic<uint64_t> bytes_now{0};
   std::atomic<uint64_t> bytes_total{0};
   std::atomic<uint64_t> total_wire_bytes{0};
-  std::atomic<uint64_t> total_disk_bytes{0};
   std::atomic<unsigned> succeeded_or_cached{0};
   std::atomic<unsigned> newly_downloaded{0};
   std::atomic<unsigned> retry_attempt{0};
@@ -810,11 +808,9 @@ XCThermWidget::FinishDownload()
   const double span_secs = std::chrono::duration<double>(
     std::chrono::steady_clock::now() - job->started_at).count();
   const double wire_mb = (double)job->total_wire_bytes.load() / (1024.0 * 1024.0);
-  const double disk_mb = (double)job->total_disk_bytes.load() / (1024.0 * 1024.0);
   const double speed_mbs = span_secs > 0 ? wire_mb / span_secs : 0.0;
 
   row_info.status = LayerDownloadInfo::DONE;
-  row_info.size_mb = disk_mb;
   row_info.wire_mb = wire_mb;
   row_info.speed_mbs = speed_mbs;
   row_info.span_hours = ok;
@@ -1010,7 +1006,6 @@ XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
         if (ok) {
           /* Got bytes — commit + move on to next offset. */
           job->total_wire_bytes.fetch_add((uint64_t)wire_bytes);
-          job->total_disk_bytes.fetch_add((uint64_t)geojson.size());
           job->succeeded_or_cached.fetch_add(1);
           job->newly_downloaded.fetch_add(1);
 
@@ -1151,7 +1146,6 @@ XCThermWidget::RehydrateRowsFromCache() noexcept
     row.future_hours = summary.future_hours;
     row.new_downloads = 0;
     row.wire_mb = 0.0;
-    row.size_mb = 0.0;
     row.speed_mbs = 0.0;
     row.pending_index = 0;
     row.pending_total = 0;

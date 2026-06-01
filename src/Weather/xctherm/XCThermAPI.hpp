@@ -89,8 +89,6 @@ public:
                       const std::string &password) noexcept;
   void SetModel(const std::string &model) noexcept;
 
-  const std::string &GetModel() const noexcept { return model; }
-
   /**
    * Fetch and parse index.json for the current model.
    * Populates available_parameters.
@@ -256,7 +254,6 @@ public:
    */
   struct LayerCacheSummary {
     std::vector<unsigned> hours;          ///< sorted cached UTC hours
-    int64_t earliest_downloaded_at = 0;   ///< oldest write time (unix s)
     int64_t latest_downloaded_at = 0;     ///< newest write time (unix s)
     std::string latest_run_date;          ///< run_date of the newest slice
     std::string latest_run_hour;          ///< run_hour of the newest slice

@@ -35,7 +35,6 @@ public:
    */
   bool ForceReauthenticate() noexcept;
 
-  const std::string &GetJWTToken() const noexcept { return jwt_token; }
   bool HasValidToken() const noexcept;
 
   /**

@@ -674,9 +674,6 @@ XCThermAPI::GetCachedLayerSummary(const std::string &parameter) const noexcept
     out.hours.push_back(kv.first);
     const auto &s = kv.second;
     if (s.downloaded_at != 0) {
-      if (out.earliest_downloaded_at == 0 ||
-          s.downloaded_at < out.earliest_downloaded_at)
-        out.earliest_downloaded_at = s.downloaded_at;
       if (s.downloaded_at > out.latest_downloaded_at) {
         out.latest_downloaded_at = s.downloaded_at;
         /* Track the run identity of the most recently written slice
