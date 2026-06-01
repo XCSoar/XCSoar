@@ -87,6 +87,20 @@ TestTaskSave()
   ok1(task_loaded.get()->GetTaskPoint(0).GetWaypoint() == *wp1);
   ok1(task_loaded.get()->GetTaskPoint(1).GetWaypoint() == *wp2);
   ok1(task_loaded.get()->GetTaskPoint(2).GetWaypoint() == *wp3);
+
+  /* Round-trip .tsk: cylinder radii and waypoint identity (#1346). */
+  const auto &z0 = task_loaded->GetTaskPoint(0).GetObservationZone();
+  const auto &z1 = task_loaded->GetTaskPoint(1).GetObservationZone();
+  const auto &z2 = task_loaded->GetTaskPoint(2).GetObservationZone();
+  const auto *cyl0 = dynamic_cast<const CylinderZone *>(&z0);
+  const auto *cyl1 = dynamic_cast<const CylinderZone *>(&z1);
+  const auto *cyl2 = dynamic_cast<const CylinderZone *>(&z2);
+  ok1(cyl0 != nullptr);
+  ok1(cyl1 != nullptr);
+  ok1(cyl2 != nullptr);
+  ok1(equals(cyl0->GetRadius(), 500.));
+  ok1(equals(cyl1->GetRadius(), 10000.));
+  ok1(equals(cyl2->GetRadius(), 500.));
 }
 
 static void
@@ -99,7 +113,7 @@ int main()
 {
   Directory::Create(Path{"output/results"});
 
-  plan_tests(10);
+  plan_tests(16);
   task_behaviour.SetDefaults();
   ordered_task_settings.SetDefaults();
   TestAll();
