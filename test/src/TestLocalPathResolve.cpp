@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "LocalPath.hpp"
 #include "Repository/FileType.hpp"
 #include "io/FileOutputStream.hxx"
@@ -66,12 +67,19 @@ TestResolveRepositoryDataPath()
   SetSingleDataPath(Path(template_path));
 
   const auto in_cache = CacheDataSavePath("repository");
+  const auto in_data_cache =
+    LocalPath(AllocatedPath::Build(Path("cache"), Path("repository")));
   const auto in_root = LocalPath("repository");
 
   TouchFile(in_cache);
   ok1(ResolveRepositoryDataPath("repository") == in_cache);
 
   File::Delete(in_cache);
+  MakeLocalPath(Path("cache"));
+  TouchFile(in_data_cache);
+  ok1(ResolveRepositoryDataPath("repository") == in_data_cache);
+
+  File::Delete(in_data_cache);
   TouchFile(in_root);
   ok1(ResolveRepositoryDataPath("repository") == in_root);
 
@@ -91,12 +99,19 @@ TestResolveCacheDataPath()
   SetSingleDataPath(Path(template_path));
 
   const auto in_cache = CacheDataSavePath("notams.json");
+  const auto in_data_cache =
+    LocalPath(AllocatedPath::Build(Path("cache"), Path("notams.json")));
   const auto in_root = LocalPath("notams.json");
 
   TouchFile(in_cache);
   ok1(ResolveCacheDataPath("notams.json") == in_cache);
 
   File::Delete(in_cache);
+  MakeLocalPath(Path("cache"));
+  TouchFile(in_data_cache);
+  ok1(ResolveCacheDataPath("notams.json") == in_data_cache);
+
+  File::Delete(in_data_cache);
   TouchFile(in_root);
   ok1(ResolveCacheDataPath("notams.json") == in_root);
 }
@@ -140,6 +155,21 @@ TestDefaultTaskPaths()
 }
 
 static void
+TestTypedDataSavePathCreatesNestedDirs()
+{
+  char template_path[] = "/tmp/xcsoar-typed-save-XXXXXX";
+  ok1(mkdtemp(template_path) != nullptr);
+  SetSingleDataPath(Path(template_path));
+
+  const auto plane_path = TypedDataSavePath(FileType::PLANE, "plane.xcp");
+  ok1(Directory::Exists(plane_path.GetParent()));
+
+  const auto details_path =
+    TypedDataSavePath(FileType::WAYPOINTDETAILS, "notes.txt");
+  ok1(Directory::Exists(details_path.GetParent()));
+}
+
+static void
 TestRepositoryDownloadRelativePath()
 {
   const auto relative = RepositoryDownloadRelativePath("repository");
@@ -150,13 +180,14 @@ TestRepositoryDownloadRelativePath()
 int
 main()
 {
-  plan_tests(34);
+  plan_tests(39);
   TestLayoutSubdirForFilename();
   TestResolveTypedDataFilePath();
   TestResolveRepositoryDataPath();
   TestResolveCacheDataPath();
   TestResolveLogsDataPath();
   TestDefaultTaskPaths();
+  TestTypedDataSavePathCreatesNestedDirs();
   TestRepositoryDownloadRelativePath();
   return exit_status();
 }

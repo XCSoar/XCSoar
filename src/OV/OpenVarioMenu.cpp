@@ -23,6 +23,7 @@
 #include "lib/dbus/Connection.hxx"
 #include "lib/dbus/ScopeMatch.hxx"
 #include "lib/dbus/Systemd.hxx"
+#include "DataFilePath.hpp"
 #include "system/Process.hpp"
 #include "io/FileLineReader.hpp"
 #include "util/PrintException.hxx"

@@ -1,6 +1,7 @@
 # Build rules for the profile library
 
 PROFILE_SOURCES = \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/Profile/File.cpp \
 	$(SRC)/Profile/Current.cpp \
 	$(SRC)/Profile/Map.cpp \
@@ -8,7 +9,8 @@ PROFILE_SOURCES = \
 	$(SRC)/Profile/NumericValue.cpp \
 	$(SRC)/Profile/PathValue.cpp \
 	$(SRC)/Profile/GeoValue.cpp \
-	$(SRC)/Profile/ProfileMap.cpp
+	$(SRC)/Profile/ProfileMap.cpp \
+	$(SRC)/Repository/FileType.cpp
 
 PROFILE_DEPENDS = FMT
 

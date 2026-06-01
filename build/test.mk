@@ -225,12 +225,14 @@ $(eval $(call link-program,TestEDL,TEST_EDL))
 
 TEST_NOTAM_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/NOTAM/Client.cpp \
 	$(SRC)/NOTAM/Delta.cpp \
 	$(SRC)/NOTAM/NOTAMCache.cpp \
 	$(SRC)/NOTAM/Filter.cpp \
+	$(SRC)/Repository/FileType.cpp \
 	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -741,6 +743,7 @@ $(eval $(call link-program,TestFileType,TEST_FILE_TYPE))
 
 TEST_DATA_LAYOUT_MIGRATION_SOURCES = \
 	$(SRC)/DataLayoutMigration.cpp \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/PathValue.cpp \
@@ -757,6 +760,7 @@ TEST_DATA_LAYOUT_MIGRATION_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,TestDataLayoutMigration,TEST_DATA_LAYOUT_MIGRATION))
 
 TEST_LOCAL_PATH_RESOLVE_SOURCES = \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/system/FileUtil.cpp \
@@ -767,6 +771,14 @@ TEST_LOCAL_PATH_RESOLVE_SOURCES = \
 	$(TEST_SRC_DIR)/TestLocalPathResolve.cpp
 TEST_LOCAL_PATH_RESOLVE_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestLocalPathResolve,TEST_LOCAL_PATH_RESOLVE))
+
+TEST_TAR_ARCHIVE_SOURCES = \
+	$(SRC)/io/MemoryReader.cxx \
+	$(SRC)/io/TarArchive.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestTarArchive.cpp
+TEST_TAR_ARCHIVE_DEPENDS = IO UTIL
+$(eval $(call link-program,TestTarArchive,TEST_TAR_ARCHIVE))
 TEST_GEO_POINT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGeoPoint.cpp
@@ -881,6 +893,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/TrafficDatabases.cpp \
@@ -903,6 +916,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/TransponderMode.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(SRC)/Repository/FileType.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(SRC)/Engine/GlideSolvers/GlidePolar.cpp \
@@ -1901,6 +1915,7 @@ $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 
 RUN_MAP_WINDOW_SOURCES = \
 	$(CONTEST_SRC_DIR)/Settings.cpp \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Engine/Trace/Point.cpp \
 	$(SRC)/Engine/Trace/Trace.cpp \
@@ -1911,6 +1926,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/MapFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
+	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/Friends.cpp \
@@ -1985,6 +2001,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \
 	$(SRC)/Profile/TaskProfile.cpp \
@@ -2407,6 +2424,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/Airspace/ActivePredicate.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
@@ -2476,6 +2494,8 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/DataFilePath.cpp \
+	$(SRC)/LocalPath.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceGlue.cpp \

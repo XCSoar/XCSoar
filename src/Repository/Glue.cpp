@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "Glue.hpp"
 #include "Parser.hpp"
 #include "net/http/Features.hpp"
@@ -8,7 +9,6 @@
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
 #include "io/FileLineReader.hpp"
-#include "LocalPath.hpp"
 
 #include "util/StringFormat.hpp"
 #include "util/StringCompare.hxx"

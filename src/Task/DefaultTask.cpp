@@ -2,8 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "DefaultTask.hpp"
+#include "DataFilePath.hpp"
 #include "LoadFile.hpp"
-#include "LocalPath.hpp"
 #include "Repository/FileType.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "system/Path.hpp"

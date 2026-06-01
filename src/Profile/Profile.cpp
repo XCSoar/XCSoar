@@ -107,27 +107,3 @@ Profile::SetFiles(Path override_path) noexcept
   // Set the default profile file
   startProfileFile = BuildProfilePath(Path(XCSPROFILE));
 }
-
-AllocatedPath
-Profile::GetPath(std::string_view key) noexcept
-{
-  return map.GetPath(key);
-}
-
-std::vector<AllocatedPath>
-Profile::GetMultiplePaths(std::string_view key, const char *patterns)
-{
-  return map.GetMultiplePaths(key, patterns);
-}
-
-bool
-Profile::GetPathIsEqual(std::string_view key, Path value) noexcept
-{
-  return map.GetPathIsEqual(key, value);
-}
-
-void
-Profile::SetPath(std::string_view key, Path value) noexcept
-{
-  map.SetPath(key, value);
-}

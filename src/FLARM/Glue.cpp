@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "Glue.hpp"
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
@@ -10,7 +11,6 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "MergeThread.hpp"
-#include "LocalPath.hpp"
 #include "Repository/FileType.hpp"
 #include "io/DataFile.hpp"
 #include "io/Reader.hxx"

@@ -59,6 +59,7 @@
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
+#include "DataFilePath.hpp"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "io/FileCache.hpp"
