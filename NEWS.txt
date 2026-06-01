@@ -28,6 +28,8 @@ Version 7.45 - not yet released
     Start reach value colour and comment reflect gate state at leg ETA
     (Too early/Can start/Too late, blue/green/red)
   - infoboxen: new Altitude IGC InfoBox (logger pressure or ISA pressure only)
+  - BigTrafficWidget: task direction arrow matches map best-cruise shape,
+    drawn as outline between range rings #2027
   - plane polar dialog: fix polar coefficient grid layout and auto-sized width
   - waypoint search: name filter matches anywhere in the long name and the
     shortname (typically the ICAO code in SeeYou .cup files), not only at
