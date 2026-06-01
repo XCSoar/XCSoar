@@ -109,9 +109,6 @@ PlaneEditWidget::UpdatePolarButton() noexcept
 void
 PlaneEditWidget::UpdateWeGlideName() noexcept
 {
-  if (!CommonInterface::GetComputerSettings().weglide.enabled)
-    return;
-
   if (plane.weglide_glider_type == 0) {
     SetText(WEGLIDE_NAME, "-");
     return;
@@ -166,15 +163,10 @@ PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
            "%.0f %s", "%.0f", 0, 300, 5,
            false, UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 
-  if (CommonInterface::GetComputerSettings().weglide.enabled) {
-    auto *row = AddInteger(_("WeGlide Type"), nullptr, "%u", "%u", 0,
-                           9999, 1, plane.weglide_glider_type, this);
-    row->SetEditCallback(EditWeGlideType);
-    AddReadOnly(_("WeGlide Aircraft"), nullptr, "");
-  } else {
-    AddDummy();
-    AddDummy();
-  }
+  auto *row = AddInteger(_("WeGlide Type"), nullptr, "%u", "%u", 0,
+                         9999, 1, plane.weglide_glider_type, this);
+  row->SetEditCallback(EditWeGlideType);
+  AddReadOnly(_("WeGlide Aircraft"), nullptr, "");
 
   UpdateCaption();
   UpdatePolarButton();
@@ -196,8 +188,7 @@ PlaneEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValueInteger(DUMP_TIME, plane.dump_time);
   changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
                        plane.max_speed);
-  if (CommonInterface::GetComputerSettings().weglide.enabled)
-    changed |= SaveValueInteger(WEGLIDE_ID, plane.weglide_glider_type);
+  changed |= SaveValueInteger(WEGLIDE_ID, plane.weglide_glider_type);
 
   _changed |= changed;
   return true;
