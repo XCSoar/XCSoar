@@ -503,7 +503,7 @@ TestPgLandingCupStyle()
   Waypoints wps;
   NullOperationEnvironment env;
   try {
-    ReadWaypointFile(Path("test/data/pg_landing.cup"), wps,
+    ReadWaypointFile(Path("test/data/wp_parser/pg_landing.cup"), wps,
                      WaypointFactory(WaypointOrigin::NONE), env);
     ok1(true);
   } catch (...) {

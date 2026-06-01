@@ -5,6 +5,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "Math/EnergyHeight.hpp"
 #include "time/FloatDuration.hxx"
 #include "time/Stamp.hpp"
 
@@ -180,6 +181,22 @@ struct AircraftState:
     flying = false;
   }
 };
+
+/**
+ * Convertible energy height for task/MacCready prediction when TAS and polar
+ * are available; otherwise navigation #AircraftState::altitude.
+ */
+[[gnu::const]]
+inline double
+GlideEnergyHeightForAircraft(const AircraftState &ac,
+                             double best_glide_true_airspeed_m_s) noexcept
+{
+  if (ac.true_airspeed > 0. && best_glide_true_airspeed_m_s > 0.)
+    return GlideConvertibleEnergyHeight(ac.altitude, ac.true_airspeed,
+                                        best_glide_true_airspeed_m_s);
+
+  return ac.altitude;
+}
 
 /**
  * Height input for MacCready / GlideState: convertible energy when available,
