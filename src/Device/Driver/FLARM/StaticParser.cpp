@@ -339,7 +339,8 @@ ParsePFLAO(NMEAInputLine &line, FlarmAlertZoneList &zones,
     return;
 
   int inside_val;
-  if (!line.ReadChecked(inside_val))
+  if (!line.ReadChecked(inside_val) ||
+      inside_val < 0 || inside_val > 1)
     return;
 
   int lat_e7;
@@ -355,7 +356,8 @@ ParsePFLAO(NMEAInputLine &line, FlarmAlertZoneList &zones,
     return;
 
   int radius_val;
-  if (!line.ReadChecked(radius_val) || radius_val < 0)
+  if (!line.ReadChecked(radius_val) ||
+      radius_val < 0 || radius_val > 2000)
     return;
 
   int bottom_val;
@@ -399,7 +401,7 @@ ParsePFLAO(NMEAInputLine &line, FlarmAlertZoneList &zones,
   }
 
   slot->alarm_level = static_cast<FlarmTraffic::AlarmType>(alarm_level_val);
-  slot->inside = inside_val != 0;
+  slot->inside = inside_val == 1;
   slot->center = GeoPoint(Angle::Degrees(double(lon_e7) * 1e-7),
                           Angle::Degrees(double(lat_e7) * 1e-7));
   slot->radius = (unsigned)radius_val;

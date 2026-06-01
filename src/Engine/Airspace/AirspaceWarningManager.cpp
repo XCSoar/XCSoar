@@ -11,6 +11,7 @@
 #include "util/PrintException.hxx"
 #include "LogFileDecl.hpp"
 
+#include <algorithm>
 #include <ranges>
 
 static constexpr double CRUISE_FILTER_FACT = 0.5;
