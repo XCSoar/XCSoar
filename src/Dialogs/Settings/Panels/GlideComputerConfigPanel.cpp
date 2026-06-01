@@ -9,6 +9,7 @@
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "util/Macros.hpp"
 
 using namespace std::chrono;
 
@@ -20,6 +21,7 @@ enum ControlIndex {
   PredictWindDrift,
   EnableNavBaroAltitude,
   AverEffTime,
+  EffAltitudeSource,
   SPACER_MODE,
   EnableExternalTriggerCruise,
   CruiseToCirclingModeSwitchThreshold,
@@ -102,6 +104,21 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
           aver_eff_list, settings_computer.average_eff_time);
   SetExpertRow(AverEffTime);
 
+  static constexpr StaticEnumChoice eff_altitude_list[] = {
+    { tealtitude, N_("TE Altitude") },
+    { navaltitude, N_("Navigation Altitude") },
+    nullptr
+  };
+  static_assert(ARRAY_SIZE(eff_altitude_list) - 1 ==
+                unsigned(EffAltitude::COUNT),
+                "eff_altitude_list must match EffAltitude::COUNT");
+
+  AddEnum(_("GR altitude source"),
+          _("Here you can decide on which altitude is used to calculate Glide Ratios. "
+              "Continuous glide ratio as vario info is always based on TE altitude."),
+          eff_altitude_list, settings_computer.eff_altitude);
+  SetExpertRow(EffAltitudeSource);
+
   AddSpacer();
   SetExpertRow(SPACER_MODE);
 
@@ -170,6 +187,9 @@ GlideComputerConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime,
                            settings_computer.average_eff_time);
+
+  changed |= SaveValueEnum(EffAltitudeSource, ProfileKeys::EffAltitudeSource,
+                           settings_computer.eff_altitude);
 
   changed |= SaveValueEnum(EnableExternalTriggerCruise,
                            ProfileKeys::SpeedCommandSwitch,

@@ -57,6 +57,7 @@ ComputerSettings::SetDefaults()
   wave.SetDefaults();
 
   average_eff_time = ae30seconds;
+  eff_altitude = navaltitude;
   set_system_time_from_gps = false;
 
 #ifdef KOBO
