@@ -51,9 +51,10 @@ if toolchain.is_windows:
         lua,
     ]
 
-    # Add SDL2 and its dependencies for OpenGL/ANGLE builds
+    # Add SDL2, sqlite3, and their dependencies for OpenGL/ANGLE builds
     if enable_sdl:
         thirdparty_libs.extend([
+            sqlite3,
             freetype,
             libpng,
             libjpeg,
