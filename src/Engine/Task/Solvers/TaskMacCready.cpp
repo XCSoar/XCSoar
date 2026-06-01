@@ -5,7 +5,6 @@
 #include "TaskSolution.hpp"
 #include "Task/Points/TaskPoint.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Math/EnergyHeight.hpp"
 
 #include <algorithm>
 
@@ -39,8 +38,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
       aircraft_predict.altitude += gr.altitude_difference;
 
     aircraft_predict.total_energy_height =
-      GlideConvertibleEnergyHeight(aircraft_predict.altitude,
-                                   aircraft_predict.true_airspeed,
+      GlideEnergyHeightForAircraft(aircraft_predict,
                                    glide_polar.GetVBestLD());
   }
 
