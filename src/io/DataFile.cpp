@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "DataFile.hpp"
+#include "DataFilePath.hpp"
 #include "FileReader.hxx"
 #include "LocalPath.hpp"
 #include "Repository/FileType.hpp"

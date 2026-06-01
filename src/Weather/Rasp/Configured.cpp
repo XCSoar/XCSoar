@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "Configured.hpp"
 #include "RaspStore.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
-#include "LocalPath.hpp"
 #include "Repository/FileType.hpp"
 
 std::shared_ptr<RaspStore>

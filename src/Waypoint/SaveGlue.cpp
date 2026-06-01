@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "WaypointGlue.hpp"
 #include "CupWriter.hpp"
 #include "LogFile.hpp"
@@ -8,7 +9,6 @@
 #include "system/Path.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"
-#include "LocalPath.hpp"
 #include "Repository/FileType.hpp"
 
 void

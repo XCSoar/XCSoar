@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "WaypointGlue.hpp"
 #include "Factory.hpp"
 #include "Language/Language.hpp"
-#include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
 #include "Profile/Profile.hpp"

@@ -1,7 +1,9 @@
 OV_MENU_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Asset.cpp \
+	$(SRC)/DataFilePath.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \

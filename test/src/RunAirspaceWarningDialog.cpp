@@ -28,8 +28,6 @@
 
 #include <memory>
 #include <stdio.h>
-void VisitDataFiles([[maybe_unused]] const char* filter,
-                    [[maybe_unused]] File::Visitor &visitor) {}
 
 InterfaceBlackboard CommonInterface::Private::blackboard;
 

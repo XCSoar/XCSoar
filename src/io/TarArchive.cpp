@@ -20,6 +20,7 @@ namespace {
 
 constexpr size_t TAR_BLOCK_SIZE = 512;
 constexpr size_t COPY_BUFFER_SIZE = 262144;
+constexpr size_t TAR_NAME_SIZE = 100;
 
 using TarHeader = std::array<char, TAR_BLOCK_SIZE>;
 using TarBlock = std::array<std::byte, TAR_BLOCK_SIZE>;
@@ -107,7 +108,7 @@ WriteString(char *dest, std::string_view src, size_t max) noexcept
     return;
 
   std::memset(dest, 0, max);
-  std::memcpy(dest, src.data(), std::min(max - 1, src.size()));
+  std::memcpy(dest, src.data(), std::min(max, src.size()));
 }
 
 void
@@ -138,7 +139,7 @@ void
 WriteHeaderBlock(OutputStream &out, std::string_view name, uint64_t size)
 {
   TarHeader header{};
-  WriteString(header.data() + 0, name, 100);
+  WriteString(header.data() + 0, name, TAR_NAME_SIZE);
   WriteOctal(header.data() + 100, 8, 0644);
   WriteOctal(header.data() + 108, 8, 0);
   WriteOctal(header.data() + 116, 8, 0);
@@ -232,6 +233,9 @@ void
 TarWriter::Add(std::string_view name, Reader &in, uint64_t size,
                const std::function<void(uint64_t)> &on_bytes)
 {
+  if (name.size() > TAR_NAME_SIZE)
+    throw std::invalid_argument("tar entry name too long");
+
   WriteHeaderBlock(output, name, size);
   CopyBytes(in, output, size, on_bytes);
   WritePaddingBytes(output, size);

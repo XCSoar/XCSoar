@@ -2,6 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "Compatibility/path.h"
+#include "Current.hpp"
+#include "Profile.hpp"
+#include "DataFilePath.hpp"
 #include "LocalPath.hpp"
 #include "Map.hpp"
 #include "system/Path.hpp"
@@ -122,4 +125,28 @@ ProfileMap::SetPath(std::string_view key, Path value) noexcept
 
     Set(key, value.c_str());
   }
+}
+
+AllocatedPath
+Profile::GetPath(std::string_view key) noexcept
+{
+  return map.GetPath(key);
+}
+
+std::vector<AllocatedPath>
+Profile::GetMultiplePaths(std::string_view key, const char *patterns)
+{
+  return map.GetMultiplePaths(key, patterns);
+}
+
+bool
+Profile::GetPathIsEqual(std::string_view key, Path value) noexcept
+{
+  return map.GetPathIsEqual(key, value);
+}
+
+void
+Profile::SetPath(std::string_view key, Path value) noexcept
+{
+  map.SetPath(key, value);
 }
