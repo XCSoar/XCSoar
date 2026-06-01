@@ -64,7 +64,8 @@ struct VisibleWaypoint {
   void CalculateReachabilityDirect(const MoreData &basic,
                                    const SpeedVector &wind,
                                    const MacCready &mac_cready,
-                                   const TaskBehaviour &task_behaviour) noexcept {
+                                   const TaskBehaviour &task_behaviour,
+                                   double best_glide_tas) noexcept {
     assert(basic.location_available);
     assert(basic.NavAltitudeAvailable());
 
@@ -74,7 +75,8 @@ struct VisibleWaypoint {
     const auto elevation = waypoint->elevation +
       task_behaviour.safety_height_arrival;
     const GlideState state(GeoVector(basic.location, waypoint->location),
-                           elevation, basic.nav_altitude, wind);
+                           elevation,
+                           GlideEnergyHeight(basic, best_glide_tas), wind);
 
     const GlideResult result = mac_cready.SolveStraight(state);
     if (!result.IsOk())
@@ -137,6 +139,7 @@ class WaypointVisitorMap final
 
   char altitude_unit[4];
   bool task_valid;
+  double best_glide_tas;
 
   /**
    * A list of waypoints that are going to be drawn.  This list is
@@ -163,6 +166,7 @@ public:
      settings(_settings), look(_look), task_behaviour(_task_behaviour),
      basic(_basic),
      task_valid(false),
+     best_glide_tas(0.),
      icon_renderer(settings, look,
                    _canvas,
                    projection.GetMapScale() > 4000,
@@ -234,7 +238,8 @@ protected:
 
       const auto safety_height = task_behaviour.safety_height_arrival;
       const auto target_altitude = way_point.elevation + safety_height;
-      const auto delta_h = basic.nav_altitude - target_altitude;
+      const auto delta_h =
+        GlideEnergyHeight(basic, best_glide_tas) - target_altitude;
       if (delta_h <= 0)
         /* no L/D if below waypoint */
         return;
@@ -418,6 +423,7 @@ public:
       task_behaviour.route_planner.reach_polar_mode == RoutePlannerConfig::Polar::TASK
       ? polar_settings.glide_polar_task
       : calculated.glide_polar_safety;
+    best_glide_tas = glide_polar.IsValid() ? glide_polar.GetVBestLD() : 0.;
     const MacCready mac_cready(task_behaviour.glide, glide_polar);
 
     for (VisibleWaypoint &vwp : waypoints) {
@@ -425,7 +431,8 @@ public:
 
       if (way_point.IsLandable() || way_point.flags.watched)
         vwp.CalculateReachabilityDirect(basic, calculated.GetWindOrZero(),
-                                        mac_cready, task_behaviour);
+                                        mac_cready, task_behaviour,
+                                        best_glide_tas);
     }
   }
 
@@ -433,6 +440,12 @@ public:
                  const PolarSettings &polar_settings,
                  const TaskBehaviour &task_behaviour,
                  const DerivedInfo &calculated) noexcept {
+    const GlidePolar &glide_polar =
+      task_behaviour.route_planner.reach_polar_mode == RoutePlannerConfig::Polar::TASK
+      ? polar_settings.glide_polar_task
+      : calculated.glide_polar_safety;
+    best_glide_tas = glide_polar.IsValid() ? glide_polar.GetVBestLD() : 0.;
+
     if (route_planner != nullptr && !route_planner->IsTerrainReachEmpty())
       CalculateRoute(*route_planner);
     else
