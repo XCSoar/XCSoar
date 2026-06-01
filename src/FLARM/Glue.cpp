@@ -11,6 +11,7 @@
 #include "BackendComponents.hpp"
 #include "MergeThread.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "io/DataFile.hpp"
 #include "io/Reader.hxx"
 #include "io/BufferedReader.hxx"
@@ -117,7 +118,8 @@ SaveFlarmColors() noexcept
 static void
 SaveSecondary(FlarmNameDatabase &flarm_names) noexcept
 try {
-  FileOutputStream fos(LocalPath("xcsoar-flarm.txt"));
+  FileOutputStream fos(
+    TypedDataSavePath(FileType::FLARMDB, "xcsoar-flarm.txt"));
   BufferedOutputStream bos(fos);
   SaveFlarmNameFile(bos, flarm_names);
   bos.Flush();
@@ -129,7 +131,8 @@ try {
 static void
 SaveMessaging(FlarmMessagingDatabase &flarm_messages) noexcept
 try {
-  FileOutputStream fos(LocalPath("flarm-msg-data.csv"));
+  FileOutputStream fos(
+    TypedDataSavePath(FileType::FLARMDB, "flarm-msg-data.csv"));
   BufferedOutputStream bos(fos);
   SaveFlarmMessagingFile(bos, flarm_messages);
   bos.Flush();

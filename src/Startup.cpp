@@ -666,7 +666,8 @@ Startup(UI::Display &display)
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     backend_components->flight_logger = std::make_unique<GlueFlightLogger>(live_blackboard);
-    backend_components->flight_logger->SetPath(LocalPath("flights.log"));
+    backend_components->flight_logger->SetPath(
+      LogsDataSavePath("flights.log"));
   }
 
   if (computer_settings.logger.enable_nmea_logger)

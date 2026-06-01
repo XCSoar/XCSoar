@@ -26,8 +26,12 @@ struct CacheMetadata {
 
 namespace NOTAMCache {
 
-/** Returns the path to the NOTAM cache file. */
+/** Canonical path for writing the NOTAM cache file. */
 AllocatedPath GetFilePath();
+
+/** Resolve the NOTAM cache file for reading (cache/ or legacy root). */
+[[gnu::pure]]
+AllocatedPath ResolveFilePath();
 
 /**
  * Read and parse the NOTAM cache file into a JSON value using
