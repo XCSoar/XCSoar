@@ -1,5 +1,5 @@
-; XCSoar NSIS Installer Script for WIN64OPENGL
-; This script creates a Windows installer for the 64-bit ANGLE (OpenGL ES) build
+; XCSoar NSIS Installer Script for WIN64OPENGL and WIN32OPENGL
+; This script creates a Windows installer for the ANGLE (OpenGL ES) builds
 ; Including XCSoar.exe and the required ANGLE DLLs (libEGL.dll and libGLESv2.dll)
 
 ; Product name can be overridden from command line with -DPRODUCT_NAME=name
@@ -17,9 +17,14 @@
 !define INSTALLER_LABEL "${PRODUCT_NAME}"
 !endif
 
-; Binary directory can be overridden from command line
+; Binary directory passed from the Makefile via -DBIN_DIR
 !ifndef BIN_DIR
 !define BIN_DIR "..\output\WIN64OPENGL\bin"
+!endif
+
+; Target flavor passed from the Makefile via -DTARGET_FLAVOR
+!ifndef TARGET_FLAVOR
+!define TARGET_FLAVOR "WIN64OPENGL"
 !endif
 
 !define PRODUCT_PUBLISHER "XCSoar Development Team"
@@ -34,12 +39,16 @@ Name "${INSTALLER_LABEL} ${PRODUCT_VERSION}"
 
 ; Output file can be overridden from command line
 !ifndef OUTPUT_FILE
-OutFile "..\output\WIN64OPENGL\XCSoar-Installer.exe"
+OutFile "..\output\${TARGET_FLAVOR}\XCSoar-Installer.exe"
 !else
 OutFile "${OUTPUT_FILE}"
 !endif
 
+!if "${TARGET_FLAVOR}" == "WIN32OPENGL"
+InstallDir "$PROGRAMFILES\XCSoar"
+!else
 InstallDir "$PROGRAMFILES64\XCSoar"
+!endif
 InstallDirRegKey HKLM "${PRODUCT_UNINST_KEY}" "InstallLocation"
 RequestExecutionLevel admin
 

@@ -3,8 +3,7 @@
 
 ifeq ($(HAVE_WIN32),y)
 
-# Only build installers for WIN64OPENGL target (can be extended later)
-ifeq ($(TARGET_FLAVOR),WIN64OPENGL)
+ifneq ($(filter WIN64OPENGL WIN32OPENGL,$(TARGET_FLAVOR)),)
 
 # Check for VERSION.txt
 ifeq ($(wildcard VERSION.txt),)
@@ -33,7 +32,7 @@ MAKENSIS ?= makensis
 NSIS_SCRIPT = $(topdir)/windows/xcsoar.nsi
 
 # Installer output file (in bin directory)
-INSTALLER_NAME = $(PRODUCT_NAME)-$(XCSOAR_VERSION)-WIN64OPENGL-Installer.exe
+INSTALLER_NAME = $(PRODUCT_NAME)-$(XCSOAR_VERSION)-$(TARGET_FLAVOR)-Installer.exe
 INSTALLER_OUTPUT = $(TARGET_BIN_DIR)/$(INSTALLER_NAME)
 
 # Dependencies: XCSoar.exe, ANGLE DLLs, and bundled fonts
@@ -52,6 +51,7 @@ $(INSTALLER_OUTPUT): $(INSTALLER_DEPS) $(NSIS_SCRIPT) | $(TARGET_BIN_DIR)/dirsta
 		-DINSTALLER_LABEL="$(INSTALLER_LABEL)" \
 		-DOUTPUT_FILE="$(abspath $@)" \
 		-DBIN_DIR="$(abspath $(TARGET_BIN_DIR))" \
+		-DTARGET_FLAVOR="$(TARGET_FLAVOR)" \
 		xcsoar.nsi
 
 # Phony target for easy invocation
@@ -59,6 +59,6 @@ installer: $(INSTALLER_OUTPUT)
 
 .PHONY: installer
 
-endif # WIN64OPENGL
+endif # WIN64OPENGL / WIN32OPENGL
 
 endif # HAVE_WIN32
