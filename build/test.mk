@@ -90,7 +90,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
-	TestLogger TestGRecord TestClimbAvCalc \
+	TestLogger TestGRecord TestClimbAvCalc TestFilteredVarioComputer \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestGeoPoint TestDiffFilter \
@@ -520,6 +520,15 @@ TEST_CLIMB_AV_CALC_SOURCES = \
 	$(TEST_SRC_DIR)/TestClimbAvCalc.cpp
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
+
+TEST_FILTERED_VARIO_COMPUTER_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Computer/FilteredVarioComputer.cpp \
+	$(ENGINE_SRC_DIR)/Util/VarioOutputFilter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFilteredVarioComputer.cpp
+TEST_FILTERED_VARIO_COMPUTER_DEPENDS = LIBNMEA GEO MATH UTIL UNITS TIME
+$(eval $(call link-program,TestFilteredVarioComputer,TEST_FILTERED_VARIO_COMPUTER))
 
 TEST_PROJECTION_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
