@@ -16,7 +16,6 @@
 #include "Form/Edit.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Math/Util.hpp"
@@ -40,21 +39,10 @@ private:
 void
 AltitudeSetupPanel::OnModified(DataField &_df) noexcept
 {
-  ComputerSettings &settings =
-    CommonInterface::SetComputerSettings();
-
   DataField *qnh_df = qnh_control ? qnh_control->GetDataField() : nullptr;
   if (qnh_df && &_df == qnh_df) {
     DataFieldFloat &df = (DataFieldFloat &)_df;
-    settings.pressure = Units::FromUserPressure(df.GetValue());
-    settings.pressure_available.Update(CommonInterface::Basic().clock);
-    InfoBoxManager::SetDirty();
-    InfoBoxManager::ProcessTimer();
-
-    if (backend_components && backend_components->devices) {
-      MessageOperationEnvironment env;
-      backend_components->devices->PutQNH(settings.pressure, env);
-    }
+    ActionInterface::SetQNH(Units::FromUserPressure(df.GetValue()), true);
     return;
   }
 
