@@ -73,15 +73,15 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Parse fmt library version and checksum from libs.py",
+      "description": "Parse fmt library version, checksum, and unpack metadata from libs.py",
       "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
       "matchStrings": [
-        "(?s)https://github\\.com/fmtlib/fmt/archive/(?<currentValue>\\d+(?:\\.\\d+)+)\\.tar\\.gz.*?\"(?<currentDigest>[a-f0-9]{64})\""
+        "(?s)https://github\\.com/fmtlib/fmt/archive/(?<currentValue>\\d+(?:\\.\\d+)+)\\.tar\\.gz\",\\n    \"(?<currentDigest>[a-f0-9]{64})\".*?version=\"\\d+(?:\\.\\d+)+\",\\n    base=\"fmt-\\d+(?:\\.\\d+)+\","
       ],
-      "datasourceTemplate": "github-release-attachments",
+      "datasourceTemplate": "github-releases",
       "depNameTemplate": "fmtlib/fmt",
       "packageNameTemplate": "fmtlib/fmt",
-      "autoReplaceStringTemplate": "https://github.com/fmtlib/fmt/archive/{{{newValue}}}.tar.gz\",\n    \"{{{newDigest}}}\"",
+      "autoReplaceStringTemplate": "https://github.com/fmtlib/fmt/archive/{{{newValue}}}.tar.gz\",\n    \"{{{newDigest}}}\",\n    \"lib/libfmt.a\",\n    [\n        \"-DBUILD_SHARED_LIBS=OFF\",\n        \"-DFMT_DOC=OFF\",\n        \"-DFMT_TEST=OFF\",\n    ],\n    name=\"fmt\",\n    version=\"{{{newValue}}}\",\n    base=\"fmt-{{{newValue}}}\"",
       "versioningTemplate": "semver"
     },
     {
