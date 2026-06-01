@@ -20,6 +20,12 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
     ? info.nav_altitude
     : 0.;
 
+  const double v_best_glide =
+    calculated.glide_polar_safety.IsValid()
+    ? calculated.glide_polar_safety.GetVBestLD()
+    : 0.;
+  aircraft.total_energy_height = GlideEnergyHeight(info, v_best_glide);
+
   aircraft.working_band_fraction = calculated.common_stats.height_fraction_working;
 
   aircraft.altitude_agl =
