@@ -340,7 +340,7 @@ ShowLogbook() noexcept
   FlightListRenderer renderer{look.text_font, look.bold_font};
 
   try {
-    FileLineReaderA file(LocalPath("flights.log"));
+    FileLineReaderA file(ResolveLogsDataPath("flights.log"));
 
     FlightParser parser{file};
     FlightInfo flight;

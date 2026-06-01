@@ -18,6 +18,6 @@ ProtectedTaskManager::TaskSave(Path path)
 void
 ProtectedTaskManager::TaskSaveDefault()
 {
-  const auto path = LocalPath(default_task_path);
+  const auto path = GetDefaultTaskSavePath();
   TaskSave(path);
 }

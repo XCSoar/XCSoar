@@ -36,11 +36,11 @@ OpenLog()
     initialised = true;
 
     /* delete the obsolete log file */
-    File::Delete(LocalPath("xcsoar-startup.log"));
+    File::Delete(ResolveLogsDataPath("xcsoar-startup.log"));
 
-    path = LocalPath("xcsoar.log");
+    path = LogsDataSavePath("xcsoar.log");
 
-    File::Replace(path, LocalPath("xcsoar-old.log"));
+    File::Replace(path, ResolveLogsDataPath("xcsoar-old.log"));
 
 #ifdef ANDROID
     /* redirect stdout/stderr to xcsoar-startup.log on Android so we
