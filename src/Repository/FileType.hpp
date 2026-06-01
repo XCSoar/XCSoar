@@ -53,6 +53,24 @@ bool FilenameMatchesFileType(const char *filename,
                              FileType file_type) noexcept;
 
 /**
+ * Classify a filename for typed layout placement.  Unlike
+ * DetectFileTypeByFilename(), this only returns types with an actual
+ * managed subdirectory.
+ */
+[[gnu::pure]]
+FileType ClassifyDataFilename(const char *filename) noexcept;
+
+/**
+ * Return the layout subdirectory for a filename, or nullptr if this
+ * filename should remain in the data root.
+ */
+[[gnu::pure]]
+AllocatedPath GetLayoutSubdirForFilename(const char *filename) noexcept;
+
+[[gnu::pure]]
+bool IsCacheLayoutFilename(const char *filename) noexcept;
+
+/**
  * Detect the unique #FileType for a filename.
  *
  * Exact-match patterns win.  If multiple wildcard-only file types
