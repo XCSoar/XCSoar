@@ -98,7 +98,7 @@ Glue::OnDownloadFinished(const DownloadNotification &notification) noexcept
 
   switch (notification.job) {
   case DownloadJob::OVERLAY:
-    if (notification.outcome == DownloadOutcome::ERROR) {
+    if (notification.outcome == DownloadOutcome::DOWNLOAD_ERROR) {
       LogError(notification.error, "EDL overlay download failed");
       SetErrorStatus();
     } else if (notification.overlay_path) {
@@ -114,7 +114,7 @@ Glue::OnDownloadFinished(const DownloadNotification &notification) noexcept
     break;
 
   case DownloadJob::PRECACHE_DAY:
-    if (notification.outcome == DownloadOutcome::ERROR) {
+    if (notification.outcome == DownloadOutcome::DOWNLOAD_ERROR) {
       LogError(notification.error, "EDL precache failed");
       SetErrorStatus();
     } else {
