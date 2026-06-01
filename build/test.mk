@@ -94,7 +94,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestGeoPoint TestDiffFilter \
-	TestFileUtil TestFileType TestRepository TestPath TestPolars TestCSVLine TestGlidePolar \
+	TestFileUtil TestFileType TestDataLayoutMigration TestLocalPathResolve TestRepository TestPath TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
@@ -689,6 +689,25 @@ TEST_FILE_TYPE_SOURCES = \
 	$(TEST_SRC_DIR)/TestFileType.cpp
 TEST_FILE_TYPE_DEPENDS = UTIL
 $(eval $(call link-program,TestFileType,TEST_FILE_TYPE))
+
+TEST_DATA_LAYOUT_MIGRATION_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/DataLayoutMigration.cpp \
+	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Repository/FileType.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/TestDataLayoutMigration.cpp
+TEST_DATA_LAYOUT_MIGRATION_DEPENDS = PROFILE IO OS UTIL
+$(eval $(call link-program,TestDataLayoutMigration,TEST_DATA_LAYOUT_MIGRATION))
+
+TEST_LOCAL_PATH_RESOLVE_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Repository/FileType.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLocalPathResolve.cpp
+TEST_LOCAL_PATH_RESOLVE_DEPENDS = IO OS UTIL
+$(eval $(call link-program,TestLocalPathResolve,TEST_LOCAL_PATH_RESOLVE))
 
 TEST_REPOSITORY_SOURCES = \
 	$(SRC)/Repository/Parser.cpp \
