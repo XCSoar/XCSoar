@@ -59,6 +59,7 @@
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
+#include "DataLayoutMigration.hpp"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "io/FileCache.hpp"
@@ -391,6 +392,8 @@ Startup(UI::Display &display)
   if (!LoadProfile())
     return false;
 
+  MigrateDataLayoutToSubdirs();
+
   operation.SetText(_("Initialising"));
 
   /* create XCSoarData on the first start */
@@ -656,7 +659,7 @@ Startup(UI::Display &display)
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     backend_components->flight_logger = std::make_unique<GlueFlightLogger>(live_blackboard);
-    backend_components->flight_logger->SetPath(LocalPath("flights.log"));
+    backend_components->flight_logger->SetPath(LogsDataSavePath("flights.log"));
   }
 
   if (computer_settings.logger.enable_nmea_logger)

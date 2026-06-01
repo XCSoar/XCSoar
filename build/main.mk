@@ -435,6 +435,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Language/LanguageGlue.cpp \
 	$(SRC)/Language/Table.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/DataLayoutMigration.cpp \
 	$(SRC)/UIActions.cpp \
 	$(SRC)/Interface.cpp \
 	$(SRC)/ActionInterface.cpp \
