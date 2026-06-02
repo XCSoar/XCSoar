@@ -15,6 +15,7 @@
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Asset.hpp"
+#include "Look/Colors.hpp"
 #include "system/Path.hpp"
 #include "system/RunFile.hpp"
 
@@ -392,24 +393,67 @@ DrawToggleSwitch(Canvas &canvas, const PixelRect &rc,
   const int track_top = rc.top + (rc.GetHeight() - track_h) / 2;
   const int track_bottom = track_top + track_h;
 
-  Color track_color;
+  /* Choose track and thumb colors based on display capabilities.
+     IsDithered() = pure B&W Kobo: use black/white with outlines for contrast.
+     !HasColors() = greyscale: use dark/light grey.
+     Otherwise: use established XCSoar theme colors. */
+  Color track_color, thumb_color, label_color;
+  bool draw_track_outline = false;
+
   if (!enabled) {
-    track_color = Color(180, 180, 180);
-  } else if (checked) {
-    track_color = pressed ? Color(0, 160, 70) : Color(52, 199, 89);
+    track_color = COLOR_LIGHT_GRAY;
+    thumb_color = COLOR_WHITE;
+    label_color = COLOR_GRAY;
+    draw_track_outline = IsDithered();
+  } else if (IsDithered()) {
+    /* B&W e-ink: filled black = on, white with border = off */
+    if (checked) {
+      track_color = pressed ? COLOR_GRAY : COLOR_BLACK;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_WHITE;
+    } else {
+      track_color = COLOR_WHITE;
+      thumb_color = COLOR_BLACK;
+      label_color = COLOR_BLACK;
+      draw_track_outline = true;
+    }
+  } else if (!HasColors()) {
+    /* Greyscale display */
+    if (checked) {
+      track_color = pressed ? COLOR_GRAY : COLOR_DARK_GRAY;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_WHITE;
+    } else {
+      track_color = pressed ? COLOR_DARK_GRAY : COLOR_LIGHT_GRAY;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_DARK_GRAY;
+    }
   } else {
-    track_color = pressed ? Color(160, 160, 160) : Color(209, 209, 214);
+    /* Color display: use XCSoar theme color for checked */
+    if (checked) {
+      track_color = pressed ? DarkColor(COLOR_XCSOAR) : COLOR_XCSOAR;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_WHITE;
+    } else {
+      track_color = pressed ? COLOR_GRAY : COLOR_LIGHT_GRAY;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_DARK_GRAY;
+    }
   }
 
   canvas.Select(Brush(track_color));
-  canvas.SelectNullPen();
+  if (draw_track_outline)
+    canvas.Select(Pen(Layout::ScaleFinePenWidth(1), COLOR_BLACK));
+  else
+    canvas.SelectNullPen();
   /* fully pill-shaped: corner radius = half height */
   canvas.DrawRoundRectangle({track_left, track_top, track_right, track_bottom},
                             {track_h, track_h});
 
   if (focused && !pressed) {
     canvas.SelectHollowBrush();
-    canvas.Select(Pen(Layout::ScaleFinePenWidth(2), Color(0, 122, 255)));
+    canvas.Select(Pen(Layout::ScaleFinePenWidth(2),
+                      HasColors() ? COLOR_XCSOAR : COLOR_BLACK));
     canvas.DrawRoundRectangle({track_left - 2, track_top - 2,
                                track_right + 2, track_bottom + 2},
                               {track_h + 4, track_h + 4});
@@ -425,7 +469,7 @@ DrawToggleSwitch(Canvas &canvas, const PixelRect &rc,
   const int thumb_cy = track_top + track_h / 2;
 
   /* ON / OFF label in the empty side of the track */
-  canvas.SetTextColor(COLOR_WHITE);
+  canvas.SetTextColor(label_color);
   canvas.SetBackgroundTransparent();
   {
     const char *label = checked ? _("On") : _("Off");
@@ -445,8 +489,11 @@ DrawToggleSwitch(Canvas &canvas, const PixelRect &rc,
   }
 
   /* thumb drawn last so it sits on top of the label */
-  canvas.Select(Brush(COLOR_WHITE));
-  canvas.SelectNullPen();
+  canvas.Select(Brush(thumb_color));
+  if (IsDithered() && !checked)
+    canvas.Select(Pen(Layout::ScaleFinePenWidth(1), COLOR_BLACK));
+  else
+    canvas.SelectNullPen();
   canvas.DrawCircle({thumb_cx, thumb_cy}, thumb_r);
 }
 
