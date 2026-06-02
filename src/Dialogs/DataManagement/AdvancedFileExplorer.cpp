@@ -19,6 +19,7 @@
 #include "io/CopyFile.hxx"
 #include "io/FileTransaction.hpp"
 #include "system/FileUtil.hpp"
+#include "Storage/DirEntry.hpp"
 #include "Formatter/FileMetadataFormatter.hpp"
 #include "util/StaticString.hxx"
 #include "util/TruncateString.hpp"
@@ -56,29 +57,18 @@ struct AdvancedExplorerContainer : public PropertyWidgetContainer {
         }
       }
 
-      // Enumerate local filesystem
-      struct Visitor final : public Directory::DirEntryVisitor {
-        std::vector<FileMultiSelectWidgetItem> &out;
-        std::vector<Path> files;
-        Path current;
-
-        Visitor(std::vector<FileMultiSelectWidgetItem> &o, Path c) noexcept
-          : out(o), current(c) {}
-
-        void Visit(Path /*full*/, Path filename, bool is_dir) noexcept override {
-          FileMultiSelectWidgetItem it;
-          it.path = AllocatedPath::Build(current, filename.c_str());
-          it.is_dir = is_dir;
-          out.emplace_back(std::move(it));
-          if (!is_dir)
-            files.emplace_back(out.back().path);
-        }
-      };
-
       try {
-        Visitor v(out, Path(current_path));
-        Directory::VisitDirectoriesAndFiles(Path(current_path), v, false);
-        file_metadata.Build(v.files);
+        const Path dir = Path(current_path);
+        const auto dir_entries = ListDirEntries(dir);
+
+        for (const auto &de : dir_entries) {
+          FileMultiSelectWidgetItem it;
+          it.path = AllocatedPath::Build(dir, de.name.c_str());
+          it.is_dir = de.is_directory;
+          out.emplace_back(std::move(it));
+        }
+
+        file_metadata.Build(dir_entries, dir);
       } catch (...) {
       }
 
@@ -172,27 +162,17 @@ struct DirectoryPickerContainer final : public PropertyWidgetContainer {
         }
       }
 
-      struct Visitor final : Directory::DirEntryVisitor {
-        std::vector<FileMultiSelectWidgetItem> &out;
-        Path current;
-
-        Visitor(std::vector<FileMultiSelectWidgetItem> &_out, Path _current) noexcept
-          : out(_out), current(_current) {}
-
-        void Visit(Path /*full*/, Path filename, bool is_dir) noexcept override {
-          if (!is_dir)
-            return;
+      try {
+        const Path dir = Path(current_path);
+        for (const auto &de : ListDirEntries(dir)) {
+          if (!de.is_directory)
+            continue;
 
           FileMultiSelectWidgetItem it;
-          it.path = AllocatedPath::Build(current, filename.c_str());
+          it.path = AllocatedPath::Build(dir, de.name.c_str());
           it.is_dir = true;
           out.emplace_back(std::move(it));
         }
-      };
-
-      try {
-        Visitor v(out, Path(current_path));
-        Directory::VisitDirectoriesAndFiles(Path(current_path), v, false);
       } catch (...) {
       }
 

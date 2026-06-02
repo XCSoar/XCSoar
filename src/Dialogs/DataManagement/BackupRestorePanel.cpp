@@ -26,6 +26,7 @@
 #include "fmt/format.h"
 #include "Storage/StorageUtil.hpp"
 #include "Storage/StorageDevice.hpp"
+#include "util/StringCompare.hxx"
 
 #include <algorithm>
 #include <memory>
@@ -38,29 +39,22 @@
 static constexpr std::string_view kExcludedPaths[] = {
   "*.log",
   "*.tar",
-  "repository",
   "cache/",
 };
 
 static bool
 IsExcludedPath(std::string_view path) noexcept
 {
-  for (const auto pattern : kExcludedPaths)
-    if (pattern.starts_with("*.")) {
-      // extension glob: matches any path ending with the suffix
-      if (path.size() >= pattern.size() - 1 &&
-          path.ends_with(pattern.substr(1)))
-        return true;
-    } else if (pattern.ends_with('/')) {
-      // directory: matches the name itself and all children
+  for (const auto pattern : kExcludedPaths) {
+    if (pattern.ends_with('/')) {
+      /* Directory: matches the name itself and all children. */
       const auto dir = pattern.substr(0, pattern.size() - 1);
       if (path == dir || path.starts_with(pattern))
         return true;
-    } else {
-      // exact match
-      if (path == pattern)
-        return true;
+    } else if (WildcardMatchIgnoreCase(pattern.data(), path.data())) {
+      return true;
     }
+  }
   return false;
 }
 
