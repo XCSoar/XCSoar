@@ -193,17 +193,44 @@ public:
     return HasTouchScreen() ? row_h * 3 : row_h * 2;
   }
 
+  [[gnu::pure]]
+  static int CursorBarHeight() noexcept {
+    return HasTouchScreen() ? 110 : 80;
+  }
+
+  /**
+   * Compute child control geometry for the two-row cursor bar.
+   *
+   * MainWindow::Prepare() passes the full main map rectangle (tall and
+   * often narrow between InfoBoxes). Button width must be derived from
+   * the bar's real height (~80–110 px), not the full main height, and
+   * must not exceed half the available width.
+   */
+  static void
+  ComputeCursorBarLayout(const PixelRect &rc,
+                         int &total_h, int &row_h, int &row2_y,
+                         int &btn_w, int &w) noexcept
+  {
+    w = std::max(1, (int)rc.GetWidth());
+    total_h = std::max(SEPARATOR_H + 2,
+                       std::min((int)rc.GetHeight(), CursorBarHeight()));
+    row_h = std::max(1, (total_h - SEPARATOR_H) / 2);
+    row2_y = row_h + SEPARATOR_H;
+    btn_w = CalcButtonWidth(row_h);
+    const int max_btn_w = std::max(1, w / 2);
+    if (btn_w > max_btn_w)
+      btn_w = max_btn_w;
+  }
+
   void Create(ContainerWindow &parent, const PixelRect &rc) noexcept {
     WindowStyle style;
     style.Hide();
     style.ControlParent();
     ContainerWindow::Create(parent, rc, style);
 
-    const int total_h = rc.GetHeight();
-    const int row_h = (total_h - SEPARATOR_H) / 2;
-    const int row2_y = row_h + SEPARATOR_H;
-    const int btn_w = CalcButtonWidth(row_h);
-    const int w = (int)rc.GetWidth();
+    int total_h, row_h, row2_y, btn_w, w;
+    ComputeCursorBarLayout(rc, total_h, row_h, row2_y, btn_w, w);
+    (void)total_h;
 
     WindowStyle child_style;
 
@@ -414,11 +441,9 @@ public:
   }
 
   void LayoutChildren(const PixelRect &rc) noexcept {
-    const int total_h = rc.GetHeight();
-    const int row_h = (total_h - SEPARATOR_H) / 2;
-    const int row2_y = row_h + SEPARATOR_H;
-    const int btn_w = CalcButtonWidth(row_h);
-    const int w = rc.GetWidth();
+    int total_h, row_h, row2_y, btn_w, w;
+    ComputeCursorBarLayout(rc, total_h, row_h, row2_y, btn_w, w);
+    (void)total_h;
 
     if (layer_prev.IsDefined())
       layer_prev.Move({0, 0, btn_w, row_h});
@@ -770,9 +795,11 @@ protected:
     /* Draw separator line between rows. Use the themed text color so
        the line stays visible in both light and dark mode (was a
        hardcoded black pen — invisible against the dark background). */
-    const int total_h = (int)GetClientRect().GetHeight();
-    const int row_h = (total_h - SEPARATOR_H) / 2;
-    const int w = (int)GetClientRect().GetWidth();
+    int total_h, row_h, row2_y, btn_w, w;
+    ComputeCursorBarLayout(GetClientRect(), total_h, row_h, row2_y, btn_w, w);
+    (void)total_h;
+    (void)row2_y;
+    (void)btn_w;
 
     const Pen separator_pen(1, look.text_color);
     canvas.Select(separator_pen);
