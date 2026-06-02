@@ -844,6 +844,39 @@ AirspaceWarningManager::ProcessClearanceIntervals(
   const bool inside_cleared = n_cleared_inside > 0;
   const FloatDuration warning_time{config.warning_time};
 
+  /* Float-geometry cross-check for a surviving residual interval.
+     Interval subtraction works in the coarse (~111 m) integer
+     projection.  When a non-cleared airspace is nested inside a
+     cleared one with a near-coincident boundary, the two boundaries
+     can fail to nest after integer rounding: the same predicted path
+     crosses the two (separate but ~coincident) edges at slightly
+     different integer positions, so the cleared airspace's interval
+     does not fully contain the nested airspace's interval and a
+     phantom residual survives.  Sample the middle of the residual and,
+     if it actually lies inside a cleared airspace (in exact float
+     geometry), treat the residual as covered.  This cannot suppress a
+     genuine protrusion, whose midpoint really is outside every cleared
+     airspace. */
+  const auto residual_covered_in_float =
+    [this, &state](const AirspaceWarningInterval &iv) -> bool {
+      const GeoPoint mid =
+        iv.entry.location.Middle(iv.exit.location);
+      for (const auto &c : warnings) {
+        if (!c.IsCleared()) continue;
+        const auto &as = c.GetAirspace();
+        /* Horizontal containment in exact float geometry plus a
+           vertical-band check at the current altitude (clearance is
+           whole-airspace; the short prediction window means the
+           current altitude is a good proxy along the path). */
+        if (!as.Inside(mid)) continue;
+        if (state.altitude < as.GetBaseAltitude(state) ||
+            state.altitude > as.GetTopAltitude(state))
+          continue;
+        return true;
+      }
+      return false;
+    };
+
   /* Warnings that step 1 downgraded out of WARNING_INSIDE. Step 2
      re-processes these (they're no longer INSIDE), but should not
      re-subtract clearances already applied in step 1 (i.e. those
@@ -913,6 +946,13 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         const AirspaceWarningInterval &iv = w.GetInterval(m);
         if (!iv.IsValid()) continue;
         if (iv.Length() < kMinFragmentLength) continue;
+        if (residual_covered_in_float(iv)) {
+          /* Phantom residual from integer-projection non-nesting;
+             really inside a clearance. */
+          any_consumed_by_clearance = true;
+          w.SetInterval(m, AirspaceWarningInterval::Invalid());
+          continue;
+        }
         residuals[n_res++] = {m, iv.entry.distance,
                               iv.entry.location};
       }
@@ -1028,6 +1068,13 @@ AirspaceWarningManager::ProcessClearanceIntervals(
 
       if (!iv.IsValid() ||
           (changed && iv.Length() < kMinFragmentLength)) {
+        w.SetInterval(m, AirspaceWarningInterval::Invalid());
+      } else if (residual_covered_in_float(iv)) {
+        /* Interval subtraction left this (possibly unchanged because
+           the integer intervals failed to overlap), but in float
+           geometry it lies inside a clearance: phantom residual from
+           integer-projection non-nesting of a nested airspace. */
+        any_changed = true;
         w.SetInterval(m, AirspaceWarningInterval::Invalid());
       } else {
         w.SetInterval(m, iv);
