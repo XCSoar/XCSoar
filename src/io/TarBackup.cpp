@@ -13,8 +13,6 @@
 #include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
-#include "Storage/StorageDevice.hpp"
-#include "Storage/StorageUtil.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "util/UTF8.hpp"
@@ -176,27 +174,6 @@ private:
 };
 
 } // namespace
-
-std::vector<DirEntry>
-EnumerateTarFiles(Path dir)
-{
-  std::vector<DirEntry> result;
-
-  auto device = FindDeviceByName(dir);
-  if (!device)
-    return result;
-
-  for (auto &entry : device->ListEntries(Path(""))) {
-    if (entry.is_directory)
-      continue;
-    if (!Path(entry.name.c_str()).EndsWithIgnoreCase(".tar"))
-      continue;
-
-    result.push_back(std::move(entry));
-  }
-
-  return result;
-}
 
 bool
 CreateBackup(Path source_root, OutputStream &output,

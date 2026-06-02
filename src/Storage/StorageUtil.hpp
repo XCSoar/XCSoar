@@ -3,10 +3,12 @@
 
 #pragma once
 
+#include "DirEntry.hpp"
 #include "system/Path.hpp"
 
 #include <memory>
 #include <string>
+#include <vector>
 
 class StorageDevice;
 
@@ -48,3 +50,10 @@ bool IsSafDeviceId(const std::string &id) noexcept;
 [[nodiscard]]
 std::shared_ptr<StorageDevice>
 FindDeviceByName(Path name) noexcept;
+
+/**
+ * List .tar files on the device at the given path.
+ */
+[[nodiscard]]
+std::vector<DirEntry>
+EnumerateTarFiles(Path dir);

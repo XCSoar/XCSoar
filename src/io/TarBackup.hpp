@@ -3,11 +3,8 @@
 
 #pragma once
 
-#include "Storage/DirEntry.hpp"
-
 #include <string>
 #include <string_view>
-#include <vector>
 
 class OperationEnvironment;
 class Path;
@@ -15,13 +12,6 @@ class OutputStream;
 class Reader;
 
 using ArchiveExcludePathFn = bool (*)(std::string_view) noexcept;
-
-/**
- * List .tar files on the device at the given path.
- */
-[[nodiscard]]
-std::vector<DirEntry>
-EnumerateTarFiles(Path dir);
 
 /**
  * Create a tar archive of all files under @p source_root,
