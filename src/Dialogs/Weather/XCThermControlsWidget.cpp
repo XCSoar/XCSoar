@@ -789,6 +789,13 @@ private:
   }
 
 protected:
+  void OnResize(PixelSize new_size) noexcept override {
+    ContainerWindow::OnResize(new_size);
+
+    if (layer_prev.IsDefined())
+      LayoutChildren(GetClientRect());
+  }
+
   void OnPaint(Canvas &canvas) noexcept override {
     ContainerWindow::OnPaint(canvas);
 
@@ -844,10 +851,6 @@ XCThermControlsWidget::Unprepare() noexcept
 void
 XCThermControlsWidget::Show(const PixelRect &rc) noexcept
 {
-  auto &w = static_cast<ControlsWindow &>(GetWindow());
-  w.Move(rc);
-  w.LayoutChildren({0, 0, (int)rc.GetWidth(), (int)rc.GetHeight()});
-
   WindowWidget::Show(rc);
 
   /* Listen for GPS updates so the auto-switch logic actually runs.
@@ -860,8 +863,20 @@ XCThermControlsWidget::Show(const PixelRect &rc) noexcept
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
   if (settings.overlay_location ==
-      XCThermSettings::OverlayLocation::SEPARATE_MAP)
+      XCThermSettings::OverlayLocation::SEPARATE_MAP) {
+    auto &w = static_cast<ControlsWindow &>(GetWindow());
     w.RestoreOverlayFromCache();
+  }
+}
+
+void
+XCThermControlsWidget::Move(const PixelRect &rc) noexcept
+{
+  WindowWidget::Move(rc);
+
+  auto &w = static_cast<ControlsWindow &>(GetWindow());
+  if (w.IsDefined())
+    w.LayoutChildren({0, 0, (int)rc.GetWidth(), (int)rc.GetHeight()});
 }
 
 void
