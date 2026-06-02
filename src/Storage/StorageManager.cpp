@@ -135,28 +135,62 @@ StorageManager::ApplyEnumeratedDevices(
 }
 
 bool
+StorageManager::EnumerateAndApply(StorageChange &change)
+{
+  std::lock_guard<std::mutex> lock(enumerate_mutex_);
+  return ApplyEnumeratedDevices(enumerator_->Enumerate(), change);
+}
+
+bool
 StorageManager::RefreshDevices()
 {
   if (!enumerator_)
     return false;
 
-  /* Skip if a background refresh is already running — it will
-     produce the same result and notify via ProcessPendingChanges. */
+  /* Background refresh owns enumeration while running. */
   if (refresh_running_.load())
     return false;
 
   StorageChange change;
-  const bool changed =
-    ApplyEnumeratedDevices(enumerator_->Enumerate(), change);
+  const bool changed = EnumerateAndApply(change);
 
   if (!changed) {
     last_change_.added.clear();
     last_change_.removed.clear();
+    last_change_.access_granted.clear();
     return false;
   }
 
   last_change_ = std::move(change);
   return true;
+}
+
+void
+StorageManager::RunBackgroundRefresh() noexcept
+try
+{
+  refresh_pending_.store(false);
+
+  StorageChange change;
+  const bool changed = EnumerateAndApply(change);
+
+  if (changed && !shutting_down_.load()) {
+    {
+      std::lock_guard<std::mutex> lock(refresh_mutex_);
+      pending_change_ = std::move(change);
+    }
+
+    notify_callback_();
+  }
+
+  if (refresh_pending_.exchange(false) && !shutting_down_.load())
+    RunBackgroundRefresh();
+  else
+    refresh_running_.store(false);
+}
+catch (...) {
+  refresh_running_.store(false);
+  LogError(std::current_exception());
 }
 
 void
@@ -168,42 +202,32 @@ try
   if (!enumerator_ || shutting_down_.load())
     return;
 
+  if (refresh_running_.load()) {
+    refresh_pending_.store(true);
+    return;
+  }
+
   bool expected = false;
-  if (!refresh_running_.compare_exchange_strong(expected, true))
-    return; // already running, coalesce
+  if (!refresh_running_.compare_exchange_strong(expected, true)) {
+    refresh_pending_.store(true);
+    return;
+  }
 
   try {
-    {
-      std::lock_guard<std::mutex> lock(refresh_mutex_);
-      if (refresh_thread_.joinable())
-        refresh_thread_.join();
-    }
+    /* The previous worker has finished (refresh_running_ was false),
+       but its std::thread object is still joinable.  Move-assigning
+       onto a joinable std::thread calls std::terminate(), so join the
+       completed thread before starting a new one.  This happens when a
+       single hotplug action emits multiple topology events. */
+    if (refresh_thread_.joinable())
+      refresh_thread_.join();
 
     refresh_thread_ = std::thread([this]() noexcept {
-      try {
-        StorageChange change;
-        const bool changed =
-          ApplyEnumeratedDevices(enumerator_->Enumerate(), change);
-
-        if (changed) {
-          {
-            std::lock_guard<std::mutex> lock(refresh_mutex_);
-            pending_change_ = std::move(change);
-          }
-
-          // Notify the owner (e.g. UI thread via UI::Notify)
-          if (!shutting_down_.load())
-            notify_callback_();
-        }
-      } catch (...) {
-        LogError(std::current_exception());
-      }
-
-      refresh_running_.store(false);
+      RunBackgroundRefresh();
     });
   } catch (...) {
     refresh_running_.store(false);
-    throw;
+    LogError(std::current_exception());
   }
 }
 catch (...) {

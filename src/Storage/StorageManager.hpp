@@ -104,12 +104,27 @@ private:
     std::vector<std::shared_ptr<StorageDevice>> new_devices,
     StorageChange &change);
 
+  /**
+   * Enumerate devices and apply the result.  Serialized by
+   * #enumerate_mutex_ so synchronous and background refresh never
+   * overlap.
+   */
+  bool EnumerateAndApply(StorageChange &change);
+
+  /**
+   * Background refresh loop: coalesces hotplug events via
+   * #refresh_pending_ instead of dropping them.
+   */
+  void RunBackgroundRefresh() noexcept;
+
   StorageChange last_change_;
 
   // Async refresh control
   std::atomic<bool> shutting_down_{false};
   std::atomic<bool> refresh_running_{false};
+  std::atomic<bool> refresh_pending_{false};
   std::thread refresh_thread_;
   std::mutex refresh_mutex_;
+  std::mutex enumerate_mutex_;
   StorageChange pending_change_;
 };
