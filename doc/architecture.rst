@@ -68,6 +68,42 @@ section tries to give a rough overview where you can find what.
 
 -  :file:`Engine/Route/`: the route planner (airspace and terrain)
 
+-  :file:`io/`: stream and file I/O (readers, writers, archives). Keep this
+   layer free of UI and backend singletons; device-specific listing belongs
+   in :file:`Storage/`
+
+-  :file:`Repository/`: filename patterns and typed data directories
+   (:file:`FileType`)
+
+-  :file:`Storage/`: removable storage enumeration, hotplug monitors, and
+   the :file:`StorageDevice` abstraction (platform code in
+   :file:`Storage/linux/`, :file:`Storage/win/`, :file:`Storage/android/`)
+
+-  :file:`Device/`, :file:`Computer/`, :file:`Blackboard/`: sensor drivers,
+   glide computer, and thread-specific data copies
+
+-  :file:`Dialogs/DataManagement/`: data management UI (import, export,
+   backup, file explorer)
+
+Layer dependencies
+~~~~~~~~~~~~~~~~~~
+
+Rough dependency direction (see also project rules in
+:file:`.cursor/rules/xcsoar-project-rules.mdc`):
+
+- **Foundation** (:file:`util/`, :file:`Math/`, :file:`Geo/`, :file:`io/`,
+  :file:`system/`) must not include Engine, Backend, or UI headers.
+
+- **Engine** uses Foundation only.
+
+- **Backend** (:file:`Device/`, :file:`Computer/`, :file:`Storage/`,
+  :file:`NOTAM/`, …) uses Foundation and Engine. Access UI only through
+  event queues (:file:`InputEvents`, :file:`UI::Notify`), not dialogs.
+
+- **UI** (:file:`Dialogs/`, :file:`Form/`, :file:`Interface.hpp`) may use all
+  layers below it. Helpers such as :file:`Storage/StorageUtil.cpp` that read
+  :file:`BackendComponents` are backend/UI glue, not Foundation.
+
 Threads and Locking
 -------------------
 
@@ -165,14 +201,19 @@ clients. Each client that uses :file:`Net::AsyncTask` should implement
 torn down. The global pointer is cleared later in :file:`Startup.cpp`
 (``DestroyNetComponents``).
 
-**Shutdown order** (see :file:`Startup.cpp`):
+**Shutdown order** (see :file:`Startup.cpp`; simplified):
 
 1. ``NetComponents::BeginShutdown()`` — cancel coroutines and queued
    downloads; clear map pointers to TIM / SkyLines data
-2. Stop merge and calculation threads; destroy UI
-3. ``delete net_components``
-4. On process exit, :file:`Net::Deinitialise` destroys :file:`CurlGlobal`
-   on the **asio** thread (:file:`DrainCurl` in :file:`net/http/Init.cpp`)
+2. ``MainWindow::BeginShutdown()``; stop merge and calculation threads;
+   join them; deinitialise map and devices
+3. ``MainWindow::DeinitialiseStorage()`` — unregister storage UI listeners
+4. ``StorageManager::StopMonitoring()`` — stop hotplug; destructor joins
+   the enumeration worker when ``delete backend_components`` runs
+5. ``delete backend_components`` and ``delete data_components``
+6. ``DestroyNetComponents()``; destroy :file:`MainWindow`
+7. On process exit, :file:`Net::Deinitialise` destroys :file:`CurlGlobal` on
+   the **asio** thread (:file:`DrainCurl` in :file:`net/http/Init.cpp`)
 
 **Deferred UI refresh:** callbacks such as async terrain load or
 blackboard updates must not call :file:`PageActions::Update` or
@@ -189,6 +230,62 @@ layout while InfoBoxes are being created. Use
 example :file:`Weather/EDL/DownloadGlue.cpp`). New providers (such as
 XCTherm) should follow the same split: listener on the UI thread,
 network I/O on the asio thread, UI updates via :file:`UI::Notify`.
+
+Background file jobs
+~~~~~~~~~~~~~~~~~~~~
+
+Not all background work uses the network thread. **Local file jobs**
+(tar backup/restore, import/export copies, device enumeration) use other
+mechanisms:
+
+- **Modal progress on the UI thread:** :file:`JobDialog` runs a
+  :file:`Job` subclass on a short-lived worker thread
+  (:file:`Job/Thread.cpp`) while showing :file:`ProgressDialog`. The UI
+  thread stays responsive; progress is reported through
+  :file:`OperationEnvironment`.
+
+- **Modal network work:** :file:`ShowCoDialog` runs a coroutine on the
+  asio thread (see above). Do not use :file:`JobDialog` for HTTP.
+
+- **Fire-and-forget helpers:** some UI actions start a detached
+  :file:`std::thread` for a single task (for example deleting a file on
+  removable media). Keep captured state alive (for example
+  :file:`std::shared_ptr<StorageDevice>`) and avoid UI calls from that
+  thread.
+
+When modifying shared backend data (waypoints, airspaces) during such
+jobs, use :file:`ScopeSuspendAllThreads` from :file:`Protection.hpp` where
+appropriate.
+
+Storage and removable media
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**BackendComponents** (:file:`BackendComponents.hpp`) owns backend
+singletons including :file:`storage_manager` (:file:`StorageManager`).
+:file:`NetComponents` is separate and holds long-lived HTTP clients only.
+
+:file:`StorageManager` (:file:`Storage/StorageManager.cpp`):
+
+- Owns the platform hotplug monitor and storage enumerator.
+- Receives topology events (from a platform worker or the UI event loop,
+  depending on the backend).
+- Runs device re-enumeration on a **dedicated worker thread** so sysfs,
+  Win32, or SAF walks do not block the UI.
+- Invokes a constructor-supplied ``NotifyCallback`` (wired in
+  :file:`Startup.cpp` to :file:`MainWindow::SendStorageNotification`) so
+  the UI thread calls :file:`ProcessPendingChanges()` and dispatches
+  :file:`StorageEvent` notifications to listeners.
+
+UI code registers :file:`StorageEventListener` instances on the main
+thread (for example :file:`StorageLocationPickerDialog`). Use
+:file:`StorageUtil` (:file:`FindDeviceByName`, :file:`FormatStorageCaption`,
+:file:`EnumerateTarFiles`) from UI or backend glue — not from Foundation
+:file:`io/` (stream-only tar create/restore lives in :file:`io/TarBackup`).
+
+**Thread lifetime:** when starting a new storage worker, join any
+**finished** previous :file:`std::thread` before move-assigning a new one;
+otherwise the C++ runtime calls ``std::terminate()``. The destructor
+joins the worker after :file:`StopMonitoring()`.
 
 Locking
 ~~~~~~~
