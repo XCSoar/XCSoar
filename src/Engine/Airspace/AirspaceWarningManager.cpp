@@ -321,29 +321,44 @@ public:
            along the predicted path direction. */
         auto isv = airspace.Intersects(
           state.location, location_predicted, projection);
-        if (isv.empty()) {
-          /* entire predicted path inside airspace */
+
+        /* all() returns inside-segments as (entry, exit) pairs.
+           When state.location is on the boundary, all() may emit a
+           degenerate (state.location, state.location) pair: for
+           circles Inside() uses <=, and for either shape the coarse
+           (~111 m) integer projection can snap the position onto an
+           edge.  Skip those and use the first genuine exit. */
+        const GeoPoint *exit_pt = nullptr;
+        for (const auto &seg : isv) {
+          if (seg.second != state.location) {
+            exit_pt = &seg.second;
+            break;
+          }
+        }
+
+        if (exit_pt != nullptr) {
+          double d = state.location.Distance(*exit_pt);
+          iv = {{0, state.location}, {d, *exit_pt}};
+        } else if (airspace.Inside(location_predicted)) {
+          /* No boundary crossing and the predicted endpoint is also
+             inside: the entire predicted path lies within the
+             airspace. */
           double len =
             state.location.Distance(location_predicted);
           iv = {{0, state.location},
                 {len, location_predicted}};
         } else {
-          /* all() returns inside-segments as (entry, exit) pairs.
-             For circles, when state.location is exactly on the
-             boundary, Inside() returns true (<=) and all() emits a
-             degenerate (state.location, state.location) pair first;
-             skip it.  When more than one segment returned,
-             ignore all degenerate segements and use the first
-             genuine exit. */
-          const GeoPoint *exit_pt = &location_predicted;
-          for (const auto &seg : isv) {
-            if (seg.second != state.location) {
-              exit_pt = &seg.second;
-              break;
-            }
-          }
-          double d = state.location.Distance(*exit_pt);
-          iv = {{0, state.location}, {d, *exit_pt}};
+          /* No genuine exit found, yet the predicted endpoint is
+             outside the airspace. This happens when state.location
+             lies on the airspace boundary after the coarse integer
+             projection: the real exit is at t==0 and gets dropped.
+             Represent the inside segment by the projection's grid 
+             resolution rather than spuriously (avoiding a one-cycle
+             warning on exit). */
+          const double d = projection.GetApproximateScale();
+          const GeoPoint exit =
+            state.location.IntermediatePoint(location_predicted, d);
+          iv = {{0, state.location}, {d, exit}};
         }
       }
 
@@ -888,13 +903,14 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       }
 
       if (n_res == 0) {
-        /* Only claim clearance coverage when meaningful intervals
-           existed before subtraction and clearances consumed them.
-           If no method produced a meaningful interval to begin with
-           (e.g. all predictions land inside a narrow airspace that
-           is already < kMinFragmentLength away from the exit), the
-           WARNING_INSIDE is unrelated to clearance and must not be
-           silently suppressed. */
+        /* Claim clearance coverage when the interval was either
+           meaningful before subtraction, or was actually consumed
+           by a clearance.  If no method produced a meaningful
+           interval and no clearance overlapped it (e.g. all
+           predictions land inside a narrow airspace that is already
+           < kMinFragmentLength away from the exit, with the
+           clearance elsewhere), the WARNING_INSIDE is unrelated to
+           clearance and must not be silently suppressed. */
         if (any_meaningful_before)
           w.SetCoveredByClearance(true);
         continue;

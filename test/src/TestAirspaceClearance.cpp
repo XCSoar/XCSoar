@@ -111,7 +111,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(17);
+  plan_tests(18);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -503,6 +503,52 @@ main()
     ok1(bw == nullptr || bw->IsCoveredByClearance() ||
         !bw->IsAckExpired());
   }
+
+  /* --- Scenario 10: nested airspaces sharing an exit edge snapped
+         together by the integer projection ---
+     B (non-cleared) sits a few metres inside cleared A and shares
+     A's eastern edge.  Flying east while inside both, the coarse
+     integer projection snaps the aircraft onto the shared edge, so
+     B's exit crossing is dropped (t==0) and both exits coincide.
+     B must stay suppressed throughout, never flashing a spurious
+     INSIDE or downgraded approach warning. */
+  {
+    auto a = MakeRectangle(10.000, 49.990, 10.020, 50.010,
+                           0.0, 3000.0);
+    auto b = MakeRectangle(10.010, 49.990, 10.020 - 0.0008,
+                           50.000, 0.0, 3000.0);
+    Airspaces airspaces;
+    airspaces.Add(a);
+    airspaces.Add(b);
+    airspaces.Optimise();
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+    auto state = MakeAircraft(P(10.015, 49.995), 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.SetCleared(a, true);
+
+    bool ever_spuriously_warned = false;
+    for (int i = 0; i < 40; ++i) {
+      state.location = P(10.015 + 0.0005 * i, 49.995);
+      state.time += std::chrono::seconds{1};
+      mgr.Update(state, polar, task_stats, false,
+                 std::chrono::seconds{1});
+      auto *bw = mgr.GetWarningPtr(*b);
+      if (bw != nullptr
+          && bw->GetWarningState() > AirspaceWarning::WARNING_CLEAR
+          && !bw->IsCoveredByClearance()
+          && bw->IsAckExpired()) {
+        printf("step %d lon=%.5f: B fires unexpectedly (state=%d)\n",
+               i, state.location.longitude.Degrees(),
+               bw->GetWarningState());
+        ever_spuriously_warned = true;
+      }
+    }
+    ok1(!ever_spuriously_warned);
+  }
+
 
   return exit_status();
 }
