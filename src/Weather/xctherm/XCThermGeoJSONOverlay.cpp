@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "XCThermGeoJSONOverlay.hpp"
+#include "XCThermAPI.hpp"
 
 #include "Projection/WindowProjection.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -11,16 +12,22 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdio>
+#include <ctime>
 #include <vector>
 
 void
 XCThermGeoJSONOverlay::SetForecast(
     XCThermGeoJSON::ForecastLayer &&_forecast,
-    const char *_label) noexcept
+    const char *_label,
+    const char *_parameter,
+    unsigned _forecast_utc) noexcept
 {
   const std::lock_guard lock{mutex};
   forecast = std::move(_forecast);
   label = _label != nullptr ? _label : "XCTherm";
+  parameter = _parameter != nullptr ? _parameter : "";
+  forecast_utc = _forecast_utc;
   LogFmt("xctherm overlay: loaded {} bands, {} polygons",
          forecast.bands.size(), forecast.TotalPolygons());
 }
@@ -32,6 +39,87 @@ XCThermGeoJSONOverlay::HasData() const noexcept
   return !forecast.IsEmpty();
 }
 
+bool
+XCThermGeoJSONOverlay::GetClimbAt(GeoPoint p, double &out_min_ms,
+                                  double &out_max_ms) const noexcept
+{
+  const std::lock_guard lock{mutex};
+  /* Pure geometry lives in XCThermGeoJSON::FindBandAtPoint so it can be
+     unit-tested without dragging in the overlay's UI dependencies. */
+  return XCThermGeoJSON::FindBandAtPoint(forecast, p, out_min_ms, out_max_ms);
+}
+
+bool
+XCThermGeoJSONOverlay::FormatPointInfo(GeoPoint p, char *buffer,
+                                       std::size_t size) const noexcept
+{
+  if (buffer == nullptr || size == 0)
+    return false;
+
+  /* Snapshot the metadata we need under the lock, then format without
+     holding it (snprintf + API call must not nest the mutex). */
+  std::string label_copy, parameter_copy;
+  unsigned hour;
+  {
+    const std::lock_guard lock{mutex};
+    if (forecast.IsEmpty())
+      return false;
+    label_copy = label;
+    parameter_copy = parameter;
+    hour = forecast_utc;
+  }
+
+  /* Climb value at the tapped location.
+     The source data is contoured into bands server-side, so the finest
+     value available is the band the point falls in; we report its
+     midpoint as the representative number. The neutral band
+     (−0.2…+0.2 m/s) is dropped at parse time, so a point inside no band
+     is neutral → 0.0. Open-ended edge bands carry a ±1000 sentinel
+     bound; for those the finite edge is the only meaningful figure. */
+  double min_ms = 0, max_ms = 0;
+  char climb[32];
+  if (GetClimbAt(p, min_ms, max_ms)) {
+    double value;
+    if (min_ms <= -100.0)
+      value = max_ms;                 // open-ended sink: use finite edge
+    else if (max_ms >= 100.0)
+      value = min_ms;                 // open-ended lift: use finite edge
+    else
+      value = (min_ms + max_ms) / 2;  // band midpoint
+    std::snprintf(climb, sizeof(climb), "%+.1f m/s", value);
+  } else {
+    std::snprintf(climb, sizeof(climb), "0.0 m/s");  // neutral (dropped band)
+  }
+
+  /* Download time + issued run from the cache, if we know which
+     parameter this overlay came from. */
+  char meta[96];
+  meta[0] = '\0';
+  if (!parameter_copy.empty()) {
+    const auto summary =
+      XCThermAPI::Instance().GetCachedLayerSummary(parameter_copy);
+    char issued[24] = "";
+    if (summary.latest_run_date.size() == 8 &&
+        summary.latest_run_hour.size() == 2)
+      std::snprintf(issued, sizeof(issued), " | run %.2s %sZ",
+                    summary.latest_run_date.c_str() + 6,
+                    summary.latest_run_hour.c_str());
+    char dl[24] = "";
+    if (summary.latest_downloaded_at > 0) {
+      const std::time_t t = (std::time_t)summary.latest_downloaded_at;
+      std::tm *lt = std::localtime(&t);
+      char tbuf[8];
+      if (lt != nullptr && std::strftime(tbuf, sizeof(tbuf), "%H:%M", lt) > 0)
+        std::snprintf(dl, sizeof(dl), " | dl %s", tbuf);
+    }
+    std::snprintf(meta, sizeof(meta), "%s%s", issued, dl);
+  }
+
+  std::snprintf(buffer, size, "%s @ %s (%02uZ)%s",
+                climb, label_copy.c_str(), hour, meta);
+  return true;
+}
+
 const char *
 XCThermGeoJSONOverlay::GetLabel() const noexcept
 {
@@ -39,11 +127,14 @@ XCThermGeoJSONOverlay::GetLabel() const noexcept
 }
 
 bool
-XCThermGeoJSONOverlay::IsInside([[maybe_unused]] GeoPoint p) const noexcept
+XCThermGeoJSONOverlay::IsInside(GeoPoint p) const noexcept
 {
-  /* For now, always return true — the forecast covers a large region.
-     A bounding-box check would be a future optimization. */
-  return HasData();
+  const std::lock_guard lock{mutex};
+  /* Only claim the location if the forecast actually covers it — so a
+     tap far outside the model domain doesn't surface a bogus XCTherm
+     map item reading "0.0 m/s". */
+  return !forecast.IsEmpty() && forecast.bounds.IsValid() &&
+         forecast.bounds.IsInside(p);
 }
 
 Color

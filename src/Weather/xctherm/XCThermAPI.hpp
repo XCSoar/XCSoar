@@ -11,8 +11,10 @@
 #include <cstdint>
 #include <cstddef>
 #include <functional>
+#include <list>
 #include <map>
 #include <mutex>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -207,6 +209,19 @@ public:
   };
 
   /**
+   * Lightweight metadata about a cached slice — everything except the
+   * (potentially multi-MB) GeoJSON body. The disk index holds one of
+   * these per cached slice so we can answer "what's available, from
+   * which run, downloaded when" without loading any bodies into RAM.
+   */
+  struct SliceMeta {
+    std::string run_date;
+    std::string run_hour;
+    unsigned step = 0;
+    int64_t downloaded_at = 0;
+  };
+
+  /**
    * Check if a layer has already been downloaded for the given UTC hour.
    */
   bool IsLayerCached(const std::string &parameter,
@@ -224,18 +239,23 @@ public:
                      const std::string &run_hour) const noexcept;
 
   /**
-   * Get cached GeoJSON for a layer/hour combination.
-   * Returns empty string if not cached.
+   * Get cached GeoJSON for a layer/hour combination, returned by value.
+   * If the slice exists on disk but isn't resident in RAM, it is
+   * faulted in (read from disk) and kept in a small LRU body cache.
+   * Returns an empty string if the slice isn't cached at all.
+   *
+   * Not const: it mutates the in-RAM LRU body cache. Call from the UI
+   * or download-worker thread, never from the map draw thread.
    */
-  const std::string &GetCachedGeoJSON(const std::string &parameter,
-                                       unsigned utc_hour) const noexcept;
+  std::string GetCachedGeoJSON(const std::string &parameter,
+                               unsigned utc_hour) noexcept;
 
   /**
-   * Get the model run (date, hour) that produced the cached slice.
-   * Returns nullptr if not cached.
+   * Get the model run / freshness metadata for a cached slice, read
+   * from the disk index (no body load). std::nullopt if not cached.
    */
-  const CachedSlice *GetCachedSlice(const std::string &parameter,
-                                    unsigned utc_hour) const noexcept;
+  std::optional<SliceMeta> GetSliceMeta(const std::string &parameter,
+                                        unsigned utc_hour) const noexcept;
 
   /**
    * Get all UTC hours that are cached for a given parameter.
@@ -309,11 +329,6 @@ public:
   unsigned PruneStaleRuns(const std::string &parameter,
                           unsigned current_utc_hour) noexcept;
 
-  /**
-   * Clear the entire download cache.
-   */
-  void ClearCache() noexcept;
-
 private:
   XCThermAuth auth;
   std::string model = "icon-ch";
@@ -321,14 +336,30 @@ private:
   bool index_loaded = false;
 
   /**
-   * Cache: parameter -> (utc_hour -> CachedSlice).
-   *
-   * Guarded by cache_mutex because the download worker thread (run from
-   * the dialog) writes to it while the UI thread (controls widget,
-   * dialog re-renders) reads from it. Hold only for the brief actual
-   * map operation — never across a curl call.
+   * Disk index: parameter -> (utc_hour -> SliceMeta). The authoritative
+   * record of what is cached on disk, populated by EnableDiskCache()
+   * scanning file headers (cheap) and kept in sync by the write paths.
+   * Metadata queries (hours, run, freshness) answer from here without
+   * touching any GeoJSON body — that's what keeps startup RAM low.
+   */
+  std::map<std::string, std::map<unsigned, SliceMeta>> disk_index;
+
+  /**
+   * In-RAM body cache: parameter -> (utc_hour -> CachedSlice with the
+   * GeoJSON body). A *bounded* LRU subset of what's in disk_index —
+   * only slices recently accessed via GetCachedGeoJSON are resident.
+   * Capped at kMaxResidentSlices so we never hold the whole 24 h × N
+   * layer cache (hundreds of MB) in memory at once.
    */
   std::map<std::string, std::map<unsigned, CachedSlice>> geojson_cache;
+
+  /** MRU-ordered keys for geojson_cache; front = most recently used. */
+  std::list<std::pair<std::string, unsigned>> lru_order;
+
+  /** Max number of GeoJSON bodies kept resident in geojson_cache. */
+  static constexpr std::size_t kMaxResidentSlices = 12;
+
+  /** Guards disk_index, geojson_cache and lru_order. */
   mutable std::mutex cache_mutex;
 
   /**
@@ -337,8 +368,6 @@ private:
    * enabled.
    */
   AllocatedPath disk_cache_dir = nullptr;
-
-  static const std::string kEmptyString;
 
   /* ---- Disk cache helpers ---- */
 
@@ -358,8 +387,28 @@ private:
   void DeleteSliceFromDisk(const std::string &parameter,
                            unsigned forecast_utc) const noexcept;
 
-  /** Wipe every *.xctcache file in the cache directory. */
-  void WipeDiskCache() const noexcept;
+  /**
+   * Read and parse one on-disk slice file (header + GeoJSON body).
+   * @return true on success, with @p out fully populated.
+   */
+  bool ReadSliceFile(const std::string &parameter, unsigned utc_hour,
+                     CachedSlice &out) const noexcept;
+
+  /**
+   * Insert a freshly-obtained body into the LRU body cache, recording
+   * it as most-recently-used and evicting the least-recently-used
+   * entries beyond kMaxResidentSlices. Caller must hold cache_mutex.
+   */
+  void InsertResident(const std::string &parameter, unsigned utc_hour,
+                      CachedSlice &&slice) noexcept;
+
+  /** Mark (parameter, utc_hour) most-recently-used. Caller holds lock. */
+  void TouchResident(const std::string &parameter,
+                     unsigned utc_hour) noexcept;
+
+  /** Drop a key from the LRU body cache. Caller holds lock. */
+  void DropResident(const std::string &parameter,
+                    unsigned utc_hour) noexcept;
 
   /**
    * Parse the index.json response and populate available_parameters.

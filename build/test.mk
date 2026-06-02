@@ -89,6 +89,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
+	TestXCThermBandQuery \
 	TestLogger TestGRecord TestClimbAvCalc \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
@@ -429,6 +430,13 @@ TEST_GEO_BOUNDS_SOURCES = \
 	$(TEST_SRC_DIR)/TestGeoBounds.cpp
 TEST_GEO_BOUNDS_DEPENDS = GEO MATH
 $(eval $(call link-program,TestGeoBounds,TEST_GEO_BOUNDS))
+
+TEST_XCTHERM_BAND_QUERY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
+	$(TEST_SRC_DIR)/TestXCThermBandQuery.cpp
+TEST_XCTHERM_BAND_QUERY_DEPENDS = GEO MATH
+$(eval $(call link-program,TestXCThermBandQuery,TEST_XCTHERM_BAND_QUERY))
 
 TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
