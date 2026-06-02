@@ -33,6 +33,7 @@ public:
   void Unprepare() noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
 
   /* virtual methods from class BlackboardListener */
   void OnGPSUpdate(const MoreData &basic) override;
