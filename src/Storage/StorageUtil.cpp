@@ -132,3 +132,24 @@ FindDeviceByName(Path name) noexcept
 
   return nullptr;
 }
+
+std::vector<DirEntry>
+EnumerateTarFiles(Path dir)
+{
+  std::vector<DirEntry> result;
+
+  auto device = FindDeviceByName(dir);
+  if (!device)
+    return result;
+
+  for (auto &entry : device->ListEntries(Path(""))) {
+    if (entry.is_directory)
+      continue;
+    if (!Path(entry.name.c_str()).EndsWithIgnoreCase(".tar"))
+      continue;
+
+    result.push_back(std::move(entry));
+  }
+
+  return result;
+}
