@@ -65,9 +65,27 @@ Version 7.45 - not yet released
     height above safety, and distance; tap to display a different waypoint
     without advancing the task or setting a Goto, or "Resume auto tracking" to
     revert)
+  - new Data Management hub (menu, quick menu, and ``DataManagement`` input
+    event): site files, download manager, export flights, import data,
+    backup manager, and advanced file explorer in one place
+  - storage location picker lists removable and external volumes; the list
+    refreshes when media is plugged or unplugged (Linux udev, Windows
+    volumes, Android storage access framework)
+  - import data: pick files on external storage and copy recognized types
+    into the correct XCSoar data subdirectories (waypoints, airspaces,
+    terrain, and the rest); unknown files can stay in the data root #2289
+  - backup manager: create and restore ``.tar`` backups of the primary data
+    tree on a chosen volume; logs, existing archives, and ``cache/`` are
+    excluded; restore rejects paths outside the data tree
+  - advanced file explorer: browse any storage device, organize loose files
+    into typed subdirectories, transfer selections to another volume, and
+    rename or delete files #2289
 * desktop
   - command-line: -h/--help and -version/--version print to stdout and exit;
     unknown options print a short usage line on stderr
+  - flight export and data import use the shared storage picker and hotplug
+    refresh (extends external-storage export/import on Linux and Windows)
+    #1114
 * ui
   - Waypoint details embedded image: new input mode ``wptimg`` and
     ``WaypointImage`` events (magnify, shrink, reset, arrows) so keys
@@ -177,6 +195,8 @@ Version 7.45 - not yet released
     reliably produce the symbol ZIP in CI
   - configure built-in GPS & sensors in the last device slot by default (same on
     iOS)
+  - storage enumeration and permission grants update the device list when
+    the user picks a folder or when SAF access changes
 * calculations
   - BrokenDateTime: unified UTC conversion (rename FromUnixTimeUTC to
     FromUnixTime); Windows TimeGm uses _mkgmtime
@@ -202,6 +222,15 @@ Version 7.45 - not yet released
   - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
     is read correctly
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
+  - XCSoar data layout: waypoints, airspaces, terrain, profiles, logs, and
+    other repository types use typed subdirectories under the data root;
+    built-in and downloaded files save and resolve through the FileType API
+    instead of hard-coded extensions #2289
+  - on first start after upgrade, move legacy flat files in the primary data
+    directory into the matching subdirectories when the destination does not
+    yet exist; migration is marked complete only after at least one file was
+    moved #2289
+  - IGC and NMEA logs are stored under ``logs/`` #2289
 * devices
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
   - Polar sync device setting is offered only for drivers that register polar
