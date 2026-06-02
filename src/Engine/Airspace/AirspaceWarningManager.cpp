@@ -863,11 +863,14 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         continue;
 
       bool any_meaningful_before = false;
+      bool any_consumed_by_clearance = false;
       for (const auto m : kPredictionMethods) {
         AirspaceWarningInterval iv = w.GetInterval(m);
         if (!iv.IsValid()) continue;
         if (iv.Length() >= kMinFragmentLength)
           any_meaningful_before = true;
+
+        const AirspaceWarningInterval iv_before = iv;
 
         std::array<AirspaceWarning *, kClearedBufCap> buf{};
         std::size_t n = 0;
@@ -881,6 +884,18 @@ AirspaceWarningManager::ProcessClearanceIntervals(
           SubtractInterval(iv, buf[i]->GetInterval(m));
           if (!iv.IsValid()) break;
         }
+
+        /* Did a clearance actually overlap (shorten or eliminate)
+           this interval?  Tracked separately from the length test
+           above because near-coincident boundaries (two airspaces
+           sharing an edge, snapped together by the coarse integer
+           projection) yield a short inside interval that is still
+           genuinely consumed by the clearance. */
+        if (!iv.IsValid()
+            || iv.entry.distance != iv_before.entry.distance
+            || iv.exit.distance != iv_before.exit.distance)
+          any_consumed_by_clearance = true;
+
         w.SetInterval(m, iv);
       }
 
@@ -911,7 +926,7 @@ AirspaceWarningManager::ProcessClearanceIntervals(
            < kMinFragmentLength away from the exit, with the
            clearance elsewhere), the WARNING_INSIDE is unrelated to
            clearance and must not be silently suppressed. */
-        if (any_meaningful_before)
+        if (any_meaningful_before || any_consumed_by_clearance)
           w.SetCoveredByClearance(true);
         continue;
       }

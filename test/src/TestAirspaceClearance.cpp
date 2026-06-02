@@ -111,7 +111,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(18);
+  plan_tests(19);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -543,6 +543,79 @@ main()
         printf("step %d lon=%.5f: B fires unexpectedly (state=%d)\n",
                i, state.location.longitude.Degrees(),
                bw->GetWarningState());
+        ever_spuriously_warned = true;
+      }
+    }
+    ok1(!ever_spuriously_warned);
+  }
+
+
+  /* --- Scenario 11: exit across a near-coincident shared boundary
+         (real CTR LAHR / CTR SEKTOR ALTDORF geometry) ---
+     These two airspaces from DE-ASP-National-OpenAIP.txt share the
+     exact SE vertex 48:15:41N 007:49:35E, and Altdorf's NE edge runs
+     ~4 m inside Lahr's SE edge, far below the ~111 m integer-
+     projection grid.  With Lahr cleared, flying east out of both must
+     never raise an Altdorf warning: the snapped-together exits make
+     Altdorf's inside interval short (< kMinFragmentLength) but it is
+     still fully consumed by Lahr's clearance.  Regression for the
+     one-cycle INSIDE-then-NEAR glitch seen on exit. */
+  {
+    auto DMS = [](int d, int m, double s) {
+      return d + m / 60.0 + s / 3600.0;
+    };
+    std::vector<GeoPoint> lahr = {
+      P(DMS(7,44,9),  DMS(48,21,40)),
+      P(DMS(7,44,40), DMS(48,19,38)),
+      P(DMS(7,44,2),  DMS(48,19,5)),
+      P(DMS(7,41,57), DMS(48,18,23)),
+      P(DMS(7,41,56), DMS(48,18,22)),
+      P(DMS(7,49,35), DMS(48,15,41)),
+      P(DMS(7,57,50), DMS(48,25,55)),
+      P(DMS(7,49,52), DMS(48,28,45)),
+    };
+    std::vector<GeoPoint> altdorf = {
+      P(DMS(7,49,33), DMS(48,17,54)),
+      P(DMS(7,48,34), DMS(48,16,3)),
+      P(DMS(7,49,35), DMS(48,15,41)),
+      P(DMS(7,51,5),  DMS(48,17,33)),
+    };
+    auto lahr_as = std::make_shared<AirspacePolygon>(lahr);
+    auto alt_as = std::make_shared<AirspacePolygon>(altdorf);
+    lahr_as->SetProperties("CTR LAHR", "", TransponderCode{},
+                           AirspaceClass::CTR, AirspaceClass::CTR,
+                           Alt(0.0), Alt(762.0));
+    alt_as->SetProperties("ALTDORF", "", TransponderCode{},
+                          AirspaceClass::CTR, AirspaceClass::CTR,
+                          Alt(0.0), Alt(609.0));
+    Airspaces airspaces;
+    airspaces.Add(lahr_as);
+    airspaces.Add(alt_as);
+    airspaces.Optimise();
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+    const double lat = 48.277;
+    auto state = MakeAircraft(P(7.835, lat), 400.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.SetCleared(lahr_as, true);
+
+    bool ever_spuriously_warned = false;
+    for (int i = 0; i < 40; ++i) {
+      state.location = P(7.835 + 0.0002 * i, lat);
+      state.time += std::chrono::seconds{1};
+      mgr.Update(state, polar, task_stats, false,
+                 std::chrono::seconds{1});
+      auto *aw = mgr.GetWarningPtr(*alt_as);
+      if (aw != nullptr
+          && aw->GetWarningState() > AirspaceWarning::WARNING_CLEAR
+          && !aw->IsCoveredByClearance()
+          && aw->IsAckExpired()) {
+        printf("step %d lon=%.5f: Altdorf fires unexpectedly "
+               "(state=%d)\n", i,
+               state.location.longitude.Degrees(),
+               aw->GetWarningState());
         ever_spuriously_warned = true;
       }
     }
