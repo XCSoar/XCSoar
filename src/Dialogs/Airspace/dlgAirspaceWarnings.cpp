@@ -80,9 +80,9 @@ public:
     ack_day_button = dialog.AddButton(_("Ack Day"), [this](){ AckDay(); });
     enable_button = dialog.AddButton(_("Enable"), [this](){ Enable(); });
     clearance_button = dialog.AddButton(_("Clearance"),
-                                         [this](){ SetClearance(); });
+                                         [this](){ ChangeClearance(true); });
     revoke_clearance_button = dialog.AddButton(_("Revoke Clearance"),
-                                         [this](){ RevokeClearance(); });
+                                         [this](){ ChangeClearance(false); });
     radio_button = dialog.AddButton(_("Radio"), [this](){ Radio(); });
     details_button = dialog.AddButton(_("Details"), [this](){ Details(); });
   }
@@ -100,8 +100,7 @@ public:
   void Ack();
   void AckDay();
   void Enable();
-  void SetClearance();
-  void RevokeClearance();
+  void ChangeClearance(bool set);
   void Radio() noexcept;
   void Details() noexcept;
 
@@ -170,15 +169,13 @@ AirspaceWarningListWidget::UpdateButtons()
   }
 
   const bool cleared = warning->IsCleared();
-  const AirspaceWarningConfig &warning_config =
-    CommonInterface::GetComputerSettings().airspace.warnings;
-  const bool clearance_allowed =
-    warning_config.IsClassClearanceAllowed(airspace->GetTypeOrClass());
 
   ack_button->SetEnabled(warning->IsAckExpired());
   ack_day_button->SetEnabled(!warning->GetAckDay());
   enable_button->SetEnabled(!warning->IsAckExpired());
-  clearance_button->SetEnabled(!cleared && clearance_allowed);
+  clearance_button->SetEnabled(
+    !cleared &&
+    IsAirspaceClearanceAllowed(airspace->GetTypeOrClass()));
   revoke_clearance_button->SetEnabled(cleared);
   radio_button->SetEnabled(airspace->GetRadioFrequency().IsDefined());
   details_button->SetEnabled(true);
@@ -307,23 +304,14 @@ AirspaceWarningListWidget::AckDay()
 }
 
 void
-AirspaceWarningListWidget::SetClearance()
+AirspaceWarningListWidget::ChangeClearance(bool set)
 {
-  const auto &airspace = selected_airspace;
-  if (airspace != NULL) {
-    airspace_warnings.SetCleared(airspace, true);
-    UpdateList();
-  }
-}
+  if (selected_airspace == nullptr)
+    return;
+  if (!TrySetAirspaceClearance(airspace_warnings, selected_airspace, set))
+    return;
 
-void
-AirspaceWarningListWidget::RevokeClearance()
-{
-  const auto &airspace = selected_airspace;
-  if (airspace != NULL) {
-    airspace_warnings.SetCleared(airspace, false);
-    UpdateList();
-  }
+  UpdateList();
 }
 
 void

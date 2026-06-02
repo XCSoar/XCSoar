@@ -101,6 +101,33 @@ GetScrollableTextRowMaximumHeight(const PixelRect &rc) noexcept
 
 } // namespace
 
+bool
+IsAirspaceClearanceAllowed(AirspaceClass type) noexcept
+{
+  return CommonInterface::GetComputerSettings().airspace.warnings
+    .IsClassClearanceAllowed(type);
+}
+
+bool
+TrySetAirspaceClearance(ProtectedAirspaceWarningManager &manager,
+                        ConstAirspacePtr airspace,
+                        bool set) noexcept
+{
+  try {
+    manager.SetCleared(std::move(airspace), set);
+    return true;
+  } catch (const std::exception &e) {
+    LogFmt("Failed to update airspace clearance: {}", e.what());
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to update airspace clearance");
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return false;
+  }
+}
+
 class AirspaceDetailsWidget
   : public RowFormWidget {
 protected:
@@ -255,27 +282,17 @@ dlgAirspaceDetailsModal(ConstAirspacePtr airspace,
     widget->dialog = &dialog;
 
     const bool cleared = warnings->GetCleared(*airspace);
-    const AirspaceWarningConfig &warning_config =
-      CommonInterface::GetComputerSettings().airspace.warnings;
-    const bool clearance_allowed =
-      warning_config.IsClassClearanceAllowed(airspace->GetTypeOrClass());
 
     Button *clearance_button =
       dialog.AddButton(cleared ? _("Revoke Clearance") : _("Set Clearance"),
                        [widget](){ widget->ToggleClearance(); });
 
-    if (!cleared && !clearance_allowed)
+    if (!cleared &&
+        !IsAirspaceClearanceAllowed(airspace->GetTypeOrClass()))
       clearance_button->SetEnabled(false);
 
-    const char *label = _("Ack Day");
-    try {
-      label = warnings->GetAckDay(*airspace) ? _("Enable") : _("Ack Day");
-    } catch (const std::exception &e) {
-      LogFmt("Failed to query airspace day acknowledgement: {}", e.what());
-    } catch (...) {
-      LogError(std::current_exception(),
-               "Failed to query airspace day acknowledgement");
-    }
+    const char *label = warnings->GetAckDay(*airspace)
+      ? _("Enable") : _("Ack Day");
 
     dialog.AddButton(label, [widget](){ widget->AckDayOrEnable(); });
   }
@@ -295,15 +312,9 @@ AirspaceDetailsWidget::ToggleClearance() noexcept
 {
   assert(warnings != nullptr);
 
-  try {
-    const bool cleared = warnings->GetCleared(*airspace);
-    warnings->SetCleared(airspace, !cleared);
-  } catch (...) {
-    LogError(std::current_exception(),
-             "Failed to update airspace clearance");
-    Message::AddMessage(_("Failed to update airspace clearance"));
+  const bool cleared = warnings->GetCleared(*airspace);
+  if (!TrySetAirspaceClearance(*warnings, airspace, !cleared))
     return;
-  }
 
   dialog->SetModalResult(mrOK);
 }

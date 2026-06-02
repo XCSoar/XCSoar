@@ -23,7 +23,6 @@
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Engine/Airspace/AirspaceWarningConfig.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/AirspaceWarningStatusRenderer.hpp"
 #include "Asset.hpp"
@@ -191,8 +190,7 @@ protected:
   void OnGotoClicked();
   void OnAckClicked();
   void OnEnableClicked();
-  void OnSetClearanceClicked();
-  void OnRevokeClearanceClicked();
+  void OnClearanceClicked(bool set);
 
 public:
   /* virtual methods from class Widget */
@@ -283,10 +281,7 @@ public:
           ->GetCleared(*as_item.airspace))
       return false;
 
-    /* respect the per-class permission set in the Filter dialog */
-    const AirspaceWarningConfig &warning_config =
-      CommonInterface::GetComputerSettings().airspace.warnings;
-    return warning_config.IsClassClearanceAllowed(
+    return IsAirspaceClearanceAllowed(
       as_item.airspace->GetTypeOrClass());
   }
 
@@ -339,14 +334,13 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
     OnEnableClicked();
   });
 
-  clearance_button = dialog.AddButton(_("Set Clearance"),
-                                      [this](){
-    OnSetClearanceClicked();
+  clearance_button = dialog.AddButton(_("Set Clearance"), [this](){
+    OnClearanceClicked(true);
   });
 
   revoke_clearance_button =
     dialog.AddButton(_("Revoke Clearance"), [this](){
-      OnRevokeClearanceClicked();
+      OnClearanceClicked(false);
     });
 
   settings_button = dialog.AddButton(_("Settings"), [](){
@@ -644,23 +638,18 @@ MapItemListWidget::OnEnableClicked()
 }
 
 inline void
-MapItemListWidget::OnSetClearanceClicked()
+MapItemListWidget::OnClearanceClicked(bool set)
 {
   const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
     list[GetCursorIndex()];
-  backend_components->GetAirspaceWarnings()->SetCleared(
-    as_item.airspace, true);
-  UpdateButtons();
-}
-
-inline void
-MapItemListWidget::OnRevokeClearanceClicked()
-{
-  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
-    list[GetCursorIndex()];
-  backend_components->GetAirspaceWarnings()->SetCleared(
-    as_item.airspace, false);
-  UpdateButtons();
+  auto *warnings = backend_components->GetAirspaceWarnings();
+  if (warnings == nullptr) {
+    LogFmt("Failed to update airspace clearance: missing warning manager");
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return;
+  }
+  if (TrySetAirspaceClearance(*warnings, as_item.airspace, set))
+    UpdateButtons();
 }
 
 static bool
