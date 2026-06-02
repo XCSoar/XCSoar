@@ -37,6 +37,10 @@
 #include "ui/event/Queue.hpp"
 #include "Dialogs/Message.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/File.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Map.hpp"
+#include "system/Path.hpp"
 #include "MainWindow.hpp"
 #include "Startup.hpp"
 #include "Interface.hpp"
@@ -242,6 +246,41 @@ try {
   InitialiseDataPath();
   AtScopeExit() { DeinitialiseDataPath(); };
 
+  // Look at the profile for the AA setting without modifying global
+  // Profile state - Profile::GetPath() must remain nullptr so that
+  // dlgStartupShowModal() is still shown later.
+  unsigned antialiasing_samples = 0;
+  try {
+    Path path = Profile::GetPath();
+    AllocatedPath default_path;
+    if (path == nullptr) {
+      default_path = LocalPath("default.prf");
+      path = default_path;
+    }
+    ProfileMap temp_map;
+    Profile::LoadFile(temp_map, path);
+    temp_map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
+    if (antialiasing_samples != 2 && antialiasing_samples != 4 &&
+        antialiasing_samples != 8 && antialiasing_samples != 16)
+      antialiasing_samples = 0;
+  } catch (...) {
+  }
+
+  // Load anti-aliasing setting early before initializing the display
+  unsigned antialiasing_samples = 0;
+  try {
+    if (Profile::GetPath() == nullptr)
+      Profile::SetFiles(nullptr);
+    
+    Profile::LoadFile(Profile::GetPath());
+    Profile::map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
+    if (antialiasing_samples != 2 && antialiasing_samples != 4 &&
+        antialiasing_samples != 8 && antialiasing_samples != 16)
+      antialiasing_samples = 0;
+  } catch (...) {
+    // Ignore errors loading profile at this stage
+  }
+
   LogFormat("Starting %s", XCSoar_ProductToken);
 
   TextUtil::Initialise(env);
@@ -306,7 +345,7 @@ try {
     ioio_helper = nullptr;
   };
 
-  ScreenGlobalInit screen_init;
+  ScreenGlobalInit screen_init(antialiasing_samples);
   AtScopeExit() { Fonts::Deinitialize(); };
 
   AllowLanguage();

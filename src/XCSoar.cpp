@@ -27,6 +27,10 @@
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
 #include "util/PrintException.hxx"
+#include "Profile/Profile.hpp"
+#include "Profile/File.hpp"
+#include "Profile/Map.hpp"
+#include "Profile/Keys.hpp"
 
 #ifdef ENABLE_SDL
 /* this is necessary on macOS, to let libSDL bootstrap Quartz
@@ -46,7 +50,28 @@
 static int
 Main()
 {
-  ScreenGlobalInit screen_init;
+  // Peek at the profile for the AA setting without modifying global
+  // Profile state - Profile::GetPath() must remain nullptr so that
+  // dlgStartupShowModal() is still shown later.
+  unsigned antialiasing_samples = 0;
+  try {
+    Path path = Profile::GetPath();
+    AllocatedPath default_path;
+    if (path == nullptr) {
+      default_path = LocalPath("default.prf");
+      path = default_path;
+    }
+    ProfileMap temp_map;
+    Profile::LoadFile(temp_map, path);
+    temp_map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
+    if (antialiasing_samples != 0 && antialiasing_samples != 2 &&
+        antialiasing_samples != 4 && antialiasing_samples != 8 &&
+        antialiasing_samples != 16)
+      antialiasing_samples = 0;
+  } catch (...) {
+  }
+
+  ScreenGlobalInit screen_init(antialiasing_samples);
 
 #if defined(__APPLE__) && !TARGET_OS_IPHONE
   // We do not want the ugly non-localized main menu which SDL creates

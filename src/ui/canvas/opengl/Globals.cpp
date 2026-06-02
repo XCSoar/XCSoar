@@ -15,6 +15,10 @@ bool mapbuffer;
 
 GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
+unsigned max_antialiasing_samples;
+
+unsigned antialiasing_samples;
+
 UnsignedPoint2D window_size, viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
