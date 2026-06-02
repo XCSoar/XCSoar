@@ -4,6 +4,7 @@
 #pragma once
 
 #include "MapItem.hpp"
+#include "Geo/GeoPoint.hpp"
 
 class MapOverlay;
 
@@ -14,5 +15,12 @@ struct OverlayMapItem : public MapItem
 {
   const StaticString<64> label;
 
-  explicit OverlayMapItem(const MapOverlay &_overlay);
+  /**
+   * Optional second line with the overlay's value at the tapped
+   * location (e.g. the XCTherm forecast climb / altitude / download
+   * time). Empty when the overlay provides no point detail.
+   */
+  StaticString<256> detail;
+
+  OverlayMapItem(const MapOverlay &_overlay, GeoPoint location);
 };

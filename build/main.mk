@@ -696,6 +696,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermAuth.cpp \
 	$(SRC)/Weather/xctherm/XCThermAPI.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSON.cpp \
+	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSONOverlay.cpp \
 	$(SRC)/Weather/xctherm/XCThermAutoSwitch.cpp \
 	$(SRC)/Dialogs/Weather/XCThermControlsWidget.cpp

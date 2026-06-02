@@ -156,6 +156,13 @@ Parse(std::string_view content, bool skip_neutral) noexcept
         const bool is_neutral =
           band.min_ms >= -0.2 && band.max_ms <= 0.2;
         if ((!skip_neutral || !is_neutral) && !band.polygons.empty()) {
+          /* Grow the layer's geographic extent over this band's
+             exterior rings, so callers can cheaply test coverage. */
+          for (const auto &polygon : band.polygons)
+            if (!polygon.empty())
+              for (const auto &pt : polygon[0])
+                layer.bounds.Extend(pt);
+
           /* push_back can throw bad_alloc; the function is noexcept
              on the .hpp, so we keep allocations modest by reserving
              nothing extra and trust that std::terminate on OOM is
@@ -175,5 +182,9 @@ Parse(std::string_view content, bool skip_neutral) noexcept
 
   return layer;
 }
+
+/* FindBandAtPoint() + its PointInRing() helper live in
+   XCThermGeoQuery.cpp so they link without boost::json and stay
+   unit-testable. */
 
 } // namespace XCThermGeoJSON

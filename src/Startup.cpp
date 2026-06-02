@@ -94,6 +94,9 @@
 #include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
+#ifdef HAVE_HTTP
+#include "Weather/xctherm/XCThermAPI.hpp"
+#endif
 #include "Plane/PlaneGlue.hpp"
 #include "UIState.hpp"
 #include "Tracking/TrackingGlue.hpp"
@@ -197,6 +200,18 @@ AfterStartup()
   // Return value intentionally unused; task will resume if available.
   (void)resumed;
 
+#ifdef HAVE_HTTP
+  /* If the XCTherm feature is in use (credentials configured), index
+     the persistent forecast cache now — at startup, once — so the
+     Weather dialog and the bottom cursor widget immediately reflect
+     forecasts downloaded in previous sessions instead of appearing
+     empty until the user interacts. Header-only scan, so it's cheap;
+     bodies still fault in lazily. When the feature isn't configured we
+     do nothing, so non-users pay no cost. */
+  if (CommonInterface::GetComputerSettings()
+        .weather.xctherm.credentials.IsDefined())
+    XCThermAPI::Instance().EnableDiskCache();
+#endif
 
   InfoBoxManager::SetDirty();
 
