@@ -7,6 +7,7 @@
 #include "Asset.hpp"
 #include "Audio/Sound.hpp"
 #include "Form/Button.hpp"
+#include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "ui/event/Idle.hpp"
 #include "Look/Colors.hpp"
@@ -198,11 +199,11 @@ public:
       CommonInterface::main_window->SetBottomBannerWidget(nullptr);
     });
 
-    const auto &warning_config =
-      CommonInterface::GetComputerSettings().airspace.warnings;
-    if (warning_config.IsClassClearanceAllowed(airspace->GetTypeOrClass()))
+    if (IsAirspaceClearanceAllowed(airspace->GetTypeOrClass()))
       AddButton(_("Clearance"), [this](){
-        manager.SetCleared(airspace);
+        if (!TrySetAirspaceClearance(manager, airspace, true))
+          return;
+
         monitor.Schedule();
         CommonInterface::main_window->SetBottomBannerWidget(nullptr);
       });

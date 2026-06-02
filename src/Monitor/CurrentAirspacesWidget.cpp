@@ -290,7 +290,8 @@ CurrentAirspacesWidget::Matches(std::span<const Entry> other) const noexcept
 void
 CurrentAirspacesWidget::RevokeClearance(ConstAirspacePtr airspace) noexcept
 {
-  manager.SetCleared(std::move(airspace), false);
+  if (!TrySetAirspaceClearance(manager, std::move(airspace), false))
+    return;
 
   /* Let the monitor recompute and either replace this widget with one
      showing the remaining entries, or destroy if nothing is left. */
