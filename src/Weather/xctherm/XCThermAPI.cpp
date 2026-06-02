@@ -25,8 +25,6 @@
 #include <boost/json.hpp>
 #include <curl/curl.h>
 
-const std::string XCThermAPI::kEmptyString;
-
 /* ------------------------------------------------------------------ */
 /* CURL helpers                                                        */
 /* ------------------------------------------------------------------ */
@@ -565,7 +563,12 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
 
   {
     const std::lock_guard lock{cache_mutex};
-    geojson_cache[parameter][forecast_utc] = std::move(slice);
+    /* Record in the authoritative disk index... */
+    disk_index[parameter][forecast_utc] =
+      SliceMeta{slice.run_date, slice.run_hour, slice.step,
+                slice.downloaded_at};
+    /* ...and keep the just-downloaded body hot in the LRU cache. */
+    InsertResident(parameter, forecast_utc, std::move(slice));
   }
 
   return !out_geojson.empty();
@@ -583,8 +586,8 @@ XCThermAPI::IsLayerCached(const std::string &parameter,
                            unsigned utc_hour) const noexcept
 {
   const std::lock_guard lock{cache_mutex};
-  auto it = geojson_cache.find(parameter);
-  if (it == geojson_cache.end())
+  auto it = disk_index.find(parameter);
+  if (it == disk_index.end())
     return false;
   return it->second.find(utc_hour) != it->second.end();
 }
@@ -596,8 +599,8 @@ XCThermAPI::IsCachedAtRun(const std::string &parameter,
                           const std::string &run_hour) const noexcept
 {
   const std::lock_guard lock{cache_mutex};
-  auto it = geojson_cache.find(parameter);
-  if (it == geojson_cache.end())
+  auto it = disk_index.find(parameter);
+  if (it == disk_index.end())
     return false;
   auto it2 = it->second.find(utc_hour);
   if (it2 == it->second.end())
@@ -606,43 +609,51 @@ XCThermAPI::IsCachedAtRun(const std::string &parameter,
     && it2->second.run_hour == run_hour;
 }
 
-const std::string &
+std::string
 XCThermAPI::GetCachedGeoJSON(const std::string &parameter,
-                              unsigned utc_hour) const noexcept
+                             unsigned utc_hour) noexcept
 {
-  /* This accessor returns a reference into the cache, which would race
-     if the worker thread reallocates the entry. The dialog only calls
-     this on the UI thread between successful downloads (the worker
-     completes the cache write before notifying done), so it's safe in
-     practice; the lock here just guards the lookup itself.
-
-     If a future use case needs a worker-thread-safe copy, expose a
-     value-returning accessor instead. */
   const std::lock_guard lock{cache_mutex};
+
+  /* Fast path: body already resident. */
   auto it = geojson_cache.find(parameter);
-  if (it == geojson_cache.end())
-    return kEmptyString;
-  auto it2 = it->second.find(utc_hour);
-  if (it2 == it->second.end())
-    return kEmptyString;
-  return it2->second.geojson;
+  if (it != geojson_cache.end()) {
+    auto it2 = it->second.find(utc_hour);
+    if (it2 != it->second.end()) {
+      TouchResident(parameter, utc_hour);
+      return it2->second.geojson;
+    }
+  }
+
+  /* Not resident — is it on disk (in the index)? */
+  auto di = disk_index.find(parameter);
+  if (di == disk_index.end() || di->second.find(utc_hour) == di->second.end())
+    return {};
+
+  /* Fault the body in from disk and keep it (LRU-bounded). The read
+     happens under the lock; bodies are a few MB and reads are fast, and
+     this is never called from the map draw thread. */
+  CachedSlice slice;
+  if (!ReadSliceFile(parameter, utc_hour, slice))
+    return {};
+
+  std::string body = slice.geojson;  // copy out before move into cache
+  InsertResident(parameter, utc_hour, std::move(slice));
+  return body;
 }
 
-const XCThermAPI::CachedSlice *
-XCThermAPI::GetCachedSlice(const std::string &parameter,
-                           unsigned utc_hour) const noexcept
+std::optional<XCThermAPI::SliceMeta>
+XCThermAPI::GetSliceMeta(const std::string &parameter,
+                         unsigned utc_hour) const noexcept
 {
-  /* Same caveat as GetCachedGeoJSON: pointer into the cache, only safe
-     from the UI thread when the worker isn't actively rewriting that
-     parameter's entries. */
   const std::lock_guard lock{cache_mutex};
-  auto it = geojson_cache.find(parameter);
-  if (it == geojson_cache.end())
-    return nullptr;
+  auto it = disk_index.find(parameter);
+  if (it == disk_index.end())
+    return std::nullopt;
   auto it2 = it->second.find(utc_hour);
   if (it2 == it->second.end())
-    return nullptr;
-  return &it2->second;
+    return std::nullopt;
+  return it2->second;
 }
 
 std::vector<unsigned>
@@ -650,8 +661,8 @@ XCThermAPI::GetCachedHours(const std::string &parameter) const noexcept
 {
   std::vector<unsigned> result;
   const std::lock_guard lock{cache_mutex};
-  auto it = geojson_cache.find(parameter);
-  if (it == geojson_cache.end())
+  auto it = disk_index.find(parameter);
+  if (it == disk_index.end())
     return result;
   for (const auto &kv : it->second)
     result.push_back(kv.first);
@@ -664,8 +675,8 @@ XCThermAPI::GetCachedLayerSummary(const std::string &parameter) const noexcept
 {
   LayerCacheSummary out;
   const std::lock_guard lock{cache_mutex};
-  auto it = geojson_cache.find(parameter);
-  if (it == geojson_cache.end())
+  auto it = disk_index.find(parameter);
+  if (it == disk_index.end())
     return out;
 
   const auto now = std::chrono::system_clock::now();
@@ -719,7 +730,7 @@ bool
 XCThermAPI::HasAnyCache() const noexcept
 {
   const std::lock_guard lock{cache_mutex};
-  for (const auto &kv : geojson_cache)
+  for (const auto &kv : disk_index)
     if (!kv.second.empty())
       return true;
   return false;
@@ -731,13 +742,16 @@ XCThermAPI::ClearLayer(const std::string &parameter) noexcept
   std::vector<unsigned> dropped_hours;
   {
     const std::lock_guard lock{cache_mutex};
-    auto it = geojson_cache.find(parameter);
-    if (it != geojson_cache.end()) {
+    auto it = disk_index.find(parameter);
+    if (it != disk_index.end()) {
       dropped_hours.reserve(it->second.size());
       for (const auto &kv : it->second)
         dropped_hours.push_back(kv.first);
     }
+    disk_index.erase(parameter);
     geojson_cache.erase(parameter);
+    for (unsigned utc : dropped_hours)
+      DropResident(parameter, utc);
   }
 
   /* Disk cleanup outside the cache mutex — file I/O isn't a hot path
@@ -767,13 +781,13 @@ XCThermAPI::PruneStaleRuns(const std::string &parameter,
 
   {
     const std::lock_guard lock{cache_mutex};
-    auto it = geojson_cache.find(parameter);
-    if (it == geojson_cache.end())
+    auto it = disk_index.find(parameter);
+    if (it == disk_index.end())
       return 0;
 
     for (const auto &kv : it->second) {
       const unsigned utc = kv.first;
-      const auto &slice = kv.second;
+      const auto &meta = kv.second;
 
       const unsigned offset = (utc + 24 - current_utc_hour) % 24;
       std::string latest_date, latest_run;
@@ -784,29 +798,21 @@ XCThermAPI::PruneStaleRuns(const std::string &parameter,
            slice, the user explicitly downloaded it. */
         continue;
 
-      if (slice.run_date != latest_date ||
-          slice.run_hour != latest_run)
+      if (meta.run_date != latest_date ||
+          meta.run_hour != latest_run)
         hours_to_drop.push_back(utc);
     }
 
-    for (unsigned utc : hours_to_drop)
+    for (unsigned utc : hours_to_drop) {
       it->second.erase(utc);
+      DropResident(parameter, utc);
+    }
   }
 
   for (unsigned utc : hours_to_drop)
     DeleteSliceFromDisk(parameter, utc);
 
   return (unsigned)hours_to_drop.size();
-}
-
-void
-XCThermAPI::ClearCache() noexcept
-{
-  {
-    const std::lock_guard lock{cache_mutex};
-    geojson_cache.clear();
-  }
-  WipeDiskCache();
 }
 
 /* ------------------------------------------------------------------ */
@@ -841,15 +847,18 @@ XCThermAPI::EnableDiskCache() noexcept
   }
   LogFmt("xctherm: disk cache dir = {}", disk_cache_dir.c_str());
 
-  /* Scan existing files and either load or delete them.
-     Visitor that captures `this`. */
-  struct Loader final : public File::Visitor {
+  /* Scan existing files: index their headers (cheap), delete stale.
+     Crucially we do NOT read the GeoJSON bodies here — only the small
+     header line — so startup RAM stays low regardless of how many
+     forecasts were downloaded. Bodies fault in on demand via
+     GetCachedGeoJSON. Visitor captures `this`. */
+  struct Indexer final : public File::Visitor {
     XCThermAPI &api;
     const std::chrono::system_clock::time_point cutoff;
-    unsigned loaded = 0;
+    unsigned indexed = 0;
     unsigned dropped = 0;
-    Loader(XCThermAPI &_api,
-           std::chrono::system_clock::time_point _cutoff) noexcept
+    Indexer(XCThermAPI &_api,
+            std::chrono::system_clock::time_point _cutoff) noexcept
       : api(_api), cutoff(_cutoff) {}
 
     void Visit(Path path, Path filename) override {
@@ -880,34 +889,31 @@ XCThermAPI::EnableDiskCache() noexcept
       if (utc >= 24)
         return;
 
-      /* Read file: header line + body. */
-      std::string contents;
+      /* Read just the first chunk — enough to hold the one-line header
+         (~80 bytes). We never pull the multi-MB body at startup. */
+      std::string head;
       try {
         FileReader r{path};
-        char buf[64 * 1024];
-        while (true) {
-          const auto n = r.Read(std::as_writable_bytes(std::span{buf}));
-          if (n == 0)
-            break;
-          contents.append(buf, n);
-        }
+        char buf[512];
+        const auto n = r.Read(std::as_writable_bytes(std::span{buf}));
+        head.assign(buf, n);
       } catch (...) {
         return;
       }
 
-      const auto eol = contents.find('\n');
+      const auto eol = head.find('\n');
       if (eol == std::string::npos)
         return;
-      const bool is_v2 = contents.compare(0, 10, kDiskHeaderV2) == 0;
-      const bool is_v1 = contents.compare(0, 10, kDiskHeaderV1) == 0;
+      const bool is_v2 = head.compare(0, 10, kDiskHeaderV2) == 0;
+      const bool is_v1 = head.compare(0, 10, kDiskHeaderV1) == 0;
       if (!is_v2 && !is_v1)
         return;
 
       /* v1: "#XCTHERMv1 run_date=YYYYMMDD run_hour=HH step=N"
          v2: same + " downloaded_at=<unix_sec>" */
-      CachedSlice slice;
+      SliceMeta meta;
       auto extract = [&](const char *key) -> std::string_view {
-        const std::string_view header(contents.data(), eol);
+        const std::string_view header(head.data(), eol);
         const std::string needle = std::string{key} + "=";
         const auto pos = header.find(needle);
         if (pos == std::string_view::npos)
@@ -917,14 +923,14 @@ XCThermAPI::EnableDiskCache() noexcept
         return header.substr(v_start,
           v_end == std::string_view::npos ? std::string_view::npos : v_end - v_start);
       };
-      slice.run_date = std::string{extract("run_date")};
-      slice.run_hour = std::string{extract("run_hour")};
+      meta.run_date = std::string{extract("run_date")};
+      meta.run_hour = std::string{extract("run_hour")};
       try {
-        slice.step = (unsigned)std::stoul(std::string{extract("step")});
+        meta.step = (unsigned)std::stoul(std::string{extract("step")});
       } catch (...) {
         return;
       }
-      if (slice.run_date.size() != 8 || slice.run_hour.size() != 2)
+      if (meta.run_date.size() != 8 || meta.run_hour.size() != 2)
         return;
 
       /* v2: read explicit timestamp. v1: fall back to file mtime so old
@@ -932,32 +938,30 @@ XCThermAPI::EnableDiskCache() noexcept
       const auto dl_at = extract("downloaded_at");
       if (!dl_at.empty()) {
         try {
-          slice.downloaded_at = (int64_t)std::stoll(std::string{dl_at});
+          meta.downloaded_at = (int64_t)std::stoll(std::string{dl_at});
         } catch (...) {
-          slice.downloaded_at = 0;
+          meta.downloaded_at = 0;
         }
       }
-      if (slice.downloaded_at == 0) {
-        slice.downloaded_at =
+      if (meta.downloaded_at == 0) {
+        meta.downloaded_at =
           (int64_t)std::chrono::duration_cast<std::chrono::seconds>(
             mtime_tp.time_since_epoch()).count();
       }
 
-      slice.geojson = contents.substr(eol + 1);
-
       {
         const std::lock_guard lock{api.cache_mutex};
-        api.geojson_cache[parameter][utc] = std::move(slice);
+        api.disk_index[parameter][utc] = std::move(meta);
       }
-      ++loaded;
+      ++indexed;
     }
   };
 
   const auto now = std::chrono::system_clock::now();
-  Loader loader(*this, now - kDiskTTL);
-  Directory::VisitSpecificFiles(disk_cache_dir, "*.xctcache", loader);
-  LogFmt("xctherm: disk cache loaded {} slices (dropped {} stale)",
-         loader.loaded, loader.dropped);
+  Indexer indexer(*this, now - kDiskTTL);
+  Directory::VisitSpecificFiles(disk_cache_dir, "*.xctcache", indexer);
+  LogFmt("xctherm: disk cache indexed {} slices (dropped {} stale)",
+         indexer.indexed, indexer.dropped);
 }
 
 AllocatedPath
@@ -1016,16 +1020,111 @@ XCThermAPI::DeleteSliceFromDisk(const std::string &parameter,
   File::Delete(path);
 }
 
-void
-XCThermAPI::WipeDiskCache() const noexcept
+bool
+XCThermAPI::ReadSliceFile(const std::string &parameter, unsigned utc_hour,
+                          CachedSlice &out) const noexcept
 {
-  if (disk_cache_dir == nullptr)
-    return;
+  const auto path = SliceFilePath(parameter, utc_hour);
+  if (path == nullptr)
+    return false;
 
-  struct Wiper final : public File::Visitor {
-    void Visit(Path path, Path) override {
-      File::Delete(path);
+  std::string contents;
+  try {
+    FileReader r{path};
+    char buf[64 * 1024];
+    while (true) {
+      const auto n = r.Read(std::as_writable_bytes(std::span{buf}));
+      if (n == 0)
+        break;
+      contents.append(buf, n);
     }
-  } wiper;
-  Directory::VisitSpecificFiles(disk_cache_dir, "*.xctcache", wiper);
+  } catch (...) {
+    return false;
+  }
+
+  const auto eol = contents.find('\n');
+  if (eol == std::string::npos)
+    return false;
+  const bool is_v2 = contents.compare(0, 10, kDiskHeaderV2) == 0;
+  const bool is_v1 = contents.compare(0, 10, kDiskHeaderV1) == 0;
+  if (!is_v2 && !is_v1)
+    return false;
+
+  auto extract = [&](const char *key) -> std::string_view {
+    const std::string_view header(contents.data(), eol);
+    const std::string needle = std::string{key} + "=";
+    const auto pos = header.find(needle);
+    if (pos == std::string_view::npos)
+      return {};
+    const auto v_start = pos + needle.size();
+    const auto v_end = header.find(' ', v_start);
+    return header.substr(v_start,
+      v_end == std::string_view::npos ? std::string_view::npos : v_end - v_start);
+  };
+  out.run_date = std::string{extract("run_date")};
+  out.run_hour = std::string{extract("run_hour")};
+  try {
+    out.step = (unsigned)std::stoul(std::string{extract("step")});
+  } catch (...) {
+    return false;
+  }
+  const auto dl_at = extract("downloaded_at");
+  if (!dl_at.empty()) {
+    try {
+      out.downloaded_at = (int64_t)std::stoll(std::string{dl_at});
+    } catch (...) {
+      out.downloaded_at = 0;
+    }
+  }
+  out.geojson = contents.substr(eol + 1);
+  return true;
+}
+
+void
+XCThermAPI::TouchResident(const std::string &parameter,
+                          unsigned utc_hour) noexcept
+{
+  const auto key = std::make_pair(parameter, utc_hour);
+  auto it = std::find(lru_order.begin(), lru_order.end(), key);
+  if (it != lru_order.end())
+    lru_order.erase(it);
+  lru_order.push_front(key);
+}
+
+void
+XCThermAPI::DropResident(const std::string &parameter,
+                         unsigned utc_hour) noexcept
+{
+  const auto key = std::make_pair(parameter, utc_hour);
+  auto it = std::find(lru_order.begin(), lru_order.end(), key);
+  if (it != lru_order.end())
+    lru_order.erase(it);
+
+  auto pit = geojson_cache.find(parameter);
+  if (pit != geojson_cache.end()) {
+    pit->second.erase(utc_hour);
+    if (pit->second.empty())
+      geojson_cache.erase(pit);
+  }
+}
+
+void
+XCThermAPI::InsertResident(const std::string &parameter, unsigned utc_hour,
+                           CachedSlice &&slice) noexcept
+{
+  geojson_cache[parameter][utc_hour] = std::move(slice);
+  TouchResident(parameter, utc_hour);
+
+  /* Evict least-recently-used bodies beyond the budget. The disk index
+     and the on-disk files are untouched — only the RAM body goes. */
+  while (lru_order.size() > kMaxResidentSlices) {
+    const auto victim = lru_order.back();
+    lru_order.pop_back();
+    auto pit = geojson_cache.find(victim.first);
+    if (pit != geojson_cache.end()) {
+      pit->second.erase(victim.second);
+      if (pit->second.empty())
+        geojson_cache.erase(pit);
+    }
+  }
 }

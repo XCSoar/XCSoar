@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Geo/GeoPoint.hpp"
+#include "Geo/GeoBounds.hpp"
 
 #include <cstdint>
 #include <string>
@@ -54,6 +55,13 @@ struct ForecastLayer {
   std::string model;        // e.g. "ICON-CH"
   std::string valid_time;   // ISO timestamp if known
 
+  /**
+   * Geographic extent of all polygon coordinates, filled in by Parse().
+   * Invalid when the layer is empty. Used to answer "is this location
+   * even covered by the forecast?" without scanning every polygon.
+   */
+  GeoBounds bounds = GeoBounds::Invalid();
+
   /** Is there any data? */
   bool IsEmpty() const noexcept { return bands.empty(); }
 
@@ -90,5 +98,19 @@ struct ForecastLayer {
  */
 ForecastLayer
 Parse(std::string_view content, bool skip_neutral = true) noexcept;
+
+/**
+ * Find the vertical-wind band whose polygons contain @p p and write its
+ * [min,max] m/s range to the out-parameters. When the point falls inside
+ * several bands, the most extreme (largest |midpoint|) wins — the
+ * innermost contour, i.e. the true local value.
+ *
+ * Pure geometry over @p layer; no UI / projection dependencies, so it is
+ * unit-testable in isolation. Returns false (out-params untouched) if no
+ * band contains the point.
+ */
+bool
+FindBandAtPoint(const ForecastLayer &layer, GeoPoint p,
+                double &out_min_ms, double &out_max_ms) noexcept;
 
 } // namespace XCThermGeoJSON

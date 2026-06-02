@@ -799,9 +799,13 @@ XCThermWidget::FinishDownload()
      reuse the existing overlay if there is one). */
   std::lock_guard lock{job->result_mutex};
   if (map != nullptr && !job->first_forecast.IsEmpty()) {
+    /* The first parseable slice the worker kept is the previous-hour
+       slot (slot 0), valid at current_utc - 1. */
+    const unsigned shown_utc = (job->current_utc + 23) % 24;
     auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
     overlay->SetForecast(std::move(job->first_forecast),
-                         job->target_label.c_str());
+                         job->target_label.c_str(),
+                         job->param.c_str(), shown_utc);
     map->SetOverlay(std::move(overlay));
   }
 
@@ -1126,6 +1130,12 @@ XCThermWidget::RehydrateRowsFromCache() noexcept
   const auto *layers = GetLayers(settings.model, count);
   auto *info = GetDownloadInfo(settings.model);
   auto &api = XCThermAPI::Instance();
+
+  /* Make sure the disk index is built before we read it — otherwise a
+     fresh session that opens this dialog without having downloaded
+     anything yet would show "Not downloaded" for slices that are in
+     fact sitting in the on-disk cache. Idempotent. */
+  api.EnableDiskCache();
 
   for (unsigned i = 0; i < count; ++i) {
     /* Don't overwrite session state — a row that's mid-download

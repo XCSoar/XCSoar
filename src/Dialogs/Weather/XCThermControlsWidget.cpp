@@ -57,9 +57,15 @@ static constexpr unsigned N_LAYERS = std::size(LAYERS);
 
 /**
  * Apply a GeoJSON string as the map overlay.
+ *
+ * @param parameter API parameter (e.g. "vertical_wind_5000amsl") so the
+ *   overlay can resolve download/run metadata for the map-item popup.
+ * @param forecast_utc the forecast's valid UTC hour.
  */
 static void
-ApplyGeoJSONOverlay(const std::string &geojson, const char *label)
+ApplyGeoJSONOverlay(const std::string &geojson, const char *label,
+                    const char *parameter = nullptr,
+                    unsigned forecast_utc = 0)
 {
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
@@ -74,7 +80,7 @@ ApplyGeoJSONOverlay(const std::string &geojson, const char *label)
   forecast.layer_name = label;
 
   auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-  overlay->SetForecast(std::move(forecast), label);
+  overlay->SetForecast(std::move(forecast), label, parameter, forecast_utc);
   map->SetOverlay(std::move(overlay));
 }
 
@@ -403,7 +409,8 @@ public:
     const std::string &cached =
       api.GetCachedGeoJSON(LAYERS[current_layer].api_parameter, hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, LAYERS[current_layer].short_label);
+      ApplyGeoJSONOverlay(cached, LAYERS[current_layer].short_label,
+                          LAYERS[current_layer].api_parameter, hour);
   }
 
   void LayoutChildren(const PixelRect &rc) noexcept {
@@ -609,7 +616,8 @@ private:
     const std::string &cached =
       api.GetCachedGeoJSON(LAYERS[layer_index].api_parameter, utc_hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, LAYERS[layer_index].short_label);
+      ApplyGeoJSONOverlay(cached, LAYERS[layer_index].short_label,
+                          LAYERS[layer_index].api_parameter, utc_hour);
     else
       LogFmt("xctherm: cache miss {}@{}h",
              LAYERS[layer_index].api_parameter, utc_hour);
@@ -703,10 +711,10 @@ private:
     int offset_min = 0;
     bool has_real_offset = false;
     auto &api = XCThermAPI::Instance();
-    const auto *slice = api.GetCachedSlice(
+    const auto slice = api.GetSliceMeta(
       LAYERS[current_layer].api_parameter, fcast_h);
 
-    if (slice != nullptr && slice->run_date.size() == 8 &&
+    if (slice.has_value() && slice->run_date.size() == 8 &&
         slice->run_hour.size() == 2 &&
         BrokenDateTime::NowUTC().IsPlausible()) {
       const unsigned year  = (unsigned)std::atoi(slice->run_date.substr(0, 4).c_str());
