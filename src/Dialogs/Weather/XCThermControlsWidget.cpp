@@ -11,7 +11,7 @@
 #include "Interface.hpp"
 #include "Form/Button.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "ui/window/ContainerWindow.hpp"
+#include "ui/window/SolidContainerWindow.hpp"
 #include "ui/window/PaintWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
@@ -106,12 +106,10 @@ public:
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
     const auto rc = GetClientRect();
-    /* Themed colors — match dark mode when the dialog look is dark.
-       Previously hardcoded to COLOR_WHITE / COLOR_BLACK which looked
-       jarring against the rest of the app in dark mode. */
-    canvas.Clear(look.background_color);
     canvas.SetBackgroundTransparent();
-    canvas.SetTextColor(is_available ? look.text_color : COLOR_GRAY);
+    canvas.SetTextColor(is_available
+                        ? look.text_color
+                        : look.button.disabled.color);
     canvas.Select(look.text_font);
 
     const auto text_size = canvas.CalcTextSize(text);
@@ -137,7 +135,7 @@ public:
  *   ------- separator -------
  *   Row 2: < time_label  >    (forecast time stepper)
  */
-class XCThermControlsWidget::ControlsWindow final : public ContainerWindow {
+class XCThermControlsWidget::ControlsWindow final : public SolidContainerWindow {
   const DialogLook &look;
   static constexpr int SEPARATOR_H = 1;
 
@@ -226,7 +224,8 @@ public:
     WindowStyle style;
     style.Hide();
     style.ControlParent();
-    ContainerWindow::Create(parent, rc, style);
+    SolidContainerWindow::Create(parent, rc, look.background_color, style);
+    SetGradientTopColor(look.background_gradient_top_color);
 
     int total_h, row_h, row2_y, btn_w, w;
     ComputeCursorBarLayout(rc, total_h, row_h, row2_y, btn_w, w);
@@ -797,18 +796,16 @@ protected:
   }
 
   void OnPaint(Canvas &canvas) noexcept override {
-    ContainerWindow::OnPaint(canvas);
+    SolidContainerWindow::OnPaint(canvas);
 
-    /* Draw separator line between rows. Use the themed text color so
-       the line stays visible in both light and dark mode (was a
-       hardcoded black pen — invisible against the dark background). */
+    /* Subtle row divider — same border tone as read-only form fields. */
     int total_h, row_h, row2_y, btn_w, w;
     ComputeCursorBarLayout(GetClientRect(), total_h, row_h, row2_y, btn_w, w);
     (void)total_h;
     (void)row2_y;
     (void)btn_w;
 
-    const Pen separator_pen(1, look.text_color);
+    const Pen separator_pen(1, look.ReadOnlyValueBorderColor());
     canvas.Select(separator_pen);
     canvas.DrawLine({0, row_h}, {w, row_h});
   }
