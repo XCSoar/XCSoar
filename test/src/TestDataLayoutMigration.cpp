@@ -20,6 +20,7 @@
 
 #include <cstdio>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 static bool
 WriteTextFile(Path path, const char *content) noexcept
@@ -127,10 +128,41 @@ TestMigratesFilesAndActiveProfileOnly()
   ok1(!File::Exists(AllocatedPath::Build(data_path, Path("plane.xcp"))));
 }
 
+static void
+TestDoesNotWriteMarkerWhenAllMovesFail()
+{
+  char template_path[] = "/tmp/xcsoar-migrate-fail-XXXXXX";
+  ok1(mkdtemp(template_path) != nullptr);
+
+  const Path data_path(template_path);
+  SetSingleDataPath(data_path);
+
+  ok1(WriteTextFile(AllocatedPath::Build(data_path, Path("terrain.xcm")),
+                    "dummy"));
+
+  const auto default_prf =
+    AllocatedPath::Build(data_path, Path("default.prf"));
+  ok1(WriteTextFile(default_prf,
+                    "MapFile=%LOCAL_PATH%\\terrain.xcm\n"));
+
+  Profile::SetFiles(default_prf);
+  Profile::Load();
+
+  ok1(chmod(template_path, 0555) == 0);
+
+  MigrateDataLayoutToSubdirs();
+
+  ok1(chmod(template_path, 0755) == 0);
+
+  ok1(!File::Exists(LocalPath(".xcsoar-subdir-layout-v1")));
+  ok1(File::Exists(AllocatedPath::Build(data_path, Path("terrain.xcm"))));
+}
+
 int
 main()
 {
-  plan_tests(36);
+  plan_tests(43);
   TestMigratesFilesAndActiveProfileOnly();
+  TestDoesNotWriteMarkerWhenAllMovesFail();
   return exit_status();
 }

@@ -4,6 +4,7 @@
 #include "DataLayoutMigration.hpp"
 
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "UtilsSettings.hpp"
@@ -186,6 +187,7 @@ MigrateDataLayoutToSubdirs() noexcept
     const auto plan = BuildMigrationPlan(root);
 
     bool profile_changed = false;
+    unsigned moved_count = 0;
     for (const auto &entry : plan.moves) {
       const auto parent = entry.destination_path.GetParent();
       if (parent != nullptr)
@@ -194,15 +196,22 @@ MigrateDataLayoutToSubdirs() noexcept
       if (!File::Rename(entry.source_path, entry.destination_path))
         continue;
 
+      ++moved_count;
       profile_changed |= UpdateProfileReferences(entry.source_path,
-                                                entry.destination_path);
+                                                  entry.destination_path);
     }
 
     if (profile_changed)
       Profile::Save();
 
-    FileOutputStream marker_file(marker, FileOutputStream::Mode::CREATE);
-    marker_file.Commit();
+    if (plan.moves.empty() || moved_count > 0) {
+      FileOutputStream marker_file(marker, FileOutputStream::Mode::CREATE);
+      marker_file.Commit();
+    } else if (!plan.moves.empty()) {
+      LogFormat("Data layout migration: all %u file moves failed",
+                unsigned(plan.moves.size()));
+    }
   } catch (...) {
+    LogError(std::current_exception());
   }
 }
