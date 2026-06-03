@@ -6,9 +6,12 @@
 #include "LogFile.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/FileReader.hxx"
-#include "lib/curl/Easy.hxx"
-#include "lib/curl/Setup.hxx"
-#include "lib/curl/Slist.hxx"
+#include "lib/fmt/ToBuffer.hxx"
+#include "co/InvokeTask.hxx"
+#include "lib/curl/Global.hxx"
+#include "util/ReturnValue.hxx"
+#include "net/client/xctherm/Http.hpp"
+#include "net/http/Init.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 
@@ -23,35 +26,6 @@
 #include <vector>
 
 #include <boost/json.hpp>
-#include <curl/curl.h>
-
-/* ------------------------------------------------------------------ */
-/* CURL helpers                                                        */
-/* ------------------------------------------------------------------ */
-
-/**
- * Progress context passed to CURL xferinfo callback. The callback
- * forwards (bytes_now, bytes_total) to the caller-supplied ProgressFn
- * and aborts the transfer when it returns false (Stop pressed).
- */
-struct CurlProgressCtx {
-  const XCThermAPI::ProgressFn *progress = nullptr;
-};
-
-static int
-CurlProgressCallback(void *userp,
-                     curl_off_t dltotal, curl_off_t dlnow,
-                     [[maybe_unused]] curl_off_t ultotal,
-                     [[maybe_unused]] curl_off_t ulnow)
-{
-  auto *ctx = static_cast<CurlProgressCtx *>(userp);
-  if (ctx == nullptr || ctx->progress == nullptr || !*ctx->progress)
-    return 0;
-
-  /* Returning non-zero aborts curl with CURLE_ABORTED_BY_CALLBACK,
-     which is how the Stop button becomes effective mid-transfer. */
-  return (*ctx->progress)((uint64_t)dlnow, (uint64_t)dltotal) ? 0 : 1;
-}
 
 /* ------------------------------------------------------------------ */
 /* Singleton                                                           */
@@ -92,15 +66,12 @@ XCThermAPI::SetModel(const std::string &m) noexcept
  * user-readable message. Caller decides whether to retry or surface.
  */
 static XCThermAPIError
-MakeApiError(CURLcode res, long http_code, const std::string &context)
+MakeApiError(bool transfer_failed, long http_code, const std::string &context)
 {
-  if (res != CURLE_OK) {
-    std::string msg = "Network error";
-    if (const char *what = curl_easy_strerror(res); what != nullptr) {
-      msg += ": ";
-      msg += what;
-    }
-    msg += " (" + context + ")";
+  if (transfer_failed) {
+    std::string msg = "Network error (";
+    msg += context;
+    msg += ")";
     return XCThermAPIError(XCThermAPIError::Kind::NETWORK, 0,
                            std::move(msg));
   }
@@ -138,58 +109,44 @@ MakeApiError(CURLcode res, long http_code, const std::string &context)
   return XCThermAPIError(kind, http_code, std::move(msg));
 }
 
-bool
-XCThermAPI::FetchIndex()
+Co::Task<bool>
+XCThermAPI::CoFetchIndex(CurlGlobal &curl)
 {
   LogFmt("xctherm: fetching index for model='{}'", model);
 
-  const std::string url =
-    "https://tiles.xctherm.com/forecast/" + model + "/index.json";
+  const auto url = FmtBuffer<256>(
+    "https://tiles.xctherm.com/forecast/{}/index.json", model);
 
-  /* RAII curl handle + XCSoar's shared Setup (User-Agent, CA bundle,
-     timeouts). Replaces the previous manual curl_easy_setopt
-     sequence. */
-  CurlEasy easy{url.c_str()};
-  Curl::Setup(easy);
-  /* index.json is gzip-compressed; tell curl to decompress. */
-  easy.SetOption(CURLOPT_ACCEPT_ENCODING, "gzip");
-  easy.SetTimeout(20);
-
-  std::vector<uint8_t> response_buffer;
-  easy.SetWriteFunction(
-    [](char *ptr, size_t size, size_t nmemb, void *userdata) -> size_t {
-      const size_t total = size * nmemb;
-      auto *buf = static_cast<std::vector<uint8_t> *>(userdata);
-      buf->insert(buf->end(),
-                  reinterpret_cast<uint8_t *>(ptr),
-                  reinterpret_cast<uint8_t *>(ptr) + total);
-      return total;
-    },
-    &response_buffer);
-
-  CURLcode res = CURLE_OK;
+  Curl::CoResponse response;
   try {
-    easy.Perform();   /* throws on network-level failure */
-  } catch (const std::exception &) {
-    /* Re-classify any throw out of Perform() as a NETWORK error so
-       the caller's catch sees XCThermAPIError, not a generic
-       std::runtime_error from Curl::MakeError. */
-    res = CURLE_OPERATION_TIMEDOUT;
+    response = co_await XCTherm::Http::CoGet(curl, url.c_str());
+  } catch (...) {
+    LogFmt("xctherm: index fetch failed (network)");
+    throw MakeApiError(true, 0, "index.json");
   }
 
-  long http_code = 0;
-  easy.GetInfo(CURLINFO_RESPONSE_CODE, &http_code);
-
-  if (res != CURLE_OK || http_code != 200) {
-    LogFmt("xctherm: index fetch failed curl={} http={}",
-           (int)res, http_code);
-    throw MakeApiError(res, http_code, "index.json");
+  if (response.status != 200) {
+    LogFmt("xctherm: index fetch failed http={}", response.status);
+    throw MakeApiError(response.status == 0, (long)response.status,
+                       "index.json");
   }
 
-  std::string json(response_buffer.begin(), response_buffer.end());
-  LogFmt("xctherm: index fetched, {} bytes", json.size());
+  LogFmt("xctherm: index fetched, {} bytes", response.body.size());
+  co_return ParseIndex(response.body);
+}
 
-  return ParseIndex(json);
+bool
+XCThermAPI::FetchIndex()
+{
+  if (Net::curl == nullptr)
+    throw MakeApiError(true, 0, "index.json");
+
+  ReturnValue<bool> parsed;
+  const auto invoke = [&parsed, this](Co::Task<bool> task) -> Co::InvokeTask {
+    parsed.Set(co_await task);
+  };
+  XCTherm::Http::RunSync(*Net::curl, invoke(CoFetchIndex(*Net::curl)));
+  return std::move(parsed).Get();
 }
 
 /* ------------------------------------------------------------------ */
@@ -412,19 +369,19 @@ XCThermAPI::FindSlotForOffset(const std::string &parameter,
 std::string
 XCThermAPI::FormatStep(unsigned step) noexcept
 {
-  char buf[4];
-  std::snprintf(buf, sizeof(buf), "%03u", step);
-  return buf;
+  return std::string(FmtBuffer<8>("{:03}", step).c_str());
 }
 
-bool
-XCThermAPI::DownloadGeoJSON(const std::string &parameter,
-                            const std::string &date,
-                            const std::string &run_hour,
-                            unsigned step,
-                            std::string &out_geojson,
-                            int64_t *out_wire_bytes,
-                            ProgressFn progress)
+Co::Task<bool>
+XCThermAPI::CoDownloadGeoJSON(CurlGlobal &curl,
+                              const std::string &parameter,
+                              const std::string &date,
+                              const std::string &run_hour,
+                              const unsigned step,
+                              std::string &out_geojson,
+                              int64_t *const out_wire_bytes,
+                              ProgressListener *const progress,
+                              const std::function<bool()> &should_continue)
 {
   out_geojson.clear();
 
@@ -436,109 +393,43 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
   }
 
   const std::string step_str = FormatStep(step);
-  const std::string url =
-    "https://tiles.xctherm.com/forecast/" + model + "/" +
-    date + "/" + run_hour + "/" + step_str + "/" + parameter + ".geojson";
+  const auto url = FmtBuffer<512>(
+    "https://tiles.xctherm.com/forecast/{}/{}/{}/{}/{}.geojson",
+    model, date, run_hour, step_str, parameter);
+  const std::string context = parameter + " " + date + "/" + run_hour +
+                              "Z step " + step_str;
 
-  LogFmt("xctherm: downloading {}", url);
+  LogFmt("xctherm: downloading {}", url.c_str());
 
-  /* Helper: perform one curl request with our auth header + progress
-     callback. Returns (wire_bytes_added, http_code). Throws
-     std::runtime_error from CurlEasy::Perform() on network failure;
-     caller catches and re-classifies. */
-  auto perform = [&](std::vector<uint8_t> &response_buffer,
-                     CurlProgressCtx &ctx,
-                     curl_off_t &out_wire,
-                     curl_off_t &out_speed,
-                     long &out_http,
-                     CURLcode &out_curl) {
-    CurlEasy easy{url.c_str()};
-    Curl::Setup(easy);          // shared CA bundle, User-Agent, NoSignal
-    easy.SetOption(CURLOPT_ACCEPT_ENCODING, "gzip");
-    easy.SetOption(CURLOPT_FOLLOWLOCATION, 1L);
-    easy.SetTimeout(60);
+  Curl::CoResponse response;
+  try {
+    response = co_await XCTherm::Http::CoBearerGet(
+      curl, url.c_str(), auth, progress, should_continue, true);
+  } catch (const XCTherm::Http::TransferCancelled &) {
+    co_return false;
+  } catch (...) {
+    if (!should_continue())
+      co_return false;
 
-    CurlSlist headers;
-    headers.Append(auth.GetAuthHeader().c_str());
-    easy.SetRequestHeaders(headers.Get());
-
-    easy.SetWriteFunction(
-      [](char *ptr, size_t size, size_t nmemb, void *userdata) -> size_t {
-        const size_t total = size * nmemb;
-        auto *buf = static_cast<std::vector<uint8_t> *>(userdata);
-        buf->insert(buf->end(),
-                    reinterpret_cast<uint8_t *>(ptr),
-                    reinterpret_cast<uint8_t *>(ptr) + total);
-        return total;
-      },
-      &response_buffer);
-
-    if (progress)
-      easy.SetXferInfoFunction(CurlProgressCallback, &ctx);
-
-    out_curl = CURLE_OK;
-    try {
-      easy.Perform();
-    } catch (const std::exception &) {
-      out_curl = CURLE_OPERATION_TIMEDOUT;
-    }
-
-    easy.GetInfo(CURLINFO_RESPONSE_CODE, &out_http);
-    easy.GetInfo(CURLINFO_SIZE_DOWNLOAD_T, &out_wire);
-    easy.GetInfo(CURLINFO_SPEED_DOWNLOAD_T, &out_speed);
-    /* easy + headers destruct here — no manual cleanup, no leak on
-       throw. */
-  };
-
-  std::vector<uint8_t> response_buffer;
-  CurlProgressCtx progress_ctx;
-  progress_ctx.progress = progress ? &progress : nullptr;
-
-  curl_off_t wire_bytes = 0;
-  curl_off_t speed_bps = 0;
-  long http_code = 0;
-  CURLcode res = CURLE_OK;
-  perform(response_buffer, progress_ctx, wire_bytes, speed_bps,
-          http_code, res);
-
-  if (out_wire_bytes)
-    *out_wire_bytes = (int64_t)wire_bytes;
-
-  /* User cancelled via Stop — return false, not an error. */
-  if (res == CURLE_ABORTED_BY_CALLBACK)
-    return false;
-
-  /* 401: try re-auth ONCE (bounded — used to be unbounded recursive). */
-  if (http_code == 401) {
-    LogFmt("xctherm: 401, re-authenticating");
-    if (!auth.ForceReauthenticate())
-      throw XCThermAPIError(XCThermAPIError::Kind::AUTH_FAILED, 401,
-                            "XCTherm authentication failed. Check "
-                            "credentials in Config → System → Weather.");
-    response_buffer.clear();
-    perform(response_buffer, progress_ctx, wire_bytes, speed_bps,
-            http_code, res);
-    if (out_wire_bytes)
-      *out_wire_bytes += (int64_t)wire_bytes;
-    if (res == CURLE_ABORTED_BY_CALLBACK)
-      return false;
+    LogFmt("xctherm: download failed (network) {}", context);
+    throw MakeApiError(true, 0, context);
   }
 
-  if (res != CURLE_OK || http_code != 200) {
-    LogFmt("xctherm: download failed curl={} http={}",
-           (int)res, http_code);
-    throw MakeApiError(res, http_code,
-                       parameter + " " + date + "/" + run_hour +
-                       "Z step " + step_str);
+  if (!should_continue())
+    co_return false;
+
+  if (response.status != 200) {
+    LogFmt("xctherm: download failed http={}", response.status);
+    throw MakeApiError(response.status == 0, (long)response.status, context);
   }
 
-  out_geojson.assign(response_buffer.begin(), response_buffer.end());
+  if (out_wire_bytes != nullptr)
+    *out_wire_bytes = (int64_t)response.body.size();
 
-  LogFmt("xctherm: {:.1f} KB over wire -> {:.1f} KB decompressed ({:.1f}x), {:.0f} KB/s",
-         wire_bytes / 1024.0,
-         out_geojson.size() / 1024.0,
-         wire_bytes > 0 ? (double)out_geojson.size() / wire_bytes : 1.0,
-         speed_bps / 1024.0);
+  out_geojson = std::move(response.body);
+
+  LogFmt("xctherm: {:.1f} KB decompressed",
+         out_geojson.size() / 1024.0);
 
   /* Build the cache entry once; commit it atomically only after the
      curl handle reported success above. ControlsWidget reads from
@@ -571,7 +462,7 @@ XCThermAPI::DownloadGeoJSON(const std::string &parameter,
     InsertResident(parameter, forecast_utc, std::move(slice));
   }
 
-  return !out_geojson.empty();
+  co_return !out_geojson.empty();
 }
 
 /* ------------------------------------------------------------------ */
@@ -970,10 +861,9 @@ XCThermAPI::SliceFilePath(const std::string &parameter,
 {
   if (disk_cache_dir == nullptr)
     return nullptr;
-  char name[128];
-  std::snprintf(name, sizeof(name), "%s_%02u.xctcache",
-                parameter.c_str(), forecast_utc);
-  return AllocatedPath::Build(disk_cache_dir, name);
+  const auto name = FmtBuffer<128>("{}_{:02}.xctcache",
+                                   parameter, forecast_utc);
+  return AllocatedPath::Build(disk_cache_dir, name.c_str());
 }
 
 void
@@ -987,17 +877,11 @@ XCThermAPI::WriteSliceToDisk(const std::string &parameter,
 
   try {
     FileOutputStream out{path};
-    char header[128];
-    const int header_len = std::snprintf(
-      header, sizeof(header),
-      "%s run_date=%s run_hour=%s step=%u downloaded_at=%lld\n",
+    const auto header = FmtBuffer<128>(
+      "{} run_date={} run_hour={} step={} downloaded_at={}\n",
       kDiskHeader,
-      slice.run_date.c_str(),
-      slice.run_hour.c_str(),
-      slice.step,
-      (long long)slice.downloaded_at);
-    if (header_len > 0)
-      out.Write(std::as_bytes(std::span(header, (size_t)header_len)));
+      slice.run_date, slice.run_hour, slice.step, slice.downloaded_at);
+    out.Write(std::as_bytes(std::span(header.c_str(), std::strlen(header.c_str()))));
     out.Write(std::as_bytes(std::span(slice.geojson.data(),
                                       slice.geojson.size())));
     out.Commit();
