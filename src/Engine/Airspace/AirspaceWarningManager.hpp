@@ -65,11 +65,13 @@ class AirspaceWarningManager {
   /**
    * NOTAM areas are removed and re-created when the NOTAM list is refreshed,
    * so #warnings cannot match the new #AbstractAirspace by pointer.  "Ack
-   * day" for NOTAM is also keyed by NOTAM number (#GetStationName()) so it
-   * survives updates.
+   * day" and "cleared" for NOTAM are also keyed by NOTAM number
+   * (#GetStationName()) so they survive updates.
    */
   std::unordered_set<std::string, TransparentStringHash,
                      TransparentStringEqual> notam_day_ack_by_station;
+  std::unordered_set<std::string, TransparentStringHash,
+                     TransparentStringEqual> notam_day_cleared_by_station;
 
   /**
    * This number is incremented each time this object is modified.
@@ -195,6 +197,7 @@ public:
     ++serial;
     warnings.clear();
     notam_day_ack_by_station.clear();
+    notam_day_cleared_by_station.clear();
   }
 
   /**
@@ -291,6 +294,8 @@ public:
   bool IsActive(const AbstractAirspace &airspace) const noexcept;
 
 private:
+  void ApplyNotamDayState(AirspaceWarning &warning) noexcept;
+
   AirspaceWarning *FindWarningByNotamDayAckKey(std::string_view key) noexcept;
   const AirspaceWarning *
   FindWarningByNotamDayAckKey(std::string_view key) const noexcept;

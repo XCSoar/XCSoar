@@ -31,6 +31,17 @@ NotamDayAckKey(const AbstractAirspace &airspace) noexcept
   return (s != nullptr && s[0] != '\0') ? s : nullptr;
 }
 
+void
+AirspaceWarningManager::ApplyNotamDayState(AirspaceWarning &warning) noexcept
+{
+  if (const char *key = NotamDayAckKey(warning.GetAirspace())) {
+    if (notam_day_ack_by_station.contains(key))
+      warning.AcknowledgeDay(true);
+    if (notam_day_cleared_by_station.contains(key))
+      warning.SetCleared(true);
+  }
+}
+
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
                                                const Airspaces &_airspaces)
   :airspaces(_airspaces)
@@ -67,6 +78,7 @@ AirspaceWarningManager::Reset(const AircraftState &state)
   ++serial;
   warnings.clear();
   notam_day_ack_by_station.clear();
+  notam_day_cleared_by_station.clear();
   cruise_filter.Reset(state);
   circling_filter.Reset(state);
 }
@@ -97,11 +109,8 @@ AirspaceWarningManager::GetWarning(ConstAirspacePtr airspace)
   // not found, create new entry
   ++serial;
   warnings.emplace_back(std::move(airspace));
-  AirspaceWarning &created = warnings.back();
-  if (const char *key = NotamDayAckKey(created.GetAirspace());
-      key != nullptr && notam_day_ack_by_station.contains(key))
-    created.AcknowledgeDay(true);
-  return created;
+  ApplyNotamDayState(warnings.back());
+  return warnings.back();
 }
 
 
@@ -141,11 +150,8 @@ AirspaceWarningManager::GetNewWarningPtr(ConstAirspacePtr airspace)
 {
   ++serial;
   warnings.emplace_back(airspace);
-  AirspaceWarning &created = warnings.back();
-  if (const char *key = NotamDayAckKey(created.GetAirspace());
-      key != nullptr && notam_day_ack_by_station.contains(key))
-    created.AcknowledgeDay(true);
-  return &created;
+  ApplyNotamDayState(warnings.back());
+  return &warnings.back();
 }
 
 bool 
@@ -719,19 +725,50 @@ void
 AirspaceWarningManager::SetCleared(ConstAirspacePtr airspace,
                                    const bool set)
 {
-  auto &warning = GetWarning(std::move(airspace));
-  if (warning.IsCleared() != set) {
-    warning.SetCleared(set);
-    // The renderer fill cache keys on the manager serial; without this
-    // bump, toggling clearance on an existing warning would not refresh
-    // the cached fill on the non-GL renderer.
-    ++serial;
+  const char *const key = NotamDayAckKey(*airspace);
+  bool membership_changed = false;
+  if (key != nullptr) {
+    if (set)
+      membership_changed = notam_day_cleared_by_station.emplace(key).second;
+    else
+      membership_changed = notam_day_cleared_by_station.erase(key) > 0;
   }
+
+  auto &warning = GetWarning(std::move(airspace));
+  bool flag_changed = false;
+  if (key != nullptr) {
+    /* Every polygon of this NOTAM already in the list must carry
+       the flag.  IsCleared() does not consult the station set. */
+    const std::string_view key_view{key};
+    for (auto &candidate : warnings) {
+      const char *const candidate_key =
+        NotamDayAckKey(candidate.GetAirspace());
+      if (candidate_key == nullptr || key_view != candidate_key)
+        continue;
+      if (candidate.IsCleared() == set)
+        continue;
+      candidate.SetCleared(set);
+      flag_changed = true;
+    }
+  } else if (warning.IsCleared() != set) {
+    warning.SetCleared(set);
+    flag_changed = true;
+  }
+
+  // The renderer fill cache keys on the manager serial; without this
+  // bump, toggling clearance on an existing warning would not refresh
+  // the cached fill on the non-GL renderer.
+  if (membership_changed || flag_changed)
+    ++serial;
 }
 
 bool
 AirspaceWarningManager::GetCleared(const AbstractAirspace &airspace) const noexcept
 {
+  if (const char *key = NotamDayAckKey(airspace);
+      key != nullptr && notam_day_cleared_by_station.contains(key))
+    return true;
+
   const AirspaceWarning *warning = GetWarningPtr(airspace);
   return warning != nullptr && warning->IsCleared();
 }
