@@ -691,8 +691,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/NOAAUpdater.cpp \
-	$(SRC)/Weather/xctherm/XCThermAuth.cpp \
 	$(SRC)/Weather/xctherm/XCThermAPI.cpp \
+	$(SRC)/Weather/xctherm/XCThermDownload.cpp \
+	$(SRC)/Weather/xctherm/XCThermDownloadGlue.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSON.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSONOverlay.cpp \

@@ -3,10 +3,13 @@
 
 #pragma once
 
-#include "XCThermAuth.hpp"
+#include "co/Task.hxx"
+#include "net/client/xctherm/Auth.hpp"
 #include "Operation/Operation.hpp"
 
 #include "system/Path.hpp"
+
+class CurlGlobal;
 
 #include <cstdint>
 #include <cstddef>
@@ -18,6 +21,8 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+class ProgressListener;
 
 /**
  * Errors thrown by XCThermAPI on network / HTTP failures. Callers can
@@ -140,38 +145,25 @@ public:
                          unsigned &out_step) const noexcept;
 
   /**
-   * Progress / cancel callback. Called periodically from inside
-   * DownloadGeoJSON during the libcurl transfer.
+   * Download a single GeoJSON layer on @p curl's event loop (async).
    *
-   * @param bytes_now   bytes received so far on the current slice
-   * @param bytes_total expected total in bytes (0 if not yet known)
-   * @return true to continue; false to abort the transfer
-   *         (curl will return failure)
-   */
-  using ProgressFn = std::function<bool(uint64_t bytes_now,
-                                        uint64_t bytes_total)>;
-
-  /**
-   * Download a single GeoJSON layer.
+   * Ensures a valid JWT via #auth before the request; sends Bearer auth;
+   * on HTTP 401 re-authenticates once and retries.
    *
-   * @param parameter e.g. "vertical_wind_3000amsl"
-   * @param date YYYYMMDD
-   * @param run_hour HH (00, 03, etc.)
-   * @param step forecast step (0, 1, 2, ...)
-   * @param out_geojson receives the uncompressed GeoJSON string
-   * @param progress optional progress / cancel callback. Safe to call
-   *   from any thread (callback fires on the calling thread).
-   * @return @c true on success; @c false only if the progress callback
-   *   returned false (i.e. user cancelled mid-transfer).
+   * @return @c true on success; @c false if @p should_continue returned false.
    * @throws XCThermAPIError on network / HTTP failure.
    */
-  bool DownloadGeoJSON(const std::string &parameter,
-                       const std::string &date,
-                       const std::string &run_hour,
-                       unsigned step,
-                       std::string &out_geojson,
-                       int64_t *out_wire_bytes = nullptr,
-                       ProgressFn progress = nullptr);
+  Co::Task<bool> CoDownloadGeoJSON(CurlGlobal &curl,
+                                   const std::string &parameter,
+                                   const std::string &date,
+                                   const std::string &run_hour,
+                                   unsigned step,
+                                   std::string &out_geojson,
+                                   int64_t *out_wire_bytes = nullptr,
+                                   ProgressListener *progress = nullptr,
+                                   const std::function<bool()> &should_continue = []() {
+                                     return true;
+                                   });
 
   bool IsIndexLoaded() const noexcept { return index_loaded; }
 
@@ -330,7 +322,7 @@ public:
                           unsigned current_utc_hour) noexcept;
 
 private:
-  XCThermAuth auth;
+  XCTherm::Auth auth{XCTherm::kAuthConfig};
   std::string model = "icon-ch";
   std::vector<ParameterInfo> available_parameters;
   bool index_loaded = false;
@@ -409,6 +401,8 @@ private:
   /** Drop a key from the LRU body cache. Caller holds lock. */
   void DropResident(const std::string &parameter,
                     unsigned utc_hour) noexcept;
+
+  Co::Task<bool> CoFetchIndex(CurlGlobal &curl);
 
   /**
    * Parse the index.json response and populate available_parameters.

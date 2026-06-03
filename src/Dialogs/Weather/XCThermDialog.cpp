@@ -26,17 +26,19 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/StaticString.hxx"
 #include "Weather/xctherm/XCThermAPI.hpp"
+#include "Weather/xctherm/XCThermDownloadGlue.hpp"
+#include "Weather/xctherm/XCThermDownloadJob.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
 #include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "LogFile.hpp"
+#include "lib/fmt/ToBuffer.hxx"
+#include "net/http/Init.hpp"
 
-#include <atomic>
 #include <chrono>
 #include <ctime>
 #include <memory>
-#include <mutex>
-#include <thread>
+#include <optional>
 
 namespace {
 
@@ -129,54 +131,6 @@ struct LayerDownloadInfo {
   unsigned retry_seconds_left = 0;// seconds until next retry attempt
   std::string download_time;      // "HH:MM:SS" local time
   std::string issued_utc;         // "YYYY-MM-DD HH UTC" of the model run
-};
-
-/**
- * Cross-thread state for a span download.
- *
- * Owned via std::shared_ptr so that the UI widget can drop its reference
- * mid-flight (when the dialog closes) while the worker thread keeps the
- * job alive long enough to observe the cancel flag and exit cleanly.
- *
- * Atomics carry live progress that the UI thread polls every 200 ms via
- * PeriodicTimer. The result_mutex-guarded fields hold the final outputs
- * the UI applies once @c done is observed true.
- */
-struct DownloadJob {
-  /* Inputs (read-only after construction) */
-  unsigned model = 0;
-  int target_index = -1;
-  std::string target_label;
-  std::string param;
-  unsigned span_hours = 0;
-  unsigned current_utc = 12;
-
-  /* Live progress, written by worker, read by UI */
-  std::atomic<bool> cancel{false};
-  std::atomic<bool> done{false};
-  std::atomic<unsigned> current_offset{0};
-  std::atomic<uint64_t> bytes_now{0};
-  std::atomic<uint64_t> bytes_total{0};
-  std::atomic<uint64_t> total_wire_bytes{0};
-  std::atomic<unsigned> succeeded_or_cached{0};
-  std::atomic<unsigned> newly_downloaded{0};
-  std::atomic<unsigned> retry_attempt{0};
-  std::atomic<unsigned> retry_seconds_left{0};
-  std::atomic<bool> any_slot_missing{false};
-
-  /* Final results, written once by worker before setting done=true */
-  std::mutex result_mutex;
-  XCThermGeoJSON::ForecastLayer first_forecast;
-  std::string latest_run_date;
-  std::string latest_run_hour;
-  std::chrono::steady_clock::time_point started_at;
-  std::chrono::steady_clock::time_point finished_at;
-
-  /* If the worker hit a non-recoverable error (auth, forbidden,
-     unexpected HTTP), it stores the exception here and exits the
-     loop. FinishDownload feeds this into ShowError on the UI thread,
-     so the user gets the actual cause instead of a generic message. */
-  std::exception_ptr error_eptr;
 };
 
 /** Per-layer download info (indexed by layer position in the list) */
@@ -343,13 +297,11 @@ class XCThermWidget final : public ListWidget {
 
   XCThermRowRenderer row_renderer;
 
-  /* In-flight download. nullptr when idle. The widget keeps a strong
-     reference; the worker thread captures its own shared_ptr so the
-     job object survives even if the widget is destroyed mid-flight. */
-  std::shared_ptr<DownloadJob> active_job;
+  std::shared_ptr<XCThermDownloadJob> active_job;
 
-  /* Polls active_job every 200 ms to refresh the list row and detect
-     completion. Fires on the UI thread. */
+  std::optional<XCThermDownloadGlue> download_glue;
+
+  /* Polls active_job every 200 ms for live progress (UI thread). */
   UI::PeriodicTimer poll_timer{[this]{ PollDownload(); }};
 
 public:
@@ -360,19 +312,13 @@ public:
   void CreateButtons(ButtonPanel &buttons);
 
   ~XCThermWidget() noexcept override {
-    /* If a download is still running, ask it to stop and detach: the
-       worker keeps a shared_ptr to the job, so cancel will be observed
-       on the next progress callback or retry-sleep tick. */
-    if (active_job) {
-      active_job->cancel.store(true);
-      if (active_job_thread.joinable())
-        active_job_thread.detach();
-    }
+    if (download_glue)
+      download_glue->RequestCancel();
+    if (download_glue)
+      download_glue->BeginShutdown();
   }
 
 private:
-  std::thread active_job_thread;
-
   void UpdateList();
   void SaveSettings();
 
@@ -386,7 +332,6 @@ private:
   void PollDownload();
   void FinishDownload();
   void CancelDownload();
-  static void DownloadWorker(std::shared_ptr<DownloadJob> job);
 
   /**
    * Walk every row for the current model and populate its
@@ -617,11 +562,11 @@ XCThermWidget::CancelDownload()
 {
   if (!active_job)
     return;
-  /* Setting the cancel flag aborts the in-flight curl call (via the
-     progress callback returning non-zero) and shortcuts the
-     retry-sleep loop. The worker then sets done=true; the poll timer
-     picks that up and runs FinishDownload(). */
-  active_job->cancel.store(true);
+
+  if (download_glue)
+    download_glue->RequestCancel();
+  else
+    active_job->cancel.store(true);
 }
 
 void
@@ -684,8 +629,18 @@ XCThermWidget::StartDownload()
     }
   }
 
-  /* Initialise per-row UI state and the job descriptor. */
-  auto job = std::make_shared<DownloadJob>();
+  if (Net::curl == nullptr) {
+    ShowMessageBox(_("Network is not available."), "XCTherm", MB_OK);
+    return;
+  }
+
+  if (!download_glue)
+    download_glue.emplace(*Net::curl);
+
+  if (download_glue->IsRunning())
+    return;
+
+  auto job = std::make_shared<XCThermDownloadJob>();
   job->model = settings.model;
   job->target_index = cursor_index;
   job->target_label = target.label;
@@ -696,11 +651,7 @@ XCThermWidget::StartDownload()
 
   auto *info = GetDownloadInfo(settings.model);
   auto &row_info = info[cursor_index];
-  /* Preserve the previous DONE info so FinishDownload can restore it
-     if nothing usable comes out of the new run. The PENDING row text
-     is rendered from atomics, not from these fields. */
   row_info.status = LayerDownloadInfo::PENDING;
-  /* Worker fetches (span + 1) slices (past + future). */
   row_info.pending_total = span_hours + 1;
   row_info.pending_index = 0;
   row_info.pending_bytes_now = 0;
@@ -709,11 +660,12 @@ XCThermWidget::StartDownload()
   row_info.retry_seconds_left = 0;
 
   active_job = job;
-  /* Spawn the worker. It captures its own shared_ptr to the job so the
-     state survives even if the widget is destroyed mid-flight. */
-  active_job_thread = std::thread(&XCThermWidget::DownloadWorker, job);
 
-  /* Refresh button labels (Download → Stop) and start the UI poll. */
+  download_glue->Start(job, [this](std::shared_ptr<XCThermDownloadJob> finished) {
+    active_job = std::move(finished);
+    FinishDownload();
+  });
+
   UpdateList();
   poll_timer.Schedule(std::chrono::milliseconds(200));
 }
@@ -738,9 +690,6 @@ XCThermWidget::PollDownload()
   row_info.retry_seconds_left = job.retry_seconds_left.load();
 
   GetList().Invalidate();
-
-  if (job.done.load())
-    FinishDownload();
 }
 
 void
@@ -750,10 +699,6 @@ XCThermWidget::FinishDownload()
     return;
 
   poll_timer.Cancel();
-
-  /* The worker has signalled done; safe to join. */
-  if (active_job_thread.joinable())
-    active_job_thread.join();
 
   auto job = std::move(active_job);
   active_job.reset();
@@ -831,13 +776,12 @@ XCThermWidget::FinishDownload()
   row_info.retry_seconds_left = 0;
 
   if (job->latest_run_date.size() == 8 && job->latest_run_hour.size() == 2) {
-    char issued[24];
-    std::snprintf(issued, sizeof(issued), "%.4s-%.2s-%.2s %s UTC",
-                  job->latest_run_date.c_str(),
-                  job->latest_run_date.c_str() + 4,
-                  job->latest_run_date.c_str() + 6,
-                  job->latest_run_hour.c_str());
-    row_info.issued_utc = issued;
+    const std::string &d = job->latest_run_date;
+    row_info.issued_utc = std::string(FmtBuffer<32>("{}-{}-{} {} UTC",
+                                                    d.substr(0, 4),
+                                                    d.substr(4, 2),
+                                                    d.substr(6, 2),
+                                                    job->latest_run_hour).c_str());
   } else {
     row_info.issued_utc = "?";
   }
@@ -889,198 +833,6 @@ XCThermWidget::FinishDownload()
                ok, span, nu);
     ShowMessageBox(msg, "XCTherm", MB_OK);
   }
-}
-
-/* ---- Download worker (background thread) ---- */
-
-void
-XCThermWidget::DownloadWorker(std::shared_ptr<DownloadJob> job)
-{
-  auto &api = XCThermAPI::Instance();
-
-  /* We fetch (span_hours + 1) hourly slices per download: the previous
-     hour first, followed by span_hours future hours. The past slot
-     gives the pilot context about what was forecast an hour ago — e.g.
-     to compare against what actually happened — without making the
-     download disproportionately bigger. */
-  const unsigned total_slots = job->span_hours + 1;
-  for (unsigned slot_i = 0; slot_i < total_slots; ++slot_i) {
-    if (job->cancel.load())
-      break;
-
-    /* slot_i == 0 → previous-hour forecast (base shifted back by 1,
-       offset 0). slot_i >= 1 → future offsets 1..span_hours from the
-       current UTC hour. */
-    const bool is_past = (slot_i == 0);
-    const unsigned slot_base = is_past
-      ? (job->current_utc + 23) % 24
-      : job->current_utc;
-    const unsigned slot_offset = is_past ? 0u : slot_i;
-
-    job->current_offset.store(slot_i + 1);  // 1-based for UI progress
-    job->bytes_now.store(0);
-    job->bytes_total.store(0);
-
-    std::string slot_date, slot_run_hour;
-    unsigned slot_step = 0;
-    if (!api.FindSlotForOffset(job->param, slot_base, slot_offset,
-                               slot_date, slot_run_hour, slot_step)) {
-      LogFmt("xctherm: no slot for slot#{} (base={}UTC +{}h) — skipping",
-             slot_i, slot_base, slot_offset);
-      job->any_slot_missing.store(true);
-      continue;
-    }
-
-    const unsigned run_h = (unsigned)std::atoi(slot_run_hour.c_str());
-    const unsigned forecast_utc = (run_h + slot_step) % 24;
-
-    /* Track the freshest run seen for the display. */
-    {
-      std::lock_guard lock{job->result_mutex};
-      if (slot_date > job->latest_run_date ||
-          (slot_date == job->latest_run_date &&
-           slot_run_hour > job->latest_run_hour)) {
-        job->latest_run_date = slot_date;
-        job->latest_run_hour = slot_run_hour;
-      }
-    }
-
-    /* Skip slices that are already cached from this exact run. */
-    if (api.IsCachedAtRun(job->param, forecast_utc,
-                          slot_date, slot_run_hour)) {
-      LogFmt("xctherm: slot#{} ({}UTC) cached at run {}/{}Z — reused",
-             slot_i, forecast_utc, slot_date, slot_run_hour);
-      job->succeeded_or_cached.fetch_add(1);
-
-      /* Use the cached slice for the overlay if this is the first
-         parseable one we've seen. */
-      {
-        std::lock_guard lock{job->result_mutex};
-        if (job->first_forecast.IsEmpty()) {
-          const std::string &cached =
-            api.GetCachedGeoJSON(job->param, forecast_utc);
-          if (!cached.empty()) {
-            auto forecast = XCThermGeoJSON::Parse(cached, true);
-            if (!forecast.IsEmpty()) {
-              forecast.layer_name = job->target_label;
-              job->first_forecast = std::move(forecast);
-            }
-          }
-        }
-      }
-      continue;
-    }
-
-    /* Retry loop for this slot. Each iteration: one curl call.
-       Transient failures (network, 5xx) sleep+retry forever until the
-       user cancels or the network comes back. Persistent failures
-       (auth, forbidden, unexpected HTTP) abort the whole job and bubble
-       up to FinishDownload via job->error_eptr. */
-    bool slot_ok = false;
-    bool slot_abandon = false;
-    for (unsigned attempt = 0; !job->cancel.load(); ++attempt) {
-      job->retry_attempt.store(attempt);
-      job->retry_seconds_left.store(0);
-      job->bytes_now.store(0);
-      job->bytes_total.store(0);
-
-      std::string geojson;
-      int64_t wire_bytes = 0;
-
-      /* The progress callback runs on this worker thread (inside curl).
-         It updates the per-slice byte counters and returns false when
-         cancel is set, which causes curl to abort the transfer. */
-      auto progress = [&job](uint64_t now, uint64_t total) -> bool {
-        if (job->cancel.load())
-          return false;
-        job->bytes_now.store(now);
-        job->bytes_total.store(total);
-        return true;
-      };
-
-      bool transient_failure = false;
-      try {
-        const bool ok = api.DownloadGeoJSON(
-          job->param, slot_date, slot_run_hour, slot_step,
-          geojson, &wire_bytes, progress);
-
-        if (job->cancel.load())
-          break;
-
-        if (ok) {
-          /* Got bytes — commit + move on to next offset. */
-          job->total_wire_bytes.fetch_add((uint64_t)wire_bytes);
-          job->succeeded_or_cached.fetch_add(1);
-          job->newly_downloaded.fetch_add(1);
-
-          {
-            std::lock_guard lock{job->result_mutex};
-            if (job->first_forecast.IsEmpty()) {
-              auto forecast = XCThermGeoJSON::Parse(geojson, true);
-              if (!forecast.IsEmpty()) {
-                forecast.layer_name = job->target_label;
-                job->first_forecast = std::move(forecast);
-              }
-            }
-          }
-          slot_ok = true;
-          break;
-        }
-        /* ok==false here means user cancel — handled by the next
-           cancel.load() check above; nothing else gets here. */
-      } catch (const XCThermAPIError &e) {
-        switch (e.kind) {
-        case XCThermAPIError::Kind::NETWORK:
-        case XCThermAPIError::Kind::SERVER_ERROR:
-          /* Transient — retry. */
-          transient_failure = true;
-          break;
-        case XCThermAPIError::Kind::NOT_FOUND:
-          /* This particular slot doesn't exist on the server — give up
-             on this offset but keep going with the rest of the span. */
-          LogFmt("xctherm: slot#{}: {}", slot_i, e.what());
-          slot_abandon = true;
-          break;
-        case XCThermAPIError::Kind::AUTH_FAILED:
-        case XCThermAPIError::Kind::FORBIDDEN:
-        case XCThermAPIError::Kind::OTHER_HTTP:
-          /* Persistent — abandon the entire job and surface to user. */
-          LogFmt("xctherm: aborting job — {}", e.what());
-          job->error_eptr = std::current_exception();
-          job->finished_at = std::chrono::steady_clock::now();
-          job->done.store(true);
-          return;
-        }
-      } catch (...) {
-        /* Anything else — propagate via the same path. */
-        job->error_eptr = std::current_exception();
-        job->finished_at = std::chrono::steady_clock::now();
-        job->done.store(true);
-        return;
-      }
-
-      if (slot_abandon)
-        break;
-
-      if (transient_failure) {
-        constexpr unsigned RETRY_SECONDS = 5;
-        LogFmt("xctherm: slot#{} attempt {} transient failure — retry in {}s",
-               slot_i, attempt + 1, RETRY_SECONDS);
-        for (unsigned s = RETRY_SECONDS; s > 0 && !job->cancel.load(); --s) {
-          job->retry_seconds_left.store(s);
-          for (int t = 0; t < 10 && !job->cancel.load(); ++t)
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-        job->retry_seconds_left.store(0);
-      }
-    }
-
-    if (!slot_ok && !job->cancel.load())
-      job->any_slot_missing.store(true);
-  }
-
-  job->finished_at = std::chrono::steady_clock::now();
-  job->done.store(true);
 }
 
 void
@@ -1166,13 +918,12 @@ XCThermWidget::RehydrateRowsFromCache() noexcept
 
     if (summary.latest_run_date.size() == 8 &&
         summary.latest_run_hour.size() == 2) {
-      char issued[24];
-      std::snprintf(issued, sizeof(issued), "%.4s-%.2s-%.2s %s UTC",
-                    summary.latest_run_date.c_str(),
-                    summary.latest_run_date.c_str() + 4,
-                    summary.latest_run_date.c_str() + 6,
-                    summary.latest_run_hour.c_str());
-      row.issued_utc = issued;
+      const std::string &d = summary.latest_run_date;
+      row.issued_utc = std::string(FmtBuffer<32>("{}-{}-{} {} UTC",
+                                                 d.substr(0, 4),
+                                                 d.substr(4, 2),
+                                                 d.substr(6, 2),
+                                                 summary.latest_run_hour).c_str());
     } else {
       row.issued_utc = "?";
     }
@@ -1191,6 +942,9 @@ void
 XCThermWidget::Prepare(ContainerWindow &parent,
                         const PixelRect &rc) noexcept
 {
+  if (Net::curl != nullptr && !download_glue)
+    download_glue.emplace(*Net::curl);
+
   CreateButtons(buttons_widget->GetButtonPanel());
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc, row_renderer.CalculateLayout(look));
