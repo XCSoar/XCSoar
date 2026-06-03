@@ -1,4 +1,5 @@
-ifeq ($(TARGET_IS_LINUX)$(USE_POLL_EVENT)$(TARGET_IS_KOBO),yyn)
+ifeq ($(TARGET_IS_LINUX)$(TARGET_IS_KOBO)$(TARGET_IS_ANDROID),ynn)
+
 
 $(eval $(call pkg-config-library,LIBDBUS,dbus-1))
 
