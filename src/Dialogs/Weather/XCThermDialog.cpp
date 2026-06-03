@@ -26,6 +26,7 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/StaticString.hxx"
 #include "Weather/xctherm/XCThermAPI.hpp"
+#include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Weather/xctherm/XCThermDownloadGlue.hpp"
 #include "Weather/xctherm/XCThermDownloadJob.hpp"
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
@@ -41,73 +42,6 @@
 #include <optional>
 
 namespace {
-
-/* Model IDs — keep in sync with WeatherConfigPanel's region enum. */
-constexpr unsigned XCTHERM_MODEL_UK = 1;
-
-struct LayerInfo {
-  const char *label;       // display text
-  const char *file_suffix; // e.g. "5000amsl" or "100agl"
-  unsigned value;          // altitude value in meters
-  bool is_agl;             // true = AGL, false = AMSL
-};
-
-static constexpr LayerInfo CH_LAYERS[] = {
-  { "Vertical wind 1500 m AMSL", "1500amsl", 1500, false },
-  { "Vertical wind 2000 m AMSL", "2000amsl", 2000, false },
-  { "Vertical wind 3000 m AMSL", "3000amsl", 3000, false },
-  { "Vertical wind 4000 m AMSL", "4000amsl", 4000, false },
-  { "Vertical wind 5000 m AMSL", "5000amsl", 5000, false },
-  { "Vertical wind 6000 m AMSL", "6000amsl", 6000, false },
-  { "Vertical wind 7000 m AMSL", "7000amsl", 7000, false },
-  { "Vertical wind 8000 m AMSL", "8000amsl", 8000, false },
-  { "Vertical wind 100 m AGL",   "100agl",   100,  true },
-  { "Vertical wind 400 m AGL",   "400agl",   400,  true },
-};
-
-static constexpr LayerInfo UK_LAYERS[] = {
-  { "Vertical wind 1000 m AMSL", "1000amsl", 1000, false },
-  { "Vertical wind 1500 m AMSL", "1500amsl", 1500, false },
-  { "Vertical wind 2000 m AMSL", "2000amsl", 2000, false },
-  { "Vertical wind 2500 m AMSL", "2500amsl", 2500, false },
-  { "Vertical wind 3000 m AMSL", "3000amsl", 3000, false },
-  { "Vertical wind 4200 m AMSL", "4200amsl", 4200, false },
-  { "Vertical wind 100 m AGL",   "100agl",   100,  true },
-  { "Vertical wind 200 m AGL",   "200agl",   200,  true },
-  { "Vertical wind 400 m AGL",   "400agl",   400,  true },
-  { "Vertical wind 800 m AGL",   "800agl",   800,  true },
-};
-
-[[gnu::pure]]
-static bool
-IsUKModel(unsigned model) noexcept
-{
-  return model == XCTHERM_MODEL_UK;
-}
-
-static const LayerInfo *
-GetLayers(unsigned model, size_t &size) noexcept
-{
-  if (IsUKModel(model)) {
-    size = std::size(UK_LAYERS);
-    return UK_LAYERS;
-  }
-  size = std::size(CH_LAYERS);
-  return CH_LAYERS;
-}
-
-[[gnu::pure]]
-static bool
-IsActiveLayer(const LayerInfo &layer,
-              unsigned active_parameter,
-              unsigned active_wave_height,
-              unsigned active_vertical_agl) noexcept
-{
-  if (layer.is_agl)
-    return active_parameter == 1 && layer.value == active_vertical_agl;
-  else
-    return active_parameter == 0 && layer.value == active_wave_height;
-}
 
 /**
  * Download metadata for a layer — shown in the second row.
@@ -134,13 +68,17 @@ struct LayerDownloadInfo {
 };
 
 /** Per-layer download info (indexed by layer position in the list) */
-static LayerDownloadInfo download_info_ch[std::size(CH_LAYERS)];
-static LayerDownloadInfo download_info_uk[std::size(UK_LAYERS)];
+static LayerDownloadInfo download_info_ch[
+  XCTherm::GetRegion(XCTherm::Region::CH).layer_count];
+static LayerDownloadInfo download_info_uk[
+  XCTherm::GetRegion(XCTherm::Region::UK).layer_count];
 
 static LayerDownloadInfo *
 GetDownloadInfo(unsigned model) noexcept
 {
-  return IsUKModel(model) ? download_info_uk : download_info_ch;
+  if (XCTherm::ToRegion(model) == XCTherm::Region::UK)
+    return download_info_uk;
+  return download_info_ch;
 }
 
 /* ---- List item renderer ---- */
@@ -169,21 +107,20 @@ XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           unsigned active_vertical_agl,
                           unsigned span_hours_setting)
 {
-  size_t count = 0;
-  const auto *layers = GetLayers(model, count);
-  if (index >= count)
+  const auto &region = XCTherm::GetRegion(model);
+  if (index >= region.layer_count)
     return;
 
-  const auto &layer = layers[index];
-  const bool active = IsActiveLayer(layer, active_parameter,
-                                     active_wave_height,
-                                     active_vertical_agl);
+  const auto &layer = region.layers[index];
+  const bool active = XCTherm::IsActiveLayer(layer, active_parameter,
+                                             active_wave_height,
+                                             active_vertical_agl);
 
   StaticString<80> first_row;
   if (active)
-    first_row.Format("%s  %s", layer.label, _("[ACTIVE]"));
+    first_row.Format("%s  %s", layer.dialog_label, _("[ACTIVE]"));
   else
-    first_row = layer.label;
+    first_row = layer.dialog_label;
 
   /* Second row: download status */
   StaticString<200> second_row;
@@ -403,10 +340,9 @@ XCThermWidget::UpdateList()
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
 
-  size_t count = 0;
-  GetLayers(settings.model, count);
+  const auto &region = XCTherm::GetRegion(settings.model);
 
-  list.SetLength(count);
+  list.SetLength(region.layer_count);
 
   /* Important: do NOT call SetCursorIndex here. UpdateList runs after
      every action (download progress tick, Activate, Span change). If
@@ -442,12 +378,11 @@ XCThermWidget::OnCursorMoved(unsigned index) noexcept
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
 
-  size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto &region = XCTherm::GetRegion(settings.model);
 
-  const bool cursor_is_active = index < count &&
-    IsActiveLayer(layers[index], settings.parameter,
-                   settings.wave_height, settings.vertical_wind_agl);
+  const bool cursor_is_active = index < region.layer_count &&
+    XCTherm::IsActiveLayer(region.layers[index], settings.parameter,
+                           settings.wave_height, settings.vertical_wind_agl);
 
   if (cursor_is_active) {
     activate_button->SetCaption(_("Active"));
@@ -481,20 +416,19 @@ XCThermWidget::ActivateClicked()
   auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
 
   const int index = GetList().GetCursorIndex();
-  size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto &region = XCTherm::GetRegion(settings.model);
 
-  if (index < 0 || (unsigned)index >= count)
+  if (index < 0 || unsigned(index) >= region.layer_count)
     return;
 
-  const auto &layer = layers[index];
+  const auto &layer = region.layers[index];
 
   if (layer.is_agl) {
     settings.parameter = 1;
-    settings.vertical_wind_agl = layer.value;
+    settings.vertical_wind_agl = layer.altitude_m;
   } else {
     settings.parameter = 0;
-    settings.wave_height = layer.value;
+    settings.wave_height = layer.altitude_m;
   }
 
   SaveSettings();
@@ -514,20 +448,16 @@ XCThermWidget::DeleteClicked()
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
 
-  size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto &region = XCTherm::GetRegion(settings.model);
 
   const int cursor_index = GetList().GetCursorIndex();
-  if (cursor_index < 0 || (unsigned)cursor_index >= count) {
+  if (cursor_index < 0 || unsigned(cursor_index) >= region.layer_count) {
     ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
     return;
   }
-  const auto &target = layers[cursor_index];
+  const auto &target = region.layers[cursor_index];
 
-  StaticString<64> param;
-  param.Format("vertical_wind_%s", target.file_suffix);
-
-  XCThermAPI::Instance().ClearLayer(param.c_str());
+  XCThermAPI::Instance().ClearLayer(target.api_parameter);
 
   /* Reset the per-row status so the dialog stops showing the old
      "Cached Nh | Issued …" line. */
@@ -584,15 +514,14 @@ XCThermWidget::StartDownload()
     return;
 
   /* Download targets the cursor-selected row, not the active layer. */
-  size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto &region = XCTherm::GetRegion(settings.model);
 
   const int cursor_index = GetList().GetCursorIndex();
-  if (cursor_index < 0 || (unsigned)cursor_index >= count) {
+  if (cursor_index < 0 || unsigned(cursor_index) >= region.layer_count) {
     ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
     return;
   }
-  const auto &target = layers[cursor_index];
+  const auto &target = region.layers[cursor_index];
 
   /* Current UTC hour — captured up-front because the worker can't safely
      touch CommonInterface (UI-only). */
@@ -610,6 +539,7 @@ XCThermWidget::StartDownload()
   api.EnableDiskCache();
   api.SetCredentials(settings.credentials.email.c_str(),
                      settings.credentials.password.c_str());
+  api.SetModel(region.api_slug);
 
   /* Index fetch happens synchronously on the UI thread once, before
      spawning the worker — it's a small payload and the worker can
@@ -643,8 +573,8 @@ XCThermWidget::StartDownload()
   auto job = std::make_shared<XCThermDownloadJob>();
   job->model = settings.model;
   job->target_index = cursor_index;
-  job->target_label = target.label;
-  job->param = std::string("vertical_wind_") + target.file_suffix;
+  job->target_label = target.dialog_label;
+  job->param = target.api_parameter;
   job->span_hours = span_hours;
   job->current_utc = current_utc;
   job->started_at = std::chrono::steady_clock::now();
@@ -878,8 +808,7 @@ XCThermWidget::RehydrateRowsFromCache() noexcept
 {
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
-  size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
+  const auto &region = XCTherm::GetRegion(settings.model);
   auto *info = GetDownloadInfo(settings.model);
   auto &api = XCThermAPI::Instance();
 
@@ -889,16 +818,14 @@ XCThermWidget::RehydrateRowsFromCache() noexcept
      fact sitting in the on-disk cache. Idempotent. */
   api.EnableDiskCache();
 
-  for (unsigned i = 0; i < count; ++i) {
+  for (unsigned i = 0; i < region.layer_count; ++i) {
     /* Don't overwrite session state — a row that's mid-download
        (PENDING) or failed/canceled should keep its visible status. */
     if (info[i].status != LayerDownloadInfo::NONE)
       continue;
 
-    StaticString<64> param;
-    param.Format("vertical_wind_%s", layers[i].file_suffix);
-
-    const auto summary = api.GetCachedLayerSummary(param.c_str());
+    const auto summary =
+      api.GetCachedLayerSummary(region.layers[i].api_parameter);
     if (summary.hours.empty())
       continue;
 
@@ -963,12 +890,11 @@ XCThermWidget::Prepare(ContainerWindow &parent,
      while layer Y is active stays parked on X after the download. */
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
-  size_t count = 0;
-  const auto *layers = GetLayers(settings.model, count);
-  for (unsigned i = 0; i < count; ++i) {
-    if (IsActiveLayer(layers[i], settings.parameter,
-                      settings.wave_height,
-                      settings.vertical_wind_agl)) {
+  const auto &region = XCTherm::GetRegion(settings.model);
+  for (unsigned i = 0; i < region.layer_count; ++i) {
+    if (XCTherm::IsActiveLayer(region.layers[i], settings.parameter,
+                               settings.wave_height,
+                               settings.vertical_wind_agl)) {
       GetList().SetCursorIndex(i);
       break;
     }
