@@ -10,6 +10,7 @@
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/SymbolButtonRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/window/SolidContainerWindow.hpp"
 #include "ui/window/PaintWindow.hpp"
@@ -234,24 +235,25 @@ public:
     WindowStyle child_style;
 
     /* Row 1: Layer stepper */
-    layer_prev.Create(*this, look.button, "<",
-                      {0, 0, btn_w, row_h},
-                      child_style, [this]{ ManualStepLayer(-1); });
-    layer_next.Create(*this, look.button, ">",
-                      {w - btn_w, 0, w, row_h},
-                      child_style, [this]{ ManualStepLayer(+1); });
+    layer_prev.Create(*this, {0, 0, btn_w, row_h}, child_style,
+                      std::make_unique<SymbolButtonRenderer>(look.button, "<"),
+                      [this]{ ManualStepLayer(-1); });
+    layer_next.Create(*this, {w - btn_w, 0, w, row_h}, child_style,
+                      std::make_unique<SymbolButtonRenderer>(look.button, ">"),
+                      [this]{ ManualStepLayer(+1); });
     {
       WindowStyle ls;
       layer_label.Create(*this, {btn_w, 0, w - btn_w, row_h}, ls);
     }
 
     /* Row 2: Time stepper */
-    time_prev.Create(*this, look.button, "<",
-                     {0, row2_y, btn_w, row2_y + row_h},
-                     child_style, [this]{ ManualStepTime(-1); });
-    time_next.Create(*this, look.button, ">",
-                     {w - btn_w, row2_y, w, row2_y + row_h},
-                     child_style, [this]{ ManualStepTime(+1); });
+    time_prev.Create(*this, {0, row2_y, btn_w, row2_y + row_h}, child_style,
+                    std::make_unique<SymbolButtonRenderer>(look.button, "<"),
+                    [this]{ ManualStepTime(-1); });
+    time_next.Create(*this, {w - btn_w, row2_y, w, row2_y + row_h},
+                    child_style,
+                    std::make_unique<SymbolButtonRenderer>(look.button, ">"),
+                    [this]{ ManualStepTime(+1); });
     {
       WindowStyle ts;
       time_label.Create(*this, {btn_w, row2_y, w - btn_w, row2_y + row_h}, ts);
