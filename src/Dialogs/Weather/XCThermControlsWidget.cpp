@@ -14,9 +14,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/window/SolidContainerWindow.hpp"
 #include "ui/window/PaintWindow.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
-#include "Weather/xctherm/XCThermGeoJSON.hpp"
-#include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
@@ -30,39 +28,6 @@
 #include <algorithm>
 #include <cstdlib>
 #include <memory>
-
-namespace {
-
-/**
- * Apply a GeoJSON string as the map overlay.
- *
- * @param parameter API parameter (e.g. "vertical_wind_5000amsl") so the
- *   overlay can resolve download/run metadata for the map-item popup.
- * @param forecast_utc the forecast's valid UTC hour.
- */
-static void
-ApplyGeoJSONOverlay(const std::string &geojson, const char *label,
-                    const char *parameter = nullptr,
-                    unsigned forecast_utc = 0)
-{
-  auto *map = UIGlobals::GetMap();
-  if (map == nullptr)
-    return;
-
-  auto forecast = XCThermGeoJSON::Parse(geojson, true);
-  if (forecast.IsEmpty()) {
-    LogFmt("xctherm: parse failed for {}", label);
-    return;
-  }
-
-  forecast.layer_name = label;
-
-  auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-  overlay->SetForecast(std::move(forecast), label, parameter, forecast_utc);
-  map->SetOverlay(std::move(overlay));
-}
-
-} // anonymous namespace
 
 /**
  * A label that draws centered text with availability coloring.
@@ -426,8 +391,8 @@ public:
     const std::string &cached =
       api.GetCachedGeoJSON(LayerAt(current_layer).api_parameter, hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, LayerAt(current_layer).short_label,
-                          LayerAt(current_layer).api_parameter, hour);
+      XCTherm::ApplyForecastToMap(cached, LayerAt(current_layer).short_label,
+                                  LayerAt(current_layer).api_parameter, hour);
   }
 
   void LayoutChildren(const PixelRect &rc) noexcept {
@@ -635,8 +600,9 @@ private:
     const std::string &cached =
       api.GetCachedGeoJSON(LayerAt(layer_index).api_parameter, utc_hour);
     if (!cached.empty())
-      ApplyGeoJSONOverlay(cached, LayerAt(layer_index).short_label,
-                          LayerAt(layer_index).api_parameter, utc_hour);
+      XCTherm::ApplyForecastToMap(cached, LayerAt(layer_index).short_label,
+                                  LayerAt(layer_index).api_parameter,
+                                  utc_hour);
     else
       LogFmt("xctherm: cache miss {}@{}h",
              LayerAt(layer_index).api_parameter, utc_hour);
@@ -882,8 +848,7 @@ XCThermControlsWidget::Hide() noexcept
     CommonInterface::GetComputerSettings().weather.xctherm;
   if (settings.overlay_location ==
       XCThermSettings::OverlayLocation::SEPARATE_MAP) {
-    if (auto *map = UIGlobals::GetMap())
-      map->SetOverlay(nullptr);
+    XCTherm::ClearMapOverlay();
   }
 
   WindowWidget::Hide();

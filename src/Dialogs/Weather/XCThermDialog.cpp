@@ -29,9 +29,7 @@
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Weather/xctherm/XCThermDownloadGlue.hpp"
 #include "Weather/xctherm/XCThermDownloadJob.hpp"
-#include "Weather/xctherm/XCThermGeoJSON.hpp"
-#include "Weather/xctherm/XCThermGeoJSONOverlay.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
 #include "LogFile.hpp"
 #include "lib/fmt/ToBuffer.hxx"
 #include "net/http/Init.hpp"
@@ -468,8 +466,7 @@ XCThermWidget::DeleteClicked()
      overlay. We don't try to detect that exactly — easier to just drop
      it whenever the user invokes Delete; auto-switch will repopulate
      from a different cached layer on the next GPS tick if available. */
-  if (auto *map = UIGlobals::GetMap())
-    map->SetOverlay(nullptr);
+  XCTherm::ClearMapOverlay();
 
   UpdateList();
 }
@@ -631,7 +628,6 @@ XCThermWidget::FinishDownload()
   auto job = std::move(active_job);
   active_job.reset();
 
-  auto *map = UIGlobals::GetMap();
   auto *info = GetDownloadInfo(job->model);
   auto &row_info = info[job->target_index];
 
@@ -671,15 +667,13 @@ XCThermWidget::FinishDownload()
      slice (and only if any actual transfer happened — pure cache hits
      reuse the existing overlay if there is one). */
   std::lock_guard lock{job->result_mutex};
-  if (map != nullptr && !job->first_forecast.IsEmpty()) {
+  if (!job->first_forecast.IsEmpty()) {
     /* The first parseable slice the worker kept is the previous-hour
        slot (slot 0), valid at current_utc - 1. */
     const unsigned shown_utc = (job->current_utc + 23) % 24;
-    auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
-    overlay->SetForecast(std::move(job->first_forecast),
-                         job->target_label.c_str(),
-                         job->param.c_str(), shown_utc);
-    map->SetOverlay(std::move(overlay));
+    XCTherm::ApplyForecastLayerToMap(std::move(job->first_forecast),
+                                     job->target_label.c_str(),
+                                     job->param.c_str(), shown_utc);
   }
 
   const double span_secs = std::chrono::duration<double>(
