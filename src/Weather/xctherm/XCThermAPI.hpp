@@ -23,6 +23,7 @@ class CurlGlobal;
 #include <vector>
 
 class ProgressListener;
+struct XCThermSettings;
 
 /**
  * Errors thrown by XCThermAPI on network / HTTP failures. Callers can
@@ -94,7 +95,20 @@ public:
 
   void SetCredentials(const std::string &email,
                       const std::string &password) noexcept;
-  void SetModel(const std::string &model) noexcept;
+
+  /**
+   * Tiles URL model slug (e.g. @c "icon-ch"), not @c settings.xctherm.model.
+   */
+  void SetModel(const std::string &api_slug) noexcept;
+
+  /**
+   * Map profile region id (@c XCTherm::Region / settings.xctherm.model)
+   * to the tiles API slug and invalidate the index when it changes.
+   */
+  void SetRegion(unsigned region_model_id) noexcept;
+
+  /** Sync credentials and region from computer settings. */
+  void ApplySessionSettings(const XCThermSettings &settings) noexcept;
 
   /**
    * Fetch and parse index.json for the current model.
@@ -323,6 +337,8 @@ public:
 
 private:
   XCTherm::Auth auth{XCTherm::kAuthConfig};
+
+  /** Tiles path segment; kept in sync via #SetRegion / #ApplySessionSettings. */
   std::string model = "icon-ch";
   std::vector<ParameterInfo> available_parameters;
   bool index_loaded = false;

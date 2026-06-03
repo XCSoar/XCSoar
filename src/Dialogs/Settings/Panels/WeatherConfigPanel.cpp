@@ -7,6 +7,7 @@
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/Features.hpp"
+#include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
@@ -193,6 +194,8 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
      here would assert at runtime — the DataField is enum-typed). */
   changed |= SaveValueEnum(XCTHERM_REGION, ProfileKeys::XCThermModel,
                            settings.xctherm.model);
+
+  XCThermAPI::Instance().ApplySessionSettings(settings.xctherm);
 #endif
 
   _changed |= changed;

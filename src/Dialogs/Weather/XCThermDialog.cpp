@@ -537,9 +537,7 @@ XCThermWidget::StartDownload()
      populated from previous sessions before we start the download
      loop (so IsCachedAtRun can skip slices we already have on disk). */
   api.EnableDiskCache();
-  api.SetCredentials(settings.credentials.email.c_str(),
-                     settings.credentials.password.c_str());
-  api.SetModel(region.api_slug);
+  api.ApplySessionSettings(settings);
 
   /* Index fetch happens synchronously on the UI thread once, before
      spawning the worker — it's a small payload and the worker can

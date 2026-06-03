@@ -208,9 +208,15 @@ AfterStartup()
      empty until the user interacts. Header-only scan, so it's cheap;
      bodies still fault in lazily. When the feature isn't configured we
      do nothing, so non-users pay no cost. */
-  if (CommonInterface::GetComputerSettings()
-        .weather.xctherm.credentials.IsDefined())
-    XCThermAPI::Instance().EnableDiskCache();
+  {
+    const auto &xctherm =
+      CommonInterface::GetComputerSettings().weather.xctherm;
+    if (xctherm.credentials.IsDefined()) {
+      auto &api = XCThermAPI::Instance();
+      api.ApplySessionSettings(xctherm);
+      api.EnableDiskCache();
+    }
+  }
 #endif
 
   InfoBoxManager::SetDirty();

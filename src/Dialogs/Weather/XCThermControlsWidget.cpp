@@ -515,13 +515,11 @@ private:
 
     /* Idempotent — first call wires up the persistent disk cache and
        reloads anything from previous sessions (within 24 h TTL). */
-    api.EnableDiskCache();
-
     const auto &settings =
       CommonInterface::GetComputerSettings().weather.xctherm;
-    api.SetCredentials(settings.credentials.email.c_str(),
-                       settings.credentials.password.c_str());
-    api.SetModel(RegionLayers().api_slug);
+
+    api.EnableDiskCache();
+    api.ApplySessionSettings(settings);
 
     /* Fetch index.json only if not yet loaded.
 

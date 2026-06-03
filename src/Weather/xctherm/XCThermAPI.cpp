@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "XCThermAPI.hpp"
+#include "Weather/Settings.hpp"
+#include "Weather/xctherm/XCThermCatalog.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "io/FileOutputStream.hxx"
@@ -55,6 +57,20 @@ XCThermAPI::SetModel(const std::string &m) noexcept
     available_parameters.clear();
     index_loaded = false;
   }
+}
+
+void
+XCThermAPI::SetRegion(const unsigned region_model_id) noexcept
+{
+  SetModel(XCTherm::GetRegion(region_model_id).api_slug);
+}
+
+void
+XCThermAPI::ApplySessionSettings(const XCThermSettings &settings) noexcept
+{
+  SetCredentials(settings.credentials.email.c_str(),
+                 settings.credentials.password.c_str());
+  SetRegion(settings.model);
 }
 
 /* ------------------------------------------------------------------ */
