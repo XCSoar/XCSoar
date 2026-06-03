@@ -1,0 +1,13 @@
+{
+  "name": "xcsoar-docs",
+  "scripts": {
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "build": "nuxt build"
+  },
+  "dependencies": {
+    "docus": "latest",
+    "better-sqlite3": "^12.6.2",
+    "nuxt": "^4.3.1"
+  }
+}
