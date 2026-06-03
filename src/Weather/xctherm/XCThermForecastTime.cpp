@@ -2,7 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "XCThermForecastTime.hpp"
+#include "XCThermAPI.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
+#include "time/BrokenDateTime.hpp"
+
+#include <chrono>
+#include <cstdlib>
 
 namespace XCTherm {
 
@@ -62,6 +68,57 @@ ForecastHourAt(const std::vector<unsigned> &cached_hours,
   if (!available_hours.empty())
     return available_hours[0];
   return fallback;
+}
+
+void
+FormatTimeLabel(StaticString<64> &dest, const char *api_parameter,
+                unsigned forecast_utc_hour, bool time_auto_active) noexcept
+{
+  int offset_min = 0;
+  bool has_real_offset = false;
+  const auto slice =
+    XCThermAPI::Instance().GetSliceMeta(api_parameter, forecast_utc_hour);
+
+  if (slice.has_value() && slice->run_date.size() == 8 &&
+      slice->run_hour.size() == 2 &&
+      BrokenDateTime::NowUTC().IsPlausible()) {
+    const unsigned year =
+      (unsigned)std::atoi(slice->run_date.substr(0, 4).c_str());
+    const unsigned month =
+      (unsigned)std::atoi(slice->run_date.substr(4, 2).c_str());
+    const unsigned day =
+      (unsigned)std::atoi(slice->run_date.substr(6, 2).c_str());
+    const unsigned run_h = (unsigned)std::atoi(slice->run_hour.c_str());
+    const BrokenDateTime run_dt(year, month, day, run_h, 0, 0);
+    const BrokenDateTime forecast_dt =
+      run_dt + std::chrono::hours{slice->step};
+    const auto delta = forecast_dt - BrokenDateTime::NowUTC();
+    offset_min = (int)std::chrono::duration_cast<std::chrono::minutes>(
+      delta).count();
+    has_real_offset = true;
+  } else if (CommonInterface::Basic().date_time_utc.IsPlausible()) {
+    const auto &basic = CommonInterface::Basic();
+    const int cur_min = int(basic.date_time_utc.hour) * 60
+                      + int(basic.date_time_utc.minute);
+    const int fc_min = int(forecast_utc_hour) * 60;
+    offset_min = fc_min - cur_min;
+    if (offset_min < 0)
+      offset_min += 1440;
+    has_real_offset = true;
+  }
+
+  char offset_buf[16] = {};
+  if (has_real_offset) {
+    const int abs_min = std::abs(offset_min);
+    std::snprintf(offset_buf, sizeof(offset_buf), "%s%d:%02d",
+                  offset_min >= 0 ? "+" : "-", abs_min / 60, abs_min % 60);
+  }
+
+  if (time_auto_active)
+    dest.Format("%s %02u:00 UTC (%s)", _("AUTO:"), forecast_utc_hour,
+                offset_buf);
+  else
+    dest.Format("%02u:00 UTC (%s)", forecast_utc_hour, offset_buf);
 }
 
 } // namespace XCTherm

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "util/StaticString.hxx"
+
 #include <vector>
 
 namespace XCTherm {
@@ -35,5 +37,12 @@ unsigned ForecastHourAt(const std::vector<unsigned> &cached_hours,
                         unsigned time_index,
                         const std::vector<unsigned> &available_hours,
                         unsigned fallback = 12) noexcept;
+
+/**
+ * Cursor-bar time label, e.g. @c "12:00 UTC (+1:30)" or @c "AUTO: …".
+ */
+void FormatTimeLabel(StaticString<64> &dest, const char *api_parameter,
+                     unsigned forecast_utc_hour,
+                     bool time_auto_active) noexcept;
 
 } // namespace XCTherm
