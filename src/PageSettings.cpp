@@ -23,12 +23,20 @@ PageLayout::Normalise() noexcept
     overlay = Overlay::NONE;
 
   if (IsMapMain()) {
-    if (!UsesWeatherOverlay() &&
-        bottom == Bottom::EDL_CONTROLS)
+    if (overlay == Overlay::EDL || overlay == Overlay::RASP) {
+      if (bottom == Bottom::NOTHING)
+        bottom = Bottom::EDL_CONTROLS;
+    } else if (overlay == Overlay::XCTHERM) {
+      if (bottom == Bottom::NOTHING)
+        bottom = Bottom::XCTHERM;
+    } else if (!UsesWeatherOverlay() &&
+               bottom == Bottom::EDL_CONTROLS)
       bottom = Bottom::NOTHING;
   } else {
     overlay = Overlay::NONE;
     if (bottom == Bottom::EDL_CONTROLS)
+      bottom = Bottom::NOTHING;
+    else if (bottom == Bottom::XCTHERM)
       bottom = Bottom::NOTHING;
   }
 
@@ -65,6 +73,10 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
 
   case PageLayout::Overlay::EDL:
     builder.Append(", EDL");
+    break;
+
+  case PageLayout::Overlay::XCTHERM:
+    builder.Append(", XCTherm");
     break;
 
   case PageLayout::Overlay::MAX:

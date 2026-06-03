@@ -3,14 +3,16 @@
 
 #include "XCThermDownloadJob.hpp"
 #include "XCThermAPI.hpp"
+#include "XCThermCatalog.hpp"
 #include "XCThermGeoJSON.hpp"
+#include "Weather/Settings.hpp"
 #include "LogFile.hpp"
 #include "Operation/ProgressListener.hpp"
+#include "co/Sleep.hxx"
 #include "co/Task.hxx"
 #include "lib/curl/Global.hxx"
 
 #include <cstdlib>
-#include <thread>
 
 namespace {
 
@@ -32,12 +34,48 @@ public:
 
 } // namespace
 
+std::shared_ptr<XCThermDownloadJob>
+MakeXCThermSpanJob(const XCThermSettings &settings, unsigned layer_index,
+                   unsigned current_utc) noexcept
+{
+  const auto &region = XCTherm::GetRegion(settings.model);
+  if (layer_index >= region.layer_count || settings.download_span_hours == 0)
+    return nullptr;
+
+  const auto &target = region.layers[layer_index];
+  auto job = std::make_shared<XCThermDownloadJob>();
+  job->model = settings.model;
+  job->target_index = int(layer_index);
+  job->target_label = target.dialog_label;
+  job->param = target.api_parameter;
+  job->span_hours = settings.download_span_hours;
+  job->current_utc = current_utc;
+  job->started_at = std::chrono::steady_clock::now();
+  return job;
+}
+
 Co::Task<void>
 RunXCThermDownload(CurlGlobal &curl,
                    const std::shared_ptr<XCThermDownloadJob> &job)
 {
   auto &api = XCThermAPI::Instance();
   JobProgressListener progress_listener{job};
+
+  if (!api.IsIndexLoaded()) {
+    try {
+      if (!co_await api.CoEnsureIndexLoaded(curl)) {
+        job->index_no_parameters.store(true);
+        job->finished_at = std::chrono::steady_clock::now();
+        job->done.store(true);
+        co_return;
+      }
+    } catch (...) {
+      job->error_eptr = std::current_exception();
+      job->finished_at = std::chrono::steady_clock::now();
+      job->done.store(true);
+      co_return;
+    }
+  }
 
   const unsigned total_slots = job->span_hours + 1;
   for (unsigned slot_i = 0; slot_i < total_slots; ++slot_i) {
@@ -177,8 +215,7 @@ RunXCThermDownload(CurlGlobal &curl,
                slot_i, attempt + 1, RETRY_SECONDS);
         for (unsigned s = RETRY_SECONDS; s > 0 && !job->cancel.load(); --s) {
           job->retry_seconds_left.store(s);
-          for (int t = 0; t < 10 && !job->cancel.load(); ++t)
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+          co_await Co::Sleep(curl.GetEventLoop(), std::chrono::seconds(1));
         }
         job->retry_seconds_left.store(0);
       }

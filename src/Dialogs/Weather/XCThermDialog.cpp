@@ -31,6 +31,7 @@
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Weather/xctherm/XCThermDownloadGlue.hpp"
 #include "Weather/xctherm/XCThermDownloadJob.hpp"
+#include "Weather/xctherm/XCThermForecastTime.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #include "LogFile.hpp"
 #include "lib/fmt/ToBuffer.hxx"
@@ -41,15 +42,6 @@
 #include <memory>
 
 namespace {
-
-[[gnu::pure]]
-static XCThermDownloadGlue *
-GetXCThermDownloadGlue() noexcept
-{
-  if (net_components == nullptr)
-    return nullptr;
-  return net_components->xctherm_download.get();
-}
 
 /**
  * Download metadata for a layer — shown in the second row.
@@ -524,59 +516,19 @@ XCThermWidget::StartDownload()
     ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
     return;
   }
-  const auto &target = region.layers[cursor_index];
+  XCThermAPI::Instance().PrepareSession(settings);
 
-  /* Current UTC hour — captured up-front because the worker can't safely
-     touch CommonInterface (UI-only). */
-  unsigned current_utc = 12;
-  {
-    const auto &basic = CommonInterface::Basic();
-    if (basic.date_time_utc.IsPlausible())
-      current_utc = basic.date_time_utc.hour;
-  }
-
-  auto &api = XCThermAPI::Instance();
-  /* Idempotent disk cache bootstrap — guarantees the in-RAM cache is
-     populated from previous sessions before we start the download
-     loop (so IsCachedAtRun can skip slices we already have on disk). */
-  api.EnableDiskCache();
-  api.ApplySessionSettings(settings);
-
-  /* Index fetch happens synchronously on the UI thread once, before
-     spawning the worker — it's a small payload and the worker can
-     then assume index_loaded == true. FetchIndex throws on real
-     failures; ShowError surfaces the actual cause to the user (auth
-     vs network vs server error, etc.). */
-  if (!api.IsIndexLoaded()) {
-    try {
-      if (!api.FetchIndex()) {
-        ShowMessageBox(_("Forecast index has no XCTherm parameters."),
-                       "XCTherm", MB_OK);
-        return;
-      }
-    } catch (...) {
-      ShowError(std::current_exception(), "XCTherm");
-      return;
-    }
-  }
-
-  auto *glue = GetXCThermDownloadGlue();
-  if (glue == nullptr || Net::curl == nullptr) {
-    ShowMessageBox(_("Network is not available."), "XCTherm", MB_OK);
+  active_job = XCTherm::StartSpanDownload(
+    settings, unsigned(cursor_index),
+    [this](std::shared_ptr<XCThermDownloadJob> finished) {
+      active_job = std::move(finished);
+      FinishDownload();
+    });
+  if (active_job == nullptr) {
+    if (GetXCThermDownloadGlue() == nullptr || Net::curl == nullptr)
+      ShowMessageBox(_("Network is not available."), "XCTherm", MB_OK);
     return;
   }
-
-  if (glue->IsRunning())
-    return;
-
-  auto job = std::make_shared<XCThermDownloadJob>();
-  job->model = settings.model;
-  job->target_index = cursor_index;
-  job->target_label = target.dialog_label;
-  job->param = target.api_parameter;
-  job->span_hours = span_hours;
-  job->current_utc = current_utc;
-  job->started_at = std::chrono::steady_clock::now();
 
   auto *info = GetDownloadInfo(settings.model);
   auto &row_info = info[cursor_index];
@@ -587,13 +539,6 @@ XCThermWidget::StartDownload()
   row_info.pending_bytes_total = 0;
   row_info.retry_attempt = 0;
   row_info.retry_seconds_left = 0;
-
-  active_job = job;
-
-  glue->Start(job, [this](std::shared_ptr<XCThermDownloadJob> finished) {
-    active_job = std::move(finished);
-    FinishDownload();
-  });
 
   UpdateList();
   poll_timer.Schedule(std::chrono::milliseconds(200));
@@ -655,6 +600,9 @@ XCThermWidget::FinishDownload()
     UpdateList();
     if (canceled) {
       /* nothing — Cancelled state in the row says it all */
+    } else if (job->index_no_parameters.load()) {
+      ShowMessageBox(_("Forecast index has no XCTherm parameters."),
+                     "XCTherm", MB_OK);
     } else if (job->error_eptr) {
       /* Surface the actual cause (auth, forbidden, server error, …)
          instead of a generic message. ShowError unpacks the chain of
@@ -667,18 +615,7 @@ XCThermWidget::FinishDownload()
     return;
   }
 
-  /* Atomic overlay swap: only after the worker has produced a parseable
-     slice (and only if any actual transfer happened — pure cache hits
-     reuse the existing overlay if there is one). */
-  std::lock_guard lock{job->result_mutex};
-  if (!job->first_forecast.IsEmpty()) {
-    /* The first parseable slice the worker kept is the previous-hour
-       slot (slot 0), valid at current_utc - 1. */
-    const unsigned shown_utc = (job->current_utc + 23) % 24;
-    XCTherm::ApplyForecastLayerToMap(std::move(job->first_forecast),
-                                     job->target_label.c_str(),
-                                     job->param.c_str(), shown_utc);
-  }
+  XCTherm::ApplyJobPreviewToMap(job);
 
   const double span_secs = std::chrono::duration<double>(
     std::chrono::steady_clock::now() - job->started_at).count();
@@ -725,10 +662,7 @@ XCThermWidget::FinishDownload()
      hours stay in the cache (user can browse back); we just align
      them with the latest run. */
   if (nu > 0) {
-    unsigned current_utc = job->current_utc;
-    const auto &basic = CommonInterface::Basic();
-    if (basic.date_time_utc.IsPlausible())
-      current_utc = basic.date_time_utc.hour;
+    const unsigned current_utc = XCTherm::GetUtcTimeParts().hour;
 
     const unsigned dropped =
       XCThermAPI::Instance().PruneStaleRuns(job->param, current_utc);

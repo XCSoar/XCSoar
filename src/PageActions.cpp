@@ -26,6 +26,7 @@
 #ifdef HAVE_HTTP
 #include "Dialogs/Weather/XCThermControlsWidget.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
 
 #if defined(ENABLE_SDL) && defined(main)
@@ -117,6 +118,13 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 #endif
     break;
 
+  case PageLayout::Overlay::XCTHERM:
+#ifdef HAVE_HTTP
+    if (layout.UsesXcthermOverlay())
+      XCTherm::ActivatePageOverlay();
+#endif
+    break;
+
   case PageLayout::Overlay::MAX:
     gcc_unreachable();
   }
@@ -141,6 +149,10 @@ PageActions::LeavePage()
   } else if (layout.overlay == PageLayout::Overlay::RASP) {
     ClearPageOverlays();
     CommonInterface::SetUIState().weather.rasp_page_entered = false;
+#ifdef HAVE_HTTP
+  } else if (layout.UsesXcthermOverlay()) {
+    XCTherm::ClearMapOverlay();
+#endif
   }
 
   if (state.special_page.IsDefined())
@@ -173,6 +185,10 @@ PageActions::Restore()
   } else if (special_page.overlay == PageLayout::Overlay::RASP) {
     ClearPageOverlays();
     CommonInterface::SetUIState().weather.rasp_page_entered = false;
+#ifdef HAVE_HTTP
+  } else if (special_page.UsesXcthermOverlay()) {
+    XCTherm::ClearMapOverlay();
+#endif
   }
 
   special_page.SetUndefined();
