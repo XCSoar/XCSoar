@@ -140,7 +140,8 @@ TopographyFileRenderer::PaintPoints(Canvas &canvas,
 
 void
 TopographyFileRenderer::Paint(Canvas &canvas,
-                              const WindowProjection &projection) noexcept
+                              const WindowProjection &projection,
+                              bool draw_points) noexcept
 {
   const std::lock_guard lock{file.mutex};
 
@@ -149,7 +150,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     return;
 
   UpdateVisibleShapes(projection);
-  PaintPoints(canvas, projection);
+  if (draw_points)
+    PaintPoints(canvas, projection);
 
   if (visible_shapes.empty())
     return;

@@ -36,7 +36,7 @@ XCThermDownloadGlue::BeginShutdown() noexcept
   complete_notify.ClearNotification();
   job.reset();
   on_finished = nullptr;
-  on_index_fetched = nullptr;
+  index_fetch_callbacks.clear();
   index_fetch = false;
   completion_error = {};
 }
@@ -50,7 +50,7 @@ XCThermDownloadGlue::Start(
     return;
 
   index_fetch = false;
-  on_index_fetched = nullptr;
+  index_fetch_callbacks.clear();
   job = std::move(new_job);
   on_finished = std::move(finished);
   completion_error = {};
@@ -61,17 +61,19 @@ XCThermDownloadGlue::Start(
 void
 XCThermDownloadGlue::StartIndexFetch(std::function<void()> &&finished)
 {
-  if (task.IsShuttingDown() || task.IsRunning())
-    return;
-
   if (XCThermAPI::Instance().IsIndexLoaded()) {
     if (finished)
       finished();
     return;
   }
 
+  if (finished)
+    index_fetch_callbacks.push_back(std::move(finished));
+
+  if (index_fetch || task.IsShuttingDown() || task.IsRunning())
+    return;
+
   index_fetch = true;
-  on_index_fetched = std::move(finished);
   job.reset();
   on_finished = nullptr;
   completion_error = {};
@@ -135,12 +137,14 @@ XCThermDownloadGlue::OnCompleteNotify() noexcept
 
   if (index_fetch) {
     index_fetch = false;
-    auto callback = std::move(on_index_fetched);
-    on_index_fetched = nullptr;
+    auto callbacks = std::move(index_fetch_callbacks);
+    index_fetch_callbacks.clear();
     completion_error = {};
 
-    if (callback)
-      callback();
+    for (auto &callback : callbacks) {
+      if (callback)
+        callback();
+    }
     return;
   }
 

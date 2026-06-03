@@ -4,6 +4,7 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "UIActions.hpp"
 #include "PageActions.hpp"
@@ -585,6 +586,32 @@ MainWindow::ReinitialiseLayoutTA(PixelRect rc,
 }
 
 void
+MainWindow::ReinitialiseInfoBoxes(const PixelRect &rc) noexcept
+{
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+
+  look->ReinitialiseLayout(ib_layout.control_size.width,
+                           ui_settings.info_boxes.scale_title_font);
+
+  InfoBoxManager::Destroy();
+  InfoBoxManager::Create(*this, ib_layout, look->info_box);
+  InfoBoxManager::ProcessTimer();
+  map_rect = ib_layout.remaining;
+
+  if (FullScreen)
+    InfoBoxManager::Hide();
+  else
+    InfoBoxManager::Show();
+
+  ReinitialiseLayout_vario(ib_layout);
+  ReinitialiseLayout_flarm(rc, ib_layout);
+  ReinitialiseLayoutTA(rc, ib_layout);
+}
+
+void
 MainWindow::ReinitialiseLayout() noexcept
 {
   if (map == nullptr)
@@ -601,34 +628,23 @@ MainWindow::ReinitialiseLayout() noexcept
     return;
 #endif
 
-  InfoBoxManager::Destroy();
+  if (dlgInfoBoxAccessIsOpen()) {
+    /* Keep map/Forward View sized while an InfoBox dialog is open, but
+       defer destroying InfoBoxes until the dialog closes. */
+    reinitialise_layout_pending = true;
 
-  const UISettings &ui_settings = CommonInterface::GetUISettings();
-
-  const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
-
-  look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
-
-  InfoBoxManager::Create(*this, ib_layout, look->info_box);
-  InfoBoxManager::ProcessTimer();
-  map_rect = ib_layout.remaining;
+    const UISettings &ui_settings = CommonInterface::GetUISettings();
+    map_rect = InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry)
+      .remaining;
+  } else {
+    reinitialise_layout_pending = false;
+    ReinitialiseInfoBoxes(rc);
+  }
 
   if (popup != nullptr)
     popup->UpdateLayout(GetMainRect());
 
-  ReinitialiseLayout_vario(ib_layout);
-
-  ReinitialiseLayout_flarm(rc, ib_layout);
-
-  ReinitialiseLayoutTA(rc, ib_layout);
-
   if (map != nullptr) {
-    if (FullScreen)
-      InfoBoxManager::Hide();
-    else
-      InfoBoxManager::Show();
-
     LayoutMapArea();
     map->FullRedraw();
   }
@@ -640,6 +656,24 @@ MainWindow::ReinitialiseLayout() noexcept
 
   if (map != nullptr)
     map->BringToBottom();
+}
+
+void
+MainWindow::FlushDeferredReinitialiseLayout() noexcept
+{
+  if (!reinitialise_layout_pending || dlgInfoBoxAccessIsOpen())
+    return;
+
+  reinitialise_layout_pending = false;
+
+  const PixelRect rc = GetClientRect();
+  ReinitialiseInfoBoxes(rc);
+
+  if (map != nullptr) {
+    LayoutMapArea();
+    UpdateMapOverlayButtonLayout();
+    map->FullRedraw();
+  }
 }
 
 void

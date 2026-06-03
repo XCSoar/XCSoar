@@ -249,7 +249,8 @@ public:
    *
    * @return true if new data from the topography file has been loaded
    */
-  bool Update(const WindowProjection &map_projection);
+  bool Update(const WindowProjection &map_projection,
+              double visibility_map_scale=-1);
 
   /**
    * Throws on error.

@@ -100,7 +100,8 @@ XCThermControlsModel::SyncActiveLayerFromSettings() noexcept
   const int active_layer = FindActiveLayerIndex(Settings());
 
   if (active_layer == state.last_synced_active_layer) {
-    MaybeFetchActiveLayer(nullptr);
+    if (!HasMapOverlay())
+      MaybeFetchActiveLayer(nullptr);
     return;
   }
 

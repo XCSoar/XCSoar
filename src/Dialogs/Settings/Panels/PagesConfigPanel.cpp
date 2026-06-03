@@ -48,7 +48,7 @@ private:
   static constexpr unsigned IBP_NONE = 0x7000;
   static constexpr unsigned IBP_AUTO = 0x7001;
 
-  PageLayout value;
+  PageLayout value = PageLayout::Default();
 
   Listener &listener;
 
@@ -207,8 +207,11 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
   const bool rasp_available = rasp != nullptr && rasp->GetItemCount() > 0;
   const bool rasp_overlay = value.overlay == PageLayout::Overlay::RASP;
 
-  SetRowAvailable(OVERLAY, map_page);
-  SetRowAvailable(RASP_FIELD, map_page && rasp_overlay);
+  /* Keep overlay rows in the layout at all times. Hiding them via
+     SetRowAvailable() before the first SetValue() made TwoWidgets
+     allocate too little height for the page editor (rows clipped). */
+  SetRowAvailable(OVERLAY, true);
+  SetRowAvailable(RASP_FIELD, true);
 
   SetRowEnabled(OVERLAY, map_page);
   SetRowEnabled(RASP_FIELD, map_page && rasp_overlay && rasp_available);
@@ -226,6 +229,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
     { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
     { PageLayout::Main::HORIZON, N_("Horizon") },
+    { PageLayout::Main::FORWARD_VIEW, N_("Forward view") },
     nullptr
   };
   AddEnum(_("Main area"),
@@ -357,6 +361,10 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   } else if (&df == &GetDataField(BOTTOM)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.bottom = (PageLayout::Bottom)dfe.GetValue();
+#ifdef HAVE_HTTP
+    if (value.IsMapMain() && value.bottom == PageLayout::Bottom::XCTHERM)
+      value.overlay = PageLayout::Overlay::XCTHERM;
+#endif
   } else if (&df == &GetDataField(OVERLAY)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.overlay = (PageLayout::Overlay)dfe.GetValue();
@@ -371,7 +379,9 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
 
   value.Normalise();
   LoadValueEnum(BOTTOM, value.bottom);
+  LoadValueEnum(OVERLAY, value.overlay);
   GetControl(BOTTOM).RefreshDisplay();
+  GetControl(OVERLAY).RefreshDisplay();
   UpdateOverlayControls();
   listener.OnModified(value);
 }

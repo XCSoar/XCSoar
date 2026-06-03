@@ -73,7 +73,8 @@ public:
    * @param bitmap_canvas Temporary canvas for the icon
    * @param projection
    */
-  void Paint(Canvas &canvas, const WindowProjection &projection) noexcept;
+  void Paint(Canvas &canvas, const WindowProjection &projection,
+             bool draw_points=true) noexcept;
 
   /**
    * Paints a topography label if the space is available in the LabelBlock

@@ -149,6 +149,7 @@ private:
   bool restore_page_pending = false;
   bool refresh_info_boxes_pending = false;
   bool page_actions_update_pending = false;
+  bool reinitialise_layout_pending = false;
   bool vario_bar_redraw_pending = false;
 
   /**
@@ -280,6 +281,8 @@ private:
   void ReinitialiseLayoutTA(PixelRect rc,
                             const InfoBoxLayout::Layout &layout) noexcept;
 
+  void ReinitialiseInfoBoxes(const PixelRect &rc) noexcept;
+
 public:
   /**
    * Called by XCSoarInterface::Startup() after startup has been
@@ -297,6 +300,12 @@ public:
    * position/size.
    */
   void ReinitialiseLayout() noexcept;
+
+  /**
+   * Apply a #ReinitialiseLayout() call that was deferred while an
+   * InfoBox modal dialog was open.
+   */
+  void FlushDeferredReinitialiseLayout() noexcept;
 
   /**
    * Reinitialise the #Look after relevant #UISettings have been

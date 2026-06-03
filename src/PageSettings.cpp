@@ -7,6 +7,10 @@
 #include "Weather/Rasp/RaspStore.hpp"
 #include "util/StringBuilder.hxx"
 
+#ifdef HAVE_HTTP
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
+#endif
+
 #include <algorithm>
 
 void
@@ -26,8 +30,17 @@ PageLayout::Normalise() noexcept
     if (overlay == Overlay::EDL || overlay == Overlay::RASP) {
       if (bottom == Bottom::NOTHING)
         bottom = Bottom::EDL_CONTROLS;
+#ifdef HAVE_HTTP
+    } else if (overlay == Overlay::NONE &&
+               bottom == Bottom::XCTHERM) {
+      overlay = Overlay::XCTHERM;
+#endif
     } else if (overlay == Overlay::XCTHERM) {
-      if (bottom == Bottom::NOTHING)
+      if (bottom == Bottom::NOTHING
+#ifdef HAVE_HTTP
+          && !XCTherm::IsPageOverlaySuspendedForPan()
+#endif
+         )
         bottom = Bottom::XCTHERM;
     } else if (overlay == Overlay::NONE &&
                bottom == Bottom::EDL_CONTROLS)
@@ -107,6 +120,9 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
 
   case PageLayout::Main::HORIZON:
     return _("Horizon");
+
+  case PageLayout::Main::FORWARD_VIEW:
+    return _("Forward view");
 
   case PageLayout::Main::MAX:
     gcc_unreachable();

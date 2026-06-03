@@ -294,6 +294,13 @@ XCSOAR_SOURCES := \
 	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/CrossSection/CrossSectionWidget.cpp \
+	$(SRC)/ForwardView/ForwardViewRenderer.cpp \
+	$(SRC)/ForwardView/ForwardViewTerrainShader.cpp \
+	$(SRC)/ForwardView/ForwardViewTopographyTexture.cpp \
+	$(SRC)/ForwardView/ForwardViewAirspaceOverlay.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/ForwardView/ForwardViewXCThermOverlay.cpp) \
+	$(SRC)/ForwardView/ForwardViewWindow.cpp \
+	$(SRC)/ForwardView/ForwardViewWidget.cpp \
 	\
 	$(SRC)/Gauge/ThermalAssistantRenderer.cpp \
 	$(SRC)/Gauge/ThermalAssistantWindow.cpp \

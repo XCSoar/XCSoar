@@ -8,7 +8,8 @@ TOPO_SOURCES = \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Topography/Index.cpp \
-	$(SRC)/Topography/CachedTopographyRenderer.cpp
+	$(SRC)/Topography/CachedTopographyRenderer.cpp \
+	$(SRC)/Topography/ForwardViewTopographyOverlay.cpp
 
 TOPO_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 

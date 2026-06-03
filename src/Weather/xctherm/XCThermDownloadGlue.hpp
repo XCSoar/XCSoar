@@ -11,6 +11,7 @@
 #include <exception>
 #include <functional>
 #include <memory>
+#include <vector>
 
 class CurlGlobal;
 
@@ -25,7 +26,7 @@ class XCThermDownloadGlue final {
 
   std::shared_ptr<XCThermDownloadJob> job;
   std::function<void(std::shared_ptr<XCThermDownloadJob>)> on_finished;
-  std::function<void()> on_index_fetched;
+  std::vector<std::function<void()>> index_fetch_callbacks;
   bool index_fetch = false;
   std::exception_ptr completion_error;
 

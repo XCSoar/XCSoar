@@ -11,6 +11,9 @@
 #ifdef HAVE_EDL
 #include "Weather/EDL/StateController.hpp"
 #endif
+#ifdef HAVE_HTTP
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
+#endif
 
 #include <cassert>
 
@@ -26,11 +29,19 @@ EnterPan()
 {
   assert(CommonInterface::main_window != nullptr);
 
+  const PageLayout &layout = PageActions::GetCurrentLayout();
+
 #ifdef HAVE_EDL
-  const bool suspending_edl_page =
-    PageActions::GetCurrentLayout().UsesEdlOverlay();
+  const bool suspending_edl_page = layout.UsesEdlOverlay();
   if (suspending_edl_page)
     EDL::SuspendDedicatedPageForPan();
+#endif
+
+#ifdef HAVE_HTTP
+  const bool suspending_xctherm_page =
+    XCTherm::ShouldSuspendPageOverlayForPan(layout);
+  if (suspending_xctherm_page)
+    XCTherm::SuspendPageOverlayForPan();
 #endif
 
   GlueMapWindow *map = PageActions::ShowOnlyMap();
@@ -38,6 +49,10 @@ EnterPan()
 #ifdef HAVE_EDL
     if (suspending_edl_page)
       EDL::ResumeDedicatedPageAfterPan();
+#endif
+#ifdef HAVE_HTTP
+    if (suspending_xctherm_page)
+      XCTherm::ResumePageOverlayAfterPan();
 #endif
     return;
   }
@@ -53,11 +68,19 @@ PanTo(const GeoPoint &location)
 {
   assert(CommonInterface::main_window != nullptr);
 
+  const PageLayout &layout = PageActions::GetCurrentLayout();
+
 #ifdef HAVE_EDL
-  const bool suspending_edl_page =
-    PageActions::GetCurrentLayout().UsesEdlOverlay();
+  const bool suspending_edl_page = layout.UsesEdlOverlay();
   if (suspending_edl_page)
     EDL::SuspendDedicatedPageForPan();
+#endif
+
+#ifdef HAVE_HTTP
+  const bool suspending_xctherm_page =
+    XCTherm::ShouldSuspendPageOverlayForPan(layout);
+  if (suspending_xctherm_page)
+    XCTherm::SuspendPageOverlayForPan();
 #endif
 
   GlueMapWindow *map = PageActions::ShowOnlyMap();
@@ -65,6 +88,10 @@ PanTo(const GeoPoint &location)
 #ifdef HAVE_EDL
     if (suspending_edl_page)
       EDL::ResumeDedicatedPageAfterPan();
+#endif
+#ifdef HAVE_HTTP
+    if (suspending_xctherm_page)
+      XCTherm::ResumePageOverlayAfterPan();
 #endif
     return false;
   }
@@ -89,6 +116,9 @@ DisablePan()
 #ifdef HAVE_EDL
   EDL::ResumeDedicatedPageAfterPan();
 #endif
+#ifdef HAVE_HTTP
+  XCTherm::ResumePageOverlayAfterPan();
+#endif
 }
 
 void
@@ -104,6 +134,9 @@ LeavePan()
   PageActions::Restore();
 #ifdef HAVE_EDL
   EDL::ResumeDedicatedPageAfterPan();
+#endif
+#ifdef HAVE_HTTP
+  XCTherm::ResumePageOverlayAfterPan();
 #endif
 }
 

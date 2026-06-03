@@ -5,6 +5,7 @@
 
 struct InfoBoxLook;
 class ContainerWindow;
+class InfoBoxWindow;
 
 namespace InfoBoxLayout { struct Layout; }
 
@@ -18,6 +19,9 @@ ProcessTimer() noexcept;
 
 [[nodiscard]] bool
 IsReady() noexcept;
+
+[[nodiscard]] InfoBoxWindow *
+GetWindow(unsigned id) noexcept;
 
 void
 SetDirty() noexcept;

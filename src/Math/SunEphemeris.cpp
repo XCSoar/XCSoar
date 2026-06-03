@@ -11,6 +11,7 @@
 #include "time/BrokenDateTime.hpp"
 #include "time/RoughTime.hpp"
 
+#include <algorithm>
 #include <cstdint>
 
 /** Sun radius in degrees (?) */
@@ -226,6 +227,40 @@ CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
   Angle delta = Angle::asin(obliquity.sin() * lambda.sin());
 
   return CalculateAzimuth(location, date_time, time_zone, delta);
+}
+
+Angle
+CalcElevation(const GeoPoint &location, const BrokenDateTime &date_time,
+              RoughTimeDelta time_zone) noexcept
+{
+  assert(date_time.IsPlausible());
+
+  const auto days_to_j2000 = FNday(date_time);
+
+  const Angle l = GetMeanSunLongitude(days_to_j2000);
+  const Angle lambda = GetEclipticLongitude(days_to_j2000, l);
+
+  const Angle obliquity = Angle::Degrees(23.439 - .0000004 * days_to_j2000);
+  const Angle delta = Angle::asin(obliquity.sin() * lambda.sin());
+
+  using Hours = std::chrono::duration<double, std::chrono::hours::period>;
+
+  const auto time_hours =
+    std::chrono::duration_cast<Hours>(date_time.DurationSinceMidnight());
+  const auto tz_hours =
+    std::chrono::duration_cast<Hours>(time_zone.ToDuration());
+
+  const auto t = (time_hours - Hours{12} + tz_hours).count();
+  const Angle hour_angle = Angle::Degrees(15) * t;
+
+  const auto [latitude_sin, latitude_cos] = location.latitude.SinCos();
+  const auto [dec_sin, dec_cos] = delta.SinCos();
+  const auto hour_angle_cos = hour_angle.cos();
+
+  const double elevation_sin = latitude_sin * dec_sin +
+    latitude_cos * dec_cos * hour_angle_cos;
+
+  return Angle::asin(std::clamp(elevation_sin, -1., 1.));
 }
 
 } // namespace SunEphemeris

@@ -43,6 +43,20 @@ XCThermGeoJSONOverlay::HasData() const noexcept
   return !forecast.IsEmpty();
 }
 
+const std::string &
+XCThermGeoJSONOverlay::GetParameter() const noexcept
+{
+  const std::lock_guard lock{mutex};
+  return parameter;
+}
+
+unsigned
+XCThermGeoJSONOverlay::GetForecastUtc() const noexcept
+{
+  const std::lock_guard lock{mutex};
+  return forecast_utc;
+}
+
 bool
 XCThermGeoJSONOverlay::GetClimbAt(GeoPoint p, double &out_min_ms,
                                   double &out_max_ms) const noexcept
@@ -51,6 +65,19 @@ XCThermGeoJSONOverlay::GetClimbAt(GeoPoint p, double &out_min_ms,
   /* Pure geometry lives in XCThermGeoJSON::FindBandAtPoint so it can be
      unit-tested without dragging in the overlay's UI dependencies. */
   return XCThermGeoJSON::FindBandAtPoint(forecast, p, out_min_ms, out_max_ms);
+}
+
+bool
+XCThermGeoJSONOverlay::TryCopyForecast(ForecastSnapshot &out) const noexcept
+{
+  const std::lock_guard lock{mutex};
+  if (forecast.IsEmpty())
+    return false;
+
+  out.forecast = forecast;
+  out.parameter = parameter;
+  out.forecast_utc = forecast_utc;
+  return true;
 }
 
 bool
@@ -177,6 +204,19 @@ XCThermGeoJSONOverlay::WindToColor(double min_ms, double max_ms) noexcept
   return Color(0xA0, 0x20, 0xF0);                    // purple
 }
 
+Color
+XCThermGeoJSONOverlay::BandFillColor(double min_ms, double max_ms) noexcept
+{
+  const Color color = WindToColor(min_ms, max_ms);
+  const double abs_mid = std::abs((min_ms + max_ms) / 2.0);
+  int alpha = (int)std::lround(140.0 - 18.0 * abs_mid);
+  if (alpha < 60)
+    alpha = 60;
+  if (alpha > 150)
+    alpha = 150;
+  return ColorWithAlpha(color, uint8_t(alpha));
+}
+
 void
 XCThermGeoJSONOverlay::Draw(Canvas &canvas,
                              const WindowProjection &projection) noexcept
@@ -201,12 +241,7 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
      * Alpha ramps down with intensity so the underlying map stays
      * readable through the stronger lift/sink colors (which would
      * otherwise saturate). |mid| = 0  → 140, |mid| = 4 → 68. */
-    const Color color = WindToColor(band.min_ms, band.max_ms);
-    const double abs_mid = std::abs((band.min_ms + band.max_ms) / 2.0);
-    int alpha = (int)std::lround(140.0 - 18.0 * abs_mid);
-    if (alpha < 60) alpha = 60;
-    if (alpha > 150) alpha = 150;
-    const Color fill_color = ColorWithAlpha(color, (uint8_t)alpha);
+    const Color fill_color = BandFillColor(band.min_ms, band.max_ms);
 
     Brush brush(fill_color);
     canvas.Select(brush);

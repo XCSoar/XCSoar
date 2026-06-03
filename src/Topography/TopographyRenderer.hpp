@@ -39,7 +39,8 @@ public:
    * @param canvas The drawing canvas
    * @param rc The area to draw in
    */
-  void Draw(Canvas &canvas, const WindowProjection &projection) noexcept;
+  void Draw(Canvas &canvas, const WindowProjection &projection,
+            bool draw_points=true) noexcept;
 
   void DrawLabels(Canvas &canvas, const WindowProjection &projection,
                   LabelBlock &label_block) noexcept;

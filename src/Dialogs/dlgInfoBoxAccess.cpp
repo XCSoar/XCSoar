@@ -16,6 +16,7 @@
 #include "Widget/ButtonWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "Language/Language.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 
@@ -36,6 +37,19 @@ static WndForm *current_dialog = nullptr;
  * ID of the InfoBox that owns the current dialog, or -1 if none.
  */
 static int current_dialog_id = -1;
+
+static void
+FlushDeferredLayout() noexcept
+{
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->FlushDeferredReinitialiseLayout();
+}
+
+bool
+dlgInfoBoxAccessIsOpen() noexcept
+{
+  return current_dialog != nullptr;
+}
 
 void
 dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
@@ -114,7 +128,8 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   /* When InfoBox panel opens, adjust bottom margin to make room */
   GlueMapWindow *map = UIGlobals::GetMap();
-  if (map != nullptr) {
+  const bool map_visible = map != nullptr && map->IsVisible();
+  if (map_visible) {
     unsigned dialog_height = form_rc.GetHeight();
 
     if (dialog_height > 0)
@@ -123,11 +138,13 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   int result = dialog.ShowModal();
 
-  if (map != nullptr)
+  if (map_visible)
     map->SetBottomMargin(0);
 
   current_dialog = nullptr;
   current_dialog_id = -1;
+
+  FlushDeferredLayout();
 
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
@@ -147,8 +164,10 @@ dlgInfoBoxAccessClose() noexcept
 
     /* Restore map scale position when panel closes */
     GlueMapWindow *map = UIGlobals::GetMap();
-    if (map != nullptr)
+    if (map != nullptr && map->IsVisible())
       map->SetBottomMargin(0);
+
+    FlushDeferredLayout();
   }
 }
 

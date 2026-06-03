@@ -85,9 +85,13 @@ LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field)
 }
 
 bool
-TopographyFile::Update(const WindowProjection &map_projection)
+TopographyFile::Update(const WindowProjection &map_projection,
+                       double visibility_map_scale)
 {
-  if (map_projection.GetMapScale() > scale_threshold)
+  const double map_scale = visibility_map_scale > 0.
+    ? visibility_map_scale
+    : map_projection.GetMapScale();
+  if (map_scale > scale_threshold)
     /* not visible, don't update cache now */
     return false;
 

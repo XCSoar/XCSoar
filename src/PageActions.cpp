@@ -40,7 +40,7 @@ namespace PageActions {
    * Call this when we're about to leave the current page.  This
    * function checks if settings need to be remembered.
    */
-  static void LeavePage();
+  static void LeavePage(const PageLayout *next_layout = nullptr);
 
   /**
    * Restore the map zoom afte switching to a configured page.
@@ -56,7 +56,7 @@ namespace PageActions {
   static const PageLayout &
   GetActiveLayout() noexcept;
 
-  static void ClearPageOverlays() noexcept;
+  static void ClearPageOverlays(bool preserve_xctherm_overlay = false) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 };
@@ -72,7 +72,7 @@ PageActions::GetActiveLayout() noexcept
 }
 
 void
-PageActions::ClearPageOverlays() noexcept
+PageActions::ClearPageOverlays(bool preserve_xctherm_overlay) noexcept
 {
   WeatherUIState &weather = CommonInterface::SetUIState().weather;
   weather.map = -1;
@@ -81,12 +81,18 @@ PageActions::ClearPageOverlays() noexcept
   if (!EDL::IsDedicatedPageSuspendedForPan())
     EDL::ClearOverlay();
 #endif
+
+#ifdef HAVE_HTTP
+  if (!preserve_xctherm_overlay &&
+      !XCTherm::IsPageOverlaySuspendedForPan())
+    XCTherm::ClearMapOverlay();
+#endif
 }
 
 void
 PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 {
-  ClearPageOverlays();
+  ClearPageOverlays(layout.UsesXcthermOverlay());
 
   switch (layout.overlay) {
   case PageLayout::Overlay::NONE:
@@ -121,7 +127,7 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
   case PageLayout::Overlay::XCTHERM:
 #ifdef HAVE_HTTP
     if (layout.UsesXcthermOverlay())
-      XCTherm::ActivatePageOverlay();
+      XCTherm::ApplyPageOverlayForLayout(layout);
 #endif
     break;
 
@@ -133,7 +139,7 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 }
 
 void
-PageActions::LeavePage()
+PageActions::LeavePage(const PageLayout *next_layout)
 {
   PagesState &state = CommonInterface::SetUIState().pages;
 
@@ -151,7 +157,9 @@ PageActions::LeavePage()
     CommonInterface::SetUIState().weather.rasp_page_entered = false;
 #ifdef HAVE_HTTP
   } else if (layout.UsesXcthermOverlay()) {
-    XCTherm::ClearMapOverlay();
+    if (!XCTherm::IsPageOverlaySuspendedForPan() &&
+        (next_layout == nullptr || !next_layout->UsesXcthermOverlay()))
+      XCTherm::ClearMapOverlay();
 #endif
   }
 
@@ -187,7 +195,8 @@ PageActions::Restore()
     CommonInterface::SetUIState().weather.rasp_page_entered = false;
 #ifdef HAVE_HTTP
   } else if (special_page.UsesXcthermOverlay()) {
-    XCTherm::ClearMapOverlay();
+    if (!XCTherm::IsPageOverlaySuspendedForPan())
+      XCTherm::ClearMapOverlay();
 #endif
   }
 
@@ -276,13 +285,25 @@ PageActions::NextIndex()
 void
 PageActions::Next()
 {
-  LeavePage();
-
   PagesState &state = CommonInterface::SetUIState().pages;
 
-  state.current_index = NextIndex();
-  state.special_page.SetUndefined();
+  if (state.special_page.IsDefined()) {
+    LeavePage();
+    state.special_page.SetUndefined();
+    Update();
+    RestoreMapZoom();
+    return;
+  }
 
+  const unsigned next = NextIndex();
+  if (next == state.current_index)
+    return;
+
+  const PageLayout &next_layout =
+    CommonInterface::GetUISettings().pages.pages[next];
+  LeavePage(&next_layout);
+
+  state.current_index = next;
   Update();
   RestoreMapZoom();
 }
@@ -306,13 +327,25 @@ PageActions::PrevIndex()
 void
 PageActions::Prev()
 {
-  LeavePage();
-
   PagesState &state = CommonInterface::SetUIState().pages;
 
-  state.current_index = PrevIndex();
-  state.special_page.SetUndefined();
+  if (state.special_page.IsDefined()) {
+    LeavePage();
+    state.special_page.SetUndefined();
+    Update();
+    RestoreMapZoom();
+    return;
+  }
 
+  const unsigned prev = PrevIndex();
+  if (prev == state.current_index)
+    return;
+
+  const PageLayout &next_layout =
+    CommonInterface::GetUISettings().pages.pages[prev];
+  LeavePage(&next_layout);
+
+  state.current_index = prev;
   Update();
   RestoreMapZoom();
 }
@@ -337,6 +370,10 @@ LoadMain(PageLayout::Main main)
 
   case PageLayout::Main::HORIZON:
     UIActions::ShowHorizon();
+    break;
+
+  case PageLayout::Main::FORWARD_VIEW:
+    UIActions::ShowForwardView();
     break;
 
   case PageLayout::Main::MAX:
@@ -373,6 +410,10 @@ LoadBottom(const PageLayout &layout)
 
 #ifdef HAVE_HTTP
   case PageLayout::Bottom::XCTHERM:
+    if (XCTherm::IsPageOverlaySuspendedForPan()) {
+      CommonInterface::main_window->SetBottomWidget(nullptr);
+      break;
+    }
     /* The user explicitly chose XCTherm as this page's bottom widget.
        If they haven't downloaded any forecast yet, installing the
        cursor bar would just show a permanent "No data" strip — confusing.
@@ -497,7 +538,13 @@ PageActions::ShowMap()
 GlueMapWindow *
 PageActions::ShowOnlyMap()
 {
-  OpenLayout(PageLayout::FullScreen());
+  /* Keep the current page overlay (XCTherm, EDL, RASP state) while
+     hiding InfoBoxes and the bottom area for panning. FullScreen()
+     forced overlay NONE and dropped weather layers. */
+  PageLayout layout = GetCurrentLayout();
+  layout.infobox_config.enabled = false;
+  layout.bottom = PageLayout::Bottom::NOTHING;
+  OpenLayout(layout);
   return CommonInterface::main_window->ActivateMap();
 }
 

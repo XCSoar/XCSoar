@@ -2402,6 +2402,12 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
+	$(SRC)/ForwardView/ForwardViewRenderer.cpp \
+	$(SRC)/ForwardView/ForwardViewTerrainShader.cpp \
+	$(SRC)/ForwardView/ForwardViewTopographyTexture.cpp \
+	$(SRC)/ForwardView/ForwardViewAirspaceOverlay.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/ForwardView/ForwardViewXCThermOverlay.cpp) \
+	$(SRC)/ForwardView/ForwardViewWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/Renderer/AirspacePreviewRenderer.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \

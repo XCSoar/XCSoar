@@ -19,10 +19,11 @@ TopographyRenderer::~TopographyRenderer() noexcept = default;
 
 void
 TopographyRenderer::Draw(Canvas &canvas,
-                         const WindowProjection &projection) noexcept
+                         const WindowProjection &projection,
+                         bool draw_points) noexcept
 {
   for (auto &i : files)
-    i.Paint(canvas, projection);
+    i.Paint(canvas, projection, draw_points);
 }
 
 void

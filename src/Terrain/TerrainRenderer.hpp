@@ -83,3 +83,7 @@ public:
     raster_renderer.Draw(canvas, projection);
   }
 };
+
+[[gnu::pure]]
+const ColorRamp *
+GetTerrainColorRamp(unsigned ramp_index) noexcept;

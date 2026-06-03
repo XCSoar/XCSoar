@@ -56,7 +56,8 @@ public:
    * @return the number of files which were updated
    */
   unsigned ScanVisibility(const WindowProjection &m_projection,
-                          unsigned max_update=1024) noexcept;
+                          unsigned max_update=1024,
+                          double visibility_map_scale=-1) noexcept;
 
   /**
    * Load all shapes of all files into memory.  For debugging

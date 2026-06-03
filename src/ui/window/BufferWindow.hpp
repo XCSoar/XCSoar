@@ -6,12 +6,10 @@
 #include "PaintWindow.hpp"
 #include "ui/canvas/BufferCanvas.hpp"
 
+#include <atomic>
+
 #ifdef ENABLE_OPENGL
 #include <cstdint>
-#endif
-
-#ifdef USE_MEMORY_CANVAS
-#include <atomic>
 #endif
 
 /**
@@ -31,14 +29,12 @@ class BufferWindow : public PaintWindow {
   bool render_state_token_known = false;
 #endif
 
-#ifdef USE_MEMORY_CANVAS
+#if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
   /**
-   * Is there a pending resize request?
-   * If true, the buffer will be resized during the next OnPaint() call.
-   * Thread-safe atomic flag.
+   * Pending resize applied at the start of the next #OnPaint() (never
+   * while the buffer FBO is active).
    */
   std::atomic<bool> resize_pending{false};
-  
   std::atomic<unsigned> pending_width{0};
   std::atomic<unsigned> pending_height{0};
 #endif

@@ -50,6 +50,8 @@ struct PageLayout
 
     HORIZON,
 
+    FORWARD_VIEW,
+
     MAP_NORTH_UP,
 
     EDL_MAP,

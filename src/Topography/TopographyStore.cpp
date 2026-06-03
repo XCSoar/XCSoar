@@ -34,7 +34,8 @@ TopographyStore::GetNextScaleThreshold(double map_scale) const noexcept
 
 unsigned
 TopographyStore::ScanVisibility(const WindowProjection &m_projection,
-                                unsigned max_update) noexcept
+                                unsigned max_update,
+                                double visibility_map_scale) noexcept
 {
   // check if any needs to have cache updates because wasnt
   // visible previously when bounds moved
@@ -44,7 +45,7 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
   unsigned num_updated = 0;
   for (auto &file : files) {
     try {
-      if (file.Update(m_projection)) {
+      if (file.Update(m_projection, visibility_map_scale)) {
         ++num_updated;
         if (num_updated >= max_update)
           break;

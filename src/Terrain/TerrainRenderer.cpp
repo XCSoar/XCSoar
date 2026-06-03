@@ -387,3 +387,12 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                                 do_contour);
   return true;
 }
+
+const ColorRamp *
+GetTerrainColorRamp(const unsigned ramp_index) noexcept
+{
+  if (ramp_index >= TerrainRendererSettings::NUM_RAMPS)
+    return &terrain_colors[0][0];
+
+  return &terrain_colors[ramp_index][0];
+}

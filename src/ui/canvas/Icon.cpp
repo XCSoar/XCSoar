@@ -296,3 +296,58 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc,
 #endif
 #endif
 }
+
+#ifdef ENABLE_OPENGL
+
+void
+MaskedIcon::DrawBillboard(const float mvp[16],
+                          const BillboardCorner corners[4]) const noexcept
+{
+  assert(IsDefined());
+
+  OpenGL::texture_shader->Use();
+  glUniformMatrix4fv(OpenGL::texture_projection, 1, GL_FALSE, mvp);
+
+  const GLEnable<GL_DEPTH_TEST> depth_test;
+  glDepthMask(GL_TRUE);
+
+  const ScopeAlphaBlend alpha_blend;
+
+  GLTexture &texture = *bitmap.GetNative();
+  texture.Bind();
+
+  const float vertices[] = {
+    corners[0].x, corners[0].y, corners[0].z,
+    corners[1].x, corners[1].y, corners[1].z,
+    corners[2].x, corners[2].y, corners[2].z,
+    corners[3].x, corners[3].y, corners[3].z,
+  };
+
+  glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
+  glVertexAttribPointer(OpenGL::Attribute::POSITION, 3, GL_FLOAT, GL_FALSE,
+                        0, vertices);
+
+  const PixelSize allocated = texture.GetAllocatedSize();
+  const GLfloat u0 = 0.f;
+  const GLfloat v0 = texture.IsFlipped() ? 1.f : 0.f;
+  const GLfloat u1 = GLfloat(size.width) / allocated.width;
+  const GLfloat v1 = texture.IsFlipped() ? 0.f : 1.f;
+
+  const GLfloat coord[] = {
+    u0, v0,
+    u1, v0,
+    u0, v1,
+    u1, v1,
+  };
+
+  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
+                        0, coord);
+
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+  glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+  glDisableVertexAttribArray(OpenGL::Attribute::POSITION);
+}
+
+#endif

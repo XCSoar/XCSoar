@@ -8,9 +8,13 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <string_view>
 
 struct XCThermDownloadJob;
 struct XCThermSettings;
+struct PageLayout;
+
+class XCThermGeoJSONOverlay;
 
 namespace XCTherm {
 
@@ -79,11 +83,43 @@ void MaybeFetchActiveLayerSpan(
     nullptr);
 
 /**
- * Restore overlay from cache and ensure index / active-layer data.
+ * Apply XCTherm page overlay for the current page layout. Reuses an
+ * existing map overlay and skips index fetch when already loaded.
  */
-void ActivatePageOverlay() noexcept;
+void ApplyPageOverlayForLayout(const PageLayout &page_layout) noexcept;
+
+[[gnu::pure]]
+bool HasMapOverlay() noexcept;
+
+[[gnu::pure]]
+bool ShouldSuspendPageOverlayForPan(const PageLayout &layout) noexcept;
 
 /** Allow a new auto-fetch after the activated layer changed. */
 void ResetAutoFetchAttempt() noexcept;
+
+/**
+ * Keep the map overlay while pan mode replaces the page with fullscreen
+ * map (same pattern as #EDL::SuspendDedicatedPageForPan).
+ */
+void SuspendPageOverlayForPan() noexcept;
+
+void ResumePageOverlayAfterPan() noexcept;
+
+[[gnu::pure]]
+bool IsPageOverlaySuspendedForPan() noexcept;
+
+/**
+ * The XCTherm GeoJSON overlay installed on the main map, if any.
+ */
+[[gnu::pure]]
+const XCThermGeoJSONOverlay *GetMapOverlay() noexcept;
+
+/**
+ * Resolve @p api_parameter (e.g. @c "vertical_wind_5000amsl") to layer
+ * altitude metadata.
+ */
+[[gnu::pure]]
+bool FindLayerByApiParameter(std::string_view api_parameter,
+                             unsigned &altitude_m, bool &is_agl) noexcept;
 
 } // namespace XCTherm

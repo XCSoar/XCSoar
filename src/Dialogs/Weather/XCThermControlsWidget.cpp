@@ -193,12 +193,17 @@ public:
 
     model.BootstrapSession();
     InitAutoSwitch();
-    model.RequestBackgroundIndex([this]{ OnIndexReady(); });
-    model.MaybeFetchActiveLayer(
-      [this](std::shared_ptr<XCThermDownloadJob> job) {
-        model.OnDownloadFinished(job);
-        RefreshLabels();
-      });
+    if (model.IsIndexLoaded())
+      OnIndexReady();
+    else {
+      model.RequestBackgroundIndex([this]{ OnIndexReady(); });
+      if (!XCTherm::HasMapOverlay())
+        model.MaybeFetchActiveLayer(
+          [this](std::shared_ptr<XCThermDownloadJob> job) {
+            model.OnDownloadFinished(job);
+            RefreshLabels();
+          });
+    }
     RefreshLabels();
   }
 
@@ -420,7 +425,8 @@ XCThermControlsWidget::Hide() noexcept
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
   if (settings.overlay_location ==
-      XCThermSettings::OverlayLocation::SEPARATE_MAP) {
+        XCThermSettings::OverlayLocation::SEPARATE_MAP &&
+      !XCTherm::IsPageOverlaySuspendedForPan()) {
     XCTherm::ClearMapOverlay();
   }
 

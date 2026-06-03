@@ -8,6 +8,9 @@ struct InfoBoxPanel;
 void
 dlgInfoBoxAccessShowModeless(int id, const InfoBoxPanel *panels);
 
+[[nodiscard]] bool
+dlgInfoBoxAccessIsOpen() noexcept;
+
 /**
  * Close the currently open InfoBox dialog if one exists.
  */

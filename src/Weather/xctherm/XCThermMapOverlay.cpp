@@ -2,12 +2,14 @@
 // Copyright The XCSoar Project
 
 #include "XCThermMapOverlay.hpp"
+#include "PageSettings.hpp"
 #include "XCThermAPI.hpp"
 #include "XCThermCatalog.hpp"
 #include "XCThermForecastTime.hpp"
 #include "XCThermDownloadGlue.hpp"
 #include "XCThermDownloadJob.hpp"
 #include "XCThermGeoJSONOverlay.hpp"
+#include "ActionInterface.hpp"
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -16,14 +18,81 @@
 #include "net/http/Init.hpp"
 
 #include <mutex>
+#include <string_view>
 
 namespace XCTherm {
 
 namespace {
 
 std::string auto_fetch_attempted_param;
+bool page_overlay_suspended_for_pan = false;
+
+const XCThermGeoJSONOverlay *
+GetXCThermMapOverlay() noexcept
+{
+#ifdef ENABLE_OPENGL
+  const auto *map = UIGlobals::GetMap();
+  if (map == nullptr || map->GetOverlay() == nullptr)
+    return nullptr;
+
+  return dynamic_cast<const XCThermGeoJSONOverlay *>(map->GetOverlay());
+#else
+  return nullptr;
+#endif
+}
+
+bool
+MapOverlayShowsCachedLayer(unsigned layer_index, unsigned utc_hour) noexcept
+{
+  const auto *overlay = GetXCThermMapOverlay();
+  if (overlay == nullptr || !overlay->HasData())
+    return false;
+
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  const auto &region = GetRegion(settings.model);
+  if (layer_index >= region.layer_count)
+    return false;
+
+  const auto &layer = region.layers[layer_index];
+  return overlay->GetParameter() == layer.api_parameter &&
+    overlay->GetForecastUtc() == utc_hour;
+}
+
+void
+RefreshMapAfterOverlayChange() noexcept
+{
+  if (auto *map = UIGlobals::GetMap())
+    map->PartialRedraw();
+  ActionInterface::SendUIState(true);
+}
 
 } // namespace
+
+const XCThermGeoJSONOverlay *
+GetMapOverlay() noexcept
+{
+  return GetXCThermMapOverlay();
+}
+
+bool
+FindLayerByApiParameter(std::string_view api_parameter,
+                        unsigned &altitude_m, bool &is_agl) noexcept
+{
+  for (unsigned r = 0; r < unsigned(Region::COUNT); ++r) {
+    const auto &def = GetRegion(Region(r));
+    for (unsigned i = 0; i < def.layer_count; ++i) {
+      const auto &layer = def.layers[i];
+      if (api_parameter == layer.api_parameter) {
+        altitude_m = layer.altitude_m;
+        is_agl = layer.is_agl;
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
 
 void
 ApplyForecastToMap(const std::string &geojson, const char *label,
@@ -54,14 +123,17 @@ ApplyForecastLayerToMap(XCThermGeoJSON::ForecastLayer &&forecast,
   auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
   overlay->SetForecast(std::move(forecast), label, parameter, forecast_utc);
   map->SetOverlay(std::move(overlay));
+  RefreshMapAfterOverlayChange();
 }
 
 void
 ClearMapOverlay() noexcept
 {
   auto *map = UIGlobals::GetMap();
-  if (map != nullptr)
+  if (map != nullptr) {
     map->SetOverlay(nullptr);
+    RefreshMapAfterOverlayChange();
+  }
 }
 
 bool
@@ -81,6 +153,9 @@ ApplyCachedLayerOverlay(unsigned layer_index, unsigned utc_hour) noexcept
     LogFmt("xctherm: cache miss {}@{}h", layer.api_parameter, utc_hour);
     return false;
   }
+
+  if (MapOverlayShowsCachedLayer(layer_index, utc_hour))
+    return true;
 
   ApplyForecastToMap(cached, layer.short_label, layer.api_parameter, utc_hour);
   return true;
@@ -215,17 +290,82 @@ ResetAutoFetchAttempt() noexcept
 }
 
 void
-ActivatePageOverlay() noexcept
+SuspendPageOverlayForPan() noexcept
 {
+  page_overlay_suspended_for_pan = true;
+}
+
+void
+ResumePageOverlayAfterPan() noexcept
+{
+  page_overlay_suspended_for_pan = false;
+}
+
+bool
+IsPageOverlaySuspendedForPan() noexcept
+{
+  return page_overlay_suspended_for_pan;
+}
+
+bool
+HasMapOverlay() noexcept
+{
+  return GetXCThermMapOverlay() != nullptr;
+}
+
+bool
+ShouldSuspendPageOverlayForPan(const PageLayout &layout) noexcept
+{
+  if (!layout.IsMapMain())
+    return false;
+
+  if (layout.UsesXcthermOverlay() ||
+      layout.bottom == PageLayout::Bottom::XCTHERM)
+    return true;
+
+  return HasMapOverlay();
+}
+
+void
+ApplyPageOverlayForLayout(const PageLayout &page_layout) noexcept
+{
+  if (IsPageOverlaySuspendedForPan() && HasMapOverlay()) {
+    RefreshMapAfterOverlayChange();
+    return;
+  }
+
+  auto &api = XCThermAPI::Instance();
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
 
-  XCThermAPI::Instance().PrepareSession(settings);
-  RestoreActiveLayerOverlay();
+  /* Bottom cursor bar runs Restore / OnIndexLoaded when cache exists. */
+  const bool cursor_bar_handles_overlay =
+    page_layout.bottom == PageLayout::Bottom::XCTHERM &&
+    api.HasAnyCache();
+
+  if (!cursor_bar_handles_overlay && !HasMapOverlay())
+    ResetAutoFetchAttempt();
+
+  api.PrepareSession(settings);
+
+  if (!cursor_bar_handles_overlay)
+    RestoreActiveLayerOverlay();
+
+  RefreshMapAfterOverlayChange();
+
+  if (api.IsIndexLoaded()) {
+    if (!cursor_bar_handles_overlay)
+      MaybeFetchActiveLayerSpan(nullptr);
+    return;
+  }
+
+  if (cursor_bar_handles_overlay)
+    return;
 
   RequestBackgroundIndexFetch([]{
     RestoreActiveLayerOverlay();
     MaybeFetchActiveLayerSpan(nullptr);
+    RefreshMapAfterOverlayChange();
   });
 }
 

@@ -57,6 +57,12 @@ public:
   /** Is any data loaded? */
   bool HasData() const noexcept;
 
+  [[gnu::pure]]
+  const std::string &GetParameter() const noexcept;
+
+  [[gnu::pure]]
+  unsigned GetForecastUtc() const noexcept;
+
   /**
    * Find the vertical-wind band whose polygons contain @p p and
    * return its [min,max] m/s range. When the point falls inside
@@ -73,6 +79,25 @@ public:
   bool GetClimbAt(GeoPoint p, double &out_min_ms,
                   double &out_max_ms) const noexcept;
 
+  struct ForecastSnapshot {
+    XCThermGeoJSON::ForecastLayer forecast;
+    std::string parameter;
+    unsigned forecast_utc = 0;
+  };
+
+  /** Thread-safe copy of the loaded forecast for off-map rendering. */
+  bool TryCopyForecast(ForecastSnapshot &out) const noexcept;
+
+  /**
+   * Map vertical wind (m/s) to the XCTherm color scale.
+   */
+  static Color WindToColor(double min_ms, double max_ms) noexcept;
+
+  /**
+   * Wind band fill color with map-overlay alpha ramp.
+   */
+  static Color BandFillColor(double min_ms, double max_ms) noexcept;
+
   /* virtual methods from class MapOverlay */
   const char *GetLabel() const noexcept override;
   bool IsInside(GeoPoint p) const noexcept override;
@@ -80,13 +105,4 @@ public:
                        std::size_t size) const noexcept override;
   void Draw(Canvas &canvas,
             const WindowProjection &projection) noexcept override;
-
-private:
-  /**
-   * Map a vertical wind speed (m/s) to an RGBA color.
-   * Uses the standard XCTherm color scale:
-   *   strong sink = blue, weak sink = light blue,
-   *   weak lift = light red/orange, strong lift = red
-   */
-  static Color WindToColor(double min_ms, double max_ms) noexcept;
 };

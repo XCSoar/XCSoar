@@ -57,4 +57,23 @@ static constexpr Color COLOR_ADMONITION_TIP =
  */
 static constexpr Color COLOR_LIGHT_GREEN = Color(0x00, 0xc0, 0x00);
 
+/** Forward-view terrain: muted land base for hillshade lighting. */
+static constexpr Color COLOR_FORWARD_VIEW_LAND = Color(0x6b, 0x73, 0x55);
+
+/** Low-elevation valleys (tan). */
+static constexpr Color COLOR_FORWARD_VIEW_LAND_LOW = Color(0x9a, 0x8b, 0x6e);
+
+/** High ridges and peaks (warm brown-grey). */
+static constexpr Color COLOR_FORWARD_VIEW_LAND_HIGH = Color(0x7a, 0x6e, 0x58);
+
+/** Forward-view water distinct from hillshaded land. */
+static constexpr Color COLOR_FORWARD_VIEW_WATER = Color(0x55, 0xa0, 0xff);
+
+/** Topology lake/reservoir fill (darker than terrain water for contrast). */
+static constexpr Color COLOR_FORWARD_VIEW_TOPO_WATER =
+  Color(0x38, 0x78, 0xd8);
+
+/** Subtle draped terrain grid (low contrast). */
+static constexpr Color COLOR_FORWARD_VIEW_GRID = Color(0x52, 0x56, 0x48);
+
 static constexpr uint8_t ALPHA_OVERLAY = 0xA0;

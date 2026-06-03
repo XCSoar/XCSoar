@@ -13,6 +13,8 @@
 #include "Gauge/BigThermalAssistantWidget.hpp"
 #include "Look/Look.hpp"
 #include "HorizonWidget.hpp"
+#include "ForwardView/ForwardViewWidget.hpp"
+#include "Components.hpp"
 
 static bool force_shutdown = false;
 
@@ -69,3 +71,15 @@ UIActions::ShowHorizon()
   CommonInterface::main_window->SetWidget(widget);
   InputEvents::SetFlavour("Horizon");
 }
+
+void
+UIActions::ShowForwardView()
+{
+  if (InputEvents::IsFlavour("ForwardView"))
+    return;
+
+  auto widget = new ForwardViewWidget(*data_components);
+  CommonInterface::main_window->SetWidget(widget);
+  InputEvents::SetFlavour("ForwardView");
+}
+

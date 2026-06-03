@@ -46,4 +46,12 @@ Angle
 CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
             RoughTimeDelta time_zone) noexcept;
 
+/**
+ * Calculates the sun's elevation above the horizon.
+ */
+[[gnu::pure]]
+Angle
+CalcElevation(const GeoPoint &location, const BrokenDateTime &date_time,
+              RoughTimeDelta time_zone) noexcept;
+
 } // namespace SunEphemeris

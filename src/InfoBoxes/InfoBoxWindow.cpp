@@ -257,15 +257,24 @@ InfoBoxWindow::UpdateContent()
 void
 InfoBoxWindow::ShowDialog()
 {
+  const unsigned owner_id = id;
+
   force_draw_selector = true;
   Invalidate();
 
-  dlgInfoBoxAccessShowModeless(id, GetDialogContent());
+  dialog_timer.Cancel();
 
-  force_draw_selector = false;
-  Invalidate();
-  
-  FocusParent();
+  dlgInfoBoxAccessShowModeless(owner_id, GetDialogContent());
+
+  /* #ReinitialiseLayout() may recreate InfoBoxes while ShowModal()
+     runs; do not touch this after the dialog closes. */
+  InfoBoxWindow *owner = InfoBoxManager::GetWindow(owner_id);
+  if (owner == nullptr)
+    return;
+
+  owner->force_draw_selector = false;
+  owner->Invalidate();
+  owner->FocusParent();
 }
 
 bool

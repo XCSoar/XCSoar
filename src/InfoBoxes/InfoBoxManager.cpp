@@ -178,6 +178,15 @@ InfoBoxManager::ProcessTimer() noexcept
   InfoBoxDrawIfDirty();
 }
 
+InfoBoxWindow *
+InfoBoxManager::GetWindow(unsigned id) noexcept
+{
+  if (!infoboxes_ready || id >= layout.count)
+    return nullptr;
+
+  return infoboxes[id];
+}
+
 void
 InfoBoxManager::Create(ContainerWindow &parent,
                        const InfoBoxLayout::Layout &_layout,

@@ -60,4 +60,14 @@ public:
             unsigned target_height) const noexcept;
 
   void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const noexcept;
+
+#ifdef ENABLE_OPENGL
+  struct BillboardCorner {
+    float x, y, z;
+  };
+
+  /** Draw a screen-aligned billboard in world space (depth-tested). */
+  void DrawBillboard(const float mvp[16],
+                     const BillboardCorner corners[4]) const noexcept;
+#endif
 };
