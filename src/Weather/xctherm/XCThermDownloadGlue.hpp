@@ -25,9 +25,12 @@ class XCThermDownloadGlue final {
 
   std::shared_ptr<XCThermDownloadJob> job;
   std::function<void(std::shared_ptr<XCThermDownloadJob>)> on_finished;
+  std::function<void()> on_index_fetched;
+  bool index_fetch = false;
   std::exception_ptr completion_error;
 
   Co::InvokeTask RunDownload();
+  Co::InvokeTask RunIndexFetch();
   void OnCompletion(std::exception_ptr error) noexcept;
   void OnCompleteNotify() noexcept;
 
@@ -47,6 +50,12 @@ public:
   void Start(std::shared_ptr<XCThermDownloadJob> new_job,
              std::function<void(std::shared_ptr<XCThermDownloadJob>)> &&finished);
 
+  /**
+   * Fetch index.json on the network thread when not already loaded.
+   * @p finished runs on the UI thread (no-op if a job is already running).
+   */
+  void StartIndexFetch(std::function<void()> &&finished);
+
   void RequestCancel() noexcept;
 
   /**
@@ -56,4 +65,11 @@ public:
    */
   void Abandon() noexcept;
 };
+
+/**
+ * Shared #XCThermDownloadGlue from #net_components (UI thread only).
+ */
+[[gnu::pure]]
+XCThermDownloadGlue *
+GetXCThermDownloadGlue() noexcept;
 

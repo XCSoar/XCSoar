@@ -287,6 +287,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 #ifdef HAVE_EDL
     { PageLayout::Overlay::EDL, N_("EDL") },
 #endif
+#ifdef HAVE_HTTP
+    { PageLayout::Overlay::XCTHERM, N_("XCTherm") },
+#endif
     nullptr
   };
   AddEnum(_("Map overlay"),

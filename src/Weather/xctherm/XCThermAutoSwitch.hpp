@@ -97,6 +97,13 @@ public:
    * Set current positions (called after manual selection or initial load).
    */
   void SetCurrentLayerPos(int pos) noexcept;
+
+  /**
+   * Match @c current_layer_pos to a region layer index from
+   * #SetLoadedLayers().
+   */
+  void SyncCurrentLayerIndex(unsigned layer_index) noexcept;
+
   void SetCurrentTimePos(int pos) noexcept;
 
   /**

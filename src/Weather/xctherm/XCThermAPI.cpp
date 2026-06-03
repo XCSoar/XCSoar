@@ -73,6 +73,13 @@ XCThermAPI::ApplySessionSettings(const XCThermSettings &settings) noexcept
   SetRegion(settings.model);
 }
 
+void
+XCThermAPI::PrepareSession(const XCThermSettings &settings) noexcept
+{
+  EnableDiskCache();
+  ApplySessionSettings(settings);
+}
+
 /* ------------------------------------------------------------------ */
 /* Index.json                                                          */
 /* ------------------------------------------------------------------ */
@@ -149,6 +156,15 @@ XCThermAPI::CoFetchIndex(CurlGlobal &curl)
 
   LogFmt("xctherm: index fetched, {} bytes", response.body.size());
   co_return ParseIndex(response.body);
+}
+
+Co::Task<bool>
+XCThermAPI::CoEnsureIndexLoaded(CurlGlobal &curl)
+{
+  if (IsIndexLoaded())
+    co_return true;
+
+  co_return co_await CoFetchIndex(curl);
 }
 
 bool

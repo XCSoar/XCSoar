@@ -45,6 +45,17 @@ XCThermAutoSwitch::SetCurrentLayerPos(int pos) noexcept
 }
 
 void
+XCThermAutoSwitch::SyncCurrentLayerIndex(unsigned layer_index) noexcept
+{
+  for (size_t i = 0; i < loaded_layers.size(); ++i) {
+    if (loaded_layers[i].index == layer_index) {
+      SetCurrentLayerPos(int(i));
+      return;
+    }
+  }
+}
+
+void
 XCThermAutoSwitch::SetCurrentTimePos(int pos) noexcept
 {
   current_time_pos = pos;

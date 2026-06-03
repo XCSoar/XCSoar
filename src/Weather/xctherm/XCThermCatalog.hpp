@@ -4,6 +4,9 @@
 #pragma once
 
 #include <cstddef>
+#include <iterator>
+
+struct XCThermSettings;
 
 namespace XCTherm {
 
@@ -150,5 +153,24 @@ constexpr bool IsActiveLayer(const Layer &layer,
            layer.altitude_m == active_vertical_agl;
   return active_parameter == 0 && layer.altitude_m == active_wave_height;
 }
+
+/**
+ * Index of the layer matching dialog Activate settings, or -1.
+ */
+[[gnu::pure]]
+int FindActiveLayerIndex(const XCThermSettings &settings) noexcept;
+
+/**
+ * First region layer with any cached forecast slices, or -1.
+ */
+[[gnu::pure]]
+int FindFirstCachedLayerIndex(const XCThermSettings &settings) noexcept;
+
+/**
+ * Layer to display: activated layer when cached, otherwise first
+ * cached layer.
+ */
+[[gnu::pure]]
+int ResolveDisplayLayerIndex(const XCThermSettings &settings) noexcept;
 
 } // namespace XCTherm

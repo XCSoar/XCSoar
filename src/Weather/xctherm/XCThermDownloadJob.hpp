@@ -35,6 +35,7 @@ struct XCThermDownloadJob {
   std::atomic<unsigned> retry_attempt{0};
   std::atomic<unsigned> retry_seconds_left{0};
   std::atomic<bool> any_slot_missing{false};
+  std::atomic<bool> index_no_parameters{false};
 
   std::mutex result_mutex;
   XCThermGeoJSON::ForecastLayer first_forecast;
@@ -47,6 +48,14 @@ struct XCThermDownloadJob {
 };
 
 class CurlGlobal;
+struct XCThermSettings;
+
+/**
+ * Build a span download job for @p layer_index (region from @p settings).
+ */
+std::shared_ptr<XCThermDownloadJob>
+MakeXCThermSpanJob(const XCThermSettings &settings, unsigned layer_index,
+                   unsigned current_utc) noexcept;
 
 /**
  * Multi-hour download loop on @p curl's event loop. Updates @p job

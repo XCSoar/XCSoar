@@ -5,7 +5,12 @@
 
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
 
+#include <functional>
+#include <memory>
 #include <string>
+
+struct XCThermDownloadJob;
+struct XCThermSettings;
 
 namespace XCTherm {
 
@@ -29,5 +34,56 @@ void ApplyForecastLayerToMap(XCThermGeoJSON::ForecastLayer &&forecast,
                              unsigned forecast_utc = 0) noexcept;
 
 void ClearMapOverlay() noexcept;
+
+/**
+ * Apply a cached slice to the map.
+ * @return false when nothing is cached for @p layer_index at @p utc_hour.
+ */
+bool ApplyCachedLayerOverlay(unsigned layer_index,
+                             unsigned utc_hour) noexcept;
+
+/**
+ * Apply the best cached hour for @p layer_index (auto-time :45 rule).
+ */
+bool ApplyCachedLayerOverlayAuto(unsigned layer_index) noexcept;
+
+/**
+ * Apply the activated (or first cached) layer from cache to the map.
+ */
+void RestoreActiveLayerOverlay() noexcept;
+
+/**
+ * Install the first parseable slice from a finished download job.
+ */
+void ApplyJobPreviewToMap(const std::shared_ptr<XCThermDownloadJob> &job) noexcept;
+
+/**
+ * Start a span download on the network glue.
+ * @return nullptr when prerequisites are missing or glue is busy.
+ */
+std::shared_ptr<XCThermDownloadJob>
+StartSpanDownload(
+  const XCThermSettings &settings, unsigned layer_index,
+  std::function<void(std::shared_ptr<XCThermDownloadJob>)> on_finished);
+
+/**
+ * Fetch index.json on the network thread when needed.
+ */
+void RequestBackgroundIndexFetch(std::function<void()> on_ready = nullptr);
+
+/**
+ * Start a span download for the activated layer when it has no cache.
+ */
+void MaybeFetchActiveLayerSpan(
+  std::function<void(std::shared_ptr<XCThermDownloadJob>)> on_finished =
+    nullptr);
+
+/**
+ * Restore overlay from cache and ensure index / active-layer data.
+ */
+void ActivatePageOverlay() noexcept;
+
+/** Allow a new auto-fetch after the activated layer changed. */
+void ResetAutoFetchAttempt() noexcept;
 
 } // namespace XCTherm

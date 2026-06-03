@@ -110,6 +110,9 @@ public:
   /** Sync credentials and region from computer settings. */
   void ApplySessionSettings(const XCThermSettings &settings) noexcept;
 
+  /** Enable disk cache and apply @p settings (idempotent). */
+  void PrepareSession(const XCThermSettings &settings) noexcept;
+
   /**
    * Fetch and parse index.json for the current model.
    * Populates available_parameters.
@@ -120,6 +123,14 @@ public:
    *   expected shape — treated as a "no XCTherm data" non-error).
    */
   bool FetchIndex();
+
+  /**
+   * Fetch index.json on @p curl's event loop when not already loaded.
+   *
+   * @throws XCThermAPIError on network / HTTP failure.
+   * @return false if the response contained no forecast parameters.
+   */
+  Co::Task<bool> CoEnsureIndexLoaded(CurlGlobal &curl);
 
   /**
    * Get available vertical_wind parameters from the last FetchIndex().

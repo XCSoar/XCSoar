@@ -167,6 +167,7 @@ MapOverlayControlsWidget::GetAutoAdvance() const noexcept
   case PageLayout::Overlay::RASP:
     return rasp.GetTimeAutoAdvance();
 
+  case PageLayout::Overlay::XCTHERM:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;
@@ -187,6 +188,7 @@ MapOverlayControlsWidget::SetAutoAdvance(bool auto_advance) noexcept
     rasp.SetTimeAutoAdvance(auto_advance);
     break;
 
+  case PageLayout::Overlay::XCTHERM:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;
@@ -214,6 +216,7 @@ MapOverlayControlsWidget::ApplyAutoAdvance() noexcept
     RefreshControls();
     break;
 
+  case PageLayout::Overlay::XCTHERM:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;
@@ -309,6 +312,7 @@ MapOverlayControlsWidget::Prepare(ContainerWindow &parent,
       AddEnum(_("Forecast"), nullptr, this);
       break;
 
+    case PageLayout::Overlay::XCTHERM:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
       break;
