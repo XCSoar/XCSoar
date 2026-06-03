@@ -3,6 +3,9 @@ ifeq ($(HAVE_HTTP),y)
 # network services.
 
 LIBCLIENT_SOURCES = \
+	$(SRC)/net/client/SyncHttp.cpp \
+	$(SRC)/net/client/auth/JwtBearerSession.cpp \
+	$(SRC)/net/client/xctherm/Http.cpp \
 	$(SRC)/net/client/tim/Client.cpp \
 	$(SRC)/net/client/WeGlide/AircraftCache.cpp \
 	$(SRC)/net/client/WeGlide/AircraftList.cpp \
