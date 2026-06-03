@@ -12,6 +12,7 @@
 #ifdef HAVE_EDL
 #include "Weather/EDL/DownloadGlue.hpp"
 #endif
+#include "Weather/xctherm/XCThermDownloadGlue.hpp"
 #endif
 
 NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
@@ -31,6 +32,7 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
 # ifdef HAVE_EDL
   ,edl(new EDL::DownloadGlue(curl))
 # endif
+  ,xctherm_download(new XCThermDownloadGlue(curl))
 #endif
 {
 #ifdef HAVE_TRACKING
@@ -69,6 +71,9 @@ NetComponents::BeginShutdown() noexcept
   if (edl != nullptr)
     edl->BeginShutdown();
 # endif
+
+  if (xctherm_download != nullptr)
+    xctherm_download->BeginShutdown();
 
   if (notam != nullptr)
     notam->BeginShutdown();
