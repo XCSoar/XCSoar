@@ -19,16 +19,11 @@
 #include "Weather/xctherm/XCThermForecastTime.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #include "Weather/xctherm/XCThermAutoSwitch.hpp"
-#include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Weather/Settings.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
-#include "time/BrokenDateTime.hpp"
 #include "util/StaticString.hxx"
-
-#include <chrono>
-#include <cstdlib>
 
 class XCThermLabel final : public PaintWindow {
   const DialogLook &look;
@@ -325,60 +320,15 @@ private:
       return;
     }
 
-    const unsigned fcast_h = cached_hours[
+    const unsigned time_index =
       model.GetCurrentTimeIndex() < cached_hours.size()
-      ? model.GetCurrentTimeIndex() : 0];
-
-    int offset_min = 0;
-    bool has_real_offset = false;
-    auto &api = XCThermAPI::Instance();
-    const auto slice = api.GetSliceMeta(
-      LayerAt(model.GetCurrentLayer()).api_parameter, fcast_h);
-
-    if (slice.has_value() && slice->run_date.size() == 8 &&
-        slice->run_hour.size() == 2 &&
-        BrokenDateTime::NowUTC().IsPlausible()) {
-      const unsigned year =
-        (unsigned)std::atoi(slice->run_date.substr(0, 4).c_str());
-      const unsigned month =
-        (unsigned)std::atoi(slice->run_date.substr(4, 2).c_str());
-      const unsigned day =
-        (unsigned)std::atoi(slice->run_date.substr(6, 2).c_str());
-      const unsigned run_h =
-        (unsigned)std::atoi(slice->run_hour.c_str());
-      const BrokenDateTime run_dt(year, month, day, run_h, 0, 0);
-      const BrokenDateTime forecast_dt =
-        run_dt + std::chrono::hours{slice->step};
-      const auto delta = forecast_dt - BrokenDateTime::NowUTC();
-      offset_min = (int)std::chrono::duration_cast<std::chrono::minutes>(
-        delta).count();
-      has_real_offset = true;
-    } else if (CommonInterface::Basic().date_time_utc.IsPlausible()) {
-      const auto &basic = CommonInterface::Basic();
-      int cur_min = (int)basic.date_time_utc.hour * 60
-                  + (int)basic.date_time_utc.minute;
-      int fc_min = (int)fcast_h * 60;
-      offset_min = fc_min - cur_min;
-      if (offset_min < 0)
-        offset_min += 1440;
-      has_real_offset = true;
-    }
-
-    char offset_buf[16] = {0};
-    if (has_real_offset) {
-      const int abs_min = std::abs(offset_min);
-      std::snprintf(offset_buf, sizeof(offset_buf),
-                    "%s%d:%02d",
-                    offset_min >= 0 ? "+" : "-",
-                    abs_min / 60, abs_min % 60);
-    }
+      ? model.GetCurrentTimeIndex() : 0;
+    const unsigned fcast_h = cached_hours[time_index];
 
     StaticString<64> text;
-    if (auto_switch.IsTimeAutoActive())
-      text.Format("%s %02u:00 UTC (%s)", _("AUTO:"), fcast_h, offset_buf);
-    else
-      text.Format("%02u:00 UTC (%s)", fcast_h, offset_buf);
-
+    XCTherm::FormatTimeLabel(text,
+                             LayerAt(model.GetCurrentLayer()).api_parameter,
+                             fcast_h, auto_switch.IsTimeAutoActive());
     time_label.SetText(text);
     time_label.SetAvailable(true);
   }
