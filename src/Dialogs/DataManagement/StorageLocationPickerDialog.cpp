@@ -76,6 +76,9 @@ class StorageListWidget final : public ListWidget,
   DeviceList options_;
   WndForm *dialog_ = nullptr;
   Button *select_button_ = nullptr;
+#ifdef ANDROID
+  std::string pending_permission_device_id_;
+#endif
 
   void SyncSelectButton() noexcept {
     if (select_button_ != nullptr)
@@ -120,8 +123,34 @@ public:
   }
 
   /* StorageEventListener */
-  void OnStorageEvent(const StorageEventInfo &) noexcept override {
+  void OnStorageEvent([[maybe_unused]] const StorageEventInfo &info) noexcept override {
     Refresh();
+
+#ifdef ANDROID
+    if (info.type != StorageEvent::AccessGranted ||
+        pending_permission_device_id_.empty() ||
+        dialog_ == nullptr)
+      return;
+
+    for (const auto &granted : info.devices) {
+      if (granted == nullptr ||
+          granted->Id() != pending_permission_device_id_)
+        continue;
+
+      const auto it = std::find_if(options_.begin(), options_.end(),
+                                   [&granted](const auto &device) {
+                                     return device != nullptr &&
+                                            device->Id() == granted->Id();
+                                   });
+      if (it == options_.end() || (*it)->NeedsPermission())
+        continue;
+
+      GetList().SetCursorIndex(static_cast<unsigned>(it - options_.begin()));
+      pending_permission_device_id_.clear();
+      dialog_->SetModalResult(mrOK);
+      return;
+    }
+#endif
   }
 
   /* Widget */
@@ -192,9 +221,52 @@ public:
     return true;
   }
 
-  void OnActivateItem([[maybe_unused]] unsigned) noexcept override {
+#ifdef ANDROID
+  void SelectCurrent() noexcept {
+    const unsigned index = GetCursorIndex();
+    if (index >= options_.size())
+      return;
+
+    const auto &device = options_[index];
+    if (device == nullptr)
+      return;
+
+    if (device->NeedsPermission()) {
+      pending_permission_device_id_ = device->Id();
+      device->RequestPermission();
+      return;
+    }
+
+    pending_permission_device_id_.clear();
     if (dialog_ != nullptr)
       dialog_->SetModalResult(mrOK);
+  }
+
+  void ChangeFolder() noexcept {
+    const unsigned index = GetCursorIndex();
+    if (index >= options_.size())
+      return;
+
+    const auto &device = options_[index];
+    if (device == nullptr)
+      return;
+
+    const AllocatedPath name{device->Name().c_str()};
+    if (!IsContentUri(name))
+      return;
+
+    pending_permission_device_id_ = device->Id();
+    device->RequestPermission();
+  }
+#endif
+
+  void OnActivateItem([[maybe_unused]] unsigned) noexcept override {
+#ifdef ANDROID
+    SelectCurrent();
+#else
+    if (dialog_ != nullptr)
+      dialog_->SetModalResult(mrOK);
+#endif
   }
 };
 
@@ -217,58 +289,43 @@ PickStorageLocation() noexcept
 {
   const auto &look = UIGlobals::GetDialogLook();
 
-  while (true) {
-    auto *list_widget = new StorageListWidget();
+  auto *list_widget = new StorageListWidget();
 
-    WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                        look, _("Choose location"));
-    list_widget->SetDialog(dialog);
-
-    auto *select_btn = dialog.AddButton(_("Select"), mrOK);
-    list_widget->SetSelectButton(*select_btn);
-#ifdef ANDROID
-    static constexpr int mrChangeFolder = 100;
-    dialog.AddButton(_("Change folder"), mrChangeFolder);
-#endif
-    /* "Scan" is kept for manual refresh; hotplug also triggers Refresh(). */
-    dialog.AddButton(_("Scan"), [list_widget]{ list_widget->ScanAndReport(); });
-    dialog.AddButton(_("Cancel"), mrCancel);
-    dialog.EnableCursorSelection();
-    dialog.FinishPreliminary(list_widget);
-
-    const int result = dialog.ShowModal();
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Choose location"));
+  list_widget->SetDialog(dialog);
 
 #ifdef ANDROID
-    if (result == mrChangeFolder) {
-      const unsigned sel = list_widget->GetCursorIndex();
-      auto &opts = list_widget->GetOptions();
-      if (sel < opts.size()) {
-        const auto &dev = opts[sel];
-        if (IsContentUri(AllocatedPath(dev->Name().c_str())))
-          dev->RequestPermission();
-      }
-      continue;
-    }
+  auto *select_btn = dialog.AddButton(_("Select"),
+                                      [list_widget]{ list_widget->SelectCurrent(); });
+#else
+  auto *select_btn = dialog.AddButton(_("Select"), mrOK);
 #endif
+  list_widget->SetSelectButton(*select_btn);
+#ifdef ANDROID
+  dialog.AddButton(_("Change folder"),
+                   [list_widget]{ list_widget->ChangeFolder(); });
+#endif
+  /* "Scan" is kept for manual refresh; hotplug also triggers Refresh(). */
+  dialog.AddButton(_("Scan"), [list_widget]{ list_widget->ScanAndReport(); });
+  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.EnableCursorSelection();
+  dialog.FinishPreliminary(list_widget);
 
-    if (result != mrOK)
-      return AllocatedPath();
+  const int result = dialog.ShowModal();
 
-    const unsigned sel = list_widget->GetCursorIndex();
-    auto &opts = list_widget->GetOptions();
-    if (sel >= opts.size())
-      return AllocatedPath();
+  if (result != mrOK)
+    return AllocatedPath();
 
-    const auto &chosen = opts[sel];
+  const unsigned sel = list_widget->GetCursorIndex();
+  auto &opts = list_widget->GetOptions();
+  if (sel >= opts.size())
+    return AllocatedPath();
 
-    if (chosen->NeedsPermission()) {
-      chosen->RequestPermission();
-      continue;
-    }
+  const auto &chosen = opts[sel];
 
-    AllocatedPath chosen_path{chosen->Name().c_str()};
-    if (chosen_path != nullptr)
-      last_storage_target = Path(chosen_path);
-    return chosen_path;
-  }
+  AllocatedPath chosen_path{chosen->Name().c_str()};
+  if (chosen_path != nullptr)
+    last_storage_target = Path(chosen_path);
+  return chosen_path;
 }
