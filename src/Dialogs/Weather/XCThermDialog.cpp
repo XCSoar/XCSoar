@@ -5,6 +5,8 @@
 #include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/ListPicker.hpp"
+#include "Components.hpp"
+#include "NetComponents.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
 
@@ -37,9 +39,17 @@
 #include <chrono>
 #include <ctime>
 #include <memory>
-#include <optional>
 
 namespace {
+
+[[gnu::pure]]
+static XCThermDownloadGlue *
+GetXCThermDownloadGlue() noexcept
+{
+  if (net_components == nullptr)
+    return nullptr;
+  return net_components->xctherm_download.get();
+}
 
 /**
  * Download metadata for a layer — shown in the second row.
@@ -234,8 +244,6 @@ class XCThermWidget final : public ListWidget {
 
   std::shared_ptr<XCThermDownloadJob> active_job;
 
-  std::optional<XCThermDownloadGlue> download_glue;
-
   /* Polls active_job every 200 ms for live progress (UI thread). */
   UI::PeriodicTimer poll_timer{[this]{ PollDownload(); }};
 
@@ -247,10 +255,8 @@ public:
   void CreateButtons(ButtonPanel &buttons);
 
   ~XCThermWidget() noexcept override {
-    if (download_glue)
-      download_glue->RequestCancel();
-    if (download_glue)
-      download_glue->BeginShutdown();
+    if (auto *glue = GetXCThermDownloadGlue())
+      glue->Abandon();
   }
 
 private:
@@ -490,9 +496,9 @@ XCThermWidget::CancelDownload()
   if (!active_job)
     return;
 
-  if (download_glue)
-    download_glue->RequestCancel();
-  else
+  if (auto *glue = GetXCThermDownloadGlue())
+    glue->RequestCancel();
+  else if (active_job)
     active_job->cancel.store(true);
 }
 
@@ -554,15 +560,13 @@ XCThermWidget::StartDownload()
     }
   }
 
-  if (Net::curl == nullptr) {
+  auto *glue = GetXCThermDownloadGlue();
+  if (glue == nullptr || Net::curl == nullptr) {
     ShowMessageBox(_("Network is not available."), "XCTherm", MB_OK);
     return;
   }
 
-  if (!download_glue)
-    download_glue.emplace(*Net::curl);
-
-  if (download_glue->IsRunning())
+  if (glue->IsRunning())
     return;
 
   auto job = std::make_shared<XCThermDownloadJob>();
@@ -586,7 +590,7 @@ XCThermWidget::StartDownload()
 
   active_job = job;
 
-  download_glue->Start(job, [this](std::shared_ptr<XCThermDownloadJob> finished) {
+  glue->Start(job, [this](std::shared_ptr<XCThermDownloadJob> finished) {
     active_job = std::move(finished);
     FinishDownload();
   });
@@ -861,9 +865,6 @@ void
 XCThermWidget::Prepare(ContainerWindow &parent,
                         const PixelRect &rc) noexcept
 {
-  if (Net::curl != nullptr && !download_glue)
-    download_glue.emplace(*Net::curl);
-
   CreateButtons(buttons_widget->GetButtonPanel());
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc, row_renderer.CalculateLayout(look));

@@ -48,5 +48,12 @@ public:
              std::function<void(std::shared_ptr<XCThermDownloadJob>)> &&finished);
 
   void RequestCancel() noexcept;
+
+  /**
+   * Cancel an in-flight job and drop the UI completion handler (e.g.
+   * dialog closed). Does not stop the shared #Net::AsyncTask — use
+   * #BeginShutdown() from #NetComponents on app exit.
+   */
+  void Abandon() noexcept;
 };
 

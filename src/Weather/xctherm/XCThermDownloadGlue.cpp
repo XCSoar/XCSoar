@@ -50,6 +50,13 @@ XCThermDownloadGlue::RequestCancel() noexcept
     job->cancel.store(true);
 }
 
+void
+XCThermDownloadGlue::Abandon() noexcept
+{
+  RequestCancel();
+  on_finished = nullptr;
+}
+
 Co::InvokeTask
 XCThermDownloadGlue::RunDownload()
 {
