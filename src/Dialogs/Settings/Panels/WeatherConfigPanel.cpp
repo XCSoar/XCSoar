@@ -7,6 +7,7 @@
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/Features.hpp"
+#include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
 #include "Interface.hpp"
@@ -57,19 +58,12 @@ static constexpr StaticEnumChoice xctherm_overlay_location_list[] = {
   nullptr
 };
 
-/* The CH/UK constants live as numbered model IDs in XCThermDialog.cpp;
-   re-declare them here as named enums so the picker stays readable. */
-enum class XCThermRegion : unsigned {
-  CH = 0,
-  UK = 1,
-};
-
 static constexpr StaticEnumChoice xctherm_region_list[] = {
-  { (unsigned)XCThermRegion::CH, N_("CH (Alps)"),
+  { unsigned(XCTherm::Region::CH), N_("CH (Alps)"),
     N_("Covers the entire Alpine arc from Vienna to Perpignan, "
        "forecasting wave throughout the whole Alps region. "
        "ICON-CH model.") },
-  { (unsigned)XCThermRegion::UK, N_("UK"),
+  { unsigned(XCTherm::Region::UK), N_("UK"),
     N_("United Kingdom. ICON-UK model.") },
   nullptr
 };
