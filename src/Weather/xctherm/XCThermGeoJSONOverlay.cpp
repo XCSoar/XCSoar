@@ -2,6 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "XCThermGeoJSONOverlay.hpp"
+#include "lib/fmt/ToBuffer.hxx"
+
+#include <cstring>
+#include <string>
 #include "XCThermAPI.hpp"
 
 #include "Projection/WindowProjection.hpp"
@@ -77,46 +81,45 @@ XCThermGeoJSONOverlay::FormatPointInfo(GeoPoint p, char *buffer,
      is neutral → 0.0. Open-ended edge bands carry a ±1000 sentinel
      bound; for those the finite edge is the only meaningful figure. */
   double min_ms = 0, max_ms = 0;
-  char climb[32];
+  std::string climb;
   if (GetClimbAt(p, min_ms, max_ms)) {
     double value;
     if (min_ms <= -100.0)
-      value = max_ms;                 // open-ended sink: use finite edge
+      value = max_ms;
     else if (max_ms >= 100.0)
-      value = min_ms;                 // open-ended lift: use finite edge
+      value = min_ms;
     else
-      value = (min_ms + max_ms) / 2;  // band midpoint
-    std::snprintf(climb, sizeof(climb), "%+.1f m/s", value);
+      value = (min_ms + max_ms) / 2;
+    climb = std::string(FmtBuffer<32>("{:+.1f} m/s", value).c_str());
   } else {
-    std::snprintf(climb, sizeof(climb), "0.0 m/s");  // neutral (dropped band)
+    climb = "0.0 m/s";
   }
 
-  /* Download time + issued run from the cache, if we know which
-     parameter this overlay came from. */
-  char meta[96];
-  meta[0] = '\0';
+  std::string meta;
   if (!parameter_copy.empty()) {
     const auto summary =
       XCThermAPI::Instance().GetCachedLayerSummary(parameter_copy);
-    char issued[24] = "";
     if (summary.latest_run_date.size() == 8 &&
-        summary.latest_run_hour.size() == 2)
-      std::snprintf(issued, sizeof(issued), " | run %.2s %sZ",
-                    summary.latest_run_date.c_str() + 6,
-                    summary.latest_run_hour.c_str());
-    char dl[24] = "";
+        summary.latest_run_hour.size() == 2) {
+      const std::string &d = summary.latest_run_date;
+      meta += std::string(FmtBuffer<32>(" | run {}-{}-{} {}Z",
+                                        d.substr(0, 4), d.substr(4, 2),
+                                        d.substr(6, 2),
+                                        summary.latest_run_hour).c_str());
+    }
     if (summary.latest_downloaded_at > 0) {
       const std::time_t t = (std::time_t)summary.latest_downloaded_at;
       std::tm *lt = std::localtime(&t);
       char tbuf[8];
       if (lt != nullptr && std::strftime(tbuf, sizeof(tbuf), "%H:%M", lt) > 0)
-        std::snprintf(dl, sizeof(dl), " | dl %s", tbuf);
+        meta += std::string(FmtBuffer<16>(" | dl {}", tbuf).c_str());
     }
-    std::snprintf(meta, sizeof(meta), "%s%s", issued, dl);
   }
 
-  std::snprintf(buffer, size, "%s @ %s (%02uZ)%s",
-                climb, label_copy.c_str(), hour, meta);
+  const auto line = FmtBuffer<256>("{} @ {} ({:02}Z){}",
+                                   climb, label_copy, hour, meta);
+  std::strncpy(buffer, line.c_str(), size - 1);
+  buffer[size - 1] = '\0';
   return true;
 }
 
