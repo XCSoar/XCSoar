@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "DataLayoutMigration.hpp"
+#include "FakeLogFile.hpp"
 #include "LocalPath.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/File.hpp"
@@ -148,11 +149,12 @@ TestDoesNotWriteMarkerWhenAllMovesFail()
   Profile::SetFiles(default_prf);
   Profile::Load();
 
-  ok1(chmod(template_path, 0555) == 0);
+  ok1(WriteTextFile(AllocatedPath::Build(data_path, Path("maps")),
+                    "not a directory"));
+  ok1(WriteTextFile(AllocatedPath::Build(data_path, Path("profiles")),
+                    "not a directory"));
 
   MigrateDataLayoutToSubdirs();
-
-  ok1(chmod(template_path, 0755) == 0);
 
   ok1(!File::Exists(LocalPath(".xcsoar-subdir-layout-v1")));
   ok1(File::Exists(AllocatedPath::Build(data_path, Path("terrain.xcm"))));
@@ -161,6 +163,8 @@ TestDoesNotWriteMarkerWhenAllMovesFail()
 int
 main()
 {
+  SetFakeLogFileQuiet(true);
+
   plan_tests(43);
   TestMigratesFilesAndActiveProfileOnly();
   TestDoesNotWriteMarkerWhenAllMovesFail();
