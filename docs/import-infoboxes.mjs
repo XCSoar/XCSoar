@@ -244,27 +244,29 @@ function extractSymbol(handlerField) {
 }
 
 function clean(field) {
-    if (!field) {
-        return null;
+    if (!field) return null;
+
+    // Unwrap N_(...) if present
+    let inner = field;
+    const nMatch = field.match(/^N_\(([\s\S]*)\)$/);
+    if (nMatch) inner = nMatch[1];
+
+    if (inner.trim() === 'NULL') return null;
+
+    // Collect all adjacent C string literals (handles multi-line concatenation)
+    const parts = [];
+    const re = /"((?:[^"\\]|\\.)*)"/g;
+    let m;
+    while ((m = re.exec(inner)) !== null) {
+        parts.push(m[1]);
     }
 
-    let m = field.match(/N_\("([\s\S]*?)"\)/);
+    if (parts.length === 0) return inner.trim();
 
-    if (m) {
-        return m[1].replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-    }
-
-    m = field.match(/"([\s\S]*?)"/);
-
-    if (m) {
-        return m[1].replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-    }
-
-    if (field === "NULL") {
-        return null;
-    }
-
-    return field.trim();
+    return parts
+        .join('')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\');
 }
 
 function parseEntry(entry) {
