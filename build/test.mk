@@ -742,6 +742,7 @@ TEST_FILE_TYPE_DEPENDS = UTIL
 $(eval $(call link-program,TestFileType,TEST_FILE_TYPE))
 
 TEST_DATA_LAYOUT_MIGRATION_SOURCES = \
+	$(SRC)/DataFileLayout.cpp \
 	$(SRC)/DataLayoutMigration.cpp \
 	$(SRC)/DataFilePath.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -760,13 +761,18 @@ TEST_DATA_LAYOUT_MIGRATION_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,TestDataLayoutMigration,TEST_DATA_LAYOUT_MIGRATION))
 
 TEST_LOCAL_PATH_RESOLVE_SOURCES = \
+	$(SRC)/DataFileLayout.cpp \
 	$(SRC)/DataFilePath.cpp \
+	$(SRC)/Form/DataField/Base.cpp \
+	$(SRC)/Form/DataField/ComboList.cpp \
+	$(SRC)/Form/DataField/File.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/system/FileUtil.cpp \
 	$(SRC)/system/Path.cpp \
 	$(SRC)/io/FileOutputStream.cxx \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestLocalPathResolve.cpp
 TEST_LOCAL_PATH_RESOLVE_DEPENDS = IO OS UTIL

@@ -3,6 +3,7 @@
 
 #include "DataLayoutMigration.hpp"
 
+#include "DataFileLayout.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Profile/Keys.hpp"
@@ -45,7 +46,7 @@ BuildMigrationPlan(Path root)
       if (relative_path == nullptr || !relative_path.IsBase())
         return;
 
-      const auto subdir = GetLayoutSubdirForFilename(filename.c_str());
+      const auto subdir = DataFileLayout::GetLayoutSubdirForDataFile(full);
       if (subdir == nullptr) {
         ++plan.skipped_unknown;
         return;

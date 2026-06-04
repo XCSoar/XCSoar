@@ -7,6 +7,8 @@
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 
+#include <utility>
+
 namespace {
 
 [[gnu::pure]]
@@ -16,6 +18,34 @@ ResolveDataCachePath(const char *filename) noexcept
   return filename != nullptr
     ? LocalPath(AllocatedPath::Build(Path("cache"), Path(filename)))
     : nullptr;
+}
+
+[[gnu::pure]]
+static AllocatedPath
+ResolveUniqueExistingTypedDataFile(const char *filename) noexcept
+{
+  if (filename == nullptr || *filename == '\0')
+    return nullptr;
+
+  AllocatedPath match;
+
+  for (uint8_t i = 1; i < static_cast<uint8_t>(FileType::COUNT); ++i) {
+    const auto type = static_cast<FileType>(i);
+    const auto subdir = GetFileTypeDefaultDir(type);
+    if (subdir == nullptr || !FilenameMatchesFileType(filename, type))
+      continue;
+
+    auto candidate = LocalPath(AllocatedPath::Build(subdir, Path(filename)));
+    if (!File::Exists(candidate))
+      continue;
+
+    if (match != nullptr && match != candidate)
+      return nullptr;
+
+    match = std::move(candidate);
+  }
+
+  return match;
 }
 
 } // namespace
@@ -81,8 +111,13 @@ ResolveLocalDataFile(AllocatedPath path, FileType file_type) noexcept
   if (filename == nullptr || !filename.IsValidFilename())
     return path;
 
-  if (file_type == FileType::UNKNOWN)
+  if (file_type == FileType::UNKNOWN) {
+    if (auto resolved = ResolveUniqueExistingTypedDataFile(filename.c_str());
+        resolved != nullptr)
+      return resolved;
+
     file_type = ClassifyDataFilename(filename.c_str());
+  }
 
   if (file_type == FileType::UNKNOWN)
     return path;

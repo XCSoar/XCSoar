@@ -100,6 +100,15 @@ FileDataField::ScanDirectoryTop(const char *filter) noexcept
     const auto typed_path = LocalPath(subdir);
     if (typed_path != nullptr && Directory::Exists(typed_path))
       Directory::VisitSpecificFiles(typed_path, filter, fv, true);
+
+    if (file_type == FileType::WAYPOINTDETAILS) {
+      /* Compatibility fallback: an earlier subdir migration could move
+         ambiguous .txt waypoint details into airspace/. */
+      const auto airspace_path =
+        LocalPath(GetFileTypeDefaultDir(FileType::AIRSPACE));
+      if (airspace_path != nullptr && Directory::Exists(airspace_path))
+        Directory::VisitSpecificFiles(airspace_path, filter, fv, true);
+    }
   } else {
     VisitDataFiles(filter, fv);
   }

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ImportDataPanel.hpp"
+#include "DataFileLayout.hpp"
 #include "StorageLocationPickerDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
@@ -38,6 +39,10 @@ namespace {
  * Compute the import destination path for a source file.
  * Recognized file types are imported into their typed data
  * subdirectories; unknown files remain in the XCSoar data root.
+ * Ambiguous ``.txt`` files (OpenAir, TNP/SUA content in a ``.txt``
+ * instead of ``.sua``, waypoint details) are sniffed via
+ * DataFileLayout and placed under ``airspace/`` or
+ * ``waypoints/details/`` when recognized.
  */
 static AllocatedPath
 ComputeRelativeDestination(Path src) noexcept
@@ -50,7 +55,7 @@ ComputeRelativeDestination(Path src) noexcept
   if (!base_path.IsValidFilename())
     return nullptr;
 
-  const auto subdir = GetLayoutSubdirForFilename(base.c_str());
+  const auto subdir = DataFileLayout::GetLayoutSubdirForDataFile(src);
   if (subdir != nullptr)
     return AllocatedPath::Build(Path(subdir), base_path);
 
@@ -155,6 +160,7 @@ struct ImportJob : public Job {
         }
 
         device->CopyToLocal(rel, dest, &sub_env);
+        dest = DataFileLayout::RelocateRootDataFileToLayoutSubdir(dest);
 
         ++completed;
       } catch (...) {
