@@ -3,6 +3,7 @@
 
 #include "TarBackup.hpp"
 
+#include "DataFileLayout.hpp"
 #include "CopyFile.hxx"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "FileReader.hxx"
@@ -100,6 +101,50 @@ bool
 AcceptEntry(ArchiveExcludePathFn exclude, std::string_view name) noexcept
 {
   return !name.empty() && (exclude == nullptr || !exclude(name));
+}
+
+[[nodiscard]]
+std::string
+MakePortableArchiveName(Path path)
+{
+  std::string name = path.c_str();
+  std::replace(name.begin(), name.end(), '\\', '/');
+  return name;
+}
+
+[[nodiscard]]
+bool
+ArchiveContains(const std::vector<std::string> &names,
+                std::string_view name) noexcept
+{
+  return std::find(names.begin(), names.end(), name) != names.end();
+}
+
+[[nodiscard]]
+AllocatedPath
+ResolveRestoreDestination(Path source, Path destination_root,
+                          const std::string &archive_name,
+                          const std::vector<std::string> &archive_names) noexcept
+{
+  const Path archive_path(archive_name.c_str());
+  auto destination = AllocatedPath::Build(destination_root, archive_path);
+
+  if (!archive_path.IsBase())
+    return destination;
+
+  const auto subdir = DataFileLayout::GetLayoutSubdirForDataFile(source);
+  if (subdir == nullptr)
+    return destination;
+
+  const auto relative = AllocatedPath::Build(subdir, archive_path);
+  if (ArchiveContains(archive_names, MakePortableArchiveName(relative)))
+    return destination;
+
+  auto typed_destination = AllocatedPath::Build(destination_root, Path(relative));
+  if (File::ExistsAny(typed_destination))
+    return destination;
+
+  return typed_destination;
 }
 
 [[nodiscard]]
@@ -382,7 +427,8 @@ try {
     }
 
     AllocatedPath source = AllocatedPath::Build(temp_root, name.c_str());
-    AllocatedPath dest = AllocatedPath::Build(destination_root, name.c_str());
+    AllocatedPath dest = ResolveRestoreDestination(source, destination_root,
+                                                   name, extracted_names);
     Directory::CreateRecursive(dest.GetParent());
 
     try {
