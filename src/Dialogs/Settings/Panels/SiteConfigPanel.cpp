@@ -87,7 +87,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    _("List of active airspace files. Use the Add and Remove "
                      "buttons to activate or deactivate"
                      " airspace files respectively. Supported file types are: "
-                     "Openair (.txt /.air), and Tim Newport-Pearce (.sua)."),
+                     "Openair (.openair /.txt /.air), and Tim Newport-Pearce (.sua)."),
                    ProfileKeys::AirspaceFileList,
                    GetFileTypePatterns(FileType::AIRSPACE),
                    FileType::AIRSPACE);
