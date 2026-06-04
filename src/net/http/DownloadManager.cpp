@@ -9,6 +9,7 @@
 #include "lib/curl/Global.hxx"
 #include "Operation/ProgressListener.hpp"
 #include "LocalPath.hpp"
+#include "system/FileUtil.hpp"
 #include "thread/Mutex.hxx"
 #include "thread/SafeList.hxx"
 #include "co/InjectTask.hxx"
@@ -16,6 +17,7 @@
 #include <string>
 #include <list>
 #include <algorithm>
+#include <utility>
 
 #include <string.h>
 
@@ -175,8 +177,12 @@ DownloadManagerThread::Start() noexcept
   const Item &item = queue.front();
   current_position = 0;
 
+  auto destination = LocalPath(item.path_relative.c_str());
+  if (const auto parent = destination.GetParent(); parent != nullptr)
+    Directory::CreateRecursive(parent);
+
   task.Start(DownloadToFile(*Net::curl, item.uri.c_str(),
-                            LocalPath(item.path_relative.c_str()),
+                            std::move(destination),
                             nullptr, *this),
              BIND_THIS_METHOD(OnCompletion));
 }
