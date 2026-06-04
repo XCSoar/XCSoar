@@ -89,6 +89,7 @@ TestFilenameMatchesFileType()
 
   // Regular .txt file should still match AIRSPACE (no exact claim)
   ok1(FilenameMatchesFileType("london.txt", FileType::AIRSPACE));
+  ok1(FilenameMatchesFileType("london.openair", FileType::AIRSPACE));
   ok1(FilenameMatchesFileType("gfs-rasp-forecast.dat", FileType::WAYPOINT));
 
   // No match at all
@@ -110,6 +111,7 @@ TestDetectFileTypeByFilename()
   ok1(DetectFileTypeByFilename("waypoints.cup") == FileType::WAYPOINT);
   ok1(DetectFileTypeByFilename("WAYPOINTS.CUP") == FileType::WAYPOINT);
   ok1(DetectFileTypeByFilename("london.txt") == FileType::UNKNOWN);
+  ok1(DetectFileTypeByFilename("london.openair") == FileType::AIRSPACE);
   ok1(DetectFileTypeByFilename("readme.md") == FileType::UNKNOWN);
 }
 
@@ -119,6 +121,7 @@ TestLayoutClassification()
   ok1(ClassifyDataFilename("waypoints.cup") == FileType::WAYPOINT);
   ok1(ClassifyDataFilename("track.igc") == FileType::IGC);
   ok1(GetLayoutSubdirForFilename("waypoints.cup") == Path("waypoints"));
+  ok1(GetLayoutSubdirForFilename("zone.openair") == Path("airspace"));
   ok1(GetLayoutSubdirForFilename("task.tsk") == Path("tasks"));
   ok1(GetLayoutSubdirForFilename("gfs-rasp-forecast.dat") == Path("weather/rasp"));
   ok1(GetLayoutSubdirForFilename("track.igc") == Path("logs"));
@@ -131,7 +134,7 @@ TestLayoutClassification()
 
 int main()
 {
-  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 15 + 8 + 11);
+  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 16 + 9 + 12);
 
   TestDefaultDirs();
   TestPatterns();

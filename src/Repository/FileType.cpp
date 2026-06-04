@@ -14,7 +14,7 @@ GetFileTypePatterns(const FileType file_type) noexcept
 {
   switch (file_type) {
   case FileType::AIRSPACE:
-    return "*.txt\0*.air\0*.sua\0";
+    return "*.openair\0*.txt\0*.air\0*.sua\0";
 
   case FileType::WAYPOINT:
     return "*.dat\0*.xcw\0*.cup\0*.cupx\0*.wpz\0*.wpt\0";
