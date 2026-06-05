@@ -30,6 +30,9 @@ CI uploads this metadata with:
 
 Both workflows require the `GOOGLE_PLAY_JSON_KEY` GitHub secret.
 
+Ruby dependencies are pinned in the repo-root `Gemfile` / `Gemfile.lock`
+and installed via Bundler in CI (`bundle exec fastlane supply`).
+
 ## Other stores
 
 Apple and F-Droid metadata are not managed here yet.
