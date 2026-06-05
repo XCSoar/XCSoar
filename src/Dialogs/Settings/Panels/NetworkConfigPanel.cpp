@@ -26,6 +26,12 @@
 #include "net/wifi/WifiError.hpp"
 #endif
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#include "java/Global.hxx"
+#endif
+
 struct NetworkConfigRows {
   unsigned status{0}, connectivity{0}, ip{0}, backend{0}, radio{0},
     persist_wifi{0};
@@ -61,6 +67,23 @@ LinuxBackendName(LinuxWifiBackendKind backend_kind) noexcept
 }
 #endif
 
+#ifdef ANDROID
+static StaticString<64>
+GetPlatformWifiIpAddress() noexcept
+{
+  StaticString<64> text;
+  text.clear();
+
+  if (native_view == nullptr)
+    return text;
+
+  native_view->GetWifiIpAddress(Java::GetEnv(),
+                                text.buffer(), text.capacity());
+
+  return text;
+}
+#endif
+
 static const char *
 GetStatusHelp() noexcept
 {
@@ -70,6 +93,8 @@ GetStatusHelp() noexcept
   return _("This page shows WiFi status when NetworkManager or ConnMan is on "
            "D-Bus (e.g. Linux with Wayland or KMS). Open WiFi list to scan "
            "and connect when a service is available.");
+#elif defined(ANDROID)
+  return _("WiFi on Android is managed by the system settings. Use WiFi list to open them.");
 #else
   return _("Network details are not available in this build.");
 #endif
@@ -82,6 +107,8 @@ GetBackendHelp() noexcept
   return _("WiFi on Kobo is managed by wpa_supplicant.");
 #elif defined(HAVE_LINUX_NET_WIFI)
   return _("D-Bus provider used for WiFi (see WiFi list to manage networks).");
+#elif defined(ANDROID)
+  return _("Platform backend used for WiFi management.");
 #else
   return _("Platform/backend information is not available in this build.");
 #endif
@@ -94,6 +121,8 @@ GetInitialBackendName() noexcept
   return "wpa_supplicant";
 #elif defined(HAVE_LINUX_NET_WIFI)
   return LinuxBackendName(LinuxWifiBackendKind::None);
+#elif defined(ANDROID)
+  return "Android";
 #else
   return _("Unavailable");
 #endif
@@ -169,6 +198,13 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
     const auto message = WifiError::Format(std::current_exception());
     ShowMessageBox(message.c_str(), _("Network"), MB_OK);
   }
+#elif defined(ANDROID)
+  if (native_view != nullptr && native_view->OpenWifiSettings(Java::GetEnv()))
+    return;
+
+  ShowMessageBox(_("Failed to open Android WiFi settings."),
+                 _("Connectivity"), MB_OK);
+  (void)refresh;
 #else
   (void)refresh;
   ShowMessageBox(_("WiFi management is not available in this build."),
@@ -230,12 +266,20 @@ BuildPlatformState(NetworkConfigState &state,
     const auto message = WifiError::Format(std::current_exception());
     state.status = message.c_str();
   }
+#elif defined(ANDROID)
+  state.connectivity = GetNetState();
+  state.backend = "Android";
+  state.status = _("Managed by Android system settings.");
+
+  const auto android_ip = GetPlatformWifiIpAddress();
+  if (!android_ip.empty())
+    state.ip = android_ip;
 #else
   (void)rows;
   state.status = _("In-app network settings are not available in this build.");
 #endif
 
-#if defined(KOBO)
+#if defined(KOBO) || defined(ANDROID)
   (void)rows;
 #endif
 }
