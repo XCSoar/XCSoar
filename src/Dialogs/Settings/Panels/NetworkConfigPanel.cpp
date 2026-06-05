@@ -27,8 +27,10 @@
 #endif
 
 struct NetworkConfigRows {
-  unsigned status{0}, connectivity{0}, ip{0}, backend{0}, radio{0};
+  unsigned status{0}, connectivity{0}, ip{0}, backend{0}, radio{0},
+    persist_wifi{0};
   bool have_radio{false};
+  bool have_persist_wifi{false};
 };
 
 struct NetworkConfigState {
@@ -38,6 +40,8 @@ struct NetworkConfigState {
   StaticString<64> backend{_("Unknown")};
   bool have_radio_enabled{false};
   bool radio_enabled{false};
+  bool have_persist_wifi_enabled{false};
+  bool persist_wifi_enabled{false};
 };
 
 #if defined(HAVE_LINUX_NET_WIFI)
@@ -105,6 +109,11 @@ PreparePlatformRows(RowFormWidget &widget, unsigned &n, NetworkConfigRows &rows,
   widget.AddBoolean(_("WiFi Enabled"),
                     _("Turns the Kobo WiFi interface on or off."),
                     IsKoboWifiOn(), &listener);
+  rows.persist_wifi = n++;
+  rows.have_persist_wifi = true;
+  widget.AddBoolean(_("Auto WiFi"),
+                    _("Enable WiFi automatically at startup."),
+                    IsKoboWifiAutoOn(), &listener);
 #elif defined(HAVE_LINUX_NET_WIFI)
   try {
     const auto backend_kind = QueryLinuxWifiBackendKind();
@@ -176,6 +185,8 @@ BuildPlatformState(NetworkConfigState &state,
   state.backend = "wpa_supplicant";
   state.have_radio_enabled = true;
   state.radio_enabled = IsKoboWifiOn();
+  state.have_persist_wifi_enabled = true;
+  state.persist_wifi_enabled = IsKoboWifiAutoOn();
 
   if (!state.radio_enabled) {
     state.status = _("Disabled");
@@ -235,6 +246,16 @@ HandlePlatformModified(RowFormWidget &widget, const NetworkConfigRows &rows,
                        std::function<void()> refresh) noexcept
 {
 #if defined(KOBO)
+  if (rows.have_persist_wifi && widget.IsDataField(rows.persist_wifi, df)) {
+    if (!SetKoboWifiAutoOn(widget.GetValueBoolean(rows.persist_wifi))) {
+      ShowMessageBox(_("Failed to store the WiFi startup setting."),
+                     _("Network"), MB_OK);
+      refresh();
+    }
+
+    return;
+  }
+
   if (!widget.IsDataField(rows.radio, df))
     return;
 
@@ -347,6 +368,9 @@ NetworkConfigWidget::OnRefresh() noexcept
 
   if (rows.have_radio && state.have_radio_enabled)
     LoadValue(rows.radio, state.radio_enabled);
+
+  if (rows.have_persist_wifi && state.have_persist_wifi_enabled)
+    LoadValue(rows.persist_wifi, state.persist_wifi_enabled);
 }
 
 void

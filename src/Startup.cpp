@@ -119,6 +119,10 @@
 #include "Android/NativeView.hpp"
 #endif
 
+#ifdef KOBO
+#include "Kobo/System.hpp"
+#endif
+
 #ifdef __APPLE__
 #include "Apple/Services.hpp"
 #endif
@@ -399,6 +403,10 @@ Startup(UI::Display &display)
 
   /* create XCSoarData on the first start */
   CreateDataPath();
+
+#ifdef KOBO
+  ApplyKoboWifiAutoOn();
+#endif
 
 #ifdef ANDROID
   {

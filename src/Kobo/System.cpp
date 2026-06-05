@@ -18,6 +18,10 @@
 #include <sys/mount.h>
 #include <errno.h>
 
+static constexpr const char *kobo_config_dir = "/mnt/onboard/XCSoarData/kobo";
+static constexpr const char *kobo_wifi_auto_on_path =
+  "/mnt/onboard/XCSoarData/kobo/wifi_auto_on";
+
 static bool
 WaitForPath(const char *path, unsigned timeout_ms) noexcept
 {
@@ -202,6 +206,50 @@ IsKoboWifiOn()
   return Directory::Exists(Path{path});
 #else
   return false;
+#endif
+}
+
+bool
+IsKoboWifiAutoOn()
+{
+#ifdef KOBO
+  return File::Exists(Path(kobo_wifi_auto_on_path));
+#else
+  return false;
+#endif
+}
+
+bool
+SetKoboWifiAutoOn(bool enabled)
+{
+#ifdef KOBO
+  if (mkdir("/mnt/onboard/XCSoarData", 0777) != 0 && errno != EEXIST)
+    return false;
+  if (mkdir(kobo_config_dir, 0777) != 0 && errno != EEXIST)
+    return false;
+
+  if (enabled)
+    return File::CreateExclusive(Path(kobo_wifi_auto_on_path)) ||
+      File::Exists(Path(kobo_wifi_auto_on_path));
+
+  return File::Delete(Path(kobo_wifi_auto_on_path)) ||
+    !File::Exists(Path(kobo_wifi_auto_on_path));
+#else
+  (void)enabled;
+  return false;
+#endif
+}
+
+void
+ApplyKoboWifiAutoOn()
+{
+#ifdef KOBO
+  if (IsKoboWifiAutoOn()) {
+    if (!IsKoboWifiOn())
+      KoboWifiOn();
+  } else if (IsKoboWifiOn()) {
+    KoboWifiOff();
+  }
 #endif
 }
 
