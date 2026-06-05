@@ -6,6 +6,7 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "LogFile.hpp"
@@ -14,7 +15,6 @@
 #include "Screen/Layout.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "util/Exception.hxx"
-#include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "net/wifi/WifiBackend.hpp"
 #include "net/wifi/WifiError.hpp"
@@ -240,6 +240,7 @@ public:
         ShowWifiError(std::current_exception(), _("Error"));
       }
     });
+
   }
 
   void UpdateButtons();
@@ -356,6 +357,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   if (info.is_visible) {
     StaticString<64> text;
+    text.clear();
     switch (info.signal_unit) {
     case WifiSignalUnit::Dbm:
       text.UnsafeFormat("%s %d dBm", auth, info.signal_level);
@@ -454,6 +456,9 @@ WifiListWidget::UpdateList()
 
   try {
     std::array<WifiNetworkEntry, 64> buffer;
+    for (auto &entry : buffer)
+      entry.Clear();
+
     const auto n = backend_->GetNetworks(buffer.data(), buffer.size());
     std::stable_sort(buffer.begin(), buffer.begin() + n, NetworkEntrySortLess);
 

@@ -2,16 +2,18 @@
 // Copyright The XCSoar Project
 
 #include "NetworkConfigPanel.hpp"
-#include "UIGlobals.hpp"
-#include "Dialogs/WifiDialog.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/WifiDialog.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Language/Language.hpp"
+#include "UIGlobals.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "net/State.hpp"
+#include "util/StaticString.hxx"
 
+#include <functional>
 #include <memory>
 #include <stdexcept>
-#include <string>
 
 #if defined(KOBO)
 #include "Kobo/PlatformWifiBackend.hpp"
@@ -20,145 +22,29 @@
 #endif
 
 #if defined(HAVE_LINUX_NET_WIFI)
-#include "net/State.hpp"
 #include "net/wifi/LinuxWifiBackend.hpp"
 #include "net/wifi/WifiError.hpp"
 #endif
 
-#if defined(KOBO)
-
-class KoboNetworkConfigWidget final
-  : public RowFormWidget, public DataFieldListener {
-  unsigned row_status{0}, row_ip{0}, row_backend{0}, row_radio{0};
-
-public:
-  KoboNetworkConfigWidget()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
-
-private:
-  void OnRefresh() noexcept;
-  void OnModified(DataField &df) noexcept override;
+struct NetworkConfigRows {
+  unsigned status{0}, connectivity{0}, ip{0}, backend{0}, radio{0};
+  bool have_radio{false};
 };
 
-void
-KoboNetworkConfigWidget::Prepare(ContainerWindow &parent,
-                                 const PixelRect &rc) noexcept
-{
-  RowFormWidget::Prepare(parent, rc);
-
-  unsigned n = 0U;
-  row_status = n++;
-  AddReadOnly(
-    _("Status"),
-    _("This page shows Kobo WiFi status. Open WiFi list to scan and connect."),
-    _("Checking WiFi..."));
-  row_ip = n++;
-  AddReadOnly(
-    _("IP address"),
-    _("IPv4 address of the active WiFi interface."),
-    _("Unknown"));
-  row_backend = n++;
-  AddReadOnly(
-    _("Backend"),
-    _("WiFi on Kobo is managed by wpa_supplicant."),
-    "wpa_supplicant");
-  row_radio = n++;
-  AddBoolean(
-    _("WiFi Enabled"),
-    _("Turns the Kobo WiFi interface on or off."),
-    IsKoboWifiOn(), this);
-
-  AddButton(_("WiFi List"), [this]() {
-    try {
-      auto backend = CreatePlatformWifiBackend();
-      if (backend == nullptr) {
-        ShowMessageBox(
-          _("WiFi backend is not available in this Kobo build."),
-          _("Network"), MB_OK);
-        return;
-      }
-
-      ShowWifiDialog(std::move(backend));
-      OnRefresh();
-    } catch (...) {
-      const auto message = WifiError::Format(std::current_exception());
-      ShowMessageBox(message.c_str(), _("Network"), MB_OK);
-    }
-  });
-
-  OnRefresh();
-}
-
-void
-KoboNetworkConfigWidget::OnRefresh() noexcept
-{
-  SetText(row_backend, "wpa_supplicant");
-  LoadValue(row_radio, IsKoboWifiOn());
-
-  if (!IsKoboWifiOn()) {
-    SetText(row_status, _("Disabled"));
-    SetText(row_ip, _("Unknown"));
-    return;
-  }
-
-  try {
-    auto backend = CreatePlatformWifiBackend();
-    if (backend == nullptr) {
-      SetText(row_status, _("WiFi backend is not available in this Kobo build."));
-      SetText(row_ip, _("Unknown"));
-      return;
-    }
-
-    const auto status = backend->GetBackendStatus();
-    SetText(row_status, WifiBackendStatus::Format(status));
-    SetText(row_ip, WifiBackendStatus::FormatIpAddress(status));
-  } catch (...) {
-    const auto message = WifiError::Format(std::current_exception());
-    SetText(row_status, message.c_str());
-    SetText(row_ip, _("Unknown"));
-  }
-}
-
-void
-KoboNetworkConfigWidget::OnModified(DataField &df) noexcept
-{
-  if (!IsDataField(row_radio, df))
-    return;
-
-  try {
-    const bool enabled = GetValueBoolean(row_radio);
-    const bool success = enabled ? KoboWifiOn() : KoboWifiOff();
-    if (!success)
-      throw std::runtime_error{enabled
-        ? _("Failed to enable WiFi.")
-        : _("Failed to disable WiFi.")};
-
-    OnRefresh();
-  } catch (...) {
-    const auto message = WifiError::Format(std::current_exception());
-    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
-    OnRefresh();
-  }
-}
-
-bool
-KoboNetworkConfigWidget::Save(bool &changed) noexcept
-{
-  (void)changed;
-  return true;
-}
-
-#endif
+struct NetworkConfigState {
+  NetState connectivity{NetState::UNKNOWN};
+  StaticString<256> status{_("Unknown")};
+  StaticString<64> ip{_("Unknown")};
+  StaticString<64> backend{_("Unknown")};
+  bool have_radio_enabled{false};
+  bool radio_enabled{false};
+};
 
 #if defined(HAVE_LINUX_NET_WIFI)
-
 static const char *
-BackendName(LinuxWifiBackendKind b) noexcept
+LinuxBackendName(LinuxWifiBackendKind backend_kind) noexcept
 {
-  switch (b) {
+  switch (backend_kind) {
   case LinuxWifiBackendKind::None:
     return _("None");
   case LinuxWifiBackendKind::NetworkManager:
@@ -169,140 +55,304 @@ BackendName(LinuxWifiBackendKind b) noexcept
 
   return _("Unknown");
 }
+#endif
+
+static const char *
+GetStatusHelp() noexcept
+{
+#if defined(KOBO)
+  return _("This page shows Kobo WiFi status. Open WiFi list to scan and connect.");
+#elif defined(HAVE_LINUX_NET_WIFI)
+  return _("This page shows WiFi status when NetworkManager or ConnMan is on "
+           "D-Bus (e.g. Linux with Wayland or KMS). Open WiFi list to scan "
+           "and connect when a service is available.");
+#else
+  return _("Network details are not available in this build.");
+#endif
+}
+
+static const char *
+GetBackendHelp() noexcept
+{
+#if defined(KOBO)
+  return _("WiFi on Kobo is managed by wpa_supplicant.");
+#elif defined(HAVE_LINUX_NET_WIFI)
+  return _("D-Bus provider used for WiFi (see WiFi list to manage networks).");
+#else
+  return _("Platform/backend information is not available in this build.");
+#endif
+}
+
+static const char *
+GetInitialBackendName() noexcept
+{
+#if defined(KOBO)
+  return "wpa_supplicant";
+#elif defined(HAVE_LINUX_NET_WIFI)
+  return LinuxBackendName(LinuxWifiBackendKind::None);
+#else
+  return _("Unavailable");
+#endif
+}
+
+static void
+PreparePlatformRows(RowFormWidget &widget, unsigned &n, NetworkConfigRows &rows,
+                    DataFieldListener &listener) noexcept
+{
+#if defined(KOBO)
+  rows.radio = n++;
+  rows.have_radio = true;
+  widget.AddBoolean(_("WiFi Enabled"),
+                    _("Turns the Kobo WiFi interface on or off."),
+                    IsKoboWifiOn(), &listener);
+#elif defined(HAVE_LINUX_NET_WIFI)
+  try {
+    const auto backend_kind = QueryLinuxWifiBackendKind();
+    rows.have_radio = HasLinuxWifiRadioToggle(backend_kind);
+  } catch (...) {
+    rows.have_radio = false;
+  }
+
+  if (rows.have_radio) {
+    rows.radio = n++;
+    widget.AddBoolean(_("WiFi Enabled"), nullptr, false, &listener);
+  }
+#else
+  (void)widget;
+  (void)n;
+  (void)rows;
+  (void)listener;
+#endif
+}
+
+static void
+OpenPlatformWifiList(std::function<void()> refresh) noexcept
+{
+#if defined(KOBO)
+  try {
+    auto backend = CreatePlatformWifiBackend();
+    if (backend == nullptr) {
+      ShowMessageBox(
+        _("WiFi backend is not available in this Kobo build."),
+        _("Network"), MB_OK);
+      return;
+    }
+
+    ShowWifiDialog(std::move(backend));
+    refresh();
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+  }
+#elif defined(HAVE_LINUX_NET_WIFI)
+  try {
+    auto backend = CreateLinuxWifiBackend();
+    if (backend == nullptr) {
+      ShowMessageBox(
+        _("No network service (NetworkManager or ConnMan) found on D-Bus."),
+        _("Network"), MB_OK);
+      return;
+    }
+
+    ShowWifiDialog(std::move(backend));
+    refresh();
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+  }
+#else
+  (void)refresh;
+  ShowMessageBox(_("WiFi management is not available in this build."),
+                 _("Connectivity"), MB_OK);
+#endif
+}
+
+static void
+BuildPlatformState(NetworkConfigState &state,
+                   const NetworkConfigRows &rows) noexcept
+{
+#if defined(KOBO)
+  state.connectivity = GetNetState();
+  state.backend = "wpa_supplicant";
+  state.have_radio_enabled = true;
+  state.radio_enabled = IsKoboWifiOn();
+
+  if (!state.radio_enabled) {
+    state.status = _("Disabled");
+    return;
+  }
+
+  try {
+    auto backend = CreatePlatformWifiBackend();
+    if (backend == nullptr) {
+      state.status = _("WiFi backend is not available in this Kobo build.");
+      return;
+    }
+
+    const auto status = backend->GetBackendStatus();
+    state.status = WifiBackendStatus::Format(status);
+    state.ip = WifiBackendStatus::FormatIpAddress(status);
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    state.status = message.c_str();
+  }
+#elif defined(HAVE_LINUX_NET_WIFI)
+  try {
+    const auto backend_kind = QueryLinuxWifiBackendKind();
+    state.connectivity = GetNetState();
+    state.backend = LinuxBackendName(backend_kind);
+
+    auto backend = CreateLinuxWifiBackend(backend_kind);
+    if (backend == nullptr) {
+      state.status = _("No network service (NetworkManager or ConnMan) found on D-Bus.");
+    } else {
+      const auto status = backend->GetBackendStatus();
+      state.status = WifiBackendStatus::Format(status);
+      state.ip = WifiBackendStatus::FormatIpAddress(status);
+    }
+
+    if (rows.have_radio) {
+      state.have_radio_enabled = true;
+      state.radio_enabled = GetLinuxWifiRadioEnabled(backend_kind);
+    }
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    state.status = message.c_str();
+  }
+#else
+  (void)rows;
+  state.status = _("In-app network settings are not available in this build.");
+#endif
+
+#if defined(KOBO)
+  (void)rows;
+#endif
+}
+
+static void
+HandlePlatformModified(RowFormWidget &widget, const NetworkConfigRows &rows,
+                       DataField &df,
+                       std::function<void()> refresh) noexcept
+{
+#if defined(KOBO)
+  if (!widget.IsDataField(rows.radio, df))
+    return;
+
+  try {
+    const bool enabled = widget.GetValueBoolean(rows.radio);
+    const bool success = enabled ? KoboWifiOn() : KoboWifiOff();
+    if (!success)
+      throw std::runtime_error{enabled
+        ? _("Failed to enable WiFi.")
+        : _("Failed to disable WiFi.")};
+
+    refresh();
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+    refresh();
+  }
+#elif defined(HAVE_LINUX_NET_WIFI)
+  if (!rows.have_radio || !widget.IsDataField(rows.radio, df))
+    return;
+
+  try {
+    const auto backend_kind = QueryLinuxWifiBackendKind();
+    if (backend_kind == LinuxWifiBackendKind::None) {
+      refresh();
+      return;
+    }
+
+    SetLinuxWifiRadioEnabled(backend_kind, widget.GetValueBoolean(rows.radio));
+    refresh();
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+    refresh();
+  }
+#else
+  (void)widget;
+  (void)rows;
+  (void)df;
+  (void)refresh;
+#endif
+}
 
 class NetworkConfigWidget final
   : public RowFormWidget, public DataFieldListener {
-  LinuxWifiBackendKind backend_kind = LinuxWifiBackendKind::None;
-
-  unsigned row_status{0}, row_connectivity{0}, row_ip{0};
-  unsigned row_backend{0}, row_radio{0};
-  bool have_radio{false};
+  NetworkConfigRows rows;
 
 public:
   NetworkConfigWidget()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 
 private:
   void OnRefresh() noexcept;
-
-  /* DataFieldListener */
   void OnModified(DataField &df) noexcept override;
 };
 
 void
-NetworkConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
+NetworkConfigWidget::Prepare(ContainerWindow &parent,
+                             const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
   unsigned n = 0U;
-  row_status = n++;
-  AddReadOnly(
-    _("Status"),
-    _("This page shows WiFi status when NetworkManager or ConnMan is on "
-      "D-Bus (e.g. Linux with Wayland or KMS). Open WiFi list to scan and "
-      "connect when a service is available."),
-    _("Checking network services..."));
-  row_connectivity = n++;
-  AddReadOnly(
-    _("Connectivity"),
-    _("Current network connectivity state."),
-    NetStateText::ToString(NetState::UNKNOWN));
-  row_ip = n++;
-  AddReadOnly(
-    _("IP address"),
-    _("IPv4 address of the active WiFi interface."),
-    _("Unknown"));
-  row_backend = n++;
-  AddReadOnly(
-    _("Backend"),
-    _("D-Bus provider used for WiFi (see WiFi list to manage networks)."),
-    BackendName(LinuxWifiBackendKind::None));
+  rows.status = n++;
+  AddReadOnly(_("Status"), GetStatusHelp(), _("Checking network services..."));
 
-  try {
-    backend_kind = QueryLinuxWifiBackendKind();
-    have_radio = HasLinuxWifiRadioToggle(backend_kind);
-  } catch (...) {
-    backend_kind = LinuxWifiBackendKind::None;
-    have_radio = false;
-  }
+  rows.connectivity = n++;
+  AddReadOnly(_("Connectivity"),
+              _("Current network connectivity state."),
+              NetStateText::ToString(NetState::UNKNOWN));
+  rows.ip = n++;
+  AddReadOnly(_("IP address"),
+              _("IPv4 address of the active WiFi interface."),
+              _("Unknown"));
+  rows.backend = n++;
+  AddReadOnly(_("Backend"),
+              GetBackendHelp(),
+              GetInitialBackendName());
 
-  if (have_radio) {
-    row_radio = n++;
-    AddBoolean(_("WiFi Enabled"), nullptr, false, this);
-  }
+  PreparePlatformRows(*this, n, rows, *this);
 
   AddButton(_("WiFi List"), [this]() {
-    try {
-      auto backend = CreateLinuxWifiBackend();
-      if (backend == nullptr) {
-        ShowMessageBox(
-          _("No network service (NetworkManager or ConnMan) found on D-Bus."),
-          _("Network"), MB_OK);
-        return;
-      }
-
-      ShowWifiDialog(std::move(backend));
-      OnRefresh();
-    } catch (...) {
-      const auto message = WifiError::Format(std::current_exception());
-      ShowMessageBox(message.c_str(), _("Network"), MB_OK);
-    }
+    OpenPlatformWifiList([this]() { OnRefresh(); });
   });
 
   OnRefresh();
 }
 
 void
+NetworkConfigWidget::Show(const PixelRect &rc) noexcept
+{
+  RowFormWidget::Show(rc);
+  OnRefresh();
+}
+
+void
 NetworkConfigWidget::OnRefresh() noexcept
 {
-  const auto set_error_state = [this](const char *status) {
-    SetText(row_status, status);
-    SetText(row_connectivity, NetStateText::ToString(NetState::UNKNOWN));
-    SetText(row_ip, _("Unknown"));
-    SetText(row_backend, _("Unknown"));
-  };
+  NetworkConfigState state;
+  BuildPlatformState(state, rows);
 
-  try {
-    backend_kind = QueryLinuxWifiBackendKind();
-    SetText(row_backend, BackendName(backend_kind));
-    SetText(row_connectivity, NetStateText::ToString(GetNetState()));
+  SetText(rows.status, state.status.c_str());
+  SetText(rows.connectivity, NetStateText::ToString(state.connectivity));
+  SetText(rows.ip, state.ip.c_str());
+  SetText(rows.backend, state.backend.c_str());
 
-    auto backend = CreateLinuxWifiBackend(backend_kind);
-    if (backend == nullptr) {
-      SetText(row_status,
-              _("No network service (NetworkManager or ConnMan) found on D-Bus."));
-      SetText(row_ip, _("Unknown"));
-    } else {
-      const auto status = backend->GetBackendStatus();
-      SetText(row_status, WifiBackendStatus::Format(status));
-      SetText(row_ip, WifiBackendStatus::FormatIpAddress(status));
-    }
-
-    if (have_radio)
-      LoadValue(row_radio, GetLinuxWifiRadioEnabled(backend_kind));
-  } catch (...) {
-    const auto message = WifiError::Format(std::current_exception());
-    set_error_state(message.c_str());
-  }
+  if (rows.have_radio && state.have_radio_enabled)
+    LoadValue(rows.radio, state.radio_enabled);
 }
 
 void
 NetworkConfigWidget::OnModified(DataField &df) noexcept
 {
-  if (have_radio && IsDataField(row_radio, df) &&
-      backend_kind != LinuxWifiBackendKind::None) {
-    try {
-      SetLinuxWifiRadioEnabled(backend_kind, GetValueBoolean(row_radio));
-      OnRefresh();
-    } catch (...) {
-      const auto message = WifiError::Format(std::current_exception());
-      ShowMessageBox(message.c_str(), _("Network"), MB_OK);
-    }
-  }
+  HandlePlatformModified(*this, rows, df, [this]() { OnRefresh(); });
 }
 
 bool
@@ -312,33 +362,8 @@ NetworkConfigWidget::Save(bool &changed) noexcept
   return true;
 }
 
-#endif /* HAVE_LINUX_NET_WIFI */
-
-#if !defined(HAVE_LINUX_NET_WIFI) && !defined(KOBO)
-class NetworkConfigStub final : public RowFormWidget {
-public:
-  explicit NetworkConfigStub()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override
-  {
-    RowFormWidget::Prepare(parent, rc);
-    AddReadOnly(
-      _("Status"),
-      nullptr,
-      _("In-app network settings are not available in this build."));
-  }
-};
-#endif
-
 std::unique_ptr<Widget>
 CreateNetworkConfigPanel()
 {
-#if defined(KOBO)
-  return std::make_unique<KoboNetworkConfigWidget>();
-#elif defined(HAVE_LINUX_NET_WIFI)
   return std::make_unique<NetworkConfigWidget>();
-#else
-  return std::make_unique<NetworkConfigStub>();
-#endif
 }
