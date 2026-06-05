@@ -162,9 +162,9 @@ BackendName(LinuxWifiBackendKind b) noexcept
   case LinuxWifiBackendKind::None:
     return _("None");
   case LinuxWifiBackendKind::NetworkManager:
-    return _("NetworkManager");
+    return "NetworkManager";
   case LinuxWifiBackendKind::ConnMan:
-    return _("ConnMan");
+    return "ConnMan";
   }
 
   return _("Unknown");
