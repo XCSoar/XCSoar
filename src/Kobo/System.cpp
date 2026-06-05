@@ -18,6 +18,24 @@
 #include <sys/mount.h>
 #include <errno.h>
 
+static bool
+WaitForPath(const char *path, unsigned timeout_ms) noexcept
+{
+  if (path == nullptr)
+    return false;
+
+  constexpr unsigned step_ms = 100;
+
+  for (unsigned elapsed = 0; elapsed < timeout_ms; elapsed += step_ms) {
+    if (File::Exists(Path(path)))
+      return true;
+
+    Sleep(step_ms);
+  }
+
+  return File::Exists(Path(path));
+}
+
 template<typename... Args>
 static bool
 InsMod(const char *path, Args... args)
@@ -251,11 +269,13 @@ KoboWifiOn()
       "-c", "/etc/wpa_supplicant/wpa_supplicant.conf",
       "-C", "/var/run/wpa_supplicant", "-B", "-D", driver);
 
-  Sleep(2000);
+  StaticString<128> control_path;
+  control_path.Format("/var/run/wpa_supplicant/%s", interface);
+  WaitForPath(control_path.c_str(), 3000);
 
-  Start("/sbin/udhcpc", "-S", "-i", interface,
-        "-s", "/etc/udhcpc.d/default.script",
-        "-t15", "-T10", "-A3", "-f", "-q");
+  Run("/sbin/udhcpc", "-S", "-i", interface,
+      "-s", "/etc/udhcpc.d/default.script",
+      "-t15", "-T10", "-A3", "-f", "-q");
 
   return true;
 #else
