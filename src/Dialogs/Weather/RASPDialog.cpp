@@ -8,6 +8,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
+#include "Repository/FileType.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
@@ -35,7 +36,8 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
   WndProperty *wp = AddFile(_("File"), nullptr,
-                            ProfileKeys::RaspFile, "*-rasp*.dat\0",
+                            ProfileKeys::RaspFile,
+                            GetFileTypePatterns(FileType::RASP),
                             FileType::RASP);
   wp->GetDataField()->SetOnModified([this]{
     if (SaveValueFileReader(FILE, ProfileKeys::RaspFile)) {

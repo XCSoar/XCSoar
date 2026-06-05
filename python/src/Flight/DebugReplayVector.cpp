@@ -35,7 +35,8 @@ DebugReplayVector::Compute(const int elevation)
   FeaturesSettings features;
   features.nav_baro_altitude_enabled = true;
   computer.Fill(computed_basic, qnh, features);
-  computer.Compute(computed_basic, last_basic, last_basic, calculated);
+  computer.Compute(computed_basic, last_basic, last_basic, calculated,
+                   ComputerSettings{.polar = {.glide_polar_task = glide_polar}});
 
   if (elevation > -1000) {
     calculated.terrain_valid = true;

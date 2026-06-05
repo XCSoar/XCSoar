@@ -55,6 +55,9 @@ MapLook::Initialise(const MapSettings &settings,
 
   track_line_pen.Create(Layout::ScalePenWidth(3), COLOR_GRAY);
 
+  distance_rings_pen.Create(Layout::ScalePenWidth(1),
+                            HasColors() ? COLOR_GRAY : COLOR_BLACK);
+
   contest_pens[0].Create(Layout::ScalePenWidth(1) + 2, COLOR_RED);
   contest_pens[1].Create(Layout::ScalePenWidth(1) + 1, COLOR_ORANGE);
   contest_pens[2].Create(Layout::ScalePenWidth(1), COLOR_BLUE);

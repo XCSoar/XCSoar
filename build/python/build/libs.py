@@ -161,8 +161,8 @@ openssh = AutotoolsProject(
 )
 
 libfmt = CmakeProject(
-    "https://github.com/fmtlib/fmt/archive/11.1.4.tar.gz",
-    "ac366b7b4c2e9f0dde63a59b3feb5ee59b67974b14ee5dc9ea8ad78aa2c1ee1e",
+    "https://github.com/fmtlib/fmt/archive/11.2.0.tar.gz",
+    "bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af",
     "lib/libfmt.a",
     [
         "-DBUILD_SHARED_LIBS=OFF",
@@ -170,8 +170,8 @@ libfmt = CmakeProject(
         "-DFMT_TEST=OFF",
     ],
     name="fmt",
-    version="11.1.4",
-    base="fmt-11.1.4",
+    version="11.2.0",
+    base="fmt-11.2.0",
 )
 
 libsodium = AutotoolsProject(
@@ -344,11 +344,8 @@ libpng = LibPngProject(
 )
 
 libjpeg = CmakeProject(
-    (
-        "http://downloads.sourceforge.net/project/libjpeg-turbo/3.0.1/libjpeg-turbo-3.0.1.tar.gz",
-        "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.0.1/libjpeg-turbo-3.0.1.tar.gz",
-    ),
-    "22429507714ae147b3acacd299e82099fce5d9f456882fc28e252e4579ba2a75",
+    "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.4/libjpeg-turbo-3.1.4.tar.gz",
+    "e23d3ebb2c6ee4d0e2a5823dbb55b614845df5ea3435c956fed5cf04041a87ad",
     "lib/libjpeg.a",
     [
         "-DENABLE_STATIC=ON",

@@ -14,8 +14,16 @@ struct DeviceInfo;
 
 namespace LX {
 
+/**
+ * Read six LXWP0 vario samples and apply the 5th-order low-pass FIR
+ * filter used by LX EOS.
+ */
 bool
-LXWP0(NMEAInputLine &line, NMEAInfo &info);
+ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario);
+
+bool
+LXWP0(NMEAInputLine &line, NMEAInfo &info,
+      bool provide_vario=true);
 
 void
 LXWP1(NMEAInputLine &line, DeviceInfo &device);

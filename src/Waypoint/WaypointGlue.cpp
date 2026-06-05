@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "WaypointGlue.hpp"
 #include "Factory.hpp"
 #include "Language/Language.hpp"
-#include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
-#include "Patterns.hpp"
 #include "Profile/Profile.hpp"
+#include "Repository/FileType.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WaypointFileType.hpp"
 #include "WaypointReader.hpp"
@@ -83,7 +83,7 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
 
   // ### FIRST FILE ###
   auto paths = Profile::GetMultiplePaths(ProfileKeys::WaypointFileList,
-                                         WAYPOINT_FILE_PATTERNS);
+                                         GetFileTypePatterns(FileType::WAYPOINT));
   uint8_t file_num = 0;
   for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
@@ -92,7 +92,7 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
   paths = Profile::GetMultiplePaths(ProfileKeys::WatchedWaypointFileList,
-                                    WAYPOINT_FILE_PATTERNS);
+                                    GetFileTypePatterns(FileType::WAYPOINT));
   file_num = 0;
   for (const auto &path : paths) {
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
@@ -121,7 +121,8 @@ LoadWaypoints(Waypoints &way_points, const RasterTerrain *terrain,
     }
   }
   //Load user.cup
-  LoadWaypointFile(way_points, LocalPath("user.cup"),
+  LoadWaypointFile(way_points,
+                   ResolveTypedDataFilePath(FileType::WAYPOINT, "user.cup"),
                    WaypointFileType::SEEYOU,
                    WaypointOrigin::USER, 0, terrain, progress);
   // Optimise the waypoint list after attaching new waypoints

@@ -193,6 +193,9 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 void
 PlaneGlue::WriteFile(const Plane &plane, Path path)
 {
+  if (const auto parent = path.GetParent(); parent != nullptr)
+    Directory::CreateRecursive(parent);
+
   FileOutputStream file(path);
   BufferedOutputStream buffered(file);
   KeyValueFileWriter kvwriter(buffered);

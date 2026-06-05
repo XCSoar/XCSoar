@@ -59,6 +59,7 @@
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
+#include "DataFilePath.hpp"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
 #include "io/FileCache.hpp"
@@ -73,6 +74,8 @@
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Storage/StorageManager.hpp"
+#include "DataLayoutMigration.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -100,6 +103,7 @@
 
 #include "lua/StartFile.hpp"
 #include "lua/Background.hpp"
+#include "Repository/FileType.hpp"
 
 #include "util/ScopeExit.hxx"
 
@@ -142,6 +146,7 @@ LoadProfile()
   }
 
   Profile::Load();
+  MigrateDataLayoutToSubdirs();
   Profile::Use(Profile::map);
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);
@@ -154,7 +159,7 @@ static void
 AfterStartup()
 {
   try {
-    const auto lua_path = LocalPath("lua");
+    const auto lua_path = LocalPath(GetFileTypeDefaultDir(FileType::LUA));
     const AllocatedPath init_path = AllocatedPath::Build(lua_path, "init.lua");
     if (File::Exists(init_path))
       Lua::StartFile(init_path);
@@ -437,6 +442,15 @@ Startup(UI::Display &display)
   data_components = new DataComponents();
   backend_components = new BackendComponents();
 
+  /* Create storage manager and hand it a callback that marshals
+     notifications to the UI thread via MainWindow::storage_notify_. */
+  backend_components->storage_manager =
+    std::make_unique<StorageManager>([main_window]{
+      main_window->SendStorageNotification();
+    });
+  backend_components->storage_manager->StartMonitoring();
+  main_window->InitialiseStorage();
+
   ReadLanguageFile();
 
   try {
@@ -655,7 +669,8 @@ Startup(UI::Display &display)
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     backend_components->flight_logger = std::make_unique<GlueFlightLogger>(live_blackboard);
-    backend_components->flight_logger->SetPath(LocalPath("flights.log"));
+    backend_components->flight_logger->SetPath(
+      LogsDataSavePath("flights.log"));
   }
 
   if (computer_settings.logger.enable_nmea_logger)
@@ -900,6 +915,12 @@ Shutdown()
 
   // Destroy FlarmNet records
   DeinitTrafficGlobals();
+
+  main_window->DeinitialiseStorage();
+
+  if (backend_components != nullptr &&
+      backend_components->storage_manager != nullptr)
+    backend_components->storage_manager->StopMonitoring();
 
   delete backend_components;
   backend_components = nullptr;

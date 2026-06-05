@@ -465,3 +465,23 @@ ActionInterface::SetTransponderMode(TransponderMode mode) noexcept
 
   /* Note: no device API currently exists to send only the mode. */
 }
+
+void
+ActionInterface::SetQNH(AtmosphericPressure qnh, bool to_devices) noexcept
+{
+  const NMEAInfo &basic = Basic();
+  ComputerSettings &settings_computer = SetComputerSettings();
+
+  settings_computer.pressure = qnh;
+  settings_computer.pressure_available.Update(basic.clock);
+
+  SendGetComputerSettings();
+
+  InfoBoxManager::SetDirty();
+  InfoBoxManager::ProcessTimer();
+
+  if (to_devices && backend_components && backend_components->devices) {
+    MessageOperationEnvironment env;
+    backend_components->devices->PutQNH(qnh, env);
+  }
+}

@@ -2,8 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "DataFile.hpp"
+#include "DataFilePath.hpp"
 #include "FileReader.hxx"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
 
@@ -15,6 +17,7 @@ OpenDataFile(const char *name)
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  const auto path = LocalPath(name);
+  const auto path =
+    ResolveLocalDataFile(LocalPath(name), ClassifyDataFilename(name));
   return std::make_unique<FileReader>(path);
 }

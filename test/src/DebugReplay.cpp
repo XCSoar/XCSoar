@@ -46,7 +46,8 @@ DebugReplay::Compute()
   features.nav_baro_altitude_enabled = true;
   computer.Fill(computed_basic, qnh, features);
 
-  computer.Compute(computed_basic, last_basic, last_basic, calculated);
+  computer.Compute(computed_basic, last_basic, last_basic, calculated,
+                   ComputerSettings{.polar = {.glide_polar_task = glide_polar}});
   flying_computer.Compute(glide_polar.GetVTakeoff(),
                           computed_basic, calculated,
                           calculated.flight);

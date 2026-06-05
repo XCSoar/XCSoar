@@ -60,6 +60,8 @@ struct MapLook {
 
   Pen track_line_pen;
 
+  Pen distance_rings_pen;
+
   Pen contest_pens[3];
 
   MaskedIcon thermal_source_icon;

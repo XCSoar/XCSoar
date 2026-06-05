@@ -2,6 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "Compatibility/path.h"
+#include "Current.hpp"
+#include "Profile.hpp"
+#include "DataFilePath.hpp"
 #include "LocalPath.hpp"
 #include "Map.hpp"
 #include "system/Path.hpp"
@@ -30,7 +33,7 @@ ProfileMap::GetPath(std::string_view key) const noexcept
   if (StringIsEmpty(buffer))
     return nullptr;
 
-  return ExpandLocalPath(Path(buffer));
+  return ResolveLocalDataFile(ExpandLocalPath(Path(buffer)));
 }
 
 std::vector<AllocatedPath>
@@ -55,7 +58,8 @@ ProfileMap::GetMultiplePaths(std::string_view key, const char *patterns) const
     size_t length;
     const char *patterns_iterator = patterns;
     if (patterns == nullptr) {
-      paths.push_back(ExpandLocalPath(AllocatedPath(path)));
+      paths.push_back(ResolveLocalDataFile(
+        ExpandLocalPath(AllocatedPath(path))));
       continue;
     }
     while ((length = strlen(patterns_iterator)) > 0) {
@@ -65,7 +69,8 @@ ProfileMap::GetMultiplePaths(std::string_view key, const char *patterns) const
       if (StringEndsWithIgnoreCase(path.c_str(), patterns_iterator + 1))
 #endif
       {
-        paths.push_back(ExpandLocalPath(AllocatedPath(path)));
+        paths.push_back(ResolveLocalDataFile(
+          ExpandLocalPath(AllocatedPath(path))));
         break;
       }
       patterns_iterator += length + 1;
@@ -120,4 +125,28 @@ ProfileMap::SetPath(std::string_view key, Path value) noexcept
 
     Set(key, value.c_str());
   }
+}
+
+AllocatedPath
+Profile::GetPath(std::string_view key) noexcept
+{
+  return map.GetPath(key);
+}
+
+std::vector<AllocatedPath>
+Profile::GetMultiplePaths(std::string_view key, const char *patterns)
+{
+  return map.GetMultiplePaths(key, patterns);
+}
+
+bool
+Profile::GetPathIsEqual(std::string_view key, Path value) noexcept
+{
+  return map.GetPathIsEqual(key, value);
+}
+
+void
+Profile::SetPath(std::string_view key, Path value) noexcept
+{
+  map.SetPath(key, value);
 }

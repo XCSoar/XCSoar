@@ -14,6 +14,7 @@
 #include "LocalPath.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
+#include "Repository/FileType.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "util/StaticString.hxx"
@@ -109,7 +110,7 @@ ProfileListWidget::UpdateList()
   list.clear();
 
   ProfileFileVisitor pfv(list);
-  VisitDataFiles("*.prf", pfv);
+  VisitDataFiles(GetFileTypePatterns(FileType::PROFILE), pfv);
 
   unsigned len = list.size();
 
@@ -175,7 +176,11 @@ ProfileListWidget::NewClicked()
   filename = name;
   filename += ".prf";
 
-  const auto path = LocalPath(filename);
+  const auto path = LocalPath(AllocatedPath::Build(
+    GetFileTypeDefaultDir(FileType::PROFILE), filename));
+  if (const auto parent = path.GetParent(); parent != nullptr)
+    Directory::CreateRecursive(parent);
+
   if (!File::CreateExclusive(path)) {
     ShowMessageBox(name, _("File exists already."), MB_OK|MB_ICONEXCLAMATION);
     return;
@@ -242,7 +247,8 @@ ProfileListWidget::CopyClicked()
   new_filename = new_name;
   new_filename += ".prf";
 
-  const auto new_path = LocalPath(new_filename);
+  const auto new_path = LocalPath(AllocatedPath::Build(
+    GetFileTypeDefaultDir(FileType::PROFILE), new_filename));
 
   if (File::ExistsAny(new_path)) {
     ShowMessageBox(new_name, _("File exists already."),

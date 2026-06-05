@@ -89,7 +89,7 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
        left == (heading - h).AsDelta().IsNegative();
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    lift_database[index] = basic.brutto_vario;
+    lift_database[index] = basic.FilteredBruttoVario();
   }
 
   // detect zero crossing

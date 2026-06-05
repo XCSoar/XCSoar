@@ -16,8 +16,8 @@
 #include "Dialogs.hpp"
 #include "Legacy.hpp"
 #include "LocalPath.hpp"
-#include "Compatibility/path.h"
 #include "system/Path.hpp"
+#include "Repository/FileType.hpp"
 #include "Airspace.hpp"
 #include "Task.hpp"
 #include "Settings.hpp"
@@ -57,8 +57,9 @@ Lua::NewFullState()
   InitInputEvent(L);
 
   {
+    const auto lua_dir = GetFileTypeDefaultDir(FileType::LUA);
     SetPackagePath(L,
-                   LocalPath("lua" DIR_SEPARATOR_S "?.lua").c_str());
+                   LocalPath(AllocatedPath::Build(lua_dir, "?.lua")).c_str());
   }
 
   return L;

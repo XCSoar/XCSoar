@@ -57,7 +57,27 @@ ShouldSwitchHostBaudForNinc(const DeviceInfo &device_info) noexcept
 namespace LX {
 
 bool
-LXWP0(NMEAInputLine &line, NMEAInfo &info)
+ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario)
+{
+  static constexpr double fir_coefficients[] = {
+    -0.0421, 0.1628, 0.3793, 0.3793, 0.1628, -0.0421,
+  };
+
+  vario = 0;
+  bool vario_ok = true;
+  double value = 0;
+  for (double fir_b : fir_coefficients) {
+    if (!line.ReadChecked(value))
+      vario_ok = false;
+    else
+      vario += value * fir_b;
+  }
+
+  return vario_ok;
+}
+
+bool
+LXWP0(NMEAInputLine &line, NMEAInfo &info, bool provide_vario)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -65,7 +85,7 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
    0 loger_stored (Y/N)
    1 IAS (kph) ----> Condor uses TAS!
    2 baroaltitude (m)
-   3-8 vario (m/s) (last 6 measurements in last second)
+   3-8 vario (m/s) (last 6 measurements in last second, FIR filtered)
    9 heading of plane
   10 windcourse (deg)
   11 windspeed (kph)
@@ -91,10 +111,13 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
      */
     info.ProvideTrueAirspeed(Units::ToSysUnit(airspeed, Unit::KILOMETER_PER_HOUR));
 
-  if (line.ReadChecked(value))
-    info.ProvideTotalEnergyVario(value);
+  if (provide_vario) {
+    if (ReadFilteredLXWP0Vario(line, value))
+      info.ProvideTotalEnergyVario(value);
+  } else
+    line.Skip(6);
 
-  line.Skip(6);
+  line.Skip(1); // heading
 
   if (SpeedVector wind; line.ReadSpeedVectorKPH(wind))
     info.ProvideExternalWind(wind);
@@ -196,6 +219,11 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
     auto qnh = AtmosphericPressure::PressureAltitudeToStaticPressure(value);
     info.settings.ProvideQNH(qnh, info.clock);
   }
+
+  line.Skip(); // scmode
+
+  if (line.ReadChecked(value))
+    info.settings.ProvideVarioFilterPeriod(value, info.clock);
 
   return true;
 }
@@ -498,13 +526,15 @@ PLXVC(NMEAInputLine &line, NMEAInfo &info,
 }
 
 /**
- * Parse the $PLXVF sentence (LXNAV sVarios (including V7)).
+ * Parse the $PLXVF sentence (LXNAV sVarios (including V7, S80)).
  *
  * $PLXVF,time ,AccX,AccY,AccZ,Vario,IAS,PressAlt*CS<CR><LF>
  *
  * Example: $PLXVF,,1.00,0.87,-0.12,-0.25,90.2,244.3,*CS<CR><LF>
  *
- * @see http://www.xcsoar.org/trac/raw-attachment/ticket/1666/V7%20dataport%20specification%201.97.pdf
+ * The Vario field carries total-energy vario at the configured rate
+ * (typically 10–20 Hz).  $LXWP0 still sends six TE samples per second,
+ * but those are only used when $PLXVF is unavailable.
  */
 static bool
 PLXVF(NMEAInputLine &line, NMEAInfo &info)
@@ -523,7 +553,7 @@ PLXVF(NMEAInputLine &line, NMEAInfo &info)
 
   double vario;
   if (line.ReadChecked(vario))
-    info.ProvideNettoVario(vario);
+    info.ProvideTotalEnergyVario(vario);
 
   double ias;
   bool have_ias = line.ReadChecked(ias);
@@ -697,7 +727,8 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   const auto type = line.ReadView();
   if (type == "$LXWP0"sv)
-    return LX::LXWP0(line, info);
+    return LX::LXWP0(line, info,
+                      !(plxvf_received || IsLXNAVVario()));
 
   if (type == "$LXWP1"sv) {
     DeviceInfo &device_info = mode == Mode::PASS_THROUGH
@@ -737,6 +768,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (type == "$PLXVF"sv) {
     is_colibri = false;
+    plxvf_received = true;
     return PLXVF(line, info);
   }
 

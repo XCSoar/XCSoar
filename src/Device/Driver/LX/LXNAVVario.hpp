@@ -43,18 +43,20 @@ namespace LXNAVVario {
   /**
    * Set up the NMEA sentences sent by the vario:
    *
-   * - PLXVF at 2 Hz
+   * - PLXVF at 10 Hz (total-energy vario, IAS, pressure altitude; spec
+   *   recommends 20, 10, 5, 2, 1)
    * - PLXVS every 5 seconds
-   * - LXWP0 every second
+   * - LXWP0 every second (TAS, altitude, wind; six TE samples ignored
+   *   when PLXVF is active)
    * - LXWP1 every 60 seconds
    * - LXWP2 every 5 seconds (contains MC, ballast, bugs - more frequent for better sync)
-   * - LXWP3 disabled (we don't parse it)
+   * - LXWP3 every 5 seconds (variofil; changes rarely on the vario)
    * - LXWP5 disabled (we don't parse it)
    */
   static inline void
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
-    PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,60,5,0,0", env);
+    PortWriteNMEA(port, "PLXV0,NMEARATE,W,10,5,1,60,5,5,0", env);
   }
 
   /**

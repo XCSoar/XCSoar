@@ -62,7 +62,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   int clipping_arrow_av_offset = Layout::Scale(4);
 //  int clipping_arrow_mc_offset = Layout::Scale(4);
 
-  auto vario_gross = basic.brutto_vario;
+  auto vario_gross = basic.FilteredBruttoVario();
 
   FormatUserVerticalSpeed(vario_gross, Value, false, true);
   canvas.Select(*look.font);

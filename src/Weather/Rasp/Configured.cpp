@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "Configured.hpp"
 #include "RaspStore.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
-#include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 
 std::shared_ptr<RaspStore>
 LoadConfiguredRasp(bool legacy_default) noexcept
@@ -14,7 +15,7 @@ LoadConfiguredRasp(bool legacy_default) noexcept
   if (legacy_default && path == nullptr)
     /* if no path is configured, attempt to load xcsoar-rasp.dat
        (XCSoar < 7.29) */
-    path = LocalPath(RASP_FILENAME);
+    path = ResolveTypedDataFilePath(FileType::RASP, RASP_FILENAME);
 
   auto rasp = std::make_shared<RaspStore>(std::move(path));
   rasp->ScanAll();

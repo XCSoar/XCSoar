@@ -20,7 +20,8 @@
 #include "ui/event/Notify.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "thread/Mutex.hxx"
-
+#include "LocalPath.hpp"
+#include "system/FileUtil.hpp"
 #include <vector>
 
 #include <cassert>
@@ -186,7 +187,23 @@ DownloadFilePickerWidget::Download()
   const auto &file = items[current];
 
   try {
-    path = DownloadFileModal(_("Download"), file.GetURI(), file.GetName());
+    AllocatedPath dest_dir = GetFileTypeDefaultDir(file_type);
+
+    const Path file_path(file.GetName()); //AllocatedPath cannot take nullptr
+
+    if (!file_path.IsValidFilename())
+      throw std::runtime_error("Invalid download filename");
+
+    AllocatedPath relative_path(file_path);
+    if (dest_dir != nullptr) {
+      const auto dest_path = LocalPath(dest_dir);
+      Directory::CreateRecursive(dest_path);
+      if (!Directory::Exists(dest_path))
+        throw std::runtime_error("Directory does not exist and could not be created.");
+
+      relative_path = AllocatedPath::Build(Path(dest_dir), file_path);
+    }
+    path = DownloadFileModal(_("Download"), file.GetURI(), relative_path.c_str());
     if (path != nullptr)
       dialog.SetModalResult(mrOK);
   } catch (...) {

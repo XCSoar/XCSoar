@@ -9,6 +9,7 @@ class Vibrator;
 class BluetoothHelper;
 class UsbSerialHelper;
 class IOIOHelper;
+class SAFHelper;
 
 extern Context *context;
 
@@ -21,3 +22,4 @@ extern Vibrator *vibrator;
 extern BluetoothHelper *bluetooth_helper;
 extern UsbSerialHelper *usb_serial_helper;
 extern IOIOHelper *ioio_helper;
+extern SAFHelper *saf_helper;

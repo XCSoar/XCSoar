@@ -1296,8 +1296,12 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
   nmea_info.clock = TimeStamp{FloatDuration{1}};
 
   /* airspeed and vario available */
-  ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
-                        nmea_info));
+  if (condor)
+    ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
+                          nmea_info));
+  else
+    ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,1.71,1.71,1.71,1.71,1.71,239,174,10.1*5E",
+                          nmea_info));
   ok1((bool)nmea_info.pressure_altitude_available == !condor);
   ok1((bool)nmea_info.baro_altitude_available == condor);
   ok1(equals(condor ? nmea_info.baro_altitude : nmea_info.pressure_altitude,
@@ -1435,6 +1439,8 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
     ok1(device->ParseNMEA("$LXWP3,47.76,0,2.0,5.0,15,30,2.5,1.0,0,100,0.1,,0*08", nmea_info));
     ok1(nmea_info.settings.qnh_available);
     ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1015));
+    ok1(nmea_info.settings.vario_filter_period_available);
+    ok1(equals(nmea_info.settings.vario_filter_period, 2.0));
   }
 
   delete device;
@@ -1576,8 +1582,8 @@ TestLXV7()
   lx_device.ResetDeviceDetection();
 
   ok1(device->ParseNMEA("$PLXVF,,1.00,0.87,-0.12,-0.25,90.2,244.3,*64", basic));
-  ok1(basic.netto_vario_available);
-  ok1(equals(basic.netto_vario, -0.25));
+  ok1(basic.total_energy_vario_available);
+  ok1(equals(basic.total_energy_vario, -0.25));
   ok1(basic.airspeed_available);
   ok1(equals(basic.indicated_airspeed, 90.2));
   ok1(basic.pressure_altitude_available);
@@ -2904,7 +2910,7 @@ int main()
   plan_tests(1036 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
-             + 107 /* LXNav protocol 1.05 */
+             + 109 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */

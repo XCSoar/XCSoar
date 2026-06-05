@@ -3,6 +3,7 @@
 
 #include "NOTAMCache.hpp"
 #include "Client.hpp"
+#include "DataFilePath.hpp"
 #include "Delta.hpp"
 #include "NOTAM.hpp"
 #include "Settings.hpp"
@@ -12,7 +13,6 @@
 #include "json/Parse.hxx"
 #include "json/Serialize.hxx"
 #include "system/FileUtil.hpp"
-#include "LocalPath.hpp"
 #include "LogFile.hpp"
 
 #include <boost/json.hpp>
@@ -43,7 +43,13 @@ GetJsonNumber(const boost::json::value &value, double &out) noexcept
 AllocatedPath
 NOTAMCache::GetFilePath()
 {
-  return LocalPath("notams.json");
+  return CacheDataSavePath("notams.json");
+}
+
+AllocatedPath
+NOTAMCache::ResolveFilePath()
+{
+  return ResolveCacheDataPath("notams.json");
 }
 
 bool

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "LogFile.hpp"
+#include "FakeLogFile.hpp"
 #include "util/Exception.hxx"
 
 #include <fmt/format.h>
@@ -11,9 +12,20 @@
 #include <cstdio>
 #include <iterator>
 
+static bool quiet;
+
+void
+SetFakeLogFileQuiet(bool _quiet) noexcept
+{
+  quiet = _quiet;
+}
+
 void
 LogString(std::string_view s) noexcept
 {
+  if (quiet)
+    return;
+
   fprintf(stderr, "%.*s\n",
           int(s.size()), s.data());
 }
@@ -33,6 +45,9 @@ LogVFmt(fmt::string_view format_str, fmt::format_args args) noexcept
 void
 LogFormat(const char *fmt, ...) noexcept
 {
+  if (quiet)
+    return;
+
   va_list ap;
 
   va_start(ap, fmt);

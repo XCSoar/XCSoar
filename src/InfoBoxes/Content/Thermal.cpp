@@ -27,13 +27,13 @@ SetVSpeed(InfoBoxData &data, double value) noexcept
 void
 UpdateInfoBoxVario(InfoBoxData &data) noexcept
 {
-  SetVSpeed(data, CommonInterface::Basic().brutto_vario);
+  SetVSpeed(data, CommonInterface::Basic().FilteredBruttoVario());
 }
 
 void
 UpdateInfoBoxVarioNetto(InfoBoxData &data) noexcept
 {
-  SetVSpeed(data, CommonInterface::Basic().netto_vario);
+  SetVSpeed(data, CommonInterface::Basic().FilteredNettoVario());
 }
 
 void

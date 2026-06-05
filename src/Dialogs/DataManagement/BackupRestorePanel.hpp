@@ -3,4 +3,7 @@
 
 #pragma once
 
-#define AIRSPACE_FILE_PATTERNS "*.txt\0*.air\0*.sua\0"
+class AllocatedPath;
+
+void ShowBackupManagerDialog();
+void ShowRestoreDialog();

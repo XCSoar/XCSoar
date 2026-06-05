@@ -108,6 +108,15 @@ StringAfterPrefixIgnoreCase(std::string_view haystack,
 const char *
 FindStringSuffix(const char *p, const char *suffix) noexcept;
 
+/**
+ * Match a string against a shell-style wildcard pattern. Supports
+ * "*" (matches any sequence, including empty) and "?" (matches any
+ * single character). Comparison is ASCII case-insensitive.
+ */
+[[gnu::pure]] [[gnu::nonnull]]
+bool
+WildcardMatchIgnoreCase(const char *pattern, const char *s) noexcept;
+
 template<typename T>
 bool
 SkipPrefix(std::basic_string_view<T> &haystack,

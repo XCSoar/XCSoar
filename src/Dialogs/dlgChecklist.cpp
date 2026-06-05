@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "DataFilePath.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/VScrollWidget.hpp"
@@ -14,9 +15,9 @@
 #include "io/Reader.hxx"
 #include "io/BufferedReader.hxx"
 #include "io/StringConverter.hpp"
-#include "LocalPath.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
+#include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 #include "Language/Language.hpp"
 
@@ -142,7 +143,8 @@ dlgChecklistShowModal()
 
   auto path = Profile::GetPath(ProfileKeys::ChecklistFile);
   if (path == nullptr || path.empty())
-    path = LocalPath("xcsoar-checklist.txt");
+    path = ResolveTypedDataFilePath(FileType::CHECKLIST,
+                                    "xcsoar-checklist.txt");
   auto checklist = LoadChecklist(path);
   if (checklist.empty())
     {

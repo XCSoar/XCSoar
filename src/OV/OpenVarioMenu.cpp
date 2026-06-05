@@ -23,6 +23,7 @@
 #include "lib/dbus/Connection.hxx"
 #include "lib/dbus/ScopeMatch.hxx"
 #include "lib/dbus/Systemd.hxx"
+#include "DataFilePath.hpp"
 #include "system/Process.hpp"
 #include "io/FileLineReader.hpp"
 #include "util/PrintException.hxx"
@@ -340,7 +341,7 @@ ShowLogbook() noexcept
   FlightListRenderer renderer{look.text_font, look.bold_font};
 
   try {
-    FileLineReaderA file(LocalPath("flights.log"));
+    FileLineReaderA file(ResolveLogsDataPath("flights.log"));
 
     FlightParser parser{file};
     FlightInfo flight;

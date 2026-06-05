@@ -23,6 +23,7 @@ enum ControlIndex {
   AIRCRAFT_SYMBOL,
   WIND_ARROW_STYLE,
   SKYLINES_TRAFFIC_MAP_MODE,
+  DISTANCE_RINGS_ENABLED,
 };
 
 class SymbolsConfigPanel final
@@ -182,6 +183,10 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           _("Show the SkyLines traffic symbols/names on the map, downloaded from the SkyLines server."),
           skylines_map_mode_list, (unsigned)settings_map.skylines_traffic_map_mode);
 
+  AddBoolean(_("Distance rings"),
+             _("Display distance rings around the aircraft on the map."),
+             settings_map.distance_rings_enabled);
+
   ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }
 
@@ -219,6 +224,9 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(SKYLINES_TRAFFIC_MAP_MODE, ProfileKeys::SkyLinesTrafficMapMode,
                            settings_map.skylines_traffic_map_mode);
+
+  changed |= SaveValue(DISTANCE_RINGS_ENABLED, ProfileKeys::DistanceRingsEnabled,
+                       settings_map.distance_rings_enabled);
 
   _changed |= changed;
 

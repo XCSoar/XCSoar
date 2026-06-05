@@ -8,6 +8,7 @@
 struct TaskBehaviour;
 class OrderedTask;
 class Waypoints;
+class AllocatedPath;
 
 #define default_task_path "Default.tsk"
 
@@ -24,3 +25,9 @@ class Waypoints;
 std::unique_ptr<OrderedTask>
 LoadDefaultTask(const TaskBehaviour &task_behaviour,
                 const Waypoints *waypoints) noexcept;
+
+AllocatedPath
+GetDefaultTaskPath() noexcept;
+
+AllocatedPath
+GetDefaultTaskSavePath() noexcept;

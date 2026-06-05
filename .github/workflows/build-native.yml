@@ -801,12 +801,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '4.0.5'
-          # No Gemfile in-tree; we install fastlane via gem (bundler-cache would
-          # run bundle install to no purpose).
-          bundler-cache: false
-
-      - name: Install Fastlane
-        run: gem install fastlane
+          bundler-cache: true
 
       - name: Create Play Store key
         run: |
@@ -849,7 +844,7 @@ jobs:
           else
             echo "::warning::Native debug symbols not found at $SYMBOLS_ZIP (expected CI artifact layout); Play native stacks may stay obfuscated"
           fi
-          fastlane supply \
+          bundle exec fastlane supply \
             --package_name org.xcsoar.play \
             --aab "$AAB_PATH" \
             ${MAPPING_PATH:+--mapping "$MAPPING_PATH"} \

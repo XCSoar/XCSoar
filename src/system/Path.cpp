@@ -71,6 +71,57 @@ Path::IsBase() const noexcept
 #endif
 }
 
+bool
+Path::IsValidFilename() const noexcept
+{
+  if (*this == nullptr)
+    return false;
+  if (empty())
+    return false;
+  if (StringIsEqual(c_str(), ".") || StringIsEqual(c_str(), ".."))
+    return false;
+
+#ifdef _WIN32
+  const char *invalid_chars = "<>:\"/\\|?*";
+  size_t len = StringLength(c_str());
+
+  if (c_str()[len - 1] == ' ' || c_str()[len - 1] == '.')
+    return false;
+
+  for (size_t i = 0; i < len; ++i)
+  {
+    unsigned char c = c_str()[i];
+
+    // Control characters
+    if (c < 32)
+      return false;
+
+    if (std::strchr(invalid_chars, c))
+      return false;
+  }
+  return true;
+#else
+  // On Unix-like systems, only '/' is invalid in filenames
+  return IsBase();
+#endif
+}
+
+bool
+Path::HasPathTraversal() const noexcept
+{
+  assert(*this != nullptr);
+
+  for (const auto *s = c_str();
+       (s = strstr(s, "..")) != nullptr; s += 2) {
+    if (s != c_str() && !IsDirSeparator(s[-1]))
+      continue;
+    if (s[2] != '\0' && !IsDirSeparator(s[2]))
+      continue;
+    return true;
+  }
+  return false;
+}
+
 [[gnu::pure]]
 static Path::const_pointer
 LastSeparator(Path::const_pointer path) noexcept

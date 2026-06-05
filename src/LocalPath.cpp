@@ -118,6 +118,12 @@ MakeLocalPath(const char *name)
   return path;
 }
 
+AllocatedPath
+MakeLocalPath(const Path name)
+{
+  return MakeLocalPath(name.c_str());
+}
+
 Path
 RelativePath(Path path) noexcept
 {
