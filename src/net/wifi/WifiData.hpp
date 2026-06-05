@@ -27,28 +27,29 @@ TryFormatWifiInterfaceAddress(const char *interface_name,
 }
 
 struct WifiVisibleNetwork {
-  StaticString<32> bssid;
-  StaticString<256> ssid;
-  signed signal_level;
+  StaticString<32> bssid{};
+  StaticString<256> ssid{};
+  signed signal_level = 0;
   WifiSecurity security = WifiSecurity::Unknown;
 };
 
 struct WifiConfiguredNetworkInfo {
-  unsigned id;
-  StaticString<256> ssid;
-  StaticString<32> bssid;
+  unsigned id = 0;
+  StaticString<256> ssid{};
+  StaticString<32> bssid{};
 };
 
 struct WifiBackendStatus {
   WifiConnectionState state = WifiConnectionState::Unknown;
   WifiSignalUnit signal_unit = WifiSignalUnit::Unknown;
-  StaticString<64> ip_address;
-  StaticString<32> interface_name;
-  StaticString<32> bssid;
-  StaticString<256> ssid;
+  StaticString<64> ip_address{};
+  StaticString<32> interface_name{};
+  StaticString<32> bssid{};
+  StaticString<256> ssid{};
 
   static StaticString<256> Format(const WifiBackendStatus &status) {
     StaticString<256> text;
+    text.clear();
 
     switch (status.state) {
     case WifiConnectionState::Connected:
@@ -71,6 +72,7 @@ struct WifiBackendStatus {
 
   static StaticString<64> FormatIpAddress(const WifiBackendStatus &status) {
     StaticString<64> text;
+    text.clear();
 
     if (status.state != WifiConnectionState::Connected) {
       text = FormatWifiConnectionStateLabel(status.state);
@@ -108,11 +110,11 @@ struct WifiBackendStatus {
 };
 
 struct WifiNetworkEntry {
-  StaticString<256> profile_id;
-  StaticString<64> ip_address;
-  StaticString<32> bssid;
-  StaticString<32> interface_name;
-  StaticString<256> ssid;
+  StaticString<256> profile_id{};
+  StaticString<64> ip_address{};
+  StaticString<32> bssid{};
+  StaticString<32> interface_name{};
+  StaticString<256> ssid{};
   signed signal_level = 0;
   WifiSecurity security = WifiSecurity::Unknown;
   WifiSignalUnit signal_unit = WifiSignalUnit::Unknown;
@@ -125,6 +127,7 @@ struct WifiNetworkEntry {
 
   static StaticString<64> FormatState(const WifiNetworkEntry &entry) {
     StaticString<64> text;
+    text.clear();
 
     if (entry.kind == WifiNetworkKind::ConnectedNetwork) {
       if (!entry.ip_address.empty()) {
@@ -179,9 +182,9 @@ struct WifiNetworkEntry {
 };
 
 struct WifiConnectRequest {
-  StaticString<256> profile_id;
-  StaticString<256> ssid;
-  StaticString<64> secret;
+  StaticString<256> profile_id{};
+  StaticString<256> ssid{};
+  StaticString<64> secret{};
   WifiSecurity security = WifiSecurity::Unknown;
 
   void Clear() {
