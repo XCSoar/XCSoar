@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GlideComputer.hpp"
+#include "Atmosphere/AirDensity.hpp"
 #include "Computer/Settings.hpp"
 #include "NMEA/Derived.hpp"
 #include "GlideComputerInterface.hpp"
@@ -56,6 +57,12 @@ GlideComputer::ProcessGPS(bool force)
 {
   const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
+
+  if (computer_settings.polar.glide_polar_task.IsValid())
+    if (const auto altitude = basic.GetAnyAltitude())
+      computer_settings.polar.glide_polar_task.SetDensityRatio(
+          AirDensityRatio(*altitude));
+
   const ComputerSettings &settings = GetComputerSettings();
 
   const bool last_flying = calculated.flight.flying;

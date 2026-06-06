@@ -1,4 +1,9 @@
 Version 7.45 - not yet released
+* glide computer
+  - Speed-to-fly and task calculations are now altitude-corrected: the glide
+    polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
+    so optimal cruise speeds increase with altitude and best L/D is preserved
+    (#1569)
 * android
   - BLE serial ports now support Nordic UART Service (NUS) for e.g. Naviter
     dongles, in addition to HM-10; the protocol is auto-detected at connection
