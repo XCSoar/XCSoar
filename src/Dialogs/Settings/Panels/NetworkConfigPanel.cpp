@@ -15,6 +15,10 @@
 #include <memory>
 #include <stdexcept>
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #if defined(KOBO)
 #include "Kobo/PlatformWifiBackend.hpp"
 #include "Kobo/System.hpp"
@@ -30,6 +34,10 @@
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #include "java/Global.hxx"
+#endif
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+#include "net/IPv4Address.hxx"
 #endif
 
 struct NetworkConfigRows {
@@ -67,18 +75,26 @@ LinuxBackendName(LinuxWifiBackendKind backend_kind) noexcept
 }
 #endif
 
-#ifdef ANDROID
+#if defined(ANDROID) || (defined(__APPLE__) && TARGET_OS_IPHONE)
 static StaticString<64>
 GetPlatformWifiIpAddress() noexcept
 {
   StaticString<64> text;
   text.clear();
 
+#ifdef ANDROID
   if (native_view == nullptr)
     return text;
 
   native_view->GetWifiIpAddress(Java::GetEnv(),
                                 text.buffer(), text.capacity());
+#else
+  char buffer[64];
+  const auto address = IPv4Address::GetDeviceAddress("en0");
+  if (address.IsDefined() &&
+      address.ToString(buffer, sizeof(buffer)) != nullptr)
+    text = buffer;
+#endif
 
   return text;
 }
@@ -95,6 +111,8 @@ GetStatusHelp() noexcept
            "and connect when a service is available.");
 #elif defined(ANDROID)
   return _("WiFi on Android is managed by the system settings. Use WiFi list to open them.");
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  return _("WiFi on iOS is managed by the Settings app. Use WiFi list for instructions.");
 #else
   return _("Network details are not available in this build.");
 #endif
@@ -107,7 +125,7 @@ GetBackendHelp() noexcept
   return _("WiFi on Kobo is managed by wpa_supplicant.");
 #elif defined(HAVE_LINUX_NET_WIFI)
   return _("D-Bus provider used for WiFi (see WiFi list to manage networks).");
-#elif defined(ANDROID)
+#elif defined(ANDROID) || (defined(__APPLE__) && TARGET_OS_IPHONE)
   return _("Platform backend used for WiFi management.");
 #else
   return _("Platform/backend information is not available in this build.");
@@ -123,6 +141,8 @@ GetInitialBackendName() noexcept
   return LinuxBackendName(LinuxWifiBackendKind::None);
 #elif defined(ANDROID)
   return "Android";
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  return "iOS";
 #else
   return _("Unavailable");
 #endif
@@ -205,10 +225,17 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
   ShowMessageBox(_("Failed to open Android WiFi settings."),
                  _("Connectivity"), MB_OK);
   (void)refresh;
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  ShowMessageBox(_("Open the Settings app on the iPhone or iPad, then go to Wi-Fi to scan and connect."),
+                 _("Connectivity"), MB_OK);
 #else
   (void)refresh;
   ShowMessageBox(_("WiFi management is not available in this build."),
                  _("Connectivity"), MB_OK);
+#endif
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  (void)refresh;
 #endif
 }
 
@@ -274,12 +301,19 @@ BuildPlatformState(NetworkConfigState &state,
   const auto android_ip = GetPlatformWifiIpAddress();
   if (!android_ip.empty())
     state.ip = android_ip;
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  state.connectivity = GetNetState();
+  state.backend = "iOS";
+  state.status = _("Managed by iOS Settings app.");
+  const auto ios_ip = GetPlatformWifiIpAddress();
+  if (!ios_ip.empty())
+    state.ip = ios_ip;
 #else
   (void)rows;
   state.status = _("In-app network settings are not available in this build.");
 #endif
 
-#if defined(KOBO) || defined(ANDROID)
+#if defined(KOBO) || defined(ANDROID) || (defined(__APPLE__) && TARGET_OS_IPHONE)
   (void)rows;
 #endif
 }
