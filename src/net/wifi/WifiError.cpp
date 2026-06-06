@@ -10,6 +10,18 @@
 
 namespace {
 
+static const char *
+GetWifiServiceUnavailableText() noexcept
+{
+  return _("WiFi service is not available.");
+}
+
+static const char *
+GetWifiServiceNotRespondingText() noexcept
+{
+  return _("Could not contact the WiFi service.");
+}
+
 [[gnu::const]]
 static constexpr const char *
 DebugMessage(WifiError::Code code) noexcept
@@ -59,16 +71,16 @@ FormatCodeForUser(WifiError::Code code)
     return {_("No Wi-Fi interface available")};
 
   case Code::NoDbusConnection:
-    return {_("No D-Bus connection")};
+    return {GetWifiServiceNotRespondingText()};
 
   case Code::ConnmanUnavailable:
-    return {_("ConnMan is not available")};
+    return {_("WiFi service is not running.")};
 
   case Code::NoBackendAvailable:
-    return {_("No Wi-Fi backend available")};
+    return {GetWifiServiceUnavailableText()};
 
   case Code::NetworkManagerUnavailable:
-    return {_("NetworkManager is not available")};
+    return {_("WiFi service is not running.")};
   }
 
   return {_("The operation failed.")};
@@ -94,13 +106,11 @@ FormatWhatForUser(const char *what)
               "network.")};
   }
   if (w.find("org.freedesktop.") != std::string_view::npos) {
-    return {_("A D-Bus error occurred. Is NetworkManager or ConnMan running "
-              "on the bus?")};
+    return {GetWifiServiceNotRespondingText()};
   }
   if (w.find("DBus.Error") != std::string_view::npos ||
       w.find("DBus:") != std::string_view::npos) {
-    return {_("A D-Bus error occurred. Is NetworkManager or ConnMan running "
-              "on the bus?")};
+    return {GetWifiServiceNotRespondingText()};
   }
   if (w.find("secret") != std::string_view::npos && w.length() < 200U) {
     return {_("A passphrase is required, or a saved network for this "

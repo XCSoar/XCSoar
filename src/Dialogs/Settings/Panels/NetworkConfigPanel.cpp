@@ -102,21 +102,31 @@ GetPlatformWifiIpAddress() noexcept
 }
 #endif
 
+#if defined(KOBO) || defined(HAVE_LINUX_NET_WIFI)
+static const char *
+GetWifiServiceUnavailableText() noexcept
+{
+  return _("WiFi service is not available.");
+}
+#endif
+
+#if defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
+static const char *
+GetManagedBySystemSettingsText() noexcept
+{
+  return _("Managed by system settings.");
+}
+#endif
+
 static const char *
 GetStatusHelp() noexcept
 {
-#if defined(KOBO)
-  return _("This page shows Kobo WiFi status. Open WiFi list to scan and connect.");
-#elif defined(HAVE_LINUX_NET_WIFI)
-  return _("This page shows WiFi status when NetworkManager or ConnMan is on "
-           "D-Bus (e.g. Linux with Wayland or KMS). Open WiFi list to scan "
-           "and connect when a service is available.");
-#elif defined(ANDROID)
-  return _("WiFi on Android is managed by the system settings. Use WiFi list to open them.");
-#elif defined(_WIN32)
-  return _("WiFi on Windows is managed by the Settings app. Use WiFi list to open it.");
+#if defined(KOBO) || defined(HAVE_LINUX_NET_WIFI)
+  return _("This page shows WiFi status. Use WiFi list to scan and connect.");
+#elif defined(ANDROID) || defined(_WIN32)
+  return _("WiFi is managed by the system settings. Use WiFi list to open them.");
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
-  return _("WiFi on iOS is managed by the Settings app. Use WiFi list for instructions.");
+  return _("WiFi is managed by the system settings. Use WiFi list for instructions.");
 #else
   return _("Network details are not available in this build.");
 #endif
@@ -125,12 +135,8 @@ GetStatusHelp() noexcept
 static const char *
 GetBackendHelp() noexcept
 {
-#if defined(KOBO)
-  return _("WiFi on Kobo is managed by wpa_supplicant.");
-#elif defined(HAVE_LINUX_NET_WIFI)
-  return _("D-Bus provider used for WiFi (see WiFi list to manage networks).");
-#elif defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
-  return _("Platform backend used for WiFi management.");
+#if defined(KOBO) || defined(HAVE_LINUX_NET_WIFI) || defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
+  return _("WiFi service used by the device.");
 #else
   return _("Platform/backend information is not available in this build.");
 #endif
@@ -196,9 +202,7 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
   try {
     auto backend = CreatePlatformWifiBackend();
     if (backend == nullptr) {
-      ShowMessageBox(
-        _("WiFi backend is not available in this Kobo build."),
-        _("Network"), MB_OK);
+      ShowMessageBox(GetWifiServiceUnavailableText(), _("Network"), MB_OK);
       return;
     }
 
@@ -212,9 +216,7 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
   try {
     auto backend = CreateLinuxWifiBackend();
     if (backend == nullptr) {
-      ShowMessageBox(
-        _("No network service (NetworkManager or ConnMan) found on D-Bus."),
-        _("Network"), MB_OK);
+      ShowMessageBox(GetWifiServiceUnavailableText(), _("Network"), MB_OK);
       return;
     }
 
@@ -228,16 +230,16 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
   if (native_view != nullptr && native_view->OpenWifiSettings(Java::GetEnv()))
     return;
 
-  ShowMessageBox(_("Failed to open Android WiFi settings."),
+  ShowMessageBox(_("Failed to open system settings."),
                  _("Connectivity"), MB_OK);
 #elif defined(_WIN32)
   if (OpenLink("ms-settings:network-wifi"))
     return;
 
-  ShowMessageBox(_("Failed to open Windows WiFi settings."),
+  ShowMessageBox(_("Failed to open system settings."),
                  _("Connectivity"), MB_OK);
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
-  ShowMessageBox(_("Open the Settings app on the iPhone or iPad, then go to Wi-Fi to scan and connect."),
+  ShowMessageBox(_("Open the Settings app, then go to Wi-Fi."),
                  _("Connectivity"), MB_OK);
 #else
   (void)refresh;
@@ -270,7 +272,7 @@ BuildPlatformState(NetworkConfigState &state,
   try {
     auto backend = CreatePlatformWifiBackend();
     if (backend == nullptr) {
-      state.status = _("WiFi backend is not available in this Kobo build.");
+      state.status = GetWifiServiceUnavailableText();
       return;
     }
 
@@ -289,7 +291,7 @@ BuildPlatformState(NetworkConfigState &state,
 
     auto backend = CreateLinuxWifiBackend(backend_kind);
     if (backend == nullptr) {
-      state.status = _("No network service (NetworkManager or ConnMan) found on D-Bus.");
+      state.status = GetWifiServiceUnavailableText();
     } else {
       const auto status = backend->GetBackendStatus();
       state.status = WifiBackendStatus::Format(status);
@@ -307,19 +309,18 @@ BuildPlatformState(NetworkConfigState &state,
 #elif defined(ANDROID)
   state.connectivity = GetNetState();
   state.backend = "Android";
-  state.status = _("Managed by Android system settings.");
-
+  state.status = GetManagedBySystemSettingsText();
   const auto android_ip = GetPlatformWifiIpAddress();
   if (!android_ip.empty())
     state.ip = android_ip;
 #elif defined(_WIN32)
   state.connectivity = GetNetState();
   state.backend = "Windows";
-  state.status = _("Managed by Windows Settings app.");
+  state.status = GetManagedBySystemSettingsText();
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   state.connectivity = GetNetState();
   state.backend = "iOS";
-  state.status = _("Managed by iOS Settings app.");
+  state.status = GetManagedBySystemSettingsText();
   const auto ios_ip = GetPlatformWifiIpAddress();
   if (!ios_ip.empty())
     state.ip = ios_ip;
@@ -417,7 +418,7 @@ NetworkConfigWidget::Prepare(ContainerWindow &parent,
 
   unsigned n = 0U;
   rows.status = n++;
-  AddReadOnly(_("Status"), GetStatusHelp(), _("Checking network services..."));
+  AddReadOnly(_("Status"), GetStatusHelp(), _("Checking WiFi..."));
 
   rows.connectivity = n++;
   AddReadOnly(_("Connectivity"),
