@@ -10,6 +10,8 @@
 
 struct PixelRect;
 class Canvas;
+class Angle;
+class Color;
 
 /**
  * An icon with a mask which marks transparent pixels.
@@ -58,6 +60,12 @@ public:
    */
   void Draw(Canvas &canvas, PixelPoint p,
             unsigned target_height) const noexcept;
+
+  void Draw(Canvas &canvas, PixelPoint p, unsigned target_height,
+            Angle angle) const noexcept;
+
+  void Draw(Canvas &canvas, PixelPoint p, unsigned target_height,
+            Angle angle, Color body_color) const noexcept;
 
   void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const noexcept;
 };

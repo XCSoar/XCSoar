@@ -42,6 +42,15 @@ extern GLint combine_texture_projection, combine_texture_texture,
   combine_texture_translate;
 
 /**
+ * A shader that draws FLARM traffic aircraft-type icons (body and
+ * outline colours from uniforms, partitioned by pixel luminance).
+ */
+extern GLProgram *traffic_icon_shader;
+extern GLint traffic_icon_projection, traffic_icon_texture,
+  traffic_icon_translate, traffic_icon_body_color,
+  traffic_icon_outline_color;
+
+/**
  * A shader that draws dashed lines (#Pen::Style).
  */
 extern GLProgram *dashed_shader;

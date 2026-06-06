@@ -4,6 +4,7 @@
 #pragma once
 
 #include "FLARM/Color.hpp"
+#include "ui/canvas/Color.hpp"
 
 struct PixelPoint;
 class Canvas;
@@ -14,6 +15,12 @@ class Angle;
 
 namespace TrafficRenderer
 {
+void
+DrawAircraftTypeIcon(Canvas &canvas, const TrafficLook &traffic_look,
+                     const FlarmTraffic &traffic, Angle angle,
+                     PixelPoint pt, unsigned icon_height,
+                     Color color) noexcept;
+
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
      bool fading,

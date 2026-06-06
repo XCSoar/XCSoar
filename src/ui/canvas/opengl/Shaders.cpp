@@ -28,6 +28,10 @@ GLProgram *combine_texture_shader;
 GLint combine_texture_projection, combine_texture_texture,
   combine_texture_translate;
 
+GLProgram *traffic_icon_shader;
+GLint traffic_icon_projection, traffic_icon_texture, traffic_icon_translate,
+  traffic_icon_body_color, traffic_icon_outline_color;
+
 GLProgram *dashed_shader;
 GLint dashed_projection, dashed_translate,
   dashed_resolution, dashed_start, dashed_period, dashed_ratio;
@@ -140,6 +144,43 @@ static constexpr char combine_texture_fragment_shader[] =
     varying vec2 texcoordvar;
     void main() {
       gl_FragColor = colorvar * texture2D(texture, texcoordvar);
+    }
+)glsl";
+
+static constexpr char traffic_icon_vertex_shader[] =
+  GLSL_VERSION
+  R"glsl(
+    uniform mat4 projection;
+    uniform vec2 translate;
+    attribute vec4 position;
+    attribute vec2 texcoord;
+    varying vec2 texcoordvar;
+    void main() {
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
+      texcoordvar = texcoord;
+    }
+)glsl";
+
+static constexpr char traffic_icon_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform sampler2D texture;
+    uniform vec4 body_color;
+    uniform vec4 outline_color;
+    varying vec2 texcoordvar;
+    void main() {
+      vec4 tex = texture2D(texture, texcoordvar);
+      float lum = max(max(tex.r, tex.g), tex.b);
+      float body_w = smoothstep(0.72, 0.88, lum);
+      float stroke_w = 1.0 - body_w;
+      float alpha = tex.a * max(body_w, stroke_w);
+      if (alpha < 0.004)
+        discard;
+      vec3 rgb = body_color.rgb * body_w + outline_color.rgb * stroke_w;
+      gl_FragColor = vec4(rgb, alpha);
     }
 )glsl";
 
@@ -349,6 +390,26 @@ OpenGL::InitShaders()
   combine_texture_shader->Use();
   glUniform1i(combine_texture_texture, 0);
 
+  traffic_icon_shader = CompileProgram(traffic_icon_vertex_shader,
+                                       traffic_icon_fragment_shader);
+  traffic_icon_shader->BindAttribLocation(Attribute::POSITION, "position");
+  traffic_icon_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  LinkProgram(*traffic_icon_shader);
+
+  traffic_icon_projection =
+    traffic_icon_shader->GetUniformLocation("projection");
+  traffic_icon_texture =
+    traffic_icon_shader->GetUniformLocation("texture");
+  traffic_icon_translate =
+    traffic_icon_shader->GetUniformLocation("translate");
+  traffic_icon_body_color =
+    traffic_icon_shader->GetUniformLocation("body_color");
+  traffic_icon_outline_color =
+    traffic_icon_shader->GetUniformLocation("outline_color");
+
+  traffic_icon_shader->Use();
+  glUniform1i(traffic_icon_texture, 0);
+
   dashed_shader = CompileProgram(dashed_vertex_shader, dashed_fragment_shader);
   dashed_shader->BindAttribLocation(Attribute::POSITION, "position");
   dashed_shader->BindAttribLocation(Attribute::COLOR, "color");
@@ -394,6 +455,8 @@ OpenGL::DeinitShaders() noexcept
   circle_outline_shader = nullptr;
   delete dashed_shader;
   dashed_shader = nullptr;
+  delete traffic_icon_shader;
+  traffic_icon_shader = nullptr;
   delete combine_texture_shader;
   combine_texture_shader = nullptr;
   delete alpha_shader;
@@ -429,6 +492,10 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
   glUniformMatrix4fv(combine_texture_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
 
+  traffic_icon_shader->Use();
+  glUniformMatrix4fv(traffic_icon_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
   dashed_shader->Use();
   glUniformMatrix4fv(dashed_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
@@ -462,6 +529,9 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   combine_texture_shader->Use();
   glUniform2f(combine_texture_translate, t.x, t.y);
+
+  traffic_icon_shader->Use();
+  glUniform2f(traffic_icon_translate, t.x, t.y);
 
   dashed_shader->Use();
   glUniform2f(dashed_translate, t.x, t.y);

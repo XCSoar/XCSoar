@@ -11,6 +11,8 @@
 struct TrafficLook;
 
 struct FlarmTrafficLook {
+  const TrafficLook *traffic_look = nullptr;
+
   Color warning_color;
   Color alarm_color;
   Color default_color;

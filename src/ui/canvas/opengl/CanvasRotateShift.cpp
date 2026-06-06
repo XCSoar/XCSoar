@@ -26,6 +26,7 @@ CanvasRotateShift::CanvasRotateShift(const PixelPoint pos, Angle angle,
 }
 
 CanvasRotateShift::~CanvasRotateShift() noexcept {
+  OpenGL::solid_shader->Use();
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(glm::mat4(1)));
 }
