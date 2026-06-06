@@ -95,7 +95,7 @@ public:
   /**
    * Constructs an uninitialized object.
    */
-  constexpr GlidePolar() noexcept = default;
+  constexpr GlidePolar() noexcept : density_ratio(1.0) {}
 
   /**
    * Constructor.  Performs search for best LD at instantiation
@@ -618,4 +618,4 @@ private:
   void UpdateSMin() noexcept;
 };
 
-static_assert(std::is_trivial<GlidePolar>::value, "type is not trivial");
+static_assert(std::is_trivially_copyable<GlidePolar>::value, "type is not trivially copyable");
