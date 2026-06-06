@@ -19,8 +19,8 @@ class GlidePolar;
  *  frequently, greater than one if the glider attains higher speeds due
  *  to dolphin/cloud street flying.
  *  
- *  Note that all speeds etc are assumed to be true; air density is NOT
- *  taken into account.
+ *  Note that all speeds are true airspeeds. Air density correction is
+ *  applied via GlidePolar::density_ratio, set from AirDensityRatio(altitude).
  */
 class MacCready 
 {
