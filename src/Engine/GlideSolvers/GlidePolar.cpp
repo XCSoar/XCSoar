@@ -28,7 +28,8 @@ GlidePolar::GlidePolar(double _mc, double _bugs,
    reference_mass(300),
    empty_mass(reference_mass),
    crew_mass(90.),
-   wing_area(0)
+   wing_area(0),
+   density_ratio(1)
 {
   Update();
 
@@ -40,6 +41,9 @@ void
 GlidePolar::Update() noexcept
 {
   assert(bugs > 0);
+
+  if (density_ratio <= 0)
+    density_ratio = 1.0;
 
   if (!reference_polar.IsValid()) {
     Vmin = Vmax = 0;
@@ -138,6 +142,13 @@ GlidePolar::SetMC(const double _mc) noexcept
     UpdateBestLD();
 }
 
+void
+GlidePolar::SetDensityRatio(const double dr) noexcept
+{
+  density_ratio = dr;
+  Update();
+}
+
 double
 GlidePolar::MSinkRate(const double V) const noexcept
 {
@@ -149,7 +160,8 @@ GlidePolar::SinkRate(const double V) const noexcept
 {
   assert(polar.IsValid());
 
-  return V * (V * polar.a + polar.b) + polar.c;
+  const double v_ias = V / density_ratio;
+  return density_ratio * (v_ias * (v_ias * polar.a + polar.b) + polar.c);
 }
 
 double
@@ -210,7 +222,8 @@ GlidePolar::UpdateBestLD() noexcept
   assert(polar.IsValid());
   assert(mc >= 0);
 
-  VbestLD = std::clamp(sqrt((polar.c + mc) / polar.a), Vmin, Vmax);
+  const double vbld_ias = sqrt((polar.c + mc) / polar.a);
+  VbestLD = std::clamp(vbld_ias * density_ratio, Vmin, Vmax);
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 #endif
@@ -256,7 +269,7 @@ GlidePolar::UpdateSMin() noexcept
 #else
   assert(polar.IsValid());
 
-  Vmin = std::min(Vmax, -0.5 * polar.b / polar.a);
+  Vmin = std::min(Vmax, -0.5 * polar.b / polar.a * density_ratio);
   Smin = SinkRate(Vmin);
 #endif
 
@@ -420,8 +433,11 @@ GlidePolar::GetBestGlideRatioSpeed(double head_wind) const noexcept
 {
   assert(polar.IsValid());
 
+  // altitude-corrected ground-speed polar: a'=a/DR, b'=b, c'=c*DR
+  const auto a_alt = polar.a / density_ratio;
+  const auto c_alt = polar.c * density_ratio;
   auto s = head_wind * head_wind +
-    (mc + polar.c + polar.b * head_wind) / polar.a;
+    (mc + c_alt + polar.b * head_wind) / a_alt;
   if (s < 0)
     /* should never happen, but just in case */
     return GetVMax();

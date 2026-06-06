@@ -86,6 +86,9 @@ class GlidePolar
   /** Reference wing area, m^2 */
   double wing_area;
 
+  /** Air density ratio sqrt(rho0/rho); 1.0 at sea level, >1 at altitude */
+  double density_ratio;
+
   friend class GlidePolarTest;
 
 public:
@@ -496,6 +499,13 @@ public:
   /** Sets the wing area in m^2 */
   constexpr void SetWingArea(double _wing_area) noexcept {
     wing_area = _wing_area;
+  }
+
+  /** Sets the air density ratio and updates polar speeds/rates accordingly */
+  void SetDensityRatio(double dr) noexcept;
+
+  constexpr double GetDensityRatio() const noexcept {
+    return density_ratio;
   }
 
   /** Returns the reference mass in kg */
