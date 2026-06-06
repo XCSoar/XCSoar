@@ -9,11 +9,13 @@
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/State.hpp"
+#include "system/OpenLink.hpp"
 #include "util/StaticString.hxx"
 
 #include <functional>
 #include <memory>
 #include <stdexcept>
+#include <string>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -111,6 +113,8 @@ GetStatusHelp() noexcept
            "and connect when a service is available.");
 #elif defined(ANDROID)
   return _("WiFi on Android is managed by the system settings. Use WiFi list to open them.");
+#elif defined(_WIN32)
+  return _("WiFi on Windows is managed by the Settings app. Use WiFi list to open it.");
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   return _("WiFi on iOS is managed by the Settings app. Use WiFi list for instructions.");
 #else
@@ -125,7 +129,7 @@ GetBackendHelp() noexcept
   return _("WiFi on Kobo is managed by wpa_supplicant.");
 #elif defined(HAVE_LINUX_NET_WIFI)
   return _("D-Bus provider used for WiFi (see WiFi list to manage networks).");
-#elif defined(ANDROID) || (defined(__APPLE__) && TARGET_OS_IPHONE)
+#elif defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
   return _("Platform backend used for WiFi management.");
 #else
   return _("Platform/backend information is not available in this build.");
@@ -141,6 +145,8 @@ GetInitialBackendName() noexcept
   return LinuxBackendName(LinuxWifiBackendKind::None);
 #elif defined(ANDROID)
   return "Android";
+#elif defined(_WIN32)
+  return "Windows";
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   return "iOS";
 #else
@@ -224,7 +230,12 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
 
   ShowMessageBox(_("Failed to open Android WiFi settings."),
                  _("Connectivity"), MB_OK);
-  (void)refresh;
+#elif defined(_WIN32)
+  if (OpenLink("ms-settings:network-wifi"))
+    return;
+
+  ShowMessageBox(_("Failed to open Windows WiFi settings."),
+                 _("Connectivity"), MB_OK);
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   ShowMessageBox(_("Open the Settings app on the iPhone or iPad, then go to Wi-Fi to scan and connect."),
                  _("Connectivity"), MB_OK);
@@ -234,7 +245,7 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
                  _("Connectivity"), MB_OK);
 #endif
 
-#if defined(__APPLE__) && TARGET_OS_IPHONE
+#if defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
   (void)refresh;
 #endif
 }
@@ -301,6 +312,10 @@ BuildPlatformState(NetworkConfigState &state,
   const auto android_ip = GetPlatformWifiIpAddress();
   if (!android_ip.empty())
     state.ip = android_ip;
+#elif defined(_WIN32)
+  state.connectivity = GetNetState();
+  state.backend = "Windows";
+  state.status = _("Managed by Windows Settings app.");
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   state.connectivity = GetNetState();
   state.backend = "iOS";
@@ -313,7 +328,7 @@ BuildPlatformState(NetworkConfigState &state,
   state.status = _("In-app network settings are not available in this build.");
 #endif
 
-#if defined(KOBO) || defined(ANDROID) || (defined(__APPLE__) && TARGET_OS_IPHONE)
+#if defined(KOBO) || defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
   (void)rows;
 #endif
 }
