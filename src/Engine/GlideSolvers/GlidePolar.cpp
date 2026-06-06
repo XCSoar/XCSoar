@@ -42,9 +42,6 @@ GlidePolar::Update() noexcept
 {
   assert(bugs > 0);
 
-  if (density_ratio <= 0)
-    density_ratio = 1.0;
-
   if (!reference_polar.IsValid()) {
     Vmin = Vmax = 0;
     return;
