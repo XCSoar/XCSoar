@@ -46,6 +46,9 @@ GetFileTypePatterns(const FileType file_type) noexcept
   case FileType::LUA:
     return "*.lua\0";
 
+  case FileType::TIFF:
+    return "*.tif\0*.tiff\0";
+
   case FileType::TASK:
     return "*.tsk\0*.cup\0*.igc\0";
 
@@ -107,6 +110,9 @@ GetFileTypeDefaultDir(const FileType file_type)
 
   case FileType::LUA:
     return AllocatedPath("lua");
+
+  case FileType::TIFF:
+    return AllocatedPath("overlays");
 
   case FileType::PROFILE:
     return AllocatedPath("profiles");

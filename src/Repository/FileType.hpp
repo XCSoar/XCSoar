@@ -22,6 +22,7 @@ enum class FileType : uint8_t {
   PLANE,
   XCI,
   LUA,
+  TIFF,
   COUNT,
 };
 
