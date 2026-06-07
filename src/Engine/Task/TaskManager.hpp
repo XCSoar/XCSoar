@@ -307,6 +307,9 @@ public:
    */
   void SetGlidePolar(const GlidePolar &glide_polar) noexcept;
 
+  /** Update air density ratio on task polars (in place). */
+  void SetDensityRatio(double dr) noexcept;
+
   /**
    * Retrieve copy of safety glide polar used by task system
    *

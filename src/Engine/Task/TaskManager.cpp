@@ -405,6 +405,16 @@ TaskManager::SetGlidePolar(const GlidePolar &_glide_polar) noexcept
   safety_polar.SetMC(task_behaviour.safety_mc);
 }
 
+void
+TaskManager::SetDensityRatio(const double dr) noexcept
+{
+  if (!glide_polar.IsValid())
+    return;
+
+  glide_polar.SetDensityRatio(dr);
+  safety_polar.SetDensityRatio(dr);
+}
+
 bool
 TaskManager::UpdateAutoMC(const AircraftState &state_now,
                           const double fallback_mc) noexcept
