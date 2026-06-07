@@ -8,12 +8,19 @@
 #include <memory>
 
 class DisplayBrightness final {
-#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
+#if defined(KOBO) || (defined(__linux__) && !defined(ANDROID))
+  enum class Type {
+    Kobo,
+    Linux,
+  };
+
+  Type type;
   AllocatedPath brightness_path;
   unsigned max_brightness;
   bool writable;
 
-  DisplayBrightness(AllocatedPath &&_brightness_path,
+  DisplayBrightness(Type _type,
+                    AllocatedPath &&_brightness_path,
                     unsigned _max_brightness,
                     bool _writable) noexcept;
 #endif
@@ -23,7 +30,7 @@ public:
   Detect() noexcept;
 
   [[nodiscard]] bool IsWritable() const noexcept {
-#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
+#if defined(KOBO) || (defined(__linux__) && !defined(ANDROID))
     return writable;
 #else
     return false;
