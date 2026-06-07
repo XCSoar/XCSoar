@@ -602,6 +602,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \
 	$(SRC)/Hardware/Battery.cpp \
+	$(SRC)/Hardware/DisplayBrightness.cpp \
 
 ifneq ($(TARGET),ANDROID)
 ifeq ($(TARGET_IS_LINUX),y)
