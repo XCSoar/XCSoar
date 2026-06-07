@@ -48,6 +48,8 @@ public:
   // common accessors for ui and calc clients
   void SetGlidePolar(const GlidePolar &glide_polar) noexcept;
 
+  void SetDensityRatio(double dr) noexcept;
+
   [[gnu::pure]]
   const OrderedTaskSettings GetOrderedTaskSettings() const noexcept;
 
