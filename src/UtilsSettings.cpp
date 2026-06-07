@@ -54,6 +54,7 @@ bool MapFileChanged = false;
 bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
+bool OverlayFileChanged = false;
 bool FlarmFileChanged = false;
 bool RaspFileChanged = false;
 bool ChecklistFileChanged = false;
@@ -74,6 +75,7 @@ SettingsEnter() noexcept
   AirspaceFileChanged = false;
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
+  OverlayFileChanged = false;
   FlarmFileChanged = false;
   RaspFileChanged = false;
   ChecklistFileChanged = false;

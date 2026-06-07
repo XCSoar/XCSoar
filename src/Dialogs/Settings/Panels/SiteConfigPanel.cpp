@@ -21,6 +21,7 @@ enum ControlIndex {
   WatchedWaypointFileList,
   AirfieldFileList,
   AirspaceFileList,
+  OverlayFileList,
   FlarmFile,
   RaspFile,
   ChecklistFile,
@@ -92,6 +93,14 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    GetFileTypePatterns(FileType::AIRSPACE),
                    FileType::AIRSPACE);
 
+  AddMultipleFiles(_("Map overlays"),
+                   _("GeoTIFF images drawn as a semi-transparent overlay "
+                     "on the map (OpenGL only)."),
+                   ProfileKeys::OverlayFileList,
+                   GetFileTypePatterns(FileType::TIFF),
+                   FileType::TIFF);
+  SetExpertRow(OverlayFileList);
+
   AddFile(_("FLARM database"),
           _("The name of the file containing information about registered FLARM devices."),
           ProfileKeys::FlarmFile,
@@ -138,6 +147,9 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   AirspaceFileChanged |= SaveValueMultiFileReader(
       AirspaceFileList, ProfileKeys::AirspaceFileList);
 
+  OverlayFileChanged = SaveValueMultiFileReader(
+      OverlayFileList, ProfileKeys::OverlayFileList);
+
   FlarmFileChanged = SaveValueFileReader(FlarmFile, ProfileKeys::FlarmFile);
 
   AirfieldFileChanged = SaveValueMultiFileReader(
@@ -157,7 +169,7 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   changed = WaypointFileChanged || AirfieldFileChanged ||
             AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
             RaspFileChanged || ChecklistFileChanged ||
-            UserRepositoriesListChanged;
+            OverlayFileChanged || UserRepositoriesListChanged;
 
   _changed |= changed;
 
