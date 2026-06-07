@@ -3,6 +3,10 @@
 
 #include "DisplayBrightness.hpp"
 
+#ifdef KOBO
+#include "Kobo/System.hpp"
+#endif
+
 #include "system/FileUtil.hpp"
 #include "util/NumberParser.hxx"
 
@@ -17,7 +21,7 @@
 #include <fmt/format.h>
 #endif
 
-#if defined(__linux__) && !defined(ANDROID)
+#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
 static std::optional<unsigned>
 ReadUnsigned(Path path) noexcept
 {
@@ -48,7 +52,13 @@ DisplayBrightness::DisplayBrightness(AllocatedPath &&_brightness_path,
 std::unique_ptr<DisplayBrightness>
 DisplayBrightness::Detect() noexcept
 {
-#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
+#ifdef KOBO
+  if (!KoboCanChangeBacklightBrightness())
+    return nullptr;
+
+  return std::unique_ptr<DisplayBrightness>(
+    new DisplayBrightness(nullptr, MAX_BRIGHTNESS_PERCENT, true));
+#elif defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
   struct Visitor final : Directory::DirEntryVisitor {
     unsigned best_max_brightness = 0;
     bool best_writable = false;
@@ -94,9 +104,13 @@ DisplayBrightness::Detect() noexcept
 unsigned
 DisplayBrightness::GetBrightnessPercent() const noexcept
 {
-#if defined(__linux__) && !defined(ANDROID)
+#ifdef KOBO
+  return std::clamp(KoboGetBacklightBrightness(), 0,
+                    (int)MAX_BRIGHTNESS_PERCENT);
+#elif defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
   if (brightness_path == nullptr || max_brightness == 0)
     return 0;
+
   const auto brightness = ReadUnsigned(brightness_path);
   if (!brightness)
     return 0;
@@ -111,7 +125,10 @@ DisplayBrightness::GetBrightnessPercent() const noexcept
 void
 DisplayBrightness::SetBrightnessPercent(unsigned percent) const noexcept
 {
-#ifdef HAVE_POSIX
+#ifdef KOBO
+  KoboSetBacklightBrightness((int)std::clamp(percent, 0u,
+                                              MAX_BRIGHTNESS_PERCENT));
+#elif defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
   if (!writable || max_brightness == 0 || brightness_path == nullptr)
     return;
 
