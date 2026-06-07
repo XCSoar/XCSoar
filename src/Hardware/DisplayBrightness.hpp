@@ -20,7 +20,7 @@ public:
   static constexpr unsigned MAX_BRIGHTNESS_PERCENT = 100;
 
   /**
-   * Detect the brightness control on non-Android Linux platforms.
+   * Detect the brightness control on Kobo and non-Android Linux platforms.
    *
    * @return A brightness control, or `nullptr` when none is supported or
    * available.
@@ -35,7 +35,7 @@ public:
   }
 
   /**
-   * Get the current brightness as a percentage on non-Android Linux.
+   * Get the current brightness as a percentage on Kobo and non-Android Linux.
    *
    * @return A value from zero through MAX_BRIGHTNESS_PERCENT, or zero when
    * reading fails.
@@ -44,7 +44,7 @@ public:
   unsigned GetBrightnessPercent() const noexcept;
 
   /**
-   * Set the brightness on a writable non-Android Linux platform.
+   * Set the brightness on a writable Kobo or non-Android Linux platform.
    *
    * The percentage is clamped from zero through MAX_BRIGHTNESS_PERCENT.
    */
