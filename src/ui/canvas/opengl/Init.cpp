@@ -140,6 +140,9 @@ OpenGL::SetupContext()
   if (auto s = (const char *)glGetString(GL_EXTENSIONS))
     LogFormat("GL extensions: %s", s);
 
+  glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
+  LogFormat("GL max texture size: %d", (int)max_texture_size);
+
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef ANDROID
