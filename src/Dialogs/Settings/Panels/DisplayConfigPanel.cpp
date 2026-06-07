@@ -6,6 +6,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Hardware/DisplayBrightness.hpp"
 #include "Hardware/RotateDisplay.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
@@ -25,12 +26,21 @@
 #include "ui/event/Queue.hpp"
 #endif
 
+#include <memory>
+
+#if defined(KOBO) || (defined(__linux__) && !defined(ANDROID))
+#define HAVE_DISPLAY_BRIGHTNESS_CONTROL
+#endif
+
 enum ControlIndex {
 #ifdef ANDROID
   FullScreen,
 #endif
   Orientation,
   DarkMode,
+#if defined(HAVE_DISPLAY_BRIGHTNESS_CONTROL)
+  ScreenBrightness,
+#endif
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
   CursorInverted,
@@ -62,9 +72,12 @@ static constexpr StaticEnumChoice dark_mode_list[] = {
 };
 
 class DisplayConfigPanel final : public RowFormWidget {
+  std::unique_ptr<DisplayBrightness> brightness;
+
 public:
   DisplayConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     brightness(DisplayBrightness::Detect()) {}
 
 public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -94,6 +107,21 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   AddEnum(_("Dark mode"), nullptr, dark_mode_list,
           (unsigned)ui_settings.dark_mode);
+
+#ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
+  if (brightness != nullptr) {
+    AddInteger(_("Screen brightness"),
+               brightness->IsWritable()
+               ? _("Adjust the screen brightness.")
+               : _("Screen brightness is read-only because writing requires additional permissions."),
+               "%d %%", "%d", 0, 100, 5,
+               brightness->GetBrightnessPercent());
+
+    if (!brightness->IsWritable())
+      SetReadOnly(ScreenBrightness);
+  } else
+    AddDummy();
+#endif
 
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), "%d x", "%d x",
@@ -128,6 +156,15 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
                            ui_settings.dark_mode);
 
+  if (brightness != nullptr && brightness->IsWritable()) {
+#ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
+    const unsigned old_percent = brightness->GetBrightnessPercent();
+    const unsigned new_percent = GetValueInteger(ScreenBrightness);
+    if (new_percent != old_percent)
+      brightness->SetBrightnessPercent(new_percent);
+#endif
+  }
+
 #ifdef DRAW_MOUSE_CURSOR
   changed |= SaveValueInteger(CursorSize, ProfileKeys::CursorSize,
                               ui_settings.display.cursor_size);
@@ -161,3 +198,5 @@ CreateDisplayConfigPanel()
 {
   return std::make_unique<DisplayConfigPanel>();
 }
+
+#undef HAVE_DISPLAY_BRIGHTNESS_CONTROL
