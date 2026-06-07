@@ -32,6 +32,7 @@
 #include "Panels/SafetyFactorsConfigPanel.hpp"
 #include "Panels/RouteConfigPanel.hpp"
 #include "Panels/InterfaceConfigPanel.hpp"
+#include "Panels/DisplayConfigPanel.hpp"
 #include "Panels/LayoutConfigPanel.hpp"
 #include "Panels/GaugesConfigPanel.hpp"
 #include "Panels/VarioConfigPanel.hpp"
@@ -133,7 +134,8 @@ static constexpr TabMenuPage task_pages[] = {
 
 static constexpr TabMenuPage look_pages[] = {
   { N_("Language, Input"), CreateInterfaceConfigPanel },
-  { N_("Screen Layout"), CreateLayoutConfigPanel },
+  { N_("Display"), CreateDisplayConfigPanel },
+  { N_("Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
   { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },
   { nullptr, nullptr }
