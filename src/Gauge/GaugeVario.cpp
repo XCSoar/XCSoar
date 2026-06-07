@@ -587,7 +587,8 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
   // only draw speed command if flying and vario is not circling
   if ((Calculated().flight.flying)
       && (!Basic().gps.simulator || !Calculated().circling)) {
-    v_diff = Calculated().V_stf - Basic().indicated_airspeed;
+    /* V_stf is TAS (density-compensated); compare to actual TAS */
+    v_diff = Calculated().V_stf - Basic().true_airspeed;
     v_diff = std::clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
     v_diff = iround(v_diff/DELTA_V_STEP) * DELTA_V_STEP;
   } else
