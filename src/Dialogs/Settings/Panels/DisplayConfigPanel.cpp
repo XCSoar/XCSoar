@@ -6,6 +6,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Hardware/DisplayBrightness.hpp"
 #include "Hardware/RotateDisplay.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
@@ -28,6 +29,10 @@
 #include "ui/event/Queue.hpp"
 #endif
 
+#include <memory>
+
+static constexpr unsigned MIN_SCREEN_BRIGHTNESS_PERCENT = 10;
+
 enum ControlIndex {
 #ifdef ANDROID
   FullScreen,
@@ -35,6 +40,7 @@ enum ControlIndex {
   Orientation,
   DarkMode,
   AppDisplayType,
+  ScreenBrightness,
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
   CursorInverted,
@@ -82,9 +88,13 @@ static_assert(ARRAY_SIZE(display_type_list) ==
               "display_type_list must match DisplayType::COUNT");
 
 class DisplayConfigPanel final : public RowFormWidget {
+  std::unique_ptr<DisplayBrightness> brightness;
+  bool brightness_modified = false;
+
 public:
   DisplayConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     brightness(DisplayBrightness::Detect()) {}
 
 public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -126,6 +136,24 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
           display_type_list,
           (unsigned)ui_settings.display.display_type);
   SetExpertRow(AppDisplayType);
+
+  if (brightness != nullptr) {
+    AddInteger(_("Screen brightness"),
+               brightness->IsWritable()
+               ? _("Adjust the screen brightness.")
+               : _("Screen brightness is read-only because writing requires additional permissions."),
+               "%d %%", "%d",
+               MIN_SCREEN_BRIGHTNESS_PERCENT,
+               DisplayBrightness::MAX_BRIGHTNESS_PERCENT, 10,
+               brightness->GetBrightnessPercent());
+    GetDataField(ScreenBrightness).SetOnModified([this] {
+      brightness_modified = true;
+    });
+
+    if (!brightness->IsWritable())
+      SetReadOnly(ScreenBrightness);
+  } else
+    AddDummy();
 
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), "%d x", "%d x",
@@ -171,6 +199,14 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
                     ui_settings.display.display_type)) {
     changed = true;
     SetDisplayType(ui_settings.display.display_type);
+  }
+
+  if (brightness_modified && brightness != nullptr &&
+      brightness->IsWritable()) {
+    const unsigned old_percent = brightness->GetBrightnessPercent();
+    const unsigned new_percent = GetValueInteger(ScreenBrightness);
+    if (new_percent != old_percent)
+      brightness->SetBrightnessPercent(new_percent);
   }
 
 #ifdef DRAW_MOUSE_CURSOR
