@@ -4,6 +4,11 @@ Version 7.45 - not yet released
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
     so optimal cruise speeds increase with altitude and best L/D is preserved
     (#1569)
+  - Task manager glide and safety polars use the same density ratio from baro
+    or GPS altitude
+  - Netto vario (when derived from the polar) and vario speed-to-fly
+    push/pull arrows use true airspeed against the density-scaled polar sink
+    and speed-to-fly
 * android
   - BLE serial ports now support Nordic UART Service (NUS) for e.g. Naviter
     dongles, in addition to HM-10; the protocol is auto-detected at connection
@@ -18,6 +23,11 @@ Version 7.45 - not yet released
     ignores the sentence
   - LXNAV: apply device vario filter time ($LXWP3 variofil) to gauge, map
     vario bar, thermal rose, audio vario and snail-trail colouring
+  - Condor 3: new UDP telemetry driver (Condor3UDP) for Simkits generic UDP
+    output (default port 55278); complements TCP/NMEA Condor3 for MacCready,
+    ballast, attitude, radio, and related fields (#2340)
+  - Glide polar sync in the device dialog is only shown for drivers that
+    implement it (LXNAV)
 * ui
   - macOS: thick solid lines now render at their correct pixel width #2545
   - plane details: WeGlide aircraft type can be configured even when WeGlide
@@ -419,8 +429,6 @@ Version 7.44 - 2026-03-22
   - fix segfault when resizing window with software rendering
 * devices
   - Add driver for Condor 3 #1612
-  - Add Condor3 UDP driver for Condor 3 simkits UDP telemetry (UDP listener)
-  - Devices: show glide polar sync only for drivers that implement it (LXNAV)
   - Add driver for LöFGREN variometer #2080
   - Add driver for LX Navigation Eos / Era variometers #389
   - Add driver for Stratux
