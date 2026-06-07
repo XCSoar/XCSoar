@@ -107,13 +107,25 @@ enum class WindArrowStyle: uint8_t {
   NO_ARROW,
 };
 
+/** Blending mode for the GeoTIFF map overlay layer. */
+enum class MapOverlayBlendMode : uint8_t {
+  /** Alpha-blend the overlay over the map. */
+  MIX,
+
+  /** Multiply: white is transparent, black darkens fully. */
+  ADD,
+};
+
 /** Settings for the GeoTIFF map overlay layer. */
 struct OverlayImageSettings {
   /** Opacity in percent (0..100). */
   unsigned opacity;
 
+  MapOverlayBlendMode blend_mode;
+
   void SetDefaults() noexcept {
     opacity = 50;
+    blend_mode = MapOverlayBlendMode::MIX;
   }
 };
 

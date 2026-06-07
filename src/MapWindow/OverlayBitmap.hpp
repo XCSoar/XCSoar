@@ -8,10 +8,12 @@
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
 
+#include <cstdint>
 #include <string>
 
 class Canvas;
 class WindowProjection;
+enum class MapOverlayBlendMode : uint8_t;
 
 /**
  * A georeferenced bitmap that can be rendered in the #MapWindow.
@@ -35,6 +37,8 @@ class MapOverlayBitmap final : public MapOverlay {
   bool use_bitmap_alpha = true;
 
   float alpha = 1;
+
+  MapOverlayBlendMode blend_mode{};
 
   std::string label;
 
@@ -77,6 +81,10 @@ public:
    */
   void SetAlpha(float _alpha) noexcept {
     alpha = _alpha;
+  }
+
+  void SetBlendMode(MapOverlayBlendMode _blend_mode) noexcept {
+    blend_mode = _blend_mode;
   }
 
   /* virtual methods from class MapOverlay */

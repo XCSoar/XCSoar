@@ -102,10 +102,12 @@ inline void
 MapWindow::RenderImageOverlays([[maybe_unused]] Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
-  const float opacity = GetMapSettings().overlay.opacity / 100.0f;
+  const auto &settings = GetMapSettings().overlay;
+  const float opacity = settings.opacity / 100.0f;
   for (const auto &o : image_overlays) {
     o->IgnoreBitmapAlpha();
     o->SetAlpha(opacity);
+    o->SetBlendMode(settings.blend_mode);
     o->Draw(canvas, render_projection);
   }
 #endif

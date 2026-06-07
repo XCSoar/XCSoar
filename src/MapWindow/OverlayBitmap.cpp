@@ -6,6 +6,7 @@
 #include "ui/canvas/opengl/Texture.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
 #include "ui/canvas/opengl/ConstantAlpha.hpp"
+#include "MapSettings.hpp"
 #include "ui/canvas/opengl/VertexPointer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Math/Point2D.hpp"
@@ -144,33 +145,41 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
 
   texture.Bind();
 
-  const ScopeTextureConstantAlpha blend(use_bitmap_alpha, alpha);
-
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
 
-  for (const auto &polygon : clipped) {
-    const auto &ring = polygon.outer();
+  const auto draw_polygons = [&]() {
+    for (const auto &polygon : clipped) {
+      const auto &ring = polygon.outer();
 
-    size_t n = ring.size();
-    if (ring.front() == ring.back())
-      --n;
+      size_t n = ring.size();
+      if (ring.front() == ring.back())
+        --n;
 
-    for (size_t i = 0; i < n; ++i) {
-      const auto v = GeoFrom2D(ring[i]);
+      for (size_t i = 0; i < n; ++i) {
+        const auto v = GeoFrom2D(ring[i]);
 
-      auto p = MapInQuadrilateral(bounds, v);
-      coord[i].x = p.x * x_factor;
-      coord[i].y = p.y * y_factor;
+        auto p = MapInQuadrilateral(bounds, v);
+        coord[i].x = p.x * x_factor;
+        coord[i].y = p.y * y_factor;
 
-      if (bitmap.IsFlipped())
-        coord[i].y = 1 - coord[i].y;
+        if (bitmap.IsFlipped())
+          coord[i].y = 1 - coord[i].y;
 
-      vertices[i] = projection.GeoToScreen(v);
+        vertices[i] = projection.GeoToScreen(v);
+      }
+
+      glDrawArrays(GL_TRIANGLE_FAN, 0, n);
     }
+  };
 
-    glDrawArrays(GL_TRIANGLE_FAN, 0, n);
+  if (blend_mode == MapOverlayBlendMode::ADD) {
+    const ScopeTextureMultiplyAlpha blend(alpha);
+    draw_polygons();
+  } else {
+    const ScopeTextureConstantAlpha blend(use_bitmap_alpha, alpha);
+    draw_polygons();
   }
 
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);

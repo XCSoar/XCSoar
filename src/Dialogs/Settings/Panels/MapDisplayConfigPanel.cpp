@@ -19,6 +19,7 @@ enum ControlIndex {
   MaxAutoZoomDistance,
   PAGES_DISTINCT_ZOOM,
   OverlayOpacity,
+  OverlayBlend,
 };
 
 static constexpr StaticEnumChoice orientation_list[] = {
@@ -32,6 +33,14 @@ static constexpr StaticEnumChoice orientation_list[] = {
     N_("The moving map display will be rotated so the navigation target is oriented up.") },
   { MapOrientation::WIND_UP, N_("Wind up"),
     N_("The moving map display will be rotated so the wind is always oriented up to down. (can be useful for wave flying)") },
+  nullptr
+};
+
+static constexpr StaticEnumChoice overlay_blend_list[] = {
+  { MapOverlayBlendMode::MIX, N_("Mix"),
+    N_("Blend the overlay over the map using only the opacity: Opacity 100% means overlay fully covers the map, opacity 0% would make overlay invisible.") },
+  { MapOverlayBlendMode::ADD, N_("Multiplicative (Draw dark onto map)"),
+    N_("Multiplicative blending of the overlay onto the map, with bright being more transparent: White parts of the overlay are transparent, black parts are fully opaque.") },
   nullptr
 };
 
@@ -135,6 +144,11 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent,
              "%d %%", "%d", 0, 100, 5,
              settings_map.overlay.opacity);
 
+  AddEnum(_("Overlay blending"),
+          _("How the GeoTIFF map overlays are blended onto the map."),
+          overlay_blend_list,
+          (unsigned)settings_map.overlay.blend_mode);
+
   UpdateVisibilities();
 }
 
@@ -171,6 +185,9 @@ MapDisplayConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueInteger(OverlayOpacity, ProfileKeys::OverlayOpacity,
                               settings_map.overlay.opacity);
+
+  changed |= SaveValueEnum(OverlayBlend, ProfileKeys::OverlayBlendMode,
+                           settings_map.overlay.blend_mode);
 
   _changed |= changed;
 
