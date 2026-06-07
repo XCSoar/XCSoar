@@ -321,9 +321,9 @@ KoboWifiOn()
   control_path.Format("/var/run/wpa_supplicant/%s", interface);
   WaitForPath(control_path.c_str(), 3000);
 
-  Run("/sbin/udhcpc", "-S", "-i", interface,
-      "-s", "/etc/udhcpc.d/default.script",
-      "-t15", "-T10", "-A3", "-f", "-q");
+  Start("/sbin/udhcpc", "-S", "-i", interface,
+        "-s", "/etc/udhcpc.d/default.script",
+        "-t15", "-T10", "-A3", "-f", "-q");
 
   return true;
 #else
