@@ -107,6 +107,16 @@ enum class WindArrowStyle: uint8_t {
   NO_ARROW,
 };
 
+/** Settings for the GeoTIFF map overlay layer. */
+struct OverlayImageSettings {
+  /** Opacity in percent (0..100). */
+  unsigned opacity;
+
+  void SetDefaults() noexcept {
+    opacity = 50;
+  }
+};
+
 struct MapSettings {
   /** Map zooms in on circling */
   bool circle_zoom_enabled;
@@ -193,6 +203,9 @@ struct MapSettings {
 
   /** Show 95% distance rule helpers on map and infoboxes */
   bool show_95_percent_rule_helpers;
+
+  /** GeoTIFF map overlay layer */
+  OverlayImageSettings overlay;
 
   void SetDefaults() noexcept;
 };

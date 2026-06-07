@@ -56,6 +56,9 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   settings.waypoint.LoadFromProfile();
 
+  map.Get(ProfileKeys::OverlayOpacity, settings.overlay.opacity);
+  settings.overlay.opacity = std::clamp(settings.overlay.opacity, 0u, 100u);
+
   Load(map, settings.airspace);
 
   map.Get(ProfileKeys::GliderScreenPosition, settings.glider_screen_position);

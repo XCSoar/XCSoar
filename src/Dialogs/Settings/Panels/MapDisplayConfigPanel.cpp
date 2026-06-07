@@ -18,6 +18,7 @@ enum ControlIndex {
   GliderScreenPosition,
   MaxAutoZoomDistance,
   PAGES_DISTINCT_ZOOM,
+  OverlayOpacity,
 };
 
 static constexpr StaticEnumChoice orientation_list[] = {
@@ -129,6 +130,11 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent,
              page_settings.distinct_zoom);
   SetExpertRow(PAGES_DISTINCT_ZOOM);
 
+  AddInteger(_("Overlay opacity"),
+             _("Opacity of the GeoTIFF map overlays."),
+             "%d %%", "%d", 0, 100, 5,
+             settings_map.overlay.opacity);
+
   UpdateVisibilities();
 }
 
@@ -162,6 +168,9 @@ MapDisplayConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(PAGES_DISTINCT_ZOOM, ProfileKeys::PagesDistinctZoom,
                        page_settings.distinct_zoom);
+
+  changed |= SaveValueInteger(OverlayOpacity, ProfileKeys::OverlayOpacity,
+                              settings_map.overlay.opacity);
 
   _changed |= changed;
 

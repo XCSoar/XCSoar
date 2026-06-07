@@ -79,6 +79,7 @@ constexpr std::string_view PolarFile = "PolarFile"; // pL
 constexpr std::string_view WaypointFileList = "WPFileList";           // pL
 constexpr std::string_view WatchedWaypointFileList = "WatchedWPFileList"; // pL
 constexpr std::string_view OverlayFileList = "OverlayFileList"; // pL
+constexpr std::string_view OverlayOpacity = "OverlayOpacity";
 constexpr std::string_view LanguageFile = "LanguageFile"; // pL
 constexpr std::string_view InputFile = "InputFile"; // pL
 constexpr std::string_view ChecklistFile = "ChecklistFile"; // pL
