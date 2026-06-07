@@ -18,7 +18,7 @@ $(eval $(call pkg-config-library,LIBTIFF,libtiff-4))
 LIBTIFF_CPPFLAGS += -DUSE_LIBTIFF
 
 ifeq ($(GEOTIFF),y)
-LIBTIFF_CPPFLAGS += -DUSE_GEOTIFF
+TARGET_CPPFLAGS += -DUSE_GEOTIFF
 ifneq ($(USE_THIRDPARTY_LIBS),y)
 LIBTIFF_CPPFLAGS += -isystem /usr/include/geotiff
 endif
