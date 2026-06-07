@@ -42,6 +42,12 @@ MapWindow::SetOverlay(std::unique_ptr<MapOverlay> &&_overlay) noexcept
   overlay = std::move(_overlay);
 }
 
+void
+MapWindow::SetImageOverlays(std::vector<std::unique_ptr<MapOverlayBitmap>> &&_overlays) noexcept
+{
+  image_overlays = std::move(_overlays);
+}
+
 #endif
 
 void

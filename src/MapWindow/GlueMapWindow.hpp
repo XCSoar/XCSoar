@@ -144,6 +144,13 @@ public:
   void SetTopography(TopographyStore *_topography) noexcept;
   void SetTerrain(RasterTerrain *_terrain) noexcept;
 
+#ifdef ENABLE_OPENGL
+  /**
+   * (Re)load the configured GeoTIFF map overlays from the profile.
+   */
+  void LoadOverlays() noexcept;
+#endif
+
   void SetMapSettings(const MapSettings &new_value) noexcept;
   void SetComputerSettings(const ComputerSettings &new_value) noexcept;
   void SetUIState(const UIState &new_value) noexcept;

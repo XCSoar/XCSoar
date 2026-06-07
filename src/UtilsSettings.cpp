@@ -4,6 +4,7 @@
 #include "UtilsSettings.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -196,6 +197,12 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (RaspFileChanged)
     DataGlobals::SetRasp(LoadConfiguredRasp(false));
+
+#ifdef ENABLE_OPENGL
+  if (OverlayFileChanged)
+    if (GlueMapWindow *map = main_window.GetMap())
+      map->LoadOverlays();
+#endif
 
   if (ChecklistFileChanged)
     dlgChecklistNotifySiteFileChanged();

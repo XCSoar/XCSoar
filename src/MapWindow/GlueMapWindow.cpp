@@ -3,6 +3,14 @@
 
 #include "GlueMapWindow.hpp"
 #include "DrawThread.hpp"
+#ifdef ENABLE_OPENGL
+#include "OverlayBitmap.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/Keys.hpp"
+#include "Repository/FileType.hpp"
+#include "system/Path.hpp"
+#include "LogFile.hpp"
+#endif
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
@@ -58,6 +66,27 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
     terrain_thread =
       new TerrainThread(*_terrain, [this](){ InjectRedraw(); });
 }
+
+#ifdef ENABLE_OPENGL
+
+void
+GlueMapWindow::LoadOverlays() noexcept
+{
+  std::vector<std::unique_ptr<MapOverlayBitmap>> overlays;
+
+  for (const auto &path : Profile::GetMultiplePaths(ProfileKeys::OverlayFileList,
+                                                    GetFileTypePatterns(FileType::TIFF))) {
+    try {
+      overlays.emplace_back(new MapOverlayBitmap(path));
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to load map overlay");
+    }
+  }
+
+  SetImageOverlays(std::move(overlays));
+}
+
+#endif
 
 void
 GlueMapWindow::SetMapSettings(const MapSettings &new_value) noexcept
