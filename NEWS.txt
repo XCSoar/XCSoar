@@ -9,11 +9,6 @@ Version 7.45 - not yet released
   - Netto vario (when derived from the polar) and vario speed-to-fly
     push/pull arrows use true airspeed against the density-scaled polar sink
     and speed-to-fly
-* map
-  - turn back marker: new opt-in overlay (Safety Factors config panel) showing
-    the furthest point along the current track from which the glider can still
-    glide to the active goto/task waypoint; hidden when circling or arrival
-    altitude is zero or below; persisted via profile key TurnBackMarkerEnabled
 * android
   - BLE serial ports now support Nordic UART Service (NUS) for e.g. Naviter
     dongles, in addition to HM-10; the protocol is auto-detected at connection
@@ -136,6 +131,11 @@ Version 7.45 - not yet released
     pre-filtered to recently-used waypoints; listed in the Gesture Help
     dialog with its own icon #336
 * map
+  - turn back marker: new opt-in overlay (Safety Factors config panel) showing
+    a green triangle along the current track indicating the furthest point from
+    which the active task waypoint or Goto target can still be reached with the
+    current altitude and conditions; only shown during cruise when the target
+    is reachable; persisted via profile key TurnBackMarkerEnabled #1741
   - larger on-map typography: default waypoint text, map-scale readout, and
     topography labels
   - map waypoint icons (bitmap and vector landables): new ``Waypoint icon
