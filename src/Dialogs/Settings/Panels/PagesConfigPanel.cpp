@@ -54,10 +54,12 @@ private:
 
   void UpdateOverlayControls() noexcept;
   void FillRaspFieldControl() noexcept;
+  void ApplyValueToForm() noexcept;
 
 public:
   PageLayoutEditWidget(const DialogLook &_look, Listener &_listener)
-    :RowFormWidget(_look), listener(_listener) {}
+    :RowFormWidget(_look), value(PageLayout::Default()),
+     listener(_listener) {}
 
   void SetValue(const PageLayout &_value);
 
@@ -207,11 +209,19 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
   const bool rasp_available = rasp != nullptr && rasp->GetItemCount() > 0;
   const bool rasp_overlay = value.overlay == PageLayout::Overlay::RASP;
 
-  SetRowAvailable(OVERLAY, map_page);
-  SetRowAvailable(RASP_FIELD, map_page && rasp_overlay);
-
   SetRowEnabled(OVERLAY, map_page);
   SetRowEnabled(RASP_FIELD, map_page && rasp_overlay && rasp_available);
+}
+
+void
+PageLayoutEditWidget::ApplyValueToForm() noexcept
+{
+  LoadValueEnum(BOTTOM, value.bottom);
+  GetControl(BOTTOM).RefreshDisplay();
+  LoadValueEnum(OVERLAY, value.overlay);
+  GetControl(OVERLAY).RefreshDisplay();
+  FillRaspFieldControl();
+  UpdateOverlayControls();
 }
 
 void
@@ -274,7 +284,8 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     nullptr
   };
   AddEnum(_("Bottom area"),
-          _("Specifies what should be displayed below the main area."),
+          _("Specifies what should be displayed below the main area. "
+            "Weather controls require a RASP or EDL map overlay."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
 
@@ -287,7 +298,8 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     nullptr
   };
   AddEnum(_("Map overlay"),
-          _("Optional weather overlay drawn on map pages."),
+          _("Optional weather overlay on map pages. "
+            "Use with Weather controls in the bottom area for in-flight adjustment."),
           overlay_list,
           (unsigned)PageLayout::Overlay::NONE, this);
 
@@ -351,11 +363,23 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   } else if (&df == &GetDataField(BOTTOM)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.bottom = (PageLayout::Bottom)dfe.GetValue();
+
+    if (value.bottom == PageLayout::Bottom::EDL_CONTROLS &&
+        value.IsMapMain() &&
+        !value.UsesWeatherOverlay()) {
+#ifdef HAVE_EDL
+      value.overlay = PageLayout::Overlay::EDL;
+#else
+      const auto rasp = DataGlobals::GetRasp();
+      if (rasp != nullptr && rasp->GetItemCount() > 0)
+        value.overlay = PageLayout::Overlay::RASP;
+      else
+        value.bottom = PageLayout::Bottom::NOTHING;
+#endif
+    }
   } else if (&df == &GetDataField(OVERLAY)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.overlay = (PageLayout::Overlay)dfe.GetValue();
-    if (value.overlay == PageLayout::Overlay::RASP)
-      FillRaspFieldControl();
   } else if (&df == &GetDataField(RASP_FIELD)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.rasp_field = dfe.GetValue();
@@ -364,9 +388,7 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   }
 
   value.Normalise();
-  LoadValueEnum(BOTTOM, value.bottom);
-  GetControl(BOTTOM).RefreshDisplay();
-  UpdateOverlayControls();
+  ApplyValueToForm();
   listener.OnModified(value);
 }
 
