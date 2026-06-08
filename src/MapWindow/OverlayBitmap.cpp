@@ -165,7 +165,11 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
         coord[i].y = p.y * y_factor;
 
         if (bitmap.IsFlipped())
-          coord[i].y = 1 - coord[i].y;
+          /* flip within the image's valid texture region, not the
+             whole allocated texture: when the texture is padded to a
+             power-of-two (no GL_..._npot), y_factor < 1, and flipping
+             around 1.0 would sample the uninitialised padding */
+          coord[i].y = y_factor - coord[i].y;
 
         vertices[i] = projection.GeoToScreen(v);
       }
