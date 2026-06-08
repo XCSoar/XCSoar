@@ -132,27 +132,90 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
     /* not visible, outside of screen area */
     return;
 
-  auto clipped = Clip(bounds, projection.GetScreenBounds());
-  if (clipped.empty())
-    return;
-
   GLTexture &texture = *bitmap.GetNative();
   const PixelSize allocated = texture.GetAllocatedSize();
   const double x_factor = double(texture.GetWidth()) / allocated.width;
   const double y_factor = double(texture.GetHeight()) / allocated.height;
+  const bool flipped = bitmap.IsFlipped();
 
-  Point2D<GLfloat> coord[16];
-  BulkPixelPoint vertices[16];
+  /* Map a relative raster position (u,v in 0..1, from the top-left) to a
+     texture coordinate. Accounts for the power-of-two padding-
+     and image flipping. The result is clamped to the initialised
+     region when padded. */
+  const auto texcoord = [x_factor, y_factor, flipped](double u, double v) {
+    double tx = u * x_factor;
+    double ty = v * y_factor;
+    if (flipped)
+      ty = y_factor - ty;
 
-  const ScopeVertexPointer vp(vertices);
+    Point2D<GLfloat> c;
+    c.x = std::clamp(tx, 0.0, double(x_factor));
+    c.y = std::clamp(ty, 0.0, double(y_factor));
+    return c;
+  };
 
   texture.Bind();
-
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
-                        0, coord);
 
-  const auto draw_polygons = [&]() {
+  /* Curved-projection overlays carry a subdivision mesh. In that
+     case, draw it cell by cell, each node textured with its exact 
+     texture coordinate and positioned by its own GeoToScreen(). */
+  const auto draw_mesh = [&]() {
+    const GeoBounds screen_bounds = projection.GetScreenBounds();
+
+    Point2D<GLfloat> coord[4];
+    BulkPixelPoint vertices[4]{};
+    const ScopeVertexPointer vp(vertices);
+    glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
+                          0, coord);
+
+    const unsigned nx = grid.nx, ny = grid.ny;
+    for (unsigned j = 0; j < ny; ++j) {
+      for (unsigned i = 0; i < nx; ++i) {
+        const GeoPoint tl = grid.At(i, j), tr = grid.At(i + 1, j);
+        const GeoPoint bl = grid.At(i, j + 1), br = grid.At(i + 1, j + 1);
+
+        /* skip cells that are entirely off-screen */
+        GeoBounds cell = GeoBounds::Invalid();
+        cell.Extend(tl);
+        cell.Extend(tr);
+        cell.Extend(bl);
+        cell.Extend(br);
+        if (!cell.Overlaps(screen_bounds))
+          continue;
+
+        const double u0 = double(i) / nx, u1 = double(i + 1) / nx;
+        const double v0 = double(j) / ny, v1 = double(j + 1) / ny;
+
+        /* GL_TRIANGLE_STRIP order: top-left, top-right, bottom-left,
+           bottom-right */
+        coord[0] = texcoord(u0, v0);
+        vertices[0] = projection.GeoToScreen(tl);
+        coord[1] = texcoord(u1, v0);
+        vertices[1] = projection.GeoToScreen(tr);
+        coord[2] = texcoord(u0, v1);
+        vertices[2] = projection.GeoToScreen(bl);
+        coord[3] = texcoord(u1, v1);
+        vertices[3] = projection.GeoToScreen(br);
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+      }
+    }
+  };
+
+  /* A single quadrilateral (flat rasters, e.g. weather overlays): clip to the
+     screen and simply texture via the bilinear inverse */
+  const auto draw_single_quad = [&]() {
+    const auto clipped = Clip(bounds, projection.GetScreenBounds());
+    if (clipped.empty())
+      return;
+
+    Point2D<GLfloat> coord[16];
+    BulkPixelPoint vertices[16];
+    const ScopeVertexPointer vp(vertices);
+    glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
+                          0, coord);
+
     for (const auto &polygon : clipped) {
       const auto &ring = polygon.outer();
 
@@ -162,27 +225,8 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
 
       for (size_t i = 0; i < n; ++i) {
         const auto v = GeoFrom2D(ring[i]);
-
-        auto p = MapInQuadrilateral(bounds, v);
-
-        double tx = p.x * x_factor;
-        double ty = p.y * y_factor;
-
-        if (bitmap.IsFlipped())
-          /* flip within the image's valid texture region, not the
-             whole allocated texture: when the texture is padded to a
-             power-of-two (no GL_..._npot), y_factor < 1, and flipping
-             around 1.0 would sample the uninitialised padding */
-          ty = y_factor - ty;
-
-        /* clamp to the valid texture region: when the texture is
-           padded to a power-of-two, the area beyond [x_factor,y_factor]
-           is uninitialised. This clamp avoids a sampling outside the
-           initialized region, that would cause a {-1,-1} in
-           MapInQuadrilateral and also against texel bleed at edge */
-        coord[i].x = std::clamp(tx, 0.0, double(x_factor));
-        coord[i].y = std::clamp(ty, 0.0, double(y_factor));
-
+        const auto p = MapInQuadrilateral(bounds, v);
+        coord[i] = texcoord(p.x, p.y);
         vertices[i] = projection.GeoToScreen(v);
       }
 
@@ -190,12 +234,19 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
     }
   };
 
+  const auto render = [&]() {
+    if (grid.IsMesh())
+      draw_mesh();
+    else
+      draw_single_quad();
+  };
+
   if (blend_mode == MapOverlayBlendMode::ADD) {
     const ScopeTextureMultiplyAlpha blend(alpha);
-    draw_polygons();
+    render();
   } else {
     const ScopeTextureConstantAlpha blend(use_bitmap_alpha, alpha);
-    draw_polygons();
+    render();
   }
 
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
