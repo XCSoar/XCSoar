@@ -14,6 +14,13 @@ Version 7.45 - not yet released
   - LXNAV: apply device vario filter time ($LXWP3 variofil) to gauge, map
     vario bar, thermal rose, audio vario and snail-trail colouring
 * ui
+  - fix crash when switching pages from FLARM radar or thermal assistant back
+    to a map page that has a bottom widget configured (#2583)
+  - airspace warnings: fix crash when the warning clears if the bottom page
+    was already restored
+  - pages config: map overlay and RASP layer rows stay visible on non-map
+    pages (disabled instead of hidden); weather controls and overlay
+    selection are decoupled (#2583)
   - macOS: thick solid lines now render at their correct pixel width #2545
   - plane details: WeGlide aircraft type can be configured even when WeGlide
     upload is disabled #2323

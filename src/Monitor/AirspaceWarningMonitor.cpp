@@ -18,6 +18,7 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "LogFile.hpp"
+#include "MainWindow.hpp"
 #include "Message.hpp"
 
 #include <exception>
@@ -120,9 +121,13 @@ AirspaceWarningMonitor::Reset() noexcept
 void
 AirspaceWarningMonitor::HideWidget() noexcept
 {
-  if (widget != nullptr)
-    PageActions::RestoreBottom();
-  assert(widget == nullptr);
+  if (widget == nullptr)
+    return;
+
+  PageActions::RestoreBottom();
+
+  if (widget != nullptr && CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->SetBottomWidget(nullptr);
 }
 
 void

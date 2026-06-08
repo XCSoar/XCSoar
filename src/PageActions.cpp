@@ -424,13 +424,15 @@ PageActions::RestoreBottom()
     return;
 
   const PageLayout &configured_page = GetConfiguredLayout();
-  if (special_page.bottom == configured_page.bottom)
-    return;
 
-  special_page.bottom = configured_page.bottom;
-  if (special_page == configured_page)
-    special_page.SetUndefined();
+  if (special_page.bottom != configured_page.bottom) {
+    special_page.bottom = configured_page.bottom;
+    if (special_page == configured_page)
+      special_page.SetUndefined();
+  }
 
+  /* Always apply the configured bottom.  A prior restore may have updated
+     special_page.bottom without tearing down a SetCustomBottom widget. */
   LoadBottom(configured_page);
 }
 
