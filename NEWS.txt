@@ -37,6 +37,7 @@ Version 7.45 - not yet released
     pages (disabled instead of hidden); weather controls and overlay
     selection are decoupled (#2583)
   - macOS: thick solid lines now render at their correct pixel width #2545
+  - Android: fix spurious outline lines on high-DPI OpenGL displays #1514
   - plane details: WeGlide aircraft type can be configured even when WeGlide
     upload is disabled #2323
   - status dialog, Times: flight time matches takeoff and landing after
