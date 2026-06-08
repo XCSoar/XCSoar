@@ -347,10 +347,9 @@ LoadMain(PageLayout::Main main)
 static void
 LoadBottom(const PageLayout &layout)
 {
-  /* The XCTherm cursor widget is installed here ONLY when the user
-     explicitly selects it as a page's Bottom area in Aussehen → Seiten
-     (Config → System → Pages). Never auto-installed. Same opt-in model
-     as CrossSection. */
+  /* Weather controls bottom widget is opt-in (Config → System → Pages).
+     EDL/RASP use MapOverlayControlsWidget; XCTherm overlay uses
+     XCThermControlsWidget. Same opt-in model as Cross Section. */
   switch (layout.bottom) {
   case PageLayout::Bottom::NOTHING:
     CommonInterface::main_window->SetBottomWidget(nullptr);
@@ -361,6 +360,16 @@ LoadBottom(const PageLayout &layout)
     break;
 
   case PageLayout::Bottom::EDL_CONTROLS:
+#ifdef HAVE_HTTP
+    if (layout.overlay == PageLayout::Overlay::XCTHERM) {
+      if (XCThermAPI::Instance().HasAnyCache())
+        CommonInterface::main_window->SetBottomWidget(
+          new XCThermControlsWidget());
+      else
+        CommonInterface::main_window->SetBottomWidget(nullptr);
+      break;
+    }
+#endif
 #ifdef HAVE_EDL
     {
       auto widget = CreateMapOverlayControlsBottomWidget(layout.overlay);
@@ -373,12 +382,9 @@ LoadBottom(const PageLayout &layout)
 
 #ifdef HAVE_HTTP
   case PageLayout::Bottom::XCTHERM:
-    /* The user explicitly chose XCTherm as this page's bottom widget.
-       If they haven't downloaded any forecast yet, installing the
-       cursor bar would just show a permanent "No data" strip — confusing.
-       Collapse to no bottom widget instead; the next page load (after
-       a successful download) will recreate it. */
-    if (XCThermAPI::Instance().HasAnyCache())
+    /* Legacy profile value — Normalise() maps to EDL_CONTROLS. */
+    if (layout.overlay == PageLayout::Overlay::XCTHERM &&
+        XCThermAPI::Instance().HasAnyCache())
       CommonInterface::main_window->SetBottomWidget(new XCThermControlsWidget());
     else
       CommonInterface::main_window->SetBottomWidget(nullptr);

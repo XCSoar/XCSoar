@@ -23,20 +23,23 @@ PageLayout::Normalise() noexcept
     overlay = Overlay::NONE;
 
   if (IsMapMain()) {
-    if (overlay == Overlay::EDL || overlay == Overlay::RASP) {
+    /* Legacy profiles used Bottom::XCTHERM; fold into weather controls. */
+    if (bottom == Bottom::XCTHERM) {
+      bottom = Bottom::EDL_CONTROLS;
+      if (overlay == Overlay::NONE)
+        overlay = Overlay::XCTHERM;
+    }
+
+    if (overlay == Overlay::EDL || overlay == Overlay::RASP ||
+        overlay == Overlay::XCTHERM) {
       if (bottom == Bottom::NOTHING)
         bottom = Bottom::EDL_CONTROLS;
-    } else if (overlay == Overlay::XCTHERM) {
-      if (bottom == Bottom::NOTHING)
-        bottom = Bottom::XCTHERM;
     } else if (!UsesWeatherOverlay() &&
                bottom == Bottom::EDL_CONTROLS)
       bottom = Bottom::NOTHING;
   } else {
     overlay = Overlay::NONE;
-    if (bottom == Bottom::EDL_CONTROLS)
-      bottom = Bottom::NOTHING;
-    else if (bottom == Bottom::XCTHERM)
+    if (bottom == Bottom::EDL_CONTROLS || bottom == Bottom::XCTHERM)
       bottom = Bottom::NOTHING;
   }
 
@@ -155,7 +158,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
       break;
 
     case Bottom::XCTHERM:
-      builder.Append(", XCTherm");
+      /* Migrated to EDL_CONTROLS in Normalise(); title uses overlay. */
       break;
 
     case Bottom::MAX:
