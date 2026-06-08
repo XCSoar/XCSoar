@@ -20,7 +20,7 @@ env:
   TARGET_FINAL: XCSoar-docs
   TARGET_EXT: pdf
 jobs:
-  xcsoar-compile:
+  manual-pdf:
     runs-on: ubuntu-24.04
     container: debian:trixie-slim
     steps:
