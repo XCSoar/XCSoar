@@ -102,8 +102,12 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(RiskFactor);
 
   AddBoolean(_("Turn back marker"),
-             _("Show a marker indicating the point of no return "
-               "based on current conditions."),
+             _("Show a green triangle on the map along the current track "
+               "indicating the furthest point from which the active task "
+               "waypoint or Goto target can still be reached with the "
+               "current altitude and conditions. "
+               "The triangle is only shown during cruise when the target "
+               "is reachable."),
              task_behaviour.turn_back_marker_enabled);
 }
 
