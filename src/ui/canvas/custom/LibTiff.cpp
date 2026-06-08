@@ -21,6 +21,11 @@
 #include <geo_normalize.h>
 #include <geovalues.h>
 #include <xtiffio.h>
+
+#include <proj.h>
+
+#include <cmath>
+#include <cstdio>
 #endif
 
 static TIFF *
@@ -104,18 +109,72 @@ LoadTiff(Path path)
 
 #ifdef USE_GEOTIFF
 
-static GeoPoint
-TiffPixelToGeoPoint(GTIF &gtif, GTIFDefn &defn, double x, double y)
-{
-  if (!GTIFImageToPCS(&gtif, &x, &y))
-    return GeoPoint::Invalid();
+/**
+ * Converts GeoTIFF raster pixel coordinates to WGS84 geographic
+ * coordinates. The raster->model step uses libgeotiff, the model->WGS84
+ * step uses PROJ with the file's CRS so the geodetic datum shift is
+ * applied. The EPSG code is used for the datum shift.
+ * If the source CRS is not a usable EPSG code, it falls back to
+ * GTIFProj4ToLatLong() (no datum shift) as a best effort.
+ */
+class GeoTiffTransform {
+  GTIF &gtif;
+  GTIFDefn &defn;
 
-  if (defn.Model != ModelTypeGeographic &&
-      !GTIFProj4ToLatLong(&defn, 1, &x, &y))
-    return GeoPoint::Invalid();
+  PJ_CONTEXT *ctx = nullptr;
+  PJ *pj = nullptr;
 
-  return GeoPoint(Angle::Degrees(x), Angle::Degrees(y));
-}
+public:
+  GeoTiffTransform(GTIF &_gtif, GTIFDefn &_defn) noexcept
+    :gtif(_gtif), defn(_defn) {
+    char src[32];
+    if (defn.Model == ModelTypeProjected &&
+        defn.PCS != KvUserDefined && defn.PCS != 0)
+      snprintf(src, sizeof(src), "EPSG:%d", defn.PCS);
+    else if (defn.Model == ModelTypeGeographic &&
+             defn.GCS != KvUserDefined && defn.GCS != 0)
+      snprintf(src, sizeof(src), "EPSG:%d", defn.GCS);
+    else
+      /* no usable EPSG code: leave pj==nullptr and fall back */
+      return;
+
+    ctx = proj_context_create();
+    if (PJ *p = proj_create_crs_to_crs(ctx, src, "EPSG:4326", nullptr)) {
+      /* normalise axis order to (easting/longitude, northing/latitude)
+         on input and (longitude, latitude) on output */
+      pj = proj_normalize_for_visualization(ctx, p);
+      proj_destroy(p);
+    }
+  }
+
+  ~GeoTiffTransform() noexcept {
+    if (pj != nullptr)
+      proj_destroy(pj);
+    if (ctx != nullptr)
+      proj_context_destroy(ctx);
+  }
+
+  GeoTiffTransform(const GeoTiffTransform &) = delete;
+  GeoTiffTransform &operator=(const GeoTiffTransform &) = delete;
+
+  GeoPoint PixelToGeoPoint(double x, double y) const noexcept {
+    if (!GTIFImageToPCS(&gtif, &x, &y))
+      return GeoPoint::Invalid();
+
+    if (pj != nullptr) {
+      const PJ_COORD c = proj_trans(pj, PJ_FWD, proj_coord(x, y, 0, 0));
+      if (!std::isfinite(c.xy.x) || !std::isfinite(c.xy.y))
+        return GeoPoint::Invalid();
+      return GeoPoint(Angle::Degrees(c.xy.x), Angle::Degrees(c.xy.y));
+    }
+
+    /* fall back: invert the projection without a datum shift */
+    if (defn.Model != ModelTypeGeographic &&
+        !GTIFProj4ToLatLong(&defn, 1, &x, &y))
+      return GeoPoint::Invalid();
+    return GeoPoint(Angle::Degrees(x), Angle::Degrees(y));
+  }
+};
 
 std::pair<UncompressedImage, GeoQuadrilateral>
 LoadGeoTiff(Path path)
@@ -139,10 +198,11 @@ LoadGeoTiff(Path path)
     tiff.GetField(TIFFTAG_IMAGEWIDTH, width);
     tiff.GetField(TIFFTAG_IMAGELENGTH, height);
 
-    bounds.top_left = TiffPixelToGeoPoint(*gtif, defn, 0, 0);
-    bounds.top_right = TiffPixelToGeoPoint(*gtif, defn, width, 0);
-    bounds.bottom_left = TiffPixelToGeoPoint(*gtif, defn, 0, height);
-    bounds.bottom_right = TiffPixelToGeoPoint(*gtif, defn, width, height);
+    const GeoTiffTransform transform(*gtif, defn);
+    bounds.top_left = transform.PixelToGeoPoint(0, 0);
+    bounds.top_right = transform.PixelToGeoPoint(width, 0);
+    bounds.bottom_left = transform.PixelToGeoPoint(0, height);
+    bounds.bottom_right = transform.PixelToGeoPoint(width, height);
 
     if (!bounds.Check())
       throw std::runtime_error("Invalid GeoTIFF bounds");

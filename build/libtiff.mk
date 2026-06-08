@@ -23,9 +23,7 @@ ifneq ($(USE_THIRDPARTY_LIBS),y)
 LIBTIFF_CPPFLAGS += -isystem /usr/include/geotiff
 endif
 LIBTIFF_LDLIBS += -lgeotiff
-endif
 
-ifeq ($(GEOTIFF)$(USE_THIRDPARTY_LIBS),yy)
 $(eval $(call pkg-config-library,PROJ,proj))
 LIBTIFF_CPPFLAGS += $(PROJ_CPPFLAGS)
 LIBTIFF_LDLIBS += $(PROJ_LDLIBS)
