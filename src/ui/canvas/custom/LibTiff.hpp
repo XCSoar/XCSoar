@@ -7,7 +7,7 @@
 
 class Path;
 class UncompressedImage;
-struct GeoQuadrilateral;
+struct GeoReferencedGrid;
 
 /**
  * Load a TIFF file.  Throws a std::runtime_error on error.
@@ -18,7 +18,7 @@ LoadTiff(Path path);
 /**
  * Load a GeoTIFF file.  Throws a std::runtime_error on error.
  *
- * @return the image and its geographic bounds
+ * @return the image and its georeference grid
  */
-std::pair<UncompressedImage, GeoQuadrilateral>
+std::pair<UncompressedImage, GeoReferencedGrid>
 LoadGeoTiff(Path path);

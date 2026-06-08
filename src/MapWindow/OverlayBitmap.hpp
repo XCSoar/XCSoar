@@ -7,6 +7,7 @@
 #include "ui/canvas/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "Geo/ReferencedGrid.hpp"
 
 #include <cstdint>
 #include <string>
@@ -24,7 +25,15 @@ class MapOverlayBitmap final : public MapOverlay {
   Bitmap bitmap;
 
   /**
-   * The geo reference for #bitmap.
+   * The geo reference grid for #bitmap. A 1x1 grid (the four corners)
+   * for bitmaps loaded with a single quadrilateral, or a finer mesh for
+   * GeoTIFF with curved projection.
+   */
+  GeoReferencedGrid grid;
+
+  /**
+   * The four outer corners of #grid, for the single-quadrilateral draw
+   * path and for IsInside().
    */
   GeoQuadrilateral bounds;
 
@@ -59,7 +68,7 @@ public:
    */
   MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds,
                    std::string::const_pointer _label) noexcept
-    :bitmap(std::move(_bitmap)), bounds(_bounds),
+    :bitmap(std::move(_bitmap)), grid(_bounds), bounds(_bounds),
      simple_bounds(bounds.GetBounds()),
      label(_label) {}
 
