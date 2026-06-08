@@ -4,12 +4,14 @@ on:
   push:
     paths:
       - 'doc/**'
+      - '.readthedocs.yaml'
       - '.github/workflows/build-docs.yml'
     branches:
       - master
   pull_request:
     paths:
       - 'doc/**'
+      - '.readthedocs.yaml'
       - '.github/workflows/build-docs.yml'
     branches:
       - master
@@ -48,3 +50,20 @@ jobs:
        with:
          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}
          path: output/${{ env.DOC_OUTPUT }}/*.${{ env.TARGET_EXT }}
+
+  readthedocs-sphinx:
+    runs-on: ubuntu-24.04
+    steps:
+     - uses: actions/checkout@v6
+       with:
+         submodules: false
+
+     - uses: actions/setup-python@v5
+       with:
+         python-version: '3.12'
+
+     - name: Install Sphinx dependencies
+       run: pip install -r doc/requirements.txt
+
+     - name: Build Sphinx HTML
+       run: sphinx-build -b html doc/ output/sphinx-html
