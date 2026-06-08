@@ -97,8 +97,8 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    _("GeoTIFF images drawn as a semi-transparent overlay "
                      "on the map (OpenGL only)."),
                    ProfileKeys::OverlayFileList,
-                   GetFileTypePatterns(FileType::TIFF),
-                   FileType::TIFF);
+                   GetFileTypePatterns(FileType::GEOTIFF),
+                   FileType::GEOTIFF);
   SetExpertRow(OverlayFileList);
 
   AddFile(_("FLARM database"),

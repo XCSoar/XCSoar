@@ -75,7 +75,7 @@ GlueMapWindow::LoadOverlays() noexcept
   std::vector<std::unique_ptr<MapOverlayBitmap>> overlays;
 
   for (const auto &path : Profile::GetMultiplePaths(ProfileKeys::OverlayFileList,
-                                                    GetFileTypePatterns(FileType::TIFF))) {
+                                                    GetFileTypePatterns(FileType::GEOTIFF))) {
     try {
       overlays.emplace_back(new MapOverlayBitmap(path));
     } catch (...) {
