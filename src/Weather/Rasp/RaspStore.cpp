@@ -6,7 +6,9 @@
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "system/ConvertPathName.hpp"
+#include "system/FileUtil.hpp"
 #include "system/Path.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "io/ZipArchive.hpp"
 #include "util/StringCompare.hxx"
 #include "util/Macros.hpp"
@@ -79,6 +81,23 @@ RaspStore::MapItem::MapItem(const char *_name)
   :name(_name)
 {
   std::fill_n(times, ARRAY_SIZE(times), false);
+}
+
+BrokenDateTime
+RaspStore::GetFileModifiedTime() const noexcept
+{
+  if (path == nullptr || path.empty() || !File::Exists(path))
+    return BrokenDateTime::Invalid();
+
+  const auto modified = File::GetLastModification(path);
+  if (modified == std::chrono::system_clock::time_point{})
+    return BrokenDateTime::Invalid();
+
+  const BrokenDateTime dt{modified};
+  if (!dt.IsPlausible())
+    return BrokenDateTime::Invalid();
+
+  return dt.ToLocal();
 }
 
 BrokenTime
