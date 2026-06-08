@@ -1544,6 +1544,11 @@ TestCondor3UDP()
   ok1(info.settings.has_active_frequency);
   ok1(info.settings.active_frequency.GetKiloHertz() == 123500u);
 
+  next_step();
+  ok1(device->ParseNMEA("bank=0.5", info));
+  ok1(info.attitude.bank_angle_available);
+  ok1(equals(info.attitude.bank_angle.Radians(), -0.5));
+
   delete device;
 }
 
@@ -3016,7 +3021,7 @@ int main()
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
-             + 47 /* Condor3UDP */);
+             + 50 /* Condor3UDP */);
   TestGeneric();
   TestTasman();
   TestFLARM();

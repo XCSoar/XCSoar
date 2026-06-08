@@ -111,7 +111,8 @@ class Condor3UDPDevice final : public AbstractDevice {
     }
 
     if (StringIsEqualIgnoreCase(key, "bank"sv)) {
-      info.attitude.bank_angle = Angle::Radians(value);
+      /* Condor bank sign is opposite XCSoar (positive = right wing down). */
+      info.attitude.bank_angle = Angle::Radians(-value);
       info.attitude.bank_angle_available.Update(info.clock);
       return true;
     }
