@@ -15,6 +15,8 @@
 #include "system/Path.hpp"
 #include "util/StaticArray.hxx"
 
+#include <algorithm>
+
 #include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/geometries/multi_polygon.hpp>
@@ -161,15 +163,24 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
         const auto v = GeoFrom2D(ring[i]);
 
         auto p = MapInQuadrilateral(bounds, v);
-        coord[i].x = p.x * x_factor;
-        coord[i].y = p.y * y_factor;
+
+        double tx = p.x * x_factor;
+        double ty = p.y * y_factor;
 
         if (bitmap.IsFlipped())
           /* flip within the image's valid texture region, not the
              whole allocated texture: when the texture is padded to a
              power-of-two (no GL_..._npot), y_factor < 1, and flipping
              around 1.0 would sample the uninitialised padding */
-          coord[i].y = y_factor - coord[i].y;
+          ty = y_factor - ty;
+
+        /* clamp to the valid texture region: when the texture is
+           padded to a power-of-two, the area beyond [x_factor,y_factor]
+           is uninitialised. This clamp avoids a sampling outside the
+           initialized region, that would cause a {-1,-1} in
+           MapInQuadrilateral and also against texel bleed at edge */
+        coord[i].x = std::clamp(tx, 0.0, double(x_factor));
+        coord[i].y = std::clamp(ty, 0.0, double(y_factor));
 
         vertices[i] = projection.GeoToScreen(v);
       }
