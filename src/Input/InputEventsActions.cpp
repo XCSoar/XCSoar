@@ -800,6 +800,7 @@ InputEvents::eventUploadIGCFile([[maybe_unused]] const char *misc) {
   FileDataField df;
   df.ScanMultiplePatterns("*.igc\0");
   df.SetFileType(FileType::IGC);
+  df.Sort(FileDataField::SortOrder::DESCENDING, false);
   if (FilePicker("IGC-FilePicker", df)) {
     auto path = df.GetValue();
     if (!path.empty())
