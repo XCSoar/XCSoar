@@ -26,6 +26,7 @@
 struct DialogLook;
 struct StaticEnumChoice;
 class Angle;
+class FileDataField;
 class RoughTimeDelta;
 class Path;
 class Button;
@@ -650,6 +651,12 @@ public:
 
   [[gnu::pure]]
   Path GetValueFile(unsigned i) const noexcept;
+
+  [[gnu::pure]]
+  FileDataField &GetFileDataField(unsigned i) noexcept;
+
+  [[gnu::pure]]
+  const FileDataField &GetFileDataField(unsigned i) const noexcept;
 
   [[gnu::pure]]
   const char *GetValueString(unsigned i) const noexcept {

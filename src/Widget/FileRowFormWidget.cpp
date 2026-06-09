@@ -10,9 +10,23 @@
 Path
 RowFormWidget::GetValueFile(unsigned i) const noexcept
 {
+  return GetFileDataField(i).GetValue();
+}
+
+FileDataField &
+RowFormWidget::GetFileDataField(unsigned i) noexcept
+{
+  auto &df = (FileDataField &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::FILE);
+  return df;
+}
+
+const FileDataField &
+RowFormWidget::GetFileDataField(unsigned i) const noexcept
+{
   const auto &df = (const FileDataField &)GetDataField(i);
   assert(df.GetType() == DataField::Type::FILE);
-  return df.GetValue();
+  return df;
 }
 
 void
