@@ -73,6 +73,10 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
 
   const Angle heading = basic.attitude.heading;
 
+  const double vario = basic.netto_vario_available
+    ? basic.FilteredNettoVario()
+    : basic.FilteredBruttoVario();
+
   // Start at the last heading and add heading_step until the current heading
   // is reached. For each heading save the current lift value into the
   // LiftDatabase. Last and current heading are included since they are
@@ -89,7 +93,7 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
        left == (heading - h).AsDelta().IsNegative();
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    lift_database[index] = basic.FilteredBruttoVario();
+    lift_database[index] = vario;
   }
 
   // detect zero crossing
