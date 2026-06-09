@@ -137,11 +137,12 @@ void
 InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
                                      const PixelRect &rc) noexcept
 {
-  if (CommonInterface::Basic().acceleration.available) {
-    const Look &look = UIGlobals::GetLook();
-    HorizonRenderer::Draw(canvas, rc,
-                          look.horizon, CommonInterface::Basic().attitude);
-  }
+  const auto &attitude = CommonInterface::Basic().attitude;
+  if (!attitude.bank_angle_available && !attitude.pitch_angle_available)
+    return;
+
+  const Look &look = UIGlobals::GetLook();
+  HorizonRenderer::Draw(canvas, rc, look.horizon, attitude);
 }
 
 void
