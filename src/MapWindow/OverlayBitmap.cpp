@@ -22,6 +22,7 @@
 #include <boost/geometry/geometries/multi_polygon.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
 #include <boost/geometry/algorithms/covered_by.hpp>
+#include <boost/geometry/algorithms/correct.hpp>
 #include <boost/geometry/strategies/strategies.hpp>
 
 using ArrayQuadrilateral = StaticArray<DoublePoint2D, 5>;
@@ -80,10 +81,19 @@ ToBox(const GeoBounds b) noexcept
 static ArrayQuadrilateral
 ToArrayQuadrilateral(const GeoQuadrilateral q) noexcept
 {
-  return {GeoTo2D(q.top_left), GeoTo2D(q.top_right),
+  ArrayQuadrilateral ring{GeoTo2D(q.top_left), GeoTo2D(q.top_right),
       GeoTo2D(q.bottom_right), GeoTo2D(q.bottom_left),
       /* close the ring: */
       GeoTo2D(q.top_left) };
+
+  /* Normalise the winding order: boost::geometry expects clockwise outer rings;
+     a counter-clockwise one makes intersection() return an empty result,
+     so normalize the ring just in case.
+     This can happen e.g. if a a GeoTIFF is stored "south up" (negative
+     ModelPixelScale Y), or if some other unusual geotransform is used.
+   */
+  boost::geometry::correct(ring);
+  return ring;
 }
 
 /**
