@@ -11,6 +11,7 @@
 #include "Form/DataField/Base.hpp"
 #include "Language/Language.hpp"
 #include "Repository/FileType.hpp"
+#include "Form/DataField/File.hpp"
 
 class ReplayControlWidget final
   : public RowFormWidget
@@ -52,7 +53,9 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
           {},
           {FileType::NMEA, FileType::IGC},
           true);
+  auto &file_df = (FileDataField &)GetDataField(FILE);
   LoadValue(FILE, replay.GetFilename());
+  file_df.Sort(FileDataField::SortOrder::DESCENDING, true);
 
   AddFloat(_("Rate"),
            _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
