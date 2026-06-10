@@ -4,6 +4,7 @@
 #pragma once
 
 #include "MapItem.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 
 class MapOverlay;
 
@@ -14,6 +15,9 @@ struct RaspMapItem : public MapItem
 {
   const StaticString<64> label;
 
-  explicit RaspMapItem(const char *_label)
-    :MapItem(Type::RASP), label(_label) {}
+  /** The field value at the queried location. */
+  const RaspFieldValue value;
+
+  RaspMapItem(const char *_label, const RaspFieldValue &_value)
+    :MapItem(Type::RASP), label(_label), value(_value) {}
 };
