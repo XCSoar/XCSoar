@@ -383,7 +383,7 @@ InputEvents::eventTaskTransition(const char *misc)
     }
     Message::AddMessage(_("Task start"), TempAll.c_str());
   } else if (StringIsEqual(misc, "next")) {
-    Message::AddMessage(_("Next turnpoint"));
+    Message::AddMessage(_("Next Turnpoint"));
   } else if (StringIsEqual(misc, "finish")) {
     Message::AddMessage(_("Task finished"));
   }
