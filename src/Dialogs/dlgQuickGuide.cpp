@@ -231,7 +231,7 @@ GetConfigurationHelpText()
     "Show thermal locations from thermalmap.info on the map\n\n"
     "- [%s] [Safety factors](xcsoar://config/safety) - "
     "Set arrival height, terrain clearance and polar degradation\n\n"
-    "- [%s] [Terrain display](xcsoar://config/terrain) - "
+    "- [%s] [Terrain Display](xcsoar://config/terrain) - "
     "Choose terrain colors, shading and contour lines\n\n"
     "- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - "
     "Share your position via SkyLines or LiveTrack24\n\n"

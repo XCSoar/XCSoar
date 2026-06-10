@@ -202,7 +202,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
     return;
 
   case ObservationZone::Shape::BGA_START:
-    strcpy(buffer, _("BGA Start Sector"));
+    strcpy(buffer, _("BGA start sector"));
     return;
 
   case ObservationZone::Shape::SYMMETRIC_QUADRANT:

@@ -185,7 +185,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent,
     { Unit::METER_PER_SECOND, "m/s" },
     nullptr
   };
-  AddEnum(_("Task speed"), _("Units used for task speeds."),
+  AddEnum(_("Task Speed"), _("Units used for task speeds."),
           units_taskspeed_list,
           (unsigned)config.task_speed_unit, this);
   SetExpertRow(UnitsTaskSpeed);

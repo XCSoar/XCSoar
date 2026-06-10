@@ -357,7 +357,7 @@ void dlgConfigurationShowModal()
   if (dialog.GetChanged()) {
     Profile::Save();
     if (require_restart)
-      ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
+      ShowMessageBox(_("Changes to configuration saved. Restart XCSoar to apply changes."),
                   "", MB_OK);
   }
 }

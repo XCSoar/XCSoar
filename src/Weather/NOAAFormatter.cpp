@@ -247,7 +247,7 @@ NOAAFormatter::Format(const NOAAStore::Item &station, std::string &output)
   output.reserve(2048);
 
   if (!station.metar_available) {
-    output += _("No METAR available!");
+    output += _("No METAR available");
   } else {
     if (station.parsed_metar_available)
       FormatDecodedMETAR(station.metar, station.parsed_metar, output);

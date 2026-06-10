@@ -152,7 +152,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
             (unsigned)ui_settings.thermal_assistant_position,
             this);
 
-  AddBoolean(_("Thermal band"),
+  AddBoolean(_("Thermal Band"),
              _("This enables the display of the thermal profile (climb band) display on the map."),
              map_settings.show_thermal_profile);
 

@@ -22,16 +22,19 @@
 
 #define RASP_FORMAT "%s.curr.%02u%02ulst.d2.jp2"
 
+static constexpr const char *WSTAR_HELP =
+  N_("Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth.");
+
 static constexpr RaspStore::MapInfo WeatherDescriptors[] = {
   {
     "wstar",
     N_("W*"),
-    N_("Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth."),
+    WSTAR_HELP,
   },
   {
     "wstar_bsratio",
     N_("W*"),
-    N_("Average dry thermal updraft strength near mid-BL height. Subtract glider descent rate to get average vario reading for cloudless thermals. Updraft strengths will be stronger than this forecast if convective clouds are present, since cloud condensation adds buoyancy aloft (i.e. this neglects \"cloudsuck\"). W* depends upon both the surface heating and the BL depth."),
+    WSTAR_HELP,
   },
   {
     "blwindspd",

@@ -228,7 +228,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
   const TerrainRendererSettings &terrain = settings_map.terrain;
 
-  AddBoolean(_("Terrain display"),
+  AddBoolean(_("Terrain Display"),
              _("Draw a digital elevation terrain on the map."),
              terrain.enable);
   GetDataField(EnableTerrain).SetListener(this);

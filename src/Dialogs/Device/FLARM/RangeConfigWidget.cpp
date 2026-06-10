@@ -64,7 +64,7 @@ FLARMRangeConfigWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   if (hardware.isPowerFlarm()) {
     vrange = GetUnsignedValue(device, "VRANGE", 500);
-    AddInteger(_("Vertical range"), NULL, "%d m", "%d", 100, 2000, 100, vrange);
+    AddInteger(_("Vertical Range"), NULL, "%d m", "%d", 100, 2000, 100, vrange);
   }
 
   if (hardware.hasADSB()) {

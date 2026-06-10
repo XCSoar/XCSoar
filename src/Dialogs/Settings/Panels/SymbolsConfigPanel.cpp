@@ -107,7 +107,7 @@ static constexpr StaticEnumChoice  aircraft_symbol_list[] = {
     N_("Detailed rendered aircraft graphics.") },
   { AircraftSymbol::HANGGLIDER, N_("HangGlider"),
     N_("Simplified hang glider as line graphics, white with black contours.") },
-  { AircraftSymbol::PARAGLIDER, N_("ParaGlider"),
+  { AircraftSymbol::PARAGLIDER, N_("Paraglider"),
     N_("Simplified para glider as line graphics, white with black contours.") },
   nullptr
 };
@@ -136,7 +136,7 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           _("Display the ground track as a grey line on the map."),
           ground_track_mode_list, (unsigned)settings_map.display_ground_track);
 
-  AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
+  AddBoolean(_("FLARM Traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
 
   AddBoolean(_("Fade traffic"), _("Keep showing traffic for a while after it has disappeared."),

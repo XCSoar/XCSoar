@@ -24,7 +24,7 @@ public:
 
   void Prepare([[maybe_unused]] ContainerWindow &parent,
                [[maybe_unused]] const PixelRect &rc) noexcept override {
-    AddButton(_("Navigation & Flight Resources"), [](){ ShowConfigPanel(_("Site files"), CreateSiteConfigPanel); });
+    AddButton(_("Navigation & Flight Resources"), [](){ ShowConfigPanel(_("Site Files"), CreateSiteConfigPanel); });
     AddButton(_("Download manager"), [](){ ShowFileManager(); });
     AddButton(_("Export flights"), [](){ ShowExportFlightsDialog(); });
     AddButton(_("Import data"), [](){ ShowImportDataDialog(); });

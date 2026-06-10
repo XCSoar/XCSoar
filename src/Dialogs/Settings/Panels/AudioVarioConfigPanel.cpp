@@ -48,7 +48,7 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent,
 
   const auto &settings = CommonInterface::GetUISettings().sound.vario;
 
-  AddBoolean(_("Audio vario"),
+  AddBoolean(_("Audio Vario"),
              _("Emulate the sound of an electronic vario."),
              settings.enabled);
 

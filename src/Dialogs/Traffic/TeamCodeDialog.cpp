@@ -77,7 +77,7 @@ TeamCodeWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddReadOnly(_("Range"));
   AddReadOnly(_("Bearing"));
   AddReadOnly(_("Rel. bearing"));
-  AddReadOnly(_("Flarm lock"));
+  AddReadOnly(_("Flarm Lock"));
 }
 
 void
@@ -187,7 +187,7 @@ TeamCodeWidget::OnFlarmLockClicked()
 
   if (count == 0) {
     ShowMessageBox(_("Unknown Competition Number"),
-                   _("Not Found"), MB_OK | MB_ICONINFORMATION);
+                   _("Not found"), MB_OK | MB_ICONINFORMATION);
     return;
   }
 

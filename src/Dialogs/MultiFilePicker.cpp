@@ -29,7 +29,7 @@ GetFileName(const FileMultiSelectWidget::FileItem &item) noexcept
 
   /* file configured in profile but not found on disk */
   static StaticString<256> buffer;
-  buffer.Format("%s [%s]", name, _("not found"));
+  buffer.Format("%s [%s]", name, _("Not found"));
   return buffer.c_str();
 }
 

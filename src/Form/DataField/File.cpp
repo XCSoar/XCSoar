@@ -394,7 +394,7 @@ FileDataField::CreateComboList([[maybe_unused]] const char *reference) const noe
       display_string = buffer;
     } else if (is_not_found) {
       /* file configured in profile does not exist on disk */
-      buffer.Format("%s [%s]", path.c_str(), _("not found"));
+      buffer.Format("%s [%s]", path.c_str(), _("Not found"));
       display_string = buffer;
     }
 

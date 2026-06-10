@@ -1042,7 +1042,7 @@ type=key
 data=0
 event=ThermalAssistant
 event=Mode default
-label=Thermal Assistant
+label=Thermal assistant
 location=9
 
 # -------------
@@ -1454,7 +1454,7 @@ type=key
 data=0
 event=ThermalAssistant
 event=Mode default
-label=Thermal Assistant$(CheckCircling)
+label=Thermal assistant$(CheckCircling)
 location=32
 
 mode=RemoteStick

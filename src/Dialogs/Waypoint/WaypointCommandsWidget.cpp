@@ -238,7 +238,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
   
-  replace_button = AddButton(_("Replace in Task"), [this](){
+  replace_button = AddButton(_("Replace in task"), [this](){
     if (ReplaceInTask(*task_manager, waypoint))
       CommitParentSearchAndCloseForm();
   });
@@ -253,7 +253,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
       CommitParentSearchAndCloseForm();
   });
     
-  remove_button = AddButton(_("Remove from Task"), [this](){
+  remove_button = AddButton(_("Remove from task"), [this](){
     if (RemoveFromTask(*task_manager, *waypoint))
       CommitParentSearchAndCloseForm();
   });

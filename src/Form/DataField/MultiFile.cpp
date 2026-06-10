@@ -155,7 +155,7 @@ MultiFileDataField::UpdateDisplayString()
       auto base = path.GetBase();
       display_string += (base != nullptr) ? base.c_str() : path.c_str();
       display_string += " [";
-      display_string += _("not found");
+      display_string += _("Not found");
       display_string += "]";
     }
   }

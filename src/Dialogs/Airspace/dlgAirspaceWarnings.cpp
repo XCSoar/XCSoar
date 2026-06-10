@@ -79,7 +79,7 @@ public:
   void CreateButtons(WidgetDialog &dialog) {
     self_dialog = &dialog;
     ack_button = dialog.AddButton(_("ACK"), [this](){ Ack(); });
-    ack_day_button = dialog.AddButton(_("ACK Day"), [this](){ AckDay(); });
+    ack_day_button = dialog.AddButton(_("Ack Day"), [this](){ AckDay(); });
     enable_button = dialog.AddButton(_("Enable"), [this](){ Enable(); });
     radio_button = dialog.AddButton(_("Radio"), [this](){ Radio(); });
     details_button = dialog.AddButton(_("Details"), [this](){ Details(); });
