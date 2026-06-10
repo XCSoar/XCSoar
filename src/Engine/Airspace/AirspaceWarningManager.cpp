@@ -856,6 +856,113 @@ SortByEntryDistance(AirspaceWarning **first,
 
 } // namespace
 
+bool
+AirspaceWarningManager::IsThinClearanceCorridor(
+    const AirspaceWarningInterval &iv,
+    const AbstractAirspace &offending,
+    const AircraftState &state,
+    const double tolerance) const noexcept
+{
+  /* Interval arithmetic works on the coarse (~111 m) integer
+     projection.  When a non-cleared airspace shares a
+     near-coincident boundary with a cleared one, the residual that
+     survives subtraction can be a thin strip hugging the cleared
+     boundary: the two boundaries are separate in float geometry but
+     collapse (or fail to nest) on the integer grid.  Such strips are
+     digitisation/projection artifacts -- no real airspace leaves a
+     sub-grid-cell corridor between a sector and its enclosing
+     airspace -- so a warning whose entire relevant interval runs
+     inside or within one tolerance of a cleared airspace is
+     suppressed.  A genuine intrusion cannot be suppressed this way:
+     some sample of its interval lies farther than the tolerance from
+     every cleared airspace. */
+
+  const FlatProjection &projection = GetProjection();
+
+  /* Restrict the mechanism to the near-coincident-boundary case:
+     the interval must start within one tolerance of the offending
+     airspace's own boundary.  Checked only for the first point
+     because offending airspaces (CTRs etc.) may have many vertices,
+     while cleared airspaces are typically simple. */
+  if (offending.DistanceToBoundary(iv.entry.location, projection) >
+      tolerance)
+    return false;
+
+  /* Collect cleared airspaces whose vertical band contains the
+     current altitude.  Clearance is whole-airspace; the short
+     prediction window means the current altitude is a good proxy
+     along the path. */
+  std::array<const AbstractAirspace *, kClearedBufCap> cleared{};
+  std::size_t n_cleared = 0;
+  for (const auto &c : warnings) {
+    if (!c.IsCleared()) continue;
+    const auto &as = c.GetAirspace();
+    if (state.altitude < as.GetBaseAltitude(state) ||
+        state.altitude > as.GetTopAltitude(state))
+      continue;
+    if (n_cleared < cleared.size())
+      cleared[n_cleared++] = &as;
+  }
+  if (n_cleared == 0)
+    return false;
+
+  const auto near_cleared = [&](const GeoPoint &p) {
+    for (std::size_t i = 0; i < n_cleared; ++i) {
+      const auto &as = *cleared[i];
+      /* Inside() first: exact float geometry, and the common case
+         for samples genuinely inside the cleared airspace. */
+      if (as.Inside(p) ||
+          as.DistanceToBoundary(p, projection) <= tolerance)
+        return true;
+    }
+    return false;
+  };
+
+  const auto point_at = [&iv](double d) {
+    return iv.entry.location.IntermediatePoint(iv.exit.location,
+                                               d - iv.entry.distance);
+  };
+
+  /* Walk no farther than the warning horizon; intervals beyond it
+     cannot alert within warning_time anyway. */
+  const FloatDuration warning_time{config.warning_time};
+  const double d_last =
+    std::max(iv.entry.distance,
+             std::min(iv.exit.distance,
+                      std::max(tolerance,
+                               state.ground_speed *
+                                 warning_time.count())));
+
+  /* Interval endpoints come from the coarse integer projection and
+     can overshoot the real (float) boundary of the offending
+     airspace by up to a grid cell -- most notably the synthetic
+     one-cell interval created when the aircraft sits on the exit
+     edge.  A sample that is not genuinely inside the offending
+     airspace represents no intrusion, so it is disregarded instead
+     of being required to be near a clearance. */
+  const auto sample_ok = [&](const GeoPoint &p) {
+    return near_cleared(p) || !offending.Inside(p);
+  };
+
+  /* Sample order chosen for early-out: first point, then the far
+     end (fails fast for genuine deep intrusions), then steps of one
+     tolerance from near to far.  The first point must be near a
+     clearance unconditionally: it anchors the corridor to an actual
+     clearance, so an unrelated interval (e.g. a tangential graze of
+     the offending airspace far away from any cleared airspace)
+     cannot be suppressed. */
+  if (!near_cleared(iv.entry.location))
+    return false;
+  if (!sample_ok(point_at(d_last)))
+    return false;
+  for (double d = iv.entry.distance + tolerance; d < d_last;
+       d += tolerance)
+    if (!sample_ok(point_at(d)))
+      return false;
+
+  return true;
+}
+
 void
 AirspaceWarningManager::ProcessClearanceIntervals(
     const AircraftState &state,
@@ -878,7 +985,6 @@ AirspaceWarningManager::ProcessClearanceIntervals(
   }
   if (!any_cleared) return;
 
-  const bool inside_cleared = n_cleared_inside > 0;
   const FloatDuration warning_time{config.warning_time};
 
   /* Tolerance for clearance interval arithmetic.  Use the integer
@@ -887,39 +993,6 @@ AirspaceWarningManager::ProcessClearanceIntervals(
      that grid, so fragments below one grid cell are below the
      geometric resolution of the data they are derived from. */
   const double tolerance = GetProjection().GetApproximateScale();
-
-  /* Float-geometry cross-check for a surviving residual interval.
-     Interval subtraction works in the coarse (~111 m) integer
-     projection.  When a non-cleared airspace is nested inside a
-     cleared one with a near-coincident boundary, the two boundaries
-     can fail to nest after integer rounding: the same predicted path
-     crosses the two (separate but ~coincident) edges at slightly
-     different integer positions, so the cleared airspace's interval
-     does not fully contain the nested airspace's interval and a
-     phantom residual survives.  Sample the middle of the residual and,
-     if it actually lies inside a cleared airspace (in exact float
-     geometry), treat the residual as covered.  This cannot suppress a
-     genuine protrusion, whose midpoint really is outside every cleared
-     airspace. */
-  const auto residual_covered_in_float =
-    [this, &state](const AirspaceWarningInterval &iv) -> bool {
-      const GeoPoint mid =
-        iv.entry.location.Middle(iv.exit.location);
-      for (const auto &c : warnings) {
-        if (!c.IsCleared()) continue;
-        const auto &as = c.GetAirspace();
-        /* Horizontal containment in exact float geometry plus a
-           vertical-band check at the current altitude (clearance is
-           whole-airspace; the short prediction window means the
-           current altitude is a good proxy along the path). */
-        if (!as.Inside(mid)) continue;
-        if (state.altitude < as.GetBaseAltitude(state) ||
-            state.altitude > as.GetTopAltitude(state))
-          continue;
-        return true;
-      }
-      return false;
-    };
 
   /* Warnings that step 1 downgraded out of WARNING_INSIDE. Step 2
      re-processes these (they're no longer INSIDE), but should not
@@ -931,96 +1004,43 @@ AirspaceWarningManager::ProcessClearanceIntervals(
   std::array<AirspaceWarning *, 16> step1_downgraded{};
   std::size_t n_step1_downgraded = 0;
 
-  // Step 1: convert WARNING_INSIDE warnings of non-cleared
-  // airspaces while inside another, cleared, airspace.
-  if (inside_cleared) {
-    for (auto &w : warnings) {
-      if (w.IsCleared()) continue;
-      if (w.GetWarningState() != AirspaceWarning::WARNING_INSIDE)
-        continue;
+  /* Shared by the inside pass and the approach pass.  Each pass
+     chooses which clearances apply; these only subtract intervals
+     and rebuild the intercept from what remains. */
+  struct Residual {
+    AirspaceWarning::State method;
+    double distance;
+    GeoPoint location;
+  };
 
-      bool any_meaningful_before = false;
-      bool any_consumed_by_clearance = false;
-      for (const auto m : kPredictionMethods) {
-        AirspaceWarningInterval iv = w.GetInterval(m);
-        if (!iv.IsValid()) continue;
-        if (iv.Length() >= tolerance)
-          any_meaningful_before = true;
-
-        const AirspaceWarningInterval iv_before = iv;
-
-        std::array<AirspaceWarning *, kClearedBufCap> buf{};
-        std::size_t n = 0;
-        for (std::size_t i = 0; i < n_cleared_inside; ++i) {
-          AirspaceWarning *c = cleared_inside_buf[i];
-          if (c->HasInterval(m))
-            buf[n++] = c;
-        }
-        SortByEntryDistance(buf.data(), buf.data() + n, m);
-        for (std::size_t i = 0; i < n; ++i) {
-          SubtractInterval(iv, buf[i]->GetInterval(m), tolerance);
-          if (!iv.IsValid()) break;
-        }
-
-        /* Did a clearance actually overlap (shorten or eliminate)
-           this interval?  Tracked separately from the length test
-           above because near-coincident boundaries (two airspaces
-           sharing an edge, snapped together by the coarse integer
-           projection) yield a short inside interval that is still
-           genuinely consumed by the clearance. */
-        if (!iv.IsValid()
-            || iv.entry.distance != iv_before.entry.distance
-            || iv.exit.distance != iv_before.exit.distance)
-          any_consumed_by_clearance = true;
-
-        w.SetInterval(m, iv);
+  const auto subtract_cleared =
+    [](AirspaceWarningInterval iv, AirspaceWarning **buf, std::size_t n,
+       AirspaceWarning::State method, double tolerance) noexcept {
+      SortByEntryDistance(buf, buf + n, method);
+      for (std::size_t i = 0; i < n; ++i) {
+        SubtractInterval(iv, buf[i]->GetInterval(method), tolerance);
+        if (!iv.IsValid())
+          break;
       }
+      return iv;
+    };
 
-      // Collect surviving intervals across methods, sort by
-      // nearest entry distance, and try each in turn until one
-      // produces a valid intercept solution.
-      struct Residual {
-        AirspaceWarning::State method;
-        double distance;
-        GeoPoint location;
-      };
-      std::array<Residual, std::size(kPredictionMethods)> residuals;
-      std::size_t n_res = 0;
-      for (const auto m : kPredictionMethods) {
-        const AirspaceWarningInterval &iv = w.GetInterval(m);
-        if (!iv.IsValid()) continue;
-        if (iv.Length() < tolerance) continue;
-        if (residual_covered_in_float(iv)) {
-          /* Phantom residual from integer-projection non-nesting;
-             really inside a clearance. */
-          any_consumed_by_clearance = true;
-          w.SetInterval(m, AirspaceWarningInterval::Invalid());
-          continue;
-        }
-        residuals[n_res++] = {m, iv.entry.distance,
-                              iv.entry.location};
-      }
+  const auto interval_changed =
+    [](const AirspaceWarningInterval &before,
+       const AirspaceWarningInterval &after) noexcept {
+      return !after.IsValid()
+        || after.entry.distance != before.entry.distance
+        || after.exit.distance != before.exit.distance;
+    };
 
-      if (n_res == 0) {
-        /* Claim clearance coverage when the interval was either
-           meaningful before subtraction, or was actually consumed
-           by a clearance.  If no method produced a meaningful
-           interval and no clearance overlapped it (e.g. all
-           predictions land inside a narrow airspace that is already
-           less than the tolerance away from the exit, with the
-           clearance elsewhere), the WARNING_INSIDE is unrelated to
-           clearance and must not be silently suppressed. */
-        if (any_meaningful_before || any_consumed_by_clearance)
-          w.SetCoveredByClearance(true);
-        continue;
-      }
-
-      std::sort(residuals.begin(), residuals.begin() + n_res,
+  const auto apply_nearest =
+    [&](AirspaceWarning &w, Residual *residuals, std::size_t n_res,
+        bool force_state) noexcept {
+      std::sort(residuals, residuals + n_res,
                 [](const Residual &a, const Residual &b) {
                   return a.distance < b.distance;
                 });
 
-      bool resolved = false;
       for (std::size_t i = 0; i < n_res; ++i) {
         const auto &r = residuals[i];
         const AirspaceAircraftPerformance perf = PerfFor(
@@ -1030,20 +1050,92 @@ AirspaceWarningManager::ProcessClearanceIntervals(
           w.GetAirspace().Intercept(state, perf,
                                     r.location, r.location);
         if (sol.IsValid() && sol.elapsed_time <= warning_time) {
-          w.ForceState(r.method);
+          if (force_state)
+            w.ForceState(r.method);
           w.SetSolution(sol);
-          resolved = true;
-          if (n_step1_downgraded < step1_downgraded.size())
-            step1_downgraded[n_step1_downgraded++] = &w;
-          break;
+          return true;
         }
       }
+      return false;
+    };
 
-      if (!resolved) {
-        // Every interval is too far / unreachable; treat as
-        // covered.
-        w.SetCoveredByClearance(true);
+  // Step 1: convert WARNING_INSIDE warnings of non-cleared
+  // airspaces.  Subtraction applies the coverage of cleared
+  // airspaces the aircraft is physically inside; the corridor
+  // check additionally drops thin artifact residuals along
+  // near-coincident boundaries (which can exist before the
+  // aircraft has entered the cleared airspace itself).
+  for (auto &w : warnings) {
+    if (w.IsCleared()) continue;
+    if (w.GetWarningState() != AirspaceWarning::WARNING_INSIDE)
+      continue;
+
+    bool any_consumed_by_clearance = false;
+    for (const auto m : kPredictionMethods) {
+      AirspaceWarningInterval iv = w.GetInterval(m);
+      if (!iv.IsValid()) continue;
+
+      const AirspaceWarningInterval iv_before = iv;
+
+      std::array<AirspaceWarning *, kClearedBufCap> buf{};
+      std::size_t n = 0;
+      for (std::size_t i = 0; i < n_cleared_inside; ++i) {
+        AirspaceWarning *c = cleared_inside_buf[i];
+        if (c->HasInterval(m))
+          buf[n++] = c;
       }
+      iv = subtract_cleared(iv, buf.data(), n, m, tolerance);
+
+      /* Near-coincident boundaries snap together on the integer
+         projection and leave a short interval that a clearance
+         still consumed. */
+      if (interval_changed(iv_before, iv))
+        any_consumed_by_clearance = true;
+
+      w.SetInterval(m, iv);
+    }
+
+    // Collect surviving intervals across methods, sort by
+    // nearest entry distance, and try each in turn until one
+    // produces a valid intercept solution.
+    std::array<Residual, std::size(kPredictionMethods)> residuals;
+    std::size_t n_res = 0;
+    for (const auto m : kPredictionMethods) {
+      const AirspaceWarningInterval &iv = w.GetInterval(m);
+      if (!iv.IsValid()) continue;
+      /* A sub-tolerance sliver along a cleared boundary counts as
+         consumed, otherwise the inside warning is left untouched. */
+      if (IsThinClearanceCorridor(iv, w.GetAirspace(), state,
+                                  tolerance)) {
+        any_consumed_by_clearance = true;
+        w.SetInterval(m, AirspaceWarningInterval::Invalid());
+        continue;
+      }
+      if (iv.Length() < tolerance) continue;
+      residuals[n_res++] = {m, iv.entry.distance,
+                            iv.entry.location};
+    }
+
+    /* No clearance touched any interval (neither subtraction nor
+       corridor check): leave the genuine INSIDE warning alone.
+       Without this, an untouched inside interval (entry.distance
+       == 0) would be re-resolved below into a zero-distance
+       approach warning. */
+    if (!any_consumed_by_clearance)
+      continue;
+
+    if (n_res == 0) {
+      w.SetCoveredByClearance(true);
+      continue;
+    }
+
+    if (apply_nearest(w, residuals.data(), n_res, true)) {
+      if (n_step1_downgraded < step1_downgraded.size())
+        step1_downgraded[n_step1_downgraded++] = &w;
+    } else {
+      // Every interval is too far / unreachable; treat as
+      // covered.
+      w.SetCoveredByClearance(true);
     }
   }
 
@@ -1064,11 +1156,6 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       &w) != step1_downgraded.begin() + n_step1_downgraded;
 
     bool any_changed = false;
-    struct Residual {
-      AirspaceWarning::State method;
-      double distance;
-      GeoPoint location;
-    };
     std::array<Residual, std::size(kPredictionMethods)> residuals;
     std::size_t n_res = 0;
 
@@ -1099,25 +1186,21 @@ AirspaceWarningManager::ProcessClearanceIntervals(
         if (n >= buf.size()) break;
         buf[n++] = &c;
       }
-      SortByEntryDistance(buf.data(), buf.data() + n, m);
-      for (std::size_t i = 0; i < n; ++i) {
-        SubtractInterval(iv, buf[i]->GetInterval(m), tolerance);
-        if (!iv.IsValid()) break;
-      }
+      iv = subtract_cleared(iv, buf.data(), n, m, tolerance);
 
-      const bool changed = !iv.IsValid()
-        || iv.entry.distance != iv_orig.entry.distance
-        || iv.exit.distance != iv_orig.exit.distance;
+      const bool changed = interval_changed(iv_orig, iv);
       if (changed) any_changed = true;
 
       if (!iv.IsValid() ||
           (changed && iv.Length() < tolerance)) {
         w.SetInterval(m, AirspaceWarningInterval::Invalid());
-      } else if (residual_covered_in_float(iv)) {
+      } else if (IsThinClearanceCorridor(iv, w.GetAirspace(), state,
+                                         tolerance)) {
         /* Interval subtraction left this (possibly unchanged because
-           the integer intervals failed to overlap), but in float
-           geometry it lies inside a clearance: phantom residual from
-           integer-projection non-nesting of a nested airspace. */
+           the integer intervals failed to overlap or never did), but
+           the whole warning-relevant part runs along a cleared
+           boundary: thin artifact corridor from integer-projection
+           non-nesting of near-coincident boundaries. */
         any_changed = true;
         w.SetInterval(m, AirspaceWarningInterval::Invalid());
       } else {
@@ -1135,32 +1218,9 @@ AirspaceWarningManager::ProcessClearanceIntervals(
       continue;
     }
 
-    // Sort surviving residuals by entry distance and rebuild the
-    // solution at the nearest one whose Intercept solves; try
-    // the next-nearest method if it fails.
-    std::sort(residuals.begin(), residuals.begin() + n_res,
-              [](const Residual &a, const Residual &b) {
-                return a.distance < b.distance;
-              });
-
-    bool resolved = false;
-    for (std::size_t i = 0; i < n_res; ++i) {
-      const auto &r = residuals[i];
-      const AirspaceAircraftPerformance perf = PerfFor(
-        r.method, glide_polar, cruise_filter,
-        circling_filter, circling, task_stats);
-      AirspaceInterceptSolution sol =
-        w.GetAirspace().Intercept(state, perf,
-                                  r.location, r.location);
-      if (sol.IsValid() && sol.elapsed_time <= warning_time) {
-        w.SetSolution(sol);
-        resolved = true;
-        break;
-      }
-    }
-
-    if (!resolved) {
+    // Rebuild the solution at the nearest surviving interval whose
+    // Intercept solves; try the next-nearest method if it fails.
+    if (!apply_nearest(w, residuals.data(), n_res, false))
       w.SetCoveredByClearance(true);
-    }
   }
 }
