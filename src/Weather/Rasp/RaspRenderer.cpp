@@ -29,6 +29,27 @@ RaspRenderer::GetExtendedLabel() const
   return result;
 }
 
+RaspFieldValue
+RaspRenderer::GetValueAt(GeoPoint p) const noexcept
+{
+  const RasterMap *map = cache.GetMap();
+  if (map == nullptr)
+    return {0, UnitGroup::NONE, false};
+
+  const TerrainHeight h = map->GetInterpolatedHeight(p);
+  if (h.IsSpecial())
+    /* invalid or water: no field data here */
+    return {0, UnitGroup::NONE, false};
+
+  const auto &style = LookupWeatherTerrainStyle(cache.GetMapName());
+
+  /* the raw raster value is the rendering-domain value; invert the
+     colour transform to recover the colormap value-space, then map it
+     to the canonical system unit */
+  const double colormap_value = (h.GetValue() - style.offset) / style.scale;
+  return {style.ToSystemValue(colormap_value), style.unit_group, true};
+}
+
 bool
 RaspRenderer::Generate(const WindowProjection &projection,
                        const TerrainRendererSettings &settings,
