@@ -314,16 +314,37 @@ private:
                        FloatDuration max_time) noexcept;
 
   /**
+   * Check whether a warning interval is a thin corridor hugging a
+   * cleared airspace: its entry point lies within @p tolerance of
+   * the offending airspace's own boundary, and every sample along
+   * the interval (entry, end of the warning-relevant part, and
+   * steps of @p tolerance in between) is inside or within
+   * @p tolerance of a cleared airspace whose vertical band contains
+   * the current altitude.  Samples not genuinely inside the
+   * offending airspace (exact geometry) are disregarded -- interval
+   * endpoints from the integer projection can overshoot the real
+   * boundary by up to a grid cell.  Such corridors are digitisation /
+   * projection artifacts of near-coincident boundaries, not real
+   * geometry; warnings on them are suppressed.
+   */
+  [[gnu::pure]]
+  bool IsThinClearanceCorridor(const AirspaceWarningInterval &iv,
+                               const AbstractAirspace &offending,
+                               const AircraftState &state,
+                               double tolerance) const noexcept;
+
+  /**
    * Apply clearance suppression to the warning list.
    *
    * Two passes:
-   * 1. If the aircraft is physically inside any cleared
-   *    airspace, subtract the cleared
-   *    coverage along each warning interval.
+   * 1. For WARNING_INSIDE warnings of non-cleared airspaces,
+   *    subtract the coverage of cleared airspaces the aircraft
+   *    is physically inside from each warning interval, and drop
+   *    residuals that are thin clearance corridors.
    *    Fully covered warnings keep WARNING_INSIDE state but
-   *    are marked SetCoveredByClearance(true). Partially 
+   *    are marked SetCoveredByClearance(true). Partially
    *    covered warnings with (time-to-arrival <= warning_time)
-   *    become "near" warnings and set to the corresponding 
+   *    become "near" warnings and set to the corresponding
    *    state
    * 2. For non-INSIDE warnings, subtract cleared intervals
    *    from approach intervals; suppress fully-covered

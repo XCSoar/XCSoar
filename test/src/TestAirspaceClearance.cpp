@@ -65,6 +65,18 @@ MakeCircle(const GeoPoint &center, double radius_m,
 }
 
 AirspacePtr
+MakeNotam(const GeoPoint &center, double radius_m,
+          const char *station)
+{
+  auto as = std::make_shared<AirspaceCircle>(center, radius_m);
+  TransponderCode code;
+  as->SetProperties("notam", station, std::move(code),
+                    AirspaceClass::NOTAM, AirspaceClass::NOTAM,
+                    Alt(0.0), Alt(3000.0));
+  return as;
+}
+
+AirspacePtr
 MakeRectangle(double west_lon, double south_lat,
               double east_lon, double north_lat,
               double base_m, double top_m)
@@ -113,7 +125,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(27);
+  plan_tests(35);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -667,14 +679,16 @@ main()
 
   /* --- Scenario 12: non-cleared airspace genuinely protruding past
          the cleared one must still warn (no over-suppression) ---
-     B extends ~57 m east beyond cleared A, so there is a real region
-     inside B but outside A.  When the aircraft is in that region
-     (left the clearance, still in restricted airspace), B's INSIDE
-     warning must fire. */
+     B extends ~500 m east beyond cleared A, well past the corridor
+     tolerance (one ~111 m projection grid cell), so there is a real
+     region inside B but outside A.  When the aircraft is in that
+     region (left the clearance, still in restricted airspace), B's
+     INSIDE warning must fire.  (A sub-tolerance protrusion would by
+     design be treated as a digitisation artifact and suppressed.) */
   {
     auto a = MakeRectangle(10.000, 49.990, 10.020, 50.010,
                            0.0, 3000.0);
-    auto b = MakeRectangle(10.010, 49.990, 10.020 + 0.0008,
+    auto b = MakeRectangle(10.010, 49.990, 10.020 + 0.007,
                            50.000, 0.0, 3000.0);
     Airspaces airspaces;
     airspaces.Add(a);
@@ -788,6 +802,184 @@ main()
     ok1(!ever_spuriously_warned);
   }
 
+  /* --- Scenarios 14-18: thin sliver between near-coincident
+         boundaries (clearance-test2 geometry analogue) ---
+     B (non-cleared) with cleared A nested inside; A's south edge
+     lies 1 arcsec (~31 m) north of B's south edge, leaving a thin
+     artifact strip of B that hugs A's boundary.  B extends ~3.3 km
+     north of A and ~2.9 km east of A (genuine interior). */
+  {
+    constexpr double kArcsec = 1.0 / 3600.0;  /* ~30.9 m of lat */
+
+    const auto make_airspaces = [&](Airspaces &airspaces,
+                                    AirspacePtr &a, AirspacePtr &b) {
+      b = MakeRectangle(10.000, 49.950, 10.100, 50.020,
+                        0.0, 3000.0);
+      a = MakeRectangle(10.010, 49.950 + kArcsec, 10.060, 49.990,
+                        0.0, 3000.0);
+      airspaces.Add(a);
+      airspaces.Add(b);
+      airspaces.Optimise();
+    };
+
+    /* March the aircraft from @p start along @p step_bearing and
+       report whether B's warning ever alerted. */
+    const auto march_alerts = [&](const GeoPoint &start,
+                                  Angle track, Angle step_bearing,
+                                  double step_m, int steps) {
+      Airspaces airspaces;
+      AirspacePtr a, b;
+      make_airspaces(airspaces, a, b);
+      AirspaceWarningConfig cfg;
+      cfg.SetDefaults();
+      AirspaceWarningManager mgr(cfg, airspaces);
+      auto state = MakeAircraft(start, 1500.0, track, 40.0);
+      mgr.Reset(state);
+      mgr.SetCleared(a, true);
+
+      bool alerted = false;
+      for (int i = 0; i < steps; ++i) {
+        state.location =
+          GeoVector(step_m * i, step_bearing).EndPoint(start);
+        state.time += std::chrono::seconds{1};
+        mgr.Update(state, polar, task_stats, false,
+                   std::chrono::seconds{1});
+        auto *bw = mgr.GetWarningPtr(*b);
+        if (bw != nullptr
+            && bw->GetWarningState() > AirspaceWarning::WARNING_CLEAR
+            && !bw->IsCoveredByClearance()
+            && bw->IsAckExpired()) {
+          printf("step %d lon=%.5f lat=%.5f: B fires (state=%d)\n",
+                 i, state.location.longitude.Degrees(),
+                 state.location.latitude.Degrees(),
+                 bw->GetWarningState());
+          alerted = true;
+        }
+      }
+      return alerted;
+    };
+
+    /* Scenario 14: northbound entry through the sliver into A (the
+       original clearance-test2 symptom: INSIDE warning popping up
+       in the strip with no preceding approach warning).  March from
+       south of B across the sliver well into A. */
+    ok1(!march_alerts(P(10.030, 49.9495), Angle::Degrees(0.0),
+                      Angle::Degrees(0.0), 11.0, 35));
+
+    /* Scenario 15: southbound exit from A through the sliver and
+       out of B (no one-cycle exit blip). */
+    ok1(!march_alerts(P(10.030, 49.9520), Angle::Degrees(180.0),
+                      Angle::Degrees(180.0), 11.0, 35));
+
+    /* Scenario 16: genuine deep intrusion guard.  Aircraft inside B
+       ~1.4 km east of A (far beyond the corridor tolerance), heading
+       west: the INSIDE warning must fire. */
+    {
+      Airspaces airspaces;
+      AirspacePtr a, b;
+      make_airspaces(airspaces, a, b);
+      AirspaceWarningConfig cfg;
+      cfg.SetDefaults();
+      AirspaceWarningManager mgr(cfg, airspaces);
+      auto state = MakeAircraft(P(10.080, 49.970), 1500.0,
+                                Angle::Degrees(270.0), 40.0);
+      mgr.Reset(state);
+      mgr.SetCleared(a, true);
+      mgr.Update(state, polar, task_stats, false,
+                 std::chrono::seconds{1});
+      auto *bw = mgr.GetWarningPtr(*b);
+      ok1(bw != nullptr
+          && bw->GetWarningState() == AirspaceWarning::WARNING_INSIDE
+          && !bw->IsCoveredByClearance()
+          && bw->IsAckExpired());
+    }
+
+    /* Scenario 17: shallow corridor.  Flying east *along* the sliver
+       (predicted path stays in the strip, hugging A's boundary, for
+       over a kilometre).  No short fragment ever exists here, so the
+       fragment-length logic alone cannot suppress it; the corridor
+       walk must. */
+    ok1(!march_alerts(P(10.020, 49.950 + kArcsec / 2),
+                      Angle::Degrees(90.0), Angle::Degrees(90.0),
+                      14.0, 30));
+
+    /* Scenario 18: direction guard.  Starting in the sliver near A's
+       SE corner heading east, the predicted path leaves the corridor
+       into B's genuine interior: B must alert. */
+    ok1(march_alerts(P(10.0550, 49.950 + kArcsec / 2),
+                     Angle::Degrees(90.0), Angle::Degrees(90.0),
+                     14.0, 40));
+  }
+
+  /* --- Scenario 19: circle variant of the sliver (B2/A2 analogue
+         of clearance-test2) ---
+     Cleared circle A2 nested in non-cleared circle B2 with
+     near-coincident north rims (~80 m gap, below the ~111 m
+     tolerance).  Northbound through A2, the rim sliver and out of
+     B2: B2 must never alert.  Exercises the analytic
+     AirspaceCircle::DistanceToBoundary in gate and samples. */
+  {
+    const GeoPoint b2_center = P(10.0, 49.90);
+    const GeoPoint a2_center =
+      GeoVector(1920.0, Angle::Degrees(0.0)).EndPoint(b2_center);
+    Airspaces airspaces;
+    auto b2 = MakeCircle(b2_center, 5000.0, 0.0, 3000.0);
+    auto a2 = MakeCircle(a2_center, 3000.0, 0.0, 3000.0);
+    airspaces.Add(a2);
+    airspaces.Add(b2);
+    airspaces.Optimise();
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    const GeoPoint start =
+      GeoVector(4800.0, Angle::Degrees(0.0)).EndPoint(b2_center);
+    auto state = MakeAircraft(start, 1500.0,
+                              Angle::Degrees(0.0), 40.0);
+    mgr.Reset(state);
+    mgr.SetCleared(a2, true);
+
+    bool ever_spuriously_warned = false;
+    for (int i = 0; i < 25; ++i) {
+      state.location =
+        GeoVector(16.0 * i, Angle::Degrees(0.0)).EndPoint(start);
+      state.time += std::chrono::seconds{1};
+      mgr.Update(state, polar, task_stats, false,
+                 std::chrono::seconds{1});
+      auto *bw = mgr.GetWarningPtr(*b2);
+      if (bw != nullptr
+          && bw->GetWarningState() > AirspaceWarning::WARNING_CLEAR
+          && !bw->IsCoveredByClearance()
+          && bw->IsAckExpired()) {
+        printf("step %d lat=%.5f: B2 fires unexpectedly (state=%d)\n",
+               i, state.location.latitude.Degrees(),
+               bw->GetWarningState());
+        ever_spuriously_warned = true;
+      }
+    }
+    ok1(!ever_spuriously_warned);
+  }
+
+  /* Sibling NOTAM polygons share one station id.  Clearance on one
+     sets the flag on every existing warning with that id. */
+  {
+    Airspaces airspaces;
+    auto a = MakeNotam(P(10.0, 50.0), 1000.0, "A1234/26");
+    auto b = MakeNotam(P(10.05, 50.0), 1000.0, "A1234/26");
+    airspaces.Add(a);
+    airspaces.Add(b);
+    airspaces.Optimise();
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto &wa = mgr.GetWarning(a);
+    auto &wb = mgr.GetWarning(b);
+    mgr.SetCleared(a, true);
+    ok1(wa.IsCleared() && wb.IsCleared());
+    mgr.SetCleared(b, false);
+    ok1(!wa.IsCleared() && !wb.IsCleared());
+  }
 
   return exit_status();
 }
