@@ -18,6 +18,7 @@
 #include "Widget/ListWidget.hpp"
 #include "util/StaticString.hxx"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "LocalPath.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "time/BrokenDateTime.hpp"
@@ -82,7 +83,9 @@ struct BackupJob final : public Job {
     auto dev = FindDeviceByName(target_device);
     if (!dev) {
       aborted = true;
-      error_message = _("Target device not found.");
+      StaticString<64> message;
+      FormatDeviceNotFound(message, N_("Target"));
+      error_message = message;
       return;
     }
 
@@ -129,7 +132,9 @@ struct RestoreJob final : public Job {
     auto dev = FindDeviceByName(device_path);
     if (!dev) {
       aborted = true;
-      error_message = _("Source device not found.");
+      StaticString<64> message;
+      FormatDeviceNotFound(message, N_("Source"));
+      error_message = message;
       return;
     }
 
@@ -413,7 +418,9 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
 
     auto dev = FindDeviceByName(container_ptr->target_device_path);
     if (!dev) {
-      ShowMessageBox(_("Target device not found."), _("Delete backup"), MB_OK | MB_ICONERROR);
+      StaticString<64> message;
+      FormatDeviceNotFound(message, N_("Target"));
+      ShowMessageBox(message, _("Delete backup"), MB_OK | MB_ICONERROR);
       return;
     }
 

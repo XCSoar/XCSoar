@@ -17,6 +17,7 @@
 #include "FLARM/TrafficDatabases.hpp"
 #include "util/StaticString.hxx"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/Look.hpp"
@@ -669,9 +670,9 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 #ifdef HAVE_SKYLINES_TRACKING
   } else if (item.IsSkyLines()) {
     if (CommonInterface::Basic().time_available) {
-      tmp.UnsafeFormat(_("%u minutes ago"),
+      FormatMinutesAgo(tmp,
                        SinceInMinutes(CommonInterface::Basic().time,
-                                      item.time_of_day));
+                                      item.time_of_day).count());
     } else
       tmp.clear();
 

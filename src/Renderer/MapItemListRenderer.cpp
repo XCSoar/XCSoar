@@ -21,6 +21,7 @@
 #include "Dialogs/Task/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "util/StringCompare.hxx"
 #include "util/Macros.hpp"
 #include "util/StaticString.hxx"
@@ -404,9 +405,11 @@ Draw(Canvas &canvas, PixelRect rc,
 
   if (CommonInterface::Basic().time_available) {
     StaticString<64> buffer;
-    buffer.UnsafeFormat(_("%u minutes ago"),
-                        SinceInMinutes(CommonInterface::Basic().time,
-                                       duration<uint32_t, milliseconds::period>{item.time_of_day}).count());
+    FormatMinutesAgo(buffer,
+                     SinceInMinutes(
+                       CommonInterface::Basic().time,
+                       duration<uint32_t, milliseconds::period>{
+                         item.time_of_day}).count());
     row_renderer.DrawSecondRow(canvas, rc, buffer);
   }
 }

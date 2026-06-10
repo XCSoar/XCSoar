@@ -13,6 +13,7 @@
 #include "ActionInterface.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "Look/DialogLook.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
@@ -434,8 +435,9 @@ void
 MapOverlayControlsWidget::RefreshEdlOverlay()
 {
 #if !defined(HAVE_HTTP) || !defined(HAVE_EDL)
-  ShowMessageBox(_("HTTP support is not available in this build."),
-                 _("Weather"), MB_OK);
+  StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuild(message, N_("HTTP support"));
+  ShowMessageBox(message, _("Weather"), MB_OK);
 #else
   if (!EDL::OverlayEnabled()) {
     RefreshControls();
@@ -460,8 +462,9 @@ void
 MapOverlayControlsWidget::PrecacheDay()
 {
 #if !defined(HAVE_HTTP) || !defined(HAVE_EDL)
-  ShowMessageBox(_("HTTP support is not available in this build."),
-                 _("Weather"), MB_OK);
+  StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuild(message, N_("HTTP support"));
+  ShowMessageBox(message, _("Weather"), MB_OK);
 #else
   if (!EDL::OverlayEnabled())
     return;

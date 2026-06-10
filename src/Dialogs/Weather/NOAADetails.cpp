@@ -4,6 +4,7 @@
 #include "NOAADetails.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "Weather/Features.hpp"
 
 #ifdef HAVE_NOAA
@@ -94,8 +95,7 @@ inline void
 NOAADetailsWidget::RemoveClicked()
 {
   StaticString<256> tmp;
-  tmp.Format(_("Do you want to remove station %s?"),
-             station_iterator->GetCodeT());
+  FormatRemoveStationPrompt(tmp, station_iterator->GetCodeT());
 
   if (ShowMessageBox(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;

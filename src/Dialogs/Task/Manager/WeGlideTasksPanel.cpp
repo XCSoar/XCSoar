@@ -4,6 +4,7 @@
 #include "WeGlideTasksPanel.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 
 #ifdef HAVE_HTTP
 #include "Internal.hpp"
@@ -365,7 +366,9 @@ CreateWeGlideTasksPanel([[maybe_unused]] TaskManagerDialog &dialog,
                         [[maybe_unused]] bool *task_modified) noexcept
 {
   auto widget = std::make_unique<TextWidget>();
-  widget->SetText(_("WeGlide is not available in this build."));
+  StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuild(message, N_("WeGlide"));
+  widget->SetText(message);
   return widget;
 }
 

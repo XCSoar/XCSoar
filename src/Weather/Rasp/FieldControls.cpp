@@ -6,6 +6,9 @@
 #include "RaspStore.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
+#include "util/StaticString.hxx"
+#include "util/StringCompare.hxx"
 
 #include <algorithm>
 #include <fmt/format.h>
@@ -30,9 +33,17 @@ FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
     const char *label = item.label != nullptr
       ? gettext(item.label)
       : item.name;
-    const char *help = item.help != nullptr
-      ? gettext(item.help)
-      : nullptr;
+    StaticString<512> help_buffer;
+    const char *help = nullptr;
+    if (StringIsEqual(item.name, "dwcrit")) {
+      FormatRaspHeightCritHelp(help_buffer, true);
+      help = help_buffer.c_str();
+    } else if (StringIsEqual(item.name, "hwcrit")) {
+      FormatRaspHeightCritHelp(help_buffer, false);
+      help = help_buffer.c_str();
+    } else if (item.help != nullptr) {
+      help = gettext(item.help);
+    }
 
     field.AddChoice(i, item.name, label, help);
   }

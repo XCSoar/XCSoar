@@ -19,6 +19,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "util/StaticString.hxx"
 
 static int weather_page = 0;
@@ -28,7 +29,10 @@ static std::unique_ptr<Widget>
 CreateEDLUnavailableWidget() noexcept
 {
   auto widget = std::make_unique<TextWidget>();
-  widget->SetText(_("EDL weather is not available in this build because the OpenGL renderer is not available."));
+  StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuildWithoutOpenGLRenderer(message,
+                                                            N_("EDL weather"));
+  widget->SetText(message);
   return widget;
 }
 #endif

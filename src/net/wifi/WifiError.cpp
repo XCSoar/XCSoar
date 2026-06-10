@@ -3,6 +3,7 @@
 
 #include "WifiError.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "util/Exception.hxx"
 
 #include <string>
@@ -71,7 +72,7 @@ FormatCodeForUser(WifiError::Code code)
     return {_("NetworkManager is not available")};
   }
 
-  return {_("The operation failed.")};
+  return {OperationFailedText()};
 }
 
 } // namespace
@@ -84,7 +85,7 @@ static std::string
 FormatWhatForUser(const char *what)
 {
   if (what == nullptr) {
-    return {_("The operation failed.")};
+    return {OperationFailedText()};
   }
   const std::string_view w{what};
 
@@ -126,7 +127,7 @@ std::string
 WifiError::Format(std::exception_ptr e)
 {
   if (e == nullptr)
-    return {_("The operation failed.")};
+    return {OperationFailedText()};
 
   if (const auto *wifi_error = FindNested<WifiError::Exception>(e);
       wifi_error != nullptr)
@@ -137,6 +138,6 @@ WifiError::Format(std::exception_ptr e)
   } catch (const std::exception &ex) {
     return WifiError::Format(ex);
   } catch (...) {
-    return {_("The operation failed.")};
+    return {OperationFailedText()};
   }
 }

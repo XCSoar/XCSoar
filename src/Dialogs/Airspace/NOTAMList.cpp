@@ -13,6 +13,7 @@
 #include "Look/DialogLook.hpp"
 #include "util/Compiler.h"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "UIGlobals.hpp"
 #include "NetComponents.hpp"
 #include "Components.hpp"
@@ -174,7 +175,7 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       if (now < notam.start_time) {
         const auto starts_in = FormatRelativeNotamTime(notam.start_time - now);
         StaticString<64> status;
-        status.Format(_("Starts in %s"), starts_in.c_str());
+        FormatStartsIn(status, starts_in.c_str());
         first_row_text += " • ";
         first_row_text += status.c_str();
       } else if (!is_perm && now > notam.end_time) {

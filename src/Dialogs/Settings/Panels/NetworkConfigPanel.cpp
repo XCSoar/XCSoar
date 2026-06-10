@@ -6,8 +6,11 @@
 #include "Dialogs/WifiDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/DataField/Listener.hpp"
+
+#include "util/StaticString.hxx"
 
 #include <memory>
 #include <stdexcept>
@@ -75,9 +78,10 @@ KoboNetworkConfigWidget::Prepare(ContainerWindow &parent,
     try {
       auto backend = CreatePlatformWifiBackend();
       if (backend == nullptr) {
-        ShowMessageBox(
-          _("WiFi backend is not available in this Kobo build."),
-          _("Network"), MB_OK);
+        StaticString<128> message;
+        FormatFeatureNotAvailableInThisBuild(message,
+                                             N_("WiFi backend"));
+        ShowMessageBox(message, _("Network"), MB_OK);
         return;
       }
 
@@ -107,7 +111,9 @@ KoboNetworkConfigWidget::OnRefresh() noexcept
   try {
     auto backend = CreatePlatformWifiBackend();
     if (backend == nullptr) {
-      SetText(row_status, _("WiFi backend is not available in this Kobo build."));
+      StaticString<128> message;
+      FormatFeatureNotAvailableInThisBuild(message, N_("WiFi backend"));
+      SetText(row_status, message);
       SetText(row_ip, _("Unknown"));
       return;
     }
@@ -323,10 +329,10 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override
   {
     RowFormWidget::Prepare(parent, rc);
-    AddReadOnly(
-      _("Status"),
-      nullptr,
-      _("In-app network settings are not available in this build."));
+    StaticString<128> message;
+    FormatFeatureNotAvailableInThisBuild(message,
+                                         N_("In-app network settings"));
+    AddReadOnly(_("Status"), nullptr, message);
   }
 };
 #endif
