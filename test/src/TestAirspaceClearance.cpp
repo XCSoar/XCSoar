@@ -26,10 +26,12 @@
 #include "Engine/Task/Stats/TaskStats.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Flat/FlatPoint.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Radio/TransponderCode.hpp"
 #include "TestUtil.hpp"
 
 #include <chrono>
+#include <cmath>
 #include <memory>
 
 namespace {
@@ -111,7 +113,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(21);
+  plan_tests(27);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -123,6 +125,46 @@ main()
 
   TaskStats task_stats;
   task_stats.reset();
+
+  /* --- DistanceToBoundary: circle analytic, polygon via integer
+     grid (accurate to about one ~111 m cell) --- */
+  {
+    Airspaces airspaces;
+    auto circle = MakeCircle(origin, 5000.0, 0.0, 3000.0);
+    /* rectangle ~7.2 km (E-W) x ~11.1 km (N-S) around origin */
+    auto rect = MakeRectangle(9.95, 49.95, 10.05, 50.05,
+                              0.0, 3000.0);
+    airspaces.Add(circle);
+    airspaces.Add(rect);
+    airspaces.Optimise();
+    const FlatProjection &proj = airspaces.GetProjection();
+
+    /* Deep inside the circle: distance to the rim, not zero. */
+    ok1(fabs(circle->DistanceToBoundary(origin, proj) - 5000.0) < 1.0);
+    /* 100 m inside / 200 m outside the rim.  GeoVector::EndPoint
+       places points with the accurate great-circle formula while the
+       circle uses the simplified DistanceS (~0.3 % short at 5 km),
+       hence the ~20 m slack. */
+    const GeoPoint rim_in =
+      GeoVector(4900.0, Angle::Degrees(90.0)).EndPoint(origin);
+    const GeoPoint rim_out =
+      GeoVector(5200.0, Angle::Degrees(90.0)).EndPoint(origin);
+    ok1(fabs(circle->DistanceToBoundary(rim_in, proj) - 100.0) < 20.0);
+    ok1(fabs(circle->DistanceToBoundary(rim_out, proj) - 200.0) < 20.0);
+
+    /* Polygon: deep inside (origin, ~3.6 km from the west/east
+       edges) must report a large distance, not zero. */
+    ok1(rect->DistanceToBoundary(origin, proj) > 3000.0);
+    /* 100 m inside and 200 m outside the west edge; integer grid
+       rounding allows about one cell of slack. */
+    const GeoPoint west_mid = P(9.95, 50.0);
+    const GeoPoint poly_in =
+      GeoVector(100.0, Angle::Degrees(90.0)).EndPoint(west_mid);
+    const GeoPoint poly_out =
+      GeoVector(200.0, Angle::Degrees(270.0)).EndPoint(west_mid);
+    ok1(rect->DistanceToBoundary(poly_in, proj) < 350.0);
+    ok1(rect->DistanceToBoundary(poly_out, proj) < 550.0);
+  }
 
   /* --- Scenario 1: INSIDE warning fully covered by clearance ---
      Aircraft inside both W and C; C fully encloses W horizontally.

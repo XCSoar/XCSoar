@@ -9,6 +9,7 @@
 #include "AirspaceIntersectionVector.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const double _radius) noexcept
   :AbstractAirspace(Shape::CIRCLE), m_center(loc), m_radius(_radius)
@@ -78,6 +79,16 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
                projection.Unproject(f_p2));
 
   return sorter.all();
+}
+
+double
+AirspaceCircle::DistanceToBoundary(const GeoPoint &loc,
+                                   const FlatProjection &) const noexcept
+{
+  /* ClosestPoint() returns loc itself for interior points, so the
+     generic implementation would yield zero anywhere inside; the
+     circle boundary distance is available analytically. */
+  return std::fabs(loc.DistanceS(m_center) - m_radius);
 }
 
 GeoPoint
