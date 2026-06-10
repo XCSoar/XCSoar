@@ -14,6 +14,9 @@
 #ifdef _WIN32
 # include "system/WindowsRegistry.hpp"
 # include "util/StringFormat.hpp"
+# include "util/StringUtil.hpp"
+# include <algorithm>
+# include <climits>
 #endif
 
 #ifdef ANDROID
@@ -121,6 +124,27 @@ ComIndex(char *name) noexcept
 }
 
 static void
+FormatSerialPortDisplay(char *buffer, size_t size,
+                        const char *com_name,
+                        const char *device_name) noexcept
+{
+  const char *device = device_name;
+  if (const char *p = StringAfterPrefix(device_name, "\\Device\\"))
+    device = p;
+
+  if (device[0] == '\0' || StringIsEqual(com_name, device))
+    CopyString(buffer, size, com_name);
+  else
+    StringFormat(buffer, size, "%s (%s)", com_name, device);
+}
+
+struct DetectedSerialPort {
+  char path[128];
+  char display[128];
+  int com_index;
+};
+
+static void
 DetectSerialPorts(DataFieldEnum &df) noexcept
 try {
   /* the registry key HKEY_LOCAL_MACHINE/Hardware/DEVICEMAP/SERIALCOMM
@@ -129,6 +153,9 @@ try {
   RegistryKey hardware{HKEY_LOCAL_MACHINE, "Hardware"};
   RegistryKey devicemap{hardware, "DEVICEMAP"};
   RegistryKey serialcomm{devicemap, "SERIALCOMM"};
+
+  DetectedSerialPort ports[64];
+  unsigned num_ports = 0;
 
   for (unsigned i = 0;; ++i) {
     char name[128];
@@ -143,11 +170,17 @@ try {
       // weird
       continue;
 
+    if (num_ports >= std::size(ports))
+      break;
+
+    DetectedSerialPort &port = ports[num_ports++];
+
     const char *path = value;
+    const int com_index = ComIndex(value);
 
     char buffer[128];
-    if (const auto com_idx = ComIndex(value); com_idx >= 0) {
-      if (com_idx < 10)
+    if (com_index >= 0) {
+      if (com_index < 10)
         /* old-style raw names (with trailing colon for backwards
            compatibility with older XCSoar versions) */
         StringFormatUnsafe(buffer, "%s:", value);
@@ -157,8 +190,23 @@ try {
       path = buffer;
     }
 
-    AddPort(df, DeviceConfig::PortType::SERIAL, path, name);
+    FormatSerialPortDisplay(port.display, sizeof(port.display),
+                            value, name);
+
+    CopyString(port.path, sizeof(port.path), path);
+    port.com_index = com_index >= 0 ? com_index : INT_MAX;
   }
+
+  std::sort(ports, ports + num_ports,
+            [](const DetectedSerialPort &a, const DetectedSerialPort &b) {
+              if (a.com_index != b.com_index)
+                return a.com_index < b.com_index;
+              return StringCollate(a.display, b.display) < 0;
+            });
+
+  for (unsigned i = 0; i < num_ports; ++i)
+    AddPort(df, DeviceConfig::PortType::SERIAL,
+            ports[i].path, ports[i].display);
 } catch (const std::system_error &) {
   // silently ignore registry errors
 }
