@@ -161,6 +161,11 @@ BuildNOTAMAirspace(const struct NOTAM &notam)
       : notam.id;
     airspace->SetProperties(
       std::move(name), // name
+      false,                      // has_activation_time
+      BrokenDateTime::Invalid(),  // activation start time — none for NOTAMs
+      BrokenDateTime::Invalid(),  // activation end time — none for NOTAMs
+      true,                       // active_today      — NOTAMs always considered active
+      false,                      // never_active
       std::move(station_name), // station_name
       TransponderCode(), // transponder_code
       AirspaceClass::UNCLASSIFIED, // class
