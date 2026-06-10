@@ -73,6 +73,19 @@ class GlueMapWindow : public MapWindow {
   KineticManager kinetic_x{std::chrono::milliseconds{700}};
   KineticManager kinetic_y{std::chrono::milliseconds{700}};
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
+
+  /**
+   * Re-render terrain at higher OpenGL quantisation after the user
+   * stops interacting (see RasterRenderer::GetQuantisation()).
+   */
+  UI::Timer terrain_quantisation_timer{
+    [this]{ OnTerrainQuantisationTimer(); }};
+
+  /**
+   * Set after a full-resolution idle terrain redraw so
+   * PollTerrainQuantisationIdle() does not repaint every tick.
+   */
+  bool terrain_quantisation_idle_done = false;
 #endif
 
   /** flag to indicate if the MapItemList should be shown on mouse up */
@@ -168,15 +181,22 @@ public:
 
   void QuickRedraw() noexcept;
 
+#ifdef ENABLE_OPENGL
+  /**
+   * Re-evaluate idle terrain quantisation; called from the main timer
+   * so simulator startup and async tile loads still refine without
+   * a GNSS-driven redraw.
+   */
+  void PollTerrainQuantisationIdle() noexcept;
+#endif
+
   /**
    * Trigger a deferred redraw.  It will occur in the main thread
    * after all other events have been handled.
    *
    * This method is thread-safe.
    */
-  void InjectRedraw() noexcept {
-    redraw_notify.SendNotification();
-  }
+  void InjectRedraw() noexcept;
 
   /**
    * Trigger a deferred redraw.  It will occur in the main thread
@@ -306,5 +326,7 @@ private:
 
 #ifdef ENABLE_OPENGL
   void OnKineticTimer() noexcept;
+  void NoteTerrainQuantisationUserActivity() noexcept;
+  void OnTerrainQuantisationTimer() noexcept;
 #endif
 };

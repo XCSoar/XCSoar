@@ -1071,6 +1071,11 @@ MainWindow::RunTimer() noexcept
 
   ProcessTimer();
 
+#ifdef ENABLE_OPENGL
+  if (GlueMapWindow *m = GetMapIfActive())
+    m->PollTerrainQuantisationIdle();
+#endif
+
   UpdateGaugeVisibility();
 
   if (CommonInterface::GetUISettings().thermal_assistant_position == UISettings::ThermalAssistantPosition::OFF) {
