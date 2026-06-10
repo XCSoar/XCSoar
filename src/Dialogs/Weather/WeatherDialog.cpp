@@ -28,7 +28,7 @@ static std::unique_ptr<Widget>
 CreateEDLUnavailableWidget() noexcept
 {
   auto widget = std::make_unique<TextWidget>();
-  widget->SetText(_("EDL weather is not available because this build has no OpenGL renderer."));
+  widget->SetText(_("EDL weather is not available in this build because the OpenGL renderer is not available."));
   return widget;
 }
 #endif
