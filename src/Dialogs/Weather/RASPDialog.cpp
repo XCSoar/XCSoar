@@ -14,6 +14,10 @@
 #include "Terrain/RasterRenderer.hpp"
 #include "ui/canvas/RawBitmap.hpp"
 #include "Math/Angle.hpp"
+#include "Units/Units.hpp"
+#include "Units/System.hpp"
+#include "Units/Descriptor.hpp"
+#include "Units/Unit.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/ConstantAlpha.hpp"
@@ -161,25 +165,45 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
     PixelSize{width, bar_height}, canvas,
     PixelSize{width, bar_height}, false, use_alpha);
 
-  // Draw min/max text labels
-  auto fmt_value = [](float v) -> std::string {
-    if (v >= 100.0f || v <= -100.0f)
-      return fmt::format("{:.0f}", v);
-    return fmt::format("{:.1f}", v);
+  // Draw min/max text labels, converted to the user's units
+  const Unit unit = style->unit_group == UnitGroup::NONE
+    ? Unit::UNDEFINED
+    : Units::GetUserUnitByGroup(style->unit_group);
+  const char *const unit_name = unit == Unit::UNDEFINED
+    ? nullptr : Units::GetUnitName(unit);
+
+  const RaspStyle &s = *style;
+  auto fmt_value = [&s, unit, unit_name](float v) -> std::string {
+    const double value = unit == Unit::UNDEFINED
+      ? (double)v
+      : Units::ToUserUnit(s.ToSystemValue(v), unit);
+
+    std::string text = (value >= 100.0 || value <= -100.0)
+      ? fmt::format("{:.0f}", value)
+      : fmt::format("{:.1f}", value);
+
+    if (unit_name != nullptr)
+      text += fmt::format(" {}", unit_name);
+
+    return text;
   };
 
   canvas.SetTextColor(look.text_color);
   canvas.SetBackgroundTransparent();
 
-  const auto min_text = fmt_value(min_v);
-  const auto max_text = fmt_value(max_v);
+  try {
+    const auto min_text = fmt_value(min_v);
+    const auto max_text = fmt_value(max_v);
 
-  canvas.DrawText({rc.left + 1, bar_bottom + 1},
-                  min_text);
-  const auto max_size = canvas.CalcTextSize(max_text);
-  canvas.DrawText({rc.right - (int)max_size.width - 1,
-                   bar_bottom + 1},
-                  max_text);
+    canvas.DrawText({rc.left + 1, bar_bottom + 1},
+                    min_text);
+    const auto max_size = canvas.CalcTextSize(max_text);
+    canvas.DrawText({rc.right - (int)max_size.width - 1,
+                     bar_bottom + 1},
+                    max_text);
+  } catch (...) {
+    // Suppress formatting/allocation failures; colorbar rendering is preserved
+  }
 }
 
 class RASPSettingsPanel final
