@@ -48,8 +48,22 @@ struct ProjectedFan {
                    triangle_buffer.data());
   }
 
-  void DrawOutline(unsigned start) const noexcept {
-    glDrawArrays(GL_LINE_LOOP, start, size);
+  void DrawOutline(const BulkPixelPoint *all_points, unsigned start,
+                   unsigned pen_width) const noexcept {
+    const BulkPixelPoint *fan_points = all_points + start;
+
+    if (UseOpenGLLineLoopOutline(pen_width)) {
+      glDrawArrays(GL_LINE_LOOP, start, size);
+    } else {
+      static AllocatedArray<BulkPixelPoint> outline_buffer;
+      const unsigned strip_len =
+        LineToTriangles(fan_points, size, outline_buffer,
+                        pen_width, true);
+      if (strip_len > 0) {
+        const ScopeVertexPointer vp{outline_buffer.data()};
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
+      }
+    }
   }
 #else
   void DrawFill(Canvas &canvas, const BulkPixelPoint *points) const noexcept {
@@ -135,23 +149,28 @@ struct ProjectedFans {
 #endif
   }
 
-  void DrawOutline([[maybe_unused]] Canvas &canvas) const noexcept {
+#ifdef ENABLE_OPENGL
+  void DrawOutline(unsigned pen_width) const noexcept {
     assert(remaining == 0);
 
-#ifdef ENABLE_OPENGL
+    const auto *points = &this->points[0];
     unsigned start = 0;
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
-      i->DrawOutline(start);
+      i->DrawOutline(points, start, pen_width);
       start += i->size;
     }
+  }
 #else
+  void DrawOutline(Canvas &canvas) const noexcept {
+    assert(remaining == 0);
+
     const auto *points = &this->points[0];
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawOutline(canvas, points);
       points += i->size;
     }
-#endif
   }
+#endif
 };
 
 typedef StaticArray<ProjectedFan, FlatTriangleFanTree::MAX_FANS> ProjectedFanVector;
@@ -346,7 +365,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
     // Draw the TerrainLine polygon
 
-    visitor.fans.DrawOutline(canvas);
+    visitor.fans.DrawOutline(reach_pen.GetWidth());
 
 #ifdef ENABLE_OPENGL
     reach_pen.Unbind();
@@ -374,7 +393,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
   reach_pen_thick.Bind();
-  visitor.fans.DrawOutline(canvas);
+  visitor.fans.DrawOutline(reach_pen_thick.GetWidth());
   reach_pen_thick.Unbind();
 
   glDisable(GL_STENCIL_TEST);
