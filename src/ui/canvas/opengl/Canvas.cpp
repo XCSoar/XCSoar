@@ -34,21 +34,6 @@
 
 AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
 
-/**
- * OpenGL ES only guarantees 1px line width.  On Android (Adreno),
- * GL_LINE_LOOP with glLineWidth() > 1 produces spurious lines on
- * high-DPI devices (#1514).
- */
-[[gnu::const]]
-static bool
-UseOpenGLLineLoopOutline(unsigned pen_width) noexcept
-{
-  if (IsAndroid())
-    return false;
-
-  return pen_width <= (IsMacOSX() ? 1u : 2u);
-}
-
 static void
 GLDrawRectangle(const PixelRect r) noexcept
 {

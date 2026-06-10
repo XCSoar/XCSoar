@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Triangulate.hpp"
+#include "Asset.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
 #include "Math/Line2D.hpp"
@@ -588,4 +589,13 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
   }
 
   return s - strip.data();
+}
+
+bool
+UseOpenGLLineLoopOutline(unsigned pen_width) noexcept
+{
+  if (IsAndroid())
+    return false;
+
+  return pen_width <= (IsMacOSX() ? 1u : 2u);
 }
