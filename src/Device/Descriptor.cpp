@@ -209,14 +209,15 @@ try {
     parser.DisableGeoid();
 
   if (driver->CreateOnPort != nullptr) {
-    Device *new_device = driver->CreateOnPort(config, *port);
+    Device *new_device = driver->CreateOnPort(config, port->GetImplementationPort());
 
     const std::lock_guard lock{mutex};
     device = new_device;
 
     if (driver->HasPassThrough() && config.use_second_device &&
         second_driver->CreateOnPort != nullptr)
-      second_device = second_driver->CreateOnPort(config, *port);
+      second_device = second_driver->CreateOnPort(config,
+                                                  port->GetImplementationPort());
   } else
     port->StartRxThread();
 

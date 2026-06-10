@@ -315,8 +315,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     p.y = 0;
   }
 
-  if ((!enable_north_up) && traffic.relative_east && traffic.relative_north) {
-    // Rotate x and y to have a track up display
+  if (!enable_north_up) {
+    // Track-up: rotate even when east or north is zero (cardinal bearing).
     p = fr.Rotate(p);
   }
 

@@ -52,6 +52,7 @@ DeviceConfig::IsAvailable() const noexcept
 
   case PortType::TCP_LISTENER:
   case PortType::UDP_LISTENER:
+  case PortType::SPECTATE_FILE:
     return true;
 
   case PortType::PTY:
@@ -98,9 +99,8 @@ DeviceConfig::ShouldReopenOnTimeout() const noexcept
 
   case PortType::TCP_LISTENER:
   case PortType::UDP_LISTENER:
-    /* this is a server, and if no data gets received, this can just
-       mean that nobody connected to it, but reopening it periodically
-       doesn't help */
+  case PortType::SPECTATE_FILE:
+    /* local file polling; reopening does not help */
     return false;
 
   case PortType::PTY:
@@ -164,6 +164,13 @@ DeviceConfig::BluetoothNameStartsWith([[maybe_unused]] const char *prefix) const
 #else
   return false;
 #endif
+}
+
+void
+DeviceConfig::ApplySpectateDefaults() noexcept
+{
+  if (path.empty())
+    path = DEFAULT_SPECTATE_PATH;
 }
 
 void
@@ -296,6 +303,10 @@ DeviceConfig::GetPortName(char *buffer, size_t max_size) const noexcept
   case PortType::ANDROID_USB_SERIAL:
     StringFormat(buffer, max_size, "%s: %s",
                  _("USB serial"), path.c_str());
+    return buffer;
+
+  case PortType::SPECTATE_FILE:
+    StringFormat(buffer, max_size, "%s", path.c_str());
     return buffer;
   }
 

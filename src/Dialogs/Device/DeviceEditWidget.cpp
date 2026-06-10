@@ -19,6 +19,8 @@ enum ControlIndex {
   Port, EngineTypes, BaudRate, BulkBaudRate,
   IP_ADDRESS,
   TCPPort,
+  SpectatePath,
+  OwnCallsign,
   I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
   SyncFromDevice, SyncToDevice, SendPosition, PolarSyncMode,
   K6Bt,
@@ -138,6 +140,9 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
        flag and re-enable the device */
     config.enabled = true;
 
+  if (config.port_type == DeviceConfig::PortType::SPECTATE_FILE)
+    config.ApplySpectateDefaults();
+
   WndProperty &port_control = GetControl(Port);
   DataFieldEnum &port_df = *(DataFieldEnum *)port_control.GetDataField();
   SetPort(port_df, config);
@@ -147,6 +152,8 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   LoadValueEnum(BulkBaudRate, config.bulk_baud_rate);
   LoadValueEnum(IP_ADDRESS, config.ip_address);
   LoadValueEnum(TCPPort, config.tcp_port);
+  LoadValue(SpectatePath, config.path);
+  LoadValue(OwnCallsign, config.port_name);
   LoadValueEnum(I2CBus, config.i2c_bus);
   LoadValueEnum(I2CAddr, config.i2c_addr);
   LoadValueEnum(PressureUsage, config.press_use);
@@ -285,6 +292,8 @@ DeviceEditWidget::UpdateVisibilities() noexcept
                 SupportsBulkBaudRate(GetDataField(Driver)));
   SetRowAvailable(IP_ADDRESS, DeviceConfig::UsesIPAddress(type));
   SetRowAvailable(TCPPort, DeviceConfig::UsesTCPPort(type));
+  SetRowAvailable(SpectatePath, type == DeviceConfig::PortType::SPECTATE_FILE);
+  SetRowAvailable(OwnCallsign, type == DeviceConfig::PortType::SPECTATE_FILE);
   SetRowAvailable(I2CBus, DeviceConfig::UsesI2C(type));
   SetRowAvailable(I2CAddr, DeviceConfig::UsesI2C(type) &&
                 type != DeviceConfig::PortType::NUNCHUCK);
@@ -360,6 +369,20 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
   FillTCPPorts(*tcp_port_df);
   tcp_port_df->SetValue(config.tcp_port);
   Add(_("TCP port"), nullptr, tcp_port_df);
+
+  DataFieldString *spectate_path_df = new DataFieldString("", this);
+  spectate_path_df->SetValue(config.path);
+  Add(_("Spectate file"),
+      _("Full path to Condor 3 Spectate.json. "
+        "Default: c:\\condor3\\logs\\spectate.json"),
+      spectate_path_df);
+
+  DataFieldString *own_callsign_df = new DataFieldString("", this);
+  own_callsign_df->SetValue(config.port_name);
+  Add(_("Own callsign"),
+      _("Competition number of your glider in Spectate.json "
+        "(excluded from traffic, used as position reference)."),
+      own_callsign_df);
 
   DataFieldEnum *i2c_bus_df = new DataFieldEnum(this);
   FillI2CBus(*i2c_bus_df);
@@ -476,10 +499,13 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
   case DeviceConfig::PortType::GLIDER_LINK:
+  case DeviceConfig::PortType::SPECTATE_FILE:
     if (new_type == config.port_type)
       return false;
 
     config.port_type = new_type;
+    if (new_type == DeviceConfig::PortType::SPECTATE_FILE)
+      config.ApplySpectateDefaults();
     return true;
 
   case DeviceConfig::PortType::SERIAL:
@@ -547,6 +573,11 @@ DeviceEditWidget::Save(bool &_changed) noexcept
   if (config.UsesTCPPort())
     changed |= SaveValueEnum(TCPPort, config.tcp_port);
 
+  if (config.port_type == DeviceConfig::PortType::SPECTATE_FILE) {
+    changed |= SaveValue(SpectatePath, config.path);
+    changed |= SaveValue(OwnCallsign, config.port_name);
+  }
+
   if (config.UsesI2C()) {
     changed |= SaveValueEnum(I2CBus, config.i2c_bus);
     changed |= SaveValueEnum(I2CAddr, config.i2c_addr);
@@ -586,6 +617,14 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 void
 DeviceEditWidget::OnModified(DataField &df) noexcept
 {
+  if (IsDataField(Port, df)) {
+    const auto type = GetPortType((const DataFieldEnum &)df);
+    if (type == DeviceConfig::PortType::SPECTATE_FILE) {
+      config.ApplySpectateDefaults();
+      LoadValue(SpectatePath, config.path);
+    }
+  }
+
   if (IsDataField(Port, df) || IsDataField(Driver, df) ||
       IsDataField(UseSecondDriver, df) || IsDataField(K6Bt, df))
     UpdateVisibilities();

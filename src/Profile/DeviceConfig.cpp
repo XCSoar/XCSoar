@@ -38,6 +38,7 @@ static const char *const port_type_strings[] = {
   "ble_hm10",
   "glider_link",
   "android_usb_serial",
+  "spectate_file",
   NULL
 };
 
@@ -151,9 +152,16 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
   config.path.clear();
   if ((!have_port_type ||
        config.port_type == DeviceConfig::PortType::ANDROID_USB_SERIAL ||
-       config.port_type == DeviceConfig::PortType::SERIAL) &&
+       config.port_type == DeviceConfig::PortType::SERIAL ||
+       config.port_type == DeviceConfig::PortType::SPECTATE_FILE) &&
       !LoadPath(map, config, n) && LoadPortIndex(map, config, n))
     config.port_type = DeviceConfig::PortType::SERIAL;
+
+  if (const char *name = make_port_name("PortName"); name != nullptr)
+    map.Get(name, config.port_name);
+
+  if (config.port_type == DeviceConfig::PortType::SPECTATE_FILE)
+    config.ApplySpectateDefaults();
 
   if (const char *name = make_port_name("BaudRate");
       name == nullptr || !map.Get(name, config.baud_rate)) {
@@ -276,6 +284,9 @@ Profile::SetDeviceConfig(ProfileMap &map,
 
   if (const char *name = make_port_name("Path"); name != nullptr)
     map.Set(name, config.path);
+
+  if (const char *name = make_port_name("PortName"); name != nullptr)
+    map.Set(name, config.port_name);
 
   if (const char *name = make_port_name("BaudRate"); name != nullptr)
     map.Set(name, config.baud_rate);
