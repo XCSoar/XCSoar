@@ -139,6 +139,18 @@ GlueMapWindow::ResumeThreads() noexcept
 }
 
 void
+GlueMapWindow::InjectRedraw() noexcept
+{
+#ifdef ENABLE_OPENGL
+  /* async tile/topography loads may arrive after the idle upgrade
+     timer has already fired (common in simulator startup) */
+  terrain_quantisation_idle_done = false;
+#endif
+
+  redraw_notify.SendNotification();
+}
+
+void
 GlueMapWindow::FullRedraw() noexcept
 {
   UpdateDisplayMode();
@@ -148,6 +160,10 @@ GlueMapWindow::FullRedraw() noexcept
   UpdateScreenBounds();
 
   DeferRedraw();
+
+#ifdef ENABLE_OPENGL
+  NoteTerrainQuantisationUserActivity();
+#endif
 }
 
 void
@@ -186,5 +202,59 @@ GlueMapWindow::QuickRedraw() noexcept
   /* we suppose that the operation will need a full redraw later, so
      trigger that now */
   DeferRedraw();
+#else
+  NoteTerrainQuantisationUserActivity();
 #endif
 }
+
+#ifdef ENABLE_OPENGL
+
+/** Must match the steps in RasterRenderer::GetQuantisation(). */
+static constexpr auto TERRAIN_QUANTISATION_IDLE_STEP =
+  std::chrono::milliseconds(750);
+
+void
+GlueMapWindow::NoteTerrainQuantisationUserActivity() noexcept
+{
+  terrain_quantisation_idle_done = false;
+  terrain_quantisation_timer.Schedule(TERRAIN_QUANTISATION_IDLE_STEP);
+}
+
+void
+GlueMapWindow::PollTerrainQuantisationIdle() noexcept
+{
+  if (!IsUserIdle(750)) {
+    terrain_quantisation_idle_done = false;
+    return;
+  }
+
+  if (terrain_quantisation_timer.IsPending())
+    return;
+
+  if (IsUserIdle(1500)) {
+    if (!terrain_quantisation_idle_done) {
+      terrain_quantisation_idle_done = true;
+      PartialRedraw();
+    }
+    return;
+  }
+
+  /* idle past the first threshold but the one-shot timer was missed
+     (e.g. simulator startup before the map was shown) */
+  terrain_quantisation_idle_done = false;
+  PartialRedraw();
+  terrain_quantisation_timer.Schedule(TERRAIN_QUANTISATION_IDLE_STEP);
+}
+
+void
+GlueMapWindow::OnTerrainQuantisationTimer() noexcept
+{
+  PartialRedraw();
+
+  if (!IsUserIdle(1500))
+    terrain_quantisation_timer.Schedule(TERRAIN_QUANTISATION_IDLE_STEP);
+  else
+    terrain_quantisation_idle_done = true;
+}
+
+#endif
