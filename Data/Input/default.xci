@@ -626,7 +626,7 @@ type=key
 data=9
 event=Setup Target
 event=Mode default
-label=Target Show$(CheckTask)$(CheckTaskResumed)
+label=Target$(CheckTask)$(CheckTaskResumed)
 location=8
 
 # -------------
@@ -740,7 +740,7 @@ type=key
 data=6
 event=Setup System
 event=Mode default
-label=System
+label=Configuration
 location=5
 
 mode=Config1
@@ -748,7 +748,7 @@ type=key
 data=7
 event=Setup Plane
 event=Mode default
-label=Plane
+label=Planes
 location=6
 
 mode=Config1
@@ -764,7 +764,7 @@ type=key
 data=9
 event=Setup Basic
 event=Mode default
-label=Flight
+label=Flight Setup
 location=8
 
 mode=Config1
@@ -1034,7 +1034,7 @@ type=key
 data=9
 event=FlarmDetails
 event=Mode default
-label=Traffic List
+label=Traffic
 location=8
 
 mode=Info2
@@ -1213,7 +1213,7 @@ type=key
 data=0
 event=Setup Wind
 event=Mode default
-label=Setup Wind
+label=Wind
 location=2
 
 mode=RemoteStick
@@ -1221,7 +1221,7 @@ type=key
 data=0
 event=Setup System
 event=Mode default
-label=Setup System
+label=Configuration
 location=3
 
 mode=RemoteStick
@@ -1229,7 +1229,7 @@ type=key
 data=0
 event=Setup Airspace
 event=Mode default
-label=Settings Airspace$(CheckAirspace)
+label=Airspace$(CheckAirspace)
 location=4
 
 mode=RemoteStick
@@ -1237,7 +1237,7 @@ type=key
 data=0
 event=Setup Plane
 event=Mode default
-label=Setup Plane
+label=Planes
 location=5
 
 mode=RemoteStick
@@ -1299,7 +1299,7 @@ type=key
 data=0
 event=Calculator
 event=Mode default
-label=Task
+label=Task Manager
 location=13
 
 mode=RemoteStick
@@ -1334,7 +1334,7 @@ type=key
 data=0
 event=Setup Target
 event=Mode default
-label=Target Show$(CheckTask)$(CheckTaskResumed)
+label=Target$(CheckTask)$(CheckTaskResumed)
 location=17
 
 mode=RemoteStick
@@ -1509,7 +1509,7 @@ type=key
 data=0
 event=DistanceRings show
 event=DistanceRings toggle
-label=Dist. Rings\n$(DistanceRingsToggleActionName)
+label=Distance rings\n$(DistanceRingsToggleActionName)
 location=39
 
 mode=RemoteStick
@@ -1524,7 +1524,7 @@ mode=RemoteStick
 type=key
 data=0
 event=Exit
-label=Quit XCSoar
+label=Quit
 location=41
 
 # -------------
