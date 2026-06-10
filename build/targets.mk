@@ -553,6 +553,10 @@ ifeq ($(TARGET),PC)
 
   # default to "console"; see SCREEN_LDLIBS
   TARGET_LDFLAGS += -Wl,-subsystem,console
+
+  ifeq ($(X64),y)
+    TARGET_LDFLAGS += -Wl,--high-entropy-va
+  endif
 endif
 
 ifeq ($(HAVE_WIN32),y)
