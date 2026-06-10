@@ -48,6 +48,7 @@ DeviceFactory::OpenInternalSensors(SensorListener &listener)
     // TODO: Allow user to specify whether they want certain sensors.
     internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_PRESSURE);
     internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_ACCELEROMETER);
+    internal_sensors->SubscribeToSensor(env, InternalSensors::TYPE_GYROSCOPE);
   }
 
   return internal_sensors;

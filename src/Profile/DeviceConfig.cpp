@@ -232,6 +232,12 @@ Profile::GetDeviceConfig(const ProfileMap &map, unsigned n,
       name == nullptr || !map.GetEnum(name, config.polar_sync) ||
       unsigned(config.polar_sync) >= unsigned(DeviceConfig::PolarSync::COUNT))
     config.polar_sync = DeviceConfig::PolarSync::OFF;
+
+  if (const char *name = make_port_name("InstrumentAlignment");
+      name == nullptr || !map.GetEnum(name, config.instrument_alignment) ||
+      unsigned(config.instrument_alignment) >=
+        unsigned(DeviceConfig::InstrumentAlignment::COUNT))
+    config.instrument_alignment = DeviceConfig::InstrumentAlignment::NONE;
 }
 
 static const char *
@@ -342,4 +348,7 @@ Profile::SetDeviceConfig(ProfileMap &map,
 
   if (const char *name = make_port_name("PolarSync"); name != nullptr)
     map.SetEnum(name, config.polar_sync);
+
+  if (const char *name = make_port_name("InstrumentAlignment"); name != nullptr)
+    map.SetEnum(name, config.instrument_alignment);
 }
