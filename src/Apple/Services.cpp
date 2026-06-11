@@ -18,8 +18,7 @@ InitializeAppleServices()
   AVAudioSession *session = [AVAudioSession sharedInstance];
   [session setCategory:AVAudioSessionCategoryPlayback
            withOptions:AVAudioSessionCategoryOptionMixWithOthers
-                 error:&error];
-  [session setActive:YES error:&error];
+           error:&error];
   if (error) {
     LogFormat("AVAudioSession initialize error: %s", [[error localizedDescription] UTF8String]);
   }
@@ -33,7 +32,9 @@ DeinitializeAppleServices()
 #if TARGET_OS_IPHONE
   // Deinitialize AVAudioSession
   NSError *error = nil;
-  [[AVAudioSession sharedInstance] setActive:NO error:&error];
+  [[AVAudioSession sharedInstance] setActive:NO
+                                   withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
+                                   error:&error];
   if (error) {
     LogFormat("AVAudioSession deinitialize error: %s", [[error localizedDescription] UTF8String]);
   }
