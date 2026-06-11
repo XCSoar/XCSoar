@@ -4,6 +4,7 @@
 #include "Form/Edit.hpp"
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
+#include "DataField/Boolean.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
@@ -14,6 +15,7 @@
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Asset.hpp"
+#include "Look/Colors.hpp"
 #include "system/Path.hpp"
 #include "system/RunFile.hpp"
 
@@ -147,13 +149,20 @@ WndProperty::BeginEditing() noexcept
     
     OnHelp();
     return false;
-  } else {
-    if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
-      return false;
+  }
 
+  if (data_field->GetType() == DataField::Type::BOOLEAN) {
+    auto &df = static_cast<DataFieldBoolean &>(*data_field);
+    df.ModifyValue(!df.GetValue());
     RefreshDisplay();
     return true;
   }
+
+  if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
+    return false;
+
+  RefreshDisplay();
+  return true;
 }
 
 void
@@ -214,9 +223,29 @@ WndProperty::OnResize(PixelSize new_size) noexcept
   UpdateLayout();
 }
 
+static PixelRect
+GetHelpIconRect(const PixelRect &edit_rc) noexcept
+{
+  const int h = edit_rc.GetHeight() * 7 / 10;
+  const int left = edit_rc.left + Layout::GetTextPadding();
+  const int top = edit_rc.top + (edit_rc.GetHeight() - h) / 2;
+  return {left, top, left + h, top + h};
+}
+
 bool
 WndProperty::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
+  const bool is_boolean = data_field != nullptr &&
+    data_field->GetType() == DataField::Type::BOOLEAN;
+
+  if (is_boolean && HasHelp() && GetHelpIconRect(edit_rc).Contains(p)) {
+    help_icon_pressed = true;
+    pressed = true;
+    Invalidate();
+    SetCapture();
+    return true;
+  }
+
   if (!IsReadOnly() || HasHelp()) {
     dragging = true;
     pressed = true;
@@ -231,6 +260,18 @@ WndProperty::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 bool
 WndProperty::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
+  if (help_icon_pressed) {
+    help_icon_pressed = false;
+    ReleaseCapture();
+    if (pressed) {
+      pressed = false;
+      Invalidate();
+      if (GetHelpIconRect(edit_rc).Contains(p))
+        OnHelp();
+    }
+    return true;
+  }
+
   if (dragging) {
     dragging = false;
     ReleaseCapture();
@@ -250,7 +291,7 @@ WndProperty::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 bool
 WndProperty::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept
 {
-  if (dragging) {
+  if (dragging || help_icon_pressed) {
     const bool inside = IsInside(p);
     if (inside != pressed) {
       pressed = inside;
@@ -266,8 +307,9 @@ WndProperty::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcept
 void
 WndProperty::OnCancelMode() noexcept
 {
-  if (dragging) {
+  if (dragging || help_icon_pressed) {
     dragging = false;
+    help_icon_pressed = false;
     pressed = false;
     Invalidate();
     ReleaseCapture();
@@ -296,6 +338,165 @@ WndProperty::DecValue() noexcept
   return 0;
 }
 
+static void
+DrawInfoIcon(Canvas &canvas, const PixelRect &rc,
+             bool pressed, bool enabled) noexcept
+{
+  const int cx = (rc.left + rc.right) / 2;
+  const int cy = (rc.top + rc.bottom) / 2;
+  const int r = rc.GetWidth() / 2;
+
+  /* solid filled circle */
+  Color bg;
+  if (!enabled)
+    bg = Color(160, 160, 160);
+  else if (pressed)
+    bg = Color(30, 30, 30);
+  else
+    bg = Color(50, 50, 50);
+
+  canvas.Select(Brush(bg));
+  canvas.SelectNullPen();
+  canvas.DrawCircle({cx, cy}, r);
+
+  /* bold dot */
+  const int dot_r = std::max(2, r * 2 / 9);
+  const int dot_cy = cy - r * 7 / 20;
+  canvas.Select(Brush(COLOR_WHITE));
+  canvas.DrawCircle({cx, dot_cy}, dot_r);
+
+  /* bold stem with gap below dot */
+  const int stem_w = std::max(2, r * 2 / 5);
+  const int stem_top = dot_cy + dot_r + std::max(2, r / 5);
+  const int stem_bottom = cy + r * 11 / 20;
+  canvas.DrawFilledRectangle({cx - stem_w / 2, stem_top,
+                              cx - stem_w / 2 + stem_w, stem_bottom},
+                             COLOR_WHITE);
+}
+
+static void
+DrawToggleSwitch(Canvas &canvas, const PixelRect &rc,
+                 bool checked, bool focused, bool pressed,
+                 bool enabled) noexcept
+{
+  const int height = rc.GetHeight();
+  /* thumb slightly smaller than track height */
+  const int thumb_d = height - Layout::VptScale(7);
+  const int thumb_r = thumb_d / 2;
+  /* wider track to fit ON/OFF label text */
+  const int track_w = (height * 5) / 2;
+  const int track_h = height;
+
+  /* center the track vertically within rc, align right */
+  const int track_right = rc.right - Layout::GetTextPadding();
+  const int track_left = track_right - track_w;
+  const int track_top = rc.top + (rc.GetHeight() - track_h) / 2;
+  const int track_bottom = track_top + track_h;
+
+  /* Choose track and thumb colors based on display capabilities.
+     IsDithered() = pure B&W Kobo: use black/white with outlines for contrast.
+     !HasColors() = greyscale: use dark/light grey.
+     Otherwise: use established XCSoar theme colors. */
+  Color track_color, thumb_color, label_color;
+  bool draw_track_outline = false;
+
+  if (!enabled) {
+    track_color = COLOR_LIGHT_GRAY;
+    thumb_color = COLOR_WHITE;
+    label_color = COLOR_GRAY;
+    draw_track_outline = IsDithered();
+  } else if (IsDithered()) {
+    /* B&W e-ink: filled black = on, white with border = off */
+    if (checked) {
+      track_color = pressed ? COLOR_GRAY : COLOR_BLACK;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_WHITE;
+    } else {
+      track_color = COLOR_WHITE;
+      thumb_color = COLOR_BLACK;
+      label_color = COLOR_BLACK;
+      draw_track_outline = true;
+    }
+  } else if (!HasColors()) {
+    /* Greyscale display */
+    if (checked) {
+      track_color = pressed ? COLOR_GRAY : COLOR_DARK_GRAY;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_WHITE;
+    } else {
+      track_color = pressed ? COLOR_DARK_GRAY : COLOR_LIGHT_GRAY;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_DARK_GRAY;
+    }
+  } else {
+    /* Color display: use XCSoar theme color for checked */
+    if (checked) {
+      track_color = pressed ? DarkColor(COLOR_XCSOAR) : COLOR_XCSOAR;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_WHITE;
+    } else {
+      track_color = pressed ? COLOR_GRAY : COLOR_LIGHT_GRAY;
+      thumb_color = COLOR_WHITE;
+      label_color = COLOR_DARK_GRAY;
+    }
+  }
+
+  canvas.Select(Brush(track_color));
+  if (draw_track_outline)
+    canvas.Select(Pen(Layout::ScaleFinePenWidth(1), COLOR_BLACK));
+  else
+    canvas.SelectNullPen();
+  /* fully pill-shaped: corner radius = half height */
+  canvas.DrawRoundRectangle({track_left, track_top, track_right, track_bottom},
+                            {track_h, track_h});
+
+  if (focused && !pressed) {
+    canvas.SelectHollowBrush();
+    canvas.Select(Pen(Layout::ScaleFinePenWidth(2),
+                      HasColors() ? COLOR_XCSOAR : COLOR_BLACK));
+    canvas.DrawRoundRectangle({track_left - 2, track_top - 2,
+                               track_right + 2, track_bottom + 2},
+                              {track_h + 4, track_h + 4});
+  }
+
+  /* thumb position */
+  const int padding = (track_h - thumb_d) / 2;
+  int thumb_cx;
+  if (checked)
+    thumb_cx = track_right - padding - thumb_r;
+  else
+    thumb_cx = track_left + padding + thumb_r;
+  const int thumb_cy = track_top + track_h / 2;
+
+  /* ON / OFF label in the empty side of the track */
+  canvas.SetTextColor(label_color);
+  canvas.SetBackgroundTransparent();
+  {
+    const char *label = checked ? _("On") : _("Off");
+    const PixelSize ts = canvas.CalcTextSize(label);
+    int tx, text_area_left, text_area_right;
+    if (checked) {
+      text_area_left  = track_left + padding;
+      text_area_right = thumb_cx - thumb_r - padding / 2;
+    } else {
+      text_area_left  = thumb_cx + thumb_r + padding / 2;
+      text_area_right = track_right - padding;
+    }
+    tx = text_area_left + (text_area_right - text_area_left - (int)ts.width) / 2;
+    const int ty = track_top + (track_h - (int)ts.height) / 2;
+    if (tx >= text_area_left)
+      canvas.DrawText({tx, ty}, label);
+  }
+
+  /* thumb drawn last so it sits on top of the label */
+  canvas.Select(Brush(thumb_color));
+  if (IsDithered() && !checked)
+    canvas.Select(Pen(Layout::ScaleFinePenWidth(1), COLOR_BLACK));
+  else
+    canvas.SelectNullPen();
+  canvas.DrawCircle({thumb_cx, thumb_cy}, thumb_r);
+}
+
 void
 WndProperty::OnPaint(Canvas &canvas) noexcept
 {
@@ -313,6 +514,8 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
     visible_edit_rc.bottom = canvas_height;
 
   const bool focused = HasCursorKeys() && HasFocus();
+  const bool is_boolean = data_field != nullptr &&
+    data_field->GetType() == DataField::Type::BOOLEAN;
 
   /* background and selector */
   if (pressed)
@@ -353,6 +556,19 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
     else
       canvas.DrawClippedText(org, clip_width - org.x,
                              caption.c_str());
+  }
+
+  if (is_boolean) {
+    const bool checked =
+      static_cast<const DataFieldBoolean *>(data_field)->GetValue();
+    if (HasHelp()) {
+      const PixelRect icon_rc = GetHelpIconRect(edit_rc);
+      DrawInfoIcon(canvas, icon_rc, pressed && help_icon_pressed, IsEnabled());
+    }
+    canvas.Select(look.text_font);
+    DrawToggleSwitch(canvas, visible_edit_rc, checked,
+                     focused, pressed && !help_icon_pressed, IsEnabled());
+    return;
   }
 
   Color background_color, text_color;
