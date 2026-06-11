@@ -15,7 +15,44 @@
 #import <Foundation/Foundation.h>
 
 #if TARGET_OS_IPHONE
+
+/**
+ * Deactivates the AVAudioSession once playback has finished, notifying
+ * other apps so that any audio they had ducked or paused while our sound
+ * was playing is restored. Without this, the session stays active
+ * indefinitely and other apps' audio remains ducked forever.
+ */
+@interface XCSoarAudioPlayerDelegate : NSObject <AVAudioPlayerDelegate>
+@end
+
+static void
+DeactivateAudioSession()
+{
+  NSError *error = nil;
+  [[AVAudioSession sharedInstance] setActive:NO
+                                   withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
+                                   error:&error];
+  if (error) {
+    LogFormat("AVAudioSession deactivate error: %s", [[error localizedDescription] UTF8String]);
+  }
+}
+
+@implementation XCSoarAudioPlayerDelegate
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)audioPlayer successfully:(BOOL)flag
+{
+  DeactivateAudioSession();
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)audioPlayer error:(NSError *)error
+{
+  DeactivateAudioSession();
+}
+
+@end
+
 static AVAudioPlayer *player = nil;
+static XCSoarAudioPlayerDelegate *player_delegate = nil;
 #endif
 
 bool
@@ -63,8 +100,25 @@ SoundUtil::Play(const char *resource_name)
     return false;
   }
 
-  [player prepareToPlay];
-  [player play];
+  // Activate the audio session for the duration of the playback. It is
+  // deactivated again by the player delegate once playback has finished,
+  // so that other apps' audio (e.g. music) is never ducked permanently.
+  NSError *activate_error = nil;
+  [[AVAudioSession sharedInstance] setActive:YES error:&activate_error];
+  if (activate_error) {
+    LogFormat("AVAudioSession activate error: %s", [[activate_error localizedDescription] UTF8String]);
+  }
+
+  if (!player_delegate) {
+    player_delegate = [[XCSoarAudioPlayerDelegate alloc] init];
+  }
+  player.delegate = player_delegate;
+
+  if (![player prepareToPlay] || ![player play]) {
+    LogFormat("Failed to start playback for %s (%s)", resource_name, filename);
+    DeactivateAudioSession();
+    return false;
+  }
 
   return true;
 #else
