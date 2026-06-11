@@ -22,6 +22,7 @@ enum ControlIndex {
   AirfieldFileList,
   AirspaceFileList,
   FlarmFile,
+  FrequenciesFile,
   RaspFile,
   ChecklistFile,
   UserRepositoriesList
@@ -98,6 +99,11 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           GetFileTypePatterns(FileType::FLARMNET),
           FileType::FLARMNET);
 
+ AddFile(_("Radio Frequency Database"),
+          _("The file containing a list of radio frequencies."),
+          ProfileKeys::FrequenciesFile, "*.frq\0",
+          FileType::FREQUENCIES);
+
   AddFile("RASP",
           _("Regional Atmospheric Soaring Prediction file providing "
             "weather forecasts for soaring. Displays color-coded map "
@@ -139,6 +145,7 @@ SiteConfigPanel::Save(bool &_changed) noexcept
       AirspaceFileList, ProfileKeys::AirspaceFileList);
 
   FlarmFileChanged = SaveValueFileReader(FlarmFile, ProfileKeys::FlarmFile);
+  FrequenciesFileChanged = SaveValueFileReader(FrequenciesFile, ProfileKeys::FrequenciesFile);
 
   AirfieldFileChanged = SaveValueMultiFileReader(
       AirfieldFileList, ProfileKeys::AirfieldFileList);
@@ -156,7 +163,7 @@ SiteConfigPanel::Save(bool &_changed) noexcept
 
   changed = WaypointFileChanged || AirfieldFileChanged ||
             AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
-            RaspFileChanged || ChecklistFileChanged ||
+            FrequencyFileChanged||RaspFileChanged || ChecklistFileChanged ||
             UserRepositoriesListChanged;
 
   _changed |= changed;
