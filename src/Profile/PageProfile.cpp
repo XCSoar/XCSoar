@@ -75,6 +75,12 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
       pl.bottom == PageLayout::Bottom::EDL_CONTROLS)
     pl.overlay = PageLayout::Overlay::EDL;
 
+#ifdef HAVE_HTTP
+  if (pl.overlay == PageLayout::Overlay::NONE &&
+      pl.bottom == PageLayout::Bottom::XCTHERM)
+    pl.overlay = PageLayout::Overlay::XCTHERM;
+#endif
+
   pl.Normalise();
 
   _pl = pl;

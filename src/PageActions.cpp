@@ -16,11 +16,17 @@
 #include "Components.hpp"
 #include "DataGlobals.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "ActionInterface.hpp"
 #ifdef HAVE_EDL
 #include "Dialogs/Weather/MapOverlayControlsWidget.hpp"
 #include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/StateController.hpp"
+#endif
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_HTTP
+#include "Dialogs/Weather/XCThermControlsWidget.hpp"
+#include "Weather/xctherm/XCThermAPI.hpp"
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
 
 #if defined(ENABLE_SDL) && defined(main)
@@ -112,6 +118,13 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 #endif
     break;
 
+  case PageLayout::Overlay::XCTHERM:
+#ifdef HAVE_HTTP
+    if (layout.UsesXcthermOverlay())
+      XCTherm::ActivatePageOverlay();
+#endif
+    break;
+
   case PageLayout::Overlay::MAX:
     gcc_unreachable();
   }
@@ -136,6 +149,10 @@ PageActions::LeavePage()
   } else if (layout.overlay == PageLayout::Overlay::RASP) {
     ClearPageOverlays();
     CommonInterface::SetUIState().weather.rasp_page_entered = false;
+#ifdef HAVE_HTTP
+  } else if (layout.UsesXcthermOverlay()) {
+    XCTherm::ClearMapOverlay();
+#endif
   }
 
   if (state.special_page.IsDefined())
@@ -168,6 +185,10 @@ PageActions::Restore()
   } else if (special_page.overlay == PageLayout::Overlay::RASP) {
     ClearPageOverlays();
     CommonInterface::SetUIState().weather.rasp_page_entered = false;
+#ifdef HAVE_HTTP
+  } else if (special_page.UsesXcthermOverlay()) {
+    XCTherm::ClearMapOverlay();
+#endif
   }
 
   special_page.SetUndefined();
@@ -326,6 +347,9 @@ LoadMain(PageLayout::Main main)
 static void
 LoadBottom(const PageLayout &layout)
 {
+  /* Weather controls bottom widget is opt-in (Config → System → Pages).
+     EDL/RASP use MapOverlayControlsWidget; XCTherm overlay uses
+     XCThermControlsWidget. Same opt-in model as Cross Section. */
   switch (layout.bottom) {
   case PageLayout::Bottom::NOTHING:
     CommonInterface::main_window->SetBottomWidget(nullptr);
@@ -336,6 +360,16 @@ LoadBottom(const PageLayout &layout)
     break;
 
   case PageLayout::Bottom::EDL_CONTROLS:
+#ifdef HAVE_HTTP
+    if (layout.overlay == PageLayout::Overlay::XCTHERM) {
+      if (XCThermAPI::Instance().HasAnyCache())
+        CommonInterface::main_window->SetBottomWidget(
+          new XCThermControlsWidget());
+      else
+        CommonInterface::main_window->SetBottomWidget(nullptr);
+      break;
+    }
+#endif
 #ifdef HAVE_EDL
     {
       auto widget = CreateMapOverlayControlsBottomWidget(layout.overlay);
@@ -345,6 +379,17 @@ LoadBottom(const PageLayout &layout)
     CommonInterface::main_window->SetBottomWidget(nullptr);
 #endif
     break;
+
+#ifdef HAVE_HTTP
+  case PageLayout::Bottom::XCTHERM:
+    /* Legacy profile value — Normalise() maps to EDL_CONTROLS. */
+    if (layout.overlay == PageLayout::Overlay::XCTHERM &&
+        XCThermAPI::Instance().HasAnyCache())
+      CommonInterface::main_window->SetBottomWidget(new XCThermControlsWidget());
+    else
+      CommonInterface::main_window->SetBottomWidget(nullptr);
+    break;
+#endif
 
   case PageLayout::Bottom::CUSTOM:
     /* don't touch */

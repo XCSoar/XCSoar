@@ -180,6 +180,7 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Weather/XCThermDialog.cpp \
 	$(SRC)/Dialogs/Weather/PCMetDialog.cpp \
 	$(SRC)/Dialogs/Weather/NOAAList.cpp \
 	$(SRC)/Dialogs/Weather/NOAADetails.cpp
@@ -691,7 +692,19 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAFormatter.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
-	$(SRC)/Weather/NOAAUpdater.cpp
+	$(SRC)/Weather/NOAAUpdater.cpp \
+	$(SRC)/Weather/xctherm/XCThermAPI.cpp \
+	$(SRC)/Weather/xctherm/XCThermDownload.cpp \
+	$(SRC)/Weather/xctherm/XCThermDownloadGlue.cpp \
+	$(SRC)/Weather/xctherm/XCThermGeoJSON.cpp \
+	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
+	$(SRC)/Weather/xctherm/XCThermGeoJSONOverlay.cpp \
+	$(SRC)/Weather/xctherm/XCThermMapOverlay.cpp \
+	$(SRC)/Weather/xctherm/XCThermCatalog.cpp \
+	$(SRC)/Weather/xctherm/XCThermForecastTime.cpp \
+	$(SRC)/Weather/xctherm/XCThermControlsModel.cpp \
+	$(SRC)/Weather/xctherm/XCThermAutoSwitch.cpp \
+	$(SRC)/Dialogs/Weather/XCThermControlsWidget.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
