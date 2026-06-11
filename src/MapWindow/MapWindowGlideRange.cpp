@@ -365,7 +365,11 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
     // Draw the TerrainLine polygon
 
+#ifdef ENABLE_OPENGL
     visitor.fans.DrawOutline(reach_pen.GetWidth());
+#else
+    visitor.fans.DrawOutline(canvas);
+#endif
 
 #ifdef ENABLE_OPENGL
     reach_pen.Unbind();
