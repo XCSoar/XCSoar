@@ -174,7 +174,7 @@ XCThermAPI::FetchIndex()
     throw MakeApiError(true, 0, "index.json");
 
   ReturnValue<bool> parsed;
-  const auto invoke = [&parsed, this](Co::Task<bool> task) -> Co::InvokeTask {
+  const auto invoke = [&parsed](Co::Task<bool> task) -> Co::InvokeTask {
     parsed.Set(co_await task);
   };
   XCTherm::Http::RunSync(*Net::curl, invoke(CoFetchIndex(*Net::curl)));

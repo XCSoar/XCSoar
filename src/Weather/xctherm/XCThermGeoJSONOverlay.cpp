@@ -11,7 +11,9 @@
 #include "Projection/WindowProjection.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
+#ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
+#endif
 #include "LogFile.hpp"
 
 #include <algorithm>
@@ -186,8 +188,10 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
   if (forecast.IsEmpty())
     return;
 
+#ifdef ENABLE_OPENGL
   /* Enable alpha blending for the entire overlay draw */
   const ScopeAlphaBlend alpha_blend;
+#endif
 
   /* Temporary buffer for screen-space polygon points.
      We reuse this across polygons to avoid reallocation. */

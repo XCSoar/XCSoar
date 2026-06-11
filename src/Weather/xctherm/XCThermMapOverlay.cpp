@@ -51,17 +51,25 @@ ApplyForecastLayerToMap(XCThermGeoJSON::ForecastLayer &&forecast,
   if (map == nullptr)
     return;
 
+#ifdef ENABLE_OPENGL
   auto overlay = std::make_unique<XCThermGeoJSONOverlay>();
   overlay->SetForecast(std::move(forecast), label, parameter, forecast_utc);
   map->SetOverlay(std::move(overlay));
+#else
+  (void)label;
+  (void)parameter;
+  (void)forecast_utc;
+#endif
 }
 
 void
 ClearMapOverlay() noexcept
 {
+#ifdef ENABLE_OPENGL
   auto *map = UIGlobals::GetMap();
   if (map != nullptr)
     map->SetOverlay(nullptr);
+#endif
 }
 
 bool

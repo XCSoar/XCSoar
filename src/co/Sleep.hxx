@@ -19,7 +19,6 @@ namespace Co {
  * @p loop.  Must run on the thread that owns @p loop.
  */
 class SleepAwaitable final {
-  EventLoop &loop;
   const Event::Duration delay;
   std::coroutine_handle<> continuation{nullptr};
   CoarseTimerEvent timer;
@@ -32,7 +31,7 @@ class SleepAwaitable final {
 
 public:
   SleepAwaitable(EventLoop &loop, Event::Duration delay) noexcept
-    :loop(loop), delay(delay),
+    :delay(delay),
      timer(loop, BIND_THIS_METHOD(OnExpired)) {}
 
   ~SleepAwaitable() noexcept {
