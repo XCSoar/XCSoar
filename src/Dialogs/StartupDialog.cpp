@@ -193,6 +193,7 @@ dlgStartupShowModal() noexcept
 
   /* scan all profile files */
   auto *dff = new FileDataField();
+  dff->SetFileType(FileType::PROFILE);
   dff->ScanDirectoryTop(GetFileTypePatterns(FileType::PROFILE));
 
   if (dff->GetNumFiles() == 1) {
