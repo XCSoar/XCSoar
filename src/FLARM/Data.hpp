@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "FLARM/AlertZone.hpp"
 #include "FLARM/Error.hpp"
 #include "FLARM/Version.hpp"
 #include "FLARM/Hardware.hpp"
@@ -31,6 +32,8 @@ struct FlarmData {
 
   TrafficList traffic;
 
+  FlarmAlertZoneList alert_zones;
+
   constexpr bool IsDetected() const noexcept {
     return status.available || !traffic.IsEmpty();
   }
@@ -43,6 +46,7 @@ struct FlarmData {
     progress.Clear();
     status.Clear();
     traffic.Clear();
+    alert_zones.Clear();
   }
 
   constexpr void Complement(const FlarmData &add) noexcept {
@@ -53,6 +57,7 @@ struct FlarmData {
     progress.Complement(add.progress);
     status.Complement(add.status);
     traffic.Complement(add.traffic);
+    alert_zones.Complement(add.alert_zones);
   }
 
   constexpr void Expire(TimeStamp clock) noexcept {
@@ -63,6 +68,7 @@ struct FlarmData {
     progress.Expire(clock);
     status.Expire(clock);
     traffic.Expire(clock);
+    alert_zones.Expire(clock);
   }
 };
 

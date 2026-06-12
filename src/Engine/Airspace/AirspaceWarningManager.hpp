@@ -10,15 +10,18 @@
 #include "util/Serial.hpp"
 
 #include <list>
+#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_set>
+#include <vector>
 
 class TaskStats;
 class GlidePolar;
 class Airspaces;
 class FlatProjection;
 class AirspaceAircraftPerformance;
+class AirspaceIntersectionVisitor;
 
 /**
  * Class to detect and track airspace warnings
@@ -70,6 +73,13 @@ class AirspaceWarningManager {
    */
   std::unordered_set<std::string, TransparentStringHash,
                      TransparentStringEqual> notam_day_ack_by_station;
+
+  /**
+   * Airspaces provided externally (e.g. FLARM alert zones) that are
+   * not in the main Airspaces R-tree but should be checked by the
+   * same detection passes.
+   */
+  std::vector<ConstAirspacePtr> external_airspaces;
 
   /**
    * This number is incremented each time this object is modified.
@@ -195,6 +205,7 @@ public:
     ++serial;
     warnings.clear();
     notam_day_ack_by_station.clear();
+    external_airspaces.clear();
   }
 
   /**
@@ -273,6 +284,18 @@ public:
   [[gnu::pure]]
   bool IsActive(const AbstractAirspace &airspace) const noexcept;
 
+  /**
+   * Set externally-provided airspaces (e.g. from FLARM PFLAO).
+   * These are checked by the same detection passes as normal
+   * airspaces during the next Update() cycle.
+   */
+  void SetExternalAirspaces(std::span<const ConstAirspacePtr> airspaces);
+
+  [[gnu::pure]]
+  std::span<const ConstAirspacePtr> GetExternalAirspaces() const noexcept {
+    return external_airspaces;
+  }
+
 private:
   AirspaceWarning *FindWarningByNotamDayAckKey(std::string_view key) noexcept;
   const AirspaceWarning *
@@ -289,4 +312,18 @@ private:
                        const AirspaceAircraftPerformance &perf,
                        const AirspaceWarning::State warning_state,
                        FloatDuration max_time) noexcept;
+
+  /**
+   * Call f(ConstAirspacePtr) for every airspace (R-tree and external)
+   * whose horizontal bounds contain the given location.
+   */
+  template<typename F>
+  void ForEachInside(const GeoPoint &location, F &&f) const;
+
+  /**
+   * Visit all airspaces (R-tree and external) that intersect the
+   * line segment [a, b].
+   */
+  void VisitAllIntersecting(const GeoPoint &a, const GeoPoint &b,
+                            AirspaceIntersectionVisitor &visitor) const;
 };

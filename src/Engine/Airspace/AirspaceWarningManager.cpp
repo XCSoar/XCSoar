@@ -11,6 +11,9 @@
 #include "util/PrintException.hxx"
 #include "LogFileDecl.hpp"
 
+#include <algorithm>
+#include <ranges>
+
 static constexpr double CRUISE_FILTER_FACT = 0.5;
 
 /**
@@ -62,8 +65,20 @@ AirspaceWarningManager::Reset(const AircraftState &state)
   ++serial;
   warnings.clear();
   notam_day_ack_by_station.clear();
+  external_airspaces.clear();
   cruise_filter.Reset(state);
   circling_filter.Reset(state);
+}
+
+void
+AirspaceWarningManager::SetExternalAirspaces(
+    std::span<const ConstAirspacePtr> airspaces)
+{
+  if (std::ranges::equal(external_airspaces, airspaces))
+    return;
+
+  external_airspaces.assign(airspaces.begin(), airspaces.end());
+  ++serial;
 }
 
 void 
@@ -152,10 +167,16 @@ AirspaceWarningManager::Update(const AircraftState& state,
 {
   bool changed = false;
 
-  // update warning states
-  if (airspaces.IsEmpty()) {
-    // no airspaces, no warnings possible
-    assert(warnings.empty());
+  const bool have_airspaces = !airspaces.IsEmpty();
+  const bool have_external = !external_airspaces.empty();
+
+  if (!have_airspaces && !have_external) {
+    if (!warnings.empty()) {
+      warnings.clear();
+      ++serial;
+      return true;
+    }
+
     return false;
   }
 
@@ -314,6 +335,34 @@ private:
 };
 
 
+template<typename F>
+void
+AirspaceWarningManager::ForEachInside(const GeoPoint &location,
+                                      F &&f) const
+{
+  for (const auto &i : airspaces.QueryInside(location))
+    f(i.GetAirspacePtr());
+
+  for (const auto &ea : external_airspaces)
+    if (ea->Inside(location))
+      f(ea);
+}
+
+void
+AirspaceWarningManager::VisitAllIntersecting(
+  const GeoPoint &a, const GeoPoint &b,
+  AirspaceIntersectionVisitor &visitor) const
+{
+  airspaces.VisitIntersecting(a, b, visitor);
+
+  for (const auto &ea : external_airspaces) {
+    auto intersections = ea->Intersects(a, b, GetProjection());
+    if (!intersections.empty())
+      if (visitor.SetIntersections(std::move(intersections)))
+        visitor.Visit(ea);
+  }
+}
+
 bool 
 AirspaceWarningManager::UpdatePredicted(const AircraftState& state, 
                                         const GeoPoint &location_predicted,
@@ -344,13 +393,13 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
                                              warning_state, max_time_limit,
                                              ceiling);
 
-  airspaces.VisitIntersecting(state.location, location_predicted, visitor);
+  VisitAllIntersecting(state.location, location_predicted, visitor);
 
   visitor.SetMode(true);
 
-  for (const auto &i : airspaces.QueryInside(state.location)) {
-    visitor.Visit(i.GetAirspacePtr());
-  }
+  ForEachInside(state.location, [&](ConstAirspacePtr ap) {
+    visitor.Visit(std::move(ap));
+  });
 
   return visitor.Found();
 }
@@ -438,15 +487,13 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 
   bool found = false;
 
-  for (const auto &i : airspaces.QueryInside(state.location)) {
-    const auto airspace = i.GetAirspacePtr();
-
+  const auto check_airspace = [&](ConstAirspacePtr airspace) {
     const AltitudeState &altitude = state;
-    if (// ignore inactive airspaces
-        !airspace->IsActive() ||
-        !(config.IsClassEnabled(airspace->GetClassOrType()) || config.IsClassEnabled(airspace->GetTypeOrClass())) ||
+    if (!airspace->IsActive() ||
+        !(config.IsClassEnabled(airspace->GetClassOrType()) ||
+          config.IsClassEnabled(airspace->GetTypeOrClass())) ||
         !airspace->Inside(altitude))
-      continue;
+      return;
 
     AirspaceWarning *warning = GetWarningPtr(*airspace);
 
@@ -463,7 +510,9 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
       warning->UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;
     }
-  }
+  };
+
+  ForEachInside(state.location, check_airspace);
 
   return found;
 }
