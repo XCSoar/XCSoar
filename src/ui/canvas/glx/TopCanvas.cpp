@@ -3,6 +3,8 @@
 
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
+#include "ui/canvas/opengl/DitherPass.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/display/Display.hpp"
 #include "ui/dim/Size.hpp"
 
@@ -47,5 +49,13 @@ TopCanvas::GetNativeSize() const noexcept
 void
 TopCanvas::Flip()
 {
+#ifdef ENABLE_OPENGL
+  if (OpenGL::enable_dither_pass) {
+    Canvas canvas = Lock();
+    if (canvas.IsDefined())
+      OpenGL::ApplyGreyscalePass(canvas);
+  }
+#endif
+
   glXSwapBuffers(display.GetXDisplay(), glx_window);
 }
