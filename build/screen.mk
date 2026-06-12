@@ -87,7 +87,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/android/Font.cpp
 endif
 
-ifeq ($(DITHER),y)
+ifeq ($(call bool_or,$(DITHER),$(OPENGL)),y)
 SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/memory/Dither.cpp
 endif
@@ -141,6 +141,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/opengl/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Buffer.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Shaders.cpp \
+	$(CANVAS_SRC_DIR)/opengl/DitherPass.cpp \
 	$(CANVAS_SRC_DIR)/opengl/CanvasRotateShift.cpp \
 	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
 endif
