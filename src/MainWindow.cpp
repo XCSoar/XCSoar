@@ -33,6 +33,9 @@
 #include "UIReceiveBlackboard.hpp"
 #include "UISettings.hpp"
 #include "Interface.hpp"
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/custom/Cache.hpp"
+#endif
 
 #include <utility>
 #include "Components.hpp"
@@ -769,6 +772,20 @@ MainWindow::ReinitialiseLook() noexcept
 
   InfoBoxManager::ScheduleRedraw();
 }
+
+#ifdef ENABLE_OPENGL
+
+void
+MainWindow::SetEInkDisplay(bool enable) noexcept
+{
+  SetEnableDither(enable);
+
+#ifdef HAVE_TEXT_CACHE
+  TextCache::Flush();
+#endif
+}
+
+#endif
 
 #ifdef ANDROID
 

@@ -9,7 +9,7 @@
 struct GestureLook
 {
   static constexpr Color color = COLOR_RED;
-  static constexpr Color invalid_color = LightColor(color);
+  static inline const Color invalid_color = LightColor(color);
 
   Pen pen, invalid_pen;
 
