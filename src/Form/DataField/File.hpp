@@ -76,6 +76,12 @@ private:
    * the file list was loaded. It will trigger a sort after loading.
    */
   SortOrder postponed_sort;
+  
+  /**
+   * Stores whether the first entry should be skipped during sorting if 
+   * Sort() has been called before the file list was loaded.
+  */
+  bool postponed_preserve_first = false;
 
   /**
    * Used to store the value while !loaded.
@@ -153,7 +159,8 @@ public:
   void ModifyIndex(unsigned new_value) noexcept;
 
   /** Sorts the filelist by filenames */
-  void Sort(SortOrder order = SortOrder::ASCENDING) noexcept;
+  void Sort(SortOrder order = SortOrder::ASCENDING,
+            bool preserve_first = false) noexcept;
   void ScanDirectoryTop(const char *filter) noexcept;
 
   /**

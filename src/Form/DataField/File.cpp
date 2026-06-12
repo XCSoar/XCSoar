@@ -77,7 +77,7 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
    // Set selection to zero
    current_index(0),
    loaded(false), postponed_sort(SortOrder::NO_ORDER),
-   postponed_value(nullptr) {}
+   postponed_preserve_first(false), postponed_value(nullptr) {}
 
 void
 FileDataField::ScanDirectoryTop(const char *filter) noexcept
@@ -113,7 +113,8 @@ FileDataField::ScanDirectoryTop(const char *filter) noexcept
     VisitDataFiles(filter, fv);
   }
 
-  Sort();
+  if (postponed_sort == SortOrder::NO_ORDER)
+    Sort();
 }
 
 void
@@ -324,31 +325,40 @@ FileDataField::Dec() noexcept
 }
 
 void
-FileDataField::Sort(SortOrder order) noexcept
+FileDataField::Sort(SortOrder order, bool preserve_first) noexcept
 {
   if (order == SortOrder::NO_ORDER)
     return;
 
   if (!loaded) {
     postponed_sort = order;
+    postponed_preserve_first = preserve_first;
     return;
   }
 
-  if (order == SortOrder::ASCENDING) {
-    // Sort the filelist in ascending order
-    std::sort(files.begin(), files.end(), [](const Item &a,
-                                             const Item &b) {
-                return StringCollate(a.filename.c_str(), b.filename.c_str()) < 0;
-              });
-  } else {
-    // Sort the filelist in descending order
-    std::sort(files.begin(), files.end(), [](const Item &a,
+  if (files.size() > 1) {
+    if (preserve_first) {
+      // Replay if first record blank then remainder sorted descending
+      std::sort(std::next(files.begin()), files.end(), [](const Item &a, const Item &b) {
+                return StringCollate(a.filename.c_str(), b.filename.c_str()) > 0;
+      });
+    } else if (order == SortOrder::DESCENDING) {
+      // Sort the filelist in descending order
+      std::sort(files.begin(), files.end(), [](const Item &a,
                                              const Item &b) {
                 return StringCollate(a.filename.c_str(), b.filename.c_str()) > 0;
               });
+    } else {
+      // Sort the filelist in ascending order
+      std::sort(files.begin(), files.end(), [](const Item &a,
+                                             const Item &b) {
+                return StringCollate(a.filename.c_str(), b.filename.c_str()) < 0;
+              });
   }
+}
 
   postponed_sort = SortOrder::NO_ORDER;
+  postponed_preserve_first = false;
 }
 
 ComboList
@@ -442,7 +452,7 @@ FileDataField::EnsureLoaded() noexcept
     ScanDirectoryTop(*i);
 
   if (postponed_sort != SortOrder::NO_ORDER)
-    Sort(postponed_sort);
+    Sort(postponed_sort, postponed_preserve_first);
 
   if (postponed_value != nullptr)
     SetValue(postponed_value);
