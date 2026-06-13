@@ -397,9 +397,35 @@ TestFlarmMessagingResolveInfo()
   traffic_databases = nullptr;
 }
 
+static void
+TestFlarmClearUserCallsignFallback()
+{
+  TrafficDatabases dbs;
+  traffic_databases = &dbs;
+
+  const FlarmId id = FlarmId::Parse("DD0004", nullptr);
+  InsertMessaging(dbs.flarm_messages, "DD0004",
+                  "Pilot", "Ventus 3", "D-6529", "AB");
+
+  ok1(FlarmDetails::LookupCallsign(id) != nullptr);
+  ok1(StringIsEqual(FlarmDetails::LookupCallsign(id), "AB"));
+
+  ok1(FlarmDetails::AddSecondaryItem(id, ""));
+
+  const char *callsign = FlarmDetails::LookupCallsign(id);
+  ok1(callsign != nullptr);
+  ok1(StringIsEqual(callsign, "AB"));
+
+  const ResolvedInfo info = FlarmDetails::ResolveInfo(id);
+  ok1(info.callsign == "AB");
+  ok1(info.registration == "D-6529");
+
+  traffic_databases = nullptr;
+}
+
 int main()
 {
-  plan_tests(50);
+  plan_tests(57);
 
   TestFlarmMessagingIO();
   TestFlarmMessagingFile();
@@ -407,6 +433,7 @@ int main()
   TestFlarmMessagingUndefinedValue();
   TestFlarmMessagingThreadSafety();
   TestFlarmMessagingResolveInfo();
+  TestFlarmClearUserCallsignFallback();
 
   return exit_status();
 }
