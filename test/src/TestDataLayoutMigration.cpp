@@ -33,7 +33,7 @@ WriteTextFile(Path path, const char *content) noexcept
 }
 
 static void
-TestMigratesFilesAndActiveProfileOnly()
+TestMigratesFilesAndAllProfiles()
 {
   char template_path[] = "/tmp/xcsoar-migrate-XXXXXX";
   ok1(mkdtemp(template_path) != nullptr);
@@ -103,7 +103,7 @@ TestMigratesFilesAndActiveProfileOnly()
   Profile::LoadFile(competition_map, moved_competition_prf);
   std::string raw_map_path;
   ok1(competition_map.Get(ProfileKeys::MapFile, raw_map_path));
-  ok1(StringFind(raw_map_path.c_str(), "maps") == nullptr);
+  ok1(StringFind(raw_map_path.c_str(), "maps") != nullptr);
 
   const auto resolved = competition_map.GetPath(ProfileKeys::MapFile);
   ok1(resolved != nullptr);
@@ -166,7 +166,7 @@ main()
   SetFakeLogFileQuiet(true);
 
   plan_tests(43);
-  TestMigratesFilesAndActiveProfileOnly();
+  TestMigratesFilesAndAllProfiles();
   TestDoesNotWriteMarkerWhenAllMovesFail();
   return exit_status();
 }
