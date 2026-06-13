@@ -582,6 +582,33 @@ CopyTruncateStringUTF8(std::span<char> dest,
   return p;
 }
 
+std::string_view
+SuffixUTF8(std::string_view s, std::size_t max_chars) noexcept
+{
+  assert(ValidateUTF8(s));
+
+  const char *const end = s.data() + s.size();
+  std::size_t char_count = 0;
+  for (std::string_view i = s; !i.empty(); ++char_count) {
+    const std::size_t sequence = SequenceLengthUTF8(i.data());
+    assert(sequence > 0);
+    assert(sequence <= i.size());
+    i.remove_prefix(sequence);
+  }
+
+  if (char_count <= max_chars)
+    return s;
+
+  const char *p = s.data();
+  for (std::size_t skip = char_count - max_chars; skip > 0; --skip) {
+    const std::size_t sequence = SequenceLengthUTF8(p);
+    assert(sequence > 0);
+    p += sequence;
+  }
+
+  return {p, static_cast<std::size_t>(end - p)};
+}
+
 std::pair<unsigned, const char *>
 NextUTF8(const char *p) noexcept
 {
