@@ -268,6 +268,7 @@ $(eval $(call link-program,TestAirspaceWarningManager,TEST_AIRSPACE_WARNING_MANA
 
 TEST_OGN_APRS_PARSER_SOURCES = \
 	$(SRC)/Cloud/OGNAprs.cpp \
+	$(SRC)/Cloud/OGNTraffic.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
 TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS

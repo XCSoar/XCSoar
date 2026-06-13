@@ -15,6 +15,8 @@
 #include "event/SignalMonitor.hxx"
 #include "event/net/cares/Channel.hxx"
 #include "net/IPv4Address.hxx"
+#include "net/IPv6Address.hxx"
+#include "net/ToString.hxx"
 #include "io/FileOutputStream.hxx"
 #include "io/FileReader.hxx"
 #include "util/PrintException.hxx"
@@ -27,6 +29,7 @@
 #include <cstring>
 #include <iostream>
 #include <iomanip>
+#include <iterator>
 #include <memory>
 #include <optional>
 
@@ -45,6 +48,9 @@ static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE =
 
 static constexpr std::chrono::steady_clock::duration REQUEST_EXPIRY =
   std::chrono::minutes(5);
+
+static constexpr std::chrono::steady_clock::duration TRAFFIC_PUSH_INTERVAL =
+  std::chrono::seconds(15);
 
 static constexpr unsigned MAX_TRAFFIC_TARGETS_PER_RESPONSE = 64;
 
@@ -68,6 +74,12 @@ EnvOr(const char *key, const char *fallback) noexcept
 {
   const char *v = std::getenv(key);
   return (v != nullptr && v[0] != '\0') ? v : fallback;
+}
+
+static bool
+DebugEnabled() noexcept
+{
+  return std::strcmp(EnvOr("XCS_CLOUD_DEBUG", "0"), "1") == 0;
 }
 
 class CloudServer final
@@ -111,12 +123,16 @@ public:
       std::string user{EnvOr("XCS_CLOUD_OGN_USER", "N0CALL")};
       std::string pass{EnvOr("XCS_CLOUD_OGN_PASS", "-1")};
 
+      cout << "OGN\tenabled\thost=" << host << "\tport=" << port
+           << "\tuser=" << user << endl;
+
       ogn_client = std::make_unique<OGNClient>(
         event_loop, cares_channel, *this,
         std::move(host), port, std::move(user), std::move(pass));
       ogn_client->Start();
       ScheduleOgnExpire();
-    }
+    } else
+      cout << "OGN\tdisabled" << endl;
   }
 
   ~CloudServer() noexcept
@@ -159,17 +175,24 @@ private:
 
   void PushOgnTraffic(const OGNTrafficEntry &t) noexcept;
 
+  void SendTrafficCallsign(SocketAddress address, uint64_t key,
+                           uint32_t pilot_id,
+                           const std::string &callsign) noexcept;
+
+  void SendNearTrafficSnapshot(CloudClient &client,
+                               const char *reason) noexcept;
+
+  void MaybeSendNearTrafficSnapshot(CloudClient &client,
+                                    const char *reason,
+                                    bool force = false) noexcept;
+
   template<typename F>
-  void ForEachTrafficInterestedNear(
+  void ForEachClientNear(
     const ::GeoPoint &origin,
-    std::chrono::steady_clock::time_point now,
     std::optional<uint64_t> exclude_key, F &&f) noexcept(
-    noexcept(f(std::declval<const CloudClient &>()))) {
+    noexcept(f(std::declval<CloudClient &>()))) {
     for (const auto &i : clients.QueryWithinRange(origin, TRAFFIC_RANGE)) {
       if (exclude_key && i->key == *exclude_key)
-        continue;
-
-      if (now > i->wants_traffic)
         continue;
 
       f(*i);
@@ -187,6 +210,9 @@ protected:
 
   void OnTrafficRequest(const Client &client,
                         bool near) override;
+
+  void OnUserNameRequest(const Client &client,
+                         uint32_t user_id) override;
 
   void OnWaveSubmit(const Client &client,
                     std::chrono::milliseconds time_of_day,
@@ -236,15 +262,41 @@ void
 CloudServer::OnAprsLine(std::string_view line) noexcept
 {
   const OGNAprsParseResult p = ParseOGNAprsLine(line);
-  if (!p.valid)
+  if (!p.valid) {
+    if (DebugEnabled())
+      cerr << "OGN\tignore\t" << line << endl;
     return;
+  }
 
   OGNTrafficEntry &t =
     ogn_traffic.Upsert(p.station_id, p.location, p.altitude,
                        p.track_deg, p.track_valid,
                        p.flarm_id, p.flarm_valid,
-                       p.aircraft_type);
+                       p.aircraft_type, p.callsign);
+
+  cout << "OGN\ttraffic\t" << p.station_id << '\t'
+       << t.location << '\t' << t.altitude << "m\t"
+       << "pilot_id=" << t.pilot_id;
+  if (!t.callsign.empty())
+    cout << "\tcallsign=" << t.callsign;
+  cout << endl;
+
   PushOgnTraffic(t);
+}
+
+void
+CloudServer::SendTrafficCallsign(SocketAddress address, uint64_t key,
+                                 uint32_t pilot_id,
+                                 const std::string &callsign) noexcept
+{
+  if (callsign.empty())
+    return;
+
+  SendUserNameResponse(*this, address, key, pilot_id, callsign);
+
+  if (DebugEnabled())
+    cerr << "USER_NAME\tpush\tpilot_id=" << pilot_id
+         << "\tname=" << callsign << endl;
 }
 
 void
@@ -255,14 +307,88 @@ CloudServer::PushOgnTraffic(const OGNTrafficEntry &t) noexcept
   if (t.stamp < min_stamp)
     return;
 
-  const TrafficRecordExtensions ext = TrafficRecordExtensions::FromOgn(t);
-  const uint32_t time_ms = MsUtcMidnight();
-
-  ForEachTrafficInterestedNear(t.location, now, {}, [&](const CloudClient &i) {
-    TrafficResponseSender s(*this, i.address, i.key);
-    s.Add(t.pilot_id, time_ms, t.location, t.altitude, ext);
-    s.Flush();
+  ForEachClientNear(t.location, {}, [&](CloudClient &i) {
+    MaybeSendNearTrafficSnapshot(i, "TRAFFIC_OGN");
   });
+}
+
+void
+CloudServer::MaybeSendNearTrafficSnapshot(CloudClient &client,
+                                          const char *reason,
+                                          bool force) noexcept
+{
+  const auto now = std::chrono::steady_clock::now();
+  if (!force && now < client.last_traffic_push + TRAFFIC_PUSH_INTERVAL)
+    return;
+
+  client.last_traffic_push = now;
+  SendNearTrafficSnapshot(client, reason);
+}
+
+void
+CloudServer::SendNearTrafficSnapshot(CloudClient &client,
+                                       const char *reason) noexcept
+{
+  const auto now = std::chrono::steady_clock::now();
+  const auto min_stamp = now - MAX_TRAFFIC_AGE;
+
+  TrafficResponseSender s(*this, client.address, client.key);
+
+  unsigned n = 0;
+  unsigned n_cloud = 0;
+  unsigned n_ogn = 0;
+  for (const auto &traffic : clients.QueryWithinRange(client.location,
+                                                      TRAFFIC_RANGE)) {
+    if (traffic.get() == &client)
+      continue;
+
+    if (traffic->stamp < min_stamp)
+      continue;
+
+    s.Add(traffic->id, 0, //TODO: time?
+          traffic->location, traffic->altitude);
+    ++n_cloud;
+
+    if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
+      break;
+  }
+
+  if (n <= MAX_TRAFFIC_TARGETS_PER_RESPONSE) {
+    const uint32_t time_ms = MsUtcMidnight();
+    for (const auto &og :
+         ogn_traffic.QueryWithinRange(client.location, TRAFFIC_RANGE)) {
+      if (og->stamp < min_stamp)
+        continue;
+
+      s.Add(og->pilot_id, time_ms, og->location, og->altitude,
+            TrafficRecordExtensions::FromOgn(*og));
+      ++n_ogn;
+
+      if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
+        break;
+    }
+  }
+
+  s.Flush();
+
+  if (n_ogn > 0) {
+    for (const auto &og :
+         ogn_traffic.QueryWithinRange(client.location, TRAFFIC_RANGE)) {
+      if (og->stamp < min_stamp)
+        continue;
+
+      SendTrafficCallsign(client.address, client.key,
+                          og->pilot_id, og->callsign);
+    }
+  }
+
+  if (n > 0 || std::strcmp(reason, "TRAFFIC_FIX") == 0) {
+    cout << reason << '\t' << client.address << '\t'
+         << std::hex << client.key << std::dec << '\t'
+         << client.id << '\t' << client.location << '\t'
+         << "cloud=" << n_cloud << "\togn=" << n_ogn
+         << "\ttotal=" << n << endl;
+  }
 }
 
 void
@@ -294,73 +420,51 @@ CloudServer::OnFix(const Client &c,
       clients.Refresh(*client, c.address);
   }
 
-  /* send this new traffic location to all interested clients
-     immediately */
-  const auto now = std::chrono::steady_clock::now();
-  ForEachTrafficInterestedNear(location, now, c.key,
-                               [&](const CloudClient &i) {
-                                 TrafficResponseSender s(*this, i.address,
-                                                         i.key);
-                                 s.Add(client->id, 0, //TODO: time?
-                                       client->location, client->altitude);
-                                 s.Flush();
-                               });
+  if (client == nullptr || !location.IsValid())
+    return;
+
+  /* Always push a full nearby snapshot to the client that sent the FIX. */
+  MaybeSendNearTrafficSnapshot(*client, "TRAFFIC_FIX", true);
+
+  /* Tell other nearby clients about this aircraft immediately. */
+  ForEachClientNear(location, c.key,
+                    [&](CloudClient &i) {
+                      TrafficResponseSender s(*this, i.address, i.key);
+                      s.Add(client->id, 0, //TODO: time?
+                            client->location, client->altitude);
+                      s.Flush();
+                    });
 }
 
 void
 CloudServer::OnTrafficRequest(const Client &c, bool near)
 {
-  if (!near)
-    /* "near" is the only selection flag we know */
+  if (!near) {
+    if (DebugEnabled())
+      cerr << "TRAFFIC_REQUEST\tignored\tnot-near\t"
+           << std::hex << c.key << std::dec << endl;
     return;
+  }
 
   auto *client = clients.Find(c.key);
-  if (client == nullptr)
-    /* we don't send our data to clients who didn't sent anything to
-       us yet */
+  if (client == nullptr) {
+    cerr << "TRAFFIC_REQUEST\trejected\tunknown-client\t"
+         << ToString(c.address) << '\t'
+         << std::hex << c.key << std::dec << endl;
+    return;
+  }
+
+  MaybeSendNearTrafficSnapshot(*client, "TRAFFIC_REQUEST", true);
+}
+
+void
+CloudServer::OnUserNameRequest(const Client &c, uint32_t user_id)
+{
+  const OGNTrafficEntry *traffic = ogn_traffic.FindByPilotId(user_id);
+  if (traffic == nullptr || traffic->callsign.empty())
     return;
 
-  const auto now = std::chrono::steady_clock::now();
-
-  client->wants_traffic = now + REQUEST_EXPIRY;
-
-  const auto min_stamp = now - MAX_TRAFFIC_AGE;
-
-  TrafficResponseSender s(*this, c.address, c.key);
-
-  unsigned n = 0;
-  for (const auto &traffic : clients.QueryWithinRange(client->location,
-                                                      TRAFFIC_RANGE)) {
-    if (traffic.get() == client)
-      continue;
-
-    if (traffic->stamp < min_stamp)
-      /* don't send stale traffic, it's probably not there anymore */
-      continue;
-
-    s.Add(traffic->id, 0, //TODO: time?
-          traffic->location, traffic->altitude);
-
-    if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
-      break;
-  }
-
-  if (n <= MAX_TRAFFIC_TARGETS_PER_RESPONSE) {
-    const uint32_t time_ms = MsUtcMidnight();
-    for (const auto &og :
-         ogn_traffic.QueryWithinRange(client->location, TRAFFIC_RANGE)) {
-      if (og->stamp < min_stamp)
-        continue;
-
-      s.Add(og->pilot_id, time_ms, og->location, og->altitude,
-            TrafficRecordExtensions::FromOgn(*og));
-
-      if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
-        break;
-    }
-  }
-
-  s.Flush();
+  SendTrafficCallsign(c.address, c.key, user_id, traffic->callsign);
 }
 
 void
@@ -473,6 +577,11 @@ CloudServer::OnThermalRequest(const Client &c)
   }
 
   s.Flush();
+
+  cout << "THERMAL_REQUEST\t" << client->address << '\t'
+       << std::hex << client->key << std::dec << '\t'
+       << client->id << '\t' << client->location << '\t'
+       << "count=" << n << endl;
 }
 
 void
@@ -481,6 +590,11 @@ CloudServer::Load()
   FileReader fr(db_path);
   Deserialiser s(fr);
   CloudData::Load(s);
+
+  cout << "DB\tloaded\tclients="
+       << std::distance(clients.begin(), clients.end())
+       << "\tthermals="
+       << std::distance(thermals.begin(), thermals.end()) << endl;
 }
 
 void
@@ -507,6 +621,8 @@ try {
     cerr << "Optional env: XCS_CLOUD_OGN=1 enables OGN/APRS-IS ingest "
             "(see XCS_CLOUD_OGN_* variables)."
          << endl;
+    cerr << "Optional env: XCS_CLOUD_DEBUG=1 enables verbose debug logging."
+         << endl;
     return EXIT_FAILURE;
   }
 
@@ -519,12 +635,28 @@ try {
   const bool enable_ogn =
     std::strcmp(EnvOr("XCS_CLOUD_OGN", "0"), "1") == 0;
 
-  CloudServer server(db_path, event_loop,
-                     IPv4Address(CloudServer::GetDefaultPort()),
-                     enable_ogn);
+  std::unique_ptr<CloudServer> server;
+  const char *bind_mode;
+  try {
+    server = std::make_unique<CloudServer>(db_path, event_loop,
+                                           IPv6Address(CloudServer::GetDefaultPort()),
+                                           enable_ogn);
+    bind_mode = "ipv6-dual-stack";
+  } catch (...) {
+    cerr << "IPv6 bind failed, falling back to IPv4" << endl;
+    server = std::make_unique<CloudServer>(db_path, event_loop,
+                                           IPv4Address(CloudServer::GetDefaultPort()),
+                                           enable_ogn);
+    bind_mode = "ipv4";
+  }
+
+  cout << "START\tport=" << CloudServer::GetDefaultPort()
+       << "\tbind=" << bind_mode
+       << "\tdb=" << db_path.c_str()
+       << "\tdebug=" << (DebugEnabled() ? "1" : "0") << endl;
 
   try {
-    server.Load();
+    server->Load();
   } catch (const std::runtime_error &e) {
     cerr << "Failed to load database" << endl;
     PrintException(e);
@@ -532,7 +664,7 @@ try {
 
   event_loop.Run();
 
-  server.Save();
+  server->Save();
 
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {
