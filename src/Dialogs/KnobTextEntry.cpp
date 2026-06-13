@@ -271,7 +271,7 @@ KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
   dialog.AddButtonKey(KEY_RIGHT);
 }
 
-void
+bool
 KnobTextEntry(char *text, size_t width,
               const char *caption)
 {
@@ -288,5 +288,8 @@ KnobTextEntry(char *text, size_t width,
   if (dialog.ShowModal() == mrOK) {
     StripRight(dialog.GetWidget().GetValue());
     CopyTruncateString(text, width, dialog.GetWidget().GetValue());
+    return true;
   }
+
+  return false;
 }
