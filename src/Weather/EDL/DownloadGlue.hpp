@@ -28,7 +28,7 @@ enum class DownloadJob : uint8_t {
 
 enum class DownloadOutcome : uint8_t {
   SUCCESS,
-  ERROR,
+  DOWNLOAD_ERROR,
 };
 
 struct DownloadNotification {

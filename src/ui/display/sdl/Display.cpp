@@ -4,6 +4,7 @@
 #include "Display.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "Asset.hpp"
+#include "Math/Point2D.hpp"
 
 #include <SDL.h>
 #include <SDL_hints.h>
@@ -12,6 +13,11 @@ namespace SDL {
 
 Display::Display()
 {
+#ifdef _WIN32
+  SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS,
+              "permonitorv2");
+#endif
+
   Uint32 flags = SDL_INIT_VIDEO;
   if (!IsKobo())
     flags |= SDL_INIT_AUDIO;
@@ -20,6 +26,10 @@ Display::Display()
     throw FmtRuntimeError("SDL_Init() has failed: {}", ::SDL_GetError());
 
 #ifdef ENABLE_OPENGL
+#ifdef USE_ANGLE
+  // On Windows, tell SDL to use EGL (required for ANGLE)
+  SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
+#endif
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
@@ -40,6 +50,17 @@ Display::Display()
 Display::~Display() noexcept
 {
   ::SDL_Quit();
+}
+
+UnsignedPoint2D
+Display::GetDPI() noexcept
+{
+  float ddpi, hdpi, vdpi;
+
+  if (SDL_GetDisplayDPI(0, &ddpi, &hdpi, &vdpi) == 0)
+    return {static_cast<unsigned>(hdpi), static_cast<unsigned>(vdpi)};
+
+  return {96, 96};
 }
 
 } // namespace SDL
