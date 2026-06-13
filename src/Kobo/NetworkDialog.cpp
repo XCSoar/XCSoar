@@ -3,10 +3,13 @@
 
 #include "NetworkDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Kobo/PlatformWifiBackend.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "net/wifi/WifiError.hpp"
 #include "System.hpp"
 
 [[gnu::pure]]
@@ -56,10 +59,18 @@ NetworkWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]
   });
 
   AddButton(_("WiFi"), []() {
-    ShowMessageBox(
-      _("Kobo WiFi settings have moved into XCSoar.\n\n"
-        "Open XCSoar and go to Menu > Config > Setup > Network."),
-      _("WiFi"), MB_OK);
+    try {
+      auto backend = CreatePlatformWifiBackend();
+      if (backend == nullptr) {
+        ShowMessageBox(_("WiFi service is not available."), _("WiFi"), MB_OK);
+        return;
+      }
+
+      ShowWifiDialog(std::move(backend));
+    } catch (...) {
+      const auto message = WifiError::Format(std::current_exception());
+      ShowMessageBox(message.c_str(), _("WiFi"), MB_OK);
+    }
   });
 
   AddButton("Telnet server", [](){ KoboRunTelnetd(); });
