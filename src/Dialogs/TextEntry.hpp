@@ -36,7 +36,7 @@ TextEntryDialog(BasicStringBuffer<char, N> &text,
                          caption, accb, default_shift_state);
 }
 
-void
+bool
 KnobTextEntry(char *text, size_t width,
               const char *caption);
 
