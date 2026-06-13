@@ -11,6 +11,7 @@
 #include "Math/Screen.hpp"
 #include "Language/Language.hpp"
 #include "util/Macros.hpp"
+#include "util/UTF8.hpp"
 #include "Look/FlarmTrafficLook.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "Interface.hpp"
@@ -464,12 +465,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       sc[i].y - int(sx.height * 3 / 2),
     };
 
-    const size_t len = traffic.name.length();
-    const std::string_view text = (len > 2)
-      ? std::string_view(traffic.name.c_str() + (len - 2), 2)
-      : std::string_view(traffic.name);
-
-    canvas.DrawText(ts, text);
+    canvas.DrawText(ts, SuffixUTF8(traffic.name, 2));
   }
 
   StaticString<10> side_text;
