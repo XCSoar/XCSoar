@@ -7,6 +7,7 @@
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Weather/Rasp/RaspCache.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#include "Weather/Rasp/FieldControls.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
@@ -53,6 +54,9 @@ MapWindow::RenderRasp(Canvas &canvas) noexcept
 
   if (state.map < 0 ||
       unsigned(state.map) >= rasp_store->GetItemCount())
+    return;
+
+  if (!Rasp::HasSelectedTimeData(state.time_auto_advance))
     return;
 
   if (!rasp_renderer) {

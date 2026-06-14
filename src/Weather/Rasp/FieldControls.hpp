@@ -59,14 +59,20 @@ unsigned
 MinuteOfDayFromTime(BrokenTime time) noexcept;
 
 /**
- * Step through the forecast times available for a field.
+ * Step through local quarter hours (0:00–23:45), even when no raster exists.
  *
- * @return false if stepping is not possible
+ * @return false when @p delta is zero
  */
 bool
 StepTime(const RaspStore *rasp, unsigned field_index,
          BrokenTime current_time, bool time_auto_advance,
          int delta, unsigned &minute_of_day) noexcept;
+
+/**
+ * Redraw the RASP layer from persisted cursor-bar session state.
+ */
+void
+ApplyOverlayFromSession() noexcept;
 
 /**
  * Compact label for the active RASP field (map-scale PAN string).
