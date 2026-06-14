@@ -4,13 +4,20 @@
 #include "RASPDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Weather/Rasp/Configured.hpp"
+#include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Button.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Form/Edit.hpp"
 #include "Repository/FileType.hpp"
 #include "DataGlobals.hpp"
+#include "Interface.hpp"
+#include "Message.hpp"
+#include "PageActions.hpp"
+#include "PageSettings.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
 #include "Language/Language.hpp"
@@ -22,14 +29,17 @@
 #endif
 
 class RASPSettingsPanel final
-  : public RowFormWidget {
-
+  : public RowFormWidget
+  , private DataFieldListener
+{
   enum Controls {
     FILE,
     MODIFIED,
+    LAYER,
   };
 
   std::shared_ptr<RaspStore> rasp;
+  bool suppress_layer_activation = false;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Button *update_button = nullptr;
@@ -38,6 +48,11 @@ class RASPSettingsPanel final
   void ReloadRasp();
   void UpdateModifiedDisplay();
   void UpdateClicked();
+  void FillLayerControl() noexcept;
+  void UpdateLayerControls() noexcept;
+  void ActivateLayer(int field) noexcept;
+
+  void OnModified(DataField &df) noexcept override;
 
 public:
   explicit RASPSettingsPanel(std::shared_ptr<RaspStore> &&_rasp) noexcept
@@ -56,6 +71,8 @@ RASPSettingsPanel::ReloadRasp()
   RaspFileChanged = true;
   Profile::Save();
   UpdateModifiedDisplay();
+  FillLayerControl();
+  UpdateLayerControls();
 }
 
 void
@@ -87,6 +104,68 @@ RASPSettingsPanel::UpdateClicked()
 }
 
 void
+RASPSettingsPanel::FillLayerControl() noexcept
+{
+  auto &control = GetControl(LAYER);
+  auto &df = (DataFieldEnum &)*control.GetDataField();
+
+  suppress_layer_activation = true;
+
+  rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0) {
+    df.ClearChoices();
+    df.AddChoice(-1, _("No RASP file loaded"));
+    df.SetValue(-1);
+    control.RefreshDisplay();
+    suppress_layer_activation = false;
+    return;
+  }
+
+  Rasp::FillFieldChoices(df, rasp.get(), {.include_none = true});
+  df.SetValue(-1);
+
+  control.RefreshDisplay();
+  suppress_layer_activation = false;
+}
+
+void
+RASPSettingsPanel::UpdateLayerControls() noexcept
+{
+  rasp = DataGlobals::GetRasp();
+  const bool available = rasp != nullptr && rasp->GetItemCount() > 0;
+  SetRowEnabled(LAYER, available);
+}
+
+void
+RASPSettingsPanel::ActivateLayer(int field) noexcept
+{
+  rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0)
+    return;
+
+  if (field < 0 || unsigned(field) >= rasp->GetItemCount())
+    return;
+
+  const unsigned page_index = PageActions::EnsureWeatherOverlayPage(
+    PageLayout::Overlay::RASP, field);
+  if (page_index >= PageSettings::MAX_PAGES) {
+    Message::AddMessage(_("No free map page for weather overlay."));
+    return;
+  }
+
+  PageActions::GoToPage(page_index);
+}
+
+void
+RASPSettingsPanel::OnModified(DataField &df) noexcept
+{
+  if (suppress_layer_activation || &df != &GetDataField(LAYER))
+    return;
+
+  ActivateLayer(((const DataFieldEnum &)df).GetValue());
+}
+
+void
 RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
@@ -105,11 +184,19 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
               _("Local date and time of the selected RASP file."));
   UpdateModifiedDisplay();
 
+  AddEnum(_("RASP layer"),
+          _("RASP weather layer to display on this map page."),
+          this);
+  GetControl(LAYER).GetDataField()->EnableItemHelp(true);
+  FillLayerControl();
+
 #ifdef HAVE_DOWNLOAD_MANAGER
   update_button = AddButton(_("Update"), [this]{ UpdateClicked(); });
   if (!Net::DownloadManager::IsAvailable())
     update_button->SetEnabled(false);
 #endif
+
+  UpdateLayerControls();
 }
 
 bool
