@@ -17,7 +17,7 @@
 #include "util/StaticString.hxx"
 #include "net/http/Features.hpp"
 #ifdef HAVE_DOWNLOAD_MANAGER
-#include "Dialogs/FileManager.hpp"
+#include "Weather/Rasp/DownloadGlue.hpp"
 #include "net/http/DownloadManager.hpp"
 #endif
 
@@ -82,13 +82,7 @@ void
 RASPSettingsPanel::UpdateClicked()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  ShowFileManager();
-
-  const AllocatedPath profile_path = Profile::GetPath(ProfileKeys::RaspFile);
-  if (profile_path != nullptr)
-    LoadValue(FILE, Path(profile_path));
-
-  ReloadRasp();
+  RequestConfiguredRaspUpdate();
 #endif
 }
 

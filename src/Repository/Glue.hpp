@@ -79,7 +79,7 @@ EnqueueRemoteFileDownload(const AvailableFile &file) noexcept;
  * Base file name of the configured RASP file, or nullptr.
  */
 [[gnu::pure]]
-const char *
+AllocatedPath
 GetConfiguredRaspFileName() noexcept;
 
 [[gnu::pure]]
@@ -98,6 +98,15 @@ IsConfiguredRaspOutOfDate(const FileRepository &repository) noexcept;
  */
 bool
 EnqueueConfiguredRaspUpdate(const FileRepository &repository) noexcept;
+
+/**
+ * Enqueue a download of the configured RASP file when it is listed in
+ * the repository, even when the local copy is up to date.
+ *
+ * @return true if a download was queued
+ */
+bool
+EnqueueConfiguredRaspDownload(const FileRepository &repository) noexcept;
 
 /**
  * Download the main repository and all user-defined repositories

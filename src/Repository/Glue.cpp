@@ -190,7 +190,7 @@ EnqueueRemoteFileDownload(const AvailableFile &file) noexcept
   Net::DownloadManager::Enqueue(file.GetURI(), Path(relative_path.c_str()));
 }
 
-const char *
+AllocatedPath
 GetConfiguredRaspFileName() noexcept
 {
   auto path = Profile::GetPath(ProfileKeys::RaspFile);
@@ -203,17 +203,17 @@ GetConfiguredRaspFileName() noexcept
   if (base == nullptr || base.empty())
     return nullptr;
 
-  return base.c_str();
+  return AllocatedPath(base.c_str());
 }
 
 const AvailableFile *
 FindConfiguredRaspRemoteFile(const FileRepository &repository) noexcept
 {
-  const char *name = GetConfiguredRaspFileName();
+  const auto name = GetConfiguredRaspFileName();
   if (name == nullptr)
     return nullptr;
 
-  return repository.FindByName(name);
+  return repository.FindByName(name.c_str());
 }
 
 bool
@@ -231,6 +231,17 @@ EnqueueConfiguredRaspUpdate(const FileRepository &repository) noexcept
 {
   const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
   if (remote == nullptr || !IsRemoteFileOutOfDate(*remote))
+    return false;
+
+  EnqueueRemoteFileDownload(*remote);
+  return true;
+}
+
+bool
+EnqueueConfiguredRaspDownload(const FileRepository &repository) noexcept
+{
+  const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
+  if (remote == nullptr)
     return false;
 
   EnqueueRemoteFileDownload(*remote);
