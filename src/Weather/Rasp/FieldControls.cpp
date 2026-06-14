@@ -4,14 +4,23 @@
 #include "FieldControls.hpp"
 
 #include "RaspStore.hpp"
+#include "DataGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "PageActions.hpp"
+#include "PageSettings.hpp"
+#include "UIState.hpp"
+#include "Weather/MapOverlay/CursorBarLabels.hpp"
 
 #include <algorithm>
+#include <cstdio>
 #include <fmt/format.h>
 #include <vector>
 
 namespace Rasp {
+
+static BrokenTime GetAutoAdvanceLocalTime() noexcept;
 
 void
 FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
@@ -84,16 +93,43 @@ MinuteOfDayFromTime(BrokenTime time) noexcept
   return time.IsPlausible() ? time.GetMinuteOfDay() : 0U;
 }
 
+static bool
+FindNextMinute(const std::vector<unsigned> &minutes,
+               unsigned anchor_minute, unsigned &result) noexcept
+{
+  for (unsigned m : minutes) {
+    if (m > anchor_minute) {
+      result = m;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+static bool
+FindPreviousMinute(const std::vector<unsigned> &minutes,
+                   unsigned anchor_minute, unsigned &result) noexcept
+{
+  for (auto it = minutes.rbegin(); it != minutes.rend(); ++it) {
+    if (*it < anchor_minute) {
+      result = *it;
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool
 StepTime(const RaspStore *rasp, unsigned field_index,
-         BrokenTime current_time, int delta,
-         unsigned &minute_of_day) noexcept
+         BrokenTime current_time, bool time_auto_advance,
+         int delta, unsigned &minute_of_day) noexcept
 {
-  if (rasp == nullptr || field_index >= rasp->GetItemCount())
+  if (rasp == nullptr || field_index >= rasp->GetItemCount() || delta == 0)
     return false;
 
   std::vector<unsigned> minutes;
-  minutes.push_back(0);
   for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i) {
     if (!rasp->IsTimeAvailable(field_index, i))
       continue;
@@ -101,25 +137,161 @@ StepTime(const RaspStore *rasp, unsigned field_index,
     minutes.push_back(RaspStore::IndexToTime(i).GetMinuteOfDay());
   }
 
-  if (minutes.size() <= 1)
+  if (minutes.empty())
     return false;
 
-  const unsigned current_minute = MinuteOfDayFromTime(current_time);
+  unsigned anchor_minute;
+  if (!time_auto_advance && current_time.IsPlausible())
+    anchor_minute = current_time.GetMinuteOfDay();
+  else {
+    const BrokenTime auto_time = GetAutoAdvanceLocalTime();
+    if (!auto_time.IsPlausible())
+      return false;
 
-  auto it = std::find(minutes.begin(), minutes.end(), current_minute);
-  unsigned index = it == minutes.end()
-    ? 0
-    : unsigned(std::distance(minutes.begin(), it));
+    anchor_minute = auto_time.GetMinuteOfDay();
+  }
 
-  if (delta > 0 && index > 0)
-    --index;
-  else if (delta < 0 && index + 1 < minutes.size())
-    ++index;
+  if (delta > 0)
+    return FindNextMinute(minutes, anchor_minute, minute_of_day);
+
+  return FindPreviousMinute(minutes, anchor_minute, minute_of_day);
+}
+
+int
+GetFieldIndex(const PageLayout &layout) noexcept
+{
+  if (layout.overlay != PageLayout::Overlay::RASP)
+    return -1;
+
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0)
+    return -1;
+
+  if (layout.rasp_field >= 0 &&
+      unsigned(layout.rasp_field) < rasp->GetItemCount())
+    return layout.rasp_field;
+
+  return rasp->GetItemCount() > 0 ? 0 : -1;
+}
+
+int
+GetActiveFieldIndex() noexcept
+{
+  return GetFieldIndex(PageActions::GetCurrentLayout());
+}
+
+StaticString<64>
+GetPanOverlayLabel(const PageLayout &configured) noexcept
+{
+  StaticString<64> label;
+
+  if (configured.overlay != PageLayout::Overlay::RASP)
+    return label;
+
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0)
+    return label;
+
+  const int field_index = GetFieldIndex(configured);
+  if (field_index < 0)
+    return label;
+
+  const auto &info = rasp->GetItemInfo(unsigned(field_index));
+  const char *field_label = info.label != nullptr
+    ? gettext(info.label)
+    : info.name.c_str();
+
+  const auto &weather = CommonInterface::GetUIState().weather;
+  if (weather.time_auto_advance || !weather.time.IsPlausible())
+    label.Format(_("RASP %s"), field_label);
   else
+    label.Format(_("RASP %s %02u:%02u"), field_label,
+                 weather.time.hour, weather.time.minute);
+
+  return label;
+}
+
+static BrokenTime
+GetLocalTimeNow() noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+  if (!basic.date_time_utc.IsPlausible())
+    return BrokenTime::Invalid();
+
+  const auto local = basic.date_time_utc.ToLocal();
+  return BrokenTime(local.hour, local.minute);
+}
+
+static BrokenTime
+GetAutoAdvanceLocalTime() noexcept
+{
+  const BrokenTime now = GetLocalTimeNow();
+  if (!now.IsPlausible())
+    return BrokenTime::Invalid();
+
+  return BrokenTime(now.hour, (now.minute / 15) * 15);
+}
+
+static BrokenTime
+GetEffectiveLocalTime(bool auto_advance) noexcept
+{
+  const auto &weather = CommonInterface::GetUIState().weather;
+  if (auto_advance || !weather.time.IsPlausible())
+    return GetAutoAdvanceLocalTime();
+
+  return weather.time;
+}
+
+static unsigned
+ToQuarterHours(BrokenTime t) noexcept
+{
+  return unsigned(t.hour) * 4u + unsigned(t.minute) / 15u;
+}
+
+bool
+HasSelectedTimeData(bool auto_advance) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  const int field_index = GetActiveFieldIndex();
+  if (rasp == nullptr || field_index < 0)
     return false;
 
-  minute_of_day = minutes[index];
-  return true;
+  const BrokenTime forecast = GetEffectiveLocalTime(auto_advance);
+  if (!forecast.IsPlausible())
+    return false;
+
+  const unsigned time_index = ToQuarterHours(forecast);
+  return rasp->GetNearestTime(unsigned(field_index), time_index) !=
+    RaspStore::MAX_WEATHER_TIMES;
+}
+
+void
+FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept
+{
+  const BrokenTime forecast = GetEffectiveLocalTime(auto_advance);
+  const BrokenTime now = GetLocalTimeNow();
+  const bool has_data = HasSelectedTimeData(auto_advance);
+
+  char offset_buf[16] = {};
+  if (forecast.IsPlausible() && now.IsPlausible()) {
+    int offset_min = int(forecast.GetMinuteOfDay()) -
+                     int(now.GetMinuteOfDay());
+    offset_min = WeatherMapOverlay::NormaliseMinuteOffsetAroundNow(offset_min);
+    WeatherMapOverlay::FormatSignedMinuteOffset(offset_buf, sizeof(offset_buf),
+                                         offset_min);
+  }
+
+  StaticString<64> base;
+  WeatherMapOverlay::FormatAutoLocalTimeLabel(base, auto_advance,
+                                       forecast.IsPlausible(),
+                                       unsigned(forecast.hour),
+                                       unsigned(forecast.minute),
+                                       offset_buf);
+
+  if (has_data)
+    text = base;
+  else
+    WeatherMapOverlay::AppendNoDataTag(text, base.c_str());
 }
 
 } // namespace Rasp

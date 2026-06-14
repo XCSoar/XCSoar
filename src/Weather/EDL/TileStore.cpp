@@ -3,6 +3,7 @@
 
 #include "TileStore.hpp"
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
 #include "Operation/ProgressListener.hpp"
 #include "net/http/CoDownloadToFile.hpp"
 #include "system/FileUtil.hpp"
@@ -21,6 +22,25 @@ BrokenDateTime
 GetTrackedForecastTime(BrokenDateTime utc) noexcept
 {
   return utc.FloorToHour() + std::chrono::hours{1};
+}
+
+StaticString<32>
+FormatForecastUtcLog(BrokenDateTime forecast) noexcept
+{
+  StaticString<32> text;
+  text.Format("%04u-%02u-%02u %02u:00 UTC",
+              unsigned(forecast.year), unsigned(forecast.month),
+              unsigned(forecast.day), unsigned(forecast.hour));
+  return text;
+}
+
+StaticString<16>
+FormatForecastDayLog(BrokenDateTime day) noexcept
+{
+  StaticString<16> text;
+  text.Format("%04u-%02u-%02u UTC",
+              unsigned(day.year), unsigned(day.month), unsigned(day.day));
+  return text;
 }
 
 bool
@@ -112,11 +132,15 @@ TileRequest::EnsureDownloaded(CurlGlobal &curl,
   auto path = BuildCachePath();
   if (!File::ExistsAny(path)) {
     const auto url = BuildDownloadUrl();
+    LogFmt("edl: downloading {} hPa {} from {}",
+           isobar / 100, BuildCacheFileName().c_str(), url.c_str());
     const auto ignored = co_await Net::CoDownloadToFile(curl, url.c_str(),
                                                         nullptr, nullptr,
                                                         path, nullptr,
                                                         progress);
     (void)ignored;
+  } else {
+    LogFmt("edl: tile already cached {}", BuildCacheFileName().c_str());
   }
 
   co_return path;
@@ -129,6 +153,10 @@ EnsureDayDownloaded(BrokenDateTime day, CurlGlobal &curl,
   const auto day_utc = NormaliseDay(day);
 
   progress.SetProgressRange(FORECAST_HOURS_PER_DAY * NUM_ISOBARS);
+
+  LogFmt("edl: precaching {} ({} tiles)",
+         FormatForecastDayLog(day_utc).c_str(),
+         FORECAST_HOURS_PER_DAY * NUM_ISOBARS);
 
   unsigned position = 0;
   for (unsigned hour = 0; hour < FORECAST_HOURS_PER_DAY; ++hour) {

@@ -13,10 +13,13 @@
 #include "PageSettings.hpp"
 #include "UIState.hpp"
 #include "UIGlobals.hpp"
+#include "LogFile.hpp"
 #include "system/FileUtil.hpp"
+#include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cstdio>
 #include <memory>
 
 namespace EDL {
@@ -98,6 +101,15 @@ ShouldMaintainOverlay() noexcept
 }
 
 bool
+HasOverlayCache() noexcept
+{
+  EnsureInitialised();
+
+  const TileRequest request(GetForecastTime(), GetIsobar());
+  return File::ExistsAny(request.BuildCachePath());
+}
+
+bool
 TryApplyOverlayFromCache() noexcept
 {
   if (!ShouldMaintainOverlay())
@@ -108,6 +120,8 @@ TryApplyOverlayFromCache() noexcept
   if (!File::ExistsAny(path))
     return false;
 
+  LogFmt("edl: overlay from cache {} ({} hPa)",
+         request.BuildCacheFileName().c_str(), request.isobar / 100);
   ApplyOverlay(path);
   return true;
 }
@@ -174,6 +188,16 @@ ClearGpsUiRefreshPending() noexcept
   gps_ui_refresh_pending = false;
 }
 
+static BrokenDateTime
+ReferenceUtc() noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+  if (basic.date_time_utc.IsPlausible())
+    return basic.date_time_utc;
+
+  return BrokenDateTime::NowUTC();
+}
+
 void
 ResetForDedicatedPage() noexcept
 {
@@ -182,8 +206,7 @@ ResetForDedicatedPage() noexcept
   /* On first entry after leaving an EDL page, resync only when auto
      advance is enabled; manual forecast/level choices are kept. */
   if (state.forecast_auto_advance) {
-    state.forecast_datetime =
-      GetTrackedForecastTime(BrokenDateTime::NowUTC());
+    state.forecast_datetime = GetTrackedForecastTime(ReferenceUtc());
     UpdateCurrentLevel();
   }
 
@@ -233,7 +256,7 @@ ClearOverlay() noexcept
   if (map == nullptr || HasDedicatedPageOverlayOwnership())
     return;
 
-  if (map->GetOverlay() == nullptr)
+  if (dynamic_cast<const MbTilesOverlay *>(map->GetOverlay()) == nullptr)
     return;
 
   map->SetOverlay(nullptr);
@@ -323,6 +346,31 @@ GetForecastTimeLocal() noexcept
 {
   EnsureInitialised();
   return GetForecastTime().ToLocal();
+}
+
+void
+FormatForecastCursorLabel(StaticString<64> &text,
+                            bool auto_advance) noexcept
+{
+  EnsureInitialised();
+
+  const auto forecast = GetForecastTime().FloorToHour();
+  BrokenDateTime now = BrokenDateTime::NowUTC();
+  const auto &basic = CommonInterface::Basic();
+  if (basic.date_time_utc.IsPlausible())
+    now = basic.date_time_utc;
+
+  char offset_buf[16] = {};
+  if (forecast.IsPlausible() && now.IsPlausible()) {
+    const int offset_min =
+      (int)std::chrono::duration_cast<std::chrono::minutes>(
+        forecast - now).count();
+    WeatherMapOverlay::FormatSignedMinuteOffset(offset_buf, sizeof(offset_buf),
+                                         offset_min);
+  }
+
+  WeatherMapOverlay::FormatAutoUtcHourLabel(text, auto_advance,
+                                     unsigned(forecast.hour), offset_buf);
 }
 
 StaticString<64>
