@@ -227,7 +227,7 @@ GetConfigurationHelpText()
     "Connect your flight instruments\n\n"
     "- [%s] [WeGlide](xcsoar://config/weglide) - "
     "Upload flights automatically to WeGlide\n\n"
-    "- [%s] [Thermal Information Map](xcsoar://config/weather) - "
+    "- [%s] [Thermal Information Map](xcsoar://config/weather/thermal-map) - "
     "Show thermal locations from thermalmap.info on the map\n\n"
     "- [%s] [Safety factors](xcsoar://config/safety) - "
     "Set arrival height, terrain clearance and polar degradation\n\n"
