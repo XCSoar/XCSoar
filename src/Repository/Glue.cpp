@@ -287,4 +287,11 @@ DownloadRepositoriesModal(bool main_repo, bool user_repo)
   }
 }
 
+bool
+FileTypeSupportsDownload(FileType type) noexcept
+{
+  return type != FileType::IGC && type != FileType::UNKNOWN &&
+         Net::DownloadManager::IsAvailable();
+}
+
 #endif

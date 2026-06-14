@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "FileManager.hpp"
+#include "EmptyDownloadList.hpp"
 #include "WidgetDialog.hpp"
 #include "Message.hpp"
 #include "UIGlobals.hpp"
@@ -269,6 +270,17 @@ public:
   unsigned OnListResized() noexcept override;
   void OnCursorMoved(unsigned index) noexcept override;
 
+  /* virtual methods from ListCursorHandler */
+  bool CanActivateItem(unsigned index) const noexcept override {
+#ifdef HAVE_DOWNLOAD_MANAGER
+    if (items.empty())
+      return Net::DownloadManager::IsAvailable() && index == 0;
+#endif
+    return index < items.size();
+  }
+
+  void OnActivateItem(unsigned index) noexcept override;
+
 #ifdef HAVE_DOWNLOAD_MANAGER
   void OnTimer();
 
@@ -389,7 +401,12 @@ ManagedFileListWidget::RefreshList()
   }
 
   ListControl &list = GetList();
+#ifdef HAVE_DOWNLOAD_MANAGER
+  list.SetLength(items.empty() && Net::DownloadManager::IsAvailable()
+                 ? size_t{1} : items.size());
+#else
   list.SetLength(items.size());
+#endif
   list.Invalidate();
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -420,13 +437,32 @@ ManagedFileListWidget::UpdateButtons()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
+    if (items.empty()) {
+      download_button->SetEnabled(false);
+      cancel_button->SetEnabled(false);
+      update_button->SetEnabled(false);
+      return;
+    }
+
     const unsigned current = GetList().GetCursorIndex();
 
-    download_button->SetEnabled(!items.empty() &&
-                                CanDownload(repository, items[current].name));
-    cancel_button->SetEnabled(!items.empty() && items[current].downloading);
-    update_button->SetEnabled(!items.empty() && some_out_of_date);
+    download_button->SetEnabled(CanDownload(repository, items[current].name));
+    cancel_button->SetEnabled(items[current].downloading);
+    update_button->SetEnabled(some_out_of_date);
   }
+#endif
+}
+
+void
+ManagedFileListWidget::OnActivateItem(unsigned index) noexcept
+{
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (items.empty()) {
+    assert(index == 0);
+    Add();
+  }
+#else
+  (void)index;
 #endif
 }
 
@@ -434,6 +470,14 @@ void
 ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                    unsigned i) noexcept
 {
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (items.empty() && Net::DownloadManager::IsAvailable()) {
+    assert(i == 0);
+    DrawEmptyDownloadHint(row_renderer, canvas, rc);
+    return;
+  }
+#endif
+
   const FileItem &file = items[i];
 
   row_renderer.DrawFirstRow(canvas, rc, file.name.c_str());
