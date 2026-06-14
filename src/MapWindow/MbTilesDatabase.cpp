@@ -10,9 +10,13 @@
 #include "util/NumberParser.hpp"
 #include "util/StringSplit.hxx"
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
+#include <map>
+#include <mutex>
 #include <numbers>
+#include <span>
 #include <stdexcept>
 #include <string_view>
 
@@ -248,7 +252,7 @@ MbTilesDatabase::MbTilesDatabase(Path path)
 }
 
 bool
-MbTilesDatabase::HasTile(TileKey key) const
+MbTilesDatabase::HasTileUnlocked(TileKey key) const
 {
   auto stmt = db.CreateStatement("SELECT 1 FROM tiles "
                                  "WHERE zoom_level=? AND tile_column=? AND tile_row=?");
@@ -258,8 +262,15 @@ MbTilesDatabase::HasTile(TileKey key) const
   return stmt.StepRow();
 }
 
-Bitmap
-MbTilesDatabase::LoadTile(TileKey key) const
+bool
+MbTilesDatabase::HasTile(TileKey key) const
+{
+  const std::lock_guard lock{mutex};
+  return HasTileUnlocked(key);
+}
+
+static UncompressedImage
+LoadUncompressedTile(const SqliteDatabase &db, TileKey key)
 {
   auto stmt = db.CreateStatement("SELECT tile_data FROM tiles "
                                  "WHERE zoom_level=? AND tile_column=? AND tile_row=?");
@@ -274,17 +285,114 @@ MbTilesDatabase::LoadTile(TileKey key) const
   const int size = stmt.GetBytesColumn(0);
   const std::span raw_tile{data, std::size_t(size)};
 
-  Bitmap bitmap;
-  UncompressedImage uncompressed;
   try {
-    uncompressed = LoadPNG(raw_tile);
+    UncompressedImage uncompressed = LoadPNG(raw_tile);
+    if (!uncompressed.IsDefined())
+      throw std::runtime_error("Failed to decode MBTiles tile image");
+    return uncompressed;
   } catch (const std::exception &) {
     LogFmt("Failed to decode MBTiles tile image: z={} x={} y={}",
            key.zoom, key.column, key.row);
     throw;
   }
+}
 
-  if (!uncompressed.IsDefined() || !bitmap.Load(std::move(uncompressed))) {
+static bool
+ReadRgbaPixel(const UncompressedImage &image, unsigned x, unsigned y,
+              Rgba8 &pixel)
+{
+  if (image.GetFormat() != UncompressedImage::Format::RGBA)
+    return false;
+
+  const unsigned width = image.GetWidth();
+  const unsigned height = image.GetHeight();
+  if (width == 0 || height == 0 || x >= width || y >= height)
+    return false;
+
+  const auto *row = static_cast<const uint8_t *>(image.GetData()) +
+    std::size_t(y) * image.GetPitch();
+  const unsigned offset = x * 4u;
+  pixel.r = row[offset];
+  pixel.g = row[offset + 1];
+  pixel.b = row[offset + 2];
+  pixel.a = row[offset + 3];
+  return true;
+}
+
+static bool
+ComputePixelCoords(GeoPoint p, TileKey key, unsigned width, unsigned height,
+                   unsigned &x, unsigned &y) noexcept
+{
+  const GeoPoint north_west = key.GetNorthWest();
+  const GeoPoint south_east = key.GetSouthEast();
+  const Angle lon_span = south_east.longitude - north_west.longitude;
+  const Angle lat_span = north_west.latitude - south_east.latitude;
+  if (lon_span == Angle::Zero() || lat_span == Angle::Zero())
+    return false;
+
+  if (width == 0 || height == 0)
+    return false;
+
+  const double fx = std::clamp((p.longitude - north_west.longitude) / lon_span,
+                               0., 1.);
+  const double fy = std::clamp((north_west.latitude - p.latitude) / lat_span,
+                               0., 1.);
+
+  x = std::min(unsigned(fx * double(width)), width - 1u);
+  y = std::min(unsigned(fy * double(height)), height - 1u);
+  return true;
+}
+
+static bool
+SampleRgbaInImage(GeoPoint p, TileKey key, const UncompressedImage &image,
+                  Rgba8 &pixel) noexcept
+{
+  unsigned x = 0, y = 0;
+  if (!ComputePixelCoords(p, key, image.GetWidth(), image.GetHeight(), x, y))
+    return false;
+
+  if (!ReadRgbaPixel(image, x, y, pixel))
+    return false;
+
+  if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0 && pixel.a == 0)
+    return false;
+
+  return true;
+}
+
+bool
+MbTilesDatabase::SampleRgbaAtGeo(GeoPoint p, Rgba8 &pixel) const noexcept
+{
+  try {
+    const std::lock_guard lock{mutex};
+    const TileKey key = TileKey::FromGeoPoint(p, metadata.max_zoom);
+    if (!HasTileUnlocked(key))
+      return false;
+
+    UncompressedImage image;
+    try {
+      image = LoadUncompressedTile(db, key);
+    } catch (const std::exception &) {
+      return false;
+    }
+
+    if (image.GetFormat() != UncompressedImage::Format::RGBA)
+      return false;
+
+    return SampleRgbaInImage(p, key, image, pixel);
+  } catch (const std::exception &) {
+    return false;
+  }
+}
+
+Bitmap
+MbTilesDatabase::LoadTile(TileKey key) const
+{
+  const std::lock_guard lock{mutex};
+  UncompressedImage uncompressed = LoadUncompressedTile(db, key);
+
+  Bitmap bitmap;
+  if (!bitmap.Load(std::move(uncompressed))) {
     /* MbTilesOverlay::Draw() catches this and skips only the failing
        tile, so a broken image does not stop XCSoar in flight. */
     LogFmt("Failed to load MBTiles tile bitmap: z={} x={} y={}",
