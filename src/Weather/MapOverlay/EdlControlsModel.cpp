@@ -23,11 +23,7 @@ EdlControlsModel::OnShow() noexcept
   if (!PageActions::GetCurrentLayout().UsesEdlOverlay())
     return;
 
-  const auto &basic = CommonInterface::Basic();
-  if (basic.date_time_utc.IsPlausible())
-    EDL::OnTimeUpdate(basic.date_time_utc);
-  else
-    EDL::OnTimeUpdate(BrokenDateTime::NowUTC());
+  EDL::ApplyOverlayFromSession();
 }
 
 void
@@ -40,6 +36,7 @@ EdlControlsModel::SelectForecast(unsigned index) noexcept
   auto &edl = CommonInterface::SetUIState().weather.edl;
   edl.forecast_datetime = forecast_times[index];
   edl.forecast_auto_advance = false;
+  edl.cursor_session_initialized = true;
 }
 
 void
@@ -114,6 +111,7 @@ void
 EdlControlsModel::ResumeAutoAdvance() noexcept
 {
   SetForecastAutoAdvance(true);
+  SetLevelAutoAdvance(true);
   EDL::UpdateCurrentLevel();
 
   const auto &basic = CommonInterface::Basic();
@@ -142,7 +140,7 @@ EdlControlsModel::FormatLevelLabel(StaticString<64> &text) const noexcept
   const int altitude = EDL::GetAltitudeForIsobar(isobar);
 
   StaticString<64> base;
-  if (GetForecastAutoAdvance())
+  if (GetLevelAutoAdvance())
     base.Format("%s %u hPa (%d m)", _("AUTO:"), isobar / 100, altitude);
   else
     base.Format(_("%u hPa (%d m)"), isobar / 100, altitude);
@@ -172,13 +170,27 @@ EdlControlsModel::SetForecastAutoAdvance(bool auto_advance) noexcept
     auto_advance;
 }
 
+bool
+EdlControlsModel::GetLevelAutoAdvance() const noexcept
+{
+  return CommonInterface::GetUIState().weather.edl.level_auto_advance;
+}
+
+void
+EdlControlsModel::SetLevelAutoAdvance(bool auto_advance) noexcept
+{
+  CommonInterface::SetUIState().weather.edl.level_auto_advance =
+    auto_advance;
+}
+
 void
 EdlControlsModel::SelectLevel(unsigned isobar) noexcept
 {
   EDL::EnsureInitialised();
   auto &edl = CommonInterface::SetUIState().weather.edl;
   edl.SelectIsobar(isobar);
-  edl.forecast_auto_advance = false;
+  edl.level_auto_advance = false;
+  edl.cursor_session_initialized = true;
 }
 
 unsigned

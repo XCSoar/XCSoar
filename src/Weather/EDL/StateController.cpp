@@ -7,6 +7,7 @@
 #include "Levels.hpp"
 #include "TileStore.hpp"
 #include "MapWindow/MbTilesOverlay.hpp"
+#include "Weather/EDL/EdlMbTilesOverlay.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -67,7 +68,7 @@ void
 UpdateCurrentLevel() noexcept
 {
   auto &state = CommonInterface::SetUIState().weather.edl;
-  if (!state.forecast_auto_advance)
+  if (!state.level_auto_advance)
     return;
 
   state.isobar = ResolveLevelBelow();
@@ -85,7 +86,7 @@ EnsureInitialised() noexcept
       GetTrackedForecastTime(BrokenDateTime::NowUTC());
 
   if (!IsSupportedIsobar(state.isobar))
-    state.isobar = state.forecast_auto_advance
+    state.isobar = state.level_auto_advance
       ? ResolveLevelBelow()
       : ResolveCurrentLevel();
 
@@ -127,6 +128,15 @@ TryApplyOverlayFromCache() noexcept
 }
 
 void
+ApplyOverlayFromSession() noexcept
+{
+  if (TryApplyOverlayFromCache())
+    return;
+
+  ClearOverlay();
+}
+
+void
 OnTimeUpdate(BrokenDateTime utc) noexcept
 {
   if (!OverlayEnabled() || !utc.IsPlausible())
@@ -139,12 +149,13 @@ OnTimeUpdate(BrokenDateTime utc) noexcept
   if (!state.forecast_auto_advance)
     return;
 
-  UpdateCurrentLevel();
+  if (state.level_auto_advance)
+    UpdateCurrentLevel();
 
   const auto tracked = GetTrackedForecastTime(utc);
   state.forecast_datetime = tracked;
 
-  TryApplyOverlayFromCache();
+  ApplyOverlayFromSession();
 }
 
 void
@@ -159,19 +170,29 @@ ProcessGpsUpdate(BrokenDateTime utc) noexcept
   if (hour_changed)
     last_utc_hour = hour;
 
-  const auto &state = CommonInterface::GetUIState().weather.edl;
-  if (!state.forecast_auto_advance)
+  auto &state = CommonInterface::SetUIState().weather.edl;
+  bool changed = false;
+
+  if (state.level_auto_advance) {
+    const unsigned prev_isobar = state.isobar;
+    UpdateCurrentLevel();
+    if (state.isobar != prev_isobar)
+      changed = true;
+  }
+
+  if (state.forecast_auto_advance && hour_changed) {
+    const auto tracked = GetTrackedForecastTime(utc);
+    if (state.forecast_datetime != tracked) {
+      state.forecast_datetime = tracked;
+      changed = true;
+    }
+  }
+
+  if (!changed)
     return;
 
-  const unsigned prev_isobar = state.isobar;
-  UpdateCurrentLevel();
-  const bool level_changed =
-    CommonInterface::GetUIState().weather.edl.isobar != prev_isobar;
-
-  if (hour_changed || level_changed) {
-    OnTimeUpdate(utc);
-    gps_ui_refresh_pending = true;
-  }
+  ApplyOverlayFromSession();
+  gps_ui_refresh_pending = true;
 }
 
 bool
@@ -207,8 +228,10 @@ ResetForDedicatedPage() noexcept
      advance is enabled; manual forecast/level choices are kept. */
   if (state.forecast_auto_advance) {
     state.forecast_datetime = GetTrackedForecastTime(ReferenceUtc());
-    UpdateCurrentLevel();
   }
+
+  if (state.level_auto_advance)
+    UpdateCurrentLevel();
 
   state.status = EDLWeatherUIState::Status::IDLE;
 }
@@ -253,13 +276,18 @@ void
 ClearOverlay() noexcept
 {
   auto *map = UIGlobals::GetMap();
-  if (map == nullptr || HasDedicatedPageOverlayOwnership())
+  if (map == nullptr)
     return;
 
   if (dynamic_cast<const MbTilesOverlay *>(map->GetOverlay()) == nullptr)
     return;
 
   map->SetOverlay(nullptr);
+
+  auto &state = CommonInterface::SetUIState().weather.edl;
+  state.enabled = false;
+  if (state.status == EDLWeatherUIState::Status::READY)
+    state.status = EDLWeatherUIState::Status::IDLE;
 }
 
 void
@@ -296,7 +324,7 @@ ApplyOverlay(Path path)
   /* Reuse the generic overlay HUD by exposing the active EDL state as
      the overlay label instead of showing this mapping only in a widget. */
   const auto label = GetOverlayLabel();
-  auto overlay = std::make_unique<MbTilesOverlay>(path, label.c_str());
+  auto overlay = std::make_unique<EdlMbTilesOverlay>(path, label.c_str());
 
   if (auto *map = UIGlobals::GetMap()) {
     map->SetOverlay(std::move(overlay));
@@ -388,6 +416,25 @@ GetOverlayLabel() noexcept
                unsigned(local.hour),
                GetIsobar() / 100,
                buffer);
+
+#ifdef ENABLE_OPENGL
+  if (auto *map = UIGlobals::GetMap()) {
+    const GeoPoint location = map->GetLocation();
+    if (location.IsValid()) {
+      const auto *overlay =
+        dynamic_cast<const EdlMbTilesOverlay *>(map->GetOverlay());
+      if (overlay != nullptr) {
+        double value_mps = 0;
+        if (overlay->SampleAscendancyAt(location, value_mps)) {
+          StaticString<64> with_value;
+          with_value.Format("%s %+.1f m/s", label.c_str(), value_mps);
+          return with_value;
+        }
+      }
+    }
+  }
+#endif
+
   return label;
 }
 

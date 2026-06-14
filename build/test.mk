@@ -220,6 +220,7 @@ TEST_EDL_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Weather/EDL/TileStore.cpp \
+	$(SRC)/Weather/EDL/TileValue.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestEDL.cpp
 TEST_EDL_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD MATH TIME UTIL
