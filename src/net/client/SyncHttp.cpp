@@ -61,18 +61,21 @@ HeaderCallback(char *buffer, size_t size, size_t nitems,
   if (capture == nullptr || capture->cookie_name == nullptr)
     return total;
 
-  std::string line(buffer, total);
-  if (line.size() <= 12)
-    return total;
+  try {
+    std::string line(buffer, total);
+    if (line.size() <= 12)
+      return total;
 
-  if (line.substr(0, 11) != "Set-Cookie:" &&
-      line.substr(0, 11) != "set-cookie:")
-    return total;
+    if (line.substr(0, 11) != "Set-Cookie:" &&
+        line.substr(0, 11) != "set-cookie:")
+      return total;
 
-  if (line.find(capture->cookie_name) == std::string::npos)
-    return total;
+    if (line.find(capture->cookie_name) == std::string::npos)
+      return total;
 
-  capture->set_cookie_value = line.substr(12);
+    capture->set_cookie_value = line.substr(12);
+  } catch (...) {
+  }
   return total;
 }
 

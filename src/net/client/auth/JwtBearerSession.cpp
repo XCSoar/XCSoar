@@ -68,96 +68,113 @@ JwtBearerSession::ForceReauthenticate() noexcept
 bool
 JwtBearerSession::Authenticate() noexcept
 {
-  if (login_id.empty() || login_secret.empty()) {
-    LogFmt("{}: auth skipped — no credentials", config.log_tag);
+  try {
+    if (login_id.empty() || login_secret.empty()) {
+      LogFmt("{}: auth skipped — no credentials", config.log_tag);
+      return false;
+    }
+
+    LogFmt("{}: authenticating (user len={})", config.log_tag, login_id.size());
+
+    const boost::json::object body{
+      {config.login_id_json_field, login_id},
+      {config.login_secret_json_field, login_secret},
+    };
+    StringOutputStream post_stream;
+    Json::Serialize(post_stream, body);
+    const std::string post_data = post_stream.GetValue();
+
+    CurlSlist headers;
+    headers.Append("Content-Type: application/json");
+
+    SyncHttpResponse response;
+    if (!SyncHttpPost(config.login_url, headers.Get(), post_data, response,
+                      config.refresh_cookie_name) ||
+        response.http_code != 200) {
+      LogFmt("{}: auth failed http={}", config.log_tag, response.http_code);
+      return false;
+    }
+
+    if (!ParseAccessTokenFromResponse(config, response.body, access_token)) {
+      LogFmt("{}: no {} in auth response",
+             config.log_tag, config.access_token_json_field);
+      return false;
+    }
+
+    access_token_expiry = static_cast<uint32_t>(std::time(nullptr)) +
+      config.token_lifetime_seconds;
+
+    if (!response.captured_set_cookie.empty()) {
+      ParseRefreshTokenFromCookie(config, response.captured_set_cookie,
+                                refresh_token);
+      if (!refresh_token.empty())
+        LogFmt("{}: got {} (len={})", config.log_tag,
+               config.refresh_cookie_name, refresh_token.size());
+    }
+
+    LogFmt("{}: auth success, token_len={}", config.log_tag,
+           access_token.size());
+    return true;
+  } catch (const std::exception &e) {
+    LogFmt("{}: auth exception: {}", config.log_tag, e.what());
+    return false;
+  } catch (...) {
+    LogFmt("{}: auth unknown exception", config.log_tag);
     return false;
   }
-
-  LogFmt("{}: authenticating (user len={})", config.log_tag, login_id.size());
-
-  const boost::json::object body{
-    {config.login_id_json_field, login_id},
-    {config.login_secret_json_field, login_secret},
-  };
-  StringOutputStream post_stream;
-  Json::Serialize(post_stream, body);
-  const std::string post_data = post_stream.GetValue();
-
-  CurlSlist headers;
-  headers.Append("Content-Type: application/json");
-
-  SyncHttpResponse response;
-  if (!SyncHttpPost(config.login_url, headers.Get(), post_data, response,
-                    config.refresh_cookie_name) ||
-      response.http_code != 200) {
-    LogFmt("{}: auth failed http={}", config.log_tag, response.http_code);
-    return false;
-  }
-
-  if (!ParseAccessTokenFromResponse(config, response.body, access_token)) {
-    LogFmt("{}: no {} in auth response",
-           config.log_tag, config.access_token_json_field);
-    return false;
-  }
-
-  access_token_expiry = static_cast<uint32_t>(std::time(nullptr)) +
-    config.token_lifetime_seconds;
-
-  if (!response.captured_set_cookie.empty()) {
-    ParseRefreshTokenFromCookie(config, response.captured_set_cookie,
-                              refresh_token);
-    if (!refresh_token.empty())
-      LogFmt("{}: got {} (len={})", config.log_tag,
-             config.refresh_cookie_name, refresh_token.size());
-  }
-
-  LogFmt("{}: auth success, token_len={}", config.log_tag, access_token.size());
-  return true;
 }
 
 bool
 JwtBearerSession::RefreshAccessToken() noexcept
 {
-  if (refresh_token.empty())
+  try {
+    if (refresh_token.empty())
+      return false;
+
+    LogFmt("{}: refreshing access token", config.log_tag);
+
+    std::string cookie = config.refresh_cookie_name;
+    cookie += '=';
+    cookie += refresh_token;
+
+    CurlSlist headers;
+    headers.Append("Content-Type: application/json");
+
+    SyncHttpResponse response;
+    if (!SyncHttpPost(config.refresh_url, headers.Get(), "", response,
+                      config.refresh_cookie_name, cookie.c_str()) ||
+        response.http_code != 200) {
+      LogFmt("{}: refresh failed http={}", config.log_tag, response.http_code);
+      refresh_token.clear();
+      return false;
+    }
+
+    if (!ParseAccessTokenFromResponse(config, response.body, access_token)) {
+      LogFmt("{}: no {} in refresh response",
+             config.log_tag, config.access_token_json_field);
+      return false;
+    }
+
+    access_token_expiry = static_cast<uint32_t>(std::time(nullptr)) +
+      config.token_lifetime_seconds;
+
+    if (!response.captured_set_cookie.empty()) {
+      std::string new_refresh;
+      if (ParseRefreshTokenFromCookie(config, response.captured_set_cookie,
+                                      new_refresh))
+        refresh_token = std::move(new_refresh);
+    }
+
+    LogFmt("{}: refresh success, token_len={}",
+           config.log_tag, access_token.size());
+    return true;
+  } catch (const std::exception &e) {
+    LogFmt("{}: refresh exception: {}", config.log_tag, e.what());
     return false;
-
-  LogFmt("{}: refreshing access token", config.log_tag);
-
-  std::string cookie = config.refresh_cookie_name;
-  cookie += '=';
-  cookie += refresh_token;
-
-  CurlSlist headers;
-  headers.Append("Content-Type: application/json");
-
-  SyncHttpResponse response;
-  if (!SyncHttpPost(config.refresh_url, headers.Get(), "", response,
-                    config.refresh_cookie_name, cookie.c_str()) ||
-      response.http_code != 200) {
-    LogFmt("{}: refresh failed http={}", config.log_tag, response.http_code);
-    refresh_token.clear();
+  } catch (...) {
+    LogFmt("{}: refresh unknown exception", config.log_tag);
     return false;
   }
-
-  if (!ParseAccessTokenFromResponse(config, response.body, access_token)) {
-    LogFmt("{}: no {} in refresh response",
-           config.log_tag, config.access_token_json_field);
-    return false;
-  }
-
-  access_token_expiry = static_cast<uint32_t>(std::time(nullptr)) +
-    config.token_lifetime_seconds;
-
-  if (!response.captured_set_cookie.empty()) {
-    std::string new_refresh;
-    if (ParseRefreshTokenFromCookie(config, response.captured_set_cookie,
-                                    new_refresh))
-      refresh_token = std::move(new_refresh);
-  }
-
-  LogFmt("{}: refresh success, token_len={}",
-         config.log_tag, access_token.size());
-  return true;
 }
 
 bool
