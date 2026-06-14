@@ -4,10 +4,12 @@
 #include "XCThermDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
+#include "Message.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "PageActions.hpp"
+#include "PageSettings.hpp"
 #include "Weather/Features.hpp"
 
 #ifdef HAVE_HTTP
@@ -429,8 +431,16 @@ XCThermWidget::ActivateClicked()
   }
 
   SaveSettings();
-  XCTherm::RestoreActiveLayerOverlay();
-  PageActions::Update();
+
+  const unsigned page_index = PageActions::EnsureWeatherOverlayPage(
+    PageLayout::Overlay::XCTHERM);
+  if (page_index >= PageSettings::MAX_PAGES) {
+    Message::AddMessage(_("No free map page for weather overlay."));
+    XCTherm::RestoreActiveLayerOverlay();
+    PageActions::Update();
+  } else
+    PageActions::GoToPage(page_index);
+
   UpdateList();
 }
 

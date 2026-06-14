@@ -7,6 +7,8 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "MainWindow.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/PageProfile.hpp"
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
@@ -65,7 +67,105 @@ namespace PageActions {
   static void ClearPageOverlays() noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
+
+  static unsigned
+  FindPageWithOverlay(const PageSettings &settings,
+                      PageLayout::Overlay overlay) noexcept;
+
+  static unsigned
+  CountWeatherOverlayPages(const PageSettings &settings) noexcept;
+
+  static void
+  AssignOverlayToLayout(PageLayout &layout, PageLayout::Overlay overlay,
+                        int rasp_field) noexcept;
 };
+
+unsigned
+PageActions::FindPageWithOverlay(const PageSettings &settings,
+                                 PageLayout::Overlay overlay) noexcept
+{
+  for (unsigned i = 0; i < settings.n_pages; ++i)
+    if (settings.pages[i].overlay == overlay)
+      return i;
+
+  return PageSettings::MAX_PAGES;
+}
+
+unsigned
+PageActions::CountWeatherOverlayPages(const PageSettings &settings) noexcept
+{
+  unsigned count = 0;
+  for (unsigned i = 0; i < settings.n_pages; ++i)
+    if (settings.pages[i].UsesWeatherOverlay())
+      ++count;
+
+  return count;
+}
+
+void
+PageActions::AssignOverlayToLayout(PageLayout &layout,
+                                   PageLayout::Overlay overlay,
+                                   int rasp_field) noexcept
+{
+  if (!layout.IsMapMain())
+    layout.main = PageLayout::Main::MAP;
+
+  layout.overlay = overlay;
+
+  if (overlay == PageLayout::Overlay::RASP && rasp_field >= 0)
+    layout.rasp_field = rasp_field;
+
+  layout.Normalise();
+}
+
+unsigned
+PageActions::EnsureWeatherOverlayPage(PageLayout::Overlay overlay,
+                                      int rasp_field) noexcept
+{
+  PageSettings &settings = CommonInterface::SetUISettings().pages;
+
+  const unsigned existing = FindPageWithOverlay(settings, overlay);
+  if (existing < PageSettings::MAX_PAGES) {
+    PageLayout &page = settings.pages[existing];
+    if (overlay == PageLayout::Overlay::RASP && rasp_field >= 0)
+      page.rasp_field = rasp_field;
+    page.Normalise();
+    Profile::Save(Profile::map, page, existing);
+    return existing;
+  }
+
+  unsigned target;
+  if (CountWeatherOverlayPages(settings) == 0) {
+    target = 0;
+    if (!settings.pages[target].IsDefined())
+      settings.pages[target] = PageLayout::Default();
+    AssignOverlayToLayout(settings.pages[target], overlay, rasp_field);
+  } else if (settings.n_pages < PageSettings::MAX_PAGES) {
+    target = settings.n_pages;
+    settings.pages[target] = PageLayout::FullScreen();
+    AssignOverlayToLayout(settings.pages[target], overlay, rasp_field);
+    settings.n_pages = target + 1;
+  } else
+    return PageSettings::MAX_PAGES;
+
+  Profile::Save(Profile::map, settings.pages[target], target);
+  return target;
+}
+
+void
+PageActions::GoToPage(unsigned index) noexcept
+{
+  assert(index < CommonInterface::GetUISettings().pages.n_pages);
+
+  LeavePage();
+
+  PagesState &state = CommonInterface::SetUIState().pages;
+  state.current_index = index;
+  state.special_page.SetUndefined();
+
+  Update();
+  RestoreMapZoom();
+}
 
 const PageLayout &
 PageActions::GetActiveLayout() noexcept

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "PageSettings.hpp"
+
 struct PageLayout;
 class GlueMapWindow;
 class Widget;
@@ -37,6 +39,20 @@ namespace PageActions
    * Opens the previous page.
    */
   void Prev();
+
+  /**
+   * Switch to a configured page by index.
+   */
+  void GoToPage(unsigned index) noexcept;
+
+  /**
+   * Ensure a map page exists for @p overlay.  Assigns the first
+   * overlay to page 0; each additional overlay type gets a new page.
+   *
+   * @return page index, or #PageSettings::MAX_PAGES when no slot remains
+   */
+  unsigned EnsureWeatherOverlayPage(PageLayout::Overlay overlay,
+                                    int rasp_field=-1) noexcept;
 
   /**
    * Opens the given layout.

@@ -11,6 +11,8 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Message.hpp"
+#include "PageActions.hpp"
 #include "PageSettings.hpp"
 #include "UIState.hpp"
 #include "UIGlobals.hpp"
@@ -352,6 +354,24 @@ ApplyOverlay(Path path)
 
   state.enabled = true;
   state.status = EDLWeatherUIState::Status::READY;
+
+  const PageSettings &page_settings = CommonInterface::GetUISettings().pages;
+  bool has_edl_page = false;
+  for (unsigned i = 0; i < page_settings.n_pages; ++i) {
+    if (page_settings.pages[i].overlay == PageLayout::Overlay::EDL) {
+      has_edl_page = true;
+      break;
+    }
+  }
+
+  if (!has_edl_page) {
+    const unsigned page_index = PageActions::EnsureWeatherOverlayPage(
+      PageLayout::Overlay::EDL);
+    if (page_index >= PageSettings::MAX_PAGES)
+      Message::AddMessage(_("No free map page for weather overlay."));
+    else
+      PageActions::GoToPage(page_index);
+  }
 }
 
 void
