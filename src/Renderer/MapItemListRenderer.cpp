@@ -81,6 +81,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const FinalGlideBarLook &look)
 {
   const unsigned line_height = rc.GetHeight();
+  const unsigned text_padding = Layout::GetTextPadding();
+  const unsigned icon_size = line_height - 2 * text_padding;
 
   bool reach_relevant = item.reach.IsReachRelevant();
 
@@ -97,15 +99,23 @@ Draw(Canvas &canvas, PixelRect rc,
 
   // Draw final glide arrow icon
 
-  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + icon_size / 2, rc.top + line_height / 2);
 
   BulkPixelPoint arrow[] = {
       { -7, -3 }, { 0, 4 }, { 7, -3 }
   };
 
+  /*
+   * PolygonRotateShift() maps coordinates in the +/-50 range to the
+   * scale argument; this triangle spans 7 units vertically — scale
+   * it to fit the row instead of using a fixed map-icon size.
+   */
+  constexpr unsigned arrow_span = 7;
+  const int arrow_scale = std::max(int(icon_size) * 50 / int(arrow_span), 1);
+
   Angle arrow_angle = reachable ? Angle::HalfCircle() : Angle::Zero();
   PolygonRotateShift({arrow, ARRAY_SIZE(arrow)}, pt, arrow_angle,
-                     Layout::Scale(100U));
+                     arrow_scale);
 
   if (reachable) {
     canvas.Select(look.brush_above);
@@ -116,8 +126,7 @@ Draw(Canvas &canvas, PixelRect rc,
   }
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
-  const unsigned text_padding = Layout::GetTextPadding();
-  rc.left += line_height + text_padding;
+  rc.left += icon_size + text_padding;
 
   // Format title row
 
