@@ -26,6 +26,8 @@ class XCThermControlsWidget final : public CursorBarWidget,
   void OnStepTime(int delta) noexcept;
   void OnResumeLayerAuto() noexcept;
   void OnResumeTimeAuto() noexcept;
+  void OnLabelClicked(unsigned row) noexcept;
+  void OnRequestDownload() noexcept;
 
 public:
   XCThermControlsWidget();

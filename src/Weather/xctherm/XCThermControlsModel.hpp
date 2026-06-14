@@ -139,6 +139,15 @@ public:
   void MaybeFetchActiveLayer(
     std::function<void(std::shared_ptr<XCThermDownloadJob>)> on_finished) const;
 
+  /**
+   * Queue a span download for the cursor-bar layer.
+   *
+   * @return true if a download was started
+   */
+  bool RequestLayerDownload(
+    std::function<void(std::shared_ptr<XCThermDownloadJob>)> on_finished
+    = nullptr) noexcept;
+
   void OnDownloadFinished(const std::shared_ptr<XCThermDownloadJob> &job) noexcept;
 
   void FormatLayerLabel(StaticString<80> &text) const noexcept;

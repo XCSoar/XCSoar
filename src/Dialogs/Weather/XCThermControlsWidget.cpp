@@ -7,6 +7,7 @@
 #ifdef HAVE_HTTP
 
 #include "Blackboard/BlackboardListenerRegistration.hpp"
+#include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Interface.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "util/StaticString.hxx"
@@ -21,10 +22,7 @@ XCThermControlsWidget::XCThermControlsWidget()
       OnStepTime(delta);
   });
   SetLabelClickCallback([this](unsigned row) {
-    if (row == LAYER_ROW)
-      OnResumeLayerAuto();
-    else if (row == TIME_ROW)
-      OnResumeTimeAuto();
+    OnLabelClicked(row);
   });
 }
 
@@ -76,6 +74,31 @@ XCThermControlsWidget::OnResumeTimeAuto() noexcept
 {
   model.ResumeTimeAuto();
   UpdateLabels();
+}
+
+void
+XCThermControlsWidget::OnLabelClicked(unsigned row) noexcept
+{
+  if (!model.HasCacheAtCurrentHour(model.GetCurrentLayer())) {
+    OnRequestDownload();
+    return;
+  }
+
+  if (row == LAYER_ROW)
+    OnResumeLayerAuto();
+  else if (row == TIME_ROW)
+    OnResumeTimeAuto();
+}
+
+void
+XCThermControlsWidget::OnRequestDownload() noexcept
+{
+  if (model.RequestLayerDownload([this](std::shared_ptr<XCThermDownloadJob>){
+        UpdateLabels();
+      }))
+    return;
+
+  ShowWeatherDialog("xctherm");
 }
 
 void

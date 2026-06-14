@@ -32,7 +32,6 @@
 
 #ifdef HAVE_HTTP
 #include "Dialogs/Weather/XCThermControlsWidget.hpp"
-#include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
 
@@ -419,11 +418,8 @@ LoadBottom(const PageLayout &layout)
   case PageLayout::Bottom::EDL_CONTROLS:
 #ifdef HAVE_HTTP
     if (layout.overlay == PageLayout::Overlay::XCTHERM) {
-      if (XCThermAPI::Instance().HasAnyCache())
-        CommonInterface::main_window->SetBottomWidget(
-          new XCThermControlsWidget());
-      else
-        CommonInterface::main_window->SetBottomWidget(nullptr);
+      CommonInterface::main_window->SetBottomWidget(
+        new XCThermControlsWidget());
       break;
     }
 #endif
@@ -445,8 +441,7 @@ LoadBottom(const PageLayout &layout)
 #ifdef HAVE_HTTP
   case PageLayout::Bottom::XCTHERM:
     /* Legacy profile value — Normalise() maps to EDL_CONTROLS. */
-    if (layout.overlay == PageLayout::Overlay::XCTHERM &&
-        XCThermAPI::Instance().HasAnyCache())
+    if (layout.overlay == PageLayout::Overlay::XCTHERM)
       CommonInterface::main_window->SetBottomWidget(new XCThermControlsWidget());
     else
       CommonInterface::main_window->SetBottomWidget(nullptr);

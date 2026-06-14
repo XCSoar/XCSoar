@@ -425,6 +425,31 @@ XCThermControlsModel::MaybeFetchActiveLayer(
   MaybeFetchActiveLayerSpan(std::move(on_finished));
 }
 
+bool
+XCThermControlsModel::RequestLayerDownload(
+  std::function<void(std::shared_ptr<XCThermDownloadJob>)> on_finished) noexcept
+{
+  const auto &settings = Settings();
+  if (!settings.credentials.IsDefined() ||
+      settings.download_span_hours == 0)
+    return false;
+
+  ResetAutoFetchAttempt();
+  XCThermAPI::Instance().PrepareSession(settings);
+
+  const auto shared = StartSpanDownload(
+    settings, state.current_layer,
+    [this, finished = std::move(on_finished)](
+      std::shared_ptr<XCThermDownloadJob> done) mutable {
+      ApplyJobPreviewToMap(done);
+      OnDownloadFinished(done);
+      if (finished)
+        finished(std::move(done));
+    });
+
+  return shared != nullptr;
+}
+
 void
 XCThermControlsModel::OnDownloadFinished(
   const std::shared_ptr<XCThermDownloadJob> &job) noexcept
