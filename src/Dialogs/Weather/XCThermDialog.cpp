@@ -118,9 +118,9 @@ XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   StaticString<80> first_row;
   if (active)
-    first_row.Format("%s  %s", layer.dialog_label, _("[ACTIVE]"));
+    first_row.Format("%s  %s", gettext(layer.dialog_label), _("[ACTIVE]"));
   else
-    first_row = layer.dialog_label;
+    first_row = gettext(layer.dialog_label);
 
   /* Second row: download status */
   StaticString<200> second_row;
@@ -428,6 +428,8 @@ XCThermWidget::ActivateClicked()
   }
 
   SaveSettings();
+  XCTherm::RestoreActiveLayerOverlay();
+  PageActions::Update();
   UpdateList();
 }
 
@@ -461,12 +463,14 @@ XCThermWidget::DeleteClicked()
   info[cursor_index] = LayerDownloadInfo{};
 
   /* If the deleted layer was currently displayed on the map, clear the
-     overlay. We don't try to detect that exactly — easier to just drop
-     it whenever the user invokes Delete; auto-switch will repopulate
-     from a different cached layer on the next GPS tick if available. */
-  XCTherm::ClearMapOverlay();
+     overlay and refresh page state. */
+  if (XCTherm::IsActiveLayer(target, settings.parameter,
+                             settings.wave_height,
+                             settings.vertical_wind_agl))
+    XCTherm::ClearMapOverlay();
 
   UpdateList();
+  PageActions::Update();
 }
 
 /* ---- Download span (asynchronous worker thread) ---- */

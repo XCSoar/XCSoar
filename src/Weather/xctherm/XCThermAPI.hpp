@@ -11,6 +11,7 @@
 
 class CurlGlobal;
 
+#include <atomic>
 #include <cstdint>
 #include <cstddef>
 #include <functional>
@@ -190,7 +191,9 @@ public:
                                      return true;
                                    });
 
-  bool IsIndexLoaded() const noexcept { return index_loaded; }
+  bool IsIndexLoaded() const noexcept {
+    return index_loaded.load(std::memory_order_acquire);
+  }
 
   /* ---- Download cache ---- */
 
@@ -352,7 +355,7 @@ private:
   /** Tiles path segment; kept in sync via #SetRegion / #ApplySessionSettings. */
   std::string model = "icon-ch";
   std::vector<ParameterInfo> available_parameters;
-  bool index_loaded = false;
+  std::atomic<bool> index_loaded{false};
 
   /**
    * Disk index: parameter -> (utc_hour -> SliceMeta). The authoritative
@@ -387,6 +390,10 @@ private:
    * (yet) enabled.
    */
   AllocatedPath disk_cache_dir = nullptr;
+
+  void ReloadDiskIndex() noexcept;
+
+  AllocatedPath ModelDiskCacheDirectory() const noexcept;
 
   /* ---- Disk cache helpers ---- */
 

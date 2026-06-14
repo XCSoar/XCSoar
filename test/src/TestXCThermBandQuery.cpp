@@ -34,7 +34,7 @@ P(double lon, double lat)
 
 int main()
 {
-  plan_tests(14);
+  plan_tests(14 + 4);
 
   ForecastLayer layer;
   /* Two disjoint bands side by side:
@@ -81,6 +81,25 @@ int main()
   ok1(FindBandAtPoint(nested, P(1.5, 1.5), lo, hi));
   ok1(equals(lo, 3.0));
   ok1(equals(hi, 4.0));
+
+  /* --- Polygon with a hole: interior ring excludes the center --- */
+  ForecastLayer holed;
+  {
+    WindBand band = MakeSquareBand(1.0, 2.0, 0, 0, 4, 4);
+    Ring hole;
+    hole.push_back(GeoPoint(Angle::Degrees(1.5), Angle::Degrees(1.5)));
+    hole.push_back(GeoPoint(Angle::Degrees(2.5), Angle::Degrees(1.5)));
+    hole.push_back(GeoPoint(Angle::Degrees(2.5), Angle::Degrees(2.5)));
+    hole.push_back(GeoPoint(Angle::Degrees(1.5), Angle::Degrees(2.5)));
+    hole.push_back(GeoPoint(Angle::Degrees(1.5), Angle::Degrees(1.5)));
+    band.polygons[0].push_back(std::move(hole));
+    holed.bands.push_back(std::move(band));
+  }
+  lo = hi = -99;
+  ok1(!FindBandAtPoint(holed, P(2.0, 2.0), lo, hi));
+  ok1(FindBandAtPoint(holed, P(0.5, 0.5), lo, hi));
+  ok1(equals(lo, 1.0));
+  ok1(equals(hi, 2.0));
 
   return exit_status();
 }

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
+#include "Weather/xctherm/XCThermForecastTime.hpp"
 #include "co/Task.hxx"
 
 #include <atomic>
@@ -22,7 +23,7 @@ struct XCThermDownloadJob {
   std::string target_label;
   std::string param;
   unsigned span_hours = 0;
-  unsigned current_utc = 12;
+  unsigned current_utc = XCTherm::XCTHERM_DEFAULT_UTC_HOUR;
 
   std::atomic<bool> cancel{false};
   std::atomic<bool> done{false};
@@ -39,6 +40,8 @@ struct XCThermDownloadJob {
 
   std::mutex result_mutex;
   XCThermGeoJSON::ForecastLayer first_forecast;
+  unsigned first_forecast_utc = 0;
+  bool has_first_forecast_utc = false;
   std::string latest_run_date;
   std::string latest_run_hour;
   std::chrono::steady_clock::time_point started_at;

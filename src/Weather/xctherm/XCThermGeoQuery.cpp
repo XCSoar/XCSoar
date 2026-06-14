@@ -39,6 +39,24 @@ PointInRing(const Ring &ring, double x, double y) noexcept
   return inside;
 }
 
+[[gnu::pure]]
+static bool
+PointInPolygon(const std::vector<Ring> &polygon, double x, double y) noexcept
+{
+  if (polygon.empty() || polygon[0].size() < 3)
+    return false;
+
+  if (!PointInRing(polygon[0], x, y))
+    return false;
+
+  for (std::size_t i = 1; i < polygon.size(); ++i) {
+    if (polygon[i].size() >= 3 && PointInRing(polygon[i], x, y))
+      return false;
+  }
+
+  return true;
+}
+
 bool
 FindBandAtPoint(const ForecastLayer &layer, GeoPoint p,
                 double &out_min_ms, double &out_max_ms) noexcept
@@ -61,11 +79,7 @@ FindBandAtPoint(const ForecastLayer &layer, GeoPoint p,
       continue;
 
     for (const auto &polygon : band.polygons) {
-      if (polygon.empty() || polygon[0].size() < 3)
-        continue;
-      /* Exterior ring only; holes are absent in this data (matches
-         the Draw path). */
-      if (PointInRing(polygon[0], x, y)) {
+      if (PointInPolygon(polygon, x, y)) {
         out_min_ms = band.min_ms;
         out_max_ms = band.max_ms;
         best_abs_mid = abs_mid;

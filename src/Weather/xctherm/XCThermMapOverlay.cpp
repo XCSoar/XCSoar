@@ -168,7 +168,8 @@ GetPanOverlayLabel() noexcept
   const int li = FindActiveLayerIndex(settings);
   if (li >= 0) {
     label.Format(_("XCTherm %s"),
-                 GetRegion(settings.model).layers[unsigned(li)].short_label);
+                 gettext(GetRegion(settings.model)
+                           .layers[unsigned(li)].short_label));
   } else
     label = _("XCTherm");
 
@@ -193,7 +194,8 @@ ApplyCachedLayerOverlay(unsigned layer_index, unsigned utc_hour) noexcept
     return false;
   }
 
-  ApplyForecastToMap(cached, layer.short_label, layer.api_parameter, utc_hour);
+  ApplyForecastToMap(cached, gettext(layer.short_label),
+                       layer.api_parameter, utc_hour);
   return true;
 }
 
@@ -227,7 +229,8 @@ RestoreActiveLayerOverlay() noexcept
   if (layer_index < 0)
     return;
 
-  ApplyCachedLayerOverlayAuto(unsigned(layer_index));
+  if (!ApplyCachedLayerOverlayAuto(unsigned(layer_index)))
+    ClearMapOverlay();
 }
 
 void
@@ -239,9 +242,11 @@ ApplyJobPreviewToMap(const std::shared_ptr<XCThermDownloadJob> &job) noexcept
 
   std::lock_guard lock{job->result_mutex};
   if (!job->first_forecast.IsEmpty()) {
-    const unsigned shown_utc = (job->current_utc + 23) % 24;
+    const unsigned shown_utc = job->has_first_forecast_utc
+      ? job->first_forecast_utc
+      : (job->current_utc + 23) % 24;
     ApplyForecastLayerToMap(std::move(job->first_forecast),
-                            job->target_label.c_str(),
+                            gettext(job->target_label.c_str()),
                             job->param.c_str(), shown_utc);
   } else {
     RestoreActiveLayerOverlay();

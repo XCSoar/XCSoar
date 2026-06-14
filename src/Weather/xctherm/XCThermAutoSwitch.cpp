@@ -162,7 +162,7 @@ XCThermAutoSwitch::FindLayerForAltitude(double altitude) const noexcept
 void
 XCThermAutoSwitch::UpdateAltitude(double altitude, TimeStamp now) noexcept
 {
-  if (loaded_layers.empty() || thresholds.empty())
+  if (loaded_layers.empty())
     return;
 
   int target_pos = FindLayerForAltitude(altitude);

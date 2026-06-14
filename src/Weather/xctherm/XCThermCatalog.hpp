@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Language/Language.hpp"
+
 #include <cstddef>
 #include <iterator>
 
@@ -48,49 +50,49 @@ struct RegionDef {
 namespace detail {
 
 constexpr Layer CH_LAYERS[] = {
-  { "1500amsl", "vertical_wind_1500amsl", "Vertical wind 1500 m AMSL",
-    "1500m AMSL", 1500, false },
-  { "2000amsl", "vertical_wind_2000amsl", "Vertical wind 2000 m AMSL",
-    "2000m AMSL", 2000, false },
-  { "3000amsl", "vertical_wind_3000amsl", "Vertical wind 3000 m AMSL",
-    "3000m AMSL", 3000, false },
-  { "4000amsl", "vertical_wind_4000amsl", "Vertical wind 4000 m AMSL",
-    "4000m AMSL", 4000, false },
-  { "5000amsl", "vertical_wind_5000amsl", "Vertical wind 5000 m AMSL",
-    "5000m AMSL", 5000, false },
-  { "6000amsl", "vertical_wind_6000amsl", "Vertical wind 6000 m AMSL",
-    "6000m AMSL", 6000, false },
-  { "7000amsl", "vertical_wind_7000amsl", "Vertical wind 7000 m AMSL",
-    "7000m AMSL", 7000, false },
-  { "8000amsl", "vertical_wind_8000amsl", "Vertical wind 8000 m AMSL",
-    "8000m AMSL", 8000, false },
-  { "100agl", "vertical_wind_100agl", "Vertical wind 100 m AGL",
-    "100m AGL", 100, true },
-  { "400agl", "vertical_wind_400agl", "Vertical wind 400 m AGL",
-    "400m AGL", 400, true },
+  { "1500amsl", "vertical_wind_1500amsl",
+    N_("Vertical wind 1500 m AMSL"), N_("1500m AMSL"), 1500, false },
+  { "2000amsl", "vertical_wind_2000amsl",
+    N_("Vertical wind 2000 m AMSL"), N_("2000m AMSL"), 2000, false },
+  { "3000amsl", "vertical_wind_3000amsl",
+    N_("Vertical wind 3000 m AMSL"), N_("3000m AMSL"), 3000, false },
+  { "4000amsl", "vertical_wind_4000amsl",
+    N_("Vertical wind 4000 m AMSL"), N_("4000m AMSL"), 4000, false },
+  { "5000amsl", "vertical_wind_5000amsl",
+    N_("Vertical wind 5000 m AMSL"), N_("5000m AMSL"), 5000, false },
+  { "6000amsl", "vertical_wind_6000amsl",
+    N_("Vertical wind 6000 m AMSL"), N_("6000m AMSL"), 6000, false },
+  { "7000amsl", "vertical_wind_7000amsl",
+    N_("Vertical wind 7000 m AMSL"), N_("7000m AMSL"), 7000, false },
+  { "8000amsl", "vertical_wind_8000amsl",
+    N_("Vertical wind 8000 m AMSL"), N_("8000m AMSL"), 8000, false },
+  { "100agl", "vertical_wind_100agl",
+    N_("Vertical wind 100 m AGL"), N_("100m AGL"), 100, true },
+  { "400agl", "vertical_wind_400agl",
+    N_("Vertical wind 400 m AGL"), N_("400m AGL"), 400, true },
 };
 
 constexpr Layer UK_LAYERS[] = {
-  { "1000amsl", "vertical_wind_1000amsl", "Vertical wind 1000 m AMSL",
-    "1000m AMSL", 1000, false },
-  { "1500amsl", "vertical_wind_1500amsl", "Vertical wind 1500 m AMSL",
-    "1500m AMSL", 1500, false },
-  { "2000amsl", "vertical_wind_2000amsl", "Vertical wind 2000 m AMSL",
-    "2000m AMSL", 2000, false },
-  { "2500amsl", "vertical_wind_2500amsl", "Vertical wind 2500 m AMSL",
-    "2500m AMSL", 2500, false },
-  { "3000amsl", "vertical_wind_3000amsl", "Vertical wind 3000 m AMSL",
-    "3000m AMSL", 3000, false },
-  { "4200amsl", "vertical_wind_4200amsl", "Vertical wind 4200 m AMSL",
-    "4200m AMSL", 4200, false },
-  { "100agl", "vertical_wind_100agl", "Vertical wind 100 m AGL",
-    "100m AGL", 100, true },
-  { "200agl", "vertical_wind_200agl", "Vertical wind 200 m AGL",
-    "200m AGL", 200, true },
-  { "400agl", "vertical_wind_400agl", "Vertical wind 400 m AGL",
-    "400m AGL", 400, true },
-  { "800agl", "vertical_wind_800agl", "Vertical wind 800 m AGL",
-    "800m AGL", 800, true },
+  { "1000amsl", "vertical_wind_1000amsl",
+    N_("Vertical wind 1000 m AMSL"), N_("1000m AMSL"), 1000, false },
+  { "1500amsl", "vertical_wind_1500amsl",
+    N_("Vertical wind 1500 m AMSL"), N_("1500m AMSL"), 1500, false },
+  { "2000amsl", "vertical_wind_2000amsl",
+    N_("Vertical wind 2000 m AMSL"), N_("2000m AMSL"), 2000, false },
+  { "2500amsl", "vertical_wind_2500amsl",
+    N_("Vertical wind 2500 m AMSL"), N_("2500m AMSL"), 2500, false },
+  { "3000amsl", "vertical_wind_3000amsl",
+    N_("Vertical wind 3000 m AMSL"), N_("3000m AMSL"), 3000, false },
+  { "4200amsl", "vertical_wind_4200amsl",
+    N_("Vertical wind 4200 m AMSL"), N_("4200m AMSL"), 4200, false },
+  { "100agl", "vertical_wind_100agl",
+    N_("Vertical wind 100 m AGL"), N_("100m AGL"), 100, true },
+  { "200agl", "vertical_wind_200agl",
+    N_("Vertical wind 200 m AGL"), N_("200m AGL"), 200, true },
+  { "400agl", "vertical_wind_400agl",
+    N_("Vertical wind 400 m AGL"), N_("400m AGL"), 400, true },
+  { "800agl", "vertical_wind_800agl",
+    N_("Vertical wind 800 m AGL"), N_("800m AGL"), 800, true },
 };
 
 constexpr RegionDef REGIONS[] = {

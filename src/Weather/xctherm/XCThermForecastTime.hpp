@@ -9,8 +9,10 @@
 
 namespace XCTherm {
 
+constexpr unsigned XCTHERM_DEFAULT_UTC_HOUR = 12;
+
 struct UtcTimeParts {
-  unsigned hour = 12;
+  unsigned hour = XCTHERM_DEFAULT_UTC_HOUR;
   unsigned minute = 0;
 };
 
@@ -45,7 +47,7 @@ int PickAutoTimeIndex(const std::vector<unsigned> &cached_hours,
 unsigned ForecastHourAt(const std::vector<unsigned> &cached_hours,
                         unsigned time_index,
                         const std::vector<unsigned> &available_hours,
-                        unsigned fallback = 12) noexcept;
+                        unsigned fallback = XCTHERM_DEFAULT_UTC_HOUR) noexcept;
 
 /**
  * Cursor-bar time label, e.g. @c "12:00 UTC (+1:30)" or @c "AUTO: …".

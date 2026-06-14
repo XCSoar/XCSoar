@@ -52,11 +52,22 @@ XCThermAPI::SetCredentials(const std::string &email,
 void
 XCThermAPI::SetModel(const std::string &m) noexcept
 {
-  if (model != m) {
-    model = m;
-    available_parameters.clear();
-    index_loaded = false;
+  if (model == m)
+    return;
+
+  model = m;
+  available_parameters.clear();
+  index_loaded.store(false, std::memory_order_release);
+
+  {
+    const std::lock_guard lock{cache_mutex};
+    disk_index.clear();
+    geojson_cache.clear();
+    lru_order.clear();
   }
+
+  if (disk_cache_dir != nullptr)
+    ReloadDiskIndex();
 }
 
 void
@@ -229,7 +240,7 @@ bool
 XCThermAPI::ParseIndex(const std::string &json) noexcept
 {
   available_parameters.clear();
-  index_loaded = false;
+  index_loaded.store(false, std::memory_order_release);
 
   boost::json::value root;
   try {
@@ -302,10 +313,11 @@ XCThermAPI::ParseIndex(const std::string &json) noexcept
     }
   }
 
-  index_loaded = !available_parameters.empty();
+  index_loaded.store(!available_parameters.empty(),
+                     std::memory_order_release);
   LogFmt("xctherm: index parsed, {} vertical_wind parameters",
          available_parameters.size());
-  return index_loaded;
+  return index_loaded.load(std::memory_order_acquire);
 }
 
 /* ------------------------------------------------------------------ */
@@ -765,26 +777,33 @@ BuildDiskCacheDirectory()
   return xctherm_path;
 }
 
-void
-XCThermAPI::EnableDiskCache() noexcept
+AllocatedPath
+XCThermAPI::ModelDiskCacheDirectory() const noexcept
 {
-  if (disk_cache_dir != nullptr)
-    return;  /* idempotent */
+  if (disk_cache_dir == nullptr)
+    return nullptr;
 
   try {
-    disk_cache_dir = BuildDiskCacheDirectory();
+    auto model_dir = AllocatedPath::Build(disk_cache_dir, Path(model.c_str()));
+    Directory::Create(model_dir);
+    return model_dir;
   } catch (...) {
-    LogFmt("xctherm: could not create disk cache dir");
-    disk_cache_dir = nullptr;
-    return;
+    return nullptr;
   }
-  LogFmt("xctherm: disk cache dir = {}", disk_cache_dir.c_str());
+}
 
-  /* Scan existing files: index their headers (cheap), delete stale.
-     Crucially we do NOT read the GeoJSON bodies here — only the small
-     header line — so startup RAM stays low regardless of how many
-     forecasts were downloaded. Bodies fault in on demand via
-     GetCachedGeoJSON. Visitor captures `this`. */
+void
+XCThermAPI::ReloadDiskIndex() noexcept
+{
+  const auto model_dir = ModelDiskCacheDirectory();
+  if (model_dir == nullptr)
+    return;
+
+  {
+    const std::lock_guard lock{cache_mutex};
+    disk_index.clear();
+  }
+
   struct Indexer final : public File::Visitor {
     XCThermAPI &api;
     const std::chrono::system_clock::time_point cutoff;
@@ -892,20 +911,39 @@ XCThermAPI::EnableDiskCache() noexcept
 
   const auto now = std::chrono::system_clock::now();
   Indexer indexer(*this, now - kDiskTTL);
-  Directory::VisitSpecificFiles(disk_cache_dir, "*.xctcache", indexer);
-  LogFmt("xctherm: disk cache indexed {} slices (dropped {} stale)",
-         indexer.indexed, indexer.dropped);
+  Directory::VisitSpecificFiles(model_dir, "*.xctcache", indexer);
+  LogFmt("xctherm: disk cache indexed {} slices for {} (dropped {} stale)",
+         indexer.indexed, model.c_str(), indexer.dropped);
+}
+
+void
+XCThermAPI::EnableDiskCache() noexcept
+{
+  if (disk_cache_dir != nullptr)
+    return;  /* idempotent */
+
+  try {
+    disk_cache_dir = BuildDiskCacheDirectory();
+  } catch (...) {
+    LogFmt("xctherm: could not create disk cache dir");
+    disk_cache_dir = nullptr;
+    return;
+  }
+  LogFmt("xctherm: disk cache dir = {}", disk_cache_dir.c_str());
+
+  ReloadDiskIndex();
 }
 
 AllocatedPath
 XCThermAPI::SliceFilePath(const std::string &parameter,
                           unsigned forecast_utc) const noexcept
 {
-  if (disk_cache_dir == nullptr)
+  const auto model_dir = ModelDiskCacheDirectory();
+  if (model_dir == nullptr)
     return nullptr;
   const auto name = FmtBuffer<128>("{}_{:02}.xctcache",
                                    parameter, forecast_utc);
-  return AllocatedPath::Build(disk_cache_dir, name.c_str());
+  return AllocatedPath::Build(model_dir, name.c_str());
 }
 
 void

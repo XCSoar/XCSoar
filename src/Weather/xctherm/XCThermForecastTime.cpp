@@ -10,6 +10,7 @@
 
 #include <chrono>
 #include <cstdlib>
+#include <optional>
 
 namespace XCTherm {
 
@@ -90,8 +91,10 @@ FormatTimeLabel(StaticString<64> &dest, const char *api_parameter,
 {
   int offset_min = 0;
   bool has_real_offset = false;
-  const auto slice =
-    XCThermAPI::Instance().GetSliceMeta(api_parameter, forecast_utc_hour);
+  std::optional<XCThermAPI::SliceMeta> slice;
+  if (api_parameter != nullptr && api_parameter[0] != '\0')
+    slice = XCThermAPI::Instance().GetSliceMeta(api_parameter,
+                                                forecast_utc_hour);
 
   if (slice.has_value() && slice->run_date.size() == 8 &&
       slice->run_hour.size() == 2 &&

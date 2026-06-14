@@ -180,6 +180,8 @@ RunXCThermDownload(CurlGlobal &curl,
             if (!forecast.IsEmpty()) {
               forecast.layer_name = job->target_label;
               job->first_forecast = std::move(forecast);
+              job->first_forecast_utc = forecast_utc;
+              job->has_first_forecast_utc = true;
             }
           }
         }
@@ -223,6 +225,8 @@ RunXCThermDownload(CurlGlobal &curl,
               if (!forecast.IsEmpty()) {
                 forecast.layer_name = job->target_label;
                 job->first_forecast = std::move(forecast);
+                job->first_forecast_utc = forecast_utc;
+                job->has_first_forecast_utc = true;
               }
             }
           }
@@ -259,6 +263,13 @@ RunXCThermDownload(CurlGlobal &curl,
         break;
 
       if (transient_failure) {
+        constexpr unsigned MAX_TRANSIENT_RETRIES = 5;
+        if (attempt + 1 >= MAX_TRANSIENT_RETRIES) {
+          LogFmt("xctherm: slot#{} giving up after {} attempts",
+                 slot_i, attempt + 1);
+          break;
+        }
+
         constexpr unsigned RETRY_SECONDS = 5;
         LogFmt("xctherm: slot#{} attempt {} transient failure — retry in {}s",
                slot_i, attempt + 1, RETRY_SECONDS);

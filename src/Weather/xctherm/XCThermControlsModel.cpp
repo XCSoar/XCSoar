@@ -58,6 +58,7 @@ XCThermControlsModel::ApplyAutoSwitchLayer(unsigned layer_index) noexcept
 
   auto_switch.SyncCurrentLayerIndex(state.current_layer);
   SaveCursorSession();
+  NotifyStateChanged();
 }
 
 void
@@ -74,6 +75,7 @@ XCThermControlsModel::ConfigureAutoSwitch() noexcept
       state.current_time_index = utc_hour % 24;
       ApplyCurrentSelectionToMap();
       SaveCursorSession();
+      NotifyStateChanged();
     });
     auto_switch_configured = true;
   }
@@ -443,11 +445,12 @@ XCThermControlsModel::FormatLayerLabel(StaticString<80> &text) const noexcept
   const bool has_cache = HasCacheAtCurrentHour(layer);
 
   if (!has_cache)
-    WeatherMapOverlay::AppendNoDataTag(text, LayerAt(layer).short_label);
+    WeatherMapOverlay::AppendNoDataTag(text,
+                                       gettext(LayerAt(layer).short_label));
   else if (auto_switch.IsAltitudeAutoActive())
-    text.Format("%s %s", _("AUTO:"), LayerAt(layer).short_label);
+    text.Format("%s %s", _("AUTO:"), gettext(LayerAt(layer).short_label));
   else
-    text.Format("%s", LayerAt(layer).short_label);
+    text.Format("%s", gettext(LayerAt(layer).short_label));
 }
 
 void
