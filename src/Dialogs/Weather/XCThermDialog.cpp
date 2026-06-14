@@ -17,8 +17,9 @@
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Widget/LargeTextWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
+#include "WeatherCredentialGateWidget.hpp"
+#include "Dialogs/Settings/Panels/XCThermConfigPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "Interface.hpp"
@@ -834,22 +835,9 @@ XCThermWidget::Prepare(ContainerWindow &parent,
 
 } // namespace
 
-std::unique_ptr<Widget>
-CreateXCThermWidget() noexcept
+static std::unique_ptr<Widget>
+CreateXCThermMainWidget() noexcept
 {
-  /*
-   * If no XCTherm account is configured, show a simple message
-   * (same pattern as pc_met).
-   */
-  const auto &settings =
-    CommonInterface::GetComputerSettings().weather.xctherm;
-
-  if (!settings.credentials.IsDefined())
-    return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
-                                             _("No XCTherm account configured.\n\n"
-                                               "Enter your credentials in\n"
-                                               "Config > Weather > XCTherm."));
-
   auto widget = std::make_unique<XCThermWidget>();
   auto buttons = std::make_unique<ButtonPanelWidget>(
     std::move(widget),
@@ -857,6 +845,18 @@ CreateXCThermWidget() noexcept
   auto *widget_ptr = static_cast<XCThermWidget *>(&buttons->GetWidget());
   widget_ptr->SetButtonPanel(*buttons);
   return buttons;
+}
+
+std::unique_ptr<Widget>
+CreateXCThermWidget() noexcept
+{
+  return CreateWeatherCredentialGateWidget(
+    []() {
+      return CommonInterface::GetComputerSettings()
+        .weather.xctherm.credentials.IsDefined();
+    },
+    CreateXCThermConfigPanel,
+    CreateXCThermMainWidget);
 }
 
 #endif
