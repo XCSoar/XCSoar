@@ -238,6 +238,14 @@ Version 7.45 - not yet released
     bottom-panel weather controls with auto-advance, day precaching,
     and simplified RASP configuration (field/time on pages instead of the
     weather dialog)
+  - activating a weather overlay assigns it to a map page automatically
+    (first overlay reuses page 0; further types append a page); RASP layer
+    selection in Info → Weather or Config → Weather activates the overlay
+    without a separate Activate step (#2583)
+  - weather overlay map pages: ``WeatherOverlay`` input event and
+    ``mode=weather`` stick/button bindings step forecast time and
+    altitude/level on the cursor bar; new overlay pages keep default
+    InfoBoxes (#2583)
   - pc_met www images: add RADAR Deutschland Nord/Mitte/Süd, Alpen, SAT RAD
     BLITZ, and Blitzkarte Europa; local radar list uses Borkum instead of
     the removed Emden site
