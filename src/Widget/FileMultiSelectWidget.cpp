@@ -17,6 +17,7 @@
 #include "util/StaticString.hxx"
 #include "util/UTF8.hpp"
 #include "Dialogs/HelpDialog.hpp"
+#include "Dialogs/EmptyDownloadList.hpp"
 #include "Form/CheckBox.hpp"
 
 #include <algorithm>
@@ -162,7 +163,9 @@ FileMultiSelectWidget::Refresh() noexcept
   if (df_)
     MergePaths(current_items);
 
-  SetLengthWithSelection(items_.size());
+  SetLengthWithSelection(ShouldShowEmptyDownloadHint()
+                         ? 1u : unsigned(items_.size()));
+  GetList().SetItemHeight(ComputeRowHeight());
   ClearSelection();
 
   RestoreAfterRefresh(saved_selection, previous_paths, current_items);
@@ -291,6 +294,15 @@ void
 FileMultiSelectWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                    unsigned idx) noexcept
 {
+  if (ShouldShowEmptyDownloadHint()) {
+    assert(idx == 0);
+    if (use_two_rows_)
+      DrawEmptyDownloadHint(two_text_rows_renderer_, canvas, rc);
+    else
+      DrawEmptyDownloadHint(text_row_renderer_, canvas, rc);
+    return;
+  }
+
   if (idx >= items_.size())
     return;
 
@@ -412,6 +424,13 @@ FileMultiSelectWidget::SetNavigateCallback(std::function<void(AllocatedPath)> cb
 void
 FileMultiSelectWidget::OnActivateItem(unsigned index) noexcept
 {
+  if (ShouldShowEmptyDownloadHint()) {
+    assert(index == 0);
+    if (empty_download_activate_)
+      empty_download_activate_();
+    return;
+  }
+
   if (index >= items_.size())
     return;
 
@@ -438,6 +457,11 @@ FileMultiSelectWidget::OnListResized() noexcept
 unsigned
 FileMultiSelectWidget::ComputeRowHeight() noexcept
 {
+  if (ShouldShowEmptyDownloadHint())
+    return use_two_rows_
+      ? LayoutEmptyDownloadRow(two_text_rows_renderer_)
+      : LayoutEmptyDownloadRow(text_row_renderer_);
+
   const DialogLook &look = UIGlobals::GetDialogLook();
   /* Row height is driven purely by font metrics so that it adapts
      when Layout scale factors change on window resize.  The folder

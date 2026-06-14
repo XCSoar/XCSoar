@@ -98,6 +98,14 @@ public:
     default-constructed or empty, all files are shown. */
   void SetFilter(std::function<bool(const Path &)> filter) noexcept;
 
+  /**
+   * When the list is empty, show a download hint row; @p activate runs
+   * when the user activates that row (e.g. open the download picker).
+   */
+  void EnableEmptyDownloadHint(std::function<void()> activate) noexcept {
+    empty_download_activate_ = std::move(activate);
+  }
+
   // MultiSelectListWidget virtual methods
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
@@ -130,6 +138,7 @@ private:
   std::function<void()> selection_changed_callback_;
   std::function<bool(const Path &)> filter_;
   std::function<void(AllocatedPath)> navigate_callback_;
+  std::function<void()> empty_download_activate_;
   MaskedIcon folder_icon_;
 
   void LoadFiles() noexcept;
@@ -148,4 +157,9 @@ private:
   void RestoreSelection(const std::vector<Path> &saved_selection,
                         const std::vector<AllocatedPath> &previous_items_paths,
                         const std::vector<Path> &current_items) noexcept;
+
+  [[gnu::pure]]
+  bool ShouldShowEmptyDownloadHint() const noexcept {
+    return empty_download_activate_ && items_.empty();
+  }
 };

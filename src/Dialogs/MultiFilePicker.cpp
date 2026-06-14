@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MultiFilePicker.hpp"
+#include "Repository/Glue.hpp"
 #include "Form/DataField/MultiFile.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -15,7 +16,6 @@
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "DownloadFilePicker.hpp"
-#include "net/http/DownloadManager.hpp"
 #endif
 
 static const char *
@@ -54,8 +54,8 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
   dialog.AddButton(_("OK"), mrOK);
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  if (Net::DownloadManager::IsAvailable()) {
-    dialog.AddButton(_("Download"), [file_widget, &df]() {
+  if (FileTypeSupportsDownload(df.GetFileDataField().GetFileType())) {
+    const auto download = [file_widget, &df]() {
       const auto path = DownloadFilePicker(df.GetFileDataField().GetFileType());
       if (path != nullptr) {
         df.ForceModify(path);
@@ -63,7 +63,9 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
 
         file_widget->Refresh();
       }
-    });
+    };
+    dialog.AddButton(_("Download"), download);
+    file_widget->EnableEmptyDownloadHint(download);
   }
 #endif
 
@@ -88,6 +90,7 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
   UpdateButtons();
   file_widget->SetSelectionChangedCallback(UpdateButtons);
 
+  dialog.EnableCursorSelection();
   dialog.FinishPreliminary(std::move(widget));
 
   int result = dialog.ShowModal();

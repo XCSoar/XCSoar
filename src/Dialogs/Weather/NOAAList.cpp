@@ -129,7 +129,7 @@ NOAAListWidget::UpdateList()
   std::sort(stations.begin(), stations.end());
 
   ListControl &list = GetList();
-  list.SetLength(stations.size());
+  list.SetLength(std::max(stations.size(), size_t{1}));
   list.Invalidate();
 
   const bool empty = stations.empty(), full = stations.full();
@@ -143,6 +143,14 @@ void
 NOAAListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned index) noexcept
 {
+  if (stations.empty()) {
+    assert(index == 0);
+    row_renderer.DrawFirstRow(canvas, rc, _("None"));
+    row_renderer.DrawSecondRow(canvas, rc,
+                               _("Press here to add a station"));
+    return;
+  }
+
   assert(index < stations.size());
 
   NOAAListRenderer::Draw(canvas, rc, *stations[index].iterator,
@@ -238,6 +246,12 @@ NOAAListWidget::DetailsClicked()
 void
 NOAAListWidget::OnActivateItem(unsigned index) noexcept
 {
+  if (stations.empty()) {
+    assert(index == 0);
+    AddClicked();
+    return;
+  }
+
   OpenDetails(index);
 }
 
