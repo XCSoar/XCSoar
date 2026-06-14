@@ -57,8 +57,6 @@ RaspControlsWidget::OnStepTime(int delta) noexcept
 {
   if (data->model.StepTime(delta))
     RefreshRaspOverlay();
-  else if (!data->model.HasTimeData())
-    SetRowText(TIME_ROW, WeatherMapOverlay::NoDataStepHint(), false);
   else
     UpdateLabels();
 }
@@ -119,7 +117,7 @@ RaspControlsWidget::OnGPSUpdate(const MoreData &basic)
   if (!basic.date_time_utc.IsPlausible())
     return;
 
-  const auto local = basic.date_time_utc.ToLocal();
+  const auto local = basic.date_time_utc.ToLocal().FloorToQuarterHour();
   const unsigned quarter = unsigned(local.hour) * 4u +
     unsigned(local.minute) / 15u;
   if (quarter == data->last_quarter)

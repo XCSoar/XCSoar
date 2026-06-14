@@ -40,6 +40,7 @@ RaspControlsModel::SetTime(unsigned minute_of_day) noexcept
   auto &weather = CommonInterface::SetUIState().weather;
   weather.time = Rasp::TimeFromMinuteOfDay(minute_of_day);
   weather.time_auto_advance = false;
+  weather.rasp_cursor_session_initialized = true;
 
   ActionInterface::SendUIState(true);
 }
@@ -78,7 +79,7 @@ RaspControlsModel::StepTime(int delta) noexcept
 {
   const auto rasp = DataGlobals::GetRasp();
   const int field_index = Rasp::GetActiveFieldIndex();
-  if (rasp == nullptr || field_index < 0)
+  if (rasp == nullptr || field_index < 0 || delta == 0)
     return false;
 
   const auto &weather = CommonInterface::GetUIState().weather;
