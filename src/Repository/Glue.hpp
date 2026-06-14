@@ -4,6 +4,7 @@
 #pragma once
 
 #include "AvailableFile.hpp"
+#include "Repository/FileType.hpp"
 #include "net/http/Features.hpp"
 #include "system/Path.hpp"
 
@@ -113,4 +114,9 @@ EnqueueConfiguredRaspDownload(const FileRepository &repository) noexcept;
 void
 DownloadRepositoriesModal(bool main_repo=true, bool user_repo=true);
 
+/**
+ * Whether the download manager can offer repository files for @p type.
+ */
+[[gnu::pure]] bool
+FileTypeSupportsDownload(FileType type) noexcept;
 #endif /* HAVE_DOWNLOAD_MANAGER */

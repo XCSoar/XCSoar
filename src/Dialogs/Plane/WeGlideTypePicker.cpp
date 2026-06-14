@@ -110,7 +110,7 @@ SelectWeGlideAircraftType(unsigned &aircraft_id,
       return aircraft_id != old_aircraft_id;
     }
 
-    if (result == -2) {
+    if (result == mrExtra) {
       auto refreshed = DownloadAircraftTypes(settings);
       if (refreshed.empty()) {
         ShowMessageBox(_("Could not load WeGlide aircraft list."),

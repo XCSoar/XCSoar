@@ -6,6 +6,7 @@
 #include "Form/Form.hpp"
 #include "HelpDialog.hpp"
 #include "UIGlobals.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
@@ -39,11 +40,15 @@ class ListPickerWidget : public ListWidget {
   TextWidget *help_widget;
   TwoWidgets *two_widgets;
 
+  /** When the list is empty but an extra action (e.g. Download) exists. */
+  bool empty_extra_action;
+  TextRowRenderer empty_row_renderer;
+
 public:
   ListPickerWidget(unsigned _num_items, unsigned _initial_value,
                    unsigned _row_height, ListItemRenderer &_item_renderer,
                    WndForm &_dialog, const char *_caption,
-                   const char *_help_text) noexcept
+                   const char *_help_text, bool _empty_extra_action) noexcept
       : num_items(_num_items),
         initial_value(_initial_value),
         row_height(_row_height),
@@ -52,7 +57,8 @@ public:
         dialog(_dialog),
         caption(_caption),
         help_text(_help_text),
-        item_help_callback(nullptr)
+        item_help_callback(nullptr),
+        empty_extra_action(_empty_extra_action)
   {
   }
 
@@ -79,13 +85,7 @@ public:
 
   /* virtual methods from class Widget */
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override
-  {
-    ListControl &list =
-        CreateList(parent, UIGlobals::GetDialogLook(), rc, row_height);
-    list.SetLength(num_items);
-    list.SetCursorIndex(initial_value);
-  }
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 
   void Show(const PixelRect &rc) noexcept override
   {
@@ -104,16 +104,10 @@ public:
 
   /* virtual methods from class ListControl::Handler */
 
-  unsigned OnListResized() noexcept override
-  {
-    return item_renderer.OnListResized();
-  }
+  unsigned OnListResized() noexcept override;
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) noexcept override
-  {
-    item_renderer.OnPaintItem(canvas, rc, idx);
-  }
+                   unsigned idx) noexcept override;
 
   void OnCursorMoved(unsigned index) noexcept override { UpdateHelp(index); }
 
@@ -124,7 +118,10 @@ public:
 
   void OnActivateItem([[maybe_unused]] unsigned index) noexcept override
   {
-    dialog.SetModalResult(mrOK);
+    if (num_items == 0 && empty_extra_action)
+      dialog.SetModalResult(mrExtra);
+    else
+      dialog.SetModalResult(mrOK);
   }
 };
 
@@ -141,7 +138,7 @@ public:
  * @param itemhelp_callback Callback to return string for current item help
  * @param extra_caption caption of another button that closes the
  * dialog (nullptr disables it)
- * @return the list index, -1 if the user cancelled the dialog, -2 if
+ * @return the list index, -1 if the user cancelled the dialog, mrExtra if
  * the user clicked the "extra" button
  */
 int
