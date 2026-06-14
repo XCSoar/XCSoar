@@ -46,6 +46,9 @@ void ClearParsedLayerCache(const std::string *parameter = nullptr) noexcept;
 /** True when the main map overlay already shows @p parameter at @p utc_hour. */
 bool MapShowsForecast(const char *parameter, unsigned utc_hour) noexcept;
 
+/** True when the main map shows an XCTherm forecast overlay. */
+bool HasActiveMapOverlay() noexcept;
+
 /** Apply overlay for cursor-bar layer/time from UI session state. */
 void ApplyCursorOverlayFromSession() noexcept;
 

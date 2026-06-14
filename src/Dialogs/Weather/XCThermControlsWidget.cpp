@@ -14,6 +14,7 @@
 #include "Message.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "Weather/MapOverlay/InputEventMisc.hpp"
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
 #include "util/StaticString.hxx"
 
 XCThermControlsWidget::XCThermControlsWidget()
@@ -83,6 +84,14 @@ XCThermControlsWidget::OnResumeTimeAuto() noexcept
 void
 XCThermControlsWidget::OnLabelClicked(unsigned row) noexcept
 {
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  if (!settings.credentials.IsDefined() &&
+      XCTherm::HasActiveMapOverlay()) {
+    ShowWeatherDialog("xctherm");
+    return;
+  }
+
   if (!model.HasCacheAtCurrentHour(model.GetCurrentLayer())) {
     OnRequestDownload();
     return;

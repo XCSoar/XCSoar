@@ -95,6 +95,21 @@ MapShowsForecast(const char *parameter, unsigned utc_hour) noexcept
   return MapShowsXCThermForecast(parameter, utc_hour);
 }
 
+bool
+HasActiveMapOverlay() noexcept
+{
+#ifdef ENABLE_OPENGL
+  const auto *map = UIGlobals::GetMap();
+  if (map == nullptr)
+    return false;
+
+  return dynamic_cast<const XCThermGeoJSONOverlay *>(map->GetOverlay()) !=
+    nullptr;
+#else
+  return false;
+#endif
+}
+
 void
 ApplyForecastToMap(const std::string &geojson, const char *label,
                    const char *parameter, const unsigned forecast_utc) noexcept
