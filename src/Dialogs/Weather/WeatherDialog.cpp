@@ -92,7 +92,7 @@ ShowWeatherDialog(const char *page)
   if (page != nullptr && StringIsEqual(page, "pc_met"))
     start_page = widget.GetSize();
 
-  widget.AddTab(CreatePCMetWidget(), "pc_met");
+  widget.AddTab(CreatePCMetWidget(), "Flugwetter");
 #endif
 
 #if 0
