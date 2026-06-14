@@ -24,12 +24,97 @@ namespace {
 
 std::string auto_fetch_attempted_param;
 
+#ifdef ENABLE_OPENGL
+
+/** Parsed forecast kept after ClearMapOverlay() for fast page return. */
+struct ParsedLayerCache {
+  std::string parameter;
+  std::string label;
+  unsigned utc_hour = 0;
+  XCThermGeoJSON::ForecastLayer forecast;
+
+  bool Matches(const char *parameter, unsigned utc_hour) const noexcept
+  {
+    return !forecast.IsEmpty() && parameter != nullptr &&
+           this->parameter == parameter && this->utc_hour == utc_hour;
+  }
+
+  void Store(XCThermGeoJSON::ForecastLayer &&layer, std::string label,
+             std::string parameter, unsigned utc_hour) noexcept
+  {
+    forecast = std::move(layer);
+    this->label = std::move(label);
+    this->parameter = std::move(parameter);
+    this->utc_hour = utc_hour;
+  }
+
+  void Clear() noexcept
+  {
+    parameter.clear();
+    label.clear();
+    utc_hour = 0;
+    forecast = {};
+  }
+
+  bool TakeIfMatches(const char *parameter, unsigned utc_hour,
+                     XCThermGeoJSON::ForecastLayer &out_forecast) noexcept
+  {
+    if (!Matches(parameter, utc_hour))
+      return false;
+
+    out_forecast = std::move(forecast);
+    Clear();
+    return true;
+  }
+};
+
+static ParsedLayerCache parsed_layer_cache;
+
+#endif /* ENABLE_OPENGL */
+
+static bool
+MapShowsXCThermForecast(const char *parameter, unsigned utc_hour) noexcept
+{
+  auto *map = UIGlobals::GetMap();
+  if (map == nullptr)
+    return false;
+
+  const auto *overlay =
+    dynamic_cast<const XCThermGeoJSONOverlay *>(map->GetOverlay());
+  if (overlay == nullptr)
+    return false;
+
+  return overlay->MatchesForecast(parameter, utc_hour);
+}
+
 } // namespace
+
+bool
+MapShowsForecast(const char *parameter, unsigned utc_hour) noexcept
+{
+  return MapShowsXCThermForecast(parameter, utc_hour);
+}
 
 void
 ApplyForecastToMap(const std::string &geojson, const char *label,
                    const char *parameter, const unsigned forecast_utc) noexcept
 {
+  if (parameter != nullptr &&
+      MapShowsXCThermForecast(parameter, forecast_utc))
+    return;
+
+#ifdef ENABLE_OPENGL
+  if (parameter != nullptr) {
+    XCThermGeoJSON::ForecastLayer cached_forecast;
+    if (parsed_layer_cache.TakeIfMatches(parameter, forecast_utc,
+                                         cached_forecast)) {
+      ApplyForecastLayerToMap(std::move(cached_forecast), label,
+                              parameter, forecast_utc);
+      return;
+    }
+  }
+#endif
+
   auto forecast = XCThermGeoJSON::Parse(geojson, true);
   if (forecast.IsEmpty()) {
     LogFmt("xctherm: parse failed for {}", label);
@@ -46,6 +131,10 @@ ApplyForecastLayerToMap(XCThermGeoJSON::ForecastLayer &&forecast,
                         const unsigned forecast_utc) noexcept
 {
   if (forecast.IsEmpty())
+    return;
+
+  if (parameter != nullptr &&
+      MapShowsXCThermForecast(parameter, forecast_utc))
     return;
 
   auto *map = UIGlobals::GetMap();
@@ -71,11 +160,31 @@ ClearMapOverlay() noexcept
   if (map == nullptr)
     return;
 
-  if (dynamic_cast<const XCThermGeoJSONOverlay *>(map->GetOverlay()) ==
-      nullptr)
+  const auto *overlay =
+    dynamic_cast<const XCThermGeoJSONOverlay *>(map->GetOverlay());
+  if (overlay == nullptr)
     return;
 
+  std::string label, parameter;
+  unsigned utc_hour = 0;
+  auto forecast = const_cast<XCThermGeoJSONOverlay *>(overlay)
+    ->TakeForecast(label, parameter, utc_hour);
+  if (!forecast.IsEmpty())
+    parsed_layer_cache.Store(std::move(forecast), std::move(label),
+                               std::move(parameter), utc_hour);
+
   map->SetOverlay(nullptr);
+#endif
+}
+
+void
+ClearParsedLayerCache(const std::string *parameter) noexcept
+{
+#ifdef ENABLE_OPENGL
+  if (parameter == nullptr || parsed_layer_cache.parameter == *parameter)
+    parsed_layer_cache.Clear();
+#else
+  (void)parameter;
 #endif
 }
 
@@ -187,6 +296,20 @@ ApplyCachedLayerOverlay(unsigned layer_index, unsigned utc_hour) noexcept
 
   auto &api = XCThermAPI::Instance();
   const auto &layer = region.layers[layer_index];
+  if (MapShowsXCThermForecast(layer.api_parameter, utc_hour))
+    return true;
+
+#ifdef ENABLE_OPENGL
+  XCThermGeoJSON::ForecastLayer cached_forecast;
+  if (parsed_layer_cache.TakeIfMatches(layer.api_parameter, utc_hour,
+                                       cached_forecast)) {
+    ApplyForecastLayerToMap(std::move(cached_forecast),
+                            gettext(layer.short_label),
+                            layer.api_parameter, utc_hour);
+    return true;
+  }
+#endif
+
   const std::string &cached =
     api.GetCachedGeoJSON(layer.api_parameter, utc_hour);
   if (cached.empty()) {
@@ -346,7 +469,6 @@ ActivatePageOverlay() noexcept
   ApplyCursorOverlayFromSession();
 
   RequestBackgroundIndexFetch([]{
-    ApplyCursorOverlayFromSession();
     MaybeFetchActiveLayerSpan(nullptr);
   });
 }

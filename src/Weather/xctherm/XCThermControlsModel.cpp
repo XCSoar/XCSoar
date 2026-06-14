@@ -129,6 +129,11 @@ void
 XCThermControlsModel::OnShow() noexcept
 {
   RefreshCachedHours();
+
+  const auto &layer = LayerAt(state.current_layer);
+  if (MapShowsForecast(layer.api_parameter, GetCurrentForecastHour()))
+    return;
+
   ApplyCurrentSelectionToMap();
 }
 
@@ -392,7 +397,11 @@ XCThermControlsModel::OnIndexLoaded() noexcept
   RefreshCachedHours();
   if (!CommonInterface::GetUIState().weather.xctherm.cursor_initialized)
     SelectBestTimeIndex();
-  ApplyCurrentSelectionToMap();
+
+  const auto &layer = LayerAt(state.current_layer);
+  if (!MapShowsForecast(layer.api_parameter, GetCurrentForecastHour()))
+    ApplyCurrentSelectionToMap();
+
   MaybeFetchActiveLayer(nullptr);
   ConfigureAutoSwitch();
   SaveCursorSession();

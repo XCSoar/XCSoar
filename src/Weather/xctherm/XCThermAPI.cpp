@@ -4,6 +4,7 @@
 #include "XCThermAPI.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "io/FileOutputStream.hxx"
@@ -65,6 +66,8 @@ XCThermAPI::SetModel(const std::string &m) noexcept
     geojson_cache.clear();
     lru_order.clear();
   }
+
+  XCTherm::ClearParsedLayerCache();
 
   if (disk_cache_dir != nullptr)
     ReloadDiskIndex();
@@ -693,6 +696,8 @@ XCThermAPI::ClearLayer(const std::string &parameter) noexcept
      and FileUtil functions are noexcept but can still take a moment. */
   for (unsigned utc : dropped_hours)
     DeleteSliceFromDisk(parameter, utc);
+
+  XCTherm::ClearParsedLayerCache(&parameter);
 }
 
 unsigned

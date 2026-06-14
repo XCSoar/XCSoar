@@ -46,6 +46,31 @@ XCThermGeoJSONOverlay::HasData() const noexcept
 }
 
 bool
+XCThermGeoJSONOverlay::MatchesForecast(const char *parameter,
+                                        unsigned utc_hour) const noexcept
+{
+  if (parameter == nullptr || parameter[0] == '\0')
+    return false;
+
+  const std::lock_guard lock{mutex};
+  return !forecast.IsEmpty() && forecast_utc == utc_hour &&
+    this->parameter == parameter;
+}
+
+XCThermGeoJSON::ForecastLayer
+XCThermGeoJSONOverlay::TakeForecast(std::string &out_label,
+                                    std::string &out_parameter,
+                                    unsigned &out_forecast_utc) noexcept
+{
+  const std::lock_guard lock{mutex};
+  out_label = std::move(label);
+  out_parameter = std::move(parameter);
+  out_forecast_utc = forecast_utc;
+  forecast_utc = 0;
+  return std::move(forecast);
+}
+
+bool
 XCThermGeoJSONOverlay::GetClimbAt(GeoPoint p, double &out_min_ms,
                                   double &out_max_ms) const noexcept
 {

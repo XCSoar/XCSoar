@@ -58,6 +58,20 @@ public:
   bool HasData() const noexcept;
 
   /**
+   * Return true when this overlay already shows @p parameter at @p utc_hour.
+   */
+  bool MatchesForecast(const char *parameter,
+                       unsigned utc_hour) const noexcept;
+
+  /**
+   * Move the parsed forecast out of this overlay (e.g. when the map
+   * overlay is cleared but the parsed data should be kept in RAM).
+   */
+  XCThermGeoJSON::ForecastLayer TakeForecast(std::string &out_label,
+                                             std::string &out_parameter,
+                                             unsigned &out_forecast_utc) noexcept;
+
+  /**
    * Find the vertical-wind band whose polygons contain @p p and
    * return its [min,max] m/s range. When the point falls inside
    * several nested bands, the most extreme (largest |mid|) wins —

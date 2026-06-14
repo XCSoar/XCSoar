@@ -36,6 +36,16 @@ void ApplyForecastLayerToMap(XCThermGeoJSON::ForecastLayer &&forecast,
 
 void ClearMapOverlay() noexcept;
 
+/**
+ * Drop parsed forecast data kept in RAM after the map overlay was
+ * cleared. When @p parameter is non-null, only entries for that
+ * parameter are removed.
+ */
+void ClearParsedLayerCache(const std::string *parameter = nullptr) noexcept;
+
+/** True when the main map overlay already shows @p parameter at @p utc_hour. */
+bool MapShowsForecast(const char *parameter, unsigned utc_hour) noexcept;
+
 /** Apply overlay for cursor-bar layer/time from UI session state. */
 void ApplyCursorOverlayFromSession() noexcept;
 
