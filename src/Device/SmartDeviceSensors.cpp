@@ -3,11 +3,14 @@
 
 #include "SmartDeviceSensors.hpp"
 
+#include "Logger/NMEALogger.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Descriptor.hpp"
 #include "DataEditor.hpp"
 #include "NMEA/Info.hpp"
 #include "Geo/Geoid.hpp"
 
+static constexpr int MIN_SATELLITES_FOR_3D_FIX = 4; // 3D fix needs ≥4 satellites
 
 void
 DeviceDescriptor::OnConnected(int connected) noexcept
@@ -68,11 +71,10 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.location = location;
   basic.location_available.Update(basic.clock);
 
+  const double geoid_separation = EGM96::LookupSeparation(basic.location);
+  const double altitude_correction = geoid_altitude ? 0. : geoid_separation;
   if (hasAltitude) {
-    auto GeoidSeparation = geoid_altitude
-      ? 0.
-      : EGM96::LookupSeparation(basic.location);
-    basic.gps_altitude = altitude - GeoidSeparation;
+    basic.gps_altitude = altitude - altitude_correction;
     basic.gps_altitude_available.Update(basic.clock);
   } else
     basic.gps_altitude_available.Clear();
@@ -91,6 +93,61 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.gps.hdop = hasAccuracy ? accuracy : -1;
 
   e.Commit();
+
+  // synthesize GPRMC and GPGGA sentences and write to NMEA Logger
+  if (nmea_logger != nullptr &&
+      nmea_logger->IsEnabled() &&
+      n_satellites >= MIN_SATELLITES_FOR_3D_FIX) {
+    char sentence[128];
+    const int lat_deg = std::abs((int)location.latitude.Degrees());
+    const int lon_deg = std::abs((int)location.longitude.Degrees());
+    const double lat_frac = std::abs(location.latitude.Degrees()) - lat_deg;
+    const double lon_frac = std::abs(location.longitude.Degrees()) - lon_deg;
+    const char lat_hem = (location.latitude.Degrees() < 0.0) ? 'S' : 'N';
+    const char lon_hem = (location.longitude.Degrees() < 0.0) ? 'W' : 'E';
+
+    char loc_str[32];
+    snprintf(loc_str, sizeof(loc_str), "%02d%07.4f,%c,%03d%07.4f,%c",
+              lat_deg, lat_frac*60.0, lat_hem,
+              lon_deg, lon_frac*60.0, lon_hem);
+    char ts_str[16];
+    snprintf(ts_str, sizeof(ts_str), "%02d%02d%02d.00",
+              date_time.hour,date_time.minute,date_time.second);
+    char speed_str[12] = "";
+    if (hasSpeed)
+      snprintf(speed_str, sizeof(speed_str), "%.2f",
+               ground_speed * 1.94384); // convert m/s to kn
+    char cog_str[12] = "";
+    if (hasBearing)
+      snprintf(cog_str, sizeof(cog_str), "%.2f", bearing);
+    char alt_geoid_str[32] = ",M,,M";
+    if (hasAltitude)
+      snprintf(alt_geoid_str, sizeof(alt_geoid_str),
+               "%.1f,M,%.1f,M",
+               basic.gps_altitude, geoid_separation);
+    char hdop_str[12] = "";
+    if (hasAccuracy)
+      snprintf(hdop_str, sizeof(hdop_str), "%.2f", accuracy);
+
+    int length = snprintf(sentence, sizeof(sentence),
+             "$GPRMC,%s,A,%s,%s,%s,%02d%02d%02d,,,A",
+             ts_str, loc_str, speed_str, cog_str,
+             date_time.day, date_time.month, date_time.year % 100);
+    if (length >= 0 &&
+        length <= static_cast<int>(sizeof(sentence)) - 4) {
+      AppendNMEAChecksum(sentence);
+      nmea_logger->Log(sentence);
+    }
+
+    length = snprintf(sentence, sizeof(sentence),
+             "$GPGGA,%s,%s,1,%d,%s,%s,,",
+             ts_str, loc_str, n_satellites, hdop_str, alt_geoid_str);
+    if (length >= 0 &&
+        length <= static_cast<int>(sizeof(sentence)) - 4) {
+      AppendNMEAChecksum(sentence);
+      nmea_logger->Log(sentence);
+    }
+  }
 }
 
 
