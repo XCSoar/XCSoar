@@ -6,6 +6,7 @@
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
 #include "Weather/Features.hpp"
+#include "XCThermDialog.hpp"
 #if 0
 #include "MapOverlayWidget.hpp"
 #endif
@@ -14,7 +15,7 @@
 #include "Widget/TabWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
 #ifdef HAVE_EDL
-#include "MapOverlayControlsWidget.hpp"
+#include "EdlSettingsWidget.hpp"
 #endif
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -73,6 +74,17 @@ ShowWeatherDialog(const char *page)
   widget.AddTab(CreateNOAAListWidget(), _("METAR and TAF"));
 #endif
 
+  /* XCTherm second in the tab strip — right after METAR/TAF.
+     Pilots checking weather typically progress: airfield METAR/TAF
+     first, then look at large-scale wave forecast next; RASP and
+     PCMet are secondary references. */
+#ifdef HAVE_HTTP
+  if (page != nullptr && StringIsEqual(page, "xctherm"))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateXCThermWidget(), "XC Therm");
+#endif
+
   if (page != nullptr && StringIsEqual(page, "rasp"))
     start_page = widget.GetSize();
 
@@ -82,8 +94,7 @@ ShowWeatherDialog(const char *page)
     start_page = widget.GetSize();
 
 #ifdef HAVE_EDL
-  widget.AddTab(CreateMapOverlayControlsOverlayWidget(PageLayout::Overlay::EDL),
-                "EDL");
+  widget.AddTab(CreateEdlSettingsWidget(), "EDL");
 #else
   widget.AddTab(CreateEDLUnavailableWidget(), "EDL");
 #endif

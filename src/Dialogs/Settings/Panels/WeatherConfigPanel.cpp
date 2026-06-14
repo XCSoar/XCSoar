@@ -2,10 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "WeatherConfigPanel.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/Features.hpp"
+#include "Weather/xctherm/XCThermAPI.hpp"
+#include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
 #include "Interface.hpp"
@@ -25,8 +28,32 @@ enum ControlIndex {
 
 #ifdef HAVE_HTTP
   ENABLE_TIM,
+  /* AddSpacer() in Prepare() — visual section divider between general
+     weather rows and the XCTherm group. Spacers DO consume an index
+     slot in the row list (HLine is a real Row), so a dummy enum entry
+     keeps every SaveValue() / AddXxx() index aligned. Same trick
+     OpenSoar uses in its Skysight panel. */
+  XCTHERM_SPACER,
+  XCTHERM_EMAIL,
+  XCTHERM_PASSWORD,
+  XCTHERM_REGION,
+  XCTHERM_AUTO_SWITCH,
 #endif
 };
+
+#ifdef HAVE_HTTP
+
+static constexpr StaticEnumChoice xctherm_region_list[] = {
+  { unsigned(XCTherm::Region::CH), N_("CH (Alps)"),
+    N_("Covers the entire Alpine arc from Vienna to Perpignan, "
+       "forecasting wave throughout the whole Alps region. "
+       "ICON-CH model.") },
+  { unsigned(XCTherm::Region::UK), N_("UK"),
+    N_("United Kingdom. ICON-UK model.") },
+  nullptr
+};
+
+#endif
 
 class WeatherConfigPanel final
   : public RowFormWidget {
@@ -69,6 +96,30 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean("Thermal Information Map",
              _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
              settings.enable_tim);
+
+  /* Visual divider between the general weather row(s) above and the
+     XCTherm group below — same pattern OpenSoar uses for its Skysight
+     section in src/Dialogs/Settings/Panels/WeatherConfigPanel.cpp. */
+  AddSpacer();
+
+  AddText(_("XCTherm email"),
+          _("Email address for your XCTherm account."),
+          settings.xctherm.credentials.email);
+
+  AddPassword(_("XCTherm password"),
+              _("Password for your XCTherm account."),
+              settings.xctherm.credentials.password);
+
+  AddEnum(_("XCTherm region"),
+          _("Forecast region. Changes which model XCTherm fetches data "
+            "from. Restart or re-download after changing."),
+          xctherm_region_list,
+          settings.xctherm.model);
+
+  AddBoolean(_("XCTherm Auto Layer/Time"),
+             _("Automatically switch altitude layer based on GPS altitude "
+               "and forecast time based on UTC clock."),
+             settings.xctherm.auto_switch);
 #endif
 }
 
@@ -101,6 +152,25 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 #ifdef HAVE_HTTP
   changed |= SaveValue(ENABLE_TIM, ProfileKeys::EnableThermalInformationMap,
                        settings.enable_tim);
+
+  changed |= SaveValue(XCTHERM_AUTO_SWITCH,
+                       ProfileKeys::XCThermAutoSwitch,
+                       settings.xctherm.auto_switch);
+
+  changed |= SaveValue(XCTHERM_EMAIL, ProfileKeys::XCThermEmail,
+                       settings.xctherm.credentials.email);
+
+  changed |= SaveValue(XCTHERM_PASSWORD, ProfileKeys::XCThermPassword,
+                       settings.xctherm.credentials.password);
+
+  /* Region used to live as the dialog's "Model" button — now only
+     configurable here, matching how OpenSoar handles Skysight. The row
+     is an enum dropdown, so save it via SaveValueEnum (using Integer
+     here would assert at runtime — the DataField is enum-typed). */
+  changed |= SaveValueEnum(XCTHERM_REGION, ProfileKeys::XCThermModel,
+                           settings.xctherm.model);
+
+  XCThermAPI::Instance().ApplySessionSettings(settings.xctherm);
 #endif
 
   _changed |= changed;
