@@ -9,6 +9,7 @@
 #include "Dialogs/Message.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Message.hpp"
 #include "NetComponents.hpp"
 #include "PageSettings.hpp"
 #include "Weather/EDL/DownloadGlue.hpp"
@@ -17,6 +18,7 @@
 #include "Weather/EDL/StateController.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "Weather/MapOverlay/EdlControlsModel.hpp"
+#include "Weather/MapOverlay/InputEventMisc.hpp"
 #include "util/StaticString.hxx"
 
 #include <memory>
@@ -115,6 +117,98 @@ EdlControlsWidget::OnResumeAuto() noexcept
 
   data->model.ResumeAutoAdvance();
   RefreshEdlOverlay();
+}
+
+static void
+ApplyEdlForecastAuto(WeatherMapOverlay::EdlControlsModel &model) noexcept
+{
+  if (!model.GetForecastAutoAdvance())
+    return;
+
+  const auto &basic = CommonInterface::Basic();
+  if (basic.date_time_utc.IsPlausible())
+    EDL::OnTimeUpdate(basic.date_time_utc);
+}
+
+static void
+ApplyEdlLevelAuto() noexcept
+{
+  EDL::UpdateCurrentLevel();
+}
+
+void
+EdlControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
+{
+  switch (WeatherMapOverlay::ParseOverlayInputAction(misc)) {
+  case WeatherMapOverlay::OverlayInputAction::TIME_PLUS:
+    OnStepForecast(+1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_MINUS:
+    OnStepForecast(-1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_PLUS:
+    OnStepLevel(+1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_MINUS:
+    OnStepLevel(-1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_TOGGLE:
+    data->model.SetForecastAutoAdvance(
+      !data->model.GetForecastAutoAdvance());
+    ApplyEdlForecastAuto(data->model);
+    RefreshEdlOverlay();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_ON:
+    data->model.SetForecastAutoAdvance(true);
+    ApplyEdlForecastAuto(data->model);
+    RefreshEdlOverlay();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_OFF:
+    data->model.SetForecastAutoAdvance(false);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_SHOW:
+    if (data->model.GetForecastAutoAdvance())
+      Message::AddMessage(_("Auto. weather time on"));
+    else
+      Message::AddMessage(_("Auto. weather time off"));
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_TOGGLE:
+    data->model.SetLevelAutoAdvance(!data->model.GetLevelAutoAdvance());
+    if (data->model.GetLevelAutoAdvance())
+      ApplyEdlLevelAuto();
+    RefreshEdlOverlay();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_ON:
+    data->model.SetLevelAutoAdvance(true);
+    ApplyEdlLevelAuto();
+    RefreshEdlOverlay();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_OFF:
+    data->model.SetLevelAutoAdvance(false);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_SHOW:
+    if (data->model.GetLevelAutoAdvance())
+      Message::AddMessage(_("Auto. weather altitude on"));
+    else
+      Message::AddMessage(_("Auto. weather altitude off"));
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::NONE:
+    break;
+  }
 }
 
 void

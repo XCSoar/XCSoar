@@ -5,8 +5,12 @@
 
 #include "Blackboard/BlackboardListenerRegistration.hpp"
 #include "ActionInterface.hpp"
+#include "Dialogs/Message.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
+#include "Message.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
+#include "Weather/MapOverlay/InputEventMisc.hpp"
 #include "Weather/MapOverlay/RaspControlsModel.hpp"
 #include "util/StaticString.hxx"
 
@@ -70,6 +74,54 @@ RaspControlsWidget::OnResumeAuto() noexcept
   data->model.ResumeAutoAdvance();
   data->last_quarter = unsigned(-1);
   RefreshRaspOverlay();
+}
+
+void
+RaspControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
+{
+  switch (WeatherMapOverlay::ParseOverlayInputAction(misc)) {
+  case WeatherMapOverlay::OverlayInputAction::TIME_PLUS:
+    OnStepTime(+1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_MINUS:
+    OnStepTime(-1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_TOGGLE:
+    data->model.SetTimeAutoAdvance(!data->model.GetTimeAutoAdvance());
+    if (data->model.GetTimeAutoAdvance())
+      data->model.ApplyAutoAdvanceTime();
+    RefreshRaspOverlay();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_ON:
+    data->model.SetTimeAutoAdvance(true);
+    data->model.ApplyAutoAdvanceTime();
+    RefreshRaspOverlay();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_OFF:
+    data->model.SetTimeAutoAdvance(false);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_SHOW:
+    if (data->model.GetTimeAutoAdvance())
+      Message::AddMessage(_("Auto. weather time on"));
+    else
+      Message::AddMessage(_("Auto. weather time off"));
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::NONE:
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_PLUS:
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_MINUS:
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_TOGGLE:
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_ON:
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_OFF:
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_SHOW:
+    break;
+  }
 }
 
 void

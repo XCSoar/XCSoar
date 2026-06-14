@@ -47,4 +47,6 @@ public:
   /* virtual methods from class BlackboardListener */
   void OnGPSUpdate(const MoreData &basic) override;
   void OnDownloadFinished(const EDL::DownloadNotification &) noexcept override;
+
+  void HandleWeatherOverlayInput(const char *misc) noexcept;
 };
