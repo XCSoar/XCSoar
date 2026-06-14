@@ -11,6 +11,9 @@
 #ifdef HAVE_EDL
 #include "Weather/EDL/StateController.hpp"
 #endif
+#ifdef HAVE_HTTP
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
+#endif
 
 #include <cassert>
 
@@ -32,6 +35,12 @@ EnterPan()
   if (suspending_edl_page)
     EDL::SuspendDedicatedPageForPan();
 #endif
+#ifdef HAVE_HTTP
+  const bool suspending_xctherm_page =
+    PageActions::GetCurrentLayout().UsesXcthermOverlay();
+  if (suspending_xctherm_page)
+    XCTherm::SuspendDedicatedPageForPan();
+#endif
 
   const bool suspending_rasp_page =
     PageActions::GetCurrentLayout().UsesRaspOverlay();
@@ -46,6 +55,10 @@ EnterPan()
 #endif
     if (suspending_rasp_page)
       CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+#ifdef HAVE_HTTP
+    if (suspending_xctherm_page)
+      XCTherm::ResumeDedicatedPageAfterPan();
+#endif
     return;
   }
 
@@ -66,6 +79,12 @@ PanTo(const GeoPoint &location)
   if (suspending_edl_page)
     EDL::SuspendDedicatedPageForPan();
 #endif
+#ifdef HAVE_HTTP
+  const bool suspending_xctherm_page =
+    PageActions::GetCurrentLayout().UsesXcthermOverlay();
+  if (suspending_xctherm_page)
+    XCTherm::SuspendDedicatedPageForPan();
+#endif
 
   const bool suspending_rasp_page =
     PageActions::GetCurrentLayout().UsesRaspOverlay();
@@ -80,6 +99,10 @@ PanTo(const GeoPoint &location)
 #endif
     if (suspending_rasp_page)
       CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+#ifdef HAVE_HTTP
+    if (suspending_xctherm_page)
+      XCTherm::ResumeDedicatedPageAfterPan();
+#endif
     return false;
   }
 
@@ -104,16 +127,22 @@ DisablePan()
   EDL::ResumeDedicatedPageAfterPan();
 #endif
   CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+#ifdef HAVE_HTTP
+  XCTherm::ResumeDedicatedPageAfterPan();
+#endif
 }
 
 void
 LeavePan()
 {
   GlueMapWindow *map = UIGlobals::GetMapIfActive();
-  if (map == nullptr || !map->IsPanning())
+  if (map == nullptr)
     return;
 
-  map->SetPan(false);
+  if (map->IsPanning())
+    map->SetPan(false);
+  else if (!PageActions::IsStuckPanFullScreenLayout())
+    return;
 
   InputEvents::UpdatePan();
   PageActions::Restore();
@@ -121,6 +150,9 @@ LeavePan()
   EDL::ResumeDedicatedPageAfterPan();
 #endif
   CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+#ifdef HAVE_HTTP
+  XCTherm::ResumeDedicatedPageAfterPan();
+#endif
 }
 
 void
