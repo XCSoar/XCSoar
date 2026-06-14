@@ -699,9 +699,11 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSONOverlay.cpp \
 	$(SRC)/Weather/xctherm/XCThermMapOverlay.cpp \
+	$(SRC)/Weather/xctherm/XCThermControlsModel.cpp \
 	$(SRC)/Weather/xctherm/XCThermCatalog.cpp \
 	$(SRC)/Weather/xctherm/XCThermForecastTime.cpp \
 	$(SRC)/Weather/xctherm/XCThermAutoSwitch.cpp \
+	$(SRC)/Dialogs/Weather/XCThermControlsWidget.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
