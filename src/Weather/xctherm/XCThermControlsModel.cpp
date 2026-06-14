@@ -8,7 +8,6 @@
 #include "XCThermMapOverlay.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "LogFile.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "Weather/Settings.hpp"
 #include "UIState.hpp"
@@ -201,8 +200,6 @@ XCThermControlsModel::BootstrapSession() noexcept
   api.PrepareSession(settings);
 
   ApplyIndexAvailability();
-  if (!state.index_loaded)
-    LogFmt("xctherm: index not loaded — fetching in background");
 
   LoadCursorSession();
 
@@ -217,8 +214,9 @@ XCThermControlsModel::BootstrapSession() noexcept
     SaveCursorSession();
   } else {
     RefreshCachedHours();
-    ConfigureAutoSwitch();
   }
+
+  ConfigureAutoSwitch();
 }
 
 void
@@ -386,12 +384,9 @@ void
 XCThermControlsModel::OnIndexLoaded() noexcept
 {
   ApplyIndexAvailability();
-  if (!state.index_loaded) {
-    LogFmt("xctherm: index not loaded — controls in offline mode");
+  if (!state.index_loaded)
     return;
-  }
 
-  LogFmt("xctherm: index loaded — refreshing controls");
   if (!CommonInterface::GetUIState().weather.xctherm.cursor_initialized)
     SyncActiveLayerFromSettings();
   RefreshCachedHours();
@@ -453,13 +448,16 @@ XCThermControlsModel::FormatLayerLabel(StaticString<80> &text) const noexcept
   const unsigned layer = state.current_layer;
   const bool has_cache = HasCacheAtCurrentHour(layer);
 
-  if (!has_cache)
-    WeatherMapOverlay::AppendNoDataTag(text,
-                                       gettext(LayerAt(layer).short_label));
-  else if (auto_switch.IsAltitudeAutoActive())
-    text.Format("%s %s", _("AUTO:"), gettext(LayerAt(layer).short_label));
+  StaticString<80> base;
+  if (auto_switch.IsAltitudeAutoActive())
+    base.Format("%s %s", _("AUTO:"), gettext(LayerAt(layer).short_label));
   else
-    text.Format("%s", gettext(LayerAt(layer).short_label));
+    base.Format("%s", gettext(LayerAt(layer).short_label));
+
+  if (has_cache)
+    text = base;
+  else
+    WeatherMapOverlay::AppendNoDataTag(text, base.c_str());
 }
 
 void

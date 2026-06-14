@@ -80,14 +80,33 @@ BackgroundDownloadProgress::ApplyPendingProgress() noexcept
 }
 
 void
+BackgroundDownloadProgress::ProcessPendingVisibility() noexcept
+{
+  if (pending_hide.load(std::memory_order_relaxed)) {
+    if (active_sessions.load(std::memory_order_relaxed) == 0) {
+      pending_hide.store(false, std::memory_order_relaxed);
+      HideOnMainThread();
+    }
+  }
+
+  if (pending_show.load(std::memory_order_relaxed) &&
+      active_sessions.load(std::memory_order_relaxed) > 0) {
+    pending_show.store(false, std::memory_order_relaxed);
+    ShowOnMainThread(pending_text);
+  }
+}
+
+void
 BackgroundDownloadProgress::OnProgressNotify() noexcept
 {
+  ProcessPendingVisibility();
+
   static PeriodClock throttle;
 
   if (!throttle.CheckUpdate(std::chrono::milliseconds(200)))
     return;
 
-  if (active_sessions.load() == 0)
+  if (active_sessions.load(std::memory_order_relaxed) == 0)
     return;
 
   ApplyPendingProgress();
@@ -100,23 +119,22 @@ BackgroundDownloadProgress::Begin(const char *text) noexcept
 
   const unsigned prev = active_sessions.fetch_add(1);
   if (prev == 0)
-    ShowOnMainThread(text);
-  else if (env != nullptr)
-    env->SetText(text);
-  else {
+    pending_show.store(true, std::memory_order_relaxed);
+  else
     text_pending = true;
-    progress_notify.SendNotification();
-  }
+
+  progress_notify.SendNotification();
 }
 
 void
 BackgroundDownloadProgress::End() noexcept
 {
-  unsigned expected = active_sessions.load();
+  unsigned expected = active_sessions.load(std::memory_order_relaxed);
   while (expected > 0) {
     if (active_sessions.compare_exchange_weak(expected, expected - 1)) {
       if (expected == 1)
-        HideOnMainThread();
+        pending_hide.store(true, std::memory_order_relaxed);
+      progress_notify.SendNotification();
       return;
     }
   }
@@ -125,8 +143,10 @@ BackgroundDownloadProgress::End() noexcept
 void
 BackgroundDownloadProgress::ForceHide() noexcept
 {
-  active_sessions.store(0);
-  HideOnMainThread();
+  active_sessions.store(0, std::memory_order_relaxed);
+  pending_show.store(false, std::memory_order_relaxed);
+  pending_hide.store(true, std::memory_order_relaxed);
+  progress_notify.SendNotification();
 }
 
 void

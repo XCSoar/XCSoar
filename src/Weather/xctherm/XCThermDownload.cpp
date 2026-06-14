@@ -145,8 +145,6 @@ RunXCThermDownload(CurlGlobal &curl,
     unsigned slot_step = 0;
     if (!api.FindSlotForOffset(job->param, slot_base, slot_offset,
                                slot_date, slot_run_hour, slot_step)) {
-      LogFmt("xctherm: no slot for slot#{} (base={}UTC +{}h) — skipping",
-             slot_i, slot_base, slot_offset);
       job->any_slot_missing.store(true);
       continue;
     }
@@ -166,8 +164,6 @@ RunXCThermDownload(CurlGlobal &curl,
 
     if (api.IsCachedAtRun(job->param, forecast_utc,
                           slot_date, slot_run_hour)) {
-      LogFmt("xctherm: slot#{} ({}UTC) cached at run {}/{}Z — reused",
-             slot_i, forecast_utc, slot_date, slot_run_hour);
       job->succeeded_or_cached.fetch_add(1);
 
       {

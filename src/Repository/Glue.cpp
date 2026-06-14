@@ -163,8 +163,11 @@ bool
 IsRemoteFileOutOfDate(const AvailableFile &file) noexcept
 {
   const auto path = LocalPath(GetFileDownloadRelativePath(file));
-  if (path == nullptr || !File::Exists(path))
+  if (path == nullptr)
     return false;
+
+  if (!File::Exists(path))
+    return true;
 
   const BrokenDate local_changed =
     BrokenDateTime{File::GetLastModification(path)};

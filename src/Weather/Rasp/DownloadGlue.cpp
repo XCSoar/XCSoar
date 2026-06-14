@@ -16,6 +16,7 @@
 #include "Repository/Glue.hpp"
 #include "util/StringCompare.hxx"
 #include "net/http/DownloadManager.hpp"
+#include "ActionInterface.hpp"
 #include "util/StaticString.hxx"
 
 #include <string_view>
@@ -82,6 +83,9 @@ RaspDownloadGlue::BeginShutdown() noexcept
 
   StopProgress();
   BackgroundDownloadProgress::Get().ForceHide();
+  pending_show_progress.store(false);
+  pending_completion.store(PendingCompletion::NONE);
+  download_notify.ClearNotification();
 }
 
 void
@@ -215,6 +219,30 @@ RaspDownloadGlue::PollDownloadProgress() noexcept
 void
 RaspDownloadGlue::OnDownloadNotify() noexcept
 {
+  if (pending_show_progress.exchange(false)) {
+    if (!progress_active)
+      EnsureProgressActive();
+  }
+
+  switch (pending_completion.exchange(PendingCompletion::NONE)) {
+  case PendingCompletion::REPOSITORY:
+    RequestUpdateIfOutOfDate();
+    break;
+
+  case PendingCompletion::RASP_RELOAD:
+    StopProgress();
+    ReloadConfiguredRasp();
+    ActionInterface::ScheduleSendUIState();
+    break;
+
+  case PendingCompletion::RASP_ERROR:
+    StopProgress();
+    break;
+
+  case PendingCompletion::NONE:
+    break;
+  }
+
   PollDownloadProgress();
 
   FileRepository repository;
@@ -233,7 +261,7 @@ RaspDownloadGlue::Listener::OnDownloadAdded(Path path_relative,
   if (!IsTrackedDownload(path_relative))
     return;
 
-  owner.EnsureProgressActive();
+  owner.pending_show_progress.store(true);
   owner.download_notify.SendNotification();
 }
 
@@ -245,7 +273,7 @@ RaspDownloadGlue::Listener::OnDownloadComplete(Path path_relative) noexcept
     return;
 
   if (name.c_str() == "repository"sv || IsUserRepositoryFile(name.c_str())) {
-    owner.RequestUpdateIfOutOfDate();
+    owner.pending_completion.store(PendingCompletion::REPOSITORY);
     owner.download_notify.SendNotification();
     return;
   }
@@ -253,8 +281,8 @@ RaspDownloadGlue::Listener::OnDownloadComplete(Path path_relative) noexcept
   if (!IsRaspDownload(path_relative))
     return;
 
-  owner.StopProgress();
-  owner.ReloadConfiguredRasp();
+  owner.pending_completion.store(PendingCompletion::RASP_RELOAD);
+  owner.download_notify.SendNotification();
 }
 
 void
@@ -264,7 +292,8 @@ RaspDownloadGlue::Listener::OnDownloadError(
   if (!IsRaspDownload(path_relative))
     return;
 
-  owner.StopProgress();
+  owner.pending_completion.store(PendingCompletion::RASP_ERROR);
+  owner.download_notify.SendNotification();
 }
 
 void

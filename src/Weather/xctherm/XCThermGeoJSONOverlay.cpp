@@ -14,7 +14,6 @@
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
-#include "LogFile.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -34,8 +33,6 @@ XCThermGeoJSONOverlay::SetForecast(
   label = _label != nullptr ? _label : "XCTherm";
   parameter = _parameter != nullptr ? _parameter : "";
   forecast_utc = _forecast_utc;
-  LogFmt("xctherm overlay: loaded {} bands, {} polygons",
-         forecast.bands.size(), forecast.TotalPolygons());
 }
 
 bool

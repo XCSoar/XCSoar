@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "XCThermGeoJSON.hpp"
-#include "LogFile.hpp"
 
 #include <boost/json.hpp>
 
@@ -176,9 +175,6 @@ Parse(std::string_view content, bool skip_neutral) noexcept
       break;
     pos = eol + 1;
   }
-
-  LogFmt("xctherm geojson: parsed {} bands, {} polygons, {} coords",
-         layer.bands.size(), layer.TotalPolygons(), layer.TotalCoords());
 
   return layer;
 }

@@ -14,6 +14,10 @@
 #include "ActionInterface.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "Weather/Rasp/DownloadGlue.hpp"
+#endif
+
 #include <algorithm>
 #include <cstdio>
 #include <fmt/format.h>
@@ -234,6 +238,37 @@ HasSelectedTimeData(bool auto_advance) noexcept
 
   const unsigned time_index = ToQuarterHours(forecast);
   return rasp->IsTimeAvailable(unsigned(field_index), time_index);
+}
+
+void
+MaybeRequestConfiguredRaspUpdateOnAutoNoData() noexcept
+{
+#ifdef HAVE_DOWNLOAD_MANAGER
+  const auto &weather = CommonInterface::GetUIState().weather;
+  if (!weather.time_auto_advance)
+    return;
+
+  if (HasSelectedTimeData(true))
+    return;
+
+  if (GetActiveFieldIndex() < 0)
+    return;
+
+  const auto &basic = CommonInterface::Basic();
+  if (!basic.date_time_utc.IsPlausible())
+    return;
+
+  static unsigned last_attempt_quarter = unsigned(-1);
+  const auto local = basic.date_time_utc.ToLocal().FloorToQuarterHour();
+  const unsigned quarter = unsigned(local.hour) * 4u +
+    unsigned(local.minute) / 15u;
+
+  if (quarter == last_attempt_quarter)
+    return;
+
+  last_attempt_quarter = quarter;
+  RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
 }
 
 void

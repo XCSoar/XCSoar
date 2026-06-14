@@ -8,7 +8,12 @@
 #include "Interface.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "Weather/MapOverlay/RaspControlsModel.hpp"
+#include "Weather/Rasp/FieldControls.hpp"
 #include "util/StaticString.hxx"
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "Weather/Rasp/DownloadGlue.hpp"
+#endif
 
 #include <memory>
 
@@ -70,6 +75,11 @@ RaspControlsWidget::OnResumeAuto() noexcept
   data->model.ResumeAutoAdvance();
   data->last_quarter = unsigned(-1);
   RefreshRaspOverlay();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (!data->model.HasTimeData())
+    RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
 }
 
 void
@@ -113,6 +123,7 @@ RaspControlsWidget::OnGPSUpdate(const MoreData &basic)
     return;
 
   UpdateLabels();
+  Rasp::MaybeRequestConfiguredRaspUpdateOnAutoNoData();
 
   if (!basic.date_time_utc.IsPlausible())
     return;

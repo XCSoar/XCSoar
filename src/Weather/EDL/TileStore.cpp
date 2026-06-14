@@ -139,8 +139,6 @@ TileRequest::EnsureDownloaded(CurlGlobal &curl,
                                                         path, nullptr,
                                                         progress);
     (void)ignored;
-  } else {
-    LogFmt("edl: tile already cached {}", BuildCacheFileName().c_str());
   }
 
   co_return path;

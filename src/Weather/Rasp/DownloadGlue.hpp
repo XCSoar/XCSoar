@@ -11,6 +11,7 @@
 #include "ui/event/Notify.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
+#include <atomic>
 #include <exception>
 
 class Path;
@@ -20,10 +21,19 @@ class Path;
  * using the same out-of-date rules as the download manager UI.
  */
 class RaspDownloadGlue final {
+  enum class PendingCompletion : uint8_t {
+    NONE,
+    REPOSITORY,
+    RASP_RELOAD,
+    RASP_ERROR,
+  };
+
   UI::Notify download_notify{[this]{ OnDownloadNotify(); }};
   UI::PeriodicTimer progress_timer{[this]{ PollDownloadProgress(); }};
   bool listener_registered = false;
   bool progress_active = false;
+  std::atomic<bool> pending_show_progress{false};
+  std::atomic<PendingCompletion> pending_completion{PendingCompletion::NONE};
 
   void OnDownloadNotify() noexcept;
   void PollDownloadProgress() noexcept;

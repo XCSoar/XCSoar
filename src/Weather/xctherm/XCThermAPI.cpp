@@ -168,7 +168,6 @@ XCThermAPI::CoFetchIndex(CurlGlobal &curl)
                        "index.json");
   }
 
-  LogFmt("xctherm: index fetched, {} bytes", response.body.size());
   co_return ParseIndex(response.body);
 }
 
@@ -309,11 +308,8 @@ XCThermAPI::ParseIndex(const std::string &json) noexcept
       info.slots.push_back(std::move(slot));
     }
 
-    if (!info.slots.empty()) {
-      LogFmt("xctherm: param '{}' — {} slots",
-             info.name, info.slots.size());
+    if (!info.slots.empty())
       available_parameters.push_back(std::move(info));
-    }
   }
 
   index_loaded.store(!available_parameters.empty(),
@@ -393,12 +389,6 @@ XCThermAPI::FindSlotForOffset(const std::string &parameter,
         out_date = slot.run_date;
         out_run_hour = slot.run_hour;
         out_step = needed_step;
-
-        LogFmt("xctherm: FindSlotForOffset param={} now={}UTC +{}h -> "
-               "run={}/{} step={} -> forecast {}UTC",
-               parameter, current_utc_hour, offset_hours,
-               slot.run_date, slot.run_hour, needed_step,
-               (run_h + needed_step) % 24);
         return true;
       }
     }

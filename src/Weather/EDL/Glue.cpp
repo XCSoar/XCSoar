@@ -95,8 +95,6 @@ Glue::RequestPrecacheDay(BrokenDateTime day) noexcept
     return;
 
   SetLoadingStatus();
-  LogFmt("edl: precaching day {}",
-         FormatForecastDayLog(day).c_str());
   download_glue->StartPrecacheDay(day);
 }
 
@@ -131,9 +129,6 @@ Glue::OnDownloadFinished(const DownloadNotification &notification) noexcept
       SetErrorStatus();
     } else {
       SetIdleStatus();
-
-      LogFmt("edl: precache complete, {} files",
-             notification.precache_count);
 
       StaticString<64> message;
       message.Format(_("Cached %u files for the selected UTC day."),
