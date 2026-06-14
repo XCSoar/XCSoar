@@ -306,7 +306,7 @@ XCThermWidget::CreateButtons(ButtonPanel &buttons)
        2. Activate — mark which row is "active"
        3. Update — fetch / refresh data (acts as Stop while running)
        4. Delete — clear cached data for the cursor row
-     Region (CH/UK) lives in Config → System → Weather. */
+     Region (CH/UK) lives in Config → Weather → XCTherm. */
   span_button = buttons.Add(_("Span"), [this]() { SpanClicked(); });
   activate_button = buttons.Add(_("Activate"),
                                 [this]() { ActivateClicked(); });
@@ -848,7 +848,7 @@ CreateXCThermWidget() noexcept
     return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
                                              _("No XCTherm account configured.\n\n"
                                                "Enter your credentials in\n"
-                                               "Config > System > Weather."));
+                                               "Config > Weather > XCTherm."));
 
   auto widget = std::make_unique<XCThermWidget>();
   auto buttons = std::make_unique<ButtonPanelWidget>(

@@ -119,7 +119,7 @@ MakeApiError(bool transfer_failed, long http_code, const std::string &context)
   case 401:
     kind = XCThermAPIError::Kind::AUTH_FAILED;
     msg = "Authentication expired or invalid. "
-          "Check XCTherm credentials in Config → System → Weather.";
+          "Check XCTherm credentials in Config → Weather → XCTherm.";
     break;
   case 403:
     kind = XCThermAPIError::Kind::FORBIDDEN;
@@ -193,6 +193,13 @@ XCThermAPI::FetchIndex()
   XCTherm::Http::RunSync(*Net::curl, invoke(CoFetchIndex(*Net::curl)));
   return std::move(parsed).Get();
 }
+
+namespace {
+
+/** Largest step span we iterate when reading index.json metadata. */
+constexpr unsigned kMaxIndexStepSpan = 168;
+
+} // namespace
 
 /* ------------------------------------------------------------------ */
 /* index.json parsing via boost::json                                  */
@@ -303,6 +310,8 @@ XCThermAPI::ParseIndex(const std::string &json) noexcept
         slot.step_step = TryGetUInt(steps_obj, "step", 1);
         if (slot.step_step == 0)
           slot.step_step = 1;
+        if (slot.step_max > slot.step_min + kMaxIndexStepSpan)
+          slot.step_max = slot.step_min + kMaxIndexStepSpan;
       }
 
       info.slots.push_back(std::move(slot));
@@ -334,7 +343,15 @@ XCThermAPI::GetAvailableForecastHours(const std::string &parameter) const noexce
 
     for (const auto &slot : p.slots) {
       unsigned run_h = (unsigned)std::atoi(slot.run_hour.c_str());
-      for (unsigned s = slot.step_min; s <= slot.step_max; s += slot.step_step) {
+      const unsigned capped_max = std::min(slot.step_max,
+                                           slot.step_min + kMaxIndexStepSpan);
+      if (capped_max < slot.step_min)
+        continue;
+
+      unsigned iterations = 0;
+      for (unsigned s = slot.step_min;
+           s <= capped_max && iterations < kMaxIndexStepSpan;
+           s += slot.step_step, ++iterations) {
         unsigned forecast_h = (run_h + s) % 24;
         hours.insert(forecast_h);
       }
@@ -426,7 +443,7 @@ XCThermAPI::CoDownloadGeoJSON(CurlGlobal &curl,
     LogFmt("xctherm: cannot download — auth failed");
     throw XCThermAPIError(XCThermAPIError::Kind::AUTH_FAILED, 0,
                           "XCTherm authentication failed. Check "
-                          "credentials in Config → System → Weather.");
+                          "credentials in Config → Weather → XCTherm.");
   }
 
   const std::string step_str = FormatStep(step);

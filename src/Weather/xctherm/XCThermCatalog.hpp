@@ -15,7 +15,7 @@ namespace XCTherm {
 /**
  * Forecast region — stored in profile as @c settings.xctherm.model
  * (unsigned). Must match @c StaticEnumChoice order in
- * WeatherConfigPanel.
+ * XCThermConfigPanel.
  */
 enum class Region : unsigned {
   CH = 0,

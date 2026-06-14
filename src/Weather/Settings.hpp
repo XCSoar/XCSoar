@@ -26,7 +26,7 @@ struct WeatherCredentialsSettings {
   void SetDefaults() noexcept {
     /* Never embed real credentials in source — they would ship in the
        binary and end up reused across users. Users supply their own
-       credentials via Config → System → Weather. */
+       credentials via Config → Weather → XCTherm. */
     email.clear();
     password.clear();
   }
