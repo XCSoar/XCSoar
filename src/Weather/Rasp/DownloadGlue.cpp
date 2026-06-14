@@ -101,6 +101,19 @@ RaspDownloadGlue::RequestUpdateIfOutOfDate() noexcept
   EnqueueConfiguredRaspUpdate(repository);
 }
 
+void
+RaspDownloadGlue::RequestConfiguredRaspUpdate() noexcept
+{
+  if (!Net::DownloadManager::IsAvailable())
+    return;
+
+  EnqueueRepositoryDownload(true, true, true);
+
+  FileRepository repository;
+  LoadAllRepositories(repository);
+  EnqueueConfiguredRaspDownload(repository);
+}
+
 bool
 RaspDownloadGlue::IsRaspDownload(Path path_relative) noexcept
 {
@@ -301,6 +314,13 @@ RequestConfiguredRaspUpdateIfOutOfDate() noexcept
 {
   if (RaspDownloadGlue *glue = GetRaspDownloadGlue())
     glue->RequestUpdateIfOutOfDate();
+}
+
+void
+RequestConfiguredRaspUpdate() noexcept
+{
+  if (RaspDownloadGlue *glue = GetRaspDownloadGlue())
+    glue->RequestConfiguredRaspUpdate();
 }
 
 #endif /* HAVE_DOWNLOAD_MANAGER */

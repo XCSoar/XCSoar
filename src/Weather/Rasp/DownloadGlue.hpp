@@ -57,6 +57,12 @@ public:
    */
   void RequestUpdateIfOutOfDate() noexcept;
 
+  /**
+   * Refresh repository metadata, then download the configured RASP file
+   * immediately (UI thread).
+   */
+  void RequestConfiguredRaspUpdate() noexcept;
+
 private:
   class Listener final : public Net::DownloadListener {
     RaspDownloadGlue &owner;
@@ -86,5 +92,12 @@ GetRaspDownloadGlue() noexcept;
  */
 void
 RequestConfiguredRaspUpdateIfOutOfDate() noexcept;
+
+/**
+ * Download the configured RASP file immediately via
+ * #Net::DownloadManager (UI thread).
+ */
+void
+RequestConfiguredRaspUpdate() noexcept;
 
 #endif /* HAVE_DOWNLOAD_MANAGER */

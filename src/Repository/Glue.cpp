@@ -240,6 +240,17 @@ EnqueueConfiguredRaspUpdate(const FileRepository &repository) noexcept
   return true;
 }
 
+bool
+EnqueueConfiguredRaspDownload(const FileRepository &repository) noexcept
+{
+  const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
+  if (remote == nullptr)
+    return false;
+
+  EnqueueRemoteFileDownload(*remote);
+  return true;
+}
+
 #endif /* HAVE_DOWNLOAD_MANAGER */
 
 #ifdef HAVE_DOWNLOAD_MANAGER
