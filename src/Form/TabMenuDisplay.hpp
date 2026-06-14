@@ -14,7 +14,10 @@ class PagerWidget;
 class TabMenuDisplay final : public PaintWindow
 {
   /* excludes "Main Menu" which is a "super menu" */
-  static constexpr unsigned MAX_MAIN_MENU_ITEMS = 7;
+  static constexpr unsigned MAX_MAIN_MENU_ITEMS = 8;
+
+  /** Sub-pages across all groups (must match #PagerWidget::MAX_CHILDREN). */
+  static constexpr unsigned MAX_SUB_MENU_ITEMS = 40;
 
   /**
    * The offset from a page number in the #TabMenuDisplay to a page
@@ -116,7 +119,7 @@ class TabMenuDisplay final : public PaintWindow
   PagerWidget &pager;
   const DialogLook &look;
 
-  StaticArray<SubMenuButton, 32> buttons;
+  StaticArray<SubMenuButton, MAX_SUB_MENU_ITEMS> buttons;
 
   /* holds info and buttons for the main menu.  not on child menus */
   StaticArray<MainMenuButton, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
