@@ -8,6 +8,12 @@
 # "  - " bullets merge indented continuation lines into one list item so the
 # in-app renderer wraps with correct hanging indent. A blank line is also
 # inserted after the H1.  ``#1234`` issue references become GitHub links.
+#
+# Quick Guide Markdown constraints (validated before code generation):
+# - Use ``* section`` and ``  - `` bullets only; continuations with 4 spaces.
+# - Avoid `` `` `` (double backticks); the in-app renderer shows them literally.
+# - Avoid ``[text](url)`` examples; MarkdownParser treats them as real links.
+# - Do not write ``(#0, #1)`` for USB port suffixes; use ``(0, 1)`` instead.
 
 from __future__ import annotations
 
@@ -18,7 +24,8 @@ import sys
 # GitHub issue links for NEWS “#1234” references (same tracker as the repo).
 GITHUB_ISSUE_BASE = "https://github.com/XCSoar/XCSoar/issues"
 # Do not match “#digits” already used as link text in […](…); avoid “##…” headings.
-_ISSUE_REF = re.compile(r"(?<!\[)#(\d+)\b")
+# Skip #0 (not a GitHub issue; used for USB port suffixes in NEWS).
+_ISSUE_REF = re.compile(r"(?<!\[)#(?!0\b)(\d+)\b")
 
 
 def extract_first_version_block(text: str) -> str:
@@ -105,6 +112,29 @@ def convert_news_block_to_markdown(block: str) -> str:
     return linkify_github_issue_refs("\n".join(md) + "\n")
 
 
+def validate_quickguide_markdown(md: str) -> list[str]:
+    """Reject constructs that confuse MarkdownParser or mis-link in the UI."""
+    errors: list[str] = []
+    for i, line in enumerate(md.splitlines(), 1):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith("#"):
+            continue
+        if not stripped.startswith("- "):
+            errors.append(f"line {i}: expected list item or heading, got: {line[:72]!r}")
+            continue
+        if "[text](url)" in line:
+            errors.append(
+                f"line {i}: literal [text](url) is parsed as a Markdown link"
+            )
+        if "``" in line:
+            errors.append(
+                f"line {i}: double backticks render literally; use quotes instead"
+            )
+    return errors
+
+
 def cxx_escape(s: str) -> str:
     return (
         s.replace("\\", "\\\\")
@@ -165,6 +195,10 @@ def main() -> int:
     md = convert_news_block_to_markdown(block)
     if not md.strip():
         print("news_to_quickguide_md: conversion produced empty markdown", file=sys.stderr)
+        return 1
+
+    for err in validate_quickguide_markdown(md):
+        print(f"news_to_quickguide_md: {err}", file=sys.stderr)
         return 1
 
     emit_header(md)
