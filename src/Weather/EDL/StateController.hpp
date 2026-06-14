@@ -75,6 +75,13 @@ bool
 TryApplyOverlayFromCache() noexcept;
 
 /**
+ * Return true when the MBTiles file for the current forecast/isobar exists
+ * in the local cache.
+ */
+bool
+HasOverlayCache() noexcept;
+
+/**
  * Advance the shared forecast to the tracked hour and refresh a cached
  * overlay when appropriate.
  */
@@ -144,6 +151,13 @@ GetForecastTime() noexcept;
  */
 BrokenDateTime
 GetForecastTimeLocal() noexcept;
+
+/**
+ * Cursor-bar forecast label, e.g. @c "14:00 UTC (+1:30)" or @c "AUTO: …".
+ */
+void
+FormatForecastCursorLabel(StaticString<64> &text,
+                            bool auto_advance) noexcept;
 
 /**
  * Build the map legend text for the active EDL overlay.
