@@ -13,6 +13,7 @@
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
+#include "Input/InputEvents.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
@@ -142,7 +143,7 @@ PageActions::EnsureWeatherOverlayPage(PageLayout::Overlay overlay,
     AssignOverlayToLayout(settings.pages[target], overlay, rasp_field);
   } else if (settings.n_pages < PageSettings::MAX_PAGES) {
     target = settings.n_pages;
-    settings.pages[target] = PageLayout::FullScreen();
+    settings.pages[target] = PageLayout::Default();
     AssignOverlayToLayout(settings.pages[target], overlay, rasp_field);
     settings.n_pages = target + 1;
   } else
@@ -593,6 +594,12 @@ PageActions::LoadLayout(const PageLayout &layout)
   LoadMain(active.main);
   ApplyPageOverlay(active);
   LoadBottom(active);
+
+  if (active.bottom == PageLayout::Bottom::EDL_CONTROLS &&
+      active.UsesWeatherOverlay())
+    InputEvents::setMode("weather");
+  else if (InputEvents::IsMode("weather"))
+    InputEvents::setMode(InputEvents::MODE_DEFAULT);
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState(false);
