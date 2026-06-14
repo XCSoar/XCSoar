@@ -210,6 +210,16 @@ TestDateTime()
   ok1(BrokenDateTime(2026, 3, 12, 14, 37, 59).FloorToHour() ==
       BrokenDateTime(2026, 3, 12, 14, 0, 0));
 
+  ok1(BrokenDateTime(2026, 3, 12, 14, 14, 59).FloorToQuarterHour() ==
+      BrokenDateTime(2026, 3, 12, 14, 0, 0));
+  ok1(BrokenDateTime(2026, 3, 12, 14, 15, 30).FloorToQuarterHour() ==
+      BrokenDateTime(2026, 3, 12, 14, 15, 0));
+  ok1(BrokenDateTime(2026, 3, 12, 14, 44, 59).FloorToQuarterHour() ==
+      BrokenDateTime(2026, 3, 12, 14, 30, 0));
+  ok1(BrokenDateTime(2026, 3, 12, 14, 45, 12).FloorToQuarterHour() ==
+      BrokenDateTime(2026, 3, 12, 14, 45, 0));
+  ok1(!BrokenDateTime::Invalid().FloorToQuarterHour().IsPlausible());
+
   {
     const BrokenDateTime utc(2010, 1, 2, 12, 15, 30);
     const auto tm = LocalTime(utc.ToTimePoint());
@@ -221,7 +231,7 @@ TestDateTime()
 
 int main()
 {
-  plan_tests(110 + 10);
+  plan_tests(110 + 10 + 5);
 
   TestDate();
   TestTime();
