@@ -95,18 +95,35 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
         unsigned(layout.rasp_field) < rasp->GetItemCount())
       weather.map = layout.rasp_field;
 
-    if (weather.EnterRaspDedicatedPage())
+    if (!weather.time_auto_advance)
+      weather.rasp_cursor_session_initialized = true;
+
+    weather.EnterRaspDedicatedPage();
+
+    if (!weather.rasp_cursor_session_initialized)
       weather.ResetRaspForDedicatedPage();
+    else
+      Rasp::ApplyOverlayFromSession();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+    RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
     break;
   }
 
   case PageLayout::Overlay::EDL:
 #ifdef HAVE_EDL
     if (layout.UsesEdlOverlay()) {
-      if (EDL::EnterDedicatedPage())
+      auto &edl = CommonInterface::SetUIState().weather.edl;
+      if (!edl.forecast_auto_advance || !edl.level_auto_advance)
+        edl.cursor_session_initialized = true;
+
+      EDL::EnterDedicatedPage();
+
+      if (!edl.cursor_session_initialized)
         EDL::ResetForDedicatedPage();
       else
-        EDL::EnsureInitialised();
+        EDL::ApplyOverlayFromSession();
 
       EDL::RequestOverlayRefresh();
     }
