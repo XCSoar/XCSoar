@@ -24,14 +24,6 @@ namespace {
 
 std::string auto_fetch_attempted_param;
 
-static bool
-HasDedicatedPageOverlayOwnership() noexcept
-{
-  const auto &state = CommonInterface::GetUIState().weather.xctherm;
-  return state.dedicated_page_entered ||
-    state.dedicated_page_suspended_for_pan;
-}
-
 } // namespace
 
 void
@@ -76,7 +68,7 @@ ClearMapOverlay() noexcept
 {
 #ifdef ENABLE_OPENGL
   auto *map = UIGlobals::GetMap();
-  if (map == nullptr || HasDedicatedPageOverlayOwnership())
+  if (map == nullptr)
     return;
 
   if (dynamic_cast<const XCThermGeoJSONOverlay *>(map->GetOverlay()) ==
@@ -85,6 +77,33 @@ ClearMapOverlay() noexcept
 
   map->SetOverlay(nullptr);
 #endif
+}
+
+void
+ApplyCursorOverlayFromSession() noexcept
+{
+  const auto &session =
+    CommonInterface::GetUIState().weather.xctherm;
+  if (!session.cursor_initialized) {
+    RestoreActiveLayerOverlay();
+    return;
+  }
+
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  const auto &region = GetRegion(settings.model);
+  if (session.cursor_layer >= region.layer_count)
+    return;
+
+  const auto &layer = region.layers[session.cursor_layer];
+  if (!XCThermAPI::Instance().IsLayerCached(layer.api_parameter,
+                                             session.cursor_forecast_utc_hour)) {
+    ClearMapOverlay();
+    return;
+  }
+
+  ApplyCachedLayerOverlay(session.cursor_layer,
+                          session.cursor_forecast_utc_hour);
 }
 
 bool
@@ -309,16 +328,20 @@ ResetAutoFetchAttempt() noexcept
 void
 ActivatePageOverlay() noexcept
 {
+  auto &session = CommonInterface::SetUIState().weather.xctherm;
+  if (session.altitude_manual_override || session.time_manual_override)
+    session.cursor_initialized = true;
+
   EnterDedicatedPage();
 
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
 
   XCThermAPI::Instance().PrepareSession(settings);
-  RestoreActiveLayerOverlay();
+  ApplyCursorOverlayFromSession();
 
   RequestBackgroundIndexFetch([]{
-    RestoreActiveLayerOverlay();
+    ApplyCursorOverlayFromSession();
     MaybeFetchActiveLayerSpan(nullptr);
   });
 }

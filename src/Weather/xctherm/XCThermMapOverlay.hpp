@@ -36,6 +36,9 @@ void ApplyForecastLayerToMap(XCThermGeoJSON::ForecastLayer &&forecast,
 
 void ClearMapOverlay() noexcept;
 
+/** Apply overlay for cursor-bar layer/time from UI session state. */
+void ApplyCursorOverlayFromSession() noexcept;
+
 /**
  * Dedicated XCTherm page lifecycle (mirrors EDL pan suspension).
  */

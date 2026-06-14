@@ -135,6 +135,22 @@ public:
     on_time_switch = std::move(cb);
   }
 
+  void SetAltitudeManualOverride(bool override) noexcept {
+    altitude_manual_override = override;
+  }
+
+  void SetTimeManualOverride(bool override) noexcept {
+    time_manual_override = override;
+  }
+
+  bool IsAltitudeManualOverride() const noexcept {
+    return altitude_manual_override;
+  }
+
+  bool IsTimeManualOverride() const noexcept {
+    return time_manual_override;
+  }
+
   /**
    * Called periodically (~1 Hz) with current flight data.
    * @param gps_alt GPS altitude in meters (negative if unavailable)

@@ -111,6 +111,9 @@ public:
 
   void RefreshAvailableHours() noexcept;
 
+  void LoadCursorSession() noexcept;
+  void SaveCursorSession() noexcept;
+
   void SelectBestTimeIndex() noexcept;
 
   void ApplyCurrentSelectionToMap() noexcept;

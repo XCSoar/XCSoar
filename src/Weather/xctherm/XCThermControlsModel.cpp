@@ -11,6 +11,7 @@
 #include "LogFile.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "Weather/Settings.hpp"
+#include "UIState.hpp"
 #include "NMEA/Info.hpp"
 
 #include <algorithm>
@@ -56,6 +57,7 @@ XCThermControlsModel::ApplyAutoSwitchLayer(unsigned layer_index) noexcept
   ApplyCurrentSelectionToMap();
 
   auto_switch.SyncCurrentLayerIndex(state.current_layer);
+  SaveCursorSession();
 }
 
 void
@@ -71,6 +73,7 @@ XCThermControlsModel::ConfigureAutoSwitch() noexcept
 
       state.current_time_index = utc_hour % 24;
       ApplyCurrentSelectionToMap();
+      SaveCursorSession();
     });
     auto_switch_configured = true;
   }
@@ -154,6 +157,32 @@ XCThermControlsModel::OnGPSUpdate(const MoreData &basic) noexcept
   }
 
   auto_switch.Update(gps_alt, baro_alt, utc_hour, utc_minute, basic.time);
+  SaveCursorSession();
+}
+
+void
+XCThermControlsModel::LoadCursorSession() noexcept
+{
+  const auto &session = CommonInterface::GetUIState().weather.xctherm;
+  if (!session.cursor_initialized)
+    return;
+
+  state.current_layer = session.cursor_layer;
+  state.current_time_index = session.cursor_forecast_utc_hour;
+  state.last_synced_active_layer = FindActiveLayerIndex(Settings());
+  auto_switch.SetAltitudeManualOverride(session.altitude_manual_override);
+  auto_switch.SetTimeManualOverride(session.time_manual_override);
+}
+
+void
+XCThermControlsModel::SaveCursorSession() noexcept
+{
+  auto &session = CommonInterface::SetUIState().weather.xctherm;
+  session.cursor_initialized = true;
+  session.cursor_layer = state.current_layer;
+  session.cursor_forecast_utc_hour = GetCurrentForecastHour();
+  session.altitude_manual_override = auto_switch.IsAltitudeManualOverride();
+  session.time_manual_override = auto_switch.IsTimeManualOverride();
 }
 
 void
@@ -168,13 +197,21 @@ XCThermControlsModel::BootstrapSession() noexcept
   if (!state.index_loaded)
     LogFmt("xctherm: index not loaded — fetching in background");
 
-  const int def = FindLayerIndex(ToRegion(settings.model), 5000, false);
-  if (def >= 0)
-    state.current_layer = unsigned(def);
+  LoadCursorSession();
 
-  SyncActiveLayerFromSettings();
-  RefreshCachedHours();
-  SelectBestTimeIndex();
+  if (!CommonInterface::GetUIState().weather.xctherm.cursor_initialized) {
+    const int def = FindLayerIndex(ToRegion(settings.model), 5000, false);
+    if (def >= 0)
+      state.current_layer = unsigned(def);
+
+    SyncActiveLayerFromSettings();
+    RefreshCachedHours();
+    SelectBestTimeIndex();
+    SaveCursorSession();
+  } else {
+    RefreshCachedHours();
+    ConfigureAutoSwitch();
+  }
 }
 
 void
@@ -296,6 +333,7 @@ XCThermControlsModel::StepLayer(int delta) noexcept
   SelectBestTimeIndex();
   ApplyCurrentSelectionToMap();
   auto_switch.SyncCurrentLayerIndex(state.current_layer);
+  SaveCursorSession();
   return true;
 }
 
@@ -309,6 +347,7 @@ XCThermControlsModel::StepTime(int delta) noexcept
   state.current_time_index = unsigned(hour);
 
   ApplyCurrentSelectionToMap();
+  SaveCursorSession();
   return true;
 }
 
@@ -319,6 +358,7 @@ XCThermControlsModel::ResumeLayerAuto(const MoreData &basic) noexcept
     return;
 
   auto_switch.ResumeAltitudeAuto(BestAltitude(basic));
+  SaveCursorSession();
 }
 
 void
@@ -332,6 +372,7 @@ XCThermControlsModel::ResumeTimeAuto() noexcept
   const auto utc = GetUtcTimeParts();
   state.current_time_index = PickAutoTargetUtcHour(utc.hour, utc.minute);
   ApplyCurrentSelectionToMap();
+  SaveCursorSession();
 }
 
 void
@@ -344,12 +385,15 @@ XCThermControlsModel::OnIndexLoaded() noexcept
   }
 
   LogFmt("xctherm: index loaded — refreshing controls");
-  SyncActiveLayerFromSettings();
+  if (!CommonInterface::GetUIState().weather.xctherm.cursor_initialized)
+    SyncActiveLayerFromSettings();
   RefreshCachedHours();
-  SelectBestTimeIndex();
+  if (!CommonInterface::GetUIState().weather.xctherm.cursor_initialized)
+    SelectBestTimeIndex();
   ApplyCurrentSelectionToMap();
   MaybeFetchActiveLayer(nullptr);
   ConfigureAutoSwitch();
+  SaveCursorSession();
 }
 
 void
@@ -385,8 +429,10 @@ XCThermControlsModel::OnDownloadFinished(
     return;
 
   if (!job->error_eptr && job->succeeded_or_cached.load() > 0) {
-    SelectBestTimeIndex();
+    if (!CommonInterface::GetUIState().weather.xctherm.cursor_initialized)
+      SelectBestTimeIndex();
     ApplyCurrentSelectionToMap();
+    SaveCursorSession();
   }
 }
 
