@@ -7,9 +7,13 @@
 #ifdef HAVE_HTTP
 
 #include "Blackboard/BlackboardListenerRegistration.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
+#include "Message.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
+#include "Weather/MapOverlay/InputEventMisc.hpp"
 #include "util/StaticString.hxx"
 
 XCThermControlsWidget::XCThermControlsWidget()
@@ -139,6 +143,77 @@ XCThermControlsWidget::OnGPSUpdate(const MoreData &basic)
 {
   model.OnGPSUpdate(basic);
   UpdateLabels();
+}
+
+void
+XCThermControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
+{
+  const MoreData &basic = CommonInterface::Basic();
+
+  switch (WeatherMapOverlay::ParseOverlayInputAction(misc)) {
+  case WeatherMapOverlay::OverlayInputAction::TIME_PLUS:
+    OnStepTime(+1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_MINUS:
+    OnStepTime(-1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_PLUS:
+    OnStepLayer(+1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_MINUS:
+    OnStepLayer(-1);
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_TOGGLE:
+    model.SetTimeAutoAdvance(!model.IsTimeAutoActive());
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_ON:
+    model.SetTimeAutoAdvance(true);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_OFF:
+    model.SetTimeAutoAdvance(false);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_SHOW:
+    if (model.IsTimeAutoActive())
+      Message::AddMessage(_("Auto. weather time on"));
+    else
+      Message::AddMessage(_("Auto. weather time off"));
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_TOGGLE:
+    model.SetAltitudeAutoAdvance(!model.IsAltitudeAutoActive(), basic);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_ON:
+    model.SetAltitudeAutoAdvance(true, basic);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_OFF:
+    model.SetAltitudeAutoAdvance(false, basic);
+    UpdateLabels();
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_SHOW:
+    if (model.IsAltitudeAutoActive())
+      Message::AddMessage(_("Auto. weather altitude on"));
+    else
+      Message::AddMessage(_("Auto. weather altitude off"));
+    break;
+
+  case WeatherMapOverlay::OverlayInputAction::NONE:
+    break;
+  }
 }
 
 #endif /* HAVE_HTTP */

@@ -132,6 +132,10 @@ public:
   void ResumeLayerAuto(const MoreData &basic) noexcept;
   void ResumeTimeAuto() noexcept;
 
+  void SetAltitudeAutoAdvance(bool auto_advance,
+                              const MoreData &basic) noexcept;
+  void SetTimeAutoAdvance(bool auto_advance) noexcept;
+
   void OnIndexLoaded() noexcept;
 
   void RequestBackgroundIndex(std::function<void()> on_ready) const;

@@ -179,6 +179,13 @@ InputEvents::IsDefault() noexcept
   return current_mode == MODE_DEFAULT;
 }
 
+bool
+InputEvents::IsMode(const char *name) noexcept
+{
+  const int id = GetModeId(name);
+  return id >= 0 && current_mode == Mode(id);
+}
+
 void
 InputEvents::drawButtons(Mode mode, bool full) noexcept
 {

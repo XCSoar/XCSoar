@@ -333,6 +333,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Input/InputEventsPage.cpp \
 	$(SRC)/Input/InputEventsAirspace.cpp \
 	$(SRC)/Input/InputEventsTask.cpp \
+	$(SRC)/Input/InputEventsWeatherOverlay.cpp \
 	$(SRC)/Input/InputEventsSettings.cpp \
 	$(SRC)/Input/InputEventsThermalAssistant.cpp \
 	$(SRC)/Input/InputEventsTraffic.cpp \
@@ -739,6 +740,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/StateController.cpp \
 	$(SRC)/Weather/MapOverlay/CursorBarLabels.cpp \
 	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
+	$(SRC)/Weather/MapOverlay/InputEvents.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Dialogs/Weather/EdlControlsWidget.cpp \
 	$(SRC)/Dialogs/Weather/RaspControlsWidget.cpp \

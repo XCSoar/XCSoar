@@ -381,6 +381,31 @@ XCThermControlsModel::ResumeTimeAuto() noexcept
 }
 
 void
+XCThermControlsModel::SetAltitudeAutoAdvance(bool auto_advance,
+                                             const MoreData &basic) noexcept
+{
+  if (auto_advance)
+    ResumeLayerAuto(basic);
+  else {
+    auto_switch.SetAltitudeManualOverride(true);
+    SaveCursorSession();
+    NotifyStateChanged();
+  }
+}
+
+void
+XCThermControlsModel::SetTimeAutoAdvance(bool auto_advance) noexcept
+{
+  if (auto_advance)
+    ResumeTimeAuto();
+  else {
+    auto_switch.SetTimeManualOverride(true);
+    SaveCursorSession();
+    NotifyStateChanged();
+  }
+}
+
+void
 XCThermControlsModel::OnIndexLoaded() noexcept
 {
   ApplyIndexAvailability();
