@@ -28,6 +28,8 @@ class BackgroundDownloadProgress final : public ProgressListener {
   std::atomic<unsigned> active_sessions{0};
   std::atomic<unsigned> pending_range{0};
   std::atomic<unsigned> pending_position{0};
+  std::atomic<bool> pending_show{false};
+  std::atomic<bool> pending_hide{false};
   StaticString<128> pending_text;
   bool text_pending = false;
 
@@ -36,6 +38,7 @@ class BackgroundDownloadProgress final : public ProgressListener {
 
   void OnProgressNotify() noexcept;
 
+  void ProcessPendingVisibility() noexcept;
   void ShowOnMainThread(const char *text) noexcept;
   void HideOnMainThread() noexcept;
   void ApplyPendingProgress() noexcept;

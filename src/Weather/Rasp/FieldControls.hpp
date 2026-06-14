@@ -104,4 +104,12 @@ FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept;
 bool
 HasSelectedTimeData(bool auto_advance) noexcept;
 
+/**
+ * When AUTO is active but the configured field has no raster for the
+ * current quarter hour, queue a repository / RASP refresh (at most once
+ * per quarter hour while the gap persists).
+ */
+void
+MaybeRequestConfiguredRaspUpdateOnAutoNoData() noexcept;
+
 } // namespace Rasp

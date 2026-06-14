@@ -28,6 +28,22 @@ namespace EDL {
 static BrokenDateTime last_utc_hour = BrokenDateTime::Invalid();
 static bool gps_ui_refresh_pending = false;
 
+/** Cache file name of the overlay currently on the map (basename only). */
+static StaticString<64> active_overlay_file;
+
+static bool
+MapShowsCachedOverlay(const TileRequest &request) noexcept
+{
+  auto *map = UIGlobals::GetMap();
+  if (map == nullptr)
+    return false;
+
+  if (dynamic_cast<const MbTilesOverlay *>(map->GetOverlay()) == nullptr)
+    return false;
+
+  return active_overlay_file == request.BuildCacheFileName();
+}
+
 static bool
 HasDedicatedPageOverlayOwnership() noexcept
 {
@@ -121,8 +137,9 @@ TryApplyOverlayFromCache() noexcept
   if (!File::ExistsAny(path))
     return false;
 
-  LogFmt("edl: overlay from cache {} ({} hPa)",
-         request.BuildCacheFileName().c_str(), request.isobar / 100);
+  if (MapShowsCachedOverlay(request))
+    return true;
+
   ApplyOverlay(path);
   return true;
 }
@@ -283,6 +300,7 @@ ClearOverlay() noexcept
     return;
 
   map->SetOverlay(nullptr);
+  active_overlay_file.clear();
 
   auto &state = CommonInterface::SetUIState().weather.edl;
   state.enabled = false;
@@ -321,6 +339,7 @@ void
 ApplyOverlay(Path path)
 {
   auto &state = CommonInterface::SetUIState().weather.edl;
+  active_overlay_file = path.GetBase().c_str();
   /* Reuse the generic overlay HUD by exposing the active EDL state as
      the overlay label instead of showing this mapping only in a widget. */
   const auto label = GetOverlayLabel();

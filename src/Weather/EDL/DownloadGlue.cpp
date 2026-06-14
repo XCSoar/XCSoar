@@ -126,9 +126,6 @@ DownloadGlue::StartPrecacheDay(BrokenDateTime day) noexcept
   completed_precache_count = 0;
   completed_path.reset();
 
-  LogFmt("edl: precaching day {}",
-         FormatForecastDayLog(day).c_str());
-
   StaticString<128> text;
   text.Format(_("Caching EDL forecast %s..."),
               FormatForecastDayLog(day).c_str());
