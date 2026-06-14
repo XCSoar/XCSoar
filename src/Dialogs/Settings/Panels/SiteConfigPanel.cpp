@@ -8,8 +8,8 @@
 #include "Profile/Keys.hpp"
 #include "Repository/FileType.hpp"
 #include "Profile/Profile.hpp"
-#include "UIGlobals.hpp"
 #include "Repository/Glue.hpp"
+#include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "system/Path.hpp"
@@ -22,9 +22,8 @@ enum ControlIndex {
   AirfieldFileList,
   AirspaceFileList,
   FlarmFile,
-  RaspFile,
   ChecklistFile,
-  UserRepositoriesList
+  UserRepositoriesList,
 };
 
 class SiteConfigPanel final : public RowFormWidget {
@@ -98,26 +97,18 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           GetFileTypePatterns(FileType::FLARMNET),
           FileType::FLARMNET);
 
-  AddFile("RASP",
-          _("Regional Atmospheric Soaring Prediction file providing "
-            "weather forecasts for soaring. Displays color-coded map "
-            "overlays for thermal strength, boundary layer winds, "
-            "cloud cover, and other soaring-relevant parameters at "
-            "various forecast times throughout the day."),
-          ProfileKeys::RaspFile,
-          GetFileTypePatterns(FileType::RASP),
-          FileType::RASP);
-
   AddFile(_("Checklist"),
           _("The checklist file containing pre-flight and other checklists."),
           ProfileKeys::ChecklistFile,
           GetFileTypePatterns(FileType::CHECKLIST),
           FileType::CHECKLIST);
-  
-  const char *user_repositories_list_value = Profile::Get(ProfileKeys::UserRepositoriesList, "");
+
+  const char *user_repositories_list_value =
+    Profile::Get(ProfileKeys::UserRepositoriesList, "");
 
   AddText(_("User repositories"),
-          _("List of additional user repository URIs, separated by '|' character."),
+          _("List of additional user repository URIs, separated by '|' "
+            "character."),
           user_repositories_list_value);
   SetExpertRow(UserRepositoriesList);
 }
@@ -143,21 +134,19 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   AirfieldFileChanged = SaveValueMultiFileReader(
       AirfieldFileList, ProfileKeys::AirfieldFileList);
 
-  RaspFileChanged = SaveValueFileReader(RaspFile, ProfileKeys::RaspFile);
-
   ChecklistFileChanged = SaveValueFileReader(ChecklistFile, ProfileKeys::ChecklistFile);
 
-  const std::string old_repos{Profile::Get(ProfileKeys::UserRepositoriesList, "")};
+  const std::string old_repos{
+    Profile::Get(ProfileKeys::UserRepositoriesList, "")};
   std::string new_repos = old_repos;
   UserRepositoriesListChanged = SaveValue(
-      UserRepositoriesList, ProfileKeys::UserRepositoriesList, new_repos);
+    UserRepositoriesList, ProfileKeys::UserRepositoriesList, new_repos);
   if (UserRepositoriesListChanged)
     PurgeChangedUserRepositoryFiles(old_repos.c_str(), new_repos.c_str());
 
   changed = WaypointFileChanged || AirfieldFileChanged ||
             AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
-            RaspFileChanged || ChecklistFileChanged ||
-            UserRepositoriesListChanged;
+            ChecklistFileChanged || UserRepositoriesListChanged;
 
   _changed |= changed;
 

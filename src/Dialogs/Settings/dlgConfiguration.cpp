@@ -61,8 +61,11 @@
 #include "Panels/CloudConfigPanel.hpp"
 #endif
 
-#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
-#include "Panels/WeatherConfigPanel.hpp"
+#include "Panels/RaspConfigPanel.hpp"
+#ifdef HAVE_HTTP
+#include "Panels/PCMetConfigPanel.hpp"
+#include "Panels/XCThermConfigPanel.hpp"
+#include "Panels/ThermalMapConfigPanel.hpp"
 #endif
 
 #include "Panels/WeGlideConfigPanel.hpp"
@@ -124,6 +127,18 @@ static constexpr TabMenuPage look_pages[] = {
   { nullptr, nullptr }
 };
 
+static constexpr TabMenuPage weather_pages[] = {
+#ifdef HAVE_HTTP
+  { N_("XCTherm"), CreateXCThermConfigPanel },
+#endif
+  { N_("RASP"), CreateRaspConfigPanel },
+#ifdef HAVE_HTTP
+  { N_("Flugwetter"), CreatePCMetConfigPanel },
+  { N_("Thermal Map"), CreateThermalMapConfigPanel },
+#endif
+  { nullptr, nullptr }
+};
+
 static constexpr TabMenuPage setup_pages[] = {
   { N_("Logger"), CreateLoggerConfigPanel },
   { N_("Units"), CreateUnitsConfigPanel },
@@ -134,9 +149,6 @@ static constexpr TabMenuPage setup_pages[] = {
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
   { "XCSoar Cloud", CreateCloudConfigPanel },
-#endif
-#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
-  { N_("Weather"), CreateWeatherConfigPanel },
 #endif
   { "WeGlide", CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER
@@ -153,6 +165,7 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Gauges"), gauge_pages },
   { N_("Task Defaults"), task_pages },
   { N_("Look"), look_pages },
+  { N_("Weather"), weather_pages },
   { N_("Setup"), setup_pages },
 };
 

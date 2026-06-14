@@ -134,7 +134,10 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/UnitsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp \
-	$(SRC)/Dialogs/Settings/Panels/WeatherConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/RaspConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/XCThermConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/PCMetConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/ThermalMapConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/Task/Widgets/ObservationZoneEditWidget.cpp \
