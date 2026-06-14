@@ -364,7 +364,7 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
         item.path = std::move(overlay->path);
         UpdatePreview(item.path);
       } catch (...) {
-        ShowError(std::current_exception(), "pc_met");
+        ShowError(std::current_exception(), "Flugwetter");
       }
     }
   }
@@ -399,7 +399,7 @@ WeatherMapOverlayListWidget::UpdateClicked()
           SetOverlay(overlay->path, info.label.c_str());
         item.path = std::move(overlay->path);
       } catch (...) {
-        ShowError(std::current_exception(), "pc_met");
+        ShowError(std::current_exception(), "Flugwetter");
         break;
       }
     }

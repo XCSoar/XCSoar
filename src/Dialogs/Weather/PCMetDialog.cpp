@@ -185,7 +185,7 @@ BitmapDialog(const Bitmap &bitmap)
   WidgetDialog dialog(WidgetDialog::Full{},
                       UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
-                      "pc_met", new PCMetImageWidget(bitmap));
+                      "Flugwetter", new PCMetImageWidget(bitmap));
   auto &image = static_cast<PCMetImageWidget &>(dialog.GetWidget());
 
   dialog.AddButton(_("Close"), mrOK);
@@ -217,7 +217,7 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
     bitmap.LoadFile(*path);
     BitmapDialog(bitmap);
   } catch (...) {
-    ShowError(std::current_exception(), "pc_met");
+    ShowError(std::current_exception(), "Flugwetter");
   }
 }
 
