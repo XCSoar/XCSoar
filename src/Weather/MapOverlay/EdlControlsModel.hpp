@@ -38,6 +38,11 @@ public:
   void SetForecastAutoAdvance(bool auto_advance) noexcept;
 
   [[gnu::pure]]
+  bool GetLevelAutoAdvance() const noexcept;
+
+  void SetLevelAutoAdvance(bool auto_advance) noexcept;
+
+  [[gnu::pure]]
   unsigned SelectedCachedDayIndex(const std::vector<EDL::CachedDay> &days) const noexcept;
 
   [[gnu::pure]]

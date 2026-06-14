@@ -77,6 +77,8 @@ Glue::RequestOverlayRefresh() noexcept
     return;
   }
 
+  ClearOverlay();
+
   const auto forecast = GetForecastTime();
   const unsigned isobar = GetIsobar();
   LogFmt("edl: loading overlay {} hPa {}",

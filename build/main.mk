@@ -717,6 +717,8 @@ ifeq ($(OPENGL),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/Levels.cpp \
 	$(SRC)/Weather/EDL/TileStore.cpp \
+	$(SRC)/Weather/EDL/TileValue.cpp \
+	$(SRC)/Weather/EDL/EdlMbTilesOverlay.cpp \
 	$(SRC)/Weather/EDL/StateController.cpp \
 	$(SRC)/Weather/MapOverlay/CursorBarLabels.cpp \
 	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \

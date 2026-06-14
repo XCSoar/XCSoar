@@ -14,6 +14,10 @@
 #include "Asset.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "ActionInterface.hpp"
+#ifdef HAVE_EDL
+#include "Weather/EDL/StateController.hpp"
+#endif
 
 #ifdef USE_X11
 #include "ui/event/Globals.hpp"
@@ -240,6 +244,11 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
     kinetic_x.MouseUp(p.x);
     kinetic_y.MouseUp(p.y);
     kinetic_timer.Schedule(std::chrono::milliseconds(30));
+#endif
+
+#ifdef HAVE_EDL
+    if (EDL::IsDedicatedPageSuspendedForPan())
+      ActionInterface::ScheduleSendUIState();
 #endif
     break;
 

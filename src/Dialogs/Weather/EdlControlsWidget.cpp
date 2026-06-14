@@ -109,7 +109,8 @@ EdlControlsWidget::OnStepLevel(int delta) noexcept
 void
 EdlControlsWidget::OnResumeAuto() noexcept
 {
-  if (data->model.GetForecastAutoAdvance())
+  if (data->model.GetForecastAutoAdvance() &&
+      data->model.GetLevelAutoAdvance())
     return;
 
   data->model.ResumeAutoAdvance();
@@ -164,7 +165,8 @@ EdlControlsWidget::Hide() noexcept
 void
 EdlControlsWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
-  if (!data->model.GetForecastAutoAdvance())
+  if (!data->model.GetForecastAutoAdvance() &&
+      !data->model.GetLevelAutoAdvance())
     return;
 
   if (EDL::TakeGpsUiRefreshPending())

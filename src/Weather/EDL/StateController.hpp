@@ -75,6 +75,13 @@ bool
 TryApplyOverlayFromCache() noexcept;
 
 /**
+ * Apply a cached overlay for the current cursor-bar selection, or clear
+ * the map overlay when nothing is cached.
+ */
+void
+ApplyOverlayFromSession() noexcept;
+
+/**
  * Return true when the MBTiles file for the current forecast/isobar exists
  * in the local cache.
  */
