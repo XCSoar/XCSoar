@@ -10,7 +10,8 @@ File Location
 XCSoar looks for checklist files in the following locations:
 
 1. The file specified in **Site Files > Checklist** setting
-2. ``xcsoar-checklist.txt`` in the XCSoar data directory
+2. ``xcsoar-checklist.txt`` in the XCSoar data directory (typically
+   :file:`checklists/xcsoar-checklist.txt`; see :doc:`data_directory`)
 3. Legacy: Files with ``.xcc`` extension in legacy search paths
 
 The XCSoar data directory is typically:

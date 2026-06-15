@@ -65,7 +65,7 @@ Running Lua
 
 The directory :file:`XCSoarData/lua/` may contain Lua scripts (:file:`*.lua`).
 The directory :file:`XCSoarData/lua/lib/` may contain Lua libraries to be
-loaded with ``require``.
+loaded with ``require``. See :doc:`data_directory` for the full data layout.
 
 After startup, XCSoar starts the script :file:`init.lua` (if it
 exists).
