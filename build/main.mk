@@ -400,6 +400,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/FieldControls.cpp \
 	$(SRC)/Weather/Rasp/Configured.cpp \
 	$(SRC)/Weather/Rasp/DownloadGlue.cpp \
+	$(SRC)/Weather/MapOverlay/CursorBarLabels.cpp \
+	$(SRC)/Weather/MapOverlay/InputEvents.cpp \
+	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
 	$(SRC)/Blackboard/ProxyBlackboardListener.cpp \
@@ -738,13 +741,10 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/TileValue.cpp \
 	$(SRC)/Weather/EDL/EdlMbTilesOverlay.cpp \
 	$(SRC)/Weather/EDL/StateController.cpp \
-	$(SRC)/Weather/MapOverlay/CursorBarLabels.cpp \
 	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
-	$(SRC)/Weather/MapOverlay/InputEvents.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Dialogs/Weather/EdlControlsWidget.cpp \
 	$(SRC)/Dialogs/Weather/RaspControlsWidget.cpp \
-	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
 	$(SRC)/Weather/EDL/Glue.cpp \
 	$(SRC)/Weather/EDL/DownloadGlue.cpp
 endif

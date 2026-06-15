@@ -75,6 +75,7 @@ static ParsedLayerCache parsed_layer_cache;
 static bool
 MapShowsXCThermForecast(const char *parameter, unsigned utc_hour) noexcept
 {
+#ifdef ENABLE_OPENGL
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
     return false;
@@ -85,6 +86,11 @@ MapShowsXCThermForecast(const char *parameter, unsigned utc_hour) noexcept
     return false;
 
   return overlay->MatchesForecast(parameter, utc_hour);
+#else
+  (void)parameter;
+  (void)utc_hour;
+  return false;
+#endif
 }
 
 } // namespace

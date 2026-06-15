@@ -33,26 +33,26 @@ WeatherMapOverlay::HandleInputEvent(const char *misc) noexcept
     return;
 
   switch (layout.overlay) {
-#ifdef ENABLE_OPENGL
   case PageLayout::Overlay::RASP:
+#ifdef ENABLE_OPENGL
     if (auto *controls = dynamic_cast<RaspControlsWidget *>(widget))
       controls->HandleWeatherOverlayInput(misc);
-    break;
 #endif
+    break;
 
-#ifdef HAVE_EDL
   case PageLayout::Overlay::EDL:
+#ifdef HAVE_EDL
     if (auto *controls = dynamic_cast<EdlControlsWidget *>(widget))
       controls->HandleWeatherOverlayInput(misc);
-    break;
 #endif
+    break;
 
-#ifdef HAVE_HTTP
   case PageLayout::Overlay::XCTHERM:
+#ifdef HAVE_HTTP
     if (auto *controls = dynamic_cast<XCThermControlsWidget *>(widget))
       controls->HandleWeatherOverlayInput(misc);
-    break;
 #endif
+    break;
 
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:

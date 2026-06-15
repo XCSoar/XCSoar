@@ -56,7 +56,7 @@ class MbTilesDatabase {
 
 public:
   explicit MbTilesDatabase(Path path);
-  MbTilesDatabase(MbTilesDatabase &&other) noexcept = default;
+  MbTilesDatabase(MbTilesDatabase &&other) noexcept = delete;
   MbTilesDatabase &operator=(MbTilesDatabase &&other) noexcept = delete;
   ~MbTilesDatabase() noexcept = default;
 

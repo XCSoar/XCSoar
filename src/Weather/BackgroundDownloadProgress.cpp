@@ -145,6 +145,8 @@ BackgroundDownloadProgress::ForceHide() noexcept
 {
   active_sessions.store(0, std::memory_order_relaxed);
   pending_show.store(false, std::memory_order_relaxed);
+  pending_hide.store(false, std::memory_order_relaxed);
+  progress_notify.ClearNotification();
   pending_hide.store(true, std::memory_order_relaxed);
   progress_notify.SendNotification();
 }
