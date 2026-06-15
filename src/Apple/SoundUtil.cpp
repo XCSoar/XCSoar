@@ -5,6 +5,7 @@
 // Currently for iOS only, not macOS (AVAudioSession is iOS only)
 
 #include "SoundUtil.hpp"
+#include "Services.hpp"
 #include "LogFile.hpp"
 
 #include <TargetConditionals.h>
@@ -21,21 +22,12 @@
  * other apps so that any audio they had ducked or paused while our sound
  * was playing is restored. Without this, the session stays active
  * indefinitely and other apps' audio remains ducked forever.
+ *
+ * (DeactivateAudioSession() skips the deactivation while the audio
+ * vario is active, so it keeps playing.)
  */
 @interface XCSoarAudioPlayerDelegate : NSObject <AVAudioPlayerDelegate>
 @end
-
-static void
-DeactivateAudioSession()
-{
-  NSError *error = nil;
-  [[AVAudioSession sharedInstance] setActive:NO
-                                   withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
-                                   error:&error];
-  if (error) {
-    LogFormat("AVAudioSession deactivate error: %s", [[error localizedDescription] UTF8String]);
-  }
-}
 
 @implementation XCSoarAudioPlayerDelegate
 
@@ -103,11 +95,7 @@ SoundUtil::Play(const char *resource_name)
   // Activate the audio session for the duration of the playback. It is
   // deactivated again by the player delegate once playback has finished,
   // so that other apps' audio (e.g. music) is never ducked permanently.
-  NSError *activate_error = nil;
-  [[AVAudioSession sharedInstance] setActive:YES error:&activate_error];
-  if (activate_error) {
-    LogFormat("AVAudioSession activate error: %s", [[activate_error localizedDescription] UTF8String]);
-  }
+  ActivateAudioSession();
 
   if (!player_delegate) {
     player_delegate = [[XCSoarAudioPlayerDelegate alloc] init];
