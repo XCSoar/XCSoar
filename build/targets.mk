@@ -548,11 +548,15 @@ TARGET_LDLIBS =
 TARGET_LDADD =
 
 ifeq ($(TARGET),PC)
-  TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
-  TARGET_LDFLAGS += -Wl,--minor-subsystem-version=00
+  TARGET_LDFLAGS += -Wl,--major-subsystem-version=6
+  TARGET_LDFLAGS += -Wl,--minor-subsystem-version=0
 
   # default to "console"; see SCREEN_LDLIBS
   TARGET_LDFLAGS += -Wl,-subsystem,console
+
+  ifeq ($(X64),y)
+    TARGET_LDFLAGS += -Wl,--high-entropy-va
+  endif
 endif
 
 ifeq ($(HAVE_WIN32),y)

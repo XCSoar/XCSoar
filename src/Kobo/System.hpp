@@ -26,6 +26,15 @@ bool
 IsKoboWifiOn();
 
 bool
+IsKoboWifiAutoOn();
+
+bool
+SetKoboWifiAutoOn(bool enabled);
+
+void
+ApplyKoboWifiAutoOn();
+
+bool
 KoboWifiOn();
 
 bool

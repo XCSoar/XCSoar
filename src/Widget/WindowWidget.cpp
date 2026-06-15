@@ -68,8 +68,10 @@ WindowWidget::Move(const PixelRect &rc) noexcept
 {
   assert(window != nullptr);
   assert(window->IsDefined());
-  assert(window->IsVisible());
 
+  /* Allow repositioning while hidden; supports layout sequences where
+     Move() may be called before or during Show() (e.g. SolidWidget
+     nested UI during Show()). */
   window->Move(rc);
 }
 

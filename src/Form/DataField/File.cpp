@@ -76,6 +76,7 @@ FileDataField::FileDataField(DataFieldListener *listener) noexcept
   :DataField(Type::FILE, true, listener),
    // Set selection to zero
    current_index(0),
+   file_type(FileType::UNKNOWN),
    loaded(false), postponed_sort(SortOrder::NO_ORDER),
    postponed_value(nullptr) {}
 

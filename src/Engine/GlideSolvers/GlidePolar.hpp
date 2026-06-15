@@ -86,13 +86,16 @@ class GlidePolar
   /** Reference wing area, m^2 */
   double wing_area;
 
+  /** Air density ratio sqrt(rho0/rho); 1.0 at sea level, >1 at altitude */
+  double density_ratio;
+
   friend class GlidePolarTest;
 
 public:
   /**
    * Constructs an uninitialized object.
    */
-  constexpr GlidePolar() noexcept = default;
+  constexpr GlidePolar() noexcept : density_ratio(1.0) {}
 
   /**
    * Constructor.  Performs search for best LD at instantiation
@@ -498,6 +501,13 @@ public:
     wing_area = _wing_area;
   }
 
+  /** Sets the air density ratio and updates polar speeds/rates accordingly */
+  void SetDensityRatio(double dr) noexcept;
+
+  constexpr double GetDensityRatio() const noexcept {
+    return density_ratio;
+  }
+
   /** Returns the reference mass in kg */
   constexpr double GetReferenceMass() const noexcept {
     return reference_mass;
@@ -608,4 +618,4 @@ private:
   void UpdateSMin() noexcept;
 };
 
-static_assert(std::is_trivial<GlidePolar>::value, "type is not trivial");
+static_assert(std::is_trivially_copyable<GlidePolar>::value, "type is not trivially copyable");

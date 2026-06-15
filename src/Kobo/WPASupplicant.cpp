@@ -83,7 +83,11 @@ ParseStatusLine(WifiBackendStatus &status, std::string_view src) noexcept
 static bool
 ParseStatus(WifiBackendStatus &status, std::string_view src) noexcept
 {
-  status = {};
+  /* Preserve fields pre-filled by the backend (e.g. interface_name,
+     signal_unit) and only refresh values returned by STATUS. */
+  status.state = WifiConnectionState::Unknown;
+  status.bssid.clear();
+  status.ssid.clear();
 
   for (const auto line : IterableSplitString(src, '\n'))
     ParseStatusLine(status, line);

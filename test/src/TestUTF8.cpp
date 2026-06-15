@@ -183,6 +183,36 @@ TestCopyString()
   }
 }
 
+static void
+TestSuffixUTF8()
+{
+  struct {
+    const char *src;
+    std::size_t tail_chars;
+    const char *expected;
+  } cases[] = {
+    { "", 2, "" },
+    { "A", 2, "A" },
+    { "AB", 2, "AB" },
+    { "ABC", 2, "BC" },
+    { "\xc3\x84\x42", 2, "\xc3\x84\x42" },
+    { "\x41\xc3\x84\x42", 2, "\xc3\x84\x42" },
+    { "\x41\xc3\x84\xc3\x96", 2, "\xc3\x84\xc3\x96" },
+  };
+
+  for (const auto &c : cases) {
+    const std::string_view suffix = SuffixUTF8(c.src, c.tail_chars);
+    ok1(suffix == c.expected);
+    ok1(ValidateUTF8(suffix));
+  }
+
+  const std::string_view bounded = std::string_view("XABCY").substr(1, 3);
+  const std::string_view bounded_suffix = SuffixUTF8(bounded, 2);
+  ok1(bounded_suffix == "BC");
+  ok1(bounded_suffix.size() == 2);
+  ok1(ValidateUTF8(bounded_suffix));
+}
+
 int main()
 {
   plan_tests(2 * ARRAY_SIZE(valid) +
@@ -192,6 +222,7 @@ int main()
              4 * ARRAY_SIZE(crop) +
              ARRAY_SIZE(truncate_string_tests) +
              2 * ARRAY_SIZE(copy_string_tests) +
+             2 * 7 + 3 +
              10 + 27);
 
   for (auto i : valid) {
@@ -227,6 +258,7 @@ int main()
 
   TestTruncateString();
   TestCopyString();
+  TestSuffixUTF8();
 
   /* test NextUTF8() */
   {

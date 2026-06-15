@@ -6,6 +6,7 @@
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
 #include "system/Path.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "time/BrokenTime.hpp"
 
 #include <memory>
@@ -81,6 +82,9 @@ public:
   unsigned GetItemCount() const {
     return maps.size();
   }
+
+  [[nodiscard]]
+  BrokenDateTime GetFileModifiedTime() const noexcept;
 
   [[gnu::const]]
   const MapItem &GetItemInfo(unsigned i) const {

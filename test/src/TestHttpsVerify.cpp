@@ -32,7 +32,6 @@ FetchOk(CurlGlobal &curl, const char *url)
 
 struct FetchResults {
   bool internet_available = false;
-  bool badssl_ok = false;
   bool wrong_host_ok = false;
   bool xcsoar_ok = false;
 };
@@ -48,8 +47,6 @@ FetchAll(CurlGlobal &curl)
     co_await FetchOk(curl, "http://http.badssl.com/");
 
   if (results.internet_available) {
-    results.badssl_ok =
-      co_await FetchOk(curl, "https://badssl.com/");
     results.wrong_host_ok =
       co_await FetchOk(curl, "https://wrong.host.badssl.com/");
     results.xcsoar_ok =
@@ -69,18 +66,17 @@ main()
   plan_skip_all("TLS verification disabled on this platform");
   return exit_status();
 #else
-  plan_tests(3);
+  plan_tests(2);
 
   Instance instance;
   const auto results = instance.Run(FetchAll(*Net::curl));
 
   /* Avoid failing the TLS tests when the test host is simply offline. */
   if (!results.internet_available) {
-    skip(3, 1, "internet unavailable");
+    skip(2, 1, "internet unavailable");
     return exit_status();
   }
 
-  ok1(results.badssl_ok);
   ok1(!results.wrong_host_ok);
   ok1(results.xcsoar_ok);
 

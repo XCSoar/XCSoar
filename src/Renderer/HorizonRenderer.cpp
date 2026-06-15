@@ -40,7 +40,7 @@ HorizonRenderer::drawAircraftSymbol(Canvas &canvas, const PixelPoint &center,
                   {center.x + radius / 10, center.y});
   canvas.DrawLine({center.x - radius / 10, center.y + radius / 10},
                   {center.x - radius / 10, center.y});
-  canvas.DrawCircle(center, 2);
+  canvas.DrawCircle(center, std::max(1, radius / 20));
 }
 
 int
@@ -143,6 +143,8 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   int w = static_cast<int>(rc.GetWidth());
   int h = static_cast<int>(rc.GetHeight());
+  const int left = rc.left;
+  const int top = rc.top;
 
   // compute theoretical horizon line
   PixelPoint p1 = {-w, int(h / 2.f * pitch_degrees / MAX_HEIGHT_DEGREES)};
@@ -151,10 +153,10 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   rotate(p2, center, Angle::Degrees(-bank_degrees), p2);
 
   PixelPoint p3 = {(p1.x + p2.x) / 2, (p1.y + p2.y) / 2};
-  PixelPoint k11 = {0, 0}; // up left
-  PixelPoint k12 = {w, 0}; // up right
-  PixelPoint k22 = {w, h}; // down right
-  PixelPoint k21 = {0, h}; // down left
+  PixelPoint k11 = {left, top};
+  PixelPoint k12 = {left + w, top};
+  PixelPoint k22 = {left + w, top + h};
+  PixelPoint k21 = {left, top + h};
 
   int i, j;
   BulkPixelPoint corners[] = {k21, k11, k12, k22, k21};
@@ -323,58 +325,67 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   canvas.Select(look.mark_pen);
   canvas.Select(look.mark_brush);
 
-  PixelPoint m1 = {-radius + Layout::Scale(2), 0};
-  PixelPoint m2 = {-radius + Layout::Scale(12), 0};
+  const bool compact = radius <= 100;
+  const int tick_inset = compact
+    ? std::max(1, radius / 12)
+    : Layout::Scale(2);
+  const int tick_len = compact
+    ? std::max(2, radius / 6)
+    : Layout::Scale(10);
+  const int minor_tick_inset = compact
+    ? tick_inset + tick_len / 3
+    : Layout::Scale(7);
+  const int pitch_half_width = compact
+    ? std::max(2, radius / 6)
+    : radius / 5;
 
-  for (int angle : {0, 30, 60, 120, 150, 180})
+  PixelPoint m1 = {-radius + tick_inset, 0};
+  PixelPoint m2 = {-radius + tick_inset + tick_len, 0};
+
+  for (int angle : {0, 30, 45, 60, 120, 135, 150, 180})
   {
     rotate(m1, center, Angle::Degrees(angle - bank_degrees), p1);
     rotate(m2, center, Angle::Degrees(angle - bank_degrees), p2);
     canvas.DrawLine(p1, p2);
   }
 
-  m1.x = -radius + Layout::Scale(7);
-
-  for (int angle : {70, 80, 100, 110})
+  if (!compact)
   {
-    rotate(m1, center, Angle::Degrees(angle - bank_degrees), p1);
-    rotate(m2, center, Angle::Degrees(angle - bank_degrees), p2);
-    canvas.DrawLine(p1, p2);
+    m1.x = -radius + minor_tick_inset;
+
+    for (int angle : {70, 80, 100, 110})
+    {
+      rotate(m1, center, Angle::Degrees(angle - bank_degrees), p1);
+      rotate(m2, center, Angle::Degrees(angle - bank_degrees), p2);
+      canvas.DrawLine(p1, p2);
+    }
+
+    m1 = {-radius + tick_inset, -5};
+    m2 = {-radius + tick_inset, 5};
+    PixelPoint m3 = {-radius + tick_inset + tick_len, 0};
+    rotate(m1, center, Angle::Degrees(90 - bank_degrees), p1);
+    rotate(m2, center, Angle::Degrees(90 - bank_degrees), p2);
+    rotate(m3, center, Angle::Degrees(90 - bank_degrees), p3);
+
+    BulkPixelPoint zero_mark[3] = {p1, p2, p3};
+    canvas.DrawPolygon(zero_mark, 3);
   }
-
-  m2.x = -radius + Layout::Scale(9);
-
-  for (int angle : {45, 135})
-  {
-    rotate(m2, center, Angle::Degrees(angle - bank_degrees), p2);
-    canvas.DrawCircle(p2, 2);
-  }
-
-  PixelPoint m3 = {-radius + Layout::Scale(12), 0};
-  m1 = {-radius + Layout::Scale(2), -5};
-  m2 = {-radius + Layout::Scale(2), 5};
-  rotate(m1, center, Angle::Degrees(90 - bank_degrees), p1);
-  rotate(m2, center, Angle::Degrees(90 - bank_degrees), p2);
-  rotate(m3, center, Angle::Degrees(90 - bank_degrees), p3);
-
-  BulkPixelPoint zero_mark[3] = {p1, p2, p3};
-  canvas.DrawPolygon(zero_mark, 3);
 
   // pitch marks
   int pitch_10 = (int(pitch_degrees) / 10) * 10;
-  for (int k = pitch_10 - 20; k <= pitch_10 + 20; k += 10)
+  const int pitch_span = compact ? 10 : 20;
+  for (int k = pitch_10 - pitch_span; k <= pitch_10 + pitch_span; k += 10)
   {
     if (k == 0) continue;
-    m1 = {-radius / 5, static_cast<int>(h / 2.f * (pitch_degrees - k) /
+    m1 = {-pitch_half_width, static_cast<int>(h / 2.f * (pitch_degrees - k) /
                                         MAX_HEIGHT_DEGREES)};
-    m2 = {+radius / 5, static_cast<int>(h / 2.f * (pitch_degrees - k) /
+    m2 = {+pitch_half_width, static_cast<int>(h / 2.f * (pitch_degrees - k) /
                                         MAX_HEIGHT_DEGREES)};
     rotate(m1, center, Angle::Degrees(-bank_degrees), p1);
     rotate(m2, center, Angle::Degrees(-bank_degrees), p2);
     canvas.DrawLine(p1, p2);
 
-    // stop showing text numbers when in infobox mode
-    if (radius > 100)
+    if (!compact)
     {
       canvas.Select(look.mark_font);
       canvas.SetBackgroundTransparent();
@@ -382,18 +393,24 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
       char buffer[5];
       StringFormatUnsafe(buffer, "%+3d", k);
       PixelSize ts = canvas.CalcTextSize(buffer);
-      m2 = {+radius / 5 + static_cast<int>(ts.height / 2),
+      m2 = {+pitch_half_width + static_cast<int>(ts.height / 2),
             static_cast<int>(h / 2.f * (pitch_degrees - k) /
                              MAX_HEIGHT_DEGREES) -
                 static_cast<int>(ts.height / 2)};
       rotate(m2, center, Angle::Degrees(-bank_degrees), p2);
       canvas.DrawText(p2, buffer);
+      canvas.Select(look.mark_pen);
+      canvas.Select(look.mark_brush);
     }
-    for (int k = pitch_10 - 25; k <= pitch_10 + 25; k += 10)
+  }
+
+  if (!compact)
+  {
+    for (int minor = pitch_10 - 25; minor <= pitch_10 + 25; minor += 10)
     {
-      m1 = {-radius / 10, static_cast<int>(h / 2.f * (pitch_degrees - k) /
+      m1 = {-radius / 10, static_cast<int>(h / 2.f * (pitch_degrees - minor) /
                                            MAX_HEIGHT_DEGREES)};
-      m2 = {+radius / 10, static_cast<int>(h / 2.f * (pitch_degrees - k) /
+      m2 = {+radius / 10, static_cast<int>(h / 2.f * (pitch_degrees - minor) /
                                            MAX_HEIGHT_DEGREES)};
       rotate(m1, center, Angle::Degrees(-bank_degrees), p1);
       rotate(m2, center, Angle::Degrees(-bank_degrees), p2);
@@ -403,12 +420,19 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   HorizonRenderer::drawAircraftSymbol(canvas, center, radius, look);
 
-  if (radius > 100)
-  {
-    BulkPixelPoint triangle[3] = {
-        {center.x - Layout::Scale(4), center.y - radius + Layout::Scale(22)},
-        {center.x, center.y - radius + Layout::Scale(12)},
-        {center.x + Layout::Scale(4), center.y - radius + Layout::Scale(22)}};
-    canvas.DrawPolygon(triangle, 3);
-  }
+  const int tick_outer = tick_inset + tick_len;
+  const int arrow_half_width = compact
+    ? std::max(2, radius / 12)
+    : Layout::Scale(4);
+  /* Tip at the outer bank tick; base below the arc (same layout as full size). */
+  const int arrow_tip = compact ? tick_outer : Layout::Scale(12);
+  const int arrow_base = compact
+    ? tick_outer + std::max(4, radius / 8)
+    : Layout::Scale(22);
+
+  BulkPixelPoint triangle[3] = {
+    {center.x - arrow_half_width, center.y - radius + arrow_base},
+    {center.x, center.y - radius + arrow_tip},
+    {center.x + arrow_half_width, center.y - radius + arrow_base}};
+  canvas.DrawPolygon(triangle, 3);
 }

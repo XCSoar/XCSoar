@@ -51,6 +51,49 @@ GLDrawRectangle(const PixelRect r) noexcept
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
+static void
+GLDrawOutlineRectangleEdges(PixelRect r, unsigned width,
+                            const Color &color) noexcept
+{
+  if (r.IsEmpty() || width == 0)
+    return;
+
+  const int left = r.left;
+  const int top = r.top;
+  const int right = r.right;
+  const int bottom = r.bottom;
+  const int w = int(width);
+
+  if (right - left <= w || bottom - top <= w)
+    return;
+
+  OpenGL::solid_shader->Use();
+  color.Bind();
+
+  GLDrawRectangle({left, top, right, top + w});
+  GLDrawRectangle({left, bottom - w, right, bottom});
+  GLDrawRectangle({left, top + w, left + w, bottom - w});
+  GLDrawRectangle({right - w, top + w, right, bottom - w});
+}
+
+static void
+GLDrawLineLoopOutline(ScopeVertexPointer &vp,
+                      const BulkPixelPoint *points, unsigned num_points,
+                      unsigned pen_width,
+                      AllocatedArray<BulkPixelPoint> &buffer) noexcept
+{
+  if (UseOpenGLLineLoopOutline(pen_width))
+    glDrawArrays(GL_LINE_LOOP, 0, num_points);
+  else {
+    unsigned vertices = LineToTriangles(points, num_points, buffer,
+                                        pen_width, true);
+    if (vertices > 0) {
+      vp.Update(buffer.data());
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
+    }
+  }
+}
+
 void
 Canvas::InvertRectangle(PixelRect r) noexcept
 {
@@ -105,39 +148,19 @@ Canvas::DrawFilledRectangle(PixelRect r, const Color color) noexcept
 void
 Canvas::DrawOutlineRectangleGL(PixelRect r) noexcept
 {
-  --r.right;
-  --r.bottom;
-
-  const ExactPixelPoint vertices[] = {
-    r.GetTopLeft(),
-    r.GetTopRight(),
-    r.GetBottomRight(),
-    r.GetBottomLeft(),
-  };
-
-  const ScopeVertexPointer vp(vertices);
-  glDrawArrays(GL_LINE_LOOP, 0, 4);
+  GLDrawOutlineRectangleEdges(r, pen.GetWidth(), pen.GetColor());
 }
 
 void
 Canvas::DrawOutlineRectangle(PixelRect r) noexcept
 {
-  OpenGL::solid_shader->Use();
-
-  pen.Bind();
-  DrawOutlineRectangleGL(r);
-  pen.Unbind();
+  GLDrawOutlineRectangleEdges(r, pen.GetWidth(), pen.GetColor());
 }
 
 void
 Canvas::DrawOutlineRectangle(PixelRect r, Color color) noexcept
 {
-  OpenGL::solid_shader->Use();
-
-  color.Bind();
-  glLineWidth(1);
-
-  DrawOutlineRectangleGL(r);
+  GLDrawOutlineRectangleEdges(r, 1, color);
 }
 
 void
@@ -202,18 +225,8 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept
 
   if (IsPenOverBrush()) {
     pen.Bind();
-
-    if (pen.GetWidth() <= (IsMacOSX() ? 1u : 2u)) {
-      glDrawArrays(GL_LINE_LOOP, 0, num_points);
-    } else {
-      unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
-                                          pen.GetWidth(), true);
-      if (vertices > 0) {
-        vp.Update(vertex_buffer.data());
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
-      }
-    }
-
+    GLDrawLineLoopOutline(vp, points, num_points, pen.GetWidth(),
+                          vertex_buffer);
     pen.Unbind();
   }
 }
@@ -235,18 +248,8 @@ Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexc
 
   if (IsPenOverBrush()) {
     pen.Bind();
-
-    if (pen.GetWidth() <= (IsMacOSX() ? 1u : 2u)) {
-      glDrawArrays(GL_LINE_LOOP, 0, num_points);
-    } else {
-      unsigned vertices = LineToTriangles(points, num_points, vertex_buffer,
-                                          pen.GetWidth(), true);
-      if (vertices > 0) {
-        vp.Update(vertex_buffer.data());
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
-      }
-    }
-
+    GLDrawLineLoopOutline(vp, points, num_points, pen.GetWidth(),
+                          vertex_buffer);
     pen.Unbind();
   }
 }

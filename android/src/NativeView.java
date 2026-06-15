@@ -24,6 +24,7 @@ import android.content.res.Resources;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.Settings;
 import android.webkit.MimeTypeMap;
 
 class EGLException extends Exception {
@@ -450,6 +451,27 @@ class NativeView extends SurfaceView
   }
 
   /**
+   * Opens Android Wi-Fi settings or the connectivity panel.
+   */
+  private boolean openWifiSettings() {
+    try {
+      Intent intent;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        intent = new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY);
+      } else {
+        intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+      }
+
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      getContext().startActivity(intent);
+      return true;
+    } catch (Exception e) {
+      Log.e(TAG, "openWifiSettings() error", e);
+      return false;
+    }
+  }
+
+  /**
    * Starts a VIEW intent for a given file
    */
   private void openWaypointFile(int id, String filename) {
@@ -480,6 +502,10 @@ class NativeView extends SurfaceView
 
   private int getNetState() {
     return NetUtil.getNetState();
+  }
+
+  private String getWifiIpAddress() {
+    return NetUtil.getWifiIpAddress();
   }
 
   @Override public boolean onTouchEvent(final MotionEvent event)

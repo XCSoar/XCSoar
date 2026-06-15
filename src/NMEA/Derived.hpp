@@ -272,4 +272,4 @@ struct DerivedInfo:
   double CalculateWorkingFraction(const double h, const double safety_height) const;
 };
 
-static_assert(std::is_trivial_v<DerivedInfo>, "type is not trivial");
+static_assert(std::is_trivially_copyable_v<DerivedInfo>, "type is not trivially copyable");

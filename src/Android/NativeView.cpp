@@ -20,8 +20,10 @@ jmethodID NativeView::loadFileBitmap_method;
 jmethodID NativeView::bitmapToTexture_method;
 jmethodID NativeView::shareText_method;
 jmethodID NativeView::openURL_method;
+jmethodID NativeView::openWifiSettings_method;
 jmethodID NativeView::openWaypointFile_method;
 jmethodID NativeView::getNetState_method;
+jmethodID NativeView::getWifiIpAddress_method;
 jmethodID NativeView::isAutoRotateEnabled_method;
 jmethodID NativeView::getPhysicalOrientation_method;
 jmethodID NativeView::startMyService_method;
@@ -64,11 +66,17 @@ NativeView::Initialise(JNIEnv *env)
   openURL_method = env->GetMethodID(cls, "openURL",
                                     "(Ljava/lang/String;)Z");
 
+  openWifiSettings_method = env->GetMethodID(cls, "openWifiSettings",
+                                             "()Z");
+
   openWaypointFile_method =
     env->GetMethodID(cls, "openWaypointFile",
                      "(ILjava/lang/String;)V");
 
   getNetState_method = env->GetMethodID(cls, "getNetState", "()I");
+
+  getWifiIpAddress_method = env->GetMethodID(cls, "getWifiIpAddress",
+                                             "()Ljava/lang/String;");
 
   isAutoRotateEnabled_method =
     env->GetMethodID(cls, "isAutoRotateEnabled", "()Z");
@@ -172,6 +180,25 @@ NativeView::OpenURL(JNIEnv *env, const char *url) noexcept
 {
   return env->CallBooleanMethod(obj, openURL_method,
                                 Java::String{env, url}.Get());
+}
+
+bool
+NativeView::OpenWifiSettings(JNIEnv *env) noexcept
+{
+  return env->CallBooleanMethod(obj, openWifiSettings_method);
+}
+
+bool
+NativeView::GetWifiIpAddress(JNIEnv *env, char *buffer,
+                             size_t max_size) const noexcept
+{
+  const auto string = (jstring)env->CallObjectMethod(obj, getWifiIpAddress_method);
+  if (string == nullptr)
+    return false;
+
+  const bool success = Java::String::CopyTo(env, string, buffer, max_size) != nullptr;
+  env->DeleteLocalRef(string);
+  return success;
 }
 
 void

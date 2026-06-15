@@ -18,6 +18,28 @@
 #include <sys/mount.h>
 #include <errno.h>
 
+static constexpr const char *kobo_config_dir = "/mnt/onboard/XCSoarData/kobo";
+static constexpr const char *kobo_wifi_auto_on_path =
+  "/mnt/onboard/XCSoarData/kobo/wifi_auto_on";
+
+static bool
+WaitForPath(const char *path, unsigned timeout_ms) noexcept
+{
+  if (path == nullptr)
+    return false;
+
+  constexpr unsigned step_ms = 100;
+
+  for (unsigned elapsed = 0; elapsed < timeout_ms; elapsed += step_ms) {
+    if (File::Exists(Path(path)))
+      return true;
+
+    Sleep(step_ms);
+  }
+
+  return File::Exists(Path(path));
+}
+
 template<typename... Args>
 static bool
 InsMod(const char *path, Args... args)
@@ -188,6 +210,50 @@ IsKoboWifiOn()
 }
 
 bool
+IsKoboWifiAutoOn()
+{
+#ifdef KOBO
+  return File::Exists(Path(kobo_wifi_auto_on_path));
+#else
+  return false;
+#endif
+}
+
+bool
+SetKoboWifiAutoOn(bool enabled)
+{
+#ifdef KOBO
+  if (mkdir("/mnt/onboard/XCSoarData", 0777) != 0 && errno != EEXIST)
+    return false;
+  if (mkdir(kobo_config_dir, 0777) != 0 && errno != EEXIST)
+    return false;
+
+  if (enabled)
+    return File::CreateExclusive(Path(kobo_wifi_auto_on_path)) ||
+      File::Exists(Path(kobo_wifi_auto_on_path));
+
+  return File::Delete(Path(kobo_wifi_auto_on_path)) ||
+    !File::Exists(Path(kobo_wifi_auto_on_path));
+#else
+  (void)enabled;
+  return false;
+#endif
+}
+
+void
+ApplyKoboWifiAutoOn()
+{
+#ifdef KOBO
+  if (IsKoboWifiAutoOn()) {
+    if (!IsKoboWifiOn())
+      KoboWifiOn();
+  } else if (IsKoboWifiOn()) {
+    KoboWifiOff();
+  }
+#endif
+}
+
+bool
 KoboWifiOn()
 {
 #ifdef KOBO
@@ -251,7 +317,9 @@ KoboWifiOn()
       "-c", "/etc/wpa_supplicant/wpa_supplicant.conf",
       "-C", "/var/run/wpa_supplicant", "-B", "-D", driver);
 
-  Sleep(2000);
+  StaticString<128> control_path;
+  control_path.Format("/var/run/wpa_supplicant/%s", interface);
+  WaitForPath(control_path.c_str(), 3000);
 
   Start("/sbin/udhcpc", "-S", "-i", interface,
         "-s", "/etc/udhcpc.d/default.script",

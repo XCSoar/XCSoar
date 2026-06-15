@@ -157,6 +157,8 @@ Main()
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
+  ApplyKoboWifiAutoOn();
+
   while (true) {
     int action = Main();
 

@@ -77,8 +77,8 @@ private:
   void OnFriendColorClicked(FlarmColor color);
 
   /* virtual methods from BlackboardListener */
-  void OnGPSUpdate(const MoreData &basic) override {
-    UpdateChanging(basic);
+  void OnGPSUpdate([[maybe_unused]] const MoreData &basic) override {
+    Update();
   }
 };
 

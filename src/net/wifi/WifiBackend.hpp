@@ -127,6 +127,7 @@ public:
         dest[i].kind = WifiNetworkKind::ConnectedNetwork;
         dest[i].can_connect = false;
         dest[i].can_disconnect = true;
+        dest[i].ip_address = status.ip_address;
         dest[i].interface_name = status.interface_name;
       }
 

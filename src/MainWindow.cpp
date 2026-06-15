@@ -1071,6 +1071,11 @@ MainWindow::RunTimer() noexcept
 
   ProcessTimer();
 
+#ifdef ENABLE_OPENGL
+  if (GlueMapWindow *m = GetMapIfActive())
+    m->PollTerrainQuantisationIdle();
+#endif
+
   UpdateGaugeVisibility();
 
   if (CommonInterface::GetUISettings().thermal_assistant_position == UISettings::ThermalAssistantPosition::OFF) {
@@ -1326,16 +1331,18 @@ MainWindow::ActivateMap() noexcept
 
   if (widget != nullptr) {
     KillWidget();
+
+    if (bottom_widget != nullptr) {
+      PixelRect main_rect = GetMainRect();
+      const PixelRect top_rect = GetTopWidgetRect(main_rect, top_widget);
+      main_rect = GetMapRectBelow(main_rect, top_rect);
+      bottom_widget->Show(GetBottomWidgetRect(main_rect, bottom_widget));
+    }
+
     LayoutMapArea();
     map->Show();
     map->SetFocus();
     UpdateMapOverlayButtonLayout();
-
-    if (bottom_widget != nullptr) {
-      assert(HaveBottomWidget());
-      bottom_widget->Show(GetBottomWidgetRect(GetMainRect(),
-                                              bottom_widget));
-    }
 
 #ifndef ENABLE_OPENGL
     if (draw_suspended) {
@@ -1468,8 +1475,7 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
       /* the bottom widget is only visible below the map, but not
          below a custom main widget; see HaveBottomWidget() */
       bottom_widget->Show(bottom_rect);
-    else
-      bottom_widget->Move(bottom_rect);
+    /* else: leave hidden until ActivateMap() shows it */
   }
 
   LayoutMapArea();

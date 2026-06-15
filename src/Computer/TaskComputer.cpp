@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskComputer.hpp"
+#include "Atmosphere/AirDensity.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -54,6 +55,10 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
   ProtectedTaskManager::ExclusiveLease _task(task);
 
   _task->SetTaskBehaviour(settings_computer.task);
+
+  if (settings_computer.polar.glide_polar_task.IsValid())
+    if (const auto altitude = basic.GetAnyAltitude())
+      _task->SetDensityRatio(AirDensityRatio(*altitude));
 
   const AircraftState current_as = ToAircraftState(basic, calculated);
 

@@ -136,6 +136,17 @@ CopyTruncateStringUTF8(std::span<char> dest,
                        const char *src, std::size_t truncate) noexcept;
 
 /**
+ * Return a suffix view containing at most the last #max_chars UTF-8
+ * characters from @p s.
+ *
+ * This does not allocate; it returns a std::string_view into the original
+ * string.
+ */
+[[gnu::pure]]
+std::string_view
+SuffixUTF8(std::string_view s, std::size_t max_chars) noexcept;
+
+/**
  * Decode the next UNICODE character.
  *
  * @param p a null-terminated valid UTF-8 string

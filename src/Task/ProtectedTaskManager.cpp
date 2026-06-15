@@ -30,6 +30,13 @@ ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar) noexcept
 }
 
 void
+ProtectedTaskManager::SetDensityRatio(const double dr) noexcept
+{
+  ExclusiveLease lease(*this);
+  lease->SetDensityRatio(dr);
+}
+
+void
 ProtectedTaskManager::SetPevStartTimeSpan(const TimeSpan &open_time_span) noexcept
 {
   ExclusiveLease lease(*this);

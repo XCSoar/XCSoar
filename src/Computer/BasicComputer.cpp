@@ -329,8 +329,14 @@ GetGliderSinkRate(const MoreData &basic, const DerivedInfo &calculated,
       ? basic.acceleration.g_load
       : 1.;
 
-    return -settings.polar.glide_polar_task.SinkRate(
-      basic.indicated_airspeed, g_load);
+    /* MergeThread runs before CalculationThread updates the shared
+       polar; apply density ratio here so SinkRate() sees TAS at
+       altitude. */
+    GlidePolar polar = settings.polar.glide_polar_task;
+    if (const auto altitude = basic.GetAnyAltitude())
+      polar.SetDensityRatio(AirDensityRatio(*altitude));
+
+    return -polar.SinkRate(basic.true_airspeed, g_load);
   }
 
   return calculated.sink_rate;

@@ -32,10 +32,9 @@ UpdateProfileReferences(Path old_path, Path new_path);
 
 /**
  * One-time migration of legacy flat XCSoarData files into typed
- * subdirectories. Rewrites path keys in the active profile only; other
- * profiles keep legacy paths and rely on ResolveLocalDataFile() when
- * loading files. Already-migrated data directories are skipped via a
- * marker file.
+ * subdirectories. Rewrites path keys in all profile files found in the
+ * configured data paths. Already-migrated data directories are skipped
+ * via a marker file.
  */
 void
 MigrateDataLayoutToSubdirs() noexcept;

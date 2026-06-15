@@ -16,14 +16,11 @@ TextEntryDialog(char *text, size_t width,
   case DialogSettings::TextInputStyle::Keyboard:
     if (HasPointer())
       return TouchTextEntry(text, width, caption, accb, default_shift_state);
-    else {
-      KnobTextEntry(text, width, caption);
-      return true;
-    }
+    else
+      return KnobTextEntry(text, width, caption);
 
   case DialogSettings::TextInputStyle::HighScore:
-    KnobTextEntry(text, width, caption);
-    return true;
+    return KnobTextEntry(text, width, caption);
   }
 
   return false;

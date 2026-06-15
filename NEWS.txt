@@ -1,4 +1,14 @@
 Version 7.45 - not yet released
+* glide computer
+  - Speed-to-fly and task calculations are now altitude-corrected: the glide
+    polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
+    so optimal cruise speeds increase with altitude and best L/D is preserved
+    (#1569)
+  - Task manager glide and safety polars use the same density ratio from baro
+    or GPS altitude
+  - Netto vario (when derived from the polar) and vario speed-to-fly
+    push/pull arrows use true airspeed against the density-scaled polar sink
+    and speed-to-fly
 * android
   - BLE serial ports now support Nordic UART Service (NUS) for e.g. Naviter
     dongles, in addition to HM-10; the protocol is auto-detected at connection
@@ -13,8 +23,21 @@ Version 7.45 - not yet released
     ignores the sentence
   - LXNAV: apply device vario filter time ($LXWP3 variofil) to gauge, map
     vario bar, thermal rose, audio vario and snail-trail colouring
+  - Condor 3: new UDP telemetry driver (Condor3UDP) for Simkits generic UDP
+    output (default port 55278); complements TCP/NMEA Condor3 for MacCready,
+    ballast, attitude, radio, and related fields (#2340)
+  - Glide polar sync in the device dialog is only shown for drivers that
+    implement it (LXNAV)
 * ui
+  - fix crash when switching pages from FLARM radar or thermal assistant back
+    to a map page that has a bottom widget configured (#2583)
+  - airspace warnings: fix crash when the warning clears if the bottom page
+    was already restored
+  - pages config: map overlay and RASP layer rows stay visible on non-map
+    pages (disabled instead of hidden); weather controls and overlay
+    selection are decoupled (#2583)
   - macOS: thick solid lines now render at their correct pixel width #2545
+  - Android: fix spurious outline lines on high-DPI OpenGL displays #1514
   - plane details: WeGlide aircraft type can be configured even when WeGlide
     upload is disabled #2323
   - status dialog, Times: flight time matches takeoff and landing after
@@ -108,6 +131,11 @@ Version 7.45 - not yet released
     pre-filtered to recently-used waypoints; listed in the Gesture Help
     dialog with its own icon #336
 * map
+  - turn back marker: new opt-in overlay (Safety Factors config panel) showing
+    a green triangle along the current track indicating the furthest point from
+    which the active task waypoint or Goto target can still be reached with the
+    current altitude and conditions; only shown during cruise when the target
+    is reachable; persisted via profile key TurnBackMarkerEnabled #1741
   - larger on-map typography: default waypoint text, map-scale readout, and
     topography labels
   - map waypoint icons (bitmap and vector landables): new ``Waypoint icon

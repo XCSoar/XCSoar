@@ -2,9 +2,15 @@ DEBUG ?= y
 DEBUG_GLIBCXX ?= n
 
 ifeq ($(DEBUG),y)
-  OPTIMIZE := -Og
-  ifeq ($(CLANG),n)
-    OPTIMIZE += -funit-at-a-time
+  ifeq ($(HAVE_WIN32),y)
+    # MinGW -Og builds are often flagged as malware by Windows
+    # Defender (PWS:Win32/Banjori.A); -O0 stays debug-friendly.
+    OPTIMIZE := -O0
+  else
+    OPTIMIZE := -Og
+    ifeq ($(CLANG),n)
+      OPTIMIZE += -funit-at-a-time
+    endif
   endif
 else
   OPTIMIZE := -Os

@@ -123,6 +123,9 @@ struct TaskBehaviour {
   /** Route and reach planning */
   RoutePlannerConfig route_planner;
 
+  /** Show a turn-back marker at the point where arrival altitude becomes 0 */
+  bool turn_back_marker_enabled;
+
   void SetDefaults();
 
   /**

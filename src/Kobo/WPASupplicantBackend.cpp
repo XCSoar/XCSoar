@@ -177,6 +177,14 @@ WPASupplicantBackend::GetBackendStatus()
   status.state = !status.bssid.empty()
     ? WifiConnectionState::Connected
     : WifiConnectionState::Disconnected;
+
+  /* Preserve the old behavior: if STATUS does not provide an IP address,
+     look it up from the WiFi interface directly. */
+  if (status.ip_address.empty() &&
+      status.state == WifiConnectionState::Connected)
+    (void)TryFormatWifiInterfaceAddress(interface_name_.c_str(),
+                                        status.ip_address);
+
   return status;
 }
 

@@ -370,6 +370,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/MapItemListRenderer.cpp \
 	$(SRC)/Renderer/OZPreviewRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
+	$(SRC)/Renderer/TurnBackMarkerRenderer.cpp \
 	$(SRC)/Renderer/TrafficRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/Renderer/UnitSymbolRenderer.cpp \
