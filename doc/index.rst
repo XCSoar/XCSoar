@@ -10,6 +10,7 @@ XCSoar
    rebranding
    policy
    architecture
+   data_directory
    input_events
    lua
    mapfile

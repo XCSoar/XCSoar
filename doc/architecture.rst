@@ -73,7 +73,7 @@ section tries to give a rough overview where you can find what.
    in :file:`Storage/`
 
 -  :file:`Repository/`: filename patterns and typed data directories
-   (:file:`FileType`)
+   (:file:`FileType`); see :doc:`data_directory` for the on-disk layout
 
 -  :file:`Storage/`: removable storage enumeration, hotplug monitors, and
    the :file:`StorageDevice` abstraction (platform code in
