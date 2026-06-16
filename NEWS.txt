@@ -272,6 +272,11 @@ Version 7.45 - not yet released
   - memory canvas: fix painting when list rows or edit fields are partially
     off-screen while scrolling (no black squares; safer clipping of subcanvas
     and list blits) #2293
+* Windows
+  - add installer for the OpenGL Windows version (64-bit and 32-bit); zip
+    download remains available for a portable install
+  - deprecate the legacy single-file Windows executable; use the OpenGL
+    version instead — the legacy build will be removed in a future release
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
