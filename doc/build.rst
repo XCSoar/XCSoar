@@ -229,21 +229,56 @@ Compiling for Windows
 To cross-compile to (desktop) Windows, you need
 `Mingw-w64 <http://mingw-w64.org>`__.
 
-The following command installs it on Debian::
+On Debian, install the cross compiler (and NSIS if you need the installer)::
 
-  sudo apt-get install g++-mingw-w64
+  sudo apt-get install g++-mingw-w64 nsis
 
-To compile for 64-bit Windows with OpenGL support, run::
+A minimal 64-bit OpenGL build::
 
   make TARGET=WIN64OPENGL
 
 Use one of the following targets:
 
 ================ =================================================
-``PC``           32-bit Windows (i686), GDI legacy build
-``WIN64``        Windows x64 (amd64 / x86-64), GDI legacy build
-``WIN64OPENGL``  Windows x64 (amd64 / x86-64), OpenGL via ANGLE
+``WIN64OPENGL``  Windows x64 (amd64 / x86-64), OpenGL via ANGLE (recommended)
+``WIN32OPENGL``  Windows 32-bit (i686), OpenGL via ANGLE (recommended)
+``PC``           32-bit Windows (i686), GDI legacy build (**deprecated**)
+``WIN64``        Windows x64 (amd64 / x86-64), GDI legacy build (**deprecated**)
 ================ =================================================
+
+The GDI targets ``PC`` and ``WIN64`` are deprecated and will be removed in a
+future release. New development and releases focus on the OpenGL targets
+above.
+
+Typical OpenGL build commands::
+
+  make -j$(nproc) TARGET=WIN64OPENGL USE_CCACHE=y everything
+  make -j$(nproc) TARGET=WIN32OPENGL USE_CCACHE=y everything
+
+To build the NSIS installer as well (64-bit or 32-bit)::
+
+  make -j$(nproc) TARGET=WIN64OPENGL USE_CCACHE=y everything installer
+
+OpenGL Windows builds use SDL2 and GLES2 via ANGLE (D3D11 backend). ANGLE
+libraries are fetched automatically on first build by
+:file:`windows/fetch-angle-from-github.sh` into the target output tree (see
+:file:`build/angle.mk`).
+
+Build outputs (64-bit example; 32-bit uses ``WIN32OPENGL`` and ``x86`` ANGLE
+arch instead):
+
+- ``output/WIN64OPENGL/bin/XCSoar.exe`` — main executable
+- ``output/WIN64OPENGL/bin/XCSoar.zip`` — portable package (exe, ANGLE DLLs,
+  bundled fonts)
+- ``output/WIN64OPENGL/bin/XCSoar-<version>-WIN64OPENGL-Installer.exe`` —
+  NSIS installer (``installer`` target only)
+- ``output/WIN64OPENGL/bin/libEGL.dll``,
+  ``output/WIN64OPENGL/bin/libGLESv2.dll`` — ANGLE runtime (also inside zip
+  and installer)
+
+Some features are compiled only when ``OPENGL=y`` (all OpenGL Windows targets),
+for example EDL weather and MbTiles map overlays. The deprecated GDI builds do
+not include them.
 
 Compiling for iOS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -486,17 +521,23 @@ Defaults shown are from the build system (they can be overridden with
    - Windows 32-bit (i686)
    - no
    - GDI
-   - MinGW-w64 cross-compile target.
+   - MinGW-w64 cross-compile target. **Deprecated**; use ``WIN32OPENGL``.
  * - ``WIN64``
    - Windows 64-bit (x86_64)
    - no
    - GDI
-   - Flavor of ``PC`` with 64-bit toolchain.
+   - Flavor of ``PC`` with 64-bit toolchain. **Deprecated**; use
+     ``WIN64OPENGL``.
  * - ``WIN64OPENGL``
    - Windows 64-bit (x86_64)
    - yes
    - OpenGL ES (ANGLE)
-   - Windows 64-bit build with SDL and OpenGL ES
+   - Recommended Windows 64-bit build with SDL and OpenGL ES.
+ * - ``WIN32OPENGL``
+   - Windows 32-bit (i686)
+   - yes
+   - OpenGL ES (ANGLE)
+   - Recommended Windows 32-bit build with SDL and OpenGL ES.
  * - ``ANDROID``
    - Android ARMv7
    - no
