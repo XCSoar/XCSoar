@@ -12,6 +12,8 @@
 #include "lib/fmt/ToBuffer.hxx"
 
 #include <algorithm> // for std::clamp()
+#include <array>
+#include <cstdlib> // for std::abs()
 
 static constexpr double DELTA_V_STEP = 4.0;
 static constexpr double DELTA_V_LIMIT = 16.0;
@@ -133,9 +135,13 @@ inline
 GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
   :ballast(look, rc), bugs(look, rc)
 {
-  nlength0 = Layout::Scale(15);
-  nlength1 = Layout::Scale(6);
-  nwidth = Layout::Scale(4);
+  // needle sits between minor and major tick:
+  // tip at inner end of minor tick, base at inner end of major tick
+  const int tick_minor = Layout::GetTextPadding() * 4;
+  const int tick_major = Layout::GetTextPadding() * 8;
+  nlength1 = tick_minor; // tip = inner end of minor tick
+  nlength0 = tick_major; // base = inner end of major tick (needle length = tick_minor)
+  nwidth = Layout::GetTextPadding() * 2;
   nline = Layout::Scale(8);
 
   offset = rc.GetMiddleRight();
@@ -169,75 +175,118 @@ TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset) noexcept
   return { pt.x + offset.x, WidthToHeight(pt.y) + offset.y + 1 };
 }
 
+void
+GaugeVario::RenderVarioBar(Canvas &canvas, const PixelRect &rc, int ival) noexcept
+{
+  if (ival == 0) return;
+
+  const int x_radius = rc.GetWidth() - Layout::GetTextPadding();
+  const int bar_width = Layout::GetTextPadding() * 4; // same as tick_length_minor
+
+  const int angle_min = std::min(0, ival);
+  const int angle_max = std::max(0, ival);
+  // ring sector: outer arc (radius x_radius) forward + inner arc (radius x_radius - bar_width) backward
+  std::array<BulkPixelPoint, 400> poly;
+  std::size_t n = 0;
+
+  // outer arc: angle_min to angle_max
+  for (int i = angle_min; i <= angle_max; ++i) {
+    const FastIntegerRotation r{Angle::Degrees(i)};
+    const auto pt = TransformRotatedPoint(r.Rotate({-x_radius, 0}), geometry.offset);
+    poly[n++] = BulkPixelPoint{pt.x, pt.y};
+  }
+  // inner arc: angle_max back to angle_min
+  for (int i = angle_max; i >= angle_min; --i) {
+    const FastIntegerRotation r{Angle::Degrees(i)};
+    const auto pt = TransformRotatedPoint(r.Rotate({-x_radius + bar_width, 0}), geometry.offset);
+    poly[n++] = BulkPixelPoint{pt.x, pt.y};
+  }
+
+  canvas.SelectNullPen();
+  canvas.Select(ival > 0 ? look.lift_brush : look.sink_brush);
+  canvas.DrawPolygon(poly.data(), n);
+}
+
 inline void
 GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
 {
-  canvas.Clear(look.background_color);
 
-  canvas.Select(look.arc_pen);
+  const int x_radius = rc.GetWidth() - Layout::GetTextPadding();
 
-  std::array<BulkPixelPoint, 21> arc;
-
-  const int arc_padding = look.arc_label_font.GetHeight();
-
-  const int x_radius = rc.GetWidth() - arc_padding;
-  const int y_radius = WidthToHeight(x_radius);
-
-  for (std::size_t i = 0; i < arc.size(); ++i) {
-    const unsigned angle = INT_ANGLE_RANGE / 2
-      + i * INT_ANGLE_RANGE / 2 / (arc.size() - 1);
-    const PixelPoint delta(ISINETABLE[NormalizeIntAngle(angle)] * x_radius / 1024,
-                           -ISINETABLE[NormalizeIntAngle(angle + INT_QUARTER_CIRCLE)] * y_radius / 1024);
-
-    arc[i] = geometry.offset + delta;
-  }
-
-  canvas.DrawPolyline(arc.data(), arc.size());
-
-  canvas.Select(look.tick_pen);
   canvas.Select(look.arc_label_font);
   canvas.SetTextColor(look.dimmed_text_color);
   canvas.SetBackgroundTransparent();
 
-  int tick_value_step = 1;
   const auto &unit_descriptor =
     Units::unit_descriptors[(std::size_t)Units::current.vertical_speed_unit];
   const double unit_factor = unit_descriptor.factor_to_user;
 
+  // major_step in user units; minor ticks at half that interval
+  int major_step;
   switch (Units::current.vertical_speed_unit) {
   case Unit::FEET_PER_MINUTE:
-    tick_value_step = 200;
+    major_step = 200;
     break;
-
-  default:
+  case Unit::KNOTS:
+    major_step = 2;
+    break;
+  default: // m/s
+    major_step = 1;
     break;
   }
 
-  const Angle tick_angle_step = Angle::QuarterCircle() * tick_value_step
+  const Angle major_angle_step = Angle::QuarterCircle() * major_step
     / unit_factor / GAUGEVARIORANGE;
+  const Angle minor_angle_step = major_angle_step / 2;
 
-  const int n_ticks = GAUGEVARIORANGE / (tick_value_step / unit_factor);
+  const int n_major = GAUGEVARIORANGE / (major_step / unit_factor);
 
-  const int tick_length = Layout::GetTextPadding() * 4;
+  const int tick_length_major = Layout::GetTextPadding() * 8;
+  const int tick_length_minor = Layout::GetTextPadding() * 4;
 
-  const IntPoint2D tick_start{1 - x_radius, 0};
-  const IntPoint2D tick_end{-tick_length - x_radius, 0};
-  const IntPoint2D label_center{-x_radius - arc_padding / 2 - tick_length, 0};
+  // ticks start at the outer edge (where arc was) and go inward
+  const IntPoint2D major_outer{-x_radius, 0};
+  const IntPoint2D major_inner{-x_radius + tick_length_major, 0};
+  const IntPoint2D minor_outer{-x_radius, 0};
+  const IntPoint2D minor_inner{-x_radius + tick_length_minor, 0};
+  const IntPoint2D label_center{-x_radius + tick_length_major + (int)Layout::GetTextPadding() * 3, 0};
 
-  for (int i = -n_ticks; i < n_ticks; ++i) {
-    Angle angle = tick_angle_step * i;
+  // draw minor (half-step) ticks
+  canvas.Select(look.half_tick_pen);
+  for (int i = -n_major; i < n_major; ++i) {
+    const Angle angle = major_angle_step * i + minor_angle_step;
+    const FastIntegerRotation r{angle};
+    canvas.DrawLine(TransformRotatedPoint(r.Rotate(minor_outer), geometry.offset),
+                    TransformRotatedPoint(r.Rotate(minor_inner), geometry.offset));
+  }
+
+  // draw major ticks as filled rectangles (sharp square ends), including extremes
+  const int major_half_w = 1; // 2px total width, sharp rectangular tick
+  canvas.SelectNullPen();
+  canvas.SelectBlackBrush();
+  if (look.inverse)
+    canvas.SelectWhiteBrush();
+  for (int i = -n_major; i <= n_major; ++i) {
+    const Angle angle = major_angle_step * i;
     const FastIntegerRotation r{angle};
 
-    canvas.DrawLine(TransformRotatedPoint(r.Rotate(tick_start),
-                                          geometry.offset),
-                    TransformRotatedPoint(r.Rotate(tick_end),
-                                          geometry.offset));
+    const IntPoint2D p0{-x_radius,                  -major_half_w};
+    const IntPoint2D p1{-x_radius + tick_length_major, -major_half_w};
+    const IntPoint2D p2{-x_radius + tick_length_major,  major_half_w};
+    const IntPoint2D p3{-x_radius,                   major_half_w};
+
+    const BulkPixelPoint rect[4] = {
+      TransformRotatedPoint(r.Rotate(p0), geometry.offset),
+      TransformRotatedPoint(r.Rotate(p1), geometry.offset),
+      TransformRotatedPoint(r.Rotate(p2), geometry.offset),
+      TransformRotatedPoint(r.Rotate(p3), geometry.offset),
+    };
+    canvas.DrawPolygon(rect, 4);
 
     char label[16];
-    StringFormatUnsafe(label, "%d", i * tick_value_step);
+    StringFormatUnsafe(label, "%d", std::abs(i * major_step));
 
     const auto label_size = canvas.CalcTextSize(label);
-
     const auto label_position = TransformRotatedPoint(r.Rotate(label_center),
                                                       geometry.offset)
       - label_size / 2U;
@@ -251,10 +300,39 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
 
-  if (!IsPersistent() || background_dirty) {
-    RenderBackground(canvas, rc);
-    background_dirty = false;
+  auto vval = Basic().VarioOutputFilterActive()
+    ? (Basic().brutto_vario_available
+        ? Basic().FilteredBruttoVario()
+        : 0.)
+    : Basic().brutto_vario;
+
+  if (!needle_initialised) {
+    MakeAllPolygons();
+    needle_initialised = true;
   }
+
+  const int ival = ValueToNeedlePos(vval);
+
+  int ival_av = 0;
+  int ival_av_thermal = 0;
+  if (Settings().show_thermal_average_needle)
+    ival_av_thermal = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
+  if (Settings().show_average_needle) {
+    ival_av = ValueToNeedlePos(!Calculated().circling
+                               ? Calculated().netto_average
+                               : Calculated().average);
+  }
+
+  canvas.Clear(look.background_color);
+
+  // draw colored vario bar in the background (behind ticks)
+  RenderVarioBar(canvas, rc, ival);
+
+  // draw scale (ticks + labels) on top of bar
+  RenderBackground(canvas, rc);
+
+  // 4. draw UI overlays
+  dirty = true; // force redraw of all value fields
 
   if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
@@ -281,54 +359,12 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
   if (Settings().show_bugs)
     RenderBugs(canvas);
 
-  dirty = false;
-  int ival, sval, ival_av = 0;
-  int ival_av_thermal = 0;
-  if (Settings().show_thermal_average_needle) {
-      ival_av_thermal = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
+  if (Settings().show_gross) {
+    auto vvaldisplay = std::clamp(Units::ToUserVSpeed(vval), -99.9, 99.9);
+    RenderValue(canvas, geometry.gross, gross_di, vvaldisplay, "Gross");
   }
 
-  auto vval = Basic().VarioOutputFilterActive()
-    ? (Basic().brutto_vario_available
-        ? Basic().FilteredBruttoVario()
-        : 0.)
-    : Basic().brutto_vario;
-  ival = ValueToNeedlePos(vval);
-  sval = ValueToNeedlePos(Calculated().sink_rate);
-  if (Settings().show_average_needle) {
-    if (!Calculated().circling)
-      ival_av = ValueToNeedlePos(Calculated().netto_average);
-    else
-      ival_av = ValueToNeedlePos(Calculated().average);
-  }
-
-  // clear items first
-
-  if (Settings().show_average_needle) {
-    if (!IsPersistent() || ival_av != ival_last)
-      RenderNeedle(canvas, ival_last, true, true);
-
-    ival_last = ival_av;
-  }
-
-  if (!IsPersistent() || (sval != sval_last) || (ival != vval_last))
-    RenderVarioLine(canvas, vval_last, sval_last, true);
-
-  sval_last = sval;
-  if (Settings().show_thermal_average_needle) {
-      if (!IsPersistent() || ival_av_thermal != ival_av_last)
-          RenderNeedle(canvas, ival_av_last, false, true);
-
-      ival_av_last = ival_av_thermal;
-  } else {
-      if (!IsPersistent() || ival != vval_last)
-        RenderNeedle(canvas, vval_last, false, true);
-
-      vval_last = ival;
-  }
-
-  // now draw items
-  RenderVarioLine(canvas, ival, sval, false);
+  // draw needle on top of everything
   if (Settings().show_average_needle)
     RenderNeedle(canvas, ival_av, true, false);
 
@@ -336,16 +372,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
                Settings().show_thermal_average_needle ? ival_av_thermal : ival,
                false, false);
 
-  if (Settings().show_gross) {
-    auto vvaldisplay = std::clamp(Units::ToUserVSpeed(vval),
-                                  -99.9, 99.9);
-
-    RenderValue(canvas, geometry.gross, gross_di,
-                vvaldisplay,
-                "Gross");
-  }
-
-  RenderZero(canvas);
+  dirty = false;
 }
 
 void
