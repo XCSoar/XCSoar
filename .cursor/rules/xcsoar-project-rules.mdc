@@ -1063,6 +1063,7 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - Check for accidentally committed debug code or temporary files
 - Verify all user-visible changes have corresponding NEWS.txt entries
 - When a NEWS.txt entry relates to a GitHub issue, include the issue number at the end (e.g., `#2145`)
+- Follow `.cursor/rules/news.txt.mdc` for NEWS.txt wording and audience
 - When adding Android drawable resources, check both `build/android.mk` and `build/android_bundle.mk`
 
 ## Common Mistakes and How to Avoid Them

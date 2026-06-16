@@ -94,6 +94,33 @@ add/modify/remove features in the same patch.
 Don’t rewrite code unless you need to. Migrate incrementally to a new
 concept. Keep patches small and easy to understand.
 
+Release notes (``NEWS.txt``)
+-----------------------------
+
+Add entries at the top of ``NEWS.txt`` (under the current unreleased version).
+
+**User-facing sections** (``* Windows``, ``* ui``, ``* android``, …): changes
+pilots or installers would notice. Prefer plain language in **new** bullets
+(“OpenGL Windows version”, “installer”); avoid build target names and internal
+terms (GDI, NSIS) where a user phrase exists.
+
+**``* documentation`` section**: updates to the user manual, installation
+guide, or other documentation end users read (see 7.43+ in ``NEWS.txt``).
+
+**``* development`` section**: build system, CI, contributor documentation
+(e.g. ``doc/build.rst``), and hacking APIs — technical wording and target names
+are appropriate. Prefix bullets with a topic (``build system:``,
+``documentation:``, …), as in the 7.44 block.
+
+- Append a GitHub issue reference (``#1234``) at the end of the bullet when
+  the change relates to an issue.
+- Omit pure refactors or CI tweaks that are not worth noting anywhere.
+- Section names in ``NEWS.txt`` are historically inconsistent (``* ui`` vs
+  ``* user interface``); match the current unreleased release block.
+
+See also ``.cursor/rules/news.txt.mdc`` for wording examples and a fuller
+checklist.
+
 Code Style
 ==========
 
