@@ -1,0 +1,142 @@
+---
+description: Style and audience for NEWS.txt release notes
+globs:
+  - "NEWS.txt"
+alwaysApply: false
+---
+
+# NEWS.txt release notes
+
+`NEWS.txt` ships with XCSoar (Credits dialog, release packages). It is a
+**cumulative** changelog: the top uses current style; older entries at the
+bottom retain legacy formats (prose lists, “Changes from …”, contributor
+attributions). **New entries** always go at the top under the current
+unreleased version.
+
+## When to add an entry
+
+- Under **`Version X.Y - not yet released`** at the top of the file
+- **User-visible** changes → platform/feature sections (`* Windows`, `* ui`, …)
+- **Manual / user documentation** users would notice → `* documentation` (see
+  below)
+- **Build, CI, contributor docs, scripting APIs** → `* development` (see below)
+- Pure refactors or CI tweaks with nothing worth noting: omit
+
+## Structure
+
+```text
+Version X.Y - not yet released
+* section
+  - bullet describing the change
+* documentation
+  - clarify task speed calculation section
+* development
+  - build system: ...
+  - documentation: ...
+```
+
+- **Version line**: `Version X.Y - YYYY-MM-DD` or `- not yet released`
+- **Section headers**: `* android`, `* Windows`, `* ui`, … — lowercase after
+  `*` unless a proper noun (Windows, macOS, iOS, Android, Linux, Kobo)
+- **Bullets**: start with a verb (`add`, `fix`, `deprecate`, `support`, …)
+- **Issue references**: append ` #1234` at end when related to a GitHub issue
+  (project practice since 2012)
+
+### Section naming (historical mess — pick one style per release)
+
+The file mixes `* user interface` and `* ui`, `* android` and `* Android`,
+`* devices` and `* Devices`. For **new** entries in a release block, match the
+sections already used in that block; prefer lowercase generic names (`* ui`,
+`* devices`, `* android`) unless the release already uses another form.
+
+## User-facing sections
+
+Platform and feature sections (`* Windows`, `* ui`, `* devices`, `* map`, …).
+Aim for language pilots understand when **adding new** bullets. Older entries
+often use technical terms (`targetSdkVersion`, driver names) — that is fine to
+leave; do not rewrite history.
+
+### Wording — prefer for new user bullets
+
+- Plain language: “OpenGL Windows version”, “installer”, “legacy
+  single-file executable”
+- What the user gets or should do: “use the OpenGL version instead”
+- Match tone of other bullets in the same release block
+
+### Wording — avoid in new user bullets when a plain phrase exists
+
+- Build target names: `WIN64OPENGL`, `WIN32OPENGL`, `PC`, `WIN64`, `TARGET=…`
+- Internal stack terms users do not see: GDI, NSIS, ANGLE, SDL, `USE_*`
+- Source paths, class names, “targets” in the build-system sense
+
+Driver names, file formats, and platform APIs are OK when that is what the user
+configures or sees.
+
+### Examples
+
+```text
+# BAD (* Windows)
+- add NSIS installer for OpenGL builds (WIN64OPENGL, WIN32OPENGL)
+- deprecate GDI legacy builds (targets PC, WIN64)
+
+# GOOD (* Windows)
+- add installer for the OpenGL Windows version (64-bit and 32-bit)
+- deprecate the legacy single-file Windows executable; use the OpenGL
+  version instead
+```
+
+## `* documentation` section
+
+Use for **end-user or pilot documentation** shipped or maintained with the
+release: manual chapters, installation instructions, Lua reference updates users
+read, clarifications in the built-in help. Established in 7.43+ as a top-level
+section.
+
+```text
+* documentation
+  - clarify task speed calculation section
+  - lua reference updated
+```
+
+Do not use this for `doc/build.rst` or other contributor-only docs — those go
+under `* development` with a `documentation:` prefix.
+
+## `* development` section
+
+Use for people **building** or **hacking on** XCSoar. Introduced in 7.44 as a
+consolidated block; before that, similar items appeared as `* build system`,
+top-level `build system:` bullets, or inside platform sections.
+
+Technical terms and target names are fine here.
+
+- Prefix bullets with a topic: `build system:`, `documentation:`, `iOS:`,
+  `Linux:`, … (match 7.44 style)
+- Examples: new targets, makefile/CI changes, `doc/build.rst`, dev guides,
+  contributor scripting APIs
+
+```text
+* development
+  - build system: add WIN32OPENGL target and NSIS installer target
+  - documentation: document OpenGL Windows cross-compile and outputs
+```
+
+Legacy: a standalone `* build system` section still exists at Version 6.0 in
+the file; prefer `* development` with a `build system:` prefix for new entries.
+
+## Avoid duplication
+
+Do not repeat the same change in multiple sections unless one line is
+user-facing and another adds separate technical detail (e.g. installer in
+`* Windows`, `build system: WIN64OPENGL installer target` in `* development`).
+
+## Deprecations and removals
+
+- User sections: what is going away and what to use instead, in user terms
+- `* development`: target names and flags OK (e.g. deprecate `PC` / `WIN64`
+  GDI targets)
+
+## Platform notes (user sections)
+
+- Prefer “OpenGL Windows version” over naming the renderer stack
+- “Legacy” or “single-file” `.exe` is clearer than “GDI build”
+- Mention installer and zip when both are shipped
