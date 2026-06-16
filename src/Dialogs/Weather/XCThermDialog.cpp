@@ -25,6 +25,7 @@
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "Interface.hpp"
+#include "UIState.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
@@ -431,6 +432,9 @@ XCThermWidget::ActivateClicked()
   }
 
   SaveSettings();
+
+  /* New activation must not reuse the previous cursor-bar session. */
+  CommonInterface::SetUIState().weather.xctherm.cursor_initialized = false;
 
   const unsigned page_index = PageActions::EnsureWeatherOverlayPage(
     PageLayout::Overlay::XCTHERM);

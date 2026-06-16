@@ -155,7 +155,7 @@ XCThermControlsModel::OnGPSUpdate(const MoreData &basic) noexcept
   double gps_alt = basic.gps_altitude_available ? basic.gps_altitude : -1.0;
   double baro_alt = basic.baro_altitude_available ? basic.baro_altitude : -1.0;
 
-  unsigned utc_hour = 12;
+  unsigned utc_hour = XCTHERM_DEFAULT_UTC_HOUR;
   unsigned utc_minute = 0;
   if (basic.date_time_utc.IsPlausible()) {
     utc_hour = basic.date_time_utc.hour;
