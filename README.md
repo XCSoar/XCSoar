@@ -10,7 +10,7 @@ height="56"></a>
 <a href="https://apps.apple.com/app/xcsoar/id6741046464"><img
 src="Data/badges/apple-app-store-padded.svg" alt="App Store"
 height="56"></a>
-<a href="https://download.xcsoar.org/releases/latest/WIN64/"><img
+<a href="https://download.xcsoar.org/releases/latest/WIN64OPENGL/"><img
 src="Data/badges/windows-microsoft-store-padded.svg"
 alt="Windows Download" height="56"></a>
 <a href="https://download.xcsoar.org/releases/latest/DEBIAN/"><img
