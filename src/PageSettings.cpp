@@ -10,6 +10,20 @@
 #include <algorithm>
 
 void
+PageLayout::SetWeatherOverlay(Overlay overlay, int rasp_field) noexcept
+{
+  if (!IsMapMain())
+    main = Main::MAP;
+
+  this->overlay = overlay;
+
+  if (overlay == Overlay::RASP && rasp_field >= 0)
+    this->rasp_field = rasp_field;
+
+  Normalise();
+}
+
+void
 PageLayout::Normalise() noexcept
 {
   if (main == Main::EDL_MAP) {

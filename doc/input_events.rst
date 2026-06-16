@@ -529,12 +529,13 @@ Built-in modes
 - ``mc`` -- MacCready adjustment mode. Entered from ``mode=default`` via
   the ``Mode mc`` event (default key ``3``). Stick UP/DOWN adjust MC;
   RETURN toggles auto/manual MC; ESCAPE returns to ``default``.
-- ``weather`` -- weather overlay cursor bar mode. Entered automatically
-  when the active map page has a weather overlay (EDL, RASP, or XCTherm)
-  and the page bottom widget is set to weather controls
-  (**Config > System > Pages > Bottom widget**). Stick UP/DOWN step
-  altitude/level, LEFT/RIGHT step time, RETURN toggles time auto/manual,
-  APP6 toggles altitude auto/manual, ESCAPE returns to ``default``.
+- ``weather`` -- weather overlay cursor bar mode. Enter from the quick
+  menu (**Menu → Weather**) or the ``Mode weather`` event. Stick UP/DOWN
+  step altitude/level, LEFT/RIGHT step time, RETURN toggles time
+  auto/manual, APP6 toggles altitude auto/manual, ESCAPE returns to
+  ``default``. Only affects map pages with a weather overlay (EDL, RASP,
+  or XCTherm) and weather controls in the bottom widget
+  (**Config > System > Pages > Bottom widget**).
   See :ref:`weather-overlay-mode` below.
 - ``wptimg`` -- the waypoint details dialog is on an **image** page;
   key bindings in this map control zoom and pan of the image (the
@@ -550,10 +551,10 @@ Weather overlay mode (``mode=weather``)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When a map page displays EDL, RASP, or XCTherm overlay controls in
-the bottom cursor bar, XCSoar switches to ``mode=weather`` so stick
-and button bindings can adjust forecast time and altitude without
-leaving the map. Leaving the page (or pressing ESCAPE / the Exit
-label) returns to ``default``.
+the bottom cursor bar, use **Menu → Weather** (or ``Mode weather``) to
+enter ``mode=weather`` so stick and button bindings can adjust forecast
+time and altitude without leaving the map. Leaving the page (or pressing
+ESCAPE / the Exit label) returns to ``default``.
 
 The built-in stick bindings in :file:`Data/Input/default.xci` are:
 
@@ -584,8 +585,7 @@ On-screen labels (locations 1, 6--10) mirror these actions. RASP
 pages ignore altitude commands; only the time row is active.
 
 The same ``WeatherOverlay`` arguments can be bound in any mode (for
-example from ``mode=default``) if you prefer not to use automatic
-``mode=weather`` entry.
+example from ``mode=default``) if you prefer not to use ``mode=weather``.
 
 Labels
 ~~~~~~

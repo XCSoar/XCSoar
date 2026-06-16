@@ -104,7 +104,7 @@ public:
       const unsigned n = GetList().GetLength();
       if (n < PageSettings::MAX_PAGES) {
         auto &page = settings.pages[n];
-        page = PageLayout::Default();
+        page = PageLayout::NewPage();
         GetList().SetLength(n + 1);
         GetList().SetCursorIndex(n);
       }

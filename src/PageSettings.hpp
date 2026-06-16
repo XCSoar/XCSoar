@@ -141,6 +141,20 @@ struct PageLayout
   }
 
   /**
+   * Blank page for Config → Look → Pages → Add and programmatic page
+   * creation (same as #Default()).
+   */
+  static constexpr PageLayout NewPage() noexcept {
+    return Default();
+  }
+
+  /**
+   * Configure a map page for @p overlay (sets bottom weather controls
+   * via #Normalise()).
+   */
+  void SetWeatherOverlay(Overlay overlay, int rasp_field = -1) noexcept;
+
+  /**
    * Returns the default page that will show the "Aux" InfoBoxes.
    */
   static constexpr PageLayout Aux() noexcept {

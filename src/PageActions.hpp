@@ -46,8 +46,8 @@ namespace PageActions
   void GoToPage(unsigned index) noexcept;
 
   /**
-   * Ensure a map page exists for @p overlay.  Assigns the first
-   * overlay to page 0; each additional overlay type gets a new page.
+   * Ensure a map page exists for @p overlay.  Appends a page with the
+   * same defaults as Config → Look → Pages → Add when a slot is free.
    *
    * @return page index, or #PageSettings::MAX_PAGES when no slot remains
    */

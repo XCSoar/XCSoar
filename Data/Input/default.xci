@@ -1216,6 +1216,13 @@ location=4
 
 mode=Menu
 type=key
+data=5
+event=Mode weather
+label=Weather
+location=5
+
+mode=Menu
+type=key
 data=9
 event=LockScreen
 event=Mode default

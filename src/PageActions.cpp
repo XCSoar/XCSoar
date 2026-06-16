@@ -72,13 +72,6 @@ namespace PageActions {
   static unsigned
   FindPageWithOverlay(const PageSettings &settings,
                       PageLayout::Overlay overlay) noexcept;
-
-  static unsigned
-  CountWeatherOverlayPages(const PageSettings &settings) noexcept;
-
-  static void
-  AssignOverlayToLayout(PageLayout &layout, PageLayout::Overlay overlay,
-                        int rasp_field) noexcept;
 };
 
 unsigned
@@ -90,33 +83,6 @@ PageActions::FindPageWithOverlay(const PageSettings &settings,
       return i;
 
   return PageSettings::MAX_PAGES;
-}
-
-unsigned
-PageActions::CountWeatherOverlayPages(const PageSettings &settings) noexcept
-{
-  unsigned count = 0;
-  for (unsigned i = 0; i < settings.n_pages; ++i)
-    if (settings.pages[i].UsesWeatherOverlay())
-      ++count;
-
-  return count;
-}
-
-void
-PageActions::AssignOverlayToLayout(PageLayout &layout,
-                                   PageLayout::Overlay overlay,
-                                   int rasp_field) noexcept
-{
-  if (!layout.IsMapMain())
-    layout.main = PageLayout::Main::MAP;
-
-  layout.overlay = overlay;
-
-  if (overlay == PageLayout::Overlay::RASP && rasp_field >= 0)
-    layout.rasp_field = rasp_field;
-
-  layout.Normalise();
 }
 
 unsigned
@@ -136,18 +102,18 @@ PageActions::EnsureWeatherOverlayPage(PageLayout::Overlay overlay,
   }
 
   unsigned target;
-  if (CountWeatherOverlayPages(settings) == 0) {
-    target = 0;
-    if (!settings.pages[target].IsDefined())
-      settings.pages[target] = PageLayout::Default();
-    AssignOverlayToLayout(settings.pages[target], overlay, rasp_field);
-  } else if (settings.n_pages < PageSettings::MAX_PAGES) {
+  if (settings.n_pages < PageSettings::MAX_PAGES) {
     target = settings.n_pages;
-    settings.pages[target] = PageLayout::Default();
-    AssignOverlayToLayout(settings.pages[target], overlay, rasp_field);
     settings.n_pages = target + 1;
-  } else
-    return PageSettings::MAX_PAGES;
+  } else {
+    /* All page slots are in use — replace page 0 when it has no overlay. */
+    if (settings.pages[0].UsesWeatherOverlay())
+      return PageSettings::MAX_PAGES;
+    target = 0;
+  }
+
+  settings.pages[target] = PageLayout::NewPage();
+  settings.pages[target].SetWeatherOverlay(overlay, rasp_field);
 
   Profile::Save(Profile::map, settings.pages[target], target);
   return target;
@@ -595,10 +561,7 @@ PageActions::LoadLayout(const PageLayout &layout)
   ApplyPageOverlay(active);
   LoadBottom(active);
 
-  if (active.bottom == PageLayout::Bottom::EDL_CONTROLS &&
-      active.UsesWeatherOverlay())
-    InputEvents::setMode("weather");
-  else if (InputEvents::IsMode("weather"))
+  if (!active.UsesWeatherOverlay() && InputEvents::IsMode("weather"))
     InputEvents::setMode(InputEvents::MODE_DEFAULT);
 
   ActionInterface::UpdateDisplayMode();
