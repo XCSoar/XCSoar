@@ -83,6 +83,13 @@ struct WeatherUIState {
 
   bool rasp_page_entered;
 
+  /**
+   * When true, the RASP dedicated-page overlay is preserved across a
+   * temporary pan (full-screen map) instead of being cleared.  Mirrors
+   * EDLWeatherUIState::dedicated_page_suspended_for_pan.
+   */
+  bool rasp_page_suspended_for_pan;
+
   EDLWeatherUIState edl;
 
   void Clear() noexcept {
@@ -90,6 +97,7 @@ struct WeatherUIState {
     time = BrokenTime::Invalid();
     time_auto_advance = true;
     rasp_page_entered = false;
+    rasp_page_suspended_for_pan = false;
     edl.Clear();
   }
 
@@ -113,5 +121,23 @@ struct WeatherUIState {
   void ResetRaspForDedicatedPage() noexcept {
     if (time_auto_advance)
       time = BrokenTime::Invalid();
+  }
+
+  /**
+   * Suspend the RASP dedicated page while panning, so the overlay is
+   * kept instead of being torn down.  Only takes effect if a RASP page
+   * is currently entered.
+   */
+  void SuspendRaspForPan() noexcept {
+    rasp_page_suspended_for_pan = rasp_page_entered;
+  }
+
+  void ResumeRaspAfterPan() noexcept {
+    rasp_page_suspended_for_pan = false;
+  }
+
+  [[gnu::pure]]
+  bool IsRaspSuspendedForPan() const noexcept {
+    return rasp_page_suspended_for_pan;
   }
 };

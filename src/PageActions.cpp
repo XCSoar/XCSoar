@@ -69,7 +69,8 @@ void
 PageActions::ClearPageOverlays() noexcept
 {
   WeatherUIState &weather = CommonInterface::SetUIState().weather;
-  weather.map = -1;
+  if (!weather.IsRaspSuspendedForPan())
+    weather.map = -1;
 
 #ifdef HAVE_EDL
   if (!EDL::IsDedicatedPageSuspendedForPan())
@@ -134,8 +135,10 @@ PageActions::LeavePage()
     }
 #endif
   } else if (layout.overlay == PageLayout::Overlay::RASP) {
-    ClearPageOverlays();
-    CommonInterface::SetUIState().weather.rasp_page_entered = false;
+    if (!CommonInterface::GetUIState().weather.IsRaspSuspendedForPan()) {
+      ClearPageOverlays();
+      CommonInterface::SetUIState().weather.rasp_page_entered = false;
+    }
   }
 
   if (state.special_page.IsDefined())
@@ -166,8 +169,10 @@ PageActions::Restore()
     }
 #endif
   } else if (special_page.overlay == PageLayout::Overlay::RASP) {
-    ClearPageOverlays();
-    CommonInterface::SetUIState().weather.rasp_page_entered = false;
+    if (!CommonInterface::GetUIState().weather.IsRaspSuspendedForPan()) {
+      ClearPageOverlays();
+      CommonInterface::SetUIState().weather.rasp_page_entered = false;
+    }
   }
 
   special_page.SetUndefined();
