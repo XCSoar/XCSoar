@@ -175,6 +175,13 @@ struct PageLayout
 
   [[gnu::const]]
   constexpr bool
+  UsesRaspOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::RASP;
+  }
+
+  [[gnu::const]]
+  constexpr bool
   UsesWeatherOverlay() const noexcept
   {
     return IsMapMain() &&
