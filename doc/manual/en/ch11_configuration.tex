@@ -389,6 +389,41 @@ pattern you wish the selected airspace class to be drawn in.
 \subsection*{Filters}
 The filter function is described in Section~\ref{sec:airspace-filter}.
 
+\subsection*{NOTAM}
+
+This page configures downloading and display of NOTAM affected areas.
+NOTAMs are shown as airspaces on the map and are intended for
+situational awareness only; they do not replace a proper NOTAM briefing.
+See Section~\ref{sec:notam-airspace}.
+
+\begin{description}
+\item[NOTAM Support]  Enables downloading and display of NOTAMs from
+  aviation authorities.
+\item[API URL]  Base URL of the NOTAM proxy API.
+\item[Search Radius]  Radius around the current location for which NOTAMs
+  are downloaded.  If the aircraft moves outside the loaded area and
+  Internet access is available, XCSoar downloads NOTAMs for the new area.
+\item[Auto-Refresh (minutes)]  Time interval for automatic NOTAM updates.
+  Set this to 0 to disable automatic refresh and use manual refresh only.
+\item[Show IFR-Only NOTAMs]  Includes NOTAMs marked as IFR-only traffic.
+  This is disabled by default.
+\item[Show Only Currently Effective]  Hides NOTAMs which are not effective
+  at the current time.  This is enabled by default.
+\item[Maximum NOTAM Radius]  Hides NOTAMs whose affected radius is larger
+  than this value.  Set this to 0 to disable the radius filter.  The
+  default is 100~km.
+\item[Hidden Q-Codes]  Space-separated list of Q-code prefixes to hide.
+  Prefixes are matched case-insensitively.  The default list is
+  \texttt{QA QK QN QOL QOA QOBTT}, hiding administrative, checklist,
+  navigation-aid and obstacle-lighting or obstacle-administration notices.
+\end{description}
+
+The read-only rows below the filter settings show how many loaded NOTAMs
+are currently filtered by each filter.  The \button{Refresh} button saves
+the current settings and requests a new download for the current
+position.  The \button{List} button opens the current NOTAM list for
+review.
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Glide Computer / Safety Factors}\label{sec:safety-factors}

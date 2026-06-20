@@ -48,6 +48,49 @@ The default colouring of Class C, D, E and F airspace is consistent
 with ICAO charts.
 
 
+\subsection*{NOTAM airspace}\label{sec:notam-airspace}
+
+XCSoar can download NOTAM affected areas and display them as airspace
+on the map.  This function is intended for situational awareness only
+and does not replace a proper pre-flight NOTAM briefing.
+
+NOTAM support is enabled in the system configuration under
+\emph{Map Display / Airspace / NOTAM}.  When enabled and a valid
+position and Internet connection are available, XCSoar downloads NOTAMs
+around the current position using the configured search radius.  The
+downloaded NOTAMs are added to the normal airspace display and can be
+queried from the map like other airspaces.  The details page shows
+NOTAM-specific information such as the NOTAM number, ICAO location,
+Q-code, validity period, altitude limits and text.
+
+XCSoar keeps the downloaded data small.  It stores the NOTAM cache in
+the data directory and reuses it while it is still valid for the current
+position, radius, API URL and refresh interval.  If the aircraft moves
+outside the loaded area and Internet access is available, XCSoar loads a
+new area for the configured radius.  Automatic updates are also performed
+from time to time according to the configured refresh interval.  XCSoar
+requests incremental updates based on the NOTAMs already known instead of
+downloading all data again.
+
+To avoid overloading the map and the pilot with low-value notices,
+NOTAM filters are enabled by default.  The default settings hide:
+\begin{itemize}
+\item IFR-only NOTAMs,
+\item NOTAMs which are not currently effective,
+\item NOTAMs with an affected radius larger than 100~km, and
+\item NOTAMs with the Q-code prefixes \texttt{QA}, \texttt{QK},
+  \texttt{QN}, \texttt{QOL}, \texttt{QOA} and \texttt{QOBTT}
+  (administrative, checklist, navigation-aid and obstacle-lighting or
+  obstacle-administration notices).
+\end{itemize}
+
+The filters can be adjusted in the NOTAM configuration page.  The
+settings page also shows how many loaded NOTAMs are filtered by each
+filter, and the \button{List} button can be used to review the current
+NOTAM list.  Use \button{Refresh} to manually request a new download for
+the current position.
+
+
 \subsection*{Incursion events}
 
 Three types of events are detected by XCSoar in relation to SUA:
