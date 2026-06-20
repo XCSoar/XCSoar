@@ -179,10 +179,10 @@ their contents (:file:`DataFileLayout.cpp`). OpenAir and TNP airspace
 files go to :file:`airspace/`; waypoint detail files with attachment
 sections go to :file:`waypoints/details/`.
 
+.. _cache-directory:
+
 Cache directory
 ~~~~~~~~~~~~~~~
-
-.. _cache-directory:
 
 :file:`cache/` holds data that XCSoar downloads or regenerates and
 that should not be edited manually. The whole :file:`cache/` tree is
@@ -216,7 +216,7 @@ Weather data
 The top-level :file:`weather/` directory is for **user-provided**
 overlay images only:
 
-- **GeoTIFF overlays** — :file:`weather/overlay/` (*.tif, *.tiff), listed
+- **GeoTIFF overlays** — :file:`weather/overlay/` (``*.tif``, ``*.tiff``), listed
   in the Weather dialog
   (:file:`Dialogs/Weather/MapOverlayWidget.cpp`).
 

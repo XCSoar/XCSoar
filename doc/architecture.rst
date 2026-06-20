@@ -23,11 +23,11 @@ section tries to give a rough overview where you can find what.
 -  :file:`Units/`: conversion from SI units (“System” units) to configured
    user units
 
--  :FILE:`NMEA/`: data structures for values parsed from NMEA
+-  :file:`NMEA/`: data structures for values parsed from NMEA
 
 -  :file:`Profile/`: user profiles, loading from and saving to
 
--  :FILE:`IGC/`: support for the IGC file format
+-  :file:`IGC/`: support for the IGC file format
 
 -  :file:`Logger/`: all loggers (NMEA, IGC, flights)
 
@@ -51,7 +51,7 @@ section tries to give a rough overview where you can find what.
    operations
 
 -  :file:`Android/`: code specific to Android (the native part only; Java
-   code is in :file:`android/src/`
+   code is in :file:`android/src/`)
 
 -  :file:`Engine/PathSolvers/`: an implementation of Dijkstra’s path finding
    algorithm, for task and contest optimisation
@@ -115,19 +115,19 @@ allow expensive background calculations.
 
 This is how it looks like on Windows and Linux/SDL (software rendering):
 
-.. blockdiag::
+.. graphviz::
 
-    blockdiag threads {
-      Devices [stacked];
-      Devices -> MergeThread [label = "sensors", fontsize=8];
-      MergeThread -> CalcThread [label = "sensors", fontsize=8];
+   digraph threads {
+     graph [fontsize=10];
+     node [fontsize=10];
+     edge [fontsize=8];
 
-      CalcThread -> UIThread [folded, label = "results", fontsize=8];
-
-      IOThread -> UIThread [label = "data", fontsize=8];
-
-      UIThread <-> DrawThread [label = "redraw", fontsize=8];
-    }
+     Devices -> MergeThread [label="sensors"];
+     MergeThread -> CalcThread [label="sensors"];
+     CalcThread -> UIThread [label="results"];
+     IOThread -> UIThread [label="data"];
+     UIThread -> DrawThread [dir=both, label="redraw"];
+   }
 
 The UI thread is the main thread.  It starts the other threads and is
 responsible for the UI event loop.  No other thread is allowed to
@@ -327,21 +327,24 @@ of various data structures just for the main thread.
 
 This is how sensor data moves inside XCSoar:
 
-.. blockdiag::
+.. graphviz::
 
-    blockdiag threads {
-      Devices [stacked];
-      MergeThread [label="MergeThread\nBasicComputer\nDeviceBlackboard"];
-      CalcThread [label="CalcThread\nGlideComputer\nGlideComputerBlackboard"];
-      UIThread [label="UIThread\nInterfaceBlackboard\nBlackboardListener"];
-      DrawThread [label="DrawThread\nMapWindow\nMapWindowBlackboard"];
+   digraph threads {
+     graph [fontsize=10];
+     node [fontsize=10];
+     edge [fontsize=8];
 
-      Devices -> MergeThread [folded, label = "NMEAInfo", fontsize=8];
-      MergeThread -> CalcThread [folded, label = "MoreData", fontsize=8];
+     Devices [label="Devices"];
+     MergeThread [label="MergeThread\nBasicComputer\nDeviceBlackboard"];
+     CalcThread [label="CalcThread\nGlideComputer\nGlideComputerBlackboard"];
+     UIThread [label="UIThread\nInterfaceBlackboard\nBlackboardListener"];
+     DrawThread [label="DrawThread\nMapWindow\nMapWindowBlackboard"];
 
-      CalcThread -> UIThread [folded, label = "DerivedInfo", fontsize=8];
-      UIThread -> DrawThread [folded, label = "DerivedInfo", fontsize=8];
-    }
+     Devices -> MergeThread [label="NMEAInfo"];
+     MergeThread -> CalcThread [label="MoreData"];
+     CalcThread -> UIThread [label="DerivedInfo"];
+     UIThread -> DrawThread [label="DerivedInfo"];
+   }
 
 The device driver parses input received from its device into its own
 ``NMEAInfo`` instance inside ``DeviceBlackboard`` (i.e.
@@ -385,10 +388,10 @@ on who you are:
   it while using its data.
 
 Developing
-==========
+----------
 
 Debugging XCSoar
-----------------
+~~~~~~~~~~~~~~~~
 
 The XCSoar source repository contains a module for the GNU debugger
 (``gdb``). It contains pretty-printers for various XCSoar types,
@@ -414,10 +417,10 @@ radian angles to degrees and more. You can now do fancy stuff like::
   $5 = GeoVector(267.899420345 107957.109724)
 
 User interface guidelines
-=========================
+-------------------------
 
 General
--------
+~~~~~~~
 
 -  Minimise the number of colours, and re-use colour groups already
    defined.
@@ -452,12 +455,9 @@ where possible, in particular:
 -  ICAO Internation Standards and Recommended Practices, Annex 4 to the
    Convention on International Civil Aviation (Aeronautical Charts).
 
-- `NASA Colour Usage recommendations and design guidelines
-   <http://colorusage.arc.nasa.gov/>`__
+- `NASA Colour Usage recommendations and design guidelines <http://colorusage.arc.nasa.gov/>`__
 
-- `DOT/FAA/AR-03/67 Human Factors Considerations in the Design and
-   Evaluation of Electronic Flight Bags (EFBs)
-   <http://www.volpe.dot.gov/hf/aviation/efb/docs/efb_version2.pdf>`__
+- `DOT/FAA/AR-03/67 Human Factors Considerations in the Design and Evaluation of Electronic Flight Bags (EFBs) <http://www.volpe.dot.gov/hf/aviation/efb/docs/efb_version2.pdf>`__
 
 -  `FAA Human Factors Design Standards <http://hf.tc.faa.gov/hfds/>`__
 
@@ -476,7 +476,7 @@ require the user to stare at the screen continuously.**
 of producing unsafe results if misconfigured by the pilot.**
 
 General colour conventions
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Colour conventions generally in use throughout the program:
 
@@ -489,7 +489,7 @@ Colour conventions generally in use throughout the program:
 -  Blue for neutral indicator of safety
 
 Displayed data
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 -  Where data is invalid, indicate this by not presenting the data or
    showing dashes.
@@ -501,10 +501,10 @@ Displayed data
    whichever is lower.
 
 Dialogs and menu buttons
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Colors
-~~~~~~
+^^^^^^
 
 Colour conventions in use are:
 
@@ -523,7 +523,7 @@ Colour conventions in use are:
 -  Text is greyed out (but still visible) if the item is disabled
 
 dialogue types and navigation buttons
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are four types of dialogs in XCSoar, and the navigation buttons
 for each are different. Navigation buttons are the Close, OK, Cancel and
@@ -551,7 +551,7 @@ Select buttons.
    These shall have a Close button
 
 dialogue button placement and size
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 -  The Close and Cancel buttons will never appear in the same dialogue
    and are always located in the same place. This location will be:
@@ -588,7 +588,7 @@ dialogue button placement and size
    to implementing and possibly documenting in the developers guide.
 
 Usability
-~~~~~~~~~
+^^^^^^^^^
 
 -  Minimum size of buttons should be X by Y mm
 
@@ -599,10 +599,10 @@ Usability
    ``Canvas``.
 
 Main graphics
--------------
+~~~~~~~~~~~~~
 
 Colors
-~~~~~~
+^^^^^^
 
 Colour conventions in use, in order of priority, are:
 
@@ -628,7 +628,7 @@ Nevertheless, the colour conventions are useful to adopt as they are
 likely to be intuitive and are designed for aviation use.
 
 Pen styles
-~~~~~~~~~~
+^^^^^^^^^^
 
 -  Map culture should be rendered with a thin pen
 
@@ -638,7 +638,7 @@ Pen styles
 -  Dashed lines are used to increase perceptual priority
 
 Map overlays
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 Elements on the map that are not part of the map layer, such as
 additional informational widgets (final glide bar, wind, north arrow)
@@ -664,10 +664,10 @@ order of priority, particularly with alert warning items above caution
 items above non-alert items.
 
 Terminology
------------
+~~~~~~~~~~~
 
 Glide Ratio
-~~~~~~~~~~~
+^^^^^^^^^^^
 
 ’Glide ratio’ is a non-specific term which can refer to the ratio of
 horizontal to vertical motion with reference to either the surrounding
