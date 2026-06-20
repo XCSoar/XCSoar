@@ -307,14 +307,14 @@ Tips
 - **Test after rebase** - rebasing rewrites history and can introduce issues
 - **Use ``--force-with-lease``** instead of ``--force`` when pushing rebased branches
 - **Keep commits focused** - one logical change per commit
-- **Write good commit messages** - follow the project's format (see :doc:`gitworkflow`)
+- **Write good commit messages** - follow the project's format (see :doc:`policy`)
 - **Use visual tools** (tig, lazygit) for complex operations - easier than command line
 - **Don't rebase shared branches** - only rebase your local feature branches
 
 Additional Resources
 --------------------
 
-- :doc:`gitworkflow` - XCSoar Git workflow guidelines
+- :doc:`policy` - XCSoar development policy and Git workflow
 - ``git help <command>`` - Built-in Git documentation
 - `Pro Git book <https://git-scm.com/book>`_ - Comprehensive Git reference
 

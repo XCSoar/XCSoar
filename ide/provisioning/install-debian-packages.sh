@@ -45,7 +45,8 @@ install_manual() {
     texlive-lang-polish \
     texlive-lang-portuguese \
     texlive-lang-german \
-    liblocale-po-perl
+    liblocale-po-perl \
+    graphviz
   echo
 }
 

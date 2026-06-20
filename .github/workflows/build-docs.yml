@@ -62,6 +62,9 @@ jobs:
        with:
          python-version: '3.12'
 
+     - name: Install Graphviz
+       run: sudo apt-get update && sudo apt-get install -y --no-install-recommends graphviz
+
      - name: Install Sphinx dependencies
        run: pip install -r doc/requirements.txt
 

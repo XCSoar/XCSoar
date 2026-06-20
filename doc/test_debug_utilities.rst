@@ -742,7 +742,7 @@ device connection issues.
 Monitoring Device Communication with socat
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`socat` is a powerful command-line utility available in Debian/Ubuntu that can
+``socat`` is a powerful command-line utility available in Debian/Ubuntu that can
 monitor bidirectional serial port traffic between XCSoar and devices. This is
 useful for debugging device communication protocols and seeing all NMEA
 sentences in both directions.
@@ -764,8 +764,7 @@ To monitor a serial port and see all traffic in both directions:
 
 The flags:
 - ``-x``: Shows hex dump of all data
-- ``-v``: Verbose output with direction indicators (``>`` for TX, ``<`` for
-  RX)
+- ``-v``: Verbose output with direction indicators (``>`` for TX, ``<`` for RX)
 - ``-``: Outputs to stdout
 
 **Spying on XCSoar Device Communication**:
@@ -793,8 +792,7 @@ If you can temporarily disconnect the device, monitor it directly:
 
 This will:
 - Display all traffic in real-time with hex dumps
-- Show direction indicators (``>`` for data sent to device, ``<`` for data
-  received from device)
+- Show direction indicators (``>`` for data sent to device, ``<`` for data received from device)
 - Save output to ``device_traffic.log`` file
 
 **What it does**:
