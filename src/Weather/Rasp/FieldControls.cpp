@@ -117,6 +117,17 @@ GetActiveFieldIndex() noexcept
   return GetFieldIndex(PageActions::GetCurrentLayout());
 }
 
+int
+GetEffectiveFieldIndex() noexcept
+{
+  const int field_index = GetActiveFieldIndex();
+  if (field_index >= 0)
+    return field_index;
+
+  const int map = CommonInterface::GetUIState().weather.map;
+  return map >= 0 ? map : -1;
+}
+
 StaticString<64>
 GetPanOverlayLabel(const PageLayout &configured) noexcept
 {
@@ -224,7 +235,7 @@ bool
 HasSelectedTimeData(bool auto_advance) noexcept
 {
   const auto rasp = DataGlobals::GetRasp();
-  const int field_index = GetActiveFieldIndex();
+  const int field_index = GetEffectiveFieldIndex();
   if (rasp == nullptr || field_index < 0)
     return false;
 
