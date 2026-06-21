@@ -591,8 +591,8 @@ SuffixUTF8(std::string_view s, std::size_t max_chars) noexcept
   std::size_t char_count = 0;
   for (std::string_view i = s; !i.empty(); ++char_count) {
     const std::size_t sequence = SequenceLengthUTF8(i.data());
-    assert(sequence > 0);
-    assert(sequence <= i.size());
+    if (sequence == 0 || sequence > i.size())
+      break;
     i.remove_prefix(sequence);
   }
 
@@ -602,7 +602,8 @@ SuffixUTF8(std::string_view s, std::size_t max_chars) noexcept
   const char *p = s.data();
   for (std::size_t skip = char_count - max_chars; skip > 0; --skip) {
     const std::size_t sequence = SequenceLengthUTF8(p);
-    assert(sequence > 0);
+    if (sequence == 0 || std::size_t(end - p) < sequence)
+      break;
     p += sequence;
   }
 
