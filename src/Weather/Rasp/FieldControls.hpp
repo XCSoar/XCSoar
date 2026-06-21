@@ -50,6 +50,14 @@ GetFieldIndex(const PageLayout &layout) noexcept;
 int
 GetActiveFieldIndex() noexcept;
 
+/**
+ * Field index for rendering: current layout, or persisted #weather.map
+ * while the overlay is kept during pan full-screen.
+ */
+[[gnu::pure]]
+int
+GetEffectiveFieldIndex() noexcept;
+
 [[gnu::pure]]
 BrokenTime
 TimeFromMinuteOfDay(unsigned minute_of_day) noexcept;
