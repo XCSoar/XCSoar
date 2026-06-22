@@ -106,6 +106,16 @@ struct WeatherUIState {
 
   EDLWeatherUIState edl;
 
+  struct {
+    bool dedicated_page_entered = false;
+    bool dedicated_page_suspended_for_pan = false;
+
+    void Clear() noexcept {
+      dedicated_page_entered = false;
+      dedicated_page_suspended_for_pan = false;
+    }
+  } xctherm;
+
   void Clear() noexcept {
     map = -1;
     time = BrokenTime::Invalid();
@@ -114,6 +124,7 @@ struct WeatherUIState {
     rasp_page_entered = false;
     rasp_page_suspended_for_pan = false;
     edl.Clear();
+    xctherm.Clear();
   }
 
   /**
