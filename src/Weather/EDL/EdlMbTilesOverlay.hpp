@@ -14,7 +14,4 @@ public:
 
   bool
   SampleAscendancyAt(GeoPoint p, double &value_mps) const noexcept;
-
-  bool FormatPointInfo(GeoPoint p, char *buffer,
-                       std::size_t size) const noexcept override;
 };
