@@ -24,7 +24,8 @@ Notify::SendNotification() noexcept
 #ifdef USE_WINUSER
   SendUser(0);
 #else
-  event_queue->InjectCall(Callback, this);
+  if (event_queue != nullptr)
+    event_queue->InjectCall(Callback, this);
 #endif
 }
 
@@ -35,7 +36,8 @@ Notify::ClearNotification() noexcept
     return;
 
 #ifndef USE_WINUSER
-  event_queue->Purge(Callback, this);
+  if (event_queue != nullptr)
+    event_queue->Purge(Callback, this);
 #endif
 }
 
