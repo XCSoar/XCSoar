@@ -719,7 +719,7 @@ jobs:
             output/${{ matrix.target }}/symbols.zip
 
       - name: Upload artifact (Installer)
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: ${{ matrix.target == 'WIN64OPENGL' || matrix.target == 'WIN32OPENGL' }}
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}-Installer.exe
