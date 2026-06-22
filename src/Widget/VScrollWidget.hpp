@@ -35,6 +35,9 @@ class VScrollWidget final : public WindowWidget, VScrollPanelListener {
   /** Reserve horizontal space for the scrollbar. */
   bool reserve_scrollbar;
 
+  /** Optional maximum height reported to parent layout. */
+  unsigned maximum_layout_height;
+
   /**
    * Optional callback for horizontal swipe gestures.
    * Called with true for swipe-right (next), false for swipe-left
@@ -52,10 +55,12 @@ public:
    */
   explicit VScrollWidget(std::unique_ptr<Widget> &&_widget,
                          const DialogLook &_look,
-                         bool _reserve_scrollbar = false) noexcept
+                         bool _reserve_scrollbar = false,
+                         unsigned _maximum_layout_height = 0) noexcept
     :look(_look),
      widget(std::move(_widget)),
-     reserve_scrollbar(_reserve_scrollbar) {}
+     reserve_scrollbar(_reserve_scrollbar),
+     maximum_layout_height(_maximum_layout_height) {}
 
   Widget &GetWidget() noexcept {
     return *widget;

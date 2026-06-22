@@ -4,12 +4,15 @@
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Widget/ScrollableLargeTextWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Screen/Layout.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
@@ -28,10 +31,15 @@
 
 #include <cstring>
 #include <cassert>
+#include <algorithm>
 #include <exception>
 #include <string>
 
 namespace {
+
+static constexpr unsigned SCROLLABLE_TEXT_MIN_ROWS = 3;
+static constexpr unsigned SCROLLABLE_TEXT_MAX_ROWS = 10;
+static constexpr unsigned SCROLLABLE_TEXT_PREFERRED_HEIGHT_DIVISOR = 3;
 
 [[nodiscard]]
 static std::string
@@ -73,6 +81,19 @@ FormatAltitudeWithReference(char *buffer, size_t buffer_size,
     if (suffix_len <= remaining)
       std::memcpy(buffer + current_len, suffix, suffix_len + 1);
   }
+}
+
+[[nodiscard]]
+static unsigned
+GetScrollableTextRowMaximumHeight(const PixelRect &rc) noexcept
+{
+  const unsigned row_height = Layout::GetMinimumControlHeight();
+  const unsigned minimum = row_height * SCROLLABLE_TEXT_MIN_ROWS;
+  const unsigned maximum = row_height * SCROLLABLE_TEXT_MAX_ROWS;
+  const unsigned preferred =
+    rc.GetHeight() / SCROLLABLE_TEXT_PREFERRED_HEIGHT_DIVISOR;
+
+  return std::clamp(preferred, minimum, maximum);
 }
 
 } // namespace
@@ -384,7 +405,7 @@ NOTAMDetailsWidget::AddNOTAMAltitudes(StaticString<128> &buffer)
 
 void
 NOTAMDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
-                            [[maybe_unused]] const PixelRect &rc) noexcept
+                            const PixelRect &rc) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   StaticString<128> buffer;
@@ -413,7 +434,9 @@ NOTAMDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     notam_opt && !notam_opt->text.empty()
     ? SafeString(notam_opt->text)
     : SafeString(airspace_name != nullptr ? airspace_name : "");
-  AddMultiLine(text.c_str());
+  Add(std::make_unique<VScrollWidget>(
+    std::make_unique<ScrollableLargeTextWidget>(GetLook(), text.c_str()),
+    GetLook(), true, GetScrollableTextRowMaximumHeight(rc)));
 
   AddNOTAMValidity(notam_opt, buffer);
   AddNOTAMAltitudes(buffer);
