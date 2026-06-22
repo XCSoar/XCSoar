@@ -5,6 +5,9 @@
 
 #include "AirspaceLabelList.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
+#include "Engine/Airspace/Ptr.hpp"
+
+#include <span>
 
 struct AirspaceLook;
 struct MoreData;
@@ -60,7 +63,8 @@ private:
                     const AirspaceWarningConfig &config,
                     bool draw_altitude_labels,
                     bool draw_notam_labels,
-                    LabelBlock *label_block) noexcept;
+                    LabelBlock *label_block,
+                    std::span<const ConstAirspacePtr> external_airspaces) noexcept;
 
   void DrawLabel(Canvas &canvas, const WindowProjection &projection,
                  const AirspaceLabelList::Label &label) noexcept;

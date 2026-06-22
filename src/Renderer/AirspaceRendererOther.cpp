@@ -13,6 +13,7 @@
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
+#include "Airspace/AirspaceIteration.hxx"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "MapWindow/StencilMapCanvas.hpp"
@@ -201,17 +202,11 @@ AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
   AirspaceVisitorMap v(helper, awc, settings,
                        look);
 
-  // JMW TODO wasteful to draw twice, can't it be drawn once?
-  // we are using two draws so borders go on top of everything
-
-  const auto range =
-    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                projection.GetScreenDistanceMeters());
-  for (const auto &i : range) {
-    const AbstractAirspace &airspace = i.GetAirspace();
-    if (visible(airspace))
-      v.Visit(airspace);
-  }
+  ForEachAirspaceInView(airspaces, awc.GetExternalAirspaces(), projection,
+                        visible,
+                        [&](const AbstractAirspace &airspace) {
+                          v.Visit(airspace);
+                        });
 
   return v.Commit();
 }
@@ -253,18 +248,16 @@ inline void
 AirspaceRenderer::DrawOutline(Canvas &canvas,
                               const WindowProjection &projection,
                               const AirspaceRendererSettings &settings,
+                              const AirspaceWarningCopy &awc,
                               const AirspacePredicate &visible) const
 {
-  const auto range =
-    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                projection.GetScreenDistanceMeters());
-
   AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
-  for (const auto &i : range) {
-    const AbstractAirspace &airspace = i.GetAirspace();
-    if (visible(airspace))
-      outline_renderer.Visit(airspace);
-  }
+
+  ForEachAirspaceInView(airspaces, awc.GetExternalAirspaces(), projection,
+                        visible,
+                        [&](const AbstractAirspace &airspace) {
+                          outline_renderer.Visit(airspace);
+                        });
 }
 
 void
@@ -277,7 +270,7 @@ AirspaceRenderer::DrawInternal(Canvas &canvas, Canvas &stencil_canvas,
   if (settings.fill_mode != AirspaceRendererSettings::FillMode::NONE)
     DrawFillCached(canvas, stencil_canvas, projection, settings, awc, visible);
 
-  DrawOutline(canvas, projection, settings, visible);
+  DrawOutline(canvas, projection, settings, awc, visible);
 }
 
 #endif /* ENABLE_OPENGL */

@@ -7,7 +7,8 @@
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/AirspaceIteration.hxx"
+#include "Airspace/AirspaceMapVisible.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Airspace/AirspaceClass.hpp"
@@ -41,27 +42,6 @@ struct NotamLabelCluster {
   PixelPoint anchor;
   unsigned count = 0;
   StaticArray<StaticString<64>, NOTAM_CLUSTER_VISIBLE_LINES> labels;
-};
-
-class AirspaceMapVisible
-{
-  const AirspaceVisibility visible_predicate;
-  const AirspaceWarningCopy &warnings;
-
-public:
-  AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
-                     const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState &_state,
-                     const AirspaceWarningCopy &_warnings) noexcept
-    :visible_predicate(_computer_settings, _renderer_settings, _state),
-     warnings(_warnings) {}
-
-  [[gnu::pure]]
-  bool operator()(const AbstractAirspace& airspace) const noexcept {
-    return visible_predicate(airspace) ||
-      warnings.IsInside(airspace) ||
-      warnings.HasWarning(airspace);
-  }
 };
 
 static StaticString<64>
@@ -207,13 +187,22 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
     settings.show_notam_labels &&
     projection.GetMapScale() <= NOTAM_LABEL_MAX_MAP_SCALE;
 
-  if ((!draw_altitude_labels && !draw_notam_labels) ||
-      airspaces == nullptr || airspaces->IsEmpty())
+  if (!draw_altitude_labels && !draw_notam_labels)
     return;
 
   AirspaceWarningCopy awc;
   if (warning_manager != nullptr)
     awc.Visit(*warning_manager);
+
+  if ((airspaces == nullptr || airspaces->IsEmpty()) &&
+      awc.GetExternalAirspaces().empty()) {
+    if (!draw_notam_labels)
+      return;
+  }
+
+  if (!draw_altitude_labels && draw_notam_labels &&
+      (airspaces == nullptr || airspaces->IsEmpty()))
+    return;
 
   const AircraftState aircraft = ToAircraftState(basic, calculated);
   const AirspaceMapVisible visible(computer_settings, settings,
@@ -221,7 +210,8 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
 
   DrawInternal(canvas,
                projection, visible, computer_settings.warnings,
-               draw_altitude_labels, draw_notam_labels, label_block);
+               draw_altitude_labels, draw_notam_labels, label_block,
+               awc.GetExternalAirspaces());
 }
 
 inline void
@@ -231,18 +221,17 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const AirspaceWarningConfig &config,
                                     const bool draw_altitude_labels,
                                     const bool draw_notam_labels,
-                                    LabelBlock *label_block) noexcept
+                                    LabelBlock *label_block,
+                                    std::span<const ConstAirspacePtr> external_airspaces) noexcept
 {
   AirspaceLabelList labels;
 
   if (draw_altitude_labels) {
-    for (const auto &i : airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
-                                                     projection.GetScreenDistanceMeters())) {
-      const AbstractAirspace &airspace = i.GetAirspace();
-      if (visible(airspace))
-        labels.Add(airspace.GetCenter(), airspace.GetClass(), airspace.GetBase(),
-                   airspace.GetTop());
-    }
+    ForEachAirspaceInView(airspaces, external_airspaces, projection, visible,
+                          [&](const AbstractAirspace &airspace) {
+                            labels.Add(airspace.GetCenter(), airspace.GetClass(),
+                                       airspace.GetBase(), airspace.GetTop());
+                          });
 
     labels.Sort(config);
   }

@@ -5,10 +5,16 @@
 
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/Ptr.hpp"
+#include "FLARM/Id.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "time/DeltaTime.hpp"
+
+#include <map>
 
 class Airspaces;
 struct ComputerSettings;
+struct FlarmData;
 struct MoreData;
 struct DerivedInfo;
 struct AirspaceWarningsInfo;
@@ -26,6 +32,22 @@ class WarningComputer {
 
   bool initialised;
 
+  /**
+   * Cached AirspaceCircle objects for FLARM alert zones, keyed by
+   * FlarmId.  Reusing the same shared_ptr across ticks preserves
+   * warning acknowledgement state.  Since AirspaceCircle is immutable,
+   * it must be replaced when the zone geometry/metadata changes.
+   */
+  struct FlarmZoneCache {
+    AirspacePtr airspace;
+    GeoPoint center;
+    double radius;
+    int bottom, top;
+    uint8_t zone_type;
+  };
+
+  std::map<FlarmId, FlarmZoneCache> flarm_zone_airspaces;
+
 public:
   WarningComputer(const AirspaceWarningConfig &_config,
                   Airspaces &_airspaces);
@@ -41,10 +63,15 @@ public:
   void Reset() {
     delta_time.Reset();
     initialised = false;
+    flarm_zone_airspaces.clear();
   }
 
   void Update(const ComputerSettings &settings_computer,
               const MoreData &basic,
               const DerivedInfo &calculated,
               AirspaceWarningsInfo &result);
+
+private:
+  void UpdateFlarmZones(const FlarmData &flarm,
+                        AirspaceWarningManager &mgr);
 };
