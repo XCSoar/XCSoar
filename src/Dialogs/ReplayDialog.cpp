@@ -10,6 +10,7 @@
 #include "Replay/Replay.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Language/Language.hpp"
+#include "Repository/FileType.hpp"
 
 class ReplayControlWidget final
   : public RowFormWidget
@@ -49,7 +50,7 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddFile(_("File"),
           _("Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (.nmea). Leave blank to run the demo."),
           {},
-          "*.nmea\0*.igc\0",
+          {FileType::NMEA, FileType::IGC},
           true);
   LoadValue(FILE, replay.GetFilename());
 
