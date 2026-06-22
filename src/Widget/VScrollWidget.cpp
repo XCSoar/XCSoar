@@ -8,6 +8,7 @@
 #include "ui/event/KeyCode.hpp"
 #include "util/StringAPI.hxx"
 
+#include <algorithm>
 #include <cassert>
 
 unsigned
@@ -67,7 +68,20 @@ VScrollWidget::GetMinimumSize() const noexcept
 PixelSize
 VScrollWidget::GetMaximumSize() const noexcept
 {
-  return widget->GetMaximumSize();
+  PixelSize size = widget->GetMaximumSize();
+
+  if (maximum_layout_height > 0) {
+    const unsigned minimum_height = widget->GetMinimumSize().height;
+    const unsigned capped_height =
+      std::max(minimum_height, maximum_layout_height);
+
+    if (size.height == 0)
+      size.height = capped_height;
+    else
+      size.height = std::clamp(size.height, minimum_height, capped_height);
+  }
+
+  return size;
 }
 
 void
