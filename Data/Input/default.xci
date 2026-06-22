@@ -1023,6 +1023,14 @@ location=5
 
 mode=Info2
 type=key
+data=7
+event=NOTAMList
+event=Mode default
+label=NOTAMs
+location=6
+
+mode=Info2
+type=key
 data=8
 event=Setup Teamcode
 event=Mode default
