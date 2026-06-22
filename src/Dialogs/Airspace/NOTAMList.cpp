@@ -7,8 +7,10 @@
 #ifdef HAVE_HTTP
 
 #include "Dialogs/WidgetDialog.hpp"
+#include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "ui/control/List.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/DialogLook.hpp"
 #include "util/Compiler.h"
@@ -20,6 +22,10 @@
 #include "NOTAM/NOTAM.hpp"
 #include "NOTAM/Filter.hpp"
 #include "NOTAM/NOTAMGlue.hpp"
+#include "NOTAM/Converter.hpp"
+#include "Airspace.hpp"
+#include "BackendComponents.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Interface.hpp"
 #include "util/StringFormat.hpp"
@@ -34,9 +40,45 @@
 #include <ctime>
 #include <iterator>
 #include <string>
+#include <string_view>
 
 // Use full struct name to avoid collision with AirspaceClass::NOTAM enum
 using NOTAMStruct = struct NOTAM;
+
+static void
+AppendFilterReason(std::string &text, const char *reason)
+{
+  if (!text.empty())
+    text += ", ";
+
+  text += reason;
+}
+
+[[nodiscard]]
+static std::string
+GetFilterReasons(const NOTAMStruct &notam,
+                 const NOTAMSettings &settings,
+                 std::chrono::system_clock::time_point now)
+{
+  std::string reasons;
+
+  if (!settings.show_ifr && !notam.traffic.empty() && notam.traffic == "I")
+    AppendFilterReason(reasons, _("IFR-only"));
+
+  if (settings.show_only_effective && !notam.IsActive(now))
+    AppendFilterReason(reasons, _("not effective"));
+
+  if (settings.max_radius_m > 0 &&
+      notam.geometry.radius_meters > settings.max_radius_m)
+    AppendFilterReason(reasons, _("radius"));
+
+  const auto &qcode = notam.feature_type;
+  if (!qcode.empty() &&
+      NOTAMFilter::IsQCodeHidden(qcode, settings.hidden_qcodes))
+    AppendFilterReason(reasons, _("Q-Code"));
+
+  return reasons;
+}
 
 // Return UTF-8 text safe for UI, or a placeholder if invalid.
 [[nodiscard]]
@@ -83,15 +125,78 @@ GetCurrentNOTAMTimeUTC() noexcept
     : std::chrono::system_clock::now();
 }
 
+[[nodiscard]]
+static std::string
+EllipsizeText(Canvas &canvas, const std::string &text,
+              const unsigned max_width)
+{
+  if (max_width == 0)
+    return {};
+
+  if (canvas.CalcTextWidth(text) <= max_width)
+    return text;
+
+  constexpr std::string_view ellipsis = "...";
+  const unsigned ellipsis_width = canvas.CalcTextWidth(ellipsis);
+  if (ellipsis_width >= max_width)
+    return std::string{ellipsis};
+
+  std::string result;
+  result.reserve(text.size());
+
+  for (std::string_view remaining = text; !remaining.empty();) {
+    const std::size_t sequence = SequenceLengthUTF8(remaining.front());
+    if (sequence == 0 || sequence > remaining.size())
+      break;
+
+    std::string candidate = result;
+    candidate.append(remaining.substr(0, sequence));
+    candidate += ellipsis;
+
+    if (canvas.CalcTextWidth(candidate) > max_width)
+      break;
+
+    result.append(remaining.substr(0, sequence));
+    remaining.remove_prefix(sequence);
+  }
+
+  result += ellipsis;
+  return result;
+}
+
+[[nodiscard]]
+static unsigned
+GetTextWidth(const PixelRect &rc, const TwoTextRowsRenderer &row_renderer)
+{
+  const int width = rc.GetWidth() - row_renderer.GetX();
+  return width > 0 ? unsigned(width) : 0u;
+}
+
 class NOTAMListWidget final : public ListWidget {
   static constexpr unsigned HEADER_COUNT = 4;
   std::vector<NOTAMStruct> items;
   TwoTextRowsRenderer row_renderer;
+  Button *details_button = nullptr;
 
 public:
   NOTAMListWidget() = default;
 
   void UpdateList();
+
+  void SetDetailsButton(Button *_details_button) noexcept {
+    details_button = _details_button;
+    if (details_button != nullptr)
+      details_button->SetEnabled(false);
+  }
+
+  void ShowDetails() noexcept {
+    OnActivateItem(GetList().GetCursorIndex());
+  }
+
+  void UpdateButtons() noexcept {
+    if (details_button != nullptr)
+      details_button->SetEnabled(CanActivateItem(GetList().GetCursorIndex()));
+  }
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
@@ -106,6 +211,7 @@ public:
       items.clear();
       GetList().SetLength(1);
       GetList().Invalidate();
+      UpdateButtons();
     }
   }
 
@@ -114,10 +220,15 @@ public:
                    unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept
-    override {
-    return false; // No activation needed for NOTAM list
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
+    UpdateButtons();
   }
+
+  bool CanActivateItem(unsigned index) const noexcept override {
+    return index >= HEADER_COUNT && index < items.size();
+  }
+
+  void OnActivateItem(unsigned index) noexcept override;
 };
 
 void
@@ -194,10 +305,19 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       if (is_filtered) {
         first_row_text += " • ";
         first_row_text += _("Filtered");
+        const auto reasons = GetFilterReasons(notam, settings, now);
+        if (!reasons.empty()) {
+          first_row_text += ": ";
+          first_row_text += reasons;
+        }
       }
     }
 
-    StaticString<256> first_row;
+    canvas.Select(row_renderer.GetFirstFont());
+    first_row_text =
+      EllipsizeText(canvas, first_row_text, GetTextWidth(rc, row_renderer));
+
+    StaticString<512> first_row;
     CopyTruncateStringUTF8({first_row.buffer(), first_row.capacity()},
                  first_row_text.c_str(),
                  first_row.capacity() - 1);
@@ -225,19 +345,14 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       for (auto &ch : text) {
         if (ch == '\n' || ch == '\r') ch = ' ';
       }
-      // Truncate if too long (byte-limited, UTF-8 safe)
-      constexpr std::size_t max_bytes = 120;
-      static_assert(max_bytes >= 3, "max_bytes must leave room for ellipsis");
-      if (text.length() > max_bytes) {
-        const std::size_t truncate_at =
-          TruncateStringUTF8(text.c_str(), max_bytes - 3, max_bytes - 3);
-        text.resize(truncate_at);
-        text += "...";
-      }
       second_row_text += text;
     }
 
     if (!second_row_text.empty()) {
+      canvas.Select(row_renderer.GetSecondFont());
+      second_row_text =
+        EllipsizeText(canvas, second_row_text, GetTextWidth(rc, row_renderer));
+
       StaticString<512> second_row;
       CopyTruncateStringUTF8({second_row.buffer(), second_row.capacity()},
                              second_row_text.c_str(),
@@ -252,6 +367,26 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 #endif
     row_renderer.DrawFirstRow(canvas, rc, _("NOTAM render error"));
     row_renderer.DrawSecondRow(canvas, rc, "");
+  }
+}
+
+void
+NOTAMListWidget::OnActivateItem(unsigned i) noexcept
+{
+  if (!CanActivateItem(i))
+    return;
+
+  try {
+    auto airspace = NOTAMConverter::BuildNOTAMAirspace(items[i], true);
+    if (!airspace)
+      return;
+
+    dlgAirspaceDetails(std::move(airspace),
+                       backend_components != nullptr
+                       ? backend_components->GetAirspaceWarnings()
+                       : nullptr);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to show NOTAM details");
   }
 }
 
@@ -344,6 +479,7 @@ NOTAMListWidget::UpdateList()
 #endif
   GetList().SetLength(std::max(static_cast<size_t>(1), items.size()));
   GetList().Invalidate();
+  UpdateButtons();
 }
 
 void
@@ -351,8 +487,11 @@ ShowNOTAMListDialog(UI::SingleWindow &parent)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   auto list_widget = std::make_unique<NOTAMListWidget>();
+  NOTAMListWidget *const list = list_widget.get();
   WidgetDialog dialog(WidgetDialog::Auto{}, parent, look, _("NOTAMs"),
                       list_widget.release());
+  list->SetDetailsButton(dialog.AddButton(_("Details"),
+                                          [list](){ list->ShowDetails(); }));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }
