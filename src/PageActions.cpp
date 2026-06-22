@@ -106,7 +106,7 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
     if (!weather.rasp_cursor_session_initialized)
       weather.ResetRaspForDedicatedPage();
     else
-      Rasp::ApplyOverlayFromSession();
+      ActionInterface::ScheduleSendUIState();
 
 #ifdef HAVE_DOWNLOAD_MANAGER
     RequestConfiguredRaspUpdateIfOutOfDate();

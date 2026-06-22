@@ -11,7 +11,6 @@
 #include "PageActions.hpp"
 #include "PageSettings.hpp"
 #include "UIState.hpp"
-#include "ActionInterface.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -227,12 +226,6 @@ StepTime(const RaspStore *rasp, unsigned field_index,
   next = (next % 96 + 96) % 96;
   minute_of_day = unsigned(next) * 15;
   return true;
-}
-
-void
-ApplyOverlayFromSession() noexcept
-{
-  ActionInterface::ScheduleSendUIState();
 }
 
 bool

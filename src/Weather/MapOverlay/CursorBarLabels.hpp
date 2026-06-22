@@ -74,4 +74,10 @@ FormatAutoLocalTimeLabel(StaticString<64> &dest, bool auto_advance,
                          bool has_time, unsigned hour, unsigned minute,
                          const char *offset_buf) noexcept;
 
+void
+ShowAutoTimeStatusMessage(bool enabled) noexcept;
+
+void
+ShowAutoAltitudeStatusMessage(bool enabled) noexcept;
+
 } // namespace WeatherMapOverlay

@@ -4,6 +4,7 @@
 #include "CursorBarLabels.hpp"
 
 #include "Language/Language.hpp"
+#include "Message.hpp"
 
 #include <cstdio>
 
@@ -71,6 +72,24 @@ FormatAutoLocalTimeLabel(StaticString<64> &dest, bool auto_advance,
   } else {
     dest = _("AUTO:");
   }
+}
+
+void
+ShowAutoTimeStatusMessage(bool enabled) noexcept
+{
+  if (enabled)
+    Message::AddMessage(_("Auto. weather time on"));
+  else
+    Message::AddMessage(_("Auto. weather time off"));
+}
+
+void
+ShowAutoAltitudeStatusMessage(bool enabled) noexcept
+{
+  if (enabled)
+    Message::AddMessage(_("Auto. weather altitude on"));
+  else
+    Message::AddMessage(_("Auto. weather altitude off"));
 }
 
 } // namespace WeatherMapOverlay

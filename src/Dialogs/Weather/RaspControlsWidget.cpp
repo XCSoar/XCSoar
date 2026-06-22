@@ -8,7 +8,6 @@
 #include "Dialogs/Message.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Message.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "Weather/MapOverlay/InputEventMisc.hpp"
 #include "Weather/MapOverlay/RaspControlsModel.hpp"
@@ -117,10 +116,8 @@ RaspControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     break;
 
   case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_SHOW:
-    if (data->model.GetTimeAutoAdvance())
-      Message::AddMessage(_("Auto. weather time on"));
-    else
-      Message::AddMessage(_("Auto. weather time off"));
+    WeatherMapOverlay::ShowAutoTimeStatusMessage(
+      data->model.GetTimeAutoAdvance());
     break;
 
   case WeatherMapOverlay::OverlayInputAction::NONE:

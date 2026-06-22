@@ -11,7 +11,6 @@
 #include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
-#include "Weather/MapOverlay/EdlControlsModel.hpp"
 #include "Weather/EDL/StateController.hpp"
 #include "Weather/EDL/TileStore.hpp"
 #ifdef HAVE_EDL
@@ -24,13 +23,41 @@
 #include <memory>
 #include <vector>
 
+namespace {
+
+unsigned
+SelectedCachedDayIndex(const std::vector<EDL::CachedDay> &days) noexcept
+{
+  if (days.empty())
+    return 0;
+
+  const auto current_day = EDL::GetForecastTime().AtMidnight();
+  for (unsigned i = 0; i < days.size(); ++i)
+    if (days[i].day == current_day)
+      return i;
+
+  return 0;
+}
+
+StaticString<40>
+FormatCachedDayLabel(const EDL::CachedDay &day) noexcept
+{
+  StaticString<40> label;
+  label.Format("%04u-%02u-%02u (%s, %u)",
+               day.day.year, day.day.month, day.day.day,
+               day.IsComplete() ? _("Complete") : _("Partial"),
+               day.file_count);
+  return label;
+}
+
+} // namespace
+
 class EdlSettingsWidget final
   : public RowFormWidget
 #ifdef HAVE_EDL
   , private EDL::DownloadListener
 #endif
 {
-  WeatherMapOverlay::EdlControlsModel edl;
   std::vector<EDL::CachedDay> cached_days;
 
   unsigned cached_day_row = unsigned(-1);
@@ -101,9 +128,9 @@ EdlSettingsWidget::RefreshControls() noexcept
         clean_other_days_button->SetEnabled(true);
 
       const unsigned selected_index =
-        edl.SelectedCachedDayIndex(cached_days);
+        SelectedCachedDayIndex(cached_days);
       for (unsigned i = 0; i < cached_days.size(); ++i)
-        df.AddChoice(i, edl.FormatCachedDayLabel(cached_days[i]).c_str());
+        df.AddChoice(i, FormatCachedDayLabel(cached_days[i]).c_str());
 
       df.SetValue(selected_index);
     }

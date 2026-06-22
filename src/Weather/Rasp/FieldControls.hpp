@@ -77,12 +77,6 @@ StepTime(const RaspStore *rasp, unsigned field_index,
          int delta, unsigned &minute_of_day) noexcept;
 
 /**
- * Redraw the RASP layer from persisted cursor-bar session state.
- */
-void
-ApplyOverlayFromSession() noexcept;
-
-/**
  * Compact label for the active RASP field (map-scale PAN string).
  */
 StaticString<64>

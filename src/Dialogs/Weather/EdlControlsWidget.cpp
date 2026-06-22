@@ -9,7 +9,6 @@
 #include "Dialogs/Message.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Message.hpp"
 #include "NetComponents.hpp"
 #include "PageSettings.hpp"
 #include "Weather/EDL/DownloadGlue.hpp"
@@ -139,6 +138,9 @@ ApplyEdlLevelAuto() noexcept
 void
 EdlControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
 {
+  if (misc == nullptr || *misc == '\0')
+    return;
+
   switch (WeatherMapOverlay::ParseOverlayInputAction(misc)) {
   case WeatherMapOverlay::OverlayInputAction::TIME_PLUS:
     OnStepForecast(+1);
@@ -175,10 +177,8 @@ EdlControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     break;
 
   case WeatherMapOverlay::OverlayInputAction::TIME_AUTO_SHOW:
-    if (data->model.GetForecastAutoAdvance())
-      Message::AddMessage(_("Auto. weather time on"));
-    else
-      Message::AddMessage(_("Auto. weather time off"));
+    WeatherMapOverlay::ShowAutoTimeStatusMessage(
+      data->model.GetForecastAutoAdvance());
     break;
 
   case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_TOGGLE:
@@ -200,10 +200,8 @@ EdlControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     break;
 
   case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_SHOW:
-    if (data->model.GetLevelAutoAdvance())
-      Message::AddMessage(_("Auto. weather altitude on"));
-    else
-      Message::AddMessage(_("Auto. weather altitude off"));
+    WeatherMapOverlay::ShowAutoAltitudeStatusMessage(
+      data->model.GetLevelAutoAdvance());
     break;
 
   case WeatherMapOverlay::OverlayInputAction::NONE:

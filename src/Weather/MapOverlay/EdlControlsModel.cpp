@@ -9,6 +9,7 @@
 #include "UIState.hpp"
 #include "Weather/EDL/Levels.hpp"
 #include "Weather/EDL/StateController.hpp"
+#include "Weather/EDL/TileStore.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 
 #include <chrono>
@@ -191,31 +192,6 @@ EdlControlsModel::SelectLevel(unsigned isobar) noexcept
   edl.SelectIsobar(isobar);
   edl.level_auto_advance = false;
   edl.cursor_session_initialized = true;
-}
-
-unsigned
-EdlControlsModel::SelectedCachedDayIndex(const std::vector<EDL::CachedDay> &days) const noexcept
-{
-  if (days.empty())
-    return 0;
-
-  const auto current_day = EDL::GetForecastTime().AtMidnight();
-  for (unsigned i = 0; i < days.size(); ++i)
-    if (days[i].day == current_day)
-      return i;
-
-  return 0;
-}
-
-StaticString<40>
-EdlControlsModel::FormatCachedDayLabel(const EDL::CachedDay &day) const noexcept
-{
-  StaticString<40> label;
-  label.Format("%04u-%02u-%02u (%s, %u)",
-               day.day.year, day.day.month, day.day.day,
-               day.IsComplete() ? _("Complete") : _("Partial"),
-               day.file_count);
-  return label;
 }
 
 } // namespace WeatherMapOverlay
