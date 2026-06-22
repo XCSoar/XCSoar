@@ -11,6 +11,7 @@
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
+#include "Input/InputEvents.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
@@ -445,6 +446,9 @@ PageActions::LoadLayout(const PageLayout &layout)
   LoadMain(active.main);
   ApplyPageOverlay(active);
   LoadBottom(active);
+
+  if (!active.UsesWeatherOverlay() && InputEvents::IsMode("weather"))
+    InputEvents::setMode(InputEvents::MODE_DEFAULT);
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState(false);

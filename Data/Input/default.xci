@@ -1216,6 +1216,13 @@ location=4
 
 mode=Menu
 type=key
+data=5
+event=Mode weather
+label=Weather
+location=5
+
+mode=Menu
+type=key
 data=9
 event=LockScreen
 event=Mode default
@@ -1613,6 +1620,13 @@ data=0
 event=Exit
 label=Quit XCSoar
 location=41
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode weather
+label=Forecast\nControls
+location=42
 
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote
