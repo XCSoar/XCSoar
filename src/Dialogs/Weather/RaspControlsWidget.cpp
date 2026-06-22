@@ -5,9 +5,12 @@
 
 #include "Blackboard/BlackboardListenerRegistration.hpp"
 #include "ActionInterface.hpp"
-#include "Dialogs/Message.hpp"
+#include "DataGlobals.hpp"
+#include "Dialogs/ComboPicker.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 #include "Weather/MapOverlay/InputEventMisc.hpp"
 #include "Weather/MapOverlay/RaspControlsModel.hpp"
@@ -27,16 +30,20 @@ struct RaspControlsWidget::Private {
 };
 
 RaspControlsWidget::RaspControlsWidget()
-  :CursorBarWidget(1),
+  :CursorBarWidget(2),
    data(std::make_unique<Private>())
 {
   SetStepCallback([this](unsigned row, int delta) {
     if (row == TIME_ROW)
       OnStepTime(delta);
+    else if (row == FIELD_ROW)
+      OnStepField(delta);
   });
   SetLabelClickCallback([this](unsigned row) {
-    (void)row;
-    OnResumeAuto();
+    if (row == TIME_ROW)
+      OnResumeAuto();
+    else if (row == FIELD_ROW)
+      OnPickField();
   });
 }
 
@@ -51,6 +58,10 @@ RaspControlsWidget::UpdateLabels() noexcept
   StaticString<64> time_text;
   data->model.FormatTimeLabel(time_text);
   SetRowText(TIME_ROW, time_text, data->model.HasTimeData());
+
+  StaticString<64> field_text;
+  data->model.FormatFieldLabel(field_text);
+  SetRowText(FIELD_ROW, field_text, data->model.HasFieldData());
 }
 
 void
@@ -64,6 +75,15 @@ void
 RaspControlsWidget::OnStepTime(int delta) noexcept
 {
   if (data->model.StepTime(delta))
+    RefreshRaspOverlay();
+  else
+    UpdateLabels();
+}
+
+void
+RaspControlsWidget::OnStepField(int delta) noexcept
+{
+  if (data->model.StepField(delta))
     RefreshRaspOverlay();
   else
     UpdateLabels();
@@ -86,8 +106,35 @@ RaspControlsWidget::OnResumeAuto() noexcept
 }
 
 void
+RaspControlsWidget::OnPickField() noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0)
+    return;
+
+  DataFieldEnum field;
+  Rasp::FillFieldChoices(field, rasp.get());
+
+  const int current = Rasp::GetEffectiveFieldIndex();
+  field.SetValue(current >= 0 ? current : 0);
+
+  if (!ComboPicker(_("RASP Layer"), field, nullptr))
+    return;
+
+  const int selected = field.GetValue();
+  if (selected < 0)
+    return;
+
+  data->model.SelectField(unsigned(selected));
+  RefreshRaspOverlay();
+}
+
+void
 RaspControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
 {
+  if (misc == nullptr || *misc == '\0')
+    return;
+
   switch (WeatherMapOverlay::ParseOverlayInputAction(misc)) {
   case WeatherMapOverlay::OverlayInputAction::TIME_PLUS:
     OnStepTime(+1);
@@ -121,8 +168,16 @@ RaspControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     break;
 
   case WeatherMapOverlay::OverlayInputAction::NONE:
+    break;
+
   case WeatherMapOverlay::OverlayInputAction::ALTITUDE_PLUS:
+    OnStepField(+1);
+    break;
+
   case WeatherMapOverlay::OverlayInputAction::ALTITUDE_MINUS:
+    OnStepField(-1);
+    break;
+
   case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_TOGGLE:
   case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_ON:
   case WeatherMapOverlay::OverlayInputAction::ALTITUDE_AUTO_OFF:

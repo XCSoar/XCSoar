@@ -582,8 +582,9 @@ The built-in stick bindings in :file:`Data/Input/default.xci` are:
    - ``Mode default``
    - Exit weather input mode
 
-On-screen labels (locations 1, 6--10) mirror these actions. RASP
-pages ignore altitude commands; only the time row is active.
+On-screen labels (locations 1, 6--10) mirror these actions. On RASP
+pages, UP/DOWN step the forecast layer; EDL pages use them for pressure
+level. RASP ignores altitude auto/manual commands.
 
 The same ``WeatherOverlay`` arguments can be bound in any mode (for
 example from ``mode=default``) if you prefer not to use ``mode=weather``.

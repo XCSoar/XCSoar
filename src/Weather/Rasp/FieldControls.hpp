@@ -77,6 +77,42 @@ StepTime(const RaspStore *rasp, unsigned field_index,
          int delta, unsigned &minute_of_day) noexcept;
 
 /**
+ * Compact label for the active RASP field (cursor bar).
+ */
+void
+FormatFieldCursorLabel(StaticString<64> &text) noexcept;
+
+/**
+ * Number of RASP fields in the loaded repository, or @c 0.
+ */
+[[gnu::pure]]
+unsigned
+GetFieldCount() noexcept;
+
+/**
+ * Apply @p field_index to the current RASP page and active overlay.
+ *
+ * @return false when the field is invalid or the page is not RASP
+ */
+bool
+SelectField(unsigned field_index) noexcept;
+
+/**
+ * Step the active RASP field by @p delta (wraps at list ends).
+ *
+ * @return false when stepping is not possible
+ */
+bool
+StepField(int delta) noexcept;
+
+/**
+ * Return true when a RASP field is loaded and selected.
+ */
+[[gnu::pure]]
+bool
+HasSelectedField() noexcept;
+
+/**
  * Compact label for the active RASP field (map-scale PAN string).
  */
 StaticString<64>

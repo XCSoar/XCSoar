@@ -105,4 +105,28 @@ RaspControlsModel::HasTimeData() const noexcept
   return Rasp::HasSelectedTimeData(GetTimeAutoAdvance());
 }
 
+bool
+RaspControlsModel::StepField(int delta) noexcept
+{
+  return Rasp::StepField(delta);
+}
+
+void
+RaspControlsModel::SelectField(unsigned field_index) noexcept
+{
+  Rasp::SelectField(field_index);
+}
+
+void
+RaspControlsModel::FormatFieldLabel(StaticString<64> &text) const noexcept
+{
+  Rasp::FormatFieldCursorLabel(text);
+}
+
+bool
+RaspControlsModel::HasFieldData() const noexcept
+{
+  return Rasp::HasSelectedField();
+}
+
 } // namespace WeatherMapOverlay

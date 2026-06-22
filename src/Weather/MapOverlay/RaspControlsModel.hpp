@@ -24,8 +24,15 @@ public:
   bool StepTime(int delta) noexcept;
   void FormatTimeLabel(StaticString<64> &text) const noexcept;
 
+  bool StepField(int delta) noexcept;
+  void SelectField(unsigned field_index) noexcept;
+  void FormatFieldLabel(StaticString<64> &text) const noexcept;
+
   [[gnu::pure]]
   bool HasTimeData() const noexcept;
+
+  [[gnu::pure]]
+  bool HasFieldData() const noexcept;
 };
 
 } // namespace WeatherMapOverlay

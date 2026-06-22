@@ -3,6 +3,7 @@
 
 #include "FieldControls.hpp"
 
+#include "ActionInterface.hpp"
 #include "RaspStore.hpp"
 #include "DataGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -10,6 +11,8 @@
 #include "Language/Language.hpp"
 #include "PageActions.hpp"
 #include "PageSettings.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/PageProfile.hpp"
 #include "UIState.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 
@@ -129,6 +132,82 @@ GetEffectiveFieldIndex() noexcept
 
   const int map = CommonInterface::GetUIState().weather.map;
   return map >= 0 ? map : -1;
+}
+
+unsigned
+GetFieldCount() noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  return rasp != nullptr ? rasp->GetItemCount() : 0U;
+}
+
+void
+FormatFieldCursorLabel(StaticString<64> &text) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  const int field_index = GetEffectiveFieldIndex();
+  if (rasp == nullptr || field_index < 0) {
+    text = _("No layer");
+    return;
+  }
+
+  const auto &info = rasp->GetItemInfo(unsigned(field_index));
+  const char *field_label = info.label != nullptr
+    ? gettext(info.label)
+    : info.name.c_str();
+  text = field_label;
+}
+
+bool
+SelectField(unsigned field_index) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || field_index >= rasp->GetItemCount())
+    return false;
+
+  PageSettings &settings = CommonInterface::SetUISettings().pages;
+  const PagesState &pages = CommonInterface::GetUIState().pages;
+  const unsigned page_index = pages.current_index;
+
+  PageLayout &page = settings.pages[page_index];
+  if (page.overlay != PageLayout::Overlay::RASP)
+    return false;
+
+  page.rasp_field = int(field_index);
+  page.Normalise();
+  Profile::Save(Profile::map, page, page_index);
+
+  auto &weather = CommonInterface::SetUIState().weather;
+  weather.map = int(field_index);
+  weather.rasp_cursor_session_initialized = true;
+
+  ActionInterface::UpdateDisplayMode();
+  ActionInterface::SendUIState(true);
+  return true;
+}
+
+bool
+StepField(int delta) noexcept
+{
+  const unsigned count = GetFieldCount();
+  if (count == 0 || delta == 0)
+    return false;
+
+  int index = GetEffectiveFieldIndex();
+  if (index < 0)
+    index = 0;
+
+  int next = (int(index) + delta) % int(count);
+  if (next < 0)
+    next += int(count);
+
+  return SelectField(unsigned(next));
+}
+
+bool
+HasSelectedField() noexcept
+{
+  return GetFieldCount() > 0 && GetEffectiveFieldIndex() >= 0;
 }
 
 StaticString<64>
