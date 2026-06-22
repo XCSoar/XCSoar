@@ -6,6 +6,7 @@
 #include "Widget.hpp"
 #include "ui/dim/Rect.hpp"
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>
