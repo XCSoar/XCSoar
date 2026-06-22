@@ -92,7 +92,7 @@ jobs:
       version: ${{ steps.get_version.outputs.VERSION }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
           submodules: true
@@ -254,7 +254,7 @@ jobs:
           fi
 
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
           submodules: true
@@ -837,7 +837,7 @@ jobs:
     if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
           submodules: true
