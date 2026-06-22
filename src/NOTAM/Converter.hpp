@@ -33,10 +33,14 @@ ConvertNOTAMToAirspace(const struct NOTAM &notam, Airspaces &airspaces);
  * Convert a NOTAM to an airspace object.
  *
  * @param notam NOTAM to convert
+ * @param allow_oversized_circles true to cap circles larger than
+ * MAX_CIRCLE_RADIUS_METERS instead of rejecting them; intended for temporary
+ * details display, not airspace database injection
  * @return AirspacePtr on success, empty on failure
  */
 [[nodiscard]] AirspacePtr
-BuildNOTAMAirspace(const struct NOTAM &notam);
+BuildNOTAMAirspace(const struct NOTAM &notam,
+                   bool allow_oversized_circles = false);
 
 /**
  * Convert multiple NOTAMs to airspace format

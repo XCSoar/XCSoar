@@ -49,7 +49,8 @@ ConvertNOTAMToAirspace(const struct NOTAM &notam,
 }
 
 AirspacePtr
-BuildNOTAMAirspace(const struct NOTAM &notam)
+BuildNOTAMAirspace(const struct NOTAM &notam,
+                   const bool allow_oversized_circles)
 {
   try {
     std::unique_ptr<AbstractAirspace> airspace;
@@ -70,7 +71,7 @@ BuildNOTAMAirspace(const struct NOTAM &notam)
         );
         break;
         
-      case NOTAM::NOTAMGeometry::Type::CIRCLE:
+      case NOTAM::NOTAMGeometry::Type::CIRCLE: {
         // Validate radius before creating circle
         if (!std::isfinite(notam.geometry.radius_meters) ||
             notam.geometry.radius_meters <= 0) {
@@ -80,12 +81,21 @@ BuildNOTAMAirspace(const struct NOTAM &notam)
                  notam.number.c_str());
           return {};
         }
-        if (notam.geometry.radius_meters > MAX_CIRCLE_RADIUS_METERS) {
+        double radius_meters = notam.geometry.radius_meters;
+        if (radius_meters > MAX_CIRCLE_RADIUS_METERS) {
+          if (!allow_oversized_circles) {
+            LogFmt("NOTAM: Circle radius {:.1f} exceeds max {:.0f} for "
+                   "NOTAM {}/{}, skipping",
+                   radius_meters, MAX_CIRCLE_RADIUS_METERS,
+                   notam.id.c_str(), notam.number.c_str());
+            return {};
+          }
+
           LogFmt("NOTAM: Circle radius {:.1f} exceeds max {:.0f} for "
-                 "NOTAM {}/{}, skipping",
-                 notam.geometry.radius_meters, MAX_CIRCLE_RADIUS_METERS,
+                 "NOTAM {}/{}, capping for details",
+                 radius_meters, MAX_CIRCLE_RADIUS_METERS,
                  notam.id.c_str(), notam.number.c_str());
-          return {};
+          radius_meters = MAX_CIRCLE_RADIUS_METERS;
         }
         if (!notam.geometry.center.Check()) {
           LogFmt("NOTAM: Invalid circle coordinates for NOTAM {}/{}, skipping",
@@ -95,9 +105,10 @@ BuildNOTAMAirspace(const struct NOTAM &notam)
 
         airspace = std::make_unique<AirspaceCircle>(
           notam.geometry.center,
-          notam.geometry.radius_meters
+          radius_meters
         );
         break;
+      }
         
       case NOTAM::NOTAMGeometry::Type::POLYGON:
         if (notam.geometry.polygon_points.size() >= 3) {
