@@ -443,6 +443,11 @@ public:
                        bool nullable = true) noexcept;
 
   WndProperty *AddFile(const char *label, const char *help,
+                       std::string_view profile_key,
+                       std::initializer_list<FileType> file_types,
+                       bool nullable = true) noexcept;
+
+  WndProperty *AddFile(const char *label, const char *help,
                        std::string_view profile_key, const char *filters,
                        bool nullable = true) noexcept {
     return AddFile(label, help, profile_key, filters, FileType::UNKNOWN,
