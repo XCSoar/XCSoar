@@ -4,6 +4,7 @@
 #include "Task/TaskStore.hpp"
 #include "Task/TaskFile.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Repository/FileType.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "LocalPath.hpp"
@@ -11,6 +12,7 @@
 #include "LogFile.hpp"
 
 #include <algorithm>
+#include <cstring>
 #include <memory>
 
 class TaskFileVisitor: public File::Visitor
@@ -57,6 +59,25 @@ public:
   }
 };
 
+namespace {
+
+static constexpr char PRIMARY_TASK_PATTERN[] = "*.tsk";
+
+static void
+VisitPatternList(File::Visitor &visitor, const char *patterns,
+                 const char *skip_pattern = nullptr)
+{
+  size_t length;
+  while ((length = strlen(patterns)) > 0) {
+    if (skip_pattern == nullptr || strcmp(patterns, skip_pattern) != 0)
+      VisitDataFiles(patterns, visitor);
+
+    patterns += length + 1;
+  }
+}
+
+} // namespace
+
 void
 TaskStore::Clear()
 {
@@ -71,12 +92,11 @@ TaskStore::Scan(bool extra)
 
   // scan files
   TaskFileVisitor tfv(store);
-  VisitDataFiles("*.tsk", tfv);
+  VisitDataFiles(PRIMARY_TASK_PATTERN, tfv);
 
-  if (extra) {
-    VisitDataFiles("*.cup", tfv);
-    VisitDataFiles("*.igc", tfv);
-  }
+  if (extra)
+    VisitPatternList(tfv, GetFileTypePatterns(FileType::TASK),
+                     PRIMARY_TASK_PATTERN);
 
   std::sort(store.begin(), store.end());
 }

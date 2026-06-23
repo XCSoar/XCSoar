@@ -4,6 +4,7 @@
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
 #include "IGC/IGCExtensions.hpp"
+#include "Repository/FileType.hpp"
 #include "io/FileLineReader.hpp"
 #include "system/FileUtil.hpp"
 #include "time/FloatDuration.hxx"
@@ -11,6 +12,7 @@
 #include "util/PrintException.hxx"
 
 #include <cstdio>
+#include <cstring>
 #include <stdlib.h>
 
 class FlightCheck {
@@ -140,7 +142,13 @@ IGCFileVisitor::Visit(Path path, Path filename)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 try {
   IGCFileVisitor visitor;
-  Directory::VisitSpecificFiles(Path("."), "*.igc", visitor);
+  const char *patterns = GetFileTypePatterns(FileType::IGC);
+  size_t length;
+  while ((length = strlen(patterns)) > 0) {
+    Directory::VisitSpecificFiles(Path("."), patterns, visitor);
+    patterns += length + 1;
+  }
+
   return 0;
 } catch (...) {
   PrintException(std::current_exception());
