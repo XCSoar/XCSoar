@@ -177,6 +177,27 @@ struct DeviceConfig {
   double sensor_factor;
 
   /**
+   * For Acceleration & Rotation sensors of the built-in sensor set.
+   * It is important to know the orientation of the sensor axis.
+   *
+   * Is the instrument housing of these sensors permanently mounted in the
+   * aircraft, and do the sensors' three axes correspond to the aircraft's
+   * three axes (FIXED_AND_ALIGNED)? Or is the instrument mounted flexibly in the cockpit,
+   * for example using a gooseneck (NOT_ALIGNED)?
+   * If in doubt, this should be set to NOT_ALIGNED, as incorrect measurements
+   * can lead to misinterpretations.
+   */
+  enum class InstrumentAlignment : unsigned {
+    NONE = 0,
+    /** The instrument is fixed and the axis are aligned to the aircraft */
+    FIXED_AND_ALIGNED,
+    /** Not aligned to the aircraft's axis, e.g. flexible mount */
+    NOT_ALIGNED,
+    /** A dummy entry that is used for validating profile values. */
+    COUNT
+  } instrument_alignment;
+
+  /**
    * User choices of engine types supported.
    * Depending on the engine used (2-stroke, 4-stroke etc.),
    * ignitions per second have to be scaled to revolutions per second.
