@@ -82,7 +82,8 @@ LoadTiff(TIFFRGBAImage &img)
   if (img.width > max_size || img.height > max_size)
     throw std::runtime_error("TIFF file is too large");
 
-  std::unique_ptr<uint8_t[]> data(new uint8_t[img.width * img.height * 4]);
+  const std::size_t size = std::size_t(img.width) * img.height * 4;
+  std::unique_ptr<uint8_t[]> data(new uint8_t[size]);
   uint32_t *data32 = (uint32_t *)(void *)data.get();
 
   if (!TIFFRGBAImageGet(&img, data32, img.width, img.height))
