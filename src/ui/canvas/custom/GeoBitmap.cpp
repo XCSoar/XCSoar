@@ -24,7 +24,7 @@ Bitmap::LoadGeoFile(Path path)
   if (path.EndsWithIgnoreCase(".tif") ||
       path.EndsWithIgnoreCase(".tiff")) {
     if (File::GetSize(path) < kMinTiffGeoFileSize)
-      return GeoReferencedGrid{GeoQuadrilateral::Undefined()};
+      throw std::runtime_error("Geo image file is too small");
 
     auto result = LoadGeoTiff(path);
     if (!Load(std::move(result.first)))
