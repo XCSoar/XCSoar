@@ -4,6 +4,7 @@
 #pragma once
 
 #include "system/Path.hpp"
+#include "Repository/FileType.hpp"
 
 #include <initializer_list>
 #include <string_view>
@@ -22,4 +23,9 @@ BuildTargetDirectory(Path target, std::string_view subfolder) noexcept;
 void
 ScanFilesIntoDataField(const AllocatedPath &path, MultiFileDataField &df,
                        std::initializer_list<std::string_view> patterns,
+                       bool recursive = true) noexcept;
+
+void
+ScanFilesIntoDataField(const AllocatedPath &path, MultiFileDataField &df,
+                       std::initializer_list<FileType> file_types,
                        bool recursive = true) noexcept;

@@ -375,7 +375,7 @@ ShowExportFlightsDialog()
   auto logs_path = MakeLocalPath("logs");
   if (logs_path != nullptr && Directory::Exists(logs_path)) {
     ScanFilesIntoDataField(logs_path, *df,
-                           {"*.igc", "*.nmea"}, true);
+                           {FileType::IGC, FileType::NMEA}, true);
   }
 
   auto container = std::make_unique<FlightContainer>(*df);

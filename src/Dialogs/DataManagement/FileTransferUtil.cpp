@@ -7,6 +7,27 @@
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 
+#include <cstring>
+
+namespace {
+
+static void
+VisitFileTypePatterns(Path path, File::Visitor &visitor,
+                      std::initializer_list<FileType> file_types,
+                      bool recursive) noexcept
+{
+  for (const auto file_type : file_types) {
+    const char *patterns = GetFileTypePatterns(file_type);
+    size_t length;
+    while ((length = strlen(patterns)) > 0) {
+      Directory::VisitSpecificFiles(path, patterns, visitor, recursive);
+      patterns += length + 1;
+    }
+  }
+}
+
+} // namespace
+
 AllocatedPath
 BuildTargetDirectory(Path target, std::string_view subfolder) noexcept
 {
@@ -42,6 +63,26 @@ ScanFilesIntoDataField(const AllocatedPath &path, MultiFileDataField &df,
     std::string pattern_str(pattern);
     Directory::VisitSpecificFiles(path, pattern_str.c_str(), scanner, recursive);
   }
+
+  df.GetFileDataField().Sort(FileDataField::SortOrder::DESCENDING);
+}
+
+void
+ScanFilesIntoDataField(const AllocatedPath &path, MultiFileDataField &df,
+                       std::initializer_list<FileType> file_types,
+                       bool recursive) noexcept
+{
+  struct FileScanner : File::Visitor {
+    MultiFileDataField &df;
+    explicit FileScanner(MultiFileDataField &d) : df(d) {}
+    void Visit(Path file, Path /*filename*/) override {
+      if (file == nullptr)
+        return;
+      df.GetFileDataField().ForceModify(file);
+    }
+  } scanner(df);
+
+  VisitFileTypePatterns(path, scanner, file_types, recursive);
 
   df.GetFileDataField().Sort(FileDataField::SortOrder::DESCENDING);
 }
