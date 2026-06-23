@@ -19,6 +19,7 @@
 #include <concepts>
 #include <cstdint>
 #include <functional>
+#include <initializer_list>
 #include <memory>
 #include <type_traits>
 
@@ -434,6 +435,11 @@ public:
   WndProperty *AddFile(const char *label, const char *help,
                        std::string_view profile_key, const char *filters,
                        FileType file_type,
+                       bool nullable = true) noexcept;
+
+  WndProperty *AddFile(const char *label, const char *help,
+                       std::string_view profile_key, const char *filters,
+                       std::initializer_list<FileType> file_types,
                        bool nullable = true) noexcept;
 
   WndProperty *AddFile(const char *label, const char *help,

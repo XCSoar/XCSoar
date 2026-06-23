@@ -10,31 +10,55 @@
 #include "Profile/Profile.hpp"
 #include "RowFormWidget.hpp"
 
+namespace {
+
+static WndProperty *
+FinishFileProperty(RowFormWidget &form, const char *label, const char *help,
+                   std::string_view profile_key, const char *filters,
+                   FileDataField &df, bool nullable) noexcept
+{
+  WndProperty *edit = form.Add(label, help);
+  edit->SetDataField(&df);
+
+  if (nullable)
+    df.AddNull();
+
+  df.ScanMultiplePatterns(filters);
+
+  if (profile_key.data() != nullptr) {
+    const auto path = Profile::GetPath(profile_key);
+    if (path != nullptr)
+      df.SetValue(path);
+  }
+
+  edit->RefreshDisplay();
+  return edit;
+}
+
+} // namespace
+
 WndProperty *
 RowFormWidget::AddFile(const char *label, const char *help,
                        std::string_view profile_key, const char *filters,
                        FileType file_type,
                        bool nullable) noexcept
 {
-  WndProperty *edit = Add(label, help);
   auto *df = new FileDataField();
   df->SetFileType(file_type);
-  edit->SetDataField(df);
+  return FinishFileProperty(*this, label, help, profile_key, filters, *df,
+                            nullable);
+}
 
-  if (nullable)
-    df->AddNull();
-
-  df->ScanMultiplePatterns(filters);
-
-  if (profile_key.data() != nullptr) {
-    const auto path = Profile::GetPath(profile_key);
-    if (path != nullptr)
-      df->SetValue(path);
-  }
-
-  edit->RefreshDisplay();
-
-  return edit;
+WndProperty *
+RowFormWidget::AddFile(const char *label, const char *help,
+                       std::string_view profile_key, const char *filters,
+                       std::initializer_list<FileType> file_types,
+                       bool nullable) noexcept
+{
+  auto *df = new FileDataField();
+  df->SetFileTypes(file_types);
+  return FinishFileProperty(*this, label, help, profile_key, filters, *df,
+                            nullable);
 }
 
 WndProperty *

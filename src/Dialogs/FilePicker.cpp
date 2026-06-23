@@ -23,18 +23,19 @@ FilePicker(const char *caption, FileDataField &df, const char *help_text,
 
   const char *extra_caption = nullptr;
 #ifdef HAVE_DOWNLOAD_MANAGER
+  const auto file_type = df.GetFileType();
   // with FileType::IGC don't show the 'Download'-Button!
-  if (df.GetFileType() != FileType::IGC &&
-    df.GetFileType() != FileType::UNKNOWN &&
-    Net::DownloadManager::IsAvailable())
-      extra_caption = _("Download");
+  if (file_type != FileType::IGC &&
+      file_type != FileType::UNKNOWN &&
+      Net::DownloadManager::IsAvailable())
+    extra_caption = _("Download");
 #endif
 
   int i = ComboPicker(caption, combo_list, help_text, false, extra_caption);
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (i == -2) {
-    const auto path = DownloadFilePicker(df.GetFileType());
+    const auto path = DownloadFilePicker(file_type);
     if (path == nullptr)
       return false;
 
