@@ -47,6 +47,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Dialogs/dlgQuickGuide.hpp"
 #include "Dialogs/dlgGestureHelp.hpp"
 #include "Message.hpp"
+#include "Repository/FileType.hpp"
 #include "Markers/Markers.hpp"
 #include "MainWindow.hpp"
 #include "PopupMessage.hpp"
@@ -798,7 +799,7 @@ InputEvents::eventExchangeFrequencies([[maybe_unused]] const char *misc)
 void
 InputEvents::eventUploadIGCFile([[maybe_unused]] const char *misc) {
   FileDataField df;
-  df.ScanMultiplePatterns("*.igc\0");
+  df.ScanMultiplePatterns(GetFileTypePatterns(FileType::IGC));
   df.SetFileType(FileType::IGC);
   if (FilePicker("IGC-FilePicker", df)) {
     auto path = df.GetValue();
