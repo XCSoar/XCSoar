@@ -283,7 +283,9 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     FileName[0] = 0;
   }
 
-  // Scan for files in "/test/data/something"
+  /* Scan matching files first.  The loop below still enumerates all
+     entries to find subdirectories, but must not visit the same files
+     again through File::Visitor. */
   if (dir_entry_cb == nullptr)
     ScanFiles(visitor, Path(FileName), filter);
 
@@ -316,11 +318,9 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
         if (recursive)
           ScanDirectories(visitor, true, Path(FileName), filter, show_dir, dir_entry_cb);
-      } else if (checkFilter(FindFileData.cFileName, filter)) {
-        if (dir_entry_cb)
-          dir_entry_cb->Visit(Path(FileName), Path(FindFileData.cFileName), false);
-        else
-          visitor.Visit(Path(FileName), Path(FindFileData.cFileName));
+      } else if (dir_entry_cb != nullptr &&
+                 checkFilter(FindFileData.cFileName, filter)) {
+        dir_entry_cb->Visit(Path(FileName), Path(FindFileData.cFileName), false);
       }
     }
 
