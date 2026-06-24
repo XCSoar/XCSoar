@@ -42,5 +42,5 @@ struct NOTAMSettings {
    *  obstacle admin)
    * See: faa.gov/air_traffic/publications/atpubs/notam_html/appendix_b.html
    */
-  StaticString<64> hidden_qcodes{"QA QK QN QOL QOA QOBTT"};
+  StaticString<256> hidden_qcodes{"QA QK QN QOL QOA QOBTT"};
 };
