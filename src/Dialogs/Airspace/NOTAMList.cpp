@@ -7,6 +7,7 @@
 #ifdef HAVE_HTTP
 
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "ui/control/List.hpp"
@@ -23,15 +24,20 @@
 #include "NOTAM/Filter.hpp"
 #include "NOTAM/NOTAMGlue.hpp"
 #include "NOTAM/Converter.hpp"
+#include "Airspace/AirspaceGlue.hpp"
 #include "Airspace.hpp"
 #include "BackendComponents.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Interface.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/Keys.hpp"
+#include "Protection.hpp"
 #include "util/StringFormat.hpp"
 #include "util/TruncateString.hpp"
 #include "Operation/Operation.hpp"
 #include "util/UTF8.hpp"
+#include "util/StringAPI.hxx"
 #include "system/FileUtil.hpp"
 
 #include <array>
@@ -92,6 +98,136 @@ SafeString(const std::string &input)
     return std::string(_("[Invalid text]"));
   }
   return input;
+}
+
+[[nodiscard]]
+static bool
+HasHiddenQCodeToken(std::string_view hidden_list,
+                    std::string_view qcode) noexcept
+{
+  if (qcode.empty())
+    return false;
+
+  size_t start = hidden_list.find_first_not_of(" \t,");
+  while (start != std::string_view::npos) {
+    const size_t end = hidden_list.find_first_of(" \t,", start);
+    const size_t token_len = end == std::string_view::npos
+      ? hidden_list.size() - start
+      : end - start;
+
+    if (token_len == qcode.size() &&
+        StringIsEqualIgnoreCase(hidden_list.data() + start,
+                                qcode.data(), qcode.size()))
+      return true;
+
+    if (end == std::string_view::npos)
+      break;
+
+    start = hidden_list.find_first_not_of(" \t,", end + 1);
+  }
+
+  return false;
+}
+
+[[nodiscard]]
+static unsigned
+CountNOTAMsWithQCodePrefix(std::string_view qcode) noexcept
+{
+  if (qcode.empty() || net_components == nullptr ||
+      net_components->notam == nullptr)
+    return 0;
+
+  unsigned count = 0;
+  try {
+    const auto snapshot = net_components->notam->GetSnapshot();
+    for (const auto &notam : snapshot.notams)
+      if (NOTAMFilter::IsQCodeHidden(notam.feature_type, qcode))
+        ++count;
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to count NOTAM Q-code");
+  }
+
+  return count;
+}
+
+static bool
+AddHiddenQCode(NOTAMSettings &settings, std::string_view qcode) noexcept
+{
+  if (qcode.empty() || HasHiddenQCodeToken(settings.hidden_qcodes, qcode))
+    return true;
+
+  const size_t length = settings.hidden_qcodes.length();
+  const size_t separator = length > 0 ? 1 : 0;
+  if (length + separator + qcode.size() + 1 >
+      settings.hidden_qcodes.capacity())
+    return false;
+
+  if (separator > 0)
+    settings.hidden_qcodes += ' ';
+
+  settings.hidden_qcodes += qcode;
+  return true;
+}
+
+static bool
+RemoveHiddenQCode(NOTAMSettings &settings, std::string_view qcode) noexcept
+{
+  if (qcode.empty())
+    return false;
+
+  StaticString<256> remaining;
+  bool removed = false;
+  std::string_view hidden_list = settings.hidden_qcodes;
+  size_t start = hidden_list.find_first_not_of(" \t,");
+  while (start != std::string_view::npos) {
+    const size_t end = hidden_list.find_first_of(" \t,", start);
+    const auto token = hidden_list.substr(start, end == std::string_view::npos
+                                          ? hidden_list.size() - start
+                                          : end - start);
+    const bool matches = token.size() <= qcode.size() &&
+      StringIsEqualIgnoreCase(token.data(), qcode.data(), token.size());
+
+    if (matches) {
+      removed = true;
+    } else {
+      if (!remaining.empty())
+        remaining += ' ';
+      remaining += token;
+    }
+
+    if (end == std::string_view::npos)
+      break;
+
+    start = hidden_list.find_first_not_of(" \t,", end + 1);
+  }
+
+  if (removed)
+    settings.hidden_qcodes = remaining;
+
+  return removed;
+}
+
+static void
+ApplyNOTAMFilterSettings(const NOTAMSettings &settings) noexcept
+{
+  Profile::Set(ProfileKeys::NOTAMHiddenQCodes, settings.hidden_qcodes);
+
+  if (net_components != nullptr && net_components->notam != nullptr)
+    net_components->notam->SetSettings(settings);
+
+  if (net_components != nullptr && net_components->notam != nullptr &&
+      data_components != nullptr && data_components->airspaces != nullptr) {
+    try {
+      const ScopeSuspendAllThreads suspend;
+      net_components->notam->UpdateAirspaces(*data_components->airspaces);
+      if (data_components->terrain != nullptr)
+        SetAirspaceGroundLevels(*data_components->airspaces,
+                                *data_components->terrain);
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to apply NOTAM Q-code filter");
+    }
+  }
 }
 
 
@@ -177,6 +313,7 @@ class NOTAMListWidget final : public ListWidget {
   std::vector<NOTAMStruct> items;
   TwoTextRowsRenderer row_renderer;
   Button *details_button = nullptr;
+  Button *filter_qcode_button = nullptr;
 
 public:
   NOTAMListWidget() = default;
@@ -189,13 +326,37 @@ public:
       details_button->SetEnabled(false);
   }
 
+  void SetFilterQCodeButton(Button *_filter_qcode_button) noexcept {
+    filter_qcode_button = _filter_qcode_button;
+    if (filter_qcode_button != nullptr)
+      filter_qcode_button->SetEnabled(false);
+  }
+
   void ShowDetails() noexcept {
     OnActivateItem(GetList().GetCursorIndex());
   }
 
+  void FilterSelectedQCode() noexcept;
+
   void UpdateButtons() noexcept {
+    const unsigned index = GetList().GetCursorIndex();
+
     if (details_button != nullptr)
-      details_button->SetEnabled(CanActivateItem(GetList().GetCursorIndex()));
+      details_button->SetEnabled(CanActivateItem(index));
+
+    if (filter_qcode_button != nullptr) {
+      const auto *notam = GetSelectableNOTAM(index);
+      const auto &settings =
+        CommonInterface::GetComputerSettings().airspace.notam;
+      const bool has_qcode = notam != nullptr && !notam->feature_type.empty();
+      filter_qcode_button->SetEnabled(has_qcode);
+      if (has_qcode)
+        filter_qcode_button->SetCaption(
+          NOTAMFilter::IsQCodeHidden(notam->feature_type,
+                                     settings.hidden_qcodes)
+          ? _("Show Q-code")
+          : _("Hide Q-code"));
+    }
   }
 
   /* virtual methods from class Widget */
@@ -208,10 +369,7 @@ public:
       UpdateList();
     } catch (...) {
       LogError(std::current_exception(), "Failed to update NOTAM list");
-      items.clear();
-      GetList().SetLength(1);
-      GetList().Invalidate();
-      UpdateButtons();
+      ResetListAfterUpdateFailure();
     }
   }
 
@@ -229,6 +387,18 @@ public:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
+
+private:
+  void ResetListAfterUpdateFailure() noexcept {
+    items.clear();
+    GetList().SetLength(1);
+    GetList().Invalidate();
+    UpdateButtons();
+  }
+
+  const NOTAMStruct *GetSelectableNOTAM(unsigned index) const noexcept {
+    return CanActivateItem(index) ? &items[index] : nullptr;
+  }
 };
 
 void
@@ -391,6 +561,68 @@ NOTAMListWidget::OnActivateItem(unsigned i) noexcept
 }
 
 void
+NOTAMListWidget::FilterSelectedQCode() noexcept
+{
+  const auto *notam = GetSelectableNOTAM(GetList().GetCursorIndex());
+  if (notam == nullptr || notam->feature_type.empty())
+    return;
+
+  const auto qcode = std::string_view{notam->feature_type};
+  auto &settings = CommonInterface::SetComputerSettings().airspace.notam;
+
+  if (NOTAMFilter::IsQCodeHidden(qcode, settings.hidden_qcodes)) {
+    StaticString<512> message;
+    message.Format(_("Show Q-code %s?\n"
+                     "This will remove matching Q-code filters, which may "
+                     "also show other NOTAMs."),
+                   notam->feature_type.c_str());
+
+    if (ShowMessageBox(message.c_str(), _("NOTAM"),
+                       MB_YESNO | MB_ICONQUESTION) != IDYES)
+      return;
+
+    if (!RemoveHiddenQCode(settings, qcode))
+      return;
+
+    ApplyNOTAMFilterSettings(settings);
+    try {
+      UpdateList();
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to refresh NOTAM list");
+      ResetListAfterUpdateFailure();
+    }
+    return;
+  }
+
+  const unsigned affected_count = CountNOTAMsWithQCodePrefix(qcode);
+  StaticString<512> message;
+  message.Format(_("Hide Q-code %s?\n"
+                   "This will hide %u currently loaded NOTAM(s) with a "
+                   "matching Q-code prefix from the map and mark them as "
+                   "filtered in the NOTAM list."),
+                 notam->feature_type.c_str(), affected_count);
+
+  if (ShowMessageBox(message.c_str(), _("NOTAM"),
+                     MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return;
+
+  if (!AddHiddenQCode(settings, qcode)) {
+    ShowMessageBox(_("The hidden Q-code list is full. Remove unused filters "
+                     "in NOTAM settings first."),
+                   _("NOTAM"), MB_OK | MB_ICONEXCLAMATION);
+    return;
+  }
+
+  ApplyNOTAMFilterSettings(settings);
+  try {
+    UpdateList();
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to refresh NOTAM list");
+    ResetListAfterUpdateFailure();
+  }
+}
+
+void
 NOTAMListWidget::UpdateList()
 {
   items.clear();
@@ -492,6 +724,9 @@ ShowNOTAMListDialog(UI::SingleWindow &parent)
                       list_widget.release());
   list->SetDetailsButton(dialog.AddButton(_("Details"),
                                           [list](){ list->ShowDetails(); }));
+  list->SetFilterQCodeButton(
+    dialog.AddButton(_("Hide Q-code"),
+                     [list](){ list->FilterSelectedQCode(); }));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }
