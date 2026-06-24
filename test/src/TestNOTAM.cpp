@@ -67,7 +67,7 @@ MetadataValid(std::string_view json)
 int
 main()
 {
-  plan_tests(59);
+  plan_tests(62);
 
   const auto now = system_clock::now();
 
@@ -242,6 +242,16 @@ main()
   ok1(MetadataValid(R"({"xcsoar_timestamp":1712664000,"xcsoar_location_lat":50,"xcsoar_location_lon":8,"xcsoar_radius_km":25,"api_base_url":"https://notam.example/api"})"));
   ok1(!MetadataValid(R"({"xcsoar_timestamp":1712664000,"xcsoar_location_lat":50,"xcsoar_location_lon":8,"xcsoar_radius_km":25,"api_base_url":""})"));
   ok1(!MetadataValid(R"({"xcsoar_timestamp":1712664000})"));
+
+  {
+    NOTAMSettings settings;
+    settings.hidden_qcodes =
+      "QNMXX QOBCE QMXLT QAFXX QXXXX QRTTT QMXLC QOLAS QPOCH QFALT QWULW";
+    ok1(settings.hidden_qcodes == "QNMXX QOBCE QMXLT QAFXX QXXXX QRTTT "
+                                  "QMXLC QOLAS QPOCH QFALT QWULW");
+    ok1(NOTAMFilter::IsQCodeHidden("QWULW", settings.hidden_qcodes));
+    ok1(NOTAMFilter::IsQCodeHidden("QWULW", settings.hidden_qcodes.c_str()));
+  }
 
   {
     NOTAMSettings settings;
