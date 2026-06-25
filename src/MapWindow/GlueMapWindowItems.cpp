@@ -101,7 +101,8 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 #endif
 
     if (rasp_renderer && rasp_renderer->IsInside(location))
-      list.push_back(new RaspMapItem(rasp_renderer->GetLabel()));
+      list.push_back(new RaspMapItem(rasp_renderer->GetLabel(),
+                                     rasp_renderer->GetValueAt(location)));
   }
 
   // Sort the list of map items

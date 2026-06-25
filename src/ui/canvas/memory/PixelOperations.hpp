@@ -458,3 +458,49 @@ public:
       PixelTraits::WritePixel(p, (*this)(c));
   }
 };
+
+/**
+ * Blend a single channel using alpha.
+ */
+static constexpr uint8_t
+BlendChannel(uint8_t dest, uint8_t src, uint8_t alpha) noexcept {
+  return dest + ((int(src - dest) * alpha) >> 8);
+}
+
+/**
+ * Blend source and destination color using the alpha channel from
+ * the source pixel.
+ */
+template<AnyPixelTraits PT>
+struct PixelSourceAlpha {
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using channel_type = typename PixelTraits::channel_type;
+
+  using SourcePixelTraits = PT;
+
+  constexpr color_type operator()(color_type dest, color_type src) const {
+    // Get alpha from source pixel
+    const uint8_t alpha = src.Alpha();
+    if (alpha == 0)
+      return dest;  // Fully transparent - keep destination
+    if (alpha == 0xff)
+      return src;   // Fully opaque - use source
+
+    // Blend each channel using source alpha
+    // Cannot use TransformChannels because it doesn't preserve source alpha properly
+    return color_type(BlendChannel(dest.Red(), src.Red(), alpha),
+                      BlendChannel(dest.Green(), src.Green(), alpha),
+                      BlendChannel(dest.Blue(), src.Blue(), alpha),
+                      // Blend alpha: dest_alpha + (src_alpha - dest_alpha) * src_alpha / 255
+                      // Simplified: keep source alpha for the overlay
+                      alpha);
+  }
+};
+
+/**
+ * Per-pixel alpha blending operations using source pixel's alpha channel.
+ */
+template<AnyPixelTraits PixelTraits>
+using SourceAlphaPixelOperations =
+  BinaryPerPixelOperations<PixelSourceAlpha<PixelTraits>>;

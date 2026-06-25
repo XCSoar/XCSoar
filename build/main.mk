@@ -390,7 +390,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/RaspStore.cpp \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
+	$(SRC)/Weather/Rasp/ColorMap.cpp \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
+	$(SRC)/Weather/Rasp/RaspStylesData.cpp \
 	$(SRC)/Weather/Rasp/FieldControls.cpp \
 	$(SRC)/Weather/Rasp/Configured.cpp \
 	\

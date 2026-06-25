@@ -304,7 +304,18 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   PixelRect scale_pos(rc.left, rc.top, rc.right, rc.bottom - bottom_margin);
 
-  RenderMapScale(canvas, projection, scale_pos, look.overlay);
+  unsigned contour_spacing_m = 0;
+  const auto &terrain = GetMapSettings().terrain;
+  if (projection.IsValid() &&
+      terrain.enable && terrain.contours != Contours::OFF &&
+      background.AreContoursVisible()) {
+    const double screen_pixel_size = 1.0 / projection.GetScale();
+    const double dpi_factor = Layout::ScalePenWidth(1024u) / 1024.0;
+    contour_spacing_m = ContourSpacing(terrain.contours, 4,
+                                       screen_pixel_size * dpi_factor);
+  }
+
+  RenderMapScale(canvas, projection, scale_pos, look.overlay, contour_spacing_m);
 
   if (!projection.IsValid())
     return;
@@ -348,9 +359,9 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   if (rasp_renderer != nullptr &&
       ui_state.page_overlay != PageLayout::Overlay::RASP) {
-    const char *label = rasp_renderer->GetLabel();
-    if (label != nullptr)
-      buffer += gettext(label);
+    const auto label = rasp_renderer->GetExtendedLabel();
+    if (!label.empty())
+      buffer += label;
   }
 
   if (!buffer.empty()) {

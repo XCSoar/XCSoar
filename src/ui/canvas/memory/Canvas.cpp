@@ -664,3 +664,27 @@ Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                      src.buffer, src_position, src_size,
                      alpha);
 }
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               ConstImageBuffer src,
+                               PixelPoint src_position, PixelSize src_size) noexcept
+{
+  SDLRasterCanvas canvas(buffer);
+
+#ifdef GREYSCALE
+  /* greyscale pixels have no alpha channel, so per-pixel source-alpha
+     blending is not available. RASP selects an opaque colormap on 
+     this target, so this path is not normally reached at runtime. */
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size);
+#else
+  SourceAlphaPixelOperations<ActivePixelTraits> operations;
+
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size,
+                        operations);
+#endif
+}

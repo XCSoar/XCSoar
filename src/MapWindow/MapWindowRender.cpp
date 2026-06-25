@@ -69,9 +69,11 @@ MapWindow::RenderRasp(Canvas &canvas) noexcept
     rasp_renderer->Update(Calculated().date_time_local, operation);
   }
 
-  const auto &terrain_settings = GetMapSettings().terrain;
-  if (rasp_renderer->Generate(render_projection, terrain_settings))
-    rasp_renderer->Draw(canvas, render_projection);
+  const auto &map_settings = GetMapSettings();
+  if (rasp_renderer->Generate(render_projection, map_settings.terrain,
+                              state.contour_density))
+    rasp_renderer->Draw(canvas, render_projection,
+                        map_settings.rasp_layer_opacity / 100.f);
 }
 
 inline void

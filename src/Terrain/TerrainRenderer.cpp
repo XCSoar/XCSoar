@@ -3,13 +3,14 @@
 
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Screen/Layout.hpp"
 #include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 
 #include <cassert>
 
-static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0, { 0x70, 0xc0, 0xa7 }},
     {250, { 0xca, 0xe7, 0xb9 }},
@@ -288,6 +289,29 @@ static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
 static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
               "mismatched size");
 
+static constexpr ColorRamp terrain_ramps[] = {
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[0], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[1], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[2], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[3], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[4], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[5], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[6], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[7], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[8], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[9], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[10], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[11], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[12], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[13], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[14], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[15], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[16], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[17], nullptr },
+};
+static_assert(ARRAY_SIZE(terrain_ramps) == TerrainRendererSettings::NUM_RAMPS,
+              "mismatched size");
+
 // map scale is approximately 2 points on the grid
 // therefore, want one to one mapping if mapscale is 0.5
 // there are approx 30 pixels in mapscale
@@ -342,9 +366,16 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth) &&
-      !raster_renderer.UpdateQuantisation())
-    /* no change since previous frame */
-    return true;
+      !raster_renderer.UpdateQuantisation()) {
+    /* The existing terrain image is suitable for reuse.
+       But with contours: Re-use only without zoom change.
+       Otherwise we can re-use as a fast preview, but
+       re-render the higher quality views (q=2 and q=1) */
+    if (settings.contours == Contours::OFF ||
+        raster_renderer.GetQuantisationPixels() > 2 ||
+        map_projection.GetScale() == last_projection_scale)
+      return true;
+  }
 
 #else
   if (compare_projection.Compare(map_projection) &&
@@ -366,10 +397,18 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   const bool is_terrain = true;
   const bool do_shading = is_terrain &&
                           settings.slope_shading != SlopeShading::OFF;
-  const bool do_contour = is_terrain &&
-                          settings.contours != Contours::OFF;
+  const double screen_pixel_size =
+    1.0 / map_projection.GetScale();
+  const double dpi_factor =
+    Layout::ScalePenWidth(1024u) / 1024.0;
+  const double contour_pixel_size = screen_pixel_size * dpi_factor *
+    std::max(1u, raster_renderer.GetQuantisationPixels() / 2u);
+  const unsigned contour_spacing = is_terrain
+    ? ContourSpacing(settings.contours, height_scale,
+                     contour_pixel_size)
+    : 0u;
 
-  const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
+  const ColorRamp *const color_ramp = &terrain_ramps[settings.ramp];
   if (color_ramp != last_color_ramp) {
     raster_renderer.PrepareColorTable(color_ramp, do_water,
                                       height_scale, interp_levels);
@@ -384,6 +423,9 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth,
-                                do_contour);
+                                contour_spacing);
+
+  last_projection_scale = map_projection.GetScale();
+
   return true;
 }
