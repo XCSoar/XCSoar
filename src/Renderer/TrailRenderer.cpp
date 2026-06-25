@@ -20,6 +20,10 @@
 #include <vector>
 #include <cmath>
 
+static constexpr double TRAIL_ZOOMED_IN_SCALE = 6000;
+static constexpr int TRAIL_THIN_PIXELS_MIN = 3;
+static constexpr int TRAIL_THIN_PIXELS_MAX = 24;
+
 namespace {
 
 void
@@ -78,21 +82,16 @@ LookupVarioFromKnots(TracePoint::Time t_query,
   return a.second * (1. - u) + b.second * u;
 }
 
-/**
- * Screen-space thinning distance for trace extraction, scaled like
- * topography skip steps (#2661 cruise CPU).
- */
+/** ~1 canvas pixel per 500 m map scale, clamped to pre/post #2661 range. */
 [[gnu::const]]
-static int
-GetTrailThinningPixels(double map_scale) noexcept
+static double
+GetTrailThinDistance(const WindowProjection &projection,
+                     double map_scale) noexcept
 {
-  if (map_scale <= 3000)
-    return 3;
-  if (map_scale <= 6000)
-    return 6;
-  if (map_scale <= 12000)
-    return 12;
-  return 24;
+  const int thin_px = std::clamp(int(map_scale / 500),
+                                 TRAIL_THIN_PIXELS_MIN,
+                                 TRAIL_THIN_PIXELS_MAX);
+  return projection.DistancePixelsToMeters(thin_px);
 }
 
 } // namespace
@@ -115,17 +114,17 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer) noexcept
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
                          TimeStamp min_time,
-                         const WindowProjection &projection) noexcept
+                         const WindowProjection &projection,
+                         double map_scale) noexcept
 {
   trace.clear();
   merge_vario_samples.clear();
   try {
-    const double map_scale = projection.GetMapScale();
     trace_computer.LockedCopySnapshot(trace, merge_vario_samples,
                                       min_time.Cast<std::chrono::duration<unsigned>>(),
                                       projection.GetGeoScreenCenter(),
-                                      projection.DistancePixelsToMeters(
-                                        GetTrailThinningPixels(map_scale)));
+                                      GetTrailThinDistance(projection,
+                                                           map_scale));
   } catch (const std::bad_alloc &) {
     trace.clear();
     merge_vario_samples.clear();
@@ -155,6 +154,16 @@ GetAltitudeColorIndex(double alt, double min_alt, double max_alt) noexcept
   auto relative_altitude = (alt - min_alt) / (max_alt - min_alt);
   int _max = TrailLook::NUMSNAILCOLORS - 1;
   return std::clamp((int)(relative_altitude * _max), 0, _max);
+}
+
+[[gnu::pure]]
+static unsigned
+GetTrailColorIndex(TrailSettings::Type type, double value,
+                   double value_min, double value_max) noexcept
+{
+  if (type == TrailSettings::Type::ALTITUDE)
+    return GetAltitudeColorIndex(value, value_min, value_max);
+  return GetSnailColorIndex(value, value_min, value_max);
 }
 
 [[gnu::pure]]
@@ -291,7 +300,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (settings.length == TrailSettings::Length::OFF)
     return;
 
-  if (!LoadTrace(trace_computer, min_time, projection))
+  const double map_scale = projection.GetMapScale();
+
+  if (!LoadTrace(trace_computer, min_time, projection, map_scale))
     return;
 
   if (!basic.location_available || !calculated.wind_available)
@@ -309,30 +320,18 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   auto value_min = minmax.first;
   auto value_max = minmax.second;
 
-  bool scaled_trail = settings.scaling_enabled &&
-                      projection.GetMapScale() <= 6000;
+  const bool zoomed_in = map_scale <= TRAIL_ZOOMED_IN_SCALE;
+  const bool scaled_trail = settings.scaling_enabled && zoomed_in;
 
   const GeoBounds bounds = projection.GetScreenBounds().Scale(4);
 
-  const double map_scale = projection.GetMapScale();
-
-  // Determine if we should use smoothing (only for line segments, not dots-only modes)
   const bool use_smoothing =
     settings.type != TrailSettings::Type::VARIO_1_DOTS &&
     settings.type != TrailSettings::Type::VARIO_2_DOTS &&
-    map_scale <= 6000;
-
-  // More segments when zoomed in; splines are disabled when zoomed out
-  const unsigned num_segments = map_scale <= 3000 ? 12 :
-                                map_scale <= 6000 ? 8 : 6;
+    zoomed_in;
 
   valid_points.clear();
   valid_points.reserve(trace.size());
-
-  /* Same map-pixel spacing as LoadTrace geo thinning
-     (DistancePixelsToMeters); catches vertices that still collapse
-     after GeoToScreen rounding. */
-  const int screen_lod = GetTrailThinningPixels(map_scale);
 
   for (const auto &i : trace) {
     const GeoPoint gp = enable_traildrift
@@ -348,8 +347,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     const TrailPointData pd{pt, value, i.GetTime()};
 
     if (!valid_points.empty() &&
-        ManhattanDistance(pt, valid_points.back().point) <
-        int(screen_lod)) {
+        ManhattanDistance(pt, valid_points.back().point) < 1) {
       /* Same screen cell: keep latest vario/altitude for colour */
       valid_points.back() = pd;
       continue;
@@ -371,15 +369,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     const auto &prev_data = valid_points[i - 1];
     const auto &curr_data = valid_points[i];
 
-    // Determine color index for this segment
-    unsigned color_index;
-    if (settings.type == TrailSettings::Type::ALTITUDE) {
-      color_index = GetAltitudeColorIndex(curr_data.value,
-                                          value_min, value_max);
-    } else {
-      color_index = GetSnailColorIndex(curr_data.value,
-                                       value_min, value_max);
-    }
+    const unsigned color_index =
+      GetTrailColorIndex(settings.type, curr_data.value,
+                         value_min, value_max);
 
     // Determine if we should draw dots (circles) for this segment
     // Dots are drawn for negative vario in dots modes, or for positive vario in VARIO_DOTS_AND_LINES/VARIO_EINK
@@ -426,6 +418,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       const auto &p3 = (i + 1 < valid_points.size()) ? valid_points[i + 1].point : curr_data.point;
 
       if (use_smoothing && i >= 1) {
+        const unsigned num_segments = map_scale <= 3000 ? 12 :
+                                      map_scale <= TRAIL_ZOOMED_IN_SCALE ? 8 : 6;
         InterpolateSegment(p0, p1, p2, p3, num_segments, interpolated);
 
         const bool use_merge_vario =
@@ -480,14 +474,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
               prev_data.value * (1.0 - t) + curr_data.value * t;
           }
 
-          unsigned seg_color_index;
-          if (settings.type == TrailSettings::Type::ALTITUDE) {
-            seg_color_index = GetAltitudeColorIndex(interp_value,
-                                                    value_min, value_max);
-          } else {
-            seg_color_index = GetSnailColorIndex(interp_value,
-                                                 value_min, value_max);
-          }
+          const unsigned seg_color_index =
+            GetTrailColorIndex(settings.type, interp_value,
+                               value_min, value_max);
 
           if (!run_active) {
             run_start = j;
@@ -503,12 +492,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
         if (run_active)
           flush_colour_run(interpolated.size() - 1);
       } else {
-        // Not enough points or smoothing disabled - draw direct line
-
-        if (scaled_trail)
-          canvas.Select(look.scaled_trail_pens[color_index]);
-        else
-          canvas.Select(look.trail_pens[color_index]);
+        SelectTrailPen(canvas, color_index, scaled_trail);
         canvas.DrawLinePiece(prev_data.point, curr_data.point);
       }
     }
@@ -517,19 +501,11 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   // Draw line to current aircraft position
   if (!valid_points.empty()) {
     const auto &last_data = valid_points.back();
-    unsigned color_index;
-    if (settings.type == TrailSettings::Type::ALTITUDE) {
-      color_index = GetAltitudeColorIndex(last_data.value,
-                                         value_min, value_max);
-    } else {
-      color_index = GetSnailColorIndex(last_data.value,
-                                      value_min, value_max);
-    }
+    const unsigned color_index =
+      GetTrailColorIndex(settings.type, last_data.value,
+                         value_min, value_max);
 
-    if (scaled_trail)
-      canvas.Select(look.scaled_trail_pens[color_index]);
-    else
-      canvas.Select(look.trail_pens[color_index]);
+    SelectTrailPen(canvas, color_index, scaled_trail);
     canvas.DrawLine(last_data.point, pos);
   }
 }
@@ -546,7 +522,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
                     TimeStamp min_time) noexcept
 {
-  if (LoadTrace(trace_computer, min_time, projection))
+  if (LoadTrace(trace_computer, min_time, projection,
+                projection.GetMapScale()))
     Draw(canvas, projection);
 }
 
@@ -555,6 +532,22 @@ TrailRenderer::Prepare(unsigned n) noexcept
 {
   points.GrowDiscard(n);
   return points.data();
+}
+
+void
+TrailRenderer::SelectTrailPen(Canvas &canvas, unsigned color_index,
+                              bool scaled_trail) const noexcept
+{
+  if (scaled_trail)
+    canvas.Select(look.scaled_trail_pens[color_index]);
+  else
+    canvas.Select(look.trail_pens[color_index]);
+}
+
+void
+TrailRenderer::PrepareCopy(const PixelPoint *src, unsigned n) noexcept
+{
+  std::copy_n(src, n, Prepare(n));
 }
 
 void
@@ -570,15 +563,8 @@ TrailRenderer::DrawColourPolyline(Canvas &canvas, unsigned color_index,
   if (n < 2)
     return;
 
-  BulkPixelPoint *p = Prepare(n);
-  for (unsigned k = 0; k < n; ++k)
-    p[k] = pts[first + k];
-
-  if (scaled_trail)
-    canvas.Select(look.scaled_trail_pens[color_index]);
-  else
-    canvas.Select(look.trail_pens[color_index]);
-
+  PrepareCopy(pts.data() + first, n);
+  SelectTrailPen(canvas, color_index, scaled_trail);
   DrawPreparedPolyline(canvas, n);
 }
 

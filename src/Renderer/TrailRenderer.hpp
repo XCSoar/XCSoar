@@ -10,7 +10,6 @@
 #include "ui/dim/Point.hpp"
 #include "time/Stamp.hpp"
 
-#include <utility>
 #include <vector>
 
 struct BulkPixelPoint;
@@ -61,7 +60,8 @@ public:
    */
   bool LoadTrace(const TraceComputer &trace_computer,
                  TimeStamp min_time,
-                 const WindowProjection &projection) noexcept;
+                 const WindowProjection &projection,
+                 double map_scale) noexcept;
 
   void ScanBounds(GeoBounds &bounds) const noexcept {
     trace.ScanBounds(bounds);
@@ -103,6 +103,11 @@ public:
                     const ContestTraceVector &trace) noexcept;
 
 private:
+  void SelectTrailPen(Canvas &canvas, unsigned color_index,
+                      bool scaled_trail) const noexcept;
+
+  void PrepareCopy(const PixelPoint *src, unsigned n) noexcept;
+
   void DrawColourPolyline(Canvas &canvas, unsigned color_index,
                           bool scaled_trail,
                           const std::vector<PixelPoint> &pts,
