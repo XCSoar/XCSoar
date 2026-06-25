@@ -52,6 +52,18 @@ public:
     return until > std::chrono::steady_clock::time_point{};
   }
 
+  Port &GetInnerPort() noexcept {
+    return *port;
+  }
+
+  const Port &GetInnerPort() const noexcept {
+    return *port;
+  }
+
+  Port &GetImplementationPort() noexcept override {
+    return port->GetImplementationPort();
+  }
+
 private:
   /**
    * Determine whether dumping is currently enabled.

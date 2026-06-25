@@ -51,6 +51,8 @@ static constexpr struct {
   { DeviceConfig::PortType::TCP_LISTENER, N_("TCP port") },
   { DeviceConfig::PortType::UDP_LISTENER, N_("UDP port") },
 
+  { DeviceConfig::PortType::SPECTATE_FILE, N_("Condor Spectate file") },
+
   { DeviceConfig::PortType::SERIAL, nullptr } /* sentinel */
 };
 
@@ -300,6 +302,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
   case DeviceConfig::PortType::PTY:
   case DeviceConfig::PortType::RFCOMM_SERVER:
   case DeviceConfig::PortType::GLIDER_LINK:
+  case DeviceConfig::PortType::SPECTATE_FILE:
     break;
 
   case DeviceConfig::PortType::SERIAL:

@@ -66,11 +66,10 @@ class Condor3UDPDevice final : public AbstractDevice {
     const double h = std::hypot(vx, vy);
     info.ground_speed = h;
     info.ground_speed_available.Update(info.clock);
-    if (h > 0.2 && !info.attitude.heading_available) {
-      /* Ground velocity track; compass heading is preferred when sent. */
-      info.track = Angle::Radians(std::atan2(vx, vy));
-      info.track_available.Update(info.clock);
-    }
+    /* Do not derive track from Condor vx/vy: Condor documents them as
+       ground velocity but they are not reliable earth-frame N/E (see
+       compass handler comment).  Using them after compass expires made
+       the FLARM traffic radar bearing jump by ~120°. */
   }
 
   bool
