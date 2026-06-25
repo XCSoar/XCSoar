@@ -28,6 +28,7 @@ Version 7.45 - not yet released
     ballast, attitude, radio, and related fields (#2340)
   - Glide polar sync in the device dialog is only shown for drivers that
     implement it (LXNAV)
+  - Increase the number of device slots from 6 to 8
 * ui
   - fix crash when switching pages from FLARM radar or thermal assistant back
     to a map page that has a bottom widget configured (#2583)
