@@ -7,11 +7,12 @@
 #include "Computer/TraceComputer.hpp"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
+#include "MapSettings.hpp"
+#include "ui/dim/Point.hpp"
 #include "time/Stamp.hpp"
 
 #include <vector>
 
-struct PixelPoint;
 struct BulkPixelPoint;
 class Canvas;
 class TraceComputer;
@@ -30,11 +31,23 @@ struct TrailSettings;
  * includes filter for coarse-graining trail in LoadTrace
  */
 class TrailRenderer {
+  struct TrailPointData {
+    PixelPoint point;
+    double value{};
+    TracePoint::Time time{};
+  };
+
   const TrailLook &look;
 
   TracePointVector trace;
   std::vector<TrailVarioSample> merge_vario_samples;
   AllocatedArray<BulkPixelPoint> points;
+
+  /** Reused each Draw() to avoid per-frame heap allocations. */
+  std::vector<TrailPointData> valid_points;
+  std::vector<PixelPoint> interpolated;
+  /** Segment parameter u in [0,1] → vario for merge-vario colouring. */
+  std::vector<std::pair<double, double>> vario_breakpoints;
 
 public:
   TrailRenderer(const TrailLook &_look) noexcept:look(_look) {}
@@ -49,7 +62,8 @@ public:
    */
   bool LoadTrace(const TraceComputer &trace_computer,
                  TimeStamp min_time,
-                 const WindowProjection &projection) noexcept;
+                 const WindowProjection &projection,
+                 double map_scale) noexcept;
 
   void ScanBounds(GeoBounds &bounds) const noexcept {
     trace.ScanBounds(bounds);
@@ -91,6 +105,25 @@ public:
                     const ContestTraceVector &trace) noexcept;
 
 private:
+  void SelectTrailPen(Canvas &canvas, unsigned color_index,
+                      bool scaled_trail) const noexcept;
+
+  void PrepareCopy(const PixelPoint *src, unsigned n) noexcept;
+
+  void DrawColourPolyline(Canvas &canvas, unsigned color_index,
+                          bool scaled_trail,
+                          const std::vector<PixelPoint> &pts,
+                          size_t first, size_t last) noexcept;
+
+  void DrawSegmentWithVarioColour(Canvas &canvas,
+                                  const TrailPointData &prev_data,
+                                  const TrailPointData &curr_data,
+                                  const std::vector<PixelPoint> &segment_pts,
+                                  TrailSettings::Type type,
+                                  double value_min, double value_max,
+                                  bool scaled_trail,
+                                  bool use_merge_vario) noexcept;
+
   void DrawTraceVector(Canvas &canvas, const Projection &projection,
                        const TracePointVector &trace) noexcept;
 };
