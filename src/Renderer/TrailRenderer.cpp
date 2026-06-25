@@ -92,9 +92,7 @@ GetTrailThinningPixels(double map_scale) noexcept
     return 6;
   if (map_scale <= 12000)
     return 12;
-  if (map_scale <= 25000)
-    return 24;
-  return 48;
+  return 24;
 }
 
 } // namespace
@@ -331,6 +329,11 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   valid_points.clear();
   valid_points.reserve(trace.size());
 
+  /* Same map-pixel spacing as LoadTrace geo thinning
+     (DistancePixelsToMeters); catches vertices that still collapse
+     after GeoToScreen rounding. */
+  const int screen_lod = GetTrailThinningPixels(map_scale);
+
   for (const auto &i : trace) {
     const GeoPoint gp = enable_traildrift
       ? i.GetLocation().Parametric(traildrift, i.CalculateDrift(basic.time))
@@ -342,8 +345,17 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     auto pt = projection.GeoToScreen(gp);
     const double value = (settings.type == TrailSettings::Type::ALTITUDE)
       ? i.GetAltitude() : i.GetVario();
+    const TrailPointData pd{pt, value, i.GetTime()};
 
-    valid_points.push_back({pt, value, i.GetTime()});
+    if (!valid_points.empty() &&
+        ManhattanDistance(pt, valid_points.back().point) <
+        int(screen_lod)) {
+      /* Same screen cell: keep latest vario/altitude for colour */
+      valid_points.back() = pd;
+      continue;
+    }
+
+    valid_points.push_back(pd);
   }
 
   if (valid_points.empty())
