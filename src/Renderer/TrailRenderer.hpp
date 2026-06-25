@@ -103,6 +103,11 @@ public:
                     const ContestTraceVector &trace) noexcept;
 
 private:
+  void DrawColourPolyline(Canvas &canvas, unsigned color_index,
+                          bool scaled_trail,
+                          const std::vector<PixelPoint> &pts,
+                          size_t first, size_t last) noexcept;
+
   void DrawTraceVector(Canvas &canvas, const Projection &projection,
                        const TracePointVector &trace) noexcept;
 };

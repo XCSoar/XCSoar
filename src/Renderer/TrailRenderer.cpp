@@ -78,6 +78,25 @@ LookupVarioFromKnots(TracePoint::Time t_query,
   return a.second * (1. - u) + b.second * u;
 }
 
+/**
+ * Screen-space thinning distance for trace extraction, scaled like
+ * topography skip steps (#2661 cruise CPU).
+ */
+[[gnu::const]]
+static int
+GetTrailThinningPixels(double map_scale) noexcept
+{
+  if (map_scale <= 3000)
+    return 3;
+  if (map_scale <= 6000)
+    return 6;
+  if (map_scale <= 12000)
+    return 12;
+  if (map_scale <= 25000)
+    return 24;
+  return 48;
+}
+
 } // namespace
 
 bool
@@ -103,10 +122,12 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
   trace.clear();
   merge_vario_samples.clear();
   try {
+    const double map_scale = projection.GetMapScale();
     trace_computer.LockedCopySnapshot(trace, merge_vario_samples,
                                       min_time.Cast<std::chrono::duration<unsigned>>(),
                                       projection.GetGeoScreenCenter(),
-                                      projection.DistancePixelsToMeters(3));
+                                      projection.DistancePixelsToMeters(
+                                        GetTrailThinningPixels(map_scale)));
   } catch (const std::bad_alloc &) {
     trace.clear();
     merge_vario_samples.clear();
@@ -295,16 +316,17 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   const GeoBounds bounds = projection.GetScreenBounds().Scale(4);
 
-  // Determine if we should use smoothing (only for line segments, not dots-only modes)
-  const bool use_smoothing = 
-    settings.type != TrailSettings::Type::VARIO_1_DOTS &&
-    settings.type != TrailSettings::Type::VARIO_2_DOTS;
+  const double map_scale = projection.GetMapScale();
 
-  // Determine number of interpolation segments based on zoom level
-  // More segments when zoomed in for better quality, and always use enough for smooth curves
-  // Gliders fly in smooth arcs, so we need more segments for realistic appearance
-  const unsigned num_segments = projection.GetMapScale() <= 3000 ? 12 : 
-                                 projection.GetMapScale() <= 6000 ? 8 : 6;
+  // Determine if we should use smoothing (only for line segments, not dots-only modes)
+  const bool use_smoothing =
+    settings.type != TrailSettings::Type::VARIO_1_DOTS &&
+    settings.type != TrailSettings::Type::VARIO_2_DOTS &&
+    map_scale <= 6000;
+
+  // More segments when zoomed in; splines are disabled when zoomed out
+  const unsigned num_segments = map_scale <= 3000 ? 12 :
+                                map_scale <= 6000 ? 8 : 6;
 
   valid_points.clear();
   valid_points.reserve(trace.size());
@@ -410,7 +432,17 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
             ? static_cast<double>(interpolated.size() - 1)
             : 1.0;
 
-        // Interpolate values for smooth color transitions
+        size_t run_start = 0;
+        unsigned run_color = 0;
+        bool run_active = false;
+
+        auto flush_colour_run = [&](size_t run_end) {
+          if (!run_active || run_end <= run_start)
+            return;
+          DrawColourPolyline(canvas, run_color, scaled_trail,
+                             interpolated, run_start, run_end);
+        };
+
         for (size_t j = 0; j + 1 < interpolated.size(); ++j) {
           double interp_value;
           if (settings.type == TrailSettings::Type::ALTITUDE) {
@@ -438,18 +470,26 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
           unsigned seg_color_index;
           if (settings.type == TrailSettings::Type::ALTITUDE) {
-            seg_color_index = GetAltitudeColorIndex(interp_value, value_min, value_max);
+            seg_color_index = GetAltitudeColorIndex(interp_value,
+                                                    value_min, value_max);
           } else {
-            seg_color_index = GetSnailColorIndex(interp_value, value_min, value_max);
+            seg_color_index = GetSnailColorIndex(interp_value,
+                                                 value_min, value_max);
           }
 
-          if (scaled_trail)
-            canvas.Select(look.scaled_trail_pens[seg_color_index]);
-          else
-            canvas.Select(look.trail_pens[seg_color_index]);
-
-          canvas.DrawLinePiece(interpolated[j], interpolated[j + 1]);
+          if (!run_active) {
+            run_start = j;
+            run_color = seg_color_index;
+            run_active = true;
+          } else if (seg_color_index != run_color) {
+            flush_colour_run(j);
+            run_start = j;
+            run_color = seg_color_index;
+          }
         }
+
+        if (run_active)
+          flush_colour_run(interpolated.size() - 1);
       } else {
         // Not enough points or smoothing disabled - draw direct line
 
@@ -503,6 +543,31 @@ TrailRenderer::Prepare(unsigned n) noexcept
 {
   points.GrowDiscard(n);
   return points.data();
+}
+
+void
+TrailRenderer::DrawColourPolyline(Canvas &canvas, unsigned color_index,
+                                   bool scaled_trail,
+                                   const std::vector<PixelPoint> &pts,
+                                   size_t first, size_t last) noexcept
+{
+  assert(first <= last);
+  assert(last < pts.size());
+
+  const unsigned n = unsigned(last - first + 1);
+  if (n < 2)
+    return;
+
+  BulkPixelPoint *p = Prepare(n);
+  for (unsigned k = 0; k < n; ++k)
+    p[k] = pts[first + k];
+
+  if (scaled_trail)
+    canvas.Select(look.scaled_trail_pens[color_index]);
+  else
+    canvas.Select(look.trail_pens[color_index]);
+
+  DrawPreparedPolyline(canvas, n);
 }
 
 void
