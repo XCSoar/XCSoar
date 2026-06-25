@@ -7,11 +7,12 @@
 #include "Computer/TraceComputer.hpp"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
+#include "ui/dim/Point.hpp"
 #include "time/Stamp.hpp"
 
+#include <utility>
 #include <vector>
 
-struct PixelPoint;
 struct BulkPixelPoint;
 class Canvas;
 class TraceComputer;
@@ -30,11 +31,22 @@ struct TrailSettings;
  * includes filter for coarse-graining trail in LoadTrace
  */
 class TrailRenderer {
+  struct TrailPointData {
+    PixelPoint point;
+    double value{};
+    TracePoint::Time time{};
+  };
+
   const TrailLook &look;
 
   TracePointVector trace;
   std::vector<TrailVarioSample> merge_vario_samples;
   AllocatedArray<BulkPixelPoint> points;
+
+  /** Reused each Draw() to avoid per-frame heap allocations. */
+  std::vector<TrailPointData> valid_points;
+  std::vector<PixelPoint> interpolated;
+  std::vector<std::pair<TracePoint::Time, double>> vario_knots;
 
 public:
   TrailRenderer(const TrailLook &_look) noexcept:look(_look) {}

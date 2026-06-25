@@ -219,18 +219,16 @@ CalculateAngle(const PixelPoint &p0, const PixelPoint &p1, const PixelPoint &p2)
  * @param p2 End point
  * @param p3 Control point after p2
  * @param base_num_segments Base number of segments to generate
- * @return Vector of interpolated points (including p1 and p2)
+ * @param result Reused output buffer (including p1 and p2)
  */
-static std::vector<PixelPoint>
+static void
 InterpolateSegment(const PixelPoint &p0, const PixelPoint &p1,
                    const PixelPoint &p2, const PixelPoint &p3,
-                   unsigned base_num_segments) noexcept
+                   unsigned base_num_segments,
+                   std::vector<PixelPoint> &result) noexcept
 {
-  // Calculate turn angle to determine if we need more segments
   const double angle = CalculateAngle(p0, p1, p2);
-  
-  // Sharper turns need more segments for smooth appearance
-  // For angles > 30 degrees, increase segments significantly
+
   unsigned num_segments = base_num_segments;
   if (angle > 45.0) {
     num_segments = base_num_segments * 2;
@@ -239,26 +237,19 @@ InterpolateSegment(const PixelPoint &p0, const PixelPoint &p1,
   } else if (angle > 15.0) {
     num_segments = static_cast<unsigned>(base_num_segments * 1.2);
   }
-  
-  // Cap maximum segments for performance
-  num_segments = std::min(num_segments, 20u);
-  
-  std::vector<PixelPoint> result;
-  result.reserve(num_segments + 1);
 
-  // Always include the start point
+  num_segments = std::min(num_segments, 20u);
+
+  result.clear();
+  result.reserve(num_segments + 1);
   result.push_back(p1);
 
-  // Generate intermediate points
   for (unsigned i = 1; i < num_segments; ++i) {
     const double t = static_cast<double>(i) / num_segments;
     result.push_back(CatmullRomInterpolate(p0, p1, p2, p3, t));
   }
 
-  // Always include the end point
   result.push_back(p2);
-
-  return result;
 }
 
 void
@@ -306,13 +297,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   const unsigned num_segments = projection.GetMapScale() <= 3000 ? 12 : 
                                  projection.GetMapScale() <= 6000 ? 8 : 6;
 
-  // Collect valid points with their data
-  struct PointData {
-    PixelPoint point;
-    double value; // vario or altitude
-    TracePoint::Time time{};
-  };
-  std::vector<PointData> valid_points;
+  valid_points.clear();
   valid_points.reserve(trace.size());
 
   for (const auto &i : trace) {
@@ -398,10 +383,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       const auto &p3 = (i + 1 < valid_points.size()) ? valid_points[i + 1].point : curr_data.point;
 
       if (use_smoothing && i >= 1) {
-        // Use spline interpolation for smooth curves
-        auto interpolated = InterpolateSegment(p0, p1, p2, p3, num_segments);
+        InterpolateSegment(p0, p1, p2, p3, num_segments, interpolated);
 
-        std::vector<std::pair<TracePoint::Time, double>> vario_knots;
         const bool use_merge_vario =
           settings.type != TrailSettings::Type::ALTITUDE &&
           !merge_vario_samples.empty();
@@ -409,6 +392,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
           BuildVarioKnots(prev_data.time, prev_data.value,
                           curr_data.time, curr_data.value,
                           merge_vario_samples, vario_knots);
+        else
+          vario_knots.clear();
 
         /* Colour parameter spans drawn line pieces (n−1), not vertex count n */
         const double piece_count =
