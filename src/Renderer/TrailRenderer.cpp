@@ -32,41 +32,50 @@ BuildVarioKnots(TracePoint::Time t0, double v0,
   if (!(t1 > t0))
     return;
 
-  knots.reserve(samples.size() + 2);
+  const auto begin = std::upper_bound(samples.begin(), samples.end(), t0,
+                                      [](TracePoint::Time t,
+                                         const TrailVarioSample &s) {
+                                        return t < s.time;
+                                      });
+  const auto end = std::lower_bound(begin, samples.end(), t1,
+                                    [](const TrailVarioSample &s,
+                                       TracePoint::Time t) {
+                                      return s.time < t;
+                                    });
+
+  knots.reserve(std::size_t(end - begin) + 2);
   knots.emplace_back(t0, v0);
-  for (const auto &s : samples) {
-    if (s.time > t0 && s.time < t1)
-      knots.emplace_back(s.time, (double)s.vario);
-  }
+  for (auto i = begin; i != end; ++i)
+    knots.emplace_back(i->time, (double)i->vario);
   knots.emplace_back(t1, v1);
-  /* merge_vario_samples are time-ordered; unstable sort would scramble ties */
 }
 
 [[gnu::pure]]
 double
 LookupVarioFromKnots(TracePoint::Time t_query,
-                       const std::vector<std::pair<TracePoint::Time, double>> &knots) noexcept
+                     const std::vector<std::pair<TracePoint::Time, double>> &knots) noexcept
 {
   if (knots.empty())
     return 0;
-  if (t_query <= knots.front().first)
+
+  const auto it = std::lower_bound(knots.begin(), knots.end(), t_query,
+                                   [](const auto &k, TracePoint::Time t) {
+                                     return k.first < t;
+                                   });
+  if (it == knots.begin())
     return knots.front().second;
-  if (t_query >= knots.back().first)
+  if (it == knots.end())
     return knots.back().second;
-  for (size_t i = 0; i + 1 < knots.size(); ++i) {
-    const auto &a = knots[i];
-    const auto &b = knots[i + 1];
-    if (t_query <= b.first) {
-      const double da = (double)a.first.count();
-      const double db = (double)b.first.count();
-      const double dq = (double)t_query.count();
-      if (db <= da)
-        return b.second;
-      const double u = (dq - da) / (db - da);
-      return a.second * (1. - u) + b.second * u;
-    }
-  }
-  return knots.back().second;
+
+  const auto &b = *it;
+  const auto &a = *std::prev(it);
+  const double da = (double)a.first.count();
+  const double db = (double)b.first.count();
+  const double dq = (double)t_query.count();
+  if (db <= da)
+    return b.second;
+  const double u = (dq - da) / (db - da);
+  return a.second * (1. - u) + b.second * u;
 }
 
 } // namespace
