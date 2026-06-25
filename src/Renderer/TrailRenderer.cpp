@@ -26,31 +26,48 @@ static constexpr int TRAIL_THIN_PIXELS_MAX = 24;
 
 namespace {
 
+/**
+ * Merge-vario samples strictly between two GPS trace times (t0, t1).
+ * \a search_from advances monotonically across successive segments.
+ */
+struct MergeSampleRange {
+  size_t begin{};
+  size_t end{}; /* one past the last sample in range */
+};
+
+static MergeSampleRange
+FindMergeSamplesBetween(TracePoint::Time t0, TracePoint::Time t1,
+                        const std::vector<TrailVarioSample> &samples,
+                        size_t &search_from) noexcept
+{
+  while (search_from < samples.size() && samples[search_from].time <= t0)
+    ++search_from;
+
+  const size_t begin = search_from;
+  while (search_from < samples.size() && samples[search_from].time < t1)
+    ++search_from;
+
+  return {begin, search_from};
+}
+
 void
 BuildVarioKnots(TracePoint::Time t0, double v0,
                 TracePoint::Time t1, double v1,
                 const std::vector<TrailVarioSample> &samples,
+                size_t &merge_sample_index,
                 std::vector<std::pair<TracePoint::Time, double>> &knots) noexcept
 {
   knots.clear();
   if (!(t1 > t0))
     return;
 
-  const auto begin = std::upper_bound(samples.begin(), samples.end(), t0,
-                                      [](TracePoint::Time t,
-                                         const TrailVarioSample &s) {
-                                        return t < s.time;
-                                      });
-  const auto end = std::lower_bound(begin, samples.end(), t1,
-                                    [](const TrailVarioSample &s,
-                                       TracePoint::Time t) {
-                                      return s.time < t;
-                                    });
+  const MergeSampleRange range =
+    FindMergeSamplesBetween(t0, t1, samples, merge_sample_index);
 
-  knots.reserve(std::size_t(end - begin) + 2);
+  knots.reserve(range.end - range.begin + 2);
   knots.emplace_back(t0, v0);
-  for (auto i = begin; i != end; ++i)
-    knots.emplace_back(i->time, (double)i->vario);
+  for (size_t i = range.begin; i < range.end; ++i)
+    knots.emplace_back(samples[i].time, (double)samples[i].vario);
   knots.emplace_back(t1, v1);
 }
 
@@ -359,6 +376,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (valid_points.empty())
     return;
 
+  size_t merge_sample_index = 0;
+
   // Draw the trail with spline interpolation
   for (size_t i = 0; i < valid_points.size(); ++i) {
     if (i == 0) {
@@ -428,7 +447,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
         if (use_merge_vario)
           BuildVarioKnots(prev_data.time, prev_data.value,
                           curr_data.time, curr_data.value,
-                          merge_vario_samples, vario_knots);
+                          merge_vario_samples, merge_sample_index,
+                          vario_knots);
         else
           vario_knots.clear();
 
