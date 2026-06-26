@@ -50,6 +50,15 @@ GetSmoothingSegments(double map_scale, size_t point_count) noexcept
   return std::min(GetPreferredSmoothingSegments(map_scale), allowed);
 }
 
+[[gnu::const]]
+static size_t
+GetFirstSmoothedPointIndex(size_t point_count) noexcept
+{
+  return point_count > MAX_SMOOTHED_TRAIL_POINTS
+    ? point_count - MAX_SMOOTHED_TRAIL_POINTS
+    : 0;
+}
+
 void
 BuildVarioKnots(TracePoint::Time t0, double v0,
                 TracePoint::Time t1, double v1,
@@ -252,8 +261,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   const GeoBounds bounds = projection.GetScreenBounds().Scale(4);
 
-  // Determine if we should use smoothing (only for line segments, not dots-only modes)
-  const bool use_smoothing = 
+  const bool smoothing_type =
     settings.type != TrailSettings::Type::VARIO_1_DOTS &&
     settings.type != TrailSettings::Type::VARIO_2_DOTS;
 
@@ -284,15 +292,12 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (valid_points.empty())
     return;
 
-  const bool use_smoothing =
-    smoothing_type && valid_points.size() <= MAX_SMOOTHED_TRAIL_POINTS;
+  const size_t first_smoothed_point =
+    GetFirstSmoothedPointIndex(valid_points.size());
+  const size_t smoothed_point_count =
+    valid_points.size() - first_smoothed_point;
   const unsigned num_segments =
-    GetSmoothingSegments(projection.GetMapScale(), valid_points.size());
-  const bool use_merge_vario =
-    use_smoothing &&
-    settings.type != TrailSettings::Type::ALTITUDE &&
-    !merge_vario_samples.empty();
-  std::vector<std::pair<TracePoint::Time, double>> vario_knots;
+    GetSmoothingSegments(projection.GetMapScale(), smoothed_point_count);
 
   // Draw the trail
   for (size_t i = 0; i < valid_points.size(); ++i) {
@@ -358,7 +363,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       const auto &p2 = curr_data.point;
       const auto &p3 = (i + 1 < valid_points.size()) ? valid_points[i + 1].point : curr_data.point;
 
-      if (use_smoothing && i >= 1) {
+      if (smoothing_type && i > first_smoothed_point) {
         std::vector<std::pair<TracePoint::Time, double>> vario_knots;
         const bool use_merge_vario =
           settings.type != TrailSettings::Type::ALTITUDE &&
