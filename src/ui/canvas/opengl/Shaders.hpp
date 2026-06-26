@@ -19,7 +19,20 @@ extern GLint solid_projection, solid_modelview, solid_translate;
  * A shader that copies the texture.
  */
 extern GLProgram *texture_shader;
-extern GLint texture_projection, texture_texture, solid_translate;
+extern GLint texture_projection, texture_texture, texture_translate;
+
+/**
+ * A shader that converts a texture to greyscale using Luminosity weights.
+ */
+extern GLProgram *luminosity_shader;
+extern GLint luminosity_projection, luminosity_texture, luminosity_translate;
+
+/**
+ * A shader that applies 4x4 Bayer ordered dither to a greyscale texture.
+ */
+extern GLProgram *dither_shader;
+extern GLint dither_projection, dither_texture, dither_translate,
+  dither_snap_high, dither_snap_low, dither_gamma;
 
 /**
  * A shader that copies the inverted texture.

@@ -10,4 +10,5 @@ DisplaySettings::SetDefaults()
   cursor_size = 1;
   invert_cursor_colors = false;
   full_screen = true;
+  e_ink_display = false;
 }

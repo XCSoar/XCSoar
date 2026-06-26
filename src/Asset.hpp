@@ -216,28 +216,17 @@ HasCursorKeys() noexcept
 /**
  * Does this device have a display with colors?
  */
-static constexpr bool
-HasColors() noexcept
-{
-#if defined(GREYSCALE)
-  return false;
-#else
-  return !IsKobo();
-#endif
-}
+bool HasColors() noexcept;
 
 /**
  * Is dithering black&white used on the display?
  */
-static constexpr bool
-IsDithered() noexcept
-{
-#ifdef DITHER
-  return true;
-#else
-  return false;
-#endif
-}
+bool IsDithered() noexcept;
+
+/**
+ * Does this device use greyscale luminosity for color adjustments?
+ */
+bool UseGreyscaleDisplay() noexcept;
 
 /**
  * Does this device have an electronic paper screen, such as E-Ink?
@@ -245,8 +234,4 @@ IsDithered() noexcept
  * and show ghosting.  Animations shall be disabled when this function
  * returns true.
  */
-static constexpr bool
-HasEPaper() noexcept
-{
-  return IsKobo();
-}
+bool HasEPaper() noexcept;

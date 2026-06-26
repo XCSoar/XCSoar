@@ -34,6 +34,9 @@ enum ControlIndex {
 #endif
   MapOrientation,
   DarkMode,
+#ifdef ENABLE_OPENGL
+  EInkDisplay,
+#endif
   AppInfoBoxGeom,
   InfoBoxTitleScale,
   TabDialogStyle,
@@ -190,6 +193,14 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           (unsigned)ui_settings.dark_mode);
   SetExpertRow(DarkMode);
 
+#ifdef ENABLE_OPENGL
+  AddBoolean(_("E-ink display"),
+             _("Enable greyscale high-contrast rendering for monochrome "
+               "e-paper displays."),
+             ui_settings.display.e_ink_display);
+  SetExpertRow(EInkDisplay);
+#endif
+
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
@@ -263,6 +274,11 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
                            ui_settings.dark_mode);
+
+#ifdef ENABLE_OPENGL
+  changed |= SaveValue(EInkDisplay, ProfileKeys::EInkDisplay,
+                       ui_settings.display.e_ink_display);
+#endif
 
   bool info_box_geometry_changed = false;
 

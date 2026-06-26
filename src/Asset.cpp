@@ -4,6 +4,10 @@
 #include "Asset.hpp"
 #include "CommandLine.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/DitherPass.hpp"
+#endif
+
 #if defined(USE_CONSOLE) || defined(USE_WAYLAND)
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
@@ -40,3 +44,54 @@ HasKeyboard() noexcept
 }
 
 #endif /* USE_LIBINPUT || USE_WAYLAND */
+
+bool
+UseGreyscaleDisplay() noexcept
+{
+#if defined(GREYSCALE)
+  return true;
+#elif defined(ENABLE_OPENGL)
+  return OpenGL::enable_dither_pass;
+#else
+  return false;
+#endif
+}
+
+bool
+HasColors() noexcept
+{
+#if defined(GREYSCALE)
+  return false;
+#elif defined(ENABLE_OPENGL)
+  if (OpenGL::enable_dither_pass)
+    return false;
+  return !IsKobo();
+#else
+  return !IsKobo();
+#endif
+}
+
+bool
+IsDithered() noexcept
+{
+#ifdef DITHER
+  return true;
+#elif defined(ENABLE_OPENGL)
+  return OpenGL::enable_dither_pass;
+#else
+  return false;
+#endif
+}
+
+bool
+HasEPaper() noexcept
+{
+  if (IsKobo())
+    return true;
+
+#ifdef ENABLE_OPENGL
+  return OpenGL::enable_dither_pass;
+#else
+  return false;
+#endif
+}
