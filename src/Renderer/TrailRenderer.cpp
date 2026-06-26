@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "TrailRenderer.hpp"
-#include "Asset.hpp"
 #include "Look/TrailLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "NMEA/Info.hpp"
@@ -12,8 +11,6 @@
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
-#include "Math/Constants.hpp"
-#include "Math/Point2D.hpp"
 
 #include <algorithm>
 #include <new>
@@ -141,6 +138,49 @@ GetTrailThinDistance(const WindowProjection &projection,
   return projection.DistancePixelsToMeters(thin_px);
 }
 
+/**
+ * Bounded Catmull-Rom smoothing budget and recent trail tail.
+ * Stefan Schumann, PR #2664.
+ */
+static constexpr size_t MAX_SMOOTHED_TRAIL_POINTS = 180;
+
+[[gnu::const]]
+static unsigned
+GetBaseSmoothingSegments(double map_scale) noexcept
+{
+  return map_scale <= 3000 ? 4 : map_scale <= 6000 ? 3 : 2;
+}
+
+[[gnu::const]]
+static unsigned
+GetPreferredSmoothingSegments(double map_scale) noexcept
+{
+  return map_scale <= 3000 ? 8 : map_scale <= 6000 ? 6 : 4;
+}
+
+[[gnu::const]]
+static unsigned
+GetSmoothingSegments(double map_scale, size_t point_count) noexcept
+{
+  const unsigned base = GetBaseSmoothingSegments(map_scale);
+  if (point_count <= 1)
+    return base;
+
+  const unsigned budget = (MAX_SMOOTHED_TRAIL_POINTS - 1) * base;
+  const unsigned allowed = std::max(base,
+                                    budget / (unsigned)(point_count - 1));
+  return std::min(GetPreferredSmoothingSegments(map_scale), allowed);
+}
+
+[[gnu::const]]
+static size_t
+GetFirstSmoothedPointIndex(size_t point_count) noexcept
+{
+  return point_count > MAX_SMOOTHED_TRAIL_POINTS
+    ? point_count - MAX_SMOOTHED_TRAIL_POINTS
+    : 0;
+}
+
 [[gnu::pure]]
 static PixelPoint
 LerpPixelPoint(const PixelPoint &a, const PixelPoint &b,
@@ -149,16 +189,6 @@ LerpPixelPoint(const PixelPoint &a, const PixelPoint &b,
   return PixelPoint(
     int(std::lround(a.x + (b.x - a.x) * u)),
     int(std::lround(a.y + (b.y - a.y) * u)));
-}
-
-[[gnu::const]]
-static unsigned
-GetSplineBaseSegments(const PixelPoint &p1, const PixelPoint &p2) noexcept
-{
-  unsigned base = unsigned(std::clamp(ManhattanDistance(p1, p2) / 4, 4, 16));
-  if (IsEmbedded() && base > 4)
-    base = base * 3 / 4;
-  return std::max(base, 4u);
 }
 
 static void
@@ -312,68 +342,6 @@ CatmullRomInterpolate(const PixelPoint &p0, const PixelPoint &p1,
   );
 }
 
-/**
- * Turn angle at \a p1 between segments p0–p1 and p1–p2 (degrees).
- */
-[[gnu::pure]]
-static double
-CalculateAngle(const PixelPoint &p0, const PixelPoint &p1, const PixelPoint &p2) noexcept
-{
-  const IntPoint2D v1 = p1 - p0;
-  const IntPoint2D v2 = p2 - p1;
-
-  const double len1 = v1.Magnitude();
-  const double len2 = v2.Magnitude();
-
-  if (len1 < 1.0 || len2 < 1.0)
-    return 0.0;
-
-  const double dot = DotProduct(v1, v2) / (len1 * len2);
-  const double clamped = std::clamp(dot, -1.0, 1.0);
-  return std::acos(clamped) * 180.0 / M_PI;
-}
-
-/**
- * Generate interpolated points between two trace points using Catmull-Rom spline.
- * Adaptively adjusts the number of segments based on the turn angle for smoother curves.
- * @param p0 Control point before p1
- * @param p1 Start point
- * @param p2 End point
- * @param p3 Control point after p2
- * @param base_num_segments Base number of segments to generate
- * @param result Reused output buffer (including p1 and p2)
- */
-static void
-InterpolateSegment(const PixelPoint &p0, const PixelPoint &p1,
-                   const PixelPoint &p2, const PixelPoint &p3,
-                   unsigned base_num_segments, unsigned max_segments,
-                   std::vector<PixelPoint> &result) noexcept
-{
-  const double angle = CalculateAngle(p0, p1, p2);
-
-  unsigned num_segments = base_num_segments;
-  if (angle > 45.0) {
-    num_segments = base_num_segments * 2;
-  } else if (angle > 30.0) {
-    num_segments = static_cast<unsigned>(base_num_segments * 1.5);
-  } else if (angle > 15.0) {
-    num_segments = static_cast<unsigned>(base_num_segments * 1.2);
-  }
-
-  num_segments = std::min(num_segments, max_segments);
-
-  result.clear();
-  result.reserve(num_segments + 1);
-  result.push_back(p1);
-
-  for (unsigned i = 1; i < num_segments; ++i) {
-    const double t = static_cast<double>(i) / num_segments;
-    result.push_back(CatmullRomInterpolate(p0, p1, p2, p3, t));
-  }
-
-  result.push_back(p2);
-}
-
 void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
@@ -414,6 +382,16 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     settings.type != TrailSettings::Type::VARIO_1_DOTS &&
     settings.type != TrailSettings::Type::VARIO_2_DOTS &&
     zoomed_in;
+
+  const size_t first_smoothed_point =
+    use_smoothing ? GetFirstSmoothedPointIndex(valid_points.size())
+                  : valid_points.size();
+  const size_t smoothed_point_count =
+    valid_points.size() - first_smoothed_point;
+  const unsigned num_segments =
+    use_smoothing
+      ? GetSmoothingSegments(map_scale, smoothed_point_count)
+      : 0u;
 
   valid_points.clear();
   valid_points.reserve(trace.size());
@@ -516,14 +494,11 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       else
         vario_breakpoints.clear();
 
-      if (use_smoothing && i >= 1) {
-        const unsigned base_segments = GetSplineBaseSegments(p1, p2);
-        InterpolateSegment(p0, p1, p2, p3, base_segments, 16u,
-                           interpolated);
-        DrawSegmentWithVarioColour(canvas, prev_data, curr_data,
-                                   interpolated, settings.type,
-                                   value_min, value_max,
-                                   scaled_trail, use_merge_vario);
+      if (use_smoothing && i > first_smoothed_point) {
+        DrawSmoothTailSegmentInline(canvas, p0, p1, p2, p3, num_segments,
+                                    prev_data, curr_data, settings.type,
+                                    value_min, value_max, scaled_trail,
+                                    use_merge_vario);
       } else {
         BuildDirectSegmentPoints(p1, p2, vario_breakpoints,
                                  use_merge_vario, interpolated);
@@ -666,6 +641,50 @@ TrailRenderer::DrawSegmentWithVarioColour(
 
   if (run_active)
     flush_colour_run(segment_pts.size() - 1);
+}
+
+void
+TrailRenderer::DrawSmoothTailSegmentInline(
+    Canvas &canvas,
+    const PixelPoint &p0, const PixelPoint &p1,
+    const PixelPoint &p2, const PixelPoint &p3,
+    unsigned num_segments,
+    const TrailPointData &prev_data,
+    const TrailPointData &curr_data,
+    TrailSettings::Type type,
+    double value_min, double value_max,
+    bool scaled_trail,
+    bool use_merge_vario) noexcept
+{
+  const double piece_count = static_cast<double>(num_segments);
+  PixelPoint last_interpolated = p1;
+
+  for (unsigned j = 0; j < num_segments; ++j) {
+    const unsigned next_piece = j + 1;
+    const double t = static_cast<double>(next_piece) / piece_count;
+    const PixelPoint next_interpolated =
+      next_piece == num_segments
+        ? p2
+        : CatmullRomInterpolate(p0, p1, p2, p3, t);
+
+    double interp_value;
+    if (type == TrailSettings::Type::ALTITUDE) {
+      interp_value =
+        prev_data.value * (1.0 - t) + curr_data.value * t;
+    } else if (use_merge_vario && !vario_breakpoints.empty()) {
+      const double u = static_cast<double>(j + 0.5) / piece_count;
+      interp_value = LookupVarioAtU(u, vario_breakpoints);
+    } else {
+      interp_value =
+        prev_data.value * (1.0 - t) + curr_data.value * t;
+    }
+
+    const unsigned seg_color_index =
+      GetTrailColorIndex(type, interp_value, value_min, value_max);
+    SelectTrailPen(canvas, seg_color_index, scaled_trail);
+    canvas.DrawLinePiece(last_interpolated, next_interpolated);
+    last_interpolated = next_interpolated;
+  }
 }
 
 void
