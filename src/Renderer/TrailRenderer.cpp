@@ -298,6 +298,11 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     valid_points.size() - first_smoothed_point;
   const unsigned num_segments =
     GetSmoothingSegments(projection.GetMapScale(), smoothed_point_count);
+  const bool use_merge_vario =
+    smoothing_type &&
+    settings.type != TrailSettings::Type::ALTITUDE &&
+    !merge_vario_samples.empty();
+  std::vector<std::pair<TracePoint::Time, double>> vario_knots;
 
   // Draw the trail
   for (size_t i = 0; i < valid_points.size(); ++i) {
@@ -364,10 +369,6 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       const auto &p3 = (i + 1 < valid_points.size()) ? valid_points[i + 1].point : curr_data.point;
 
       if (smoothing_type && i > first_smoothed_point) {
-        std::vector<std::pair<TracePoint::Time, double>> vario_knots;
-        const bool use_merge_vario =
-          settings.type != TrailSettings::Type::ALTITUDE &&
-          !merge_vario_samples.empty();
         if (use_merge_vario)
           BuildVarioKnots(prev_data.time, prev_data.value,
                           curr_data.time, curr_data.value,
