@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TrailRenderer.hpp"
+#include "Asset.hpp"
 #include "Look/TrailLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "NMEA/Info.hpp"
@@ -27,7 +28,7 @@ static constexpr int TRAIL_THIN_PIXELS_MAX = 24;
 namespace {
 
 /**
- * Merge-vario samples strictly between two GPS trace times (t0, t1).
+ * Merge-vario samples in the half-open GPS interval [t0, t1).
  * \a search_from advances monotonically across successive segments.
  */
 struct MergeSampleRange {
@@ -40,7 +41,7 @@ FindMergeSamplesBetween(TracePoint::Time t0, TracePoint::Time t1,
                         const std::vector<TrailVarioSample> &samples,
                         size_t &search_from) noexcept
 {
-  while (search_from < samples.size() && samples[search_from].time <= t0)
+  while (search_from < samples.size() && samples[search_from].time < t0)
     ++search_from;
 
   const size_t begin = search_from;
@@ -51,52 +52,81 @@ FindMergeSamplesBetween(TracePoint::Time t0, TracePoint::Time t1,
 }
 
 void
-BuildVarioKnots(TracePoint::Time t0, double v0,
-                TracePoint::Time t1, double v1,
-                const std::vector<TrailVarioSample> &samples,
-                size_t &merge_sample_index,
-                std::vector<std::pair<TracePoint::Time, double>> &knots) noexcept
+BuildVarioBreakpoints(TracePoint::Time t0, double v0,
+                      TracePoint::Time t1, double v1,
+                      const std::vector<TrailVarioSample> &samples,
+                      size_t &merge_sample_index,
+                      std::vector<std::pair<double, double>> &bps) noexcept
 {
-  knots.clear();
+  bps.clear();
   if (!(t1 > t0))
     return;
 
   const MergeSampleRange range =
     FindMergeSamplesBetween(t0, t1, samples, merge_sample_index);
 
-  knots.reserve(range.end - range.begin + 2);
-  knots.emplace_back(t0, v0);
-  for (size_t i = range.begin; i < range.end; ++i)
-    knots.emplace_back(samples[i].time, (double)samples[i].vario);
-  knots.emplace_back(t1, v1);
+  const size_t n = range.end - range.begin;
+  bps.reserve(n + 2);
+  bps.emplace_back(0., v0);
+  if (n == 0) {
+    bps.emplace_back(1., v1);
+    return;
+  }
+
+  const double dt = (double)(t1 - t0).count();
+
+  auto sample_u = [&](size_t i) noexcept -> double {
+    if (dt > 0.)
+      return (double)(samples[range.begin + i].time - t0).count() / dt;
+    return (double)(i + 1) / (double)(n + 1);
+  };
+
+  double u_prev = 0.;
+  for (size_t i = 0; i < n; ) {
+    const double u_i = sample_u(i);
+    size_t j = i + 1;
+    while (j < n && sample_u(j) == u_i)
+      ++j;
+
+    const double u_right = (j < n) ? sample_u(j) : 1.;
+    const size_t m = j - i;
+    const double u_left = u_prev;
+    for (size_t k = i; k < j; ++k) {
+      const double u = (m > 1)
+        ? u_left + (u_right - u_left) * (double)(k - i + 1) / (double)(m + 1)
+        : u_i;
+      bps.emplace_back(u, (double)samples[range.begin + k].vario);
+      u_prev = u;
+    }
+    i = j;
+  }
+
+  bps.emplace_back(1., v1);
 }
 
 [[gnu::pure]]
 double
-LookupVarioFromKnots(TracePoint::Time t_query,
-                     const std::vector<std::pair<TracePoint::Time, double>> &knots) noexcept
+LookupVarioAtU(double u,
+               const std::vector<std::pair<double, double>> &bps) noexcept
 {
-  if (knots.empty())
+  if (bps.empty())
     return 0;
+  if (u <= bps.front().first)
+    return bps.front().second;
+  if (u >= bps.back().first)
+    return bps.back().second;
 
-  const auto it = std::lower_bound(knots.begin(), knots.end(), t_query,
-                                   [](const auto &k, TracePoint::Time t) {
-                                     return k.first < t;
+  const auto it = std::upper_bound(bps.begin(), bps.end(), u,
+                                   [](double u, const auto &bp) {
+                                     return u < bp.first;
                                    });
-  if (it == knots.begin())
-    return knots.front().second;
-  if (it == knots.end())
-    return knots.back().second;
-
   const auto &b = *it;
   const auto &a = *std::prev(it);
-  const double da = (double)a.first.count();
-  const double db = (double)b.first.count();
-  const double dq = (double)t_query.count();
-  if (db <= da)
+  const double du = b.first - a.first;
+  if (du <= 0.)
     return b.second;
-  const double u = (dq - da) / (db - da);
-  return a.second * (1. - u) + b.second * u;
+  const double t = (u - a.first) / du;
+  return a.second * (1. - t) + b.second * t;
 }
 
 /** ~1 canvas pixel per 500 m map scale, clamped to pre/post #2661 range. */
@@ -109,6 +139,44 @@ GetTrailThinDistance(const WindowProjection &projection,
                                  TRAIL_THIN_PIXELS_MIN,
                                  TRAIL_THIN_PIXELS_MAX);
   return projection.DistancePixelsToMeters(thin_px);
+}
+
+[[gnu::pure]]
+static PixelPoint
+LerpPixelPoint(const PixelPoint &a, const PixelPoint &b,
+               double u) noexcept
+{
+  return PixelPoint(
+    int(std::lround(a.x + (b.x - a.x) * u)),
+    int(std::lround(a.y + (b.y - a.y) * u)));
+}
+
+[[gnu::const]]
+static unsigned
+GetSplineBaseSegments(const PixelPoint &p1, const PixelPoint &p2) noexcept
+{
+  unsigned base = unsigned(std::clamp(ManhattanDistance(p1, p2) / 4, 4, 16));
+  if (IsEmbedded() && base > 4)
+    base = base * 3 / 4;
+  return std::max(base, 4u);
+}
+
+static void
+BuildDirectSegmentPoints(const PixelPoint &p1, const PixelPoint &p2,
+                         const std::vector<std::pair<double, double>> &bps,
+                         bool use_merge_vario,
+                         std::vector<PixelPoint> &result) noexcept
+{
+  result.clear();
+  result.push_back(p1);
+
+  if (use_merge_vario && bps.size() > 2) {
+    const unsigned pieces = unsigned(bps.size() - 1);
+    for (unsigned j = 1; j < pieces; ++j)
+      result.push_back(LerpPixelPoint(p1, p2, double(j) / double(pieces)));
+  }
+
+  result.push_back(p2);
 }
 
 } // namespace
@@ -278,7 +346,7 @@ CalculateAngle(const PixelPoint &p0, const PixelPoint &p1, const PixelPoint &p2)
 static void
 InterpolateSegment(const PixelPoint &p0, const PixelPoint &p1,
                    const PixelPoint &p2, const PixelPoint &p3,
-                   unsigned base_num_segments,
+                   unsigned base_num_segments, unsigned max_segments,
                    std::vector<PixelPoint> &result) noexcept
 {
   const double angle = CalculateAngle(p0, p1, p2);
@@ -292,7 +360,7 @@ InterpolateSegment(const PixelPoint &p0, const PixelPoint &p1,
     num_segments = static_cast<unsigned>(base_num_segments * 1.2);
   }
 
-  num_segments = std::min(num_segments, 20u);
+  num_segments = std::min(num_segments, max_segments);
 
   result.clear();
   result.reserve(num_segments + 1);
@@ -436,84 +504,33 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       const auto &p2 = curr_data.point;
       const auto &p3 = (i + 1 < valid_points.size()) ? valid_points[i + 1].point : curr_data.point;
 
+      const bool use_merge_vario =
+        settings.type != TrailSettings::Type::ALTITUDE &&
+        !merge_vario_samples.empty();
+
+      if (use_merge_vario)
+        BuildVarioBreakpoints(prev_data.time, prev_data.value,
+                              curr_data.time, curr_data.value,
+                              merge_vario_samples, merge_sample_index,
+                              vario_breakpoints);
+      else
+        vario_breakpoints.clear();
+
       if (use_smoothing && i >= 1) {
-        const unsigned num_segments = map_scale <= 3000 ? 12 :
-                                      map_scale <= TRAIL_ZOOMED_IN_SCALE ? 8 : 6;
-        InterpolateSegment(p0, p1, p2, p3, num_segments, interpolated);
-
-        const bool use_merge_vario =
-          settings.type != TrailSettings::Type::ALTITUDE &&
-          !merge_vario_samples.empty();
-        if (use_merge_vario)
-          BuildVarioKnots(prev_data.time, prev_data.value,
-                          curr_data.time, curr_data.value,
-                          merge_vario_samples, merge_sample_index,
-                          vario_knots);
-        else
-          vario_knots.clear();
-
-        /* Colour parameter spans drawn line pieces (n−1), not vertex count n */
-        const double piece_count =
-          interpolated.size() > 1
-            ? static_cast<double>(interpolated.size() - 1)
-            : 1.0;
-
-        size_t run_start = 0;
-        unsigned run_color = 0;
-        bool run_active = false;
-
-        auto flush_colour_run = [&](size_t run_end) {
-          if (!run_active || run_end <= run_start)
-            return;
-          DrawColourPolyline(canvas, run_color, scaled_trail,
-                             interpolated, run_start, run_end);
-        };
-
-        for (size_t j = 0; j + 1 < interpolated.size(); ++j) {
-          double interp_value;
-          if (settings.type == TrailSettings::Type::ALTITUDE) {
-            const double t =
-              static_cast<double>(j + 1) / piece_count;
-            interp_value =
-              prev_data.value * (1.0 - t) + curr_data.value * t;
-          } else if (use_merge_vario && !vario_knots.empty()) {
-            const double u =
-              static_cast<double>(j + 0.5) / piece_count;
-            const double tc =
-              (double)prev_data.time.count() +
-              ((double)curr_data.time.count() -
-               (double)prev_data.time.count()) *
-                u;
-            const TracePoint::Time t_query(
-              std::chrono::duration<unsigned>((unsigned)std::lround(tc)));
-            interp_value = LookupVarioFromKnots(t_query, vario_knots);
-          } else {
-            const double t =
-              static_cast<double>(j + 1) / piece_count;
-            interp_value =
-              prev_data.value * (1.0 - t) + curr_data.value * t;
-          }
-
-          const unsigned seg_color_index =
-            GetTrailColorIndex(settings.type, interp_value,
-                               value_min, value_max);
-
-          if (!run_active) {
-            run_start = j;
-            run_color = seg_color_index;
-            run_active = true;
-          } else if (seg_color_index != run_color) {
-            flush_colour_run(j);
-            run_start = j;
-            run_color = seg_color_index;
-          }
-        }
-
-        if (run_active)
-          flush_colour_run(interpolated.size() - 1);
+        const unsigned base_segments = GetSplineBaseSegments(p1, p2);
+        InterpolateSegment(p0, p1, p2, p3, base_segments, 16u,
+                           interpolated);
+        DrawSegmentWithVarioColour(canvas, prev_data, curr_data,
+                                   interpolated, settings.type,
+                                   value_min, value_max,
+                                   scaled_trail, use_merge_vario);
       } else {
-        SelectTrailPen(canvas, color_index, scaled_trail);
-        canvas.DrawLinePiece(prev_data.point, curr_data.point);
+        BuildDirectSegmentPoints(p1, p2, vario_breakpoints,
+                                 use_merge_vario, interpolated);
+        DrawSegmentWithVarioColour(canvas, prev_data, curr_data,
+                                   interpolated, settings.type,
+                                   value_min, value_max,
+                                   scaled_trail, use_merge_vario);
       }
     }
   }
@@ -586,6 +603,69 @@ TrailRenderer::DrawColourPolyline(Canvas &canvas, unsigned color_index,
   PrepareCopy(pts.data() + first, n);
   SelectTrailPen(canvas, color_index, scaled_trail);
   DrawPreparedPolyline(canvas, n);
+}
+
+void
+TrailRenderer::DrawSegmentWithVarioColour(
+    Canvas &canvas,
+    const TrailPointData &prev_data,
+    const TrailPointData &curr_data,
+    const std::vector<PixelPoint> &segment_pts,
+    TrailSettings::Type type,
+    double value_min, double value_max,
+    bool scaled_trail,
+    bool use_merge_vario) noexcept
+{
+  if (segment_pts.size() < 2)
+    return;
+
+  const double piece_count =
+    segment_pts.size() > 1
+      ? static_cast<double>(segment_pts.size() - 1)
+      : 1.0;
+
+  size_t run_start = 0;
+  unsigned run_color = 0;
+  bool run_active = false;
+
+  auto flush_colour_run = [&](size_t run_end) {
+    if (!run_active || run_end <= run_start)
+      return;
+    DrawColourPolyline(canvas, run_color, scaled_trail,
+                       segment_pts, run_start, run_end);
+  };
+
+  for (size_t j = 0; j + 1 < segment_pts.size(); ++j) {
+    double interp_value;
+    if (type == TrailSettings::Type::ALTITUDE) {
+      const double t = static_cast<double>(j + 1) / piece_count;
+      interp_value =
+        prev_data.value * (1.0 - t) + curr_data.value * t;
+    } else if (use_merge_vario && !vario_breakpoints.empty()) {
+      const double u = static_cast<double>(j + 0.5) / piece_count;
+      interp_value = LookupVarioAtU(u, vario_breakpoints);
+    } else {
+      const double t = static_cast<double>(j + 1) / piece_count;
+      interp_value =
+        prev_data.value * (1.0 - t) + curr_data.value * t;
+    }
+
+    const unsigned seg_color_index =
+      GetTrailColorIndex(type, interp_value, value_min, value_max);
+
+    if (!run_active) {
+      run_start = j;
+      run_color = seg_color_index;
+      run_active = true;
+    } else if (seg_color_index != run_color) {
+      flush_colour_run(j);
+      run_start = j;
+      run_color = seg_color_index;
+    }
+  }
+
+  if (run_active)
+    flush_colour_run(segment_pts.size() - 1);
 }
 
 void

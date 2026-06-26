@@ -7,6 +7,7 @@
 #include "Computer/TraceComputer.hpp"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
+#include "MapSettings.hpp"
 #include "ui/dim/Point.hpp"
 #include "time/Stamp.hpp"
 
@@ -45,7 +46,8 @@ class TrailRenderer {
   /** Reused each Draw() to avoid per-frame heap allocations. */
   std::vector<TrailPointData> valid_points;
   std::vector<PixelPoint> interpolated;
-  std::vector<std::pair<TracePoint::Time, double>> vario_knots;
+  /** Segment parameter u in [0,1] → vario for merge-vario colouring. */
+  std::vector<std::pair<double, double>> vario_breakpoints;
 
 public:
   TrailRenderer(const TrailLook &_look) noexcept:look(_look) {}
@@ -112,6 +114,15 @@ private:
                           bool scaled_trail,
                           const std::vector<PixelPoint> &pts,
                           size_t first, size_t last) noexcept;
+
+  void DrawSegmentWithVarioColour(Canvas &canvas,
+                                  const TrailPointData &prev_data,
+                                  const TrailPointData &curr_data,
+                                  const std::vector<PixelPoint> &segment_pts,
+                                  TrailSettings::Type type,
+                                  double value_min, double value_max,
+                                  bool scaled_trail,
+                                  bool use_merge_vario) noexcept;
 
   void DrawTraceVector(Canvas &canvas, const Projection &projection,
                        const TracePointVector &trace) noexcept;
