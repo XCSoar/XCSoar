@@ -124,6 +124,18 @@ private:
                                   bool scaled_trail,
                                   bool use_merge_vario) noexcept;
 
+  /** Inline Catmull-Rom pieces for the bounded smoothed tail (#2664). */
+  void DrawSmoothTailSegmentInline(Canvas &canvas,
+                                   const PixelPoint &p0, const PixelPoint &p1,
+                                   const PixelPoint &p2, const PixelPoint &p3,
+                                   unsigned num_segments,
+                                   const TrailPointData &prev_data,
+                                   const TrailPointData &curr_data,
+                                   TrailSettings::Type type,
+                                   double value_min, double value_max,
+                                   bool scaled_trail,
+                                   bool use_merge_vario) noexcept;
+
   void DrawTraceVector(Canvas &canvas, const Projection &projection,
                        const TracePointVector &trace) noexcept;
 };
