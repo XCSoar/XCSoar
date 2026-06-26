@@ -218,38 +218,6 @@ CatmullRomInterpolate(const PixelPoint &p0, const PixelPoint &p1,
   );
 }
 
-/**
- * Generate interpolated points between two trace points using Catmull-Rom spline.
- * @param p0 Control point before p1
- * @param p1 Start point
- * @param p2 End point
- * @param p3 Control point after p2
- * @param num_segments Number of segments to generate
- * @return Vector of interpolated points (including p1 and p2)
- */
-static std::vector<PixelPoint>
-InterpolateSegment(const PixelPoint &p0, const PixelPoint &p1,
-                   const PixelPoint &p2, const PixelPoint &p3,
-                   unsigned num_segments) noexcept
-{
-  std::vector<PixelPoint> result;
-  result.reserve(num_segments + 1);
-
-  // Always include the start point
-  result.push_back(p1);
-
-  // Generate intermediate points
-  for (unsigned i = 1; i < num_segments; ++i) {
-    const double t = static_cast<double>(i) / num_segments;
-    result.push_back(CatmullRomInterpolate(p0, p1, p2, p3, t));
-  }
-
-  // Always include the end point
-  result.push_back(p2);
-
-  return result;
-}
-
 void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
@@ -391,9 +359,6 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       const auto &p3 = (i + 1 < valid_points.size()) ? valid_points[i + 1].point : curr_data.point;
 
       if (use_smoothing && i >= 1) {
-        // Use spline interpolation for smooth curves
-        auto interpolated = InterpolateSegment(p0, p1, p2, p3, num_segments);
-
         std::vector<std::pair<TracePoint::Time, double>> vario_knots;
         const bool use_merge_vario =
           settings.type != TrailSettings::Type::ALTITUDE &&
@@ -403,18 +368,20 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                           curr_data.time, curr_data.value,
                           merge_vario_samples, vario_knots);
 
-        /* Colour parameter spans drawn line pieces (n−1), not vertex count n */
-        const double piece_count =
-          interpolated.size() > 1
-            ? static_cast<double>(interpolated.size() - 1)
-            : 1.0;
+        const double piece_count = static_cast<double>(num_segments);
 
-        // Interpolate values for smooth color transitions
-        for (size_t j = 0; j + 1 < interpolated.size(); ++j) {
+        PixelPoint last_interpolated = p1;
+        for (unsigned j = 0; j < num_segments; ++j) {
+          const unsigned next_piece = j + 1;
+          const double t =
+            static_cast<double>(next_piece) / piece_count;
+          const PixelPoint next_interpolated =
+            next_piece == num_segments
+              ? p2
+              : CatmullRomInterpolate(p0, p1, p2, p3, t);
+
           double interp_value;
           if (settings.type == TrailSettings::Type::ALTITUDE) {
-            const double t =
-              static_cast<double>(j + 1) / piece_count;
             interp_value =
               prev_data.value * (1.0 - t) + curr_data.value * t;
           } else if (use_merge_vario && !vario_knots.empty()) {
@@ -447,7 +414,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
           else
             canvas.Select(look.trail_pens[seg_color_index]);
 
-          canvas.DrawLinePiece(interpolated[j], interpolated[j + 1]);
+          canvas.DrawLinePiece(last_interpolated, next_interpolated);
+          last_interpolated = next_interpolated;
         }
       } else {
         // Not enough points or smoothing disabled - draw direct line
