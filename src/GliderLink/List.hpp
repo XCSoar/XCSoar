@@ -52,9 +52,15 @@ struct GliderLinkTrafficList {
   void Expire(TimeStamp clock) noexcept {
     new_traffic.Expire(clock, std::chrono::minutes(5));
 
-    for (unsigned i = list.size(); i-- > 0;)
+    if (list.size() > MAX_COUNT)
+      list.resize(MAX_COUNT);
+
+    for (unsigned i = 0; i < list.size(); ) {
       if (!list[i].Refresh(clock))
         list.quick_remove(i);
+      else
+        ++i;
+    }
   }
 
   /**
