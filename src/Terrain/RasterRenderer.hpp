@@ -89,7 +89,7 @@ public:
    * regardless of user idle state.
    */
   void SetQuantisationPixels(unsigned q) noexcept {
-    quantisation_pixels = q;
+    quantisation_pixels = q < 1 ? 1u : q;
 #ifdef ENABLE_OPENGL
     fixed_quantisation = true;
 #endif
