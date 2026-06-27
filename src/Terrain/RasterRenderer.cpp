@@ -27,6 +27,42 @@ static constexpr unsigned MAX_QUANTISATION_NEAR = 25;
 static constexpr unsigned MAX_QUANTISATION_LOW_ZOOM = 40;
 static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
 
+/** Keep slope neighbour sampling inside the height matrix. */
+static void
+ClampQuantisationEffectiveToMatrix(unsigned &quantisation_effective,
+                                     UnsignedPoint2D matrix_size) noexcept
+{
+  if (quantisation_effective == 0)
+    return;
+
+  if (matrix_size.x <= 1 || matrix_size.y <= 1) {
+    quantisation_effective = 0;
+    return;
+  }
+
+  const unsigned max_step =
+    std::min(matrix_size.x - 1, matrix_size.y - 1);
+  if (quantisation_effective > max_step)
+    quantisation_effective = max_step;
+}
+
+[[gnu::const]]
+static unsigned
+SafeMinusStep(unsigned pos, unsigned step) noexcept
+{
+  return std::min(step, pos);
+}
+
+[[gnu::const]]
+static unsigned
+SafePlusStep(unsigned pos, unsigned size, unsigned step) noexcept
+{
+  if (size <= 1 || pos >= size - 1)
+    return 0;
+
+  return std::min(step, size - 1 - pos);
+}
+
 /**
  * Interpolate between x and y with i/128, i.e. i/(1 << 7).
  *
@@ -144,6 +180,9 @@ RasterRenderer::ScanMap(const RasterMap &map,
   GeoPoint center = projection.ScreenToGeo(projection.GetScreenCenter());
 
   // Geographical edge length of one height matrix cell in meters
+  if (quantisation_pixels < 1)
+    quantisation_pixels = 1;
+
   pixel_size = quantisation_pixels / projection.GetScale();
 
   // set resolution
@@ -194,13 +233,24 @@ RasterRenderer::ScanMap(const RasterMap &map,
   bounds = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
   bounds.IntersectWith(map.GetBounds());
 
-  height_matrix.Fill(map, bounds,
-                     (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels,
-                     true);
+  const UnsignedPoint2D matrix_size =
+    (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels;
+  if (matrix_size.x == 0 || matrix_size.y == 0) {
+    quantisation_effective = 0;
+    return;
+  }
+
+  height_matrix.Fill(map, bounds, matrix_size, true);
+
+  ClampQuantisationEffectiveToMatrix(quantisation_effective,
+                                     height_matrix.GetSize());
 
   last_quantisation_pixels = quantisation_pixels;
 #else
   height_matrix.Fill(map, projection, quantisation_pixels, true);
+
+  ClampQuantisationEffectiveToMatrix(quantisation_effective,
+                                     height_matrix.GetSize());
 #endif
 }
 
@@ -221,6 +271,8 @@ RasterRenderer::GenerateImage(bool do_shading,
     contour_column_base = new unsigned char[height_matrix.GetSize().x];
   }
 
+  ClampQuantisationEffectiveToMatrix(quantisation_effective,
+                                     height_matrix.GetSize());
   if (quantisation_effective == 0) {
     do_shading = false;
     do_contour = false;
@@ -312,32 +364,34 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    const int sx, const int sy, const int sz,
                                    const unsigned contour_height_scale) noexcept
 {
-  assert(quantisation_effective > 0);
+  const UnsignedPoint2D matrix_size = height_matrix.GetSize();
+  ClampQuantisationEffectiveToMatrix(quantisation_effective, matrix_size);
+  if (quantisation_effective == 0)
+    return;
 
-  const auto border = PixelRect{PixelSize{height_matrix.GetSize()}}
-    .WithPadding(quantisation_effective);
-
+  const unsigned q_sq = quantisation_effective * quantisation_effective;
+  const unsigned max_height_slope_factor =
+    std::max(1u, 8192u / q_sq);
   const unsigned height_slope_factor =
-    std::clamp((unsigned)pixel_size, 1u,
-               /* this upper limit avoids integer overflows in the
-                  "mag" formula; it effectively limits "dd2" so
-                  calculating its square will not overflow */
-               8192u / (quantisation_effective * quantisation_effective));
-  
+    std::clamp(static_cast<unsigned>(pixel_size), 1u,
+               /* upper limit avoids integer overflows in the "mag"
+                  formula; it effectively limits "dd2" so calculating
+                  its square will not overflow */
+               max_height_slope_factor);
+
   const auto *src = height_matrix.GetData();
   const RawColor *oColorBuf = color_table + 64 * 256;
 
   RawColor *dest = image->GetTopRow();
 
-  for (unsigned y = 0; y < height_matrix.GetSize().y; ++y) {
-    const unsigned row_plus_index = y < (unsigned)border.bottom
-      ? quantisation_effective
-      : height_matrix.GetSize().y - 1 - y;
-    const unsigned row_plus_offset = height_matrix.GetSize().x * row_plus_index;
+  for (unsigned y = 0; y < matrix_size.y; ++y) {
+    const unsigned row_plus_index =
+      SafePlusStep(y, matrix_size.y, quantisation_effective);
+    const unsigned row_plus_offset = matrix_size.x * row_plus_index;
 
-    const unsigned row_minus_index = y >= quantisation_effective
-      ? quantisation_effective : y;
-    const unsigned row_minus_offset = height_matrix.GetSize().x * row_minus_index;
+    const unsigned row_minus_index =
+      SafeMinusStep(y, quantisation_effective);
+    const unsigned row_minus_offset = matrix_size.x * row_minus_index;
 
     const unsigned p31 = row_plus_index + row_minus_index;
 
@@ -347,7 +401,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     unsigned contour_row_base = ContourInterval(*src, contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
-    for (unsigned x = 0; x < height_matrix.GetSize().x; ++x, ++src) {
+    for (unsigned x = 0; x < matrix_size.x; ++x, ++src) {
       const auto e = *src;
       if (!e.IsSpecial()) [[likely]] {
         unsigned h = std::max(0, (int)e.GetValue());
@@ -357,26 +411,10 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
         h = std::min(254u, h >> height_scale);
 
-        // no need to calculate slope if undefined height or sea level
-
-        // Y direction
-        assert(src - row_minus_offset >= height_matrix.GetData());
-        assert(src + row_plus_offset >= height_matrix.GetData());
-        assert(src - row_minus_offset < height_matrix.GetDataEnd());
-        assert(src + row_plus_offset < height_matrix.GetDataEnd());
-
-        // X direction
-
-        const unsigned column_plus_index = x < (unsigned)border.right
-          ? quantisation_effective
-          : height_matrix.GetSize().x - 1 - x;
-        const unsigned column_minus_index = x >= (unsigned)border.left
-          ? quantisation_effective : x;
-
-        assert(src - column_minus_index >= height_matrix.GetData());
-        assert(src + column_plus_index >= height_matrix.GetData());
-        assert(src - column_minus_index < height_matrix.GetDataEnd());
-        assert(src + column_plus_index < height_matrix.GetDataEnd());
+        const unsigned column_plus_index =
+          SafePlusStep(x, matrix_size.x, quantisation_effective);
+        const unsigned column_minus_index =
+          SafeMinusStep(x, quantisation_effective);
 
         const auto h_above = src[-(int)row_minus_offset];
         const auto h_below = src[row_plus_offset];

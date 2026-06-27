@@ -32,6 +32,9 @@ void
 HeightMatrix::SetSize(UnsignedPoint2D _size,
                       unsigned quantisation_pixels) noexcept
 {
+  if (quantisation_pixels < 1)
+    quantisation_pixels = 1;
+
   const UnsignedPoint2D round_up{
     quantisation_pixels - 1,
     quantisation_pixels - 1,
@@ -46,6 +49,9 @@ void
 HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
                    const UnsignedPoint2D _size, bool interpolate) noexcept
 {
+  if (_size.x == 0 || _size.y == 0)
+    return;
+
   SetSize(_size);
 
   const Angle delta_y = bounds.GetHeight() / _size.y;
@@ -64,7 +70,12 @@ void
 HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
                    unsigned quantisation_pixels, bool interpolate) noexcept
 {
+  if (quantisation_pixels < 1)
+    quantisation_pixels = 1;
+
   const auto screen_size = projection.GetScreenSize();
+  if (screen_size.width == 0 || screen_size.height == 0)
+    return;
 
   SetSize((UnsignedPoint2D)screen_size, quantisation_pixels);
 
