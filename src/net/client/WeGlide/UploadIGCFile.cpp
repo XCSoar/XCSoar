@@ -18,10 +18,11 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "Language/Language.hpp"
-#include "lib/fmt/tchar.hxx"
 #include "net/http/Init.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "util/StaticString.hxx"
+
+#include <fmt/format.h>
 
 #include <cinttypes>
 
