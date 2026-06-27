@@ -13,6 +13,7 @@
 #include "lib/curl/Slist.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/fmt/ToBuffer.hxx"
+#include <fmt/format.h>
 #include "Operation/ProgressListener.hpp"
 #include "net/http/Progress.hpp"
 #include "Formatter/TimeFormatter.hpp"
