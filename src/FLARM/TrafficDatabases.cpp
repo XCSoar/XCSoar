@@ -9,6 +9,9 @@
 const char *
 TrafficDatabases::FindNameById(FlarmId id) const noexcept
 {
+  if (!id.IsDefined())
+    return nullptr;
+
   // try to find flarm from userFile (secondary names)
   const char *name = flarm_names.Get(id);
   if (name != nullptr)

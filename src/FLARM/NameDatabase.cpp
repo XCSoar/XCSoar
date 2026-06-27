@@ -6,7 +6,8 @@
 int
 FlarmNameDatabase::Find(FlarmId id) const noexcept
 {
-  assert(id.IsDefined());
+  if (!id.IsDefined())
+    return -1;
 
   for (unsigned i = 0, size = data.size(); i != size; ++i)
     if (data[i].id == id)

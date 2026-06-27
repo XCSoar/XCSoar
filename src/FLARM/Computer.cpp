@@ -48,6 +48,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     // Skip for no_track targets and random IDs: they must not be resolved
     // against databases (FTD-012 NoTrack / random ID semantics).
     if (!traffic.no_track &&
+        traffic.id.IsDefined() &&
         traffic.id_type != FlarmTraffic::IdType::RANDOM) {
       const char *fname = FlarmDetails::LookupCallsign(traffic.id);
       if (fname != nullptr &&
