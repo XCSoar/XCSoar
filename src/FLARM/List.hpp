@@ -49,6 +49,8 @@ struct TrafficList {
    * this one.
    */
   constexpr void Complement(const TrafficList &add) noexcept {
+    ClampListSize();
+
     if (add.modified.Modified(modified))
       modified = add.modified;
 
