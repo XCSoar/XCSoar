@@ -9,16 +9,25 @@
 #include "Renderer/TextInBox.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/Friends.hpp"
-#include "Tracking/SkyLines/Data.hpp"
+#include "MapSettings.hpp"
 #include "util/StringCompare.hxx"
 
 #include <cassert>
+
+[[gnu::const]]
+static bool
+IsInjectedTrafficSource(FlarmTraffic::SourceType source) noexcept
+{
+  return source == FlarmTraffic::SourceType::OGN ||
+    source == FlarmTraffic::SourceType::SKYLINES;
+}
 
 static void
 DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
                  const TrafficLook &look, bool fading,
                  const PixelPoint aircraft_pos,
-                 const FlarmTraffic &traffic) noexcept
+                 const FlarmTraffic &traffic,
+                 DisplayOnlineTrafficMapMode online_mode) noexcept
 {
   assert(traffic.location_available);
 
@@ -39,8 +48,12 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
 
   // only draw labels if not close to aircraft
   if ((sc - aircraft_pos).MagnitudeSquared() > Layout::Scale(30 * 30)) {
+    const bool show_name = traffic.HasName() && !StringIsEmpty(traffic.name) &&
+      (!IsInjectedTrafficSource(traffic.source) ||
+       online_mode == DisplayOnlineTrafficMapMode::SYMBOL_NAME);
+
     // If FLARM callsign/name available draw it to the canvas
-    if (traffic.HasName() && !StringIsEmpty(traffic.name)) {
+    if (show_name) {
       // Draw the name 16 points below the icon
       auto sc_name = sc;
       sc_name.y -= Layout::Scale(20);
@@ -95,25 +108,35 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   canvas.Select(*traffic_look.font);
 
+  const DisplayOnlineTrafficMapMode online_mode =
+    GetMapSettings().online_traffic_map_mode;
+
   // Circle through the FLARM targets
   for (const auto &traffic : flarm.list) {
     if (!traffic.location_available)
       continue;
 
+    if (IsInjectedTrafficSource(traffic.source) &&
+        online_mode == DisplayOnlineTrafficMapMode::OFF)
+      continue;
+
   // No position traffic (relative_east=0) does not make sense in map display
     if (traffic.relative_east)
       DrawFlarmTraffic(canvas, projection, traffic_look, false,
-                       aircraft_pos, traffic);
+                       aircraft_pos, traffic, online_mode);
   }
 
   if (const auto &fading = GetFadingFlarmTraffic(); !fading.empty()) {
     for (const auto &[id, traffic] : fading) {
       assert(traffic.location_available);
 
+      if (IsInjectedTrafficSource(traffic.source))
+        continue;
+
   // No position traffic (relative_east=0) does not make sense in map display
       if (traffic.relative_east)
         DrawFlarmTraffic(canvas, projection, traffic_look, true,
-                         aircraft_pos, traffic);
+                         aircraft_pos, traffic, online_mode);
     }
   }
 }
@@ -221,40 +244,3 @@ MapWindow::DrawTeammate(Canvas &canvas) const noexcept
       traffic_look.teammate_icon.Draw(canvas, *p);
   }
 }
-
-#ifdef HAVE_SKYLINES_TRACKING
-
-void
-MapWindow::DrawOnlineTraffic(Canvas &canvas) const noexcept
-{
-  if (DisplayOnlineTrafficMapMode::OFF == GetMapSettings().online_traffic_map_mode ||
-      skylines_data == nullptr)
-    return;
-
-  canvas.Select(*traffic_look.font);
-
-  const std::lock_guard lock{skylines_data->mutex};
-  for (auto &i : skylines_data->traffic) {
-    if (auto p = render_projection.GeoToScreenIfVisible(i.second.location)) {
-      traffic_look.teammate_icon.Draw(canvas, *p);
-      if (DisplayOnlineTrafficMapMode::SYMBOL_NAME == GetMapSettings().online_traffic_map_mode) {
-        const auto name_i = skylines_data->user_names.find(i.first);
-        const char *name = name_i != skylines_data->user_names.end()
-          ? name_i->second.c_str()
-          : "";
-
-        StaticString<128> buffer;
-        buffer.Format("%s [%um]", name, i.second.altitude);
-
-        TextInBoxMode mode;
-        mode.shape = LabelShape::OUTLINED;
-
-        // Draw the name 16 points below the icon
-        p->y -= Layout::Scale(10);
-        TextInBox(canvas, buffer, *p, mode, GetClientRect());
-      }
-    }
-  }
-}
-
-#endif
