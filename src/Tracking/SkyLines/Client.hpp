@@ -9,6 +9,7 @@
 #include "thread/Mutex.hxx"
 #include "util/Cancellable.hxx"
 #include "util/SpanCast.hxx"
+#include "Handler.hpp"
 
 #include <cstdint>
 #include <optional>
@@ -24,7 +25,6 @@ struct TrafficResponsePacket;
 struct UserNameResponsePacket;
 struct WaveResponsePacket;
 struct ThermalResponsePacket;
-class Handler;
 
 class Client final : Cares::SimpleHandler {
   Handler *const handler;
@@ -41,11 +41,15 @@ class Client final : Cares::SimpleHandler {
   AllocatedSocketAddress address;
   SocketEvent socket_event;
 
+  TrafficSource traffic_source;
+
 public:
   explicit Client(EventLoop &event_loop,
-                  Handler *_handler=nullptr)
+                  Handler *_handler=nullptr,
+                  TrafficSource _traffic_source=TrafficSource::SKYLINES)
     :handler(_handler),
-     socket_event(event_loop, BIND_THIS_METHOD(OnSocketReady)) {}
+     socket_event(event_loop, BIND_THIS_METHOD(OnSocketReady)),
+     traffic_source(_traffic_source) {}
   ~Client() { Close(); }
 
   auto &GetEventLoop() const noexcept {

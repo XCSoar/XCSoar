@@ -3,14 +3,12 @@
 
 #pragma once
 
-#include "Features.hpp"
+#include "Tracking/SkyLines/Features.hpp"
 #include "util/TriState.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING
 
 #include <cstdint>
-
-namespace SkyLinesTracking {
 
 struct CloudSettings {
   /**
@@ -20,17 +18,27 @@ struct CloudSettings {
    */
   TriState enabled;
 
+  /**
+   * Receive traffic from the XCSoar Cloud server (including OGN)?
+   */
+  bool show_traffic;
+
   bool show_thermals;
+
+  /**
+   * Enable cloud communication while on a "roamed" connection?
+   */
+  bool roaming;
 
   uint64_t key;
 
   void SetDefaults() {
     enabled = TriState::UNKNOWN;
+    show_traffic = true;
     show_thermals = true;
+    roaming = true;
     key = 0;
   }
 };
-
-} /* namespace SkyLinesTracking */
 
 #endif

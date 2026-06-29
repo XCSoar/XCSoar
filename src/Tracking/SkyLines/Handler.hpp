@@ -13,6 +13,11 @@ struct AGeoPoint;
 
 namespace SkyLinesTracking {
 
+enum class TrafficSource {
+  SKYLINES,
+  CLOUD,
+};
+
 class Handler {
 public:
   /**
@@ -23,8 +28,11 @@ public:
   virtual void OnSkyLinesReady() {}
 
   virtual void OnAck([[maybe_unused]] unsigned id) {}
-  virtual void OnTraffic([[maybe_unused]] uint32_t pilot_id, [[maybe_unused]] unsigned time_of_day_ms,
-                         [[maybe_unused]] const ::GeoPoint &location, [[maybe_unused]] int altitude) {}
+  virtual void OnTraffic([[maybe_unused]] uint32_t pilot_id,
+                         [[maybe_unused]] unsigned time_of_day_ms,
+                         [[maybe_unused]] const ::GeoPoint &location,
+                         [[maybe_unused]] int altitude,
+                         [[maybe_unused]] TrafficSource source) {}
   virtual void OnUserName([[maybe_unused]] uint32_t user_id, [[maybe_unused]] const char *name) {}
   virtual void OnWave([[maybe_unused]] unsigned time_of_day_ms,
                       [[maybe_unused]] const ::GeoPoint &a, [[maybe_unused]] const ::GeoPoint &b) {}
