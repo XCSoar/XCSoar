@@ -280,7 +280,7 @@ jobs:
           ccache --set-config compression=true
 
       - name: "Cache common downloads"
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: downloads-common-${{ runner.os }}-${{ hashFiles('build/libboost.mk') }}
           restore-keys: |
@@ -288,7 +288,7 @@ jobs:
           path: ${{ github.workspace }}/output/download
 
       - name: "Cache target-specific downloads"
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: downloads-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('build/kobo.mk', 'build/thirdparty.py', 'build/python/build/libs.py') }}
           restore-keys: |
@@ -299,7 +299,7 @@ jobs:
 
       - name: "Cache apt packages"
         if: ${{ matrix.os == 'ubuntu-24.04' }}
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: apt-${{ matrix.target_container }}-${{ hashFiles('ide/provisioning/install-debian-packages.sh') }}
           restore-keys: |
@@ -309,7 +309,7 @@ jobs:
 
       - name: "Cache Homebrew packages"
         if: ${{ startsWith(matrix.os, 'macos-') }}
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: brew-${{ matrix.os }}-${{ hashFiles('ide/provisioning/install-darwin-packages.sh') }}
           restore-keys: |
@@ -324,14 +324,14 @@ jobs:
 
       - name: "Cache ANGLE downloads"
         if: ${{ matrix.target == 'MACOS' }}
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: angle-${{ hashFiles('darwin/fetch-angle-from-chrome.sh') }}
           restore-keys: angle-
           path: output/angle-download
 
       - name: "Cache Boost"
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
           path: |
@@ -341,7 +341,7 @@ jobs:
 
       - name: "Cache Android SDK/NDK"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh', 'build/android.mk', 'build/android_bundle.mk', 'build/targets.mk') }}
           restore-keys: |
@@ -354,7 +354,7 @@ jobs:
 
       - name: "Cache third-party libraries"
         if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'KOBO' }}
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/thirdparty.mk') }}
           restore-keys: |
