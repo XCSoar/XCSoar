@@ -225,9 +225,9 @@ MapWindow::DrawTeammate(Canvas &canvas) const noexcept
 #ifdef HAVE_SKYLINES_TRACKING
 
 void
-MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const noexcept
+MapWindow::DrawOnlineTraffic(Canvas &canvas) const noexcept
 {
-  if (DisplaySkyLinesTrafficMapMode::OFF == GetMapSettings().skylines_traffic_map_mode ||
+  if (DisplayOnlineTrafficMapMode::OFF == GetMapSettings().online_traffic_map_mode ||
       skylines_data == nullptr)
     return;
 
@@ -237,7 +237,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const noexcept
   for (auto &i : skylines_data->traffic) {
     if (auto p = render_projection.GeoToScreenIfVisible(i.second.location)) {
       traffic_look.teammate_icon.Draw(canvas, *p);
-      if (DisplaySkyLinesTrafficMapMode::SYMBOL_NAME == GetMapSettings().skylines_traffic_map_mode) {
+      if (DisplayOnlineTrafficMapMode::SYMBOL_NAME == GetMapSettings().online_traffic_map_mode) {
         const auto name_i = skylines_data->user_names.find(i.first);
         const char *name = name_i != skylines_data->user_names.end()
           ? name_i->second.c_str()

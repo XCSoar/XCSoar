@@ -186,7 +186,8 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
 
 #ifdef HAVE_SKYLINES_TRACKING
   AddBoolean("SkyLines",
-             _("Enable live tracking via the SkyLines server."),
+             _("Enable live tracking via the SkyLines server "
+               "(tracking.skylines.aero)."),
              settings.skylines.enabled, this);
 #ifdef HAVE_NET_STATE_ROAMING
   AddBoolean(_("Roaming"),
@@ -197,13 +198,13 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexc
           FindClosestTrackingInterval(settings.skylines.interval));
 
   AddBoolean(_("Track friends"),
-             _("Download the position of your friends live from the SkyLines "
-               "server."),
+             _("Download the position of your SkyLines friends live from "
+               "the SkyLines server."),
              settings.skylines.traffic_enabled, this);
 
   AddBoolean(_("Show nearby traffic"),
-             _("Download the position of your nearby traffic live from the "
-             "SkyLines server."),
+             _("Download the position of nearby SkyLines users live from "
+               "the SkyLines server."),
              settings.skylines.near_traffic_enabled, this);
 
   StaticString<64> buffer;

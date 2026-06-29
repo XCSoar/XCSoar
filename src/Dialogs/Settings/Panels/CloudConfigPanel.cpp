@@ -11,11 +11,16 @@
 #include "UIGlobals.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "net/State.hpp"
 
 #include <stdio.h>
 
 enum ControlIndex {
   ENABLED,
+  SHOW_TRAFFIC,
+#ifdef HAVE_NET_STATE_ROAMING
+  ROAMING,
+#endif
   SHOW_THERMALS,
 };
 
@@ -39,6 +44,10 @@ private:
 void
 CloudConfigPanel::SetEnabled(bool enabled)
 {
+  SetRowEnabled(SHOW_TRAFFIC, enabled);
+#ifdef HAVE_NET_STATE_ROAMING
+  SetRowEnabled(ROAMING, enabled);
+#endif
   SetRowEnabled(SHOW_THERMALS, enabled);
 }
 
@@ -58,12 +67,27 @@ CloudConfigPanel::Prepare(ContainerWindow &parent,
   RowFormWidget::Prepare(parent, rc);
 
   const auto &settings =
-    CommonInterface::GetComputerSettings().tracking.skylines.cloud;
+    CommonInterface::GetComputerSettings().tracking.cloud;
 
   AddBoolean("XCSoar Cloud",
-             _("Participate in the XCSoar Cloud field test? This transmits your location, thermal and wave locations and other weather data to our test server."),
+             _("Participate in the XCSoar Cloud? This transmits your "
+               "position while flying and allows receiving traffic from "
+               "other XCSoar Cloud participants and OGN, as well as "
+               "thermal and wave locations from the cloud server."),
              settings.enabled == TriState::TRUE,
              this);
+
+  AddBoolean(_("Show traffic"),
+             _("Receive traffic from the XCSoar Cloud server and OGN. "
+               "Requires flying with a real GPS fix."),
+             settings.show_traffic, this);
+
+#ifdef HAVE_NET_STATE_ROAMING
+  AddBoolean(_("Roaming"),
+             _("Allow XCSoar Cloud communication when on a roaming "
+               "mobile data connection."),
+             settings.roaming, this);
+#endif
 
   AddBoolean(_("Show thermals"),
              _("Obtain and show thermal locations reported by others."),
@@ -78,7 +102,7 @@ CloudConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   auto &settings =
-    CommonInterface::SetComputerSettings().tracking.skylines.cloud;
+    CommonInterface::SetComputerSettings().tracking.cloud;
 
   bool cloud_enabled = settings.enabled == TriState::TRUE;
   if (SaveValue(ENABLED, ProfileKeys::CloudEnabled, cloud_enabled)) {
@@ -97,6 +121,14 @@ CloudConfigPanel::Save(bool &_changed) noexcept
 
     changed = true;
   }
+
+  changed |= SaveValue(SHOW_TRAFFIC, ProfileKeys::CloudShowTraffic,
+                       settings.show_traffic);
+
+#ifdef HAVE_NET_STATE_ROAMING
+  changed |= SaveValue(ROAMING, ProfileKeys::CloudRoaming,
+                       settings.roaming);
+#endif
 
   changed |= SaveValue(SHOW_THERMALS, ProfileKeys::CloudShowThermals,
                        settings.show_thermals);

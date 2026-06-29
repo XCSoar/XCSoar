@@ -54,7 +54,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
                      ? calculated.wind : SpeedVector::Zero());
 
 #ifdef HAVE_SKYLINES_TRACKING
-  const auto &cloud_settings = GetComputerSettings().tracking.skylines.cloud;
+  const auto &cloud_settings = GetComputerSettings().tracking.cloud;
   if (cloud_settings.show_thermals && skylines_data != nullptr) {
     const std::lock_guard lock{skylines_data->mutex};
     for (auto &i : skylines_data->thermals) {

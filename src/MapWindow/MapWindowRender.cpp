@@ -282,7 +282,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   // Draw traffic
 
 #ifdef HAVE_SKYLINES_TRACKING
-  DrawSkyLinesTraffic(canvas);
+  DrawOnlineTraffic(canvas);
 #endif
 
   DrawGLinkTraffic(canvas);

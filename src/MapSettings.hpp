@@ -49,7 +49,7 @@ enum class FinalGlideBarDisplayMode: uint8_t {
   AUTO,
 };
 
-enum class DisplaySkyLinesTrafficMapMode: uint8_t {
+enum class DisplayOnlineTrafficMapMode: uint8_t {
   OFF,
   SYMBOL,
   SYMBOL_NAME,
@@ -182,9 +182,9 @@ struct MapSettings {
   bool show_fai_triangle_areas;
 
   /**
-   * Display skylines name on map
+   * Display online traffic (SkyLines and XCSoar Cloud) on the map.
    */
-  DisplaySkyLinesTrafficMapMode skylines_traffic_map_mode;
+  DisplayOnlineTrafficMapMode online_traffic_map_mode;
 
   FAITriangleSettings fai_triangle_settings;
 

@@ -18683,7 +18683,6 @@
 				5CBFEA852D742FA600F05795 /* Assemble.cpp */,
 				5CBFEA862D742FA600F05795 /* Client.hpp */,
 				5CBFEA872D742FA600F05795 /* Client.cpp */,
-				5CBFEA882D742FA600F05795 /* CloudSettings.hpp */,
 				5CBFEA892D742FA600F05795 /* Data.hpp */,
 				5CBFEA8A2D742FA600F05795 /* Export.hpp */,
 				5CBFEA8B2D742FA600F05795 /* Features.hpp */,
@@ -18707,6 +18706,7 @@
 			children = (
 				5CBFEA832D742FA600F05795 /* LiveTrack24 */,
 				5CBFEA972D742FA600F05795 /* SkyLines */,
+				5CBFEA882D742FA600F05795 /* CloudSettings.hpp */,
 				5CBFEA982D742FA600F05795 /* Features.hpp */,
 				5CBFEA992D742FA600F05795 /* TrackingGlue.hpp */,
 				5CBFEA9A2D742FA600F05795 /* TrackingGlue.cpp */,
