@@ -58,6 +58,12 @@ public:
   }
 
   /**
+   * Process one replay fix through merge and trail-vario (no UI triggers).
+   * Call only while the worker thread is suspended.
+   */
+  void ProcessReplayFix() noexcept;
+
+  /**
    * Throws on error.
    */
   void Start(bool suspended=false) {
@@ -67,6 +73,12 @@ public:
 
 private:
   void Process() noexcept;
+
+  /**
+   * Merge and basic-computer update.  No thread assertion; caller must
+   * ensure the worker thread is not running concurrently.
+   */
+  void ProcessUnlocked() noexcept;
 
 protected:
   void Tick() noexcept override;

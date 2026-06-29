@@ -3,10 +3,14 @@
 
 #include "Trace.hpp"
 #include "Vector.hpp"
+#include "Geo/GeoBounds.hpp"
+#include "Geo/GeoClip.hpp"
 #include "util/GlobalSliceAllocator.hxx"
 
 #include <algorithm>
+#include <cstdint>
 #include <iterator>
+#include <vector>
 
 Trace::Trace(const Time _no_thin_time, const Time max_time,
              const unsigned max_size) noexcept
@@ -414,7 +418,7 @@ Trace::SyncPoints(TracePointerVector &v) const noexcept
 void
 Trace::GetPoints(TracePointVector &v, const Time min_time,
                  const GeoPoint &location,
-                 double min_distance) const noexcept
+                 double min_distance) const
 {
   /* skip the trace points that are before min_time */
   Trace::const_iterator i = begin(), end = this->end();
@@ -441,4 +445,58 @@ Trace::GetPoints(TracePointVector &v, const Time min_time,
     v.push_back(*i);
     i.NextSquareRange(sq_range, end);
   } while (i != end);
+}
+
+[[gnu::pure]]
+static bool
+SegmentIntersectsBounds(const GeoPoint &a, const GeoPoint &b,
+                        const GeoBounds &bounds) noexcept
+{
+  if (bounds.IsInside(a) || bounds.IsInside(b))
+    return true;
+
+  GeoClip clip(bounds);
+  GeoPoint a2 = a, b2 = b;
+  return clip.ClipLine(a2, b2);
+}
+
+void
+Trace::GetPoints(TracePointVector &v, const Time min_time,
+                 const GeoBounds &bounds,
+                 const GeoPoint &location,
+                 const double min_distance) const
+{
+  TracePointVector thinned;
+  GetPoints(thinned, min_time, location, min_distance);
+
+  if (thinned.empty()) {
+    v.clear();
+    return;
+  }
+
+  std::vector<uint8_t> keep(thinned.size(), 0);
+  for (size_t k = 0; k < thinned.size(); ++k) {
+    const GeoPoint gp = thinned[k].GetLocation();
+    if (bounds.IsInside(gp)) {
+      keep[k] = 1;
+      continue;
+    }
+
+    if (k > 0 &&
+        SegmentIntersectsBounds(thinned[k - 1].GetLocation(), gp, bounds))
+      keep[k] = 1;
+    else if (k + 1 < thinned.size() &&
+             SegmentIntersectsBounds(gp, thinned[k + 1].GetLocation(), bounds))
+      keep[k] = 1;
+  }
+
+  /* Keep only visible / bounds-crossing points.  Do not reinsert
+     off-screen gaps between separate viewport runs — that would let
+     trail size grow with flight duration despite the filter. */
+  v.clear();
+  v.reserve(thinned.size());
+  for (size_t k = 0; k < thinned.size(); ++k) {
+    if (keep[k])
+      v.push_back(thinned[k]);
+  }
 }
