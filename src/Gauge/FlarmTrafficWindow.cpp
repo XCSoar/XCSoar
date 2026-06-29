@@ -25,6 +25,25 @@
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
+/** Team / alarm ring radii around radar targets (virtual points). */
+static constexpr unsigned RADAR_RING_VPT_SMALL = 8;
+static constexpr unsigned RADAR_RING_VPT = 14;
+static constexpr unsigned RADAR_RING_OUTER_VPT_SMALL = 10;
+static constexpr unsigned RADAR_RING_OUTER_VPT = 17;
+
+[[gnu::const]]
+static unsigned
+RadarTargetRingRadius(bool small, unsigned index) noexcept
+{
+  switch (index) {
+  case 0:
+    return Layout::VptScale(small ? RADAR_RING_VPT_SMALL : RADAR_RING_VPT);
+  default:
+    return Layout::VptScale(small ? RADAR_RING_OUTER_VPT_SMALL
+                                  : RADAR_RING_OUTER_VPT);
+  }
+}
+
 
 FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _h_padding,
@@ -389,9 +408,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   if (circles > 0) {
     canvas.SelectHollowBrush();
     canvas.Select(*circle_pen);
-    canvas.DrawCircle(sc[i], Layout::FastScale(small ? 8 : 16));
+    canvas.DrawCircle(sc[i], RadarTargetRingRadius(small, 0));
     if (circles == 2)
-      canvas.DrawCircle(sc[i], Layout::FastScale(small ? 10 : 19));
+      canvas.DrawCircle(sc[i], RadarTargetRingRadius(small, 1));
   }
 
   // Create an arrow polygon
