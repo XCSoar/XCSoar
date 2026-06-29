@@ -5,6 +5,7 @@
 #include "OGNTraffic.hpp"
 #include "Tracking/SkyLines/Export.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
+#include "Tracking/SkyLines/TrafficExtensions.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/CRC16CCITT.hpp"
 #include "util/UTF8.hpp"
@@ -16,24 +17,21 @@ TrafficRecordExtensions
 TrafficRecordExtensions::FromOgn(unsigned track_deg, bool track_valid,
                                  unsigned aircraft_type,
                                  uint32_t flarm_id,
-                                 bool flarm_valid) noexcept
+                                 bool flarm_valid,
+                                 bool altitude_valid) noexcept
 {
-  TrafficRecordExtensions e{};
-  if (track_valid && track_deg <= 359)
-    e.reserved = uint16_t(0x8000u | (track_deg & 0x1FFu) |
-                          ((aircraft_type & 0x1Fu) << 9));
-
-  if (flarm_valid && flarm_id <= 0xFFFFFFu)
-    e.reserved2 = 0x80000000u | (flarm_id & 0xFFFFFFu);
-
-  return e;
+  const auto ext = SkyLinesTracking::TrafficExtensions::FromOgn(
+    track_deg, track_valid, aircraft_type, flarm_id, flarm_valid,
+    altitude_valid);
+  const auto wire = ext.ToWire();
+  return {wire.reserved, wire.reserved2};
 }
 
 TrafficRecordExtensions
 TrafficRecordExtensions::FromOgn(const OGNTrafficEntry &t) noexcept
 {
   return FromOgn(t.track_deg, t.track_valid, t.aircraft_type,
-                 t.flarm_id, t.flarm_valid);
+                 t.flarm_id, t.flarm_valid, t.altitude_valid);
 }
 
 void

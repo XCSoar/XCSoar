@@ -9,6 +9,7 @@
 #include "Tracking/SkyLines/Import.hpp"
 #include "net/AddressInfo.hxx"
 #include "net/Resolver.hxx"
+#include "util/ByteOrder.hxx"
 
 #include <boost/geometry/algorithms/distance.hpp>
 #include <boost/geometry/algorithms/intersection.hpp>
@@ -41,7 +42,8 @@ CloudClientContainer::Find(uint64_t key)
 CloudClient &
 CloudClientContainer::Make(SocketAddress address,
                            uint64_t key,
-                           const GeoPoint &location, int altitude)
+                           const GeoPoint &location, int altitude,
+                           unsigned track_deg, bool track_valid)
 {
   KeySet::insert_commit_data hint;
   auto result = key_set.insert_check(key, key_set.hash_function(),
@@ -49,11 +51,13 @@ CloudClientContainer::Make(SocketAddress address,
   if (result.second) {
     auto client = std::make_shared<CloudClient>(address, key, next_id++,
                                                 location, altitude);
+    client->track_deg = track_deg;
+    client->track_valid = track_valid;
     Insert(*client);
     return *client;
   } else {
     auto &client = *result.first;
-    Refresh(client, address, location, altitude);
+    Refresh(client, address, location, altitude, track_deg, track_valid);
     return client;
   }
 }
@@ -71,7 +75,8 @@ CloudClientContainer::Refresh(CloudClient &client,
 void
 CloudClientContainer::Refresh(CloudClient &client,
                               SocketAddress address,
-                              const GeoPoint &location, int altitude)
+                              const GeoPoint &location, int altitude,
+                              unsigned track_deg, bool track_valid)
 {
   Refresh(client, address);
 
@@ -83,6 +88,9 @@ CloudClientContainer::Refresh(CloudClient &client,
   }
 
   client.altitude = altitude;
+  client.track_deg = track_deg;
+  client.track_valid = track_valid;
+  client.aircraft_type = 1;
 }
 
 void
@@ -155,9 +163,13 @@ CloudClient::Save(Serialiser &s) const
   uint32_t flags = SkyLinesTracking::FixPacket::FLAG_LOCATION;
   if (altitude != -1)
     flags |= SkyLinesTracking::FixPacket::FLAG_ALTITUDE;
+  if (track_valid)
+    flags |= SkyLinesTracking::FixPacket::FLAG_TRACK;
 
   s.WriteT(SkyLinesTracking::MakeFix(key, flags, 0,
-                                     location, Angle::Zero(), 0, 0,
+                                     location,
+                                     Angle::Degrees(double(track_deg)),
+                                     0, 0,
                                      altitude, 0, 0));
 
   s << address;
@@ -186,6 +198,10 @@ CloudClient::Load(Deserialiser &s)
                      SkyLinesTracking::ImportGeoPoint(fix.location),
                      (int16_t)FromBE16(fix.altitude));
   client.stamp = stamp;
+  if ((FromBE32(fix.flags) & SkyLinesTracking::FixPacket::FLAG_TRACK) != 0) {
+    client.track_valid = true;
+    client.track_deg = unsigned(FromBE16(fix.track));
+  }
   return client;
 }
 
