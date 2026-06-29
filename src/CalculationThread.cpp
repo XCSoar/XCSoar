@@ -112,6 +112,32 @@ CalculationThread::Tick() noexcept
 }
 
 void
+CalculationThread::ProcessReplayFix() noexcept
+{
+#ifdef HAVE_CPU_FREQUENCY
+  const ScopeLockCPU cpu;
+#endif
+
+  {
+    const std::lock_guard lock{device_blackboard.mutex};
+    glide_computer.ReadBlackboard(device_blackboard.Basic());
+  }
+
+  {
+    const std::lock_guard lock{mutex};
+    glide_computer.ReadComputerSettings(settings_computer);
+  }
+
+  glide_computer.Expire();
+  glide_computer.ProcessGPS(true);
+
+  {
+    const std::lock_guard lock{device_blackboard.mutex};
+    device_blackboard.ReadBlackboard(glide_computer.Calculated());
+  }
+}
+
+void
 CalculationThread::ForceTrigger() noexcept
 {
   {
