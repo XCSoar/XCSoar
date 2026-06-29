@@ -32,6 +32,10 @@ public:
     return value != UNDEFINED_VALUE;
   }
 
+  constexpr uint32_t Value() const noexcept {
+    return value;
+  }
+
   constexpr void Clear() noexcept {
     value = UNDEFINED_VALUE;
   }
