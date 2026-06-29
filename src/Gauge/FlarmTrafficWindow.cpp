@@ -31,6 +31,12 @@ static constexpr unsigned RADAR_RING_VPT = 14;
 static constexpr unsigned RADAR_RING_OUTER_VPT_SMALL = 10;
 static constexpr unsigned RADAR_RING_OUTER_VPT = 17;
 
+/** Big-radar arrow template spans 18 units vertically (-10 to +8). */
+static constexpr unsigned RADAR_ARROW_SPAN = 18;
+static constexpr unsigned RADAR_ARROW_VPT = 36;
+static constexpr unsigned RADAR_ARROW_SMALL_SPAN = 9;
+static constexpr unsigned RADAR_ARROW_SMALL_VPT = 24;
+
 [[gnu::const]]
 static unsigned
 RadarTargetRingRadius(bool small, unsigned index) noexcept
@@ -42,6 +48,21 @@ RadarTargetRingRadius(bool small, unsigned index) noexcept
     return Layout::VptScale(small ? RADAR_RING_OUTER_VPT_SMALL
                                   : RADAR_RING_OUTER_VPT);
   }
+}
+
+[[gnu::const]]
+static int
+RadarArrowScale(bool small_radar) noexcept
+{
+  const unsigned arrow_span = small_radar
+    ? RADAR_ARROW_SMALL_SPAN
+    : RADAR_ARROW_SPAN;
+  const unsigned icon_vpt = small_radar
+    ? RADAR_ARROW_SMALL_VPT
+    : RADAR_ARROW_VPT;
+  const unsigned icon_size = Layout::VptScale(icon_vpt);
+
+  return std::max(int(icon_size) * 50 / int(arrow_span), 1);
 }
 
 
@@ -439,7 +460,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   PolygonRotateShift(Arrow, sc[i],
                      traffic.track - (enable_north_up ?
                                       Angle::Zero() : heading),
-                     Layout::Scale(100u));
+                     RadarArrowScale(small));
 
   // Select pen and brush
   if (target_brush == nullptr) {
