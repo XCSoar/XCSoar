@@ -283,9 +283,6 @@ protected:
   virtual void RenderTrail(Canvas &canvas, PixelPoint aircraft_pos) noexcept;
   virtual void RenderTrackBearing(Canvas &canvas, PixelPoint aircraft_pos) noexcept;
 
-#ifdef HAVE_SKYLINES_TRACKING
-  void DrawOnlineTraffic(Canvas &canvas) const noexcept;
-#endif
 
   void DrawTeammate(Canvas &canvas) const noexcept;
   void DrawDistanceRings(Canvas &canvas) const noexcept;
