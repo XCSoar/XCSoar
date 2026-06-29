@@ -6,6 +6,7 @@
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "Import.hpp"
+#include "TrafficExtensions.hpp"
 #include "util/ByteOrder.hxx"
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -19,13 +20,14 @@
 #include <string>
 
 void
-SkyLinesTracking::Client::Open(Cares::Channel &cares, const char *server)
+SkyLinesTracking::Client::Open(Cares::Channel &cares, const char *server,
+                               unsigned port)
 {
-  BlockingCall(GetEventLoop(), [this, &cares, server](){
+  BlockingCall(GetEventLoop(), [this, &cares, server, port](){
     InternalClose();
 
     Cares::SimpleHandler &resolver_handler = *this;
-    resolver.emplace(resolver_handler, GetDefaultPort());
+    resolver.emplace(resolver_handler, port);
     resolver->Start(cares, server);
   });
 }
@@ -142,12 +144,18 @@ SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
   if (length != sizeof(packet) + n * sizeof(list.front()))
     return;
 
-  for (const auto &traffic : list)
+  for (const auto &traffic : list) {
+    const auto ext = TrafficExtensions::FromWire(traffic.reserved,
+                                                 traffic.reserved2);
     handler->OnTraffic(FromBE32(traffic.pilot_id),
                        FromBE32(traffic.time),
                        ImportGeoPoint(traffic.location),
                        (int16_t)FromBE16(traffic.altitude),
-                       traffic_source);
+                       ext.altitude_valid,
+                       traffic_source,
+                       ext.track_deg, ext.track_valid,
+                       ext.flarm_id, ext.aircraft_type);
+  }
 }
 
 inline void

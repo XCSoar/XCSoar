@@ -106,7 +106,11 @@ Server::OnDatagramReceived(Client &&client,
           : ::GeoPoint::Invalid(),
           fix.flags & ToBE32(FixPacket::FLAG_ALTITUDE)
           ? (int16_t)FromBE16(fix.altitude)
-          : -1);
+          : -1,
+          fix.flags & ToBE32(FixPacket::FLAG_TRACK)
+          ? unsigned(FromBE16(fix.track))
+          : 0u,
+          (fix.flags & ToBE32(FixPacket::FLAG_TRACK)) != 0);
     break;
 
   case TRAFFIC_REQUEST:
