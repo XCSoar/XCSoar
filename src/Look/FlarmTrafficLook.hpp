@@ -21,6 +21,10 @@ struct FlarmTrafficLook {
   Color safe_above_color;
   Color safe_below_color;
   Color warning_in_altitude_range_color;
+  Color team_color_green;
+  Color team_color_blue;
+  Color team_color_yellow;
+  Color team_color_magenta;
 
   Brush warning_brush;
   Brush alarm_brush;
@@ -55,4 +59,15 @@ struct FlarmTrafficLook {
   Font info_values_font, info_units_font, info_labels_font, call_sign_font;
 
   void Initialise(const TrafficLook &other, bool small, bool inverse = false);
+
+  /**
+   * Reload pens and fonts after #Layout::Initialise() (DPI / resize).
+   */
+  void ReinitialiseLayout() noexcept;
+
+private:
+  bool small;
+  bool inverse;
+
+  void InitialisePensAndFonts() noexcept;
 };
