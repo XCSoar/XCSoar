@@ -8,7 +8,6 @@
 #include "FLARM/List.hpp"
 #include "TeamCode/Settings.hpp"
 #include "Math/FastRotation.hpp"
-#include "Renderer/TextInBox.hpp"
 #include "ui/canvas/Pen.hpp"
 
 #include <cstdint>
