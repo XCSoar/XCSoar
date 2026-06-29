@@ -5,6 +5,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Rough/RoughAngle.hpp"
 #include "FLARM/Id.hpp"
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
@@ -39,9 +40,6 @@ struct MapItem
     THERMAL,
     WAYPOINT,
     TRAFFIC,
-#ifdef HAVE_SKYLINES_TRACKING
-    SKYLINES_TRAFFIC,
-#endif
     OVERLAY,
     RASP,
   } type;
@@ -190,30 +188,6 @@ struct TrafficMapItem: public MapItem
   TrafficMapItem(FlarmId _id, FlarmColor _color)
     :MapItem(Type::TRAFFIC), id(_id), color(_color) {}
 };
-
-#ifdef HAVE_SKYLINES_TRACKING
-
-struct SkyLinesTrafficMapItem : public MapItem
-{
-  using Time = std::chrono::duration<uint_least32_t, std::chrono::milliseconds::period>;
-
-  uint32_t id;
-
-  Time time_of_day;
-
-  int altitude;
-
-  StaticString<40> name;
-
-  SkyLinesTrafficMapItem(uint32_t _id, Time _time_of_day_ms,
-                         int _altitude,
-                         const char *_name)
-    :MapItem(Type::SKYLINES_TRAFFIC), id(_id), time_of_day(_time_of_day_ms),
-     altitude(_altitude),
-     name(_name) {}
-};
-
-#endif
 
 struct ThermalMapItem: public MapItem
 {

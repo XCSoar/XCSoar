@@ -14,14 +14,6 @@
 
 #include <cassert>
 
-[[gnu::const]]
-static bool
-IsInjectedTrafficSource(FlarmTraffic::SourceType source) noexcept
-{
-  return source == FlarmTraffic::SourceType::OGN ||
-    source == FlarmTraffic::SourceType::SKYLINES;
-}
-
 static void
 DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
                  const TrafficLook &look, bool fading,
@@ -47,27 +39,25 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
   // JMW TODO enhancement: decluttering of FLARM altitudes (sort by max lift)
 
   // only draw labels if not close to aircraft
-  if ((sc - aircraft_pos).MagnitudeSquared() > Layout::Scale(30 * 30)) {
+  const TrafficRenderer::MapTrafficLabelLayout layout =
+    TrafficRenderer::MapLabelLayout();
+  if ((sc - aircraft_pos).MagnitudeSquared() >
+      layout.min_label_distance * layout.min_label_distance) {
     const bool show_name = traffic.HasName() && !StringIsEmpty(traffic.name) &&
-      (!IsInjectedTrafficSource(traffic.source) ||
+      (!FlarmTraffic::IsInjectedSource(traffic.source) ||
        online_mode == DisplayOnlineTrafficMapMode::SYMBOL_NAME);
 
-    // If FLARM callsign/name available draw it to the canvas
     if (show_name) {
-      // Draw the name 16 points below the icon
       auto sc_name = sc;
-      sc_name.y -= Layout::Scale(20);
+      sc_name.y -= layout.name_offset_y;
 
       TextInBox(canvas, traffic.name, sc_name,
                 mode, projection.GetScreenRect());
     }
 
     if (!fading && traffic.climb_rate_avg30s >= 0.1) {
-      // If average climb data available draw it to the canvas
-
-      // Draw the average climb value above the icon
       auto sc_av = sc;
-      sc_av.y += Layout::Scale(5);
+      sc_av.y += layout.climb_offset_y;
 
       TextInBox(canvas,
                 FormatUserVerticalSpeed(traffic.climb_rate_avg30s, false),
@@ -116,7 +106,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     if (!traffic.location_available)
       continue;
 
-    if (IsInjectedTrafficSource(traffic.source) &&
+    if (FlarmTraffic::IsInjectedSource(traffic.source) &&
         online_mode == DisplayOnlineTrafficMapMode::OFF)
       continue;
 
@@ -130,7 +120,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     for (const auto &[id, traffic] : fading) {
       assert(traffic.location_available);
 
-      if (IsInjectedTrafficSource(traffic.source))
+      if (FlarmTraffic::IsInjectedSource(traffic.source) &&
+          online_mode == DisplayOnlineTrafficMapMode::OFF)
         continue;
 
   // No position traffic (relative_east=0) does not make sense in map display
