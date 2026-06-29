@@ -1,22 +1,39 @@
 # XCSoar Docker Image
 
-This Docker Image when built, will compile XCSoar for several targets in a clean room environment.
+This Docker image compiles XCSoar for several targets in a clean-room
+environment. See ``doc/build.rst`` (“Using Docker”) for full instructions,
+including legacy Raspberry Pi cross-compile in a privileged container.
 
-## Currently Supported Targets
+## Currently Supported Targets (`xcsoar-compile`)
 
-Targets:
-  - UNIX (linux & co)
-  - UNIX-SDL (Software Rendering for X11 forward)
-  - ANDROID
-  - PC
-  - KOBO
-  - DOCS
+| Target | Description |
+|--------|-------------|
+| ``UNIX`` | Native Linux/Unix build (OpenGL, default desktop target) |
+| ``UNIX-SDL`` | Software rendering via SDL (useful with X11 forwarding) |
+| ``WAYLAND`` | Experimental Wayland display server build |
+| ``WIN64OPENGL`` | Windows x64, OpenGL ES via ANGLE (**recommended**) |
+| ``WIN32OPENGL`` | Windows 32-bit, OpenGL ES via ANGLE (**recommended**) |
+| ``ANDROID`` | Android fat package (all ABIs) |
+| ``KOBO`` | Kobo e-reader build plus ``KoboRoot.tgz`` |
+| ``DOCS`` | Build the PDF manuals (``make manual``) |
+| ``UNIX-DEBIAN`` | Build a ``.deb`` package (``dpkg-buildpackage``) |
+| ``PC`` | Windows 32-bit GDI (**deprecated**; use ``WIN32OPENGL``) |
+| ``WIN64`` | Windows x64 GDI (**deprecated**; use ``WIN64OPENGL``) |
+
+Pass additional ``make`` options after the target name (e.g. ``USE_CCACHE=y
+everything``).
+
+**Platform notes:** The image targets **Linux x86_64** hosts. **iOS** builds
+are not supported in Docker — use a Mac with Xcode (see ``doc/build.rst``,
+*Compiling for iOS*). On **macOS**, Android via Docker can hang or fail under
+emulation; prefer a native Android build or a Linux Docker host (see
+``doc/build.rst``, *Using Docker*).
 
 ## Instructions
 
 The container itself is readonly. The build results will appear in `./output/`.
 
-To run the container interactivly:
+To run the container interactively:
 ```bash
 docker run \
     --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
@@ -28,6 +45,14 @@ To run the ANDROID build:
 docker run \
     --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
     -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest xcsoar-compile ANDROID
+```
+
+To cross-compile Windows (OpenGL, recommended):
+```bash
+docker run \
+    --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
+    ghcr.io/xcsoar/xcsoar/xcsoar-build:latest \
+    xcsoar-compile WIN64OPENGL USE_CCACHE=y everything
 ```
 
 To build the container:

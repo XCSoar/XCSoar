@@ -21,6 +21,8 @@ XCSoar
 
 Build system reference: :ref:`build-system-reference`
 
+Developer docs: :doc:`build` (:ref:`development-workflow`), :doc:`test_debug_utilities`
+
 
 Indices and tables
 ==================

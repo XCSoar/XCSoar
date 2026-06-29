@@ -1,6 +1,11 @@
 Test and Debug Utilities
 =========================
 
+.. _test-debug-utilities:
+
+For a shorter overview of debugging workflows (replay, simulator, gdb,
+device tools), see :doc:`debugging`.
+
 The XCSoar test suite includes a collection of standalone utility programs
 for debugging, testing, and interactive exploration of XCSoar components
 without running the full application. Many of these utilities are prefixed
@@ -47,16 +52,21 @@ find your output directory, check what was created in the ``output/`` folder
 after building.
 
 Building Run* Utilities
-------------------------
+-----------------------
 
-All Run* utilities are automatically built when you compile XCSoar. They are
-defined in ``build/test.mk`` and compiled as part of the debug programs target.
+These utilities are **not** built by plain ``make``; use the ``debug`` target
+(see :ref:`development-workflow` in :doc:`build`). They are defined in
+:file:`build/test.mk` and compiled as the ``debug`` make target.
 
 To build all Run* utilities:
 
 .. code-block:: bash
 
-   make DEBUG
+   make -j$(nproc) debug
+
+Or build everything (main binary, utilities, unit tests, harness)::
+
+   make -j$(nproc) everything
 
 To build a specific utility:
 

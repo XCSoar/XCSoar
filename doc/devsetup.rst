@@ -10,8 +10,6 @@ In the following instructions, ``sudo`` is used to execute commands with
 root privileges. This is not enabled by default in Debian (but on some
 Debian based distributions, like Ubuntu).
 
-To install a virtual machine with the required, you can use ``Vagrant``.
-
 Download source code
 ====================
 
@@ -25,63 +23,83 @@ following way in your project directory::
 
  git clone --recurse-submodules https://github.com/XCSoar/XCSoar
 
-Use provisioning scripts
-========================
+Setting up the build environment
+================================
 
-If you are not using Vagrant, but an existing standard installation of a
-Debian-based Linux distribution, you can run the scripts from
-``ide/provisioning`` subfolder of the XCSoar source to install the build
-dependencies for various XCSoar target platforms.
+On Debian or Ubuntu, use one of the following — in order of preference:
 
-::
+1. **Native build** on the host (recommended): install dependencies with
+   the provisioning scripts, then run ``make``.
+2. **Docker** on x86_64: use the pre-built image when you prefer not to
+   install libraries on the host (see :ref:`docker-build` in :doc:`build`).
+3. **Vagrant** VM: optional legacy path if you want an isolated VM with
+   many targets preconfigured (see “Using a build VM with Vagrant” in
+   :doc:`build`).
+
+Native build
+------------
+
+Run the scripts from ``ide/provisioning`` to install build dependencies.
+See :doc:`build` for per-target section names and compile commands.
+For ``Run*`` test and debug utilities after building, see
+:doc:`test_debug_utilities`::
 
    cd ide/provisioning
    sudo ./install-debian-packages.sh
    ./install-android-tools.sh
 
-Optional: Eclipse IDE
-=====================
+Docker
+------
 
-One of the most widespread IDEs is eclipse. It is not limited to
-Android, and can be used for all targets. It is not required for XCSoar, but
-its installation is described here as an example. Eclipse is quite
-heavyweight, and many developers prefer other IDEs for XCSoar development.
+On an x86_64 Linux host, bind-mount the source tree and compile inside
+the container (details in :doc:`build`)::
 
-To install, download the eclipse installer (Sometimes called
-“*Ooomph!*” for some reason) from here:
-``https://www.eclipse.org/downloads/``
+   docker run \
+       --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
+       -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
 
-Important: Install the CDT version of eclipse for C development, not the
-Android/Java package, even if you plan developing for Android. In
-addition, it is very convenient to install the git support (egit).
+   xcsoar-compile UNIX USE_CCACHE=y
 
-The current stable version is *eclipse mars* (4.5) and works with
-OpenJDK 7 or 8, the new *eclipse neon* 4.6, currently RC2, is also quite
-stable, and requires OpenJDK 8. Both can be installed with the
-installer.
+Vagrant
+-------
 
-You can also install the ADT (Android development tools) package for
-better integration with Android.
+See :doc:`build` for VM setup with VirtualBox and the Vagrantfile in
+``ide/vagrant``.
 
-Next, create a new project, by generating a make project from existing
-sources files. Choose your xcsoar source directory which contains the
-makefile.
+Raspberry Pi
+============
 
-Important: After you have added the sources, eclipse will start
-indexing all files. If you have already started ``make`` before this
-time, then a lot of files have been downloaded for the various
-libraries which are exctracted/built within the XCSoar directory (most
-notably the boost libraries). Indexing all these takes a very long
-time, and a lot of heap space, so you should probably stop the indexer
-right away. In addition you should probably exclude these directories
-from the indexer for the future.
+On a **Raspberry Pi 4 or 5**, install dependencies and build **natively on
+the device** (``TARGET=UNIX`` is auto-detected)::
 
-For this, in the C/C++ scope, right-click on the “output” directory in
-the file tree on the left side, select “Properties”, then
-“Resource/Resource Filters” and add a filter. In the “add filter”
-dialog, choose “exclude all”, “files and folders”, “all children
-(recursive)” and set the Filter details to “Name matches \*”. This will
-exclude the output tree from the indexer, leading to a minimal index.
+   cd ide/provisioning
+   sudo ./install-debian-packages.sh UPDATE BASE LINUX LIBINPUT_GBM
+   make -j$(nproc) USE_CCACHE=y
+
+Cross-compiling for legacy Raspberry Pi 1–3
+------------------------------------------
+
+``TARGET=PI`` and ``TARGET=PI2`` are for cross-compiling on a desktop host
+for old ARMv6/ARMv7 boards. Create an armhf sysroot (``setup-pi-sysroot.sh``
+installs ``PI_HOST`` host tools by default)::
+
+   cd ide/provisioning
+   sudo ./setup-pi-sysroot.sh
+
+Cross-compile (Pi 1 / ARMv6)::
+
+   make TARGET=PI PI=/opt/pi/root
+
+For Raspberry Pi 2/3 (ARMv7 with NEON)::
+
+   make TARGET=PI2 PI=/opt/pi/root
+
+Binaries are written to ``output/PI/`` and ``output/PI2/`` (not
+``output/UNIX/``). See :doc:`build` for details.
+
+The same sysroot steps work inside a privileged Docker container; see
+:doc:`build` (“Using Docker” and “Cross-compiling for legacy Raspberry Pi
+1–3”).
 
 Optional: modern LaTeX editor for editing the Manual
 ====================================================
