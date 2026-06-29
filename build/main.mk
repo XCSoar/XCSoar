@@ -708,6 +708,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Key.cpp \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
+	$(SRC)/Tracking/SkyLines/FlarmTrafficBuilder.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp \
 	$(SRC)/NetComponents.cpp
 

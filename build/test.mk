@@ -942,6 +942,7 @@ TEST_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(SRC)/Tracking/SkyLines/FlarmTrafficBuilder.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
 TEST_DRIVER_DEPENDS = DRIVER OPERATION LIBNMEA GEO MATH IO OS THREAD UTIL TIME GLIDE COMPUTER TASK LOGGER
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
