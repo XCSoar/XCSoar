@@ -17,7 +17,8 @@ ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE),nyn)
 endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(PI)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(PI)/usr
+  PI_PKG_CONFIG_LIBDIR := $(PI)/usr/lib/arm-linux-gnueabihf/pkgconfig:$(PI)/usr/share/pkgconfig
+  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(PI_PKG_CONFIG_LIBDIR) $(PKG_CONFIG) --define-variable=prefix=$(PI)/usr
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)

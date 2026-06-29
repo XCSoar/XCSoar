@@ -22,7 +22,7 @@
 #   ENABLE_MESA_KMS If set to "y", the program uses KMS to switch to graphics mode.
 #               Use this option when the program runs on a text-mode system
 #               without graphics and window system like X11 or Wayland.
-#               Default for Rasperry PI 4, optional for Cubieboard.
+#               Default for Raspberry Pi 4, optional for Cubieboard.
 #
 #   OPENGL      "y" means render with OpenGL.
 #
