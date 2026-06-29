@@ -59,16 +59,20 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
 
   static constexpr StaticEnumChoice abort_task_mode_list[] = {
     { AbortTaskMode::SIMPLE, N_("Simple"),
-      N_("The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.") },
+      N_("Reachable airfields are listed first (nearest at top), then "
+         "outlanding sites (nearest at top).") },
     { AbortTaskMode::TASK, N_("Task"),
-      N_("The sorting will also take the current task direction into account.") },
+      N_("Reachable airfields are listed first (smallest detour to the "
+         "active turnpoint at top), then outlanding sites.") },
     { AbortTaskMode::HOME, N_("Home"),
-      N_("The sorting will try to find landing options in the current direction to the configured home waypoint.") },
+      N_("Reachable airfields are listed first (smallest detour toward "
+         "home at top), then outlanding sites.") },
     nullptr
   };
 
   AddEnum(_("Alternates mode"),
-          _("Determines sorting of alternates in the alternates dialog and in abort mode."),
+          _("Determines sorting of alternates in the alternates dialog "
+            "and in abort mode."),
           abort_task_mode_list, (unsigned)task_behaviour.abort_task_mode);
 
   AddFloat(_("Polar degradation"), /* xgettext:no-c-format */
