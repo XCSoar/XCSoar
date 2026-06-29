@@ -641,6 +641,10 @@ Startup(UI::Display &display)
     map_window->SetTerrain(data_components->terrain.get());
     map_window->SetRasp(rasp);
 
+#ifdef ENABLE_OPENGL
+    map_window->LoadOverlays();
+#endif
+
 #ifdef HAVE_NOAA
     map_window->SetNOAAStore(noaa_store);
 #endif
