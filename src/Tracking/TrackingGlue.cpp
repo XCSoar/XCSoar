@@ -6,6 +6,17 @@
 #include "NMEA/MoreData.hpp"
 #include "LogFile.hpp"
 
+#include <cstdlib>
+#include <cstring>
+
+/* TEMPORARY: remove before upstream merge */
+static bool
+CloudDebugEnabled() noexcept
+{
+  const char *value = std::getenv("XCS_CLOUD_DEBUG");
+  return value != nullptr && std::strcmp(value, "1") == 0;
+}
+
 TrackingGlue::TrackingGlue(EventLoop &event_loop,
                            CurlGlobal &curl) noexcept
   :skylines(event_loop, this),
@@ -16,7 +27,10 @@ TrackingGlue::TrackingGlue(EventLoop &event_loop,
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
-  skylines.SetSettings(_settings.skylines);
+  cloud_enabled = _settings.cloud.enabled;
+  cloud_show_traffic = _settings.cloud.show_traffic;
+
+  skylines.SetSettings(_settings.skylines, _settings.cloud);
   livetrack24.SetSettings(_settings.livetrack24);
 }
 
@@ -48,8 +62,20 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 
 void
 TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
-                        const GeoPoint &location, int altitude)
+                        const GeoPoint &location, int altitude,
+                        SkyLinesTracking::TrafficSource source)
 {
+  if (source == SkyLinesTracking::TrafficSource::CLOUD) {
+    if (cloud_enabled != TriState::TRUE || !cloud_show_traffic)
+      return;
+
+    if (CloudDebugEnabled())
+      LogFmt("Cloud: TRAFFIC_RESPONSE pilot_id={:#x} alt={}m lat={} lon={}",
+             pilot_id, altitude,
+             location.latitude.Degrees(),
+             location.longitude.Degrees());
+  }
+
   bool user_known;
 
   {
