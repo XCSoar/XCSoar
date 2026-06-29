@@ -11,6 +11,8 @@ Version 7.45 - not yet released
   - Configurable XCSoar Cloud server hostname and UDP port in cloud settings
   - Raise combined FLARM/online traffic list limit to 64 targets (cloud
     batch size); device FLARM traffic still typically stays within 25
+* ui
+  - Outline selected targets on the FLARM traffic radar
 * glide computer
   - Speed-to-fly and task calculations are now altitude-corrected: the glide
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,

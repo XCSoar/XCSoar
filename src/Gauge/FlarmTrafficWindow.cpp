@@ -59,6 +59,23 @@ FlarmTrafficWindow::RadarArrowScale(bool small_radar,
   return std::max(int(icon_size) * 50 / int(arrow_span), 1);
 }
 
+static void
+DrawSideLabel(Canvas &canvas, const FlarmTrafficLook &look,
+              const char *text, PixelPoint p, bool selected,
+              Color text_color) noexcept
+{
+  canvas.SetBackgroundTransparent();
+
+  if (!selected) {
+    canvas.SetTextColor(text_color);
+    canvas.DrawText(p, text);
+    return;
+  }
+
+  const bool light_background = look.background_color != COLOR_BLACK;
+  RenderShadowedText(canvas, text, p, light_background);
+}
+
 
 FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _h_padding,
@@ -494,16 +511,19 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   canvas.SetTextColor(*text_color);
 
   const unsigned radar_radius = radar_renderer.GetRadius();
+  const bool selected = static_cast<unsigned>(selection) == i;
 
-  // Draw callsign only in combination with relative altitude
+  // Draw callsign when selected, or in relative-altitude side-data mode
   if (traffic.HasName() &&
-      side_display_type == SideInfoType::RELATIVE_ALTITUDE) {
+      (selected ||
+       side_display_type == SideInfoType::RELATIVE_ALTITUDE)) {
     const PixelPoint ts{
       sc[i].x + int(ScaleRadarPermille(radar_radius, SIDE_LABEL_X_PERMILLE)),
       sc[i].y - int(ScaleRadarPermille(radar_radius, SIDE_LABEL_Y_PERMILLE)),
     };
 
-    canvas.DrawText(ts, SuffixUTF8(traffic.name, 2));
+    DrawSideLabel(canvas, look, SuffixUTF8(traffic.name, 2).data(), ts,
+                  selected, *text_color);
   }
 
   StaticString<10> side_text;
@@ -528,7 +548,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   };
 
   if (!side_text.empty())
-    canvas.DrawText(tp, side_text);
+    DrawSideLabel(canvas, look, side_text, tp, selected, *text_color);
 }
 
 void
