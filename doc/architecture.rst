@@ -393,6 +393,8 @@ Developing
 Debugging XCSoar
 ~~~~~~~~~~~~~~~~
 
+See also :doc:`debugging` for replay, simulator, and utility workflows.
+
 The XCSoar source repository contains a module for the GNU debugger
 (``gdb``). It contains pretty-printers for various XCSoar types,
 including ``Angle``, ``GeoPoint`` and others. These are helpful when you
