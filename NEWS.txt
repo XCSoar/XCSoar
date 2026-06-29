@@ -5,6 +5,12 @@ Version 7.45 - not yet released
   - Rename map display setting to "Online traffic on map" (SkyLines and
     XCSoar Cloud traffic)
   - Expire online traffic map icons 5 minutes after the last update
+  - Show OGN and SkyLines traffic on the map, in the traffic list, and in
+    the what-is-here dialog using the same FLARM traffic display as device
+    traffic (fixes pan-mode disappearance of online targets)
+  - Configurable XCSoar Cloud server hostname and UDP port in cloud settings
+  - Raise combined FLARM/online traffic list limit to 64 targets (cloud
+    batch size); device FLARM traffic still typically stays within 25
 * glide computer
   - Speed-to-fly and task calculations are now altitude-corrected: the glide
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
