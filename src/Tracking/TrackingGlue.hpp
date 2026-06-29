@@ -11,6 +11,7 @@
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/LiveTrack24/Glue.hpp"
+#include "util/TriState.hpp"
 
 struct TrackingSettings;
 struct MoreData;
@@ -28,6 +29,9 @@ class TrackingGlue final
 
   bool shutting_down = false;
 
+  TriState cloud_enabled = TriState::UNKNOWN;
+  bool cloud_show_traffic = true;
+
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 
@@ -43,9 +47,10 @@ public:
 
 private:
   /* virtual methods from SkyLinesTracking::Handler */
-  virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
-                         const GeoPoint &location, int altitude) override;
-    virtual void OnUserName(uint32_t user_id, const char *name) override;
+  void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
+                 const GeoPoint &location, int altitude,
+                 SkyLinesTracking::TrafficSource source) override;
+  void OnUserName(uint32_t user_id, const char *name) override;
   void OnWave(unsigned time_of_day_ms,
               const GeoPoint &a, const GeoPoint &b) override;
   void OnThermal(unsigned time_of_day_ms,

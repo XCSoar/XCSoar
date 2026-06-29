@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include "CloudSettings.hpp"
 #include "Features.hpp"
-#include "util/TriState.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING
 
@@ -38,8 +36,6 @@ struct Settings {
 
   uint64_t key;
 
-  CloudSettings cloud;
-
   void SetDefaults() {
     enabled = false;
     roaming = true;
@@ -47,7 +43,6 @@ struct Settings {
     near_traffic_enabled = false;
     interval = 5;
     key = 0;
-    cloud.SetDefaults();
   }
 };
 
