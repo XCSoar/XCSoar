@@ -20,6 +20,15 @@ Draw(Canvas &canvas, const TrafficLook &traffic_look,
      const FlarmTraffic &traffic, Angle angle,
      FlarmColor color, PixelPoint pt) noexcept;
 
+/**
+ * Draw a traffic symbol scaled to fit a list row icon slot.
+ */
+void
+DrawList(Canvas &canvas, const TrafficLook &traffic_look,
+         const FlarmTraffic &traffic, Angle angle,
+         FlarmColor color, PixelPoint pt,
+         unsigned icon_size) noexcept;
+
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
      const GliderLinkTraffic &traffic, Angle angle, PixelPoint pt) noexcept;
