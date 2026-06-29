@@ -17,6 +17,38 @@
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
+/** The arrow template spans 14 units vertically (-8 to +6). */
+static constexpr unsigned ARROW_SPAN = 14;
+
+/**
+ * Target map traffic symbol height in virtual points.  Scales with
+ * display DPI (and small-screen viewing distance) but not window size.
+ * ~Scale(100) arrow size at the 240 px design baseline.
+ */
+static constexpr unsigned MAP_TRAFFIC_ICON_VPT = 36;
+
+struct MapTrafficScale {
+  int arrow_scale;
+  unsigned circle_radius;
+};
+
+[[gnu::pure]]
+static MapTrafficScale
+MapTrafficScaleFromIconSize(unsigned icon_size) noexcept
+{
+  return {
+    std::max(int(icon_size) * 50 / int(ARROW_SPAN), 1),
+    std::max(icon_size / 3U, Layout::ScalePenWidth(1)),
+  };
+}
+
+[[gnu::pure]]
+static MapTrafficScale
+GetMapTrafficScale() noexcept
+{
+  return MapTrafficScaleFromIconSize(Layout::VptScale(MAP_TRAFFIC_ICON_VPT));
+}
+
 static void
 DrawFlarmArrow(Canvas &canvas, const TrafficLook &traffic_look,
                bool fading, const FlarmTraffic &traffic,
@@ -93,14 +125,35 @@ DrawFlarmArrow(Canvas &canvas, const TrafficLook &traffic_look,
   canvas.DrawCircle(pt, circle_radius);
 }
 
+unsigned
+TrafficRenderer::MapIconSize() noexcept
+{
+  return Layout::VptScale(MAP_TRAFFIC_ICON_VPT);
+}
+
+TrafficRenderer::MapTrafficLabelLayout
+TrafficRenderer::MapLabelLayout() noexcept
+{
+  const unsigned icon_size = MapIconSize();
+  const int half = int(icon_size) / 2;
+
+  return {
+    icon_size,
+    half + int(Layout::VptScale(3)),
+    half + int(Layout::VptScale(1)),
+    half + int(Layout::VptScale(30)),
+  };
+}
+
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       bool fading,
                       const FlarmTraffic &traffic, const Angle angle,
                       const FlarmColor color, const PixelPoint pt) noexcept
 {
+  const MapTrafficScale scale = GetMapTrafficScale();
   DrawFlarmArrow(canvas, traffic_look, fading, traffic, angle, color, pt,
-                 Layout::Scale(100U), Layout::FastScale(11u));
+                 scale.arrow_scale, scale.circle_radius);
 }
 
 void
@@ -109,15 +162,10 @@ TrafficRenderer::DrawList(Canvas &canvas, const TrafficLook &traffic_look,
                           const FlarmColor color, const PixelPoint pt,
                           unsigned icon_size) noexcept
 {
-  /* The arrow template spans 14 units vertically (-8 to +6). */
-  constexpr unsigned arrow_span = 14;
-  const int arrow_scale =
-    std::max(int(icon_size) * 50 / int(arrow_span), 1);
-  const unsigned circle_radius =
-    std::max(icon_size / 3, Layout::ScalePenWidth(1));
+  const MapTrafficScale scale = MapTrafficScaleFromIconSize(icon_size);
 
   DrawFlarmArrow(canvas, traffic_look, false, traffic, angle, color, pt,
-                 arrow_scale, circle_radius);
+                 scale.arrow_scale, scale.circle_radius);
 }
 
 void
@@ -135,13 +183,14 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   canvas.Select(traffic_look.safe_above_brush);
 
   if (IsDithered())
-    canvas.Select(Pen(Layout::FastScale(2), COLOR_BLACK));
+    canvas.Select(Pen(Layout::ScalePenWidth(2), COLOR_BLACK));
   else
     canvas.SelectBlackPen();
 
-  PolygonRotateShift(arrow, pt, angle, Layout::Scale(100U));
+  const MapTrafficScale scale = GetMapTrafficScale();
+  PolygonRotateShift(arrow, pt, angle, scale.arrow_scale);
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(pt, Layout::FastScale(11u));
+  canvas.DrawCircle(pt, scale.circle_radius);
 }
