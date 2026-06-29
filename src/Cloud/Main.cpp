@@ -23,6 +23,7 @@
 #include "util/Exception.hxx"
 #include "util/Compiler.h"
 #include "util/ScopeExit.hxx"
+#include "util/EnvParser.hpp"
 
 #include <array>
 #include <cstdlib>
@@ -69,19 +70,6 @@ MsUtcMidnight() noexcept
   return uint32_t(ms % day_ms);
 }
 
-static const char *
-EnvOr(const char *key, const char *fallback) noexcept
-{
-  const char *v = std::getenv(key);
-  return (v != nullptr && v[0] != '\0') ? v : fallback;
-}
-
-static bool
-DebugEnabled() noexcept
-{
-  return std::strcmp(EnvOr("XCS_CLOUD_DEBUG", "0"), "1") == 0;
-}
-
 class CloudServer final
   : public SkyLinesTracking::Server,
     CloudData,
@@ -117,14 +105,17 @@ public:
     ScheduleSave();
 
     if (enable_ogn) {
-      std::string host{EnvOr("XCS_CLOUD_OGN_HOST", "aprs.glidernet.org")};
-      const unsigned port =
-        unsigned(std::strtoul(EnvOr("XCS_CLOUD_OGN_PORT", "10152"), nullptr, 10));
-      std::string user{EnvOr("XCS_CLOUD_OGN_USER", "N0CALL")};
-      std::string pass{EnvOr("XCS_CLOUD_OGN_PASS", "-1")};
+      std::string host{GetEnvString("XCS_CLOUD_OGN_HOST", "aprs.glidernet.org")};
+      const unsigned port = unsigned(
+        GetEnvInt("XCS_CLOUD_OGN_PORT", 10152, 1, 65535));
+      std::string user{GetEnvString("XCS_CLOUD_OGN_USER", "N0CALL")};
+      std::string pass{GetEnvString("XCS_CLOUD_OGN_PASS", "-1")};
+
+      const bool user_configured = user != "N0CALL";
 
       cout << "OGN\tenabled\thost=" << host << "\tport=" << port
-           << "\tuser=" << user << endl;
+           << "\tuser=" << (user_configured ? "configured" : "default")
+           << endl;
 
       ogn_client = std::make_unique<OGNClient>(
         event_loop, cares_channel, *this,
@@ -144,9 +135,18 @@ public:
   void Load();
   void Save();
 
+  void SaveSafely() noexcept {
+    try {
+      Save();
+    } catch (...) {
+      cerr << "Failed to save database: "
+           << GetFullMessage(std::current_exception()) << endl;
+    }
+  }
+
 private:
   void OnSaveTimer() noexcept {
-    Save();
+    SaveSafely();
     ScheduleSave();
   }
 
@@ -206,7 +206,8 @@ protected:
   /* virtual methods from class SkyLinesTracking::Server */
   void OnFix(const Client &client,
              std::chrono::milliseconds time_of_day,
-             const ::GeoPoint &location, int altitude) override;
+             const ::GeoPoint &location, int altitude,
+             unsigned track_deg, bool track_valid) override;
 
   void OnTrafficRequest(const Client &client,
                         bool near) override;
@@ -249,7 +250,7 @@ protected:
   }
 
   void OnReloadSignal() noexcept {
-    Save();
+    SaveSafely();
   }
 
   void OnDumpSignal() noexcept {
@@ -263,25 +264,36 @@ CloudServer::OnAprsLine(std::string_view line) noexcept
 {
   const OGNAprsParseResult p = ParseOGNAprsLine(line);
   if (!p.valid) {
-    if (DebugEnabled())
+    if (GetEnvBool("XCS_CLOUD_DEBUG"))
       cerr << "OGN\tignore\t" << line << endl;
     return;
   }
 
-  OGNTrafficEntry &t =
-    ogn_traffic.Upsert(p.station_id, p.location, p.altitude,
-                       p.track_deg, p.track_valid,
-                       p.flarm_id, p.flarm_valid,
-                       p.aircraft_type, p.callsign);
+  try {
+    OGNTrafficEntry &t =
+      ogn_traffic.Upsert(p.station_id, p.location, p.altitude,
+                         p.altitude_valid,
+                         p.track_deg, p.track_valid,
+                         p.flarm_id, p.flarm_valid,
+                         p.aircraft_type, p.callsign);
 
-  cout << "OGN\ttraffic\t" << p.station_id << '\t'
-       << t.location << '\t' << t.altitude << "m\t"
-       << "pilot_id=" << t.pilot_id;
-  if (!t.callsign.empty())
-    cout << "\tcallsign=" << t.callsign;
-  cout << endl;
+    if (GetEnvBool("XCS_CLOUD_DEBUG")) {
+      cout << "OGN\ttraffic\t" << p.station_id << '\t'
+           << t.location << '\t' << t.altitude << "m\t"
+           << "pilot_id=" << t.pilot_id;
+      if (p.aircraft_type != 0)
+        cout << "\ttype=" << p.aircraft_type;
+      if (p.track_valid)
+        cout << "\ttrack=" << p.track_deg;
+      if (!t.callsign.empty())
+        cout << "\tcallsign=" << t.callsign;
+      cout << endl;
+    }
 
-  PushOgnTraffic(t);
+    PushOgnTraffic(t);
+  } catch (...) {
+    cerr << "OGN\talloc-error\t" << p.station_id << endl;
+  }
 }
 
 void
@@ -294,7 +306,7 @@ CloudServer::SendTrafficCallsign(SocketAddress address, uint64_t key,
 
   SendUserNameResponse(*this, address, key, pilot_id, callsign);
 
-  if (DebugEnabled())
+  if (GetEnvBool("XCS_CLOUD_DEBUG"))
     cerr << "USER_NAME\tpush\tpilot_id=" << pilot_id
          << "\tname=" << callsign << endl;
 }
@@ -303,7 +315,7 @@ void
 CloudServer::PushOgnTraffic(const OGNTrafficEntry &t) noexcept
 {
   const auto now = std::chrono::steady_clock::now();
-  const auto min_stamp = now - MAX_TRAFFIC_AGE;
+  const auto min_stamp = now - MAX_OGN_TRAFFIC_AGE;
   if (t.stamp < min_stamp)
     return;
 
@@ -331,6 +343,7 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
 {
   const auto now = std::chrono::steady_clock::now();
   const auto min_stamp = now - MAX_TRAFFIC_AGE;
+  const auto min_ogn_stamp = now - MAX_OGN_TRAFFIC_AGE;
 
   TrafficResponseSender s(*this, client.address, client.key);
 
@@ -345,42 +358,39 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
     if (traffic->stamp < min_stamp)
       continue;
 
-    s.Add(traffic->id, 0, //TODO: time?
-          traffic->location, traffic->altitude);
-    ++n_cloud;
-
-    if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
+    if (n >= MAX_TRAFFIC_TARGETS_PER_RESPONSE)
       break;
+
+    s.Add(traffic->id, 0, //TODO: time?
+          traffic->location, traffic->altitude,
+          TrafficRecordExtensions::FromOgn(traffic->track_deg,
+                                           traffic->track_valid,
+                                           traffic->aircraft_type,
+                                           0, false, true));
+    ++n_cloud;
+    ++n;
   }
 
-  if (n <= MAX_TRAFFIC_TARGETS_PER_RESPONSE) {
+  if (n < MAX_TRAFFIC_TARGETS_PER_RESPONSE) {
     const uint32_t time_ms = MsUtcMidnight();
     for (const auto &og :
          ogn_traffic.QueryWithinRange(client.location, TRAFFIC_RANGE)) {
-      if (og->stamp < min_stamp)
+      if (og->stamp < min_ogn_stamp)
         continue;
+
+      if (n >= MAX_TRAFFIC_TARGETS_PER_RESPONSE)
+        break;
 
       s.Add(og->pilot_id, time_ms, og->location, og->altitude,
             TrafficRecordExtensions::FromOgn(*og));
+      SendTrafficCallsign(client.address, client.key,
+                          og->pilot_id, og->callsign);
       ++n_ogn;
-
-      if (++n > MAX_TRAFFIC_TARGETS_PER_RESPONSE)
-        break;
+      ++n;
     }
   }
 
   s.Flush();
-
-  if (n_ogn > 0) {
-    for (const auto &og :
-         ogn_traffic.QueryWithinRange(client.location, TRAFFIC_RANGE)) {
-      if (og->stamp < min_stamp)
-        continue;
-
-      SendTrafficCallsign(client.address, client.key,
-                          og->pilot_id, og->callsign);
-    }
-  }
 
   if (n > 0 || std::strcmp(reason, "TRAFFIC_FIX") == 0) {
     cout << reason << '\t' << client.address << '\t'
@@ -394,7 +404,8 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
 void
 CloudServer::OnFix(const Client &c,
                    std::chrono::milliseconds time_of_day,
-                   const ::GeoPoint &location, int altitude)
+                   const ::GeoPoint &location, int altitude,
+                   unsigned track_deg, bool track_valid)
 {
   (void)time_of_day; // TODO: use this parameter
 
@@ -402,15 +413,18 @@ CloudServer::OnFix(const Client &c,
   if (location.IsValid()) {
     bool was_empty = clients.empty();
 
-    client = &clients.Make(c.address, c.key, location, altitude);
+    client = &clients.Make(c.address, c.key, location, altitude,
+                           track_deg, track_valid);
 
     cout << "FIX\t"
          << client->address << '\t'
          << std::hex << client->key << std::dec << '\t'
          << client->id << '\t'
          << client->location << '\t'
-         << client->altitude << 'm'
-         << endl;
+         << client->altitude << 'm';
+    if (track_valid)
+      cout << "\ttrack=" << track_deg;
+    cout << endl;
 
     if (was_empty)
       ScheduleExpire();
@@ -426,13 +440,10 @@ CloudServer::OnFix(const Client &c,
   /* Always push a full nearby snapshot to the client that sent the FIX. */
   MaybeSendNearTrafficSnapshot(*client, "TRAFFIC_FIX", true);
 
-  /* Tell other nearby clients about this aircraft immediately. */
+  /* Push full snapshots to other nearby clients (same as OGN updates). */
   ForEachClientNear(location, c.key,
                     [&](CloudClient &i) {
-                      TrafficResponseSender s(*this, i.address, i.key);
-                      s.Add(client->id, 0, //TODO: time?
-                            client->location, client->altitude);
-                      s.Flush();
+                      MaybeSendNearTrafficSnapshot(i, "TRAFFIC_FIX", true);
                     });
 }
 
@@ -440,7 +451,7 @@ void
 CloudServer::OnTrafficRequest(const Client &c, bool near)
 {
   if (!near) {
-    if (DebugEnabled())
+    if (GetEnvBool("XCS_CLOUD_DEBUG"))
       cerr << "TRAFFIC_REQUEST\tignored\tnot-near\t"
            << std::hex << c.key << std::dec << endl;
     return;
@@ -570,10 +581,11 @@ CloudServer::OnThermalRequest(const Client &c)
       /* don't send old thermals, they're useless */
       continue;
 
-    s.Add(thermal->Pack());
-
-    if (++n > 256)
+    if (n >= 256)
       break;
+
+    s.Add(thermal->Pack());
+    ++n;
   }
 
   s.Flush();
@@ -632,8 +644,7 @@ try {
   SignalMonitorInit(event_loop);
   AtScopeExit() { SignalMonitorFinish(); };
 
-  const bool enable_ogn =
-    std::strcmp(EnvOr("XCS_CLOUD_OGN", "0"), "1") == 0;
+  const bool enable_ogn = GetEnvBool("XCS_CLOUD_OGN");
 
   std::unique_ptr<CloudServer> server;
   const char *bind_mode;
@@ -653,7 +664,7 @@ try {
   cout << "START\tport=" << CloudServer::GetDefaultPort()
        << "\tbind=" << bind_mode
        << "\tdb=" << db_path.c_str()
-       << "\tdebug=" << (DebugEnabled() ? "1" : "0") << endl;
+       << "\tdebug=" << (GetEnvBool("XCS_CLOUD_DEBUG") ? "1" : "0") << endl;
 
   try {
     server->Load();

@@ -19,7 +19,7 @@ struct OGNTrafficEntry;
  * reserved fields (host byte order here; converted in #TrafficResponseSender).
  *
  * - reserved: bit 15 TRACK_VALID; bits 0-8 ground track [deg]; bits 9-13 aircraft
- *   type (0-31).
+ *   type (0-31); bit 14 ALTITUDE_VALID.
  * - reserved2: bit 31 FLARM_VALID; bits 0-23 FLARM address when valid.
  *
  * For OGN traffic with a known FLARM address, pilot_id uses
@@ -32,7 +32,8 @@ struct TrafficRecordExtensions {
   static TrafficRecordExtensions FromOgn(unsigned track_deg, bool track_valid,
                                          unsigned aircraft_type,
                                          uint32_t flarm_id,
-                                         bool flarm_valid) noexcept;
+                                         bool flarm_valid,
+                                         bool altitude_valid) noexcept;
 
   static TrafficRecordExtensions
   FromOgn(const OGNTrafficEntry &t) noexcept;
@@ -43,8 +44,15 @@ class TrafficResponseSender {
   const SocketAddress address;
 
   static constexpr size_t MAX_TRAFFIC_SIZE = 1024;
+  static_assert(sizeof(SkyLinesTracking::TrafficResponsePacket) <
+                  MAX_TRAFFIC_SIZE,
+                "TrafficResponsePacket header exceeds response size");
   static constexpr size_t MAX_TRAFFIC =
-    MAX_TRAFFIC_SIZE / sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic);
+    (MAX_TRAFFIC_SIZE - sizeof(SkyLinesTracking::TrafficResponsePacket)) /
+    sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic);
+
+  static_assert(MAX_TRAFFIC > 0,
+                "TrafficResponsePacket header leaves no room for traffic");
 
   struct Packet {
     SkyLinesTracking::TrafficResponsePacket header;
@@ -82,8 +90,15 @@ class ThermalResponseSender {
   const SocketAddress address;
 
   static constexpr size_t MAX_THERMAL_SIZE = 1024;
+  static_assert(sizeof(SkyLinesTracking::ThermalResponsePacket) <
+                  MAX_THERMAL_SIZE,
+                "ThermalResponsePacket header exceeds response size");
   static constexpr size_t MAX_THERMAL =
-    MAX_THERMAL_SIZE / sizeof(SkyLinesTracking::Thermal);
+    (MAX_THERMAL_SIZE - sizeof(SkyLinesTracking::ThermalResponsePacket)) /
+    sizeof(SkyLinesTracking::Thermal);
+
+  static_assert(MAX_THERMAL > 0,
+                "ThermalResponsePacket header leaves no room for thermals");
 
   struct Packet {
     SkyLinesTracking::ThermalResponsePacket header;
