@@ -4,6 +4,7 @@ Version 7.45 - not yet released
     and roaming are independent of SkyLines options
   - Rename map display setting to "Online traffic on map" (SkyLines and
     XCSoar Cloud traffic)
+  - Expire online traffic map icons 5 minutes after the last update
 * glide computer
   - Speed-to-fly and task calculations are now altitude-corrected: the glide
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
