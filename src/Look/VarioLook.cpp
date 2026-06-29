@@ -27,14 +27,14 @@ VarioLook::Initialise(bool _inverse, bool _colors,
     background_color = COLOR_BLACK;
     text_color = COLOR_WHITE;
     dimmed_text_color = Color(0xa0, 0xa0, 0xa0);
-    sink_color = Color(0xc4, 0x80, 0x1e);
-    lift_color = Color(0x1e, 0xf1, 0x73);
+    sink_color = COLOR_RED;
+    lift_color = Color(0x00, 0xff, 0x00);
   } else {
     background_color = COLOR_WHITE;
     text_color = COLOR_BLACK;
     dimmed_text_color = Color((uint8_t)~0xa0, (uint8_t)~0xa0, (uint8_t)~0xa0);
-    sink_color = Color(0xa3,0x69,0x0d);
-    lift_color = Color(0x19,0x94,0x03);
+    sink_color = COLOR_RED;
+    lift_color = Color(0x00, 0xcc, 0x00);
   }
 
   sink_brush.Create(sink_color);
@@ -42,6 +42,8 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 
   arc_pen.Create(Layout::ScalePenWidth(2), text_color);
   tick_pen.Create(Layout::ScalePenWidth(1), text_color);
+  thick_tick_pen.Create(Layout::ScalePenWidth(2), text_color);
+  half_tick_pen.Create(Layout::ScalePenWidth(1), Color(0x80, 0x80, 0x80));
 
   thick_background_pen.Create(Layout::Scale(5), background_color);
   thick_sink_pen.Create(Layout::Scale(5), sink_color);
