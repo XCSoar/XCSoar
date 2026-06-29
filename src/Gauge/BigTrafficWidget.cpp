@@ -44,8 +44,8 @@ protected:
 
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
-    :FlarmTrafficWindow(look, Layout::Scale(10),
-                        Layout::GetMinimumControlHeight() + Layout::Scale(10)) {}
+    :FlarmTrafficWindow(look, Layout::VptScale(10),
+                        Layout::GetMinimumControlHeight() + Layout::VptScale(10)) {}
 
 protected:
   void CalcAutoZoom();
@@ -487,10 +487,11 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
       }
 
       canvas.SelectNullPen();
-      canvas.DrawCircle(rc.GetTopLeft().At(Layout::FastScale(7u), (font_size / 2)),
-                        Layout::FastScale(7u));
+      const unsigned team_dot = Layout::VptScale(7);
+      canvas.DrawCircle(rc.GetTopLeft().At(team_dot, font_size / 2),
+                        team_dot);
 
-      rc.left += Layout::FastScale(16);
+      rc.left += team_dot + Layout::VptScale(9);
     }
   }
 
