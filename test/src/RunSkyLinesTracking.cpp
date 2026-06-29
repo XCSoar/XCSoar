@@ -3,6 +3,7 @@
 
 #include "Tracking/SkyLines/Client.hpp"
 #include "Tracking/SkyLines/Handler.hpp"
+#include "FLARM/Id.hpp"
 #include "NMEA/Info.hpp"
 #include "net/Resolver.hxx"
 #include "net/AddressInfo.hxx"
@@ -46,15 +47,22 @@ public:
     event_loop.Break();
   }
 
-  virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
-                         const GeoPoint &location, int altitude) override {
+  virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
+                         const GeoPoint &location, int altitude,
+                         bool altitude_valid,
+                         SkyLinesTracking::TrafficSource source,
+                         unsigned track_deg, bool track_valid,
+                         FlarmId flarm_id,
+                         unsigned aircraft_type) override {
     auto time = BrokenTime::FromSinceMidnight(milliseconds(time_of_day_ms));
 
-    printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d\n",
+    printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d source=%u track=%u valid=%u flarm=%u type=%u\n",
            pilot_id, time.hour, time.minute, time.second,
            (double)location.longitude.Degrees(),
            (double)location.latitude.Degrees(),
-           altitude);
+           altitude, unsigned(altitude_valid),
+           unsigned(source), track_deg, unsigned(track_valid),
+           unsigned(flarm_id.IsDefined() ? 1 : 0), aircraft_type);
 
     stop_timer.Schedule(std::chrono::seconds(1));
   }
