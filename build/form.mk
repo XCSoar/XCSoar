@@ -31,6 +31,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/GridView.cpp \
 	$(FORM_SRC_DIR)/HLine.cpp
 
-FORM_DEPENDS = SCREEN TIME GEO
+FORM_DEPENDS = SCREEN TIME GEO DATA_FIELD
 
 $(eval $(call link-library,form,FORM))
