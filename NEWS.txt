@@ -170,6 +170,7 @@ Version 7.45 - not yet released
     Displayed glide is re-solved with the current aircraft state; value colour
     encodes not reachable, final glide, need climb, and MANUAL on/below glide.
     Manual updated en/de/fr/pt_BR #2347
+  - clarify alternates mode help text in Safety Factors config panel (#555)
   - status: show G-load availability in device list and variometer source in
     system status
   - terrain: add new terrain shading orientation "fixed (Top Left)"
