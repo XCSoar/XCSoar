@@ -11,8 +11,6 @@
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
-#include "Math/Constants.hpp"
-#include "Math/Point2D.hpp"
 
 #include <algorithm>
 #include <new>
@@ -21,6 +19,45 @@
 #include <cmath>
 
 namespace {
+
+static constexpr size_t MAX_SMOOTHED_TRAIL_POINTS = 180;
+
+[[gnu::const]]
+static unsigned
+GetBaseSmoothingSegments(double map_scale) noexcept
+{
+  return map_scale <= 3000 ? 4 : map_scale <= 6000 ? 3 : 2;
+}
+
+[[gnu::const]]
+static unsigned
+GetPreferredSmoothingSegments(double map_scale) noexcept
+{
+  return map_scale <= 3000 ? 8 : map_scale <= 6000 ? 6 : 4;
+}
+
+[[gnu::const]]
+static unsigned
+GetSmoothingSegments(double map_scale, size_t point_count) noexcept
+{
+  const unsigned base = GetBaseSmoothingSegments(map_scale);
+  if (point_count <= 1)
+    return base;
+
+  const unsigned budget = (MAX_SMOOTHED_TRAIL_POINTS - 1) * base;
+  const unsigned allowed = std::max(base,
+                                    budget / (unsigned)(point_count - 1));
+  return std::min(GetPreferredSmoothingSegments(map_scale), allowed);
+}
+
+[[gnu::const]]
+static size_t
+GetFirstSmoothedPointIndex(size_t point_count) noexcept
+{
+  return point_count > MAX_SMOOTHED_TRAIL_POINTS
+    ? point_count - MAX_SMOOTHED_TRAIL_POINTS
+    : 0;
+}
 
 void
 BuildVarioKnots(TracePoint::Time t0, double v0,
@@ -190,77 +227,6 @@ CatmullRomInterpolate(const PixelPoint &p0, const PixelPoint &p1,
   );
 }
 
-/**
- * Turn angle at \a p1 between segments p0–p1 and p1–p2 (degrees).
- */
-[[gnu::pure]]
-static double
-CalculateAngle(const PixelPoint &p0, const PixelPoint &p1, const PixelPoint &p2) noexcept
-{
-  const IntPoint2D v1 = p1 - p0;
-  const IntPoint2D v2 = p2 - p1;
-
-  const double len1 = v1.Magnitude();
-  const double len2 = v2.Magnitude();
-
-  if (len1 < 1.0 || len2 < 1.0)
-    return 0.0;
-
-  const double dot = DotProduct(v1, v2) / (len1 * len2);
-  const double clamped = std::clamp(dot, -1.0, 1.0);
-  return std::acos(clamped) * 180.0 / M_PI;
-}
-
-/**
- * Generate interpolated points between two trace points using Catmull-Rom spline.
- * Adaptively adjusts the number of segments based on the turn angle for smoother curves.
- * @param p0 Control point before p1
- * @param p1 Start point
- * @param p2 End point
- * @param p3 Control point after p2
- * @param base_num_segments Base number of segments to generate
- * @return Vector of interpolated points (including p1 and p2)
- */
-static std::vector<PixelPoint>
-InterpolateSegment(const PixelPoint &p0, const PixelPoint &p1,
-                   const PixelPoint &p2, const PixelPoint &p3,
-                   unsigned base_num_segments) noexcept
-{
-  // Calculate turn angle to determine if we need more segments
-  const double angle = CalculateAngle(p0, p1, p2);
-  
-  // Sharper turns need more segments for smooth appearance
-  // For angles > 30 degrees, increase segments significantly
-  unsigned num_segments = base_num_segments;
-  if (angle > 45.0) {
-    num_segments = base_num_segments * 2;
-  } else if (angle > 30.0) {
-    num_segments = static_cast<unsigned>(base_num_segments * 1.5);
-  } else if (angle > 15.0) {
-    num_segments = static_cast<unsigned>(base_num_segments * 1.2);
-  }
-  
-  // Cap maximum segments for performance
-  num_segments = std::min(num_segments, 20u);
-  
-  std::vector<PixelPoint> result;
-  result.reserve(num_segments + 1);
-
-  // Always include the start point
-  result.push_back(p1);
-
-  // Generate intermediate points
-  for (unsigned i = 1; i < num_segments; ++i) {
-    const double t = static_cast<double>(i) / num_segments;
-    result.push_back(CatmullRomInterpolate(p0, p1, p2, p3, t));
-  }
-
-  // Always include the end point
-  result.push_back(p2);
-
-  return result;
-}
-
 void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
@@ -295,16 +261,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   const GeoBounds bounds = projection.GetScreenBounds().Scale(4);
 
-  // Determine if we should use smoothing (only for line segments, not dots-only modes)
-  const bool use_smoothing = 
+  const bool smoothing_type =
     settings.type != TrailSettings::Type::VARIO_1_DOTS &&
     settings.type != TrailSettings::Type::VARIO_2_DOTS;
-
-  // Determine number of interpolation segments based on zoom level
-  // More segments when zoomed in for better quality, and always use enough for smooth curves
-  // Gliders fly in smooth arcs, so we need more segments for realistic appearance
-  const unsigned num_segments = projection.GetMapScale() <= 3000 ? 12 : 
-                                 projection.GetMapScale() <= 6000 ? 8 : 6;
 
   // Collect valid points with their data
   struct PointData {
@@ -333,7 +292,19 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   if (valid_points.empty())
     return;
 
-  // Draw the trail with spline interpolation
+  const size_t first_smoothed_point =
+    GetFirstSmoothedPointIndex(valid_points.size());
+  const size_t smoothed_point_count =
+    valid_points.size() - first_smoothed_point;
+  const unsigned num_segments =
+    GetSmoothingSegments(projection.GetMapScale(), smoothed_point_count);
+  const bool use_merge_vario =
+    smoothing_type &&
+    settings.type != TrailSettings::Type::ALTITUDE &&
+    !merge_vario_samples.empty();
+  std::vector<std::pair<TracePoint::Time, double>> vario_knots;
+
+  // Draw the trail
   for (size_t i = 0; i < valid_points.size(); ++i) {
     if (i == 0) {
       // First point - just store it
@@ -397,31 +368,26 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       const auto &p2 = curr_data.point;
       const auto &p3 = (i + 1 < valid_points.size()) ? valid_points[i + 1].point : curr_data.point;
 
-      if (use_smoothing && i >= 1) {
-        // Use spline interpolation for smooth curves
-        auto interpolated = InterpolateSegment(p0, p1, p2, p3, num_segments);
-
-        std::vector<std::pair<TracePoint::Time, double>> vario_knots;
-        const bool use_merge_vario =
-          settings.type != TrailSettings::Type::ALTITUDE &&
-          !merge_vario_samples.empty();
+      if (smoothing_type && i > first_smoothed_point) {
         if (use_merge_vario)
           BuildVarioKnots(prev_data.time, prev_data.value,
                           curr_data.time, curr_data.value,
                           merge_vario_samples, vario_knots);
 
-        /* Colour parameter spans drawn line pieces (n−1), not vertex count n */
-        const double piece_count =
-          interpolated.size() > 1
-            ? static_cast<double>(interpolated.size() - 1)
-            : 1.0;
+        const double piece_count = static_cast<double>(num_segments);
 
-        // Interpolate values for smooth color transitions
-        for (size_t j = 0; j + 1 < interpolated.size(); ++j) {
+        PixelPoint last_interpolated = p1;
+        for (unsigned j = 0; j < num_segments; ++j) {
+          const unsigned next_piece = j + 1;
+          const double t =
+            static_cast<double>(next_piece) / piece_count;
+          const PixelPoint next_interpolated =
+            next_piece == num_segments
+              ? p2
+              : CatmullRomInterpolate(p0, p1, p2, p3, t);
+
           double interp_value;
           if (settings.type == TrailSettings::Type::ALTITUDE) {
-            const double t =
-              static_cast<double>(j + 1) / piece_count;
             interp_value =
               prev_data.value * (1.0 - t) + curr_data.value * t;
           } else if (use_merge_vario && !vario_knots.empty()) {
@@ -454,7 +420,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
           else
             canvas.Select(look.trail_pens[seg_color_index]);
 
-          canvas.DrawLinePiece(interpolated[j], interpolated[j + 1]);
+          canvas.DrawLinePiece(last_interpolated, next_interpolated);
+          last_interpolated = next_interpolated;
         }
       } else {
         // Not enough points or smoothing disabled - draw direct line
