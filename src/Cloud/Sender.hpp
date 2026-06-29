@@ -24,6 +24,10 @@ struct OGNTrafficEntry;
  *
  * For OGN traffic with a known FLARM address, pilot_id uses
  * #OGNPilotIdFromFlarm() (0x80000000 | flarm_id).
+ *
+ * Pre-extension XCSoar and SkyLines clients ignore reserved/reserved2
+ * and read only the fixed traffic fields; keep those zero unless
+ * optional extension data is present.
  */
 struct TrafficRecordExtensions {
   uint16_t reserved = 0;
