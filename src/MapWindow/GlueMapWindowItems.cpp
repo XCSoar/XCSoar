@@ -86,10 +86,6 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
   builder.AddTraffic(basic.flarm.traffic);
 
-#ifdef HAVE_SKYLINES_TRACKING
-  builder.AddSkyLinesTraffic();
-#endif
-
 #ifdef ENABLE_OPENGL
   if (!list.full() && overlay && overlay->IsInside(location))
     list.push_back(new OverlayMapItem(*overlay));
