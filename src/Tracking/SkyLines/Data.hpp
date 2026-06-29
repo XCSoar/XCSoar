@@ -4,36 +4,18 @@
 #pragma once
 
 #include "Geo/GeoPoint.hpp"
+#include "FLARM/Id.hpp"
 #include "thread/Mutex.hxx"
 
 #include <string>
 #include <map>
 #include <list>
-#include <chrono>
 #include <cstdint>
 
 namespace SkyLinesTracking {
 
 struct Data {
   using Time = std::chrono::duration<uint_least32_t, std::chrono::milliseconds::period>;
-
-  struct Traffic {
-    /**
-     * Millisecond of day.
-     *
-     * @see SkyLinesTracking::TrafficResponsePacket::Traffic::time
-     */
-    Time time_of_day;
-
-    GeoPoint location;
-    int altitude;
-
-    Traffic() = default;
-    constexpr Traffic(Time _time, GeoPoint _location,
-                      int _altitude) noexcept
-      :time_of_day(_time),
-       location(_location), altitude(_altitude) {}
-  };
 
   struct Wave {
     /**
@@ -68,8 +50,6 @@ struct Data {
   };
 
   mutable Mutex mutex;
-
-  std::map<uint32_t, Traffic> traffic;
 
   /**
    * A database of user-id to display-name.  An empty string means

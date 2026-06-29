@@ -87,7 +87,8 @@ public:
     key = _key;
   }
 
-  void Open(Cares::Channel &cares, const char *server);
+  void Open(Cares::Channel &cares, const char *server,
+            unsigned port = GetDefaultPort());
   bool Open(SocketAddress _address);
   void Close();
 
