@@ -85,6 +85,10 @@ public:
     Invalidate();
   }
 
+  [[gnu::pure]]
+  static unsigned ScaleRadarPermille(unsigned radar_radius,
+                                     unsigned permille) noexcept;
+
   void Paint(Canvas &canvas) noexcept;
 
 protected:
@@ -110,6 +114,23 @@ protected:
   void PaintNorth(Canvas &canvas) const noexcept;
 
 protected:
+  static constexpr unsigned TARGET_RING_PERMILLE = 140;
+  static constexpr unsigned TARGET_RING_OUTER_PERMILLE = 170;
+  static constexpr unsigned ARROW_ICON_PERMILLE = 400;
+  static constexpr unsigned ALT_LABEL_DIST_PERMILLE = 135;
+  static constexpr unsigned ALT_LABEL_ALARM_DIST_PERMILLE = 200;
+  static constexpr unsigned ALT_TRIANGLE_PERMILLE = 60;
+  static constexpr unsigned SIDE_LABEL_X_PERMILLE = 100;
+  static constexpr unsigned SIDE_LABEL_Y_PERMILLE = 150;
+  static constexpr unsigned SIDE_LABEL_Y_CENTER_PERMILLE = 75;
+  static constexpr unsigned PLANE_WING_X_PERMILLE = 85;
+  static constexpr unsigned PLANE_WING_Y_PERMILLE = 17;
+  static constexpr unsigned PLANE_FUSE_PERMILLE = 51;
+  static constexpr unsigned PLANE_WING_TIP_PERMILLE = 34;
+  static constexpr unsigned TEAM_DOT_PERMILLE = 47;
+  static constexpr unsigned TEAM_DOT_GAP_PERMILLE = 60;
+
+protected:
   /* virtual methods from class Window */
   void OnResize(PixelSize new_size) noexcept override;
 
@@ -117,6 +138,14 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override;
 
 private:
+  [[gnu::pure]]
+  static unsigned RadarTargetRingRadius(unsigned index,
+                                        unsigned radar_radius) noexcept;
+
+  [[gnu::pure]]
+  static int RadarArrowScale(bool small_radar,
+                             unsigned radar_radius) noexcept;
+
   /**
    * Renders a FLARM target that has no position data.
    * Draws an optional distance ring, a dot, and an exclamation mark.
@@ -125,8 +154,7 @@ private:
                            const PixelPoint &target_point,
                            const PixelPoint &radar_center,
                            double scale,
-                           bool small,
-                           const PixelSize &sx,
+                           [[maybe_unused]] bool small,
                            const Pen *target_pen,
                            const Color *text_color) const noexcept;
 };

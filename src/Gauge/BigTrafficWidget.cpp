@@ -487,11 +487,14 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
       }
 
       canvas.SelectNullPen();
-      const unsigned team_dot = Layout::VptScale(7);
+      const unsigned radar_radius = radar_renderer.GetRadius();
+      const unsigned team_dot =
+        ScaleRadarPermille(radar_radius, TEAM_DOT_PERMILLE);
       canvas.DrawCircle(rc.GetTopLeft().At(team_dot, font_size / 2),
                         team_dot);
 
-      rc.left += team_dot + Layout::VptScale(9);
+      rc.left += team_dot +
+        ScaleRadarPermille(radar_radius, TEAM_DOT_GAP_PERMILLE);
     }
   }
 
