@@ -5,15 +5,50 @@
 #include "Settings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "Geo/GeoBounds.hpp"
 
-static constexpr unsigned full_trace_size = 1024;
+#include <cmath>
+
 static constexpr unsigned contest_trace_size = 256;
 static constexpr unsigned sprint_trace_size = 128;
 
 static constexpr auto full_trace_no_thin_time = std::chrono::minutes{2};
 
+/** Minimum |Δvario| to store another merge-vario sample (m/s). */
+static constexpr float MERGE_VARIO_DEDUPE_EPS = 0.05f;
+
+/** Near-zero band: always keep samples for Nullschieber colouring. */
+static constexpr float MERGE_VARIO_NULL_BAND = 0.05f;
+
+[[gnu::const]]
+static bool
+MergeVarioSampleWorthKeeping(float prev, float next) noexcept
+{
+  if (std::abs(next - prev) >= MERGE_VARIO_DEDUPE_EPS)
+    return true;
+
+  if ((prev > 0.f) != (next > 0.f))
+    return true;
+
+  if (std::abs(next) < MERGE_VARIO_NULL_BAND)
+    return true;
+
+  return false;
+}
+
+static void
+PushMergeVarioDeduped(std::vector<TrailVarioSample> &dest,
+                      const TrailVarioSample &sample) noexcept
+{
+  if (!dest.empty() &&
+      !MergeVarioSampleWorthKeeping(dest.back().vario, sample.vario))
+    return;
+
+  dest.push_back(sample);
+}
+
 TraceComputer::TraceComputer()
- :full(full_trace_no_thin_time, Trace::null_time, full_trace_size),
+ :full(full_trace_no_thin_time, Trace::null_time, FULL_TRACE_MAX_POINTS),
   contest({}, Trace::null_time, contest_trace_size),
   sprint({}, std::chrono::minutes{120}, sprint_trace_size)
 {
@@ -26,6 +61,7 @@ TraceComputer::Reset()
     const std::lock_guard lock{mutex};
     full.clear();
     merge_vario_samples.clear();
+    merge_vario_archive.clear();
   }
 
   contest.clear();
@@ -40,14 +76,44 @@ TraceComputer::LockedCopyTo(TracePointVector &v) const
 }
 
 void
+TraceComputer::ArchiveMergeVarioForLegUnlocked(TracePoint::Time t0,
+                                               TracePoint::Time t1) noexcept
+{
+  if (!(t1 > t0))
+    return;
+
+  for (const auto &s : merge_vario_samples) {
+    if (s.time < t0 || s.time >= t1)
+      continue;
+
+    PushMergeVarioDeduped(merge_vario_archive, s);
+  }
+}
+
+void
 TraceComputer::CopyMergeVarioSamplesUnlocked(
-    std::vector<TrailVarioSample> &vario_samples) const
+    std::vector<TrailVarioSample> &vario_samples,
+    TracePoint::Time min_time) const
 {
   vario_samples.clear();
-  constexpr unsigned max_items = MERGE_VARIO_SAMPLES_CAPACITY - 1;
-  vario_samples.reserve(max_items);
-  for (const auto &s : merge_vario_samples)
-    vario_samples.push_back(s);
+
+  const auto min_count = merge_vario_archive.size() + MERGE_VARIO_SAMPLES_CAPACITY;
+  vario_samples.reserve(min_count);
+
+  for (const auto &s : merge_vario_archive) {
+    if (s.time >= min_time)
+      vario_samples.push_back(s);
+  }
+
+  const TracePoint::Time after_archive =
+    merge_vario_archive.empty()
+      ? min_time
+      : std::max(min_time, merge_vario_archive.back().time);
+
+  for (const auto &s : merge_vario_samples) {
+    if (s.time > after_archive)
+      vario_samples.push_back(s);
+  }
 }
 
 void
@@ -78,7 +144,31 @@ TraceComputer::LockedCopySnapshot(TracePointVector &v,
 {
   const std::lock_guard lock{mutex};
   full.GetPoints(v, min_time, location, resolution);
-  CopyMergeVarioSamplesUnlocked(vario_samples);
+  CopyMergeVarioSamplesUnlocked(vario_samples, min_time);
+}
+
+void
+TraceComputer::LockedTrailQuery(const TrailQuery &query,
+                                TracePointVector &v,
+                                std::vector<TrailVarioSample> &vario_samples,
+                                Serial *append_serial,
+                                Serial *modify_serial) const
+{
+  const std::lock_guard lock{mutex};
+
+  if (query.bounds.IsValid())
+    full.GetPoints(v, query.min_time, query.bounds,
+                   query.project_location, query.min_distance_m);
+  else
+    full.GetPoints(v, query.min_time, query.project_location,
+                   query.min_distance_m);
+
+  CopyMergeVarioSamplesUnlocked(vario_samples, query.min_time);
+
+  if (append_serial != nullptr)
+    *append_serial = full.GetAppendSerial();
+  if (modify_serial != nullptr)
+    *modify_serial = full.GetModifySerial();
 }
 
 void
@@ -89,8 +179,14 @@ TraceComputer::PushMergeVarioSample(TracePoint::Time time, float vario) noexcept
      equal timestamps (several merge ticks per GPS second). */
   if (!merge_vario_samples.empty()) {
     const TracePoint::Time newest = merge_vario_samples.last().time;
-    if (time < newest)
+    if (time < newest) {
       merge_vario_samples.clear();
+      merge_vario_archive.clear();
+    } else {
+      const float last_vario = merge_vario_samples.last().vario;
+      if (!MergeVarioSampleWorthKeeping(last_vario, vario))
+        return;
+    }
   }
   merge_vario_samples.push({time, vario});
 }
@@ -110,7 +206,14 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
 
   {
     const std::lock_guard lock{mutex};
+    const bool had_previous = !full.empty();
+    const TracePoint::Time leg_start =
+      had_previous ? full.back().GetTime() : TracePoint::Time{};
+
     full.push_back(point);
+
+    if (had_previous)
+      ArchiveMergeVarioForLegUnlocked(leg_start, point.GetTime());
   }
 
   // only contest requires trace_sprint

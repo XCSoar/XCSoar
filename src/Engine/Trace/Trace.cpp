@@ -3,10 +3,14 @@
 
 #include "Trace.hpp"
 #include "Vector.hpp"
+#include "Geo/GeoBounds.hpp"
+#include "Geo/GeoClip.hpp"
 #include "util/GlobalSliceAllocator.hxx"
 
 #include <algorithm>
+#include <cstdint>
 #include <iterator>
+#include <vector>
 
 Trace::Trace(const Time _no_thin_time, const Time max_time,
              const unsigned max_size) noexcept
@@ -441,4 +445,66 @@ Trace::GetPoints(TracePointVector &v, const Time min_time,
     v.push_back(*i);
     i.NextSquareRange(sq_range, end);
   } while (i != end);
+}
+
+[[gnu::pure]]
+static bool
+SegmentIntersectsBounds(const GeoPoint &a, const GeoPoint &b,
+                        const GeoBounds &bounds) noexcept
+{
+  if (bounds.IsInside(a) || bounds.IsInside(b))
+    return true;
+
+  GeoClip clip(bounds);
+  GeoPoint a2 = a, b2 = b;
+  return clip.ClipLine(a2, b2);
+}
+
+void
+Trace::GetPoints(TracePointVector &v, const Time min_time,
+                 const GeoBounds &bounds,
+                 const GeoPoint &location,
+                 const double min_distance) const noexcept
+{
+  TracePointVector thinned;
+  GetPoints(thinned, min_time, location, min_distance);
+
+  if (thinned.empty()) {
+    v.clear();
+    return;
+  }
+
+  std::vector<uint8_t> keep(thinned.size(), 0);
+  for (size_t k = 0; k < thinned.size(); ++k) {
+    const GeoPoint gp = thinned[k].GetLocation();
+    if (bounds.IsInside(gp)) {
+      keep[k] = 1;
+      continue;
+    }
+
+    if (k > 0 &&
+        SegmentIntersectsBounds(thinned[k - 1].GetLocation(), gp, bounds))
+      keep[k] = 1;
+    else if (k + 1 < thinned.size() &&
+             SegmentIntersectsBounds(gp, thinned[k + 1].GetLocation(), bounds))
+      keep[k] = 1;
+  }
+
+  v.clear();
+  size_t last_kept = 0;
+  bool have_last = false;
+
+  for (size_t k = 0; k < thinned.size(); ++k) {
+    if (!keep[k])
+      continue;
+
+    if (have_last && k > last_kept + 1) {
+      for (size_t j = last_kept + 1; j < k; ++j)
+        v.push_back(thinned[j]);
+    }
+
+    v.push_back(thinned[k]);
+    last_kept = k;
+    have_last = true;
+  }
 }

@@ -7,6 +7,8 @@
 #include "DemoReplayGlue.hpp"
 #include "io/FileLineReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "CalculationThread.hpp"
+#include "MergeThread.hpp"
 #include "Logger/Logger.hpp"
 #include "Interface.hpp"
 #include "Repository/FileType.hpp"
@@ -194,6 +196,45 @@ Replay::Update()
   }
 
   return true;
+}
+
+unsigned
+Replay::ProcessAllFixes(MergeThread &merge_thread,
+                        CalculationThread &calc_thread) noexcept
+{
+  if (replay == nullptr || path == nullptr || path.empty())
+    return 0;
+
+  timer.Cancel();
+  fast_forward = TimeStamp::Undefined();
+
+  NMEAInfo data;
+  data.Reset();
+  unsigned count = 0;
+
+  while (replay->Update(data)) {
+    assert(!data.gps.real);
+
+    if (data.time_available)
+      virtual_time = data.time;
+
+    {
+      const std::lock_guard lock{device_blackboard.mutex};
+      device_blackboard.SetReplayState() = data;
+    }
+
+    merge_thread.ProcessReplayFix();
+    calc_thread.ProcessReplayFix();
+    ++count;
+
+    if (data.time_available)
+      data.Expire();
+  }
+
+  if (count > 0)
+    next_data = data;
+
+  return count;
 }
 
 void

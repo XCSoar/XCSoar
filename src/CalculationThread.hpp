@@ -56,6 +56,12 @@ public:
 
   void ForceTrigger() noexcept;
 
+  /**
+   * Run one calculation cycle for bulk replay (no UI triggers).
+   * Call only while the worker thread is suspended.
+   */
+  void ProcessReplayFix() noexcept;
+
 protected:
   void Tick() noexcept override;
 };
