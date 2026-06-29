@@ -212,10 +212,12 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
        * such as the scale, are not overdrawn by the buttons
        * when in Pan mode. */
       PixelRect screen_rect = map->GetParentClientRect();
+      static constexpr unsigned MENUBAR_MARGIN_FACTOR_PORTRAIT = 6;
+      static constexpr unsigned MENUBAR_MARGIN_FACTOR_LANDSCAPE = 5;
       unsigned factor = (screen_rect.GetHeight() > screen_rect.GetWidth())
-        ? menubar_height_scale_factor
-        : 5;
-      
+        ? MENUBAR_MARGIN_FACTOR_PORTRAIT
+        : MENUBAR_MARGIN_FACTOR_LANDSCAPE;
+
       map->SetBottomMarginFactor(factor);
     } else {
       map->SetBottomMarginFactor(0);

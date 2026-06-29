@@ -154,7 +154,6 @@ HasPointer() noexcept
  * supports the command line) can override autodetection.
  */
 #if defined(USE_LIBINPUT) || defined(USE_WAYLAND)
-[[gnu::pure]]
 bool
 HasTouchScreen() noexcept;
 #else
