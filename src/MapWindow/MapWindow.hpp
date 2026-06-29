@@ -284,7 +284,7 @@ protected:
   virtual void RenderTrackBearing(Canvas &canvas, PixelPoint aircraft_pos) noexcept;
 
 #ifdef HAVE_SKYLINES_TRACKING
-  void DrawSkyLinesTraffic(Canvas &canvas) const noexcept;
+  void DrawOnlineTraffic(Canvas &canvas) const noexcept;
 #endif
 
   void DrawTeammate(Canvas &canvas) const noexcept;

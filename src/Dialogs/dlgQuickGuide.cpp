@@ -322,7 +322,7 @@ IsCloudConsentNeeded() noexcept
 {
 #ifdef HAVE_SKYLINES_TRACKING
   const auto &settings =
-    CommonInterface::GetComputerSettings().tracking.skylines.cloud;
+    CommonInterface::GetComputerSettings().tracking.cloud;
   return settings.enabled == TriState::UNKNOWN;
 #else
   return false;
@@ -401,7 +401,7 @@ static void
 EnableCloud()
 {
   auto &settings =
-    CommonInterface::SetComputerSettings().tracking.skylines.cloud;
+    CommonInterface::SetComputerSettings().tracking.cloud;
   settings.enabled = TriState::TRUE;
   Profile::Set(ProfileKeys::CloudEnabled, true);
 
@@ -424,7 +424,7 @@ static void
 DisableCloud()
 {
   auto &settings =
-    CommonInterface::SetComputerSettings().tracking.skylines.cloud;
+    CommonInterface::SetComputerSettings().tracking.cloud;
   settings.enabled = TriState::FALSE;
   Profile::Set(ProfileKeys::CloudEnabled, false);
   Profile::Save();
@@ -548,7 +548,7 @@ dlgQuickGuideShowModal(bool force_info)
 
     const bool cloud_currently_enabled =
       CommonInterface::GetComputerSettings()
-        .tracking.skylines.cloud.enabled == TriState::TRUE;
+        .tracking.cloud.enabled == TriState::TRUE;
 
     auto page = QuickGuidePageWidget::CreateCheckboxPage(
       look, GetCloudConsentText(),
