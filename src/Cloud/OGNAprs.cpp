@@ -19,7 +19,8 @@ using std::string_view;
  * delimiter, e.g. "4903.50NI00820.62E&".
  */
 static bool
-ParseAprsLatLon(string_view payload, GeoPoint &location) noexcept
+ParseAprsLatLon(string_view payload, GeoPoint &location,
+                std::size_t *end_pos = nullptr) noexcept
 {
   const auto h = payload.find('h');
   if (h == string_view::npos || h + 1 >= payload.size())
@@ -107,7 +108,43 @@ ParseAprsLatLon(string_view payload, GeoPoint &location) noexcept
     lon = -lon;
 
   location = GeoPoint(Angle::Degrees(lon), Angle::Degrees(lat));
+  if (end_pos != nullptr)
+    *end_pos = (h + 1) + i + 1;
   return location.Check();
+}
+
+/**
+ * APRS course/speed after the position symbol, e.g. "'243/039" or
+ * "^085/165".  Course 000 means unknown.
+ */
+static void
+ParseAprsCourseSpeed(string_view payload, std::size_t pos,
+                     unsigned &track_deg, bool &track_valid) noexcept
+{
+  track_valid = false;
+
+  if (pos >= payload.size())
+    return;
+
+  ++pos; /* skip APRS symbol code after longitude */
+
+  if (pos + 4 >= payload.size())
+    return;
+
+  if (!IsDigitASCII(payload[pos]) || !IsDigitASCII(payload[pos + 1]) ||
+      !IsDigitASCII(payload[pos + 2]) || payload[pos + 3] != '/')
+    return;
+
+  const unsigned course =
+    unsigned(payload[pos] - '0') * 100u +
+    unsigned(payload[pos + 1] - '0') * 10u +
+    unsigned(payload[pos + 2] - '0');
+
+  if (course == 0 || course > 360)
+    return;
+
+  track_deg = course == 360 ? 0u : course;
+  track_valid = true;
 }
 
 /**
@@ -134,38 +171,39 @@ ParseAltitudeFeet(string_view payload, int &altitude_m) noexcept
 }
 
 /**
- * OGN comment fragment "id06XXXXXX" / "id03XXXXXX" (hex aircraft id).
+ * OGN comment fragment "idXXYYYYYY" (see OGN APRS protocol).
+ *
+ * XX encodes stealth/no-tracking flags, aircraft type (tttt) and address
+ * type (aa).  YYYYYY is the 24-bit sender address.
  */
 static bool
-ParseOgnIdTag(string_view line, uint32_t &id, bool &valid) noexcept
+ParseOgnIdField(string_view line, uint32_t &id, bool &valid,
+                unsigned &aircraft_type) noexcept
 {
   valid = false;
   id = 0;
+  aircraft_type = 0;
 
-  static constexpr string_view tags[] = {
-      " id06", " id03", " id21",
-  };
+  const auto pos = line.find(" id");
+  if (pos == string_view::npos)
+    return false;
 
-  for (const string_view tag : tags) {
-    auto pos = line.find(tag);
-    if (pos == string_view::npos)
-      continue;
+  const auto hex_start = pos + 3;
+  if (hex_start + 8 > line.size())
+    return false;
 
-    pos += tag.size();
-    if (pos + 6 > line.size())
-      continue;
+  const string_view hex = line.substr(hex_start, 8);
 
-    const string_view hex = line.substr(pos, 6);
-    uint32_t value = 0;
-    if (!ParseIntegerTo(hex, value, 16))
-      continue;
+  uint32_t meta = 0;
+  uint32_t addr = 0;
+  if (!ParseIntegerTo(hex.substr(0, 2), meta, 16) ||
+      !ParseIntegerTo(hex.substr(2, 6), addr, 16))
+    return false;
 
-    id = value & 0xFFFFFFu;
-    valid = true;
-    return true;
-  }
-
-  return false;
+  id = addr & 0xFFFFFFu;
+  valid = true;
+  aircraft_type = unsigned((meta >> 2u) & 0x0Fu);
+  return true;
 }
 
 /**
@@ -250,27 +288,31 @@ ParseOGNAprsLine(string_view line) noexcept
   if (colon == string_view::npos || colon + 1 >= line.size())
     return r;
 
-  r.station_id = line.substr(0, gt);
+  r.station_id = std::string(line.substr(0, gt));
   const string_view payload = line.substr(colon + 1);
 
   GeoPoint loc;
-  if (!ParseAprsLatLon(payload, loc))
+  std::size_t pos_end = 0;
+  if (!ParseAprsLatLon(payload, loc, &pos_end))
     return r;
 
   int alt_m = 0;
-  if (!ParseAltitudeFeet(payload, alt_m))
-    /* still accept pressure-alt absent on some frames */
-    alt_m = 0;
+  const bool altitude_valid = ParseAltitudeFeet(payload, alt_m);
+
+  ParseAprsCourseSpeed(payload, pos_end, r.track_deg, r.track_valid);
 
   uint32_t fid = 0;
   bool fid_ok = false;
-  ParseOgnIdTag(line, fid, fid_ok);
+  unsigned aircraft_type = 0;
+  ParseOgnIdField(line, fid, fid_ok, aircraft_type);
 
   r.valid = true;
   r.location = loc;
   r.altitude = alt_m;
+  r.altitude_valid = altitude_valid;
   r.flarm_id = fid;
   r.flarm_valid = fid_ok;
+  r.aircraft_type = aircraft_type;
   ResolveOgnCallsign(line, r, r.callsign);
   return r;
 }

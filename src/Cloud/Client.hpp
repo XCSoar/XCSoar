@@ -17,6 +17,9 @@
 class Serialiser;
 class Deserialiser;
 
+/** FLARM aircraft type for glider (#FlarmTraffic::AircraftType::GLIDER). */
+static constexpr unsigned CLOUD_DEFAULT_AIRCRAFT_TYPE = 1;
+
 /**
  * A client which has submitted data to us recently.
  */
@@ -72,6 +75,15 @@ struct CloudClient
    * Last known altitude.
    */
   int altitude;
+
+  /** Ground track in degrees (0..359) when track_valid. */
+  unsigned track_deg = 0;
+  bool track_valid = false;
+
+  /**
+   * FLARM aircraft type (glider for XCSoar cloud clients).
+   */
+  unsigned aircraft_type = CLOUD_DEFAULT_AIRCRAFT_TYPE;
 
   struct KeyHash {
     constexpr std::size_t operator()(uint64_t key) const {
@@ -218,14 +230,16 @@ public:
    * Create a new #CloudClient, or refresh the existing one.
    */
   CloudClient &Make(SocketAddress address,
-                    uint64_t key, const GeoPoint &location, int altitude);
+                    uint64_t key, const GeoPoint &location, int altitude,
+                    unsigned track_deg, bool track_valid);
 
   void Refresh(CloudClient &client,
                SocketAddress address);
 
   void Refresh(CloudClient &client,
                SocketAddress address,
-               const GeoPoint &location, int altitude);
+               const GeoPoint &location, int altitude,
+               unsigned track_deg, bool track_valid);
 
   void Insert(CloudClient &client);
 
