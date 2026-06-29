@@ -11,10 +11,25 @@
 
 /**
  * This class keeps track of the traffic objects received from a
- * FLARM.
+ * FLARM device and injected online traffic merged into the same list.
  */
 struct TrafficList {
-  static constexpr size_t MAX_COUNT = 25;
+  /**
+   * Typical maximum simultaneous PFLAA targets from one FLARM device.
+   */
+  static constexpr size_t DEVICE_MAX_COUNT = 25;
+  static constexpr size_t ONLINE_MAX_COUNT = 64;
+
+  /**
+   * Maximum traffic entries in this list.  Matches the largest online
+   * traffic batch the XCSoar Cloud server may send plus the local
+   * device FLARM traffic that may be merged into it.
+   */
+  static constexpr size_t MAX_COUNT =
+    DEVICE_MAX_COUNT + ONLINE_MAX_COUNT;
+
+  static_assert(MAX_COUNT >= DEVICE_MAX_COUNT + ONLINE_MAX_COUNT,
+                "combined list must hold device and online traffic");
 
   /**
    * Time stamp of the latest modification to this object.
