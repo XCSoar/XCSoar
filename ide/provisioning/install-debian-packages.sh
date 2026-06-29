@@ -55,6 +55,7 @@ install_linux() {
   apt-get install "${APTOPTS[@]}" make g++ \
     binutils-gold \
     zlib1g-dev \
+    libbz2-dev \
     libfmt-dev \
     libdbus-1-dev \
     libsodium-dev \
@@ -105,7 +106,8 @@ install_llvm() {
 
 install_libinput_gbm() {
   echo Installing dependencies for compiling targets which need libinput or GBM...
-  apt-get install "${APTOPTS[@]}" libinput-dev libgbm-dev
+  apt-get install "${APTOPTS[@]}" libinput-dev libgbm-dev libdrm-dev \
+    libgles2-mesa-dev
   echo
 }
 
@@ -114,6 +116,13 @@ install_arm() {
   apt-get install "${APTOPTS[@]}" g++-arm-linux-gnueabihf \
     libmpc-dev \
     meson
+  echo
+}
+
+install_pi_host() {
+  echo Installing host tools for Raspberry Pi cross-compilation and sysroot...
+  apt-get install "${APTOPTS[@]}" debootstrap qemu-user-static binfmt-support \
+    g++-arm-linux-gnueabihf libmpc-dev ca-certificates pkg-config
   echo
 }
 
@@ -180,6 +189,9 @@ for section in "${sections_to_install[@]}"; do
       ;;
     ARM)
       install_arm
+      ;;
+    PI_HOST)
+      install_pi_host
       ;;
     WIN)
       install_win
