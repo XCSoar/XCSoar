@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+/*
+ * The implementation follows Naviter's "Extended OpenAir file format specification"
+ * Version 2.1.2
+ * as of 2026-05-21
+ * https://github.com/naviter/seeyou_file_formats/blob/main/OpenAir_File_Format_Support.md#aa-airspace-activation-times
+ */
 
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -24,11 +30,21 @@
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringSplit.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "util/TruncateString.hpp"
+#include "LogFile.hpp"
 
 #include <cassert>
 #include <stdexcept>
 
 using std::string_view_literals::operator""sv;
+
+enum class AirspaceActivationDecode {
+  NOT_APPLICABLE,
+  NEVER_ACTIVE,
+  IS_ACTIVE_NOW,
+  UNDETECTABLE_CONTENT,
+};
 
 enum class AirspaceFileType {
   UNKNOWN,
@@ -170,6 +186,11 @@ struct TempAirspace
   std::optional<AirspaceAltitude> base;
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
+  bool has_activation_time;
+  BrokenDateTime activation_start_time;
+  BrokenDateTime activation_end_time;
+  bool active_today;
+  bool never_active;
 
   // Polygon
   std::vector<GeoPoint> points;
@@ -190,6 +211,11 @@ struct TempAirspace
   Reset(unsigned line_number) noexcept
   {
     days_of_operation.SetAll();
+    has_activation_time = false;
+    activation_start_time = BrokenDateTime::Invalid();
+    activation_end_time   = BrokenDateTime::Invalid();
+    active_today = false;
+    never_active = false;
     name.clear();
     radio_frequency = RadioFrequency::Null();
     transponder_code = TransponderCode::Null();
@@ -244,6 +270,8 @@ struct TempAirspace
   {
     Check();
 
+    if (never_active) return;
+
     if (points.size() < 3)
       throw CommitError{"Not enough polygon points"};
 
@@ -254,7 +282,13 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name), std::move(station_name),
+    as->SetProperties(std::move(name),
+                      std::move(has_activation_time),
+                      std::move(activation_start_time),
+                      std::move(activation_end_time),
+                      std::move(active_today),
+                      std::move(never_active),
+                      std::move(station_name),
                       std::move(transponder_code), asclass, astype, *base,
                       *top);
     as->SetRadioFrequency(radio_frequency);
@@ -280,6 +314,8 @@ struct TempAirspace
   {
     Check();
 
+    if (never_active) return;
+
     if (!points.empty())
       throw CommitError{"Airspace is a mix of polygon and circle"};
 
@@ -291,9 +327,15 @@ struct TempAirspace
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name), std::move(station_name),
-                      std::move(transponder_code), asclass, std::move(astype),
-                      *base, *top);
+    as->SetProperties(std::move(name),
+                      std::move(has_activation_time),
+                      std::move(activation_start_time),
+                      std::move(activation_end_time),
+                      std::move(active_today),
+                      std::move(never_active),
+                      std::move(station_name),
+                      std::move(transponder_code), asclass, astype, *base,
+                      *top);
     as->SetRadioFrequency(radio_frequency);
     as->SetTransponderCode(transponder_code);
     as->SetDays(days_of_operation);
@@ -554,6 +596,111 @@ ParseType(const char *buffer) noexcept
   return OTHER;
 }
 
+/*
+ * read ISO8601 formatted date and time UTC
+ * example: 2026-05-10T14:00:00Z
+ *      or: 2026-05-10T14:00Z
+ */
+static bool
+ReadISO8601(const char *ts, BrokenDateTime &dt) noexcept
+{
+  unsigned year, month, day, hour, minute, second;
+  char suffix = '\0';
+  int result = sscanf(ts, "%04u-%02u-%02uT%02u:%02u:%02u%c",
+                      &year, &month, &day, &hour, &minute, &second, &suffix);
+  if (result == 7 && suffix == 'Z') {
+    dt.year = year;
+    dt.month = month;
+    dt.day = day;
+    dt.hour = hour;
+    dt.minute = minute;
+    dt.second = second;
+
+    if (dt.IsPlausible()) return true;
+  }
+
+  // try w/o second
+  suffix = '\0';
+  result = sscanf(ts, "%04u-%02u-%02uT%02u:%02u%c",
+                      &year, &month, &day, &hour, &minute, &suffix);
+  if (result == 6 && suffix == 'Z') {
+    dt.year = year;
+    dt.month = month;
+    dt.day = day;
+    dt.hour = hour;
+    dt.minute = minute;
+    dt.second = 0;
+
+    if (dt.IsPlausible()) return true;
+  }
+  return false;
+}
+
+static AirspaceActivationDecode
+ParseActivationTime(const char *in,
+                    BrokenDateTime &start_time,
+                    BrokenDateTime &end_time) noexcept
+{
+  char active_time_pair[80];
+  BrokenDateTime dt              = BrokenDateTime::Invalid();
+  const BrokenDateTime now       = BrokenDateTime::NowUTC();
+  bool time_interval_has_started = false;
+  bool time_interval_before_end  = false;
+
+
+  start_time = BrokenDateTime::Invalid();
+  end_time   = BrokenDateTime::Invalid();
+
+  CopyTruncateString(active_time_pair, sizeof(active_time_pair), in);
+
+  /* NONE as the only argument means "No defined time - inactive"
+   * Don't even show up on the map
+   */
+  if (StringIsEqualIgnoreCase(active_time_pair,"NONE"))
+    return AirspaceActivationDecode::NEVER_ACTIVE;
+
+  char *slash_loc = std::strchr(active_time_pair,'/');
+  if (slash_loc) {
+    *slash_loc = 0;
+    if (StringIsEqualIgnoreCase(active_time_pair, "NONE")) {
+      time_interval_has_started = true;
+    } else if (ReadISO8601(active_time_pair, dt)) {
+      /* Catch activation in near future.
+       * 18 hours should be enough to catch activation
+       * times between now (parse time) and sunset.
+       */
+      if ((dt - std::chrono::seconds(18 * 3600)) < now) {
+        time_interval_has_started = true;
+        start_time = dt;
+      }
+    } else {
+      // can't recognize start time
+      return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
+    }
+
+    if (StringIsEqualIgnoreCase(slash_loc + 1, "NONE")) {
+      time_interval_before_end = true;
+    } else if (ReadISO8601(slash_loc + 1, dt)) {
+      if (now < dt) {
+        time_interval_before_end = true;
+        end_time = dt;
+      }
+    } else {
+      // can't recognize end time
+      return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
+    }
+
+    if (time_interval_has_started && time_interval_before_end)
+      return AirspaceActivationDecode::IS_ACTIVE_NOW;
+    else
+      return AirspaceActivationDecode::NOT_APPLICABLE;
+
+  } else {
+    // can't recognize the 2 time stamps
+    return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
+  }
+}
+
 [[gnu::pure]]
 static bool
 IsICAOClassOrUnclassified(AirspaceClass asclass) noexcept
@@ -627,6 +774,39 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
   case 'A':
   case 'a':
     switch (input.pop_front()) {
+    case 'A':
+    case 'a':
+      if (input.SkipWhitespace()) {
+        temp_area.has_activation_time = true;
+        BrokenDateTime activation_start_time;
+        BrokenDateTime activation_end_time;
+        switch (ParseActivationTime(input.c_str(),
+                                    activation_start_time,
+                                    activation_end_time)) {
+          case AirspaceActivationDecode::IS_ACTIVE_NOW :
+            if (temp_area.never_active)
+              break;
+            temp_area.active_today = true;
+            temp_area.activation_start_time = activation_start_time;
+            temp_area.activation_end_time   = activation_end_time;
+            break;
+          case AirspaceActivationDecode::NOT_APPLICABLE :
+            // this AA is not active, but more AAs may come
+            break;
+          case AirspaceActivationDecode::NEVER_ACTIVE :
+            temp_area.never_active = true;
+            temp_area.active_today = false;
+            break;
+          case AirspaceActivationDecode::UNDETECTABLE_CONTENT :
+            if (temp_area.never_active)
+              break;
+            LogFormat("Airspace %s: Activation Time(s) not plausible : %s",
+              temp_area.name.c_str(), input.c_str());
+            break;
+          }
+        }
+      break;
+
     case 'C':
     case 'c':
       if (!input.SkipWhitespace())
