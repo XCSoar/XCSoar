@@ -23,6 +23,13 @@ namespace PageActions
   const PageLayout &GetCurrentLayout();
 
   /**
+   * True after pan was disabled without Restore(), leaving the transient
+   * FullScreen layout active while a different page is configured.
+   */
+  [[gnu::pure]]
+  bool IsStuckPanFullScreenLayout() noexcept;
+
+  /**
    * Opens the next page.
    */
   void Next();

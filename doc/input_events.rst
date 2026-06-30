@@ -333,7 +333,8 @@ Event list
      Use ``reset`` to erase all user markers.
  * - ``Mode M``
    - Sets the current input event mode. The argument is the label
-     of the mode to activate (e.g. ``default``, ``Menu``).
+     of the mode to activate (e.g. ``default``, ``Menu``, ``mc``,
+     ``weather``).
  * - ``NearestAirspaceDetails``
    - If airspace warnings are active, opens the airspace warnings
      dialog. Otherwise, finds the nearest airspace (within 30
@@ -477,6 +478,28 @@ Event list
    - Opens the waypoint editor/configuration dialog.
  * - ``Weather``
    - Opens the weather dialog.
+ * - ``WeatherOverlay``
+   - Adjusts the active map weather overlay cursor bar (EDL, RASP, or
+     XCTherm). Only has an effect on map pages that show weather overlay
+     controls. Arguments use a common ``<axis> …`` prefix:
+
+     **Time:** ``time +``, ``time -`` (step forecast time)
+
+     **Time auto/manual:** ``time auto toggle``, ``time auto on``,
+     ``time auto off``, ``time auto show``
+
+     **Altitude / level:** ``altitude +``, ``altitude -`` (step altitude
+     band or pressure level). For EDL overlays, ``level +``/``level -``
+     and ``level auto …`` are accepted as aliases for the altitude
+     commands.
+
+     **Altitude auto/manual:** ``altitude auto toggle``,
+     ``altitude auto on``, ``altitude auto off``,
+     ``altitude auto show``
+
+     RASP overlays support time commands only. EDL overlays support
+     both time and level. XCTherm overlays map altitude to the layer
+     (altitude band) row and time to the forecast hour row.
  * - ``Zoom Z``
    - Controls map zoom. Possible arguments: ``auto toggle``,
      ``auto on``, ``auto off``, ``auto show``, ``in``, ``out``,
@@ -503,6 +526,17 @@ Built-in modes
 - ``infobox`` -- an InfoBox has been selected.
 - ``pan`` -- pan mode is active.
 - ``Menu`` -- a menu level is open.
+- ``mc`` -- MacCready adjustment mode. Entered from ``mode=default`` via
+  the ``Mode mc`` event (default key ``3``). Stick UP/DOWN adjust MC;
+  RETURN toggles auto/manual MC; ESCAPE returns to ``default``.
+- ``weather`` -- weather overlay cursor bar mode. Enter from the quick
+  menu (**Forecast Controls**) or the on-screen menu (**Menu → Weather**),
+  or via the ``Mode weather`` event. Stick UP/DOWN step altitude/level,
+  LEFT/RIGHT step time, RETURN toggles time auto/manual, APP6 toggles
+  altitude auto/manual, ESCAPE returns to ``default``. Only affects map
+  pages with a weather overlay (EDL or RASP) and weather controls in the
+  bottom widget (**Config > System > Pages > Bottom widget**).
+  See :ref:`weather-overlay-mode` below.
 - ``wptimg`` -- the waypoint details dialog is on an **image** page;
   key bindings in this map control zoom and pan of the image (the
   ``WaypointImage`` event) without inheriting the normal ``default``
@@ -510,6 +544,50 @@ Built-in modes
 
 You may define any additional mode names to build custom menu
 hierarchies.
+
+.. _weather-overlay-mode:
+
+Weather overlay mode (``mode=weather``)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When a map page displays EDL or RASP overlay controls in the bottom
+cursor bar, open the quick menu (F1 or the ULDR gesture) and choose
+**Forecast Controls**, or use **Menu → Weather**, to enter
+``mode=weather`` so stick and button bindings can adjust forecast time
+and altitude without leaving the map. Leaving the page (or pressing
+ESCAPE / the Exit label) returns to ``default``.
+
+The built-in stick bindings in :file:`Data/Input/default.xci` are:
+
+.. list-table::
+ :widths: 20 50 30
+ :header-rows: 1
+
+ * - Input
+   - Event
+   - Action
+ * - UP / DOWN
+   - ``WeatherOverlay altitude +/-``
+   - Step pressure level (EDL)
+ * - LEFT / RIGHT
+   - ``WeatherOverlay time -/+``
+   - Step forecast time
+ * - RETURN
+   - ``WeatherOverlay time auto show/toggle``
+   - Toggle time auto/manual
+ * - APP6
+   - ``WeatherOverlay altitude auto show/toggle``
+   - Toggle altitude/level auto/manual
+ * - ESCAPE
+   - ``Mode default``
+   - Exit weather input mode
+
+On-screen labels (locations 1, 6--10) mirror these actions. On RASP
+pages, UP/DOWN step the forecast layer; EDL pages use them for pressure
+level. RASP ignores altitude auto/manual commands.
+
+The same ``WeatherOverlay`` arguments can be bound in any mode (for
+example from ``mode=default``) if you prefer not to use ``mode=weather``.
 
 Labels
 ~~~~~~

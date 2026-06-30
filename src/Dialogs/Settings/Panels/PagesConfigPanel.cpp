@@ -278,7 +278,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
-#ifdef HAVE_EDL
+#if defined(HAVE_EDL) || defined(ENABLE_OPENGL)
     { PageLayout::Bottom::EDL_CONTROLS, N_("Weather controls") },
 #endif
     nullptr

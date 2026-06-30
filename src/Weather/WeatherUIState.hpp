@@ -31,6 +31,12 @@ struct EDLWeatherUIState {
   bool forecast_auto_advance;
 
   /**
+   * When true, #isobar follows GPS/baro altitude.
+   * When false, the user selects the pressure level manually.
+   */
+  bool level_auto_advance;
+
+  /**
    * Nearest supported EDL pressure level in Pascal.
    */
   unsigned isobar;
@@ -39,15 +45,20 @@ struct EDLWeatherUIState {
   bool dedicated_page_suspended_for_pan;
   bool enabled;
 
+  /** Cursor-bar session survives page changes within the app run. */
+  bool cursor_session_initialized;
+
   Status status;
 
   void Clear() noexcept {
     forecast_datetime = BrokenDateTime::Invalid();
     forecast_auto_advance = true;
+    level_auto_advance = true;
     isobar = EDL::ISOBARS[0];
     dedicated_page_entered = false;
     dedicated_page_suspended_for_pan = false;
     enabled = false;
+    cursor_session_initialized = false;
     status = Status::DISABLED;
   }
 
@@ -81,6 +92,9 @@ struct WeatherUIState {
    */
   bool time_auto_advance;
 
+  /** RASP cursor-bar session survives page changes within the app run. */
+  bool rasp_cursor_session_initialized;
+
   bool rasp_page_entered;
 
   /**
@@ -92,13 +106,25 @@ struct WeatherUIState {
 
   EDLWeatherUIState edl;
 
+  struct {
+    bool dedicated_page_entered = false;
+    bool dedicated_page_suspended_for_pan = false;
+
+    void Clear() noexcept {
+      dedicated_page_entered = false;
+      dedicated_page_suspended_for_pan = false;
+    }
+  } xctherm;
+
   void Clear() noexcept {
     map = -1;
     time = BrokenTime::Invalid();
     time_auto_advance = true;
+    rasp_cursor_session_initialized = false;
     rasp_page_entered = false;
     rasp_page_suspended_for_pan = false;
     edl.Clear();
+    xctherm.Clear();
   }
 
   /**

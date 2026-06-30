@@ -76,6 +76,7 @@ class DownloadGlue final {
   /** Snapshot for overlay download (read on network thread). */
   BrokenDateTime overlay_forecast_time;
   unsigned overlay_isobar = 0;
+  bool overlay_restart_pending = false;
 
   bool shutting_down = false;
 
@@ -103,8 +104,10 @@ public:
 
   /**
    * Download the overlay for the given forecast/isobar in the background.
+   *
+   * @return true if a new download was started immediately
    */
-  void StartOverlayDownload(BrokenDateTime forecast_time,
+  bool StartOverlayDownload(BrokenDateTime forecast_time,
                             unsigned isobar) noexcept;
 
   /**

@@ -20,6 +20,11 @@
 #include "BackendComponents.hpp"
 #include "DataGlobals.hpp"
 #include "PageSettings.hpp"
+#include "Weather/Features.hpp"
+#include "Weather/Rasp/FieldControls.hpp"
+#ifdef HAVE_EDL
+#include "Weather/EDL/StateController.hpp"
+#endif
 
 using namespace CommonInterface;
 
@@ -285,15 +290,45 @@ UpdateMapScalePageInfo(UIState &state,
                        const UISettings &settings) noexcept
 {
   const PagesState &pages = state.pages;
+  const PageLayout &configured =
+    settings.pages.pages[pages.current_index];
+
   const PageLayout &layout = pages.special_page.IsDefined()
     ? pages.special_page
-    : settings.pages.pages[pages.current_index];
+    : configured;
 
-  state.page_overlay = layout.IsMapMain()
-    ? layout.overlay
+  /* Pan fullscreen keeps the configured map overlay visible — retain its
+     type for RASP HUD logic and show the active layer in the PAN string. */
+  const PageLayout &overlay_layout =
+    (pages.special_page.IsDefined() &&
+     pages.special_page == PageLayout::FullScreen() &&
+     configured.IsMapMain() &&
+     configured.overlay != PageLayout::Overlay::NONE)
+    ? configured
+    : layout;
+
+  state.page_overlay = overlay_layout.IsMapMain()
+    ? overlay_layout.overlay
     : PageLayout::Overlay::NONE;
 
   state.map_scale_page_title.clear();
+
+  const bool pan_fullscreen =
+    pages.special_page.IsDefined() &&
+    pages.special_page == PageLayout::FullScreen();
+
+#ifdef HAVE_EDL
+  if (pan_fullscreen && EDL::IsDedicatedPageSuspendedForPan() &&
+      configured.UsesEdlOverlay()) {
+    state.map_scale_page_title = EDL::GetOverlayLabel();
+    return;
+  }
+#endif
+  if (pan_fullscreen &&
+      configured.overlay == PageLayout::Overlay::RASP) {
+    state.map_scale_page_title = Rasp::GetPanOverlayLabel(configured);
+    return;
+  }
 
   if (layout.IsMapMain() &&
       layout.overlay != PageLayout::Overlay::NONE) {

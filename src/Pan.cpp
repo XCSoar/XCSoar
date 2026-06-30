@@ -110,10 +110,13 @@ void
 LeavePan()
 {
   GlueMapWindow *map = UIGlobals::GetMapIfActive();
-  if (map == nullptr || !map->IsPanning())
+  if (map == nullptr)
     return;
 
-  map->SetPan(false);
+  if (map->IsPanning())
+    map->SetPan(false);
+  else if (!PageActions::IsStuckPanFullScreenLayout())
+    return;
 
   InputEvents::UpdatePan();
   PageActions::Restore();

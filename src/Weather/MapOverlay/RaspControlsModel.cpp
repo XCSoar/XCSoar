@@ -10,9 +10,14 @@
 #include "UIState.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "Form/DataField/Enum.hpp"
 
-namespace MapOverlay {
+namespace WeatherMapOverlay {
+
+void
+RaspControlsModel::OnShow() noexcept
+{
+  SyncFromPageLayout();
+}
 
 void
 RaspControlsModel::SyncFromPageLayout() noexcept
@@ -24,39 +29,9 @@ RaspControlsModel::SyncFromPageLayout() noexcept
   auto &weather = CommonInterface::SetUIState().weather;
   weather.map = -1;
 
-  const int field_index = GetFieldIndex();
+  const int field_index = Rasp::GetActiveFieldIndex();
   if (field_index >= 0)
     weather.map = field_index;
-}
-
-int
-RaspControlsModel::GetFieldIndex() const noexcept
-{
-  const auto &layout = PageActions::GetCurrentLayout();
-  if (layout.overlay != PageLayout::Overlay::RASP)
-    return -1;
-
-  const auto rasp = DataGlobals::GetRasp();
-  if (rasp == nullptr || rasp->GetItemCount() == 0)
-    return -1;
-
-  if (layout.rasp_field >= 0 &&
-      unsigned(layout.rasp_field) < rasp->GetItemCount())
-    return layout.rasp_field;
-
-  return rasp->GetItemCount() > 0 ? 0 : -1;
-}
-
-void
-RaspControlsModel::FillTimeChoices(DataFieldEnum &field,
-                                   const std::shared_ptr<RaspStore> &rasp) const noexcept
-{
-  const int map = GetFieldIndex();
-  if (map < 0)
-    return;
-
-  Rasp::FillTimeChoices(field, rasp.get(), unsigned(map),
-                        CommonInterface::GetUIState().weather.time);
 }
 
 void
@@ -65,6 +40,7 @@ RaspControlsModel::SetTime(unsigned minute_of_day) noexcept
   auto &weather = CommonInterface::SetUIState().weather;
   weather.time = Rasp::TimeFromMinuteOfDay(minute_of_day);
   weather.time_auto_advance = false;
+  weather.rasp_cursor_session_initialized = true;
 
   ActionInterface::SendUIState(true);
 }
@@ -88,4 +64,69 @@ RaspControlsModel::ApplyAutoAdvanceTime() noexcept
   ActionInterface::SendUIState(true);
 }
 
-} // namespace MapOverlay
+void
+RaspControlsModel::ResumeAutoAdvance() noexcept
+{
+  if (GetTimeAutoAdvance())
+    return;
+
+  SetTimeAutoAdvance(true);
+  ApplyAutoAdvanceTime();
+}
+
+bool
+RaspControlsModel::StepTime(int delta) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  const int field_index = Rasp::GetActiveFieldIndex();
+  if (rasp == nullptr || field_index < 0 || delta == 0)
+    return false;
+
+  const auto &weather = CommonInterface::GetUIState().weather;
+  unsigned minute_of_day = 0;
+  if (!Rasp::StepTime(rasp.get(), unsigned(field_index),
+                      weather.time, weather.time_auto_advance,
+                      delta, minute_of_day))
+    return false;
+
+  SetTime(minute_of_day);
+  return true;
+}
+
+void
+RaspControlsModel::FormatTimeLabel(StaticString<64> &text) const noexcept
+{
+  Rasp::FormatTimeCursorLabel(text, GetTimeAutoAdvance());
+}
+
+bool
+RaspControlsModel::HasTimeData() const noexcept
+{
+  return Rasp::HasSelectedTimeData(GetTimeAutoAdvance());
+}
+
+bool
+RaspControlsModel::StepField(int delta) noexcept
+{
+  return Rasp::StepField(delta);
+}
+
+void
+RaspControlsModel::SelectField(unsigned field_index) noexcept
+{
+  Rasp::SelectField(field_index);
+}
+
+void
+RaspControlsModel::FormatFieldLabel(StaticString<64> &text) const noexcept
+{
+  Rasp::FormatFieldCursorLabel(text);
+}
+
+bool
+RaspControlsModel::HasFieldData() const noexcept
+{
+  return Rasp::HasSelectedField();
+}
+
+} // namespace WeatherMapOverlay
