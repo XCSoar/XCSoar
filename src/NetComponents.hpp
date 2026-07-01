@@ -19,6 +19,12 @@ class NOTAMGlue;
 #ifdef HAVE_EDL
 namespace EDL { class DownloadGlue; }
 #endif
+#ifdef HAVE_HTTP
+class XCThermDownloadGlue;
+#endif
+#ifdef HAVE_DOWNLOAD_MANAGER
+class RaspDownloadGlue;
+#endif
 
 /**
  * Singleton for global networking-related objects.
@@ -38,6 +44,10 @@ struct NetComponents {
 # ifdef HAVE_EDL
   const std::unique_ptr<EDL::DownloadGlue> edl;
 # endif
+  const std::unique_ptr<XCThermDownloadGlue> xctherm_download;
+#endif
+#ifdef HAVE_DOWNLOAD_MANAGER
+  const std::unique_ptr<RaspDownloadGlue> rasp_download;
 #endif
 
   NetComponents(EventLoop &event_loop, CurlGlobal &curl,

@@ -16,6 +16,10 @@
  * time.
  */
 class PagerWidget : public Widget {
+public:
+  /** Maximum pages in one pager (System configuration dialog). */
+  static constexpr unsigned MAX_CHILDREN = 40;
+
   typedef std::function<void()> PageFlippedCallback;
 
   struct Child {
@@ -37,7 +41,7 @@ class PagerWidget : public Widget {
   PixelRect position;
 
   unsigned current;
-  boost::container::static_vector<Child, 32u> children;
+  boost::container::static_vector<Child, MAX_CHILDREN> children;
 
   PageFlippedCallback page_flipped_callback;
 

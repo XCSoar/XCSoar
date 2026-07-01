@@ -3,25 +3,14 @@
 
 #pragma once
 
-#include <memory>
+#include "util/StaticString.hxx"
 
-#include "PageSettings.hpp"
-#include "Usage.hpp"
-
-class DataFieldEnum;
-class RaspStore;
-
-namespace MapOverlay {
+namespace WeatherMapOverlay {
 
 class RaspControlsModel {
-  [[gnu::pure]]
-  int GetFieldIndex() const noexcept;
-
 public:
+  void OnShow() noexcept;
   void SyncFromPageLayout() noexcept;
-
-  void FillTimeChoices(DataFieldEnum &field,
-                       const std::shared_ptr<RaspStore> &rasp) const noexcept;
 
   void SetTime(unsigned minute_of_day) noexcept;
 
@@ -30,6 +19,13 @@ public:
 
   void SetTimeAutoAdvance(bool auto_advance) noexcept;
   void ApplyAutoAdvanceTime() noexcept;
+  void ResumeAutoAdvance() noexcept;
+
+  bool StepTime(int delta) noexcept;
+  void FormatTimeLabel(StaticString<64> &text) const noexcept;
+
+  [[gnu::pure]]
+  bool HasTimeData() const noexcept;
 };
 
-} // namespace MapOverlay
+} // namespace WeatherMapOverlay

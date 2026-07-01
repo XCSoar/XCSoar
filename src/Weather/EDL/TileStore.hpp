@@ -24,6 +24,20 @@ namespace EDL {
 BrokenDateTime
 GetTrackedForecastTime(BrokenDateTime utc) noexcept;
 
+/**
+ * Format a UTC forecast hour for log messages (printf-safe).
+ */
+[[gnu::pure]]
+StaticString<32>
+FormatForecastUtcLog(BrokenDateTime forecast) noexcept;
+
+/**
+ * Format a UTC calendar day for log messages (printf-safe).
+ */
+[[gnu::pure]]
+StaticString<16>
+FormatForecastDayLog(BrokenDateTime day) noexcept;
+
 struct CachedDay {
   BrokenDateTime day;
   unsigned file_count;

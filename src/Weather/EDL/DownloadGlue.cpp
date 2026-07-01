@@ -6,19 +6,27 @@
 #ifdef HAVE_EDL
 
 #include "TileStore.hpp"
+#include "Weather/BackgroundDownloadProgress.hpp"
+#include "Language/Language.hpp"
 #include "Operation/ProgressListener.hpp"
 #include "LogFile.hpp"
 #include "lib/curl/Global.hxx"
 #include "util/Macros.hpp"
+#include "util/StaticString.hxx"
 
 namespace EDL {
 
 namespace {
 
-struct NullProgressListener final : ProgressListener {
-  void SetProgressRange(unsigned) noexcept override {}
-  void SetProgressPosition(unsigned) noexcept override {}
-};
+StaticString<128>
+FormatOverlayProgressText(BrokenDateTime forecast_time,
+                          unsigned isobar) noexcept
+{
+  StaticString<128> text;
+  text.Format(_("Loading EDL overlay %u hPa %s..."),
+              isobar / 100, FormatForecastUtcLog(forecast_time).c_str());
+  return text;
+}
 
 } // namespace
 
@@ -41,10 +49,12 @@ DownloadGlue::BeginShutdown() noexcept
 
   shutting_down = true;
   pending_job = Job::NONE;
+  overlay_restart_pending = false;
   completion_error = {};
   completed_path.reset();
   task.BeginShutdown();
   complete_notify.ClearNotification();
+  BackgroundDownloadProgress::Get().ForceHide();
 }
 
 void
@@ -73,20 +83,36 @@ DownloadGlue::NotifyListeners(const DownloadNotification &notification) noexcept
   });
 }
 
-void
+bool
 DownloadGlue::StartOverlayDownload(BrokenDateTime forecast_time,
                                     unsigned isobar) noexcept
 {
-  if (shutting_down || task.IsRunning())
-    return;
+  if (shutting_down)
+    return false;
 
-  pending_job = Job::OVERLAY;
-  completion_error = {};
-  completed_path.reset();
   overlay_forecast_time = forecast_time;
   overlay_isobar = isobar;
+  pending_job = Job::OVERLAY;
+
+  if (task.IsRunning()) {
+    overlay_restart_pending = true;
+    LogFmt("edl: overlay download queued {} hPa {}",
+           isobar / 100, FormatForecastUtcLog(forecast_time).c_str());
+    return false;
+  }
+
+  overlay_restart_pending = false;
+  completion_error = {};
+  completed_path.reset();
+
+  LogFmt("edl: starting overlay download {} hPa {}",
+         isobar / 100, FormatForecastUtcLog(forecast_time).c_str());
+
+  BackgroundDownloadProgress::Get().Begin(
+    FormatOverlayProgressText(forecast_time, isobar).c_str());
 
   task.Start(RunOverlayDownload(), BIND_THIS_METHOD(OnCompletion));
+  return true;
 }
 
 void
@@ -100,13 +126,18 @@ DownloadGlue::StartPrecacheDay(BrokenDateTime day) noexcept
   completed_precache_count = 0;
   completed_path.reset();
 
+  StaticString<128> text;
+  text.Format(_("Caching EDL forecast %s..."),
+              FormatForecastDayLog(day).c_str());
+  BackgroundDownloadProgress::Get().Begin(text.c_str());
+
   task.Start(RunPrecacheDay(day), BIND_THIS_METHOD(OnCompletion));
 }
 
 Co::InvokeTask
 DownloadGlue::RunOverlayDownload()
 {
-  NullProgressListener progress;
+  auto &progress = BackgroundDownloadProgress::Get();
   const TileRequest request(overlay_forecast_time, overlay_isobar);
   completed_path = co_await request.EnsureDownloaded(curl, progress);
 }
@@ -114,9 +145,8 @@ DownloadGlue::RunOverlayDownload()
 Co::InvokeTask
 DownloadGlue::RunPrecacheDay(BrokenDateTime day)
 {
-  NullProgressListener progress;
   completed_precache_count =
-    co_await EnsureDayDownloaded(day, curl, progress);
+    co_await EnsureDayDownloaded(day, curl, BackgroundDownloadProgress::Get());
 }
 
 void
@@ -159,6 +189,21 @@ DownloadGlue::OnCompleteNotify() noexcept
   completion_error = {};
 
   NotifyListeners(notification);
+
+  if (overlay_restart_pending && !shutting_down) {
+    overlay_restart_pending = false;
+    pending_job = Job::OVERLAY;
+    completion_error = {};
+    completed_path.reset();
+    LogFmt("edl: restarting queued overlay download {} hPa {}",
+           overlay_isobar / 100,
+           FormatForecastUtcLog(overlay_forecast_time).c_str());
+    task.Start(RunOverlayDownload(), BIND_THIS_METHOD(OnCompletion));
+    return;
+  }
+
+  if (!task.IsRunning())
+    BackgroundDownloadProgress::Get().End();
 }
 
 } // namespace EDL

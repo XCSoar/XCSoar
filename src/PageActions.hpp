@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "PageSettings.hpp"
+
 struct PageLayout;
 class GlueMapWindow;
 class Widget;
@@ -23,6 +25,13 @@ namespace PageActions
   const PageLayout &GetCurrentLayout();
 
   /**
+   * True after pan was disabled without Restore(), leaving the transient
+   * FullScreen layout active while a different page is configured.
+   */
+  [[gnu::pure]]
+  bool IsStuckPanFullScreenLayout() noexcept;
+
+  /**
    * Opens the next page.
    */
   void Next();
@@ -30,6 +39,20 @@ namespace PageActions
    * Opens the previous page.
    */
   void Prev();
+
+  /**
+   * Switch to a configured page by index.
+   */
+  void GoToPage(unsigned index) noexcept;
+
+  /**
+   * Ensure a map page exists for @p overlay.  Appends a page with the
+   * same defaults as Config → Look → Pages → Add when a slot is free.
+   *
+   * @return page index, or #PageSettings::MAX_PAGES when no slot remains
+   */
+  unsigned EnsureWeatherOverlayPage(PageLayout::Overlay overlay,
+                                    int rasp_field=-1) noexcept;
 
   /**
    * Opens the given layout.

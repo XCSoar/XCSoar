@@ -10,6 +10,20 @@
 #include <algorithm>
 
 void
+PageLayout::SetWeatherOverlay(Overlay overlay, int rasp_field) noexcept
+{
+  if (!IsMapMain())
+    main = Main::MAP;
+
+  this->overlay = overlay;
+
+  if (overlay == Overlay::RASP && rasp_field >= 0)
+    this->rasp_field = rasp_field;
+
+  Normalise();
+}
+
+void
 PageLayout::Normalise() noexcept
 {
   if (main == Main::EDL_MAP) {
@@ -23,12 +37,23 @@ PageLayout::Normalise() noexcept
     overlay = Overlay::NONE;
 
   if (IsMapMain()) {
-    if (!UsesWeatherOverlay() &&
-        bottom == Bottom::EDL_CONTROLS)
+    /* Legacy profiles used Bottom::XCTHERM; fold into weather controls. */
+    if (bottom == Bottom::XCTHERM) {
+      bottom = Bottom::EDL_CONTROLS;
+      if (overlay == Overlay::NONE)
+        overlay = Overlay::XCTHERM;
+    }
+
+    if (overlay == Overlay::EDL || overlay == Overlay::RASP ||
+        overlay == Overlay::XCTHERM) {
+      if (bottom == Bottom::NOTHING)
+        bottom = Bottom::EDL_CONTROLS;
+    } else if (!UsesWeatherOverlay() &&
+               bottom == Bottom::EDL_CONTROLS)
       bottom = Bottom::NOTHING;
   } else {
     overlay = Overlay::NONE;
-    if (bottom == Bottom::EDL_CONTROLS)
+    if (bottom == Bottom::EDL_CONTROLS || bottom == Bottom::XCTHERM)
       bottom = Bottom::NOTHING;
   }
 
@@ -65,6 +90,10 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
 
   case PageLayout::Overlay::EDL:
     builder.Append(", EDL");
+    break;
+
+  case PageLayout::Overlay::XCTHERM:
+    builder.Append(", XCTherm");
     break;
 
   case PageLayout::Overlay::MAX:
@@ -140,6 +169,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
       break;
 
     case Bottom::EDL_CONTROLS:
+      break;
+
+    case Bottom::XCTHERM:
+      /* Migrated to EDL_CONTROLS in Normalise(); title uses overlay. */
       break;
 
     case Bottom::MAX:

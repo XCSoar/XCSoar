@@ -12,6 +12,10 @@
 #ifdef HAVE_EDL
 #include "Weather/EDL/DownloadGlue.hpp"
 #endif
+#include "Weather/xctherm/XCThermDownloadGlue.hpp"
+#endif
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "Weather/Rasp/DownloadGlue.hpp"
 #endif
 
 NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
@@ -31,8 +35,16 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
 # ifdef HAVE_EDL
   ,edl(new EDL::DownloadGlue(curl))
 # endif
+  ,xctherm_download(new XCThermDownloadGlue(curl))
+#endif
+#ifdef HAVE_DOWNLOAD_MANAGER
+  ,rasp_download(new RaspDownloadGlue())
 #endif
 {
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (rasp_download != nullptr)
+    rasp_download->Initialise();
+#endif
 #ifdef HAVE_TRACKING
   tracking->SetSettings(tracking_settings);
 #else
@@ -69,6 +81,14 @@ NetComponents::BeginShutdown() noexcept
   if (edl != nullptr)
     edl->BeginShutdown();
 # endif
+
+  if (xctherm_download != nullptr)
+    xctherm_download->BeginShutdown();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (rasp_download != nullptr)
+    rasp_download->BeginShutdown();
+#endif
 
   if (notam != nullptr)
     notam->BeginShutdown();

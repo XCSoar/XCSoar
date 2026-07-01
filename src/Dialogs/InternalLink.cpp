@@ -18,7 +18,12 @@
 #include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/NetworkConfigPanel.hpp"
-#include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/RaspConfigPanel.hpp"
+#ifdef HAVE_HTTP
+#include "Dialogs/Settings/Panels/PCMetConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/XCThermConfigPanel.hpp"
+#include "Dialogs/Settings/Panels/ThermalMapConfigPanel.hpp"
+#endif
 #include "Dialogs/Settings/Panels/SafetyFactorsConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/TrackingConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/TerrainDisplayConfigPanel.hpp"
@@ -82,7 +87,14 @@ static constexpr ConfigPanelLink config_panel_links[] = {
   {"config/pages",      N_("Pages"),      CreatePagesConfigPanel},
   {"config/weglide",    N_("WeGlide"),    CreateWeGlideConfigPanel},
   {"config/network",    N_("Network"),    CreateNetworkConfigPanel},
-  {"config/weather",    N_("Weather"),    CreateWeatherConfigPanel},
+  {"config/weather/rasp", N_("RASP"), CreateRaspConfigPanel},
+#ifdef HAVE_HTTP
+  {"config/weather/xctherm", N_("XCTherm"), CreateXCThermConfigPanel},
+  {"config/weather/pcmet", N_("Flugwetter"), CreatePCMetConfigPanel},
+  {"config/weather/thermal-map", N_("Thermal Map"),
+   CreateThermalMapConfigPanel},
+  {"config/weather", N_("XCTherm"), CreateXCThermConfigPanel},
+#endif
   {"config/safety",     N_("Safety Factors"), CreateSafetyFactorsConfigPanel},
   {"config/tracking",   N_("Tracking"),   CreateTrackingConfigPanel},
   {"config/terrain",    N_("Terrain Display"), CreateTerrainDisplayConfigPanel},

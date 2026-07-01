@@ -76,6 +76,11 @@ struct PageLayout
     EDL_CONTROLS,
 
     /**
+     * Show XCTherm wave forecast controls below the map.
+     */
+    XCTHERM,
+
+    /**
      * A custom #Widget is being displayed.  This is not a
      * user-accessible option, it's only used for runtime state.
      */
@@ -94,6 +99,7 @@ struct PageLayout
     NONE,
     RASP,
     EDL,
+    XCTHERM,
 
     MAX
   } overlay;
@@ -133,6 +139,20 @@ struct PageLayout
   static constexpr PageLayout Default() noexcept  {
     return {true, InfoBoxConfig(true, 0)};
   }
+
+  /**
+   * Blank page for Config → Look → Pages → Add and programmatic page
+   * creation (same as #Default()).
+   */
+  static constexpr PageLayout NewPage() noexcept {
+    return Default();
+  }
+
+  /**
+   * Configure a map page for @p overlay (sets bottom weather controls
+   * via #Normalise()).
+   */
+  void SetWeatherOverlay(Overlay overlay, int rasp_field = -1) noexcept;
 
   /**
    * Returns the default page that will show the "Aux" InfoBoxes.
@@ -182,10 +202,18 @@ struct PageLayout
 
   [[gnu::const]]
   constexpr bool
+  UsesXcthermOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::XCTHERM;
+  }
+
+  [[gnu::const]]
+  constexpr bool
   UsesWeatherOverlay() const noexcept
   {
     return IsMapMain() &&
-      (overlay == Overlay::EDL || overlay == Overlay::RASP);
+      (overlay == Overlay::EDL || overlay == Overlay::RASP ||
+       overlay == Overlay::XCTHERM);
   }
 
   /**

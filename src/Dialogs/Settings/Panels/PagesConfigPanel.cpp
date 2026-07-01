@@ -104,7 +104,7 @@ public:
       const unsigned n = GetList().GetLength();
       if (n < PageSettings::MAX_PAGES) {
         auto &page = settings.pages[n];
-        page = PageLayout::Default();
+        page = PageLayout::NewPage();
         GetList().SetLength(n + 1);
         GetList().SetCursorIndex(n);
       }
@@ -278,14 +278,14 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
-#ifdef HAVE_EDL
+#if defined(HAVE_EDL) || defined(HAVE_HTTP)
     { PageLayout::Bottom::EDL_CONTROLS, N_("Weather controls") },
 #endif
     nullptr
   };
   AddEnum(_("Bottom area"),
           _("Specifies what should be displayed below the main area. "
-            "Weather controls require a RASP or EDL map overlay."),
+            "Weather controls require a RASP, EDL, or XCTherm map overlay."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
 
@@ -294,6 +294,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     { PageLayout::Overlay::RASP, N_("RASP") },
 #ifdef HAVE_EDL
     { PageLayout::Overlay::EDL, N_("EDL") },
+#endif
+#ifdef HAVE_HTTP
+    { PageLayout::Overlay::XCTHERM, N_("XCTherm") },
 #endif
     nullptr
   };
@@ -373,8 +376,13 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
       const auto rasp = DataGlobals::GetRasp();
       if (rasp != nullptr && rasp->GetItemCount() > 0)
         value.overlay = PageLayout::Overlay::RASP;
+#ifdef HAVE_HTTP
+      else
+        value.overlay = PageLayout::Overlay::XCTHERM;
+#else
       else
         value.bottom = PageLayout::Bottom::NOTHING;
+#endif
 #endif
     }
   } else if (&df == &GetDataField(OVERLAY)) {

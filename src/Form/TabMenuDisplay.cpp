@@ -14,6 +14,8 @@
 #include "util/StringFormat.hpp"
 #include "Asset.hpp"
 
+#include "Widget/PagerWidget.hpp"
+
 #include <cassert>
 
 TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
@@ -29,6 +31,8 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[],
   assert(groups != nullptr);
   assert(n_groups > 0);
   assert(n_groups <= MAX_MAIN_MENU_ITEMS);
+  static_assert(MAX_SUB_MENU_ITEMS >= PagerWidget::MAX_CHILDREN,
+                "TabMenuDisplay must track every PagerWidget page");
 
   main_menu_buttons.resize(n_groups);
   for (unsigned i = 0; i < n_groups; i++) {
@@ -50,6 +54,8 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[],
 
     mb.last_page_index = buttons.size() - 1;
   }
+
+  assert(buttons.size() <= MAX_SUB_MENU_ITEMS);
 }
 
 const char *

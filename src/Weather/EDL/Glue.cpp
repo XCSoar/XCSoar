@@ -4,6 +4,7 @@
 #include "Glue.hpp"
 
 #include "StateController.hpp"
+#include "TileStore.hpp"
 #include "NMEA/MoreData.hpp"
 
 #ifdef HAVE_EDL
@@ -76,8 +77,15 @@ Glue::RequestOverlayRefresh() noexcept
     return;
   }
 
+  ClearOverlay();
+
+  const auto forecast = GetForecastTime();
+  const unsigned isobar = GetIsobar();
+  LogFmt("edl: loading overlay {} hPa {}",
+         isobar / 100, FormatForecastUtcLog(forecast).c_str());
+
   SetLoadingStatus();
-  download_glue->StartOverlayDownload(GetForecastTime(), GetIsobar());
+  download_glue->StartOverlayDownload(forecast, isobar);
 }
 
 void
@@ -102,9 +110,11 @@ Glue::OnDownloadFinished(const DownloadNotification &notification) noexcept
       LogError(notification.error, "EDL overlay download failed");
       SetErrorStatus();
     } else if (notification.overlay_path) {
-      if (ShouldMaintainOverlay())
+      if (ShouldMaintainOverlay()) {
+        LogFmt("edl: overlay download complete, applying {}",
+               notification.overlay_path->GetBase().c_str());
         ApplyOverlay(*notification.overlay_path);
-      else
+      } else
         SetIdleStatus();
     } else {
       SetIdleStatus();

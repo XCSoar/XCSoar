@@ -3,7 +3,9 @@
 
 #pragma once
 
+#include "AvailableFile.hpp"
 #include "net/http/Features.hpp"
+#include "system/Path.hpp"
 
 #include <string>
 #include <string_view>
@@ -51,6 +53,61 @@ void
 EnqueueRepositoryDownload(bool force=false, bool main_repo=true, bool user_repo=true);
 
 #ifdef HAVE_DOWNLOAD_MANAGER
+
+/**
+ * Relative download path for a repository file (for
+ * Net::DownloadManager::Enqueue()).
+ */
+AllocatedPath
+GetFileDownloadRelativePath(const AvailableFile &file) noexcept;
+
+/**
+ * Return true when the local copy of @p file is older than the
+ * repository metadata (same rule as the download manager UI).
+ */
+[[gnu::pure]]
+bool
+IsRemoteFileOutOfDate(const AvailableFile &file) noexcept;
+
+/**
+ * Queue a repository file for download.
+ */
+void
+EnqueueRemoteFileDownload(const AvailableFile &file) noexcept;
+
+/**
+ * Base file name of the configured RASP file, or nullptr.
+ */
+[[gnu::pure]]
+const char *
+GetConfiguredRaspFileName() noexcept;
+
+[[gnu::pure]]
+const AvailableFile *
+FindConfiguredRaspRemoteFile(const FileRepository &repository) noexcept;
+
+[[gnu::pure]]
+bool
+IsConfiguredRaspOutOfDate(const FileRepository &repository) noexcept;
+
+/**
+ * Enqueue a download of the configured RASP file when it is listed in
+ * the repository and out of date locally.
+ *
+ * @return true if a download was queued
+ */
+bool
+EnqueueConfiguredRaspUpdate(const FileRepository &repository) noexcept;
+
+/**
+ * Enqueue a download of the configured RASP file when it is listed in
+ * the repository, even when the local copy is up to date.
+ *
+ * @return true if a download was queued
+ */
+bool
+EnqueueConfiguredRaspDownload(const FileRepository &repository) noexcept;
+
 /**
  * Download the main repository and all user-defined repositories
  * modally, showing a #ProgressDialog for each one.  Errors are
@@ -59,4 +116,5 @@ EnqueueRepositoryDownload(bool force=false, bool main_repo=true, bool user_repo=
  */
 void
 DownloadRepositoriesModal(bool main_repo=true, bool user_repo=true);
-#endif
+
+#endif /* HAVE_DOWNLOAD_MANAGER */
