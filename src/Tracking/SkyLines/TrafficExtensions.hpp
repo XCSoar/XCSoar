@@ -34,7 +34,6 @@ struct TrafficExtensions {
     uint32_t reserved2 = 0;
   };
 
-  [[gnu::const]]
   WireFields ToWire() const noexcept
   {
     WireFields w{};
@@ -60,7 +59,6 @@ struct TrafficExtensions {
     return w;
   }
 
-  [[gnu::const]]
   static TrafficExtensions FromOgn(unsigned track_deg, bool track_valid,
                                    unsigned aircraft_type,
                                    uint32_t flarm_id, bool flarm_valid,
@@ -71,6 +69,7 @@ struct TrafficExtensions {
     e.track_valid = track_valid;
     e.aircraft_type = aircraft_type;
     e.altitude_valid = altitude_valid;
+    e.flarm_id = FlarmId::Undefined();
 
     if (flarm_valid && flarm_id <= 0xFFFFFFu)
       e.flarm_id = FlarmId::FromValue(flarm_id);
@@ -78,7 +77,6 @@ struct TrafficExtensions {
     return e;
   }
 
-  [[gnu::const]]
   static TrafficExtensions FromWire(uint16_t reserved_be,
                                     uint32_t reserved2_be) noexcept
   {
