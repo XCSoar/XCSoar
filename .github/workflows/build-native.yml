@@ -235,6 +235,14 @@ jobs:
             target_ext: .ipa
             target_upload: true
             target_container: ''
+          - os: macos-26
+            target: IOS32
+            target_bin: xcsoar
+            target_bin_path: ''
+            target_final: XCSoar
+            target_ext: .ipa
+            target_upload: false
+            target_container: ''
 
     steps:
       - name: Install checkout dependencies
@@ -260,7 +268,7 @@ jobs:
           submodules: true
 
       - name: Verify Xcode version
-        if: ${{ matrix.target == 'IOS64' }}
+        if: ${{ matrix.target == 'IOS64' || matrix.target == 'IOS32' }}
         run: |
           xcodebuild -version
 
@@ -399,11 +407,45 @@ jobs:
             ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'MACOS' ]; then
               ./ide/provisioning/install-darwin-packages.sh MACOS
-            elif [ ${{ matrix.target }} = 'IOS64' ]; then
+            elif [ ${{ matrix.target }} = 'IOS64' ] || [ ${{ matrix.target }} = 'IOS32' ]; then
               ./ide/provisioning/install-darwin-packages.sh IOS
             fi
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+      - name: Prepare Theos SDK for iOS armv7
+        if: ${{ matrix.target == 'IOS32' }}
+        env:
+          IOS32_THEOS_SDK_TARBALL_BASE64: ${{ secrets.IOS32_THEOS_SDK_TARBALL_BASE64 }}
+          IOS32_THEOS_SDK_URL: ${{ secrets.IOS32_THEOS_SDK_URL }}
+          IOS32_THEOS_SDK_SHA256: ${{ secrets.IOS32_THEOS_SDK_SHA256 }}
+        run: |
+          set -e
+          THEOS="$HOME/theos"
+          THEOS_SDKS_PATH="$THEOS/sdks"
+          mkdir -p "$THEOS_SDKS_PATH"
+          echo "THEOS=$THEOS" >> "$GITHUB_ENV"
+
+          if [ -n "$IOS32_THEOS_SDK_TARBALL_BASE64" ]; then
+            echo "$IOS32_THEOS_SDK_TARBALL_BASE64" | base64 -d > "$RUNNER_TEMP/ios32-sdk.tar"
+          elif [ -n "$IOS32_THEOS_SDK_URL" ]; then
+            curl -fsSL "$IOS32_THEOS_SDK_URL" -o "$RUNNER_TEMP/ios32-sdk.tar"
+          else
+            echo "::warning::IOS32_THEOS_SDK_TARBALL_BASE64 or IOS32_THEOS_SDK_URL is required to build IOS32"
+            echo "IOS32_BUILD_AVAILABLE=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          if [ -n "$IOS32_THEOS_SDK_SHA256" ]; then
+            echo "$IOS32_THEOS_SDK_SHA256  $RUNNER_TEMP/ios32-sdk.tar" | shasum -a 256 -c -
+          fi
+
+          tar -xf "$RUNNER_TEMP/ios32-sdk.tar" -C "$THEOS_SDKS_PATH"
+          if ! find "$THEOS_SDKS_PATH" -maxdepth 1 -type d \( -name 'iPhoneOS10.3.sdk' -o -name 'iPhoneOS9.3.sdk' \) | grep -q .; then
+            echo "The iOS32 SDK archive must contain iPhoneOS10.3.sdk or iPhoneOS9.3.sdk at its top level"
+            exit 1
+          fi
+          echo "IOS32_BUILD_AVAILABLE=true" >> "$GITHUB_ENV"
 
       - name: Prepare signing key
         shell: bash
@@ -513,7 +555,11 @@ jobs:
       - name: Compile XCSoar - PR
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
-          if [ ${{ matrix.target }} = "IOS64" ]; then
+          if [ ${{ matrix.target }} = "IOS32" ] && [ "${IOS32_BUILD_AVAILABLE:-true}" != "true" ]; then
+            echo "Skipping IOS32 build because no legacy Theos SDK was configured"
+            exit 0
+          fi
+          if [ ${{ matrix.target }} = "IOS64" ] || [ ${{ matrix.target }} = "IOS32" ]; then
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
             export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
             export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
@@ -558,6 +604,8 @@ jobs:
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "MACOS" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" dmg pkg
+          elif [ ${{ matrix.target }} = "IOS32" ]; then
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" IOS_MIN_SUPPORTED_VERSION=6.0 ipa
           elif [ ${{ matrix.target }} = "IOS64" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" ipa
           elif [ ${{ matrix.target }} = "UNIX" ]; then
@@ -577,7 +625,11 @@ jobs:
       - name: Compile XCSoar - Release
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
-          if [ ${{ matrix.target }} = "IOS64" ]; then
+          if [ ${{ matrix.target }} = "IOS32" ] && [ "${IOS32_BUILD_AVAILABLE:-true}" != "true" ]; then
+            echo "Skipping IOS32 build because no legacy Theos SDK was configured"
+            exit 0
+          fi
+          if [ ${{ matrix.target }} = "IOS64" ] || [ ${{ matrix.target }} = "IOS32" ]; then
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
             export IOS_APP_BUILD_NUMBER="${{ vars.IOS_APP_BUILD_NUMBER || github.run_number }}"
             export IOS_PATCH_VERSION="${{ vars.IOS_PATCH_VERSION || 0 }}"
@@ -613,6 +665,8 @@ jobs:
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "MACOS" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 dmg pkg
+          elif [ ${{ matrix.target }} = "IOS32" ]; then
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=n IOS_MIN_SUPPORTED_VERSION=6.0 ipa
           elif [ ${{ matrix.target }} = "IOS64" ]; then
             # Set iOS app configuration for production release builds
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
@@ -704,6 +758,7 @@ jobs:
           security delete-keychain macos-build.keychain || true
 
       - name: Upload artifact
+        if: ${{ matrix.target != 'IOS32' || env.IOS32_BUILD_AVAILABLE == 'true' }}
         uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
@@ -804,7 +859,7 @@ jobs:
           fi
 
       - name: Deploy to Download server - testing
-        if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' && matrix.target != 'IOS32' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
