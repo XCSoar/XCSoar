@@ -56,7 +56,7 @@ public:
                          unsigned aircraft_type) override {
     auto time = BrokenTime::FromSinceMidnight(milliseconds(time_of_day_ms));
 
-    printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d source=%u track=%u valid=%u flarm=%u type=%u\n",
+    printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d alt_valid=%u source=%u track=%u valid=%u flarm=%u type=%u\n",
            pilot_id, time.hour, time.minute, time.second,
            (double)location.longitude.Degrees(),
            (double)location.latitude.Degrees(),
