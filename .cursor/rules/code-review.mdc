@@ -1,0 +1,115 @@
+---
+description: Pre-merge review — safety patterns, WERROR build, tests, reuse and simplification
+alwaysApply: true
+---
+
+# Code review checklist
+
+Use this when reviewing a PR, finishing a feature branch, or before asking
+for merge. See also `.cursor/rules/cpp-safety-patterns.mdc` for examples.
+
+## 1. Build and test (required)
+
+Before calling work merge-ready:
+
+```bash
+make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
+make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y check
+```
+
+- **`WERROR=y`** is mandatory — fix every warning in changed code.
+- Run **`check`** when tests cover the touched area (parsers, math, FLARM,
+  tracking, etc.).
+- For cross-platform changes, build at least one additional target if
+  feasible (`TARGET=WIN64` for Windows-only issues, `OPENGL=n` for memory
+  canvas).
+
+Report build/test results in the review; do not assume green CI without
+running locally when you changed code.
+
+## 2. nullptr and validity
+
+Scan changed code for:
+
+- Raw pointers (`Foo *p`) used without a **null check** before dereference.
+- **`Find*` / `Get*` / lookup APIs** — assume failure; handle `nullptr`.
+- Global component pointers (`backend_components`, `data_components`, …) —
+  guard with `!= nullptr` before use.
+- **`const char *` / `string_view`** — reject `nullptr` and empty strings
+  at API boundaries when the value is required.
+- Objects with validity flags (`IsValid()`, `Validity`, `location_available`)
+  — check before use; do not propagate invalid state into files or UI.
+
+Prefer early return over deep nesting. Do not add redundant checks for
+states that are impossible by construction.
+
+## 3. Off-by-one and unsigned arithmetic
+
+Review loops, caps, and buffer math:
+
+- **`++n` vs `n++` after `break`** — cap checks must happen **before**
+  `Add()` / append, not after (see cloud traffic response caps).
+- **Unsigned subtraction** — guard `a - b` when `b` may exceed `a`; return
+  early instead of underflow (`if (a <= b) return;`).
+- **Array/list indices** — `< size` vs `<= size`; `quick_remove(i)` vs
+  `++i` in removal loops.
+- **StaticArray / fixed buffers** — verify capacity matches enum `COUNT`
+  with `static_assert`.
+
+## 4. `noexcept` contract
+
+For every **`noexcept`** added or touched in the diff:
+
+- List callees that may **throw** (`std::string` growth, `make_shared`,
+  file I/O, `VisitDataFiles`, container `emplace`).
+- Either **remove `noexcept`**, wrap in **try/catch** with logging/recovery,
+  or prove all paths are truly non-throwing.
+- A throwing escape from `noexcept` → **`std::terminate`** (unrecoverable).
+
+Do not mark allocation-heavy hot paths `noexcept` without handling
+`std::bad_alloc`.
+
+## 5. `[[gnu::…]]` attributes
+
+Review each GCC attribute in the diff for correctness:
+
+| Attribute | Must be true |
+|-----------|----------------|
+| `[[gnu::pure]]` | No side effects; result depends only on arguments and memory they point to. |
+| `[[gnu::const]]` | Stricter than pure — no reads of global/mutable state at all. |
+| `[[nodiscard]]` | Caller must use the return value; document why ignoring is wrong. |
+| `[[noreturn]]` | Function never returns (always throws or exits). |
+
+Remove or downgrade attributes that are optimistic. Wrong `pure`/`const`
+enables invalid compiler optimizations.
+
+## 6. Reuse, simplification, refactoring
+
+After correctness checks, look for:
+
+- **Duplicated logic** — same algorithm in two places (e.g. altitude band
+  filters, env parsing, traffic merge paths). Extract a shared helper in
+  the appropriate layer; do not copy-paste.
+- **Over-abstraction** — one-off 3-line helpers or premature templates;
+  prefer inline clarity unless used twice or more.
+- **Dead code** — unused parameters, unreachable branches, commented-out
+  experiments; remove unless clearly marked temporary with a ticket.
+- **Scope creep** — refactors mixed with features in one commit; split per
+  project patch rules.
+- **Existing utilities** — `Layout::`, `Path`, `StaticString`, `util/`,
+  `GetEnvBool`, layer-appropriate blackboards before inventing new ones.
+
+Suggest refactors as **optional follow-ups** when they would enlarge an
+otherwise focused PR; implement directly when the duplication is in the
+same files you already touch and the fix stays small.
+
+## 7. Review output
+
+Summarize findings as:
+
+1. **Blockers** — build failure, test failure, crash/privacy/correctness bugs.
+2. **Should fix** — nullptr, off-by-one, wrong `noexcept`, incorrect attributes.
+3. **Nice to have** — reuse/simplification, minor style.
+4. **Verified** — WERROR build and test commands run (with result).
+
+Do not request `po/` updates during feature review (see `po-translations.mdc`).

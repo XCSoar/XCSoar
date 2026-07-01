@@ -41,4 +41,4 @@ The enum is in `src/Engine/Waypoint/Waypoint.hpp`. Every new value needs:
 
 ## Translations
 
-Any new English label introduced in the steps above is exposed via `_()` / `N_()`. Run `make update-po` to refresh `po/*.po` and `po/xcsoar.pot` before committing translation changes (commit them at the **end** of the branch, separately, per `xcsoar-project-rules.mdc`).
+Any new English label introduced in the steps above is exposed via `_()` / `N_()`. Do **not** run `make update-po` during feature work — defer `po/` updates to release prep (see `.cursor/rules/po-translations.mdc`).
