@@ -15,6 +15,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "Storage/StorageDevice.hpp"
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
@@ -372,7 +373,7 @@ ShowExportFlightsDialog()
    * logs folder only (collect, sort externally, then populate)
    */
   auto df = std::make_unique<MultiFileDataField>();
-  auto logs_path = MakeLocalPath("logs");
+  auto logs_path = LocalPath(GetFileTypeDefaultDir(FileType::IGC));
   if (logs_path != nullptr && Directory::Exists(logs_path)) {
     ScanFilesIntoDataField(logs_path, *df,
                            {FileType::IGC, FileType::NMEA}, true);

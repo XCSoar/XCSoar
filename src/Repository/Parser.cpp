@@ -3,6 +3,7 @@
 
 #include "Parser.hpp"
 #include "FileRepository.hpp"
+#include "FileType.hpp"
 #include "io/LineReader.hpp"
 #include "util/StringStrip.hxx"
 #include "util/HexString.hpp"
@@ -81,24 +82,7 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
     } else if (StringIsEqual(name, "area")) {
       file.area = value;
     } else if (StringIsEqual(name, "type")) {
-      if (StringIsEqual(value, "airspace"))
-        file.type = FileType::AIRSPACE;
-      else if (StringIsEqual(value, "waypoint-details"))
-        file.type = FileType::WAYPOINTDETAILS;
-      else if (StringIsEqual(value, "waypoint"))
-        file.type = FileType::WAYPOINT;
-      else if (StringIsEqual(value, "map"))
-        file.type = FileType::MAP;
-      else if (StringIsEqual(value, "flarmnet"))
-        file.type = FileType::FLARMNET;
-      else if (StringIsEqual(value, "rasp"))
-        file.type = FileType::RASP;
-      else if (StringIsEqual(value, "xci"))
-        file.type = FileType::XCI;
-      else if (StringIsEqual(value, "task"))
-        file.type = FileType::TASK;
-      else if (StringIsEqual(value, "checklist"))
-        file.type = FileType::CHECKLIST;
+      file.type = FileTypeFromRepositoryString(value);
     } else if (StringIsEqual(name, "update")) {
       unsigned year, month, day;
       if (sscanf(value, "%04u-%02u-%02u", &year, &month, &day) == 3)

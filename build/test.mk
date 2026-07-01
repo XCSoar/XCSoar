@@ -736,7 +736,10 @@ TEST_REPOSITORY_DEPENDS = UTIL
 $(eval $(call link-program,TestRepository,TEST_REPOSITORY))
 
 TEST_FILE_TYPE_SOURCES = \
+	$(SRC)/DataFilePath.cpp \
+	$(SRC)/LocalPath.cpp \
 	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/system/FileUtil.cpp \
 	$(SRC)/system/Path.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFileType.cpp
