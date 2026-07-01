@@ -3,6 +3,7 @@
 
 #include "Glue.hpp"
 #include "Settings.hpp"
+#include "Tracking/CloudSettings.hpp"
 #include "Queue.hpp"
 #include "Assemble.hpp"
 #include "NMEA/Info.hpp"
@@ -11,6 +12,9 @@
 #include "io/async/GlobalAsioThread.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/Compiler.h"
+#include "util/EnvParser.hpp"
+#include "util/StringCompare.hxx"
+#include "LogFile.hpp"
 
 #include <cassert>
 
@@ -20,8 +24,8 @@ static constexpr auto CLOUD_INTERVAL = minutes(1);
 
 SkyLinesTracking::Glue::Glue(EventLoop &event_loop,
                              Handler *_handler)
-  :client(event_loop, _handler),
-   cloud_client(event_loop, _handler)
+  :client(event_loop, _handler, TrafficSource::SKYLINES),
+   cloud_client(event_loop, _handler, TrafficSource::CLOUD)
 {
 }
 
@@ -40,7 +44,7 @@ SkyLinesTracking::Glue::BeginShutdown() noexcept
 }
 
 inline bool
-SkyLinesTracking::Glue::IsConnected() const
+SkyLinesTracking::Glue::IsNetConnected(bool roaming_allowed) const
 {
   switch (GetNetState()) {
   case NetState::UNKNOWN:
@@ -55,7 +59,7 @@ SkyLinesTracking::Glue::IsConnected() const
     return true;
 
   case NetState::ROAMING:
-    return roaming;
+    return roaming_allowed;
   }
 
   assert(false);
@@ -72,7 +76,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
     return;
   }
 
-  if (!IsConnected()) {
+  if (!IsNetConnected(skylines_roaming)) {
     if (clock.CheckAdvance(basic.time, interval)) {
       /* queue the packet, send it later */
       if (queue == nullptr)
@@ -114,14 +118,23 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
     return;
   }
 
-  if (!basic.location_available || !calculated.flight.flying)
+  if (!basic.location_available)
     return;
 
-  if (!IsConnected())
+  if (!calculated.flight.flying)
     return;
 
-  if (cloud_clock.CheckAdvance(basic.time, CLOUD_INTERVAL))
+  if (!IsNetConnected(cloud_roaming)) {
+    if (GetEnvBool("XCS_CLOUD_DEBUG"))
+      LogFmt("Cloud: FIX skipped (network/roaming gate)");
+    return;
+  }
+
+  if (cloud_clock.CheckAdvance(basic.time, CLOUD_INTERVAL)) {
     cloud_client.SendFix(basic);
+    if (GetEnvBool("XCS_CLOUD_DEBUG"))
+      LogFmt("Cloud: sent FIX flying={}", calculated.flight.flying);
+  }
 
   if (last_climb_time > basic.time)
     /* recover from time warp */
@@ -157,11 +170,15 @@ void
 SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
                              const DerivedInfo &calculated)
 {
-  if (basic.location_available && !basic.gps.real)
+  const bool simulator =
+    basic.location_available && !basic.gps.real;
+  const bool cloud_debug = GetEnvBool("XCS_CLOUD_DEBUG");
+
+  if (simulator && !cloud_debug)
     /* disable in simulator/replay */
     return;
 
-  if (client.IsConnected()) {
+  if (client.IsConnected() && !simulator) {
     SendFixes(basic);
 
     if (traffic_enabled &&
@@ -172,6 +189,15 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
   if (cloud_client.IsConnected()) {
     SendCloudFix(basic, calculated);
 
+    if (cloud_show_traffic && basic.location_available &&
+        (calculated.flight.flying || cloud_debug) &&
+        cloud_traffic_clock.CheckAdvance(basic.clock, minutes(1))) {
+      /* near=true: cloud server returns nearby cloud + OGN traffic */
+      cloud_client.SendTrafficRequest(false, false, true);
+      if (cloud_debug)
+        LogFmt("Cloud: sent TRAFFIC_REQUEST (near)");
+    }
+
     if (thermal_enabled &&
         thermal_clock.CheckAdvance(basic.clock, minutes(1)))
       cloud_client.SendThermalRequest();
@@ -179,35 +205,54 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
 }
 
 void
-SkyLinesTracking::Glue::SetSettings(const Settings &settings)
+SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
+                                    const CloudSettings &cloud_settings)
 {
-  thermal_enabled = settings.cloud.show_thermals;
+  thermal_enabled = cloud_settings.show_thermals;
+  cloud_show_traffic = cloud_settings.show_traffic;
+  cloud_roaming = cloud_settings.roaming;
 
-  if (settings.cloud.enabled == TriState::TRUE && settings.cloud.key != 0) {
-    cloud_client.SetKey(settings.cloud.key);
+  if (cloud_settings.enabled == TriState::TRUE && cloud_settings.key != 0) {
+    cloud_client.SetKey(cloud_settings.key);
+
+    const char *host = cloud_settings.HostCStr();
+    const unsigned port = cloud_settings.EffectivePort();
+    const bool endpoint_changed =
+      !StringIsEqual(cloud_host, host) || cloud_port != port;
+    if (endpoint_changed && cloud_client.IsDefined())
+      cloud_client.Close();
+
     if (!cloud_client.IsDefined()) {
-      cloud_client.Open(*global_cares_channel, "cloud.xcsoar.org");
+      cloud_host = host;
+      cloud_port = port;
+      cloud_client.Open(*global_cares_channel, host, port);
+      if (GetEnvBool("XCS_CLOUD_DEBUG"))
+        LogFmt("Cloud: opening {}:{} (simulator override enabled)",
+               host, port);
     }
-  } else
+  } else {
     cloud_client.Close();
+    cloud_host.clear();
+    cloud_port = 0;
+  }
 
-  if (!settings.enabled || settings.key == 0) {
+  if (!skylines_settings.enabled || skylines_settings.key == 0) {
     delete queue;
     queue = nullptr;
     client.Close();
     return;
   }
 
-  client.SetKey(settings.key);
+  client.SetKey(skylines_settings.key);
 
-  interval = seconds(settings.interval);
+  interval = seconds(skylines_settings.interval);
 
   if (!client.IsDefined()) {
     client.Open(*global_cares_channel, "tracking.skylines.aero");
   }
 
-  traffic_enabled = settings.traffic_enabled;
-  near_traffic_enabled = settings.near_traffic_enabled;
+  traffic_enabled = skylines_settings.traffic_enabled;
+  near_traffic_enabled = skylines_settings.near_traffic_enabled;
 
-  roaming = settings.roaming;
+  skylines_roaming = skylines_settings.roaming;
 }

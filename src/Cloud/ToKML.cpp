@@ -38,10 +38,10 @@ static void
 ToKML(BufferedOutputStream &os, const CloudClient &client)
 {
   os.Fmt("<Placemark>\n"
-         "  <name>%u</name>\n"
+         "  <name>{}</name>\n"
          "  <ExtendedData>\n"
          "    <SchemaData schemaUrl=\"#traffic\">\n"
-         "      <SimpleData name=\"id\">%u</SimpleData>\n"
+         "      <SimpleData name=\"id\">{}</SimpleData>\n"
          "    </SchemaData>\n"
          "  </ExtendedData>\n",
          client.id, client.id);

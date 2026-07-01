@@ -97,4 +97,6 @@ Look::ReinitialiseLayout(unsigned infobox_width, unsigned scale_title_font)
 
   info_box.ReinitialiseLayout(infobox_width, scale_title_font);
   vario.ReinitialiseLayout(infobox_width);
+  flarm_gauge.ReinitialiseLayout();
+  flarm_dialog.ReinitialiseLayout();
 }

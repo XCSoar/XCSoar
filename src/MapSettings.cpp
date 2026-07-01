@@ -48,7 +48,7 @@ MapSettings::SetDefaults() noexcept
   final_glide_bar_display_mode = FinalGlideBarDisplayMode::ON;
   vario_bar_enabled = false;
   show_fai_triangle_areas = false;
-  skylines_traffic_map_mode = DisplaySkyLinesTrafficMapMode::SYMBOL;
+  online_traffic_map_mode = DisplayOnlineTrafficMapMode::SYMBOL;
   show_95_percent_rule_helpers = false;
 
   trail.SetDefaults();

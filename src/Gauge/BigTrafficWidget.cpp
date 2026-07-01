@@ -29,6 +29,18 @@
 
 #include <algorithm>
 
+static void
+DrawTrafficInfoText(Canvas &canvas, PixelPoint p,
+                    const char *text, Color text_color) noexcept
+{
+  if (text == nullptr || *text == '\0')
+    return;
+
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(text_color);
+  canvas.DrawText(p, text);
+}
+
 /**
  * A Window which renders FLARM traffic, with user interaction.
  */
@@ -44,8 +56,8 @@ protected:
 
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
-    :FlarmTrafficWindow(look, Layout::Scale(10),
-                        Layout::GetMinimumControlHeight() + Layout::Scale(10)) {}
+    :FlarmTrafficWindow(look, Layout::VptScale(10),
+                        Layout::GetMinimumControlHeight() + Layout::VptScale(10)) {}
 
 protected:
   void CalcAutoZoom();
@@ -100,11 +112,15 @@ public:
 
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
-  void PaintClimbRate(Canvas &canvas, PixelRect rc, double climb_rate) const;
-  void PaintDistance(Canvas &canvas, PixelRect rc, double distance) const;
+  void PaintClimbRate(Canvas &canvas, PixelRect rc, double climb_rate,
+                      Color text_color) const;
+  void PaintDistance(Canvas &canvas, PixelRect rc, double distance,
+                     Color text_color) const;
   void PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
-                             double relative_altitude) const;
-  void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic) const;
+                             double relative_altitude,
+                             Color text_color) const;
+  void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic,
+               Color text_color) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
   void StopDragging() {
@@ -312,12 +328,15 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 
 void
 FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
-                                    double climb_rate) const
+                                    double climb_rate,
+                                    Color text_color) const
 {
   // Paint label
   canvas.Select(look.info_labels_font);
   const unsigned label_width = canvas.CalcTextSize(_("Vario")).width;
-  canvas.DrawText(rc.GetTopRight().At(-(int)label_width, 0), _("Vario"));
+  DrawTrafficInfoText(canvas,
+                      rc.GetTopRight().At(-(int)label_width, 0),
+                      _("Vario"), text_color);
 
   // Format climb rate
   Unit unit = Units::GetUserVerticalSpeedUnit();
@@ -347,7 +366,8 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   const int value_y = y - value_height;
 
   // Paint value
-  canvas.DrawText({value_x, value_y}, buffer.c_str());
+  DrawTrafficInfoText(canvas, {value_x, value_y},
+                      buffer.c_str(), text_color);
 
   // Paint unit
   canvas.Select(look.info_units_font);
@@ -357,7 +377,8 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
 
 void
 FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
-                                   double distance) const
+                                   double distance,
+                                   Color text_color) const
 {
   // Format distance
   char buffer[20];
@@ -382,7 +403,8 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
   const auto p0 = rc.GetBottomLeft();
 
   // Paint value
-  canvas.DrawText(p0.At(0, -(int)value_height), buffer);
+  DrawTrafficInfoText(canvas, p0.At(0, -(int)value_height),
+                      buffer, text_color);
 
   // Paint unit
   canvas.Select(look.info_units_font);
@@ -394,13 +416,16 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
 
   // Paint label
   canvas.Select(look.info_labels_font);
-  canvas.DrawText(p0.At(0, -int(max_height + look.info_labels_font.GetHeight())),
-                  _("Distance"));
+  DrawTrafficInfoText(canvas,
+                      p0.At(0, -int(max_height +
+                                    look.info_labels_font.GetHeight())),
+                      _("Distance"), text_color);
 }
 
 void
 FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
-                                           double relative_altitude) const
+                                           double relative_altitude,
+                                           Color text_color) const
 {
   // Format relative altitude
   char buffer[20];
@@ -426,9 +451,10 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   const auto p0 = rc.GetBottomRight();
 
   // Paint value
-  canvas.DrawText(p0.At(-int(unit_width + space_width + value_width),
-                        -(int)value_height),
-                  buffer);
+  DrawTrafficInfoText(canvas,
+                      p0.At(-int(unit_width + space_width + value_width),
+                              -(int)value_height),
+                      buffer, text_color);
 
   // Paint unit
   canvas.Select(look.info_units_font);
@@ -440,13 +466,17 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   // Paint label
   canvas.Select(look.info_labels_font);
   const unsigned label_width = canvas.CalcTextSize(_("Rel. Alt.")).width;
-  canvas.DrawText(p0.At(-(int)label_width,  -int(max_height + look.info_labels_font.GetHeight())),
-                  _("Rel. Alt."));
+  DrawTrafficInfoText(canvas,
+                      p0.At(-(int)label_width,
+                            -int(max_height +
+                                 look.info_labels_font.GetHeight())),
+                      _("Rel. Alt."), text_color);
 }
 
 void
 FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
-                             const FlarmTraffic &traffic) const
+                             const FlarmTraffic &traffic,
+                             Color text_color) const
 {
   char buffer[20];
 
@@ -487,14 +517,18 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
       }
 
       canvas.SelectNullPen();
-      canvas.DrawCircle(rc.GetTopLeft().At(Layout::FastScale(7u), (font_size / 2)),
-                        Layout::FastScale(7u));
+      const unsigned radar_radius = radar_renderer.GetRadius();
+      const unsigned team_dot_radius =
+        ScaleRadarPermille(radar_radius, TEAM_DOT_PERMILLE);
+      canvas.DrawCircle(rc.GetTopLeft().At(team_dot_radius, font_size / 2),
+                        team_dot_radius);
 
-      rc.left += Layout::FastScale(16);
+      rc.left += team_dot_radius * 2 +
+        ScaleRadarPermille(radar_radius, TEAM_DOT_GAP_PERMILLE);
     }
   }
 
-  canvas.DrawText(rc.GetTopLeft(), buffer);
+  DrawTrafficInfoText(canvas, rc.GetTopLeft(), buffer, text_color);
 }
 
 /**
@@ -519,38 +553,42 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   rc.right = canvas.GetWidth() - padding;
   rc.bottom = canvas.GetHeight() - padding;
 
-  // Set the text color and background
+  // Set the text color for traffic info readouts
+  Color text_color = look.default_color;
   switch (traffic.alarm_level) {
   case FlarmTraffic::AlarmType::LOW:
   case FlarmTraffic::AlarmType::INFO_ALERT:
-    canvas.SetTextColor(look.warning_color);
+    text_color = look.warning_color;
     break;
   case FlarmTraffic::AlarmType::IMPORTANT:
   case FlarmTraffic::AlarmType::URGENT:
-    canvas.SetTextColor(look.alarm_color);
+    text_color = look.alarm_color;
     break;
   case FlarmTraffic::AlarmType::NONE:
-    canvas.SetTextColor(look.default_color);
+  default:
     break;
   }
 
   canvas.SetBackgroundTransparent();
 
+  const bool selected = !WarningMode() && selection >= 0;
+
   // Climb Rate
   if (!WarningMode() && traffic.climb_rate_avg30s_available)
-    PaintClimbRate(canvas, rc, traffic.climb_rate_avg30s);
+    PaintClimbRate(canvas, rc, traffic.climb_rate_avg30s, text_color);
 
   // Distance
-  PaintDistance(canvas, rc, traffic.distance);
+  PaintDistance(canvas, rc, traffic.distance, text_color);
 
   // Relative Height
-  PaintRelativeAltitude(canvas, rc, traffic.relative_altitude);
+  PaintRelativeAltitude(canvas, rc, traffic.relative_altitude, text_color);
 
   // ID / Name
-  if (!traffic.HasAlarm())
-    canvas.SetTextColor(look.selection_color);
+  Color id_color = text_color;
+  if (!traffic.HasAlarm() && !selected)
+    id_color = look.selection_color;
 
-  PaintID(canvas, rc, traffic);
+  PaintID(canvas, rc, traffic, id_color);
 }
 
 void

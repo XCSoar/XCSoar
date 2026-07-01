@@ -32,6 +32,12 @@ struct FlarmTraffic {
     ADSR = 3,
     TISB = 4,
     MODES = 6,
+    /** OGN / cloud-server traffic injected by XCSoar */
+    OGN = 7,
+    /** SkyLines tracking traffic injected by XCSoar */
+    SKYLINES = 8,
+    /** Other XCSoar cloud-server participants */
+    CLOUD = 9,
   };
 
   /**
@@ -214,7 +220,16 @@ struct FlarmTraffic {
   [[gnu::const]]
   static const char *GetSourceString(SourceType source) noexcept;
 
+  [[gnu::const]]
+  static bool IsInjectedSource(SourceType source) noexcept;
+
   void Update(const FlarmTraffic &other) noexcept;
+
+  /**
+   * Merge an online (SkyLines/cloud) traffic update into this record.
+   * Preserves track when @p built has no new track data.
+   */
+  void UpdateOnline(const FlarmTraffic &built) noexcept;
 };
 
 static_assert(std::is_trivial<FlarmTraffic>::value, "type is not trivial");

@@ -5,6 +5,7 @@
 #include "MetaTable.hxx"
 #include "Util.hxx"
 #include "util/StringAPI.hxx"
+#include "util/TriState.hpp"
 #include "Interface.hpp"
 
 extern "C" {
@@ -33,6 +34,14 @@ l_tracking_index(lua_State *L)
     /* Show nearby traffic, downloads the position
        of your nearby traffic live from the SkyLines server. */
     Lua::Push(L, settings.skylines.near_traffic_enabled);
+  } else if (StringIsEqual(name, "cloud_enabled")) {
+    Lua::Push(L, settings.cloud.enabled == TriState::TRUE);
+  } else if (StringIsEqual(name, "cloud_show_traffic")) {
+    Lua::Push(L, settings.cloud.show_traffic);
+  } else if (StringIsEqual(name, "cloud_show_thermals")) {
+    Lua::Push(L, settings.cloud.show_thermals);
+  } else if (StringIsEqual(name, "cloud_roaming")) {
+    Lua::Push(L, settings.cloud.roaming);
   } else if (StringIsEqual(name, "livetrack24_enabled")) {
     Lua::Push(L, settings.livetrack24.enabled);
   } else if (StringIsEqual(name, "livetrack24_interval")) {

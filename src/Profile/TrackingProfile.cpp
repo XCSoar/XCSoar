@@ -10,14 +10,26 @@
 #ifdef HAVE_TRACKING
 
 namespace Profile {
-static void Load(const ProfileMap &map,
-                 SkyLinesTracking::CloudSettings &settings) {
+static void Load(const ProfileMap &map, CloudSettings &settings) {
   bool bvalue;
   settings.enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
     ? (bvalue ? TriState::TRUE : TriState::FALSE)
     : TriState::UNKNOWN;
 
+  map.Get(ProfileKeys::CloudShowTraffic, settings.show_traffic);
   map.Get(ProfileKeys::CloudShowThermals, settings.show_thermals);
+  map.Get(ProfileKeys::CloudRoaming, settings.roaming);
+
+  if (!map.Get(ProfileKeys::CloudHost, settings.host) ||
+      settings.host.empty())
+    settings.host = CloudSettings::DEFAULT_HOST;
+
+  unsigned port = 0;
+  if (!map.Get(ProfileKeys::CloudPort, port) ||
+      port == 0 || port > 65535u)
+    settings.port = CloudSettings::DEFAULT_PORT;
+  else
+    settings.port = port;
 
   const char *key = map.Get(ProfileKeys::CloudKey);
   if (key != nullptr)
@@ -35,8 +47,6 @@ static void Load(const ProfileMap &map,
   const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
   if (key != nullptr)
     ParseIntegerTo(key, settings.key, 16);
-
-  Load(map, settings.cloud);
 }
 
 static void Load(const ProfileMap &map,
@@ -63,6 +73,7 @@ void
 Profile::Load(const ProfileMap &map, TrackingSettings &settings)
 {
   Load(map, settings.skylines);
+  Load(map, settings.cloud);
   Load(map, settings.livetrack24);
 }
 

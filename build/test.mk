@@ -105,6 +105,7 @@ TEST_NAMES = \
 	TestZeroFinder \
 	TestAirspaceWarningManager \
 	TestAirspaceParser \
+	TestOGNAprsParser \
 	TestMETARParser \
 	TestIGCParser \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
@@ -264,6 +265,14 @@ TEST_AIRSPACE_WARNING_MANAGER_SOURCES = \
 	$(TEST_SRC_DIR)/TestAirspaceWarningManager.cpp
 TEST_AIRSPACE_WARNING_MANAGER_DEPENDS = $(TEST1_DEPENDS) UNITS
 $(eval $(call link-program,TestAirspaceWarningManager,TEST_AIRSPACE_WARNING_MANAGER))
+
+TEST_OGN_APRS_PARSER_SOURCES = \
+	$(SRC)/Cloud/OGNAprs.cpp \
+	$(SRC)/Cloud/OGNTraffic.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
+TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS
+$(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -933,6 +942,7 @@ TEST_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(SRC)/Tracking/SkyLines/FlarmTrafficBuilder.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
 TEST_DRIVER_DEPENDS = DRIVER OPERATION LIBNMEA GEO MATH IO OS THREAD UTIL TIME GLIDE COMPUTER TASK LOGGER
 $(eval $(call link-program,TestDriver,TEST_DRIVER))

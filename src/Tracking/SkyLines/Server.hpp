@@ -67,8 +67,10 @@ protected:
 
   virtual void OnFix([[maybe_unused]] const Client &client,
                      [[maybe_unused]] std::chrono::milliseconds time_of_day,
-                     [[maybe_unused]] const ::GeoPoint &location, 
-                     [[maybe_unused]] int altitude) {}
+                     [[maybe_unused]] const ::GeoPoint &location,
+                     [[maybe_unused]] int altitude,
+                     [[maybe_unused]] unsigned track_deg,
+                     [[maybe_unused]] bool track_valid) {}
 
   virtual void OnTrafficRequest([[maybe_unused]] const Client &client, [[maybe_unused]] bool near) {}
 

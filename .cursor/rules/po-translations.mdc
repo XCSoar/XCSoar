@@ -1,0 +1,40 @@
+---
+description: Defer po/ translation updates until release to avoid branch churn
+alwaysApply: true
+---
+
+# Translation files — defer until release
+
+Do **not** run `make update-po`, edit `po/*.po`, or commit `po/xcsoar.pot`
+during normal feature or bugfix work. Updating 33 language files on every
+string change creates huge diffs, noisy rebases, and merge conflicts.
+
+## During development
+
+- Add or change user-visible strings in source with `_()` / `N_()` as usual.
+- **Stop there** — leave `po/` untouched unless the user explicitly asks for
+  translation work.
+- Do not run `make update-po` proactively after adding translatable strings.
+- Do not include `po/` files in feature PRs or review-fix commits.
+
+## When to update `po/`
+
+Only when preparing a **release** (or when the user explicitly requests a
+translation pass):
+
+1. Run `make update-po` once on the release branch.
+2. Fix translations, fuzzy entries, and empty c-format `msgstr` values.
+3. Commit as a single comprehensive `po:` commit (see
+   `xcsoar-project-rules.mdc`).
+
+## If `po/` was changed by mistake
+
+Revert before committing:
+
+```bash
+git restore po/
+```
+
+English `_()` / `N_()` strings in source are enough until the release
+translation sweep; untranslated new msgids simply fall back to English at
+runtime.

@@ -52,7 +52,10 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   map.GetEnum(ProfileKeys::WindArrowStyle, settings.wind_arrow_style);
 
-  map.GetEnum(ProfileKeys::SkyLinesTrafficMapMode, settings.skylines_traffic_map_mode);
+  if (!map.GetEnum(ProfileKeys::OnlineTrafficMapMode,
+                   settings.online_traffic_map_mode))
+    map.GetEnum(ProfileKeys::SkyLinesTrafficMapMode,
+                settings.online_traffic_map_mode);
 
   settings.waypoint.LoadFromProfile();
 

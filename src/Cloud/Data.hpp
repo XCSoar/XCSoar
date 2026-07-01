@@ -5,6 +5,7 @@
 
 #include "Client.hpp"
 #include "Thermal.hpp"
+#include "OGNTraffic.hpp"
 
 class Serialiser;
 class Deserialiser;
@@ -12,6 +13,9 @@ class Deserialiser;
 struct CloudData {
   CloudClientContainer clients;
   CloudThermalContainer thermals;
+
+  /** Live OGN positions (not persisted). */
+  OGNTrafficContainer ogn_traffic;
 
   void DumpClients();
 

@@ -1,10 +1,13 @@
 [Unit]
 Description=XCSoar Cloud Server
-After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
+EnvironmentFile=-/var/lib/xcsoar-cloud/ogn.env
 ExecStart=/usr/sbin/xcsoar-cloud-server /var/lib/xcsoar-cloud/db
 User=xcsoar-cloud
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

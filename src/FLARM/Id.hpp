@@ -24,8 +24,16 @@ public:
     return FlarmId(UNDEFINED_VALUE);
   }
 
+  static constexpr FlarmId FromValue(uint32_t value) noexcept {
+    return FlarmId(value);
+  }
+
   constexpr bool IsDefined() const noexcept {
     return value != UNDEFINED_VALUE;
+  }
+
+  constexpr uint32_t Value() const noexcept {
+    return value;
   }
 
   constexpr void Clear() noexcept {

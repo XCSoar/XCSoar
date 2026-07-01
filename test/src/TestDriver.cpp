@@ -47,6 +47,10 @@
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/MessagingRecord.hpp"
+#include "Tracking/SkyLines/FlarmTrafficBuilder.hpp"
+#include "Tracking/SkyLines/TrafficExtensions.hpp"
+#include "Tracking/SkyLines/Protocol.hpp"
+#include "Tracking/SkyLines/Handler.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -73,6 +77,8 @@
 
 #ifdef _WIN32
 #include <process.h>
+/* winerror.h may define NO_ERROR after FLARM/Error.hpp was included. */
+#undef NO_ERROR
 #else
 #include <unistd.h>
 #endif
@@ -431,7 +437,7 @@ TestFLARM()
 
   // PFLAE without message (pre-v7 style)
   ok1(parser.ParseLine("$PFLAE,A,0,0*33", nmea_info));
-  ok1(nmea_info.flarm.error.severity == FlarmError::NO_ERROR);
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::NO_ERROR);
   ok1(nmea_info.flarm.error.code == (FlarmError::Code)0);
   ok1(nmea_info.flarm.error.message.empty());
 
@@ -3021,6 +3027,129 @@ TestMalformedInput()
   ok1(parser.ParseLine("$GPGSA,,,,,,,,,,,,,,,,,*6E", nmea_info));
 }
 
+static void
+TestFlarmTrafficBuilder()
+{
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::ResolveId(0x80123456u,
+       FlarmId::Undefined()) == FlarmId::FromValue(0x123456u));
+
+  const FlarmId defined = FlarmId::FromValue(0xABCDEFu);
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::ResolveId(0x123u, defined) ==
+      defined);
+
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::SourceForOnline(
+        42u, SkyLinesTracking::TrafficSource::CLOUD) ==
+      FlarmTraffic::SourceType::CLOUD);
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::SourceForOnline(
+        0x80000001u, SkyLinesTracking::TrafficSource::CLOUD) ==
+      FlarmTraffic::SourceType::OGN);
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::SourceForOnline(
+        1u, SkyLinesTracking::TrafficSource::SKYLINES) ==
+      FlarmTraffic::SourceType::SKYLINES);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  basic.location = GeoPoint(Angle::Degrees(51), Angle::Degrees(7));
+  basic.location_available.Update(basic.clock);
+  basic.gps_altitude = 1000;
+  basic.gps_altitude_available.Update(basic.clock);
+
+  FlarmTraffic traffic = SkyLinesTracking::FlarmTrafficBuilder::Build(
+    0x80000001u, GeoPoint(Angle::Degrees(51.01), Angle::Degrees(7.01)),
+    1200, true, SkyLinesTracking::TrafficSource::CLOUD,
+    90, true, FlarmId::Undefined(), 1, nullptr);
+
+  ok1(traffic.source == FlarmTraffic::SourceType::OGN);
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::FillRelative(traffic, basic));
+  ok1(traffic.relative_east != 0 || traffic.relative_north != 0);
+
+  FlarmTraffic device_traffic{};
+  device_traffic.source = FlarmTraffic::SourceType::FLARM;
+  device_traffic.valid.Update(basic.clock);
+  const bool device_wins = device_traffic.valid &&
+    !FlarmTraffic::IsInjectedSource(device_traffic.source);
+  ok1(device_wins);
+
+  ok1(StringIsEqual(FlarmTraffic::GetSourceString(
+        FlarmTraffic::SourceType::OGN), "OGN"));
+
+  FlarmTraffic online_traffic{};
+  online_traffic.source = FlarmTraffic::SourceType::OGN;
+  const bool online_wins = !(online_traffic.valid &&
+    !FlarmTraffic::IsInjectedSource(online_traffic.source));
+  ok1(online_wins);
+
+  FlarmTraffic merged{};
+  merged.track_received = true;
+  merged.track = RoughAngle(Angle::Degrees(90));
+  FlarmTraffic partial = merged;
+  partial.track_received = false;
+  merged.UpdateOnline(partial);
+  ok1(merged.track_received);
+}
+
+static void
+TestTrafficExtensionsWire()
+{
+  using SkyLinesTracking::TrafficExtensions;
+
+  TrafficExtensions ext{};
+  ext.track_deg = 270;
+  ext.track_valid = true;
+  ext.aircraft_type = 5;
+  ext.altitude_valid = false;
+  ext.flarm_id = FlarmId::FromValue(0x123456);
+
+  const auto wire = ext.ToWire();
+  const auto decoded = TrafficExtensions::FromWire(
+    ToBE16(wire.reserved), ToBE32(wire.reserved2));
+  ok1(decoded.track_valid);
+  ok1(decoded.track_deg == 270u);
+  ok1(decoded.aircraft_type == 5u);
+  ok1(!decoded.altitude_valid);
+  ok1(decoded.flarm_id == ext.flarm_id);
+
+  const auto from_ogn = TrafficExtensions::FromOgn(
+    90, true, 1, 0xABCDEFu, true, true);
+  const auto ogn_wire = from_ogn.ToWire();
+  ok1((ogn_wire.reserved & 0x4000u) != 0);
+  ok1((ogn_wire.reserved2 & SkyLinesTracking::FLARM_EXTENSION_VALID) != 0);
+  ok1((ogn_wire.reserved2 & 0xFFFFFFu) == 0xABCDEFu);
+
+  const auto round_trip = TrafficExtensions::FromWire(
+    ToBE16(ogn_wire.reserved), ToBE32(ogn_wire.reserved2));
+  ok1(round_trip.track_valid);
+  ok1(round_trip.track_deg == 90u);
+  ok1(round_trip.aircraft_type == 1u);
+  ok1(round_trip.altitude_valid);
+  ok1(round_trip.flarm_id == FlarmId::FromValue(0xABCDEFu));
+
+  /* Legacy wire: pre-extension servers sent reserved/reserved2 as zero. */
+  const auto legacy = TrafficExtensions::FromWire(0, 0);
+  ok1(legacy.altitude_valid);
+  ok1(!legacy.track_valid);
+  ok1(legacy.aircraft_type == 0u);
+  ok1(!legacy.flarm_id.IsDefined());
+
+  /* Position-only relay: omit extension bits; decode stays compatible. */
+  const auto basic = TrafficExtensions::FromOgn(
+    0, false, 0, 0, false, true).ToWire();
+  ok1(basic.reserved == 0);
+  ok1(basic.reserved2 == 0);
+  ok1(TrafficExtensions::FromWire(0, 0).altitude_valid);
+
+  /* Golden bytes from the original #TrafficRecordExtensions::FromOgn(). */
+  const auto ogn_no_alt = TrafficExtensions::FromOgn(
+    270, true, 5, 0, false, false).ToWire();
+  ok1(ogn_no_alt.reserved == 0x8B0Eu);
+  ok1(ogn_no_alt.reserved2 == 0u);
+  ok1(!TrafficExtensions::FromWire(
+        ToBE16(ogn_no_alt.reserved), 0).altitude_valid);
+
+  ok1(sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic) == 24);
+}
+
 int main()
 {
   const auto data_path = MakeTestDriverDataPath();
@@ -3035,7 +3164,8 @@ int main()
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
-             + 59 /* Condor3UDP */);
+             + 59 /* Condor3UDP */ + 12 /* FlarmTrafficBuilder */
+             + 24 /* TrafficExtensionsWire */);
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -3101,6 +3231,8 @@ int main()
   TestGLL();
   TestGSA();
   TestMalformedInput();
+  TestFlarmTrafficBuilder();
+  TestTrafficExtensionsWire();
 
   DeinitialiseDataPath();
   return exit_status();

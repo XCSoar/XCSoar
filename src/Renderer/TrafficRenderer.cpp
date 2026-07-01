@@ -11,17 +11,51 @@
 #include "util/Macros.hpp"
 #include "Asset.hpp"
 
+#include <algorithm>
+
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
-void
-TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
-                      bool fading,
-                      const FlarmTraffic &traffic, const Angle angle,
-                      const FlarmColor color, const PixelPoint pt) noexcept
+/** The arrow template spans 14 units vertically (-8 to +6). */
+static constexpr unsigned ARROW_SPAN = 14;
+
+/**
+ * Target map traffic symbol height in virtual points.  Scales with
+ * display DPI (and small-screen viewing distance) but not window size.
+ * ~Scale(100) arrow size at the 240 px design baseline.
+ */
+static constexpr unsigned MAP_TRAFFIC_ICON_VPT = 36;
+
+struct MapTrafficScale {
+  int arrow_scale;
+  unsigned circle_radius;
+};
+
+[[gnu::pure]]
+static MapTrafficScale
+MapTrafficScaleFromIconSize(unsigned icon_size) noexcept
 {
-  // Create point array that will form that arrow polygon
+  return {
+    std::max(int(icon_size) * 50 / int(ARROW_SPAN), 1),
+    std::max(icon_size / 3U, Layout::ScalePenWidth(1)),
+  };
+}
+
+[[gnu::pure]]
+static MapTrafficScale
+GetMapTrafficScale() noexcept
+{
+  return MapTrafficScaleFromIconSize(Layout::VptScale(MAP_TRAFFIC_ICON_VPT));
+}
+
+static void
+DrawFlarmArrow(Canvas &canvas, const TrafficLook &traffic_look,
+               bool fading, const FlarmTraffic &traffic,
+               const Angle angle, const FlarmColor color,
+               const PixelPoint pt,
+               int arrow_scale, unsigned circle_radius) noexcept
+{
   BulkPixelPoint arrow[] = {
     { -4, 6 },
     { 0, -8 },
@@ -29,8 +63,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     { 0, 3 },
   };
 
-  // Rotate and shift the arrow to the right position and angle
-  PolygonRotateShift(arrow, pt, angle, Layout::Scale(100U));
+  PolygonRotateShift(arrow, pt, angle, arrow_scale);
 
   if (fading) {
     canvas.Select(traffic_look.fading_pen);
@@ -42,13 +75,11 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
     canvas.SelectHollowBrush();
 #endif
 
-    // Draw the arrow
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
   } else {
-    // Select brush depending on AlarmLevel
     switch (traffic.alarm_level) {
     case FlarmTraffic::AlarmType::LOW:
     case FlarmTraffic::AlarmType::INFO_ALERT:
@@ -69,10 +100,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
       break;
     }
 
-    // Select black pen
     canvas.SelectBlackPen();
-
-    // Draw the arrow
     canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
   }
 
@@ -94,17 +122,57 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   }
 
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(pt, Layout::FastScale(11u));
+  canvas.DrawCircle(pt, circle_radius);
 }
 
+unsigned
+TrafficRenderer::MapIconSize() noexcept
+{
+  return Layout::VptScale(MAP_TRAFFIC_ICON_VPT);
+}
 
+TrafficRenderer::MapTrafficLabelLayout
+TrafficRenderer::MapLabelLayout() noexcept
+{
+  const unsigned icon_size = MapIconSize();
+  const int half = int(icon_size) / 2;
+
+  return {
+    icon_size,
+    half + int(Layout::VptScale(3)),
+    half + int(Layout::VptScale(1)),
+    half + int(Layout::VptScale(30)),
+  };
+}
+
+void
+TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
+                      bool fading,
+                      const FlarmTraffic &traffic, const Angle angle,
+                      const FlarmColor color, const PixelPoint pt) noexcept
+{
+  const MapTrafficScale scale = GetMapTrafficScale();
+  DrawFlarmArrow(canvas, traffic_look, fading, traffic, angle, color, pt,
+                 scale.arrow_scale, scale.circle_radius);
+}
+
+void
+TrafficRenderer::DrawList(Canvas &canvas, const TrafficLook &traffic_look,
+                          const FlarmTraffic &traffic, const Angle angle,
+                          const FlarmColor color, const PixelPoint pt,
+                          unsigned icon_size) noexcept
+{
+  const MapTrafficScale scale = MapTrafficScaleFromIconSize(icon_size);
+
+  DrawFlarmArrow(canvas, traffic_look, false, traffic, angle, color, pt,
+                 scale.arrow_scale, scale.circle_radius);
+}
 
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       [[maybe_unused]] const GliderLinkTraffic &traffic,
                       const Angle angle, const PixelPoint pt) noexcept
 {
-  // Create point array that will form that arrow polygon
   BulkPixelPoint arrow[] = {
     { -4, 6 },
     { 0, -8 },
@@ -114,18 +182,15 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
 
   canvas.Select(traffic_look.safe_above_brush);
 
-  // Select black pen
   if (IsDithered())
-    canvas.Select(Pen(Layout::FastScale(2), COLOR_BLACK));
+    canvas.Select(Pen(Layout::ScalePenWidth(2), COLOR_BLACK));
   else
     canvas.SelectBlackPen();
 
-  // Rotate and shift the arrow to the right position and angle
-  PolygonRotateShift(arrow, pt, angle, Layout::Scale(100U));
-
-  // Draw the arrow
+  const MapTrafficScale scale = GetMapTrafficScale();
+  PolygonRotateShift(arrow, pt, angle, scale.arrow_scale);
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(pt, Layout::FastScale(11u));
+  canvas.DrawCircle(pt, scale.circle_radius);
 }

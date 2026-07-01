@@ -766,16 +766,20 @@ Key rules:
 
 ## Translation and Internationalization Workflow
 
+See also `.cursor/rules/po-translations.mdc`: **do not run `make update-po` or
+commit `po/` during feature work** — defer the full translation sweep until
+release prep unless the user explicitly asks for translation work.
+
 ### Working with .po Files
 - Translation files are located in `po/` directory (33 language files + `xcsoar.pot` template)
-- Use `make update-po` to synchronize all `.po` files with source code changes
+- Use `make update-po` to synchronize all `.po` files with source code changes **at release time only** (not on every feature branch)
 - **CRITICAL**: Never add custom comments (e.g., `# FIXME:`, `# TODO:`) between `#, fuzzy` and `msgid`, or between `msgid` and `msgstr`
 - Valid comment placement: Before `#, fuzzy` or at the start of an entry block
 - Comments violating `.po` syntax will cause `msgmerge` to fail during `make update-po`
 
 ### Translation Commit Organization
 - Translation updates should be committed as a single, comprehensive commit
-- Translation commits should generally be at the end of a feature branch
+- Translation commits belong on the **release branch** (or a dedicated translation pass before release), not on in-flight feature PRs
 - Commit message format: `po: <brief summary of what was translated/fixed>`
 - Include detailed description of what was fixed across which languages
 - Use `make update-po` before committing translations to ensure line numbers are current
@@ -799,7 +803,7 @@ Key rules:
 - Test UI with translations enabled to catch display issues
 
 ### Running make update-po
-- Run `make update-po` after any source code changes that add/modify translatable strings
+- Run `make update-po` when preparing a release (or when explicitly asked), not after every source change that adds `_()` / `N_()` strings
 - This updates:
   - Line number references in all `.po` files
   - Adds new `msgid` entries from source code
@@ -1055,8 +1059,9 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - Document what was changed in response to review (helps reviewers verify fixes)
 
 ### Pre-PR Checklist
-- Run `make update-po` if any translatable strings were added/modified
-- Check that all `.po` files have valid syntax (no custom comments in wrong places)
+- Follow `.cursor/rules/code-review.mdc`: `WERROR=y` build, run `check` where relevant, review nullptr/off-by-one/`noexcept`/`[[gnu::…]]`, reuse
+- Do **not** run `make update-po` or commit `po/` for feature PRs (see `po-translations.mdc`)
+- If the PR is release/translation work: run `make update-po` and check that all `.po` files have valid syntax (no custom comments in wrong places)
 - Verify commit messages follow format: `<Component>: <Summary>`
 - Squash fixup commits and reword generic "Fix" messages
 - Ensure branch compiles on at least one platform
@@ -1071,8 +1076,8 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 ### Translation File Mistakes
 - ❌ Adding custom comments between `msgid` and `msgstr`
 - ✅ Place comments before `msgid` or at entry start
-- ❌ Forgetting to run `make update-po` after source changes
-- ✅ Always run `make update-po` before committing translations
+- ❌ Running `make update-po` on every feature branch (huge churn across 33 languages)
+- ✅ Defer `po/` updates to release prep; add `_()` / `N_()` in source only during development
 - ❌ Translating only one language when fixing an issue
 - ✅ Fix the issue across all affected languages
 

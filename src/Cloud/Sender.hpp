@@ -9,16 +9,54 @@
 #include "net/StaticSocketAddress.hxx"
 
 #include <array>
+#include <cstdint>
 
 struct GeoPoint;
+struct OGNTrafficEntry;
+
+/**
+ * Packed extensions for #SkyLinesTracking::TrafficResponsePacket::Traffic
+ * reserved fields (host byte order here; converted in #TrafficResponseSender).
+ *
+ * - reserved: bit 15 TRACK_VALID; bits 0-8 ground track [deg]; bits 9-13 aircraft
+ *   type (0-31); bit 14 ALTITUDE_VALID.
+ * - reserved2: bit 31 FLARM_VALID; bits 0-23 FLARM address when valid.
+ *
+ * For OGN traffic with a known FLARM address, pilot_id uses
+ * #OGNPilotIdFromFlarm() (0x80000000 | flarm_id).
+ *
+ * Pre-extension XCSoar and SkyLines clients ignore reserved/reserved2
+ * and read only the fixed traffic fields; keep those zero unless
+ * optional extension data is present.
+ */
+struct TrafficRecordExtensions {
+  uint16_t reserved = 0;
+  uint32_t reserved2 = 0;
+
+  static TrafficRecordExtensions FromOgn(unsigned track_deg, bool track_valid,
+                                         unsigned aircraft_type,
+                                         uint32_t flarm_id,
+                                         bool flarm_valid,
+                                         bool altitude_valid) noexcept;
+
+  static TrafficRecordExtensions
+  FromOgn(const OGNTrafficEntry &t) noexcept;
+};
 
 class TrafficResponseSender {
   SkyLinesTracking::Server &server;
   const SocketAddress address;
 
   static constexpr size_t MAX_TRAFFIC_SIZE = 1024;
+  static_assert(sizeof(SkyLinesTracking::TrafficResponsePacket) <
+                  MAX_TRAFFIC_SIZE,
+                "TrafficResponsePacket header exceeds response size");
   static constexpr size_t MAX_TRAFFIC =
-    MAX_TRAFFIC_SIZE / sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic);
+    (MAX_TRAFFIC_SIZE - sizeof(SkyLinesTracking::TrafficResponsePacket)) /
+    sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic);
+
+  static_assert(MAX_TRAFFIC > 0,
+                "TrafficResponsePacket header leaves no room for traffic");
 
   struct Packet {
     SkyLinesTracking::TrafficResponsePacket header;
@@ -41,17 +79,30 @@ public:
   }
 
   void Add(uint32_t pilot_id, uint32_t time,
-           GeoPoint location, int altitude);
+           GeoPoint location, int altitude,
+           TrafficRecordExtensions ext = {});
   void Flush();
 };
+
+void
+SendUserNameResponse(SkyLinesTracking::Server &server,
+                     SocketAddress address, uint64_t key,
+                     uint32_t user_id, std::string_view name) noexcept;
 
 class ThermalResponseSender {
   SkyLinesTracking::Server &server;
   const SocketAddress address;
 
   static constexpr size_t MAX_THERMAL_SIZE = 1024;
+  static_assert(sizeof(SkyLinesTracking::ThermalResponsePacket) <
+                  MAX_THERMAL_SIZE,
+                "ThermalResponsePacket header exceeds response size");
   static constexpr size_t MAX_THERMAL =
-    MAX_THERMAL_SIZE / sizeof(SkyLinesTracking::Thermal);
+    (MAX_THERMAL_SIZE - sizeof(SkyLinesTracking::ThermalResponsePacket)) /
+    sizeof(SkyLinesTracking::Thermal);
+
+  static_assert(MAX_THERMAL > 0,
+                "ThermalResponsePacket header leaves no room for thermals");
 
   struct Packet {
     SkyLinesTracking::ThermalResponsePacket header;

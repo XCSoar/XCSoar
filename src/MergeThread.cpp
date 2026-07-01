@@ -10,6 +10,12 @@
 #include "Audio/VarioGlue.hpp"
 #include "Device/MultipleDevices.hpp"
 
+#ifdef HAVE_TRACKING
+#include "Components.hpp"
+#include "NetComponents.hpp"
+#include "Tracking/TrackingGlue.hpp"
+#endif
+
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
                          MultipleDevices *_devices,
                          TraceComputer *_trail_vario_sink) noexcept
@@ -46,6 +52,12 @@ MergeThread::Process() noexcept
   computer.Fill(device_blackboard.SetMoreData(), settings_computer);
   computer.Compute(device_blackboard.SetMoreData(), last_any, last_fix,
                    device_blackboard.Calculated(), settings_computer);
+
+#ifdef HAVE_TRACKING
+  if (net_components != nullptr && net_components->tracking != nullptr)
+    net_components->tracking->MergeOnlineTraffic(
+      device_blackboard.SetBasic().flarm, basic);
+#endif
 
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
