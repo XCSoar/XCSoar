@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Repository/FileType.hpp"
 #include "net/http/Features.hpp"
 
 #include <string>
@@ -59,4 +60,10 @@ EnqueueRepositoryDownload(bool force=false, bool main_repo=true, bool user_repo=
  */
 void
 DownloadRepositoriesModal(bool main_repo=true, bool user_repo=true);
+
+/**
+ * Whether the download manager can offer repository files for @p type.
+ */
+[[gnu::pure]] bool
+FileTypeSupportsDownload(FileType type) noexcept;
 #endif
