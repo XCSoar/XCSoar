@@ -46,8 +46,6 @@
         </array>
         <key>MinimumOSVersion</key>
         <string>IOS_MIN_SUPPORTED_VERSION_PLACEHOLDER</string>
-        <key>LSMinimumSystemVersion</key>
-        <string>MACOS_MIN_SUPPORTED_VERSION_PLACEHOLDER</string>
         <key>UIDeviceFamily</key>
         <array>
             <integer>1</integer>
@@ -102,14 +100,9 @@
         <string>LaunchScreen</string>
         <key>UIBackgroundModes</key>
         <array>
-            <string>processing</string>
             <string>audio</string>
             <string>location</string>
             <string>fetch</string>
-        </array>
-        <key>BGTaskSchedulerPermittedIdentifiers</key>
-        <array>
-            <string>de.xcsoar.background-processing</string>
         </array>
         <key>NSAppTransportSecurity</key>
         <dict>

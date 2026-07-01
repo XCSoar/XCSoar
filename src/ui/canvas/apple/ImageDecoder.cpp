@@ -9,6 +9,8 @@
 #include "ui/canvas/custom/UncompressedImage.hpp"
 #include "util/ScopeExit.hxx"
 
+#include <cassert>
+
 #import <CoreGraphics/CoreGraphics.h>
 
 static UncompressedImage

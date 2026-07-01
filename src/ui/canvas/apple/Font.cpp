@@ -41,6 +41,52 @@ using NativeFontT =
   UIFont;
 #endif
 
+#ifdef USE_UIKIT
+static bool
+IsAtLeastIOS7() noexcept
+{
+  static const bool at_least_ios7 =
+    [[[UIDevice currentDevice] systemVersion] compare: @"7.0"
+        options: NSNumericSearch] != NSOrderedAscending;
+
+  return at_least_ios7;
+}
+
+static NSString *
+GetUIFontName(const FontDescription &d) noexcept
+{
+  if (d.IsMonospace()) {
+    if (d.IsBold() && d.IsItalic())
+      return @"Courier-BoldOblique";
+
+    if (d.IsBold())
+      return @"Courier-Bold";
+
+    if (d.IsItalic())
+      return @"Courier-Oblique";
+
+    return @"Courier";
+  }
+
+  if (d.IsBold() && d.IsItalic())
+    return @"Helvetica-BoldOblique";
+
+  if (d.IsBold())
+    return @"Helvetica-Bold";
+
+  if (d.IsItalic())
+    return @"Helvetica-Oblique";
+
+  return @"Helvetica";
+}
+
+static UIFont *
+GetUIFontFromAttributes(NSDictionary *attributes) noexcept
+{
+  return [attributes objectForKey: NSFontAttributeName];
+}
+#endif
+
 void
 Font::Load(const FontDescription &d)
 {
@@ -50,10 +96,14 @@ Font::Load(const FontDescription &d)
   const std::lock_guard lock{apple_font_mutex};
 #endif
 
+#ifdef USE_UIKIT
+  native_font = [NativeFontT fontWithName: GetUIFontName(d) size: d.GetHeight()];
+#else
   if (d.IsMonospace())
     native_font = [NativeFontT fontWithName: @"Courier" size: d.GetHeight()];
   else
     native_font = [NativeFontT fontWithName: @"Helvetica" size: d.GetHeight()];
+#endif
 
   if (nil == native_font)
     throw std::runtime_error{"fontWithName named"};
@@ -68,7 +118,8 @@ Font::Load(const FontDescription &d)
     native_font = [[NSFontManager sharedFontManager]
         convertFont: native_font
         toHaveTrait: mask];
-#else
+#elif defined(__IPHONE_7_0)
+    if (IsAtLeastIOS7()) {
     UIFontDescriptorSymbolicTraits mask = 0;
     if (d.IsBold())
       mask |= UIFontDescriptorTraitBold;
@@ -77,12 +128,20 @@ Font::Load(const FontDescription &d)
     UIFontDescriptor *font_desc =
         [native_font.fontDescriptor fontDescriptorWithSymbolicTraits: mask];
     native_font = [UIFont fontWithDescriptor: font_desc size: d.GetHeight()];
+    }
 #endif
   }
 
   draw_attributes = @{ NSFontAttributeName: native_font };
 
+#ifdef USE_UIKIT
+  CGSize size = IsAtLeastIOS7()
+    ? [@"ÄjX€µ" sizeWithAttributes: draw_attributes]
+    : [@"ÄjX€µ" sizeWithFont: native_font];
+  height = ceilf(size.height);
+#else
   height = ceilf([@"ÄjX€µ" sizeWithAttributes: draw_attributes].height);
+#endif
   ascent_height = static_cast<unsigned>(ceilf([native_font ascender]));
   capital_height = static_cast<unsigned>(ceilf([native_font capHeight]));
 }
@@ -100,7 +159,16 @@ Font::TextSize(const std::string_view text) const noexcept
   const std::lock_guard lock{apple_font_mutex};
 #endif
 
-  CGSize size = [ns_str sizeWithAttributes: draw_attributes];
+  CGSize size;
+#ifdef USE_UIKIT
+  if (IsAtLeastIOS7())
+    size = [ns_str sizeWithAttributes: draw_attributes];
+  else
+    size = [ns_str sizeWithFont: GetUIFontFromAttributes(draw_attributes)];
+#else
+  size = [ns_str sizeWithAttributes: draw_attributes];
+#endif
+
   return PixelSize(static_cast<int>(ceilf(size.width)),
                    static_cast<int>(ceilf(size.height)));
 }
@@ -152,5 +220,12 @@ Font::Render(std::string_view text, const PixelSize size,
   };
 
   static CGPoint p = CGPointMake(0, 0);
+#ifdef USE_UIKIT
+  if (IsAtLeastIOS7())
+    [ns_str drawAtPoint: p withAttributes: draw_attributes];
+  else
+    [ns_str drawAtPoint: p withFont: GetUIFontFromAttributes(draw_attributes)];
+#else
   [ns_str drawAtPoint: p withAttributes: draw_attributes];
+#endif
 }

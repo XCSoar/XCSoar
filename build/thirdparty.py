@@ -45,7 +45,6 @@ if toolchain.is_windows:
     thirdparty_libs = [
         zlib,
         libfmt,
-        libsodium,
         cares,
         curl,
         lua,
@@ -72,7 +71,6 @@ elif toolchain.is_darwin:
     thirdparty_libs = [
         zlib,
         libfmt,
-        libsodium,
         cares,
         curl,
         lua,

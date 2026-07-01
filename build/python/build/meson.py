@@ -12,7 +12,10 @@ def __no_ccache(cmd: str) -> str:
     return cmd
 
 def make_cross_file(toolchain: Toolchain) -> str:
-    if toolchain.is_windows:
+    if toolchain.is_target_ios:
+        system = 'ios'
+        windres = ''
+    elif toolchain.is_windows:
         system = 'windows'
         windres = "windres = '%s'" % toolchain.windres
     else:
