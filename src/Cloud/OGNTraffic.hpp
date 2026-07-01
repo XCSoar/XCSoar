@@ -52,6 +52,9 @@ struct OGNTrafficEntry
 
   unsigned aircraft_type = 0;
 
+  /** OGN id-field address type (aa bits).  See #OGN_ADDRESS_TYPE_TRACKER. */
+  unsigned address_type = 0;
+
   /** Cached #OGNPilotIdFromStation(station_id); set on insert. */
   uint32_t pilot_id = 0;
 
@@ -63,14 +66,18 @@ struct OGNTrafficEntry
                   bool _altitude_valid,
                   unsigned _track_deg, bool _track_valid,
                   uint32_t _flarm_id, bool _flarm_valid,
-                  unsigned _aircraft_type)
+                  unsigned _aircraft_type, unsigned _address_type)
     :station_id(std::forward<S>(_station)), location(_loc),
      altitude(_altitude), altitude_valid(_altitude_valid),
      stamp(std::chrono::steady_clock::now()),
      track_deg(_track_deg), track_valid(_track_valid),
      flarm_id(_flarm_id), flarm_valid(_flarm_valid),
-     aircraft_type(_aircraft_type) {}
+     aircraft_type(_aircraft_type), address_type(_address_type) {}
 };
+
+[[gnu::pure]]
+bool
+IsForwardableOgnTraffic(const OGNTrafficEntry &t) noexcept;
 
 [[gnu::pure]]
 uint32_t
@@ -172,7 +179,7 @@ public:
                           int altitude, bool altitude_valid,
                           unsigned track_deg, bool track_valid,
                           uint32_t flarm_id, bool flarm_valid,
-                          unsigned aircraft_type,
+                          unsigned aircraft_type, unsigned address_type,
                           std::string_view callsign);
 
   void Expire(std::chrono::steady_clock::time_point before) noexcept;

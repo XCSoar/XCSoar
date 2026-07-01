@@ -40,6 +40,9 @@
 static constexpr double TRAFFIC_RANGE = 50000;
 static constexpr double THERMAL_RANGE = 50000;
 
+/** Max |target − client| altitude [m] when relaying traffic to a client. */
+static constexpr int MAX_TRAFFIC_ALTITUDE_SEPARATION = 5000;
+
 static constexpr std::chrono::steady_clock::duration MAX_TRAFFIC_AGE =
   std::chrono::minutes(15);
 static constexpr std::chrono::steady_clock::duration MAX_OGN_TRAFFIC_AGE =
@@ -68,6 +71,39 @@ MsUtcMidnight() noexcept
                     .count();
   constexpr auto day_ms = 24LL * 60 * 60 * 1000;
   return uint32_t(ms % day_ms);
+}
+
+/**
+ * Whether @p target is traffic relevant to a client at @p client_location
+ * and @p client_altitude: within #TRAFFIC_RANGE horizontally and within
+ * #MAX_TRAFFIC_ALTITUDE_SEPARATION vertically when both altitudes are known.
+ */
+[[gnu::pure]]
+static bool
+IsTrafficRelevantToClient(const GeoPoint &client_location,
+                          int client_altitude,
+                          const GeoPoint &target_location,
+                          int target_altitude,
+                          bool target_altitude_valid) noexcept
+{
+  if (!target_location.IsValid())
+    return false;
+
+  if (client_location.Distance(target_location) > TRAFFIC_RANGE)
+    return false;
+
+  if (client_altitude < 0) {
+    /* Without own altitude, drop targets that report altitude (e.g.
+       high-altitude ADSB) instead of relaying the full horizontal set. */
+    return !target_altitude_valid;
+  }
+
+  if (!target_altitude_valid)
+    return false;
+
+  const int separation = target_altitude - client_altitude;
+  return separation <= MAX_TRAFFIC_ALTITUDE_SEPARATION &&
+    separation >= -MAX_TRAFFIC_ALTITUDE_SEPARATION;
 }
 
 class CloudServer final
@@ -187,12 +223,19 @@ private:
                                     bool force = false) noexcept;
 
   template<typename F>
-  void ForEachClientNear(
-    const ::GeoPoint &origin,
+  void ForEachClientNearTraffic(
+    const GeoPoint &target_location, int target_altitude,
+    bool target_altitude_valid,
     std::optional<uint64_t> exclude_key, F &&f) noexcept(
     noexcept(f(std::declval<CloudClient &>()))) {
-    for (const auto &i : clients.QueryWithinRange(origin, TRAFFIC_RANGE)) {
+    for (const auto &i : clients.QueryWithinRange(target_location,
+                                                  TRAFFIC_RANGE)) {
       if (exclude_key && i->key == *exclude_key)
+        continue;
+
+      if (!IsTrafficRelevantToClient(i->location, i->altitude,
+                                     target_location, target_altitude,
+                                     target_altitude_valid))
         continue;
 
       f(*i);
@@ -269,13 +312,19 @@ CloudServer::OnAprsLine(std::string_view line) noexcept
     return;
   }
 
+  if (!IsForwardableOgnTraffic(p, line)) {
+    if (GetEnvBool("XCS_CLOUD_DEBUG"))
+      cerr << "OGN\tground-station\t" << p.station_id << endl;
+    return;
+  }
+
   try {
     OGNTrafficEntry &t =
       ogn_traffic.Upsert(p.station_id, p.location, p.altitude,
                          p.altitude_valid,
                          p.track_deg, p.track_valid,
                          p.flarm_id, p.flarm_valid,
-                         p.aircraft_type, p.callsign);
+                         p.aircraft_type, p.address_type, p.callsign);
 
     if (GetEnvBool("XCS_CLOUD_DEBUG")) {
       cout << "OGN\ttraffic\t" << p.station_id << '\t'
@@ -319,9 +368,10 @@ CloudServer::PushOgnTraffic(const OGNTrafficEntry &t) noexcept
   if (t.stamp < min_stamp)
     return;
 
-  ForEachClientNear(t.location, {}, [&](CloudClient &i) {
-    MaybeSendNearTrafficSnapshot(i, "TRAFFIC_OGN");
-  });
+  ForEachClientNearTraffic(t.location, t.altitude, t.altitude_valid, {},
+                           [&](CloudClient &i) {
+                             MaybeSendNearTrafficSnapshot(i, "TRAFFIC_OGN");
+                           });
 }
 
 void
@@ -358,6 +408,11 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
     if (traffic->stamp < min_stamp)
       continue;
 
+    if (!IsTrafficRelevantToClient(client.location, client.altitude,
+                                   traffic->location, traffic->altitude,
+                                   traffic->altitude >= 0))
+      continue;
+
     if (n >= MAX_TRAFFIC_TARGETS_PER_RESPONSE)
       break;
 
@@ -366,7 +421,8 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
           TrafficRecordExtensions::FromOgn(traffic->track_deg,
                                            traffic->track_valid,
                                            traffic->aircraft_type,
-                                           0, false, true));
+                                           0, false,
+                                           traffic->altitude >= 0));
     ++n_cloud;
     ++n;
   }
@@ -376,6 +432,14 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
     for (const auto &og :
          ogn_traffic.QueryWithinRange(client.location, TRAFFIC_RANGE)) {
       if (og->stamp < min_ogn_stamp)
+        continue;
+
+      if (!IsForwardableOgnTraffic(*og))
+        continue;
+
+      if (!IsTrafficRelevantToClient(client.location, client.altitude,
+                                     og->location, og->altitude,
+                                     og->altitude_valid))
         continue;
 
       if (n >= MAX_TRAFFIC_TARGETS_PER_RESPONSE)
@@ -396,6 +460,7 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
     cout << reason << '\t' << client.address << '\t'
          << std::hex << client.key << std::dec << '\t'
          << client.id << '\t' << client.location << '\t'
+         << "alt=" << client.altitude << "m\t"
          << "cloud=" << n_cloud << "\togn=" << n_ogn
          << "\ttotal=" << n << endl;
   }
@@ -441,10 +506,10 @@ CloudServer::OnFix(const Client &c,
   MaybeSendNearTrafficSnapshot(*client, "TRAFFIC_FIX", true);
 
   /* Push full snapshots to other nearby clients (same as OGN updates). */
-  ForEachClientNear(location, c.key,
-                    [&](CloudClient &i) {
-                      MaybeSendNearTrafficSnapshot(i, "TRAFFIC_FIX", true);
-                    });
+  ForEachClientNearTraffic(location, altitude, altitude >= 0, c.key,
+                           [&](CloudClient &i) {
+                             MaybeSendNearTrafficSnapshot(i, "TRAFFIC_FIX", true);
+                           });
 }
 
 void

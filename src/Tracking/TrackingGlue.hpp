@@ -51,6 +51,9 @@ class TrackingGlue final
   TriState cloud_enabled = TriState::UNKNOWN;
   bool cloud_show_traffic = true;
 
+  /** Own-ship altitude [m MSL] for online-traffic filtering; -1 if unknown. */
+  int own_altitude = -1;
+
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 

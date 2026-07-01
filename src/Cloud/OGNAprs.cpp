@@ -178,11 +178,12 @@ ParseAltitudeFeet(string_view payload, int &altitude_m) noexcept
  */
 static bool
 ParseOgnIdField(string_view line, uint32_t &id, bool &valid,
-                unsigned &aircraft_type) noexcept
+                unsigned &aircraft_type, unsigned &address_type) noexcept
 {
   valid = false;
   id = 0;
   aircraft_type = 0;
+  address_type = 0;
 
   const auto pos = line.find(" id");
   if (pos == string_view::npos)
@@ -202,7 +203,38 @@ ParseOgnIdField(string_view line, uint32_t &id, bool &valid,
 
   id = addr & 0xFFFFFFu;
   valid = true;
+  address_type = unsigned(meta & 0x03u);
   aircraft_type = unsigned((meta >> 2u) & 0x0Fu);
+  return true;
+}
+
+static bool
+IsOgnGroundStationTocall(string_view line) noexcept
+{
+  const auto gt = line.find('>');
+  if (gt == string_view::npos || gt + 1 >= line.size())
+    return false;
+
+  const auto comma = line.find(',', gt + 1);
+  const string_view tocall = line.substr(
+    gt + 1, comma == string_view::npos ? line.size() - gt - 1 : comma - gt - 1);
+
+  return tocall == "OGNSXR" || tocall == "OGNSDR";
+}
+
+bool
+IsForwardableOgnTraffic(const OGNAprsParseResult &r,
+                        string_view line) noexcept
+{
+  if (!r.flarm_valid)
+    return false;
+
+  if (r.address_type == OGN_ADDRESS_TYPE_TRACKER)
+    return false;
+
+  if (IsOgnGroundStationTocall(line))
+    return false;
+
   return true;
 }
 
@@ -304,7 +336,8 @@ ParseOGNAprsLine(string_view line) noexcept
   uint32_t fid = 0;
   bool fid_ok = false;
   unsigned aircraft_type = 0;
-  ParseOgnIdField(line, fid, fid_ok, aircraft_type);
+  unsigned address_type = 0;
+  ParseOgnIdField(line, fid, fid_ok, aircraft_type, address_type);
 
   r.valid = true;
   r.location = loc;
@@ -313,6 +346,7 @@ ParseOGNAprsLine(string_view line) noexcept
   r.flarm_id = fid;
   r.flarm_valid = fid_ok;
   r.aircraft_type = aircraft_type;
+  r.address_type = address_type;
   ResolveOgnCallsign(line, r, r.callsign);
   return r;
 }
