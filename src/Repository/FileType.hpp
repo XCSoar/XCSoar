@@ -78,3 +78,10 @@ bool IsCacheLayoutFilename(const char *filename) noexcept;
  */
 [[gnu::pure]]
 FileType DetectFileTypeByFilename(const char *filename) noexcept;
+
+/**
+ * Parse a repository file ``type = …`` value into a #FileType.
+ * Returns FileType::UNKNOWN for unrecognised values.
+ */
+[[gnu::pure]]
+FileType FileTypeFromRepositoryString(const char *type) noexcept;

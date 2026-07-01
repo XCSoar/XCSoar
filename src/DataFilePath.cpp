@@ -12,6 +12,17 @@
 namespace {
 
 [[gnu::pure]]
+static bool
+IsSafeDataFilename(const char *filename) noexcept
+{
+  if (filename == nullptr || *filename == '\0')
+    return false;
+
+  const Path path(filename);
+  return path.IsValidFilename() && !path.HasPathTraversal();
+}
+
+[[gnu::pure]]
 static AllocatedPath
 ResolveDataCachePath(const char *filename) noexcept
 {
@@ -53,9 +64,12 @@ ResolveUniqueExistingTypedDataFile(const char *filename) noexcept
 AllocatedPath
 TypedDataSavePath(FileType file_type, const char *filename) noexcept
 {
+  if (!IsSafeDataFilename(filename))
+    return nullptr;
+
   const auto subdir = GetFileTypeDefaultDir(file_type);
-  if (subdir == nullptr || filename == nullptr || *filename == '\0')
-    return filename != nullptr ? LocalPath(filename) : nullptr;
+  if (subdir == nullptr)
+    return LocalPath(filename);
 
   Directory::CreateRecursive(LocalPath(subdir));
   return LocalPath(AllocatedPath::Build(subdir, filename));
@@ -175,6 +189,36 @@ ResolveDownloadDestinationPath(Path path) noexcept
 }
 
 AllocatedPath
+GetFileTypeDownloadRelativePath(const FileType file_type,
+                                const char *filename) noexcept
+{
+  if (!IsSafeDataFilename(filename))
+    return nullptr;
+
+  const auto subdir = GetFileTypeDefaultDir(file_type);
+  if (subdir == nullptr)
+    return AllocatedPath(filename);
+
+  AllocatedPath relative = AllocatedPath::Build(subdir, filename);
+  if (Path(relative).HasPathTraversal())
+    return nullptr;
+
+  return relative;
+}
+
+bool
+EnsureFileTypeDownloadDirectory(const FileType file_type) noexcept
+{
+  const auto subdir = GetFileTypeDefaultDir(file_type);
+  if (subdir == nullptr)
+    return true;
+
+  const auto dest_path = LocalPath(subdir);
+  Directory::CreateRecursive(dest_path);
+  return Directory::Exists(dest_path);
+}
+
+AllocatedPath
 CacheDataSavePath(const char *filename) noexcept
 {
   return RepositoryDataSavePath(filename);
@@ -201,9 +245,7 @@ ResolveCacheDataPath(const char *filename) noexcept
 AllocatedPath
 LogsDataSavePath(const char *filename) noexcept
 {
-  const auto logs_dir = LocalPath(Path("logs"));
-  Directory::CreateRecursive(logs_dir);
-  return AllocatedPath::Build(logs_dir, filename);
+  return TypedDataSavePath(FileType::IGC, filename);
 }
 
 AllocatedPath

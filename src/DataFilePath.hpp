@@ -54,6 +54,14 @@ RepositoryDownloadRelativePath(const char *filename) noexcept;
 AllocatedPath
 ResolveDownloadDestinationPath(Path path) noexcept;
 
+[[gnu::pure]]
+AllocatedPath
+GetFileTypeDownloadRelativePath(FileType file_type,
+                                const char *filename) noexcept;
+
+bool
+EnsureFileTypeDownloadDirectory(FileType file_type) noexcept;
+
 AllocatedPath
 CacheDataSavePath(const char *filename) noexcept;
 

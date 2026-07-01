@@ -2,10 +2,14 @@
 // Copyright The XCSoar Project
 
 #include "Repository/FileType.hpp"
+#include "DataFilePath.hpp"
+#include "LocalPath.hpp"
 #include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 #include "TestUtil.hpp"
 
 #include <cstdint>
+#include <cstdlib>
 
 static constexpr auto N_CONTENT_TYPES =
   static_cast<uint8_t>(FileType::COUNT) - 1;
@@ -123,18 +127,76 @@ TestLayoutClassification()
   ok1(GetLayoutSubdirForFilename("waypoints.cup") == Path("waypoints"));
   ok1(GetLayoutSubdirForFilename("zone.openair") == Path("airspace"));
   ok1(GetLayoutSubdirForFilename("task.tsk") == Path("tasks"));
-  ok1(GetLayoutSubdirForFilename("gfs-rasp-forecast.dat") == Path("weather/rasp"));
+  ok1(GetLayoutSubdirForFilename("gfs-rasp-forecast.dat") ==
+      AllocatedPath::Build("weather", "rasp"));
   ok1(GetLayoutSubdirForFilename("track.igc") == Path("logs"));
   ok1(GetLayoutSubdirForFilename("readme.md") == nullptr);
   ok1(GetLayoutSubdirForFilename("profile.prf") == Path("profiles"));
-  ok1(GetLayoutSubdirForFilename("plane.xcp") == Path("profiles/planes"));
+  ok1(GetLayoutSubdirForFilename("plane.xcp") ==
+      AllocatedPath::Build("profiles", "planes"));
   ok1(GetLayoutSubdirForFilename("repository") == Path("cache"));
   ok1(GetLayoutSubdirForFilename("xcsoar.log") == nullptr);
 }
 
+static void
+TestRepositoryTypeStrings()
+{
+  ok1(FileTypeFromRepositoryString("airspace") == FileType::AIRSPACE);
+  ok1(FileTypeFromRepositoryString("waypoint-details") ==
+      FileType::WAYPOINTDETAILS);
+  ok1(FileTypeFromRepositoryString("waypoint") == FileType::WAYPOINT);
+  ok1(FileTypeFromRepositoryString("map") == FileType::MAP);
+  ok1(FileTypeFromRepositoryString("flarmnet") == FileType::FLARMNET);
+  ok1(FileTypeFromRepositoryString("rasp") == FileType::RASP);
+  ok1(FileTypeFromRepositoryString("xci") == FileType::XCI);
+  ok1(FileTypeFromRepositoryString("task") == FileType::TASK);
+  ok1(FileTypeFromRepositoryString("checklist") == FileType::CHECKLIST);
+  ok1(FileTypeFromRepositoryString("unknown") == FileType::UNKNOWN);
+  ok1(FileTypeFromRepositoryString(nullptr) == FileType::UNKNOWN);
+}
+
+static void
+TestDownloadRelativePath()
+{
+  ok1(GetFileTypeDownloadRelativePath(FileType::WAYPOINT, "test.cup") ==
+      Path("waypoints/test.cup"));
+  ok1(GetFileTypeDownloadRelativePath(FileType::WAYPOINT, "../evil.cup") ==
+      nullptr);
+  ok1(TypedDataSavePath(FileType::WAYPOINT, "../evil.cup") == nullptr);
+}
+
+static void
+TestNestedDefaultDirs()
+{
+  ok1(GetFileTypeDefaultDir(FileType::RASP) ==
+      AllocatedPath::Build("weather", "rasp"));
+  ok1(GetFileTypeDefaultDir(FileType::WAYPOINTDETAILS) ==
+      AllocatedPath::Build("waypoints", "details"));
+  ok1(GetFileTypeDefaultDir(FileType::PLANE) ==
+      AllocatedPath::Build("profiles", "planes"));
+}
+
+static void
+TestEnsureFileTypeDownloadDirectory()
+{
+  char template_path[] = "/tmp/xcsoar-download-dir-XXXXXX";
+  ok1(mkdtemp(template_path) != nullptr);
+  SetSingleDataPath(Path(template_path));
+
+  const auto rasp_dir = GetFileTypeDefaultDir(FileType::RASP);
+  ok1(!Directory::Exists(LocalPath(rasp_dir)));
+
+  ok1(EnsureFileTypeDownloadDirectory(FileType::RASP));
+  ok1(Directory::Exists(LocalPath(rasp_dir)));
+
+  ok1(GetFileTypeDownloadRelativePath(FileType::RASP, "forecast.dat") ==
+      AllocatedPath::Build(Path(rasp_dir), Path("forecast.dat")));
+}
+
 int main()
 {
-  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 16 + 9 + 12);
+  plan_tests(N_CONTENT_TYPES + 2 + N_CONTENT_TYPES + 2 + 7 + 16 + 9 + 12 +
+             11 + 3 + 3 + 5);
 
   TestDefaultDirs();
   TestPatterns();
@@ -142,6 +204,10 @@ int main()
   TestFilenameMatchesFileType();
   TestDetectFileTypeByFilename();
   TestLayoutClassification();
+  TestRepositoryTypeStrings();
+  TestDownloadRelativePath();
+  TestNestedDefaultDirs();
+  TestEnsureFileTypeDownloadDirectory();
 
   return exit_status();
 }

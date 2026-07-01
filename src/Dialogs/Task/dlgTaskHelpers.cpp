@@ -17,6 +17,7 @@
 #include "Engine/Task/Points/Type.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 
 #include <cassert>
@@ -221,7 +222,7 @@ OrderedTaskSave(OrderedTask &task)
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
 
-  const auto tasks_path = MakeLocalPath("tasks");
+  const auto tasks_path = LocalPath(GetFileTypeDefaultDir(FileType::TASK));
 
   strcat(fname, ".tsk");
   task.SetName(fname);
