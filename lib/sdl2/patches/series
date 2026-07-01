@@ -1,1 +1,4 @@
 disable_metal_ios.diff
+optional_availability_versions
+guard_ios11_home_indicator_calls
+disable_new_gamecontroller_on_old_ios_sdk

@@ -26,6 +26,7 @@
 #endif
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
+#include "Apple/ScreenScale.hpp"
 #import <UIKit/UIKit.h>
 #endif
 
@@ -58,26 +59,39 @@ SystemWindowSize() noexcept
   return native_view->GetSize();
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
-  
+
   // Check if window is null to prevent crashes
   if (!window) {
     // Fallback to main screen dimensions if no window is available
     CGRect screenBounds = [UIScreen mainScreen].bounds;
-    CGFloat scale = [UIScreen mainScreen].nativeScale;
-    return PixelSize{(int)(screenBounds.size.width * scale), (int)(screenBounds.size.height * scale)};
+    CGFloat scale = GetUIScreenScale([UIScreen mainScreen]);
+#if !defined(__LP64__)
+    /* 32-bit iOS (old iPod/iPhone) needs the SDL window size in points.
+       SDL_WINDOW_ALLOW_HIGHDPI gives us the retina drawable later. */
+    (void)scale;
+    return PixelSize{(int)screenBounds.size.width,
+                     (int)screenBounds.size.height};
+#else
+    return PixelSize{(int)(screenBounds.size.width * scale),
+                     (int)(screenBounds.size.height * scale)};
+#endif
   }
-  
-  
+
   CGRect bounds = window.bounds;
-  CGFloat scale = window.screen.nativeScale;
+  CGFloat scale = GetUIScreenScale(window.screen);
 
   CGFloat width = bounds.size.width;
   CGFloat height = bounds.size.height;
 
+#if !defined(__LP64__)
+  (void)scale;
+  return PixelSize{(int)width, (int)height};
+#else
   int pixelWidth = (int)(width * scale);
   int pixelHeight = (int)(height * scale);
 
-  return PixelSize{ pixelWidth, pixelHeight };
+  return PixelSize{pixelWidth, pixelHeight};
+#endif
 #elif defined(__APPLE__) && !TARGET_OS_IPHONE
   // Use default window size (SDL handles HiDPI scaling automatically)
   return PixelSize{ CommandLine::width, CommandLine::height };

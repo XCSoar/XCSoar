@@ -1,0 +1,20 @@
+Index: SDL2-2.30.0/src/video/uikit/SDL_uikitappdelegate.m
+===================================================================
+--- SDL2-2.30.0.orig/src/video/uikit/SDL_uikitappdelegate.m
++++ SDL2-2.30.0/src/video/uikit/SDL_uikitappdelegate.m
+@@ -29,14 +29,16 @@
+ #import "SDL_uikitappdelegate.h"
+ #import "SDL_uikitmodes.h"
+ #import "SDL_uikitwindow.h"
+ 
+ #include "../../events/SDL_events_c.h"
+ 
+ #if !TARGET_OS_TV
++# if __has_include(<AvailabilityVersions.h>)
+ #include <AvailabilityVersions.h>
++# endif
+ 
+ # ifndef __IPHONE_13_0
+ # define __IPHONE_13_0 130000
+ # endif
+ #endif

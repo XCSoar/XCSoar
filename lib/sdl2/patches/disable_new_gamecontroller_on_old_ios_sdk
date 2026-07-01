@@ -1,0 +1,34 @@
+Index: SDL2-2.30.0/src/joystick/iphoneos/SDL_mfijoystick.m
+===================================================================
+--- SDL2-2.30.0.orig/src/joystick/iphoneos/SDL_mfijoystick.m
++++ SDL2-2.30.0/src/joystick/iphoneos/SDL_mfijoystick.m
+@@ -104,7 +104,9 @@
+ #endif
+ @end
+ 
+-#if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 140000) || (__APPLETV_OS_VERSION_MAX_ALLOWED >= 140000) || (__MAC_OS_VERSION_MAX_ALLOWED > 1500000) || (__MAC_OS_X_VERSION_MAX_ALLOWED > 101600)
++#if (TARGET_OS_IOS && (__IPHONE_OS_VERSION_MAX_ALLOWED >= 140000)) || \
++    (TARGET_OS_TV && (__APPLETV_OS_VERSION_MAX_ALLOWED >= 140000)) || \
++    (!TARGET_OS_IOS && !TARGET_OS_TV && ((__MAC_OS_VERSION_MAX_ALLOWED > 1500000) || (__MAC_OS_X_VERSION_MAX_ALLOWED > 101600)))
+ #define ENABLE_MFI_BATTERY
+ #define ENABLE_MFI_RUMBLE
+ #define ENABLE_MFI_LIGHT
+@@ -1134,6 +1136,7 @@
+ }
+ #endif /* DEBUG_CONTROLLER_STATE */
+ 
++#ifdef ENABLE_PHYSICAL_INPUT_PROFILE
+         if (@available(macOS 10.16, iOS 14.0, tvOS 14.0, *)) {
+             NSDictionary<NSString *, GCControllerElement *> *elements = controller.physicalInputProfile.elements;
+             NSDictionary<NSString *, GCControllerButtonInput *> *buttons = controller.physicalInputProfile.buttons;
+@@ -1162,7 +1165,9 @@
+                 }
+                 SDL_PrivateJoystickButton(joystick, button++, value);
+             }
+-        } else if (controller.extendedGamepad) {
++        } else
++#endif /* ENABLE_PHYSICAL_INPUT_PROFILE */
++        if (controller.extendedGamepad) {
+             SDL_bool isstack;
+             GCExtendedGamepad *gamepad = controller.extendedGamepad;
+ 

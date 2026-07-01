@@ -63,6 +63,7 @@ struct zxdg_toplevel_decoration_v1;
 #endif
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
+#include "Apple/ScreenScale.hpp"
 #import <UIKit/UIKit.h>
 #endif
 
@@ -342,19 +343,25 @@ public:
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   [[gnu::pure]]
   const PixelSize GetSize() const noexcept {
+#ifdef ENABLE_SDL
+    return ContainerWindow::GetSize();
+#else
     PixelRect rc = GetClientRect();
     return {rc.right-rc.left, rc.bottom-rc.top};
+#endif
   }
 
   [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept override {
+#ifdef ENABLE_SDL
+    return ContainerWindow::GetClientRect();
+#else
     assert(IsDefined());
     
     // Get screen bounds
-    CGRect screenBounds = [UIScreen mainScreen].bounds;
-    // Get screen scale factor. We need to use nativeScale instead of scale
-    // to correctly account for downsampling on mini and Plus devices.
-    CGFloat scale = [UIScreen mainScreen].nativeScale;
+    UIScreen *screen = [UIScreen mainScreen];
+    CGRect screenBounds = screen.bounds;
+    CGFloat scale = GetUIScreenScale(screen);
     int width = (int)(screenBounds.size.width * scale);
     int height = (int)(screenBounds.size.height * scale);
     
@@ -364,7 +371,13 @@ public:
       return PixelRect(0, 0, width, height);
     }
     
-    UIEdgeInsets insets = window.safeAreaInsets;
+    UIEdgeInsets insets;
+#ifdef __IPHONE_11_0
+    if (@available(iOS 11.0, *))
+      insets = window.safeAreaInsets;
+    else
+#endif
+      insets = UIEdgeInsetsZero;
     insets.top *= scale;
     insets.left *= scale;
     insets.bottom *= scale;
@@ -378,6 +391,7 @@ public:
     );
 
     return result;
+#endif
   }
 #endif
 

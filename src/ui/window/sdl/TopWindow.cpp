@@ -41,15 +41,19 @@ MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
   flags |= SDL_SWSURFACE;
 #endif /* !ENABLE_OPENGL */
 
-#if !defined(__MACOSX__) || !(__MACOSX__)
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  (void)full_screen;
+  (void)resizable;
+#elif !defined(__MACOSX__) || !(__MACOSX__)
   if (full_screen)
     flags |= SDL_WINDOW_FULLSCREEN;
-#endif
 
   if (resizable)
     flags |= SDL_WINDOW_RESIZABLE;
+#endif
 
-#ifdef HAVE_HIGHDPI_SUPPORT
+#if defined(HAVE_HIGHDPI_SUPPORT) && \
+    (!defined(__APPLE__) || !TARGET_OS_IPHONE)
   flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 #endif
 
@@ -248,11 +252,14 @@ TopWindow::OnEvent(const SDL_Event &event)
           h = real_h;
 #endif
 #ifdef ENABLE_OPENGL
-#if defined(__APPLE__) && TARGET_OS_IPHONE
+#if defined(__APPLE__) && TARGET_OS_IPHONE && defined(__LP64__)
+          /* 64-bit iPhone path: keep the existing behavior. */
           PixelSize size = SystemWindowSize();
           if (screen->CheckResize(size))
             Resize(size);
 #else
+          /* 32-bit iOS and all other platforms: use the real drawable
+             size from SDL_GL_GetDrawableSize. */
           if (screen->CheckResize(PixelSize(w, h)))
             Resize(screen->GetSize());
 #endif

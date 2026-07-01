@@ -146,8 +146,8 @@ ParseNOTAMProperties(NOTAM &notam, const boost::json::object &notam_obj)
   bool has_lower_limit = false;
   bool has_upper_limit = false;
 
-  notam.lower_altitude = ParseAltitudeString("").value();
-  notam.upper_altitude = ParseAltitudeString("").value();
+  notam.lower_altitude = *ParseAltitudeString("");
+  notam.upper_altitude = *ParseAltitudeString("");
 
   // Parse NOTAM properties from the nested object
   if (auto it = notam_obj.find("id"); it != notam_obj.end()) {

@@ -1,7 +1,32 @@
 import sys
 import os
 import platform
-from typing import Union
+import re
+import subprocess
+from typing import Optional, Union
+
+def _get_osx_sysroot(cflags: str) -> Optional[str]:
+    m = re.search(r'-isysroot +(\S+)', cflags)
+    return m.group(1) if m else None
+
+def _get_ios_libcxx_include(cflags: str) -> Optional[str]:
+    sdk = _get_osx_sysroot(cflags)
+    if sdk is None:
+        try:
+            sdk = subprocess.check_output(
+                ['xcrun', '--sdk', 'iphoneos', '--show-sdk-path'],
+                text=True,
+            ).strip()
+        except (OSError, subprocess.SubprocessError):
+            print("warning: failed to detect iOS SDK libc++ include path via xcrun",
+                  file=sys.stderr)
+            return None
+
+    cxx_include = os.path.join(sdk, 'usr/include/c++/v1')
+    if os.path.exists(os.path.join(cxx_include, 'algorithm')):
+        return cxx_include
+
+    return None
 
 class NativeToolchain:
     """A toolchain for building native binaries, e.g. to be run on the
@@ -74,6 +99,10 @@ class Toolchain:
         common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + arch_cflags
         self.cflags = common_flags
         self.cxxflags = common_flags
+        if target_is_ios:
+            cxx_include = _get_ios_libcxx_include(self.cflags)
+            if cxx_include is not None:
+                self.cxxflags += ' -isystem ' + cxx_include
         self.cppflags = '-isystem ' + os.path.join(install_prefix, 'include') + ' -DNDEBUG ' + cppflags
         self.ldflags = '-L' + os.path.join(install_prefix, 'lib') + ' ' + arch_ldflags
         self.libs = ''

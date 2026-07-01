@@ -284,14 +284,36 @@ ifeq ($(TARGET),IOS32)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 10.0
+  IOS_MIN_SUPPORTED_VERSION = 9.0
   HOST_TRIPLET = armv7-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
+    # If THEOS is passed as a concrete SDK path (e.g. .../iPhoneOS9.3.sdk),
+    # use it directly instead of trying to derive THEOS_SDKS_PATH.
+    ifneq ($(wildcard $(THEOS)/SDKSettings.plist),)
+      DARWIN_SDK ?= $(THEOS)
+    else
+      ifeq ($(THEOS_SDKS_PATH),)
+        ifneq ($(THEOS),)
+          THEOS_SDKS_PATH = $(THEOS)/sdks
+        endif
+      endif
+      ifneq ($(THEOS_SDKS_PATH),)
+        IOS32_THEOS_SDK = $(firstword $(wildcard \
+          $(THEOS_SDKS_PATH)/iPhoneOS10.3.sdk \
+          $(THEOS_SDKS_PATH)/iPhoneOS9.3.sdk))
+        ifneq ($(IOS32_THEOS_SDK),)
+          DARWIN_SDK ?= $(IOS32_THEOS_SDK)
+        endif
+      endif
+    endif
+    ifeq ($(DARWIN_SDK),)
+      $(error IOS32 requires an armv7-capable iPhoneOS SDK; set THEOS or THEOS_SDKS_PATH to a directory containing iPhoneOS9.3.sdk or iPhoneOS10.3.sdk)
+    endif
   endif
   CLANG = y
-  TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION)
+  TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION) -arch armv7
+  ASFLAGS += -arch armv7
 endif
 
 ifeq ($(TARGET),IOS64)
@@ -564,6 +586,28 @@ endif
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
 TARGET_LDADD =
+
+ifeq ($(TARGET_IS_IOS)$(HOST_TRIPLET),yarmv7-apple-darwin)
+  TARGET_LDFLAGS += -Wl,-U,___gxx_personality_sj0
+  # The iPhoneOS10.3 SDK is preferred as the compile-time sysroot, but its
+  # libobjc.A.tbd no longer exports armv7 stret entry points such as
+  # _objc_msgSend_stret.  Link these legacy runtime stubs from iPhoneOS9.3
+  # when available; otherwise fall back to 10.3.
+  ifneq ($(wildcard $(THEOS)/usr/lib/libgcc_s.1.tbd),)
+    IOS32_RUNTIME_SDK = $(THEOS)
+  else
+    IOS32_RUNTIME_SDK = $(firstword $(wildcard \
+      $(THEOS_SDKS_PATH)/iPhoneOS9.3.sdk \
+      $(THEOS_SDKS_PATH)/iPhoneOS10.3.sdk))
+  endif
+  ifneq ($(IOS32_RUNTIME_SDK),)
+    TARGET_LDLIBS += \
+      $(IOS32_RUNTIME_SDK)/usr/lib/libgcc_s.1.tbd \
+      $(IOS32_RUNTIME_SDK)/usr/lib/libobjc.A.tbd
+  else
+    TARGET_LDLIBS += -lgcc_s.1
+  endif
+endif
 
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=6
