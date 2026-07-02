@@ -5,11 +5,43 @@
 #include "Tracking/SkyLines/FlarmTrafficBuilder.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "NMEA/MoreData.hpp"
+#include "NMEA/Info.hpp"
 #include "LogFile.hpp"
 
 #include <chrono>
 
 using namespace std::chrono;
+
+static constexpr int MAX_ONLINE_TRAFFIC_ALTITUDE_SEPARATION = 5000;
+
+[[gnu::pure]]
+static int
+OwnAltitudeMeters(const NMEAInfo &basic) noexcept
+{
+  if (basic.baro_altitude_available)
+    return int(basic.baro_altitude);
+
+  if (basic.gps_altitude_available)
+    return int(basic.gps_altitude);
+
+  return -1;
+}
+
+[[gnu::pure]]
+static bool
+WithinOnlineAltitudeBand(int own_alt, int target_alt,
+                         bool target_altitude_valid) noexcept
+{
+  if (own_alt < 0)
+    return !target_altitude_valid;
+
+  if (!target_altitude_valid)
+    return false;
+
+  const int separation = target_alt - own_alt;
+  return separation <= MAX_ONLINE_TRAFFIC_ALTITUDE_SEPARATION &&
+    separation >= -MAX_ONLINE_TRAFFIC_ALTITUDE_SEPARATION;
+}
 
 static constexpr auto ONLINE_BUFFER_STALE = minutes(5);
 
@@ -55,6 +87,11 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   if (shutting_down)
     return;
 
+  {
+    const std::lock_guard lock{online_mutex};
+    own_altitude = OwnAltitudeMeters(basic);
+  }
+
   try {
     skylines.Tick(basic, calculated);
   } catch (...) {
@@ -72,17 +109,21 @@ TrackingGlue::MergeOnlineTraffic(FlarmData &flarm,
 
   const std::lock_guard lock{online_mutex};
 
+  own_altitude = OwnAltitudeMeters(basic);
+
   online_traffic.ClampListSize();
 
   const auto now = steady_clock::now();
 
   for (unsigned i = 0; i < online_traffic.list.size(); ) {
-    const FlarmId id = online_traffic.list[i].id;
-    const auto last_i = online_last_received.find(id);
+    const FlarmTraffic &t = online_traffic.list[i];
+    const auto last_i = online_last_received.find(t.id);
     if (last_i == online_last_received.end() ||
-        now - last_i->second > ONLINE_BUFFER_STALE) {
-      online_last_received.erase(id);
-      online_pilot_ids.erase(id);
+        now - last_i->second > ONLINE_BUFFER_STALE ||
+        !WithinOnlineAltitudeBand(own_altitude, int(t.altitude),
+                                  t.altitude_available)) {
+      online_last_received.erase(t.id);
+      online_pilot_ids.erase(t.id);
       online_traffic.list.quick_remove(i);
     } else
       ++i;
@@ -141,6 +182,15 @@ TrackingGlue::OnTraffic(uint32_t pilot_id,
     if (cloud_enabled != TriState::TRUE || !cloud_show_traffic)
       return;
   }
+
+  int own_alt;
+  {
+    const std::lock_guard lock{online_mutex};
+    own_alt = own_altitude;
+  }
+
+  if (!WithinOnlineAltitudeBand(own_alt, altitude, altitude_valid))
+    return;
 
   StaticString<64> server_name_buffer;
   CopyOnlineUserName(pilot_id, server_name_buffer);
