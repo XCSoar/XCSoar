@@ -845,36 +845,25 @@ TrailRenderer::UpdateSegmentCache(const WindowProjection &projection,
 
 void
 TrailRenderer::DrawOpenLeg(Canvas &canvas,
-                           const WindowProjection &projection,
                            const TrailSettings &settings,
                            const ColorScale &color_scale,
                            const bool scaled_trail,
                            const bool use_smoothing,
                            const unsigned num_segments,
                            const size_t first_smoothed_point,
-                           const bool enable_traildrift,
-                           const GeoPoint &traildrift,
                            const NMEAInfo &basic,
                            const PixelPoint aircraft_pos) noexcept
 {
-  (void)projection;
-  (void)enable_traildrift;
-  (void)traildrift;
-  (void)basic;
   if (valid_points.size() < 1)
     return;
 
   const TrailPointData &last_data = valid_points.back();
-  const unsigned color_index = color_scale.Index(last_data.value);
 
   const bool draw_lines =
     !(last_data.value < 0 && IsVarioDotsOnlyMode(settings.type));
 
-  if (!draw_lines) {
-    SelectTrailPen(canvas, color_index, scaled_trail);
-    canvas.DrawLine(last_data.point, aircraft_pos);
+  if (!draw_lines)
     return;
-  }
 
   const bool use_merge_vario =
     settings.type != TrailSettings::Type::ALTITUDE &&
@@ -1049,9 +1038,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   DrawCachedSegments(canvas, projection, settings.type, scaled_trail,
                      enable_traildrift, traildrift, basic, segment_cache);
-  DrawOpenLeg(canvas, projection, settings, color_scale, scaled_trail,
+  DrawOpenLeg(canvas, settings, color_scale, scaled_trail,
               use_smoothing, num_segments, first_smoothed_point,
-              enable_traildrift, traildrift, basic, pos);
+              basic, pos);
 }
 
 void

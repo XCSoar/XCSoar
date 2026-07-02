@@ -272,15 +272,12 @@ private:
                           CachedTrailSegment &dest) noexcept;
 
   void DrawOpenLeg(Canvas &canvas,
-                   const WindowProjection &projection,
                    const TrailSettings &settings,
                    const ColorScale &color_scale,
                    bool scaled_trail,
                    bool use_smoothing,
                    unsigned num_segments,
                    size_t first_smoothed_point,
-                   bool enable_traildrift,
-                   const GeoPoint &traildrift,
                    const NMEAInfo &basic,
                    PixelPoint aircraft_pos) noexcept;
 
