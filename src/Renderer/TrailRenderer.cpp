@@ -540,6 +540,42 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
   static constexpr unsigned null_color_index =
     TrailLook::NUMSNAILCOLORS / 2;
 
+  if (scaled_trail) {
+    for (const auto &seg : segments) {
+      for (const auto &run : seg.colour_runs) {
+        if (run.points.size() < 2)
+          continue;
+
+        if (suppress_sink_lines && run.color_index < null_color_index)
+          continue;
+
+        SelectTrailPen(canvas, run.color_index, true);
+
+        bool have_prev = false;
+        PixelPoint prev_pt;
+        for (const auto &p : run.points) {
+          const PixelPoint pt = projection.GeoToScreen(
+            DriftGeoPoint(p.geo, p.time, p.drift_factor,
+                          enable_traildrift, traildrift, basic.time));
+
+          if (!have_prev) {
+            prev_pt = pt;
+            have_prev = true;
+            continue;
+          }
+
+          if (pt == prev_pt)
+            continue;
+
+          canvas.DrawLinePiece(prev_pt, pt);
+          prev_pt = pt;
+        }
+      }
+    }
+
+    return;
+  }
+
   size_t max_batch_points = 0;
   size_t current_batch_points = 0;
   unsigned current_batch_color = TrailLook::NUMSNAILCOLORS;
