@@ -10,6 +10,8 @@
 #include "util/NumberParser.hxx"
 #include "util/StringStrip.hxx"
 
+#include <cstdio>
+
 using std::string_view;
 
 /**
@@ -166,6 +168,70 @@ ParseOgnIdTag(string_view line, uint32_t &id, bool &valid) noexcept
   return false;
 }
 
+/**
+ * Extract a whitespace-delimited field prefixed by @p tag (e.g. "reg",
+ * "fn").
+ */
+static bool
+ExtractTaggedField(string_view line, string_view tag, std::string &dest) noexcept
+{
+  dest.clear();
+
+  std::size_t pos = 0;
+  while (pos < line.size()) {
+    pos = line.find(tag, pos);
+    if (pos == string_view::npos)
+      return false;
+
+    if (pos > 0 && line[pos - 1] != ' ' && line[pos - 1] != '\t') {
+      ++pos;
+      continue;
+    }
+
+    pos += tag.size();
+    if (pos >= line.size())
+      return false;
+
+    const std::size_t end = line.find_first_of(" \t", pos);
+    const std::size_t len = (end == string_view::npos)
+      ? line.size() - pos
+      : end - pos;
+    if (len == 0)
+      return false;
+
+    dest.assign(line.data() + pos, len);
+    return true;
+  }
+
+  return false;
+}
+
+static void
+ResolveOgnCallsign(string_view line, const OGNAprsParseResult &r,
+                   std::string &callsign) noexcept
+{
+  callsign.clear();
+
+  std::string field;
+  if (ExtractTaggedField(line, "reg", field)) {
+    callsign = std::move(field);
+    return;
+  }
+
+  if (ExtractTaggedField(line, "fn", field)) {
+    callsign = std::move(field);
+    return;
+  }
+
+  if (r.flarm_valid) {
+    char buf[16];
+    const int n = std::snprintf(buf, sizeof(buf), "%06X",
+                                unsigned(r.flarm_id & 0xffffffu));
+    if (n > 0 && unsigned(n) < sizeof(buf))
+      callsign.assign(buf, unsigned(n));
+  }
+}
+
 OGNAprsParseResult
 ParseOGNAprsLine(string_view line) noexcept
 {
@@ -205,5 +271,6 @@ ParseOGNAprsLine(string_view line) noexcept
   r.altitude = alt_m;
   r.flarm_id = fid;
   r.flarm_valid = fid_ok;
+  ResolveOgnCallsign(line, r, r.callsign);
   return r;
 }

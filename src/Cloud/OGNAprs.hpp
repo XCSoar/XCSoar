@@ -6,6 +6,7 @@
 #include "Geo/GeoPoint.hpp"
 
 #include <cstdint>
+#include <string>
 #include <string_view>
 
 /**
@@ -17,12 +18,13 @@ struct OGNAprsParseResult {
   /**
    * APRS source address (before '>').
    */
-  std::string_view station_id;
+  std::string station_id;
 
   GeoPoint location = GeoPoint::Invalid();
 
   /** Altitude above MSL [m]. */
   int altitude = 0;
+  bool altitude_valid = false;
 
   unsigned track_deg = 0;
   bool track_valid = false;
@@ -33,6 +35,12 @@ struct OGNAprsParseResult {
 
   /** Compact aircraft type hint (0 if unknown). */
   unsigned aircraft_type = 0;
+
+  /**
+   * Registration or callsign when present in the APRS comment (e.g. ADSB
+   * "regHB-XXX" / "fnA...") or derived from the FLARM address.
+   */
+  std::string callsign;
 };
 
 /**
