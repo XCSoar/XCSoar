@@ -524,6 +524,31 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
   static constexpr unsigned null_color_index =
     TrailLook::NUMSNAILCOLORS / 2;
 
+  size_t max_batch_points = 0;
+  size_t current_batch_points = 0;
+  unsigned current_batch_color = TrailLook::NUMSNAILCOLORS;
+  for (const auto &seg : segments) {
+    for (const auto &run : seg.colour_runs) {
+      if (run.points.size() < 2)
+        continue;
+
+      if (suppress_sink_lines && run.color_index < null_color_index)
+        continue;
+
+      if (run.color_index != current_batch_color) {
+        max_batch_points = std::max(max_batch_points, current_batch_points);
+        current_batch_points = 0;
+        current_batch_color = run.color_index;
+      }
+
+      current_batch_points += run.points.size();
+    }
+  }
+
+  max_batch_points = std::max(max_batch_points, current_batch_points);
+  if (max_batch_points > 0)
+    points.GrowDiscard(max_batch_points);
+
   unsigned batch_color = TrailLook::NUMSNAILCOLORS;
   unsigned batch_n = 0;
 
@@ -566,11 +591,6 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
         const PixelPoint pt = projection.GeoToScreen(
           DriftGeoPoint(p.geo, p.time, p.drift_factor,
                         enable_traildrift, traildrift, basic.time));
-
-        if (batch_n == 0)
-          points.GrowDiscard(1);
-        else
-          points.GrowDiscard(batch_n + 1);
 
         points[batch_n++] = pt;
       }
