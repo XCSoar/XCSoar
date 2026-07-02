@@ -8,15 +8,34 @@
 #include "net/SocketAddress.hxx"
 #include "util/BindMethod.hxx"
 #include "util/SpanCast.hxx"
+#include "util/PrintException.hxx"
+#include "util/Exception.hxx"
 
 #include <array>
 #include <chrono>
+#include <cstdlib>
 #include <cstdio>
+#include <cstring>
+#include <iostream>
 
 namespace {
 constexpr auto CONNECT_TIMEOUT = std::chrono::seconds(15);
 constexpr auto RECONNECT_DELAY = std::chrono::seconds(25);
 constexpr std::size_t RX_BUFFER_CAPACITY = 16384;
+
+const char *
+EnvOr(const char *key, const char *fallback) noexcept
+{
+  const char *v = std::getenv(key);
+  return (v != nullptr && v[0] != '\0') ? v : fallback;
+}
+
+bool
+DebugEnabled() noexcept
+{
+  return std::strcmp(EnvOr("XCS_CLOUD_DEBUG", "0"), "1") == 0;
+}
+
 } // namespace
 
 OGNClient::OGNClient(EventLoop &_loop, Cares::Channel &_cares,
@@ -39,6 +58,7 @@ OGNClient::OGNClient(EventLoop &_loop, Cares::Channel &_cares,
 void
 OGNClient::Start() noexcept
 {
+  std::cerr << "OGN\tlookup\t" << host << ':' << port << std::endl;
   BeginLookup();
 }
 
@@ -48,7 +68,6 @@ OGNClient::Stop() noexcept
   reconnect_timer.Cancel();
   resolver_job.reset();
   CloseConnection();
-  connector.Cancel();
 }
 
 void
@@ -65,7 +84,9 @@ void
 OGNClient::TryConnect(std::forward_list<AllocatedSocketAddress> addresses) noexcept
 {
   for (AllocatedSocketAddress &a : addresses) {
-    connector.Cancel();
+    if (connector.IsPending())
+      connector.Cancel();
+
     if (connector.Connect(a, CONNECT_TIMEOUT))
       return;
   }
@@ -76,16 +97,26 @@ OGNClient::TryConnect(std::forward_list<AllocatedSocketAddress> addresses) noexc
 void
 OGNClient::OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept
 {
+  std::cerr << "OGN\tconnected\t" << host << ':' << port << std::endl;
+
   read_event.Open(fd.Release());
   read_event.ScheduleRead();
   rx_buffer.clear();
-  rx_buffer.reserve(RX_BUFFER_CAPACITY);
+  try {
+    rx_buffer.reserve(RX_BUFFER_CAPACITY);
+  } catch (...) {
+    std::cerr << "OGN\talloc-error\t" << host << ':' << port << std::endl;
+    ScheduleReconnect();
+    return;
+  }
   SendLogin();
 }
 
 void
-OGNClient::OnSocketConnectError([[maybe_unused]] std::exception_ptr error) noexcept
+OGNClient::OnSocketConnectError(std::exception_ptr error) noexcept
 {
+  std::cerr << "OGN\tconnect-error\t" << host << ':' << port << '\t'
+            << GetFullMessage(error) << std::endl;
   ScheduleReconnect();
 }
 
@@ -108,12 +139,16 @@ void
 OGNClient::CloseConnection() noexcept
 {
   read_event.Close();
-  connector.Cancel();
+
+  if (connector.IsPending())
+    connector.Cancel();
 }
 
 void
 OGNClient::ScheduleReconnect() noexcept
 {
+  std::cerr << "OGN\treconnect\t" << host << ':' << port
+            << "\tin=" << RECONNECT_DELAY.count() << "s" << std::endl;
   CloseConnection();
   reconnect_timer.Schedule(RECONNECT_DELAY);
 }
@@ -128,11 +163,13 @@ void
 OGNClient::OnReadReady(unsigned events) noexcept
 {
   if (events & SocketEvent::HANGUP) {
+    std::cerr << "OGN\thangup\t" << host << ':' << port << std::endl;
     ScheduleReconnect();
     return;
   }
 
   if (events & SocketEvent::ERROR) {
+    std::cerr << "OGN\tsocket-error\t" << host << ':' << port << std::endl;
     ScheduleReconnect();
     return;
   }
@@ -141,15 +178,24 @@ OGNClient::OnReadReady(unsigned events) noexcept
   const ssize_t nbytes =
     read_event.GetSocket().Read(std::span<std::byte>{buf.data(), buf.size()});
   if (nbytes <= 0) {
+    std::cerr << "OGN\teof\t" << host << ':' << port << std::endl;
     ScheduleReconnect();
     return;
   }
 
-  ConsumeInput({(const char *)buf.data(), (std::size_t)nbytes});
+  if (DebugEnabled())
+    std::cerr << "OGN\trx\t" << nbytes << " bytes" << std::endl;
+
+  try {
+    ConsumeInput({(const char *)buf.data(), (std::size_t)nbytes});
+  } catch (...) {
+    std::cerr << "OGN\talloc-error\t" << host << ':' << port << std::endl;
+    ScheduleReconnect();
+  }
 }
 
 void
-OGNClient::ConsumeInput(std::string_view chunk) noexcept
+OGNClient::ConsumeInput(std::string_view chunk)
 {
   rx_buffer.append(chunk.data(), chunk.size());
 

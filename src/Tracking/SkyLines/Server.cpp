@@ -17,6 +17,12 @@ CreateBindUDP(SocketAddress address)
   if (!s.Create(address.GetFamily(), SOCK_DGRAM, 0))
     throw MakeSocketError("Failed to create socket");
 
+  /* Linux dual-stack: receive IPv4 and IPv6 on one socket. */
+#ifndef _WIN32
+  if (address.GetFamily() == AF_INET6)
+    s.SetV6Only(false);
+#endif
+
   if (!s.Bind(address))
     throw MakeSocketError("Failed to connect socket");
 
@@ -43,7 +49,7 @@ Server::SendBuffer(SocketAddress address,
                    std::span<const std::byte> buffer) noexcept
 {
   try {
-    ssize_t nbytes = socket.GetSocket().WriteNoWait(buffer);
+    ssize_t nbytes = socket.GetSocket().WriteNoWait(buffer, address);
     if (nbytes < 0)
       throw MakeSocketError("Failed to send");
   } catch (...) {

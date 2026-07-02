@@ -50,10 +50,9 @@ struct CloudClient
   std::chrono::steady_clock::time_point stamp;
 
   /**
-   * The client wishes to receive traffic information until this time
-   * stamp.
+   * Last traffic snapshot sent to this client (monotonic clock).
    */
-  std::chrono::steady_clock::time_point wants_traffic =
+  std::chrono::steady_clock::time_point last_traffic_push =
     std::chrono::steady_clock::time_point::min();
 
   /**
