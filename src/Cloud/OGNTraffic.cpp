@@ -3,6 +3,7 @@
 
 #include "OGNTraffic.hpp"
 
+#include "OGNAprs.hpp"
 #include "Tracking/SkyLines/TrafficExtensions.hpp"
 #include "Geo/Boost/RangeBox.hpp"
 
@@ -37,6 +38,18 @@ OGNTrafficPilotId(const OGNTrafficEntry &t) noexcept
     return t.pilot_id;
 
   return OGNPilotIdFromStation(t.station_id);
+}
+
+bool
+IsForwardableOgnTraffic(const OGNTrafficEntry &t) noexcept
+{
+  if (!t.flarm_valid)
+    return false;
+
+  if (t.address_type == OGN_ADDRESS_TYPE_TRACKER)
+    return false;
+
+  return true;
 }
 
 OGNTrafficContainer::OGNTrafficContainer() = default;
@@ -86,7 +99,7 @@ OGNTrafficContainer::Upsert(std::string_view station_sv,
                             bool altitude_valid,
                             unsigned track_deg, bool track_valid,
                             uint32_t flarm_id, bool flarm_valid,
-                            unsigned aircraft_type,
+                            unsigned aircraft_type, unsigned address_type,
                             std::string_view callsign)
 {
   auto it = by_station.find(station_sv);
@@ -97,7 +110,7 @@ OGNTrafficContainer::Upsert(std::string_view station_sv,
     auto p = std::make_shared<OGNTrafficEntry>(
       std::move(station), location, altitude, altitude_valid,
       track_deg, track_valid,
-      flarm_id, flarm_valid, aircraft_type);
+      flarm_id, flarm_valid, aircraft_type, address_type);
     if (!callsign.empty())
       p->callsign.assign(callsign.data(), callsign.size());
     p->pilot_id = OGNTrafficPilotId(*p);
@@ -125,6 +138,7 @@ OGNTrafficContainer::Upsert(std::string_view station_sv,
   e.flarm_id = flarm_id;
   e.flarm_valid = flarm_valid;
   e.aircraft_type = aircraft_type;
+  e.address_type = address_type;
   if (!callsign.empty())
     e.callsign.assign(callsign.data(), callsign.size());
   e.pilot_id = OGNTrafficPilotId(e);
