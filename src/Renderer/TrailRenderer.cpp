@@ -50,6 +50,19 @@ FindMergeSamplesBetween(TracePoint::Time t0, TracePoint::Time t1,
   return {begin, search_from};
 }
 
+[[gnu::pure]]
+static size_t
+FindMergeSampleIndexAtOrAfter(
+    TracePoint::Time time,
+    const std::vector<TrailVarioSample> &samples) noexcept
+{
+  return std::lower_bound(samples.begin(), samples.end(), time,
+                          [](const TrailVarioSample &sample,
+                             TracePoint::Time t) noexcept {
+                            return sample.time < t;
+                          }) - samples.begin();
+}
+
 void
 BuildVarioBreakpoints(TracePoint::Time t0, double v0,
                       TracePoint::Time t1, double v1,
@@ -811,6 +824,14 @@ TrailRenderer::UpdateSegmentCache(const WindowProjection &projection,
   const size_t start_leg = rebuild ? 0 : from_leg;
   if (rebuild)
     segment_cache.reserve(trace.size() - 1);
+  else if (from_leg < segment_cache.size()) {
+    segment_cache.resize(from_leg);
+    merge_sample_search_index =
+      from_leg < trace.size()
+        ? FindMergeSampleIndexAtOrAfter(trace[from_leg].GetTime(),
+                                        merge_vario_samples)
+        : merge_vario_samples.size();
+  }
 
   for (size_t leg = start_leg; leg + 1 < trace.size(); ++leg) {
     segment_cache.emplace_back();
@@ -977,10 +998,15 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     UpdateSegmentCache(projection, settings.type, color_scale,
                        use_smoothing, num_segments, first_smoothed_point,
                        0, true);
-  else if (leg_count > segment_cache.size())
+  else if (leg_count > segment_cache.size()) {
+    const size_t rebuild_from =
+      use_smoothing && leg_count > MAX_SMOOTHED_TRAIL_POINTS
+        ? leg_count - MAX_SMOOTHED_TRAIL_POINTS
+        : use_smoothing ? 0 : segment_cache.size();
     UpdateSegmentCache(projection, settings.type, color_scale,
                        use_smoothing, num_segments, first_smoothed_point,
-                       segment_cache.size(), false);
+                       rebuild_from, false);
+  }
   else if (leg_count < segment_cache.size())
     segment_cache.resize(leg_count);
 
