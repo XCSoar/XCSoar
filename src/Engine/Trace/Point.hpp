@@ -136,6 +136,10 @@ public:
   constexpr double GetVario() const noexcept {
     return vario;
   }
+
+  constexpr unsigned GetDriftFactor() const noexcept {
+    return drift_factor;
+  }
 };
 
 static_assert(is_trivial_ndebug<TracePoint>::value, "type is not trivial");

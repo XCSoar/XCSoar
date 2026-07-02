@@ -37,6 +37,12 @@ MergeThread::Process() noexcept
 {
   assert(!IsDefined() || IsInside());
 
+  ProcessUnlocked();
+}
+
+void
+MergeThread::ProcessUnlocked() noexcept
+{
   device_blackboard.Merge();
 
   const MoreData &basic = device_blackboard.Basic();
@@ -49,6 +55,52 @@ MergeThread::Process() noexcept
 
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
+}
+
+void
+MergeThread::ProcessReplayFix() noexcept
+{
+  TracePoint::Time trail_push_time{};
+  float trail_push_vario = 0;
+  bool do_trail_vario_push = false;
+
+  {
+    const std::lock_guard lock{device_blackboard.mutex};
+
+    ProcessUnlocked();
+
+    const MoreData &basic = device_blackboard.Basic();
+    const DerivedInfo &calculated = device_blackboard.Calculated();
+
+    if (trail_vario_sink != nullptr &&
+        basic.time_available &&
+        basic.location_available &&
+        basic.NavAltitudeAvailable() &&
+        calculated.flight.flying) {
+      if (!computer.FilteredVarioActive()) {
+        if (basic.netto_vario_available) {
+          do_trail_vario_push = true;
+          trail_push_time = basic.time.Cast<TracePoint::Time>();
+          trail_push_vario = (float)basic.netto_vario;
+        }
+      } else if (basic.brutto_vario_available &&
+                 computer.FilteredVarioSampleUpdated()) {
+        do_trail_vario_push = true;
+        trail_push_time = basic.time.Cast<TracePoint::Time>();
+        trail_push_vario = (float)basic.FilteredNettoVario();
+      }
+    }
+
+    last_any = basic;
+
+    if ((basic.time_available &&
+         (!last_fix.time_available || basic.time != last_fix.time)) ||
+        basic.location_available != last_fix.location_available)
+      last_fix = basic;
+  }
+
+  if (do_trail_vario_push && trail_vario_sink != nullptr)
+    trail_vario_sink->PushMergeVarioSample(trail_push_time, trail_push_vario);
 }
 
 void
@@ -120,10 +172,8 @@ MergeThread::Tick() noexcept
     vario_output_updated = !computer.FilteredVarioActive() ||
       computer.FilteredVarioSampleUpdated();
 
-    /* update last_any in every iteration */
     last_any = basic;
 
-    /* update last_fix only when a new GPS fix was received */
     if ((basic.time_available &&
          (!last_fix.time_available || basic.time != last_fix.time)) ||
         basic.location_available != last_fix.location_available)

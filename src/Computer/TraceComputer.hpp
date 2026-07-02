@@ -5,6 +5,7 @@
 
 #include "thread/Mutex.hxx"
 #include "Engine/Trace/Trace.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "util/OverwritingRingBuffer.hpp"
 
 #include <vector>
@@ -22,9 +23,25 @@ struct TrailVarioSample {
 };
 
 /**
+ * Parameters for a filtered trace read (time, bounds, screen-space thinning).
+ */
+struct TrailQuery {
+  std::chrono::duration<unsigned> min_time{};
+  GeoBounds bounds{};
+  GeoPoint project_location{};
+  double min_distance_m{};
+};
+
+/**
  * Record a trace of the current flight.
  */
 class TraceComputer {
+  /**
+   * Full snail-trail capacity: ~14 h at \a Trace::push_back minimum spacing
+   * (2 s between stored fixes).
+   */
+  static constexpr unsigned FULL_TRACE_MAX_POINTS = 25200;
+
   /**
    * Capacity for #merge_vario_samples (must match ring template size).
    */
@@ -46,12 +63,23 @@ class TraceComputer {
   OverwritingRingBuffer<TrailVarioSample, MERGE_VARIO_SAMPLES_CAPACITY>
       merge_vario_samples;
 
+  /** Merge-vario samples for completed GPS legs (ring holds the open leg). */
+  std::vector<TrailVarioSample> merge_vario_archive;
+
   /**
-   * Append merge-time vario ring contents to \a vario_samples (mutex must
-   * already be held).
+   * Append merge-vario samples for the half-open interval [t0, t1) to
+   * #merge_vario_archive (mutex must already be held).
+   */
+  void ArchiveMergeVarioForLegUnlocked(TracePoint::Time t0,
+                                       TracePoint::Time t1) noexcept;
+
+  /**
+   * Copy archived merge-vario samples plus the open-leg ring (mutex must
+   * already be held).  When \a min_time is non-zero, omit older samples.
    */
   void CopyMergeVarioSamplesUnlocked(
-      std::vector<TrailVarioSample> &vario_samples) const;
+      std::vector<TrailVarioSample> &vario_samples,
+      TracePoint::Time min_time = {}) const;
 
 public:
   TraceComputer();
@@ -115,6 +143,17 @@ public:
                           std::vector<TrailVarioSample> &vario_samples,
                           std::chrono::duration<unsigned> min_time,
                           const GeoPoint &location, double resolution) const;
+
+  /**
+   * Copy trace points and merge-vario samples matching \a query under one
+   * lock.  When \a append_serial and \a modify_serial are non-null, they
+   * are filled with the current trace serials.
+   */
+  void LockedTrailQuery(const TrailQuery &query,
+                        TracePointVector &v,
+                        std::vector<TrailVarioSample> &vario_samples,
+                        Serial *append_serial = nullptr,
+                        Serial *modify_serial = nullptr) const;
 
   /**
    * Called from #MergeThread after merged basic data is computed (must

@@ -20,6 +20,7 @@
 
 class TracePointVector;
 class TracePointerVector;
+class GeoBounds;
 
 /**
  * This class uses a smart thinning algorithm to limit the number of items
@@ -391,6 +392,15 @@ public:
    */
   void GetPoints(TracePointVector &v, Time min_time,
                  const GeoPoint &location, double resolution) const noexcept;
+
+  /**
+   * Like GetPoints() with time and distance thinning, but only returns
+   * points inside \a bounds or on legs that intersect \a bounds.
+   */
+  void GetPoints(TracePointVector &v, Time min_time,
+                 const GeoBounds &bounds,
+                 const GeoPoint &location,
+                 double min_distance) const noexcept;
 
   const TracePoint &front() const noexcept {
     assert(!empty());

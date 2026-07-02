@@ -14,6 +14,8 @@ class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
 class CatmullRomInterpolator;
+class MergeThread;
+class CalculationThread;
 class Error;
 
 class Replay final
@@ -117,6 +119,15 @@ public:
   TimeStamp GetVirtualTime() const noexcept {
     return virtual_time;
   }
+
+  /**
+   * Feed every fix from the current replay file through merge and
+   * calculation without virtual-time skipping.  For trail testing.
+   * Returns the number of fixes processed (0 if replay is inactive or
+   * demo mode).  \a merge_thread and \a calc_thread must be suspended.
+   */
+  unsigned ProcessAllFixes(MergeThread &merge_thread,
+                           CalculationThread &calc_thread) noexcept;
 
 private:
   void OnTimer();
