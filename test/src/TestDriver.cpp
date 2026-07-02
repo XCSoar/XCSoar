@@ -16,10 +16,6 @@
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/Eye.hpp"
 #include "Device/Driver/FLARM.hpp"
-#include "Tracking/SkyLines/FlarmTrafficBuilder.hpp"
-#include "Tracking/SkyLines/TrafficExtensions.hpp"
-#include "Tracking/SkyLines/Protocol.hpp"
-#include "Tracking/SkyLines/Handler.hpp"
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/Flytec.hpp"
@@ -51,6 +47,10 @@
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
 #include "FLARM/MessagingRecord.hpp"
+#include "Tracking/SkyLines/FlarmTrafficBuilder.hpp"
+#include "Tracking/SkyLines/TrafficExtensions.hpp"
+#include "Tracking/SkyLines/Protocol.hpp"
+#include "Tracking/SkyLines/Handler.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -437,7 +437,7 @@ TestFLARM()
 
   // PFLAE without message (pre-v7 style)
   ok1(parser.ParseLine("$PFLAE,A,0,0*33", nmea_info));
-  ok1(nmea_info.flarm.error.severity == FlarmError::NO_ERROR);
+  ok1(nmea_info.flarm.error.severity == FlarmError::Severity::NO_ERROR);
   ok1(nmea_info.flarm.error.code == (FlarmError::Code)0);
   ok1(nmea_info.flarm.error.message.empty());
 
