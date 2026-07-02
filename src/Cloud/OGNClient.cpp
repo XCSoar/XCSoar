@@ -10,32 +10,17 @@
 #include "util/SpanCast.hxx"
 #include "util/PrintException.hxx"
 #include "util/Exception.hxx"
+#include "util/EnvParser.hpp"
 
 #include <array>
 #include <chrono>
-#include <cstdlib>
 #include <cstdio>
-#include <cstring>
 #include <iostream>
 
 namespace {
 constexpr auto CONNECT_TIMEOUT = std::chrono::seconds(15);
 constexpr auto RECONNECT_DELAY = std::chrono::seconds(25);
 constexpr std::size_t RX_BUFFER_CAPACITY = 16384;
-
-const char *
-EnvOr(const char *key, const char *fallback) noexcept
-{
-  const char *v = std::getenv(key);
-  return (v != nullptr && v[0] != '\0') ? v : fallback;
-}
-
-bool
-DebugEnabled() noexcept
-{
-  return std::strcmp(EnvOr("XCS_CLOUD_DEBUG", "0"), "1") == 0;
-}
-
 } // namespace
 
 OGNClient::OGNClient(EventLoop &_loop, Cares::Channel &_cares,
@@ -183,7 +168,7 @@ OGNClient::OnReadReady(unsigned events) noexcept
     return;
   }
 
-  if (DebugEnabled())
+  if (GetEnvBool("XCS_CLOUD_DEBUG"))
     std::cerr << "OGN\trx\t" << nbytes << " bytes" << std::endl;
 
   try {
