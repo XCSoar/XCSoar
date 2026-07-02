@@ -88,6 +88,13 @@ TraceComputer::ArchiveMergeVarioForLegUnlocked(TracePoint::Time t0,
 
     PushMergeVarioDeduped(merge_vario_archive, s);
   }
+
+  const size_t max_archive_size = FULL_TRACE_MAX_POINTS;
+  if (merge_vario_archive.size() > max_archive_size) {
+    const size_t excess = merge_vario_archive.size() - max_archive_size;
+    merge_vario_archive.erase(merge_vario_archive.begin(),
+                              merge_vario_archive.begin() + excess);
+  }
 }
 
 void
@@ -111,7 +118,19 @@ TraceComputer::CopyMergeVarioSamplesUnlocked(
       : std::max(min_time, merge_vario_archive.back().time);
 
   for (const auto &s : merge_vario_samples) {
-    if (s.time > after_archive)
+    if (s.time < after_archive)
+      continue;
+
+    bool duplicate = false;
+    for (auto it = vario_samples.rbegin();
+         it != vario_samples.rend() && it->time == s.time; ++it) {
+      if (it->vario == s.vario) {
+        duplicate = true;
+        break;
+      }
+    }
+
+    if (!duplicate)
       vario_samples.push_back(s);
   }
 }
