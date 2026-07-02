@@ -403,6 +403,8 @@ TrailRenderer::TrailDrawFingerprint::operator==(
     const TrailDrawFingerprint &other) const noexcept
 {
   return scale_px_per_m == other.scale_px_per_m &&
+    color_min == other.color_min &&
+    color_max == other.color_max &&
     query_bounds.GetNorthWest() == other.query_bounds.GetNorthWest() &&
     query_bounds.GetSouthEast() == other.query_bounds.GetSouthEast();
 }
@@ -958,19 +960,20 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   const TrailDrawFingerprint new_fingerprint{
     projection.GetScale(),
     query.bounds,
+    minmax.first,
+    minmax.second,
   };
 
   const bool modify_changed =
     synced_modify_serial != cache_modify_serial;
-  const bool scale_changed =
-    fingerprint.scale_px_per_m != new_fingerprint.scale_px_per_m;
+  const bool fingerprint_changed = !(fingerprint == new_fingerprint);
   const bool settings_changed =
     cached_settings_type != settings.type ||
     cached_scaled_trail != scaled_trail;
 
   const size_t leg_count = trace.size() >= 2 ? trace.size() - 1 : 0;
 
-  if (modify_changed || scale_changed || settings_changed)
+  if (modify_changed || fingerprint_changed || settings_changed)
     UpdateSegmentCache(projection, settings.type, color_scale,
                        use_smoothing, num_segments, first_smoothed_point,
                        0, true);

@@ -61,6 +61,8 @@ class TrailRenderer {
   struct TrailDrawFingerprint {
     double scale_px_per_m{};
     GeoBounds query_bounds{};
+    double color_min{};
+    double color_max{};
 
     [[gnu::pure]]
     bool operator==(const TrailDrawFingerprint &other) const noexcept;
