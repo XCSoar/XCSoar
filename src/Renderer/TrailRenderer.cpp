@@ -20,7 +20,6 @@
 #include <cmath>
 
 static constexpr double TRAIL_ZOOMED_OUT_MAP_SCALE = 6000;
-static constexpr int TRAIL_SPACING_PX = 6;
 static constexpr int TRAIL_THIN_PIXELS_MIN = 3;
 static constexpr int TRAIL_THIN_PIXELS_MAX = 24;
 static constexpr double TRAIL_BOUNDS_SCALE = 4.;
@@ -194,18 +193,19 @@ ComputeCatmullRomWeights(double t) noexcept
 /** Target screen-pixel spacing between kept trace fixes. */
 [[gnu::const]]
 static int
-GetTrailSpacingPixels() noexcept
+GetTrailSpacingPixels(double map_scale) noexcept
 {
-  return std::clamp(TRAIL_SPACING_PX,
+  return std::clamp(int(map_scale / 500),
                     TRAIL_THIN_PIXELS_MIN,
                     TRAIL_THIN_PIXELS_MAX);
 }
 
 [[gnu::const]]
 static double
-GetTrailThinDistance(const WindowProjection &projection) noexcept
+GetTrailThinDistance(const WindowProjection &projection,
+                     double map_scale) noexcept
 {
-  return projection.DistancePixelsToMeters(GetTrailSpacingPixels());
+  return projection.DistancePixelsToMeters(GetTrailSpacingPixels(map_scale));
 }
 
 /**
@@ -403,11 +403,12 @@ TrailQuery
 TrailRenderer::MakeTrailQuery(TimeStamp min_time,
                               const WindowProjection &projection) noexcept
 {
+  const double map_scale = projection.GetMapScale();
   TrailQuery query;
   query.min_time = min_time.Cast<std::chrono::duration<unsigned>>();
   query.bounds = projection.GetScreenBounds().Scale(TRAIL_BOUNDS_SCALE);
   query.project_location = projection.GetGeoScreenCenter();
-  query.min_distance_m = GetTrailThinDistance(projection);
+  query.min_distance_m = GetTrailThinDistance(projection, map_scale);
   return query;
 }
 
