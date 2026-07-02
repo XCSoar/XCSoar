@@ -11,7 +11,7 @@
 int
 main()
 {
-  plan_tests(27);
+  plan_tests(42);
 
   const OGNAprsParseResult bad = ParseOGNAprsLine("# comment");
   ok1(!bad.valid);
@@ -31,7 +31,9 @@ main()
   ok1(r.flarm_valid);
   ok1(r.flarm_id == 0x303030u);
   ok1(r.aircraft_type == 8u);
+  ok1(r.address_type == 1u);
   ok1(!r.track_valid);
+  ok1(IsForwardableOgnTraffic(r, sample));
 
   ok1(OGNPilotIdFromFlarm(0x303030u) == (0x80000000u | 0x303030u));
 
@@ -40,7 +42,8 @@ main()
                                       r.altitude_valid,
                                       r.track_deg, r.track_valid,
                                       r.flarm_id, r.flarm_valid,
-                                      r.aircraft_type, r.callsign);
+                                      r.aircraft_type, r.address_type,
+                                      r.callsign);
   ok1(e.pilot_id == (0x80000000u | 0x303030u));
   ok1(e.callsign == "303030");
 
@@ -52,8 +55,10 @@ main()
   ok1(adsb_r.flarm_valid);
   ok1(adsb_r.flarm_id == 0x4CA6A4u);
   ok1(adsb_r.aircraft_type == 9u);
+  ok1(adsb_r.address_type == 1u);
   ok1(adsb_r.track_valid);
   ok1(adsb_r.track_deg == 85u);
+  ok1(IsForwardableOgnTraffic(adsb_r, adsb));
 
   static constexpr std::string_view flarm_glider =
     "FLRDDDA28B>OGFLR,qAS,bram:/141053h4327.04N/00205.37E'243/039/A=003426 "
@@ -62,8 +67,33 @@ main()
   ok1(glider_r.valid);
   ok1(glider_r.flarm_id == 0xDDA28Bu);
   ok1(glider_r.aircraft_type == 1u);
+  ok1(glider_r.address_type == 2u);
   ok1(glider_r.track_valid);
   ok1(glider_r.track_deg == 243u);
+  ok1(IsForwardableOgnTraffic(glider_r, flarm_glider));
+
+  static constexpr std::string_view ground_sdr =
+    "Barton>OGNSDR:/080643h5145.94NI00111.49W&/A=000295";
+  const OGNAprsParseResult ground_r = ParseOGNAprsLine(ground_sdr);
+  ok1(ground_r.valid);
+  ok1(!ground_r.flarm_valid);
+  ok1(!IsForwardableOgnTraffic(ground_r, ground_sdr));
+
+  static constexpr std::string_view ground_tracker =
+    "OGN395F39>OGNT,qOR:/080629h5145.94N/00111.51W'000/000/A=000321 "
+    "!W81! id07395F39 -019fpm +0.0rot 45.8dB 0e +3.2kHz gps4x6";
+  const OGNAprsParseResult tracker_r = ParseOGNAprsLine(ground_tracker);
+  ok1(tracker_r.valid);
+  ok1(tracker_r.flarm_valid);
+  ok1(tracker_r.address_type == OGN_ADDRESS_TYPE_TRACKER);
+  ok1(!IsForwardableOgnTraffic(tracker_r, ground_tracker));
+
+  static constexpr std::string_view no_altitude =
+    "FLRDD3030F>APRS,qAO,FNB:/092742h4825.11NI00947.88E&"
+    " !W37! id21303030 +550fpm +2.2rot";
+  const OGNAprsParseResult no_alt_r = ParseOGNAprsLine(no_altitude);
+  ok1(no_alt_r.valid);
+  ok1(!no_alt_r.altitude_valid);
 
   return exit_status();
 }
