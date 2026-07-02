@@ -37,11 +37,28 @@ struct OGNAprsParseResult {
   unsigned aircraft_type = 0;
 
   /**
+   * OGN id-field address type (aa bits, 0–3).  Meaningful when
+   * #flarm_valid; #OGN_ADDRESS_TYPE_TRACKER marks a ground receiver.
+   */
+  unsigned address_type = 0;
+
+  /**
    * Registration or callsign when present in the APRS comment (e.g. ADSB
    * "regHB-XXX" / "fnA...") or derived from the FLARM address.
    */
   std::string callsign;
 };
+
+/** OGN id-field address type: OGN tracker / ground receiver. */
+static constexpr unsigned OGN_ADDRESS_TYPE_TRACKER = 3;
+
+/**
+ * Aircraft traffic relayed by OGN (not a ground-station position report).
+ */
+[[gnu::pure]]
+bool
+IsForwardableOgnTraffic(const OGNAprsParseResult &r,
+                        std::string_view line) noexcept;
 
 /**
  * Parse one APRS-IS text line.  Invalid or irrelevant lines yield
