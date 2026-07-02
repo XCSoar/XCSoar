@@ -4,8 +4,13 @@
 #include "Sender.hpp"
 #include "OGNTraffic.hpp"
 #include "Tracking/SkyLines/Export.hpp"
+#include "Tracking/SkyLines/Protocol.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "util/CRC16CCITT.hpp"
+#include "util/UTF8.hpp"
+
+#include <array>
+#include <cstring>
 
 TrafficRecordExtensions
 TrafficRecordExtensions::FromOgn(unsigned track_deg, bool track_valid,
@@ -64,6 +69,39 @@ TrafficResponseSender::Flush()
   data.header.header.crc = 0;
   data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
   server.SendBuffer(address, {(const std::byte *)&data, size});
+}
+
+void
+SendUserNameResponse(SkyLinesTracking::Server &server,
+                     SocketAddress address, uint64_t key,
+                     uint32_t user_id, std::string_view name) noexcept
+{
+  if (name.empty() || name.size() > 255 || !ValidateUTF8(name))
+    return;
+
+  std::array<std::byte, sizeof(SkyLinesTracking::UserNameResponsePacket) + 255>
+    buffer{};
+
+  auto &packet = *(SkyLinesTracking::UserNameResponsePacket *)buffer.data();
+  packet.header.magic = ToBE32(SkyLinesTracking::MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(SkyLinesTracking::Type::USER_NAME_RESPONSE);
+  packet.header.key = ToBE64(key);
+  packet.user_id = ToBE32(user_id);
+  packet.flags = 0;
+  packet.club_id = 0;
+  packet.name_length = uint8_t(name.size());
+  packet.reserved1 = 0;
+  packet.reserved2 = 0;
+  packet.reserved3 = 0;
+  packet.reserved4 = 0;
+  packet.reserved5 = 0;
+
+  std::memcpy(&packet + 1, name.data(), name.size());
+
+  const size_t size = sizeof(packet) + name.size();
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(buffer.data(), size, 0));
+  server.SendBuffer(address, {buffer.data(), size});
 }
 
 void

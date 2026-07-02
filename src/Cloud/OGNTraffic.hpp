@@ -18,22 +18,19 @@
 #include <unordered_map>
 
 /**
- * Synthetic pilot ids from OGN never overlap XCSoar-cloud sequential client
- * ids (which stay in the low range).
- */
-[[gnu::const]]
-constexpr uint32_t
-OGNPilotIdMask() noexcept
-{
-  return 0x80000000u;
-}
-
-/**
  * Stable 31-bit FNV-1a folded into the OGN pilot namespace.
  */
 [[gnu::pure]]
 uint32_t
 OGNPilotIdFromStation(std::string_view station_id) noexcept;
+
+/**
+ * Encode a FLARM address into the OGN #TrafficResponsePacket::Traffic::pilot_id
+ * namespace (distinct from sequential XCSoar-cloud client ids).
+ */
+[[gnu::const]]
+uint32_t
+OGNPilotIdFromFlarm(uint32_t flarm_id) noexcept;
 
 struct OGNTrafficEntry
   : std::enable_shared_from_this<OGNTrafficEntry>,
@@ -43,6 +40,7 @@ struct OGNTrafficEntry
 
   GeoPoint location;
   int altitude = 0;
+  bool altitude_valid = false;
 
   std::chrono::steady_clock::time_point stamp;
 
@@ -57,18 +55,26 @@ struct OGNTrafficEntry
   /** Cached #OGNPilotIdFromStation(station_id); set on insert. */
   uint32_t pilot_id = 0;
 
+  /** Registration/callsign when known (from OGN APRS or derived). */
+  std::string callsign;
+
   template<typename S>
   OGNTrafficEntry(S &&_station, const GeoPoint &_loc, int _altitude,
+                  bool _altitude_valid,
                   unsigned _track_deg, bool _track_valid,
                   uint32_t _flarm_id, bool _flarm_valid,
                   unsigned _aircraft_type)
     :station_id(std::forward<S>(_station)), location(_loc),
-     altitude(_altitude),
+     altitude(_altitude), altitude_valid(_altitude_valid),
      stamp(std::chrono::steady_clock::now()),
      track_deg(_track_deg), track_valid(_track_valid),
      flarm_id(_flarm_id), flarm_valid(_flarm_valid),
      aircraft_type(_aircraft_type) {}
 };
+
+[[gnu::pure]]
+uint32_t
+OGNTrafficPilotId(const OGNTrafficEntry &t) noexcept;
 
 using OGNTrafficPtr = std::shared_ptr<OGNTrafficEntry>;
 
@@ -144,6 +150,8 @@ class OGNTrafficContainer {
                      OGNTrafficDetail::StationEqual>
     by_station;
 
+  std::unordered_map<uint32_t, OGNTrafficPtr> by_pilot_id;
+
 public:
   OGNTrafficContainer();
   ~OGNTrafficContainer();
@@ -158,14 +166,14 @@ public:
   }
 
   [[gnu::pure]]
-  OGNTrafficEntry *Find(std::string_view station_id) const noexcept;
-
-  bool Erase(std::string_view station_id) noexcept;
+  OGNTrafficEntry *FindByPilotId(uint32_t pilot_id) const noexcept;
 
   OGNTrafficEntry &Upsert(std::string_view station_id, const GeoPoint &location,
-                          int altitude, unsigned track_deg, bool track_valid,
+                          int altitude, bool altitude_valid,
+                          unsigned track_deg, bool track_valid,
                           uint32_t flarm_id, bool flarm_valid,
-                          unsigned aircraft_type) noexcept;
+                          unsigned aircraft_type,
+                          std::string_view callsign);
 
   void Expire(std::chrono::steady_clock::time_point before) noexcept;
 

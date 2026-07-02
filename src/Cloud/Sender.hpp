@@ -21,6 +21,9 @@ struct OGNTrafficEntry;
  * - reserved: bit 15 TRACK_VALID; bits 0-8 ground track [deg]; bits 9-13 aircraft
  *   type (0-31).
  * - reserved2: bit 31 FLARM_VALID; bits 0-23 FLARM address when valid.
+ *
+ * For OGN traffic with a known FLARM address, pilot_id uses
+ * #OGNPilotIdFromFlarm() (0x80000000 | flarm_id).
  */
 struct TrafficRecordExtensions {
   uint16_t reserved = 0;
@@ -68,6 +71,11 @@ public:
            TrafficRecordExtensions ext = {});
   void Flush();
 };
+
+void
+SendUserNameResponse(SkyLinesTracking::Server &server,
+                     SocketAddress address, uint64_t key,
+                     uint32_t user_id, std::string_view name) noexcept;
 
 class ThermalResponseSender {
   SkyLinesTracking::Server &server;
