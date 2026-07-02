@@ -12,6 +12,7 @@
 #include "Geo/Math.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
+#include "Screen/Layout.hpp"
 
 #include <algorithm>
 #include <new>
@@ -148,6 +149,14 @@ IsVarioDotsOnlyMode(TrailSettings::Type type) noexcept
     type == TrailSettings::Type::VARIO_2_DOTS;
 }
 
+[[gnu::const]]
+static bool
+IsVarioLineMode(TrailSettings::Type type) noexcept
+{
+  return type == TrailSettings::Type::VARIO_1 ||
+    type == TrailSettings::Type::VARIO_2;
+}
+
 [[gnu::pure]]
 static double
 InterpolatePieceValue(TrailSettings::Type type,
@@ -195,7 +204,7 @@ ComputeCatmullRomWeights(double t) noexcept
 static int
 GetTrailSpacingPixels(double map_scale) noexcept
 {
-  return std::clamp(int(map_scale / 500),
+  return std::clamp(static_cast<int>(map_scale / 500),
                     TRAIL_THIN_PIXELS_MIN,
                     TRAIL_THIN_PIXELS_MAX);
 }
@@ -208,42 +217,14 @@ GetTrailThinDistance(const WindowProjection &projection,
   return projection.DistancePixelsToMeters(GetTrailSpacingPixels(map_scale));
 }
 
-/**
- * Bounded Catmull-Rom smoothing budget and recent trail tail.
- * Stefan Schumann, PR #2664.
- */
+/** Max number of recent trace points that receive Catmull-Rom smoothing. */
 static constexpr size_t MAX_SMOOTHED_TRAIL_POINTS = 180;
 
-[[gnu::const]]
-static unsigned
-GetBaseSmoothingSegments(const WindowProjection &projection) noexcept
-{
-  const double map_scale = projection.GetMapScale();
-  return map_scale <= 3000 ? 4 : map_scale <= TRAIL_ZOOMED_OUT_MAP_SCALE ? 3 : 2;
-}
-
-[[gnu::const]]
-static unsigned
-GetPreferredSmoothingSegments(const WindowProjection &projection) noexcept
-{
-  const double map_scale = projection.GetMapScale();
-  return map_scale <= 3000 ? 8 : map_scale <= TRAIL_ZOOMED_OUT_MAP_SCALE ? 6 : 4;
-}
-
-[[gnu::const]]
-static unsigned
-GetSmoothingSegments(const WindowProjection &projection,
-                     size_t point_count) noexcept
-{
-  const unsigned base = GetBaseSmoothingSegments(projection);
-  if (point_count <= 1)
-    return base;
-
-  const unsigned budget = (MAX_SMOOTHED_TRAIL_POINTS - 1) * base;
-  const unsigned allowed = std::max(base,
-                                    budget / (unsigned)(point_count - 1));
-  return std::min(GetPreferredSmoothingSegments(projection), allowed);
-}
+/**
+ * Fixed Catmull-Rom sub-divisions per GPS leg in the smoothed tail.
+ * Constant across zoom levels for visual consistency and bounded cost.
+ */
+static constexpr unsigned TRAIL_SMOOTH_SEGMENTS = 4;
 
 [[gnu::const]]
 static size_t
@@ -252,6 +233,76 @@ GetFirstSmoothedPointIndex(size_t point_count) noexcept
   return point_count > MAX_SMOOTHED_TRAIL_POINTS
     ? point_count - MAX_SMOOTHED_TRAIL_POINTS
     : 0;
+}
+
+[[gnu::pure]]
+static bool
+UseTrailSmoothing(TrailSettings::Type type, double map_scale) noexcept
+{
+  if (IsVarioDotsOnlyMode(type) || map_scale > TRAIL_ZOOMED_OUT_MAP_SCALE)
+    return false;
+
+  return true;
+}
+
+[[gnu::const]]
+static bool
+UseRibbonTrail(TrailSettings::Type type, bool scaled_trail) noexcept
+{
+  return scaled_trail && IsVarioLineMode(type);
+}
+
+[[gnu::const]]
+static PixelPoint
+RoundRibbonPoint(double x, double y) noexcept
+{
+  return {int(std::lround(x)), int(std::lround(y))};
+}
+
+[[gnu::pure]]
+static bool
+IsLowDpiTrail() noexcept
+{
+  return Layout::min_screen_pixels <= TrailLook::LOW_DPI_TRAIL_SCREEN_PX;
+}
+
+static void
+AppendFilteredTrailPoint(BulkPixelPoint *buffer, unsigned &n,
+                         PixelPoint pt, bool simplify) noexcept
+{
+  if (n > 0 && pt.x == buffer[n - 1].x && pt.y == buffer[n - 1].y)
+    return;
+
+  if (simplify && n >= 2) {
+    const auto &a = buffer[n - 2];
+    const auto &b = buffer[n - 1];
+
+    if (std::abs(pt.x - a.x) <= 1 && std::abs(pt.y - a.y) <= 1) {
+      buffer[n - 1] = pt;
+      return;
+    }
+
+    if ((a.x == b.x && b.x == pt.x) || (a.y == b.y && b.y == pt.y)) {
+      buffer[n - 1] = pt;
+      return;
+    }
+  }
+
+  buffer[n++] = pt;
+}
+
+[[gnu::pure]]
+static double
+GetRibbonWidth(const TrailLook &look, unsigned color_index) noexcept
+{
+  const unsigned min_width = look.trail_widths[0];
+  const unsigned width = look.trail_widths[color_index];
+
+  if (width <= min_width)
+    return min_width;
+
+  const double extra_factor = IsLowDpiTrail() ? 0.5 : 1.0;
+  return min_width + (width - min_width) * extra_factor;
 }
 
 [[gnu::pure]]
@@ -303,13 +354,13 @@ CatmullRomInterpolate(const PixelPoint &p0, const PixelPoint &p1,
 static GeoPoint
 TrailGeoPoint(const TracePoint &tp, bool enable_traildrift,
               const GeoPoint &traildrift,
-              const NMEAInfo &basic) noexcept
+              TimeStamp now) noexcept
 {
   if (!enable_traildrift)
     return tp.GetLocation();
 
   return tp.GetLocation().Parametric(traildrift,
-                                     tp.CalculateDrift(basic.time));
+                                     tp.CalculateDrift(now));
 }
 
 [[gnu::pure]]
@@ -533,12 +584,39 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
                                   const bool scaled_trail,
                                   const bool enable_traildrift,
                                   const GeoPoint &traildrift,
-                                  const NMEAInfo &basic,
+                                  const TimeStamp drift_now,
                                   const std::vector<CachedTrailSegment> &segments) noexcept
 {
   const bool suppress_sink_lines = IsVarioDotsOnlyMode(type);
+  const bool use_ribbon = UseRibbonTrail(type, scaled_trail);
+  const bool simplify_projected = IsLowDpiTrail() && use_ribbon;
   static constexpr unsigned null_color_index =
     TrailLook::NUMSNAILCOLORS / 2;
+
+  if (use_ribbon) {
+    for (const auto &seg : segments) {
+      for (const auto &run : seg.colour_runs) {
+        if (run.points.size() < 2)
+          continue;
+
+        if (suppress_sink_lines && run.color_index < null_color_index)
+          continue;
+
+        auto *dst = Prepare(run.points.size());
+        unsigned n = 0;
+        for (const auto &p : run.points) {
+          const PixelPoint pt = projection.GeoToScreen(
+            DriftGeoPoint(p.geo, p.time, p.drift_factor,
+                          enable_traildrift, traildrift, drift_now));
+          AppendFilteredTrailPoint(dst, n, pt, simplify_projected);
+        }
+
+        DrawRibbonPolyline(canvas, run.color_index, dst, n);
+      }
+    }
+
+    return;
+  }
 
   size_t max_batch_points = 0;
   size_t current_batch_points = 0;
@@ -596,7 +674,7 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
         const PixelPoint junction = projection.GeoToScreen(
           DriftGeoPoint(junction_pt.geo, junction_pt.time,
                         junction_pt.drift_factor,
-                        enable_traildrift, traildrift, basic.time));
+                        enable_traildrift, traildrift, drift_now));
         if (junction.x == points[batch_n - 1].x &&
             junction.y == points[batch_n - 1].y)
           start = 1;
@@ -606,9 +684,10 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
         const auto &p = run.points[i];
         const PixelPoint pt = projection.GeoToScreen(
           DriftGeoPoint(p.geo, p.time, p.drift_factor,
-                        enable_traildrift, traildrift, basic.time));
+                        enable_traildrift, traildrift, drift_now));
 
-        points[batch_n++] = pt;
+        AppendFilteredTrailPoint(points.data(), batch_n, pt,
+                                 simplify_projected);
       }
     }
   }
@@ -934,20 +1013,28 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   const ColorScale color_scale =
     ColorScale::FromMinMax(settings.type, minmax.first, minmax.second);
 
-  const bool zoomed_in =
-    projection.GetMapScale() <= TRAIL_ZOOMED_OUT_MAP_SCALE;
+  const double map_scale = projection.GetMapScale();
+  const bool zoomed_in = map_scale <= TRAIL_ZOOMED_OUT_MAP_SCALE;
   const bool scaled_trail = settings.scaling_enabled && zoomed_in;
 
-  const bool use_smoothing =
-    settings.type != TrailSettings::Type::VARIO_1_DOTS &&
-    settings.type != TrailSettings::Type::VARIO_2_DOTS &&
-    zoomed_in;
+  const bool use_smoothing = UseTrailSmoothing(settings.type, map_scale);
+
+  const bool append_changed =
+    synced_append_serial != cache_append_serial;
+  const bool modify_changed =
+    synced_modify_serial != cache_modify_serial;
+  const size_t leg_count = trace.size() >= 2 ? trace.size() - 1 : 0;
+
+  if (!stable_drift_time.IsDefined() || append_changed || modify_changed ||
+      leg_count > segment_cache.size())
+    stable_drift_time = basic.time;
 
   valid_points.clear();
   valid_points.reserve(trace.size());
 
   for (const auto &i : trace) {
-    const GeoPoint gp = TrailGeoPoint(i, enable_traildrift, traildrift, basic);
+    const GeoPoint gp = TrailGeoPoint(i, enable_traildrift, traildrift,
+                                      stable_drift_time);
     const PixelPoint pt = projection.GeoToScreen(gp);
     const double value = (settings.type == TrailSettings::Type::ALTITUDE)
       ? i.GetAltitude() : i.GetVario();
@@ -960,12 +1047,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   const size_t first_smoothed_point =
     use_smoothing ? GetFirstSmoothedPointIndex(valid_points.size())
                   : valid_points.size();
-  const size_t smoothed_point_count =
-    valid_points.size() - first_smoothed_point;
-  const unsigned num_segments =
-    use_smoothing
-      ? GetSmoothingSegments(projection, smoothed_point_count)
-      : 0u;
+  const unsigned num_segments = use_smoothing ? TRAIL_SMOOTH_SEGMENTS : 0u;
 
   const TrailDrawFingerprint new_fingerprint{
     projection.GetScale(),
@@ -974,14 +1056,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     minmax.second,
   };
 
-  const bool modify_changed =
-    synced_modify_serial != cache_modify_serial;
   const bool fingerprint_changed = !(fingerprint == new_fingerprint);
-  const bool settings_changed =
-    cached_settings_type != settings.type ||
-    cached_scaled_trail != scaled_trail;
-
-  const size_t leg_count = trace.size() >= 2 ? trace.size() - 1 : 0;
+  const bool settings_changed = cached_settings_type != settings.type;
 
   if (modify_changed || fingerprint_changed || settings_changed)
     UpdateSegmentCache(projection, settings.type, color_scale,
@@ -1005,7 +1081,6 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   cache_modify_serial = synced_modify_serial;
   fingerprint = new_fingerprint;
   cached_settings_type = settings.type;
-  cached_scaled_trail = scaled_trail;
 
   for (size_t i = 1; i < valid_points.size(); ++i) {
     const auto &curr_data = valid_points[i];
@@ -1037,7 +1112,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   }
 
   DrawCachedSegments(canvas, projection, settings.type, scaled_trail,
-                     enable_traildrift, traildrift, basic, segment_cache);
+                     enable_traildrift, traildrift, stable_drift_time,
+                     segment_cache);
   DrawOpenLeg(canvas, settings, color_scale, scaled_trail,
               use_smoothing, num_segments, first_smoothed_point,
               basic, pos);
@@ -1077,16 +1153,11 @@ TrailRenderer::SelectTrailPen(Canvas &canvas, unsigned color_index,
 }
 
 void
-TrailRenderer::PrepareCopy(const PixelPoint *src, unsigned n) noexcept
-{
-  std::copy_n(src, n, Prepare(n));
-}
-
-void
 TrailRenderer::DrawColourPolyline(Canvas &canvas, unsigned color_index,
-                                   bool scaled_trail,
-                                   const std::vector<PixelPoint> &pts,
-                                   size_t first, size_t last) noexcept
+                                  TrailSettings::Type type,
+                                  bool scaled_trail,
+                                  const std::vector<PixelPoint> &pts,
+                                  size_t first, size_t last) noexcept
 {
   assert(first <= last);
   assert(last < pts.size());
@@ -1095,9 +1166,73 @@ TrailRenderer::DrawColourPolyline(Canvas &canvas, unsigned color_index,
   if (n < 2)
     return;
 
-  PrepareCopy(pts.data() + first, n);
+  const bool simplify_projected = IsLowDpiTrail() &&
+    (UseRibbonTrail(type, scaled_trail) || !scaled_trail);
+  auto *dst = Prepare(n);
+  unsigned filtered_n = 0;
+  for (size_t i = first; i <= last; ++i)
+    AppendFilteredTrailPoint(dst, filtered_n, pts[i], simplify_projected);
+
+  if (filtered_n < 2)
+    return;
+
+  if (UseRibbonTrail(type, scaled_trail)) {
+    DrawRibbonPolyline(canvas, color_index, dst, filtered_n);
+    return;
+  }
+
   SelectTrailPen(canvas, color_index, scaled_trail);
-  DrawPreparedPolyline(canvas, n);
+  DrawPreparedPolyline(canvas, filtered_n);
+}
+
+void
+TrailRenderer::DrawRibbonPolyline(Canvas &canvas, unsigned color_index,
+                                  const BulkPixelPoint *pts,
+                                  unsigned n) noexcept
+{
+  if (n < 2)
+    return;
+
+  const double half_width =
+    std::max(1., GetRibbonWidth(look, color_index) * 0.5);
+  const unsigned join_radius = unsigned(std::ceil(half_width));
+
+  canvas.SelectNullPen();
+  canvas.Select(look.trail_brushes[color_index]);
+
+  for (unsigned i = 0; i + 1 < n; ++i) {
+    const auto &a = pts[i];
+    const auto &b = pts[i + 1];
+    const double dx = double(b.x - a.x);
+    const double dy = double(b.y - a.y);
+    const double length = std::hypot(dx, dy);
+    if (length <= 0.)
+      continue;
+
+    const double ux = dx / length;
+    const double uy = dy / length;
+    const double nx = -uy * half_width;
+    const double ny = ux * half_width;
+    const double overlap = 0.5;
+    const double ax = double(a.x) - ux * overlap;
+    const double ay = double(a.y) - uy * overlap;
+    const double bx = double(b.x) + ux * overlap;
+    const double by = double(b.y) + uy * overlap;
+
+    BulkPixelPoint polygon[4] = {
+      RoundRibbonPoint(ax + nx, ay + ny),
+      RoundRibbonPoint(ax - nx, ay - ny),
+      RoundRibbonPoint(bx - nx, by - ny),
+      RoundRibbonPoint(bx + nx, by + ny),
+    };
+
+    canvas.DrawPolygon(polygon, 4);
+  }
+
+  if (join_radius > 1) {
+    for (unsigned i = 1; i + 1 < n; ++i)
+      canvas.DrawCircle(pts[i], join_radius);
+  }
 }
 
 void
@@ -1123,7 +1258,7 @@ TrailRenderer::DrawVarioColouredPolyline(Canvas &canvas,
   auto flush_colour_run = [&](size_t run_end) {
     if (!run_active || run_end <= run_start)
       return;
-    DrawColourPolyline(canvas, run_color, scaled_trail,
+    DrawColourPolyline(canvas, run_color, type, scaled_trail,
                        pts, run_start, run_end);
   };
 

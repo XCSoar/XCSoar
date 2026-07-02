@@ -103,9 +103,10 @@ class TrailRenderer {
   Serial cache_modify_serial;
   TrailDrawFingerprint fingerprint{};
   TrailSettings::Type cached_settings_type{};
-  bool cached_scaled_trail{};
   size_t cached_trace_size{};
   size_t merge_sample_search_index{};
+  /** Keep completed-segment drift stable between GPS trace updates. */
+  TimeStamp stable_drift_time{TimeStamp::Undefined()};
 
 public:
   TrailRenderer(const TrailLook &_look) noexcept:look(_look) {}
@@ -169,12 +170,14 @@ private:
   void SelectTrailPen(Canvas &canvas, unsigned color_index,
                       bool scaled_trail) const noexcept;
 
-  void PrepareCopy(const PixelPoint *src, unsigned n) noexcept;
-
   void DrawColourPolyline(Canvas &canvas, unsigned color_index,
+                          TrailSettings::Type type,
                           bool scaled_trail,
                           const std::vector<PixelPoint> &pts,
                           size_t first, size_t last) noexcept;
+
+  void DrawRibbonPolyline(Canvas &canvas, unsigned color_index,
+                          const BulkPixelPoint *pts, unsigned n) noexcept;
 
   void DrawCachedSegments(Canvas &canvas,
                           const WindowProjection &projection,
@@ -182,7 +185,7 @@ private:
                           bool scaled_trail,
                           bool enable_traildrift,
                           const GeoPoint &traildrift,
-                          const NMEAInfo &basic,
+                          TimeStamp drift_now,
                           const std::vector<CachedTrailSegment> &segments) noexcept;
 
   void DrawVarioColouredPolyline(Canvas &canvas,

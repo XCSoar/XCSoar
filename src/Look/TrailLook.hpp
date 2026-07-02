@@ -10,6 +10,7 @@ struct TrailSettings;
 
 struct TrailLook {
   static constexpr unsigned NUMSNAILCOLORS = 15;
+  static constexpr unsigned LOW_DPI_TRAIL_SCREEN_PX = 600;
 
   unsigned trail_widths[NUMSNAILCOLORS];
   Brush trail_brushes[NUMSNAILCOLORS];
