@@ -32,7 +32,7 @@ install_base() {
     git quilt zip \
     m4 automake wget \
     pkg-config cmake ninja-build ccache \
-    ca-certificates
+    ca-certificates sqlite3
   echo
 }
 
