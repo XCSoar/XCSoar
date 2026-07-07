@@ -17,38 +17,6 @@ void
 ResetForDedicatedPage() noexcept;
 
 /**
- * Mark the dedicated EDL page as left, so the next entry resets it.
- */
-void
-LeaveDedicatedPage() noexcept;
-
-/**
- * Mark the dedicated EDL page as entered.
- *
- * @return true if this is the first entry since the last leave
- */
-bool
-EnterDedicatedPage() noexcept;
-
-/**
- * Preserve dedicated-page state while temporarily switching away for pan mode.
- */
-void
-SuspendDedicatedPageForPan() noexcept;
-
-/**
- * Clear the temporary dedicated-page pan suspension flag.
- */
-void
-ResumeDedicatedPageAfterPan() noexcept;
-
-/**
- * Check whether the dedicated EDL page is only hidden temporarily for pan mode.
- */
-bool
-IsDedicatedPageSuspendedForPan() noexcept;
-
-/**
  * Update the current EDL level from the current aircraft altitude.
  */
 void
@@ -73,6 +41,20 @@ ShouldMaintainOverlay() noexcept;
  */
 bool
 TryApplyOverlayFromCache() noexcept;
+
+/**
+ * Apply a cached overlay for the current cursor-bar selection, or clear
+ * the map overlay when nothing is cached.
+ */
+void
+ApplyOverlayFromSession() noexcept;
+
+/**
+ * Return true when the MBTiles file for the current forecast/isobar exists
+ * in the local cache.
+ */
+bool
+HasOverlayCache() noexcept;
 
 /**
  * Advance the shared forecast to the tracked hour and refresh a cached
@@ -121,6 +103,9 @@ SetIdleStatus() noexcept;
 void
 SetErrorStatus() noexcept;
 
+bool
+TryApplyOverlay(Path path) noexcept;
+
 void
 ApplyOverlay(Path path);
 
@@ -144,6 +129,13 @@ GetForecastTime() noexcept;
  */
 BrokenDateTime
 GetForecastTimeLocal() noexcept;
+
+/**
+ * Cursor-bar forecast label, e.g. @c "14:00 UTC (+1:30)" or @c "AUTO: …".
+ */
+void
+FormatForecastCursorLabel(StaticString<64> &text,
+                            bool auto_advance) noexcept;
 
 /**
  * Build the map legend text for the active EDL overlay.

@@ -23,7 +23,7 @@ PageLayout::Normalise() noexcept
     overlay = Overlay::NONE;
 
   if (IsMapMain()) {
-    if (!UsesWeatherOverlay() &&
+    if (overlay != Overlay::EDL && overlay != Overlay::RASP &&
         bottom == Bottom::EDL_CONTROLS)
       bottom = Bottom::NOTHING;
   } else {

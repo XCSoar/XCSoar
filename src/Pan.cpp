@@ -7,10 +7,6 @@
 #include "Interface.hpp"
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
-#include "Weather/Features.hpp"
-#ifdef HAVE_EDL
-#include "Weather/EDL/StateController.hpp"
-#endif
 
 #include <cassert>
 
@@ -26,26 +22,15 @@ EnterPan()
 {
   assert(CommonInterface::main_window != nullptr);
 
-#ifdef HAVE_EDL
-  const bool suspending_edl_page =
-    PageActions::GetCurrentLayout().UsesEdlOverlay();
-  if (suspending_edl_page)
-    EDL::SuspendDedicatedPageForPan();
-#endif
-
-  const bool suspending_rasp_page =
-    PageActions::GetCurrentLayout().UsesRaspOverlay();
-  if (suspending_rasp_page)
-    CommonInterface::SetUIState().weather.SuspendRaspForPan();
+  const bool suspending_weather_page =
+    PageActions::GetCurrentLayout().UsesWeatherOverlay();
+  if (suspending_weather_page)
+    PageActions::SuspendWeatherOverlaysForPan();
 
   GlueMapWindow *map = PageActions::ShowOnlyMap();
   if (map == nullptr || map->IsPanning()) {
-#ifdef HAVE_EDL
-    if (suspending_edl_page)
-      EDL::ResumeDedicatedPageAfterPan();
-#endif
-    if (suspending_rasp_page)
-      CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+    if (suspending_weather_page)
+      PageActions::ResumeWeatherOverlaysAfterPan();
     return;
   }
 
@@ -60,26 +45,15 @@ PanTo(const GeoPoint &location)
 {
   assert(CommonInterface::main_window != nullptr);
 
-#ifdef HAVE_EDL
-  const bool suspending_edl_page =
-    PageActions::GetCurrentLayout().UsesEdlOverlay();
-  if (suspending_edl_page)
-    EDL::SuspendDedicatedPageForPan();
-#endif
-
-  const bool suspending_rasp_page =
-    PageActions::GetCurrentLayout().UsesRaspOverlay();
-  if (suspending_rasp_page)
-    CommonInterface::SetUIState().weather.SuspendRaspForPan();
+  const bool suspending_weather_page =
+    PageActions::GetCurrentLayout().UsesWeatherOverlay();
+  if (suspending_weather_page)
+    PageActions::SuspendWeatherOverlaysForPan();
 
   GlueMapWindow *map = PageActions::ShowOnlyMap();
   if (map == nullptr) {
-#ifdef HAVE_EDL
-    if (suspending_edl_page)
-      EDL::ResumeDedicatedPageAfterPan();
-#endif
-    if (suspending_rasp_page)
-      CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+    if (suspending_weather_page)
+      PageActions::ResumeWeatherOverlaysAfterPan();
     return false;
   }
 
@@ -100,27 +74,26 @@ DisablePan()
   map->SetPan(false);
 
   InputEvents::UpdatePan();
-#ifdef HAVE_EDL
-  EDL::ResumeDedicatedPageAfterPan();
-#endif
-  CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+  PageActions::ResumeWeatherOverlaysAfterPan();
 }
 
 void
 LeavePan()
 {
   GlueMapWindow *map = UIGlobals::GetMapIfActive();
-  if (map == nullptr || !map->IsPanning())
+  if (map == nullptr) {
+    PageActions::ResumeWeatherOverlaysAfterPan();
     return;
+  }
 
-  map->SetPan(false);
+  if (map->IsPanning())
+    map->SetPan(false);
+  else if (!PageActions::IsStuckPanFullScreenLayout())
+    return;
 
   InputEvents::UpdatePan();
   PageActions::Restore();
-#ifdef HAVE_EDL
-  EDL::ResumeDedicatedPageAfterPan();
-#endif
-  CommonInterface::SetUIState().weather.ResumeRaspAfterPan();
+  PageActions::ResumeWeatherOverlaysAfterPan();
 }
 
 void

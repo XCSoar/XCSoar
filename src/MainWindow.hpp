@@ -205,6 +205,9 @@ protected:
   void KillBottomWidget() noexcept;
 
 public:
+  Widget *GetBottomWidget() const noexcept {
+    return bottom_widget;
+  }
   void Create(PixelSize size, UI::TopWindowStyle style={});
 
   void Destroy() noexcept;

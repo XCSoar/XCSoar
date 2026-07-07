@@ -81,6 +81,13 @@ bool
 IsDefault() noexcept;
 
 /**
+ * @return true if the named input mode (from the ``.xci`` file) is active.
+ */
+[[gnu::pure]]
+bool
+IsMode(const char *name) noexcept;
+
+/**
  * Process an event chain.
  */
 void
@@ -182,6 +189,7 @@ void eventTerrainTopography(const char *misc);
 void eventTerrainTopology(const char *misc);
 void eventWaypointDetails(const char *misc);
 void eventWaypointDetailsPersistent(const char *misc);
+void eventWeatherOverlay(const char *misc);
 void eventWaypointImage(const char *misc);
 void eventWaypointEditor(const char *misc);
 void eventZoom(const char *misc);

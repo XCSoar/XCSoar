@@ -23,6 +23,13 @@ namespace PageActions
   const PageLayout &GetCurrentLayout();
 
   /**
+   * True after pan was disabled without Restore(), leaving the transient
+   * FullScreen layout active while a different page is configured.
+   */
+  [[gnu::pure]]
+  bool IsStuckPanFullScreenLayout() noexcept;
+
+  /**
    * Opens the next page.
    */
   void Next();
@@ -106,6 +113,16 @@ namespace PageActions
    * Show the dedicated weather map page.
    */
   void ShowWeatherPage();
+
+  /**
+   * Preserve active weather overlays across a temporary pan full-screen.
+   */
+  void SuspendWeatherOverlaysForPan() noexcept;
+
+  /**
+   * Clear temporary pan suspension flags for all weather overlays.
+   */
+  void ResumeWeatherOverlaysAfterPan() noexcept;
 
   /**
    * Use a custom widget for the "bottom" area.  This is a wrapper for

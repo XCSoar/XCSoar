@@ -11,6 +11,63 @@
 #include <cstdint>
 
 /**
+ * Dedicated-page and cursor-bar session flags shared by weather overlays
+ * (EDL, RASP, XCTherm).
+ */
+struct OverlaySession {
+  bool page_entered = false;
+  bool suspended_for_pan = false;
+
+  /** Cursor-bar selection survives page changes within the app run. */
+  bool cursor_initialized = false;
+
+  void Clear() noexcept {
+    page_entered = false;
+    suspended_for_pan = false;
+    cursor_initialized = false;
+  }
+
+  /**
+   * Mark the dedicated page as entered.
+   *
+   * @return true if this is the first entry since the last leave
+   */
+  bool EnterPage() noexcept {
+    if (page_entered)
+      return false;
+
+    page_entered = true;
+    return true;
+  }
+
+  void LeavePage() noexcept {
+    page_entered = false;
+  }
+
+  /**
+   * Preserve overlay state while temporarily switching away for pan mode.
+   * Only takes effect if a dedicated page is currently entered.
+   */
+  void SuspendForPan() noexcept {
+    suspended_for_pan = page_entered;
+  }
+
+  void ResumeAfterPan() noexcept {
+    suspended_for_pan = false;
+  }
+
+  [[nodiscard]] [[gnu::pure]]
+  bool IsSuspendedForPan() const noexcept {
+    return suspended_for_pan;
+  }
+
+  [[nodiscard]] [[gnu::pure]]
+  bool HasPageOwnership() const noexcept {
+    return page_entered || suspended_for_pan;
+  }
+};
+
+/**
  * The state of weather display on the user interface.
  */
 struct EDLWeatherUIState {
@@ -31,23 +88,29 @@ struct EDLWeatherUIState {
   bool forecast_auto_advance;
 
   /**
+   * When true, #isobar follows GPS/baro altitude.
+   * When false, the user selects the pressure level manually.
+   */
+  bool level_auto_advance;
+
+  /**
    * Nearest supported EDL pressure level in Pascal.
    */
   unsigned isobar;
 
-  bool dedicated_page_entered;
-  bool dedicated_page_suspended_for_pan;
   bool enabled;
+
+  OverlaySession session;
 
   Status status;
 
   void Clear() noexcept {
     forecast_datetime = BrokenDateTime::Invalid();
     forecast_auto_advance = true;
+    level_auto_advance = true;
     isobar = EDL::ISOBARS[0];
-    dedicated_page_entered = false;
-    dedicated_page_suspended_for_pan = false;
     enabled = false;
+    session.Clear();
     status = Status::DISABLED;
   }
 
@@ -81,37 +144,19 @@ struct WeatherUIState {
    */
   bool time_auto_advance;
 
-  bool rasp_page_entered;
-
-  /**
-   * When true, the RASP dedicated-page overlay is preserved across a
-   * temporary pan (full-screen map) instead of being cleared.  Mirrors
-   * EDLWeatherUIState::dedicated_page_suspended_for_pan.
-   */
-  bool rasp_page_suspended_for_pan;
+  OverlaySession rasp;
 
   EDLWeatherUIState edl;
+
+  OverlaySession xctherm;
 
   void Clear() noexcept {
     map = -1;
     time = BrokenTime::Invalid();
     time_auto_advance = true;
-    rasp_page_entered = false;
-    rasp_page_suspended_for_pan = false;
+    rasp.Clear();
     edl.Clear();
-  }
-
-  /**
-   * Mark the current RASP page as entered.
-   *
-   * @return true if this is the first entry since the last leave
-   */
-  bool EnterRaspDedicatedPage() noexcept {
-    if (rasp_page_entered)
-      return false;
-
-    rasp_page_entered = true;
-    return true;
+    xctherm.Clear();
   }
 
   /**
@@ -121,23 +166,5 @@ struct WeatherUIState {
   void ResetRaspForDedicatedPage() noexcept {
     if (time_auto_advance)
       time = BrokenTime::Invalid();
-  }
-
-  /**
-   * Suspend the RASP dedicated page while panning, so the overlay is
-   * kept instead of being torn down.  Only takes effect if a RASP page
-   * is currently entered.
-   */
-  void SuspendRaspForPan() noexcept {
-    rasp_page_suspended_for_pan = rasp_page_entered;
-  }
-
-  void ResumeRaspAfterPan() noexcept {
-    rasp_page_suspended_for_pan = false;
-  }
-
-  [[gnu::pure]]
-  bool IsRaspSuspendedForPan() const noexcept {
-    return rasp_page_suspended_for_pan;
   }
 };
