@@ -7,11 +7,12 @@
 #include "io/Sqlite.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/custom/UncompressedImage.hpp"
 #include "util/StaticString.hxx"
 
 #include <compare>
-#include <cstddef>
-#include <vector>
+#include <cstdint>
+#include <mutex>
 
 struct MbTilesMetadata {
   StaticString<32> format;
@@ -28,44 +29,34 @@ struct TileKey {
   unsigned column;
   unsigned row;
 
-  /**
-   * Convert a geographic position to the MBTiles tile covering it.
-   */
   static TileKey FromGeoPoint(GeoPoint point, unsigned zoom) noexcept;
 
-  /**
-   * Return the north-west corner of this tile.
-   */
   GeoPoint GetNorthWest() const noexcept;
-
-  /**
-   * Return the north-east corner of this tile.
-   */
   GeoPoint GetNorthEast() const noexcept;
-
-  /**
-   * Return the south-west corner of this tile.
-   */
   GeoPoint GetSouthWest() const noexcept;
-
-  /**
-   * Return the south-east corner of this tile.
-   */
   GeoPoint GetSouthEast() const noexcept;
 
   constexpr auto operator<=>(const TileKey &) const noexcept = default;
 };
 
-/**
- * Read tile metadata and tile bitmaps from an MBTiles database.
- */
+struct Rgba8 {
+  uint8_t r = 0;
+  uint8_t g = 0;
+  uint8_t b = 0;
+  uint8_t a = 0;
+};
+
 class MbTilesDatabase {
+  mutable std::mutex mutex;
   SqliteDatabase db;
   MbTilesMetadata metadata;
 
+  [[gnu::pure]]
+  bool HasTileUnlocked(TileKey key) const;
+
 public:
   explicit MbTilesDatabase(Path path);
-  MbTilesDatabase(MbTilesDatabase &&other) noexcept = default;
+  MbTilesDatabase(MbTilesDatabase &&other) noexcept = delete;
   MbTilesDatabase &operator=(MbTilesDatabase &&other) noexcept = delete;
   ~MbTilesDatabase() noexcept = default;
 
@@ -76,16 +67,13 @@ public:
     return metadata;
   }
 
-  /**
-   * Check whether the specified tile exists in the database.
-   */
   [[gnu::pure]]
-  bool
-  HasTile(TileKey key) const;
+  bool HasTile(TileKey key) const;
+
+  Bitmap LoadTile(TileKey key) const;
 
   /**
-   * Load and decode one tile bitmap from the database.
+   * Sample one RGBA pixel at @p point from the tile at maximum zoom.
    */
-  Bitmap
-  LoadTile(TileKey key) const;
+  bool SampleRgbaAtGeo(GeoPoint p, Rgba8 &pixel) const noexcept;
 };

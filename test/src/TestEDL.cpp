@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Weather/EDL/TileStore.hpp"
+#include "Weather/EDL/TileValue.hpp"
 #include "TestUtil.hpp"
 #include "time/BrokenDateTime.hpp"
 
@@ -48,13 +49,48 @@ TestTrackedForecastTime()
          tracked.year, tracked.month, tracked.day, tracked.hour);
 }
 
+static void
+TestAscendancyPixelDecode()
+{
+  double value = 0;
+
+  ok1(!EDL::DecodeAscendancyPixel(0, 0, 0, 0, value));
+
+  ok1(!EDL::DecodeAscendancyPixel(255, 255, 0, 0, value));
+
+  ok1(EDL::DecodeAscendancyPixel(0, 0, 0, 128, value));
+  ok1(equals(value, 0.0196078431372549));
+
+  ok1(EDL::DecodeAscendancyPixel(0, 255, 0, 255, value));
+  ok1(equals(value, 5.));
+
+  ok1(EDL::DecodeAscendancyPixel(255, 0, 0, 255, value));
+  ok1(equals(value, -5.));
+
+  ok1(EDL::DecodeAscendancyPixel(255, 255, 0, 6, value));
+  ok1(equals(value, 4.764705882352941));
+
+  ok1(EDL::DecodeAscendancyPixel(255, 116, 0, 153, value));
+  ok1(equals(value, 5.));
+
+  ok1(EDL::DecodeAscendancyPixel(0, 255, 255, 66, value));
+  ok1(equals(value, -2.411764705882353));
+
+  ok1(EDL::DecodeAscendancyPixel(127, 127, 0, 255, value));
+  ok1(equals(value, 2.490196078431373));
+
+  ok1(EDL::DecodeAscendancyPixel(0, 0, 255, 255, value));
+  ok1(equals(value, -5.));
+}
+
 int
 main()
 {
-  plan_tests(4);
+  plan_tests(4 + 18);
 
   TestRequest();
   TestTrackedForecastTime();
+  TestAscendancyPixelDecode();
 
   return exit_status();
 }

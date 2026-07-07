@@ -2,18 +2,23 @@
 // Copyright The XCSoar Project
 
 #include "DataFilePath.hpp"
+#include "FileType.hpp"
+#include "FileRepository.hpp"
 #include "Glue.hpp"
 #include "Parser.hpp"
+#include "LocalPath.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "net/http/Features.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
 #include "io/FileLineReader.hpp"
+#include "time/BrokenDateTime.hpp"
 
 #include "util/StringFormat.hpp"
 #include "util/StringCompare.hxx"
-#include "Profile/Keys.hpp"
-#include "Profile/Profile.hpp"
 #include "util/IterableSplitString.hxx"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -137,6 +142,116 @@ EnqueueRepositoryDownload(bool force, bool main_repo, bool user_repo)
       }
   }
 }
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+
+AllocatedPath
+GetFileDownloadRelativePath(const AvailableFile &file) noexcept
+{
+  const auto base = file.GetName();
+  if (base == nullptr || *base == '\0')
+    return nullptr;
+
+  const AllocatedPath subdir = GetFileTypeDefaultDir(file.type);
+  if (subdir == nullptr)
+    return AllocatedPath(base);
+
+  return AllocatedPath::Build(subdir, Path(base));
+}
+
+bool
+IsRemoteFileOutOfDate(const AvailableFile &file) noexcept
+{
+  const auto path = LocalPath(GetFileDownloadRelativePath(file));
+  if (path == nullptr)
+    return false;
+
+  if (!File::Exists(path))
+    return true;
+
+  const BrokenDate local_changed =
+    BrokenDateTime{File::GetLastModification(path)};
+  return local_changed < file.update_date;
+}
+
+void
+EnqueueRemoteFileDownload(const AvailableFile &file) noexcept
+{
+  if (!Net::DownloadManager::IsAvailable())
+    return;
+
+  const auto relative_path = GetFileDownloadRelativePath(file);
+  if (relative_path == nullptr)
+    return;
+
+  const AllocatedPath subdir = GetFileTypeDefaultDir(file.type);
+  if (subdir != nullptr) {
+    const auto dest_path = LocalPath(subdir);
+    Directory::CreateRecursive(dest_path);
+  }
+
+  Net::DownloadManager::Enqueue(file.GetURI(), Path(relative_path.c_str()));
+}
+
+AllocatedPath
+GetConfiguredRaspFileName() noexcept
+{
+  auto path = Profile::GetPath(ProfileKeys::RaspFile);
+  if (path == nullptr)
+    path = ResolveTypedDataFilePath(FileType::RASP, RASP_FILENAME);
+  if (path == nullptr)
+    return nullptr;
+
+  const Path base = path.GetBase();
+  if (base == nullptr || base.empty())
+    return nullptr;
+
+  return AllocatedPath(base.c_str());
+}
+
+const AvailableFile *
+FindConfiguredRaspRemoteFile(const FileRepository &repository) noexcept
+{
+  const auto name = GetConfiguredRaspFileName();
+  if (name == nullptr)
+    return nullptr;
+
+  return repository.FindByName(name.c_str());
+}
+
+bool
+IsConfiguredRaspOutOfDate(const FileRepository &repository) noexcept
+{
+  const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
+  if (remote == nullptr)
+    return false;
+
+  return IsRemoteFileOutOfDate(*remote);
+}
+
+bool
+EnqueueConfiguredRaspUpdate(const FileRepository &repository) noexcept
+{
+  const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
+  if (remote == nullptr || !IsRemoteFileOutOfDate(*remote))
+    return false;
+
+  EnqueueRemoteFileDownload(*remote);
+  return true;
+}
+
+bool
+EnqueueConfiguredRaspDownload(const FileRepository &repository) noexcept
+{
+  const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
+  if (remote == nullptr)
+    return false;
+
+  EnqueueRemoteFileDownload(*remote);
+  return true;
+}
+
+#endif /* HAVE_DOWNLOAD_MANAGER */
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 

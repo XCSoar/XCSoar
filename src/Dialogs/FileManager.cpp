@@ -40,22 +40,6 @@ using std::string_view_literals::operator""sv;
 
 [[gnu::pure]]
 static AllocatedPath
-GetRelativePathByType(const AvailableFile &file)
-{
-  const auto base = file.GetName();
-  if (base == nullptr)
-    return nullptr;
-
-  const AllocatedPath subdir = GetFileTypeDefaultDir(file.type);
-  if (subdir == nullptr)
-    return AllocatedPath(base);
-
-  return AllocatedPath::Build(subdir, Path(base));
-}
-
-
-[[gnu::pure]]
-static AllocatedPath
 LocalPathByType(const char *name, FileType type)
 {
   if (name == nullptr)
@@ -96,16 +80,10 @@ static bool
 UpdateAvailable(const FileRepository &repository, const char *name)
 {
   const AvailableFile *remote_file = FindRemoteFile(repository, name);
-
   if (remote_file == nullptr)
     return false;
 
-  BrokenDate remote_changed = remote_file->update_date;
-
-  const auto path = LocalPathByType(*remote_file);
-  BrokenDate local_changed = BrokenDateTime{File::GetLastModification(path)};
-
-  return local_changed < remote_changed;
+  return IsRemoteFileOutOfDate(*remote_file);
 }
 #endif
 
@@ -532,28 +510,7 @@ void
 ManagedFileListWidget::DownloadRemoteFile(const AvailableFile &remote_file)
 {
   assert(Net::DownloadManager::IsAvailable());
-
-  if (remote_file.GetName() == nullptr)
-    return;
-
-  const AllocatedPath subdir = GetFileTypeDefaultDir(remote_file.type);
-  AllocatedPath path = nullptr;
-  if (subdir != nullptr) {
-    const auto dest_path = LocalPath(subdir);
-    Directory::CreateRecursive(dest_path);
-    if (!Directory::Exists(dest_path)) {
-      ShowMessageBox(_("Subdirectory does not exist and could not be created."),
-                     _("Error"), MB_OK);
-      return;
-    }
-    path = AllocatedPath::Build(subdir, Path(remote_file.GetName()));
-  } else {
-    path = AllocatedPath(remote_file.GetName());
-    if (path == nullptr)
-      return;
-  }
-
-  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), path);
+  EnqueueRemoteFileDownload(remote_file);
 }
 
 
@@ -654,11 +611,12 @@ ManagedFileListWidget::UpdateFiles() {
       const AvailableFile *remote_file = FindRemoteFile(repository, file.name);
 
       if (remote_file != nullptr) {
-        const auto relative_path = GetRelativePathByType(*remote_file);
+        const auto relative_path = GetFileDownloadRelativePath(*remote_file);
         if (relative_path == nullptr)
-          return;
+          continue;
 
-        Net::DownloadManager::Enqueue(remote_file->GetURI(), relative_path);
+        Net::DownloadManager::Enqueue(remote_file->GetURI(),
+                                      Path(relative_path.c_str()));
       }
     }
   }
@@ -680,7 +638,7 @@ ManagedFileListWidget::Cancel()
   const FileItem &item = items[current];
   const AvailableFile *remote_file = FindRemoteFile(repository, item.name);
   if (remote_file != nullptr) {
-    if (const auto relative_path = GetRelativePathByType(*remote_file);
+    if (const auto relative_path = GetFileDownloadRelativePath(*remote_file);
         relative_path != nullptr) {
       Net::DownloadManager::Cancel(relative_path);
       return;

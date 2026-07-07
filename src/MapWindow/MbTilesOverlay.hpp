@@ -14,7 +14,7 @@
 #include <optional>
 #include <string>
 
-class MbTilesOverlay final : public MapOverlay {
+class MbTilesOverlay : public MapOverlay {
   MbTilesDatabase database;
   std::string label;
   unsigned cached_zoom = 0;
@@ -23,8 +23,20 @@ class MbTilesOverlay final : public MapOverlay {
   [[gnu::pure]]
   unsigned SelectZoom(const WindowProjection &projection) const noexcept;
 
-  MapOverlayBitmap
-  LoadTile(TileKey key);
+  MapOverlayBitmap LoadTile(TileKey key);
+
+protected:
+  const MbTilesDatabase &
+  GetDatabase() const noexcept
+  {
+    return database;
+  }
+
+  bool
+  SampleRgbaAtGeo(GeoPoint p, Rgba8 &pixel) const noexcept
+  {
+    return database.SampleRgbaAtGeo(p, pixel);
+  }
 
 public:
   MbTilesOverlay(Path path, std::string _label);
