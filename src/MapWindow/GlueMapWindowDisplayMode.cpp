@@ -9,7 +9,6 @@
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
 #include "PageActions.hpp"
-#include "Weather/Features.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Globals.hpp"
@@ -205,13 +204,9 @@ GlueMapWindow::UpdateScreenAngle() noexcept
   const MapSettings &settings = CommonInterface::GetMapSettings();
   const UIState &ui_state = CommonInterface::GetUIState();
 
-  // force north-up if the current page is a dedicated MAP_NORTH_UP or weather page
+  // force north-up if the current page is a dedicated MAP_NORTH_UP page
   const PageLayout &layout = PageActions::GetConfiguredLayout();
-  if (layout.main == PageLayout::Main::MAP_NORTH_UP
-#ifdef HAVE_EDL
-      || layout.UsesEdlOverlay()
-#endif
-      ) {
+  if (layout.main == PageLayout::Main::MAP_NORTH_UP) {
     visible_projection.SetScreenAngle(Angle::Zero());
     OnProjectionModified();
     compass_visible = false;

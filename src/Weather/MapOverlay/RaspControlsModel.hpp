@@ -3,33 +3,45 @@
 
 #pragma once
 
+#include "ControlsModel.hpp"
+
 #include <memory>
 
-#include "PageSettings.hpp"
-#include "Usage.hpp"
+namespace WeatherMapOverlay {
 
-class DataFieldEnum;
-class RaspStore;
-
-namespace MapOverlay {
-
-class RaspControlsModel {
-  [[gnu::pure]]
-  int GetFieldIndex() const noexcept;
+class RaspControlsModel final : public ControlsModel {
+  unsigned last_quarter = unsigned(-1);
 
 public:
-  void SyncFromPageLayout() noexcept;
+  void OnShow() noexcept override;
 
-  void FillTimeChoices(DataFieldEnum &field,
-                       const std::shared_ptr<RaspStore> &rasp) const noexcept;
+  void FormatPrimaryLabel(StaticString<64> &text) const noexcept override;
+  void FormatSecondaryLabel(StaticString<64> &text) const noexcept override;
 
-  void SetTime(unsigned minute_of_day) noexcept;
+  [[nodiscard]]
+  bool HasPrimaryData() const noexcept override;
+  [[nodiscard]]
+  bool HasSecondaryData() const noexcept override;
 
-  [[gnu::pure]]
-  bool GetTimeAutoAdvance() const noexcept;
+  [[nodiscard]]
+  bool StepPrimary(int delta) noexcept override;
+  [[nodiscard]]
+  bool StepSecondary(int delta) noexcept override;
 
-  void SetTimeAutoAdvance(bool auto_advance) noexcept;
-  void ApplyAutoAdvanceTime() noexcept;
+  [[nodiscard]]
+  bool GetPrimaryAutoAdvance() const noexcept override;
+  void SetPrimaryAutoAdvance(bool auto_advance) noexcept override;
+  void ApplyPrimaryAutoAdvance() noexcept override;
+
+  void OnPrimaryLabelClick() noexcept override;
+  void OnSecondaryLabelClick() noexcept override;
+
+  void RefreshOverlay() noexcept override;
+  void OnGPSUpdate(const MoreData &basic) noexcept override;
 };
 
-} // namespace MapOverlay
+[[nodiscard]]
+std::unique_ptr<ControlsModel>
+CreateRaspControlsModel() noexcept;
+
+} // namespace WeatherMapOverlay

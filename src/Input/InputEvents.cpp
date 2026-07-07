@@ -39,6 +39,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "io/BufferedReader.hxx"
 #include "Pan.hpp"
 #include "Dialogs/LockScreen.hpp"
+#include "Weather/MapOverlay/InputEvents.hpp"
 #include "Menu/MenuBar.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 
@@ -177,6 +178,13 @@ bool
 InputEvents::IsDefault() noexcept
 {
   return current_mode == MODE_DEFAULT;
+}
+
+bool
+InputEvents::IsMode(const char *name) noexcept
+{
+  const int id = GetModeId(name);
+  return id >= 0 && current_mode == Mode(id);
 }
 
 void
@@ -542,4 +550,15 @@ void
 InputEvents::eventLockScreen([[maybe_unused]] const char *mode)
 {
   ShowLockBox();
+}
+
+// WeatherOverlay
+// Adjusts the active map weather overlay cursor bar.
+// time +/-, time auto on/off/toggle/show
+// altitude +/-, altitude auto on/off/toggle/show
+// level +/- and level auto … (EDL pressure level alias for altitude)
+void
+InputEvents::eventWeatherOverlay(const char *misc)
+{
+  WeatherMapOverlay::HandleInputEvent(misc);
 }

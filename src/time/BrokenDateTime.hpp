@@ -118,6 +118,18 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   }
 
   /**
+   * Returns a copy floored to the previous 15-minute boundary (seconds
+   * cleared).  Minutes become 0, 15, 30, or 45.
+   */
+  constexpr BrokenDateTime FloorToQuarterHour() const noexcept
+  {
+    if (!IsPlausible())
+      return *this;
+
+    return BrokenDateTime(year, month, day, hour, (minute / 15) * 15, 0);
+  }
+
+  /**
    * Convert this UTC timestamp to local time.
    */
   [[gnu::pure]]

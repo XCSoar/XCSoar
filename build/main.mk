@@ -394,6 +394,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/FieldControls.cpp \
 	$(SRC)/Weather/Rasp/Configured.cpp \
 	$(SRC)/Weather/Rasp/DownloadGlue.cpp \
+	$(SRC)/Weather/MapOverlay/CursorBarLabels.cpp \
+	$(SRC)/Weather/MapOverlay/InputEvents.cpp \
 	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
@@ -401,6 +403,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Blackboard/RateLimitedBlackboardListener.cpp \
 	$(SRC)/Blackboard/LiveBlackboard.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
+	$(SRC)/Blackboard/BlackboardListenerRegistration.cpp \
 	$(SRC)/Blackboard/ScopeGPSListener.cpp \
 	$(SRC)/Blackboard/ScopeCalculatedListener.cpp \
 	\
@@ -604,7 +607,6 @@ ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
-	$(SRC)/Dialogs/Weather/MapOverlayControlsWidget.cpp \
 	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp
 endif
 endif
@@ -694,7 +696,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAFormatter.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
-	$(SRC)/Weather/NOAAUpdater.cpp
+	$(SRC)/Weather/NOAAUpdater.cpp \
 
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
@@ -722,6 +724,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/TileValue.cpp \
 	$(SRC)/Weather/EDL/EdlMbTilesOverlay.cpp \
 	$(SRC)/Weather/EDL/StateController.cpp \
+	$(SRC)/Weather/MapOverlay/ControlsWidget.cpp \
 	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Weather/EDL/Glue.cpp \

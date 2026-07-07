@@ -288,6 +288,93 @@ event=MacCready down
 label=MC-\n(DOWN)
 location=8
 
+# ------------
+# mode=weather (weather overlay cursor bar)
+# Stick: UP/DOWN altitude, LEFT/RIGHT time, RETURN time auto/manual,
+#        APP6 altitude auto/manual, ESCAPE exit
+# Buttons: 1=Exit, 6=Alt auto, 7=Time+, 8=Time-, 9=Alt+, 10=Alt-
+# ------------
+
+mode=weather
+type=key
+data=UP
+event=WeatherOverlay altitude +
+
+mode=weather
+type=key
+data=DOWN
+event=WeatherOverlay altitude -
+
+mode=weather
+type=key
+data=LEFT
+event=WeatherOverlay time -
+
+mode=weather
+type=key
+data=RIGHT
+event=WeatherOverlay time +
+
+mode=weather
+type=key
+data=RETURN
+event=WeatherOverlay time auto show
+event=WeatherOverlay time auto toggle
+
+mode=weather
+type=key
+data=APP6
+event=WeatherOverlay altitude auto show
+event=WeatherOverlay altitude auto toggle
+
+mode=weather
+type=key
+data=ESCAPE
+event=Mode default
+
+mode=weather
+type=key
+data=0
+event=Mode default
+label=Exit\n(ESC)
+location=1
+
+mode=weather
+type=key
+data=0
+event=WeatherOverlay altitude auto show
+event=WeatherOverlay altitude auto toggle
+label=Alt\nauto
+location=6
+
+mode=weather
+type=key
+data=0
+event=WeatherOverlay time +
+label=Time+\n(RIGHT)
+location=7
+
+mode=weather
+type=key
+data=0
+event=WeatherOverlay time -
+label=Time-\n(LEFT)
+location=8
+
+mode=weather
+type=key
+data=0
+event=WeatherOverlay altitude +
+label=Alt+\n(UP)
+location=9
+
+mode=weather
+type=key
+data=0
+event=WeatherOverlay altitude -
+label=Alt-\n(DOWN)
+location=10
+
 ###### main entry buttons
 
 mode=default
@@ -1129,6 +1216,13 @@ location=4
 
 mode=Menu
 type=key
+data=5
+event=Mode weather
+label=Weather
+location=5
+
+mode=Menu
+type=key
 data=9
 event=LockScreen
 event=Mode default
@@ -1526,6 +1620,13 @@ data=0
 event=Exit
 label=Quit XCSoar
 location=41
+
+mode=RemoteStick
+type=key
+data=0
+event=Mode weather
+label=Forecast\nControls
+location=42
 
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote
