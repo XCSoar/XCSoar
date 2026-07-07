@@ -14,7 +14,7 @@
 #include "Widget/TabWidget.hpp"
 #include "Widget/ButtonWidget.hpp"
 #ifdef HAVE_EDL
-#include "MapOverlayControlsWidget.hpp"
+#include "EdlSettingsWidget.hpp"
 #endif
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -82,8 +82,7 @@ ShowWeatherDialog(const char *page)
     start_page = widget.GetSize();
 
 #ifdef HAVE_EDL
-  widget.AddTab(CreateMapOverlayControlsOverlayWidget(PageLayout::Overlay::EDL),
-                "EDL");
+  widget.AddTab(CreateEdlSettingsWidget(), "EDL");
 #else
   widget.AddTab(CreateEDLUnavailableWidget(), "EDL");
 #endif
