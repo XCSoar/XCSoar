@@ -9,7 +9,6 @@
 #include <functional>
 
 struct MoreData;
-struct PageLayout;
 
 namespace WeatherMapOverlay {
 
@@ -101,12 +100,6 @@ public:
 
   /** Map-side refresh only; labels are updated by #ControlsWidget. */
   virtual void RefreshOverlay() noexcept = 0;
-
-  virtual void OnEnterPage(const PageLayout &layout) noexcept {
-    (void)layout;
-  }
-
-  virtual void OnLeavePage() noexcept {}
 
   virtual void OnGPSUpdate(const MoreData &basic) noexcept {
     (void)basic;

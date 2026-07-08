@@ -38,18 +38,4 @@ CreateControlsModel(PageLayout::Overlay overlay) noexcept
   return nullptr;
 }
 
-void
-EnterOverlayPage(const PageLayout &layout) noexcept
-{
-  if (auto model = CreateControlsModel(layout.overlay))
-    model->OnEnterPage(layout);
-}
-
-void
-LeaveOverlayPage(const PageLayout &layout) noexcept
-{
-  if (auto model = CreateControlsModel(layout.overlay))
-    model->OnLeavePage();
-}
-
 } // namespace WeatherMapOverlay

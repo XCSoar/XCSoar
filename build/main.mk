@@ -397,6 +397,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/MapOverlay/CursorBarLabels.cpp \
 	$(SRC)/Weather/MapOverlay/InputEvents.cpp \
 	$(SRC)/Weather/MapOverlay/ControlsFactory.cpp \
+	$(SRC)/Weather/MapOverlay/ControlsWidget.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Weather/MapOverlay/XcthermControlsModel.cpp \
 	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
@@ -727,7 +728,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/TileValue.cpp \
 	$(SRC)/Weather/EDL/EdlMbTilesOverlay.cpp \
 	$(SRC)/Weather/EDL/StateController.cpp \
-	$(SRC)/Weather/MapOverlay/ControlsWidget.cpp \
 	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
 	$(SRC)/Weather/EDL/Glue.cpp \
 	$(SRC)/Weather/EDL/DownloadGlue.cpp

@@ -4,7 +4,6 @@
 #pragma once
 
 #include "ControlsModel.hpp"
-#include "PageSettings.hpp"
 
 namespace WeatherMapOverlay {
 
@@ -32,8 +31,6 @@ public:
   void ApplyPrimaryAutoAdvance() noexcept override;
 
   void RefreshOverlay() noexcept override;
-  void OnEnterPage(const PageLayout &layout) noexcept override;
-  void OnLeavePage() noexcept override;
 };
 
 } // namespace WeatherMapOverlay

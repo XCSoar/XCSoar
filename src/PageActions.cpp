@@ -16,8 +16,10 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "Weather/MapOverlay/ControlsFactory.hpp"
-#ifdef ENABLE_OPENGL
 #include "Weather/MapOverlay/ControlsWidget.hpp"
+#include "Weather/Rasp/FieldControls.hpp"
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "Weather/Rasp/DownloadGlue.hpp"
 #endif
 #ifdef HAVE_EDL
 #include "Weather/EDL/Glue.hpp"
@@ -53,7 +55,15 @@ namespace PageActions {
 
   static void ClearPageOverlays() noexcept;
 
+  static void LeaveRaspOverlay() noexcept;
+  static void LeaveEdlOverlay() noexcept;
+  static void LeaveXcthermOverlay() noexcept;
+
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
+
+  static void ApplyRaspOverlay(const PageLayout &layout) noexcept;
+  static void ApplyEdlOverlay() noexcept;
+  static void ApplyXcthermOverlay() noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 };
@@ -82,9 +92,97 @@ PageActions::ClearPageOverlays() noexcept
 }
 
 void
+PageActions::LeaveEdlOverlay() noexcept
+{
+#ifdef HAVE_EDL
+  auto &weather = CommonInterface::SetUIState().weather;
+  if (weather.edl.session.IsSuspendedForPan())
+    return;
+
+  weather.edl.session.LeavePage();
+  EDL::ClearOverlay();
+#endif
+}
+
+void
+PageActions::LeaveRaspOverlay() noexcept
+{
+  WeatherUIState &weather = CommonInterface::SetUIState().weather;
+  if (weather.rasp.IsSuspendedForPan())
+    return;
+
+  ClearPageOverlays();
+  weather.rasp.LeavePage();
+}
+
+void
+PageActions::LeaveXcthermOverlay() noexcept
+{
+  auto &xctherm = CommonInterface::SetUIState().weather.xctherm;
+  if (xctherm.IsSuspendedForPan())
+    return;
+
+  xctherm.LeavePage();
+}
+
+void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
-  WeatherMapOverlay::LeaveOverlayPage(layout);
+  if (layout.UsesEdlOverlay())
+    LeaveEdlOverlay();
+  else if (layout.overlay == PageLayout::Overlay::RASP)
+    LeaveRaspOverlay();
+  else if (layout.UsesXcthermOverlay())
+    LeaveXcthermOverlay();
+}
+
+void
+PageActions::ApplyRaspOverlay(const PageLayout &layout) noexcept
+{
+  WeatherUIState &weather = CommonInterface::SetUIState().weather;
+  weather.map = Rasp::GetFieldIndex(layout);
+
+  if (!weather.time_auto_advance)
+    weather.rasp.cursor_initialized = true;
+
+  const bool first_enter = weather.rasp.EnterPage();
+
+  if (!weather.rasp.cursor_initialized) {
+    weather.ResetRaspForDedicatedPage();
+  } else if (first_enter) {
+    ActionInterface::ScheduleSendUIState();
+  }
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (!weather.rasp.cursor_initialized || first_enter)
+    RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
+}
+
+void
+PageActions::ApplyEdlOverlay() noexcept
+{
+#ifdef HAVE_EDL
+  auto &edl = CommonInterface::SetUIState().weather.edl;
+  if (!edl.forecast_auto_advance || !edl.level_auto_advance)
+    edl.session.cursor_initialized = true;
+
+  const bool first_enter = edl.session.EnterPage();
+
+  if (!edl.session.cursor_initialized) {
+    EDL::ResetForDedicatedPage();
+    EDL::RequestOverlayRefresh();
+  } else if (first_enter) {
+    EDL::ApplyOverlayFromSession();
+    EDL::RequestOverlayRefresh();
+  }
+#endif
+}
+
+void
+PageActions::ApplyXcthermOverlay() noexcept
+{
+  CommonInterface::SetUIState().weather.xctherm.EnterPage();
 }
 
 void
@@ -115,9 +213,28 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 {
   ClearPageOverlays();
 
-  WeatherMapOverlay::EnterOverlayPage(layout);
+  switch (layout.overlay) {
+  case PageLayout::Overlay::NONE:
+    break;
 
-  ActionInterface::SendUIState(true);
+  case PageLayout::Overlay::RASP:
+    ApplyRaspOverlay(layout);
+    break;
+
+  case PageLayout::Overlay::EDL:
+    ApplyEdlOverlay();
+    break;
+
+  case PageLayout::Overlay::XCTHERM:
+    ApplyXcthermOverlay();
+    break;
+
+  case PageLayout::Overlay::MAX:
+    gcc_unreachable();
+  }
+
+  if (layout.UsesWeatherOverlay())
+    ActionInterface::SendUIState(true);
 }
 
 void
@@ -339,13 +456,11 @@ LoadBottom(const PageLayout &layout)
     break;
 
   case PageLayout::Bottom::EDL_CONTROLS:
-#ifdef ENABLE_OPENGL
     if (auto model = WeatherMapOverlay::CreateControlsModel(layout.overlay)) {
       CommonInterface::main_window->SetBottomWidget(
         new WeatherMapOverlay::ControlsWidget(std::move(model)));
       break;
     }
-#endif
     CommonInterface::main_window->SetBottomWidget(nullptr);
     break;
 
