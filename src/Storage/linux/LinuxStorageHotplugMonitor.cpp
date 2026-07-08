@@ -3,9 +3,12 @@
 
 #include "LinuxStorageHotplugMonitor.hpp"
 #include "LogFile.hpp"
-#include "ui/event/poll/Queue.hpp"
 #include "Storage/StorageHotplugMonitor.hpp"
 #include "util/BindMethod.hxx"
+
+#ifdef USE_POLL_EVENT
+#include "ui/event/poll/Queue.hpp"
+#endif
 
 #include <sys/socket.h>
 #include <linux/netlink.h>
@@ -18,8 +21,12 @@
 LinuxStorageHotplugMonitor::LinuxStorageHotplugMonitor(
     StorageHotplugHandler &handler)
   : handler_(handler),
+#ifdef USE_POLL_EVENT
     trigger_event_(UI::event_queue->GetEventLoop(),
                    BIND_THIS_METHOD(OnTriggerReady))
+#else
+    ui_notify_([this]{ DispatchTrigger(); })
+#endif
 {}
 
 LinuxStorageHotplugMonitor::~LinuxStorageHotplugMonitor()
@@ -37,11 +44,13 @@ LinuxStorageHotplugMonitor::Start() noexcept
   if (socket_fd_ < 0)
     return;
 
-  /* register our trigger EventFD with the main event loop so the
+#ifdef USE_POLL_EVENT
+  /* register our trigger EventFD with the poll event loop so the
      UI thread gets a callback when the worker thread calls
      trigger_.Write() */
   trigger_event_.Open(trigger_.Get());
   trigger_event_.ScheduleRead();
+#endif
 
   running_ = true;
   Thread::Start();
@@ -61,8 +70,12 @@ LinuxStorageHotplugMonitor::Stop() noexcept
 
   Thread::Join();
 
+#ifdef USE_POLL_EVENT
   /* unregister the trigger from the event loop */
   trigger_event_.Close();
+#else
+  ui_notify_.ClearNotification();
+#endif
 
   CloseSocket();
 }
@@ -124,11 +137,17 @@ LinuxStorageHotplugMonitor::Run() noexcept
 
       std::string_view msg(buffer, static_cast<size_t>(len));
       if (msg.find("SUBSYSTEM=block") != std::string_view::npos) {
+#ifdef USE_POLL_EVENT
         trigger_.Write();
+#else
+        ui_notify_.SendNotification();
+#endif
       }
     }
   }
 }
+
+#ifdef USE_POLL_EVENT
 
 void
 LinuxStorageHotplugMonitor::OnTriggerReady(unsigned) noexcept
@@ -137,12 +156,24 @@ try
   /* Clear the EventFD and notify the handler on the UI thread.
      This callback runs in the main/UI event loop thread. */
   (void)trigger_.Read();
-  handler_.OnStorageTopologyChanged();
+  DispatchTrigger();
 
   /* Ensure we remain registered for future events. Some backends
      require explicit re-arming inside the callback; ScheduleRead
      is idempotent if already scheduled. */
   trigger_event_.ScheduleRead();
+}
+catch (...) {
+  LogError(std::current_exception());
+}
+
+#endif
+
+void
+LinuxStorageHotplugMonitor::DispatchTrigger() noexcept
+try
+{
+  handler_.OnStorageTopologyChanged();
 }
 catch (...) {
   LogError(std::current_exception());
