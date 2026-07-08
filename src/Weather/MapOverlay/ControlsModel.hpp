@@ -9,8 +9,17 @@
 #include <functional>
 
 struct MoreData;
+struct PageLayout;
 
 namespace WeatherMapOverlay {
+
+/**
+ * Secondary row label tap when level auto is not resumed first.
+ */
+enum class SecondaryLabelAction : uint8_t {
+  NONE,
+  OPEN_PICKER,
+};
 
 /**
  * How #ControlsWidget should refresh after a model-driven change.
@@ -81,11 +90,23 @@ public:
 
   virtual void ApplySecondaryAutoAdvance() noexcept {}
 
-  virtual void OnPrimaryLabelClick() noexcept {}
-  virtual void OnSecondaryLabelClick() noexcept {}
+  [[nodiscard]]
+  virtual SecondaryLabelAction GetSecondaryLabelAction() const noexcept {
+    return SecondaryLabelAction::NONE;
+  }
+
+  virtual void ResumePrimaryAuto() noexcept {}
+  virtual void ResumeSecondaryAuto() noexcept {}
+  virtual void OpenSecondaryPicker() noexcept {}
 
   /** Map-side refresh only; labels are updated by #ControlsWidget. */
   virtual void RefreshOverlay() noexcept = 0;
+
+  virtual void OnEnterPage(const PageLayout &layout) noexcept {
+    (void)layout;
+  }
+
+  virtual void OnLeavePage() noexcept {}
 
   virtual void OnGPSUpdate(const MoreData &basic) noexcept {
     (void)basic;

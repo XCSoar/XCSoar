@@ -33,6 +33,8 @@ class ControlsWidget final : public CursorBarWidget,
 
   void OnStepPrimary(int delta) noexcept;
   void OnStepSecondary(int delta) noexcept;
+  void OnPrimaryLabelClick() noexcept;
+  void OnSecondaryLabelClick() noexcept;
 
 public:
   explicit ControlsWidget(std::unique_ptr<ControlsModel> _model) noexcept;

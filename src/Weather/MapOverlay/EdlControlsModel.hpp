@@ -53,8 +53,8 @@ public:
   void SetSecondaryAutoAdvance(bool auto_advance) noexcept override;
   void ApplySecondaryAutoAdvance() noexcept override;
 
-  void OnPrimaryLabelClick() noexcept override;
-  void OnSecondaryLabelClick() noexcept override;
+  void ResumePrimaryAuto() noexcept override;
+  void ResumeSecondaryAuto() noexcept override;
 
   void RefreshOverlay() noexcept override;
   void OnGPSUpdate(const MoreData &basic) noexcept override;
@@ -65,18 +65,13 @@ private:
   void RebuildForecastTimes() noexcept;
   void SelectForecast(unsigned index) noexcept;
   void SelectLevel(unsigned isobar) noexcept;
-  void ResumeAutoAdvance() noexcept;
   void UnregisterEdlDownloadListener() noexcept;
 
   [[nodiscard]] [[gnu::pure]]
   unsigned FindForecastIndex() const noexcept;
 
-  [[nodiscard]] [[gnu::pure]]
+  [[nodiscard]]
   bool HasOverlayData() const noexcept;
 };
-
-[[nodiscard]]
-std::unique_ptr<ControlsModel>
-CreateEdlControlsModel() noexcept;
 
 } // namespace WeatherMapOverlay
