@@ -97,6 +97,8 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
     weather.edl.session.SuspendForPan();
   if (layout.UsesRaspOverlay())
     weather.rasp.SuspendForPan();
+  if (layout.UsesXcthermOverlay())
+    weather.xctherm.SuspendForPan();
 }
 
 void

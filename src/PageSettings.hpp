@@ -94,6 +94,7 @@ struct PageLayout
     NONE,
     RASP,
     EDL,
+    XCTHERM,
 
     MAX
   } overlay;
@@ -182,10 +183,18 @@ struct PageLayout
 
   [[gnu::const]]
   constexpr bool
+  UsesXcthermOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::XCTHERM;
+  }
+
+  [[gnu::const]]
+  constexpr bool
   UsesWeatherOverlay() const noexcept
   {
     return IsMapMain() &&
-      (overlay == Overlay::EDL || overlay == Overlay::RASP);
+      (overlay == Overlay::EDL || overlay == Overlay::RASP ||
+       overlay == Overlay::XCTHERM);
   }
 
   /**
