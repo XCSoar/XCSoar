@@ -31,9 +31,9 @@ ControlsWidget::ControlsWidget(std::unique_ptr<ControlsModel> _model) noexcept
 
   SetLabelClickCallback([this](unsigned row) {
     if (row == PRIMARY_ROW)
-      model->OnPrimaryLabelClick();
+      OnPrimaryLabelClick();
     else if (row == SECONDARY_ROW)
-      model->OnSecondaryLabelClick();
+      OnSecondaryLabelClick();
   });
 }
 
@@ -108,6 +108,34 @@ ControlsWidget::OnStepSecondary(int delta) noexcept
     RefreshOverlay();
   else
     UpdateLabels();
+}
+
+void
+ControlsWidget::OnPrimaryLabelClick() noexcept
+{
+  if (model->GetPrimaryAutoAdvance())
+    return;
+
+  model->ResumePrimaryAuto();
+}
+
+void
+ControlsWidget::OnSecondaryLabelClick() noexcept
+{
+  if (model->SupportsSecondaryAutoAdvance()) {
+    if (!model->GetSecondaryAutoAdvance())
+      model->ResumeSecondaryAuto();
+    return;
+  }
+
+  switch (model->GetSecondaryLabelAction()) {
+  case SecondaryLabelAction::OPEN_PICKER:
+    model->OpenSecondaryPicker();
+    break;
+
+  case SecondaryLabelAction::NONE:
+    break;
+  }
 }
 
 void

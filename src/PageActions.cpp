@@ -15,22 +15,14 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
-#include "DataGlobals.hpp"
-#include "Weather/Rasp/RaspStore.hpp"
-#include "Weather/Rasp/FieldControls.hpp"
+#include "Weather/MapOverlay/ControlsFactory.hpp"
 #ifdef ENABLE_OPENGL
 #include "Weather/MapOverlay/ControlsWidget.hpp"
-#include "Weather/MapOverlay/RaspControlsModel.hpp"
+#endif
 #ifdef HAVE_EDL
 #include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/StateController.hpp"
-#include "Weather/MapOverlay/EdlControlsModel.hpp"
 #endif
-#endif
-#ifdef HAVE_DOWNLOAD_MANAGER
-#include "Weather/Rasp/DownloadGlue.hpp"
-#endif
-#include "Weather/Features.hpp"
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -92,21 +84,7 @@ PageActions::ClearPageOverlays() noexcept
 void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
-  WeatherUIState &weather = CommonInterface::SetUIState().weather;
-
-  if (layout.UsesEdlOverlay()) {
-#ifdef HAVE_EDL
-    if (!weather.edl.session.IsSuspendedForPan()) {
-      weather.edl.session.LeavePage();
-      EDL::ClearOverlay();
-    }
-#endif
-  } else if (layout.overlay == PageLayout::Overlay::RASP) {
-    if (!weather.rasp.IsSuspendedForPan()) {
-      ClearPageOverlays();
-      weather.rasp.LeavePage();
-    }
-  }
+  WeatherMapOverlay::LeaveOverlayPage(layout);
 }
 
 void
@@ -135,52 +113,7 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 {
   ClearPageOverlays();
 
-  switch (layout.overlay) {
-  case PageLayout::Overlay::NONE:
-    break;
-
-  case PageLayout::Overlay::RASP: {
-    WeatherUIState &weather = CommonInterface::SetUIState().weather;
-    weather.map = Rasp::GetFieldIndex(layout);
-
-    if (!weather.time_auto_advance)
-      weather.rasp.cursor_initialized = true;
-
-    weather.rasp.EnterPage();
-
-    if (!weather.rasp.cursor_initialized)
-      weather.ResetRaspForDedicatedPage();
-    else
-      ActionInterface::ScheduleSendUIState();
-
-#ifdef HAVE_DOWNLOAD_MANAGER
-    RequestConfiguredRaspUpdateIfOutOfDate();
-#endif
-    break;
-  }
-
-  case PageLayout::Overlay::EDL:
-#ifdef HAVE_EDL
-    if (layout.UsesEdlOverlay()) {
-      auto &edl = CommonInterface::SetUIState().weather.edl;
-      if (!edl.forecast_auto_advance || !edl.level_auto_advance)
-        edl.session.cursor_initialized = true;
-
-      edl.session.EnterPage();
-
-      if (!edl.session.cursor_initialized)
-        EDL::ResetForDedicatedPage();
-      else
-        EDL::ApplyOverlayFromSession();
-
-      EDL::RequestOverlayRefresh();
-    }
-#endif
-    break;
-
-  case PageLayout::Overlay::MAX:
-    gcc_unreachable();
-  }
+  WeatherMapOverlay::EnterOverlayPage(layout);
 
   ActionInterface::SendUIState(true);
 }
@@ -392,7 +325,7 @@ static void
 LoadBottom(const PageLayout &layout)
 {
   /* Weather controls bottom widget is opt-in (Config → System → Pages).
-     EDL and RASP share WeatherMapOverlay::ControlsWidget. Same opt-in
+     Weather overlays share WeatherMapOverlay::ControlsWidget. Same opt-in
      model as Cross Section. */
   switch (layout.bottom) {
   case PageLayout::Bottom::NOTHING:
@@ -404,19 +337,10 @@ LoadBottom(const PageLayout &layout)
     break;
 
   case PageLayout::Bottom::EDL_CONTROLS:
-#ifdef HAVE_EDL
-    if (layout.overlay == PageLayout::Overlay::EDL) {
-      CommonInterface::main_window->SetBottomWidget(
-        new WeatherMapOverlay::ControlsWidget(
-          WeatherMapOverlay::CreateEdlControlsModel()));
-      break;
-    }
-#endif
 #ifdef ENABLE_OPENGL
-    if (layout.overlay == PageLayout::Overlay::RASP) {
+    if (auto model = WeatherMapOverlay::CreateControlsModel(layout.overlay)) {
       CommonInterface::main_window->SetBottomWidget(
-        new WeatherMapOverlay::ControlsWidget(
-          WeatherMapOverlay::CreateRaspControlsModel()));
+        new WeatherMapOverlay::ControlsWidget(std::move(model)));
       break;
     }
 #endif

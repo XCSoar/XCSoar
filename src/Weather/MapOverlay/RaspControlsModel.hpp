@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ControlsModel.hpp"
+#include "PageSettings.hpp"
 
 #include <memory>
 
@@ -33,15 +34,16 @@ public:
   void SetPrimaryAutoAdvance(bool auto_advance) noexcept override;
   void ApplyPrimaryAutoAdvance() noexcept override;
 
-  void OnPrimaryLabelClick() noexcept override;
-  void OnSecondaryLabelClick() noexcept override;
+  [[nodiscard]]
+  SecondaryLabelAction GetSecondaryLabelAction() const noexcept override;
+
+  void ResumePrimaryAuto() noexcept override;
+  void OpenSecondaryPicker() noexcept override;
 
   void RefreshOverlay() noexcept override;
   void OnGPSUpdate(const MoreData &basic) noexcept override;
+  void OnEnterPage(const PageLayout &layout) noexcept override;
+  void OnLeavePage() noexcept override;
 };
-
-[[nodiscard]]
-std::unique_ptr<ControlsModel>
-CreateRaspControlsModel() noexcept;
 
 } // namespace WeatherMapOverlay

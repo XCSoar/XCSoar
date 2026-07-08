@@ -9,6 +9,7 @@
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "UIState.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 
@@ -79,8 +80,15 @@ RaspControlsModel::ApplyPrimaryAutoAdvance() noexcept
   Rasp::ApplyAutoAdvanceTime();
 }
 
+[[nodiscard]]
+SecondaryLabelAction
+RaspControlsModel::GetSecondaryLabelAction() const noexcept
+{
+  return SecondaryLabelAction::OPEN_PICKER;
+}
+
 void
-RaspControlsModel::OnPrimaryLabelClick() noexcept
+RaspControlsModel::ResumePrimaryAuto() noexcept
 {
   if (GetPrimaryAutoAdvance())
     return;
@@ -96,7 +104,7 @@ RaspControlsModel::OnPrimaryLabelClick() noexcept
 }
 
 void
-RaspControlsModel::OnSecondaryLabelClick() noexcept
+RaspControlsModel::OpenSecondaryPicker() noexcept
 {
   const auto rasp = DataGlobals::GetRasp();
   if (rasp == nullptr || rasp->GetItemCount() == 0)
@@ -126,6 +134,41 @@ RaspControlsModel::RefreshOverlay() noexcept
 }
 
 void
+RaspControlsModel::OnEnterPage(const PageLayout &layout) noexcept
+{
+  if (layout.overlay != PageLayout::Overlay::RASP)
+    return;
+
+  WeatherUIState &weather = CommonInterface::SetUIState().weather;
+  weather.map = Rasp::GetFieldIndex(layout);
+
+  if (!weather.time_auto_advance)
+    weather.rasp.cursor_initialized = true;
+
+  weather.rasp.EnterPage();
+
+  if (!weather.rasp.cursor_initialized)
+    weather.ResetRaspForDedicatedPage();
+  else
+    ActionInterface::ScheduleSendUIState();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
+}
+
+void
+RaspControlsModel::OnLeavePage() noexcept
+{
+  WeatherUIState &weather = CommonInterface::SetUIState().weather;
+  if (weather.rasp.IsSuspendedForPan())
+    return;
+
+  weather.map = -1;
+  weather.rasp.LeavePage();
+}
+
+void
 RaspControlsModel::OnGPSUpdate(const MoreData &basic) noexcept
 {
   if (!GetPrimaryAutoAdvance())
@@ -145,12 +188,6 @@ RaspControlsModel::OnGPSUpdate(const MoreData &basic) noexcept
 
   last_quarter = quarter;
   ActionInterface::SendUIState(true);
-}
-
-std::unique_ptr<ControlsModel>
-CreateRaspControlsModel() noexcept
-{
-  return std::make_unique<RaspControlsModel>();
 }
 
 } // namespace WeatherMapOverlay
