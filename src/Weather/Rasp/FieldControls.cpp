@@ -29,6 +29,15 @@ namespace Rasp {
 
 static BrokenTime GetAutoAdvanceLocalTime() noexcept;
 
+[[gnu::pure]]
+static const char *
+GetFieldLabel(const RaspStore::MapItem &item) noexcept
+{
+  return item.label != nullptr
+    ? gettext(item.label)
+    : item.name.c_str();
+}
+
 void
 FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
                  FieldChoicesOptions options) noexcept
@@ -43,14 +52,11 @@ FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
 
   for (unsigned i = 0; i < rasp->GetItemCount(); ++i) {
     const auto &item = rasp->GetItemInfo(i);
-    const char *label = item.label != nullptr
-      ? gettext(item.label)
-      : item.name;
     const char *help = item.help != nullptr
       ? gettext(item.help)
       : nullptr;
 
-    field.AddChoice(i, item.name, label, help);
+    field.AddChoice(i, item.name, GetFieldLabel(item), help);
   }
 }
 
@@ -114,7 +120,7 @@ GetFieldIndex(const PageLayout &layout) noexcept
       unsigned(layout.rasp_field) < rasp->GetItemCount())
     return layout.rasp_field;
 
-  return rasp->GetItemCount() > 0 ? 0 : -1;
+  return 0;
 }
 
 int
@@ -192,16 +198,13 @@ ResumeAutoAdvance() noexcept
 bool
 StepCursorTime(int delta) noexcept
 {
-  const auto rasp = DataGlobals::GetRasp();
   const int field_index = GetActiveFieldIndex();
-  if (rasp == nullptr || field_index < 0 || delta == 0)
+  if (field_index < 0 || delta == 0)
     return false;
 
   const auto &weather = CommonInterface::GetUIState().weather;
   unsigned minute_of_day = 0;
-  if (!StepTime(rasp.get(), unsigned(field_index),
-                weather.time, weather.time_auto_advance,
-                delta, minute_of_day))
+  if (!StepTime(weather.time_auto_advance, delta, minute_of_day))
     return false;
 
   SetCursorTime(minute_of_day);
@@ -225,11 +228,7 @@ FormatFieldCursorLabel(StaticString<64> &text) noexcept
     return;
   }
 
-  const auto &info = rasp->GetItemInfo(unsigned(field_index));
-  const char *field_label = info.label != nullptr
-    ? gettext(info.label)
-    : info.name.c_str();
-  text = field_label;
+  text = GetFieldLabel(rasp->GetItemInfo(unsigned(field_index)));
 }
 
 bool
@@ -300,10 +299,8 @@ GetPanOverlayLabel(const PageLayout &configured) noexcept
   if (field_index < 0)
     return label;
 
-  const auto &info = rasp->GetItemInfo(unsigned(field_index));
-  const char *field_label = info.label != nullptr
-    ? gettext(info.label)
-    : info.name.c_str();
+  const char *field_label =
+    GetFieldLabel(rasp->GetItemInfo(unsigned(field_index)));
 
   const auto &weather = CommonInterface::GetUIState().weather;
   if (weather.time_auto_advance || !weather.time.IsPlausible())
@@ -347,33 +344,17 @@ GetEffectiveLocalTime(bool auto_advance) noexcept
   return weather.time;
 }
 
-static unsigned
-ToQuarterHours(BrokenTime t) noexcept
-{
-  return unsigned(t.hour) * 4u + unsigned(t.minute) / 15u;
-}
-
 bool
-StepTime(const RaspStore *rasp, unsigned field_index,
-         BrokenTime current_time, bool time_auto_advance,
-         int delta, unsigned &minute_of_day) noexcept
+StepTime(bool time_auto_advance, int delta,
+         unsigned &minute_of_day) noexcept
 {
-  (void)rasp;
-  (void)field_index;
-  (void)current_time;
-
   if (delta == 0)
     return false;
 
   unsigned quarter = 0;
   const BrokenTime effective = GetEffectiveLocalTime(time_auto_advance);
   if (effective.IsPlausible())
-    quarter = ToQuarterHours(effective);
-  else {
-    const BrokenTime auto_time = GetAutoAdvanceLocalTime();
-    if (auto_time.IsPlausible())
-      quarter = ToQuarterHours(auto_time);
-  }
+    quarter = RaspStore::TimeToIndex(effective);
 
   int next = int(quarter) + delta;
   next = (next % 96 + 96) % 96;
@@ -382,19 +363,24 @@ StepTime(const RaspStore *rasp, unsigned field_index,
 }
 
 bool
-HasSelectedTimeData(bool auto_advance) noexcept
+HasSelectedTimeData(bool auto_advance, int field_index,
+                    BrokenTime manual_time,
+                    BrokenTime auto_local_time) noexcept
 {
   const auto rasp = DataGlobals::GetRasp();
-  const int field_index = GetEffectiveFieldIndex();
   if (rasp == nullptr || field_index < 0)
     return false;
 
-  const BrokenTime forecast = GetEffectiveLocalTime(auto_advance);
-  if (!forecast.IsPlausible())
-    return false;
+  return rasp->HasSelectedTimeData(unsigned(field_index), auto_advance,
+                                   manual_time, auto_local_time);
+}
 
-  const unsigned time_index = ToQuarterHours(forecast);
-  return rasp->IsTimeAvailable(unsigned(field_index), time_index);
+bool
+HasSelectedTimeData(bool auto_advance) noexcept
+{
+  const auto &weather = CommonInterface::GetUIState().weather;
+  return HasSelectedTimeData(auto_advance, GetEffectiveFieldIndex(),
+                             weather.time, GetAutoAdvanceLocalTime());
 }
 
 void
@@ -417,8 +403,8 @@ MaybeRequestConfiguredRaspUpdateOnAutoNoData() noexcept
 
   static unsigned last_attempt_quarter = unsigned(-1);
   const auto local = basic.date_time_utc.ToLocal().FloorToQuarterHour();
-  const unsigned quarter = unsigned(local.hour) * 4u +
-    unsigned(local.minute) / 15u;
+  const unsigned quarter =
+    RaspStore::TimeToIndex(BrokenTime(local.hour, local.minute));
 
   if (quarter == last_attempt_quarter)
     return;

@@ -107,6 +107,30 @@ RaspStore::IndexToTime(unsigned index)
 }
 
 unsigned
+RaspStore::TimeToIndex(BrokenTime t) noexcept
+{
+  return unsigned(t.hour) * 4u + unsigned(t.minute) / 15u;
+}
+
+bool
+RaspStore::HasSelectedTimeData(unsigned item_index, bool auto_advance,
+                               BrokenTime manual_time,
+                               BrokenTime auto_local_time) const noexcept
+{
+  if (item_index >= maps.size())
+    return false;
+
+  const BrokenTime forecast = (auto_advance || !manual_time.IsPlausible())
+    ? auto_local_time
+    : manual_time;
+  if (!forecast.IsPlausible())
+    return false;
+
+  const unsigned time_index = TimeToIndex(forecast);
+  return IsTimeAvailable(item_index, time_index);
+}
+
+unsigned
 RaspStore::GetNearestTime(unsigned item_index, unsigned time_index) const
 {
   if (item_index >= maps.size() || time_index >= MAX_WEATHER_TIMES)
