@@ -72,9 +72,8 @@ MinuteOfDayFromTime(BrokenTime time) noexcept;
  * @return false when @p delta is zero
  */
 bool
-StepTime(const RaspStore *rasp, unsigned field_index,
-         BrokenTime current_time, bool time_auto_advance,
-         int delta, unsigned &minute_of_day) noexcept;
+StepTime(bool time_auto_advance, int delta,
+         unsigned &minute_of_day) noexcept;
 
 /**
  * Synchronise #WeatherUIState::map from the active RASP page layout.
@@ -165,10 +164,22 @@ FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept;
 /**
  * Return true when the active RASP field has raster data for the
  * effective cursor-bar time ("Now"/AUTO or manual selection).
+ *
+ * Main-thread wrapper; uses #CommonInterface for state.
  */
 [[gnu::pure]]
 bool
 HasSelectedTimeData(bool auto_advance) noexcept;
+
+/**
+ * Thread-safe variant for map rendering: caller supplies field index,
+ * manual time, and GPS-based quarter-hour time for AUTO mode.
+ */
+[[gnu::pure]]
+bool
+HasSelectedTimeData(bool auto_advance, int field_index,
+                    BrokenTime manual_time,
+                    BrokenTime auto_local_time) noexcept;
 
 /**
  * When AUTO is active but the configured field has no raster for the

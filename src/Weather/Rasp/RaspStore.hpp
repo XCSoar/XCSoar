@@ -103,6 +103,15 @@ public:
     return maps[item_index].times[time_index];
   }
 
+  /**
+   * Return true when this field has raster data for the effective
+   * cursor-bar time (AUTO quarter-hour or manual selection).
+   */
+  [[gnu::pure]]
+  bool HasSelectedTimeData(unsigned item_index, bool auto_advance,
+                           BrokenTime manual_time,
+                           BrokenTime auto_local_time) const noexcept;
+
   template<typename C>
   void ForEachTime(unsigned item_index, C &&c) {
     if (item_index >= maps.size())
@@ -127,6 +136,12 @@ public:
    */
   [[gnu::pure]]
   static BrokenTime IndexToTime(unsigned index);
+
+  /**
+   * Converts a #BrokenTime to a quarter-hour time index (0..95).
+   */
+  [[gnu::pure]]
+  static unsigned TimeToIndex(BrokenTime t) noexcept;
 
   std::unique_ptr<ZipArchive> OpenArchive() const;
 

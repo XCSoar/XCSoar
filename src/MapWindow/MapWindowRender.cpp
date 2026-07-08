@@ -7,7 +7,6 @@
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Weather/Rasp/RaspCache.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "Weather/Rasp/FieldControls.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
@@ -56,7 +55,18 @@ MapWindow::RenderRasp(Canvas &canvas) noexcept
       unsigned(state.map) >= rasp_store->GetItemCount())
     return;
 
-  if (!Rasp::HasSelectedTimeData(state.time_auto_advance))
+  BrokenTime auto_local_time = BrokenTime::Invalid();
+  if (state.time_auto_advance) {
+    const BrokenDateTime &utc = Basic().date_time_utc;
+    if (utc.IsPlausible()) {
+      const auto quarter = utc.ToLocal().FloorToQuarterHour();
+      auto_local_time = BrokenTime(quarter.hour, quarter.minute);
+    }
+  }
+
+  if (!rasp_store->HasSelectedTimeData(unsigned(state.map),
+                                       state.time_auto_advance,
+                                       state.time, auto_local_time))
     return;
 
   if (!rasp_renderer) {
