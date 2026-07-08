@@ -6,10 +6,15 @@
 #include "Storage/StorageHotplugMonitor.hpp"
 #include "thread/Thread.hpp"
 #include "system/EventFD.hxx"
-#include "event/PipeEvent.hxx"
-#include "ui/event/Globals.hpp"
 
 #include <atomic>
+
+#ifdef USE_POLL_EVENT
+#include "event/PipeEvent.hxx"
+#include "ui/event/Globals.hpp"
+#else
+#include "ui/event/Notify.hpp"
+#endif
 
 class LinuxStorageHotplugMonitor final :
   public StorageHotplugMonitor, private Thread
@@ -23,9 +28,14 @@ public:
 
 private:
   StorageHotplugHandler &handler_;
-  EventFD trigger_;
   EventFD shutdown_fd_;
+
+#ifdef USE_POLL_EVENT
+  EventFD trigger_;
   PipeEvent trigger_event_;
+#else
+  UI::Notify ui_notify_;
+#endif
 
   int socket_fd_ = -1;
   std::atomic<bool> running_{false};
@@ -34,5 +44,10 @@ private:
   void CloseSocket() noexcept;
 
   void Run() noexcept override;
+
+#ifdef USE_POLL_EVENT
   void OnTriggerReady(unsigned) noexcept;
+#endif
+
+  void DispatchTrigger() noexcept;
 };
