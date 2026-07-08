@@ -4,7 +4,6 @@
 #pragma once
 
 #include "ControlsModel.hpp"
-#include "PageSettings.hpp"
 
 #include <memory>
 
@@ -42,8 +41,6 @@ public:
 
   void RefreshOverlay() noexcept override;
   void OnGPSUpdate(const MoreData &basic) noexcept override;
-  void OnEnterPage(const PageLayout &layout) noexcept override;
-  void OnLeavePage() noexcept override;
 };
 
 } // namespace WeatherMapOverlay

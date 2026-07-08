@@ -241,7 +241,6 @@ ControlsWidget::Show(const PixelRect &rc) noexcept
   CursorBarWidget::Show(rc);
   UpdateLabels();
   RegisterBlackboard();
-  RefreshOverlay();
 }
 
 void

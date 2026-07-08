@@ -9,7 +9,6 @@
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIState.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 
@@ -131,41 +130,6 @@ void
 RaspControlsModel::RefreshOverlay() noexcept
 {
   ActionInterface::SendUIState(true);
-}
-
-void
-RaspControlsModel::OnEnterPage(const PageLayout &layout) noexcept
-{
-  if (layout.overlay != PageLayout::Overlay::RASP)
-    return;
-
-  WeatherUIState &weather = CommonInterface::SetUIState().weather;
-  weather.map = Rasp::GetFieldIndex(layout);
-
-  if (!weather.time_auto_advance)
-    weather.rasp.cursor_initialized = true;
-
-  weather.rasp.EnterPage();
-
-  if (!weather.rasp.cursor_initialized)
-    weather.ResetRaspForDedicatedPage();
-  else
-    ActionInterface::ScheduleSendUIState();
-
-#ifdef HAVE_DOWNLOAD_MANAGER
-  RequestConfiguredRaspUpdateIfOutOfDate();
-#endif
-}
-
-void
-RaspControlsModel::OnLeavePage() noexcept
-{
-  WeatherUIState &weather = CommonInterface::SetUIState().weather;
-  if (weather.rasp.IsSuspendedForPan())
-    return;
-
-  weather.map = -1;
-  weather.rasp.LeavePage();
 }
 
 void
