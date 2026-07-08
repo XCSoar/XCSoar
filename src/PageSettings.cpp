@@ -24,6 +24,7 @@ PageLayout::Normalise() noexcept
 
   if (IsMapMain()) {
     if (overlay != Overlay::EDL && overlay != Overlay::RASP &&
+        overlay != Overlay::XCTHERM &&
         bottom == Bottom::EDL_CONTROLS)
       bottom = Bottom::NOTHING;
   } else {
@@ -65,6 +66,10 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
 
   case PageLayout::Overlay::EDL:
     builder.Append(", EDL");
+    break;
+
+  case PageLayout::Overlay::XCTHERM:
+    builder.Append(", XCTherm");
     break;
 
   case PageLayout::Overlay::MAX:

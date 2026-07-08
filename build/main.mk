@@ -398,6 +398,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/MapOverlay/InputEvents.cpp \
 	$(SRC)/Weather/MapOverlay/ControlsFactory.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
+	$(SRC)/Weather/MapOverlay/XcthermControlsModel.cpp \
 	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \

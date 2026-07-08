@@ -7,6 +7,7 @@
 #include "EdlControlsModel.hpp"
 #endif
 #include "RaspControlsModel.hpp"
+#include "XcthermControlsModel.hpp"
 
 #include <memory>
 
@@ -25,6 +26,9 @@ CreateControlsModel(PageLayout::Overlay overlay) noexcept
 
   case PageLayout::Overlay::RASP:
     return std::make_unique<RaspControlsModel>();
+
+  case PageLayout::Overlay::XCTHERM:
+    return std::make_unique<XcthermControlsModel>();
 
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
