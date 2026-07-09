@@ -96,15 +96,18 @@ RASPSettingsPanel::UpdateLayerControl()
   df.ClearChoices();
 
   if (rasp == nullptr || rasp->GetItemCount() == 0) {
-    df.AddChoice(-1, _("No RASP file loaded"));
+    df.AddChoice(-1, "none", _("None"), nullptr);
+    df.AddChoice(-2, _("No RASP file loaded"));
     df.SetValue(-1);
     selected_field = -1;
-    control.SetEnabled(false);
+    control.SetEnabled(true);
     control.RefreshDisplay();
     return;
   }
 
-  Rasp::FillFieldChoices(df, rasp.get());
+  Rasp::FieldChoicesOptions options;
+  options.include_none = true;
+  Rasp::FillFieldChoices(df, rasp.get(), options);
 
   if (selected_field < 0 || unsigned(selected_field) >= rasp->GetItemCount())
     selected_field = 0;
@@ -133,6 +136,12 @@ RASPSettingsPanel::GetPlacementFieldIndex() const noexcept
 void
 RASPSettingsPanel::AddToCurrentClicked()
 {
+  if (GetPlacementFieldIndex() < 0) {
+    WeatherDialogOverlayActions::AddOverlayToCurrentPage(
+      PageLayout::Overlay::NONE);
+    return;
+  }
+
   WeatherDialogOverlayActions::AddOverlayToCurrentPage(
     PageLayout::Overlay::RASP, GetPlacementFieldIndex());
 }
@@ -140,6 +149,12 @@ RASPSettingsPanel::AddToCurrentClicked()
 void
 RASPSettingsPanel::AddToNewPageClicked()
 {
+  if (GetPlacementFieldIndex() < 0) {
+    WeatherDialogOverlayActions::AddOverlayToNewPage(
+      PageLayout::Overlay::NONE);
+    return;
+  }
+
   WeatherDialogOverlayActions::AddOverlayToNewPage(
     PageLayout::Overlay::RASP, GetPlacementFieldIndex());
 }
