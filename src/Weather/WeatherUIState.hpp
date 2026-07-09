@@ -149,6 +149,19 @@ struct WeatherUIState {
   EDLWeatherUIState edl;
 
   OverlaySession xctherm;
+  struct XCThermCursorState {
+    unsigned layer = 0;
+    unsigned forecast_utc_hour = 12;
+    bool altitude_manual_override = false;
+    bool time_manual_override = false;
+
+    void Clear() noexcept {
+      layer = 0;
+      forecast_utc_hour = 12;
+      altitude_manual_override = false;
+      time_manual_override = false;
+    }
+  } xctherm_cursor;
 
   void Clear() noexcept {
     map = -1;
@@ -157,6 +170,7 @@ struct WeatherUIState {
     rasp.Clear();
     edl.Clear();
     xctherm.Clear();
+    xctherm_cursor.Clear();
   }
 
   /**

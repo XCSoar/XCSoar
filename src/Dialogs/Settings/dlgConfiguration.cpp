@@ -64,6 +64,9 @@
 #if defined(HAVE_PCMET) || defined(HAVE_HTTP)
 #include "Panels/WeatherConfigPanel.hpp"
 #endif
+#ifdef HAVE_HTTP
+#include "Panels/XCThermConfigPanel.hpp"
+#endif
 
 #include "Panels/WeGlideConfigPanel.hpp"
 #include "Panels/NetworkConfigPanel.hpp"
@@ -137,6 +140,9 @@ static constexpr TabMenuPage setup_pages[] = {
 #endif
 #if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   { N_("Weather"), CreateWeatherConfigPanel },
+#endif
+#ifdef HAVE_HTTP
+  { N_("XCTherm"), CreateXCThermConfigPanel },
 #endif
   { "WeGlide", CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER

@@ -57,4 +57,20 @@ static constexpr Color COLOR_ADMONITION_TIP =
  */
 static constexpr Color COLOR_LIGHT_GREEN = Color(0x00, 0xc0, 0x00);
 
+/**
+ * XCTherm overlay palette.
+ */
+static constexpr Color COLOR_XCTHERM_BLUE = Color(0x00, 0x00, 0xc8);
+static constexpr Color COLOR_XCTHERM_BRIGHT_CYAN = Color(0x00, 0xd0, 0xff);
+static constexpr Color COLOR_XCTHERM_SKY_BLUE = Color(0x60, 0xe0, 0xff);
+static constexpr Color COLOR_XCTHERM_LIGHT_BLUE = Color(0xa0, 0xe8, 0xff);
+static constexpr Color COLOR_XCTHERM_PALE_BLUE = Color(0xc8, 0xf0, 0xff);
+static constexpr Color COLOR_XCTHERM_CREAM = Color(0xf0, 0xf0, 0xc0);
+static constexpr Color COLOR_XCTHERM_YELLOW = Color(0xff, 0xff, 0x00);
+static constexpr Color COLOR_XCTHERM_GOLD = Color(0xff, 0xd0, 0x00);
+static constexpr Color COLOR_XCTHERM_ORANGE = Color(0xff, 0xa0, 0x00);
+static constexpr Color COLOR_XCTHERM_RED_ORANGE = Color(0xff, 0x40, 0x00);
+static constexpr Color COLOR_XCTHERM_RED = Color(0xff, 0x00, 0x00);
+static constexpr Color COLOR_XCTHERM_PURPLE = Color(0xa0, 0x20, 0xf0);
+
 static constexpr uint8_t ALPHA_OVERLAY = 0xA0;

@@ -19,6 +19,7 @@ class NOTAMGlue;
 #ifdef HAVE_EDL
 namespace EDL { class DownloadGlue; }
 #endif
+class XCThermDownloadGlue;
 #ifdef HAVE_DOWNLOAD_MANAGER
 class RaspDownloadGlue;
 #endif
@@ -41,6 +42,7 @@ struct NetComponents {
 # ifdef HAVE_EDL
   const std::unique_ptr<EDL::DownloadGlue> edl;
 # endif
+  const std::unique_ptr<XCThermDownloadGlue> xctherm_download;
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
   const std::unique_ptr<RaspDownloadGlue> rasp_download;

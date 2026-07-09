@@ -25,6 +25,9 @@
 #include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/StateController.hpp"
 #endif
+#ifdef HAVE_HTTP
+#include "Weather/xctherm/XCThermMapOverlay.hpp"
+#endif
 
 #if defined(ENABLE_SDL) && defined(main)
 /* on some platforms, SDL wraps the main() function and clutters our
@@ -123,6 +126,9 @@ PageActions::LeaveXcthermOverlay() noexcept
     return;
 
   xctherm.LeavePage();
+#ifdef HAVE_HTTP
+  XCTherm::ClearMapOverlay();
+#endif
 }
 
 void
@@ -182,7 +188,14 @@ PageActions::ApplyEdlOverlay() noexcept
 void
 PageActions::ApplyXcthermOverlay() noexcept
 {
-  CommonInterface::SetUIState().weather.xctherm.EnterPage();
+  auto &xctherm = CommonInterface::SetUIState().weather.xctherm;
+  const bool first_enter = xctherm.EnterPage();
+#ifdef HAVE_HTTP
+  if (!xctherm.cursor_initialized)
+    XCTherm::ActivatePageOverlay();
+  else if (first_enter)
+    XCTherm::ApplyCursorOverlayFromSession();
+#endif
 }
 
 void

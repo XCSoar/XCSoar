@@ -16,6 +16,9 @@
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Weather/Rasp/DownloadGlue.hpp"
 #endif
+#ifdef HAVE_HTTP
+#include "Weather/xctherm/XCThermDownloadGlue.hpp"
+#endif
 
 NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
                              const TrackingSettings &tracking_settings,
@@ -34,6 +37,7 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
 # ifdef HAVE_EDL
   ,edl(new EDL::DownloadGlue(curl))
 # endif
+  ,xctherm_download(new XCThermDownloadGlue(curl))
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
   ,rasp_download(new RaspDownloadGlue())
@@ -79,6 +83,9 @@ NetComponents::BeginShutdown() noexcept
   if (edl != nullptr)
     edl->BeginShutdown();
 # endif
+
+  if (xctherm_download != nullptr)
+    xctherm_download->BeginShutdown();
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (rasp_download != nullptr)
