@@ -11,7 +11,8 @@
 void
 WeatherMapOverlay::HandleInputEvent(const char *misc) noexcept
 {
-  if (misc == nullptr || CommonInterface::main_window == nullptr)
+  if (misc == nullptr || misc[0] == '\0' ||
+      CommonInterface::main_window == nullptr)
     return;
 
   auto *controls = dynamic_cast<ControlsWidget *>(
