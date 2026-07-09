@@ -290,9 +290,8 @@ location=8
 
 # ------------
 # mode=weather (weather overlay cursor bar)
-# Stick: UP/DOWN altitude, LEFT/RIGHT time, RETURN time auto/manual,
-#        APP6 altitude auto/manual, ESCAPE exit
-# Buttons: 1=Exit, 6=Alt auto, 7=Time+, 8=Time-, 9=Alt+, 10=Alt-
+# Stick: UP/DOWN altitude, LEFT/RIGHT time, RETURN time picker, ESCAPE exit
+# Buttons: 1=Exit, 7=Time+, 8=Time-, 9=Alt+, 10=Alt-
 # ------------
 
 mode=weather
@@ -318,14 +317,7 @@ event=WeatherOverlay time +
 mode=weather
 type=key
 data=RETURN
-event=WeatherOverlay time auto show
-event=WeatherOverlay time auto toggle
-
-mode=weather
-type=key
-data=APP6
-event=WeatherOverlay altitude auto show
-event=WeatherOverlay altitude auto toggle
+event=WeatherOverlay time picker
 
 mode=weather
 type=key
@@ -338,14 +330,6 @@ data=0
 event=Mode default
 label=Exit\n(ESC)
 location=1
-
-mode=weather
-type=key
-data=0
-event=WeatherOverlay altitude auto show
-event=WeatherOverlay altitude auto toggle
-label=Alt\nauto
-location=6
 
 mode=weather
 type=key
