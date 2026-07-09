@@ -57,13 +57,43 @@ TestWeatherUiStateRaspReset()
   ok1(!weather.time.IsPlausible());
 }
 
+static void
+TestWeatherUiStateXcthermCursor()
+{
+  WeatherUIState weather;
+  weather.Clear();
+
+  ok1(!weather.xctherm.cursor_initialized);
+  ok1(weather.xctherm_cursor.layer == 0);
+  ok1(weather.xctherm_cursor.forecast_utc_hour == 12);
+  ok1(!weather.xctherm_cursor.altitude_manual_override);
+  ok1(!weather.xctherm_cursor.time_manual_override);
+
+  weather.xctherm.EnterPage();
+  weather.xctherm.SuspendForPan();
+  weather.xctherm.cursor_initialized = true;
+  weather.xctherm_cursor.layer = 7;
+  weather.xctherm_cursor.forecast_utc_hour = 19;
+  weather.xctherm_cursor.altitude_manual_override = true;
+  weather.xctherm_cursor.time_manual_override = true;
+
+  weather.Clear();
+  ok1(!weather.xctherm.HasPageOwnership());
+  ok1(!weather.xctherm.cursor_initialized);
+  ok1(weather.xctherm_cursor.layer == 0);
+  ok1(weather.xctherm_cursor.forecast_utc_hour == 12);
+  ok1(!weather.xctherm_cursor.altitude_manual_override);
+  ok1(!weather.xctherm_cursor.time_manual_override);
+}
+
 int
 main()
 {
-  plan_tests(21);
+  plan_tests(32);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
+  TestWeatherUiStateXcthermCursor();
 
   return exit_status();
 }
