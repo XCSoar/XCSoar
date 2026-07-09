@@ -64,7 +64,7 @@ XcthermControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
     return;
   }
 #endif
-  text = _("XCTherm");
+  text = "XCTherm";
 }
 
 void
