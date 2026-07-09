@@ -89,6 +89,9 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
     return;
 
   const unsigned requested_time = effective_time;
+  if (requested_time == failed_time)
+    /* avoid retrying malformed/unsupported tiles every redraw */
+    return;
 
   effective_time = store.GetNearestTime(parameter, effective_time);
   if (effective_time == RaspStore::MAX_WEATHER_TIMES)
@@ -110,6 +113,7 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
                         true, operation);
   } catch (...) {
     LogError(std::current_exception(), "Failed to load RASP file");
+    failed_time = requested_time;
     return;
   }
 
@@ -117,4 +121,5 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   map = std::move(new_map);
   last_time = requested_time;
+  failed_time = unsigned(-1);
 }

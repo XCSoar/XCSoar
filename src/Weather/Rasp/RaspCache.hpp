@@ -22,6 +22,7 @@ class RaspCache {
 
   unsigned time = 0;
   unsigned last_time = 0;
+  unsigned failed_time = unsigned(-1);
 
   std::unique_ptr<RasterMap> map;
 
