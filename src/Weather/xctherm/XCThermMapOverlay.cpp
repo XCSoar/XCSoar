@@ -378,6 +378,8 @@ ApplyJobPreviewToMap(const std::shared_ptr<XCThermDownloadJob> &job) noexcept
 
   std::lock_guard lock{job->result_mutex};
   if (!job->first_forecast.IsEmpty()) {
+    /* The span starts at the previous UTC hour; when the job has not
+       reported the first slot's UTC yet, fall back to current_utc-1. */
     const unsigned shown_utc = job->has_first_forecast_utc
       ? job->first_forecast_utc
       : (job->current_utc + 23) % 24;
@@ -396,6 +398,11 @@ StartSpanDownload(
 {
   if (settings.download_span_hours == 0 || !settings.credentials.IsDefined())
     return nullptr;
+
+  if (!XCThermAPI::Instance().EnsureAuthenticated()) {
+    LogFmt("xctherm: cannot start download — auth failed");
+    return nullptr;
+  }
 
   auto *glue = GetXCThermDownloadGlue();
   if (glue == nullptr || Net::curl == nullptr || glue->IsRunning())

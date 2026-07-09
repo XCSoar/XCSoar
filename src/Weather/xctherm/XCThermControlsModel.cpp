@@ -17,6 +17,25 @@
 
 namespace XCTherm {
 
+XCThermControlsModel::~XCThermControlsModel() noexcept
+{
+  const std::lock_guard lock{callback_gate->mutex};
+  callback_gate->alive = false;
+}
+
+void
+XCThermControlsModel::ClampCurrentLayer() noexcept
+{
+  const unsigned layer_count = Region().layer_count;
+  if (layer_count == 0) {
+    state.current_layer = 0;
+    return;
+  }
+
+  if (state.current_layer >= layer_count)
+    state.current_layer = layer_count - 1;
+}
+
 const RegionDef &
 XCThermControlsModel::Region() const noexcept
 {
@@ -111,13 +130,26 @@ void
 XCThermControlsModel::Prepare(std::function<void()> state_changed) noexcept
 {
   on_state_changed = std::move(state_changed);
+  const auto gate = callback_gate;
 
   BootstrapSession();
-  RequestBackgroundIndex([this]{
+  RequestBackgroundIndex([this, gate]{
+    {
+      const std::lock_guard lock{gate->mutex};
+      if (!gate->alive)
+        return;
+    }
+
     OnIndexLoaded();
     NotifyStateChanged();
   });
-  MaybeFetchActiveLayer([this](std::shared_ptr<XCThermDownloadJob> job) {
+  MaybeFetchActiveLayer([this, gate](std::shared_ptr<XCThermDownloadJob> job) {
+    {
+      const std::lock_guard lock{gate->mutex};
+      if (!gate->alive)
+        return;
+    }
+
     OnDownloadFinished(job);
     NotifyStateChanged();
   });
@@ -126,6 +158,7 @@ XCThermControlsModel::Prepare(std::function<void()> state_changed) noexcept
 void
 XCThermControlsModel::OnShow() noexcept
 {
+  ClampCurrentLayer();
   RefreshCachedHours();
 
   const auto &layer = LayerAt(state.current_layer);
@@ -174,7 +207,12 @@ XCThermControlsModel::LoadCursorSession() noexcept
   if (!session.cursor_initialized)
     return;
 
-  state.current_layer = cursor.layer;
+  const unsigned layer_count = Region().layer_count;
+  if (layer_count > 0)
+    state.current_layer = std::min(cursor.layer, layer_count - 1);
+  else
+    state.current_layer = 0;
+
   state.current_time_index = cursor.forecast_utc_hour;
   state.last_synced_active_layer = FindActiveLayerIndex(Settings());
   auto_switch.SetAltitudeManualOverride(cursor.altitude_manual_override);
@@ -205,6 +243,7 @@ XCThermControlsModel::BootstrapSession() noexcept
   ApplyIndexAvailability();
 
   LoadCursorSession();
+  ClampCurrentLayer();
 
   if (!CommonInterface::GetUIState().weather.xctherm.cursor_initialized) {
     const int def = FindLayerIndex(ToRegion(settings.model), 5000, false);
@@ -227,6 +266,8 @@ XCThermControlsModel::ApplyIndexAvailability() noexcept
 {
   auto &api = XCThermAPI::Instance();
   state.index_loaded = api.IsIndexLoaded();
+  ClampCurrentLayer();
+
   if (state.index_loaded) {
     const auto &params = api.GetAvailableParameters();
     for (unsigned i = 0; i < Region().layer_count; ++i) {
@@ -238,7 +279,8 @@ XCThermControlsModel::ApplyIndexAvailability() noexcept
         }
       }
     }
-    if (state.layer_available[state.current_layer])
+    if (state.current_layer < Region().layer_count &&
+        state.layer_available[state.current_layer])
       state.available_hours =
         api.GetAvailableForecastHours(
           LayerAt(state.current_layer).api_parameter);
@@ -286,6 +328,7 @@ XCThermControlsModel::SyncActiveLayerFromSettings() noexcept
 void
 XCThermControlsModel::RefreshCachedHours() noexcept
 {
+  ClampCurrentLayer();
   state.cached_hours =
     XCThermAPI::Instance().GetCachedHours(
       LayerAt(state.current_layer).api_parameter);
@@ -303,6 +346,7 @@ XCThermControlsModel::RefreshCurrentLayerHours(
 void
 XCThermControlsModel::RefreshAvailableHours() noexcept
 {
+  ClampCurrentLayer();
   if (!state.index_loaded)
     return;
 
@@ -470,11 +514,18 @@ XCThermControlsModel::RequestLayerDownload(
 
   ResetAutoFetchAttempt();
   XCThermAPI::Instance().PrepareSession(settings);
+  const auto gate = callback_gate;
 
   const auto shared = StartSpanDownload(
     settings, state.current_layer,
-    [this, finished = std::move(on_finished)](
+    [this, gate, finished = std::move(on_finished)](
       std::shared_ptr<XCThermDownloadJob> done) mutable {
+      {
+        const std::lock_guard lock{gate->mutex};
+        if (!gate->alive)
+          return;
+      }
+
       ApplyJobPreviewToMap(done);
       OnDownloadFinished(done);
       if (finished)
@@ -557,6 +608,9 @@ XCThermControlsModel::IsTimeAutoActive() const noexcept
 bool
 XCThermControlsModel::LayerHasCache(unsigned layer_index) const noexcept
 {
+  if (layer_index >= Region().layer_count)
+    return false;
+
   return !XCThermAPI::Instance()
     .GetCachedHours(LayerAt(layer_index).api_parameter).empty();
 }
@@ -565,6 +619,9 @@ bool
 XCThermControlsModel::LayerUsableForAutoSwitch(
   unsigned layer_index) const noexcept
 {
+  if (layer_index >= Region().layer_count)
+    return false;
+
   return state.layer_available[layer_index] || LayerHasCache(layer_index);
 }
 
@@ -582,6 +639,9 @@ XCThermControlsModel::BuildAutoSwitchLayers() const noexcept
 bool
 XCThermControlsModel::HasCacheAtCurrentHour(unsigned layer_index) const noexcept
 {
+  if (layer_index >= Region().layer_count)
+    return false;
+
   return XCThermAPI::Instance().IsLayerCached(
     LayerAt(layer_index).api_parameter, GetCurrentForecastHour());
 }

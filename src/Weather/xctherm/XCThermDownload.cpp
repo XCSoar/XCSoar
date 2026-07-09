@@ -229,7 +229,8 @@ RunXCThermDownload(CurlGlobal &curl,
           MaybeSetFirstForecast(job, geojson, forecast_utc);
           slot_ok = true;
           break;
-        }
+        } else
+          transient_failure = true;
       } catch (const XCThermAPIError &e) {
         switch (e.kind) {
         case XCThermAPIError::Kind::NETWORK:

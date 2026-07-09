@@ -59,12 +59,24 @@ CreatePCMetTabWidget() noexcept
 #endif
 
 #ifndef HAVE_EDL
+class EDLUnavailableWidget final : public TextWidget {
+  const char *text;
+
+public:
+  explicit EDLUnavailableWidget(const char *_text) noexcept
+    :text(_text) {}
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
+    TextWidget::Prepare(parent, rc);
+    SetText(text);
+  }
+};
+
 static std::unique_ptr<Widget>
 CreateEDLUnavailableWidget() noexcept
 {
-  auto widget = std::make_unique<TextWidget>();
-  widget->SetText(_("EDL weather is not available because this build has no OpenGL renderer."));
-  return widget;
+  return std::make_unique<EDLUnavailableWidget>(
+    _("EDL weather is not available because this build has no OpenGL renderer."));
 }
 #endif
 

@@ -88,7 +88,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
 #ifdef ENABLE_OPENGL
   if (!list.full() && overlay && overlay->IsInside(location))
-    list.push_back(new OverlayMapItem(*overlay));
+    list.push_back(new OverlayMapItem(*overlay, location));
 #endif
 
   if (!list.full()) {

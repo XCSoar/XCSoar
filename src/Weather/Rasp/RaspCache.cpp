@@ -84,17 +84,18 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
     assert(effective_time < RaspStore::MAX_WEATHER_TIMES);
   }
 
-  if (effective_time == last_time)
+  const unsigned requested_time = effective_time;
+  const unsigned resolved_time =
+    store.GetNearestTime(parameter, requested_time);
+  if (resolved_time == RaspStore::MAX_WEATHER_TIMES)
+    return;
+
+  if (resolved_time == last_time)
     // no change, quick exit.
     return;
 
-  const unsigned requested_time = effective_time;
-  if (requested_time == failed_time)
+  if (resolved_time == failed_time)
     /* avoid retrying malformed/unsupported tiles every redraw */
-    return;
-
-  effective_time = store.GetNearestTime(parameter, effective_time);
-  if (effective_time == RaspStore::MAX_WEATHER_TIMES)
     return;
 
   auto archive = store.OpenArchive();
@@ -103,7 +104,7 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   char new_name[MAX_PATH];
   if (!store.WeatherFilename(new_name, Path(store.GetItemInfo(parameter).name),
-                             effective_time))
+                             resolved_time))
     return;
 
   auto new_map = std::make_unique<RasterMap>();
@@ -113,13 +114,13 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
                         true, operation);
   } catch (...) {
     LogError(std::current_exception(), "Failed to load RASP file");
-    failed_time = requested_time;
+    failed_time = resolved_time;
     return;
   }
 
   new_map->UpdateProjection();
 
   map = std::move(new_map);
-  last_time = requested_time;
+  last_time = resolved_time;
   failed_time = unsigned(-1);
 }

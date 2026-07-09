@@ -22,6 +22,19 @@
 #include <ctime>
 #include <vector>
 
+static bool
+FormatLocalHourMinute(std::time_t t, char *buffer, std::size_t size) noexcept
+{
+  std::tm tm_buf{};
+#ifdef _WIN32
+  return localtime_s(&tm_buf, &t) == 0 &&
+    std::strftime(buffer, size, "%H:%M", &tm_buf) > 0;
+#else
+  return localtime_r(&t, &tm_buf) != nullptr &&
+    std::strftime(buffer, size, "%H:%M", &tm_buf) > 0;
+#endif
+}
+
 void
 XCThermGeoJSONOverlay::SetForecast(
     XCThermGeoJSON::ForecastLayer &&_forecast,
@@ -79,7 +92,7 @@ XCThermGeoJSONOverlay::GetClimbAt(GeoPoint p, double &out_min_ms,
 }
 
 bool
-XCThermGeoJSONOverlay::FormatPointInfo(GeoPoint p, char *buffer,
+XCThermGeoJSONOverlay::FormatPointInfo(const GeoPoint &p, char *buffer,
                                        std::size_t size) const noexcept
 {
   if (buffer == nullptr || size == 0)
@@ -134,9 +147,8 @@ XCThermGeoJSONOverlay::FormatPointInfo(GeoPoint p, char *buffer,
     }
     if (summary.latest_downloaded_at > 0) {
       const std::time_t t = (std::time_t)summary.latest_downloaded_at;
-      std::tm *lt = std::localtime(&t);
       char tbuf[8];
-      if (lt != nullptr && std::strftime(tbuf, sizeof(tbuf), "%H:%M", lt) > 0)
+      if (FormatLocalHourMinute(t, tbuf, sizeof(tbuf)))
         meta += std::string(FmtBuffer<16>(" | dl {}", tbuf).c_str());
     }
   }

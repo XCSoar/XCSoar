@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <memory>
+#include <mutex>
 #include <vector>
 
 struct MoreData;
@@ -33,12 +34,20 @@ struct XCThermControlsState {
 };
 
 class XCThermControlsModel {
+  struct CallbackGate {
+    std::mutex mutex;
+    bool alive = true;
+  };
+
   XCThermControlsState state;
   XCThermAutoSwitch auto_switch;
   bool auto_switch_configured = false;
   std::function<void()> on_state_changed;
+  std::shared_ptr<CallbackGate> callback_gate =
+    std::make_shared<CallbackGate>();
 
   void NotifyStateChanged() noexcept;
+  void ClampCurrentLayer() noexcept;
 
   [[gnu::pure]]
   const RegionDef &Region() const noexcept;
@@ -58,6 +67,8 @@ class XCThermControlsModel {
   void ApplySelectionAndPersist() noexcept;
 
 public:
+  ~XCThermControlsModel() noexcept;
+
   const XCThermControlsState &GetState() const noexcept {
     return state;
   }

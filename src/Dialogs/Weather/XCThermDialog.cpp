@@ -364,7 +364,7 @@ XCThermWidget::UpdateList()
   /* Update span button label */
   {
     StaticString<16> span_caption;
-    span_caption.Format("Span: %uh", settings.download_span_hours);
+    span_caption.Format(_("Span: %uh"), settings.download_span_hours);
     span_button->SetCaption(span_caption);
   }
 
@@ -695,8 +695,8 @@ XCThermWidget::FinishDownload()
   std::time_t now = std::time(nullptr);
   std::tm *lt = std::localtime(&now);
   char tbuf[16];
-  std::strftime(tbuf, sizeof(tbuf), "%H:%M:%S", lt);
-  row_info.download_time = tbuf;
+  if (lt != nullptr && std::strftime(tbuf, sizeof(tbuf), "%H:%M:%S", lt) > 0)
+    row_info.download_time = tbuf;
 
   /* Stale-run sweep — but only AFTER the new forecast is successfully
      in the cache and the overlay was swapped above. Older-run entries

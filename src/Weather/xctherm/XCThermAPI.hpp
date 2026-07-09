@@ -39,7 +39,7 @@ class XCThermAPIError : public std::runtime_error {
 public:
   enum class Kind {
     NETWORK,        ///< curl-level transport failure (timeout, DNS, etc.)
-    AUTH_FAILED,    ///< 401 after re-auth attempt
+    AUTH_FAILED,    ///< 401 unauthorized / auth invalid
     FORBIDDEN,      ///< 403
     NOT_FOUND,      ///< 404 — a single slot might genuinely be absent
     SERVER_ERROR,   ///< 5xx
@@ -115,6 +115,14 @@ public:
   void PrepareSession(const XCThermSettings &settings) noexcept;
 
   /**
+   * Ensure a valid JWT using synchronous auth/refresh.
+   *
+   * Call only from non-network-loop threads (e.g. UI thread) before
+   * launching async download work.
+   */
+  bool EnsureAuthenticated() noexcept;
+
+  /**
    * Fetch and parse index.json for the current model.
    * Populates available_parameters.
    *
@@ -173,8 +181,9 @@ public:
   /**
    * Download a single GeoJSON layer on @p curl's event loop (async).
    *
-   * Ensures a valid JWT via #auth before the request; sends Bearer auth;
-   * on HTTP 401 re-authenticates once and retries.
+   * Sends Bearer auth with the current JWT and performs one request.
+   * The async path intentionally avoids synchronous re-authentication to
+   * keep the network event loop non-blocking.
    *
    * @return @c true on success; @c false if @p should_continue returned false.
    * @throws XCThermAPIError on network / HTTP failure.

@@ -13,6 +13,7 @@ class MapOverlay;
 struct OverlayMapItem : public MapItem
 {
   const StaticString<64> label;
+  StaticString<256> info;
 
-  explicit OverlayMapItem(const MapOverlay &_overlay);
+  OverlayMapItem(const MapOverlay &_overlay, GeoPoint location);
 };

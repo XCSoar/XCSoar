@@ -13,9 +13,7 @@ class XCThermControlsModel;
 
 namespace WeatherMapOverlay {
 
-/**
- * Placeholder cursor-bar model for XCTherm until the backend is wired.
- */
+/** Weather cursor-bar model backed by XCTherm controls state. */
 class XcthermControlsModel final : public ControlsModel {
 #ifdef HAVE_HTTP
   bool prepared = false;

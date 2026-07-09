@@ -81,7 +81,7 @@ HeaderCallback(char *buffer, size_t size, size_t nitems,
 
 bool
 Perform(CurlEasy &easy, StringOutputStream &body, SyncHttpResponse &response,
-        HeaderCapture *headers, SyncHttpProgressFn progress) noexcept
+        HeaderCapture *headers, SyncHttpProgressFn progress)
 {
   response = {};
 
