@@ -5,6 +5,7 @@
 #include "NOAAList.hpp"
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
+#include "Dialogs/Settings/Panels/PCMetConfigPanel.hpp"
 #ifdef HAVE_HTTP
 #include "XCThermDialog.hpp"
 #include "WeatherCredentialGateWidget.hpp"
@@ -53,7 +54,7 @@ CreatePCMetTabWidget() noexcept
       return CommonInterface::GetComputerSettings()
         .weather.pcmet.www_credentials.IsDefined();
     },
-    CreateWeatherConfigPanel,
+    CreatePCMetConfigPanel,
     CreatePCMetMainWidget);
 }
 #endif
