@@ -137,10 +137,10 @@ static constexpr TabMenuPage weather_pages[] = {
 #endif
   { "RASP", CreateRaspConfigPanel },
 #ifdef HAVE_PCMET
-  { N_("Flugwetter (pc_met)"), CreatePCMetConfigPanel },
+  { "Flugwetter (pc_met)", CreatePCMetConfigPanel },
 #endif
 #ifdef HAVE_HTTP
-  { N_("XCTherm"), CreateXCThermConfigPanel },
+  { "XCTherm", CreateXCThermConfigPanel },
 #endif
   { nullptr, nullptr }
 };

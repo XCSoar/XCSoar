@@ -293,7 +293,7 @@ GetPanOverlayLabel() noexcept
                  gettext(GetRegion(settings.model)
                            .layers[unsigned(li)].short_label));
   } else
-    label = _("XCTherm");
+    label = "XCTherm";
 
   return label;
 }
