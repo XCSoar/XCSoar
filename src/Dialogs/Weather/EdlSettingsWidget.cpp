@@ -115,7 +115,12 @@ EdlSettingsWidget::RefreshControls()
     auto &df = (DataFieldEnum &)*control.GetDataField();
     df.ClearChoices();
 
-    cached_days = EDL::ListDownloadedDays();
+    try {
+      cached_days = EDL::ListDownloadedDays();
+    } catch (...) {
+      cached_days.clear();
+    }
+
     if (cached_days.empty()) {
       df.AddChoice(-1, _("None"));
       df.SetValue(-1);

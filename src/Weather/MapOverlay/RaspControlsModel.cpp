@@ -144,7 +144,9 @@ RaspControlsModel::OnGPSUpdate(const MoreData &basic) noexcept
   if (!basic.date_time_utc.IsPlausible())
     return;
 
-  const auto local = basic.date_time_utc.ToLocal().FloorToQuarterHour();
+  const auto local = (basic.date_time_utc +
+                      CommonInterface::GetComputerSettings().utc_offset
+                      .ToDuration()).FloorToQuarterHour();
   const unsigned quarter =
     RaspStore::TimeToIndex(BrokenTime(local.hour, local.minute));
   if (quarter == last_quarter)
