@@ -53,9 +53,36 @@ class RaspRenderer {
 
   uint32_t last_ramp_hash = 0;
 
+  /**
+   * The #RasterMap that was rendered in the previous Generate() call.
+   * Used as a cheap "data changed" signal: RaspCache::Reload() swaps in
+   * a fresh RasterMap whenever data changes, so pointer identity is reliable.
+   */
+  const RasterMap *last_map = nullptr;
+
+  ContourDensity last_contour_density = ContourDensity::OFF;
+
+  /**
+   * The contrast/brightness settings passed to GenerateImage() in the
+   * previous Generate() call.  GenerateImage() bakes these into the
+   * rendered pixels, so the cached image may only be reused while they
+   * are unchanged.
+   */
+  short last_contrast = -1, last_brightness = -1;
+
+#ifdef ENABLE_OPENGL
+  double last_projection_scale = 0;
+#endif
+
 public:
   RaspRenderer(const RaspStore &_store, unsigned parameter)
-    :cache(_store, parameter) {}
+    :cache(_store, parameter) {
+#ifdef ENABLE_OPENGL
+    /* Quantization limited to legacy value of 2 until further
+       optimizations in place. */
+    raster_renderer.SetMinQuantisationPixels(2);
+#endif
+  }
 
   /**
    * Flush the cache.
@@ -66,6 +93,7 @@ public:
 #else
     compare_projection.Clear();
 #endif
+    last_map = nullptr;
   }
 
   unsigned GetParameter() const {
