@@ -9,6 +9,7 @@
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "PageActions.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 
@@ -110,7 +111,9 @@ RaspControlsModel::OpenSecondaryPicker() noexcept
     return;
 
   DataFieldEnum field;
-  Rasp::FillFieldChoices(field, rasp.get());
+  Rasp::FieldChoicesOptions options;
+  options.include_none = true;
+  Rasp::FillFieldChoices(field, rasp.get(), options);
 
   const int current = Rasp::GetEffectiveFieldIndex();
   field.SetValue(current >= 0 ? current : 0);
@@ -119,8 +122,11 @@ RaspControlsModel::OpenSecondaryPicker() noexcept
     return;
 
   const int selected = field.GetValue();
-  if (selected < 0)
+  if (selected < 0) {
+    PageActions::AddWeatherOverlayToCurrentPage(PageLayout::Overlay::NONE);
+    Notify(ControlsUpdate::OVERLAY);
     return;
+  }
 
   Rasp::SelectField(unsigned(selected));
   Notify(ControlsUpdate::OVERLAY);
