@@ -10,6 +10,7 @@ XCSoar
    rebranding
    policy
    architecture
+   weather_overlays
    data_directory
    input_events
    lua
