@@ -427,6 +427,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const TwoTextRowsRenderer &row_renderer)
 {
   row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
+  if (!item.info.empty())
+    row_renderer.DrawSecondRow(canvas, rc, item.info.c_str());
 }
 
 static void

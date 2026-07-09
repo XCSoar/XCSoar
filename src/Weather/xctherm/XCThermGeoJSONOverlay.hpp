@@ -90,8 +90,8 @@ public:
   /* virtual methods from class MapOverlay */
   const char *GetLabel() const noexcept override;
   bool IsInside(GeoPoint p) const noexcept override;
-  bool FormatPointInfo(GeoPoint p, char *buffer,
-                       std::size_t size) const noexcept;
+  bool FormatPointInfo(const GeoPoint &p, char *buffer,
+                       std::size_t size) const noexcept override;
   void Draw(Canvas &canvas,
             const WindowProjection &projection) noexcept override;
 

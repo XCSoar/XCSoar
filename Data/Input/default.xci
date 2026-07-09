@@ -1218,7 +1218,7 @@ mode=Menu
 type=key
 data=5
 event=Mode weather
-label=Forecast Controls
+label=Weather
 location=5
 
 mode=Menu

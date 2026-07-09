@@ -95,6 +95,12 @@ XCThermAPI::PrepareSession(const XCThermSettings &settings) noexcept
   ApplySessionSettings(settings);
 }
 
+bool
+XCThermAPI::EnsureAuthenticated() noexcept
+{
+  return auth.EnsureValidToken();
+}
+
 /* ------------------------------------------------------------------ */
 /* Index.json                                                          */
 /* ------------------------------------------------------------------ */
@@ -440,13 +446,6 @@ XCThermAPI::CoDownloadGeoJSON(CurlGlobal &curl,
 {
   out_geojson.clear();
 
-  if (!auth.EnsureValidToken()) {
-    LogFmt("xctherm: cannot download — auth failed");
-    throw XCThermAPIError(XCThermAPIError::Kind::AUTH_FAILED, 0,
-                          "XCTherm authentication failed. Check "
-                          "credentials in Config → Weather → XCTherm.");
-  }
-
   const std::string step_str = FormatStep(step);
   const auto url = FmtBuffer<512>(
     "{}/{}/{}/{}/{}/{}.geojson",
@@ -460,7 +459,7 @@ XCThermAPI::CoDownloadGeoJSON(CurlGlobal &curl,
   Curl::CoResponse response;
   try {
     response = co_await XCTherm::Http::CoBearerGet(
-      curl, url.c_str(), auth, progress, should_continue, true);
+      curl, url.c_str(), auth, progress, should_continue, false);
   } catch (const XCTherm::Http::TransferCancelled &) {
     co_return false;
   } catch (...) {
@@ -810,104 +809,116 @@ XCThermAPI::ReloadDiskIndex() noexcept
       : api(_api), cutoff(_cutoff) {}
 
     void Visit(Path path, Path filename) override {
-      /* Filename pattern: <param>_<utc>.xctcache */
-      const auto mtime_tp = File::GetLastModification(path);
-      if (mtime_tp < cutoff) {
-        File::Delete(path);
-        ++dropped;
-        return;
-      }
-
-      /* Parse filename to recover (parameter, utc). */
-      const std::string_view name{filename.c_str()};
-      const auto dot = name.rfind('.');
-      const auto under = name.rfind('_', dot);
-      if (dot == std::string_view::npos ||
-          under == std::string_view::npos ||
-          under >= dot)
-        return;
-      const std::string parameter{name.substr(0, under)};
-      unsigned utc;
       try {
-        utc = (unsigned)std::stoul(std::string{name.substr(under + 1,
-                                                           dot - under - 1)});
-      } catch (...) {
-        return;
-      }
-      if (utc >= 24)
-        return;
-
-      /* Read just the first chunk — enough to hold the one-line header
-         (~80 bytes). We never pull the multi-MB body at startup. */
-      std::string head;
-      try {
-        FileReader r{path};
-        char buf[512];
-        const auto n = r.Read(std::as_writable_bytes(std::span{buf}));
-        head.assign(buf, n);
-      } catch (...) {
-        return;
-      }
-
-      const auto eol = head.find('\n');
-      if (eol == std::string::npos)
-        return;
-      const bool is_v2 = head.compare(0, 10, kDiskHeaderV2) == 0;
-      const bool is_v1 = head.compare(0, 10, kDiskHeaderV1) == 0;
-      if (!is_v2 && !is_v1)
-        return;
-
-      /* v1: "#XCTHERMv1 run_date=YYYYMMDD run_hour=HH step=N"
-         v2: same + " downloaded_at=<unix_sec>" */
-      SliceMeta meta;
-      auto extract = [&](const char *key) -> std::string_view {
-        const std::string_view header(head.data(), eol);
-        const std::string needle = std::string{key} + "=";
-        const auto pos = header.find(needle);
-        if (pos == std::string_view::npos)
-          return {};
-        const auto v_start = pos + needle.size();
-        const auto v_end = header.find(' ', v_start);
-        return header.substr(v_start,
-          v_end == std::string_view::npos ? std::string_view::npos : v_end - v_start);
-      };
-      meta.run_date = std::string{extract("run_date")};
-      meta.run_hour = std::string{extract("run_hour")};
-      try {
-        meta.step = (unsigned)std::stoul(std::string{extract("step")});
-      } catch (...) {
-        return;
-      }
-      if (meta.run_date.size() != 8 || meta.run_hour.size() != 2)
-        return;
-
-      /* v2: read explicit timestamp. v1: fall back to file mtime so old
-         caches still display a sensible "downloaded at" in the dialog. */
-      const auto dl_at = extract("downloaded_at");
-      if (!dl_at.empty()) {
-        try {
-          meta.downloaded_at = (int64_t)std::stoll(std::string{dl_at});
-        } catch (...) {
-          meta.downloaded_at = 0;
+        /* Filename pattern: <param>_<utc>.xctcache */
+        const auto mtime_tp = File::GetLastModification(path);
+        if (mtime_tp < cutoff) {
+          File::Delete(path);
+          ++dropped;
+          return;
         }
-      }
-      if (meta.downloaded_at == 0) {
-        meta.downloaded_at =
-          (int64_t)std::chrono::duration_cast<std::chrono::seconds>(
-            mtime_tp.time_since_epoch()).count();
-      }
 
-      {
-        const std::lock_guard lock{api.cache_mutex};
-        api.disk_index[parameter][utc] = std::move(meta);
+        /* Parse filename to recover (parameter, utc). */
+        const std::string_view name{filename.c_str()};
+        const auto dot = name.rfind('.');
+        const auto under = name.rfind('_', dot);
+        if (dot == std::string_view::npos ||
+            under == std::string_view::npos ||
+            under >= dot)
+          return;
+
+        const std::string parameter{name.substr(0, under)};
+        unsigned utc;
+        try {
+          utc = (unsigned)std::stoul(std::string{name.substr(under + 1,
+                                                             dot - under - 1)});
+        } catch (...) {
+          return;
+        }
+        if (utc >= 24)
+          return;
+
+        /* Read just the first chunk — enough to hold the one-line header
+           (~80 bytes). We never pull the multi-MB body at startup. */
+        std::string head;
+        {
+          FileReader r{path};
+          char buf[512];
+          const auto n = r.Read(std::as_writable_bytes(std::span{buf}));
+          head.assign(buf, n);
+        }
+
+        const auto eol = head.find('\n');
+        if (eol == std::string::npos)
+          return;
+        const bool is_v2 = head.compare(0, 10, kDiskHeaderV2) == 0;
+        const bool is_v1 = head.compare(0, 10, kDiskHeaderV1) == 0;
+        if (!is_v2 && !is_v1)
+          return;
+
+        /* v1: "#XCTHERMv1 run_date=YYYYMMDD run_hour=HH step=N"
+           v2: same + " downloaded_at=<unix_sec>" */
+        SliceMeta meta;
+        auto extract = [&](const char *key) -> std::string_view {
+          const std::string_view header(head.data(), eol);
+          const std::string needle = std::string{key} + "=";
+          const auto pos = header.find(needle);
+          if (pos == std::string_view::npos)
+            return {};
+          const auto v_start = pos + needle.size();
+          const auto v_end = header.find(' ', v_start);
+          return header.substr(v_start,
+            v_end == std::string_view::npos ? std::string_view::npos : v_end - v_start);
+        };
+
+        meta.run_date = std::string{extract("run_date")};
+        meta.run_hour = std::string{extract("run_hour")};
+        try {
+          meta.step = (unsigned)std::stoul(std::string{extract("step")});
+        } catch (...) {
+          return;
+        }
+        if (meta.run_date.size() != 8 || meta.run_hour.size() != 2)
+          return;
+
+        /* v2: read explicit timestamp. v1: fall back to file mtime so old
+           caches still display a sensible "downloaded at" in the dialog. */
+        const auto dl_at = extract("downloaded_at");
+        if (!dl_at.empty()) {
+          try {
+            meta.downloaded_at = (int64_t)std::stoll(std::string{dl_at});
+          } catch (...) {
+            meta.downloaded_at = 0;
+          }
+        }
+        if (meta.downloaded_at == 0) {
+          meta.downloaded_at =
+            (int64_t)std::chrono::duration_cast<std::chrono::seconds>(
+              mtime_tp.time_since_epoch()).count();
+        }
+
+        {
+          const std::lock_guard lock{api.cache_mutex};
+          api.disk_index[parameter][utc] = std::move(meta);
+        }
+        ++indexed;
+      } catch (...) {
+        /* ReloadDiskIndex() is noexcept; ignore malformed entries and OOM
+           from a single file so indexing can continue. */
+        return;
       }
-      ++indexed;
     }
   };
 
   const auto now = std::chrono::system_clock::now();
   Indexer indexer(*this, now - kDiskTTL);
-  Directory::VisitSpecificFiles(model_dir, "*.xctcache", indexer);
+  try {
+    Directory::VisitSpecificFiles(model_dir, "*.xctcache", indexer);
+  } catch (...) {
+    LogError(std::current_exception(),
+             "xctherm: disk cache scan failed");
+  }
+
   LogFmt("xctherm: disk cache indexed {} slices for {} (dropped {} stale)",
          indexer.indexed, model.c_str(), indexer.dropped);
 }

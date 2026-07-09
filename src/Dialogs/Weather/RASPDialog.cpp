@@ -97,10 +97,9 @@ RASPSettingsPanel::UpdateLayerControl()
 
   if (rasp == nullptr || rasp->GetItemCount() == 0) {
     df.AddChoice(-1, "none", _("None"), nullptr);
-    df.AddChoice(-2, _("No RASP file loaded"));
     df.SetValue(-1);
     selected_field = -1;
-    control.SetEnabled(true);
+    control.SetEnabled(false);
     control.RefreshDisplay();
     return;
   }
@@ -128,9 +127,7 @@ RASPSettingsPanel::UpdateClicked()
 int
 RASPSettingsPanel::GetPlacementFieldIndex() const noexcept
 {
-  return selected_field >= 0
-    ? selected_field
-    : Rasp::GetActiveFieldIndex();
+  return selected_field;
 }
 
 void

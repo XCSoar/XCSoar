@@ -60,7 +60,7 @@ XcthermControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 {
 #ifdef HAVE_HTTP
   if (model != nullptr) {
-    const_cast<XCTherm::XCThermControlsModel *>(model)->FormatTimeLabel(text);
+    model->FormatTimeLabel(text);
     return;
   }
 #endif

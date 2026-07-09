@@ -59,12 +59,8 @@ CoGetWithHeaders(CurlGlobal &curl, const char *url, curl_slist *headers,
   if (progress != nullptr)
     progress_adapter.emplace(easy, *progress);
 
-  Curl::CoResponse response;
-  try {
-    response = co_await Curl::CoStreamRequest(curl, std::move(easy), checked);
-  } catch (const TransferCancelled &) {
-    throw;
-  }
+  Curl::CoResponse response =
+    co_await Curl::CoStreamRequest(curl, std::move(easy), checked);
 
   /* CoStreamRequest writes to @p body, not CoResponse::body. */
   response.body = std::move(body).GetValue();
@@ -125,6 +121,8 @@ struct RunSyncCompletion {
 void
 RunSync(CurlGlobal &curl, Co::InvokeTask task)
 {
+  /* Blocking helper: caller must not be the curl/asio event-loop thread,
+     otherwise completion cannot be delivered and this wait deadlocks. */
   RunSyncCompletion completion;
 
   Co::InjectTask inject{curl.GetEventLoop()};

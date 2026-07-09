@@ -53,6 +53,11 @@ XCThermDownloadGlue::Start(
   if (task.IsShuttingDown() || task.IsRunning())
     return;
 
+  if (new_job == nullptr) {
+    LogFmt("xctherm: Start() called with null job");
+    return;
+  }
+
   index_fetch = false;
   on_index_fetched = nullptr;
   job = std::move(new_job);
@@ -101,6 +106,7 @@ XCThermDownloadGlue::Abandon() noexcept
 {
   RequestCancel();
   on_finished = nullptr;
+  on_index_fetched = nullptr;
 }
 
 Co::InvokeTask
