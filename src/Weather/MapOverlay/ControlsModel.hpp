@@ -20,6 +20,12 @@ enum class SecondaryLabelAction : uint8_t {
   OPEN_PICKER,
 };
 
+enum class PrimaryLabelAction : uint8_t {
+  NONE,
+  RESUME_AUTO,
+  OPEN_PICKER,
+};
+
 /**
  * How #ControlsWidget should refresh after a model-driven change.
  */
@@ -88,6 +94,13 @@ public:
   }
 
   virtual void ApplySecondaryAutoAdvance() noexcept {}
+
+  [[nodiscard]]
+  virtual PrimaryLabelAction GetPrimaryLabelAction() const noexcept {
+    return PrimaryLabelAction::RESUME_AUTO;
+  }
+
+  virtual void OpenPrimaryPicker() noexcept {}
 
   [[nodiscard]]
   virtual SecondaryLabelAction GetSecondaryLabelAction() const noexcept {

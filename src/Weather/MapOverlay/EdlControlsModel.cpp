@@ -5,7 +5,9 @@
 
 #include "ActionInterface.hpp"
 #include "Components.hpp"
+#include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/Message.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "NetComponents.hpp"
@@ -17,8 +19,14 @@
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 
 #include <chrono>
+#include <limits>
 
 namespace WeatherMapOverlay {
+
+static constexpr unsigned TIME_PICKER_AUTO =
+  std::numeric_limits<unsigned>::max() - 1;
+static constexpr unsigned TIME_PICKER_NOW =
+  std::numeric_limits<unsigned>::max();
 
 EdlControlsModel::~EdlControlsModel() noexcept
 {
@@ -227,6 +235,61 @@ EdlControlsModel::ApplyPrimaryAutoAdvance() noexcept
   const auto &basic = CommonInterface::Basic();
   if (basic.date_time_utc.IsPlausible())
     EDL::OnTimeUpdate(basic.date_time_utc);
+}
+
+PrimaryLabelAction
+EdlControlsModel::GetPrimaryLabelAction() const noexcept
+{
+  return PrimaryLabelAction::OPEN_PICKER;
+}
+
+void
+EdlControlsModel::OpenPrimaryPicker() noexcept
+{
+  RebuildForecastTimes();
+
+  DataFieldEnum picker;
+  picker.ClearChoices();
+  picker.addEnumText(_("Auto"), TIME_PICKER_AUTO);
+  picker.addEnumText(_("Now"), TIME_PICKER_NOW);
+
+  for (unsigned i = 0; i < forecast_choices; ++i) {
+    const auto local = forecast_times[i].ToLocal();
+    StaticString<16> label;
+    label.Format("%02u:00", unsigned(local.hour));
+    picker.addEnumText(label.c_str(), i);
+  }
+
+  if (GetPrimaryAutoAdvance())
+    picker.SetValue(TIME_PICKER_AUTO);
+  else
+    picker.SetValue(FindForecastIndex());
+
+  if (!ComboPicker(_("EDL Time"), picker, nullptr))
+    return;
+
+  const unsigned selected = picker.GetValue();
+  if (selected == TIME_PICKER_AUTO) {
+    ResumePrimaryAuto();
+    return;
+  }
+
+  if (selected == TIME_PICKER_NOW) {
+    const BrokenDateTime tracked = EDL::GetTrackedForecastTime(BrokenDateTime::NowUTC());
+    for (unsigned i = 0; i < forecast_choices; ++i) {
+      if (forecast_times[i] == tracked) {
+        SetPrimaryAutoAdvance(false);
+        SelectForecast(i);
+        Notify(ControlsUpdate::OVERLAY);
+        return;
+      }
+    }
+    return;
+  } else if (selected < forecast_choices) {
+    SetPrimaryAutoAdvance(false);
+    SelectForecast(selected);
+    Notify(ControlsUpdate::OVERLAY);
+  }
 }
 
 bool

@@ -43,6 +43,9 @@ public:
   bool GetPrimaryAutoAdvance() const noexcept override;
   void SetPrimaryAutoAdvance(bool auto_advance) noexcept override;
   void ApplyPrimaryAutoAdvance() noexcept override;
+  [[nodiscard]]
+  PrimaryLabelAction GetPrimaryLabelAction() const noexcept override;
+  void OpenPrimaryPicker() noexcept override;
 
   [[nodiscard]]
   bool SupportsSecondaryAutoAdvance() const noexcept override;

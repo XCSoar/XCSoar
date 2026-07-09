@@ -34,8 +34,12 @@ public:
   void ApplyPrimaryAutoAdvance() noexcept override;
 
   [[nodiscard]]
+  PrimaryLabelAction GetPrimaryLabelAction() const noexcept override;
+
+  [[nodiscard]]
   SecondaryLabelAction GetSecondaryLabelAction() const noexcept override;
 
+  void OpenPrimaryPicker() noexcept override;
   void ResumePrimaryAuto() noexcept override;
   void OpenSecondaryPicker() noexcept override;
 

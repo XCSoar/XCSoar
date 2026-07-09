@@ -9,6 +9,7 @@ namespace WeatherMapOverlay {
 
 enum class OverlayInputAction {
   NONE,
+  TIME_PICKER,
   TIME_PLUS,
   TIME_MINUS,
   ALTITUDE_PLUS,
@@ -42,6 +43,8 @@ ParseOverlayInputAction(const char *misc) noexcept
     return OverlayInputAction::TIME_PLUS;
   if (StringIsEqual(misc, "time -"))
     return OverlayInputAction::TIME_MINUS;
+  if (StringIsEqual(misc, "time picker"))
+    return OverlayInputAction::TIME_PICKER;
 
   if (StringIsEqual(misc, "altitude +") || StringIsEqual(misc, "level +"))
     return OverlayInputAction::ALTITUDE_PLUS;
