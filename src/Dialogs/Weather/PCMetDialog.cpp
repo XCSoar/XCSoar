@@ -3,6 +3,8 @@
 
 #include "PCMetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "WeatherCredentialGateWidget.hpp"
+#include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 
@@ -302,19 +304,26 @@ protected:
 };
 
 std::unique_ptr<Widget>
-CreatePCMetWidget()
+CreatePCMetMainWidget()
 {
-  const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
-  if (!settings.www_credentials.IsDefined())
-    return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
-                                             "No account was configured.");
-
   auto area_widget = std::make_unique<ImageAreaListWidget>();
   auto type_widget = std::make_unique<ImageTypeListWidget>(*area_widget);
 
   return std::make_unique<TwoWidgets>(std::move(type_widget),
                                       std::move(area_widget),
                                       false);
+}
+
+std::unique_ptr<Widget>
+CreatePCMetWidget()
+{
+  return CreateWeatherCredentialGateWidget(
+    []() {
+      return CommonInterface::GetComputerSettings()
+        .weather.pcmet.www_credentials.IsDefined();
+    },
+    CreateWeatherConfigPanel,
+    CreatePCMetMainWidget);
 }
 
 #endif  // HAVE_PCMET

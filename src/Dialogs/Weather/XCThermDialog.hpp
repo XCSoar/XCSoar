@@ -8,7 +8,7 @@
 class Widget;
 
 std::unique_ptr<Widget>
-CreatePCMetWidget();
+CreateXCThermWidget() noexcept;
 
 std::unique_ptr<Widget>
-CreatePCMetMainWidget();
+CreateXCThermMainWidget() noexcept;

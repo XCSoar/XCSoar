@@ -5,6 +5,12 @@
 #include "NOAAList.hpp"
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
+#ifdef HAVE_HTTP
+#include "XCThermDialog.hpp"
+#include "WeatherCredentialGateWidget.hpp"
+#include "Dialogs/Settings/Panels/XCThermConfigPanel.hpp"
+#endif
+#include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
 #include "Weather/Features.hpp"
 #if 0
 #include "MapOverlayWidget.hpp"
@@ -19,9 +25,38 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
+#include "Interface.hpp"
 #include "util/StaticString.hxx"
 
 static int weather_page = 0;
+
+#ifdef HAVE_HTTP
+static std::unique_ptr<Widget>
+CreateXCThermTabWidget() noexcept
+{
+  return CreateWeatherCredentialGateWidget(
+    []() {
+      return CommonInterface::GetComputerSettings()
+        .weather.xctherm.credentials.IsDefined();
+    },
+    CreateXCThermConfigPanel,
+    CreateXCThermMainWidget);
+}
+#endif
+
+#ifdef HAVE_PCMET
+static std::unique_ptr<Widget>
+CreatePCMetTabWidget() noexcept
+{
+  return CreateWeatherCredentialGateWidget(
+    []() {
+      return CommonInterface::GetComputerSettings()
+        .weather.pcmet.www_credentials.IsDefined();
+    },
+    CreateWeatherConfigPanel,
+    CreatePCMetMainWidget);
+}
+#endif
 
 #ifndef HAVE_EDL
 static std::unique_ptr<Widget>
@@ -73,6 +108,13 @@ ShowWeatherDialog(const char *page)
   widget.AddTab(CreateNOAAListWidget(), _("METAR and TAF"));
 #endif
 
+#ifdef HAVE_HTTP
+  if (page != nullptr && StringIsEqual(page, "xctherm"))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateXCThermTabWidget(), "XCTherm");
+#endif
+
   if (page != nullptr && StringIsEqual(page, "rasp"))
     start_page = widget.GetSize();
 
@@ -91,7 +133,7 @@ ShowWeatherDialog(const char *page)
   if (page != nullptr && StringIsEqual(page, "pc_met"))
     start_page = widget.GetSize();
 
-  widget.AddTab(CreatePCMetWidget(), "Flugwetter");
+  widget.AddTab(CreatePCMetTabWidget(), "Flugwetter");
 #endif
 
 #if 0
