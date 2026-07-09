@@ -213,6 +213,14 @@ TEST_METAR_PARSER_SOURCES = \
 TEST_METAR_PARSER_DEPENDS = MATH UTIL UNITS
 $(eval $(call link-program,TestMETARParser,TEST_METAR_PARSER))
 
+TEST_NAMES += TestWeatherUIState
+
+TEST_WEATHER_UI_STATE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWeatherUIState.cpp
+TEST_WEATHER_UI_STATE_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestWeatherUIState,TEST_WEATHER_UI_STATE))
+
 ifeq ($(HAVE_HTTP),y)
 TEST_NAMES += TestEDL
 
