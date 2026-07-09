@@ -87,6 +87,12 @@ SyncCursorFromPageLayout() noexcept;
 void
 SetCursorTime(unsigned minute_of_day) noexcept;
 
+/**
+ * Select the "Now" cursor mode while staying in manual mode.
+ */
+void
+SetCursorNow() noexcept;
+
 [[nodiscard]] [[gnu::pure]]
 bool
 GetTimeAutoAdvance() noexcept;

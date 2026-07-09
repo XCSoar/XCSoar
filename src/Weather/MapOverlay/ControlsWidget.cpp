@@ -113,10 +113,19 @@ ControlsWidget::OnStepSecondary(int delta) noexcept
 void
 ControlsWidget::OnPrimaryLabelClick() noexcept
 {
-  if (model->GetPrimaryAutoAdvance())
-    return;
+  switch (model->GetPrimaryLabelAction()) {
+  case PrimaryLabelAction::OPEN_PICKER:
+    model->OpenPrimaryPicker();
+    break;
 
-  model->ResumePrimaryAuto();
+  case PrimaryLabelAction::RESUME_AUTO:
+    if (!model->GetPrimaryAutoAdvance())
+      model->ResumePrimaryAuto();
+    break;
+
+  case PrimaryLabelAction::NONE:
+    break;
+  }
 }
 
 void
@@ -145,6 +154,10 @@ ControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     return;
 
   switch (ParseOverlayInputAction(misc)) {
+  case OverlayInputAction::TIME_PICKER:
+    OnPrimaryLabelClick();
+    break;
+
   case OverlayInputAction::TIME_PLUS:
     OnStepPrimary(+1);
     break;

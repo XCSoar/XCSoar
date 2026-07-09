@@ -175,6 +175,12 @@ SetCursorTime(unsigned minute_of_day) noexcept
   ActionInterface::SendUIState(true);
 }
 
+void
+SetCursorNow() noexcept
+{
+  SetCursorTime(NOW_CHOICE_MINUTE_OF_DAY);
+}
+
 bool
 GetTimeAutoAdvance() noexcept
 {
