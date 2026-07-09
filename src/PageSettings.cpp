@@ -35,8 +35,8 @@ PageLayout::Normalise() noexcept
 
   if (overlay != Overlay::RASP)
     rasp_field = -1;
-  else if (rasp_field < 0)
-    rasp_field = 0;
+  else if (rasp_field < -1)
+    rasp_field = -1;
 }
 
 static void

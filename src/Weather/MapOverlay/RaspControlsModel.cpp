@@ -123,13 +123,11 @@ RaspControlsModel::OpenSecondaryPicker() noexcept
 
   const int selected = field.GetValue();
   if (selected < 0) {
-    PageActions::AddWeatherOverlayToCurrentPage(PageLayout::Overlay::NONE);
-    Notify(ControlsUpdate::OVERLAY);
+    Rasp::ClearSelectedField();
     return;
   }
 
   Rasp::SelectField(unsigned(selected));
-  Notify(ControlsUpdate::OVERLAY);
 }
 
 void
