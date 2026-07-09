@@ -118,6 +118,9 @@ GetFieldIndex(const PageLayout &layout) noexcept
   if (layout.overlay != PageLayout::Overlay::RASP)
     return -1;
 
+  if (layout.rasp_field < 0)
+    return -1;
+
   const auto rasp = DataGlobals::GetRasp();
   if (rasp == nullptr || rasp->GetItemCount() == 0)
     return -1;
@@ -277,6 +280,30 @@ SelectField(unsigned field_index) noexcept
       weather.time = RaspStore::IndexToTime(nearest);
     }
   }
+
+  ActionInterface::UpdateDisplayMode();
+  ActionInterface::SendUIState(true);
+  return true;
+}
+
+bool
+ClearSelectedField() noexcept
+{
+  PageSettings &settings = CommonInterface::SetUISettings().pages;
+  const PagesState &pages = CommonInterface::GetUIState().pages;
+  const unsigned page_index = pages.current_index;
+
+  PageLayout &page = settings.pages[page_index];
+  if (page.overlay != PageLayout::Overlay::RASP)
+    return false;
+
+  page.rasp_field = -1;
+  page.Normalise();
+  Profile::Save(Profile::map, page, page_index);
+
+  auto &weather = CommonInterface::SetUIState().weather;
+  weather.map = -1;
+  weather.rasp.cursor_initialized = true;
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState(true);

@@ -134,6 +134,14 @@ bool
 SelectField(unsigned field_index) noexcept;
 
 /**
+ * Clear the selected RASP field while keeping the RASP overlay active.
+ *
+ * @return false when the current page is not a RASP overlay page
+ */
+bool
+ClearSelectedField() noexcept;
+
+/**
  * Step the active RASP field by @p delta (wraps at list ends).
  *
  * @return false when stepping is not possible
