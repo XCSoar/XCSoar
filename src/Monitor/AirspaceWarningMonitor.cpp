@@ -125,9 +125,6 @@ AirspaceWarningMonitor::HideWidget() noexcept
     return;
 
   PageActions::RestoreBottom();
-
-  if (widget != nullptr && CommonInterface::main_window != nullptr)
-    CommonInterface::main_window->SetBottomWidget(nullptr);
 }
 
 void
