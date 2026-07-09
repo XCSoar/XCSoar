@@ -1063,7 +1063,7 @@ type=key
 data=7
 event=Weather
 event=Mode default
-label=Weather
+label=Weather Setup
 location=6
 
 mode=Info1
@@ -1218,7 +1218,7 @@ mode=Menu
 type=key
 data=5
 event=Mode weather
-label=Weather
+label=Forecast Controls
 location=5
 
 mode=Menu
@@ -1490,7 +1490,7 @@ type=key
 data=0
 event=Weather
 event=Mode default
-label=Weather
+label=Weather Setup
 location=25
 
 mode=RemoteStick
