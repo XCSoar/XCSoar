@@ -73,7 +73,7 @@ struct PageLayout
      */
     CROSS_SECTION,
 
-    EDL_CONTROLS,
+    WEATHER_CONTROLS,
 
     /**
      * A custom #Widget is being displayed.  This is not a

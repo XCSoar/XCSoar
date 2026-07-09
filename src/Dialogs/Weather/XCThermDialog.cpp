@@ -8,7 +8,9 @@
 #include "Dialogs/ListPicker.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
+#include "OverlayPageActions.hpp"
 #include "PageActions.hpp"
+#include "PageSettings.hpp"
 #include "Weather/Features.hpp"
 
 #ifdef HAVE_HTTP
@@ -19,8 +21,6 @@
 #include "Form/ButtonPanel.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
-#include "WeatherCredentialGateWidget.hpp"
-#include "Dialogs/Settings/Panels/XCThermConfigPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "Interface.hpp"
@@ -232,6 +232,8 @@ class XCThermWidget final : public ListWidget {
   ButtonPanelWidget *buttons_widget = nullptr;
   Button *span_button = nullptr;
   Button *activate_button = nullptr;
+  Button *add_to_current_button = nullptr;
+  Button *add_to_new_page_button = nullptr;
   Button *download_button = nullptr;   // labeled "Update" or "Stop"
   Button *delete_button = nullptr;
 
@@ -257,8 +259,11 @@ public:
 private:
   void UpdateList();
   void SaveSettings();
+  bool SetActiveLayerFromCursor();
 
   void ActivateClicked();
+  void AddToCurrentClicked();
+  void AddToNewPageClicked();
   void DownloadClicked();
   void DeleteClicked();
   void SpanClicked();
@@ -313,6 +318,10 @@ XCThermWidget::CreateButtons(ButtonPanel &buttons)
   span_button = buttons.Add(_("Span"), [this]() { SpanClicked(); });
   activate_button = buttons.Add(_("Activate"),
                                 [this]() { ActivateClicked(); });
+  add_to_current_button = buttons.Add(_("Add to page"),
+                                      [this]() { AddToCurrentClicked(); });
+  add_to_new_page_button = buttons.Add(_("Add new page"),
+                                       [this]() { AddToNewPageClicked(); });
   download_button = buttons.Add(_("Update"),
                                 [this]() { DownloadClicked(); });
   delete_button = buttons.Add(_("Delete"),
@@ -412,16 +421,19 @@ XCThermWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 XCThermWidget::ActivateClicked()
 {
-  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
+  AddToCurrentClicked();
+}
 
+bool
+XCThermWidget::SetActiveLayerFromCursor()
+{
+  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
   const int index = GetList().GetCursorIndex();
   const auto &region = XCTherm::GetRegion(settings.model);
-
   if (index < 0 || unsigned(index) >= region.layer_count)
-    return;
+    return false;
 
   const auto &layer = region.layers[index];
-
   if (layer.is_agl) {
     settings.parameter = 1;
     settings.vertical_wind_agl = layer.altitude_m;
@@ -430,13 +442,32 @@ XCThermWidget::ActivateClicked()
     settings.wave_height = layer.altitude_m;
   }
 
+  return true;
+}
+
+void
+XCThermWidget::AddToCurrentClicked()
+{
+  if (!SetActiveLayerFromCursor())
+    return;
+
   SaveSettings();
-
-  /* New activation must not reuse the previous cursor-bar session. */
   CommonInterface::SetUIState().weather.xctherm.cursor_initialized = false;
+  WeatherDialogOverlayActions::AddOverlayToCurrentPage(
+    PageLayout::Overlay::XCTHERM);
+  UpdateList();
+}
 
-  XCTherm::RestoreActiveLayerOverlay();
-  PageActions::Update();
+void
+XCThermWidget::AddToNewPageClicked()
+{
+  if (!SetActiveLayerFromCursor())
+    return;
+
+  SaveSettings();
+  CommonInterface::SetUIState().weather.xctherm.cursor_initialized = false;
+  WeatherDialogOverlayActions::AddOverlayToNewPage(
+    PageLayout::Overlay::XCTHERM);
 
   UpdateList();
 }
@@ -852,18 +883,6 @@ CreateXCThermMainWidget() noexcept
   auto *widget_ptr = static_cast<XCThermWidget *>(&buttons->GetWidget());
   widget_ptr->SetButtonPanel(*buttons);
   return buttons;
-}
-
-std::unique_ptr<Widget>
-CreateXCThermWidget() noexcept
-{
-  return CreateWeatherCredentialGateWidget(
-    []() {
-      return CommonInterface::GetComputerSettings()
-        .weather.xctherm.credentials.IsDefined();
-    },
-    CreateXCThermConfigPanel,
-    CreateXCThermMainWidget);
 }
 
 #endif

@@ -16,7 +16,7 @@ PageLayout::Normalise() noexcept
     main = Main::MAP;
     overlay = Overlay::EDL;
     if (bottom == Bottom::NOTHING)
-      bottom = Bottom::EDL_CONTROLS;
+      bottom = Bottom::WEATHER_CONTROLS;
   }
 
   if (unsigned(overlay) >= unsigned(Overlay::MAX))
@@ -25,11 +25,11 @@ PageLayout::Normalise() noexcept
   if (IsMapMain()) {
     if (overlay != Overlay::EDL && overlay != Overlay::RASP &&
         overlay != Overlay::XCTHERM &&
-        bottom == Bottom::EDL_CONTROLS)
+        bottom == Bottom::WEATHER_CONTROLS)
       bottom = Bottom::NOTHING;
   } else {
     overlay = Overlay::NONE;
-    if (bottom == Bottom::EDL_CONTROLS)
+    if (bottom == Bottom::WEATHER_CONTROLS)
       bottom = Bottom::NOTHING;
   }
 
@@ -144,7 +144,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
       builder.Append(", XS");
       break;
 
-    case Bottom::EDL_CONTROLS:
+    case Bottom::WEATHER_CONTROLS:
       break;
 
     case Bottom::MAX:

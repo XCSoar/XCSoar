@@ -279,7 +279,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
 #if defined(HAVE_EDL) || defined(ENABLE_OPENGL)
-    { PageLayout::Bottom::EDL_CONTROLS, N_("Weather controls") },
+    { PageLayout::Bottom::WEATHER_CONTROLS, N_("Weather controls") },
 #endif
     nullptr
   };
@@ -364,7 +364,7 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.bottom = (PageLayout::Bottom)dfe.GetValue();
 
-    if (value.bottom == PageLayout::Bottom::EDL_CONTROLS &&
+    if (value.bottom == PageLayout::Bottom::WEATHER_CONTROLS &&
         value.IsMapMain() &&
         !value.UsesWeatherOverlay()) {
 #ifdef HAVE_EDL

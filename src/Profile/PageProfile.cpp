@@ -72,7 +72,7 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
   map.Get(profileKey, pl.rasp_field);
 
   if (pl.overlay == PageLayout::Overlay::NONE &&
-      pl.bottom == PageLayout::Bottom::EDL_CONTROLS)
+      pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS)
     pl.overlay = PageLayout::Overlay::EDL;
 
   pl.Normalise();
