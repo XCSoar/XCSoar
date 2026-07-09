@@ -212,7 +212,7 @@ RasterRenderer::UpdateQuantisation() noexcept
        don't let the idle-based heuristic overwrite it */
     return quantisation_pixels < last_quantisation_pixels;
 
-  quantisation_pixels = GetQuantisation();
+  quantisation_pixels = std::max(GetQuantisation(), min_quantisation_pixels);
   return quantisation_pixels < last_quantisation_pixels;
 }
 

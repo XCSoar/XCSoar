@@ -39,6 +39,13 @@ class RasterRenderer {
   /** when true, #quantisation_pixels is fixed and
       UpdateQuantisation() becomes a no-op */
   bool fixed_quantisation = false;
+
+  /**
+   * Lower bound for the idle-based quantisation heuristic in
+   * UpdateQuantisation().  Terrain leaves this at 1 (allowing full
+   * resolution when idle); RASP raises it to suppress the step to 1.
+   */
+  unsigned min_quantisation_pixels = 1;
 #endif
 
   /**
@@ -135,6 +142,14 @@ public:
 #ifdef ENABLE_OPENGL
     fixed_quantisation = true;
 #endif
+  }
+
+  /**
+   * Set the lower bound for the idle-based quantisation heuristic (see
+   * #min_quantisation_pixels).
+   */
+  void SetMinQuantisationPixels(unsigned q) noexcept {
+    min_quantisation_pixels = q < 1 ? 1u : q;
   }
 
   /**
