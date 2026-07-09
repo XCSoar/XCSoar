@@ -225,6 +225,7 @@ TEST_NAMES += TestWeatherOverlayPagePlacement
 
 TEST_WEATHER_OVERLAY_PAGE_PLACEMENT_SOURCES = \
 	$(SRC)/PageSettings.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWeatherOverlayPagePlacement.cpp
 TEST_WEATHER_OVERLAY_PAGE_PLACEMENT_DEPENDS = TIME UTIL
