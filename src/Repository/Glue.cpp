@@ -188,6 +188,8 @@ EnqueueRemoteFileDownload(const AvailableFile &file) noexcept
   if (subdir != nullptr) {
     const auto dest_path = LocalPath(subdir);
     Directory::CreateRecursive(dest_path);
+    if (!Directory::Exists(dest_path))
+      return;
   }
 
   Net::DownloadManager::Enqueue(file.GetURI(), Path(relative_path.c_str()));
