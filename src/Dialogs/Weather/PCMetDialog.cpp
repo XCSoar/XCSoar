@@ -3,8 +3,6 @@
 
 #include "PCMetDialog.hpp"
 #include "Dialogs/Message.hpp"
-#include "WeatherCredentialGateWidget.hpp"
-#include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 
@@ -312,18 +310,6 @@ CreatePCMetMainWidget()
   return std::make_unique<TwoWidgets>(std::move(type_widget),
                                       std::move(area_widget),
                                       false);
-}
-
-std::unique_ptr<Widget>
-CreatePCMetWidget()
-{
-  return CreateWeatherCredentialGateWidget(
-    []() {
-      return CommonInterface::GetComputerSettings()
-        .weather.pcmet.www_credentials.IsDefined();
-    },
-    CreateWeatherConfigPanel,
-    CreatePCMetMainWidget);
 }
 
 #endif  // HAVE_PCMET

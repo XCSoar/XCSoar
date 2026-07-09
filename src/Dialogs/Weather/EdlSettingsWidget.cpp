@@ -4,6 +4,7 @@
 #include "EdlSettingsWidget.hpp"
 
 #include "Dialogs/Message.hpp"
+#include "OverlayPageActions.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "Form/Button.hpp"
@@ -63,6 +64,8 @@ class EdlSettingsWidget final
   unsigned cached_day_row = unsigned(-1);
   Button *precache_day_button = nullptr;
   Button *clean_other_days_button = nullptr;
+  Button *add_to_current_button = nullptr;
+  Button *add_to_new_page_button = nullptr;
 #ifdef HAVE_EDL
   EDL::DownloadGlue *edl_listener_glue = nullptr;
 #endif
@@ -89,6 +92,8 @@ private:
   void RefreshControls();
   void PrecacheDay();
   void CleanOtherDays();
+  void AddToCurrentPage();
+  void AddToNewPage();
 
 #ifdef HAVE_EDL
   void OnDownloadFinished(const EDL::DownloadNotification &notification) noexcept override;
@@ -162,6 +167,10 @@ EdlSettingsWidget::Prepare(ContainerWindow &parent,
 
   clean_other_days_button = AddButton(_("Clean other days"),
                                       [this]{ CleanOtherDays(); });
+  add_to_current_button = AddButton(_("Add to page"),
+                                    [this]{ AddToCurrentPage(); });
+  add_to_new_page_button = AddButton(_("Add new page"),
+                                     [this]{ AddToNewPage(); });
 }
 
 void
@@ -195,6 +204,8 @@ EdlSettingsWidget::Unprepare() noexcept
   cached_day_row = unsigned(-1);
   precache_day_button = nullptr;
   clean_other_days_button = nullptr;
+  add_to_current_button = nullptr;
+  add_to_new_page_button = nullptr;
   cached_days.clear();
   RowFormWidget::Unprepare();
 }
@@ -247,6 +258,20 @@ EdlSettingsWidget::CleanOtherDays()
   StaticString<64> result;
   result.Format(_("Deleted %u cached files."), deleted);
   ShowMessageBox(result, _("Weather"), MB_OK);
+}
+
+void
+EdlSettingsWidget::AddToCurrentPage()
+{
+  WeatherDialogOverlayActions::AddOverlayToCurrentPage(
+    PageLayout::Overlay::EDL);
+}
+
+void
+EdlSettingsWidget::AddToNewPage()
+{
+  WeatherDialogOverlayActions::AddOverlayToNewPage(
+    PageLayout::Overlay::EDL);
 }
 
 std::unique_ptr<Widget>

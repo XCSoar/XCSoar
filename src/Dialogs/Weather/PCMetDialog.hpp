@@ -8,7 +8,4 @@
 class Widget;
 
 std::unique_ptr<Widget>
-CreatePCMetWidget();
-
-std::unique_ptr<Widget>
 CreatePCMetMainWidget();

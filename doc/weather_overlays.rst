@@ -121,3 +121,24 @@ Common pitfalls
 - performing UI operations from non-UI threads
 - adding provider logic without tests for enter/leave/suspend/resume
 
+Page placement UX
+-----------------
+
+Weather dialogs provide two placement actions:
+
+- ``Add to page`` updates the currently configured page and replaces any
+  existing weather overlay on that page.
+- ``Add new page`` clones the currently configured page, forces map main,
+  applies the selected overlay, and appends the clone as a new configured
+  page.
+
+Both actions:
+
+- set ``bottom = WEATHER_CONTROLS`` so the shared weather cursor bar is active
+- persist page layout changes to the profile immediately
+- clear provider cursor initialization so first-enter behavior
+  is reapplied consistently
+
+When the page limit (``PageSettings::MAX_PAGES``) is reached, ``Add new page``
+must fail without mutating existing pages, and the UI must show a clear
+message.

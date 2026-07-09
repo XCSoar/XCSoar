@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ControlsFactory.hpp"
+#include "Weather/Features.hpp"
 
 #ifdef HAVE_EDL
 #include "EdlControlsModel.hpp"
