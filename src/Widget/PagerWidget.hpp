@@ -37,7 +37,7 @@ class PagerWidget : public Widget {
   PixelRect position;
 
   unsigned current;
-  boost::container::static_vector<Child, 32u> children;
+  boost::container::static_vector<Child, 48u> children;
 
   PageFlippedCallback page_flipped_callback;
 

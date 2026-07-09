@@ -89,8 +89,10 @@ TabMenuDisplay::UpdateLayout() noexcept
 {
   const auto window_size = GetSize();
   const unsigned border_width = GetTabLineHeight();
+  const unsigned n_main_menu_items = std::max(GetNumMainMenuItems(), 1u);
   const unsigned menu_button_height =
-    std::min(Layout::GetMaximumControlHeight(), window_size.height / 7u);
+    std::min(Layout::GetMaximumControlHeight(),
+             window_size.height / n_main_menu_items);
   const unsigned menu_button_width = (window_size.width - 2 * border_width) / 2;
 
   const unsigned offset = Layout::Scale(2);

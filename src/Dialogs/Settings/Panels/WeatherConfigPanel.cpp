@@ -5,24 +5,13 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
-#include "Weather/Features.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-#include "util/NumberParser.hpp"
 
 enum ControlIndex {
-#ifdef HAVE_PCMET
-  PCMET_USER,
-  PCMET_PASSWORD,
-#if 0
-  PCMET_FTP_USER,
-  PCMET_FTP_PASSWORD,
-#endif
-#endif
-
 #ifdef HAVE_HTTP
   ENABLE_TIM,
 #endif
@@ -44,29 +33,14 @@ void
 WeatherConfigPanel::Prepare(ContainerWindow &parent,
                             const PixelRect &rc) noexcept
 {
-#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
+#ifdef HAVE_HTTP
   const auto &settings = CommonInterface::GetComputerSettings().weather;
 #endif
 
   RowFormWidget::Prepare(parent, rc);
 
-#ifdef HAVE_PCMET
-  AddText("pc_met Username", "",
-          settings.pcmet.www_credentials.username);
-  AddPassword("pc_met Password", "",
-              settings.pcmet.www_credentials.password);
-
-#if 0
-  // code disabled because DWD has terminated our access */
-  AddText("pc_met FTP Username", "",
-          settings.pcmet.ftp_credentials.username);
-  AddPassword("pc_met FTP Password", "",
-              settings.pcmet.ftp_credentials.password);
-#endif
-#endif
-
 #ifdef HAVE_HTTP
-  AddBoolean("Thermal Information Map",
+  AddBoolean(_("Thermal Information Map"),
              _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
              settings.enable_tim);
 #endif
@@ -77,25 +51,8 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
-#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
+#ifdef HAVE_HTTP
   auto &settings = CommonInterface::SetComputerSettings().weather;
-#endif
-
-#ifdef HAVE_PCMET
-  changed |= SaveValue(PCMET_USER, ProfileKeys::PCMetUsername,
-                       settings.pcmet.www_credentials.username);
-
-  changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
-                       settings.pcmet.www_credentials.password);
-
-#if 0
-  // code disabled because DWD has terminated our access */
-  changed |= SaveValue(PCMET_FTP_USER, ProfileKeys::PCMetFtpUsername,
-                       settings.pcmet.ftp_credentials.username);
-
-  changed |= SaveValue(PCMET_FTP_PASSWORD, ProfileKeys::PCMetFtpPassword,
-                       settings.pcmet.ftp_credentials.password);
-#endif
 #endif
 
 #ifdef HAVE_HTTP
