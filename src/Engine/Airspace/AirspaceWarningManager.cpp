@@ -154,9 +154,15 @@ AirspaceWarningManager::Update(const AircraftState& state,
 
   // update warning states
   if (airspaces.IsEmpty()) {
-    // no airspaces, no warnings possible
-    assert(warnings.empty());
-    return false;
+    // The airspace database can be rebuilt asynchronously (e.g. NOTAM
+    // disable/refresh), temporarily dropping all airspaces while stale warning
+    // entries from the previous set still exist.
+    if (warnings.empty())
+      return false;
+
+    ++serial;
+    warnings.clear();
+    return true;
   }
 
   // save old state
