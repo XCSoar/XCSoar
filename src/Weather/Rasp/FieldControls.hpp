@@ -67,12 +67,12 @@ unsigned
 MinuteOfDayFromTime(BrokenTime time) noexcept;
 
 /**
- * Step through local quarter hours (0:00–23:45), even when no raster exists.
+ * Step through forecast times available for @p field_index.
  *
- * @return false when @p delta is zero
+ * @return false when stepping is not possible
  */
 bool
-StepTime(bool time_auto_advance, int delta,
+StepTime(bool time_auto_advance, int field_index, int delta,
          unsigned &minute_of_day) noexcept;
 
 /**
@@ -104,7 +104,8 @@ void
 ResumeAutoAdvance() noexcept;
 
 /**
- * Step the cursor-bar time by @p delta quarters and apply the selection.
+ * Step the cursor-bar time by @p delta available forecast slots and
+ * apply the selection.
  *
  * @return false when stepping is not possible
  */

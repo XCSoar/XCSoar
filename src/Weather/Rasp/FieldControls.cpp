@@ -28,6 +28,10 @@
 namespace Rasp {
 
 static BrokenTime GetAutoAdvanceLocalTime() noexcept;
+static BrokenTime GetEffectiveLocalTime(bool auto_advance) noexcept;
+static bool FieldHasAnyTime(const RaspStore &rasp,
+                            unsigned field_index) noexcept;
+static constexpr unsigned NOW_CHOICE_MINUTE_OF_DAY = 24U * 60U;
 
 [[gnu::pure]]
 static const char *
@@ -64,7 +68,7 @@ void
 InitTimeChoices(DataFieldEnum &field) noexcept
 {
   field.ClearChoices();
-  field.addEnumText(_("Now"));
+  field.addEnumText(_("Now"), NOW_CHOICE_MINUTE_OF_DAY);
 }
 
 void
@@ -95,15 +99,17 @@ FillTimeChoices(DataFieldEnum &field, const RaspStore *rasp,
 BrokenTime
 TimeFromMinuteOfDay(unsigned minute_of_day) noexcept
 {
-  return minute_of_day > 0
-    ? BrokenTime::FromMinuteOfDay(minute_of_day)
-    : BrokenTime::Invalid();
+  if (minute_of_day == NOW_CHOICE_MINUTE_OF_DAY || minute_of_day >= 24U * 60U)
+    return BrokenTime::Invalid();
+
+  return BrokenTime::FromMinuteOfDay(minute_of_day);
 }
 
 unsigned
 MinuteOfDayFromTime(BrokenTime time) noexcept
 {
-  return time.IsPlausible() ? time.GetMinuteOfDay() : 0U;
+  return time.IsPlausible() ? time.GetMinuteOfDay()
+                            : NOW_CHOICE_MINUTE_OF_DAY;
 }
 
 int
@@ -204,7 +210,8 @@ StepCursorTime(int delta) noexcept
 
   const auto &weather = CommonInterface::GetUIState().weather;
   unsigned minute_of_day = 0;
-  if (!StepTime(weather.time_auto_advance, delta, minute_of_day))
+  if (!StepTime(weather.time_auto_advance, field_index, delta,
+                minute_of_day))
     return false;
 
   SetCursorTime(minute_of_day);
@@ -238,6 +245,9 @@ SelectField(unsigned field_index) noexcept
   if (rasp == nullptr || field_index >= rasp->GetItemCount())
     return false;
 
+  if (!FieldHasAnyTime(*rasp, field_index))
+    return false;
+
   PageSettings &settings = CommonInterface::SetUISettings().pages;
   const PagesState &pages = CommonInterface::GetUIState().pages;
   const unsigned page_index = pages.current_index;
@@ -254,6 +264,20 @@ SelectField(unsigned field_index) noexcept
   weather.map = int(field_index);
   weather.rasp.cursor_initialized = true;
 
+  if (!weather.time_auto_advance &&
+      !rasp->HasSelectedTimeData(field_index, false,
+                                 weather.time, GetAutoAdvanceLocalTime())) {
+    const BrokenTime effective =
+      GetEffectiveLocalTime(false);
+    const unsigned desired = effective.IsPlausible()
+      ? RaspStore::TimeToIndex(effective)
+      : 0;
+    const unsigned nearest = rasp->GetNearestTime(field_index, desired);
+    if (nearest < RaspStore::MAX_WEATHER_TIMES) {
+      weather.time = RaspStore::IndexToTime(nearest);
+    }
+  }
+
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState(true);
   return true;
@@ -266,15 +290,38 @@ StepField(int delta) noexcept
   if (count == 0 || delta == 0)
     return false;
 
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr)
+    return false;
+
   int index = GetEffectiveFieldIndex();
   if (index < 0)
     index = 0;
 
-  int next = (int(index) + delta) % int(count);
-  if (next < 0)
-    next += int(count);
+  int current = index;
+  int remaining = delta;
+  while (remaining != 0) {
+    const int direction = remaining > 0 ? 1 : -1;
+    bool found = false;
+    for (unsigned i = 0; i < count; ++i) {
+      current += direction;
+      current %= int(count);
+      if (current < 0)
+        current += int(count);
 
-  return SelectField(unsigned(next));
+      if (FieldHasAnyTime(*rasp, unsigned(current))) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!found)
+      return false;
+
+    remaining -= direction;
+  }
+
+  return SelectField(unsigned(current));
 }
 
 bool
@@ -344,11 +391,59 @@ GetEffectiveLocalTime(bool auto_advance) noexcept
   return weather.time;
 }
 
+[[gnu::pure]]
+static bool
+FieldHasAnyTime(const RaspStore &rasp, unsigned field_index) noexcept
+{
+  for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i)
+    if (rasp.IsTimeAvailable(field_index, i))
+      return true;
+
+  return false;
+}
+
+[[gnu::pure]]
+static unsigned
+StepToAvailableTimeIndex(const RaspStore &rasp, unsigned field_index,
+                         unsigned from, int delta) noexcept
+{
+  if (!FieldHasAnyTime(rasp, field_index))
+    return RaspStore::MAX_WEATHER_TIMES;
+
+  int current = int(from);
+  int remaining = delta;
+  while (remaining != 0) {
+    const int direction = remaining > 0 ? 1 : -1;
+    bool found = false;
+    for (int next = current + direction;
+         next >= 0 && next < int(RaspStore::MAX_WEATHER_TIMES);
+         next += direction) {
+      if (!rasp.IsTimeAvailable(field_index, unsigned(next)))
+        continue;
+
+      current = next;
+      found = true;
+      break;
+    }
+
+    if (!found)
+      return RaspStore::MAX_WEATHER_TIMES;
+
+    remaining -= direction;
+  }
+
+  return unsigned(current);
+}
+
 bool
-StepTime(bool time_auto_advance, int delta,
+StepTime(bool time_auto_advance, int field_index, int delta,
          unsigned &minute_of_day) noexcept
 {
-  if (delta == 0)
+  if (field_index < 0 || delta == 0)
+    return false;
+
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || unsigned(field_index) >= rasp->GetItemCount())
     return false;
 
   unsigned quarter = 0;
@@ -356,9 +451,12 @@ StepTime(bool time_auto_advance, int delta,
   if (effective.IsPlausible())
     quarter = RaspStore::TimeToIndex(effective);
 
-  int next = int(quarter) + delta;
-  next = (next % 96 + 96) % 96;
-  minute_of_day = unsigned(next) * 15;
+  const unsigned next = StepToAvailableTimeIndex(*rasp, unsigned(field_index),
+                                                 quarter, delta);
+  if (next >= RaspStore::MAX_WEATHER_TIMES)
+    return false;
+
+  minute_of_day = RaspStore::IndexToTime(next).GetMinuteOfDay();
   return true;
 }
 
