@@ -391,6 +391,11 @@ NOTAMConfigPanel::OnModified(DataField &df) noexcept
 #ifdef HAVE_HTTP
   if (IsDataField(ENABLE_NOTAM, df)) {
     UpdateVisibility();
+
+    const auto &enabled_field =
+      static_cast<const DataFieldBoolean &>(df);
+    if (enabled_field.GetValue())
+      UpdateFilterCounts();
   }
 #endif
 }
