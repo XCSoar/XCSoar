@@ -136,22 +136,23 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
 
   if (use_alpha) {
     // Draw checkerboard background for alpha styles
-    constexpr unsigned CHECK_SIZE = 8;
+    constexpr unsigned CHECK_SQUARES_Y = 7;
+    const unsigned check_squares_x = std::max(1u, CHECK_SQUARES_Y * width / bar_height);
+    const unsigned check_size_x = width / check_squares_x + 1;
+    const unsigned check_size_y = bar_height / CHECK_SQUARES_Y + 1;
     const Color light_color(230, 230, 230);
     const Color dark_color(26, 26, 26);
 
-    for (unsigned y = 0; y < bar_height;
-         y += CHECK_SIZE) {
-      for (unsigned x = 0; x < width;
-           x += CHECK_SIZE) {
-        const bool light =
-          ((x / CHECK_SIZE)
-           + (y / CHECK_SIZE)) % 2 == 0;
+    for (unsigned iy = 0; iy < CHECK_SQUARES_Y; iy++) {
+         unsigned y = iy * bar_height / CHECK_SQUARES_Y;
+      for (unsigned ix = 0; ix < check_squares_x; ix++) {
+        unsigned x = ix * width / check_squares_x;
+        const bool light = (ix + iy + 1) % 2 == 0;
         canvas.DrawFilledRectangle(
           PixelRect{(int)x, (int)y,
-            std::min((int)(x + CHECK_SIZE),
+            std::min((int)(x + check_size_x),
                      (int)width),
-            std::min((int)(y + CHECK_SIZE),
+            std::min((int)(y + check_size_y),
                      (int)bar_height)},
           light ? light_color : dark_color);
       }
