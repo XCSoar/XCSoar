@@ -4,6 +4,7 @@
 #include "ui/canvas/Bitmap.hpp"
 #include "Screen/Debug.hpp"
 #include "system/Path.hpp"
+#include "io/FileMapping.hpp"
 
 #ifdef ENABLE_COREGRAPHICS
 #include "../apple/ImageDecoder.hpp"
@@ -50,10 +51,10 @@ DecompressImageFile(Path path)
     return LoadTiff(path);
 #endif
 
-  if (path.EndsWithIgnoreCase(".png"))
-    return LoadPNG(path);
-
-  return LoadJPEGFile(path);
+  FileMapping map(path);
+  return IsJPEG(map)
+    ? LoadJPEG(map)
+    : LoadPNG(map);
 }
 
 bool
