@@ -36,6 +36,7 @@ static constexpr std::string_view USER_REPOSITORY_FILE_PREFIX{
     "user_repository_"};
 
 static bool repository_downloaded = false;
+static bool user_repository_downloaded = false;
 
 std::vector<RepositoryLink>
 GetUserRepositories()
@@ -134,12 +135,15 @@ EnqueueRepositoryDownload(bool force, bool main_repo, bool user_repo)
 
   // Enqueue additional user-defined repository URIs, if set
   if (user_repo) {
-    for (const auto &repo : GetUserRepositories())
-      {
-        const auto path =
-          RepositoryDownloadRelativePath(repo.filename.c_str());
-        Net::DownloadManager::Enqueue(repo.uri.c_str(), Path(path.c_str()));
-      }
+    if (!user_repository_downloaded || force) {
+      user_repository_downloaded = true;
+      for (const auto &repo : GetUserRepositories())
+        {
+          const auto path =
+            RepositoryDownloadRelativePath(repo.filename.c_str());
+          Net::DownloadManager::Enqueue(repo.uri.c_str(), Path(path.c_str()));
+        }
+    }
   }
 }
 
@@ -284,6 +288,7 @@ DownloadRepositoriesModal(bool main_repo, bool user_repo)
         ShowError(std::current_exception(), _("Updating repository"));
       }
     }
+    user_repository_downloaded = true;
   }
 }
 
