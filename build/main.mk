@@ -193,6 +193,11 @@ DIALOG_SOURCES += \
 	$(SRC)/Dialogs/Weather/NOAADetails.cpp
 endif
 
+ifeq ($(HAVE_HTTP),y)
+DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Weather/SkySightDialog.cpp
+endif
+
 XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/MapFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
@@ -627,6 +632,13 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
 	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp
 endif
+endif
+
+ifeq ($(HAVE_HTTP),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Weather/SkySight/SkySightClient.cpp \
+	$(SRC)/Weather/SkySight/SkySightAPI.cpp \
+	$(SRC)/Weather/SkySight/SkySightRequest.cpp
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)

@@ -8,6 +8,9 @@
 #include "Waypoint/WaypointGlue.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#ifdef HAVE_HTTP
+#include "Weather/SkySight/SkySightClient.hpp"
+#endif
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "UIGlobals.hpp"
@@ -19,6 +22,10 @@
 #include "PageActions.hpp"
 #include "Protection.hpp" // for global_running
 #include "LogFile.hpp"
+
+#ifdef HAVE_HTTP
+static std::shared_ptr<SkySightClient> sky_sight;
+#endif
 
 void
 DataGlobals::UnsetTerrain() noexcept
@@ -76,6 +83,20 @@ DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp) noexcept
   if (map != nullptr)
     map->SetRasp(std::move(rasp));
 }
+
+#ifdef HAVE_HTTP
+std::shared_ptr<SkySightClient>
+DataGlobals::GetSkySight() noexcept
+{
+  return sky_sight;
+}
+
+void
+DataGlobals::SetSkySight(std::shared_ptr<SkySightClient> skysight) noexcept
+{
+  sky_sight = std::move(skysight);
+}
+#endif
 
 void
 DataGlobals::UpdateHome(bool reset) noexcept
