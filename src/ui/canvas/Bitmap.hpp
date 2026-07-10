@@ -161,8 +161,11 @@ public:
   }
 #endif
 
-#ifndef USE_GDI
+#if !defined(USE_GDI) || defined(ENABLE_OPENGL)
   bool Load(UncompressedImage &&uncompressed, Type type=Type::STANDARD);
+#endif
+
+#if !defined(USE_GDI) && !defined(ANDROID)
 #ifndef ANDROID
   bool Load(std::span<const std::byte> buffer, Type type=Type::STANDARD);
 #endif
