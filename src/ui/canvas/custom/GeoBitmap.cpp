@@ -151,6 +151,9 @@ ParseTileBounds(std::string_view name)
 GeoQuadrilateral
 Bitmap::LoadGeoFile(Path path)
 {
+  if (!File::Exists(path))
+    throw std::runtime_error("Geo image file not found");
+
 #ifdef USE_GEOTIFF
   /* Smallest useful GeoTIFF is far larger; skip obvious truncation before LibTiff. */
   static constexpr unsigned kMinTiffGeoFileSize = 100;
