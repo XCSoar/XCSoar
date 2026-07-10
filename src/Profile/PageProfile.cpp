@@ -90,8 +90,22 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
   if (!map.Get(profileKey, pl.xctherm_time))
     pl.xctherm_time = PageLayout::XCTHERM_TIME_AUTO;
 
+  strcpy(profileKey + prefixLen, "SkysightOverlay");
+  const char *skysight_overlay_value = map.Get(profileKey);
+  strcpy(profileKey + prefixLen, "SkysightOverlay");
+  if (const char *value = map.Get(profileKey); value != nullptr)
+    skysight_overlay_value = value;
+  if (skysight_overlay_value != nullptr && *skysight_overlay_value != '\0') {
+    pl.skysight_overlay = skysight_overlay_value;
+    if (pl.overlay == PageLayout::Overlay::NONE)
+      pl.overlay = PageLayout::Overlay::SKYSIGHT;
+  } else {
+    pl.skysight_overlay.clear();
+  }
+
   if (pl.overlay == PageLayout::Overlay::NONE &&
-      pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS)
+      pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS &&
+      pl.skysight_overlay.empty())
     pl.overlay = PageLayout::Overlay::EDL;
 
   pl.Normalise();
@@ -156,6 +170,9 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "XCThermTime");
   map.Set(profileKey, page.xctherm_time);
+
+  strcpy(profileKey + prefixLen, "SkysightOverlay");
+  map.Set(profileKey, page.skysight_overlay.c_str());
 }
 
 

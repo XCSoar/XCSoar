@@ -23,6 +23,9 @@ ShowWeatherSetupDialog() noexcept
   case PageLayout::Overlay::XCTHERM:
     page = "xctherm";
     break;
+  case PageLayout::Overlay::SKYSIGHT:
+    page = "skysight";
+    break;
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;

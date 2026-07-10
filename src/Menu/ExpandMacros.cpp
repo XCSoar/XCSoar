@@ -270,6 +270,9 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     case PageLayout::Overlay::XCTHERM:
       return plus ? _("Altitude+\n(UP)") : _("Altitude-\n(DOWN)");
 
+    case PageLayout::Overlay::SKYSIGHT:
+      return "";
+
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
@@ -285,6 +288,9 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     case PageLayout::Overlay::XCTHERM:
       return _("Altitude\nList\n(F2/+)");
 
+    case PageLayout::Overlay::SKYSIGHT:
+      return "";
+
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
@@ -299,6 +305,9 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
 
     case PageLayout::Overlay::XCTHERM:
       return _("Altitude\nAuto\n(F3/-)");
+
+    case PageLayout::Overlay::SKYSIGHT:
+      return _("Time\nAuto\n(F3/-)");
 
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
