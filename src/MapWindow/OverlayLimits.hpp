@@ -7,6 +7,6 @@
 
 namespace MapWindowOverlay {
 
-inline constexpr std::size_t MAX_MAP_OVERLAYS = 9;
+inline constexpr std::size_t MAX_MAP_OVERLAYS = 25;
 
 } // namespace MapWindowOverlay

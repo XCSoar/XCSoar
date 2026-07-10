@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Layers.hpp"
+#include "MapWindow/OverlayLimits.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
@@ -22,6 +23,11 @@ class Path;
 class SkysightAPI;
 
 class Skysight final {
+  static constexpr unsigned LIVE_TILE_RANGE_OFFSET = 2;
+  static constexpr unsigned LIVE_TILE_OVERLAY_COUNT =
+    (2 * LIVE_TILE_RANGE_OFFSET + 1) * (2 * LIVE_TILE_RANGE_OFFSET + 1);
+  static_assert(LIVE_TILE_OVERLAY_COUNT <= MapWindowOverlay::MAX_MAP_OVERLAYS);
+
   std::unique_ptr<SkysightAPI> api;
   SkySight::Layer *active_layer = nullptr;
   SkySight::Layer *displayed_layer = nullptr;
@@ -30,7 +36,7 @@ class Skysight final {
   bool forecast_cleanup_pending = true;
   bool forecast_progress_visible = false;
   bool throttle_notification_active = false;
-  std::array<std::string, 9> tile_filenames;
+  std::array<std::string, LIVE_TILE_OVERLAY_COUNT> tile_filenames;
   UI::PeriodicTimer request_timer;
 
 public:

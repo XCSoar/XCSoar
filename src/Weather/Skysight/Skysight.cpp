@@ -894,8 +894,11 @@ Skysight::DisplayTileLayer()
 
   bool any_visible = false;
   unsigned slot = 0;
-  for (int x = int(base_tile.x) - 1; x <= int(base_tile.x) + 1; ++x) {
-    for (int y = int(base_tile.y) - 1; y <= int(base_tile.y) + 1; ++y, ++slot) {
+  constexpr int tile_range = int(LIVE_TILE_RANGE_OFFSET);
+  for (int x = int(base_tile.x) - tile_range;
+       x <= int(base_tile.x) + tile_range; ++x) {
+    for (int y = int(base_tile.y) - tile_range;
+         y <= int(base_tile.y) + tile_range; ++y, ++slot) {
       if (y < 0 || y >= tiles_per_axis) {
         map_window->SetOverlay(slot, nullptr);
         tile_filenames[slot].clear();
