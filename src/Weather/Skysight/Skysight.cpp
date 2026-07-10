@@ -4,6 +4,7 @@
 #include "Skysight.hpp"
 #include "SkysightCache.hpp"
 #include "SkysightAPI.hpp"
+#include "ForecastUtils.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
@@ -48,10 +49,6 @@ Skysight::Init()
   ReloadSelectedLayersFromProfile();
   api->PollRegions();
   api->PollLayers();
-
-  const char *configured_layer = Profile::Get(ProfileKeys::WeatherLayerDisplayed);
-  if (configured_layer != nullptr && !std::string_view{configured_layer}.empty())
-    (void)SetLayerActive(configured_layer);
 }
 
 void
@@ -188,7 +185,11 @@ Skysight::AddSelectedLayer(std::string_view id, bool save_profile)
       for (const auto t : cached_times)
         selected.forecast_datafiles.emplace_back(t, "");
 
-      selected.forecast_time = cached_times.front();
+      selected.forecast_time = SkySight::ChooseClosestForecastTime(
+        cached_times,
+        [](time_t time) noexcept {
+          return time;
+        });
       selected.from = cached_times.back();
       selected.to = cached_times.front();
 
@@ -278,6 +279,58 @@ Skysight::SelectForecastTime(std::string_view id, time_t forecast_time)
   if (i == layer->forecast_datafiles.end())
     return false;
 
+  layer->forecast_time_mode = SkySight::ForecastTimeMode::Fixed;
+  selected->forecast_time_mode = SkySight::ForecastTimeMode::Fixed;
+  layer->forecast_time = forecast_time;
+  selected->forecast_time = forecast_time;
+
+  const auto candidate = SkysightCache::FindForecastImage(GetLocalPath(),
+                                                          GetRegion(),
+                                                          layer->id,
+                                                          forecast_time);
+  if (candidate.path != nullptr) {
+    const auto mtime = std::chrono::system_clock::to_time_t(
+      File::GetLastModification(candidate.path));
+    layer->mtime = mtime;
+    selected->mtime = mtime;
+  } else {
+    if (!api->QueueForecastDatafile(id, i->time, i->link))
+      return false;
+  }
+
+  if (active_layer == layer)
+    tile_filenames[0].clear();
+
+  OnDataUpdated();
+  return true;
+}
+
+bool
+Skysight::SelectAutomaticForecastTime(std::string_view id)
+{
+  auto *layer = api->GetLayer(id);
+  auto *selected = api->GetSelectedLayer(id);
+  if (layer == nullptr || selected == nullptr || layer->SupportsLiveTiles())
+    return false;
+
+  const auto forecast_time = SkySight::ChooseClosestForecastTime(
+    layer->forecast_datafiles,
+    [](const auto &candidate) noexcept {
+      return candidate.time;
+    });
+  if (forecast_time <= 0)
+    return false;
+
+  const auto i = std::find_if(layer->forecast_datafiles.begin(),
+                              layer->forecast_datafiles.end(),
+                              [forecast_time](const auto &candidate) {
+                                return candidate.time == forecast_time;
+                              });
+  if (i == layer->forecast_datafiles.end())
+    return false;
+
+  layer->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
+  selected->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
   layer->forecast_time = forecast_time;
   selected->forecast_time = forecast_time;
 
@@ -415,10 +468,23 @@ Skysight::SetLayerActive(std::string_view id)
     }
   }
 
-  Profile::Set(ProfileKeys::WeatherLayerDisplayed, layer->id.c_str());
   ResetTiles();
   OnDataUpdated();
   return true;
+}
+
+void
+Skysight::ApplyPageOverlay(std::string_view overlay_id) noexcept
+{
+  if (overlay_id.empty()) {
+    if (!GetActiveLayerId().empty())
+      DeactivateLayer();
+
+    return;
+  }
+
+  if (GetActiveLayerId() != overlay_id)
+    (void)SetLayerActive(overlay_id);
 }
 
 void
@@ -426,7 +492,6 @@ Skysight::DeactivateLayer()
 {
   api->CancelTileDownloads();
   active_layer = nullptr;
-  Profile::Set(ProfileKeys::WeatherLayerDisplayed, "");
   ResetTiles();
   OnDataUpdated();
 }

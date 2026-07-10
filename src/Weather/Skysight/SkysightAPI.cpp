@@ -1129,7 +1129,8 @@ SkysightAPI::OnDatafileDownloaded(std::string_view layer_id,
 
 void
 SkysightAPI::OnDatafileError(std::string_view layer_id,
-                             [[maybe_unused]] time_t forecast_time) noexcept
+                             [[maybe_unused]] time_t forecast_time,
+                             [[maybe_unused]] bool preparation_failed) noexcept
 {
   if (auto *layer = GetLayer(layer_id); layer != nullptr) {
     if (layer->pending_downloads > 0)

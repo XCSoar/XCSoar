@@ -23,6 +23,8 @@ struct SkySightPreparedData {
   SkySightPreparedDataKind kind = SkySightPreparedDataKind::DisplayReady;
   AllocatedPath source_path;
   AllocatedPath display_path;
+  AllocatedPath cleanup_source_path;
+  AllocatedPath cleanup_download_path;
 
   [[nodiscard]] bool IsDisplayReady() const noexcept {
     return kind == SkySightPreparedDataKind::DisplayReady;

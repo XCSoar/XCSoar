@@ -149,6 +149,7 @@ struct WeatherUIState {
   EDLWeatherUIState edl;
 
   OverlaySession xctherm;
+  OverlaySession skysight;
   struct XCThermCursorState {
     unsigned layer = 0;
     unsigned forecast_utc_hour = 12;
@@ -170,6 +171,7 @@ struct WeatherUIState {
     rasp.Clear();
     edl.Clear();
     xctherm.Clear();
+    skysight.Clear();
     xctherm_cursor.Clear();
   }
 

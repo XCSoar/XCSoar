@@ -105,7 +105,8 @@ public:
   void OnDatafilesError(std::string_view layer_id) noexcept;
   void OnDatafileDownloaded(std::string_view layer_id, time_t forecast_time,
                             Path path) noexcept;
-  void OnDatafileError(std::string_view layer_id, time_t forecast_time) noexcept;
+  void OnDatafileError(std::string_view layer_id, time_t forecast_time,
+                       bool preparation_failed=false) noexcept;
   void OnDownloadComplete() noexcept;
 
 private:

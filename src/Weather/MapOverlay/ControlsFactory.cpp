@@ -8,6 +8,10 @@
 #include "EdlControlsModel.hpp"
 #endif
 #include "RaspControlsModel.hpp"
+#ifdef HAVE_HTTP
+#include "DataGlobals.hpp"
+#include "SkysightControlsModel.hpp"
+#endif
 #include "XcthermControlsModel.hpp"
 
 #include <memory>
@@ -15,9 +19,9 @@
 namespace WeatherMapOverlay {
 
 std::unique_ptr<ControlsModel>
-CreateControlsModel(PageLayout::Overlay overlay) noexcept
+CreateControlsModel(const PageLayout &layout) noexcept
 {
-  switch (overlay) {
+  switch (layout.overlay) {
   case PageLayout::Overlay::EDL:
 #ifdef HAVE_EDL
     return std::make_unique<EdlControlsModel>();
@@ -30,6 +34,14 @@ CreateControlsModel(PageLayout::Overlay overlay) noexcept
 
   case PageLayout::Overlay::XCTHERM:
     return std::make_unique<XcthermControlsModel>();
+
+  case PageLayout::Overlay::SKYSIGHT:
+#ifdef HAVE_HTTP
+    return std::make_unique<SkysightControlsModel>(
+      DataGlobals::GetSkysight(), layout.skysight_overlay.c_str());
+#else
+    break;
+#endif
 
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:

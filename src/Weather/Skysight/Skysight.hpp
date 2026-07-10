@@ -48,6 +48,7 @@ public:
   bool AddSelectedLayer(std::string_view id);
   bool RemoveSelectedLayer(std::string_view id);
   bool SelectForecastTime(std::string_view id, time_t forecast_time);
+  bool SelectAutomaticForecastTime(std::string_view id);
   bool PreloadForecast(std::string_view id) noexcept;
   bool PreloadAllForecasts() noexcept;
   bool HasForecastLayers() const noexcept;
@@ -65,6 +66,7 @@ public:
   std::string_view GetDisplayedLayerId() const noexcept;
 
   bool SetLayerActive(std::string_view id);
+  void ApplyPageOverlay(std::string_view overlay_id) noexcept;
   void DeactivateLayer();
   void Render();
 
