@@ -29,6 +29,10 @@
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
 
+#ifdef HAVE_HTTP
+#include "Weather/SkySight/SkySightClient.hpp"
+#endif
+
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
 #undef DELETE
@@ -244,6 +248,42 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
     break;
 #endif
 
+  case PageLayout::Overlay::SKYSIGHT: {
+    control.SetCaption(_("SkySight layer"));
+    control.SetHelpText(
+      _("SkySight layer used when this page overlay is SkySight."));
+
+#ifdef HAVE_HTTP
+    const auto skysight = DataGlobals::GetSkySight();
+    if (skysight != nullptr) {
+      unsigned choice = 0;
+
+      if (!value.skysight_overlay.empty()) {
+        df.AddChoice(choice++, value.skysight_overlay.c_str(),
+                     value.skysight_overlay.c_str());
+      }
+
+      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+        const auto *layer = skysight->GetSelectedLayer(i);
+        if (layer == nullptr ||
+            layer->id == value.skysight_overlay.c_str())
+          continue;
+
+        df.AddChoice(choice++, layer->name.c_str());
+      }
+
+      if (choice > 0) {
+        df.SetValue(0U);
+        break;
+      }
+    }
+#endif
+
+    df.AddChoice(0, _("No SkySight layers selected"));
+    df.SetValue(0U);
+    break;
+  }
+
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::XCTHERM:
 #ifndef HAVE_EDL
@@ -280,6 +320,11 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
       detail_enabled = true;
       break;
 #endif
+    case PageLayout::Overlay::SKYSIGHT:
+#ifdef HAVE_HTTP
+      detail_enabled = DataGlobals::GetSkySight() != nullptr;
+#endif
+      break;
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::XCTHERM:
 #ifndef HAVE_EDL
@@ -366,7 +411,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   };
   AddEnum(_("Bottom area"),
           _("Specifies what should be displayed below the main area. "
-            "Weather controls require a RASP, EDL, or XCTherm map "
+            "Weather controls require a weather map "
             "overlay."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
@@ -379,6 +424,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 #endif
 #ifdef HAVE_HTTP
     { PageLayout::Overlay::XCTHERM, N_("XCTherm") },
+    { PageLayout::Overlay::SKYSIGHT, "SkySight" },
 #endif
     nullptr
   };
@@ -389,7 +435,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           (unsigned)PageLayout::Overlay::NONE, this);
 
   AddEnum(_("Layer / Level"),
-          _("Select a RASP or EDL map overlay to configure its "
+          _("Select a weather map overlay to configure its "
             "layer or level for this page."),
           this);
   GetControl(OVERLAY_DETAIL).GetDataField()->EnableItemHelp(true);
@@ -466,6 +512,14 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   } else if (&df == &GetDataField(OVERLAY)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.overlay = (PageLayout::Overlay)dfe.GetValue();
+    if (value.overlay == PageLayout::Overlay::SKYSIGHT &&
+        value.skysight_overlay.empty()) {
+#ifdef HAVE_HTTP
+      if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+        if (const auto *layer = skysight->GetSelectedLayer(0); layer != nullptr)
+          value.skysight_overlay = layer->id;
+#endif
+    }
   } else if (&df == &GetDataField(OVERLAY_DETAIL)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     if (value.overlay == PageLayout::Overlay::RASP)
@@ -474,6 +528,29 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
     else if (value.overlay == PageLayout::Overlay::EDL)
       value.edl_isobar = dfe.GetValue();
 #endif
+    else if (value.overlay == PageLayout::Overlay::SKYSIGHT) {
+#ifdef HAVE_HTTP
+      if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr) {
+        unsigned choice = value.skysight_overlay.empty() ? 0 : 1;
+        const unsigned selected = dfe.GetValue();
+
+        if (!value.skysight_overlay.empty() && selected == 0)
+          return;
+
+        for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+          const auto *layer = skysight->GetSelectedLayer(i);
+          if (layer == nullptr ||
+              layer->id == value.skysight_overlay.c_str())
+            continue;
+
+          if (choice++ == selected) {
+            value.skysight_overlay = layer->id;
+            break;
+          }
+        }
+      }
+#endif
+    }
   } else {
     gcc_unreachable();
   }
