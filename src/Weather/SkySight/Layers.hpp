@@ -20,6 +20,11 @@ enum class LiveMetadataSupport : uint8_t {
   Unsupported,
 };
 
+enum class ForecastTimeMode : uint8_t {
+  AutoDefault,
+  Fixed,
+};
+
 struct LegendColor {
   uint8_t red = 0;
   uint8_t green = 0;
@@ -75,6 +80,7 @@ struct Layer {
   /** Whether /data/last_updated actually returns this pseudo-layer. */
   LiveMetadataSupport live_metadata_support = LiveMetadataSupport::Unknown;
   time_t forecast_time = 0;
+  ForecastTimeMode forecast_time_mode = ForecastTimeMode::AutoDefault;
 
   Layer() = default;
 
@@ -99,6 +105,10 @@ struct Layer {
 
   [[nodiscard]] bool HasKnownLiveTimestamp() const noexcept {
     return SupportsLiveTiles() && last_update > 0;
+  }
+
+  [[nodiscard]] bool UsesAutomaticForecastTime() const noexcept {
+    return forecast_time_mode == ForecastTimeMode::AutoDefault;
   }
 
   /**
