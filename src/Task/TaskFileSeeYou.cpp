@@ -44,7 +44,7 @@ struct SeeYouTaskInformation {
 
 struct SeeYouTurnpointInformation {
   /** CUP file contained info for this OZ */
-  bool valid = false;
+  bool has_oz = false;
 
   enum Style {
     FIXED,
@@ -57,7 +57,13 @@ struct SeeYouTurnpointInformation {
   bool is_line = false;
   bool reduce = false;
 
+  bool radius1_set = false;
+  bool radius2_set = false;
   double radius1 = 500, radius2 = 200, max_altitude = 0;
+
+  bool angle1_set = false;
+  bool angle2_set = false;
+  bool angle12_set = false;
   Angle angle1{}, angle2{}, angle12{};
 };
 
@@ -175,27 +181,35 @@ ParseOptions(SeeYouTaskInformation &task_info, std::string_view src) noexcept
 static void
 ParseOZs(SeeYouTurnpointInformation &tp_info, std::string_view src) noexcept
 {
-  tp_info.valid = true;
+  tp_info.has_oz = true;
 
   for (std::string_view i : IterableSplitString(src, ',')) {
     if (SkipPrefix(i, "Style="sv))
       tp_info.style = ParseStyle(i);
     else if (SkipPrefix(i, "R1="sv)) {
       const double radius = ParseRadius(i);
-      if (radius > 0)
+      if (radius > 0) {
         tp_info.radius1 = radius;
-    } else if (SkipPrefix(i, "A1="sv))
+        tp_info.radius1_set = true;
+      }
+    } else if (SkipPrefix(i, "A1="sv)) {
+      tp_info.angle1_set = true;
       tp_info.angle1 = ParseAngle(i);
-    else if (SkipPrefix(i, "R2="sv)) {
+    } else if (SkipPrefix(i, "R2="sv)) {
       const double radius = ParseRadius(i);
-      if (radius > 0)
+      if (radius > 0) {
         tp_info.radius2 = radius;
+        tp_info.radius2_set = true;
+      }
     }
-    else if (SkipPrefix(i, "A2="sv))
+    else if (SkipPrefix(i, "A2="sv)) {
+      tp_info.angle2_set = true;
       tp_info.angle2 = ParseAngle(i);
-    else if (SkipPrefix(i, "A12="sv))
+    }
+    else if (SkipPrefix(i, "A12="sv)) {
+      tp_info.angle12_set = true;
       tp_info.angle12 = ParseAngle(i);
-    else if (SkipPrefix(i, "MaxAlt="sv))
+    } else if (SkipPrefix(i, "MaxAlt="sv))
       tp_info.max_altitude = ParseMaxAlt(i);
     else if (SkipPrefix(i, "Line="sv))
       tp_info.is_line = i.starts_with('1');
@@ -317,8 +331,9 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
   const bool is_intermediate = (pos > 0) && (pos < (size - 1));
   const Waypoint *wp = &*wps[pos];
 
-  if (!turnpoint_infos.valid)
-    return nullptr;
+  // For turnpoints that don't have an explicit ObsZone line, default to an FAI Quadrant
+  if (!turnpoint_infos.has_oz)
+    return SymmetricSectorZone::CreateFAISectorZone(wp->location, is_intermediate);
 
   if (factType == TaskFactoryType::RACING &&
       is_intermediate && isKeyhole(turnpoint_infos)) {
@@ -350,13 +365,51 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
   else if (factType == TaskFactoryType::RACING) {
 
-    // XCSoar does not support fixed sectors for RT
-    if (turnpoint_infos.style == SeeYouTurnpointInformation::FIXED)
+    // XCSoar does not support FIXED sectors for RT, fall back to a basic cylinder
+    if (turnpoint_infos.style == SeeYouTurnpointInformation::FIXED) {
       return std::make_unique<CylinderZone>(wp->location,
                                             turnpoint_infos.radius1);
-    else
+
+    // Handle SYMMETRICAL OZs for Racing tasks
+    } else if (turnpoint_infos.style == SeeYouTurnpointInformation::Style::SYMMETRICAL) {
+
+      /*
+      Compute "effective" radius and angle used for OZ type selection, depending on
+      whether the .cup file explicitly sets these explicitly or not.
+      */
+      const double eff_radius = turnpoint_infos.radius1_set ? turnpoint_infos.radius1 : 3000.0;
+      const Angle eff_angle  = turnpoint_infos.angle1_set ? turnpoint_infos.angle1 * 2: Angle::QuarterCircle();
+
+      /*
+      For FAI observation zones, SeeYou creates .cup files with a radius of 3000m
+      and an angle of 45 degrees. Detect these (with some margin of error, allowing for
+      any radius larger than 3000m as long as the angle is 45 degrees) and create
+      FAI quadrant OZs for them.
+      */
+      if (eff_radius >= 3000.0 &&
+          eff_angle.CompareRoughly(Angle::QuarterCircle(), Angle::Degrees(1))) {
+
+        return SymmetricSectorZone::CreateFAISectorZone(wp->location,
+                                                         is_intermediate);
+      } else {
+        /*
+        In case of a OZ definition with a non-FAI radius or other angle than a quadrant,
+        then specify a generic circular sector zone here instead of an FAI quadrant.
+        Even if the above heuristic for detecting FAI quadrants is not perfect, this remains
+        functionally correct and in line with what is specified in the .cup file.
+        */
+        return SymmetricSectorZone::CreateSymmetricCircularSectorZone(
+          wp->location, eff_radius, eff_angle);
+      }
+    } else {
+      /*
+      Default to FAI Quadrant OZ if we don't have a better option.
+      This will often not be what the task designer intended.
+      */
       return SymmetricSectorZone::CreateFAISectorZone(wp->location,
-                                                      is_intermediate);
+                                                         is_intermediate);
+
+    }
 
   } else if (is_intermediate) { //AAT intermediate point
     assert(wps[pos + 1]);
