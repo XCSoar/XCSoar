@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Language/Language.hpp"
+
 #include <string>
 #include <string_view>
 #include <vector>
@@ -12,17 +14,17 @@ struct SkySightRegionInfo {
   const char *id;
 };
 
-inline constexpr SkySightRegionInfo skysight_regions[] = {
-  { "Europe", "EUROPE" },
-  { "South Africa", "SANEW" },
-  { "Western US", "WEST_US" },
-  { "Eastern US", "EAST_US" },
-  { "Argentina/Chile", "ARGENTINA_CHILE" },
-  { "Brazil", "BRAZIL" },
-  { "Japan", "JAPAN" },
-  { "New Zealand", "NZ" },
-  { "Western Australia", "WA" },
-  { "Eastern Australia", "EAST_AUS" },
+inline constexpr SkySightRegionInfo SKYSIGHT_REGIONS[] = {
+  { N_("Europe"), "EUROPE" },
+  { N_("South Africa"), "SANEW" },
+  { N_("Western US"), "WEST_US" },
+  { N_("Eastern US"), "EAST_US" },
+  { N_("Argentina/Chile"), "ARGENTINA_CHILE" },
+  { N_("Brazil"), "BRAZIL" },
+  { N_("Japan"), "JAPAN" },
+  { N_("New Zealand"), "NZ" },
+  { N_("Western Australia"), "WA" },
+  { N_("Eastern Australia"), "EAST_AUS" },
 };
 
 struct SkySightRegionEntry {
@@ -39,14 +41,14 @@ struct SkySightRegionEntry {
 static constexpr const SkySightRegionInfo &
 GetDefaultSkySightRegion() noexcept
 {
-  return skysight_regions[0];
+  return SKYSIGHT_REGIONS[0];
 }
 
 [[gnu::pure]]
 static constexpr const SkySightRegionInfo &
 FindSkySightRegionById(std::string_view region_id) noexcept
 {
-  for (const auto &region : skysight_regions)
+  for (const auto &region : SKYSIGHT_REGIONS)
     if (region_id == region.id)
       return region;
 
@@ -57,10 +59,10 @@ inline void
 ResetDefaultSkySightRegions(std::vector<SkySightRegionEntry> &result)
 {
   result.clear();
-  if (result.capacity() < std::size(skysight_regions))
-    result.reserve(std::size(skysight_regions));
+  if (result.capacity() < std::size(SKYSIGHT_REGIONS))
+    result.reserve(std::size(SKYSIGHT_REGIONS));
 
-  for (const auto &region : skysight_regions)
+  for (const auto &region : SKYSIGHT_REGIONS)
     result.push_back({region.id, region.name, {}});
 }
 
