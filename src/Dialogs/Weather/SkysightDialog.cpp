@@ -13,7 +13,9 @@
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Form/Button.hpp"
+#include "Form/CheckBox.hpp"
 #include "Form/ButtonPanel.hpp"
+#include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
@@ -190,7 +192,7 @@ public:
 };
 
 class MultiLayerPickerWidget final : public MultiSelectListWidget {
-  TextRowRenderer row_renderer;
+  TwoTextRowsRenderer row_renderer;
   std::shared_ptr<Skysight> skysight;
   std::function<void()> selection_changed_callback;
 
@@ -203,12 +205,14 @@ public:
   }
 
   unsigned CalculateLayout(const DialogLook &look) noexcept {
-    return row_renderer.CalculateLayout(*look.list.font);
+    return row_renderer.CalculateLayout(*look.list.font_bold,
+                                        look.small_font);
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
     const DialogLook &look = UIGlobals::GetDialogLook();
-    CreateList(parent, look, rc, row_renderer.CalculateLayout(*look.list.font));
+    CreateList(parent, look, rc, row_renderer.CalculateLayout(*look.list.font_bold,
+                                                              look.small_font));
     SetLengthWithSelection(skysight ? skysight->NumLayers() : 0);
     MultiSelectListWidget::Prepare(parent, rc);
 
@@ -231,7 +235,25 @@ public:
     if (layer == nullptr)
       return;
 
-    DrawCheckboxText(canvas, rc, layer->name.c_str(), IsSelected(idx));
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    const bool focused = GetList().HasFocus();
+    const unsigned padding = Layout::GetTextPadding();
+    const unsigned box_size = rc.GetHeight() > 2 * padding
+      ? rc.GetHeight() - 2 * padding
+      : 0;
+
+    PixelRect box_rc;
+    box_rc.left = rc.left + (int)padding;
+    box_rc.top = rc.top + (int)padding;
+    box_rc.right = box_rc.left + (int)box_size;
+    box_rc.bottom = box_rc.top + (int)box_size;
+
+    DrawCheckBox(canvas, look, box_rc, IsSelected(idx), focused, false, true);
+
+    PixelRect text_rc = rc;
+    text_rc.left = box_rc.right + 2 * (int)padding;
+    row_renderer.DrawFirstRow(canvas, text_rc, layer->name.c_str());
+    row_renderer.DrawSecondRow(canvas, text_rc, layer->description.c_str());
   }
 
 protected:
