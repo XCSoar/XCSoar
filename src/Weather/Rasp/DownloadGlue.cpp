@@ -269,10 +269,6 @@ RaspDownloadGlue::OnDownloadNotify() noexcept
   }
 
   PollDownloadProgress();
-
-  FileRepository repository;
-  LoadAllRepositories(repository);
-  EnqueueConfiguredRaspUpdate(repository);
 }
 
 void
