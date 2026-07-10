@@ -6,6 +6,7 @@
 #include "Layers.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 #include "system/Path.hpp"
+#include "util/StaticString.hxx"
 
 #include <array>
 #include <memory>
@@ -65,6 +66,7 @@ public:
 
   std::string_view GetActiveLayerId() const noexcept;
   std::string_view GetDisplayedLayerId() const noexcept;
+  StaticString<128> GetOverlayLabel() const noexcept;
 
   bool SetLayerActive(std::string_view id);
   void ApplyPageOverlay(std::string_view overlay_id) noexcept;

@@ -10,6 +10,8 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "LocalPath.hpp"
@@ -153,6 +155,30 @@ Skysight::GetDisplayedLayerId() const noexcept
   return displayed_layer != nullptr
     ? std::string_view{displayed_layer->id}
     : std::string_view{};
+}
+
+StaticString<128>
+Skysight::GetOverlayLabel() const noexcept
+{
+  StaticString<128> label;
+  label = "SkySight";
+
+  const auto *layer = active_layer != nullptr
+    ? active_layer
+    : displayed_layer;
+  if (layer == nullptr)
+    return label;
+
+  label.AppendFormat(" %s", layer->name.c_str());
+
+  if (!layer->SupportsLiveTiles() && layer->forecast_time > 0) {
+    const auto time_label =
+      FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->forecast_time)),
+                          CommonInterface::GetComputerSettings().utc_offset);
+    label.AppendFormat(" %s", time_label.c_str());
+  }
+
+  return label;
 }
 
 bool
