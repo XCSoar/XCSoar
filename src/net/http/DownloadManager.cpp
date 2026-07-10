@@ -90,6 +90,11 @@ public:
     if (shutting_down)
       return;
 
+    /* skip duplicates already in the queue (e.g. a file re-enqueued
+       before its previous download completed) */
+    if (std::find(queue.begin(), queue.end(), path_relative) != queue.end())
+      return;
+
     queue.emplace_back(uri, path_relative);
 
     listeners.ForEach([path_relative](auto *listener){
