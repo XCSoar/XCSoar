@@ -10,6 +10,8 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "LocalPath.hpp"
