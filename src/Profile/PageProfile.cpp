@@ -8,6 +8,7 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "util/StringFormat.hpp"
 
+#include <cstring>
 #include <stdio.h>
 
 /**
@@ -65,14 +66,26 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
 
   strcpy(profileKey + prefixLen, "Overlay");
   if (!map.GetEnum(profileKey, pl.overlay) ||
-      unsigned(pl.overlay) >= unsigned(PageLayout::Overlay::MAX))
+      unsigned(pl.overlay) >= unsigned(PageLayout::Overlay::MAX)) {
     pl.overlay = PageLayout::Overlay::NONE;
+  }
 
   strcpy(profileKey + prefixLen, "RaspField");
   map.Get(profileKey, pl.rasp_field);
 
+  strcpy(profileKey + prefixLen, "SkysightOverlay");
+  const char *skysight_overlay_value = map.Get(profileKey);
+  if (skysight_overlay_value != nullptr && *skysight_overlay_value != '\0') {
+    pl.skysight_overlay = skysight_overlay_value;
+    if (pl.overlay == PageLayout::Overlay::NONE)
+      pl.overlay = PageLayout::Overlay::SKYSIGHT;
+  } else {
+    pl.skysight_overlay.clear();
+  }
+
   if (pl.overlay == PageLayout::Overlay::NONE &&
-      pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS)
+      pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS &&
+      pl.skysight_overlay.empty())
     pl.overlay = PageLayout::Overlay::EDL;
 
   pl.Normalise();
@@ -122,8 +135,10 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "RaspField");
   map.Set(profileKey, page.rasp_field);
-}
 
+  strcpy(profileKey + prefixLen, "SkysightOverlay");
+  map.Set(profileKey, page.skysight_overlay.c_str());
+}
 
 void
 Profile::Save(ProfileMap &map, const PageSettings &settings)

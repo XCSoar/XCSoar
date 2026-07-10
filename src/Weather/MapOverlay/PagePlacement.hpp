@@ -5,6 +5,8 @@
 
 #include "PageSettings.hpp"
 
+#include <string_view>
+
 namespace WeatherMapOverlay {
 
 enum class AddPageResult {
@@ -16,7 +18,8 @@ enum class AddPageResult {
 static inline void
 ApplyWeatherOverlayToLayout(PageLayout &layout,
                             PageLayout::Overlay overlay,
-                            int rasp_field=-1) noexcept
+                            int rasp_field=-1,
+                            std::string_view skysight_layer_id={}) noexcept
 {
   if (!layout.IsDefined())
     layout = PageLayout::Default();
@@ -29,6 +32,10 @@ ApplyWeatherOverlayToLayout(PageLayout &layout,
   layout.rasp_field = overlay == PageLayout::Overlay::RASP
     ? rasp_field
     : -1;
+  if (overlay == PageLayout::Overlay::SKYSIGHT)
+    layout.skysight_overlay = skysight_layer_id;
+  else
+    layout.skysight_overlay.clear();
   layout.Normalise();
 }
 
@@ -36,12 +43,14 @@ static inline bool
 ApplyWeatherOverlayToPage(PageSettings &settings,
                           unsigned page_index,
                           PageLayout::Overlay overlay,
-                          int rasp_field=-1) noexcept
+                          int rasp_field=-1,
+                          std::string_view skysight_layer_id={}) noexcept
 {
   if (page_index >= settings.n_pages)
     return false;
 
-  ApplyWeatherOverlayToLayout(settings.pages[page_index], overlay, rasp_field);
+  ApplyWeatherOverlayToLayout(settings.pages[page_index], overlay,
+                              rasp_field, skysight_layer_id);
   return true;
 }
 
@@ -50,7 +59,8 @@ AddWeatherOverlayPage(PageSettings &settings,
                       unsigned source_page_index,
                       PageLayout::Overlay overlay,
                       unsigned &new_page_index,
-                      int rasp_field=-1) noexcept
+                      int rasp_field=-1,
+                      std::string_view skysight_layer_id={}) noexcept
 {
   if (source_page_index >= settings.n_pages)
     return AddPageResult::INVALID_SOURCE_PAGE;
@@ -61,7 +71,7 @@ AddWeatherOverlayPage(PageSettings &settings,
   const unsigned append_index = settings.n_pages;
   settings.pages[append_index] = settings.pages[source_page_index];
   ApplyWeatherOverlayToLayout(settings.pages[append_index],
-                              overlay, rasp_field);
+                              overlay, rasp_field, skysight_layer_id);
   ++settings.n_pages;
   new_page_index = append_index;
   return AddPageResult::SUCCESS;

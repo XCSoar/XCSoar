@@ -61,6 +61,20 @@ TestReplaceCurrentOverlay()
 }
 
 static void
+TestApplySkysightOverlay()
+{
+  PageSettings settings;
+  settings.SetDefaults();
+
+  ok1(ApplyWeatherOverlayToPage(settings, 0, PageLayout::Overlay::SKYSIGHT,
+                                -1, "wind_925"));
+  ok1(settings.pages[0].overlay == PageLayout::Overlay::SKYSIGHT);
+  ok1(settings.pages[0].skysight_overlay == "wind_925");
+  ok1(settings.pages[0].bottom == PageLayout::Bottom::WEATHER_CONTROLS);
+  ok1(settings.pages[0].rasp_field == -1);
+}
+
+static void
 TestPageLimitGuard()
 {
   PageSettings settings;
@@ -92,11 +106,12 @@ TestInvalidSourcePage()
 int
 main()
 {
-  plan_tests(17);
+  plan_tests(22);
 
   TestApplyToCurrentPage();
   TestAddNewOverlayPageFromNonMapSource();
   TestReplaceCurrentOverlay();
+  TestApplySkysightOverlay();
   TestPageLimitGuard();
   TestInvalidSourcePage();
 

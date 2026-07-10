@@ -72,6 +72,14 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
 #endif
     break;
 
+  case PageLayout::Overlay::SKYSIGHT:
+    builder.Append(", SkySight");
+    if (!layout.skysight_overlay.empty()) {
+      builder.Append(' ');
+      builder.Append(layout.skysight_overlay.c_str());
+    }
+    break;
+
   case PageLayout::Overlay::MAX:
     gcc_unreachable();
   }
