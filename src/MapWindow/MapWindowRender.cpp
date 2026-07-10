@@ -7,6 +7,10 @@
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Weather/Rasp/RaspCache.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#ifdef HAVE_HTTP
+#include "DataGlobals.hpp"
+#include "Weather/Skysight/Skysight.hpp"
+#endif
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
@@ -106,8 +110,14 @@ inline void
 MapWindow::RenderOverlays([[maybe_unused]] Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
+#if defined(HAVE_HTTP)
+  for (const auto &i : overlay)
+    if (i)
+      i->Draw(canvas, render_projection);
+#else
   if (overlay)
     overlay->Draw(canvas, render_projection);
+#endif
 #endif
 }
 
@@ -222,6 +232,11 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 
   draw_sw.Mark("RenderRasp");
   RenderRasp(canvas);
+
+#ifdef HAVE_HTTP
+  if (auto skysight = DataGlobals::GetSkysight())
+    skysight->Render();
+#endif
 
   draw_sw.Mark("RenderTopography");
   RenderTopography(canvas);

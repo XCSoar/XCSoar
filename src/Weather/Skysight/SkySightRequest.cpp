@@ -1,0 +1,349 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "SkySightRequest.hpp"
+#include "SkysightAPI.hpp"
+#include "Version.hpp"
+#include "json/ParserOutputStream.hxx"
+#include "co/Task.hxx"
+#include "lib/curl/CoStreamRequest.hxx"
+#include "lib/curl/Easy.hxx"
+#include "lib/curl/Setup.hxx"
+#include "lib/curl/Slist.hxx"
+#include "io/FileOutputStream.hxx"
+#include "lib/fmt/RuntimeError.hxx"
+#include "lib/curl/Global.hxx"
+#include "LogFile.hpp"
+
+#include <boost/json.hpp>
+
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+
+class HttpStatusError final : public std::runtime_error {
+public:
+  const unsigned status;
+
+  explicit HttpStatusError(unsigned _status)
+    :std::runtime_error("SkySight HTTP request failed"),
+     status(_status) {}
+};
+
+static std::string
+EscapeJsonString(std::string_view value)
+{
+  std::string escaped;
+  escaped.reserve(value.size() + 8);
+
+  for (const char ch : value) {
+    switch (ch) {
+    case '\\':
+      escaped += "\\\\";
+      break;
+    case '"':
+      escaped += "\\\"";
+      break;
+    case '\n':
+      escaped += "\\n";
+      break;
+    case '\r':
+      escaped += "\\r";
+      break;
+    case '\t':
+      escaped += "\\t";
+      break;
+    default:
+      escaped.push_back(ch);
+      break;
+    }
+  }
+
+  return escaped;
+}
+
+static Co::Task<boost::json::value>
+LoginTask(CurlGlobal &curl, std::string email, std::string password)
+{
+  CurlEasy easy{"https://skysight.io/api/auth"};
+  Curl::Setup(easy);
+
+  CurlSlist headers;
+  headers.Append("X-API-Key: XCSoar");
+  headers.Append((std::string{"User-Agent: "} + XCSoar_ProductToken).c_str());
+  headers.Append("Content-Type: application/json");
+
+  easy.SetPost();
+  easy.SetRequestHeaders(headers.Get());
+
+  const auto json = std::string{"{\"username\":\""} +
+                    EscapeJsonString(email) +
+                    "\",\"password\":\"" +
+                    EscapeJsonString(password) +
+                    "\"}";
+  easy.SetRequestBody(json);
+  easy.SetFailOnError(false);
+
+  Json::ParserOutputStream parser;
+  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
+  if (response.status != 200 && response.status != 201)
+    throw FmtRuntimeError("SkySight login failed with status {}", response.status);
+
+  co_return parser.Finish();
+}
+
+static Co::Task<AllocatedPath>
+DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
+                 std::string api_key)
+{
+  FileOutputStream file(path);
+
+  CurlEasy easy{url.c_str()};
+  Curl::Setup(easy);
+  easy.SetFailOnError(false);
+
+  CurlSlist headers;
+  if (!api_key.empty()) {
+    headers.Append((std::string{"X-API-Key: "} + api_key).c_str());
+    headers.Append((std::string{"User-Agent: "} + XCSoar_ProductToken).c_str());
+    easy.SetRequestHeaders(headers.Get());
+  }
+
+  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), file);
+  if (response.status != 200 && response.status != 201)
+    throw HttpStatusError(response.status);
+
+  file.Commit();
+  co_return path;
+}
+
+SkySightRequest::SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl) noexcept
+  :api(_api),
+   curl(_curl),
+   login_job(curl.GetEventLoop())
+{
+}
+
+SkySightRequest::~SkySightRequest() noexcept
+{
+  CancelAll();
+}
+
+void
+SkySightRequest::CancelAll() noexcept
+{
+  login_job.Cancel();
+  login_running = false;
+
+  for (auto &i : file_jobs)
+    i.second->function.Cancel();
+
+  file_jobs.clear();
+  pending_jobs.clear();
+  retry_after.clear();
+  throttle_until = 0;
+}
+
+void
+SkySightRequest::Configure(std::string_view new_email, std::string_view new_password)
+{
+  email = std::string{new_email};
+  password = std::string{new_password};
+  api_key.clear();
+  valid_until = 0;
+  last_login_request = 0;
+
+  CancelAll();
+}
+
+bool
+SkySightRequest::IsLoggedIn() const noexcept
+{
+  return !api_key.empty() && valid_until > std::time(nullptr) + 120;
+}
+
+void
+SkySightRequest::CleanupFinishedJobs()
+{
+  for (auto i = file_jobs.begin(); i != file_jobs.end();) {
+    if (i->second->finished)
+      i = file_jobs.erase(i);
+    else
+      ++i;
+  }
+}
+
+bool
+SkySightRequest::IsQueued(std::string_view key) const noexcept
+{
+  return std::any_of(pending_jobs.begin(), pending_jobs.end(),
+                     [key](const auto &job) {
+                       return job.key == key;
+                     });
+}
+
+void
+SkySightRequest::PumpQueue()
+{
+  CleanupFinishedJobs();
+
+  const auto now = std::time(nullptr);
+  if (now < throttle_until)
+    return;
+
+  while (file_jobs.size() < MAX_ACTIVE_DOWNLOADS && !pending_jobs.empty()) {
+    auto job = std::move(pending_jobs.front());
+    pending_jobs.pop_front();
+
+    if (auto retry = retry_after.find(job.key); retry != retry_after.end()) {
+      if (now < retry->second)
+        continue;
+
+      retry_after.erase(retry);
+    }
+
+    if (job.requires_auth && !IsLoggedIn()) {
+      pending_jobs.push_front(std::move(job));
+      EnsureLoggedIn();
+      break;
+    }
+
+    auto active_job = std::make_unique<FileJob>(curl.GetEventLoop());
+    auto *job_ptr = active_job.get();
+    const auto key = job.key;
+
+    file_jobs.emplace(key, std::move(active_job));
+    job_ptr->function.Start(
+      DownloadFileTask(curl, std::move(job.url), std::move(job.path),
+                       job.requires_auth ? api_key : std::string{}),
+      [this, key](AllocatedPath) {
+        OnFileSuccess(key);
+      },
+      [this, key](std::exception_ptr error) {
+        OnFileError(key, std::move(error));
+      });
+  }
+}
+
+void
+SkySightRequest::EnsureLoggedIn()
+{
+  if (!HasCredentials() || login_running || IsLoggedIn())
+    return;
+
+  const auto now = std::time(nullptr);
+  if (last_login_request != 0 && now < last_login_request + 30)
+    return;
+
+  last_login_request = now;
+  login_running = true;
+
+  login_job.Start(LoginTask(curl, email, password),
+                  [this](boost::json::value value) {
+                    OnLoginSuccess(std::move(value));
+                  },
+                  [this](std::exception_ptr error) {
+                    OnLoginError(std::move(error));
+                  });
+}
+
+void
+SkySightRequest::OnLoginSuccess(boost::json::value value)
+{
+  login_running = false;
+
+  try {
+    const auto &json = value.as_object();
+    api_key = json.at("key").as_string().c_str();
+
+    const auto &valid = json.at("valid_until");
+    if (valid.is_number())
+      valid_until = valid.to_number<time_t>();
+    else if (valid.is_string())
+      valid_until = std::strtoll(valid.as_string().c_str(), nullptr, 10);
+    else
+      valid_until = 0;
+
+    if (!api_key.empty())
+      api.OnAuthenticated();
+  } catch (...) {
+    api_key.clear();
+    valid_until = 0;
+    LogError(std::current_exception(), "SkySight login response parsing failed");
+  }
+
+  PumpQueue();
+}
+
+void
+SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
+{
+  login_running = false;
+  api_key.clear();
+  valid_until = 0;
+  LogError(error, "SkySight login failed");
+}
+
+void
+SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires_auth)
+{
+  PumpQueue();
+
+  const std::string key{filename.c_str()};
+  if (file_jobs.find(key) != file_jobs.end() || IsQueued(key))
+    return;
+
+  const auto now = std::time(nullptr);
+  if (now < throttle_until)
+    return;
+
+  if (auto retry = retry_after.find(key); retry != retry_after.end()) {
+    if (now < retry->second)
+      return;
+
+    retry_after.erase(retry);
+  }
+
+  pending_jobs.emplace_back(key, std::string{url},
+                            AllocatedPath(filename.c_str()), requires_auth);
+  PumpQueue();
+}
+
+void
+SkySightRequest::OnFileSuccess(const std::string &key) noexcept
+{
+  if (auto i = file_jobs.find(key); i != file_jobs.end())
+    i->second->finished = true;
+
+  api.OnDownloadComplete();
+  PumpQueue();
+}
+
+void
+SkySightRequest::OnFileError(const std::string &key,
+                             std::exception_ptr error) noexcept
+{
+  if (auto i = file_jobs.find(key); i != file_jobs.end())
+    i->second->finished = true;
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const HttpStatusError &http_error) {
+    const auto retry_time = std::time(nullptr) +
+      (http_error.status == 429 ? THROTTLE_RETRY_SECONDS : ERROR_RETRY_SECONDS);
+    retry_after[key] = retry_time;
+
+    if (http_error.status == 429) {
+      throttle_until = retry_time;
+      LogFmt("SkySight throttled by server (HTTP 429), pausing tile downloads for %u seconds",
+             unsigned(THROTTLE_RETRY_SECONDS));
+    } else {
+      LogFmt("SkySight tile download failed with HTTP %u", http_error.status);
+    }
+  } catch (...) {
+    retry_after[key] = std::time(nullptr) + ERROR_RETRY_SECONDS;
+    LogError(error, "SkySight tile download failed");
+  }
+
+  PumpQueue();
+}

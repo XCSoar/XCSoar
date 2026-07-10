@@ -4,27 +4,95 @@
 #include "WeatherConfigPanel.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
+#include "DataGlobals.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Weather/Settings.hpp"
+#include "Weather/Features.hpp"
+#ifdef HAVE_HTTP
+#include "Weather/Skysight/Skysight.hpp"
+#endif
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 
+#include <string_view>
+
 enum ControlIndex {
 #ifdef HAVE_HTTP
   ENABLE_TIM,
 #endif
+
+#ifdef HAVE_HTTP
+  SKYSIGHT_SPACER,
+  SKYSIGHT_EMAIL,
+  SKYSIGHT_PASSWORD,
+  SKYSIGHT_REGION,
+#endif
 };
 
-class WeatherConfigPanel final
-  : public RowFormWidget {
+#ifdef HAVE_HTTP
+static constexpr StaticEnumChoice skysight_region_list[] = {
+  { 0, N_("Europe") },
+  { 1, N_("South Africa") },
+  { 2, N_("Western US") },
+  { 3, N_("Eastern US") },
+  { 4, N_("Argentina/Chile") },
+  { 5, N_("Brazil") },
+  { 6, N_("Japan") },
+  { 7, N_("New Zealand") },
+  { 8, N_("Western Australia") },
+  { 9, N_("Eastern Australia") },
+  nullptr,
+};
+
+static const char *
+GetSkysightRegionId(unsigned index) noexcept
+{
+  switch (index) {
+  case 0:
+    return "EUROPE";
+  case 1:
+    return "SANEW";
+  case 2:
+    return "WEST_US";
+  case 3:
+    return "EAST_US";
+  case 4:
+    return "ARGENTINA_CHILE";
+  case 5:
+    return "BRAZIL";
+  case 6:
+    return "JAPAN";
+  case 7:
+    return "NZ";
+  case 8:
+    return "WA";
+  case 9:
+    return "EAST_AUS";
+  default:
+    return "EUROPE";
+  }
+}
+
+static unsigned
+FindSkysightRegionIndex(std::string_view region) noexcept
+{
+  for (unsigned i = 0; skysight_region_list[i].display_string != nullptr; ++i)
+    if (region == GetSkysightRegionId(i))
+      return i;
+
+  return 0;
+}
+#endif
+
+class WeatherConfigPanel final : public RowFormWidget {
 public:
   WeatherConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 };
@@ -33,7 +101,7 @@ void
 WeatherConfigPanel::Prepare(ContainerWindow &parent,
                             const PixelRect &rc) noexcept
 {
-#ifdef HAVE_HTTP
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   const auto &settings = CommonInterface::GetComputerSettings().weather;
 #endif
 
@@ -44,6 +112,21 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent,
              _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
              settings.enable_tim);
 #endif
+
+#ifdef HAVE_HTTP
+  AddSpacer();
+
+  AddText(_("SkySight Email"),
+          _("The e-mail address you use to sign in to skysight.io."),
+          settings.skysight.email);
+  AddPassword(_("SkySight Password"),
+              _("Your SkySight password."),
+              settings.skysight.password);
+  AddEnum(_("SkySight Region"),
+          _("Select the SkySight region used for live weather layers."),
+          skysight_region_list,
+          FindSkysightRegionIndex(settings.skysight.region.c_str()));
+#endif
 }
 
 bool
@@ -51,7 +134,7 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
-#ifdef HAVE_HTTP
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   auto &settings = CommonInterface::SetComputerSettings().weather;
 #endif
 
@@ -60,8 +143,30 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
                        settings.enable_tim);
 #endif
 
-  _changed |= changed;
+#ifdef HAVE_HTTP
+  bool skysight_changed = false;
 
+  skysight_changed |= SaveValue(SKYSIGHT_EMAIL, ProfileKeys::SkysightEmail,
+                                settings.skysight.email);
+  skysight_changed |= SaveValue(SKYSIGHT_PASSWORD,
+                                ProfileKeys::SkysightPassword,
+                                settings.skysight.password);
+
+  const char *new_region = GetSkysightRegionId(GetValueEnum(SKYSIGHT_REGION));
+  if (std::string_view{settings.skysight.region.c_str()} != new_region) {
+    settings.skysight.region = new_region;
+    Profile::Set(ProfileKeys::SkysightRegion, new_region);
+    skysight_changed = true;
+  }
+
+  if (skysight_changed)
+    if (auto skysight = DataGlobals::GetSkysight())
+      skysight->Init();
+
+  changed |= skysight_changed;
+#endif
+
+  _changed |= changed;
   return true;
 }
 
