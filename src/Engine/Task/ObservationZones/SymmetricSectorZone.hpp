@@ -58,6 +58,25 @@ public:
   }
 
   /**
+   * An arbitrary angle circular sector centered at the bisector of incoming/outgoing legs
+   * Similar to an FAI quadrant but with configurable radius or other angles than 90 degrees
+   *
+   * @param radius1 The radius of the sector
+   * @param angle1 The angle of the sector, where 180 is a half-circle
+
+   */
+  static auto CreateSymmetricCircularSectorZone(const GeoPoint loc,
+                                  const double radius,
+                                  const Angle angle
+                                  ) noexcept {
+    std::unique_ptr<SymmetricSectorZone> oz(new SymmetricSectorZone(Shape::SYMMETRIC_QUADRANT, true, false, loc,
+                                                                    radius,
+                                                                    angle));
+    oz->UpdateSector();
+    return oz;
+  }
+
+  /**
    * Create a 180 degree sector centered at the inverse of the
    * outgoing leg.
    *
@@ -71,9 +90,9 @@ public:
     return oz;
   }
 
-  /** 
+  /**
    * Accessor for angle of sector (angle between start/end radials)
-   * 
+   *
    * @return Angle (deg) of sector
    */
   constexpr Angle GetSectorAngle() const noexcept {

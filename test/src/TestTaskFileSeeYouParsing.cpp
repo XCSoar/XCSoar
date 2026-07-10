@@ -143,12 +143,14 @@ TestAngleParsingWithDecimals()
     "\"Start2\",\"S2\",,4801.000N,01101.000E,500.0m,1,0,0.0m,\"\",\"Start 2\"\n"
     "\"Turn1\",\"T1\",,4810.000N,01110.000E,500.0m,1,0,0.0m,\"\",\"Turn 1\"\n"
     "\"Turn2\",\"T2\",,4815.000N,01115.000E,500.0m,1,0,0.0m,\"\",\"Turn 2\"\n"
+    "\"Turn3\",\"T3\",,4817.000N,01118.000E,500.0m,1,0,0.0m,\"\",\"Turn 3\"\n"
     "\"Finish1\",\"F1\",,4820.000N,01120.000E,500.0m,1,0,0.0m,\"\",\"Finish 1\"\n"
     "-----Related Tasks-----\n"
     "\"Test Task\",\"S1\",\"S1\",\"S2\",\"T1\",\"T2\",\"F1\",\"F1\"\n"
-    "ObsZone=0,Style=1,R1=1000m,A1=123.4\n"
+    "ObsZone=0,Style=1,R1=550m,A1=123.4\n"
     "ObsZone=1,Style=1,R1=1000m,A1=180\n"
-    "ObsZone=2,Style=1,R1=1000m,A12=45.67\n";
+    "ObsZone=2,Style=1,R1=4000m,A1=45\n"
+    "ObsZone=3,Style=1,R1=1000m,A12=45.67\n";
 
   constexpr Path task_path{"output/results/Test-Task-AngleParsing.cup"};
 
@@ -165,16 +167,57 @@ TestAngleParsingWithDecimals()
   ok1(task != nullptr);
 
   if (!task) {
-    skip(3, 0, "Failed to load task");
+    skip(12, 0, "Failed to load task");
     return;
   }
 
-  // Note: We can't directly test the parsed angle values without accessing
-  // internal zone structures, but we can verify the task loads successfully
-  // with decimal angles, which means ParseAngle is working correctly.
   ok1(task->IsValidIndex(0));
   ok1(task->IsValidIndex(1));
   ok1(task->IsValidIndex(2));
+  ok1(task->IsValidIndex(3));
+
+
+  /*
+  Check the contents of the parsed observation zones
+  This requires a bit of drilling into data structures, but is
+  worth it to get good test coverage.
+  */
+  const auto &tp0 = task->GetTaskPoint(0).GetObservationZone();
+  const auto &tp1 = task->GetTaskPoint(1).GetObservationZone();
+  const auto &tp2 = task->GetTaskPoint(2).GetObservationZone();
+  const auto &tp3 = task->GetTaskPoint(3).GetObservationZone();
+
+  ok1(tp0.GetShape() == ObservationZone::Shape::SYMMETRIC_QUADRANT);
+  if (const auto *s0 = dynamic_cast<const SymmetricSectorZone *>(&tp0)) {
+    // Allow for a 0.1 degree tolerance due to floating point precision
+    ok1(s0->GetRadius() == 550);
+    ok1(fabs(s0->GetSectorAngle().Degrees() - (123.4 * 2)) < 0.1);
+  } else {
+    ok(false, "Point 0 should be a SymmetricSectorZone");
+  }
+
+  ok1(tp1.GetShape() == ObservationZone::Shape::CYLINDER);
+  if (const auto *s1 = dynamic_cast<const CylinderZone *>(&tp1)) {
+    ok1(s1->GetRadius() == 1000);
+  } else {
+    ok(false, "Point 1 should be a CylinderZone");
+  }
+
+  ok1(tp2.GetShape() == ObservationZone::Shape::FAI_SECTOR);
+  if (const auto *s2 = dynamic_cast<const SymmetricSectorZone *>(&tp2)) {
+    ok1(fabs(s2->GetSectorAngle().Degrees() - (45.0 * 2)) < 0.1);
+    ok1(s2->GetRadius() >= 3000);
+  } else {
+    ok(false, "Point 2 should be a SymmetricSectorZone");
+  }
+
+  /*
+  TODO: This .cup OZ sets A12 angle, and thus should probably result in a different
+  OZ type than SYMMETRIC_QUADRANT. The A12 angle defines the sector centre line.
+  For now the purpose of this test is just to check that the angle parsing doesn't
+  crash for this field.
+  */
+  ok1(tp3.GetShape() == ObservationZone::Shape::SYMMETRIC_QUADRANT);
 }
 
 static void
@@ -246,7 +289,7 @@ int main()
 {
   Directory::Create(Path{"output/results"});
 
-  plan_tests(33);
+  plan_tests(43);
   task_behaviour.SetDefaults();
   TestAll();
   return exit_status();

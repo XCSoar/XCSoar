@@ -125,9 +125,11 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     return SymmetricSectorZone::CreateFAISectorZone(wp.location, is_turnpoint);
   else if (StringIsEqual(type, "SymmetricQuadrant")) {
     double radius = 10000;
+    Angle angle = Angle::QuarterCircle();
     node.GetAttribute("radius", radius);
+    node.GetAttribute("angle", angle);
 
-    return std::make_unique<SymmetricSectorZone>(wp.location, radius);
+    return SymmetricSectorZone::CreateSymmetricCircularSectorZone(wp.location, radius, angle);
   } else if (StringIsEqual(type, "Keyhole"))
     return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
   else if (StringIsEqual(type, "CustomKeyhole")) {
@@ -206,7 +208,7 @@ DeserialiseTaskpoint(AbstractTaskFactory &fact, const ConstDataNode &node,
     pt = oz != nullptr
       ? fact.CreateFinish(std::move(oz), std::move(wp))
       : fact.CreateFinish(std::move(wp));
-  } 
+  }
 
   if (!pt)
     return;
@@ -314,7 +316,7 @@ LoadTask(OrderedTask &task, const ConstDataNode &node,
     DeserialiseTaskpoint(fact, *i, waypoints);
   }
 
-  /* 
+  /*
     Normalize deserialized taskpoint types to match the task factory type.
     Some exporters (e.g., WeGlide) may serialize intermediate points with
     generic types (e.g., "turn") even when the task is declared as AAT.

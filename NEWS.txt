@@ -278,6 +278,9 @@ Version 7.45 - not yet released
   - add NOTAM settings and filters (IFR, effective time, max radius, hidden Q-codes)
   - add NOTAM details integration in airspace dialogs
 * data files
+  - .cup tasks: More correctly parse SeeYou .cup task files with observation zones 
+    with uncommon angles, i.e. angles other than 90 degree quadrants or cylinder. 
+    Previously these were incorrectly parsed into FAI Quadrants #2697
   - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
     is read correctly
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
