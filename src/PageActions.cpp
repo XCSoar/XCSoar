@@ -9,6 +9,7 @@
 #include "MainWindow.hpp"
 #include "util/ScopeExit.hxx"
 #include "CrossSection/CrossSectionWidget.hpp"
+#include "DataGlobals.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
@@ -29,6 +30,7 @@
 #include "Weather/EDL/StateController.hpp"
 #endif
 #ifdef HAVE_HTTP
+#include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/xctherm/FieldControls.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
@@ -65,12 +67,14 @@ namespace PageActions {
   static void LeaveRaspOverlay() noexcept;
   static void LeaveEdlOverlay() noexcept;
   static void LeaveXcthermOverlay() noexcept;
+  static void LeaveSkySightOverlay() noexcept;
 
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
 
   static void ApplyRaspOverlay(const PageLayout &layout) noexcept;
   static void ApplyEdlOverlay(const PageLayout &layout) noexcept;
   static void ApplyXcthermOverlay(const PageLayout &layout) noexcept;
+  static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 };
@@ -95,6 +99,12 @@ PageActions::ClearPageOverlays() noexcept
 #ifdef HAVE_EDL
   if (!weather.edl.session.IsSuspendedForPan())
     EDL::ClearOverlay();
+#endif
+
+#ifdef HAVE_HTTP
+  if (!weather.skysight.IsSuspendedForPan())
+    if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+      skysight->ApplyPageOverlay({});
 #endif
 }
 
@@ -136,6 +146,20 @@ PageActions::LeaveXcthermOverlay() noexcept
 }
 
 void
+PageActions::LeaveSkySightOverlay() noexcept
+{
+#ifdef HAVE_HTTP
+  auto &session = CommonInterface::SetUIState().weather.skysight;
+  if (session.IsSuspendedForPan())
+    return;
+
+  session.LeavePage();
+  if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+    skysight->ApplyPageOverlay({});
+#endif
+}
+
+void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
   if (layout.UsesEdlOverlay())
@@ -144,6 +168,8 @@ PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
     LeaveRaspOverlay();
   else if (layout.UsesXcthermOverlay())
     LeaveXcthermOverlay();
+  else if (layout.UsesSkySightOverlay())
+    LeaveSkySightOverlay();
 }
 
 void
@@ -222,6 +248,20 @@ PageActions::ApplyXcthermOverlay(const PageLayout &layout) noexcept
 }
 
 void
+PageActions::ApplySkySightOverlay(const PageLayout &layout) noexcept
+{
+#ifdef HAVE_HTTP
+  auto &session = CommonInterface::SetUIState().weather.skysight;
+  session.EnterPage();
+
+  if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+    skysight->ApplyPageOverlay(layout.skysight_overlay.c_str());
+#else
+  (void)layout;
+#endif
+}
+
+void
 PageActions::SuspendWeatherOverlaysForPan() noexcept
 {
   WeatherUIState &weather = CommonInterface::SetUIState().weather;
@@ -233,6 +273,8 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
     weather.rasp.SuspendForPan();
   if (layout.UsesXcthermOverlay())
     weather.xctherm.SuspendForPan();
+  if (layout.UsesSkySightOverlay())
+    weather.skysight.SuspendForPan();
 }
 
 void
@@ -242,6 +284,7 @@ PageActions::ResumeWeatherOverlaysAfterPan() noexcept
   weather.edl.session.ResumeAfterPan();
   weather.rasp.ResumeAfterPan();
   weather.xctherm.ResumeAfterPan();
+  weather.skysight.ResumeAfterPan();
 }
 
 void
@@ -258,6 +301,8 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
     LeaveEdlOverlay();
   if (!layout.UsesXcthermOverlay())
     LeaveXcthermOverlay();
+  if (!layout.UsesSkySightOverlay())
+    LeaveSkySightOverlay();
 
   ClearPageOverlays();
 
@@ -275,6 +320,10 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::XCTHERM:
     ApplyXcthermOverlay(layout);
+    break;
+
+  case PageLayout::Overlay::SKYSIGHT:
+    ApplySkySightOverlay(layout);
     break;
 
   case PageLayout::Overlay::MAX:
@@ -504,7 +553,7 @@ LoadBottom(const PageLayout &layout)
     break;
 
   case PageLayout::Bottom::WEATHER_CONTROLS:
-    if (auto model = WeatherMapOverlay::CreateControlsModel(layout.overlay)) {
+    if (auto model = WeatherMapOverlay::CreateControlsModel(layout)) {
       CommonInterface::main_window->SetBottomWidget(
         new WeatherMapOverlay::ControlsWidget(std::move(model)));
       break;

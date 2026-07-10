@@ -13,6 +13,6 @@ namespace WeatherMapOverlay {
 
 [[nodiscard]]
 std::unique_ptr<ControlsModel>
-CreateControlsModel(PageLayout::Overlay overlay) noexcept;
+CreateControlsModel(const PageLayout &layout) noexcept;
 
 } // namespace WeatherMapOverlay
