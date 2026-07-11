@@ -556,6 +556,7 @@ InputEvents::eventLockScreen([[maybe_unused]] const char *mode)
 // Adjusts the active map weather overlay cursor bar.
 // time +/-, time auto on/off/toggle/show
 // altitude +/-, altitude auto on/off/toggle/show
+// field/layer/level picker (secondary axis list)
 // level +/- and level auto … (EDL pressure level alias for altitude)
 void
 InputEvents::eventWeatherOverlay(const char *misc)

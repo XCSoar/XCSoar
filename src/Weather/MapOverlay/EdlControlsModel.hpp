@@ -57,8 +57,13 @@ public:
   void SetSecondaryAutoAdvance(bool auto_advance) noexcept override;
   void ApplySecondaryAutoAdvance() noexcept override;
 
+  [[nodiscard]]
+  SecondaryLabelAction GetSecondaryLabelAction() const noexcept override;
+
   void ResumePrimaryAuto() noexcept override;
   void ResumeSecondaryAuto() noexcept override;
+
+  void OpenSecondaryPicker() noexcept override;
 
   void RefreshOverlay() noexcept override;
   void OnGPSUpdate(const MoreData &basic) noexcept override;

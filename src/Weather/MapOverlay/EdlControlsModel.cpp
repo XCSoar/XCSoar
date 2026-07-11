@@ -5,6 +5,7 @@
 
 #include "ActionInterface.hpp"
 #include "Components.hpp"
+#include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
@@ -304,6 +305,46 @@ EdlControlsModel::OpenPrimaryPicker() noexcept
         SelectForecast(index);
       });
     });
+}
+
+SecondaryLabelAction
+EdlControlsModel::GetSecondaryLabelAction() const noexcept
+{
+  return SecondaryLabelAction::OPEN_PICKER;
+}
+
+void
+EdlControlsModel::OpenSecondaryPicker() noexcept
+{
+  EDL::EnsureInitialised();
+
+  DataFieldEnum field;
+  const unsigned active = EDL::GetIsobar();
+  unsigned current_index = 0;
+
+  for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i) {
+    const unsigned isobar = EDL::ISOBARS[i];
+    const int altitude = EDL::GetAltitudeForIsobar(isobar);
+
+    StaticString<32> label;
+    label.Format(_("%u hPa (%d m)"), isobar / 100, altitude);
+    field.addEnumText(label.c_str(), int(i));
+
+    if (isobar == active)
+      current_index = i;
+  }
+
+  field.SetValue(int(current_index));
+
+  if (!ComboPicker(_("EDL Level"), field, nullptr))
+    return;
+
+  const int selected = field.GetValue();
+  if (selected < 0 || unsigned(selected) >= EDL::NUM_ISOBARS)
+    return;
+
+  SelectLevel(EDL::ISOBARS[unsigned(selected)]);
+  Notify(ControlsUpdate::OVERLAY);
 }
 
 bool

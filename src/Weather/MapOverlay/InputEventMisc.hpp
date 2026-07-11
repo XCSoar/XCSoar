@@ -14,6 +14,7 @@ enum class OverlayInputAction {
   TIME_MINUS,
   ALTITUDE_PLUS,
   ALTITUDE_MINUS,
+  FIELD_PICKER,
   TIME_AUTO_TOGGLE,
   TIME_AUTO_ON,
   TIME_AUTO_OFF,
@@ -30,6 +31,8 @@ enum class OverlayInputAction {
  * Step commands use a common ``<axis> +/-`` form: ``time +``,
  * ``time -``, ``altitude +``, ``altitude -``. ``field +/-`` and EDL
  * ``level +/-`` are accepted as aliases for ``altitude +/-``.
+ * ``field picker``, ``layer picker``, and ``level picker`` open the
+ * secondary-axis list (RASP layer, EDL level, XCTherm layer).
  * Auto/manual commands use
  * ``<axis> auto …`` (``toggle``, ``on``, ``off``, ``show``).
  */
@@ -55,6 +58,11 @@ ParseOverlayInputAction(const char *misc) noexcept
       StringIsEqual(misc, "field -") ||
       StringIsEqual(misc, "level -"))
     return OverlayInputAction::ALTITUDE_MINUS;
+
+  if (StringIsEqual(misc, "field picker") ||
+      StringIsEqual(misc, "layer picker") ||
+      StringIsEqual(misc, "level picker"))
+    return OverlayInputAction::FIELD_PICKER;
 
   if (StringIsEqual(misc, "time auto toggle"))
     return OverlayInputAction::TIME_AUTO_TOGGLE;

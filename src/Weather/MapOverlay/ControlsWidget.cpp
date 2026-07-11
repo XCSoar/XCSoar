@@ -135,15 +135,10 @@ ControlsWidget::OnPrimaryLabelClick() noexcept
 void
 ControlsWidget::OnSecondaryLabelClick() noexcept
 {
-  if (model->SupportsSecondaryAutoAdvance()) {
-    if (!model->GetSecondaryAutoAdvance())
-      model->ResumeSecondaryAuto();
-    return;
-  }
-
   switch (model->GetSecondaryLabelAction()) {
   case SecondaryLabelAction::OPEN_PICKER:
     model->OpenSecondaryPicker();
+    RefreshOverlay();
     break;
 
   case SecondaryLabelAction::NONE:
@@ -176,6 +171,11 @@ ControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
 
   case OverlayInputAction::ALTITUDE_MINUS:
     OnStepSecondary(-1);
+    break;
+
+  case OverlayInputAction::FIELD_PICKER:
+    model->OpenSecondaryPicker();
+    RefreshOverlay();
     break;
 
   case OverlayInputAction::TIME_AUTO_TOGGLE:
