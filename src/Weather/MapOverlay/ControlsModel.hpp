@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <utility>
 
 struct MoreData;
 
@@ -118,7 +119,31 @@ public:
     (void)basic;
   }
 
+  /** Shared entry point for menu/input and picker auto-on actions. */
+  virtual void EnablePrimaryAutoFromInput() noexcept {
+    EnablePrimaryAutoAndRefresh();
+  }
+
 protected:
+  void NotifyOverlay() noexcept {
+    Notify(ControlsUpdate::OVERLAY);
+  }
+
+  void EnablePrimaryAutoAndRefresh() noexcept {
+    SetPrimaryAutoAdvance(true);
+    ApplyPrimaryAutoAdvance();
+    NotifyOverlay();
+  }
+
+  template<typename F>
+  void
+  ApplyManualPrimarySelection(F &&select_manual)
+  {
+    SetPrimaryAutoAdvance(false);
+    std::forward<F>(select_manual)();
+    NotifyOverlay();
+  }
+
   void Notify(ControlsUpdate update) noexcept {
     if (notify)
       notify(update);

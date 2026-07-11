@@ -60,7 +60,8 @@ ListPicker(const char *caption,
            ListItemRenderer &item_renderer, bool update,
            const char *help_text,
            ItemHelpCallback_t _itemhelp_callback,
-           const char *extra_caption)
+           const char *extra_caption,
+           const char *extra_caption2)
 {
   assert(num_items <= 0x7fffffff);
   assert((num_items == 0 && initial_value == 0) || initial_value < num_items);
@@ -98,6 +99,8 @@ ListPicker(const char *caption,
 
   if (extra_caption != nullptr)
     dialog.AddButton(extra_caption, mrExtra);
+  if (extra_caption2 != nullptr)
+    dialog.AddButton(extra_caption2, mrExtra2);
 
   /* only show a Help button when item help is active (the general
      help text complements the per-item help); for pickers without
@@ -122,7 +125,7 @@ ListPicker(const char *caption,
   int result = dialog.ShowModal();
   if (result == mrOK)
     result = (int)list_widget->GetList().GetCursorIndex();
-  else if (result != mrExtra)
+  else if (result != mrExtra && result != mrExtra2)
     result = -1;
 
   return result;

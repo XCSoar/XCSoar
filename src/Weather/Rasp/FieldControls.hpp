@@ -177,6 +177,13 @@ void
 FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept;
 
 /**
+ * Minute-of-day for the effective cursor-bar time (manual or AUTO).
+ */
+[[gnu::pure]]
+unsigned
+GetCursorBarMinuteOfDay() noexcept;
+
+/**
  * Return true when the active RASP field has raster data for the
  * effective cursor-bar time ("Now"/AUTO or manual selection).
  *

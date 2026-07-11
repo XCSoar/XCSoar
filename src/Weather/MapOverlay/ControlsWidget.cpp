@@ -116,6 +116,7 @@ ControlsWidget::OnPrimaryLabelClick() noexcept
   switch (model->GetPrimaryLabelAction()) {
   case PrimaryLabelAction::OPEN_PICKER:
     model->OpenPrimaryPicker();
+    UpdateLabels();
     break;
 
   case PrimaryLabelAction::RESUME_AUTO:
@@ -175,16 +176,16 @@ ControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     break;
 
   case OverlayInputAction::TIME_AUTO_TOGGLE:
-    model->SetPrimaryAutoAdvance(!model->GetPrimaryAutoAdvance());
-    if (model->GetPrimaryAutoAdvance())
-      model->ApplyPrimaryAutoAdvance();
-    RefreshOverlay();
+    if (model->GetPrimaryAutoAdvance()) {
+      model->SetPrimaryAutoAdvance(false);
+      UpdateLabels();
+    } else {
+      model->EnablePrimaryAutoFromInput();
+    }
     break;
 
   case OverlayInputAction::TIME_AUTO_ON:
-    model->SetPrimaryAutoAdvance(true);
-    model->ApplyPrimaryAutoAdvance();
-    RefreshOverlay();
+    model->EnablePrimaryAutoFromInput();
     break;
 
   case OverlayInputAction::TIME_AUTO_OFF:

@@ -545,6 +545,17 @@ MaybeRequestConfiguredRaspUpdateOnAutoNoData() noexcept
 #endif
 }
 
+unsigned
+GetCursorBarMinuteOfDay() noexcept
+{
+  const BrokenTime effective =
+    GetEffectiveLocalTime(GetTimeAutoAdvance());
+  if (!effective.IsPlausible())
+    return 0;
+
+  return effective.GetMinuteOfDay();
+}
+
 void
 FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept
 {

@@ -6,9 +6,7 @@
 #include "ControlsModel.hpp"
 
 #ifdef HAVE_HTTP
-namespace XCTherm {
-class XCThermControlsModel;
-}
+#include "Weather/xctherm/XCThermControlsModel.hpp"
 #endif
 
 namespace WeatherMapOverlay {
@@ -16,13 +14,26 @@ namespace WeatherMapOverlay {
 /** Weather cursor-bar model backed by XCTherm controls state. */
 class XcthermControlsModel final : public ControlsModel {
 #ifdef HAVE_HTTP
+  mutable XCTherm::XCThermControlsModel backend;
   bool prepared = false;
-  XCTherm::XCThermControlsModel *model = nullptr;
-#endif
-public:
-  XcthermControlsModel() noexcept;
-  ~XcthermControlsModel() noexcept override;
 
+  template<typename F>
+  void WithBackend(F &&f) noexcept
+  {
+    std::forward<F>(f)(backend);
+  }
+
+  template<typename F>
+  void WithBackend(F &&f) const noexcept
+  {
+    std::forward<F>(f)(backend);
+  }
+#else
+  template<typename F>
+  void WithBackend(F &&) noexcept {}
+#endif
+
+public:
   void OnShow() noexcept override;
   void OnHide() noexcept override;
 
@@ -43,6 +54,8 @@ public:
   bool GetPrimaryAutoAdvance() const noexcept override;
   void SetPrimaryAutoAdvance(bool auto_advance) noexcept override;
   void ApplyPrimaryAutoAdvance() noexcept override;
+  void EnablePrimaryAutoFromInput() noexcept override;
+
   [[nodiscard]]
   PrimaryLabelAction GetPrimaryLabelAction() const noexcept override;
   void OpenPrimaryPicker() noexcept override;

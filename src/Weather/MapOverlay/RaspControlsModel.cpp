@@ -10,23 +10,17 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "PageActions.hpp"
+#include "PrimaryTimePicker.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "UIState.hpp"
+#include "util/StaticString.hxx"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Weather/Rasp/DownloadGlue.hpp"
 #endif
 
-#include <cstdio>
-#include <limits>
-
 namespace WeatherMapOverlay {
-
-static constexpr unsigned TIME_PICKER_AUTO =
-  std::numeric_limits<unsigned>::max() - 1;
-static constexpr unsigned TIME_PICKER_NOW =
-  std::numeric_limits<unsigned>::max();
 
 void
 RaspControlsModel::OnShow() noexcept
@@ -87,6 +81,18 @@ void
 RaspControlsModel::ApplyPrimaryAutoAdvance() noexcept
 {
   Rasp::ApplyAutoAdvanceTime();
+  last_quarter = unsigned(-1);
+}
+
+void
+RaspControlsModel::EnablePrimaryAutoFromInput() noexcept
+{
+  EnablePrimaryAutoAndRefresh();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (!Rasp::HasSelectedTimeData(true))
+    RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
 }
 
 PrimaryLabelAction
@@ -111,39 +117,32 @@ RaspControlsModel::OpenPrimaryPicker() noexcept
       unsigned(field_index) >= rasp->GetItemCount())
     return;
 
-  DataFieldEnum time;
-  time.ClearChoices();
-  time.addEnumText(_("Auto"), TIME_PICKER_AUTO);
-  time.addEnumText(_("Now"), TIME_PICKER_NOW);
+  OpenPrimaryTimePicker(*this, _("RASP Time"),
+    [&](DataFieldEnum &field) noexcept {
+      field.ClearChoices();
 
-  for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i) {
-    const BrokenTime t = RaspStore::IndexToTime(i);
-    char label[24];
-    std::snprintf(label, sizeof(label), "%02u:%02u %s",
-                  unsigned(t.hour), unsigned(t.minute),
-                  rasp->IsTimeAvailable(unsigned(field_index), i)
-                  ? "[x]" : "[ ]");
-    time.addEnumText(label, t.GetMinuteOfDay());
-  }
-
-  const auto &weather = CommonInterface::GetUIState().weather;
-  if (weather.time_auto_advance)
-    time.SetValue(TIME_PICKER_AUTO);
-  else if (!weather.time.IsPlausible())
-    time.SetValue(TIME_PICKER_NOW);
-  else
-    time.SetValue(weather.time.GetMinuteOfDay());
-
-  if (!ComboPicker(_("RASP Time"), time, nullptr))
-    return;
-
-  const unsigned selected = time.GetValue();
-  if (selected == TIME_PICKER_AUTO)
-    Rasp::ResumeAutoAdvance();
-  else if (selected == TIME_PICKER_NOW)
-    Rasp::SetCursorNow();
-  else
-    Rasp::SetCursorTime(selected);
+      for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i) {
+        const BrokenTime t = RaspStore::IndexToTime(i);
+        StaticString<24> label;
+        label.Format("%02u:%02u %s",
+                     unsigned(t.hour), unsigned(t.minute),
+                     rasp->IsTimeAvailable(unsigned(field_index), i)
+                     ? "[x]" : "[ ]");
+        field.addEnumText(label.c_str(), t.GetMinuteOfDay());
+      }
+    },
+    []() noexcept {
+      return Rasp::GetCursorBarMinuteOfDay();
+    },
+    [](ControlsModel &model) noexcept {
+      model.EnablePrimaryAutoFromInput();
+    },
+    [](ControlsModel &) noexcept {
+      Rasp::SetCursorNow();
+    },
+    [](ControlsModel &, unsigned minute_of_day) noexcept {
+      Rasp::SetCursorTime(minute_of_day);
+    });
 }
 
 void
@@ -152,14 +151,7 @@ RaspControlsModel::ResumePrimaryAuto() noexcept
   if (GetPrimaryAutoAdvance())
     return;
 
-  Rasp::ResumeAutoAdvance();
-  last_quarter = unsigned(-1);
-  Notify(ControlsUpdate::OVERLAY);
-
-#ifdef HAVE_DOWNLOAD_MANAGER
-  if (!Rasp::HasSelectedTimeData(true))
-    RequestConfiguredRaspUpdateIfOutOfDate();
-#endif
+  EnablePrimaryAutoFromInput();
 }
 
 void

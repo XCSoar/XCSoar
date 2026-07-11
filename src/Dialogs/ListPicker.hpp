@@ -138,8 +138,10 @@ public:
  * @param itemhelp_callback Callback to return string for current item help
  * @param extra_caption caption of another button that closes the
  * dialog (nullptr disables it)
+ * @param extra_caption2 caption of a second extra button that closes the
+ * dialog (nullptr disables it)
  * @return the list index, -1 if the user cancelled the dialog, mrExtra if
- * the user clicked the "extra" button
+ * the user clicked the first extra button, mrExtra2 for the second
  */
 int
 ListPicker(const char *caption,
@@ -148,4 +150,5 @@ ListPicker(const char *caption,
            ListItemRenderer &item_renderer, bool update = false,
            const char *help_text = nullptr,
            ItemHelpCallback_t itemhelp_callback = nullptr,
-           const char *extra_caption=nullptr);
+           const char *extra_caption = nullptr,
+           const char *extra_caption2 = nullptr);

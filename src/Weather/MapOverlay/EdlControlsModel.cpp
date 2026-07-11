@@ -5,13 +5,14 @@
 
 #include "ActionInterface.hpp"
 #include "Components.hpp"
-#include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "NetComponents.hpp"
+#include "PrimaryTimePicker.hpp"
 #include "UIState.hpp"
+#include "util/StaticString.hxx"
 #include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/Levels.hpp"
 #include "Weather/EDL/StateController.hpp"
@@ -19,14 +20,8 @@
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
 
 #include <chrono>
-#include <limits>
 
 namespace WeatherMapOverlay {
-
-static constexpr unsigned TIME_PICKER_AUTO =
-  std::numeric_limits<unsigned>::max() - 1;
-static constexpr unsigned TIME_PICKER_NOW =
-  std::numeric_limits<unsigned>::max();
 
 EdlControlsModel::~EdlControlsModel() noexcept
 {
@@ -68,9 +63,18 @@ EdlControlsModel::SelectForecast(unsigned index) noexcept
   if (index >= forecast_times.size())
     return;
 
+  SelectForecastTime(forecast_times[index]);
+}
+
+void
+EdlControlsModel::SelectForecastTime(const BrokenDateTime &time) noexcept
+{
+  if (!time.IsPlausible())
+    return;
+
   EDL::EnsureInitialised();
   auto &edl = CommonInterface::SetUIState().weather.edl;
-  edl.forecast_datetime = forecast_times[index];
+  edl.forecast_datetime = time;
   edl.forecast_auto_advance = false;
   edl.session.cursor_initialized = true;
 }
@@ -100,7 +104,23 @@ EdlControlsModel::FindForecastIndex() const noexcept
     if (forecast_times[i] == selected)
       return i;
 
+  if (const auto tracked = FindTrackedForecastIndex())
+    return *tracked;
+
   return 0;
+}
+
+std::optional<unsigned>
+EdlControlsModel::FindTrackedForecastIndex() const noexcept
+{
+  const BrokenDateTime tracked =
+    EDL::GetTrackedForecastTime(BrokenDateTime::NowUTC());
+
+  for (unsigned i = 0; i < forecast_choices; ++i)
+    if (forecast_times[i] == tracked)
+      return i;
+
+  return std::nullopt;
 }
 
 bool
@@ -149,9 +169,7 @@ EdlControlsModel::ResumePrimaryAuto() noexcept
   if (GetPrimaryAutoAdvance())
     return;
 
-  SetPrimaryAutoAdvance(true);
-  ApplyPrimaryAutoAdvance();
-  Notify(ControlsUpdate::OVERLAY);
+  EnablePrimaryAutoFromInput();
 }
 
 void
@@ -248,48 +266,44 @@ EdlControlsModel::OpenPrimaryPicker() noexcept
 {
   RebuildForecastTimes();
 
-  DataFieldEnum picker;
-  picker.ClearChoices();
-  picker.addEnumText(_("Auto"), TIME_PICKER_AUTO);
-  picker.addEnumText(_("Now"), TIME_PICKER_NOW);
+  StaticString<64> caption;
+  caption.Format("%s %s (UTC)", "EDL", _("Time"));
 
-  for (unsigned i = 0; i < forecast_choices; ++i) {
-    const auto local = forecast_times[i].ToLocal();
-    StaticString<16> label;
-    label.Format("%02u:00", unsigned(local.hour));
-    picker.addEnumText(label.c_str(), i);
-  }
+  OpenPrimaryTimePicker(*this, caption.c_str(),
+    [this](DataFieldEnum &field) noexcept {
+      field.ClearChoices();
 
-  if (GetPrimaryAutoAdvance())
-    picker.SetValue(TIME_PICKER_AUTO);
-  else
-    picker.SetValue(FindForecastIndex());
-
-  if (!ComboPicker(_("EDL Time"), picker, nullptr))
-    return;
-
-  const unsigned selected = picker.GetValue();
-  if (selected == TIME_PICKER_AUTO) {
-    ResumePrimaryAuto();
-    return;
-  }
-
-  if (selected == TIME_PICKER_NOW) {
-    const BrokenDateTime tracked = EDL::GetTrackedForecastTime(BrokenDateTime::NowUTC());
-    for (unsigned i = 0; i < forecast_choices; ++i) {
-      if (forecast_times[i] == tracked) {
-        SetPrimaryAutoAdvance(false);
-        SelectForecast(i);
-        Notify(ControlsUpdate::OVERLAY);
+      for (unsigned i = 0; i < forecast_choices; ++i) {
+        StaticString<16> label;
+        label.Format("%02u:00", unsigned(forecast_times[i].hour));
+        field.addEnumText(label.c_str(), i);
+      }
+    },
+    [this]() noexcept {
+      return FindForecastIndex();
+    },
+    [](ControlsModel &model) noexcept {
+      model.EnablePrimaryAutoFromInput();
+    },
+    [this](ControlsModel &) noexcept {
+      if (const auto tracked = FindTrackedForecastIndex()) {
+        ApplyManualPrimarySelection([this, tracked]() noexcept {
+          SelectForecast(*tracked);
+        });
         return;
       }
-    }
-    return;
-  } else if (selected < forecast_choices) {
-    SetPrimaryAutoAdvance(false);
-    SelectForecast(selected);
-    Notify(ControlsUpdate::OVERLAY);
-  }
+
+      const BrokenDateTime tracked =
+        EDL::GetTrackedForecastTime(BrokenDateTime::NowUTC());
+      ApplyManualPrimarySelection([this, tracked]() noexcept {
+        SelectForecastTime(tracked);
+      });
+    },
+    [this](ControlsModel &, unsigned index) noexcept {
+      ApplyManualPrimarySelection([this, index]() noexcept {
+        SelectForecast(index);
+      });
+    });
 }
 
 bool
