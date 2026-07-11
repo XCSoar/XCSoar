@@ -626,8 +626,13 @@ ManagedFileListWidget::Add()
       list.push_back(remote_file);
   }
 
-  if (list.empty())
+  if (list.empty()) {
+    /* Empty File Manager with no index yet: retry repository download
+       (same as DownloadFilePicker's empty-list activate). */
+    if (repository.begin() == repository.end())
+      EnqueueRepositoryDownload(true);
     return;
+  }
 
   AddFileListItemRenderer item_renderer(list, look);
   int i = ListPicker(_("Select a file"),
