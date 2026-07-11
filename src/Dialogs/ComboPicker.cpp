@@ -37,7 +37,8 @@ ComboPicker(const char *caption,
             const ComboList &combo_list,
             const char *help_text,
             bool enable_item_help,
-            const char *extra_caption)
+            const char *extra_caption,
+            const char *extra_caption2)
 {
   ComboListPopup = &combo_list;
 
@@ -49,7 +50,8 @@ ComboPicker(const char *caption,
                     support, false,
                     help_text,
                     enable_item_help ? OnItemHelp : nullptr,
-                    extra_caption);
+                    extra_caption,
+                    extra_caption2);
 }
 
 bool

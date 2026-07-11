@@ -10,6 +10,7 @@
 
 #include <array>
 #include <memory>
+#include <optional>
 
 namespace WeatherMapOverlay {
 
@@ -67,11 +68,15 @@ public:
 private:
   void RebuildForecastTimes() noexcept;
   void SelectForecast(unsigned index) noexcept;
+  void SelectForecastTime(const BrokenDateTime &time) noexcept;
   void SelectLevel(unsigned isobar) noexcept;
   void UnregisterEdlDownloadListener() noexcept;
 
   [[nodiscard]] [[gnu::pure]]
   unsigned FindForecastIndex() const noexcept;
+
+  [[nodiscard]]
+  std::optional<unsigned> FindTrackedForecastIndex() const noexcept;
 
   [[nodiscard]]
   bool HasOverlayData() const noexcept;

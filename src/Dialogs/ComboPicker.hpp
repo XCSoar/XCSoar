@@ -11,7 +11,8 @@ ComboPicker(const char *caption,
             const ComboList &combo_list,
             const char *help_text = nullptr,
             bool enable_item_help = false,
-            const char *extra_caption=nullptr);
+            const char *extra_caption = nullptr,
+            const char *extra_caption2 = nullptr);
 
 /**
  * @return true if the user has selected a new value (though it may be

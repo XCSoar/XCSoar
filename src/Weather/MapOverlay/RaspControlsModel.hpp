@@ -32,6 +32,7 @@ public:
   bool GetPrimaryAutoAdvance() const noexcept override;
   void SetPrimaryAutoAdvance(bool auto_advance) noexcept override;
   void ApplyPrimaryAutoAdvance() noexcept override;
+  void EnablePrimaryAutoFromInput() noexcept override;
 
   [[nodiscard]]
   PrimaryLabelAction GetPrimaryLabelAction() const noexcept override;
