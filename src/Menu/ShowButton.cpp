@@ -7,8 +7,6 @@
 #include "Look/ButtonLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
-#include "PageActions.hpp"
-#include "PageSettings.hpp"
 #include "UIState.hpp"
 
 #include <memory>
@@ -23,7 +21,7 @@
 #endif
 
 /**
- * Map overlay buttons (menu, zoom) are hidden on special pages.
+ * Map overlay buttons (menu, QuickMenu, zoom) are hidden on special pages.
  */
 class ShowMapOverlayButtonRenderer : public ButtonRenderer {
   std::unique_ptr<ButtonRenderer> inner;
@@ -68,6 +66,21 @@ ShowMenuButton::OnClicked() noexcept
 }
 
 void
+ShowQuickMenuButton::Create(ContainerWindow &parent, const ButtonLook &look,
+                            const PixelRect &rc,
+                            WindowStyle style) noexcept
+{
+  Button::Create(parent, rc, style, MakeMapOverlaySymbolButton(look, "q"));
+}
+
+bool
+ShowQuickMenuButton::OnClicked() noexcept
+{
+  InputEvents::eventQuickMenu(nullptr);
+  return true;
+}
+
+void
 ShowZoomButton::Create(ContainerWindow &parent, const ButtonLook &look,
                        const PixelRect &rc, Sign _sign,
                        WindowStyle style) noexcept
@@ -81,13 +94,6 @@ ShowZoomButton::Create(ContainerWindow &parent, const ButtonLook &look,
 bool
 ShowZoomButton::OnClicked() noexcept
 {
-  if (PageActions::GetCurrentLayout().UsesWeatherOverlay()) {
-    InputEvents::eventWeatherOverlay(sign == Sign::ZOOM_IN
-                                     ? "field picker"
-                                     : "field auto toggle");
-    return true;
-  }
-
   InputEvents::eventZoom(sign == Sign::ZOOM_IN ? "in" : "out");
   return true;
 }

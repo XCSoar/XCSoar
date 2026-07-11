@@ -105,6 +105,20 @@ MainWindow::GetShowMenuButtonRect(const PixelRect rc) noexcept
 
 [[gnu::pure]]
 PixelRect
+MainWindow::GetShowQuickMenuButtonRect(const PixelRect rc) noexcept
+{
+  const UISettings &settings = CommonInterface::GetUISettings();
+  const unsigned padding = Layout::GetTextPadding();
+
+  int top = rc.top + int(padding);
+  if (settings.show_menu_button)
+    top = GetShowMenuButtonRect(rc).bottom + int(padding);
+
+  return GetMapOverlayButtonRect(rc, top);
+}
+
+[[gnu::pure]]
+PixelRect
 MainWindow::GetShowZoomButtonRect(const PixelRect rc,
                                   ShowZoomButton::Sign sign) noexcept
 {
@@ -112,8 +126,17 @@ MainWindow::GetShowZoomButtonRect(const PixelRect rc,
   const unsigned padding = Layout::GetTextPadding();
   const unsigned size = Layout::GetMaximumControlHeight();
 
-  if (settings.show_menu_button && ShowMapOverlayZoomButtons(settings)) {
-    int top = GetShowMenuButtonRect(rc).bottom + int(padding);
+  const bool stack_top_right =
+    (settings.show_menu_button || settings.show_quickmenu_button) &&
+    ShowMapOverlayZoomButtons(settings);
+
+  if (stack_top_right) {
+    int top;
+    if (settings.show_quickmenu_button)
+      top = GetShowQuickMenuButtonRect(rc).bottom + int(padding);
+    else
+      top = GetShowMenuButtonRect(rc).bottom + int(padding);
+
     if (sign == ShowZoomButton::Sign::ZOOM_IN) {
       const PixelRect zoom_out =
         GetShowZoomButtonRect(rc, ShowZoomButton::Sign::ZOOM_OUT);
@@ -295,6 +318,12 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
     if (overlay_buttons_active)
       show_menu_button->Move(GetShowMenuButtonRect(rc));
   }
+  if (show_quickmenu_button != nullptr) {
+    show_quickmenu_button->SetVisible(overlay_buttons_active);
+    show_quickmenu_button->SetEnabled(overlay_buttons_active);
+    if (overlay_buttons_active)
+      show_quickmenu_button->Move(GetShowQuickMenuButtonRect(rc));
+  }
   if (show_zoom_out_button != nullptr) {
     show_zoom_out_button->SetVisible(overlay_buttons_active);
     show_zoom_out_button->SetEnabled(overlay_buttons_active);
@@ -314,6 +343,62 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
   if (show_rotate_button != nullptr)
     show_rotate_button->Move(GetShowRotateButtonRect(rc));
 #endif
+}
+
+void
+MainWindow::ReinitialiseMapOverlayButtons() noexcept
+{
+  if (look == nullptr)
+    return;
+
+  const UISettings &settings = CommonInterface::GetUISettings();
+  const PixelRect map_area_rect = GetMapAreaRect();
+
+  if (settings.show_menu_button) {
+    if (show_menu_button == nullptr) {
+      show_menu_button = new ShowMenuButton();
+      show_menu_button->Create(*this, look->dialog.button,
+                               GetShowMenuButtonRect(map_area_rect));
+    }
+  } else if (show_menu_button != nullptr) {
+    delete show_menu_button;
+    show_menu_button = nullptr;
+  }
+
+  if (settings.show_quickmenu_button) {
+    if (show_quickmenu_button == nullptr) {
+      show_quickmenu_button = new ShowQuickMenuButton();
+      show_quickmenu_button->Create(*this, look->dialog.button,
+                                    GetShowQuickMenuButtonRect(map_area_rect));
+    }
+  } else if (show_quickmenu_button != nullptr) {
+    delete show_quickmenu_button;
+    show_quickmenu_button = nullptr;
+  }
+
+  if (ShowMapOverlayZoomButtons(settings)) {
+    if (show_zoom_out_button == nullptr) {
+      show_zoom_out_button = new ShowZoomButton();
+      show_zoom_out_button->Create(*this, look->dialog.button,
+                                   GetShowZoomButtonRect(map_area_rect,
+                                                         ShowZoomButton::Sign::ZOOM_OUT),
+                                   ShowZoomButton::Sign::ZOOM_OUT);
+    }
+    if (show_zoom_in_button == nullptr) {
+      show_zoom_in_button = new ShowZoomButton();
+      show_zoom_in_button->Create(*this, look->dialog.button,
+                                  GetShowZoomButtonRect(map_area_rect,
+                                                        ShowZoomButton::Sign::ZOOM_IN),
+                                  ShowZoomButton::Sign::ZOOM_IN);
+    }
+  } else {
+    delete show_zoom_out_button;
+    show_zoom_out_button = nullptr;
+    delete show_zoom_in_button;
+    show_zoom_in_button = nullptr;
+  }
+
+  UpdateMapOverlayButtonLayout();
 }
 
 MainWindow::MainWindow(UI::Display &display) noexcept
@@ -381,32 +466,15 @@ MainWindow::InitialiseConfigured()
   ReinitialiseLayoutTA(rc, ib_layout);
   ReinitialiseLayout_flarm(rc, ib_layout);
 
-  const UISettings &settings = CommonInterface::GetUISettings();
-  const PixelRect map_area_rect = GetMapAreaRect();
-
-  if (settings.show_menu_button) {
-    show_menu_button = new ShowMenuButton();
-    show_menu_button->Create(*this, look->dialog.button,
-                             GetShowMenuButtonRect(map_area_rect));
-  }
-  if (ShowMapOverlayZoomButtons(settings)) {
-    show_zoom_out_button = new ShowZoomButton();
-    show_zoom_out_button->Create(*this, look->dialog.button,
-                                 GetShowZoomButtonRect(map_area_rect,
-                                                       ShowZoomButton::Sign::ZOOM_OUT),
-                                 ShowZoomButton::Sign::ZOOM_OUT);
-    show_zoom_in_button = new ShowZoomButton();
-    show_zoom_in_button->Create(*this, look->dialog.button,
-                                GetShowZoomButtonRect(map_area_rect,
-                                                      ShowZoomButton::Sign::ZOOM_IN),
-                                ShowZoomButton::Sign::ZOOM_IN);
-  }
+  ReinitialiseMapOverlayButtons();
 
 #ifdef ANDROID
   /* create a rotate button (initially hidden) when orientation is
      DEFAULT (not forced) and the system auto-rotate setting is
      enabled; the button appears temporarily when the Java
      OrientationEventListener detects a physical orientation change */
+  const UISettings &settings = CommonInterface::GetUISettings();
+  const PixelRect map_area_rect = GetMapAreaRect();
   if (settings.display.orientation == DisplayOrientation::DEFAULT &&
       native_view != nullptr &&
       native_view->IsAutoRotateEnabled(Java::GetEnv())) {
@@ -482,6 +550,8 @@ MainWindow::Deinitialise() noexcept
 
   delete show_menu_button;
   show_menu_button = nullptr;
+  delete show_quickmenu_button;
+  show_quickmenu_button = nullptr;
   delete show_zoom_out_button;
   show_zoom_out_button = nullptr;
   delete show_zoom_in_button;
