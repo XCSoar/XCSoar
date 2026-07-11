@@ -17,6 +17,7 @@ enum class FileType : uint8_t {
   IGC,
   NMEA,
   TASK,
+  FREQUENCIES,
   CHECKLIST,
   PROFILE,
   PLANE,
