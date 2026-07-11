@@ -4,31 +4,33 @@
 #include "MenuBar.hpp"
 #include "ui/window/ContainerWindow.hpp"
 #include "Input/InputEvents.hpp"
+#include "Screen/Layout.hpp"
 
-#include <algorithm>
 #include <cassert>
 
 [[gnu::pure]]
 static PixelRect
 GetButtonPosition(unsigned i, PixelRect rc)
 {
-  unsigned hwidth = rc.GetWidth(), hheight = rc.GetHeight();
+  /* Use constant touch height so button size does not change on widget
+     or layout change. */
+  const unsigned touch_height = Layout::GetMaximumControlHeight();
+  unsigned hwidth = rc.GetWidth();
+  unsigned hheight = touch_height;
 
-  if (hheight > hwidth) {
+  if (rc.GetHeight() > rc.GetWidth()) {
     // portrait
-
-    hheight = std::max(1u, hheight / menubar_height_scale_factor);
 
     if (i == 0) {
       rc.left = rc.right;
       rc.top = rc.bottom;
     } else if (i < 5) {
-      hwidth = std::max(1u, hwidth / 4);
+      hwidth /= 4;
 
       rc.left += hwidth * (i - 1);
       rc.top = rc.bottom - hheight;
     } else {
-      hwidth = std::max(1u, hwidth / 3);
+      hwidth /= 3;
 
       rc.left = rc.right - hwidth;
       rc.top += (i - 5) * hheight;
@@ -39,8 +41,7 @@ GetButtonPosition(unsigned i, PixelRect rc)
   } else {
     // landscape
 
-    hwidth = std::max(1u, hwidth / 5);
-    hheight = std::max(1u, hheight / 5);
+    hwidth /= 5;
 
     if (i == 0) {
       rc.left = rc.right;
