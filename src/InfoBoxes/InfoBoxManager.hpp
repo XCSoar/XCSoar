@@ -5,6 +5,7 @@
 
 struct InfoBoxLook;
 class ContainerWindow;
+class InfoBoxWindow;
 
 namespace InfoBoxLayout { struct Layout; }
 
@@ -18,6 +19,13 @@ ProcessTimer() noexcept;
 
 [[nodiscard]] bool
 IsReady() noexcept;
+
+/**
+ * Returns the InfoBox window for the given slot, or nullptr if the
+ * manager was reinitialised and the window no longer exists.
+ */
+[[nodiscard]] InfoBoxWindow *
+GetWindow(unsigned id) noexcept;
 
 void
 SetDirty() noexcept;

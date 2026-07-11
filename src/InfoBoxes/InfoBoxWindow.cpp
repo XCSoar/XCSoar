@@ -262,9 +262,14 @@ InfoBoxWindow::ShowDialog()
 
   dlgInfoBoxAccessShowModeless(id, GetDialogContent());
 
+  /* Layout may be reinitialised while the modal dialog runs (e.g. window
+     resize), which destroys and recreates InfoBox windows. */
+  if (InfoBoxManager::GetWindow(id) != this)
+    return;
+
   force_draw_selector = false;
   Invalidate();
-  
+
   FocusParent();
 }
 
