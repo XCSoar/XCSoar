@@ -132,6 +132,7 @@ constexpr std::string_view TeamcodeRefWaypoint = "TeamcodeRefWaypoint";
 constexpr std::string_view AppInfoBoxBorder = "AppInfoBoxBorder";
 constexpr std::string_view ShowMenuButton = "ShowMenuButton";
 constexpr std::string_view ShowZoomButton = "ShowZoomButton";
+constexpr std::string_view ShowQuickMenuButton = "ShowQuickMenuButton";
 constexpr std::string_view CursorSize = "CursorSize";
 constexpr std::string_view CursorColorsInverted = "CursorColorsInverted";
 constexpr std::string_view NoPositionTargetDistanceRing = "NoPositionTargetDistanceRing";

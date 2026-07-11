@@ -47,6 +47,7 @@ class MainWindow : public UI::SingleWindow {
   MenuBar *menu_bar = nullptr;
 
   ShowMenuButton *show_menu_button = nullptr;
+  ShowQuickMenuButton *show_quickmenu_button = nullptr;
   ShowZoomButton *show_zoom_out_button = nullptr;
   ShowZoomButton *show_zoom_in_button = nullptr;
 
@@ -285,6 +286,12 @@ private:
 
 public:
   /**
+   * Create or destroy map overlay buttons to match the current
+   * UISettings, then update their positions.
+   */
+  void ReinitialiseMapOverlayButtons() noexcept;
+
+  /**
    * Called by XCSoarInterface::Startup() after startup has been
    * completed.
    */
@@ -510,6 +517,7 @@ protected:
   bool OnKeyDown(unsigned key_code) noexcept override;
   void OnPaint(Canvas &canvas) noexcept override;
   PixelRect GetShowMenuButtonRect(const PixelRect rc) noexcept;
+  PixelRect GetShowQuickMenuButtonRect(const PixelRect rc) noexcept;
   PixelRect GetShowZoomButtonRect(const PixelRect rc,
                                   ShowZoomButton::Sign sign) noexcept;
 

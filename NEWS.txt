@@ -17,6 +17,8 @@ Version 7.45 - not yet released
     long centre labels instead of hiding them when they do not fit
   - Fix crash when opening the map item list on waypoints with long
     non-ASCII comments (UTF-8 truncation)
+  - add optional map overlay QuickMenu button (Config → Look → Layout),
+    enabled by default when a touch screen is detected #2610
 * glide computer
   - Speed-to-fly and task calculations are now altitude-corrected: the glide
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
