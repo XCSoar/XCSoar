@@ -138,6 +138,15 @@ InfoBoxManager::InfoBoxDrawIfDirty() noexcept
   }
 }
 
+InfoBoxWindow *
+InfoBoxManager::GetWindow(unsigned id) noexcept
+{
+  if (!infoboxes_ready || id >= layout.count)
+    return nullptr;
+
+  return infoboxes[id];
+}
+
 void
 InfoBoxManager::SetDirty() noexcept
 {
