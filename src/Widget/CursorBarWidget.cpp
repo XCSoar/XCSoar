@@ -67,9 +67,18 @@ protected:
     canvas.Select(look.text_font);
 
     const auto text_size = canvas.CalcTextSize(text);
-    const int x = (rc.GetWidth() - (int)text_size.width) / 2;
-    const int y = (rc.GetHeight() - (int)text_size.height) / 2;
-    canvas.DrawText({x, y}, text);
+    const int avail_w = int(rc.GetWidth());
+    const int avail_h = int(rc.GetHeight());
+    const int y = std::max(0, (avail_h - int(text_size.height)) / 2);
+
+    if (int(text_size.width) <= avail_w) {
+      const int x = (avail_w - int(text_size.width)) / 2;
+      canvas.DrawText({x, y}, text);
+    } else {
+      /* Keep long labels visible: DrawText with a negative/huge x from
+         unsigned underflow is clipped away entirely on OpenGL. */
+      canvas.DrawClippedText({0, y}, unsigned(avail_w), text);
+    }
   }
 };
 
@@ -82,8 +91,12 @@ class CursorBarWidget::BarWindow final : public SolidContainerWindow {
   StaticArray<Button, MAX_ROWS> next_buttons;
   StaticArray<std::unique_ptr<CursorBarLabel>, MAX_ROWS> labels;
 
-  static int CalcButtonWidth(int row_h) noexcept {
-    return row_h * 2;
+  /**
+   * Prev/next width is based on the compact control height, not the
+   * tall touch row height, so phone bars keep enough room for labels.
+   */
+  static int CalcButtonWidth() noexcept {
+    return int(Layout::GetMinimumControlHeight()) * 2;
   }
 
   static void
@@ -98,8 +111,10 @@ class CursorBarWidget::BarWindow final : public SolidContainerWindow {
     row_h = std::max(1, (total_h - int(separators) * SEPARATOR_H)
                      / int(rows));
 
-    const int max_btn_w = std::max(1, w / 3);
-    btn_w = std::max(1, std::min(CalcButtonWidth(row_h), max_btn_w));
+    /* Cap at 1/5 of the bar so both buttons leave most of the width
+       for the centre label on narrow phones. */
+    const int max_btn_w = std::max(1, w / 5);
+    btn_w = std::max(1, std::min(CalcButtonWidth(), max_btn_w));
   }
 
   [[gnu::pure]]
