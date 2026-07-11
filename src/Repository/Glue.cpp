@@ -277,6 +277,7 @@ DownloadRepositoriesModal(bool main_repo, bool user_repo)
   }
 
   if (user_repo) {
+    bool user_repo_download_success = true;
     for (const auto &repo : GetUserRepositories()) {
       try {
         const auto path =
@@ -285,10 +286,12 @@ DownloadRepositoriesModal(bool main_repo, bool user_repo)
                               repo.uri.c_str(), path.c_str()) == nullptr)
           return; /* cancelled */
       } catch (...) {
+        user_repo_download_success = false;
         ShowError(std::current_exception(), _("Updating repository"));
       }
     }
-    user_repository_downloaded = true;
+    if (user_repo_download_success)
+      user_repository_downloaded = true;
   }
 }
 
