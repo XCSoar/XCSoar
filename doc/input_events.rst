@@ -483,23 +483,26 @@ Event list
      XCTherm). Only has an effect on map pages that show weather overlay
      controls. Arguments use a common ``<axis> …`` prefix:
 
-     **Time:** ``time +``, ``time -`` (step forecast time)
+     **Time:** ``time +``, ``time -`` (step forecast time), ``time picker``
+     (open the time picker with Auto, Now, and manual selection)
 
      **Time auto/manual:** ``time auto toggle``, ``time auto on``,
      ``time auto off``, ``time auto show``
 
-     **Altitude / level:** ``altitude +``, ``altitude -`` (step altitude
-     band or pressure level). For EDL overlays, ``level +``/``level -``
-     and ``level auto …`` are accepted as aliases for the altitude
-     commands.
+     **Secondary axis:** ``field +``, ``field -`` (step layer, pressure
+     level, or altitude band). ``altitude +/-`` and EDL ``level +/-`` are
+     accepted as aliases.
 
-     **Altitude auto/manual:** ``altitude auto toggle``,
-     ``altitude auto on``, ``altitude auto off``,
-     ``altitude auto show``
+     **Secondary list:** ``field picker``, ``layer picker``, or
+     ``level picker`` (open the ComboPicker list for the active overlay).
 
-     RASP overlays support time commands only. EDL overlays support
-     both time and level. XCTherm overlays map altitude to the layer
-     (altitude band) row and time to the forecast hour row.
+     **Secondary auto/manual:** ``field auto toggle`` (and ``altitude auto
+     …``, ``level auto …`` aliases). On RASP, secondary auto falls back
+     to time auto when no secondary axis exists.
+
+     RASP overlays support time and layer selection. EDL overlays support
+     time and pressure level. XCTherm overlays map the secondary axis to
+     altitude bands and time to forecast hours.
  * - ``Zoom Z``
    - Controls map zoom. Possible arguments: ``auto toggle``,
      ``auto on``, ``auto off``, ``auto show``, ``in``, ``out``,
@@ -530,12 +533,12 @@ Built-in modes
   the ``Mode mc`` event (default key ``3``). Stick UP/DOWN adjust MC;
   RETURN toggles auto/manual MC; ESCAPE returns to ``default``.
 - ``weather`` -- weather overlay cursor bar mode. Enter from the quick
-  menu (**Forecast Controls**) or the on-screen menu (**Menu → Weather**),
-  or via the ``Mode weather`` event. Stick UP/DOWN step altitude/level,
-  LEFT/RIGHT step time, RETURN toggles time auto/manual, APP6 toggles
-  altitude auto/manual, ESCAPE returns to ``default``. Only affects map
-  pages with a weather overlay (EDL or RASP) and weather controls in the
-  bottom widget (**Config > System > Pages > Bottom widget**).
+  menu (**Forecast Controls** on RemoteStick) or via the ``Mode weather``
+  event. Stick UP/DOWN step the secondary axis (layer, level, or
+  altitude), LEFT/RIGHT step time, RETURN opens the time picker, ESCAPE
+  returns to ``default``. On map pages with weather overlay controls,
+  F2 and the on-screen **+** button open the secondary list; F3 and
+  **−** toggle auto (secondary axis on EDL/XCTherm, time auto on RASP).
   See :ref:`weather-overlay-mode` below.
 - ``wptimg`` -- the waypoint details dialog is on an **image** page;
   key bindings in this map control zoom and pan of the image (the
@@ -550,12 +553,12 @@ hierarchies.
 Weather overlay mode (``mode=weather``)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When a map page displays EDL or RASP overlay controls in the bottom
-cursor bar, open the quick menu (F1 or the ULDR gesture) and choose
-**Forecast Controls**, or use **Menu → Weather**, to enter
-``mode=weather`` so stick and button bindings can adjust forecast time
-and altitude without leaving the map. Leaving the page (or pressing
-ESCAPE / the Exit label) returns to ``default``.
+When a map page displays EDL, RASP, or XCTherm overlay controls in the
+bottom cursor bar, open the quick menu (F1 or the ULDR gesture) and choose
+**Forecast Controls** (RemoteStick), or bind ``Mode weather`` elsewhere,
+to enter ``mode=weather`` so stick and button bindings can adjust forecast
+time and the secondary axis without leaving the map. Pressing ESCAPE
+returns to ``default``.
 
 The built-in stick bindings in :file:`Data/Input/default.xci` are:
 
@@ -567,24 +570,57 @@ The built-in stick bindings in :file:`Data/Input/default.xci` are:
    - Event
    - Action
  * - UP / DOWN
-   - ``WeatherOverlay altitude +/-``
-   - Step pressure level (EDL)
+   - ``WeatherOverlay field +/-``
+   - Step layer (RASP), pressure level (EDL), or altitude band (XCTherm)
  * - LEFT / RIGHT
    - ``WeatherOverlay time -/+``
    - Step forecast time
  * - RETURN
-   - ``WeatherOverlay time auto show/toggle``
-   - Toggle time auto/manual
- * - APP6
-   - ``WeatherOverlay altitude auto show/toggle``
-   - Toggle altitude/level auto/manual
+   - ``WeatherOverlay time picker``
+   - Open time picker (Auto, Now, manual)
+ * - F2 / on-screen **+**
+   - ``WeatherOverlay field picker``
+   - Open secondary-axis list (layer, level, or altitude)
+ * - F3 / on-screen **−**
+   - ``WeatherOverlay field auto toggle``
+   - Toggle secondary auto (EDL/XCTherm) or time auto (RASP)
  * - ESCAPE
    - ``Mode default``
    - Exit weather input mode
 
-On-screen labels (locations 1, 6--10) mirror these actions. On RASP
-pages, UP/DOWN step the forecast layer; EDL pages use them for pressure
-level. RASP ignores altitude auto/manual commands.
+On-screen menubar buttons (locations 1--7) mirror these actions:
+
+.. list-table::
+ :widths: 15 35 50
+ :header-rows: 1
+
+ * - Location
+   - Action
+   - Label (overlay-specific)
+ * - 1
+   - Time step back
+   - ``Time- (LEFT)``
+ * - 2
+   - Secondary list
+   - Layer / Level / Altitude list (``F2/+``)
+ * - 3
+   - Auto toggle
+   - Time auto (RASP) or secondary auto (EDL/XCTherm) (``F3/-``)
+ * - 4
+   - Time step forward
+   - ``Time+ (RIGHT)``
+ * - 5
+   - Secondary step up
+   - ``Field+ / Level+ / Altitude+ (UP)``
+ * - 6
+   - Secondary step down
+   - ``Field- / Level- / Altitude- (DOWN)``
+ * - 7
+   - Time picker
+   - ``Time Picker (RETURN)``
+
+Tapping the secondary cursor-bar label also opens the list picker. The
+map title shows the active overlay layer when applicable.
 
 The same ``WeatherOverlay`` arguments can be bound in any mode (for
 example from ``mode=default``) if you prefer not to use ``mode=weather``.
