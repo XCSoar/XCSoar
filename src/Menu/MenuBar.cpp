@@ -8,6 +8,16 @@
 #include <algorithm>
 #include <cassert>
 
+/** Side-column slots (location 5+) must fit at least this many buttons. */
+static constexpr unsigned side_column_slots = 8;
+
+[[gnu::pure]]
+static unsigned
+GetSideColumnRowHeight(unsigned screen_height) noexcept
+{
+  return std::max(1u, screen_height / side_column_slots);
+}
+
 [[gnu::pure]]
 static PixelRect
 GetButtonPosition(unsigned i, PixelRect rc)
@@ -29,6 +39,7 @@ GetButtonPosition(unsigned i, PixelRect rc)
       rc.top = rc.bottom - hheight;
     } else {
       hwidth = std::max(1u, hwidth / 3);
+      hheight = GetSideColumnRowHeight(rc.GetHeight());
 
       rc.left = rc.right - hwidth;
       rc.top += (i - 5) * hheight;
@@ -48,8 +59,11 @@ GetButtonPosition(unsigned i, PixelRect rc)
     } else if (i < 5) {
       rc.top += hheight * (i - 1);
     } else {
-      rc.left += hwidth * (i - 5);
-      rc.top = rc.bottom - hheight;
+      hwidth = std::max(1u, hwidth * 5 / 3);
+      hheight = GetSideColumnRowHeight(rc.GetHeight());
+
+      rc.left = rc.right - hwidth;
+      rc.top += (i - 5) * hheight;
     }
 
     rc.right = rc.left + hwidth;

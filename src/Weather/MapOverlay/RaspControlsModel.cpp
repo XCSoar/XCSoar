@@ -179,6 +179,7 @@ RaspControlsModel::OpenSecondaryPicker() noexcept
   }
 
   Rasp::SelectField(unsigned(selected));
+  Notify(ControlsUpdate::OVERLAY);
 }
 
 void

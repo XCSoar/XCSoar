@@ -3,12 +3,14 @@
 
 #include "XcthermControlsModel.hpp"
 
+#include "Dialogs/ComboPicker.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "PrimaryTimePicker.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "util/StaticString.hxx"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
+#include "Weather/xctherm/XCThermCatalog.hpp"
 
 #include <algorithm>
 
@@ -257,6 +259,56 @@ XcthermControlsModel::SetSecondaryAutoAdvance(bool auto_advance) noexcept
   });
 #else
   (void)auto_advance;
+#endif
+}
+
+SecondaryLabelAction
+XcthermControlsModel::GetSecondaryLabelAction() const noexcept
+{
+  return SecondaryLabelAction::OPEN_PICKER;
+}
+
+void
+XcthermControlsModel::OpenSecondaryPicker() noexcept
+{
+#ifdef HAVE_HTTP
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  const auto &region = XCTherm::GetRegion(settings.model);
+  if (region.layer_count == 0)
+    return;
+
+  DataFieldEnum field;
+  unsigned current_layer = 0;
+
+  WithBackend([&](const XCTherm::XCThermControlsModel &backend) noexcept {
+    current_layer = backend.GetCurrentLayer();
+  });
+
+  for (unsigned i = 0; i < region.layer_count; ++i) {
+    field.addEnumText(gettext(region.layers[i].short_label), int(i));
+  }
+
+  field.SetValue(int(current_layer));
+
+  if (!ComboPicker(_("XCTherm Altitude"), field, nullptr))
+    return;
+
+  const int selected = field.GetValue();
+  if (selected < 0 || unsigned(selected) >= region.layer_count)
+    return;
+
+  const auto &basic = CommonInterface::Basic();
+  WithBackend([&](XCTherm::XCThermControlsModel &backend) noexcept {
+    backend.SetAltitudeAutoAdvance(false, basic);
+    backend.SetCurrentLayer(unsigned(selected));
+    backend.ApplyCurrentSelectionToMap();
+    backend.SaveCursorSession();
+  });
+
+  Notify(ControlsUpdate::OVERLAY);
+#else
+  (void)0;
 #endif
 }
 

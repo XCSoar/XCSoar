@@ -277,6 +277,21 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     }
   }
 
+  if (name == "WeatherSecondaryPickerLabel") {
+    switch (GetUIState().page_overlay) {
+    case PageLayout::Overlay::EDL:
+      return _("Level\nList\n(APP4)");
+
+    case PageLayout::Overlay::XCTHERM:
+      return _("Altitude\nList\n(APP4)");
+
+    case PageLayout::Overlay::RASP:
+    case PageLayout::Overlay::NONE:
+    case PageLayout::Overlay::MAX:
+      return _("Layer\nList\n(APP4)");
+    }
+  }
+
   if (name =="CheckFLARM") {
     invalid |= !Basic().flarm.status.available;
     return nullptr;
