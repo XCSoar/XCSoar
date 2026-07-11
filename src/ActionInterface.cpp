@@ -22,9 +22,6 @@
 #include "PageSettings.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
-#ifdef HAVE_EDL
-#include "Weather/EDL/StateController.hpp"
-#endif
 
 using namespace CommonInterface;
 
@@ -32,6 +29,10 @@ namespace ActionInterface {
 static void
 SendGetComputerSettings() noexcept;
 }
+
+static void
+UpdateMapScalePageInfo(UIState &state,
+                       const UISettings &settings) noexcept;
 
 void
 XCSoarInterface::ReceiveGPS() noexcept
@@ -261,6 +262,8 @@ ActionInterface::SendMapSettings(const bool trigger_draw) noexcept
 void
 ActionInterface::SendUIState(const bool trigger_draw) noexcept
 {
+  UpdateMapScalePageInfo(SetUIState(), GetUISettings());
+
   main_window->SetUIState(GetUIState());
 
   if (trigger_draw)
@@ -313,27 +316,9 @@ UpdateMapScalePageInfo(UIState &state,
 
   state.map_scale_page_title.clear();
 
-  const bool pan_fullscreen =
-    pages.special_page.IsDefined() &&
-    pages.special_page == PageLayout::FullScreen();
-
-#ifdef HAVE_EDL
-  if (pan_fullscreen &&
-      state.weather.edl.session.IsSuspendedForPan() &&
-      configured.UsesEdlOverlay()) {
-    state.map_scale_page_title = EDL::GetOverlayLabel();
-    return;
-  }
-#endif
-  if (pan_fullscreen &&
-      configured.overlay == PageLayout::Overlay::RASP) {
-    state.map_scale_page_title = Rasp::GetPanOverlayLabel(configured);
-    return;
-  }
-
-  if (layout.IsMapMain() &&
-      layout.overlay != PageLayout::Overlay::NONE) {
-    const char *title = layout.MakeTitle(settings.info_boxes,
+  if (overlay_layout.IsMapMain() &&
+      overlay_layout.overlay != PageLayout::Overlay::NONE) {
+    const char *title = overlay_layout.MakeTitle(settings.info_boxes,
                                          std::span{state.map_scale_page_title.data(),
                                                    state.map_scale_page_title.capacity()},
                                          DataGlobals::GetRasp().get(),
@@ -362,6 +347,8 @@ ActionInterface::UpdateDisplayMode() noexcept
 void
 ActionInterface::SendUIState() noexcept
 {
+  UpdateMapScalePageInfo(SetUIState(), GetUISettings());
+
   /* force-update all InfoBoxes just in case the display mode has
      changed */
   InfoBoxManager::SetDirty();

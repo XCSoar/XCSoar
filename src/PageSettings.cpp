@@ -2,80 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "PageSettings.hpp"
+#include "PageOverlayTitle.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
-#include "Weather/Rasp/RaspStore.hpp"
 #include "util/StringBuilder.hxx"
 
 #include <algorithm>
-
-void
-PageLayout::Normalise() noexcept
-{
-  if (main == Main::EDL_MAP) {
-    main = Main::MAP;
-    overlay = Overlay::EDL;
-    if (bottom == Bottom::NOTHING)
-      bottom = Bottom::WEATHER_CONTROLS;
-  }
-
-  if (unsigned(overlay) >= unsigned(Overlay::MAX))
-    overlay = Overlay::NONE;
-
-  if (IsMapMain()) {
-    if (overlay != Overlay::EDL && overlay != Overlay::RASP &&
-        overlay != Overlay::XCTHERM &&
-        bottom == Bottom::WEATHER_CONTROLS)
-      bottom = Bottom::NOTHING;
-  } else {
-    overlay = Overlay::NONE;
-    if (bottom == Bottom::WEATHER_CONTROLS)
-      bottom = Bottom::NOTHING;
-  }
-
-  if (overlay != Overlay::RASP)
-    rasp_field = -1;
-  else if (rasp_field < -1)
-    rasp_field = -1;
-}
-
-static void
-AppendOverlayTitle(BasicStringBuilder<char> &builder,
-                   const PageLayout &layout,
-                   const RaspStore *rasp)
-{
-  switch (layout.overlay) {
-  case PageLayout::Overlay::NONE:
-    break;
-
-  case PageLayout::Overlay::RASP:
-    builder.Append(", RASP");
-    if (rasp != nullptr &&
-        layout.rasp_field >= 0 &&
-        unsigned(layout.rasp_field) < rasp->GetItemCount()) {
-      const auto &item = rasp->GetItemInfo(layout.rasp_field);
-      const char *label = item.label != nullptr
-        ? gettext(item.label)
-        : item.name;
-      if (label != nullptr && *label != '\0') {
-        builder.Append(' ');
-        builder.Append(label);
-      }
-    }
-    break;
-
-  case PageLayout::Overlay::EDL:
-    builder.Append(", EDL");
-    break;
-
-  case PageLayout::Overlay::XCTHERM:
-    builder.Append(", XCTherm");
-    break;
-
-  case PageLayout::Overlay::MAX:
-    gcc_unreachable();
-  }
-}
 
 const char *
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,

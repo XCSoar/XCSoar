@@ -225,6 +225,7 @@ TEST_NAMES += TestWeatherOverlayPagePlacement
 
 TEST_WEATHER_OVERLAY_PAGE_PLACEMENT_SOURCES = \
 	$(SRC)/PageSettings.cpp \
+	$(TEST_SRC_DIR)/PageOverlayTitleStub.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWeatherOverlayPagePlacement.cpp
@@ -2029,6 +2030,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Audio/VarioSettings.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/PageSettings.cpp \
+	$(TEST_SRC_DIR)/PageOverlayTitleStub.cpp \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
@@ -2462,6 +2464,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/PageSettings.cpp \
+	$(TEST_SRC_DIR)/PageOverlayTitleStub.cpp \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
 	$(SRC)/Gauge/TrafficSettings.cpp \
@@ -2533,6 +2536,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/PageSettings.cpp \
+	$(TEST_SRC_DIR)/PageOverlayTitleStub.cpp \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
 	$(SRC)/Gauge/TrafficSettings.cpp \

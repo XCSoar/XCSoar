@@ -363,35 +363,6 @@ HasSelectedField() noexcept
   return GetFieldCount() > 0 && GetEffectiveFieldIndex() >= 0;
 }
 
-StaticString<64>
-GetPanOverlayLabel(const PageLayout &configured) noexcept
-{
-  StaticString<64> label;
-
-  if (configured.overlay != PageLayout::Overlay::RASP)
-    return label;
-
-  const auto rasp = DataGlobals::GetRasp();
-  if (rasp == nullptr || rasp->GetItemCount() == 0)
-    return label;
-
-  const int field_index = GetFieldIndex(configured);
-  if (field_index < 0)
-    return label;
-
-  const char *field_label =
-    GetFieldLabel(rasp->GetItemInfo(unsigned(field_index)));
-
-  const auto &weather = CommonInterface::GetUIState().weather;
-  if (weather.time_auto_advance || !weather.time.IsPlausible())
-    label.Format(_("RASP %s"), field_label);
-  else
-    label.Format(_("RASP %s %02u:%02u"), field_label,
-                 weather.time.hour, weather.time.minute);
-
-  return label;
-}
-
 static BrokenTime
 GetLocalTimeNow() noexcept
 {

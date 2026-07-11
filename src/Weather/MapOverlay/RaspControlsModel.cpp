@@ -184,7 +184,6 @@ RaspControlsModel::OpenSecondaryPicker() noexcept
 void
 RaspControlsModel::RefreshOverlay() noexcept
 {
-  ActionInterface::SendUIState(true);
 }
 
 void

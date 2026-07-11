@@ -3,7 +3,6 @@
 
 #include "XcthermControlsModel.hpp"
 
-#include "ActionInterface.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "PrimaryTimePicker.hpp"
@@ -303,7 +302,6 @@ XcthermControlsModel::RefreshOverlay() noexcept
     backend.ApplyCurrentSelectionToMap();
   });
 #endif
-  ActionInterface::SendUIState(true);
 }
 
 } // namespace WeatherMapOverlay

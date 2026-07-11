@@ -3,6 +3,7 @@
 
 #include "ControlsWidget.hpp"
 
+#include "ActionInterface.hpp"
 #include "CursorBarLabels.hpp"
 #include "InputEventMisc.hpp"
 #include "Interface.hpp"
@@ -73,6 +74,7 @@ ControlsWidget::RefreshOverlay() noexcept
 {
   UpdateLabels();
   model->RefreshOverlay();
+  ActionInterface::SendUIState(true);
 }
 
 void
@@ -84,6 +86,7 @@ ControlsWidget::ApplyUpdate(ControlsUpdate update) noexcept
 
   case ControlsUpdate::LABELS:
     UpdateLabels();
+    ActionInterface::SendUIState(false);
     break;
 
   case ControlsUpdate::OVERLAY:

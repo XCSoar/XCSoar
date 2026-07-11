@@ -266,36 +266,33 @@ IsDedicatedPageSuspendedForPan() noexcept
   return CommonInterface::GetUIState().weather.xctherm.IsSuspendedForPan();
 }
 
-StaticString<64>
-GetPanOverlayLabel() noexcept
+void
+FormatLayerTitleLabel(StaticString<64> &text) noexcept
 {
-  StaticString<64> label;
-#ifdef ENABLE_OPENGL
-  const auto *map = UIGlobals::GetMap();
-  if (map != nullptr) {
-    const auto *xctherm =
-      dynamic_cast<const XCThermGeoJSONOverlay *>(map->GetOverlay());
-    if (xctherm != nullptr) {
-      const char *layer = xctherm->GetLabel();
-      if (layer != nullptr && *layer != '\0') {
-        label.Format(_("XCTherm %s"), layer);
-        return label;
-      }
-    }
-  }
-#endif
+  text.clear();
 
+  const auto &weather = CommonInterface::GetUIState().weather;
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
-  const int li = FindActiveLayerIndex(settings);
-  if (li >= 0) {
-    label.Format(_("XCTherm %s"),
-                 gettext(GetRegion(settings.model)
-                           .layers[unsigned(li)].short_label));
-  } else
-    label = "XCTherm";
+  const auto &region = GetRegion(settings.model);
 
-  return label;
+  unsigned layer_index = 0;
+  if (weather.xctherm.cursor_initialized) {
+    if (weather.xctherm_cursor.layer >= region.layer_count)
+      return;
+
+    layer_index = weather.xctherm_cursor.layer;
+  } else {
+    const int li = FindActiveLayerIndex(settings);
+    if (li < 0)
+      return;
+
+    layer_index = unsigned(li);
+  }
+
+  const char *label = gettext(region.layers[layer_index].short_label);
+  if (label != nullptr && *label != '\0')
+    text = label;
 }
 
 bool

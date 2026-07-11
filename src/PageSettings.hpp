@@ -200,7 +200,34 @@ struct PageLayout
   /**
    * Convert legacy page layouts to the current representation.
    */
-  void Normalise() noexcept;
+  constexpr void Normalise() noexcept
+  {
+    if (main == Main::EDL_MAP) {
+      main = Main::MAP;
+      overlay = Overlay::EDL;
+      if (bottom == Bottom::NOTHING)
+        bottom = Bottom::WEATHER_CONTROLS;
+    }
+
+    if (unsigned(overlay) >= unsigned(Overlay::MAX))
+      overlay = Overlay::NONE;
+
+    if (IsMapMain()) {
+      if (overlay != Overlay::EDL && overlay != Overlay::RASP &&
+          overlay != Overlay::XCTHERM &&
+          bottom == Bottom::WEATHER_CONTROLS)
+        bottom = Bottom::NOTHING;
+    } else {
+      overlay = Overlay::NONE;
+      if (bottom == Bottom::WEATHER_CONTROLS)
+        bottom = Bottom::NOTHING;
+    }
+
+    if (overlay != Overlay::RASP)
+      rasp_field = -1;
+    else if (rasp_field < -1)
+      rasp_field = -1;
+  }
 
   [[nodiscard]]
   const char *MakeTitle(const InfoBoxSettings &info_box_settings,
