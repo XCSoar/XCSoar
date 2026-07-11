@@ -62,9 +62,9 @@ void ResumeDedicatedPageAfterPan() noexcept;
 bool IsDedicatedPageSuspendedForPan() noexcept;
 
 /**
- * Compact label for the active forecast overlay (map-scale PAN string).
+ * Short layer label for map page titles (e.g. @c "1500m AMSL"), or empty.
  */
-StaticString<64> GetPanOverlayLabel() noexcept;
+void FormatLayerTitleLabel(StaticString<64> &text) noexcept;
 
 /**
  * Apply a cached slice to the map.
