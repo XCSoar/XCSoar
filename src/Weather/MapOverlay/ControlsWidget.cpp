@@ -201,8 +201,15 @@ ControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     break;
 
   case OverlayInputAction::ALTITUDE_AUTO_TOGGLE:
-    if (!model->SupportsSecondaryAutoAdvance())
+    if (!model->SupportsSecondaryAutoAdvance()) {
+      if (model->GetPrimaryAutoAdvance()) {
+        model->SetPrimaryAutoAdvance(false);
+        UpdateLabels();
+      } else {
+        model->EnablePrimaryAutoFromInput();
+      }
       break;
+    }
     model->SetSecondaryAutoAdvance(!model->GetSecondaryAutoAdvance());
     if (model->GetSecondaryAutoAdvance())
       model->ApplySecondaryAutoAdvance();
