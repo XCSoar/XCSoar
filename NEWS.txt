@@ -15,6 +15,8 @@ Version 7.45 - not yet released
   - Outline selected targets on the FLARM traffic radar
   - Weather cursor bar: narrower stepper buttons on touchscreens and clip
     long centre labels instead of hiding them when they do not fit
+  - Fix crash when opening the map item list on waypoints with long
+    non-ASCII comments (UTF-8 truncation)
 * glide computer
   - Speed-to-fly and task calculations are now altitude-corrected: the glide
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,

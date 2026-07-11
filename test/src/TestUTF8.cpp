@@ -3,6 +3,7 @@
 
 #include "util/UTF8.hpp"
 #include "util/StringUtil.hpp"
+#include "util/StaticString.hxx"
 #include "util/Macros.hpp"
 #include "TestUtil.hpp"
 
@@ -183,6 +184,42 @@ TestCopyString()
   }
 }
 
+/**
+ * Test that StaticString::Format / AppendFormat never leave an
+ * incomplete UTF-8 sequence after snprintf truncation.  This is the
+ * map-item list crash path (WaypointListRenderer packs long CUP
+ * comments into StaticString<256>).
+ */
+static void
+TestStaticStringFormat()
+{
+  /* ü = \xc3\xbc — capacity 5 fits "foo" + leading \xc3 only */
+  {
+    StaticString<5> s;
+    s.Format("foo%s", "\xc3\xbc");
+    ok1(strcmp(s.c_str(), "foo") == 0);
+    ok1(ValidateUTF8(s.c_str()));
+  }
+
+  /* AppendFormat: "xx" + "fooü" into capacity 7 → append avail 5
+     truncates after \xc3, then crop */
+  {
+    StaticString<7> s;
+    s.Format("%s", "xx");
+    s.AppendFormat("%s", "foo\xc3\xbc");
+    ok1(strcmp(s.c_str(), "xxfoo") == 0);
+    ok1(ValidateUTF8(s.c_str()));
+  }
+
+  /* 3-byte 目 truncated mid-sequence */
+  {
+    StaticString<6> s;
+    s.Format("foo%s", "\xe7\x9b\xae");
+    ok1(strcmp(s.c_str(), "foo") == 0);
+    ok1(ValidateUTF8(s.c_str()));
+  }
+}
+
 static void
 TestSuffixUTF8()
 {
@@ -223,7 +260,8 @@ int main()
              ARRAY_SIZE(truncate_string_tests) +
              2 * ARRAY_SIZE(copy_string_tests) +
              2 * 7 + 3 +
-             10 + 27);
+             10 + 27 +
+             6);
 
   for (auto i : valid) {
     ok1(ValidateUTF8(i));
@@ -258,6 +296,7 @@ int main()
 
   TestTruncateString();
   TestCopyString();
+  TestStaticStringFormat();
   TestSuffixUTF8();
 
   /* test NextUTF8() */
