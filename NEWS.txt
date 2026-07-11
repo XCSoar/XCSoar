@@ -34,6 +34,8 @@ Version 7.45 - not yet released
   - The saved device port type string for that mode remains ble_hm10 so
     existing profiles load without migration
   - add support for SoftRF Concorde, Prime Mk4, and Retro Mk2 as supported USB devices
+  - Fix crash when the native thread restarts after surface teardown
+    (JNI helper classes were not cleared between runNative calls)
 * devices
   - Android: multi-port USB serial adapters (e.g. dual FTDI) use 0-based port
     suffixes (#0, #1) in both the port list and device list #2481

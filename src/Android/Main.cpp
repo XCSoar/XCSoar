@@ -234,6 +234,16 @@ try {
   const bool have_usb_serial = UsbSerialHelper::Initialise(env);
   const bool have_ioio = IOIOHelper::Initialise(env);
 
+  /* These class globals must be cleared before runNative can be
+     entered again in the same process (e.g. surface recreate before
+     System.exit).  Helper instances below are destroyed first because
+     AtScopeExit runs in reverse registration order. */
+  AtScopeExit(env) {
+    IOIOHelper::Deinitialise(env);
+    UsbSerialHelper::Deinitialise(env);
+    BluetoothHelper::Deinitialise(env);
+  };
+
   context = new Context(env, _context);
   AtScopeExit() {
     delete context;
