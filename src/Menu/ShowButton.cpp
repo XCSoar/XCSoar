@@ -7,6 +7,8 @@
 #include "Look/ButtonLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
+#include "PageActions.hpp"
+#include "PageSettings.hpp"
 #include "UIState.hpp"
 
 #include <memory>
@@ -79,6 +81,13 @@ ShowZoomButton::Create(ContainerWindow &parent, const ButtonLook &look,
 bool
 ShowZoomButton::OnClicked() noexcept
 {
+  if (PageActions::GetCurrentLayout().UsesWeatherOverlay()) {
+    InputEvents::eventWeatherOverlay(sign == Sign::ZOOM_IN
+                                     ? "field picker"
+                                     : "field auto toggle");
+    return true;
+  }
+
   InputEvents::eventZoom(sign == Sign::ZOOM_IN ? "in" : "out");
   return true;
 }
