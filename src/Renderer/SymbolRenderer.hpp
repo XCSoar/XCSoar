@@ -20,4 +20,5 @@ namespace SymbolRenderer
   void DrawSign(Canvas &canvas, PixelRect rc, bool plus,
                 unsigned max_draw_size=0) noexcept;
   void DrawHamburger(Canvas &canvas, PixelRect rc) noexcept;
+  void DrawBolt(Canvas &canvas, PixelRect rc) noexcept;
 }
