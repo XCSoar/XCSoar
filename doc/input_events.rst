@@ -536,9 +536,9 @@ Built-in modes
   menu (**Forecast Controls** on RemoteStick) or via the ``Mode weather``
   event. Stick UP/DOWN step the secondary axis (layer, level, or
   altitude), LEFT/RIGHT step time, RETURN opens the time picker, ESCAPE
-  returns to ``default``. On map pages with weather overlay controls,
-  F2 and the on-screen **+** button open the secondary list; F3 and
-  **−** toggle auto (secondary axis on EDL/XCTherm, time auto on RASP).
+  returns to ``default``. In ``mode=weather``, F2 opens the secondary
+  list and F3 toggles auto (secondary axis on EDL/XCTherm, time auto on
+  RASP). The map overlay **+** / **−** buttons always zoom the map.
   See :ref:`weather-overlay-mode` below.
 - ``wptimg`` -- the waypoint details dialog is on an **image** page;
   key bindings in this map control zoom and pan of the image (the
@@ -578,17 +578,19 @@ The built-in stick bindings in :file:`Data/Input/default.xci` are:
  * - RETURN
    - ``WeatherOverlay time picker``
    - Open time picker (Auto, Now, manual)
- * - F2 / on-screen **+**
+ * - F2
    - ``WeatherOverlay field picker``
    - Open secondary-axis list (layer, level, or altitude)
- * - F3 / on-screen **−**
+ * - F3
    - ``WeatherOverlay field auto toggle``
    - Toggle secondary auto (EDL/XCTherm) or time auto (RASP)
  * - ESCAPE
    - ``Mode default``
    - Exit weather input mode
 
-On-screen menubar buttons (locations 1--7) mirror these actions:
+The map overlay **+** / **−** buttons always zoom the map (they are not
+remapped in weather mode). On-screen menubar buttons (locations 1--7)
+mirror the stick actions:
 
 .. list-table::
  :widths: 15 35 50
@@ -602,10 +604,10 @@ On-screen menubar buttons (locations 1--7) mirror these actions:
    - ``Time- (LEFT)``
  * - 2
    - Secondary list
-   - Layer / Level / Altitude list (``F2/+``)
+   - Layer / Level / Altitude list (``F2``)
  * - 3
    - Auto toggle
-   - Time auto (RASP) or secondary auto (EDL/XCTherm) (``F3/-``)
+   - Time auto (RASP) or secondary auto (EDL/XCTherm) (``F3``)
  * - 4
    - Time step forward
    - ``Time+ (RIGHT)``

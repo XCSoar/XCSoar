@@ -291,8 +291,8 @@ location=8
 # ------------
 # mode=weather (weather overlay cursor bar)
 # Stick: UP/DOWN field, LEFT/RIGHT time, RETURN time picker, ESCAPE exit
-# Zoom: F2/+ = list, F3/- = auto
-# Buttons: 1=Time-, 2=List (F2/+), 3=Auto (F3/-), 4=Time+,
+# Keys: F2 = list, F3 = auto (map overlay +/- always zoom)
+# Buttons: 1=Time-, 2=List (F2), 3=Auto (F3), 4=Time+,
 #          5=Field+, 6=Field-, 7=Time Picker
 # ------------
 
