@@ -2802,7 +2802,7 @@ $(eval $(call link-program,TestDMStScoring,TEST_DMST_SCORING))
 TEST_VERSION_NUMBER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestVersionNumber.cpp
-TEST_VERSION_NUMBER_DEPENDS = MATH UTILS
+TEST_VERSION_NUMBER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestVersionNumber,TEST_VERSION_NUMBER))
 
 TEST_HTTPS_VERIFY_SOURCES = \

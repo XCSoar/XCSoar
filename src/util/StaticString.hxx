@@ -218,6 +218,10 @@ public:
 	/**
 	 * Use snprintf() to set the value of this string.  The value
 	 * is truncated if it is too long for the buffer.
+	 *
+	 * When truncated, any incomplete trailing UTF-8 sequence is
+	 * removed so the result remains valid UTF-8 (same as
+	 * CopyString()).
 	 */
 	template<typename... Args>
 	std::basic_string_view<T> Format(const_pointer fmt, Args&&... args) noexcept {
@@ -227,9 +231,12 @@ public:
 			return {};
 
 		size_type length = (size_type)s_length;
-		if (length >= capacity())
-			/* truncated */
-			length = capacity() - 1;
+		if (length >= capacity()) {
+			/* truncated — snprintf may have split a multi-byte
+			   UTF-8 sequence at the buffer end */
+			CropIncompleteUTF8(data());
+			length = StringLength(data());
+		}
 
 		return {data(), length};
 	}
@@ -237,11 +244,18 @@ public:
 	/**
 	 * Use snprintf() to append to this string.  The value is
 	 * truncated if it would become too long for the buffer.
+	 *
+	 * When truncated, any incomplete trailing UTF-8 sequence is
+	 * removed so the result remains valid UTF-8 (same as
+	 * CopyString()).
 	 */
 	template<typename... Args>
 	void AppendFormat(const_pointer fmt, Args&&... args) noexcept {
 		size_t l = length();
-		StringFormat(data() + l, capacity() - l, fmt, args...);
+		const size_t avail = capacity() - l;
+		int s_length = StringFormat(data() + l, avail, fmt, args...);
+		if (s_length >= 0 && (size_t)s_length >= avail)
+			CropIncompleteUTF8(data());
 	}
 
 	/**
