@@ -260,6 +260,23 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
   if (value != nullptr)
     return value;
 
+  if (name == "WeatherSecondaryPlusLabel" ||
+      name == "WeatherSecondaryMinusLabel") {
+    const bool plus = name == "WeatherSecondaryPlusLabel";
+    switch (GetUIState().page_overlay) {
+    case PageLayout::Overlay::EDL:
+      return plus ? _("Level+\n(UP)") : _("Level-\n(DOWN)");
+
+    case PageLayout::Overlay::XCTHERM:
+      return plus ? _("Altitude+\n(UP)") : _("Altitude-\n(DOWN)");
+
+    case PageLayout::Overlay::RASP:
+    case PageLayout::Overlay::NONE:
+    case PageLayout::Overlay::MAX:
+      return plus ? _("Field+\n(UP)") : _("Field-\n(DOWN)");
+    }
+  }
+
   if (name =="CheckFLARM") {
     invalid |= !Basic().flarm.status.available;
     return nullptr;

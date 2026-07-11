@@ -28,8 +28,9 @@ enum class OverlayInputAction {
  * Parse a ``WeatherOverlay`` misc argument.
  *
  * Step commands use a common ``<axis> +/-`` form: ``time +``,
- * ``time -``, ``altitude +``, ``altitude -``. EDL accepts ``level``
- * as an alias for ``altitude``. Auto/manual commands use
+ * ``time -``, ``altitude +``, ``altitude -``. ``field +/-`` and EDL
+ * ``level +/-`` are accepted as aliases for ``altitude +/-``.
+ * Auto/manual commands use
  * ``<axis> auto …`` (``toggle``, ``on``, ``off``, ``show``).
  */
 [[gnu::pure]]
@@ -46,9 +47,13 @@ ParseOverlayInputAction(const char *misc) noexcept
   if (StringIsEqual(misc, "time picker"))
     return OverlayInputAction::TIME_PICKER;
 
-  if (StringIsEqual(misc, "altitude +") || StringIsEqual(misc, "level +"))
+  if (StringIsEqual(misc, "altitude +") ||
+      StringIsEqual(misc, "field +") ||
+      StringIsEqual(misc, "level +"))
     return OverlayInputAction::ALTITUDE_PLUS;
-  if (StringIsEqual(misc, "altitude -") || StringIsEqual(misc, "level -"))
+  if (StringIsEqual(misc, "altitude -") ||
+      StringIsEqual(misc, "field -") ||
+      StringIsEqual(misc, "level -"))
     return OverlayInputAction::ALTITUDE_MINUS;
 
   if (StringIsEqual(misc, "time auto toggle"))
@@ -61,15 +66,19 @@ ParseOverlayInputAction(const char *misc) noexcept
     return OverlayInputAction::TIME_AUTO_SHOW;
 
   if (StringIsEqual(misc, "altitude auto toggle") ||
+      StringIsEqual(misc, "field auto toggle") ||
       StringIsEqual(misc, "level auto toggle"))
     return OverlayInputAction::ALTITUDE_AUTO_TOGGLE;
   if (StringIsEqual(misc, "altitude auto on") ||
+      StringIsEqual(misc, "field auto on") ||
       StringIsEqual(misc, "level auto on"))
     return OverlayInputAction::ALTITUDE_AUTO_ON;
   if (StringIsEqual(misc, "altitude auto off") ||
+      StringIsEqual(misc, "field auto off") ||
       StringIsEqual(misc, "level auto off"))
     return OverlayInputAction::ALTITUDE_AUTO_OFF;
   if (StringIsEqual(misc, "altitude auto show") ||
+      StringIsEqual(misc, "field auto show") ||
       StringIsEqual(misc, "level auto show"))
     return OverlayInputAction::ALTITUDE_AUTO_SHOW;
 
