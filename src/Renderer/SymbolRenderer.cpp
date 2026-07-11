@@ -113,3 +113,27 @@ SymbolRenderer::DrawHamburger(Canvas &canvas, PixelRect rc) noexcept
   DrawBarAt(canvas, center, margin);
   DrawBarAt(canvas, {center.x, center.y + step}, margin);
 }
+
+void
+SymbolRenderer::DrawBolt(Canvas &canvas, PixelRect rc) noexcept
+{
+  const unsigned min_dim = MinDimension(rc);
+  if (min_dim == 0)
+    return;
+
+  /* Material-style lightning bolt (filled zigzag), sized like the
+     hamburger icon so it reads clearly on map overlay buttons. */
+  const int s = int(std::max(1u, min_dim * 3 / 8));
+  const auto c = rc.GetCenter();
+
+  const BulkPixelPoint bolt[] = {
+    {c.x + s * 2 / 10, c.y - s},
+    {c.x - s * 5 / 10, c.y + s / 10},
+    {c.x - s / 10, c.y + s / 10},
+    {c.x - s * 2 / 10, c.y + s},
+    {c.x + s * 5 / 10, c.y - s / 10},
+    {c.x + s / 10, c.y - s / 10},
+  };
+
+  canvas.DrawPolygon(bolt, 6);
+}

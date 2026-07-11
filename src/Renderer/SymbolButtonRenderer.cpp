@@ -17,7 +17,7 @@ SymbolButtonRenderer::IsSymbolCaption(const char *caption) noexcept
     return false;
 
   return ch == '+' || ch == '-' || ch == '<' || ch == '>' ||
-    ch == '^' || ch == 'v' || ch == 'h';
+    ch == '^' || ch == 'v' || ch == 'h' || ch == 'q';
 }
 
 [[gnu::pure]]
@@ -89,6 +89,10 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc,
   // Draw hamburger menu icon (map overlay menu button)
   else if (ch == 'h')
     SymbolRenderer::DrawHamburger(canvas, rc);
+
+  // Draw bolt icon (map overlay QuickMenu button)
+  else if (ch == 'q')
+    SymbolRenderer::DrawBolt(canvas, rc);
 }
 
 void
