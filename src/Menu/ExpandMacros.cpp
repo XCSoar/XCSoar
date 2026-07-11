@@ -280,15 +280,30 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
   if (name == "WeatherSecondaryPickerLabel") {
     switch (GetUIState().page_overlay) {
     case PageLayout::Overlay::EDL:
-      return _("Level\nList\n(APP4)");
+      return _("Level\nList\n(F2/+)");
 
     case PageLayout::Overlay::XCTHERM:
-      return _("Altitude\nList\n(APP4)");
+      return _("Altitude\nList\n(F2/+)");
 
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
-      return _("Layer\nList\n(APP4)");
+      return _("Layer\nList\n(F2/+)");
+    }
+  }
+
+  if (name == "WeatherSecondaryAutoLabel") {
+    switch (GetUIState().page_overlay) {
+    case PageLayout::Overlay::EDL:
+      return _("Level\nAuto\n(F3/-)");
+
+    case PageLayout::Overlay::XCTHERM:
+      return _("Altitude\nAuto\n(F3/-)");
+
+    case PageLayout::Overlay::RASP:
+    case PageLayout::Overlay::NONE:
+    case PageLayout::Overlay::MAX:
+      return _("Time\nAuto\n(F3/-)");
     }
   }
 
