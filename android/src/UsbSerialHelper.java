@@ -59,6 +59,8 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x303a, 0x81a0), // SoftRF Midi
     createDevice(0x303a, 0x820a), // SoftRF Ink
     createDevice(0x2886, 0x0057), // SoftRF Card
+    createDevice(0x303a, 0x8343), // SoftRF Concorde
+    createDevice(0x303a, 0x8366), // SoftRF Prime Mk4
 
     createDevice(0x0403, 0x6001), // FT232AM, FT232BM, FT232R FT245R,
     createDevice(0x0403, 0x6010), // FT2232D, FT2232H
@@ -66,7 +68,9 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     createDevice(0x0403, 0x6014), // FT232H
 
     createDevice(0x10C4, 0xEA60), // CP210x
+    createDevice(0x1A86, 0x55D3), // CH343
     createDevice(0x1A86, 0x55D4), // CH9102
+    createDevice(0x1A86, 0x7523), // CH340, SoftRF Retro Mk2
 
     createDevice(0x067B, 0x2303), // PL2303
     createDevice(0x1546, 0x01A7)  // U-BLOX 7 USB GPS

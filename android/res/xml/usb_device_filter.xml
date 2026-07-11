@@ -22,6 +22,8 @@
   <usb-device vendor-id="12346" product-id="33184"/> <!-- SoftRF Midi -->
   <usb-device vendor-id="12346" product-id="33290"/> <!-- SoftRF Ink -->
   <usb-device vendor-id="10374" product-id="87"/> <!-- SoftRF Card -->
+  <usb-device vendor-id="12346" product-id="33603"/> <!-- SoftRF Concorde -->
+  <usb-device vendor-id="12346" product-id="33638"/> <!-- SoftRF Prime Mk4 -->
 
   <usb-device vendor-id="1027" product-id="24577"/> <!-- FT232AM, FT232BM, FT232R FT245R -->
   <usb-device vendor-id="1027" product-id="24592"/> <!-- FT2232D, FT2232H -->
@@ -29,7 +31,9 @@
   <usb-device vendor-id="1027" product-id="24596"/> <!-- FT232H -->
 
   <usb-device vendor-id="4292" product-id="60000"/> <!-- CP210x -->
+  <usb-device vendor-id="6790" product-id="21971"/> <!-- CH343 -->
   <usb-device vendor-id="6790" product-id="21972"/> <!-- CH9102 -->
+  <usb-device vendor-id="6790" product-id="29987"/> <!-- CH340, SoftRF Retro Mk2 -->
 
   <usb-device vendor-id="1659" product-id="8963"/> <!-- PL2303 -->
 
