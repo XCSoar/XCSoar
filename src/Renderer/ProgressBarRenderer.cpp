@@ -24,7 +24,8 @@ void
 DrawSimpleProgressBar(Canvas &canvas, const PixelRect &r,
                       unsigned current_value,
                       unsigned min_value, unsigned max_value,
-                      const Color *background_color) noexcept
+                      const Color *background_color,
+                      const Color *progress_color) noexcept
 {
   const int position =
     CalcProgressBarPosition(current_value, min_value, max_value,
@@ -33,7 +34,12 @@ DrawSimpleProgressBar(Canvas &canvas, const PixelRect &r,
   auto a = r, b = r;
   a.right = b.left = a.left + position;
 
-  canvas.DrawFilledRectangle(a, IsDithered() ? COLOR_BLACK : COLOR_GREEN);
+  const Color fill_color = IsDithered()
+    ? COLOR_BLACK
+    : progress_color != nullptr
+      ? HasColors() ? *progress_color : COLOR_BLACK
+      : COLOR_GREEN;
+  canvas.DrawFilledRectangle(a, fill_color);
   canvas.DrawFilledRectangle(b,
                              background_color != nullptr
                              ? *background_color : COLOR_WHITE);
