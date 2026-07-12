@@ -32,6 +32,7 @@ struct ForecastProgress {
   unsigned total = 0;
   unsigned completed = 0;
   unsigned failed = 0;
+  unsigned retry_seconds = 0;
 };
 
 struct LegendColor {

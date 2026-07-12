@@ -51,6 +51,7 @@ public:
   bool IsThrottled() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
+  void Poll() noexcept;
 
   const std::vector<SkysightRegionEntry> &GetRegions() const noexcept {
     return regions;
@@ -119,6 +120,7 @@ public:
                        bool preparation_failed=false) noexcept;
   void OnDownloadComplete() noexcept;
   void OnThrottle() noexcept;
+  void OnThrottleEnded() noexcept;
 
 private:
   static constexpr std::size_t MAX_SELECTED_LAYERS = 8;

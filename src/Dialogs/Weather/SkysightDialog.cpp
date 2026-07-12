@@ -8,7 +8,6 @@
 #include "DataGlobals.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/Weather/OverlayPageActions.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -26,6 +25,7 @@
 #include "Widget/MultiSelectListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Weather/Skysight/Skysight.hpp"
+#include "Dialogs/Weather/OverlayPageActions.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include "util/StaticString.hxx"
@@ -96,12 +96,15 @@ public:
 
     StaticString<256> second_row;
     if (layer->updating) {
-      if (!layer->SupportsLiveTiles() && layer->datafiles_pending) {
-        if (skysight->IsThrottled())
-          second_row = _("Rate-limited by SkySight, retrying forecast steps shortly...");
-        else
-          second_row = _("Loading forecast steps...");
-      }
+      if (skysight->IsThrottled())
+        second_row.Format(_("Download limit reached; retrying in %u seconds..."),
+                          unsigned(skysight->GetThrottleRemainingSeconds()));
+      else if (const auto retry = skysight->GetDatafilesRetryRemainingSeconds();
+               retry > 0 && layer->datafiles_pending)
+        second_row.Format(_("Connection failed; retrying in %u seconds..."),
+                          unsigned(retry));
+      else if (!layer->SupportsLiveTiles() && layer->datafiles_pending)
+        second_row = _("Loading forecast steps...");
       else if (!layer->SupportsLiveTiles() && layer->decoding)
         second_row = _("Decoding forecast data...");
       else if (!layer->SupportsLiveTiles() && layer->pending_downloads > 1)
@@ -268,7 +271,6 @@ protected:
 class SkysightWidget final : public ListWidget {
   std::shared_ptr<Skysight> skysight;
   ButtonPanelWidget *buttons_widget = nullptr;
-  Button *activate_button = nullptr;
   Button *select_button = nullptr;
   Button *time_button = nullptr;
   Button *preload_button = nullptr;
@@ -298,19 +300,8 @@ public:
   }
 
 protected:
-  bool CanActivateItem(unsigned i) const noexcept override {
-    return skysight != nullptr && i < skysight->NumSelectedLayers();
-  }
-
-  void OnActivateItem(unsigned i) noexcept override {
-    if (skysight == nullptr || i >= skysight->NumSelectedLayers())
-      return;
-
-    const auto *layer = skysight->GetSelectedLayer(i);
-    if (layer != nullptr && skysight->GetActiveLayerId() == layer->id)
-      DeactivateClicked();
-    else
-      ActivateClicked(i);
+  bool CanActivateItem([[maybe_unused]] unsigned i) const noexcept override {
+    return false;
   }
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -320,19 +311,16 @@ protected:
 
 private:
   void CreateButtons(ButtonPanel &buttons) {
-    activate_button = buttons.Add(_("Activate"), [this]() {
-      ActivateClicked(GetList().GetCursorIndex());
-    });
     select_button = buttons.Add(_("Select"), [this]() {
       SelectClicked();
     });
     time_button = buttons.Add(_("Time"), [this]() {
       SelectTimeClicked();
     });
-    preload_button = buttons.Add(_("Preload"), [this]() {
+    preload_button = buttons.Add(_("Preload Layer"), [this]() {
       PreloadClicked();
     });
-    preload_all_button = buttons.Add(_("Preload All"), [this]() {
+    preload_all_button = buttons.Add(_("Preload Selected"), [this]() {
       PreloadAllClicked();
     });
     buttons.Add(_("Add to page"), [this]() {
@@ -345,7 +333,7 @@ private:
   }
 
   void UpdateButtons() {
-    if (activate_button == nullptr || select_button == nullptr ||
+    if (select_button == nullptr ||
         time_button == nullptr || preload_button == nullptr ||
         preload_all_button == nullptr)
       return;
@@ -360,10 +348,8 @@ private:
 
     const auto index = empty ? 0u : GetList().GetCursorIndex();
     const auto *layer = empty ? nullptr : skysight->GetSelectedLayer(index);
-    const auto active = layer != nullptr && skysight->GetActiveLayerId() == layer->id;
 
     bool any_forecast_layer = false;
-    bool any_idle_forecast_layer = false;
     if (skysight != nullptr) {
       for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
         const auto *selected_layer = skysight->GetSelectedLayer(i);
@@ -371,7 +357,6 @@ private:
           continue;
 
         any_forecast_layer = true;
-        any_idle_forecast_layer = any_idle_forecast_layer || !selected_layer->updating;
       }
     }
 
@@ -381,19 +366,7 @@ private:
     preload_button->SetEnabled(layer != nullptr && !layer->SupportsLiveTiles() &&
                                skysight->HasCredentials() && !layer->updating);
     preload_all_button->SetEnabled(skysight != nullptr && skysight->HasCredentials() &&
-                                   any_forecast_layer && any_idle_forecast_layer);
-
-    if (active) {
-      activate_button->SetEnabled(true);
-      activate_button->SetCaption(_("Deactivate"));
-      activate_button->SetCallback([this]() { DeactivateClicked(); });
-    } else {
-      activate_button->SetEnabled(layer != nullptr);
-      activate_button->SetCaption(_("Activate"));
-      activate_button->SetCallback([this]() {
-        ActivateClicked(GetList().GetCursorIndex());
-      });
-    }
+                                   any_forecast_layer);
   }
 
   void UpdateList() {
@@ -506,27 +479,6 @@ private:
     UpdateButtons();
   }
 
-  void ActivateClicked(unsigned index) {
-    if (skysight == nullptr || index >= skysight->NumSelectedLayers())
-      return;
-
-    const auto *layer = skysight->GetSelectedLayer(index);
-    if (layer == nullptr)
-      return;
-
-    if (layer->requires_auth && !skysight->HasCredentials()) {
-      ShowMessageBox(
-        _("Configure your SkySight credentials in Weather settings before enabling SkySight layers."),
-        _("SkySight"), MB_OK);
-      return;
-    }
-
-    if (!skysight->SetLayerActive(layer->id))
-      ShowMessageBox(_("Couldn't display data."), _("Display Error"), MB_OK);
-
-    UpdateList();
-  }
-
   void SelectTimeClicked() {
     if (skysight == nullptr)
       return;
@@ -555,14 +507,6 @@ private:
     UpdateList();
   }
 
-  void ShowPreloadThrottledMessage() const {
-    StaticString<256> message;
-    message.Format(_("SkySight is rate-limited for about %s. Cached/older forecast data will remain visible. Please try preload again later."),
-                   FormatTimespanSmart(std::chrono::seconds(
-                     skysight->GetThrottleRemainingSeconds())).c_str());
-    ShowMessageBox(message, _("SkySight"), MB_OK);
-  }
-
   void PreloadClicked() {
     if (skysight == nullptr)
       return;
@@ -576,9 +520,7 @@ private:
       return;
 
     const bool success = skysight->PreloadForecast(layer->id);
-    if (skysight->IsThrottled()) {
-      ShowPreloadThrottledMessage();
-    } else if (!success) {
+    if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
                      _("SkySight"), MB_OK);
     }
@@ -590,20 +532,25 @@ private:
     if (skysight == nullptr)
       return;
 
+    const unsigned layers = skysight->GetSelectedForecastLayerCount();
+    const unsigned files = skysight->GetPreloadFileCount();
+    StaticString<256> prompt;
+    if (files > 0)
+      prompt.Format(_("Cache %u forecast files for %u selected SkySight layers for offline use?"),
+                    files, layers);
+    else
+      prompt.Format(_("Discover and cache all forecasts for %u selected SkySight layers for offline use?"),
+                    layers);
+
+    if (ShowMessageBox(prompt.c_str(), _("SkySight offline cache"),
+                       MB_YESNO | MB_ICONQUESTION) != IDYES)
+      return;
+
     const bool success = skysight->PreloadAllForecasts();
-    if (skysight->IsThrottled()) {
-      ShowPreloadThrottledMessage();
-    } else if (!success) {
+    if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
                      _("SkySight"), MB_OK);
     }
-
-    UpdateList();
-  }
-
-  void DeactivateClicked() {
-    if (skysight != nullptr)
-      skysight->DeactivateLayer();
 
     UpdateList();
   }

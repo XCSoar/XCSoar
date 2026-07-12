@@ -39,6 +39,17 @@ public:
      status(_status) {}
 };
 
+[[nodiscard]] static constexpr bool
+ShouldRetryHttpDownload(unsigned status, unsigned attempts) noexcept
+{
+  return status == 429 || (status >= 500 && attempts < 2);
+}
+
+static_assert(ShouldRetryHttpDownload(429, 99));
+static_assert(ShouldRetryHttpDownload(503, 0));
+static_assert(!ShouldRetryHttpDownload(503, 2));
+static_assert(!ShouldRetryHttpDownload(404, 0));
+
 static boost::json::value
 ParseJsonResponse(std::string_view body, const char *context)
 {
@@ -241,6 +252,36 @@ SkySightRequest::IsQueued(std::string_view key) const noexcept
 }
 
 void
+SkySightRequest::RequeueFileJob(const FileJob &job, time_t ready_at) noexcept
+{
+  PendingJob pending{
+    job.kind,
+    std::string{job.path.c_str()},
+    job.url,
+    AllocatedPath{job.path.c_str()},
+    job.requires_auth,
+    job.layer_id,
+    job.forecast_time,
+  };
+  pending.ready_at = ready_at;
+  pending.attempts = job.attempts + 1;
+  pending_jobs.push_front(std::move(pending));
+}
+
+bool
+SkySightRequest::Poll() noexcept
+{
+  PumpQueue();
+
+  if (throttle_until == 0 && throttle_resume_notification_pending) {
+    throttle_resume_notification_pending = false;
+    return true;
+  }
+
+  return false;
+}
+
+void
 SkySightRequest::PumpQueue()
 {
   CleanupFinishedJobs();
@@ -256,11 +297,9 @@ SkySightRequest::PumpQueue()
     auto job = std::move(pending_jobs.front());
     pending_jobs.pop_front();
 
-    if (auto retry = retry_after.find(job.key); retry != retry_after.end()) {
-      if (now < retry->second)
-        continue;
-
-      retry_after.erase(retry);
+    if (now < job.ready_at) {
+      pending_jobs.push_front(std::move(job));
+      break;
     }
 
     if (job.requires_auth && !IsLoggedIn()) {
@@ -274,12 +313,15 @@ SkySightRequest::PumpQueue()
     const auto key = job.key;
     job_ptr->kind = job.kind;
     job_ptr->path = std::move(job.path);
+    job_ptr->url = std::move(job.url);
+    job_ptr->requires_auth = job.requires_auth;
     job_ptr->layer_id = job.layer_id;
     job_ptr->forecast_time = job.forecast_time;
+    job_ptr->attempts = job.attempts;
 
     file_jobs.emplace(key, std::move(active_job));
     job_ptr->function.Start(
-      DownloadFileTask(curl, std::move(job.url),
+      DownloadFileTask(curl, job_ptr->url,
                        AllocatedPath(job_ptr->path.c_str()),
                        job.requires_auth ? api_key : std::string{}),
       [this, key](AllocatedPath) {
@@ -719,33 +761,49 @@ SkySightRequest::OnFileError(const std::string &key,
   std::string layer_id;
   time_t forecast_time = 0;
   FileJob::Kind kind = FileJob::Kind::Generic;
+  FileJob *failed_job = nullptr;
   if (auto i = file_jobs.find(key); i != file_jobs.end()) {
     i->second->finished = true;
+    failed_job = i->second.get();
     layer_id = i->second->layer_id;
     forecast_time = i->second->forecast_time;
     kind = i->second->kind;
   }
+
+  bool terminal_forecast_error = !layer_id.empty() &&
+    kind == FileJob::Kind::ForecastData;
 
   try {
     std::rethrow_exception(error);
   } catch (const HttpStatusError &http_error) {
     const auto retry_delay = http_error.status == 429
       ? THROTTLE_RETRY_SECONDS
-      : (http_error.status == 404 ? NOT_FOUND_RETRY_SECONDS : ERROR_RETRY_SECONDS);
+      : ERROR_RETRY_SECONDS;
     const auto retry_time = std::time(nullptr) + retry_delay;
-    retry_after[key] = retry_time;
-
     if (http_error.status == 429) {
       SetThrottleUntil(retry_time);
       api.OnThrottle();
       LogThrottleNotice();
+      if (failed_job != nullptr) {
+        RequeueFileJob(*failed_job, retry_time);
+        terminal_forecast_error = false;
+      }
+    } else if (failed_job != nullptr &&
+               ShouldRetryHttpDownload(http_error.status,
+                                       failed_job->attempts)) {
+      RequeueFileJob(*failed_job, retry_time);
+      terminal_forecast_error = false;
     } else {
       LogDownloadHttpError(kind == FileJob::Kind::ForecastData,
                            layer_id, forecast_time,
                            http_error.status, key);
     }
   } catch (...) {
-    retry_after[key] = std::time(nullptr) + ERROR_RETRY_SECONDS;
+    const auto retry_time = std::time(nullptr) + ERROR_RETRY_SECONDS;
+    if (failed_job != nullptr && failed_job->attempts < 2) {
+      RequeueFileJob(*failed_job, retry_time);
+      terminal_forecast_error = false;
+    }
     if (!layer_id.empty()) {
       LogFmt("SkySight {} download failed for layer '{}' (forecast_time={})",
              kind == FileJob::Kind::ForecastData ? "forecast" : "tile",
@@ -756,6 +814,9 @@ SkySightRequest::OnFileError(const std::string &key,
              ? "SkySight forecast download failed"
              : "SkySight tile download failed");
   }
+
+  if (terminal_forecast_error)
+    api.OnDatafileError(layer_id, forecast_time);
 
   PumpQueue();
 }
@@ -820,9 +881,10 @@ void
 SkySightRequest::SetThrottleUntil(time_t value) noexcept
 {
   throttle_until = value;
-  if (throttle_until > std::time(nullptr))
+  if (throttle_until > std::time(nullptr)) {
+    throttle_resume_notification_pending = true;
     StoreThrottleState();
-  else
+  } else
     ClearThrottleState();
 }
 

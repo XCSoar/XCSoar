@@ -7,6 +7,7 @@
 #include "ui/canvas/custom/GeoBitmap.hpp"
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
+#include "ui/event/PeriodicTimer.hpp"
 
 #include <array>
 #include <memory>
@@ -28,7 +29,9 @@ class Skysight final {
   bool forecast_image_dirty = true;
   bool forecast_cleanup_pending = true;
   bool forecast_progress_visible = false;
+  bool throttle_notification_active = false;
   std::array<std::string, 9> tile_filenames;
+  UI::PeriodicTimer request_timer;
 
 public:
   explicit Skysight(CurlGlobal &curl);
@@ -54,6 +57,8 @@ public:
   bool SelectPageLayer(std::string_view id);
   bool PreloadForecast(std::string_view id) noexcept;
   bool PreloadAllForecasts() noexcept;
+  unsigned GetPreloadFileCount() const noexcept;
+  unsigned GetSelectedForecastLayerCount() const noexcept;
   bool HasForecastLayers() const noexcept;
   bool IsForecastDecodeAvailable() const noexcept;
   void RefreshCatalog() noexcept;
@@ -78,6 +83,8 @@ public:
   void OnLayerCatalogChanged(std::string_view active_id,
                              std::string_view displayed_id) noexcept;
   void OnDataUpdated() noexcept;
+  void OnForecastThrottled() noexcept;
+  void OnForecastResumed() noexcept;
   void OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept;
 
 private:
