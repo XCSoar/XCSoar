@@ -40,6 +40,11 @@ toolchain = Toolchain(xcsoar_path, lib_path,
 from build.libs import *
 
 geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
+use_angle_env = os.environ.get('USE_ANGLE', 'auto')
+if use_angle_env == 'auto':
+    use_angle = toolchain.is_darwin and not toolchain.is_target_ios
+else:
+    use_angle = (use_angle_env == 'y')
 
 thirdparty_projects = {
     'binutils': binutils,
@@ -65,6 +70,7 @@ thirdparty_projects = {
     'libusb': libusb,
     'simple-usbmodeswitch': simple_usbmodeswitch,
     'sdl2': sdl2,
+    'angle': angle,
 }
 
 if toolchain.is_windows:
@@ -76,6 +82,10 @@ if toolchain.is_windows:
         curl,
         lua,
     ]
+    if use_angle:
+        thirdparty_libs += [
+            angle,
+        ]
 
     # Add SDL2, sqlite3, and their dependencies for OpenGL/ANGLE builds
     if enable_sdl:
@@ -102,6 +112,12 @@ elif toolchain.is_darwin:
         cares,
         curl,
         lua,
+    ]
+    if use_angle:
+        thirdparty_libs += [
+            angle,
+        ]
+    thirdparty_libs += [
         sdl2
     ]
     if geotiff_enabled:
