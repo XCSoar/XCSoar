@@ -7,6 +7,7 @@
 #include "Engine/Waypoint/Ptr.hpp"
 
 #include <cstddef>
+#include <cstdint>
 
 enum class AlternateInfoBoxMode : uint8_t {
   AUTO,
