@@ -6,24 +6,8 @@
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Geo/GeoPoint.hpp"
 #include <chrono>
-#include <cstdint>
 #include <vector>
 #include <string>
-
-namespace NOTAMTime {
-
-/// Seconds since Unix epoch for 2100-01-01T00:00:00Z.
-constexpr std::int64_t PERMANENT_END_EPOCH_SECONDS = 4102444800LL;
-
-constexpr std::chrono::system_clock::time_point
-PermanentEndTime() noexcept
-{
-  return std::chrono::system_clock::time_point{
-    std::chrono::seconds{PERMANENT_END_EPOCH_SECONDS}
-  };
-}
-
-} // namespace NOTAMTime
 
 namespace NOTAMAltitude {
 
@@ -67,6 +51,9 @@ struct NOTAM {
   
   /** End time of the NOTAM validity */
   std::chrono::system_clock::time_point end_time;
+
+  /** Whether the API specified a permanent ("PERM") end time. */
+  bool end_time_permanent = false;
   
   /** Geographic area affected by the NOTAM */
   struct NOTAMGeometry {
@@ -118,9 +105,8 @@ struct NOTAM {
    * Check if this NOTAM is currently active
    */
   bool IsActive(std::chrono::system_clock::time_point now) const noexcept {
-    const auto permanent_end = NOTAMTime::PermanentEndTime();
     return now >= start_time &&
-      (end_time >= permanent_end || now <= end_time);
+      (end_time_permanent || now <= end_time);
   }
   
 };

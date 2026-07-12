@@ -329,7 +329,7 @@ NOTAMDetailsWidget::AddNOTAMValidity(
   AddReadOnly(_("Valid From"), nullptr, time_buffer);
 
   // Check if it's a far future date (PERM = permanent)
-  if (notam_opt->end_time >= NOTAMTime::PermanentEndTime()) {
+  if (notam_opt->end_time_permanent) {
     AddReadOnly(_("Valid Until"), nullptr, "PERM");
   } else {
     BrokenDateTime end_dt(notam_opt->end_time);
@@ -363,7 +363,7 @@ NOTAMDetailsWidget::AddNOTAMValidity(
       }
     }
     buffer.Format(_("Starts in %s"), time_str.c_str());
-  } else if (now > notam_opt->end_time) {
+  } else if (!notam_opt->end_time_permanent && now > notam_opt->end_time) {
     // Expired
     const auto expired_ago =
       std::chrono::duration_cast<std::chrono::minutes>(
