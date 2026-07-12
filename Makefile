@@ -65,6 +65,12 @@
 #   TARGET_DIR  "<path>" to build into output/<path> instead of output/<target>
 #
 #   TARGET_OUTPUT_DIR "<path>" to build into arbitrary directory
+#
+#   THIRDPARTY_PACKAGES
+#               "auto" for the target's default third-party package set,
+#               or a comma-separated list of packages to provision through
+#               the third-party build pipeline.
+#               Omitted packages are discovered on the system.
 
 .DEFAULT_GOAL := all
 

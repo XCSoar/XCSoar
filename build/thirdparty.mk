@@ -17,18 +17,32 @@ endif
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
 
+THIRDPARTY_PACKAGES ?= auto
+empty :=
+space := $(empty) $(empty)
+comma := ,
+THIRDPARTY_PACKAGES_LIST = $(sort $(strip $(subst $(comma), ,$(THIRDPARTY_PACKAGES))))
+THIRDPARTY_PACKAGES_NORMALIZED = $(subst $(space),$(comma),$(THIRDPARTY_PACKAGES_LIST))
+THIRDPARTY_PACKAGES_TAG = $(if $(THIRDPARTY_PACKAGES_NORMALIZED),$(subst $(comma),-,$(THIRDPARTY_PACKAGES_NORMALIZED)),none)
+
+# Helper: returns y if the named package is part of the current third-party
+# selection, n otherwise.  With THIRDPARTY_PACKAGES=auto, every package is
+# considered selected.
+THIRDPARTY_PACKAGE_SELECTED = $(if $(filter auto,$(THIRDPARTY_PACKAGES)),y,$(if $(filter $(1),$(THIRDPARTY_PACKAGES_LIST)),y,n))
+
 # -Wl,--gc-sections breaks the (Kobo) glibc build
 THIRDPARTY_LDFLAGS_FILTER_OUT = -L$(THIRDPARTY_LIBS_DIR)/% -Wl,--gc-sections
 
-THIRDPARTY_LIBS_DIR = $(ARCH_OUTPUT_DIR)/lib
+THIRDPARTY_LIBS_DIR = $(ARCH_OUTPUT_DIR)/lib/$(THIRDPARTY_PACKAGES_TAG)
 THIRDPARTY_LIBS_ROOT = $(THIRDPARTY_LIBS_DIR)/$(HOST_TRIPLET)
+THIRDPARTY_LIBS_STAMP = $(THIRDPARTY_LIBS_DIR)/stamp
 
 .PHONY: libs
-libs: $(THIRDPARTY_LIBS_DIR)/stamp
+libs: $(THIRDPARTY_LIBS_STAMP)
 
-compile-depends += $(THIRDPARTY_LIBS_DIR)/stamp
-$(THIRDPARTY_LIBS_DIR)/stamp:
-	GEOTIFF=$(GEOTIFF) ./build/thirdparty.py $(THIRDPARTY_LIBS_DIR) $(HOST_TRIPLET) $(TARGET_IS_IOS) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" "$(WRAPPED_CC)" "$(WRAPPED_CXX)" $(AR) "$(ARFLAGS)" $(RANLIB) $(STRIP) "$(WINDRES)" $(ENABLE_SDL)
+compile-depends += $(THIRDPARTY_LIBS_STAMP)
+$(THIRDPARTY_LIBS_STAMP):
+	GEOTIFF=$(GEOTIFF) THIRDPARTY_PACKAGES="$(THIRDPARTY_PACKAGES_NORMALIZED)" ./build/thirdparty.py $(THIRDPARTY_LIBS_DIR) $(HOST_TRIPLET) $(TARGET_IS_IOS) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" "$(WRAPPED_CC)" "$(WRAPPED_CXX)" $(AR) "$(ARFLAGS)" $(RANLIB) $(STRIP) "$(WINDRES)" $(ENABLE_SDL)
 	touch $@
 
 ifeq ($(TARGET_IS_KOBO),n)
@@ -40,7 +54,7 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   # we build a toolchain as part of the thirdparty-library build
-  BUILD_TOOLCHAIN_TARGET = $(THIRDPARTY_LIBS_DIR)/stamp
+  BUILD_TOOLCHAIN_TARGET = $(THIRDPARTY_LIBS_STAMP)
 else
   BUILD_TOOLCHAIN_TARGET =
 endif

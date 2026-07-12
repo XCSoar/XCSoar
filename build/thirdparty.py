@@ -41,6 +41,32 @@ from build.libs import *
 
 geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
 
+thirdparty_projects = {
+    'binutils': binutils,
+    'linux-headers': linux_headers,
+    'gcc-bootstrap': gcc_bootstrap,
+    'musl': musl,
+    'gcc': gcc,
+    'zlib': zlib,
+    'fmt': libfmt,
+    'libsodium': libsodium,
+    'freetype': freetype,
+    'openssl': openssl,
+    'c-ares': cares,
+    'curl': curl,
+    'libpng': libpng,
+    'libjpeg': libjpeg,
+    'lua': lua,
+    'sqlite': sqlite3,
+    'proj': proj,
+    'libtiff': libtiff,
+    'libgeotiff': libgeotiff,
+    'libsalsa': libsalsa,
+    'libusb': libusb,
+    'simple-usbmodeswitch': simple_usbmodeswitch,
+    'sdl2': sdl2,
+}
+
 if toolchain.is_windows:
     thirdparty_libs = [
         zlib,
@@ -123,6 +149,35 @@ elif '-kobo-linux-' in host_triplet:
     ]
 else:
     raise RuntimeError('Unrecognized target')
+
+package_selection = os.environ.get('THIRDPARTY_PACKAGES', 'auto')
+if package_selection != 'auto':
+    selected_names = {
+        name.strip()
+        for name in package_selection.split(',')
+        if name.strip()
+    }
+    unknown_names = selected_names - thirdparty_projects.keys()
+    if unknown_names:
+        raise RuntimeError(
+            'Unknown third-party package(s): ' + ', '.join(sorted(unknown_names))
+        )
+
+    available_projects = set(thirdparty_libs)
+    unsupported_names = {
+        name for name in selected_names
+        if thirdparty_projects[name] not in available_projects
+    }
+    if unsupported_names:
+        raise RuntimeError(
+            'Third-party package(s) unavailable for this target: ' +
+            ', '.join(sorted(unsupported_names))
+        )
+
+    selected_projects = {thirdparty_projects[name] for name in selected_names}
+    thirdparty_libs = [
+        project for project in thirdparty_libs if project in selected_projects
+    ]
 
 # build the third-party libraries
 for x in thirdparty_libs:

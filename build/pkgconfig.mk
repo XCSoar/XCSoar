@@ -1,7 +1,9 @@
 PKG_CONFIG = pkg-config
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+  # Prefer packages built by build/thirdparty.py, but allow packages omitted
+  # from THIRDPARTY_PACKAGES to be discovered on the system.
+  PKG_CONFIG := PKG_CONFIG_PATH=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
