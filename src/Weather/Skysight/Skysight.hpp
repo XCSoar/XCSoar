@@ -69,13 +69,15 @@ public:
   bool IsThrottled() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
+  time_t GetDatafilesRetryRemainingSeconds() const noexcept;
 
   std::string_view GetActiveLayerId() const noexcept;
   std::string_view GetDisplayedLayerId() const noexcept;
   StaticString<128> GetOverlayLabel() const noexcept;
 
   bool SetLayerActive(std::string_view id);
-  void ApplyPageOverlay(std::string_view overlay_id) noexcept;
+  void ApplyPageOverlay(std::string_view overlay_id,
+                        bool reset_automatic_time=false) noexcept;
   void DeactivateLayer();
   void Render();
 

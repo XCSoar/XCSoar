@@ -51,6 +51,7 @@ public:
   bool IsThrottled() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
+  time_t GetDatafilesRetryRemainingSeconds() const noexcept;
   void Poll() noexcept;
 
   const std::vector<SkysightRegionEntry> &GetRegions() const noexcept {
@@ -113,6 +114,7 @@ public:
   void OnLayers(boost::json::value value) noexcept;
   void OnLastUpdates(boost::json::value value) noexcept;
   void OnDatafiles(std::string_view layer_id, boost::json::value value) noexcept;
+  void OnDatafilesRetry(std::string_view layer_id) noexcept;
   void OnDatafilesError(std::string_view layer_id) noexcept;
   void OnDatafileDownloaded(std::string_view layer_id, time_t forecast_time,
                             SkySightPreparedData prepared) noexcept;

@@ -476,6 +476,12 @@ SkysightAPI::GetThrottleRemainingSeconds() const noexcept
   return request->GetThrottleRemainingSeconds();
 }
 
+time_t
+SkysightAPI::GetDatafilesRetryRemainingSeconds() const noexcept
+{
+  return request->GetDatafilesRetryRemainingSeconds();
+}
+
 void
 SkysightAPI::Poll() noexcept
 {
@@ -656,30 +662,35 @@ SkysightAPI::QueueForecastDatafile(SkySight::Layer &layer,
                                    time_t forecast_time,
                                    std::string_view link) noexcept
 {
-  if (link.empty())
+  try {
+    if (link.empty())
+      return false;
+
+    const auto suffix = GetUrlSuffix(link);
+    if (!SkySightFileDecoder::IsNetCdfDecodeAvailable() &&
+        NeedsNetCdfDecodeSuffix(suffix))
+      return false;
+
+    const bool high_priority = owner.GetActiveLayerId() == layer.id;
+
+    switch (request->DownloadDatafile(layer.id, forecast_time, link,
+                                      GetDatafilePath(layer, forecast_time, suffix),
+                                      high_priority)) {
+    case SkySightRequest::DownloadDatafileResult::Duplicate:
+    case SkySightRequest::DownloadDatafileResult::Available:
+      return true;
+
+    case SkySightRequest::DownloadDatafileResult::Queued:
+      ++layer.pending_downloads;
+      UpdateBusyState(layer);
+      return true;
+    }
+
     return false;
-
-  const auto suffix = GetUrlSuffix(link);
-  if (!SkySightFileDecoder::IsNetCdfDecodeAvailable() &&
-      NeedsNetCdfDecodeSuffix(suffix))
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight forecast queueing failed");
     return false;
-
-  const bool high_priority = owner.GetActiveLayerId() == layer.id;
-
-  switch (request->DownloadDatafile(layer.id, forecast_time, link,
-                                    GetDatafilePath(layer, forecast_time, suffix),
-                                    high_priority)) {
-  case SkySightRequest::DownloadDatafileResult::Duplicate:
-  case SkySightRequest::DownloadDatafileResult::Available:
-    return true;
-
-  case SkySightRequest::DownloadDatafileResult::Queued:
-    ++layer.pending_downloads;
-    UpdateBusyState(layer);
-    return true;
   }
-
-  return false;
 }
 
 bool
@@ -729,18 +740,21 @@ SkysightAPI::StartNextDecodeJob() noexcept
     SyncSelectedLayer(layer->id);
   }
 
+  const auto layer_id = std::move(job.layer_id);
+  const auto forecast_time = job.forecast_time;
+
   decode_job->Start(
     std::move(job.prepared),
     std::move(job.variable_name),
     std::move(job.legend),
-    [this, layer_id = std::move(job.layer_id), forecast_time = job.forecast_time](AllocatedPath output_path) {
+    [this, layer_id, forecast_time](AllocatedPath output_path) {
       OnDatafileDownloaded(layer_id, forecast_time, SkySightPreparedData{
         SkySightPreparedDataKind::DisplayReady,
         {},
         std::move(output_path),
       });
     },
-    [this, layer_id = std::move(job.layer_id), forecast_time = job.forecast_time](std::exception_ptr error) {
+    [this, layer_id, forecast_time](std::exception_ptr error) {
       LogError(error, "SkySight forecast decode failed");
       OnDatafileError(layer_id, forecast_time);
     });
@@ -928,6 +942,11 @@ SkysightAPI::UpdatePreloadProgress() noexcept
 
   if (request->IsThrottled())
     progress.phase = SkySight::ForecastProgressPhase::Throttled;
+  else if (const auto retry = request->GetDatafilesRetryRemainingSeconds();
+           retry > 0) {
+    progress.phase = SkySight::ForecastProgressPhase::RetryWait;
+    progress.retry_seconds = retry;
+  }
   else if (!preload_metadata_layers.empty())
     progress.phase = SkySight::ForecastProgressPhase::Metadata;
   else if (decode_job != nullptr &&
@@ -1272,6 +1291,20 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
   PollSelectedDatafiles();
+  UpdatePreloadProgress();
+}
+
+void
+SkysightAPI::OnDatafilesRetry(std::string_view layer_id) noexcept
+{
+  if (auto *layer = GetLayer(layer_id); layer != nullptr) {
+    /* Keep datafiles_pending and preload_requested set.  Poll() retries the
+       metadata request after the request-layer backoff expires. */
+    UpdateBusyState(*layer);
+    SyncSelectedLayer(layer_id);
+  }
+
+  owner.OnDataUpdated();
   UpdatePreloadProgress();
 }
 

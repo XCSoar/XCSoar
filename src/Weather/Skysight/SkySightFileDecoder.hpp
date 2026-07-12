@@ -42,6 +42,7 @@ struct SkySightPreparedData {
 class SkySightFileDecoder final {
 public:
   static SkySightPreparedData Prepare(Path path);
+  [[nodiscard]] static AllocatedPath FindCachedDisplay(Path path);
   static void InvalidateCache(Path path) noexcept;
   static bool IsNetCdfDecodeAvailable() noexcept;
 };

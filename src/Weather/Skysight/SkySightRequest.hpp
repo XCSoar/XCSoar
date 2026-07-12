@@ -95,6 +95,7 @@ class SkySightRequest final {
   std::string password;
   std::string api_key;
   std::string datafiles_layer_id;
+  time_t datafiles_retry_at = 0;
   time_t valid_until = 0;
   time_t last_login_request = 0;
   time_t throttle_until = 0;
@@ -126,6 +127,11 @@ public:
   time_t GetThrottleRemainingSeconds() const noexcept {
     const auto now = std::time(nullptr);
     return throttle_until > now ? throttle_until - now : 0;
+  }
+
+  time_t GetDatafilesRetryRemainingSeconds() const noexcept {
+    const auto now = std::time(nullptr);
+    return datafiles_retry_at > now ? datafiles_retry_at - now : 0;
   }
 
   /** Pump deferred downloads and report when a throttle pause has ended. */
