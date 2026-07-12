@@ -451,7 +451,7 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
       // Add status indicator
       const auto now = GetCurrentNOTAMTimeUTC();
-      const bool is_perm = notam.end_time >= NOTAMTime::PermanentEndTime();
+      const bool is_perm = notam.end_time_permanent;
       if (now < notam.start_time) {
         const auto starts_in = FormatRelativeNotamTime(notam.start_time - now);
         StaticString<64> status;

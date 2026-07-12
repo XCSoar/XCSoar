@@ -127,16 +127,8 @@ ParseFlightLevelLimit(const std::string &fl_value)
 namespace NOTAMClient {
 
 static std::chrono::system_clock::time_point
-ParseNOTAMTime(const std::string &iso_string, const bool allow_permanent)
+ParseNOTAMTime(const std::string &iso_string)
 {
-  if (iso_string == "PERM") {
-    if (!allow_permanent)
-      throw std::runtime_error("Invalid ISO8601 timestamp '" + iso_string +
-                               "': PERM is only valid as an end time");
-
-    return NOTAMTime::PermanentEndTime();
-  }
-
   return ParseISO8601Utc(iso_string);
 }
 
@@ -169,12 +161,16 @@ ParseNOTAMProperties(NOTAM &notam, const boost::json::object &notam_obj)
   
   if (auto it = notam_obj.find("effectiveStart"); it != notam_obj.end()) {
     notam.start_time =
-      ParseNOTAMTime(boost::json::value_to<std::string>(it->value()), false);
+      ParseNOTAMTime(boost::json::value_to<std::string>(it->value()));
   }
   
   if (auto it = notam_obj.find("effectiveEnd"); it != notam_obj.end()) {
-    notam.end_time =
-      ParseNOTAMTime(boost::json::value_to<std::string>(it->value()), true);
+    const auto value = boost::json::value_to<std::string>(it->value());
+    if (value == "PERM") {
+      notam.end_time_permanent = true;
+    } else {
+      notam.end_time = ParseNOTAMTime(value);
+    }
   }
   
   // Parse altitude limits using airspace altitude parsing system

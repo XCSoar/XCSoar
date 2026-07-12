@@ -89,7 +89,7 @@ main()
       R"({"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[8.522111,47.973519]}]})")));
 
     ok1(notams.size() == 1);
-    ok1(notams.size() == 1 && notams[0].end_time == NOTAMTime::PermanentEndTime());
+    ok1(notams.size() == 1 && notams[0].end_time_permanent);
   }
 
   {
@@ -295,7 +295,7 @@ main()
   {
     NOTAM notam{};
     notam.start_time = now - hours(1);
-    notam.end_time = NOTAMTime::PermanentEndTime() + seconds(1);
+    notam.end_time_permanent = true;
 
     ok1(notam.IsActive(now));
   }
