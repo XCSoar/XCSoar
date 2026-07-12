@@ -655,7 +655,7 @@ SkySightFileDecodeJob::Start(SkySightPreparedData new_prepared,
   error = nullptr;
   on_success = std::move(new_on_success);
   on_error = std::move(new_on_error);
-  status = Status::Idle;
+  status = Status::Busy;
 
   Trigger();
 }

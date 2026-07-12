@@ -12,6 +12,10 @@
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Message.hpp"
+#include "PageActions.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/PageProfile.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "MainWindow.hpp"
@@ -45,7 +49,8 @@ HasExactForecastImage(std::string_view region,
 
 } // namespace
 SkySightClient::SkySightClient(CurlGlobal &curl)
-  :api(std::make_unique<SkySightAPI>(*this, curl, GetLocalPath()))
+  :api(std::make_unique<SkySightAPI>(*this, curl, GetLocalPath())),
+   request_timer([this]{ PollPendingDatafiles(); })
 {
   Init();
 }
@@ -73,6 +78,7 @@ SkySightClient::Init()
   ReloadSelectedLayersFromProfile();
   api->PollRegions();
   api->PollLayers();
+  request_timer.Schedule(std::chrono::seconds{1});
 }
 
 void
@@ -274,7 +280,7 @@ void
 SkySightClient::PollPendingDatafiles() noexcept
 {
   MaybeCleanupFiles();
-  api->PollSelectedDatafiles();
+  api->Poll();
 }
 
 bool
@@ -404,6 +410,33 @@ bool
 SkySightClient::PreloadAllForecasts() noexcept
 {
   return api->PreloadAllDatafiles();
+}
+
+unsigned
+SkySightClient::GetPreloadFileCount() const noexcept
+{
+  unsigned count = 0;
+  const auto now = std::time(nullptr);
+  for (std::size_t i = 0; i < api->NumSelectedLayers(); ++i) {
+    const auto *layer = api->GetSelectedLayer(i);
+    if (layer != nullptr && !layer->SupportsLiveTiles())
+      count += SkySight::GetForecastPreloadDatafiles(*layer, now).size();
+  }
+
+  return count;
+}
+
+unsigned
+SkySightClient::GetSelectedForecastLayerCount() const noexcept
+{
+  unsigned count = 0;
+  for (std::size_t i = 0; i < api->NumSelectedLayers(); ++i) {
+    const auto *layer = api->GetSelectedLayer(i);
+    if (layer != nullptr && !layer->SupportsLiveTiles())
+      ++count;
+  }
+
+  return count;
 }
 
 void
@@ -550,6 +583,29 @@ SkySightClient::OnDataUpdated() noexcept
 }
 
 void
+SkySightClient::OnForecastThrottled() noexcept
+{
+  if (throttle_notification_active)
+    return;
+
+  throttle_notification_active = true;
+  StaticString<128> message;
+  message.Format(_("SkySight rate limit reached; continuing in %u seconds."),
+                 unsigned(GetThrottleRemainingSeconds()));
+  Message::AddMessage(message.c_str());
+}
+
+void
+SkySightClient::OnForecastResumed() noexcept
+{
+  if (!throttle_notification_active)
+    return;
+
+  throttle_notification_active = false;
+  Message::AddMessage(_("SkySight downloads resumed."));
+}
+
+void
 SkySightClient::OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept
 {
   auto &download_progress = BackgroundDownloadProgress::Get();
@@ -571,7 +627,8 @@ SkySightClient::OnForecastProgress(const SkySight::ForecastProgress &progress) n
     break;
 
   case SkySight::ForecastProgressPhase::Throttled:
-    text = _("SkySight is rate-limited; preload will resume shortly.");
+    text.Format(_("SkySight rate limited; continuing in %u seconds..."),
+                progress.retry_seconds);
     break;
 
   case SkySight::ForecastProgressPhase::Complete:
@@ -599,6 +656,19 @@ SkySightClient::OnForecastProgress(const SkySight::ForecastProgress &progress) n
       forecast_progress_visible) {
     download_progress.End();
     forecast_progress_visible = false;
+
+    StaticString<160> summary;
+    if (progress.failed == 0)
+      summary.Format(_("SkySight offline cache ready: %u files."),
+                     progress.completed);
+    else {
+      const unsigned ready = progress.completed > progress.failed
+        ? progress.completed - progress.failed
+        : 0;
+      summary.Format(_("SkySight cache finished: %u of %u files ready, %u failed."),
+                     ready, progress.total, progress.failed);
+    }
+    Message::AddMessage(summary.c_str());
   }
 }
 

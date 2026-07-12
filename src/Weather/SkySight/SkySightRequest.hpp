@@ -29,8 +29,11 @@ class SkySightRequest final {
     UI::CoInjectFunction<AllocatedPath> function;
     Kind kind = Kind::Generic;
     AllocatedPath path;
+    std::string url;
+    bool requires_auth = false;
     std::string layer_id;
     time_t forecast_time = 0;
+    unsigned attempts = 0;
     bool finished = false;
 
     explicit FileJob(EventLoop &event_loop) noexcept
@@ -45,6 +48,8 @@ class SkySightRequest final {
     bool requires_auth;
     std::string layer_id;
     time_t forecast_time = 0;
+    time_t ready_at = 0;
+    unsigned attempts = 0;
 
     PendingJob(std::string _key, std::string _url,
                AllocatedPath _path, bool _requires_auth) noexcept
@@ -100,6 +105,7 @@ class SkySightRequest final {
   time_t last_login_request = 0;
   time_t throttle_until = 0;
   time_t last_throttle_notice = 0;
+  bool throttle_resume_notification_pending = false;
 
 public:
   enum class DownloadDatafileResult {
@@ -128,6 +134,9 @@ public:
     return throttle_until > now ? throttle_until - now : 0;
   }
 
+  /** Pump deferred downloads and report when a throttle pause has ended. */
+  bool Poll() noexcept;
+
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
   void CancelTileDownloads() noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
@@ -146,6 +155,7 @@ private:
   void EnsureLoggedIn();
   void CleanupFinishedJobs();
   bool IsQueued(std::string_view key) const noexcept;
+  void RequeueFileJob(const FileJob &job, time_t ready_at) noexcept;
   void PumpQueue();
   void OnLoginSuccess(boost::json::value value);
   void OnLoginError(std::exception_ptr error) noexcept;

@@ -478,6 +478,16 @@ SkySightAPI::GetThrottleRemainingSeconds() const noexcept
   return request->GetThrottleRemainingSeconds();
 }
 
+void
+SkySightAPI::Poll() noexcept
+{
+  if (request->Poll())
+    OnThrottleEnded();
+
+  PollSelectedDatafiles();
+  UpdatePreloadProgress();
+}
+
 std::size_t
 SkySightAPI::NumLayers() const noexcept
 {
@@ -715,6 +725,12 @@ SkySightAPI::StartNextDecodeJob() noexcept
   auto job = std::move(pending_decode_jobs.front());
   pending_decode_jobs.pop_front();
 
+  if (auto *layer = GetLayer(job.layer_id); layer != nullptr) {
+    layer->decoding = true;
+    UpdateBusyState(*layer);
+    SyncSelectedLayer(layer->id);
+  }
+
   decode_job->Start(
     std::move(job.prepared),
     std::move(job.variable_name),
@@ -910,6 +926,7 @@ SkySightAPI::UpdatePreloadProgress() noexcept
   progress.total = preload_targets.size();
   progress.completed = completed;
   progress.failed = preload_failures;
+  progress.retry_seconds = request->GetThrottleRemainingSeconds();
 
   if (request->IsThrottled())
     progress.phase = SkySight::ForecastProgressPhase::Throttled;
@@ -1326,6 +1343,16 @@ SkySightAPI::OnDownloadComplete() noexcept
 void
 SkySightAPI::OnThrottle() noexcept
 {
+  owner.OnForecastThrottled();
+  owner.OnDataUpdated();
+  UpdatePreloadProgress();
+}
+
+void
+SkySightAPI::OnThrottleEnded() noexcept
+{
+  owner.OnForecastResumed();
+
   owner.OnDataUpdated();
   UpdatePreloadProgress();
 }
