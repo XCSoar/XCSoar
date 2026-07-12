@@ -7,10 +7,13 @@
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/ProgressBarRenderer.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/Colors.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 
 #include <string_view>
+
+static constexpr Color DARK_PROGRESS_GREEN = Color(0x00, 0x60, 0x00);
 
 class ProgressWidget::ProgressBar final : public PaintWindow {
   unsigned range = 0, position = 0;
@@ -42,7 +45,8 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override {
     auto &look = UIGlobals::GetDialogLook();
     DrawSimpleProgressBar(canvas, canvas.GetRect(), position, 0, range,
-                          look.dark_mode ? &look.background_color : nullptr);
+                          look.dark_mode ? &look.background_color : nullptr,
+                          look.dark_mode ? &DARK_PROGRESS_GREEN : nullptr);
 
     if (!text.empty()) {
       auto &font = look.text_font;
@@ -53,9 +57,7 @@ protected:
 
       canvas.SetTextColor(look.text_color);
       canvas.SetBackgroundTransparent();
-
-      const std::string_view _text{text};
-      canvas.DrawText({padding, padding}, _text);
+      canvas.DrawText({padding, padding}, std::string_view{text});
     }
   }
 };
