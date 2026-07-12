@@ -191,6 +191,7 @@ SkySightRequest::CancelAll() noexcept
   last_updates_layer_id.clear();
   datafiles_running = false;
   datafiles_layer_id.clear();
+  datafiles_retry_at = 0;
 
   for (auto &i : file_jobs)
     i.second->function.Cancel();
@@ -486,6 +487,16 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
   if (!download_failures.CanQueue(key, std::time(nullptr)))
     return DownloadDatafileResult::Duplicate;
 
+  if (auto display_path = SkySightFileDecoder::FindCachedDisplay(filename);
+      display_path != nullptr) {
+    api.OnDatafileDownloaded(layer_id, forecast_time, SkySightPreparedData{
+      SkySightPreparedDataKind::DisplayReady,
+      {},
+      std::move(display_path),
+    });
+    return DownloadDatafileResult::Available;
+  }
+
   if (File::Exists(filename)) {
     try {
       auto prepared = SkySightFileDecoder::Prepare(filename);
@@ -684,7 +695,11 @@ SkySightRequest::RequestDatafiles(std::string_view region_id,
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (std::time(nullptr) < datafiles_retry_at)
+    return false;
+
   datafiles_running = true;
+  datafiles_retry_at = 0;
   datafiles_layer_id = std::string{layer_id};
 
   auto url = SkySightUrl::Api("data");
@@ -736,6 +751,7 @@ void
 SkySightRequest::OnDatafilesSuccess(boost::json::value value)
 {
   datafiles_running = false;
+  datafiles_retry_at = 0;
 
   const auto layer_id = std::exchange(datafiles_layer_id, std::string{});
   api.OnDatafiles(layer_id, std::move(value));
@@ -756,6 +772,11 @@ SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
       return;
   } catch (...) {
     LogError(error, "SkySight datafiles request failed");
+    datafiles_retry_at = std::time(nullptr) + THROTTLE_RETRY_SECONDS;
+    LogFmt("SkySight forecast-step request will retry in {} seconds",
+           THROTTLE_RETRY_SECONDS);
+    api.OnDatafilesRetry(layer_id);
+    return;
   }
 
   api.OnDatafilesError(layer_id);

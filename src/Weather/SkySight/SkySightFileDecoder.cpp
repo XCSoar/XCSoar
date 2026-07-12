@@ -415,7 +415,8 @@ PrepareNetCdfPayload(PreparedForecastPayload payload)
       File::GetLastModification(display_path) >=
         File::GetLastModification(payload.source_path)) {
     DeleteIfExists(payload.source_path);
-    DeleteIfExists(payload.cleanup_download_path);
+    if (payload.cleanup_download_path != nullptr)
+      DeleteIfExists(payload.cleanup_download_path);
     return MakeDisplayReadyData(display_path);
   }
 
@@ -548,7 +549,8 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   TIFFSetField(tf, TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel);
   TIFFSetField(tf, TIFFTAG_BITSPERSAMPLE, bits_per_sample);
   TIFFSetField(tf, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-  TIFFSetField(tf, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+  TIFFSetField(tf, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
+  TIFFSetField(tf, TIFFTAG_PREDICTOR, PREDICTOR_HORIZONTAL);
   TIFFSetField(tf, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
   TIFFSetField(tf, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
   TIFFSetField(tf, TIFFTAG_EXTRASAMPLES, 1, &alpha_sample);
@@ -600,6 +602,9 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   }
 
   GTIFWriteKeys(gt);
+  DeleteIfExists(prepared.cleanup_source_path);
+  if (prepared.cleanup_download_path != nullptr)
+    DeleteIfExists(prepared.cleanup_download_path);
   return CopyPath(prepared.display_path);
 }
 
@@ -690,6 +695,12 @@ SkySightFileDecodeJob::Tick() noexcept
     prepared.kind,
     CopyPath(prepared.source_path),
     CopyPath(prepared.display_path),
+    prepared.cleanup_source_path != nullptr
+      ? CopyPath(prepared.cleanup_source_path)
+      : AllocatedPath{},
+    prepared.cleanup_download_path != nullptr
+      ? CopyPath(prepared.cleanup_download_path)
+      : AllocatedPath{},
   };
   auto variable_name_copy = variable_name;
   auto legend_copy = legend;
@@ -757,6 +768,15 @@ SkySightFileDecoder::Prepare(Path path)
     return MakeDisplayReadyData(payload.source_path);
 
   throw std::runtime_error("Unsupported SkySight forecast payload");
+}
+
+AllocatedPath
+SkySightFileDecoder::FindCachedDisplay(Path path)
+{
+  const auto display_path = path.WithSuffix(".tif");
+  return File::Exists(display_path)
+    ? AllocatedPath(display_path.c_str())
+    : nullptr;
 }
 
 void

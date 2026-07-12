@@ -30,6 +30,7 @@ enum class ForecastProgressPhase : uint8_t {
   Download,
   Decode,
   Throttled,
+  RetryWait,
   Complete,
 };
 
