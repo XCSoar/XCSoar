@@ -243,10 +243,12 @@ PageActions::ApplySkysightOverlay(const PageLayout &layout) noexcept
 {
 #ifdef HAVE_HTTP
   auto &skysight_session = CommonInterface::SetUIState().weather.skysight;
-  skysight_session.EnterPage();
+  const bool first_enter = skysight_session.EnterPage();
 
   if (auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
-    skysight->ApplyPageOverlay(layout.skysight_overlay.c_str());
+    skysight->ApplyPageOverlay(layout.skysight_overlay.c_str(),
+                               first_enter &&
+                               !skysight_session.cursor_initialized);
 #else
   (void)layout;
 #endif

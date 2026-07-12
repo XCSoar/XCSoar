@@ -8,6 +8,7 @@
 #include "DataGlobals.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Weather/OverlayPageActions.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -310,6 +311,12 @@ private:
     preload_all_button = buttons.Add(_("Preload All"), [this]() {
       PreloadAllClicked();
     });
+    buttons.Add(_("Add to page"), [this]() {
+      AddToPageClicked(false);
+    });
+    buttons.Add(_("Add new page"), [this]() {
+      AddToPageClicked(true);
+    });
     buttons.EnableCursorSelection();
   }
 
@@ -575,6 +582,25 @@ private:
       skysight->DeactivateLayer();
 
     UpdateList();
+  }
+
+  void AddToPageClicked(bool new_page) {
+    if (skysight == nullptr)
+      return;
+
+    const auto index = GetList().GetCursorIndex();
+    const auto *layer = index < skysight->NumSelectedLayers()
+      ? skysight->GetSelectedLayer(index)
+      : nullptr;
+    if (layer == nullptr)
+      return;
+
+    if (new_page)
+      WeatherDialogOverlayActions::AddOverlayToNewPage(
+        PageLayout::Overlay::SKYSIGHT, -1, layer->id);
+    else
+      WeatherDialogOverlayActions::AddOverlayToCurrentPage(
+        PageLayout::Overlay::SKYSIGHT, -1, layer->id);
   }
 };
 
