@@ -7,7 +7,7 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
     PKG_CONFIG := PKG_CONFIG_PATH=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
   else
     # Cross builds must not fall back to host pkg-config metadata.
-    PKG_CONFIG := PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+    PKG_CONFIG := PKG_CONFIG_PATH= PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
   endif
 endif
 
