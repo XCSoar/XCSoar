@@ -314,6 +314,8 @@ class NOTAMListWidget final : public ListWidget {
   TwoTextRowsRenderer row_renderer;
   Button *details_button = nullptr;
   Button *filter_qcode_button = nullptr;
+  Button *toggle_filter_button = nullptr;
+  bool show_all = false;
 
 public:
   NOTAMListWidget() = default;
@@ -332,11 +334,27 @@ public:
       filter_qcode_button->SetEnabled(false);
   }
 
+  void SetToggleFilterButton(Button *_toggle_filter_button) noexcept {
+    toggle_filter_button = _toggle_filter_button;
+    UpdateToggleFilterButton();
+  }
+
   void ShowDetails() noexcept {
     OnActivateItem(GetList().GetCursorIndex());
   }
 
   void FilterSelectedQCode() noexcept;
+
+  void ToggleFilter() noexcept {
+    show_all = !show_all;
+    UpdateToggleFilterButton();
+    try {
+      UpdateList();
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to toggle NOTAM filter");
+      ResetListAfterUpdateFailure();
+    }
+  }
 
   void UpdateButtons() noexcept {
     const unsigned index = GetList().GetCursorIndex();
@@ -394,6 +412,13 @@ private:
     GetList().SetLength(1);
     GetList().Invalidate();
     UpdateButtons();
+  }
+
+  void UpdateToggleFilterButton() noexcept {
+    if (toggle_filter_button != nullptr)
+      toggle_filter_button->SetCaption(show_all
+                                       ? _("Hide Filtered")
+                                       : _("Show All"));
   }
 
   const NOTAMStruct *GetSelectableNOTAM(unsigned index) const noexcept {
@@ -696,7 +721,15 @@ NOTAMListWidget::UpdateList()
     };
     items.insert(items.end(), headers.begin(), headers.end());
     
-    items.insert(items.end(), notams.begin(), notams.end());
+    if (!show_all) {
+      std::copy_if(notams.begin(), notams.end(), std::back_inserter(items),
+                   [&](const auto &notam) {
+                     return NOTAMFilter::ShouldDisplay(notam, settings, now,
+                                                       false);
+                   });
+    } else {
+      items.insert(items.end(), notams.begin(), notams.end());
+    }
   } else {
     LogFmt("NOTAM: UpdateList - net_components or notam is null");
   }
@@ -727,6 +760,9 @@ ShowNOTAMListDialog(UI::SingleWindow &parent)
   list->SetFilterQCodeButton(
     dialog.AddButton(_("Hide Q-code"),
                      [list](){ list->FilterSelectedQCode(); }));
+  list->SetToggleFilterButton(
+    dialog.AddButton(_("Show All"),
+                     [list](){ list->ToggleFilter(); }));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }
