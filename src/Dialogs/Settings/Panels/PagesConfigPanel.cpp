@@ -256,24 +256,37 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
 #ifdef HAVE_HTTP
     const auto skysight = DataGlobals::GetSkySight();
     if (skysight != nullptr) {
-      unsigned choice = 0;
+      unsigned selected_value = 1;
+      bool has_choices = false;
+      bool stored_layer_is_selected = false;
 
-      if (!value.skysight_overlay.empty()) {
-        df.AddChoice(choice++, value.skysight_overlay.c_str(),
+      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
+        if (const auto *layer = skysight->GetSelectedLayer(i);
+            layer != nullptr &&
+            layer->id == value.skysight_overlay.c_str()) {
+          stored_layer_is_selected = true;
+          selected_value = unsigned(i + 1);
+          break;
+        }
+
+      if (!value.skysight_overlay.empty() && !stored_layer_is_selected) {
+        df.AddChoice(0, value.skysight_overlay.c_str(),
                      value.skysight_overlay.c_str());
+        has_choices = true;
+        selected_value = 0;
       }
 
       for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
         const auto *layer = skysight->GetSelectedLayer(i);
-        if (layer == nullptr ||
-            layer->id == value.skysight_overlay.c_str())
+        if (layer == nullptr)
           continue;
 
-        df.AddChoice(choice++, layer->name.c_str());
+        df.AddChoice(unsigned(i + 1), layer->name.c_str());
+        has_choices = true;
       }
 
-      if (choice > 0) {
-        df.SetValue(0U);
+      if (has_choices) {
+        df.SetValue(selected_value);
         break;
       }
     }
@@ -531,23 +544,25 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
     else if (value.overlay == PageLayout::Overlay::SKYSIGHT) {
 #ifdef HAVE_HTTP
       if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr) {
-        unsigned choice = value.skysight_overlay.empty() ? 0 : 1;
         const unsigned selected = dfe.GetValue();
 
-        if (!value.skysight_overlay.empty() && selected == 0)
-          return;
-
-        for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
-          const auto *layer = skysight->GetSelectedLayer(i);
-          if (layer == nullptr ||
-              layer->id == value.skysight_overlay.c_str())
-            continue;
-
-          if (choice++ == selected) {
-            value.skysight_overlay = layer->id;
+        bool stored_layer_is_selected = false;
+        for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
+          if (const auto *layer = skysight->GetSelectedLayer(i);
+              layer != nullptr &&
+              layer->id == value.skysight_overlay.c_str()) {
+            stored_layer_is_selected = true;
             break;
           }
-        }
+
+        if (selected == 0 && !stored_layer_is_selected)
+          return;
+
+        if (selected > 0)
+          if (const auto *layer =
+                skysight->GetSelectedLayer(selected - 1);
+              layer != nullptr)
+            value.skysight_overlay = layer->id;
       }
 #endif
     }

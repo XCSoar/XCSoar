@@ -110,6 +110,20 @@ TestApplySkySightOverlay()
 }
 
 static void
+TestChangeSkySightPageLayer()
+{
+  PageSettings settings;
+  settings.SetDefaults();
+
+  ok1(!SetSkySightLayerOnPage(settings, 0, "thermal"));
+  ok1(ApplyWeatherOverlayToPage(settings, 0,
+                                PageLayout::Overlay::SKYSIGHT,
+                                -1, "wind"));
+  ok1(SetSkySightLayerOnPage(settings, 0, "thermal"));
+  ok1(settings.pages[0].skysight_overlay == "thermal");
+}
+
+static void
 TestNormaliseCursorValues()
 {
   auto page = PageLayout::Default();
@@ -201,12 +215,13 @@ TestAddPageFromDraftCopiesCursors()
 int
 main()
 {
-  plan_tests(43 + 9 + 5);
+  plan_tests(43 + 9 + 5 + 4);
 
   TestApplyToCurrentPage();
   TestAddNewOverlayPageFromNonMapSource();
   TestReplaceCurrentOverlay();
   TestApplySkySightOverlay();
+  TestChangeSkySightPageLayer();
   TestPageLimitGuard();
   TestNormaliseCursorValues();
   TestXCThermManualCursorDefaultsOnAdd();
