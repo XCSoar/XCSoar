@@ -305,44 +305,46 @@ MainWindow::LayoutMapArea() noexcept
 void
 MainWindow::UpdateMapOverlayButtonLayout() noexcept
 {
-  if (widget != nullptr || map == nullptr)
-    return;
-
   const bool overlay_buttons_active =
+    widget == nullptr && map != nullptr &&
     !CommonInterface::GetUIState().pages.special_page.IsDefined();
-  const PixelRect rc = map->GetPosition();
 
   if (show_menu_button != nullptr) {
     show_menu_button->SetVisible(overlay_buttons_active);
     show_menu_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_menu_button->Move(GetShowMenuButtonRect(rc));
+      show_menu_button->Move(GetShowMenuButtonRect(map->GetPosition()));
   }
   if (show_quickmenu_button != nullptr) {
     show_quickmenu_button->SetVisible(overlay_buttons_active);
     show_quickmenu_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_quickmenu_button->Move(GetShowQuickMenuButtonRect(rc));
+      show_quickmenu_button->Move(GetShowQuickMenuButtonRect(map->GetPosition()));
   }
   if (show_zoom_out_button != nullptr) {
     show_zoom_out_button->SetVisible(overlay_buttons_active);
     show_zoom_out_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_zoom_out_button->Move(GetShowZoomButtonRect(rc,
+      show_zoom_out_button->Move(GetShowZoomButtonRect(map->GetPosition(),
                                                        ShowZoomButton::Sign::ZOOM_OUT));
   }
   if (show_zoom_in_button != nullptr) {
     show_zoom_in_button->SetVisible(overlay_buttons_active);
     show_zoom_in_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_zoom_in_button->Move(GetShowZoomButtonRect(rc,
+      show_zoom_in_button->Move(GetShowZoomButtonRect(map->GetPosition(),
                                                       ShowZoomButton::Sign::ZOOM_IN));
   }
 
 #ifdef ANDROID
-  if (show_rotate_button != nullptr)
-    show_rotate_button->Move(GetShowRotateButtonRect(rc));
+  if (show_rotate_button != nullptr && overlay_buttons_active)
+    show_rotate_button->Move(GetShowRotateButtonRect(map->GetPosition()));
 #endif
+
+  /* Newly created overlay buttons are added after the map; keep the map
+     underneath them (same as ReinitialiseLayout()). */
+  if (overlay_buttons_active)
+    map->BringToBottom();
 }
 
 void
@@ -1587,6 +1589,8 @@ MainWindow::SetWidget(Widget *_widget) noexcept
   widget->Initialise(*this, rc);
   widget->Prepare(*this, rc);
   widget->Show(rc);
+
+  UpdateMapOverlayButtonLayout();
 
   if (!widget->SetFocus())
     SetFocus();
