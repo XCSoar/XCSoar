@@ -142,6 +142,9 @@ similar operating systems:
 
 -  `libjpeg <https://libjpeg.sourceforge.net/>`__
 
+-  `NetCDF <https://www.unidata.ucar.edu/software/netcdf/>`__
+  (native Linux builds)
+
 -  OpenGL (Mesa)
 
 -  to run XCSoar, you need one of the following fonts (Debian package):

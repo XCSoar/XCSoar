@@ -440,6 +440,31 @@ libgeotiff = CmakeProject(
     patches=abspath("lib/libgeotiff/patches"),
 )
 
+netcdf = CmakeProject(
+    "https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.10.0.tar.gz",
+    "ce160f9c1483b32d1ba8b7633d7984510259e4e439c48a218b95a023dc02fd4c",
+    "lib/pkgconfig/netcdf.pc",
+    [
+        "-DBUILD_SHARED_LIBS=OFF",
+        "-DNETCDF_ENABLE_HDF5=OFF",
+        "-DNETCDF_ENABLE_DAP=OFF",
+        "-DNETCDF_ENABLE_NCZARR=OFF",
+        "-DNETCDF_ENABLE_REMOTE_FUNCTIONALITY=OFF",
+        "-DNETCDF_ENABLE_BYTERANGE=OFF",
+        "-DNETCDF_BUILD_UTILITIES=OFF",
+        "-DNETCDF_ENABLE_TESTS=OFF",
+        "-DNETCDF_ENABLE_EXAMPLES=OFF",
+        "-DNETCDF_ENABLE_LIBXML2=OFF",
+        "-DNETCDF_ENABLE_PLUGINS=OFF",
+    ],
+    android_configure_args=[
+        "-DHAVE_LIBM=m",
+        "-DZLIB_LIBRARY=z",
+        "-DNETCDF_ENABLE_MMAP=OFF",
+    ],
+    base="netcdf-c-4.10.0",
+)
+
 sdl2 = CmakeProject(
     (
         "http://www.libsdl.org/release/SDL2-2.30.0.tar.gz",

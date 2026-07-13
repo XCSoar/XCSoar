@@ -28,7 +28,7 @@ install_macOS() {
   brew install fmt sdl2 \
     libsodium freetype \
     libpng libjpeg-turbo \
-    libtiff libgeotiff \
+    libtiff libgeotiff netcdf \
     proj c-ares \
     curl lua
   echo
