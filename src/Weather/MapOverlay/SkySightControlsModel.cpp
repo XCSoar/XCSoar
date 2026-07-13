@@ -9,10 +9,9 @@
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Weather/SkySight/ForecastFormatter.hpp"
 #include "Weather/SkySight/ForecastUtils.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
-#include "time/BrokenDateTime.hpp"
-
 #include <algorithm>
 #include <chrono>
 #include <limits>
@@ -22,29 +21,6 @@ namespace WeatherMapOverlay {
 
 static constexpr unsigned TIME_PICKER_AUTO =
   std::numeric_limits<unsigned>::max();
-
-[[nodiscard]] static StaticString<32>
-FormatForecastTimeLabel(const SkySight::Layer &layer,
-                        time_t forecast_time) noexcept
-{
-  StaticString<32> label;
-  if (forecast_time <= 0)
-    return label;
-
-  const BrokenDateTime date_time{
-    std::chrono::system_clock::from_time_t(forecast_time) +
-    CommonInterface::GetComputerSettings().utc_offset.ToDuration()};
-
-  if (SkySight::IsFullDayForecastLayer(layer))
-    label.Format("%04u-%02u-%02u",
-                 date_time.year, date_time.month, date_time.day);
-  else
-    label.Format("%04u-%02u-%02u %02u:%02u",
-                 date_time.year, date_time.month, date_time.day,
-                 date_time.hour, date_time.minute);
-
-  return label;
-}
 
 [[nodiscard]] static std::vector<time_t>
 BuildForecastTimes(const SkySight::Layer &layer)
@@ -132,7 +108,9 @@ SkySightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
     return;
   }
 
-  const auto label = FormatForecastTimeLabel(*layer, layer->forecast_time);
+  const auto label = SkySight::FormatForecastTimeLabel(
+    *layer, layer->forecast_time,
+    CommonInterface::GetComputerSettings().utc_offset);
   if (layer->UsesAutomaticForecastTime())
     text.Format(_("AUTO: %s"), label.c_str());
   else
@@ -323,7 +301,9 @@ SkySightControlsModel::OpenPrimaryPicker() noexcept
     picker.addEnumText(_("Auto"), TIME_PICKER_AUTO);
 
     for (unsigned i = 0; i < times.size(); ++i)
-      picker.addEnumText(FormatForecastTimeLabel(*layer, times[i]).c_str(), i);
+      picker.addEnumText(SkySight::FormatForecastTimeLabel(
+        *layer, times[i],
+        CommonInterface::GetComputerSettings().utc_offset).c_str(), i);
 
     if (layer->UsesAutomaticForecastTime())
       picker.SetValue(TIME_PICKER_AUTO);
