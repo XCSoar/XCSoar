@@ -51,7 +51,7 @@ if toolchain.is_windows:
         lua,
     ]
 
-    # Add SDL2, sqlite3, and their dependencies for OpenGL/ANGLE builds
+    # Add SDL2 and image/font prerequisites for OpenGL/ANGLE builds.
     if enable_sdl:
         thirdparty_libs.extend([
             sqlite3,
@@ -60,6 +60,15 @@ if toolchain.is_windows:
             libjpeg,
             sdl2,
         ])
+
+    if geotiff_enabled:
+        thirdparty_libs += [
+            sqlite3,
+            proj,
+            libtiff,
+            libgeotiff,
+            netcdf,
+        ]
 
     # Some libraries (such as CURL) want to use the min()/max() macros
     toolchain.cppflags = cppflags.replace('-DNOMINMAX', '')
@@ -84,6 +93,7 @@ elif toolchain.is_darwin:
             proj,
             libtiff,
             libgeotiff,
+            netcdf,
         ]
 elif toolchain.is_android:
     thirdparty_libs = [
@@ -99,6 +109,7 @@ elif toolchain.is_android:
         proj,
         libtiff,
         libgeotiff,
+        netcdf,
     ]
 elif '-kobo-linux-' in host_triplet:
     thirdparty_libs = [
