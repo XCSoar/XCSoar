@@ -642,6 +642,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/SkySight/SkySightCache.cpp \
 	$(SRC)/Weather/SkySight/SkySightAPI.cpp \
 	$(SRC)/Weather/SkySight/SkySightRequest.cpp
+
+$(call SRC_TO_OBJ,$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp): CPPFLAGS += $(NETCDF_CPPFLAGS)
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
@@ -825,6 +827,10 @@ endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_LDLIBS += -framework CoreLocation -lSDL2main # include SDL2main for main() on MacOS and iOS (otherwise linking fails)
+endif
+
+ifeq ($(HAVE_HTTP),y)
+XCSOAR_LDLIBS += $(NETCDF_LDLIBS)
 endif
 
 XCSOAR_STRIP = y
