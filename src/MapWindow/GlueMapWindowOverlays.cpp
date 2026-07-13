@@ -333,18 +333,19 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   const UIState &ui_state = GetUIState();
-  if (!ui_state.map_scale_page_title.empty()) {
-    buffer += ui_state.map_scale_page_title;
-    buffer += " ";
-  } else if (ui_state.auxiliary_enabled) {
-    buffer += ui_state.panel_name;
-    buffer += " ";
-  }
-
   if (Basic().gps.replay)
     buffer += "REPLAY ";
   else if (Basic().gps.simulator) {
     buffer += _("Simulator");
+    buffer += " ";
+  }
+
+  if (!ui_state.map_scale_page_title.empty()) {
+    buffer += "| ";
+    buffer += ui_state.map_scale_page_title;
+    buffer += " ";
+  } else if (ui_state.auxiliary_enabled) {
+    buffer += ui_state.panel_name;
     buffer += " ";
   }
 
