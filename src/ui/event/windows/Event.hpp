@@ -11,7 +11,16 @@
 namespace UI {
 
 struct Event {
-  MSG msg;
+  using Callback = void (*)(void *ctx) noexcept;
+
+  MSG msg{};
+
+  Callback callback = nullptr;
+  void *callback_ctx = nullptr;
+
+  bool IsCallback() const noexcept {
+    return callback != nullptr;
+  }
 
   bool IsKeyDown() const {
     return msg.message == WM_KEYDOWN;
