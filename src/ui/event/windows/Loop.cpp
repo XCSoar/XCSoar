@@ -17,6 +17,11 @@ EventLoop::Get(Event &event)
 void
 EventLoop::Dispatch(const Event &event)
 {
+  if (event.IsCallback()) {
+    event.callback(event.callback_ctx);
+    return;
+  }
+
   ::TranslateMessage(&event.msg);
   ::DispatchMessage(&event.msg);
 }
@@ -24,7 +29,7 @@ EventLoop::Dispatch(const Event &event)
 void
 DialogEventLoop::Dispatch(Event &event)
 {
-  if (::IsDialogMessage(dialog, &event.msg))
+  if (!event.IsCallback() && ::IsDialogMessage(dialog, &event.msg))
     return;
 
   EventLoop::Dispatch(event);

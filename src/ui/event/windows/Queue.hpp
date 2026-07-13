@@ -3,17 +3,17 @@
 
 #pragma once
 
+#include "Event.hpp"
 #include "../shared/TimerQueue.hpp"
 #include "thread/Mutex.hxx"
 #include "time/ClockCache.hxx"
 
 #include <chrono>
+#include <queue>
 
 #include <handleapi.h>
 
 namespace UI {
-
-struct Event;
 
 class EventQueue {
   ClockCache<std::chrono::steady_clock> steady_clock_cache;
@@ -22,6 +22,13 @@ class EventQueue {
 
   Mutex mutex;
   TimerQueue timers;
+
+  struct InjectedEvent {
+    Event::Callback callback;
+    void *ctx;
+  };
+
+  std::queue<InjectedEvent> injected_events;
 
 public:
   EventQueue();
@@ -46,7 +53,13 @@ public:
 
   bool Wait(Event &event);
 
+  void InjectCall(Event::Callback callback, void *ctx) noexcept;
+
+  void Purge(Event::Callback callback, void *ctx) noexcept;
+
 private:
+  bool PopInjected(Event &event) noexcept;
+
   void WakeUp() {
     ::SetEvent(trigger);
   }

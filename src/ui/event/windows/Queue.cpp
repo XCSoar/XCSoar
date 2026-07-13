@@ -13,6 +13,44 @@ namespace UI {
 EventQueue::EventQueue()
   :trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
 
+void
+EventQueue::InjectCall(Event::Callback callback, void *ctx) noexcept
+{
+  {
+    const std::lock_guard lock{mutex};
+    injected_events.push({callback, ctx});
+  }
+
+  WakeUp();
+}
+
+bool
+EventQueue::PopInjected(Event &event) noexcept
+{
+  const std::lock_guard lock{mutex};
+  if (injected_events.empty())
+    return false;
+
+  const InjectedEvent &injected = injected_events.front();
+  event.callback = injected.callback;
+  event.callback_ctx = injected.ctx;
+  injected_events.pop();
+  return true;
+}
+
+void
+EventQueue::Purge(Event::Callback callback, void *ctx) noexcept
+{
+  const std::lock_guard lock{mutex};
+  size_t n = injected_events.size();
+  while (n-- > 0) {
+    const InjectedEvent &injected = injected_events.front();
+    if (injected.callback != callback || injected.ctx != ctx)
+      injected_events.push(injected);
+    injected_events.pop();
+  }
+}
+
 bool
 EventQueue::Wait(Event &event)
 {
@@ -22,6 +60,12 @@ EventQueue::Wait(Event &event)
 
   while (true) {
     ::ResetEvent(trigger);
+
+    event.callback = nullptr;
+    event.callback_ctx = nullptr;
+
+    if (PopInjected(event))
+      return true;
 
     /* invoke all due timers */
 
