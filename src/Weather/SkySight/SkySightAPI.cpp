@@ -674,6 +674,19 @@ SkySightAPI::QueueForecastDatafile(SkySight::Layer &layer,
   return false;
 }
 
+bool
+SkySightAPI::QueuePreloadDatafile(SkySight::Layer &layer,
+                                  time_t forecast_time,
+                                  std::string_view link) noexcept
+{
+  AddPreloadTarget(layer.id, forecast_time);
+  if (QueueForecastDatafile(layer, forecast_time, link))
+    return true;
+
+  FinishPreloadTarget(layer.id, forecast_time, true);
+  return false;
+}
+
 void
 SkySightAPI::QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer &layer,
                             time_t forecast_time) noexcept
@@ -764,11 +777,15 @@ SkySightAPI::PreloadDefaultDatafile(std::string_view layer_id) noexcept
 }
 
 bool
-SkySightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
+SkySightAPI::PreloadDatafiles(std::string_view layer_id,
+                              bool begin_progress) noexcept
 {
   auto *layer = GetLayer(layer_id);
   if (layer == nullptr || layer->SupportsLiveTiles())
     return false;
+
+  if (begin_progress)
+    BeginPreloadProgress();
 
   bool success = false;
 
@@ -776,6 +793,9 @@ SkySightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
     layer->preload_requested = true;
     layer->default_preload_requested = false;
     layer->datafiles_pending = true;
+    if (std::find(preload_metadata_layers.begin(), preload_metadata_layers.end(),
+                  layer->id) == preload_metadata_layers.end())
+      preload_metadata_layers.emplace_back(layer->id);
     UpdateBusyState(*layer);
     success = true;
   } else {
@@ -783,7 +803,7 @@ SkySightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
     layer->default_preload_requested = false;
     for (const auto *datafile :
          SkySight::GetForecastPreloadDatafiles(*layer, std::time(nullptr)))
-      success = QueueForecastDatafile(*layer, datafile->time, datafile->link) ||
+      success = QueuePreloadDatafile(*layer, datafile->time, datafile->link) ||
         success;
 
     UpdateBusyState(*layer);
@@ -795,19 +815,117 @@ SkySightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
   if (layer->datafiles_pending)
     PollSelectedDatafiles();
 
+  if (begin_progress)
+    preload_progress_initializing = false;
+  UpdatePreloadProgress();
+
   return success;
+}
+
+bool
+SkySightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
+{
+  return PreloadDatafiles(layer_id, true);
 }
 
 bool
 SkySightAPI::PreloadAllDatafiles() noexcept
 {
+  BeginPreloadProgress();
   bool success = false;
 
   for (const auto &selected : selected_layers)
     if (!selected.SupportsLiveTiles())
-      success = PreloadDatafiles(selected.id) || success;
+      success = PreloadDatafiles(selected.id, false) || success;
+
+  preload_progress_initializing = false;
+  UpdatePreloadProgress();
 
   return success;
+}
+
+void
+SkySightAPI::BeginPreloadProgress() noexcept
+{
+  preload_targets.clear();
+  preload_metadata_layers.clear();
+  preload_failures = 0;
+  preload_progress_active = true;
+  preload_progress_initializing = true;
+  owner.OnForecastProgress({SkySight::ForecastProgressPhase::Metadata});
+}
+
+void
+SkySightAPI::AddPreloadTarget(std::string_view layer_id,
+                               time_t forecast_time) noexcept
+{
+  const auto exists = std::find_if(preload_targets.begin(), preload_targets.end(),
+                                   [layer_id, forecast_time](const auto &target) {
+                                     return target.layer_id == layer_id &&
+                                       target.forecast_time == forecast_time;
+                                   });
+  if (exists == preload_targets.end())
+    preload_targets.push_back({std::string{layer_id}, forecast_time});
+}
+
+void
+SkySightAPI::FinishPreloadTarget(std::string_view layer_id,
+                                  time_t forecast_time, bool failed) noexcept
+{
+  const auto target = std::find_if(preload_targets.begin(), preload_targets.end(),
+                                   [layer_id, forecast_time](const auto &candidate) {
+                                     return candidate.layer_id == layer_id &&
+                                       candidate.forecast_time == forecast_time;
+                                   });
+  if (target != preload_targets.end() && !target->finished) {
+    target->finished = true;
+    if (failed)
+      ++preload_failures;
+  }
+}
+
+void
+SkySightAPI::FinishPreloadMetadata(std::string_view layer_id, bool failed) noexcept
+{
+  const auto i = std::find(preload_metadata_layers.begin(),
+                           preload_metadata_layers.end(), layer_id);
+  if (i != preload_metadata_layers.end()) {
+    preload_metadata_layers.erase(i);
+    if (failed)
+      ++preload_failures;
+  }
+}
+
+void
+SkySightAPI::UpdatePreloadProgress() noexcept
+{
+  if (!preload_progress_active || preload_progress_initializing)
+    return;
+
+  unsigned completed = 0;
+  for (const auto &target : preload_targets)
+    completed += target.finished;
+
+  SkySight::ForecastProgress progress;
+  progress.total = preload_targets.size();
+  progress.completed = completed;
+  progress.failed = preload_failures;
+
+  if (request->IsThrottled())
+    progress.phase = SkySight::ForecastProgressPhase::Throttled;
+  else if (!preload_metadata_layers.empty())
+    progress.phase = SkySight::ForecastProgressPhase::Metadata;
+  else if (decode_job != nullptr &&
+           decode_job->GetStatus() != SkySightFileDecodeJob::Status::Idle)
+    progress.phase = SkySight::ForecastProgressPhase::Decode;
+  else if (completed < progress.total)
+    progress.phase = SkySight::ForecastProgressPhase::Download;
+  else
+    progress.phase = SkySight::ForecastProgressPhase::Complete;
+
+  owner.OnForecastProgress(progress);
+  if (progress.phase == SkySight::ForecastProgressPhase::Complete)
+    preload_progress_active = false;
 }
 
 void
@@ -1156,7 +1274,7 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     if (preload_requested) {
       for (const auto *datafile :
            SkySight::GetForecastPreloadDatafiles(*layer, now))
-        (void)QueueForecastDatafile(*layer, datafile->time, datafile->link);
+        (void)QueuePreloadDatafile(*layer, datafile->time, datafile->link);
     } else if (default_preload_requested &&
                selected != layer->forecast_datafiles.end()) {
       (void)QueueForecastDatafile(*layer, selected->time, selected->link);
@@ -1172,10 +1290,13 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     layer->to = 0;
   }
 
+  FinishPreloadMetadata(layer_id);
+
   UpdateBusyState(*layer);
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
   PollSelectedDatafiles();
+  UpdatePreloadProgress();
 }
 
 void
@@ -1189,8 +1310,11 @@ SkySightAPI::OnDatafilesError(std::string_view layer_id) noexcept
     SyncSelectedLayer(layer_id);
   }
 
+  FinishPreloadMetadata(layer_id, true);
+
   owner.OnDataUpdated();
   PollSelectedDatafiles();
+  UpdatePreloadProgress();
 }
 
 void
@@ -1203,6 +1327,7 @@ void
 SkySightAPI::OnThrottle() noexcept
 {
   owner.OnDataUpdated();
+  UpdatePreloadProgress();
 }
 
 void
@@ -1215,14 +1340,18 @@ SkySightAPI::OnDatafileDownloaded(std::string_view layer_id,
     return;
 
   if (prepared.NeedsDecode()) {
+    layer->decoding = true;
     UpdateBusyState(*layer);
     SyncSelectedLayer(layer_id);
     owner.OnDataUpdated();
 
     QueueDecodeJob(std::move(prepared), *layer, forecast_time);
     StartNextDecodeJob();
+    UpdatePreloadProgress();
     return;
   }
+
+  layer->decoding = false;
 
   const bool had_pending_download = layer->pending_downloads > 0;
   if (had_pending_download)
@@ -1234,7 +1363,9 @@ SkySightAPI::OnDatafileDownloaded(std::string_view layer_id,
     File::GetLastModification(prepared.GetAvailablePath()));
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
+  FinishPreloadTarget(layer_id, forecast_time);
   StartNextDecodeJob();
+  UpdatePreloadProgress();
 }
 
 void
@@ -1246,12 +1377,16 @@ SkySightAPI::OnDatafileError(std::string_view layer_id,
     if (layer->pending_downloads > 0)
       --layer->pending_downloads;
 
+    layer->decoding = false;
     UpdateBusyState(*layer);
   }
+
+  FinishPreloadTarget(layer_id, forecast_time, true);
 
   SyncSelectedLayer(layer_id);
   owner.OnDataUpdated();
   StartNextDecodeJob();
+  UpdatePreloadProgress();
 }
 
 void

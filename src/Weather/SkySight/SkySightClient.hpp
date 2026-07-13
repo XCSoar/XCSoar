@@ -26,6 +26,7 @@ class SkySightClient final {
   unsigned displayed_zoom = 0;
   bool forecast_image_dirty = true;
   bool forecast_cleanup_pending = true;
+  bool forecast_progress_visible = false;
   std::array<std::string, 9> tile_filenames;
 
 public:
@@ -75,6 +76,7 @@ public:
   void OnLayerCatalogChanged(std::string_view active_id,
                              std::string_view displayed_id) noexcept;
   void OnDataUpdated() noexcept;
+  void OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept;
 
 private:
   bool AddSelectedLayer(std::string_view id, bool save_profile,

@@ -223,10 +223,31 @@ TestSkySightRequestFailurePolicy()
   ok1(login_decision.ready_at == NOW + 90);
 }
 
+static void
+TestSkySightForecastBusyState()
+{
+  SkySight::Layer layer;
+
+  ok1(!layer.ShouldShowUpdating());
+
+  layer.datafiles_pending = true;
+  ok1(layer.ShouldShowUpdating());
+
+  layer.forecast_datafiles.emplace_back(1, "cached");
+  ok1(!layer.ShouldShowUpdating());
+
+  layer.decoding = true;
+  ok1(layer.ShouldShowUpdating());
+
+  layer.decoding = false;
+  layer.pending_downloads = 1;
+  ok1(layer.ShouldShowUpdating());
+}
+
 int
 main()
 {
-  plan_tests(32 + 10 + 9 + 31 + 2 + 1);
+  plan_tests(32 + 10 + 9 + 5 + 31 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
@@ -234,6 +255,7 @@ main()
   TestSkySightKnownLiveTimestamp();
   TestSkySightForecastPreloadSelection();
   TestSkySightRequestFailurePolicy();
+  TestSkySightForecastBusyState();
 
   return exit_status();
 }
