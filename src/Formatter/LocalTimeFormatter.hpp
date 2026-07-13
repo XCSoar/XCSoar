@@ -28,3 +28,21 @@ FormatLocalTimeHHMM(TimeStamp time,
   FormatLocalTimeHHMM(buffer.data(), time, utc_offset);
   return buffer;
 }
+
+/**
+ * Convert a UTC timestamp to local time and format it as
+ * YYYY-MM-DD HH:MM.
+ */
+void
+FormatLocalDateTimeYYYYMMDDHHMM(char *buffer, TimeStamp time,
+                                RoughTimeDelta utc_offset) noexcept;
+
+[[gnu::const]]
+static inline BasicStringBuffer<char, 17>
+FormatLocalDateTimeYYYYMMDDHHMM(TimeStamp time,
+                                RoughTimeDelta utc_offset) noexcept
+{
+  BasicStringBuffer<char, 17> buffer;
+  FormatLocalDateTimeYYYYMMDDHHMM(buffer.data(), time, utc_offset);
+  return buffer;
+}

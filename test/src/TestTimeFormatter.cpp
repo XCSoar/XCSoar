@@ -2,12 +2,16 @@
 // Copyright The XCSoar Project
 
 #include "Formatter/TimeFormatter.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "time/RoughTime.hpp"
 #include "time/Stamp.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 #include "TestUtil.hpp"
+
+#include <algorithm>
+#include <array>
 
 using namespace std::chrono_literals;
 
@@ -276,9 +280,23 @@ TestFlightTimeFromRoundedBrokenDateTime()
         "01:44"));
 }
 
+static void
+TestFormatLocalDateTimeYYYYMMDDHHMM()
+{
+  std::array<char, 21> buffer;
+  buffer.fill(char{0x55});
+
+  FormatLocalDateTimeYYYYMMDDHHMM(buffer.data(), TimeStamp{12h + 34min},
+                                  RoughTimeDelta::FromHours(2));
+
+  ok1(StringIsEqual(buffer.data(), "1970-01-01 14:34"));
+  ok1(std::all_of(buffer.begin() + 17, buffer.end(),
+                  [](char value) { return value == char{0x55}; }));
+}
+
 int main()
 {
-  plan_tests(115);
+  plan_tests(117);
 
   TestFormat();
   TestFormatLong();
@@ -287,6 +305,7 @@ int main()
   TestSmart();
   TestFlightTimeFromRoundedTakeoffLanding();
   TestFlightTimeFromRoundedBrokenDateTime();
+  TestFormatLocalDateTimeYYYYMMDDHHMM();
 
   return exit_status();
 }
