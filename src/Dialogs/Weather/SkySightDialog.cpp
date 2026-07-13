@@ -23,25 +23,13 @@
 #include "Widget/MultiSelectListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
+#include "Weather/SkySight/ForecastFormatter.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include "util/StaticString.hxx"
 
 #include <algorithm>
 #include <functional>
-
-static StaticString<32>
-FormatForecastTimeLabel(time_t forecast_time) noexcept
-{
-  StaticString<32> label;
-  if (forecast_time <= 0)
-    return label;
-
-  label = FormatLocalDateTimeYYYYMMDDHHMM(
-    TimeStamp(std::chrono::duration<double>(forecast_time)),
-    CommonInterface::GetComputerSettings().utc_offset).c_str();
-  return label;
-}
 
 class SelectedLayerRenderer {
   TwoTextRowsRenderer row_renderer;
@@ -125,12 +113,14 @@ public:
     } else {
       const auto &settings = CommonInterface::GetComputerSettings();
       const auto now = std::time(nullptr);
-      const auto age = std::chrono::seconds(now > (time_t)layer->mtime
-                                            ? now - (time_t)layer->mtime
+      const auto age = std::chrono::seconds(now > layer->mtime
+                                            ? now - layer->mtime
                                             : 0);
       if (layer->forecast_time != 0) {
         second_row.Format(_("Step %s. Data from %s to %s. Updated %s ago"),
-                          FormatForecastTimeLabel(layer->forecast_time).c_str(),
+                          SkySight::FormatForecastTimeLabel(
+                            *layer, layer->forecast_time,
+                            settings.utc_offset).c_str(),
                           FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->from)),
                                               settings.utc_offset).c_str(),
                           FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->to)),
@@ -153,10 +143,12 @@ public:
 
 class ForecastStepRenderer final : public ListItemRenderer {
   TextRowRenderer row_renderer;
+  const SkySight::Layer &layer;
   std::vector<time_t> forecast_times;
 
 public:
-  explicit ForecastStepRenderer(const SkySight::Layer &layer) {
+  explicit ForecastStepRenderer(const SkySight::Layer &_layer)
+    :layer(_layer) {
     forecast_times.reserve(layer.forecast_datafiles.size());
     for (const auto &datafile : layer.forecast_datafiles)
       forecast_times.push_back(datafile.time);
@@ -184,7 +176,9 @@ public:
       return;
 
     row_renderer.DrawTextRow(canvas, rc,
-                             FormatForecastTimeLabel(forecast_times[index]).c_str());
+                             SkySight::FormatForecastTimeLabel(
+                               layer, forecast_times[index],
+                               CommonInterface::GetComputerSettings().utc_offset).c_str());
   }
 };
 
