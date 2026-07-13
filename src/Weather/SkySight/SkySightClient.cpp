@@ -6,6 +6,7 @@
 #include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
 #include "SkySightFileDecoder.hpp"
+#include "Weather/MapOverlay/PagePlacement.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
@@ -346,6 +347,28 @@ SkySightClient::SelectAutomaticForecastTime(std::string_view id)
 
   OnDataUpdated();
   return true;
+}
+
+bool
+SkySightClient::SelectPageLayer(std::string_view id)
+{
+  if (id.empty() || !api->IsSelectedLayer(id))
+    return false;
+
+  auto &settings = CommonInterface::SetUISettings().pages;
+  const auto &pages = CommonInterface::GetUIState().pages;
+  if (pages.current_index >= settings.n_pages)
+    return false;
+
+  if (!WeatherMapOverlay::SetSkySightLayerOnPage(settings,
+                                                 pages.current_index, id))
+    return false;
+
+  const auto &page = settings.pages[pages.current_index];
+  Profile::Save(Profile::map, page, pages.current_index);
+  CommonInterface::SetUIState().weather.skysight.cursor_initialized = true;
+
+  return SetLayerActive(id);
 }
 
 bool
