@@ -16,8 +16,6 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "MapWindow/OverlayBitmap.hpp"
 #include "system/FileUtil.hpp"
-#include "time/BrokenDateTime.hpp"
-
 #include <algorithm>
 #include <chrono>
 
@@ -563,14 +561,10 @@ Skysight::UpdateActiveLayer(unsigned index, Path path,
   if (active_layer->SupportsLiveTiles()) {
     label.AppendFormat(" (%u/%u/%u)", tile.zoom, tile.x, tile.y);
   } else if (active_layer->forecast_time != 0) {
-    const BrokenDateTime forecast_date_time{
-      std::chrono::system_clock::from_time_t(active_layer->forecast_time)};
-    label.AppendFormat(" (%04u-%02u-%02u %02u:%02u)",
-                       forecast_date_time.year,
-                       forecast_date_time.month,
-                       forecast_date_time.day,
-                       forecast_date_time.hour,
-                       forecast_date_time.minute);
+    const auto forecast_time = FormatLocalDateTimeYYYYMMDDHHMM(
+      TimeStamp(std::chrono::duration<double>(active_layer->forecast_time)),
+      CommonInterface::GetComputerSettings().utc_offset);
+    label.AppendFormat(" (%s)", forecast_time.c_str());
   }
 
   bitmap->SetLabel(label.c_str());

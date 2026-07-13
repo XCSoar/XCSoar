@@ -7,12 +7,11 @@
 #include "DataGlobals.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Skysight/ForecastUtils.hpp"
 #include "Weather/Skysight/Skysight.hpp"
-#include "time/BrokenDateTime.hpp"
-
 #include <algorithm>
 #include <chrono>
 #include <limits>
@@ -31,17 +30,17 @@ FormatForecastTimeLabel(const SkySight::Layer &layer,
   if (forecast_time <= 0)
     return label;
 
-  const BrokenDateTime date_time{
-    std::chrono::system_clock::from_time_t(forecast_time) +
-    CommonInterface::GetComputerSettings().utc_offset.ToDuration()};
+  const auto date_time = FormatLocalDateTimeYYYYMMDDHHMM(
+    TimeStamp(std::chrono::duration<double>(forecast_time)),
+    CommonInterface::GetComputerSettings().utc_offset);
 
   if (SkySight::IsFullDayForecastLayer(layer))
-    label.Format("%04u-%02u-%02u",
-                 date_time.year, date_time.month, date_time.day);
+    label = date_time.c_str();
   else
-    label.Format("%04u-%02u-%02u %02u:%02u",
-                 date_time.year, date_time.month, date_time.day,
-                 date_time.hour, date_time.minute);
+    label = date_time.c_str();
+
+  if (SkySight::IsFullDayForecastLayer(layer))
+    label.Truncate(10);
 
   return label;
 }
