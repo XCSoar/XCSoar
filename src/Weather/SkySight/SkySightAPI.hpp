@@ -51,6 +51,8 @@ public:
   bool IsThrottled() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
+  time_t GetDatafilesRetryRemainingSeconds() const noexcept;
+  void Poll() noexcept;
 
   const std::vector<SkySightRegionEntry> &GetRegions() const noexcept {
     return regions;
@@ -88,11 +90,20 @@ public:
   void CancelTileDownloads() noexcept;
   void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
                       std::string_view link);
+  bool QueuePreloadDatafile(SkySight::Layer &layer, time_t forecast_time,
+                            std::string_view link) noexcept;
   bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,
                              std::string_view link) noexcept;
+  bool PreloadDatafiles(std::string_view layer_id, bool begin_progress) noexcept;
   bool PreloadDefaultDatafile(std::string_view layer_id) noexcept;
   bool PreloadDatafiles(std::string_view layer_id) noexcept;
   bool PreloadAllDatafiles() noexcept;
+  void BeginPreloadProgress() noexcept;
+  void AddPreloadTarget(std::string_view layer_id, time_t forecast_time) noexcept;
+  void FinishPreloadTarget(std::string_view layer_id, time_t forecast_time,
+                           bool failed=false) noexcept;
+  void FinishPreloadMetadata(std::string_view layer_id, bool failed=false) noexcept;
+  void UpdatePreloadProgress() noexcept;
   void PollRegions() noexcept;
   void PollLayers() noexcept;
   void PollLastUpdates() noexcept;
@@ -106,6 +117,7 @@ public:
   void OnLastUpdates(std::string_view requested_layer_id,
                      boost::json::value value) noexcept;
   void OnDatafiles(std::string_view layer_id, boost::json::value value) noexcept;
+  void OnDatafilesRetry(std::string_view layer_id) noexcept;
   void OnDatafilesError(std::string_view layer_id) noexcept;
   void OnDatafileDownloaded(std::string_view layer_id, time_t forecast_time,
                             SkySightPreparedData prepared) noexcept;
@@ -113,9 +125,22 @@ public:
                        bool preparation_failed=false) noexcept;
   void OnDownloadComplete() noexcept;
   void OnThrottle() noexcept;
+  void OnThrottleEnded() noexcept;
 
 private:
   static constexpr std::size_t MAX_SELECTED_LAYERS = 8;
+
+  struct PreloadTarget {
+    std::string layer_id;
+    time_t forecast_time;
+    bool finished = false;
+  };
+
+  std::vector<PreloadTarget> preload_targets;
+  std::vector<std::string> preload_metadata_layers;
+  unsigned preload_failures = 0;
+  bool preload_progress_active = false;
+  bool preload_progress_initializing = false;
 
   bool regions_loaded = false;
   time_t last_regions_request = 0;
