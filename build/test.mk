@@ -662,6 +662,7 @@ TEST_FILE_METADATA_FORMATTER_DEPENDS = MATH UTIL TIME OS
 $(eval $(call link-program,TestFileMetadataFormatter,TEST_FILE_METADATA_FORMATTER))
 
 TEST_TIME_FORMATTER_SOURCES = \
+	$(SRC)/Formatter/LocalTimeFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTimeFormatter.cpp
