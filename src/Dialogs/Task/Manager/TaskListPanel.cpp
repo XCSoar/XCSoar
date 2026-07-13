@@ -64,7 +64,7 @@ public:
                 TextWidget &_summary)
     :dialog(_dialog),
      active_task(_active_task), task_modified(_task_modified),
-     more(false),
+     more(true),
      summary(_summary)  {}
 
   void SetTwoWidgets(TwoWidgets &_two_widgets) {
