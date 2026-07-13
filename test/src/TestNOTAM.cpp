@@ -67,7 +67,7 @@ MetadataValid(std::string_view json)
 int
 main()
 {
-  plan_tests(62);
+  plan_tests(64);
 
   const auto now = system_clock::now();
 
@@ -268,6 +268,11 @@ main()
     notam.feature_type = "QMRLC";
     notam.geometry.radius_meters = 1000;
 
+    const auto reasons = NOTAMFilter::Evaluate(notam, settings, now);
+    ok1(NOTAMFilter::HasFilterReason(reasons,
+                                     NOTAMFilter::FilterReason::IFR));
+    ok1(NOTAMFilter::HasFilterReason(reasons,
+                                     NOTAMFilter::FilterReason::QCODE));
     ok1(!NOTAMFilter::ShouldDisplay(notam, settings, now, false));
 
     notam.feature_type = "QWERT";

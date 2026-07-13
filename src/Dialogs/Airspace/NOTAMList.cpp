@@ -62,25 +62,27 @@ AppendFilterReason(std::string &text, const char *reason)
 
 [[nodiscard]]
 static std::string
-GetFilterReasons(const NOTAMStruct &notam,
-                 const NOTAMSettings &settings,
-                 std::chrono::system_clock::time_point now)
+FormatFilterReasons(const NOTAMStruct &notam,
+                    const NOTAMSettings &settings,
+                    std::chrono::system_clock::time_point now)
 {
   std::string reasons;
+  const auto filter_reasons = NOTAMFilter::Evaluate(notam, settings, now);
 
-  if (!settings.show_ifr && !notam.traffic.empty() && notam.traffic == "I")
+  if (NOTAMFilter::HasFilterReason(filter_reasons,
+                                   NOTAMFilter::FilterReason::IFR))
     AppendFilterReason(reasons, _("IFR-only"));
 
-  if (settings.show_only_effective && !notam.IsActive(now))
+  if (NOTAMFilter::HasFilterReason(filter_reasons,
+                                   NOTAMFilter::FilterReason::TIME))
     AppendFilterReason(reasons, _("not effective"));
 
-  if (settings.max_radius_m > 0 &&
-      notam.geometry.radius_meters > settings.max_radius_m)
+  if (NOTAMFilter::HasFilterReason(filter_reasons,
+                                   NOTAMFilter::FilterReason::RADIUS))
     AppendFilterReason(reasons, _("radius"));
 
-  const auto &qcode = notam.feature_type;
-  if (!qcode.empty() &&
-      NOTAMFilter::IsQCodeHidden(qcode, settings.hidden_qcodes))
+  if (NOTAMFilter::HasFilterReason(filter_reasons,
+                                   NOTAMFilter::FilterReason::QCODE))
     AppendFilterReason(reasons, _("Q-Code"));
 
   return reasons;
@@ -500,7 +502,7 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       if (is_filtered) {
         first_row_text += " • ";
         first_row_text += _("Filtered");
-        const auto reasons = GetFilterReasons(notam, settings, now);
+      const auto reasons = FormatFilterReasons(notam, settings, now);
         if (!reasons.empty()) {
           first_row_text += ": ";
           first_row_text += reasons;
