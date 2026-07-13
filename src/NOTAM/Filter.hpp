@@ -12,6 +12,22 @@
 
 namespace NOTAMFilter {
 
+enum class FilterReason : unsigned {
+  IFR = 1u << 0,
+  TIME = 1u << 1,
+  QCODE = 1u << 2,
+  RADIUS = 1u << 3,
+};
+
+using FilterReasons = unsigned;
+
+[[nodiscard]]
+constexpr bool
+HasFilterReason(FilterReasons reasons, FilterReason reason) noexcept
+{
+  return (reasons & static_cast<FilterReasons>(reason)) != 0;
+}
+
 struct FilterStats {
   unsigned total = 0;
   unsigned filtered_by_ifr = 0;
@@ -30,6 +46,14 @@ struct FilterStats {
 [[gnu::pure]]
 bool IsQCodeHidden(std::string_view qcode,
                    std::string_view hidden_list) noexcept;
+
+/**
+ * Evaluates all active filters and returns the matching suppression reasons.
+ */
+[[nodiscard]]
+FilterReasons Evaluate(const struct NOTAM &notam,
+                       const NOTAMSettings &settings,
+                       std::chrono::system_clock::time_point now) noexcept;
 
 /**
  * Returns false when @p notam is suppressed by IFR, effective-time, radius or

@@ -47,13 +47,37 @@ IsQCodeHidden(std::string_view qcode,
   return false;
 }
 
+FilterReasons
+Evaluate(const struct NOTAM &notam, const NOTAMSettings &settings,
+         std::chrono::system_clock::time_point now) noexcept
+{
+  FilterReasons reasons = 0;
+
+  if (!settings.show_ifr && !notam.traffic.empty() && notam.traffic == "I")
+    reasons |= static_cast<FilterReasons>(FilterReason::IFR);
+
+  if (settings.show_only_effective && !notam.IsActive(now))
+    reasons |= static_cast<FilterReasons>(FilterReason::TIME);
+
+  if (settings.max_radius_m > 0 &&
+      notam.geometry.radius_meters > settings.max_radius_m)
+    reasons |= static_cast<FilterReasons>(FilterReason::RADIUS);
+
+  if (!notam.feature_type.empty() &&
+      IsQCodeHidden(notam.feature_type, settings.hidden_qcodes))
+    reasons |= static_cast<FilterReasons>(FilterReason::QCODE);
+
+  return reasons;
+}
+
 bool
 ShouldDisplay(const struct NOTAM &notam, const NOTAMSettings &settings,
               std::chrono::system_clock::time_point now,
               bool log) noexcept
 {
-  // Check IFR filter (I=IFR-only, V=VFR-only, IV=both)
-  if (!settings.show_ifr && !notam.traffic.empty() && notam.traffic == "I") {
+  const auto reasons = Evaluate(notam, settings, now);
+
+  if (HasFilterReason(reasons, FilterReason::IFR)) {
     if (log) {
       LogDebug("NOTAM Filter: {} is IFR-only traffic ({}), filtered out",
                notam.number.c_str(), notam.traffic.c_str());
@@ -61,20 +85,15 @@ ShouldDisplay(const struct NOTAM &notam, const NOTAMSettings &settings,
     return false;
   }
 
-  // Check if currently effective (if filter enabled)
-  if (settings.show_only_effective) {
-    if (!notam.IsActive(now)) {
-      if (log) {
-        LogDebug("NOTAM Filter: {} not currently effective, filtered out",
-                 notam.number.c_str());
-      }
-      return false;
+  if (HasFilterReason(reasons, FilterReason::TIME)) {
+    if (log) {
+      LogDebug("NOTAM Filter: {} not currently effective, filtered out",
+               notam.number.c_str());
     }
+    return false;
   }
 
-  // Check radius filter
-  if (settings.max_radius_m > 0 &&
-      notam.geometry.radius_meters > settings.max_radius_m) {
+  if (HasFilterReason(reasons, FilterReason::RADIUS)) {
     if (log) {
       LogDebug("NOTAM Filter: {} radius {:.0f} m exceeds limit {} m, "
                "filtered out",
@@ -85,15 +104,12 @@ ShouldDisplay(const struct NOTAM &notam, const NOTAMSettings &settings,
   }
 
   const auto &qcode = notam.feature_type;
-  if (qcode.empty())
-    return true;
-
-  if (log) {
+  if (!qcode.empty() && log) {
     LogDebug("NOTAM Filter: {} Q-code='{}'", notam.number.c_str(),
              qcode.c_str());
   }
 
-  if (IsQCodeHidden(qcode, settings.hidden_qcodes)) {
+  if (HasFilterReason(reasons, FilterReason::QCODE)) {
     if (log) {
       LogDebug("NOTAM Filter: {} Q-code {} is hidden",
                notam.number.c_str(), qcode.c_str());
@@ -101,7 +117,7 @@ ShouldDisplay(const struct NOTAM &notam, const NOTAMSettings &settings,
     return false;
   }
 
-  return true;
+  return reasons == 0;
 }
 
 unsigned
@@ -125,25 +141,21 @@ ComputeStats(const std::vector<struct NOTAM> &notams,
   FilterStats stats;
   stats.total = static_cast<unsigned>(notams.size());
 
-  const char *const hidden_list = settings.hidden_qcodes.c_str();
-
   for (const auto &notam : notams) {
-    if (!settings.show_ifr && !notam.traffic.empty() && notam.traffic == "I")
+    const auto reasons = Evaluate(notam, settings, now);
+    if (HasFilterReason(reasons, FilterReason::IFR))
       ++stats.filtered_by_ifr;
 
-    if (settings.show_only_effective && !notam.IsActive(now))
+    if (HasFilterReason(reasons, FilterReason::TIME))
       ++stats.filtered_by_time;
 
-    const auto &qcode = notam.feature_type;
-    if (!qcode.empty() &&
-        IsQCodeHidden(qcode, hidden_list))
+    if (HasFilterReason(reasons, FilterReason::QCODE))
       ++stats.filtered_by_qcode;
 
-    if (settings.max_radius_m > 0 &&
-        notam.geometry.radius_meters > settings.max_radius_m)
+    if (HasFilterReason(reasons, FilterReason::RADIUS))
       ++stats.filtered_by_radius;
 
-    if (ShouldDisplay(notam, settings, now, false))
+    if (reasons == 0)
       ++stats.final_count;
   }
 
