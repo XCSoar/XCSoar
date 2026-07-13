@@ -271,8 +271,6 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
       return plus ? _("Altitude+\n(UP)") : _("Altitude-\n(DOWN)");
 
     case PageLayout::Overlay::SKYSIGHT:
-      return "";
-
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:

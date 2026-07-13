@@ -225,14 +225,22 @@ PageLayoutEditWidget::FillSkysightLayerControl() noexcept
 #ifdef HAVE_HTTP
   const auto skysight = DataGlobals::GetSkysight();
   if (skysight != nullptr) {
-    unsigned selected_value = 0;
+    unsigned selected_value = 1;
     bool has_choices = false;
-    unsigned next_value = 0;
+    bool stored_layer_is_selected = false;
 
-    if (!value.skysight_overlay.empty()) {
+    for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
+      if (const auto *layer = skysight->GetSelectedLayer(i);
+          layer != nullptr && layer->id == value.skysight_overlay.c_str()) {
+        stored_layer_is_selected = true;
+        selected_value = unsigned(i + 1);
+        break;
+      }
+
+    if (!value.skysight_overlay.empty() && !stored_layer_is_selected) {
       df.AddChoice(0, value.skysight_overlay.c_str(), value.skysight_overlay.c_str());
       has_choices = true;
-      next_value = 1;
+      selected_value = 0;
     }
 
     for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
@@ -240,17 +248,10 @@ PageLayoutEditWidget::FillSkysightLayerControl() noexcept
       if (layer == nullptr)
         continue;
 
-      if (has_choices && layer->id == value.skysight_overlay.c_str()) {
-        selected_value = 0;
-        continue;
-      }
-
-      df.AddChoice(next_value, layer->name.c_str());
-      if (layer->id == value.skysight_overlay.c_str())
-        selected_value = next_value;
+      const unsigned choice_value = unsigned(i + 1);
+      df.AddChoice(choice_value, layer->name.c_str());
 
       has_choices = true;
-      ++next_value;
     }
 
     if (has_choices) {

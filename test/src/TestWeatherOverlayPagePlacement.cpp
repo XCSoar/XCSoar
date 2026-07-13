@@ -75,6 +75,20 @@ TestApplySkysightOverlay()
 }
 
 static void
+TestChangeSkysightPageLayer()
+{
+  PageSettings settings;
+  settings.SetDefaults();
+
+  ok1(!SetSkysightLayerOnPage(settings, 0, "thermal"));
+  ok1(ApplyWeatherOverlayToPage(settings, 0,
+                                PageLayout::Overlay::SKYSIGHT,
+                                -1, "wind"));
+  ok1(SetSkysightLayerOnPage(settings, 0, "thermal"));
+  ok1(settings.pages[0].skysight_overlay == "thermal");
+}
+
+static void
 TestPageLimitGuard()
 {
   PageSettings settings;
@@ -106,12 +120,13 @@ TestInvalidSourcePage()
 int
 main()
 {
-  plan_tests(22);
+  plan_tests(22 + 4);
 
   TestApplyToCurrentPage();
   TestAddNewOverlayPageFromNonMapSource();
   TestReplaceCurrentOverlay();
   TestApplySkysightOverlay();
+  TestChangeSkysightPageLayer();
   TestPageLimitGuard();
   TestInvalidSourcePage();
 

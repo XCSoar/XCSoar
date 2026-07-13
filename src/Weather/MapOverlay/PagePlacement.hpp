@@ -54,6 +54,22 @@ ApplyWeatherOverlayToPage(PageSettings &settings,
   return true;
 }
 
+static inline bool
+SetSkysightLayerOnPage(PageSettings &settings, unsigned page_index,
+                       std::string_view layer_id) noexcept
+{
+  if (page_index >= settings.n_pages || layer_id.empty())
+    return false;
+
+  auto &page = settings.pages[page_index];
+  if (!page.IsMapMain() || page.overlay != PageLayout::Overlay::SKYSIGHT)
+    return false;
+
+  page.skysight_overlay = layer_id;
+  page.Normalise();
+  return true;
+}
+
 static inline AddPageResult
 AddWeatherOverlayPage(PageSettings &settings,
                       unsigned source_page_index,

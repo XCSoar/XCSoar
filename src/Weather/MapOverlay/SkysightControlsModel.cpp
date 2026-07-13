@@ -78,6 +78,19 @@ SkysightControlsModel::SkysightControlsModel(std::shared_ptr<Skysight> _skysight
                                              std::string_view _layer_id) noexcept
   :skysight(std::move(_skysight)), layer_id(_layer_id) {}
 
+void
+SkysightControlsModel::OnShow() noexcept
+{
+  countdown_timer.Schedule(std::chrono::seconds{1});
+}
+
+void
+SkysightControlsModel::OnHide() noexcept
+{
+  countdown_timer.Cancel();
+  countdown_visible = false;
+}
+
 const SkySight::Layer *
 SkysightControlsModel::GetLayer() const noexcept
 {
@@ -89,6 +102,20 @@ SkysightControlsModel::GetLayer() const noexcept
 void
 SkysightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 {
+  if (skysight != nullptr && skysight->IsThrottled()) {
+    text.Format(_("Download limit: retry in %u s"),
+                unsigned(skysight->GetThrottleRemainingSeconds()));
+    return;
+  }
+
+  if (skysight != nullptr) {
+    const auto retry = skysight->GetDatafilesRetryRemainingSeconds();
+    if (retry > 0) {
+      text.Format(_("Retry download in %u s"), unsigned(retry));
+      return;
+    }
+  }
+
   const auto *layer = GetLayer();
   if (layer == nullptr) {
     text = _("SkySight");
@@ -121,32 +148,7 @@ SkysightControlsModel::FormatSecondaryLabel(StaticString<64> &text) const noexce
     return;
   }
 
-  if (layer->SupportsLiveTiles()) {
-    if (layer->updating)
-      text = _("Updating...");
-    else if (layer->last_update != 0)
-      text.Format(_("Updated %s"),
-                  FormatForecastTimeLabel(*layer, layer->last_update).c_str());
-    else
-      text = _("Live tiles");
-    return;
-  }
-
-  if (layer->pending_downloads > 0 || layer->datafiles_pending) {
-    text = _("Updating...");
-    return;
-  }
-
-  const auto steps = BuildForecastTimes(*layer).size();
-  if (steps == 0) {
-    text = _("No forecast steps");
-    return;
-  }
-
-  text.Format(steps == 1
-                ? _("1 step available")
-                : _("%u steps available"),
-              unsigned(steps));
+  text = layer->name.c_str();
 }
 
 bool
@@ -162,35 +164,99 @@ SkysightControlsModel::HasPrimaryData() const noexcept
 bool
 SkysightControlsModel::HasSecondaryData() const noexcept
 {
-  return GetLayer() != nullptr;
+  return skysight != nullptr && skysight->NumSelectedLayers() > 0;
 }
 
 bool
 SkysightControlsModel::StepPrimary(int delta) noexcept
 {
-  const auto *layer = GetLayer();
-  if (layer == nullptr || layer->SupportsLiveTiles())
+  try {
+    const auto *layer = GetLayer();
+    if (layer == nullptr || layer->SupportsLiveTiles())
+      return false;
+
+    const auto times = BuildForecastTimes(*layer);
+    if (times.empty())
+      return false;
+
+    int index = FindForecastIndex(*layer, times);
+    if (index < 0) {
+      const auto reference = layer->forecast_time > 0
+        ? layer->forecast_time
+        : SkySight::ChooseClosestForecastTime(times,
+                                              [](time_t time) { return time; });
+      const auto nearest = std::lower_bound(times.begin(), times.end(), reference);
+      if (nearest == times.end())
+        index = int(times.size()) - 1;
+      else if (nearest == times.begin())
+        index = 0;
+      else {
+        const auto before = nearest - 1;
+        index = reference - *before <= *nearest - reference
+          ? int(before - times.begin())
+          : int(nearest - times.begin());
+      }
+    }
+
+    index += delta;
+    if (index < 0 || index >= int(times.size()))
+      return false;
+
+    return skysight->SelectForecastTime(layer->id, times[unsigned(index)]);
+  } catch (...) {
     return false;
-
-  const auto times = BuildForecastTimes(*layer);
-  if (times.empty())
-    return false;
-
-  int index = FindForecastIndex(*layer, times);
-  if (index < 0)
-    index = 0;
-
-  index += delta;
-  if (index < 0 || index >= int(times.size()))
-    return false;
-
-  return skysight->SelectForecastTime(layer->id, times[unsigned(index)]);
+  }
 }
 
 bool
-SkysightControlsModel::StepSecondary([[maybe_unused]] int delta) noexcept
+SkysightControlsModel::StepSecondary(int delta) noexcept
 {
-  return false;
+  if (skysight == nullptr || delta == 0 || skysight->NumSelectedLayers() == 0)
+    return false;
+
+  int current = 0;
+  for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+    const auto *layer = skysight->GetSelectedLayer(i);
+    if (layer != nullptr && layer->id == layer_id.c_str()) {
+      current = int(i);
+      break;
+    }
+  }
+
+  const int count = int(skysight->NumSelectedLayers());
+  const int next = ((current + delta) % count + count) % count;
+  return SelectLayer(unsigned(next));
+}
+
+void
+SkysightControlsModel::UpdateCountdownLabel() noexcept
+{
+  const bool waiting = skysight != nullptr &&
+    (skysight->IsThrottled() ||
+     skysight->GetDatafilesRetryRemainingSeconds() > 0);
+
+  if (waiting || countdown_visible)
+    Notify(ControlsUpdate::LABELS);
+
+  countdown_visible = waiting;
+}
+
+bool
+SkysightControlsModel::SelectLayer(unsigned index) noexcept
+{
+  try {
+    if (skysight == nullptr || index >= skysight->NumSelectedLayers())
+      return false;
+
+    const auto *layer = skysight->GetSelectedLayer(index);
+    if (layer == nullptr || !skysight->SelectPageLayer(layer->id))
+      return false;
+
+    layer_id = layer->id.c_str();
+    return true;
+  } catch (...) {
+    return false;
+  }
 }
 
 bool
@@ -203,14 +269,17 @@ SkysightControlsModel::GetPrimaryAutoAdvance() const noexcept
 void
 SkysightControlsModel::SetPrimaryAutoAdvance(bool auto_advance) noexcept
 {
-  const auto *layer = GetLayer();
-  if (layer == nullptr || layer->SupportsLiveTiles())
-    return;
+  try {
+    const auto *layer = GetLayer();
+    if (layer == nullptr || layer->SupportsLiveTiles())
+      return;
 
-  if (auto_advance)
-    (void)skysight->SelectAutomaticForecastTime(layer->id);
-  else if (layer->forecast_time != 0)
-    (void)skysight->SelectForecastTime(layer->id, layer->forecast_time);
+    if (auto_advance)
+      (void)skysight->SelectAutomaticForecastTime(layer->id);
+    else if (layer->forecast_time != 0)
+      (void)skysight->SelectForecastTime(layer->id, layer->forecast_time);
+  } catch (...) {
+  }
 }
 
 void
@@ -229,39 +298,78 @@ SkysightControlsModel::GetPrimaryLabelAction() const noexcept
     : PrimaryLabelAction::NONE;
 }
 
+SecondaryLabelAction
+SkysightControlsModel::GetSecondaryLabelAction() const noexcept
+{
+  return skysight != nullptr && skysight->NumSelectedLayers() > 0
+    ? SecondaryLabelAction::OPEN_PICKER
+    : SecondaryLabelAction::NONE;
+}
+
 void
 SkysightControlsModel::OpenPrimaryPicker() noexcept
 {
-  const auto *layer = GetLayer();
-  if (layer == nullptr || layer->SupportsLiveTiles())
-    return;
+  try {
+    const auto *layer = GetLayer();
+    if (layer == nullptr || layer->SupportsLiveTiles())
+      return;
 
-  const auto times = BuildForecastTimes(*layer);
-  if (times.empty())
+    const auto times = BuildForecastTimes(*layer);
+    if (times.empty())
+      return;
+
+    DataFieldEnum picker;
+    picker.ClearChoices();
+    picker.addEnumText(_("Auto"), TIME_PICKER_AUTO);
+
+    for (unsigned i = 0; i < times.size(); ++i)
+      picker.addEnumText(FormatForecastTimeLabel(*layer, times[i]).c_str(), i);
+
+    if (layer->UsesAutomaticForecastTime())
+      picker.SetValue(TIME_PICKER_AUTO);
+    else {
+      const int current = FindForecastIndex(*layer, times);
+      picker.SetValue(current >= 0 ? unsigned(current) : 0);
+    }
+
+    if (!ComboPicker(_("SkySight Time"), picker, nullptr))
+      return;
+
+    const unsigned selected = picker.GetValue();
+    if (selected == TIME_PICKER_AUTO)
+      (void)skysight->SelectAutomaticForecastTime(layer->id);
+    else if (selected < times.size())
+      (void)skysight->SelectForecastTime(layer->id, times[selected]);
+  } catch (...) {
+  }
+}
+
+void
+SkysightControlsModel::OpenSecondaryPicker() noexcept
+{
+  if (skysight == nullptr || skysight->NumSelectedLayers() == 0)
     return;
 
   DataFieldEnum picker;
-  picker.ClearChoices();
-  picker.addEnumText(_("Auto"), TIME_PICKER_AUTO);
+  unsigned current = 0;
+  for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+    const auto *layer = skysight->GetSelectedLayer(i);
+    if (layer == nullptr)
+      continue;
 
-  for (unsigned i = 0; i < times.size(); ++i)
-    picker.addEnumText(FormatForecastTimeLabel(*layer, times[i]).c_str(), i);
-
-  if (layer->UsesAutomaticForecastTime())
-    picker.SetValue(TIME_PICKER_AUTO);
-  else {
-    const int current = FindForecastIndex(*layer, times);
-    picker.SetValue(current >= 0 ? unsigned(current) : 0);
+    picker.addEnumText(layer->name.c_str(), int(i));
+    if (layer->id == layer_id.c_str())
+      current = i;
   }
 
-  if (!ComboPicker(_("SkySight Time"), picker, nullptr))
+  picker.SetValue(current);
+  if (!ComboPicker(_("SkySight Layer"), picker, nullptr))
     return;
 
-  const unsigned selected = picker.GetValue();
-  if (selected == TIME_PICKER_AUTO)
-    (void)skysight->SelectAutomaticForecastTime(layer->id);
-  else if (selected < times.size())
-    (void)skysight->SelectForecastTime(layer->id, times[selected]);
+  const int selected = picker.GetValue();
+  if (selected >= 0 && unsigned(selected) < skysight->NumSelectedLayers() &&
+      SelectLayer(unsigned(selected)))
+    Notify(ControlsUpdate::OVERLAY);
 }
 
 void
