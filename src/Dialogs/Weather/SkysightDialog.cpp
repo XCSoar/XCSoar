@@ -102,6 +102,8 @@ public:
         else
           second_row = _("Loading forecast steps...");
       }
+      else if (!layer->SupportsLiveTiles() && layer->decoding)
+        second_row = _("Decoding forecast data...");
       else if (!layer->SupportsLiveTiles() && layer->pending_downloads > 1)
         second_row.Format(_("Preloading %u forecast steps..."),
                           layer->pending_downloads);

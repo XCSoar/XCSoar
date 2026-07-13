@@ -86,11 +86,20 @@ public:
   void CancelTileDownloads() noexcept;
   void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
                       std::string_view link);
+  bool QueuePreloadDatafile(SkySight::Layer &layer, time_t forecast_time,
+                            std::string_view link) noexcept;
   bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,
                              std::string_view link) noexcept;
+  bool PreloadDatafiles(std::string_view layer_id, bool begin_progress) noexcept;
   bool PreloadDefaultDatafile(std::string_view layer_id) noexcept;
   bool PreloadDatafiles(std::string_view layer_id) noexcept;
   bool PreloadAllDatafiles() noexcept;
+  void BeginPreloadProgress() noexcept;
+  void AddPreloadTarget(std::string_view layer_id, time_t forecast_time) noexcept;
+  void FinishPreloadTarget(std::string_view layer_id, time_t forecast_time,
+                           bool failed=false) noexcept;
+  void FinishPreloadMetadata(std::string_view layer_id, bool failed=false) noexcept;
+  void UpdatePreloadProgress() noexcept;
   void PollRegions() noexcept;
   void PollLayers() noexcept;
   void PollLastUpdates() noexcept;
@@ -113,6 +122,18 @@ public:
 
 private:
   static constexpr std::size_t MAX_SELECTED_LAYERS = 8;
+
+  struct PreloadTarget {
+    std::string layer_id;
+    time_t forecast_time;
+    bool finished = false;
+  };
+
+  std::vector<PreloadTarget> preload_targets;
+  std::vector<std::string> preload_metadata_layers;
+  unsigned preload_failures = 0;
+  bool preload_progress_active = false;
+  bool preload_progress_initializing = false;
 
   bool regions_loaded = false;
   time_t last_regions_request = 0;

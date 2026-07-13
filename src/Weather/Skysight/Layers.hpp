@@ -19,6 +19,21 @@ enum class ForecastTimeMode : uint8_t {
   Fixed,
 };
 
+enum class ForecastProgressPhase : uint8_t {
+  Metadata,
+  Download,
+  Decode,
+  Throttled,
+  Complete,
+};
+
+struct ForecastProgress {
+  ForecastProgressPhase phase = ForecastProgressPhase::Metadata;
+  unsigned total = 0;
+  unsigned completed = 0;
+  unsigned failed = 0;
+};
+
 struct LegendColor {
   uint8_t red = 0;
   uint8_t green = 0;
@@ -58,6 +73,8 @@ struct Layer {
   bool updating = false;
   /** Metadata request for available forecast steps is still pending. */
   bool datafiles_pending = false;
+  /** A downloaded forecast file is being decoded into an overlay image. */
+  bool decoding = false;
   bool preload_requested = false;
   bool default_preload_requested = false;
   bool tile_layer = false;
@@ -109,7 +126,8 @@ struct Layer {
    * cached data is usable yet; active downloads/decodes are always busy.
    */
   [[nodiscard]] bool ShouldShowUpdating() const noexcept {
-    return pending_downloads > 0 || (datafiles_pending && !HasUsableForecastData());
+    return decoding || pending_downloads > 0 ||
+      (datafiles_pending && !HasUsableForecastData());
   }
 
   bool operator==(std::string_view other) const noexcept {

@@ -6,10 +6,12 @@
 #include "SkysightAPI.hpp"
 #include "ForecastUtils.hpp"
 #include "SkySightFileDecoder.hpp"
+#include "Weather/BackgroundDownloadProgress.hpp"
 #include "Weather/MapOverlay/PagePlacement.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "MainWindow.hpp"
@@ -302,6 +304,7 @@ void
 Skysight::PollPendingDatafiles() noexcept
 {
   MaybeCleanupFiles();
+  api->PollSelectedDatafiles();
 }
 
 bool
@@ -580,6 +583,59 @@ Skysight::OnDataUpdated() noexcept
 
   if (CommonInterface::main_window != nullptr)
     CommonInterface::main_window->SendCalculatedUpdate();
+}
+
+void
+Skysight::OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept
+{
+  auto &download_progress = BackgroundDownloadProgress::Get();
+  StaticString<128> text;
+
+  switch (progress.phase) {
+  case SkySight::ForecastProgressPhase::Metadata:
+    text = _("Loading SkySight forecast steps...");
+    break;
+
+  case SkySight::ForecastProgressPhase::Download:
+    text.Format(_("Preloading SkySight forecast (%u/%u)..."),
+                progress.completed, progress.total);
+    break;
+
+  case SkySight::ForecastProgressPhase::Decode:
+    text.Format(_("Decoding SkySight forecast (%u/%u)..."),
+                progress.completed, progress.total);
+    break;
+
+  case SkySight::ForecastProgressPhase::Throttled:
+    text = _("SkySight is rate-limited; preload will resume shortly.");
+    break;
+
+  case SkySight::ForecastProgressPhase::Complete:
+    if (progress.failed > 0)
+      text.Format(_("SkySight preload completed with %u failures."),
+                  progress.failed);
+    break;
+  }
+
+  if (!forecast_progress_visible &&
+      progress.phase != SkySight::ForecastProgressPhase::Complete) {
+    download_progress.Begin(text.c_str());
+    forecast_progress_visible = true;
+  } else if (forecast_progress_visible && !text.empty()) {
+    download_progress.SetText(text.c_str());
+  }
+
+  if (forecast_progress_visible) {
+    download_progress.SetProgressRange(std::max(1u, progress.total));
+    download_progress.SetProgressPosition(std::min(progress.completed,
+                                                    std::max(1u, progress.total)));
+  }
+
+  if (progress.phase == SkySight::ForecastProgressPhase::Complete &&
+      forecast_progress_visible) {
+    download_progress.End();
+    forecast_progress_visible = false;
+  }
 }
 
 bool

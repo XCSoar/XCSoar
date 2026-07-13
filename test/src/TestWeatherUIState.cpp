@@ -115,15 +115,37 @@ TestSkysightForecastPreloadSelection()
   ok1(selected[1]->time == 11 * DAY + 6 * 60 * 60);
 }
 
+static void
+TestSkysightForecastBusyState()
+{
+  SkySight::Layer layer;
+
+  ok1(!layer.ShouldShowUpdating());
+
+  layer.datafiles_pending = true;
+  ok1(layer.ShouldShowUpdating());
+
+  layer.forecast_datafiles.emplace_back(1, "cached");
+  ok1(!layer.ShouldShowUpdating());
+
+  layer.decoding = true;
+  ok1(layer.ShouldShowUpdating());
+
+  layer.decoding = false;
+  layer.pending_downloads = 1;
+  ok1(layer.ShouldShowUpdating());
+}
+
 int
 main()
 {
-  plan_tests(32 + 7);
+  plan_tests(32 + 7 + 5);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
   TestWeatherUiStateXcthermCursor();
   TestSkysightForecastPreloadSelection();
+  TestSkysightForecastBusyState();
 
   return exit_status();
 }
