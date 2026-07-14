@@ -374,11 +374,8 @@ Cleanup(Path directory) noexcept
 {
   try {
     const auto now = std::chrono::system_clock::now();
-    OlderThanFileVisitor delete_tiles{now - std::chrono::hours{12}};
     OlderThanFileVisitor delete_tmp{now - std::chrono::hours{6}};
     OlderThanFileVisitor delete_json{now - std::chrono::hours{1}};
-
-    Directory::VisitSpecificFiles(directory, "*.jpg", delete_tiles);
 
     OlderThanForecastTimeVisitor delete_forecasts{
       std::chrono::system_clock::to_time_t(now - FORECAST_RETENTION)};
