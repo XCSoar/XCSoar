@@ -14,6 +14,9 @@ Version 7.45 - not yet released
 * ui
   - Show all tasks by default in Task Browser instead of requiring to click
     the "More" button first.
+  - Rename to turnpoint observation zone type "Symmetric Quadrant" to
+    "Symmetric Sector", as these zones do not have to be 90 degrees but
+    support any angle.
   - Outline selected targets on the FLARM traffic radar
   - Weather cursor bar: narrower stepper buttons on touchscreens and clip
     long centre labels instead of hiding them when they do not fit

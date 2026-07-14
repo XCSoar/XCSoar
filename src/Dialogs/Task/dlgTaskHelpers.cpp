@@ -205,8 +205,15 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
     strcpy(buffer, _("BGA Start Sector"));
     return;
 
-  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-    strcpy(buffer, _("Symmetric quadrant"));
+  case ObservationZone::Shape::SYMMETRIC_SECTOR:
+    StringFormatUnsafe(buffer,"%s - %s: %.1f%s, %s: %.1f°",
+                    _("Symmetric Sector"),
+                    _("Radius"),
+                    (double)Units::ToUserDistance(((const SymmetricSectorZone &)ozp).GetRadius()),
+                    Units::GetDistanceName(),
+                    _("Angle"),
+                    ((const SymmetricSectorZone &)ozp).GetSectorAngle().Degrees()
+                  );
     return;
   }
 

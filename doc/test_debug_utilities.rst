@@ -97,23 +97,23 @@ flight data.
 
    #include "system/Args.hpp"
    #include "DebugReplay.hpp"
-   
+
    int main(int argc, char **argv)
    {
      Args args(argc, argv, "USAGE");
      DebugReplay *replay = CreateDebugReplay(args);
      if (replay == NULL)
        return EXIT_FAILURE;
-     
+
      args.ExpectEnd();
-     
+
      while (replay->Next()) {
        const MoreData &basic = replay->Basic();
        const DerivedInfo &calculated = replay->Calculated();
-       
+
        // Process data here
      }
-     
+
      delete replay;
      return EXIT_SUCCESS;
    }
@@ -151,9 +151,9 @@ boilerplate for window creation, event loops, and UI initialization.
    #define ENABLE_CMDLINE
    #define ENABLE_PROFILE
    #define USAGE "DRIVER FILE"
-   
+
    #include "Main.hpp"
-   
+
    static void
    Main(UI::Display &display)
    {
@@ -189,13 +189,13 @@ parsing.
 .. code-block:: cpp
 
    #include "system/Args.hpp"
-   
+
    int main(int argc, char **argv)
    {
      Args args(argc, argv, "USAGE");
      // Parse arguments
      args.ExpectEnd();
-     
+
      // Process input (stdin, files, etc.)
      return EXIT_SUCCESS;
    }
@@ -220,22 +220,22 @@ drivers directly.
 
    #include "test/src/DebugPort.hpp"
    #include "Device/Driver.hpp"
-   
+
    int main(int argc, char **argv)
    {
      Args args(argc, argv, "PORT BAUD");
      DebugPort debug_port(args);
      args.ExpectEnd();
-     
+
      ScopeGlobalAsioThread global_asio_thread;
      NullDataHandler handler;
      auto port = debug_port.Open(*asio_thread, *global_cares_channel, handler);
-     
+
      ConsoleOperationEnvironment env;
      if (!port->WaitConnected(env)) {
        return EXIT_FAILURE;
      }
-     
+
      // Interact with device
      return EXIT_SUCCESS;
    }
@@ -265,24 +265,24 @@ utilities. It provides:
    DebugReplay *replay = CreateDebugReplay(args);
    if (replay == NULL)
      return EXIT_FAILURE;
-   
+
    while (replay->Next()) {
      const MoreData &basic = replay->Basic();
      const DerivedInfo &calculated = replay->Calculated();
-     
+
      // Access GPS data
      if (basic.location_available) {
        GeoPoint location = basic.location;
        // ...
      }
-     
+
      // Access calculated values
      if (calculated.estimated_wind_available) {
        SpeedVector wind = calculated.estimated_wind;
        // ...
      }
    }
-   
+
    delete replay;
 
 **Available data**:
@@ -497,7 +497,7 @@ data over the network:
 
    # Terminal 1: Start FeedNMEA as TCP server
    cat flight.nmea | ./output/UNIX/bin/FeedNMEA tcp 4353
-   
+
    # Terminal 2: XCSoar connects to localhost:4353 to receive NMEA data
    # Configure XCSoar device port as "TCP Client" with host "localhost" and port 4353
 
@@ -531,7 +531,7 @@ FeedNMEA is particularly useful for testing XCSoar under WINE:
    # Convert IGC to NMEA and feed to serial port
    ./output/UNIX/bin/IGC2NMEA test/data/01lz1hq1.igc /tmp/flight.nmea
    cat /tmp/flight.nmea | ./output/UNIX/bin/FeedNMEA /dev/ttyUSB0 57600
-   
+
    # Or feed to TCP server for network testing
    cat /tmp/flight.nmea | ./output/UNIX/bin/FeedNMEA tcp 4353
 
@@ -578,7 +578,7 @@ actual hardware. Supports Vega, FLARM, and ATR833 devices.
 
    # Terminal 1: Start device emulator
    ./output/UNIX/bin/EmulateDevice FLARM /tmp/flarm 57600
-   
+
    # Terminal 2: Connect XCSoar to /tmp/flarm and test FLARM features
    # XCSoar will send commands, emulator will respond appropriately
 
@@ -910,7 +910,7 @@ Tests observation zone (OZ) rendering for different task zone types.
 - Line, Cylinder, MAT Cylinder
 - Sector, FAI Sector, Annular Sector
 - DAeC Keyhole, BGA Fixed Course, BGA Enhanced Option
-- BGA Start, Symmetric Quadrant, Custom Keyhole
+- BGA Start, Symmetric Sector, Custom Keyhole
 
 RunChartRenderer
 ~~~~~~~~~~~~~~~~
@@ -1034,24 +1034,24 @@ To create a new Run* utility:
 
    // SPDX-License-Identifier: GPL-2.0-or-later
    // Copyright The XCSoar Project
-   
+
    #include "system/Args.hpp"
    #include "DebugReplay.hpp"
-   
+
    #include <stdio.h>
    #include <stdlib.h>
-   
+
    int main(int argc, char **argv)
    {
      Args args(argc, argv, "USAGE");
      DebugReplay *replay = CreateDebugReplay(args);
      if (replay == NULL)
        return EXIT_FAILURE;
-     
+
      args.ExpectEnd();
-     
+
      // Your processing logic here
-     
+
      delete replay;
      return EXIT_SUCCESS;
    }

@@ -3,12 +3,21 @@
 
 #pragma once
 
+#include <optional>
 #include "SectorZone.hpp"
 
 /** Segment centered on bisector of incoming/outgoing legs */
 class SymmetricSectorZone: public SectorZone
 {
+  // The angular width of the sector
   Angle sector_angle;
+
+  /*
+  The angular direction of the center line of the sector.
+  This field is set by SetLegs(). Null if no legs have been
+  configured yet.
+  */
+  std::optional<Angle> biSector = std::nullopt;
 
 protected:
   /**
@@ -33,11 +42,11 @@ public:
   constexpr SymmetricSectorZone(const SymmetricSectorZone &other,
                                 const GeoPoint &reference) noexcept
     :SectorZone((const SectorZone &)other, reference),
-     sector_angle(other.sector_angle) {}
+     sector_angle(other.sector_angle), biSector(other.biSector) {}
 
   SymmetricSectorZone(const GeoPoint &loc,
                       const double radius=10000.0) noexcept
-    :SectorZone(Shape::SYMMETRIC_QUADRANT, true, true, loc, radius),
+    :SectorZone(Shape::SYMMETRIC_SECTOR, true, true, loc, radius),
      sector_angle(Angle::QuarterCircle()) {
     UpdateSector();
   }
@@ -69,7 +78,7 @@ public:
                                   const double radius,
                                   const Angle angle
                                   ) noexcept {
-    std::unique_ptr<SymmetricSectorZone> oz(new SymmetricSectorZone(Shape::SYMMETRIC_QUADRANT, true, false, loc,
+    std::unique_ptr<SymmetricSectorZone> oz(new SymmetricSectorZone(Shape::SYMMETRIC_SECTOR, true, false, loc,
                                                                     radius,
                                                                     angle));
     oz->UpdateSector();
@@ -99,10 +108,9 @@ public:
     return sector_angle;
   }
 
-  void SetSectorAngle(Angle _angle) noexcept {
-    sector_angle = _angle;
-    UpdateSector();
-  }
+  void SetSectorAngle(Angle _angle) noexcept;
+
+  void UpdateRadialsFromSectorAngle() noexcept;
 
   /* virtual methods from class ObservationZonePoint */
   void SetLegs(const GeoPoint *previous, const GeoPoint *next) noexcept override;

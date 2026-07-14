@@ -26,7 +26,7 @@ enum class TaskPointFactoryType : uint8_t {
   FINISH_CYLINDER,
   START_BGA,
   AAT_ANNULAR_SECTOR,
-  SYMMETRIC_QUADRANT,
+  SYMMETRIC_SECTOR,
   AAT_KEYHOLE,
 
   /**

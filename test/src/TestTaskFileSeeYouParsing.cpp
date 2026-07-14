@@ -187,7 +187,7 @@ TestAngleParsingWithDecimals()
   const auto &tp2 = task->GetTaskPoint(2).GetObservationZone();
   const auto &tp3 = task->GetTaskPoint(3).GetObservationZone();
 
-  ok1(tp0.GetShape() == ObservationZone::Shape::SYMMETRIC_QUADRANT);
+  ok1(tp0.GetShape() == ObservationZone::Shape::SYMMETRIC_SECTOR);
   if (const auto *s0 = dynamic_cast<const SymmetricSectorZone *>(&tp0)) {
     // Allow for a 0.1 degree tolerance due to floating point precision
     ok1(s0->GetRadius() == 550);
@@ -217,7 +217,7 @@ TestAngleParsingWithDecimals()
   For now the purpose of this test is just to check that the angle parsing doesn't
   crash for this field.
   */
-  ok1(tp3.GetShape() == ObservationZone::Shape::SYMMETRIC_QUADRANT);
+  ok1(tp3.GetShape() == ObservationZone::Shape::SYMMETRIC_SECTOR);
 }
 
 static void

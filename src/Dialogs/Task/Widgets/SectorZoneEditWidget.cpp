@@ -4,12 +4,14 @@
 #include "SectorZoneEditWidget.hpp"
 #include "Engine/Task/ObservationZones/SectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Engine/Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Language/Language.hpp"
 
 enum Controls {
   RADIUS,
   START_RADIAL,
   END_RADIAL,
+  ANGLE,
   INNER_RADIUS,
 };
 
@@ -30,17 +32,28 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent,
            UnitGroup::DISTANCE, GetObject().GetRadius(),
            this);
 
-  if (shape == ObservationZone::Shape::SYMMETRIC_QUADRANT) {
-    AddDummy();
-    AddDummy();
+  if (shape == ObservationZone::Shape::SYMMETRIC_SECTOR) {
+    AddDummy(); // Start radial
+    AddDummy(); // Finish radial
+
+    if (const auto *oz = dynamic_cast<const SymmetricSectorZone *>(&GetObject())) {
+      Angle angle = oz->GetSectorAngle();
+      AddAngle(_("Angle"), _("Angle of the OZ sector"),
+               angle, 10, true,
+               this);
+    } else {
+      assert(false);
+      AddDummy(); // Angle
+    }
   } else {
     AddAngle(_("Start radial"), _("Start radial of the OZ area"),
              GetObject().GetStartRadial(), 10, true,
              this);
 
     AddAngle(_("Finish radial"), _("Finish radial of the OZ area"),
-             GetObject().GetEndRadial(), 10, true,
-             this);
+              GetObject().GetEndRadial(), 10, true,
+              this);
+    AddDummy(); // Angle
   }
 
   if (shape == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
@@ -51,6 +64,8 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent,
              0.1, 100, 1, true,
              UnitGroup::DISTANCE, annulus.GetInnerRadius(),
              this);
+  } else {
+    AddDummy(); // Inner radius
   }
 }
 
@@ -58,6 +73,7 @@ bool
 SectorZoneEditWidget::Save(bool &_changed) noexcept
 {
   const auto shape = GetObject().GetShape();
+
   bool changed = false;
 
   auto radius = GetObject().GetRadius();
@@ -66,7 +82,18 @@ SectorZoneEditWidget::Save(bool &_changed) noexcept
     changed = true;
   }
 
-  if (shape == ObservationZone::Shape::SYMMETRIC_QUADRANT) {
+  if (shape == ObservationZone::Shape::SYMMETRIC_SECTOR) {
+    if (auto *oz = dynamic_cast<SymmetricSectorZone *>(&GetObject())) {
+      Angle angle = Angle::Zero();
+      if (SaveValue(ANGLE, angle)) {
+        oz->SetSectorAngle(angle);
+        changed = true;
+      }
+    } else {
+      // Failed to cast to SymmetricSectorZone
+      assert(false);
+    }
+
   } else {
     Angle radial = GetObject().GetStartRadial();
     if (SaveValue(START_RADIAL, radial)) {

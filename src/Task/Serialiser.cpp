@@ -76,6 +76,11 @@ Visit(WritableDataNode &node, const SectorZone &data)
 static void
 Visit(WritableDataNode &node, const SymmetricSectorZone &data)
 {
+  /*
+  Note: Despite the name, this may not be a quadrant, it
+  can be any circular sector. Retaining the name for backwards
+  compatibility in .tsk files.
+  */
   node.SetAttribute("type", "SymmetricQuadrant");
   node.SetAttribute("radius", data.GetRadius());
   node.SetAttribute("angle", data.GetSectorAngle());
@@ -155,11 +160,11 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
     Visit(node, (const AnnularSectorZone &)data);
     break;
 
-  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::SYMMETRIC_SECTOR:
     Visit(node, (const SymmetricSectorZone &)data);
     break;
   }
-} 
+}
 
 static void
 Serialise(WritableDataNode &node, const OrderedTaskPoint &data,

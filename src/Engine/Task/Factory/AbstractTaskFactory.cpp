@@ -20,7 +20,7 @@ GetOZSize(const ObservationZonePoint &oz) noexcept
 {
   switch (oz.GetShape()) {
   case ObservationZone::Shape::SECTOR:
-  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::SYMMETRIC_SECTOR:
     return ((const SectorZone &)oz).GetRadius();
 
   case ObservationZone::Shape::LINE:
@@ -153,7 +153,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const noexcept
   case TaskPointType::START:
     switch (oz.GetShape()) {
     case ObservationZone::Shape::FAI_SECTOR:
-    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    case ObservationZone::Shape::SYMMETRIC_SECTOR:
       return TaskPointFactoryType::START_SECTOR;
 
     case ObservationZone::Shape::LINE:
@@ -178,7 +178,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const noexcept
     switch (oz.GetShape()) {
     case ObservationZone::Shape::SECTOR:
     case ObservationZone::Shape::FAI_SECTOR:
-    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    case ObservationZone::Shape::SYMMETRIC_SECTOR:
     case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:
@@ -223,8 +223,8 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const noexcept
     case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::AST_CYLINDER;
 
-    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-      return TaskPointFactoryType::SYMMETRIC_QUADRANT;
+    case ObservationZone::Shape::SYMMETRIC_SECTOR:
+      return TaskPointFactoryType::SYMMETRIC_SECTOR;
     }
     break;
 
@@ -232,7 +232,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const noexcept
     switch (oz.GetShape()) {
     case ObservationZone::Shape::BGA_START:
     case ObservationZone::Shape::FAI_SECTOR:
-    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    case ObservationZone::Shape::SYMMETRIC_SECTOR:
       return TaskPointFactoryType::FINISH_SECTOR;
 
     case ObservationZone::Shape::LINE:
@@ -316,7 +316,7 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateASTPoint(SymmetricSectorZone::CreateFAISectorZone(location,
                                                                    true),
                           std::move(wp));
-  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
+  case TaskPointFactoryType::SYMMETRIC_SECTOR:
     return CreateASTPoint(std::make_unique<SymmetricSectorZone>(location,
                                                                 turnpoint_radius),
                           std::move(wp));
@@ -792,7 +792,7 @@ AbstractTaskFactory::ValidateFAIOZs() const noexcept
     case TaskPointFactoryType::AAT_SEGMENT:
     case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     case TaskPointFactoryType::AAT_KEYHOLE:
-    case TaskPointFactoryType::SYMMETRIC_QUADRANT:
+    case TaskPointFactoryType::SYMMETRIC_SECTOR:
       valid = false;
       break;
 
@@ -853,7 +853,7 @@ AbstractTaskFactory::ValidateMATOZs() const noexcept
     case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     case TaskPointFactoryType::AAT_KEYHOLE:
     case TaskPointFactoryType::FINISH_SECTOR:
-    case TaskPointFactoryType::SYMMETRIC_QUADRANT:
+    case TaskPointFactoryType::SYMMETRIC_SECTOR:
       valid = false;
       break;
 

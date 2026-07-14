@@ -40,7 +40,7 @@ static const char *const oz_type_names[NUM_OZ_TYPES] = {
   "BGA Enhanced Option",
   "BGA Start",
   "Annular sector",
-  "Symmetric quadrant",
+  "Symmetric Sector",
   "Custom Keyhole",
 };
 
@@ -126,7 +126,7 @@ public:
       oz = KeyholeZone::CreateBGAStartSectorZone(location);
       break;
 
-    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    case ObservationZone::Shape::SYMMETRIC_SECTOR:
       oz = std::make_unique<SymmetricSectorZone>(location);
       break;
     }

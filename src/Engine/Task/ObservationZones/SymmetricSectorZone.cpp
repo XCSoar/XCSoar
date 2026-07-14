@@ -14,24 +14,51 @@ SymmetricSectorZone::SetLegs(const GeoPoint *previous,
      Reversing the formula would not work, because the bearing on a
      "Great Circle" is not constant, and we would get a different
      result. */
-  Angle biSector;
+  Angle _biSector;
   if (!next && previous)
     // final
-    biSector = GetReference().Bearing(*previous).Reciprocal();
+    _biSector = GetReference().Bearing(*previous).Reciprocal();
   else if (next && previous)
     // intermediate
-    biSector = GetReference().Bearing(*previous)
+    _biSector = GetReference().Bearing(*previous)
       .HalfAngle(GetReference().Bearing(*next));
   else if (next && !previous)
     // start
-    biSector = GetReference().Bearing(*next).Reciprocal();
+    _biSector = GetReference().Bearing(*next).Reciprocal();
   else
     // single point
-    biSector = Angle::Zero();
+    _biSector = Angle::Zero();
+
+  /*
+  Populate the member variable for the bisector angle, so we
+  can later update the radials if the sector angle changes.
+  */
+  biSector = _biSector;
+
+  UpdateRadialsFromSectorAngle();
+}
+
+void
+SymmetricSectorZone::SetSectorAngle(Angle _angle) noexcept
+{
+  sector_angle = _angle;
+  UpdateRadialsFromSectorAngle();
+  UpdateSector();
+}
+
+// Updates the radial angles based on the current sector angle and the bisector
+void
+SymmetricSectorZone::UpdateRadialsFromSectorAngle() noexcept
+{
+  if (!biSector) {
+    // Should never happen
+    assert(false);
+    return;
+  }
 
   const Angle half = sector_angle.Half();
-  SetStartRadial((biSector - half).AsBearing());
-  SetEndRadial((biSector + half).AsBearing());
+  SetStartRadial((biSector.value() - half).AsBearing());
+  SetEndRadial((biSector.value() + half).AsBearing());
 }
 
 bool

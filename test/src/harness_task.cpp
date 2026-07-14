@@ -44,7 +44,7 @@ public:
     printf("# cylinder zone, radius = %f\n", oz.GetRadius());
   }
   void Visit([[maybe_unused]] const SymmetricSectorZone &oz) {
-    printf("# symmetric quadrant\n");
+    printf("# Symmetric Sector\n");
   }
 
   void Visit(const ObservationZonePoint &oz) {
@@ -75,7 +75,7 @@ public:
       Visit((const AnnularSectorZone &)oz);
       break;
 
-    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    case ObservationZone::Shape::SYMMETRIC_SECTOR:
       Visit((const SymmetricSectorZone &)oz);
       break;
     }

@@ -124,8 +124,13 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
   } else if (StringIsEqual(type, "FAISector"))
     return SymmetricSectorZone::CreateFAISectorZone(wp.location, is_turnpoint);
   else if (StringIsEqual(type, "SymmetricQuadrant")) {
-    double radius = 10000;
-    Angle angle = Angle::QuarterCircle();
+    /*
+    Note: Despite the name, this may not be a quadrant, it
+    can be a circular sector with any angle. Retaining the
+    name for backwards ompatibility in .tsk files.
+    */
+    double radius = 10000; // Default radius if not specified
+    Angle angle = Angle::QuarterCircle(); // Default angle if not specified
     node.GetAttribute("radius", radius);
     node.GetAttribute("angle", angle);
 
