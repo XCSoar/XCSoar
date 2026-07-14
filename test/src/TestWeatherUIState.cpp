@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Weather/WeatherUIState.hpp"
+#include "Weather/Skysight/ForecastUtils.hpp"
 #include "TestUtil.hpp"
 
 static void
@@ -86,14 +87,43 @@ TestWeatherUiStateXcthermCursor()
   ok1(!weather.xctherm_cursor.time_manual_override);
 }
 
+static void
+TestSkysightForecastPreloadSelection()
+{
+  constexpr time_t DAY = 24 * 60 * 60;
+  constexpr time_t NOW = 10 * DAY + 7 * 60 * 60;
+
+  SkySight::Layer layer;
+  layer.forecast_datafiles = {
+    {9 * DAY + 23 * 60 * 60, "previous"},
+    {10 * DAY + 12 * 60 * 60, "later"},
+    {10 * DAY + 6 * 60 * 60, "earlier"},
+    {11 * DAY + 6 * 60 * 60, "tomorrow"},
+    {10 * DAY + 8 * 60 * 60, ""},
+  };
+
+  auto selected = SkySight::GetForecastPreloadDatafiles(layer, NOW);
+  ok1(selected.size() == 3);
+  ok1(selected[0]->time == 10 * DAY + 6 * 60 * 60);
+  ok1(selected[1]->time == 10 * DAY + 12 * 60 * 60);
+  ok1(selected[2]->time == 11 * DAY + 6 * 60 * 60);
+
+  layer.id = "pfdtot";
+  selected = SkySight::GetForecastPreloadDatafiles(layer, NOW);
+  ok1(selected.size() == 2);
+  ok1(selected[0]->time == 10 * DAY + 6 * 60 * 60);
+  ok1(selected[1]->time == 11 * DAY + 6 * 60 * 60);
+}
+
 int
 main()
 {
-  plan_tests(32);
+  plan_tests(32 + 7);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
   TestWeatherUiStateXcthermCursor();
+  TestSkysightForecastPreloadSelection();
 
   return exit_status();
 }
