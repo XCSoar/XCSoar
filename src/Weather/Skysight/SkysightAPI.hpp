@@ -80,6 +80,7 @@ public:
                                 std::string_view suffix) const;
   void EnsureTile(const SkySight::Layer &layer, time_t timestamp,
                   const GeoBitmap::TileData &tile);
+  void CancelTileDownloads() noexcept;
   void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
                       std::string_view link);
   bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,

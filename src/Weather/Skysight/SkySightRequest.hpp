@@ -110,6 +110,7 @@ public:
   bool IsLoggedIn() const noexcept;
 
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
+  void CancelTileDownloads() noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
                                           time_t forecast_time,
                                           std::string_view url, Path filename);

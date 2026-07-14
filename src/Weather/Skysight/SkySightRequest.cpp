@@ -183,6 +183,32 @@ SkySightRequest::CancelAll() noexcept
 }
 
 void
+SkySightRequest::CancelTileDownloads() noexcept
+{
+  for (const auto &job : pending_jobs)
+    if (job.kind == FileJob::Kind::Generic)
+      retry_after.erase(job.key);
+
+  std::erase_if(pending_jobs, [](const auto &job) {
+    return job.kind == FileJob::Kind::Generic;
+  });
+
+  for (auto i = file_jobs.begin(); i != file_jobs.end();) {
+    if (i->second->kind != FileJob::Kind::Generic) {
+      ++i;
+      continue;
+    }
+
+    i->second->function.Cancel();
+    retry_after.erase(i->first);
+    i = file_jobs.erase(i);
+  }
+
+  tile_http_error_count.clear();
+  PumpQueue();
+}
+
+void
 SkySightRequest::Configure(std::string_view new_email, std::string_view new_password)
 {
   email = std::string{new_email};
