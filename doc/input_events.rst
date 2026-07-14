@@ -457,6 +457,22 @@ Event list
  * - ``UserDisplayModeForce M``
    - Forces a display mode. Possible arguments: ``unforce``,
      ``forceclimb``, ``forcecruise``, ``forcefinal``.
+ * - ``VarioAudioMode``
+   - Controls whether the internal audio vario uses Vario or STF
+     tones. Possible arguments: ``auto`` (switch automatically
+     between Vario in circling and STF in cruise), ``manual`` (keep
+     the current runtime manual mode; after a restart, manual mode
+     starts in Vario), ``vario`` (manual Vario), ``stf``
+     (manual speed-to-fly), ``toggle`` (toggle manual Vario/STF),
+     ``show`` (display the current mode). STF audio needs valid
+     airspeed and total-energy vario input; in the built-in simulator,
+     manual STF stays silent and auto cruise falls back to vario unless
+     such input is provided.
+ * - ``VarioVolume``
+   - Adjusts the internal audio vario volume. Possible arguments:
+     ``mute`` (toggle mute and restore the previous level when hit
+     again), ``up`` / ``+`` (increase and unmute), ``down`` / ``-``
+     (decrease and unmute), ``show`` (display current value).
  * - ``WaypointDetails W``
    - Displays airfield/waypoint details.
 

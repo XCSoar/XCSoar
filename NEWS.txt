@@ -27,6 +27,10 @@ Version 7.45 - not yet released
     non-ASCII comments (UTF-8 truncation)
   - add optional map overlay QuickMenu button (Config → Look → Layout),
     enabled by default when a touch screen is detected #2610
+  - input events: add ``VarioVolume`` to mute/unmute and adjust the
+    internal audio vario volume
+  - audio vario: add manual/automatic Vario/STF sound switching and
+    ``VarioAudioMode`` input events
 * glide computer
   - Speed-to-fly and task calculations are now altitude-corrected: the glide
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
