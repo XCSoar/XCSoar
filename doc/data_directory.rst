@@ -197,8 +197,10 @@ that should not be edited manually. The whole :file:`cache/` tree is
   :file:`xcsoar-rasp.dat`)
 - ``weather/edl/mbtiles/`` — downloaded EDL forecast MBTiles tiles
 - ``weather/xctherm/<model>/`` — XCTherm GeoJSON slice cache files
+- ``skysight/`` — SkySight catalog metadata, downloaded forecast files, and
+  rendered forecast images
 
-Downloaded weather data (RASP, EDL, XCTherm) is stored here rather than
+Downloaded weather data (RASP, EDL, XCTherm, SkySight) is stored here rather than
 under the top-level :file:`weather/` directory, so it is excluded from
 backups together with other cache data. Earlier 7.45 development builds
 used :file:`weather/rasp/`, :file:`weather/edl/`, and
@@ -231,6 +233,9 @@ Repository downloads and other fetched forecast data live under
 - **XCTherm** — :file:`cache/weather/xctherm/<model>/`
   (:file:`Weather/xctherm/XCThermAPI.cpp`). Each file is named
   ``<parameter>_<utc>.xctcache``.
+- **SkySight** — :file:`cache/skysight/` (:file:`Weather/Skysight/`). The
+  provider retains its catalog and forecast cache there and removes stale
+  rendered data automatically.
 
 Files in the data root
 ----------------------

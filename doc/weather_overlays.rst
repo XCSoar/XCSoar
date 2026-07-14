@@ -12,6 +12,7 @@ Applies to:
 - RASP
 - EDL
 - XCTherm
+- SkySight
 
 Code entry points:
 
@@ -51,6 +52,7 @@ The lifecycle is orchestrated in :file:`src/PageActions.cpp`:
    - :cpp:`ApplyRaspOverlay(const PageLayout &)`
    - :cpp:`ApplyEdlOverlay()`
    - :cpp:`ApplyXcthermOverlay()`
+   - :cpp:`ApplySkysightOverlay()`
 
 3. Leaving a page calls :cpp:`LeaveWeatherOverlayPage()` and
    provider-specific leave hooks.
@@ -82,6 +84,30 @@ values when entering dedicated pages for the first time in a session.
   - first dedicated-page entry without cursor initialization calls
     :cpp:`EDL::ResetForDedicatedPage()`.
 
+SkySight forecast loading
+-------------------------
+
+SkySight keeps the selected forecast image visible while it refreshes the
+catalog or fetches forecast-step metadata.  Selecting a forecast time queues
+its download immediately; the dialog timer retries deferred metadata requests
+without waiting for page activation or map rendering.
+
+``Preload Layer`` and ``Preload Selected`` use the shared top-of-map download
+progress widget.  The widget first reports forecast-step discovery, then
+displays the number of finished forecast files while download and NetCDF
+decoding proceed.  Cached files count as finished.  Requests run one at a
+time; a SkySight API rate limit pauses and requeues the interrupted request,
+shows a countdown, and resumes automatically.
+
+Preloading includes the available forecasts from the start of the current UTC
+day onward and excludes earlier days.  Full-day layers such as PFD contribute
+one file per forecast day.  Live tile layers are not preloaded, and their
+outstanding requests are cancelled when the user selects another layer.
+
+The SkySight cursor-bar rows are forecast time and layer.  Time selection is
+session state.  Layer selection updates the current configured page and is
+saved immediately, matching RASP layer selection.
+
 Threading and async boundaries
 ------------------------------
 
@@ -110,6 +136,8 @@ Integration checklist for a new provider
 
 5. Trigger refresh/download only from well-defined UI events
    (first enter, auto-no-data, explicit user action).
+   Providers with multi-file preloads must report a stable batch progress
+   total, not only the current queue depth.
 6. Add unit tests for session transitions and reset rules (see
    :file:`test/src/TestWeatherUIState.cpp`).
 
