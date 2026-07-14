@@ -11,8 +11,8 @@
 #include "system/FileUtil.hpp"
 
 #include <algorithm>
+#include <charconv>
 #include <cmath>
-#include <cstdlib>
 #include <string_view>
 
 #ifdef USE_GEOTIFF
@@ -23,30 +23,33 @@
 
 using namespace GeoBitmap;
 
-static int
-LonToTileX(double lon, int zoom) noexcept
+static uint32_t
+LonToTileX(double lon, unsigned zoom) noexcept
 {
-  return (int)std::floor((lon + 180.0) / 360.0 * (1 << zoom));
+  return uint32_t(std::floor((lon + 180.0) / 360.0 *
+                             (uint32_t{1} << zoom)));
 }
 
-static int
-LatToTileY(double lat, int zoom) noexcept
+static uint32_t
+LatToTileY(double lat, unsigned zoom) noexcept
 {
   const double latitude_radians = lat * M_PI / 180.0;
-  return (int)std::floor((1.0 - std::asinh(std::tan(latitude_radians)) / M_PI) /
-                         2.0 * (1 << zoom));
+  return uint32_t(std::floor(
+    (1.0 - std::asinh(std::tan(latitude_radians)) / M_PI) / 2.0 *
+    (uint32_t{1} << zoom)));
 }
 
 static double
-TileXToLon(int x, int zoom) noexcept
+TileXToLon(uint32_t x, unsigned zoom) noexcept
 {
-  return x / (double)(1 << zoom) * 360.0 - 180.0;
+  return x / double(uint32_t{1} << zoom) * 360.0 - 180.0;
 }
 
 static double
-TileYToLat(int y, int zoom) noexcept
+TileYToLat(uint32_t y, unsigned zoom) noexcept
 {
-  const double n = M_PI - 2.0 * M_PI * y / (double)(1 << zoom);
+  const double n = M_PI - 2.0 * M_PI * y /
+    double(uint32_t{1} << zoom);
   return 180.0 / M_PI * std::atan(0.5 * (std::exp(n) - std::exp(-n)));
 }
 
@@ -55,8 +58,8 @@ GeoBitmap::GetTile(const GeoBounds &bounds, uint16_t zoom) noexcept
 {
   return {
     zoom,
-    (uint16_t)LonToTileX(bounds.GetCenter().longitude.Degrees(), zoom),
-    (uint16_t)LatToTileY(bounds.GetCenter().latitude.Degrees(), zoom),
+    LonToTileX(bounds.GetCenter().longitude.Degrees(), zoom),
+    LatToTileY(bounds.GetCenter().latitude.Degrees(), zoom),
   };
 }
 
@@ -122,9 +125,26 @@ ParseTileBounds(std::string_view name)
   if (zoom_string.empty() || x_string.empty() || y_string.empty())
     throw std::runtime_error("Unsupported geo image file");
 
-  const auto zoom = (uint16_t)std::strtoul(std::string(zoom_string).c_str(), nullptr, 10);
-  const auto x = (uint16_t)std::strtoul(std::string(x_string).c_str(), nullptr, 10);
-  const auto y = (uint16_t)std::strtoul(std::string(y_string).c_str(), nullptr, 10);
+  auto parse = [](std::string_view value) {
+    uint32_t result = 0;
+    const auto [end, error] = std::from_chars(value.begin(), value.end(), result);
+    if (error != std::errc{} || end != value.end())
+      throw std::runtime_error("Unsupported geo image file");
+
+    return result;
+  };
+
+  const auto zoom_value = parse(zoom_string);
+  const auto x = parse(x_string);
+  const auto y = parse(y_string);
+  if (zoom_value == 0 || zoom_value > MAX_TILE_ZOOM)
+    throw std::runtime_error("Unsupported geo image file");
+
+  const auto tile_count = uint32_t{1} << zoom_value;
+  if (x >= tile_count || y >= tile_count)
+    throw std::runtime_error("Unsupported geo image file");
+
+  const auto zoom = uint16_t(zoom_value);
   return GeoBitmap::GetGeoQuadrilateral({zoom, x, y});
 }
 
