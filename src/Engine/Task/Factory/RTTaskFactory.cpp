@@ -28,7 +28,7 @@ static constexpr LegalPointSet rt_im_types{
   TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
   TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
   TaskPointFactoryType::FAI_SECTOR,
-  TaskPointFactoryType::SYMMETRIC_QUADRANT,
+  TaskPointFactoryType::SYMMETRIC_SECTOR,
 };
 
 static constexpr LegalPointSet rt_finish_types{
@@ -63,7 +63,7 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
   case TaskPointFactoryType::FAI_SECTOR:
   case TaskPointFactoryType::AST_CYLINDER:
-  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
+  case TaskPointFactoryType::SYMMETRIC_SECTOR:
     break;
 
   case TaskPointFactoryType::FINISH_SECTOR:

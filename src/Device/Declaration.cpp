@@ -62,7 +62,7 @@ get_sector_angle(const OrderedTaskPoint &tp)
     return Angle::HalfCircle();
 
   case ObservationZone::Shape::FAI_SECTOR:
-  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::SYMMETRIC_SECTOR:
   case ObservationZone::Shape::DAEC_KEYHOLE:
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
   case ObservationZone::Shape::BGAFIXEDCOURSE:

@@ -116,7 +116,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   }
 
   case ObservationZone::Shape::BGA_START:
-  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::SYMMETRIC_SECTOR:
   case ObservationZone::Shape::SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
 
@@ -200,7 +200,7 @@ OZRenderer::GetGeoBounds(const ObservationZonePoint &oz) noexcept
   case ObservationZone::Shape::MAT_CYLINDER:
   case ObservationZone::Shape::CYLINDER:
   case ObservationZone::Shape::BGA_START:
-  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+  case ObservationZone::Shape::SYMMETRIC_SECTOR:
   case ObservationZone::Shape::SECTOR:
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
   case ObservationZone::Shape::DAEC_KEYHOLE:

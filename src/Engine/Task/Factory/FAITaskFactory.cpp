@@ -91,7 +91,7 @@ FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const noexcept
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
   case TaskPointFactoryType::AAT_SEGMENT:
-  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
+  case TaskPointFactoryType::SYMMETRIC_SECTOR:
     newtype = TaskPointFactoryType::FAI_SECTOR;
     break;
 
