@@ -45,7 +45,7 @@ public:
 
   void Init();
 
-  [[nodiscard]] static AllocatedPath GetLocalPath() noexcept;
+  [[nodiscard]] static AllocatedPath GetCachePath() noexcept;
 
   std::size_t NumLayers() const noexcept;
   const SkySight::Layer *GetLayer(std::size_t index) const noexcept;

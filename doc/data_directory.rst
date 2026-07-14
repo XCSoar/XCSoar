@@ -97,6 +97,7 @@ API (:file:`Repository/FileType.hpp`).
    │   └── weather/
    │       ├── edl/mbtiles/   EDL forecast MBTiles cache
    │       ├── rasp/          RASP forecast files (*-rasp*.dat)
+   │       ├── skysight/      SkySight forecast and provider cache
    │       └── xctherm/<model>/  XCTherm GeoJSON slice cache
    ├── checklists/            Checklist files (*.xcc, xcsoar-checklist.txt)
    ├── flarm/                 FLARMNet database and FLARM message data
@@ -196,11 +197,12 @@ that should not be edited manually. The whole :file:`cache/` tree is
 - ``weather/rasp/`` — RASP forecast files (``*-rasp*.dat``, for example
   :file:`xcsoar-rasp.dat`)
 - ``weather/edl/mbtiles/`` — downloaded EDL forecast MBTiles tiles
+- ``weather/skysight/`` (the full path is
+  :file:`cache/weather/skysight/`) — SkySight catalog metadata, downloaded
+  forecast files, rendered forecast images, and persisted throttle state
 - ``weather/xctherm/<model>/`` — XCTherm GeoJSON slice cache files
-- ``skysight/`` — SkySight catalog metadata, downloaded forecast files, and
-  rendered forecast images
 
-Downloaded weather data (RASP, EDL, XCTherm, SkySight) is stored here rather than
+Downloaded weather data (RASP, EDL, SkySight, XCTherm) is stored here rather than
 under the top-level :file:`weather/` directory, so it is excluded from
 backups together with other cache data. Earlier 7.45 development builds
 used :file:`weather/rasp/`, :file:`weather/edl/`, and
@@ -230,12 +232,12 @@ Repository downloads and other fetched forecast data live under
 - **EDL** — :file:`cache/weather/edl/mbtiles/`
   (:file:`Weather/EDL/TileStore.cpp`). Filenames encode forecast time
   and isobar level.
+- **SkySight** — :file:`cache/weather/skysight/`
+  (:file:`Weather/Skysight/`). The provider removes stale forecast artifacts
+  automatically while retaining catalog and throttle ``*.cache`` files.
 - **XCTherm** — :file:`cache/weather/xctherm/<model>/`
   (:file:`Weather/xctherm/XCThermAPI.cpp`). Each file is named
   ``<parameter>_<utc>.xctcache``.
-- **SkySight** — :file:`cache/skysight/` (:file:`Weather/Skysight/`). The
-  provider retains its catalog and forecast cache there and removes stale
-  rendered data automatically.
 
 Files in the data root
 ----------------------
