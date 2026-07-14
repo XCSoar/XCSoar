@@ -24,6 +24,13 @@ class InjectTask {
 
 	std::atomic_bool alive{false};
 
+	/**
+	 * Incremented on each Start(); Cancel() only disposes #task if
+	 * the generation is unchanged when the cancel runs on the event
+	 * loop (a new Start() may have begun in the meantime).
+	 */
+	std::atomic<unsigned> generation{0};
+
 public:
 	explicit InjectTask(EventLoop &event_loop) noexcept;
 

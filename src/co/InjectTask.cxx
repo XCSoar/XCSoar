@@ -18,6 +18,8 @@ InjectTask::Start(InvokeTask _task, Callback _callback) noexcept
 	assert(_task);
 	assert(_callback);
 
+	++generation;
+
 	task = std::move(_task);
 	callback = _callback;
 	alive = true;
@@ -35,10 +37,13 @@ InjectTask::Cancel() noexcept
 
 	inject_event.Cancel();
 
-	BlockingCall(GetEventLoop(), [this](){
-		/* this actually cancels and disposes the coroutine
-		   which is already running */
-		task = {};
+	const unsigned cancel_generation = generation.load();
+
+	BlockingCall(GetEventLoop(), [this, cancel_generation](){
+		/* dispose the coroutine only if no new Start() happened
+		   while this cancel was waiting for the event loop */
+		if (generation.load() == cancel_generation)
+			task = {};
 	});
 
 	alive = false;
@@ -47,8 +52,8 @@ InjectTask::Cancel() noexcept
 void
 InjectTask::OnInject() noexcept
 {
-	assert(alive);
-	assert(task);
+	if (!alive || !task)
+		return;
 
 	task.Start(BIND_THIS_METHOD(OnCompletion));
 }
@@ -56,7 +61,8 @@ InjectTask::OnInject() noexcept
 void
 InjectTask::OnCompletion(std::exception_ptr error) noexcept
 {
-	assert(alive);
+	if (!alive)
+		return;
 
 	alive = false;
 

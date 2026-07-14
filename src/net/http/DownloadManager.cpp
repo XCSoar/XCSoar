@@ -51,7 +51,7 @@ class DownloadManagerThread final
 
   /**
    * Information about the current download, i.e. queue.front().
-   * Protected by #mutex.
+   * The download #queue is also protected by #mutex.
    */
   int64_t current_size = -1, current_position = -1;
 
@@ -72,12 +72,13 @@ public:
   }
 
   void Enumerate(Net::DownloadListener &listener) noexcept {
+    const std::lock_guard lock{mutex};
+
     for (auto i = queue.begin(), end = queue.end(); i != end; ++i) {
       const Item &item = *i;
 
       int64_t size = -1, position = -1;
       if (i == queue.begin()) {
-        const std::lock_guard lock{mutex};
         size = current_size;
         position = current_position;
       }
@@ -87,47 +88,80 @@ public:
   }
 
   void Enqueue(const char *uri, Path path_relative) noexcept {
-    if (shutting_down)
-      return;
+    {
+      const std::lock_guard lock{mutex};
 
-    /* skip duplicates already in the queue (e.g. a file re-enqueued
-       before its previous download completed) */
-    if (std::find(queue.begin(), queue.end(), path_relative) != queue.end())
-      return;
+      if (shutting_down)
+        return;
 
-    queue.emplace_back(uri, path_relative);
+      /* skip duplicates already in the queue (e.g. a file re-enqueued
+         before its previous download completed) */
+      if (std::find(queue.begin(), queue.end(), path_relative) != queue.end())
+        return;
+
+      queue.emplace_back(uri, path_relative);
+
+      if (!task && current_position == -1)
+        Start();
+    }
 
     listeners.ForEach([path_relative](auto *listener){
       listener->OnDownloadAdded(path_relative, -1, -1);
     });
-
-    if (!task)
-      Start();
   }
 
   void Cancel(Path relative_path) noexcept {
-    auto i = std::find(queue.begin(), queue.end(), relative_path);
-    if (i == queue.end())
-      return;
+    bool cancel_active = false;
+    bool cancelled = false;
 
-    if (i == queue.begin()) {
-      /* current download; stop the thread to cancel the current file
-         and restart the thread to continue downloading the following
-         files */
+    {
+      const std::lock_guard lock{mutex};
 
-      task.Cancel();
-      current_size = current_position = -1;
+      auto i = std::find(queue.begin(), queue.end(), relative_path);
+      if (i == queue.end())
+        return;
 
-      if (!queue.empty())
-        Start();
-    } else {
-      /* queued download; simply remove it from the list */
-      queue.erase(i);
+      if (i != queue.begin()) {
+        /* queued download; simply remove it from the list */
+        queue.erase(i);
+        cancelled = true;
+      } else {
+        cancel_active = true;
+      }
     }
 
-    listeners.ForEach([relative_path](auto *listener){
-      listener->OnDownloadError(relative_path, {});
-    });
+    if (cancel_active) {
+      /* If #task is already idle, the coroutine finished and
+         OnCompletion() is in flight (InjectTask clears #alive before
+         invoking the callback).  Do not advance the queue here or we
+         race with OnCompletion() and trip assert(!task) in Start(). */
+      if (!task)
+        return;
+
+      /* Cancel the coroutine without holding #mutex: task.Cancel() blocks on
+         the event loop, which may be in OnCompletion() waiting for #mutex */
+      task.Cancel();
+
+      const std::lock_guard lock{mutex};
+
+      auto i = std::find(queue.begin(), queue.end(), relative_path);
+      if (i == queue.end())
+        return;
+
+      cancelled = true;
+
+      current_size = current_position = -1;
+      queue.erase(i);
+
+      if (!queue.empty() && !task && current_position == -1)
+        Start();
+    }
+
+    if (cancelled) {
+      listeners.ForEach([relative_path](auto *listener){
+        listener->OnDownloadError(relative_path, {});
+      });
+    }
   }
 
 private:
@@ -160,11 +194,22 @@ DownloadToFile(CurlGlobal &curl,
 void
 DownloadManagerThread::BeginShutdown() noexcept
 {
-  if (shutting_down)
-    return;
+  bool cancel_active = false;
 
-  shutting_down = true;
-  task.Cancel();
+  {
+    const std::lock_guard lock{mutex};
+
+    if (shutting_down)
+      return;
+
+    shutting_down = true;
+    cancel_active = bool(task);
+  }
+
+  if (cancel_active)
+    task.Cancel();
+
+  const std::lock_guard lock{mutex};
   queue.clear();
   current_size = current_position = -1;
 }
@@ -195,12 +240,24 @@ DownloadManagerThread::Start() noexcept
 void
 DownloadManagerThread::OnCompletion(std::exception_ptr error) noexcept
 {
-  assert(!queue.empty());
+  AllocatedPath path_relative;
 
-  const AllocatedPath path_relative = std::move(queue.front().path_relative);
-  queue.pop_front();
+  {
+    const std::lock_guard lock{mutex};
 
-  current_size = current_position = -1;
+    assert(!queue.empty());
+
+    path_relative = std::move(queue.front().path_relative);
+    queue.pop_front();
+
+    current_size = current_position = -1;
+
+    /* start the next download before notifying listeners; this keeps
+       #task alive while callbacks run and closes the race where
+       Enqueue() could call Start() during completion handling */
+    if (!queue.empty() && !task)
+      Start();
+  }
 
   if (error) {
     LogError(error);
@@ -212,10 +269,6 @@ DownloadManagerThread::OnCompletion(std::exception_ptr error) noexcept
       listener->OnDownloadComplete(path);
     });
   }
-
-  // start the next download
-  if (!queue.empty())
-    Start();
 }
 
 static DownloadManagerThread *thread;

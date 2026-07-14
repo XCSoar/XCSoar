@@ -300,6 +300,8 @@ Version 7.45 - not yet released
     yet exist; migration is marked complete only after at least one file was
     moved #2289
   - IGC and NMEA logs are stored under ``logs/`` #2289
+  - fix crash when queuing many background file downloads while others
+    complete (download manager queue race) #2624
 * devices
   - fix native crash on device reconnect (stale delayed reopen timer) #2382
   - Polar sync device setting is offered only for drivers that register polar
