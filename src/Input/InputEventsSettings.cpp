@@ -24,6 +24,19 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
+static uint8_t last_unmuted_vario_volume = 80;
+
+static const char *
+GetVarioAudioModeLabel(const VarioSoundSettings &settings) noexcept
+{
+  if (settings.switching_mode == VarioSoundSwitchingMode::AUTO)
+    return _("Auto (circling/cruise)");
+
+  return settings.manual_mode == VarioSoundManualMode::STF
+    ? _("Manual STF")
+    : _("Manual Vario");
+}
+
 void
 InputEvents::eventSounds(const char *misc)
 {
@@ -148,6 +161,81 @@ InputEvents::eventAudioDeadband(const char *misc)
   Profile::Set(ProfileKeys::SoundDeadband, settings.sound_deadband);
 
   // TODO feature: send to vario if available
+}
+
+void
+InputEvents::eventVarioVolume(const char *misc)
+{
+  auto &settings = CommonInterface::SetUISettings().sound.vario;
+
+  if (StringIsEqual(misc, "mute")) {
+    if (settings.volume == 0)
+      settings.volume = last_unmuted_vario_volume;
+    else {
+      last_unmuted_vario_volume = settings.volume;
+      settings.volume = 0;
+    }
+  } else if (StringIsEqual(misc, "up") || StringIsEqual(misc, "+")) {
+    if (settings.volume == 0)
+      settings.volume = last_unmuted_vario_volume;
+
+    if (settings.volume < 95)
+      settings.volume += 5;
+    else
+      settings.volume = 100;
+  } else if (StringIsEqual(misc, "down") || StringIsEqual(misc, "-")) {
+    if (settings.volume == 0)
+      settings.volume = last_unmuted_vario_volume;
+
+    if (settings.volume > 5)
+      settings.volume -= 5;
+    else
+      settings.volume = 0;
+  } else if (StringIsEqual(misc, "show")) {
+    char Temp[64];
+    StringFormatUnsafe(Temp, "%d", (int)settings.volume);
+    Message::AddMessage(_("Volume"), Temp);
+    return;
+  } else
+    return;
+
+  if (settings.volume > 0)
+    last_unmuted_vario_volume = settings.volume;
+
+  AudioVarioGlue::Configure(settings);
+  Profile::Set(ProfileKeys::SoundVolume, settings.volume);
+}
+
+void
+InputEvents::eventVarioAudioMode(const char *misc)
+{
+  auto &settings = CommonInterface::SetUISettings().sound.vario;
+
+  if (StringIsEqual(misc, "auto"))
+    settings.switching_mode = VarioSoundSwitchingMode::AUTO;
+  else if (StringIsEqual(misc, "manual"))
+    settings.switching_mode = VarioSoundSwitchingMode::MANUAL;
+  else if (StringIsEqual(misc, "vario")) {
+    settings.switching_mode = VarioSoundSwitchingMode::MANUAL;
+    settings.manual_mode = VarioSoundManualMode::VARIO;
+  } else if (StringIsEqual(misc, "stf")) {
+    settings.switching_mode = VarioSoundSwitchingMode::MANUAL;
+    settings.manual_mode = VarioSoundManualMode::STF;
+  } else if (StringIsEqual(misc, "toggle")) {
+    settings.switching_mode = VarioSoundSwitchingMode::MANUAL;
+    settings.manual_mode = settings.manual_mode == VarioSoundManualMode::VARIO
+      ? VarioSoundManualMode::STF
+      : VarioSoundManualMode::VARIO;
+  } else if (StringIsEqual(misc, "show")) {
+    Message::AddMessage(_("Audio vario mode"), GetVarioAudioModeLabel(settings));
+    return;
+  } else {
+    return;
+  }
+
+  AudioVarioGlue::Configure(settings);
+  Profile::Set(ProfileKeys::VarioSoundSwitchingMode,
+               (unsigned)settings.switching_mode);
 }
 
 // Bugs
