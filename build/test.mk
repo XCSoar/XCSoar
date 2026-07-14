@@ -1069,7 +1069,7 @@ DEBUG_PROGRAM_NAMES += \
 	RunExternalWind \
 	RunTask \
 	LoadImage ViewImage \
-	RunCanvas RunMapWindow \
+	RunCanvas RunMapWindow RunRichTextRenderer \
 	RunListControl \
 	RunTextEntry RunNumberEntry RunDateEntry RunTimeEntry RunAngleEntry \
 	RunGeoPointEntry \
@@ -1965,6 +1965,39 @@ RUN_CANVAS_SOURCES = \
 RUN_CANVAS_LDADD = $(FAKE_LIBS)
 RUN_CANVAS_DEPENDS = FORM SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunCanvas,RUN_CANVAS))
+
+RUN_RICH_TEXT_RENDERER_SOURCES = \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/Form/CheckBox.cpp \
+	$(SRC)/UIUtil/GestureManager.cpp \
+	$(SRC)/UIUtil/TrackingGestureManager.cpp \
+	$(SRC)/ui/event/Idle.cpp \
+	$(SRC)/Math/FastTrig.cpp \
+	$(SRC)/util/MarkdownParser.cpp \
+	$(SRC)/ResourceLookup.cpp \
+	$(SRC)/system/OpenLink.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/CheckBoxLook.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeInternalLink.cpp \
+	$(TEST_SRC_DIR)/FakeResourceLoader.cpp \
+	$(TEST_SRC_DIR)/RunRichTextRenderer.cpp
+RUN_RICH_TEXT_RENDERER_LDADD = $(FAKE_LIBS)
+RUN_RICH_TEXT_RENDERER_DEPENDS = GEO WIDGET DATA_FIELD SCREEN FORM EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME LOOK
+$(eval $(call link-program,RunRichTextRenderer,RUN_RICH_TEXT_RENDERER))
+
+$(call SRC_TO_OBJ,$(TEST_SRC_DIR)/RunRichTextRenderer.cpp): $(OUT)/include/QuickGuideNEWS.hpp
 
 RUN_MAP_WINDOW_SOURCES = \
 	$(CONTEST_SRC_DIR)/Settings.cpp \
