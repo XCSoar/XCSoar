@@ -1174,7 +1174,6 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     return;
 
   layer->datafiles_pending = false;
-  layer->forecast_datafiles.clear();
 
   bool found = false;
   time_t first_time = 0;
@@ -1236,12 +1235,13 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     return;
   }
 
+  std::sort(forecast_datafiles.begin(), forecast_datafiles.end(),
+            [](const auto &a, const auto &b) {
+              return a.time > b.time;
+            });
+  layer->forecast_datafiles = std::move(forecast_datafiles);
+
   if (found) {
-    std::sort(forecast_datafiles.begin(), forecast_datafiles.end(),
-              [](const auto &a, const auto &b) {
-                return a.time > b.time;
-              });
-    layer->forecast_datafiles = std::move(forecast_datafiles);
     layer->from = first_time;
     layer->to = last_time;
     layer->last_update = std::max(layer->last_update, last_time);
@@ -1283,6 +1283,8 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     layer->preload_requested = false;
     layer->default_preload_requested = false;
     layer->forecast_time = 0;
+    layer->from = 0;
+    layer->to = 0;
   }
 
   FinishPreloadMetadata(layer_id);
