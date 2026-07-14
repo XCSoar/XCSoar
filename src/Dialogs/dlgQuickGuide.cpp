@@ -29,6 +29,7 @@
 #endif
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
+#include "util/Macros.hpp"
 #include "MapSettings.hpp"
 #include "Computer/Settings.hpp"
 
@@ -38,6 +39,9 @@
 // Page indices for the can-advance guard
 static constexpr unsigned INVALID_PAGE = ~0u;
 
+/** Index within #info_page_titles for the dynamic Getting Started page. */
+static constexpr std::size_t GETTING_STARTED_INFO_PAGE_INDEX = 1;
+
 /**
  * Track conditional page indices for post-dialog result handling.
  */
@@ -46,8 +50,9 @@ struct QuickGuideState {
   unsigned news_page_index = INVALID_PAGE;
   unsigned cloud_page_index = INVALID_PAGE;
   unsigned location_page_index = INVALID_PAGE;
+  unsigned first_info_page_index = INVALID_PAGE;
   bool warranty_accepted = false;
-  QuickGuidePageWidget *warranty_widget = nullptr;
+  bool hide_guide_checked = false;
 };
 
 /* ---- Welcome / Logo page text ---- */
@@ -461,6 +466,29 @@ dlgQuickGuideShowModal(bool force_info)
 #endif
   const bool info_pages_needed = force_info || !IsQuickGuideHidden();
 
+  static constexpr const char *info_page_titles[] = {
+    N_("Gesture Navigation"),
+    N_("Getting Started"),
+    N_("Preflight"),
+    N_("After Your Flight"),
+    N_("Done"),
+  };
+
+  static const char *(*const info_page_texts[])() = {
+    GetGestureHelpText,
+    GetConfigurationHelpText,
+    GetPreflightText,
+    GetPostflightText,
+    []() -> const char * {
+      return _("# That's it!\n\n"
+                "You can revisit the gesture help from the "
+                "**Info** menu at any time.");
+    },
+  };
+
+  static_assert(ARRAY_SIZE(info_page_titles) == ARRAY_SIZE(info_page_texts),
+                "Quick Guide info page tables must match");
+
   // If everything is already satisfied, skip the dialog entirely
   if (!warranty_needed && !news_needed &&
       !cloud_needed && !permissions_needed && !info_pages_needed)
@@ -473,6 +501,7 @@ dlgQuickGuideShowModal(bool force_info)
                       look, _("Welcome to XCSoar"));
 
   QuickGuideState state;
+  state.hide_guide_checked = IsQuickGuideHidden();
 
   auto pager = std::make_unique<ArrowPagerWidget>(
     look.button, [&dialog, &state, warranty_needed]() {
@@ -498,10 +527,12 @@ dlgQuickGuideShowModal(bool force_info)
     return std::make_unique<VScrollWidget>(std::move(w), look, true);
   };
 
-  /* ---- Logo / Welcome page (always shown) ---- */
-  pager->Add(make_scroll_page(
-    std::make_unique<RichTextWidget>(look, GetWelcomeText(look.dark_mode))));
-  titles.push_back(_("Welcome"));
+  /* ---- Logo / Welcome page (only with informational guide pages) ---- */
+  if (info_pages_needed) {
+    pager->Add(make_scroll_page(
+      std::make_unique<RichTextWidget>(look, GetWelcomeText(look.dark_mode))));
+    titles.push_back(_("Welcome"));
+  }
 
   /* ---- Warranty page (conditional) ---- */
   if (warranty_needed) {
@@ -518,8 +549,6 @@ dlgQuickGuideShowModal(bool force_info)
                                          ? _("Close")
                                          : _("Quit"));
       });
-    state.warranty_widget = page.get();
-
     pager->Add(std::move(page));
     titles.push_back(_("Safety Disclaimer"));
   }
@@ -615,52 +644,29 @@ dlgQuickGuideShowModal(bool force_info)
 #endif
 
   /* ---- Informational pages (conditional) ---- */
-  unsigned config_page_index = INVALID_PAGE;
-  RichTextWidget *config_widget_ptr = nullptr;
 
   if (info_pages_needed) {
-    // Gestures
-    pager->Add(make_scroll_page(
-      std::make_unique<RichTextWidget>(look, GetGestureHelpText())));
-    titles.push_back(_("Gesture Navigation"));
+    state.first_info_page_index = pager->GetSize();
 
-    // Configuration (checkboxes reflect current profile state)
-    auto config_widget =
-      std::make_unique<RichTextWidget>(look, GetConfigurationHelpText());
-    config_widget_ptr = config_widget.get();
-    config_widget->SetLinkReturnCallback([config_widget_ptr]() {
-      /* Refresh checkbox state after returning from a config dialog */
-      config_widget_ptr->SetText(GetConfigurationHelpText());
-    });
-    pager->Add(make_scroll_page(std::move(config_widget)));
-    config_page_index = pager->GetSize() - 1;
-    titles.push_back(_("Getting Started"));
-
-    // Preflight
-    pager->Add(make_scroll_page(
-      std::make_unique<RichTextWidget>(look, GetPreflightText())));
-    titles.push_back(_("Preflight"));
-
-    // Postflight
-    pager->Add(make_scroll_page(
-      std::make_unique<RichTextWidget>(look, GetPostflightText())));
-    titles.push_back(_("After Your Flight"));
-
-    // Don't show again - using a checkbox page
-    {
-      auto done_page = QuickGuidePageWidget::CreateCheckboxPage(
-        look,
-        _("# That's it!\n\n"
-          "You can revisit the gesture help from the "
-          "**Info** menu at any time.\n\n"
-          "Check the box below to skip this guide on "
-          "future startups."),
+    for (std::size_t i = 0; i < ARRAY_SIZE(info_page_titles); ++i) {
+      auto page = QuickGuidePageWidget::CreateCheckboxPage(
+        look, info_page_texts[i](),
         _("Don't show this guide again"),
-        IsQuickGuideHidden(),
-        [](bool) { /* state is read on dialog close */ });
-      pager->Add(std::move(done_page));
+        state.hide_guide_checked,
+        [&state](bool checked) {
+          state.hide_guide_checked = checked;
+        });
+
+      if (i == GETTING_STARTED_INFO_PAGE_INDEX) {
+        QuickGuidePageWidget *page_ptr = page.get();
+        page->SetLinkReturnCallback([page_ptr]() {
+          page_ptr->SetText(GetConfigurationHelpText());
+        });
+      }
+
+      pager->Add(std::move(page));
+      titles.push_back(gettext(info_page_titles[i]));
     }
-    titles.push_back(_("Done"));
   }
 
   // If no pages were added, skip
@@ -684,15 +690,22 @@ dlgQuickGuideShowModal(bool force_info)
   const unsigned total_pages = pager->GetSize();
 
   auto update_caption =
-    [&dialog, &titles, pager_ptr, total_pages,
-     config_page_index, config_widget_ptr]() {
+    [&dialog, &titles, pager_ptr, total_pages, &state]() {
     const unsigned current = pager_ptr->GetCurrentIndex();
 
-    /* Refresh the "Getting Started" checkboxes every time the
-       page becomes visible, so changes made via xcsoar:// links
-       are reflected immediately. */
-    if (current == config_page_index && config_widget_ptr != nullptr)
-      config_widget_ptr->SetText(GetConfigurationHelpText());
+    if (state.first_info_page_index != INVALID_PAGE &&
+        current >= state.first_info_page_index &&
+        current < state.first_info_page_index +
+        ARRAY_SIZE(info_page_titles)) {
+      auto &page_widget = pager_ptr->GetWidget(current);
+      if (auto *page = dynamic_cast<QuickGuidePageWidget *>(&page_widget)) {
+        page->SetCheckboxState(state.hide_guide_checked);
+
+        if (current == state.first_info_page_index +
+            GETTING_STARTED_INFO_PAGE_INDEX)
+          page->SetText(GetConfigurationHelpText());
+      }
+    }
 
     StaticString<128> caption;
     if (current < titles.size())
@@ -760,17 +773,9 @@ dlgQuickGuideShowModal(bool force_info)
   // Save "don't show again" state (both checked and unchecked,
   // so unticking from the Info menu re-enables the guide)
   if (info_pages_needed) {
-    // The last page is the don't-show-again page
-    const unsigned last_page_idx = total_pages - 1;
-    auto &last_widget = static_cast<ArrowPagerWidget &>(
-      dialog.GetWidget()).GetWidget(last_page_idx);
-    auto *guide_page =
-      dynamic_cast<QuickGuidePageWidget *>(&last_widget);
-    if (guide_page != nullptr) {
-      Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup,
-                   guide_page->GetCheckboxState());
-      Profile::Save();
-    }
+    Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup,
+                 state.hide_guide_checked);
+    Profile::Save();
   }
 
   (void)result;
