@@ -213,13 +213,7 @@ NormalisePayloadPath(Path source_path, ForecastPayloadType type)
                      GetNormalisedPayloadTarget(source_path, suffix));
 }
 
-[[nodiscard]] static bool
-NeedsNetCdfDecode(Path path) noexcept
-{
-  return path.EndsWithIgnoreCase(".nc");
-}
-
-static void
+void
 DeleteIfExists(Path path) noexcept
 {
   if (File::Exists(path))
@@ -232,11 +226,14 @@ NeedsGunzipForecastPayload(Path path) noexcept;
 [[nodiscard]] static AllocatedPath
 GetGunzipOutputPath(Path compressed_path);
 
-static void
-DeleteNetCdfDisplayArtifact(Path path) noexcept
+void
+DeleteDisplayArtifacts(Path path) noexcept
 {
-  if (NeedsNetCdfDecode(path))
-    DeleteIfExists(path.WithSuffix(".tif"));
+  DeleteIfExists(path.WithSuffix(".tif"));
+  DeleteIfExists(path.WithSuffix(".tiff"));
+  DeleteIfExists(path.WithSuffix(".png"));
+  DeleteIfExists(path.WithSuffix(".jpg"));
+  DeleteIfExists(path.WithSuffix(".jpeg"));
 }
 
 static void
@@ -257,11 +254,12 @@ DeletePreparedPayloadArtifacts(Path path) noexcept
   if (NeedsGunzipForecastPayload(path)) {
     const auto inflated_path = GetGunzipOutputPath(path);
     DeleteIfExists(inflated_path);
-    DeleteNetCdfDisplayArtifact(inflated_path);
+    DeleteDisplayArtifacts(inflated_path);
+    DeleteDisplayArtifacts(path);
     return;
   }
 
-  DeleteNetCdfDisplayArtifact(path);
+  DeleteDisplayArtifacts(path);
 }
 
 static void
@@ -431,8 +429,9 @@ PrepareNetCdfPayload(PreparedForecastPayload payload)
 
 #if defined(USE_GEOTIFF) && defined(HAVE_SKYSIGHT_NETCDF)
 
-[[maybe_unused]] static void
-TiffErrorHandler(const char *module, const char *fmt, va_list ap)
+#if TIFFLIB_VERSION > 20220520
+void
+LogTiffMessage(const char *module, const char *fmt, va_list ap)
 {
   char buffer[256];
   vsnprintf(buffer, sizeof(buffer), fmt, ap);
@@ -443,7 +442,74 @@ TiffErrorHandler(const char *module, const char *fmt, va_list ap)
     LogFormat("%s", buffer);
 }
 
-static void
+int
+TiffErrorHandler(TIFF *, void *, const char *module, const char *fmt,
+                 va_list ap)
+{
+  LogTiffMessage(module, fmt, ap);
+  return 1;
+}
+#endif
+
+TIFF *
+OpenGeoTiff(Path path, const char *mode)
+{
+#if TIFFLIB_VERSION > 20220520
+  TIFFOpenOptions *options = TIFFOpenOptionsAlloc();
+  if (options == nullptr)
+    throw std::bad_alloc();
+
+  AtScopeExit(options) { TIFFOpenOptionsFree(options); };
+  TIFFOpenOptionsSetErrorHandlerExtR(options, TiffErrorHandler, nullptr);
+  TIFFOpenOptionsSetWarningHandlerExtR(options, TiffErrorHandler, nullptr);
+  return XTIFFOpenExt(path.c_str(), mode, options);
+#else
+  return XTIFFOpen(path.c_str(), mode);
+#endif
+}
+
+void
+ThrowNetCdfError(int status, const char *action);
+
+void
+ValidateCoordinateVariable(int file_id, int variable_id,
+                           int expected_dimension, size_t expected_size,
+                           const char *name)
+{
+  int dimensions = 0;
+  ThrowNetCdfError(nc_inq_varndims(file_id, variable_id, &dimensions), name);
+  if (dimensions != 1)
+    throw FmtRuntimeError("SkySight NetCDF {} variable is not one-dimensional",
+                          name);
+
+  int dimension_id = -1;
+  ThrowNetCdfError(nc_inq_vardimid(file_id, variable_id, &dimension_id), name);
+  size_t size = 0;
+  ThrowNetCdfError(nc_inq_dimlen(file_id, dimension_id, &size), name);
+  if (dimension_id != expected_dimension || size != expected_size)
+    throw FmtRuntimeError("SkySight NetCDF {} dimension does not match its grid",
+                          name);
+}
+
+void
+ValidateDataVariable(int file_id, int variable_id,
+                     int latitude_dimension, int longitude_dimension)
+{
+  int dimensions = 0;
+  ThrowNetCdfError(nc_inq_varndims(file_id, variable_id, &dimensions),
+                   "inspect data dimensions");
+  if (dimensions != 2)
+    throw std::runtime_error("SkySight NetCDF data variable is not two-dimensional");
+
+  int dimension_ids[2];
+  ThrowNetCdfError(nc_inq_vardimid(file_id, variable_id, dimension_ids),
+                   "inspect data dimensions");
+  if (dimension_ids[0] != latitude_dimension ||
+      dimension_ids[1] != longitude_dimension)
+    throw std::runtime_error("SkySight NetCDF data dimensions do not match the grid");
+}
+
+void
 ThrowNetCdfError(int status, const char *action)
 {
   if (status != NC_NOERR)
@@ -472,7 +538,11 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   if (legend.empty())
     throw std::runtime_error("SkySight legend is empty");
 
-  File::Delete(prepared.display_path);
+  const std::string temporary_name =
+    std::string{prepared.display_path.c_str()} + ".tmp";
+  const AllocatedPath temporary_path{temporary_name.c_str()};
+  DeleteIfExists(temporary_path);
+  AtScopeExit(&temporary_path) { DeleteIfExists(temporary_path); };
 
   int file_id = -1;
   ThrowNetCdfError(nc_open(prepared.source_path.c_str(), NC_NOWRITE, &file_id),
@@ -487,16 +557,23 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   ThrowNetCdfError(nc_inq_dimlen(file_id, lat_dim_id, &lat_size), "read lat dimension");
   ThrowNetCdfError(nc_inq_dimlen(file_id, lon_dim_id, &lon_size), "read lon dimension");
 
-  std::vector<double> lat_values(lat_size), lon_values(lon_size), values(lat_size * lon_size);
+  if (lat_size < 2 || lon_size < 2)
+    throw std::runtime_error("SkySight NetCDF grid is too small");
+  if (lat_size > std::numeric_limits<uint32_t>::max() ||
+      lon_size > std::numeric_limits<uint32_t>::max() ||
+      lat_size > std::numeric_limits<size_t>::max() / lon_size ||
+      lon_size > std::numeric_limits<size_t>::max() / 4)
+    throw std::runtime_error("SkySight NetCDF grid is too large");
 
   int lat_var_id = -1, lon_var_id = -1;
   ThrowNetCdfError(nc_inq_varid(file_id, "lat", &lat_var_id), "find lat variable");
   ThrowNetCdfError(nc_inq_varid(file_id, "lon", &lon_var_id), "find lon variable");
+  ValidateCoordinateVariable(file_id, lat_var_id, lat_dim_id, lat_size, "lat");
+  ValidateCoordinateVariable(file_id, lon_var_id, lon_dim_id, lon_size, "lon");
+
+  std::vector<double> lat_values(lat_size), lon_values(lon_size);
   ThrowNetCdfError(nc_get_var_double(file_id, lat_var_id, lat_values.data()), "read lat values");
   ThrowNetCdfError(nc_get_var_double(file_id, lon_var_id, lon_values.data()), "read lon values");
-
-  if (lat_size < 2 || lon_size < 2)
-    throw std::runtime_error("SkySight NetCDF grid is too small");
 
   const bool lat_ascending = lat_values.front() < lat_values.back();
   const bool lon_ascending = lon_values.front() < lon_values.back();
@@ -512,7 +589,13 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   int data_var_id = -1;
   ThrowNetCdfError(nc_inq_varid(file_id, std::string{variable_name}.c_str(), &data_var_id),
                    "find data variable");
-  ThrowNetCdfError(nc_get_var_double(file_id, data_var_id, values.data()),
+  ValidateDataVariable(file_id, data_var_id, lat_dim_id, lon_dim_id);
+
+  std::vector<double> values(lat_size * lon_size);
+  const size_t start[2] = {0, 0};
+  const size_t count[2] = {lat_size, lon_size};
+  ThrowNetCdfError(nc_get_vara_double(file_id, data_var_id, start, count,
+                                     values.data()),
                    "read data values");
 
   const double fill_value = GetOptionalDoubleAttribute(file_id, data_var_id,
@@ -523,85 +606,100 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   const double scale = GetOptionalDoubleAttribute(file_id, data_var_id,
                                                   "scale_factor", 1.0);
 
-  TIFFSetErrorHandler(TiffErrorHandler);
-  TIFFSetWarningHandler(TiffErrorHandler);
-
-  TIFF *tf = XTIFFOpen(prepared.display_path.c_str(), "w");
-  if (tf == nullptr)
-    throw std::runtime_error("SkySight GeoTIFF open failed");
-
-  AtScopeExit(tf) { TIFFClose(tf); };
-
-  GTIF *gt = GTIFNew(tf);
-  if (gt == nullptr)
-    throw std::runtime_error("SkySight GeoTIFF metadata init failed");
-
-  AtScopeExit(gt) { GTIFFree(gt); };
-
   const double tie_points[6] = {0, 0, 0, lon_west_edge, lat_north_edge, 0};
   const double pixel_scale[3] = {lon_step, lat_step, 0};
   constexpr uint16_t samples_per_pixel = 4;
   constexpr uint16_t bits_per_sample = 8;
   constexpr uint16_t alpha_sample = EXTRASAMPLE_ASSOCALPHA;
 
-  TIFFSetField(tf, TIFFTAG_IMAGEWIDTH, lon_size);
-  TIFFSetField(tf, TIFFTAG_IMAGELENGTH, lat_size);
-  TIFFSetField(tf, TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel);
-  TIFFSetField(tf, TIFFTAG_BITSPERSAMPLE, bits_per_sample);
-  TIFFSetField(tf, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-  TIFFSetField(tf, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
-  TIFFSetField(tf, TIFFTAG_PREDICTOR, PREDICTOR_HORIZONTAL);
-  TIFFSetField(tf, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-  TIFFSetField(tf, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
-  TIFFSetField(tf, TIFFTAG_EXTRASAMPLES, 1, &alpha_sample);
-  TIFFSetField(tf, TIFFTAG_GEOTIEPOINTS, 6, tie_points);
-  TIFFSetField(tf, TIFFTAG_GEOPIXELSCALE, 3, pixel_scale);
-  TIFFSetField(tf, TIFFTAG_ROWSPERSTRIP,
-               TIFFDefaultStripSize(tf, samples_per_pixel * lon_size));
+  {
+    TIFF *tf = OpenGeoTiff(temporary_path, "w");
+    if (tf == nullptr)
+      throw std::runtime_error("SkySight GeoTIFF open failed");
 
-  GTIFKeySet(gt, GTModelTypeGeoKey, TYPE_SHORT, 1, ModelTypeGeographic);
-  GTIFKeySet(gt, GTRasterTypeGeoKey, TYPE_SHORT, 1, RasterPixelIsArea);
-  GTIFKeySet(gt, GeographicTypeGeoKey, TYPE_SHORT, 1, GCS_WGS_84);
-  GTIFKeySet(gt, GTCitationGeoKey, TYPE_ASCII, 25,
-             "Generated by XCSoar");
-  GTIFKeySet(gt, GeogLinearUnitsGeoKey, TYPE_SHORT, 1, Linear_Meter);
-  GTIFKeySet(gt, GeogAngularUnitsGeoKey, TYPE_SHORT, 1, Angular_Degree);
+    AtScopeExit(tf) { TIFFClose(tf); };
 
-  std::vector<uint8_t> row(samples_per_pixel * lon_size);
+    GTIF *gt = GTIFNew(tf);
+    if (gt == nullptr)
+      throw std::runtime_error("SkySight GeoTIFF metadata init failed");
 
-  for (size_t y = 0; y < lat_size; ++y) {
-    std::fill(row.begin(), row.end(), 0);
+    AtScopeExit(gt) { GTIFFree(gt); };
 
-    const auto source_y = lat_ascending ? (lat_size - 1 - y) : y;
+    TIFFSetField(tf, TIFFTAG_IMAGEWIDTH, lon_size);
+    TIFFSetField(tf, TIFFTAG_IMAGELENGTH, lat_size);
+    TIFFSetField(tf, TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel);
+    TIFFSetField(tf, TIFFTAG_BITSPERSAMPLE, bits_per_sample);
+    TIFFSetField(tf, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+    TIFFSetField(tf, TIFFTAG_COMPRESSION, COMPRESSION_ADOBE_DEFLATE);
+    TIFFSetField(tf, TIFFTAG_PREDICTOR, PREDICTOR_HORIZONTAL);
+    TIFFSetField(tf, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    TIFFSetField(tf, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+    TIFFSetField(tf, TIFFTAG_EXTRASAMPLES, 1, &alpha_sample);
+    TIFFSetField(tf, TIFFTAG_GEOTIEPOINTS, 6, tie_points);
+    TIFFSetField(tf, TIFFTAG_GEOPIXELSCALE, 3, pixel_scale);
+    TIFFSetField(tf, TIFFTAG_ROWSPERSTRIP,
+                 TIFFDefaultStripSize(tf, samples_per_pixel * lon_size));
 
-    for (size_t x = 0; x < lon_size; ++x) {
-      const auto source_x = lon_ascending ? x : (lon_size - 1 - x);
-      const auto index = source_y * lon_size + source_x;
-      const auto raw = values[index];
-      if (!std::isnan(fill_value) && raw == fill_value)
-        continue;
+    GTIFKeySet(gt, GTModelTypeGeoKey, TYPE_SHORT, 1, ModelTypeGeographic);
+    GTIFKeySet(gt, GTRasterTypeGeoKey, TYPE_SHORT, 1, RasterPixelIsArea);
+    GTIFKeySet(gt, GeographicTypeGeoKey, TYPE_SHORT, 1, GCS_WGS_84);
+    GTIFKeySet(gt, GTCitationGeoKey, TYPE_ASCII, 25,
+               "Generated by XCSoar");
+    GTIFKeySet(gt, GeogLinearUnitsGeoKey, TYPE_SHORT, 1, Linear_Meter);
+    GTIFKeySet(gt, GeogAngularUnitsGeoKey, TYPE_SHORT, 1, Angular_Degree);
 
-      const auto point = raw * scale + offset;
-      auto color = legend.upper_bound((float)point);
-      if (color == legend.begin())
-        continue;
+    std::vector<uint8_t> row(samples_per_pixel * lon_size);
 
-      --color;
+    for (size_t y = 0; y < lat_size; ++y) {
+      std::fill(row.begin(), row.end(), 0);
 
-      const auto offset_index = x * samples_per_pixel;
-      row[offset_index] = color->second.red;
-      row[offset_index + 1] = color->second.green;
-      row[offset_index + 2] = color->second.blue;
-      row[offset_index + 3] = 255;
+      const auto source_y = lat_ascending ? (lat_size - 1 - y) : y;
+
+      for (size_t x = 0; x < lon_size; ++x) {
+        const auto source_x = lon_ascending ? x : (lon_size - 1 - x);
+        const auto index = source_y * lon_size + source_x;
+        const auto raw = values[index];
+        if (!std::isnan(fill_value) && raw == fill_value)
+          continue;
+
+        const auto point = raw * scale + offset;
+        auto color = legend.upper_bound((float)point);
+        if (color == legend.begin())
+          continue;
+
+        --color;
+
+        const auto offset_index = x * samples_per_pixel;
+        row[offset_index] = color->second.red;
+        row[offset_index + 1] = color->second.green;
+        row[offset_index + 2] = color->second.blue;
+        row[offset_index + 3] = 255;
+      }
+
+      if (TIFFWriteScanline(tf, row.data(), (uint32_t)y, 0) != 1)
+        throw std::runtime_error("SkySight GeoTIFF write failed");
     }
 
-    if (TIFFWriteScanline(tf, row.data(), (uint32_t)y, 0) != 1) {
-      File::Delete(prepared.display_path);
-      throw std::runtime_error("SkySight GeoTIFF write failed");
-    }
+    if (!GTIFWriteKeys(gt) || !TIFFWriteDirectory(tf))
+      throw std::runtime_error("SkySight GeoTIFF finalization failed");
   }
 
-  GTIFWriteKeys(gt);
+  {
+    TIFF *tf = OpenGeoTiff(temporary_path, "r");
+    if (tf == nullptr)
+      throw std::runtime_error("SkySight GeoTIFF validation failed");
+
+    AtScopeExit(tf) { TIFFClose(tf); };
+    uint32_t width = 0, height = 0;
+    if (!TIFFGetField(tf, TIFFTAG_IMAGEWIDTH, &width) ||
+        !TIFFGetField(tf, TIFFTAG_IMAGELENGTH, &height) ||
+        width != lon_size || height != lat_size)
+      throw std::runtime_error("SkySight GeoTIFF validation failed");
+  }
+
+  if (!File::Replace(temporary_path, prepared.display_path))
+    throw std::runtime_error("SkySight GeoTIFF publication failed");
+
   DeleteIfExists(prepared.cleanup_source_path);
   if (prepared.cleanup_download_path != nullptr)
     DeleteIfExists(prepared.cleanup_download_path);
@@ -770,13 +868,40 @@ SkySightFileDecoder::Prepare(Path path)
   throw std::runtime_error("Unsupported SkySight forecast payload");
 }
 
+namespace {
+
+[[nodiscard]] AllocatedPath
+FindDisplayVariant(Path path)
+{
+  if ((path.EndsWithIgnoreCase(".tif") ||
+       path.EndsWithIgnoreCase(".tiff") ||
+       path.EndsWithIgnoreCase(".png") ||
+       path.EndsWithIgnoreCase(".jpg") ||
+       path.EndsWithIgnoreCase(".jpeg")) &&
+      File::Exists(path))
+    return CopyPath(path);
+
+  for (const auto *suffix : {".tif", ".tiff", ".png", ".jpg", ".jpeg"}) {
+    const auto candidate = path.WithSuffix(suffix);
+    if (File::Exists(candidate))
+      return AllocatedPath(candidate.c_str());
+  }
+
+  return nullptr;
+}
+
+} // namespace
+
 AllocatedPath
 SkySightFileDecoder::FindCachedDisplay(Path path)
 {
-  const auto display_path = path.WithSuffix(".tif");
-  return File::Exists(display_path)
-    ? AllocatedPath(display_path.c_str())
-    : nullptr;
+  if (auto display = FindDisplayVariant(path); display != nullptr)
+    return display;
+
+  if (NeedsGunzipForecastPayload(path))
+    return FindDisplayVariant(GetGunzipOutputPath(path));
+
+  return nullptr;
 }
 
 void
