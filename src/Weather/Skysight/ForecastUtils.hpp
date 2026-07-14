@@ -6,6 +6,7 @@
 #include "Layers.hpp"
 
 #include <algorithm>
+#include <iterator>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -45,7 +46,8 @@ IsSameForecastDay(time_t left, time_t right) noexcept
 
 template<typename Range, typename GetTime>
 [[nodiscard]] inline time_t
-ChooseClosestForecastTime(const Range &values, GetTime get_time) noexcept
+ChooseClosestForecastTime(const Range &values, GetTime get_time)
+  noexcept(noexcept(get_time(*std::begin(values))))
 {
   const auto now = std::time(nullptr);
 
@@ -108,6 +110,10 @@ CollapseFullDayForecastDatafiles(const Layer &layer,
                                 });
 }
 
+/**
+ * Returns pointers into Layer::forecast_datafiles.  They remain valid only
+ * while the layer exists and its forecast_datafiles vector is not mutated.
+ */
 [[nodiscard]] inline std::vector<const ForecastDatafile *>
 GetForecastPreloadDatafiles(const Layer &layer, time_t now)
 {

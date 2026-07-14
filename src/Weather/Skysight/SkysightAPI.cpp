@@ -7,8 +7,9 @@
 #include "SkySightRequest.hpp"
 #include "SkySightURL.hpp"
 #include "Skysight.hpp"
-#include "io/FileLineReader.hpp"
+#include "io/FileReader.hxx"
 #include "io/FileOutputStream.hxx"
+#include "json/Parse.hxx"
 #include "json/Serialize.hxx"
 #include "time/Convert.hxx"
 #include "util/StaticString.hxx"
@@ -23,51 +24,20 @@
 
 namespace {
 
-static constexpr time_t REGIONS_RETRY_SECONDS = 30;
-static constexpr time_t LAYERS_RETRY_SECONDS = 30;
-static constexpr time_t CATALOG_CACHE_MAX_AGE = 12 * 60 * 60;
-static constexpr time_t INITIAL_LAST_UPDATE_POLL_SECONDS = 30;
-static constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
-static constexpr const char *REGIONS_CACHE_FILE = "regions-v1.cache";
+constexpr time_t REGIONS_RETRY_SECONDS = 30;
+constexpr time_t LAYERS_RETRY_SECONDS = 30;
+constexpr time_t CATALOG_CACHE_MAX_AGE = 12 * 60 * 60;
+constexpr time_t INITIAL_LAST_UPDATE_POLL_SECONDS = 30;
+constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
+constexpr const char *REGIONS_CACHE_FILE = "regions-v1.cache";
 
-static time_t
+time_t
 GetInitialDatafilesTime() noexcept
 {
   return SkySight::GetForecastDayStart(std::time(nullptr));
 }
 
-struct ForecastDatafileChoice {
-  time_t time = 0;
-  std::string link;
-};
-
-[[nodiscard]] static const SkySight::ForecastDatafile *
-FindForecastDatafile(const SkySight::Layer &layer,
-                     time_t forecast_time) noexcept
-{
-  const auto i = std::find_if(layer.forecast_datafiles.begin(),
-                              layer.forecast_datafiles.end(),
-                              [forecast_time](const auto &candidate) {
-                                return candidate.time == forecast_time;
-                              });
-  return i != layer.forecast_datafiles.end()
-    ? &*i
-    : nullptr;
-}
-
-[[nodiscard]] static ForecastDatafileChoice
-ChooseDefaultForecastDatafile(time_t latest_past_time,
-                              std::string latest_past_link,
-                              time_t earliest_future_time,
-                              std::string earliest_future_link) noexcept
-{
-  if (latest_past_time > 0)
-    return {latest_past_time, std::move(latest_past_link)};
-
-  return {earliest_future_time, std::move(earliest_future_link)};
-}
-
-static time_t
+time_t
 ParseUpdateTime(const boost::json::value &value)
 {
   if (value.is_number())
@@ -79,7 +49,7 @@ ParseUpdateTime(const boost::json::value &value)
   return 0;
 }
 
-static float
+float
 ParseFloat(const boost::json::value &value)
 {
   if (value.is_number())
@@ -91,7 +61,7 @@ ParseFloat(const boost::json::value &value)
   return 0;
 }
 
-static void
+void
 ParseLegend(const boost::json::object &entry, SkySight::Layer &layer)
 {
   layer.legend.clear();
@@ -127,7 +97,7 @@ ParseLegend(const boost::json::object &entry, SkySight::Layer &layer)
   }
 }
 
-static std::string_view
+std::string_view
 StripUrlQuery(std::string_view url) noexcept
 {
   const auto split = url.find_first_of("?#");
@@ -136,7 +106,7 @@ StripUrlQuery(std::string_view url) noexcept
     : url.substr(0, split);
 }
 
-static std::string
+std::string
 GetUrlSuffix(std::string_view url)
 {
   const auto clean = StripUrlQuery(url);
@@ -159,19 +129,19 @@ GetUrlSuffix(std::string_view url)
   return std::string{filename.substr(dot)};
 }
 
-[[nodiscard]] static bool
+[[nodiscard]] bool
 NeedsNetCdfDecodeSuffix(std::string_view suffix) noexcept
 {
   return suffix == ".nc" || suffix == ".nc.min" || suffix == ".min";
 }
 
-[[nodiscard]] static bool
+[[nodiscard]] bool
 MetadataCacheFresh(time_t last_refresh, time_t now) noexcept
 {
   return last_refresh != 0 && now < last_refresh + CATALOG_CACHE_MAX_AGE;
 }
 
-static time_t
+time_t
 GetMetadataCacheTime(Path path) noexcept
 {
   const auto modification = File::GetLastModification(path);
@@ -180,27 +150,12 @@ GetMetadataCacheTime(Path path) noexcept
     : std::chrono::system_clock::to_time_t(modification);
 }
 
-static bool
+bool
 LoadMetadataCache(Path path, boost::json::value &value) noexcept
 {
-  std::string json;
-
   try {
-    FileLineReaderA reader(path);
-    const char *line;
-    while ((line = reader.ReadLine()) != nullptr) {
-      json += line;
-      json += '\n';
-    }
-  } catch (...) {
-    return false;
-  }
-
-  if (json.empty())
-    return false;
-
-  try {
-    value = boost::json::parse(json);
+    FileReader reader(path);
+    value = Json::Parse(reader);
     return true;
   } catch (...) {
     return false;
@@ -803,7 +758,7 @@ SkysightAPI::PreloadDefaultDatafile(std::string_view layer_id) noexcept
     return false;
 
   bool success = false;
-  const auto *selected = FindForecastDatafile(*layer, layer->forecast_time);
+  const auto *selected = layer->FindDatafile(layer->forecast_time);
   if (selected == nullptr || selected->link.empty()) {
     layer->preload_requested = false;
     layer->default_preload_requested = true;
@@ -1032,9 +987,11 @@ SkysightAPI::PollLastUpdates() noexcept
     return;
 
   const auto now = std::time(nullptr);
-  const auto interval = owner.GetActiveLayerId().empty() ||
-      GetLayer(owner.GetActiveLayerId()) == nullptr ||
-      GetLayer(owner.GetActiveLayerId())->last_update != 0
+  const auto active_layer_id = owner.GetActiveLayerId();
+  const auto *active_layer = active_layer_id.empty()
+    ? nullptr
+    : GetLayer(active_layer_id);
+  const auto interval = active_layer == nullptr || active_layer->last_update != 0
     ? LAST_UPDATE_POLL_SECONDS
     : INITIAL_LAST_UPDATE_POLL_SECONDS;
 
@@ -1200,9 +1157,7 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
   time_t first_time = 0;
   time_t last_time = 0;
   time_t latest_past_time = 0;
-  std::string latest_past_link;
   time_t earliest_future_time = 0;
-  std::string earliest_future_link;
   const auto now = std::time(nullptr);
   std::vector<SkySight::ForecastDatafile> forecast_datafiles;
 
@@ -1240,14 +1195,10 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
           existing->link = link_value;
 
         if (update_time <= now) {
-          if (latest_past_time == 0 || update_time > latest_past_time) {
+          if (latest_past_time == 0 || update_time > latest_past_time)
             latest_past_time = update_time;
-            latest_past_link = link_value;
-          }
-        } else if (earliest_future_time == 0 || update_time < earliest_future_time) {
+        } else if (earliest_future_time == 0 || update_time < earliest_future_time)
           earliest_future_time = update_time;
-          earliest_future_link = link_value;
-        }
       }
     }
   } catch (...) {
@@ -1267,24 +1218,15 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
     layer->to = last_time;
     layer->last_update = std::max(layer->last_update, last_time);
 
-    const auto default_choice = ChooseDefaultForecastDatafile(latest_past_time,
-                                                              std::move(latest_past_link),
-                                                              earliest_future_time,
-                                                              std::move(earliest_future_link));
+    const time_t default_time = latest_past_time > 0
+      ? latest_past_time
+      : earliest_future_time;
 
     if (layer->forecast_time == 0 ||
-        std::none_of(layer->forecast_datafiles.begin(),
-                     layer->forecast_datafiles.end(),
-                     [layer](const auto &candidate) {
-                       return candidate.time == layer->forecast_time;
-                     }))
-      layer->forecast_time = default_choice.time;
+        layer->FindDatafile(layer->forecast_time) == nullptr)
+      layer->forecast_time = default_time;
 
-    const auto selected = std::find_if(layer->forecast_datafiles.begin(),
-                                       layer->forecast_datafiles.end(),
-                                       [layer](const auto &candidate) {
-                                         return candidate.time == layer->forecast_time;
-                                       });
+    const auto *selected = layer->FindDatafile(layer->forecast_time);
 
     const bool preload_requested = std::exchange(layer->preload_requested, false);
     const bool default_preload_requested =
@@ -1294,10 +1236,10 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
            SkySight::GetForecastPreloadDatafiles(*layer, now))
         (void)QueuePreloadDatafile(*layer, datafile->time, datafile->link);
     } else if (default_preload_requested &&
-               selected != layer->forecast_datafiles.end()) {
+               selected != nullptr) {
       (void)QueueForecastDatafile(*layer, selected->time, selected->link);
     } else if (owner.GetActiveLayerId() == layer_id &&
-               selected != layer->forecast_datafiles.end()) {
+               selected != nullptr) {
       (void)QueueForecastDatafile(*layer, selected->time, selected->link);
     }
   } else {
@@ -1444,5 +1386,9 @@ SkysightAPI::SyncSelectedLayer(std::string_view id) noexcept
   if (selected == nullptr || layer == nullptr)
     return;
 
-  *selected = *layer;
+  try {
+    *selected = *layer;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight selected layer synchronization failed");
+  }
 }

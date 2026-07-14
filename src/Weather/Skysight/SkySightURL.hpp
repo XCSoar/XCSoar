@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <fmt/format.h>
+
 #include <string>
 #include <string_view>
 
@@ -27,16 +29,8 @@ Tile(std::string_view layer_id,
      unsigned zoom, unsigned x, unsigned y,
      std::string_view timestamp)
 {
-  auto url = Api(layer_id);
-  url.push_back('/');
-  url += std::to_string(zoom);
-  url.push_back('/');
-  url += std::to_string(x);
-  url.push_back('/');
-  url += std::to_string(y);
-  url.push_back('/');
-  url.append(timestamp);
-  return url;
+  return fmt::format("{}/{}/{}/{}/{}/{}", API_BASE, layer_id,
+                     zoom, x, y, timestamp);
 }
 
 } // namespace SkySightUrl

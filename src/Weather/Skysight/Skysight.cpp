@@ -45,6 +45,24 @@ HasExactForecastImage(std::string_view region,
     File::Exists(candidate.path);
 }
 
+[[nodiscard]] bool
+SyncCachedForecastImage(std::string_view region,
+                        SkySight::Layer &layer,
+                        SkySight::Layer &selected,
+                        time_t forecast_time) noexcept
+{
+  const auto candidate = SkysightCache::FindForecastImage(
+    Skysight::GetLocalPath(), region, layer.id, forecast_time);
+  if (candidate.path == nullptr || candidate.forecast_time != forecast_time)
+    return false;
+
+  const auto mtime = std::chrono::system_clock::to_time_t(
+    File::GetLastModification(candidate.path));
+  layer.mtime = mtime;
+  selected.mtime = mtime;
+  return true;
+}
+
 } // namespace
 Skysight::Skysight(CurlGlobal &curl)
   :api(std::make_unique<SkysightAPI>(*this, curl, GetLocalPath())),
@@ -267,11 +285,10 @@ Skysight::AddSelectedLayer(std::string_view id, bool save_profile)
   if (!api->AddSelectedLayer(selected))
     return false;
 
-  if (save_profile)
+  if (save_profile) {
     SaveSelectedLayers();
-
-  if (save_profile)
     api->PollSelectedDatafiles();
+  }
 
   return true;
 }
@@ -330,12 +347,8 @@ Skysight::SelectForecastTime(std::string_view id, time_t forecast_time)
   if (layer == nullptr || selected == nullptr || layer->SupportsLiveTiles())
     return false;
 
-  const auto i = std::find_if(layer->forecast_datafiles.begin(),
-                              layer->forecast_datafiles.end(),
-                              [forecast_time](const auto &candidate) {
-                                return candidate.time == forecast_time;
-                              });
-  if (i == layer->forecast_datafiles.end())
+  const auto *datafile = layer->FindDatafile(forecast_time);
+  if (datafile == nullptr)
     return false;
 
   layer->forecast_time_mode = SkySight::ForecastTimeMode::Fixed;
@@ -344,18 +357,9 @@ Skysight::SelectForecastTime(std::string_view id, time_t forecast_time)
   selected->forecast_time = forecast_time;
   CommonInterface::SetUIState().weather.skysight.cursor_initialized = true;
 
-  const auto candidate = SkysightCache::FindForecastImage(GetLocalPath(),
-                                                          GetRegion(),
-                                                          layer->id,
-                                                          forecast_time);
-  if (candidate.path != nullptr &&
-      candidate.forecast_time == forecast_time) {
-    const auto mtime = std::chrono::system_clock::to_time_t(
-      File::GetLastModification(candidate.path));
-    layer->mtime = mtime;
-    selected->mtime = mtime;
-  } else {
-    if (!api->QueueForecastDatafile(id, i->time, i->link))
+  if (!SyncCachedForecastImage(GetRegion(), *layer, *selected,
+                               forecast_time)) {
+    if (!api->QueueForecastDatafile(id, datafile->time, datafile->link))
       return false;
   }
 
@@ -382,12 +386,8 @@ Skysight::SelectAutomaticForecastTime(std::string_view id)
   if (forecast_time <= 0)
     return false;
 
-  const auto i = std::find_if(layer->forecast_datafiles.begin(),
-                              layer->forecast_datafiles.end(),
-                              [forecast_time](const auto &candidate) {
-                                return candidate.time == forecast_time;
-                              });
-  if (i == layer->forecast_datafiles.end())
+  const auto *datafile = layer->FindDatafile(forecast_time);
+  if (datafile == nullptr)
     return false;
 
   layer->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
@@ -395,18 +395,9 @@ Skysight::SelectAutomaticForecastTime(std::string_view id)
   layer->forecast_time = forecast_time;
   selected->forecast_time = forecast_time;
 
-  const auto candidate = SkysightCache::FindForecastImage(GetLocalPath(),
-                                                          GetRegion(),
-                                                          layer->id,
-                                                          forecast_time);
-  if (candidate.path != nullptr &&
-      candidate.forecast_time == forecast_time) {
-    const auto mtime = std::chrono::system_clock::to_time_t(
-      File::GetLastModification(candidate.path));
-    layer->mtime = mtime;
-    selected->mtime = mtime;
-  } else {
-    if (!api->QueueForecastDatafile(id, i->time, i->link))
+  if (!SyncCachedForecastImage(GetRegion(), *layer, *selected,
+                               forecast_time)) {
+    if (!api->QueueForecastDatafile(id, datafile->time, datafile->link))
       return false;
   }
 
@@ -683,10 +674,6 @@ Skysight::OnForecastProgress(const SkySight::ForecastProgress &progress) noexcep
     break;
 
   case SkySight::ForecastProgressPhase::Download:
-    text.Format(_("SkySight forecasts: %u of %u available..."),
-                available, progress.total);
-    break;
-
   case SkySight::ForecastProgressPhase::Decode:
     text.Format(_("SkySight forecasts: %u of %u available..."),
                 available, progress.total);

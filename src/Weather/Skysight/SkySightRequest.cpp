@@ -985,11 +985,11 @@ SkySightRequest::LogDownloadHttpError(bool forecast_download,
                                       unsigned status,
                                       std::string_view key) noexcept
 {
-  const std::string bucket =
-    (forecast_download ? std::string{"forecast"} : std::string{"tile"}) +
-    "|" + (layer_id.empty() ? std::string{"*"} : std::string{layer_id}) +
-    "|" + std::to_string(status);
-  auto &count = tile_http_error_count[bucket];
+  const auto bucket = FmtBuffer<64>("{}|{}|{}",
+                                    forecast_download ? "forecast" : "tile",
+                                    layer_id.empty() ? "*" : layer_id,
+                                    status);
+  auto &count = tile_http_error_count[std::string{bucket.c_str()}];
   ++count;
 
   if (count == 1) {

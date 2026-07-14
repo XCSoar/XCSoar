@@ -5,6 +5,7 @@
 
 #include "ui/canvas/custom/GeoBitmap.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <ctime>
 #include <map>
@@ -67,9 +68,9 @@ struct Layer {
   std::map<float, LegendColor> legend;
   std::string time_name;
   std::vector<ForecastDatafile> forecast_datafiles;
-  double from = 0;
-  double to = 0;
-  double mtime = 0;
+  time_t from = 0;
+  time_t to = 0;
+  time_t mtime = 0;
   bool requires_auth = false;
   /** True while the UI should present this layer as busy. */
   bool updating = false;
@@ -113,6 +114,16 @@ struct Layer {
 
   [[nodiscard]] bool UsesAutomaticForecastTime() const noexcept {
     return forecast_time_mode == ForecastTimeMode::AutoDefault;
+  }
+
+  [[nodiscard]] const ForecastDatafile *
+  FindDatafile(time_t time) const noexcept {
+    const auto i = std::find_if(forecast_datafiles.begin(),
+                                forecast_datafiles.end(),
+                                [time](const auto &candidate) {
+                                  return candidate.time == time;
+                                });
+    return i != forecast_datafiles.end() ? &*i : nullptr;
   }
 
   /**
