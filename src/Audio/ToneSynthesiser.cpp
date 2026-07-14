@@ -16,9 +16,11 @@ void
 ToneSynthesiser::Synthesise(int16_t *buffer, size_t n)
 {
   assert(angle < ISINETABLE.size());
+  const auto current_volume = volume.load();
 
   for (int16_t *end = buffer + n; buffer != end; ++buffer) {
-    *buffer = ISINETABLE[angle] * (32767 / 1024) * (int)volume / 100;
+    *buffer = ISINETABLE[angle] * (32767 / 1024) *
+      (int)current_volume / 100;
     angle = (angle + increment) & (ISINETABLE.size() - 1);
   }
 }
