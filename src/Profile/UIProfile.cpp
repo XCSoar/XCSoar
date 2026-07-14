@@ -74,6 +74,7 @@ Profile::Load(const ProfileMap &map, VarioSoundSettings &settings)
 {
   map.Get(ProfileKeys::SoundAudioVario, settings.enabled);
   map.Get(ProfileKeys::SoundVolume, settings.volume);
+  map.GetEnum(ProfileKeys::VarioSoundSwitchingMode, settings.switching_mode);
   map.Get(ProfileKeys::VarioDeadBandEnabled, settings.dead_band_enabled);
 
   map.Get(ProfileKeys::VarioMinFrequency, settings.min_frequency);
