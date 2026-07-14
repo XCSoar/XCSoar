@@ -231,6 +231,10 @@ Version 7.45 - not yet released
   - Quick Guide, help & configuration checklists: list checkboxes use dialog
     look and min touch row height; keyboard focus frame on the checkbox; override
     touch autodetection with -touchscreen or -notouchscreen (non-Android) #2325
+  - Quick Guide: "Don't show this guide again" on every informational page;
+    skip Welcome on startup when the guide is hidden; Config → Look →
+    Language, Input controls startup visibility, release notes on next
+    startup, and safety disclaimer acceptance #2648
   - waypoint search: stays open until Esc or a successful GoTo / task / home / pan
     action (pan ends the search so the map is not hidden under the list); same for
     WaypointDetails select and WaypointDetailsPersistent (was: only after closing
