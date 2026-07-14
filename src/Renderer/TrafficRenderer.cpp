@@ -25,7 +25,7 @@ static constexpr unsigned ARROW_SPAN = 14;
  * display DPI (and small-screen viewing distance) but not window size.
  * ~Scale(100) arrow size at the 240 px design baseline.
  */
-static constexpr unsigned MAP_TRAFFIC_ICON_VPT = 36;
+static constexpr unsigned MAP_TRAFFIC_ICON_VPT = 50;
 
 struct MapTrafficScale {
   int arrow_scale;

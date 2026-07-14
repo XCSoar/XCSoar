@@ -115,12 +115,13 @@ protected:
 protected:
   static constexpr unsigned TARGET_RING_PERMILLE = 140;
   static constexpr unsigned TARGET_RING_OUTER_PERMILLE = 170;
+  static constexpr unsigned NOPOSTARGET_PERMILLE = 70;
   static constexpr unsigned ARROW_ICON_PERMILLE = 400;
   static constexpr unsigned ALT_LABEL_DIST_PERMILLE = 135;
   static constexpr unsigned ALT_LABEL_ALARM_DIST_PERMILLE = 200;
   static constexpr unsigned ALT_TRIANGLE_PERMILLE = 60;
   static constexpr unsigned SIDE_LABEL_X_PERMILLE = 100;
-  static constexpr unsigned SIDE_LABEL_Y_PERMILLE = 150;
+  static constexpr unsigned SIDE_LABEL_Y_PERMILLE = 175;
   static constexpr unsigned SIDE_LABEL_Y_CENTER_PERMILLE = 75;
   static constexpr unsigned PLANE_WING_X_PERMILLE = 85;
   static constexpr unsigned PLANE_WING_Y_PERMILLE = 17;
@@ -153,7 +154,7 @@ private:
                            const PixelPoint &target_point,
                            const PixelPoint &radar_center,
                            double scale,
-                           [[maybe_unused]] bool small,
+                           bool small,
                            const Pen *target_pen,
                            const Color *text_color) const noexcept;
 };
