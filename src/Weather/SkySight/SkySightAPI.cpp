@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SkySightAPI.hpp"
+#include "ForecastUtils.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkySightRequest.hpp"
 #include "SkySightClient.hpp"
@@ -25,7 +26,7 @@ static constexpr time_t LAST_UPDATE_POLL_SECONDS = 5 * 60;
 static time_t
 GetInitialDatafilesTime() noexcept
 {
-  return std::time(nullptr) - 18 * 60 * 60;
+  return SkySight::GetForecastCatalogStart(std::time(nullptr));
 }
 
 struct ForecastDatafileChoice {
@@ -467,8 +468,10 @@ SkySightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
     success = true;
   } else {
     layer->preload_requested = false;
-    for (const auto &datafile : layer->forecast_datafiles)
-      success = QueueForecastDatafile(*layer, datafile.time, datafile.link) || success;
+    for (const auto *datafile :
+         SkySight::GetForecastPreloadDatafiles(*layer, std::time(nullptr)))
+      success = QueueForecastDatafile(*layer, datafile->time, datafile->link) ||
+        success;
 
     UpdateBusyState(*layer);
   }
@@ -889,8 +892,9 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
 
     const bool preload_requested = std::exchange(layer->preload_requested, false);
     if (preload_requested) {
-      for (const auto &datafile : layer->forecast_datafiles)
-        (void)QueueForecastDatafile(*layer, datafile.time, datafile.link);
+      for (const auto *datafile :
+           SkySight::GetForecastPreloadDatafiles(*layer, now))
+        (void)QueueForecastDatafile(*layer, datafile->time, datafile->link);
     } else if (selected != layer->forecast_datafiles.end()) {
       (void)QueueForecastDatafile(*layer, selected->time, selected->link);
     }
