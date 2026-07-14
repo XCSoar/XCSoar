@@ -683,8 +683,10 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
       if (run.points.size() < 2)
         continue;
 
-      if (suppress_sink_lines && run.color_index < null_color_index)
+      if (suppress_sink_lines && run.color_index < null_color_index) {
+        flush_batch();
         continue;
+      }
 
       if (run.color_index != batch_color)
         flush_batch();
@@ -1241,7 +1243,7 @@ TrailRenderer::DrawRibbonPolyline(Canvas &canvas, unsigned color_index,
 
   if (join_radius > 1) {
     for (unsigned i = 1; i + 1 < n; ++i)
-      canvas.DrawCircle(pts[i], join_radius);
+      canvas.DrawCircle({pts[i].x, pts[i].y}, join_radius);
   }
 }
 
