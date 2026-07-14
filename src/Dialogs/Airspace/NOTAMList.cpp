@@ -177,7 +177,7 @@ RemoveHiddenQCode(NOTAMSettings &settings, std::string_view qcode) noexcept
   if (qcode.empty())
     return false;
 
-  StaticString<256> remaining;
+  StaticString<256> remaining{};
   bool removed = false;
   std::string_view hidden_list = settings.hidden_qcodes;
   size_t start = hidden_list.find_first_not_of(" \t,");
