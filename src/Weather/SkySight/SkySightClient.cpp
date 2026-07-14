@@ -12,6 +12,7 @@
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "LogFile.hpp"
 #include "Message.hpp"
 #include "PageActions.hpp"
 #include "Profile/Current.hpp"
@@ -28,8 +29,50 @@
 #include <algorithm>
 #include <cassert>
 #include <chrono>
+#include <exception>
 
 namespace {
+
+void
+MigrateCacheFiles(Path source_path, Path destination_path) noexcept
+{
+  if (!Directory::Exists(source_path))
+    return;
+
+  struct Visitor final : File::Visitor {
+    const Path destination_path;
+
+    explicit Visitor(Path _destination_path) noexcept
+      :destination_path(_destination_path) {}
+
+    void Visit(Path source_path, Path filename) override {
+      const auto target_path = AllocatedPath::Build(destination_path, filename);
+      if (File::ExistsAny(target_path))
+        File::Delete(source_path);
+      else
+        File::Rename(source_path, target_path);
+    }
+  } visitor{destination_path};
+
+  try {
+    Directory::VisitFiles(source_path, visitor);
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight cache migration failed");
+    return;
+  }
+
+  struct EmptyVisitor final : Directory::DirEntryVisitor {
+    bool empty = true;
+
+    void Visit(Path, Path, bool) noexcept override {
+      empty = false;
+    }
+  } empty_visitor;
+
+  Directory::VisitDirectoriesAndFiles(source_path, empty_visitor);
+  if (empty_visitor.empty)
+    (void)Directory::Remove(source_path);
+}
 
 [[nodiscard]] static bool
 HasExactForecastImage(std::string_view region,
@@ -38,10 +81,8 @@ HasExactForecastImage(std::string_view region,
   if (layer.forecast_time <= 0)
     return false;
 
-  const auto candidate = SkySightCache::FindForecastImage(SkySightClient::GetLocalPath(),
-                                                          region,
-                                                          layer.id,
-                                                          layer.forecast_time);
+  const auto candidate = SkySightCache::FindForecastImage(
+    SkySightClient::GetCachePath(), region, layer.id, layer.forecast_time);
   return candidate.path != nullptr &&
     candidate.forecast_time == layer.forecast_time &&
     File::Exists(candidate.path);
@@ -54,7 +95,7 @@ SyncCachedForecastImage(std::string_view region,
                         time_t forecast_time) noexcept
 {
   const auto candidate = SkySightCache::FindForecastImage(
-    SkySightClient::GetLocalPath(), region, layer.id, forecast_time);
+    SkySightClient::GetCachePath(), region, layer.id, forecast_time);
   if (candidate.path == nullptr || candidate.forecast_time != forecast_time)
     return false;
 
@@ -67,7 +108,7 @@ SyncCachedForecastImage(std::string_view region,
 
 } // namespace
 SkySightClient::SkySightClient(CurlGlobal &curl)
-  :api(std::make_unique<SkySightAPI>(*this, curl, GetLocalPath())),
+  :api(std::make_unique<SkySightAPI>(*this, curl, GetCachePath())),
    request_timer([this]{ PollPendingDatafiles(); })
 {
   Init();
@@ -76,14 +117,26 @@ SkySightClient::SkySightClient(CurlGlobal &curl)
 SkySightClient::~SkySightClient() = default;
 
 AllocatedPath
-SkySightClient::GetLocalPath() noexcept
+SkySightClient::GetCachePath() noexcept
 {
-  return MakeCacheDirectory("skysight");
+  const auto weather_path = MakeCacheDirectory("weather");
+  auto skysight_path = AllocatedPath::Build(weather_path, "skysight");
+  try {
+    Directory::Create(skysight_path);
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight cache directory creation failed");
+  }
+  return skysight_path;
 }
 
 void
 SkySightClient::Init()
 {
+  const auto cache_path = GetCachePath();
+  MigrateCacheFiles(AllocatedPath::Build(::GetCachePath(), "skysight"),
+                    cache_path);
+  MigrateCacheFiles(AllocatedPath::Build(LocalPath("weather"), "skysight"),
+                    cache_path);
   CleanupFiles();
   forecast_cleanup_pending = !SkySightCache::IsTrustedTimeAvailableForCleanup();
 
@@ -113,7 +166,7 @@ SkySightClient::MaybeCleanupFiles() noexcept
 void
 SkySightClient::CleanupFiles() noexcept
 {
-  SkySightCache::Cleanup(GetLocalPath());
+  SkySightCache::Cleanup(GetCachePath());
 }
 
 std::size_t
@@ -764,7 +817,7 @@ SkySightClient::DisplayForecastLayer()
     forecast_image_dirty = true;
   }
 
-  const auto candidate = SkySightCache::FindForecastImage(GetLocalPath(),
+  const auto candidate = SkySightCache::FindForecastImage(GetCachePath(),
                                                           GetRegion(),
                                                           active_layer->id,
                                                           active_layer->forecast_time);
