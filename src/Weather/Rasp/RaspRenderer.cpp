@@ -118,7 +118,6 @@ RaspRenderer::Generate(const WindowProjection &projection,
   const auto &style = LookupWeatherTerrainStyle(cache.GetMapName());
   const bool do_water = style.do_water;
   const unsigned height_scale = style.height_scale;
-  const int interp_levels = 5;
 
   auto materialized_color_ramp =
     MaterializeColorRamp(style.color_map,
@@ -128,7 +127,7 @@ RaspRenderer::Generate(const WindowProjection &projection,
 
   if (materialized_color_ramp.hash != last_ramp_hash) {
     auto ramp = materialized_color_ramp.GetColorRamp();
- 
+
     // Choose between RGB and RGBA colormap based on style and on
     // whether the rendering backend can blend per-pixel source alpha.
     const bool use_alpha = style.HasAlpha() && HaveBitmapSourceAlpha();
@@ -136,11 +135,11 @@ RaspRenderer::Generate(const WindowProjection &projection,
     if (use_alpha)
       raster_renderer.PrepareColorTableAlpha(&ramp, do_water,
                                              height_scale,
-                                             interp_levels);
+                                             RASP_INTERP_LEVELS);
     else
       raster_renderer.PrepareColorTable(&ramp, do_water,
                                         height_scale,
-                                        interp_levels);
+                                        RASP_INTERP_LEVELS);
     last_ramp_hash = materialized_color_ramp.hash;
   }
 

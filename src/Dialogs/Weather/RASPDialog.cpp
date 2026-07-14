@@ -11,6 +11,7 @@
 #include "WeatherOverlayDraft.hpp"
 #include "Weather/Rasp/RaspStyle.hpp"
 #include "Weather/Rasp/ColorMap.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 #include "Terrain/RasterRenderer.hpp"
 #include "ui/canvas/RawBitmap.hpp"
 #include "Math/Angle.hpp"
@@ -106,15 +107,14 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
   auto ramp = materialized.GetColorRamp();
 
   RasterRenderer renderer;
-  constexpr int interp_levels = 5;
   if (use_alpha)
     renderer.PrepareColorTableAlpha(
       &ramp, style->do_water,
-      height_scale, interp_levels);
+      height_scale, RASP_INTERP_LEVELS);
   else
     renderer.PrepareColorTable(
       &ramp, style->do_water,
-      height_scale, interp_levels);
+      height_scale, RASP_INTERP_LEVELS);
 
   canvas.Select(look.text_font);
   const unsigned font_h = canvas.CalcTextSize("0").height;

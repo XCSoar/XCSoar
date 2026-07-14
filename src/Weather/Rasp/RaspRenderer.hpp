@@ -20,6 +20,11 @@ struct TerrainRendererSettings;
 struct GeoPoint;
 
 /**
+ * Interpolation levels used for colormap rendering in RASP visualization.
+  */
+constexpr int RASP_INTERP_LEVELS = 5;
+
+/**
  * The value of a RASP field sampled at a geographic point.
  */
 struct RaspFieldValue {
