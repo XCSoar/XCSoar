@@ -309,6 +309,7 @@ constexpr std::string_view VarioZeroFrequency = "VarioZeroFrequency";
 constexpr std::string_view VarioMaxFrequency = "VarioMaxFrequency";
 constexpr std::string_view VarioMinPeriod = "VarioMinPeriod";
 constexpr std::string_view VarioMaxPeriod = "VarioMaxPeriod";
+constexpr std::string_view VarioSoundSwitchingMode = "VarioSoundSwitchingMode";
 constexpr std::string_view VarioDeadBandEnabled = "VarioDeadBandEnabled";
 constexpr std::string_view VarioDeadBandMin = "VarioDeadBandMin";
 constexpr std::string_view VarioDeadBandMax = "VarioDeadBandMax";
