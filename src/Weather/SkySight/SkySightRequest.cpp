@@ -272,18 +272,10 @@ SkySightRequest::IsQueued(std::string_view key) const noexcept
 }
 
 bool
-SkySightRequest::RequeueFileJob(const FileJob &job, time_t ready_at) noexcept
+SkySightRequest::RequeueFileJob(FileJob &job, time_t ready_at) noexcept
 {
   try {
-    PendingJob pending{
-      job.kind,
-      std::string{job.path.c_str()},
-      job.url,
-      AllocatedPath{job.path.c_str()},
-      job.requires_auth,
-      job.layer_id,
-      job.forecast_time,
-    };
+    FileRequest pending{std::move(static_cast<FileRequest &>(job))};
     pending.ready_at = ready_at;
     pending.attempts = download_failures.GetAttempts(pending.key);
     pending_jobs.push_back(std::move(pending));
@@ -337,22 +329,15 @@ SkySightRequest::PumpQueue()
     auto job = std::move(*next);
     pending_jobs.erase(next);
 
-    auto active_job = std::make_unique<FileJob>(curl.GetEventLoop());
+    auto active_job = std::make_unique<FileJob>(curl.GetEventLoop(),
+                                                std::move(job));
     auto *job_ptr = active_job.get();
-    const auto key = job.key;
-    job_ptr->kind = job.kind;
-    job_ptr->path = std::move(job.path);
-    job_ptr->url = std::move(job.url);
-    job_ptr->requires_auth = job.requires_auth;
-    job_ptr->layer_id = job.layer_id;
-    job_ptr->forecast_time = job.forecast_time;
-    job_ptr->attempts = job.attempts;
-
+    const auto key = job_ptr->key;
     file_jobs.emplace(key, std::move(active_job));
     job_ptr->function.Start(
       DownloadFileTask(curl, job_ptr->url,
                        AllocatedPath(job_ptr->path.c_str()),
-                       job.requires_auth ? api_key : std::string{}),
+                       job_ptr->requires_auth ? api_key : std::string{}),
       [this, key](AllocatedPath) {
         OnFileSuccess(key);
       },
@@ -539,7 +524,7 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
     }
   }
 
-  PendingJob job{FileJob::Kind::ForecastData,
+  FileRequest job{FileJob::Kind::ForecastData,
                  key, std::string{url},
                  AllocatedPath(filename.c_str()), true,
                  std::string{layer_id}, forecast_time};
@@ -1052,11 +1037,11 @@ SkySightRequest::LogDownloadHttpError(bool forecast_download,
                                       unsigned status,
                                       std::string_view key) noexcept
 {
-  const std::string bucket =
-    (forecast_download ? std::string{"forecast"} : std::string{"tile"}) +
-    "|" + (layer_id.empty() ? std::string{"*"} : std::string{layer_id}) +
-    "|" + std::to_string(status);
-  auto &count = tile_http_error_count[bucket];
+  const auto bucket = FmtBuffer<64>("{}|{}|{}",
+                                    forecast_download ? "forecast" : "tile",
+                                    layer_id.empty() ? "*" : layer_id,
+                                    status);
+  auto &count = tile_http_error_count[std::string{bucket.c_str()}];
   ++count;
 
   if (count == 1) {
