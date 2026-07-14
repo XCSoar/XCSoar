@@ -344,6 +344,9 @@ SkySightClient::SetLayerActive(std::string_view id)
   if (!api->IsSelectedLayer(id) && !AddSelectedLayer(id))
     return false;
 
+  if (active_layer != layer)
+    api->CancelTileDownloads();
+
   active_layer = layer;
   if (!active_layer->SupportsLiveTiles()) {
     if (auto *selected = api->GetSelectedLayer(id); selected != nullptr) {
@@ -361,6 +364,7 @@ SkySightClient::SetLayerActive(std::string_view id)
 void
 SkySightClient::DeactivateLayer()
 {
+  api->CancelTileDownloads();
   active_layer = nullptr;
   Profile::Set(ProfileKeys::WeatherLayerDisplayed, "");
   ResetTiles();
