@@ -13,6 +13,7 @@
 
 #include <ctime>
 #include <deque>
+#include <map>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -161,7 +162,8 @@ private:
                           const boost::json::value &value) const noexcept;
   bool QueueForecastDatafile(SkySight::Layer &layer, time_t forecast_time,
                              std::string_view link) noexcept;
-  void QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer &layer,
+  bool QueueDecodeJob(SkySightPreparedData prepared,
+                      const SkySight::Layer &layer,
                       time_t forecast_time) noexcept;
   void StartNextDecodeJob() noexcept;
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);
