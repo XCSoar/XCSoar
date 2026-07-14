@@ -7,9 +7,9 @@
 #include "DataGlobals.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Formatter/LocalTimeFormatter.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Weather/Skysight/ForecastFormatter.hpp"
 #include "Weather/Skysight/ForecastUtils.hpp"
 #include "Weather/Skysight/Skysight.hpp"
 #include <algorithm>
@@ -21,29 +21,6 @@ namespace WeatherMapOverlay {
 
 static constexpr unsigned TIME_PICKER_AUTO =
   std::numeric_limits<unsigned>::max();
-
-[[nodiscard]] static StaticString<32>
-FormatForecastTimeLabel(const SkySight::Layer &layer,
-                        time_t forecast_time) noexcept
-{
-  StaticString<32> label;
-  if (forecast_time <= 0)
-    return label;
-
-  const auto date_time = FormatLocalDateTimeYYYYMMDDHHMM(
-    TimeStamp(std::chrono::duration<double>(forecast_time)),
-    CommonInterface::GetComputerSettings().utc_offset);
-
-  if (SkySight::IsFullDayForecastLayer(layer))
-    label = date_time.c_str();
-  else
-    label = date_time.c_str();
-
-  if (SkySight::IsFullDayForecastLayer(layer))
-    label.Truncate(10);
-
-  return label;
-}
 
 [[nodiscard]] static std::vector<time_t>
 BuildForecastTimes(const SkySight::Layer &layer)
@@ -131,7 +108,9 @@ SkysightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
     return;
   }
 
-  const auto label = FormatForecastTimeLabel(*layer, layer->forecast_time);
+  const auto label = SkySight::FormatForecastTimeLabel(
+    *layer, layer->forecast_time,
+    CommonInterface::GetComputerSettings().utc_offset);
   if (layer->UsesAutomaticForecastTime())
     text.Format(_("AUTO: %s"), label.c_str());
   else
@@ -322,7 +301,9 @@ SkysightControlsModel::OpenPrimaryPicker() noexcept
     picker.addEnumText(_("Auto"), TIME_PICKER_AUTO);
 
     for (unsigned i = 0; i < times.size(); ++i)
-      picker.addEnumText(FormatForecastTimeLabel(*layer, times[i]).c_str(), i);
+      picker.addEnumText(SkySight::FormatForecastTimeLabel(
+        *layer, times[i],
+        CommonInterface::GetComputerSettings().utc_offset).c_str(), i);
 
     if (layer->UsesAutomaticForecastTime())
       picker.SetValue(TIME_PICKER_AUTO);
