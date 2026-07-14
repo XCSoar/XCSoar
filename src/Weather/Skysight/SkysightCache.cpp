@@ -15,12 +15,13 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdio>
+#include <utility>
 
 namespace {
 
-static constexpr auto FORECAST_RETENTION = std::chrono::hours{12};
+constexpr auto FORECAST_RETENTION = std::chrono::hours{12};
 
-[[nodiscard]] static bool
+[[nodiscard]] bool
 IsGpsTimeValidForForecastCleanup() noexcept
 {
   const auto &basic = CommonInterface::Basic();
@@ -29,7 +30,7 @@ IsGpsTimeValidForForecastCleanup() noexcept
 }
 
 #if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
-[[nodiscard]] static bool
+[[nodiscard]] bool
 HasNtpSynchronizedSystemTimeForForecastCleanup() noexcept
 {
   try {
@@ -42,7 +43,7 @@ HasNtpSynchronizedSystemTimeForForecastCleanup() noexcept
 #endif
 
 template<typename V>
-static void
+void
 VisitForecastImageFiles(Path directory, V &visitor)
 {
   Directory::VisitSpecificFiles(directory, "*.tif", visitor);
@@ -52,7 +53,7 @@ VisitForecastImageFiles(Path directory, V &visitor)
   Directory::VisitSpecificFiles(directory, "*.jpeg", visitor);
 }
 
-[[nodiscard]] static bool
+[[nodiscard]] bool
 StripSuffix(std::string_view &value, std::string_view suffix) noexcept
 {
   if (!value.ends_with(suffix))
@@ -62,7 +63,7 @@ StripSuffix(std::string_view &value, std::string_view suffix) noexcept
   return true;
 }
 
-[[nodiscard]] static std::string_view
+[[nodiscard]] std::string_view
 ExtractTimestampPrefix(std::string_view stem) noexcept
 {
   if (stem.size() < 16 || stem[stem.size() - 16] != '-')
@@ -71,7 +72,7 @@ ExtractTimestampPrefix(std::string_view stem) noexcept
   return stem.substr(0, stem.size() - 16);
 }
 
-[[nodiscard]] static bool
+[[nodiscard]] bool
 IsUnsignedNumber(std::string_view value) noexcept
 {
   return !value.empty() &&
@@ -80,7 +81,7 @@ IsUnsignedNumber(std::string_view value) noexcept
     });
 }
 
-[[nodiscard]] static bool
+[[nodiscard]] bool
 LooksLikeTileCacheStem(std::string_view stem) noexcept
 {
   auto prefix = ExtractTimestampPrefix(stem);
@@ -107,7 +108,7 @@ LooksLikeTileCacheStem(std::string_view stem) noexcept
   return true;
 }
 
-[[nodiscard]] static std::string_view
+[[nodiscard]] std::string_view
 StripForecastArtifactSuffix(std::string_view filename) noexcept
 {
   auto stem = filename;
@@ -134,7 +135,7 @@ StripForecastArtifactSuffix(std::string_view filename) noexcept
   return {};
 }
 
-[[nodiscard]] static time_t
+[[nodiscard]] time_t
 ParseAnyForecastFileTimestamp(std::string_view filename) noexcept
 {
   const bool is_jpg = filename.ends_with(".jpg");
@@ -160,7 +161,7 @@ ParseAnyForecastFileTimestamp(std::string_view filename) noexcept
 
   return std::chrono::system_clock::to_time_t(date_time.ToTimePoint());
 }
-[[nodiscard]] static time_t
+[[nodiscard]] time_t
 ParseForecastFileTimestamp(std::string_view filename,
                            std::string_view prefix) noexcept
 {
@@ -225,6 +226,10 @@ public:
 
 namespace SkysightCache {
 
+/**
+ * Returns true only when GPS time is valid or the supported host reports NTP
+ * synchronization, allowing age-based forecast cleanup to be trusted.
+ */
 bool
 IsTrustedTimeAvailableForCleanup() noexcept
 {
@@ -238,17 +243,15 @@ IsTrustedTimeAvailableForCleanup() noexcept
 #endif
 }
 
+/**
+ * Selects an exact preferred forecast first, otherwise the newest forecast not
+ * later than now, and finally the earliest future forecast.
+ */
 ForecastImageCandidate
 FindForecastImage(Path directory, std::string_view region,
                   std::string_view layer_id,
                   time_t preferred_time)
 {
-  ForecastImageCandidate exact;
-  ForecastImageCandidate latest_past;
-  ForecastImageCandidate earliest_future;
-  std::chrono::system_clock::time_point exact_mtime{};
-  std::chrono::system_clock::time_point latest_past_mtime{};
-  std::chrono::system_clock::time_point earliest_future_mtime{};
   const auto now = std::time(nullptr);
   std::string prefix{region};
   prefix += '-';
@@ -259,29 +262,18 @@ FindForecastImage(Path directory, std::string_view region,
     const std::string_view prefix;
     const time_t preferred_time;
     const time_t now;
-    ForecastImageCandidate &exact;
-    ForecastImageCandidate &latest_past;
-    ForecastImageCandidate &earliest_future;
-    std::chrono::system_clock::time_point &exact_mtime;
-    std::chrono::system_clock::time_point &latest_past_mtime;
-    std::chrono::system_clock::time_point &earliest_future_mtime;
+    ForecastImageCandidate exact;
+    ForecastImageCandidate latest_past;
+    ForecastImageCandidate earliest_future;
+    std::chrono::system_clock::time_point exact_mtime{};
+    std::chrono::system_clock::time_point latest_past_mtime{};
+    std::chrono::system_clock::time_point earliest_future_mtime{};
 
-    Visitor(std::string_view _prefix, time_t _preferred_time, time_t _now,
-            ForecastImageCandidate &_exact,
-            ForecastImageCandidate &_latest_past,
-            ForecastImageCandidate &_earliest_future,
-            std::chrono::system_clock::time_point &_exact_mtime,
-            std::chrono::system_clock::time_point &_latest_past_mtime,
-            std::chrono::system_clock::time_point &_earliest_future_mtime) noexcept
+    Visitor(std::string_view _prefix, time_t _preferred_time,
+            time_t _now) noexcept
       :prefix(_prefix),
        preferred_time(_preferred_time),
-       now(_now),
-       exact(_exact),
-       latest_past(_latest_past),
-       earliest_future(_earliest_future),
-       exact_mtime(_exact_mtime),
-       latest_past_mtime(_latest_past_mtime),
-       earliest_future_mtime(_earliest_future_mtime) {}
+       now(_now) {}
 
     void Visit(Path full_path, Path filename) override {
       const auto forecast_time =
@@ -318,21 +310,23 @@ FindForecastImage(Path directory, std::string_view region,
         earliest_future_mtime = mtime;
       }
     }
-  } visitor(prefix, preferred_time, now,
-            exact, latest_past, earliest_future,
-            exact_mtime, latest_past_mtime, earliest_future_mtime);
+  } visitor(prefix, preferred_time, now);
 
   VisitForecastImageFiles(directory, visitor);
 
-  if (exact.path != nullptr)
-    return exact;
+  if (visitor.exact.path != nullptr)
+    return std::move(visitor.exact);
 
-  if (latest_past.path != nullptr)
-    return latest_past;
+  if (visitor.latest_past.path != nullptr)
+    return std::move(visitor.latest_past);
 
-  return earliest_future;
+  return std::move(visitor.earliest_future);
 }
 
+/**
+ * Collects unique cached forecast timestamps for one region and layer, ordered
+ * from newest to oldest.
+ */
 std::vector<time_t>
 CollectForecastTimes(Path directory, std::string_view region,
                      std::string_view layer_id)
@@ -369,6 +363,10 @@ CollectForecastTimes(Path directory, std::string_view region,
   return times;
 }
 
+/**
+ * Removes forecasts older than the retention window, stale raw/intermediate
+ * artifacts using the same cutoff, and short-lived temporary metadata files.
+ */
 void
 Cleanup(Path directory) noexcept
 {
