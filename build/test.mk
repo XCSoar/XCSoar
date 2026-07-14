@@ -1974,6 +1974,7 @@ RUN_RICH_TEXT_RENDERER_SOURCES = \
 	$(SRC)/UIUtil/TrackingGestureManager.cpp \
 	$(SRC)/ui/event/Idle.cpp \
 	$(SRC)/Math/FastTrig.cpp \
+	$(SRC)/Math/Angle.cpp \
 	$(SRC)/util/MarkdownParser.cpp \
 	$(SRC)/ResourceLookup.cpp \
 	$(SRC)/system/OpenLink.cpp \
