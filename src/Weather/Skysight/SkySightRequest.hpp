@@ -154,8 +154,9 @@ private:
   void EnsureLoggedIn();
   void CleanupFinishedJobs();
   bool IsQueued(std::string_view key) const noexcept;
-  void RequeueFileJob(const FileJob &job, time_t ready_at) noexcept;
+  bool RequeueFileJob(const FileJob &job, time_t ready_at) noexcept;
   void PumpQueue();
+  void TryPumpQueue() noexcept;
   void OnLoginSuccess(boost::json::value value);
   void OnLoginError(std::exception_ptr error) noexcept;
   void OnRegionsSuccess(boost::json::value value);
