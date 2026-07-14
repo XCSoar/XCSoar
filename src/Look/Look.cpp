@@ -18,6 +18,10 @@ Look::Initialise(const Font &map_font)
 static bool
 GetDarkMode(const UISettings &settings) noexcept
 {
+#ifdef KOBO
+  (void)settings;
+  return false;
+#else
   switch (settings.dark_mode) {
   case UISettings::DarkMode::OFF:
     break;
@@ -30,6 +34,7 @@ GetDarkMode(const UISettings &settings) noexcept
   }
 
   return false;
+#endif
 }
 
 [[gnu::pure]]

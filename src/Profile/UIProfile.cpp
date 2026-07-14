@@ -144,6 +144,11 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
         : UISettings::DarkMode::OFF;
   }
 
+#ifdef KOBO
+  /* Dark mode is not supported on e-paper displays. */
+  settings.dark_mode = UISettings::DarkMode::OFF;
+#endif
+
   Load(map, settings.format);
   Load(map, settings.map);
   Load(map, settings.info_boxes);

@@ -186,9 +186,13 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   else
     AddDummy();
 
+#ifndef KOBO
   AddEnum(_("Dark mode"), nullptr, dark_mode_list,
           (unsigned)ui_settings.dark_mode);
   SetExpertRow(DarkMode);
+#else
+  AddDummy();
+#endif
 
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
@@ -265,8 +269,15 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
     changed |= orientation_changed;
   }
 
+#ifndef KOBO
   changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
                            ui_settings.dark_mode);
+#else
+  if (ui_settings.dark_mode != UISettings::DarkMode::OFF) {
+    ui_settings.dark_mode = UISettings::DarkMode::OFF;
+    changed = true;
+  }
+#endif
 
   bool info_box_geometry_changed = false;
 

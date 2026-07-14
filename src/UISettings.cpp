@@ -31,7 +31,11 @@ UISettings::SetDefaults() noexcept
   show_zoom_button = show_menu_button;
   show_quickmenu_button = HasTouchScreen();
 
+#ifdef KOBO
+  dark_mode = DarkMode::OFF;
+#else
   dark_mode = DarkMode::AUTO;
+#endif
 
   format.SetDefaults();
   map.SetDefaults();
