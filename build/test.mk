@@ -91,6 +91,7 @@ TEST_NAMES = \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestGRecord TestClimbAvCalc TestFilteredVarioComputer \
+	TestVarioSynthesiser \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
@@ -896,6 +897,14 @@ TEST_VALIDITY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestValidity.cpp
 $(eval $(call link-program,TestValidity,TEST_VALIDITY))
+
+TEST_VARIO_SYNTHESISER_SOURCES = \
+	$(SRC)/Audio/ToneSynthesiser.cpp \
+	$(SRC)/Audio/VarioSynthesiser.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestVarioSynthesiser.cpp
+TEST_VARIO_SYNTHESISER_DEPENDS = MATH THREAD
+$(eval $(call link-program,TestVarioSynthesiser,TEST_VARIO_SYNTHESISER))
 
 TEST_ALLOCATED_GRID_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
