@@ -708,17 +708,24 @@ SkySightAPI::QueuePreloadDatafile(SkySight::Layer &layer,
   return false;
 }
 
-void
+bool
 SkySightAPI::QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer &layer,
                             time_t forecast_time) noexcept
 {
-  pending_decode_jobs.push_back(PendingDecodeJob{
-    std::move(prepared),
-    std::string{layer.id},
-    layer.legend,
-    std::string{layer.id},
-    forecast_time,
-  });
+  try {
+    pending_decode_jobs.push_back(PendingDecodeJob{
+      std::move(prepared),
+      std::string{layer.id},
+      layer.legend,
+      std::string{layer.id},
+      forecast_time,
+    });
+    return true;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight forecast decode scheduling failed");
+    OnDatafileError(layer.id, forecast_time);
+    return false;
+  }
 }
 
 void
@@ -727,8 +734,17 @@ SkySightAPI::StartNextDecodeJob() noexcept
   if (pending_decode_jobs.empty())
     return;
 
-  if (decode_job == nullptr)
-    decode_job = std::make_unique<SkySightFileDecodeJob>();
+  if (decode_job == nullptr) {
+    try {
+      decode_job = std::make_unique<SkySightFileDecodeJob>();
+    } catch (...) {
+      auto failed = std::move(pending_decode_jobs.front());
+      pending_decode_jobs.pop_front();
+      LogError(std::current_exception(), "SkySight forecast decoder allocation failed");
+      OnDatafileError(failed.layer_id, failed.forecast_time);
+      return;
+    }
+  }
 
   if (decode_job->GetStatus() != SkySightFileDecodeJob::Status::Idle)
     return;
@@ -745,21 +761,26 @@ SkySightAPI::StartNextDecodeJob() noexcept
   const auto layer_id = std::move(job.layer_id);
   const auto forecast_time = job.forecast_time;
 
-  decode_job->Start(
-    std::move(job.prepared),
-    std::move(job.variable_name),
-    std::move(job.legend),
-    [this, layer_id, forecast_time](AllocatedPath output_path) {
-      OnDatafileDownloaded(layer_id, forecast_time, SkySightPreparedData{
-        SkySightPreparedDataKind::DisplayReady,
-        {},
-        std::move(output_path),
+  try {
+    decode_job->Start(
+      std::move(job.prepared),
+      std::move(job.variable_name),
+      std::move(job.legend),
+      [this, layer_id, forecast_time](AllocatedPath output_path) {
+        OnDatafileDownloaded(layer_id, forecast_time, SkySightPreparedData{
+          SkySightPreparedDataKind::DisplayReady,
+          {},
+          std::move(output_path),
+        });
+      },
+      [this, layer_id, forecast_time](std::exception_ptr error) {
+        LogError(error, "SkySight forecast decode failed");
+        OnDatafileError(layer_id, forecast_time);
       });
-    },
-    [this, layer_id, forecast_time](std::exception_ptr error) {
-      LogError(error, "SkySight forecast decode failed");
-      OnDatafileError(layer_id, forecast_time);
-    });
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight forecast decode start failed");
+    OnDatafileError(layer_id, forecast_time);
+  }
 }
 
 bool
@@ -1396,8 +1417,12 @@ SkySightAPI::OnDatafileDownloaded(std::string_view layer_id,
                                   SkySightPreparedData prepared) noexcept
 {
   auto *layer = GetLayer(layer_id);
-  if (layer == nullptr)
+  if (layer == nullptr) {
+    FinishPreloadTarget(layer_id, forecast_time);
+    StartNextDecodeJob();
+    UpdatePreloadProgress();
     return;
+  }
 
   if (prepared.NeedsDecode()) {
     layer->decoding = true;
@@ -1405,7 +1430,8 @@ SkySightAPI::OnDatafileDownloaded(std::string_view layer_id,
     SyncSelectedLayer(layer_id);
     owner.OnDataUpdated();
 
-    QueueDecodeJob(std::move(prepared), *layer, forecast_time);
+    if (!QueueDecodeJob(std::move(prepared), *layer, forecast_time))
+      return;
     StartNextDecodeJob();
     UpdatePreloadProgress();
     return;
