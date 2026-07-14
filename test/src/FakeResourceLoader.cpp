@@ -21,4 +21,12 @@ Load([[maybe_unused]] ResourceId id)
 }
 #endif
 
+#ifdef _WIN32
+HBITMAP
+LoadBitmap2([[maybe_unused]] ResourceId id)
+{
+  return nullptr;
+}
+#endif
+
 } // namespace ResourceLoader
