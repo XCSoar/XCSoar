@@ -82,6 +82,7 @@ public:
                   const GeoBitmap::TileData &tile);
   void OnLiveTileProbeSucceeded(std::string_view layer_id,
                                 time_t timestamp) noexcept;
+  void CancelTileDownloads() noexcept;
   void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
                       std::string_view link);
   bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,

@@ -356,6 +356,12 @@ SkySightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
 }
 
 void
+SkySightAPI::CancelTileDownloads() noexcept
+{
+  request->CancelTileDownloads();
+}
+
+void
 SkySightAPI::EnsureDatafile(const SkySight::Layer &layer,
                             time_t forecast_time,
                             std::string_view link)
