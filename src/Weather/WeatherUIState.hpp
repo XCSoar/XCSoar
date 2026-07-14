@@ -7,6 +7,7 @@
 #include "time/BrokenDateTime.hpp"
 #include "time/BrokenTime.hpp"
 
+#include <cassert>
 #include <chrono>
 #include <cstdint>
 

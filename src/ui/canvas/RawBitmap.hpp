@@ -227,9 +227,13 @@ public:
    *                         blending; takes precedence over transparent_white
    * @param transparent_white if true, white pixels are treated as transparent
    *                         (only effective when not use_source_alpha)
+   * @param alpha overall layer opacity (0.0=transparent, 1.0=opaque);
+   *              on the memory canvas, ignored when use_source_alpha
+   *              is set (combining both is not supported)
    */
   void StretchTo(PixelSize src_size,
                  Canvas &dest_canvas, PixelSize dest_size,
                  bool transparent_white=false,
-                 bool use_source_alpha=false) const noexcept;
+                 bool use_source_alpha=false,
+                 float alpha=1.0f) const noexcept;
 };
