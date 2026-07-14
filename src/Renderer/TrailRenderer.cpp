@@ -209,14 +209,6 @@ GetTrailSpacingPixels(double map_scale) noexcept
                     TRAIL_THIN_PIXELS_MAX);
 }
 
-[[gnu::const]]
-static double
-GetTrailThinDistance(const WindowProjection &projection,
-                     double map_scale) noexcept
-{
-  return projection.DistancePixelsToMeters(GetTrailSpacingPixels(map_scale));
-}
-
 /** Max number of recent trace points that receive Catmull-Rom smoothing. */
 static constexpr size_t MAX_SMOOTHED_TRAIL_POINTS = 180;
 
@@ -459,7 +451,8 @@ TrailRenderer::MakeTrailQuery(TimeStamp min_time,
   query.min_time = min_time.Cast<std::chrono::duration<unsigned>>();
   query.bounds = projection.GetScreenBounds().Scale(TRAIL_BOUNDS_SCALE);
   query.project_location = projection.GetGeoScreenCenter();
-  query.min_distance_m = GetTrailThinDistance(projection, map_scale);
+  query.min_distance_m =
+    projection.DistancePixelsToMeters(GetTrailSpacingPixels(map_scale));
   return query;
 }
 
@@ -470,6 +463,7 @@ TrailRenderer::TrailDrawFingerprint::operator==(
   return scale_px_per_m == other.scale_px_per_m &&
     color_min == other.color_min &&
     color_max == other.color_max &&
+    settings_type == other.settings_type &&
     query_bounds.GetNorthWest() == other.query_bounds.GetNorthWest() &&
     query_bounds.GetSouthEast() == other.query_bounds.GetSouthEast();
 }
@@ -478,7 +472,6 @@ void
 TrailRenderer::InvalidateSegmentCache() noexcept
 {
   segment_cache.clear();
-  cached_trace_size = 0;
 }
 
 bool
@@ -577,6 +570,39 @@ GetMinMax(TrailSettings::Type type, const TracePointVector &trace) noexcept
   return std::make_pair(value_min, value_max);
 }
 
+PixelPoint
+TrailRenderer::ProjectCachedPathPoint(
+    const CachedPathPoint &p,
+    const WindowProjection &projection,
+    const bool enable_traildrift,
+    const GeoPoint &traildrift,
+    const TimeStamp drift_now) noexcept
+{
+  return projection.GeoToScreen(
+    DriftGeoPoint(p.geo, p.time, p.drift_factor,
+                  enable_traildrift, traildrift, drift_now));
+}
+
+void
+TrailRenderer::ProjectCachedColourRun(
+    const CachedColourRun &run,
+    const size_t start_index,
+    const WindowProjection &projection,
+    const bool enable_traildrift,
+    const GeoPoint &traildrift,
+    const TimeStamp drift_now,
+    BulkPixelPoint *buffer,
+    unsigned &n,
+    const bool simplify_projected) noexcept
+{
+  for (size_t i = start_index; i < run.points.size(); ++i)
+    AppendFilteredTrailPoint(
+      buffer, n,
+      ProjectCachedPathPoint(run.points[i], projection,
+                             enable_traildrift, traildrift, drift_now),
+      simplify_projected);
+}
+
 void
 TrailRenderer::DrawCachedSegments(Canvas &canvas,
                                   const WindowProjection &projection,
@@ -604,12 +630,9 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
 
         auto *dst = Prepare(run.points.size());
         unsigned n = 0;
-        for (const auto &p : run.points) {
-          const PixelPoint pt = projection.GeoToScreen(
-            DriftGeoPoint(p.geo, p.time, p.drift_factor,
-                          enable_traildrift, traildrift, drift_now));
-          AppendFilteredTrailPoint(dst, n, pt, simplify_projected);
-        }
+        ProjectCachedColourRun(run, 0, projection, enable_traildrift,
+                               traildrift, drift_now, dst, n,
+                               simplify_projected);
 
         DrawRibbonPolyline(canvas, run.color_index, dst, n);
       }
@@ -670,25 +693,17 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
 
       size_t start = 0;
       if (batch_n > 0 && !run.points.empty()) {
-        const auto &junction_pt = run.points.front();
-        const PixelPoint junction = projection.GeoToScreen(
-          DriftGeoPoint(junction_pt.geo, junction_pt.time,
-                        junction_pt.drift_factor,
-                        enable_traildrift, traildrift, drift_now));
+        const PixelPoint junction =
+          ProjectCachedPathPoint(run.points.front(), projection,
+                                 enable_traildrift, traildrift, drift_now);
         if (junction.x == points[batch_n - 1].x &&
             junction.y == points[batch_n - 1].y)
           start = 1;
       }
 
-      for (size_t i = start; i < run.points.size(); ++i) {
-        const auto &p = run.points[i];
-        const PixelPoint pt = projection.GeoToScreen(
-          DriftGeoPoint(p.geo, p.time, p.drift_factor,
-                        enable_traildrift, traildrift, drift_now));
-
-        AppendFilteredTrailPoint(points.data(), batch_n, pt,
-                                 simplify_projected);
-      }
+      ProjectCachedColourRun(run, start, projection,
+                             enable_traildrift, traildrift, drift_now,
+                             points.data(), batch_n, simplify_projected);
     }
   }
 
@@ -829,24 +844,20 @@ TrailRenderer::BuildCachedSegment(const WindowProjection &projection,
   const GeoPoint gp1 = curr_tp.GetLocation();
   dest.colour_runs.clear();
 
-  const TrailPointData prev_data{
-    projection.GeoToScreen(gp0),
+  const double prev_value =
     type == TrailSettings::Type::ALTITUDE
-      ? prev_tp.GetAltitude() : prev_tp.GetVario(),
-    prev_tp.GetTime()};
-  const TrailPointData curr_data{
-    projection.GeoToScreen(gp1),
+      ? prev_tp.GetAltitude() : prev_tp.GetVario();
+  const double curr_value =
     type == TrailSettings::Type::ALTITUDE
-      ? curr_tp.GetAltitude() : curr_tp.GetVario(),
-    curr_tp.GetTime()};
+      ? curr_tp.GetAltitude() : curr_tp.GetVario();
 
   const bool use_merge_vario =
     type != TrailSettings::Type::ALTITUDE &&
     !merge_vario_samples.empty();
 
   if (use_merge_vario)
-    BuildVarioBreakpoints(prev_data.time, prev_data.value,
-                          curr_data.time, curr_data.value,
+    BuildVarioBreakpoints(prev_tp.GetTime(), prev_value,
+                          curr_tp.GetTime(), curr_value,
                           merge_vario_samples, merge_sample_index,
                           vario_breakpoints);
   else
@@ -862,14 +873,20 @@ TrailRenderer::BuildCachedSegment(const WindowProjection &projection,
     : gp1;
 
   if (use_smoothing && leg_index + 1 > first_smoothed_point) {
+    const TrailPointData prev_data{
+      PixelPoint{}, prev_value, prev_tp.GetTime()};
+    const TrailPointData curr_data{
+      PixelPoint{}, curr_value, curr_tp.GetTime()};
     BuildSmoothColourRuns(g0, g1, g2, g3,
                           prev_tp.GetTime(), curr_tp.GetTime(),
                           prev_tp.GetDriftFactor(), curr_tp.GetDriftFactor(),
                           num_segments, prev_data, curr_data, type, color_scale,
                           use_merge_vario, dest.colour_runs);
   } else {
-    const PixelPoint p1s = prev_data.point;
-    const PixelPoint p2s = curr_data.point;
+    const PixelPoint p1s = projection.GeoToScreen(gp0);
+    const PixelPoint p2s = projection.GeoToScreen(gp1);
+    const TrailPointData prev_data{p1s, prev_value, prev_tp.GetTime()};
+    const TrailPointData curr_data{p2s, curr_value, curr_tp.GetTime()};
     BuildDirectSegmentPoints(p1s, p2s, vario_breakpoints,
                              use_merge_vario, interpolated);
     BuildDirectColourRuns(prev_data, curr_data, gp0, gp1,
@@ -896,10 +913,8 @@ TrailRenderer::UpdateSegmentCache(const WindowProjection &projection,
     merge_sample_search_index = 0;
   }
 
-  if (trace.size() < 2) {
-    cached_trace_size = trace.size();
+  if (trace.size() < 2)
     return;
-  }
 
   const size_t start_leg = rebuild ? 0 : from_leg;
   if (rebuild)
@@ -919,8 +934,6 @@ TrailRenderer::UpdateSegmentCache(const WindowProjection &projection,
                        use_smoothing, num_segments, first_smoothed_point,
                        merge_sample_search_index, segment_cache.back());
   }
-
-  cached_trace_size = trace.size();
 }
 
 void
@@ -1054,12 +1067,12 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     query.bounds,
     minmax.first,
     minmax.second,
+    settings.type,
   };
 
   const bool fingerprint_changed = !(fingerprint == new_fingerprint);
-  const bool settings_changed = cached_settings_type != settings.type;
 
-  if (modify_changed || fingerprint_changed || settings_changed)
+  if (modify_changed || fingerprint_changed)
     UpdateSegmentCache(projection, settings.type, color_scale,
                        use_smoothing, num_segments, first_smoothed_point,
                        0, true);
@@ -1075,12 +1088,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   else if (leg_count < segment_cache.size())
     segment_cache.resize(leg_count);
 
-  cached_trace_size = trace.size();
-
   cache_append_serial = synced_append_serial;
   cache_modify_serial = synced_modify_serial;
   fingerprint = new_fingerprint;
-  cached_settings_type = settings.type;
 
   for (size_t i = 1; i < valid_points.size(); ++i) {
     const auto &curr_data = valid_points[i];
