@@ -13,7 +13,6 @@
 #include "util/Macros.hpp"
 #include "util/UTF8.hpp"
 #include "Look/FlarmTrafficLook.hpp"
-#include "Renderer/TextInBox.hpp"
 #include "Interface.hpp"
 
 #include <algorithm>
@@ -58,24 +57,6 @@ FlarmTrafficWindow::RadarArrowScale(bool small_radar,
 
   return std::max(int(icon_size) * 50 / int(arrow_span), 1);
 }
-
-static void
-DrawSideLabel(Canvas &canvas, const FlarmTrafficLook &look,
-              const char *text, PixelPoint p, bool selected,
-              Color text_color) noexcept
-{
-  canvas.SetBackgroundTransparent();
-
-  if (!selected) {
-    canvas.SetTextColor(text_color);
-    canvas.DrawText(p, text);
-    return;
-  }
-
-  const bool light_background = look.background_color != COLOR_BLACK;
-  RenderShadowedText(canvas, text, p, light_background);
-}
-
 
 FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _h_padding,
@@ -304,7 +285,7 @@ FlarmTrafficWindow::PaintNoPositionTarget(Canvas &canvas,
                                         const PixelPoint &target_point,
                                         const PixelPoint &radar_center,
                                         double scale,
-                                        [[maybe_unused]] bool small,
+                                        bool small,
                                         const Pen *target_pen,
                                         const Color *text_color) const noexcept
 {
@@ -324,7 +305,7 @@ FlarmTrafficWindow::PaintNoPositionTarget(Canvas &canvas,
   // No position target - Paint a dot
   const unsigned radar_radius = radar_renderer.GetRadius();
   const int dot_radius = std::max(1,
-    int(ScaleRadarPermille(radar_radius, TARGET_RING_PERMILLE)));
+    int(ScaleRadarPermille(radar_radius, NOPOSTARGET_PERMILLE)));
   canvas.DrawCircle(target_point, dot_radius);
   // No position target - print exclamation mark in the middle over the dot
   if (!small) {
@@ -522,8 +503,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       sc[i].y - int(ScaleRadarPermille(radar_radius, SIDE_LABEL_Y_PERMILLE)),
     };
 
-    DrawSideLabel(canvas, look, SuffixUTF8(traffic.name, 2).data(), ts,
-                  selected, *text_color);
+    canvas.DrawText(ts, SuffixUTF8(traffic.name, 2));
   }
 
   StaticString<10> side_text;
@@ -548,7 +528,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   };
 
   if (!side_text.empty())
-    DrawSideLabel(canvas, look, side_text, tp, selected, *text_color);
+    canvas.DrawText(tp, side_text);
 }
 
 void
