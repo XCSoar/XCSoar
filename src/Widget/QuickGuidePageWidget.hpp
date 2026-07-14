@@ -74,6 +74,12 @@ private:
    */
   std::function<void(bool)> gesture_callback;
 
+  /**
+   * Optional callback after an internal (xcsoar://) link dialog
+   * closes, forwarded to the internal RichTextWidget.
+   */
+  std::function<void()> link_return_callback;
+
 public:
   explicit QuickGuidePageWidget(const DialogLook &_look,
                                 const char *_markdown_text) noexcept;
@@ -95,6 +101,13 @@ public:
    * after #Initialise().
    */
   void SetGestureCallback(std::function<void(bool)> cb) noexcept;
+
+  /**
+   * Set a callback invoked after an internal (xcsoar://) link dialog
+   * closes.  Must be called before Initialise().
+   */
+  void SetLinkReturnCallback(std::function<void()> cb) noexcept;
+
   ~QuickGuidePageWidget() noexcept override;
 
   /**
