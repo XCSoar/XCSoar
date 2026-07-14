@@ -6,6 +6,7 @@
 #include "Layers.hpp"
 
 #include <algorithm>
+#include <iterator>
 #include <string_view>
 #include <utility>
 #include <vector>
