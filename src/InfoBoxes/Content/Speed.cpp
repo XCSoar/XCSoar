@@ -106,6 +106,11 @@ UpdateInfoBoxSpeedDolphin(InfoBoxData &data) noexcept
 {
   // Set Value
   const DerivedInfo &calculated = CommonInterface::Calculated();
+  if (!calculated.V_stf_available) {
+    data.SetInvalid();
+    return;
+  }
+
   data.SetValueFromSpeed(calculated.V_stf, false);
 
   // Set Comment
