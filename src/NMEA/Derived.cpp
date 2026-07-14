@@ -37,6 +37,9 @@ DerivedInfo::Reset()
 {
   date_time_local = BrokenDateTime::Invalid();
 
+  V_stf = 0;
+  V_stf_available = false;
+
   VarioInfo::Clear();
   ClimbInfo::Clear();
   CirclingInfo::Clear();

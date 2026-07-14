@@ -133,6 +133,9 @@ struct DerivedInfo:
   /** Speed to fly block/dolphin (m/s) */
   double V_stf;
 
+  /** Whether #V_stf was calculated from a valid glide polar. */
+  bool V_stf_available;
+
   /** Auto QNH calculation result. */
   AtmosphericPressure pressure;
   Validity pressure_available;

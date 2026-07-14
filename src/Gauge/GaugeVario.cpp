@@ -564,7 +564,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 inline void
 GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 {
-  if (!Basic().airspeed_available ||
+  if (!Calculated().V_stf_available || !Basic().airspeed_available ||
       !Basic().total_energy_vario_available)
     return;
 
