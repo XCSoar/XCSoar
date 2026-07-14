@@ -5,9 +5,23 @@
 
 #include "Features.hpp"
 
+#include <optional>
+
 struct VarioSoundSettings;
 
 namespace AudioVarioGlue {
+
+struct VarioAudioInput {
+  /** Current total-energy vario value [m/s]. */
+  std::optional<double> vario;
+
+  /** Whether the aircraft is currently circling. */
+  bool circling = false;
+
+  /** Target true airspeed minus current true airspeed [m/s]. */
+  std::optional<double> stf_speed_error;
+};
+
 #ifdef HAVE_PCM_PLAYER
 
   /**
@@ -27,18 +41,9 @@ namespace AudioVarioGlue {
   void Configure(const VarioSoundSettings &settings);
 
   /**
-   * Update the vario value.
-   *
-   * @param vario the current vario value [m/s]
+   * Update the values used by the audio vario.
    */
-  void SetValue(double vario);
-
-  /**
-   * Declare that no vario value is known (e.g. when connection to all
-   * devices is lost).  Vario sound will be shut off until vario
-   * reception is back.
-   */
-  void NoValue();
+  void SetValue(const VarioAudioInput &input);
 
   /**
    * Is the audio vario platform available on this platform?
@@ -50,8 +55,7 @@ namespace AudioVarioGlue {
   static inline void Initialise() {}
   static inline void Deinitialise() {}
   static inline void Configure([[maybe_unused]] const VarioSoundSettings &settings) {}
-  static inline void SetValue([[maybe_unused]] double vario) {}
-  static inline void NoValue() {}
+  static inline void SetValue([[maybe_unused]] const VarioAudioInput &input) {}
   static inline bool HaveAudioVario() { return false; }
 #endif
 };

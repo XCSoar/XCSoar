@@ -8,6 +8,8 @@ VarioSoundSettings::SetDefaults()
 {
   enabled = false;
   volume = 80;
+  switching_mode = VarioSoundSwitchingMode::MANUAL;
+  manual_mode = VarioSoundManualMode::VARIO;
   dead_band_enabled = false;
 
   min_frequency = 200;

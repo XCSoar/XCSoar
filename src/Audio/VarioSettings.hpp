@@ -6,9 +6,21 @@
 #include <cstdint>
 #include <type_traits>
 
+enum class VarioSoundSwitchingMode : uint8_t {
+  MANUAL,
+  AUTO,
+};
+
+enum class VarioSoundManualMode : uint8_t {
+  VARIO,
+  STF,
+};
+
 struct VarioSoundSettings {
   bool enabled;
   uint8_t volume;
+  VarioSoundSwitchingMode switching_mode;
+  VarioSoundManualMode manual_mode;
   bool dead_band_enabled;
 
   unsigned min_frequency;

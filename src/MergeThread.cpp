@@ -121,8 +121,7 @@ MergeThread::Tick() noexcept
   bool gps_updated, calculated_updated;
 
 #ifdef HAVE_PCM_PLAYER
-  bool vario_available;
-  double vario;
+  AudioVarioGlue::VarioAudioInput vario_audio_input;
 #endif
 
   TracePoint::Time trail_push_time{};
@@ -172,12 +171,19 @@ MergeThread::Tick() noexcept
 
 #ifdef HAVE_PCM_PLAYER
     if (!computer.FilteredVarioActive()) {
-      vario_available = basic.brutto_vario_available;
-      vario = vario_available ? basic.brutto_vario : 0;
+      if (basic.brutto_vario_available)
+        vario_audio_input.vario = basic.brutto_vario;
     } else {
-      vario_available = basic.filtered_brutto_vario_available;
-      vario = vario_available ? basic.FilteredBruttoVario() : 0;
+      if (basic.filtered_brutto_vario_available)
+        vario_audio_input.vario = basic.FilteredBruttoVario();
     }
+
+    if (calculated.V_stf_available && basic.airspeed_available &&
+        basic.total_energy_vario_available && calculated.flight.flying)
+      vario_audio_input.stf_speed_error =
+        calculated.V_stf - basic.true_airspeed;
+
+    vario_audio_input.circling = calculated.circling;
 #endif
 
     /* Throttle map vario-bar redraws to ~1 Hz when the LX filter is active. */
@@ -196,10 +202,7 @@ MergeThread::Tick() noexcept
     trail_vario_sink->PushMergeVarioSample(trail_push_time, trail_push_vario);
 
 #ifdef HAVE_PCM_PLAYER
-  if (vario_available)
-    AudioVarioGlue::SetValue(vario);
-  else
-    AudioVarioGlue::NoValue();
+  AudioVarioGlue::SetValue(vario_audio_input);
 #endif
 
   if (gps_updated)
