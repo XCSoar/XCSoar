@@ -5,11 +5,14 @@
 
 #include "PCMSynthesiser.hpp"
 
+#include <atomic>
+
 /**
  * This class generates tones with a sine wave.
  */
 class ToneSynthesiser : public PCMSynthesiser {
-  unsigned volume = 100, angle = 0, increment = 0;
+  std::atomic<unsigned> volume{100};
+  unsigned angle = 0, increment = 0;
 
 public:
   explicit ToneSynthesiser(unsigned _sample_rate) : sample_rate(_sample_rate) {

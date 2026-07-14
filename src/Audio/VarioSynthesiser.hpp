@@ -94,6 +94,7 @@ public:
    * Enable/disable the dead band silence
    */
   void SetDeadBand(bool enabled) {
+    const std::lock_guard lock{mutex};
     dead_band_enabled = enabled;
   }
 
@@ -101,6 +102,7 @@ public:
    * Set the base frequencies for minimum, zero and maximum lift
    */
   void SetFrequencies(unsigned min, unsigned zero, unsigned max) {
+    const std::lock_guard lock{mutex};
     min_frequency = min;
     zero_frequency = zero;
     max_frequency = max;
@@ -110,6 +112,7 @@ public:
    * Set the time periods for minimum and maximum lift
    */
   void SetPeriods(unsigned min, unsigned max) {
+    const std::lock_guard lock{mutex};
     min_period_ms = min;
     max_period_ms = max;
   }
@@ -118,6 +121,7 @@ public:
    * Set the vario range of the "dead band" during which no sound is emitted
    */
   void SetDeadBandRange(double min, double max) {
+    const std::lock_guard lock{mutex};
     min_dead = (int)(min * 100);
     max_dead = (int)(max * 100);
   }
