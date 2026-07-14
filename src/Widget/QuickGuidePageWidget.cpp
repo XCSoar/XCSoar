@@ -29,6 +29,12 @@ QuickGuidePageWidget::SetGestureCallback(std::function<void(bool)> cb) noexcept
       gesture_callback);
 }
 
+void
+QuickGuidePageWidget::SetLinkReturnCallback(std::function<void()> cb) noexcept
+{
+  link_return_callback = std::move(cb);
+}
+
 std::unique_ptr<QuickGuidePageWidget>
 QuickGuidePageWidget::CreateContentPage(
   const DialogLook &look,
@@ -108,8 +114,12 @@ void
 QuickGuidePageWidget::SetText(const char *text) noexcept
 {
   markdown_text = text ? text : "";
-  // If the scroll widget already has a RichTextWidget inside,
-  // we can't easily update it. The caller should recreate the page.
+  if (scroll_widget == nullptr)
+    return;
+
+  auto &rich_text = static_cast<RichTextWidget &>(
+    static_cast<VScrollWidget &>(*scroll_widget).GetWidget());
+  rich_text.SetText(markdown_text.c_str());
 }
 
 QuickGuidePageWidget::PageLayout
@@ -156,6 +166,8 @@ QuickGuidePageWidget::Initialise(ContainerWindow &parent,
   // Create the RichTextWidget wrapped in VScrollWidget
   auto rich_text = std::make_unique<RichTextWidget>(
     look, markdown_text.c_str(), parse_links);
+  if (link_return_callback)
+    rich_text->SetLinkReturnCallback(link_return_callback);
   auto scroll = std::make_unique<VScrollWidget>(
     std::move(rich_text), look, true);
 
