@@ -20,45 +20,30 @@ class CurlGlobal;
 class SkySightAPI;
 
 class SkySightRequest final {
-  struct FileJob {
+  struct FileRequest {
     enum class Kind {
       Generic,
       ForecastData,
     };
 
-    UI::CoInjectFunction<AllocatedPath> function;
     Kind kind = Kind::Generic;
-    AllocatedPath path;
-    std::string url;
-    bool requires_auth = false;
-    std::string layer_id;
-    time_t forecast_time = 0;
-    unsigned attempts = 0;
-    bool finished = false;
-
-    explicit FileJob(EventLoop &event_loop) noexcept
-      :function(event_loop) {}
-  };
-
-  struct PendingJob {
-    FileJob::Kind kind = FileJob::Kind::Generic;
     std::string key;
     std::string url;
     AllocatedPath path;
-    bool requires_auth;
+    bool requires_auth = false;
     std::string layer_id;
     time_t forecast_time = 0;
     time_t ready_at = 0;
     unsigned attempts = 0;
 
-    PendingJob(std::string _key, std::string _url,
+    FileRequest(std::string _key, std::string _url,
                AllocatedPath _path, bool _requires_auth) noexcept
       :key(std::move(_key)),
        url(std::move(_url)),
        path(std::move(_path)),
        requires_auth(_requires_auth) {}
 
-    PendingJob(FileJob::Kind _kind,
+    FileRequest(Kind _kind,
                std::string _key, std::string _url,
                AllocatedPath _path, bool _requires_auth,
                std::string _layer_id, time_t _forecast_time) noexcept
@@ -69,6 +54,14 @@ class SkySightRequest final {
        requires_auth(_requires_auth),
        layer_id(std::move(_layer_id)),
        forecast_time(_forecast_time) {}
+  };
+
+  struct FileJob final : FileRequest {
+    UI::CoInjectFunction<AllocatedPath> function;
+    bool finished = false;
+
+    FileJob(EventLoop &event_loop, FileRequest request) noexcept
+      :FileRequest(std::move(request)), function(event_loop) {}
   };
 
   static constexpr unsigned MAX_ACTIVE_DOWNLOADS = 1;
@@ -89,7 +82,7 @@ class SkySightRequest final {
   bool last_updates_running = false;
   bool datafiles_running = false;
   std::map<std::string, std::unique_ptr<FileJob>> file_jobs;
-  std::deque<PendingJob> pending_jobs;
+  std::deque<FileRequest> pending_jobs;
   SkySight::AuthenticationFailurePolicy authentication_failures;
   SkySight::RequestFailurePolicy download_failures;
   std::map<std::string, time_t> payload_retry_at;
@@ -161,8 +154,9 @@ private:
   void EnsureLoggedIn();
   void CleanupFinishedJobs();
   bool IsQueued(std::string_view key) const noexcept;
-  void RequeueFileJob(const FileJob &job, time_t ready_at) noexcept;
+  bool RequeueFileJob(FileJob &job, time_t ready_at) noexcept;
   void PumpQueue();
+  void TryPumpQueue() noexcept;
   void OnLoginSuccess(boost::json::value value);
   void OnLoginError(std::exception_ptr error) noexcept;
   void OnRegionsSuccess(boost::json::value value);
