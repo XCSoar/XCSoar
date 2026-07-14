@@ -118,7 +118,7 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
 
   canvas.Select(look.text_font);
   const unsigned font_h = canvas.CalcTextSize("0").height;
-  const int bar_bottom = rc.bottom - font_h - 2;
+  const int bar_bottom = rc.bottom - font_h - Layout::Scale(2);
   const unsigned width = rc.right - rc.left;
   const unsigned bar_height = std::max(0, bar_bottom - rc.top);
 
@@ -195,12 +195,13 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
   try {
     const auto min_text = fmt_value(min_v);
     const auto max_text = fmt_value(max_v);
+    const int text_offset = Layout::Scale(1);
 
-    canvas.DrawText({rc.left + 1, bar_bottom + 1},
+    canvas.DrawText({rc.left + text_offset, bar_bottom + text_offset},
                     min_text);
     const auto max_size = canvas.CalcTextSize(max_text);
-    canvas.DrawText({rc.right - (int)max_size.width - 1,
-                     bar_bottom + 1},
+    canvas.DrawText({rc.right - (int)max_size.width - text_offset,
+                     bar_bottom + text_offset},
                     max_text);
   } catch (...) {
     // Suppress formatting/allocation failures; colorbar rendering is preserved
@@ -507,7 +508,7 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
     WindowStyle style;
     style.Border();
     colorbar->Create((ContainerWindow &)GetWindow(),
-                     {0, 0, 100, Layout::Scale(40)},
+                     {0, 0, Layout::Scale(100), Layout::Scale(40)},
                      style);
     Add(std::move(colorbar));
   }
