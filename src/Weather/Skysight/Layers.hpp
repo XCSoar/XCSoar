@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "ui/canvas/custom/GeoBitmap.hpp"
+
 #include <string>
 #include <string_view>
 
@@ -15,7 +17,7 @@ struct Layer {
   bool requires_auth = false;
   bool tile_layer = true;
   unsigned zoom_min = 1;
-  unsigned zoom_max = 20;
+  unsigned zoom_max = GeoBitmap::MAX_TILE_ZOOM;
   float alpha = 0.6f;
 
   bool operator==(std::string_view other) const noexcept {
