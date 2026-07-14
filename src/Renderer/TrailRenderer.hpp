@@ -63,6 +63,7 @@ class TrailRenderer {
     GeoBounds query_bounds{};
     double color_min{};
     double color_max{};
+    TrailSettings::Type settings_type{};
 
     [[gnu::pure]]
     bool operator==(const TrailDrawFingerprint &other) const noexcept;
@@ -102,8 +103,6 @@ class TrailRenderer {
   Serial cache_append_serial;
   Serial cache_modify_serial;
   TrailDrawFingerprint fingerprint{};
-  TrailSettings::Type cached_settings_type{};
-  size_t cached_trace_size{};
   size_t merge_sample_search_index{};
   /** Keep completed-segment drift stable between GPS trace updates. */
   TimeStamp stable_drift_time{TimeStamp::Undefined()};
@@ -187,6 +186,23 @@ private:
                           const GeoPoint &traildrift,
                           TimeStamp drift_now,
                           const std::vector<CachedTrailSegment> &segments) noexcept;
+
+  [[gnu::pure]]
+  static PixelPoint ProjectCachedPathPoint(const CachedPathPoint &p,
+                                           const WindowProjection &projection,
+                                           bool enable_traildrift,
+                                           const GeoPoint &traildrift,
+                                           TimeStamp drift_now) noexcept;
+
+  static void ProjectCachedColourRun(const CachedColourRun &run,
+                                     size_t start_index,
+                                     const WindowProjection &projection,
+                                     bool enable_traildrift,
+                                     const GeoPoint &traildrift,
+                                     TimeStamp drift_now,
+                                     BulkPixelPoint *buffer,
+                                     unsigned &n,
+                                     bool simplify_projected) noexcept;
 
   void DrawVarioColouredPolyline(Canvas &canvas,
                                  const std::vector<PixelPoint> &pts,
