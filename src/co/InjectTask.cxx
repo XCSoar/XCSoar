@@ -35,18 +35,19 @@ InjectTask::Cancel() noexcept
 		return;
 	}
 
-	inject_event.Cancel();
+  inject_event.Cancel();
 
-	const unsigned cancel_generation = generation.load();
+  const unsigned cancel_generation = generation.load();
 
-	BlockingCall(GetEventLoop(), [this, cancel_generation](){
-		/* dispose the coroutine only if no new Start() happened
-		   while this cancel was waiting for the event loop */
-		if (generation.load() == cancel_generation)
-			task = {};
-	});
+  BlockingCall(GetEventLoop(), [this, cancel_generation](){
+    /* dispose the coroutine only if no new Start() happened
+       while this cancel was waiting for the event loop */
+    if (generation.load() == cancel_generation)
+      task = {};
+  });
 
-	alive = false;
+  if (generation.load() == cancel_generation)
+    alive = false;
 }
 
 void

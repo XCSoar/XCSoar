@@ -138,6 +138,26 @@ public:
       if (!task)
         return;
 
+      /* Re-check that the requested item is still the active download;
+         OnCompletion() may have finished it and started the next one
+         while we were waiting to call task.Cancel() */
+      {
+        const std::lock_guard lock{mutex};
+
+        if (queue.empty() || queue.front() != relative_path) {
+          auto i = std::find(queue.begin(), queue.end(), relative_path);
+          if (i == queue.end())
+            return;
+
+          if (i != queue.begin()) {
+            queue.erase(i);
+            cancelled = true;
+          }
+
+          return;
+        }
+      }
+
       /* Cancel the coroutine without holding #mutex: task.Cancel() blocks on
          the event loop, which may be in OnCompletion() waiting for #mutex */
       task.Cancel();
