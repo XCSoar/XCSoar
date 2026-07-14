@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 
 #include <tiffio.h>
@@ -65,6 +66,11 @@ BilinearUpscale(UncompressedImage &&src, unsigned scale)
 
   const unsigned src_width = src.GetWidth();
   const unsigned src_height = src.GetHeight();
+  if (src_width == 0 || src_height == 0 ||
+      src_width > std::numeric_limits<unsigned>::max() / scale ||
+      src_height > std::numeric_limits<unsigned>::max() / scale)
+    return std::move(src);
+
   const unsigned dst_width = src_width * scale;
   const unsigned dst_height = src_height * scale;
 
@@ -90,7 +96,16 @@ BilinearUpscale(UncompressedImage &&src, unsigned scale)
   const auto src_pitch = src.GetPitch();
   const auto *src_data = (const uint8_t *)src.GetData();
 
+  constexpr std::size_t MAX_SCALED_BYTES = 256u * 1024u * 1024u;
+  if (std::size_t(dst_width) >
+      std::numeric_limits<std::size_t>::max() / bytes_per_pixel)
+    return std::move(src);
+
   const std::size_t dst_pitch = std::size_t(dst_width) * bytes_per_pixel;
+  if (dst_height > std::numeric_limits<std::size_t>::max() / dst_pitch ||
+      dst_pitch * dst_height > MAX_SCALED_BYTES)
+    return std::move(src);
+
   auto dst_data = std::make_unique<uint8_t[]>(dst_pitch * dst_height);
 
   for (unsigned dst_y = 0; dst_y < dst_height; ++dst_y) {
@@ -122,8 +137,7 @@ BilinearUpscale(UncompressedImage &&src, unsigned scale)
           float(p10[channel]) * fx * (1.0f - fy) +
           float(p01[channel]) * (1.0f - fx) * fy +
           float(p11[channel]) * fx * fy;
-        const auto out_channel = (channel & 1u) ? channel : (channel + 2u) % 4u;
-        dst[out_channel] = (uint8_t)(value + 0.5f);
+        dst[channel] = (uint8_t)(value + 0.5f);
       }
     }
   }
