@@ -780,6 +780,6 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
 #else
   image->StretchTo(PixelSize{height_matrix.GetSize()},
                    canvas, projection.GetScreenSize(),
-                   transparent_white, has_alpha);
+                   transparent_white, has_alpha, alpha);
 #endif
 }
