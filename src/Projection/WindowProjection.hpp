@@ -28,7 +28,7 @@ class WindowProjection:
    * This is a cached member that has to be updated manually by
    * calling UpdateScreenBounds()
    */
-  GeoBounds screen_bounds;
+  GeoBounds screen_bounds = GeoBounds::Invalid();
 
 public:
   /**

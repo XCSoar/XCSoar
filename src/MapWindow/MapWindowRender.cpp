@@ -190,7 +190,8 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 
   render_projection = visible_projection;
 
-  if (!render_projection.IsValid()) {
+  if (!render_projection.IsValid() ||
+      !render_projection.GetScreenBounds().IsValid()) {
     canvas.ClearWhite();
     return;
   }
