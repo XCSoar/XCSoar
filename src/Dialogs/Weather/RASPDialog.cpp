@@ -573,7 +573,6 @@ RASPSettingsPanel::Show(const PixelRect &rc) noexcept
   RowFormWidget::Show(rc);
   RefreshPageSection();
   SyncUpdateButtonEnabled();
-}
 
 bool
 RASPSettingsPanel::Save(bool &_changed) noexcept
