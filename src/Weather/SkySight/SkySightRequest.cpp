@@ -233,6 +233,52 @@ SkySightRequest::CancelTileDownloads() noexcept
 }
 
 void
+SkySightRequest::ReconcileTileDownloads(
+  const std::set<std::string, std::less<>> &desired_keys) noexcept
+{
+  std::erase_if(pending_jobs, [&desired_keys](const auto &job) {
+    return job.kind == FileJob::Kind::Generic &&
+      !desired_keys.contains(job.key);
+  });
+
+  for (auto i = file_jobs.begin(); i != file_jobs.end();) {
+    if (i->second->kind != FileJob::Kind::Generic ||
+        desired_keys.contains(i->first)) {
+      ++i;
+      continue;
+    }
+
+    i->second->function.Cancel();
+    i = file_jobs.erase(i);
+  }
+
+  for (auto i = generic_keys.begin(); i != generic_keys.end();) {
+    if (desired_keys.contains(*i)) {
+      ++i;
+      continue;
+    }
+
+    payload_retry_at.erase(*i);
+    download_failures.Erase(*i);
+    i = generic_keys.erase(i);
+  }
+}
+
+bool
+SkySightRequest::HasPendingTileDownloads() const noexcept
+{
+  return std::any_of(pending_jobs.begin(), pending_jobs.end(),
+                     [](const auto &job) {
+                       return job.kind == FileJob::Kind::Generic;
+                     }) ||
+    std::any_of(file_jobs.begin(), file_jobs.end(),
+                [](const auto &entry) {
+                  const auto &job = *entry.second;
+                  return job.kind == FileJob::Kind::Generic && !job.finished;
+                });
+}
+
+void
 SkySightRequest::Configure(std::string_view new_email, std::string_view new_password)
 {
   email = std::string{new_email};
@@ -305,6 +351,17 @@ SkySightRequest::PumpQueue()
   CleanupFinishedJobs();
 
   const auto now = std::time(nullptr);
+  const bool has_live_tile_work =
+    std::any_of(pending_jobs.begin(), pending_jobs.end(),
+                [](const auto &job) {
+                  return job.kind == FileJob::Kind::Generic;
+                }) ||
+    std::any_of(file_jobs.begin(), file_jobs.end(),
+                [](const auto &entry) {
+                  return entry.second->kind == FileJob::Kind::Generic;
+                });
+  live_tile_pacer.OnQueueState(now, has_live_tile_work);
+
   if (now < throttle_until)
     return;
 
@@ -315,6 +372,8 @@ SkySightRequest::PumpQueue()
     const auto next = std::find_if(pending_jobs.begin(), pending_jobs.end(),
                                    [this, now](const auto &job) {
                                      return now >= job.ready_at &&
+                                       (job.kind != FileJob::Kind::Generic ||
+                                        live_tile_pacer.CanStart(now)) &&
                                        (!job.requires_auth || IsLoggedIn());
                                    });
     if (next == pending_jobs.end()) {
@@ -333,6 +392,10 @@ SkySightRequest::PumpQueue()
                                                 std::move(job));
     auto *job_ptr = active_job.get();
     const auto key = job_ptr->key;
+
+    if (job_ptr->kind == FileJob::Kind::Generic)
+      live_tile_pacer.OnStarted(now);
+
     file_jobs.emplace(key, std::move(active_job));
     job_ptr->function.Start(
       DownloadFileTask(curl, job_ptr->url,
@@ -502,11 +565,11 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
   }
 
   if (File::Exists(filename)) {
-    if (auto retry = retry_after.find(key); retry != retry_after.end()) {
+    if (auto retry = payload_retry_at.find(key); retry != payload_retry_at.end()) {
       if (std::time(nullptr) < retry->second)
         return DownloadDatafileResult::Duplicate;
 
-      retry_after.erase(retry);
+      payload_retry_at.erase(retry);
     }
 
     try {
@@ -830,7 +893,7 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
     try {
       switch (i->second->kind) {
       case FileJob::Kind::Generic:
-        api.OnDownloadComplete();
+        api.OnTileDownloadStateChanged();
         break;
 
       case FileJob::Kind::ForecastData: {
@@ -880,6 +943,8 @@ SkySightRequest::OnFileError(const std::string &key,
     const auto decision = download_failures.OnHttpFailure(
       key, http_error.status, now, http_error.retry_at);
     if (http_error.status == 429) {
+      if (kind == FileJob::Kind::Generic)
+        live_tile_pacer.OnThrottle();
       SetThrottleUntil(decision.ready_at);
       api.OnThrottle();
       LogThrottleNotice(http_error.retry_at > now);
@@ -920,6 +985,8 @@ SkySightRequest::OnFileError(const std::string &key,
     api.OnDatafileError(layer_id, forecast_time);
 
   TryPumpQueue();
+  if (kind == FileJob::Kind::Generic)
+    api.OnTileDownloadStateChanged();
 }
 
 AllocatedPath

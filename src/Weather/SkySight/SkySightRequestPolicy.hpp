@@ -118,6 +118,53 @@ public:
   }
 };
 
+/**
+ * Keeps live XYZ requests below the provider's observed rolling rate limit.
+ * Forecast downloads use immutable API-provided links and are not paced here.
+ */
+class LiveTileRequestPacer {
+  static constexpr time_t MIN_INTERVAL_SECONDS = 8;
+  static constexpr time_t BURST_REARM_IDLE_SECONDS = 30;
+  static constexpr unsigned BURST_SIZE = 4;
+
+  time_t next_request_at = 0;
+  time_t idle_since = 0;
+  unsigned burst_remaining = BURST_SIZE;
+
+public:
+  [[nodiscard]] bool CanStart(time_t now) const noexcept {
+    return burst_remaining > 0 || now >= next_request_at;
+  }
+
+  void OnStarted(time_t now) noexcept {
+    if (burst_remaining > 0)
+      --burst_remaining;
+
+    idle_since = 0;
+    next_request_at = now + MIN_INTERVAL_SECONDS;
+  }
+
+  void OnQueueState(time_t now, bool busy) noexcept {
+    if (busy) {
+      idle_since = 0;
+      return;
+    }
+
+    if (idle_since == 0) {
+      idle_since = now;
+      return;
+    }
+
+    if (now >= idle_since + BURST_REARM_IDLE_SECONDS)
+      burst_remaining = BURST_SIZE;
+  }
+
+  void OnThrottle() noexcept {
+    burst_remaining = 0;
+    idle_since = 0;
+  }
+};
+
 struct RequestFailureDecision {
   RequestFailureAction action;
   time_t ready_at;

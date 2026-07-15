@@ -15,6 +15,7 @@
 #include <deque>
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -92,6 +93,9 @@ public:
   void OnLiveTileProbeSucceeded(std::string_view layer_id,
                                 time_t timestamp) noexcept;
   void CancelTileDownloads() noexcept;
+  void ReconcileTileDownloads(
+    const std::set<std::string, std::less<>> &desired_keys) noexcept;
+  [[nodiscard]] bool HasPendingTileDownloads() const noexcept;
   void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
                       std::string_view link);
   bool QueuePreloadDatafile(SkySight::Layer &layer, time_t forecast_time,
@@ -126,7 +130,7 @@ public:
                             SkySightPreparedData prepared) noexcept;
   void OnDatafileError(std::string_view layer_id, time_t forecast_time,
                        bool preparation_failed=false) noexcept;
-  void OnDownloadComplete() noexcept;
+  void OnTileDownloadStateChanged() noexcept;
   void OnThrottle() noexcept;
   void OnThrottleEnded() noexcept;
 

@@ -221,6 +221,32 @@ TestSkySightRequestFailurePolicy()
   ok1(login_decision.ready_at == NOW + 30);
   login_decision = authentication.OnTransportFailure(NOW + 30);
   ok1(login_decision.ready_at == NOW + 90);
+
+  SkySight::LiveTileRequestPacer pacer;
+  ok1(pacer.CanStart(NOW));
+  pacer.OnStarted(NOW);
+  ok1(pacer.CanStart(NOW + 1));
+  pacer.OnStarted(NOW + 1);
+  ok1(pacer.CanStart(NOW + 2));
+  pacer.OnStarted(NOW + 2);
+  ok1(pacer.CanStart(NOW + 3));
+  pacer.OnStarted(NOW + 3);
+  ok1(!pacer.CanStart(NOW + 10));
+  ok1(pacer.CanStart(NOW + 11));
+
+  SkySight::LiveTileRequestPacer rearmed_pacer;
+  for (unsigned i = 0; i < 4; ++i)
+    rearmed_pacer.OnStarted(NOW + i);
+  rearmed_pacer.OnQueueState(NOW + 4, false);
+  rearmed_pacer.OnQueueState(NOW + 34, false);
+  rearmed_pacer.OnStarted(NOW + 34);
+  ok1(rearmed_pacer.CanStart(NOW + 34));
+
+  SkySight::LiveTileRequestPacer throttled_pacer;
+  throttled_pacer.OnStarted(NOW);
+  throttled_pacer.OnThrottle();
+  ok1(!throttled_pacer.CanStart(NOW + 1));
+  ok1(throttled_pacer.CanStart(NOW + 8));
 }
 
 static void
@@ -247,7 +273,7 @@ TestSkySightForecastBusyState()
 int
 main()
 {
-  plan_tests(32 + 10 + 9 + 5 + 31 + 2 + 1);
+  plan_tests(32 + 10 + 9 + 5 + 40 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
