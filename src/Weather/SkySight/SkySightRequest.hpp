@@ -85,6 +85,7 @@ class SkySightRequest final {
   std::deque<FileRequest> pending_jobs;
   SkySight::AuthenticationFailurePolicy authentication_failures;
   SkySight::RequestFailurePolicy download_failures;
+  SkySight::LiveTileRequestPacer live_tile_pacer;
   std::map<std::string, time_t> payload_retry_at;
   std::set<std::string, std::less<>> generic_keys;
   std::map<std::string, unsigned> tile_http_error_count;
@@ -138,6 +139,9 @@ public:
 
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
   void CancelTileDownloads() noexcept;
+  void ReconcileTileDownloads(
+    const std::set<std::string, std::less<>> &desired_keys) noexcept;
+  [[nodiscard]] bool HasPendingTileDownloads() const noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
                                           time_t forecast_time,
                                           std::string_view url, Path filename,

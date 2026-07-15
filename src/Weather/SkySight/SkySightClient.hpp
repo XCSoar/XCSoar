@@ -35,6 +35,7 @@ class SkySightClient final {
   bool forecast_cleanup_pending = true;
   bool forecast_progress_visible = false;
   bool throttle_notification_active = false;
+  bool live_view_updating = false;
   std::array<std::string, LIVE_TILE_OVERLAY_COUNT> tile_filenames;
   UI::PeriodicTimer request_timer;
 
@@ -72,6 +73,8 @@ public:
   bool HasCredentials() const noexcept;
 
   bool IsThrottled() const noexcept;
+
+  bool IsLiveViewUpdating(std::string_view layer_id) const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
   time_t GetDatafilesRetryRemainingSeconds() const noexcept;
