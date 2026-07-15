@@ -140,6 +140,15 @@ MergeThread::Tick() noexcept
     const ComputerSettings &settings_computer =
       device_blackboard.GetComputerSettings();
 
+    const auto stf_speed_error =
+      ComputeSTFSpeedError(basic, calculated, settings_computer);
+    auto &more_data = device_blackboard.SetMoreData();
+    if (stf_speed_error) {
+      more_data.V_stf = basic.true_airspeed + *stf_speed_error;
+      more_data.V_stf_available.Update(basic.clock);
+    } else
+      more_data.V_stf_available.Clear();
+
     if (trail_vario_sink != nullptr &&
         basic.time_available &&
         basic.location_available &&
@@ -181,8 +190,7 @@ MergeThread::Tick() noexcept
         vario_audio_input.vario = basic.FilteredBruttoVario();
     }
 
-    vario_audio_input.stf_speed_error =
-      ComputeSTFSpeedError(basic, calculated, settings_computer);
+    vario_audio_input.stf_speed_error = stf_speed_error;
 
     vario_audio_input.circling = calculated.circling;
 #endif

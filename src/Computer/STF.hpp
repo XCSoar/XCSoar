@@ -10,6 +10,14 @@ struct DerivedInfo;
 struct ComputerSettings;
 
 /**
+ * Get the most recent speed-to-fly target.  Prefer the value calculated from
+ * the latest merged sensor sample, but fall back to the GPS-cycle result.
+ */
+[[gnu::pure]]
+std::optional<double>
+GetSTFSpeed(const MoreData &basic, const DerivedInfo &calculated) noexcept;
+
+/**
  * Compute target TAS minus current TAS from the latest merged sensor sample.
  *
  * Unlike DerivedInfo::V_stf, this cheap calculation is intended to run at

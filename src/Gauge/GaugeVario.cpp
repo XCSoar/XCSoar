@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Gauge/GaugeVario.hpp"
+#include "Computer/STF.hpp"
 #include "Look/VarioLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -564,7 +565,8 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 inline void
 GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 {
-  if (!Calculated().V_stf_available || !Basic().airspeed_available ||
+  const auto stf = GetSTFSpeed(Basic(), Calculated());
+  if (!stf || !Basic().airspeed_available ||
       !Basic().total_energy_vario_available)
     return;
 
@@ -588,7 +590,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
   if ((Calculated().flight.flying)
       && (!Basic().gps.simulator || !Calculated().circling)) {
     /* V_stf is TAS (density-compensated); compare to actual TAS */
-    v_diff = Calculated().V_stf - Basic().true_airspeed;
+    v_diff = *stf - Basic().true_airspeed;
     v_diff = std::clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
     v_diff = iround(v_diff/DELTA_V_STEP) * DELTA_V_STEP;
   } else

@@ -60,13 +60,20 @@ UIReceiveSensorData(OperationEnvironment &env)
 
   bool modified = ApplyExternalSettings(env);
 
-  /*
-   * Update the infoboxes if no location is available
-   *
-   * (if the location is available the CalculationThread will send the
-   * Command::CALCULATED_UPDATE message which will update them)
-   */
-  if (modified || !CommonInterface::Basic().location_available) {
+  /* Most InfoBoxes are refreshed by calculated updates.  Merge-rate STF
+     (MoreData::V_stf) also dirties boxes when availability or value changes.
+     Compare as bool so Validity timestamps alone do not thrash redraws. */
+  static bool last_stf_available = false;
+  static double last_stf = 0;
+  const auto &basic = CommonInterface::Basic();
+  const bool stf_available = (bool)basic.V_stf_available;
+  const bool stf_changed = stf_available != last_stf_available ||
+    (stf_available && basic.V_stf != last_stf);
+  last_stf_available = stf_available;
+  if (stf_available)
+    last_stf = basic.V_stf;
+
+  if (modified || !basic.location_available || stf_changed) {
     InfoBoxManager::SetDirty();
     InfoBoxManager::ProcessTimer();
   }
