@@ -51,6 +51,7 @@
 #include "Tracking/SkyLines/TrafficExtensions.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "Tracking/SkyLines/Handler.hpp"
+#include "Tracking/CloudSettings.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -73,7 +74,9 @@
 #include "util/PackedFloat.hxx"
 
 #include <chrono>
+#include <cstring>
 #include <memory>
+#include <span>
 
 #ifdef _WIN32
 #include <process.h>
@@ -3089,12 +3092,41 @@ TestFlarmTrafficBuilder()
   ok1(merged.track_received);
 
   const FlarmId radio = FlarmId::FromValue(0xABCDEFu);
+  const FlarmId other = FlarmId::FromValue(0x123456u);
+  const FlarmId own_ids[] = { radio };
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_ids, radio));
+  ok1(!SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_ids, other));
+  ok1(!SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
+         std::span<const FlarmId>{}, radio));
+
+  const FlarmId multi[] = {
+    FlarmId::FromValue(0x111111u),
+    FlarmId::FromValue(0x222222u),
+  };
   ok1(SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
-        radio, FlarmId::FromValue(0xABCDEFu)));
+        multi, FlarmId::FromValue(0x222222u)));
   ok1(!SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
-         radio, FlarmId::FromValue(0x123456u)));
-  ok1(!SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
-         FlarmId::Undefined(), radio));
+         multi, FlarmId::FromValue(0x333333u)));
+
+  const auto parsed =
+    CloudSettings::ParseOwnFlarmIds("ABCDEF, 111111,ABCDEF,zz,222222");
+  ok1(parsed.size() == 3);
+  ok1(parsed[0] == FlarmId::FromValue(0xABCDEFu));
+  ok1(parsed[1] == FlarmId::FromValue(0x111111u));
+  ok1(parsed[2] == FlarmId::FromValue(0x222222u));
+
+  char formatted[CloudSettings::OWN_FLARM_IDS_TEXT_SIZE];
+  CloudSettings::FormatOwnFlarmIds(parsed, formatted, sizeof(formatted));
+  ok1(StringIsEqual(formatted, "ABCDEF,111111,222222"));
+
+  /* Worst-case 8×8-hex ids must fit the format buffer. */
+  CloudSettings::OwnFlarmIdList full;
+  for (unsigned i = 0; i < CloudSettings::MAX_OWN_FLARM_IDS; ++i)
+    full.append(FlarmId::FromValue(0xF0000000u + i));
+  CloudSettings::FormatOwnFlarmIds(full, formatted, sizeof(formatted));
+  ok1(strlen(formatted) + 1 <= CloudSettings::OWN_FLARM_IDS_TEXT_SIZE);
+  ok1(CloudSettings::ParseOwnFlarmIds(formatted).size() ==
+      CloudSettings::MAX_OWN_FLARM_IDS);
 }
 
 static void
@@ -3172,7 +3204,7 @@ int main()
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
-             + 59 /* Condor3UDP */ + 15 /* FlarmTrafficBuilder */
+             + 59 /* Condor3UDP */ + 24 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */);
   TestGeneric();
   TestTasman();

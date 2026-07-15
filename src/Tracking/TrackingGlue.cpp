@@ -45,6 +45,21 @@ WithinOnlineAltitudeBand(int own_alt, int target_alt,
 
 static constexpr auto ONLINE_BUFFER_STALE = minutes(5);
 
+/**
+ * Configured own FLARM ids plus the device radio id when known.
+ */
+static StaticArray<FlarmId, CloudSettings::MAX_OWN_FLARM_IDS + 1>
+MakeEffectiveOwnFlarmIds(const CloudSettings::OwnFlarmIdList &configured,
+                         FlarmId radio_id) noexcept
+{
+  StaticArray<FlarmId, CloudSettings::MAX_OWN_FLARM_IDS + 1> ids;
+  for (const FlarmId id : configured)
+    ids.append(id);
+  if (radio_id.IsDefined() && !ids.contains(radio_id))
+    ids.append(radio_id);
+  return ids;
+}
+
 TrackingGlue::TrackingGlue(EventLoop &event_loop,
                            CurlGlobal &curl) noexcept
   :skylines(event_loop, this),
@@ -59,11 +74,17 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
   cloud_enabled = _settings.cloud.enabled;
   cloud_show_traffic = _settings.cloud.show_traffic;
 
-  if (cloud_enabled != TriState::TRUE || !cloud_show_traffic) {
+  {
     const std::lock_guard lock{online_mutex};
-    online_traffic.Clear();
-    online_pilot_ids.clear();
-    online_last_received.clear();
+    configured_own_flarm_ids = _settings.cloud.own_flarm_ids;
+    own_flarm_ids = MakeEffectiveOwnFlarmIds(configured_own_flarm_ids,
+                                             device_radio_id);
+
+    if (cloud_enabled != TriState::TRUE || !cloud_show_traffic) {
+      online_traffic.Clear();
+      online_pilot_ids.clear();
+      online_last_received.clear();
+    }
   }
 
   skylines.SetSettings(_settings.skylines, _settings.cloud);
@@ -90,7 +111,9 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   {
     const std::lock_guard lock{online_mutex};
     own_altitude = OwnAltitudeMeters(basic);
-    own_flarm_id = basic.flarm.hardware.radio_id;
+    device_radio_id = basic.flarm.hardware.radio_id;
+    own_flarm_ids = MakeEffectiveOwnFlarmIds(configured_own_flarm_ids,
+                                             device_radio_id);
   }
 
   try {
@@ -111,7 +134,9 @@ TrackingGlue::MergeOnlineTraffic(FlarmData &flarm,
   const std::lock_guard lock{online_mutex};
 
   own_altitude = OwnAltitudeMeters(basic);
-  own_flarm_id = flarm.hardware.radio_id;
+  device_radio_id = flarm.hardware.radio_id;
+  own_flarm_ids = MakeEffectiveOwnFlarmIds(configured_own_flarm_ids,
+                                           device_radio_id);
 
   online_traffic.ClampListSize();
 
@@ -124,7 +149,7 @@ TrackingGlue::MergeOnlineTraffic(FlarmData &flarm,
         now - last_i->second > ONLINE_BUFFER_STALE ||
         !WithinOnlineAltitudeBand(own_altitude, int(t.altitude),
                                   t.altitude_available) ||
-        SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_flarm_id,
+        SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_flarm_ids,
                                                            t.id)) {
       online_last_received.erase(t.id);
       online_pilot_ids.erase(t.id);
@@ -134,10 +159,6 @@ TrackingGlue::MergeOnlineTraffic(FlarmData &flarm,
   }
 
   for (const auto &online : online_traffic.list) {
-    if (SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_flarm_id,
-                                                           online.id))
-      continue;
-
     FlarmTraffic *existing = flarm.traffic.FindTraffic(online.id);
     if (existing != nullptr &&
         !FlarmTraffic::IsInjectedSource(existing->source) &&
@@ -192,11 +213,11 @@ TrackingGlue::OnTraffic(uint32_t pilot_id,
   }
 
   int own_alt;
-  FlarmId own_id;
+  StaticArray<FlarmId, CloudSettings::MAX_OWN_FLARM_IDS + 1> own_ids;
   {
     const std::lock_guard lock{online_mutex};
     own_alt = own_altitude;
-    own_id = own_flarm_id;
+    own_ids = own_flarm_ids;
   }
 
   if (!WithinOnlineAltitudeBand(own_alt, altitude, altitude_valid))
@@ -215,7 +236,7 @@ TrackingGlue::OnTraffic(uint32_t pilot_id,
   if (!built.location_available)
     return;
 
-  if (SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_id, built.id))
+  if (SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_ids, built.id))
     return;
 
   bool user_known;

@@ -273,6 +273,7 @@ constexpr std::string_view CloudRoaming = "CloudRoaming";
 constexpr std::string_view CloudHost = "CloudHost";
 constexpr std::string_view CloudPort = "CloudPort";
 constexpr std::string_view CloudKey = "CloudKey";
+constexpr std::string_view CloudOwnFlarmId = "CloudOwnFlarmId";
 
 constexpr std::string_view OnlineTrafficMapMode = "OnlineTrafficMapMode";
 

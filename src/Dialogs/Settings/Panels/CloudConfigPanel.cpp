@@ -16,8 +16,13 @@
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "net/State.hpp"
+#include "util/StringStrip.hxx"
+
+#include <fmt/format.h>
 
 #include <stdio.h>
+#include <string>
+#include <string_view>
 
 enum ControlIndex {
   ENABLED,
@@ -28,10 +33,14 @@ enum ControlIndex {
   SHOW_THERMALS,
   HOST,
   PORT,
+  OWN_FLARM_ID,
 };
 
 class CloudConfigPanel final
   : public RowFormWidget, DataFieldListener {
+  /** Help text for Own FLARM IDs (holds fmt result for SetHelpText). */
+  std::string own_flarm_help;
+
 public:
   CloudConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -57,6 +66,7 @@ CloudConfigPanel::SetEnabled(bool enabled)
   SetRowEnabled(SHOW_THERMALS, enabled);
   SetRowEnabled(HOST, enabled);
   SetRowEnabled(PORT, enabled);
+  SetRowEnabled(OWN_FLARM_ID, enabled);
 }
 
 void
@@ -112,6 +122,23 @@ CloudConfigPanel::Prepare(ContainerWindow &parent,
              1, 65535, 1, int(settings.port));
   SetExpertRow(PORT);
 
+  char own_flarm_text[CloudSettings::OWN_FLARM_IDS_TEXT_SIZE] = "";
+  CloudSettings::FormatOwnFlarmIds(settings.own_flarm_ids,
+                                   own_flarm_text, sizeof(own_flarm_text));
+  own_flarm_help = fmt::format(
+    fmt::runtime(
+      _("Comma-separated hex FLARM / ICAO addresses (up to {}) "
+        "used to hide your own aircraft from OGN traffic. Use "
+        "this when the FLARM radio id is not available (for "
+        "example behind an LX passthrough), or to hide "
+        "additional own aircraft. Leave empty to use the "
+        "device id when known.")),
+    CloudSettings::MAX_OWN_FLARM_IDS);
+  AddText(_("Own FLARM IDs"),
+          own_flarm_help.c_str(),
+          own_flarm_text);
+  SetExpertRow(OWN_FLARM_ID);
+
   SetEnabled(settings.enabled == TriState::TRUE);
 }
 
@@ -162,6 +189,29 @@ CloudConfigPanel::Save(bool &_changed) noexcept
     if (settings.port == 0 || settings.port > 65535u)
       settings.port = CloudSettings::DEFAULT_PORT;
     changed = true;
+  }
+
+  StaticString<CloudSettings::OWN_FLARM_IDS_TEXT_SIZE> own_flarm_text;
+  if (SaveValue(OWN_FLARM_ID, own_flarm_text)) {
+    const auto ids =
+      CloudSettings::ParseOwnFlarmIds(own_flarm_text.c_str());
+    const bool input_blank = Strip(std::string_view{own_flarm_text.c_str()})
+      .empty();
+
+    /* Non-empty garbage must not wipe a previously valid list. */
+    if (input_blank || !ids.empty()) {
+      bool same = settings.own_flarm_ids.size() == ids.size();
+      for (unsigned i = 0; same && i < ids.size(); ++i)
+        same = settings.own_flarm_ids[i] == ids[i];
+
+      if (!same) {
+        settings.own_flarm_ids = ids;
+        char tmp[CloudSettings::OWN_FLARM_IDS_TEXT_SIZE];
+        CloudSettings::FormatOwnFlarmIds(ids, tmp, sizeof(tmp));
+        Profile::Set(ProfileKeys::CloudOwnFlarmId, tmp);
+        changed = true;
+      }
+    }
   }
 
   _changed |= changed;
