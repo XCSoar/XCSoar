@@ -46,6 +46,12 @@ struct MoreData : public NMEAInfo {
 
   Validity filtered_netto_vario_available;
 
+  /** Speed to fly calculated from the latest merged sensor sample (m/s TAS). */
+  double V_stf;
+
+  /** Whether #V_stf is available from the latest merged sensor sample. */
+  Validity V_stf_available;
+
   void Reset() noexcept;
 
   constexpr bool NavAltitudeAvailable() const noexcept {

@@ -5,6 +5,7 @@
 #include "BackendComponents.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "Computer/STF.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
@@ -105,13 +106,14 @@ void
 UpdateInfoBoxSpeedDolphin(InfoBoxData &data) noexcept
 {
   // Set Value
-  const DerivedInfo &calculated = CommonInterface::Calculated();
-  if (!calculated.V_stf_available) {
+  const auto stf = GetSTFSpeed(CommonInterface::Basic(),
+                               CommonInterface::Calculated());
+  if (!stf) {
     data.SetInvalid();
     return;
   }
 
-  data.SetValueFromSpeed(calculated.V_stf, false);
+  data.SetValueFromSpeed(*stf, false);
 
   // Set Comment
   if (CommonInterface::GetComputerSettings().features.block_stf_enabled)

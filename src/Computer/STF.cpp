@@ -11,6 +11,18 @@
 #include "Navigation/Aircraft.hpp"
 
 std::optional<double>
+GetSTFSpeed(const MoreData &basic, const DerivedInfo &calculated) noexcept
+{
+  if (basic.V_stf_available)
+    return basic.V_stf;
+
+  if (calculated.V_stf_available)
+    return calculated.V_stf;
+
+  return std::nullopt;
+}
+
+std::optional<double>
 ComputeSTFSpeedError(const MoreData &basic,
                      const DerivedInfo &calculated,
                      const ComputerSettings &settings) noexcept
