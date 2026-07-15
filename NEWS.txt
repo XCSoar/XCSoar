@@ -12,6 +12,9 @@ Version 7.45 - not yet released
   - Raise combined FLARM/online traffic list limit to 64 targets (cloud
     batch size); device FLARM traffic still typically stays within 25
 * ui
+  - FLARM radar: show callsigns on all registered targets again, use the
+    full callsign on target labels, and omit duplicate side vario/altitude
+    on the selected target (info panel already shows them) #2718
   - Show all tasks by default in Task Browser instead of requiring to click
     the "More" button first.
   - Rename to turnpoint observation zone type "Symmetric Quadrant" to

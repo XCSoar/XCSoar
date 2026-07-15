@@ -11,7 +11,6 @@
 #include "Math/Screen.hpp"
 #include "Language/Language.hpp"
 #include "util/Macros.hpp"
-#include "util/UTF8.hpp"
 #include "Look/FlarmTrafficLook.hpp"
 #include "Interface.hpp"
 
@@ -494,16 +493,14 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   const unsigned radar_radius = radar_renderer.GetRadius();
   const bool selected = static_cast<unsigned>(selection) == i;
 
-  // Draw callsign when selected, or in relative-altitude side-data mode
-  if (traffic.HasName() &&
-      (selected ||
-       side_display_type == SideInfoType::RELATIVE_ALTITUDE)) {
+  // Draw callsign for registered targets (FLARMnet / OGN / user names)
+  if (traffic.HasName()) {
     const PixelPoint ts{
       sc[i].x + int(ScaleRadarPermille(radar_radius, SIDE_LABEL_X_PERMILLE)),
       sc[i].y - int(ScaleRadarPermille(radar_radius, SIDE_LABEL_Y_PERMILLE)),
     };
 
-    canvas.DrawText(ts, SuffixUTF8(traffic.name, 2));
+    canvas.DrawText(ts, traffic.name);
   }
 
   StaticString<10> side_text;
@@ -527,7 +524,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      SIDE_LABEL_Y_CENTER_PERMILLE)),
   };
 
-  if (!side_text.empty())
+  // Side vario/altitude is omitted on the selected target; the info panel
+  // already shows those values in the corners.
+  if (!side_text.empty() && !selected)
     canvas.DrawText(tp, side_text);
 }
 
