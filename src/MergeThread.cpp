@@ -4,6 +4,7 @@
 #include "MergeThread.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Computer/TraceComputer.hpp"
+#include "Computer/STF.hpp"
 #include "Protection.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -136,6 +137,8 @@ MergeThread::Tick() noexcept
 
     const MoreData &basic = device_blackboard.Basic();
     const DerivedInfo &calculated = device_blackboard.Calculated();
+    const ComputerSettings &settings_computer =
+      device_blackboard.GetComputerSettings();
 
     if (trail_vario_sink != nullptr &&
         basic.time_available &&
@@ -178,10 +181,8 @@ MergeThread::Tick() noexcept
         vario_audio_input.vario = basic.FilteredBruttoVario();
     }
 
-    if (calculated.V_stf_available && basic.airspeed_available &&
-        basic.total_energy_vario_available && calculated.flight.flying)
-      vario_audio_input.stf_speed_error =
-        calculated.V_stf - basic.true_airspeed;
+    vario_audio_input.stf_speed_error =
+      ComputeSTFSpeedError(basic, calculated, settings_computer);
 
     vario_audio_input.circling = calculated.circling;
 #endif
