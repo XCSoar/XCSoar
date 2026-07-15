@@ -70,6 +70,11 @@ TestModesAndDeadBand() noexcept
   ok1(value && *value < 0);
   ok1(HasSound(value));
 
+  input.stf_speed_error = 9.;
+  value = ComputeAudioValue(input, VarioSoundSwitchingMode::MANUAL,
+                            VarioSoundManualMode::STF);
+  ok1(value && equals(*value, -3.));
+
   input.stf_speed_error = -2.01;
   value = ComputeAudioValue(input, VarioSoundSwitchingMode::MANUAL,
                             VarioSoundManualMode::STF);
@@ -128,7 +133,7 @@ TestMergedSensorSTF() noexcept
 int
 main()
 {
-  plan_tests(18);
+  plan_tests(19);
 
   TestModesAndDeadBand();
   TestMergedSensorSTF();
