@@ -8,7 +8,6 @@
 
 namespace AudioVarioGlue {
 
-static constexpr double STF_FULL_SCALE = 16.0;
 static constexpr double VARIO_FULL_SCALE = 5.0;
 static constexpr double STF_SPEED_DEAD_BAND = 2.0;
 
@@ -16,9 +15,12 @@ static constexpr double STF_SPEED_DEAD_BAND = 2.0;
 static double
 STFSpeedErrorToPseudoVario(double speed_error) noexcept
 {
-  /* Reuse the existing tone model: sink-like tones command speeding up,
-     climb-like tones command slowing down. */
-  return std::clamp(-speed_error * (VARIO_FULL_SCALE / STF_FULL_SCALE),
+  /* Square-root scaling compresses large speed errors while preserving
+     useful cue separation just outside the quiet band.  Sink-like tones
+     command speeding up; climb-like tones command slowing down. */
+  const double cue = -std::copysign(std::sqrt(std::abs(speed_error)),
+                                    speed_error);
+  return std::clamp(cue,
                     -VARIO_FULL_SCALE, VARIO_FULL_SCALE);
 }
 
