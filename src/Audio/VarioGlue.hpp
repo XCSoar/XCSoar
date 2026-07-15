@@ -4,23 +4,11 @@
 #pragma once
 
 #include "Features.hpp"
-
-#include <optional>
+#include "VarioAudioValue.hpp"
 
 struct VarioSoundSettings;
 
 namespace AudioVarioGlue {
-
-struct VarioAudioInput {
-  /** Current total-energy vario value [m/s]. */
-  std::optional<double> vario;
-
-  /** Whether the aircraft is currently circling. */
-  bool circling = false;
-
-  /** Target true airspeed minus current true airspeed [m/s]. */
-  std::optional<double> stf_speed_error;
-};
 
 #ifdef HAVE_PCM_PLAYER
 

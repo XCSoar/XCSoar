@@ -11,7 +11,6 @@
 #include "SLES/Init.hpp"
 #endif
 
-#include <algorithm>
 #include <atomic>
 #include <cassert>
 
@@ -29,19 +28,6 @@ static std::atomic<VarioSoundSwitchingMode> switching_mode{
 static std::atomic<VarioSoundManualMode> manual_mode{
   VarioSoundManualMode::VARIO
 };
-
-static constexpr double stf_full_scale = 16.0;
-static constexpr double vario_full_scale = 5.0;
-
-[[gnu::const]]
-static double
-STFSpeedErrorToPseudoVario(double speed_error) noexcept
-{
-  /* Reuse the existing tone model: sink-like tones command speeding up,
-     climb-like tones command slowing down. */
-  return std::clamp(-speed_error * (vario_full_scale / stf_full_scale),
-                    -vario_full_scale, vario_full_scale);
-}
 
 bool
 AudioVarioGlue::HaveAudioVario()
@@ -115,26 +101,10 @@ AudioVarioGlue::SetValue(const VarioAudioInput &input)
   assert(player != nullptr);
   assert(synthesiser != nullptr);
 
-  const auto configured_switching_mode =
-    switching_mode.load();
-  const bool use_stf = configured_switching_mode == VarioSoundSwitchingMode::AUTO
-    ? !input.circling
-    : manual_mode.load() == VarioSoundManualMode::STF;
-
-  if (use_stf) {
-    if (input.stf_speed_error)
-      synthesiser->SetVario(STFSpeedErrorToPseudoVario(*input.stf_speed_error));
-    else if (configured_switching_mode == VarioSoundSwitchingMode::AUTO &&
-             input.vario)
-      synthesiser->SetVario(*input.vario);
-    else
-      synthesiser->SetSilence();
-
-    return;
-  }
-
-  if (input.vario)
-    synthesiser->SetVario(*input.vario);
+  const auto value = ComputeAudioValue(input, switching_mode.load(),
+                                       manual_mode.load());
+  if (value)
+    synthesiser->SetVario(*value);
   else
     synthesiser->SetSilence();
 }
