@@ -19,7 +19,7 @@
 #include <errhandlingapi.h>
 
 /** Dedicated class for HWND_MESSAGE windows (UI::Notify fallback). */
-static constexpr char message_window_class[] = "XCSoarMessage";
+static constexpr char MESSAGE_WINDOW_CLASS[] = "XCSoarMessage";
 
 static bool
 RegisterMessageWindowClass() noexcept
@@ -27,7 +27,7 @@ RegisterMessageWindowClass() noexcept
   WNDCLASS wc{};
   wc.lpfnWndProc = Window::WndProc;
   wc.hInstance = ::GetModuleHandle(nullptr);
-  wc.lpszClassName = message_window_class;
+  wc.lpszClassName = MESSAGE_WINDOW_CLASS;
   if (::RegisterClass(&wc) != 0)
     return true;
 
@@ -69,7 +69,7 @@ Window::CreateMessageWindow() noexcept
   static const bool registered = RegisterMessageWindowClass();
   assert(registered);
 
-  hWnd = ::CreateWindowEx(0, message_window_class, nullptr, 0,
+  hWnd = ::CreateWindowEx(0, MESSAGE_WINDOW_CLASS, nullptr, 0,
                           0, 0, 0, 0,
                           HWND_MESSAGE,
                           nullptr, nullptr, this);
