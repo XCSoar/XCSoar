@@ -698,3 +698,25 @@ Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
                         operations);
 #endif
 }
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               ConstImageBuffer src,
+                               PixelPoint src_position, PixelSize src_size,
+                               uint8_t alpha) noexcept
+{
+  SDLRasterCanvas canvas(buffer);
+
+#ifdef GREYSCALE
+  /* greyscale pixels have no alpha channel, so only the global constant
+     alpha applies here. */
+  AlphaPixelOperations<ActivePixelTraits> operations(alpha);
+#else
+  SourceConstantAlphaPixelOperations<ActivePixelTraits> operations(alpha);
+#endif
+
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size,
+                        operations);
+}

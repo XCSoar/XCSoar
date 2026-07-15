@@ -443,4 +443,13 @@ public:
   void StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
                               ConstImageBuffer src,
                               PixelPoint src_position, PixelSize src_size) noexcept;
+
+  /**
+   * Stretch with per-pixel (from src) alpha blending, combined with a
+   * global constant alpha (effective alpha is source_alpha * alpha)
+   */
+  void StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                              ConstImageBuffer src,
+                              PixelPoint src_position, PixelSize src_size,
+                              uint8_t alpha) noexcept;
 };

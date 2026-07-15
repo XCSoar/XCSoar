@@ -228,8 +228,8 @@ public:
    * @param transparent_white if true, white pixels are treated as transparent
    *                         (only effective when not use_source_alpha)
    * @param alpha overall layer opacity (0.0=transparent, 1.0=opaque);
-   *              on the memory canvas, ignored when use_source_alpha
-   *              is set (combining both is not supported)
+   *              when use_source_alpha is set it is combined with the
+   *              per-pixel alpha, matching the OpenGL path
    */
   void StretchTo(PixelSize src_size,
                  Canvas &dest_canvas, PixelSize dest_size,
