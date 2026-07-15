@@ -30,6 +30,7 @@
 #include <cassert>
 #include <chrono>
 #include <exception>
+#include <set>
 
 namespace {
 
@@ -901,14 +902,21 @@ SkySightClient::DisplayTileLayer()
 
     return (uint16_t)result;
   };
-  bool any_visible = false;
-  bool probe_queued = false;
+
+  struct VisibleTile {
+    GeoBitmap::TileData tile;
+    unsigned slot;
+    unsigned priority;
+  };
+
+  std::vector<VisibleTile> visible_tiles;
+  visible_tiles.reserve(LIVE_TILE_OVERLAY_COUNT);
   unsigned slot = 0;
   constexpr int tile_range = int(LIVE_TILE_RANGE_OFFSET);
-  for (int x = int(base_tile.x) - tile_range;
-       x <= int(base_tile.x) + tile_range; ++x) {
-    for (int y = int(base_tile.y) - tile_range;
-         y <= int(base_tile.y) + tile_range; ++y, ++slot) {
+  for (int dx = -tile_range; dx <= tile_range; ++dx) {
+    for (int dy = -tile_range; dy <= tile_range; ++dy, ++slot) {
+      const int x = int(base_tile.x) + dx;
+      const int y = int(base_tile.y) + dy;
       if (y < 0 || y >= tiles_per_axis) {
         map_window->SetOverlay(slot, nullptr);
         tile_filenames[slot].clear();
@@ -923,49 +931,77 @@ SkySightClient::DisplayTileLayer()
         continue;
       }
 
-      any_visible = true;
-      bool found = false;
-      const unsigned fallback_steps = has_known_timestamp ? 3 : 24;
-      for (unsigned step = 0; step < fallback_steps; ++step) {
-        const auto candidate_time = refresh_time - (time_t(step) * 600);
-        const auto path = api->GetTilePath(*active_layer, candidate_time, tile);
-        if (!File::Exists(path))
-          continue;
-
-        if (tile_filenames[slot] != path.c_str()) {
-          if (UpdateActiveLayer(slot, path, tile))
-            tile_filenames[slot] = path.c_str();
-        }
-
-        found = true;
-        break;
-      }
-
-      if (has_known_timestamp && !found) {
-        api->EnsureTile(*active_layer, refresh_time, tile);
-        map_window->SetOverlay(slot, nullptr);
-        tile_filenames[slot].clear();
-      } else if (!has_known_timestamp && !probe_queued) {
-        /* /data/last_updated does not currently publish timestamps for every
-           live pseudo-layer.  Probe one visible tile only; once it succeeds,
-           the cached file below establishes the timestamp without fanning an
-           unverified timestamp out across the whole viewport. */
-        const auto probe_path =
-          api->GetTilePath(*active_layer, refresh_time, tile);
-        if (File::Exists(probe_path)) {
-          active_layer->last_update = refresh_time;
-          active_layer->live_timestamp_from_probe = true;
-          api->OnLiveTileProbeSucceeded(active_layer->id, refresh_time);
-          probe_queued = true;
-        } else {
-          api->EnsureTile(*active_layer, refresh_time, tile);
-          probe_queued = true;
-        }
-      }
+      visible_tiles.push_back({tile, slot, unsigned(dx * dx + dy * dy)});
     }
   }
 
-  return any_visible;
+  std::stable_sort(visible_tiles.begin(), visible_tiles.end(),
+                   [](const auto &a, const auto &b) {
+                     return a.priority < b.priority;
+                   });
+
+  std::set<std::string, std::less<>> desired_keys;
+  std::vector<GeoBitmap::TileData> missing_tiles;
+  missing_tiles.reserve(visible_tiles.size());
+
+  for (const auto &visible : visible_tiles) {
+    const auto tile = visible.tile;
+    const auto tile_slot = visible.slot;
+    bool found = false;
+    bool exact_found = false;
+    const unsigned fallback_steps = has_known_timestamp ? 3 : 24;
+    for (unsigned step = 0; step < fallback_steps; ++step) {
+      const auto candidate_time = refresh_time - (time_t(step) * 600);
+      const auto path = api->GetTilePath(*active_layer, candidate_time, tile);
+      if (!File::Exists(path))
+        continue;
+
+      if (tile_filenames[tile_slot] != path.c_str()) {
+        if (UpdateActiveLayer(tile_slot, path, tile))
+          tile_filenames[tile_slot] = path.c_str();
+      }
+
+      found = true;
+      exact_found = step == 0;
+      break;
+    }
+
+    if (!found) {
+      map_window->SetOverlay(tile_slot, nullptr);
+      tile_filenames[tile_slot].clear();
+    }
+
+    if (has_known_timestamp) {
+      const auto exact_path = api->GetTilePath(*active_layer, refresh_time,
+                                              tile);
+      desired_keys.emplace(exact_path.c_str());
+      if (!exact_found)
+        missing_tiles.push_back(tile);
+    }
+  }
+
+  if (!has_known_timestamp && !visible_tiles.empty()) {
+    /* /data/last_updated does not currently publish timestamps for every
+       live pseudo-layer.  Probe the centre-most visible tile only; once it
+       succeeds, normal viewport downloads begin in the same centre-out order. */
+    const auto probe_tile = visible_tiles.front().tile;
+    const auto probe_path = api->GetTilePath(*active_layer, refresh_time,
+                                             probe_tile);
+    desired_keys.emplace(probe_path.c_str());
+    if (File::Exists(probe_path)) {
+      active_layer->last_update = refresh_time;
+      active_layer->live_timestamp_from_probe = true;
+      api->OnLiveTileProbeSucceeded(active_layer->id, refresh_time);
+    } else {
+      missing_tiles.push_back(probe_tile);
+    }
+  }
+
+  api->ReconcileTileDownloads(desired_keys);
+  for (const auto &tile : missing_tiles)
+    api->EnsureTile(*active_layer, refresh_time, tile);
+
+  return !visible_tiles.empty();
 #endif
 }
 

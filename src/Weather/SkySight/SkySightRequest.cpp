@@ -233,6 +233,38 @@ SkySightRequest::CancelTileDownloads() noexcept
 }
 
 void
+SkySightRequest::ReconcileTileDownloads(
+  const std::set<std::string, std::less<>> &desired_keys) noexcept
+{
+  std::erase_if(pending_jobs, [&desired_keys](const auto &job) {
+    return job.kind == FileJob::Kind::Generic &&
+      !desired_keys.contains(job.key);
+  });
+
+  for (auto i = file_jobs.begin(); i != file_jobs.end();) {
+    if (i->second->kind != FileJob::Kind::Generic ||
+        desired_keys.contains(i->first)) {
+      ++i;
+      continue;
+    }
+
+    i->second->function.Cancel();
+    i = file_jobs.erase(i);
+  }
+
+  for (auto i = generic_keys.begin(); i != generic_keys.end();) {
+    if (desired_keys.contains(*i)) {
+      ++i;
+      continue;
+    }
+
+    payload_retry_at.erase(*i);
+    download_failures.Erase(*i);
+    i = generic_keys.erase(i);
+  }
+}
+
+void
 SkySightRequest::Configure(std::string_view new_email, std::string_view new_password)
 {
   email = std::string{new_email};
