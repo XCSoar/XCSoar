@@ -3,6 +3,7 @@
 
 #include "../Window.hpp"
 #include "../ContainerWindow.hpp"
+#include "../SingleWindow.hpp"
 #include "../MinimumSize.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Screen/Debug.hpp"
@@ -19,9 +20,6 @@
 
 /** Dedicated class for HWND_MESSAGE windows (UI::Notify fallback). */
 static constexpr char message_window_class[] = "XCSoarMessage";
-
-/** Main window class registered by UI::SingleWindow::RegisterClass(). */
-static constexpr char main_window_class[] = "XCSoarMain";
 
 static bool
 RegisterMessageWindowClass() noexcept
@@ -64,10 +62,10 @@ Window::Create(ContainerWindow *parent, const char *cls, const char *text,
 void
 Window::CreateMessageWindow() noexcept
 {
-  /* Lazily register a class without CS_PARENTDC.  Reusing
-     "PaintWindow" for HWND_MESSAGE windows interacts badly with
-     WM_GETMINMAXINFO minimum-size enforcement and fails
-     CreateWindowEx on some Windows hosts (issue #2720). */
+  /* Lazily register a dedicated class for HWND_MESSAGE windows.
+     Reusing "PaintWindow" shares WndProc's WM_GETMINMAXINFO path,
+     which used to treat parent-less message windows as top-level
+     and could make CreateWindowEx fail (issue #2720). */
   static const bool registered = RegisterMessageWindowClass();
   assert(registered);
 
@@ -349,15 +347,15 @@ Window::WndProc(HWND _hWnd, UINT message,
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we have not
        set a Window pointer yet.  Let DefWindowProc fill defaults,
        then clamp the main window only (issue #2110).  Do not apply
-       this to message-only / PaintWindow children — GetParent() is
-       also null for HWND_MESSAGE windows, and forcing a minimum
-       size makes CreateMessageWindow() fail (issue #2720). */
+       this to message-only windows: GetParent() is also null for
+       HWND_MESSAGE, and forcing a minimum size can make
+       CreateMessageWindow() fail (issue #2720). */
     const LRESULT result =
       ::DefWindowProc(_hWnd, message, wParam, lParam);
 
     char class_name[64];
     if (::GetClassNameA(_hWnd, class_name, sizeof(class_name)) > 0 &&
-        std::strcmp(class_name, main_window_class) == 0) {
+        std::strcmp(class_name, UI::SingleWindow::class_name) == 0) {
       MINMAXINFO *mmi = reinterpret_cast<MINMAXINFO *>(lParam);
       /* Allow either landscape (320x240) or portrait (240x320). */
       mmi->ptMinTrackSize.x = LONG(UI::MIN_HEIGHT);
