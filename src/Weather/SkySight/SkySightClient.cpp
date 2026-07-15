@@ -236,6 +236,13 @@ SkySightClient::IsThrottled() const noexcept
   return api->IsThrottled();
 }
 
+bool
+SkySightClient::IsLiveViewUpdating(std::string_view layer_id) const noexcept
+{
+  return live_view_updating && active_layer != nullptr &&
+    active_layer->id == layer_id;
+}
+
 time_t
 SkySightClient::GetThrottleRemainingSeconds() const noexcept
 {
@@ -547,8 +554,10 @@ SkySightClient::OnLayerCatalogChanged(std::string_view active_id,
     ? nullptr
     : api->GetLayer(displayed_id);
 
-  if (active_layer == nullptr)
+  if (active_layer == nullptr) {
+    live_view_updating = false;
     ResetTiles();
+  }
 }
 
 void
@@ -582,6 +591,10 @@ SkySightClient::SetLayerActive(std::string_view id)
     api->CancelTileDownloads();
 
   active_layer = layer;
+  /* DisplayTileLayer() derives this from actual queued/running tile work.
+     Starting optimistically busy leaves a stale label when a cached live
+     viewport needs no download or cannot be rendered immediately. */
+  live_view_updating = false;
   if (!active_layer->SupportsLiveTiles()) {
     if (auto *selected = api->GetSelectedLayer(id); selected != nullptr) {
       const bool has_exact_forecast_image =
@@ -638,6 +651,7 @@ SkySightClient::DeactivateLayer()
 {
   api->CancelTileDownloads();
   active_layer = nullptr;
+  live_view_updating = false;
   ResetTiles();
   OnDataUpdated();
 }
@@ -1000,6 +1014,8 @@ SkySightClient::DisplayTileLayer()
   api->ReconcileTileDownloads(desired_keys);
   for (const auto &tile : missing_tiles)
     api->EnsureTile(*active_layer, refresh_time, tile);
+
+  live_view_updating = api->HasPendingTileDownloads();
 
   return !visible_tiles.empty();
 #endif

@@ -64,7 +64,7 @@ void
 SkySightControlsModel::OnHide() noexcept
 {
   countdown_timer.Cancel();
-  countdown_visible = false;
+  dynamic_status_visible = false;
 }
 
 const SkySight::Layer *
@@ -99,7 +99,9 @@ SkySightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
   }
 
   if (layer->SupportsLiveTiles()) {
-    text = _("Live");
+    text = skysight != nullptr && skysight->IsLiveViewUpdating(layer->id)
+      ? _("Live (updating...)")
+      : _("Live");
     return;
   }
 
@@ -211,12 +213,13 @@ SkySightControlsModel::UpdateCountdownLabel() noexcept
 {
   const bool waiting = skysight != nullptr &&
     (skysight->IsThrottled() ||
-     skysight->GetDatafilesRetryRemainingSeconds() > 0);
+     skysight->GetDatafilesRetryRemainingSeconds() > 0 ||
+     skysight->IsLiveViewUpdating(layer_id.c_str()));
 
-  if (waiting || countdown_visible)
+  if (waiting || dynamic_status_visible)
     Notify(ControlsUpdate::LABELS);
 
-  countdown_visible = waiting;
+  dynamic_status_visible = waiting;
 }
 
 bool

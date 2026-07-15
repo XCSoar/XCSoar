@@ -611,6 +611,12 @@ SkySightAPI::ReconcileTileDownloads(
   request->ReconcileTileDownloads(desired_keys);
 }
 
+bool
+SkySightAPI::HasPendingTileDownloads() const noexcept
+{
+  return request->HasPendingTileDownloads();
+}
+
 void
 SkySightAPI::EnsureDatafile(const SkySight::Layer &layer,
                             time_t forecast_time,
@@ -1336,7 +1342,7 @@ SkySightAPI::OnDatafilesError(std::string_view layer_id) noexcept
 }
 
 void
-SkySightAPI::OnDownloadComplete() noexcept
+SkySightAPI::OnTileDownloadStateChanged() noexcept
 {
   owner.OnDataUpdated();
 }

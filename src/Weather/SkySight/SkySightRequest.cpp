@@ -264,6 +264,20 @@ SkySightRequest::ReconcileTileDownloads(
   }
 }
 
+bool
+SkySightRequest::HasPendingTileDownloads() const noexcept
+{
+  return std::any_of(pending_jobs.begin(), pending_jobs.end(),
+                     [](const auto &job) {
+                       return job.kind == FileJob::Kind::Generic;
+                     }) ||
+    std::any_of(file_jobs.begin(), file_jobs.end(),
+                [](const auto &entry) {
+                  const auto &job = *entry.second;
+                  return job.kind == FileJob::Kind::Generic && !job.finished;
+                });
+}
+
 void
 SkySightRequest::Configure(std::string_view new_email, std::string_view new_password)
 {
@@ -879,7 +893,7 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
     try {
       switch (i->second->kind) {
       case FileJob::Kind::Generic:
-        api.OnDownloadComplete();
+        api.OnTileDownloadStateChanged();
         break;
 
       case FileJob::Kind::ForecastData: {
@@ -971,6 +985,8 @@ SkySightRequest::OnFileError(const std::string &key,
     api.OnDatafileError(layer_id, forecast_time);
 
   TryPumpQueue();
+  if (kind == FileJob::Kind::Generic)
+    api.OnTileDownloadStateChanged();
 }
 
 AllocatedPath

@@ -141,6 +141,7 @@ public:
   void CancelTileDownloads() noexcept;
   void ReconcileTileDownloads(
     const std::set<std::string, std::less<>> &desired_keys) noexcept;
+  [[nodiscard]] bool HasPendingTileDownloads() const noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
                                           time_t forecast_time,
                                           std::string_view url, Path filename,

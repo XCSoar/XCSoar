@@ -23,7 +23,7 @@ class SkySightControlsModel final : public ControlsModel {
   std::shared_ptr<SkySightClient> skysight;
   StaticString<64> layer_id;
   UI::PeriodicTimer countdown_timer{[this]{ UpdateCountdownLabel(); }};
-  bool countdown_visible = false;
+  bool dynamic_status_visible = false;
 
 public:
   explicit SkySightControlsModel(std::shared_ptr<SkySightClient> _skysight,
