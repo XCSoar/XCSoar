@@ -333,10 +333,6 @@ Version 7.45 - not yet released
     off-screen while scrolling (no black squares; safer clipping of subcanvas
     and list blits) #2293
 * Windows
-  - fix legacy Windows executable failing to start with an assertion
-    dialog on some systems #2720
-  - fix legacy Windows executable crash on quit when Lua timers or
-    background notifications were still pending #2720
   - add installer for the OpenGL Windows version (64-bit and 32-bit); zip
     download remains available for a portable install
   - deprecate the legacy single-file Windows executable; use the OpenGL
