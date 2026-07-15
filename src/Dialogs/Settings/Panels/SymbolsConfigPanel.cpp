@@ -24,7 +24,6 @@ enum ControlIndex {
   WIND_ARROW_STYLE,
   SKYLINES_TRAFFIC_MAP_MODE,
   DISTANCE_RINGS_ENABLED,
-  RASP_LAYER_OPACITY,
 };
 
 class SymbolsConfigPanel final
@@ -189,13 +188,6 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
              _("Display distance rings around the aircraft on the map."),
              settings_map.distance_rings_enabled);
 
-  AddInteger(_("RASP overlay opacity"),
-             _("Sets the opacity of the RASP weather overlay "
-               "on the map. 0% is fully transparent, "
-               "100% is fully opaque."),
-             "%d %%", "%d", 0, 100, 10,
-             settings_map.rasp_layer_opacity);
-
   ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }
 
@@ -236,10 +228,6 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(DISTANCE_RINGS_ENABLED, ProfileKeys::DistanceRingsEnabled,
                        settings_map.distance_rings_enabled);
-
-  changed |= SaveValueInteger(RASP_LAYER_OPACITY,
-                               ProfileKeys::RaspLayerOpacity,
-                               settings_map.rasp_layer_opacity);
 
   _changed |= changed;
 
