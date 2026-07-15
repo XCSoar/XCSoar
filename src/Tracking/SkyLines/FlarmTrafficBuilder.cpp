@@ -32,6 +32,13 @@ SkyLinesTracking::FlarmTrafficBuilder::SourceForOnline(
 }
 
 bool
+SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(FlarmId own_radio_id,
+                                                    FlarmId traffic_id) noexcept
+{
+  return own_radio_id.IsDefined() && traffic_id == own_radio_id;
+}
+
+bool
 SkyLinesTracking::FlarmTrafficBuilder::FillRelative(FlarmTraffic &traffic,
                                                     const NMEAInfo &basic) noexcept
 {

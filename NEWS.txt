@@ -11,6 +11,8 @@ Version 7.45 - not yet released
   - Configurable XCSoar Cloud server hostname and UDP port in cloud settings
   - Raise combined FLARM/online traffic list limit to 64 targets (cloud
     batch size); device FLARM traffic still typically stays within 25
+  - Drop OGN/cloud online traffic that matches the connected FLARM radio
+    id so own-ship no longer appears on the traffic display #2693
 * ui
   - FLARM radar: show callsigns on all registered targets again, use the
     full callsign on target labels, and omit duplicate side vario/altitude

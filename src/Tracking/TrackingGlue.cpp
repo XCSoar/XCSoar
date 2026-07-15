@@ -90,6 +90,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   {
     const std::lock_guard lock{online_mutex};
     own_altitude = OwnAltitudeMeters(basic);
+    own_flarm_id = basic.flarm.hardware.radio_id;
   }
 
   try {
@@ -110,6 +111,7 @@ TrackingGlue::MergeOnlineTraffic(FlarmData &flarm,
   const std::lock_guard lock{online_mutex};
 
   own_altitude = OwnAltitudeMeters(basic);
+  own_flarm_id = flarm.hardware.radio_id;
 
   online_traffic.ClampListSize();
 
@@ -121,7 +123,9 @@ TrackingGlue::MergeOnlineTraffic(FlarmData &flarm,
     if (last_i == online_last_received.end() ||
         now - last_i->second > ONLINE_BUFFER_STALE ||
         !WithinOnlineAltitudeBand(own_altitude, int(t.altitude),
-                                  t.altitude_available)) {
+                                  t.altitude_available) ||
+        SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_flarm_id,
+                                                           t.id)) {
       online_last_received.erase(t.id);
       online_pilot_ids.erase(t.id);
       online_traffic.list.quick_remove(i);
@@ -130,6 +134,10 @@ TrackingGlue::MergeOnlineTraffic(FlarmData &flarm,
   }
 
   for (const auto &online : online_traffic.list) {
+    if (SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_flarm_id,
+                                                           online.id))
+      continue;
+
     FlarmTraffic *existing = flarm.traffic.FindTraffic(online.id);
     if (existing != nullptr &&
         !FlarmTraffic::IsInjectedSource(existing->source) &&
@@ -184,9 +192,11 @@ TrackingGlue::OnTraffic(uint32_t pilot_id,
   }
 
   int own_alt;
+  FlarmId own_id;
   {
     const std::lock_guard lock{online_mutex};
     own_alt = own_altitude;
+    own_id = own_flarm_id;
   }
 
   if (!WithinOnlineAltitudeBand(own_alt, altitude, altitude_valid))
@@ -203,6 +213,9 @@ TrackingGlue::OnTraffic(uint32_t pilot_id,
     track_deg, track_valid, flarm_id, aircraft_type, server_name);
 
   if (!built.location_available)
+    return;
+
+  if (SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(own_id, built.id))
     return;
 
   bool user_known;

@@ -16,9 +16,10 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     was_binary = false;
     mode = Mode::NMEA;
 
-    /* request self-test results and version information from FLARM */
+    /* request self-test results, version and radio id from FLARM */
     Send("PFLAE,R", env);
     Send("PFLAV,R", env);
+    Send("PFLAC,R,RADIOID", env);
     return true;
 
   case Mode::NMEA:
