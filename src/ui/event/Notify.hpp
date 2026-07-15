@@ -31,11 +31,9 @@ public:
 
   Notify(const Notify &) = delete;
 
-#ifndef USE_WINUSER
   ~Notify() noexcept {
     ClearNotification();
   }
-#endif
 
   /**
    * Send a notification to this object.  This method can be called

@@ -32,6 +32,10 @@ public:
   explicit LuaTimer(lua_State *L, int callback_idx)
     :callback(L, Lua::StackIndex(callback_idx)), timer(L) {}
 
+  ~LuaTimer() noexcept {
+    Cancel();
+  }
+
   lua_State *GetLuaState() {
     return callback.GetState();
   }
@@ -45,17 +49,23 @@ public:
     timer_event.Schedule(d);
   }
 
-  void Cancel() {
-    const Lua::ScopeCheckStack check_stack(GetLuaState());
-
+  void Cancel() noexcept {
+    lua_State *const L = GetLuaState();
     timer_event.Cancel();
+    if (L == nullptr)
+      return;
+
+    const Lua::ScopeCheckStack check_stack(L);
     timer.Set(nullptr);
-    Lua::RemovePersistent(GetLuaState(), this);
+    Lua::RemovePersistent(L, this);
   }
 
 protected:
   void OnTimer() noexcept {
     const auto L = GetLuaState();
+    if (L == nullptr)
+      return;
+
     const Lua::ScopeCheckStack check_stack(L);
 
     callback.Push();
@@ -63,6 +73,9 @@ protected:
     if (lua_pcall(L, 1, 0, 0))
       Lua::ThrowError(L, Lua::PopError(L));
 
+    /* May destroy this object (and the PeriodicTimer) when the last
+       persistent handle is gone -- PeriodicTimer::Invoke tolerates
+       that via invoke_alive. */
     Lua::CheckPersistent(L);
   }
 
