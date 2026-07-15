@@ -32,10 +32,17 @@ SkyLinesTracking::FlarmTrafficBuilder::SourceForOnline(
 }
 
 bool
-SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(FlarmId own_radio_id,
-                                                    FlarmId traffic_id) noexcept
+SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
+  std::span<const FlarmId> own_ids, FlarmId traffic_id) noexcept
 {
-  return own_radio_id.IsDefined() && traffic_id == own_radio_id;
+  if (!traffic_id.IsDefined())
+    return false;
+
+  for (const FlarmId id : own_ids)
+    if (id.IsDefined() && id == traffic_id)
+      return true;
+
+  return false;
 }
 
 bool

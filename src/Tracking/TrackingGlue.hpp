@@ -8,6 +8,7 @@
 #ifdef HAVE_TRACKING
 
 #include "Tracking/SkyLines/Handler.hpp"
+#include "Tracking/CloudSettings.hpp"
 #include "FLARM/Id.hpp"
 #include "FLARM/List.hpp"
 #include "FLARM/Data.hpp"
@@ -15,6 +16,7 @@
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/LiveTrack24/Glue.hpp"
 #include "util/StaticString.hxx"
+#include "util/StaticArray.hxx"
 #include "util/TriState.hpp"
 #include "thread/Mutex.hxx"
 
@@ -54,8 +56,18 @@ class TrackingGlue final
   /** Own-ship altitude [m MSL] for online-traffic filtering; -1 if unknown. */
   int own_altitude = -1;
 
-  /** Own-ship FLARM radio id when known (filters OGN self). */
-  FlarmId own_flarm_id = FlarmId::Undefined();
+  /**
+   * Effective own-ship FLARM ids for filtering online self traffic:
+   * configured #CloudSettings::own_flarm_ids plus #device_radio_id when
+   * known (room for one extra id beyond the configured maximum).
+   */
+  StaticArray<FlarmId, CloudSettings::MAX_OWN_FLARM_IDS + 1> own_flarm_ids;
+
+  /** Manual own FLARM ids from cloud settings. */
+  CloudSettings::OwnFlarmIdList configured_own_flarm_ids;
+
+  /** Last observed #FlarmHardware::radio_id (device self id). */
+  FlarmId device_radio_id = FlarmId::Undefined();
 
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;

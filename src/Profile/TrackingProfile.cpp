@@ -34,6 +34,9 @@ static void Load(const ProfileMap &map, CloudSettings &settings) {
   const char *key = map.Get(ProfileKeys::CloudKey);
   if (key != nullptr)
     ParseIntegerTo(key, settings.key, 16);
+
+  settings.own_flarm_ids =
+    CloudSettings::ParseOwnFlarmIds(map.Get(ProfileKeys::CloudOwnFlarmId));
 }
 
 static void Load(const ProfileMap &map,
