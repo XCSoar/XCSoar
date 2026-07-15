@@ -75,9 +75,13 @@ public:
     bool alive = true;
     invoke_alive = &alive;
     callback();
+    /* Callback may have destroyed this object (e.g. LuaTimer). */
+    if (!alive)
+      return;
+
     invoke_alive = nullptr;
 
-    if (alive && IsActive() && !timer.IsPending())
+    if (IsActive() && !timer.IsPending())
       timer.Schedule(interval);
   }
 };
