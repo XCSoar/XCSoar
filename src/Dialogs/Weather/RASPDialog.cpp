@@ -223,6 +223,7 @@ class RASPSettingsPanel final
     LAYER,
     COLORBAR,
     CONTOURS,
+    OPACITY,
     TIME,
     APPLY_TO_PAGE,
     ADD_PAGE,
@@ -241,6 +242,7 @@ class RASPSettingsPanel final
   static RASPSettingsPanel *active;
 
   ContourDensity contour_density = ContourDensity::OFF;
+  unsigned rasp_layer_opacity = 70;
 
   void ReloadRasp();
   void UpdateModifiedDisplay();
@@ -528,7 +530,10 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                   unsigned(ContourDensity::COUNT) + 1,
                   "contour_density_list must match ContourDensity::COUNT");
     Profile::GetEnum(ProfileKeys::RaspContours, contour_density);
-    WndProperty *cp = AddEnum(_("Contours"), nullptr,
+    WndProperty *cp = AddEnum(_("Contours"),
+                              _("Draws contour lines onto the RASP weather "
+                                "overlay.  Denser settings draw more lines; "
+                                "\"Off\" disables the contour lines."),
                               contour_density_list,
                               (unsigned)contour_density);
     cp->GetDataField()->SetOnModified([this]{
@@ -536,6 +541,13 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       UpdateColorbar();
     });
   }
+
+  rasp_layer_opacity = CommonInterface::GetMapSettings().rasp_layer_opacity;
+  AddInteger(_("Overlay opacity"),
+             _("Sets the opacity of the RASP weather overlay on the map.  "
+               "0% is fully transparent, 100% is fully opaque."),
+             "%d %%", "%d", 0, 100, 10,
+             rasp_layer_opacity);
 
   UpdateColorbar();
 
@@ -569,20 +581,43 @@ RASPSettingsPanel::Show(const PixelRect &rc) noexcept
 }
 
 bool
-RASPSettingsPanel::Save([[maybe_unused]] bool &_changed) noexcept
+RASPSettingsPanel::Save(bool &_changed) noexcept
 {
+  bool changed = false;
+
 #ifdef HAVE_DOWNLOAD_MANAGER
   auto &weather = CommonInterface::SetComputerSettings().weather;
-  _changed |= SaveValue(AUTO_UPDATE, ProfileKeys::RaspAutoUpdate,
-                        weather.rasp.auto_update);
+  if (SaveValue(AUTO_UPDATE, ProfileKeys::RaspAutoUpdate,
+               weather.rasp.auto_update))
+    changed = true;
 #endif
 
   WeatherUIState &state = CommonInterface::SetUIState().weather;
 
-  state.contour_density = contour_density;
-  Profile::SetEnum(ProfileKeys::RaspContours, contour_density);
+  if (state.contour_density != contour_density) {
+    state.contour_density = contour_density;
+    Profile::SetEnum(ProfileKeys::RaspContours, contour_density);
+    changed = true;
+  }
 
-  ActionInterface::SendUIState(true);
+  if (SaveValueInteger(OPACITY, ProfileKeys::RaspLayerOpacity,
+                       rasp_layer_opacity)) {
+    CommonInterface::SetMapSettings().rasp_layer_opacity =
+      (uint8_t)rasp_layer_opacity;
+    /* Propagate the map settings; the redraw is triggered by the
+       SendUIState() call below. */
+    ActionInterface::SendMapSettings(false);
+    changed = true;
+  }
+
+  if (changed) {
+    /* This dialog can be shown standalone (via the weather dialog),
+       where nothing else writes the profile to disk, so persist here. */
+    Profile::Save();
+    ActionInterface::SendUIState(true);
+  }
+
+  _changed |= changed;
 
   return true;
 }
