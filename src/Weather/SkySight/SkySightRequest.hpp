@@ -85,6 +85,7 @@ class SkySightRequest final {
   std::deque<FileRequest> pending_jobs;
   SkySight::AuthenticationFailurePolicy authentication_failures;
   SkySight::RequestFailurePolicy download_failures;
+  SkySight::LiveTileRequestPacer live_tile_pacer;
   std::map<std::string, time_t> payload_retry_at;
   std::set<std::string, std::less<>> generic_keys;
   std::map<std::string, unsigned> tile_http_error_count;

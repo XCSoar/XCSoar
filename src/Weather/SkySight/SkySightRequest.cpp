@@ -305,6 +305,17 @@ SkySightRequest::PumpQueue()
   CleanupFinishedJobs();
 
   const auto now = std::time(nullptr);
+  const bool has_live_tile_work =
+    std::any_of(pending_jobs.begin(), pending_jobs.end(),
+                [](const auto &job) {
+                  return job.kind == FileJob::Kind::Generic;
+                }) ||
+    std::any_of(file_jobs.begin(), file_jobs.end(),
+                [](const auto &entry) {
+                  return entry.second->kind == FileJob::Kind::Generic;
+                });
+  live_tile_pacer.OnQueueState(now, has_live_tile_work);
+
   if (now < throttle_until)
     return;
 
@@ -315,6 +326,8 @@ SkySightRequest::PumpQueue()
     const auto next = std::find_if(pending_jobs.begin(), pending_jobs.end(),
                                    [this, now](const auto &job) {
                                      return now >= job.ready_at &&
+                                       (job.kind != FileJob::Kind::Generic ||
+                                        live_tile_pacer.CanStart(now)) &&
                                        (!job.requires_auth || IsLoggedIn());
                                    });
     if (next == pending_jobs.end()) {
@@ -333,6 +346,10 @@ SkySightRequest::PumpQueue()
                                                 std::move(job));
     auto *job_ptr = active_job.get();
     const auto key = job_ptr->key;
+
+    if (job_ptr->kind == FileJob::Kind::Generic)
+      live_tile_pacer.OnStarted(now);
+
     file_jobs.emplace(key, std::move(active_job));
     job_ptr->function.Start(
       DownloadFileTask(curl, job_ptr->url,
@@ -502,11 +519,11 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
   }
 
   if (File::Exists(filename)) {
-    if (auto retry = retry_after.find(key); retry != retry_after.end()) {
+    if (auto retry = payload_retry_at.find(key); retry != payload_retry_at.end()) {
       if (std::time(nullptr) < retry->second)
         return DownloadDatafileResult::Duplicate;
 
-      retry_after.erase(retry);
+      payload_retry_at.erase(retry);
     }
 
     try {
@@ -880,6 +897,8 @@ SkySightRequest::OnFileError(const std::string &key,
     const auto decision = download_failures.OnHttpFailure(
       key, http_error.status, now, http_error.retry_at);
     if (http_error.status == 429) {
+      if (kind == FileJob::Kind::Generic)
+        live_tile_pacer.OnThrottle();
       SetThrottleUntil(decision.ready_at);
       api.OnThrottle();
       LogThrottleNotice(http_error.retry_at > now);
