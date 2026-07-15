@@ -21,6 +21,13 @@ class PeriodicTimer final {
 
   std::chrono::steady_clock::duration interval{-1};
 
+  /**
+   * Cleared by the destructor while Invoke() is running, so a
+   * callback that destroys this object does not touch freed memory
+   * on return (LuaTimer / CheckPersistent).
+   */
+  bool *invoke_alive = nullptr;
+
   using Callback = std::function<void()>;
   const Callback callback;
 
@@ -30,6 +37,12 @@ public:
    */
   explicit PeriodicTimer(Callback &&_callback) noexcept
     :callback(std::move(_callback)) {}
+
+  ~PeriodicTimer() noexcept {
+    if (invoke_alive != nullptr)
+      *invoke_alive = false;
+    Cancel();
+  }
 
   /**
    * Is the timer active, i.e. is it waiting for the current period to
@@ -59,9 +72,12 @@ public:
 
 public:
   void Invoke() noexcept {
+    bool alive = true;
+    invoke_alive = &alive;
     callback();
+    invoke_alive = nullptr;
 
-    if (IsActive() && !timer.IsPending())
+    if (alive && IsActive() && !timer.IsPending())
       timer.Schedule(interval);
   }
 };
