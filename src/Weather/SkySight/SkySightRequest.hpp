@@ -56,6 +56,7 @@ class SkySightRequest final {
   std::string email;
   std::string password;
   std::string api_key;
+  std::string last_updates_layer_id;
   time_t valid_until = 0;
   time_t last_login_request = 0;
   time_t throttle_until = 0;
@@ -73,7 +74,8 @@ public:
   bool IsLoggedIn() const noexcept;
 
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
-  void RequestLastUpdates(std::string_view region_id);
+  void RequestLastUpdates(std::string_view region_id,
+                          std::string_view layer_id);
 
 private:
   void CancelAll() noexcept;

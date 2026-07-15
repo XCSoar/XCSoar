@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <utility>
 
 class HttpStatusError final : public std::runtime_error {
 public:
@@ -159,6 +160,7 @@ SkySightRequest::CancelAll() noexcept
   last_updates_job.Cancel();
   login_running = false;
   last_updates_running = false;
+  last_updates_layer_id.clear();
 
   for (auto &i : file_jobs)
     i.second->function.Cancel();
@@ -335,9 +337,10 @@ SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires
 }
 
 void
-SkySightRequest::RequestLastUpdates(std::string_view region_id)
+SkySightRequest::RequestLastUpdates(std::string_view region_id,
+                                    std::string_view layer_id)
 {
-  if (region_id.empty() || last_updates_running)
+  if (region_id.empty() || layer_id.empty() || last_updates_running)
     return;
 
   if (!HasCredentials())
@@ -349,9 +352,12 @@ SkySightRequest::RequestLastUpdates(std::string_view region_id)
   }
 
   last_updates_running = true;
+  last_updates_layer_id = layer_id;
 
   std::string url{"https://skysight.io/api/data/last_updated?region_id="};
   url += region_id;
+  url += "&layer_ids=";
+  url += layer_id;
 
   last_updates_job.Start(
     JsonTask(curl, std::move(url), api_key),
@@ -367,13 +373,15 @@ void
 SkySightRequest::OnLastUpdatesSuccess(boost::json::value value)
 {
   last_updates_running = false;
-  api.OnLastUpdates(std::move(value));
+  const auto layer_id = std::exchange(last_updates_layer_id, std::string{});
+  api.OnLastUpdates(layer_id, std::move(value));
 }
 
 void
 SkySightRequest::OnLastUpdatesError(std::exception_ptr error) noexcept
 {
   last_updates_running = false;
+  last_updates_layer_id.clear();
 
   try {
     std::rethrow_exception(error);
