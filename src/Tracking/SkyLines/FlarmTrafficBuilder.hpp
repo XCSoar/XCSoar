@@ -25,6 +25,14 @@ public:
   SourceForOnline(uint32_t pilot_id, TrafficSource source) noexcept;
 
   /**
+   * True when online traffic #traffic_id matches the own-ship FLARM
+   * radio id (drop self from OGN / cloud feeds).
+   */
+  [[gnu::const]]
+  static bool IsOwnShipId(FlarmId own_radio_id,
+                          FlarmId traffic_id) noexcept;
+
+  /**
    * Populate relative_north/east/altitude from own-ship GPS.
    *
    * @return false if relative position cannot be computed

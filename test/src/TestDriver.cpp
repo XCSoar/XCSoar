@@ -3087,6 +3087,14 @@ TestFlarmTrafficBuilder()
   partial.track_received = false;
   merged.UpdateOnline(partial);
   ok1(merged.track_received);
+
+  const FlarmId radio = FlarmId::FromValue(0xABCDEFu);
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
+        radio, FlarmId::FromValue(0xABCDEFu)));
+  ok1(!SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
+         radio, FlarmId::FromValue(0x123456u)));
+  ok1(!SkyLinesTracking::FlarmTrafficBuilder::IsOwnShipId(
+         FlarmId::Undefined(), radio));
 }
 
 static void
@@ -3164,7 +3172,7 @@ int main()
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
-             + 59 /* Condor3UDP */ + 12 /* FlarmTrafficBuilder */
+             + 59 /* Condor3UDP */ + 15 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */);
   TestGeneric();
   TestTasman();

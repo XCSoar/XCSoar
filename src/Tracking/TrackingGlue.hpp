@@ -54,6 +54,9 @@ class TrackingGlue final
   /** Own-ship altitude [m MSL] for online-traffic filtering; -1 if unknown. */
   int own_altitude = -1;
 
+  /** Own-ship FLARM radio id when known (filters OGN self). */
+  FlarmId own_flarm_id = FlarmId::Undefined();
+
 public:
   TrackingGlue(EventLoop &event_loop, CurlGlobal &curl) noexcept;
 

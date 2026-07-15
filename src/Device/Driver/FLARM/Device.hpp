@@ -98,7 +98,7 @@ protected:
   bool TextMode(OperationEnvironment &env);
   bool BinaryMode(OperationEnvironment &env);
 
-  bool ParsePFLAC(NMEAInputLine &line);
+  bool ParsePFLAC(NMEAInputLine &line, NMEAInfo &info);
 
 public:
   /* virtual methods from class Device */

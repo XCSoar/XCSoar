@@ -29,6 +29,7 @@ struct FlarmHardware {
 
   constexpr void Clear() noexcept {
     available.Clear();
+    radio_id.Clear();
   }
 
   constexpr void Complement(const FlarmHardware &add) noexcept {
