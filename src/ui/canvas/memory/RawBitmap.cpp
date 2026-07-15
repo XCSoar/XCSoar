@@ -29,12 +29,17 @@ RawBitmap::StretchTo(PixelSize src_size,
   uint8_t alpha_u8 =
     static_cast<uint8_t>(std::clamp(alpha, 0.0f, 1.0f) * 255 + 0.5f);
 
-  if (use_source_alpha)
-    /* per-pixel alpha takes precedence; the overall "alpha" is
-       ignored because combining both is not supported here */
-    dest_canvas.StretchWithSourceAlpha({0, 0}, dest_size,
-                                       src, {0, 0}, src_size);
-  else if (alpha_u8 < 255) {
+  if (use_source_alpha) {
+    if (alpha_u8 < 255)
+      /* combine per-pixel source alpha with the global opacity, matching
+         the OpenGL path */
+      dest_canvas.StretchWithSourceAlpha({0, 0}, dest_size,
+                                         src, {0, 0}, src_size,
+                                         alpha_u8);
+    else
+      dest_canvas.StretchWithSourceAlpha({0, 0}, dest_size,
+                                         src, {0, 0}, src_size);
+  } else if (alpha_u8 < 255) {
     if (transparent_white)
       dest_canvas.AlphaBlendNotWhite({0, 0}, dest_size,
                                      src, {0, 0}, src_size,
