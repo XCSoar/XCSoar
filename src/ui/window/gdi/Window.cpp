@@ -10,7 +10,32 @@
 #include "Asset.hpp"
 
 #include <cassert>
+#include <cstring>
 #include <windowsx.h>
+#include <winerror.h>
+
+#include <libloaderapi.h>
+#include <errhandlingapi.h>
+
+/** Dedicated class for HWND_MESSAGE windows (UI::Notify fallback). */
+static constexpr char message_window_class[] = "XCSoarMessage";
+
+/** Main window class registered by UI::SingleWindow::RegisterClass(). */
+static constexpr char main_window_class[] = "XCSoarMain";
+
+static bool
+RegisterMessageWindowClass() noexcept
+{
+  WNDCLASS wc{};
+  wc.lpfnWndProc = Window::WndProc;
+  wc.hInstance = ::GetModuleHandle(nullptr);
+  wc.lpszClassName = message_window_class;
+  if (::RegisterClass(&wc) != 0)
+    return true;
+
+  /* Already registered by another CreateMessageWindow() call. */
+  return ::GetLastError() == ERROR_CLASS_ALREADY_EXISTS;
+}
 
 void
 Window::Create(ContainerWindow *parent, const char *cls, const char *text,
@@ -39,7 +64,15 @@ Window::Create(ContainerWindow *parent, const char *cls, const char *text,
 void
 Window::CreateMessageWindow() noexcept
 {
-  hWnd = ::CreateWindowEx(0, "PaintWindow", nullptr, 0, 0, 0, 0, 0,
+  /* Lazily register a class without CS_PARENTDC.  Reusing
+     "PaintWindow" for HWND_MESSAGE windows interacts badly with
+     WM_GETMINMAXINFO minimum-size enforcement and fails
+     CreateWindowEx on some Windows hosts (issue #2720). */
+  static const bool registered = RegisterMessageWindowClass();
+  assert(registered);
+
+  hWnd = ::CreateWindowEx(0, message_window_class, nullptr, 0,
+                          0, 0, 0, 0,
                           HWND_MESSAGE,
                           nullptr, nullptr, this);
   assert(hWnd != nullptr);
@@ -313,17 +346,25 @@ Window::WndProc(HWND _hWnd, UINT message,
                 WPARAM wParam, LPARAM lParam) noexcept
 {
   if (message == WM_GETMINMAXINFO) {
-    /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
-       a Window pointer yet - but we can still enforce minimum size.
-       This prevents crashes from invalid rectangles (issue #2110) */
-    MINMAXINFO *mmi = reinterpret_cast<MINMAXINFO *>(lParam);
+    /* WM_GETMINMAXINFO is called before WM_CREATE, and we have not
+       set a Window pointer yet.  Let DefWindowProc fill defaults,
+       then clamp the main window only (issue #2110).  Do not apply
+       this to message-only / PaintWindow children — GetParent() is
+       also null for HWND_MESSAGE windows, and forcing a minimum
+       size makes CreateMessageWindow() fail (issue #2720). */
+    const LRESULT result =
+      ::DefWindowProc(_hWnd, message, wParam, lParam);
 
-    /* Only enforce minimum for top-level windows (no parent) */
-    if (::GetParent(_hWnd) == nullptr) {
-      mmi->ptMinTrackSize.x = UI::MIN_HEIGHT;
-      mmi->ptMinTrackSize.y = UI::MIN_HEIGHT;
+    char class_name[64];
+    if (::GetClassNameA(_hWnd, class_name, sizeof(class_name)) > 0 &&
+        std::strcmp(class_name, main_window_class) == 0) {
+      MINMAXINFO *mmi = reinterpret_cast<MINMAXINFO *>(lParam);
+      /* Allow either landscape (320x240) or portrait (240x320). */
+      mmi->ptMinTrackSize.x = LONG(UI::MIN_HEIGHT);
+      mmi->ptMinTrackSize.y = LONG(UI::MIN_HEIGHT);
     }
-    return 0;
+
+    return result;
   }
 
   Window *window;
