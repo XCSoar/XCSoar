@@ -152,11 +152,12 @@ SkySightClient::GetDisplayedLayerId() const noexcept
 bool
 SkySightClient::AddSelectedLayer(std::string_view id)
 {
-  return AddSelectedLayer(id, true);
+  return AddSelectedLayer(id, true, true);
 }
 
 bool
-SkySightClient::AddSelectedLayer(std::string_view id, bool save_profile)
+SkySightClient::AddSelectedLayer(std::string_view id, bool save_profile,
+                           bool request_datafiles)
 {
   if (id.empty() || api->SelectedLayersFull() || api->IsSelectedLayer(id))
     return false;
@@ -167,7 +168,7 @@ SkySightClient::AddSelectedLayer(std::string_view id, bool save_profile)
 
   auto selected = *layer;
   if (!selected.SupportsLiveTiles())
-    selected.updating = true;
+    selected.updating = request_datafiles;
 
   if (!api->AddSelectedLayer(selected))
     return false;
@@ -175,7 +176,8 @@ SkySightClient::AddSelectedLayer(std::string_view id, bool save_profile)
   if (save_profile)
     SaveSelectedLayers();
 
-  api->PollSelectedDatafiles();
+  if (request_datafiles)
+    api->PollSelectedDatafiles();
   return true;
 }
 
@@ -203,15 +205,13 @@ SkySightClient::ReloadSelectedLayersFromProfile()
     const auto split = remaining.find(',');
     const auto layer_id = remaining.substr(0, split);
     if (!layer_id.empty())
-      (void)AddSelectedLayer(layer_id, false);
+      (void)AddSelectedLayer(layer_id, false, false);
 
     if (split == std::string::npos)
       break;
 
     remaining.erase(0, split + 1);
   }
-
-  api->PollSelectedDatafiles();
 }
 
 void

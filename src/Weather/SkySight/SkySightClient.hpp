@@ -61,7 +61,8 @@ public:
   void OnDataUpdated() noexcept;
 
 private:
-  bool AddSelectedLayer(std::string_view id, bool save_profile);
+  bool AddSelectedLayer(std::string_view id, bool save_profile,
+                        bool request_datafiles);
   void SaveSelectedLayers() const;
   void CleanupFiles() noexcept;
   void ResetTiles() noexcept;
