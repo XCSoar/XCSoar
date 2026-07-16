@@ -215,6 +215,20 @@ SetManualAlternateWaypoint(AlternateInfoBoxSlot slot,
 }
 
 void
+SelectManualAlternateWaypoint(AlternateInfoBoxSlot slot,
+                              WaypointPtr waypoint) noexcept
+{
+  {
+    const std::scoped_lock lock(alternate_state_mutex);
+    auto &state = alternate_slot_states[ToAlternateInfoBoxSlotIndex(slot)];
+    state.waypoint = std::move(waypoint);
+    state.mode = AlternateInfoBoxMode::MANUAL;
+  }
+
+  MarkAlternateInfoBoxesDirty();
+}
+
+void
 ClearManualAlternateWaypoint(AlternateInfoBoxSlot slot) noexcept
 {
   SetManualAlternateWaypoint(slot, nullptr);
