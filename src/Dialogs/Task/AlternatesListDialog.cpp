@@ -216,8 +216,7 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
         return;
 
       const auto slot = GetConfiguredSlot();
-      SetManualAlternateWaypoint(slot, GetSelectedWaypointPtr());
-      SetAlternateInfoBoxMode(slot, AlternateInfoBoxMode::MANUAL);
+      SelectManualAlternateWaypoint(slot, GetSelectedWaypointPtr());
       cancel_button->Click();
     });
   }
