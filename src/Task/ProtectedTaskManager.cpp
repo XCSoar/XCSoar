@@ -37,10 +37,10 @@ ProtectedTaskManager::SetDensityRatio(const double dr) noexcept
 }
 
 void
-ProtectedTaskManager::SetPevStartTimeSpan(const TimeSpan &open_time_span) noexcept
+ProtectedTaskManager::SetPilotEventStartTimeSpan(const TimeSpan &open_time_span) noexcept
 {
   ExclusiveLease lease(*this);
-  lease->SetPevStartTimeSpan(open_time_span);
+  lease->SetPilotEventStartTimeSpan(open_time_span);
 }
 
 const OrderedTaskSettings

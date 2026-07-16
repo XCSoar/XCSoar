@@ -136,6 +136,15 @@ OrderedTask::UpdateStatsGeometry() noexcept
 }
 
 void
+OrderedTask::SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept
+{
+  pilot_event_window_snapshot = span;
+
+  if (taskpoint_start != nullptr)
+    taskpoint_start->SetPilotEventWindowSnapshot(span);
+}
+
+void
 OrderedTask::UpdateGeometry() noexcept
 {
   UpdateStatsGeometry();
@@ -532,8 +541,8 @@ OrderedTask::CheckTransitions(const AircraftState &state,
     assert(start_state.HasTime());
     stats.start.SetStarted(
         start_state,
-        pilot_pev_window_snapshot.IsDefined() ? &pilot_pev_window_snapshot
-                                             : nullptr);
+        pilot_event_window_snapshot.IsDefined() ? &pilot_event_window_snapshot
+                                                : nullptr);
 
     if (taskpoint_finish != nullptr)
       taskpoint_finish->SetFaiFinishHeight(start_state.altitude - 1000);

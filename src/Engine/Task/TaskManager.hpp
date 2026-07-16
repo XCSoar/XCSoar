@@ -424,10 +424,10 @@ public:
   void ResetTask() noexcept;
 
   /**
-   * Sets the PEV start time span.
-   * To be called when PEV has been pressed.
+   * Sets the Pilot Event (PEV) start time span.
+   * To be called when Pilot Event (PEV) has been pressed.
    */
-  void SetPevStartTimeSpan(const TimeSpan &open_time_span) noexcept;
+  void SetPilotEventStartTimeSpan(const TimeSpan &open_time_span) noexcept;
 
   /**
    * Update speed-to-fly and risk MC from the current polar.

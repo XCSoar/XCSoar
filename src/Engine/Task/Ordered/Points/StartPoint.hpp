@@ -21,6 +21,7 @@ class StartPoint final : public OrderedTaskPoint {
   double safety_height;
 
   TaskStartMargins margins;
+  TimeSpan pilot_event_window_snapshot = TimeSpan::Invalid();
 
   /**
    * A copy of OrderedTaskSettings::start_constraints, managed by
@@ -75,6 +76,7 @@ public:
   /* virtual methods from class OrderedTaskPoint */
   void SetTaskBehaviour(const TaskBehaviour &tb) noexcept override;
   void SetOrderedTaskSettings(const OrderedTaskSettings &s) noexcept override;
+  void SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept override;
   void SetNeighbours(OrderedTaskPoint *prev,
                      OrderedTaskPoint *next) noexcept override;
   bool IsInSector(const AircraftState &ref) const noexcept override;

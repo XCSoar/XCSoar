@@ -53,7 +53,7 @@ public:
   [[gnu::pure]]
   const OrderedTaskSettings GetOrderedTaskSettings() const noexcept;
 
-  void SetPevStartTimeSpan(const TimeSpan &open_time_span) noexcept;
+  void SetPilotEventStartTimeSpan(const TimeSpan &open_time_span) noexcept;
 
   [[gnu::pure]]
   WaypointPtr GetActiveWaypoint() const noexcept;

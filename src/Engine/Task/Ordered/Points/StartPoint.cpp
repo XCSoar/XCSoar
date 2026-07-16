@@ -41,6 +41,12 @@ StartPoint::SetOrderedTaskSettings(const OrderedTaskSettings &settings) noexcept
 }
 
 void
+StartPoint::SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept
+{
+  pilot_event_window_snapshot = span;
+}
+
+void
 StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next) noexcept
 {
   assert(_prev==NULL);
@@ -92,11 +98,20 @@ bool
 StartPoint::CheckExitTransition(const AircraftState &ref_now,
                                 const AircraftState &ref_last) const noexcept
 {
-  if (!constraints.open_time_span.HasBegun(FineTime{ref_last.time}))
+  const TimeSpan *start_window = &constraints.open_time_span;
+  if (constraints.start_mode == StartMode::PEV ||
+      constraints.start_mode == StartMode::POLISH) {
+    if (!pilot_event_window_snapshot.IsDefined())
+      return false;
+
+    start_window = &pilot_event_window_snapshot;
+  }
+
+  if (!start_window->HasBegun(FineTime{ref_last.time}))
     /* the start gate is not yet open when we left the OZ */
     return false;
 
-  if (constraints.open_time_span.HasEnded(FineTime{ref_now.time}))
+  if (start_window->HasEnded(FineTime{ref_now.time}))
     /* the start gate was already closed when we left the OZ */
     return false;
 

@@ -9,7 +9,6 @@
 
 class TaskManagerDialog;
 class OrderedTask;
-class DataFieldBoolean;
 class DataFieldEnum;
 
 class TaskPropertiesPanel final
@@ -29,7 +28,6 @@ public:
                       std::unique_ptr<OrderedTask> &_active_task,
                       bool *_task_modified) noexcept;
 
-  void OnFAIFinishHeightChange(DataFieldBoolean &df);
   void OnTaskTypeChange(DataFieldEnum &df);
 
   /* virtual methods from Widget */

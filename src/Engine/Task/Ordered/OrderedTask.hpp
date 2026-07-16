@@ -76,8 +76,8 @@ private:
 
   StaticString<64> name;
 
-  /** Snapshot from #TaskManager for PEV offset at start recording. */
-  TimeSpan pilot_pev_window_snapshot{TimeSpan::Invalid()};
+  /** Snapshot from #TaskManager for pilot-event offset at start recording. */
+  TimeSpan pilot_event_window_snapshot{TimeSpan::Invalid()};
 
 public:
   /**
@@ -94,12 +94,10 @@ public:
   ~OrderedTask() noexcept;
 
   /**
-   * Copy the current PEV window from #CommonStats before each
+   * Copy the current pilot-event window from #CommonStats before each
    * #Update(); used when recording start offset at crossing.
    */
-  void SetPilotPevWindowSnapshot(const TimeSpan &span) noexcept {
-    pilot_pev_window_snapshot = span;
-  }
+  void SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept;
 
   /**
    * Accessor for factory system for constructing tasks

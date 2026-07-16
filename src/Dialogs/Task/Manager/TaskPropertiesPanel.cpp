@@ -4,7 +4,6 @@
 #include "TaskPropertiesPanel.hpp"
 #include "Internal.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Boolean.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TypeStrings.hpp"
@@ -16,6 +15,7 @@ using namespace std::chrono;
 
 enum Controls {
   TASK_TYPE,
+  START_MODE,
   MIN_TIME,
   START_REQUIRES_ARM,
   START_SCORE_EXIT,
@@ -28,8 +28,51 @@ enum Controls {
   FINISH_HEIGHT_REF,
   PEV_START_WAIT_TIME,
   PEV_START_WINDOW,
-  FAI_FINISH_HEIGHT,
 };
+
+static constexpr StaticEnumChoice start_mode_list[] = {
+  { StartMode::NORMAL, N_("Normal Start"),
+    N_("Use normal start rules.") },
+  { StartMode::FAI_START_FINISH, N_("FAI start+finish"),
+    N_("Use FAI start and finish rules.") },
+  { StartMode::PEV, N_("Pilot Event (PEV) Start"),
+    N_("Enable Pilot Event (PEV) start timing.") },
+  { StartMode::POLISH, N_("Polish Start"),
+    N_("Placeholder for Polish start timing.") },
+  nullptr
+};
+
+static StartMode
+GetStartMode(const OrderedTaskSettings &p) noexcept
+{
+  return p.start_constraints.start_mode;
+}
+
+static void
+SetStartMode(OrderedTaskSettings &p, StartMode mode) noexcept
+{
+  switch (mode) {
+  case StartMode::NORMAL:
+    p.finish_constraints.fai_finish = false;
+    p.start_constraints.fai_finish = false;
+    p.start_constraints.pev_start_enabled = false;
+    break;
+
+  case StartMode::FAI_START_FINISH:
+    p.finish_constraints.fai_finish = true;
+    p.start_constraints.fai_finish = true;
+    p.start_constraints.pev_start_enabled = false;
+    break;
+
+  case StartMode::PEV:
+  case StartMode::POLISH:
+    p.finish_constraints.fai_finish = false;
+    p.start_constraints.fai_finish = false;
+    p.start_constraints.pev_start_enabled = true;
+    break;
+  }
+  p.start_constraints.start_mode = mode;
+}
 
 TaskPropertiesPanel::TaskPropertiesPanel(TaskManagerDialog &_dialog,
                                          std::unique_ptr<OrderedTask> &_active_task,
@@ -47,10 +90,15 @@ TaskPropertiesPanel::RefreshView()
 
   const bool aat_types = ftype == TaskFactoryType::AAT ||
     ftype == TaskFactoryType::MAT;
-  bool fai_start_finish = p.finish_constraints.fai_finish;
+  const StartMode start_mode = GetStartMode(p);
+  const bool fai_start_finish = start_mode == StartMode::FAI_START_FINISH;
+  const bool pev_start = start_mode == StartMode::PEV ||
+    start_mode == StartMode::POLISH;
 
   SetRowVisible(MIN_TIME, aat_types);
   LoadValueDuration(MIN_TIME, p.aat_min_time);
+
+  LoadValueEnum(START_MODE, start_mode);
 
   LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
   LoadValue(START_SCORE_EXIT, p.start_constraints.score_exit);
@@ -76,15 +124,12 @@ TaskPropertiesPanel::RefreshView()
   SetRowVisible(FINISH_HEIGHT_REF, !fai_start_finish);
   LoadValueEnum(FINISH_HEIGHT_REF, p.finish_constraints.min_height_ref);
 
-  SetRowVisible(FAI_FINISH_HEIGHT, IsFai(ftype));
-  LoadValue(FAI_FINISH_HEIGHT, fai_start_finish);
-
   LoadValueEnum(TASK_TYPE, ftype);
 
-  SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish);
+  SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish && pev_start);
   LoadValueDuration(PEV_START_WAIT_TIME,
                     p.start_constraints.pev_start_wait_time);
-  SetRowVisible(PEV_START_WINDOW, !fai_start_finish);
+  SetRowVisible(PEV_START_WINDOW, !fai_start_finish && pev_start);
   LoadValueDuration(PEV_START_WINDOW,
                     p.start_constraints.pev_start_window);
 
@@ -145,30 +190,21 @@ TaskPropertiesPanel::ReadValues()
   changed |= SaveValueEnum(FINISH_HEIGHT_REF,
                            p.finish_constraints.min_height_ref);
 
+  StartMode start_mode = GetStartMode(p);
+  changed |= SaveValueEnum(START_MODE, start_mode);
+  if (changed)
+    SetStartMode(p, start_mode);
+
   changed |= SaveValue(PEV_START_WAIT_TIME,
                        p.start_constraints.pev_start_wait_time);
   changed |= SaveValue(PEV_START_WINDOW,
                        p.start_constraints.pev_start_window);
 
-  if (changed)
+  if (changed) {
     ordered_task->SetOrderedTaskSettings(p);
+  }
 
   *task_changed |= changed;
-}
-
-void
-TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
-{
-  OrderedTaskSettings p = ordered_task->GetOrderedTaskSettings();
-  bool newvalue = df.GetValue();
-  if (newvalue != p.finish_constraints.fai_finish) {
-    p.finish_constraints.fai_finish = p.start_constraints.fai_finish
-      = newvalue;
-    ordered_task->SetOrderedTaskSettings(p);
-
-    *task_changed = true;
-    RefreshView();
-  }
 }
 
 void
@@ -180,17 +216,18 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
     ReadValues();
     ordered_task->SetFactory(newtype);
     *task_changed =true;
-    RefreshView();
   }
 }
 
 void
 TaskPropertiesPanel::OnModified(DataField &df) noexcept
 {
-  if (IsDataField(FAI_FINISH_HEIGHT, df))
-    OnFAIFinishHeightChange((DataFieldBoolean &)df);
-  else if (IsDataField(TASK_TYPE, df))
+  if (IsDataField(TASK_TYPE, df))
     OnTaskTypeChange((DataFieldEnum &)df);
+  else if (IsDataField(START_MODE, df))
+    ReadValues();
+
+  RefreshView();
 }
 
 void
@@ -209,6 +246,12 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       dfe->SetValue(factory_types[i]);
   }
   Add(_("Task type"), _("Sets the behaviour for the current task."), dfe);
+
+  AddEnum(_("Start mode"),
+          _("Choose how the start is configured."),
+          start_mode_list,
+          (unsigned)GetStartMode(ordered_task->GetOrderedTaskSettings()),
+          this);
 
   AddDuration(_("AAT min. time"), _("Minimum AAT task time in minutes."),
               {}, hours{10}, minutes{1}, minutes{3});
@@ -258,17 +301,13 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           altitude_reference_list);
 
   AddDuration(_("PEV start wait time"),
-              _("Wait time in minutes after Pilot Event and before start gate opens. "
+              _("Wait time in minutes after Pilot Event (PEV) and before start gate opens. "
                 "0 means start opens immediately."),
-              {}, minutes{30}, minutes{1}, {});
+              {}, minutes{10}, minutes{1}, {});
   AddDuration(_("PEV start window"),
-              _("Number of minutes the start remains open after Pilot Event and PEV wait time. "
+              _("Number of minutes the start remains open after Pilot Event (PEV) and PEV wait time. "
                 "0 means start will never close after it opens."),
-              {}, minutes{30}, minutes{1}, {});
-
-  AddBoolean(_("FAI start / finish rules"),
-             _("If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height."),
-             false, this);
+              minutes{0}, minutes{10}, minutes{1}, {});
 }
 
 void
