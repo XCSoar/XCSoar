@@ -327,10 +327,9 @@ public:
   }
 
   bool HasFocus() const noexcept override {
-    return (task_manager != nullptr &&
-            (goto_button.HasFocus() ||
-             alternate1_button.HasFocus() ||
-             alternate2_button.HasFocus())) ||
+    return goto_button.HasFocus() ||
+           alternate1_button.HasFocus() ||
+           alternate2_button.HasFocus() ||
       (!images.empty() && (magnify_button.HasFocus() ||
                            shrink_button.HasFocus())) ||
        previous_button.HasFocus() || next_button.HasFocus() ||
@@ -390,30 +389,17 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 
     std::tie(previous_button, next_button) = buttons.CutBottomSafe(button_height).VerticalSplit();
   } else {
-    auto buttons = main.CutBottomSafe(3 * button_height);
+    auto buttons = main.CutBottomSafe(2 * button_height);
 
-    auto alternate_column = buttons;
-    alternate_column.right = alternate_column.left + buttons.GetWidth() / 3;
+    auto top_row = buttons.CutTopSafe(button_height);
+    goto_button = top_row.CutLeftSafe(top_row.GetWidth() / 3);
+    alternate1_button = top_row.CutLeftSafe(top_row.GetWidth() / 2);
+    alternate2_button = top_row;
 
-    goto_button = alternate_column.CutTopSafe(button_height);
-    alternate1_button = alternate_column.CutTopSafe(button_height);
-    alternate2_button = alternate_column.CutTopSafe(button_height);
-
-    auto navigation = buttons.CutBottomSafe(button_height);
-    navigation.left = alternate_column.right;
-
-    const unsigned first_third =
-      (2 * navigation.left + navigation.right) / 3;
-    const unsigned second_third =
-      (navigation.left + 2 * navigation.right) / 3;
-
-    previous_button = navigation;
-    previous_button.right = first_third;
-    next_button = navigation;
-    next_button.left = first_third;
-    next_button.right = second_third;
-    close_button = navigation;
-    close_button.left = second_third;
+    auto bottom_row = buttons;
+    previous_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 3);
+    next_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 2);
+    close_button = bottom_row;
 
     const unsigned padding = ::Layout::GetTextPadding();
     shrink_button.left = main.left + padding;
