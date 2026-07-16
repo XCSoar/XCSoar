@@ -29,11 +29,13 @@
 #include "ui/canvas/Color.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
+#include "Form/Frame.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/Edit.hpp"
 #include "Interface.hpp"
 #include "PageSettings.hpp"
 #include "Repository/FileType.hpp"
+#include "UISettings.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "DataGlobals.hpp"
@@ -51,6 +53,7 @@
 
 #include <fmt/format.h>
 #include <algorithm>
+#include <span>
 
 class RaspColorbarWindow : public PaintWindow {
   const DialogLook &look;
@@ -81,7 +84,9 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
     return;
   }
 
-  const bool use_alpha = style->HasAlpha();
+  // Gate alpha on the backend's per-pixel source-alpha capability, matching
+  // the map renderer, so the preview never diverges from the actual map.
+  const bool use_alpha = style->HasAlpha() && HaveBitmapSourceAlpha();
   const auto &map = use_alpha
     ? style->color_map_alpha : style->color_map;
   const float min_v = map.points[0].value;
@@ -121,6 +126,9 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
   const int bar_bottom = rc.bottom - font_h - Layout::Scale(2);
   const unsigned width = rc.right - rc.left;
   const unsigned bar_height = std::max(0, bar_bottom - rc.top);
+
+  canvas.DrawFilledRectangle(PixelRect{rc.left, bar_bottom, rc.right, rc.bottom},
+                             look.background_color);
 
   if (width == 0 || bar_height == 0)
     return;
@@ -217,13 +225,14 @@ class RASPSettingsPanel final
 #ifdef HAVE_DOWNLOAD_MANAGER
     AUTO_UPDATE,
     UPDATE_BUTTON,
-    SPACER_AFTER_UPDATE,
 #endif
-    LAYER,
-    COLORBAR,
-    CONTOURS,
     OPACITY,
+    CONTOURS,
+    SPACER,
+    PAGE_HEADER,
+    LAYER,
     TIME,
+    COLORBAR,
     APPLY_TO_PAGE,
     ADD_PAGE,
     SPACER_AFTER_ADD,
@@ -492,28 +501,16 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   update_button = AddButton(_("Update"), [this]{ UpdateClicked(); });
   SyncUpdateButtonEnabled();
-  AddSpacer();
 #endif
 
-  auto *layer = AddEnum(_("Layer"),
-                        _("RASP weather layer for the current map page. "
-                          "Use Apply to page to commit changes."));
-  layer->GetDataField()->SetOnModified([this]{
-    OnLayerModified();
-  });
+  const auto &dialog_look = UIGlobals::GetDialogLook();
 
-  {
-    const auto &dialog_look = UIGlobals::GetDialogLook();
-    auto colorbar =
-      std::make_unique<RaspColorbarWindow>(dialog_look);
-
-    WindowStyle style;
-    style.Border();
-    colorbar->Create((ContainerWindow &)GetWindow(),
-                     {0, 0, Layout::Scale(100), Layout::Scale(40)},
-                     style);
-    Add(std::move(colorbar));
-  }
+  rasp_layer_opacity = CommonInterface::GetMapSettings().rasp_layer_opacity;
+  AddInteger(_("Overlay opacity"),
+             _("Sets the opacity of the RASP weather overlay on the map.  "
+               "0% is fully transparent, 100% is fully opaque."),
+             "%d %%", "%d", 0, 100, 10,
+             rasp_layer_opacity);
 
   {
     static constexpr StaticEnumChoice contour_density_list[] = {
@@ -537,20 +534,70 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
     });
   }
 
-  rasp_layer_opacity = CommonInterface::GetMapSettings().rasp_layer_opacity;
-  AddInteger(_("Overlay opacity"),
-             _("Sets the opacity of the RASP weather overlay on the map.  "
-               "0% is fully transparent, 100% is fully opaque."),
-             "%d %%", "%d", 0, 100, 10,
-             rasp_layer_opacity);
+  /* Everything below relates to the currently displayed page, not the
+     global RASP file/transparency/contour settings above.  Separate it
+     with an empty line (an empty WndFrame) and a plain-text header (a
+     WndFrame, so the header text is not enclosed in an input-field
+     box). */
+  {
+    auto spacer = std::make_unique<WndFrame>(dialog_look);
+    spacer->Create((ContainerWindow &)GetWindow(),
+                   {0, 0, Layout::Scale(100),
+                    (int)Layout::GetMinimumControlHeight()});
+    Add(std::move(spacer));
+  }
 
-  UpdateColorbar();
+  {
+    const auto &ui_state = CommonInterface::GetUIState();
+    const auto &ui_settings = CommonInterface::GetUISettings();
+    const unsigned page_index = ui_state.pages.current_index;
+    const PageLayout &page = ui_settings.pages.pages[page_index];
+
+    /* Pass rasp=nullptr so the title omits the selected RASP field name;
+       that field is configured right here in this dialog. */
+    StaticString<64> title_buffer;
+    const char *title =
+      page.MakeTitle(ui_settings.info_boxes,
+                     std::span{title_buffer.data(), title_buffer.capacity()});
+
+    StaticString<128> header;
+    header.Format("%s %u - %s:", _("Page"), page_index + 1, title);
+
+    auto header_frame = std::make_unique<WndFrame>(dialog_look);
+    header_frame->Create((ContainerWindow &)GetWindow(),
+                         {0, 0, Layout::Scale(100),
+                          (int)Layout::GetMinimumControlHeight()});
+    header_frame->SetFont(dialog_look.bold_font);
+    header_frame->SetText(header.c_str());
+    Add(std::move(header_frame));
+  }
+
+  auto *layer = AddEnum(_("Layer"),
+                        _("RASP weather layer for the current map page. "
+                          "Use Apply to page to commit changes."));
+  layer->GetDataField()->SetOnModified([this]{
+    OnLayerModified();
+  });
 
   auto *time = AddEnum(_("Time"),
                        _("Forecast time for the current map page. "
                          "Opens the same picker as the weather controls "
                          "(Auto, Now, or a fixed quarter-hour slot)."));
   time->SetEditCallback(EditTimeCallback);
+
+  {
+    auto colorbar =
+      std::make_unique<RaspColorbarWindow>(dialog_look);
+
+    WindowStyle style;
+    style.Border();
+    colorbar->Create((ContainerWindow &)GetWindow(),
+                     {0, 0, Layout::Scale(100), Layout::Scale(40)},
+                     style);
+    Add(std::move(colorbar));
+  }
+
+  UpdateColorbar();
 
   apply_to_page_button = AddButton(_("Apply to page"), [this]{
     ApplyToPageClicked();
@@ -573,6 +620,7 @@ RASPSettingsPanel::Show(const PixelRect &rc) noexcept
   RowFormWidget::Show(rc);
   RefreshPageSection();
   SyncUpdateButtonEnabled();
+}
 
 bool
 RASPSettingsPanel::Save(bool &_changed) noexcept
