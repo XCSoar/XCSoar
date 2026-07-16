@@ -11,6 +11,7 @@
 #include <string>
 
 struct DialogLook;
+class Font;
 
 class WndFrame : public PaintWindow {
   const DialogLook &look;
@@ -18,6 +19,12 @@ class WndFrame : public PaintWindow {
   Color text_color;
 
   std::optional<Color> background_color;
+
+  /**
+   * The font used to render the text.  Defaults to the dialog look's
+   * regular text font; override with SetFont() (e.g. for a bold heading).
+   */
+  const Font *font;
 
   TextRenderer text_renderer;
 
@@ -55,6 +62,12 @@ public:
    */
   void SetBackgroundColor(const Color &color) noexcept {
     background_color = color;
+  }
+
+  void SetFont(const Font &_font) noexcept {
+    font = &_font;
+    text_renderer.InvalidateLayout();
+    Invalidate();
   }
 
   void SetTopSeparator(bool value = true) noexcept {

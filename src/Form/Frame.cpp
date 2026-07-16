@@ -10,7 +10,8 @@
 
 WndFrame::WndFrame(const DialogLook &_look) noexcept
   :look(_look),
-   text_color(look.text_color)
+   text_color(look.text_color),
+   font(&look.text_font)
 {
 }
 
@@ -18,7 +19,8 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    PixelRect rc,
                    const WindowStyle style) noexcept
   :look(_look),
-   text_color(look.text_color)
+   text_color(look.text_color),
+   font(&look.text_font)
 {
   Create(parent, rc, style);
 }
@@ -53,7 +55,7 @@ WndFrame::GetTextHeight() const noexcept
   rc.Grow(-padding);
 
   AnyCanvas canvas;
-  canvas.Select(look.text_font);
+  canvas.Select(*font);
 
   return text_renderer.GetHeight(canvas, rc, text.c_str());
 }
@@ -77,7 +79,7 @@ WndFrame::OnPaint(Canvas &canvas) noexcept
   canvas.SetTextColor(text_color);
   canvas.SetBackgroundTransparent();
 
-  canvas.Select(look.text_font);
+  canvas.Select(*font);
 
   PixelRect rc = GetClientRect();
   const int padding = Layout::GetTextPadding();
