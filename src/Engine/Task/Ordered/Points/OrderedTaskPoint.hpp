@@ -8,6 +8,7 @@
 #include "Task/Points/ScoredTaskPoint.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
+#include "time/RoughTime.hpp"
 
 #include <memory>
 
@@ -105,6 +106,7 @@ public:
 
   virtual void SetTaskBehaviour([[maybe_unused]] const TaskBehaviour &tb) noexcept {}
   virtual void SetOrderedTaskSettings([[maybe_unused]] const OrderedTaskSettings &otb) noexcept {}
+  virtual void SetPilotEventWindowSnapshot([[maybe_unused]] const TimeSpan &span) noexcept {}
 
   /**
    * Set previous/next task points.

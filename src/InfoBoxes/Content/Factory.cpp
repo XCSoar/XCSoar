@@ -926,7 +926,7 @@ static constexpr MetaData meta_data[] = {
     N_("Start open"),
     N_("Signed countdown until the start gate opens or closes (now). "
        "Value colour and secondary line reflect gate state at the current "
-       "time: Waiting (blue), Open (green), Closed (red). PEV window overrides "
+       "time: Waiting (blue), Open (green), Closed (red). Pilot Event (PEV) window overrides "
        "task gate when set."),
     IBFHelper<InfoBoxContentStartOpen>::Create,
   },

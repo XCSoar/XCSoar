@@ -50,7 +50,7 @@ public:
    *
    * @return True if observation zone has been entered
    */
-  bool HasEntered() const noexcept {
+  virtual bool HasEntered() const noexcept {
     return entered_state.HasTime();
   }
 
@@ -59,7 +59,7 @@ public:
    *
    * @return State at entry, or null if never entered
    */
-  const AircraftState &GetEnteredState() const noexcept {
+  virtual const AircraftState &GetEnteredState() const noexcept {
     return entered_state;
   }
 
@@ -70,15 +70,15 @@ public:
    *
    * @return True if aircraft has exited the OZ
    */
-  bool HasExited() const noexcept {
+  virtual bool HasExited() const noexcept {
     return exited_state.HasTime();
   }
 
-  const AircraftState &GetExitedState() const noexcept {
+  virtual const AircraftState &GetExitedState() const noexcept {
     return exited_state;
   }
 
-  const AircraftState &GetScoredState() const noexcept {
+  virtual const AircraftState &GetScoredState() const noexcept {
     return HasExited() && ScoreLastExit()
       ? exited_state
       : entered_state;
@@ -111,14 +111,14 @@ public:
 
   /** Retrieve location to be used for the scored task. */
   [[gnu::pure]]
-  const GeoPoint &GetLocationScored() const noexcept;
+  virtual const GeoPoint &GetLocationScored() const noexcept;
 
   /**
    * Retrieve location to be used for the task already travelled.
    * This is always the scored best location for prior-active task points.
    */
   [[gnu::pure]]
-  const GeoPoint &GetLocationTravelled() const noexcept {
+  virtual const GeoPoint &GetLocationTravelled() const noexcept {
     return GetLocationMin();
   }
 

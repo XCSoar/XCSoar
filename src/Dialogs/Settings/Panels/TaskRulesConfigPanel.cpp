@@ -106,14 +106,14 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(spacer_3);
 
   AddDuration(_("PEV start wait time"),
-              _("Wait time in minutes after Pilot Event and before start gate opens. "
+              _("Wait time in minutes after Pilot Event (PEV) and before start gate opens. "
                 "0 means start opens immediately."),
               {}, minutes{30}, minutes{1},
               task_behaviour.ordered_defaults.start_constraints.pev_start_wait_time);
   SetExpertRow(PEVStartWaitTime);
 
   AddDuration(_("PEV start window"),
-              _("Number of minutes start remains open after Pilot Event and PEV wait time."
+              _("Number of minutes start remains open after Pilot Event (PEV) and PEV wait time."
                 "0 means start will never close after it opens."),
               {}, minutes{30}, minutes{1},
               task_behaviour.ordered_defaults.start_constraints.pev_start_window);

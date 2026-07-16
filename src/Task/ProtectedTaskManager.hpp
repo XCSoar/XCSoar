@@ -13,6 +13,7 @@
 struct AGeoPoint;
 struct TaskBehaviour;
 struct OrderedTaskSettings;
+struct AircraftState;
 class Path;
 class GlidePolar;
 class ProtectedRoutePlanner;
@@ -53,7 +54,8 @@ public:
   [[gnu::pure]]
   const OrderedTaskSettings GetOrderedTaskSettings() const noexcept;
 
-  void SetPevStartTimeSpan(const TimeSpan &open_time_span) noexcept;
+  void SetPilotEventStartTimeSpan(const TimeSpan &open_time_span) noexcept;
+  bool StartPolish(const AircraftState &state) noexcept;
 
   [[gnu::pure]]
   WaypointPtr GetActiveWaypoint() const noexcept;

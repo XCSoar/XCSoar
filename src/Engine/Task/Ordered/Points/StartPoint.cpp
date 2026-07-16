@@ -41,11 +41,124 @@ StartPoint::SetOrderedTaskSettings(const OrderedTaskSettings &settings) noexcept
 }
 
 void
+StartPoint::SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept
+{
+  pilot_event_window_snapshot = span;
+}
+
+void
+StartPoint::Reset() noexcept
+{
+  ScoredTaskPoint::Reset();
+  pilot_event_window_snapshot = TimeSpan::Invalid();
+  polish_start_state.Reset();
+}
+
+bool
+StartPoint::StartPolish(const AircraftState &state) noexcept
+{
+  if (!IsPolishStart() || polish_start_state.HasTime() ||
+      !state.HasTime() || !state.location.IsValid() || !state.flying)
+    return false;
+
+  if (!IsInSector(state) ||
+      !constraints.CheckSpeed(state.ground_speed, &margins))
+    return false;
+
+  polish_start_state = state;
+  return true;
+}
+
+void
 StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next) noexcept
 {
   assert(_prev==NULL);
   // should not ever have an inbound leg
   OrderedTaskPoint::SetNeighbours(_prev, _next);
+}
+
+bool
+StartPoint::HasEntered() const noexcept
+{
+  return polish_start_state.HasTime() || ScoredTaskPoint::HasEntered();
+}
+
+const AircraftState &
+StartPoint::GetEnteredState() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state
+    : ScoredTaskPoint::GetEnteredState();
+}
+
+bool
+StartPoint::HasExited() const noexcept
+{
+  return polish_start_state.HasTime() || ScoredTaskPoint::HasExited();
+}
+
+const AircraftState &
+StartPoint::GetExitedState() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state
+    : ScoredTaskPoint::GetExitedState();
+}
+
+const AircraftState &
+StartPoint::GetScoredState() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state
+    : ScoredTaskPoint::GetScoredState();
+}
+
+const GeoPoint &
+StartPoint::GetLocationRemaining() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state.location
+    : ScoredTaskPoint::GetLocationRemaining();
+}
+
+const GeoPoint &
+StartPoint::GetLocationScored() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state.location
+    : ScoredTaskPoint::GetLocationScored();
+}
+
+const GeoPoint &
+StartPoint::GetLocationTravelled() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state.location
+    : ScoredTaskPoint::GetLocationTravelled();
+}
+
+const GeoPoint &
+StartPoint::GetLocationMaxTotal() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state.location
+    : SampledTaskPoint::GetLocationMaxTotal();
+}
+
+const GeoPoint &
+StartPoint::GetLocationMax() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state.location
+    : SampledTaskPoint::GetLocationMax();
+}
+
+const GeoPoint &
+StartPoint::GetLocationMin() const noexcept
+{
+  return polish_start_state.HasTime()
+    ? polish_start_state.location
+    : SampledTaskPoint::GetLocationMin();
 }
 
 
@@ -92,11 +205,22 @@ bool
 StartPoint::CheckExitTransition(const AircraftState &ref_now,
                                 const AircraftState &ref_last) const noexcept
 {
-  if (!constraints.open_time_span.HasBegun(FineTime{ref_last.time}))
+  if (constraints.start_mode == StartMode::POLISH)
+    return false;
+
+  const TimeSpan *start_window = &constraints.open_time_span;
+  if (constraints.start_mode == StartMode::PEV) {
+    if (!pilot_event_window_snapshot.IsDefined())
+      return false;
+
+    start_window = &pilot_event_window_snapshot;
+  }
+
+  if (!start_window->HasBegun(FineTime{ref_last.time}))
     /* the start gate is not yet open when we left the OZ */
     return false;
 
-  if (constraints.open_time_span.HasEnded(FineTime{ref_now.time}))
+  if (start_window->HasEnded(FineTime{ref_now.time}))
     /* the start gate was already closed when we left the OZ */
     return false;
 

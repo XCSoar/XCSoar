@@ -27,13 +27,13 @@ public:
   TimeSpan start_open_time_span;
 
   /**
-   * The start window resulting from the last Pilot Event declared, based on
+   * The start window resulting from the last Pilot Event (PEV) declared, based on
    * the task settings #StartConstraints::pev_start_wait_time and
    * #StartConstraints::pev_start_window.
-   * If defined, it defines a soft start window, which is informative
-   * to the pilot only and will not be enforced in any way.
+   * If defined, it is used by the task engine for start timing when the
+   * selected start mode enables PEV timing, and it is also exposed to the UI.
    */
-  TimeSpan pev_start_time_span;
+  TimeSpan pilot_event_start_time_span;
 
   /** Whether the task found landable reachable waypoints (aliases abort) */
   bool landable_reachable;

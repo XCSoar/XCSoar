@@ -1003,11 +1003,13 @@ UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   const TimeSpan &task_open_span = common_stats.start_open_time_span;
-  const TimeSpan &pev_open_span = common_stats.pev_start_time_span;
+  const TimeSpan &pilot_event_open_span =
+    common_stats.pilot_event_start_time_span;
 
-  // give priority to PEV window
-  const bool have_pev_start = pev_open_span.IsDefined();
-  const TimeSpan &eff_start_window = have_pev_start ? pev_open_span : task_open_span;
+  // give priority to the Pilot Event (PEV) window
+  const bool have_pilot_event_start = pilot_event_open_span.IsDefined();
+  const TimeSpan &eff_start_window =
+    have_pilot_event_start ? pilot_event_open_span : task_open_span;
 
   /* reset color that may have been set by a previous call */
   data.SetValueColor(0);
