@@ -3,6 +3,7 @@
 
 #include "SkySightRequest.hpp"
 #include "SkySightFileDecoder.hpp"
+#include "SkySightLimits.hpp"
 #include "SkySightAPI.hpp"
 #include "SkySightURL.hpp"
 #include "Version.hpp"
@@ -24,11 +25,55 @@
 #include <boost/json.hpp>
 
 #include <algorithm>
+#include <cstddef>
 #include <cstring>
 #include <cstdlib>
 #include <ctime>
+#include <limits>
 #include <span>
 #include <utility>
+
+namespace {
+
+class LimitedOutputStream final : public OutputStream {
+  OutputStream &destination;
+  std::size_t remaining;
+
+public:
+  LimitedOutputStream(OutputStream &_destination, std::size_t maximum) noexcept
+    :destination(_destination), remaining(maximum) {}
+
+  void Write(std::span<const std::byte> source) override {
+    if (source.size() > remaining)
+      throw SkySight::ResourceLimitError(
+        "SkySight response exceeds its size limit");
+
+    destination.Write(source);
+    remaining -= source.size();
+  }
+};
+
+void
+ConfigureSkySightTransfer(CurlEasy &easy, long timeout_seconds)
+{
+  easy.SetTimeout(timeout_seconds);
+  easy.SetOption(CURLOPT_LOW_SPEED_LIMIT, 128L);
+  easy.SetOption(CURLOPT_LOW_SPEED_TIME, 60L);
+}
+
+[[nodiscard]] bool
+IsResourceLimitError(std::exception_ptr error) noexcept
+{
+  try {
+    std::rethrow_exception(error);
+  } catch (const SkySight::ResourceLimitError &) {
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+} // namespace
 
 class HttpStatusError final : public std::runtime_error {
 public:
@@ -68,6 +113,7 @@ LoginTask(CurlGlobal &curl, std::string email, std::string password)
   const auto url = SkySightUrl::Api("auth");
   CurlEasy easy{url.c_str()};
   Curl::Setup(easy);
+  ConfigureSkySightTransfer(easy, 60);
 
   CurlSlist headers;
   headers.Append("X-API-Key: XCSoar");
@@ -89,7 +135,10 @@ LoginTask(CurlGlobal &curl, std::string email, std::string password)
   easy.SetFailOnError(false);
 
   StringOutputStream body_stream;
-  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), body_stream);
+  LimitedOutputStream limited_body{body_stream,
+                                   SkySight::MAX_JSON_RESPONSE_BYTES};
+  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy),
+                                                       limited_body);
   auto body = std::move(body_stream).GetValue();
   if (response.status != 200 && response.status != 201)
     throw HttpStatusError(response.status);
@@ -102,6 +151,7 @@ JsonTask(CurlGlobal &curl, std::string url, std::string api_key)
 {
   CurlEasy easy{url.c_str()};
   Curl::Setup(easy);
+  ConfigureSkySightTransfer(easy, 60);
   easy.SetFailOnError(false);
 
   CurlSlist headers;
@@ -112,7 +162,10 @@ JsonTask(CurlGlobal &curl, std::string url, std::string api_key)
   }
 
   StringOutputStream body_stream;
-  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), body_stream);
+  LimitedOutputStream limited_body{body_stream,
+                                   SkySight::MAX_JSON_RESPONSE_BYTES};
+  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy),
+                                                       limited_body);
   auto body = std::move(body_stream).GetValue();
   if (response.status != 200 && response.status != 201)
     throw HttpStatusError(response.status);
@@ -122,12 +175,15 @@ JsonTask(CurlGlobal &curl, std::string url, std::string api_key)
 
 static Co::Task<AllocatedPath>
 DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
-                 std::string api_key)
+                 std::string api_key, std::size_t maximum_size,
+                 long timeout_seconds)
 {
   FileOutputStream file(path);
+  LimitedOutputStream limited_file{file, maximum_size};
 
   CurlEasy easy{url.c_str()};
   Curl::Setup(easy);
+  ConfigureSkySightTransfer(easy, timeout_seconds);
   easy.SetFailOnError(false);
 
   CurlSlist headers;
@@ -137,7 +193,8 @@ DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
     easy.SetRequestHeaders(headers.Get());
   }
 
-  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), file);
+  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy),
+                                                       limited_file);
   if (response.status != 200 && response.status != 201)
     throw HttpStatusError(response.status);
 
@@ -186,27 +243,23 @@ SkySightRequest::CancelAll() noexcept
   file_jobs.clear();
   pending_jobs.clear();
   retry_after.clear();
+  tile_failures.clear();
 }
 
 void
 SkySightRequest::CancelTileDownloads() noexcept
 {
-  for (const auto &job : pending_jobs)
-    if (job.kind == FileJob::Kind::Generic)
-      retry_after.erase(job.key);
-
   std::erase_if(pending_jobs, [](const auto &job) {
-    return job.kind == FileJob::Kind::Generic;
+    return job.kind == FileJob::Kind::Tile;
   });
 
   for (auto i = file_jobs.begin(); i != file_jobs.end();) {
-    if (i->second->kind != FileJob::Kind::Generic) {
+    if (i->second->kind != FileJob::Kind::Tile) {
       ++i;
       continue;
     }
 
     i->second->function.Cancel();
-    retry_after.erase(i->first);
     i = file_jobs.erase(i);
   }
 
@@ -222,6 +275,7 @@ SkySightRequest::Configure(std::string_view new_email, std::string_view new_pass
   api_key.clear();
   valid_until = 0;
   next_login_request = std::chrono::steady_clock::time_point::min();
+  next_file_request = std::chrono::steady_clock::time_point::min();
   login_attempt_window_start = std::chrono::steady_clock::time_point::min();
   login_attempts_in_window = 0;
   requests_suspended = false;
@@ -253,6 +307,68 @@ SkySightRequest::IsQueued(std::string_view key) const noexcept
                      [key](const auto &job) {
                        return job.key == key;
                      });
+}
+
+bool
+SkySightRequest::IsTileDownloadAllowed(std::string_view key,
+                                       std::string_view layer_id,
+                                       time_t timestamp, time_t now) noexcept
+{
+  for (auto i = tile_failures.begin(); i != tile_failures.end();) {
+    if (i->second.layer_id == layer_id &&
+        i->second.timestamp != timestamp)
+      i = tile_failures.erase(i);
+    else
+      ++i;
+  }
+
+  if (const auto failure = tile_failures.find(key);
+      failure != tile_failures.end())
+    return !SkySight::ShouldSuppressTile(failure->second.failures) &&
+      now >= failure->second.retry_at;
+
+  const auto generation_failures = std::count_if(
+    tile_failures.begin(), tile_failures.end(),
+    [layer_id, timestamp](const auto &entry) {
+      return entry.second.layer_id == layer_id &&
+        entry.second.timestamp == timestamp;
+    });
+  return std::size_t(generation_failures) <
+    SkySight::MAX_TILE_FAILURES_PER_GENERATION;
+}
+
+void
+SkySightRequest::RecordTileFailure(const FileJob &job,
+                                   const std::string &key,
+                                   time_t now, bool terminal) noexcept
+{
+  try {
+    auto [i, inserted] = tile_failures.try_emplace(key);
+    auto &failure = i->second;
+    if (inserted || failure.layer_id != job.layer_id ||
+        failure.timestamp != job.forecast_time) {
+      failure = TileFailure{
+        job.layer_id,
+        job.forecast_time,
+      };
+    }
+
+    const auto previous_failures = failure.failures;
+    failure.failures = terminal
+      ? SkySight::MAX_TILE_FAILURES
+      : std::min(failure.failures + 1, SkySight::MAX_TILE_FAILURES);
+    failure.retry_at = now + SkySight::GetTileRetryDelay(failure.failures);
+
+    if (!SkySight::ShouldSuppressTile(previous_failures) &&
+        SkySight::ShouldSuppressTile(failure.failures))
+      LogFmt("SkySight tile download retry limit reached for layer '{}' "
+             "(timestamp={}); suppressing this tile until the timestamp changes",
+             job.layer_id, (long long)job.forecast_time);
+  } catch (...) {
+    LogError(std::current_exception(),
+             "SkySight tile failure tracking failed");
+    SuspendRequests("tile failure tracking failed");
+  }
 }
 
 bool
@@ -310,6 +426,9 @@ SkySightRequest::PumpQueue()
     SetThrottleUntil(0);
 
   while (file_jobs.size() < MAX_ACTIVE_DOWNLOADS && !pending_jobs.empty()) {
+    if (std::chrono::steady_clock::now() < next_file_request)
+      break;
+
     const auto next = std::find_if(pending_jobs.begin(), pending_jobs.end(),
                                    [this, now](const auto &job) {
                                      return now >= job.ready_at &&
@@ -339,16 +458,28 @@ SkySightRequest::PumpQueue()
     job_ptr->attempts = job.attempts;
 
     file_jobs.emplace(key, std::move(active_job));
-    job_ptr->function.Start(
-      DownloadFileTask(curl, job_ptr->url,
-                       AllocatedPath(job_ptr->path.c_str()),
-                       job.requires_auth ? api_key : std::string{}),
-      [this, key](AllocatedPath) {
-        OnFileSuccess(key);
-      },
-      [this, key](std::exception_ptr error) {
-        OnFileError(key, std::move(error));
-      });
+    const bool tile_download = job_ptr->kind == FileJob::Kind::Tile;
+    next_file_request = std::chrono::steady_clock::now() +
+      FILE_REQUEST_INTERVAL;
+    try {
+      job_ptr->function.Start(
+        DownloadFileTask(curl, job_ptr->url,
+                         AllocatedPath(job_ptr->path.c_str()),
+                         job.requires_auth ? api_key : std::string{},
+                         tile_download
+                           ? SkySight::MAX_TILE_DOWNLOAD_BYTES
+                           : SkySight::MAX_FORECAST_DOWNLOAD_BYTES,
+                         tile_download ? 60 : 10 * 60),
+        [this, key](AllocatedPath) {
+          OnFileSuccess(key);
+        },
+        [this, key](std::exception_ptr error) {
+          OnFileError(key, std::move(error));
+        });
+    } catch (...) {
+      file_jobs.erase(key);
+      throw;
+    }
   }
 }
 
@@ -461,6 +592,10 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
 
   try {
     std::rethrow_exception(error);
+  } catch (const SkySight::ResourceLimitError &) {
+    SuspendRequests("authentication response exceeded its size limit");
+    LogError(error, "SkySight login response exceeded its size limit");
+    return;
   } catch (const HttpStatusError &http_error) {
     if (http_error.status == 429) {
       SuspendRequests("server returned HTTP 429 during authentication");
@@ -474,9 +609,11 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
 }
 
 void
-SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires_auth)
+SkySightRequest::DownloadTile(std::string_view layer_id, time_t timestamp,
+                              std::string_view url, Path filename,
+                              bool requires_auth)
 {
-  if (requests_suspended)
+  if (requests_suspended || layer_id.empty() || timestamp <= 0)
     return;
 
   PumpQueue();
@@ -489,15 +626,13 @@ SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires
   if (now < throttle_until)
     return;
 
-  if (auto retry = retry_after.find(key); retry != retry_after.end()) {
-    if (now < retry->second)
-      return;
+  if (!IsTileDownloadAllowed(key, layer_id, timestamp, now))
+    return;
 
-    retry_after.erase(retry);
-  }
-
-  pending_jobs.emplace_back(key, std::string{url},
-                            AllocatedPath(filename.c_str()), requires_auth);
+  pending_jobs.emplace_back(FileJob::Kind::Tile,
+                            key, std::string{url},
+                            AllocatedPath(filename.c_str()), requires_auth,
+                            std::string{layer_id}, timestamp);
   PumpQueue();
 }
 
@@ -527,24 +662,27 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
     return DownloadDatafileResult::Available;
   }
 
+  if (auto retry = retry_after.find(key); retry != retry_after.end()) {
+    if (std::time(nullptr) < retry->second)
+      return DownloadDatafileResult::Duplicate;
+
+    retry_after.erase(retry);
+  }
+
   if (File::Exists(filename)) {
-    if (auto retry = retry_after.find(key); retry != retry_after.end()) {
-      if (std::time(nullptr) < retry->second)
-        return DownloadDatafileResult::Duplicate;
-
-      retry_after.erase(retry);
-    }
-
     try {
       auto prepared = SkySightFileDecoder::Prepare(filename);
       api.OnDatafileDownloaded(layer_id, forecast_time,
                                std::move(prepared));
       return DownloadDatafileResult::Available;
     } catch (...) {
+      const auto error = std::current_exception();
       LogForecastPreparationError(layer_id, forecast_time,
-                                  std::current_exception());
+                                  error);
       SkySightFileDecoder::InvalidateCache(filename);
-      retry_after[key] = std::time(nullptr) + ERROR_RETRY_SECONDS;
+      retry_after[key] = IsResourceLimitError(error)
+        ? std::numeric_limits<time_t>::max()
+        : std::time(nullptr) + ERROR_RETRY_SECONDS;
       api.OnDatafileError(layer_id, forecast_time, true);
       return DownloadDatafileResult::Available;
     }
@@ -561,6 +699,18 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
 
   PumpQueue();
   return DownloadDatafileResult::Queued;
+}
+
+void
+SkySightRequest::SuppressDatafile(Path filename) noexcept
+{
+  try {
+    retry_after[filename.c_str()] = std::numeric_limits<time_t>::max();
+  } catch (...) {
+    LogError(std::current_exception(),
+             "SkySight datafile suppression failed");
+    SuspendRequests("datafile suppression failed");
+  }
 }
 
 bool
@@ -607,6 +757,10 @@ SkySightRequest::OnRegionsError(std::exception_ptr error) noexcept
 
   try {
     std::rethrow_exception(error);
+  } catch (const SkySight::ResourceLimitError &) {
+    SuspendRequests("regions response exceeded its size limit");
+    LogError(error, "SkySight regions response exceeded its size limit");
+    return;
   } catch (const HttpStatusError &http_error) {
     if (HandleJsonRequestHttpStatus(http_error.status,
                                     "SkySight regions request failed"))
@@ -665,6 +819,10 @@ SkySightRequest::OnLayersError(std::exception_ptr error) noexcept
 
   try {
     std::rethrow_exception(error);
+  } catch (const SkySight::ResourceLimitError &) {
+    SuspendRequests("layers response exceeded its size limit");
+    LogError(error, "SkySight layers response exceeded its size limit");
+    return;
   } catch (const HttpStatusError &http_error) {
     if (HandleJsonRequestHttpStatus(http_error.status,
                                     "SkySight layers request failed"))
@@ -770,6 +928,11 @@ SkySightRequest::OnLastUpdatesError(std::exception_ptr error) noexcept
 
   try {
     std::rethrow_exception(error);
+  } catch (const SkySight::ResourceLimitError &) {
+    SuspendRequests("last-updated response exceeded its size limit");
+    LogError(error,
+             "SkySight last-updated response exceeded its size limit");
+    return;
   } catch (const HttpStatusError &http_error) {
     if (HandleJsonRequestHttpStatus(http_error.status,
                                     "SkySight last-updated request failed"))
@@ -798,6 +961,11 @@ SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
 
   try {
     std::rethrow_exception(error);
+  } catch (const SkySight::ResourceLimitError &) {
+    SuspendRequests("datafiles response exceeded its size limit");
+    LogError(error, "SkySight datafiles response exceeded its size limit");
+    api.OnDatafilesError(layer_id);
+    return;
   } catch (const HttpStatusError &http_error) {
     if (HandleJsonRequestHttpStatus(http_error.status,
                                     "SkySight datafiles request failed"))
@@ -843,7 +1011,8 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
 
     try {
       switch (i->second->kind) {
-      case FileJob::Kind::Generic:
+      case FileJob::Kind::Tile:
+        tile_failures.erase(key);
         api.OnDownloadComplete();
         break;
 
@@ -856,12 +1025,15 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
       }
       }
     } catch (...) {
+      const auto error = std::current_exception();
       if (i->second->kind == FileJob::Kind::ForecastData)
         SkySightFileDecoder::InvalidateCache(i->second->path);
 
-      retry_after[key] = std::time(nullptr) + ERROR_RETRY_SECONDS;
+      retry_after[key] = IsResourceLimitError(error)
+        ? std::numeric_limits<time_t>::max()
+        : std::time(nullptr) + ERROR_RETRY_SECONDS;
       LogForecastPreparationError(layer_id, forecast_time,
-                                  std::current_exception());
+                                  error);
       api.OnDatafileError(layer_id, forecast_time, true);
     }
   }
@@ -874,7 +1046,7 @@ SkySightRequest::OnFileError(const std::string &key,
 {
   std::string layer_id;
   time_t forecast_time = 0;
-  FileJob::Kind kind = FileJob::Kind::Generic;
+  FileJob::Kind kind = FileJob::Kind::Tile;
   FileJob *failed_job = nullptr;
   if (auto i = file_jobs.find(key); i != file_jobs.end()) {
     i->second->finished = true;
@@ -889,6 +1061,15 @@ SkySightRequest::OnFileError(const std::string &key,
 
   try {
     std::rethrow_exception(error);
+  } catch (const SkySight::ResourceLimitError &) {
+    if (failed_job != nullptr && kind == FileJob::Kind::Tile)
+      RecordTileFailure(*failed_job, key, std::time(nullptr), true);
+    else if (kind == FileJob::Kind::ForecastData)
+      retry_after[key] = std::numeric_limits<time_t>::max();
+
+    LogError(error, kind == FileJob::Kind::ForecastData
+             ? "SkySight forecast download exceeded a resource limit"
+             : "SkySight tile download exceeded a resource limit");
   } catch (const HttpStatusError &http_error) {
     if (http_error.status == 401 || http_error.status == 403) {
       api_key.clear();
@@ -902,6 +1083,10 @@ SkySightRequest::OnFileError(const std::string &key,
     if (http_error.status == 429) {
       SuspendRequests("server returned HTTP 429");
       LogThrottleNotice();
+    } else if (failed_job != nullptr && kind == FileJob::Kind::Tile) {
+      RecordTileFailure(*failed_job, key, std::time(nullptr));
+      LogDownloadHttpError(false, layer_id, forecast_time,
+                           http_error.status, key);
     } else if (failed_job != nullptr &&
                ShouldRetryHttpDownload(http_error.status,
                                        failed_job->attempts)) {
@@ -915,7 +1100,9 @@ SkySightRequest::OnFileError(const std::string &key,
     }
   } catch (...) {
     const auto retry_time = std::time(nullptr) + ERROR_RETRY_SECONDS;
-    if (failed_job != nullptr && failed_job->attempts < 2) {
+    if (failed_job != nullptr && kind == FileJob::Kind::Tile) {
+      RecordTileFailure(*failed_job, key, std::time(nullptr));
+    } else if (failed_job != nullptr && failed_job->attempts < 2) {
       terminal_forecast_error =
         !RequeueFileJob(*failed_job, retry_time);
     } else {

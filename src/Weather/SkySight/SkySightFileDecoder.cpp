@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SkySightFileDecoder.hpp"
+#include "SkySightLimits.hpp"
 
 #include "LogFile.hpp"
 #include "io/FileReader.hxx"
@@ -31,10 +32,25 @@
 
 namespace {
 
+using CancellationCheck = std::function<bool()>;
+
+void
+ThrowIfCancelled(const CancellationCheck &is_cancelled)
+{
+  if (is_cancelled && is_cancelled())
+    throw std::runtime_error("SkySight forecast decode cancelled");
+}
+
 [[nodiscard]] AllocatedPath
 CopyPath(Path path)
 {
   return AllocatedPath(path.c_str());
+}
+
+[[nodiscard]] AllocatedPath
+CopyOptionalPath(Path path)
+{
+  return path != nullptr ? CopyPath(path) : AllocatedPath{};
 }
 
 [[nodiscard]] bool
@@ -263,15 +279,28 @@ DeletePreparedPayloadArtifacts(Path path) noexcept
 }
 
 void
-CopyReader(Reader &reader, OutputStream &output)
+CopyReader(Reader &reader, OutputStream &output, std::size_t maximum_size,
+           const CancellationCheck &is_cancelled)
 {
+  const auto advertised_size = reader.GetSize();
+  if (advertised_size > maximum_size)
+    throw SkySight::ResourceLimitError(
+      "Expanded SkySight forecast exceeds its size limit");
+
+  std::size_t remaining = maximum_size;
+  std::array<std::byte, 64 * 1024> buffer;
   while (true) {
-    std::array<std::byte, 64 * 1024> buffer;
+    ThrowIfCancelled(is_cancelled);
     const auto nbytes = reader.Read(buffer);
     if (nbytes == 0)
       break;
 
+    if (nbytes > remaining)
+      throw SkySight::ResourceLimitError(
+        "Expanded SkySight forecast exceeds its size limit");
+
     output.Write(std::span<const std::byte>{buffer.data(), nbytes});
+    remaining -= nbytes;
   }
 }
 
@@ -295,33 +324,46 @@ GetGunzipOutputPath(Path compressed_path)
 }
 
 [[nodiscard]] AllocatedPath
-InflateForecastPayload(Path compressed_path)
+InflateForecastPayload(Path compressed_path,
+                       const CancellationCheck &is_cancelled)
 {
   const auto output_path = GetGunzipOutputPath(compressed_path);
   if (File::Exists(output_path) &&
       File::GetLastModification(output_path) >=
-        File::GetLastModification(compressed_path))
+        File::GetLastModification(compressed_path)) {
+    if (File::GetSize(output_path) > SkySight::MAX_EXPANDED_FORECAST_BYTES)
+      throw SkySight::ResourceLimitError(
+        "Expanded SkySight forecast exceeds its size limit");
+
     return AllocatedPath(output_path.c_str());
+  }
 
   FileReader file(compressed_path);
   GunzipReader gunzip(file);
   FileOutputStream output(output_path);
-  CopyReader(gunzip, output);
+  CopyReader(gunzip, output, SkySight::MAX_EXPANDED_FORECAST_BYTES,
+             is_cancelled);
   output.Commit();
   return AllocatedPath(output_path.c_str());
 }
 
 [[nodiscard]] AllocatedPath
-ExtractArchiveEntry(Path archive_path)
+ExtractArchiveEntry(Path archive_path, const CancellationCheck &is_cancelled)
 {
   ZipArchive archive(archive_path);
 
   std::string fallback_entry_name;
   std::string entry_name;
+  std::size_t entry_count = 0;
   while (true) {
+    ThrowIfCancelled(is_cancelled);
     entry_name = archive.NextName();
     if (entry_name.empty())
       break;
+
+    if (++entry_count > SkySight::MAX_FORECAST_ARCHIVE_ENTRIES)
+      throw SkySight::ResourceLimitError(
+        "SkySight forecast archive contains too many entries");
 
     if (entry_name.back() == '/')
       continue;
@@ -344,28 +386,26 @@ ExtractArchiveEntry(Path archive_path)
     ? archive_path.WithSuffix(suffix)
     : archive_path.WithSuffix(".payload");
 
-  if (File::Exists(output_path))
+  if (File::Exists(output_path)) {
+    if (File::GetSize(output_path) > SkySight::MAX_EXPANDED_FORECAST_BYTES)
+      throw SkySight::ResourceLimitError(
+        "Expanded SkySight forecast exceeds its size limit");
+
     return AllocatedPath(output_path.c_str());
+  }
 
   ZipReader reader(archive.get(), entry_name.c_str());
   FileOutputStream output(output_path);
-  std::array<std::byte, 64 * 1024> buffer;
-
-  while (true) {
-    const auto nbytes = reader.Read(buffer);
-    if (nbytes == 0)
-      break;
-
-    output.Write(std::span<const std::byte>{buffer.data(), nbytes});
-  }
-
+  CopyReader(reader, output, SkySight::MAX_EXPANDED_FORECAST_BYTES,
+             is_cancelled);
   output.Commit();
   return AllocatedPath(output_path.c_str());
 }
 
 [[nodiscard]] PreparedForecastPayload
-PrepareForecastPayload(Path path)
+PrepareForecastPayload(Path path, const CancellationCheck &is_cancelled)
 {
+  ThrowIfCancelled(is_cancelled);
   PreparedForecastPayload payload{
     AllocatedPath(path.c_str()),
     {},
@@ -373,12 +413,14 @@ PrepareForecastPayload(Path path)
   };
 
   if (payload.type == ForecastPayloadType::Zip) {
-    payload.source_path = ExtractArchiveEntry(payload.source_path);
+    payload.source_path = ExtractArchiveEntry(payload.source_path,
+                                              is_cancelled);
     payload.type = DetectForecastPayloadType(payload.source_path);
   }
 
   if (payload.type == ForecastPayloadType::Gzip) {
-    payload.source_path = InflateForecastPayload(payload.source_path);
+    payload.source_path = InflateForecastPayload(payload.source_path,
+                                                 is_cancelled);
     payload.type = DetectForecastPayloadType(payload.source_path);
   }
 
@@ -425,6 +467,25 @@ PrepareNetCdfPayload(PreparedForecastPayload payload)
   prepared.cleanup_source_path = std::move(cleanup_source_path);
   prepared.cleanup_download_path = std::move(payload.cleanup_download_path);
   return prepared;
+}
+
+[[nodiscard]] SkySightPreparedData
+PreparePayload(Path path, const CancellationCheck &is_cancelled)
+{
+  if (File::GetSize(path) > SkySight::MAX_FORECAST_DOWNLOAD_BYTES)
+    throw SkySight::ResourceLimitError(
+      "SkySight forecast exceeds its size limit");
+
+  auto payload = PrepareForecastPayload(path, is_cancelled);
+  ThrowIfCancelled(is_cancelled);
+
+  if (payload.type == ForecastPayloadType::NetCdf)
+    return PrepareNetCdfPayload(std::move(payload));
+
+  if (IsDisplayReadyType(payload.type))
+    return MakeDisplayReadyData(payload.source_path);
+
+  throw std::runtime_error("Unsupported SkySight forecast payload");
 }
 
 #if defined(USE_GEOTIFF) && defined(HAVE_SKYSIGHT_NETCDF)
@@ -533,10 +594,17 @@ GetOptionalDoubleAttribute(int file_id, int variable_id,
 AllocatedPath
 DecodeNetCdf(const SkySightPreparedData &prepared,
              std::string_view variable_name,
-             const std::map<float, SkySight::LegendColor> &legend)
+             const std::map<float, SkySight::LegendColor> &legend,
+             const CancellationCheck &is_cancelled)
 {
   if (legend.empty())
     throw std::runtime_error("SkySight legend is empty");
+  if (std::any_of(legend.begin(), legend.end(), [](const auto &entry) {
+        return !std::isfinite(entry.first);
+      }))
+    throw std::runtime_error("SkySight legend contains a non-finite threshold");
+
+  ThrowIfCancelled(is_cancelled);
 
   const std::string temporary_name =
     std::string{prepared.display_path.c_str()} + ".tmp";
@@ -548,6 +616,7 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   ThrowNetCdfError(nc_open(prepared.source_path.c_str(), NC_NOWRITE, &file_id),
                    "open");
   AtScopeExit(file_id) { if (file_id >= 0) nc_close(file_id); };
+  ThrowIfCancelled(is_cancelled);
 
   int lat_dim_id = -1, lon_dim_id = -1;
   ThrowNetCdfError(nc_inq_dimid(file_id, "lat", &lat_dim_id), "find lat dimension");
@@ -559,11 +628,9 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
 
   if (lat_size < 2 || lon_size < 2)
     throw std::runtime_error("SkySight NetCDF grid is too small");
-  if (lat_size > std::numeric_limits<uint32_t>::max() ||
-      lon_size > std::numeric_limits<uint32_t>::max() ||
-      lat_size > std::numeric_limits<size_t>::max() / lon_size ||
-      lon_size > std::numeric_limits<size_t>::max() / 4)
-    throw std::runtime_error("SkySight NetCDF grid is too large");
+  if (!SkySight::IsNetCdfGridSizeAllowed(lat_size, lon_size))
+    throw SkySight::ResourceLimitError(
+      "SkySight NetCDF grid exceeds its size limit");
 
   int lat_var_id = -1, lon_var_id = -1;
   ThrowNetCdfError(nc_inq_varid(file_id, "lat", &lat_var_id), "find lat variable");
@@ -574,6 +641,13 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   std::vector<double> lat_values(lat_size), lon_values(lon_size);
   ThrowNetCdfError(nc_get_var_double(file_id, lat_var_id, lat_values.data()), "read lat values");
   ThrowNetCdfError(nc_get_var_double(file_id, lon_var_id, lon_values.data()), "read lon values");
+  ThrowIfCancelled(is_cancelled);
+
+  if (std::any_of(lat_values.begin(), lat_values.end(),
+                  [](double value) { return !std::isfinite(value); }) ||
+      std::any_of(lon_values.begin(), lon_values.end(),
+                  [](double value) { return !std::isfinite(value); }))
+    throw std::runtime_error("SkySight NetCDF coordinates are not finite");
 
   const bool lat_ascending = lat_values.front() < lat_values.back();
   const bool lon_ascending = lon_values.front() < lon_values.back();
@@ -585,6 +659,10 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
     lat_step / 2;
   const double lon_west_edge = (lon_ascending ? lon_values.front() : lon_values.back()) -
     lon_step / 2;
+  if (!std::isfinite(lat_step) || !std::isfinite(lon_step) ||
+      lat_step <= 0 || lon_step <= 0 ||
+      !std::isfinite(lat_north_edge) || !std::isfinite(lon_west_edge))
+    throw std::runtime_error("SkySight NetCDF coordinates are invalid");
 
   int data_var_id = -1;
   ThrowNetCdfError(nc_inq_varid(file_id, std::string{variable_name}.c_str(), &data_var_id),
@@ -597,6 +675,7 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
   ThrowNetCdfError(nc_get_vara_double(file_id, data_var_id, start, count,
                                      values.data()),
                    "read data values");
+  ThrowIfCancelled(is_cancelled);
 
   const double fill_value = GetOptionalDoubleAttribute(file_id, data_var_id,
                                                        "_FillValue",
@@ -605,6 +684,8 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
                                                    "add_offset", 0.0);
   const double scale = GetOptionalDoubleAttribute(file_id, data_var_id,
                                                   "scale_factor", 1.0);
+  if (!std::isfinite(offset) || !std::isfinite(scale))
+    throw std::runtime_error("SkySight NetCDF scaling is not finite");
 
   const double tie_points[6] = {0, 0, 0, lon_west_edge, lat_north_edge, 0};
   const double pixel_scale[3] = {lon_step, lat_step, 0};
@@ -651,6 +732,7 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
     std::vector<uint8_t> row(samples_per_pixel * lon_size);
 
     for (size_t y = 0; y < lat_size; ++y) {
+      ThrowIfCancelled(is_cancelled);
       std::fill(row.begin(), row.end(), 0);
 
       const auto source_y = lat_ascending ? (lat_size - 1 - y) : y;
@@ -659,11 +741,16 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
         const auto source_x = lon_ascending ? x : (lon_size - 1 - x);
         const auto index = source_y * lon_size + source_x;
         const auto raw = values[index];
-        if (!std::isnan(fill_value) && raw == fill_value)
+        if (!std::isfinite(raw) ||
+            (!std::isnan(fill_value) && raw == fill_value))
           continue;
 
         const auto point = raw * scale + offset;
-        auto color = legend.upper_bound((float)point);
+        const auto float_point = (float)point;
+        if (!std::isfinite(point) || !std::isfinite(float_point))
+          continue;
+
+        auto color = legend.upper_bound(float_point);
         if (color == legend.begin())
           continue;
 
@@ -697,6 +784,7 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
       throw std::runtime_error("SkySight GeoTIFF validation failed");
   }
 
+  ThrowIfCancelled(is_cancelled);
   if (!File::Replace(temporary_path, prepared.display_path))
     throw std::runtime_error("SkySight GeoTIFF publication failed");
 
@@ -711,17 +799,32 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
 AllocatedPath
 DecodePreparedData(const SkySightPreparedData &prepared,
                    std::string_view variable_name,
-                   const std::map<float, SkySight::LegendColor> &legend)
+                   const std::map<float, SkySight::LegendColor> &legend,
+                   const CancellationCheck &is_cancelled)
 {
-  if (!prepared.NeedsDecode())
-    return CopyPath(prepared.display_path);
+  ThrowIfCancelled(is_cancelled);
+  auto prepared_payload = prepared.kind ==
+    SkySightPreparedDataKind::NeedsPreparation
+    ? PreparePayload(prepared.source_path, is_cancelled)
+    : SkySightPreparedData{
+        prepared.kind,
+        CopyOptionalPath(prepared.source_path),
+        CopyOptionalPath(prepared.display_path),
+        CopyOptionalPath(prepared.cleanup_source_path),
+        CopyOptionalPath(prepared.cleanup_download_path),
+      };
+
+  ThrowIfCancelled(is_cancelled);
+  if (!prepared_payload.NeedsDecode())
+    return CopyPath(prepared_payload.display_path);
 
 #if defined(USE_GEOTIFF) && defined(HAVE_SKYSIGHT_NETCDF)
-  return DecodeNetCdf(prepared, variable_name, legend);
+  return DecodeNetCdf(prepared_payload, variable_name, legend, is_cancelled);
 #else
-  (void)prepared;
+  (void)prepared_payload;
   (void)variable_name;
   (void)legend;
+  (void)is_cancelled;
   throw std::runtime_error("SkySight NetCDF decode support is unavailable in this build");
 #endif
 }
@@ -750,6 +853,7 @@ SkySightFileDecodeJob::Start(SkySightPreparedData new_prepared,
 
   std::unique_lock lock{mutex};
   WaitDone(lock);
+  cancel_requested.store(false, std::memory_order_relaxed);
 
   prepared = std::move(new_prepared);
   variable_name = std::move(new_variable_name);
@@ -766,8 +870,10 @@ SkySightFileDecodeJob::Start(SkySightPreparedData new_prepared,
 void
 SkySightFileDecodeJob::Cancel() noexcept
 {
+  cancel_requested.store(true, std::memory_order_relaxed);
   notify.ClearNotification();
   LockStop();
+  notify.ClearNotification();
 
   const std::lock_guard lock{mutex};
   result_path = nullptr;
@@ -810,7 +916,10 @@ SkySightFileDecodeJob::Tick() noexcept
 
   try {
     local_result = DecodePreparedData(prepared_copy, variable_name_copy,
-                                      legend_copy);
+                                      legend_copy, [this] {
+                                        return cancel_requested.load(
+                                          std::memory_order_relaxed);
+                                      });
   } catch (...) {
     local_error = std::current_exception();
   }
@@ -857,15 +966,10 @@ SkySightFileDecodeJob::OnNotification() noexcept
 SkySightPreparedData
 SkySightFileDecoder::Prepare(Path path)
 {
-  auto payload = PrepareForecastPayload(path);
-
-  if (payload.type == ForecastPayloadType::NetCdf)
-    return PrepareNetCdfPayload(std::move(payload));
-
-  if (IsDisplayReadyType(payload.type))
-    return MakeDisplayReadyData(payload.source_path);
-
-  throw std::runtime_error("Unsupported SkySight forecast payload");
+  return {
+    SkySightPreparedDataKind::NeedsPreparation,
+    CopyPath(path),
+  };
 }
 
 namespace {

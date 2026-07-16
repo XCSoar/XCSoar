@@ -23,6 +23,9 @@
 #include "UIGlobals.hpp"
 #include "LocalPath.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "thread/Debug.hpp"
+
+#include <cassert>
 #include "MapWindow/OverlayBitmap.hpp"
 #include "system/FileUtil.hpp"
 #include <algorithm>
@@ -132,7 +135,11 @@ SkySightManager::Init()
   ReloadSelectedLayersFromProfile();
   api->PollRegions();
   api->PollLayers();
-  request_timer.Schedule(std::chrono::seconds{1});
+
+  if (api->HasCredentials())
+    request_timer.Schedule(std::chrono::seconds{1});
+  else
+    request_timer.Cancel();
 }
 
 void
@@ -288,41 +295,33 @@ SkySightManager::AddSelectedLayer(std::string_view id, bool save_profile)
   if (id.empty() || api->SelectedLayersFull() || api->IsSelectedLayer(id))
     return false;
 
-  const auto *layer = api->GetLayer(id);
+  auto *layer = api->GetLayer(id);
   if (layer == nullptr)
     return false;
+
+  if (!layer->SupportsLiveTiles()) {
+    const auto cached_times = SkySightCache::CollectForecastTimes(GetCachePath(),
+                                                                  GetRegion(),
+                                                                  layer->id);
+    if (!cached_times.empty()) {
+      SkySight::MergeCachedForecastTimes(*layer, cached_times,
+                                         std::time(nullptr));
+
+      const auto candidate = SkySightCache::FindForecastImage(GetCachePath(),
+                                                              GetRegion(),
+                                                              layer->id,
+                                                              layer->forecast_time);
+      if (candidate.path != nullptr &&
+          candidate.forecast_time == layer->forecast_time) {
+        layer->mtime = std::chrono::system_clock::to_time_t(
+          File::GetLastModification(candidate.path));
+      }
+    }
+  }
 
   auto selected = *layer;
   if (!selected.SupportsLiveTiles()) {
     selected.datafiles_pending = true;
-
-    const auto cached_times = SkySightCache::CollectForecastTimes(GetCachePath(),
-                                                                  GetRegion(),
-                                                                  selected.id);
-    if (!cached_times.empty()) {
-      selected.forecast_datafiles.clear();
-      selected.forecast_datafiles.reserve(cached_times.size());
-      for (const auto t : cached_times)
-        selected.forecast_datafiles.emplace_back(t, "");
-
-      selected.forecast_time = SkySight::ChooseClosestForecastTime(
-        cached_times,
-        [](time_t time) noexcept {
-          return time;
-        });
-      selected.from = cached_times.back();
-      selected.to = cached_times.front();
-
-      const auto candidate = SkySightCache::FindForecastImage(GetCachePath(),
-                                                              GetRegion(),
-                                                              selected.id,
-                                                              selected.forecast_time);
-      if (candidate.path != nullptr) {
-        selected.mtime = std::chrono::system_clock::to_time_t(
-          File::GetLastModification(candidate.path));
-      }
-    }
-
     selected.updating = selected.ShouldShowUpdating();
   }
 
@@ -998,6 +997,13 @@ SkySightManager::DisplayTileLayer()
 void
 SkySightManager::Render()
 {
+#ifndef ENABLE_OPENGL
+  /* Forecast and live-tile overlays are OpenGL-only.  Avoid reading
+     shared SkySight state from the DrawThread on other backends. */
+  return;
+#else
+  assert(InMainThread());
+
   if (active_layer == nullptr)
     return;
 
@@ -1005,4 +1011,5 @@ SkySightManager::Render()
     (void)DisplayTileLayer();
   else
     (void)DisplayForecastLayer();
+#endif
 }

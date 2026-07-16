@@ -21,12 +21,12 @@ class SkySightAPI;
 class SkySightRequest final {
   struct FileJob {
     enum class Kind {
-      Generic,
+      Tile,
       ForecastData,
     };
 
     UI::CoInjectFunction<AllocatedPath> function;
-    Kind kind = Kind::Generic;
+    Kind kind = Kind::Tile;
     AllocatedPath path;
     std::string url;
     bool requires_auth = false;
@@ -40,7 +40,7 @@ class SkySightRequest final {
   };
 
   struct PendingJob {
-    FileJob::Kind kind = FileJob::Kind::Generic;
+    FileJob::Kind kind = FileJob::Kind::Tile;
     std::string key;
     std::string url;
     AllocatedPath path;
@@ -49,13 +49,6 @@ class SkySightRequest final {
     time_t forecast_time = 0;
     time_t ready_at = 0;
     unsigned attempts = 0;
-
-    PendingJob(std::string _key, std::string _url,
-               AllocatedPath _path, bool _requires_auth) noexcept
-      :key(std::move(_key)),
-       url(std::move(_url)),
-       path(std::move(_path)),
-       requires_auth(_requires_auth) {}
 
     PendingJob(FileJob::Kind _kind,
                std::string _key, std::string _url,
@@ -70,12 +63,20 @@ class SkySightRequest final {
        forecast_time(_forecast_time) {}
   };
 
+  struct TileFailure {
+    std::string layer_id;
+    time_t timestamp = 0;
+    time_t retry_at = 0;
+    unsigned failures = 0;
+  };
+
   static constexpr unsigned MAX_ACTIVE_DOWNLOADS = 1;
   static constexpr time_t THROTTLE_RETRY_SECONDS = 30;
   static constexpr time_t ERROR_RETRY_SECONDS = 10;
   static constexpr auto LOGIN_RETRY_INTERVAL = std::chrono::seconds{30};
   static constexpr auto LOGIN_ATTEMPT_WINDOW = std::chrono::minutes{5};
   static constexpr unsigned MAX_LOGIN_ATTEMPTS_PER_WINDOW = 3;
+  static constexpr auto FILE_REQUEST_INTERVAL = std::chrono::seconds{1};
 
   SkySightAPI &api;
   CurlGlobal &curl;
@@ -93,6 +94,7 @@ class SkySightRequest final {
   std::map<std::string, std::unique_ptr<FileJob>> file_jobs;
   std::deque<PendingJob> pending_jobs;
   std::map<std::string, time_t> retry_after;
+  std::map<std::string, TileFailure, std::less<>> tile_failures;
   std::map<std::string, unsigned> tile_http_error_count;
   std::map<std::string, unsigned> forecast_prepare_error_count;
   std::string email;
@@ -102,6 +104,8 @@ class SkySightRequest final {
   time_t datafiles_retry_at = 0;
   time_t valid_until = 0;
   std::chrono::steady_clock::time_point next_login_request =
+    std::chrono::steady_clock::time_point::min();
+  std::chrono::steady_clock::time_point next_file_request =
     std::chrono::steady_clock::time_point::min();
   std::chrono::steady_clock::time_point login_attempt_window_start =
     std::chrono::steady_clock::time_point::min();
@@ -150,12 +154,14 @@ public:
   /** Pump deferred downloads and report when a throttle pause has ended. */
   bool Poll() noexcept;
 
-  void DownloadFile(std::string_view url, Path filename, bool requires_auth);
+  void DownloadTile(std::string_view layer_id, time_t timestamp,
+                    std::string_view url, Path filename, bool requires_auth);
   void CancelTileDownloads() noexcept;
   DownloadDatafileResult DownloadDatafile(std::string_view layer_id,
                                           time_t forecast_time,
                                           std::string_view url, Path filename,
                                           bool high_priority = false);
+  void SuppressDatafile(Path filename) noexcept;
   bool RequestRegions();
   bool RequestLayers(std::string_view region_id);
   bool RequestLastUpdates(std::string_view region_id);
@@ -168,6 +174,11 @@ private:
   void SuspendRequests(const char *reason) noexcept;
   void CleanupFinishedJobs();
   bool IsQueued(std::string_view key) const noexcept;
+  bool IsTileDownloadAllowed(std::string_view key,
+                             std::string_view layer_id,
+                             time_t timestamp, time_t now) noexcept;
+  void RecordTileFailure(const FileJob &job, const std::string &key,
+                         time_t now, bool terminal=false) noexcept;
   bool RequeueFileJob(const FileJob &job, time_t ready_at) noexcept;
   void PumpQueue();
   void TryPumpQueue() noexcept;

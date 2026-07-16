@@ -46,11 +46,9 @@ IsSameForecastDay(time_t left, time_t right) noexcept
 
 template<typename Range, typename GetTime>
 [[nodiscard]] inline time_t
-ChooseClosestForecastTime(const Range &values, GetTime get_time)
+ChooseClosestForecastTime(const Range &values, GetTime get_time, time_t now)
   noexcept(noexcept(get_time(*std::begin(values))))
 {
-  const auto now = std::time(nullptr);
-
   time_t latest_past = 0;
   time_t earliest_future = 0;
   for (const auto &value : values) {
@@ -65,6 +63,50 @@ ChooseClosestForecastTime(const Range &values, GetTime get_time)
   }
 
   return latest_past != 0 ? latest_past : earliest_future;
+}
+
+template<typename Range, typename GetTime>
+[[nodiscard]] inline time_t
+ChooseClosestForecastTime(const Range &values, GetTime get_time)
+  noexcept(noexcept(get_time(*std::begin(values))))
+{
+  return ChooseClosestForecastTime(values, get_time, std::time(nullptr));
+}
+
+/**
+ * Merge display-ready cache entries into the canonical forecast metadata.
+ * Existing download links and a still-valid selection are preserved.
+ */
+inline void
+MergeCachedForecastTimes(Layer &layer, const std::vector<time_t> &cached_times,
+                         time_t now)
+{
+  for (const auto time : cached_times) {
+    if (time <= 0 || layer.FindDatafile(time) != nullptr)
+      continue;
+
+    layer.forecast_datafiles.emplace_back(time, std::string{});
+  }
+
+  std::sort(layer.forecast_datafiles.begin(),
+            layer.forecast_datafiles.end(),
+            [](const auto &left, const auto &right) {
+              return left.time > right.time;
+            });
+
+  if (layer.forecast_datafiles.empty())
+    return;
+
+  layer.from = layer.forecast_datafiles.back().time;
+  layer.to = layer.forecast_datafiles.front().time;
+
+  if (layer.forecast_time <= 0 ||
+      layer.FindDatafile(layer.forecast_time) == nullptr)
+    layer.forecast_time = ChooseClosestForecastTime(
+      layer.forecast_datafiles,
+      [](const auto &datafile) noexcept {
+        return datafile.time;
+      }, now);
 }
 
 template<typename T, typename GetTime>

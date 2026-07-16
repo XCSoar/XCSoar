@@ -8,6 +8,7 @@
 #include "thread/StandbyThread.hpp"
 #include "ui/event/Notify.hpp"
 
+#include <atomic>
 #include <exception>
 #include <functional>
 #include <map>
@@ -16,6 +17,7 @@
 
 enum class SkySightPreparedDataKind {
   DisplayReady,
+  NeedsPreparation,
   NeedsNetCdfDecode,
 };
 
@@ -65,6 +67,7 @@ private:
   std::exception_ptr error;
   std::function<void(AllocatedPath)> on_success;
   std::function<void(std::exception_ptr)> on_error;
+  std::atomic_bool cancel_requested{false};
   Status status = Status::Idle;
 
 public:
