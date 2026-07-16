@@ -315,6 +315,9 @@ Version 7.45 - not yet released
   - angle bearing/delta normalization uses O(1) wrap (avoids stalls when angles
     are extremely large; suspected Android freeze #1292)
 * weather
+  - Enhanced rendering of RASP weather data with layer transparency,
+    color scale key and numerical display of weather values, per-page-overlays,
+    bottom-panel controls and auto-advance.
   - METAR/TAF station list: accept lowercase ICAO codes when adding a station;
     codes are normalized to upper-case for download and profile storage
   - add EDL weather support with per-page map overlays (None/RASP/EDL),
