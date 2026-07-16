@@ -30,7 +30,7 @@
 #include "Weather/EDL/StateController.hpp"
 #endif
 #ifdef HAVE_HTTP
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
 
@@ -66,14 +66,14 @@ namespace PageActions {
   static void LeaveRaspOverlay() noexcept;
   static void LeaveEdlOverlay() noexcept;
   static void LeaveXcthermOverlay() noexcept;
-  static void LeaveSkysightOverlay() noexcept;
+  static void LeaveSkySightOverlay() noexcept;
 
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
 
   static void ApplyRaspOverlay(const PageLayout &layout) noexcept;
   static void ApplyEdlOverlay() noexcept;
   static void ApplyXcthermOverlay() noexcept;
-  static void ApplySkysightOverlay(const PageLayout &layout) noexcept;
+  static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 
@@ -113,7 +113,7 @@ PageActions::ClearPageOverlays() noexcept
 
 #ifdef HAVE_HTTP
   if (!weather.skysight.IsSuspendedForPan())
-    if (auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
+    if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
       skysight->ApplyPageOverlay({});
 #endif
 }
@@ -156,7 +156,7 @@ PageActions::LeaveXcthermOverlay() noexcept
 }
 
 void
-PageActions::LeaveSkysightOverlay() noexcept
+PageActions::LeaveSkySightOverlay() noexcept
 {
 #ifdef HAVE_HTTP
   auto &skysight_session = CommonInterface::SetUIState().weather.skysight;
@@ -164,7 +164,7 @@ PageActions::LeaveSkysightOverlay() noexcept
     return;
 
   skysight_session.LeavePage();
-  if (auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
+  if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
     skysight->ApplyPageOverlay({});
 #endif
 }
@@ -178,8 +178,8 @@ PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
     LeaveRaspOverlay();
   else if (layout.UsesXcthermOverlay())
     LeaveXcthermOverlay();
-  else if (layout.UsesSkysightOverlay())
-    LeaveSkysightOverlay();
+  else if (layout.UsesSkySightOverlay())
+    LeaveSkySightOverlay();
 }
 
 void
@@ -239,13 +239,13 @@ PageActions::ApplyXcthermOverlay() noexcept
 }
 
 void
-PageActions::ApplySkysightOverlay(const PageLayout &layout) noexcept
+PageActions::ApplySkySightOverlay(const PageLayout &layout) noexcept
 {
 #ifdef HAVE_HTTP
   auto &skysight_session = CommonInterface::SetUIState().weather.skysight;
   const bool first_enter = skysight_session.EnterPage();
 
-  if (auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
+  if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
     skysight->ApplyPageOverlay(layout.skysight_overlay.c_str(),
                                first_enter &&
                                !skysight_session.cursor_initialized);
@@ -266,7 +266,7 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
     weather.rasp.SuspendForPan();
   if (layout.UsesXcthermOverlay())
     weather.xctherm.SuspendForPan();
-  if (layout.UsesSkysightOverlay())
+  if (layout.UsesSkySightOverlay())
     weather.skysight.SuspendForPan();
 }
 
@@ -302,7 +302,7 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
     break;
 
   case PageLayout::Overlay::SKYSIGHT:
-    ApplySkysightOverlay(layout);
+    ApplySkySightOverlay(layout);
     break;
 
   case PageLayout::Overlay::MAX:

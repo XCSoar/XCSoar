@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "SkysightConfigPanel.hpp"
+#include "SkySightConfigPanel.hpp"
 
 #ifdef HAVE_HTTP
 
@@ -10,8 +10,8 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
-#include "Weather/Skysight/Regions.hpp"
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/Regions.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -23,9 +23,9 @@ enum ControlIndex {
   SKYSIGHT_REGION,
 };
 
-class SkysightConfigPanel final : public RowFormWidget {
+class SkySightConfigPanel final : public RowFormWidget {
 public:
-  SkysightConfigPanel()
+  SkySightConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -33,7 +33,7 @@ public:
 };
 
 void
-SkysightConfigPanel::Prepare(ContainerWindow &parent,
+SkySightConfigPanel::Prepare(ContainerWindow &parent,
                              const PixelRect &rc) noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather;
@@ -53,7 +53,7 @@ SkysightConfigPanel::Prepare(ContainerWindow &parent,
     return;
 
   auto &df = *(DataFieldEnum *)region->GetDataField();
-  if (const auto skysight = DataGlobals::GetSkysight(); skysight != nullptr) {
+  if (const auto skysight = DataGlobals::GetSkySight(); skysight != nullptr) {
     for (const auto &candidate : skysight->GetRegions())
       df.addEnumText(candidate.id.c_str(), gettext(candidate.name.c_str()));
 
@@ -63,27 +63,27 @@ SkysightConfigPanel::Prepare(ContainerWindow &parent,
     for (const auto &candidate : SKYSIGHT_REGIONS)
       df.addEnumText(candidate.id, gettext(candidate.name));
 
-    df.SetValue(FindSkysightRegionById(settings.skysight.region.c_str()).id);
+    df.SetValue(FindSkySightRegionById(settings.skysight.region.c_str()).id);
   }
 
   region->RefreshDisplay();
 }
 
 bool
-SkysightConfigPanel::Save(bool &_changed) noexcept
+SkySightConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
   auto &settings = CommonInterface::SetComputerSettings().weather;
 
-  changed |= SaveValue(SKYSIGHT_EMAIL, ProfileKeys::SkysightEmail,
+  changed |= SaveValue(SKYSIGHT_EMAIL, ProfileKeys::SkySightEmail,
                        settings.skysight.email);
-  changed |= SaveValue(SKYSIGHT_PASSWORD, ProfileKeys::SkysightPassword,
+  changed |= SaveValue(SKYSIGHT_PASSWORD, ProfileKeys::SkySightPassword,
                        settings.skysight.password);
-  changed |= SaveValue(SKYSIGHT_REGION, ProfileKeys::SkysightRegion,
+  changed |= SaveValue(SKYSIGHT_REGION, ProfileKeys::SkySightRegion,
                        settings.skysight.region);
 
   if (changed)
-    if (auto skysight = DataGlobals::GetSkysight())
+    if (auto skysight = DataGlobals::GetSkySight())
       skysight->Init();
 
   _changed |= changed;
@@ -91,15 +91,15 @@ SkysightConfigPanel::Save(bool &_changed) noexcept
 }
 
 std::unique_ptr<Widget>
-CreateSkysightConfigPanel()
+CreateSkySightConfigPanel()
 {
-  return std::make_unique<SkysightConfigPanel>();
+  return std::make_unique<SkySightConfigPanel>();
 }
 
 #else
 
 std::unique_ptr<Widget>
-CreateSkysightConfigPanel()
+CreateSkySightConfigPanel()
 {
   return {};
 }

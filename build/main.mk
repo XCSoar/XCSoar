@@ -125,7 +125,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/NetworkConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/RaspConfigPanel.cpp \
-	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/SkysightConfigPanel.cpp) \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/SkySightConfigPanel.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/RouteConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SiteConfigPanel.cpp \
@@ -195,7 +195,7 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
-	$(SRC)/Dialogs/Weather/SkysightDialog.cpp
+	$(SRC)/Dialogs/Weather/SkySightDialog.cpp
 endif
 
 XCSOAR_SOURCES := \
@@ -415,7 +415,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/MapOverlay/TimePicker.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Weather/MapOverlay/XcthermControlsModel.cpp \
-	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Weather/MapOverlay/SkysightControlsModel.cpp) \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Weather/MapOverlay/SkySightControlsModel.cpp) \
 	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
@@ -633,13 +633,13 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Weather/Skysight/SkySightFileDecoder.cpp \
-	$(SRC)/Weather/Skysight/Skysight.cpp \
-	$(SRC)/Weather/Skysight/SkysightCache.cpp \
-	$(SRC)/Weather/Skysight/SkysightAPI.cpp \
-	$(SRC)/Weather/Skysight/SkySightRequest.cpp
+	$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp \
+	$(SRC)/Weather/SkySight/SkySightManager.cpp \
+	$(SRC)/Weather/SkySight/SkySightCache.cpp \
+	$(SRC)/Weather/SkySight/SkySightAPI.cpp \
+	$(SRC)/Weather/SkySight/SkySightRequest.cpp
 
-$(call SRC_TO_OBJ,$(SRC)/Weather/Skysight/SkySightFileDecoder.cpp): CPPFLAGS += $(NETCDF_CPPFLAGS)
+$(call SRC_TO_OBJ,$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp): CPPFLAGS += $(NETCDF_CPPFLAGS)
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)

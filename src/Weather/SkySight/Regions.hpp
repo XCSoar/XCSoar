@@ -9,12 +9,12 @@
 #include <string_view>
 #include <vector>
 
-struct SkysightRegionInfo {
+struct SkySightRegionInfo {
   const char *name;
   const char *id;
 };
 
-inline constexpr SkysightRegionInfo SKYSIGHT_REGIONS[] = {
+inline constexpr SkySightRegionInfo SKYSIGHT_REGIONS[] = {
   { N_("Europe"), "EUROPE" },
   { N_("South Africa"), "SANEW" },
   { N_("Western US"), "WEST_US" },
@@ -27,7 +27,7 @@ inline constexpr SkysightRegionInfo SKYSIGHT_REGIONS[] = {
   { N_("Eastern Australia"), "EAST_AUS" },
 };
 
-struct SkysightRegionEntry {
+struct SkySightRegionEntry {
   std::string id;
   std::string name;
   std::string projection;
@@ -38,25 +38,25 @@ struct SkysightRegionEntry {
 };
 
 [[gnu::const]]
-static constexpr const SkysightRegionInfo &
-GetDefaultSkysightRegion() noexcept
+static constexpr const SkySightRegionInfo &
+GetDefaultSkySightRegion() noexcept
 {
   return SKYSIGHT_REGIONS[0];
 }
 
 [[gnu::pure]]
-static constexpr const SkysightRegionInfo &
-FindSkysightRegionById(std::string_view region_id) noexcept
+static constexpr const SkySightRegionInfo &
+FindSkySightRegionById(std::string_view region_id) noexcept
 {
   for (const auto &region : SKYSIGHT_REGIONS)
     if (region_id == region.id)
       return region;
 
-  return GetDefaultSkysightRegion();
+  return GetDefaultSkySightRegion();
 }
 
 inline void
-ResetDefaultSkysightRegions(std::vector<SkysightRegionEntry> &result)
+ResetDefaultSkySightRegions(std::vector<SkySightRegionEntry> &result)
 {
   result.clear();
   if (result.capacity() < std::size(SKYSIGHT_REGIONS))
@@ -66,10 +66,10 @@ ResetDefaultSkysightRegions(std::vector<SkysightRegionEntry> &result)
     result.push_back({region.id, region.name, {}});
 }
 
-[[nodiscard]] inline std::vector<SkysightRegionEntry>
-GetDefaultSkysightRegions()
+[[nodiscard]] inline std::vector<SkySightRegionEntry>
+GetDefaultSkySightRegions()
 {
-  std::vector<SkysightRegionEntry> result;
-  ResetDefaultSkysightRegions(result);
+  std::vector<SkySightRegionEntry> result;
+  ResetDefaultSkySightRegions(result);
   return result;
 }

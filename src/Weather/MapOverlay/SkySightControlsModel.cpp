@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "SkysightControlsModel.hpp"
+#include "SkySightControlsModel.hpp"
 
 #include "ActionInterface.hpp"
 #include "DataGlobals.hpp"
@@ -9,9 +9,9 @@
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Weather/Skysight/ForecastFormatter.hpp"
-#include "Weather/Skysight/ForecastUtils.hpp"
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/ForecastFormatter.hpp"
+#include "Weather/SkySight/ForecastUtils.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #include <algorithm>
 #include <chrono>
 #include <limits>
@@ -50,25 +50,25 @@ FindForecastIndex(const SkySight::Layer &layer,
   return -1;
 }
 
-SkysightControlsModel::SkysightControlsModel(std::shared_ptr<Skysight> _skysight,
+SkySightControlsModel::SkySightControlsModel(std::shared_ptr<SkySightManager> _skysight,
                                              std::string_view _layer_id) noexcept
   :skysight(std::move(_skysight)), layer_id(_layer_id) {}
 
 void
-SkysightControlsModel::OnShow() noexcept
+SkySightControlsModel::OnShow() noexcept
 {
   countdown_timer.Schedule(std::chrono::seconds{1});
 }
 
 void
-SkysightControlsModel::OnHide() noexcept
+SkySightControlsModel::OnHide() noexcept
 {
   countdown_timer.Cancel();
   countdown_visible = false;
 }
 
 const SkySight::Layer *
-SkysightControlsModel::GetLayer() const noexcept
+SkySightControlsModel::GetLayer() const noexcept
 {
   return skysight != nullptr
     ? skysight->GetSelectedLayer(layer_id.c_str())
@@ -76,11 +76,14 @@ SkysightControlsModel::GetLayer() const noexcept
 }
 
 void
-SkysightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
+SkySightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 {
   if (skysight != nullptr && skysight->IsThrottled()) {
-    text.Format(_("Download limit: retry in %u s"),
-                unsigned(skysight->GetThrottleRemainingSeconds()));
+    if (skysight->IsSuspendedForSession())
+      text = _("Downloads paused");
+    else
+      text.Format(_("Download limit: retry in %u s"),
+                  unsigned(skysight->GetThrottleRemainingSeconds()));
     return;
   }
 
@@ -94,7 +97,7 @@ SkysightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 
   const auto *layer = GetLayer();
   if (layer == nullptr) {
-    text = _("SkySight");
+    text = "SkySight";
     return;
   }
 
@@ -118,7 +121,7 @@ SkysightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 }
 
 void
-SkysightControlsModel::FormatSecondaryLabel(StaticString<64> &text) const noexcept
+SkySightControlsModel::FormatSecondaryLabel(StaticString<64> &text) const noexcept
 {
   const auto *layer = GetLayer();
   if (layer == nullptr) {
@@ -130,7 +133,7 @@ SkysightControlsModel::FormatSecondaryLabel(StaticString<64> &text) const noexce
 }
 
 bool
-SkysightControlsModel::HasPrimaryData() const noexcept
+SkySightControlsModel::HasPrimaryData() const noexcept
 {
   const auto *layer = GetLayer();
   return layer != nullptr &&
@@ -140,13 +143,13 @@ SkysightControlsModel::HasPrimaryData() const noexcept
 }
 
 bool
-SkysightControlsModel::HasSecondaryData() const noexcept
+SkySightControlsModel::HasSecondaryData() const noexcept
 {
   return skysight != nullptr && skysight->NumSelectedLayers() > 0;
 }
 
 bool
-SkysightControlsModel::StepPrimary(int delta) noexcept
+SkySightControlsModel::StepPrimary(int delta) noexcept
 {
   try {
     const auto *layer = GetLayer();
@@ -187,7 +190,7 @@ SkysightControlsModel::StepPrimary(int delta) noexcept
 }
 
 bool
-SkysightControlsModel::StepSecondary(int delta) noexcept
+SkySightControlsModel::StepSecondary(int delta) noexcept
 {
   if (skysight == nullptr || delta == 0 || skysight->NumSelectedLayers() == 0)
     return false;
@@ -207,10 +210,10 @@ SkysightControlsModel::StepSecondary(int delta) noexcept
 }
 
 void
-SkysightControlsModel::UpdateCountdownLabel() noexcept
+SkySightControlsModel::UpdateCountdownLabel() noexcept
 {
   const bool waiting = skysight != nullptr &&
-    (skysight->IsThrottled() ||
+    ((skysight->IsThrottled() && !skysight->IsSuspendedForSession()) ||
      skysight->GetDatafilesRetryRemainingSeconds() > 0);
 
   if (waiting || countdown_visible)
@@ -220,7 +223,7 @@ SkysightControlsModel::UpdateCountdownLabel() noexcept
 }
 
 bool
-SkysightControlsModel::SelectLayer(unsigned index) noexcept
+SkySightControlsModel::SelectLayer(unsigned index) noexcept
 {
   try {
     if (skysight == nullptr || index >= skysight->NumSelectedLayers())
@@ -238,14 +241,14 @@ SkysightControlsModel::SelectLayer(unsigned index) noexcept
 }
 
 bool
-SkysightControlsModel::GetPrimaryAutoAdvance() const noexcept
+SkySightControlsModel::GetPrimaryAutoAdvance() const noexcept
 {
   const auto *layer = GetLayer();
   return layer != nullptr && layer->UsesAutomaticForecastTime();
 }
 
 void
-SkysightControlsModel::SetPrimaryAutoAdvance(bool auto_advance) noexcept
+SkySightControlsModel::SetPrimaryAutoAdvance(bool auto_advance) noexcept
 {
   try {
     const auto *layer = GetLayer();
@@ -261,12 +264,14 @@ SkysightControlsModel::SetPrimaryAutoAdvance(bool auto_advance) noexcept
 }
 
 void
-SkysightControlsModel::ApplyPrimaryAutoAdvance() noexcept
+SkySightControlsModel::ApplyPrimaryAutoAdvance() noexcept
 {
+  /* SetPrimaryAutoAdvance() applies the SkySight forecast selection
+     immediately, so there is no deferred map-side state to apply here. */
 }
 
 PrimaryLabelAction
-SkysightControlsModel::GetPrimaryLabelAction() const noexcept
+SkySightControlsModel::GetPrimaryLabelAction() const noexcept
 {
   const auto *layer = GetLayer();
   return layer != nullptr &&
@@ -277,7 +282,7 @@ SkysightControlsModel::GetPrimaryLabelAction() const noexcept
 }
 
 SecondaryLabelAction
-SkysightControlsModel::GetSecondaryLabelAction() const noexcept
+SkySightControlsModel::GetSecondaryLabelAction() const noexcept
 {
   return skysight != nullptr && skysight->NumSelectedLayers() > 0
     ? SecondaryLabelAction::OPEN_PICKER
@@ -285,7 +290,7 @@ SkysightControlsModel::GetSecondaryLabelAction() const noexcept
 }
 
 void
-SkysightControlsModel::OpenPrimaryPicker() noexcept
+SkySightControlsModel::OpenPrimaryPicker() noexcept
 {
   try {
     const auto *layer = GetLayer();
@@ -325,35 +330,38 @@ SkysightControlsModel::OpenPrimaryPicker() noexcept
 }
 
 void
-SkysightControlsModel::OpenSecondaryPicker() noexcept
+SkySightControlsModel::OpenSecondaryPicker() noexcept
 {
-  if (skysight == nullptr || skysight->NumSelectedLayers() == 0)
-    return;
+  try {
+    if (skysight == nullptr || skysight->NumSelectedLayers() == 0)
+      return;
 
-  DataFieldEnum picker;
-  unsigned current = 0;
-  for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
-    const auto *layer = skysight->GetSelectedLayer(i);
-    if (layer == nullptr)
-      continue;
+    DataFieldEnum picker;
+    unsigned current = 0;
+    for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+      const auto *layer = skysight->GetSelectedLayer(i);
+      if (layer == nullptr)
+        continue;
 
-    picker.addEnumText(layer->name.c_str(), int(i));
-    if (layer->id == layer_id.c_str())
-      current = i;
+      picker.addEnumText(layer->name.c_str(), int(i));
+      if (layer->id == layer_id.c_str())
+        current = i;
+    }
+
+    picker.SetValue(current);
+    if (!ComboPicker(_("SkySight Layer"), picker, nullptr))
+      return;
+
+    const int selected = picker.GetValue();
+    if (selected >= 0 && unsigned(selected) < skysight->NumSelectedLayers() &&
+        SelectLayer(unsigned(selected)))
+      Notify(ControlsUpdate::OVERLAY);
+  } catch (...) {
   }
-
-  picker.SetValue(current);
-  if (!ComboPicker(_("SkySight Layer"), picker, nullptr))
-    return;
-
-  const int selected = picker.GetValue();
-  if (selected >= 0 && unsigned(selected) < skysight->NumSelectedLayers() &&
-      SelectLayer(unsigned(selected)))
-    Notify(ControlsUpdate::OVERLAY);
 }
 
 void
-SkysightControlsModel::ResumePrimaryAuto() noexcept
+SkySightControlsModel::ResumePrimaryAuto() noexcept
 {
   if (GetPrimaryAutoAdvance())
     return;
@@ -363,7 +371,7 @@ SkysightControlsModel::ResumePrimaryAuto() noexcept
 }
 
 void
-SkysightControlsModel::RefreshOverlay() noexcept
+SkySightControlsModel::RefreshOverlay() noexcept
 {
   ActionInterface::SendUIState(true);
 }

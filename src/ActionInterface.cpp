@@ -24,7 +24,7 @@
 #include "Weather/Features.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #ifdef HAVE_HTTP
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
 #ifdef HAVE_EDL
@@ -358,7 +358,7 @@ UpdateMapScalePageInfo(UIState &state) noexcept
 
   case PageLayout::Overlay::SKYSIGHT:
 #ifdef HAVE_HTTP
-    if (const auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
+    if (const auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
       state.map_scale_page_title = skysight->GetOverlayLabel();
     else
       state.map_scale_page_title = "SkySight";

@@ -8,4 +8,4 @@
 class Widget;
 
 std::unique_ptr<Widget>
-CreateSkysightWidget();
+CreateSkySightConfigPanel();

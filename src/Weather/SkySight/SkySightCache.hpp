@@ -9,7 +9,7 @@
 #include <string_view>
 #include <vector>
 
-namespace SkysightCache {
+namespace SkySightCache {
 
 [[nodiscard]] bool
 IsTrustedTimeAvailableForCleanup() noexcept;
@@ -31,4 +31,4 @@ CollectForecastTimes(Path directory, std::string_view region,
 void
 Cleanup(Path directory) noexcept;
 
-} // namespace SkysightCache
+} // namespace SkySightCache

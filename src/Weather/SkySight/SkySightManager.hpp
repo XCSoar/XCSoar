@@ -16,19 +16,19 @@
 #include <string_view>
 #include <vector>
 
-struct SkysightRegionEntry;
+struct SkySightRegionEntry;
 
 class CurlGlobal;
 class Path;
-class SkysightAPI;
+class SkySightAPI;
 
-class Skysight final {
+class SkySightManager final {
   static constexpr unsigned LIVE_TILE_RANGE_OFFSET = 2;
   static constexpr unsigned LIVE_TILE_OVERLAY_COUNT =
     (2 * LIVE_TILE_RANGE_OFFSET + 1) * (2 * LIVE_TILE_RANGE_OFFSET + 1);
   static_assert(LIVE_TILE_OVERLAY_COUNT <= MapWindowOverlay::MAX_MAP_OVERLAYS);
 
-  std::unique_ptr<SkysightAPI> api;
+  std::unique_ptr<SkySightAPI> api;
   SkySight::Layer *active_layer = nullptr;
   SkySight::Layer *displayed_layer = nullptr;
   unsigned displayed_zoom = 0;
@@ -40,8 +40,8 @@ class Skysight final {
   UI::PeriodicTimer request_timer;
 
 public:
-  explicit Skysight(CurlGlobal &curl);
-  ~Skysight();
+  explicit SkySightManager(CurlGlobal &curl);
+  ~SkySightManager();
 
   void Init();
 
@@ -49,7 +49,7 @@ public:
 
   std::size_t NumLayers() const noexcept;
   const SkySight::Layer *GetLayer(std::size_t index) const noexcept;
-  const std::vector<SkysightRegionEntry> &GetRegions() const noexcept;
+  const std::vector<SkySightRegionEntry> &GetRegions() const noexcept;
   std::string_view GetRegion() const noexcept;
   std::size_t NumSelectedLayers() const noexcept;
   const SkySight::Layer *GetSelectedLayer(std::size_t index) const noexcept;
@@ -73,6 +73,7 @@ public:
   bool HasCredentials() const noexcept;
 
   bool IsThrottled() const noexcept;
+  bool IsSuspendedForSession() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
   time_t GetDatafilesRetryRemainingSeconds() const noexcept;
@@ -94,6 +95,7 @@ public:
   void OnForecastThrottled() noexcept;
   void OnForecastResumed() noexcept;
   void OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept;
+  void OnForecastProgressCancelled() noexcept;
 
 private:
   bool AddSelectedLayer(std::string_view id, bool save_profile);

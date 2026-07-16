@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "SkysightDialog.hpp"
+#include "SkySightDialog.hpp"
 
 #ifdef HAVE_HTTP
 
@@ -24,8 +24,8 @@
 #include "Widget/ListWidget.hpp"
 #include "Widget/MultiSelectListWidget.hpp"
 #include "Widget/TextWidget.hpp"
-#include "Weather/Skysight/Skysight.hpp"
-#include "Weather/Skysight/ForecastFormatter.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
+#include "Weather/SkySight/ForecastFormatter.hpp"
 #include "Dialogs/Weather/OverlayPageActions.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
@@ -36,11 +36,11 @@
 
 class SelectedLayerRenderer {
   TwoTextRowsRenderer row_renderer;
-  std::shared_ptr<Skysight> skysight;
+  std::shared_ptr<SkySightManager> skysight;
 
 public:
   SelectedLayerRenderer()
-    :skysight(DataGlobals::GetSkysight()) {}
+    :skysight(DataGlobals::GetSkySight()) {}
 
   unsigned CalculateLayout(const DialogLook &look) noexcept {
     return row_renderer.CalculateLayout(*look.list.font_bold,
@@ -52,7 +52,7 @@ public:
       return;
 
     if (skysight->NumSelectedLayers() == 0) {
-      row_renderer.DrawFirstRow(canvas, rc, _("SkySight"));
+      row_renderer.DrawFirstRow(canvas, rc, "SkySight");
 
       if (!skysight->HasCredentials())
         row_renderer.DrawSecondRow(canvas, rc,
@@ -192,11 +192,11 @@ public:
 
 class MultiLayerPickerWidget final : public MultiSelectListWidget {
   TwoTextRowsRenderer row_renderer;
-  std::shared_ptr<Skysight> skysight;
+  std::shared_ptr<SkySightManager> skysight;
   std::function<void()> selection_changed_callback;
 
 public:
-  explicit MultiLayerPickerWidget(std::shared_ptr<Skysight> _skysight)
+  explicit MultiLayerPickerWidget(std::shared_ptr<SkySightManager> _skysight)
     :skysight(std::move(_skysight)) {}
 
   void SetSelectionChangedCallback(std::function<void()> callback) noexcept {
@@ -262,8 +262,8 @@ protected:
   }
 };
 
-class SkysightWidget final : public ListWidget {
-  std::shared_ptr<Skysight> skysight;
+class SkySightWidget final : public ListWidget {
+  std::shared_ptr<SkySightManager> skysight;
   ButtonPanelWidget *buttons_widget = nullptr;
   Button *select_button = nullptr;
   Button *time_button = nullptr;
@@ -273,7 +273,7 @@ class SkysightWidget final : public ListWidget {
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
 public:
-  explicit SkysightWidget(std::shared_ptr<Skysight> &&_skysight)
+  explicit SkySightWidget(std::shared_ptr<SkySightManager> &&_skysight)
     :skysight(std::move(_skysight)) {}
 
   void SetButtonPanel(ButtonPanelWidget &_buttons) noexcept {
@@ -384,7 +384,7 @@ private:
     if (!skysight->HasCredentials()) {
       ShowMessageBox(
         _("Configure your SkySight credentials in Weather settings before loading the full SkySight catalog."),
-        _("SkySight"), MB_OK);
+        "SkySight", MB_OK);
       return;
     }
 
@@ -461,7 +461,7 @@ private:
 
     if (add_failed)
       ShowMessageBox(_("Some selected layers couldn't be added (the list may be full)."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
 
     UpdateList();
     if (skysight->NumSelectedLayers() > 0) {
@@ -496,7 +496,7 @@ private:
 
     if (!skysight->SelectForecastTime(layer->id, renderer.GetForecastTime(selected)))
       ShowMessageBox(_("Couldn't load the selected time step."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
 
     UpdateList();
   }
@@ -516,7 +516,7 @@ private:
     const bool success = skysight->PreloadForecast(layer->id);
     if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
     }
 
     UpdateList();
@@ -543,7 +543,7 @@ private:
     const bool success = skysight->PreloadAllForecasts();
     if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
     }
 
     UpdateList();
@@ -570,9 +570,9 @@ private:
 };
 
 std::unique_ptr<Widget>
-CreateSkysightWidget()
+CreateSkySightWidget()
 {
-  auto skysight = DataGlobals::GetSkysight();
+  auto skysight = DataGlobals::GetSkySight();
   if (!skysight) {
     auto widget = std::make_unique<TextWidget>();
     widget->SetText(_("SkySight is unavailable."));
@@ -580,9 +580,9 @@ CreateSkysightWidget()
   }
 
   auto buttons = std::make_unique<ButtonPanelWidget>(
-    std::make_unique<SkysightWidget>(std::move(skysight)),
+    std::make_unique<SkySightWidget>(std::move(skysight)),
     ButtonPanelWidget::Alignment::BOTTOM);
-  static_cast<SkysightWidget &>(buttons->GetWidget()).SetButtonPanel(*buttons);
+  static_cast<SkySightWidget &>(buttons->GetWidget()).SetButtonPanel(*buttons);
   return buttons;
 }
 

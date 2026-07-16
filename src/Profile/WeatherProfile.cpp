@@ -23,10 +23,18 @@ namespace Profile {
 #ifdef HAVE_HTTP
 
 namespace Profile {
-  static void Load(const ProfileMap &map, SkysightSettings &settings) {
-    map.Get(ProfileKeys::SkysightEmail, settings.email);
-    map.Get(ProfileKeys::SkysightPassword, settings.password);
-    map.Get(ProfileKeys::SkysightRegion, settings.region);
+  static void Load(const ProfileMap &map, SkySightSettings &settings) {
+    map.Get(ProfileKeys::SkySightEmail, settings.email);
+    map.Get(ProfileKeys::SkySightPassword, settings.password);
+    map.Get(ProfileKeys::SkySightRegion, settings.region);
+
+    /* Accept pre-rename profile keys from early SkySight builds. */
+    if (settings.email.empty())
+      map.Get("SkysightEmail", settings.email);
+    if (settings.password.empty())
+      map.Get("SkysightPassword", settings.password);
+    if (settings.region.empty())
+      map.Get("SkysightRegion", settings.region);
   }
 }
 

@@ -16,7 +16,7 @@
 #endif
 #ifdef HAVE_HTTP
 #include "DataGlobals.hpp"
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
 
@@ -79,7 +79,7 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     if (!layout.skysight_overlay.empty()) {
       const char *label = layout.skysight_overlay.c_str();
 #ifdef HAVE_HTTP
-      if (const auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
+      if (const auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
         if (const auto *layer = skysight->GetSelectedLayer(label);
             layer != nullptr)
           label = layer->name.c_str();

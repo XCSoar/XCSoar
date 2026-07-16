@@ -9,7 +9,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #ifdef HAVE_HTTP
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #endif
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -24,7 +24,7 @@
 #include "LogFile.hpp"
 
 #ifdef HAVE_HTTP
-static std::shared_ptr<Skysight> sky_sight;
+static std::shared_ptr<SkySightManager> sky_sight;
 #endif
 
 void
@@ -85,14 +85,14 @@ DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp) noexcept
 }
 
 #ifdef HAVE_HTTP
-std::shared_ptr<Skysight>
-DataGlobals::GetSkysight() noexcept
+std::shared_ptr<SkySightManager>
+DataGlobals::GetSkySight() noexcept
 {
   return sky_sight;
 }
 
 void
-DataGlobals::SetSkysight(std::shared_ptr<Skysight> skysight) noexcept
+DataGlobals::SetSkySight(std::shared_ptr<SkySightManager> skysight) noexcept
 {
   sky_sight = std::move(skysight);
 }

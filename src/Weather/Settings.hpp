@@ -17,7 +17,7 @@
 
 #ifdef HAVE_HTTP
 
-#include "Skysight/Settings.hpp"
+#include "SkySight/Settings.hpp"
 
 #endif
 
@@ -84,7 +84,7 @@ struct WeatherSettings {
 #endif
 
 #ifdef HAVE_HTTP
-  SkysightSettings skysight;
+  SkySightSettings skysight;
 #endif
 
 #ifdef HAVE_HTTP

@@ -55,7 +55,7 @@ ApplyWeatherOverlayToPage(PageSettings &settings,
 }
 
 static inline bool
-SetSkysightLayerOnPage(PageSettings &settings, unsigned page_index,
+SetSkySightLayerOnPage(PageSettings &settings, unsigned page_index,
                        std::string_view layer_id) noexcept
 {
   if (page_index >= settings.n_pages || layer_id.empty())

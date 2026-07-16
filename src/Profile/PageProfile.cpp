@@ -73,8 +73,13 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
   strcpy(profileKey + prefixLen, "RaspField");
   map.Get(profileKey, pl.rasp_field);
 
-  strcpy(profileKey + prefixLen, "SkysightOverlay");
+  strcpy(profileKey + prefixLen, "SkySightOverlay");
   const char *skysight_overlay_value = map.Get(profileKey);
+  if (skysight_overlay_value == nullptr || *skysight_overlay_value == '\0') {
+    /* Accept pre-rename page keys from early SkySight builds. */
+    strcpy(profileKey + prefixLen, "SkysightOverlay");
+    skysight_overlay_value = map.Get(profileKey);
+  }
   if (skysight_overlay_value != nullptr && *skysight_overlay_value != '\0') {
     pl.skysight_overlay = skysight_overlay_value;
     if (pl.overlay == PageLayout::Overlay::NONE)
@@ -136,7 +141,7 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
   strcpy(profileKey + prefixLen, "RaspField");
   map.Set(profileKey, page.rasp_field);
 
-  strcpy(profileKey + prefixLen, "SkysightOverlay");
+  strcpy(profileKey + prefixLen, "SkySightOverlay");
   map.Set(profileKey, page.skysight_overlay.c_str());
 }
 

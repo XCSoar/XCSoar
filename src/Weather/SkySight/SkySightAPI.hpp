@@ -20,11 +20,11 @@
 #include <vector>
 
 class CurlGlobal;
-class Skysight;
+class SkySightManager;
 class SkySightRequest;
 
-class SkysightAPI final {
-  Skysight &owner;
+class SkySightAPI final {
+  SkySightManager &owner;
   std::unique_ptr<SkySightRequest> request;
   std::unique_ptr<SkySightFileDecodeJob> decode_job;
   struct PendingDecodeJob {
@@ -37,28 +37,29 @@ class SkysightAPI final {
   std::deque<PendingDecodeJob> pending_decode_jobs;
   std::vector<SkySight::Layer> layers;
   std::vector<SkySight::Layer> selected_layers;
-  std::vector<SkysightRegionEntry> regions = GetDefaultSkysightRegions();
+  std::vector<SkySightRegionEntry> regions = GetDefaultSkySightRegions();
   const AllocatedPath cache_path;
-  std::string region = GetDefaultSkysightRegion().id;
+  std::string region = GetDefaultSkySightRegion().id;
 
   bool PreloadDatafiles(std::string_view layer_id,
                         bool begin_progress) noexcept;
 
 public:
-  SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path);
-  ~SkysightAPI();
+  SkySightAPI(SkySightManager &_owner, CurlGlobal &curl, Path _cache_path);
+  ~SkySightAPI();
 
   void Configure(std::string_view email, std::string_view password,
                  std::string_view new_region);
 
   bool HasCredentials() const noexcept;
   bool IsThrottled() const noexcept;
+  bool IsSuspendedForSession() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
   time_t GetDatafilesRetryRemainingSeconds() const noexcept;
   void Poll() noexcept;
 
-  const std::vector<SkysightRegionEntry> &GetRegions() const noexcept {
+  const std::vector<SkySightRegionEntry> &GetRegions() const noexcept {
     return regions;
   }
 
@@ -168,6 +169,7 @@ private:
                       const SkySight::Layer &layer,
                       time_t forecast_time) noexcept;
   void StartNextDecodeJob() noexcept;
+  void ResetPreloadProgress() noexcept;
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);
   static std::string FormatUrlTimestamp(time_t timestamp);
   static std::string FormatFileTimestamp(time_t timestamp);

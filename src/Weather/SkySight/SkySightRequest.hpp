@@ -8,6 +8,7 @@
 
 #include <boost/json.hpp>
 
+#include <chrono>
 #include <deque>
 #include <map>
 #include <memory>
@@ -15,7 +16,7 @@
 #include <string_view>
 
 class CurlGlobal;
-class SkysightAPI;
+class SkySightAPI;
 
 class SkySightRequest final {
   struct FileJob {
@@ -72,8 +73,11 @@ class SkySightRequest final {
   static constexpr unsigned MAX_ACTIVE_DOWNLOADS = 1;
   static constexpr time_t THROTTLE_RETRY_SECONDS = 30;
   static constexpr time_t ERROR_RETRY_SECONDS = 10;
+  static constexpr auto LOGIN_RETRY_INTERVAL = std::chrono::seconds{30};
+  static constexpr auto LOGIN_ATTEMPT_WINDOW = std::chrono::minutes{5};
+  static constexpr unsigned MAX_LOGIN_ATTEMPTS_PER_WINDOW = 3;
 
-  SkysightAPI &api;
+  SkySightAPI &api;
   CurlGlobal &curl;
   const AllocatedPath cache_path;
   UI::CoInjectFunction<boost::json::value> login_job;
@@ -97,10 +101,15 @@ class SkySightRequest final {
   std::string datafiles_layer_id;
   time_t datafiles_retry_at = 0;
   time_t valid_until = 0;
-  time_t last_login_request = 0;
+  std::chrono::steady_clock::time_point next_login_request =
+    std::chrono::steady_clock::time_point::min();
+  std::chrono::steady_clock::time_point login_attempt_window_start =
+    std::chrono::steady_clock::time_point::min();
+  unsigned login_attempts_in_window = 0;
   time_t throttle_until = 0;
   time_t last_throttle_notice = 0;
   bool throttle_resume_notification_pending = false;
+  bool requests_suspended = false;
 
 public:
   enum class DownloadDatafileResult {
@@ -109,7 +118,7 @@ public:
     Available,
   };
 
-  SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl, Path _cache_path) noexcept;
+  SkySightRequest(SkySightAPI &_api, CurlGlobal &_curl, Path _cache_path) noexcept;
   ~SkySightRequest() noexcept;
 
   void Configure(std::string_view new_email, std::string_view new_password);
@@ -121,7 +130,11 @@ public:
   bool IsLoggedIn() const noexcept;
 
   bool IsThrottled() const noexcept {
-    return std::time(nullptr) < throttle_until;
+    return requests_suspended || std::time(nullptr) < throttle_until;
+  }
+
+  bool IsSuspendedForSession() const noexcept {
+    return requests_suspended;
   }
 
   time_t GetThrottleRemainingSeconds() const noexcept {
@@ -152,6 +165,7 @@ public:
 private:
   void CancelAll() noexcept;
   void EnsureLoggedIn();
+  void SuspendRequests(const char *reason) noexcept;
   void CleanupFinishedJobs();
   bool IsQueued(std::string_view key) const noexcept;
   bool RequeueFileJob(const FileJob &job, time_t ready_at) noexcept;

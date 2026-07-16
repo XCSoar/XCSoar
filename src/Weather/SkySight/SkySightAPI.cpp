@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "SkysightAPI.hpp"
+#include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkySightRequest.hpp"
 #include "SkySightURL.hpp"
-#include "Skysight.hpp"
+#include "SkySightManager.hpp"
 #include "io/FileReader.hxx"
 #include "io/FileOutputStream.hxx"
 #include "json/Parse.hxx"
@@ -164,7 +164,7 @@ LoadMetadataCache(Path path, boost::json::value &value) noexcept
 
 } // namespace
 
-SkysightAPI::SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path)
+SkySightAPI::SkySightAPI(SkySightManager &_owner, CurlGlobal &curl, Path _cache_path)
   :owner(_owner),
    request(std::make_unique<SkySightRequest>(*this, curl, _cache_path)),
    decode_job(std::make_unique<SkySightFileDecodeJob>()),
@@ -173,22 +173,22 @@ SkysightAPI::SkysightAPI(Skysight &_owner, CurlGlobal &curl, Path _cache_path)
   InitialiseLayers(layers);
 }
 
-SkysightAPI::~SkysightAPI() = default;
+SkySightAPI::~SkySightAPI() = default;
 
 void
-SkysightAPI::UpdateBusyState(SkySight::Layer &layer) noexcept
+SkySightAPI::UpdateBusyState(SkySight::Layer &layer) noexcept
 {
   layer.updating = layer.ShouldShowUpdating();
 }
 
 AllocatedPath
-SkysightAPI::GetRegionsCachePath() const noexcept
+SkySightAPI::GetRegionsCachePath() const noexcept
 {
   return AllocatedPath::Build(cache_path, REGIONS_CACHE_FILE);
 }
 
 AllocatedPath
-SkysightAPI::GetLayersCachePath() const noexcept
+SkySightAPI::GetLayersCachePath() const noexcept
 {
   StaticString<128> filename;
   filename.Format("layers-%s-v1.cache", region.c_str());
@@ -196,7 +196,7 @@ SkysightAPI::GetLayersCachePath() const noexcept
 }
 
 void
-SkysightAPI::LoadCachedRegions() noexcept
+SkySightAPI::LoadCachedRegions() noexcept
 {
   boost::json::value value;
   const auto path = GetRegionsCachePath();
@@ -208,7 +208,7 @@ SkysightAPI::LoadCachedRegions() noexcept
 }
 
 void
-SkysightAPI::LoadCachedLayers() noexcept
+SkySightAPI::LoadCachedLayers() noexcept
 {
   boost::json::value value;
   const auto path = GetLayersCachePath();
@@ -220,7 +220,7 @@ SkysightAPI::LoadCachedLayers() noexcept
 }
 
 void
-SkysightAPI::StoreMetadataCache(Path path,
+SkySightAPI::StoreMetadataCache(Path path,
                                 const boost::json::value &value) const noexcept
 {
   try {
@@ -234,11 +234,11 @@ SkysightAPI::StoreMetadataCache(Path path,
 }
 
 bool
-SkysightAPI::ParseRegions(const boost::json::value &value,
+SkySightAPI::ParseRegions(const boost::json::value &value,
                           const char *error_context) noexcept
 {
   try {
-    std::vector<SkysightRegionEntry> new_regions;
+    std::vector<SkySightRegionEntry> new_regions;
 
     for (const auto &entry_value : value.as_array()) {
       const auto &entry = entry_value.as_object();
@@ -269,7 +269,7 @@ SkysightAPI::ParseRegions(const boost::json::value &value,
         }
 
       if (!found)
-        region = FindSkysightRegionById({}).id;
+        region = FindSkySightRegionById({}).id;
     }
 
     return true;
@@ -280,7 +280,7 @@ SkysightAPI::ParseRegions(const boost::json::value &value,
 }
 
 bool
-SkysightAPI::ParseLayers(const boost::json::value &value,
+SkySightAPI::ParseLayers(const boost::json::value &value,
                          const char *error_context) noexcept
 {
   try {
@@ -378,7 +378,7 @@ SkysightAPI::ParseLayers(const boost::json::value &value,
 }
 
 void
-SkysightAPI::InitialiseLayers(std::vector<SkySight::Layer> &new_layers)
+SkySightAPI::InitialiseLayers(std::vector<SkySight::Layer> &new_layers)
 {
   new_layers.clear();
 
@@ -392,11 +392,12 @@ SkysightAPI::InitialiseLayers(std::vector<SkySight::Layer> &new_layers)
 }
 
 void
-SkysightAPI::Configure(std::string_view email, std::string_view password,
+SkySightAPI::Configure(std::string_view email, std::string_view password,
                        std::string_view new_region)
 {
-  region = FindSkysightRegionById(new_region.empty()
-                                  ? std::string_view{GetDefaultSkysightRegion().id}
+  ResetPreloadProgress();
+  region = FindSkySightRegionById(new_region.empty()
+                                  ? std::string_view{GetDefaultSkySightRegion().id}
                                   : new_region).id;
   ResetRegions();
   layers_loaded = false;
@@ -414,31 +415,37 @@ SkysightAPI::Configure(std::string_view email, std::string_view password,
 }
 
 bool
-SkysightAPI::HasCredentials() const noexcept
+SkySightAPI::HasCredentials() const noexcept
 {
   return request->HasCredentials();
 }
 
 bool
-SkysightAPI::IsThrottled() const noexcept
+SkySightAPI::IsThrottled() const noexcept
 {
   return request->IsThrottled();
 }
 
+bool
+SkySightAPI::IsSuspendedForSession() const noexcept
+{
+  return request->IsSuspendedForSession();
+}
+
 time_t
-SkysightAPI::GetThrottleRemainingSeconds() const noexcept
+SkySightAPI::GetThrottleRemainingSeconds() const noexcept
 {
   return request->GetThrottleRemainingSeconds();
 }
 
 time_t
-SkysightAPI::GetDatafilesRetryRemainingSeconds() const noexcept
+SkySightAPI::GetDatafilesRetryRemainingSeconds() const noexcept
 {
   return request->GetDatafilesRetryRemainingSeconds();
 }
 
 void
-SkysightAPI::Poll() noexcept
+SkySightAPI::Poll() noexcept
 {
   if (request->Poll())
     OnThrottleEnded();
@@ -448,13 +455,13 @@ SkysightAPI::Poll() noexcept
 }
 
 std::size_t
-SkysightAPI::NumLayers() const noexcept
+SkySightAPI::NumLayers() const noexcept
 {
   return layers.size();
 }
 
 const SkySight::Layer *
-SkysightAPI::GetLayer(std::size_t index) const noexcept
+SkySightAPI::GetLayer(std::size_t index) const noexcept
 {
   return index < layers.size()
     ? &layers[index]
@@ -462,7 +469,7 @@ SkysightAPI::GetLayer(std::size_t index) const noexcept
 }
 
 SkySight::Layer *
-SkysightAPI::GetLayer(std::string_view id) noexcept
+SkySightAPI::GetLayer(std::string_view id) noexcept
 {
   for (auto &i : layers)
     if (i == id)
@@ -472,7 +479,7 @@ SkysightAPI::GetLayer(std::string_view id) noexcept
 }
 
 const SkySight::Layer *
-SkysightAPI::GetSelectedLayer(std::size_t index) const noexcept
+SkySightAPI::GetSelectedLayer(std::size_t index) const noexcept
 {
   return index < selected_layers.size()
     ? &selected_layers[index]
@@ -480,7 +487,7 @@ SkysightAPI::GetSelectedLayer(std::size_t index) const noexcept
 }
 
 SkySight::Layer *
-SkysightAPI::GetSelectedLayer(std::string_view id) noexcept
+SkySightAPI::GetSelectedLayer(std::string_view id) noexcept
 {
   for (auto &layer : selected_layers)
     if (layer == id)
@@ -490,7 +497,7 @@ SkysightAPI::GetSelectedLayer(std::string_view id) noexcept
 }
 
 bool
-SkysightAPI::IsSelectedLayer(std::string_view id) const noexcept
+SkySightAPI::IsSelectedLayer(std::string_view id) const noexcept
 {
   return std::any_of(selected_layers.begin(), selected_layers.end(),
                      [id](const auto &layer) {
@@ -499,13 +506,13 @@ SkysightAPI::IsSelectedLayer(std::string_view id) const noexcept
 }
 
 bool
-SkysightAPI::SelectedLayersFull() const noexcept
+SkySightAPI::SelectedLayersFull() const noexcept
 {
   return selected_layers.size() >= MAX_SELECTED_LAYERS;
 }
 
 bool
-SkysightAPI::AddSelectedLayer(const SkySight::Layer &layer)
+SkySightAPI::AddSelectedLayer(const SkySight::Layer &layer)
 {
   if (SelectedLayersFull() || IsSelectedLayer(layer.id))
     return false;
@@ -515,7 +522,7 @@ SkysightAPI::AddSelectedLayer(const SkySight::Layer &layer)
 }
 
 bool
-SkysightAPI::RemoveSelectedLayer(std::string_view id) noexcept
+SkySightAPI::RemoveSelectedLayer(std::string_view id) noexcept
 {
   const auto i = std::find_if(selected_layers.begin(), selected_layers.end(),
                               [id](const auto &layer) {
@@ -529,13 +536,13 @@ SkysightAPI::RemoveSelectedLayer(std::string_view id) noexcept
 }
 
 void
-SkysightAPI::ClearSelectedLayers() noexcept
+SkySightAPI::ClearSelectedLayers() noexcept
 {
   selected_layers.clear();
 }
 
 std::string
-SkysightAPI::FormatUrlTimestamp(time_t timestamp)
+SkySightAPI::FormatUrlTimestamp(time_t timestamp)
 {
   const auto tm = GmTime(std::chrono::system_clock::from_time_t(timestamp));
 
@@ -545,7 +552,7 @@ SkysightAPI::FormatUrlTimestamp(time_t timestamp)
 }
 
 std::string
-SkysightAPI::FormatFileTimestamp(time_t timestamp)
+SkySightAPI::FormatFileTimestamp(time_t timestamp)
 {
   const auto tm = GmTime(std::chrono::system_clock::from_time_t(timestamp));
 
@@ -555,7 +562,7 @@ SkysightAPI::FormatFileTimestamp(time_t timestamp)
 }
 
 std::string
-SkysightAPI::MakeTileUrl(const SkySight::Layer &layer,
+SkySightAPI::MakeTileUrl(const SkySight::Layer &layer,
                          time_t timestamp,
                          const GeoBitmap::TileData &tile)
 {
@@ -564,7 +571,7 @@ SkysightAPI::MakeTileUrl(const SkySight::Layer &layer,
 }
 
 AllocatedPath
-SkysightAPI::GetTilePath(const SkySight::Layer &layer, time_t timestamp,
+SkySightAPI::GetTilePath(const SkySight::Layer &layer, time_t timestamp,
                          const GeoBitmap::TileData &tile) const
 {
   StaticString<128> filename;
@@ -575,7 +582,7 @@ SkysightAPI::GetTilePath(const SkySight::Layer &layer, time_t timestamp,
 }
 
 AllocatedPath
-SkysightAPI::GetDatafilePath(const SkySight::Layer &layer,
+SkySightAPI::GetDatafilePath(const SkySight::Layer &layer,
                              time_t forecast_time,
                              std::string_view suffix) const
 {
@@ -588,7 +595,7 @@ SkysightAPI::GetDatafilePath(const SkySight::Layer &layer,
 }
 
 void
-SkysightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
+SkySightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
                         const GeoBitmap::TileData &tile)
 {
   request->DownloadFile(MakeTileUrl(layer, timestamp, tile),
@@ -597,13 +604,13 @@ SkysightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
 }
 
 void
-SkysightAPI::CancelTileDownloads() noexcept
+SkySightAPI::CancelTileDownloads() noexcept
 {
   request->CancelTileDownloads();
 }
 
 void
-SkysightAPI::EnsureDatafile(const SkySight::Layer &layer,
+SkySightAPI::EnsureDatafile(const SkySight::Layer &layer,
                             time_t forecast_time,
                             std::string_view link)
 {
@@ -613,7 +620,7 @@ SkysightAPI::EnsureDatafile(const SkySight::Layer &layer,
 }
 
 bool
-SkysightAPI::QueueForecastDatafile(SkySight::Layer &layer,
+SkySightAPI::QueueForecastDatafile(SkySight::Layer &layer,
                                    time_t forecast_time,
                                    std::string_view link) noexcept
 {
@@ -649,7 +656,7 @@ SkysightAPI::QueueForecastDatafile(SkySight::Layer &layer,
 }
 
 bool
-SkysightAPI::QueuePreloadDatafile(SkySight::Layer &layer,
+SkySightAPI::QueuePreloadDatafile(SkySight::Layer &layer,
                                   time_t forecast_time,
                                   std::string_view link) noexcept
 {
@@ -662,7 +669,7 @@ SkysightAPI::QueuePreloadDatafile(SkySight::Layer &layer,
 }
 
 bool
-SkysightAPI::QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer &layer,
+SkySightAPI::QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer &layer,
                             time_t forecast_time) noexcept
 {
   try {
@@ -682,7 +689,7 @@ SkysightAPI::QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer
 }
 
 void
-SkysightAPI::StartNextDecodeJob() noexcept
+SkySightAPI::StartNextDecodeJob() noexcept
 {
   if (pending_decode_jobs.empty())
     return;
@@ -737,7 +744,7 @@ SkysightAPI::StartNextDecodeJob() noexcept
 }
 
 bool
-SkysightAPI::QueueForecastDatafile(std::string_view layer_id,
+SkySightAPI::QueueForecastDatafile(std::string_view layer_id,
                                    time_t forecast_time,
                                    std::string_view link) noexcept
 {
@@ -751,7 +758,7 @@ SkysightAPI::QueueForecastDatafile(std::string_view layer_id,
 }
 
 bool
-SkysightAPI::PreloadDefaultDatafile(std::string_view layer_id) noexcept
+SkySightAPI::PreloadDefaultDatafile(std::string_view layer_id) noexcept
 {
   auto *layer = GetLayer(layer_id);
   if (layer == nullptr || layer->SupportsLiveTiles())
@@ -781,59 +788,67 @@ SkysightAPI::PreloadDefaultDatafile(std::string_view layer_id) noexcept
 }
 
 bool
-SkysightAPI::PreloadDatafiles(std::string_view layer_id,
+SkySightAPI::PreloadDatafiles(std::string_view layer_id,
                               bool begin_progress) noexcept
 {
-  auto *layer = GetLayer(layer_id);
-  if (layer == nullptr || layer->SupportsLiveTiles())
+  try {
+    auto *layer = GetLayer(layer_id);
+    if (layer == nullptr || layer->SupportsLiveTiles())
+      return false;
+
+    if (begin_progress)
+      BeginPreloadProgress();
+
+    bool success = false;
+
+    if (layer->forecast_datafiles.empty()) {
+      layer->preload_requested = true;
+      layer->default_preload_requested = false;
+      layer->datafiles_pending = true;
+      if (std::find(preload_metadata_layers.begin(), preload_metadata_layers.end(),
+                    layer->id) == preload_metadata_layers.end())
+        preload_metadata_layers.emplace_back(layer->id);
+      UpdateBusyState(*layer);
+      success = true;
+    } else {
+      layer->preload_requested = false;
+      layer->default_preload_requested = false;
+      for (const auto *datafile :
+           SkySight::GetForecastPreloadDatafiles(*layer, std::time(nullptr)))
+        success = QueuePreloadDatafile(*layer, datafile->time, datafile->link) ||
+          success;
+
+      UpdateBusyState(*layer);
+    }
+
+    SyncSelectedLayer(layer_id);
+    owner.OnDataUpdated();
+
+    if (layer->datafiles_pending)
+      PollSelectedDatafiles();
+
+    if (begin_progress)
+      preload_progress_initializing = false;
+    UpdatePreloadProgress();
+
+    return success;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight forecast preload failed");
+    if (begin_progress)
+      preload_progress_initializing = false;
+    UpdatePreloadProgress();
     return false;
-
-  if (begin_progress)
-    BeginPreloadProgress();
-
-  bool success = false;
-
-  if (layer->forecast_datafiles.empty()) {
-    layer->preload_requested = true;
-    layer->default_preload_requested = false;
-    layer->datafiles_pending = true;
-    if (std::find(preload_metadata_layers.begin(), preload_metadata_layers.end(),
-                  layer->id) == preload_metadata_layers.end())
-      preload_metadata_layers.emplace_back(layer->id);
-    UpdateBusyState(*layer);
-    success = true;
-  } else {
-    layer->preload_requested = false;
-    layer->default_preload_requested = false;
-    for (const auto *datafile :
-         SkySight::GetForecastPreloadDatafiles(*layer, std::time(nullptr)))
-      success = QueuePreloadDatafile(*layer, datafile->time, datafile->link) ||
-        success;
-
-    UpdateBusyState(*layer);
   }
-
-  SyncSelectedLayer(layer_id);
-  owner.OnDataUpdated();
-
-  if (layer->datafiles_pending)
-    PollSelectedDatafiles();
-
-  if (begin_progress)
-    preload_progress_initializing = false;
-  UpdatePreloadProgress();
-
-  return success;
 }
 
 bool
-SkysightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
+SkySightAPI::PreloadDatafiles(std::string_view layer_id) noexcept
 {
   return PreloadDatafiles(layer_id, true);
 }
 
 bool
-SkysightAPI::PreloadAllDatafiles() noexcept
+SkySightAPI::PreloadAllDatafiles() noexcept
 {
   BeginPreloadProgress();
   bool success = false;
@@ -849,7 +864,7 @@ SkysightAPI::PreloadAllDatafiles() noexcept
 }
 
 void
-SkysightAPI::BeginPreloadProgress() noexcept
+SkySightAPI::BeginPreloadProgress() noexcept
 {
   preload_targets.clear();
   preload_metadata_layers.clear();
@@ -860,20 +875,35 @@ SkysightAPI::BeginPreloadProgress() noexcept
 }
 
 void
-SkysightAPI::AddPreloadTarget(std::string_view layer_id,
-                               time_t forecast_time) noexcept
+SkySightAPI::ResetPreloadProgress() noexcept
 {
-  const auto exists = std::find_if(preload_targets.begin(), preload_targets.end(),
-                                   [layer_id, forecast_time](const auto &target) {
-                                     return target.layer_id == layer_id &&
-                                       target.forecast_time == forecast_time;
-                                   });
-  if (exists == preload_targets.end())
-    preload_targets.push_back({std::string{layer_id}, forecast_time});
+  owner.OnForecastProgressCancelled();
+  preload_targets.clear();
+  preload_metadata_layers.clear();
+  preload_failures = 0;
+  preload_progress_active = false;
+  preload_progress_initializing = false;
 }
 
 void
-SkysightAPI::FinishPreloadTarget(std::string_view layer_id,
+SkySightAPI::AddPreloadTarget(std::string_view layer_id,
+                               time_t forecast_time) noexcept
+{
+  try {
+    const auto exists = std::find_if(preload_targets.begin(), preload_targets.end(),
+                                     [layer_id, forecast_time](const auto &target) {
+                                       return target.layer_id == layer_id &&
+                                         target.forecast_time == forecast_time;
+                                     });
+    if (exists == preload_targets.end())
+      preload_targets.push_back({std::string{layer_id}, forecast_time});
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight preload tracking failed");
+  }
+}
+
+void
+SkySightAPI::FinishPreloadTarget(std::string_view layer_id,
                                   time_t forecast_time, bool failed) noexcept
 {
   const auto target = std::find_if(preload_targets.begin(), preload_targets.end(),
@@ -889,7 +919,7 @@ SkysightAPI::FinishPreloadTarget(std::string_view layer_id,
 }
 
 void
-SkysightAPI::FinishPreloadMetadata(std::string_view layer_id, bool failed) noexcept
+SkySightAPI::FinishPreloadMetadata(std::string_view layer_id, bool failed) noexcept
 {
   const auto i = std::find(preload_metadata_layers.begin(),
                            preload_metadata_layers.end(), layer_id);
@@ -901,7 +931,7 @@ SkysightAPI::FinishPreloadMetadata(std::string_view layer_id, bool failed) noexc
 }
 
 void
-SkysightAPI::UpdatePreloadProgress() noexcept
+SkySightAPI::UpdatePreloadProgress() noexcept
 {
   if (!preload_progress_active || preload_progress_initializing)
     return;
@@ -914,7 +944,9 @@ SkysightAPI::UpdatePreloadProgress() noexcept
   progress.total = preload_targets.size();
   progress.completed = completed;
   progress.failed = preload_failures;
-  progress.retry_seconds = request->GetThrottleRemainingSeconds();
+  progress.retry_seconds = request->IsSuspendedForSession()
+    ? 0
+    : request->GetThrottleRemainingSeconds();
 
   if (request->IsThrottled())
     progress.phase = SkySight::ForecastProgressPhase::Throttled;
@@ -939,7 +971,7 @@ SkysightAPI::UpdatePreloadProgress() noexcept
 }
 
 void
-SkysightAPI::PollRegions() noexcept
+SkySightAPI::PollRegions() noexcept
 {
   if (!HasCredentials())
     return;
@@ -960,7 +992,7 @@ SkysightAPI::PollRegions() noexcept
 }
 
 void
-SkysightAPI::PollLayers() noexcept
+SkySightAPI::PollLayers() noexcept
 {
   if (!HasCredentials() || region.empty())
     return;
@@ -981,7 +1013,7 @@ SkysightAPI::PollLayers() noexcept
 }
 
 void
-SkysightAPI::PollLastUpdates() noexcept
+SkySightAPI::PollLastUpdates() noexcept
 {
   if (!HasCredentials() || region.empty())
     return;
@@ -1007,7 +1039,7 @@ SkysightAPI::PollLastUpdates() noexcept
 }
 
 void
-SkysightAPI::PollSelectedDatafiles() noexcept
+SkySightAPI::PollSelectedDatafiles() noexcept
 {
   try {
     if (!HasCredentials() || region.empty())
@@ -1056,22 +1088,22 @@ SkysightAPI::PollSelectedDatafiles() noexcept
 }
 
 void
-SkysightAPI::ResetRegions() noexcept
+SkySightAPI::ResetRegions() noexcept
 {
-  regions = GetDefaultSkysightRegions();
+  regions = GetDefaultSkySightRegions();
   regions_loaded = false;
   last_regions_request = 0;
   last_regions_refresh = 0;
 }
 
 void
-SkysightAPI::ResetLastUpdates() noexcept
+SkySightAPI::ResetLastUpdates() noexcept
 {
   last_updates_request = 0;
 }
 
 void
-SkysightAPI::OnAuthenticated() noexcept
+SkySightAPI::OnAuthenticated() noexcept
 {
   PollRegions();
   PollLayers();
@@ -1081,7 +1113,7 @@ SkysightAPI::OnAuthenticated() noexcept
 }
 
 void
-SkysightAPI::OnRegions(boost::json::value value) noexcept
+SkySightAPI::OnRegions(boost::json::value value) noexcept
 {
   if (!ParseRegions(value, "SkySight regions parsing failed"))
     return;
@@ -1093,7 +1125,7 @@ SkysightAPI::OnRegions(boost::json::value value) noexcept
 }
 
 void
-SkysightAPI::OnLayers(boost::json::value value) noexcept
+SkySightAPI::OnLayers(boost::json::value value) noexcept
 {
   try {
     const auto active_layer_id = std::string{owner.GetActiveLayerId()};
@@ -1114,7 +1146,7 @@ SkysightAPI::OnLayers(boost::json::value value) noexcept
 }
 
 void
-SkysightAPI::OnLastUpdates(boost::json::value value) noexcept
+SkySightAPI::OnLastUpdates(boost::json::value value) noexcept
 {
   bool active_layer_changed = false;
 
@@ -1145,7 +1177,7 @@ SkysightAPI::OnLastUpdates(boost::json::value value) noexcept
 }
 
 void
-SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) noexcept
+SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) noexcept
 {
   auto *layer = GetLayer(layer_id);
   if (layer == nullptr)
@@ -1260,7 +1292,7 @@ SkysightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
 }
 
 void
-SkysightAPI::OnDatafilesRetry(std::string_view layer_id) noexcept
+SkySightAPI::OnDatafilesRetry(std::string_view layer_id) noexcept
 {
   if (auto *layer = GetLayer(layer_id); layer != nullptr) {
     /* Keep datafiles_pending and preload_requested set.  Poll() retries the
@@ -1274,7 +1306,7 @@ SkysightAPI::OnDatafilesRetry(std::string_view layer_id) noexcept
 }
 
 void
-SkysightAPI::OnDatafilesError(std::string_view layer_id) noexcept
+SkySightAPI::OnDatafilesError(std::string_view layer_id) noexcept
 {
   if (auto *layer = GetLayer(layer_id); layer != nullptr) {
     layer->datafiles_pending = false;
@@ -1292,13 +1324,13 @@ SkysightAPI::OnDatafilesError(std::string_view layer_id) noexcept
 }
 
 void
-SkysightAPI::OnDownloadComplete() noexcept
+SkySightAPI::OnDownloadComplete() noexcept
 {
   owner.OnDataUpdated();
 }
 
 void
-SkysightAPI::OnThrottle() noexcept
+SkySightAPI::OnThrottle() noexcept
 {
   owner.OnForecastThrottled();
   owner.OnDataUpdated();
@@ -1306,7 +1338,7 @@ SkysightAPI::OnThrottle() noexcept
 }
 
 void
-SkysightAPI::OnThrottleEnded() noexcept
+SkySightAPI::OnThrottleEnded() noexcept
 {
   owner.OnForecastResumed();
 
@@ -1315,7 +1347,7 @@ SkysightAPI::OnThrottleEnded() noexcept
 }
 
 void
-SkysightAPI::OnDatafileDownloaded(std::string_view layer_id,
+SkySightAPI::OnDatafileDownloaded(std::string_view layer_id,
                                   time_t forecast_time,
                                   SkySightPreparedData prepared) noexcept
 {
@@ -1358,7 +1390,7 @@ SkysightAPI::OnDatafileDownloaded(std::string_view layer_id,
 }
 
 void
-SkysightAPI::OnDatafileError(std::string_view layer_id,
+SkySightAPI::OnDatafileError(std::string_view layer_id,
                              [[maybe_unused]] time_t forecast_time,
                              [[maybe_unused]] bool preparation_failed) noexcept
 {
@@ -1379,7 +1411,7 @@ SkysightAPI::OnDatafileError(std::string_view layer_id,
 }
 
 void
-SkysightAPI::SyncSelectedLayer(std::string_view id) noexcept
+SkySightAPI::SyncSelectedLayer(std::string_view id) noexcept
 {
   auto *selected = GetSelectedLayer(id);
   auto *layer = GetLayer(id);

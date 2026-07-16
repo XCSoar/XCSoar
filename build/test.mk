@@ -2152,7 +2152,7 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 RUN_MAP_WINDOW_SOURCES += \
-	$(TEST_SRC_DIR)/FakeSkysight.cpp
+	$(TEST_SRC_DIR)/FakeSkySight.cpp
 endif
 
 RUN_MAP_WINDOW_DEPENDS = \

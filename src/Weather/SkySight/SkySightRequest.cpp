@@ -3,7 +3,7 @@
 
 #include "SkySightRequest.hpp"
 #include "SkySightFileDecoder.hpp"
-#include "SkysightAPI.hpp"
+#include "SkySightAPI.hpp"
 #include "SkySightURL.hpp"
 #include "Version.hpp"
 #include "co/Task.hxx"
@@ -92,7 +92,7 @@ LoginTask(CurlGlobal &curl, std::string email, std::string password)
   const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), body_stream);
   auto body = std::move(body_stream).GetValue();
   if (response.status != 200 && response.status != 201)
-    throw FmtRuntimeError("SkySight login failed with status {}", response.status);
+    throw HttpStatusError(response.status);
 
   co_return ParseJsonResponse(body, "SkySight login");
 }
@@ -145,7 +145,7 @@ DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
   co_return path;
 }
 
-SkySightRequest::SkySightRequest(SkysightAPI &_api, CurlGlobal &_curl,
+SkySightRequest::SkySightRequest(SkySightAPI &_api, CurlGlobal &_curl,
                                  Path _cache_path) noexcept
   :api(_api),
    curl(_curl),
@@ -221,7 +221,10 @@ SkySightRequest::Configure(std::string_view new_email, std::string_view new_pass
   password = std::string{new_password};
   api_key.clear();
   valid_until = 0;
-  last_login_request = 0;
+  next_login_request = std::chrono::steady_clock::time_point::min();
+  login_attempt_window_start = std::chrono::steady_clock::time_point::min();
+  login_attempts_in_window = 0;
+  requests_suspended = false;
 
   CancelAll();
 }
@@ -278,6 +281,9 @@ SkySightRequest::RequeueFileJob(const FileJob &job, time_t ready_at) noexcept
 bool
 SkySightRequest::Poll() noexcept
 {
+  if (requests_suspended)
+    return false;
+
   TryPumpQueue();
 
   if (throttle_until == 0 && throttle_resume_notification_pending) {
@@ -292,6 +298,9 @@ void
 SkySightRequest::PumpQueue()
 {
   CleanupFinishedJobs();
+
+  if (requests_suspended)
+    return;
 
   const auto now = std::time(nullptr);
   if (now < throttle_until)
@@ -354,31 +363,71 @@ SkySightRequest::TryPumpQueue() noexcept
 }
 
 void
+SkySightRequest::SuspendRequests(const char *reason) noexcept
+{
+  if (requests_suspended)
+    return;
+
+  requests_suspended = true;
+  /* Keep queued jobs intact while paused so their API-side progress
+     accounting remains valid.  Configure() clears them on an explicit
+     settings reload. */
+  datafiles_retry_at = 0;
+  SetThrottleUntil(std::time(nullptr) + THROTTLE_RETRY_SECONDS);
+  LogFmt("SkySight requests suspended for this session: {}", reason);
+  api.OnThrottle();
+}
+
+void
 SkySightRequest::EnsureLoggedIn()
 {
-  if (!HasCredentials() || login_running || IsLoggedIn())
+  if (requests_suspended || !HasCredentials() || login_running || IsLoggedIn())
     return;
 
-  const auto now = std::time(nullptr);
-  if (last_login_request != 0 && now < last_login_request + 30)
+  if (std::time(nullptr) < throttle_until)
     return;
 
-  last_login_request = now;
+  const auto now = std::chrono::steady_clock::now();
+  if (now < next_login_request)
+    return;
+
+  if (login_attempt_window_start == std::chrono::steady_clock::time_point::min() ||
+      now < login_attempt_window_start ||
+      now - login_attempt_window_start >= LOGIN_ATTEMPT_WINDOW) {
+    login_attempt_window_start = now;
+    login_attempts_in_window = 0;
+  }
+
+  if (login_attempts_in_window >= MAX_LOGIN_ATTEMPTS_PER_WINDOW) {
+    SuspendRequests("authentication retry limit reached");
+    return;
+  }
+
+  ++login_attempts_in_window;
+  next_login_request = now + LOGIN_RETRY_INTERVAL;
   login_running = true;
 
-  login_job.Start(LoginTask(curl, email, password),
-                  [this](boost::json::value value) {
-                    OnLoginSuccess(std::move(value));
-                  },
-                  [this](std::exception_ptr error) {
-                    OnLoginError(std::move(error));
-                  });
+  try {
+    login_job.Start(LoginTask(curl, email, password),
+                    [this](boost::json::value value) {
+                      OnLoginSuccess(std::move(value));
+                    },
+                    [this](std::exception_ptr error) {
+                      OnLoginError(std::move(error));
+                    });
+  } catch (...) {
+    login_running = false;
+    throw;
+  }
 }
 
 void
 SkySightRequest::OnLoginSuccess(boost::json::value value)
 {
   login_running = false;
+
+  if (requests_suspended)
+    return;
 
   try {
     const auto &json = value.as_object();
@@ -409,12 +458,27 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
   login_running = false;
   api_key.clear();
   valid_until = 0;
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const HttpStatusError &http_error) {
+    if (http_error.status == 429) {
+      SuspendRequests("server returned HTTP 429 during authentication");
+      LogThrottleNotice();
+      return;
+    }
+  } catch (...) {
+  }
+
   LogError(error, "SkySight login failed");
 }
 
 void
 SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires_auth)
 {
+  if (requests_suspended)
+    return;
+
   PumpQueue();
 
   const std::string key{filename.c_str()};
@@ -444,6 +508,9 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
                                   Path filename,
                                   bool high_priority)
 {
+  if (requests_suspended)
+    return DownloadDatafileResult::Duplicate;
+
   PumpQueue();
 
   const std::string key{filename.c_str()};
@@ -499,7 +566,7 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
 bool
 SkySightRequest::RequestRegions()
 {
-  if (regions_running)
+  if (requests_suspended || regions_running)
     return false;
 
   if (!HasCredentials())
@@ -552,7 +619,7 @@ SkySightRequest::OnRegionsError(std::exception_ptr error) noexcept
 bool
 SkySightRequest::RequestLayers(std::string_view region_id)
 {
-  if (region_id.empty() || layers_running)
+  if (requests_suspended || region_id.empty() || layers_running)
     return false;
 
   if (!HasCredentials())
@@ -610,7 +677,7 @@ SkySightRequest::OnLayersError(std::exception_ptr error) noexcept
 bool
 SkySightRequest::RequestLastUpdates(std::string_view region_id)
 {
-  if (region_id.empty() || last_updates_running)
+  if (requests_suspended || region_id.empty() || last_updates_running)
     return false;
 
   if (!HasCredentials())
@@ -647,7 +714,8 @@ SkySightRequest::RequestDatafiles(std::string_view region_id,
                                   std::string_view layer_id,
                                   time_t from_time)
 {
-  if (region_id.empty() || layer_id.empty() || datafiles_running)
+  if (requests_suspended || region_id.empty() || layer_id.empty() ||
+      datafiles_running)
     return false;
 
   if (!HasCredentials())
@@ -756,8 +824,7 @@ SkySightRequest::HandleJsonRequestHttpStatus(unsigned status,
   }
 
   if (status == 429) {
-    SetThrottleUntil(std::time(nullptr) + THROTTLE_RETRY_SECONDS);
-    api.OnThrottle();
+    SuspendRequests("server returned HTTP 429");
     LogThrottleNotice();
     return true;
   }
@@ -823,18 +890,18 @@ SkySightRequest::OnFileError(const std::string &key,
   try {
     std::rethrow_exception(error);
   } catch (const HttpStatusError &http_error) {
+    if (http_error.status == 401 || http_error.status == 403) {
+      api_key.clear();
+      valid_until = 0;
+    }
+
     const auto retry_delay = http_error.status == 429
       ? THROTTLE_RETRY_SECONDS
       : ERROR_RETRY_SECONDS;
     const auto retry_time = std::time(nullptr) + retry_delay;
     if (http_error.status == 429) {
-      SetThrottleUntil(retry_time);
-      api.OnThrottle();
+      SuspendRequests("server returned HTTP 429");
       LogThrottleNotice();
-      if (failed_job != nullptr) {
-        terminal_forecast_error =
-          !RequeueFileJob(*failed_job, retry_time);
-      }
     } else if (failed_job != nullptr &&
                ShouldRetryHttpDownload(http_error.status,
                                        failed_job->attempts)) {
@@ -947,8 +1014,11 @@ SkySightRequest::LogThrottleNotice() noexcept
     return;
 
   last_throttle_notice = now;
-  LogFmt("SkySight throttled by server (HTTP 429), pausing requests for {} seconds",
-         unsigned(THROTTLE_RETRY_SECONDS));
+  if (requests_suspended)
+    LogFmt("SkySight throttled by server (HTTP 429); requests are paused for this session");
+  else
+    LogFmt("SkySight throttled by server (HTTP 429), pausing requests for {} seconds",
+           unsigned(THROTTLE_RETRY_SECONDS));
 }
 
 void

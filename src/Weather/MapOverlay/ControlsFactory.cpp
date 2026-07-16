@@ -10,7 +10,7 @@
 #include "RaspControlsModel.hpp"
 #ifdef HAVE_HTTP
 #include "DataGlobals.hpp"
-#include "SkysightControlsModel.hpp"
+#include "SkySightControlsModel.hpp"
 #endif
 #include "XcthermControlsModel.hpp"
 
@@ -37,8 +37,8 @@ CreateControlsModel(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::SKYSIGHT:
 #ifdef HAVE_HTTP
-    if (const auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
-      return std::make_unique<SkysightControlsModel>(
+    if (const auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+      return std::make_unique<SkySightControlsModel>(
         skysight, layout.skysight_overlay.c_str());
     break;
 #else

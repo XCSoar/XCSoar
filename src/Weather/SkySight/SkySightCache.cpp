@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "SkysightCache.hpp"
+#include "SkySightCache.hpp"
 
 #include "Interface.hpp"
 #include "system/FileUtil.hpp"
@@ -224,7 +224,7 @@ public:
 
 } // namespace
 
-namespace SkysightCache {
+namespace SkySightCache {
 
 /**
  * Returns true only when GPS time is valid or the supported host reports NTP
@@ -375,12 +375,14 @@ Cleanup(Path directory) noexcept
     OlderThanFileVisitor delete_tmp{now - std::chrono::hours{6}};
     OlderThanFileVisitor delete_json{now - std::chrono::hours{1}};
 
-    OlderThanForecastTimeVisitor delete_forecasts{
-      std::chrono::system_clock::to_time_t(now - FORECAST_RETENTION)};
-    VisitForecastImageFiles(directory, delete_forecasts);
-    Directory::VisitSpecificFiles(directory, "*.nc", delete_forecasts);
-    Directory::VisitSpecificFiles(directory, "*.min", delete_forecasts);
-    Directory::VisitSpecificFiles(directory, "*.zip", delete_forecasts);
+    if (IsTrustedTimeAvailableForCleanup()) {
+      OlderThanForecastTimeVisitor delete_forecasts{
+        std::chrono::system_clock::to_time_t(now - FORECAST_RETENTION)};
+      VisitForecastImageFiles(directory, delete_forecasts);
+      Directory::VisitSpecificFiles(directory, "*.nc", delete_forecasts);
+      Directory::VisitSpecificFiles(directory, "*.min", delete_forecasts);
+      Directory::VisitSpecificFiles(directory, "*.zip", delete_forecasts);
+    }
 
     Directory::VisitSpecificFiles(directory, "*.tmp", delete_tmp);
     Directory::VisitSpecificFiles(directory, "*.json", delete_json);
@@ -388,4 +390,4 @@ Cleanup(Path directory) noexcept
   }
 }
 
-} // namespace SkysightCache
+} // namespace SkySightCache

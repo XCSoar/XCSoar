@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Weather/WeatherUIState.hpp"
-#include "Weather/Skysight/ForecastUtils.hpp"
+#include "Weather/SkySight/ForecastUtils.hpp"
 #include "TestUtil.hpp"
 
 static void
@@ -88,7 +88,7 @@ TestWeatherUiStateXcthermCursor()
 }
 
 static void
-TestSkysightForecastPreloadSelection()
+TestSkySightForecastPreloadSelection()
 {
   constexpr time_t DAY = 24 * 60 * 60;
   constexpr time_t NOW = 10 * DAY + 7 * 60 * 60;
@@ -116,7 +116,7 @@ TestSkysightForecastPreloadSelection()
 }
 
 static void
-TestSkysightForecastBusyState()
+TestSkySightForecastBusyState()
 {
   SkySight::Layer layer;
 
@@ -144,8 +144,8 @@ main()
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
   TestWeatherUiStateXcthermCursor();
-  TestSkysightForecastPreloadSelection();
-  TestSkysightForecastBusyState();
+  TestSkySightForecastPreloadSelection();
+  TestSkySightForecastBusyState();
 
   return exit_status();
 }

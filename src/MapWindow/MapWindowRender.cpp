@@ -9,7 +9,7 @@
 #include "Weather/Rasp/RaspStore.hpp"
 #ifdef HAVE_HTTP
 #include "DataGlobals.hpp"
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #endif
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
@@ -234,7 +234,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   RenderRasp(canvas);
 
 #ifdef HAVE_HTTP
-  if (auto skysight = DataGlobals::GetSkysight())
+  if (auto skysight = DataGlobals::GetSkySight())
     skysight->Render();
 #endif
 

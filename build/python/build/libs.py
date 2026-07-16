@@ -463,6 +463,7 @@ netcdf = CmakeProject(
         "-DNETCDF_ENABLE_MMAP=OFF",
     ],
     base="netcdf-c-4.10.0",
+    patches=abspath("lib/netcdf/patches"),
 )
 
 sdl2 = CmakeProject(

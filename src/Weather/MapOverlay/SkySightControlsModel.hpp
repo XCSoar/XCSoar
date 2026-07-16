@@ -12,21 +12,21 @@
 #include <memory>
 #include <string_view>
 
-class Skysight;
+class SkySightManager;
 namespace SkySight {
 struct Layer;
 }
 
 namespace WeatherMapOverlay {
 
-class SkysightControlsModel final : public ControlsModel {
-  std::shared_ptr<Skysight> skysight;
+class SkySightControlsModel final : public ControlsModel {
+  std::shared_ptr<SkySightManager> skysight;
   StaticString<64> layer_id;
   UI::PeriodicTimer countdown_timer{[this]{ UpdateCountdownLabel(); }};
   bool countdown_visible = false;
 
 public:
-  explicit SkysightControlsModel(std::shared_ptr<Skysight> _skysight,
+  explicit SkySightControlsModel(std::shared_ptr<SkySightManager> _skysight,
                                  std::string_view _layer_id) noexcept;
 
   void OnShow() noexcept override;

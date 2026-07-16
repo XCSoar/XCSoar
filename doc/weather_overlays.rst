@@ -52,7 +52,7 @@ The lifecycle is orchestrated in :file:`src/PageActions.cpp`:
    - :cpp:`ApplyRaspOverlay(const PageLayout &)`
    - :cpp:`ApplyEdlOverlay()`
    - :cpp:`ApplyXcthermOverlay()`
-   - :cpp:`ApplySkysightOverlay()`
+   - :cpp:`ApplySkySightOverlay()`
 
 3. Leaving a page calls :cpp:`LeaveWeatherOverlayPage()` and
    provider-specific leave hooks.

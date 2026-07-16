@@ -22,7 +22,7 @@
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Weather/Rasp/Configured.hpp"
 #ifdef HAVE_HTTP
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #endif
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
@@ -585,8 +585,8 @@ Startup(UI::Display &display)
   auto rasp = LoadConfiguredRasp();
 
 #ifdef HAVE_HTTP
-  auto skysight = std::make_shared<Skysight>(*Net::curl);
-  DataGlobals::SetSkysight(skysight);
+  auto skysight = std::make_shared<SkySightManager>(*Net::curl);
+  DataGlobals::SetSkySight(skysight);
 #endif
 
   // Reads the airspace files
@@ -876,7 +876,7 @@ Shutdown()
 #ifdef HAVE_HTTP
   /* Release SkySight before HTTP/curl teardown so active tile requests cancel
      while the UI event loop is still alive. */
-  DataGlobals::SetSkysight({});
+  DataGlobals::SetSkySight({});
 #endif
 
   // Stop sound

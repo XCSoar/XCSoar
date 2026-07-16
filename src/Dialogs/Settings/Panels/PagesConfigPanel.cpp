@@ -24,7 +24,7 @@
 #include "UIGlobals.hpp"
 
 #ifdef HAVE_HTTP
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 #endif
 
 #include <string_view>
@@ -67,7 +67,7 @@ private:
   unsigned GetOverlayValue() const noexcept;
   void UpdateOverlayControls() noexcept;
   void FillRaspFieldControl() noexcept;
-  void FillSkysightLayerControl() noexcept;
+  void FillSkySightLayerControl() noexcept;
   void ApplyValueToForm() noexcept;
 
 public:
@@ -216,14 +216,14 @@ PageLayoutEditWidget::FillRaspFieldControl() noexcept
 }
 
 void
-PageLayoutEditWidget::FillSkysightLayerControl() noexcept
+PageLayoutEditWidget::FillSkySightLayerControl() noexcept
 {
   auto &control = GetControl(SKYSIGHT_LAYER);
   auto &df = (DataFieldEnum &)*control.GetDataField();
   df.ClearChoices();
 
 #ifdef HAVE_HTTP
-  const auto skysight = DataGlobals::GetSkysight();
+  const auto skysight = DataGlobals::GetSkySight();
   if (skysight != nullptr) {
     unsigned selected_value = 1;
     bool has_choices = false;
@@ -315,7 +315,7 @@ PageLayoutEditWidget::ApplyValueToForm() noexcept
   LoadValueEnum(OVERLAY, GetOverlayValue());
   GetControl(OVERLAY).RefreshDisplay();
   FillRaspFieldControl();
-  FillSkysightLayerControl();
+  FillSkySightLayerControl();
   UpdateOverlayControls();
 }
 
@@ -412,7 +412,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           _("SkySight layer used when this page overlay is SkySight."),
           this);
   FillRaspFieldControl();
-  FillSkysightLayerControl();
+  FillSkySightLayerControl();
   UpdateOverlayControls();
 }
 
@@ -440,7 +440,7 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
   LoadValueEnum(INFO_BOX_PANEL, ib);
 
   FillRaspFieldControl();
-  FillSkysightLayerControl();
+  FillSkySightLayerControl();
   UpdateOverlayControls();
 }
 
@@ -479,7 +479,7 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
     case OVERLAY_SKYSIGHT:
 #ifdef HAVE_HTTP
       value.overlay = PageLayout::Overlay::SKYSIGHT;
-      if (auto skysight = DataGlobals::GetSkysight(); skysight != nullptr)
+      if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
         if (const auto *layer = skysight->GetSelectedLayer(0); layer != nullptr)
             value.skysight_overlay = layer->id;
 #endif
@@ -528,7 +528,7 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
 
     value.skysight_overlay.clear();
 
-    if (auto skysight = DataGlobals::GetSkysight(); skysight != nullptr) {
+    if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr) {
       if (selected > 0) {
         if (const auto *layer = skysight->GetSelectedLayer(selected - 1);
             layer != nullptr)

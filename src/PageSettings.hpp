@@ -200,7 +200,7 @@ struct PageLayout
 
   [[gnu::const]]
   constexpr bool
-  UsesSkysightOverlay() const noexcept
+  UsesSkySightOverlay() const noexcept
   {
     return IsMapMain() && overlay == Overlay::SKYSIGHT &&
       !skysight_overlay.empty();

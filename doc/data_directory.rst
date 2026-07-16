@@ -233,7 +233,7 @@ Repository downloads and other fetched forecast data live under
   (:file:`Weather/EDL/TileStore.cpp`). Filenames encode forecast time
   and isobar level.
 - **SkySight** — :file:`cache/weather/skysight/`
-  (:file:`Weather/Skysight/`). The provider removes stale forecast artifacts
+  (:file:`Weather/SkySight/`). The provider removes stale forecast artifacts
   automatically while retaining catalog and throttle ``*.cache`` files.
 - **XCTherm** — :file:`cache/weather/xctherm/<model>/`
   (:file:`Weather/xctherm/XCThermAPI.cpp`). Each file is named

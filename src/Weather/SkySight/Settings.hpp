@@ -6,7 +6,7 @@
 #include "Regions.hpp"
 #include "util/StaticString.hxx"
 
-struct SkysightSettings {
+struct SkySightSettings {
   StaticString<64> email;
   StaticString<64> password;
   StaticString<32> region;
@@ -18,6 +18,6 @@ struct SkysightSettings {
   void SetDefaults() noexcept {
     email.clear();
     password.clear();
-    region = GetDefaultSkysightRegion().id;
+    region = GetDefaultSkySightRegion().id;
   }
 };

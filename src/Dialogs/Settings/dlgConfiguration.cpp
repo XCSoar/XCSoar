@@ -72,7 +72,7 @@
 #include "Panels/XCThermConfigPanel.hpp"
 #endif
 #ifdef HAVE_HTTP
-#include "Panels/SkysightConfigPanel.hpp"
+#include "Panels/SkySightConfigPanel.hpp"
 #endif
 
 #include "Panels/WeGlideConfigPanel.hpp"
@@ -140,7 +140,7 @@ static constexpr TabMenuPage weather_pages[] = {
 #endif
   { "RASP", CreateRaspConfigPanel },
 #ifdef HAVE_HTTP
-  { "SkySight", CreateSkysightConfigPanel },
+  { "SkySight", CreateSkySightConfigPanel },
 #endif
 #ifdef HAVE_PCMET
   { "Flugwetter (pc_met)", CreatePCMetConfigPanel },

@@ -4,16 +4,16 @@
 #ifdef HAVE_HTTP
 
 #include "DataGlobals.hpp"
-#include "Weather/Skysight/Skysight.hpp"
+#include "Weather/SkySight/SkySightManager.hpp"
 
-std::shared_ptr<Skysight>
-DataGlobals::GetSkysight() noexcept
+std::shared_ptr<SkySightManager>
+DataGlobals::GetSkySight() noexcept
 {
   return {};
 }
 
 void
-Skysight::Render()
+SkySightManager::Render()
 {
 }
 

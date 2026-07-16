@@ -333,8 +333,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   const UIState &ui_state = GetUIState();
-  if (Basic().gps.replay)
-    buffer += "REPLAY ";
+  if (Basic().gps.replay) {
+    buffer += _("REPLAY");
+    buffer += " ";
+  }
   else if (Basic().gps.simulator) {
     buffer += _("Simulator");
     buffer += " ";

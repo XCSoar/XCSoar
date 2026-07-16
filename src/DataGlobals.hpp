@@ -10,7 +10,7 @@
 class RaspStore;
 class RasterTerrain;
 #ifdef HAVE_HTTP
-class Skysight;
+class SkySightManager;
 #endif
 
 /**
@@ -52,11 +52,11 @@ void
 UpdateHome(bool reset) noexcept;
 
 #ifdef HAVE_HTTP
-std::shared_ptr<Skysight>
-GetSkysight() noexcept;
+std::shared_ptr<SkySightManager>
+GetSkySight() noexcept;
 
 void
-SetSkysight(std::shared_ptr<Skysight> skysight) noexcept;
+SetSkySight(std::shared_ptr<SkySightManager> skysight) noexcept;
 #endif
 
 };
