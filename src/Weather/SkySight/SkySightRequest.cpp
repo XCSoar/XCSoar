@@ -420,8 +420,9 @@ SkySightRequest::PumpQueue()
     const auto next = std::find_if(pending_jobs.begin(), pending_jobs.end(),
                                    [this, now](const auto &job) {
                                      return now >= job.ready_at &&
-                                       (job.kind != FileJob::Kind::Generic ||
-                                        live_tile_pacer.CanStart(now)) &&
+                                       (job.kind == FileJob::Kind::ForecastData ||
+                                        (interactive_request_pacer.CanStart(now) &&
+                                         live_tile_pacer.CanStart(now))) &&
                                        (!job.requires_auth || IsLoggedIn());
                                    });
     if (next == pending_jobs.end()) {
@@ -440,9 +441,10 @@ SkySightRequest::PumpQueue()
                                                 std::move(job));
     auto *job_ptr = active_job.get();
     const auto key = job_ptr->key;
-
-    if (job_ptr->kind == FileJob::Kind::Generic)
+    if (job_ptr->kind == FileJob::Kind::Generic) {
+      interactive_request_pacer.OnStarted(now);
       live_tile_pacer.OnStarted(now);
+    }
 
     file_jobs.emplace(key, std::move(active_job));
     const bool tile_download = job_ptr->kind == FileJob::Kind::Generic;
@@ -488,11 +490,15 @@ SkySightRequest::EnsureLoggedIn()
   if (now < throttle_until || !authentication_failures.CanAttempt(now))
     return;
 
+  if (!interactive_request_pacer.CanStart(now))
+    return;
+
   if (last_login_request != 0 && now < last_login_request + 30)
     return;
 
   last_login_request = now;
   login_running = true;
+  interactive_request_pacer.OnStarted(now);
 
   try {
     login_job.Start(LoginTask(curl, email, password),
@@ -697,7 +703,11 @@ SkySightRequest::RequestRegions()
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   regions_running = true;
+  interactive_request_pacer.OnStarted(std::time(nullptr));
   regions_job.Start(
     JsonTask(curl, SkySightUrl::Api("regions"), api_key),
     [this](boost::json::value value) {
@@ -752,7 +762,11 @@ SkySightRequest::RequestLayers(std::string_view region_id)
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   layers_running = true;
+  interactive_request_pacer.OnStarted(std::time(nullptr));
 
   auto url = SkySightUrl::Api("layers");
   url += "?region_id=";
@@ -811,8 +825,12 @@ SkySightRequest::RequestLastUpdates(std::string_view region_id,
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   last_updates_running = true;
   last_updates_layer_id = layer_id;
+  interactive_request_pacer.OnStarted(std::time(nullptr));
 
   auto url = SkySightUrl::Api("data/last_updated");
   url += "?region_id=";
@@ -851,12 +869,16 @@ SkySightRequest::RequestDatafiles(std::string_view region_id,
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   if (std::time(nullptr) < datafiles_retry_at)
     return false;
 
   datafiles_running = true;
   datafiles_retry_at = 0;
   datafiles_layer_id = std::string{layer_id};
+  interactive_request_pacer.OnStarted(std::time(nullptr));
 
   auto url = SkySightUrl::Api("data");
   url += "?region_id=";

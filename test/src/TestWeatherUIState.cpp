@@ -259,6 +259,12 @@ TestSkySightRequestFailurePolicy()
   throttled_pacer.OnThrottle();
   ok1(!throttled_pacer.CanStart(NOW + 1));
   ok1(throttled_pacer.CanStart(NOW + 8));
+
+  SkySight::InteractiveRequestPacer interactive_pacer;
+  ok1(interactive_pacer.CanStart(NOW));
+  interactive_pacer.OnStarted(NOW);
+  ok1(!interactive_pacer.CanStart(NOW));
+  ok1(interactive_pacer.CanStart(NOW + 1));
 }
 
 static void
@@ -355,7 +361,7 @@ TestSkySightLiveTileResolution()
 int
 main()
 {
-  plan_tests(32 + 10 + 10 + 5 + 12 + 4 + 19 + 40 + 2 + 1);
+  plan_tests(32 + 10 + 10 + 5 + 12 + 4 + 24 + 40 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();

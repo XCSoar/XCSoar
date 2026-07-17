@@ -360,11 +360,6 @@ private:
     if (skysight == nullptr)
       return;
 
-    skysight->PollPendingDatafiles();
-
-    if (skysight->HasCredentials() && !skysight->HasForecastLayers() && !skysight->IsThrottled())
-      skysight->RefreshCatalog();
-
     GetList().SetLength(std::max<std::size_t>(1, skysight->NumSelectedLayers()));
     GetList().Invalidate();
     UpdateButtons();

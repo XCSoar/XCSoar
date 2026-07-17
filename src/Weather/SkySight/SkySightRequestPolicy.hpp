@@ -180,6 +180,25 @@ public:
   }
 };
 
+/**
+ * Prevents authentication, catalog, metadata and live-tile requests from
+ * forming a startup burst.  Forecast file downloads are intentionally exempt.
+ */
+class InteractiveRequestPacer {
+  static constexpr time_t MIN_INTERVAL_SECONDS = 1;
+
+  time_t next_request_at = 0;
+
+public:
+  [[nodiscard]] bool CanStart(time_t now) const noexcept {
+    return now >= next_request_at;
+  }
+
+  void OnStarted(time_t now) noexcept {
+    next_request_at = now + MIN_INTERVAL_SECONDS;
+  }
+};
+
 struct RequestFailureDecision {
   RequestFailureAction action;
   time_t ready_at;

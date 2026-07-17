@@ -86,6 +86,7 @@ class SkySightRequest final {
   SkySight::AuthenticationFailurePolicy authentication_failures;
   SkySight::RequestFailurePolicy download_failures;
   SkySight::ThrottleFallbackPolicy throttle_fallback;
+  SkySight::InteractiveRequestPacer interactive_request_pacer;
   SkySight::LiveTileRequestPacer live_tile_pacer;
   std::map<std::string, time_t> payload_retry_at;
   std::set<std::string, std::less<>> generic_keys;
