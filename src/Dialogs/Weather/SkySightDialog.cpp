@@ -51,7 +51,7 @@ public:
       return;
 
     if (skysight->NumSelectedLayers() == 0) {
-      row_renderer.DrawFirstRow(canvas, rc, _("SkySight"));
+      row_renderer.DrawFirstRow(canvas, rc, "SkySight");
 
       if (!skysight->HasCredentials())
         row_renderer.DrawSecondRow(canvas, rc,
@@ -372,7 +372,7 @@ private:
     if (!skysight->HasCredentials()) {
       ShowMessageBox(
         _("Configure your SkySight credentials in Weather settings before loading the full SkySight catalog."),
-        _("SkySight"), MB_OK);
+        "SkySight", MB_OK);
       return;
     }
 
@@ -449,7 +449,7 @@ private:
 
     if (add_failed)
       ShowMessageBox(_("Some selected layers couldn't be added (the list may be full)."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
 
     UpdateList();
     if (skysight->NumSelectedLayers() > 0) {
@@ -484,7 +484,7 @@ private:
 
     if (!skysight->SelectForecastTime(layer->id, renderer.GetForecastTime(selected)))
       ShowMessageBox(_("Couldn't load the selected time step."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
 
     UpdateList();
   }
@@ -504,7 +504,7 @@ private:
     const bool success = skysight->PreloadForecast(layer->id);
     if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
     }
 
     UpdateList();
@@ -531,7 +531,7 @@ private:
     const bool success = skysight->PreloadAllForecasts();
     if (!success) {
       ShowMessageBox(_("Couldn't preload forecast data."),
-                     _("SkySight"), MB_OK);
+                     "SkySight", MB_OK);
     }
 
     UpdateList();
