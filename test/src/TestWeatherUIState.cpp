@@ -184,6 +184,8 @@ TestSkySightRequestFailurePolicy()
   ok1(decision.ready_at == NOW + 123);
   ok1(!policy.CanQueue("throttled", NOW + 122));
   ok1(policy.CanQueue("throttled", NOW + 123));
+  decision = policy.OnHttpFailure("throttled-fallback", 429, NOW);
+  ok1(decision.ready_at == NOW + 30);
 
   decision = policy.OnHttpFailure("server-error", 503, NOW);
   ok1(decision.ready_at == NOW + 10);
@@ -224,6 +226,14 @@ TestSkySightRequestFailurePolicy()
   login_decision = authentication.OnTransportFailure(NOW + 30);
   ok1(login_decision.ready_at == NOW + 90);
 
+  SkySight::ThrottleFallbackPolicy throttle;
+  ok1(throttle.OnThrottle(NOW) == NOW + 30);
+  ok1(throttle.OnThrottle(NOW + 30) == NOW + 60);
+  ok1(throttle.OnThrottle(NOW + 60) == NOW + 90);
+  ok1(throttle.OnThrottle(NOW + 90) == NOW + 120);
+  ok1(throttle.OnThrottle(NOW + 120, NOW + 323) == NOW + 323);
+  ok1(throttle.OnThrottle(NOW + 323) == NOW + 353);
+
   SkySight::LiveTileRequestPacer pacer;
   ok1(pacer.CanStart(NOW));
   pacer.OnStarted(NOW);
@@ -249,6 +259,12 @@ TestSkySightRequestFailurePolicy()
   throttled_pacer.OnThrottle();
   ok1(!throttled_pacer.CanStart(NOW + 1));
   ok1(throttled_pacer.CanStart(NOW + 8));
+
+  SkySight::InteractiveRequestPacer interactive_pacer;
+  ok1(interactive_pacer.CanStart(NOW));
+  interactive_pacer.OnStarted(NOW);
+  ok1(!interactive_pacer.CanStart(NOW));
+  ok1(interactive_pacer.CanStart(NOW + 1));
 }
 
 static void
@@ -345,7 +361,7 @@ TestSkySightLiveTileResolution()
 int
 main()
 {
-  plan_tests(32 + 10 + 9 + 5 + 12 + 4 + 13 + 40 + 2 + 1);
+  plan_tests(32 + 10 + 10 + 5 + 12 + 4 + 24 + 40 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();

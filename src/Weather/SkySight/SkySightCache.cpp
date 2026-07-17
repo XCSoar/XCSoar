@@ -367,15 +367,17 @@ CollectForecastTimes(Path directory, std::string_view region,
  * Removes forecasts older than the retention window, stale raw/intermediate
  * artifacts using the same cutoff, and short-lived temporary metadata files.
  */
-void
+bool
 Cleanup(Path directory) noexcept
 {
+  const bool trusted_time = IsTrustedTimeAvailableForCleanup();
+
   try {
     const auto now = std::chrono::system_clock::now();
     OlderThanFileVisitor delete_tmp{now - std::chrono::hours{6}};
     OlderThanFileVisitor delete_json{now - std::chrono::hours{1}};
 
-    if (IsTrustedTimeAvailableForCleanup()) {
+    if (trusted_time) {
       OlderThanForecastTimeVisitor delete_forecasts{
         std::chrono::system_clock::to_time_t(now - FORECAST_RETENTION)};
       VisitForecastImageFiles(directory, delete_forecasts);
@@ -388,6 +390,8 @@ Cleanup(Path directory) noexcept
     Directory::VisitSpecificFiles(directory, "*.json", delete_json);
   } catch (...) {
   }
+
+  return trusted_time;
 }
 
 } // namespace SkySightCache

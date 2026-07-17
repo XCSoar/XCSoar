@@ -10,6 +10,7 @@
 #include "ui/event/PeriodicTimer.hpp"
 
 #include <array>
+#include <chrono>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -38,6 +39,7 @@ class SkySightClient final {
   std::array<std::string, LIVE_TILE_OVERLAY_COUNT> tile_filenames;
   std::array<GeoBitmap::TileData, LIVE_TILE_OVERLAY_COUNT> tile_coordinates;
   std::array<time_t, LIVE_TILE_OVERLAY_COUNT> tile_timestamps{};
+  std::chrono::steady_clock::time_point next_cleanup_check;
   UI::PeriodicTimer request_timer;
 
 public:
@@ -103,7 +105,7 @@ private:
                         bool request_datafiles);
   void MaybeCleanupFiles() noexcept;
   void SaveSelectedLayers() const;
-  void CleanupFiles() noexcept;
+  [[nodiscard]] bool CleanupFiles() noexcept;
   void ResetTiles() noexcept;
   bool UpdateActiveLayer(unsigned index, Path path,
                          const GeoBitmap::TileData &tile);

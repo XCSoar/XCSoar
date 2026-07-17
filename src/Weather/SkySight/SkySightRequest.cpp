@@ -369,7 +369,10 @@ SkySightRequest::RequeueFileJob(FileJob &job, time_t ready_at) noexcept
     FileRequest pending{std::move(static_cast<FileRequest &>(job))};
     pending.ready_at = ready_at;
     pending.attempts = download_failures.GetAttempts(pending.key);
-    pending_jobs.push_back(std::move(pending));
+    if (pending.kind == FileJob::Kind::Generic)
+      pending_jobs.push_front(std::move(pending));
+    else
+      pending_jobs.push_back(std::move(pending));
     return true;
   } catch (...) {
     LogError(std::current_exception(), "SkySight retry scheduling failed");
@@ -417,8 +420,9 @@ SkySightRequest::PumpQueue()
     const auto next = std::find_if(pending_jobs.begin(), pending_jobs.end(),
                                    [this, now](const auto &job) {
                                      return now >= job.ready_at &&
-                                       (job.kind != FileJob::Kind::Generic ||
-                                        live_tile_pacer.CanStart(now)) &&
+                                       (job.kind == FileJob::Kind::ForecastData ||
+                                        (interactive_request_pacer.CanStart(now) &&
+                                         live_tile_pacer.CanStart(now))) &&
                                        (!job.requires_auth || IsLoggedIn());
                                    });
     if (next == pending_jobs.end()) {
@@ -437,9 +441,10 @@ SkySightRequest::PumpQueue()
                                                 std::move(job));
     auto *job_ptr = active_job.get();
     const auto key = job_ptr->key;
-
-    if (job_ptr->kind == FileJob::Kind::Generic)
+    if (job_ptr->kind == FileJob::Kind::Generic) {
+      interactive_request_pacer.OnStarted(now);
       live_tile_pacer.OnStarted(now);
+    }
 
     file_jobs.emplace(key, std::move(active_job));
     const bool tile_download = job_ptr->kind == FileJob::Kind::Generic;
@@ -485,11 +490,15 @@ SkySightRequest::EnsureLoggedIn()
   if (now < throttle_until || !authentication_failures.CanAttempt(now))
     return;
 
+  if (!interactive_request_pacer.CanStart(now))
+    return;
+
   if (last_login_request != 0 && now < last_login_request + 30)
     return;
 
   last_login_request = now;
   login_running = true;
+  interactive_request_pacer.OnStarted(now);
 
   try {
     login_job.Start(LoginTask(curl, email, password),
@@ -551,8 +560,11 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
     LogError(error, "SkySight login response exceeded its size limit");
   } catch (const HttpStatusError &http_error) {
     const auto now = std::time(nullptr);
+    const auto retry_at = http_error.status == 429
+      ? throttle_fallback.OnThrottle(now, http_error.retry_at)
+      : http_error.retry_at;
     const auto decision = authentication_failures.OnHttpFailure(
-      http_error.status, now, http_error.retry_at);
+      http_error.status, now, retry_at);
     if (decision.action == SkySight::AuthenticationFailureAction::Throttle) {
       SetThrottleUntil(decision.ready_at);
       LogFmt("SkySight throttled by server (HTTP 429), pausing requests for {} "
@@ -691,7 +703,11 @@ SkySightRequest::RequestRegions()
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   regions_running = true;
+  interactive_request_pacer.OnStarted(std::time(nullptr));
   regions_job.Start(
     JsonTask(curl, SkySightUrl::Api("regions"), api_key),
     [this](boost::json::value value) {
@@ -746,7 +762,11 @@ SkySightRequest::RequestLayers(std::string_view region_id)
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   layers_running = true;
+  interactive_request_pacer.OnStarted(std::time(nullptr));
 
   auto url = SkySightUrl::Api("layers");
   url += "?region_id=";
@@ -805,8 +825,12 @@ SkySightRequest::RequestLastUpdates(std::string_view region_id,
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   last_updates_running = true;
   last_updates_layer_id = layer_id;
+  interactive_request_pacer.OnStarted(std::time(nullptr));
 
   auto url = SkySightUrl::Api("data/last_updated");
   url += "?region_id=";
@@ -845,12 +869,16 @@ SkySightRequest::RequestDatafiles(std::string_view region_id,
   if (std::time(nullptr) < throttle_until)
     return false;
 
+  if (!interactive_request_pacer.CanStart(std::time(nullptr)))
+    return false;
+
   if (std::time(nullptr) < datafiles_retry_at)
     return false;
 
   datafiles_running = true;
   datafiles_retry_at = 0;
   datafiles_layer_id = std::string{layer_id};
+  interactive_request_pacer.OnStarted(std::time(nullptr));
 
   auto url = SkySightUrl::Api("data");
   url += "?region_id=";
@@ -902,7 +930,6 @@ SkySightRequest::OnDatafilesSuccess(boost::json::value value)
 {
   datafiles_running = false;
   datafiles_retry_at = 0;
-
   const auto layer_id = std::exchange(datafiles_layer_id, std::string{});
   api.OnDatafiles(layer_id, std::move(value));
 }
@@ -922,9 +949,9 @@ SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
       return;
   } catch (...) {
     LogError(error, "SkySight datafiles request failed");
-    datafiles_retry_at = std::time(nullptr) + THROTTLE_RETRY_SECONDS;
+    datafiles_retry_at = std::time(nullptr) + DATAFILES_RETRY_SECONDS;
     LogFmt("SkySight forecast-step request will retry in {} seconds",
-           THROTTLE_RETRY_SECONDS);
+           DATAFILES_RETRY_SECONDS);
     api.OnDatafilesRetry(layer_id);
     return;
   }
@@ -943,9 +970,7 @@ SkySightRequest::HandleJsonRequestHttpStatus(unsigned status, time_t retry_at,
 
   if (status == 429) {
     const auto now = std::time(nullptr);
-    SetThrottleUntil(retry_at > now
-                     ? retry_at
-                     : now + THROTTLE_RETRY_SECONDS);
+    SetThrottleUntil(throttle_fallback.OnThrottle(now, retry_at));
     api.OnThrottle();
     LogThrottleNotice(retry_at > now);
     return true;
@@ -1025,11 +1050,21 @@ SkySightRequest::OnFileError(const std::string &key,
              : "SkySight tile download exceeded its size limit");
   } catch (const HttpStatusError &http_error) {
     const auto now = std::time(nullptr);
+    const auto retry_at = http_error.status == 429
+      ? throttle_fallback.OnThrottle(now, http_error.retry_at)
+      : http_error.retry_at;
     const auto decision = download_failures.OnHttpFailure(
-      key, http_error.status, now, http_error.retry_at);
+      key, http_error.status, now, retry_at);
     if (http_error.status == 429) {
       if (kind == FileJob::Kind::Generic)
         live_tile_pacer.OnThrottle();
+      if (kind == FileJob::Kind::Generic && failed_job != nullptr) {
+        /* Retry the rejected tile as the sole recovery probe.  The renderer
+           will repopulate the current viewport after that probe succeeds. */
+        std::erase_if(pending_jobs, [](const auto &pending) {
+          return pending.kind == FileJob::Kind::Generic;
+        });
+      }
       SetThrottleUntil(decision.ready_at);
       api.OnThrottle();
       LogThrottleNotice(http_error.retry_at > now);
@@ -1146,7 +1181,7 @@ SkySightRequest::LogThrottleNotice(bool server_retry_after) noexcept
 {
   const auto now = std::time(nullptr);
   if (last_throttle_notice != 0 &&
-      now < last_throttle_notice + THROTTLE_RETRY_SECONDS)
+      now < last_throttle_notice + SkySight::THROTTLE_FALLBACK_SECONDS)
     return;
 
   last_throttle_notice = now;
