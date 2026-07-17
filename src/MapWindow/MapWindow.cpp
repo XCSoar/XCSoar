@@ -96,6 +96,11 @@ MapWindow::UpdateTerrain() noexcept
   if (terrain == nullptr)
     return false;
 
+  /* Fine tiles are not useful when zoomed out this far; the overview
+     already covers the screen (same threshold as TerrainThread). */
+  if (visible_projection.GetMapScale() >= 100000)
+    return false;
+
   GeoPoint location = visible_projection.GetGeoScreenCenter();
   auto radius = visible_projection.GetScreenWidthMeters() / 2;
 

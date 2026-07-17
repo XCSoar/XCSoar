@@ -306,7 +306,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain)
   settings.SetDefaults();
 }
 
-#ifdef ENABLE_OPENGL
 /**
  * Checks if the size difference of any dimension is more than a
  * factor of two.  This is used to check whether the terrain has to be
@@ -321,13 +320,11 @@ IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
   return a.GetWidth().Native() > 2 * b.GetWidth().Native() ||
     a.GetHeight().Native() > 2 * b.GetHeight().Native();
 }
-#endif
 
 bool
 TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
-#ifdef ENABLE_OPENGL
   const GeoBounds &old_bounds = raster_renderer.GetBounds();
   GeoBounds new_bounds = map_projection.GetScreenBounds();
   assert(new_bounds.IsValid());
@@ -343,7 +340,17 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth) &&
-      !raster_renderer.UpdateQuantisation()) {
+#ifdef ENABLE_OPENGL
+      !raster_renderer.UpdateQuantisation()
+#else
+      /* Software overscan is screen-aligned: reuse only when scale
+         and heading match the buffer that was filled. */
+      map_projection.GetScale() == last_projection_scale &&
+      map_projection.GetScreenAngle()
+        .CompareRoughly(raster_renderer.GetOverscanProjection()
+                          .GetScreenAngle())
+#endif
+      ) {
     /* The existing terrain image is suitable for reuse.
        But with contours: Re-use only without zoom change.
        Otherwise we can re-use as a fast preview, but
@@ -353,16 +360,6 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
         map_projection.GetScale() == last_projection_scale)
       return true;
   }
-
-#else
-  if (compare_projection.Compare(map_projection) &&
-      terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth))
-    /* no change since previous frame */
-    return true;
-
-  compare_projection = CompareProjection(map_projection);
-#endif
 
   terrain_serial = terrain.GetSerial();
 

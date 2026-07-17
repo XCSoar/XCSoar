@@ -6,10 +6,7 @@
 #include "RasterRenderer.hpp"
 #include "util/Serial.hpp"
 #include "Terrain/TerrainSettings.hpp"
-
-#ifndef ENABLE_OPENGL
-#include "Projection/CompareProjection.hpp"
-#endif
+#include "Math/Angle.hpp"
 
 class Canvas;
 class WindowProjection;
@@ -23,10 +20,6 @@ class TerrainRenderer {
 
 protected:
   struct TerrainRendererSettings settings;
-
-#ifndef ENABLE_OPENGL
-  CompareProjection compare_projection;
-#endif
 
   Angle last_sun_azimuth = Angle::Zero();
 
@@ -47,11 +40,7 @@ public:
    * Flush the cache.
    */
   void Flush() {
-#ifdef ENABLE_OPENGL
     raster_renderer.Invalidate();
-#else
-    compare_projection.Clear();
-#endif
   }
 
 public:
