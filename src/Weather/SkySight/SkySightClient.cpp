@@ -917,6 +917,12 @@ SkySightClient::DisplayTileLayer()
   const auto live_zoom = SkySight::SelectLiveTileZoom(map_tile.zoom,
                                                        active_layer->zoom_min);
   const auto base_tile = GeoBitmap::GetTile(map_bounds, live_zoom);
+  GeoBounds region_bounds = GeoBounds::Invalid();
+  for (const auto &candidate : api->GetRegions())
+    if (candidate.id == api->GetRegion()) {
+      region_bounds = candidate.bounds;
+      break;
+    }
 
   if (displayed_layer != active_layer) {
     ResetTiles();
@@ -957,7 +963,10 @@ SkySightClient::DisplayTileLayer()
 
       GeoBitmap::TileData tile{base_tile.zoom, normalize_x(x), (uint16_t)y};
 
-      if (!GeoBitmap::GetBounds(tile).Overlaps(map_bounds))
+      const auto tile_bounds = GeoBitmap::GetBounds(tile);
+      if (!tile_bounds.Overlaps(map_bounds) ||
+          (region_bounds.IsValid() &&
+           !tile_bounds.Overlaps(region_bounds)))
         continue;
 
       visible_tiles.push_back({tile, unsigned(dx * dx + dy * dy)});
