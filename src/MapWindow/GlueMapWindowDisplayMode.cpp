@@ -97,7 +97,7 @@ GlueMapWindow::PanTo(const GeoPoint &location) noexcept
 void
 GlueMapWindow::UpdateScreenBounds() noexcept
 {
-  visible_projection.UpdateScreenBounds();
+  MapWindow::UpdateScreenBounds();
 
   if (topography_thread != nullptr &&
       visible_projection.IsValid() &&

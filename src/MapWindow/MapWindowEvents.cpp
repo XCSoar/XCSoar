@@ -23,7 +23,7 @@ MapWindow::OnResize(PixelSize new_size) noexcept
 #endif
 
   visible_projection.SetScreenSize(new_size);
-  visible_projection.UpdateScreenBounds();
+  UpdateScreenBounds();
 }
 
 void
@@ -41,7 +41,7 @@ MapWindow::OnCreate()
   visible_projection.SetScreenSize(size);
   visible_projection.SetMapScale(5000);
   visible_projection.SetScreenOrigin(PixelRect{size}.GetCenter());
-  visible_projection.UpdateScreenBounds();
+  UpdateScreenBounds();
 
 #ifndef ENABLE_OPENGL
   buffer_projection = visible_projection;
