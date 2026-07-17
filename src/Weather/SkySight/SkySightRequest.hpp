@@ -65,7 +65,7 @@ class SkySightRequest final {
   };
 
   static constexpr unsigned MAX_ACTIVE_DOWNLOADS = 1;
-  static constexpr time_t THROTTLE_RETRY_SECONDS = 30;
+  static constexpr time_t DATAFILES_RETRY_SECONDS = 30;
   static constexpr time_t ERROR_RETRY_SECONDS = 10;
 
   SkySightAPI &api;
@@ -85,6 +85,7 @@ class SkySightRequest final {
   std::deque<FileRequest> pending_jobs;
   SkySight::AuthenticationFailurePolicy authentication_failures;
   SkySight::RequestFailurePolicy download_failures;
+  SkySight::ThrottleFallbackPolicy throttle_fallback;
   SkySight::LiveTileRequestPacer live_tile_pacer;
   std::map<std::string, time_t> payload_retry_at;
   std::set<std::string, std::less<>> generic_keys;

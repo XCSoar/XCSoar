@@ -13,6 +13,8 @@
 
 namespace SkySight {
 
+inline constexpr time_t THROTTLE_FALLBACK_SECONDS = 30;
+
 [[nodiscard]] inline time_t
 ParseRetryAfterSeconds(std::string_view value, time_t now) noexcept
 {
@@ -54,8 +56,6 @@ struct AuthenticationFailureDecision {
 class AuthenticationFailurePolicy {
   static constexpr time_t BASE_RETRY_SECONDS = 30;
   static constexpr time_t MAX_RETRY_SECONDS = 10 * 60;
-  static constexpr time_t DEFAULT_THROTTLE_SECONDS = 30;
-
   time_t ready_at = 0;
   unsigned attempts = 0;
   bool rejected = false;
@@ -86,7 +86,7 @@ public:
       rejected = false;
       ready_at = retry_after > now
         ? retry_after
-        : now + DEFAULT_THROTTLE_SECONDS;
+        : now + THROTTLE_FALLBACK_SECONDS;
       return {AuthenticationFailureAction::Throttle, ready_at, attempts};
     }
 
@@ -115,6 +115,21 @@ public:
     ready_at = 0;
     attempts = 0;
     rejected = false;
+  }
+};
+
+/**
+ * Uses a conservative fixed cooldown when the server omits Retry-After.
+ */
+class ThrottleFallbackPolicy {
+public:
+  [[nodiscard]] time_t
+  OnThrottle(time_t now, time_t retry_at=0) noexcept
+  {
+    if (retry_at > now)
+      return retry_at;
+
+    return now + THROTTLE_FALLBACK_SECONDS;
   }
 };
 
@@ -184,8 +199,6 @@ class RequestFailurePolicy {
 
   static constexpr time_t BASE_RETRY_SECONDS = 10;
   static constexpr time_t MAX_RETRY_SECONDS = 10 * 60;
-  static constexpr time_t DEFAULT_THROTTLE_SECONDS = 30;
-
   std::map<std::string, State, std::less<>> states;
 
   static constexpr time_t
@@ -257,7 +270,7 @@ public:
     if (status == 429)
       return SetRetry(key, now, retry_at > now
                       ? retry_at
-                      : now + DEFAULT_THROTTLE_SECONDS);
+                      : now + THROTTLE_FALLBACK_SECONDS);
 
     if (status == 408 || status >= 500)
       return SetRetry(key, now);

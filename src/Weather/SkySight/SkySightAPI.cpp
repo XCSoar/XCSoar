@@ -452,6 +452,10 @@ SkySightAPI::Poll() noexcept
   if (request->Poll())
     OnThrottleEnded();
 
+  PollRegions();
+  PollLayers();
+  PollLastUpdates();
+
   PollSelectedDatafiles();
   UpdatePreloadProgress();
 }
@@ -1043,6 +1047,11 @@ void
 SkySightAPI::PollLastUpdates() noexcept
 {
   if (!HasCredentials() || region.empty())
+    return;
+
+  /* Let a queued or active tile be the sole recovery probe after a global
+     cooldown instead of competing with metadata for the same request slot. */
+  if (request->HasPendingTileDownloads())
     return;
 
   const auto now = std::time(nullptr);
