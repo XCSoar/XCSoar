@@ -193,6 +193,9 @@ Version 7.45 - not yet released
   - snail trail: Catmull-Rom smoothing between fixes; vario colouring samples
     high-rate netto from the merge thread between GPS points #2447
   - Add renderer to display distance rings around the current location #2522
+  - Reduce terrain tile reload frequency while panning by using a
+    scale-relative movement threshold, and skip fine-tile loads when
+    zoomed out to 100 km scale or wider (overview is enough)
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,

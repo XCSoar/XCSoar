@@ -32,6 +32,13 @@ public:
 
   void Trigger(const WindowProjection &projection);
 
+  /**
+   * Wait until the current (or pending) Tick() has finished.
+   */
+  void WaitDone() noexcept {
+    LockWaitDone();
+  }
+
 private:
   /* virtual methods from class StandbyThread*/
   void Tick() noexcept override;
