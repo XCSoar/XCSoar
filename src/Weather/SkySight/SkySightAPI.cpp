@@ -250,17 +250,45 @@ SkySightAPI::ParseRegions(const boost::json::value &value,
       const auto &entry = entry_value.as_object();
 
       const auto id = entry.at("id").as_string().c_str();
+      if (!SkySight::IsSafeId(id))
+        continue;
+
       std::string name{id};
       if (const auto *name_value = entry.if_contains("name");
-          name_value != nullptr && name_value->is_string())
-        name = name_value->as_string().c_str();
+          name_value != nullptr && name_value->is_string()) {
+        const std::string_view text{name_value->as_string().c_str(),
+                                    name_value->as_string().size()};
+        if (ValidateUTF8(text))
+          name = text;
+      }
 
       std::string projection;
       if (const auto *projection_value = entry.if_contains("projection");
           projection_value != nullptr && projection_value->is_string())
         projection = projection_value->as_string().c_str();
 
-      new_regions.push_back({id, std::move(name), std::move(projection)});
+      GeoBounds bounds = GeoBounds::Invalid();
+      if (const auto *bounds_value = entry.if_contains("bounds");
+          bounds_value != nullptr && bounds_value->is_array()) {
+        const auto &items = bounds_value->as_array();
+        if (items.size() == 4) {
+          const auto south = ParseFloat(items[0]);
+          const auto west = ParseFloat(items[1]);
+          const auto north = ParseFloat(items[2]);
+          const auto east = ParseFloat(items[3]);
+          const GeoBounds candidate{
+            {Angle::Degrees(west), Angle::Degrees(north)},
+            {Angle::Degrees(east), Angle::Degrees(south)},
+          };
+          if (std::isfinite(south) && std::isfinite(west) &&
+              std::isfinite(north) && std::isfinite(east) &&
+              candidate.Check())
+            bounds = candidate;
+        }
+      }
+
+      new_regions.push_back({id, std::move(name), std::move(projection),
+                             bounds});
     }
 
     if (!new_regions.empty()) {
@@ -342,6 +370,9 @@ SkySightAPI::ParseLayers(const boost::json::value &value,
     for (const auto &entry_value : value.as_array()) {
       const auto &entry = entry_value.as_object();
       const auto id = entry.at("id").as_string().c_str();
+      if (!SkySight::IsSafeId(id))
+        continue;
+
       auto *layer = find_new_layer(id);
       if (layer == nullptr) {
         new_layers.emplace_back(id, id, std::string{}, true, false, false);

@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Geo/GeoBounds.hpp"
 #include "Language/Language.hpp"
 
 #include <string>
@@ -31,6 +32,7 @@ struct SkySightRegionEntry {
   std::string id;
   std::string name;
   std::string projection;
+  GeoBounds bounds = GeoBounds::Invalid();
 
   bool operator==(std::string_view other) const noexcept {
     return id == other;
