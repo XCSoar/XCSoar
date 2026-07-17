@@ -321,6 +321,12 @@ TestSkySightCachedForecastMerge()
 static void
 TestSkySightResourcePolicies()
 {
+  ok1(SkySight::IsSafeId("EAST_US"));
+  ok1(SkySight::IsSafeId("wstar_bsratio"));
+  ok1(!SkySight::IsSafeId(""));
+  ok1(!SkySight::IsSafeId(".."));
+  ok1(!SkySight::IsSafeId("EUROPE/../x"));
+  ok1(!SkySight::IsSafeId("rain.jpg"));
   ok1(SkySight::IsNetCdfGridSizeAllowed(1024, 1024));
   ok1(!SkySight::IsNetCdfGridSizeAllowed(1, 1024));
   ok1(!SkySight::IsNetCdfGridSizeAllowed(
@@ -361,7 +367,7 @@ TestSkySightLiveTileResolution()
 int
 main()
 {
-  plan_tests(32 + 10 + 10 + 5 + 12 + 4 + 24 + 40 + 2 + 1);
+  plan_tests(32 + 10 + 10 + 5 + 12 + 4 + 30 + 41 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
