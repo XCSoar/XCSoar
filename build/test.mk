@@ -362,6 +362,7 @@ TEST_PROFILE_SOURCES = \
 	$(SRC)/PageSettings.cpp \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/WeatherProfile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \

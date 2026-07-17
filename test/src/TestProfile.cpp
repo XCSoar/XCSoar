@@ -6,6 +6,9 @@
 #include "Profile/Current.hpp"
 #include "Profile/PageProfile.hpp"
 #include "PageSettings.hpp"
+#include "Profile/Map.hpp"
+#include "Profile/WeatherProfile.hpp"
+#include "Weather/Settings.hpp"
 #include "io/FileLineReader.hpp"
 #include "system/Path.hpp"
 #include "TestUtil.hpp"
@@ -196,15 +199,59 @@ TestWeatherPageCursorRoundTrip()
   ok1(loaded.pages[1].xctherm_time == xctherm.xctherm_time);
 }
 
+#ifdef HAVE_HTTP
+
+static void
+TestSkySightProfileCompatibility()
+{
+  {
+    ProfileMap map;
+    map.Set(ProfileKeys::LegacySkySightEmail, "legacy@example.com");
+    map.Set(ProfileKeys::LegacySkySightPassword, "legacy-password");
+    map.Set(ProfileKeys::LegacySkySightRegion, "EUROPE");
+
+    WeatherSettings settings{};
+    Profile::Load(map, settings);
+    ok1(settings.skysight.email == "legacy@example.com");
+    ok1(settings.skysight.password == "legacy-password");
+    ok1(settings.skysight.region == "EUROPE");
+  }
+
+  {
+    ProfileMap map;
+    map.Set(ProfileKeys::LegacySkySightEmail, "legacy@example.com");
+    map.Set(ProfileKeys::LegacySkySightPassword, "legacy-password");
+    map.Set(ProfileKeys::LegacySkySightRegion, "EUROPE");
+    map.Set(ProfileKeys::SkySightEmail, "canonical@example.com");
+    map.Set(ProfileKeys::SkySightPassword, "canonical-password");
+    map.Set(ProfileKeys::SkySightRegion, "NZ");
+
+    WeatherSettings settings{};
+    Profile::Load(map, settings);
+    ok1(settings.skysight.email == "canonical@example.com");
+    ok1(settings.skysight.password == "canonical-password");
+    ok1(settings.skysight.region == "NZ");
+  }
+}
+
+#endif
+
 int main()
 try {
-  plan_tests(48);
+  plan_tests(48
+#ifdef HAVE_HTTP
+             + 6
+#endif
+             );
 
   TestMap();
   TestWriter();
   TestReader();
   TestMigration();
   TestWeatherPageCursorRoundTrip();
+#ifdef HAVE_HTTP
+  TestSkySightProfileCompatibility();
+#endif
 
   return exit_status();
 } catch (...) {

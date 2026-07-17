@@ -517,6 +517,8 @@ SkySightClient::ReloadSelectedLayersFromProfile()
   api->ClearSelectedLayers();
 
   const char *configured_layers = Profile::Get(ProfileKeys::SkySightSelectedLayers);
+  if (configured_layers == nullptr)
+    configured_layers = Profile::Get(ProfileKeys::LegacySkySightSelectedLayers);
   if (configured_layers == nullptr || *configured_layers == '\0')
     return;
 

@@ -94,7 +94,7 @@ SkySightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 
   const auto *layer = GetLayer();
   if (layer == nullptr) {
-    text = _("SkySight");
+    text = "SkySight";
     return;
   }
 
