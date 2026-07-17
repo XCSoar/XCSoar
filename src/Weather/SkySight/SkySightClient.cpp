@@ -693,6 +693,16 @@ SkySightClient::OnForecastResumed() noexcept
 }
 
 void
+SkySightClient::OnForecastProgressCancelled() noexcept
+{
+  if (!forecast_progress_visible)
+    return;
+
+  BackgroundDownloadProgress::Get().End();
+  forecast_progress_visible = false;
+}
+
+void
 SkySightClient::OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept
 {
   auto &download_progress = BackgroundDownloadProgress::Get();

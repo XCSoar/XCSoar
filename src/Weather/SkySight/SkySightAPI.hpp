@@ -106,6 +106,7 @@ public:
   bool PreloadDatafiles(std::string_view layer_id) noexcept;
   bool PreloadAllDatafiles() noexcept;
   void BeginPreloadProgress() noexcept;
+  void ResetPreloadProgress() noexcept;
   void AddPreloadTarget(std::string_view layer_id, time_t forecast_time) noexcept;
   void FinishPreloadTarget(std::string_view layer_id, time_t forecast_time,
                            bool failed=false) noexcept;

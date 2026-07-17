@@ -4,6 +4,7 @@
 #include "Weather/WeatherUIState.hpp"
 #include "Weather/SkySight/Layers.hpp"
 #include "Weather/SkySight/ForecastUtils.hpp"
+#include "Weather/SkySight/SkySightLimits.hpp"
 #include "Weather/SkySight/SkySightRequestPolicy.hpp"
 #include "TestUtil.hpp"
 
@@ -270,10 +271,50 @@ TestSkySightForecastBusyState()
   ok1(layer.ShouldShowUpdating());
 }
 
+static void
+TestSkySightCachedForecastMerge()
+{
+  SkySight::Layer layer;
+  layer.forecast_datafiles = {
+    {300, "three-hundred"},
+    {100, "one-hundred"},
+  };
+  layer.forecast_time = 200;
+
+  const std::vector<time_t> cached_times{400, 300, 200};
+  SkySight::MergeCachedForecastTimes(layer, cached_times, 250);
+
+  ok1(layer.forecast_datafiles.size() == 4);
+  ok1(layer.forecast_datafiles[0].time == 400);
+  ok1(layer.forecast_datafiles[1].time == 300);
+  ok1(layer.forecast_datafiles[2].time == 200);
+  ok1(layer.forecast_datafiles[3].time == 100);
+  ok1(layer.forecast_datafiles[1].link == "three-hundred");
+  ok1(layer.forecast_datafiles[2].link.empty());
+  ok1(layer.forecast_time == 200);
+  ok1(layer.from == 100);
+  ok1(layer.to == 400);
+
+  layer.forecast_time = 999;
+  SkySight::MergeCachedForecastTimes(layer, cached_times, 250);
+  ok1(layer.forecast_time == 200);
+  ok1(layer.forecast_datafiles.size() == 4);
+}
+
+static void
+TestSkySightResourcePolicies()
+{
+  ok1(SkySight::IsNetCdfGridSizeAllowed(1024, 1024));
+  ok1(!SkySight::IsNetCdfGridSizeAllowed(1, 1024));
+  ok1(!SkySight::IsNetCdfGridSizeAllowed(
+    SkySight::MAX_NETCDF_GRID_AXIS + 1, 2));
+  ok1(!SkySight::IsNetCdfGridSizeAllowed(4096, 4096));
+}
+
 int
 main()
 {
-  plan_tests(32 + 10 + 9 + 5 + 40 + 2 + 1);
+  plan_tests(32 + 10 + 9 + 5 + 12 + 4 + 40 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
@@ -282,6 +323,8 @@ main()
   TestSkySightForecastPreloadSelection();
   TestSkySightRequestFailurePolicy();
   TestSkySightForecastBusyState();
+  TestSkySightCachedForecastMerge();
+  TestSkySightResourcePolicies();
 
   return exit_status();
 }
