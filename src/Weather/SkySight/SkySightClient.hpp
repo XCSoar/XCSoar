@@ -95,6 +95,7 @@ public:
   void OnForecastThrottled() noexcept;
   void OnForecastResumed() noexcept;
   void OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept;
+  void OnForecastProgressCancelled() noexcept;
 
 private:
   bool AddSelectedLayer(std::string_view id, bool save_profile,

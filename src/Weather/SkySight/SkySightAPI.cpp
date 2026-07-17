@@ -4,6 +4,7 @@
 #include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
 #include "SkySightFileDecoder.hpp"
+#include "SkySightLimits.hpp"
 #include "SkySightRequest.hpp"
 #include "SkySightURL.hpp"
 #include "SkySightClient.hpp"
@@ -19,6 +20,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 
@@ -88,7 +90,11 @@ ParseLegend(const boost::json::object &entry, SkySight::Layer &layer)
     if (color_array.size() < 3)
       continue;
 
-    layer.legend.emplace(ParseFloat(*value),
+    const auto threshold = ParseFloat(*value);
+    if (!std::isfinite(threshold))
+      continue;
+
+    layer.legend.emplace(threshold,
                          SkySight::LegendColor{
                            color_array[0].to_number<uint8_t>(),
                            color_array[1].to_number<uint8_t>(),
@@ -397,6 +403,7 @@ void
 SkySightAPI::Configure(std::string_view email, std::string_view password,
                        std::string_view new_region)
 {
+  ResetPreloadProgress();
   region = FindSkySightRegionById(new_region.empty()
                                   ? std::string_view{GetDefaultSkySightRegion().id}
                                   : new_region).id;
@@ -730,6 +737,11 @@ SkySightAPI::StartNextDecodeJob() noexcept
   const auto forecast_time = job.forecast_time;
 
   try {
+    const std::string failure_path{
+      job.prepared.cleanup_download_path != nullptr
+        ? job.prepared.cleanup_download_path.c_str()
+        : job.prepared.source_path.c_str()
+    };
     decode_job->Start(
       std::move(job.prepared),
       std::move(job.variable_name),
@@ -741,7 +753,16 @@ SkySightAPI::StartNextDecodeJob() noexcept
           std::move(output_path),
         });
       },
-      [this, layer_id, forecast_time](std::exception_ptr error) {
+      [this, layer_id, forecast_time,
+       failure_path](std::exception_ptr error) {
+        try {
+          std::rethrow_exception(error);
+        } catch (const SkySight::ResourceLimitError &) {
+          request->SuppressDatafile(Path{failure_path.c_str()});
+        } catch (...) {
+        }
+
+        SkySightFileDecoder::InvalidateCache(Path{failure_path.c_str()});
         LogError(error, "SkySight forecast decode failed");
         OnDatafileError(layer_id, forecast_time);
       });
@@ -799,6 +820,7 @@ bool
 SkySightAPI::PreloadDatafiles(std::string_view layer_id,
                               bool begin_progress) noexcept
 {
+  try {
   auto *layer = GetLayer(layer_id);
   if (layer == nullptr || layer->SupportsLiveTiles())
     return false;
@@ -839,6 +861,13 @@ SkySightAPI::PreloadDatafiles(std::string_view layer_id,
   UpdatePreloadProgress();
 
   return success;
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight forecast preload failed");
+    if (begin_progress)
+      preload_progress_initializing = false;
+    UpdatePreloadProgress();
+    return false;
+  }
 }
 
 bool
@@ -875,9 +904,21 @@ SkySightAPI::BeginPreloadProgress() noexcept
 }
 
 void
+SkySightAPI::ResetPreloadProgress() noexcept
+{
+  owner.OnForecastProgressCancelled();
+  preload_targets.clear();
+  preload_metadata_layers.clear();
+  preload_failures = 0;
+  preload_progress_active = false;
+  preload_progress_initializing = false;
+}
+
+void
 SkySightAPI::AddPreloadTarget(std::string_view layer_id,
                                time_t forecast_time) noexcept
 {
+  try {
   const auto exists = std::find_if(preload_targets.begin(), preload_targets.end(),
                                    [layer_id, forecast_time](const auto &target) {
                                      return target.layer_id == layer_id &&
@@ -885,6 +926,9 @@ SkySightAPI::AddPreloadTarget(std::string_view layer_id,
                                    });
   if (exists == preload_targets.end())
     preload_targets.push_back({std::string{layer_id}, forecast_time});
+  } catch (...) {
+    LogError(std::current_exception(), "SkySight preload tracking failed");
+  }
 }
 
 void
