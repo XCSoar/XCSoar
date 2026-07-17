@@ -11,6 +11,7 @@
 #pragma once
 
 #include "PortableColor.hpp"
+#include "ui/dim/Point.hpp"
 #include "ui/dim/Size.hpp"
 
 #ifdef USE_GDI
@@ -184,6 +185,18 @@ public:
 #endif
 
   void StretchTo(PixelSize src_size,
+                 Canvas &dest_canvas, PixelSize dest_size,
+                 bool transparent_white=false) const noexcept {
+    StretchTo({0, 0}, src_size, dest_canvas, dest_size,
+              transparent_white);
+  }
+
+  /**
+   * Stretch a source rectangle from this bitmap onto the destination
+   * canvas.  @p src_position is the top-left of the source rectangle
+   * within this bitmap.
+   */
+  void StretchTo(PixelPoint src_position, PixelSize src_size,
                  Canvas &dest_canvas, PixelSize dest_size,
                  bool transparent_white=false) const noexcept;
 };

@@ -13,7 +13,7 @@ RawBitmap::RawBitmap(PixelSize _size) noexcept
 }
 
 void
-RawBitmap::StretchTo(PixelSize src_size,
+RawBitmap::StretchTo(PixelPoint src_position, PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
                      bool transparent_white) const noexcept
 {
@@ -25,8 +25,8 @@ RawBitmap::StretchTo(PixelSize src_size,
 
   if (transparent_white)
     dest_canvas.StretchTransparentWhite({0, 0}, dest_size,
-                                        src, {0, 0}, src_size);
+                                        src, src_position, src_size);
   else
     dest_canvas.Stretch({0, 0}, dest_size,
-                        src, {0, 0}, src_size);
+                        src, src_position, src_size);
 }

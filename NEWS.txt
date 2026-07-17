@@ -196,6 +196,8 @@ Version 7.45 - not yet released
   - Reduce terrain tile reload frequency while panning by using a
     scale-relative movement threshold, and skip fine-tile loads when
     zoomed out to 100 km scale or wider (overview is enough)
+  - Software terrain: reuse an oversized render buffer while panning
+    (same idea as OpenGL overscan) to avoid regenerating every frame
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,

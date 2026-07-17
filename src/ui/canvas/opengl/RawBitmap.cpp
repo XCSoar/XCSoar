@@ -46,7 +46,7 @@ RawBitmap::BindAndGetTexture() const noexcept
 }
 
 void
-RawBitmap::StretchTo(PixelSize src_size,
+RawBitmap::StretchTo(PixelPoint src_position, PixelSize src_size,
                      [[maybe_unused]] Canvas &dest_canvas, PixelSize dest_size,
                      [[maybe_unused]] bool transparent_white) const noexcept
 {
@@ -54,5 +54,6 @@ RawBitmap::StretchTo(PixelSize src_size,
 
   OpenGL::texture_shader->Use();
 
-  texture.Draw(PixelRect{dest_size}, PixelRect{src_size});
+  texture.Draw(PixelRect{dest_size},
+               PixelRect{src_position, src_size});
 }

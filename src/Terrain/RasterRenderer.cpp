@@ -25,7 +25,14 @@ static constexpr double PIXEL_SIZE_LOW_ZOOM_THRESHOLD = 20000.0;
 static constexpr double ZOOM_FACTOR_DIVISOR = 4250.0;
 static constexpr unsigned MAX_QUANTISATION_NEAR = 25;
 static constexpr unsigned MAX_QUANTISATION_LOW_ZOOM = 40;
+#ifdef ENABLE_OPENGL
 static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
+#else
+/* Software path regenerates the whole height matrix when the view
+   leaves the buffer; give pan more headroom than the OpenGL texture
+   overscan (1.5). */
+static constexpr double BOUNDS_SCALE_FACTOR = 2.0;
+#endif
 
 /** Keep slope neighbour sampling inside the height matrix. */
 static void
@@ -297,7 +304,21 @@ RasterRenderer::ScanMap(const RasterMap &map,
 
   last_quantisation_pixels = quantisation_pixels;
 #else
-  height_matrix.Fill(map, projection, quantisation_pixels, true);
+  /* Render into an oversized screen-aligned buffer so small pans can
+     blit a sub-rectangle instead of regenerating the height matrix. */
+  overscan_projection = projection;
+  const auto screen_size = projection.GetScreenSize();
+  const PixelSize buffer_size{
+    std::max(1u, unsigned(screen_size.width * BOUNDS_SCALE_FACTOR + 0.5)),
+    std::max(1u, unsigned(screen_size.height * BOUNDS_SCALE_FACTOR + 0.5)),
+  };
+  overscan_projection.SetScreenSize(buffer_size);
+  overscan_projection.SetScreenOrigin(PixelRect{buffer_size}.GetCenter());
+  overscan_projection.UpdateScreenBounds();
+  bounds = overscan_projection.GetScreenBounds();
+  bounds.IntersectWith(map.GetBounds());
+
+  height_matrix.Fill(map, overscan_projection, quantisation_pixels, true);
 
   ClampQuantisationEffectiveToMatrix(quantisation_effective,
                                      height_matrix.GetSize());
@@ -685,6 +706,9 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                      const WindowProjection &projection,
                      [[maybe_unused]] bool transparent_white) const noexcept
 {
+  if (image == nullptr)
+    return;
+
 #ifdef ENABLE_OPENGL
   if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds()))
     DrawGeoBitmap(*image,
@@ -692,7 +716,43 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                   bounds,
                   projection);
 #else
-  image->StretchTo(PixelSize{height_matrix.GetSize()},
+  assert(overscan_projection.IsValid());
+  assert(quantisation_pixels >= 1);
+
+  /* Map the visible screen into the overscan buffer (same scale and
+     angle ⇒ axis-aligned pixel translation). */
+  const PixelPoint src_tl =
+    overscan_projection.GeoToScreen(projection.ScreenToGeo({0, 0}));
+  const auto view = projection.GetScreenSize();
+
+  PixelPoint src_position{
+    src_tl.x / int(quantisation_pixels),
+    src_tl.y / int(quantisation_pixels),
+  };
+  PixelSize src_size{
+    (view.width + quantisation_pixels - 1) / quantisation_pixels,
+    (view.height + quantisation_pixels - 1) / quantisation_pixels,
+  };
+
+  const auto matrix_size = height_matrix.GetSize();
+  if (src_position.x < 0) {
+    src_size.width -= unsigned(-src_position.x);
+    src_position.x = 0;
+  }
+  if (src_position.y < 0) {
+    src_size.height -= unsigned(-src_position.y);
+    src_position.y = 0;
+  }
+  if (src_position.x >= int(matrix_size.x) ||
+      src_position.y >= int(matrix_size.y) ||
+      src_size.width == 0 || src_size.height == 0)
+    return;
+  if (src_position.x + int(src_size.width) > int(matrix_size.x))
+    src_size.width = matrix_size.x - unsigned(src_position.x);
+  if (src_position.y + int(src_size.height) > int(matrix_size.y))
+    src_size.height = matrix_size.y - unsigned(src_position.y);
+
+  image->StretchTo(src_position, src_size,
                    canvas, projection.GetScreenSize(),
                    transparent_white);
 #endif

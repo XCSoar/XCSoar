@@ -49,7 +49,7 @@ RawBitmap::~RawBitmap() noexcept
 }
 
 void
-RawBitmap::StretchTo(PixelSize src_size,
+RawBitmap::StretchTo(PixelPoint src_position, PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
                      bool transparent_white) const noexcept
 {
@@ -57,11 +57,13 @@ RawBitmap::StretchTo(PixelSize src_size,
   ::SelectObject(source_dc, bitmap);
   if (transparent_white)
     ::TransparentBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
-                     source_dc, 0, 0, src_size.width, src_size.height,
+                     source_dc, src_position.x, src_position.y,
+                     src_size.width, src_size.height,
                      COLOR_WHITE);
   else
     ::StretchBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
-                 source_dc, 0, 0, src_size.width, src_size.height,
+                 source_dc, src_position.x, src_position.y,
+                 src_size.width, src_size.height,
                  SRCCOPY);
   ::DeleteDC(source_dc);
 }

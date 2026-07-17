@@ -4,9 +4,10 @@
 #pragma once
 
 #include "Terrain/HeightMatrix.hpp"
-
-#ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
+
+#ifndef ENABLE_OPENGL
+#include "Projection/WindowProjection.hpp"
 #endif
 
 static constexpr unsigned NUM_COLOR_RAMP_LEVELS = 13;
@@ -46,13 +47,20 @@ class RasterRenderer {
    */
   unsigned quantisation_effective = 0;
 
-#ifdef ENABLE_OPENGL
   /**
    * The area that was rendered previously into the #HeightMatrix and
-   * the #RawBitmap.  This attribute is used to decide whether the
-   * texture has to be redrawn.
+   * the #RawBitmap.  Used to decide whether the image can be reused
+   * when panning (OpenGL texture or software overscan buffer).
    */
   GeoBounds bounds = GeoBounds::Invalid();
+
+#ifndef ENABLE_OPENGL
+  /**
+   * Projection of the overscan buffer filled by the last ScanMap().
+   * Draw() maps the visible screen into this projection to blit a
+   * sub-rectangle without regenerating terrain.
+   */
+  WindowProjection overscan_projection;
 #endif
 
   HeightMatrix height_matrix;
@@ -113,11 +121,15 @@ public:
     return quantisation_effective > 0;
   }
 
-#ifdef ENABLE_OPENGL
   void Invalidate() noexcept {
     bounds.SetInvalid();
   }
 
+  const GeoBounds &GetBounds() const noexcept {
+    return bounds;
+  }
+
+#ifdef ENABLE_OPENGL
   /**
    * Force a specific quantisation value.  Useful for preview
    * windows that should always render at full resolution
@@ -125,9 +137,7 @@ public:
    */
   void SetQuantisationPixels(unsigned q) noexcept {
     quantisation_pixels = q < 1 ? 1u : q;
-#ifdef ENABLE_OPENGL
     fixed_quantisation = true;
-#endif
   }
 
   /**
@@ -138,11 +148,14 @@ public:
    */
   bool UpdateQuantisation() noexcept;
 
-  const GeoBounds &GetBounds() const noexcept {
-    return bounds;
-  }
-
   const GLTexture &BindAndGetTexture() const noexcept;
+#else
+  /**
+   * Projection used to fill the overscan terrain buffer.
+   */
+  const WindowProjection &GetOverscanProjection() const noexcept {
+    return overscan_projection;
+  }
 #endif
 
   /**
