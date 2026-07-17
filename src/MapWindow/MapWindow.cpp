@@ -34,6 +34,17 @@ MapWindow::~MapWindow() noexcept
   delete topography_renderer;
 }
 
+#ifndef ENABLE_OPENGL
+
+void
+MapWindow::PublishFrameProjection() noexcept
+{
+  const std::lock_guard lock{frame_projection_mutex};
+  published_projection = visible_projection;
+}
+
+#endif
+
 #ifdef ENABLE_OPENGL
 
 void

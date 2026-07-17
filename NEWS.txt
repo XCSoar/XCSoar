@@ -193,6 +193,8 @@ Version 7.45 - not yet released
   - snail trail: Catmull-Rom smoothing between fixes; vario colouring samples
     high-rate netto from the merge thread between GPS points #2447
   - Add renderer to display distance rings around the current location #2522
+  - Fix intermittent white-map hang on startup for non-OpenGL builds when
+    drawing began before map bounds were ready #2734
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
@@ -337,6 +339,9 @@ Version 7.45 - not yet released
     download remains available for a portable install
   - deprecate the legacy single-file Windows executable; use the OpenGL
     version instead — the legacy build will be removed in a future release
+* development
+  - MapWindow: publish a coherent projection snapshot for the DrawThread on
+    non-OpenGL builds so rendering does not read a live UI projection #2735
 
 Version 7.44 - 2026-03-22
 * WaypointDetails

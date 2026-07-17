@@ -89,6 +89,19 @@ protected:
    * the DrawThread has finished drawing the new projection.
    */
   MapWindowProjection buffer_projection;
+
+  /**
+   * Protects #published_projection.  Held only for a short copy into
+   * or out of that field; never across Render().
+   */
+  mutable Mutex frame_projection_mutex;
+
+  /**
+   * Coherent projection snapshot published by the UI thread after
+   * UpdateScreenBounds().  The DrawThread copies this into
+   * #render_projection at the start of each frame.
+   */
+  MapWindowProjection published_projection;
 #endif
 
   /**
@@ -267,9 +280,21 @@ public:
 
   void UpdateScreenBounds() noexcept {
     visible_projection.UpdateScreenBounds();
+#ifndef ENABLE_OPENGL
+    PublishFrameProjection();
+#endif
   }
 
 protected:
+#ifndef ENABLE_OPENGL
+  /**
+   * Publish a coherent copy of #visible_projection for the DrawThread.
+   * Call only after UpdateScreenBounds() (or equivalent) so bounds match
+   * location/scale/angle/origin.
+   */
+  void PublishFrameProjection() noexcept;
+#endif
+
   void DrawBestCruiseTrack(Canvas &canvas, PixelPoint aircraft_pos) const noexcept;
   void DrawTrackBearing(Canvas &canvas,
                         PixelPoint aircraft_pos, bool circling) const noexcept;
