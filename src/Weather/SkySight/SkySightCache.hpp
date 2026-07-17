@@ -28,7 +28,12 @@ FindForecastImage(Path directory, std::string_view region,
 CollectForecastTimes(Path directory, std::string_view region,
                      std::string_view layer_id);
 
-void
+/**
+ * Remove expired cache files.
+ *
+ * @return true if trusted time was available for forecast-age cleanup
+ */
+[[nodiscard]] bool
 Cleanup(Path directory) noexcept;
 
 } // namespace SkySightCache

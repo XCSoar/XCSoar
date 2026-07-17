@@ -35,6 +35,8 @@
 
 namespace {
 
+static constexpr auto CLEANUP_CHECK_INTERVAL = std::chrono::minutes{1};
+
 void
 MigrateCacheFiles(Path source_path, Path destination_path) noexcept
 {
@@ -134,13 +136,16 @@ SkySightClient::GetCachePath() noexcept
 void
 SkySightClient::Init()
 {
+  request_timer.Cancel();
+
   const auto cache_path = GetCachePath();
   MigrateCacheFiles(AllocatedPath::Build(::GetCachePath(), "skysight"),
                     cache_path);
   MigrateCacheFiles(AllocatedPath::Build(LocalPath("weather"), "skysight"),
                     cache_path);
-  CleanupFiles();
-  forecast_cleanup_pending = !SkySightCache::IsTrustedTimeAvailableForCleanup();
+  forecast_cleanup_pending = !CleanupFiles();
+  next_cleanup_check = std::chrono::steady_clock::now() +
+    CLEANUP_CHECK_INTERVAL;
 
   ResetTiles();
   active_layer = nullptr;
@@ -151,24 +156,28 @@ SkySightClient::Init()
   ReloadSelectedLayersFromProfile();
   api->PollRegions();
   api->PollLayers();
-  request_timer.Schedule(std::chrono::seconds{1});
+  if (HasCredentials())
+    request_timer.Schedule(std::chrono::seconds{1});
 }
 
 void
 SkySightClient::MaybeCleanupFiles() noexcept
 {
-  if (!forecast_cleanup_pending ||
-      !SkySightCache::IsTrustedTimeAvailableForCleanup())
+  if (!forecast_cleanup_pending)
     return;
 
-  CleanupFiles();
-  forecast_cleanup_pending = false;
+  const auto now = std::chrono::steady_clock::now();
+  if (now < next_cleanup_check)
+    return;
+
+  next_cleanup_check = now + CLEANUP_CHECK_INTERVAL;
+  forecast_cleanup_pending = !CleanupFiles();
 }
 
-void
+bool
 SkySightClient::CleanupFiles() noexcept
 {
-  SkySightCache::Cleanup(GetCachePath());
+  return SkySightCache::Cleanup(GetCachePath());
 }
 
 std::size_t
@@ -662,7 +671,6 @@ SkySightClient::DeactivateLayer()
 void
 SkySightClient::OnDataUpdated() noexcept
 {
-  MaybeCleanupFiles();
   forecast_image_dirty = true;
 
   if (auto *map = UIGlobals::GetMapIfActive())
@@ -897,8 +905,6 @@ SkySightClient::DisplayTileLayer()
   auto *map_window = UIGlobals::GetMapIfActive();
   if (map_window == nullptr || active_layer == nullptr)
     return false;
-
-  api->PollLastUpdates();
 
   const auto map_tile = GeoBitmap::GetTile(map_window->VisibleProjection(),
                                            active_layer->zoom_min,
