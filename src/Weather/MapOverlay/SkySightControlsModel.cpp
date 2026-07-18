@@ -22,21 +22,6 @@ namespace WeatherMapOverlay {
 static constexpr unsigned TIME_PICKER_AUTO =
   std::numeric_limits<unsigned>::max();
 
-[[nodiscard]] static std::vector<time_t>
-BuildForecastTimes(const SkySight::Layer &layer)
-{
-  std::vector<time_t> times;
-  times.reserve(layer.forecast_datafiles.size());
-
-  for (const auto &datafile : layer.forecast_datafiles)
-    if (datafile.time > 0)
-      times.push_back(datafile.time);
-
-  std::sort(times.begin(), times.end());
-  SkySight::CollapseFullDayForecastTimes(layer.id, times);
-  return times;
-}
-
 [[nodiscard]] static int
 FindForecastIndex(const SkySight::Layer &layer,
                   const std::vector<time_t> &times) noexcept
@@ -156,7 +141,7 @@ SkySightControlsModel::StepPrimary(int delta) noexcept
     if (layer == nullptr || layer->SupportsLiveTiles())
       return false;
 
-    const auto times = BuildForecastTimes(*layer);
+    const auto times = SkySight::GetSelectableForecastTimes(*layer);
     if (times.empty())
       return false;
 
@@ -296,7 +281,7 @@ SkySightControlsModel::OpenPrimaryPicker() noexcept
     if (layer == nullptr || layer->SupportsLiveTiles())
       return;
 
-    const auto times = BuildForecastTimes(*layer);
+    const auto times = SkySight::GetSelectableForecastTimes(*layer);
     if (times.empty())
       return;
 

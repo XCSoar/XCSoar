@@ -95,7 +95,6 @@ HasExactForecastImage(std::string_view region,
 [[nodiscard]] bool
 SyncCachedForecastImage(std::string_view region,
                         SkySight::Layer &layer,
-                        SkySight::Layer &selected,
                         time_t forecast_time) noexcept
 {
   const auto candidate = SkySightCache::FindForecastImage(
@@ -106,14 +105,16 @@ SyncCachedForecastImage(std::string_view region,
   const auto mtime = std::chrono::system_clock::to_time_t(
     File::GetLastModification(candidate.path));
   layer.mtime = mtime;
-  selected.mtime = mtime;
   return true;
 }
 
 } // namespace
 SkySightClient::SkySightClient(CurlGlobal &curl)
   :api(std::make_unique<SkySightAPI>(*this, curl, GetCachePath())),
-   request_timer([this]{ PollPendingDatafiles(); })
+   request_timer([this]{
+     MaybeCleanupFiles();
+     api->Poll();
+   })
 {
   Init();
 }
@@ -219,7 +220,7 @@ SkySightClient::GetSelectedLayer(std::size_t index) const noexcept
 const SkySight::Layer *
 SkySightClient::GetSelectedLayer(std::string_view id) const noexcept
 {
-  return const_cast<SkySightAPI &>(*api).GetSelectedLayer(id);
+  return api->GetSelectedLayer(id);
 }
 
 bool
@@ -249,8 +250,22 @@ SkySightClient::IsThrottled() const noexcept
 bool
 SkySightClient::IsLiveViewUpdating(std::string_view layer_id) const noexcept
 {
-  return live_view_updating && active_layer != nullptr &&
-    active_layer->id == layer_id;
+  return active_layer != nullptr && active_layer->id == layer_id &&
+    api->HasPendingTileDownloads();
+}
+
+bool
+SkySightClient::HasDownloadActivity() const noexcept
+{
+  for (std::size_t i = 0; i < NumSelectedLayers(); ++i) {
+    const auto *layer = GetSelectedLayer(i);
+    if (layer != nullptr &&
+        (layer->HasPendingForecastMetadata() || layer->decoding ||
+         layer->pending_downloads > 0))
+      return true;
+  }
+
+  return api->HasPendingTileDownloads();
 }
 
 time_t
@@ -318,13 +333,11 @@ SkySightClient::AddSelectedLayer(std::string_view id, bool save_profile,
     }
   }
 
-  auto selected = *layer;
-  if (!selected.SupportsLiveTiles()) {
-    selected.datafiles_pending = request_datafiles || layer->datafiles_pending;
-    selected.updating = selected.ShouldShowUpdating();
-  }
+  if (!layer->SupportsLiveTiles() && request_datafiles)
+    layer->RequestForecastMetadata(
+      SkySight::ForecastMetadataIntent::Refresh);
 
-  if (!api->AddSelectedLayer(selected))
+  if (!api->AddSelectedLayer(id))
     return false;
 
   if (save_profile)
@@ -371,13 +384,6 @@ SkySightClient::RefreshCatalog() noexcept
   api->PollLayers();
 }
 
-void
-SkySightClient::PollPendingDatafiles() noexcept
-{
-  MaybeCleanupFiles();
-  api->Poll();
-}
-
 bool
 SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time)
 {
@@ -385,8 +391,8 @@ SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time)
     return false;
 
   auto *layer = api->GetLayer(id);
-  auto *selected = api->GetSelectedLayer(id);
-  if (layer == nullptr || selected == nullptr || layer->SupportsLiveTiles())
+  if (layer == nullptr || !api->IsSelectedLayer(id) ||
+      layer->SupportsLiveTiles())
     return false;
 
   const auto *datafile = layer->FindDatafile(forecast_time);
@@ -394,13 +400,10 @@ SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time)
     return false;
 
   layer->forecast_time_mode = SkySight::ForecastTimeMode::Fixed;
-  selected->forecast_time_mode = SkySight::ForecastTimeMode::Fixed;
   layer->forecast_time = forecast_time;
-  selected->forecast_time = forecast_time;
   CommonInterface::SetUIState().weather.skysight.cursor_initialized = true;
 
-  if (!SyncCachedForecastImage(GetRegion(), *layer, *selected,
-                               forecast_time)) {
+  if (!SyncCachedForecastImage(GetRegion(), *layer, forecast_time)) {
     if (!api->QueueForecastDatafile(id, datafile->time, datafile->link))
       return false;
   }
@@ -416,8 +419,8 @@ bool
 SkySightClient::SelectAutomaticForecastTime(std::string_view id)
 {
   auto *layer = api->GetLayer(id);
-  auto *selected = api->GetSelectedLayer(id);
-  if (layer == nullptr || selected == nullptr || layer->SupportsLiveTiles())
+  if (layer == nullptr || !api->IsSelectedLayer(id) ||
+      layer->SupportsLiveTiles())
     return false;
 
   const auto forecast_time = SkySight::ChooseClosestForecastTime(
@@ -433,12 +436,9 @@ SkySightClient::SelectAutomaticForecastTime(std::string_view id)
     return false;
 
   layer->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
-  selected->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
   layer->forecast_time = forecast_time;
-  selected->forecast_time = forecast_time;
 
-  if (!SyncCachedForecastImage(GetRegion(), *layer, *selected,
-                               forecast_time)) {
+  if (!SyncCachedForecastImage(GetRegion(), *layer, forecast_time)) {
     if (!api->QueueForecastDatafile(id, datafile->time, datafile->link))
       return false;
   }
@@ -567,7 +567,6 @@ SkySightClient::OnLayerCatalogChanged(std::string_view active_id,
     : api->GetLayer(displayed_id);
 
   if (active_layer == nullptr) {
-    live_view_updating = false;
     ResetTiles();
   }
 }
@@ -605,17 +604,10 @@ SkySightClient::SetLayerActive(std::string_view id)
     api->CancelTileDownloads();
 
   active_layer = layer;
-  /* DisplayTileLayer() derives this from actual queued/running tile work.
-     Starting optimistically busy leaves a stale label when a cached live
-     viewport needs no download or cannot be rendered immediately. */
-  live_view_updating = false;
   if (!active_layer->SupportsLiveTiles()) {
-    if (auto *selected = api->GetSelectedLayer(id); selected != nullptr) {
+    if (api->IsSelectedLayer(id)) {
       const bool has_exact_forecast_image =
-        HasExactForecastImage(GetRegion(), *selected);
-
-      selected->updating = selected->ShouldShowUpdating();
-      active_layer->updating = selected->updating;
+        HasExactForecastImage(GetRegion(), *active_layer);
 
       if (!has_exact_forecast_image)
         (void)api->PreloadDefaultDatafile(id);
@@ -644,10 +636,6 @@ SkySightClient::ApplyPageOverlay(std::string_view overlay_id,
       if (auto *layer = api->GetLayer(overlay_id); layer != nullptr &&
           !layer->SupportsLiveTiles()) {
         layer->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
-        if (auto *selected = api->GetSelectedLayer(overlay_id);
-            selected != nullptr)
-          selected->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
-
         if (!layer->forecast_datafiles.empty())
           (void)SelectAutomaticForecastTime(overlay_id);
       }
@@ -665,7 +653,6 @@ SkySightClient::DeactivateLayer()
 {
   api->CancelTileDownloads();
   active_layer = nullptr;
-  live_view_updating = false;
   ResetTiles();
   OnDataUpdated();
 }
@@ -845,7 +832,7 @@ SkySightClient::DisplayForecastLayer()
     displayed_layer = active_layer;
   }
 
-  if (active_layer->updating)
+  if (active_layer->ShouldShowUpdating())
     api->PollSelectedDatafiles();
 
   if (!forecast_image_dirty) {
@@ -869,9 +856,6 @@ SkySightClient::DisplayForecastLayer()
   if (candidate.forecast_time == active_layer->forecast_time) {
     active_layer->mtime = std::chrono::system_clock::to_time_t(
       File::GetLastModification(candidate.path));
-    if (auto *selected = api->GetSelectedLayer(active_layer->id);
-        selected != nullptr)
-      selected->mtime = active_layer->mtime;
   }
 
   if (tile_filenames[0] != candidate.path.c_str()) {
@@ -1178,8 +1162,6 @@ SkySightClient::DisplayTileLayer()
   api->ReconcileTileDownloads(desired_keys);
   for (const auto &tile : missing_target_tiles)
     api->EnsureTile(*active_layer, refresh_time, tile);
-
-  live_view_updating = api->HasPendingTileDownloads();
 
   return !visible_tiles.empty();
 #endif

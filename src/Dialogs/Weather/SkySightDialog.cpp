@@ -26,6 +26,7 @@
 #include "Widget/TextWidget.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/SkySight/ForecastFormatter.hpp"
+#include "Weather/SkySight/ForecastUtils.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include "util/StaticString.hxx"
@@ -82,15 +83,16 @@ public:
       first_row.AppendFormat(" [%s]", _("Active"));
 
     StaticString<256> second_row;
-    if (layer->updating) {
+    if (layer->ShouldShowUpdating()) {
       if (skysight->IsThrottled())
         second_row.Format(_("Download limit reached; retrying in %u seconds..."),
                           unsigned(skysight->GetThrottleRemainingSeconds()));
       else if (const auto retry = skysight->GetDatafilesRetryRemainingSeconds();
-               retry > 0 && layer->datafiles_pending)
+               retry > 0 && layer->HasPendingForecastMetadata())
         second_row.Format(_("Connection failed; retrying in %u seconds..."),
                           unsigned(retry));
-      else if (!layer->SupportsLiveTiles() && layer->datafiles_pending)
+      else if (!layer->SupportsLiveTiles() &&
+               layer->HasPendingForecastMetadata())
         second_row = _("Loading forecast steps...");
       else if (!layer->SupportsLiveTiles() && layer->decoding)
         second_row = _("Decoding forecast data...");
@@ -155,11 +157,8 @@ class ForecastStepRenderer final : public ListItemRenderer {
 
 public:
   explicit ForecastStepRenderer(const SkySight::Layer &_layer)
-    :layer(_layer) {
-    forecast_times.reserve(layer.forecast_datafiles.size());
-    for (const auto &datafile : layer.forecast_datafiles)
-      forecast_times.push_back(datafile.time);
-  }
+    :layer(_layer),
+     forecast_times(SkySight::GetSelectableForecastTimes(layer)) {}
 
   unsigned CalculateLayout(const DialogLook &look) noexcept {
     return row_renderer.CalculateLayout(*look.list.font);
@@ -167,6 +166,10 @@ public:
 
   [[nodiscard]] time_t GetForecastTime(unsigned index) const noexcept {
     return index < forecast_times.size() ? forecast_times[index] : 0;
+  }
+
+  [[nodiscard]] std::size_t size() const noexcept {
+    return forecast_times.size();
   }
 
   [[nodiscard]] unsigned FindForecastTime(time_t forecast_time) const noexcept {
@@ -351,7 +354,8 @@ private:
                             !layer->forecast_datafiles.empty() &&
                             (skysight->IsForecastDecodeAvailable() || layer->mtime != 0));
     preload_button->SetEnabled(layer != nullptr && !layer->SupportsLiveTiles() &&
-                               skysight->HasCredentials() && !layer->updating);
+                               skysight->HasCredentials() &&
+                               !layer->ShouldShowUpdating());
     preload_all_button->SetEnabled(skysight != nullptr && skysight->HasCredentials() &&
                                    any_forecast_layer);
   }
@@ -475,7 +479,7 @@ private:
 
     ForecastStepRenderer renderer(*layer);
     const int selected = ListPicker(_("Choose a forecast time"),
-                                    layer->forecast_datafiles.size(),
+                                    renderer.size(),
                                     renderer.FindForecastTime(layer->forecast_time),
                                     renderer.CalculateLayout(UIGlobals::GetDialogLook()),
                                     renderer);
