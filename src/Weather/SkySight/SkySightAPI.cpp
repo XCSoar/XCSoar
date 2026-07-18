@@ -3,6 +3,7 @@
 
 #include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
+#include "SkySightCache.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkySightLimits.hpp"
 #include "SkySightRequest.hpp"
@@ -1261,7 +1262,6 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
   layer->ClearForecastMetadataRequest();
 
   bool found = false;
-  time_t first_time = 0;
   time_t last_time = 0;
   time_t latest_past_time = 0;
   time_t earliest_future_time = 0;
@@ -1280,11 +1280,9 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
         continue;
 
       if (!found) {
-        first_time = update_time;
         last_time = update_time;
         found = true;
       } else {
-        first_time = std::min(first_time, update_time);
         last_time = std::max(last_time, update_time);
       }
 
@@ -1319,10 +1317,12 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
               return a.time > b.time;
             });
   layer->forecast_datafiles = std::move(forecast_datafiles);
+  SkySight::MergeCachedForecastTimes(
+    *layer,
+    SkySightCache::CollectForecastTimes(cache_path, region, layer->id),
+    now);
 
   if (found) {
-    layer->from = first_time;
-    layer->to = last_time;
     layer->last_update = std::max(layer->last_update, last_time);
 
     const time_t default_time = latest_past_time > 0
