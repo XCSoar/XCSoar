@@ -590,7 +590,7 @@ SkySightClient::SetLayerActive(std::string_view id)
       if (!has_exact_forecast_image)
         (void)api->PreloadDefaultDatafile(id);
       else
-        api->PollSelectedDatafiles();
+        api->RequestForecastMetadata(id);
     }
   }
   ResetTiles();
