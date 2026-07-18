@@ -82,15 +82,16 @@ public:
       first_row.AppendFormat(" [%s]", _("Active"));
 
     StaticString<256> second_row;
-    if (layer->updating) {
+    if (layer->ShouldShowUpdating()) {
       if (skysight->IsThrottled())
         second_row.Format(_("Download limit reached; retrying in %u seconds..."),
                           unsigned(skysight->GetThrottleRemainingSeconds()));
       else if (const auto retry = skysight->GetDatafilesRetryRemainingSeconds();
-               retry > 0 && layer->datafiles_pending)
+               retry > 0 && layer->HasPendingForecastMetadata())
         second_row.Format(_("Connection failed; retrying in %u seconds..."),
                           unsigned(retry));
-      else if (!layer->SupportsLiveTiles() && layer->datafiles_pending)
+      else if (!layer->SupportsLiveTiles() &&
+               layer->HasPendingForecastMetadata())
         second_row = _("Loading forecast steps...");
       else if (!layer->SupportsLiveTiles() && layer->decoding)
         second_row = _("Decoding forecast data...");
@@ -351,7 +352,8 @@ private:
                             !layer->forecast_datafiles.empty() &&
                             (skysight->IsForecastDecodeAvailable() || layer->mtime != 0));
     preload_button->SetEnabled(layer != nullptr && !layer->SupportsLiveTiles() &&
-                               skysight->HasCredentials() && !layer->updating);
+                               skysight->HasCredentials() &&
+                               !layer->ShouldShowUpdating());
     preload_all_button->SetEnabled(skysight != nullptr && skysight->HasCredentials() &&
                                    any_forecast_layer);
   }

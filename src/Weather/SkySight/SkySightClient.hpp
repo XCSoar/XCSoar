@@ -35,7 +35,6 @@ class SkySightClient final {
   bool forecast_cleanup_pending = true;
   bool forecast_progress_visible = false;
   bool throttle_notification_active = false;
-  bool live_view_updating = false;
   std::array<std::string, LIVE_TILE_OVERLAY_COUNT> tile_filenames;
   std::array<GeoBitmap::TileData, LIVE_TILE_OVERLAY_COUNT> tile_coordinates;
   std::array<time_t, LIVE_TILE_OVERLAY_COUNT> tile_timestamps{};
@@ -71,13 +70,13 @@ public:
   bool HasForecastLayers() const noexcept;
   bool IsForecastDecodeAvailable() const noexcept;
   void RefreshCatalog() noexcept;
-  void PollPendingDatafiles() noexcept;
 
   bool HasCredentials() const noexcept;
 
   bool IsThrottled() const noexcept;
 
   bool IsLiveViewUpdating(std::string_view layer_id) const noexcept;
+  bool HasDownloadActivity() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
   time_t GetDatafilesRetryRemainingSeconds() const noexcept;

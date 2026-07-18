@@ -37,7 +37,7 @@ class SkySightAPI final {
   };
   std::deque<PendingDecodeJob> pending_decode_jobs;
   std::vector<SkySight::Layer> layers;
-  std::vector<SkySight::Layer> selected_layers;
+  std::vector<std::string> selected_layer_ids;
   std::vector<SkySightRegionEntry> regions = GetDefaultSkySightRegions();
   const AllocatedPath cache_path;
   std::string region = GetDefaultSkySightRegion().id;
@@ -70,16 +70,18 @@ public:
   std::size_t NumLayers() const noexcept;
 
   const SkySight::Layer *GetLayer(std::size_t index) const noexcept;
+  const SkySight::Layer *GetLayer(std::string_view id) const noexcept;
   SkySight::Layer *GetLayer(std::string_view id) noexcept;
   std::size_t NumSelectedLayers() const noexcept {
-    return selected_layers.size();
+    return selected_layer_ids.size();
   }
 
   const SkySight::Layer *GetSelectedLayer(std::size_t index) const noexcept;
+  const SkySight::Layer *GetSelectedLayer(std::string_view id) const noexcept;
   SkySight::Layer *GetSelectedLayer(std::string_view id) noexcept;
   bool IsSelectedLayer(std::string_view id) const noexcept;
   bool SelectedLayersFull() const noexcept;
-  bool AddSelectedLayer(const SkySight::Layer &layer);
+  bool AddSelectedLayer(std::string_view id);
   bool RemoveSelectedLayer(std::string_view id) noexcept;
   void ClearSelectedLayers() noexcept;
 
@@ -96,8 +98,6 @@ public:
   void ReconcileTileDownloads(
     const std::set<std::string, std::less<>> &desired_keys) noexcept;
   [[nodiscard]] bool HasPendingTileDownloads() const noexcept;
-  void EnsureDatafile(const SkySight::Layer &layer, time_t forecast_time,
-                      std::string_view link);
   bool QueuePreloadDatafile(SkySight::Layer &layer, time_t forecast_time,
                             std::string_view link) noexcept;
   bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,
@@ -156,8 +156,6 @@ private:
   bool layers_loaded = false;
   time_t last_layers_request = 0;
   time_t last_layers_refresh = 0;
-  void SyncSelectedLayer(std::string_view id) noexcept;
-  static void UpdateBusyState(SkySight::Layer &layer) noexcept;
   [[gnu::pure]] AllocatedPath GetRegionsCachePath() const noexcept;
   [[gnu::pure]] AllocatedPath GetLayersCachePath() const noexcept;
   void LoadCachedRegions() noexcept;

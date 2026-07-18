@@ -272,17 +272,27 @@ TestSkySightForecastBusyState()
 {
   SkySight::Layer layer;
 
+  ok1(!layer.HasPendingForecastMetadata());
   ok1(!layer.ShouldShowUpdating());
-
-  layer.datafiles_pending = true;
+  layer.RequestForecastMetadata(SkySight::ForecastMetadataIntent::Refresh);
+  ok1(layer.HasPendingForecastMetadata());
   ok1(layer.ShouldShowUpdating());
-
   layer.forecast_datafiles.emplace_back(1, "cached");
   ok1(!layer.ShouldShowUpdating());
-
+  layer.RequestForecastMetadata(
+    SkySight::ForecastMetadataIntent::ActiveDefault);
+  ok1(layer.forecast_metadata_intent ==
+      SkySight::ForecastMetadataIntent::ActiveDefault);
+  layer.RequestForecastMetadata(SkySight::ForecastMetadataIntent::Refresh);
+  ok1(layer.forecast_metadata_intent ==
+      SkySight::ForecastMetadataIntent::ActiveDefault);
+  layer.RequestForecastMetadata(SkySight::ForecastMetadataIntent::PreloadAll);
+  ok1(layer.forecast_metadata_intent ==
+      SkySight::ForecastMetadataIntent::PreloadAll);
+  layer.ClearForecastMetadataRequest();
+  ok1(!layer.HasPendingForecastMetadata());
   layer.decoding = true;
   ok1(layer.ShouldShowUpdating());
-
   layer.decoding = false;
   layer.pending_downloads = 1;
   ok1(layer.ShouldShowUpdating());
@@ -367,7 +377,7 @@ TestSkySightLiveTileResolution()
 int
 main()
 {
-  plan_tests(32 + 10 + 10 + 5 + 12 + 4 + 30 + 41 + 2 + 1);
+  plan_tests(32 + 10 + 10 + 11 + 12 + 4 + 30 + 41 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
