@@ -161,15 +161,20 @@ CollapseFullDayForecastTimes(std::string_view layer_id,
                                 });
 }
 
-inline void
-CollapseFullDayForecastDatafiles(const Layer &layer,
-                                 std::vector<ForecastDatafile> &forecast_datafiles)
+[[nodiscard]] inline std::vector<time_t>
+GetSelectableForecastTimes(const Layer &layer)
 {
-  CollapseFullDayForecastValues(IsFullDayForecastLayer(layer),
-                                forecast_datafiles,
-                                [](const auto &datafile) noexcept {
-                                  return datafile.time;
-                                });
+  std::vector<time_t> times;
+  times.reserve(layer.forecast_datafiles.size());
+
+  for (const auto &datafile : layer.forecast_datafiles)
+    if (datafile.time > 0)
+      times.push_back(datafile.time);
+
+  std::sort(times.begin(), times.end());
+  times.erase(std::unique(times.begin(), times.end()), times.end());
+  CollapseFullDayForecastTimes(layer.id, times);
+  return times;
 }
 
 /**

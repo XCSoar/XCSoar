@@ -26,6 +26,7 @@
 #include "Widget/TextWidget.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/SkySight/ForecastFormatter.hpp"
+#include "Weather/SkySight/ForecastUtils.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include "util/StaticString.hxx"
@@ -156,11 +157,8 @@ class ForecastStepRenderer final : public ListItemRenderer {
 
 public:
   explicit ForecastStepRenderer(const SkySight::Layer &_layer)
-    :layer(_layer) {
-    forecast_times.reserve(layer.forecast_datafiles.size());
-    for (const auto &datafile : layer.forecast_datafiles)
-      forecast_times.push_back(datafile.time);
-  }
+    :layer(_layer),
+     forecast_times(SkySight::GetSelectableForecastTimes(layer)) {}
 
   unsigned CalculateLayout(const DialogLook &look) noexcept {
     return row_renderer.CalculateLayout(*look.list.font);
@@ -168,6 +166,10 @@ public:
 
   [[nodiscard]] time_t GetForecastTime(unsigned index) const noexcept {
     return index < forecast_times.size() ? forecast_times[index] : 0;
+  }
+
+  [[nodiscard]] std::size_t size() const noexcept {
+    return forecast_times.size();
   }
 
   [[nodiscard]] unsigned FindForecastTime(time_t forecast_time) const noexcept {
@@ -477,7 +479,7 @@ private:
 
     ForecastStepRenderer renderer(*layer);
     const int selected = ListPicker(_("Choose a forecast time"),
-                                    layer->forecast_datafiles.size(),
+                                    renderer.size(),
                                     renderer.FindForecastTime(layer->forecast_time),
                                     renderer.CalculateLayout(UIGlobals::GetDialogLook()),
                                     renderer);
