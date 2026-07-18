@@ -150,6 +150,12 @@ TestSkySightForecastPreloadSelection()
   ok1(SkySight::GetForecastCatalogStart(DAY / 2) == DAY / 2);
 
   ok1(SkySight::HasForecastCatalogLinks(layer));
+  const auto selectable = SkySight::GetSelectableForecastTimes(layer);
+  ok1(selectable.size() == 3);
+  ok1(selectable[0] == 9 * DAY + 23 * 60 * 60);
+  ok1(selectable[1] == 10 * DAY + 6 * 60 * 60);
+  ok1(selectable[2] == 11 * DAY + 6 * 60 * 60);
+
   for (auto &datafile : layer.forecast_datafiles)
     datafile.link.clear();
   ok1(!SkySight::HasForecastCatalogLinks(layer));
@@ -272,17 +278,27 @@ TestSkySightForecastBusyState()
 {
   SkySight::Layer layer;
 
+  ok1(!layer.HasPendingForecastMetadata());
   ok1(!layer.ShouldShowUpdating());
-
-  layer.datafiles_pending = true;
+  layer.RequestForecastMetadata(SkySight::ForecastMetadataIntent::Refresh);
+  ok1(layer.HasPendingForecastMetadata());
   ok1(layer.ShouldShowUpdating());
-
   layer.forecast_datafiles.emplace_back(1, "cached");
   ok1(!layer.ShouldShowUpdating());
-
+  layer.RequestForecastMetadata(
+    SkySight::ForecastMetadataIntent::ActiveDefault);
+  ok1(layer.forecast_metadata_intent ==
+      SkySight::ForecastMetadataIntent::ActiveDefault);
+  layer.RequestForecastMetadata(SkySight::ForecastMetadataIntent::Refresh);
+  ok1(layer.forecast_metadata_intent ==
+      SkySight::ForecastMetadataIntent::ActiveDefault);
+  layer.RequestForecastMetadata(SkySight::ForecastMetadataIntent::PreloadAll);
+  ok1(layer.forecast_metadata_intent ==
+      SkySight::ForecastMetadataIntent::PreloadAll);
+  layer.ClearForecastMetadataRequest();
+  ok1(!layer.HasPendingForecastMetadata());
   layer.decoding = true;
   ok1(layer.ShouldShowUpdating());
-
   layer.decoding = false;
   layer.pending_downloads = 1;
   ok1(layer.ShouldShowUpdating());
@@ -367,7 +383,7 @@ TestSkySightLiveTileResolution()
 int
 main()
 {
-  plan_tests(32 + 10 + 10 + 5 + 12 + 4 + 30 + 41 + 2 + 1);
+  plan_tests(32 + 10 + 10 + 11 + 12 + 4 + 30 + 43 + 4);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();

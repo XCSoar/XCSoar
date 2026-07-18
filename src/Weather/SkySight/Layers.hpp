@@ -26,6 +26,13 @@ enum class ForecastTimeMode : uint8_t {
   Fixed,
 };
 
+enum class ForecastMetadataIntent : uint8_t {
+  Idle,
+  Refresh,
+  ActiveDefault,
+  PreloadAll,
+};
+
 enum class ForecastProgressPhase : uint8_t {
   Metadata,
   Download,
@@ -72,20 +79,15 @@ struct Layer {
   std::string projection;
   std::string data_type;
   std::map<float, LegendColor> legend;
-  std::string time_name;
   std::vector<ForecastDatafile> forecast_datafiles;
   time_t from = 0;
   time_t to = 0;
   time_t mtime = 0;
   bool requires_auth = false;
-  /** True while the UI should present this layer as busy. */
-  bool updating = false;
-  /** Metadata request for available forecast steps is still pending. */
-  bool datafiles_pending = false;
+  ForecastMetadataIntent forecast_metadata_intent =
+    ForecastMetadataIntent::Idle;
   /** A downloaded forecast file is being decoded into an overlay image. */
   bool decoding = false;
-  bool preload_requested = false;
-  bool default_preload_requested = false;
   bool tile_layer = false;
   bool live_layer = false;
   /** Number of queued/download/decode jobs still outstanding. */
@@ -120,6 +122,22 @@ struct Layer {
      zoom_max(_zoom_max),
      alpha(_alpha) {}
 
+  void CopyRuntimeStateFrom(const Layer &other) {
+    forecast_datafiles = other.forecast_datafiles;
+    from = other.from;
+    to = other.to;
+    mtime = other.mtime;
+    forecast_metadata_intent = other.forecast_metadata_intent;
+    decoding = other.decoding;
+    pending_downloads = other.pending_downloads;
+    last_update = other.last_update;
+    live_timestamp_from_probe = other.live_timestamp_from_probe;
+    last_update_request = other.last_update_request;
+    live_metadata_support = other.live_metadata_support;
+    forecast_time = other.forecast_time;
+    forecast_time_mode = other.forecast_time_mode;
+  }
+
   [[nodiscard]] bool SupportsLiveTiles() const noexcept {
     return live_layer && tile_layer;
   }
@@ -130,6 +148,19 @@ struct Layer {
 
   [[nodiscard]] bool UsesAutomaticForecastTime() const noexcept {
     return forecast_time_mode == ForecastTimeMode::AutoDefault;
+  }
+
+  [[nodiscard]] bool HasPendingForecastMetadata() const noexcept {
+    return forecast_metadata_intent != ForecastMetadataIntent::Idle;
+  }
+
+  void RequestForecastMetadata(ForecastMetadataIntent intent) noexcept {
+    if (intent > forecast_metadata_intent)
+      forecast_metadata_intent = intent;
+  }
+
+  void ClearForecastMetadataRequest() noexcept {
+    forecast_metadata_intent = ForecastMetadataIntent::Idle;
   }
 
   [[nodiscard]] const ForecastDatafile *
@@ -156,7 +187,7 @@ struct Layer {
    */
   [[nodiscard]] bool ShouldShowUpdating() const noexcept {
     return decoding || pending_downloads > 0 ||
-      (datafiles_pending && !HasUsableForecastData());
+      (HasPendingForecastMetadata() && !HasUsableForecastData());
   }
 
   [[nodiscard]] bool
