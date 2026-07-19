@@ -244,6 +244,30 @@ TEST_WEATHER_UI_STATE_SOURCES = \
 TEST_WEATHER_UI_STATE_DEPENDS = TIME UTIL
 $(eval $(call link-program,TestWeatherUIState,TEST_WEATHER_UI_STATE))
 
+TEST_NAMES += TestSkySightForecastUtils
+
+TEST_SKYSIGHT_FORECAST_UTILS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightForecastUtils.cpp
+TEST_SKYSIGHT_FORECAST_UTILS_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightForecastUtils,TEST_SKYSIGHT_FORECAST_UTILS))
+
+TEST_NAMES += TestSkySightRequestPolicy
+
+TEST_SKYSIGHT_REQUEST_POLICY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightRequestPolicy.cpp
+TEST_SKYSIGHT_REQUEST_POLICY_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightRequestPolicy,TEST_SKYSIGHT_REQUEST_POLICY))
+
+TEST_NAMES += TestSkySightLiveTileUtils
+
+TEST_SKYSIGHT_LIVE_TILE_UTILS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightLiveTileUtils.cpp
+TEST_SKYSIGHT_LIVE_TILE_UTILS_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightLiveTileUtils,TEST_SKYSIGHT_LIVE_TILE_UTILS))
+
 TEST_NAMES += TestWeatherOverlayPagePlacement
 
 TEST_WEATHER_OVERLAY_PAGE_PLACEMENT_SOURCES = \
