@@ -4,6 +4,7 @@
 #include "Weather/WeatherUIState.hpp"
 #include "Weather/SkySight/Layers.hpp"
 #include "Weather/SkySight/ForecastUtils.hpp"
+#include "Weather/SkySight/LiveTileUtils.hpp"
 #include "Weather/SkySight/SkySightLimits.hpp"
 #include "Weather/SkySight/SkySightRequestPolicy.hpp"
 #include "TestUtil.hpp"
@@ -311,10 +312,40 @@ TestSkySightResourcePolicies()
   ok1(!SkySight::IsNetCdfGridSizeAllowed(4096, 4096));
 }
 
+static void
+TestSkySightLiveTileResolution()
+{
+  const GeoBitmap::TileData tile{8, 103, 207};
+  const auto parent = SkySight::GetTileAncestor(tile, 6);
+  ok1(parent.zoom == 6);
+  ok1(parent.x == 25);
+  ok1(parent.y == 51);
+
+  ok1(SkySight::SelectLiveTileZoom(8, 1) == 7);
+  ok1(SkySight::SelectLiveTileZoom(9, 1) == 8);
+  ok1(SkySight::SelectLiveTileZoom(1, 1) == 1);
+  ok1(SkySight::GetLiveTileMapZoomMaximum(8) == 9);
+  ok1(SkySight::GetLiveTileMapZoomMaximum(GeoBitmap::MAX_TILE_ZOOM) ==
+      GeoBitmap::MAX_TILE_ZOOM);
+  ok1(SkySight::IsRecentLiveTileTimestamp(10'000, 10'000));
+  ok1(SkySight::IsRecentLiveTileTimestamp(8'800, 10'000));
+  ok1(!SkySight::IsRecentLiveTileTimestamp(8'200, 10'000));
+  ok1(!SkySight::IsRecentLiveTileTimestamp(10'600, 10'000));
+
+  constexpr std::array<unsigned, 3> newest_tie{2, 2, 1};
+  ok1(SkySight::SelectCoherentLiveTileTimestamp(10'000, newest_tie) ==
+      10'000);
+  constexpr std::array<unsigned, 3> older_complete{1, 4, 2};
+  ok1(SkySight::SelectCoherentLiveTileTimestamp(10'000, older_complete) ==
+      9'400);
+  constexpr std::array<unsigned, 3> empty_coverage{};
+  ok1(SkySight::SelectCoherentLiveTileTimestamp(10'000, empty_coverage) == 0);
+}
+
 int
 main()
 {
-  plan_tests(32 + 10 + 9 + 5 + 12 + 4 + 40 + 2 + 1);
+  plan_tests(32 + 10 + 9 + 5 + 12 + 4 + 13 + 40 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
@@ -325,6 +356,7 @@ main()
   TestSkySightForecastBusyState();
   TestSkySightCachedForecastMerge();
   TestSkySightResourcePolicies();
+  TestSkySightLiveTileResolution();
 
   return exit_status();
 }
