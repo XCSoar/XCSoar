@@ -20,6 +20,35 @@ Version 7.45 - not yet released
   - FLARM radar: show callsigns on all registered targets again, use the
     full callsign on target labels, and omit duplicate side vario/altitude
     on the selected target (info panel already shows them) #2718
+  - Add XCTherm to the pages config map overlay choices (alongside RASP
+    and EDL) #2705
+  - Add Weather Setup to the weather overlay menu (opens Info → Weather
+    on the active overlay tab); the layer/level/altitude list picker also
+    has a Setup button for the same path #2690
+  - Add Auto update to the RASP weather panel to enable/disable background
+    download of out-of-date RASP files; Update remains available for a
+    manual refresh
+  - Add Auto update to the EDL weather panel to enable/disable background
+    download of missing overlay tiles; Precache day is disabled while Auto
+    update is on #2690
+  - Add Layer/Time (Level/Altitude) on weather panels for the current map
+    page; Apply to page commits changes when dirty, Add page creates a
+    page with those values, and Pages setup opens Config → Look → Pages
+    #2705 #2690
+  - Store both overlay cursor axes on weather map pages: RASP Layer/Time,
+    EDL Level/Time, and XCTherm Altitude/Time; switching pages restores
+    Auto or manual selections independently #2690 #2705
+  - Show the current map page RASP layer and time on the RASP weather
+    panel; Apply commits them to that page #2690
+  - Allow Precache day on the EDL weather panel without an active EDL map
+    page; add Time and Level using the same pickers as the overlay
+    controls #2690
+  - Align the XCTherm weather panel Time / Altitude layout with RASP and
+    EDL; map Altitude is independent of the download Layer #2690 #2705
+  - Store RASP forecast time per map page (Auto, Now, or fixed slot);
+    selecting a page restores its Layer and Time #2690 #2705
+  - Fix crash when opening Weather Setup from the weather overlay
+    layer/level/altitude list picker #2690
   - Show all tasks by default in Task Browser instead of requiring to click
     the "More" button first.
   - Rename to turnpoint observation zone type "Symmetric Quadrant" to
