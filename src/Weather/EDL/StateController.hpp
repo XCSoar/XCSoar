@@ -132,10 +132,18 @@ GetForecastTimeLocal() noexcept;
 
 /**
  * Cursor-bar forecast label, e.g. @c "14:00 UTC (+1:30)" or @c "AUTO: …".
+ * Uses the live session forecast time.
  */
 void
 FormatForecastCursorLabel(StaticString<64> &text,
-                            bool auto_advance) noexcept;
+                          bool auto_advance) noexcept;
+
+/**
+ * Like #FormatForecastCursorLabel for an explicit UTC forecast hour.
+ */
+void
+FormatForecastCursorLabel(StaticString<64> &text, bool auto_advance,
+                          BrokenDateTime forecast) noexcept;
 
 /**
  * Build the map legend text for the active EDL overlay.

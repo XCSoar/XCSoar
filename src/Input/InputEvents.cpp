@@ -558,6 +558,7 @@ InputEvents::eventLockScreen([[maybe_unused]] const char *mode)
 // altitude +/-, altitude auto on/off/toggle/show
 // field/layer/level picker (secondary axis list)
 // level +/- and level auto … (EDL pressure level alias for altitude)
+// setup (open Info → Weather for the active overlay)
 void
 InputEvents::eventWeatherOverlay(const char *misc)
 {

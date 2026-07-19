@@ -795,14 +795,18 @@ When editing a page, the following options are available for map pages:
   or \emph{Map (north-up)}.
 \item[InfoBoxes]  Which InfoBox set is shown alongside the main area.
 \item[Bottom area]  Optional panel below the main area.  Select
-  \emph{Weather controls} to show in-flight RASP or EDL forecast controls
-  when the page uses a weather overlay.
+  \emph{Weather controls} to show in-flight RASP, EDL, or XCTherm forecast
+  controls when the page uses a weather overlay.
 \item[Map overlay]  Optional weather overlay drawn on map pages: \emph{None},
-  \emph{RASP}, or \emph{EDL}.  RASP requires a loaded RASP file; EDL
-  requires \emph{EDL Weather Page} to be enabled in the weather system
-  configuration.
-\item[RASP layer]  When \emph{Map overlay} is \emph{RASP}, selects which
-  RASP field is displayed on this page.
+  \emph{RASP}, \emph{EDL}, or \emph{XCTherm}.  RASP requires a loaded RASP
+  file; EDL and XCTherm require network-capable builds with the respective
+  weather provider configured.
+\item[Layer / level]  When \emph{Map overlay} is \emph{RASP}, selects
+  which RASP field is displayed on this page.  When the overlay is
+  \emph{EDL}, selects the pressure level (altitude band): \emph{Auto}
+  follows aircraft altitude when the page is opened; a fixed level is
+  restored each time the page is selected.  The label and choices
+  change with the selected overlay.
 \end{description}
 
 
