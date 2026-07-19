@@ -492,9 +492,8 @@ struct PixelSourceAlpha {
     return color_type(BlendChannel(dest.Red(), src.Red(), alpha),
                       BlendChannel(dest.Green(), src.Green(), alpha),
                       BlendChannel(dest.Blue(), src.Blue(), alpha),
-                      // Blend alpha: dest_alpha + (src_alpha - dest_alpha) * src_alpha / 255
-                      // Simplified: keep source alpha for the overlay
-                      alpha);
+                      // "over" output alpha: src_a + dest_a * (1 - src_a)
+                      BlendChannel(dest.Alpha(), 255, alpha));
   }
 };
 
@@ -535,7 +534,8 @@ struct PixelSourceConstantAlpha {
     return color_type(BlendChannel(dest.Red(), src.Red(), alpha),
                       BlendChannel(dest.Green(), src.Green(), alpha),
                       BlendChannel(dest.Blue(), src.Blue(), alpha),
-                      alpha);
+                      // "over" output alpha: src_a + dest_a * (1 - src_a)
+                      BlendChannel(dest.Alpha(), 255, alpha));
   }
 };
 
