@@ -43,6 +43,13 @@ ProtectedTaskManager::SetPilotEventStartTimeSpan(const TimeSpan &open_time_span)
   lease->SetPilotEventStartTimeSpan(open_time_span);
 }
 
+bool
+ProtectedTaskManager::StartPolish(const AircraftState &state) noexcept
+{
+  ExclusiveLease lease(*this);
+  return lease->StartPolish(state);
+}
+
 const OrderedTaskSettings
 ProtectedTaskManager::GetOrderedTaskSettings() const noexcept
 {

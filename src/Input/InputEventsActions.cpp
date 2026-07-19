@@ -71,6 +71,8 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
+#include "NMEA/Aircraft.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Form/DataField/File.hpp"
@@ -200,7 +202,10 @@ InputEvents::eventMarkLocation(const char *misc)
 void
 InputEvents::eventPilotEvent([[maybe_unused]] const char *misc)
 try {
-  // Configure start window
+  const auto &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
+  const AircraftState aircraft = ToAircraftState(basic, calculated);
+
   const OrderedTaskSettings &ots =
     backend_components->protected_task_manager->GetOrderedTaskSettings();
   const StartConstraints &constraints = ots.start_constraints;
@@ -208,23 +213,28 @@ try {
   if (!constraints.pev_start_enabled)
     return;
 
-  const auto now = CommonInterface::Basic().time;
+  if (constraints.start_mode == StartMode::POLISH) {
+    backend_components->protected_task_manager->StartPolish(aircraft);
+  } else {
+    // Configure start window
+    const auto now = basic.time;
 
-  // Note: pev_start_wait_time == 0 means window starts right away
-  TimeStamp new_start_ts( now.ToDuration() + constraints.pev_start_wait_time );
-  FineTime new_start(new_start_ts);
+    // Note: pev_start_wait_time == 0 means window starts right away
+    TimeStamp new_start_ts( now.ToDuration() + constraints.pev_start_wait_time );
+    FineTime new_start(new_start_ts);
 
-  FineTime new_end = (constraints.pev_start_window.count() > 0) ?
-                     FineTime(new_start_ts + constraints.pev_start_window) :
-                     FineTime::Invalid();
+    FineTime new_end = (constraints.pev_start_window.count() > 0) ?
+                       FineTime(new_start_ts + constraints.pev_start_window) :
+                       FineTime::Invalid();
 
-  const TimeSpan ts = TimeSpan(new_start, new_end);
+    const TimeSpan ts = TimeSpan(new_start, new_end);
 
-  backend_components->protected_task_manager->SetPilotEventStartTimeSpan(ts);
+    backend_components->protected_task_manager->SetPilotEventStartTimeSpan(ts);
+  }
 
   // Log pilot event
   if (backend_components->igc_logger)
-    backend_components->igc_logger->LogPilotEvent(CommonInterface::Basic());
+    backend_components->igc_logger->LogPilotEvent(basic);
 
   // Let devices know the pilot event was pressed
   if (backend_components->devices) {

@@ -1161,6 +1161,30 @@ OrderedTask::TaskStarted(bool soft) const noexcept
   return false;
 }
 
+bool
+OrderedTask::StartPolish(const AircraftState &state) noexcept
+{
+  if (task_points.size() < 2 || taskpoint_start == nullptr ||
+      !taskpoint_start->IsPolishStart())
+    return false;
+
+  if (TaskStarted() || !taskpoint_start->StartPolish(state))
+    return false;
+
+  stats.start.SetStarted(state);
+
+  SetActiveTaskPoint(1);
+  taskpoint_start->ScanActive(*task_points[active_task_point]);
+
+  if (task_events != nullptr) {
+    task_events->TaskStart();
+    task_events->ActiveAdvanced(*task_points[active_task_point],
+                                (int)active_task_point);
+  }
+
+  return true;
+}
+
 /**
  * Test whether two points (as previous search locations) are significantly
  * different to warrant a new search

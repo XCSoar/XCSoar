@@ -24,6 +24,7 @@ class AlternateTask;
 class AlternateList;
 class TaskWaypoint;
 class AbortIntersectionTest;
+struct AircraftState;
 struct RangeAndRadial;
 
 /**
@@ -428,6 +429,7 @@ public:
    * To be called when Pilot Event (PEV) has been pressed.
    */
   void SetPilotEventStartTimeSpan(const TimeSpan &open_time_span) noexcept;
+  bool StartPolish(const AircraftState &state) noexcept;
 
   /**
    * Update speed-to-fly and risk MC from the current polar.

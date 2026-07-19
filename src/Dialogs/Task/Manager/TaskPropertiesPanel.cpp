@@ -38,7 +38,7 @@ static constexpr StaticEnumChoice start_mode_list[] = {
   { StartMode::PEV, N_("Pilot Event (PEV) Start"),
     N_("Enable Pilot Event (PEV) start timing.") },
   { StartMode::POLISH, N_("Polish Start"),
-    N_("Placeholder for Polish start timing.") },
+    N_("Use Pilot Event to start from the current location inside the start sector.") },
   nullptr
 };
 
@@ -92,8 +92,6 @@ TaskPropertiesPanel::RefreshView()
     ftype == TaskFactoryType::MAT;
   const StartMode start_mode = GetStartMode(p);
   const bool fai_start_finish = start_mode == StartMode::FAI_START_FINISH;
-  const bool pev_start = start_mode == StartMode::PEV ||
-    start_mode == StartMode::POLISH;
 
   SetRowVisible(MIN_TIME, aat_types);
   LoadValueDuration(MIN_TIME, p.aat_min_time);
@@ -126,10 +124,10 @@ TaskPropertiesPanel::RefreshView()
 
   LoadValueEnum(TASK_TYPE, ftype);
 
-  SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish && pev_start);
+  SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish && start_mode == StartMode::PEV);
   LoadValueDuration(PEV_START_WAIT_TIME,
                     p.start_constraints.pev_start_wait_time);
-  SetRowVisible(PEV_START_WINDOW, !fai_start_finish && pev_start);
+  SetRowVisible(PEV_START_WINDOW, !fai_start_finish && start_mode == StartMode::PEV);
   LoadValueDuration(PEV_START_WINDOW,
                     p.start_constraints.pev_start_window);
 

@@ -100,6 +100,13 @@ public:
   void SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept;
 
   /**
+   * Start a Polish task from the current aircraft location.
+   *
+   * @return True if the task was started successfully.
+   */
+  bool StartPolish(const AircraftState &state) noexcept;
+
+  /**
    * Accessor for factory system for constructing tasks
    *
    * @return Factory

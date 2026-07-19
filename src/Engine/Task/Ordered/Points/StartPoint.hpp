@@ -4,6 +4,7 @@
 #pragma once
 
 #include "OrderedTaskPoint.hpp"
+#include "Navigation/Aircraft.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Task/Ordered/StartConstraints.hpp"
 
@@ -22,6 +23,7 @@ class StartPoint final : public OrderedTaskPoint {
 
   TaskStartMargins margins;
   TimeSpan pilot_event_window_snapshot = TimeSpan::Invalid();
+  AircraftState polish_start_state;
 
   /**
    * A copy of OrderedTaskSettings::start_constraints, managed by
@@ -50,9 +52,15 @@ public:
     return constraints.require_arm;
   }
 
+  bool IsPolishStart() const noexcept {
+    return constraints.start_mode == StartMode::POLISH;
+  }
+
   bool GetScoreExit() const noexcept {
     return constraints.score_exit;
   }
+
+  bool StartPolish(const AircraftState &state) noexcept;
 
   /**
    * Search for the min point on the boundary from
@@ -70,10 +78,23 @@ public:
   double GetElevation() const noexcept override;
 
   /* virtual methods from class ScoredTaskPoint */
+  void Reset() noexcept override;
+  bool HasEntered() const noexcept override;
+  const AircraftState &GetEnteredState() const noexcept override;
+  bool HasExited() const noexcept override;
+  const AircraftState &GetExitedState() const noexcept override;
+  const AircraftState &GetScoredState() const noexcept override;
+  const GeoPoint &GetLocationScored() const noexcept override;
+  const GeoPoint &GetLocationTravelled() const noexcept override;
+
   bool CheckExitTransition(const AircraftState &ref_now,
                            const AircraftState &ref_last) const noexcept override;
 
   /* virtual methods from class OrderedTaskPoint */
+  const GeoPoint &GetLocationRemaining() const noexcept override;
+  const GeoPoint &GetLocationMaxTotal() const noexcept override;
+  const GeoPoint &GetLocationMax() const noexcept override;
+  const GeoPoint &GetLocationMin() const noexcept override;
   void SetTaskBehaviour(const TaskBehaviour &tb) noexcept override;
   void SetOrderedTaskSettings(const OrderedTaskSettings &s) noexcept override;
   void SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept override;

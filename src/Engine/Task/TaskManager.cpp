@@ -564,3 +564,13 @@ TaskManager::SetPilotEventStartTimeSpan(const TimeSpan &open_time_span) noexcept
 {
   common_stats.pilot_event_start_time_span = open_time_span;
 }
+
+bool
+TaskManager::StartPolish(const AircraftState &state) noexcept
+{
+  if (!ordered_task->StartPolish(state))
+    return false;
+
+  SetMode(TaskType::ORDERED);
+  return true;
+}
