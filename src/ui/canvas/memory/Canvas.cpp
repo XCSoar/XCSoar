@@ -413,6 +413,17 @@ Canvas::StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
 }
 
 void
+Canvas::StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                                const Bitmap &src) noexcept
+{
+  assert(src.IsDefined());
+
+  ConstImageBuffer buffer = src.GetNative();
+  StretchTransparentWhite(dest_position, dest_size,
+                          buffer, {0, 0}, buffer.size);
+}
+
+void
 Canvas::StretchNot(const Bitmap &_src)
 {
   assert(_src.IsDefined());

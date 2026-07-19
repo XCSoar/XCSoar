@@ -329,6 +329,9 @@ public:
                                ConstImageBuffer src, PixelPoint src_position,
                                PixelSize src_size) noexcept;
 
+  void StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                               const Bitmap &src) noexcept;
+
   void StretchNot(const Bitmap &src);
 
   void Stretch(PixelPoint dest_position, PixelSize dest_size,

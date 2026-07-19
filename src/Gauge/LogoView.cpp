@@ -210,15 +210,22 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   if (orientation != LogoViewOrientation::SQUARE) {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
-#endif
     canvas.Stretch(title_position, title_size, *bitmap_title);
+#else
+    /* Opaque BMP titles have a white background; key it out so tinted
+       dialog panes do not show white rectangles. */
+    canvas.StretchTransparentWhite(title_position, title_size,
+                                   *bitmap_title);
+#endif
   }
 
   {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
-#endif
     canvas.Stretch(logo_position, logo_size, *bitmap_logo);
+#else
+    canvas.StretchTransparentWhite(logo_position, logo_size, *bitmap_logo);
+#endif
   }
 
 #ifndef USE_GDI

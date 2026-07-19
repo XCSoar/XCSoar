@@ -212,6 +212,23 @@ Canvas::CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
 }
 
 void
+Canvas::StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                                const Bitmap &src) noexcept
+{
+  assert(IsDefined());
+  assert(src.IsDefined());
+
+  HDC virtual_dc = GetCompatibleDC();
+  HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src.GetNative());
+  ::TransparentBlt(dc, dest_position.x, dest_position.y,
+                   dest_size.width, dest_size.height,
+                   virtual_dc, 0, 0,
+                   src.GetWidth(), src.GetHeight(),
+                   COLOR_WHITE);
+  ::SelectObject(virtual_dc, old);
+}
+
+void
 Canvas::StretchNot(const Bitmap &src)
 {
   assert(IsDefined());
