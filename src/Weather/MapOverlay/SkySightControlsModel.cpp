@@ -99,9 +99,10 @@ SkySightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
   }
 
   if (layer->SupportsLiveTiles()) {
-    text = skysight != nullptr && skysight->IsLiveViewUpdating(layer->id)
-      ? _("Live (updating...)")
-      : _("Live");
+    if (skysight != nullptr && skysight->IsLiveViewUpdating(layer->id))
+      text = _("Live (updating...)");
+    else
+      text = _("Live");
     return;
   }
 

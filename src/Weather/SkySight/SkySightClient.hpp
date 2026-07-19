@@ -30,13 +30,14 @@ class SkySightClient final {
   std::unique_ptr<SkySightAPI> api;
   SkySight::Layer *active_layer = nullptr;
   SkySight::Layer *displayed_layer = nullptr;
-  unsigned displayed_zoom = 0;
   bool forecast_image_dirty = true;
   bool forecast_cleanup_pending = true;
   bool forecast_progress_visible = false;
   bool throttle_notification_active = false;
   bool live_view_updating = false;
   std::array<std::string, LIVE_TILE_OVERLAY_COUNT> tile_filenames;
+  std::array<GeoBitmap::TileData, LIVE_TILE_OVERLAY_COUNT> tile_coordinates;
+  std::array<time_t, LIVE_TILE_OVERLAY_COUNT> tile_timestamps{};
   UI::PeriodicTimer request_timer;
 
 public:
