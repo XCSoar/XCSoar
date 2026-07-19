@@ -7,11 +7,32 @@
 #include "CursorBarLabels.hpp"
 #include "InputEventMisc.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
+#include "WeatherSetupDialog.hpp"
 
 #include <cassert>
 #include <utility>
 
 namespace WeatherMapOverlay {
+
+void
+RefreshControlsLabels() noexcept
+{
+  if (CommonInterface::main_window == nullptr)
+    return;
+
+  auto *controls = dynamic_cast<ControlsWidget *>(
+    CommonInterface::main_window->GetBottomWidget());
+  if (controls != nullptr)
+    controls->RefreshLabels();
+}
+
+void
+NotifyLiveCursorChange() noexcept
+{
+  ActionInterface::SendUIState(true);
+  RefreshControlsLabels();
+}
 
 ControlsWidget::ControlsWidget(std::unique_ptr<ControlsModel> _model) noexcept
   :CursorBarWidget(2),
@@ -127,6 +148,11 @@ ControlsWidget::OnPrimaryLabelClick() noexcept
       model->ResumePrimaryAuto();
     break;
 
+  case PrimaryLabelAction::OPEN_SETUP:
+    /* May destroy this — return immediately after. */
+    ShowWeatherSetupDialog();
+    return;
+
   case PrimaryLabelAction::NONE:
     break;
   }
@@ -137,13 +163,26 @@ ControlsWidget::OnSecondaryLabelClick() noexcept
 {
   switch (model->GetSecondaryLabelAction()) {
   case SecondaryLabelAction::OPEN_PICKER:
-    model->OpenSecondaryPicker();
-    RefreshOverlay();
+    OpenSecondaryPicker();
     break;
 
   case SecondaryLabelAction::NONE:
     break;
   }
+}
+
+void
+ControlsWidget::OpenSecondaryPicker() noexcept
+{
+  const auto result = model->OpenSecondaryPicker();
+  if (result == SecondaryPickerResult::OPEN_SETUP) {
+    /* Weather Setup may replace the bottom widget (destroying this). Do
+       not touch members after ShowWeatherSetupDialog returns. */
+    ShowWeatherSetupDialog();
+    return;
+  }
+
+  RefreshOverlay();
 }
 
 void
@@ -174,9 +213,13 @@ ControlsWidget::HandleWeatherOverlayInput(const char *misc) noexcept
     break;
 
   case OverlayInputAction::FIELD_PICKER:
-    model->OpenSecondaryPicker();
-    RefreshOverlay();
+    OpenSecondaryPicker();
     break;
+
+  case OverlayInputAction::SETUP:
+    /* May destroy this — return immediately after. */
+    ShowWeatherSetupDialog();
+    return;
 
   case OverlayInputAction::TIME_AUTO_TOGGLE:
     if (model->GetPrimaryAutoAdvance()) {

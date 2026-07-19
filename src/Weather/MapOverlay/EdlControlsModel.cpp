@@ -5,22 +5,14 @@
 
 #include "ActionInterface.hpp"
 #include "Components.hpp"
-#include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "NetComponents.hpp"
-#include "PrimaryTimePicker.hpp"
 #include "UIState.hpp"
-#include "util/StaticString.hxx"
+#include "Weather/EDL/FieldControls.hpp"
 #include "Weather/EDL/Glue.hpp"
-#include "Weather/EDL/Levels.hpp"
 #include "Weather/EDL/StateController.hpp"
-#include "Weather/EDL/TileStore.hpp"
-#include "Weather/MapOverlay/CursorBarLabels.hpp"
-
-#include <chrono>
 
 namespace WeatherMapOverlay {
 
@@ -58,110 +50,16 @@ EdlControlsModel::OnHide() noexcept
   UnregisterEdlDownloadListener();
 }
 
-void
-EdlControlsModel::SelectForecast(unsigned index) noexcept
-{
-  if (index >= forecast_times.size())
-    return;
-
-  SelectForecastTime(forecast_times[index]);
-}
-
-void
-EdlControlsModel::SelectForecastTime(const BrokenDateTime &time) noexcept
-{
-  if (!time.IsPlausible())
-    return;
-
-  EDL::EnsureInitialised();
-  auto &edl = CommonInterface::SetUIState().weather.edl;
-  edl.forecast_datetime = time;
-  edl.forecast_auto_advance = false;
-  edl.session.cursor_initialized = true;
-}
-
-void
-EdlControlsModel::RebuildForecastTimes() noexcept
-{
-  EDL::EnsureInitialised();
-
-  auto selected_time = EDL::GetForecastTime();
-  if (!selected_time.IsPlausible())
-    selected_time = EDL::GetTrackedForecastTime(BrokenDateTime::NowUTC());
-
-  if (!selected_time.IsPlausible())
-    return;
-
-  const auto base_time = selected_time + std::chrono::hours{-11};
-  for (unsigned i = 0; i < forecast_choices; ++i)
-    forecast_times[i] = base_time + std::chrono::hours{i};
-}
-
-unsigned
-EdlControlsModel::FindForecastIndex() const noexcept
-{
-  const auto selected = EDL::GetForecastTime();
-  for (unsigned i = 0; i < forecast_choices; ++i)
-    if (forecast_times[i] == selected)
-      return i;
-
-  if (const auto tracked = FindTrackedForecastIndex())
-    return *tracked;
-
-  return 0;
-}
-
-std::optional<unsigned>
-EdlControlsModel::FindTrackedForecastIndex() const noexcept
-{
-  const BrokenDateTime tracked =
-    EDL::GetTrackedForecastTime(BrokenDateTime::NowUTC());
-
-  for (unsigned i = 0; i < forecast_choices; ++i)
-    if (forecast_times[i] == tracked)
-      return i;
-
-  return std::nullopt;
-}
-
 bool
 EdlControlsModel::StepPrimary(int delta) noexcept
 {
-  RebuildForecastTimes();
-
-  const int index = int(FindForecastIndex()) + delta;
-  if (index < 0 || index >= int(forecast_choices))
-    return false;
-
-  SelectForecast(unsigned(index));
-  return true;
+  return EDL::StepForecastTime(delta);
 }
 
 bool
 EdlControlsModel::StepSecondary(int delta) noexcept
 {
-  EDL::EnsureInitialised();
-
-  const unsigned current = EDL::GetIsobar();
-  int index = -1;
-  for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i) {
-    if (EDL::ISOBARS[i] == current) {
-      index = int(i);
-      break;
-    }
-  }
-
-  if (index < 0)
-    index = 0;
-
-  /* ISOBARS are ascending pressure (descending altitude); invert delta so
-     "<" steps down and ">" steps up in height. */
-  const int new_index = index - delta;
-  if (new_index < 0 || new_index >= int(EDL::NUM_ISOBARS))
-    return false;
-
-  SelectLevel(EDL::ISOBARS[unsigned(new_index)]);
-  return true;
+  return EDL::StepLevel(delta);
 }
 
 void
@@ -187,49 +85,25 @@ EdlControlsModel::ResumeSecondaryAuto() noexcept
 void
 EdlControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 {
-  StaticString<64> base;
-  EDL::FormatForecastCursorLabel(base, GetPrimaryAutoAdvance());
-
-  if (HasOverlayData())
-    text = base;
-  else
-    AppendNoDataTag(text, base.c_str());
+  EDL::FormatTimeCursorLabel(text, GetPrimaryAutoAdvance());
 }
 
 void
 EdlControlsModel::FormatSecondaryLabel(StaticString<64> &text) const noexcept
 {
-  const unsigned isobar = EDL::GetIsobar();
-  const int altitude = EDL::GetAltitudeForIsobar(isobar);
-
-  StaticString<64> base;
-  if (GetSecondaryAutoAdvance())
-    base.Format(_("AUTO: %u hPa (%d m)"), isobar / 100, altitude);
-  else
-    base.Format(_("%u hPa (%d m)"), isobar / 100, altitude);
-
-  if (HasOverlayData())
-    text = base;
-  else
-    AppendNoDataTag(text, base.c_str());
-}
-
-bool
-EdlControlsModel::HasOverlayData() const noexcept
-{
-  return EDL::HasOverlayCache();
+  EDL::FormatLevelCursorLabel(text, GetSecondaryAutoAdvance());
 }
 
 bool
 EdlControlsModel::HasPrimaryData() const noexcept
 {
-  return HasOverlayData();
+  return EDL::HasOverlayCache();
 }
 
 bool
 EdlControlsModel::HasSecondaryData() const noexcept
 {
-  return HasOverlayData();
+  return EDL::HasOverlayCache();
 }
 
 bool
@@ -256,6 +130,13 @@ EdlControlsModel::ApplyPrimaryAutoAdvance() noexcept
     EDL::OnTimeUpdate(basic.date_time_utc);
 }
 
+void
+EdlControlsModel::EnablePrimaryAutoFromInput() noexcept
+{
+  EDL::EnableForecastAutoFromInput();
+  NotifyOverlay();
+}
+
 PrimaryLabelAction
 EdlControlsModel::GetPrimaryLabelAction() const noexcept
 {
@@ -265,46 +146,8 @@ EdlControlsModel::GetPrimaryLabelAction() const noexcept
 void
 EdlControlsModel::OpenPrimaryPicker() noexcept
 {
-  RebuildForecastTimes();
-
-  StaticString<64> caption;
-  caption.Format("%s %s (UTC)", "EDL", _("Time"));
-
-  OpenPrimaryTimePicker(*this, caption.c_str(),
-    [this](DataFieldEnum &field) noexcept {
-      field.ClearChoices();
-
-      for (unsigned i = 0; i < forecast_choices; ++i) {
-        StaticString<16> label;
-        label.Format("%02u:00", unsigned(forecast_times[i].hour));
-        field.addEnumText(label.c_str(), i);
-      }
-    },
-    [this]() noexcept {
-      return FindForecastIndex();
-    },
-    [](ControlsModel &model) noexcept {
-      model.EnablePrimaryAutoFromInput();
-    },
-    [this](ControlsModel &) noexcept {
-      if (const auto tracked = FindTrackedForecastIndex()) {
-        ApplyManualPrimarySelection([this, tracked]() noexcept {
-          SelectForecast(*tracked);
-        });
-        return;
-      }
-
-      const BrokenDateTime tracked =
-        EDL::GetTrackedForecastTime(BrokenDateTime::NowUTC());
-      ApplyManualPrimarySelection([this, tracked]() noexcept {
-        SelectForecastTime(tracked);
-      });
-    },
-    [this](ControlsModel &, unsigned index) noexcept {
-      ApplyManualPrimarySelection([this, index]() noexcept {
-        SelectForecast(index);
-      });
-    });
+  EDL::OpenTimePicker();
+  NotifyOverlay();
 }
 
 SecondaryLabelAction
@@ -313,38 +156,12 @@ EdlControlsModel::GetSecondaryLabelAction() const noexcept
   return SecondaryLabelAction::OPEN_PICKER;
 }
 
-void
+SecondaryPickerResult
 EdlControlsModel::OpenSecondaryPicker() noexcept
 {
-  EDL::EnsureInitialised();
-
-  DataFieldEnum field;
-  const unsigned active = EDL::GetIsobar();
-  unsigned current_index = 0;
-
-  for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i) {
-    const unsigned isobar = EDL::ISOBARS[i];
-    const int altitude = EDL::GetAltitudeForIsobar(isobar);
-
-    StaticString<32> label;
-    label.Format(_("%u hPa (%d m)"), isobar / 100, altitude);
-    field.addEnumText(label.c_str(), int(i));
-
-    if (isobar == active)
-      current_index = i;
-  }
-
-  field.SetValue(int(current_index));
-
-  if (!ComboPicker(_("EDL Level"), field, nullptr))
-    return;
-
-  const int selected = field.GetValue();
-  if (selected < 0 || unsigned(selected) >= EDL::NUM_ISOBARS)
-    return;
-
-  SelectLevel(EDL::ISOBARS[unsigned(selected)]);
-  Notify(ControlsUpdate::OVERLAY);
+  return HandleSecondaryFieldPicker(EDL::OpenLevelPicker(true), [this] {
+    Notify(ControlsUpdate::OVERLAY);
+  });
 }
 
 bool
@@ -362,8 +179,13 @@ EdlControlsModel::GetSecondaryAutoAdvance() const noexcept
 void
 EdlControlsModel::SetSecondaryAutoAdvance(bool auto_advance) noexcept
 {
-  CommonInterface::SetUIState().weather.edl.level_auto_advance =
-    auto_advance;
+  if (auto_advance)
+    EDL::EnableLevelAutoFromInput();
+  else {
+    auto &edl = CommonInterface::SetUIState().weather.edl;
+    edl.level_auto_advance = false;
+    EDL::SelectLevel(edl.isobar);
+  }
 }
 
 void
@@ -389,7 +211,13 @@ EdlControlsModel::RefreshOverlay() noexcept
 void
 EdlControlsModel::OnGPSUpdate([[maybe_unused]] const MoreData &basic) noexcept
 {
-  if (!(GetPrimaryAutoAdvance() || GetSecondaryAutoAdvance()))
+  const auto &state = CommonInterface::GetUIState().weather.edl;
+  /* "Now" stores an invalid datetime and still needs hourly UI/overlay
+     refresh even when neither Auto flag is set. */
+  const bool follows_now = !state.forecast_auto_advance &&
+    !state.forecast_datetime.IsPlausible();
+  if (!(GetPrimaryAutoAdvance() || GetSecondaryAutoAdvance() ||
+        follows_now))
     return;
 
   Notify(EDL::TakeGpsUiRefreshPending()
@@ -409,16 +237,6 @@ EdlControlsModel::OnDownloadFinished(
 
   if (EDL::TryApplyOverlayFromCache())
     ActionInterface::ScheduleSendUIState();
-}
-
-void
-EdlControlsModel::SelectLevel(unsigned isobar) noexcept
-{
-  EDL::EnsureInitialised();
-  auto &edl = CommonInterface::SetUIState().weather.edl;
-  edl.SelectIsobar(isobar);
-  edl.level_auto_advance = false;
-  edl.session.cursor_initialized = true;
 }
 
 } // namespace WeatherMapOverlay

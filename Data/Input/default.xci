@@ -293,7 +293,7 @@ location=8
 # Stick: UP/DOWN field, LEFT/RIGHT time, RETURN time picker, ESCAPE exit
 # Keys: F2 = list, F3 = auto (map overlay +/- always zoom)
 # Buttons: 1=Time-, 2=List (F2), 3=Auto (F3), 4=Time+,
-#          5=Field+, 6=Field-, 7=Time Picker
+#          5=Field+, 6=Field-, 7=Time Picker, 8=Weather Setup
 # ------------
 
 mode=weather
@@ -384,6 +384,13 @@ data=0
 event=WeatherOverlay time picker
 label=Time\nPicker\n(RETURN)
 location=7
+
+mode=weather
+type=key
+data=0
+event=WeatherOverlay setup
+label=Weather\nSetup
+location=8
 
 ###### main entry buttons
 
