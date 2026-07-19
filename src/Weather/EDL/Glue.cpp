@@ -10,9 +10,11 @@
 #ifdef HAVE_EDL
 
 #include "ActionInterface.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "Message.hpp"
+#include "Weather/Settings.hpp"
 #include "util/StaticString.hxx"
 
 namespace EDL {
@@ -79,6 +81,12 @@ Glue::RequestOverlayRefresh() noexcept
 
   ClearOverlay();
 
+  if (!CommonInterface::GetComputerSettings().weather.edl.auto_update) {
+    SetIdleStatus();
+    ActionInterface::ScheduleSendUIState();
+    return;
+  }
+
   const auto forecast = GetForecastTime();
   const unsigned isobar = GetIsobar();
   LogFmt("edl: loading overlay {} hPa {}",
@@ -93,9 +101,11 @@ Glue::RequestOverlayRefresh() noexcept
 void
 Glue::RequestPrecacheDay(BrokenDateTime day) noexcept
 {
-  if (download_glue == nullptr || !OverlayEnabled())
+  if (download_glue == nullptr)
     return;
 
+  /* Precache is a setup/download action — do not require an active
+     EDL overlay page (Info → Weather can run it anytime). */
   SetLoadingStatus();
   download_glue->StartPrecacheDay(day);
 }

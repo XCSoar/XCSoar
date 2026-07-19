@@ -18,7 +18,10 @@
 #include "util/StringCompare.hxx"
 #include "net/http/DownloadManager.hpp"
 #include "ActionInterface.hpp"
+#include "Interface.hpp"
 #include "util/StaticString.hxx"
+#include "Weather/MapOverlay/ControlsWidget.hpp"
+#include "Weather/Settings.hpp"
 
 #include <string_view>
 
@@ -200,12 +203,13 @@ RaspDownloadGlue::PollDownloadProgress() noexcept
       size = s;
       position = p;
 
+      /* Always assign: StaticString is uninitialized by default, and
+         PollDownloadProgress formats label once found is true. */
       const auto base = path.GetBase();
       if (base == nullptr || base.empty())
-        return;
-
-      if (StringIsEqual(base.c_str(), "repository") ||
-          IsUserRepositoryFile(base.c_str()))
+        label = _("Updating");
+      else if (StringIsEqual(base.c_str(), "repository") ||
+               IsUserRepositoryFile(base.c_str()))
         label = _("Updating repository");
       else
         label = base.c_str();
@@ -258,6 +262,9 @@ RaspDownloadGlue::OnDownloadNotify() noexcept
     StopProgress();
     ReloadConfiguredRasp();
     ActionInterface::ScheduleSendUIState();
+    /* Clear stale [no data] on the weather cursor bar once the new
+       file's time slots are available. */
+    WeatherMapOverlay::RefreshControlsLabels();
     break;
 
   case PendingCompletion::RASP_ERROR:
@@ -320,6 +327,9 @@ RaspDownloadGlue::Listener::OnDownloadError(
 void
 RequestConfiguredRaspUpdateIfOutOfDate() noexcept
 {
+  if (!CommonInterface::GetComputerSettings().weather.rasp.auto_update)
+    return;
+
   if (RaspDownloadGlue *glue = GetRaspDownloadGlue())
     glue->RequestUpdateIfOutOfDate();
 }

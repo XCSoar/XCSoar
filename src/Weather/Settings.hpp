@@ -32,6 +32,34 @@ struct WeatherCredentialsSettings {
   }
 };
 
+struct RaspSettings {
+  /**
+   * When true, XCSoar may download/update the configured RASP file in
+   * the background when it is missing or out of date (e.g. on entering
+   * a RASP map page, or when auto time has no data). Manual Update in
+   * Info → Weather → RASP always remains available.
+   */
+  bool auto_update;
+
+  void SetDefaults() noexcept {
+    auto_update = true;
+  }
+};
+
+struct EdlSettings {
+  /**
+   * When true, XCSoar may download missing EDL overlay tiles in the
+   * background (e.g. on entering an EDL map page, or when changing
+   * time/level). Manual Precache day in Info → Weather → EDL remains
+   * available when Auto update is off.
+   */
+  bool auto_update;
+
+  void SetDefaults() noexcept {
+    auto_update = true;
+  }
+};
+
 struct XCThermSettings {
 #ifdef HAVE_HTTP
   /**
@@ -84,6 +112,8 @@ struct WeatherSettings {
   bool enable_tim;
 #endif
 
+  RaspSettings rasp;
+  EdlSettings edl;
   XCThermSettings xctherm;
 
   void SetDefaults() noexcept {
@@ -95,6 +125,8 @@ struct WeatherSettings {
     enable_tim = false;
 #endif
 
+    rasp.SetDefaults();
+    edl.SetDefaults();
     xctherm.SetDefaults();
   }
 };
