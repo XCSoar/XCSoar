@@ -6,8 +6,10 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
 #include "util/StringBuilder.hxx"
+#include "util/UTF8.hpp"
 
 #include <algorithm>
+#include <cassert>
 
 const char *
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
@@ -36,6 +38,12 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
   case PageLayout::Main::MAX:
     gcc_unreachable();
   }
+
+  assert(!buffer.empty());
+  /* Callers often pass an uninitialized StaticString buffer.  Start
+     with an empty C string so Overflow before the first Append does
+     not return stack garbage to CalcTextSize. */
+  buffer.front() = '\0';
 
   BasicStringBuilder<char> builder{buffer};
 
@@ -83,6 +91,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
       gcc_unreachable();
     }
   } catch (BasicStringBuilder<char>::Overflow) {
+    CropIncompleteUTF8(buffer.data());
   }
 
   return buffer.data();
