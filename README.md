@@ -22,7 +22,7 @@ height="56"></a>
 [![.github/workflows/build-container.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-container.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-container.yml)
 [![.github/workflows/build-docs.yml](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml/badge.svg)](https://github.com/XCSoar/XCSoar/actions/workflows/build-docs.yml)
 
-**XCSoar** is a tactical glide computer for glider pilots. Free and open-source. No ads. No tracking. Runs on Android, iOS, Linux, macOS, and Windows. Developed with love by the [open-source community](https://xcsoar.org/develop/).
+**XCSoar** is a tactical glide computer for glider pilots. Free and open-source. No ads. No tracking. Runs on Android, iOS, Linux, macOS, and Windows. Developed with love by the [open-source community](https://xcsoar.readthedocs.io/en/latest/).
 
 ## Features
 
@@ -73,7 +73,7 @@ XCSoar is built for pilots, by pilots:
 
 ## Documentation
 
-- **User manual** (latest release): [xcsoar.org/discover/manual.html](https://xcsoar.org/discover/manual.html)
+- **User manual** (latest release): [https://xcsoar.org/docs/#manual](https://xcsoar.org/docs/#manual)
 - **Developer's Manual**: [xcsoar.readthedocs.io/en/latest/build.html](https://xcsoar.readthedocs.io/en/latest/build.html)
 
 ## Contributing
