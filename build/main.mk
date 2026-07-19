@@ -170,7 +170,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DateEntry.cpp \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
-	$(SRC)/Dialogs/Weather/OverlayPageActions.cpp \
+	$(SRC)/Dialogs/Weather/WeatherOverlayDraft.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickGuide.cpp \
