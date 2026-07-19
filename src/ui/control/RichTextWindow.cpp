@@ -24,6 +24,25 @@
 #include <string_view>
 
 /**
+ * Draw a resource bitmap with transparency when the canvas supports it.
+ */
+static void
+StretchResourceBitmap(Canvas &canvas, PixelPoint position, PixelSize size,
+                      const Bitmap &bitmap, PixelSize src_size) noexcept
+{
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+  canvas.Stretch(position, size, bitmap, {0, 0}, src_size);
+#elif defined(USE_MEMORY_CANVAS) && !defined(GREYSCALE)
+  canvas.StretchWithSourceAlpha(position, size, bitmap, {0, 0}, src_size);
+#elif defined(USE_MEMORY_CANVAS) || defined(USE_GDI)
+  canvas.StretchTransparentWhite(position, size, bitmap);
+#else
+  canvas.Stretch(position, size, bitmap, {0, 0}, src_size);
+#endif
+}
+
+/**
  * Safe proxy for "is this a touch device with larger controls".
  *
  * Cannot use HasTouchScreen() directly because on Wayland/libinput
@@ -205,10 +224,10 @@ RichTextWindow::LoadImage(const std::string &url) const noexcept
   if (StringStartsWith(url.c_str(), "resource:")) {
     const char *name = url.c_str() + 9;
 
-#ifdef ENABLE_OPENGL
-    /* On OpenGL, prefer the _RGBA variant (PNG with alpha channel)
-       over the base resource (BMP with white background) so that
-       images composite correctly on non-white backgrounds. */
+#if defined(ENABLE_OPENGL) || (defined(USE_MEMORY_CANVAS) && !defined(GREYSCALE))
+    /* Prefer the _RGBA variant (PNG with alpha channel) over the base
+       resource (BMP with white background) so images composite on
+       non-white backgrounds. */
     const std::string rgba_name = std::string(name) + "_RGBA";
     ResourceId rgba_id = LookupResourceByName(rgba_name.c_str());
     if (rgba_id.IsDefined())
@@ -847,12 +866,8 @@ RichTextWindow::RenderInlineImage(Canvas &canvas,
   int img_y = y + (cur_line_height -
                    static_cast<int>(target_h)) / 2;
 
-#ifdef ENABLE_OPENGL
-  const ScopeAlphaBlend alpha_blend;
-#endif
-  canvas.Stretch({x, img_y},
-                 {target_w, target_h},
-                 *bmp, {0, 0}, img_size);
+  StretchResourceBitmap(canvas, {x, img_y}, {target_w, target_h},
+                        *bmp, img_size);
   x += static_cast<int>(target_w) + Layout::Scale(2);
   return true;
 }
@@ -1062,12 +1077,9 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
           int img_y = y + (cur_line_height -
                            static_cast<int>(target_h)) / 2;
 
-#ifdef ENABLE_OPENGL
-          const ScopeAlphaBlend alpha_blend;
-#endif
-          sub_canvas.Stretch({img_x, img_y},
-                             {target_w, target_h},
-                             *bmp, {0, 0}, img_size);
+          StretchResourceBitmap(sub_canvas, {img_x, img_y},
+                                {target_w, target_h},
+                                *bmp, img_size);
           continue; // Skip normal text rendering for this line
         }
       }

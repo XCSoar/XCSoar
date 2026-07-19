@@ -685,3 +685,49 @@ Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                      src.buffer, src_position, src_size,
                      alpha);
 }
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               ConstImageBuffer src,
+                               PixelPoint src_position,
+                               PixelSize src_size) noexcept
+{
+  SDLRasterCanvas canvas(buffer);
+
+#ifdef GREYSCALE
+  /* Greyscale buffers store no alpha; fall back to opaque stretch. */
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size);
+#else
+  SourceAlphaPixelOperations<ActivePixelTraits> operations;
+
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size,
+                        operations);
+#endif
+}
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               const Bitmap &src) noexcept
+{
+  assert(src.IsDefined());
+
+  ConstImageBuffer buffer = src.GetNative();
+  StretchWithSourceAlpha(dest_position, dest_size,
+                         buffer, {0, 0}, buffer.size);
+}
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               const Bitmap &src,
+                               PixelPoint src_position,
+                               PixelSize src_size) noexcept
+{
+  assert(src.IsDefined());
+
+  StretchWithSourceAlpha(dest_position, dest_size,
+                         src.GetNative(), src_position, src_size);
+}

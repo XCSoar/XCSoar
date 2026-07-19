@@ -18,10 +18,12 @@ struct RGBPixelReader {
 };
 
 /**
- * Read RGBA pixels (4 bytes each), discarding the alpha channel.
- * The memory canvas has no alpha blending, so alpha is dropped
- * and transparent areas composite against an implicit white
- * background.
+ * Read RGBA pixels (4 bytes each).
+ *
+ * On colour memory canvases, alpha is preserved for
+ * Canvas::StretchWithSourceAlpha().  Greyscale buffers have no alpha
+ * channel, so transparent areas are composited against white and can
+ * later be keyed out with StretchTransparentWhite().
  */
 struct RGBAPixelReader {
   const uint8_t *p;
@@ -31,12 +33,14 @@ struct RGBAPixelReader {
     const uint8_t r = *p++, g = *p++, b = *p++;
     const uint8_t a = *p++;
 
-    /* Pre-multiply against white so that transparent areas
-       render as white instead of black. */
+#ifdef GREYSCALE
     const uint8_t rb = r + (255 - a) * (255 - r) / 255;
     const uint8_t gb = g + (255 - a) * (255 - g) / 255;
     const uint8_t bb = b + (255 - a) * (255 - b) / 255;
     return typename PixelTraits::color_type(rb, gb, bb);
+#else
+    return typename PixelTraits::color_type(r, g, b, a);
+#endif
   }
 };
 

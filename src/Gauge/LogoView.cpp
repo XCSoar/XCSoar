@@ -15,12 +15,19 @@
 
 #include <algorithm>
 
+/* OpenGL composites RGBA textures with ScopeAlphaBlend.  Colour
+   memory canvases keep per-pixel alpha and use StretchWithSourceAlpha.
+   Greyscale and GDI fall back to white-keyed opaque bitmaps. */
+#if defined(ENABLE_OPENGL) || (defined(USE_MEMORY_CANVAS) && !defined(GREYSCALE))
+#define HAVE_LOGO_SOURCE_ALPHA
+#endif
+
 LogoView::LogoView() noexcept try
   :logo(IDB_LOGO), big_logo(IDB_LOGO_HD), huge_logo(IDB_LOGO_UHD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD), huge_title(IDB_TITLE_UHD)
 {
 #ifndef USE_WIN32_RESOURCES
-  /* Transparent variants for OpenGL compositing on tinted dialog
+  /* Transparent variants for compositing on tinted dialog
      backgrounds (light and dark). */
   logo_rgba.Load(IDB_LOGO_RGBA);
   big_logo_rgba.Load(IDB_LOGO_HD_RGBA);
@@ -79,10 +86,10 @@ EstimateLogoViewSize(LogoViewOrientation orientation,
   gcc_unreachable();
 }
 
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_LOGO_SOURCE_ALPHA
 /**
  * If @a selected points at @a match and @a variant is loaded, switch
- * to the variant (used for transparent OpenGL assets).
+ * to the variant (transparent splash art).
  */
 static void
 UseVariant(const Bitmap *&selected,
@@ -92,6 +99,20 @@ UseVariant(const Bitmap *&selected,
     selected = &variant;
 }
 #endif
+
+static void
+DrawSplashBitmap(Canvas &canvas, PixelPoint position, PixelSize size,
+                 const Bitmap &bitmap) noexcept
+{
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+  canvas.Stretch(position, size, bitmap);
+#elif defined(USE_MEMORY_CANVAS) && !defined(GREYSCALE)
+  canvas.StretchWithSourceAlpha(position, size, bitmap);
+#else
+  canvas.StretchTransparentWhite(position, size, bitmap);
+#endif
+}
 
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc,
@@ -143,7 +164,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
     bitmap_title = &title;
   }
 
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_LOGO_SOURCE_ALPHA
   /* Opaque BMP-derived assets leave white squares on tinted dialog
      backgrounds; prefer transparent variants when available. */
   UseVariant(bitmap_logo, huge_logo, huge_logo_rgba);
@@ -207,26 +228,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
     gcc_unreachable();
   }
 
-  if (orientation != LogoViewOrientation::SQUARE) {
-#ifdef ENABLE_OPENGL
-    const ScopeAlphaBlend alpha_blend;
-    canvas.Stretch(title_position, title_size, *bitmap_title);
-#else
-    /* Opaque BMP titles have a white background; key it out so tinted
-       dialog panes do not show white rectangles. */
-    canvas.StretchTransparentWhite(title_position, title_size,
-                                   *bitmap_title);
-#endif
-  }
+  if (orientation != LogoViewOrientation::SQUARE)
+    DrawSplashBitmap(canvas, title_position, title_size, *bitmap_title);
 
-  {
-#ifdef ENABLE_OPENGL
-    const ScopeAlphaBlend alpha_blend;
-    canvas.Stretch(logo_position, logo_size, *bitmap_logo);
-#else
-    canvas.StretchTransparentWhite(logo_position, logo_size, *bitmap_logo);
-#endif
-  }
+  DrawSplashBitmap(canvas, logo_position, logo_size, *bitmap_logo);
 
 #ifndef USE_GDI
   if (!font.IsDefined())

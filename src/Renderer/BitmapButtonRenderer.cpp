@@ -19,16 +19,22 @@ void
 BitmapButtonRenderer::DrawButton(Canvas &canvas, [[maybe_unused]] const PixelRect &rc,
                                  ButtonState state) const noexcept
 {
-#ifdef ENABLE_OPENGL
   if (use_alpha) {
+#ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
     if (state == ButtonState::PRESSED)
       canvas.StretchNot(bitmap);
     else
       canvas.Stretch(bitmap);
     return;
-  }
+#elif defined(USE_MEMORY_CANVAS) && !defined(GREYSCALE)
+    if (state == ButtonState::PRESSED)
+      canvas.StretchNot(bitmap);
+    else
+      canvas.StretchWithSourceAlpha({0, 0}, canvas.GetSize(), bitmap);
+    return;
 #endif
+  }
 
   if (state == ButtonState::PRESSED)
     canvas.StretchNot(bitmap);

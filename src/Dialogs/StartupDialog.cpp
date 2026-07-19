@@ -26,14 +26,18 @@
 #include "system/FileUtil.hpp"
 #include "ui/canvas/Canvas.hpp"
 
+#if defined(ENABLE_OPENGL) || (defined(USE_MEMORY_CANVAS) && !defined(GREYSCALE))
+#define HAVE_STARTUP_BRANDED_SPLASH
+#endif
+
 class LogoWindow final : public PaintWindow {
-#ifndef ENABLE_OPENGL
+#ifndef HAVE_STARTUP_BRANDED_SPLASH
   const DialogLook &look;
 #endif
   LogoView logo;
 
 public:
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_STARTUP_BRANDED_SPLASH
   LogoWindow() noexcept = default;
 #else
   explicit LogoWindow(const DialogLook &_look) noexcept
@@ -42,7 +46,7 @@ public:
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_STARTUP_BRANDED_SPLASH
     /* Branded splash background (same as SimulatorPromptWindow).
        Logo art is always light-on-dark on this blue gradient. */
     DrawVerticalGradient(canvas, GetClientRect(),
@@ -66,7 +70,7 @@ class LogoQuitWidget final : public NullWidget {
 public:
   LogoQuitWidget(const DialogLook &_look, WndForm &_dialog) noexcept
     :look(_look), dialog(_dialog)
-#ifndef ENABLE_OPENGL
+#ifndef HAVE_STARTUP_BRANDED_SPLASH
     , logo(_look)
 #endif
   {}
