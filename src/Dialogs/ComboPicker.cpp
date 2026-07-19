@@ -3,6 +3,7 @@
 
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/ListPicker.hpp"
+#include "Form/Form.hpp"
 #include "ui/control/List.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/ComboList.hpp"
@@ -56,8 +57,13 @@ ComboPicker(const char *caption,
 
 bool
 ComboPicker(const char *caption, DataField &df,
-            const char *help_text)
+            const char *help_text,
+            const char *extra_caption,
+            bool *extra_selected)
 {
+  if (extra_selected != nullptr)
+    *extra_selected = false;
+
   StaticString<256> buffer;
   const char *reference = nullptr;
 
@@ -66,7 +72,14 @@ ComboPicker(const char *caption, DataField &df,
     ComboListPopup = &combo_list;
 
     int idx = ComboPicker(caption, combo_list, help_text,
-                          df.GetItemHelpEnabled());
+                          df.GetItemHelpEnabled(),
+                          extra_caption);
+    if (idx == mrExtra) {
+      if (extra_selected != nullptr)
+        *extra_selected = true;
+      return false;
+    }
+
     if (idx < 0)
       return false;
 
