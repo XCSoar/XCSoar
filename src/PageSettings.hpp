@@ -104,6 +104,42 @@ struct PageLayout
    */
   int rasp_field;
 
+  /**
+   * Per-page RASP forecast time when #overlay is Overlay::RASP.
+   * #RASP_TIME_AUTO follows GPS local time; #RASP_TIME_NOW is manual
+   * "Now" (same as Auto for rendering, but auto-advance is off);
+   * otherwise minute-of-day (0..1439).
+   */
+  static constexpr int RASP_TIME_AUTO = -1;
+  static constexpr int RASP_TIME_NOW = 24 * 60;
+
+  int rasp_time;
+
+  /**
+   * Selected EDL isobar (Pascal) when #overlay is Overlay::EDL.
+   * 0 means Auto (sync from altitude on page enter).
+   */
+  static constexpr int EDL_TIME_AUTO = -1;
+  static constexpr int EDL_TIME_NOW = -2;
+
+  /**
+   * Per-page EDL forecast time.  Non-negative values are UTC hours
+   * since the Unix epoch.
+   */
+  int edl_time;
+
+  int edl_isobar;
+
+  static constexpr int XCTHERM_LAYER_AUTO = -1;
+  static constexpr int XCTHERM_TIME_AUTO = -1;
+
+  /**
+   * Per-page XCTherm cursor.  The layer is an index into the configured
+   * region; time is a UTC hour (0..23).
+   */
+  int xctherm_layer;
+  int xctherm_time;
+
   PageLayout() = default;
 
   constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
@@ -111,14 +147,24 @@ struct PageLayout
      infobox_config(_infobox_config),
      bottom(Bottom::NOTHING),
      overlay(Overlay::NONE),
-     rasp_field(-1) {}
+     rasp_field(-1),
+     rasp_time(RASP_TIME_AUTO),
+     edl_time(EDL_TIME_AUTO),
+     edl_isobar(0),
+     xctherm_layer(XCTHERM_LAYER_AUTO),
+     xctherm_time(XCTHERM_TIME_AUTO) {}
 
   constexpr PageLayout(InfoBoxConfig _infobox_config)
     :valid(true), main(Main::MAP),
      infobox_config(_infobox_config),
      bottom(Bottom::NOTHING),
      overlay(Overlay::NONE),
-     rasp_field(-1) {}
+     rasp_field(-1),
+     rasp_time(RASP_TIME_AUTO),
+     edl_time(EDL_TIME_AUTO),
+     edl_isobar(0),
+     xctherm_layer(XCTHERM_LAYER_AUTO),
+     xctherm_time(XCTHERM_TIME_AUTO) {}
 
   /**
    * Return an "undefined" page.  Its IsDefined() method will return
@@ -223,10 +269,38 @@ struct PageLayout
         bottom = Bottom::NOTHING;
     }
 
-    if (overlay != Overlay::RASP)
+    if (overlay != Overlay::RASP) {
       rasp_field = -1;
-    else if (rasp_field < -1)
-      rasp_field = -1;
+      rasp_time = RASP_TIME_AUTO;
+    } else {
+      if (rasp_field < -1)
+        rasp_field = -1;
+
+      if (rasp_time != RASP_TIME_AUTO &&
+          rasp_time != RASP_TIME_NOW &&
+          (rasp_time < 0 || rasp_time >= RASP_TIME_NOW))
+        rasp_time = RASP_TIME_AUTO;
+    }
+
+    if (overlay != Overlay::EDL) {
+      edl_time = EDL_TIME_AUTO;
+      edl_isobar = 0;
+    } else {
+      if (edl_time < EDL_TIME_NOW)
+        edl_time = EDL_TIME_AUTO;
+      if (edl_isobar < 0)
+        edl_isobar = 0;
+    }
+
+    if (overlay != Overlay::XCTHERM) {
+      xctherm_layer = XCTHERM_LAYER_AUTO;
+      xctherm_time = XCTHERM_TIME_AUTO;
+    } else {
+      if (xctherm_layer < XCTHERM_LAYER_AUTO)
+        xctherm_layer = XCTHERM_LAYER_AUTO;
+      if (xctherm_time < XCTHERM_TIME_AUTO || xctherm_time >= 24)
+        xctherm_time = XCTHERM_TIME_AUTO;
+    }
   }
 
   [[nodiscard]]
