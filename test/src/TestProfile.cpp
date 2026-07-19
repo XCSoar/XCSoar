@@ -3,6 +3,9 @@
 
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/PageProfile.hpp"
+#include "PageSettings.hpp"
 #include "io/FileLineReader.hpp"
 #include "system/Path.hpp"
 #include "TestUtil.hpp"
@@ -162,14 +165,46 @@ TestMigration()
   }
 }
 
+static void
+TestWeatherPageCursorRoundTrip()
+{
+  PageSettings settings;
+  settings.SetDefaults();
+
+  auto &edl = settings.pages[0];
+  edl.overlay = PageLayout::Overlay::EDL;
+  edl.edl_time = 500000;
+  edl.edl_isobar = 70000;
+  edl.Normalise();
+
+  auto &xctherm = settings.pages[1];
+  xctherm.overlay = PageLayout::Overlay::XCTHERM;
+  xctherm.xctherm_layer = 3;
+  xctherm.xctherm_time = 15;
+  xctherm.Normalise();
+
+  Profile::Clear();
+  Profile::Save(Profile::map, settings);
+
+  PageSettings loaded;
+  loaded.SetDefaults();
+  Profile::Load(Profile::map, loaded);
+
+  ok1(loaded.pages[0].edl_time == edl.edl_time);
+  ok1(loaded.pages[0].edl_isobar == edl.edl_isobar);
+  ok1(loaded.pages[1].xctherm_layer == xctherm.xctherm_layer);
+  ok1(loaded.pages[1].xctherm_time == xctherm.xctherm_time);
+}
+
 int main()
 try {
-  plan_tests(44);
+  plan_tests(48);
 
   TestMap();
   TestWriter();
   TestReader();
   TestMigration();
+  TestWeatherPageCursorRoundTrip();
 
   return exit_status();
 } catch (...) {
