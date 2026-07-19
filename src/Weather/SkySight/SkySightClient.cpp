@@ -5,6 +5,7 @@
 #include "SkySightCache.hpp"
 #include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
+#include "LiveTileUtils.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "Weather/BackgroundDownloadProgress.hpp"
 #include "Weather/MapOverlay/PagePlacement.hpp"
@@ -897,12 +898,17 @@ SkySightClient::DisplayTileLayer()
 
   api->PollLastUpdates();
 
-  const auto base_tile = GeoBitmap::GetTile(map_window->VisibleProjection(),
-                                            active_layer->zoom_min,
-                                            active_layer->zoom_max);
+  const auto map_tile = GeoBitmap::GetTile(map_window->VisibleProjection(),
+                                           active_layer->zoom_min,
+                                           SkySight::GetLiveTileMapZoomMaximum(
+                                             active_layer->zoom_max));
   const auto map_bounds = map_window->VisibleProjection().GetScreenBounds();
   if (!map_bounds.Check() || !map_bounds.IsValid())
     return false;
+
+  const auto live_zoom = SkySight::SelectLiveTileZoom(map_tile.zoom,
+                                                       active_layer->zoom_min);
+  const auto base_tile = GeoBitmap::GetTile(map_bounds, live_zoom);
 
   if (displayed_layer != active_layer || displayed_zoom != base_tile.zoom) {
     ResetTiles();

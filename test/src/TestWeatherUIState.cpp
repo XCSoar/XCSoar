@@ -4,6 +4,7 @@
 #include "Weather/WeatherUIState.hpp"
 #include "Weather/SkySight/Layers.hpp"
 #include "Weather/SkySight/ForecastUtils.hpp"
+#include "Weather/SkySight/LiveTileUtils.hpp"
 #include "Weather/SkySight/SkySightLimits.hpp"
 #include "Weather/SkySight/SkySightRequestPolicy.hpp"
 #include "TestUtil.hpp"
@@ -302,6 +303,17 @@ TestSkySightCachedForecastMerge()
 }
 
 static void
+TestSkySightLiveTileResolution()
+{
+  ok1(SkySight::SelectLiveTileZoom(8, 1) == 7);
+  ok1(SkySight::SelectLiveTileZoom(9, 1) == 8);
+  ok1(SkySight::SelectLiveTileZoom(1, 1) == 1);
+  ok1(SkySight::GetLiveTileMapZoomMaximum(8) == 9);
+  ok1(SkySight::GetLiveTileMapZoomMaximum(GeoBitmap::MAX_TILE_ZOOM) ==
+      GeoBitmap::MAX_TILE_ZOOM);
+}
+
+static void
 TestSkySightResourcePolicies()
 {
   ok1(SkySight::IsNetCdfGridSizeAllowed(1024, 1024));
@@ -314,7 +326,7 @@ TestSkySightResourcePolicies()
 int
 main()
 {
-  plan_tests(32 + 10 + 9 + 5 + 12 + 4 + 40 + 2 + 1);
+  plan_tests(32 + 10 + 9 + 5 + 12 + 4 + 5 + 40 + 2 + 1);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
@@ -324,6 +336,7 @@ main()
   TestSkySightRequestFailurePolicy();
   TestSkySightForecastBusyState();
   TestSkySightCachedForecastMerge();
+  TestSkySightLiveTileResolution();
   TestSkySightResourcePolicies();
 
   return exit_status();
