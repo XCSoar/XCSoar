@@ -31,7 +31,9 @@
 #include <cassert>
 #include <chrono>
 #include <exception>
+#include <map>
 #include <set>
+#include <tuple>
 
 namespace {
 
@@ -107,6 +109,138 @@ SyncCachedForecastImage(std::string_view region,
   layer.mtime = mtime;
   return true;
 }
+
+#ifdef ENABLE_OPENGL
+
+struct PrioritizedTile {
+  GeoBitmap::TileData tile;
+  unsigned priority;
+};
+
+struct CachedLiveTile {
+  AllocatedPath path;
+  time_t timestamp = 0;
+  bool exists = false;
+};
+
+class LiveTileCacheIndex {
+  using Key = std::tuple<time_t, unsigned, uint16_t, uint16_t>;
+
+  SkySightAPI &api;
+  const SkySight::Layer &layer;
+  std::map<Key, CachedLiveTile> entries;
+
+public:
+  LiveTileCacheIndex(SkySightAPI &_api,
+                     const SkySight::Layer &_layer) noexcept
+    :api(_api), layer(_layer) {}
+
+  [[nodiscard]] const CachedLiveTile &
+  Find(const GeoBitmap::TileData &tile, time_t timestamp)
+  {
+    const Key key{timestamp, tile.zoom, tile.x, tile.y};
+    auto [it, inserted] = entries.try_emplace(key);
+    if (inserted) {
+      it->second.path = api.GetTilePath(layer, timestamp, tile);
+      it->second.timestamp = timestamp;
+      it->second.exists = File::Exists(it->second.path);
+    }
+
+    return it->second;
+  }
+};
+
+struct TargetLiveTile {
+  GeoBitmap::TileData tile;
+  bool exact_refresh_available;
+};
+
+struct DisplayLiveTile {
+  GeoBitmap::TileData tile;
+  time_t timestamp;
+  std::string path;
+};
+
+void
+AppendUniqueLiveTile(std::vector<DisplayLiveTile> &items,
+                     const DisplayLiveTile &candidate)
+{
+  if (std::none_of(items.begin(), items.end(),
+                   [&candidate](const auto &item) {
+                     return SkySight::IsSameTile(item.tile, candidate.tile) &&
+                       item.path == candidate.path;
+                   }))
+    items.push_back(candidate);
+}
+
+[[nodiscard]] std::vector<GeoBitmap::TileData>
+CollectVisibleLiveTiles(const GeoBounds &map_bounds,
+                        const GeoBitmap::TileData &base_tile,
+                        const GeoBounds &region_bounds,
+                        unsigned range)
+{
+  const int tiles_per_axis = 1 << base_tile.zoom;
+  const auto normalize_x = [tiles_per_axis](int value) {
+    int result = value % tiles_per_axis;
+    if (result < 0)
+      result += tiles_per_axis;
+
+    return (uint16_t)result;
+  };
+
+  std::vector<PrioritizedTile> candidates;
+  const auto diameter = 2 * range + 1;
+  candidates.reserve(diameter * diameter);
+  const int tile_range = int(range);
+  for (int dx = -tile_range; dx <= tile_range; ++dx) {
+    for (int dy = -tile_range; dy <= tile_range; ++dy) {
+      const int y = int(base_tile.y) + dy;
+      if (y < 0 || y >= tiles_per_axis)
+        continue;
+
+      const GeoBitmap::TileData tile{
+        base_tile.zoom,
+        normalize_x(int(base_tile.x) + dx),
+        (uint16_t)y,
+      };
+      const auto tile_bounds = GeoBitmap::GetBounds(tile);
+      if (!tile_bounds.Overlaps(map_bounds) ||
+          (region_bounds.IsValid() && !tile_bounds.Overlaps(region_bounds)))
+        continue;
+
+      candidates.push_back({tile, unsigned(dx * dx + dy * dy)});
+    }
+  }
+
+  std::stable_sort(candidates.begin(), candidates.end(),
+                   [](const auto &a, const auto &b) {
+                     return a.priority < b.priority;
+                   });
+
+  std::vector<GeoBitmap::TileData> result;
+  result.reserve(candidates.size());
+  for (const auto &candidate : candidates)
+    result.push_back(candidate.tile);
+
+  return result;
+}
+
+[[nodiscard]] bool
+IsSameTileSequence(const std::vector<GeoBitmap::TileData> &a,
+                   const std::vector<GeoBitmap::TileData> &b) noexcept
+{
+  return a.size() == b.size() &&
+    std::equal(a.begin(), a.end(), b.begin(), SkySight::IsSameTile);
+}
+
+[[nodiscard]] constexpr bool
+IsSameBounds(const GeoBounds &a, const GeoBounds &b) noexcept
+{
+  return a.GetWest() == b.GetWest() && a.GetEast() == b.GetEast() &&
+    a.GetSouth() == b.GetSouth() && a.GetNorth() == b.GetNorth();
+}
+
+#endif
 
 } // namespace
 SkySightClient::SkySightClient(CurlGlobal &curl)
@@ -565,6 +699,10 @@ SkySightClient::ResetTiles() noexcept
   }
 
   forecast_image_dirty = true;
+  planned_live_timestamp_known = false;
+  planned_live_timestamp = 0;
+  planned_live_bounds.SetInvalid();
+  planned_live_tiles.clear();
   displayed_layer = nullptr;
 }
 
@@ -658,6 +796,7 @@ void
 SkySightClient::OnDataUpdated() noexcept
 {
   forecast_image_dirty = true;
+  planned_live_tiles.clear();
 
   if (auto *map = UIGlobals::GetMapIfActive())
     map->DeferRedraw();
@@ -920,95 +1059,45 @@ SkySightClient::DisplayTileLayer()
   const time_t refresh_time = probe_next_slot
     ? current_slot
     : active_layer->last_update;
-  const int tiles_per_axis = 1 << base_tile.zoom;
-  const auto normalize_x = [tiles_per_axis](int value) {
-    int result = value % tiles_per_axis;
-    if (result < 0)
-      result += tiles_per_axis;
+  const auto visible_tiles = CollectVisibleLiveTiles(
+    map_bounds, base_tile, region_bounds, LIVE_TILE_RANGE_OFFSET);
 
-    return (uint16_t)result;
-  };
-
-  struct VisibleTile {
-    GeoBitmap::TileData tile;
-    unsigned priority;
-  };
-
-  std::vector<VisibleTile> visible_tiles;
-  visible_tiles.reserve(LIVE_TILE_OVERLAY_COUNT);
-  constexpr int tile_range = int(LIVE_TILE_RANGE_OFFSET);
-  for (int dx = -tile_range; dx <= tile_range; ++dx) {
-    for (int dy = -tile_range; dy <= tile_range; ++dy) {
-      const int x = int(base_tile.x) + dx;
-      const int y = int(base_tile.y) + dy;
-      if (y < 0 || y >= tiles_per_axis)
-        continue;
-
-      GeoBitmap::TileData tile{base_tile.zoom, normalize_x(x), (uint16_t)y};
-
-      const auto tile_bounds = GeoBitmap::GetBounds(tile);
-      if (!tile_bounds.Overlaps(map_bounds) ||
-          (region_bounds.IsValid() &&
-           !tile_bounds.Overlaps(region_bounds)))
-        continue;
-
-      visible_tiles.push_back({tile, unsigned(dx * dx + dy * dy)});
-    }
+  if (!planned_live_tiles.empty() &&
+      planned_live_timestamp_known == has_known_timestamp &&
+      planned_live_timestamp == refresh_time &&
+      IsSameBounds(planned_live_bounds, map_bounds) &&
+      IsSameTileSequence(planned_live_tiles, visible_tiles)) {
+    return !visible_tiles.empty();
   }
 
-  std::stable_sort(visible_tiles.begin(), visible_tiles.end(),
-                   [](const auto &a, const auto &b) {
-                     return a.priority < b.priority;
-                   });
+  planned_live_timestamp_known = has_known_timestamp;
+  planned_live_timestamp = refresh_time;
+  planned_live_bounds = map_bounds;
+  planned_live_tiles = visible_tiles;
 
-  struct CachedTile {
-    AllocatedPath path;
-    time_t timestamp = 0;
-  };
-
-  const auto find_cached_tile = [this]
-    (const GeoBitmap::TileData &tile, time_t candidate_time) {
-    CachedTile result;
-    auto path = api->GetTilePath(*active_layer, candidate_time, tile);
-    if (File::Exists(path)) {
-      result.path = std::move(path);
-      result.timestamp = candidate_time;
-    }
-
-    return result;
-  };
-
-  struct TargetTile {
-    GeoBitmap::TileData tile;
-    bool exact_refresh_available = false;
-  };
-
-  std::vector<TargetTile> target_tiles;
+  LiveTileCacheIndex cache{*api, *active_layer};
+  std::vector<TargetLiveTile> target_tiles;
   target_tiles.reserve(visible_tiles.size());
-  const unsigned target_fallback_steps = has_known_timestamp
-    ? SkySight::RECENT_LIVE_TILE_FALLBACK_STEPS
-    : 24;
   for (const auto &visible : visible_tiles) {
     target_tiles.push_back({
-      visible.tile,
-      find_cached_tile(visible.tile, refresh_time).path != nullptr,
+      visible,
+      cache.Find(visible, refresh_time).exists,
     });
   }
 
-  std::vector<unsigned> timestamp_coverage(target_fallback_steps, 0);
-  for (unsigned step = 0; step < target_fallback_steps; ++step) {
+  std::array<unsigned, SkySight::RECENT_LIVE_TILE_FALLBACK_STEPS>
+    timestamp_coverage{};
+  for (unsigned step = 0; step < timestamp_coverage.size(); ++step) {
     const auto candidate_time = refresh_time -
       time_t(step) * SkySight::LIVE_TILE_INTERVAL_SECONDS;
 
     for (const auto &target : target_tiles) {
-      bool covered = find_cached_tile(target.tile, candidate_time).path !=
-        nullptr;
+      bool covered = cache.Find(target.tile, candidate_time).exists;
       for (unsigned zoom = target.tile.zoom;
            !covered && zoom > active_layer->zoom_min;) {
         --zoom;
-        covered = find_cached_tile(
-          SkySight::GetTileAncestor(target.tile, zoom), candidate_time).path !=
-          nullptr;
+        covered = cache.Find(SkySight::GetTileAncestor(target.tile, zoom),
+                             candidate_time).exists;
       }
 
       if (covered)
@@ -1027,49 +1116,34 @@ SkySightClient::DisplayTileLayer()
     SkySight::SelectCoherentLiveTileTimestamp(refresh_time,
                                                timestamp_coverage);
 
-  struct DisplayTile {
-    GeoBitmap::TileData tile;
-    time_t timestamp;
-    std::string path;
-  };
-
-  std::vector<DisplayTile> fallback_tiles;
-  std::vector<DisplayTile> target_zoom_tiles;
+  std::vector<DisplayLiveTile> fallback_tiles;
+  std::vector<DisplayLiveTile> target_zoom_tiles;
   fallback_tiles.reserve(target_tiles.size());
   target_zoom_tiles.reserve(target_tiles.size());
-  const auto append_unique = [](auto &items, const DisplayTile &candidate) {
-    if (std::none_of(items.begin(), items.end(),
-                     [&candidate](const auto &item) {
-                       return SkySight::IsSameTile(item.tile, candidate.tile) &&
-                         item.path == candidate.path;
-                     }))
-      items.push_back(candidate);
-  };
 
   for (const auto &target : target_tiles) {
-    const auto cached_target = find_cached_tile(target.tile,
-                                                display_timestamp);
-    if (cached_target.path != nullptr) {
-      append_unique(target_zoom_tiles,
-                    {target.tile, cached_target.timestamp,
-                     cached_target.path.c_str()});
+    const auto &cached_target = cache.Find(target.tile, display_timestamp);
+    if (cached_target.exists) {
+      AppendUniqueLiveTile(target_zoom_tiles,
+                           {target.tile, cached_target.timestamp,
+                            cached_target.path.c_str()});
       continue;
     }
 
     for (unsigned zoom = target.tile.zoom; zoom > active_layer->zoom_min;) {
       --zoom;
       const auto ancestor = SkySight::GetTileAncestor(target.tile, zoom);
-      const auto cached = find_cached_tile(ancestor, display_timestamp);
-      if (cached.path == nullptr)
+      const auto &cached = cache.Find(ancestor, display_timestamp);
+      if (!cached.exists)
         continue;
 
-      append_unique(fallback_tiles,
-                    {ancestor, cached.timestamp, cached.path.c_str()});
+      AppendUniqueLiveTile(fallback_tiles,
+                           {ancestor, cached.timestamp, cached.path.c_str()});
       break;
     }
   }
 
-  std::vector<DisplayTile> display_tiles;
+  std::vector<DisplayLiveTile> display_tiles;
   display_tiles.reserve(fallback_tiles.size() + target_zoom_tiles.size());
   display_tiles.insert(display_tiles.end(), fallback_tiles.begin(),
                        fallback_tiles.end());
@@ -1092,8 +1166,8 @@ SkySightClient::DisplayTileLayer()
           !GeoBitmap::GetBounds(tile).Overlaps(map_bounds))
         continue;
 
-      append_unique(display_tiles,
-                    {tile, tile_timestamps[i], tile_filenames[i]});
+      AppendUniqueLiveTile(display_tiles,
+                           {tile, tile_timestamps[i], tile_filenames[i]});
     }
   }
 
@@ -1131,9 +1205,8 @@ SkySightClient::DisplayTileLayer()
 
   if (has_known_timestamp) {
     for (const auto &target : target_tiles) {
-      const auto exact_path = api->GetTilePath(*active_layer, refresh_time,
-                                              target.tile);
-      desired_keys.emplace(exact_path.c_str());
+      const auto &exact = cache.Find(target.tile, refresh_time);
+      desired_keys.emplace(exact.path.c_str());
       if (!target.exact_refresh_available)
         missing_target_tiles.push_back(target.tile);
     }
@@ -1144,10 +1217,9 @@ SkySightClient::DisplayTileLayer()
        live pseudo-layer.  Probe one centre tile only; once it succeeds, normal
        viewport downloads begin centre-out. */
     const auto probe_tile = target_tiles.front().tile;
-    const auto probe_path = api->GetTilePath(*active_layer, refresh_time,
-                                             probe_tile);
-    desired_keys.emplace(probe_path.c_str());
-    if (File::Exists(probe_path)) {
+    const auto &probe = cache.Find(probe_tile, refresh_time);
+    desired_keys.emplace(probe.path.c_str());
+    if (probe.exists) {
       active_layer->last_update = refresh_time;
       active_layer->live_timestamp_from_probe = true;
       api->OnLiveTileProbeSucceeded(active_layer->id, refresh_time);

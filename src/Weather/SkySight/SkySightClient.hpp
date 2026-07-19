@@ -5,6 +5,7 @@
 
 #include "Layers.hpp"
 #include "MapWindow/OverlayLimits.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 #include "system/Path.hpp"
 #include "ui/event/PeriodicTimer.hpp"
@@ -36,6 +37,10 @@ class SkySightClient final {
   bool forecast_cleanup_pending = true;
   bool forecast_progress_visible = false;
   bool throttle_notification_active = false;
+  bool planned_live_timestamp_known = false;
+  time_t planned_live_timestamp = 0;
+  GeoBounds planned_live_bounds = GeoBounds::Invalid();
+  std::vector<GeoBitmap::TileData> planned_live_tiles;
   std::array<std::string, LIVE_TILE_OVERLAY_COUNT> tile_filenames;
   std::array<GeoBitmap::TileData, LIVE_TILE_OVERLAY_COUNT> tile_coordinates;
   std::array<time_t, LIVE_TILE_OVERLAY_COUNT> tile_timestamps{};
