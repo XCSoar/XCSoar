@@ -7,14 +7,17 @@
 #include "Form/DataField/File.hpp"
 #include "Form/Form.hpp"
 #include "Gauge/LogoView.hpp"
+#include "GlobalSettings.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "Look/Colors.hpp"
 #include "Look/DialogLook.hpp"
 #include "Profile/Profile.hpp"
 #include "Repository/FileType.hpp"
 #include "ProfileListDialog.hpp"
 #include "ProfilePasswordDialog.hpp"
+#include "Renderer/GradientRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -24,35 +27,49 @@
 #include "ui/canvas/Canvas.hpp"
 
 class LogoWindow final : public PaintWindow {
+#ifndef ENABLE_OPENGL
+  const DialogLook &look;
+#endif
   LogoView logo;
-  bool dark_mode;
 
 public:
-  explicit LogoWindow(bool _dark_mode = false,
-                     Color _background_color = COLOR_WHITE) noexcept
-    :dark_mode(_dark_mode), background_color(_background_color) {}
+#ifdef ENABLE_OPENGL
+  LogoWindow() noexcept = default;
+#else
+  explicit LogoWindow(const DialogLook &_look) noexcept
+    :look(_look) {}
+#endif
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
-    canvas.Clear(background_color);
-    logo.draw(canvas, GetClientRect(), dark_mode);
+#ifdef ENABLE_OPENGL
+    /* Branded splash background (same as SimulatorPromptWindow).
+       Logo art is always light-on-dark on this blue gradient. */
+    DrawVerticalGradient(canvas, GetClientRect(),
+                         COLOR_XCSOAR, COLOR_XCSOAR_DARK,
+                         COLOR_XCSOAR_DARK);
+    logo.draw(canvas, GetClientRect(), true);
+#else
+    canvas.Clear(look.background_color);
+    logo.draw(canvas, GetClientRect(), look.dark_mode);
+#endif
   }
-
-private:
-  Color background_color;
 };
 
 class LogoQuitWidget final : public NullWidget {
-  const ButtonLook &look;
+  const DialogLook &look;
   WndForm &dialog;
 
   LogoWindow logo;
   Button quit;
 
 public:
-  LogoQuitWidget(const ButtonLook &_look, WndForm &_dialog,
-                 bool dark_mode, Color background_color) noexcept
-    :look(_look), dialog(_dialog), logo(dark_mode, background_color) {}
+  LogoQuitWidget(const DialogLook &_look, WndForm &_dialog) noexcept
+    :look(_look), dialog(_dialog)
+#ifndef ENABLE_OPENGL
+    , logo(_look)
+#endif
+  {}
 
 private:
   PixelRect GetButtonRect(PixelRect rc) noexcept {
@@ -81,7 +98,7 @@ public:
     button_style.Hide();
     button_style.TabStop();
 
-    quit.Create(parent, look, _("Quit"), rc,
+    quit.Create(parent, look.button, _("Quit"), rc,
                 button_style, dialog.MakeModalResultCallback(mrCancel));
     logo.Create(parent, rc, style);
   }
@@ -227,15 +244,15 @@ dlgStartupShowModal() noexcept
 
   dff->SetIndex(best_index);
 
-  /* show the dialog */
-  const DialogLook &look = UIGlobals::GetDialogLook();
+  /* Profile is not loaded yet; follow system AUTO like ProgressWindow. */
+  DialogLook look;
+  look.Initialise(GlobalSettings::dark_mode);
+
   TWidgetDialog<TwoWidgets> dialog(WidgetDialog::Full{},
                                    UIGlobals::GetMainWindow(),
-                                   UIGlobals::GetDialogLook(),
-                                   nullptr);
+                                   look, nullptr);
 
-  dialog.SetWidget(std::make_unique<LogoQuitWidget>(look.button, dialog,
-                                                    look.dark_mode, look.background_color),
+  dialog.SetWidget(std::make_unique<LogoQuitWidget>(look, dialog),
                    std::make_unique<StartupWidget>(look, dialog, dff));
 
   return dialog.ShowModal() == mrOK;

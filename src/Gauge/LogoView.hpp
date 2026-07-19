@@ -12,7 +12,7 @@ class Canvas;
 class LogoView {
   Bitmap logo, big_logo, huge_logo, title, big_title, huge_title;
   Bitmap logo_rgba, big_logo_rgba, huge_logo_rgba;
-  Bitmap white_title, huge_white_title;
+  Bitmap title_rgba, white_title, huge_white_title;
 
 #ifndef USE_GDI
   Font font;
@@ -29,7 +29,7 @@ public:
    *
    * @param canvas the Canvas to draw on
    * @param rc the region within the Canvas to draw into
-   * @param dark_mode if true, use light-on-dark colors and white title
+   * @param dark_mode if true, use light text and white title art
    */
   void draw(Canvas &canvas, const PixelRect &rc,
             bool dark_mode = false) noexcept;

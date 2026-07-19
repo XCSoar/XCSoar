@@ -20,11 +20,12 @@ LogoView::LogoView() noexcept try
    title(IDB_TITLE), big_title(IDB_TITLE_HD), huge_title(IDB_TITLE_UHD)
 {
 #ifndef USE_WIN32_RESOURCES
-  /* Load RGBA logo variants for dark mode (transparent background) */
+  /* Transparent variants for OpenGL compositing on tinted dialog
+     backgrounds (light and dark). */
   logo_rgba.Load(IDB_LOGO_RGBA);
   big_logo_rgba.Load(IDB_LOGO_HD_RGBA);
   huge_logo_rgba.Load(IDB_LOGO_UHD_RGBA);
-  /* Load white title variants for dark mode */
+  title_rgba.Load(IDB_TITLE_HD_RGBA);
   white_title.Load(IDB_TITLE_HD_WHITE);
   huge_white_title.Load(IDB_TITLE_UHD_WHITE);
 #endif
@@ -78,6 +79,20 @@ EstimateLogoViewSize(LogoViewOrientation orientation,
   gcc_unreachable();
 }
 
+#ifdef ENABLE_OPENGL
+/**
+ * If @a selected points at @a match and @a variant is loaded, switch
+ * to the variant (used for transparent OpenGL assets).
+ */
+static void
+UseVariant(const Bitmap *&selected,
+           const Bitmap &match, const Bitmap &variant) noexcept
+{
+  if (selected == &match && variant.IsDefined())
+    selected = &variant;
+}
+#endif
+
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc,
                bool dark_mode) noexcept
@@ -97,14 +112,12 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   else
     orientation = LogoViewOrientation::PORTRAIT;
 
-  /* Select appropriate bitmap size based on display dimensions */
-  /* Pick the highest-resolution bitmap that IsDefined() (fall back from huge -> big -> logo) */
+  /* Pick the highest-resolution bitmap that IsDefined() */
   const Bitmap *bitmap_logo, *bitmap_title;
-  
+
   if ((orientation == LogoViewOrientation::LANDSCAPE && width >= 1024 && height >= 340) ||
       (orientation == LogoViewOrientation::PORTRAIT && width >= 660 && height >= 500) ||
       (orientation == LogoViewOrientation::SQUARE && width >= 420 && height >= 420)) {
-    /* Use huge (320px logo, 640px title) for very high resolution displays */
     if (huge_logo.IsDefined() && huge_title.IsDefined()) {
       bitmap_logo = &huge_logo;
       bitmap_title = &huge_title;
@@ -118,7 +131,6 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   } else if ((orientation == LogoViewOrientation::LANDSCAPE && width >= 510 && height >= 170) ||
              (orientation == LogoViewOrientation::PORTRAIT && width >= 330 && height >= 250) ||
              (orientation == LogoViewOrientation::SQUARE && width >= 210 && height >= 210)) {
-    /* Use big (160px logo, 320px title) for HD displays */
     if (big_logo.IsDefined() && big_title.IsDefined()) {
       bitmap_logo = &big_logo;
       bitmap_title = &big_title;
@@ -127,25 +139,30 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
       bitmap_title = &title;
     }
   } else {
-    /* Use standard (80px logo, 110px title) for low resolution displays */
     bitmap_logo = &logo;
     bitmap_title = &title;
   }
 
-  /* In dark mode, use RGBA logos (transparent background) if available */
+#ifdef ENABLE_OPENGL
+  /* Opaque BMP-derived assets leave white squares on tinted dialog
+     backgrounds; prefer transparent variants when available. */
+  UseVariant(bitmap_logo, huge_logo, huge_logo_rgba);
+  UseVariant(bitmap_logo, big_logo, big_logo_rgba);
+  UseVariant(bitmap_logo, logo, logo_rgba);
+
   if (dark_mode) {
-    if (bitmap_logo == &huge_logo && huge_logo_rgba.IsDefined())
-      bitmap_logo = &huge_logo_rgba;
-    else if (bitmap_logo == &big_logo && big_logo_rgba.IsDefined())
-      bitmap_logo = &big_logo_rgba;
-    else if (bitmap_logo == &logo && logo_rgba.IsDefined())
-      bitmap_logo = &logo_rgba;
+    UseVariant(bitmap_title, huge_title, huge_white_title);
+    /* Fall back UHD→HD white title without replacing base SD. */
+    UseVariant(bitmap_title, huge_title, white_title);
+    UseVariant(bitmap_title, big_title, white_title);
+  } else {
+    /* No UHD black RGBA title; fall back to HD. */
+    UseVariant(bitmap_title, huge_title, title_rgba);
+    UseVariant(bitmap_title, big_title, title_rgba);
   }
+#endif
 
-  // Determine logo size
   PixelSize logo_size = bitmap_logo->GetSize();
-
-  // Determine title image size
   PixelSize title_size = bitmap_title->GetSize();
 
   unsigned spacing = title_size.height / 2;
@@ -167,7 +184,6 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
 
   PixelPoint logo_position, title_position;
 
-  // Determine logo and title positions
   switch (orientation) {
   case LogoViewOrientation::LANDSCAPE:
     logo_position.x = Center(width, logo_size.width + spacing + title_size.width);
@@ -184,7 +200,6 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   case LogoViewOrientation::SQUARE:
     logo_position.x = Center(width, logo_size.width);
     logo_position.y = Center(height, logo_size.height);
-    // not needed - silence compiler "may be used uninitialized"
     title_position.x = 0;
     title_position.y = 0;
     break;
@@ -192,36 +207,19 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
     gcc_unreachable();
   }
 
-  // Draw 'XCSoar N.N' title
   if (orientation != LogoViewOrientation::SQUARE) {
-    const Bitmap *draw_title = bitmap_title;
 #ifdef ENABLE_OPENGL
-    /* On OpenGL, use white title variants for dark mode
-       (they have alpha and composite correctly).
-       On non-OpenGL, keep the standard (black) title since
-       the memory canvas composites alpha against white. */
-    if (dark_mode) {
-      if (bitmap_title == &huge_title &&
-          huge_white_title.IsDefined())
-        draw_title = &huge_white_title;
-      else if (white_title.IsDefined())
-        draw_title = &white_title;
-    }
-
     const ScopeAlphaBlend alpha_blend;
 #endif
-    canvas.Stretch(title_position, title_size, *draw_title);
+    canvas.Stretch(title_position, title_size, *bitmap_title);
   }
 
-  // Draw XCSoar swift logo
   {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.Stretch(logo_position, logo_size, *bitmap_logo);
   }
-
-  // Draw full XCSoar version number
 
 #ifndef USE_GDI
   if (!font.IsDefined())
@@ -240,30 +238,23 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   if (bold_font.IsDefined())
     canvas.Select(bold_font);
 #endif
-  
+
   const char *warning_text = "DEBUG BUILD - DO NOT FLY!";
   const auto text_size = canvas.CalcTextSize(warning_text);
-  
-  /* Half character padding (max) */
+
   const int padding = text_size.height / 2;
   const int banner_height = text_size.height + padding * 2;
   const int banner_width = text_size.width + padding * 2;
-  
-  /* Position banner below the logo/title with some spacing */
+
   int banner_y;
-  if (orientation == LogoViewOrientation::PORTRAIT) {
-    // Below title in portrait mode
+  if (orientation == LogoViewOrientation::PORTRAIT)
     banner_y = title_position.y + title_size.height + spacing / 2;
-  } else if (orientation == LogoViewOrientation::SQUARE) {
-    // Below logo in square mode
+  else if (orientation == LogoViewOrientation::SQUARE)
     banner_y = logo_position.y + logo_size.height + spacing / 2;
-  } else {
-    // Below whichever is lower in landscape mode
+  else
     banner_y = std::max(logo_position.y + logo_size.height,
-                       title_position.y + title_size.height) + spacing / 2;
-  }
-  
-  /* Only draw if banner fits within the visible area */
+                        title_position.y + title_size.height) + spacing / 2;
+
   if (banner_y + banner_height <= int(height)) {
     const PixelRect warning_rect{
       Center(width, banner_width),
@@ -271,17 +262,14 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
       Center(width, banner_width) + banner_width,
       banner_y + banner_height
     };
-    
+
     canvas.DrawFilledRectangle(warning_rect, COLOR_RED);
     canvas.SetTextColor(COLOR_WHITE);
     canvas.SetBackgroundTransparent();
-    
-    const PixelPoint text_pos{
-      warning_rect.left + padding,
-      warning_rect.top + padding
-    };
-    
-    canvas.DrawText(text_pos, warning_text);
+
+    canvas.DrawText({warning_rect.left + padding,
+                     warning_rect.top + padding},
+                    warning_text);
   }
 #endif
 }
