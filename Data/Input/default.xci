@@ -662,10 +662,19 @@ location=1
 
 mode=Nav1
 type=key
-data=6
+data=2
 event=Calculator
 event=Mode default
 label=Task Manager
+location=4
+
+mode=Nav1
+type=key
+data=6
+event=StatusMessage Pilot event announced
+event=Logger note PEV
+event=PilotEvent
+label=Pilot Event Announce
 location=5
 
 mode=Nav1
@@ -730,16 +739,6 @@ location=6
 mode=Nav2
 type=key
 data=8
-event=Mode default
-event=StatusMessage Pilot event announced
-event=Logger note PEV
-event=PilotEvent
-label=Pilot Event Announce
-location=7
-
-mode=Nav2
-type=key
-data=9
 event=Setup Target
 event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
