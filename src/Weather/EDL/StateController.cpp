@@ -96,7 +96,8 @@ EnsureInitialised() noexcept
 
   /* Overlay mode may enter through the weather dialog without visiting
      the dedicated page first, so make the shared state self-healing. */
-  if (!state.forecast_datetime.IsPlausible())
+  if (state.forecast_auto_advance &&
+      !state.forecast_datetime.IsPlausible())
     state.forecast_datetime =
       GetTrackedForecastTime(BrokenDateTime::NowUTC());
 
@@ -195,9 +196,14 @@ ProcessGpsUpdate(BrokenDateTime utc) noexcept
       changed = true;
   }
 
-  if (state.forecast_auto_advance && hour_changed) {
+  const bool follows_now =
+    !state.forecast_auto_advance &&
+    !state.forecast_datetime.IsPlausible();
+  if ((state.forecast_auto_advance || follows_now) && hour_changed) {
     const auto tracked = GetTrackedForecastTime(utc);
-    if (state.forecast_datetime != tracked) {
+    if (follows_now) {
+      changed = true;
+    } else if (state.forecast_datetime != tracked) {
       state.forecast_datetime = tracked;
       changed = true;
     }
@@ -360,7 +366,16 @@ GetStatusLabel() noexcept
 BrokenDateTime
 GetForecastTime() noexcept
 {
-  return CommonInterface::GetUIState().weather.edl.forecast_datetime;
+  const auto &state = CommonInterface::GetUIState().weather.edl;
+  if (state.forecast_datetime.IsPlausible())
+    return state.forecast_datetime;
+
+  BrokenDateTime utc = BrokenDateTime::NowUTC();
+  const auto &basic = CommonInterface::Basic();
+  if (basic.date_time_utc.IsPlausible())
+    utc = basic.date_time_utc;
+
+  return GetTrackedForecastTime(utc);
 }
 
 BrokenDateTime
@@ -371,12 +386,12 @@ GetForecastTimeLocal() noexcept
 }
 
 void
-FormatForecastCursorLabel(StaticString<64> &text,
-                            bool auto_advance) noexcept
+FormatForecastCursorLabel(StaticString<64> &text, bool auto_advance,
+                          BrokenDateTime forecast) noexcept
 {
   EnsureInitialised();
 
-  const auto forecast = GetForecastTime().FloorToHour();
+  forecast = forecast.FloorToHour();
   BrokenDateTime now = BrokenDateTime::NowUTC();
   const auto &basic = CommonInterface::Basic();
   if (basic.date_time_utc.IsPlausible())
@@ -393,6 +408,14 @@ FormatForecastCursorLabel(StaticString<64> &text,
 
   WeatherMapOverlay::FormatAutoUtcHourLabel(text, auto_advance,
                                      unsigned(forecast.hour), offset_buf);
+}
+
+void
+FormatForecastCursorLabel(StaticString<64> &text,
+                          bool auto_advance) noexcept
+{
+  FormatForecastCursorLabel(text, auto_advance,
+                            GetForecastTime());
 }
 
 StaticString<64>

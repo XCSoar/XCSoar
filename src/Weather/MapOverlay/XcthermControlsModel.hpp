@@ -62,7 +62,9 @@ public:
 
   [[nodiscard]]
   SecondaryLabelAction GetSecondaryLabelAction() const noexcept override;
-  void OpenSecondaryPicker() noexcept override;
+
+  [[nodiscard]]
+  SecondaryPickerResult OpenSecondaryPicker() noexcept override;
 
   [[nodiscard]]
   bool SupportsSecondaryAutoAdvance() const noexcept override;

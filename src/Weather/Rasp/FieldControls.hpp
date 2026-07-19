@@ -3,14 +3,19 @@
 
 #pragma once
 
+#include "Weather/MapOverlay/FieldPickerResult.hpp"
 #include "time/BrokenTime.hpp"
 #include "util/StaticString.hxx"
+
+#include <cstdint>
 
 class DataFieldEnum;
 class RaspStore;
 struct PageLayout;
 
 namespace Rasp {
+
+using LayerPickerResult = WeatherMapOverlay::FieldPickerResult;
 
 struct FieldChoicesOptions {
   bool include_none = false;
@@ -22,19 +27,6 @@ struct FieldChoicesOptions {
 void
 FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
                  FieldChoicesOptions options={}) noexcept;
-
-/**
- * Initialise a time selector with the "Now" choice.
- */
-void
-InitTimeChoices(DataFieldEnum &field) noexcept;
-
-/**
- * Fill a #DataFieldEnum with the forecast times available for a field.
- */
-void
-FillTimeChoices(DataFieldEnum &field, const RaspStore *rasp,
-                unsigned field_index, BrokenTime selected_time) noexcept;
 
 /**
  * RASP field index for @p layout, or @c -1 when unavailable.
@@ -82,16 +74,67 @@ void
 SyncCursorFromPageLayout() noexcept;
 
 /**
+ * Encode session RASP time state for #PageLayout::rasp_time.
+ */
+[[gnu::pure]]
+int
+EncodePageTime(bool time_auto_advance, BrokenTime time) noexcept;
+
+/**
+ * Apply #PageLayout::rasp_time to the shared RASP session state.
+ */
+void
+ApplyTimeFromPageLayout(const PageLayout &layout) noexcept;
+
+/**
+ * Persist the current session RASP time onto @p page_index.
+ */
+void
+PersistTimeToPage(unsigned page_index) noexcept;
+
+/**
+ * Persist the current session RASP time onto the configured page.
+ */
+void
+PersistTimeToCurrentPage() noexcept;
+
+/**
  * Select a manual cursor-bar time and end auto-advance.
  */
 void
 SetCursorTime(unsigned minute_of_day) noexcept;
 
 /**
- * Select the "Now" cursor mode while staying in manual mode.
+ * Enable time auto-advance and clear the manual time (AUTO mode).
+ * May request a RASP download when the current quarter hour has no data.
  */
 void
-SetCursorNow() noexcept;
+EnableTimeAutoFromInput() noexcept;
+
+/**
+ * Edit @p page.rasp_time via the shared time picker. Does not persist
+ * or update the live overlay (dialogs use this on a draft layout).
+ *
+ * @return false when the user cancels or no field is available
+ */
+[[nodiscard]]
+bool
+EditTimeOnLayout(PageLayout &page) noexcept;
+
+/**
+ * Cursor-bar time picker: #EditTimeOnLayout on the current map page,
+ * then persist and refresh the live overlay.
+ */
+void
+OpenTimePicker() noexcept;
+
+/**
+ * Format the Time control label from a page's stored field/time.
+ * Does not mutate the live RASP session.
+ */
+void
+FormatTimeLabelForPage(StaticString<64> &text,
+                       const PageLayout &page) noexcept;
 
 [[nodiscard]] [[gnu::pure]]
 bool
@@ -105,9 +148,6 @@ SetTimeAutoAdvance(bool auto_advance) noexcept;
  */
 void
 ApplyAutoAdvanceTime() noexcept;
-
-void
-ResumeAutoAdvance() noexcept;
 
 /**
  * Step the cursor-bar time by @p delta available forecast slots and
@@ -146,6 +186,14 @@ SelectField(unsigned field_index) noexcept;
  */
 bool
 ClearSelectedField() noexcept;
+
+/**
+ * Open the RASP layer picker.  When @p offer_setup is true, includes a
+ * Setup button (cursor-bar use); Info → Weather passes false.
+ */
+[[nodiscard]]
+LayerPickerResult
+OpenLayerPicker(bool offer_setup=false) noexcept;
 
 /**
  * Step the active RASP field by @p delta (wraps at list ends).

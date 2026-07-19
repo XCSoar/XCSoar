@@ -3,16 +3,9 @@
 
 #include "XcthermControlsModel.hpp"
 
-#include "Dialogs/ComboPicker.hpp"
 #include "Interface.hpp"
-#include "Language/Language.hpp"
-#include "PrimaryTimePicker.hpp"
-#include "Form/DataField/Enum.hpp"
-#include "util/StaticString.hxx"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
-#include "Weather/xctherm/XCThermCatalog.hpp"
-
-#include <algorithm>
+#include "Weather/xctherm/FieldControls.hpp"
 
 namespace WeatherMapOverlay {
 
@@ -47,6 +40,7 @@ void
 XcthermControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
 {
 #ifdef HAVE_HTTP
+  text.clear();
   WithBackend([&](XCTherm::XCThermControlsModel &backend) noexcept {
     backend.FormatTimeLabel(text);
   });
@@ -61,6 +55,7 @@ void
 XcthermControlsModel::FormatSecondaryLabel(StaticString<64> &text) const noexcept
 {
 #ifdef HAVE_HTTP
+  text.clear();
   WithBackend([&](const XCTherm::XCThermControlsModel &backend) noexcept {
     StaticString<80> layer_text;
     backend.FormatLayerLabel(layer_text);
@@ -177,56 +172,12 @@ void
 XcthermControlsModel::OpenPrimaryPicker() noexcept
 {
 #ifdef HAVE_HTTP
-  const bool time_plausible =
-    CommonInterface::Basic().date_time_utc.IsPlausible();
-
+  XCTherm::OpenTimePicker();
   WithBackend([&](XCTherm::XCThermControlsModel &backend) noexcept {
-    const auto persist = [this, &backend]() noexcept {
-      backend.ApplyCurrentSelectionToMap();
-      backend.SaveCursorSession();
-      NotifyOverlay();
-    };
-
-    StaticString<64> caption;
-    caption.Format("%s %s (UTC)", "XCTherm", _("Time"));
-
-    OpenPrimaryTimePicker(*this, caption.c_str(),
-      [&backend](DataFieldEnum &field) noexcept {
-        field.ClearChoices();
-
-        const auto &cached_hours = backend.GetCachedHours();
-        for (unsigned hour = 0; hour < 24; ++hour) {
-          StaticString<20> label;
-          const bool has_data =
-            std::find(cached_hours.begin(), cached_hours.end(), hour) !=
-            cached_hours.end();
-          label.Format("%02u:00 %s", hour, has_data ? "[x]" : "[ ]");
-          field.addEnumText(label.c_str(), hour);
-        }
-      },
-      [&backend]() noexcept {
-        return backend.GetCurrentForecastHour();
-      },
-      [](ControlsModel &model) noexcept {
-        model.EnablePrimaryAutoFromInput();
-      },
-      [&backend, &persist](ControlsModel &) noexcept {
-        const auto &basic = CommonInterface::Basic();
-        if (!basic.date_time_utc.IsPlausible())
-          return;
-
-        backend.SetTimeAutoAdvance(false);
-        backend.SetCurrentTimeIndex(unsigned(basic.date_time_utc.hour));
-        persist();
-      },
-      [&backend, &persist](ControlsModel &, unsigned hour) noexcept {
-        backend.SetTimeAutoAdvance(false);
-        backend.SetCurrentTimeIndex(hour);
-        persist();
-      },
-      time_plausible);
+    backend.SyncCursorFromSession();
   });
 #endif
+  NotifyOverlay();
 }
 
 bool
@@ -268,47 +219,19 @@ XcthermControlsModel::GetSecondaryLabelAction() const noexcept
   return SecondaryLabelAction::OPEN_PICKER;
 }
 
-void
+SecondaryPickerResult
 XcthermControlsModel::OpenSecondaryPicker() noexcept
 {
 #ifdef HAVE_HTTP
-  const auto &settings =
-    CommonInterface::GetComputerSettings().weather.xctherm;
-  const auto &region = XCTherm::GetRegion(settings.model);
-  if (region.layer_count == 0)
-    return;
-
-  DataFieldEnum field;
-  unsigned current_layer = 0;
-
-  WithBackend([&](const XCTherm::XCThermControlsModel &backend) noexcept {
-    current_layer = backend.GetCurrentLayer();
+  return HandleSecondaryFieldPicker(XCTherm::OpenLayerPicker(true),
+                                    [this] {
+    WithBackend([&](XCTherm::XCThermControlsModel &backend) noexcept {
+      backend.SyncCursorFromSession();
+    });
+    Notify(ControlsUpdate::OVERLAY);
   });
-
-  for (unsigned i = 0; i < region.layer_count; ++i) {
-    field.addEnumText(gettext(region.layers[i].short_label), int(i));
-  }
-
-  field.SetValue(int(current_layer));
-
-  if (!ComboPicker(_("XCTherm Altitude"), field, nullptr))
-    return;
-
-  const int selected = field.GetValue();
-  if (selected < 0 || unsigned(selected) >= region.layer_count)
-    return;
-
-  const auto &basic = CommonInterface::Basic();
-  WithBackend([&](XCTherm::XCThermControlsModel &backend) noexcept {
-    backend.SetAltitudeAutoAdvance(false, basic);
-    backend.SetCurrentLayer(unsigned(selected));
-    backend.ApplyCurrentSelectionToMap();
-    backend.SaveCursorSession();
-  });
-
-  Notify(ControlsUpdate::OVERLAY);
 #else
-  (void)0;
+  return SecondaryPickerResult::NONE;
 #endif
 }
 
