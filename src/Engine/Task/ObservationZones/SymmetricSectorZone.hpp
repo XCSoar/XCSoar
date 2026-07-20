@@ -78,7 +78,7 @@ public:
                                   const double radius,
                                   const Angle angle
                                   ) noexcept {
-    std::unique_ptr<SymmetricSectorZone> oz(new SymmetricSectorZone(Shape::SYMMETRIC_SECTOR, true, false, loc,
+    std::unique_ptr<SymmetricSectorZone> oz(new SymmetricSectorZone(Shape::SYMMETRIC_SECTOR, true, true, loc,
                                                                     radius,
                                                                     angle));
     oz->UpdateSector();
