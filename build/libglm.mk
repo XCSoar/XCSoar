@@ -1,1 +1,1 @@
-GLM_CPPFLAGS = -isystem lib/glm
+GLM_CPPFLAGS = -isystem lib/glm -DGLM_FORCE_PURE
