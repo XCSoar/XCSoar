@@ -37,6 +37,8 @@ Version 7.45 - not yet released
   - audio vario: add manual/automatic Vario/STF sound switching and
     ``VarioAudioMode`` input events
 * glide computer
+  - fix wild T Avg climb rates by preferring the instrument vario when
+    available #2754
   - Speed-to-fly and task calculations are now altitude-corrected: the glide
     polar is scaled by the air density ratio (sqrt(rho0/rho)) each GPS cycle,
     so optimal cruise speeds increase with altitude and best L/D is preserved
