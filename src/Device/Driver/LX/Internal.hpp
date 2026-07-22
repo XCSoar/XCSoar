@@ -220,8 +220,9 @@ private:
   bool vario_just_detected = false;
 
   /**
-   * Was $PLXVF received?  When set, $LXWP0 vario samples are ignored so
-   * the slower sentence cannot overwrite high-rate total-energy vario.
+   * Was $PLXVF received?  When set, $LXWP0 pressure altitude and vario
+   * samples are ignored so the slower sentence cannot overwrite
+   * high-rate PLXVF data (and cannot inject ALTOFF-adjusted altitude).
    */
   bool plxvf_received = false;
 
