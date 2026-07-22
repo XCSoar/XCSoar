@@ -1706,6 +1706,7 @@ TestLXV7()
   NMEAInfo basic;
   basic.Reset();
   basic.clock = TimeStamp{FloatDuration{1}};
+  basic.alive.Update(basic.clock);
 
   LXDevice &lx_device = *(LXDevice *)device;
   lx_device.ResetDeviceDetection();
@@ -1720,6 +1721,19 @@ TestLXV7()
   ok1(basic.acceleration.available);
   ok1(equals(basic.acceleration.g_load, 1.331));
 
+  /* After $PLXVF, $LXWP0 must not overwrite pressure altitude or TE vario
+     (ALTOFF-adjusted LXWP0 altitude vs raw PLXVF PressAlt, #2754). */
+  basic.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,1.71,1.71,1.71,1.71,1.71,239,174,10.1*5E",
+                        basic));
+  ok1(basic.pressure_altitude_available);
+  ok1(equals(basic.pressure_altitude, 244.3));
+  ok1(basic.total_energy_vario_available);
+  ok1(equals(basic.total_energy_vario, -0.25));
+  ok1(basic.airspeed_available);
+  ok1(basic.external_wind_available);
+
+  basic.clock = TimeStamp{FloatDuration{3}};
   ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
   ok1(basic.temperature_available);
   ok1(equals(basic.temperature.ToKelvin(), 296.25));
@@ -3196,7 +3210,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1036 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1043 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */

@@ -21,9 +21,13 @@ namespace LX {
 bool
 ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario);
 
+/**
+ * @param provide_altitude_vario When false, skip pressure altitude and
+ * TE vario (used once $PLXVF is active on LXNAV varios).
+ */
 bool
 LXWP0(NMEAInputLine &line, NMEAInfo &info,
-      bool provide_vario=true);
+      bool provide_altitude_vario=true);
 
 void
 LXWP1(NMEAInputLine &line, DeviceInfo &device);

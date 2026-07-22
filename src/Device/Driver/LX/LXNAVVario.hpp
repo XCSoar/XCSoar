@@ -46,8 +46,8 @@ namespace LXNAVVario {
    * - PLXVF at 10 Hz (total-energy vario, IAS, pressure altitude; spec
    *   recommends 20, 10, 5, 2, 1)
    * - PLXVS every 5 seconds
-   * - LXWP0 every second (TAS, altitude, wind; six TE samples ignored
-   *   when PLXVF is active)
+   * - LXWP0 every second (TAS, wind; altitude and six TE samples
+   *   ignored when PLXVF is active — LXWP0 altitude may include ALTOFF)
    * - LXWP1 every 60 seconds
    * - LXWP2 every 5 seconds (contains MC, ballast, bugs - more frequent for better sync)
    * - LXWP3 every 5 seconds (variofil; changes rarely on the vario)

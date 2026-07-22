@@ -59,6 +59,8 @@ Version 7.45 - not yet released
   - always start in light mode; dark mode is not supported on e-paper
     displays #2568
 * devices
+  - fix LXNAV thermal averages when the device reports conflicting
+    altitude sources #2754
   - Android: multi-port USB serial adapters (e.g. dual FTDI) use 0-based port
     suffixes (#0, #1) in both the port list and device list #2481
   - FLARM $PGRMZ (when FLARM is detected) feeds igc_pressure_altitude for the
