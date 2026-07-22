@@ -41,16 +41,17 @@ VScrollWidget::CalcVirtualHeight(const PixelRect &rc) const noexcept
   if (reserve_scrollbar) {
     /* Rich-text / prose content: the widget has a fixed content
        height and cannot shrink, so scroll the full extent. */
-    return max_height > height ? max_height : height;
+    return std::max({1u, max_height, height});
   }
 
   /* Flexible form widgets: only scroll when the widget truly
      cannot compress to fit the viewport (min_height > height). */
-  if (max_height <= height)
-    return max_height;
+  const unsigned virtual_height = max_height <= height
+    ? max_height
+    : std::max(widget->GetMinimumSize().height, height);
 
-  const unsigned min_height = widget->GetMinimumSize().height;
-  return std::max(min_height, height);
+  /* Window::Move() requires a non-empty rectangle. */
+  return std::max(1u, virtual_height);
 }
 
 inline void
