@@ -179,6 +179,9 @@ Version 7.45 - not yet released
     pre-filtered to recently-used waypoints; listed in the Gesture Help
     dialog with its own icon #336
 * map
+  - snail trail: reduce long-flight map CPU by clipping the trail to the
+    visible area before spacing-thinning (Full trail no longer walks the
+    whole history every redraw) #2661
   - dynamically adjust contour line density to zoom factor #2233
   - provide different contour density profile settings for mountains,
     low lands, etc. to have sensible contours in a given landscape type

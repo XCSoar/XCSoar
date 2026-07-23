@@ -109,6 +109,7 @@ TEST_NAMES = \
 	TestOGNAprsParser \
 	TestMETARParser \
 	TestIGCParser \
+	TestTraceBounds \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
 	TestInputConfig \
 	TestCRC16 TestCRC8 \
@@ -1021,6 +1022,14 @@ TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/TestTrace.cpp
 TEST_TRACE_DEPENDS = IO OS GEO MATH UTIL
 $(eval $(call link-program,TestTrace,TEST_TRACE))
+
+TEST_TRACE_BOUNDS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
+	$(TEST_SRC_DIR)/TestTraceBounds.cpp
+TEST_TRACE_BOUNDS_DEPENDS = GEO MATH UTIL
+$(eval $(call link-program,TestTraceBounds,TEST_TRACE_BOUNDS))
 
 FLIGHT_TABLE_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \

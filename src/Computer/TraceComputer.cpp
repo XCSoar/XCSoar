@@ -5,6 +5,7 @@
 #include "Settings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "Engine/Trace/Vector.hpp"
 #include "Geo/GeoBounds.hpp"
 
 #include <cmath>
@@ -186,7 +187,15 @@ TraceComputer::LockedTrailQuery(const TrailQuery &query,
     full.GetPoints(v, query.min_time, query.project_location,
                    query.min_distance_m);
 
-  CopyMergeVarioSamplesUnlocked(vario_samples, query.min_time);
+  /* Only copy merge-vario for the kept trail span (plus open-leg ring
+     samples after the last GPS fix).  Avoids walking the full-flight
+     archive when the viewport only needs a local subset. */
+  if (v.empty())
+    vario_samples.clear();
+  else {
+    const auto vario_min = std::max(query.min_time, v.front().GetTime());
+    CopyMergeVarioSamplesUnlocked(vario_samples, vario_min);
+  }
 
   if (append_serial != nullptr)
     *append_serial = full.GetAppendSerial();
