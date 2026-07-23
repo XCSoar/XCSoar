@@ -334,6 +334,9 @@ Version 7.45 - not yet released
   - fix audio vario playback through the device speaker
   - disable Core Location distance filter for built-in GPS so fixes are not
     suppressed while stationary #2380
+  - fix audio session never being deactivated after playing a sound, which
+    left other apps' audio (e.g. music) permanently ducked; re-apply session
+    config on audio vario device (re-)open to prevent ducking #2609
 * kobo
   - memory canvas: fix painting when list rows or edit fields are partially
     off-screen while scrolling (no black squares; safer clipping of subcanvas
