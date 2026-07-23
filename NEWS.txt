@@ -314,6 +314,7 @@ Version 7.45 - not yet released
   - windows: open files with O_BINARY so embedded ZIP (e.g. CUPX POINTS.CUP)
     is read correctly
   - openair: map AY ASRA to aerial sporting/recreational airspace type #1827
+  - openair airspace: support for openair activation times (AA label) #2520
   - XCSoar data layout: waypoints, airspaces, terrain, profiles, logs, and
     other repository types use typed subdirectories under the data root;
     built-in and downloaded files save and resolve through the FileType API
