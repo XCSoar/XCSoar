@@ -4,6 +4,7 @@
 #include "WaypointDialogs.hpp"
 #include "WaypointInfoWidget.hpp"
 #include "WaypointCommandsWidget.hpp"
+#include "InfoBoxes/Content/Alternate.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -122,6 +123,7 @@ class WaypointDetailsWidget final
   : public NullWidget {
   struct Layout {
     PixelRect goto_button;
+    PixelRect alternate1_button, alternate2_button;
     PixelRect magnify_button, shrink_button;
     PixelRect previous_button, next_button;
     PixelRect close_button;
@@ -151,6 +153,7 @@ class WaypointDetailsWidget final
   const WaypointDetailsNesting nesting;
 
   Button goto_button;
+  Button alternate1_button, alternate2_button;
   Button magnify_button, shrink_button;
   Button previous_button, next_button;
   Button close_button;
@@ -217,6 +220,7 @@ public:
   void AdjustViewForZoomChange(int old_zoom, int new_zoom) noexcept;
 
   void OnGotoClicked();
+  void OnAlternateClicked(AlternateInfoBoxSlot slot);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -230,6 +234,8 @@ public:
                         *waypoint);
 
     goto_button.MoveAndShow(layout.goto_button);
+    alternate1_button.MoveAndShow(layout.alternate1_button);
+    alternate2_button.MoveAndShow(layout.alternate2_button);
 
     if (!images.empty()) {
       magnify_button.MoveAndShow(layout.magnify_button);
@@ -259,6 +265,8 @@ public:
 
   void Hide() noexcept override {
     goto_button.Hide();
+    alternate1_button.Hide();
+    alternate2_button.Hide();
 
     if (!images.empty()) {
       magnify_button.Hide();
@@ -287,6 +295,8 @@ public:
                         *waypoint);
 
     goto_button.Move(layout.goto_button);
+    alternate1_button.Move(layout.alternate1_button);
+    alternate2_button.Move(layout.alternate2_button);
 
     if (!images.empty()) {
       magnify_button.Move(layout.magnify_button);
@@ -317,7 +327,9 @@ public:
   }
 
   bool HasFocus() const noexcept override {
-    return (task_manager != nullptr && goto_button.HasFocus()) ||
+    return goto_button.HasFocus() ||
+           alternate1_button.HasFocus() ||
+           alternate2_button.HasFocus() ||
       (!images.empty() && (magnify_button.HasFocus() ||
                            shrink_button.HasFocus())) ||
        previous_button.HasFocus() || next_button.HasFocus() ||
@@ -366,31 +378,28 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
   main = rc;
 
   if (width > height) {
-    auto buttons = main.CutLeftSafe(::Layout::Scale(70));
+    auto buttons = main.CutLeftSafe(::Layout::Scale(96));
 
     goto_button = buttons.CutTopSafe(button_height);
+    alternate1_button = buttons.CutTopSafe(button_height);
+    alternate2_button = buttons.CutTopSafe(button_height);
     std::tie(magnify_button, shrink_button) = buttons.CutTopSafe(button_height).VerticalSplit();
 
     close_button = buttons.CutBottomSafe(button_height);
 
     std::tie(previous_button, next_button) = buttons.CutBottomSafe(button_height).VerticalSplit();
   } else {
-    auto buttons = main.CutBottomSafe(button_height);
+    auto buttons = main.CutBottomSafe(2 * button_height);
 
-    const unsigned one_third = (2 * buttons.left + buttons.right) / 3;
-    const unsigned two_thirds = (buttons.left + 2 * buttons.right) / 3;
+    auto top_row = buttons.CutTopSafe(button_height);
+    goto_button = top_row.CutLeftSafe(top_row.GetWidth() / 3);
+    alternate1_button = top_row.CutLeftSafe(top_row.GetWidth() / 2);
+    alternate2_button = top_row;
 
-    goto_button = buttons;
-    goto_button.right = one_third;
-
-    close_button = buttons;
-    close_button.left = two_thirds;
-
-    previous_button = buttons;
-    previous_button.left = one_third;
-    next_button = buttons;
-    next_button.right = two_thirds;
-    previous_button.right = next_button.left = (one_third + two_thirds) / 2;
+    auto bottom_row = buttons;
+    previous_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 3);
+    next_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 2);
+    close_button = bottom_row;
 
     const unsigned padding = ::Layout::GetTextPadding();
     shrink_button.left = main.left + padding;
@@ -499,6 +508,20 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
                          }
                        });
   }
+
+  alternate1_button.Create(parent, look.button, _("Alternate 1"),
+                           layout.alternate1_button, button_style,
+                           [this](){
+                             OnAlternateClicked(AlternateInfoBoxSlot::FIRST);
+                           });
+  alternate2_button.Create(parent, look.button, _("Alternate 2"),
+                           layout.alternate2_button, button_style,
+                           [this](){
+                             OnAlternateClicked(AlternateInfoBoxSlot::SECOND);
+                           });
+  const bool can_select_alternate = task_manager != nullptr;
+  alternate1_button.SetEnabled(can_select_alternate);
+  alternate2_button.SetEnabled(can_select_alternate);
 
   if (!images.empty()) {
     magnify_button.Create(parent, layout.magnify_button, button_style,
@@ -829,6 +852,20 @@ WaypointDetailsWidget::OnGotoClicked()
   }
 
   task_manager->DoGoto(waypoint);
+  if (nesting.state_change_committed != nullptr)
+    *nesting.state_change_committed = true;
+  dialog.SetModalResult(mrOK);
+
+  CommonInterface::main_window->FullRedraw();
+}
+
+void
+WaypointDetailsWidget::OnAlternateClicked(AlternateInfoBoxSlot slot)
+{
+  if (task_manager == nullptr)
+    return;
+
+  SelectManualAlternateWaypoint(slot, waypoint);
   if (nesting.state_change_committed != nullptr)
     *nesting.state_change_committed = true;
   dialog.SetModalResult(mrOK);

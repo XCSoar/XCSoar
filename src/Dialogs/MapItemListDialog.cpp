@@ -3,6 +3,7 @@
 
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "InfoBoxes/Content/Alternate.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
@@ -80,6 +81,7 @@ class MapItemListWidget final
   MapItemListRenderer renderer;
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
+  Button *alternate1_button, *alternate2_button;
   Button *ack_button, *enable_button;
 
   WndForm *dialog = nullptr;
@@ -133,13 +135,17 @@ public:
 protected:
   void UpdateButtons() {
     const MapItem *item = GetItem(GetCursorIndex());
+    const bool can_goto = item != nullptr && CanGotoItem(*item);
     details_button->SetEnabled(item != nullptr && HasDetails(*item));
-    goto_button->SetEnabled(item != nullptr && CanGotoItem(*item));
+    goto_button->SetEnabled(can_goto);
+    alternate1_button->SetEnabled(can_goto);
+    alternate2_button->SetEnabled(can_goto);
     ack_button->SetEnabled(item != nullptr && CanAckItem(*item));
     enable_button->SetEnabled(item != nullptr && CanEnableItem(*item));
   }
 
   void OnGotoClicked();
+  void OnAlternateClicked(AlternateInfoBoxSlot slot);
   void OnAckClicked();
   void OnEnableClicked();
 
@@ -237,6 +243,14 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
     OnGotoClicked();
   });
 
+  alternate1_button = dialog.AddButton(_("Alternate 1"), [this](){
+    OnAlternateClicked(AlternateInfoBoxSlot::FIRST);
+  });
+
+  alternate2_button = dialog.AddButton(_("Alternate 2"), [this](){
+    OnAlternateClicked(AlternateInfoBoxSlot::SECOND);
+  });
+
   ack_button = dialog.AddButton(_("Ack Day"), [this](){
     OnAckClicked();
   });
@@ -250,6 +264,50 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
   });
 
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
+}
+
+static WaypointPtr
+MakeWaypointFromGotoMapItem(const MapItem &item) noexcept
+{
+  if (data_components == nullptr || data_components->waypoints == nullptr)
+    return nullptr;
+
+  assert(item.type == MapItem::Type::WAYPOINT ||
+         item.type == MapItem::Type::LOCATION);
+
+  if (item.type == MapItem::Type::WAYPOINT) {
+    auto &way_points = *data_components->waypoints;
+    {
+      ScopeSuspendAllThreads suspend;
+      way_points.EraseTempGoto();
+    }
+
+    return static_cast<const WaypointMapItem &>(item).waypoint;
+  }
+
+  const auto &loc_item = static_cast<const LocationMapItem &>(item);
+
+  const GeoPoint &location = loc_item.location;
+
+  double elevation = std::numeric_limits<double>::quiet_NaN();
+  if (loc_item.HasElevation()) {
+    elevation = loc_item.elevation;
+  } else if (data_components->terrain != nullptr) {
+    const auto h = data_components->terrain->GetTerrainHeight(location);
+    if (!h.IsSpecial())
+      elevation = h.GetValue();
+  }
+
+  auto &way_points = *data_components->waypoints;
+  const char *goto_name = "(goto)";
+  WaypointPtr waypoint;
+  {
+    ScopeSuspendAllThreads suspend;
+    way_points.AddTempPoint(location, elevation, goto_name);
+    waypoint = way_points.LookupName(goto_name);
+  }
+
+  return waypoint;
 }
 
 void
@@ -352,56 +410,30 @@ MapItemListWidget::OnGotoClicked()
   if (!backend_components->protected_task_manager)
     return;
 
-  if (data_components == nullptr || data_components->waypoints == nullptr)
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr || !CanGotoItem(*item))
     return;
 
-  unsigned index = GetCursorIndex();
-  auto const &item = *list[index];
-
-  assert(item.type == MapItem::Type::WAYPOINT ||
-         item.type == MapItem::Type::LOCATION);
-
-  WaypointPtr waypoint;
-
-  if (item.type == MapItem::Type::LOCATION) {
-    const auto &loc_item = static_cast<const LocationMapItem &>(item);
-
-    // Use the stored location directly
-    const GeoPoint &location = loc_item.location;
-
-    // Get terrain elevation (prefer stored elevation, fall back to terrain lookup)
-    double elevation = std::numeric_limits<double>::quiet_NaN();
-    if (loc_item.HasElevation()) {
-      elevation = loc_item.elevation;
-    } else if (data_components->terrain != nullptr) {
-      const auto h = data_components->terrain->GetTerrainHeight(location);
-      if (!h.IsSpecial()) {
-        elevation = h.GetValue();
-      }
-    }
-
-    // Create temporary goto waypoint (elevation may be NaN if unavailable)
-    auto &way_points = *data_components->waypoints;
-    const char *goto_name = "(goto)";
-    {
-      ScopeSuspendAllThreads suspend;
-      way_points.AddTempPoint(location, elevation, goto_name);
-      waypoint = way_points.LookupName(goto_name);
-    }
-    if (!waypoint)
-      return;
-  } else {
-    waypoint = static_cast<const WaypointMapItem &>(item).waypoint;
-
-    // Remove old temporary goto waypoint when selecting a regular waypoint
-    auto &way_points = *data_components->waypoints;
-    {
-      ScopeSuspendAllThreads suspend;
-      way_points.EraseTempGoto();
-    }
-  }
+  auto waypoint = MakeWaypointFromGotoMapItem(*item);
+  if (waypoint == nullptr)
+    return;
 
   backend_components->protected_task_manager->DoGoto(std::move(waypoint));
+  cancel_button->Click();
+}
+
+inline void
+MapItemListWidget::OnAlternateClicked(AlternateInfoBoxSlot slot)
+{
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr || !CanGotoItem(*item))
+    return;
+
+  auto waypoint = MakeWaypointFromGotoMapItem(*item);
+  if (waypoint == nullptr)
+    return;
+
+  SelectManualAlternateWaypoint(slot, std::move(waypoint));
   cancel_button->Click();
 }
 
