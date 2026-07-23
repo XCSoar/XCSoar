@@ -10,7 +10,7 @@
 
 #include <cassert>
 
-static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0, { 0x70, 0xc0, 0xa7 }},
     {250, { 0xca, 0xe7, 0xb9 }},
@@ -289,6 +289,29 @@ static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
 static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
               "mismatched size");
 
+static constexpr ColorRamp terrain_ramps[] = {
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[0], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[1], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[2], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[3], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[4], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[5], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[6], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[7], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[8], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[9], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[10], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[11], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[12], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[13], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[14], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[15], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[16], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[17], nullptr },
+};
+static_assert(ARRAY_SIZE(terrain_ramps) == TerrainRendererSettings::NUM_RAMPS,
+              "mismatched size");
+
 // map scale is approximately 2 points on the grid
 // therefore, want one to one mapping if mapscale is 0.5
 // there are approx 30 pixels in mapscale
@@ -385,7 +408,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                      contour_pixel_size)
     : 0u;
 
-  const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
+  const ColorRamp *const color_ramp = &terrain_ramps[settings.ramp];
   if (color_ramp != last_color_ramp) {
     raster_renderer.PrepareColorTable(color_ramp, do_water,
                                       height_scale, interp_levels);

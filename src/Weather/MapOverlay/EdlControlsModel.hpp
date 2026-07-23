@@ -5,21 +5,15 @@
 
 #include "ControlsModel.hpp"
 #include "Weather/EDL/DownloadGlue.hpp"
-#include "Weather/EDL/Levels.hpp"
-#include "time/BrokenDateTime.hpp"
-
-#include <array>
-#include <memory>
-#include <optional>
 
 namespace WeatherMapOverlay {
 
+/**
+ * Weather cursor-bar model backed by #EDL::FieldControls.
+ */
 class EdlControlsModel final : public ControlsModel,
                                private EDL::DownloadListener
 {
-  static constexpr unsigned forecast_choices = EDL::FORECAST_HOURS_PER_DAY;
-
-  std::array<BrokenDateTime, forecast_choices> forecast_times{};
   EDL::DownloadGlue *edl_listener_glue = nullptr;
 
 public:
@@ -49,6 +43,7 @@ public:
   [[nodiscard]]
   PrimaryLabelAction GetPrimaryLabelAction() const noexcept override;
   void OpenPrimaryPicker() noexcept override;
+  void EnablePrimaryAutoFromInput() noexcept override;
 
   [[nodiscard]]
   bool SupportsSecondaryAutoAdvance() const noexcept override;
@@ -63,7 +58,8 @@ public:
   void ResumePrimaryAuto() noexcept override;
   void ResumeSecondaryAuto() noexcept override;
 
-  void OpenSecondaryPicker() noexcept override;
+  [[nodiscard]]
+  SecondaryPickerResult OpenSecondaryPicker() noexcept override;
 
   void RefreshOverlay() noexcept override;
   void OnGPSUpdate(const MoreData &basic) noexcept override;
@@ -71,20 +67,7 @@ public:
   void OnDownloadFinished(const EDL::DownloadNotification &) noexcept override;
 
 private:
-  void RebuildForecastTimes() noexcept;
-  void SelectForecast(unsigned index) noexcept;
-  void SelectForecastTime(const BrokenDateTime &time) noexcept;
-  void SelectLevel(unsigned isobar) noexcept;
   void UnregisterEdlDownloadListener() noexcept;
-
-  [[nodiscard]] [[gnu::pure]]
-  unsigned FindForecastIndex() const noexcept;
-
-  [[nodiscard]]
-  std::optional<unsigned> FindTrackedForecastIndex() const noexcept;
-
-  [[nodiscard]]
-  bool HasOverlayData() const noexcept;
 };
 
 } // namespace WeatherMapOverlay

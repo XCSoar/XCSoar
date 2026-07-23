@@ -6,29 +6,33 @@
 #include "ActionInterface.hpp"
 #include "RaspStore.hpp"
 #include "DataGlobals.hpp"
+#include "Dialogs/ComboPicker.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "PageActions.hpp"
 #include "PageSettings.hpp"
-#include "Profile/Current.hpp"
-#include "Profile/PageProfile.hpp"
 #include "UIState.hpp"
+#include "Weather/MapOverlay/ControlsWidget.hpp"
 #include "Weather/MapOverlay/CursorBarLabels.hpp"
+#include "Weather/MapOverlay/PageCursor.hpp"
+#include "Weather/MapOverlay/TimePicker.hpp"
+#include "util/Compiler.h"
+#include "util/StaticString.hxx"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Weather/Rasp/DownloadGlue.hpp"
 #endif
 
-#include <algorithm>
 #include <cstdio>
-#include <fmt/format.h>
 #include <vector>
 
 namespace Rasp {
 
 static BrokenTime GetAutoAdvanceLocalTime() noexcept;
 static BrokenTime GetEffectiveLocalTime(bool auto_advance) noexcept;
+static void FormatTimeLabel(StaticString<64> &text, bool auto_advance,
+                            BrokenTime forecast, bool has_data) noexcept;
 static bool FieldHasAnyTime(const RaspStore &rasp,
                             unsigned field_index) noexcept;
 static constexpr unsigned NOW_CHOICE_MINUTE_OF_DAY = 24U * 60U;
@@ -62,38 +66,6 @@ FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
 
     field.AddChoice(i, item.name, GetFieldLabel(item), help);
   }
-}
-
-void
-InitTimeChoices(DataFieldEnum &field) noexcept
-{
-  field.ClearChoices();
-  field.addEnumText(_("Now"), NOW_CHOICE_MINUTE_OF_DAY);
-}
-
-void
-FillTimeChoices(DataFieldEnum &field, const RaspStore *rasp,
-                unsigned field_index, BrokenTime selected_time) noexcept
-{
-  InitTimeChoices(field);
-
-  if (rasp == nullptr || field_index >= rasp->GetItemCount())
-    return;
-
-  for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i) {
-    if (!rasp->IsTimeAvailable(field_index, i))
-      continue;
-
-    const BrokenTime t = RaspStore::IndexToTime(i);
-    char timetext[8];
-    const auto result = fmt::format_to_n(timetext, sizeof(timetext) - 1,
-                                         "{:02}:{:02}", t.hour, t.minute);
-    const size_t length = std::min(result.size, sizeof(timetext) - 1);
-    timetext[length] = '\0';
-    field.addEnumText(timetext, t.GetMinuteOfDay());
-  }
-
-  field.SetValue(MinuteOfDayFromTime(selected_time));
 }
 
 BrokenTime
@@ -164,6 +136,69 @@ SyncCursorFromPageLayout() noexcept
     weather.map = field_index;
 }
 
+int
+EncodePageTime(bool time_auto_advance, BrokenTime time) noexcept
+{
+  if (time_auto_advance)
+    return PageLayout::RASP_TIME_AUTO;
+
+  if (!time.IsPlausible())
+    return PageLayout::RASP_TIME_NOW;
+
+  return int(time.GetMinuteOfDay());
+}
+
+/**
+ * Decode #PageLayout::rasp_time into session-shaped auto/manual values.
+ */
+static void
+DecodePageTime(const PageLayout &layout, bool &auto_advance,
+               BrokenTime &manual) noexcept
+{
+  if (layout.overlay != PageLayout::Overlay::RASP ||
+      layout.rasp_time == PageLayout::RASP_TIME_AUTO) {
+    auto_advance = true;
+    manual = BrokenTime::Invalid();
+    return;
+  }
+
+  auto_advance = false;
+  if (layout.rasp_time == PageLayout::RASP_TIME_NOW)
+    manual = BrokenTime::Invalid();
+  else
+    manual = BrokenTime::FromMinuteOfDay(unsigned(layout.rasp_time));
+}
+
+void
+ApplyTimeFromPageLayout(const PageLayout &layout) noexcept
+{
+  auto &weather = CommonInterface::SetUIState().weather;
+  DecodePageTime(layout, weather.time_auto_advance, weather.time);
+}
+
+void
+PersistTimeToPage(unsigned page_index) noexcept
+{
+  WeatherMapOverlay::MutateOverlayPage(
+    page_index, PageLayout::Overlay::RASP,
+    [](PageLayout &page) noexcept {
+      const auto &weather = CommonInterface::GetUIState().weather;
+      const int encoded =
+        EncodePageTime(weather.time_auto_advance, weather.time);
+      if (page.rasp_time == encoded)
+        return false;
+
+      page.rasp_time = encoded;
+      return true;
+    });
+}
+
+void
+PersistTimeToCurrentPage() noexcept
+{
+  PersistTimeToPage(CommonInterface::GetUIState().pages.current_index);
+}
+
 void
 SetCursorTime(unsigned minute_of_day) noexcept
 {
@@ -171,14 +206,129 @@ SetCursorTime(unsigned minute_of_day) noexcept
   weather.time = TimeFromMinuteOfDay(minute_of_day);
   weather.time_auto_advance = false;
   weather.rasp.cursor_initialized = true;
+  PersistTimeToCurrentPage();
 
   ActionInterface::SendUIState(true);
 }
 
 void
-SetCursorNow() noexcept
+EnableTimeAutoFromInput() noexcept
 {
-  SetCursorTime(NOW_CHOICE_MINUTE_OF_DAY);
+  SetTimeAutoAdvance(true);
+  ApplyAutoAdvanceTime();
+  PersistTimeToCurrentPage();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (!HasSelectedTimeData(true))
+    RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
+}
+
+bool
+EditTimeOnLayout(PageLayout &page) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  const int field_index = GetFieldIndex(page);
+  if (rasp == nullptr || field_index < 0 ||
+      unsigned(field_index) >= rasp->GetItemCount())
+    return false;
+
+  DataFieldEnum field;
+  for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i) {
+    const BrokenTime t = RaspStore::IndexToTime(i);
+    StaticString<24> label;
+    label.Format("%02u:%02u %s",
+                 unsigned(t.hour), unsigned(t.minute),
+                 rasp->IsTimeAvailable(unsigned(field_index), i)
+                 ? "[x]" : "[ ]");
+    field.addEnumText(label.c_str(), t.GetMinuteOfDay());
+  }
+
+  bool auto_advance;
+  BrokenTime manual;
+  DecodePageTime(page, auto_advance, manual);
+  const BrokenTime effective =
+    auto_advance || !manual.IsPlausible()
+      ? GetAutoAdvanceLocalTime()
+      : manual;
+  if (effective.IsPlausible())
+    field.SetValue(effective.GetMinuteOfDay());
+
+  const ComboList combo_list = field.CreateComboList(nullptr);
+  const WeatherMapOverlay::TimePickerResult result =
+    WeatherMapOverlay::RunTimePicker(_("RASP Time"), combo_list);
+
+  switch (result.selection) {
+  case WeatherMapOverlay::TimePickerSelection::CANCEL:
+    return false;
+
+  case WeatherMapOverlay::TimePickerSelection::AUTO:
+    page.rasp_time = PageLayout::RASP_TIME_AUTO;
+    break;
+
+  case WeatherMapOverlay::TimePickerSelection::NOW: {
+    /* Select the current local quarter-hour slot (same as picking
+       that row in the list), not only the Now mode sentinel. */
+    const BrokenTime now = GetAutoAdvanceLocalTime();
+    if (now.IsPlausible())
+      page.rasp_time = int(now.GetMinuteOfDay());
+    else
+      page.rasp_time = PageLayout::RASP_TIME_NOW;
+    break;
+  }
+
+  case WeatherMapOverlay::TimePickerSelection::MANUAL:
+    page.rasp_time = combo_list[result.manual_index].int_value;
+    break;
+
+  case WeatherMapOverlay::TimePickerSelection::COUNT:
+    gcc_unreachable();
+  }
+
+  return true;
+}
+
+void
+OpenTimePicker() noexcept
+{
+  const unsigned page_index =
+    CommonInterface::GetUIState().pages.current_index;
+  if (!WeatherMapOverlay::MutateOverlayPage(
+        page_index, PageLayout::Overlay::RASP,
+        [](PageLayout &page) noexcept {
+          return EditTimeOnLayout(page);
+        }))
+    return;
+
+  const auto &page =
+    CommonInterface::GetUISettings().pages.pages[page_index];
+  auto &weather = CommonInterface::SetUIState().weather;
+  weather.map = GetFieldIndex(page);
+  ApplyTimeFromPageLayout(page);
+  weather.rasp.cursor_initialized = true;
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (weather.time_auto_advance && !HasSelectedTimeData(true))
+    RequestConfiguredRaspUpdateIfOutOfDate();
+#endif
+  WeatherMapOverlay::NotifyLiveCursorChange();
+}
+
+void
+FormatTimeLabelForPage(StaticString<64> &text,
+                       const PageLayout &page) noexcept
+{
+  bool auto_advance;
+  BrokenTime manual;
+  DecodePageTime(page, auto_advance, manual);
+
+  const BrokenTime auto_local = GetAutoAdvanceLocalTime();
+  const BrokenTime forecast =
+    auto_advance || !manual.IsPlausible() ? auto_local : manual;
+
+  FormatTimeLabel(text, auto_advance, forecast,
+                  HasSelectedTimeData(auto_advance, GetFieldIndex(page),
+                                      manual, auto_local));
 }
 
 bool
@@ -198,16 +348,6 @@ ApplyAutoAdvanceTime() noexcept
 {
   CommonInterface::SetUIState().weather.time = BrokenTime::Invalid();
   ActionInterface::SendUIState(true);
-}
-
-void
-ResumeAutoAdvance() noexcept
-{
-  if (GetTimeAutoAdvance())
-    return;
-
-  SetTimeAutoAdvance(true);
-  ApplyAutoAdvanceTime();
 }
 
 bool
@@ -257,17 +397,15 @@ SelectField(unsigned field_index) noexcept
   if (!FieldHasAnyTime(*rasp, field_index))
     return false;
 
-  PageSettings &settings = CommonInterface::SetUISettings().pages;
-  const PagesState &pages = CommonInterface::GetUIState().pages;
-  const unsigned page_index = pages.current_index;
-
-  PageLayout &page = settings.pages[page_index];
-  if (page.overlay != PageLayout::Overlay::RASP)
+  const unsigned page_index =
+    CommonInterface::GetUIState().pages.current_index;
+  if (!WeatherMapOverlay::MutateOverlayPage(
+        page_index, PageLayout::Overlay::RASP,
+        [field_index](PageLayout &page) noexcept {
+          page.rasp_field = int(field_index);
+          return true;
+        }))
     return false;
-
-  page.rasp_field = int(field_index);
-  page.Normalise();
-  Profile::Save(Profile::map, page, page_index);
 
   auto &weather = CommonInterface::SetUIState().weather;
   weather.map = int(field_index);
@@ -295,17 +433,15 @@ SelectField(unsigned field_index) noexcept
 bool
 ClearSelectedField() noexcept
 {
-  PageSettings &settings = CommonInterface::SetUISettings().pages;
-  const PagesState &pages = CommonInterface::GetUIState().pages;
-  const unsigned page_index = pages.current_index;
-
-  PageLayout &page = settings.pages[page_index];
-  if (page.overlay != PageLayout::Overlay::RASP)
+  const unsigned page_index =
+    CommonInterface::GetUIState().pages.current_index;
+  if (!WeatherMapOverlay::MutateOverlayPage(
+        page_index, PageLayout::Overlay::RASP,
+        [](PageLayout &page) noexcept {
+          page.rasp_field = -1;
+          return true;
+        }))
     return false;
-
-  page.rasp_field = -1;
-  page.Normalise();
-  Profile::Save(Profile::map, page, page_index);
 
   auto &weather = CommonInterface::SetUIState().weather;
   weather.map = -1;
@@ -314,6 +450,41 @@ ClearSelectedField() noexcept
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState(true);
   return true;
+}
+
+LayerPickerResult
+OpenLayerPicker(bool offer_setup) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || rasp->GetItemCount() == 0)
+    return offer_setup ? LayerPickerResult::OPEN_SETUP
+                       : LayerPickerResult::NONE;
+
+  DataFieldEnum field;
+  FieldChoicesOptions options;
+  options.include_none = true;
+  FillFieldChoices(field, rasp.get(), options);
+
+  const int current = GetEffectiveFieldIndex();
+  field.SetValue(current >= 0 ? current : -1);
+
+  bool setup = false;
+  const char *setup_caption = offer_setup ? _("Setup") : nullptr;
+  if (!ComboPicker(_("RASP Layer"), field, nullptr, setup_caption,
+                   &setup))
+    return setup ? LayerPickerResult::OPEN_SETUP
+                 : LayerPickerResult::NONE;
+
+  const int selected = field.GetValue();
+  if (selected < 0) {
+    ClearSelectedField();
+    return LayerPickerResult::CHANGED;
+  }
+
+  if (!SelectField(unsigned(selected)))
+    return LayerPickerResult::NONE;
+
+  return LayerPickerResult::CHANGED;
 }
 
 bool
@@ -530,9 +701,15 @@ GetCursorBarMinuteOfDay() noexcept
 void
 FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept
 {
-  const BrokenTime forecast = GetEffectiveLocalTime(auto_advance);
+  FormatTimeLabel(text, auto_advance, GetEffectiveLocalTime(auto_advance),
+                  HasSelectedTimeData(auto_advance));
+}
+
+static void
+FormatTimeLabel(StaticString<64> &text, bool auto_advance,
+                BrokenTime forecast, bool has_data) noexcept
+{
   const BrokenTime now = GetLocalTimeNow();
-  const bool has_data = HasSelectedTimeData(auto_advance);
 
   char offset_buf[16] = {};
   if (forecast.IsPlausible() && now.IsPlausible()) {
@@ -550,10 +727,7 @@ FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept
                                        unsigned(forecast.minute),
                                        offset_buf);
 
-  if (has_data)
-    text = base;
-  else
-    WeatherMapOverlay::AppendNoDataTag(text, base.c_str());
+  WeatherMapOverlay::AssignLabeledData(text, base, has_data);
 }
 
 } // namespace Rasp

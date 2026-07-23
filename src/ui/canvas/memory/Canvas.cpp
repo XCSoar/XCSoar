@@ -608,19 +608,24 @@ Canvas::DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept
 void
 Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                    ConstImageBuffer src,
-                   PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
+                   PixelPoint src_position, PixelSize src_size,
                    uint8_t alpha)
 {
-  // TODO: support scaling
-
   SDLRasterCanvas canvas(buffer);
 
   AlphaPixelOperations<ActivePixelTraits> operations(alpha);
 
-  canvas.CopyRectangle(dest_position.x, dest_position.y,
-                       dest_size.width, dest_size.height,
-                       src.At(src_position.x, src_position.y), src.pitch,
-                       operations);
+  if (dest_size == src_size)
+    /* 1:1 fast path without the scaling arithmetic */
+    canvas.CopyRectangle(dest_position.x, dest_position.y,
+                         dest_size.width, dest_size.height,
+                         src.At(src_position.x, src_position.y), src.pitch,
+                         operations);
+  else
+    canvas.ScaleRectangle(dest_position, dest_size,
+                          src.At(src_position.x, src_position.y),
+                          src.pitch, src_size,
+                          operations);
 }
 
 void
@@ -637,21 +642,26 @@ Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
 void
 Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                            ConstImageBuffer src,
-                           PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
+                           PixelPoint src_position, PixelSize src_size,
                            uint8_t alpha)
 {
-  // TODO: support scaling
-
   SDLRasterCanvas canvas(buffer);
 
   NotWhiteCondition<ActivePixelTraits> c;
   NotWhiteAlphaPixelOperations<ActivePixelTraits> operations(c,
                                                              PortableAlphaPixelOperations<ActivePixelTraits>(alpha));
 
-  canvas.CopyRectangle(dest_position.x, dest_position.y,
-                       dest_size.width, dest_size.height,
-                       src.At(src_position.x, src_position.y), src.pitch,
-                       operations);
+  if (dest_size == src_size)
+    /* 1:1 fast path without the scaling arithmetic */
+    canvas.CopyRectangle(dest_position.x, dest_position.y,
+                         dest_size.width, dest_size.height,
+                         src.At(src_position.x, src_position.y), src.pitch,
+                         operations);
+  else
+    canvas.ScaleRectangle(dest_position, dest_size,
+                          src.At(src_position.x, src_position.y),
+                          src.pitch, src_size,
+                          operations);
 }
 
 void
@@ -663,4 +673,50 @@ Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
   AlphaBlendNotWhite(dest_position, dest_size,
                      src.buffer, src_position, src_size,
                      alpha);
+}
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               ConstImageBuffer src,
+                               PixelPoint src_position, PixelSize src_size) noexcept
+{
+  SDLRasterCanvas canvas(buffer);
+
+#ifdef GREYSCALE
+  /* greyscale pixels have no alpha channel, so per-pixel source-alpha
+     blending is not available. RASP selects an opaque colormap on 
+     this target, so this path is not normally reached at runtime. */
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size);
+#else
+  SourceAlphaPixelOperations<ActivePixelTraits> operations;
+
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size,
+                        operations);
+#endif
+}
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               ConstImageBuffer src,
+                               PixelPoint src_position, PixelSize src_size,
+                               uint8_t alpha) noexcept
+{
+  SDLRasterCanvas canvas(buffer);
+
+#ifdef GREYSCALE
+  /* greyscale pixels have no alpha channel, so only the global constant
+     alpha applies here. */
+  AlphaPixelOperations<ActivePixelTraits> operations(alpha);
+#else
+  SourceConstantAlphaPixelOperations<ActivePixelTraits> operations(alpha);
+#endif
+
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size,
+                        operations);
 }

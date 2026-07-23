@@ -14,6 +14,10 @@
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Units/Units.hpp"
+#include "Units/System.hpp"
+#include "Units/Descriptor.hpp"
+#include "Units/Unit.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
@@ -436,6 +440,10 @@ Draw(Canvas &canvas, PixelRect rc,
      const RaspMapItem &item,
      const TwoTextRowsRenderer &row_renderer)
 {
+  const auto value = FormatRaspValue(item.value);
+  if (!value.empty())
+    rc.right = row_renderer.DrawRightFirstRow(canvas, rc, value);
+
   row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
 }
 

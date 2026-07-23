@@ -4,6 +4,7 @@
 #include "XCThermControlsModel.hpp"
 #include "XCThermAPI.hpp"
 #include "XCThermDownloadJob.hpp"
+#include "FieldControls.hpp"
 #include "XCThermForecastTime.hpp"
 #include "XCThermMapOverlay.hpp"
 #include "Interface.hpp"
@@ -230,6 +231,16 @@ XCThermControlsModel::SaveCursorSession() noexcept
   cursor.forecast_utc_hour = GetCurrentForecastHour();
   cursor.altitude_manual_override = auto_switch.IsAltitudeManualOverride();
   cursor.time_manual_override = auto_switch.IsTimeManualOverride();
+  PersistCursorToCurrentPage();
+}
+
+void
+XCThermControlsModel::SyncCursorFromSession() noexcept
+{
+  LoadCursorSession();
+  ClampCurrentLayer();
+  ConfigureAutoSwitch();
+  RefreshCachedHours();
 }
 
 void
@@ -303,6 +314,14 @@ XCThermControlsModel::SyncActiveLayerFromSettings() noexcept
 
   state.last_synced_active_layer = active_layer;
   ResetAutoFetchAttempt();
+
+  /* The configured active layer is a download policy.  Once a map page
+     owns its cursor, changing that policy must not replace the page's
+     altitude selection. */
+  if (CommonInterface::GetUIState().weather.xctherm.cursor_initialized) {
+    MaybeFetchActiveLayer(nullptr);
+    return;
+  }
 
   if (active_layer >= 0) {
     const unsigned active = unsigned(active_layer);
@@ -565,15 +584,11 @@ XCThermControlsModel::FormatLayerLabel(StaticString<80> &text) const noexcept
   const bool has_cache = HasCacheAtCurrentHour(layer);
 
   StaticString<80> base;
-  if (auto_switch.IsAltitudeAutoActive())
-    base.Format("%s %s", _("AUTO:"), gettext(LayerAt(layer).short_label));
-  else
-    base.Format("%s", gettext(LayerAt(layer).short_label));
+  WeatherMapOverlay::FormatAutoNamedLabel(
+    base, auto_switch.IsAltitudeAutoActive(),
+    gettext(LayerAt(layer).short_label));
 
-  if (has_cache)
-    text = base;
-  else
-    WeatherMapOverlay::AppendNoDataTag(text, base.c_str());
+  WeatherMapOverlay::AssignLabeledData(text, base, has_cache);
 }
 
 void
@@ -587,10 +602,8 @@ XCThermControlsModel::FormatTimeLabel(StaticString<64> &text) noexcept
                            GetCurrentForecastHour(),
                            auto_switch.IsTimeAutoActive());
 
-  if (HasCacheAtCurrentHour(state.current_layer))
-    text = base;
-  else
-    WeatherMapOverlay::AppendNoDataTag(text, base.c_str());
+  WeatherMapOverlay::AssignLabeledData(
+    text, base, HasCacheAtCurrentHour(state.current_layer));
 }
 
 bool

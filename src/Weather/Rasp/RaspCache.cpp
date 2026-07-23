@@ -74,14 +74,16 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   unsigned effective_time = time;
   if (effective_time == 0) {
-    // "Now" time, so find time in half hours
-    if (!time_local.IsPlausible())
+    // "Now" time, so find time in quarter hours
+    if (time_local.IsPlausible()) {
+      effective_time = ToQuarterHours(time_local);
+      assert(effective_time < RaspStore::MAX_WEATHER_TIMES);
+    } else if (!store.IsDayField(parameter)) {
       /* can't update to current time if we don't know the current
-         time */
+         time; day fields have no time axis, so effective_time stays 0
+         and still resolves to their single slot below */
       return;
-
-    effective_time = ToQuarterHours(time_local);
-    assert(effective_time < RaspStore::MAX_WEATHER_TIMES);
+    }
   }
 
   const unsigned requested_time = effective_time;
@@ -120,7 +122,16 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   new_map->UpdateProjection();
 
+  loaded_time_index = resolved_time;
   map = std::move(new_map);
   last_time = resolved_time;
   failed_time = unsigned(-1);
+}
+
+BrokenTime
+RaspCache::GetLoadedTime() const
+{
+  return map != nullptr
+    ? RaspStore::IndexToTime(loaded_time_index)
+    : BrokenTime::Invalid();
 }

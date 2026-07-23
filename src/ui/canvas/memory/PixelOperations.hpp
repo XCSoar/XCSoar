@@ -458,3 +458,91 @@ public:
       PixelTraits::WritePixel(p, (*this)(c));
   }
 };
+
+/**
+ * Blend a single channel using alpha.
+ */
+static constexpr uint8_t
+BlendChannel(uint8_t dest, uint8_t src, uint8_t alpha) noexcept {
+  return dest + ((int(src - dest) * alpha) >> 8);
+}
+
+/**
+ * Blend source and destination color using the alpha channel from
+ * the source pixel.
+ */
+template<AnyPixelTraits PT>
+struct PixelSourceAlpha {
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using channel_type = typename PixelTraits::channel_type;
+
+  using SourcePixelTraits = PT;
+
+  constexpr color_type operator()(color_type dest, color_type src) const {
+    // Get alpha from source pixel
+    const uint8_t alpha = src.Alpha();
+    if (alpha == 0)
+      return dest;  // Fully transparent - keep destination
+    if (alpha == 0xff)
+      return src;   // Fully opaque - use source
+
+    // Blend each channel using source alpha
+    // Cannot use TransformChannels because it doesn't preserve source alpha properly
+    return color_type(BlendChannel(dest.Red(), src.Red(), alpha),
+                      BlendChannel(dest.Green(), src.Green(), alpha),
+                      BlendChannel(dest.Blue(), src.Blue(), alpha),
+                      // "over" output alpha: src_a + dest_a * (1 - src_a)
+                      BlendChannel(dest.Alpha(), 255, alpha));
+  }
+};
+
+/**
+ * Per-pixel alpha blending operations using source pixel's alpha channel.
+ */
+template<AnyPixelTraits PixelTraits>
+using SourceAlphaPixelOperations =
+  BinaryPerPixelOperations<PixelSourceAlpha<PixelTraits>>;
+
+/**
+ * Blend source and destination color using the source pixel's alpha
+ * channel combined with a global constant alpha. This
+ * matches the OpenGL combine_texture_shader semantics. With
+ * global_alpha == 0xff it is equivalent to #PixelSourceAlpha.
+ */
+template<AnyPixelTraits PT>
+struct PixelSourceConstantAlpha {
+  using PixelTraits = PT;
+  using color_type = typename PixelTraits::color_type;
+  using channel_type = typename PixelTraits::channel_type;
+
+  using SourcePixelTraits = PT;
+
+  const uint8_t global_alpha;
+
+  constexpr explicit PixelSourceConstantAlpha(uint8_t _global_alpha)
+    :global_alpha(_global_alpha) {}
+
+  constexpr color_type operator()(color_type dest, color_type src) const {
+    // Combine per-pixel source alpha with the global constant alpha
+    const uint8_t alpha = (unsigned(src.Alpha()) * global_alpha + 127) / 255;
+    if (alpha == 0)
+      return dest;  // Fully transparent - keep destination
+    if (alpha == 0xff)
+      return src;   // Fully opaque - use source
+
+    return color_type(BlendChannel(dest.Red(), src.Red(), alpha),
+                      BlendChannel(dest.Green(), src.Green(), alpha),
+                      BlendChannel(dest.Blue(), src.Blue(), alpha),
+                      // "over" output alpha: src_a + dest_a * (1 - src_a)
+                      BlendChannel(dest.Alpha(), 255, alpha));
+  }
+};
+
+/**
+ * Per-pixel alpha blending operations combining the source pixel's alpha
+ * channel with a global constant alpha.
+ */
+template<AnyPixelTraits PixelTraits>
+using SourceConstantAlphaPixelOperations =
+  BinaryPerPixelOperations<PixelSourceConstantAlpha<PixelTraits>>;

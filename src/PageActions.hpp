@@ -10,13 +10,6 @@ class Widget;
 
 namespace PageActions
 {
-  enum class ConfigureWeatherOverlayResult {
-    APPLIED_CURRENT,
-    ADDED_PAGE,
-    NO_CONFIGURED_PAGE,
-    PAGE_LIMIT_REACHED,
-  };
-
   /**
    * Returns the configured #PageLayout that was most recently
    * visible.
@@ -121,24 +114,6 @@ namespace PageActions
    * Show the dedicated weather map page.
    */
   void ShowWeatherPage();
-
-  /**
-   * Apply a weather overlay to the currently configured page.
-   *
-   * This mutates configured page settings (not transient special pages),
-   * persists profile changes, and refreshes the active layout.
-   */
-  ConfigureWeatherOverlayResult
-  AddWeatherOverlayToCurrentPage(PageLayout::Overlay overlay,
-                                 int rasp_field=-1);
-
-  /**
-   * Clone the current configured page, apply a weather overlay to the clone,
-   * append it as a new configured page, and activate it.
-   */
-  ConfigureWeatherOverlayResult
-  AddWeatherOverlayToNewPage(PageLayout::Overlay overlay,
-                             int rasp_field=-1);
 
   /**
    * Preserve active weather overlays across a temporary pan full-screen.

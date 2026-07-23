@@ -138,6 +138,26 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 
     start = newline + 1;
   }
+
+  /* RASP field value at the panned location, analogous to the "map
+     items at this location" dialog. */
+  if (rasp_renderer && rasp_renderer->IsInside(location)) {
+    const char *label = rasp_renderer->GetLabel();
+    if (label != nullptr && *label != '\0') {
+      const auto value = FormatRaspValue(rasp_renderer->GetValueAt(location));
+
+      StaticString<128> rasp_line;
+      if (value.empty())
+        rasp_line = label;
+      else
+        rasp_line.Format("%s: %s", label, value.c_str());
+
+      TextInBox(canvas, rasp_line, p, mode,
+                render_projection.GetScreenSize());
+
+      p.y += height;
+    }
+  }
 }
 
 void
@@ -355,9 +375,9 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   if (rasp_renderer != nullptr &&
       ui_state.page_overlay != PageLayout::Overlay::RASP) {
-    const char *label = rasp_renderer->GetLabel();
-    if (label != nullptr)
-      buffer += gettext(label);
+    const auto label = rasp_renderer->GetExtendedLabel();
+    if (!label.empty())
+      buffer += label;
   }
 
   if (!buffer.empty()) {

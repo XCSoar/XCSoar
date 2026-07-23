@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "FieldPickerResult.hpp"
+#include "util/Compiler.h"
 #include "util/StaticString.hxx"
 
 #include <cstdint>
@@ -21,10 +23,45 @@ enum class SecondaryLabelAction : uint8_t {
   OPEN_PICKER,
 };
 
+/**
+ * Result of #ControlsModel::OpenSecondaryPicker.
+ *
+ * #OPEN_SETUP must be handled by the caller after the model method returns,
+ * without touching the cursor-bar widget again — Weather Setup can replace
+ * the bottom widget and destroy #ControlsWidget.
+ */
+enum class SecondaryPickerResult : uint8_t {
+  NONE,
+  OPEN_SETUP,
+};
+
+/**
+ * Map a FieldControls picker result onto #SecondaryPickerResult and run
+ * @p on_changed when the selection changed.
+ */
+template<typename F>
+SecondaryPickerResult
+HandleSecondaryFieldPicker(FieldPickerResult result,
+                           F &&on_changed) noexcept
+{
+  switch (result) {
+  case FieldPickerResult::OPEN_SETUP:
+    return SecondaryPickerResult::OPEN_SETUP;
+  case FieldPickerResult::CHANGED:
+    on_changed();
+    return SecondaryPickerResult::NONE;
+  case FieldPickerResult::NONE:
+    return SecondaryPickerResult::NONE;
+  }
+
+  gcc_unreachable();
+}
+
 enum class PrimaryLabelAction : uint8_t {
   NONE,
   RESUME_AUTO,
   OPEN_PICKER,
+  OPEN_SETUP,
 };
 
 /**
@@ -110,7 +147,11 @@ public:
 
   virtual void ResumePrimaryAuto() noexcept {}
   virtual void ResumeSecondaryAuto() noexcept {}
-  virtual void OpenSecondaryPicker() noexcept {}
+
+  [[nodiscard]]
+  virtual SecondaryPickerResult OpenSecondaryPicker() noexcept {
+    return SecondaryPickerResult::NONE;
+  }
 
   /** Map-side refresh only; labels are updated by #ControlsWidget. */
   virtual void RefreshOverlay() noexcept = 0;
@@ -132,15 +173,6 @@ protected:
   void EnablePrimaryAutoAndRefresh() noexcept {
     SetPrimaryAutoAdvance(true);
     ApplyPrimaryAutoAdvance();
-    NotifyOverlay();
-  }
-
-  template<typename F>
-  void
-  ApplyManualPrimarySelection(F &&select_manual)
-  {
-    SetPrimaryAutoAdvance(false);
-    std::forward<F>(select_manual)();
     NotifyOverlay();
   }
 

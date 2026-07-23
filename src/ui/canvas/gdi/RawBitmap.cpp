@@ -4,6 +4,7 @@
 #include "../RawBitmap.hpp"
 #include "Canvas.hpp"
 
+#include <algorithm>
 #include <cassert>
 
 /**
@@ -51,17 +52,39 @@ RawBitmap::~RawBitmap() noexcept
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      Canvas &dest_canvas, PixelSize dest_size,
-                     bool transparent_white) const noexcept
+                     bool transparent_white,
+                     [[maybe_unused]] bool use_source_alpha,
+                     float alpha) const noexcept
 {
+  // Note: GDI doesn't support per-pixel alpha blending easily,
+  // so use_source_alpha is ignored on Windows GDI backend
   HDC source_dc = ::CreateCompatibleDC(dest_canvas);
   ::SelectObject(source_dc, bitmap);
-  if (transparent_white)
-    ::TransparentBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
-                     source_dc, 0, 0, src_size.width, src_size.height,
-                     COLOR_WHITE);
-  else
-    ::StretchBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
+
+  uint8_t alpha_u8 =
+    static_cast<uint8_t>(std::clamp(alpha, 0.0f, 1.0f) * 255 + 0.5f);
+
+  if (alpha_u8 < 255) {
+    // Use AlphaBlend for constant alpha; note that AlphaBlend
+    // doesn't support TransparentBlt, so transparent_white is ignored
+    BLENDFUNCTION bf;
+    bf.BlendOp = AC_SRC_OVER;
+    bf.BlendFlags = 0;
+    bf.SourceConstantAlpha = alpha_u8;
+    bf.AlphaFormat = 0;
+    ::AlphaBlend(dest_canvas, 0, 0, dest_size.width, dest_size.height,
                  source_dc, 0, 0, src_size.width, src_size.height,
-                 SRCCOPY);
+                 bf);
+  } else {
+    // Full opacity: use existing methods for best performance
+    if (transparent_white)
+      ::TransparentBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
+                       source_dc, 0, 0, src_size.width, src_size.height,
+                       COLOR_WHITE);
+    else
+      ::StretchBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
+                   source_dc, 0, 0, src_size.width, src_size.height,
+                   SRCCOPY);
+  }
   ::DeleteDC(source_dc);
 }

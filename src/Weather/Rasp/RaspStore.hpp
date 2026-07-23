@@ -104,8 +104,17 @@ public:
   }
 
   /**
+   * "day" fields (e.g. a whole-day PFD map) are stored as a single 00:00 slot
+   */
+  [[gnu::pure]]
+  bool IsDayField(unsigned item_index) const noexcept;
+
+  /**
    * Return true when this field has raster data for the effective
    * cursor-bar time (AUTO quarter-hour or manual selection).
+   *
+   * Day fields (see #IsDayField) have no time axis and always return
+   * true.
    */
   [[gnu::pure]]
   bool HasSelectedTimeData(unsigned item_index, bool auto_advance,

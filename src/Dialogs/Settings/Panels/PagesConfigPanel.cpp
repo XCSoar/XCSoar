@@ -17,11 +17,17 @@
 #include "Weather/Features.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#ifdef HAVE_EDL
+#include "Formatter/UserUnits.hpp"
+#include "Weather/EDL/Levels.hpp"
+#include "Weather/EDL/StateController.hpp"
+#endif
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "UIGlobals.hpp"
+#include "util/StaticString.hxx"
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
@@ -42,7 +48,7 @@ private:
     INFO_BOX_PANEL,
     BOTTOM,
     OVERLAY,
-    RASP_FIELD,
+    OVERLAY_DETAIL,
   };
 
   static constexpr unsigned IBP_NONE = 0x7000;
@@ -53,7 +59,7 @@ private:
   Listener &listener;
 
   void UpdateOverlayControls() noexcept;
-  void FillRaspFieldControl() noexcept;
+  void FillOverlayDetailControl() noexcept;
   void ApplyValueToForm() noexcept;
 
 public:
@@ -176,27 +182,82 @@ public:
 };
 
 void
-PageLayoutEditWidget::FillRaspFieldControl() noexcept
+PageLayoutEditWidget::FillOverlayDetailControl() noexcept
 {
-  auto &control = GetControl(RASP_FIELD);
+  auto &control = GetControl(OVERLAY_DETAIL);
   auto &df = (DataFieldEnum &)*control.GetDataField();
 
-  const auto rasp = DataGlobals::GetRasp();
-  if (rasp == nullptr || rasp->GetItemCount() == 0) {
-    df.ClearChoices();
-    df.AddChoice(-1, _("No RASP file loaded"));
-    df.SetValue(-1);
-    control.RefreshDisplay();
-    return;
+  df.ClearChoices();
+
+  switch (value.overlay) {
+  case PageLayout::Overlay::RASP: {
+    control.SetCaption(_("RASP layer"));
+    control.SetHelpText(
+      _("RASP weather layer to display on this map page."));
+
+    const auto rasp = DataGlobals::GetRasp();
+    if (rasp == nullptr || rasp->GetItemCount() == 0) {
+      df.AddChoice(-1, _("No RASP file loaded"));
+      df.SetValue(-1);
+      break;
+    }
+
+    Rasp::FillFieldChoices(df, rasp.get());
+
+    if (value.rasp_field >= 0 &&
+        unsigned(value.rasp_field) < rasp->GetItemCount())
+      df.SetValue(value.rasp_field);
+    else
+      df.SetValue(0U);
+    break;
   }
 
-  Rasp::FillFieldChoices(df, rasp.get());
+#ifdef HAVE_EDL
+  case PageLayout::Overlay::EDL:
+    control.SetCaption(_("EDL level"));
+    control.SetHelpText(
+      _("EDL pressure level / altitude band for this map page. "
+        "Auto follows aircraft altitude when the page is opened."));
 
-  if (value.rasp_field >= 0 &&
-      unsigned(value.rasp_field) < rasp->GetItemCount())
-    df.SetValue(value.rasp_field);
-  else
-    df.SetValue(0U);
+    df.AddChoice(0, _("Auto"),
+                 _("Follow altitude on page enter (auto level)."));
+
+    for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i) {
+      const unsigned isobar = EDL::ISOBARS[i];
+      char alt[32];
+      FormatUserAltitude(EDL::GetAltitudeForIsobar(isobar), alt);
+
+      StaticString<64> label;
+      if (alt[0] != '\0')
+        label.Format("%u hPa (%s)", isobar / 100, alt);
+      else
+        label.Format("%u hPa", isobar / 100);
+
+      df.AddChoice(int(isobar), label.c_str());
+    }
+
+    if (value.edl_isobar > 0 &&
+        EDL::IsSupportedIsobar(unsigned(value.edl_isobar)))
+      df.SetValue(unsigned(value.edl_isobar));
+    else
+      df.SetValue(0U);
+    break;
+#endif
+
+  case PageLayout::Overlay::NONE:
+  case PageLayout::Overlay::XCTHERM:
+#ifndef HAVE_EDL
+  case PageLayout::Overlay::EDL:
+#endif
+  case PageLayout::Overlay::MAX:
+    control.SetCaption(_("Layer / level"));
+    control.SetHelpText(
+      _("Select a RASP or EDL map overlay to configure its "
+        "layer or level for this page."));
+    df.AddChoice(-1, _("n/a"));
+    df.SetValue(-1);
+    break;
+  }
 
   control.RefreshDisplay();
 }
@@ -205,12 +266,32 @@ void
 PageLayoutEditWidget::UpdateOverlayControls() noexcept
 {
   const bool map_page = value.IsMapMain();
-  const auto rasp = DataGlobals::GetRasp();
-  const bool rasp_available = rasp != nullptr && rasp->GetItemCount() > 0;
-  const bool rasp_overlay = value.overlay == PageLayout::Overlay::RASP;
+  bool detail_enabled = false;
+
+  if (map_page) {
+    switch (value.overlay) {
+    case PageLayout::Overlay::RASP: {
+      const auto rasp = DataGlobals::GetRasp();
+      detail_enabled = rasp != nullptr && rasp->GetItemCount() > 0;
+      break;
+    }
+#ifdef HAVE_EDL
+    case PageLayout::Overlay::EDL:
+      detail_enabled = true;
+      break;
+#endif
+    case PageLayout::Overlay::NONE:
+    case PageLayout::Overlay::XCTHERM:
+#ifndef HAVE_EDL
+    case PageLayout::Overlay::EDL:
+#endif
+    case PageLayout::Overlay::MAX:
+      break;
+    }
+  }
 
   SetRowEnabled(OVERLAY, map_page);
-  SetRowEnabled(RASP_FIELD, map_page && rasp_overlay && rasp_available);
+  SetRowEnabled(OVERLAY_DETAIL, detail_enabled);
 }
 
 void
@@ -220,7 +301,7 @@ PageLayoutEditWidget::ApplyValueToForm() noexcept
   GetControl(BOTTOM).RefreshDisplay();
   LoadValueEnum(OVERLAY, value.overlay);
   GetControl(OVERLAY).RefreshDisplay();
-  FillRaspFieldControl();
+  FillOverlayDetailControl();
   UpdateOverlayControls();
 }
 
@@ -285,7 +366,8 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   };
   AddEnum(_("Bottom area"),
           _("Specifies what should be displayed below the main area. "
-            "Weather controls require a RASP or EDL map overlay."),
+            "Weather controls require a RASP, EDL, or XCTherm map "
+            "overlay."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
 
@@ -295,6 +377,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 #ifdef HAVE_EDL
     { PageLayout::Overlay::EDL, N_("EDL") },
 #endif
+#ifdef HAVE_HTTP
+    { PageLayout::Overlay::XCTHERM, N_("XCTherm") },
+#endif
     nullptr
   };
   AddEnum(_("Map overlay"),
@@ -303,11 +388,12 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           overlay_list,
           (unsigned)PageLayout::Overlay::NONE, this);
 
-  AddEnum(_("RASP layer"),
-          _("RASP weather layer to display on this map page."),
+  AddEnum(_("Layer / level"),
+          _("Select a RASP or EDL map overlay to configure its "
+            "layer or level for this page."),
           this);
-  GetControl(RASP_FIELD).GetDataField()->EnableItemHelp(true);
-  FillRaspFieldControl();
+  GetControl(OVERLAY_DETAIL).GetDataField()->EnableItemHelp(true);
+  FillOverlayDetailControl();
   UpdateOverlayControls();
 }
 
@@ -334,7 +420,7 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 
   LoadValueEnum(INFO_BOX_PANEL, ib);
 
-  FillRaspFieldControl();
+  FillOverlayDetailControl();
   UpdateOverlayControls();
 }
 
@@ -380,9 +466,14 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
   } else if (&df == &GetDataField(OVERLAY)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     value.overlay = (PageLayout::Overlay)dfe.GetValue();
-  } else if (&df == &GetDataField(RASP_FIELD)) {
+  } else if (&df == &GetDataField(OVERLAY_DETAIL)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    value.rasp_field = dfe.GetValue();
+    if (value.overlay == PageLayout::Overlay::RASP)
+      value.rasp_field = dfe.GetValue();
+#ifdef HAVE_EDL
+    else if (value.overlay == PageLayout::Overlay::EDL)
+      value.edl_isobar = dfe.GetValue();
+#endif
   } else {
     gcc_unreachable();
   }

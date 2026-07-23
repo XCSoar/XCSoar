@@ -25,7 +25,6 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 {
 #if !defined(HAVE_PCMET) && !defined(HAVE_HTTP)
   (void)map;
-  (void)settings;
 #endif
 #ifdef HAVE_PCMET
   Load(map, settings.pcmet);
@@ -36,8 +35,12 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
   map.Get(ProfileKeys::XCThermAutoSwitch, settings.xctherm.auto_switch);
 #endif
 
+  map.Get(ProfileKeys::RaspAutoUpdate, settings.rasp.auto_update);
+  map.Get(ProfileKeys::EdlAutoUpdate, settings.edl.auto_update);
+
   {
     StaticString<64> xctherm_email;
+    xctherm_email.clear();
     map.Get(ProfileKeys::XCThermEmail, xctherm_email);
     if (!xctherm_email.empty())
       settings.xctherm.credentials.email = xctherm_email;
@@ -45,6 +48,7 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 
   {
     StaticString<64> xctherm_password;
+    xctherm_password.clear();
     map.Get(ProfileKeys::XCThermPassword, xctherm_password);
     if (!xctherm_password.empty())
       settings.xctherm.credentials.password = xctherm_password;

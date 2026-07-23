@@ -15,6 +15,7 @@ enum class OverlayInputAction {
   ALTITUDE_PLUS,
   ALTITUDE_MINUS,
   FIELD_PICKER,
+  SETUP,
   TIME_AUTO_TOGGLE,
   TIME_AUTO_ON,
   TIME_AUTO_OFF,
@@ -33,6 +34,8 @@ enum class OverlayInputAction {
  * ``level +/-`` are accepted as aliases for ``altitude +/-``.
  * ``field picker``, ``layer picker``, and ``level picker`` open the
  * secondary-axis list (RASP layer, EDL level, XCTherm layer).
+ * ``setup`` opens the Info → Weather dialog on the tab for the active
+ * overlay.
  * Auto/manual commands use
  * ``<axis> auto …`` (``toggle``, ``on``, ``off``, ``show``).
  */
@@ -63,6 +66,9 @@ ParseOverlayInputAction(const char *misc) noexcept
       StringIsEqual(misc, "layer picker") ||
       StringIsEqual(misc, "level picker"))
     return OverlayInputAction::FIELD_PICKER;
+
+  if (StringIsEqual(misc, "setup"))
+    return OverlayInputAction::SETUP;
 
   if (StringIsEqual(misc, "time auto toggle"))
     return OverlayInputAction::TIME_AUTO_TOGGLE;

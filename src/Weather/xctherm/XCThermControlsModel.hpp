@@ -127,6 +127,12 @@ public:
   void LoadCursorSession() noexcept;
   void SaveCursorSession() noexcept;
 
+  /**
+   * Reload backend cursor state from #WeatherUIState after an external
+   * page/FieldControls edit of the live session.
+   */
+  void SyncCursorFromSession() noexcept;
+
   void SelectBestTimeIndex() noexcept;
 
   void ApplyCurrentSelectionToMap() noexcept;

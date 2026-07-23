@@ -19,6 +19,7 @@ class RawBitmap;
 struct RawColor;
 struct ColorRamp;
 struct ColumnContourPending;
+struct ColorRampAlpha;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -38,6 +39,13 @@ class RasterRenderer {
   /** when true, #quantisation_pixels is fixed and
       UpdateQuantisation() becomes a no-op */
   bool fixed_quantisation = false;
+
+  /**
+   * Lower bound for the idle-based quantisation heuristic in
+   * UpdateQuantisation().  Terrain leaves this at 1 (allowing full
+   * resolution when idle); RASP raises it to suppress the step to 1.
+   */
+  unsigned min_quantisation_pixels = 1;
 #endif
 
   /**
@@ -75,6 +83,12 @@ class RasterRenderer {
   double pixel_size = 0;
 
   RawColor *color_table = nullptr;
+
+  /**
+   * True if the current color table was prepared with alpha channel support.
+   * This affects how the image should be drawn (with or without alpha blending).
+   */
+  bool has_alpha = false;
 
 public:
   RasterRenderer() noexcept;
@@ -131,6 +145,14 @@ public:
   }
 
   /**
+   * Set the lower bound for the idle-based quantisation heuristic (see
+   * #min_quantisation_pixels).
+   */
+  void SetMinQuantisationPixels(unsigned q) noexcept {
+    min_quantisation_pixels = q < 1 ? 1u : q;
+  }
+
+  /**
    * Calculate a new #quantisation_pixels value.
    *
    * @return true if the new #quantisation_pixels value is smaller
@@ -149,15 +171,33 @@ public:
    * Fills the color_table array with precomputed colors for 256 height and
    * 64 illumination levels. This is used to speed up the rendering by
    * preventing the same color calculations over and over again.
+   *
+   * This version uses RGB colors (no alpha channel).
    */
   void PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
                          unsigned height_scale, int interp_levels) noexcept;
+
+  /**
+   * Fills the color_table array with precomputed colors including alpha
+   * channel for 256 height and 64 illumination levels.
+   *
+   * This version uses RGBA colors (with alpha channel for transparency).
+   */
+  void PrepareColorTableAlpha(const ColorRamp *color_ramp, bool do_water,
+                              unsigned height_scale, int interp_levels) noexcept;
 
   /**
    * Scan the map and fill the height matrix.
    */
   void ScanMap(const RasterMap &map,
                const WindowProjection &projection) noexcept;
+
+  /**
+   * Make a gradient map from min_h to max_h, default left to right
+   */
+  void FillGradient(UnsignedPoint2D size,
+                    int16_t min_h, int16_t max_h,
+                    bool vertical = false) noexcept;
 
   /**
    * Convert the height matrix into the image.
@@ -174,8 +214,12 @@ public:
     return *image;
   }
 
+  /**
+   * @param alpha overall layer opacity (0.0=transparent, 1.0=opaque)
+   */
   void Draw(Canvas &canvas, const WindowProjection &projection,
-            bool transparent_white=false) const noexcept;
+            bool transparent_white=false,
+            float alpha=1.0f) const noexcept;
 
 protected:
   /**

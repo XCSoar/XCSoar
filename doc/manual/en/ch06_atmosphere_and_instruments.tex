@@ -416,26 +416,39 @@ These are provided by various independent soaring and paragliding enthusiasts.
 Please note that some of these links provide data in-season only, and only some
 of these providers make data available in XCSoar format.
 
-You can either install RASP data files yourself, or use XCSoar's built-in automatic 
-download for many regions worldwide via the 'Site Files / Site Files' 
-configuration page, \ref{sec:site-files}. 
+You can either install RASP data files yourself, or use XCSoar's built-in automatic
+download for many regions worldwide via the 'Site Files / Site Files'
+configuration page, \ref{sec:site-files}, or the \emph{Update} button in
+Info $\rightarrow$ Weather $\rightarrow$ RASP.  In that RASP panel,
+\emph{Auto update} (on by default) also refreshes an out-of-date or missing
+file when you open a RASP map page or when auto time has no data; turn it
+off for offline use. 
 
 The files have \verb|.dat| extension and the information is shown 
 as colour-coded terrain overlays on the map.  \\ \\
 Make sure that terrain display is set to ``on''. \tip{}  \\ \\
 
-Select a \verb|xcsoar-rasp.dat| file via menu
-\menulabelr{\bmenug{Info}\blink\bmenug{Weather}}
-\bmenuw{RASP}.  Page configuration (Section~\ref{conf:screenpages})
-determines where RASP is shown: set \emph{Map overlay} to \emph{RASP},
+The main configuration dialog for RASP is in the weather setup via menu
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather Setup}}
+\bmenuw{RASP}.
+You select the RASP data file to display, and the data field to be shown.
+After choosing the the configuration, use \bmenuw{Assign to page} to 
+assign that configuration to the current map page.
+
+Alternatively, you can control which pages show weather data and how weather display
+is controlled via the page configuration (Section~\ref{conf:screenpages}):
+Set \emph{Map overlay} to \emph{RASP},
 choose the \emph{RASP layer} for that page, and optionally set the
 \emph{Bottom area} to \emph{Weather controls} for in-flight forecast time
-control.
+control. This allows configuration of several pages quickly.
 
-\marginpar{\includegraphics[angle=0,width=0.95\linewidth,keepaspectratio='true']{figures/dialog-weather.png}}
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-weather.png}
+\end{center}
+
 When the bottom \emph{Weather controls} panel is visible, \emph{Auto advance}
-follows the current local time in 15-minute steps.  Turn it off to select a
-fixed forecast time.  When entering a page with RASP overlay for the first
+follows the current local time.  Turn it off to select a
+fixed forecast time. When entering a page with RASP overlay for the first
 time, XCSoar selects the next forecast time in the RASP file at or after the
 current time.
 
@@ -443,8 +456,48 @@ When a field is not available in the RASP file, the background is left blank.
 The current field name is displayed in the lower left corner of the screen
 whenever RASP data is displayed.
 
+RASP display configuration parameters are in the \bmenuw{RASP} tab in
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather Setup}}. Global options are:
+\begin{description}
+\item[File] Shows the currently selected RASP data file and allows selection 
+and download of other RASP data files. 
+\item[Modified] Shows the last modification date of the currently selected RASP data file.
+\item[Update] Attempts to download the latest version of the currently selected RASP data file.
+This is available for RASP data files that were downloaded from the XCSoar repository.
+THe download is in the background, the data will automatically update once it is completed.
+\item[Layer] Selects the RASP data field to display on the currently active map page, 
+indicated above the layer field.
+\item[Colormap] Below the layer selector, a colormap preview is shown for the currently
+selected RASP data field, with the scale given in the currently selected units.
+\item[Contours] Allows activation/deactivation of contour lines in the weather data,
+as well as the density of the contour lines.
+\item[Opacity] Allows adjustment of the opacity of the weather overlay. Some weather layers
+are global and do not have a transparency channel, such as the surface temperature. This
+setting allows to make them partially transparent to enable the underlying terrain to
+shine through.\\
+For RASP layers with their own transparency souch as wave lift or cloud cover, this
+setting only reduces opacity, it never overrides the transparency of that layer.
+\item[Assign to page] Assigns the currently selected RASP configuration to the currently
+active map page.
+\item[Add page] Creates a new map page with the currently selected RASP configuration after
+the currently active page.
+\end{description}
+
 The available fields can vary by data source. Some examples include:
 \begin{description}
+\item[Wave] 
+Vertical velocity of the air mass at the given altitude.
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-wave.png}
+\end{center}
+
+\item[Rain] 
+Predicted preciptation rate integrated over the forecast step interval 
+(typically 15~minutes or 1~hour).
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-rain.png}
+\end{center}
+
 \item[W*] 
 Average dry thermal updraft strength near mid-BL height.  Subtract
 glider descent rate to get average vario reading for cloudless

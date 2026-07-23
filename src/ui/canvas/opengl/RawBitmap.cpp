@@ -48,8 +48,12 @@ RawBitmap::BindAndGetTexture() const noexcept
 void
 RawBitmap::StretchTo(PixelSize src_size,
                      [[maybe_unused]] Canvas &dest_canvas, PixelSize dest_size,
-                     [[maybe_unused]] bool transparent_white) const noexcept
+                     [[maybe_unused]] bool transparent_white,
+                     [[maybe_unused]] bool use_source_alpha,
+                     [[maybe_unused]] float alpha) const noexcept
 {
+  // Note: For OpenGL, alpha blending is handled in RasterRenderer::Draw()
+  // via ScopeTextureConstantAlpha, so the alpha parameter is unused here
   GLTexture &texture = BindAndGetTexture();
 
   OpenGL::texture_shader->Use();
