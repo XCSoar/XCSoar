@@ -3,8 +3,17 @@ LUA = y
 ifeq ($(LUA),y)
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
+ifeq ($(call THIRDPARTY_PACKAGE_SELECTED,lua),y)
 LIBLUA_LDLIBS = -llua
 LIBLUA_CPPFLAGS =
+else
+# Homebrew provides pkg-config module "lua"; Debian/Ubuntu use "lua5.4".
+ifeq ($(TARGET_IS_DARWIN),y)
+$(eval $(call pkg-config-library,LIBLUA,lua))
+else
+$(eval $(call pkg-config-library,LIBLUA,lua5.4))
+endif
+endif
 else
 # Homebrew provides pkg-config module "lua"; Debian/Ubuntu use "lua5.4".
 ifeq ($(TARGET_IS_DARWIN),y)
@@ -58,7 +67,7 @@ endif
 LUA_DEPENDS = LIBLUA
 
 ifeq ($(HAVE_HTTP),y)
-ifeq ($(USE_THIRDPARTY_LIBS),y)
+ifeq ($(call THIRDPARTY_PACKAGE_SELECTED,curl),y)
 # libcurl is static in third-party builds, so avoid dllimport symbols
 LUA_CPPFLAGS_INTERNAL += -DCURL_STATICLIB
 LUA_DEPENDS += CURL
