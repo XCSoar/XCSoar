@@ -394,8 +394,10 @@ public:
                  const GeoPoint &location, double resolution) const;
 
   /**
-   * Like GetPoints() with time and distance thinning, but only returns
-   * points inside \a bounds or on legs that intersect \a bounds.
+   * Fill the vector with trace points not before #min_time that lie
+   * inside \a bounds or on legs that intersect \a bounds, then apply
+   * minimum resolution #min_distance.  Bounds are applied before
+   * spacing thinning so cost tracks the viewport, not flight length.
    */
   void GetPoints(TracePointVector &v, Time min_time,
                  const GeoBounds &bounds,

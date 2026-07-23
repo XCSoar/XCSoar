@@ -4,7 +4,8 @@
 #include "Trace.hpp"
 #include "Vector.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Geo/GeoClip.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatRay.hpp"
 #include "util/GlobalSliceAllocator.hxx"
 
 #include <algorithm>
@@ -447,17 +448,21 @@ Trace::GetPoints(TracePointVector &v, const Time min_time,
   } while (i != end);
 }
 
+/**
+ * True if the flat segment [a,b] hits \a box (endpoint inside or edge cross).
+ */
 [[gnu::pure]]
 static bool
-SegmentIntersectsBounds(const GeoPoint &a, const GeoPoint &b,
-                        const GeoBounds &bounds) noexcept
+FlatSegmentHitsBox(const FlatGeoPoint &a, const FlatGeoPoint &b,
+                   const FlatBoundingBox &box) noexcept
 {
-  if (bounds.IsInside(a) || bounds.IsInside(b))
+  if (box.IsInside(a) || box.IsInside(b))
     return true;
 
-  GeoClip clip(bounds);
-  GeoPoint a2 = a, b2 = b;
-  return clip.ClipLine(a2, b2);
+  if (a == b)
+    return false;
+
+  return box.Intersects(FlatRay(a, b));
 }
 
 void
@@ -466,37 +471,74 @@ Trace::GetPoints(TracePointVector &v, const Time min_time,
                  const GeoPoint &location,
                  const double min_distance) const
 {
-  TracePointVector thinned;
-  GetPoints(thinned, min_time, location, min_distance);
+  v.clear();
 
-  if (thinned.empty()) {
-    v.clear();
+  if (!bounds.IsValid() || empty() || !task_projection.IsValid())
     return;
-  }
 
-  std::vector<uint8_t> keep(thinned.size(), 0);
-  for (size_t k = 0; k < thinned.size(); ++k) {
-    const GeoPoint gp = thinned[k].GetLocation();
-    if (bounds.IsInside(gp)) {
-      keep[k] = 1;
-      continue;
+  /* Skip points before min_time. */
+  Trace::const_iterator i = begin(), end = this->end();
+  while (i != end && i->GetTime() < min_time)
+    ++i;
+
+  if (i == end)
+    return;
+
+  /* Bounds first (flat AABB), then spacing-thin.  Avoids thinning the
+     entire flight history before clipping — that dominated cost at
+     circling zoom where min_distance is only a few metres. */
+  const FlatBoundingBox flat_box = task_projection.Project(bounds);
+
+  TracePointVector candidates;
+  candidates.reserve(std::min(size_t(size()), size_t(4096)));
+
+  const TracePoint *prev = nullptr;
+  FlatGeoPoint prev_flat{};
+
+  for (; i != end; ++i) {
+    const TracePoint &point = *i;
+    const FlatGeoPoint flat = point.GetFlatLocation();
+    bool keep = flat_box.IsInside(flat);
+
+    if (!keep && prev != nullptr &&
+        FlatSegmentHitsBox(prev_flat, flat, flat_box))
+      keep = true;
+
+    if (keep) {
+      /* If this point is kept because a leg crosses into the box,
+         also keep the outside predecessor so the crossing leg is drawn. */
+      if (prev != nullptr &&
+          (candidates.empty() ||
+           candidates.back().GetTime() != prev->GetTime())) {
+        if (!flat_box.IsInside(prev_flat) &&
+            FlatSegmentHitsBox(prev_flat, flat, flat_box))
+          candidates.push_back(*prev);
+      }
+
+      if (candidates.empty() ||
+          candidates.back().GetTime() != point.GetTime())
+        candidates.push_back(point);
     }
 
-    if (k > 0 &&
-        SegmentIntersectsBounds(thinned[k - 1].GetLocation(), gp, bounds))
-      keep[k] = 1;
-    else if (k + 1 < thinned.size() &&
-             SegmentIntersectsBounds(gp, thinned[k + 1].GetLocation(), bounds))
-      keep[k] = 1;
+    prev = &point;
+    prev_flat = flat;
   }
 
-  /* Keep only visible / bounds-crossing points.  Do not reinsert
-     off-screen gaps between separate viewport runs — that would let
-     trail size grow with flight duration despite the filter. */
-  v.clear();
-  v.reserve(thinned.size());
-  for (size_t k = 0; k < thinned.size(); ++k) {
-    if (keep[k])
-      v.push_back(thinned[k]);
+  if (candidates.empty())
+    return;
+
+  /* Spacing-thin the chronological candidates (same metric as the
+     non-bounds GetPoints).  Do not reinsert off-screen gaps. */
+  const unsigned range = ProjectRange(location, min_distance);
+  const unsigned sq_range = range * range;
+
+  v.reserve(candidates.size());
+  v.push_back(candidates.front());
+  size_t last = 0;
+  for (size_t k = 1; k < candidates.size(); ++k) {
+    if (candidates[k].FlatSquareDistanceTo(candidates[last]) >= sq_range) {
+      v.push_back(candidates[k]);
+      last = k;
+    }
   }
 }
