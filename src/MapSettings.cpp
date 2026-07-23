@@ -53,4 +53,5 @@ MapSettings::SetDefaults() noexcept
 
   trail.SetDefaults();
   item_list.SetDefaults();
+  overlay.SetDefaults();
 }

@@ -21,6 +21,7 @@
 #include "Tracking/SkyLines/Features.hpp"
 
 #include <memory>
+#include <vector>
 
 struct MapLook;
 struct TrafficLook;
@@ -30,6 +31,7 @@ class RasterTerrain;
 class RaspStore;
 class RaspRenderer;
 class MapOverlay;
+class MapOverlayBitmap;
 class Waypoints;
 class Airspaces;
 class ProtectedTaskManager;
@@ -128,6 +130,11 @@ protected:
 
 #ifdef ENABLE_OPENGL
   std::unique_ptr<MapOverlay> overlay;
+
+  /**
+   * GeoTIFF image overlays drawn below the weather layers.
+   */
+  std::vector<std::unique_ptr<MapOverlayBitmap>> image_overlays;
 #endif
 
   const TrafficLook &traffic_look;
@@ -234,6 +241,8 @@ public:
   const MapOverlay *GetOverlay() const noexcept {
     return overlay.get();
   }
+
+  void SetImageOverlays(std::vector<std::unique_ptr<MapOverlayBitmap>> &&_overlays) noexcept;
 #endif
 
 #ifdef HAVE_NOAA
@@ -380,6 +389,7 @@ private:
   void RenderTopographyLabels(Canvas &canvas) noexcept;
 
   void RenderOverlays(Canvas &canvas) noexcept;
+  void RenderImageOverlays(Canvas &canvas) noexcept;
 
   /**
    * Renders the final glide shading

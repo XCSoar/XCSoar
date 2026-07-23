@@ -4,6 +4,7 @@
 #include "UtilsSettings.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -54,6 +55,7 @@ bool MapFileChanged = false;
 bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
+bool OverlayFileChanged = false;
 bool FlarmFileChanged = false;
 bool RaspFileChanged = false;
 bool ChecklistFileChanged = false;
@@ -74,6 +76,7 @@ SettingsEnter() noexcept
   AirspaceFileChanged = false;
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
+  OverlayFileChanged = false;
   FlarmFileChanged = false;
   RaspFileChanged = false;
   ChecklistFileChanged = false;
@@ -194,6 +197,12 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (RaspFileChanged)
     DataGlobals::SetRasp(LoadConfiguredRasp(false));
+
+#ifdef ENABLE_OPENGL
+  if (OverlayFileChanged)
+    if (GlueMapWindow *map = main_window.GetMap())
+      map->LoadOverlays();
+#endif
 
   if (ChecklistFileChanged)
     dlgChecklistNotifySiteFileChanged();

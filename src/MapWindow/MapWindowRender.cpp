@@ -3,6 +3,7 @@
 
 #include "MapWindow.hpp"
 #include "Overlay.hpp"
+#include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Weather/Rasp/RaspCache.hpp"
@@ -108,6 +109,21 @@ MapWindow::RenderOverlays([[maybe_unused]] Canvas &canvas) noexcept
 #ifdef ENABLE_OPENGL
   if (overlay)
     overlay->Draw(canvas, render_projection);
+#endif
+}
+
+inline void
+MapWindow::RenderImageOverlays([[maybe_unused]] Canvas &canvas) noexcept
+{
+#ifdef ENABLE_OPENGL
+  const auto &settings = GetMapSettings().overlay;
+  const float opacity = settings.opacity / 100.0f;
+  for (const auto &o : image_overlays) {
+    o->IgnoreBitmapAlpha();
+    o->SetAlpha(opacity);
+    o->SetBlendMode(settings.blend_mode);
+    o->Draw(canvas, render_projection);
+  }
 #endif
 }
 
@@ -219,6 +235,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   // Render terrain, groundline and topography
   draw_sw.Mark("RenderTerrain");
   RenderTerrain(canvas);
+
+  draw_sw.Mark("RenderImageOverlays");
+  RenderImageOverlays(canvas);
 
   draw_sw.Mark("RenderRasp");
   RenderRasp(canvas);

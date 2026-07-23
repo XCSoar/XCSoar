@@ -16,3 +16,18 @@ public:
   ScopeTextureConstantAlpha(const ScopeTextureConstantAlpha &&) = delete;
   ScopeTextureConstantAlpha &operator=(const ScopeTextureConstantAlpha &&) = delete;
 };
+
+/**
+ * Prepare for drawing a texture in "multiply" mode, with a given
+ * opacity: result = dst * (1 - alpha * (1 - src)). A white texel
+ * leaves the map unchanged, a black texel darkens it fully (at
+ * alpha=1).
+ */
+class ScopeTextureMultiplyAlpha {
+public:
+  explicit ScopeTextureMultiplyAlpha(float alpha);
+  ~ScopeTextureMultiplyAlpha();
+
+  ScopeTextureMultiplyAlpha(const ScopeTextureMultiplyAlpha &&) = delete;
+  ScopeTextureMultiplyAlpha &operator=(const ScopeTextureMultiplyAlpha &&) = delete;
+};

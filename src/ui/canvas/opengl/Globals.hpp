@@ -38,6 +38,12 @@ extern bool texture_non_power_of_two;
 extern bool mapbuffer;
 
 /**
+ * The maximum texture dimension (GL_MAX_TEXTURE_SIZE) supported by the
+ * current context.
+ */
+extern GLint max_texture_size;
+
+/**
  * Which depth+stencil internalFormat is supported by the
  * Renderbuffer?
  */

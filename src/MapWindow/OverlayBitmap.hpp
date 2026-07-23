@@ -7,11 +7,14 @@
 #include "ui/canvas/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "Geo/ReferencedGrid.hpp"
 
+#include <cstdint>
 #include <string>
 
 class Canvas;
 class WindowProjection;
+enum class MapOverlayBlendMode : uint8_t;
 
 /**
  * A georeferenced bitmap that can be rendered in the #MapWindow.
@@ -22,7 +25,15 @@ class MapOverlayBitmap final : public MapOverlay {
   Bitmap bitmap;
 
   /**
-   * The geo reference for #bitmap.
+   * The geo reference grid for #bitmap. A 1x1 grid (the four corners)
+   * for bitmaps loaded with a single quadrilateral, or a finer mesh for
+   * GeoTIFF with curved projection.
+   */
+  GeoReferencedGrid grid;
+
+  /**
+   * The four outer corners of #grid, for the single-quadrilateral draw
+   * path and for IsInside().
    */
   GeoQuadrilateral bounds;
 
@@ -35,6 +46,8 @@ class MapOverlayBitmap final : public MapOverlay {
   bool use_bitmap_alpha = true;
 
   float alpha = 1;
+
+  MapOverlayBlendMode blend_mode{};
 
   std::string label;
 
@@ -55,7 +68,7 @@ public:
    */
   MapOverlayBitmap(Bitmap &&_bitmap, GeoQuadrilateral _bounds,
                    std::string::const_pointer _label) noexcept
-    :bitmap(std::move(_bitmap)), bounds(_bounds),
+    :bitmap(std::move(_bitmap)), grid(_bounds), bounds(_bounds),
      simple_bounds(bounds.GetBounds()),
      label(_label) {}
 
@@ -77,6 +90,10 @@ public:
    */
   void SetAlpha(float _alpha) noexcept {
     alpha = _alpha;
+  }
+
+  void SetBlendMode(MapOverlayBlendMode _blend_mode) noexcept {
+    blend_mode = _blend_mode;
   }
 
   /* virtual methods from class MapOverlay */
