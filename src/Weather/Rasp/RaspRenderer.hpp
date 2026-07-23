@@ -47,6 +47,14 @@ struct RaspFieldValue {
   bool available;
 };
 
+/**
+ * Format a sampled RASP field value in user units, e.g. "+2.1 m/s" or
+ * "1430 m". Returns an empty string if no value is available.
+ */
+[[gnu::pure]]
+StaticString<32>
+FormatRaspValue(const RaspFieldValue &value) noexcept;
+
 class RaspRenderer {
   RaspCache cache;
 

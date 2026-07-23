@@ -8,6 +8,9 @@
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/TerrainSettings.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Units/Units.hpp"
+#include "Units/System.hpp"
+#include "Units/Descriptor.hpp"
 #include "ui/canvas/RawBitmap.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -26,6 +29,34 @@ IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b) noexcept
     a.GetHeight().Native() > 2 * b.GetHeight().Native();
 }
 #endif
+
+StaticString<32>
+FormatRaspValue(const RaspFieldValue &value) noexcept
+{
+  StaticString<32> result;
+
+  if (!value.available) {
+    result.clear();
+    return result;
+  }
+
+  if (value.unit_group == UnitGroup::NONE) {
+    result.Format("%.1f", value.value);
+    return result;
+  }
+
+  const Unit unit = Units::GetUserUnitByGroup(value.unit_group);
+  const double v = Units::ToUserUnit(value.value, unit);
+
+  /* vertical speed carries a sign, like the vario display */
+  const bool with_sign = value.unit_group == UnitGroup::VERTICAL_SPEED;
+  const char *fmt = (v >= 100.0 || v <= -100.0)
+    ? (with_sign ? "%+.0f %s" : "%.0f %s")
+    : (with_sign ? "%+.1f %s" : "%.1f %s");
+
+  result.Format(fmt, v, Units::GetUnitName(unit));
+  return result;
+}
 
 StaticString<96>
 RaspRenderer::GetExtendedLabel() const
