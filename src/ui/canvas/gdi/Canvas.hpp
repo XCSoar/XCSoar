@@ -418,6 +418,12 @@ public:
                             const Canvas &src,
                             PixelPoint src_position) noexcept;
 
+  /**
+   * Stretch a bitmap, treating white source pixels as transparent.
+   */
+  void StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                               const Bitmap &src) noexcept;
+
   void StretchNot(const Bitmap &src);
 
   void Stretch(PixelPoint dest_position, PixelSize dest_size,

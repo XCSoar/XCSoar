@@ -413,6 +413,17 @@ Canvas::StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
 }
 
 void
+Canvas::StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                                const Bitmap &src) noexcept
+{
+  assert(src.IsDefined());
+
+  ConstImageBuffer buffer = src.GetNative();
+  StretchTransparentWhite(dest_position, dest_size,
+                          buffer, {0, 0}, buffer.size);
+}
+
+void
 Canvas::StretchNot(const Bitmap &_src)
 {
   assert(_src.IsDefined());
@@ -608,19 +619,24 @@ Canvas::DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept
 void
 Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                    ConstImageBuffer src,
-                   PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
+                   PixelPoint src_position, PixelSize src_size,
                    uint8_t alpha)
 {
-  // TODO: support scaling
-
   SDLRasterCanvas canvas(buffer);
 
   AlphaPixelOperations<ActivePixelTraits> operations(alpha);
 
-  canvas.CopyRectangle(dest_position.x, dest_position.y,
-                       dest_size.width, dest_size.height,
-                       src.At(src_position.x, src_position.y), src.pitch,
-                       operations);
+  if (dest_size == src_size)
+    /* 1:1 fast path without the scaling arithmetic */
+    canvas.CopyRectangle(dest_position.x, dest_position.y,
+                         dest_size.width, dest_size.height,
+                         src.At(src_position.x, src_position.y), src.pitch,
+                         operations);
+  else
+    canvas.ScaleRectangle(dest_position, dest_size,
+                          src.At(src_position.x, src_position.y),
+                          src.pitch, src_size,
+                          operations);
 }
 
 void
@@ -637,21 +653,26 @@ Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
 void
 Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                            ConstImageBuffer src,
-                           PixelPoint src_position, [[maybe_unused]] PixelSize src_size,
+                           PixelPoint src_position, PixelSize src_size,
                            uint8_t alpha)
 {
-  // TODO: support scaling
-
   SDLRasterCanvas canvas(buffer);
 
   NotWhiteCondition<ActivePixelTraits> c;
   NotWhiteAlphaPixelOperations<ActivePixelTraits> operations(c,
                                                              PortableAlphaPixelOperations<ActivePixelTraits>(alpha));
 
-  canvas.CopyRectangle(dest_position.x, dest_position.y,
-                       dest_size.width, dest_size.height,
-                       src.At(src_position.x, src_position.y), src.pitch,
-                       operations);
+  if (dest_size == src_size)
+    /* 1:1 fast path without the scaling arithmetic */
+    canvas.CopyRectangle(dest_position.x, dest_position.y,
+                         dest_size.width, dest_size.height,
+                         src.At(src_position.x, src_position.y), src.pitch,
+                         operations);
+  else
+    canvas.ScaleRectangle(dest_position, dest_size,
+                          src.At(src_position.x, src_position.y),
+                          src.pitch, src_size,
+                          operations);
 }
 
 void
@@ -663,4 +684,50 @@ Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
   AlphaBlendNotWhite(dest_position, dest_size,
                      src.buffer, src_position, src_size,
                      alpha);
+}
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               ConstImageBuffer src,
+                               PixelPoint src_position,
+                               PixelSize src_size) noexcept
+{
+  SDLRasterCanvas canvas(buffer);
+
+#ifdef GREYSCALE
+  /* Greyscale buffers store no alpha; fall back to opaque stretch. */
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size);
+#else
+  SourceAlphaPixelOperations<ActivePixelTraits> operations;
+
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size,
+                        operations);
+#endif
+}
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               const Bitmap &src) noexcept
+{
+  assert(src.IsDefined());
+
+  ConstImageBuffer buffer = src.GetNative();
+  StretchWithSourceAlpha(dest_position, dest_size,
+                         buffer, {0, 0}, buffer.size);
+}
+
+void
+Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                               const Bitmap &src,
+                               PixelPoint src_position,
+                               PixelSize src_size) noexcept
+{
+  assert(src.IsDefined());
+
+  StretchWithSourceAlpha(dest_position, dest_size,
+                         src.GetNative(), src_position, src_size);
 }

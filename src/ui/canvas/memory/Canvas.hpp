@@ -329,6 +329,9 @@ public:
                                ConstImageBuffer src, PixelPoint src_position,
                                PixelSize src_size) noexcept;
 
+  void StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                               const Bitmap &src) noexcept;
+
   void StretchNot(const Bitmap &src);
 
   void Stretch(PixelPoint dest_position, PixelSize dest_size,
@@ -436,4 +439,20 @@ public:
                           const Canvas src,
                           PixelPoint src_position, PixelSize src_size,
                           uint8_t alpha);
+
+  /**
+   * Stretch with per-pixel alpha blending from the source buffer.
+   */
+  void StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                              ConstImageBuffer src,
+                              PixelPoint src_position,
+                              PixelSize src_size) noexcept;
+
+  void StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                              const Bitmap &src) noexcept;
+
+  void StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
+                              const Bitmap &src,
+                              PixelPoint src_position,
+                              PixelSize src_size) noexcept;
 };
