@@ -9,6 +9,10 @@
 #include <SDL.h>
 #include <SDL_hints.h>
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 namespace SDL {
 
 Display::Display()
@@ -16,6 +20,10 @@ Display::Display()
 #ifdef _WIN32
   SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS,
               "permonitorv2");
+#endif
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
 #endif
 
   Uint32 flags = SDL_INIT_VIDEO;
@@ -26,11 +34,13 @@ Display::Display()
     throw FmtRuntimeError("SDL_Init() has failed: {}", ::SDL_GetError());
 
 #ifdef ENABLE_OPENGL
-#ifdef USE_ANGLE
+#if defined(USE_ANGLE)
   // On Windows, tell SDL to use EGL (required for ANGLE)
   SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
 #endif
+#if !defined(__APPLE__) || !TARGET_OS_IPHONE
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+#endif
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #endif
@@ -43,7 +53,11 @@ Display::Display()
 
 #if defined(ENABLE_OPENGL)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
+#else
   ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
+#endif
 #endif
 }
 

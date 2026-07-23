@@ -20,6 +20,7 @@ static UIDocumentInteractionController *document_interaction_controller;
 static UIWindow *
 GetApplicationWindow() noexcept
 {
+#ifdef __IPHONE_13_0
   if (@available(iOS 13.0, *)) {
     for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
       if (scene.activationState != UISceneActivationStateForegroundActive ||
@@ -31,8 +32,17 @@ GetApplicationWindow() noexcept
           return window;
     }
   }
+#endif
 
-  return nil;
+  UIWindow *key_window = UIApplication.sharedApplication.keyWindow;
+  if (key_window != nil)
+    return key_window;
+
+  for (UIWindow *window in UIApplication.sharedApplication.windows)
+    if (window.isKeyWindow)
+      return window;
+
+  return UIApplication.sharedApplication.windows.firstObject;
 }
 
 static UIViewController *

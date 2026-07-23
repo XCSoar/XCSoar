@@ -12,6 +12,8 @@ fi
 IPA_PATH="${IOS_IPA_PATH:-$(pwd)/output/IOS64/xcsoar.ipa}"
 PROFILE_PATH="${IOS_PROFILE_PATH:-}"
 CERTIFICATE_NAME="${APPLE_DISTRIBUTION_CERTIFICATE_NAME:-}"
+# shellcheck disable=SC2206
+CODESIGN_FLAGS=(${IOS_CODESIGN_FLAGS:-})
 
 # Output configuration
 IPA_SIGNED_PATH="${IOS_SIGNED_IPA_PATH:-$(pwd)/output/IOS64/xcsoar-signed.ipa}"
@@ -67,7 +69,8 @@ fi
 
 # Sign the app
 echo "🔏 Signing with certificate '$CERTIFICATE_NAME'..."
-codesign -f -s "$CERTIFICATE_NAME" --entitlements "$ENTITLEMENTS_TMP" "$APP_PATH"
+codesign -f -s "$CERTIFICATE_NAME" --entitlements "$ENTITLEMENTS_TMP" \
+  "${CODESIGN_FLAGS[@]}" "$APP_PATH"
 
 # Verify signature
 if ! codesign --verify --deep --strict "$APP_PATH"; then

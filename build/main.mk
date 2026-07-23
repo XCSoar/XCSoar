@@ -634,6 +634,11 @@ XCSOAR_SOURCES += \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif
 
+ifeq ($(TARGET_IS_IOS)$(HOST_TRIPLET),yarmv7-apple-darwin)
+XCSOAR_SOURCES += \
+	$(SRC)/Apple/LibcxxIOS32Compatibility.cpp
+endif
+
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/java/Global.cxx \

@@ -64,9 +64,10 @@
       if (@available(iOS 9.0, *)) {
         manager.allowsBackgroundLocationUpdates = YES;
       }
-      if (@available(iOS 11.0, *)) {
+#ifdef __IPHONE_11_0
+      if (@available(iOS 11.0, *))
         manager.showsBackgroundLocationIndicator = NO;
-      }
+#endif
     }
   }
 }
@@ -212,9 +213,10 @@ void InternalSensors::Init()
       if (@available(iOS 9.0, *)) {
         location_manager.allowsBackgroundLocationUpdates = YES;
       }
-      if (@available(iOS 11.0, *)) {
+#ifdef __IPHONE_11_0
+      if (@available(iOS 11.0, *))
         location_manager.showsBackgroundLocationIndicator = NO;
-      }
+#endif
       [location_manager startUpdatingLocation];
     } else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
       // We have "When In Use", request upgrade to "Always" for background usage
@@ -239,8 +241,9 @@ void InternalSensors::Init()
   
   // Check if the device supports barometric pressure sensing
   if ([CMAltimeter isRelativeAltitudeAvailable]) {
-    // Check for authorization status (iOS 8+)
-    if ([CMAltimeter respondsToSelector:@selector(authorizationStatus)]) {
+    // Check for authorization status where CMAltimeter exposes it.
+#ifdef __IPHONE_11_0
+    if (@available(iOS 11.0, *)) {
       CMAuthorizationStatus status = [CMAltimeter authorizationStatus];
       
       // Exit if user denied permission
@@ -288,6 +291,7 @@ void InternalSensors::Init()
         return; // Exit early since altimeter initialization is handled in the completion block
       }
     }
+#endif
     
     // Initialize altimeter for pressure readings (for authorized status)
     StartAltimeterUpdates();
