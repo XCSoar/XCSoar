@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "LayoutConfigPanel.hpp"
+#include "../InfoBoxGeometryChoices.hpp"
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
@@ -60,52 +61,6 @@ static constexpr StaticEnumChoice display_orientation_list[] = {
     N_("Reverse Portrait") },
   { DisplayOrientation::REVERSE_LANDSCAPE,
     N_("Reverse Landscape") },
-  nullptr
-};
-
-static constexpr StaticEnumChoice info_box_geometry_list[] = {
-  { InfoBoxSettings::Geometry::SPLIT_8,
-    N_("8 Split") },
-  { InfoBoxSettings::Geometry::SPLIT_10,
-    N_("10 Split") },
-  { InfoBoxSettings::Geometry::SPLIT_3X4,
-    N_("12 Split in 3 rows") },
-  { InfoBoxSettings::Geometry::SPLIT_3X5,
-    N_("15 Split in 3 rows") },
-  { InfoBoxSettings::Geometry::SPLIT_3X6,
-    N_("18 Split in 3 rows") },
-  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_8,
-    N_("8 Bottom or Right") },
-  { InfoBoxSettings::Geometry::BOTTOM_8_VARIO,
-    N_("8 Bottom + Vario (Portrait)") },
-  { InfoBoxSettings::Geometry::TOP_LEFT_8,
-    N_("8 Top or Left") },
-  { InfoBoxSettings::Geometry::TOP_8_VARIO,
-    N_("8 Top + Vario (Portrait)") },
-  { InfoBoxSettings::Geometry::RIGHT_9_VARIO,
-    N_("9 Right + Vario (Landscape)") },
-  { InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO,
-    N_("9 Left + Right + Vario (Landscape)") },
-  { InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO,
-    N_("12 Left + 3 Right Vario (Landscape)") },
-  { InfoBoxSettings::Geometry::RIGHT_5,
-    N_("5 Right (Square)") },
-  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_10,
-    N_("10 Bottom or Right") },
-  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_12,
-    N_("12 Bottom or Right") },
-  { InfoBoxSettings::Geometry::TOP_LEFT_10,
-    N_("10 Top or Left") },
-  { InfoBoxSettings::Geometry::TOP_LEFT_12,
-    N_("12 Top or Left") },
-  { InfoBoxSettings::Geometry::RIGHT_16,
-    N_("16 Right (Landscape)") },
-  { InfoBoxSettings::Geometry::RIGHT_24,
-    N_("24 Bottom or Right") },
-  { InfoBoxSettings::Geometry::TOP_LEFT_4,
-    N_("4 Top or Left") },
-  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_4,
-    N_("4 Bottom or Right") },
   nullptr
 };
 
@@ -194,9 +149,9 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddDummy();
 #endif
 
-  AddEnum(_("InfoBox geometry"),
-          _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
-          info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
+  AddEnum(_("Default InfoBox geometry"),
+          _("Default InfoBox layout for new InfoBox sets and for migrating existing profiles."),
+          info_box_geometry_choices, (unsigned)ui_settings.info_boxes.geometry);
 
   AddInteger(_("InfoBox title size"), _("Zoom factor for InfoBox title and comment text"),
              "%d %%", "%d", 50, 150, 5,
@@ -279,16 +234,14 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   }
 #endif
 
-  bool info_box_geometry_changed = false;
-
-  info_box_geometry_changed |=
+  changed |=
     SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
-  info_box_geometry_changed |=
+  const bool info_box_title_scale_changed =
     SaveValueInteger(InfoBoxTitleScale, ProfileKeys::InfoBoxTitleScale,
                   ui_settings.info_boxes.scale_title_font);
 
-  changed |= info_box_geometry_changed;
+  changed |= info_box_title_scale_changed;
 
   changed |= SaveValueEnum(AppStatusMessageAlignment, ProfileKeys::AppStatusMessageAlignment,
                            ui_settings.popup_message_position);
@@ -339,7 +292,7 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 #endif
 
     CommonInterface::main_window->CheckResize();
-  } else if (info_box_geometry_changed)
+  } else if (info_box_title_scale_changed)
     CommonInterface::main_window->ReinitialiseLayout();
 
   _changed |= changed;

@@ -16,6 +16,5 @@ bool
 dlgConfigInfoboxesShowModal(UI::SingleWindow &parent,
                             const DialogLook &dialog_look,
                             const InfoBoxLook &look,
-                            InfoBoxSettings::Geometry geometry,
                             InfoBoxSettings::Panel &data,
                             bool allow_name_change);

@@ -288,6 +288,16 @@ GetPanelIndex(const UIState &ui_state)
     return InfoBoxSettings::PANEL_CRUISE;
 }
 
+[[gnu::pure]]
+static InfoBoxSettings::Geometry
+GetPanelGeometry(const InfoBoxSettings &settings, unsigned panel_index) noexcept
+{
+  if (panel_index < InfoBoxSettings::MAX_PANELS)
+    return settings.panels[panel_index].geometry;
+
+  return settings.geometry;
+}
+
 static void
 UpdateMapScalePageInfo(UIState &state,
                        const UISettings &settings) noexcept
@@ -333,6 +343,8 @@ ActionInterface::UpdateDisplayMode() noexcept
 {
   UIState &state = SetUIState();
   const UISettings &settings = GetUISettings();
+  const auto old_geometry = GetPanelGeometry(settings.info_boxes,
+                                             state.panel_index);
 
   state.display_mode = GetNewDisplayMode(settings.info_boxes, state,
                                          Calculated());
@@ -340,6 +352,10 @@ ActionInterface::UpdateDisplayMode() noexcept
 
   const auto &panel = settings.info_boxes.panels[state.panel_index];
   state.panel_name = gettext(panel.name);
+
+  if (main_window != nullptr &&
+      old_geometry != GetPanelGeometry(settings.info_boxes, state.panel_index))
+    main_window->ReinitialiseLayout();
 
   UpdateMapScalePageInfo(state, settings);
 }

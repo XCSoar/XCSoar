@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "dlgConfigInfoboxes.hpp"
+#include "InfoBoxGeometryChoices.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Look/DialogLook.hpp"
@@ -29,6 +30,7 @@ using namespace UI;
 
 static InfoBoxSettings::Panel clipboard;
 static unsigned clipboard_size;
+static constexpr int REOPEN_DIALOG = 100;
 
 class InfoBoxesConfigWidget;
 
@@ -55,7 +57,7 @@ class InfoBoxesConfigWidget final
   : public RowFormWidget, DataFieldListener {
 
   enum Controls {
-    NAME, INFOBOX, CONTENT, DESCRIPTION
+    NAME, GEOMETRY, INFOBOX, CONTENT, DESCRIPTION
   };
 
   struct Layout {
@@ -75,8 +77,6 @@ class InfoBoxesConfigWidget final
   const bool allow_name_change;
   bool changed;
 
-  const InfoBoxSettings::Geometry geometry;
-
   StaticArray<InfoBoxPreview, InfoBoxSettings::Panel::MAX_CONTENTS> previews;
   unsigned current_preview;
 
@@ -87,15 +87,13 @@ public:
                         const DialogLook &dialog_look,
                         const InfoBoxLook &_look,
                         InfoBoxSettings::Panel &_data,
-                        bool _allow_name_change,
-                        InfoBoxSettings::Geometry _geometry)
+                        bool _allow_name_change)
     :RowFormWidget(dialog_look),
      dialog(_dialog),
      look(_look),
      data(_data),
      allow_name_change(_allow_name_change),
-     changed(false),
-     geometry(_geometry) {}
+     changed(false) {}
 
   const InfoBoxLook &GetInfoBoxLook() const {
     return look;
@@ -135,7 +133,7 @@ public:
   bool Save(bool &changed) noexcept override;
 
   void Show(const PixelRect &rc) noexcept override {
-    const Layout layout(rc, geometry);
+    const Layout layout(rc, data.geometry);
 
     RowFormWidget::Show(layout.form);
 
@@ -159,7 +157,7 @@ public:
   }
 
   void Move(const PixelRect &rc) noexcept override {
-    const Layout layout(rc, geometry);
+    const Layout layout(rc, data.geometry);
 
     RowFormWidget::Move(layout.form);
 
@@ -178,8 +176,17 @@ private:
 
   void OnModified(DataField &df) noexcept override {
     if (IsDataField(INFOBOX, df)) {
-      const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+      const auto &dfe = static_cast<const DataFieldEnum &>(df);
       SetCurrentInfoBox(dfe.GetValue());
+    } else if (IsDataField(GEOMETRY, df)) {
+      const auto &dfe = static_cast<const DataFieldEnum &>(df);
+      const auto new_geometry = static_cast<InfoBoxSettings::Geometry>(dfe.GetValue());
+      if (new_geometry == data.geometry)
+        return;
+
+      data.geometry = new_geometry;
+      changed = true;
+      dialog.SetModalResult(REOPEN_DIALOG);
     } else if (IsDataField(CONTENT, df)) {
       const DataFieldEnum &dfe = (const DataFieldEnum &)df;
 
@@ -214,12 +221,17 @@ void
 InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
                                const PixelRect &rc) noexcept
 {
-  const Layout layout(rc, geometry);
+  const Layout layout(rc, data.geometry);
 
   AddText(_("Name"),
           _("The name of this InfoBox panel configuration."),
           allow_name_change ? (const char *)data.name : gettext(data.name));
   SetReadOnly(NAME, !allow_name_change);
+
+  AddEnum(_("Geometry"),
+          _("The InfoBox geometry used when this InfoBox set is active."),
+          info_box_geometry_choices,
+          (unsigned)data.geometry, this);
 
   DataFieldEnum *dfe = new DataFieldEnum(this);
   for (unsigned i = 0; i < layout.info_boxes.count; ++i) {
@@ -404,15 +416,21 @@ bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             const DialogLook &dialog_look,
                             const InfoBoxLook &_look,
-                            InfoBoxSettings::Geometry geometry,
                             InfoBoxSettings::Panel &data_r,
                             bool allow_name_change)
 {
-  TWidgetDialog<InfoBoxesConfigWidget> dialog(WidgetDialog::Full{}, parent,
-                                              dialog_look, nullptr);
-  dialog.SetWidget(dialog, dialog_look, _look,
-                   data_r, allow_name_change, geometry);
+  bool changed = false;
+  int result;
 
-  dialog.ShowModal();
-  return dialog.GetChanged();
+  do {
+    TWidgetDialog<InfoBoxesConfigWidget> dialog(WidgetDialog::Full{}, parent,
+                                                dialog_look, nullptr);
+    dialog.SetWidget(dialog, dialog_look, _look,
+                     data_r, allow_name_change);
+
+    result = dialog.ShowModal();
+    changed |= result == REOPEN_DIALOG || dialog.GetChanged();
+  } while (result == REOPEN_DIALOG);
+
+  return changed;
 }
