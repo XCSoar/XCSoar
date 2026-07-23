@@ -314,6 +314,10 @@ public:
    */
   void ReinitialiseLook() noexcept;
 
+#ifdef ENABLE_OPENGL
+  void SetEInkDisplay(bool enable) noexcept;
+#endif
+
   /**
    * Suspend threads that are owned by this object.
    */

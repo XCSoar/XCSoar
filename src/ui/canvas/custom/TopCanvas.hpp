@@ -272,6 +272,10 @@ public:
   }
 #endif
 
+#ifdef ENABLE_OPENGL
+  void SetEnableDither(bool _enable_dither) noexcept;
+#endif
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
   PixelSize SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif

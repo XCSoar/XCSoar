@@ -453,6 +453,10 @@ public:
   void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif
 
+#ifdef ENABLE_OPENGL
+  void SetEnableDither(bool enable) noexcept;
+#endif
+
 #ifdef DRAW_MOUSE_CURSOR
   void SetCursorSize(const uint8_t &cursorSize) noexcept {
     cursor_size = cursorSize;

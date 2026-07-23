@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "Asset.hpp"
+#include "PortableColor.hpp"
+
 // IWYU pragma: begin_exports
 #ifdef ENABLE_OPENGL
 #include "opengl/Color.hpp"
@@ -47,12 +50,17 @@ LightColor(uint8_t c) noexcept
  * Returns a lighter version of the specified color, adequate for
  * SRCAND filtering.
  */
-constexpr Color
+inline Color
 LightColor(Color c) noexcept
 {
-#ifdef GREYSCALE
+#if defined(GREYSCALE)
   return Color(LightColor(c.GetLuminosity()));
 #else
+  if (IsDithered()) {
+    const uint8_t l = Luminosity8(c.Red(), c.Green(), c.Blue()).GetLuminosity();
+    const uint8_t v = LightColor(l);
+    return Color(v, v, v);
+  }
   return Color(LightColor(c.Red()), LightColor(c.Green()),
                LightColor(c.Blue()));
 #endif
@@ -67,12 +75,17 @@ DarkColor(uint8_t c) noexcept
 /**
  * Returns a darker version of the specified color.
  */
-constexpr Color
+inline Color
 DarkColor(Color c) noexcept
 {
-#ifdef GREYSCALE
+#if defined(GREYSCALE)
   return Color(DarkColor(c.GetLuminosity()));
 #else
+  if (IsDithered()) {
+    const uint8_t l = Luminosity8(c.Red(), c.Green(), c.Blue()).GetLuminosity();
+    const uint8_t v = DarkColor(l);
+    return Color(v, v, v);
+  }
   return Color(DarkColor(c.Red()), DarkColor(c.Green()),
                DarkColor(c.Blue()));
 #endif
