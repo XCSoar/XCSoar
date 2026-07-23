@@ -1,4 +1,4 @@
-FROM debian:trixie-20260623
+FROM debian:13
 
 ENV DEBIAN_FRONTEND=noninteractive
 
