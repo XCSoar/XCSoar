@@ -3,10 +3,15 @@
 
 #pragma once
 
+#include "Weather/Features.hpp"
+
 #include <memory>
 
 class RaspStore;
 class RasterTerrain;
+#ifdef HAVE_HTTP
+class SkySightManager;
+#endif
 
 /**
  * This namespace provides helper functions to access generic global
@@ -45,5 +50,13 @@ SetRasp(std::shared_ptr<RaspStore> rasp) noexcept;
  */
 void
 UpdateHome(bool reset) noexcept;
+
+#ifdef HAVE_HTTP
+std::shared_ptr<SkySightManager>
+GetSkySight() noexcept;
+
+void
+SetSkySight(std::shared_ptr<SkySightManager> skysight) noexcept;
+#endif
 
 };

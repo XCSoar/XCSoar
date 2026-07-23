@@ -316,7 +316,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (!projection.IsValid())
     return;
 
-  StaticString<80> buffer;
+  StaticString<256> buffer;
 
   buffer.clear();
 
@@ -333,7 +333,17 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   const UIState &ui_state = GetUIState();
+  if (Basic().gps.replay) {
+    buffer += _("REPLAY");
+    buffer += " ";
+  }
+  else if (Basic().gps.simulator) {
+    buffer += _("Simulator");
+    buffer += " ";
+  }
+
   if (!ui_state.map_scale_page_title.empty()) {
+    buffer += "| ";
     buffer += ui_state.map_scale_page_title;
     buffer += " ";
   } else if (ui_state.auxiliary_enabled) {
@@ -341,24 +351,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     buffer += " ";
   }
 
-  if (Basic().gps.replay)
-    buffer += "REPLAY ";
-  else if (Basic().gps.simulator) {
-    buffer += _("Simulator");
-    buffer += " ";
-  }
-
   if (GetComputerSettings().polar.ballast_timer_active)
     buffer.AppendFormat(
         "BALLAST %d LITERS ",
         (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
-
-  if (rasp_renderer != nullptr &&
-      ui_state.page_overlay != PageLayout::Overlay::RASP) {
-    const char *label = rasp_renderer->GetLabel();
-    if (label != nullptr)
-      buffer += gettext(label);
-  }
 
   if (!buffer.empty()) {
 

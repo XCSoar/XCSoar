@@ -15,6 +15,12 @@
 
 #endif
 
+#ifdef HAVE_HTTP
+
+#include "SkySight/Settings.hpp"
+
+#endif
+
 struct WeatherCredentialsSettings {
   StaticString<64> email;
   StaticString<64> password;
@@ -24,9 +30,9 @@ struct WeatherCredentialsSettings {
   }
 
   void SetDefaults() noexcept {
-    /* Never embed real credentials in source — they would ship in the
+    /* Never embed real credentials in source - they would ship in the
        binary and end up reused across users. Users supply their own
-       credentials via Config → Weather → XCTherm. */
+       credentials via Config -> Weather -> XCTherm. */
     email.clear();
     password.clear();
   }
@@ -49,11 +55,11 @@ struct XCThermSettings {
 
   /**
    * How many hours of hourly forecasts the Download button fetches,
-   * starting from the next full hour. E.g. 12 → download +1h, +2h, ..., +12h.
+   * starting from the next full hour. E.g. 12 -> download +1h, +2h, ..., +12h.
    *
    * Session-only: always resets to the default on startup. The user can
    * change it via the "Span" button during a session, but the value is
-   * never persisted to the profile — by design, so each session starts
+   * never persisted to the profile - by design, so each session starts
    * with the cheap quick-look default.
    */
   unsigned download_span_hours;
@@ -78,6 +84,10 @@ struct WeatherSettings {
 #endif
 
 #ifdef HAVE_HTTP
+  SkySightSettings skysight;
+#endif
+
+#ifdef HAVE_HTTP
   /**
    * Enable Thermal Information Map?
    */
@@ -89,6 +99,10 @@ struct WeatherSettings {
   void SetDefaults() noexcept {
 #ifdef HAVE_PCMET
     pcmet.SetDefaults();
+#endif
+
+#ifdef HAVE_HTTP
+    skysight.SetDefaults();
 #endif
 
 #ifdef HAVE_HTTP

@@ -8,6 +8,7 @@
 #include "ActionInterface.hpp"
 #include "MainWindow.hpp"
 #include "CrossSection/CrossSectionWidget.hpp"
+#include "DataGlobals.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
@@ -29,6 +30,7 @@
 #include "Weather/EDL/StateController.hpp"
 #endif
 #ifdef HAVE_HTTP
+#include "Weather/SkySight/SkySightManager.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #endif
 
@@ -64,18 +66,21 @@ namespace PageActions {
   static void LeaveRaspOverlay() noexcept;
   static void LeaveEdlOverlay() noexcept;
   static void LeaveXcthermOverlay() noexcept;
+  static void LeaveSkySightOverlay() noexcept;
 
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
 
   static void ApplyRaspOverlay(const PageLayout &layout) noexcept;
   static void ApplyEdlOverlay() noexcept;
   static void ApplyXcthermOverlay() noexcept;
+  static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 
   static void ResetOverlayCursorSession(PageLayout::Overlay overlay) noexcept;
   static ConfigureWeatherOverlayResult ConfigureWeatherOverlayPage(
-    PageLayout::Overlay overlay, bool add_new_page, int rasp_field);
+    PageLayout::Overlay overlay, bool add_new_page, int rasp_field,
+    std::string_view skysight_layer_id);
 };
 
 const PageLayout &
@@ -98,6 +103,18 @@ PageActions::ClearPageOverlays() noexcept
 #ifdef HAVE_EDL
   if (!weather.edl.session.IsSuspendedForPan())
     EDL::ClearOverlay();
+#endif
+
+  if (!weather.xctherm.IsSuspendedForPan()) {
+#ifdef HAVE_HTTP
+    XCTherm::ClearMapOverlay();
+#endif
+  }
+
+#ifdef HAVE_HTTP
+  if (!weather.skysight.IsSuspendedForPan())
+    if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+      skysight->ApplyPageOverlay({});
 #endif
 }
 
@@ -139,6 +156,20 @@ PageActions::LeaveXcthermOverlay() noexcept
 }
 
 void
+PageActions::LeaveSkySightOverlay() noexcept
+{
+#ifdef HAVE_HTTP
+  auto &skysight_session = CommonInterface::SetUIState().weather.skysight;
+  if (skysight_session.IsSuspendedForPan())
+    return;
+
+  skysight_session.LeavePage();
+  if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+    skysight->ApplyPageOverlay({});
+#endif
+}
+
+void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
   if (layout.UsesEdlOverlay())
@@ -147,6 +178,8 @@ PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
     LeaveRaspOverlay();
   else if (layout.UsesXcthermOverlay())
     LeaveXcthermOverlay();
+  else if (layout.UsesSkySightOverlay())
+    LeaveSkySightOverlay();
 }
 
 void
@@ -206,6 +239,22 @@ PageActions::ApplyXcthermOverlay() noexcept
 }
 
 void
+PageActions::ApplySkySightOverlay(const PageLayout &layout) noexcept
+{
+#ifdef HAVE_HTTP
+  auto &skysight_session = CommonInterface::SetUIState().weather.skysight;
+  const bool first_enter = skysight_session.EnterPage();
+
+  if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
+    skysight->ApplyPageOverlay(layout.skysight_overlay.c_str(),
+                               first_enter &&
+                               !skysight_session.cursor_initialized);
+#else
+  (void)layout;
+#endif
+}
+
+void
 PageActions::SuspendWeatherOverlaysForPan() noexcept
 {
   WeatherUIState &weather = CommonInterface::SetUIState().weather;
@@ -217,6 +266,8 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
     weather.rasp.SuspendForPan();
   if (layout.UsesXcthermOverlay())
     weather.xctherm.SuspendForPan();
+  if (layout.UsesSkySightOverlay())
+    weather.skysight.SuspendForPan();
 }
 
 void
@@ -226,6 +277,7 @@ PageActions::ResumeWeatherOverlaysAfterPan() noexcept
   weather.edl.session.ResumeAfterPan();
   weather.rasp.ResumeAfterPan();
   weather.xctherm.ResumeAfterPan();
+  weather.skysight.ResumeAfterPan();
 }
 
 void
@@ -247,6 +299,10 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::XCTHERM:
     ApplyXcthermOverlay();
+    break;
+
+  case PageLayout::Overlay::SKYSIGHT:
+    ApplySkySightOverlay(layout);
     break;
 
   case PageLayout::Overlay::MAX:
@@ -476,7 +532,7 @@ LoadBottom(const PageLayout &layout)
     break;
 
   case PageLayout::Bottom::WEATHER_CONTROLS:
-    if (auto model = WeatherMapOverlay::CreateControlsModel(layout.overlay)) {
+    if (auto model = WeatherMapOverlay::CreateControlsModel(layout)) {
       CommonInterface::main_window->SetBottomWidget(
         new WeatherMapOverlay::ControlsWidget(std::move(model)));
       break;
@@ -692,13 +748,18 @@ PageActions::ResetOverlayCursorSession(PageLayout::Overlay overlay) noexcept
   case PageLayout::Overlay::XCTHERM:
     weather.xctherm.cursor_initialized = false;
     break;
+
+  case PageLayout::Overlay::SKYSIGHT:
+    weather.skysight.cursor_initialized = false;
+    break;
   }
 }
 
 PageActions::ConfigureWeatherOverlayResult
 PageActions::ConfigureWeatherOverlayPage(PageLayout::Overlay overlay,
                                          bool add_new_page,
-                                         int rasp_field)
+                                         int rasp_field,
+                                         std::string_view skysight_layer_id)
 {
   auto &settings = CommonInterface::SetUISettings().pages;
   auto &pages = CommonInterface::SetUIState().pages;
@@ -718,7 +779,8 @@ PageActions::ConfigureWeatherOverlayPage(PageLayout::Overlay overlay,
      into a map page; create a new weather page instead. */
   if (add_new_page || !current_is_map_main) {
     const auto add_result = WeatherMapOverlay::AddWeatherOverlayPage(
-      settings, pages.current_index, overlay, target_page_index, rasp_field);
+      settings, pages.current_index, overlay, target_page_index, rasp_field,
+      skysight_layer_id);
     if (add_result == WeatherMapOverlay::AddPageResult::PAGE_LIMIT_REACHED)
       return ConfigureWeatherOverlayResult::PAGE_LIMIT_REACHED;
     if (add_result != WeatherMapOverlay::AddPageResult::SUCCESS)
@@ -726,7 +788,8 @@ PageActions::ConfigureWeatherOverlayPage(PageLayout::Overlay overlay,
 
     result = ConfigureWeatherOverlayResult::ADDED_PAGE;
   } else if (!WeatherMapOverlay::ApplyWeatherOverlayToPage(
-               settings, pages.current_index, overlay, rasp_field))
+               settings, pages.current_index, overlay, rasp_field,
+               skysight_layer_id))
     return ConfigureWeatherOverlayResult::NO_CONFIGURED_PAGE;
 
   pages.current_index = target_page_index;
@@ -741,14 +804,18 @@ PageActions::ConfigureWeatherOverlayPage(PageLayout::Overlay overlay,
 
 PageActions::ConfigureWeatherOverlayResult
 PageActions::AddWeatherOverlayToCurrentPage(PageLayout::Overlay overlay,
-                                            int rasp_field)
+                                            int rasp_field,
+                                            std::string_view skysight_layer_id)
 {
-  return ConfigureWeatherOverlayPage(overlay, false, rasp_field);
+  return ConfigureWeatherOverlayPage(overlay, false, rasp_field,
+                                     skysight_layer_id);
 }
 
 PageActions::ConfigureWeatherOverlayResult
 PageActions::AddWeatherOverlayToNewPage(PageLayout::Overlay overlay,
-                                        int rasp_field)
+                                        int rasp_field,
+                                        std::string_view skysight_layer_id)
 {
-  return ConfigureWeatherOverlayPage(overlay, true, rasp_field);
+  return ConfigureWeatherOverlayPage(overlay, true, rasp_field,
+                                     skysight_layer_id);
 }

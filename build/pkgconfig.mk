@@ -26,9 +26,24 @@ ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
 endif
 
 call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1) || echo ERROR)
+call-pkg-config-unstatic = $(shell $(subst --static,,$(PKG_CONFIG)) --$(2) $(1) || echo ERROR)
 
 define assign-check-error
 $(1) = $$($(2))$$(if $$(filter ERROR,$$($(2))),$$(error $(3)))
+endef
+
+# Like pkg-config-library, but omit --static from the configured command.
+# Some native package configurations only provide valid transitive dependency
+# metadata for their shared libraries.
+define pkg-config-library-unstatic
+
+$(1)_CPPFLAGS_RAW_GEN = $$(call pkg-config-cppflags-filter,$$(call call-pkg-config-unstatic,$(2),cflags))
+$(1)_LDLIBS_RAW_GEN = $$(call pkg-config-ldlibs-filter,$$(call call-pkg-config-unstatic,$(2),libs))
+$(1)_MODVERSION_RAW_GEN = $$(call call-pkg-config-unstatic,$(2),modversion)
+
+$$(foreach i,CPPFLAGS LDLIBS MODVERSION,$$(call DEF_THUNK,$(1)_$$(i)_RAW))
+$$(foreach i,CPPFLAGS LDLIBS MODVERSION,$$(eval $$(call assign-check-error,$(1)_$$(i),$(1)_$$(i)_RAW,library not found: $(2))))
+
 endef
 
 ifeq ($(TARGET_IS_KOBO),y)

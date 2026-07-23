@@ -17,6 +17,7 @@
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
 #include "Renderer/TurnBackMarkerRenderer.hpp"
+#include "OverlayLimits.hpp"
 #include "Weather/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 
@@ -127,7 +128,11 @@ protected:
   std::unique_ptr<RaspRenderer> rasp_renderer;
 
 #ifdef ENABLE_OPENGL
+#if defined(HAVE_HTTP)
+  std::unique_ptr<MapOverlay> overlay[MapWindowOverlay::MAX_MAP_OVERLAYS];
+#else
   std::unique_ptr<MapOverlay> overlay;
+#endif
 #endif
 
   const TrafficLook &traffic_look;
@@ -231,8 +236,22 @@ public:
 #ifdef ENABLE_OPENGL
   void SetOverlay(std::unique_ptr<MapOverlay> &&_overlay) noexcept;
 
+#if defined(HAVE_HTTP)
+  void SetOverlay(unsigned index, std::unique_ptr<MapOverlay> &&_overlay) noexcept;
+
+  const MapOverlay *GetOverlay(unsigned index) const noexcept {
+    return index < MapWindowOverlay::MAX_MAP_OVERLAYS
+      ? overlay[index].get()
+      : nullptr;
+  }
+#endif
+
   const MapOverlay *GetOverlay() const noexcept {
+#if defined(HAVE_HTTP)
+    return GetOverlay(0);
+#else
     return overlay.get();
+#endif
   }
 #endif
 

@@ -25,6 +25,9 @@ Version 7.45 - not yet released
   - Rename to turnpoint observation zone type "Symmetric Quadrant" to
     "Symmetric Sector", as these zones do not have to be 90 degrees but
     support any angle.
+  - add SkySight forecast overlays with page placement, persistent layer
+    selection, session-only forecast times, offline caching, throttle recovery,
+    and preload progress #2690
   - Outline selected targets on the FLARM traffic radar
   - Weather cursor bar: narrower stepper buttons on touchscreens and clip
     long centre labels instead of hiding them when they do not fit

@@ -61,7 +61,7 @@ install_linux() {
     libsodium-dev \
     libfreetype-dev \
     libpng-dev libjpeg-dev \
-    libtiff5-dev libgeotiff-dev \
+    libtiff5-dev libgeotiff-dev libnetcdf-dev \
     libssl-dev \
     libcurl4-openssl-dev \
     libc-ares-dev \

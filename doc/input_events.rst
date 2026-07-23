@@ -495,8 +495,8 @@ Event list
  * - ``Weather``
    - Opens the weather dialog.
  * - ``WeatherOverlay``
-   - Adjusts the active map weather overlay cursor bar (EDL, RASP, or
-     XCTherm). Only has an effect on map pages that show weather overlay
+   - Adjusts the active map weather overlay cursor bar (EDL, RASP, XCTherm,
+     or SkySight). Only has an effect on map pages that show weather overlay
      controls. Arguments use a common ``<axis> …`` prefix:
 
      **Time:** ``time +``, ``time -`` (step forecast time), ``time picker``
@@ -518,7 +518,8 @@ Event list
 
      RASP overlays support time and layer selection. EDL overlays support
      time and pressure level. XCTherm overlays map the secondary axis to
-     altitude bands and time to forecast hours.
+     altitude bands and time to forecast hours. SkySight uses the secondary
+     axis for selected layers and the time axis for available forecast steps.
  * - ``Zoom Z``
    - Controls map zoom. Possible arguments: ``auto toggle``,
      ``auto on``, ``auto off``, ``auto show``, ``in``, ``out``,
@@ -569,7 +570,7 @@ hierarchies.
 Weather overlay mode (``mode=weather``)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When a map page displays EDL, RASP, or XCTherm overlay controls in the
+When a map page displays EDL, RASP, XCTherm, or SkySight overlay controls in the
 bottom cursor bar, open the quick menu (F1 or the ULDR gesture) and choose
 **Forecast Controls** (RemoteStick), or bind ``Mode weather`` elsewhere,
 to enter ``mode=weather`` so stick and button bindings can adjust forecast

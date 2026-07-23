@@ -71,6 +71,9 @@
 #ifdef HAVE_HTTP
 #include "Panels/XCThermConfigPanel.hpp"
 #endif
+#ifdef HAVE_HTTP
+#include "Panels/SkySightConfigPanel.hpp"
+#endif
 
 #include "Panels/WeGlideConfigPanel.hpp"
 #include "Panels/NetworkConfigPanel.hpp"
@@ -136,6 +139,9 @@ static constexpr TabMenuPage weather_pages[] = {
   { N_("Thermal Information Map"), CreateWeatherConfigPanel },
 #endif
   { "RASP", CreateRaspConfigPanel },
+#ifdef HAVE_HTTP
+  { "SkySight", CreateSkySightConfigPanel },
+#endif
 #ifdef HAVE_PCMET
   { "Flugwetter (pc_met)", CreatePCMetConfigPanel },
 #endif

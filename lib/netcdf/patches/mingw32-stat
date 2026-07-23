@@ -1,0 +1,11 @@
+--- a/include/ncpathmgr.h
++++ b/include/ncpathmgr.h
+@@ -94,7 +94,7 @@ NCPD_MINGW  | <mountpoint>/<path> | <drive>:<path>
+ #define WINPATH 1
+ #endif
+ #endif
+-#ifdef _WIN64
++#ifdef _WIN32
+ #define STAT struct _stat64 *
+ #else
+ #define STAT struct _stat *

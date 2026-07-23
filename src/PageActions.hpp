@@ -5,6 +5,8 @@
 
 #include "PageSettings.hpp"
 
+#include <string_view>
+
 class GlueMapWindow;
 class Widget;
 
@@ -130,7 +132,8 @@ namespace PageActions
    */
   ConfigureWeatherOverlayResult
   AddWeatherOverlayToCurrentPage(PageLayout::Overlay overlay,
-                                 int rasp_field=-1);
+                                 int rasp_field=-1,
+                                 std::string_view skysight_layer_id={});
 
   /**
    * Clone the current configured page, apply a weather overlay to the clone,
@@ -138,7 +141,8 @@ namespace PageActions
    */
   ConfigureWeatherOverlayResult
   AddWeatherOverlayToNewPage(PageLayout::Overlay overlay,
-                             int rasp_field=-1);
+                             int rasp_field=-1,
+                             std::string_view skysight_layer_id={});
 
   /**
    * Preserve active weather overlays across a temporary pan full-screen.

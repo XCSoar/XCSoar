@@ -2150,6 +2150,11 @@ RUN_MAP_WINDOW_SOURCES += \
 	$(SRC)/Weather/NOAAStore.cpp
 endif
 
+ifeq ($(HAVE_HTTP),y)
+RUN_MAP_WINDOW_SOURCES += \
+	$(TEST_SRC_DIR)/FakeSkySight.cpp
+endif
+
 RUN_MAP_WINDOW_DEPENDS = \
 	LIBMAPWINDOW \
 	FLARM \

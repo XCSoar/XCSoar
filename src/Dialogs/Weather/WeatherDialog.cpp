@@ -13,6 +13,10 @@
 #endif
 #include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
 #include "Weather/Features.hpp"
+
+#ifdef HAVE_HTTP
+#include "SkySightDialog.hpp"
+#endif
 #if 0
 #include "MapOverlayWidget.hpp"
 #endif
@@ -113,6 +117,13 @@ ShowWeatherDialog(const char *page)
   int start_page = -1;
 
   /* setup tabs */
+
+#ifdef HAVE_HTTP
+  if (page != nullptr && StringIsEqual(page, "skysight"))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateSkySightWidget(), "SkySight");
+#endif
 
 #ifdef HAVE_NOAA
   if (page != nullptr && StringIsEqual(page, "list"))
