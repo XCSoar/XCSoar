@@ -435,39 +435,6 @@ Draw(Canvas &canvas, PixelRect rc,
     row_renderer.DrawSecondRow(canvas, rc, item.info.c_str());
 }
 
-/**
- * Format a sampled RASP field value in the user's units, e.g.
- * "+2.1 m/s" or "1430 m".  Returns an empty string if no value is
- * available at the queried location.
- */
-static StaticString<32>
-FormatRaspValue(const RaspFieldValue &value) noexcept
-{
-  StaticString<32> result;
-
-  if (!value.available) {
-    result.clear();
-    return result;
-  }
-
-  if (value.unit_group == UnitGroup::NONE) {
-    result.Format("%.1f", value.value);
-    return result;
-  }
-
-  const Unit unit = Units::GetUserUnitByGroup(value.unit_group);
-  const double v = Units::ToUserUnit(value.value, unit);
-
-  /* vertical speed carries a sign, like the vario display */
-  const bool with_sign = value.unit_group == UnitGroup::VERTICAL_SPEED;
-  const char *fmt = (v >= 100.0 || v <= -100.0)
-    ? (with_sign ? "%+.0f %s" : "%.0f %s")
-    : (with_sign ? "%+.1f %s" : "%.1f %s");
-
-  result.Format(fmt, v, Units::GetUnitName(unit));
-  return result;
-}
-
 static void
 Draw(Canvas &canvas, PixelRect rc,
      const RaspMapItem &item,
