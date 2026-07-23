@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Language/Language.hpp"
 #include "util/StaticString.hxx"
 
 #include <cstddef>
@@ -43,6 +44,33 @@ AppendNoDataTag(StaticString<N> &dest, const char *label) noexcept
 }
 
 /**
+ * Copy @p base into @p dest, or append #NoDataTag() when @p has_data is false.
+ */
+template<size_t N>
+void
+AssignLabeledData(StaticString<N> &dest, const char *base,
+                  bool has_data) noexcept
+{
+  if (base == nullptr || *base == '\0') {
+    dest.clear();
+    return;
+  }
+
+  if (has_data)
+    dest = base;
+  else
+    AppendNoDataTag(dest, base);
+}
+
+template<size_t N>
+void
+AssignLabeledData(StaticString<N> &dest, const StaticString<N> &base,
+                  bool has_data) noexcept
+{
+  AssignLabeledData(dest, base.c_str(), has_data);
+}
+
+/**
  * Format @p offset_min as @c "+H:MM" or @c "-H:MM" into @p dest.
  */
 void
@@ -62,6 +90,26 @@ void
 FormatAutoUtcHourLabel(StaticString<64> &dest, bool auto_advance,
                        unsigned hour_utc,
                        const char *offset_buf) noexcept;
+
+/**
+ * Named secondary-axis label with optional AUTO prefix, e.g.
+ * @c "AUTO: 2000m" or @c "2000m".
+ */
+template<size_t N>
+void
+FormatAutoNamedLabel(StaticString<N> &dest, bool auto_advance,
+                     const char *name) noexcept
+{
+  if (name == nullptr || *name == '\0') {
+    dest.clear();
+    return;
+  }
+
+  if (auto_advance)
+    dest.Format("%s %s", _("AUTO:"), name);
+  else
+    dest = name;
+}
 
 /**
  * Cursor-bar local @c HH:MM label with optional AUTO prefix.

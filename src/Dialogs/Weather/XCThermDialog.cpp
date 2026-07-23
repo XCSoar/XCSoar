@@ -4,11 +4,9 @@
 #include "XCThermDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
-#include "Message.hpp"
-#include "Dialogs/ListPicker.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
-#include "OverlayPageActions.hpp"
+#include "WeatherOverlayDraft.hpp"
 #include "PageActions.hpp"
 #include "PageSettings.hpp"
 #include "Weather/Features.hpp"
@@ -16,20 +14,18 @@
 #ifdef HAVE_HTTP
 
 #include "UIGlobals.hpp"
-#include "Look/DialogLook.hpp"
 #include "Form/Button.hpp"
-#include "Form/ButtonPanel.hpp"
-#include "Widget/ListWidget.hpp"
-#include "Widget/ButtonPanelWidget.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/Edit.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Keys.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
 #include "Language/Language.hpp"
-#include "Renderer/TextRowRenderer.hpp"
-#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/StaticString.hxx"
+#include "Weather/xctherm/FieldControls.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Weather/xctherm/XCThermDownloadGlue.hpp"
@@ -47,7 +43,7 @@
 namespace {
 
 /**
- * Download metadata for a layer — shown in the second row.
+ * Download metadata for a layer — shown in the Status row.
  * For a span download, sizes/speed are totals across all hourly slices,
  * span_hours is the number of slices successfully fetched, and
  * pending_index/pending_total animate progress during the loop.
@@ -55,22 +51,21 @@ namespace {
 struct LayerDownloadInfo {
   enum Status { NONE, PENDING, DONE, FAILED, CANCELED };
   Status status = NONE;
-  double wire_mb = 0.0;           // total bytes over the network
-  double speed_mbs = 0.0;         // average download speed
-  unsigned span_hours = 0;        // hours of forecast cached (incl. reuse)
-  unsigned future_hours = 0;      // cached hours still in the future from now
-  unsigned new_downloads = 0;     // slices newly fetched this run
-  unsigned pending_index = 0;     // current slice being fetched (1-based)
-  unsigned pending_total = 0;     // total slices in this span
-  uint64_t pending_bytes_now = 0; // bytes received on current slice
-  uint64_t pending_bytes_total = 0; // expected total of current slice
-  unsigned retry_attempt = 0;     // 0 = not retrying; >0 = nth retry
-  unsigned retry_seconds_left = 0;// seconds until next retry attempt
-  std::string download_time;      // "HH:MM:SS" local time
-  std::string issued_utc;         // "YYYY-MM-DD HH UTC" of the model run
+  double wire_mb = 0.0;
+  double speed_mbs = 0.0;
+  unsigned span_hours = 0;
+  unsigned future_hours = 0;
+  unsigned new_downloads = 0;
+  unsigned pending_index = 0;
+  unsigned pending_total = 0;
+  uint64_t pending_bytes_now = 0;
+  uint64_t pending_bytes_total = 0;
+  unsigned retry_attempt = 0;
+  unsigned retry_seconds_left = 0;
+  std::string download_time;
+  std::string issued_utc;
 };
 
-/** Per-layer download info (indexed by layer position in the list) */
 static LayerDownloadInfo download_info_ch[
   XCTherm::GetRegion(XCTherm::Region::CH).layer_count];
 static LayerDownloadInfo download_info_uk[
@@ -84,252 +79,161 @@ GetDownloadInfo(unsigned model) noexcept
   return download_info_ch;
 }
 
-/* ---- List item renderer ---- */
-
-class XCThermRowRenderer {
-  TwoTextRowsRenderer row_renderer;
-
-public:
-  unsigned CalculateLayout(const DialogLook &look) {
-    return row_renderer.CalculateLayout(*look.list.font_bold,
-                                       look.small_font);
-  }
-
-  void Draw(Canvas &canvas, const PixelRect rc, unsigned index,
-            unsigned model, unsigned active_parameter,
-            unsigned active_wave_height,
-            unsigned active_vertical_agl,
-            unsigned span_hours_setting);
+static constexpr StaticEnumChoice span_list[] = {
+  { 1, N_("1 hour") },
+  { 3, N_("3 hours") },
+  { 6, N_("6 hours") },
+  { 12, N_("12 hours") },
+  { 18, N_("18 hours") },
+  nullptr
 };
 
-void
-XCThermRowRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          unsigned index, unsigned model,
-                          unsigned active_parameter,
-                          unsigned active_wave_height,
-                          unsigned active_vertical_agl,
-                          unsigned span_hours_setting)
+StaticString<200>
+FormatLayerStatus(unsigned model, unsigned layer_index,
+                  unsigned span_hours_setting) noexcept
 {
+  StaticString<200> text;
   const auto &region = XCTherm::GetRegion(model);
-  if (index >= region.layer_count)
-    return;
+  if (layer_index >= region.layer_count) {
+    text = _("None");
+    return text;
+  }
 
-  const auto &layer = region.layers[index];
-  const bool active = XCTherm::IsActiveLayer(layer, active_parameter,
-                                             active_wave_height,
-                                             active_vertical_agl);
-
-  StaticString<80> first_row;
-  if (active)
-    first_row.Format("%s  %s", gettext(layer.dialog_label), _("[ACTIVE]"));
-  else
-    first_row = gettext(layer.dialog_label);
-
-  /* Second row: download status */
-  StaticString<200> second_row;
   const auto *info = GetDownloadInfo(model);
-  switch (info[index].status) {
+  switch (info[layer_index].status) {
   case LayerDownloadInfo::PENDING: {
-    const auto &p = info[index];
-    /* pending_index is the 1-based slot number being fetched (1 = the
-       previous-hour slice we always prepend, 2..pending_total = future
-       hours). "Slot N/M" rather than "+Nh of M" because the offset for
-       N=1 is actually -1h. */
-    if (p.retry_seconds_left > 0) {
-      /* Network seems down — show countdown to next attempt. */
-      second_row.Format(_("Slot %u: reconnect in %us (try #%u)"),
-                        p.pending_index,
-                        p.retry_seconds_left,
-                        p.retry_attempt + 1);
-    } else if (p.pending_bytes_total > 0) {
+    const auto &p = info[layer_index];
+    if (p.retry_seconds_left > 0)
+      text.Format(_("Slot %u: reconnect in %us (try #%u)"),
+                  p.pending_index,
+                  p.retry_seconds_left,
+                  p.retry_attempt + 1);
+    else if (p.pending_bytes_total > 0) {
       const double now_mb = (double)p.pending_bytes_now / (1024.0 * 1024.0);
       const double tot_mb = (double)p.pending_bytes_total / (1024.0 * 1024.0);
-      second_row.Format(_("Slot %u/%u: %.2f / %.2f MB"),
-                        p.pending_index,
-                        p.pending_total,
-                        now_mb, tot_mb);
+      text.Format(_("Slot %u/%u: %.2f / %.2f MB"),
+                  p.pending_index, p.pending_total, now_mb, tot_mb);
     } else if (p.pending_bytes_now > 0) {
       const double now_mb = (double)p.pending_bytes_now / (1024.0 * 1024.0);
-      second_row.Format(_("Slot %u/%u: %.2f MB"),
-                        p.pending_index,
-                        p.pending_total,
-                        now_mb);
-    } else if (p.pending_total > 0) {
-      second_row.Format(_("Slot %u/%u: connecting..."),
-                        p.pending_index,
-                        p.pending_total);
-    } else {
-      second_row = _("Connecting...");
-    }
+      text.Format(_("Slot %u/%u: %.2f MB"),
+                  p.pending_index, p.pending_total, now_mb);
+    } else if (p.pending_total > 0)
+      text.Format(_("Slot %u/%u: connecting..."),
+                  p.pending_index, p.pending_total);
+    else
+      text = _("Connecting...");
     break;
   }
   case LayerDownloadInfo::DONE: {
-    /* "X/Yh" where X = cached future-hours still ahead of now and
-       Y = the user's currently configured download span. Letting the
-       user see at-a-glance how much of a fresh fetch they'd actually
-       need: e.g. "4 / 12 h" means the layer covers 4 of the next 12
-       requested hours; the rest would be new downloads. */
-    const unsigned future = info[index].future_hours;
-    if (info[index].new_downloads == 0)
-      second_row.Format(_("%u/%uh | Issued %s | %s"),
-                        future, span_hours_setting,
-                        info[index].issued_utc.c_str(),
-                        info[index].download_time.c_str());
+    const unsigned future = info[layer_index].future_hours;
+    if (info[layer_index].new_downloads == 0)
+      text.Format(_("%u/%uh | Issued %s | %s"),
+                  future, span_hours_setting,
+                  info[layer_index].issued_utc.c_str(),
+                  info[layer_index].download_time.c_str());
     else
-      second_row.Format(_("%u/%uh (%u new) | Issued %s | %.2f MB wire %.1f MB/s | %s"),
-                        future, span_hours_setting,
-                        info[index].new_downloads,
-                        info[index].issued_utc.c_str(),
-                        info[index].wire_mb,
-                        info[index].speed_mbs,
-                        info[index].download_time.c_str());
+      text.Format(_("%u/%uh (%u new) | Issued %s | %.2f MB wire "
+                    "%.1f MB/s | %s"),
+                  future, span_hours_setting,
+                  info[layer_index].new_downloads,
+                  info[layer_index].issued_utc.c_str(),
+                  info[layer_index].wire_mb,
+                  info[layer_index].speed_mbs,
+                  info[layer_index].download_time.c_str());
     break;
   }
   case LayerDownloadInfo::FAILED:
-    second_row = _("Download failed");
+    text = _("Download failed");
     break;
   case LayerDownloadInfo::CANCELED:
-    second_row = _("Cancelled");
+    text = _("Cancelled");
     break;
   default:
-    if (active)
-      second_row = _("Not downloaded");
-    else
-      second_row = "";
+    text = _("Not downloaded");
     break;
   }
 
-  row_renderer.DrawFirstRow(canvas, rc, first_row);
-  row_renderer.DrawSecondRow(canvas, rc, second_row);
+  return text;
 }
 
-/* ---- String choice renderer for model picker ---- */
+class XCThermWidget final : public RowFormWidget {
+  enum Controls {
+    LAYER,
+    STATUS,
+    SPAN,
+    UPDATE,
+    DELETE_BUTTON,
+    SPACER_AFTER_UPDATE,
+    TIME,
+    ALTITUDE,
+    APPLY_TO_PAGE,
+    ADD_PAGE,
+    SPACER_AFTER_ADD,
+  };
 
-class StringChoiceRenderer final : public ListItemRenderer {
-  TextRowRenderer row_renderer;
-  const char *const *choices;
-
-public:
-  explicit StringChoiceRenderer(const char *const *_choices) noexcept
-    : choices(_choices) {}
-
-  unsigned CalculateLayout(const DialogLook &look) {
-    return row_renderer.CalculateLayout(*look.list.font);
-  }
-
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned i) noexcept override {
-    /* Choices are stored with N_() markers and translated at paint
-       time so callers can pass plain string literals into the array
-       and still get localized display. */
-    row_renderer.DrawTextRow(canvas, rc, gettext(choices[i]));
-  }
-};
-
-/* ---- Main widget ---- */
-
-class XCThermWidget final : public ListWidget {
-  ButtonPanelWidget *buttons_widget = nullptr;
-  Button *span_button = nullptr;
-  Button *activate_button = nullptr;
-  Button *add_to_current_button = nullptr;
-  Button *add_to_new_page_button = nullptr;
-  Button *download_button = nullptr;   // labeled "Update" or "Stop"
+  Button *update_button = nullptr;
   Button *delete_button = nullptr;
+  Button *apply_to_page_button = nullptr;
+  Button *add_page_button = nullptr;
 
-  XCThermRowRenderer row_renderer;
+  unsigned selected_layer = 0;
+  WeatherOverlayDraft::State overlay;
 
   std::shared_ptr<XCThermDownloadJob> active_job;
-
-  /* Polls active_job every 200 ms for live progress (UI thread). */
   UI::PeriodicTimer poll_timer{[this]{ PollDownload(); }};
 
-public:
-  void SetButtonPanel(ButtonPanelWidget &_buttons) {
-    buttons_widget = &_buttons;
-  }
+  static XCThermWidget *active;
 
-  void CreateButtons(ButtonPanel &buttons);
+public:
+  XCThermWidget() noexcept
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   ~XCThermWidget() noexcept override {
     if (auto *glue = GetXCThermDownloadGlue())
       glue->Abandon();
+    if (active == this)
+      active = nullptr;
   }
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Unprepare() noexcept override;
 
 private:
-  void UpdateList();
-  void SaveSettings();
-  bool SetActiveLayerFromCursor();
+  void SaveSettings() noexcept;
+  void UpdateLayerControl() noexcept;
+  void UpdateStatusControl() noexcept;
+  void UpdateSpanControl() noexcept;
+  void SyncUpdateButtons() noexcept;
+  void UpdateTimeControl() noexcept;
+  void UpdateAltitudeControl() noexcept;
+  void RefreshPageSection() noexcept;
+  void OnLayerModified() noexcept;
+  void OnSpanModified() noexcept;
+  void ApplyToPageClicked() noexcept;
+  void AddPageClicked() noexcept;
+  bool EditTime(DataField &df) noexcept;
+  bool EditAltitude(DataField &df) noexcept;
 
-  void ActivateClicked();
-  void AddToCurrentClicked();
-  void AddToNewPageClicked();
-  void DownloadClicked();
-  void DeleteClicked();
-  void SpanClicked();
-
-  /* New download flow */
-  void StartDownload();
-  void PollDownload();
-  void FinishDownload();
-  void CancelDownload();
-
-  /**
-   * Walk every row for the current model and populate its
-   * LayerDownloadInfo from the XCThermAPI in-RAM cache (which on
-   * startup includes anything the persistent disk cache rehydrated).
-   * Lets the user open the dialog and immediately see that prior-
-   * session forecasts are still available, with their freshness and
-   * the run they came from, without having to redownload.
-   *
-   * Never stomps on session state (PENDING / FAILED / CANCELED entries
-   * are left alone), so this is safe to call from Prepare().
-   */
+  void DownloadClicked() noexcept;
+  void DeleteClicked() noexcept;
+  void StartDownload() noexcept;
+  void PollDownload() noexcept;
+  void FinishDownload() noexcept;
+  void CancelDownload() noexcept;
   void RehydrateRowsFromCache() noexcept;
 
-public:
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override;
-
-protected:
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) noexcept override;
-
-  void OnCursorMoved(unsigned index) noexcept override;
-
-  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
-    return true;
-  }
-
-  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
-    ActivateClicked();
-  }
+  static bool EditTimeCallback(const char *caption, DataField &df,
+                               const char *help_text) noexcept;
+  static bool EditAltitudeCallback(const char *caption, DataField &df,
+                                   const char *help_text) noexcept;
 };
 
-void
-XCThermWidget::CreateButtons(ButtonPanel &buttons)
-{
-  /* Button order matches user-flow:
-       1. Span  — pick how much to fetch
-       2. Activate — mark which row is "active"
-       3. Update — fetch / refresh data (acts as Stop while running)
-       4. Delete — clear cached data for the cursor row
-     Region (CH/UK) lives in Config → Weather → XCTherm. */
-  span_button = buttons.Add(_("Span"), [this]() { SpanClicked(); });
-  activate_button = buttons.Add(_("Activate"),
-                                [this]() { ActivateClicked(); });
-  add_to_current_button = buttons.Add(_("Add to page"),
-                                      [this]() { AddToCurrentClicked(); });
-  add_to_new_page_button = buttons.Add(_("Add new page"),
-                                       [this]() { AddToNewPageClicked(); });
-  download_button = buttons.Add(_("Update"),
-                                [this]() { DownloadClicked(); });
-  delete_button = buttons.Add(_("Delete"),
-                              [this]() { DeleteClicked(); });
-}
+XCThermWidget *XCThermWidget::active = nullptr;
 
 void
-XCThermWidget::SaveSettings()
+XCThermWidget::SaveSettings() noexcept
 {
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
@@ -338,186 +242,182 @@ XCThermWidget::SaveSettings()
   Profile::Set(ProfileKeys::XCThermWaveHeight, (int)settings.wave_height);
   Profile::Set(ProfileKeys::XCThermVerticalWindAGL,
                (int)settings.vertical_wind_agl);
-  /* download_span_hours is session-only — not persisted. */
 }
 
 void
-XCThermWidget::UpdateList()
+XCThermWidget::UpdateLayerControl() noexcept
 {
-  ListControl &list = GetList();
+  auto &control = GetControl(LAYER);
+  auto &df = (DataFieldEnum &)*control.GetDataField();
+  df.ClearChoices();
+
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
-
   const auto &region = XCTherm::GetRegion(settings.model);
 
-  list.SetLength(region.layer_count);
+  for (unsigned i = 0; i < region.layer_count; ++i)
+    df.AddChoice(i, gettext(region.layers[i].dialog_label));
 
-  /* Important: do NOT call SetCursorIndex here. UpdateList runs after
-     every action (download progress tick, Activate, Span change). If
-     we re-positioned the cursor to the active row each time, a user
-     who downloaded a non-active layer would see the cursor jump back
-     to the active row on completion — losing track of what they just
-     fetched. Initial cursor positioning happens once in Prepare(). */
+  if (selected_layer >= region.layer_count)
+    selected_layer = 0;
 
-  list.Invalidate();
-
-  /* Update span button label */
-  {
-    StaticString<16> span_caption;
-    span_caption.Format(_("Span: %uh"), settings.download_span_hours);
-    span_button->SetCaption(span_caption);
-  }
-
-  /* Flip Update button to Stop while a job is running; freeze the
-     other settings buttons so the job's target/span can't change
-     underneath the worker. */
-  const bool job_running = (bool)active_job;
-  download_button->SetCaption(job_running ? _("Stop") : _("Update"));
-  if (span_button)   span_button->SetEnabled(!job_running);
-  if (delete_button) delete_button->SetEnabled(!job_running);
-
-  /* Update activate/update button state based on cursor */
-  OnCursorMoved(list.GetCursorIndex());
-}
-
-void
-XCThermWidget::OnCursorMoved(unsigned index) noexcept
-{
-  const auto &settings =
-    CommonInterface::GetComputerSettings().weather.xctherm;
-
-  const auto &region = XCTherm::GetRegion(settings.model);
-
-  const bool cursor_is_active = index < region.layer_count &&
-    XCTherm::IsActiveLayer(region.layers[index], settings.parameter,
-                           settings.wave_height, settings.vertical_wind_agl);
-
-  if (cursor_is_active) {
-    activate_button->SetCaption(_("Active"));
-    activate_button->SetEnabled(false);
+  if (region.layer_count == 0) {
+    df.AddChoice(unsigned(-1), _("None"));
+    df.SetValue(unsigned(-1));
+    control.SetEnabled(false);
   } else {
-    activate_button->SetCaption(_("Activate"));
-    activate_button->SetEnabled(true);
+    df.SetValue(selected_layer);
+    control.SetEnabled(!active_job);
   }
 
-  /* While a download is running, freeze Activate so we don't change
-     the active layer concept mid-flight. */
-  if (active_job)
-    activate_button->SetEnabled(false);
+  control.RefreshDisplay();
 }
 
 void
-XCThermWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                            unsigned idx) noexcept
+XCThermWidget::UpdateStatusControl() noexcept
 {
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
-  row_renderer.Draw(canvas, rc, idx,
-                    settings.model, settings.parameter,
-                    settings.wave_height, settings.vertical_wind_agl,
-                    settings.download_span_hours);
+  SetText(STATUS,
+          FormatLayerStatus(settings.model, selected_layer,
+                            settings.download_span_hours).c_str());
 }
 
 void
-XCThermWidget::ActivateClicked()
+XCThermWidget::UpdateSpanControl() noexcept
 {
-  AddToCurrentClicked();
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  LoadValueEnum(SPAN, settings.download_span_hours);
+  GetControl(SPAN).SetEnabled(!active_job);
+  GetControl(SPAN).RefreshDisplay();
+}
+
+void
+XCThermWidget::SyncUpdateButtons() noexcept
+{
+  const bool job_running = (bool)active_job;
+  if (update_button != nullptr) {
+    update_button->SetCaption(job_running ? _("Stop") : _("Update"));
+    update_button->SetEnabled(true);
+  }
+  if (delete_button != nullptr)
+    delete_button->SetEnabled(!job_running);
+
+  GetControl(LAYER).SetEnabled(!job_running);
+  GetControl(SPAN).SetEnabled(!job_running);
+}
+
+void
+XCThermWidget::UpdateTimeControl() noexcept
+{
+  StaticString<64> label;
+  XCTherm::FormatTimeLabelForPage(label, overlay.draft);
+  WeatherOverlayDraft::SetAxisLabel(GetControl(TIME), label.c_str(), true);
+}
+
+void
+XCThermWidget::UpdateAltitudeControl() noexcept
+{
+  StaticString<64> label;
+  XCTherm::FormatLayerLabelForPage(label, overlay.draft);
+  WeatherOverlayDraft::SetAxisLabel(GetControl(ALTITUDE), label.c_str(),
+                                    true);
+}
+
+void
+XCThermWidget::RefreshPageSection() noexcept
+{
+  overlay.Load(PageLayout::Overlay::XCTHERM);
+  UpdateTimeControl();
+  UpdateAltitudeControl();
+  overlay.SyncButtons(apply_to_page_button, add_page_button);
+}
+
+void
+XCThermWidget::OnLayerModified() noexcept
+{
+  auto &df = (DataFieldEnum &)*GetControl(LAYER).GetDataField();
+  const unsigned value = df.GetValue();
+  if (value == unsigned(-1))
+    return;
+
+  /* Layer is Update/Delete only — do not write into overlay settings
+     or the live map cursor (Altitude / page controls own that). */
+  selected_layer = value;
+  UpdateStatusControl();
+}
+
+void
+XCThermWidget::OnSpanModified() noexcept
+{
+  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
+  settings.download_span_hours = GetValueEnum(SPAN);
+  SaveSettings();
+  UpdateStatusControl();
+}
+
+void
+XCThermWidget::ApplyToPageClicked() noexcept
+{
+  if (!overlay.ApplyIfDirty())
+    return;
+
+  UpdateTimeControl();
+  UpdateAltitudeControl();
+  overlay.SyncButtons(apply_to_page_button, add_page_button);
+}
+
+void
+XCThermWidget::AddPageClicked() noexcept
+{
+  overlay.AddPage(apply_to_page_button, add_page_button);
 }
 
 bool
-XCThermWidget::SetActiveLayerFromCursor()
+XCThermWidget::EditTime([[maybe_unused]] DataField &df) noexcept
 {
-  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
-  const int index = GetList().GetCursorIndex();
-  const auto &region = XCTherm::GetRegion(settings.model);
-  if (index < 0 || unsigned(index) >= region.layer_count)
-    return false;
+  if (!XCTherm::EditTimeOnLayout(overlay.draft))
+    return true;
 
-  const auto &layer = region.layers[index];
-  if (layer.is_agl) {
-    settings.parameter = 1;
-    settings.vertical_wind_agl = layer.altitude_m;
-  } else {
-    settings.parameter = 0;
-    settings.wave_height = layer.altitude_m;
-  }
-
+  UpdateTimeControl();
+  overlay.SyncButtons(apply_to_page_button, add_page_button);
   return true;
 }
 
-void
-XCThermWidget::AddToCurrentClicked()
+bool
+XCThermWidget::EditAltitude([[maybe_unused]] DataField &df) noexcept
 {
-  if (!SetActiveLayerFromCursor())
-    return;
+  const auto result = XCTherm::EditLayerOnLayout(overlay.draft, false);
+  if (result == XCTherm::LayerPickerResult::OPEN_SETUP)
+    return false;
+  if (result != XCTherm::LayerPickerResult::CHANGED)
+    return true;
 
-  SaveSettings();
-  CommonInterface::SetUIState().weather.xctherm.cursor_initialized = false;
-  WeatherDialogOverlayActions::AddOverlayToCurrentPage(
-    PageLayout::Overlay::XCTHERM);
-  UpdateList();
+  UpdateAltitudeControl();
+  overlay.SyncButtons(apply_to_page_button, add_page_button);
+  return true;
+}
+
+bool
+XCThermWidget::EditTimeCallback([[maybe_unused]] const char *caption,
+                                DataField &df,
+                                [[maybe_unused]] const char *help_text) noexcept
+{
+  return active != nullptr ? active->EditTime(df) : false;
+}
+
+bool
+XCThermWidget::EditAltitudeCallback([[maybe_unused]] const char *caption,
+                                    DataField &df,
+                                    [[maybe_unused]] const char *help_text) noexcept
+{
+  return active != nullptr ? active->EditAltitude(df) : false;
 }
 
 void
-XCThermWidget::AddToNewPageClicked()
+XCThermWidget::DownloadClicked() noexcept
 {
-  if (!SetActiveLayerFromCursor())
-    return;
-
-  SaveSettings();
-  CommonInterface::SetUIState().weather.xctherm.cursor_initialized = false;
-  WeatherDialogOverlayActions::AddOverlayToNewPage(
-    PageLayout::Overlay::XCTHERM);
-
-  UpdateList();
-}
-
-/* ---- Delete cached data for the cursor-selected layer ---- */
-
-void
-XCThermWidget::DeleteClicked()
-{
-  /* Don't allow Delete while a download is running — would race with
-     the worker writing fresh entries into the cache. */
-  if (active_job)
-    return;
-
-  const auto &settings =
-    CommonInterface::GetComputerSettings().weather.xctherm;
-
-  const auto &region = XCTherm::GetRegion(settings.model);
-
-  const int cursor_index = GetList().GetCursorIndex();
-  if (cursor_index < 0 || unsigned(cursor_index) >= region.layer_count) {
-    ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
-    return;
-  }
-  const auto &target = region.layers[cursor_index];
-
-  XCThermAPI::Instance().ClearLayer(target.api_parameter);
-
-  /* Reset the per-row status so the dialog stops showing the old
-     "Cached Nh | Issued …" line. */
-  auto *info = GetDownloadInfo(settings.model);
-  info[cursor_index] = LayerDownloadInfo{};
-
-  /* If the deleted layer was currently displayed on the map, clear the
-     overlay and refresh page state. */
-  if (XCTherm::IsActiveLayer(target, settings.parameter,
-                             settings.wave_height,
-                             settings.vertical_wind_agl))
-    XCTherm::ClearMapOverlay();
-
-  UpdateList();
-  PageActions::Update();
-}
-
-/* ---- Download span (asynchronous worker thread) ---- */
-
-void
-XCThermWidget::DownloadClicked()
-{
-  /* The download button doubles as Stop. */
   if (active_job) {
     CancelDownload();
     return;
@@ -526,19 +426,19 @@ XCThermWidget::DownloadClicked()
 }
 
 void
-XCThermWidget::CancelDownload()
+XCThermWidget::CancelDownload() noexcept
 {
   if (!active_job)
     return;
 
   if (auto *glue = GetXCThermDownloadGlue())
     glue->RequestCancel();
-  else if (active_job)
+  else
     active_job->cancel.store(true);
 }
 
 void
-XCThermWidget::StartDownload()
+XCThermWidget::StartDownload() noexcept
 {
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
@@ -551,18 +451,16 @@ XCThermWidget::StartDownload()
   if (span_hours == 0)
     return;
 
-  /* Download targets the cursor-selected row, not the active layer. */
   const auto &region = XCTherm::GetRegion(settings.model);
-
-  const int cursor_index = GetList().GetCursorIndex();
-  if (cursor_index < 0 || unsigned(cursor_index) >= region.layer_count) {
+  if (selected_layer >= region.layer_count) {
     ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
     return;
   }
+
   XCThermAPI::Instance().PrepareSession(settings);
 
   active_job = XCTherm::StartSpanDownload(
-    settings, unsigned(cursor_index),
+    settings, selected_layer,
     [this](std::shared_ptr<XCThermDownloadJob> finished) {
       active_job = std::move(finished);
       FinishDownload();
@@ -574,7 +472,7 @@ XCThermWidget::StartDownload()
   }
 
   auto *info = GetDownloadInfo(settings.model);
-  auto &row_info = info[cursor_index];
+  auto &row_info = info[selected_layer];
   row_info.status = LayerDownloadInfo::PENDING;
   row_info.pending_total = span_hours + 1;
   row_info.pending_index = 0;
@@ -583,20 +481,18 @@ XCThermWidget::StartDownload()
   row_info.retry_attempt = 0;
   row_info.retry_seconds_left = 0;
 
-  UpdateList();
+  SyncUpdateButtons();
+  UpdateStatusControl();
   poll_timer.Schedule(std::chrono::milliseconds(200));
 }
 
 void
-XCThermWidget::PollDownload()
+XCThermWidget::PollDownload() noexcept
 {
   if (!active_job)
     return;
 
   auto &job = *active_job;
-
-  /* Mirror live atomics into the row state so the renderer can pick
-     them up on the next paint. */
   auto *info = GetDownloadInfo(job.model);
   auto &row_info = info[job.target_index];
   row_info.pending_index = job.current_offset.load();
@@ -606,11 +502,11 @@ XCThermWidget::PollDownload()
   row_info.retry_attempt = job.retry_attempt.load();
   row_info.retry_seconds_left = job.retry_seconds_left.load();
 
-  GetList().Invalidate();
+  UpdateStatusControl();
 }
 
 void
-XCThermWidget::FinishDownload()
+XCThermWidget::FinishDownload() noexcept
 {
   if (!active_job)
     return;
@@ -624,12 +520,11 @@ XCThermWidget::FinishDownload()
   auto &row_info = info[job->target_index];
 
   const unsigned span = job->span_hours;
-  const unsigned ok    = job->succeeded_or_cached.load();
-  const unsigned nu    = job->newly_downloaded.load();
-  const bool canceled  = job->cancel.load();
-  const bool any_miss  = job->any_slot_missing.load();
+  const unsigned ok = job->succeeded_or_cached.load();
+  const unsigned nu = job->newly_downloaded.load();
+  const bool canceled = job->cancel.load();
+  const bool any_miss = job->any_slot_missing.load();
 
-  /* Decide the post-run row state. */
   if (ok == 0) {
     row_info.status = canceled
       ? LayerDownloadInfo::CANCELED
@@ -640,20 +535,18 @@ XCThermWidget::FinishDownload()
     row_info.pending_bytes_total = 0;
     row_info.retry_attempt = 0;
     row_info.retry_seconds_left = 0;
-    UpdateList();
-    if (canceled) {
-      /* nothing — Cancelled state in the row says it all */
-    } else if (job->index_no_parameters.load()) {
-      ShowMessageBox(_("Forecast index has no XCTherm parameters."),
-                     "XCTherm", MB_OK);
-    } else if (job->error_eptr) {
-      /* Surface the actual cause (auth, forbidden, server error, …)
-         instead of a generic message. ShowError unpacks the chain of
-         what() strings from the exception_ptr. */
-      ShowError(job->error_eptr, "XCTherm");
-    } else {
-      ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
-                     "XCTherm", MB_OK);
+    SyncUpdateButtons();
+    UpdateStatusControl();
+    if (!canceled) {
+      if (job->index_no_parameters.load()) {
+        ShowMessageBox(_("Forecast index has no XCTherm parameters."),
+                       "XCTherm", MB_OK);
+      } else if (job->error_eptr) {
+        ShowError(job->error_eptr, "XCTherm");
+      } else {
+        ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
+                       "XCTherm", MB_OK);
+      }
     }
     return;
   }
@@ -662,7 +555,8 @@ XCThermWidget::FinishDownload()
 
   const double span_secs = std::chrono::duration<double>(
     std::chrono::steady_clock::now() - job->started_at).count();
-  const double wire_mb = (double)job->total_wire_bytes.load() / (1024.0 * 1024.0);
+  const double wire_mb =
+    (double)job->total_wire_bytes.load() / (1024.0 * 1024.0);
   const double speed_mbs = span_secs > 0 ? wire_mb / span_secs : 0.0;
 
   row_info.status = LayerDownloadInfo::DONE;
@@ -670,8 +564,6 @@ XCThermWidget::FinishDownload()
   row_info.speed_mbs = speed_mbs;
   row_info.span_hours = ok;
   row_info.new_downloads = nu;
-  /* Recompute the count of future-valid slices so the "X/Yh" cell
-     reflects this fresh download immediately. */
   row_info.future_hours = XCThermAPI::Instance()
     .GetCachedLayerSummary(job->param).future_hours;
   row_info.pending_index = 0;
@@ -698,15 +590,8 @@ XCThermWidget::FinishDownload()
   if (lt != nullptr && std::strftime(tbuf, sizeof(tbuf), "%H:%M:%S", lt) > 0)
     row_info.download_time = tbuf;
 
-  /* Stale-run sweep — but only AFTER the new forecast is successfully
-     in the cache and the overlay was swapped above. Older-run entries
-     for hours we didn't re-fetch this round get dropped here so the
-     cache for this layer is consistent (one run per layer). Past
-     hours stay in the cache (user can browse back); we just align
-     them with the latest run. */
   if (nu > 0) {
     const unsigned current_utc = XCTherm::GetUtcTimeParts().hour;
-
     const unsigned dropped =
       XCThermAPI::Instance().PruneStaleRuns(job->param, current_utc);
     if (dropped > 0)
@@ -714,20 +599,15 @@ XCThermWidget::FinishDownload()
              dropped, job->param);
   }
 
-  UpdateList();
+  SyncUpdateButtons();
+  UpdateStatusControl();
+  UpdateTimeControl();
+  UpdateAltitudeControl();
 
-  /* Trigger a page reload so PageActions::LoadBottom re-evaluates
-     XCThermAPI::HasAnyCache() and the cursor bar appears on the
-     current XCTherm page (instead of waiting for the next manual
-     page switch). Cheap on success — does nothing if the current page
-     isn't configured for XCTherm. */
   if (nu > 0)
     PageActions::Update();
 
   if (job->error_eptr && !canceled) {
-    /* Partial success: some slots got through, then a persistent
-       error stopped us. Surface the cause via ShowError so the user
-       knows what to fix. */
     ShowError(job->error_eptr, "XCTherm");
   } else if (any_miss && !canceled) {
     StaticString<128> msg;
@@ -739,41 +619,42 @@ XCThermWidget::FinishDownload()
 }
 
 void
-XCThermWidget::SpanClicked()
+XCThermWidget::DeleteClicked() noexcept
 {
-  /* These strings are localized via gettext() at render time inside
-     StringChoiceRenderer; mark them with N_() so they're picked up
-     into the translation catalog. */
-  static constexpr const char *choices[] = {
-    N_("1 hour"), N_("3 hours"), N_("6 hours"),
-    N_("12 hours"), N_("18 hours"),
-  };
-  static constexpr unsigned spans[] = { 1, 3, 6, 12, 18 };
-  static_assert(std::size(choices) == std::size(spans));
-
-  auto &settings = CommonInterface::SetComputerSettings().weather.xctherm;
-
-  /* Pre-select the current value */
-  int initial = 0;
-  for (unsigned i = 0; i < std::size(spans); ++i) {
-    if (spans[i] == settings.download_span_hours) {
-      initial = (int)i;
-      break;
-    }
-  }
-
-  StringChoiceRenderer item_renderer(choices);
-  int index = ListPicker(_("Download span"),
-                         std::size(choices), initial,
-                         item_renderer.CalculateLayout(UIGlobals::GetDialogLook()),
-                         item_renderer,
-                         false, nullptr, nullptr, nullptr);
-  if (index < 0)
+  if (active_job)
     return;
 
-  settings.download_span_hours = spans[index];
-  SaveSettings();
-  UpdateList();
+  const auto &settings =
+    CommonInterface::GetComputerSettings().weather.xctherm;
+  const auto &region = XCTherm::GetRegion(settings.model);
+
+  if (selected_layer >= region.layer_count) {
+    ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
+    return;
+  }
+
+  const auto &target = region.layers[selected_layer];
+  XCThermAPI::Instance().ClearLayer(target.api_parameter);
+
+  auto *info = GetDownloadInfo(settings.model);
+  info[selected_layer] = LayerDownloadInfo{};
+
+  /* Clear the map only when the deleted layer is what the live cursor
+     (or legacy activated settings) is showing — not the Layer row. */
+  const auto &weather = CommonInterface::GetUIState().weather;
+  const bool clears_live_overlay =
+    weather.xctherm.cursor_initialized
+      ? weather.xctherm_cursor.layer == selected_layer
+      : XCTherm::IsActiveLayer(target, settings.parameter,
+                               settings.wave_height,
+                               settings.vertical_wind_agl);
+  if (clears_live_overlay)
+    XCTherm::ClearMapOverlay();
+
+  UpdateStatusControl();
+  UpdateTimeControl();
+  UpdateAltitudeControl();
+  PageActions::Update();
 }
 
 void
@@ -840,35 +721,94 @@ XCThermWidget::RehydrateRowsFromCache() noexcept
 
 void
 XCThermWidget::Prepare(ContainerWindow &parent,
-                        const PixelRect &rc) noexcept
+                       const PixelRect &rc) noexcept
 {
-  CreateButtons(buttons_widget->GetButtonPanel());
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc, row_renderer.CalculateLayout(look));
+  RowFormWidget::Prepare(parent, rc);
+  active = this;
 
-  /* Pull any forecasts that the persistent disk cache restored at app
-     startup into the per-row LayerDownloadInfo, so the user sees them
-     as cached (with freshness + run info) the first time they open the
-     dialog this session — not as "Not downloaded". */
-  RehydrateRowsFromCache();
-
-  UpdateList();
-
-  /* Seed the cursor to the currently active layer — but only here,
-     once, on initial display. UpdateList() deliberately does NOT touch
-     the cursor on subsequent calls so a user who downloads layer X
-     while layer Y is active stays parked on X after the download. */
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
-  const auto &region = XCTherm::GetRegion(settings.model);
-  for (unsigned i = 0; i < region.layer_count; ++i) {
-    if (XCTherm::IsActiveLayer(region.layers[i], settings.parameter,
-                               settings.wave_height,
-                               settings.vertical_wind_agl)) {
-      GetList().SetCursorIndex(i);
-      break;
-    }
-  }
+  const int active_layer = XCTherm::FindActiveLayerIndex(settings);
+  selected_layer = active_layer >= 0 ? unsigned(active_layer) : 0;
+
+  auto *layer = AddEnum(_("Layer"),
+                        _("Altitude layer used for Update and Delete. "
+                          "Use Altitude below to change what the map shows."));
+  layer->GetDataField()->SetOnModified([this]{
+    OnLayerModified();
+  });
+
+  AddReadOnly(_("Status"),
+              _("Download and cache status for the selected layer."));
+
+  AddEnum(_("Span"),
+          _("How many forecast hours to download with Update."),
+          span_list, settings.download_span_hours);
+  GetControl(SPAN).GetDataField()->SetOnModified([this]{
+    OnSpanModified();
+  });
+
+  update_button = AddButton(_("Update"), [this]{ DownloadClicked(); });
+  delete_button = AddButton(_("Delete"), [this]{ DeleteClicked(); });
+  AddSpacer();
+
+  StaticString<256> time_help;
+  time_help.Format(_("Forecast time for the current map page %s overlay. "
+                     "Opens the same picker as the weather controls "
+                     "(Auto, Now, or a UTC hour)."),
+                   "XCTherm");
+  auto *time = AddEnum(_("Time"), time_help.c_str());
+  time->SetEditCallback(EditTimeCallback);
+
+  auto *altitude = AddEnum(_("Altitude"),
+                           _("Altitude band for the current map page. "
+                             "Use Apply to page to commit changes."));
+  altitude->SetEditCallback(EditAltitudeCallback);
+
+  apply_to_page_button = AddButton(_("Apply to page"), [this]{
+    ApplyToPageClicked();
+  });
+  add_page_button = AddButton(_("Add page"), [this]{
+    AddPageClicked();
+  });
+  AddSpacer();
+
+  AddButton(_("Pages setup"), [this]{
+    WeatherOverlayDraft::OpenPagesConfig();
+    RefreshPageSection();
+  });
+}
+
+void
+XCThermWidget::Show(const PixelRect &rc) noexcept
+{
+  RowFormWidget::Show(rc);
+
+  XCThermAPI::Instance().PrepareSession(
+    CommonInterface::GetComputerSettings().weather.xctherm);
+  RehydrateRowsFromCache();
+
+  UpdateLayerControl();
+  UpdateStatusControl();
+  UpdateSpanControl();
+  SyncUpdateButtons();
+  RefreshPageSection();
+}
+
+void
+XCThermWidget::Hide() noexcept
+{
+  WindowWidget::Hide();
+}
+
+void
+XCThermWidget::Unprepare() noexcept
+{
+  if (active == this)
+    active = nullptr;
+  update_button = nullptr;
+  delete_button = nullptr;
+  RowFormWidget::Unprepare();
 }
 
 } // namespace
@@ -876,13 +816,7 @@ XCThermWidget::Prepare(ContainerWindow &parent,
 std::unique_ptr<Widget>
 CreateXCThermMainWidget() noexcept
 {
-  auto widget = std::make_unique<XCThermWidget>();
-  auto buttons = std::make_unique<ButtonPanelWidget>(
-    std::move(widget),
-    ButtonPanelWidget::Alignment::BOTTOM);
-  auto *widget_ptr = static_cast<XCThermWidget *>(&buttons->GetWidget());
-  widget_ptr->SetButtonPanel(*buttons);
-  return buttons;
+  return std::make_unique<XCThermWidget>();
 }
 
 #endif

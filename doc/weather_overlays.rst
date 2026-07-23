@@ -63,24 +63,39 @@ For dedicated page entry, first-enter behavior should be explicit and
 idempotent. Existing providers use :cpp:`EnterPage()` and branch on
 ``first_enter``.
 
-RASP and EDL reset behavior
----------------------------
+Per-page cursor state
+---------------------
 
-RASP and EDL both preserve manual selections but reset auto-tracked
-values when entering dedicated pages for the first time in a session.
+Each weather map page owns both cursor axes. Entering a configured page
+restores its selections; Auto values are recalculated from current GPS
+time/altitude.
 
 - RASP:
 
-  - :cpp:`WeatherUIState::ResetRaspForDedicatedPage()` clears time only
-    when :cpp:`time_auto_advance` is true.
-  - manual mode marks :cpp:`rasp.cursor_initialized = true`.
+  - Each map page stores its own forecast time in
+    :cpp:`PageLayout::rasp_time` (Auto, Now, or a fixed minute-of-day).
+  - Entering a RASP page applies that page's field and time via
+    :cpp:`Rasp::ApplyTimeFromPageLayout()`.
+  - :cpp:`WeatherUIState::ResetRaspForDedicatedPage()` clears the
+    effective time only when the page uses Auto
+    (:cpp:`time_auto_advance` is true).
+  - Time changes from the cursor bar or Weather dialog persist to the
+    current page.
 
 - EDL:
 
-  - manual forecast/level marks
-    :cpp:`edl.session.cursor_initialized = true`.
-  - first dedicated-page entry without cursor initialization calls
-    :cpp:`EDL::ResetForDedicatedPage()`.
+  - :cpp:`PageLayout::edl_time` stores Auto, Now, or a fixed UTC
+    forecast hour.
+  - :cpp:`PageLayout::edl_isobar` stores Auto or a fixed pressure level.
+  - page entry applies both values before requesting the overlay.
+
+- XCTherm:
+
+  - :cpp:`PageLayout::xctherm_time` stores Auto or a fixed UTC hour.
+  - :cpp:`PageLayout::xctherm_layer` stores Auto or a fixed altitude
+    layer.
+  - the download Layer, span, cache, and credentials remain global
+    provider settings and are not changed by map Altitude selection.
 
 Threading and async boundaries
 ------------------------------
@@ -124,21 +139,17 @@ Common pitfalls
 Page placement UX
 -----------------
 
-Weather dialogs provide two placement actions:
+Weather dialogs provide a ``Pages setup`` button that opens
+Config → Look → Pages, where map overlays (RASP, EDL, XCTherm) and the
+weather cursor bar can be assigned to pages.
 
-- ``Add to page`` updates the currently configured page and replaces any
-  existing weather overlay on that page.
-- ``Add new page`` clones the currently configured page, forces map main,
-  applies the selected overlay, and appends the clone as a new configured
-  page.
-
-Both actions:
+Programmatic placement helpers in ``PageActions`` /
+``WeatherMapOverlay::PagePlacement`` still:
 
 - set ``bottom = WEATHER_CONTROLS`` so the shared weather cursor bar is active
-- persist page layout changes to the profile immediately
+- persist page layout changes to the profile
 - clear provider cursor initialization so first-enter behavior
   is reapplied consistently
 
-When the page limit (``PageSettings::MAX_PAGES``) is reached, ``Add new page``
-must fail without mutating existing pages, and the UI must show a clear
-message.
+When the page limit (``PageSettings::MAX_PAGES``) is reached, adding a new
+page must fail without mutating existing pages.

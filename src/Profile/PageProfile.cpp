@@ -71,6 +71,25 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
   strcpy(profileKey + prefixLen, "RaspField");
   map.Get(profileKey, pl.rasp_field);
 
+  strcpy(profileKey + prefixLen, "RaspTime");
+  if (!map.Get(profileKey, pl.rasp_time))
+    pl.rasp_time = PageLayout::RASP_TIME_AUTO;
+
+  strcpy(profileKey + prefixLen, "EdlTime");
+  if (!map.Get(profileKey, pl.edl_time))
+    pl.edl_time = PageLayout::EDL_TIME_AUTO;
+
+  strcpy(profileKey + prefixLen, "EdlIsobar");
+  map.Get(profileKey, pl.edl_isobar);
+
+  strcpy(profileKey + prefixLen, "XCThermLayer");
+  if (!map.Get(profileKey, pl.xctherm_layer))
+    pl.xctherm_layer = PageLayout::XCTHERM_LAYER_AUTO;
+
+  strcpy(profileKey + prefixLen, "XCThermTime");
+  if (!map.Get(profileKey, pl.xctherm_time))
+    pl.xctherm_time = PageLayout::XCTHERM_TIME_AUTO;
+
   if (pl.overlay == PageLayout::Overlay::NONE &&
       pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS)
     pl.overlay = PageLayout::Overlay::EDL;
@@ -122,6 +141,21 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "RaspField");
   map.Set(profileKey, page.rasp_field);
+
+  strcpy(profileKey + prefixLen, "RaspTime");
+  map.Set(profileKey, page.rasp_time);
+
+  strcpy(profileKey + prefixLen, "EdlTime");
+  map.Set(profileKey, page.edl_time);
+
+  strcpy(profileKey + prefixLen, "EdlIsobar");
+  map.Set(profileKey, page.edl_isobar);
+
+  strcpy(profileKey + prefixLen, "XCThermLayer");
+  map.Set(profileKey, page.xctherm_layer);
+
+  strcpy(profileKey + prefixLen, "XCThermTime");
+  map.Set(profileKey, page.xctherm_time);
 }
 
 

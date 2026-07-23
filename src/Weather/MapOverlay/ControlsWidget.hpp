@@ -13,6 +13,21 @@
 namespace WeatherMapOverlay {
 
 /**
+ * Refresh cursor-bar labels if the bottom weather controls are shown.
+ * Call after RASP/EDL/XCTherm data changes outside the controls model
+ * (e.g. Info → Weather time picker, download reload).
+ */
+void
+RefreshControlsLabels() noexcept;
+
+/**
+ * Send UI state and refresh cursor-bar labels after a live overlay
+ * cursor edit. Provider-specific overlay redraw stays with the caller.
+ */
+void
+NotifyLiveCursorChange() noexcept;
+
+/**
  * Map-bottom weather cursor bar for all weather overlays (EDL, RASP,
  * XCTherm). Overlay-specific behaviour lives in #ControlsModel.
  */
@@ -35,6 +50,7 @@ class ControlsWidget final : public CursorBarWidget,
   void OnStepSecondary(int delta) noexcept;
   void OnPrimaryLabelClick() noexcept;
   void OnSecondaryLabelClick() noexcept;
+  void OpenSecondaryPicker() noexcept;
 
 public:
   explicit ControlsWidget(std::unique_ptr<ControlsModel> _model) noexcept;
@@ -44,6 +60,11 @@ public:
   ControlsWidget &operator=(const ControlsWidget &) = delete;
 
   void HandleWeatherOverlayInput(const char *misc) noexcept;
+
+  /** Update centre labels (e.g. after external time/layer changes). */
+  void RefreshLabels() noexcept {
+    UpdateLabels();
+  }
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,

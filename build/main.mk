@@ -170,7 +170,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DateEntry.cpp \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \
 	$(SRC)/Dialogs/Weather/WeatherDialog.cpp \
-	$(SRC)/Dialogs/Weather/OverlayPageActions.cpp \
+	$(SRC)/Dialogs/Weather/WeatherOverlayDraft.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickGuide.cpp \
@@ -407,6 +407,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/MapOverlay/ControlsFactory.cpp \
 	$(SRC)/Weather/MapOverlay/ControlsWidget.cpp \
 	$(SRC)/Weather/MapOverlay/TimePicker.cpp \
+	$(SRC)/Weather/MapOverlay/WeatherSetupDialog.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Weather/MapOverlay/XcthermControlsModel.cpp \
 	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
@@ -719,6 +720,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermMapOverlay.cpp \
 	$(SRC)/Weather/xctherm/XCThermCatalog.cpp \
 	$(SRC)/Weather/xctherm/XCThermForecastTime.cpp \
+	$(SRC)/Weather/xctherm/FieldControls.cpp \
 	$(SRC)/Weather/xctherm/XCThermControlsModel.cpp \
 	$(SRC)/Weather/xctherm/XCThermAutoSwitch.cpp \
 
@@ -748,6 +750,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EDL/TileValue.cpp \
 	$(SRC)/Weather/EDL/EdlMbTilesOverlay.cpp \
 	$(SRC)/Weather/EDL/StateController.cpp \
+	$(SRC)/Weather/EDL/FieldControls.cpp \
 	$(SRC)/Weather/MapOverlay/EdlControlsModel.cpp \
 	$(SRC)/Weather/EDL/Glue.cpp \
 	$(SRC)/Weather/EDL/DownloadGlue.cpp

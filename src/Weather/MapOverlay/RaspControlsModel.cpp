@@ -4,17 +4,10 @@
 #include "RaspControlsModel.hpp"
 
 #include "ActionInterface.hpp"
-#include "DataGlobals.hpp"
-#include "Dialogs/ComboPicker.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "Language/Language.hpp"
-#include "PageActions.hpp"
-#include "PrimaryTimePicker.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "UIState.hpp"
-#include "util/StaticString.hxx"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Weather/Rasp/DownloadGlue.hpp"
@@ -87,17 +80,18 @@ RaspControlsModel::ApplyPrimaryAutoAdvance() noexcept
 void
 RaspControlsModel::EnablePrimaryAutoFromInput() noexcept
 {
-  EnablePrimaryAutoAndRefresh();
-
-#ifdef HAVE_DOWNLOAD_MANAGER
-  if (!Rasp::HasSelectedTimeData(true))
-    RequestConfiguredRaspUpdateIfOutOfDate();
-#endif
+  Rasp::EnableTimeAutoFromInput();
+  NotifyOverlay();
 }
 
 PrimaryLabelAction
 RaspControlsModel::GetPrimaryLabelAction() const noexcept
 {
+  /* No layer yet: send the pilot to Weather Setup instead of a
+     time picker that cannot do anything useful. */
+  if (!Rasp::HasSelectedField())
+    return PrimaryLabelAction::OPEN_SETUP;
+
   return PrimaryLabelAction::OPEN_PICKER;
 }
 
@@ -111,38 +105,8 @@ RaspControlsModel::GetSecondaryLabelAction() const noexcept
 void
 RaspControlsModel::OpenPrimaryPicker() noexcept
 {
-  const auto rasp = DataGlobals::GetRasp();
-  const int field_index = Rasp::GetEffectiveFieldIndex();
-  if (rasp == nullptr || field_index < 0 ||
-      unsigned(field_index) >= rasp->GetItemCount())
-    return;
-
-  OpenPrimaryTimePicker(*this, _("RASP Time"),
-    [&](DataFieldEnum &field) noexcept {
-      field.ClearChoices();
-
-      for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i) {
-        const BrokenTime t = RaspStore::IndexToTime(i);
-        StaticString<24> label;
-        label.Format("%02u:%02u %s",
-                     unsigned(t.hour), unsigned(t.minute),
-                     rasp->IsTimeAvailable(unsigned(field_index), i)
-                     ? "[x]" : "[ ]");
-        field.addEnumText(label.c_str(), t.GetMinuteOfDay());
-      }
-    },
-    []() noexcept {
-      return Rasp::GetCursorBarMinuteOfDay();
-    },
-    [](ControlsModel &model) noexcept {
-      model.EnablePrimaryAutoFromInput();
-    },
-    [](ControlsModel &) noexcept {
-      Rasp::SetCursorNow();
-    },
-    [](ControlsModel &, unsigned minute_of_day) noexcept {
-      Rasp::SetCursorTime(minute_of_day);
-    });
+  Rasp::OpenTimePicker();
+  NotifyOverlay();
 }
 
 void
@@ -154,32 +118,19 @@ RaspControlsModel::ResumePrimaryAuto() noexcept
   EnablePrimaryAutoFromInput();
 }
 
-void
+SecondaryPickerResult
 RaspControlsModel::OpenSecondaryPicker() noexcept
 {
-  const auto rasp = DataGlobals::GetRasp();
-  if (rasp == nullptr || rasp->GetItemCount() == 0)
-    return;
+  /* No RASP file / no layer: open Setup (destroys this widget). */
+  if (!Rasp::HasSelectedField())
+    return SecondaryPickerResult::OPEN_SETUP;
 
-  DataFieldEnum field;
-  Rasp::FieldChoicesOptions options;
-  options.include_none = true;
-  Rasp::FillFieldChoices(field, rasp.get(), options);
-
-  const int current = Rasp::GetEffectiveFieldIndex();
-  field.SetValue(current >= 0 ? current : 0);
-
-  if (!ComboPicker(_("RASP Layer"), field, nullptr))
-    return;
-
-  const int selected = field.GetValue();
-  if (selected < 0) {
-    Rasp::ClearSelectedField();
-    return;
-  }
-
-  Rasp::SelectField(unsigned(selected));
-  Notify(ControlsUpdate::OVERLAY);
+  /* Do not open Weather Setup from here — it can destroy
+     ControlsWidget (and this model) while we are still on the call
+     stack. */
+  return HandleSecondaryFieldPicker(Rasp::OpenLayerPicker(true), [this] {
+    Notify(ControlsUpdate::OVERLAY);
+  });
 }
 
 void

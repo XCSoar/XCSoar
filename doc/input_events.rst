@@ -512,6 +512,9 @@ Event list
      **Secondary list:** ``field picker``, ``layer picker``, or
      ``level picker`` (open the ComboPicker list for the active overlay).
 
+     **Setup:** ``setup`` opens the Info → Weather dialog on the tab that
+     matches the active overlay (RASP, EDL, or XCTherm).
+
      **Secondary auto/manual:** ``field auto toggle`` (and ``altitude auto
      …``, ``level auto …`` aliases). On RASP, secondary auto falls back
      to time auto when no secondary axis exists.
@@ -605,7 +608,7 @@ The built-in stick bindings in :file:`Data/Input/default.xci` are:
    - Exit weather input mode
 
 The map overlay **+** / **−** buttons always zoom the map (they are not
-remapped in weather mode). On-screen menubar buttons (locations 1--7)
+remapped in weather mode). On-screen menubar buttons (locations 1--8)
 mirror the stick actions:
 
 .. list-table::
@@ -636,9 +639,13 @@ mirror the stick actions:
  * - 7
    - Time picker
    - ``Time Picker (RETURN)``
+ * - 8
+   - Weather Setup
+   - Opens Info → Weather for the active overlay
 
-Tapping the secondary cursor-bar label also opens the list picker. The
-map title shows the active overlay layer when applicable.
+Tapping the secondary cursor-bar label also opens the list picker, which
+includes a **Setup** button that opens Info → Weather for the active
+overlay. The map title shows the active overlay layer when applicable.
 
 The same ``WeatherOverlay`` arguments can be bound in any mode (for
 example from ``mode=default``) if you prefer not to use ``mode=weather``.
