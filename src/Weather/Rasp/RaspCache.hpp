@@ -21,7 +21,10 @@ class RaspCache {
   const unsigned parameter;
 
   unsigned time = 0;
-  unsigned last_time = 0;
+
+  /* -1 is "no map loaded yet" sentinel; must not collide with a valid time
+     index (0..95) */
+  unsigned last_time = unsigned(-1);
   unsigned failed_time = unsigned(-1);
 
   std::unique_ptr<RasterMap> map;

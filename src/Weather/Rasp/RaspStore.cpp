@@ -113,12 +113,33 @@ RaspStore::TimeToIndex(BrokenTime t) noexcept
 }
 
 bool
+RaspStore::IsDayField(unsigned item_index) const noexcept
+{
+  if (item_index >= maps.size())
+    return false;
+
+  const auto &times = maps[item_index].times;
+  if (!times[0])
+    return false;
+
+  for (unsigned i = 1; i < MAX_WEATHER_TIMES; ++i)
+    if (times[i])
+      /* Field has more than one time slot */
+      return false;
+
+  return true;
+}
+
+bool
 RaspStore::HasSelectedTimeData(unsigned item_index, bool auto_advance,
                                BrokenTime manual_time,
                                BrokenTime auto_local_time) const noexcept
 {
   if (item_index >= maps.size())
     return false;
+
+  if (IsDayField(item_index))
+    return true;
 
   const BrokenTime forecast = (auto_advance || !manual_time.IsPlausible())
     ? auto_local_time
