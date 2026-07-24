@@ -108,6 +108,13 @@ public:
    */
   void SetLinkReturnCallback(std::function<void()> cb) noexcept;
 
+  /**
+   * Move keyboard focus onto the bottom bar.
+   * @param from_end  If true, prefer the control nearest Close
+   *                  (right button); otherwise the first control.
+   */
+  bool FocusBottomBar(bool from_end=false) noexcept;
+
   ~QuickGuidePageWidget() noexcept override;
 
   /**
