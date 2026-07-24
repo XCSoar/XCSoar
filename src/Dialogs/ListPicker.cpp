@@ -14,6 +14,7 @@
 #include "WidgetDialog.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "ui/event/Timer.hpp"
+#include "Asset.hpp"
 
 #include <cassert>
 
@@ -51,6 +52,17 @@ ListPickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   item_renderer.OnPaintItem(canvas, rc, idx);
+}
+
+void
+ListPickerWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
+{
+  /* Per-item help triggers UpdateLayout(); on e-paper that is too
+     expensive to run on every cursor step while scrolling. */
+  if (HasEPaper())
+    postpone_update_help.Schedule(std::chrono::milliseconds(350));
+  else
+    UpdateHelp(index);
 }
 
 int
