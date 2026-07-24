@@ -22,6 +22,9 @@ Version 7.45 - not yet released
     ``label``), gesture ``data`` format, softkey ``location``,
     label escapes, complete GCE list, and ``RemoteStick`` Quick Menu
 * ui
+  - Speed up long rich-text layout (Quick Guide What's New): estimate scroll
+    height before wrapping, skip FreeType for runs that clearly fit or
+    overflow by character budget, and use one measure for typical bullets
   - Device list: show the Vario flag for non-compensated and netto vario
     sources as well as total-energy (e.g. BlueFly)
   - FLARM radar: show callsigns on all registered targets again, use the

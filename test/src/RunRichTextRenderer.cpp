@@ -184,19 +184,23 @@ RunBenchmark(TestMainWindow &main_window, const std::string &text)
   window.SetDialogLook(look);
   window.SetText(text.c_str(), !options.plain);
   const auto t3 = clock::now();
-  const unsigned height = window.GetContentHeight();
+  const unsigned height_estimate = window.GetContentHeight();
   const auto t4 = clock::now();
+  const unsigned height = window.CalculateExactContentHeight();
+  const auto t5 = clock::now();
 
   std::printf("source bytes: %zu\n", text.size());
   std::printf("layout width: %u px\n", width);
   std::printf("wrapped lines: %zu\n", wrapped.lines.size());
+  std::printf("estimated height: %u px\n", height_estimate);
   std::printf("content height: %u px\n", height);
   if (!options.plain)
     std::printf("parse markdown: %lld ms\n", Ms(t1 - t0));
   std::printf("wrap text: %lld ms\n", Ms(t2 - t1));
   std::printf("set text: %lld ms\n", Ms(t3 - t2));
-  std::printf("line layout (GetContentHeight): %lld ms\n", Ms(t4 - t3));
-  std::printf("total: %lld ms\n", Ms(t4 - t0));
+  std::printf("estimate height: %lld ms\n", Ms(t4 - t3));
+  std::printf("exact line layout: %lld ms\n", Ms(t5 - t4));
+  std::printf("total: %lld ms\n", Ms(t5 - t0));
 }
 
 static void

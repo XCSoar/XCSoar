@@ -50,6 +50,9 @@ struct WrappedText {
  * Breaks at word boundaries (spaces) when possible, otherwise
  * breaks at character boundaries for very long words.
  *
+ * Short runs skip FreeType via a glyph-width character budget; a single
+ * full-line measure keeps typical list bullets on one line.
+ *
  * @param canvas Canvas with font selected for text measurement
  * @param width Maximum width in pixels for each line
  * @param text The text to wrap
@@ -66,3 +69,12 @@ WrapText(Canvas &canvas, unsigned width, std::string_view text) noexcept;
 [[gnu::pure]]
 WrappedText
 WrapText(const Font &font, unsigned width, std::string_view text) noexcept;
+
+/**
+ * Cheap line-count estimate for scroll sizing (no wrapping).
+ * Average Latin glyph width plus ~10% slack.
+ */
+[[gnu::pure]]
+unsigned
+EstimateWrappedLineCount(const Font &font, unsigned width,
+                         std::string_view text) noexcept;
