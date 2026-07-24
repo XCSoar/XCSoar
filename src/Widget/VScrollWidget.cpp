@@ -95,8 +95,10 @@ VScrollWidget::Initialise(ContainerWindow &parent,
   style.ControlParent();
   style.Hide();
 
-  if (reserve_scrollbar)
-    style.TabStop();
+  /* Do not TabStop the panel itself.  With TabStop, dialog
+     FocusNext/Previous land on the panel and Up/Down scroll it
+     (including past the real content).  Child tab-stops such as
+     RichTextWindow are found via ControlParent instead. */
 
   VScrollPanelListener &listener = *this;
   SetWindow(std::make_unique<VScrollPanel>(parent, look, rc, style,

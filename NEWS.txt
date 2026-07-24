@@ -17,6 +17,11 @@ Version 7.45 - not yet released
     to filter self and additional own aircraft from OGN when the device
     radio id is unavailable (e.g. LX passthrough) #2693
 * ui
+  - Speed up long rich-text layout (Quick Guide What's New): estimate scroll
+    height before wrapping, skip FreeType for runs that clearly fit or
+    overflow by character budget, and use one measure for typical bullets
+  - Fix Quick Guide Up/Down focus so the bottom-bar checkbox and Close
+    button are reachable from the keyboard
   - FLARM radar: show callsigns on all registered targets again, use the
     full callsign on target labels, and omit duplicate side vario/altitude
     on the selected target (info panel already shows them) #2718

@@ -13,6 +13,7 @@
 #include "Look/Colors.hpp"
 #include "ResourceLookup.hpp"
 #include "Form/CheckBox.hpp"
+#include "Form/VScrollPanel.hpp"
 #include "system/OpenLink.hpp"
 #include "util/StringCompare.hxx"
 #include "util/UriSchemes.hpp"
@@ -394,6 +395,14 @@ RichTextWindow::EnsureLineLayout() const noexcept
   }
 
   line_layout_width = text_width;
+
+  if (!line_y_offsets.empty()) {
+    const std::size_t n = line_y_offsets.size();
+    cached_content_height =
+      static_cast<unsigned>(line_y_offsets[n - 1] + line_heights[n - 1])
+      + padding * 2;
+    cached_height_width = text_width;
+  }
 }
 
 void
@@ -408,6 +417,7 @@ RichTextWindow::InvalidateLayout() noexcept
 {
   cached_content_height = 0;
   cached_height_width = 0;
+  synced_scroll_height = 0;
   wrapped_text.reset();
   wrapped_text_width = 0;
   segmented_lines.reset();
@@ -772,21 +782,75 @@ RichTextWindow::GetContentHeight() const noexcept
   if (cached_content_height > 0 && cached_height_width == text_width)
     return cached_content_height;
 
-  EnsureLineLayout();
+  /* Exact once already wrapped for this width (e.g. after paint). */
+  if (wrapped_text && wrapped_text_width == text_width) {
+    EnsureLineLayout();
+    return line_y_offsets.empty() ? 0 : cached_content_height;
+  }
 
-  if (line_y_offsets.empty())
+  /* Cheap estimate so Show()/VScroll does not wrap yet.  Use the
+     tallest font that may appear so heading pages are not clipped. */
+  const int touch_line_pad = IsTouchLayout() ? Layout::Scale(2) : 0;
+  unsigned line_height =
+    static_cast<unsigned>(font->GetLineSpacing() + touch_line_pad);
+  for (const auto &span : parsed.styles) {
+    if (span.style != TextStyle::Heading1 &&
+        span.style != TextStyle::Heading2 &&
+        span.style != TextStyle::Heading3)
+      continue;
+    const unsigned h =
+      static_cast<unsigned>(GetHeadingFont(span.style).GetLineSpacing() +
+                            touch_line_pad);
+    if (h > line_height)
+      line_height = h;
+  }
+
+  const unsigned line_count =
+    std::max(1u, EstimateWrappedLineCount(*font, text_width, parsed.text));
+
+  cached_content_height = line_count * line_height + padding * 2;
+  cached_height_width = text_width;
+  return cached_content_height;
+}
+
+/**
+ * After exact layout, resize the parent #VScrollPanel virtual height
+ * so the scrollbar matches content (Show() only saw the estimate).
+ */
+void
+RichTextWindow::SyncParentScrollHeight() noexcept
+{
+  if (cached_content_height == 0 ||
+      synced_scroll_height == cached_content_height)
+    return;
+
+  auto *panel = dynamic_cast<VScrollPanel *>(GetParent());
+  if (panel == nullptr)
+    return;
+
+  const unsigned vh =
+    std::max(panel->GetSize().height, cached_content_height);
+  panel->SetVirtualHeight(vh);
+  Move(panel->GetVirtualRect());
+  panel->Invalidate();
+  synced_scroll_height = cached_content_height;
+}
+
+unsigned
+RichTextWindow::CalculateExactContentHeight() const noexcept
+{
+  if (font == nullptr || parsed.text.empty())
     return 0;
 
-  /* Total height = Y offset of last line + its height + padding*2 */
-  const std::size_t n = line_y_offsets.size();
-  const unsigned content_height =
-    static_cast<unsigned>(line_y_offsets[n - 1] + line_heights[n - 1])
-    + padding * 2;
+  const int padding = GetContentPadding();
+  const auto size = GetSize();
+  if (size.width <= unsigned(padding * 2))
+    return 0;
 
-  cached_content_height = content_height;
-  cached_height_width = text_width;
-
-  return content_height;
+  cached_content_height = 0;
+  EnsureLineLayout();
+  /* const API used by the harness; sync from OnPaint in the UI. */
+  return cached_content_height;
 }
 
 void
@@ -809,8 +873,6 @@ void
 RichTextWindow::OnSetFocus() noexcept
 {
   PaintWindow::OnSetFocus();
-  focus_exhausted_down = false;
-  focus_exhausted_up = false;
   Invalidate();
 }
 
@@ -819,6 +881,7 @@ RichTextWindow::OnKillFocus() noexcept
 {
   PaintWindow::OnKillFocus();
   ClearLinkFocus();
+  focused_checkbox_style.reset();
   Invalidate();
 }
 
@@ -986,11 +1049,13 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
   const int padding = GetContentPadding();
   const int text_line_height = font->GetLineSpacing();
 
-  int visible_top, visible_bottom, viewport_height;
-  GetVisibleArea(visible_top, visible_bottom, viewport_height);
-
   EnsureSegmentedLines();
   EnsureLineLayout();
+  /* Sync before GetVisibleArea(): Move() changes GetPosition(). */
+  SyncParentScrollHeight();
+
+  int visible_top, visible_bottom, viewport_height;
+  GetVisibleArea(visible_top, visible_bottom, viewport_height);
 
   if (!segmented_lines || segmented_lines->empty() ||
       line_y_offsets.empty())
@@ -1143,14 +1208,6 @@ RichTextWindow::OnLinkActivated(std::size_t index) noexcept
 bool
 RichTextWindow::OnKeyCheck(unsigned key_code) const noexcept
 {
-  /* If focus navigation has been exhausted in this direction,
-     tell the dialog we don't want the key so it can cycle focus
-     to the next tab stop (e.g. pager buttons). */
-  if (key_code == KEY_DOWN && focus_exhausted_down)
-    return false;
-  if (key_code == KEY_UP && focus_exhausted_up)
-    return false;
-
   switch (key_code) {
   case KEY_UP:
   case KEY_DOWN:
@@ -1303,28 +1360,24 @@ RichTextWindow::ScrollToFocusItem(const FocusItem &item) noexcept
     focused_checkbox_style.reset();
   }
 
-  /* Scroll to the item using content coordinates */
+  /* #VScrollPanel::ScrollTo expects parent-client coordinates. */
   ContainerWindow *parent = GetParent();
   if (parent != nullptr) {
     const PixelRect window_rect = GetPosition();
     const int parent_height = parent->GetSize().height;
-    const int scroll_margin = Layout::Scale(20);
+    const int margin = Layout::Scale(20);
 
-    /* Convert content-space Y to parent coordinates */
     const int item_top = item.y_pos + window_rect.top;
     const int item_bottom = item.y_pos + item.height + window_rect.top;
 
-    if (item_top < scroll_margin ||
-        item_bottom > parent_height - scroll_margin) {
-      PixelRect scroll_rc;
-      scroll_rc.left = 0;
-      scroll_rc.right = 1;
-      if (item_top < scroll_margin) {
-        scroll_rc.top = item.y_pos - scroll_margin;
+    if (item_top < margin || item_bottom > parent_height - margin) {
+      PixelRect scroll_rc{0, 0, 1, 1};
+      if (item_top < margin) {
+        scroll_rc.top = item_top - margin;
         scroll_rc.bottom = scroll_rc.top + 1;
       } else {
-        scroll_rc.top = item.y_pos + item.height + scroll_margin;
-        scroll_rc.bottom = scroll_rc.top + 1;
+        scroll_rc.bottom = item_bottom + margin;
+        scroll_rc.top = scroll_rc.bottom - 1;
       }
       parent->ScrollTo(scroll_rc);
     }
@@ -1333,39 +1386,13 @@ RichTextWindow::ScrollToFocusItem(const FocusItem &item) noexcept
   Invalidate();
 }
 
-bool
-RichTextWindow::AdvanceFocusToNextFrom(
-  const std::vector<FocusItem> &items,
-  std::optional<std::size_t> current_pos,
-  int max_jump) noexcept
+[[gnu::pure]]
+static bool
+FocusItemVisible(const FocusItem &item,
+                 int visible_top, int visible_bottom) noexcept
 {
-  if (!current_pos.has_value())
-    return false;
-
-  if (current_pos.value() + 1 < items.size()) {
-    const auto &cur = items[current_pos.value()];
-    const auto &next = items[current_pos.value() + 1];
-    if (next.y_pos - cur.y_pos > max_jump) {
-      /* Next item is too far away — clear focus and let
-         the scroll widget handle line-by-line scrolling. */
-      focused_checkbox_style.reset();
-      focused_link.reset();
-      focus_exhausted_down = true;
-      Invalidate();
-      return false;
-    }
-    focus_exhausted_up = false;
-    ScrollToFocusItem(next);
-    return true;
-  }
-
-  focused_checkbox_style.reset();
-  focused_link.reset();
-  focus_exhausted_down = true;
-  Invalidate();
-  if (ContainerWindow *parent = GetParent())
-    return parent->InjectKeyPress(KEY_DOWN);
-  return LinkableWindow::OnKeyDown(KEY_DOWN);
+  return item.y_pos + item.height > visible_top &&
+         item.y_pos < visible_bottom;
 }
 
 bool
@@ -1373,124 +1400,82 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
 {
   EnsureSegmentedLines();
   EnsureLineLayout();
+  SyncParentScrollHeight();
 
   if (!segmented_lines || segmented_lines->empty() ||
       line_y_offsets.empty())
     return LinkableWindow::OnKeyDown(key_code);
 
   const int padding = GetContentPadding();
-  const int text_line_height =
-    font != nullptr ? font->GetLineSpacing() : 16;
-
   const auto items = BuildFocusItems(*this, *segmented_lines,
                                      line_y_offsets, line_heights,
                                      padding);
   if (items.empty())
     return LinkableWindow::OnKeyDown(key_code);
 
+  int visible_top, visible_bottom, viewport_height;
+  GetVisibleArea(visible_top, visible_bottom, viewport_height);
+  (void)viewport_height;
+
   const auto current_pos =
-    FindCurrentFocusIndex(items, focused_checkbox_style,
-                          focused_link);
-
-  /* Maximum distance (in pixels) between two focus items before we
-     let the scroll widget handle line-by-line scrolling instead of
-     jumping directly.  This prevents jarring full-document jumps
-     when links are far apart (e.g. one at the top, several at the
-     bottom of a long text). */
-  const int viewport_height = GetClientRect().GetHeight();
-  const int max_jump = viewport_height;
-
-  /* Current visible range in content-space coordinates.  When
-     the window is scrolled inside a VScrollPanel, GetPosition().top
-     becomes negative by the scroll offset. */
-  const PixelRect win_pos = GetPosition();
-  const int visible_top = -win_pos.top;
-  const int visible_bottom = visible_top + viewport_height;
+    FindCurrentFocusIndex(items, focused_checkbox_style, focused_link);
 
   switch (key_code) {
   case KEY_DOWN:
     if (!current_pos.has_value()) {
-      /* No focus set.  When focus_exhausted_down is active (we
-         cleared focus because the next link was too far away),
-         only pick up items in the lower portion of the viewport
-         to avoid jumping back to items we've already scrolled
-         past.  Otherwise accept any visible item. */
-      const int search_start = focus_exhausted_down
-        ? visible_top + viewport_height / 3
-        : visible_top - text_line_height;
-
-      const FocusItem *best = nullptr;
+      /* Pick the first item currently in view. */
       for (const auto &it : items) {
-        if (it.y_pos >= search_start) {
-          best = &it;
-          break;
+        if (FocusItemVisible(it, visible_top, visible_bottom)) {
+          ScrollToFocusItem(it);
+          return true;
         }
       }
-      if (best != nullptr && best->y_pos <= visible_bottom) {
-        focus_exhausted_down = false;
-        focus_exhausted_up = false;
-        ScrollToFocusItem(*best);
-        return true;
-      }
-      /* No suitable item — let scroll widget handle it */
       return false;
     }
-    return AdvanceFocusToNextFrom(items, current_pos, max_jump);
+    if (current_pos.value() + 1 < items.size()) {
+      const auto &next = items[current_pos.value() + 1];
+      /* Stay within roughly one viewport; otherwise let the
+         scroller move — keep the current item so focus is not
+         lost while scrolling between sparse links. */
+      if (next.y_pos - items[current_pos.value()].y_pos <=
+          visible_bottom - visible_top) {
+        ScrollToFocusItem(next);
+        return true;
+      }
+    }
+    return false;
 
   case KEY_UP:
     if (!current_pos.has_value()) {
-      /* No focus set.  When focus_exhausted_up is active,
-         only pick up items in the upper portion of the viewport
-         to avoid jumping forward to items we've scrolled past.
-         Otherwise accept any visible item. */
-      const int search_end = focus_exhausted_up
-        ? visible_bottom - viewport_height / 3
-        : visible_bottom;
-
-      const FocusItem *best = nullptr;
       for (auto it = items.rbegin(); it != items.rend(); ++it) {
-        if (it->y_pos <= search_end) {
-          best = &*it;
-          break;
+        if (FocusItemVisible(*it, visible_top, visible_bottom)) {
+          ScrollToFocusItem(*it);
+          return true;
         }
       }
-      if (best != nullptr && best->y_pos >= visible_top - text_line_height) {
-        focus_exhausted_up = false;
-        focus_exhausted_down = false;
-        ScrollToFocusItem(*best);
+      return false;
+    }
+    if (current_pos.value() > 0) {
+      const auto &prev = items[current_pos.value() - 1];
+      if (items[current_pos.value()].y_pos - prev.y_pos <=
+          visible_bottom - visible_top) {
+        ScrollToFocusItem(prev);
         return true;
       }
-      /* No suitable item — let scroll widget handle it */
-      return false;
-    } else if (current_pos.value() > 0) {
-      const auto &cur = items[current_pos.value()];
-      const auto &prev = items[current_pos.value() - 1];
-      if (cur.y_pos - prev.y_pos > max_jump) {
-        /* Previous item is too far away — clear focus and let
-           the scroll widget handle line-by-line scrolling. */
-        focused_checkbox_style.reset();
-        focused_link.reset();
-        focus_exhausted_up = true;
-        Invalidate();
-        return false;
-      }
-      focus_exhausted_down = false;
-      ScrollToFocusItem(prev);
-      return true;
-    } else {
-      focused_checkbox_style.reset();
-      focused_link.reset();
-      focus_exhausted_up = true;
-      Invalidate();
-      if (ContainerWindow *parent = GetParent())
-        return parent->InjectKeyPress(key_code);
     }
-    break;
+    return false;
 
   case KEY_RETURN:
     if (focused_checkbox_style.has_value()) {
       ToggleCheckbox(focused_checkbox_style.value());
-      AdvanceFocusToNextFrom(items, current_pos, max_jump);
+      /* Advance like Down when possible. */
+      if (current_pos.has_value() &&
+          current_pos.value() + 1 < items.size()) {
+        const auto &next = items[current_pos.value() + 1];
+        if (next.y_pos - items[current_pos.value()].y_pos <=
+            visible_bottom - visible_top)
+          ScrollToFocusItem(next);
+      }
       return true;
     }
     if (focused_link.has_value()) {
