@@ -29,6 +29,9 @@ Version 7.45 - not yet released
     button are reachable from the keyboard
   - Device list: show the Vario flag for non-compensated and netto vario
     sources as well as total-energy (e.g. BlueFly)
+  - E-paper: snap VScrollPanel smooth scrolling instead of animating at
+    ~60 Hz, and debounce ComboPicker per-item help updates while
+    scrolling (InfoBox content list etc.)
   - FLARM radar: show callsigns on all registered targets again, use the
     full callsign on target labels, and omit duplicate side vario/altitude
     on the selected target (info panel already shows them) #2718
