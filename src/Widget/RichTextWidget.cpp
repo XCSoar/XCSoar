@@ -6,6 +6,9 @@
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
+#include "ui/canvas/TextWrapper.hpp"
+
+#include <algorithm>
 
 PixelSize
 RichTextWidget::GetMinimumSize() const noexcept
@@ -16,7 +19,6 @@ RichTextWidget::GetMinimumSize() const noexcept
 PixelSize
 RichTextWidget::GetMaximumSize() const noexcept
 {
-  // If window is prepared, use actual content height
   if (IsDefined()) {
     const auto &w = static_cast<const RichTextWindow &>(GetWindow());
     unsigned content_height = w.GetContentHeight();
@@ -25,26 +27,16 @@ RichTextWidget::GetMaximumSize() const noexcept
                        static_cast<int>(content_height)};
   }
 
-  // Estimate height from text length before window is prepared
   if (!text.empty()) {
     const Font &font = GetLook().text_font;
     const unsigned line_height = font.GetLineSpacing();
-
-    // Count newlines for initial estimate
-    unsigned line_count = 1;
-    for (const char c : text) {
-      if (c == '\n')
-        ++line_count;
-    }
-
-    // Add extra for word wrapping (rough estimate: 50% more lines)
-    line_count = line_count * 3 / 2;
-
+    const unsigned estimate_width = Layout::FastScale(600);
+    const unsigned line_count =
+      std::max(1u, EstimateWrappedLineCount(font, estimate_width, text));
     const unsigned padding = Layout::GetTextPadding() * 2;
-    const int estimated_height =
-      static_cast<int>(line_count * line_height + padding * 2);
-
-    return PixelSize{Layout::FastScale(600), estimated_height};
+    return PixelSize{
+      Layout::FastScale(600),
+      static_cast<int>(line_count * line_height + padding * 2)};
   }
 
   return PixelSize{Layout::FastScale(600), Layout::FastScale(200)};

@@ -90,6 +90,9 @@ class RichTextWindow : public LinkableWindow {
   /** Width used for cached height calculation */
   mutable unsigned cached_height_width = 0;
 
+  /** Last content height pushed to a parent #VScrollPanel (0 = none). */
+  mutable unsigned synced_scroll_height = 0;
+
   /** Wrapped lines from TextWrapper (opaque pointer to avoid header include) */
   mutable std::unique_ptr<WrappedText> wrapped_text;
 
@@ -114,15 +117,6 @@ class RichTextWindow : public LinkableWindow {
 
   /** Currently focused checkbox style_index (into parsed.styles), or nullopt */
   mutable std::optional<std::size_t> focused_checkbox_style;
-
-  /**
-   * Set when focus navigation reached the end (down) or start (up)
-   * of all focusable items.  While set, the next DOWN/UP returns
-   * false so the dialog can cycle focus to the next tab stop
-   * (e.g. pager buttons).  Cleared when the window receives focus.
-   */
-  mutable bool focus_exhausted_down = false;
-  mutable bool focus_exhausted_up = false;
 
   /** Cache of loaded bitmaps keyed by URL */
   mutable std::map<std::string, Bitmap> image_cache;
@@ -196,6 +190,12 @@ private:
    */
   void InvalidateLayout() noexcept;
 
+  /**
+   * Push exact #cached_content_height to a parent #VScrollPanel after
+   * layout (Show() may have sized the panel from the estimate).
+   */
+  void SyncParentScrollHeight() noexcept;
+
   /** Render an inline image for a segment, if present.
    * @return true if an image was rendered (caller should skip text) */
   bool RenderInlineImage(Canvas &canvas, const TextSegment &seg,
@@ -220,14 +220,6 @@ private:
 
   /** Set focus to a FocusItem and scroll to make it visible. */
   void ScrollToFocusItem(const FocusItem &item) noexcept;
-
-  /**
-   * Move focus to the next link or checkbox (same rules as KEY_DOWN when
-   * focus is already set), including max_jump and end-of-list handling.
-   */
-  bool AdvanceFocusToNextFrom(const std::vector<FocusItem> &items,
-                              std::optional<std::size_t> current_pos,
-                              int max_jump) noexcept;
 
 public:
   RichTextWindow() noexcept;
@@ -308,12 +300,14 @@ public:
   void SetText(const char *text, bool parse_markdown = true);
 
   /**
-   * Get the total content height in pixels.
-   * This accounts for text wrapping at the current width.
-   * Used by VScrollWidget to set virtual height.
+   * Content height for scroll sizing.  May be a cheap estimate before
+   * the first wrap; exact after layout / #CalculateExactContentHeight.
    */
   [[gnu::pure]]
   unsigned GetContentHeight() const noexcept;
+
+  /** Force wrap + line layout; return exact content height. */
+  unsigned CalculateExactContentHeight() const noexcept;
 
   /**
    * Get the parsed links.
