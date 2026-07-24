@@ -16,6 +16,11 @@ Version 7.45 - not yet released
   - Add expert cloud setting "Own FLARM IDs" (comma-separated hex list)
     to filter self and additional own aircraft from OGN when the device
     radio id is unavailable (e.g. LX passthrough) #2693
+* documentation
+  - document custom ``.xci`` loading: ``#CLEAR``, merge vs replace,
+    ``type`` values (``key`` / ``gce`` / ``gesture`` / ``ne`` /
+    ``label``), gesture ``data`` format, softkey ``location``,
+    label escapes, complete GCE list, and ``RemoteStick`` Quick Menu
 * ui
   - FLARM radar: show callsigns on all registered targets again, use the
     full callsign on target labels, and omit duplicate side vario/altitude
