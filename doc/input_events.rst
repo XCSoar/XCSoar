@@ -42,6 +42,13 @@ To use a custom file, go to
 **Menu > Config > System > Look > Language, Input > Events**, select
 your ``.xci`` file, and restart XCSoar.
 
+Custom files are loaded **on top of** the built-in defaults: key and
+menu entries with the same mode and ``location`` (or key) overwrite the
+stock ones; everything else remains.  To replace the built-in map
+entirely instead of merging, put ``#CLEAR`` alone on the **first line**
+of the file (before any other records or comments).  That resets the
+in-memory defaults, then applies only the contents of your ``.xci``.
+
 Default key bindings
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -140,9 +147,26 @@ In ``mode=default``, the number row currently uses this grouping:
 File format
 -----------
 
-A ``.xci`` file is plain text with CRLF line endings. Each record is
-a group of ``key=value`` lines separated from the next record by a
-blank line::
+A ``.xci`` file is plain text (Unix LF or Windows CRLF line endings).
+Each record is a group of ``key=value`` lines separated from the next
+record by a blank line.  Lines whose first non-empty character is
+``#`` are comments (except ``#CLEAR`` on line 1; see above).
+
+Recognised fields per record:
+
+- ``mode`` -- one or more mode names, separated by spaces
+- ``type`` -- ``key``, ``gce``, ``gesture``, ``ne``, or ``label``
+- ``data`` -- meaning depends on ``type`` (key name, GCE name,
+  gesture path, or NMEA-event name)
+- ``event`` -- action name plus optional argument (may appear more
+  than once; see execution order below)
+- ``label`` -- on-screen button text (optional; supports ``\n``,
+  ``\r``, and ``\\`` escapes)
+- ``location`` -- softkey slot number; only values **greater than
+  zero** create a menu button.  Omit or use ``0`` for a binding with
+  no softkey (keys, gestures, GCEs, etc.).
+
+Example::
 
  mode=default
  type=key
@@ -545,6 +569,11 @@ Built-in modes
 - ``infobox`` -- an InfoBox has been selected.
 - ``pan`` -- pan mode is active.
 - ``Menu`` -- a menu level is open.
+- ``RemoteStick`` -- contents of the **Quick Menu** (lightning / bolt
+  button, default ``F1``, or the ``ULDR`` gesture).  Softkeys with
+  ``mode=RemoteStick`` and a ``location`` appear in that grid.  Edit
+  those records in a custom ``.xci`` to reorder or limit Quick Menu
+  entries.
 - ``mc`` -- MacCready adjustment mode. Entered from ``mode=default`` via
   the ``Mode mc`` event (default key ``3``). Stick UP/DOWN adjust MC;
   RETURN toggles auto/manual MC; ESCAPE returns to ``default``.
@@ -647,9 +676,10 @@ Labels
 ~~~~~~
 
 Each record can include a ``label`` and ``location`` to display an
-on-screen button. Labels are passed through ``gettext`` for
-translation. The number of label slots and their layout depend on the
-device's screen size.
+on-screen button.  ``location`` must be greater than zero; the layout
+and number of slots depend on the device.  Labels are passed through
+``gettext`` for translation.  Use ``\n`` for a line break in the
+button text (also ``\r`` and ``\\``).
 
 Keys
 ----
@@ -680,31 +710,64 @@ Windows:
 Input types
 ~~~~~~~~~~~
 
-- ``key`` -- a hardware or keyboard key press.
+- ``key`` -- a hardware or keyboard key press (``data`` = key name).
 - ``gce`` -- a Glide Computer Event (see below).
-- ``nmea`` -- a sentence received on an NMEA port.
+- ``gesture`` -- a touch-screen stroke.  ``data`` is a sequence of the
+  letters ``U``, ``D``, ``L``, and ``R`` only (up / down / left /
+  right), e.g. ``ULDR`` for the default Quick Menu gesture.  A custom
+  file entry with the same ``data`` replaces the built-in binding.
+- ``ne`` -- an NMEA / hardware digital-input event (see below).
+- ``label`` -- softkey only: uses ``label`` and ``location`` with no
+  key, gesture, or GCE binding.
 
 Glide Computer Events
 ---------------------
 
 Glide Computer Events (GCEs) are triggered automatically by the glide
 computer rather than by user input. They are defined with
-``type=gce`` and the event name in the ``data`` field. You can attach
-the same actions to a GCE as to any other input -- for example, play
-a sound, display a message, or change the zoom level when entering a
-thermal.
+``type=gce`` and the event name in the ``data`` field (without a
+``GCE_`` prefix). You can attach the same actions to a GCE as to any
+other input -- for example, play a sound, display a message, or
+change the zoom level when entering a thermal.
+
+``AIRSPACE_NEAR``
+   Approaching an airspace for which warnings are enabled.
+
+``AIRSPACE_ENTER``
+   Entered an airspace for which warnings are enabled.
+
+``AIRSPACE_LEAVE``
+   Left an airspace for which warnings are enabled.
 
 ``COMMPORT_RESTART``
    The comm port has been restarted.
 
+``FLARM_NOTRAFFIC``
+   FLARM reports no traffic.
+
+``FLARM_TRAFFIC``
+   FLARM traffic is present.
+
+``FLARM_NEWTRAFFIC``
+   A new FLARM traffic target appeared.
+
 ``FLIGHTMODE_CLIMB``
-   The flight mode has switched to "climb".
+   Flight mode switched to climb.
 
 ``FLIGHTMODE_CRUISE``
-   The flight mode has switched to "cruise".
+   Flight mode switched to cruise.
 
 ``FLIGHTMODE_FINALGLIDE``
-   The flight mode has switched to "final glide".
+   Flight mode switched to final glide.
+
+``FLIGHTMODE_FINALGLIDE_TERRAIN``
+   Final glide path intersects terrain.
+
+``FLIGHTMODE_FINALGLIDE_ABOVE``
+   Above final glide.
+
+``FLIGHTMODE_FINALGLIDE_BELOW``
+   Below final glide.
 
 ``GPS_CONNECTION_WAIT``
    Waiting for the GPS connection.
@@ -727,10 +790,40 @@ thermal.
 ``TAKEOFF``
    Takeoff detected.
 
-``AIRSPACE_NEAR``
-   The aircraft has approached an airspace for which warnings are
-   enabled.
+``TASK_NEXTWAYPOINT``
+   Advanced to the next task waypoint.
 
-``AIRSPACE_ENTER``
-   The aircraft has entered an airspace for which warnings are
-   enabled.
+``TASK_START``
+   Task start detected.
+
+``TASK_FINISH``
+   Task finish detected.
+
+``TEAM_POS_REACHED``
+   Team-code position reached.
+
+``ARM_READY``
+   Arm-advance ready.
+
+``POLAR_CHANGED``
+   Glide polar changed.
+
+``ALTERNATE_CHANGED``
+   Selected alternate changed.
+
+``LANDABLE_UNREACHABLE``
+   A landable waypoint became unreachable.
+
+NMEA / hardware events
+----------------------
+
+Records with ``type=ne`` bind actions to digital-input events from
+certain instruments (historically Vega flap/gear/airbrake and related
+switches).  Put the event name in ``data`` **without** the ``NE_``
+prefix (for example ``DOWN_IN_GEAR_EXTENDED``).
+
+Names follow ``DOWN_IN_…`` / ``UP_IN_…`` (input asserted / released)
+and ``DOWN_OUT_…`` / ``UP_OUT_…`` (output / advisory).  The full set
+is defined in :file:`src/Input/InputQueue.hpp` (the ``NE_*``
+enumeration).  Unused slots are named ``UNUSED_n`` and should not be
+used in new files.
