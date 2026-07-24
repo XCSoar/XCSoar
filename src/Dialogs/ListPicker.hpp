@@ -109,7 +109,7 @@ public:
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
 
-  void OnCursorMoved(unsigned index) noexcept override { UpdateHelp(index); }
+  void OnCursorMoved(unsigned index) noexcept override;
 
   bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override
   {
