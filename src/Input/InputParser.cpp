@@ -164,8 +164,8 @@ ParseInputFile(InputConfig &config, BufferedReader &reader)
 
     const char *key, *value;
 
-    // experimental: if the first line is "#CLEAR" then the whole default config is cleared
-    //               and can be overwritten by file
+    /* If the first line is "#CLEAR", wipe the built-in defaults so
+       this file fully replaces them (see doc/input_events.rst). */
     if (line == 1 && StringIsEqual(buffer, "#CLEAR")) {
       config.SetDefaults();
     } else if (buffer[0] == '\0') {
