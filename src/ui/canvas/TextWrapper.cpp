@@ -80,7 +80,10 @@ TextFitsWidth(Canvas &canvas, const char *start, const char *end,
     return true;
 
   const std::size_t chars = CountUTF8Chars(start, end);
-  if (chars <= budget.safe_fit_chars)
+  /* safe_fit is calibrated with 'W' (Latin).  Only trust it when every
+     character is a single byte — wider scripts (CJK, …) must measure. */
+  if (chars <= budget.safe_fit_chars &&
+      std::size_t(end - start) == chars)
     return true;
   if (chars >= budget.must_wrap_chars)
     return false;
@@ -98,7 +101,8 @@ FindCharWrapBreak(Canvas &canvas, const char *line_start,
   if (char_count == 0)
     return line_start;
 
-  if (char_count <= budget.safe_fit_chars)
+  if (char_count <= budget.safe_fit_chars &&
+      std::size_t(word_end - line_start) == char_count)
     return word_end;
 
   std::size_t lo = 1;

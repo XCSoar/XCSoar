@@ -33,7 +33,7 @@ RichTextWidget::GetMaximumSize() const noexcept
     const unsigned estimate_width = Layout::FastScale(600);
     const unsigned line_count =
       std::max(1u, EstimateWrappedLineCount(font, estimate_width, text));
-    const unsigned padding = Layout::GetTextPadding() * 2;
+    const unsigned padding = Layout::GetTextPadding();
     return PixelSize{
       Layout::FastScale(600),
       static_cast<int>(line_count * line_height + padding * 2)};

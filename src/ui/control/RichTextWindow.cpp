@@ -828,12 +828,14 @@ RichTextWindow::SyncParentScrollHeight() noexcept
   if (panel == nullptr)
     return;
 
-  const unsigned vh =
-    std::max(panel->GetSize().height, cached_content_height);
+  /* Move() may trigger OnResize() → InvalidateLayout(), which clears
+     cached_content_height; keep the value we synced. */
+  const unsigned height = cached_content_height;
+  const unsigned vh = std::max(panel->GetSize().height, height);
   panel->SetVirtualHeight(vh);
   Move(panel->GetVirtualRect());
   panel->Invalidate();
-  synced_scroll_height = cached_content_height;
+  synced_scroll_height = height;
 }
 
 unsigned
@@ -848,6 +850,11 @@ RichTextWindow::CalculateExactContentHeight() const noexcept
     return 0;
 
   cached_content_height = 0;
+  /* EnsureLineLayout() returns early when the layout is still valid
+     for this width, which would leave the height at 0. */
+  line_y_offsets.clear();
+  line_heights.clear();
+  line_layout_width = 0;
   EnsureLineLayout();
   /* const API used by the harness; sync from OnPaint in the UI. */
   return cached_content_height;
