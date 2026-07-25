@@ -11,6 +11,7 @@ constexpr std::string_view FullScreen = "FullScreen";
 constexpr std::string_view UIScale = "UIScale";
 constexpr std::string_view CustomDPI = "CustomDPI";
 constexpr std::string_view DarkMode = "DarkMode";
+constexpr std::string_view DisplayType = "DisplayType";
 constexpr std::string_view Password = "Password";
 constexpr std::string_view AirspaceWarning = "AirspaceWarn";
 constexpr std::string_view AirspaceWarningDialog = "AirspaceWarnDialog";
