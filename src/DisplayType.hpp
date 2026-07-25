@@ -11,13 +11,13 @@
  * separate and may follow later.
  */
 enum class DisplayType : uint8_t {
-  /** Conventional LCD / OLED — full animations. */
+  /** Conventional LCD or OLED; full animations. */
   LCD,
 
   /** Monochrome electronic paper (slow refresh). */
   E_INK,
 
-  /** Colour electronic paper (still slow refresh). */
+  /** Color electronic paper (still slow refresh). */
   COLOR_E_INK,
 
   COUNT

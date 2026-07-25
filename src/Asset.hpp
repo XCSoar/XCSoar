@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "DisplayType.hpp"
+
 #ifdef ANDROID
 #include "Android/Product.hpp"
 #endif
@@ -10,8 +12,6 @@
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
-
-#include "DisplayType.hpp"
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
 #include "Apple/KeyboardDetection.hpp"
@@ -247,8 +247,8 @@ IsDithered() noexcept
  * and show ghosting.  Animations shall be disabled when this function
  * returns true.
  *
- * Driven by #DisplaySettings::type via #SetDisplayType().  Defaults
- * to e-ink on Kobo and LCD elsewhere.
+ * Driven by #DisplaySettings::display_type via #SetDisplayType().
+ * Defaults to e-ink on Kobo and LCD elsewhere.
  */
 void
 SetDisplayType(DisplayType type) noexcept;

@@ -21,7 +21,7 @@ struct DisplaySettings {
    * Display technology for refresh-sensitive UI.  Defaults to e-ink
    * on Kobo and LCD on other platforms.
    */
-  DisplayType type;
+  DisplayType display_type;
 
   void SetDefaults();
 };
