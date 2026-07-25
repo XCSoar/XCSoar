@@ -4,6 +4,7 @@
 #include "WaypointDialogs.hpp"
 #include "WaypointInfoWidget.hpp"
 #include "WaypointCommandsWidget.hpp"
+#include "Simulator.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -122,6 +123,7 @@ class WaypointDetailsWidget final
   : public NullWidget {
   struct Layout {
     PixelRect goto_button;
+    PixelRect sim_jump_button;
     PixelRect magnify_button, shrink_button;
     PixelRect previous_button, next_button;
     PixelRect close_button;
@@ -135,6 +137,7 @@ class WaypointDetailsWidget final
 #endif
 
     explicit Layout(const PixelRect &rc,
+                    bool sim_jump_active,
 #ifdef HAVE_RUN_FILE
                     TextRowRenderer &row_renderer,
 #endif
@@ -149,8 +152,10 @@ class WaypointDetailsWidget final
   ProtectedTaskManager *const task_manager;
 
   const WaypointDetailsNesting nesting;
+  const bool sim_jump_active;
 
   Button goto_button;
+  Button sim_jump_button;
   Button magnify_button, shrink_button;
   Button previous_button, next_button;
   Button close_button;
@@ -185,6 +190,7 @@ public:
      waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
      nesting(_nesting),
+     sim_jump_active(is_simulator()),
      commands_widget(new WaypointCommandsWidget(look, &dialog, waypoints, waypoint,
                                                 task_manager, allow_edit,
                                                 _nesting)) {}
@@ -217,6 +223,7 @@ public:
   void AdjustViewForZoomChange(int old_zoom, int new_zoom) noexcept;
 
   void OnGotoClicked();
+  void OnSimJumpClicked();
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -224,12 +231,15 @@ public:
 
   void Show(const PixelRect &rc) noexcept override {
     const Layout layout(rc,
+                        sim_jump_active,
 #ifdef HAVE_RUN_FILE
                         file_list_handler.GetRowRenderer(),
 #endif
                         *waypoint);
 
     goto_button.MoveAndShow(layout.goto_button);
+    if (sim_jump_active)
+      sim_jump_button.MoveAndShow(layout.sim_jump_button);
 
     if (!images.empty()) {
       magnify_button.MoveAndShow(layout.magnify_button);
@@ -259,6 +269,8 @@ public:
 
   void Hide() noexcept override {
     goto_button.Hide();
+    if (sim_jump_active)
+      sim_jump_button.Hide();
 
     if (!images.empty()) {
       magnify_button.Hide();
@@ -281,12 +293,15 @@ public:
 
   void Move(const PixelRect &rc) noexcept override {
     const Layout layout(rc,
+                        sim_jump_active,
 #ifdef HAVE_RUN_FILE
                         file_list_handler.GetRowRenderer(),
 #endif
                         *waypoint);
 
     goto_button.Move(layout.goto_button);
+    if (sim_jump_active)
+      sim_jump_button.Move(layout.sim_jump_button);
 
     if (!images.empty()) {
       magnify_button.Move(layout.magnify_button);
@@ -318,6 +333,7 @@ public:
 
   bool HasFocus() const noexcept override {
     return (task_manager != nullptr && goto_button.HasFocus()) ||
+      (sim_jump_active && sim_jump_button.HasFocus()) ||
       (!images.empty() && (magnify_button.HasFocus() ||
                            shrink_button.HasFocus())) ||
        previous_button.HasFocus() || next_button.HasFocus() ||
@@ -355,6 +371,7 @@ WaypointDetailsDispatchImageInput(const char *misc) noexcept
 }
 
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
+                                      bool sim_jump_active,
 #ifdef HAVE_RUN_FILE
                                       TextRowRenderer &row_renderer,
 #endif
@@ -369,28 +386,51 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
     auto buttons = main.CutLeftSafe(::Layout::Scale(70));
 
     goto_button = buttons.CutTopSafe(button_height);
+    if (sim_jump_active)
+      sim_jump_button = buttons.CutTopSafe(button_height);
     std::tie(magnify_button, shrink_button) = buttons.CutTopSafe(button_height).VerticalSplit();
 
     close_button = buttons.CutBottomSafe(button_height);
 
     std::tie(previous_button, next_button) = buttons.CutBottomSafe(button_height).VerticalSplit();
   } else {
-    auto buttons = main.CutBottomSafe(button_height);
+    auto buttons = main.CutBottomSafe(sim_jump_active ? 2 * button_height
+                                                      : button_height);
 
     const unsigned one_third = (2 * buttons.left + buttons.right) / 3;
     const unsigned two_thirds = (buttons.left + 2 * buttons.right) / 3;
 
-    goto_button = buttons;
-    goto_button.right = one_third;
+    if (sim_jump_active) {
+      auto top_buttons = buttons.CutTopSafe(button_height);
+      auto bottom_buttons = buttons;
 
-    close_button = buttons;
-    close_button.left = two_thirds;
+      goto_button = top_buttons;
+      goto_button.right = one_third;
 
-    previous_button = buttons;
-    previous_button.left = one_third;
-    next_button = buttons;
-    next_button.right = two_thirds;
-    previous_button.right = next_button.left = (one_third + two_thirds) / 2;
+      sim_jump_button = bottom_buttons;
+      sim_jump_button.right = one_third;
+
+      previous_button = bottom_buttons;
+      previous_button.left = one_third;
+      next_button = bottom_buttons;
+      next_button.right = two_thirds;
+      previous_button.right = next_button.left = (one_third + two_thirds) / 2;
+
+      close_button = bottom_buttons;
+      close_button.left = two_thirds;
+    } else {
+      goto_button = buttons;
+      goto_button.right = one_third;
+
+      close_button = buttons;
+      close_button.left = two_thirds;
+
+      previous_button = buttons;
+      previous_button.left = one_third;
+      next_button = buttons;
+      next_button.right = two_thirds;
+      previous_button.right = next_button.left = (one_third + two_thirds) / 2;
+    }
 
     const unsigned padding = ::Layout::GetTextPadding();
     shrink_button.left = main.left + padding;
@@ -470,6 +510,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   }
 
   const Layout layout(rc,
+                      sim_jump_active,
 #ifdef HAVE_RUN_FILE
                       file_list_handler.GetRowRenderer(),
 #endif
@@ -499,6 +540,11 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
                          }
                        });
   }
+
+  if (sim_jump_active)
+    sim_jump_button.Create(parent, look.button, _("Sim: Jump to"),
+                           layout.sim_jump_button, button_style,
+                           [this](){ OnSimJumpClicked(); });
 
   if (!images.empty()) {
     magnify_button.Create(parent, layout.magnify_button, button_style,
@@ -834,6 +880,19 @@ WaypointDetailsWidget::OnGotoClicked()
   dialog.SetModalResult(mrOK);
 
   CommonInterface::main_window->FullRedraw();
+}
+
+void
+WaypointDetailsWidget::OnSimJumpClicked()
+{
+  if (!sim_jump_active)
+    return;
+
+  if (SimJumpTo(waypoint->location)) {
+    if (nesting.state_change_committed != nullptr)
+      *nesting.state_change_committed = true;
+    dialog.SetModalResult(mrOK);
+  }
 }
 
 /**

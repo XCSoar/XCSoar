@@ -114,6 +114,9 @@ sound=IDR_FAIL
 key=Screen Mode Full
 delay=1000
 
+key=Simulator Steer by dragging from the glider, or using InfoBoxes Altitude and Speed Ground
+delay=5000
+
 # Always leave dummy entry for now (work around issue in parser)
 key=Dummy
 delay=2500

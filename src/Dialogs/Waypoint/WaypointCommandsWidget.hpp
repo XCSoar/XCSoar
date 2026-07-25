@@ -41,7 +41,9 @@ class WaypointCommandsWidget final
 	EDIT,
   };
 
-  Button *replace_button, *insert_button, *append_button, *remove_button, *home_button, *pan_button, *set_active_button, *set_standby_button, *edit_button;
+  Button *replace_button, *insert_button, *append_button, *remove_button,
+         *home_button, *pan_button,
+         *set_active_button, *set_standby_button, *edit_button;
 
   /**
    * Mark a parent browse-search as committed and close this form (no-op if

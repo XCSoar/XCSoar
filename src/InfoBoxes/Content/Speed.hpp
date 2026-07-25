@@ -10,6 +10,7 @@ class InfoBoxContentSpeedGround : public InfoBoxContent
 public:
   void Update(InfoBoxData &data) noexcept override;
   bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
+  const InfoBoxPanel *GetDialogContent() noexcept override;
 };
 
 void

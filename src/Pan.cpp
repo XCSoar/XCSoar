@@ -2,11 +2,16 @@
 // Copyright The XCSoar Project
 
 #include "Pan.hpp"
+#include "Simulator.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+#include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
+#include "BackendComponents.hpp"
+#include "Components.hpp"
 
 #include <cassert>
 
@@ -62,6 +67,28 @@ PanTo(const GeoPoint &location)
   InputEvents::setMode(InputEvents::MODE_DEFAULT);
   InputEvents::UpdatePan();
   return true;
+}
+
+bool
+SimJumpTo(const GeoPoint &location)
+{
+#ifdef SIMULATOR_AVAILABLE
+  assert(CommonInterface::main_window != nullptr);
+
+  if (!is_simulator() || backend_components == nullptr ||
+      backend_components->device_blackboard == nullptr)
+    return false;
+
+  backend_components->device_blackboard->SetSimulatorLocation(location);
+
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->FullRedraw();
+
+  return true;
+#else
+  (void)location;
+  return false;
+#endif
 }
 
 void

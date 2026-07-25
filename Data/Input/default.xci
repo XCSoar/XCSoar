@@ -35,6 +35,7 @@ data=GPS_FIX_WAIT
 mode=default
 type=gce
 data=STARTUP_SIMULATOR
+event=StatusMessage Simulator Steer by dragging from the glider, or using InfoBoxes Altitude and Speed Ground
 
 mode=default
 type=gce
