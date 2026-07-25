@@ -100,6 +100,33 @@ etc.). Usage and examples: **Debugging XCSoar** in :doc:`architecture`::
 ``Run*`` utilities are small standalone binaries and are often easier to
 debug under :program:`gdb` or :program:`valgrind` than the full application.
 
+Redraw counter overlay (e-ink)
+------------------------------
+
+To see how often the display actually presents a frame (important on
+slow e-ink screens), build with ``DRAW_REDRAW_COUNTER=y``::
+
+  make -j$(nproc) TARGET=UNIX USE_CCACHE=y DRAW_REDRAW_COUNTER=y
+
+The flag is defined in :file:`build/options.mk` (default ``n``). When
+enabled, each ``TopWindow::Expose()`` / framebuffer flip draws a
+high-contrast overlay in the top-left corner::
+
+  R:<total>  <hz>/s
+
+``R`` is the lifetime present count; the rate is frames over the last
+one-second window (it stays ``0.0/s`` until the first full second).
+The overlay is paint-only (it does not capture mouse or touch).
+
+On Kobo, or any build where ``HasEPaper()`` is true, use the overlay
+while scrolling lists and panels. Paths already gated by ``HasEPaper()``
+(for example list pixel pan and kinetic scrolling) should keep the rate
+low; spikes mean something is still forcing full-screen presents.
+The same make flag works for ``TARGET=KOBO`` and ``OPENGL=n`` builds.
+
+Clean or rebuild affected objects when toggling the flag; mixed objects
+with and without ``-DDRAW_REDRAW_COUNTER`` are not reliable.
+
 iOS and macOS
 -------------
 
