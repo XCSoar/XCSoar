@@ -10,4 +10,9 @@ DisplaySettings::SetDefaults()
   cursor_size = 1;
   invert_cursor_colors = false;
   full_screen = true;
+#ifdef KOBO
+  type = DisplayType::E_INK;
+#else
+  type = DisplayType::LCD;
+#endif
 }

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "DisplayOrientation.hpp"
+#include "DisplayType.hpp"
 
 #include <type_traits>
 
@@ -15,6 +16,12 @@ struct DisplaySettings {
   uint8_t cursor_size;
   bool invert_cursor_colors;
   bool full_screen;
+
+  /**
+   * Display technology for refresh-sensitive UI.  Defaults to e-ink
+   * on Kobo and LCD on other platforms.
+   */
+  DisplayType type;
 
   void SetDefaults();
 };

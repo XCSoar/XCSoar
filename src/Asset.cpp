@@ -9,6 +9,24 @@
 #include "ui/event/Queue.hpp"
 #endif
 
+#ifndef KOBO
+static DisplayType display_type = DisplayType::LCD;
+#else
+static DisplayType display_type = DisplayType::E_INK;
+#endif
+
+void
+SetDisplayType(DisplayType type) noexcept
+{
+  display_type = type;
+}
+
+bool
+HasEPaper() noexcept
+{
+  return IsEPaperDisplayType(display_type);
+}
+
 #if (defined(USE_CONSOLE) && !defined(KOBO)) || defined(USE_WAYLAND)
 
 bool

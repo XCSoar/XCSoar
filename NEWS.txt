@@ -27,6 +27,9 @@ Version 7.45 - not yet released
     overflow by character budget, and use one measure for typical bullets
   - Fix Quick Guide Up/Down focus so the bottom-bar checkbox and Close
     button are reachable from the keyboard
+  - Expert Look → Screen Layout setting "Display type" (LCD / E-ink /
+    Color e-ink); e-ink modes disable kinetic and smooth scrolling.
+    Defaults to E-ink on Kobo and LCD elsewhere
   - Device list: show the Vario flag for non-compensated and netto vario
     sources as well as total-energy (e.g. BlueFly)
   - E-paper: snap VScrollPanel smooth scrolling instead of animating at
