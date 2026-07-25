@@ -62,18 +62,32 @@ ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario)
   static constexpr double fir_coefficients[] = {
     -0.0421, 0.1628, 0.3793, 0.3793, 0.1628, -0.0421,
   };
+  static constexpr unsigned N = ARRAY_SIZE(fir_coefficients);
 
-  vario = 0;
-  bool vario_ok = true;
-  double value = 0;
-  for (double fir_b : fir_coefficients) {
-    if (!line.ReadChecked(value))
-      vario_ok = false;
-    else
-      vario += value * fir_b;
+  double samples[N];
+  unsigned n_valid = 0;
+
+  /* Always consume six fields so heading/wind stay aligned. */
+  for (unsigned i = 0; i < N; ++i) {
+    double value;
+    if (line.ReadChecked(value))
+      samples[n_valid++] = value;
   }
 
-  return vario_ok;
+  if (n_valid == 0)
+    return false;
+
+  if (n_valid == N) {
+    vario = 0;
+    for (unsigned i = 0; i < N; ++i)
+      vario += samples[i] * fir_coefficients[i];
+    return true;
+  }
+
+  /* Partial sentence (e.g. BlueFly LX output): restore 7.44 behaviour
+     and take the first successfully parsed sample. */
+  vario = samples[0];
+  return true;
 }
 
 /**

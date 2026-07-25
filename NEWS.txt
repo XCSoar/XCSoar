@@ -61,6 +61,9 @@ Version 7.45 - not yet released
   - always start in light mode; dark mode is not supported on e-paper
     displays #2568
 * devices
+  - Accept partial $LXWP0 vario samples (e.g. BlueFly LX mode with a
+    single rate) so Status Variometer is not stuck on Disconnected while
+    baro still works; keep the six-sample FIR for full LXNAV sentences #2763
   - fix LXNAV thermal averages when the device reports conflicting
     altitude sources #2754
   - Android: multi-port USB serial adapters (e.g. dual FTDI) use 0-based port

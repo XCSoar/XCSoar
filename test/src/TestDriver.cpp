@@ -1326,6 +1326,21 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
   ok1(equals(nmea_info.external_wind.norm, 10.1 / 3.6));
   ok1(equals(nmea_info.external_wind.bearing, reciprocal_wind ? 354 : 174));
 
+  if (!condor) {
+    /* BlueFly LX mode / classic example: only the first of six vario
+       slots is filled.  Must still publish TE vario (#2763). */
+    nmea_info.Reset();
+    nmea_info.clock = TimeStamp{FloatDuration{1}};
+    ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
+                          nmea_info));
+    ok1(nmea_info.pressure_altitude_available);
+    ok1(equals(nmea_info.pressure_altitude, 1665.5));
+    ok1(nmea_info.airspeed_available);
+    ok1(nmea_info.total_energy_vario_available);
+    ok1(equals(nmea_info.total_energy_vario, 1.71));
+    ok1(nmea_info.external_wind_available);
+  }
+
 
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{1}};
@@ -3210,7 +3225,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1043 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1050 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */
