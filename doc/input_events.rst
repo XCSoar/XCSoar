@@ -149,8 +149,10 @@ File format
 
 A ``.xci`` file is plain text (Unix LF or Windows CRLF line endings).
 Each record is a group of ``key=value`` lines separated from the next
-record by a blank line.  Lines whose first non-empty character is
-``#`` are comments (except ``#CLEAR`` on line 1; see above).
+record by a blank line.  Lines whose first character is ``#`` are
+comments (except ``#CLEAR`` on line 1; see above).  Leading spaces
+before ``#`` are not stripped, so indented ``#`` lines are not
+treated as comments.
 
 Recognised fields per record:
 
