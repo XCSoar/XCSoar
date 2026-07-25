@@ -15,8 +15,11 @@ struct DeviceInfo;
 namespace LX {
 
 /**
- * Read six LXWP0 vario samples and apply the 5th-order low-pass FIR
- * filter used by LX EOS.
+ * Read up to six LXWP0 vario samples.  When all six are present,
+ * apply the 5th-order low-pass FIR used by LX EOS / full LXNAV
+ * sentences.  When only some slots are filled (BlueFly LX mode,
+ * Condor, older devices — often a single sample), use the first
+ * valid sample so TE vario is still published (#2763).
  */
 bool
 ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario);
