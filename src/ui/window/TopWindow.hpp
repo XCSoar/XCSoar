@@ -16,6 +16,11 @@
 
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 
+#ifdef DRAW_REDRAW_COUNTER
+#include <chrono>
+#include <cstdint>
+#endif
+
 #ifdef ANDROID
 #include "thread/Mutex.hxx"
 #include "thread/Cond.hxx"
@@ -167,6 +172,13 @@ public:
   uint8_t cursor_size = 1;
   bool invert_cursor_colors = false;
   std::chrono::steady_clock::time_point cursor_visible_until;
+#endif
+
+#ifdef DRAW_REDRAW_COUNTER
+  uint64_t redraw_count = 0;
+  unsigned hz_window_frames = 0;
+  double redraw_hz = 0;
+  std::chrono::steady_clock::time_point hz_window_start{};
 #endif
 
 #ifndef USE_WINUSER
@@ -466,6 +478,11 @@ public:
 #ifdef DRAW_MOUSE_CURSOR
 private:
   void DrawMouseCursor(Canvas &canvas) noexcept;
+#endif
+
+#ifdef DRAW_REDRAW_COUNTER
+private:
+  void DrawRedrawCounter(Canvas &canvas) noexcept;
 #endif
 
 protected:

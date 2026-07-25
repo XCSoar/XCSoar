@@ -30,8 +30,16 @@
 #include "ui/canvas/opengl/Dynamic.hpp" // for GLExt::discard_framebuffer
 #endif
 
-#ifdef DRAW_MOUSE_CURSOR
+#if defined(DRAW_MOUSE_CURSOR) || defined(DRAW_REDRAW_COUNTER)
 #include "Screen/Layout.hpp"
+#endif
+
+#ifdef DRAW_REDRAW_COUNTER
+#include "Look/FontDescription.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Font.hpp"
+#include <fmt/format.h>
+#include <chrono>
 #endif
 
 namespace UI {
@@ -169,6 +177,59 @@ TopWindow::DrawMouseCursor(Canvas &canvas) noexcept
 
 #endif
 
+#ifdef DRAW_REDRAW_COUNTER
+
+inline void
+TopWindow::DrawRedrawCounter(Canvas &canvas) noexcept
+{
+  using namespace std::chrono;
+
+  ++redraw_count;
+  ++hz_window_frames;
+
+  const auto now = steady_clock::now();
+  if (hz_window_start.time_since_epoch().count() == 0)
+    hz_window_start = now;
+
+  const auto elapsed = now - hz_window_start;
+  if (elapsed >= seconds{1}) {
+    const double seconds_elapsed =
+      duration<double>(elapsed).count();
+    if (seconds_elapsed > 0)
+      redraw_hz = hz_window_frames / seconds_elapsed;
+    hz_window_start = now;
+    hz_window_frames = 0;
+  }
+
+  static Font font;
+  if (!font.IsDefined()) {
+    try {
+      font.Load(FontDescription(Layout::FontScale(12)));
+    } catch (...) {
+      return;
+    }
+  }
+
+  const auto text = fmt::format("R:{}  {:.1f}/s",
+                                redraw_count, redraw_hz);
+  const PixelSize text_size = font.TextSize(text);
+  const int pad = Layout::Scale(2);
+  const PixelRect box{
+    pad,
+    pad,
+    pad + int(text_size.width) + pad * 2,
+    pad + int(text_size.height) + pad * 2,
+  };
+
+  canvas.DrawFilledRectangle(box, COLOR_WHITE);
+  canvas.Select(font);
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundColor(COLOR_WHITE);
+  canvas.DrawText({box.left + pad, box.top + pad}, text);
+}
+
+#endif
+
 void
 TopWindow::Expose() noexcept
 {
@@ -187,6 +248,10 @@ TopWindow::Expose() noexcept
 #ifdef DRAW_MOUSE_CURSOR
     if (std::chrono::steady_clock::now() < cursor_visible_until)
       DrawMouseCursor(canvas);
+#endif
+
+#ifdef DRAW_REDRAW_COUNTER
+    DrawRedrawCounter(canvas);
 #endif
 
     screen->Unlock();

@@ -36,6 +36,12 @@ ifeq ($(STOP_WATCH),y)
   TARGET_CPPFLAGS += -DSTOP_WATCH
 endif
 
+# show TopWindow present count + Hz overlay (e-ink debug)?
+DRAW_REDRAW_COUNTER ?= n
+ifeq ($(DRAW_REDRAW_COUNTER),y)
+  TARGET_CPPFLAGS += -DDRAW_REDRAW_COUNTER
+endif
+
 # compile without UI?
 HEADLESS ?= n
 
