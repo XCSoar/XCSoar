@@ -88,6 +88,22 @@ public:
     return Export(a);
   }
 
+  /**
+   * Returns the perceived luminosity (0-255), using the same weights as
+   * Luminosity8.
+   */
+  [[gnu::const]] constexpr uint8_t GetLuminosity() const noexcept {
+    return Luminosity8(Red(), Green(), Blue()).GetLuminosity();
+  }
+
+  /**
+   * Returns a greyscale version of this color.
+   */
+  [[gnu::const]] constexpr Color ToGreyscale() const noexcept {
+    const uint8_t l = GetLuminosity();
+    return Color(Internal{}, Import(l), Import(l), Import(l), a);
+  }
+
   constexpr Color WithAlpha(uint8_t alpha) const noexcept {
     return Color(Internal(), r, g, b, Import(alpha));
   }

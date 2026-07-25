@@ -15,6 +15,7 @@ struct DisplaySettings {
   uint8_t cursor_size;
   bool invert_cursor_colors;
   bool full_screen;
+  bool e_ink_display;
 
   void SetDefaults();
 };

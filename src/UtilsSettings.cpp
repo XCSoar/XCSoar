@@ -216,9 +216,21 @@ SettingsLeave(const UISettings &old_ui_settings)
   const MapSettings &old_settings_map = old_ui_settings.map;
   const MapSettings &settings_map = ui_settings.map;
 
+#ifdef ENABLE_OPENGL
+  const bool e_ink_display_changed =
+    ui_settings.display.e_ink_display !=
+    old_ui_settings.display.e_ink_display;
+
+  if (e_ink_display_changed)
+    main_window.SetEInkDisplay(ui_settings.display.e_ink_display);
+#endif
+
   if (ui_settings.dark_mode != old_ui_settings.dark_mode ||
       ui_settings.info_boxes.use_colors != old_ui_settings.info_boxes.use_colors ||
       ui_settings.info_boxes.theme != old_ui_settings.info_boxes.theme ||
+#ifdef ENABLE_OPENGL
+      e_ink_display_changed ||
+#endif
       settings_map.trail.type != old_settings_map.trail.type ||
       settings_map.trail.scaling_enabled != old_settings_map.trail.scaling_enabled ||
       settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)

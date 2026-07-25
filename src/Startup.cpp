@@ -436,6 +436,10 @@ Startup(UI::Display &display)
   LogFormat("Device capabilities: HasCursorKeys()=%s",
             HasCursorKeys() ? "yes" : "no");
 #endif
+#ifdef ENABLE_OPENGL
+  main_window->SetEInkDisplay(ui_settings.display.e_ink_display);
+#endif
+
   LogFormat("Device capabilities: HasColors()=%s",
             HasColors() ? "yes" : "no");
   LogFormat("Device capabilities: HasEPaper()=%s",

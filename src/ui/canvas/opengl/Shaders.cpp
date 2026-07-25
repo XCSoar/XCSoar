@@ -5,6 +5,7 @@
 #include "Program.hpp"
 #include "Attribute.hpp"
 #include "Globals.hpp"
+#include "ui/canvas/Luminosity.hpp"
 #include "ui/dim/Point.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 
@@ -17,6 +18,13 @@ GLint solid_projection, solid_modelview, solid_translate;
 
 GLProgram *texture_shader;
 GLint texture_projection, texture_texture, texture_translate;
+
+GLProgram *luminosity_shader;
+GLint luminosity_projection, luminosity_texture, luminosity_translate;
+
+GLProgram *dither_shader;
+GLint dither_projection, dither_texture, dither_translate,
+  dither_snap_high, dither_snap_low, dither_gamma;
 
 GLProgram *invert_shader;
 GLint invert_projection, invert_texture, invert_translate;
@@ -127,6 +135,78 @@ static constexpr char alpha_fragment_shader[] =
     varying vec2 texcoordvar;
     void main() {
       gl_FragColor = vec4(colorvar.rgb, texture2D(texture, texcoordvar).a);
+    }
+)glsl";
+
+static const char *const luminosity_vertex_shader = texture_vertex_shader;
+static constexpr char luminosity_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  LUMINOSITY_GLSL_PREAMBLE
+  R"glsl(
+    uniform sampler2D texture;
+    varying vec2 texcoordvar;
+
+    void main() {
+      vec4 color = texture2D(texture, texcoordvar);
+      float l = luminosity(color.rgb);
+      gl_FragColor = vec4(l, l, l, color.a);
+    }
+)glsl";
+
+static const char *const dither_vertex_shader = texture_vertex_shader;
+static constexpr char dither_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  LUMINOSITY_GLSL_PREAMBLE
+  R"glsl(
+    uniform sampler2D texture;
+    uniform float snap_high;
+    uniform float snap_low;
+    uniform float gamma;
+    varying vec2 texcoordvar;
+
+    float bayer4(vec2 coord) {
+      float x = mod(floor(coord.x), 4.0);
+      float y = mod(floor(coord.y), 4.0);
+      if (y < 0.5) {
+        if (x < 0.5) return 0.0/16.0;
+        if (x < 1.5) return 8.0/16.0;
+        if (x < 2.5) return 2.0/16.0;
+        return 10.0/16.0;
+      }
+      if (y < 1.5) {
+        if (x < 0.5) return 12.0/16.0;
+        if (x < 1.5) return 4.0/16.0;
+        if (x < 2.5) return 14.0/16.0;
+        return 6.0/16.0;
+      }
+      if (y < 2.5) {
+        if (x < 0.5) return 3.0/16.0;
+        if (x < 1.5) return 11.0/16.0;
+        if (x < 2.5) return 1.0/16.0;
+        return 9.0/16.0;
+      }
+      if (x < 0.5) return 15.0/16.0;
+      if (x < 1.5) return 7.0/16.0;
+      if (x < 2.5) return 13.0/16.0;
+      return 5.0/16.0;
+    }
+
+    void main() {
+      vec4 color = texture2D(texture, texcoordvar);
+      float l = pow(luminosity(color.rgb), gamma);
+      if (l >= snap_high) {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, color.a);
+        return;
+      }
+      if (l <= snap_low) {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, color.a);
+        return;
+      }
+      float threshold = bayer4(gl_FragCoord.xy);
+      float v = l > threshold ? 1.0 : 0.0;
+      gl_FragColor = vec4(v, v, v, color.a);
     }
 )glsl";
 
@@ -307,6 +387,36 @@ OpenGL::InitShaders()
   texture_shader->Use();
   glUniform1i(texture_texture, 0);
 
+  luminosity_shader = CompileProgram(luminosity_vertex_shader,
+                                     luminosity_fragment_shader);
+  luminosity_shader->BindAttribLocation(Attribute::POSITION, "position");
+  luminosity_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  LinkProgram(*luminosity_shader);
+
+  luminosity_projection =
+    luminosity_shader->GetUniformLocation("projection");
+  luminosity_texture = luminosity_shader->GetUniformLocation("texture");
+  luminosity_translate =
+    luminosity_shader->GetUniformLocation("translate");
+
+  luminosity_shader->Use();
+  glUniform1i(luminosity_texture, 0);
+
+  dither_shader = CompileProgram(dither_vertex_shader, dither_fragment_shader);
+  dither_shader->BindAttribLocation(Attribute::POSITION, "position");
+  dither_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  LinkProgram(*dither_shader);
+
+  dither_projection = dither_shader->GetUniformLocation("projection");
+  dither_texture = dither_shader->GetUniformLocation("texture");
+  dither_translate = dither_shader->GetUniformLocation("translate");
+  dither_snap_high = dither_shader->GetUniformLocation("snap_high");
+  dither_snap_low = dither_shader->GetUniformLocation("snap_low");
+  dither_gamma = dither_shader->GetUniformLocation("gamma");
+
+  dither_shader->Use();
+  glUniform1i(dither_texture, 0);
+
   invert_shader = CompileProgram(invert_vertex_shader, invert_fragment_shader);
   invert_shader->BindAttribLocation(Attribute::POSITION, "position");
   invert_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
@@ -400,6 +510,10 @@ OpenGL::DeinitShaders() noexcept
   alpha_shader = nullptr;
   delete invert_shader;
   invert_shader = nullptr;
+  delete dither_shader;
+  dither_shader = nullptr;
+  delete luminosity_shader;
+  luminosity_shader = nullptr;
   delete texture_shader;
   texture_shader = nullptr;
   delete solid_shader;
@@ -419,6 +533,14 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
 
   texture_shader->Use();
   glUniformMatrix4fv(texture_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  luminosity_shader->Use();
+  glUniformMatrix4fv(luminosity_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  dither_shader->Use();
+  glUniformMatrix4fv(dither_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
 
   solid_shader->Use();
@@ -453,6 +575,12 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   texture_shader->Use();
   glUniform2f(texture_translate, t.x, t.y);
+
+  luminosity_shader->Use();
+  glUniform2f(luminosity_translate, t.x, t.y);
+
+  dither_shader->Use();
+  glUniform2f(dither_translate, t.x, t.y);
 
   invert_shader->Use();
   glUniform2f(invert_translate, t.x, t.y);

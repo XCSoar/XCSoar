@@ -8,8 +8,10 @@
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "ui/canvas/Canvas.hpp"
 #include "ui/dim/Rect.hpp"
 #include "ui/canvas/opengl/Init.hpp"
+#include "ui/canvas/opengl/DitherPass.hpp"
 #include "Math/Point2D.hpp"
 #include "LogFile.hpp"
 #else
@@ -308,6 +310,12 @@ void
 TopCanvas::Flip()
 {
 #ifdef ENABLE_OPENGL
+  if (OpenGL::enable_dither_pass) {
+    Canvas canvas = Lock();
+    if (canvas.IsDefined())
+      OpenGL::ApplyGreyscalePass(canvas);
+  }
+
   ::SDL_GL_SwapWindow(window);
 #else
 

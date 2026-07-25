@@ -30,3 +30,39 @@ HasKeyboard() noexcept
 }
 
 #endif
+
+bool
+UseGreyscaleDisplay() noexcept
+{
+#if defined(GREYSCALE)
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
+HasColors() noexcept
+{
+#if defined(GREYSCALE)
+  return false;
+#else
+  return !IsKobo();
+#endif
+}
+
+bool
+IsDithered() noexcept
+{
+#ifdef DITHER
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
+HasEPaper() noexcept
+{
+  return IsKobo();
+}

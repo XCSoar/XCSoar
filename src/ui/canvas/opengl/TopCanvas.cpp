@@ -6,6 +6,7 @@
 #include "Globals.hpp"
 #include "Init.hpp"
 #include "Math/Point2D.hpp"
+#include "DitherPass.hpp"
 
 PixelSize
 TopCanvas::GetSize() const noexcept
@@ -78,4 +79,10 @@ TopCanvas::Lock()
 void
 TopCanvas::Unlock() noexcept
 {
+}
+
+void
+TopCanvas::SetEnableDither(bool _enable_dither) noexcept
+{
+  OpenGL::enable_dither_pass = _enable_dither;
 }

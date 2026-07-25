@@ -56,6 +56,11 @@ IsMono() noexcept
   /* on the Kobo, "mono" mode can be set at runtime; the shutdown
      screen renders in greyscale mode */
   return FreeType::mono;
+#elif defined(ENABLE_OPENGL)
+  /* OpenGL e-ink uses anti-aliased font textures and converts the
+     composited frame to greyscale at display time; mono rendering
+     must match the load/render flags set once in Initialise() */
+  return false;
 #else
   return IsDithered();
 #endif

@@ -100,6 +100,17 @@ TopWindow::Create([[maybe_unused]] const char *text, PixelSize size,
   ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }
 
+#ifdef ENABLE_OPENGL
+
+void
+TopWindow::SetEnableDither(bool enable) noexcept
+{
+  if (screen != nullptr)
+    screen->SetEnableDither(enable);
+}
+
+#endif
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
 
 void
