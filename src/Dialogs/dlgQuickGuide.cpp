@@ -60,11 +60,12 @@ struct QuickGuideState {
 static const char *
 GetWelcomeText(bool dark_mode)
 {
-  static StaticString<1024> welcome;
+  static StaticString<1536> welcome;
   welcome.Format(
     "![XCSoar Logo](resource:IDB_LOGO_HD)\n\n"
     "![XCSoar](resource:%s)\n\n"
     "**Version %s**\n\n"
+    "%s"
     "%s\n\n"
     "%s\n\n"
     "- [https://xcsoar.org](https://xcsoar.org)\n"
@@ -73,6 +74,12 @@ GetWelcomeText(bool dark_mode)
     "- [%s](https://github.com/XCSoar/XCSoar/discussions)",
     dark_mode ? "IDB_TITLE_HD_WHITE" : "IDB_TITLE_HD",
     XCSoar_VersionString,
+    is_simulator()
+      ? _("**Simulator mode:** Drag from the glider to set direction "
+          "and speed. Jump with **Sim: Jump to** on a waypoint or map "
+          "point. Fine-tune height and speed with the **Altitude** and "
+          "**Speed Ground** InfoBoxes.\n\n")
+      : "",
     _("To get the most out of XCSoar and to learn about its many "
       "functions in detail, it is highly recommended to read the "
       "Quick Guide or the complete documentation."),
@@ -81,6 +88,7 @@ GetWelcomeText(bool dark_mode)
     _("XCSoar Manual & Quick Guide"),
     _("GitHub - Source Code & Contributions"),
     _("GitHub Discussions - Questions & Community"));
+
   return welcome.c_str();
 }
 
@@ -240,8 +248,8 @@ GetConfigurationHelpText()
     "Choose terrain colors, shading and contour lines\n\n"
     "- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - "
     "Share your position via SkyLines or LiveTrack24\n\n"
-    "The easiest way to explore XCSoar is to "
-    "[replay an existing IGC flight](xcsoar://dialog/replay)."),
+    "Explore XCSoar easily by restarting in Simulator mode, or by "
+    "[replaying an IGC flight](xcsoar://dialog/replay)."),
     has_map ? "x" : " ",
     has_polar ? "x" : " ",
     has_pilot ? "x" : " ",
@@ -250,6 +258,7 @@ GetConfigurationHelpText()
     tim_enabled ? "x" : " ",
     has_safety ? "x" : " ",
     has_terrain_display ? "x" : " ");
+
   return text.c_str();
 }
 
@@ -451,15 +460,15 @@ IsQuickGuideHidden() noexcept
 bool
 dlgQuickGuideShowModal(bool force_info)
 {
-  const bool is_simulator = global_simulator_flag;
+  const bool simulator = is_simulator();
   const bool warranty_needed =
-    !is_simulator && !IsWarrantyAcknowledged();
+    !simulator && !IsWarrantyAcknowledged();
   const bool news_needed = !IsNewsSeen();
   const bool cloud_needed =
-    !is_simulator && IsCloudConsentNeeded();
+    !simulator && IsCloudConsentNeeded();
 #ifdef ANDROID
   const bool permissions_needed =
-    !is_simulator && (!AreLocationPermissionsGranted() ||
+    !simulator && (!AreLocationPermissionsGranted() ||
                       !IsNotificationPermissionGranted());
 #else
   const bool permissions_needed = false;
@@ -606,7 +615,7 @@ dlgQuickGuideShowModal(bool force_info)
     advance_or_close();
   };
 
-  if (!is_simulator && !AreLocationPermissionsGranted()) {
+  if (!simulator && !AreLocationPermissionsGranted()) {
     state.location_page_index = pager->GetSize();
 
     auto page = QuickGuidePageWidget::CreateTwoButtonPage(
@@ -626,7 +635,7 @@ dlgQuickGuideShowModal(bool force_info)
     titles.push_back(_("Location Access"));
   }
 
-  if (!is_simulator && !IsNotificationPermissionGranted()) {
+  if (!simulator && !IsNotificationPermissionGranted()) {
     auto page = QuickGuidePageWidget::CreateTwoButtonPage(
       look, GetNotificationDisclosureText(),
       _("Continue"),

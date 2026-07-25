@@ -36,6 +36,8 @@
 #include "LogFile.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Color.hpp"
+#include "Pan.hpp"
+#include "Simulator.hpp"
 #include <Message.hpp>
 
 #include <limits>
@@ -114,6 +116,7 @@ class MapItemListWidget final
   MapItemListRenderer renderer;
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
+  Button *sim_jump_button = nullptr;
   Button *ack_button, *enable_button;
 
   WndForm *dialog = nullptr;
@@ -121,6 +124,7 @@ class MapItemListWidget final
   ProtectedAirspaceWarningManager *airspace_warnings = nullptr;
 
   void OnDetailsClicked() noexcept;
+  void OnSimJumpClicked() noexcept;
 
 public:
   void CreateButtons(WidgetDialog &dialog,
@@ -169,6 +173,11 @@ protected:
     const MapItem *item = GetItem(GetCursorIndex());
     details_button->SetEnabled(item != nullptr && HasDetails(*item));
     goto_button->SetEnabled(item != nullptr && CanGotoItem(*item));
+    if (sim_jump_button != nullptr)
+      sim_jump_button->SetEnabled(item != nullptr &&
+                                  is_simulator() &&
+                                  (item->type == MapItem::Type::WAYPOINT ||
+                                   item->type == MapItem::Type::LOCATION));
     ack_button->SetEnabled(item != nullptr && CanAckItem(*item));
     enable_button->SetEnabled(item != nullptr && CanEnableItem(*item));
   }
@@ -270,6 +279,12 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
   goto_button = dialog.AddButton(_("Goto"), [this](){
     OnGotoClicked();
   });
+
+  if (is_simulator()) {
+    sim_jump_button = dialog.AddButton(_("Sim: Jump to"), [this](){
+      OnSimJumpClicked();
+    });
+  }
 
   ack_button = dialog.AddButton(_("Ack Day"), [this](){
     OnAckClicked();
@@ -460,6 +475,26 @@ MapItemListWidget::OnGotoClicked()
 
   backend_components->protected_task_manager->DoGoto(std::move(waypoint));
   cancel_button->Click();
+}
+
+void
+MapItemListWidget::OnSimJumpClicked() noexcept
+{
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr ||
+      !is_simulator() ||
+      (item->type != MapItem::Type::WAYPOINT &&
+       item->type != MapItem::Type::LOCATION))
+    return;
+
+  GeoPoint location;
+  if (item->type == MapItem::Type::LOCATION)
+    location = static_cast<const LocationMapItem &>(*item).location;
+  else
+    location = static_cast<const WaypointMapItem &>(*item).waypoint->location;
+
+  if (SimJumpTo(location))
+    cancel_button->Click();
 }
 
 inline void

@@ -23,6 +23,12 @@ Version 7.45 - not yet released
     label escapes, complete GCE list, and ``RemoteStick`` Quick Menu
   - document ``AirspaceLabels`` input event
 * ui
+  - Improve simulator discoverability: startup tip to steer by
+    dragging from the glider or via Altitude / Speed Ground InfoBoxes
+    (5 s); Welcome Quick Guide paragraph in simulator mode; add
+    “Sim: Jump to” on map items and waypoint details; Speed Ground
+    simulator panel for bearing and ground-speed steps; label Set Home
+    as “Set as Startup Location” in simulator mode
   - Bind F1 on the FLARM traffic radar to toggle AVG/ALT side labels
     (same as AVG/ALT softkey and RL gesture); previous target remains
     on Down
