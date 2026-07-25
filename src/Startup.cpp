@@ -419,7 +419,7 @@ Startup(UI::Display &display)
   Display::LoadOrientation(operation);
   main_window->CheckResize();
 
-  SetDisplayType(CommonInterface::GetUISettings().display.type);
+  SetDisplayType(CommonInterface::GetUISettings().display.display_type);
 
   /* Log device capabilities and features after initialization */
   LogFormat("Device capabilities: HasIOIOLib()=%s",

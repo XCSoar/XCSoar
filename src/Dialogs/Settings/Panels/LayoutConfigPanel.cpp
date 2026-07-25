@@ -72,7 +72,7 @@ static constexpr StaticEnumChoice display_type_list[] = {
     N_("Monochrome electronic paper. Disables kinetic and smooth "
        "scrolling.") },
   { DisplayType::COLOR_E_INK, N_("Color e-ink"),
-    N_("Colour electronic paper. Disables kinetic and smooth "
+    N_("Color electronic paper. Disables kinetic and smooth "
        "scrolling like monochrome e-ink.") },
   nullptr
 };
@@ -216,7 +216,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
           _("Select the display technology. E-ink modes disable kinetic "
             "and smooth scrolling for slow refresh screens."),
           display_type_list,
-          (unsigned)ui_settings.display.type);
+          (unsigned)ui_settings.display.display_type);
   SetExpertRow(AppDisplayType);
 
   AddEnum(_("InfoBox geometry"),
@@ -305,9 +305,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 #endif
 
   if (SaveValueEnum(AppDisplayType, ProfileKeys::DisplayType,
-                    ui_settings.display.type)) {
+                    ui_settings.display.display_type)) {
     changed = true;
-    SetDisplayType(ui_settings.display.type);
+    SetDisplayType(ui_settings.display.display_type);
   }
 
   bool info_box_geometry_changed = false;
