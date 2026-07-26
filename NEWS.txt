@@ -70,6 +70,8 @@ Version 7.45 - not yet released
   - BLE serial ports now support Nordic UART Service (NUS) for e.g. Naviter
     dongles, in addition to HM-10; the protocol is auto-detected at connection
     time #2260
+  - BLE serial ports also support Microchip/ISSC transparent UART
+    (e.g. BlueFly Vario over BLE); auto-detected like NUS/HM-10
   - The saved device port type string for that mode remains ble_hm10 so
     existing profiles load without migration
   - add support for SoftRF Concorde, Prime Mk4, and Retro Mk2 as supported USB devices

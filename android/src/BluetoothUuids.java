@@ -62,6 +62,26 @@ public final class BluetoothUuids {
   static final UUID NORDIC_UART_TX_CHARACTERISTIC =
     UUID.fromString("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
 
+  /**
+   * Microchip/ISSC transparent UART service (e.g. BlueFly Vario BLE).
+   */
+  static final UUID ISSC_UART_SERVICE =
+    UUID.fromString("49535343-FE7D-4AE5-8FA9-9FAFD205E455");
+
+  /**
+   * ISSC UART RX characteristic - XCSoar writes data to it
+   * (Write Without Response).
+   */
+  static final UUID ISSC_UART_RX_CHARACTERISTIC =
+    UUID.fromString("49535343-8841-43F4-A8D4-ECBE34729BB3");
+
+  /**
+   * ISSC UART TX characteristic - XCSoar receives data from here
+   * (Notify).
+   */
+  static final UUID ISSC_UART_TX_CHARACTERISTIC =
+    UUID.fromString("49535343-1E4D-4BD9-BA61-23C647249616");
+
   /* Flytec Sensbox */
   static final UUID FLYTEC_SENSBOX_SERVICE =
     UUID.fromString("aba27100-143b-4b81-a444-edcd0000f020");
@@ -85,6 +105,7 @@ public final class BluetoothUuids {
                           ENGINE_SENSORS_SERVICE,
                           HM10_SERVICE,
                           NORDIC_UART_SERVICE,
+                          ISSC_UART_SERVICE,
                           FLYTEC_SENSBOX_SERVICE
                         };
   }
@@ -98,6 +119,8 @@ public final class BluetoothUuids {
                         HM10_RX_TX_CHARACTERISTIC,
                         NORDIC_UART_RX_CHARACTERISTIC,
                         NORDIC_UART_TX_CHARACTERISTIC,
+                        ISSC_UART_RX_CHARACTERISTIC,
+                        ISSC_UART_TX_CHARACTERISTIC,
                         FLYTEC_SENSBOX_NAVIGATION_SENSOR_CHARACTERISTIC,
                         FLYTEC_SENSBOX_MOVEMENT_SENSOR_CHARACTERISTIC,
                         FLYTEC_SENSBOX_SECOND_GPS_CHARACTERISTIC,

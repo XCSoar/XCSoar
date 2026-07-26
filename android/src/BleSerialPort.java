@@ -18,8 +18,8 @@ import android.util.Log;
 
 /**
  * An #AndroidPort implementation for BLE serial bridge devices.
- * Supports HM-10 and Nordic UART Service, with auto-detection based
- * on the service UUID.
+ * Supports HM-10, Nordic UART Service, and Microchip/ISSC transparent
+ * UART, with auto-detection based on the service UUID.
  */
 public class BleSerialPort
     extends BluetoothGattCallback
@@ -36,13 +36,14 @@ public class BleSerialPort
 
   private BluetoothGatt gatt;
 
-  /* For NUS, RX characteristic. For HM-10, RX and TX use the same one. */
+  /* For NUS/ISSC, RX characteristic. For HM-10, RX and TX use the same
+     one. */
   private BluetoothGattCharacteristic writeCharacteristic;
 
   private BluetoothGattCharacteristic notifyCharacteristic;
 
-  /* For NUS, stays null. For HM-10, used as a workaround to avoid a
-     race condition. */
+  /* For NUS/ISSC, stays null. For HM-10, used as a workaround to avoid
+     a race condition. */
   private BluetoothGattCharacteristic deviceNameCharacteristic;
 
   private volatile boolean shutdown = false;
@@ -102,6 +103,12 @@ public class BleSerialPort
         service.getCharacteristic(BluetoothUuids.NORDIC_UART_RX_CHARACTERISTIC);
       notifyCharacteristic =
         service.getCharacteristic(BluetoothUuids.NORDIC_UART_TX_CHARACTERISTIC);
+      /* deviceNameCharacteristic stays null */
+    } else if ((service = gatt.getService(BluetoothUuids.ISSC_UART_SERVICE)) != null) {
+      writeCharacteristic =
+        service.getCharacteristic(BluetoothUuids.ISSC_UART_RX_CHARACTERISTIC);
+      notifyCharacteristic =
+        service.getCharacteristic(BluetoothUuids.ISSC_UART_TX_CHARACTERISTIC);
       /* deviceNameCharacteristic stays null */
     } else {
       service = gatt.getService(BluetoothUuids.HM10_SERVICE);
