@@ -65,6 +65,7 @@ private:
 
   bool ParseBAT(const char *content, NMEAInfo &info);
   bool ParsePRS(const char *content, NMEAInfo &info);
+  bool ParseTMP(const char *content, NMEAInfo &info);
   bool ParseBFV(const char *content, NMEAInfo &info);
   bool ParseBST(const char *content, NMEAInfo &info);
   bool ParseSET(const char *content, NMEAInfo &info);
