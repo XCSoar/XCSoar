@@ -25,7 +25,7 @@ public:
 
     unsigned output_mode;
     static const char OUTPUT_MODE_NAME[];
-    static constexpr unsigned OUTPUT_MODE_MAX = 3;
+    static constexpr unsigned OUTPUT_MODE_MAX = 6;
 
     [[gnu::const]]
     static unsigned ExportVolume(double value) {

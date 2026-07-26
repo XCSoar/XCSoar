@@ -208,6 +208,9 @@ Version 7.45 - not yet released
   - BlueFly Vario: publish battery voltage from BAT telemetry (mV)
     in addition to the estimated percentage
   - BlueFly Vario: parse TMP temperature telemetry (deci-degrees C)
+  - BlueFly Vario: parse $BFV/$BFX telemetry and offer BFV/BFX (and
+    None) output modes in the device manage dialog
+
   - Accept partial $LXWP0 vario samples (e.g. BlueFly LX mode with a
 
     single rate) so Status Variometer is not stuck on Disconnected while

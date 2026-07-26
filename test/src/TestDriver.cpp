@@ -684,6 +684,40 @@ TestBlueFly()
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToCelsius(), 23.1));
 
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+
+  ok1(!device->ParseNMEA("$BFV,101325,123,23.1,85,0*00", nmea_info));
+
+  ok1(device->ParseNMEA("$BFV,101325,123,23.1,85,0*69", nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 101325));
+  ok1(nmea_info.noncomp_vario_available);
+  ok1(equals(nmea_info.noncomp_vario, 1.23));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToCelsius(), 23.1));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 85.0));
+  ok1(!nmea_info.dyn_pressure_available);
+  ok1(!nmea_info.voltage_available);
+
+  nmea_info.Reset();
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+
+  ok1(device->ParseNMEA("$BFX,101325,-50,18.5,40,12,3.84*74", nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 101325));
+  ok1(nmea_info.noncomp_vario_available);
+  ok1(equals(nmea_info.noncomp_vario, -0.5));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToCelsius(), 18.5));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 40.0));
+  ok1(nmea_info.dyn_pressure_available);
+  ok1(equals(nmea_info.dyn_pressure.GetPascal(), 12));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 3.84));
+
   delete device;
 }
 
@@ -3326,7 +3360,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1066 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1091 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */
