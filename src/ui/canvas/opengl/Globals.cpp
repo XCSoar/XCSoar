@@ -11,6 +11,8 @@ namespace OpenGL {
 
 bool texture_non_power_of_two;
 
+unsigned max_texture_size;
+
 bool mapbuffer;
 
 GLenum render_buffer_depth_stencil, render_buffer_stencil;

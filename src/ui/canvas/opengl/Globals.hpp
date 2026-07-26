@@ -32,6 +32,17 @@ namespace OpenGL {
 extern bool texture_non_power_of_two;
 
 /**
+ * Fallback when GL_MAX_TEXTURE_SIZE is missing or non-positive
+ * (common GLES2 floor, e.g. VC4).
+ */
+inline constexpr unsigned DEFAULT_MAX_TEXTURE_SIZE = 2048;
+
+/**
+ * GL_MAX_TEXTURE_SIZE from the driver (e.g. 2048 on VC4).
+ */
+extern unsigned max_texture_size;
+
+/**
  * Is glMapBuffer() available?  May be implemented by the extension
  * GL_OES_mapbuffer.
  */

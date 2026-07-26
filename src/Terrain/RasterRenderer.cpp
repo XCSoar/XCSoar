@@ -11,6 +11,11 @@
 #include "Renderer/GeoBitmapRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "ui/event/Idle.hpp"
+#include "LogFile.hpp"
+
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
 
 #include <algorithm> // for std::clamp()
 #include <cassert>
@@ -281,13 +286,33 @@ RasterRenderer::ScanMap(const RasterMap &map,
   bounds = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
   bounds.IntersectWith(map.GetBounds());
 
-  const UnsignedPoint2D matrix_size =
+  UnsignedPoint2D matrix_size =
     (UnsignedPoint2D)projection.GetScreenSize()
     * static_cast<unsigned>(BOUNDS_SCALE_FACTOR * 128.0f + 0.5f)
     / quantisation_pixels / 128;
   if (matrix_size.x == 0 || matrix_size.y == 0) {
     quantisation_effective = 0;
     return;
+  }
+
+  /* VC4 (and other GLES2 GPUs) reject textures larger than
+     GL_MAX_TEXTURE_SIZE (often 2048).  q=1 at 1080p with
+     BOUNDS_SCALE_FACTOR can request ~2880 wide → GL_INVALID_VALUE
+     on TexSubImage and a black map. */
+  const unsigned max_texture = OpenGL::max_texture_size > 0
+    ? OpenGL::max_texture_size
+    : OpenGL::DEFAULT_MAX_TEXTURE_SIZE;
+  if (matrix_size.x > max_texture || matrix_size.y > max_texture) {
+    const double scale = std::min(double(max_texture) / matrix_size.x,
+                                  double(max_texture) / matrix_size.y);
+    const unsigned clamped_x =
+      std::max(1u, unsigned(matrix_size.x * scale));
+    const unsigned clamped_y =
+      std::max(1u, unsigned(matrix_size.y * scale));
+    LogFmt("Terrain: clamp matrix {}x{} -> {}x{} (max texture {})",
+           matrix_size.x, matrix_size.y, clamped_x, clamped_y,
+           max_texture);
+    matrix_size = {clamped_x, clamped_y};
   }
 
   height_matrix.Fill(map, bounds, matrix_size, true);

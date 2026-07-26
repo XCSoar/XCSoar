@@ -142,6 +142,15 @@ OpenGL::SetupContext()
 
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
+  {
+    GLint value = 0;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &value);
+    max_texture_size = value > 0
+      ? unsigned(value)
+      : DEFAULT_MAX_TEXTURE_SIZE;
+    LogFormat("GL max texture size: %u", max_texture_size);
+  }
+
 #ifdef ANDROID
   if (native_view != nullptr)
     native_view->SetTexturePowerOfTwo(Java::GetEnv(), texture_non_power_of_two);
