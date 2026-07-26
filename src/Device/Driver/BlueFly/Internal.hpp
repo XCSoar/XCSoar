@@ -110,4 +110,8 @@ public:
   /* virtual methods from class Device */
   void LinkTimeout() override;
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  bool ReadFlightList(RecordedFlightList &flight_list,
+                      OperationEnvironment &env) override;
+  bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
+                      OperationEnvironment &env) override;
 };

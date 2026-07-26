@@ -210,6 +210,8 @@ Version 7.45 - not yet released
   - BlueFly Vario: parse TMP temperature telemetry (deci-degrees C)
   - BlueFly Vario: parse $BFV/$BFX telemetry and offer BFV/BFX (and
     None) output modes in the device manage dialog
+  - BlueFly Vario: download onboard IGC flight logs (Devices → Flight
+    download) via $BLF* / $BFF*
 
   - Accept partial $LXWP0 vario samples (e.g. BlueFly LX mode with a
 

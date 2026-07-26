@@ -56,7 +56,16 @@ struct RecordedFlightInfo : FlightInfo {
       uint16_t flight_id;
       uint32_t file_size;
     } lx_eos;
-    
+
+    /**
+     * IGC download addressing for the BlueFly Vario logger.
+     */
+    struct {
+      unsigned start_sector;
+      uint16_t sector_count;
+      char filename[64];
+    } bluefly;
+
   } internal;
 };
 
