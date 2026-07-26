@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Device/Parser.hpp"
+#include "Atmosphere/Pressure.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "Geo/Geoid.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.hpp"
@@ -43,6 +45,9 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   const auto type = line.ReadView();
   if (type.size() < 6)
     return false;
+
+  if (type == "$LK8EX1"sv)
+    return LK8EX1(line, info);
 
   if (IsAlphaASCII(type[1]) && IsAlphaASCII(type[2])) {
     const auto type2 = type.substr(3);
@@ -728,6 +733,59 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
   double vtas;
   if (line.ReadChecked(vtas))
     info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KNOTS));
+
+  return true;
+}
+
+bool
+NMEAParser::LK8EX1(NMEAInputLine &line, NMEAInfo &info)
+{
+  /*
+   * $LK8EX1,pressure,altitude,vario,temperature,battery*CS
+   *
+   * pressure: Pa (hPa×100), or 999999 if missing
+   * altitude: m QNE (ignored if pressure present), or 99999 if missing
+   * vario: cm/s, or 9999 if missing
+   * temperature: °C, or 99 if missing
+   * battery: volts, or 1000+percent, or 999 if missing
+   *
+   * @see https://github.com/LK8000/LK8000/blob/master/Docs/LK8EX1.txt
+   */
+
+  bool have_pressure = false;
+
+  double pressure;
+  if (line.ReadChecked(pressure) && pressure != 999999) {
+    info.ProvideStaticPressure(AtmosphericPressure::Pascal(pressure));
+    have_pressure = true;
+  }
+
+  double altitude;
+  if (line.ReadChecked(altitude)) {
+    if (!have_pressure && altitude != 99999)
+      info.ProvidePressureAltitude(altitude);
+  }
+
+  double vario_cm;
+  if (line.ReadChecked(vario_cm) && vario_cm != 9999)
+    info.ProvideNoncompVario(vario_cm / 100);
+
+  double temperature;
+  if (line.ReadChecked(temperature) && temperature != 99) {
+    info.temperature = Temperature::FromCelsius(temperature);
+    info.temperature_available.Update(info.clock);
+  }
+
+  double battery;
+  if (line.ReadChecked(battery) && battery != 999) {
+    if (battery >= 1000 && battery <= 1100) {
+      info.battery_level = battery - 1000;
+      info.battery_level_available.Update(info.clock);
+    } else {
+      info.voltage = battery;
+      info.voltage_available.Update(info.clock);
+    }
+  }
 
   return true;
 }

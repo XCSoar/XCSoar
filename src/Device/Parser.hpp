@@ -143,6 +143,16 @@ private:
   static bool PTAS1(NMEAInputLine &line, NMEAInfo &info);
 
   /**
+   * Parses an LK8EX1 sentence (LK8000 External Instrument Series 1).
+   *
+   * Handled in the central NMEA parser so any port/driver combination
+   * accepts the sentence (same approach as #PTAS1 / FLARM).
+   *
+   * @see https://github.com/LK8000/LK8000/blob/master/Docs/LK8EX1.txt
+   */
+  static bool LK8EX1(NMEAInputLine &line, NMEAInfo &info);
+
+  /**
    * Parses a MWV sentence (NMEA Wind information).
    *
    * @param line A NMEAInputLine instance that can be used for parsing
