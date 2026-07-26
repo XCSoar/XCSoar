@@ -13,6 +13,6 @@ BlueFlyCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 const struct DeviceRegister bluefly_driver = {
   "BlueFly",
   "BlueFly Vario",
-  DeviceRegister::MANAGE,
+  DeviceRegister::MANAGE | DeviceRegister::LOGGER,
   BlueFlyCreateOnPort,
 };
