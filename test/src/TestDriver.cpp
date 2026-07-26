@@ -680,6 +680,10 @@ TestBlueFly()
   ok1(nmea_info.voltage_available);
   ok1(equals(nmea_info.voltage, 3.8));
 
+  ok1(device->ParseNMEA("TMP 231", nmea_info)); //23.1 °C
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature.ToCelsius(), 23.1));
+
   delete device;
 }
 
@@ -3322,7 +3326,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1063 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1066 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */

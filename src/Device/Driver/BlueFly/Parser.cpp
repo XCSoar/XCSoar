@@ -74,6 +74,22 @@ BlueFlyDevice::ParsePRS(const char *content, NMEAInfo &info)
   return true;
 }
 
+bool
+BlueFlyDevice::ParseTMP(const char *content, NMEAInfo &info)
+{
+  // e.g. TMP 231 → 23.1 °C (decimal deci-degrees)
+
+  char *endptr;
+  long value = strtol(content, &endptr, 10);
+  if (endptr == content)
+    return true;
+
+  info.temperature = Temperature::FromCelsius(value / 10.);
+  info.temperature_available.Update(info.clock);
+
+  return true;
+}
+
 static bool
 ParseUlong(const char **line, unsigned long &value)
 {
@@ -168,6 +184,8 @@ BlueFlyDevice::ParseNMEA(const char *line, NMEAInfo &info)
     return ParsePRS(line + 4, info);
   else if (StringIsEqual(line, "BAT ", 4))
     return ParseBAT(line + 4, info);
+  else if (StringIsEqual(line, "TMP ", 4))
+    return ParseTMP(line + 4, info);
   else if (StringIsEqual(line, "BFV ", 4))
     return ParseBFV(line + 4, info);
   else if (StringIsEqual(line, "BST ", 4))
