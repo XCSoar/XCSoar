@@ -1084,6 +1084,7 @@ DEBUG_PROGRAM_NAMES = \
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
 DEBUG_PROGRAM_NAMES += \
+	RunTrailRendererStress \
 	RunTrace \
 	RunContestAnalysis \
 	RunWaveComputer \
@@ -1886,6 +1887,28 @@ RUN_TASK_SOURCES = \
 	$(TEST_SRC_DIR)/RunTask.cpp
 RUN_TASK_DEPENDS = $(DEBUG_REPLAY_DEPENDS) TASKFILE WAYPOINTFILE GLIDE GEO MATH UTIL IO TIME
 $(eval $(call link-program,RunTask,RUN_TASK))
+
+
+RUN_TRAIL_RENDERER_STRESS_SOURCES = \
+	$(SRC)/Computer/TraceComputer.cpp \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
+	$(SRC)/Engine/Trace/Vector.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Look/TrailLook.cpp \
+	$(SRC)/Renderer/TrailRenderer.cpp \
+	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/RunTrailRendererStress.cpp
+RUN_TRAIL_RENDERER_STRESS_DEPENDS = \
+	$(DEBUG_REPLAY_DEPENDS) SCREEN EVENT ASYNC OS IO THREAD GEO MATH UTIL TIME
+$(eval $(call link-program,RunTrailRendererStress,RUN_TRAIL_RENDERER_STRESS))
 
 RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
