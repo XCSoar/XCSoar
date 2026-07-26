@@ -85,10 +85,10 @@ struct DeviceConfig {
     BLE_SENSOR,
 
     /**
-     * Bluetooth Low Energy serial bridge to a paired device (HM-10 or
-     * Nordic UART Service).  Unlike #BLE_SENSOR, this provides a
-     * bidirectional data stream and XCSoar accesses it through the
-     * #Port interface.
+     * Bluetooth Low Energy serial bridge to a paired device (HM-10,
+     * Nordic UART Service, or Microchip/ISSC transparent UART).
+     * Unlike #BLE_SENSOR, this provides a bidirectional data stream
+     * and XCSoar accesses it through the #Port interface.
      *
      * @note The profile stores this mode under the legacy port type string
      * @c ble_hm10 (see Profile/DeviceConfig.cpp).

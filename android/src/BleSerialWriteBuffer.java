@@ -13,7 +13,7 @@ import android.util.Log;
 
 /**
  * This class helps with writing chunked data to a Bluetooth LE serial
- * bridge device (HM-10 or Nordic UART Service).
+ * bridge device (HM-10, Nordic UART Service, or Microchip/ISSC UART).
  */
 final class BleSerialWriteBuffer {
   private static final String TAG = "XCSoar";
