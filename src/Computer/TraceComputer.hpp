@@ -30,6 +30,10 @@ struct TrailQuery {
   GeoBounds bounds{};
   GeoPoint project_location{};
   double min_distance_m{};
+  /** Minimum stride before budget (usually 1). */
+  unsigned point_stride = 1;
+  /** Cap kept points; 0 = unlimited. */
+  unsigned max_points = 0;
 };
 
 /**
@@ -161,6 +165,34 @@ public:
                         std::vector<TrailVarioSample> &vario_samples,
                         Serial *append_serial = nullptr,
                         Serial *modify_serial = nullptr) const;
+
+  /** Read append/modify serials under the trace mutex. */
+  void LockedGetSerials(Serial &append_serial,
+                        Serial &modify_serial) const noexcept;
+
+  /**
+   * Copy the time-windowed history (no bounds filter) and matching
+   * merge-vario samples for UI-side spatial re-filtering.
+   */
+  void LockedCopyHistory(std::chrono::duration<unsigned> min_time,
+                         TracePointVector &history,
+                         std::vector<TrailVarioSample> &vario_samples,
+                         Serial *append_serial = nullptr,
+                         Serial *modify_serial = nullptr) const;
+
+  /**
+   * Append store points with time greater than \a after onto \a history
+   * and extend \a vario_samples for the new span.
+   */
+  void LockedAppendHistoryAfter(TracePoint::Time after,
+                                TracePointVector &history,
+                                std::vector<TrailVarioSample> &vario_samples,
+                                Serial *append_serial = nullptr,
+                                Serial *modify_serial = nullptr) const;
+
+  /** Project query bounds/spacing into a flat spatial filter. */
+  [[nodiscard]]
+  TrailSpatialFilter LockedMakeSpatialFilter(const TrailQuery &query) const noexcept;
 
   /**
    * Called from #MergeThread after merged basic data is computed (must

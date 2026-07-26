@@ -203,7 +203,8 @@ TraceComputer::LockedTrailQuery(const TrailQuery &query,
 
   if (query.bounds.IsValid())
     full.GetPoints(v, query.min_time, query.bounds,
-                   query.project_location, query.min_distance_m);
+                   query.project_location, query.min_distance_m,
+                   query.point_stride, query.max_points);
   else
     full.GetPoints(v, query.min_time, query.project_location,
                    query.min_distance_m);
@@ -222,6 +223,74 @@ TraceComputer::LockedTrailQuery(const TrailQuery &query,
     *append_serial = full.GetAppendSerial();
   if (modify_serial != nullptr)
     *modify_serial = full.GetModifySerial();
+}
+
+void
+TraceComputer::LockedGetSerials(Serial &append_serial,
+                                Serial &modify_serial) const noexcept
+{
+  const std::lock_guard lock{mutex};
+  append_serial = full.GetAppendSerial();
+  modify_serial = full.GetModifySerial();
+}
+
+void
+TraceComputer::LockedCopyHistory(std::chrono::duration<unsigned> min_time,
+                                 TracePointVector &history,
+                                 std::vector<TrailVarioSample> &vario_samples,
+                                 Serial *append_serial,
+                                 Serial *modify_serial) const
+{
+  const std::lock_guard lock{mutex};
+  full.GetPointsFrom(min_time, history);
+  CopyMergeVarioSamplesUnlocked(vario_samples, min_time);
+  if (append_serial != nullptr)
+    *append_serial = full.GetAppendSerial();
+  if (modify_serial != nullptr)
+    *modify_serial = full.GetModifySerial();
+}
+
+void
+TraceComputer::LockedAppendHistoryAfter(
+    TracePoint::Time after,
+    TracePointVector &history,
+    std::vector<TrailVarioSample> &vario_samples,
+    Serial *append_serial,
+    Serial *modify_serial) const
+{
+  const std::lock_guard lock{mutex};
+  full.AppendPointsAfter(after, history);
+
+  /* Append open-leg / archive samples newer than the previous history
+     tip.  Dedup against the last kept sample. */
+  const TracePoint::Time vario_after =
+    vario_samples.empty() ? after : vario_samples.back().time;
+
+  for (const auto &s : merge_vario_archive) {
+    if (s.time <= vario_after)
+      continue;
+    PushMergeVarioDeduped(vario_samples, s);
+  }
+
+  for (const auto &s : merge_vario_samples) {
+    if (s.time <= vario_after)
+      continue;
+    PushMergeVarioDeduped(vario_samples, s);
+  }
+
+  if (append_serial != nullptr)
+    *append_serial = full.GetAppendSerial();
+  if (modify_serial != nullptr)
+    *modify_serial = full.GetModifySerial();
+}
+
+TrailSpatialFilter
+TraceComputer::LockedMakeSpatialFilter(const TrailQuery &query) const noexcept
+{
+  const std::lock_guard lock{mutex};
+  return full.MakeSpatialFilter(query.bounds, query.project_location,
+                                query.min_distance_m, query.point_stride,
+                                query.max_points);
 }
 
 void
