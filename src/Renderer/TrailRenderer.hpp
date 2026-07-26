@@ -91,6 +91,18 @@ class TrailRenderer {
   std::vector<TrailVarioSample> merge_vario_samples;
   AllocatedArray<BulkPixelPoint> points;
 
+  /**
+   * Time-windowed store copy (no viewport filter).  Spatial filter runs
+   * locally into #trace so pan/zoom need not re-walk the store under lock.
+   */
+  TracePointVector history;
+  std::vector<TrailVarioSample> history_vario;
+  bool history_valid = false;
+  std::chrono::duration<unsigned> history_min_time{};
+  Serial history_append_serial{};
+  Serial history_modify_serial{};
+  TrailQuery last_query{};
+
   /** Reused each Draw() to avoid per-frame heap allocations. */
   std::vector<TrailPointData> valid_points;
   std::vector<PixelPoint> interpolated;
@@ -267,7 +279,14 @@ private:
   bool SyncTrace(const TraceComputer &trace_computer,
                  const TrailQuery &query) noexcept;
 
+  void InvalidateHistory() noexcept;
   void InvalidateSegmentCache() noexcept;
+
+  void RefilterTraceFromHistory(const TrailSpatialFilter &filter) noexcept;
+
+  [[gnu::pure]]
+  static bool TrailQueryViewEqual(const TrailQuery &a,
+                                  const TrailQuery &b) noexcept;
 
   void UpdateSegmentCache(const WindowProjection &projection,
                           TrailSettings::Type type,
