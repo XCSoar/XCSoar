@@ -8,6 +8,7 @@
 #include "util/Sanitizer.hxx"
 #include "util/SliceAllocator.hxx"
 #include "util/Serial.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "time/Stamp.hpp"
 
@@ -21,6 +22,32 @@
 class TracePointVector;
 class TracePointerVector;
 class GeoBounds;
+
+/**
+ * Flat AABB + spacing used to filter a chronological #TracePointVector
+ * to the visible set (points inside or on crossing legs).
+ */
+struct TrailSpatialFilter {
+  FlatBoundingBox box{};
+  unsigned sq_range = 0;
+  /** Minimum stride (1 = no forced skip). */
+  unsigned point_stride = 1;
+  /**
+   * Soft cap on returned points.  If distance thinning still exceeds
+   * this, stride is raised so draw cost stays bounded (PG and glider).
+   */
+  unsigned max_points = 0;
+  bool valid = false;
+};
+
+/**
+ * Bounds-first then spacing-thin, matching Trace::GetPoints(..., bounds, ...).
+ * Used by TrailRenderer on a local time-window history without re-walking
+ * the store under lock.
+ */
+void FilterTraceByBounds(const TracePointVector &in,
+                         TracePointVector &out,
+                         const TrailSpatialFilter &filter) noexcept;
 
 /**
  * This class uses a smart thinning algorithm to limit the number of items
@@ -402,7 +429,31 @@ public:
   void GetPoints(TracePointVector &v, Time min_time,
                  const GeoBounds &bounds,
                  const GeoPoint &location,
-                 double min_distance) const;
+                 double min_distance,
+                 unsigned point_stride = 1,
+                 unsigned max_points = 0) const;
+
+  /**
+   * Copy every chronological point with time >= \a min_time (no spacing
+   * thin).  Used as a UI-side history buffer for cheap local re-filters.
+   */
+  void GetPointsFrom(Time min_time, TracePointVector &v) const noexcept;
+
+  /**
+   * Append chronological points with time > \a after onto \a v.
+   */
+  void AppendPointsAfter(Time after, TracePointVector &v) const noexcept;
+
+  /**
+   * Build a flat spatial filter for \a bounds / spacing (requires a valid
+   * task projection).
+   */
+  [[nodiscard]] [[gnu::pure]]
+  TrailSpatialFilter MakeSpatialFilter(const GeoBounds &bounds,
+                                       const GeoPoint &location,
+                                       double min_distance,
+                                       unsigned point_stride = 1,
+                                       unsigned max_points = 0) const noexcept;
 
   const TracePoint &front() const noexcept {
     assert(!empty());
