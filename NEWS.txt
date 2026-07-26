@@ -212,9 +212,9 @@ Version 7.45 - not yet released
     None) output modes in the device manage dialog
   - BlueFly Vario: download onboard IGC flight logs (Devices → Flight
     download) via $BLF* / $BFF*
-
+  - BlueFly Vario: add output frequency, lift/sink thresholds, and
+    audio when connected to the device manage dialog
   - Accept partial $LXWP0 vario samples (e.g. BlueFly LX mode with a
-
     single rate) so Status Variometer is not stuck on Disconnected while
     baro still works; keep the six-sample FIR for full LXNAV sentences #2763
   - fix LXNAV thermal averages when the device reports conflicting
