@@ -16,7 +16,13 @@ class BlueFlyConfigurationWidget final
   : public RowFormWidget {
   enum BlueFlyWidgets {
     VOLUME,
+    AUDIO_WHEN_CONNECTED,
+    LIFT_THRESHOLD,
+    LIFT_OFF_THRESHOLD,
+    SINK_THRESHOLD,
+    SINK_OFF_THRESHOLD,
     OUTPUT_MODE,
+    OUTPUT_FREQUENCY,
     SAVE,
   };
 
@@ -30,12 +36,34 @@ public:
     :RowFormWidget(look), dialog(_dialog), device(_device) {}
 
   /* virtual methods from Widget */
-  void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
 
       AddFloat(N_("Volume"), nullptr,
-             "%.2f",
-             "%.2f",
+               "%.2f", "%.2f",
                0, 1.0, 0.1, true, 0);
+
+      AddBoolean(N_("Audio when connected"), nullptr, false);
+
+      AddFloat(N_("Lift threshold"), nullptr,
+               "%.2f m/s", "%.2f",
+               0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
+               0.05, true, 0.2);
+
+      AddFloat(N_("Lift off threshold"), nullptr,
+               "%.2f m/s", "%.2f",
+               0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
+               0.05, true, 0.05);
+
+      AddFloat(N_("Sink threshold"), nullptr,
+               "%.2f m/s", "%.2f",
+               0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
+               0.05, true, 0.2);
+
+      AddFloat(N_("Sink off threshold"), nullptr,
+               "%.2f m/s", "%.2f",
+               0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
+               0.05, true, 0.05);
 
       static constexpr StaticEnumChoice modes[] = {
         { 0, "BlueFlyVario" },
@@ -50,6 +78,13 @@ public:
 
       AddEnum(N_("Output mode"), nullptr, modes);
 
+      AddInteger(N_("Output frequency"),
+                 _("Divisor of the 20 ms hardware tick (1 = 50 Hz, 10 = 5 Hz)."),
+                 "%d", "%d",
+                 BlueFlyDevice::BlueFlySettings::OUTPUT_FREQUENCY_MIN,
+                 BlueFlyDevice::BlueFlySettings::OUTPUT_FREQUENCY_MAX,
+                 1, 1);
+
       AddButton(_("Save"), [this](){
         bool _changed = false;
         dialog.GetWidget().Save(_changed);
@@ -60,7 +95,16 @@ public:
     params = device.GetSettings();
 
     LoadValue(VOLUME, params.volume);
+    LoadValue(AUDIO_WHEN_CONNECTED, params.audio_when_connected);
+    LoadValue(LIFT_THRESHOLD, params.lift_threshold);
+    LoadValue(LIFT_OFF_THRESHOLD, params.lift_off_threshold);
+    LoadValue(SINK_THRESHOLD, params.sink_threshold);
+    LoadValue(SINK_OFF_THRESHOLD, params.sink_off_threshold);
     LoadValueEnum(OUTPUT_MODE, params.output_mode);
+    params.output_frequency =
+      BlueFlyDevice::BlueFlySettings::ExportOutputFrequency(
+        params.output_frequency);
+    LoadValue(OUTPUT_FREQUENCY, params.output_frequency);
 
     RowFormWidget::Show(rc);
   }
@@ -69,7 +113,15 @@ public:
     PopupOperationEnvironment env;
 
     changed |= SaveValue(VOLUME, params.volume);
+    changed |= SaveValue(AUDIO_WHEN_CONNECTED,
+                         params.audio_when_connected);
+    changed |= SaveValue(LIFT_THRESHOLD, params.lift_threshold);
+    changed |= SaveValue(LIFT_OFF_THRESHOLD, params.lift_off_threshold);
+    changed |= SaveValue(SINK_THRESHOLD, params.sink_threshold);
+    changed |= SaveValue(SINK_OFF_THRESHOLD, params.sink_off_threshold);
     changed |= SaveValueEnum(OUTPUT_MODE, params.output_mode);
+    changed |= SaveValueInteger(OUTPUT_FREQUENCY,
+                                params.output_frequency);
 
     try {
       device.WriteDeviceSettings(params, env);

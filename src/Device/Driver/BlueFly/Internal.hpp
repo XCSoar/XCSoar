@@ -9,6 +9,7 @@
 #include "thread/Cond.hxx"
 
 #include <cassert>
+#include <cmath>
 #include <string_view>
 
 struct NMEAInfo;
@@ -23,21 +24,79 @@ public:
     static constexpr unsigned VOLUME_MAX = 1000;
     static constexpr unsigned VOLUME_MULTIPLIER = 1000;
 
+    bool audio_when_connected;
+    static const char AUDIO_WHEN_CONNECTED_NAME[];
+
+    double lift_threshold;
+    static const char LIFT_THRESHOLD_NAME[];
+
+    double lift_off_threshold;
+    static const char LIFT_OFF_THRESHOLD_NAME[];
+
+    double sink_threshold;
+    static const char SINK_THRESHOLD_NAME[];
+
+    double sink_off_threshold;
+    static const char SINK_OFF_THRESHOLD_NAME[];
+
+    static constexpr unsigned THRESHOLD_MULTIPLIER = 100;
+    static constexpr double THRESHOLD_MAX = 10;
+
     unsigned output_mode;
     static const char OUTPUT_MODE_NAME[];
     static constexpr unsigned OUTPUT_MODE_MAX = 6;
 
+    unsigned output_frequency;
+    static const char OUTPUT_FREQUENCY_NAME[];
+    static constexpr unsigned OUTPUT_FREQUENCY_MIN = 1;
+    static constexpr unsigned OUTPUT_FREQUENCY_MAX = 50;
+
     [[gnu::const]]
     static unsigned ExportVolume(double value) {
-      assert(value >= 0);
-      unsigned v = unsigned(value * VOLUME_MULTIPLIER);
-
-      assert(v <= VOLUME_MAX);
+      if (value < 0)
+        value = 0;
+      unsigned v = unsigned(std::lround(value * VOLUME_MULTIPLIER));
+      if (v > VOLUME_MAX)
+        v = VOLUME_MAX;
       return v;
     }
 
     unsigned ExportVolume() const {
       return ExportVolume(volume);
+    }
+
+    [[gnu::const]]
+    static unsigned ExportBoolean(bool value) {
+      return value ? 1 : 0;
+    }
+
+    unsigned ExportAudioWhenConnected() const {
+      return ExportBoolean(audio_when_connected);
+    }
+
+    [[gnu::const]]
+    static unsigned ExportThreshold(double value) {
+      if (value < 0)
+        value = 0;
+      if (value > THRESHOLD_MAX)
+        value = THRESHOLD_MAX;
+      return unsigned(std::lround(value * THRESHOLD_MULTIPLIER));
+    }
+
+    unsigned ExportLiftThreshold() const {
+      return ExportThreshold(lift_threshold);
+    }
+
+    unsigned ExportLiftOffThreshold() const {
+      return ExportThreshold(lift_off_threshold);
+    }
+
+    unsigned ExportSinkThreshold() const {
+      return ExportThreshold(sink_threshold);
+    }
+
+    unsigned ExportSinkOffThreshold() const {
+      return ExportThreshold(sink_off_threshold);
     }
 
     [[gnu::const]]
@@ -48,6 +107,19 @@ public:
 
     unsigned ExportOutputMode() const {
       return ExportOutputMode(output_mode);
+    }
+
+    [[gnu::const]]
+    static unsigned ExportOutputFrequency(unsigned value) {
+      if (value < OUTPUT_FREQUENCY_MIN)
+        return OUTPUT_FREQUENCY_MIN;
+      if (value > OUTPUT_FREQUENCY_MAX)
+        return OUTPUT_FREQUENCY_MAX;
+      return value;
+    }
+
+    unsigned ExportOutputFrequency() const {
+      return ExportOutputFrequency(output_frequency);
     }
 
     void Parse(std::string_view name, unsigned long value);
