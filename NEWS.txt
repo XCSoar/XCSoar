@@ -79,6 +79,8 @@ Version 7.45 - not yet released
   - always start in light mode; dark mode is not supported on e-paper
     displays #2568
 * devices
+  - $LXWP0 without airspeed publishes uncompensated vario (BlueFly LX
+    mode) instead of labelling it total-energy; with IAS/TAS keep TE
   - Accept partial $LXWP0 vario samples (e.g. BlueFly LX mode with a
     single rate) so Status Variometer is not stuck on Disconnected while
     baro still works; keep the six-sample FIR for full LXNAV sentences #2763
