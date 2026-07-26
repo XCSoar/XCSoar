@@ -39,6 +39,9 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
     info.battery_level = 100;
   info.battery_level_available.Update(info.clock);
 
+  info.voltage = mV / 1000.;
+  info.voltage_available.Update(info.clock);
+
   return true;
 }
 
