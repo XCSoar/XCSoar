@@ -667,12 +667,18 @@ TestBlueFly()
   ok1(device->ParseNMEA("BAT 1068", nmea_info)); //4.2V
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 100.0));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 4.2));
   ok1(device->ParseNMEA("BAT EFE", nmea_info)); //3.84V
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 50.0));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 3.838));
   ok1(device->ParseNMEA("BAT ED8", nmea_info)); //3.80V
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 37.3333));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 3.8));
 
   delete device;
 }
@@ -3316,7 +3322,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1057 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1063 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */
