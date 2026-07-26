@@ -81,6 +81,9 @@ Version 7.45 - not yet released
   - always start in light mode; dark mode is not supported on e-paper
     displays #2568
 * devices
+  - support $LK8EX1 (LK8000 external instrument) on all device ports:
+    pressure, QNE altitude, vario, temperature, and battery voltage
+    or percentage #2772
   - $LXWP0 without airspeed publishes uncompensated vario (BlueFly LX
     mode) instead of labelling it total-energy; with IAS/TAS keep TE
   - Accept partial $LXWP0 vario samples (e.g. BlueFly LX mode with a
