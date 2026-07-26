@@ -21,9 +21,23 @@
 #include <cmath>
 
 static constexpr double TRAIL_ZOOMED_OUT_MAP_SCALE = 6000;
-static constexpr int TRAIL_THIN_PIXELS_MIN = 3;
-static constexpr int TRAIL_THIN_PIXELS_MAX = 24;
 static constexpr double TRAIL_BOUNDS_SCALE = 4.;
+
+/**
+ * On-screen trail sample spacing in points (1/72").  Converted to pixels
+ * via Layout::PtScale (DPI / UI scale) then to metres via the projection,
+ * so thinning tracks physical size across phones, OV boxes, and Kobo.
+ */
+static constexpr unsigned TRAIL_SPACING_PT_MIN = 2;
+static constexpr unsigned TRAIL_SPACING_PT_MAX = 18;
+
+/**
+ * Grow spacing with zoom-out: GetMapScale / this → pixel target before
+ * PtScale clamps.  Smaller → more thinning when zoomed out.  Still only
+ * feeds the px→m pipeline (not a device-specific stride ladder).
+ */
+static constexpr double TRAIL_SPACING_MAP_SCALE_DIV = 250.;
+
 namespace {
 
 /**
@@ -199,14 +213,24 @@ ComputeCatmullRomWeights(double t) noexcept
   };
 }
 
-/** Target screen-pixel spacing between kept trace fixes. */
-[[gnu::const]]
+/**
+ * Target on-screen spacing between kept fixes, in pixels.
+ * Floor/ceiling use Layout::PtScale so the same physical size on glass
+ * applies across DPI/resolution; zoom only moves within that range.
+ * Metres come from WindowProjection::DistancePixelsToMeters in
+ * MakeTrailQuery — not from magic GetMapScale stride bands.
+ */
+[[gnu::pure]]
 static int
 GetTrailSpacingPixels(double map_scale) noexcept
 {
-  return std::clamp(static_cast<int>(map_scale / 500),
-                    TRAIL_THIN_PIXELS_MIN,
-                    TRAIL_THIN_PIXELS_MAX);
+  const int min_px =
+    std::max(1, int(Layout::PtScale(TRAIL_SPACING_PT_MIN)));
+  const int max_px =
+    std::max(min_px, int(Layout::PtScale(TRAIL_SPACING_PT_MAX)));
+  const int from_zoom =
+    int(map_scale / TRAIL_SPACING_MAP_SCALE_DIV);
+  return std::clamp(from_zoom, min_px, max_px);
 }
 
 /** Max number of recent trace points that receive Catmull-Rom smoothing. */
@@ -421,6 +445,8 @@ TrailRenderer::MergeAdjacentColourRuns(
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer) noexcept
 {
+  InvalidateHistory();
+  InvalidateSegmentCache();
   trace.clear();
   merge_vario_samples.clear();
   try {
@@ -442,6 +468,20 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
   return SyncTrace(trace_computer, query);
 }
 
+/**
+ * Soft cap on drawable trail samples.  Scaled with short-edge resolution
+ * and point size so denser panels may keep a bit more; clamped so weak
+ * ARM targets stay bounded regardless of airspeed / zoom.
+ */
+[[gnu::pure]]
+static unsigned
+GetTrailPointBudget() noexcept
+{
+  const unsigned pt = std::max(1u, Layout::PtScale(2));
+  const unsigned by_screen = Layout::min_screen_pixels / pt;
+  return std::clamp(by_screen, 96u, 384u);
+}
+
 TrailQuery
 TrailRenderer::MakeTrailQuery(TimeStamp min_time,
                               const WindowProjection &projection) noexcept
@@ -453,6 +493,8 @@ TrailRenderer::MakeTrailQuery(TimeStamp min_time,
   query.project_location = projection.GetGeoScreenCenter();
   query.min_distance_m =
     projection.DistancePixelsToMeters(GetTrailSpacingPixels(map_scale));
+  query.point_stride = 1;
+  query.max_points = GetTrailPointBudget();
   return query;
 }
 
@@ -469,9 +511,48 @@ TrailRenderer::TrailDrawFingerprint::operator==(
 }
 
 void
+TrailRenderer::InvalidateHistory() noexcept
+{
+  history.clear();
+  history_vario.clear();
+  history_valid = false;
+  history_min_time = {};
+  last_query = {};
+}
+
+void
 TrailRenderer::InvalidateSegmentCache() noexcept
 {
   segment_cache.clear();
+}
+
+bool
+TrailRenderer::TrailQueryViewEqual(const TrailQuery &a,
+                                   const TrailQuery &b) noexcept
+{
+  return a.min_distance_m == b.min_distance_m &&
+    a.point_stride == b.point_stride &&
+    a.max_points == b.max_points &&
+    a.project_location == b.project_location &&
+    a.bounds.GetNorthWest() == b.bounds.GetNorthWest() &&
+    a.bounds.GetSouthEast() == b.bounds.GetSouthEast();
+}
+
+void
+TrailRenderer::RefilterTraceFromHistory(const TrailSpatialFilter &filter) noexcept
+{
+  FilterTraceByBounds(history, trace, filter);
+
+  merge_vario_samples.clear();
+  if (trace.empty())
+    return;
+
+  const auto vario_min = trace.front().GetTime();
+  merge_vario_samples.reserve(history_vario.size());
+  for (const auto &s : history_vario) {
+    if (s.time >= vario_min)
+      merge_vario_samples.push_back(s);
+  }
 }
 
 bool
@@ -479,18 +560,62 @@ TrailRenderer::SyncTrace(const TraceComputer &trace_computer,
                          const TrailQuery &query) noexcept
 {
   Serial append{}, modify{};
-  trace.clear();
-  merge_vario_samples.clear();
   try {
-    trace_computer.LockedTrailQuery(query, trace, merge_vario_samples,
-                                    &append, &modify);
+    trace_computer.LockedGetSerials(append, modify);
   } catch (const std::bad_alloc &) {
+    InvalidateHistory();
+    InvalidateSegmentCache();
     trace.clear();
     merge_vario_samples.clear();
-    InvalidateSegmentCache();
     return false;
   }
 
+  const bool have_history = history_valid;
+  const bool modify_ok =
+    have_history && modify == history_modify_serial;
+  const bool min_time_ok =
+    have_history && history_min_time == query.min_time;
+  const bool append_ok =
+    have_history && append == history_append_serial;
+  const bool view_ok =
+    have_history && TrailQueryViewEqual(last_query, query);
+
+  if (modify_ok && min_time_ok && append_ok && view_ok) {
+    synced_append_serial = append;
+    synced_modify_serial = modify;
+    return !trace.empty();
+  }
+
+  try {
+    if (!modify_ok || !min_time_ok) {
+      trace_computer.LockedCopyHistory(query.min_time, history,
+                                       history_vario, &append, &modify);
+      history_append_serial = append;
+      history_modify_serial = modify;
+      history_min_time = query.min_time;
+      history_valid = true;
+    } else if (!append_ok) {
+      const TracePoint::Time after =
+        history.empty() ? TracePoint::Time{} : history.back().GetTime();
+      trace_computer.LockedAppendHistoryAfter(after, history, history_vario,
+                                              &append, &modify);
+      history_append_serial = append;
+      history_modify_serial = modify;
+    }
+
+    const TrailSpatialFilter filter =
+      trace_computer.LockedMakeSpatialFilter(query);
+    RefilterTraceFromHistory(filter);
+  } catch (const std::bad_alloc &) {
+    InvalidateHistory();
+    InvalidateSegmentCache();
+    trace.clear();
+    merge_vario_samples.clear();
+    return false;
+  }
+
+  last_query = query;
+  last_query.min_time = query.min_time;
   synced_append_serial = append;
   synced_modify_serial = modify;
   return !trace.empty();
