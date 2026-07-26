@@ -139,8 +139,15 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info, bool provide_altitude_vario)
     info.ProvideTrueAirspeed(Units::ToSysUnit(airspeed, Unit::KILOMETER_PER_HOUR));
 
   if (provide_altitude_vario) {
-    if (ReadFilteredLXWP0Vario(line, value))
-      info.ProvideTotalEnergyVario(value);
+    if (ReadFilteredLXWP0Vario(line, value)) {
+      /* Real LXNAV fills IAS/TAS and the vario slots are TE.  Partial
+         LX emitters (BlueFly LX mode) leave airspeed blank and put
+         uncompensated climb/sink in those slots — do not label as TE. */
+      if (tas_available)
+        info.ProvideTotalEnergyVario(value);
+      else
+        info.ProvideNoncompVario(value);
+    }
   } else
     line.Skip(6);
 

@@ -19,14 +19,17 @@ namespace LX {
  * apply the 5th-order low-pass FIR used by LX EOS / full LXNAV
  * sentences.  When only some slots are filled (BlueFly LX mode,
  * Condor, older devices — often a single sample), use the first
- * valid sample so TE vario is still published (#2763).
+ * valid sample so vario is still published (#2763).
  */
 bool
 ReadFilteredLXWP0Vario(NMEAInputLine &line, double &vario);
 
 /**
  * @param provide_altitude_vario When false, skip pressure altitude and
- * TE vario (used once $PLXVF is active on LXNAV varios).
+ * vario (used once $PLXVF is active on LXNAV varios).
+ *
+ * Vario is published as TE when the sentence includes airspeed, else
+ * as uncompensated (BlueFly LX mode leaves IAS blank).
  */
 bool
 LXWP0(NMEAInputLine &line, NMEAInfo &info,
