@@ -112,6 +112,19 @@ RaspStore::TimeToIndex(BrokenTime t) noexcept
   return unsigned(t.hour) * 4u + unsigned(t.minute) / 15u;
 }
 
+unsigned
+RaspStore::CountAvailableTimes(unsigned item_index) const noexcept
+{
+  if (item_index >= maps.size())
+    return 0;
+
+  unsigned n = 0;
+  for (unsigned i = 0; i < MAX_WEATHER_TIMES; ++i)
+    if (maps[item_index].times[i])
+      ++n;
+  return n;
+}
+
 bool
 RaspStore::HasSelectedTimeData(unsigned item_index, bool auto_advance,
                                BrokenTime manual_time,
@@ -119,6 +132,11 @@ RaspStore::HasSelectedTimeData(unsigned item_index, bool auto_advance,
 {
   if (item_index >= maps.size())
     return false;
+
+  /* All-day / single-slot fields always have displayable raster data;
+     RaspCache snaps to that slot via GetNearestTime. */
+  if (IsSingleTimeField(item_index))
+    return true;
 
   const BrokenTime forecast = (auto_advance || !manual_time.IsPlausible())
     ? auto_local_time

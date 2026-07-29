@@ -199,6 +199,16 @@ public:
     labels[row]->SetAvailable(available);
   }
 
+  void SetRowEnabled(unsigned row, bool enabled) noexcept {
+    if (row >= row_count)
+      return;
+
+    if (prev_buttons[row].IsDefined())
+      prev_buttons[row].SetEnabled(enabled);
+    if (next_buttons[row].IsDefined())
+      next_buttons[row].SetEnabled(enabled);
+  }
+
 protected:
   void OnResize(PixelSize new_size) noexcept override {
     SolidContainerWindow::OnResize(new_size);
@@ -313,6 +323,15 @@ CursorBarWidget::SetRowText(unsigned row, const char *text,
     return;
 
   static_cast<BarWindow &>(GetWindow()).SetRowText(row, text, available);
+}
+
+void
+CursorBarWidget::SetRowEnabled(unsigned row, bool enabled) noexcept
+{
+  if (!IsDefined())
+    return;
+
+  static_cast<BarWindow &>(GetWindow()).SetRowEnabled(row, enabled);
 }
 
 void

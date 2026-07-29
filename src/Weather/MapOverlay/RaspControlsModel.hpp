@@ -21,6 +21,8 @@ public:
   [[nodiscard]]
   bool HasPrimaryData() const noexcept override;
   [[nodiscard]]
+  bool IsPrimaryEnabled() const noexcept override;
+  [[nodiscard]]
   bool HasSecondaryData() const noexcept override;
 
   [[nodiscard]]

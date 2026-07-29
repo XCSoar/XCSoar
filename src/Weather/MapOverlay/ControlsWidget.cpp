@@ -84,6 +84,7 @@ ControlsWidget::UpdateLabels() noexcept
   StaticString<64> primary_text;
   model->FormatPrimaryLabel(primary_text);
   SetRowText(PRIMARY_ROW, primary_text, model->HasPrimaryData());
+  SetRowEnabled(PRIMARY_ROW, model->IsPrimaryEnabled());
 
   StaticString<64> secondary_text;
   model->FormatSecondaryLabel(secondary_text);

@@ -37,7 +37,16 @@ RaspControlsModel::FormatSecondaryLabel(StaticString<64> &text) const noexcept
 bool
 RaspControlsModel::HasPrimaryData() const noexcept
 {
+  if (!Rasp::IsActiveFieldTimeSelectable())
+    return false;
+
   return Rasp::HasSelectedTimeData(GetPrimaryAutoAdvance());
+}
+
+bool
+RaspControlsModel::IsPrimaryEnabled() const noexcept
+{
+  return Rasp::IsActiveFieldTimeSelectable();
 }
 
 bool
@@ -49,6 +58,9 @@ RaspControlsModel::HasSecondaryData() const noexcept
 bool
 RaspControlsModel::StepPrimary(int delta) noexcept
 {
+  if (!Rasp::IsActiveFieldTimeSelectable())
+    return false;
+
   return Rasp::StepCursorTime(delta);
 }
 
@@ -91,6 +103,9 @@ RaspControlsModel::GetPrimaryLabelAction() const noexcept
      time picker that cannot do anything useful. */
   if (!Rasp::HasSelectedField())
     return PrimaryLabelAction::OPEN_SETUP;
+
+  if (!Rasp::IsActiveFieldTimeSelectable())
+    return PrimaryLabelAction::NONE;
 
   return PrimaryLabelAction::OPEN_PICKER;
 }
