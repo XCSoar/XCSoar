@@ -54,7 +54,6 @@ IsSlowCPUFrequency(unsigned max_freq_khz) noexcept
  * Maximum CPU frequency in kHz from the OS, or 0 if unknown.
  * Cached after the first successful read on Linux.
  */
-[[gnu::pure]]
 unsigned
 GetMaxCPUFrequencyKHz() noexcept;
 
@@ -62,6 +61,5 @@ GetMaxCPUFrequencyKHz() noexcept;
  * True when the host max CPU frequency is known and ≤ 1.4 GHz
  * (typical Kobo, Raspberry Pi 1–3 / 3B+, Cubieboard-class boards).
  */
-[[gnu::pure]]
 bool
 IsSlowCPU() noexcept;

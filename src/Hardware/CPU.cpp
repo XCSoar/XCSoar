@@ -44,8 +44,9 @@ ReadMaxCPUFrequencyKHz() noexcept
 {
 #ifdef __linux__
   char buffer[64];
-  if (!File::ReadString(Path("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"),
-                        buffer, sizeof(buffer)))
+  if (!File::ReadString(
+        Path("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"),
+        buffer, sizeof(buffer)))
     return 0;
 
   StripRight(buffer);
