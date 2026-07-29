@@ -233,6 +233,11 @@ EditTimeOnLayout(PageLayout &page) noexcept
       unsigned(field_index) >= rasp->GetItemCount())
     return false;
 
+  /* All-day products have a single archive slot; leave the stored
+     page time unchanged so multi-slot layers restore it later. */
+  if (rasp->IsSingleTimeField(unsigned(field_index)))
+    return false;
+
   DataFieldEnum field;
   for (unsigned i = 0; i < RaspStore::MAX_WEATHER_TIMES; ++i) {
     const BrokenTime t = RaspStore::IndexToTime(i);
@@ -318,6 +323,14 @@ void
 FormatTimeLabelForPage(StaticString<64> &text,
                        const PageLayout &page) noexcept
 {
+  const auto rasp = DataGlobals::GetRasp();
+  const int field_index = GetFieldIndex(page);
+  if (rasp != nullptr && field_index >= 0 &&
+      rasp->IsSingleTimeField(unsigned(field_index))) {
+    text.clear();
+    return;
+  }
+
   bool auto_advance;
   BrokenTime manual;
   DecodePageTime(page, auto_advance, manual);
@@ -327,7 +340,7 @@ FormatTimeLabelForPage(StaticString<64> &text,
     auto_advance || !manual.IsPlausible() ? auto_local : manual;
 
   FormatTimeLabel(text, auto_advance, forecast,
-                  HasSelectedTimeData(auto_advance, GetFieldIndex(page),
+                  HasSelectedTimeData(auto_advance, field_index,
                                       manual, auto_local));
 }
 
@@ -353,6 +366,9 @@ ApplyAutoAdvanceTime() noexcept
 bool
 StepCursorTime(int delta) noexcept
 {
+  if (!IsActiveFieldTimeSelectable())
+    return false;
+
   const int field_index = GetActiveFieldIndex();
   if (field_index < 0 || delta == 0)
     return false;
@@ -411,7 +427,10 @@ SelectField(unsigned field_index) noexcept
   weather.map = int(field_index);
   weather.rasp.cursor_initialized = true;
 
-  if (!weather.time_auto_advance &&
+  /* Keep the shared time cursor when switching to an all-day field so
+     the next multi-slot layer restores the previous timed selection. */
+  if (!rasp->IsSingleTimeField(field_index) &&
+      !weather.time_auto_advance &&
       !rasp->HasSelectedTimeData(field_index, false,
                                  weather.time, GetAutoAdvanceLocalTime())) {
     const BrokenTime effective =
@@ -532,6 +551,23 @@ bool
 HasSelectedField() noexcept
 {
   return GetFieldCount() > 0 && GetEffectiveFieldIndex() >= 0;
+}
+
+bool
+IsFieldTimeSelectable(int field_index) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr || field_index < 0 ||
+      unsigned(field_index) >= rasp->GetItemCount())
+    return false;
+
+  return !rasp->IsSingleTimeField(unsigned(field_index));
+}
+
+bool
+IsActiveFieldTimeSelectable() noexcept
+{
+  return IsFieldTimeSelectable(GetEffectiveFieldIndex());
 }
 
 static BrokenTime
@@ -701,6 +737,11 @@ GetCursorBarMinuteOfDay() noexcept
 void
 FormatTimeCursorLabel(StaticString<64> &text, bool auto_advance) noexcept
 {
+  if (!IsActiveFieldTimeSelectable()) {
+    text.clear();
+    return;
+  }
+
   FormatTimeLabel(text, auto_advance, GetEffectiveLocalTime(auto_advance),
                   HasSelectedTimeData(auto_advance));
 }

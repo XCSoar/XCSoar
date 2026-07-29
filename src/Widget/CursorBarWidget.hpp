@@ -41,6 +41,11 @@ public:
                   bool available=true) noexcept;
 
   /**
+   * Enable or disable the prev/next steppers on @p row.
+   */
+  void SetRowEnabled(unsigned row, bool enabled) noexcept;
+
+  /**
    * Preferred height for @p row_count rows (includes inter-row separators).
    */
   [[gnu::const]]

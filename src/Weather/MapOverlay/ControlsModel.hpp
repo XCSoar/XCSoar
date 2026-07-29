@@ -98,6 +98,15 @@ public:
   [[nodiscard]]
   virtual bool HasPrimaryData() const noexcept = 0;
 
+  /**
+   * When false, the primary stepper buttons are disabled (e.g. RASP
+   * all-day fields with no selectable forecast times).
+   */
+  [[nodiscard]]
+  virtual bool IsPrimaryEnabled() const noexcept {
+    return true;
+  }
+
   [[nodiscard]]
   virtual bool HasSecondaryData() const noexcept = 0;
 

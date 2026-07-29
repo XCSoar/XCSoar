@@ -157,8 +157,9 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
 {
   StaticString<64> label;
   Rasp::FormatTimeLabelForPage(label, overlay.draft);
-  WeatherOverlayDraft::SetAxisLabel(GetControl(TIME), label.c_str(),
-                                    overlay.draft.rasp_field >= 0);
+  WeatherOverlayDraft::SetAxisLabel(
+    GetControl(TIME), label.c_str(),
+    Rasp::IsFieldTimeSelectable(overlay.draft.rasp_field));
 }
 
 void

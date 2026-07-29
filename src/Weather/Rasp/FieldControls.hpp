@@ -211,6 +211,24 @@ bool
 HasSelectedField() noexcept;
 
 /**
+ * True when @p field_index has more than one forecast time slot so a
+ * time picker / stepper is useful. All-day fields (exactly one archive
+ * slot) and invalid indices return false.
+ */
+[[gnu::pure]]
+bool
+IsFieldTimeSelectable(int field_index) noexcept;
+
+/**
+ * True when the active field has more than one forecast time slot so
+ * the cursor-bar time row can step / open a picker. All-day fields
+ * (exactly one archive slot) return false.
+ */
+[[gnu::pure]]
+bool
+IsActiveFieldTimeSelectable() noexcept;
+
+/**
  * Cursor-bar time label, e.g. @c "14:30 (+0:15)" or @c "AUTO: …".
  *
  * When @p auto_advance is true, the display follows GPS local time ("Now").

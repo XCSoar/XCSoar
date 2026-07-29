@@ -67,6 +67,9 @@ Version 7.45 - not yet released
     selecting a page restores its Layer and Time #2690 #2705
   - Fix crash when opening Weather Setup from the weather overlay
     layer/level/altitude list picker #2690
+  - Keep the RASP time cursor when stepping onto all-day layers (single
+    archive time slot such as PFD); grey out the time controls until a
+    multi-slot layer is selected again #2705
   - Show all tasks by default in Task Browser instead of requiring to click
     the "More" button first.
   - Rename to turnpoint observation zone type "Symmetric Quadrant" to
