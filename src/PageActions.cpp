@@ -246,6 +246,18 @@ PageActions::ResumeWeatherOverlaysAfterPan() noexcept
 void
 PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 {
+  /*
+   * Update() may reload a page after its layout was edited in place.  In
+   * that case, LeavePage() has not seen the old overlay, so retire any
+   * stale overlay session before applying the replacement.
+   */
+  if (!layout.UsesRaspOverlay())
+    LeaveRaspOverlay();
+  if (!layout.UsesEdlOverlay())
+    LeaveEdlOverlay();
+  if (!layout.UsesXcthermOverlay())
+    LeaveXcthermOverlay();
+
   ClearPageOverlays();
 
   switch (layout.overlay) {
