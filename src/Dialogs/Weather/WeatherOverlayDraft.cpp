@@ -3,9 +3,9 @@
 
 #include "WeatherOverlayDraft.hpp"
 
-#include "ActionInterface.hpp"
 #include "Dialogs/InternalLink.hpp"
 #include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
+#include "PageActions.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/Edit.hpp"
@@ -17,20 +17,6 @@
 #include "Weather/Features.hpp"
 #include "Weather/MapOverlay/ControlsWidget.hpp"
 #include "Weather/MapOverlay/PagePlacement.hpp"
-#include "Weather/Rasp/FieldControls.hpp"
-#ifdef HAVE_DOWNLOAD_MANAGER
-#include "Weather/Rasp/DownloadGlue.hpp"
-#endif
-#ifdef HAVE_EDL
-#include "Weather/EDL/FieldControls.hpp"
-#include "Weather/EDL/Glue.hpp"
-#include "Weather/EDL/Levels.hpp"
-#include "Weather/EDL/StateController.hpp"
-#endif
-#ifdef HAVE_HTTP
-#include "Weather/xctherm/FieldControls.hpp"
-#include "Weather/xctherm/XCThermMapOverlay.hpp"
-#endif
 
 namespace WeatherOverlayDraft {
 
@@ -111,56 +97,6 @@ State::SyncButtons(Button *apply_button, Button *add_button) const noexcept
   }
 }
 
-static void
-ApplyToLiveSession(const PageLayout &draft) noexcept
-{
-  auto &weather = CommonInterface::SetUIState().weather;
-
-  switch (draft.overlay) {
-  case PageLayout::Overlay::RASP:
-    weather.map = draft.rasp_field;
-    Rasp::ApplyTimeFromPageLayout(draft);
-    weather.rasp.cursor_initialized = true;
-#ifdef HAVE_DOWNLOAD_MANAGER
-    RequestConfiguredRaspUpdateIfOutOfDate();
-#endif
-    break;
-
-  case PageLayout::Overlay::EDL:
-#ifdef HAVE_EDL
-    EDL::ApplyTimeFromPageLayout(draft);
-    if (draft.edl_isobar > 0 &&
-        EDL::IsSupportedIsobar(unsigned(draft.edl_isobar))) {
-      weather.edl.SelectIsobar(unsigned(draft.edl_isobar));
-      weather.edl.level_auto_advance = false;
-    } else {
-      weather.edl.level_auto_advance = true;
-      EDL::UpdateCurrentLevel();
-    }
-    weather.edl.session.cursor_initialized =
-      !weather.edl.forecast_auto_advance ||
-      !weather.edl.level_auto_advance;
-    EDL::ApplyOverlayFromSession();
-    EDL::RequestOverlayRefresh();
-#endif
-    break;
-
-  case PageLayout::Overlay::XCTHERM:
-#ifdef HAVE_HTTP
-    XCTherm::ApplyCursorFromPageLayout(draft);
-    XCTherm::ApplyCursorOverlayFromSession();
-#endif
-    break;
-
-  case PageLayout::Overlay::NONE:
-  case PageLayout::Overlay::MAX:
-    return;
-  }
-
-  ActionInterface::SendUIState(true);
-  WeatherMapOverlay::RefreshControlsLabels();
-}
-
 static bool
 CommitDraft(const PageLayout &draft) noexcept
 {
@@ -182,7 +118,7 @@ CommitDraft(const PageLayout &draft) noexcept
   WeatherMapOverlay::CopyWeatherOverlayCursors(settings.pages[page_index],
                                                draft);
   Profile::Save(Profile::map, settings);
-  ApplyToLiveSession(draft);
+  PageActions::Update();
   return true;
 }
 
