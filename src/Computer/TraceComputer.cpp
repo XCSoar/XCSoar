@@ -21,6 +21,18 @@ static constexpr float MERGE_VARIO_DEDUPE_EPS = 0.05f;
 /** Near-zero band: always keep samples for Nullschieber colouring. */
 static constexpr float MERGE_VARIO_NULL_BAND = 0.05f;
 
+/**
+ * Default for harness / tools that link TraceComputer without
+ * Hardware/CPU.cpp. The strong definition in CPU.cpp overrides this
+ * in the main binary.
+ */
+[[gnu::weak]]
+bool
+IsSlowCPU() noexcept
+{
+  return false;
+}
+
 [[gnu::const]]
 static bool
 MergeVarioSampleWorthKeeping(float prev, float next) noexcept
