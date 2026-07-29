@@ -2,12 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "CPU.hpp"
-
-#ifdef HAVE_CPU_FREQUENCY
-
 #include "system/FileUtil.hpp"
+#include "util/NumberParser.hpp"
+#include "util/StringStrip.hxx"
 
 #include <atomic>
+
+#ifdef HAVE_CPU_FREQUENCY
 
 static bool
 SetCPUFrequencyGovernor(const char *governor) noexcept
@@ -37,3 +38,38 @@ UnlockCPU() noexcept
 }
 
 #endif /* HAVE_CPU_FREQUENCY */
+
+static unsigned
+ReadMaxCPUFrequencyKHz() noexcept
+{
+#ifdef __linux__
+  char buffer[64];
+  if (!File::ReadString(Path("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"),
+                        buffer, sizeof(buffer)))
+    return 0;
+
+  StripRight(buffer);
+
+  char *endptr;
+  const unsigned value = ParseUnsigned(buffer, &endptr, 10);
+  if (endptr == buffer || *endptr != '\0' || value == 0)
+    return 0;
+
+  return value;
+#else
+  return 0;
+#endif
+}
+
+unsigned
+GetMaxCPUFrequencyKHz() noexcept
+{
+  static const unsigned cached = ReadMaxCPUFrequencyKHz();
+  return cached;
+}
+
+bool
+IsSlowCPU() noexcept
+{
+  return IsSlowCPUFrequency(GetMaxCPUFrequencyKHz());
+}

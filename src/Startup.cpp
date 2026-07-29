@@ -13,6 +13,7 @@
 #include "Profile/Current.hpp"
 #include "Profile/Settings.hpp"
 #include "Asset.hpp"
+#include "Hardware/CPU.hpp"
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -444,6 +445,13 @@ Startup(UI::Display &display)
             HasEPaper() ? "yes" : "no");
   LogFormat("Device capabilities: IsDithered()=%s",
             IsDithered() ? "yes" : "no");
+  if (const unsigned max_cpu_khz = GetMaxCPUFrequencyKHz();
+      max_cpu_khz != 0)
+    LogFormat("Device capabilities: max_cpu_freq=%u kHz", max_cpu_khz);
+  else
+    LogFormat("Device capabilities: max_cpu_freq=unknown");
+  LogFormat("Device capabilities: IsSlowCPU()=%s",
+            IsSlowCPU() ? "yes" : "no");
 
   main_window->InitialiseConfigured();
 

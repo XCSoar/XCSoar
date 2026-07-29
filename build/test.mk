@@ -127,6 +127,7 @@ TEST_NAMES = \
 	TestThermalBand \
 	TestPackedFloat \
 	TestVersionNumber \
+	TestSlowCPU \
 	TestWeglideScoring \
 	TestNetCoupeScoring \
 	TestDMStScoring
@@ -2866,6 +2867,11 @@ TEST_VERSION_NUMBER_SOURCES = \
 	$(TEST_SRC_DIR)/TestVersionNumber.cpp
 TEST_VERSION_NUMBER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestVersionNumber,TEST_VERSION_NUMBER))
+
+TEST_SLOW_CPU_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSlowCPU.cpp
+$(eval $(call link-program,TestSlowCPU,TEST_SLOW_CPU))
 
 TEST_HTTPS_VERIFY_SOURCES = \
 	$(SRC)/net/SocketError.cxx \
