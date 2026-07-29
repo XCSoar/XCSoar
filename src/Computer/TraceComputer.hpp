@@ -36,12 +36,19 @@ struct TrailQuery {
  * Record a trace of the current flight.
  */
 class TraceComputer {
+public:
   /**
-   * Full snail-trail capacity: ~14 h at \a Trace::push_back minimum spacing
-   * (2 s between stored fixes).
+   * Full snail-trail capacity on fast hosts: ~14 h at
+   * \a Trace::push_back minimum spacing (2 s between stored fixes).
    */
   static constexpr unsigned FULL_TRACE_MAX_POINTS = 25200;
 
+  /**
+   * Full snail-trail capacity on slow hosts (≤ 1.4 GHz): v7.44 size.
+   */
+  static constexpr unsigned FULL_TRACE_MAX_POINTS_SLOW = 1024;
+
+private:
   /**
    * Capacity for #merge_vario_samples (must match ring template size).
    */

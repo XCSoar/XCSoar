@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TraceComputer.hpp"
+#include "Hardware/CPU.hpp"
 #include "Settings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -49,8 +50,16 @@ PushMergeVarioDeduped(std::vector<TrailVarioSample> &dest,
   dest.push_back(sample);
 }
 
+static unsigned
+FullTraceMaxPoints() noexcept
+{
+  return IsSlowCPU()
+    ? TraceComputer::FULL_TRACE_MAX_POINTS_SLOW
+    : TraceComputer::FULL_TRACE_MAX_POINTS;
+}
+
 TraceComputer::TraceComputer()
- :full(full_trace_no_thin_time, Trace::null_time, FULL_TRACE_MAX_POINTS),
+ :full(full_trace_no_thin_time, Trace::null_time, FullTraceMaxPoints()),
   contest({}, Trace::null_time, contest_trace_size),
   sprint({}, std::chrono::minutes{120}, sprint_trace_size)
 {
@@ -91,7 +100,7 @@ TraceComputer::ArchiveMergeVarioForLegUnlocked(TracePoint::Time t0,
     PushMergeVarioDeduped(merge_vario_archive, s);
   }
 
-  const size_t max_archive_size = FULL_TRACE_MAX_POINTS;
+  const size_t max_archive_size = full.GetMaxSize();
   if (merge_vario_archive.size() > max_archive_size) {
     const size_t excess = merge_vario_archive.size() - max_archive_size;
     merge_vario_archive.erase(merge_vario_archive.begin(),

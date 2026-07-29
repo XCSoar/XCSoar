@@ -209,6 +209,9 @@ Version 7.45 - not yet released
 * map
   - fix black terrain after idle high-resolution sharpening on OpenGL
     devices with a 2048-pixel texture limit (e.g. Raspberry Pi 3 / VC4)
+  - on hosts with max CPU frequency ≤ 1.4 GHz (typical Kobo, Raspberry Pi
+    1–3 / 3B+, Cubieboard-class), keep the Full snail trail store at 1024
+    points (7.44 size) instead of the larger fast-host capacity #2661
   - dynamically adjust contour line density to zoom factor #2233
   - provide different contour density profile settings for mountains,
     low lands, etc. to have sensible contours in a given landscape type
