@@ -503,7 +503,10 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     canvas.DrawText(ts, traffic.name);
   }
 
-  StaticString<10> side_text;
+  // Value-initialize: an uninitialized StaticString keeps prior stack
+  // contents, so a target without side data would reuse the previous
+  // target's vario/altitude label (#2731).
+  StaticString<10> side_text{};
 
   if (side_display_type == SideInfoType::VARIO) {
     if (traffic.climb_rate_avg30s_available &&
