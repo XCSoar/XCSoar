@@ -76,6 +76,14 @@ SetManualAlternateWaypoint(AlternateInfoBoxSlot slot,
                            WaypointPtr waypoint) noexcept;
 
 /**
+ * Stores the manually selected waypoint for the specified alternate
+ * slot and switches the slot to MANUAL mode.
+ */
+void
+SelectManualAlternateWaypoint(AlternateInfoBoxSlot slot,
+                              WaypointPtr waypoint) noexcept;
+
+/**
  * Clears the manually selected waypoint for the specified alternate
  * slot.
  */
