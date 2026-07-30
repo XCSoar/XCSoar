@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ui/canvas/BufferCanvas.hpp"
+#include "ui/canvas/gdi/RootDC.hpp"
 
 #include <cassert>
 
@@ -15,6 +16,23 @@ BufferCanvas::BufferCanvas(const Canvas &canvas, PixelSize new_size) noexcept
 BufferCanvas::~BufferCanvas() noexcept
 {
   Destroy();
+}
+
+void
+BufferCanvas::Create(PixelSize new_size) noexcept
+{
+  /* CreateCompatibleBitmap() needs a colour-compatible DC; a bare
+     CreateCompatibleDC(nullptr) would yield a monochrome bitmap. */
+  RootDC root_dc;
+  HDC hdc = root_dc;
+  assert(hdc != nullptr);
+  if (hdc == nullptr) {
+    Destroy();
+    return;
+  }
+
+  Canvas screen(hdc, new_size);
+  Create(screen, new_size);
 }
 
 void

@@ -18,6 +18,12 @@ public:
   BufferCanvas(const Canvas &canvas, PixelSize new_size) noexcept;
   ~BufferCanvas() noexcept;
 
+  /**
+   * Create an off-screen buffer with the screen pixel format.
+   * Matches OpenGL / memory-canvas BufferCanvas::Create(PixelSize).
+   */
+  void Create(PixelSize new_size) noexcept;
+
   void Create(const Canvas &canvas, PixelSize new_size) noexcept;
   void Create(const Canvas &canvas) noexcept;
   void Destroy() noexcept;
