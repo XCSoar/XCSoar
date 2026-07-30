@@ -26,6 +26,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "Interface.hpp"
 #include "util/StaticString.hxx"
 
@@ -76,8 +77,10 @@ public:
 static std::unique_ptr<Widget>
 CreateEDLUnavailableWidget() noexcept
 {
-  return std::make_unique<EDLUnavailableWidget>(
-    _("EDL weather is not available because this build has no OpenGL renderer."));
+  static StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuildWithoutOpenGLRenderer(
+    message, N_("EDL weather"));
+  return std::make_unique<EDLUnavailableWidget>(message.c_str());
 }
 #endif
 

@@ -18,15 +18,16 @@
 #include "Storage/StorageDevice.hpp"
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
 #include "IGC/IgcMetaCache.hpp"
 #include "Job/Job.hpp"
 #include "Operation/Operation.hpp"
+#include "util/StaticString.hxx"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "Interface.hpp"
-#include "util/StaticString.hxx"
 #include "ui/event/Notify.hpp"
 
 #include <vector>
@@ -146,7 +147,9 @@ PerformExport(FileMultiSelectWidget *file_widget)
 
   auto device = FindDeviceByName(target);
   if (!device) {
-    ShowMessageBox(_("Target device not found."),
+    StaticString<64> message;
+    FormatDeviceNotFound(message, N_("Target"));
+    ShowMessageBox(message,
                    _("Export flights"), MB_OK | MB_ICONERROR);
     return;
   }

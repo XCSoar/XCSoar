@@ -10,6 +10,7 @@
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "PageActions.hpp"
 #include "PageSettings.hpp"
 #include "UIState.hpp"
@@ -19,6 +20,7 @@
 #include "Weather/MapOverlay/TimePicker.hpp"
 #include "util/Compiler.h"
 #include "util/StaticString.hxx"
+#include "util/StringCompare.hxx"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Weather/Rasp/DownloadGlue.hpp"
@@ -60,9 +62,17 @@ FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
 
   for (unsigned i = 0; i < rasp->GetItemCount(); ++i) {
     const auto &item = rasp->GetItemInfo(i);
-    const char *help = item.help != nullptr
-      ? gettext(item.help)
-      : nullptr;
+    StaticString<512> help_buffer;
+    const char *help = nullptr;
+    if (StringIsEqual(item.name.c_str(), "dwcrit")) {
+      FormatRaspHeightCritHelp(help_buffer, true);
+      help = help_buffer.c_str();
+    } else if (StringIsEqual(item.name.c_str(), "hwcrit")) {
+      FormatRaspHeightCritHelp(help_buffer, false);
+      help = help_buffer.c_str();
+    } else if (item.help != nullptr) {
+      help = gettext(item.help);
+    }
 
     field.AddChoice(i, item.name, GetFieldLabel(item), help);
   }

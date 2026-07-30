@@ -15,6 +15,7 @@
 #include "Screen/Layout.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "util/Exception.hxx"
+#include "Language/FormatText.hpp"
 #include "Widget/ListWidget.hpp"
 #include "net/wifi/WifiBackend.hpp"
 #include "net/wifi/WifiError.hpp"
@@ -487,7 +488,7 @@ WifiListWidget::UpdateList()
     networks.clear();
   } catch (...) {
     LogFormat("WiFi dialog refresh failed: unknown exception");
-    refresh_error = _("The operation failed.");
+    refresh_error = OperationFailedText();
     networks.clear();
   }
 
