@@ -74,8 +74,10 @@ public:
   virtual void OnBatteryPercent(double battery_percent) noexcept = 0;
 
   virtual void OnSensorStateChanged() noexcept = 0;
-  virtual void OnSensorError(const char *msg) noexcept = 0;
 #endif // ANDROID
+
+  virtual void OnSensorError(const char *msg) noexcept = 0;
+
   virtual void OnBarometricPressureSensor(float pressure,
                       float sensor_noise_variance) noexcept = 0;
 };

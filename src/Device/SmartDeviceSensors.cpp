@@ -38,6 +38,15 @@ DeviceDescriptor::OnConnected(int connected) noexcept
 }
 
 void
+DeviceDescriptor::OnSensorError(const char *msg) noexcept
+{
+  if (msg == nullptr || *msg == '\0')
+    return;
+
+  PortError(msg);
+}
+
+void
 DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
                                    int n_satellites,
                                    GeoPoint location,
