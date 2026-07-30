@@ -191,7 +191,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
 
   switch (value.overlay) {
   case PageLayout::Overlay::RASP: {
-    control.SetCaption(_("RASP layer"));
+    control.SetCaption(_("RASP Layer"));
     control.SetHelpText(
       _("RASP weather layer to display on this map page."));
 
@@ -214,7 +214,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
 
 #ifdef HAVE_EDL
   case PageLayout::Overlay::EDL:
-    control.SetCaption(_("EDL level"));
+    control.SetCaption(_("EDL Level"));
     control.SetHelpText(
       _("EDL pressure level / altitude band for this map page. "
         "Auto follows aircraft altitude when the page is opened."));
@@ -250,11 +250,11 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
   case PageLayout::Overlay::EDL:
 #endif
   case PageLayout::Overlay::MAX:
-    control.SetCaption(_("Layer / level"));
+    control.SetCaption(_("Layer / Level"));
     control.SetHelpText(
       _("Select a RASP or EDL map overlay to configure its "
         "layer or level for this page."));
-    df.AddChoice(-1, _("n/a"));
+    df.AddChoice(-1, _("N/A"));
     df.SetValue(-1);
     break;
   }
@@ -314,8 +314,8 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice main_list[] = {
     { PageLayout::Main::MAP, N_("Map") },
     { PageLayout::Main::MAP_NORTH_UP, N_("Map (north-up)") },
-    { PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
-    { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
+    { PageLayout::Main::FLARM_RADAR, N_("FLARM Radar") },
+    { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal Assistant") },
     { PageLayout::Main::HORIZON, N_("Horizon") },
     nullptr
   };
@@ -388,7 +388,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           overlay_list,
           (unsigned)PageLayout::Overlay::NONE, this);
 
-  AddEnum(_("Layer / level"),
+  AddEnum(_("Layer / Level"),
           _("Select a RASP or EDL map overlay to configure its "
             "layer or level for this page."),
           this);

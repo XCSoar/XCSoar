@@ -915,7 +915,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
-    N_("Thermal assistant"),
+    N_("Thermal Assistant"),
     N_("Thermal"),
     N_("Circular thermal assistant that shows the lift distribution over each part of the circle."),
     IBFHelper<InfoBoxContentThermalAssistant>::Create,

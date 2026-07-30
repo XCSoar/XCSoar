@@ -182,7 +182,7 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
                                     Waypoints *waypoints_for_details) noexcept
 {
   if (!select_mode) {
-    goto_button = dialog.AddButton(_("Goto"), [this](){
+    goto_button = dialog.AddButton(_("GoTo"), [this](){
       if (!HasValidSelection())
         return;
 
