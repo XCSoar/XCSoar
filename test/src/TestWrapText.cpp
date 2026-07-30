@@ -4,6 +4,7 @@
 #include "ui/canvas/TextWrapper.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
 #include "ui/canvas/Font.hpp"
+#include "ui/canvas/TextFormat.hpp"
 #include "util/UTF8.hpp"
 #include "Screen/Layout.hpp"
 #include "Fonts.hpp"
@@ -19,14 +20,19 @@ static void
 CheckLinesValidUTF8(const WrappedText &wrapped, std::string_view text,
                     const char *label) noexcept
 {
+  bool valid = true;
   for (const auto &line : wrapped.lines) {
     std::string_view seg = line.GetText(text);
-    if (!ok1(ValidateUTF8(seg)))
+    if (!ValidateUTF8(seg)) {
       diag("invalid UTF-8 in line from \"%s\" "
            "(start=%zu, length=%zu)",
            label,
            line.start, line.length);
+      valid = false;
+    }
   }
+
+  ok1(valid);
 }
 
 /**
@@ -45,17 +51,23 @@ CheckLinesCoverText(const WrappedText &wrapped, std::string_view text,
   /* the first line must start at a paragraph boundary (offset 0 or
      right after a newline) and the last line must end at or near the
      end of the text */
-  ok1(wrapped.lines.front().start == 0 ||
-      (wrapped.lines.front().start > 0 &&
-       text[wrapped.lines.front().start - 1] == '\n'));
+  const std::size_t first_start = wrapped.lines.front().start;
+  const bool valid_start =
+    first_start <= text.size() &&
+    (first_start == 0 || text[first_start - 1] == '\n');
 
   const auto &last = wrapped.lines.back();
-  const std::size_t last_end = last.start + last.length;
-  /* last_end may be less than text.size() if there are trailing
-     spaces or newlines, but must not exceed it */
-  if (!ok1(last_end <= text.size()))
-    diag("last line end %zu > text size %zu in \"%s\"",
-         last_end, text.size(), label);
+  const bool valid_end =
+    last.start <= text.size() &&
+    last.length <= text.size() - last.start;
+  /* The last line may end before text.size() if there are trailing
+     spaces or newlines, but its range must not exceed the text. */
+  if (!valid_end)
+    diag("last line range (start=%zu, length=%zu) exceeds text size %zu "
+         "in \"%s\"",
+         last.start, last.length, text.size(), label);
+
+  ok1(valid_start && valid_end);
 }
 
 static void
@@ -154,6 +166,33 @@ TestLongUTF8Line(const Font &font) noexcept
   CheckLinesValidUTF8(result, text, "long-utf8-80px");
 }
 
+/**
+ * Regression test for DrawFormattedText() splitting an unspaced UTF-8
+ * string.  The old implementation overwrote the leading byte of the
+ * character following each inserted line separator, so measuring the
+ * next line failed UTF-8 validation.
+ */
+static void
+TestDrawFormattedTextUTF8(const Font &font)
+{
+  AnyCanvas canvas;
+  canvas.Select(font);
+
+  /*
+   * CJK text triggered the original crash because it commonly has no ASCII
+   * spaces at which to wrap.  Use an unspaced UTF-8 character available in
+   * the test font so this test does not depend on an installed CJK font.
+   */
+  static constexpr std::string_view text = "ääääääää";
+  const unsigned character_width = canvas.CalcTextWidth("ä");
+  ok1(character_width > 0);
+
+  const unsigned height =
+    canvas.DrawFormattedText({0, 0, static_cast<int>(character_width), 10000},
+                             text, DT_CALCRECT);
+  ok1(height == 8 * font.GetLineSpacing());
+}
+
 int main()
 {
   /* Avoid creating a full UI Display (and OpenGL/EGL) for this unit
@@ -175,21 +214,14 @@ int main()
 
   InitialiseFonts();
 
-  /* count test points:
-     TestASCII: 1 + validUTF8(1) + cover(2) + 1 + 1 = 6
-     TestUTF8NoWrap: 5 * (1 + validUTF8(1) + cover(2)) = 20
-     TestUTF8ForceWrap: 5 * (1 + validUTF8(>=1)) >= 10
-     TestMultiParagraphUTF8: 1 + validUTF8(3) + cover(2) = 6
-     TestLongUTF8Line: 1 + validUTF8(>=1) + 1 + validUTF8(>=1) >= 4
-
-     Use no_plan since line counts depend on font metrics */
-  plan_no_plan();
+  plan_tests(39);
 
   TestASCII(normal_font);
   TestUTF8NoWrap(normal_font);
   TestUTF8ForceWrap(normal_font);
   TestMultiParagraphUTF8(normal_font);
   TestLongUTF8Line(normal_font);
+  TestDrawFormattedTextUTF8(normal_font);
 
   DeinitialiseFonts();
 
