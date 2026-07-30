@@ -113,8 +113,8 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
     TerrainHeight elevation = terrain->GetTerrainHeight(location);
     if (!elevation.IsSpecial()) {
       StaticString<64> elevation_long;
-      elevation_long = _("Elevation: ");
-      elevation_long += FormatUserAltitude(elevation.GetValue()).c_str();
+      elevation_long.Format("%s: %s", _("Elevation"),
+                            FormatUserAltitude(elevation.GetValue()).c_str());
 
       TextInBox(canvas, elevation_long, p, mode,
                 render_projection.GetScreenSize());

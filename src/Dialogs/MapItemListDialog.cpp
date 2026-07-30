@@ -276,7 +276,7 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
     OnDetailsClicked();
   });
 
-  goto_button = dialog.AddButton(_("Goto"), [this](){
+  goto_button = dialog.AddButton(_("GoTo"), [this](){
     OnGotoClicked();
   });
 

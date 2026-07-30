@@ -27,10 +27,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     break;
 
   case PageLayout::Main::FLARM_RADAR:
-    return _("FLARM radar");
+    return _("FLARM Radar");
 
   case PageLayout::Main::THERMAL_ASSISTANT:
-    return _("Thermal assistant");
+    return _("Thermal Assistant");
 
   case PageLayout::Main::HORIZON:
     return _("Horizon");
