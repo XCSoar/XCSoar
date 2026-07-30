@@ -1082,7 +1082,7 @@ type=key
 data=6
 event=FlarmTraffic
 event=Mode default
-label=FLARM Radar$(CheckFLARM)
+label=FLARM Radar
 location=5
 
 mode=Info1
@@ -1541,7 +1541,7 @@ mode=RemoteStick
 type=key
 data=0
 event=FlarmTraffic
-label=FLARM Radar$(CheckFLARM)
+label=FLARM Radar
 location=28
 
 mode=RemoteStick
@@ -1592,7 +1592,7 @@ type=key
 data=0
 event=ThermalAssistant
 event=Mode default
-label=Thermal Assistant$(CheckCircling)
+label=Thermal Assistant
 location=34
 
 mode=RemoteStick
