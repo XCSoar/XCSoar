@@ -112,7 +112,7 @@ DeviceDescriptor::GetState() const noexcept
   if (has_failed)
     return PortState::FAILED;
 
-  if (open_job != nullptr)
+  if (open_job != nullptr || waiting_to_call_open)
     return PortState::LIMBO;
 
   if (port != nullptr)
@@ -124,6 +124,12 @@ DeviceDescriptor::GetState() const noexcept
 
   if (internal_sensors != nullptr)
     return internal_sensors->GetState(Java::GetEnv());
+#elif defined(__APPLE__)
+  /* Like Android internal sensors, this does not use a Port.  The
+     Apple wrapper has no state API; successful construction means it
+     is ready. */
+  if (internal_sensors != nullptr)
+    return PortState::READY;
 #endif
 
   return PortState::FAILED;
