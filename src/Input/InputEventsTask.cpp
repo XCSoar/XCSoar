@@ -185,7 +185,8 @@ InputEvents::eventMacCready(const char *misc)
       Message::AddMessage(_("Auto. MacCready off"));
     }
   } else if (StringIsEqual(misc, "show")) {
-    Message::AddMessage(_("MacCready "), FormatUserVerticalSpeed(mc, false));
+    Message::AddMessage(_("MacCready"),
+                        FormatUserVerticalSpeed(mc, false));
   }
 }
 
@@ -383,7 +384,7 @@ InputEvents::eventTaskTransition(const char *misc)
     }
     Message::AddMessage(_("Task start"), TempAll.c_str());
   } else if (StringIsEqual(misc, "next")) {
-    Message::AddMessage(_("Next turnpoint"));
+    Message::AddMessage(_("Next Turnpoint"));
   } else if (StringIsEqual(misc, "finish")) {
     Message::AddMessage(_("Task finished"));
   }
