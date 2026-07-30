@@ -89,11 +89,13 @@ RaspDownloadGlue *
 GetRaspDownloadGlue() noexcept;
 
 /**
- * Queue repository/RASP downloads when the configured file is out of
- * date and WeatherSettings::rasp.auto_update is enabled.  Safe to call
- * from any page; downloads continue via #Net::DownloadManager while the
- * listener lives in #NetComponents.  Does nothing when auto update is
- * disabled; use #RequestConfiguredRaspUpdate for a manual download.
+ * Queue repository/RASP downloads, but only when all three conditions
+ * hold: WeatherSettings::rasp.auto_update is enabled, the session time
+ * cursor follows the clock ("Auto" or "Now"), and the local file is
+ * missing or was not written today.  Safe to call from any page;
+ * downloads continue via #Net::DownloadManager while the listener lives
+ * in #NetComponents.  Use #RequestConfiguredRaspUpdate for a manual
+ * download that ignores these conditions.
  */
 void
 RequestConfiguredRaspUpdateIfOutOfDate() noexcept;
