@@ -27,10 +27,12 @@ class CoInjectFunction final {
   std::function<void(std::exception_ptr)> on_error;
 
   Notify notify{[this]{
-    if (error)
-      on_error(std::move(error));
-    else
+    if (error) {
+      if (on_error)
+        on_error(std::move(error));
+    } else if (on_success) {
       on_success(std::move(value).Get());
+    }
   }};
 
 public:

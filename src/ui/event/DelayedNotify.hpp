@@ -13,13 +13,15 @@ namespace UI {
  * with a certain delay, to limit the rate of redundant notifications.
  */
 class DelayedNotify final {
+  using Callback = std::function<void()>;
+
+  /* delay/callback must outlive timer/notify: destruction is reverse
+     declaration order, and a pending Notify/Timer may still run. */
+  const std::chrono::steady_clock::duration delay;
+  const Callback callback;
+
   Timer timer{[this]{ callback(); }};
   Notify notify{[this]{ timer.SchedulePreserve(delay); }};
-
-  const std::chrono::steady_clock::duration delay;
-
-  using Callback = std::function<void()>;
-  const Callback callback;
 
 public:
   explicit DelayedNotify(std::chrono::steady_clock::duration _delay,
