@@ -33,17 +33,22 @@ Notify::SendNotification() noexcept
 void
 Notify::ClearNotification() noexcept
 {
-  if (!pending.exchange(false, std::memory_order_relaxed))
-    return;
-
+  /* Always purge first.  Gating on pending races with SendNotification
+     (pending cleared before InjectCall), which left dangling InjectCall
+     entries on the GDI EventQueue after #2663. */
   if (event_queue != nullptr)
     event_queue->Purge(Callback, this);
+
+  pending.store(false, std::memory_order_relaxed);
 }
 
 void
 Notify::RunNotification() noexcept
 {
-  if (pending.exchange(false, std::memory_order_relaxed))
+  if (!pending.exchange(false, std::memory_order_relaxed))
+    return;
+
+  if (callback)
     callback();
 }
 
