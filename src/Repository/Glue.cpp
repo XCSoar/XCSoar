@@ -225,21 +225,40 @@ FindConfiguredRaspRemoteFile(const FileRepository &repository) noexcept
   return repository.FindByName(name.c_str());
 }
 
-bool
-IsConfiguredRaspOutOfDate(const FileRepository &repository) noexcept
+/**
+ * RASP forecasts are regenerated every day, but the repository
+ * "update=" field is the static publication date of the product for
+ * some providers (the ThermalMap entry has been frozen since 2023), so
+ * IsRemoteFileOutOfDate() would never ask for a fresh forecast.  Treat
+ * the local copy as out of date when it is missing or was last written
+ * before today, which downloads at most once per calendar day.
+ */
+static bool
+IsRaspFileOutOfDate(const AvailableFile &file) noexcept
 {
-  const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
-  if (remote == nullptr)
+  const auto path = LocalPath(GetFileDownloadRelativePath(file));
+  if (path == nullptr)
     return false;
 
-  return IsRemoteFileOutOfDate(*remote);
+  if (!File::Exists(path))
+    return true;
+
+  const BrokenDate modified =
+    BrokenDateTime{File::GetLastModification(path)};
+  if (!modified.IsPlausible())
+    return true;
+
+  /* the system clock, not GPS time: this also runs at startup, before
+     a fix is available */
+  const BrokenDate today = BrokenDateTime::NowUTC();
+  return modified < today || modified < file.update_date;
 }
 
 bool
 EnqueueConfiguredRaspUpdate(const FileRepository &repository) noexcept
 {
   const AvailableFile *remote = FindConfiguredRaspRemoteFile(repository);
-  if (remote == nullptr || !IsRemoteFileOutOfDate(*remote))
+  if (remote == nullptr || !IsRaspFileOutOfDate(*remote))
     return false;
 
   EnqueueRemoteFileDownload(*remote);

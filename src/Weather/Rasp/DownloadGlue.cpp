@@ -6,6 +6,7 @@
 #ifdef HAVE_DOWNLOAD_MANAGER
 
 #include "Configured.hpp"
+#include "FieldControls.hpp"
 #include "Weather/BackgroundDownloadProgress.hpp"
 #include "Components.hpp"
 #include "DataGlobals.hpp"
@@ -222,9 +223,10 @@ RaspDownloadGlue::PollDownloadProgress() noexcept
   Net::DownloadManager::Enumerate(poller);
 
   if (!poller.found) {
-    FileRepository repository;
-    LoadAllRepositories(repository);
-    if (!IsConfiguredRaspOutOfDate(repository))
+    /* A finished repository download enqueues the RASP file only once
+       its completion notification has been handled; keep the indicator
+       alive until then instead of flickering. */
+    if (pending_completion.load() != PendingCompletion::REPOSITORY)
       StopProgress();
     return;
   }
@@ -328,6 +330,12 @@ void
 RequestConfiguredRaspUpdateIfOutOfDate() noexcept
 {
   if (!CommonInterface::GetComputerSettings().weather.rasp.auto_update)
+    return;
+
+  /* A fixed manual forecast slot is a deliberate choice and does not
+     need today's file; only fetch when the time cursor follows the
+     clock ("Auto" or "Now"). */
+  if (!Rasp::IsTimeCursorFollowingClock())
     return;
 
   if (RaspDownloadGlue *glue = GetRaspDownloadGlue())

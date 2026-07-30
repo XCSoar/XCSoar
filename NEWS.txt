@@ -44,8 +44,9 @@ Version 7.45 - not yet released
     on the active overlay tab); the layer/level/altitude list picker also
     has a Setup button for the same path #2690
   - Add Auto update to the RASP weather panel to enable/disable background
-    download of out-of-date RASP files; Update remains available for a
-    manual refresh
+    download of the forecast; it downloads at most once a day and only
+    while the forecast time follows the clock (Auto or Now); Update
+    remains available for a manual refresh
   - Add Auto update to the EDL weather panel to enable/disable background
     download of missing overlay tiles; Precache day is disabled while Auto
     update is on #2690

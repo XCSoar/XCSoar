@@ -84,12 +84,10 @@ GetConfiguredRaspFileName() noexcept;
 const AvailableFile *
 FindConfiguredRaspRemoteFile(const FileRepository &repository) noexcept;
 
-bool
-IsConfiguredRaspOutOfDate(const FileRepository &repository) noexcept;
-
 /**
  * Enqueue a download of the configured RASP file when it is listed in
- * the repository and out of date locally.
+ * the repository and the local copy is missing or was not written
+ * today (RASP forecasts are regenerated daily).
  *
  * @return true if a download was queued
  */

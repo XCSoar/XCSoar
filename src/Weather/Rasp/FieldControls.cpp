@@ -350,6 +350,16 @@ GetTimeAutoAdvance() noexcept
   return CommonInterface::GetUIState().weather.time_auto_advance;
 }
 
+bool
+IsTimeCursorFollowingClock() noexcept
+{
+  const auto &weather = CommonInterface::GetUIState().weather;
+
+  /* an implausible time is the "Now" mode sentinel: rendering follows
+     the clock, only auto-advance is off */
+  return weather.time_auto_advance || !weather.time.IsPlausible();
+}
+
 void
 SetTimeAutoAdvance(bool auto_advance) noexcept
 {

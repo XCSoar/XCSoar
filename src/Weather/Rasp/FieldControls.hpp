@@ -140,6 +140,15 @@ FormatTimeLabelForPage(StaticString<64> &text,
 bool
 GetTimeAutoAdvance() noexcept;
 
+/**
+ * True when the session time cursor tracks the clock: "Auto"
+ * (auto-advance) or "Now" (manual mode without a fixed slot).  A fixed
+ * manual slot returns false.
+ */
+[[nodiscard]] [[gnu::pure]]
+bool
+IsTimeCursorFollowingClock() noexcept;
+
 void
 SetTimeAutoAdvance(bool auto_advance) noexcept;
 
