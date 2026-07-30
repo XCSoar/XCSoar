@@ -632,11 +632,9 @@ $(eval $(call link-program,TestByteSizeFormatter,TEST_BYTE_SIZE_FORMATTER))
 TEST_FILE_METADATA_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
-	$(SRC)/system/FileUtil.cpp \
-	$(SRC)/system/Path.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFileMetadataFormatter.cpp
-TEST_FILE_METADATA_FORMATTER_DEPENDS = MATH UTIL TIME
+TEST_FILE_METADATA_FORMATTER_DEPENDS = MATH UTIL TIME OS
 $(eval $(call link-program,TestFileMetadataFormatter,TEST_FILE_METADATA_FORMATTER))
 
 TEST_TIME_FORMATTER_SOURCES = \
