@@ -6,6 +6,7 @@
 #include "lib/fmt/SystemError.hxx"
 
 #ifdef _WIN32
+#include "system/UTF8Win32.hpp"
 #endif
 
 #ifdef __linux__
@@ -66,19 +67,21 @@ FileOutputStream::OpenCreate(bool visible)
 		tmp_path = path.WithSuffix(".tmp");
 		Delete(tmp_path);
 
-		handle = CreateFile(tmp_path.c_str(), GENERIC_WRITE, 0, nullptr,
-				    CREATE_NEW,
-				    FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
-				    nullptr);
+		handle = CreateFileW(UTF8ToWide(tmp_path.c_str()).c_str(),
+				     GENERIC_WRITE, 0, nullptr,
+				     CREATE_NEW,
+				     FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
+				     nullptr);
 		if (handle != INVALID_HANDLE_VALUE)
 			return;
 
 	}
 
-	handle = CreateFile(path.c_str(), GENERIC_WRITE, 0, nullptr,
-			    CREATE_ALWAYS,
-			    FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
-			    nullptr);
+	handle = CreateFileW(UTF8ToWide(path.c_str()).c_str(), GENERIC_WRITE,
+			     0, nullptr,
+			     CREATE_ALWAYS,
+			     FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
+			     nullptr);
 	if (!IsDefined())
 		throw FmtLastError("Failed to create {}", path);
 }
@@ -86,10 +89,11 @@ FileOutputStream::OpenCreate(bool visible)
 inline void
 FileOutputStream::OpenAppend(bool create)
 {
-	handle = CreateFile(path.c_str(), GENERIC_WRITE, 0, nullptr,
-			    create ? OPEN_ALWAYS : OPEN_EXISTING,
-			    FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
-			    nullptr);
+	handle = CreateFileW(UTF8ToWide(path.c_str()).c_str(), GENERIC_WRITE,
+			     0, nullptr,
+			     create ? OPEN_ALWAYS : OPEN_EXISTING,
+			     FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
+			     nullptr);
 	if (!IsDefined())
 		throw FmtLastError("Failed to append to {}", path);
 
@@ -337,8 +341,9 @@ FileOutputStream::RenameOrThrow([[maybe_unused]] Path old_path,
 	assert(new_path != nullptr);
 
 #ifdef _WIN32
-	if (!MoveFileEx(old_path.c_str(), new_path.c_str(),
-			MOVEFILE_REPLACE_EXISTING))
+	if (!MoveFileExW(UTF8ToWide(old_path.c_str()).c_str(),
+			 UTF8ToWide(new_path.c_str()).c_str(),
+			 MOVEFILE_REPLACE_EXISTING))
 		throw MakeLastError("Failed to rename file");
 #elif defined(__linux__)
 	if (renameat(directory_fd.Get(), tmp_path.c_str(),
@@ -356,7 +361,7 @@ FileOutputStream::Delete(Path delete_path) const noexcept
 	assert(delete_path != nullptr);
 
 #ifdef _WIN32
-	DeleteFile(delete_path.c_str());
+	DeleteFileW(UTF8ToWide(delete_path.c_str()).c_str());
 #elif defined(__linux__)
 	unlinkat(directory_fd.Get(), delete_path.c_str(), 0);
 #else

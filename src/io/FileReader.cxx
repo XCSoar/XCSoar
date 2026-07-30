@@ -11,10 +11,12 @@
 
 #ifdef _WIN32
 
+#include "system/UTF8Win32.hpp"
+
 FileReader::FileReader(Path path)
-	:handle(CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ,
-			   nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
-			   nullptr))
+	:handle(CreateFileW(UTF8ToWide(path.c_str()).c_str(), GENERIC_READ,
+			    FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+			    FILE_ATTRIBUTE_NORMAL, nullptr))
 {
 	if (handle == INVALID_HANDLE_VALUE)
 		throw FmtLastError("Failed to open {}", path);

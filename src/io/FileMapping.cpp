@@ -14,6 +14,8 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #else
+#include "system/UTF8Win32.hpp"
+
 #include <fileapi.h>
 #include <handleapi.h> // for INVALID_HANDLE_VALUE
 #include <winbase.h> // for CreateFileMapping(), UnmapViewOfFile()
@@ -44,8 +46,9 @@ FileMapping::FileMapping(Path path)
 
   madvise(data, size, MADV_WILLNEED);
 #else /* !HAVE_POSIX */
-  hFile = ::CreateFile(path.c_str(), GENERIC_READ, FILE_SHARE_READ,
-                       nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+  hFile = ::CreateFileW(UTF8ToWide(path.c_str()).c_str(), GENERIC_READ,
+                        FILE_SHARE_READ, nullptr, OPEN_EXISTING,
+                        FILE_ATTRIBUTE_NORMAL, nullptr);
   if (hFile == INVALID_HANDLE_VALUE) [[unlikely]]
     throw FmtLastError("Failed to open {}", path);
 

@@ -12,6 +12,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #else
+#include "UTF8Win32.hpp"
+
 #include <fileapi.h>
 #include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h>
@@ -169,7 +171,7 @@ Delete(Path path) noexcept
 #ifdef HAVE_POSIX
   return unlink(path.c_str()) == 0;
 #else
-  return DeleteFile(path.c_str());
+  return DeleteFileW(UTF8ToWide(path.c_str()).c_str()) != 0;
 #endif
 }
 
@@ -181,7 +183,8 @@ Rename(Path oldpath, Path newpath) noexcept
      rename() */
   return rename(oldpath.c_str(), newpath.c_str()) == 0;
 #else
-  return MoveFile(oldpath.c_str(), newpath.c_str()) != 0;
+  return MoveFileW(UTF8ToWide(oldpath.c_str()).c_str(),
+                   UTF8ToWide(newpath.c_str()).c_str()) != 0;
 #endif
 }
 
@@ -194,8 +197,9 @@ Replace(Path oldpath, Path newpath) noexcept
 #ifdef HAVE_POSIX
   return rename(oldpath.c_str(), newpath.c_str()) == 0;
 #else
-  return MoveFileEx(oldpath.c_str(), newpath.c_str(),
-                    MOVEFILE_REPLACE_EXISTING) != 0;
+  return MoveFileExW(UTF8ToWide(oldpath.c_str()).c_str(),
+                     UTF8ToWide(newpath.c_str()).c_str(),
+                     MOVEFILE_REPLACE_EXISTING) != 0;
 #endif
 }
 
