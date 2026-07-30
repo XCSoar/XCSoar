@@ -55,7 +55,12 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
     ? UINT_MAX
     : (r.GetHeight() + skip - 1) / skip;
 
-  char *const duplicated = new char[text.size() + 1], *p = duplicated;
+  /*
+   * Word wrapping below inserts NUL separators between lines.  In the
+   * worst case, every UTF-8 character needs its own line, so reserve
+   * enough space for one separator per input byte.
+   */
+  char *const duplicated = new char[text.size() * 2 + 1], *p = duplicated;
   unsigned lines = 1;
   for (char ch : text) {
     if (ch == '\n') {
@@ -76,7 +81,7 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
   }
 
   *p = '\0';
-  const size_t len = p - duplicated;
+  size_t len = p - duplicated;
 
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces. If a line has no spaces and is too
@@ -147,16 +152,19 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
       
       // if we found a break point, insert a null terminator
       if (chars_that_fit > 0 && chars_that_fit < line_len_bytes) {
-        duplicated[line_start + chars_that_fit] = '\0';
-#ifndef UNICODE
-        // Ensure we don't split a UTF-8 sequence by cropping backward if needed
-        // CropIncompleteUTF8 finds the terminator and crops incomplete sequences
-        char *new_end = CropIncompleteUTF8(
-          reinterpret_cast<char *>(duplicated + line_start));
-        // Update chars_that_fit to the actual break position after cropping
-        chars_that_fit = new_end - reinterpret_cast<char *>(duplicated + line_start);
-#endif
-        prev_p = duplicated + line_start + chars_that_fit;
+        const size_t break_position = line_start + chars_that_fit;
+
+        /*
+         * Make room for the separator instead of overwriting the first
+         * byte of the next character.  Overwriting it made the following
+         * line begin with a UTF-8 continuation byte.
+         */
+        memmove(duplicated + break_position + 1,
+                duplicated + break_position,
+                len - break_position + 1);
+        duplicated[break_position] = '\0';
+        ++len;
+        prev_p = duplicated + break_position;
       }
     }
 
