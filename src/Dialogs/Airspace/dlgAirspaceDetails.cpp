@@ -24,6 +24,7 @@
 #include <Message.hpp>
 #include "Geo/AltitudeReference.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "TransponderMode.hpp"
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
@@ -362,7 +363,7 @@ NOTAMDetailsWidget::AddNOTAMValidity(
         time_str.Format(_("%dd"), static_cast<int>(days));
       }
     }
-    buffer.Format(_("Starts in %s"), time_str.c_str());
+    FormatStartsIn(buffer, time_str.c_str());
   } else if (!notam_opt->end_time_permanent && now > notam_opt->end_time) {
     // Expired
     const auto expired_ago =

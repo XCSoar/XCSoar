@@ -14,6 +14,7 @@ GETTEXT_SOURCES = $(XCSOAR_SOURCES) \
 	$(LIBMAPWINDOW_SOURCES) \
 	$(LIBCOMPUTER_SOURCES) \
 	$(wildcard $(SRC)/Dialogs/Device/Vega/*Parameters.hpp) \
+	$(SRC)/Language/FormatText.hpp \
 	$(SRC)/Weather/Rasp/RaspStore.cpp
 GETTEXT_EVENTS = Data/Input/default.xci
 
