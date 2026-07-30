@@ -90,7 +90,7 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
   if (resolved_time == RaspStore::MAX_WEATHER_TIMES)
     return;
 
-  if (resolved_time == last_time)
+  if (map != nullptr && resolved_time == last_time)
     // no change, quick exit.
     return;
 
