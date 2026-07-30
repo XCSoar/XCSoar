@@ -679,8 +679,9 @@ private:
   void OnTemperature(Temperature temperature) noexcept override;
   void OnBatteryPercent(double battery_percent) noexcept override;
   void OnSensorStateChanged() noexcept override;
-  void OnSensorError(const char *msg) noexcept override;
 #endif // ANDROID
+
+  void OnSensorError(const char *msg) noexcept override;
 
   void OnBarometricPressureSensor(float pressure,
                                   float sensor_noise_variance) noexcept override;

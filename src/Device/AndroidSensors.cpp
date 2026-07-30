@@ -374,10 +374,4 @@ DeviceDescriptor::OnSensorStateChanged() noexcept
   PortStateChanged();
 }
 
-void
-DeviceDescriptor::OnSensorError(const char *msg) noexcept
-{
-  PortError(msg);
-}
-
 #endif
