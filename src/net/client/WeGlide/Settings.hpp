@@ -37,6 +37,14 @@ struct WeGlideSettings {
   uint32_t pilot_id;
   BrokenDate pilot_birthdate;
 
+  /**
+   * True when WeGlide is enabled and upload credentials are set.
+   */
+  [[nodiscard]] [[gnu::pure]]
+  constexpr bool IsConfigured() const noexcept {
+    return enabled && pilot_id != 0 && pilot_birthdate.IsPlausible();
+  }
+
   void SetDefaults() noexcept {
     pilot_id = 0;
     pilot_birthdate.Clear();

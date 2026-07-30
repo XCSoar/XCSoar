@@ -40,19 +40,6 @@ static constexpr char EXPORT_FLIGHTS_SUBFOLDER[] = "xcsoar_flights";
 
 static IgcMetaCache igc_cache;
 
-/**
- * Check if WeGlide is properly configured for uploads.
- * Requires pilot ID and birthdate to be set.
- */
-static bool
-IsWeGlideConfigured() noexcept
-{
-  const WeGlideSettings &settings = CommonInterface::GetComputerSettings().weglide;
-  return settings.enabled &&
-         settings.pilot_id != 0 &&
-         settings.pilot_birthdate.IsPlausible();
-}
-
 // Export job that runs in background thread
 struct ExportJob final : public Job {
   std::vector<Path> selected_files;
@@ -180,7 +167,7 @@ PerformExport(FileMultiSelectWidget *file_widget)
 static void
 PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
 {
-  if (!IsWeGlideConfigured()) {
+  if (!CommonInterface::GetComputerSettings().weglide.IsConfigured()) {
     ShowMessageBox(_("WeGlide is not configured. Please set your pilot ID and birthdate in the settings."),
                    _("WeGlide Upload"), MB_OK | MB_ICONERROR);
     return;

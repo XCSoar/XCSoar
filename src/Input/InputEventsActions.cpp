@@ -75,6 +75,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Device/MultipleDevices.hpp"
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
+#include "Dialogs/InternalLink.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
@@ -813,6 +814,11 @@ InputEvents::eventExchangeFrequencies([[maybe_unused]] const char *misc)
 
 void
 InputEvents::eventUploadIGCFile([[maybe_unused]] const char *misc) {
+  if (!CommonInterface::GetComputerSettings().weglide.IsConfigured()) {
+    HandleInternalLink("xcsoar://config/weglide");
+    return;
+  }
+
   FileDataField df;
   df.ScanMultiplePatterns(GetFileTypePatterns(FileType::IGC));
   df.SetFileType(FileType::IGC);
