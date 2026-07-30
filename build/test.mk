@@ -702,9 +702,8 @@ $(eval $(call link-program,TestWrapText,TEST_WRAP_TEXT))
 ifeq ($(HAVE_WIN32),y)
 TEST_UTF8WIN_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestUTF8Win.cpp \
-	$(SRC)/ui/canvas/gdi/UTF8Win.cpp
-TEST_UTF8WIN_DEPENDS = UTIL
+	$(TEST_SRC_DIR)/TestUTF8Win.cpp
+TEST_UTF8WIN_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestUTF8Win,TEST_UTF8WIN))
 endif
 
@@ -748,11 +747,9 @@ TEST_GLIDE_POLAR_DEPENDS = GEO MATH IO UNITS
 $(eval $(call link-program,TestGlidePolar,TEST_GLIDE_POLAR))
 
 TEST_FILE_UTIL_SOURCES = \
-	$(SRC)/system/FileUtil.cpp \
-	$(SRC)/system/Path.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFileUtil.cpp
-TEST_FILE_UTIL_DEPENDS = UTIL
+TEST_FILE_UTIL_DEPENDS = OS UTIL
 $(eval $(call link-program,TestFileUtil,TEST_FILE_UTIL))
 
 TEST_PATH_SOURCES = \

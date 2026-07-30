@@ -80,6 +80,9 @@ Version 7.45 - not yet released
 * Kobo
   - always start in light mode; dark mode is not supported on e-paper
     displays #2568
+* Windows
+  - fix crash opening the log list when replay filenames contain
+    non-ASCII characters (Unicode directory listing and file open)
 * devices
   - support $LK8EX1 (LK8000 external instrument) on all device ports:
     pressure, QNE altitude, vario, temperature, and battery voltage

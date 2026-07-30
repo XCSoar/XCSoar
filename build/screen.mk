@@ -243,7 +243,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/gdi/SubCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/BufferCanvas.cpp \
 	$(CANVAS_SRC_DIR)/gdi/PaintCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/UTF8Win.cpp \
 
 GDI_CPPFLAGS = -DUSE_GDI
 WINUSER_CPPFLAGS = -DUSE_WINUSER
