@@ -140,6 +140,14 @@ public:
   bool FocusFirstControl() noexcept;
 
   /**
+   * Sets the keyboard focus on the last descendant window which has
+   * the WindowStyle::tab_stop() attribute.
+   *
+   * @return true if the focus has been moved
+   */
+  bool FocusLastControl() noexcept;
+
+  /**
    * Sets the keyboard focus on the next descendant window which has
    * the WindowStyle::tab_stop() attribute.
    *
