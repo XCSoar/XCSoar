@@ -7,6 +7,7 @@
 #include "Form/Button.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
+#include "Renderer/AirspaceWarningStatusRenderer.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -124,10 +125,6 @@ public:
 static WndForm *dialog = NULL;
 static AirspaceWarningListWidget *list;
 
-static constexpr Color inside_color(254,50,50);
-static constexpr Color near_color(254,254,50);
-static constexpr Color inside_ack_color(254,100,100);
-static constexpr Color near_ack_color(254,254,100);
 static bool auto_close = true;
 
 
@@ -395,9 +392,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     layout_rc.left += line_height + padding;
   }
 
-  // word "inside" is used as the etalon, because it is longer than "near" and
-  // currently (9.4.2011) there is no other possibility for the status text.
-  const int status_width = canvas.CalcTextWidth("inside");
+  const int status_width = AirspaceWarningStatusWidth(canvas);
   // "1888" is used in order to have enough space for 4-digit heights with "AGL"
   const int altitude_width = canvas.CalcTextWidth("1888 m AGL");
 
@@ -453,43 +448,14 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   }
 
   /* draw the warning state indicator */
-
-  Color state_color;
-  const char *state_text;
-
-  if (warning.IsInside()) {
-    state_color = warning.IsActive() ? inside_color : inside_ack_color;
-    state_text = "inside";
-  } else if (warning.IsWarning()) {
-    state_color = warning.IsActive() ? near_color : near_ack_color;
-    state_text = "near";
-  } else {
-    state_color = COLOR_WHITE;
-    state_text = NULL;
+  AirspaceWarningStatusBadge status;
+  if (warning.IsWarning()) {
+    status.active = warning.IsActive();
+    status.kind = warning.IsInside()
+      ? AirspaceWarningStatusBadge::Kind::Inside
+      : AirspaceWarningStatusBadge::Kind::Near;
   }
-
-  const PixelSize state_text_size =
-    canvas.CalcTextSize(state_text != NULL ? state_text : "W");
-
-  if (state_color != COLOR_WHITE) {
-    /* colored background */
-    PixelRect rc = status_rc;
-    rc.top += padding;
-    rc.right -= padding;
-    rc.bottom -= padding;
-
-    canvas.DrawFilledRectangle(rc, state_color);
-
-    /* on this background we just painted, we must use black color for
-       the state text; our caller might have selected a different
-       color, override it here */
-    canvas.SetTextColor(COLOR_BLACK);
-  }
-
-  if (state_text != NULL) {
-    // -- status text will be centered inside its table cell:
-    canvas.DrawText(status_rc.CenteredTopLeft(state_text_size), state_text);
-  }
+  DrawAirspaceWarningStatus(canvas, status_rc, status);
 }
 
 inline void

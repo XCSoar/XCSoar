@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Dialogs/MapItemListDialog.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
@@ -20,7 +21,9 @@
 #include "Weather/Features.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Airspace/AirspaceWarningManager.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/AirspaceWarningStatusRenderer.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
@@ -31,6 +34,8 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/canvas/Color.hpp"
 #include <Message.hpp>
 
 #include <limits>
@@ -40,20 +45,49 @@
 #include "Dialogs/Weather/NOAADetails.hpp"
 #endif
 
+/* Matches tab order in dlgStatusShowModal(). */
+static constexpr int STATUS_PAGE_FLIGHT = 0;
+
 static bool
 ShowMapItemDialog(const MapItem &item,
                   Waypoints *waypoints,
                   ProtectedAirspaceWarningManager *airspace_warnings);
 
 static bool
+QueryWarningStatusNoThrow(ProtectedAirspaceWarningManager &warnings,
+                          const AbstractAirspace &airspace,
+                          AirspaceWarningStatusBadge &status) noexcept
+{
+  try {
+    const ProtectedAirspaceWarningManager::Lease lease(warnings);
+    const AirspaceWarning *warning = lease->GetWarningPtr(airspace);
+    if (warning == nullptr || !warning->IsWarning())
+      return true;
+
+    status.active = warning->IsActive();
+    status.kind = warning->IsInside()
+      ? AirspaceWarningStatusBadge::Kind::Inside
+      : AirspaceWarningStatusBadge::Kind::Near;
+    return true;
+  } catch (const std::exception &e) {
+    LogFmt("Failed to query airspace warning status: {}", e.what());
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to query airspace warning status");
+  }
+
+  return false;
+}
+
+static bool
 HasDetails(const MapItem &item)
 {
   switch (item.type) {
   case MapItem::Type::ARRIVAL_ALTITUDE:
-  case MapItem::Type::SELF:
   case MapItem::Type::THERMAL:
     return false;
 
+  case MapItem::Type::SELF:
   case MapItem::Type::LOCATION:
   case MapItem::Type::AIRSPACE:
   case MapItem::Type::WAYPOINT:
@@ -301,20 +335,43 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   bool ack_day = false;
+  AirspaceWarningStatusBadge warning_status;
   if (item->type == MapItem::Type::AIRSPACE &&
       backend_components != nullptr) {
     if (auto *warnings = backend_components->GetAirspaceWarnings();
         warnings != nullptr) {
       const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
       QueryAckDayNoThrow(*warnings, *as_item.airspace, ack_day);
+      QueryWarningStatusNoThrow(*warnings, *as_item.airspace,
+                               warning_status);
     }
   }
 
   if (ack_day)
     canvas.SetTextColor(COLOR_GRAY);
 
-  renderer.Draw(canvas, rc, *item,
+  PixelRect draw_rc = rc;
+  PixelRect status_rc{};
+  bool show_status = false;
+  if (warning_status.HasStatus()) {
+    /* Reserve a status column only when the main text still has room. */
+    const int status_width = AirspaceWarningStatusWidth(canvas);
+    const unsigned padding = Layout::GetTextPadding();
+    const int needed = 2 * (int)padding + status_width;
+    const int min_main = Layout::Scale(80);
+    if ((int)rc.GetWidth() > needed + min_main) {
+      const auto split = rc.VerticalSplit(rc.right - needed);
+      draw_rc = split.first;
+      status_rc = split.second;
+      show_status = true;
+    }
+  }
+
+  renderer.Draw(canvas, draw_rc, *item,
                 &CommonInterface::Basic().flarm.traffic);
+
+  if (show_status)
+    DrawAirspaceWarningStatus(canvas, status_rc, warning_status);
 
   if ((settings.item_list.add_arrival_altitude &&
        item->type == MapItem::Type::ARRIVAL_ALTITUDE) ||
@@ -493,9 +550,12 @@ ShowMapItemDialog(const MapItem &item,
 {
   switch (item.type) {
   case MapItem::Type::ARRIVAL_ALTITUDE:
-  case MapItem::Type::SELF:
   case MapItem::Type::THERMAL:
     return false;
+
+  case MapItem::Type::SELF:
+    dlgStatusShowModal(STATUS_PAGE_FLIGHT);
+    return true;
 
   case MapItem::Type::AIRSPACE:
     return dlgAirspaceDetailsForBrowseParent(
