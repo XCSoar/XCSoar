@@ -7,6 +7,7 @@
 #include "Widget/WindowWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Simulator.hpp"
+#include "ui/event/KeyCode.hpp"
 
 #ifdef SIMULATOR_AVAILABLE
 
@@ -30,6 +31,23 @@ public:
                                                      true);
     w->Create(parent, rc, style);
     SetWindow(std::move(w));
+  }
+
+  bool KeyPress(unsigned key_code) noexcept override {
+    /* Bitmap buttons have no visible focus; activate immediately. */
+    auto &prompt = (SimulatorPromptWindow &)GetWindow();
+    switch (key_code) {
+    case KEY_LEFT:
+      prompt.SelectFly();
+      return true;
+
+    case KEY_RIGHT:
+      prompt.SelectSimulator();
+      return true;
+
+    default:
+      return false;
+    }
   }
 };
 

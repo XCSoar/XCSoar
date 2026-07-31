@@ -220,17 +220,17 @@ public:
      backend_(std::move(_backend)) {}
 
   void CreateButtons(WidgetDialog &dialog) {
-    scan_button = dialog.AddButton(_("Scan"), [this](){
-      Scan(true, true);
-      scan_timer.Schedule(kWifiAutoScanInterval);
-    });
-
     connect_button = dialog.AddButton(_("Connect"), [this](){
       try {
         Connect();
       } catch (...) {
         ShowWifiError(std::current_exception(), _("Error"));
       }
+    });
+
+    scan_button = dialog.AddButton(_("Scan"), [this](){
+      Scan(true, true);
+      scan_timer.Schedule(kWifiAutoScanInterval);
     });
 
     forget_button = dialog.AddButton(_("Forget"), [this](){
@@ -240,7 +240,6 @@ public:
         ShowWifiError(std::current_exception(), _("Error"));
       }
     });
-
   }
 
   void UpdateButtons();
@@ -510,9 +509,9 @@ ShowWifiDialog(UniqueWifiBackend backend)
   TWidgetDialog<WifiListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            look, _("WiFi"));
-  dialog.AddButton(_("Close"), mrOK);
   dialog.SetWidget(std::move(backend));
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
   dialog.ShowModal();
 }
