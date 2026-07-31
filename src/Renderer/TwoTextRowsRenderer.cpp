@@ -4,6 +4,7 @@
 #include "TwoTextRowsRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/dim/Rect.hpp"
 
 #include <algorithm>
 
@@ -32,9 +33,21 @@ TwoTextRowsRenderer::CalculateLayout(const Font &_first_font,
 }
 
 void
+TwoTextRowsRenderer::PrepareRow(const PixelRect &rc) const noexcept
+{
+  if (rc.top == edge_row_top)
+    return;
+
+  edge_row_top = rc.top;
+  first_row_right_edge = second_row_right_edge = 0;
+}
+
+void
 TwoTextRowsRenderer::DrawFirstRow(Canvas &canvas, const PixelRect &rc,
                                   const char *text) const noexcept
 {
+  PrepareRow(rc);
+
   canvas.Select(*first_font);
   first_row_right_edge = rc.left + x + (int)canvas.CalcTextWidth(text);
   canvas.DrawClippedText({rc.left + x, rc.top + first_y}, rc, text);
@@ -44,6 +57,8 @@ void
 TwoTextRowsRenderer::DrawSecondRow(Canvas &canvas, const PixelRect &rc,
                                    const char *text) const noexcept
 {
+  PrepareRow(rc);
+
   canvas.Select(*second_font);
   second_row_right_edge = rc.left + x + (int)canvas.CalcTextWidth(text);
   canvas.DrawClippedText({rc.left + x, rc.top + second_y}, rc, text);
@@ -53,6 +68,8 @@ int
 TwoTextRowsRenderer::DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
                                        const char *text) const noexcept
 {
+  PrepareRow(rc);
+
   canvas.Select(*second_font);
   int text_width = canvas.CalcTextWidth(text);
   int text_x = rc.right - x - text_width;
@@ -73,6 +90,8 @@ int
 TwoTextRowsRenderer::DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
                                         const char *text) const noexcept
 {
+  PrepareRow(rc);
+
   canvas.Select(*second_font);
   int text_width = canvas.CalcTextWidth(text);
   int text_x = rc.right - x - text_width;
