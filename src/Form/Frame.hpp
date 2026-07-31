@@ -20,6 +20,8 @@ class WndFrame : public PaintWindow {
 
   std::string text;
 
+  bool top_separator = false;
+
 public:
   explicit WndFrame(const DialogLook &look) noexcept;
 
@@ -42,6 +44,10 @@ public:
 
   void SetTextColor(const Color &color) noexcept {
     text_color = color;
+  }
+
+  void SetTopSeparator(bool value = true) noexcept {
+    top_separator = value;
   }
 
   [[gnu::pure]]

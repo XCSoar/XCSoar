@@ -57,8 +57,7 @@ public:
 
   /**
    * Called from #Button::OnSetFocus: move #selected_index to the
-   * focused #Button so only one of #ButtonState::SELECTED / FOCUSED
-   * is visible when cursor key mode is on.
+   * focused #Button so cursor-selection stays aligned with focus.
    */
   void OnButtonGainedFocus(Button &b) noexcept;
 
