@@ -55,7 +55,8 @@ Default key bindings
 The built-in ``type=key`` mapping in :file:`Data/Input/default.xci`
 currently uses this grouped layout for ``F1`` -- ``F12``:
 
-- **F1**: quick menu.
+- **F1**: quick menu.  On the FLARM traffic radar, ``F1`` is
+  ``Traffic label toggle`` (AVG/ALT side labels) instead.
 - **F2 / F3** (on the main map, ``mode=default`` only): ``Checklist`` and
   ``FlarmTraffic``.  **F2 / F3** are zoom in / out in ``pan`` mode, on
   the FLARM traffic radar, and in waypoint image ``wptimg``; they do not
@@ -236,6 +237,11 @@ Event list
    - Controls the airspace display filter mode. Possible arguments:
      ``all`` (show all), ``clip`` (clip to altitude), ``auto``
      (automatic), ``below`` (show all below), ``off`` (hide all).
+ * - ``AirspaceLabels``
+   - Toggles airspace altitude labels on the map (same setting as
+     Configuration → Airspace → Labels). Possible arguments:
+     ``toggle``, ``on`` / ``all``, ``off`` / ``none``, ``show``
+     (display current state).
  * - ``AirspaceWarnings``
    - Opens the airspace warnings dialog.
  * - ``Analysis``

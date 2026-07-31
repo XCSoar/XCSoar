@@ -182,6 +182,7 @@ void eventSendNMEAPort2(const char *misc);
 void eventSetup(const char *misc);
 void eventSnailTrail(const char *misc);
 void eventAirSpace(const char *misc); // VENTA3
+void eventAirspaceLabels(const char *misc);
 void eventSounds(const char *misc);
 void eventStatus(const char *misc);
 void eventStatusMessage(const char *misc);
