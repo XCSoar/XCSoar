@@ -392,14 +392,15 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     layout_rc.left += line_height + padding;
   }
 
-  const int status_width = AirspaceWarningStatusWidth(canvas);
+  const Font &list_font = *UIGlobals::GetDialogLook().list.font;
+  const int status_width = AirspaceWarningStatusWidth(canvas, list_font);
   // "1888" is used in order to have enough space for 4-digit heights with "AGL"
   const int altitude_width = canvas.CalcTextWidth("1888 m AGL");
 
   // Dynamic columns scaling - "name" column is flexible, altitude and state
   // columns are fixed-width.
   auto [text_altitude_rc, status_rc] =
-    layout_rc.VerticalSplit(layout_rc.right - (2 * padding + status_width));
+    layout_rc.VerticalSplit(layout_rc.right - status_width);
   auto text_rc =
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width)).first;
   text_rc.right -= padding;
@@ -455,7 +456,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
       ? AirspaceWarningStatusBadge::Kind::Inside
       : AirspaceWarningStatusBadge::Kind::Near;
   }
-  DrawAirspaceWarningStatus(canvas, status_rc, status);
+  DrawAirspaceWarningStatus(canvas, list_font, status_rc, status);
 }
 
 inline void

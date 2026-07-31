@@ -355,9 +355,8 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   bool show_status = false;
   if (warning_status.HasStatus()) {
     /* Reserve a status column only when the main text still has room. */
-    const int status_width = AirspaceWarningStatusWidth(canvas);
-    const unsigned padding = Layout::GetTextPadding();
-    const int needed = 2 * (int)padding + status_width;
+    const int needed =
+      AirspaceWarningStatusWidth(canvas, *dialog_look.list.font);
     const int min_main = Layout::Scale(80);
     if ((int)rc.GetWidth() > needed + min_main) {
       const auto split = rc.VerticalSplit(rc.right - needed);
@@ -371,7 +370,8 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                 &CommonInterface::Basic().flarm.traffic);
 
   if (show_status)
-    DrawAirspaceWarningStatus(canvas, status_rc, warning_status);
+    DrawAirspaceWarningStatus(canvas, *dialog_look.list.font,
+                              status_rc, warning_status);
 
   if ((settings.item_list.add_arrival_altitude &&
        item->type == MapItem::Type::ARRIVAL_ALTITUDE) ||
