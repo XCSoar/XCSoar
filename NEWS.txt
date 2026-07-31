@@ -21,16 +21,80 @@ Version 7.45 - not yet released
     ``type`` values (``key`` / ``gce`` / ``gesture`` / ``ne`` /
     ``label``), gesture ``data`` format, softkey ``location``,
     label escapes, complete GCE list, and ``RemoteStick`` Quick Menu
+  - document ``AirspaceLabels`` input event
 * ui
-  - Speed up long rich-text layout (Quick Guide What's New): estimate scroll
-    height before wrapping, skip FreeType for runs that clearly fit or
-    overflow by character budget, and use one measure for typical bullets
+  - Bind F1 on the FLARM traffic radar to toggle AVG/ALT side labels
+    (same as AVG/ALT softkey and RL gesture); previous target remains
+    on Down
+  - Draw map GPS status above the map scale / title line so it is not
+    covered by AUTO / Simulator / REPLAY text
+  - Improve soft keyboard text entry: default focus on a key; cursor
+    keys move across the grid (Up from OK/Cancel/Clear enters the
+    keyboard; arrows no longer jump in tab order at row edges); F1 is
+    backspace
+  - Fix profile selection / startup branding: use transparent RGBA logo
+    and title bitmaps on light (parchment) dialog backgrounds #2742
+  - Size the InfoBox panel to the current tab and lift map overlays by
+    that height only (Altitude → Simulator no longer jumps the map
+    title up by the taller Setup tab)
+  - Fix map vario / final-glide value labels: use a rounded rectangle
+    (not a pill) with even text padding and an unbroken outline for the
+    semitransparent background #1438
+  - Swap map overlay sides: vario bar on the left, final glide bar on
+    the right #1210
+  - Add airspace labels toggle: Display page 2, Quick Menu, and
+    ``AirspaceLabels`` input event (on/off, saved to profile) #1243
+  - Add Quick Guide and Replay to the Quick Menu (Replay disabled when
+    moving)
+  - Show replay speed on the map scale overlay (e.g. REPLAY 2x) #2281
+  - Allow Left/Right on the simulator prompt to choose Fly / Simulator
+    immediately
+  - Improve the map items dialog: scale “Your Position” aircraft icon
+    to the row; Enter / Details opens Status: Flight; show airspace
+    Inside/Near status like the airspace warnings dialog
+  - Put WiFi Connect first and Close last (right / bottom)
+  - Put Download before Cancel in the download picker; Left/Right page
+    the list (no armed action-bar dual focus)
+  - Use single keyboard focus in the multi-file picker (no armed action
+    bar); Enter/Space toggles the highlighted file, Up/Down reach
+    OK/Cancel
+  - Use single keyboard focus in the value list picker (ComboPicker);
+    Left/Right page, Enter selects the highlighted value
+  - Draw a thin separator line above list-picker bottom help text
+  - Make Quick Menu Left/Right stay put when the next item is disabled,
+    but still wrap or flip page at a real row edge
+  - Use focus colour for action-bar buttons that have keyboard focus
+    (armed Left/Right selection still uses the selected colour while
+    the list keeps focus — same as Alternates)
+  - Open waypoint details with Details / F1 (Enter still confirms the
+    selection)
+  - Move Task Manager keyboard focus with Manage → Browse (and WeGlide
+    lists) so Up/Down can move the task list again
+  - Fix task point dialog keyboard navigation: Up/Down no longer skip
+    the OZ Radius field; Left/Right change the task point (same as
+    < / >); Type is an AddEnum-style field; in portrait the map and OZ
+    fields are full width and the form only uses height for active OZ
+    settings (landscape keeps the side form)
+  - Fill leftover pixels on the last dialog action-bar button in a row
+    (no empty right strip); landscape side bars stay normal height
+  - Put Reference Mass above the plane polar V/W grid; Up/Down moves
+    within each V/W column
+  - Fix Configuration keyboard navigation: Up/Down again move between
+    settings rows; Up from Close/arrows focuses the last row (Quick
+    Guide chrome path unchanged); opening the dialog focuses the menu,
+    not Close; Up/Down on the menu walk individual items (then
+    Close/arrows); Esc from a settings panel returns to the menu
+  - Speed up long rich-text layout (Quick Guide What's New): estimate
+    scroll height before wrapping, skip FreeType for runs that clearly
+    fit or overflow by character budget, and use one measure for
+    typical bullets
   - Fix Quick Guide Up/Down focus so the bottom-bar checkbox and Close
     button are reachable from the keyboard
-  - Expert Look → Screen Layout setting "Display type" (LCD / E-ink /
-    Color e-ink); e-ink modes disable kinetic and smooth scrolling.
-    Defaults to E-ink on Kobo and LCD elsewhere
-  - Device list: show the Vario flag for non-compensated and netto vario
+  - Add Expert Look → Screen Layout setting "Display type" (LCD /
+    E-ink / Color e-ink); e-ink modes disable kinetic and smooth
+    scrolling. Defaults to E-ink on Kobo and LCD elsewhere
+  - Show the Vario flag on the device list for non-compensated and
+    netto vario
     sources as well as total-energy (e.g. BlueFly)
   - E-paper: snap VScrollPanel smooth scrolling instead of animating at
     ~60 Hz, and debounce ComboPicker per-item help updates while
@@ -235,8 +299,9 @@ Version 7.45 - not yet released
   - F2 = zoom in, F3 = zoom out in pan, on the FLARM radar, and in waypoint
     image ``wptimg`` (not on the main non-pan map, where F2/F3 stay Checklist
     and FLARM as before). Traffic: ``next`` and ``previous`` events; FLARM: UP/DOWN
-    and F1/F4 = next/prev target, F2/F3 = zoom. The radar no longer hard-codes
-    d-pad to zoom; bindings come from the ``.xci`` file
+    and F4 = next target (with UP/DOWN), F1 = AVG/ALT labels, F2/F3 = zoom.
+    The radar no longer hard-codes d-pad to zoom; bindings come from the
+    ``.xci`` file
   - ``GotoLookup`` accepts an optional argument to pre-select the Type
     filter on entry (``recent``/``last_used``, ``airport``, ``landable``,
     ``turnpoint``, ``start``, ``finish``), so a gesture or key binding can
