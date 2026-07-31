@@ -19,6 +19,7 @@
 #include "Language/Language.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <stdio.h>
 
@@ -103,23 +104,38 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   tab_widget.AddTab(std::make_unique<ActionWidget>(dialog.MakeModalResultCallback(mrOK)),
                     _("Close"));
 
-  const PixelRect client_rc = dialog.GetClientAreaWindow().GetClientRect();
-  const PixelSize max_size = tab_widget.GetMaximumSize();
-  if (max_size.height < client_rc.GetHeight()) {
-    form_rc.top += client_rc.GetHeight() - max_size.height;
-    dialog.Move(form_rc);
-  }
+  /* Dock to the bottom of the map area and lift map overlays by the
+     visible dialog height.  Size to the *current* tab so a short page
+     (Altitude → Simulator) does not reserve space for a taller sibling
+     (Setup); re-dock when the user flips tabs. */
+  const auto dock_dialog = [&dialog, &tab_widget]() noexcept {
+    PixelRect rc = InfoBoxManager::layout.remaining;
+    const PixelSize content = tab_widget.GetCurrentMaximumSize();
+    const PixelSize dialog_size = dialog.ClientAreaToDialogSize(content);
+    if (dialog_size.height < rc.GetHeight())
+      rc.top = rc.bottom - (int)dialog_size.height;
+    dialog.Move(rc);
+
+    GlueMapWindow *map = UIGlobals::GetMap();
+    if (map == nullptr)
+      return;
+
+    const PixelRect map_rc = map->GetPosition();
+    const PixelRect dlg_rc = dialog.GetPosition();
+    if (dlg_rc.top < map_rc.bottom && dlg_rc.bottom > map_rc.top) {
+      const unsigned margin =
+        (unsigned)(map_rc.bottom - std::max(dlg_rc.top, map_rc.top));
+      map->SetBottomMargin(margin);
+    } else
+      map->SetBottomMargin(0);
+  };
+
+  tab_widget.SetPageFlippedCallback(dock_dialog);
+  dock_dialog();
 
   dialog.SetModeless();
 
-  /* When InfoBox panel opens, adjust bottom margin to make room */
   GlueMapWindow *map = UIGlobals::GetMap();
-  if (map != nullptr) {
-    unsigned dialog_height = form_rc.GetHeight();
-
-    if (dialog_height > 0)
-      map->SetBottomMargin(dialog_height);
-  }
 
   int result = dialog.ShowModal();
 
