@@ -52,6 +52,8 @@ Version 7.45 - not yet released
   - Improve the map items dialog: scale “Your Position” aircraft icon
     to the row; Enter / Details opens Status: Flight; show airspace
     Inside/Near status like the airspace warnings dialog
+  - Tint the bottom airspace warning banner red (inside) or yellow
+    (near), matching the warnings-list badges (colour displays only)
   - Put WiFi Connect first and Close last (right / bottom)
   - Put Download before Cancel in the download picker; Left/Right page
     the list (no armed action-bar dual focus)

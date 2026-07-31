@@ -22,6 +22,14 @@ TextWidget::SetColor(Color _color) noexcept
   w.SetTextColor(_color);
 }
 
+void
+TextWidget::SetBackgroundColor(Color _color) noexcept
+{
+  WndFrame &w = (WndFrame &)GetWindow();
+  w.SetBackgroundColor(_color);
+  w.Invalidate();
+}
+
 PixelSize
 TextWidget::GetMinimumSize() const noexcept
 {

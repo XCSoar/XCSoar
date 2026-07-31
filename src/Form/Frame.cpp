@@ -61,7 +61,9 @@ WndFrame::GetTextHeight() const noexcept
 void
 WndFrame::OnPaint(Canvas &canvas) noexcept
 {
-  if (HaveClipping())
+  if (background_color)
+    canvas.Clear(*background_color);
+  else if (HaveClipping())
     canvas.Clear(look.background_brush);
 
   if (top_separator) {

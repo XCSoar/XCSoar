@@ -7,6 +7,7 @@
 #include "ui/canvas/Color.hpp"
 #include "Renderer/TextRenderer.hpp"
 
+#include <optional>
 #include <string>
 
 struct DialogLook;
@@ -15,6 +16,8 @@ class WndFrame : public PaintWindow {
   const DialogLook &look;
 
   Color text_color;
+
+  std::optional<Color> background_color;
 
   TextRenderer text_renderer;
 
@@ -44,6 +47,14 @@ public:
 
   void SetTextColor(const Color &color) noexcept {
     text_color = color;
+  }
+
+  /**
+   * Fill the frame with this colour instead of the look's background,
+   * e.g. to mark a message as a warning.
+   */
+  void SetBackgroundColor(const Color &color) noexcept {
+    background_color = color;
   }
 
   void SetTopSeparator(bool value = true) noexcept {

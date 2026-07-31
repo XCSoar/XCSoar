@@ -22,6 +22,7 @@ public:
 
   void SetText(const char *text) noexcept;
   void SetColor(Color _color) noexcept;
+  void SetBackgroundColor(Color _color) noexcept;
 
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const noexcept override;

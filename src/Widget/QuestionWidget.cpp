@@ -19,6 +19,24 @@ QuestionWidget::SetMessage(const char *_message) noexcept
   tw.SetText(_message);
 }
 
+inline void
+QuestionWidget::ApplyMessageColors() noexcept
+{
+  auto &bpw = (ButtonPanelWidget &)GetWidget();
+  auto &tw = (TextWidget &)bpw.GetWidget();
+  tw.SetBackgroundColor(message_colors->background);
+  tw.SetColor(message_colors->text);
+}
+
+void
+QuestionWidget::SetMessageColors(Color background, Color text) noexcept
+{
+  message_colors.emplace(MessageColors{background, text});
+
+  if (prepared)
+    ApplyMessageColors();
+}
+
 void
 QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
@@ -32,6 +50,11 @@ QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   for (auto button : buttons)
     panel.Add(button.caption, button.callback);
+
+  prepared = true;
+
+  if (message_colors)
+    ApplyMessageColors();
 }
 
 

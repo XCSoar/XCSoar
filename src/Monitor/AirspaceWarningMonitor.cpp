@@ -7,6 +7,7 @@
 #include "Audio/Sound.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "ui/event/Idle.hpp"
+#include "Look/Colors.hpp"
 #include "PageActions.hpp"
 #include "Widget/QuestionWidget.hpp"
 #include "Language/Language.hpp"
@@ -46,6 +47,24 @@ class AirspaceWarningWidget final
                                         2).c_str());
 
     return buffer;
+  }
+
+  /**
+   * Mark the message with the same colours the airspace warning list
+   * uses for its Inside / Near badge.
+   */
+  void UpdateMessageColors() noexcept {
+    if (!HasColors())
+      /* greyscale and e-paper displays: the plain message keeps more
+         contrast than a dithered fill */
+      return;
+
+    /* Black on both fills: 5.7:1 on Inside red and 19.4:1 on Near
+       yellow, whereas white would only reach 3.7:1 on the red. */
+    SetMessageColors(state == AirspaceWarning::WARNING_INSIDE
+                     ? COLOR_AIRSPACE_WARNING_INSIDE
+                     : COLOR_AIRSPACE_WARNING_NEAR,
+                     COLOR_BLACK);
   }
 
 public:
@@ -91,6 +110,8 @@ public:
     AddButton(_("More"), [this](){
       dlgAirspaceWarningsShowModal(manager);
     });
+
+    UpdateMessageColors();
   }
 
   ~AirspaceWarningWidget() noexcept {
@@ -106,6 +127,7 @@ public:
 
     state = _state;
     SetMessage(MakeMessage(*airspace, state, solution));
+    UpdateMessageColors();
     return true;
   }
 };
