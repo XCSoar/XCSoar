@@ -163,7 +163,9 @@ bitmap_graphic IDB_TITLE "title_red_110"
 bitmap_graphic IDB_TITLE_HD "title_red_320"
 bitmap_graphic IDB_TITLE_UHD "title_red_640"
 #ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_TITLE_RGBA "title_red_110_rgba"
 bitmap_graphic IDB_TITLE_HD_RGBA "title_red_320_rgba"
+bitmap_graphic IDB_TITLE_UHD_RGBA "title_red_640_rgba"
 bitmap_graphic IDB_TITLE_HD_WHITE "title_red_white_320_rgba"
 bitmap_graphic IDB_TITLE_UHD_WHITE "title_red_white_640_rgba"
 #endif
@@ -172,7 +174,9 @@ bitmap_graphic IDB_TITLE "title_110"
 bitmap_graphic IDB_TITLE_HD "title_320"
 bitmap_graphic IDB_TITLE_UHD "title_640"
 #ifndef USE_WIN32_RESOURCES
+bitmap_graphic IDB_TITLE_RGBA "title_110_rgba"
 bitmap_graphic IDB_TITLE_HD_RGBA "title_320_rgba"
+bitmap_graphic IDB_TITLE_UHD_RGBA "title_640_rgba"
 bitmap_graphic IDB_TITLE_HD_WHITE "title_white_320_rgba"
 bitmap_graphic IDB_TITLE_UHD_WHITE "title_white_640_rgba"
 #endif

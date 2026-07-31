@@ -307,7 +307,7 @@ $(PNG8a): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirst
 	$(Q)cp $< $@
 
 ####### title PNGs with alpha (normal + white)
-PNG8 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_TITLE_320_RGBA) $(PNG_TITLE_WHITE_320_RGBA) $(PNG_TITLE_WHITE_640_RGBA))
+PNG8 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_TITLE_110_RGBA) $(PNG_TITLE_320_RGBA) $(PNG_TITLE_640_RGBA) $(PNG_TITLE_WHITE_320_RGBA) $(PNG_TITLE_WHITE_640_RGBA))
 $(PNG8): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
 	$(Q)cp $< $@
 
