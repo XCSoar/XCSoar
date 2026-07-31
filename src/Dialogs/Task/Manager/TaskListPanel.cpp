@@ -80,6 +80,7 @@ public:
     buttons.Add(_("Rename"), [this](){ RenameTask(); });
     buttons.Add(_("Delete"), [this](){ DeleteTask(); });
     more_button = buttons.Add(_("More"), [this](){ OnMoreClicked(); });
+    buttons.EnableCursorSelection();
   }
 
   void RefreshView();

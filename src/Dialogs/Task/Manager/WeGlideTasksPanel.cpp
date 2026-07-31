@@ -84,6 +84,7 @@ public:
   void CreateButtons(ButtonPanel &buttons) noexcept {
     load_button = buttons.Add(_("Load"), [this](){ LoadTask(); });
     buttons.Add(_("Refresh"), [this](){ ReloadList(); });
+    buttons.EnableCursorSelection();
   }
 
   void UpdateButtons() noexcept {
