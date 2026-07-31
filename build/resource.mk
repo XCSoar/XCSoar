@@ -113,7 +113,9 @@ PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_
 BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
 PNG_TITLE_640 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_640.png,$(SVG_TITLE))
 BMP_TITLE_640 = $(PNG_TITLE_640:.png=.bmp)
+PNG_TITLE_110_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_110_rgba.png,$(SVG_TITLE))
 PNG_TITLE_320_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_320_rgba.png,$(SVG_TITLE))
+PNG_TITLE_640_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_640_rgba.png,$(SVG_TITLE))
 
 SVG_TITLE_WHITE = Data/graphics/title_white.svg Data/graphics/title_red_white.svg
 PNG_TITLE_WHITE_320_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_320_rgba.png,$(SVG_TITLE_WHITE))
@@ -123,7 +125,9 @@ PNG_TITLE_WHITE_640_RGBA = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%_64
 $(eval $(call rsvg-convert,$(PNG_TITLE_110),$(DATA)/graphics/%_110.png,Data/graphics/%.svg,--width=110))
 $(eval $(call rsvg-convert,$(PNG_TITLE_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_TITLE_640),$(DATA)/graphics/%_640.png,Data/graphics/%.svg,--width=640))
+$(eval $(call rsvg-convert,$(PNG_TITLE_110_RGBA),$(DATA)/graphics2/%_110_rgba.png,Data/graphics/%.svg,--width=110))
 $(eval $(call rsvg-convert,$(PNG_TITLE_320_RGBA),$(DATA)/graphics2/%_320_rgba.png,Data/graphics/%.svg,--width=320))
+$(eval $(call rsvg-convert,$(PNG_TITLE_640_RGBA),$(DATA)/graphics2/%_640_rgba.png,Data/graphics/%.svg,--width=640))
 $(eval $(call rsvg-convert,$(PNG_TITLE_WHITE_320_RGBA),$(DATA)/graphics2/%_320_rgba.png,Data/graphics/%.svg,--width=320))
 $(eval $(call rsvg-convert,$(PNG_TITLE_WHITE_640_RGBA),$(DATA)/graphics2/%_640_rgba.png,Data/graphics/%.svg,--width=640))
 
@@ -327,7 +331,7 @@ RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110)
 ifneq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(PNG_SPLASH_320_RGBA) $(PNG_SPLASH_160_RGBA) $(PNG_SPLASH_80_RGBA)
-RESOURCE_FILES += $(PNG_TITLE_320_RGBA)
+RESOURCE_FILES += $(PNG_TITLE_110_RGBA) $(PNG_TITLE_320_RGBA) $(PNG_TITLE_640_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_WHITE_320_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_WHITE_640_RGBA)
 endif

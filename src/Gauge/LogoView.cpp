@@ -20,11 +20,14 @@ LogoView::LogoView() noexcept try
    title(IDB_TITLE), big_title(IDB_TITLE_HD), huge_title(IDB_TITLE_UHD)
 {
 #ifndef USE_WIN32_RESOURCES
-  /* Load RGBA logo variants for dark mode (transparent background) */
+  /* Load RGBA logo variants (transparent background) */
   logo_rgba.Load(IDB_LOGO_RGBA);
   big_logo_rgba.Load(IDB_LOGO_HD_RGBA);
   huge_logo_rgba.Load(IDB_LOGO_UHD_RGBA);
-  /* Load white title variants for dark mode */
+  /* Transparent title for light backgrounds; white for dark mode */
+  title_rgba.Load(IDB_TITLE_RGBA);
+  big_title_rgba.Load(IDB_TITLE_HD_RGBA);
+  huge_title_rgba.Load(IDB_TITLE_UHD_RGBA);
   white_title.Load(IDB_TITLE_HD_WHITE);
   huge_white_title.Load(IDB_TITLE_UHD_WHITE);
 #endif
@@ -132,15 +135,15 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
     bitmap_title = &title;
   }
 
-  /* In dark mode, use RGBA logos (transparent background) if available */
-  if (dark_mode) {
-    if (bitmap_logo == &huge_logo && huge_logo_rgba.IsDefined())
-      bitmap_logo = &huge_logo_rgba;
-    else if (bitmap_logo == &big_logo && big_logo_rgba.IsDefined())
-      bitmap_logo = &big_logo_rgba;
-    else if (bitmap_logo == &logo && logo_rgba.IsDefined())
-      bitmap_logo = &logo_rgba;
-  }
+  /* Prefer RGBA logos (transparent background).  Opaque BMP/PNG
+     variants have a white fill that shows as a rectangle on the
+     parchment dialog background and on dark themes. */
+  if (bitmap_logo == &huge_logo && huge_logo_rgba.IsDefined())
+    bitmap_logo = &huge_logo_rgba;
+  else if (bitmap_logo == &big_logo && big_logo_rgba.IsDefined())
+    bitmap_logo = &big_logo_rgba;
+  else if (bitmap_logo == &logo && logo_rgba.IsDefined())
+    bitmap_logo = &logo_rgba;
 
   // Determine logo size
   PixelSize logo_size = bitmap_logo->GetSize();
@@ -195,19 +198,26 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   // Draw 'XCSoar N.N' title
   if (orientation != LogoViewOrientation::SQUARE) {
     const Bitmap *draw_title = bitmap_title;
-#ifdef ENABLE_OPENGL
-    /* On OpenGL, use white title variants for dark mode
-       (they have alpha and composite correctly).
-       On non-OpenGL, keep the standard (black) title since
-       the memory canvas composites alpha against white. */
+#ifndef USE_WIN32_RESOURCES
+    /* Opaque title BMPs have a white fill.  Prefer matching-size RGBA
+       variants so the title composites over parchment / dark dialog
+       backgrounds (OpenGL and memory canvas). */
     if (dark_mode) {
       if (bitmap_title == &huge_title &&
           huge_white_title.IsDefined())
         draw_title = &huge_white_title;
       else if (white_title.IsDefined())
         draw_title = &white_title;
-    }
-
+    } else if (bitmap_title == &huge_title &&
+               huge_title_rgba.IsDefined())
+      draw_title = &huge_title_rgba;
+    else if (bitmap_title == &big_title &&
+             big_title_rgba.IsDefined())
+      draw_title = &big_title_rgba;
+    else if (bitmap_title == &title && title_rgba.IsDefined())
+      draw_title = &title_rgba;
+#endif
+#ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.Stretch(title_position, title_size, *draw_title);
