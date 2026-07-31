@@ -90,7 +90,9 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
   UpdateButtons();
   file_widget->SetSelectionChangedCallback(UpdateButtons);
 
-  dialog.EnableCursorSelection();
+  /* No EnableCursorSelection: an armed action-bar button plus the list
+     cursor reads as dual focus.  Up/Down walk list ↔ buttons; Enter/Space
+     on the list toggles (MultiSelectListWidget::KeyPress). */
   dialog.FinishPreliminary(std::move(widget));
 
   int result = dialog.ShowModal();

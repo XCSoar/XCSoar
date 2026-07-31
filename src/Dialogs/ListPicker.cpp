@@ -94,7 +94,7 @@ ListPicker(const char *caption,
 
   if (_itemhelp_callback != nullptr) {
     widget = std::make_unique<TwoWidgets>(std::move(widget),
-                                          std::make_unique<TextWidget>());
+                                          std::make_unique<TextWidget>(true));
     auto &two_widgets = (TwoWidgets &)*widget;
     list_widget->EnableItemHelp(_itemhelp_callback,
                                 (TextWidget &)two_widgets.GetSecond(),
@@ -124,8 +124,8 @@ ListPicker(const char *caption,
 
   dialog.AddButton(_("Cancel"), mrCancel);
 
-  dialog.EnableCursorSelection();
-
+  /* No EnableCursorSelection: Left/Right page the list; Enter activates
+     the cursor row (Select).  Up/Down walk list ↔ buttons. */
   UI::PeriodicTimer update_timer([list_widget](){
     list_widget->GetList().Invalidate();
   });

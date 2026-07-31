@@ -52,8 +52,11 @@ TextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   WindowStyle style;
   style.Hide();
 
-  SetWindow(std::make_unique<WndFrame>(parent, UIGlobals::GetDialogLook(),
-                                       rc, style));
+  auto frame = std::make_unique<WndFrame>(parent, UIGlobals::GetDialogLook(),
+                                          rc, style);
+  if (top_separator)
+    frame->SetTopSeparator();
+  SetWindow(std::move(frame));
 }
 
 

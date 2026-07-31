@@ -27,7 +27,7 @@ public:
   StaticHelpTextWidget(std::unique_ptr<Widget> main_widget,
                        const char *_help_text) noexcept
     :TwoWidgets(std::move(main_widget),
-                std::make_unique<TextWidget>()),
+                std::make_unique<TextWidget>(true)),
      help_text(_help_text) {}
 
   void Show(const PixelRect &rc) noexcept override {

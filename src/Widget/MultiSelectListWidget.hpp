@@ -93,6 +93,13 @@ public:
     GetList().SetActivateOnFirstClick(true);
   }
 
+  /**
+   * When the list has focus, Return/Space toggle the cursor row before
+   * #ButtonPanel::KeyPress can fire the armed action (OK / Select all)
+   * under #WidgetDialog::EnableCursorSelection.
+   */
+  bool KeyPress(unsigned key_code) noexcept override;
+
 private:
   /** Select or deselect all items. */
   void SetAllSelected(bool value) noexcept {
