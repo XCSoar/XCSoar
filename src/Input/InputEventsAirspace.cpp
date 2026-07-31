@@ -17,6 +17,9 @@
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "NMEA/Aircraft.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/Keys.hpp"
+#include "util/StringCompare.hxx"
 
 /*
  * This even currently toggles DrawAirSpace() and does nothing else.
@@ -58,6 +61,41 @@ InputEvents::eventAirSpace(const char *misc)
     return;
   }
 
+  ActionInterface::SendMapSettings(true);
+}
+
+void
+InputEvents::eventAirspaceLabels(const char *misc)
+{
+  AirspaceRendererSettings &settings =
+    CommonInterface::SetMapSettings().airspace;
+
+  const bool currently_on =
+    settings.label_selection == AirspaceRendererSettings::LabelSelection::ALL;
+
+  if (StringIsEqual(misc, "toggle")) {
+    settings.label_selection = currently_on
+      ? AirspaceRendererSettings::LabelSelection::NONE
+      : AirspaceRendererSettings::LabelSelection::ALL;
+    Message::AddMessage(currently_on
+                        ? _("Airspace labels hidden")
+                        : _("Airspace labels shown"));
+  } else if (StringIsEqual(misc, "off") || StringIsEqual(misc, "none")) {
+    settings.label_selection = AirspaceRendererSettings::LabelSelection::NONE;
+    Message::AddMessage(_("Airspace labels hidden"));
+  } else if (StringIsEqual(misc, "on") || StringIsEqual(misc, "all")) {
+    settings.label_selection = AirspaceRendererSettings::LabelSelection::ALL;
+    Message::AddMessage(_("Airspace labels shown"));
+  } else if (StringIsEqual(misc, "show")) {
+    Message::AddMessage(currently_on
+                        ? _("Airspace labels on")
+                        : _("Airspace labels off"));
+    return;
+  } else
+    return;
+
+  Profile::Set(ProfileKeys::AirspaceLabelSelection,
+               (int)settings.label_selection);
   ActionInterface::SendMapSettings(true);
 }
 

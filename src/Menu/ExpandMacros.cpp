@@ -395,6 +395,10 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     return GetMapSettings().terrain.enable ? _("Hide") : _("Show");
   } else if (name == "AirspaceToggleActionName") {
     return GetMapSettings().airspace.enable ? _("Hide") : _("Show");
+  } else if (name == "AirspaceLabelsToggleActionName") {
+    return GetMapSettings().airspace.label_selection
+      == AirspaceRendererSettings::LabelSelection::ALL
+      ? _("Hide") : _("Show");
   } else if (name == "DistanceRingsToggleActionName") {
     return GetMapSettings().distance_rings_enabled ? _("Hide") : _("Show");
   } else if (name == "MapLabelsToggleActionName") {
