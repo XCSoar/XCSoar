@@ -71,6 +71,17 @@ ContainerWindow::FocusFirstControl() noexcept
 }
 
 bool
+ContainerWindow::FocusLastControl() noexcept
+{
+  Window *control = children.FindLastControl();
+  if (control == nullptr)
+    return false;
+
+  control->SetFocus();
+  return true;
+}
+
+bool
 ContainerWindow::FocusNextControl() noexcept
 {
   Window *focused = GetFocusedWindow();

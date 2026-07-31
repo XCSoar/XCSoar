@@ -37,6 +37,22 @@ ContainerWindow::FocusFirstControl() noexcept
 }
 
 bool
+ContainerWindow::FocusLastControl() noexcept
+{
+  /* Previous from the first TabStop wraps to the last TabStop. */
+  HWND hFirst = ::GetNextDlgTabItem(hWnd, nullptr, false);
+  if (hFirst == nullptr)
+    return false;
+
+  HWND hLast = ::GetNextDlgTabItem(hWnd, hFirst, true);
+  if (hLast == nullptr)
+    return false;
+
+  ::SetFocus(hLast);
+  return true;
+}
+
+bool
 ContainerWindow::FocusNextControl() noexcept
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), false);
