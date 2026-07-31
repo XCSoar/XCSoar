@@ -21,6 +21,9 @@
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "Replay/Replay.hpp"
 
 #include <algorithm> // for std::clamp()
 
@@ -157,18 +160,32 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
     // early exit
     return;
 
+  const Font &font = *look.overlay.overlay_font;
+  canvas.Select(font);
+
+  /* DrawMapScale paints the scale bar and the map-title line
+     (AUTO / Simulator / REPLAY / …) after this overlay.  Reserve that
+     band (and bottom_margin) so the GPS label sits above the title. */
+  const int scale_band = (int)font.GetCapitalHeight()
+    + (int)Layout::GetTextPadding();
+  const int title_band = (int)font.GetHeight()
+    + (int)Layout::GetTextPadding();
+  const int clear_bottom = rc.bottom - (int)bottom_margin
+    - scale_band - title_band - Layout::Scale(2);
+
+  const int row_height = std::max((int)icon->GetSize().height,
+                                  (int)font.GetHeight());
   PixelPoint p(rc.left + Layout::FastScale(2),
-               rc.bottom - Layout::FastScale(35));
+               clear_bottom - row_height);
   icon->Draw(canvas, p);
 
   p.x += icon->GetSize().width + Layout::FastScale(4);
-  p.y = rc.bottom - Layout::FastScale(34);
+  p.y = clear_bottom - (int)font.GetAscentHeight()
+    - ((row_height - (int)font.GetHeight()) / 2);
 
   TextInBoxMode mode;
   mode.shape = LabelShape::ROUNDED_BLACK;
 
-  const Font &font = *look.overlay.overlay_font;
-  canvas.Select(font);
   TextInBox(canvas, txt, p, mode, rc, nullptr);
 }
 
@@ -341,9 +358,14 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     buffer += " ";
   }
 
-  if (Basic().gps.replay)
-    buffer += "REPLAY ";
-  else if (Basic().gps.simulator) {
+  if (Basic().gps.replay) {
+    if (backend_components != nullptr &&
+        backend_components->replay != nullptr)
+      buffer.AppendFormat(_("REPLAY %.0fx "),
+                          backend_components->replay->GetTimeScale());
+    else
+      buffer += _("REPLAY ");
+  } else if (Basic().gps.simulator) {
     buffer += _("Simulator");
     buffer += " ";
   }
