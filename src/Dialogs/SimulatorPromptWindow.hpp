@@ -46,6 +46,14 @@ public:
     :look(_look), callback(std::move(_callback)),
      have_quit_button(_quit) {}
 
+  void SelectFly() noexcept {
+    callback(Result::FLY);
+  }
+
+  void SelectSimulator() noexcept {
+    callback(Result::SIMULATOR);
+  }
+
 protected:
   /* virtual methods from class Window */
   void OnCreate() override;
