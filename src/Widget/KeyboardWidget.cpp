@@ -309,8 +309,7 @@ KeyboardWidget::GetCenterByIndex(int idx, PixelPoint &out) const noexcept
   const Button *b = GetByIndex(idx);
   if (b == nullptr || !b->IsDefined() || !b->IsVisible())
     return false;
-  const PixelRect r = b->GetPosition();
-  out = {(r.left + r.right) / 2, (r.top + r.bottom) / 2};
+  out = b->GetPosition().GetCenter();
   return true;
 }
 
@@ -572,6 +571,20 @@ KeyboardWidget::MoveFocusInGridByArrowKey(unsigned key_code, Window *w,
   return false;
 }
 
+KeyboardWidget::FocusArea
+KeyboardWidget::ClassifyFocusArea(Window *w, int grid_index,
+                                  Button *backspace,
+                                  Button *action_row_first) const noexcept
+{
+  if (grid_index >= 0)
+    return FocusArea::Grid;
+  if (backspace != nullptr && w == static_cast<Window *>(backspace))
+    return FocusArea::Backspace;
+  if (action_row_first != nullptr)
+    return FocusArea::ActionRow;
+  return FocusArea::Other;
+}
+
 bool
 KeyboardWidget::KeyPressImpl(unsigned key_code, Button *backspace,
                              Button *action_row_first) noexcept
@@ -582,24 +595,43 @@ KeyboardWidget::KeyPressImpl(unsigned key_code, Button *backspace,
   if (w == nullptr)
     return false;
 
-  if (action_row_first != nullptr &&
-      w == static_cast<Window *>(action_row_first) && key_code == KEY_UP) {
-    /* @em OK is outside the grid: first @em up is @em Space, then
-       @c FindIndexVerticalFrom (Z → A → Q → 0…9) and
-       @c RouteNumberRowAndBackspace to on-screen @em backspace. */
-    return FocusSpaceKey();
+  const int from = FindIndexOf(w);
+  const FocusArea area =
+    ClassifyFocusArea(w, from, backspace, action_row_first);
+
+  switch (area) {
+  case FocusArea::ActionRow:
+    /* Up from OK / Cancel / Clear enters at Space (or first key). */
+    if (key_code != KEY_UP)
+      return false;
+    if (FocusSpaceKey())
+      return true;
+    return FocusFirstEnabledInGrid();
+
+  case FocusArea::Backspace:
+    if (key_code == KEY_UP && action_row_first != nullptr) {
+      action_row_first->SetFocus();
+      return true;
+    }
+    return RouteNumberRowAndBackspace(key_code, backspace, w);
+
+  case FocusArea::Grid:
+    if (RouteSpaceToActionRow(key_code, action_row_first, w))
+      return true;
+    if (RouteNumberRowAndBackspace(key_code, backspace, w))
+      return true;
+    if (MoveFocusInGridByArrowKey(key_code, w, backspace, action_row_first))
+      return true;
+    /* Stay put at a geometric edge — do not use letter-creation tab
+       order (FocusNextControl). */
+    {
+      int dix = 0, diy = 0;
+      return ArrowToDirection(key_code, dix, diy);
+    }
+
+  case FocusArea::Other:
+    return false;
   }
 
-  if (RouteSpaceToActionRow(key_code, action_row_first, w))
-    return true;
-  if (backspace != nullptr && action_row_first != nullptr &&
-      w == static_cast<Window *>(backspace) && key_code == KEY_UP) {
-    /* @em backspace is not in the key grid, so
-       @c MoveFocusInGridByArrowKey is never used; send @em up to @em OK. */
-    action_row_first->SetFocus();
-    return true;
-  }
-  if (RouteNumberRowAndBackspace(key_code, backspace, w))
-    return true;
-  return MoveFocusInGridByArrowKey(key_code, w, backspace, action_row_first);
+  return false;
 }
