@@ -118,6 +118,15 @@ public:
   [[gnu::pure]]
   const char *GetButtonCaption(unsigned i) const noexcept;
 
+  /**
+   * Preferred size for the current page plus the tab strip.  Unlike
+   * GetMaximumSize(), this does not grow to the tallest page, so a
+   * short tab (e.g. Altitude Simulator) does not reserve space for a
+   * taller sibling (Setup).
+   */
+  [[gnu::pure]]
+  PixelSize GetCurrentMaximumSize() const noexcept;
+
 public:
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const noexcept override;

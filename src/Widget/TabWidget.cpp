@@ -149,6 +149,20 @@ TabWidget::GetMaximumSize() const noexcept
   return size;
 }
 
+PixelSize
+TabWidget::GetCurrentMaximumSize() const noexcept
+{
+  auto size = GetCurrentWidget().GetMaximumSize();
+  if (tab_display != nullptr) {
+    if (tab_display->IsVertical())
+      size.width += tab_display->GetRecommendedColumnWidth();
+    else
+      size.height += tab_display->GetRecommendedRowHeight();
+  }
+
+  return size;
+}
+
 void
 TabWidget::Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept
 {

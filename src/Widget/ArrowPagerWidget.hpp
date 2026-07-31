@@ -143,4 +143,11 @@ private:
    * (#VScrollWidget, #QuickGuidePageWidget).  Called from #Prepare().
    */
   void WireHorizontalSwipeToPages() noexcept;
+
+  /** Up from chrome: last form row, Quick Guide bottom bar, or page. */
+  bool FocusPageBottom() noexcept;
+
+  /** Up/Down among prev / next / Close (and into the page). */
+  bool MoveChromeFocusUp() noexcept;
+  bool MoveChromeFocusDown() noexcept;
 };

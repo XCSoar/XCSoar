@@ -9,7 +9,23 @@
 void
 TwoWidgets::UpdateLayout() noexcept
 {
-  const auto layout = CalculateLayout(rc);
+  ApplyLayout();
+}
+
+void
+TwoWidgets::ApplyLayout() noexcept
+{
+  auto layout = CalculateLayout(rc);
+  first->Move(layout.first);
+  second->Move(layout.second);
+
+  if (!vertical)
+    return;
+
+  /* Bottom pane spans the full width.  The first CalculateLayout()
+     still saw the previous window width inside GetMaximumSize() (e.g.
+     TextWidget help), so recompute after Move assigned the new width. */
+  layout = CalculateLayout(rc);
   first->Move(layout.first);
   second->Move(layout.second);
 }
@@ -152,9 +168,17 @@ void
 TwoWidgets::Show(const PixelRect &rc) noexcept
 {
   this->rc = rc;
-  const auto layout = CalculateLayout(rc);
+  auto layout = CalculateLayout(rc);
   first->Show(layout.first);
   second->Show(layout.second);
+
+  if (vertical) {
+    /* Same as ApplyLayout()'s second pass: after Show the bottom pane
+       has the final width for wrapped text measurement. */
+    layout = CalculateLayout(rc);
+    first->Move(layout.first);
+    second->Move(layout.second);
+  }
 }
 
 bool
@@ -174,9 +198,7 @@ void
 TwoWidgets::Move(const PixelRect &rc) noexcept
 {
   this->rc = rc;
-  const auto layout = CalculateLayout(rc);
-  first->Move(layout.first);
-  second->Move(layout.second);
+  ApplyLayout();
 }
 
 bool

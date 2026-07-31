@@ -59,5 +59,6 @@ public:
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
+  bool SetFocus() noexcept override;
   bool HasFocus() const noexcept override;
 };

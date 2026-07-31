@@ -101,6 +101,10 @@ PagerWidget::SetCurrent(unsigned i, bool click) noexcept
   if (click && !new_child.widget->Click())
     return false;
 
+  /* If the hidden page kept keyboard focus, Up/Down and list keys
+     would stop working (e.g. Task Manager Manage → Browse). */
+  const bool steal_focus = visible && old_child.widget->HasFocus();
+
   if (visible)
     old_child.widget->Hide();
 
@@ -111,8 +115,11 @@ PagerWidget::SetCurrent(unsigned i, bool click) noexcept
     new_child.widget->Prepare(*parent, position);
   }
 
-  if (visible)
+  if (visible) {
     new_child.widget->Show(position);
+    if (steal_focus)
+      new_child.widget->SetFocus();
+  }
 
   OnPageFlipped();
   return true;
