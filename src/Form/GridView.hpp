@@ -104,6 +104,10 @@ private:
   
   signed FindNextInRow(signed currIndex, Direction direction, bool cycle) const noexcept;
   signed FindNextInColumn(signed currIndex, Direction direction, bool cycle) const noexcept;
+
+  /** True at the first/last cell of the focused item's row. */
+  [[gnu::pure]]
+  bool IsAtRowEdge(signed focus_pos, Direction direction) const noexcept;
   
   struct PageBounds {
     unsigned pageStart;

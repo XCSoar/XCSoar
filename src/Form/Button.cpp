@@ -262,13 +262,14 @@ Button::GetState() const noexcept
     return ButtonState::DISABLED;
   else if (down)
     return ButtonState::PRESSED;
-  /* #ButtonPanel cursor selection uses `look.selected` (bright); that
-     must come before #HasFocus (`look.focused`) so the current action
-     is not downgraded when the list still holds focus. */
-  else if (HasCursorKeys() && selected)
-    return ButtonState::SELECTED;
+  /* Real keyboard focus uses `look.focused`.  Armed cursor-selection
+     (list still focused, Left/Right chose an action) uses
+     `look.selected` so the list cursor and action stay visible
+     together — same model as Alternates. */
   else if (HasCursorKeys() && HasFocus())
     return ButtonState::FOCUSED;
+  else if (HasCursorKeys() && selected)
+    return ButtonState::SELECTED;
   else
     return ButtonState::ENABLED;
 }

@@ -109,16 +109,23 @@ ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end) noexcept
   const unsigned width = RangeMaxWidth(start, end);
   const unsigned total_height = rc.GetHeight();
   const unsigned max_height = n * Layout::GetMaximumControlHeight();
-  const unsigned row_height =
-    std::max(1u, std::min(total_height, max_height) / n);
+  /* Cap the stack so landscape left bars stay control-sized; only the
+     few leftover pixels from used_height / n go to the last button. */
+  const unsigned used_height = std::min(total_height, max_height);
 
-  auto button_rc = rc.CutLeftSafe(width).TopAligned(row_height);
+  auto column_rc = rc.CutLeftSafe(width);
 
+  /* Proportional tops/bottoms keep every rect non-inverted even when
+     used_height < n (integer division would otherwise overrun). */
   for (unsigned i = start; i < end; ++i) {
-    buttons[i]->Move(button_rc);
+    const unsigned idx = i - start;
+    PixelRect button_rc = column_rc;
+    button_rc.top = column_rc.top + (int)(used_height * idx / n);
+    button_rc.bottom = column_rc.top + (int)(used_height * (idx + 1) / n);
+    if (button_rc.bottom <= button_rc.top)
+      button_rc.bottom = button_rc.top + 1;
 
-    button_rc.top = button_rc.bottom;
-    button_rc.bottom += row_height;
+    buttons[i]->Move(button_rc);
   }
 
   return rc;
@@ -139,15 +146,19 @@ ButtonPanel::HorizontalRange(PixelRect rc,
       ? max_row_height
       : std::max(Layout::GetMinimumControlHeight(),
                  total_height / 2));
-  const unsigned width = std::max(1u, total_width / n);
+  auto row_rc = rc.CutBottomSafe(row_height);
 
-  auto button_rc = rc.CutBottomSafe(row_height).LeftAligned(width);
-
+  /* Proportional left/right absorbs the total_width % n remainder into
+     later buttons (no empty strip) and avoids inverted rects. */
   for (unsigned i = start; i < end; ++i) {
-    buttons[i]->Move(button_rc);
+    const unsigned idx = i - start;
+    PixelRect button_rc = row_rc;
+    button_rc.left = row_rc.left + (int)(total_width * idx / n);
+    button_rc.right = row_rc.left + (int)(total_width * (idx + 1) / n);
+    if (button_rc.right <= button_rc.left)
+      button_rc.right = button_rc.left + 1;
 
-    button_rc.left = button_rc.right;
-    button_rc.right += width;
+    buttons[i]->Move(button_rc);
   }
 
   return rc;
