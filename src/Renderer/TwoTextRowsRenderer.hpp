@@ -21,6 +21,15 @@ class TwoTextRowsRenderer {
   /** Right edge of the last DrawSecondRow() text, or 0 if not yet drawn. */
   mutable int second_row_right_edge = 0;
 
+  /**
+   * Top of the row the edges above were measured in.  Cleared when a
+   * draw method is called for a different row so right-before-left
+   * callers are not affected by the previous item.
+   */
+  mutable int edge_row_top = 0x7fffffff;
+
+  void PrepareRow(const PixelRect &rc) const noexcept;
+
 public:
   /**
    * @return the row height (including top and bottom padding)
@@ -58,7 +67,7 @@ public:
    * Draws a right-aligned column in the first row (but with the
    * second font which is usually smaller) and returns the new "right"
    * coordinate.  Skips drawing if it would overlap text previously
-   * drawn by DrawFirstRow().
+   * drawn by DrawFirstRow() in the same row.
    */
   int DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
                         const char *text) const noexcept;
@@ -66,7 +75,7 @@ public:
   /**
    * Draws a right-aligned column in the second row and returns the
    * new "right" coordinate.  Skips drawing if it would overlap text
-   * previously drawn by DrawSecondRow().
+   * previously drawn by DrawSecondRow() in the same row.
    */
   int DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
                          const char *text) const noexcept;
