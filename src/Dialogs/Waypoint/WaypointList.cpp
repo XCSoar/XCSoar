@@ -154,10 +154,10 @@ class WaypointFilterWidget;
 class WaypointListWidget
   : public ListWidget, public DataFieldListener,
     NullBlackboardListener {
-  Waypoints &way_points;
   TwoTextRowsRenderer row_renderer;
 
 protected:
+  Waypoints &way_points;
   WndForm &dialog;
   WaypointList items;
 
@@ -195,6 +195,13 @@ public:
   void UpdateList();
 
   virtual void OnWaypointListEnter();
+
+  /**
+   * Open waypoint details for the cursor row (Details button / F1).
+   * Unlike #OnWaypointListEnter in the select dialog, this does not
+   * confirm the selection.
+   */
+  virtual void ShowDetails() noexcept;
 
   WaypointPtr GetCursorObject() const {
     unsigned i = GetList().GetCursorIndex();
@@ -261,6 +268,7 @@ public:
      allow_navigation(_allow_navigation), allow_edit(_allow_edit) {}
 
   void OnWaypointListEnter() override;
+  void ShowDetails() noexcept override;
 };
 
 class WaypointFilterWidget : public RowFormWidget {
@@ -286,6 +294,7 @@ public:
 class WaypointListButtons : public RowFormWidget {
   WndForm &dialog;
   WaypointListWidget *list;
+  Button *details_button = nullptr;
 
 public:
   WaypointListButtons(const DialogLook &look, WndForm &_dialog)
@@ -297,11 +306,20 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept override {
-    AddButton(_("Details"), [this](){
-      list->OnWaypointListEnter();
+    details_button = AddButton(_("Details"), [this](){
+      list->ShowDetails();
     });
 
     AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
+  }
+
+  bool KeyPress(unsigned key_code) noexcept override {
+    if (key_code == KEY_F1 && details_button != nullptr) {
+      details_button->Click();
+      return true;
+    }
+
+    return false;
   }
 };
 
@@ -647,6 +665,20 @@ WaypointListWidget::OnWaypointListEnter()
 }
 
 void
+WaypointListWidget::ShowDetails() noexcept
+{
+  auto waypoint = GetCursorObject();
+  if (waypoint == nullptr)
+    return;
+
+  /* Same browse semantics as Alternates: details may Goto/edit; if that
+     commits a state change, dismiss this picker like a successful select. */
+  if (dlgWaypointDetailsShowModalForBrowseParent(
+        &way_points, std::move(waypoint), true, true))
+    dialog.SetModalResult(mrOK);
+}
+
+void
 WaypointListPersistentWidget::OnWaypointListEnter()
 {
   if (items.empty()) {
@@ -654,10 +686,18 @@ WaypointListPersistentWidget::OnWaypointListEnter()
     return;
   }
 
+  ShowDetails();
+}
+
+void
+WaypointListPersistentWidget::ShowDetails() noexcept
+{
+  auto waypoint = GetCursorObject();
+  if (waypoint == nullptr)
+    return;
+
   if (dlgWaypointDetailsShowModalForBrowseParent(
-        data_components->waypoints.get(),
-        WaypointPtr(items[GetList().GetCursorIndex()].waypoint), allow_navigation,
-        allow_edit))
+        &way_points, std::move(waypoint), allow_navigation, allow_edit))
     dialog.SetModalResult(mrOK);
 }
 
