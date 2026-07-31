@@ -60,6 +60,13 @@ protected:
   [[gnu::pure]]
   std::pair<PixelRect,PixelRect> CalculateLayout(const PixelRect &rc) const noexcept;
 
+  /**
+   * Apply #rc to both children.  In vertical mode, run a second pass
+   * after the bottom pane has its final width so widgets whose height
+   * depends on width (wrapped help text) measure correctly.
+   */
+  void ApplyLayout() noexcept;
+
 public:
   /* virtual methods from Widget */
   PixelSize GetMinimumSize() const noexcept override;

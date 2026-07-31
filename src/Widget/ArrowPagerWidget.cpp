@@ -5,8 +5,10 @@
 #include "ArrowPagerGesture.hpp"
 #include "QuickGuidePageWidget.hpp"
 #include "VScrollWidget.hpp"
+#include "WindowWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
@@ -212,6 +214,99 @@ ArrowPagerWidget::HasFocus() const noexcept
 }
 
 bool
+ArrowPagerWidget::FocusPageBottom() noexcept
+{
+  Widget &page = GetCurrentWidget();
+  if (auto *qg = dynamic_cast<QuickGuidePageWidget *>(&page)) {
+    if (qg->FocusBottomBar(true))
+      return true;
+    return page.SetFocus();
+  }
+
+  /* Prefer the last TabStop so Up from chrome reverses Down leaving
+     a RowForm (SetFocus alone would hit the first control). */
+  Widget *inner = &page;
+  if (auto *vs = dynamic_cast<VScrollWidget *>(&page))
+    inner = &vs->GetWidget();
+
+  if (auto *ww = dynamic_cast<WindowWidget *>(inner)) {
+    auto *cw = dynamic_cast<ContainerWindow *>(&ww->GetWindow());
+    if (cw != nullptr && cw->FocusLastControl())
+      return true;
+  }
+
+  return page.SetFocus();
+}
+
+bool
+ArrowPagerWidget::MoveChromeFocusUp() noexcept
+{
+  /* Portrait chrome order: prev | next | Close.  Up walks toward the
+     page: Close → next → prev → page bottom. */
+  if (close_button.HasFocus()) {
+    if (next_button.IsEnabled()) {
+      next_button.SetFocus();
+      return true;
+    }
+    if (previous_button.IsEnabled()) {
+      previous_button.SetFocus();
+      return true;
+    }
+    return FocusPageBottom();
+  }
+
+  if (next_button.HasFocus()) {
+    if (previous_button.IsEnabled()) {
+      previous_button.SetFocus();
+      return true;
+    }
+    return FocusPageBottom();
+  }
+
+  if (previous_button.HasFocus())
+    return FocusPageBottom();
+
+  return false;
+}
+
+bool
+ArrowPagerWidget::MoveChromeFocusDown() noexcept
+{
+  if (close_button.HasFocus())
+    return true; /* end of chrome chain */
+
+  if (previous_button.HasFocus()) {
+    if (next_button.IsEnabled())
+      next_button.SetFocus();
+    else
+      close_button.SetFocus();
+    return true;
+  }
+
+  if (next_button.HasFocus()) {
+    close_button.SetFocus();
+    return true;
+  }
+
+  /* Quick Guide bottom bar → chrome.  Other pages return false so
+     WndForm can walk TabStops (z-order FocusNext would bounce back). */
+  auto *qg = dynamic_cast<QuickGuidePageWidget *>(&GetCurrentWidget());
+  if (qg == nullptr || !qg->IsBottomBarFocused())
+    return false;
+
+  if (previous_button.IsEnabled()) {
+    previous_button.SetFocus();
+    return true;
+  }
+  if (next_button.IsEnabled()) {
+    next_button.SetFocus();
+    return true;
+  }
+  close_button.SetFocus();
+  return true;
+}
+
+bool
 ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 {
   if (PagerWidget::KeyPress(key_code))
@@ -220,70 +315,12 @@ ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
   if (extra != nullptr && extra->KeyPress(key_code))
     return true;
 
-  auto focus_page_bottom = [this]() noexcept {
-    Widget &page = GetCurrentWidget();
-    if (auto *qg = dynamic_cast<QuickGuidePageWidget *>(&page)) {
-      if (qg->FocusBottomBar(true))
-        return true;
-    }
-    return page.SetFocus();
-  };
-
   switch (key_code) {
   case KEY_UP:
-    /* Chrome focus chain (portrait: prev | next | Close):
-       Close → next → prev → page bottom bar / content. */
-    if (close_button.HasFocus()) {
-      if (next_button.IsEnabled()) {
-        next_button.SetFocus();
-        return true;
-      }
-      if (previous_button.IsEnabled()) {
-        previous_button.SetFocus();
-        return true;
-      }
-      return focus_page_bottom();
-    }
-    if (next_button.HasFocus()) {
-      if (previous_button.IsEnabled()) {
-        previous_button.SetFocus();
-        return true;
-      }
-      return focus_page_bottom();
-    }
-    if (previous_button.HasFocus())
-      return focus_page_bottom();
-    return false;
+    return MoveChromeFocusUp();
 
   case KEY_DOWN:
-    /* Page content / bottom bar finished with Down, or chrome
-       arrows — move toward Close.  Do not use dialog FocusNext:
-       window z-order would send focus back into the scroller. */
-    if (close_button.HasFocus())
-      return true; /* end of chain */
-
-    if (previous_button.HasFocus()) {
-      if (next_button.IsEnabled())
-        next_button.SetFocus();
-      else
-        close_button.SetFocus();
-      return true;
-    }
-    if (next_button.HasFocus()) {
-      close_button.SetFocus();
-      return true;
-    }
-
-    if (previous_button.IsEnabled()) {
-      previous_button.SetFocus();
-      return true;
-    }
-    if (next_button.IsEnabled()) {
-      next_button.SetFocus();
-      return true;
-    }
-    close_button.SetFocus();
-    return true;
+    return MoveChromeFocusDown();
 
   case KEY_LEFT:
     if (Previous(true))

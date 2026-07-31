@@ -365,6 +365,18 @@ QuickGuidePageWidget::FocusBottomBar(bool from_end) noexcept
 }
 
 bool
+QuickGuidePageWidget::IsBottomBarFocused() const noexcept
+{
+  if (checkbox != nullptr && checkbox->HasFocus())
+    return true;
+  if (button1 != nullptr && button1->HasFocus())
+    return true;
+  if (button2 != nullptr && button2->HasFocus())
+    return true;
+  return false;
+}
+
+bool
 QuickGuidePageWidget::KeyPress(unsigned key_code) noexcept
 {
   if (scroll_widget->HasFocus()) {

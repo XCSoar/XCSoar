@@ -115,6 +115,15 @@ public:
    */
   bool FocusBottomBar(bool from_end=false) noexcept;
 
+  /**
+   * True when the checkbox or a bottom-bar button has focus (not the
+   * scrollable content).  ArrowPager uses this so Down from the bar
+   * enters the prev/next/Close chrome without stealing Down from
+   * ordinary form pages (e.g. Configuration panels).
+   */
+  [[gnu::pure]]
+  bool IsBottomBarFocused() const noexcept;
+
   ~QuickGuidePageWidget() noexcept override;
 
   /**

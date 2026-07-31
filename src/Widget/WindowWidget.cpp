@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "WindowWidget.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "ui/window/Window.hpp"
 
 WindowWidget::WindowWidget() noexcept = default;
@@ -73,6 +74,26 @@ WindowWidget::Move(const PixelRect &rc) noexcept
      Move() may be called before or during Show() (e.g. SolidWidget
      nested UI during Show()). */
   window->Move(rc);
+}
+
+bool
+WindowWidget::SetFocus() noexcept
+{
+  assert(window != nullptr);
+  assert(window->IsDefined());
+
+  /* Prefer a child TabStop (e.g. form rows).  Fall back to the window
+     itself when it is a TabStop (e.g. Configuration TabMenuDisplay).
+     Returning false lets ArrowPager put focus on Close instead. */
+  if (auto *container = dynamic_cast<ContainerWindow *>(window.get()))
+    if (container->FocusFirstControl())
+      return true;
+
+  if (!window->IsTabStop())
+    return false;
+
+  window->SetFocus();
+  return true;
 }
 
 bool
