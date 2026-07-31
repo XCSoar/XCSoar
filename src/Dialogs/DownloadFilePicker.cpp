@@ -322,10 +322,11 @@ DownloadFilePicker(FileType file_type)
   TWidgetDialog<DownloadFilePickerWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Download"));
-  dialog.AddButton(_("Cancel"), mrCancel);
   dialog.SetWidget(dialog, file_type);
   dialog.GetWidget().CreateButtons();
-  dialog.EnableCursorSelection();
+  dialog.AddButton(_("Cancel"), mrCancel);
+  /* No EnableCursorSelection: Left/Right page the list (ListControl).
+     Up/Down walk list ↔ Download/Cancel; Enter downloads the cursor row. */
   dialog.ShowModal();
 
   return dialog.GetWidget().GetPath();

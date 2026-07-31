@@ -6,10 +6,33 @@
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/dim/Rect.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Screen/Layout.hpp"
 #include "util/Macros.hpp"
 #include "Asset.hpp"
 #include "Form/CheckBox.hpp"
+
+bool
+MultiSelectListWidget::KeyPress(unsigned key_code) noexcept
+{
+  if (ListWidget::KeyPress(key_code))
+    return true;
+
+  if (!IsDefined() || !GetList().HasFocus())
+    return false;
+
+  switch (key_code) {
+  case KEY_RETURN:
+  case KEY_SPACE:
+    /* Activate (toggle) via ListControl; always consume so the dialog
+       action bar does not treat Return as OK while browsing files. */
+    GetList().OnKeyFromWidgetParent(KEY_RETURN);
+    return true;
+
+  default:
+    return false;
+  }
+}
 
 void
 MultiSelectListWidget::DrawCheckboxText(Canvas &canvas, const PixelRect &rc,
