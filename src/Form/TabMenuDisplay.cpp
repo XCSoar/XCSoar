@@ -225,16 +225,24 @@ TabMenuDisplay::OnResize(PixelSize new_size) noexcept
 bool
 TabMenuDisplay::OnKeyCheck(unsigned key_code) const noexcept
 {
- switch (key_code) {
+  switch (key_code) {
+  case KEY_RETURN:
+  case KEY_LEFT:
+  case KEY_RIGHT:
+    return true;
 
- case KEY_RETURN:
- case KEY_LEFT:
- case KEY_RIGHT:
-   return true;
+  case KEY_DOWN:
+    /* Only claim Down while another menu item follows; at the last
+       item, let the dialog move focus to Close / arrows. */
+    return cursor + 1 < GetNumPages();
 
- default:
-   return false;
- }
+  case KEY_UP:
+    /* Same for Up at the first item. */
+    return cursor > 0;
+
+  default:
+    return false;
+  }
 }
 
 bool
@@ -246,10 +254,12 @@ TabMenuDisplay::OnKeyDown(unsigned key_code) noexcept
     return true;
 
   case KEY_RIGHT:
+  case KEY_DOWN:
     HighlightNext();
     return true;
 
   case KEY_LEFT:
+  case KEY_UP:
     HighlightPrevious();
     return true;
 

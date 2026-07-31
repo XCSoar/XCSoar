@@ -8,6 +8,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Form/TabMenuDisplay.hpp"
 #include "Form/TabMenuData.hpp"
 #include "Form/CheckBox.hpp"
@@ -367,6 +368,16 @@ void dlgConfigurationShowModal()
   });
 
   dialog.FinishPreliminary(pager);
+
+  /* Esc on a settings panel returns to the menu (same as Close);
+     on the menu itself, leave Esc to cancel the dialog. */
+  dialog.SetKeyDownFunction([&dialog](unsigned key_code) {
+    if (key_code != KEY_ESCAPE || pager->GetCurrentIndex() == 0)
+      return false;
+
+    OnCloseClicked(dialog);
+    return true;
+  });
 
   dialog.ShowModal();
 
