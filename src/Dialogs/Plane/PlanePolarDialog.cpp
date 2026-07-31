@@ -24,8 +24,8 @@ class PlanePolarWidget final
   enum Controls {
     NAME,
     INVALID,
-    SHAPE,
     REFERENCE_MASS,
+    SHAPE,
   };
 
   Plane plane;
@@ -107,13 +107,13 @@ PlanePolarWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   Add(std::make_unique<TextWidget>());
   SetRowVisible(INVALID, false);
 
-  DataFieldListener *listener = this;
-  Add(std::make_unique<PolarShapeEditWidget>(plane.polar_shape, listener));
-
   AddFloat(_("Reference Mass"), _("Reference mass of the polar."),
            "%.0f %s", "%.0f",
            0, 1000, 5, false,
            UnitGroup::MASS, plane.polar_shape.reference_mass);
+
+  DataFieldListener *listener = this;
+  Add(std::make_unique<PolarShapeEditWidget>(plane.polar_shape, listener));
 }
 
 void

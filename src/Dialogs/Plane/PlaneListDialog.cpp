@@ -64,7 +64,7 @@ class PlaneListWidget final
     }
   };
 
-  WndForm *form;
+  WidgetDialog *form;
   Button *edit_button, *copy_button, *delete_button, *load_button;
 
   std::vector<ListItem> list;
@@ -123,6 +123,9 @@ PlaneListWidget::UpdateList() noexcept
   edit_button->SetEnabled(!empty);
   copy_button->SetEnabled(!empty);
   delete_button->SetEnabled(!empty);
+
+  if (form != nullptr)
+    form->ResyncButtonPanelSelection();
 }
 
 void
@@ -362,6 +365,8 @@ dlgPlanesShowModal() noexcept
   dialog.SetWidget();
   dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
+  /* Like Alternates: list cursor picks the plane; Left/Right arm an
+     action (New/Edit/…); Enter runs it. */
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();

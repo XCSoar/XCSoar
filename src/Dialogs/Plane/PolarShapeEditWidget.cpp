@@ -156,7 +156,6 @@ PolarShapeEditWidget::CreateControls(ContainerWindow &panel,
   const unsigned columns_width = width > label_width ? width - label_width : 1U;
   const unsigned edit_width =
     std::max(1U, columns_width / unsigned(ARRAY_SIZE(points)));
-  const unsigned edit_remainder = columns_width - edit_width * ARRAY_SIZE(points);
 
   const char *v_text = C_("Glider polar coefficient", "Polar V");
   const char *w_text = C_("Glider polar coefficient", "Polar W");
@@ -168,36 +167,10 @@ PolarShapeEditWidget::CreateControls(ContainerWindow &panel,
   v_label = std::make_unique<WndFrame>(panel, look, label_rc);
   v_label->SetText(v_text);
 
-  PixelRect field_rc;
-  field_rc.left = label_width;
-  field_rc.top = 0;
-  field_rc.right = field_rc.left + edit_width;
-  field_rc.bottom = row_height;
-  for (unsigned i = 0; i < ARRAY_SIZE(points); ++i) {
-    if (i + 1 == ARRAY_SIZE(points))
-      field_rc.right = width;
-
-    points[i].v = std::make_unique<WndProperty>(panel, look, "",
-                                                field_rc, 0, style);
-    DataFieldFloat *df = new DataFieldFloat("%.0f", "%.0f %s",
-                                            0, 300, 0, 1, false,
-                                            listener);
-    points[i].v->SetDataField(df);
-
-    field_rc.left = field_rc.right;
-    field_rc.right = field_rc.left + edit_width +
-      (i + 1 == ARRAY_SIZE(points) ? edit_remainder : 0u);
-  }
-
   label_rc.top += row_height;
   label_rc.bottom += row_height;
   w_label = std::make_unique<WndFrame>(panel, look, label_rc);
   w_label->SetText(w_text);
-
-  field_rc.left = label_width;
-  field_rc.top = row_height;
-  field_rc.right = field_rc.left + edit_width;
-  field_rc.bottom = height;
 
   double step = 0.01, min = -10;
   switch (Units::current.vertical_speed_unit) {
@@ -215,21 +188,29 @@ PolarShapeEditWidget::CreateControls(ContainerWindow &panel,
     break;
   }
 
+  /* Create controls column-by-column (V then W) so Up/Down focus
+     walk matches the visual grid instead of sweeping each row. */
+  unsigned col_left = label_width;
   for (unsigned i = 0; i < ARRAY_SIZE(points); ++i) {
-    if (i + 1 == ARRAY_SIZE(points))
-      field_rc.right = width;
+    const unsigned col_right = (i + 1 == ARRAY_SIZE(points))
+      ? width
+      : col_left + edit_width;
 
+    PixelRect v_rc(col_left, 0, col_right, row_height);
+    points[i].v = std::make_unique<WndProperty>(panel, look, "",
+                                                v_rc, 0, style);
+    points[i].v->SetDataField(new DataFieldFloat("%.0f", "%.0f %s",
+                                                 0, 300, 0, 1, false,
+                                                 listener));
+
+    PixelRect w_rc(col_left, row_height, col_right, height);
     points[i].w = std::make_unique<WndProperty>(panel, look, "",
-                                                field_rc, 0, style);
-    DataFieldFloat *df = new DataFieldFloat("%.2f", "%.2f %s",
-                                            min, 0, 0, step, false,
-                                            listener);
+                                                w_rc, 0, style);
+    points[i].w->SetDataField(new DataFieldFloat("%.2f", "%.2f %s",
+                                                 min, 0, 0, step, false,
+                                                 listener));
 
-    points[i].w->SetDataField(df);
-
-    field_rc.left = field_rc.right;
-    field_rc.right = field_rc.left + edit_width +
-      (i + 1 == ARRAY_SIZE(points) ? edit_remainder : 0u);
+    col_left = col_right;
   }
 
   for (unsigned i = 0; i < ARRAY_SIZE(points); ++i)
