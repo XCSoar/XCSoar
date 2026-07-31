@@ -129,7 +129,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   for (unsigned i = 0; i < 6; i++) {
     VarioBar[i].y += y0 + dy_variobar;
-    VarioBar[i].x = rc.right - Layout::Scale(VarioBar[i].x);
+    VarioBar[i].x = Layout::Scale(VarioBar[i].x) + rc.left;
   }
 
   VarioBar[0].y -= Offset;
@@ -138,7 +138,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   for (unsigned i = 0; i < 4; i++) {
     VarioBarAvg[i].y += y0 + dy_variobar_av;
-    VarioBarAvg[i].x = rc.right-Layout::Scale(VarioBarAvg[i].x);
+    VarioBarAvg[i].x = Layout::Scale(VarioBarAvg[i].x) + rc.left;
   }
 
   VarioBarAvg[0].y -= OffsetAvg;
@@ -148,21 +148,21 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   for (unsigned i = 0; i < 6; i++) {
     mc_arrow[i].y = Layout::Scale(mc_arrow[i].y) + y0
       - OffsetMC + dy_variobar_mc;
-    mc_arrow[i].x = rc.right - Layout::Scale(mc_arrow[i].x);
+    mc_arrow[i].x = Layout::Scale(mc_arrow[i].x) + rc.left;
   }
 
   // prepare clipping arrow
   for (unsigned i = 0; i < 6; i++) {
     clipping_arrow[i].y = Layout::Scale(clipping_arrow[i].y) + y0 - Offset
       + clipping_arrow_offset + dy_variobar;
-    clipping_arrow[i].x = rc.right - Layout::Scale(clipping_arrow[i].x);
+    clipping_arrow[i].x = Layout::Scale(clipping_arrow[i].x) + rc.left;
   }
 
   // prepare clipping avg
   for (unsigned i = 0; i < 4; i++) {
     clipping_arrow_av[i].y = Layout::Scale(clipping_arrow_av[i].y) + y0 - OffsetAvg
       + clipping_arrow_av_offset + dy_variobar_av;
-    clipping_arrow_av[i].x = rc.right-Layout::Scale(clipping_arrow_av[i].x);
+    clipping_arrow_av[i].x = Layout::Scale(clipping_arrow_av[i].x) + rc.left;
   }
 
   // draw actual vario bar
@@ -210,7 +210,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (text_size.width < Layout::Scale(18u)) {
     style.align = TextInBoxMode::Alignment::RIGHT;
-    TextInBox(canvas, Value, {rc.right, y0}, style, rc);
+    TextInBox(canvas, Value, {rc.left + Layout::Scale(18), y0}, style, rc);
   } else
-    TextInBox(canvas, Value, {rc.right - Layout::Scale(18), y0}, style, rc);
+    TextInBox(canvas, Value, {rc.left, y0}, style, rc);
 }

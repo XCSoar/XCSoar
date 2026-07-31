@@ -123,7 +123,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   for (unsigned i = 0; i < 6; i++) {
     GlideBar[i].y += y0 + dy_glidebar;
-    GlideBar[i].x = Layout::Scale(GlideBar[i].x) + rc.left;
+    GlideBar[i].x = rc.right - Layout::Scale(GlideBar[i].x);
   }
 
   GlideBar[0].y -= Offset;
@@ -132,7 +132,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   for (unsigned i = 0; i < 4; i++) {
     GlideBar0[i].y += y0 + dy_glidebar0;
-    GlideBar0[i].x = Layout::Scale(GlideBar0[i].x) + rc.left;
+    GlideBar0[i].x = rc.right - Layout::Scale(GlideBar0[i].x);
   }
 
   GlideBar0[0].y -= Offset0;
@@ -148,14 +148,14 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   for (unsigned i = 0; i < 6; i++) {
     clipping_arrow[i].y = Layout::Scale(clipping_arrow[i].y) + y0 - Offset
       + clipping_arrow_offset + dy_glidebar;
-    clipping_arrow[i].x = Layout::Scale(clipping_arrow[i].x) + rc.left;
+    clipping_arrow[i].x = rc.right - Layout::Scale(clipping_arrow[i].x);
   }
 
   // prepare clipping arrow mc0
   for (unsigned i = 0; i < 4; i++) {
     clipping_arrow0[i].y = Layout::Scale(clipping_arrow0[i].y) + y0 - Offset0
       + clipping_arrow0_offset + dy_glidebar0;
-    clipping_arrow0[i].x = Layout::Scale(clipping_arrow0[i].x) + rc.left;
+    clipping_arrow0[i].x = rc.right - Layout::Scale(clipping_arrow0[i].x);
   }
 
   // draw actual glide bar
@@ -211,10 +211,14 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (cross_sign != 0) {
     canvas.Select(task_look.bearing_pen);
-    canvas.DrawLine({Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5)},
-                    {Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5)});
-    canvas.DrawLine({Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5)},
-                    {Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5)});
+    canvas.DrawLine({rc.right - Layout::Scale(9 + 5),
+                     y0 + cross_sign * Layout::Scale(9 - 5)},
+                    {rc.right - Layout::Scale(9 - 5),
+                     y0 + cross_sign * Layout::Scale(9 + 5)});
+    canvas.DrawLine({rc.right - Layout::Scale(9 + 5),
+                     y0 + cross_sign * Layout::Scale(9 + 5)},
+                    {rc.right - Layout::Scale(9 - 5),
+                     y0 + cross_sign * Layout::Scale(9 - 5)});
   }
 
   canvas.SetTextColor(COLOR_BLACK);
@@ -226,8 +230,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (text_size.width < Layout::Scale(18u)) {
     style.align = TextInBoxMode::Alignment::RIGHT;
-    TextInBox(canvas, Value, {Layout::Scale(18), y0}, style, rc);
+    TextInBox(canvas, Value, {rc.right, y0}, style, rc);
   } else
-    TextInBox(canvas, Value, {0, y0}, style, rc);
+    TextInBox(canvas, Value, {rc.right - Layout::Scale(18), y0}, style, rc);
 
 }
