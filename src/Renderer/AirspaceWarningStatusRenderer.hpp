@@ -7,6 +7,7 @@
 
 struct PixelRect;
 class Canvas;
+class Font;
 
 /**
  * Inside / Near badge used by the airspace warnings list and the
@@ -27,10 +28,15 @@ struct AirspaceWarningStatusBadge {
   }
 };
 
+/**
+ * Width to reserve at the right of a row for
+ * DrawAirspaceWarningStatus().  Uses @p font for the caption measure.
+ */
 [[nodiscard]]
 int
-AirspaceWarningStatusWidth(Canvas &canvas) noexcept;
+AirspaceWarningStatusWidth(Canvas &canvas, const Font &font) noexcept;
 
 void
-DrawAirspaceWarningStatus(Canvas &canvas, PixelRect status_rc,
+DrawAirspaceWarningStatus(Canvas &canvas, const Font &font,
+                          PixelRect status_rc,
                           AirspaceWarningStatusBadge status) noexcept;

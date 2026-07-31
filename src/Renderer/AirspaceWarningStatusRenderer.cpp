@@ -9,15 +9,26 @@
 
 #include <algorithm>
 
-int
-AirspaceWarningStatusWidth(Canvas &canvas) noexcept
+[[gnu::pure]]
+static int
+CaptionWidth(Canvas &canvas) noexcept
 {
   return std::max(canvas.CalcTextWidth(_("Inside")),
                   canvas.CalcTextWidth(_("Near")));
 }
 
+int
+AirspaceWarningStatusWidth(Canvas &canvas, const Font &font) noexcept
+{
+  canvas.Select(font);
+
+  /* caption + padding on both sides + gap to the row edge */
+  return CaptionWidth(canvas) + 3 * (int)Layout::GetTextPadding();
+}
+
 void
-DrawAirspaceWarningStatus(Canvas &canvas, PixelRect status_rc,
+DrawAirspaceWarningStatus(Canvas &canvas, const Font &font,
+                          PixelRect status_rc,
                           AirspaceWarningStatusBadge status) noexcept
 {
   Color state_color;
@@ -42,25 +53,19 @@ DrawAirspaceWarningStatus(Canvas &canvas, PixelRect status_rc,
     return;
   }
 
-  if (state_text == nullptr)
-    return;
+  canvas.Select(font);
 
   const unsigned padding = Layout::GetTextPadding();
   const PixelSize state_text_size = canvas.CalcTextSize(state_text);
 
-  /* Size the badge from the caption instead of the reserved column:
-     the column is measured with the widest caption and would leave no
-     room around a caption that is exactly as wide. */
+  /* Fill the reserved column (pad top/bottom/right).  Both captions
+     share this rectangle so Inside and Near stay the same width. */
   PixelRect badge_rc = status_rc;
   badge_rc.top += padding;
   badge_rc.bottom -= padding;
   badge_rc.right -= padding;
-  badge_rc.left = std::max(status_rc.left,
-                           badge_rc.right
-                           - (int)(state_text_size.width + 2 * padding));
 
   canvas.DrawFilledRectangle(badge_rc, state_color);
-
   canvas.SetTextColor(COLOR_BLACK);
   canvas.DrawText(badge_rc.CenteredTopLeft(state_text_size), state_text);
 }
