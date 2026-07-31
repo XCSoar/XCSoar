@@ -8,8 +8,14 @@
 #include "MapSettings.hpp"
 #include "Asset.hpp"
 #include "Math/Angle.hpp"
+#include "Math/Screen.hpp"
 #include "Screen/Layout.hpp"
 #include "util/Macros.hpp"
+
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <span>
 
 static void
 DrawMirroredPolygon(std::span<const BulkPixelPoint> src,
@@ -80,65 +86,87 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
 }
 
 
+static constexpr BulkPixelPoint AircraftLarge[] = {
+  {1, -7},
+  {1, -1},
+  {17, -1},
+  {17, 1},
+  {1, 1},
+  {1, 10},
+  {5, 10},
+  {5, 12},
+  {-5, 12},
+  {-5, 10},
+  {-1, 10},
+  {-1, 1},
+  {-17, 1},
+  {-17, -1},
+  {-1, -1},
+  {-1, -7},
+};
+
+static constexpr BulkPixelPoint AircraftSmall[] = {
+  {1, -5},
+  {1, 0},
+  {14, 0},
+  {14, 1},
+  {1, 1},
+  {1, 8},
+  {4, 8},
+  {4, 9},
+  {-3, 9},
+  {-3, 8},
+  {0, 8},
+  {0, 1},
+  {-13, 1},
+  {-13, 0},
+  {0, 0},
+  {0, -5},
+};
+
+void
+AircraftRenderer::DrawSimple(Canvas &canvas, const AircraftLook &look,
+                             Angle angle, PixelPoint aircraft_pos,
+                             int scale, bool large) noexcept
+{
+  const auto src = large
+    ? std::span<const BulkPixelPoint>{AircraftLarge}
+    : std::span<const BulkPixelPoint>{AircraftSmall};
+
+  std::array<BulkPixelPoint, ARRAY_SIZE(AircraftLarge)> aircraft;
+  assert(src.size() <= aircraft.size());
+  std::copy_n(src.begin(), src.size(), aircraft.begin());
+
+  PolygonRotateShift({aircraft.data(), src.size()},
+                     aircraft_pos, angle, scale);
+
+  canvas.SelectHollowBrush();
+  canvas.Select(look.aircraft_simple2_pen);
+  canvas.DrawPolygon(aircraft.data(), src.size());
+  canvas.SelectBlackBrush();
+  canvas.Select(look.aircraft_simple1_pen);
+  canvas.DrawPolygon(aircraft.data(), src.size());
+}
+
 static void
 DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
                    const Angle angle,
-                   const PixelPoint aircraft_pos, bool large)
+                   const PixelPoint aircraft_pos, bool large) noexcept
 {
-  static constexpr BulkPixelPoint AircraftLarge[] = {
-    {1, -7},
-    {1, -1},
-    {17, -1},
-    {17, 1},
-    {1, 1},
-    {1, 10},
-    {5, 10},
-    {5, 12},
-    {-5, 12},
-    {-5, 10},
-    {-1, 10},
-    {-1, 1},
-    {-17, 1},
-    {-17, -1},
-    {-1, -1},
-    {-1, -7},
-  };
+  const auto *aircraft = large ? AircraftLarge : AircraftSmall;
+  const std::size_t aircraft_points = large
+    ? ARRAY_SIZE(AircraftLarge)
+    : ARRAY_SIZE(AircraftSmall);
 
-  static constexpr BulkPixelPoint AircraftSmall[] = {
-    {1, -5},
-    {1, 0},
-    {14, 0},
-    {14, 1},
-    {1, 1},
-    {1, 8},
-    {4, 8},
-    {4, 9},
-    {-3, 9},
-    {-3, 8},
-    {0, 8},
-    {0, 1},
-    {-13, 1},
-    {-13, 0},
-    {0, 0},
-    {0, -5},
-   };
-
-  static constexpr unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
-  static constexpr unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
-
-  const auto *Aircraft = large ? AircraftLarge : AircraftSmall;
-  const std::size_t AircraftPoints = large ?
-                                  AIRCRAFT_POINTS_LARGE : AIRCRAFT_POINTS_SMALL;
-
-  const RotatedPolygonRenderer renderer({Aircraft, AircraftPoints},
+  const RotatedPolygonRenderer renderer({aircraft, aircraft_points},
                                         aircraft_pos, angle);
 
   canvas.SelectHollowBrush();
   canvas.Select(look.aircraft_simple2_pen);
-  renderer.Draw(canvas, 0, AircraftPoints);
+  renderer.Draw(canvas, 0, aircraft_points);
   canvas.SelectBlackBrush();
   canvas.Select(look.aircraft_simple1_pen);
-  renderer.Draw(canvas, 0, AircraftPoints);
+  renderer.Draw(canvas, 0, aircraft_points);
 }
 
 static void

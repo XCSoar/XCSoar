@@ -371,6 +371,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/AirspaceLabelRenderer.cpp \
 	$(SRC)/Renderer/AirspaceListRenderer.cpp \
 	$(SRC)/Renderer/AirspacePreviewRenderer.cpp \
+	$(SRC)/Renderer/AirspaceWarningStatusRenderer.cpp \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \

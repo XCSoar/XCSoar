@@ -58,6 +58,18 @@ static constexpr Color COLOR_ADMONITION_TIP =
 static constexpr Color COLOR_LIGHT_GREEN = Color(0x00, 0xc0, 0x00);
 
 /**
+ * Airspace warning list / map-item status badge colours.
+ */
+static constexpr Color COLOR_AIRSPACE_WARNING_INSIDE =
+  Color(254, 50, 50);
+static constexpr Color COLOR_AIRSPACE_WARNING_NEAR =
+  Color(254, 254, 50);
+static constexpr Color COLOR_AIRSPACE_WARNING_INSIDE_ACK =
+  Color(254, 100, 100);
+static constexpr Color COLOR_AIRSPACE_WARNING_NEAR_ACK =
+  Color(254, 254, 100);
+
+/**
  * XCTherm overlay palette.
  */
 static constexpr Color COLOR_XCTHERM_BLUE = Color(0x00, 0x00, 0xc8);

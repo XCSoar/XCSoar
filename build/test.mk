@@ -2623,6 +2623,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Renderer/AirspacePreviewRenderer.cpp \
+	$(SRC)/Renderer/AirspaceWarningStatusRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
