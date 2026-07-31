@@ -57,7 +57,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
   AddMultipleFiles(_("Waypoints"),
                    _("Primary waypoints files.  Supported file types are "
                      "Cambridge/WinPilot files (.dat), "
-                     "Zander files (.wpz) or SeeYou files (.cup)."),
+                     "Zander files (.wpz) or SeeYou files (.cup, .cupx)."),
                    ProfileKeys::WaypointFileList,
                    GetFileTypePatterns(FileType::WAYPOINT),
                    FileType::WAYPOINT);
