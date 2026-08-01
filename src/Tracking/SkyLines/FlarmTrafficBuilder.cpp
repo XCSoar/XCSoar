@@ -57,10 +57,6 @@ SkyLinesTracking::FlarmTrafficBuilder::FillRelative(FlarmTraffic &traffic,
   traffic.relative_north = vec.distance * sc.second;
   traffic.relative_east = vec.distance * sc.first;
 
-  /* DrawFLARMTraffic skips targets with relative_east==0 */
-  if (traffic.relative_east == 0 && traffic.relative_north != 0)
-    traffic.relative_east = 1e-3;
-
   traffic.location_available = true;
 
   if (traffic.altitude_available) {
