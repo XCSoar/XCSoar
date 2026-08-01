@@ -294,6 +294,17 @@ GlueMapWindow::SetBottomMargin(unsigned margin) noexcept
 }
 
 void
+GlueMapWindow::SetTopRightMargin(unsigned margin) noexcept
+{
+  if (margin == top_right_margin)
+    /* no change, don't redraw */
+    return;
+
+  top_right_margin = margin;
+  QuickRedraw();
+}
+
+void
 GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 {
   if (follow_mode != FOLLOW_PAN || Layout::landscape) {
