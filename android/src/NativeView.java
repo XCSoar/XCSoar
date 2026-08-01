@@ -524,10 +524,7 @@ class NativeView extends SurfaceView
       offsetY += p.getY();
     }
 
-    float x = event.getX() - offsetX;
-    float y = event.getY() - offsetY;
-
-    edgeTouchFilter.onTouchEvent(event, x, y);
+    edgeTouchFilter.onTouchEvent(event, offsetX, offsetY);
     return true;
   }
 

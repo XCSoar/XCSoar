@@ -247,7 +247,12 @@ TopWindow::OnEvent(const Event &event)
     return OnMouseWheel(event.point, (int)event.param);
 
   case Event::POINTER_DOWN:
-    return OnMultiTouchDown();
+    if (!OnMultiTouchDown())
+      return false;
+    return OnMultiTouchMove(event.point, event.point2);
+
+  case Event::POINTER_MOVE:
+    return OnMultiTouchMove(event.point, event.point2);
 
   case Event::POINTER_UP:
     return OnMultiTouchUp();

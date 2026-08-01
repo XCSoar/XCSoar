@@ -109,11 +109,13 @@ class EdgeTouchFilter implements View.OnApplyWindowInsetsListener {
    * Process a touch event.  Edge gestures are silently rejected;
    * all other events are forwarded to {@link EventBridge}.
    *
-   * @param event   the raw MotionEvent
-   * @param x       view-relative X coordinate (after offset correction)
-   * @param y       view-relative Y coordinate (after offset correction)
+   * @param event    the raw MotionEvent
+   * @param offsetX  window-to-view X offset (see NativeView)
+   * @param offsetY  window-to-view Y offset
    */
-  void onTouchEvent(MotionEvent event, float x, float y) {
+  void onTouchEvent(MotionEvent event, float offsetX, float offsetY) {
+    final float x = event.getX() - offsetX;
+    final float y = event.getY() - offsetY;
     final int finalX = (int)x;
     final int finalY = (int)y;
 
@@ -171,11 +173,13 @@ class EdgeTouchFilter implements View.OnApplyWindowInsetsListener {
       }
 
       EventBridge.onMouseMove(finalX, finalY);
+      if (event.getPointerCount() >= 2)
+        forwardTwoPointers(event, offsetX, offsetY, true);
       break;
 
     case MotionEvent.ACTION_POINTER_DOWN:
       if (!edgeTouchRejected)
-        EventBridge.onPointerDown();
+        forwardTwoPointers(event, offsetX, offsetY, false);
       break;
 
     case MotionEvent.ACTION_POINTER_UP:
@@ -190,6 +194,29 @@ class EdgeTouchFilter implements View.OnApplyWindowInsetsListener {
       edgeDownForwarded = false;
       break;
     }
+  }
+
+  /**
+   * Forward the first two active pointers to native code.
+   *
+   * @param move  true for {@link EventBridge#onPointerMove}, false for
+   *              {@link EventBridge#onPointerDown}
+   */
+  private static void forwardTwoPointers(MotionEvent event,
+                                         float offsetX, float offsetY,
+                                         boolean move) {
+    if (event.getPointerCount() < 2)
+      return;
+
+    final int x1 = (int)(event.getX(0) - offsetX);
+    final int y1 = (int)(event.getY(0) - offsetY);
+    final int x2 = (int)(event.getX(1) - offsetX);
+    final int y2 = (int)(event.getY(1) - offsetY);
+
+    if (move)
+      EventBridge.onPointerMove(x1, y1, x2, y2);
+    else
+      EventBridge.onPointerDown(x1, y1, x2, y2);
   }
 
   /**
