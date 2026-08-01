@@ -22,7 +22,21 @@ Version 7.45 - not yet released
     ``label``), gesture ``data`` format, softkey ``location``,
     label escapes, complete GCE list, and ``RemoteStick`` Quick Menu
   - document ``AirspaceLabels`` input event
+  - document map pinch-to-zoom on touchscreens that report both
+    finger positions #2790
 * ui
+  - Add pinch-to-zoom on the map for touchscreens that report both
+    finger positions (Android, iOS): two fingers scale about the
+    pinch centroid and can pan at the same time; a two-finger drag
+    or twist enters pan mode, a pinch that only zooms keeps
+    following the aircraft #2790
+  - Add two-finger twist to temporarily rotate the map; the angle is
+    held while panning and restored when pan mode is left #2790
+  - Animate keyboard and mouse-wheel map zoom on non-e-ink displays
+    so scale steps feel continuous after a pinch; free zoom continues
+    from an off-list (pinched) scale, and snaps to the usual scale
+    list again once the current scale is close to a list value
+  - Keep the north arrow clear of the on-screen menu and zoom buttons
   - Improve simulator discoverability: startup tip to steer by
     dragging from the glider or via Altitude / Speed Ground InfoBoxes
     (5 s); Welcome Quick Guide paragraph in simulator mode; add
