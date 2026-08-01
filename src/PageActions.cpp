@@ -30,6 +30,7 @@
 #include "Weather/EDL/StateController.hpp"
 #endif
 #ifdef HAVE_HTTP
+#include "Weather/SkySight/FieldControls.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/xctherm/FieldControls.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
@@ -104,7 +105,8 @@ PageActions::ClearPageOverlays() noexcept
 #ifdef HAVE_HTTP
   if (!weather.skysight.IsSuspendedForPan())
     if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
-      skysight->ApplyPageOverlay({});
+      if (!skysight->GetActiveLayerId().empty())
+        skysight->DeactivateLayer();
 #endif
 }
 
@@ -155,7 +157,8 @@ PageActions::LeaveSkySightOverlay() noexcept
 
   session.LeavePage();
   if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
-    skysight->ApplyPageOverlay({});
+    if (!skysight->GetActiveLayerId().empty())
+      skysight->DeactivateLayer();
 #endif
 }
 
@@ -252,11 +255,10 @@ PageActions::ApplySkySightOverlay(const PageLayout &layout) noexcept
 {
 #ifdef HAVE_HTTP
   auto &session = CommonInterface::SetUIState().weather.skysight;
-  const bool first_enter = session.EnterPage();
-
-  if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
-    skysight->ApplyPageOverlay(layout.skysight_overlay.c_str(),
-                               first_enter && !session.cursor_initialized);
+  session.cursor_initialized =
+    layout.skysight_time != PageLayout::SKYSIGHT_TIME_AUTO;
+  session.EnterPage();
+  SkySight::ApplyCursorFromPageLayout(layout);
 #else
   (void)layout;
 #endif

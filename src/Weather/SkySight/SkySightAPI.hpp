@@ -103,6 +103,7 @@ public:
   bool QueueForecastDatafile(std::string_view layer_id, time_t forecast_time,
                              std::string_view link) noexcept;
   bool PreloadDefaultDatafile(std::string_view layer_id) noexcept;
+  void RequestForecastMetadata(std::string_view layer_id) noexcept;
   bool PreloadDatafiles(std::string_view layer_id) noexcept;
   bool PreloadAllDatafiles() noexcept;
   void BeginPreloadProgress() noexcept;
