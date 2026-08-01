@@ -27,6 +27,7 @@ LIBMAPWINDOW_SOURCES = \
 	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \
 	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp \
 	$(SRC)/MapWindow/GlueMapWindowDisplayMode.cpp \
+	$(SRC)/MapWindow/UserMapScale.cpp \
 	$(SRC)/MapWindow/TargetMapWindow.cpp \
 	$(SRC)/MapWindow/TargetMapWindowEvents.cpp \
 	$(SRC)/MapWindow/TargetMapWindowDrag.cpp

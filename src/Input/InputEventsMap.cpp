@@ -10,19 +10,12 @@
 #include "Profile/Keys.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "MapWindow/UserMapScale.hpp"
 #include "Units/Units.hpp"
-#include "UIState.hpp"
 #include "Pan.hpp"
 #include "PageActions.hpp"
 #include "Math/Constants.hpp"
 #include "Screen/Layout.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Globals.hpp"
-#endif
-
-#include <algorithm> // for std::clamp()
-
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
 //	auto on - Turn on if not already
@@ -179,36 +172,14 @@ InputEvents::sub_AutoZoom(int vswitch)
 void
 InputEvents::sub_SetZoom(double value)
 {
-  MapSettings &settings_map = CommonInterface::SetMapSettings();
   GlueMapWindow *map_window = PageActions::ShowMap();
   if (map_window == NULL)
     return;
 
-  const DisplayMode displayMode = CommonInterface::GetUIState().display_mode;
-  if (settings_map.auto_zoom_enabled &&
-      !(displayMode == DisplayMode::CIRCLING && settings_map.circle_zoom_enabled) &&
-      !IsPanning()) {
-    settings_map.auto_zoom_enabled = false;  // disable autozoom if user manually changes zoom
-    Profile::Set(ProfileKeys::AutoZoom, false);
-    Message::AddMessage(_("Auto. zoom off"));
-  }
+  if (!IsPanning())
+    DisableAutoZoomForManualScale();
 
-  auto vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
-  auto scale_2min_distance = vmin * 12;
-  const double scale_100m = 10;
-  double scale_1600km = 1600*100;
-
-#ifdef ENABLE_OPENGL
-  if (OpenGL::max_map_scale > 0)
-    scale_1600km = std::min(scale_1600km,
-                            double(OpenGL::max_map_scale));
-#endif
-
-  auto minreasonable = displayMode == DisplayMode::CIRCLING
-    ? scale_100m
-    : std::max(scale_100m, scale_2min_distance);
-
-  value = std::clamp(value, minreasonable, scale_1600km);
+  value = ClampUserMapScale(value);
   map_window->SetMapScale(value);
   map_window->QuickRedraw();
 }
