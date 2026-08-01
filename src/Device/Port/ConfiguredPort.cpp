@@ -4,7 +4,7 @@
 #include "ConfiguredPort.hpp"
 #include "UDPPort.hpp"
 #include "TCPPort.hpp"
-#include "SpectateFilePort.hpp"
+#include "OpenSpectateFilePort.hpp"
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
 #include "LogFile.hpp"
@@ -181,9 +181,9 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
       ? DeviceConfig::DEFAULT_SPECTATE_PATH
       : config.path.c_str();
 
-    return std::make_unique<SpectateFilePort>(Path(spectate_path),
-                                              config.port_name,
-                                              listener, handler);
+    return OpenSpectateFilePort(Path(spectate_path),
+                                config.port_name,
+                                listener, handler);
   }
 
   case DeviceConfig::PortType::PTY: {

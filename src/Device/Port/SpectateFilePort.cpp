@@ -2,18 +2,34 @@
 // Copyright The XCSoar Project
 
 #include "SpectateFilePort.hpp"
+#include "OpenSpectateFilePort.hpp"
 #include "Device/Driver/Condor3Spectate.hpp"
 #include "io/DataHandler.hpp"
 
+#include <memory>
 #include <stdexcept>
+
+std::unique_ptr<Port>
+OpenSpectateFilePort(Path path, const char *own_cn,
+                     PortListener *listener,
+                     DataHandler &handler)
+{
+  return std::make_unique<SpectateFilePort>(path, own_cn, listener, handler);
+}
 
 SpectateFilePort::SpectateFilePort(Path _path, const char *_own_cn,
                                    PortListener *listener,
                                    DataHandler &handler) noexcept
-  :Port(listener, handler), path(_path)
+  :Port(listener, handler), SuspensibleThread("SpectateFilePort"),
+   path(_path)
 {
   if (_own_cn != nullptr)
     own_cn = _own_cn;
+}
+
+SpectateFilePort::~SpectateFilePort() noexcept
+{
+  StopRxThread();
 }
 
 PortState
@@ -53,17 +69,19 @@ SpectateFilePort::SetBaudrate(unsigned)
 bool
 SpectateFilePort::StopRxThread()
 {
-  running = false;
-  timer.Cancel();
+  if (Thread::IsDefined()) {
+    BeginStop();
+    Thread::Join();
+  }
+
   return true;
 }
 
 bool
 SpectateFilePort::StartRxThread()
 {
-  running = true;
-  Poll();
-  timer.Schedule(std::chrono::seconds(1));
+  StopRxThread();
+  SuspensibleThread::Start();
   return true;
 }
 
@@ -102,11 +120,10 @@ SpectateFilePort::Poll() noexcept
 }
 
 void
-SpectateFilePort::OnTimer() noexcept
+SpectateFilePort::Run() noexcept
 {
-  if (!running)
-    return;
-
   Poll();
-  timer.Schedule(std::chrono::seconds(1));
+
+  while (!WaitForStopped(std::chrono::seconds(1)))
+    Poll();
 }
