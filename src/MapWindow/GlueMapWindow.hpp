@@ -53,10 +53,17 @@ class GlueMapWindow : public MapWindow {
 
 #ifdef HAVE_MULTI_TOUCH
     /**
-     * Dragging the map with two fingers; enters the "real" pan mode
-     * as soon as the user releases the finger press.
+     * Two-finger drag without scale/rotation yet, or single-finger
+     * continuation after a pinch; may enter the "real" pan mode when
+     * the gesture ends.
      */
     DRAG_MULTI_TOUCH_PAN,
+
+    /**
+     * Two-finger pan, pinch-zoom and twist when both finger positions
+     * are available.
+     */
+    DRAG_MULTI_TOUCH_PINCH,
 #endif
 
     DRAG_PAN,
@@ -68,6 +75,37 @@ class GlueMapWindow : public MapWindow {
   PixelPoint drag_start;
   TrackingGestureManager gestures;
   bool ignore_single_click = false;
+
+  /**
+   * A multi-touch gesture currently owns map projection updates
+   * (location, scale, angle).  This is distinct from pan UI
+   * (#FOLLOW_PAN, fullscreen layout, crosshair): the gesture may own
+   * the map long before pan UI is committed.
+   */
+  [[gnu::pure]]
+  bool GestureOwnsMap() const noexcept {
+#ifdef HAVE_MULTI_TOUCH
+    return drag_mode == DRAG_MULTI_TOUCH_PAN ||
+      drag_mode == DRAG_MULTI_TOUCH_PINCH;
+#else
+    return false;
+#endif
+  }
+
+  /**
+   * Should pan chrome (crosshair, pan info) be drawn?  Hidden during
+   * an early multi-touch gesture that has not yet committed pan UI,
+   * so the crosshair is not painted at the pre-fullscreen map centre.
+   */
+  [[gnu::pure]]
+  bool IsPanChromeVisible() const noexcept {
+#ifdef HAVE_MULTI_TOUCH
+    if (GestureOwnsMap())
+      return IsPanning() &&
+        (multi_touch_pan_ui || multi_touch_was_panning);
+#endif
+    return IsPanning();
+  }
 
 #ifdef ENABLE_OPENGL
   KineticManager kinetic_x{std::chrono::milliseconds{700}};
@@ -95,6 +133,53 @@ class GlueMapWindow : public MapWindow {
    * The projection which was active when dragging started.
    */
   Projection drag_projection;
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Animate keyboard / mouse-wheel free-scale zoom.  Pinch stays
+   * instantaneous.
+   */
+  UI::Timer zoom_timer{[this]{ OnZoomTimer(); }};
+  double zoom_from_map_scale = 0;
+  double zoom_to_map_scale = 0;
+  std::chrono::steady_clock::time_point zoom_start_time{};
+#endif
+
+#ifdef HAVE_MULTI_TOUCH
+  double pinch_start_distance = 0;
+  double pinch_start_map_scale = 0;
+  GeoPoint pinch_anchor_geo = GeoPoint::Invalid();
+  PixelPoint pinch_start_centroid{};
+  PixelPoint pinch_last_a{}, pinch_last_b{};
+
+  /** True after finger separation crosses the scale dead zone. */
+  bool pinch_scaling = false;
+
+  /** Pan UI was already active at multi-touch down. */
+  bool multi_touch_was_panning = false;
+
+  /**
+   * Pan UI committed for this gesture (#CommitMultiTouchPanUI).
+   * Pure pinch-zoom leaves this false and returns to follow.
+   */
+  bool multi_touch_pan_ui = false;
+
+  /** Re-anchor single-finger pan after the second finger lifts. */
+  bool resume_pan_after_pinch = false;
+
+  Angle pinch_start_finger_angle = Angle::Zero();
+  Angle pinch_start_screen_angle = Angle::Zero();
+
+  /** True after finger twist crosses the rotate dead zone. */
+  bool pinch_rotating = false;
+
+  /**
+   * Hold #manual_rotation_angle instead of the configured orientation.
+   * Cleared by UpdateScreenAngle() when pan mode is left.
+   */
+  bool manual_rotation = false;
+  Angle manual_rotation_angle = Angle::Zero();
+#endif
 
   DisplayMode last_display_mode = DisplayMode::NONE;
 
@@ -137,6 +222,16 @@ class GlueMapWindow : public MapWindow {
 
   UI::Notify redraw_notify{[this]{ PartialRedraw(); }};
 
+  /**
+   * Nesting count for #BeginCoalesceFullRedraw() /
+   * #EndCoalesceFullRedraw().  While non-zero, #FullRedraw() only
+   * sets #full_redraw_pending.
+   */
+  unsigned coalesce_full_redraw = 0;
+
+  /** A #FullRedraw() was requested while coalescing was active. */
+  bool full_redraw_pending = false;
+
 public:
   GlueMapWindow(const Look &look) noexcept;
   virtual ~GlueMapWindow() noexcept;
@@ -157,6 +252,13 @@ public:
   void SetBottomMarginFactor(unsigned margin_factor) noexcept;
 
   /**
+   * Sets the width at the right edge of the map that is covered by the
+   * overlay buttons, so HUD elements in the top right corner can avoid
+   * them.
+   */
+  void SetTopRightMargin(unsigned margin) noexcept;
+
+  /**
    * Update the blackboard from DeviceBlackboard and
    * InterfaceBlackboard.
    */
@@ -171,6 +273,19 @@ public:
    * Resumt threads that are owned by this object.
    */
   void ResumeThreads() noexcept;
+
+  /**
+   * Coalesce #FullRedraw() calls until a matching
+   * #EndCoalesceFullRedraw().  Used while the main window applies a
+   * multi-step page layout so the map is not painted at intermediate
+   * sizes.  Distinct from #DeferRedraw(), which schedules an async
+   * invalidate.
+   */
+  void BeginCoalesceFullRedraw() noexcept {
+    ++coalesce_full_redraw;
+  }
+
+  void EndCoalesceFullRedraw() noexcept;
 
   /**
    * Trigger a full redraw of the map.
@@ -241,6 +356,8 @@ protected:
 
 #ifdef HAVE_MULTI_TOUCH
   bool OnMultiTouchDown() noexcept override;
+  bool OnMultiTouchMove(PixelPoint a, PixelPoint b) noexcept override;
+  bool OnMultiTouchUp() noexcept override;
 #endif
 
   bool OnKeyDown(unsigned key_code) noexcept override;
@@ -276,6 +393,12 @@ private:
   void SaveDisplayModeScales() noexcept;
 
   /**
+   * Persist the current projection scale as the circling or cruise
+   * scale, depending on the active display mode.
+   */
+  void PersistCurrentScale() noexcept;
+
+  /**
    * The attribute visible_projection has been edited.
    */
   void OnProjectionModified() noexcept {}
@@ -288,6 +411,39 @@ private:
 
   void UpdateScreenAngle() noexcept;
   void UpdateProjection() noexcept;
+
+#ifdef HAVE_MULTI_TOUCH
+  /**
+   * Discard a pending one-finger gesture trail without firing it.
+   */
+  void DiscardPendingFingerGesture() noexcept;
+
+  /**
+   * Begin multi-touch ownership of the map projection (not pan UI).
+   */
+  void BeginMultiTouchOwnership() noexcept;
+
+  /**
+   * Clear multi-touch session flags (ownership, pinch, rotation).
+   * Does not change #drag_mode or #follow_mode.
+   */
+  void ResetMultiTouchSessionState() noexcept;
+
+  /**
+   * Commit pan UI for the running gesture: fullscreen map and pan
+   * menu, with #FOLLOW_PAN only after the layout has been applied.
+   * No-op when already committed or pan UI was active at touch-down.
+   */
+  void CommitMultiTouchPanUI() noexcept;
+
+  /**
+   * Re-base pinch anchors after a layout change (pan UI commit) so the
+   * next motion does not jump in scale, rotation, or location.
+   */
+  void RebasePinchAfterLayoutChange(PixelPoint a, PixelPoint b,
+                                    double distance,
+                                    PixelPoint centroid) noexcept;
+#endif
 
 public:
   void SetLocation(const GeoPoint location) noexcept;
@@ -310,6 +466,13 @@ public:
 
   void UpdateDisplayMode() noexcept;
   void SetMapScale(double scale) noexcept;
+  void SetFreeMapScale(double scale) noexcept;
+
+  /**
+   * Smoothly animate to a free map scale (keyboard / mouse wheel).
+   * No-op path on builds without OpenGL: applies the scale immediately.
+   */
+  void AnimateFreeMapScale(double scale) noexcept;
 
 protected:
   DisplayMode GetDisplayMode() const noexcept {
@@ -325,6 +488,8 @@ private:
 
 #ifdef ENABLE_OPENGL
   void OnKineticTimer() noexcept;
+  void CancelZoomAnimation() noexcept;
+  void OnZoomTimer() noexcept;
   void NoteTerrainQuantisationUserActivity() noexcept;
   void OnTerrainQuantisationTimer() noexcept;
 #endif

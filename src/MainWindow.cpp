@@ -103,6 +103,12 @@ MainWindow::GetShowMenuButtonRect(const PixelRect rc) noexcept
   return GetMapOverlayButtonRect(rc, rc.top + Layout::GetTextPadding());
 }
 
+/**
+ * The width of the overlay button column in the top right corner, or 0
+ * if there is none.  The zoom buttons alone are placed in the bottom
+ * left corner and do not occupy this column.
+ */
+
 [[gnu::pure]]
 PixelRect
 MainWindow::GetShowQuickMenuButtonRect(const PixelRect rc) noexcept
@@ -283,10 +289,47 @@ MainWindow::GetMapAreaRect() const noexcept
 }
 
 void
+MainWindow::BeginCoalesceMapLayout() noexcept
+{
+  if (coalesce_map_layout++ != 0)
+    return;
+
+  coalesce_map_redraw = map != nullptr;
+  if (coalesce_map_redraw)
+    map->BeginCoalesceFullRedraw();
+}
+
+void
+MainWindow::EndCoalesceMapLayout() noexcept
+{
+  assert(coalesce_map_layout > 0);
+
+  if (--coalesce_map_layout > 0)
+    return;
+
+  if (map_layout_pending) {
+    map_layout_pending = false;
+    LayoutMapArea();
+    UpdateMapOverlayButtonLayout();
+  }
+
+  if (coalesce_map_redraw) {
+    coalesce_map_redraw = false;
+    if (map != nullptr)
+      map->EndCoalesceFullRedraw();
+  }
+}
+
+void
 MainWindow::LayoutMapArea() noexcept
 {
   if (map == nullptr)
     return;
+
+  if (coalesce_map_layout > 0) {
+    map_layout_pending = true;
+    return;
+  }
 
   PixelRect main_rect = GetMainRect();
   const PixelRect top_rect = GetTopWidgetRect(main_rect, top_widget);

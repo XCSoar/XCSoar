@@ -16,6 +16,11 @@
 #include "PageActions.hpp"
 #include "Math/Constants.hpp"
 #include "Screen/Layout.hpp"
+#include "Asset.hpp"
+#include "Hardware/CPU.hpp"
+
+#include <cmath>
+
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
 //	auto on - Turn on if not already
@@ -180,8 +185,11 @@ InputEvents::sub_SetZoom(double value)
     DisableAutoZoomForManualScale();
 
   value = ClampUserMapScale(value);
-  map_window->SetMapScale(value);
-  map_window->QuickRedraw();
+  if (HasEPaper() || IsSlowCPU()) {
+    map_window->SetMapScale(value);
+    map_window->QuickRedraw();
+  } else
+    map_window->AnimateFreeMapScale(value);
 }
 
 void
@@ -221,7 +229,17 @@ InputEvents::sub_ScaleZoom(int vswitch)
 
   auto value = projection.GetMapScale();
 
-  if (projection.HaveScaleList()) {
+  /* Stay on the discrete scale list when the current scale already
+     sits on a list value (or on e-ink / slow CPUs).  After a pinch the
+     scale is usually off-list; then step with free factors so zoom
+     continues from that value instead of snapping first.
+     StepMapScale(..., 0) returns the nearest list value. */
+  const bool use_scale_list = projection.HaveScaleList() &&
+    (HasEPaper() || IsSlowCPU() ||
+     (value > 0 &&
+      std::fabs(value - projection.StepMapScale(value, 0)) / value < 0.02));
+
+  if (use_scale_list) {
     value = projection.StepMapScale(value, -vswitch);
   } else {
     if (vswitch == 1)

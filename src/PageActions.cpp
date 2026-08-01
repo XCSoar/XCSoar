@@ -7,6 +7,7 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "MainWindow.hpp"
+#include "util/ScopeExit.hxx"
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "Dialogs/Weather/WeatherDialog.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
@@ -550,6 +551,12 @@ PageActions::LoadLayout(const PageLayout &layout)
   PageLayout active = layout;
   active.Normalise();
 
+  /* InfoBoxes and the bottom widget each resize the map; coalesce so
+     the map jumps once to the final rectangle. */
+  auto &main_window = *CommonInterface::main_window;
+  main_window.BeginCoalesceMapLayout();
+  AtScopeExit(&main_window) { main_window.EndCoalesceMapLayout(); };
+
   DisablePan();
 
   LoadInfoBoxes(active.infobox_config);
@@ -562,8 +569,7 @@ PageActions::LoadLayout(const PageLayout &layout)
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState(false);
-  if (CommonInterface::main_window != nullptr)
-    CommonInterface::main_window->ScheduleRefreshInfoBoxes();
+  main_window.ScheduleRefreshInfoBoxes();
 }
 
 void
