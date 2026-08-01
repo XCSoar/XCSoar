@@ -77,6 +77,10 @@ State::IsDirty() const noexcept
     return draft.xctherm_layer != baseline.xctherm_layer ||
       draft.xctherm_time != baseline.xctherm_time;
 
+  case PageLayout::Overlay::SKYSIGHT:
+    return draft.skysight_overlay != baseline.skysight_overlay ||
+      draft.skysight_time != baseline.skysight_time;
+
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     return false;
@@ -112,7 +116,8 @@ CommitDraft(const PageLayout &draft) noexcept
     : -1;
   if (!WeatherMapOverlay::EnsureWeatherOverlayOnPage(settings, page_index,
                                                      draft.overlay,
-                                                     rasp_field))
+                                                     rasp_field,
+                                                     draft.skysight_overlay.c_str()))
     return false;
 
   WeatherMapOverlay::CopyWeatherOverlayCursors(settings.pages[page_index],
