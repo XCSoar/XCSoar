@@ -737,7 +737,11 @@ shown below. \gesturespec{dr}
 {\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/gesture_right.pdf}}] R: Turn screen page retrograde (Normal, Full-screen...) 
 \item[\raisebox{-1em}
 {\includegraphics[angle=0,width=0.1\linewidth,keepaspectratio='true']{figures/gesture_urdl.pdf}}] URDL, denoting a P: \textbf{P}an-mode. Might also be invoked by 
-moving two fingers apart on the screen.
+moving two fingers on the screen.  On touchscreens that report both
+finger positions (Android, iOS), pinching zooms the map about the point
+between the fingers, and twisting rotates it temporarily.  A two-finger
+drag or twist enters pan mode, and the temporary rotation is held until
+pan mode is left; a pinch that only zooms keeps following the aircraft.
 \end{itemize}
 \vspace{2em}
 
