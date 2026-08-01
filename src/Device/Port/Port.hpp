@@ -259,6 +259,13 @@ public:
     return WaitForByte(static_cast<std::byte>(token), env, timeout);
   }
 
+  /**
+   * Return the underlying port when this instance wraps another port.
+   */
+  virtual Port &GetImplementationPort() noexcept {
+    return *this;
+  }
+
 protected:
   /**
    * Implementations should call this method whenever the return value
