@@ -45,12 +45,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
 
   // for each item in traffic
   for (auto &traffic : flarm.traffic.list) {
-    const bool ownship_altitude_available = basic.pressure_altitude_available ||
-      basic.gps_altitude_available;
-
-    const RoughAltitude ownship_altitude = basic.pressure_altitude_available
-      ? RoughAltitude(basic.pressure_altitude)
-      : RoughAltitude(basic.gps_altitude);
+    const auto ownship_altitude = basic.GetAnyAltitude();
 
     // Keep the cached display name (callsign) in sync with current sources.
     // Skip for no_track targets and random IDs: they must not be resolved
@@ -89,14 +84,16 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
           basic.location.longitude;
     }
 
-    // Calculate absolute altitude
+    // Calculate absolute altitude (same ownship preference as
+    // NMEAInfo::GetAnyAltitude / online FillRelative)
     if (!traffic.absolute_altitude) {
-      traffic.altitude_available = ownship_altitude_available;
+      traffic.altitude_available = ownship_altitude.has_value();
       if (traffic.altitude_available)
         traffic.altitude = traffic.relative_altitude +
-          ownship_altitude;
-    } else if (ownship_altitude_available && traffic.altitude_available) {
-      traffic.relative_altitude = traffic.altitude - ownship_altitude;
+          RoughAltitude(*ownship_altitude);
+    } else if (ownship_altitude && traffic.altitude_available) {
+      traffic.relative_altitude =
+        traffic.altitude - RoughAltitude(*ownship_altitude);
     }
 
     // Calculate average climb rate

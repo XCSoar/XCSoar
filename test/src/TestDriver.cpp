@@ -3176,8 +3176,16 @@ TestFlarmTrafficBuilder()
     90, true, FlarmId::Undefined(), 1, nullptr);
 
   ok1(traffic.source == FlarmTraffic::SourceType::OGN);
+  ok1(traffic.absolute_location);
+  ok1(traffic.absolute_altitude);
   ok1(SkyLinesTracking::FlarmTrafficBuilder::FillRelative(traffic, basic));
   ok1(traffic.relative_east != 0 || traffic.relative_north != 0);
+  ok1(equals(double(traffic.relative_altitude), 200));
+
+  basic.pressure_altitude = 950;
+  basic.pressure_altitude_available.Update(basic.clock);
+  ok1(SkyLinesTracking::FlarmTrafficBuilder::FillRelative(traffic, basic));
+  ok1(equals(double(traffic.relative_altitude), 250));
 
   FlarmTraffic device_traffic{};
   device_traffic.source = FlarmTraffic::SourceType::FLARM;
@@ -3316,7 +3324,7 @@ int main()
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
-             + 59 /* Condor3UDP */ + 24 /* FlarmTrafficBuilder */
+             + 59 /* Condor3UDP */ + 29 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */);
   TestGeneric();

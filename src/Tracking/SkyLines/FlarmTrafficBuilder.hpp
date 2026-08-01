@@ -36,7 +36,8 @@ public:
                           FlarmId traffic_id) noexcept;
 
   /**
-   * Populate relative_north/east/altitude from own-ship GPS.
+   * Populate relative_north/east/altitude from own-ship position
+   * and #NMEAInfo::GetAnyAltitude (pressure, then baro, then GPS).
    *
    * @return false if relative position cannot be computed
    */

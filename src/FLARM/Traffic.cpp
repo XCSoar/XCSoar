@@ -109,8 +109,10 @@ FlarmTraffic::UpdateOnline(const FlarmTraffic &built) noexcept
 {
   location = built.location;
   location_available = built.location_available;
+  absolute_location = built.absolute_location;
   altitude = built.altitude;
   altitude_available = built.altitude_available;
+  absolute_altitude = built.absolute_altitude;
   name = built.name;
   source = built.source;
   type = built.type;
