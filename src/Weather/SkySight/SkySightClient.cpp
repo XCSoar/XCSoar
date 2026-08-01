@@ -451,28 +451,6 @@ SkySightClient::SelectAutomaticForecastTime(std::string_view id)
 }
 
 bool
-SkySightClient::SelectPageLayer(std::string_view id)
-{
-  if (id.empty() || !api->IsSelectedLayer(id))
-    return false;
-
-  auto &settings = CommonInterface::SetUISettings().pages;
-  const auto &pages = CommonInterface::GetUIState().pages;
-  if (pages.current_index >= settings.n_pages)
-    return false;
-
-  if (!WeatherMapOverlay::SetSkySightLayerOnPage(settings,
-                                                 pages.current_index, id))
-    return false;
-
-  const auto &page = settings.pages[pages.current_index];
-  Profile::Save(Profile::map, page, pages.current_index);
-  CommonInterface::SetUIState().weather.skysight.cursor_initialized = true;
-
-  return SetLayerActive(id);
-}
-
-bool
 SkySightClient::PreloadForecast(std::string_view id) noexcept
 {
   return api->PreloadDatafiles(id);
@@ -621,28 +599,47 @@ SkySightClient::SetLayerActive(std::string_view id)
 }
 
 void
-SkySightClient::ApplyPageOverlay(std::string_view overlay_id,
-                           bool reset_automatic_time) noexcept
+SkySightClient::ApplyPageOverlay(const PageLayout &page) noexcept
 {
   try {
-    if (overlay_id.empty()) {
+    if (!page.UsesSkySightOverlay()) {
       if (!GetActiveLayerId().empty())
         DeactivateLayer();
 
       return;
     }
 
-    if (reset_automatic_time) {
-      if (auto *layer = api->GetLayer(overlay_id); layer != nullptr &&
-          !layer->SupportsLiveTiles()) {
+    const auto overlay_id = std::string_view{page.skysight_overlay.c_str()};
+    auto *layer = api->GetLayer(overlay_id);
+    if (layer == nullptr)
+      return;
+
+    const bool automatic = layer->SupportsLiveTiles() ||
+      page.skysight_time == PageLayout::SKYSIGHT_TIME_AUTO;
+    layer->forecast_time_mode = automatic
+      ? SkySight::ForecastTimeMode::AutoDefault
+      : SkySight::ForecastTimeMode::Fixed;
+    if (automatic)
+      layer->forecast_time = 0;
+    else {
+      const time_t fixed = time_t(page.skysight_time);
+      if (int64_t(fixed) == page.skysight_time)
+        layer->forecast_time = fixed;
+      else {
         layer->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
-        if (!layer->forecast_datafiles.empty())
-          (void)SelectAutomaticForecastTime(overlay_id);
+        layer->forecast_time = 0;
       }
     }
 
     if (GetActiveLayerId() != overlay_id)
       (void)SetLayerActive(overlay_id);
+
+    if (!layer->SupportsLiveTiles() && !layer->forecast_datafiles.empty()) {
+      if (layer->UsesAutomaticForecastTime())
+        (void)SelectAutomaticForecastTime(overlay_id);
+      else if (layer->FindDatafile(layer->forecast_time) != nullptr)
+        (void)SelectForecastTime(overlay_id, layer->forecast_time);
+    }
   } catch (...) {
     LogError(std::current_exception(), "SkySight page overlay selection failed");
   }

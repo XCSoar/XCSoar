@@ -10,7 +10,6 @@
 
 #include <chrono>
 #include <memory>
-#include <string_view>
 
 class SkySightClient;
 namespace SkySight {
@@ -21,13 +20,11 @@ namespace WeatherMapOverlay {
 
 class SkySightControlsModel final : public ControlsModel {
   std::shared_ptr<SkySightClient> skysight;
-  StaticString<64> layer_id;
   UI::PeriodicTimer countdown_timer{[this]{ UpdateCountdownLabel(); }};
   bool dynamic_status_visible = false;
 
 public:
-  explicit SkySightControlsModel(std::shared_ptr<SkySightClient> _skysight,
-                                 std::string_view _layer_id) noexcept;
+  explicit SkySightControlsModel(std::shared_ptr<SkySightClient> _skysight) noexcept;
 
   void OnShow() noexcept override;
   void OnHide() noexcept override;
@@ -37,6 +34,8 @@ public:
 
   [[nodiscard]]
   bool HasPrimaryData() const noexcept override;
+  [[nodiscard]]
+  bool IsPrimaryEnabled() const noexcept override;
   [[nodiscard]]
   bool HasSecondaryData() const noexcept override;
 
@@ -49,6 +48,7 @@ public:
   bool GetPrimaryAutoAdvance() const noexcept override;
   void SetPrimaryAutoAdvance(bool auto_advance) noexcept override;
   void ApplyPrimaryAutoAdvance() noexcept override;
+  void EnablePrimaryAutoFromInput() noexcept override;
 
   [[nodiscard]]
   PrimaryLabelAction GetPrimaryLabelAction() const noexcept override;
@@ -65,7 +65,6 @@ private:
   [[nodiscard]]
   const SkySight::Layer *GetLayer() const noexcept;
   void UpdateCountdownLabel() noexcept;
-  bool SelectLayer(unsigned index) noexcept;
 };
 
 } // namespace WeatherMapOverlay

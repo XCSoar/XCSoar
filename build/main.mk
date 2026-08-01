@@ -422,6 +422,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Weather/MapOverlay/XcthermControlsModel.cpp \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Weather/MapOverlay/SkySightControlsModel.cpp) \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Weather/SkySight/FieldControls.cpp) \
 	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
