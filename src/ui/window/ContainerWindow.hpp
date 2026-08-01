@@ -54,6 +54,7 @@ protected:
 
 #ifdef HAVE_MULTI_TOUCH
   bool OnMultiTouchDown() noexcept override;
+  bool OnMultiTouchMove(PixelPoint a, PixelPoint b) noexcept override;
   bool OnMultiTouchUp() noexcept override;
 #endif
 

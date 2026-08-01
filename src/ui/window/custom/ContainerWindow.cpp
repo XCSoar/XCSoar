@@ -195,6 +195,17 @@ ContainerWindow::OnMultiTouchDown() noexcept
 }
 
 bool
+ContainerWindow::OnMultiTouchMove(PixelPoint a, PixelPoint b) noexcept
+{
+  if (!capture && capture_child != nullptr) {
+    const auto origin = capture_child->GetTopLeft();
+    return capture_child->OnMultiTouchMove(a - origin, b - origin);
+  }
+
+  return PaintWindow::OnMultiTouchMove(a, b);
+}
+
+bool
 ContainerWindow::OnMultiTouchUp() noexcept
 {
   if (!capture && capture_child != nullptr)

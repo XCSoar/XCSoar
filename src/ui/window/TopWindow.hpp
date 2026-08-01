@@ -11,14 +11,17 @@
 
 #ifdef ENABLE_OPENGL
 #include "ui/opengl/Features.hpp"
-#include <cstdint>
 #endif
 
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 
+#if defined(ENABLE_OPENGL) || defined(ENABLE_SDL) || \
+  defined(DRAW_REDRAW_COUNTER)
+#include <cstdint>
+#endif
+
 #ifdef DRAW_REDRAW_COUNTER
 #include <chrono>
-#include <cstdint>
 #endif
 
 #ifdef ANDROID
@@ -241,6 +244,31 @@ public:
 #endif
 
   DoubleClick double_click;
+
+#if defined(ENABLE_SDL) && defined(HAVE_MULTI_TOUCH)
+  /**
+   * Number of fingers currently touching the screen.
+   */
+  unsigned touch_fingers = 0;
+
+  /**
+   * Were two or more fingers down during the current touch sequence?
+   */
+  bool touch_multi = false;
+
+  /**
+   * Is an emulated mouse button release waiting for the last finger to
+   * be lifted?
+   */
+  bool touch_mouse_up_pending = false;
+
+  PixelPoint touch_mouse_up_point{0, 0};
+
+  /**
+   * Deliver a postponed emulated mouse button release, if any.
+   */
+  bool FlushTouchMouseUp() noexcept;
+#endif
 
 #else /* USE_WINUSER */
 
