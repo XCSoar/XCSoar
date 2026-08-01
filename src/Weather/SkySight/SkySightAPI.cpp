@@ -1329,8 +1329,7 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
       ? latest_past_time
       : earliest_future_time;
 
-    if (layer->forecast_time == 0 ||
-        layer->FindDatafile(layer->forecast_time) == nullptr)
+    if (layer->UsesAutomaticForecastTime() || layer->forecast_time == 0)
       layer->forecast_time = default_time;
 
     const auto *selected = layer->FindDatafile(layer->forecast_time);
