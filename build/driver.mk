@@ -125,6 +125,8 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/CaiLNav.cpp \
 	$(DRIVER_SRC_DIR)/Condor.cpp \
 	$(DRIVER_SRC_DIR)/Condor3UDP.cpp \
+	$(DRIVER_SRC_DIR)/Condor3Spectate.cpp \
+	$(SRC)/Device/Port/SpectateFilePort.cpp \
 	$(DRIVER_SRC_DIR)/CProbe.cpp \
 	$(DRIVER_SRC_DIR)/EW.cpp \
 	$(DRIVER_SRC_DIR)/EWMicroRecorder.cpp \
@@ -150,6 +152,6 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/ATR833/Device.cpp \
 	$(DRIVER_SRC_DIR)/ATR833/Register.cpp
 
-DRIVER_DEPENDS = TIME LIBNMEA GEO OPERATION UNITS FMT PROFILE FLARM GLIDE
+DRIVER_DEPENDS = TIME LIBNMEA GEO OPERATION UNITS FMT PROFILE FLARM GLIDE JSON
 
 $(eval $(call link-library,driver,DRIVER))

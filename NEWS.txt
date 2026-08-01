@@ -107,6 +107,8 @@ Version 7.45 - not yet released
   - FLARM radar: show callsigns on all registered targets again, use the
     full callsign on target labels, and omit duplicate side vario/altitude
     on the selected target (info panel already shows them) #2718
+  - FLARM radar: rotate track-up targets on cardinal bearings (due
+    north/south or east/west)
   - Add XCTherm to the pages config map overlay choices (alongside RASP
     and EDL) #2705
   - Add Weather Setup to the weather overlay menu (opens Info → Weather
@@ -188,6 +190,10 @@ Version 7.45 - not yet released
   - fix crash opening the log list when replay filenames contain
     non-ASCII characters (Unicode directory listing and file open)
 * devices
+  - Condor 3: Spectate.json multiplayer traffic driver (Condor3Spectate)
+    shows other gliders on the FLARM radar and map
+  - Condor3UDP: stop deriving track from ground-velocity vx/vy (caused
+    spurious ~120° FLARM radar bearing jumps after compass expiry)
   - support $LK8EX1 (LK8000 external instrument) on all device ports:
     pressure, QNE altitude, vario, temperature, and battery voltage
     or percentage #2772

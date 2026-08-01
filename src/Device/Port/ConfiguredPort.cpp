@@ -4,6 +4,7 @@
 #include "ConfiguredPort.hpp"
 #include "UDPPort.hpp"
 #include "TCPPort.hpp"
+#include "SpectateFilePort.hpp"
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
 #include "LogFile.hpp"
@@ -174,6 +175,16 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
   case DeviceConfig::PortType::UDP_LISTENER:
     return std::make_unique<UDPPort>(event_loop, config.tcp_port,
                                      listener, handler);
+
+  case DeviceConfig::PortType::SPECTATE_FILE: {
+    const char *spectate_path = config.path.empty()
+      ? DeviceConfig::DEFAULT_SPECTATE_PATH
+      : config.path.c_str();
+
+    return std::make_unique<SpectateFilePort>(Path(spectate_path),
+                                              config.port_name,
+                                              listener, handler);
+  }
 
   case DeviceConfig::PortType::PTY: {
 #if defined(HAVE_POSIX) && !defined(ANDROID)
