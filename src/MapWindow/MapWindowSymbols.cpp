@@ -9,6 +9,8 @@
 #include "Renderer/TurnBackMarkerRenderer.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 
+#include <algorithm> // for std::min()
+
 void
 MapWindow::DrawWind(Canvas &canvas, const PixelPoint &Start,
                     const PixelRect &rc) const noexcept
@@ -27,8 +29,13 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const noexcept
   if (!compass_visible)
     return;
 
+  PixelRect compass_rc = rc;
+  compass_rc.right -= std::min(int(top_right_margin),
+                               int(compass_rc.GetWidth()));
+
   CompassRenderer compass_renderer(look);
-  compass_renderer.Draw(canvas, render_projection.GetScreenAngle(), rc);
+  compass_renderer.Draw(canvas, render_projection.GetScreenAngle(),
+                        compass_rc);
 }
 
 void

@@ -108,6 +108,18 @@ MainWindow::GetShowMenuButtonRect(const PixelRect rc) noexcept
  * if there is none.  The zoom buttons alone are placed in the bottom
  * left corner and do not occupy this column.
  */
+[[gnu::pure]]
+static unsigned
+GetMapOverlayTopRightWidth(const PixelRect rc) noexcept
+{
+  const UISettings &settings = CommonInterface::GetUISettings();
+
+  if (!settings.show_menu_button && !settings.show_quickmenu_button)
+    return 0;
+
+  const PixelRect button_rc = GetMapOverlayButtonRect(rc, rc.top);
+  return unsigned(std::max(0, rc.right - button_rc.left));
+}
 
 [[gnu::pure]]
 PixelRect
@@ -383,6 +395,12 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
   if (show_rotate_button != nullptr && overlay_buttons_active)
     show_rotate_button->Move(GetShowRotateButtonRect(map->GetPosition()));
 #endif
+
+  if (map != nullptr)
+    /* keep the north arrow clear of the overlay buttons */
+    map->SetTopRightMargin(overlay_buttons_active
+                           ? GetMapOverlayTopRightWidth(map->GetPosition())
+                           : 0);
 
   /* Newly created overlay buttons are added after the map; keep the map
      underneath them (same as ReinitialiseLayout()). */
