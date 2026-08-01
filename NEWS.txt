@@ -54,6 +54,9 @@ Version 7.45 - not yet released
     Inside/Near status like the airspace warnings dialog
   - Tint the bottom airspace warning banner red (inside) or yellow
     (near), matching the warnings-list badges (colour displays only)
+  - Show distance and time in the bottom airspace warning banner, on a
+    second line only when the name and current distance/time do not fit
+    on one line
   - Put WiFi Connect first and Close last (right / bottom)
   - Put Download before Cancel in the download picker; Left/Right page
     the list (no armed action-bar dual focus)
