@@ -878,6 +878,13 @@ public:
   virtual bool OnMultiTouchDown() noexcept;
 
   /**
+   * Two pointers are moving.  Coordinates are relative to this
+   * window.  Used for pinch-to-zoom where both finger positions are
+   * available (e.g. SDL).
+   */
+  virtual bool OnMultiTouchMove(PixelPoint a, PixelPoint b) noexcept;
+
+  /**
    * A secondary pointer is being released.
    */
   virtual bool OnMultiTouchUp() noexcept;

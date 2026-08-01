@@ -185,6 +185,13 @@ Window::OnMultiTouchDown() noexcept
 }
 
 bool
+Window::OnMultiTouchMove([[maybe_unused]] PixelPoint a,
+                         [[maybe_unused]] PixelPoint b) noexcept
+{
+  return false;
+}
+
+bool
 Window::OnMultiTouchUp() noexcept
 {
   return false;
