@@ -257,6 +257,14 @@ public:
   bool touch_multi = false;
 
   /**
+   * Stable SDL finger ids for the active two-finger gesture.  Indices
+   * into SDL's finger array are not stable across up/down events.
+   */
+  bool touch_pair_valid = false;
+  std::int64_t touch_finger_a = 0;
+  std::int64_t touch_finger_b = 0;
+
+  /**
    * Is an emulated mouse button release waiting for the last finger to
    * be lifted?
    */
