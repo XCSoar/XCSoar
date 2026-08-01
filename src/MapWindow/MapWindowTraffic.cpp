@@ -110,11 +110,13 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
         online_mode == DisplayOnlineTrafficMapMode::OFF)
       continue;
 
-    /* Historically, we skipped targets with relative vectors == 0 to
-       avoid drawing "no position" FLARM targets.  Absolute-position
-       traffic (e.g. ADS-B) may legitimately have relative vectors not
-       computed yet, so allow those as well. */
-    if (traffic.relative_east != 0 || traffic.absolute_location)
+    /* Historically, we skipped targets with both relative vectors
+       zero to avoid drawing "no position" FLARM targets.  Absolute-
+       position traffic (e.g. ADS-B) may legitimately have relatives
+       not computed yet, so allow those as well.  Require either
+       component non-zero so due-north/south targets still draw. */
+    if (traffic.absolute_location ||
+        traffic.relative_north != 0 || traffic.relative_east != 0)
       DrawFlarmTraffic(canvas, projection, traffic_look, false,
                        aircraft_pos, traffic, online_mode);
   }
@@ -127,7 +129,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
           online_mode == DisplayOnlineTrafficMapMode::OFF)
         continue;
 
-      if (traffic.relative_east != 0 || traffic.absolute_location)
+      if (traffic.absolute_location ||
+          traffic.relative_north != 0 || traffic.relative_east != 0)
         DrawFlarmTraffic(canvas, projection, traffic_look, true,
                          aircraft_pos, traffic, online_mode);
     }
