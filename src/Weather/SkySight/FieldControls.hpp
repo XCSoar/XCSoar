@@ -32,6 +32,7 @@ void FormatTimeLabelForPage(StaticString<64> &text,
 void FormatLayerLabelForPage(StaticString<64> &text,
                              const PageLayout &page) noexcept;
 
+[[nodiscard]] bool IsTimeSelectable(const PageLayout &page) noexcept;
 [[nodiscard]] bool IsTimeSelectable() noexcept;
 [[nodiscard]] bool HasSelectedLayer() noexcept;
 [[nodiscard]] bool HasSelectedTimeData() noexcept;

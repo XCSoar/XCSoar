@@ -236,15 +236,18 @@ FormatLayerLabelForPage(StaticString<64> &text,
 }
 
 bool
+IsTimeSelectable(const PageLayout &page) noexcept
+{
+  const auto *layer = GetLayer(page);
+  return layer != nullptr && !layer->SupportsLiveTiles() &&
+    !GetSelectableForecastTimes(*layer).empty();
+}
+
+bool
 IsTimeSelectable() noexcept
 {
   const auto *page = GetCurrentPage();
-  if (page == nullptr)
-    return false;
-
-  const auto *layer = GetLayer(*page);
-  return layer != nullptr && !layer->SupportsLiveTiles() &&
-    !GetSelectableForecastTimes(*layer).empty();
+  return page != nullptr && IsTimeSelectable(*page);
 }
 
 bool

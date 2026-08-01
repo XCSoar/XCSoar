@@ -39,7 +39,8 @@ PageHasOverlay(unsigned page_index,
 }
 
 void
-State::Load(PageLayout::Overlay overlay) noexcept
+State::Load(PageLayout::Overlay overlay,
+            const char *skysight_layer_id) noexcept
 {
   const auto &settings = CommonInterface::GetUISettings().pages;
   const unsigned current =
@@ -53,7 +54,9 @@ State::Load(PageLayout::Overlay overlay) noexcept
   }
 
   draft = PageLayout::Default();
-  WeatherMapOverlay::ApplyWeatherOverlayToLayout(draft, overlay, -1);
+  WeatherMapOverlay::ApplyWeatherOverlayToLayout(
+    draft, overlay, -1,
+    skysight_layer_id != nullptr ? skysight_layer_id : "");
   baseline = PageLayout::Default();
   baseline.overlay = PageLayout::Overlay::NONE;
 }

@@ -6,24 +6,29 @@
 #ifdef HAVE_HTTP
 
 #include "DataGlobals.hpp"
-#include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Weather/WeatherOverlayDraft.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Form/Button.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/ButtonPanel.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
-#include "Renderer/TextRowRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/MultiSelectListWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Widget/TextWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Weather/SkySight/FieldControls.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/SkySight/ForecastFormatter.hpp"
 #include "Weather/SkySight/ForecastUtils.hpp"
@@ -150,48 +155,6 @@ public:
   }
 };
 
-class ForecastStepRenderer final : public ListItemRenderer {
-  TextRowRenderer row_renderer;
-  const SkySight::Layer &layer;
-  std::vector<time_t> forecast_times;
-
-public:
-  explicit ForecastStepRenderer(const SkySight::Layer &_layer)
-    :layer(_layer),
-     forecast_times(SkySight::GetSelectableForecastTimes(layer)) {}
-
-  unsigned CalculateLayout(const DialogLook &look) noexcept {
-    return row_renderer.CalculateLayout(*look.list.font);
-  }
-
-  [[nodiscard]] time_t GetForecastTime(unsigned index) const noexcept {
-    return index < forecast_times.size() ? forecast_times[index] : 0;
-  }
-
-  [[nodiscard]] std::size_t size() const noexcept {
-    return forecast_times.size();
-  }
-
-  [[nodiscard]] unsigned FindForecastTime(time_t forecast_time) const noexcept {
-    for (unsigned i = 0; i < forecast_times.size(); ++i)
-      if (forecast_times[i] == forecast_time)
-        return i;
-
-    return 0;
-  }
-
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned index) noexcept override {
-    if (index >= forecast_times.size())
-      return;
-
-    row_renderer.DrawTextRow(canvas, rc,
-                             SkySight::FormatForecastTimeLabel(
-                               layer, forecast_times[index],
-                               CommonInterface::GetComputerSettings().utc_offset).c_str());
-  }
-};
-
 class MultiLayerPickerWidget final : public MultiSelectListWidget {
   TwoTextRowsRenderer row_renderer;
   std::shared_ptr<SkySightClient> skysight;
@@ -268,18 +231,22 @@ class SkySightWidget final : public ListWidget {
   std::shared_ptr<SkySightClient> skysight;
   ButtonPanelWidget *buttons_widget = nullptr;
   Button *select_button = nullptr;
-  Button *time_button = nullptr;
   Button *preload_button = nullptr;
   Button *preload_all_button = nullptr;
+  std::function<void()> layers_changed_callback;
   SelectedLayerRenderer row_renderer;
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
 public:
-  explicit SkySightWidget(std::shared_ptr<SkySightClient> &&_skysight)
+  explicit SkySightWidget(std::shared_ptr<SkySightClient> _skysight)
     :skysight(std::move(_skysight)) {}
 
   void SetButtonPanel(ButtonPanelWidget &_buttons) noexcept {
     buttons_widget = &_buttons;
+  }
+
+  void SetLayersChangedCallback(std::function<void()> callback) noexcept {
+    layers_changed_callback = std::move(callback);
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
@@ -310,9 +277,6 @@ private:
     select_button = buttons.Add(_("Select"), [this]() {
       SelectClicked();
     });
-    time_button = buttons.Add(_("Time"), [this]() {
-      SelectTimeClicked();
-    });
     preload_button = buttons.Add(_("Preload Layer"), [this]() {
       PreloadClicked();
     });
@@ -323,8 +287,7 @@ private:
   }
 
   void UpdateButtons() {
-    if (select_button == nullptr ||
-        time_button == nullptr || preload_button == nullptr ||
+    if (select_button == nullptr || preload_button == nullptr ||
         preload_all_button == nullptr)
       return;
 
@@ -350,9 +313,6 @@ private:
       }
     }
 
-    time_button->SetEnabled(layer != nullptr && !layer->SupportsLiveTiles() &&
-                            !layer->forecast_datafiles.empty() &&
-                            (skysight->IsForecastDecodeAvailable() || layer->mtime != 0));
     preload_button->SetEnabled(layer != nullptr && !layer->SupportsLiveTiles() &&
                                skysight->HasCredentials() &&
                                !layer->ShouldShowUpdating());
@@ -463,34 +423,8 @@ private:
     }
     GetList().Invalidate();
     UpdateButtons();
-  }
-
-  void SelectTimeClicked() {
-    if (skysight == nullptr)
-      return;
-
-    const auto index = GetList().GetCursorIndex();
-    if (index >= skysight->NumSelectedLayers())
-      return;
-
-    const auto *layer = skysight->GetSelectedLayer(index);
-    if (layer == nullptr || layer->SupportsLiveTiles() || layer->forecast_datafiles.empty())
-      return;
-
-    ForecastStepRenderer renderer(*layer);
-    const int selected = ListPicker(_("Choose a forecast time"),
-                                    renderer.size(),
-                                    renderer.FindForecastTime(layer->forecast_time),
-                                    renderer.CalculateLayout(UIGlobals::GetDialogLook()),
-                                    renderer);
-    if (selected < 0)
-      return;
-
-    if (!skysight->SelectForecastTime(layer->id, renderer.GetForecastTime(selected)))
-      ShowMessageBox(_("Couldn't load the selected time step."),
-                     "SkySight", MB_OK);
-
-    UpdateList();
+    if (layers_changed_callback)
+      layers_changed_callback();
   }
 
   void PreloadClicked() {
@@ -543,6 +477,185 @@ private:
 
 };
 
+class SkySightPagePanel final : public RowFormWidget {
+  enum Controls {
+    LAYER,
+    TIME,
+    APPLY_TO_PAGE,
+    ADD_PAGE,
+  };
+
+  std::shared_ptr<SkySightClient> skysight;
+  WeatherOverlayDraft::State overlay;
+  Button *apply_to_page_button = nullptr;
+  Button *add_page_button = nullptr;
+
+  static SkySightPagePanel *active;
+
+  [[nodiscard]] const SkySight::Layer *GetDefaultLayer() const noexcept {
+    return skysight != nullptr ? skysight->GetSelectedLayer(0) : nullptr;
+  }
+
+  void UpdateLayerControl() noexcept {
+    auto &control = GetControl(LAYER);
+    auto &df = (DataFieldEnum &)*control.GetDataField();
+    df.ClearChoices();
+
+    bool stored_layer_is_selected = false;
+    unsigned selected_value = 0;
+    if (skysight != nullptr)
+      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
+        if (const auto *layer = skysight->GetSelectedLayer(i);
+            layer != nullptr &&
+            layer->id == overlay.draft.skysight_overlay.c_str()) {
+          stored_layer_is_selected = true;
+          selected_value = unsigned(i + 1);
+          break;
+        }
+
+    if (!overlay.draft.skysight_overlay.empty() &&
+        !stored_layer_is_selected)
+      df.AddChoice(0, overlay.draft.skysight_overlay.c_str());
+
+    if (skysight != nullptr)
+      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
+        if (const auto *layer = skysight->GetSelectedLayer(i);
+            layer != nullptr)
+          df.AddChoice(unsigned(i + 1), layer->name.c_str());
+
+    if (skysight == nullptr || skysight->NumSelectedLayers() == 0) {
+      if (overlay.draft.skysight_overlay.empty())
+        df.AddChoice(0, _("No SkySight layers selected"));
+      df.SetValue(0U);
+      control.SetEnabled(false);
+    } else {
+      if (stored_layer_is_selected)
+        df.SetValue(selected_value);
+      else if (!overlay.draft.skysight_overlay.empty())
+        df.SetValue(0U);
+      else {
+        const auto *layer = skysight->GetSelectedLayer(0);
+        if (layer != nullptr) {
+          overlay.draft.overlay = PageLayout::Overlay::SKYSIGHT;
+          overlay.draft.skysight_overlay = layer->id;
+          overlay.draft.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
+        }
+        df.SetValue(1U);
+      }
+      control.SetEnabled(true);
+    }
+
+    control.RefreshDisplay();
+  }
+
+  void UpdateTimeControl() noexcept {
+    StaticString<64> label;
+    SkySight::FormatTimeLabelForPage(label, overlay.draft);
+    WeatherOverlayDraft::SetAxisLabel(
+      GetControl(TIME), label.c_str(),
+      SkySight::IsTimeSelectable(overlay.draft));
+  }
+
+  void SyncButtons() noexcept {
+    overlay.SyncButtons(apply_to_page_button, add_page_button);
+  }
+
+  void OnLayerModified() noexcept {
+    if (skysight == nullptr)
+      return;
+
+    const unsigned selected =
+      ((DataFieldEnum &)*GetControl(LAYER).GetDataField()).GetValue();
+    if (selected == 0 || selected > skysight->NumSelectedLayers())
+      return;
+
+    const auto *layer = skysight->GetSelectedLayer(selected - 1);
+    if (layer == nullptr)
+      return;
+
+    if (overlay.draft.skysight_overlay != layer->id.c_str()) {
+      overlay.draft.skysight_overlay = layer->id;
+      overlay.draft.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
+    }
+
+    UpdateTimeControl();
+    SyncButtons();
+  }
+
+  bool EditTime([[maybe_unused]] DataField &df) noexcept {
+    if (!SkySight::EditTimeOnLayout(overlay.draft))
+      return true;
+
+    UpdateTimeControl();
+    SyncButtons();
+    return true;
+  }
+
+  static bool EditTimeCallback([[maybe_unused]] const char *caption,
+                               DataField &df,
+                               [[maybe_unused]] const char *help_text) noexcept {
+    return active != nullptr ? active->EditTime(df) : false;
+  }
+
+public:
+  explicit SkySightPagePanel(std::shared_ptr<SkySightClient> _skysight) noexcept
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     skysight(std::move(_skysight)) {}
+
+  ~SkySightPagePanel() noexcept override {
+    if (active == this)
+      active = nullptr;
+  }
+
+  void RefreshPageSection() noexcept {
+    const auto *default_layer = GetDefaultLayer();
+    overlay.Load(PageLayout::Overlay::SKYSIGHT,
+                 default_layer != nullptr ? default_layer->id.c_str()
+                                          : nullptr);
+    UpdateLayerControl();
+    UpdateTimeControl();
+    SyncButtons();
+  }
+
+  void Prepare([[maybe_unused]] ContainerWindow &parent,
+               [[maybe_unused]] const PixelRect &rc) noexcept override {
+    active = this;
+
+    auto *layer = AddEnum(
+      _("Page layer"),
+      _("SkySight layer for the current map page. Changes remain a "
+        "draft until Apply to page is pressed."));
+    layer->GetDataField()->SetOnModified([this]{ OnLayerModified(); });
+
+    auto *time = AddEnum(
+      _("Page time"),
+      _("Forecast time for the current map page. Auto follows the "
+        "closest forecast step when the page is opened."));
+    time->SetEditCallback(EditTimeCallback);
+
+    apply_to_page_button = AddButton(_("Apply to page"), [this] {
+      if (overlay.ApplyIfDirty())
+        RefreshPageSection();
+    });
+    add_page_button = AddButton(_("Add page"), [this] {
+      overlay.AddPage(apply_to_page_button, add_page_button);
+    });
+    AddButton(_("Pages setup"), [this] {
+      WeatherOverlayDraft::OpenPagesConfig();
+      RefreshPageSection();
+    });
+
+    RefreshPageSection();
+  }
+
+  void Show(const PixelRect &rc) noexcept override {
+    RowFormWidget::Show(rc);
+    RefreshPageSection();
+  }
+};
+
+SkySightPagePanel *SkySightPagePanel::active = nullptr;
+
 std::unique_ptr<Widget>
 CreateSkySightWidget()
 {
@@ -553,11 +666,20 @@ CreateSkySightWidget()
     return widget;
   }
 
+  auto list = std::make_unique<SkySightWidget>(skysight);
+  auto *list_ptr = list.get();
   auto buttons = std::make_unique<ButtonPanelWidget>(
-    std::make_unique<SkySightWidget>(std::move(skysight)),
+    std::move(list),
     ButtonPanelWidget::Alignment::BOTTOM);
-  static_cast<SkySightWidget &>(buttons->GetWidget()).SetButtonPanel(*buttons);
-  return buttons;
+  list_ptr->SetButtonPanel(*buttons);
+
+  auto page = std::make_unique<SkySightPagePanel>(skysight);
+  auto *page_ptr = page.get();
+  list_ptr->SetLayersChangedCallback([page_ptr] {
+    page_ptr->RefreshPageSection();
+  });
+
+  return std::make_unique<TwoWidgets>(std::move(buttons), std::move(page));
 }
 
 #endif
