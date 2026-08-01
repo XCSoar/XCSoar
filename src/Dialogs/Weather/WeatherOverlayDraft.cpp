@@ -100,7 +100,13 @@ State::SyncButtons(Button *apply_button, Button *add_button) const noexcept
 
   if (add_button != nullptr) {
     const auto &settings = CommonInterface::GetUISettings().pages;
-    add_button->SetEnabled(settings.n_pages < PageSettings::MAX_PAGES);
+    const bool valid_overlay =
+      draft.overlay != PageLayout::Overlay::NONE &&
+      draft.overlay != PageLayout::Overlay::MAX &&
+      (draft.overlay != PageLayout::Overlay::SKYSIGHT ||
+       draft.UsesSkySightOverlay());
+    add_button->SetEnabled(valid_overlay &&
+                           settings.n_pages < PageSettings::MAX_PAGES);
   }
 }
 
