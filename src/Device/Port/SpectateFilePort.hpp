@@ -5,7 +5,7 @@
 
 #include "Port.hpp"
 #include "system/Path.hpp"
-#include "ui/event/Timer.hpp"
+#include "thread/SuspensibleThread.hpp"
 #include "util/StaticString.hxx"
 
 class Condor3SpectateDevice;
@@ -14,20 +14,17 @@ class Condor3SpectateDevice;
  * Poll a Condor Spectate.json file and inject FLARM NMEA into the
  * device pipeline.
  */
-class SpectateFilePort final : public Port {
+class SpectateFilePort final : public Port, SuspensibleThread {
   const Path path;
   StaticString<128> own_cn;
   Condor3SpectateDevice *device = nullptr;
 
-  UI::Timer timer{[this]{ OnTimer(); }};
-  bool running = false;
-
-  void OnTimer() noexcept;
   void Poll() noexcept;
 
 public:
   SpectateFilePort(Path _path, const char *_own_cn,
                    PortListener *listener, DataHandler &handler) noexcept;
+  ~SpectateFilePort() noexcept override;
 
   void SetDevice(Condor3SpectateDevice *_device) noexcept {
     device = _device;
@@ -46,4 +43,8 @@ public:
 
   [[noreturn]]
   void WaitRead(std::chrono::steady_clock::duration timeout) override;
+
+protected:
+  /* virtual methods from class Thread */
+  void Run() noexcept override;
 };
