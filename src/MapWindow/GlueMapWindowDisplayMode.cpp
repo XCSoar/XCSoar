@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
+#include "UserMapScale.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
@@ -15,6 +16,7 @@
 #endif
 
 #include <algorithm> // for std::clamp()
+#include <cmath>
 
 void
 OffsetHistory::Reset() noexcept
@@ -113,17 +115,13 @@ GlueMapWindow::UpdateScreenBounds() noexcept
 }
 
 void
-GlueMapWindow::SetMapScale(double scale) noexcept
+GlueMapWindow::PersistCurrentScale() noexcept
 {
-  MapWindow::SetMapScale(scale);
-  OnProjectionModified();
-
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
   MapSettings &settings = CommonInterface::SetMapSettings();
 
   if (circling && settings.circle_zoom_enabled)
-    // save cruise scale
     settings.circling_scale = visible_projection.GetScale();
   else
     settings.cruise_scale = visible_projection.GetScale();
@@ -132,8 +130,128 @@ GlueMapWindow::SetMapScale(double scale) noexcept
 }
 
 void
+GlueMapWindow::SetMapScale(double scale) noexcept
+{
+#ifdef ENABLE_OPENGL
+  CancelZoomAnimation();
+#endif
+
+  MapWindow::SetMapScale(scale);
+  OnProjectionModified();
+  PersistCurrentScale();
+}
+
+void
+GlueMapWindow::SetFreeMapScale(double scale) noexcept
+{
+#ifdef ENABLE_OPENGL
+  CancelZoomAnimation();
+#endif
+
+  visible_projection.SetFreeMapScale(scale);
+  OnProjectionModified();
+  PersistCurrentScale();
+}
+
+void
+GlueMapWindow::AnimateFreeMapScale(double scale) noexcept
+{
+  scale = ClampUserMapScale(scale);
+
+#ifndef ENABLE_OPENGL
+  SetFreeMapScale(scale);
+  QuickRedraw();
+#else
+  if (!visible_projection.IsValid()) {
+    SetFreeMapScale(scale);
+    QuickRedraw();
+    return;
+  }
+
+  zoom_from_map_scale = visible_projection.GetMapScale();
+  zoom_to_map_scale = scale;
+
+  /* persist the target scale immediately */
+  {
+    const double saved_scale = visible_projection.GetScale();
+    visible_projection.SetFreeMapScale(scale);
+    PersistCurrentScale();
+    visible_projection.SetScale(saved_scale);
+  }
+
+  if (zoom_from_map_scale <= 0 || zoom_to_map_scale <= 0 ||
+      std::fabs(zoom_from_map_scale - scale) / zoom_from_map_scale < 0.001) {
+    SetFreeMapScale(scale);
+    QuickRedraw();
+    return;
+  }
+
+  zoom_start_time = std::chrono::steady_clock::now();
+  zoom_timer.Schedule(std::chrono::milliseconds(16));
+  OnZoomTimer();
+#endif
+}
+
+#ifdef ENABLE_OPENGL
+
+void
+GlueMapWindow::CancelZoomAnimation() noexcept
+{
+  if (!zoom_timer.IsPending())
+    return;
+
+  zoom_timer.Cancel();
+
+  /* the target scale was already persisted; snap the visible
+     projection so a mid-tween cancel does not leave an intermediate
+     scale fighting the saved setting */
+  if (zoom_to_map_scale > 0 && visible_projection.IsValid()) {
+    visible_projection.SetFreeMapScale(zoom_to_map_scale);
+    OnProjectionModified();
+  }
+}
+
+void
+GlueMapWindow::OnZoomTimer() noexcept
+{
+  constexpr auto duration = std::chrono::milliseconds(180);
+  const auto elapsed = std::chrono::steady_clock::now() - zoom_start_time;
+  const auto elapsed_ms =
+    std::chrono::duration_cast<std::chrono::milliseconds>(elapsed);
+  double t = double(elapsed_ms.count()) / double(duration.count());
+
+  if (t >= 1) {
+    visible_projection.SetFreeMapScale(zoom_to_map_scale);
+    OnProjectionModified();
+    QuickRedraw();
+    zoom_timer.Cancel();
+    return;
+  }
+
+  /* ease-out cubic; interpolate in log space so multiplicative zoom
+     feels constant */
+  t = 1 - (1 - t) * (1 - t) * (1 - t);
+  const double from_log = std::log(zoom_from_map_scale);
+  const double to_log = std::log(zoom_to_map_scale);
+  const double scale = std::exp(from_log + (to_log - from_log) * t);
+
+  visible_projection.SetFreeMapScale(scale);
+  OnProjectionModified();
+  QuickRedraw();
+  zoom_timer.Schedule(std::chrono::milliseconds(16));
+}
+
+#endif
+
+void
 GlueMapWindow::RestoreMapScale() noexcept
 {
+#ifdef ENABLE_OPENGL
+  /* stop a pending keyboard/wheel tween so OnZoomTimer cannot overwrite
+     the restored cruise/circling scale with a stale target */
+  CancelZoomAnimation();
+#endif
+
   const MapSettings &settings = CommonInterface::GetMapSettings();
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
@@ -207,11 +325,32 @@ GlueMapWindow::UpdateScreenAngle() noexcept
   // force north-up if the current page is a dedicated MAP_NORTH_UP page
   const PageLayout &layout = PageActions::GetConfiguredLayout();
   if (layout.main == PageLayout::Main::MAP_NORTH_UP) {
+#ifdef HAVE_MULTI_TOUCH
+    /* a north-up page rejects temporary twist; clear so the angle
+       cannot reappear when leaving this page */
+    manual_rotation = false;
+#endif
     visible_projection.SetScreenAngle(Angle::Zero());
     OnProjectionModified();
     compass_visible = false;
     return;
   }
+
+#ifdef HAVE_MULTI_TOUCH
+  /* a two-finger twist temporarily overrides the configured
+     orientation; the angle is held while panning and released (falling
+     back to the configured orientation) once pan mode is left */
+  if (manual_rotation) {
+    if (IsPanning() || GestureOwnsMap()) {
+      visible_projection.SetScreenAngle(manual_rotation_angle);
+      OnProjectionModified();
+      compass_visible = true;
+      return;
+    }
+
+    manual_rotation = false;
+  }
+#endif
 
   MapOrientation orientation =
     ui_state.display_mode == DisplayMode::CIRCLING
@@ -254,7 +393,7 @@ GlueMapWindow::UpdateMapScale() noexcept
   if (circling && settings.circle_zoom_enabled)
     return;
 
-  if (!IsNearSelf())
+  if (!IsNearSelf() || GestureOwnsMap())
     return;
 
   auto distance = calculated.auto_zoom_distance;
@@ -321,7 +460,14 @@ GlueMapWindow::UpdateProjection() noexcept
 
   const auto center = rc.GetCenter();
 
-  if (circling || !IsNearSelf())
+  /* Gesture ownership is not pan UI: while still FOLLOWING the
+     aircraft, freeze origin/GPS so two-finger down does not jump to
+     a pan-style centred projection below the pan-entry threshold. */
+  const bool freeze_for_gesture = GestureOwnsMap() && IsNearSelf();
+
+  if (freeze_for_gesture) {
+    /* keep the current screen origin */
+  } else if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center);
   else if (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
            settings_map.cruise_orientation == MapOrientation::WIND_UP) {
@@ -361,7 +507,7 @@ GlueMapWindow::UpdateProjection() noexcept
     visible_projection.SetScreenOrigin(center.x,
         ((rc.top - rc.bottom) * settings_map.glider_screen_position / 100) + rc.bottom);
 
-  if (!IsNearSelf()) {
+  if (freeze_for_gesture || !IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
   } else if (circling && calculated.thermal_locator.estimate_valid) {
     const auto d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);

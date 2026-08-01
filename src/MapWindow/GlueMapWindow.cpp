@@ -13,6 +13,8 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
+#include <cassert>
+
 GlueMapWindow::GlueMapWindow(const Look &look) noexcept
   :MapWindow(look.map, look.traffic),
    thermal_band_renderer(look.thermal_band, look.chart),
@@ -151,8 +153,28 @@ GlueMapWindow::InjectRedraw() noexcept
 }
 
 void
+GlueMapWindow::EndCoalesceFullRedraw() noexcept
+{
+  assert(coalesce_full_redraw > 0);
+
+  if (--coalesce_full_redraw > 0)
+    return;
+
+  if (!full_redraw_pending)
+    return;
+
+  full_redraw_pending = false;
+  FullRedraw();
+}
+
+void
 GlueMapWindow::FullRedraw() noexcept
 {
+  if (coalesce_full_redraw > 0) {
+    full_redraw_pending = true;
+    return;
+  }
+
   UpdateDisplayMode();
   UpdateScreenAngle();
   UpdateProjection();

@@ -12,8 +12,46 @@
 #include "Input/InputEvents.hpp"
 #include "BackendComponents.hpp"
 #include "Components.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <cassert>
+
+namespace {
+
+/**
+ * Suspend weather overlays if needed and show the fullscreen map.
+ * On failure, resumes weather if it was suspended.
+ *
+ * @param abort_if_already_panning  if true, treat an already-panning
+ *                                  map as failure (EnterPan)
+ */
+GlueMapWindow *
+PreparePanFullscreen(bool abort_if_already_panning) noexcept
+{
+  const bool suspending_weather =
+    PageActions::GetCurrentLayout().UsesWeatherOverlay();
+  if (suspending_weather)
+    PageActions::SuspendWeatherOverlaysForPan();
+
+  GlueMapWindow *map = PageActions::ShowOnlyMap();
+  if (map == nullptr ||
+      (abort_if_already_panning && map->IsPanning())) {
+    if (suspending_weather)
+      PageActions::ResumeWeatherOverlaysAfterPan();
+    return nullptr;
+  }
+
+  return map;
+}
+
+void
+FinishEnterPan() noexcept
+{
+  InputEvents::setMode(InputEvents::MODE_DEFAULT);
+  InputEvents::UpdatePan();
+}
+
+} // anonymous namespace
 
 bool
 IsPanning()
@@ -27,22 +65,12 @@ EnterPan()
 {
   assert(CommonInterface::main_window != nullptr);
 
-  const bool suspending_weather_page =
-    PageActions::GetCurrentLayout().UsesWeatherOverlay();
-  if (suspending_weather_page)
-    PageActions::SuspendWeatherOverlaysForPan();
-
-  GlueMapWindow *map = PageActions::ShowOnlyMap();
-  if (map == nullptr || map->IsPanning()) {
-    if (suspending_weather_page)
-      PageActions::ResumeWeatherOverlaysAfterPan();
+  GlueMapWindow *map = PreparePanFullscreen(true);
+  if (map == nullptr)
     return;
-  }
 
   map->SetPan(true);
-
-  InputEvents::setMode(InputEvents::MODE_DEFAULT);
-  InputEvents::UpdatePan();
+  FinishEnterPan();
 }
 
 bool
@@ -50,22 +78,12 @@ PanTo(const GeoPoint &location)
 {
   assert(CommonInterface::main_window != nullptr);
 
-  const bool suspending_weather_page =
-    PageActions::GetCurrentLayout().UsesWeatherOverlay();
-  if (suspending_weather_page)
-    PageActions::SuspendWeatherOverlaysForPan();
-
-  GlueMapWindow *map = PageActions::ShowOnlyMap();
-  if (map == nullptr) {
-    if (suspending_weather_page)
-      PageActions::ResumeWeatherOverlaysAfterPan();
+  GlueMapWindow *map = PreparePanFullscreen(false);
+  if (map == nullptr)
     return false;
-  }
 
   map->PanTo(location);
-
-  InputEvents::setMode(InputEvents::MODE_DEFAULT);
-  InputEvents::UpdatePan();
+  FinishEnterPan();
   return true;
 }
 
@@ -113,10 +131,18 @@ LeavePan()
     return;
   }
 
+  if (!map->IsPanning() && !PageActions::IsStuckPanFullScreenLayout())
+    return;
+
+  /* Coalesce leaving follow-pan with the page restore so the map is
+     not painted once at fullscreen with FOLLOW_SELF and again after
+     InfoBoxes return. */
+  auto &main_window = *CommonInterface::main_window;
+  main_window.BeginCoalesceMapLayout();
+  AtScopeExit(&main_window) { main_window.EndCoalesceMapLayout(); };
+
   if (map->IsPanning())
     map->SetPan(false);
-  else if (!PageActions::IsStuckPanFullScreenLayout())
-    return;
 
   InputEvents::UpdatePan();
   PageActions::Restore();
