@@ -70,6 +70,15 @@ struct PageLayout
   StaticString<64> skysight_overlay;
 
   /**
+   * Per-page SkySight forecast timestamp.  Zero follows the provider's
+   * automatic/default forecast; positive values select a fixed step.
+   * Live layers always use automatic time.
+   */
+  static constexpr int64_t SKYSIGHT_TIME_AUTO = 0;
+
+  int64_t skysight_time;
+
+  /**
    * What to show below the main area (i.e. map)?
    */
   enum class Bottom : uint8_t {
@@ -154,6 +163,7 @@ struct PageLayout
     :valid(_valid), main(Main::MAP),
      infobox_config(_infobox_config),
      skysight_overlay{},
+     skysight_time(SKYSIGHT_TIME_AUTO),
      bottom(Bottom::NOTHING),
      overlay(Overlay::NONE),
      rasp_field(-1),
@@ -167,6 +177,7 @@ struct PageLayout
     :valid(true), main(Main::MAP),
      infobox_config(_infobox_config),
      skysight_overlay{},
+     skysight_time(SKYSIGHT_TIME_AUTO),
      bottom(Bottom::NOTHING),
      overlay(Overlay::NONE),
      rasp_field(-1),
@@ -269,6 +280,7 @@ struct PageLayout
     if (main == Main::EDL_MAP) {
       main = Main::MAP;
       skysight_overlay.clear();
+      skysight_time = SKYSIGHT_TIME_AUTO;
       overlay = Overlay::EDL;
       if (bottom == Bottom::NOTHING)
         bottom = Bottom::WEATHER_CONTROLS;
@@ -279,20 +291,26 @@ struct PageLayout
 
     if (!IsMapMain()) {
       skysight_overlay.clear();
+      skysight_time = SKYSIGHT_TIME_AUTO;
       overlay = Overlay::NONE;
       if (bottom == Bottom::WEATHER_CONTROLS)
         bottom = Bottom::NOTHING;
     } else if (overlay == Overlay::SKYSIGHT) {
       if (skysight_overlay.empty()) {
+        skysight_time = SKYSIGHT_TIME_AUTO;
         overlay = Overlay::NONE;
         if (bottom == Bottom::WEATHER_CONTROLS)
           bottom = Bottom::NOTHING;
       }
     } else {
       skysight_overlay.clear();
+      skysight_time = SKYSIGHT_TIME_AUTO;
       if (!UsesWeatherOverlay() && bottom == Bottom::WEATHER_CONTROLS)
         bottom = Bottom::NOTHING;
     }
+
+    if (skysight_time < SKYSIGHT_TIME_AUTO)
+      skysight_time = SKYSIGHT_TIME_AUTO;
 
     if (overlay != Overlay::RASP) {
       rasp_field = -1;

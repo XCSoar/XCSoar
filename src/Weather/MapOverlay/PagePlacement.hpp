@@ -46,6 +46,7 @@ CopyWeatherOverlayCursors(PageLayout &dest,
 
   case PageLayout::Overlay::SKYSIGHT:
     dest.skysight_overlay = src.skysight_overlay;
+    dest.skysight_time = src.skysight_time;
     break;
 
   case PageLayout::Overlay::NONE:
@@ -87,6 +88,7 @@ ApplyWeatherOverlayToLayout(PageLayout &layout,
     layout.skysight_overlay = skysight_layer_id;
   else
     layout.skysight_overlay.clear();
+  layout.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
   layout.Normalise();
 }
 
@@ -102,22 +104,6 @@ ApplyWeatherOverlayToPage(PageSettings &settings,
 
   ApplyWeatherOverlayToLayout(settings.pages[page_index], overlay, rasp_field,
                               skysight_layer_id);
-  return true;
-}
-
-static inline bool
-SetSkySightLayerOnPage(PageSettings &settings, unsigned page_index,
-                       std::string_view layer_id) noexcept
-{
-  if (page_index >= settings.n_pages || layer_id.empty())
-    return false;
-
-  auto &page = settings.pages[page_index];
-  if (!page.IsMapMain() || page.overlay != PageLayout::Overlay::SKYSIGHT)
-    return false;
-
-  page.skysight_overlay = layer_id;
-  page.Normalise();
   return true;
 }
 

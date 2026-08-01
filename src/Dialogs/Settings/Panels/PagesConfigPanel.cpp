@@ -561,8 +561,11 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
         if (selected > 0)
           if (const auto *layer =
                 skysight->GetSelectedLayer(selected - 1);
-              layer != nullptr)
+              layer != nullptr &&
+              value.skysight_overlay != layer->id.c_str()) {
             value.skysight_overlay = layer->id;
+            value.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
+          }
       }
 #endif
     }
