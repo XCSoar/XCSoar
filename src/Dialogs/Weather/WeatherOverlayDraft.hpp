@@ -18,7 +18,8 @@ struct State {
   PageLayout draft = PageLayout::Default();
   PageLayout baseline = PageLayout::Default();
 
-  void Load(PageLayout::Overlay overlay) noexcept;
+  void Load(PageLayout::Overlay overlay,
+            const char *skysight_layer_id=nullptr) noexcept;
 
   [[nodiscard]] [[gnu::pure]]
   bool IsDirty() const noexcept;
