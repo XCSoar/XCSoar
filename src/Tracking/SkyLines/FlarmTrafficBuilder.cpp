@@ -64,9 +64,9 @@ SkyLinesTracking::FlarmTrafficBuilder::FillRelative(FlarmTraffic &traffic,
   traffic.location_available = true;
 
   if (traffic.altitude_available) {
-    if (basic.gps_altitude_available)
+    if (const auto ownship_altitude = basic.GetAnyAltitude())
       traffic.relative_altitude =
-        traffic.altitude - RoughAltitude(basic.gps_altitude);
+        traffic.altitude - RoughAltitude(*ownship_altitude);
     else
       traffic.relative_altitude = traffic.altitude;
   }
@@ -96,8 +96,10 @@ SkyLinesTracking::FlarmTrafficBuilder::Build(uint32_t pilot_id,
 
   traffic.location = location;
   traffic.location_available = location.IsValid();
+  traffic.absolute_location = traffic.location_available;
   traffic.altitude = RoughAltitude(altitude);
   traffic.altitude_available = altitude_available;
+  traffic.absolute_altitude = altitude_available;
 
   if (track_valid && track_deg <= 359) {
     traffic.track = RoughAngle(Angle::Degrees(track_deg));

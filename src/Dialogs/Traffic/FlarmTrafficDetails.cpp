@@ -191,13 +191,10 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
     }
 
     RoughAltitude relative_altitude = target->relative_altitude;
-    if (target->absolute_altitude && target->altitude_available &&
-        (basic.pressure_altitude_available || basic.gps_altitude_available)) {
-      const double ownship_altitude = basic.pressure_altitude_available
-        ? basic.pressure_altitude
-        : basic.gps_altitude;
-
-      relative_altitude = target->altitude - RoughAltitude(ownship_altitude);
+    if (target->absolute_altitude && target->altitude_available) {
+      if (const auto ownship_altitude = basic.GetAnyAltitude())
+        relative_altitude =
+          target->altitude - RoughAltitude(*ownship_altitude);
     }
 
     RoughDistance distance = target->distance;
