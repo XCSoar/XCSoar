@@ -12,6 +12,7 @@ Applies to:
 - RASP
 - EDL
 - XCTherm
+- SkySight
 
 Code entry points:
 
@@ -51,6 +52,7 @@ The lifecycle is orchestrated in :file:`src/PageActions.cpp`:
    - :cpp:`ApplyRaspOverlay(const PageLayout &)`
    - :cpp:`ApplyEdlOverlay()`
    - :cpp:`ApplyXcthermOverlay()`
+   - :cpp:`ApplySkySightOverlay()`
 
 3. Leaving a page calls :cpp:`LeaveWeatherOverlayPage()` and
    provider-specific leave hooks.
@@ -97,6 +99,52 @@ time/altitude.
   - the download Layer, span, cache, and credentials remain global
     provider settings and are not changed by map Altitude selection.
 
+- SkySight:
+
+  - :cpp:`PageLayout::skysight_overlay` stores the selected layer ID.
+  - :cpp:`PageLayout::skysight_time` stores Auto or a fixed forecast
+    timestamp. Live tile layers always use Auto.
+  - entering a SkySight page applies both values. A fixed timestamp is kept
+    even when refreshed metadata no longer contains that step, so the cursor
+    can show it as unavailable instead of silently changing the page.
+
+SkySight forecast loading
+-------------------------
+
+SkySight keeps the selected forecast image visible while it refreshes the
+catalog or fetches forecast-step metadata.  With ``Auto update`` enabled,
+opening a SkySight page downloads missing or newer data automatically.
+Disabling it keeps automatic page refreshes cache-only; explicitly selecting
+a forecast time, pressing ``Set active``, or starting a preload can still
+download data.  The dialog timer retries deferred metadata requests without
+waiting for page activation or map rendering.
+
+``Preload Layer`` and ``Preload Selected`` use the shared top-of-map download
+progress widget.  The widget first reports forecast-step discovery, then
+displays the number of finished forecast files while download and NetCDF
+decoding proceed.  Cached files count as finished.  Requests run one at a
+time; a SkySight API rate limit pauses and requeues the interrupted request,
+shows a countdown, and resumes automatically.
+
+Preloading includes the available forecasts from the start of the current UTC
+day onward and excludes earlier days.  Full-day layers such as PFD contribute
+one file per forecast day.  Live tile layers are not preloaded, and their
+outstanding requests are cancelled when the user selects another layer.
+
+The SkySight cursor-bar rows are forecast time and layer. Both selections are
+stored on the current configured page and restored on page entry. The
+SkySight weather panel manages the global selected-layer list, automatic
+updates, offline preloading, and cache usage. ``Add to list`` changes the
+layers available to every map page. ``Set active`` assigns the highlighted
+selected layer to the current page in Auto time mode. More page layouts are
+managed through ``Pages setup``.
+
+The cache row reports the total size of the SkySight cache folder. ``Clear
+downloaded data`` cancels file downloads and decoding before deleting forecast
+files, rendered images, live tiles, and temporary files. Provider catalog
+metadata, credentials, selected layers, page configuration, and persisted API
+throttle state are preserved.
+
 Threading and async boundaries
 ------------------------------
 
@@ -125,6 +173,8 @@ Integration checklist for a new provider
 
 5. Trigger refresh/download only from well-defined UI events
    (first enter, auto-no-data, explicit user action).
+   Providers with multi-file preloads must report a stable batch progress
+   total, not only the current queue depth.
 6. Add unit tests for session transitions and reset rules (see
    :file:`test/src/TestWeatherUIState.cpp`).
 
@@ -140,7 +190,7 @@ Page placement UX
 -----------------
 
 Weather dialogs provide a ``Pages setup`` button that opens
-Config → Look → Pages, where map overlays (RASP, EDL, XCTherm) and the
+Config → Look → Pages, where map overlays (RASP, EDL, XCTherm, SkySight) and the
 weather cursor bar can be assigned to pages.
 
 Programmatic placement helpers in ``PageActions`` /

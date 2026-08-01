@@ -234,7 +234,9 @@ Repository downloads and other fetched forecast data live under
   and isobar level.
 - **SkySight** — :file:`cache/weather/skysight/`
   (:file:`Weather/SkySight/`). The provider removes stale forecast artifacts
-  automatically while retaining catalog and throttle ``*.cache`` files.
+  automatically. Its weather panel can report the folder size and manually
+  clear downloaded data while retaining catalog and throttle ``*.cache``
+  files.
 - **XCTherm** — :file:`cache/weather/xctherm/<model>/`
   (:file:`Weather/xctherm/XCThermAPI.cpp`). Each file is named
   ``<parameter>_<utc>.xctcache``.
