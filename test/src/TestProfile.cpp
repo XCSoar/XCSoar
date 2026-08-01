@@ -186,6 +186,14 @@ TestWeatherPageCursorRoundTrip()
   xctherm.xctherm_time = 15;
   xctherm.Normalise();
 
+  settings.n_pages = 3;
+  auto &skysight = settings.pages[2];
+  skysight = PageLayout::Default();
+  skysight.overlay = PageLayout::Overlay::SKYSIGHT;
+  skysight.skysight_overlay = "wind_925";
+  skysight.skysight_time = 1785542400;
+  skysight.Normalise();
+
   Profile::Clear();
   Profile::Save(Profile::map, settings);
 
@@ -197,6 +205,8 @@ TestWeatherPageCursorRoundTrip()
   ok1(loaded.pages[0].edl_isobar == edl.edl_isobar);
   ok1(loaded.pages[1].xctherm_layer == xctherm.xctherm_layer);
   ok1(loaded.pages[1].xctherm_time == xctherm.xctherm_time);
+  ok1(loaded.pages[2].skysight_overlay == skysight.skysight_overlay);
+  ok1(loaded.pages[2].skysight_time == skysight.skysight_time);
 }
 
 #ifdef HAVE_HTTP
@@ -238,7 +248,7 @@ TestSkySightProfileCompatibility()
 
 int main()
 try {
-  plan_tests(48
+  plan_tests(50
 #ifdef HAVE_HTTP
              + 6
 #endif

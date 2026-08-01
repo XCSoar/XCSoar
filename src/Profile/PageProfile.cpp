@@ -6,6 +6,8 @@
 #include "Map.hpp"
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "util/NumberParser.hxx"
+#include "util/StaticString.hxx"
 #include "util/StringFormat.hpp"
 
 #include <stdio.h>
@@ -103,6 +105,13 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
     pl.skysight_overlay.clear();
   }
 
+  strcpy(profileKey + prefixLen, "SkySightTime");
+  if (const char *value = map.Get(profileKey); value != nullptr) {
+    if (!ParseIntegerTo(std::string_view{value}, pl.skysight_time) ||
+        pl.skysight_time < PageLayout::SKYSIGHT_TIME_AUTO)
+      pl.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
+  }
+
   if (pl.overlay == PageLayout::Overlay::NONE &&
       pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS &&
       pl.skysight_overlay.empty())
@@ -173,6 +182,11 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "SkysightOverlay");
   map.Set(profileKey, page.skysight_overlay.c_str());
+
+  strcpy(profileKey + prefixLen, "SkySightTime");
+  StaticString<32> skysight_time;
+  skysight_time.Format("%lld", (long long)page.skysight_time);
+  map.Set(profileKey, skysight_time.c_str());
 }
 
 
