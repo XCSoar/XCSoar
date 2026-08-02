@@ -96,7 +96,7 @@ void
 NOAAListWidget::CreateButtons(ButtonPanel &buttons)
 {
   details_button = buttons.Add(_("Details"), [this](){ DetailsClicked(); });
-  add_button = buttons.Add(_("Add"), [this](){ AddClicked(); });
+  add_button = buttons.Add(C_("Button", "Add"), [this](){ AddClicked(); });
   update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
   remove_button = buttons.Add(_("Remove"), [this](){ RemoveClicked(); });
 

@@ -260,7 +260,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent,
   });
 
   const char *home_label = is_simulator()
-    ? _("Set as Startup Location")
+    ? C_("Button", "Set as Startup Location")
     : _("Set as New Home");
 
   home_button = AddButton(home_label, [this](){

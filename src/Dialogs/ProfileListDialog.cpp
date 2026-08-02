@@ -153,7 +153,7 @@ ProfileListWidget::CreateButtons(WidgetDialog &dialog)
   dialog.AddButton(_("New"), [this](){ NewClicked(); });
   password_button = dialog.AddButton(_("Password"), [this](){ PasswordClicked(); });
   copy_button = dialog.AddButton(_("Copy"), [this](){ CopyClicked(); });
-  delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
+  delete_button = dialog.AddButton(C_("Button", "Delete"), [this](){ DeleteClicked(); });
 }
 
 void
@@ -277,7 +277,7 @@ ConfirmDeleteProfile(const char *name)
 
   tmp.Format(_("Delete \"%s\"?"),
              tmp_name.c_str());
-  return ShowMessageBox(tmp, _("Delete"), MB_YESNO) == IDYES;
+  return ShowMessageBox(tmp, C_("Button", "Delete"), MB_YESNO) == IDYES;
 }
 
 inline void

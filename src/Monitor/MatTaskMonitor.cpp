@@ -37,7 +37,7 @@ public:
   MatTaskAddWidget(MatTaskMonitor &_monitor, WaypointPtr &&_waypoint)
     :QuestionWidget(MakeMessage(*_waypoint)),
      monitor(_monitor), waypoint(std::move(_waypoint)) {
-    AddButton(_("Add"), [this](){
+    AddButton(C_("Button", "Add"), [this](){
       OnAdd();
       PageActions::RestoreBottom();
     });

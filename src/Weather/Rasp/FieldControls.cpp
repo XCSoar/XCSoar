@@ -416,7 +416,7 @@ FormatFieldCursorLabel(StaticString<64> &text) noexcept
   const auto rasp = DataGlobals::GetRasp();
   const int field_index = GetEffectiveFieldIndex();
   if (rasp == nullptr || field_index < 0) {
-    text = _("No layer");
+    text = C_("Weather control", "No layer");
     return;
   }
 
@@ -508,7 +508,7 @@ OpenLayerPicker(bool offer_setup) noexcept
   field.SetValue(current >= 0 ? current : -1);
 
   bool setup = false;
-  const char *setup_caption = offer_setup ? _("Setup") : nullptr;
+  const char *setup_caption = offer_setup ? C_("Button", "Setup") : nullptr;
   if (!ComboPicker(_("RASP Layer"), field, nullptr, setup_caption,
                    &setup))
     return setup ? LayerPickerResult::OPEN_SETUP

@@ -110,7 +110,7 @@ public:
   }
 
   void CreateButtons(ButtonPanel &buttons) {
-    add_button = buttons.Add(_("Add"), [this](){
+    add_button = buttons.Add(C_("Button", "Add"), [this](){
       const unsigned n = GetList().GetLength();
       if (n < PageSettings::MAX_PAGES) {
         auto &page = settings.pages[n];
@@ -120,7 +120,7 @@ public:
       }
     });
 
-    delete_button = buttons.Add(_("Delete"), [this](){
+    delete_button = buttons.Add(C_("Button", "Delete"), [this](){
       const unsigned n = GetList().GetLength();
       const unsigned cursor = GetList().GetCursorIndex();
       if (n >= 2 && GetList().GetCursorIndex() < n) {
@@ -223,7 +223,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
       _("EDL pressure level / altitude band for this map page. "
         "Auto follows aircraft altitude when the page is opened."));
 
-    df.AddChoice(0, _("Auto"),
+    df.AddChoice(0, C_("Weather control", "Auto"),
                  _("Follow altitude on page enter (auto level)."));
 
     for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i) {
@@ -249,7 +249,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
 #endif
 
   case PageLayout::Overlay::SKYSIGHT: {
-    control.SetCaption(_("SkySight layer"));
+    control.SetCaption(C_("Setting", "SkySight layer"));
     control.SetHelpText(
       _("SkySight layer used when this page overlay is SkySight."));
 
@@ -303,7 +303,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
   case PageLayout::Overlay::EDL:
 #endif
   case PageLayout::Overlay::MAX:
-    control.SetCaption(_("Layer / Level"));
+    control.SetCaption(C_("Setting", "Layer / Level"));
     control.SetHelpText(
       _("Select a RASP or EDL map overlay to configure its "
         "layer or level for this page."));
@@ -383,7 +383,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           (unsigned)PageLayout::Main::MAP, this);
 
   static constexpr StaticEnumChoice ib_list[] = {
-    { IBP_AUTO, N_("Auto"), N_("Displays either the Circling, Cruise, or Final glide InfoBoxes.") },
+    { IBP_AUTO, NC_("Setting", "Auto"), N_("Displays either the Circling, Cruise, or Final glide InfoBoxes.") },
     { IBP_NONE, N_("None"), N_("Show fullscreen (no InfoBoxes)") },
     nullptr
   };
@@ -419,7 +419,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
     /* Always available: RASP does not require OpenGL, and the shared
        weather cursor bar works for RASP on memory canvas / Kobo. */
-    { PageLayout::Bottom::WEATHER_CONTROLS, N_("Weather controls") },
+    { PageLayout::Bottom::WEATHER_CONTROLS, NC_("Setting", "Weather controls") },
     nullptr
   };
   AddEnum(_("Bottom area"),
@@ -431,23 +431,23 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 
   static constexpr StaticEnumChoice overlay_list[] = {
     { PageLayout::Overlay::NONE, N_("None") },
-    { PageLayout::Overlay::RASP, N_("RASP") },
+    { PageLayout::Overlay::RASP, NC_("Abbreviation", "RASP") },
 #ifdef HAVE_EDL
-    { PageLayout::Overlay::EDL, N_("EDL") },
+    { PageLayout::Overlay::EDL, NC_("Abbreviation", "EDL") },
 #endif
 #ifdef HAVE_HTTP
-    { PageLayout::Overlay::XCTHERM, N_("XCTherm") },
+    { PageLayout::Overlay::XCTHERM, "XCTherm" },
     { PageLayout::Overlay::SKYSIGHT, "SkySight" },
 #endif
     nullptr
   };
-  AddEnum(_("Map overlay"),
+  AddEnum(C_("Setting", "Map overlay"),
           _("Optional weather overlay on map pages. "
             "Use with Weather controls in the bottom area for in-flight adjustment."),
           overlay_list,
           (unsigned)PageLayout::Overlay::NONE, this);
 
-  AddEnum(_("Layer / Level"),
+  AddEnum(C_("Setting", "Layer / Level"),
           _("Select a weather map overlay to configure its "
             "layer or level for this page."),
           this);

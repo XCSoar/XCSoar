@@ -30,8 +30,8 @@ enum ControlIndex {
 };
 
 static constexpr StaticEnumChoice switching_modes[] = {
-  { VarioSoundSwitchingMode::MANUAL, N_("Manual") },
-  { VarioSoundSwitchingMode::AUTO, N_("Auto") },
+  { VarioSoundSwitchingMode::MANUAL, NC_("Setting", "Manual") },
+  { VarioSoundSwitchingMode::AUTO, NC_("Setting", "Auto") },
   nullptr
 };
 
@@ -65,7 +65,7 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent,
              _("The audio vario sound volume."), "%u %%", "%u",
              0, 100, 1, settings.volume);
 
-  AddEnum(_("Mode switching"),
+  AddEnum(C_("Setting", "Mode switching"),
       _("Choose whether the audio vario stays in manual mode or switches automatically between Vario in circling and STF in cruise. Manual mode starts in Vario after each restart and can be changed by external input events. In the built-in simulator, STF audio needs valid airspeed and total-energy vario input; without those, manual STF is silent and auto cruise falls back to vario."),
           switching_modes, (unsigned)settings.switching_mode);
 

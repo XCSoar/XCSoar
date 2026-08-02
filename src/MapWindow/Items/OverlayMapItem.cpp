@@ -10,7 +10,7 @@ OverlayMapItem::OverlayMapItem(const MapOverlay &_overlay, GeoPoint location)
    label([&_overlay] {
      StaticString<64> value;
      if (!value.SetUTF8(_overlay.GetLabel()))
-       value = _("Map overlay");
+       value = C_("Status", "Map overlay");
      return value;
    }())
 {

@@ -96,7 +96,7 @@ CreateEDLUnavailableWidget() noexcept
 {
   static StaticString<128> message;
   FormatFeatureNotAvailableInThisBuildWithoutOpenGLRenderer(
-    message, N_("EDL weather"));
+    message, _("EDL weather"));
   return std::make_unique<EDLUnavailableWidget>(message.c_str());
 }
 #endif

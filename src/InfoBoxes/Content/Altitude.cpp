@@ -26,7 +26,7 @@ constexpr
 const InfoBoxPanel altitude_infobox_panels[] = {
   { N_("Simulator"), LoadAltitudeSimulatorPanel },
   { N_("Info"), LoadAltitudeInfoPanel },
-  { N_("Setup"), LoadAltitudeSetupPanel },
+  { NC_("Menu", "Setup"), LoadAltitudeSetupPanel },
   { nullptr, nullptr }
 };
 

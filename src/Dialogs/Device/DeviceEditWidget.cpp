@@ -372,14 +372,14 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
 
   DataFieldString *spectate_path_df = new DataFieldString("", this);
   spectate_path_df->SetValue(config.path);
-  Add(_("Spectate file"),
+  Add(C_("Setting", "Spectate file"),
       _("Full path to Condor 3 Spectate.json. "
         "Default: c:\\condor3\\logs\\spectate.json"),
       spectate_path_df);
 
   DataFieldString *own_callsign_df = new DataFieldString("", this);
   own_callsign_df->SetValue(config.port_name);
-  Add(_("Own callsign"),
+  Add(C_("Setting", "Own callsign"),
       _("Competition number of your glider in Spectate.json "
         "(excluded from traffic, used as position reference)."),
       own_callsign_df);
@@ -444,7 +444,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
              config.sync_to_device, this);
   SetExpertRow(SyncToDevice);
 
-  AddBoolean(_("Emit GPGGA/GPRMC"),
+  AddBoolean(C_("Setting", "Emit GPGGA/GPRMC"),
              _("Tells XCSoar to send its current GPS position to the "
                "device as $GPGGA and $GPRMC sentences. Turn off when "
                "another GPS source is already feeding the device on "

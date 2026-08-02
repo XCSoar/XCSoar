@@ -107,7 +107,7 @@ WaypointManagerWidget::CreateButtons(WidgetDialog &dialog)
     OnWaypointSaveClicked();
   });
 
-  delete_button = dialog.AddButton(_("Delete"), [this](){
+  delete_button = dialog.AddButton(C_("Button", "Delete"), [this](){
     OnWaypointDeleteClicked(GetList().GetCursorIndex());
   });
 }

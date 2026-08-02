@@ -56,8 +56,8 @@ const char *
 GetAlternateModeShortLabel(AlternateInfoBoxMode mode) noexcept
 {
   return mode == AlternateInfoBoxMode::MANUAL
-    ? _("MAN")
-    : _("AUTO");
+    ? C_("Abbreviation", "MAN")
+    : C_("Abbreviation", "AUTO");
 }
 
 [[gnu::pure]]
@@ -256,7 +256,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 void
 InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 {
-  SetAlternateTitle(data, slot, _("GR"));
+  SetAlternateTitle(data, slot, C_("Abbreviation", "GR"));
 
   const auto alternate = ResolveAlternateInfo(slot);
   if (!alternate.IsValid()) {
@@ -286,7 +286,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 void
 InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
 {
-  SetAlternateTitle(data, slot, _("AltD"));
+  SetAlternateTitle(data, slot, C_("Abbreviation", "AltD"));
 
   const auto alternate = ResolveAlternateInfo(slot);
   if (!alternate.IsValid()) {

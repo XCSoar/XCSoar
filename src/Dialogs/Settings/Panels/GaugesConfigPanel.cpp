@@ -28,7 +28,7 @@ static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
     N_("Disable final glide bar.") },
   { FinalGlideBarDisplayMode::ON, N_("On"),
     N_("Always show final glide bar.") },
-  { FinalGlideBarDisplayMode::AUTO, N_("Auto"),
+  { FinalGlideBarDisplayMode::AUTO, NC_("Setting", "Auto"),
     N_("Show final glide bar if approaching final glide range.") },
   nullptr
 };

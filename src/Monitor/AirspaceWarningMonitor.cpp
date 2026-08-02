@@ -66,7 +66,7 @@ class AirspaceWarningWidget final
                    AirspaceWarning::State state,
                    const AirspaceInterceptSolution &solution) noexcept {
     if (state == AirspaceWarning::WARNING_INSIDE) {
-      name_text.Format("%s: %s", _("Inside"), airspace.GetName());
+      name_text.Format("%s: %s", C_("Status", "Inside"), airspace.GetName());
       details_text.clear();
       return;
     }

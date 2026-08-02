@@ -24,12 +24,12 @@ public:
 
   void Prepare([[maybe_unused]] ContainerWindow &parent,
                [[maybe_unused]] const PixelRect &rc) noexcept override {
-    AddButton(_("Navigation & Flight Resources"), [](){ ShowConfigPanel(_("Site Files"), CreateSiteConfigPanel); });
-    AddButton(_("Download manager"), [](){ ShowFileManager(); });
-    AddButton(_("Export flights"), [](){ ShowExportFlightsDialog(); });
-    AddButton(_("Import data"), [](){ ShowImportDataDialog(); });
-    AddButton(_("Backup manager"), [](){ ShowBackupManagerDialog(); });
-    AddButton(_("Advanced File Explorer"), [](){ ShowAdvancedFileExplorerDialog(); });
+    AddButton(C_("Button", "Navigation & Flight Resources"), [](){ ShowConfigPanel(_("Site Files"), CreateSiteConfigPanel); });
+    AddButton(C_("Button", "Download manager"), [](){ ShowFileManager(); });
+    AddButton(C_("Button", "Export flights"), [](){ ShowExportFlightsDialog(); });
+    AddButton(C_("Button", "Import data"), [](){ ShowImportDataDialog(); });
+    AddButton(C_("Button", "Backup manager"), [](){ ShowBackupManagerDialog(); });
+    AddButton(C_("Button", "Advanced File Explorer"), [](){ ShowAdvancedFileExplorerDialog(); });
   }
 };
 
@@ -40,9 +40,9 @@ ShowDataManagementDialog()
 
   TWidgetDialog<DataManagementWidget> dlg(
     WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-    look, _("Data Management"));
+    look, C_("Menu", "Data Management"));
 
-  dlg.AddButton(_("Back"), dlg.MakeModalResultCallback(mrCancel));
+  dlg.AddButton(C_("Button", "Back"), dlg.MakeModalResultCallback(mrCancel));
   dlg.SetWidget(look);
   dlg.ShowModal();
 }
