@@ -70,7 +70,7 @@ public:
   bool SelectAutomaticForecastTime(std::string_view id);
   bool PreloadForecast(std::string_view id) noexcept;
   bool PreloadAllForecasts() noexcept;
-  unsigned GetPreloadFileCount() const noexcept;
+  unsigned GetPreloadFileCount() const;
   unsigned GetSelectedForecastLayerCount() const noexcept;
   bool HasForecastLayers() const noexcept;
   bool IsForecastDecodeAvailable() const noexcept;
