@@ -1,0 +1,48 @@
+---
+description: Pilot-facing wording for NEWS.txt bullets
+globs:
+  - "NEWS.txt"
+alwaysApply: false
+---
+
+# NEWS.txt — wording
+
+Audience: pilots and installers reading Credits / release notes.
+
+## Tone
+
+- Impersonal: no “you” / “your” (except quoting a UI string, e.g. "Your Position")
+- Plain language; what the user notices, not how it was implemented
+- Bullets start with a verb: `add`, `fix`, `show`, `hide`, `improve`, …
+
+## Prefer
+
+- Dialog / setting titles in quotes when helpful: "Map elements at this location",
+  Select Waypoint, Safety Factors
+- “OpenGL Windows version”, “installer”, “legacy single-file executable”
+- Driver names and file formats the user configures (`LXNAV`, `.openair`)
+
+## Avoid in user-facing bullets
+
+- Build targets: `WIN64OPENGL`, `PC`, `TARGET=…`
+- Internal stack jargon when a plain phrase exists: GDI, NSIS, ANGLE, `USE_*`
+- Source paths, class names, “when merging”, “own-ship”, “gated on …”
+- Second person and chatty phrasing
+
+```text
+# BAD
+- add NSIS installer for OpenGL builds (WIN64OPENGL)
+- how far you can still fly while reaching the turnpoint
+- open waypoint search filtered (…)
+
+# GOOD
+- add installer for the OpenGL Windows version (64-bit and 32-bit)
+- how far one can still fly and still reach the active task waypoint
+- open Select Waypoint filtered (recent, airport, landable, …)
+```
+
+## Release rewrites
+
+- Cover user-facing changes since the previous release, not every commit
+- Drop clear “broken in this release cycle then fixed before ship” items
+- Keep real upgrades from the previous shipped version

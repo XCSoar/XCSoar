@@ -118,8 +118,8 @@ are appropriate. Prefix bullets with a topic (``build system:``,
 - Section names in ``NEWS.txt`` are historically inconsistent (``* ui`` vs
   ``* user interface``); match the current unreleased release block.
 
-See also ``.cursor/rules/news.txt.mdc`` for wording examples and a fuller
-checklist.
+See also ``.cursor/rules/news.txt.mdc`` and the related ``news-*.mdc`` rules
+for structure, wording, formatting, and section organisation.
 
 Code Style
 ==========

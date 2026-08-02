@@ -1,0 +1,40 @@
+---
+description: How to organise NEWS.txt sections in a release block
+globs:
+  - "NEWS.txt"
+alwaysApply: false
+---
+
+# NEWS.txt — sections
+
+For a large release block, prefer **topic sections** over a long `* ui` dump.
+
+## Splitting
+
+- When ~4+ bullets share a theme, give them a section (`* alternates`,
+  `* weather`, `* Data Management`, `* FLARM radar`, `* checklists`, …)
+- Order roughly: core flight / map → related UI topics → devices → platforms →
+  `* documentation` → `* development`
+- Within a section: group by topic; features before fixes when that stays clear
+  (topic grouping wins over a rigid features-then-fixes split)
+
+## Typical section names (examples)
+
+`tracking`, `calculations`, `task`, `map`, `alternates`, `weather`, `airspace`,
+`devices`, `infoboxes`, `waypoint`, `ui`, `input`, platform names, `documentation`,
+`development`
+
+Use product / dialog names when that is what pilots see (`Quick Guide`,
+`Data Management`, `Thermal Assistant`).
+
+## Keep thin
+
+- `* ui`: cross-cutting chrome (keyboard, focus, colours, sounds) not claimed by
+  a topic section
+- `* input`: keys, gestures, `.xci` — not map gesture features (those → `* map`)
+- Map overlays and gestures → `* map` / `* weather`, not `* ui`
+
+## Platforms
+
+- User platform sections (`* Windows`, `* android`, …): what changes on that OS
+- Prefer “OpenGL Windows version” over renderer-stack names in user bullets

@@ -1,0 +1,38 @@
+---
+description: Line wrap, issue refs, and validation for NEWS.txt
+globs:
+  - "NEWS.txt"
+alwaysApply: false
+---
+
+# NEWS.txt — formatting
+
+## Layout
+
+- Max **79 columns** (same as project C++)
+- Bullets: `  - ` then text; continuations indented **4 spaces**
+- Fill lines near 79; do not wrap early leaving short stubs
+- Do not leave a continuation that is only `#1234` — pull a word down with it
+- No tabs; no trailing spaces; no blank lines inside a version block
+- One blank line between version blocks
+
+## Issue references
+
+- Append at the **end** of the bullet: ` #1234` or ` #1234 #5678`
+- Prefer `#1234`, not `(#1234)`
+- Only when tied to a GitHub issue or useful PR number
+
+## Validation
+
+After editing the current unreleased block:
+
+```bash
+python3 tools/news_to_quickguide_md.py NEWS.txt > /dev/null
+```
+
+Quick Guide “What's New” is generated from `NEWS.txt`; keep the parser happy.
+
+## Commits
+
+- Message form: `NEWS.txt: <summary>` (path with extension at repo root)
+- Do not mix NEWS rewrites with unrelated code in the same commit when avoidable
