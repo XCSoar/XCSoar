@@ -42,7 +42,7 @@ Version 7.45 - not yet released
   - add optional turn back marker (Safety Factors): green triangle along
     track showing how far you can still fly and reach the active task
     waypoint or Goto; only in cruise when the target is reachable;
-    saved in the profile #1741
+    saved in the profile #1740 #1741
   - support AUTO or MANUAL Alternate 1/2 InfoBoxes: tap to open the
     alternates list, switch mode, and assign a row (AUTO clears a manual
     pin); titles show Altn 1/2 with AUTO or MAN
@@ -66,7 +66,7 @@ Version 7.45 - not yet released
   - enlarge on-map text: waypoint names, map scale, and topography
     labels
   - add "Waypoint icon size" on Configuration → Map display → Waypoints
-    (50–200%, default 100%)
+    (50–200%, default 100%) #1594
   - make the thermal hotspot icon easier to see on dark backgrounds
     #2448
   - hide obstacles at wider map scales than other non-landables
@@ -76,7 +76,7 @@ Version 7.45 - not yet released
   - add terrain shading orientation "fixed (Top Left)"
   - smooth snail trail between fixes; vario colours use high-rate netto
     between GPS points when available #2447
-  - add distance rings around the current location #2522
+  - add distance rings around the current location #1206 #2522
   - match BigTrafficWidget task direction arrow to the map best-cruise
     shape #2027
   - show optional callsign and relative altitude beside BigTrafficWidget
@@ -178,6 +178,8 @@ Version 7.45 - not yet released
   - show glide polar sync in the device dialog only for drivers that
     support it (LXNAV) #2457
   - send QNH changes from external sources to all connected devices
+  - Air Control Display: set active COM frequency via standby swap
+    (AT-01 and similar with read-only active channel) #2454
   - show the Vario flag on the device list for non-compensated and
     netto vario sources as well as total-energy (e.g. BlueFly)
   - increase the number of device slots from 6 to 8
@@ -264,6 +266,7 @@ Version 7.45 - not yet released
     rate, and debounce ComboPicker help updates while scrolling
   - show full callsigns on all registered FLARM radar targets; omit
     duplicate side vario/altitude on the selected target #2718
+  - improve FLARM traffic symbol and label sizing #2708
   - rotate FLARM radar track-up targets on cardinal bearings
   - outline selected targets on the FLARM traffic radar
   - fix crash when opening the map item list on waypoints with long
@@ -319,6 +322,7 @@ Version 7.45 - not yet released
   - disable map overlay buttons on non-map pages (traffic, thermal
     assistant, etc.)
   - raise the InfoBox configuration entry limit so all InfoBoxes appear
+    #2344
   - encode bundled UI sound assets at higher quality
   - show clearer keyboard focus on tab strips in tabbed dialogs
   - advance checklist checkbox focus with Enter like Down #2405
@@ -329,6 +333,7 @@ Version 7.45 - not yet released
   - format Quick Guide "What's New" from NEWS.txt at build time
   - reflect live Safety factors and Terrain display settings in Quick
     Guide getting started #2324
+  - apply Quick Guide terrain file choice immediately (#2322)
   - improve Quick Guide checklist touch targets and checkbox appearance;
     -touchscreen / -notouchscreen override autodetection (non-Android)
     #2325
@@ -386,7 +391,9 @@ Version 7.45 - not yet released
     default
   - update the device list when storage access changes
 * iOS
-  - fix audio vario playback through the device speaker
+  - fix audio vario playback through the device speaker #2474
+  - open waypoint detail PDFs and other local files from the details
+    dialog (was failing silently) #2501
   - disable Core Location distance filter for built-in GPS so fixes are
     not suppressed while stationary #2380
   - configure built-in GPS and sensors in the last device slot by
@@ -394,17 +401,19 @@ Version 7.45 - not yet released
 * macOS
   - fix thick solid lines rendering at incorrect pixel width #2545
 * Linux
-  - add Config → Setup → Network for WiFi (NetworkManager or ConnMan via
-    D-Bus)
+  - add Config → Setup → Network for WiFi status, connect/disconnect,
+    and IP address (NetworkManager or ConnMan via D-Bus)
 * OpenVario
   - show WiFi and ethernet status; support WiFi connect/disconnect and
     ethernet DHCP renew from the Network dialog
 * Windows
   - add installer for the OpenGL Windows version (64-bit and 32-bit);
-    zip download remains available for a portable install
+    zip download remains available for a portable install #2064
   - deprecate the legacy single-file Windows executable; use the OpenGL
     version instead — the legacy build will be removed in a future
     release
+  - reduce Windows Defender false positives on Win64 builds (#2232)
+  - fix duplicate entries in Windows file lists #2625
   - fix crash opening the log list when replay filenames contain
     non-ASCII characters
   - open files in binary mode so embedded ZIP (e.g. CUPX POINTS.CUP) is
@@ -417,6 +426,8 @@ Version 7.45 - not yet released
 * Kobo
   - always start in light mode; dark mode is not supported on e-paper
     displays #2568
+  - add Config → Setup → Network with WiFi status and Auto WiFi (enable
+    WiFi automatically at startup) #2531
   - fix black squares when scrolling lists and edit fields on e-paper
     #2293
 * development
