@@ -82,7 +82,7 @@ MigrateCacheFiles(Path source_path, Path destination_path) noexcept
 
 [[nodiscard]] static bool
 HasExactForecastImage(std::string_view region,
-                      const SkySight::Layer &layer) noexcept
+                      const SkySight::Layer &layer)
 {
   if (layer.forecast_time <= 0)
     return false;
@@ -97,7 +97,7 @@ HasExactForecastImage(std::string_view region,
 [[nodiscard]] bool
 SyncCachedForecastImage(std::string_view region,
                         SkySight::Layer &layer,
-                        time_t forecast_time) noexcept
+                        time_t forecast_time)
 {
   const auto candidate = SkySightCache::FindForecastImage(
     SkySightClient::GetCachePath(), region, layer.id, forecast_time);
@@ -597,7 +597,7 @@ SkySightClient::PreloadAllForecasts() noexcept
 }
 
 unsigned
-SkySightClient::GetPreloadFileCount() const noexcept
+SkySightClient::GetPreloadFileCount() const
 {
   unsigned count = 0;
   const auto now = std::time(nullptr);
