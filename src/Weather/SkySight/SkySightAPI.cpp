@@ -286,20 +286,18 @@ SkySightAPI::ParseRegions(const boost::json::value &value,
                              bounds});
     }
 
-    if (!new_regions.empty()) {
-      regions = std::move(new_regions);
-      regions_loaded = true;
+    if (new_regions.empty())
+      return false;
 
-      bool found = false;
-      for (const auto &candidate : regions)
-        if (candidate.id == region) {
-          found = true;
-          break;
-        }
+    regions = std::move(new_regions);
+    regions_loaded = true;
 
-      if (!found)
-        region = FindSkySightRegionById({}).id;
-    }
+    const bool found = std::any_of(regions.begin(), regions.end(),
+                                   [this](const auto &candidate) {
+                                     return candidate.id == region;
+                                   });
+    if (!found)
+      region = FindSkySightRegionById({}).id;
 
     return true;
   } catch (...) {
@@ -388,6 +386,13 @@ SkySightAPI::ParseLayers(const boost::json::value &value,
 
       ParseLegend(entry, *layer);
     }
+
+    const bool has_forecast_layer = std::any_of(
+      new_layers.begin(), new_layers.end(), [](const auto &layer) {
+        return !layer.SupportsLiveTiles();
+      });
+    if (!has_forecast_layer)
+      return false;
 
     layers = std::move(new_layers);
     layers_loaded = true;
