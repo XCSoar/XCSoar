@@ -75,4 +75,11 @@ PrintHelp() noexcept;
  * @param CommandLine command line argument string
  */
   void Parse(Args &args);
+
+/**
+ * Apply a pending @c -profile= value after the data path is known
+ * (@c -datapath= and/or InitialiseDataPath()).  Basename profiles are
+ * resolved under the primary data path / @c profiles/.
+ */
+  void ApplyPendingProfile() noexcept;
 }

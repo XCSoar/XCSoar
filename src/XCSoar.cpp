@@ -122,6 +122,7 @@ try {
   }
 
   InitialiseDataPath();
+  CommandLine::ApplyPendingProfile();
 
   // Write startup note + version to logfile
   LogFormat("Starting %s", XCSoar_ProductToken);
