@@ -120,6 +120,9 @@ Version 7.45 - not yet released
   - Add Expert Look → Screen Layout setting "Display type" (LCD /
     E-ink / Color e-ink); e-ink modes disable kinetic and smooth
     scrolling. Defaults to E-ink on Kobo and LCD elsewhere
+  - OpenGL: keep the follow-mode map projection in sync on every map
+    paint so the aircraft and terrain move together (avoids the plane
+    sliding ahead of the map until the next full redraw)
   - Show the Vario flag on the device list for non-compensated and
     netto vario
     sources as well as total-energy (e.g. BlueFly)
