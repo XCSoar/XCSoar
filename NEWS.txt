@@ -26,6 +26,9 @@ Version 7.45 - not yet released
   - document ``AirspaceLabels`` input event
   - document map pinch-to-zoom on touchscreens that report both
     finger positions #2790
+* WeGlide
+  - fix crash when opening the aircraft type picker without a network
+    connection
 * ui
   - Add pinch-to-zoom on the map for touchscreens that report both
     finger positions (Android, iOS): two fingers scale about the

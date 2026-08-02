@@ -4,8 +4,8 @@
 #include "WeGlideTypePicker.hpp"
 
 #include "Dialogs/CoFunctionDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/ListPicker.hpp"
-#include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
@@ -43,17 +43,24 @@ DownloadAircraftTypes([[maybe_unused]] const WeGlideSettings &settings)
   if (Net::curl == nullptr)
     return {};
 
-  PluggableOperationEnvironment env;
-  const auto value = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
-                                          UIGlobals::GetDialogLook(),
-                                          _("Download"),
-                                          WeGlide::DownloadAircraftList(
-                                            *Net::curl, settings, env),
-                                          &env);
-  if (!value)
-    return {};
+  try {
+    PluggableOperationEnvironment env;
+    const auto value = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
+                                            UIGlobals::GetDialogLook(),
+                                            _("Download"),
+                                            WeGlide::DownloadAircraftList(
+                                              *Net::curl, settings, env),
+                                            &env);
+    if (!value)
+      return {};
 
-  return *value;
+    return *value;
+  } catch (...) {
+    /* ShowCoDialog rethrows download/network failures; without this
+       catch the Plane Details dialog crashes (e.g. offline Android). */
+    ShowError(std::current_exception(), _("WeGlide Type"));
+    return {};
+  }
 #else
   return {};
 #endif
@@ -71,13 +78,12 @@ SelectWeGlideAircraftType(unsigned &aircraft_id,
                           const WeGlideSettings &settings)
 {
   auto list = WeGlide::LoadAircraftListCache();
-  if (list.empty())
-    list = DownloadAircraftTypes(settings);
-
   if (list.empty()) {
-    ShowMessageBox(_("Could not load WeGlide aircraft list."),
-                   _("WeGlide Type"), MB_OK | MB_ICONEXCLAMATION);
-    return false;
+    list = DownloadAircraftTypes(settings);
+    /* Cancel returns empty without a message; network errors are
+       already reported by DownloadAircraftTypes(). */
+    if (list.empty())
+      return false;
   }
 
   const unsigned old_aircraft_id = aircraft_id;
@@ -94,8 +100,10 @@ SelectWeGlideAircraftType(unsigned &aircraft_id,
 
   unsigned initial_index = find_index(aircraft_id);
 
-  WeGlideAircraftRenderer renderer(list);
   while (true) {
+    /* Recreate after each refresh so the renderer does not keep a
+       reference to a moved-from vector. */
+    WeGlideAircraftRenderer renderer(list);
     const int result = ListPicker(_("Select WeGlide Type"),
                                   list.size(), initial_index,
                                   renderer.CalculateLayout(
@@ -112,11 +120,8 @@ SelectWeGlideAircraftType(unsigned &aircraft_id,
 
     if (result == mrExtra) {
       auto refreshed = DownloadAircraftTypes(settings);
-      if (refreshed.empty()) {
-        ShowMessageBox(_("Could not load WeGlide aircraft list."),
-                       _("WeGlide Type"), MB_OK | MB_ICONEXCLAMATION);
+      if (refreshed.empty())
         continue;
-      }
 
       list = std::move(refreshed);
       initial_index = find_index(aircraft_id);
