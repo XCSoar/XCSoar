@@ -121,8 +121,9 @@ Version 7.45 - not yet released
   - add pc_met www images: RADAR Deutschland Nord/Mitte/Süd, Alpen, SAT
     RAD BLITZ, and Blitzkarte Europa; local radar list uses Borkum
     instead of the removed Emden site
-* NOTAM integration #2018
+* NOTAM integration
   - add support for downloading, caching and displaying NOTAM airspaces
+    #2018
   - add manual refresh and auto-refresh with location/time based updates
   - add NOTAM settings and filters (IFR, effective time, max radius,
     hidden Q-codes)
