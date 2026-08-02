@@ -60,7 +60,7 @@ SkySightControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
   if (const auto *layer = GetLayer();
       layer != nullptr && layer->SupportsLiveTiles() &&
       skysight->IsLiveViewUpdating(layer->id))
-    text = _("Live (updating...)");
+    text = C_("Status", "Live (updating...)");
 }
 
 void

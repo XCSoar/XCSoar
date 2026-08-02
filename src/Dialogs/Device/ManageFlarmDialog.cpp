@@ -130,7 +130,7 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     AddReadOnly(_("IGC recorder"), nullptr, recorder_text);
   }
 
-  AddButton(_("Setup"), [this](){
+  AddButton(C_("Button", "Setup"), [this](){
     FLARMConfigWidget widget(GetLook(), device, hardware);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
                         "FLARM", widget);

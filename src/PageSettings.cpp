@@ -59,10 +59,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
       else {
         if (concise) {
           builder.Append(' ');
-          builder.Append(_("Auto"));
+          builder.Append(C_("Status", "Auto"));
         } else {
           builder.Append(" (");
-          builder.Append(_("Auto"));
+          builder.Append(C_("Status", "Auto"));
           builder.Append(')');
         }
       }

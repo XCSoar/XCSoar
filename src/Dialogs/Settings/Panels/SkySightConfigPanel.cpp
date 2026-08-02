@@ -40,14 +40,14 @@ SkySightConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddText(_("SkySight Email"),
+  AddText(C_("Setting", "SkySight Email"),
           _("The e-mail address you use to sign in to skysight.io."),
           settings.skysight.email);
-  AddPassword(_("SkySight Password"),
+  AddPassword(C_("Setting", "SkySight Password"),
               _("Your SkySight password."),
               settings.skysight.password);
 
-  auto *region = AddEnum(_("SkySight Region"),
+  auto *region = AddEnum(C_("Setting", "SkySight Region"),
                          _("Select the SkySight region used for live weather layers."));
   if (region == nullptr)
     return;

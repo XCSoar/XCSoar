@@ -64,7 +64,7 @@ ManageLXNAVVarioWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[mayb
     AddReadOnly(_("License"), NULL, buffer.c_str());
   }
 
-  AddButton(_("Setup"), [this](){
+  AddButton(C_("Button", "Setup"), [this](){
     LXNAVVarioConfigWidget widget(GetLook(), device);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
                         "LXNAV Vario", widget);

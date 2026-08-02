@@ -26,7 +26,7 @@ SetVSpeed(InfoBoxData &data, double value) noexcept
 
 static constexpr InfoBoxPanel panels[] = {
   { N_("Edit"), LoadMacCreadyEditPanel },
-  { N_("Setup"), LoadMacCreadySetupPanel },
+  { NC_("Menu", "Setup"), LoadMacCreadySetupPanel },
   { nullptr, nullptr }
 };
 

@@ -73,7 +73,7 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     {
       builder.Append(' ');
       if (layout.xctherm_layer == PageLayout::XCTHERM_LAYER_AUTO)
-        builder.Append(_("Auto"));
+        builder.Append(C_("Status", "Auto"));
       else {
         const auto &settings =
           CommonInterface::GetComputerSettings().weather.xctherm;

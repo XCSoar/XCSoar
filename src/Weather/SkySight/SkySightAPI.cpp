@@ -435,11 +435,11 @@ SkySightAPI::InitialiseLayers(std::vector<SkySight::Layer> &new_layers)
 {
   new_layers.clear();
 
-  new_layers.emplace_back("satellite", _("Satellite"),
+  new_layers.emplace_back("satellite", C_("Weather layer", "Satellite"),
                           _("Live SkySight satellite tiles"),
                           true, true, true, 1, 8, 1.0f);
 
-  new_layers.emplace_back("rain", _("Rain"),
+  new_layers.emplace_back("rain", C_("Weather layer", "Rain"),
                           _("Live SkySight precipitation tiles"),
                           true, true, true, 1, 8, 0.7f);
 }

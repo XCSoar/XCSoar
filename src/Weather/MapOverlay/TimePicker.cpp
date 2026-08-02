@@ -15,7 +15,7 @@ RunTimePicker(const char *caption,
               const bool enable_now) noexcept
 {
   const int selected_index =
-    ComboPicker(caption, choices, nullptr, false, _("Auto"),
+    ComboPicker(caption, choices, nullptr, false, C_("Weather control", "Auto"),
                 enable_now ? _("Now") : nullptr);
 
   TimePickerResult result;

@@ -83,7 +83,7 @@ EditTimeOnLayout(PageLayout &page) noexcept
       return false;
 
     DataFieldEnum picker;
-    picker.addEnumText(_("Auto"), TIME_PICKER_AUTO);
+    picker.addEnumText(C_("Weather control", "Auto"), TIME_PICKER_AUTO);
     for (unsigned i = 0; i < times.size(); ++i)
       picker.addEnumText(FormatForecastTimeLabel(
         *layer, times[i],
@@ -135,7 +135,7 @@ EditLayerOnLayout(PageLayout &page, bool offer_setup) noexcept
   picker.SetValue(current);
   bool setup = false;
   if (!ComboPicker(_("SkySight Layer"), picker, nullptr,
-                   offer_setup ? _("Setup") : nullptr, &setup))
+                   offer_setup ? C_("Button", "Setup") : nullptr, &setup))
     return setup ? LayerPickerResult::OPEN_SETUP
                  : LayerPickerResult::NONE;
 
@@ -199,12 +199,12 @@ FormatTimeLabelForPage(StaticString<64> &text,
   const auto skysight = DataGlobals::GetSkySight();
   const auto *layer = GetLayer(page);
   if (layer == nullptr) {
-    text = _("No page layer");
+    text = C_("Status", "No page layer");
     return;
   }
 
   if (layer->SupportsLiveTiles()) {
-    text = _("Live");
+    text = C_("Status", "Live");
     return;
   }
 
@@ -214,7 +214,7 @@ FormatTimeLabelForPage(StaticString<64> &text,
     ? layer->forecast_time
     : time_t(page.skysight_time);
   if (timestamp <= 0) {
-    text = automatic ? _("Auto") : _("No data");
+    text = automatic ? C_("Status", "Auto") : C_("Status", "No data");
     return;
   }
 
@@ -239,7 +239,7 @@ FormatLayerLabelForPage(StaticString<64> &text,
   text = layer != nullptr
     ? layer->name.c_str()
     : page.skysight_overlay.empty()
-      ? _("No page layer")
+      ? C_("Status", "No page layer")
       : page.skysight_overlay.c_str();
 }
 

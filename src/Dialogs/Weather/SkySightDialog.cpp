@@ -84,7 +84,7 @@ public:
     StaticString<128> first_row;
     first_row = layer->name.c_str();
     if (skysight->GetActiveLayerId() == layer->id)
-      first_row.AppendFormat(" [%s]", _("Current page"));
+      first_row.AppendFormat(" [%s]", C_("Status", "Current page"));
 
     StaticString<256> second_row;
     if (layer->ShouldShowUpdating()) {
@@ -283,16 +283,16 @@ protected:
 
 private:
   void CreateButtons(ButtonPanel &buttons) {
-    select_button = buttons.Add(_("Add to list"), [this]() {
+    select_button = buttons.Add(C_("Button", "Add to list"), [this]() {
       SelectClicked();
     });
-    set_active_button = buttons.Add(_("Set active"), [this]() {
+    set_active_button = buttons.Add(C_("Button", "Set active"), [this]() {
       SetActiveClicked();
     });
-    preload_button = buttons.Add(_("Preload Layer"), [this]() {
+    preload_button = buttons.Add(C_("Button", "Preload Layer"), [this]() {
       PreloadClicked();
     });
-    preload_all_button = buttons.Add(_("Preload Selected"), [this]() {
+    preload_all_button = buttons.Add(C_("Button", "Preload Selected"), [this]() {
       PreloadAllClicked();
     });
     buttons.EnableCursorSelection();
@@ -308,8 +308,9 @@ private:
     const auto catalog_loading = skysight != nullptr && skysight->HasCredentials() &&
       !skysight->HasForecastLayers();
 
-    select_button->SetCaption(catalog_loading ? _("Loading")
-                                              : _("Add to list"));
+    select_button->SetCaption(catalog_loading
+                              ? C_("Status", "Loading")
+                              : C_("Button", "Add to list"));
     select_button->SetEnabled(skysight != nullptr && !catalog_loading &&
                   skysight->NumLayers() > 0);
 
@@ -368,8 +369,8 @@ private:
     Button *toggle_all_button = dialog.AddButton("", [](){});
     std::function<void()> update_buttons = [picker, toggle_all_button]() {
       toggle_all_button->SetCaption(picker->GetSelectedCount() == 0
-                                    ? _("Select all")
-                                    : _("Select none"));
+                                    ? C_("Button", "Select all")
+                                    : C_("Button", "Select none"));
     };
     toggle_all_button->SetCallback([picker, update_buttons]() mutable {
       if (picker->GetSelectedCount() == 0)
@@ -578,7 +579,7 @@ public:
     const auto &settings =
       CommonInterface::GetComputerSettings().weather.skysight;
     AddBoolean(
-      _("Auto update"),
+      C_("Setting", "Auto update"),
       _("Automatically download missing or newer SkySight data for the "
         "current map page. Manual preload remains available."),
       settings.auto_update);
@@ -592,11 +593,11 @@ public:
       }
     });
 
-    AddReadOnly(_("Cache"),
+    AddReadOnly(C_("Setting", "Cache"),
                 _("Total disk space used by the SkySight cache folder."));
     UpdateCacheSize();
-    AddButton(_("Clear downloaded data"), [this] { ClearCache(); });
-    AddButton(_("Pages setup"), [] {
+    AddButton(C_("Button", "Clear downloaded data"), [this] { ClearCache(); });
+    AddButton(C_("Button", "Pages setup"), [] {
       WeatherOverlayDraft::OpenPagesConfig();
     });
   }

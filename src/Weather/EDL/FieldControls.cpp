@@ -372,7 +372,7 @@ EditTimeOnLayout(PageLayout &page) noexcept
   const ComboList combo_list = field.CreateComboList(nullptr);
 
   StaticString<64> caption;
-  caption.Format("%s %s (UTC)", "EDL", _("Time"));
+  caption.Format("%s %s (UTC)", "EDL", C_("Weather control", "Time"));
 
   const WeatherMapOverlay::TimePickerResult result =
     WeatherMapOverlay::RunTimePicker(caption.c_str(), combo_list);
@@ -439,7 +439,7 @@ EditLevelOnLayout(PageLayout &page, bool offer_setup) noexcept
   EnsureInitialised();
 
   DataFieldEnum field;
-  field.AddChoice(-1, _("Auto"));
+  field.AddChoice(-1, C_("Weather control", "Auto"));
 
   const bool manual =
     page.edl_isobar > 0 &&
@@ -461,7 +461,7 @@ EditLevelOnLayout(PageLayout &page, bool offer_setup) noexcept
   field.SetValue(manual ? unsigned(selected_index) : unsigned(-1));
 
   bool setup = false;
-  const char *setup_caption = offer_setup ? _("Setup") : nullptr;
+  const char *setup_caption = offer_setup ? C_("Button", "Setup") : nullptr;
   if (!ComboPicker(_("EDL Level"), field, nullptr, setup_caption,
                    &setup))
     return setup ? LevelPickerResult::OPEN_SETUP

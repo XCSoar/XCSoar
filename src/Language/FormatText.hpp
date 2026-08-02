@@ -7,20 +7,22 @@
 #include "util/StaticString.hxx"
 
 /**
- * Format "Feature is not available in this build." for a translatable
- * feature name (N_() marker).
+ * Format "Feature is not available in this build."
+ *
+ * @param feature already-translated feature label (e.g. _("…") / C_(…)).
  */
 template<std::size_t N>
 void
 FormatFeatureNotAvailableInThisBuild(StaticString<N> &dest,
                                      const char *feature) noexcept
 {
-  dest.Format(_("%s is not available in this build."), _(feature));
+  dest.Format(_("%s is not available in this build."), feature);
 }
 
 /**
- * Format "... because the OpenGL renderer is not available." for a
- * translatable feature name (N_() marker).
+ * Format "... because the OpenGL renderer is not available."
+ *
+ * @param feature already-translated feature label (e.g. _("…") / C_(…)).
  */
 template<std::size_t N>
 void
@@ -29,7 +31,7 @@ FormatFeatureNotAvailableInThisBuildWithoutOpenGLRenderer(
 {
   dest.Format(_("%s is not available in this build because the OpenGL "
                "renderer is not available."),
-              _(feature));
+              feature);
 }
 
 /**

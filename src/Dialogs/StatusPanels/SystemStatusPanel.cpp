@@ -61,9 +61,9 @@ SystemStatusPanel::Refresh() noexcept
   if (basic.netto_vario_available)
     SetText(Vario, _("Netto"));
   else if (basic.total_energy_vario_available)
-    SetText(Vario, _("Total energy"));
+    SetText(Vario, C_("Status", "Total energy"));
   else if (basic.noncomp_vario_available)
-    SetText(Vario, _("Uncompensated"));
+    SetText(Vario, C_("Status", "Uncompensated"));
   else
     SetText(Vario, _("Disconnected"));
 

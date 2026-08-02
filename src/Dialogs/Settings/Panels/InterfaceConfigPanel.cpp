@@ -193,7 +193,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   bool hide_quick_guide = false;
   Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup,
                hide_quick_guide);
-  AddBoolean(_("Show Quick Guide"),
+  AddBoolean(C_("Setting", "Show Quick Guide"),
              _("If enabled, the Quick Guide is shown when XCSoar starts."),
              !hide_quick_guide);
 
@@ -201,7 +201,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     Profile::Get(ProfileKeys::LastSeenNewsVersion);
   const bool news_seen = last_seen_news != nullptr &&
     StringIsEqual(last_seen_news, XCSoar_Version);
-  AddBoolean(_("Show release notes"),
+  AddBoolean(C_("Setting", "Show release notes"),
              _("If enabled, the What's New page is shown on the next "
                "startup."),
              !news_seen);

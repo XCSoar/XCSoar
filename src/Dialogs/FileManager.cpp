@@ -421,7 +421,7 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
     download_button = dialog.AddButton(_("Update"), [this](){ Download(); });
-    add_button = dialog.AddButton(_("Add"), [this](){ Add(); });
+    add_button = dialog.AddButton(C_("Button", "Add"), [this](){ Add(); });
     cancel_button = dialog.AddButton(_("Abort"), [this](){ Cancel(); });
     update_button = dialog.AddButton(_("Update all"), [this](){
       UpdateFiles();

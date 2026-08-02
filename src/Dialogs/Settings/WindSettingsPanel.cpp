@@ -173,7 +173,7 @@ WindSettingsPanel::UpdateVector() noexcept
     break;
 
   case DerivedInfo::WindSource::MANUAL:
-    source = _("Manual");
+    source = C_("Status", "Manual");
     break;
 
   case DerivedInfo::WindSource::CIRCLING:

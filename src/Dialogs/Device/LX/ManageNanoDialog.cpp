@@ -62,7 +62,7 @@ ManageNanoWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unus
     AddReadOnly(_("License"), NULL, buffer.c_str());
   }
 
-  AddButton(_("Setup"), [this](){
+  AddButton(C_("Button", "Setup"), [this](){
     NanoConfigWidget widget(GetLook(), device);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
                         "LXNAV Nano", widget);

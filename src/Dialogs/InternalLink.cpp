@@ -77,7 +77,7 @@ struct ConfigPanelLink {
 static constexpr ConfigPanelLink config_panel_links[] = {
   {"config/site-files", N_("Site Files"), CreateSiteConfigPanel},
   {"config/logger",     N_("Logger"),     CreateLoggerConfigPanel},
-  {"config/time",       N_("Time"),       CreateTimeConfigPanel},
+  {"config/time",       NC_("Setting", "Time"), CreateTimeConfigPanel},
   {"config/infoboxes",  N_("InfoBox Sets"), CreateInfoBoxesConfigPanel},
   {"config/pages",      N_("Pages"),      CreatePagesConfigPanel},
   {"config/weglide",    N_("WeGlide"),    CreateWeGlideConfigPanel},
