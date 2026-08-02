@@ -85,7 +85,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent,
           auto_logger_list, (unsigned)logger.auto_logger);
   SetExpertRow(DisableAutoLogger);
 
-  AddBoolean(_("NMEA logger"),
+  AddBoolean(_("NMEA Logger"),
              _("Enable the NMEA logger on startup? If this option is disabled, "
                  "the NMEA logger can still be started manually."),
              logger.enable_nmea_logger);

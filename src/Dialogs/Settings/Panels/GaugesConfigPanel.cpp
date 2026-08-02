@@ -132,7 +132,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddBoolean(_("FLARM radar"),
+  AddBoolean(_("FLARM Radar"),
              _("This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."),
              ui_settings.traffic.enable_gauge);
 
@@ -146,13 +146,13 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
           (unsigned)ui_settings.traffic.gauge_location);
   SetExpertRow(AppFlarmLocation);
 
-  AddEnum(_("Thermal assistant"),
+  AddEnum(_("Thermal Assistant"),
             _("Enable and select the position of the thermal assistant when overlayed on the main screen."),
             thermal_assistant_position_list,
             (unsigned)ui_settings.thermal_assistant_position,
             this);
 
-  AddBoolean(_("Thermal band"),
+  AddBoolean(_("Thermal Band"),
              _("This enables the display of the thermal profile (climb band) display on the map."),
              map_settings.show_thermal_profile);
 

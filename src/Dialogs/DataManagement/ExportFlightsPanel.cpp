@@ -18,15 +18,16 @@
 #include "Storage/StorageDevice.hpp"
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
 #include "IGC/IgcMetaCache.hpp"
 #include "Job/Job.hpp"
 #include "Operation/Operation.hpp"
+#include "util/StaticString.hxx"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "Interface.hpp"
-#include "util/StaticString.hxx"
 #include "ui/event/Notify.hpp"
 
 #include <vector>
@@ -38,19 +39,6 @@
 static constexpr char EXPORT_FLIGHTS_SUBFOLDER[] = "xcsoar_flights";
 
 static IgcMetaCache igc_cache;
-
-/**
- * Check if WeGlide is properly configured for uploads.
- * Requires pilot ID and birthdate to be set.
- */
-static bool
-IsWeGlideConfigured() noexcept
-{
-  const WeGlideSettings &settings = CommonInterface::GetComputerSettings().weglide;
-  return settings.enabled &&
-         settings.pilot_id != 0 &&
-         settings.pilot_birthdate.IsPlausible();
-}
 
 // Export job that runs in background thread
 struct ExportJob final : public Job {
@@ -146,7 +134,9 @@ PerformExport(FileMultiSelectWidget *file_widget)
 
   auto device = FindDeviceByName(target);
   if (!device) {
-    ShowMessageBox(_("Target device not found."),
+    StaticString<64> message;
+    FormatDeviceNotFound(message, N_("Target"));
+    ShowMessageBox(message,
                    _("Export flights"), MB_OK | MB_ICONERROR);
     return;
   }
@@ -177,7 +167,7 @@ PerformExport(FileMultiSelectWidget *file_widget)
 static void
 PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
 {
-  if (!IsWeGlideConfigured()) {
+  if (!CommonInterface::GetComputerSettings().weglide.IsConfigured()) {
     ShowMessageBox(_("WeGlide is not configured. Please set your pilot ID and birthdate in the settings."),
                    _("WeGlide Upload"), MB_OK | MB_ICONERROR);
     return;

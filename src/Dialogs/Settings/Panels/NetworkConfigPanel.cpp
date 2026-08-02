@@ -6,6 +6,7 @@
 #include "Dialogs/WifiDialog.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/State.hpp"
@@ -138,7 +139,10 @@ GetBackendHelp() noexcept
 #if defined(KOBO) || defined(HAVE_LINUX_NET_WIFI) || defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
   return _("WiFi service used by the device.");
 #else
-  return _("Platform/backend information is not available in this build.");
+  static StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuild(message,
+                                       N_("Platform/backend information"));
+  return message.c_str();
 #endif
 }
 
@@ -243,8 +247,11 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
                  _("Connectivity"), MB_OK);
 #else
   (void)refresh;
-  ShowMessageBox(_("WiFi management is not available in this build."),
-                 _("Connectivity"), MB_OK);
+  {
+    StaticString<128> message;
+    FormatFeatureNotAvailableInThisBuild(message, N_("WiFi management"));
+    ShowMessageBox(message, _("Connectivity"), MB_OK);
+  }
 #endif
 
 #if defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)

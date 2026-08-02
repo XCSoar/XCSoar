@@ -178,7 +178,7 @@ public:
       PageActions::RestoreBottom();
     });
 
-    AddButton(_("ACK Day"), [this](){
+    AddButton(_("Ack Day"), [this](){
       try {
         manager.AcknowledgeDay(airspace);
       } catch (...) {

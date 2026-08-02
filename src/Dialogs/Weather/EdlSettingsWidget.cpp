@@ -12,6 +12,7 @@
 #include "Form/Edit.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "PageSettings.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
@@ -414,8 +415,9 @@ void
 EdlSettingsWidget::PrecacheDay()
 {
 #if !defined(HAVE_HTTP) || !defined(HAVE_EDL)
-  ShowMessageBox(_("HTTP support is not available in this build."),
-                 _("Weather"), MB_OK);
+  StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuild(message, N_("HTTP support"));
+  ShowMessageBox(message, _("Weather"), MB_OK);
 #else
   EDL::EnsureInitialised();
   EDL::RequestPrecacheDay(EDL::GetForecastTime());

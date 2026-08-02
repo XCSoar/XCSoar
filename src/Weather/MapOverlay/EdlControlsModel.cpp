@@ -8,6 +8,8 @@
 #include "Dialogs/Message.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
+#include "util/StaticString.hxx"
 #include "NetComponents.hpp"
 #include "UIState.hpp"
 #include "Weather/EDL/FieldControls.hpp"
@@ -198,8 +200,9 @@ void
 EdlControlsModel::RefreshOverlay() noexcept
 {
 #if !defined(HAVE_HTTP)
-  ShowMessageBox(_("HTTP support is not available in this build."),
-                 _("Weather"), MB_OK);
+  StaticString<128> message;
+  FormatFeatureNotAvailableInThisBuild(message, N_("HTTP support"));
+  ShowMessageBox(message, _("Weather"), MB_OK);
 #else
   if (!EDL::OverlayEnabled())
     return;
