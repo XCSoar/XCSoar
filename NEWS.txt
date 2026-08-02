@@ -498,6 +498,8 @@ Version 7.45 - not yet released
   - Configuration / Quick Guide: do not persist unchanged profile defaults
     (terrain, LanguageFile, ContestEnumLayout, HideQuickGuideDialogOnStartup);
     Expert writes UserLevel=1 or removes the key (#1793)
+  - fix ``-profile=`` basename so it resolves under ``-datapath=`` regardless of
+    command-line argument order #848
   - .cup tasks: More correctly parse SeeYou .cup task files with observation zones
     with uncommon angles, i.e. angles other than 90 degree quadrants or cylinder.
     Previously these were incorrectly parsed into FAI Quadrants #2697

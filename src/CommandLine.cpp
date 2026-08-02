@@ -33,6 +33,9 @@ namespace CommandLine {
 #ifdef HAVE_CMDLINE_REPLAY
   const char *replay_path;
 #endif
+
+  /** Set by @c -profile=; applied in ApplyPendingProfile(). */
+  static AllocatedPath pending_profile;
 }
 
 /** Option list for Args::UsageError (stderr); leading newline continues Usage:. */
@@ -121,8 +124,11 @@ CommandLine::Parse(Args &args)
       if (StringIsEmpty(s))
         args.UsageError();
 
+      /* Defer Profile::SetFiles() until ApplyPendingProfile() so a
+         basename is joined to -datapath= even when -profile= appears
+         first on the command line (#848). */
       PathName convert(s);
-      Profile::SetFiles(convert);
+      pending_profile = AllocatedPath(Path(convert));
     } else if (StringIsEqual(s, "-datapath=", 10)) {
       s += 10;
       PathName convert(s);
@@ -204,4 +210,14 @@ CommandLine::Parse(Args &args)
   if (width < 240 || width > 4096 ||
       height < 240 || height > 4096)
     args.UsageError();
+}
+
+void
+CommandLine::ApplyPendingProfile() noexcept
+{
+  if (pending_profile == nullptr)
+    return;
+
+  Profile::SetFiles(pending_profile);
+  pending_profile = nullptr;
 }
