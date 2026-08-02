@@ -16,6 +16,7 @@
 #include "time/Convert.hxx"
 #include "util/StaticString.hxx"
 #include "util/UTF8.hpp"
+#include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "system/FileUtil.hpp"
 
@@ -408,12 +409,12 @@ SkySightAPI::InitialiseLayers(std::vector<SkySight::Layer> &new_layers)
 {
   new_layers.clear();
 
-  new_layers.emplace_back("satellite", "Satellite",
-                          "Live SkySight satellite tiles",
+  new_layers.emplace_back("satellite", _("Satellite"),
+                          _("Live SkySight satellite tiles"),
                           true, true, true, 1, 8, 1.0f);
 
-  new_layers.emplace_back("rain", "Rain",
-                          "Live SkySight precipitation tiles",
+  new_layers.emplace_back("rain", _("Rain"),
+                          _("Live SkySight precipitation tiles"),
                           true, true, true, 1, 8, 0.7f);
 }
 
