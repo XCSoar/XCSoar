@@ -10,8 +10,8 @@ Version 7.45 - not yet released
     traffic (fixes pan-mode disappearance of online targets)
   - support configurable XCSoar Cloud server hostname and UDP port in
     cloud settings
-  - raise combined FLARM/online traffic list limit to 64 targets (cloud
-    batch size); device FLARM traffic still typically stays within 25
+  - raise combined FLARM/online traffic list limit to 64 targets; device
+    FLARM traffic still typically stays within 25
   - drop OGN/cloud online traffic that matches the connected FLARM radio
     id so own-ship no longer appears on the traffic display #2693
   - add expert cloud setting "Own FLARM IDs" (comma-separated hex list)
@@ -55,11 +55,10 @@ Version 7.45 - not yet released
   - open waypoint details above the waypoint list and alternates; Close
     without a committed action returns to the list, not the map #620
 * map
-  - keep the Full snail trail store at 1024 points on slower hosts
-    (typical e-readers and similar) instead of the larger fast-host
-    capacity #2661
-  - reduce long-flight map CPU by clipping the snail trail to the
-    visible area before thinning #2661
+  - keep the Full snail trail shorter on slower hosts (typical e-readers
+    and similar) so long flights stay responsive #2661
+  - draw only the visible part of a long snail trail to reduce map lag
+    #2661
   - adjust contour line density to the zoom level #2233
   - add contour density profile settings for mountains, lowlands, and
     other landscape types
@@ -77,10 +76,10 @@ Version 7.45 - not yet released
   - smooth snail trail between fixes; vario colours use high-rate netto
     between GPS points when available #2447
   - add distance rings around the current location #1206 #2522
-  - match BigTrafficWidget task direction arrow to the map best-cruise
-    shape #2027
-  - show optional callsign and relative altitude beside BigTrafficWidget
-    targets when side data is in altitude mode
+  - match the large FLARM radar task direction arrow to the map
+    best-cruise shape #2027
+  - show optional callsign and relative altitude beside targets on the
+    large FLARM radar when side data is in altitude mode
 * weather
   - accept lowercase ICAO codes when adding a METAR/TAF station
   - add EDL weather with per-page map overlays (None/RASP/EDL), bottom
@@ -144,7 +143,7 @@ Version 7.45 - not yet released
   - fix crash when queuing many background file downloads while others
     complete #2624
 * devices
-  - add GDL 90 input driver (ADS-B traffic and ownship over serial or
+  - add GDL90 input driver (ADS-B traffic and ownship over serial or
     UDP; optional ForeFlight geometric altitude and AHRS;
     horizontal/vertical traffic filters) #2356
   - add LX160 driver for LXWPx varios (#2424)
@@ -179,8 +178,8 @@ Version 7.45 - not yet released
   - show glide polar sync in the device dialog only for drivers that
     support it (LXNAV) #2457
   - send QNH changes from external sources to all connected devices
-  - Air Control Display: set active COM frequency via standby swap
-    (AT-01 and similar with read-only active channel) #2454
+  - set the active COM frequency on Air Control Display via standby
+    swap (AT-01 and similar with read-only active channel) #2454
   - show the Vario flag on the device list for non-compensated and
     netto vario sources as well as total-energy (e.g. BlueFly)
   - increase the number of device slots from 6 to 8
@@ -246,7 +245,7 @@ Version 7.45 - not yet released
   - put Download before Cancel in the download picker; Left/Right page
     the list
   - use single keyboard focus in the multi-file picker and value list
-    picker (ComboPicker)
+    picker
   - draw a thin separator line above list-picker bottom help text
   - make Quick Menu Left/Right stay put when the next item is disabled,
     but still wrap or flip page at a real row edge
@@ -263,8 +262,8 @@ Version 7.45 - not yet released
   - add Expert Look → Screen Layout "Display type" (LCD / E-ink /
     Color e-ink); e-ink modes disable kinetic and smooth scrolling;
     defaults to E-ink on Kobo and LCD elsewhere
-  - snap e-paper VScrollPanel scrolling instead of animating at high
-    rate, and debounce ComboPicker help updates while scrolling
+  - snap e-paper scrolling instead of animating at high rate, and delay
+    per-item help updates while scrolling long lists
   - show full callsigns on all registered FLARM radar targets; omit
     duplicate side vario/altitude on the selected target #2718
   - improve FLARM traffic symbol and label sizing #2708
@@ -295,12 +294,12 @@ Version 7.45 - not yet released
     refresh when media is plugged in or removed
   - import data: copy files from external storage into the correct
     XCSoar folders (waypoints, airspaces, terrain, and the rest) #2289
-  - backup manager: copy the XCSoar data directory to chosen storage as
-    a dated .tar file (profiles, waypoints, airspaces, terrain, and
-    settings; not logs, other backups, or cache); restore warns before
-    overwriting; restart XCSoar afterward to apply restored settings
-  - file explorer: browse storage, sort files into folders, copy to
-    another drive, rename, and delete #2289
+  - copy the XCSoar data directory to chosen storage as a dated .tar
+    backup (profiles, waypoints, airspaces, terrain, and settings; not
+    logs, other backups, or cache); restore warns before overwriting;
+    restart XCSoar afterward to apply restored settings
+  - browse storage in the file explorer, sort files into folders, copy
+    to another drive, rename, and delete #2289
   - find waypoint search text anywhere in the name or short name #2483
   - list each waypoint only once in search results #1316
   - remove useless "map file" type filter when waypoints come from
@@ -331,7 +330,7 @@ Version 7.45 - not yet released
     (optional station name in the link label)
   - support horizontal swipe to flip checklist, Credits, Quick Guide,
     and configuration pages #2122 #2414
-  - format Quick Guide "What's New" from NEWS.txt at build time
+  - show formatted release notes in Quick Guide "What's New"
   - reflect live Safety factors and Terrain display settings in Quick
     Guide getting started #2324
   - apply Quick Guide terrain file choice immediately (#2322)
@@ -377,17 +376,16 @@ Version 7.45 - not yet released
     addition to HM-10; protocol auto-detected at connection #2260
   - support BLE Microchip/ISSC transparent UART (e.g. BlueFly Vario over
     BLE); auto-detected like NUS/HM-10
-  - keep the saved device port type string as ble_hm10 so existing
-    profiles load without migration
+  - keep existing BLE serial profiles working after adding NUS and
+    Microchip UART support
   - add support for SoftRF Concorde, Prime Mk4, and Retro Mk2 as
     supported USB devices
   - number multi-port USB serial adapters (e.g. dual FTDI) with
     suffixes (0, 1) in the port list and device list #2481
-  - fix crash when the native thread restarts after surface teardown
+  - fix crash when the app restarts after the display is torn down
   - fix spurious outline lines on high-DPI OpenGL displays #1514
   - use physical display metrics for startup DPI #1784
-  - improve UI sounds via preloaded SoundPool with MediaPlayer fallback
-    #2411
+  - improve bundled UI sound quality and playback reliability #2411
   - configure built-in GPS and sensors in the last device slot by
     default
   - update the device list when storage access changes
@@ -403,7 +401,7 @@ Version 7.45 - not yet released
   - fix thick solid lines rendering at incorrect pixel width #2545
 * Linux
   - add Config → Setup → Network for WiFi status, connect/disconnect,
-    and IP address (NetworkManager or ConnMan via D-Bus)
+    and IP address (NetworkManager or ConnMan)
 * OpenVario
   - show WiFi and ethernet status; support WiFi connect/disconnect and
     ethernet DHCP renew from the Network dialog
@@ -417,8 +415,7 @@ Version 7.45 - not yet released
   - fix duplicate entries in Windows file lists #2625
   - fix crash opening the log list when replay filenames contain
     non-ASCII characters
-  - open files in binary mode so embedded ZIP (e.g. CUPX POINTS.CUP) is
-    read correctly
+  - load CUPX archives with embedded waypoint files correctly
 * desktop
   - print -h/--help and -version/--version to stdout and exit; unknown
     options print a short usage line on stderr
@@ -438,6 +435,8 @@ Version 7.45 - not yet released
   - build system: ship native debug symbols for Google Play
     (symbols.zip) for single-ABI and multi-ABI (AAB) builds; fix parallel
     builds so CI reliably produces the symbol ZIP
+  - build system: generate Quick Guide "What's New" markdown from
+    NEWS.txt at build time
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
