@@ -18,8 +18,8 @@ Version 7.45 - not yet released
     to filter self and additional own aircraft from OGN when the device
     radio id is unavailable (e.g. LX passthrough) #2693
 * calculations
-  - fix wild T Avg climb rates by preferring the instrument vario when
-    available #2754
+  - prefer the instrument vario for T Avg climb rates when available
+    #2754
   - support altitude-corrected speed-to-fly and task glide calculations:
     cruise speeds and best glide stay correct higher up (#1569)
   - use the same altitude correction for task manager glide and safety
@@ -55,8 +55,6 @@ Version 7.45 - not yet released
   - open waypoint details above the waypoint list and alternates; Close
     without a committed action returns to the list, not the map #620
 * map
-  - fix black terrain after idle high-resolution sharpening on OpenGL
-    devices with a 2048-pixel texture limit
   - keep the Full snail trail store at 1024 points on slower hosts
     (typical e-readers and similar) instead of the larger fast-host
     capacity #2661
@@ -79,8 +77,6 @@ Version 7.45 - not yet released
   - smooth snail trail between fixes; vario colours use high-rate netto
     between GPS points when available #2447
   - add distance rings around the current location #2522
-  - fix intermittent white-map hang on startup when drawing began before
-    map bounds were ready #2734
   - match BigTrafficWidget task direction arrow to the map best-cruise
     shape #2027
   - show optional callsign and relative altitude beside BigTrafficWidget
@@ -117,8 +113,6 @@ Version 7.45 - not yet released
   - keep the RASP time cursor on all-day layers (single archive slot);
     grey out time controls until a multi-slot layer is selected again
     #2705
-  - fix crash when opening Weather Setup from the weather overlay
-    layer/level/altitude list picker #2690
   - add WeatherOverlay input event and mode=weather stick/button
     bindings (via quick menu Forecast Controls) to step forecast time
     and altitude/level on weather overlay map pages (#2583)
@@ -160,8 +154,6 @@ Version 7.45 - not yet released
   - add Condor 3 UDP telemetry driver (Condor3UDP) for Simkits generic
     UDP output (default port 55278); complements TCP/NMEA Condor3 for
     MacCready, ballast, attitude, radio, and related fields (#2340)
-  - fix Condor3UDP track jumps from ground-velocity vx/vy after compass
-    expiry
   - support $LK8EX1 (LK8000 external instrument) on all device ports:
     pressure, QNE altitude, vario, temperature, and battery #2772
   - treat $LXWP0 without airspeed as uncompensated vario (BlueFly LX
@@ -258,27 +250,20 @@ Version 7.45 - not yet released
   - use focus colour for action-bar buttons that have keyboard focus
   - open waypoint details with Details / F1 (Enter still confirms the
     selection)
-  - move Task Manager keyboard focus with Manage → Browse (and WeGlide
-    lists) so Up/Down can move the task list again
   - fix task point dialog keyboard navigation: Up/Down no longer skip
     OZ Radius; Left/Right change the task point; portrait layout uses
     full width for map and OZ fields
   - fill leftover pixels on the last dialog action-bar button in a row
   - put Reference Mass above the plane polar V/W grid; Up/Down moves
     within each V/W column
-  - fix Configuration keyboard navigation between settings rows, menu,
-    and Close
   - speed up long rich-text layout (Quick Guide What's New)
-  - fix Quick Guide Up/Down focus so the bottom-bar checkbox and Close
-    are reachable from the keyboard
   - add Expert Look → Screen Layout "Display type" (LCD / E-ink /
     Color e-ink); e-ink modes disable kinetic and smooth scrolling;
     defaults to E-ink on Kobo and LCD elsewhere
   - snap e-paper VScrollPanel scrolling instead of animating at high
     rate, and debounce ComboPicker help updates while scrolling
-  - show FLARM radar callsigns on all registered targets again, use the
-    full callsign on labels, and omit duplicate side vario/altitude on
-    the selected target #2718
+  - show full callsigns on all registered FLARM radar targets; omit
+    duplicate side vario/altitude on the selected target #2718
   - rotate FLARM radar track-up targets on cardinal bearings
   - outline selected targets on the FLARM traffic radar
   - fix crash when opening the map item list on waypoints with long
@@ -287,10 +272,6 @@ Version 7.45 - not yet released
     picker) #2768
   - add optional map overlay QuickMenu button (Config → Look → Layout),
     enabled by default when a touch screen is detected #2610
-  - fix crash when switching pages from FLARM radar or thermal assistant
-    back to a map page that has a bottom widget (#2583)
-  - fix airspace warnings crash when the warning clears if the bottom
-    page was already restored
   - keep pages config map overlay and RASP layer rows visible on non-map
     pages (disabled instead of hidden) (#2583)
   - allow WeGlide aircraft type in plane details even when WeGlide
