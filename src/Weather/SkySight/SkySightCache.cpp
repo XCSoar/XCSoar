@@ -13,8 +13,8 @@
 #endif
 
 #include <algorithm>
+#include <charconv>
 #include <chrono>
-#include <cstdio>
 #include <utility>
 
 namespace {
@@ -135,6 +135,36 @@ StripForecastArtifactSuffix(std::string_view filename) noexcept
   return {};
 }
 
+[[nodiscard]] bool
+ParseTimestampNumber(std::string_view text, unsigned &value) noexcept
+{
+  const auto result = std::from_chars(text.data(), text.data() + text.size(),
+                                      value);
+  return result.ec == std::errc{} && result.ptr == text.data() + text.size();
+}
+
+[[nodiscard]] time_t
+ParseTimestamp(std::string_view timestamp) noexcept
+{
+  if (timestamp.size() != 15 || timestamp[4] != '-' ||
+      timestamp[7] != '-' || timestamp[10] != '-')
+    return 0;
+
+  unsigned year, month, day, hour, minute;
+  if (!ParseTimestampNumber(timestamp.substr(0, 4), year) ||
+      !ParseTimestampNumber(timestamp.substr(5, 2), month) ||
+      !ParseTimestampNumber(timestamp.substr(8, 2), day) ||
+      !ParseTimestampNumber(timestamp.substr(11, 2), hour) ||
+      !ParseTimestampNumber(timestamp.substr(13, 2), minute))
+    return 0;
+
+  const BrokenDateTime date_time{year, month, day, hour, minute};
+  if (!date_time.IsPlausible())
+    return 0;
+
+  return std::chrono::system_clock::to_time_t(date_time.ToTimePoint());
+}
+
 [[nodiscard]] time_t
 ParseAnyForecastFileTimestamp(std::string_view filename) noexcept
 {
@@ -150,17 +180,9 @@ ParseAnyForecastFileTimestamp(std::string_view filename) noexcept
   if (stem[stem.size() - 16] != '-')
     return 0;
 
-  unsigned year, month, day, hour, minute;
-  if (std::sscanf(std::string{timestamp}.c_str(), "%4u-%2u-%2u-%2u%2u",
-                  &year, &month, &day, &hour, &minute) != 5)
-    return 0;
-
-  const BrokenDateTime date_time{year, month, day, hour, minute};
-  if (!date_time.IsPlausible())
-    return 0;
-
-  return std::chrono::system_clock::to_time_t(date_time.ToTimePoint());
+  return ParseTimestamp(timestamp);
 }
+
 [[nodiscard]] time_t
 ParseForecastFileTimestamp(std::string_view filename,
                            std::string_view prefix) noexcept
@@ -173,17 +195,7 @@ ParseForecastFileTimestamp(std::string_view filename,
   if (dot == std::string_view::npos || dot <= prefix.size())
     return 0;
 
-  unsigned year, month, day, hour, minute;
-  const std::string timestamp{filename.substr(prefix.size(), dot - prefix.size())};
-  if (std::sscanf(timestamp.c_str(), "%4u-%2u-%2u-%2u%2u",
-                  &year, &month, &day, &hour, &minute) != 5)
-    return 0;
-
-  const BrokenDateTime date_time{year, month, day, hour, minute};
-  if (!date_time.IsPlausible())
-    return 0;
-
-  return std::chrono::system_clock::to_time_t(date_time.ToTimePoint());
+  return ParseTimestamp(filename.substr(prefix.size(), dot - prefix.size()));
 }
 
 class OlderThanFileVisitor final : public File::Visitor {

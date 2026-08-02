@@ -230,26 +230,42 @@ class RequestFailurePolicy {
     return delay;
   }
 
+  State *
+  GetOrCreate(std::string_view key) noexcept
+  {
+    try {
+      return &states.try_emplace(std::string{key}).first->second;
+    } catch (...) {
+      return nullptr;
+    }
+  }
+
   RequestFailureDecision
   SetTerminal(std::string_view key) noexcept
   {
-    auto &state = states[std::string{key}];
-    ++state.attempts;
-    state.ready_at = 0;
-    state.terminal = true;
-    return {RequestFailureAction::Terminal, 0, state.attempts};
+    auto *state = GetOrCreate(key);
+    if (state == nullptr)
+      return {RequestFailureAction::Terminal, 0, 0};
+
+    ++state->attempts;
+    state->ready_at = 0;
+    state->terminal = true;
+    return {RequestFailureAction::Terminal, 0, state->attempts};
   }
 
   RequestFailureDecision
   SetRetry(std::string_view key, time_t now, time_t ready_at=0) noexcept
   {
-    auto &state = states[std::string{key}];
-    ++state.attempts;
-    state.terminal = false;
-    state.ready_at = ready_at > now
+    auto *state = GetOrCreate(key);
+    if (state == nullptr)
+      return {RequestFailureAction::Terminal, 0, 0};
+
+    ++state->attempts;
+    state->terminal = false;
+    state->ready_at = ready_at > now
       ? ready_at
-      : now + GetBackoff(state.attempts);
-    return {RequestFailureAction::Retry, state.ready_at, state.attempts};
+      : now + GetBackoff(state->attempts);
+    return {RequestFailureAction::Retry, state->ready_at, state->attempts};
   }
 
 public:
@@ -273,17 +289,20 @@ public:
                 time_t retry_at=0) noexcept
   {
     if (status == 401) {
-      auto &state = states[std::string{key}];
-      ++state.attempts;
-      if (state.attempts == 1) {
-        state.ready_at = now;
-        state.terminal = false;
-        return {RequestFailureAction::Reauthenticate, now, state.attempts};
+      auto *state = GetOrCreate(key);
+      if (state == nullptr)
+        return {RequestFailureAction::Terminal, 0, 0};
+
+      ++state->attempts;
+      if (state->attempts == 1) {
+        state->ready_at = now;
+        state->terminal = false;
+        return {RequestFailureAction::Reauthenticate, now, state->attempts};
       }
 
-      state.ready_at = 0;
-      state.terminal = true;
-      return {RequestFailureAction::Terminal, 0, state.attempts};
+      state->ready_at = 0;
+      state->terminal = true;
+      return {RequestFailureAction::Terminal, 0, state->attempts};
     }
 
     if (status == 429)
