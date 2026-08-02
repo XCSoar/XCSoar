@@ -701,8 +701,26 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
   ExchangeBlackboard();
-
   EnterDrawThread();
+
+  /* PartialRedraw (vario/GPS/topography) invalidates without running
+     FullRedraw.  Without a projection update here, Render() draws the
+     new aircraft against a stale map origin — the plane slides, then
+     the next FullRedraw recenters and the terrain jerks. */
+  if (IsNearSelf()) {
+    UpdateDisplayMode();
+    UpdateScreenAngle();
+    UpdateProjection();
+    /* Pin origin to the DeviceBlackboard sample we just exchanged so
+       aircraft and terrain share one geo origin in this frame. */
+    if (Basic().location_available)
+      SetLocationLazy(Basic().location);
+    UpdateMapScale();
+    /* Refresh cached screen_bounds only — not GlueMapWindow's
+       UpdateScreenBounds(), which would re-trigger terrain/topo
+       threads.  Stale bounds break airspace GeoClip (MapCanvas). */
+    MapWindow::UpdateScreenBounds();
+  }
 #endif
 
   MapWindow::OnPaintBuffer(canvas);
