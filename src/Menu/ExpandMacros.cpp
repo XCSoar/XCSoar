@@ -265,45 +265,51 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     const bool plus = name == "WeatherSecondaryPlusLabel";
     switch (GetUIState().page_overlay) {
     case PageLayout::Overlay::EDL:
-      return plus ? _("Level+\n(UP)") : _("Level-\n(DOWN)");
+      return plus
+        ? C_("Weather control", "Level+\n(UP)")
+        : C_("Weather control", "Level-\n(DOWN)");
 
     case PageLayout::Overlay::XCTHERM:
-      return plus ? _("Altitude+\n(UP)") : _("Altitude-\n(DOWN)");
+      return plus
+        ? C_("Weather control", "Altitude+\n(UP)")
+        : C_("Weather control", "Altitude-\n(DOWN)");
 
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
-      return plus ? _("Field+\n(UP)") : _("Field-\n(DOWN)");
+      return plus
+        ? C_("Weather control", "Field+\n(UP)")
+        : C_("Weather control", "Field-\n(DOWN)");
     }
   }
 
   if (name == "WeatherSecondaryPickerLabel") {
     switch (GetUIState().page_overlay) {
     case PageLayout::Overlay::EDL:
-      return _("Level\nList\n(F2/+)");
+      return C_("Weather control", "Level\nList\n(F2/+)");
 
     case PageLayout::Overlay::XCTHERM:
-      return _("Altitude\nList\n(F2/+)");
+      return C_("Weather control", "Altitude\nList\n(F2/+)");
 
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
-      return _("Layer\nList\n(F2/+)");
+      return C_("Weather control", "Layer\nList\n(F2/+)");
     }
   }
 
   if (name == "WeatherSecondaryAutoLabel") {
     switch (GetUIState().page_overlay) {
     case PageLayout::Overlay::EDL:
-      return _("Level\nAuto\n(F3/-)");
+      return C_("Weather control", "Level\nAuto\n(F3/-)");
 
     case PageLayout::Overlay::XCTHERM:
-      return _("Altitude\nAuto\n(F3/-)");
+      return C_("Weather control", "Altitude\nAuto\n(F3/-)");
 
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
-      return _("Time\nAuto\n(F3/-)");
+      return C_("Weather control", "Time\nAuto\n(F3/-)");
     }
   }
 

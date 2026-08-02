@@ -160,7 +160,7 @@ GetInitialBackendName() noexcept
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   return "iOS";
 #else
-  return _("Unavailable");
+  return C_("Status", "Unavailable");
 #endif
 }
 
@@ -171,12 +171,12 @@ PreparePlatformRows(RowFormWidget &widget, unsigned &n, NetworkConfigRows &rows,
 #if defined(KOBO)
   rows.radio = n++;
   rows.have_radio = true;
-  widget.AddBoolean(_("WiFi Enabled"),
+  widget.AddBoolean(C_("Setting", "WiFi Enabled"),
                     _("Turns the Kobo WiFi interface on or off."),
                     IsKoboWifiOn(), &listener);
   rows.persist_wifi = n++;
   rows.have_persist_wifi = true;
-  widget.AddBoolean(_("Auto WiFi"),
+  widget.AddBoolean(C_("Setting", "Auto WiFi"),
                     _("Enable WiFi automatically at startup."),
                     IsKoboWifiAutoOn(), &listener);
 #elif defined(HAVE_LINUX_NET_WIFI)
@@ -189,7 +189,7 @@ PreparePlatformRows(RowFormWidget &widget, unsigned &n, NetworkConfigRows &rows,
 
   if (rows.have_radio) {
     rows.radio = n++;
-    widget.AddBoolean(_("WiFi Enabled"), nullptr, false, &listener);
+    widget.AddBoolean(C_("Setting", "WiFi Enabled"), nullptr, false, &listener);
   }
 #else
   (void)widget;
@@ -235,22 +235,22 @@ OpenPlatformWifiList(std::function<void()> refresh) noexcept
     return;
 
   ShowMessageBox(_("Failed to open system settings."),
-                 _("Connectivity"), MB_OK);
+                 C_("Setting", "Connectivity"), MB_OK);
 #elif defined(_WIN32)
   if (OpenLink("ms-settings:network-wifi"))
     return;
 
   ShowMessageBox(_("Failed to open system settings."),
-                 _("Connectivity"), MB_OK);
+                 C_("Setting", "Connectivity"), MB_OK);
 #elif defined(__APPLE__) && TARGET_OS_IPHONE
   ShowMessageBox(_("Open the Settings app, then go to Wi-Fi."),
-                 _("Connectivity"), MB_OK);
+                 C_("Setting", "Connectivity"), MB_OK);
 #else
   (void)refresh;
   {
     StaticString<128> message;
-    FormatFeatureNotAvailableInThisBuild(message, N_("WiFi management"));
-    ShowMessageBox(message, _("Connectivity"), MB_OK);
+    FormatFeatureNotAvailableInThisBuild(message, NC_("Setting", "WiFi management"));
+    ShowMessageBox(message, C_("Setting", "Connectivity"), MB_OK);
   }
 #endif
 
@@ -428,7 +428,7 @@ NetworkConfigWidget::Prepare(ContainerWindow &parent,
   AddReadOnly(_("Status"), GetStatusHelp(), _("Checking WiFi..."));
 
   rows.connectivity = n++;
-  AddReadOnly(_("Connectivity"),
+  AddReadOnly(C_("Setting", "Connectivity"),
               _("Current network connectivity state."),
               NetStateText::ToString(NetState::UNKNOWN));
   rows.ip = n++;
@@ -436,13 +436,13 @@ NetworkConfigWidget::Prepare(ContainerWindow &parent,
               _("IPv4 address of the active WiFi interface."),
               _("Unknown"));
   rows.backend = n++;
-  AddReadOnly(_("Backend"),
+  AddReadOnly(C_("Setting", "Backend"),
               GetBackendHelp(),
               GetInitialBackendName());
 
   PreparePlatformRows(*this, n, rows, *this);
 
-  AddButton(_("WiFi List"), [this]() {
+  AddButton(C_("Button", "WiFi List"), [this]() {
     OpenPlatformWifiList([this]() { OnRefresh(); });
   });
 

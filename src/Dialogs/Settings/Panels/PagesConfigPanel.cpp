@@ -250,7 +250,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
   case PageLayout::Overlay::EDL:
 #endif
   case PageLayout::Overlay::MAX:
-    control.SetCaption(_("Layer / Level"));
+    control.SetCaption(C_("Setting", "Layer / Level"));
     control.SetHelpText(
       _("Select a RASP or EDL map overlay to configure its "
         "layer or level for this page."));
@@ -360,7 +360,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
 #if defined(HAVE_EDL) || defined(ENABLE_OPENGL)
-    { PageLayout::Bottom::WEATHER_CONTROLS, N_("Weather controls") },
+    { PageLayout::Bottom::WEATHER_CONTROLS, NC_("Setting", "Weather controls") },
 #endif
     nullptr
   };
@@ -373,22 +373,22 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 
   static constexpr StaticEnumChoice overlay_list[] = {
     { PageLayout::Overlay::NONE, N_("None") },
-    { PageLayout::Overlay::RASP, N_("RASP") },
+    { PageLayout::Overlay::RASP, NC_("Abbreviation", "RASP") },
 #ifdef HAVE_EDL
-    { PageLayout::Overlay::EDL, N_("EDL") },
+    { PageLayout::Overlay::EDL, NC_("Abbreviation", "EDL") },
 #endif
 #ifdef HAVE_HTTP
-    { PageLayout::Overlay::XCTHERM, N_("XCTherm") },
+    { PageLayout::Overlay::XCTHERM, NC_("Abbreviation", "XCTherm") },
 #endif
     nullptr
   };
-  AddEnum(_("Map overlay"),
+  AddEnum(C_("Setting", "Map overlay"),
           _("Optional weather overlay on map pages. "
             "Use with Weather controls in the bottom area for in-flight adjustment."),
           overlay_list,
           (unsigned)PageLayout::Overlay::NONE, this);
 
-  AddEnum(_("Layer / Level"),
+  AddEnum(C_("Setting", "Layer / Level"),
           _("Select a RASP or EDL map overlay to configure its "
             "layer or level for this page."),
           this);

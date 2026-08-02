@@ -178,7 +178,7 @@ dlgChecklistShowModal()
         _("Phone: tel: / SMS: sms: / Email: mailto:"),
         _("Maps: geo:47.5,8.5"),
         _("Set standby from a link"),
-        _("Information"));
+        C_("Menu", "Information"));
       checklist.emplace_back(ChecklistPage{
           _("No checklist loaded"),
           body.c_str(),

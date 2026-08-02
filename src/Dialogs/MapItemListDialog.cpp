@@ -281,7 +281,7 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
   });
 
   if (is_simulator()) {
-    sim_jump_button = dialog.AddButton(_("Sim: Jump to"), [this](){
+    sim_jump_button = dialog.AddButton(C_("Button", "Sim: Jump to"), [this](){
       OnSimJumpClicked();
     });
   }

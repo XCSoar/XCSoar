@@ -66,12 +66,12 @@ static constexpr StaticEnumChoice display_orientation_list[] = {
 };
 
 static constexpr StaticEnumChoice display_type_list[] = {
-  { DisplayType::LCD, N_("LCD"),
+  { DisplayType::LCD, NC_("Setting", "LCD"),
     N_("Conventional LCD or OLED. Full scrolling animations.") },
-  { DisplayType::E_INK, N_("E-ink"),
+  { DisplayType::E_INK, NC_("Setting", "E-ink"),
     N_("Monochrome electronic paper. Disables kinetic and smooth "
        "scrolling.") },
-  { DisplayType::COLOR_E_INK, N_("Color e-ink"),
+  { DisplayType::COLOR_E_INK, NC_("Setting", "Color e-ink"),
     N_("Color electronic paper. Disables kinetic and smooth "
        "scrolling like monochrome e-ink.") },
   nullptr
@@ -212,7 +212,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddDummy();
 #endif
 
-  AddEnum(_("Display type"),
+  AddEnum(C_("Setting", "Display type"),
           _("Select the display technology. E-ink modes disable kinetic "
             "and smooth scrolling for slow refresh screens."),
           display_type_list,
@@ -259,7 +259,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean(_("Show Zoom button"), _("Show the Zoom button"),
              ui_settings.show_zoom_button);
   SetExpertRow(ShowZoomButton);
-  AddBoolean(_("Show QuickMenu button"),
+  AddBoolean(C_("Setting", "Show QuickMenu button"),
              _("Show the QuickMenu button"),
              ui_settings.show_quickmenu_button);
   SetExpertRow(ShowQuickMenuButton);

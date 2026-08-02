@@ -221,7 +221,7 @@ public:
      backend_(std::move(_backend)) {}
 
   void CreateButtons(WidgetDialog &dialog) {
-    connect_button = dialog.AddButton(_("Connect"), [this](){
+    connect_button = dialog.AddButton(C_("Button", "Connect"), [this](){
       try {
         Connect();
       } catch (...) {
@@ -229,12 +229,12 @@ public:
       }
     });
 
-    scan_button = dialog.AddButton(_("Scan"), [this](){
+    scan_button = dialog.AddButton(C_("Button", "Scan"), [this](){
       Scan(true, true);
       scan_timer.Schedule(kWifiAutoScanInterval);
     });
 
-    forget_button = dialog.AddButton(_("Forget"), [this](){
+    forget_button = dialog.AddButton(C_("Button", "Forget"), [this](){
       try {
         Forget();
       } catch (...) {
@@ -305,13 +305,13 @@ WifiListWidget::UpdateButtons()
     const auto &info = networks[cursor];
 
     if (info.can_disconnect) {
-      connect_button->SetCaption(_("Disconnect"));
+      connect_button->SetCaption(C_("Button", "Disconnect"));
       connect_button->SetEnabled(true);
     } else if (info.can_connect) {
-      connect_button->SetCaption(_("Connect"));
+      connect_button->SetCaption(C_("Button", "Connect"));
       connect_button->SetEnabled(true);
     } else {
-      connect_button->SetCaption(_("Connect"));
+      connect_button->SetCaption(C_("Button", "Connect"));
       connect_button->SetEnabled(false);
     }
 
@@ -494,7 +494,7 @@ WifiListWidget::UpdateList()
 
   if (scan_pending && scan_button != nullptr) {
     scan_pending = false;
-    scan_button->SetCaption(_("Scan"));
+    scan_button->SetCaption(C_("Button", "Scan"));
     scan_button->SetEnabled(true);
   }
 
@@ -509,7 +509,7 @@ ShowWifiDialog(UniqueWifiBackend backend)
   const DialogLook &look = UIGlobals::GetDialogLook();
   TWidgetDialog<WifiListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-           look, _("WiFi"));
+           look, C_("Menu", "WiFi"));
   dialog.SetWidget(std::move(backend));
   dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);

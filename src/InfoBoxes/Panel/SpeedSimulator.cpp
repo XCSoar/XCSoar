@@ -72,7 +72,7 @@ FormatSpeedSimulatorCaption(const SpeedSimulatorAction action,
   case SpeedSimulatorAction::Type::BEARING: {
     const auto degrees = (unsigned)std::lround(value);
     StringFormat(formatted, sizeof(formatted), "%s %c%s",
-                 _("Brg"), sign, FormatBearing(degrees).c_str());
+                 C_("Abbreviation", "Brg"), sign, FormatBearing(degrees).c_str());
     break;
   }
 
@@ -80,7 +80,7 @@ FormatSpeedSimulatorCaption(const SpeedSimulatorAction action,
     BasicStringBuffer<char, 32> step_buffer;
     FormatUserSpeed(value, step_buffer.data(), true, false);
     StringFormat(formatted, sizeof(formatted), "%s %c%s",
-                 _("Spd"), sign, step_buffer.c_str());
+                 C_("Abbreviation", "Spd"), sign, step_buffer.c_str());
     break;
   }
   }

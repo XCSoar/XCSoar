@@ -267,10 +267,10 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   static constexpr StaticEnumChoice slope_shading_list[] = {
     { SlopeShading::OFF, N_("Off"), },
-    { SlopeShading::FIXED, N_("Fixed (North-West)"), },
+    { SlopeShading::FIXED, NC_("Setting", "Fixed (North-West)"), },
     { SlopeShading::SUN, N_("Sun"), },
     { SlopeShading::WIND, N_("Wind"), },
-    { SlopeShading::TOP_LEFT, N_("Fixed (Top Left)"), },
+    { SlopeShading::TOP_LEFT, NC_("Setting", "Fixed (Top Left)"), },
     nullptr
   };
 
@@ -297,20 +297,20 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(TerrainBrightness);
 
   static constexpr StaticEnumChoice contours_list[] = {
-    { Contours::OFF, N_("Off"), N_("No contour lines"), },
-    { Contours::MOUNTAINS, N_("Mountains"),
+    { Contours::OFF, N_("Off"), NC_("Setting", "No contour lines"), },
+    { Contours::MOUNTAINS, NC_("Setting", "Mountains"),
       N_("For steep mountain terrain, 256m minimum spacing"), },
-    { Contours::HIGHLANDS, N_("Highlands"),
+    { Contours::HIGHLANDS, NC_("Setting", "Highlands"),
       N_("Medium density, with 64m minimum spacing"), },
-    { Contours::LOWLANDS, N_("Lowlands"),
+    { Contours::LOWLANDS, NC_("Setting", "Lowlands"),
       N_("More line density for gentler slopes. 16m minimum spacing"), },
-    { Contours::SUPERFINE, N_("Superfine"),
+    { Contours::SUPERFINE, NC_("Setting", "Superfine"),
       N_("Maximum density contour lines down to 8m spacing"), },
-    { Contours::FIXED_256, N_("Fixed 256m"),
+    { Contours::FIXED_256, NC_("Setting", "Fixed 256m"),
       N_("Fixed 256m spacing, no zoom dependence"), },
-    { Contours::FIXED_128, N_("Fixed 128m"),
+    { Contours::FIXED_128, NC_("Setting", "Fixed 128m"),
       N_("Fixed 128m spacing, no zoom dependence"), },
-    { Contours::FIXED_64, N_("Fixed 64m"),
+    { Contours::FIXED_64, NC_("Setting", "Fixed 64m"),
       N_("Fixed 64m spacing, no zoom dependence"), },
     nullptr
   };

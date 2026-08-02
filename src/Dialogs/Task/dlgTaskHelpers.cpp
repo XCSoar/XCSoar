@@ -207,7 +207,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, char* buffer)
 
   case ObservationZone::Shape::SYMMETRIC_SECTOR:
     StringFormatUnsafe(buffer,"%s - %s: %.1f%s, %s: %.1f°",
-                    _("Symmetric Sector"),
+                    C_("Setting", "Symmetric Sector"),
                     _("Radius"),
                     (double)Units::ToUserDistance(((const SymmetricSectorZone &)ozp).GetRadius()),
                     Units::GetDistanceName(),

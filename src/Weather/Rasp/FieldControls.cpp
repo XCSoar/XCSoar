@@ -416,7 +416,7 @@ FormatFieldCursorLabel(StaticString<64> &text) noexcept
   const auto rasp = DataGlobals::GetRasp();
   const int field_index = GetEffectiveFieldIndex();
   if (rasp == nullptr || field_index < 0) {
-    text = _("No layer");
+    text = C_("Weather control", "No layer");
     return;
   }
 

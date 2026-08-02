@@ -197,7 +197,7 @@ InfoBoxContentActiveWaypoint::Update(InfoBoxData &data) noexcept
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  data.SetTitle(_("Active WP"));
+  data.SetTitle(C_("Abbreviation", "Active WP"));
 
   const auto waypoint =
     (backend_components && backend_components->protected_task_manager)
@@ -292,7 +292,7 @@ InfoBoxContentPreviousWaypoint::Update(InfoBoxData &data) noexcept
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  data.SetTitle(_("Prev WP"));
+  data.SetTitle(C_("Abbreviation", "Prev WP"));
 
   WaypointPtr waypoint = override_waypoint;
   if (waypoint == nullptr && backend_components &&
@@ -351,7 +351,7 @@ InfoBoxContentPreviousWaypoint::HandleClick() noexcept
      we currently have a manual override to clear. */
   const char *const action_label =
     (has_ordered_task && override_waypoint != nullptr)
-      ? _("Resume auto tracking")
+      ? C_("Button", "Resume auto tracking")
       : nullptr;
   bool action_selected = false;
 

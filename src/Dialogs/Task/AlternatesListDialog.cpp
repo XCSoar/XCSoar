@@ -213,7 +213,7 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
       UpdateButtons();
     });
 
-    manual_button = dialog.AddButton(_("Select as Alternate"), [this](){
+    manual_button = dialog.AddButton(C_("Button", "Select as Alternate"), [this](){
       if (!HasValidSelection())
         return;
 
@@ -315,9 +315,9 @@ dlgAlternatesListShowModal(Waypoints *waypoints,
 
   const auto *title = _("Alternates");
   if (slot.has_value()) {
-    title = _("Alternates 1");
+    title = C_("Menu", "Alternates 1");
     if (*slot == AlternateInfoBoxSlot::SECOND)
-      title = _("Alternates 2");
+      title = C_("Menu", "Alternates 2");
   }
 
   TWidgetDialog<AlternatesListWidget>

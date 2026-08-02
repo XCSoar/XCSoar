@@ -146,7 +146,7 @@ FormatLayerStatus(unsigned model, unsigned layer_index,
     text = _("Download failed");
     break;
   case LayerDownloadInfo::CANCELED:
-    text = _("Cancelled");
+    text = C_("Status", "Cancelled");
     break;
   default:
     text = _("Not downloaded");
@@ -731,7 +731,7 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   const int active_layer = XCTherm::FindActiveLayerIndex(settings);
   selected_layer = active_layer >= 0 ? unsigned(active_layer) : 0;
 
-  auto *layer = AddEnum(_("Layer"),
+  auto *layer = AddEnum(C_("Weather control", "Layer"),
                         _("Altitude layer used for Update and Delete. "
                           "Use Altitude below to change what the map shows."));
   layer->GetDataField()->SetOnModified([this]{
@@ -741,7 +741,7 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   AddReadOnly(_("Status"),
               _("Download and cache status for the selected layer."));
 
-  AddEnum(_("Span"),
+  AddEnum(C_("Weather control", "Span"),
           _("How many forecast hours to download with Update."),
           span_list, settings.download_span_hours);
   GetControl(SPAN).GetDataField()->SetOnModified([this]{
@@ -757,23 +757,23 @@ XCThermWidget::Prepare(ContainerWindow &parent,
                      "Opens the same picker as the weather controls "
                      "(Auto, Now, or a UTC hour)."),
                    "XCTherm");
-  auto *time = AddEnum(_("Time"), time_help.c_str());
+  auto *time = AddEnum(C_("Weather control", "Time"), time_help.c_str());
   time->SetEditCallback(EditTimeCallback);
 
-  auto *altitude = AddEnum(_("Altitude"),
+  auto *altitude = AddEnum(C_("Weather control", "Altitude"),
                            _("Altitude band for the current map page. "
                              "Use Apply to page to commit changes."));
   altitude->SetEditCallback(EditAltitudeCallback);
 
-  apply_to_page_button = AddButton(_("Apply to page"), [this]{
+  apply_to_page_button = AddButton(C_("Button", "Apply to page"), [this]{
     ApplyToPageClicked();
   });
-  add_page_button = AddButton(_("Add page"), [this]{
+  add_page_button = AddButton(C_("Button", "Add page"), [this]{
     AddPageClicked();
   });
   AddSpacer();
 
-  AddButton(_("Pages setup"), [this]{
+  AddButton(C_("Button", "Pages setup"), [this]{
     WeatherOverlayDraft::OpenPagesConfig();
     RefreshPageSection();
   });

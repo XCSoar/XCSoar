@@ -95,7 +95,7 @@ CloudConfigPanel::Prepare(ContainerWindow &parent,
              settings.enabled == TriState::TRUE,
              this);
 
-  AddBoolean(_("Show traffic"),
+  AddBoolean(C_("Setting", "Show traffic"),
              _("Receive traffic from the XCSoar Cloud server and OGN. "
                "Requires flying with a real GPS fix."),
              settings.show_traffic, this);
@@ -134,7 +134,7 @@ CloudConfigPanel::Prepare(ContainerWindow &parent,
         "additional own aircraft. Leave empty to use the "
         "device id when known.")),
     CloudSettings::MAX_OWN_FLARM_IDS);
-  AddText(_("Own FLARM IDs"),
+  AddText(C_("Setting", "Own FLARM IDs"),
           own_flarm_help.c_str(),
           own_flarm_text);
   SetExpertRow(OWN_FLARM_ID);

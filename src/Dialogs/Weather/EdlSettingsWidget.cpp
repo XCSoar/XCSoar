@@ -54,7 +54,7 @@ FormatCachedDayLabel(const EDL::CachedDay &day) noexcept
   StaticString<40> label;
   label.Format("%04u-%02u-%02u (%s, %u)",
                day.day.year, day.day.month, day.day.day,
-               day.IsComplete() ? _("Complete") : _("Partial"),
+               day.IsComplete() ? C_("Status", "Complete") : C_("Status", "Partial"),
                day.file_count);
   return label;
 }
@@ -308,9 +308,9 @@ EdlSettingsWidget::Prepare(ContainerWindow &parent,
   const auto &settings =
     CommonInterface::GetComputerSettings().weather;
 
-  AddEnum(_("Cached day"), nullptr);
+  AddEnum(C_("Setting", "Cached day"), nullptr);
 
-  AddBoolean(_("Auto update"),
+  AddBoolean(C_("Setting", "Auto update"),
              _("Automatically download missing EDL overlay tiles when "
                "an EDL page is opened or the forecast time/level changes. "
                "When Auto update is on, the Precache day button is "
@@ -325,38 +325,38 @@ EdlSettingsWidget::Prepare(ContainerWindow &parent,
   });
 
 #ifdef HAVE_HTTP
-  precache_day_button = AddButton(_("Precache day"), [this]{ PrecacheDay(); });
+  precache_day_button = AddButton(C_("Button", "Precache day"), [this]{ PrecacheDay(); });
   SyncPrecacheButtonEnabled();
 #endif
 
-  clean_other_days_button = AddButton(_("Clean other days"),
+  clean_other_days_button = AddButton(C_("Button", "Clean other days"),
                                       [this]{ CleanOtherDays(); });
   AddSpacer();
 
 #ifdef HAVE_EDL
-  auto *time = AddEnum(_("Time"),
+  auto *time = AddEnum(C_("Weather control", "Time"),
                        _("Forecast time for the current map page. "
                          "Opens the same picker as the weather controls "
                          "(Auto, Now, or a UTC hour)."));
   time->SetEditCallback(EditTimeCallback);
 
-  auto *level = AddEnum(_("Level"),
+  auto *level = AddEnum(C_("Weather control", "Level"),
                         _("Pressure level / altitude band for the current "
                           "map page. Opens the same picker as the weather "
                           "controls."));
   level->SetEditCallback(EditLevelCallback);
 
-  apply_to_page_button = AddButton(_("Apply to page"), [this]{
+  apply_to_page_button = AddButton(C_("Button", "Apply to page"), [this]{
     ApplyToPageClicked();
   });
-  add_page_button = AddButton(_("Add page"), [this]{
+  add_page_button = AddButton(C_("Button", "Add page"), [this]{
     AddPageClicked();
   });
 #endif
 
   AddSpacer();
 
-  AddButton(_("Pages setup"), [this]{
+  AddButton(C_("Button", "Pages setup"), [this]{
     WeatherOverlayDraft::OpenPagesConfig();
 #ifdef HAVE_EDL
     RefreshPageSection();
@@ -416,7 +416,7 @@ EdlSettingsWidget::PrecacheDay()
 {
 #if !defined(HAVE_HTTP) || !defined(HAVE_EDL)
   StaticString<128> message;
-  FormatFeatureNotAvailableInThisBuild(message, N_("HTTP support"));
+  FormatFeatureNotAvailableInThisBuild(message, NC_("Setting", "HTTP support"));
   ShowMessageBox(message, _("Weather"), MB_OK);
 #else
   EDL::EnsureInitialised();

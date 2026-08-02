@@ -194,7 +194,7 @@ struct ImportContainer : public PropertyWidgetContainer {
   FileMetadataFormatter file_metadata;
 
   explicit ImportContainer(AllocatedPath initial, AllocatedPath base) noexcept
-    : PropertyWidgetContainer(_("Source")),
+    : PropertyWidgetContainer(C_("Setting", "Source")),
       current_path(std::move(initial)), base_root(std::move(base)),
       device(FindDeviceByName(base_root)) {
     auto loader = [this]() -> std::vector<FileMultiSelectWidget::FileItem> {
@@ -242,7 +242,7 @@ struct ImportContainer : public PropertyWidgetContainer {
 
     file_list = std::make_unique<FileMultiSelectWidget>(loader,
                       nullptr,
-                      _("Files"), nullptr);
+                      C_("Setting", "Files"), nullptr);
 
     file_list->SetSecondLeftProvider([this](const FileMultiSelectWidget::FileItem &it) noexcept {
       if (it.is_dir)
@@ -336,7 +336,7 @@ ShowImportDataDialog()
     import_container.SetCurrent(std::move(d));
   });
 
-  dialog.AddButton(_("Choose location"), [&import_container]() {
+  dialog.AddButton(C_("Button", "Choose location"), [&import_container]() {
     PickStorageLocationAndApply([&import_container](AllocatedPath new_src) {
       import_container.SetSource(std::move(new_src));
     });
@@ -347,7 +347,7 @@ ShowImportDataDialog()
   dialog.AddButton(_("Import"), [&import_container, &file_list]() {
     if (import_container.device == nullptr) {
       ShowMessageBox(_("The selected import location is no longer available."),
-                     _("Import data"), MB_OK | MB_ICONEXCLAMATION);
+                     C_("Menu", "Import data"), MB_OK | MB_ICONEXCLAMATION);
       return;
     }
 
@@ -368,14 +368,14 @@ ShowImportDataDialog()
     }
 
     if (selected_files.empty()) {
-      ShowMessageBox(_("Only files can be imported."), _("Import data"),
+      ShowMessageBox(_("Only files can be imported."), C_("Menu", "Import data"),
                      MB_OK | MB_ICONINFORMATION);
       return;
     }
 
     if (skipped_directories) {
       ShowMessageBox(_("Selected directories are skipped. Only files will be imported."),
-                     _("Import data"), MB_OK | MB_ICONINFORMATION);
+                     C_("Menu", "Import data"), MB_OK | MB_ICONINFORMATION);
     }
 
     // Check for huge files > 250 MB
@@ -390,7 +390,7 @@ ShowImportDataDialog()
     }
     if (has_huge) {
       int rr = ShowMessageBox(_("One or more selected files exceed 250 MB. Continue?"),
-                              _("Import data"), MB_YESNO);
+                              C_("Menu", "Import data"), MB_YESNO);
       if (rr != IDYES)
         return;
     }
@@ -405,7 +405,7 @@ ShowImportDataDialog()
           const auto base = Path(dest).GetBase();
           prompt.Format(_("'%s' already exists. Overwrite?"),
                         base != nullptr ? base.c_str() : dest.c_str());
-          int answer = ShowMessageBox(prompt, _("Import data"), MB_YESNOCANCEL);
+          int answer = ShowMessageBox(prompt, C_("Menu", "Import data"), MB_YESNOCANCEL);
           if (answer == IDCANCEL)
             return;
           if (answer != IDYES) {
@@ -445,7 +445,7 @@ ShowImportDataDialog()
       msg.Format(_("Import canceled. Imported %u file(s)."), completed);
       if (failed > 0)
         msg.AppendFormat(_("\nFailed %u."), failed);
-      ShowMessageBox(msg, _("Import data"), MB_OK | MB_ICONINFORMATION);
+      ShowMessageBox(msg, C_("Menu", "Import data"), MB_OK | MB_ICONINFORMATION);
       return;
     }
 
@@ -454,14 +454,14 @@ ShowImportDataDialog()
       em.Format(_("Import finished: %u imported, %u failed."), completed, failed);
       for (const auto &name : failed_files)
         em.AppendFormat("\n- %s", name.c_str());
-      ShowMessageBox(em, _("Import data"), MB_OK);
+      ShowMessageBox(em, C_("Menu", "Import data"), MB_OK);
     } else {
       StaticString<256> msg;
       msg.Format(_("Import finished: %u imported."), completed);
-      ShowMessageBox(msg, _("Import data"), MB_OK);
+      ShowMessageBox(msg, C_("Menu", "Import data"), MB_OK);
     }
   });
-  dialog.AddButton(_("Back"), mrCancel);
+  dialog.AddButton(C_("Button", "Back"), mrCancel);
 
   dialog.FinishPreliminary(std::move(container));
   dialog.ShowModal();

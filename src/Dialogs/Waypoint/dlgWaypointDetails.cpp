@@ -542,7 +542,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   }
 
   if (sim_jump_active)
-    sim_jump_button.Create(parent, look.button, _("Sim: Jump to"),
+    sim_jump_button.Create(parent, look.button, C_("Button", "Sim: Jump to"),
                            layout.sim_jump_button, button_style,
                            [this](){ OnSimJumpClicked(); });
 

@@ -119,7 +119,7 @@ public:
     else
       msg.Format(_("No changes. %u device(s)."), new_count);
 
-    ShowMessageBox(msg, _("Scan"), MB_OK | MB_ICONINFORMATION);
+    ShowMessageBox(msg, C_("Button", "Scan"), MB_OK | MB_ICONINFORMATION);
   }
 
   /* StorageEventListener */
@@ -187,7 +187,7 @@ public:
     const std::string dev_id = dev.Id();
 
     std::string first_text = dev.NeedsPermission()
-      ? label + " - " + _("Grant access")
+      ? label + " - " + C_("Button", "Grant access")
       : (label.empty() ? name : label);
 
     std::string second_text;
@@ -292,7 +292,7 @@ PickStorageLocation() noexcept
   auto *list_widget = new StorageListWidget();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Choose location"));
+                      look, C_("Menu", "Choose location"));
   list_widget->SetDialog(dialog);
 
 #ifdef ANDROID
@@ -303,11 +303,11 @@ PickStorageLocation() noexcept
 #endif
   list_widget->SetSelectButton(*select_btn);
 #ifdef ANDROID
-  dialog.AddButton(_("Change folder"),
+  dialog.AddButton(C_("Button", "Change folder"),
                    [list_widget]{ list_widget->ChangeFolder(); });
 #endif
   /* "Scan" is kept for manual refresh; hotplug also triggers Refresh(). */
-  dialog.AddButton(_("Scan"), [list_widget]{ list_widget->ScanAndReport(); });
+  dialog.AddButton(C_("Button", "Scan"), [list_widget]{ list_widget->ScanAndReport(); });
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
   dialog.FinishPreliminary(list_widget);

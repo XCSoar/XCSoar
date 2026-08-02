@@ -95,7 +95,7 @@ static constexpr TabMenuPage map_pages[] = {
   { N_("Terrain"), CreateTerrainDisplayConfigPanel },
   { N_("Airspace"), CreateAirspaceConfigPanel },
 #ifdef HAVE_HTTP
-  { N_("NOTAM"), CreateNOTAMConfigPanel },
+  { NC_("Setting", "NOTAM"), CreateNOTAMConfigPanel },
 #endif
   { nullptr, nullptr }
 };

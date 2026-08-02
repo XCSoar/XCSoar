@@ -1179,8 +1179,8 @@ static constexpr MetaData meta_data[] = {
 
   // e_AltitudeIGC
   {
-    N_("Altitude IGC"),
-    N_("Alt IGC"),
+    NC_("InfoBox", "Altitude IGC"),
+    NC_("Abbreviation", "Alt IGC"),
     N_("Logger pressure altitude when the device provides it (igc_pressure_altitude), otherwise ISA pressure altitude only (1013.25 hPa; not QNH-corrected). Does not show barometric AMSL or GPS height — use other InfoBoxes for navigation."),
     UpdateInfoBoxAltitudeIGC,
     altitude_infobox_panels,
@@ -1197,16 +1197,16 @@ static constexpr MetaData meta_data[] = {
 
   // e_ActiveWaypoint
   {
-    N_("Active Waypoint"),
-    N_("Active WP"),
+    NC_("InfoBox", "Active Waypoint"),
+    NC_("Abbreviation", "Active WP"),
     N_("Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."),
     IBFHelper<InfoBoxContentActiveWaypoint>::Create,
   },
 
   // e_PreviousWaypoint
   {
-    N_("Previous Waypoint"),
-    N_("Prev WP"),
+    NC_("InfoBox", "Previous Waypoint"),
+    NC_("Abbreviation", "Prev WP"),
     N_("Previous waypoint: when an ordered task is loaded, automatically tracks the task waypoint before the active leg (the start waypoint when on the first leg). Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint to display (task waypoints when a task is loaded, otherwise the full waypoint list); selection is informational only and never advances the task or sets a Goto. With a task loaded, choose \"Resume auto tracking\" at the top of the list to revert to automatic tracking."),
     IBFHelper<InfoBoxContentPreviousWaypoint>::Create,
   },

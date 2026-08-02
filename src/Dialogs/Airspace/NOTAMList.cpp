@@ -72,19 +72,19 @@ FormatFilterReasons(const NOTAMStruct &notam,
 
   if (NOTAMFilter::HasFilterReason(filter_reasons,
                                    NOTAMFilter::FilterReason::IFR))
-    AppendFilterReason(reasons, _("IFR-only"));
+    AppendFilterReason(reasons, C_("Status", "IFR-only"));
 
   if (NOTAMFilter::HasFilterReason(filter_reasons,
                                    NOTAMFilter::FilterReason::TIME))
-    AppendFilterReason(reasons, _("not effective"));
+    AppendFilterReason(reasons, C_("Status", "not effective"));
 
   if (NOTAMFilter::HasFilterReason(filter_reasons,
                                    NOTAMFilter::FilterReason::RADIUS))
-    AppendFilterReason(reasons, _("radius"));
+    AppendFilterReason(reasons, C_("Status", "radius"));
 
   if (NOTAMFilter::HasFilterReason(filter_reasons,
                                    NOTAMFilter::FilterReason::QCODE))
-    AppendFilterReason(reasons, _("Q-Code"));
+    AppendFilterReason(reasons, C_("Setting", "Q-Code"));
 
   return reasons;
 }
@@ -375,8 +375,8 @@ public:
         filter_qcode_button->SetCaption(
           NOTAMFilter::IsQCodeHidden(notam->feature_type,
                                      settings.hidden_qcodes)
-          ? _("Show Q-code")
-          : _("Hide Q-code"));
+          ? C_("Button", "Show Q-code")
+          : C_("Button", "Hide Q-code"));
     }
   }
 
@@ -420,8 +420,8 @@ private:
   void UpdateToggleFilterButton() noexcept {
     if (toggle_filter_button != nullptr)
       toggle_filter_button->SetCaption(show_all
-                                       ? _("Hide Filtered")
-                                       : _("Show All"));
+                                       ? C_("Button", "Hide Filtered")
+                                       : C_("Button", "Show All"));
   }
 
   const NOTAMStruct *GetSelectableNOTAM(unsigned index) const noexcept {
@@ -488,7 +488,7 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
         first_row_text += status.c_str();
       } else if (!is_perm && now > notam.end_time) {
         first_row_text += " • ";
-        first_row_text += _("Expired");
+        first_row_text += C_("Status", "Expired");
       } else {
         first_row_text += " • ";
         first_row_text += _("Active");
@@ -502,7 +502,7 @@ NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
       if (is_filtered) {
         first_row_text += " • ";
-        first_row_text += _("Filtered");
+        first_row_text += C_("Status", "Filtered");
       const auto reasons = FormatFilterReasons(notam, settings, now);
         if (!reasons.empty()) {
           first_row_text += ": ";
@@ -605,7 +605,7 @@ NOTAMListWidget::FilterSelectedQCode() noexcept
                      "also show other NOTAMs."),
                    notam->feature_type.c_str());
 
-    if (ShowMessageBox(message.c_str(), _("NOTAM"),
+    if (ShowMessageBox(message.c_str(), C_("Menu", "NOTAM"),
                        MB_YESNO | MB_ICONQUESTION) != IDYES)
       return;
 
@@ -630,14 +630,14 @@ NOTAMListWidget::FilterSelectedQCode() noexcept
                    "filtered in the NOTAM list."),
                  notam->feature_type.c_str(), affected_count);
 
-  if (ShowMessageBox(message.c_str(), _("NOTAM"),
+  if (ShowMessageBox(message.c_str(), C_("Menu", "NOTAM"),
                      MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
   if (!AddHiddenQCode(settings, qcode)) {
     ShowMessageBox(_("The hidden Q-code list is full. Remove unused filters "
                      "in NOTAM settings first."),
-                   _("NOTAM"), MB_OK | MB_ICONEXCLAMATION);
+                   C_("Menu", "NOTAM"), MB_OK | MB_ICONEXCLAMATION);
     return;
   }
 
@@ -692,7 +692,7 @@ NOTAMListWidget::UpdateList()
         header1.text = _("Unknown");
       }
     } else {
-      header1.text = _("Never");
+      header1.text = C_("Status", "Never");
     }
     
     // Distance from last update
@@ -709,7 +709,7 @@ NOTAMListWidget::UpdateList()
     
     // NOTAM counts
     char count_buffer[64];
-    header3.number = _("NOTAMs");
+    header3.number = C_("Menu", "NOTAMs");
     StringFormat(count_buffer, sizeof(count_buffer), _("%u total"),
                  static_cast<unsigned>(notams.size()));
     header3.text = count_buffer;
@@ -756,15 +756,15 @@ ShowNOTAMListDialog(UI::SingleWindow &parent)
   const DialogLook &look = UIGlobals::GetDialogLook();
   auto list_widget = std::make_unique<NOTAMListWidget>();
   NOTAMListWidget *const list = list_widget.get();
-  WidgetDialog dialog(WidgetDialog::Auto{}, parent, look, _("NOTAMs"),
+  WidgetDialog dialog(WidgetDialog::Auto{}, parent, look, C_("Menu", "NOTAMs"),
                       list_widget.release());
   list->SetDetailsButton(dialog.AddButton(_("Details"),
                                           [list](){ list->ShowDetails(); }));
   list->SetFilterQCodeButton(
-    dialog.AddButton(_("Hide Q-code"),
+    dialog.AddButton(C_("Button", "Hide Q-code"),
                      [list](){ list->FilterSelectedQCode(); }));
   list->SetToggleFilterButton(
-    dialog.AddButton(_("Show All"),
+    dialog.AddButton(C_("Button", "Show All"),
                      [list](){ list->ToggleFilter(); }));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();

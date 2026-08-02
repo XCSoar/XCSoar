@@ -7,7 +7,7 @@
 
 static const char *const severity_strings[] = {
   N_("No error"),
-  N_("Information"),
+  NC_("Status", "Information"),
   N_("Reduced functionality"),
   N_("Fatal problem"),
 };

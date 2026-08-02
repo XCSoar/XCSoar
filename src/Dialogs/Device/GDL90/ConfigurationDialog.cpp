@@ -43,7 +43,7 @@ public:
     const Unit distance_u = Units::GetUserDistanceUnit();
     const Unit altitude_u = Units::GetUserAltitudeUnit();
 
-    AddBoolean(_("Use system date for UTC"),
+    AddBoolean(C_("Setting", "Use system date for UTC"),
                _("The GDL90 protocol sends time-of-day only, not calendar date. "
                  "When this is on, XCSoar sets the date from this device's "
                  "clock after a valid heartbeat. Turn it off if the system "
@@ -109,7 +109,7 @@ ManageGDL90Dialog() noexcept
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("GDL90 Setup"),
+                      look, C_("Menu", "GDL90 Setup"),
                       new GDL90ConfigurationWidget(look));
 
   dialog.AddButton(_("Close"), mrOK);

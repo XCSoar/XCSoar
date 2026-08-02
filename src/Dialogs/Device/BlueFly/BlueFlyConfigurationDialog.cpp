@@ -45,22 +45,22 @@ public:
 
       AddBoolean(N_("Audio when connected"), nullptr, false);
 
-      AddFloat(N_("Lift threshold"), nullptr,
+      AddFloat(NC_("Setting", "Lift threshold"), nullptr,
                "%.2f m/s", "%.2f",
                0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
                0.05, true, 0.2);
 
-      AddFloat(N_("Lift off threshold"), nullptr,
+      AddFloat(NC_("Setting", "Lift off threshold"), nullptr,
                "%.2f m/s", "%.2f",
                0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
                0.05, true, 0.05);
 
-      AddFloat(N_("Sink threshold"), nullptr,
+      AddFloat(NC_("Setting", "Sink threshold"), nullptr,
                "%.2f m/s", "%.2f",
                0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
                0.05, true, 0.2);
 
-      AddFloat(N_("Sink off threshold"), nullptr,
+      AddFloat(NC_("Setting", "Sink off threshold"), nullptr,
                "%.2f m/s", "%.2f",
                0, BlueFlyDevice::BlueFlySettings::THRESHOLD_MAX,
                0.05, true, 0.05);
@@ -78,7 +78,7 @@ public:
 
       AddEnum(N_("Output mode"), nullptr, modes);
 
-      AddInteger(N_("Output frequency"),
+      AddInteger(NC_("Setting", "Output frequency"),
                  _("Divisor of the 20 ms hardware tick (1 = 50 Hz, 10 = 5 Hz)."),
                  "%d", "%d",
                  BlueFlyDevice::BlueFlySettings::OUTPUT_FREQUENCY_MIN,

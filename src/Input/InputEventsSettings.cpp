@@ -30,11 +30,11 @@ static const char *
 GetVarioAudioModeLabel(const VarioSoundSettings &settings) noexcept
 {
   if (settings.switching_mode == VarioSoundSwitchingMode::AUTO)
-    return _("Auto (circling/cruise)");
+    return C_("Status", "Auto (circling/cruise)");
 
   return settings.manual_mode == VarioSoundManualMode::STF
-    ? _("Manual STF")
-    : _("Manual Vario");
+    ? C_("Status", "Manual STF")
+    : C_("Status", "Manual Vario");
 }
 
 void
@@ -227,7 +227,7 @@ InputEvents::eventVarioAudioMode(const char *misc)
       ? VarioSoundManualMode::STF
       : VarioSoundManualMode::VARIO;
   } else if (StringIsEqual(misc, "show")) {
-    Message::AddMessage(_("Audio vario mode"), GetVarioAudioModeLabel(settings));
+    Message::AddMessage(C_("Status", "Audio vario mode"), GetVarioAudioModeLabel(settings));
     return;
   } else {
     return;
