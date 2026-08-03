@@ -304,10 +304,9 @@ ParsePLXV0Polar(std::string_view value, NMEAInfo &info) noexcept
       polar_line.ReadChecked(empty_weight) &&
       polar_line.ReadChecked(pilot_weight)) {
 
-    const double a = a_lx / (LX_POLAR_V * LX_POLAR_V);
-    const double b = b_lx / LX_POLAR_V;
+    const PolarCoefficients pc = LXNAVPolar::FromNmeaPolar(a_lx, b_lx, c);
 
-    info.settings.ProvidePolarCoefficients(a, b, c, info.clock);
+    info.settings.ProvidePolarCoefficients(pc.a, pc.b, pc.c, info.clock);
     info.settings.ProvidePolarLoad(polar_load, info.clock);
     info.settings.ProvidePolarReferenceMass(polar_weight, info.clock);
     info.settings.ProvidePolarMaximumMass(max_weight, info.clock);
