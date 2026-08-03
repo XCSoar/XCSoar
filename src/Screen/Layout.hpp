@@ -13,6 +13,12 @@ namespace Layout
 extern bool landscape;
 
 /**
+ * True when the short edge is smaller than about 5 inches (used to
+ * shrink fonts for closer viewing distance).
+ */
+extern bool small_screen;
+
+/**
  * Screen size in pixels, the smaller of width and height.
  */
 extern unsigned min_screen_pixels;
