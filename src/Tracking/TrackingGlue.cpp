@@ -6,13 +6,31 @@
 #include "Tracking/TrackingSettings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Info.hpp"
+#include "event/net/cares/Error.hxx"
 #include "LogFile.hpp"
+
+#include <ares.h>
 
 #include <chrono>
 
 using namespace std::chrono;
 
 static constexpr int MAX_ONLINE_TRAFFIC_ALTITUDE_SEPARATION = 5000;
+
+[[nodiscard]] static bool
+IsDNSUnavailable(std::exception_ptr error) noexcept
+{
+  if (error == nullptr)
+    return false;
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const Cares::Error &e) {
+    return e.GetCode() == ARES_ECONNREFUSED;
+  } catch (...) {
+    return false;
+  }
+}
 
 [[gnu::pure]]
 static int
@@ -119,7 +137,9 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   try {
     skylines.Tick(basic, calculated);
   } catch (...) {
-    LogError(std::current_exception(), "SkyLines error");
+    const auto error = std::current_exception();
+    if (!IsDNSUnavailable(error))
+      LogError(error, "SkyLines error");
   }
 
   livetrack24.OnTimer(basic, calculated);
@@ -313,5 +333,6 @@ TrackingGlue::OnThermal([[maybe_unused]] unsigned time_of_day_ms,
 void
 TrackingGlue::OnSkyLinesError(std::exception_ptr e)
 {
-  LogError(e, "SkyLines error");
+  if (!IsDNSUnavailable(e))
+    LogError(e, "SkyLines error");
 }

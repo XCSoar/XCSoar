@@ -19,6 +19,7 @@ class Queue;
 
 class Glue {
   Client client;
+  std::chrono::steady_clock::time_point client_retry_at{};
   std::chrono::steady_clock::duration interval{};
   GPSClock clock;
 
@@ -35,6 +36,7 @@ class Glue {
   Queue *queue = nullptr;
 
   Client cloud_client;
+  std::chrono::steady_clock::time_point cloud_retry_at{};
   GPSClock cloud_clock;
   GPSClock cloud_traffic_clock;
 
@@ -69,6 +71,8 @@ public:
 private:
   [[gnu::pure]]
   bool IsNetConnected(bool roaming_allowed) const;
+
+  void ReconnectClients();
 
   void SendFixes(const NMEAInfo &basic);
   void SendCloudFix(const NMEAInfo &basic, const DerivedInfo &calculated);
