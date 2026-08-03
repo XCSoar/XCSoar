@@ -52,8 +52,10 @@ public:
   }
 
   void Remove(std::string_view key) noexcept {
-    if (auto i = map.find(key); i != map.end())
+    if (auto i = map.find(key); i != map.end()) {
       map.erase(i);
+      SetModified();
+    }
   }
 
   [[gnu::pure]]
