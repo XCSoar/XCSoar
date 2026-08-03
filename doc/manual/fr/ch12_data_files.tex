@@ -160,7 +160,9 @@ Le format de ce fichier est simple. Les commentaires sont les lignes commençant
 Ce qui suit est une extension du format du fichier de polaire et est optionnel.
 \begin{itemize}
 \item Surface de l'aile en m$^2$ pour calcul de la charge alaire( 0 si inconnue).
-\item Vitesse maximum de manœuvre en Km/h pour permettre de limiter les indications de vitesse données par le calculateur.
+\item Vitesse maximum de croisière en m/s, utilisée comme limite supérieure
+  de la vitesse MacCready (y compris en arrivée), pour éviter que le
+  calculateur ne commande des vitesses de croisière irréalistes.
 \end{itemize}
 
 Voici un exemple de fichier pour le LS3 :
