@@ -37,15 +37,15 @@ class Path;
  * Because two ZIP archives are concatenated (and optionally prefixed
  * by the 256-byte header), central-directory offsets stored inside
  * each ZIP are relative to that ZIP's own start, not to the
- * beginning of the .cupx file.  Standard ZIP libraries -- including
- * zziplib -- scan backward from EOF for the End-of-Central-Directory
- * record and treat its CD offset as absolute, which only works for
- * points.zip (the last archive).  For pics.zip we therefore use a
- * forward scan of local-file headers.
+ * beginning of the .cupx file.  Both pics.zip and points.zip are
+ * located via their End-of-Central-Directory records near EOF: the
+ * SFX "concat" delta (EOCD position minus CD size minus CD offset)
+ * is the absolute start of that ZIP.  points.zip is the last EOCD;
+ * pics.zip is the EOCD whose concat equals the post-header offset.
  *
- * For points.zip we locate the EOCD, compute the "SFX offset"
- * (file position of EOCD minus CD size minus CD offset), and add
- * that delta to every stored offset before seeking.
+ * Some SeeYou exports set ZIP general-purpose bit 3 (data descriptor)
+ * so local-header sizes are zero; real sizes are taken from the
+ * central directory for both archives.
  */
 namespace CupxArchive {
 
