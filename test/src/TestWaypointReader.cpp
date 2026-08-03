@@ -18,6 +18,7 @@
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
 #include "Operation/Operation.hpp"
+#include "io/CupxArchive.hpp"
 
 #include <string>
 #include <string_view>
@@ -399,6 +400,37 @@ TestCupx()
   ok1(first_embed == "test_image.jpg");
 }
 
+/**
+ * Newer SeeYou .cupx files set ZIP general-purpose bit 3 on
+ * POINTS.CUP (local-header sizes are zero).  Regression for that
+ * layout — same waypoints as test.cupx.
+ */
+static void
+TestCupxDataDescriptor()
+{
+  Waypoints way_points;
+  if (!TestWaypointFile(Path("test/data/test_datadesc.cupx"),
+                        way_points, 2)) {
+    skip(5, 0, "opening data-descriptor CUPX failed");
+    return;
+  }
+
+  const auto wp = way_points.LookupName("Test Airfield");
+  ok1(wp != nullptr);
+  if (wp == nullptr) {
+    skip(4, 0, "waypoint not found");
+    return;
+  }
+
+  ok1(wp->type == Waypoint::Type::AIRFIELD);
+  ok1(fabs(wp->elevation - 500.0) < 0.5);
+  ok1(wp->comment == "A test airfield");
+
+  const auto img = CupxArchive::ExtractImage(
+    Path("test/data/test_datadesc.cupx"), "test_image.jpg");
+  ok1(!img.empty());
+}
+
 static wp_vector
 CreateOriginalWaypoints()
 {
@@ -501,11 +533,12 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(507 + 4);
+  plan_tests(507 + 7 + 5);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
   TestCupx();
+  TestCupxDataDescriptor();
   TestZander(org_wp);
   TestFS(org_wp);
   TestFS_UTM(org_wp);

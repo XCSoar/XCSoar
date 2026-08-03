@@ -2,6 +2,9 @@ Version 7.45 - not yet released
 * airspace
   - Remove ineffective "Unknown" row from airspace warning, display, and
     colour settings #1772
+* data files
+  - fix loading SeeYou .cupx waypoint files and embedded photos that
+    use ZIP data descriptors (e.g. recent OpenAIP / SeeYou exports)
 * tracking
   - Do not resolve SkyLines or XCSoar Cloud hosts while the network link is
     down, avoiding repeated DNS timeout errors in the log #1750

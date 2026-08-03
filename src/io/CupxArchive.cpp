@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
+#include <optional>
 
 static constexpr uint32_t CUPX_MAGIC = 0x58505543;
 static constexpr std::size_t CUPX_HEADER_SIZE = 256;
@@ -26,6 +27,13 @@ static constexpr std::size_t ZIP_CENTRAL_DIR_SIZE = 46;
 static constexpr uint32_t ZIP_EOCD_SIG = 0x06054b50;
 static constexpr std::size_t ZIP_EOCD_SIZE = 22;
 
+/** Max distance from EOF to search for an EOCD (ZIP comment limit). */
+static constexpr off_t ZIP_EOCD_SEARCH = 65557;
+
+static constexpr uint32_t MAX_ENTRY_SIZE = 120u * 1024 * 1024;
+
+static constexpr uint16_t ZIP_FLAG_DATA_DESCRIPTOR = 0x0008;
+
 static const PackedLE16 &
 LE16(const std::byte *p) noexcept
 {
@@ -38,12 +46,6 @@ LE32(const std::byte *p) noexcept
   return *reinterpret_cast<const PackedLE32 *>(p);
 }
 
-static constexpr uint32_t MAX_ENTRY_SIZE = 120u * 1024 * 1024;
-
-/**
- * Read exactly @p len bytes, looping for short reads (which POSIX
- * allows even on regular files, e.g. after a signal).
- */
 static bool
 ReadFull(FileDescriptor fd, void *buf, std::size_t len) noexcept
 {
@@ -58,52 +60,11 @@ ReadFull(FileDescriptor fd, void *buf, std::size_t len) noexcept
   return true;
 }
 
-/**
- * Decompress a stored or deflated ZIP entry from the current file
- * position.
- */
-static std::vector<std::byte>
-DecompressEntry(FileDescriptor fd, uint16_t compression,
-                uint32_t compressed_size,
-                uint32_t uncompressed_size)
-{
-  if (compressed_size > MAX_ENTRY_SIZE ||
-      uncompressed_size > MAX_ENTRY_SIZE)
-    return {};
-
-  if (compression == 0) {
-    std::vector<std::byte> result(compressed_size);
-    if (!ReadFull(fd, result.data(), compressed_size))
-      return {};
-    return result;
-  }
-
-  if (compression == 8) {
-    std::vector<std::byte> compressed(compressed_size);
-    if (!ReadFull(fd, compressed.data(), compressed_size))
-      return {};
-
-    std::vector<std::byte> result(uncompressed_size);
-
-    z_stream strm{};
-    strm.next_in = reinterpret_cast<Bytef *>(compressed.data());
-    strm.avail_in = compressed_size;
-    strm.next_out = reinterpret_cast<Bytef *>(result.data());
-    strm.avail_out = uncompressed_size;
-
-    if (inflateInit2(&strm, -MAX_WBITS) != Z_OK)
-      return {};
-
-    int ret = inflate(&strm, Z_FINISH);
-    inflateEnd(&strm);
-
-    if (ret != Z_STREAM_END)
-      return {};
-
-    result.resize(uncompressed_size - strm.avail_out);
-    return result;
-  }
-
+static UniqueFileDescriptor
+OpenCupx(Path path) noexcept
+try {
+  return OpenReadOnly(path.c_str());
+} catch (...) {
   return {};
 }
 
@@ -125,112 +86,139 @@ SkipCupxHeader(FileDescriptor fd) noexcept
 }
 
 /**
- * Walk local file headers forward from the current position and
- * extract the first entry whose name matches (case-insensitive).
+ * Decompress a stored or deflated ZIP entry from the current file
+ * position, given known sizes.
  */
 static std::vector<std::byte>
-ExtractByForwardScan(FileDescriptor fd,
-                     std::string_view entry_name)
+DecompressEntry(FileDescriptor fd, uint16_t compression,
+                uint32_t compressed_size,
+                uint32_t uncompressed_size)
 {
-  std::byte header[ZIP_LOCAL_FILE_SIZE];
+  if (compressed_size > MAX_ENTRY_SIZE ||
+      uncompressed_size > MAX_ENTRY_SIZE)
+    return {};
 
-  while (true) {
-    if (!ReadFull(fd, header, ZIP_LOCAL_FILE_SIZE))
+  if (compression == 0) {
+    std::vector<std::byte> result(compressed_size);
+    if (!ReadFull(fd, result.data(), compressed_size))
       return {};
-
-    if (LE32(header) != ZIP_LOCAL_FILE_SIG)
-      return {};
-
-    const uint16_t compression = LE16(header + 8);
-    const uint32_t compressed_size = LE32(header + 18);
-    const uint32_t uncompressed_size = LE32(header + 22);
-    const uint16_t name_len = LE16(header + 26);
-    const uint16_t extra_len = LE16(header + 28);
-
-    /* data-descriptor entries (bit 3) not supported */
-    if (LE16(header + 6) & 0x08)
-      return {};
-
-    char name_buf[512];
-    if (name_len == 0 || name_len >= sizeof(name_buf)) {
-      if (fd.Skip(static_cast<off_t>(name_len) + extra_len + compressed_size) < 0)
-        return {};
-      continue;
-    }
-
-    if (!ReadFull(fd, name_buf, name_len))
-      return {};
-
-    if (extra_len > 0 && fd.Skip(extra_len) < 0)
-      return {};
-
-    if (StringIsEqualIgnoreCase({name_buf, name_len}, entry_name))
-      return DecompressEntry(fd, compression, compressed_size,
-                             uncompressed_size);
-
-    if (compressed_size > 0 && fd.Skip(compressed_size) < 0)
-      return {};
+    return result;
   }
+
+  if (compression != 8)
+    return {};
+
+  std::vector<std::byte> compressed(compressed_size);
+  if (!ReadFull(fd, compressed.data(), compressed_size))
+    return {};
+
+  std::vector<std::byte> result(uncompressed_size);
+
+  z_stream strm{};
+  strm.next_in = reinterpret_cast<Bytef *>(compressed.data());
+  strm.avail_in = compressed_size;
+  strm.next_out = reinterpret_cast<Bytef *>(result.data());
+  strm.avail_out = uncompressed_size;
+
+  if (inflateInit2(&strm, -MAX_WBITS) != Z_OK)
+    return {};
+
+  const int ret = inflate(&strm, Z_FINISH);
+  inflateEnd(&strm);
+
+  if (ret != Z_STREAM_END)
+    return {};
+
+  result.resize(uncompressed_size - strm.avail_out);
+  return result;
 }
 
+struct ZipEocd {
+  /** Absolute start of this ZIP inside the .cupx file (SFX delta). */
+  off_t zip_start;
+  uint32_t cd_size;
+  uint32_t cd_offset;
+};
+
 /**
- * Find a named entry via the central directory of the last ZIP in
- * the file (using the Python-style SFX offset adjustment).
+ * Locate an End-of-Central-Directory record near EOF.
+ *
+ * @param zip_start  if set, require SFX concat == this (pics.zip);
+ *                   if nullopt, take the last valid EOCD (points.zip).
  */
-static std::vector<std::byte>
-ExtractByEocdScan(FileDescriptor fd, off_t filesize,
-                  std::string_view entry_name)
+static std::optional<ZipEocd>
+FindEocd(FileDescriptor fd, off_t filesize,
+         std::optional<off_t> zip_start) noexcept
 {
-  const off_t search_start = std::max(off_t{0}, filesize - 65557);
+  const off_t search_start = std::max(off_t{0}, filesize - ZIP_EOCD_SEARCH);
   const auto search_len = static_cast<std::size_t>(filesize - search_start);
 
   std::vector<std::byte> tail(search_len);
   if (fd.Seek(search_start) < 0)
-    return {};
+    return std::nullopt;
   if (!ReadFull(fd, tail.data(), search_len))
-    return {};
+    return std::nullopt;
 
-  off_t eocd_offset = -1;
   for (ssize_t i = static_cast<ssize_t>(search_len) - ZIP_EOCD_SIZE;
        i >= 0; --i) {
-    if (LE32(tail.data() + i) == ZIP_EOCD_SIG) {
-      eocd_offset = search_start + i;
-      break;
-    }
+    if (LE32(tail.data() + i) != ZIP_EOCD_SIG)
+      continue;
+
+    const std::byte *eocd = tail.data() + i;
+    const uint32_t cd_size = LE32(eocd + 12);
+    const uint32_t cd_offset = LE32(eocd + 16);
+    if (cd_size > MAX_ENTRY_SIZE)
+      continue;
+
+    const off_t eocd_offset = search_start + i;
+    const off_t concat = eocd_offset
+      - static_cast<off_t>(cd_size)
+      - static_cast<off_t>(cd_offset);
+    if (concat < 0)
+      continue;
+
+    const off_t real_cd = static_cast<off_t>(cd_offset) + concat;
+    if (real_cd < 0 ||
+        real_cd + static_cast<off_t>(cd_size) > filesize)
+      continue;
+
+    /* Confirm a central-directory signature at the computed offset. */
+    std::byte sig[4];
+    if (fd.Seek(real_cd) < 0 || !ReadFull(fd, sig, 4))
+      continue;
+    if (LE32(sig) != ZIP_CENTRAL_DIR_SIG)
+      continue;
+
+    ZipEocd found{concat, cd_size, cd_offset};
+
+    if (!zip_start.has_value())
+      /* First hit scanning backward = last EOCD in the file
+         (points.zip). */
+      return found;
+
+    if (concat == *zip_start)
+      return found;
   }
 
-  if (eocd_offset < 0)
-    return {};
+  return std::nullopt;
+}
 
-  const std::byte *eocd = tail.data() + (eocd_offset - search_start);
-  const uint32_t cd_size = LE32(eocd + 12);
-  const uint32_t cd_offset = LE32(eocd + 16);
-
-  if (cd_size > MAX_ENTRY_SIZE)
-    return {};
-
-  /*
-   * SFX adjustment: the CD offset in the EOCD is relative to the
-   * embedded ZIP start, not the overall file.
-   */
-  const off_t concat = eocd_offset
-    - static_cast<off_t>(cd_size)
-    - static_cast<off_t>(cd_offset);
-  if (concat < 0)
-    return {};
-
-  const off_t real_cd_pos = static_cast<off_t>(cd_offset) + concat;
-  if (real_cd_pos < 0 || real_cd_pos + static_cast<off_t>(cd_size) > filesize)
-    return {};
-
-  std::vector<std::byte> cd(cd_size);
-  if (fd.Seek(real_cd_pos) < 0)
-    return {};
-  if (!ReadFull(fd, cd.data(), cd_size))
+/**
+ * Extract one named entry from a ZIP located via @p eocd.
+ * Uses central-directory sizes when the local header has bit 3 set
+ * (or zero sizes), which newer SeeYou .cupx files rely on.
+ */
+static std::vector<std::byte>
+ExtractZipEntry(FileDescriptor fd, off_t filesize,
+                const ZipEocd &eocd, std::string_view entry_name)
+{
+  std::vector<std::byte> cd(eocd.cd_size);
+  const off_t real_cd = static_cast<off_t>(eocd.cd_offset) + eocd.zip_start;
+  if (fd.Seek(real_cd) < 0 || !ReadFull(fd, cd.data(), eocd.cd_size))
     return {};
 
   std::size_t pos = 0;
-  while (pos + ZIP_CENTRAL_DIR_SIZE <= cd_size) {
+  while (pos + ZIP_CENTRAL_DIR_SIZE <= eocd.cd_size) {
     if (LE32(cd.data() + pos) != ZIP_CENTRAL_DIR_SIG)
       break;
 
@@ -238,59 +226,86 @@ ExtractByEocdScan(FileDescriptor fd, off_t filesize,
     const uint16_t extra_len = LE16(cd.data() + pos + 30);
     const uint16_t comment_len = LE16(cd.data() + pos + 32);
 
-    if (pos + ZIP_CENTRAL_DIR_SIZE + name_len > cd_size)
+    if (pos + ZIP_CENTRAL_DIR_SIZE + name_len > eocd.cd_size)
       break;
 
     const std::string_view name{
       reinterpret_cast<const char *>(cd.data() + pos + ZIP_CENTRAL_DIR_SIZE),
       name_len};
 
-    if (StringIsEqualIgnoreCase(name, entry_name)) {
-      const uint32_t local_offset = LE32(cd.data() + pos + 42);
-      const off_t real_local = static_cast<off_t>(local_offset) + concat;
-      if (real_local < 0 ||
-          real_local + static_cast<off_t>(ZIP_LOCAL_FILE_SIZE) > filesize)
-        return {};
-
-      if (fd.Seek(real_local) < 0)
-        return {};
-
-      std::byte lh[ZIP_LOCAL_FILE_SIZE];
-      if (!ReadFull(fd, lh, ZIP_LOCAL_FILE_SIZE))
-        return {};
-      if (LE32(lh) != ZIP_LOCAL_FILE_SIG)
-        return {};
-
-      const uint16_t compression = LE16(lh + 8);
-      const uint32_t compressed_size = LE32(lh + 18);
-      const uint32_t uncompressed_size = LE32(lh + 22);
-      const uint16_t lh_name_len = LE16(lh + 26);
-      const uint16_t lh_extra_len = LE16(lh + 28);
-
-      if (fd.Skip(lh_name_len + lh_extra_len) < 0)
-        return {};
-
-      return DecompressEntry(fd, compression, compressed_size,
-                             uncompressed_size);
+    if (!StringIsEqualIgnoreCase(name, entry_name)) {
+      pos += ZIP_CENTRAL_DIR_SIZE + name_len + extra_len + comment_len;
+      continue;
     }
 
-    pos += ZIP_CENTRAL_DIR_SIZE + name_len + extra_len + comment_len;
+    const uint32_t cd_compressed_size = LE32(cd.data() + pos + 20);
+    const uint32_t cd_uncompressed_size = LE32(cd.data() + pos + 24);
+    const uint32_t local_offset = LE32(cd.data() + pos + 42);
+    const off_t real_local =
+      static_cast<off_t>(local_offset) + eocd.zip_start;
+    if (real_local < 0 ||
+        real_local + static_cast<off_t>(ZIP_LOCAL_FILE_SIZE) > filesize)
+      return {};
+
+    if (fd.Seek(real_local) < 0)
+      return {};
+
+    std::byte lh[ZIP_LOCAL_FILE_SIZE];
+    if (!ReadFull(fd, lh, ZIP_LOCAL_FILE_SIZE))
+      return {};
+    if (LE32(lh) != ZIP_LOCAL_FILE_SIG)
+      return {};
+
+    const uint16_t compression = LE16(lh + 8);
+    uint32_t compressed_size = LE32(lh + 18);
+    uint32_t uncompressed_size = LE32(lh + 22);
+    const uint16_t lh_name_len = LE16(lh + 26);
+    const uint16_t lh_extra_len = LE16(lh + 28);
+
+    if ((LE16(lh + 6) & ZIP_FLAG_DATA_DESCRIPTOR) != 0 ||
+        (compressed_size == 0 && uncompressed_size == 0 &&
+         cd_compressed_size != 0)) {
+      compressed_size = cd_compressed_size;
+      uncompressed_size = cd_uncompressed_size;
+    }
+
+    if (fd.Skip(lh_name_len + lh_extra_len) < 0)
+      return {};
+
+    return DecompressEntry(fd, compression, compressed_size,
+                           uncompressed_size);
   }
 
   return {};
 }
 
+static std::vector<std::byte>
+ExtractNamedEntry(FileDescriptor fd, off_t filesize,
+                  std::string_view entry_name,
+                  std::optional<off_t> zip_start)
+{
+  const auto eocd = FindEocd(fd, filesize, zip_start);
+  if (!eocd)
+    return {};
+  return ExtractZipEntry(fd, filesize, *eocd, entry_name);
+}
+
 std::vector<std::byte>
 CupxArchive::ExtractImage(Path cupx_path, std::string_view image_name)
 {
-  UniqueFileDescriptor fd;
-  try {
-    fd = OpenReadOnly(cupx_path.c_str());
-  } catch (...) {
+  auto fd = OpenCupx(cupx_path);
+  if (!fd.IsDefined())
     return {};
-  }
 
   if (!SkipCupxHeader(fd))
+    return {};
+
+  const off_t zip_start = fd.Tell();
+  if (zip_start < 0)
+    return {};
+
+  const off_t filesize = fd.GetSize();
+  if (filesize < 0)
     return {};
 
   char entry[520];
@@ -300,22 +315,21 @@ CupxArchive::ExtractImage(Path cupx_path, std::string_view image_name)
   std::memcpy(entry, "Pics/", 5);
   std::memcpy(entry + 5, image_name.data(), image_name.size());
 
-  return ExtractByForwardScan(fd, {entry, 5 + image_name.size()});
+  return ExtractNamedEntry(fd, filesize,
+                           {entry, 5 + image_name.size()},
+                           zip_start);
 }
 
 std::vector<std::byte>
 CupxArchive::ExtractPointsCup(Path cupx_path)
 {
-  UniqueFileDescriptor fd;
-  try {
-    fd = OpenReadOnly(cupx_path.c_str());
-  } catch (...) {
+  auto fd = OpenCupx(cupx_path);
+  if (!fd.IsDefined())
     return {};
-  }
 
   const off_t filesize = fd.GetSize();
   if (filesize < 0)
     return {};
 
-  return ExtractByEocdScan(fd, filesize, "POINTS.CUP");
+  return ExtractNamedEntry(fd, filesize, "POINTS.CUP", std::nullopt);
 }
