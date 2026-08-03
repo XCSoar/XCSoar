@@ -10,6 +10,7 @@ struct SkySightSettings {
   StaticString<64> email;
   StaticString<64> password;
   StaticString<32> region;
+  bool auto_update;
 
   constexpr bool IsDefined() const noexcept {
     return !email.empty() && !password.empty();
@@ -19,5 +20,6 @@ struct SkySightSettings {
     email.clear();
     password.clear();
     region = GetDefaultSkySightRegion().id;
+    auto_update = true;
   }
 };

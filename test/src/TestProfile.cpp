@@ -216,6 +216,17 @@ TestSkySightProfileCompatibility()
 {
   {
     ProfileMap map;
+    WeatherSettings settings;
+    settings.SetDefaults();
+    ok1(settings.skysight.auto_update);
+
+    map.Set(ProfileKeys::SkySightAutoUpdate, false);
+    Profile::Load(map, settings);
+    ok1(!settings.skysight.auto_update);
+  }
+
+  {
+    ProfileMap map;
     map.Set(ProfileKeys::LegacySkySightEmail, "legacy@example.com");
     map.Set(ProfileKeys::LegacySkySightPassword, "legacy-password");
     map.Set(ProfileKeys::LegacySkySightRegion, "EUROPE");
@@ -250,7 +261,7 @@ int main()
 try {
   plan_tests(50
 #ifdef HAVE_HTTP
-             + 6
+             + 8
 #endif
              );
 
