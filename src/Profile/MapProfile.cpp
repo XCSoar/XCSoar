@@ -142,6 +142,11 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
           settings.rasp_layer_opacity);
   settings.rasp_layer_opacity =
       std::clamp(settings.rasp_layer_opacity, uint8_t(0), uint8_t(100));
+
+  if (!map.GetEnum(ProfileKeys::RaspContours, settings.rasp_contour_density) ||
+      unsigned(settings.rasp_contour_density) >=
+      unsigned(ContourDensity::COUNT))
+    settings.rasp_contour_density = ContourDensity::OFF;
 }
 
 void

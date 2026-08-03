@@ -527,7 +527,7 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
     static_assert(ARRAY_SIZE(contour_density_list) ==
                   unsigned(ContourDensity::COUNT) + 1,
                   "contour_density_list must match ContourDensity::COUNT");
-    Profile::GetEnum(ProfileKeys::RaspContours, contour_density);
+    contour_density = CommonInterface::GetMapSettings().rasp_contour_density;
     WndProperty *cp = AddEnum(_("Contours"),
                               _("Draws contour lines onto the RASP weather "
                                 "overlay.  Denser settings draw more lines; "
@@ -640,11 +640,14 @@ RASPSettingsPanel::Save(bool &_changed) noexcept
     changed = true;
 #endif
 
-  WeatherUIState &state = CommonInterface::SetUIState().weather;
-
-  if (state.contour_density != contour_density) {
-    state.contour_density = contour_density;
-    Profile::SetEnum(ProfileKeys::RaspContours, contour_density);
+  /* Compare against the live setting, not against #contour_density:
+     the latter is updated by the control's OnModified callback to
+     preview the colorbar, so it already holds the new value here. */
+  if (SaveValueEnum(CONTOURS, ProfileKeys::RaspContours,
+                    CommonInterface::SetMapSettings().rasp_contour_density)) {
+    /* Propagate the map settings; the redraw is triggered by the
+       SendUIState() call below. */
+    ActionInterface::SendMapSettings(false);
     changed = true;
   }
 
@@ -652,8 +655,6 @@ RASPSettingsPanel::Save(bool &_changed) noexcept
                        rasp_layer_opacity)) {
     CommonInterface::SetMapSettings().rasp_layer_opacity =
       (uint8_t)rasp_layer_opacity;
-    /* Propagate the map settings; the redraw is triggered by the
-       SendUIState() call below. */
     ActionInterface::SendMapSettings(false);
     changed = true;
   }
