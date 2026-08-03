@@ -9,6 +9,7 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Weather/WeatherOverlayDraft.hpp"
+#include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Form/Button.hpp"
@@ -20,6 +21,9 @@
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "Profile/Current.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
@@ -28,10 +32,8 @@
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
-#include "Weather/SkySight/FieldControls.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/SkySight/ForecastFormatter.hpp"
-#include "Weather/SkySight/ForecastUtils.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include "util/StaticString.hxx"
@@ -70,7 +72,7 @@ public:
                                    _("Loading SkySight catalog..."));
       else
         row_renderer.DrawSecondRow(canvas, rc,
-                                   _("No SkySight layers selected. Press Select to choose parameters."));
+                                   _("No SkySight layers selected. Press Add to list to choose parameters."));
 
       return;
     }
@@ -85,7 +87,7 @@ public:
     StaticString<128> first_row;
     first_row = layer->name.c_str();
     if (skysight->GetActiveLayerId() == layer->id)
-      first_row.AppendFormat(" [%s]", _("Active"));
+      first_row.AppendFormat(" [%s]", _("Current page"));
 
     StaticString<256> second_row;
     if (layer->ShouldShowUpdating()) {
@@ -231,9 +233,11 @@ class SkySightWidget final : public ListWidget {
   std::shared_ptr<SkySightClient> skysight;
   ButtonPanelWidget *buttons_widget = nullptr;
   Button *select_button = nullptr;
+  Button *set_active_button = nullptr;
   Button *preload_button = nullptr;
   Button *preload_all_button = nullptr;
-  std::function<void()> layers_changed_callback;
+  std::function<void()> cache_changed_callback;
+  bool download_activity_seen = false;
   SelectedLayerRenderer row_renderer;
   UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
@@ -245,8 +249,8 @@ public:
     buttons_widget = &_buttons;
   }
 
-  void SetLayersChangedCallback(std::function<void()> callback) noexcept {
-    layers_changed_callback = std::move(callback);
+  void SetCacheChangedCallback(std::function<void()> callback) noexcept {
+    cache_changed_callback = std::move(callback);
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
@@ -254,12 +258,20 @@ public:
     const DialogLook &look = UIGlobals::GetDialogLook();
     CreateList(parent, look, rc, row_renderer.CalculateLayout(look));
     UpdateList();
-    update_timer.Schedule(std::chrono::seconds(1));
   }
 
   void Unprepare() noexcept override {
-    update_timer.Cancel();
     DeleteWindow();
+  }
+
+  void Show(const PixelRect &rc) noexcept override {
+    ListWidget::Show(rc);
+    update_timer.Schedule(std::chrono::seconds(1));
+  }
+
+  void Hide() noexcept override {
+    update_timer.Cancel();
+    ListWidget::Hide();
   }
 
 protected:
@@ -274,8 +286,11 @@ protected:
 
 private:
   void CreateButtons(ButtonPanel &buttons) {
-    select_button = buttons.Add(_("Select"), [this]() {
+    select_button = buttons.Add(_("Add to list"), [this]() {
       SelectClicked();
+    });
+    set_active_button = buttons.Add(_("Set active"), [this]() {
+      SetActiveClicked();
     });
     preload_button = buttons.Add(_("Preload Layer"), [this]() {
       PreloadClicked();
@@ -287,7 +302,8 @@ private:
   }
 
   void UpdateButtons() {
-    if (select_button == nullptr || preload_button == nullptr ||
+    if (select_button == nullptr || set_active_button == nullptr ||
+        preload_button == nullptr ||
         preload_all_button == nullptr)
       return;
 
@@ -295,12 +311,14 @@ private:
     const auto catalog_loading = skysight != nullptr && skysight->HasCredentials() &&
       !skysight->HasForecastLayers();
 
-    select_button->SetCaption(catalog_loading ? _("Loading") : _("Select"));
+    select_button->SetCaption(catalog_loading ? _("Loading")
+                                              : _("Add to list"));
     select_button->SetEnabled(skysight != nullptr && !catalog_loading &&
                   skysight->NumLayers() > 0);
 
     const auto index = empty ? 0u : GetList().GetCursorIndex();
     const auto *layer = empty ? nullptr : skysight->GetSelectedLayer(index);
+    set_active_button->SetEnabled(layer != nullptr);
 
     bool any_forecast_layer = false;
     if (skysight != nullptr) {
@@ -327,6 +345,13 @@ private:
     GetList().SetLength(std::max<std::size_t>(1, skysight->NumSelectedLayers()));
     GetList().Invalidate();
     UpdateButtons();
+
+    const bool download_activity = skysight->HasDownloadActivity();
+
+    if (download_activity_seen && !download_activity &&
+        cache_changed_callback)
+      cache_changed_callback();
+    download_activity_seen = download_activity;
   }
 
   void SelectClicked() {
@@ -350,13 +375,13 @@ private:
                         UIGlobals::GetDialogLook(), _("Select SkySight Layers"));
     dialog.AddButton(_("OK"), mrOK);
 
-    Button *select_button = dialog.AddButton("", [](){});
-    std::function<void()> update_buttons = [picker, select_button]() {
-      select_button->SetCaption(picker->GetSelectedCount() == 0
-                                ? _("Select all")
-                                : _("Select none"));
+    Button *toggle_all_button = dialog.AddButton("", [](){});
+    std::function<void()> update_buttons = [picker, toggle_all_button]() {
+      toggle_all_button->SetCaption(picker->GetSelectedCount() == 0
+                                    ? _("Select all")
+                                    : _("Select none"));
     };
-    select_button->SetCallback([picker, update_buttons]() mutable {
+    toggle_all_button->SetCallback([picker, update_buttons]() mutable {
       if (picker->GetSelectedCount() == 0)
         picker->SelectAll();
       else
@@ -423,8 +448,6 @@ private:
     }
     GetList().Invalidate();
     UpdateButtons();
-    if (layers_changed_callback)
-      layers_changed_callback();
   }
 
   void PreloadClicked() {
@@ -445,6 +468,33 @@ private:
                      "SkySight", MB_OK);
     }
 
+    UpdateList();
+  }
+
+  void SetActiveClicked() {
+    if (skysight == nullptr)
+      return;
+
+    const auto index = GetList().GetCursorIndex();
+    const auto *layer = index < skysight->NumSelectedLayers()
+      ? skysight->GetSelectedLayer(index)
+      : nullptr;
+    if (layer == nullptr)
+      return;
+
+    WeatherOverlayDraft::State overlay;
+    overlay.Load(PageLayout::Overlay::SKYSIGHT, layer->id.c_str());
+    overlay.draft.overlay = PageLayout::Overlay::SKYSIGHT;
+    overlay.draft.skysight_overlay = layer->id;
+    overlay.draft.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
+    if (overlay.IsDirty() && !overlay.ApplyIfDirty()) {
+      ShowMessageBox(_("Couldn't apply the selected SkySight layer "
+                       "to the current page."),
+                     "SkySight", MB_OK);
+      return;
+    }
+
+    (void)skysight->SetLayerActive(layer->id, true);
     UpdateList();
   }
 
@@ -477,184 +527,95 @@ private:
 
 };
 
-class SkySightPagePanel final : public RowFormWidget {
+class SkySightOptionsPanel final : public RowFormWidget {
   enum Controls {
-    LAYER,
-    TIME,
-    APPLY_TO_PAGE,
-    ADD_PAGE,
+    AUTO_UPDATE,
+    CACHE_SIZE,
   };
 
   std::shared_ptr<SkySightClient> skysight;
-  WeatherOverlayDraft::State overlay;
-  Button *apply_to_page_button = nullptr;
-  Button *add_page_button = nullptr;
 
-  static SkySightPagePanel *active;
-
-  [[nodiscard]] const SkySight::Layer *GetDefaultLayer() const noexcept {
-    return skysight != nullptr ? skysight->GetSelectedLayer(0) : nullptr;
-  }
-
-  void UpdateLayerControl() noexcept {
-    auto &control = GetControl(LAYER);
-    auto &df = (DataFieldEnum &)*control.GetDataField();
-    df.ClearChoices();
-
-    bool stored_layer_is_selected = false;
-    unsigned selected_value = 0;
-    if (skysight != nullptr)
-      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
-        if (const auto *layer = skysight->GetSelectedLayer(i);
-            layer != nullptr &&
-            layer->id == overlay.draft.skysight_overlay.c_str()) {
-          stored_layer_is_selected = true;
-          selected_value = unsigned(i + 1);
-          break;
-        }
-
-    if (!overlay.draft.skysight_overlay.empty() &&
-        !stored_layer_is_selected)
-      df.AddChoice(0, overlay.draft.skysight_overlay.c_str());
-
-    if (skysight != nullptr)
-      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
-        if (const auto *layer = skysight->GetSelectedLayer(i);
-            layer != nullptr)
-          df.AddChoice(unsigned(i + 1), layer->name.c_str());
-
-    if (skysight == nullptr || skysight->NumSelectedLayers() == 0) {
-      if (overlay.draft.skysight_overlay.empty())
-        df.AddChoice(0, _("No SkySight layers selected"));
-      df.SetValue(0U);
-      control.SetEnabled(false);
-    } else {
-      if (stored_layer_is_selected)
-        df.SetValue(selected_value);
-      else if (!overlay.draft.skysight_overlay.empty())
-        df.SetValue(0U);
-      else {
-        const auto *layer = skysight->GetSelectedLayer(0);
-        if (layer != nullptr) {
-          overlay.draft.overlay = PageLayout::Overlay::SKYSIGHT;
-          overlay.draft.skysight_overlay = layer->id;
-          overlay.draft.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
-        }
-        df.SetValue(1U);
-      }
-      control.SetEnabled(true);
-    }
-
-    control.RefreshDisplay();
-  }
-
-  void UpdateTimeControl() noexcept {
-    StaticString<64> label;
-    SkySight::FormatTimeLabelForPage(label, overlay.draft);
-    WeatherOverlayDraft::SetAxisLabel(
-      GetControl(TIME), label.c_str(),
-      SkySight::IsTimeSelectable(overlay.draft));
-  }
-
-  void SyncButtons() noexcept {
-    overlay.SyncButtons(apply_to_page_button, add_page_button);
-  }
-
-  void OnLayerModified() noexcept {
+public:
+  void UpdateCacheSize() noexcept {
     if (skysight == nullptr)
       return;
 
-    const unsigned selected =
-      ((DataFieldEnum &)*GetControl(LAYER).GetDataField()).GetValue();
-    if (selected == 0 || selected > skysight->NumSelectedLayers())
-      return;
+    const auto usage = skysight->GetCacheUsage();
+    char size[32];
+    FormatByteSize(size, sizeof(size), usage.bytes, false);
 
-    const auto *layer = skysight->GetSelectedLayer(selected - 1);
-    if (layer == nullptr)
-      return;
-
-    if (overlay.draft.skysight_overlay != layer->id.c_str()) {
-      overlay.draft.skysight_overlay = layer->id;
-      overlay.draft.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
-    }
-
-    UpdateTimeControl();
-    SyncButtons();
+    StaticString<64> value;
+    value.Format(_("%s in %u files"), size, usage.files);
+    SetText(CACHE_SIZE, value.c_str());
   }
 
-  bool EditTime([[maybe_unused]] DataField &df) noexcept {
-    if (!SkySight::EditTimeOnLayout(overlay.draft))
-      return true;
+private:
+  void ClearCache() noexcept {
+    if (skysight == nullptr)
+      return;
 
-    UpdateTimeControl();
-    SyncButtons();
-    return true;
-  }
+    const auto usage = skysight->GetCacheUsage();
+    char size[32];
+    FormatByteSize(size, sizeof(size), usage.bytes, false);
 
-  static bool EditTimeCallback([[maybe_unused]] const char *caption,
-                               DataField &df,
-                               [[maybe_unused]] const char *help_text) noexcept {
-    return active != nullptr ? active->EditTime(df) : false;
+    StaticString<256> prompt;
+    prompt.Format(
+      _("Delete %s of cached SkySight data? This includes any recently "
+        "downloaded forecasts and map tiles. The active layer may be "
+        "downloaded again if Auto update is enabled."),
+      size);
+    if (ShowMessageBox(prompt.c_str(), _("Clear SkySight cache"),
+                       MB_YESNO | MB_ICONWARNING) != IDYES)
+      return;
+
+    const auto deleted = skysight->ClearDownloadedData();
+    UpdateCacheSize();
+
+    char deleted_size[32];
+    FormatByteSize(deleted_size, sizeof(deleted_size), deleted.bytes, false);
+    StaticString<96> result;
+    result.Format(_("Deleted %s in %u files."), deleted_size, deleted.files);
+    ShowMessageBox(result.c_str(), _("Clear SkySight cache"), MB_OK);
   }
 
 public:
-  explicit SkySightPagePanel(std::shared_ptr<SkySightClient> _skysight) noexcept
+  explicit SkySightOptionsPanel(std::shared_ptr<SkySightClient> _skysight) noexcept
     :RowFormWidget(UIGlobals::GetDialogLook()),
      skysight(std::move(_skysight)) {}
 
-  ~SkySightPagePanel() noexcept override {
-    if (active == this)
-      active = nullptr;
-  }
-
-  void RefreshPageSection() noexcept {
-    const auto *default_layer = GetDefaultLayer();
-    overlay.Load(PageLayout::Overlay::SKYSIGHT,
-                 default_layer != nullptr ? default_layer->id.c_str()
-                                          : nullptr);
-    UpdateLayerControl();
-    UpdateTimeControl();
-    SyncButtons();
-  }
-
   void Prepare([[maybe_unused]] ContainerWindow &parent,
                [[maybe_unused]] const PixelRect &rc) noexcept override {
-    active = this;
-
-    auto *layer = AddEnum(
-      _("Page layer"),
-      _("SkySight layer for the current map page. Changes remain a "
-        "draft until Apply to page is pressed."));
-    layer->GetDataField()->SetOnModified([this]{ OnLayerModified(); });
-
-    auto *time = AddEnum(
-      _("Page time"),
-      _("Forecast time for the current map page. Auto follows the "
-        "closest forecast step when the page is opened."));
-    time->SetEditCallback(EditTimeCallback);
-
-    apply_to_page_button = AddButton(_("Apply to page"), [this] {
-      if (overlay.ApplyIfDirty())
-        RefreshPageSection();
+    const auto &settings =
+      CommonInterface::GetComputerSettings().weather.skysight;
+    AddBoolean(
+      _("Auto update"),
+      _("Automatically download missing or newer SkySight data for the "
+        "current map page. Manual preload remains available."),
+      settings.auto_update);
+    GetControl(AUTO_UPDATE).GetDataField()->SetOnModified([this] {
+      auto &weather = CommonInterface::SetComputerSettings().weather;
+      if (SaveValue(AUTO_UPDATE, ProfileKeys::SkySightAutoUpdate,
+                    weather.skysight.auto_update)) {
+        Profile::Save();
+        if (skysight != nullptr)
+          skysight->OnAutoUpdateChanged();
+      }
     });
-    add_page_button = AddButton(_("Add page"), [this] {
-      overlay.AddPage(apply_to_page_button, add_page_button);
-    });
-    AddButton(_("Pages setup"), [this] {
+
+    AddReadOnly(_("Cache"),
+                _("Total disk space used by the SkySight cache folder."));
+    UpdateCacheSize();
+    AddButton(_("Clear downloaded data"), [this] { ClearCache(); });
+    AddButton(_("Pages setup"), [] {
       WeatherOverlayDraft::OpenPagesConfig();
-      RefreshPageSection();
     });
-
-    RefreshPageSection();
   }
 
   void Show(const PixelRect &rc) noexcept override {
     RowFormWidget::Show(rc);
-    RefreshPageSection();
+    UpdateCacheSize();
   }
 };
-
-SkySightPagePanel *SkySightPagePanel::active = nullptr;
 
 std::unique_ptr<Widget>
 CreateSkySightWidget()
@@ -673,13 +634,13 @@ CreateSkySightWidget()
     ButtonPanelWidget::Alignment::BOTTOM);
   list_ptr->SetButtonPanel(*buttons);
 
-  auto page = std::make_unique<SkySightPagePanel>(skysight);
-  auto *page_ptr = page.get();
-  list_ptr->SetLayersChangedCallback([page_ptr] {
-    page_ptr->RefreshPageSection();
+  auto options = std::make_unique<SkySightOptionsPanel>(skysight);
+  auto *options_ptr = options.get();
+  list_ptr->SetCacheChangedCallback([options_ptr] {
+    options_ptr->UpdateCacheSize();
   });
-
-  return std::make_unique<TwoWidgets>(std::move(buttons), std::move(page));
+  return std::make_unique<TwoWidgets>(std::move(buttons),
+                                      std::move(options));
 }
 
 #endif
