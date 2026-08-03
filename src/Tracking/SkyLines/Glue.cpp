@@ -222,9 +222,13 @@ SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
     if (endpoint_changed && cloud_client.IsDefined())
       cloud_client.Close();
 
-    if (!cloud_client.IsDefined()) {
-      cloud_host = host;
-      cloud_port = port;
+    cloud_host = host;
+    cloud_port = port;
+
+    /* Do not start DNS while offline (LiveTrack24 / TIM do the same).
+       ProcessTimer re-applies settings often; Open() without this gate
+       retries resolve on every failure and floods xcsoar.log (#1750). */
+    if (!cloud_client.IsDefined() && IsNetConnected(cloud_roaming)) {
       cloud_client.Open(*global_cares_channel, host, port);
       if (GetEnvBool("XCS_CLOUD_DEBUG"))
         LogFmt("Cloud: opening {}:{} (simulator override enabled)",
@@ -247,12 +251,11 @@ SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
 
   interval = seconds(skylines_settings.interval);
 
-  if (!client.IsDefined()) {
-    client.Open(*global_cares_channel, "tracking.skylines.aero");
-  }
-
   traffic_enabled = skylines_settings.traffic_enabled;
   near_traffic_enabled = skylines_settings.near_traffic_enabled;
 
   skylines_roaming = skylines_settings.roaming;
+
+  if (!client.IsDefined() && IsNetConnected(skylines_roaming))
+    client.Open(*global_cares_channel, "tracking.skylines.aero");
 }
