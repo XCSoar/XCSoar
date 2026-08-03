@@ -120,6 +120,12 @@ Profile::Exists(std::string_view key) noexcept
 }
 
 void
+Profile::Remove(std::string_view key) noexcept
+{
+  map.Remove(key);
+}
+
+void
 Profile::Clear() noexcept
 {
   map.Clear();

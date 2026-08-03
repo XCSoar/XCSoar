@@ -142,6 +142,9 @@ bool
 Exists(std::string_view key) noexcept;
 
 void
+Remove(std::string_view key) noexcept;
+
+void
 Clear() noexcept;
 
 } // namespace Profile
