@@ -5,7 +5,7 @@
 
 #include "RaspCache.hpp"
 #include "Terrain/RasterRenderer.hpp"
-#include "Weather/WeatherUIState.hpp"
+#include "ContourDensity.hpp"
 #include "Units/Group.hpp"
 #include "time/BrokenTime.hpp"
 #include "util/StaticString.hxx"

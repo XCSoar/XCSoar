@@ -10,6 +10,7 @@
 #include "Renderer/WaypointRendererSettings.hpp"
 #include "Engine/Task/Shapes/FAITriangleSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
+#include "Weather/Rasp/ContourDensity.hpp"
 
 #include <type_traits>
 
@@ -196,6 +197,9 @@ struct MapSettings {
 
   /** RASP weather overlay opacity (0=transparent, 100=opaque) */
   uint8_t rasp_layer_opacity;
+
+  /** Density of contour lines drawn on the RASP weather overlay */
+  ContourDensity rasp_contour_density;
 
   void SetDefaults() noexcept;
 };
