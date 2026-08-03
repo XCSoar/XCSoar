@@ -351,11 +351,11 @@ GetStatusLabel() noexcept
   case EDLWeatherUIState::Status::DISABLED:
     return _("Disabled");
   case EDLWeatherUIState::Status::IDLE:
-    return _("Idle");
+    return C_("Status", "Idle");
   case EDLWeatherUIState::Status::LOADING:
-    return _("Loading");
+    return C_("Status", "Loading");
   case EDLWeatherUIState::Status::READY:
-    return _("Ready");
+    return C_("Status", "Ready");
   case EDLWeatherUIState::Status::FAILED:
     return _("Error");
   }

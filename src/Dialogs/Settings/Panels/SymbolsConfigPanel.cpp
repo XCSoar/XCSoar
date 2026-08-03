@@ -179,12 +179,12 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           wind_arrow_list, (unsigned)settings_map.wind_arrow_style);
   SetExpertRow(WIND_ARROW_STYLE);
 
-  AddEnum(_("Online traffic on map"),
+  AddEnum(C_("Setting", "Online traffic on map"),
           _("Show traffic from SkyLines and XCSoar Cloud on the map."),
           online_traffic_map_mode_list,
           (unsigned)settings_map.online_traffic_map_mode);
 
-  AddBoolean(_("Distance rings"),
+  AddBoolean(C_("Setting", "Distance rings"),
              _("Display distance rings around the aircraft on the map."),
              settings_map.distance_rings_enabled);
 

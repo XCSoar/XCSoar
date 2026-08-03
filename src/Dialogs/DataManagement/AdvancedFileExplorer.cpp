@@ -77,7 +77,7 @@ struct AdvancedExplorerContainer : public PropertyWidgetContainer {
       return out;
     };
 
-    file_list = std::make_unique<FileMultiSelectWidget>(loader, nullptr, _("Files"), nullptr);
+    file_list = std::make_unique<FileMultiSelectWidget>(loader, nullptr, C_("Setting", "Files"), nullptr);
 
     // Show size and last-modified on a second row like other file dialogs
     file_list->SetSecondLeftProvider([this](const FileMultiSelectWidget::FileItem &it) noexcept {
@@ -144,7 +144,7 @@ struct DirectoryPickerContainer final : public PropertyWidgetContainer {
   AllocatedPath base_root;
 
   DirectoryPickerContainer(AllocatedPath initial, AllocatedPath root) noexcept
-    : PropertyWidgetContainer(_("Destination")),
+    : PropertyWidgetContainer(C_("Setting", "Destination")),
       current_path(std::move(initial)),
       base_root(std::move(root))
   {
@@ -181,7 +181,7 @@ struct DirectoryPickerContainer final : public PropertyWidgetContainer {
     };
 
     file_list = std::make_unique<FileMultiSelectWidget>(loader, nullptr,
-                                                        _("Folders"), nullptr);
+                                                        C_("Setting", "Folders"), nullptr);
   }
 
   Widget &GetContentWidget() noexcept override { return *file_list; }
@@ -230,7 +230,7 @@ PickTransferDestination(Path base_root, Path initial_path)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look,
-                      _("Transfer files"));
+                      C_("Menu", "Transfer files"));
 
   auto container = std::make_unique<DirectoryPickerContainer>(
     AllocatedPath(initial_path), AllocatedPath(base_root));
@@ -242,9 +242,9 @@ PickTransferDestination(Path base_root, Path initial_path)
   static constexpr int mrMove = 101;
   static constexpr int mrCopy = 102;
 
-  dialog.AddButton(_("Create folder"), [&picker]() {
+  dialog.AddButton(C_("Button", "Create folder"), [&picker]() {
     char name[256] = "";
-    if (!TextEntryDialog(name, sizeof(name), _("Create folder")))
+    if (!TextEntryDialog(name, sizeof(name), C_("Button", "Create folder")))
       return;
 
     if (name[0] == '\0')
@@ -252,34 +252,34 @@ PickTransferDestination(Path base_root, Path initial_path)
 
     const Path base_name(name);
     if (!base_name.IsValidFilename()) {
-      ShowMessageBox(_("Invalid folder name."), _("Create folder"),
+      ShowMessageBox(_("Invalid folder name."), C_("Button", "Create folder"),
                      MB_OK | MB_ICONERROR);
       return;
     }
 
     auto destination = AllocatedPath::Build(picker.GetCurrentPath(), base_name);
     if (destination == nullptr || Path(destination).HasPathTraversal()) {
-      ShowMessageBox(_("Invalid folder name."), _("Create folder"),
+      ShowMessageBox(_("Invalid folder name."), C_("Button", "Create folder"),
                      MB_OK | MB_ICONERROR);
       return;
     }
 
     if (File::ExistsAny(destination)) {
-      ShowMessageBox(_("Folder already exists."), _("Create folder"),
+      ShowMessageBox(_("Folder already exists."), C_("Button", "Create folder"),
                      MB_OK | MB_ICONINFORMATION);
       return;
     }
 
     Directory::Create(destination);
     if (!Directory::Exists(destination)) {
-      ShowMessageBox(_("Failed to create folder."), _("Create folder"),
+      ShowMessageBox(_("Failed to create folder."), C_("Button", "Create folder"),
                      MB_OK | MB_ICONERROR);
       return;
     }
 
     picker.SetCurrent(std::move(destination));
   });
-  dialog.AddButton(_("Move"), mrMove);
+  dialog.AddButton(C_("Button", "Move"), mrMove);
   dialog.AddButton(_("Copy"), mrCopy);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.FinishPreliminary(std::move(container));
@@ -544,7 +544,7 @@ PerformOrganizeFiles(FileMultiSelectWidget &file_list)
     StaticString<256> msg;
     msg.Format(_("No files to organize.\nSkipped unknown: %u\nSkipped conflicts: %u"),
                plan.skipped_unknown, plan.skipped_conflicts);
-    ShowMessageBox(msg, _("Organize files"), MB_OK | MB_ICONINFORMATION);
+    ShowMessageBox(msg, C_("Button", "Organize files"), MB_OK | MB_ICONINFORMATION);
     return;
   }
 
@@ -553,7 +553,7 @@ PerformOrganizeFiles(FileMultiSelectWidget &file_list)
                 (unsigned)plan.moves.size(),
                 plan.skipped_unknown,
                 plan.skipped_conflicts);
-  if (ShowMessageBox(prompt, _("Organize files"), MB_YESNO) != IDYES)
+  if (ShowMessageBox(prompt, C_("Button", "Organize files"), MB_YESNO) != IDYES)
     return;
 
   unsigned moved = 0, failed = 0, profile_updates = 0;
@@ -582,7 +582,7 @@ PerformOrganizeFiles(FileMultiSelectWidget &file_list)
   if (profile_updates > 0)
     msg.append(_("\nRestart recommended for moved configured files."));
 
-  ShowMessageBox(msg, _("Organize files"), MB_OK | MB_ICONINFORMATION);
+  ShowMessageBox(msg, C_("Button", "Organize files"), MB_OK | MB_ICONINFORMATION);
   file_list.Refresh();
 }
 
@@ -592,7 +592,7 @@ ShowAdvancedFileExplorerDialog()
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look,
-                      _("Advanced File Explorer"));
+                      C_("Menu", "Advanced File Explorer"));
 
   AllocatedPath initial = Path(GetPrimaryDataPath());
   auto container = std::make_unique<AdvancedExplorerContainer>(std::move(initial));
@@ -603,7 +603,7 @@ ShowAdvancedFileExplorerDialog()
     explorer.SetCurrent(std::move(d));
   });
 
-  dialog.AddButton(_("Organize files"),
+  dialog.AddButton(C_("Button", "Organize files"),
                    [&file_list]() { PerformOrganizeFiles(file_list); });
   dialog.AddButton(_("Transfer to"),
                    [&file_list, &explorer]() {
@@ -614,7 +614,7 @@ ShowAdvancedFileExplorerDialog()
   dialog.AddButton(_("Rename"), [&file_list]() { PerformRename(file_list); });
   dialog.AddButton(_("Select all"), [&file_list]() { file_list.SelectAllFiles(); });
   dialog.AddButton(_("Select none"), [&file_list]() { file_list.ClearSelection(); });
-  dialog.AddButton(_("Back"), mrCancel);
+  dialog.AddButton(C_("Button", "Back"), mrCancel);
 
   dialog.FinishPreliminary(std::move(container));
   dialog.ShowModal();

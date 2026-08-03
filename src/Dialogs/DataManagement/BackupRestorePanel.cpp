@@ -133,7 +133,7 @@ struct RestoreJob final : public Job {
     if (!dev) {
       aborted = true;
       StaticString<64> message;
-      FormatDeviceNotFound(message, N_("Source"));
+      FormatDeviceNotFound(message, NC_("Setting", "Source"));
       error_message = message;
       return;
     }
@@ -155,7 +155,7 @@ static void
 RunRestoreJob(Path device_root, Path tar_name)
 {
   int rr = ShowMessageBox(_("Restoring will overwrite existing data. Continue?"),
-                          _("Restore"), MB_YESNO);
+                          C_("Button", "Restore"), MB_YESNO);
   if (rr != IDYES)
     return;
 
@@ -168,14 +168,14 @@ RunRestoreJob(Path device_root, Path tar_name)
   if (job.aborted) {
     const std::string fullmsg = std::string(_("Restore failed.")) +
       "\n\n" + job.error_message;
-    ShowMessageBox(fullmsg.c_str(), _("Restore"), MB_OK | MB_ICONERROR);
+    ShowMessageBox(fullmsg.c_str(), C_("Button", "Restore"), MB_OK | MB_ICONERROR);
   } else if (failed > 0) {
     StaticString<256> msg;
     msg.Format(_("Restore finished with %u failed files. Restart XCSoar to apply restored settings."), failed);
-    ShowMessageBox(msg, _("Restore"), MB_OK | MB_ICONINFORMATION);
+    ShowMessageBox(msg, C_("Button", "Restore"), MB_OK | MB_ICONINFORMATION);
   } else {
     ShowMessageBox(_("Restore complete. Restart XCSoar to apply restored settings."),
-                   _("Restore"), MB_OK | MB_ICONINFORMATION);
+                   C_("Button", "Restore"), MB_OK | MB_ICONINFORMATION);
   }
 }
 
@@ -335,7 +335,7 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), look,
-                      _("Backup manager"));
+                      C_("Menu", "Backup manager"));
   auto container = std::make_unique<BackupContainer>();
   BackupContainer *container_ptr = container.get();
 
@@ -350,15 +350,15 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
     }
   }
 
-  dialog.AddButton(_("Choose location"), [container_ptr]() {
+  dialog.AddButton(C_("Button", "Choose location"), [container_ptr]() {
     PickStorageLocationAndApply([container_ptr](AllocatedPath chosen) {
       container_ptr->SetTarget(std::move(chosen));
     });
   });
 
-  dialog.AddButton(_("Create backup"), [container_ptr]() {
+  dialog.AddButton(C_("Button", "Create backup"), [container_ptr]() {
     if (container_ptr->target_device_path == nullptr) {
-      ShowMessageBox(_("Select a target first."), _("Create backup"), MB_OK | MB_ICONERROR);
+      ShowMessageBox(_("Select a target first."), C_("Button", "Create backup"), MB_OK | MB_ICONERROR);
       return;
     }
 
@@ -377,21 +377,21 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
     if (job.aborted) {
       const std::string fullmsg = std::string(_("Backup failed.")) +
         "\n\n" + job.error_message;
-      ShowMessageBox(fullmsg.c_str(), _("Create backup"), MB_OK | MB_ICONERROR);
+      ShowMessageBox(fullmsg.c_str(), C_("Button", "Create backup"), MB_OK | MB_ICONERROR);
     } else {
       container_ptr->RefreshBackups();
     }
   });
 
-  dialog.AddButton(_("Restore backup"), [container_ptr]() {
+  dialog.AddButton(C_("Button", "Restore backup"), [container_ptr]() {
     if (container_ptr->target_device_path == nullptr) {
-      ShowMessageBox(_("Select a target first."), _("Restore backup"), MB_OK | MB_ICONERROR);
+      ShowMessageBox(_("Select a target first."), C_("Button", "Restore backup"), MB_OK | MB_ICONERROR);
       return;
     }
 
     AllocatedPath selected;
     if (!container_ptr->GetSelectedBackup(selected)) {
-      ShowMessageBox(_("No backup files found in selected location."), _("Restore backup"),
+      ShowMessageBox(_("No backup files found in selected location."), C_("Button", "Restore backup"),
                      MB_OK | MB_ICONINFORMATION);
       return;
     }
@@ -399,28 +399,28 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
     RunRestoreJob(container_ptr->target_device_path, selected);
   });
 
-  dialog.AddButton(_("Delete backup"), [container_ptr]() {
+  dialog.AddButton(C_("Button", "Delete backup"), [container_ptr]() {
     if (container_ptr->target_device_path == nullptr) {
-      ShowMessageBox(_("Select a target first."), _("Delete backup"), MB_OK | MB_ICONERROR);
+      ShowMessageBox(_("Select a target first."), C_("Button", "Delete backup"), MB_OK | MB_ICONERROR);
       return;
     }
 
     AllocatedPath selected;
     if (!container_ptr->GetSelectedBackup(selected)) {
-      ShowMessageBox(_("No backup files found in selected location."), _("Delete backup"),
+      ShowMessageBox(_("No backup files found in selected location."), C_("Button", "Delete backup"),
                      MB_OK | MB_ICONINFORMATION);
       return;
     }
 
     if (ShowMessageBox(_("Delete this backup?"),
-                       _("Delete backup"), MB_YESNO) != IDYES)
+                       C_("Button", "Delete backup"), MB_YESNO) != IDYES)
       return;
 
     auto dev = FindDeviceByName(container_ptr->target_device_path);
     if (!dev) {
       StaticString<64> message;
       FormatDeviceNotFound(message, N_("Target"));
-      ShowMessageBox(message, _("Delete backup"), MB_OK | MB_ICONERROR);
+      ShowMessageBox(message, C_("Button", "Delete backup"), MB_OK | MB_ICONERROR);
       return;
     }
 
@@ -432,7 +432,7 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
     }).detach();
   });
 
-  dialog.AddButton(_("Back"), mrCancel);
+  dialog.AddButton(C_("Button", "Back"), mrCancel);
 
   dialog.FinishPreliminary(std::move(container));
   dialog.EnableCursorSelection();
@@ -459,7 +459,7 @@ ShowRestoreDialogWithSource(const AllocatedPath &initial_source)
   }
 
   if (list.empty()) {
-    ShowMessageBox(_("No backup files found in selected location."), _("Restore"), MB_OK | MB_ICONINFORMATION);
+    ShowMessageBox(_("No backup files found in selected location."), C_("Button", "Restore"), MB_OK | MB_ICONINFORMATION);
     return;
   }
 

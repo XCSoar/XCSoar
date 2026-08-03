@@ -201,7 +201,7 @@ EdlControlsModel::RefreshOverlay() noexcept
 {
 #if !defined(HAVE_HTTP)
   StaticString<128> message;
-  FormatFeatureNotAvailableInThisBuild(message, N_("HTTP support"));
+  FormatFeatureNotAvailableInThisBuild(message, NC_("Setting", "HTTP support"));
   ShowMessageBox(message, _("Weather"), MB_OK);
 #else
   if (!EDL::OverlayEnabled())

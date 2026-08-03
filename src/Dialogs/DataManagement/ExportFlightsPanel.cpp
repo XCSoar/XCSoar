@@ -137,7 +137,7 @@ PerformExport(FileMultiSelectWidget *file_widget)
     StaticString<64> message;
     FormatDeviceNotFound(message, N_("Target"));
     ShowMessageBox(message,
-                   _("Export flights"), MB_OK | MB_ICONERROR);
+                   C_("Menu", "Export flights"), MB_OK | MB_ICONERROR);
     return;
   }
 
@@ -145,7 +145,7 @@ PerformExport(FileMultiSelectWidget *file_widget)
   ExportJob job(selected, std::move(device), completed, skipped, failed);
 
   if (!JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-                 _("Export flights"), job, true)) {
+                 C_("Menu", "Export flights"), job, true)) {
     return;
   }
 
@@ -160,7 +160,7 @@ PerformExport(FileMultiSelectWidget *file_widget)
       msg.AppendFormat("\n- %s", name.c_str());
   }
 
-  ShowMessageBox(msg, _("Export flights"),
+  ShowMessageBox(msg, C_("Menu", "Export flights"),
                  MB_OK | (failed ? MB_ICONERROR : MB_ICONINFORMATION));
 }
 
@@ -224,7 +224,7 @@ struct FlightContainer : public PropertyWidgetContainer {
 
   explicit FlightContainer(MultiFileDataField &df)
     : PropertyWidgetContainer(_("Target")),
-      file_list(std::make_unique<FileMultiSelectWidget>(df, nullptr, _("Flights"), nullptr))
+      file_list(std::make_unique<FileMultiSelectWidget>(df, nullptr, C_("Setting", "Flights"), nullptr))
   {
     file_metadata.Build(df.GetAllPaths());
     file_list->SetSecondRightProvider([this](const FileMultiSelectWidget::FileItem &it) noexcept {
@@ -355,7 +355,7 @@ ShowExportFlightsDialog()
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, _("Export flights"));
+                      look, C_("Menu", "Export flights"));
 
   /**
    * Prepare MultiFileDataField with available log files from the XCSoar
@@ -379,17 +379,17 @@ ShowExportFlightsDialog()
     }
   }
 
-  dialog.AddButton(_("Choose location"), [&flight_container]() {
+  dialog.AddButton(C_("Button", "Choose location"), [&flight_container]() {
     PickStorageLocationAndApply([&flight_container](AllocatedPath chosen) {
       flight_container.SetTargetDevice(std::move(chosen));
     });
   });
 
   dialog.AddButton(_("WeGlide Upload"), [&file_list]() { PerformWeGlideUpload(&file_list); });
-  dialog.AddButton(_("Export"), [&file_list]() { PerformExport(&file_list); });
+  dialog.AddButton(C_("Button", "Export"), [&file_list]() { PerformExport(&file_list); });
   dialog.AddButton(_("Select all"), [&file_list]() { file_list.SelectAll(); });
   dialog.AddButton(_("Select none"), [&file_list]() { file_list.ClearSelection(); });
-  dialog.AddButton(_("Back"), mrCancel);
+  dialog.AddButton(C_("Button", "Back"), mrCancel);
 
   dialog.FinishPreliminary(std::move(container));
   dialog.ShowModal();

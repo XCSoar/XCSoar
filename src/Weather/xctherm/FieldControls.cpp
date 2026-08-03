@@ -196,7 +196,7 @@ EditTimeOnLayout(PageLayout &page) noexcept
 
   const ComboList combo_list = field.CreateComboList(nullptr);
   StaticString<64> caption;
-  caption.Format("%s %s (UTC)", "XCTherm", _("Time"));
+  caption.Format("%s %s (UTC)", "XCTherm", C_("Weather control", "Time"));
   const auto result =
     WeatherMapOverlay::RunTimePicker(caption.c_str(), combo_list);
 
@@ -268,7 +268,7 @@ EditLayerOnLayout(PageLayout &page, bool offer_setup) noexcept
   bool setup = false;
   const char *setup_caption = offer_setup ? _("Setup") : nullptr;
   StaticString<64> caption;
-  caption.Format("%s %s", "XCTherm", _("Altitude"));
+  caption.Format("%s %s", "XCTherm", C_("Weather control", "Altitude"));
   if (!ComboPicker(caption.c_str(), field, nullptr,
                    setup_caption, &setup))
     return setup ? LayerPickerResult::OPEN_SETUP

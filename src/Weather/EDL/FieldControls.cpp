@@ -372,7 +372,7 @@ EditTimeOnLayout(PageLayout &page) noexcept
   const ComboList combo_list = field.CreateComboList(nullptr);
 
   StaticString<64> caption;
-  caption.Format("%s %s (UTC)", "EDL", _("Time"));
+  caption.Format("%s %s (UTC)", "EDL", C_("Weather control", "Time"));
 
   const WeatherMapOverlay::TimePickerResult result =
     WeatherMapOverlay::RunTimePicker(caption.c_str(), combo_list);
