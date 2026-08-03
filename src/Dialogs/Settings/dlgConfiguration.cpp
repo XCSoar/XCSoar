@@ -307,7 +307,9 @@ static void
 OnUserLevel(bool expert) noexcept
 {
   CommonInterface::SetUISettings().dialog.expert = expert;
-  Profile::Set(ProfileKeys::UserLevel, expert);
+
+  /* Keep Profile I/O out of this checkbox callback (pager is mid-
+     relayout). Persist UserLevel when the dialog closes instead. */
 
   /* force layout update */
   pager->PagerWidget::Move(pager->GetPosition());
@@ -379,12 +381,31 @@ void dlgConfigurationShowModal()
     return true;
   });
 
-  dialog.ShowModal();
+  const int result = dialog.ShowModal();
 
   /* save page number for next time this dialog is opened */
   current_page = menu.GetCursor();
 
-  if (dialog.GetChanged()) {
+  /* Persist Expert only on OK. Missing UserLevel means beginner —
+     write "1" when enabling Expert; remove the key when returning to
+     beginner (do not leave UserLevel=0 cruft) (#1793). */
+  bool expert_changed = false;
+  if (result == mrOK) {
+    const bool expert = CommonInterface::GetUISettings().dialog.expert;
+    if (expert) {
+      bool profile_expert = false;
+      Profile::Get(ProfileKeys::UserLevel, profile_expert);
+      if (!profile_expert) {
+        Profile::Set(ProfileKeys::UserLevel, true);
+        expert_changed = true;
+      }
+    } else if (Profile::Exists(ProfileKeys::UserLevel)) {
+      Profile::Remove(ProfileKeys::UserLevel);
+      expert_changed = true;
+    }
+  }
+
+  if (dialog.GetChanged() || expert_changed) {
     Profile::Save();
     if (require_restart)
       ShowMessageBox(_("Changes to configuration saved. Restart XCSoar to apply changes."),

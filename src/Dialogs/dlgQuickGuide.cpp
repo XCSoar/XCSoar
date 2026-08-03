@@ -779,12 +779,17 @@ dlgQuickGuideShowModal(bool force_info)
   }
 #endif
 
-  // Save "don't show again" state (both checked and unchecked,
-  // so unticking from the Info menu re-enables the guide)
+  /* Only persist when the checkbox changed vs profile (missing key =
+     show guide). Still writes false when unticking from Info. */
   if (info_pages_needed) {
-    Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup,
-                 state.hide_guide_checked);
-    Profile::Save();
+    bool previously_hidden = false;
+    Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup,
+                 previously_hidden);
+    if (state.hide_guide_checked != previously_hidden) {
+      Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup,
+                   state.hide_guide_checked);
+      Profile::Save();
+    }
   }
 
   (void)result;

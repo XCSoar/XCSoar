@@ -84,7 +84,12 @@ class TerrainDisplayConfigPanel final
   bool have_terrain_preview;
 
 protected:
+  /** Current dialog values (may be previewed live). */
   TerrainRendererSettings terrain_settings;
+
+  /** Values when the panel was opened; used so Save() does not write
+      unchanged defaults into a profile that lacked those keys (#1793). */
+  TerrainRendererSettings initial_terrain_settings;
 
 public:
   TerrainDisplayConfigPanel()
@@ -342,6 +347,9 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
   terrain_settings = terrain;
   ShowTerrainControls();
   UpdateTerrainPreview();
+  /* Capture after UpdateTerrainPreview(): contrast/brightness go through
+     ByteToPercent ↔ PercentToByte, which is lossy for some values. */
+  initial_terrain_settings = terrain_settings;
 }
 
 bool
@@ -350,15 +358,22 @@ TerrainDisplayConfigPanel::Save(bool &_changed) noexcept
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   bool changed = false;
-  changed = (settings_map.terrain != terrain_settings);
 
+  /* Always apply in-memory map settings (EnableTerrain may already
+     have updated settings_map live).  Persist only when values differ
+     from the panel-open snapshot so missing profile defaults stay
+     absent (#1793). */
   settings_map.terrain = terrain_settings;
-  Profile::Set(ProfileKeys::DrawTerrain, terrain_settings.enable);
-  Profile::Set(ProfileKeys::TerrainContrast, terrain_settings.contrast);
-  Profile::Set(ProfileKeys::TerrainBrightness, terrain_settings.brightness);
-  Profile::Set(ProfileKeys::TerrainRamp, terrain_settings.ramp);
-  Profile::SetEnum(ProfileKeys::SlopeShadingType, terrain_settings.slope_shading);
-  Profile::SetEnum(ProfileKeys::TerrainContours, terrain_settings.contours);
+  if (terrain_settings != initial_terrain_settings) {
+    Profile::Set(ProfileKeys::DrawTerrain, terrain_settings.enable);
+    Profile::Set(ProfileKeys::TerrainContrast, terrain_settings.contrast);
+    Profile::Set(ProfileKeys::TerrainBrightness, terrain_settings.brightness);
+    Profile::Set(ProfileKeys::TerrainRamp, terrain_settings.ramp);
+    Profile::SetEnum(ProfileKeys::SlopeShadingType,
+                     terrain_settings.slope_shading);
+    Profile::SetEnum(ProfileKeys::TerrainContours, terrain_settings.contours);
+    changed = true;
+  }
 
   changed |= SaveValue(EnableTopography, ProfileKeys::DrawTopography,
                        settings_map.topography_enabled);
