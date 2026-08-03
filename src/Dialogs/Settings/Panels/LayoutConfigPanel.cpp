@@ -292,10 +292,9 @@ LayoutConfigPanel::Unprepare() noexcept
 bool
 LayoutConfigPanel::Leave() noexcept
 {
-  /* Publish the selection so sibling panels (InfoBox Sets) see it
-     before Settings is closed. */
-  CommonInterface::SetUISettings().info_boxes.geometry =
-    static_cast<InfoBoxSettings::Geometry>(GetValueEnum(AppInfoBoxGeom));
+  /* Make the selection visible to sibling panels before Settings closes. */
+  SaveValueEnum(AppInfoBoxGeom,
+                CommonInterface::SetUISettings().info_boxes.geometry);
   return true;
 }
 
@@ -340,15 +339,12 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 
   bool info_box_geometry_changed = false;
 
-  const auto geometry =
-    static_cast<InfoBoxSettings::Geometry>(GetValueEnum(AppInfoBoxGeom));
-  ui_settings.info_boxes.geometry = geometry;
-  if (geometry != original_geometry) {
-    Profile::Set(ProfileKeys::InfoBoxGeometry,
-                 static_cast<unsigned>(geometry));
-    info_box_geometry_changed = true;
-  }
-
+  /* Leave() may already have synced the DataField into ui_settings;
+     re-base so SaveValueEnum still writes the profile when needed. */
+  ui_settings.info_boxes.geometry = original_geometry;
+  info_box_geometry_changed |=
+    SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
+                  ui_settings.info_boxes.geometry);
   info_box_geometry_changed |=
     SaveValueInteger(InfoBoxTitleScale, ProfileKeys::InfoBoxTitleScale,
                   ui_settings.info_boxes.scale_title_font);
