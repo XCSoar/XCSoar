@@ -533,7 +533,7 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(507 + 7 + 5);
+  plan_tests(507 + 4 + 8);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
