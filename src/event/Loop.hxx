@@ -210,6 +210,19 @@ public:
 #endif // HAVE_THREADED_EVENT_LOOP
 
 	/**
+	 * Clear the quit flag so Run() can be invoked again.
+	 *
+	 * Must be called from the thread that runs the loop, after
+	 * Run() has returned.
+	 */
+	void ResetQuit() noexcept {
+		quit = false;
+#ifdef HAVE_THREADED_EVENT_LOOP
+		quit_injected = false;
+#endif
+	}
+
+	/**
 	 * Finish Run() after all pending events have been handled.
 	 */
 	void Finish() noexcept {

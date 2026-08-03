@@ -1179,7 +1179,7 @@ DEBUG_PROGRAM_NAMES += \
 	FlightPath \
 	ReadProfileString ReadProfileInt \
 	KeyCodeDumper \
-	ReadPort RunPortHandler LogPort \
+	ReadPort RunPortHandler LogPort RunLXNAVPolarEcho \
 	SplicePorts \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunEnableNMEA \
@@ -1660,6 +1660,21 @@ LOG_PORT_SOURCES = \
 	$(TEST_SRC_DIR)/LogPort.cpp
 LOG_PORT_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL
 $(eval $(call link-program,LogPort,LOG_PORT))
+
+RUN_LXNAV_POLAR_ECHO_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
+	$(SRC)/Device/Config.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/RunLXNAVPolarEcho.cpp
+RUN_LXNAV_POLAR_ECHO_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL MATH GLIDE EVENT
+$(eval $(call link-program,RunLXNAVPolarEcho,RUN_LXNAV_POLAR_ECHO))
 
 SPLICE_PORTS_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
