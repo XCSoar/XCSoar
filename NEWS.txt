@@ -5,8 +5,9 @@ Version 7.45 - not yet released
 * data files
   - fix loading SeeYou .cupx waypoint files and embedded photos that
     use ZIP data descriptors (e.g. recent OpenAIP / SeeYou exports)
-  - fix LS-8 polar max.\ cruise speed: default had 190 km/h stored as
-    if m/s; store list entries now set 190 km/h as 52.78 m/s #1134
+  - fix LS-8 polar max.\ cruise speed: the default stored 190 (km/h) in
+    the m/s field; default and built-in LS-8 polars now use 52.78 m/s
+    #1134
 * tracking
   - Do not resolve SkyLines or XCSoar Cloud hosts while the network link is
     down, avoiding repeated DNS timeout errors in the log #1750
