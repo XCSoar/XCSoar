@@ -144,7 +144,9 @@ O formato do arquivo é simples.  As linhas que iniciam com * são ignoradas e p
 Os seguintes dados são uma extensão ao formato de arquivo existente e são opcionais.
 \begin{itemize}
 \item A área da asa, em m$^2$para permitir calcular a carga alar (pode ser zero se não souber).
-\item A velocidade máxima de manobra em km/h para ativar as verificações de comando de velocidade de cruzeiro. . 
+\item A velocidade máxima de cruzeiro em m/s, usada como limite superior
+  da velocidade MacCready (incluindo planeio final), para o computador não
+  comandar velocidades de cruzeiro irrealistas.
 \end{itemize}
 
 Exemplo para o planador LS-3:

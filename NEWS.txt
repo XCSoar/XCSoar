@@ -32,6 +32,8 @@ Version 7.45 - not yet released
   - document ``AirspaceLabels`` input event
   - document map pinch-to-zoom on touchscreens that report both
     finger positions #2790
+  - correct ``.plr`` optional max.\ cruise speed unit to m/s and
+    distinguish WinPilot fields from the XCSoar extension #1134
 * development
   - Log screen resolution, DPI, virtual DPI, approximate size, and
     small-screen flag at startup #1548
