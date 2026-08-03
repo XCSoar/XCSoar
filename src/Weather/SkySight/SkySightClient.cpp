@@ -557,11 +557,7 @@ SkySightClient::SelectAutomaticForecastTime(std::string_view id)
       layer->SupportsLiveTiles())
     return false;
 
-  const auto forecast_time = SkySight::ChooseClosestForecastTime(
-    layer->forecast_datafiles,
-    [](const auto &candidate) noexcept {
-      return candidate.time;
-    });
+  const auto forecast_time = SkySight::ChooseAutomaticForecastTime(*layer);
   if (forecast_time <= 0)
     return false;
 

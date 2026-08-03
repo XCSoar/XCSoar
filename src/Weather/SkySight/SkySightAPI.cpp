@@ -1269,8 +1269,6 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
 
   bool found = false;
   time_t last_time = 0;
-  time_t latest_past_time = 0;
-  time_t earliest_future_time = 0;
   const auto now = std::time(nullptr);
   std::vector<SkySight::ForecastDatafile> forecast_datafiles;
 
@@ -1304,12 +1302,6 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
           forecast_datafiles.emplace_back(update_time, link_value);
         else
           existing->link = link_value;
-
-        if (update_time <= now) {
-          if (latest_past_time == 0 || update_time > latest_past_time)
-            latest_past_time = update_time;
-        } else if (earliest_future_time == 0 || update_time < earliest_future_time)
-          earliest_future_time = update_time;
       }
     }
   } catch (...) {
@@ -1331,12 +1323,8 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
   if (found) {
     layer->last_update = std::max(layer->last_update, last_time);
 
-    const time_t default_time = latest_past_time > 0
-      ? latest_past_time
-      : earliest_future_time;
-
     if (layer->UsesAutomaticForecastTime() || layer->forecast_time == 0)
-      layer->forecast_time = default_time;
+      layer->forecast_time = SkySight::ChooseAutomaticForecastTime(*layer, now);
 
     const auto *selected = layer->FindDatafile(layer->forecast_time);
 

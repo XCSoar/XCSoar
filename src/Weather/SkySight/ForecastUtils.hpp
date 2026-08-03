@@ -94,8 +94,42 @@ ChooseClosestForecastTime(const Range &values, GetTime get_time)
 }
 
 /**
+ * Pick the forecast represented by AUTO.  Full-day products belong to their
+ * UTC day even if the provider timestamps today's file later than the current
+ * time; applying the generic closest-time rule would keep showing yesterday.
+ */
+[[nodiscard]] inline time_t
+ChooseAutomaticForecastTime(const Layer &layer, time_t now) noexcept
+{
+  if (IsFullDayForecastLayer(layer)) {
+    time_t current_day = 0;
+    for (const auto &datafile : layer.forecast_datafiles)
+      if (IsSameForecastDay(datafile.time, now) &&
+          (current_day == 0 || datafile.time < current_day))
+        current_day = datafile.time;
+
+    if (current_day != 0)
+      return current_day;
+  }
+
+  return ChooseClosestForecastTime(
+    layer.forecast_datafiles,
+    [](const auto &datafile) noexcept {
+      return datafile.time;
+    }, now);
+}
+
+[[nodiscard]] inline time_t
+ChooseAutomaticForecastTime(const Layer &layer) noexcept
+{
+  return ChooseAutomaticForecastTime(layer, std::time(nullptr));
+}
+
+/**
  * Merge display-ready cache entries into the canonical forecast metadata.
- * Existing download links and a still-valid selection are preserved.
+ * Existing download links and a still-valid fixed selection are preserved.
+ * AUTO is recalculated because a newly cached step may be the new current
+ * forecast.
  */
 inline void
 MergeCachedForecastTimes(Layer &layer, const std::vector<time_t> &cached_times,
@@ -120,13 +154,9 @@ MergeCachedForecastTimes(Layer &layer, const std::vector<time_t> &cached_times,
   layer.from = layer.forecast_datafiles.back().time;
   layer.to = layer.forecast_datafiles.front().time;
 
-  if (layer.forecast_time <= 0 ||
+  if (layer.UsesAutomaticForecastTime() || layer.forecast_time <= 0 ||
       layer.FindDatafile(layer.forecast_time) == nullptr)
-    layer.forecast_time = ChooseClosestForecastTime(
-      layer.forecast_datafiles,
-      [](const auto &datafile) noexcept {
-        return datafile.time;
-      }, now);
+    layer.forecast_time = ChooseAutomaticForecastTime(layer, now);
 }
 
 template<typename T, typename GetTime>

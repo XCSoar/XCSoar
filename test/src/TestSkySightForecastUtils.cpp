@@ -105,14 +105,60 @@ TestCachedForecastMerge()
   SkySight::MergeCachedForecastTimes(layer, cached_times, 250);
   ok1(layer.forecast_time == 200);
   ok1(layer.forecast_datafiles.size() == 4);
+
+  layer.forecast_time = 100;
+  SkySight::MergeCachedForecastTimes(layer, cached_times, 250);
+  ok1(layer.forecast_time == 200);
+
+  layer.forecast_time_mode = SkySight::ForecastTimeMode::Fixed;
+  layer.forecast_time = 100;
+  SkySight::MergeCachedForecastTimes(layer, cached_times, 250);
+  ok1(layer.forecast_time == 100);
+}
+
+static void
+TestAutomaticForecastSelection()
+{
+  constexpr time_t DAY = 24 * 60 * 60;
+  constexpr time_t NOW = 10 * DAY + 7 * 60 * 60;
+
+  SkySight::Layer layer;
+  layer.forecast_datafiles = {
+    {9 * DAY + 12 * 60 * 60, "yesterday"},
+    {10 * DAY + 12 * 60 * 60, "today"},
+    {11 * DAY + 12 * 60 * 60, "tomorrow"},
+  };
+
+  ok1(SkySight::ChooseAutomaticForecastTime(layer, NOW) ==
+      9 * DAY + 12 * 60 * 60);
+
+  layer.id = "pfdtot";
+  ok1(SkySight::ChooseAutomaticForecastTime(layer, NOW) ==
+      10 * DAY + 12 * 60 * 60);
+
+  layer.forecast_datafiles.emplace_back(10 * DAY + 6 * 60 * 60,
+                                        "today-earlier");
+  ok1(SkySight::ChooseAutomaticForecastTime(layer, NOW) ==
+      10 * DAY + 6 * 60 * 60);
+
+  layer.forecast_datafiles.erase(
+    std::remove_if(layer.forecast_datafiles.begin(),
+                   layer.forecast_datafiles.end(),
+                   [](const auto &datafile) {
+                     return SkySight::GetForecastDayBucket(datafile.time) == 10;
+                   }),
+    layer.forecast_datafiles.end());
+  ok1(SkySight::ChooseAutomaticForecastTime(layer, NOW) ==
+      9 * DAY + 12 * 60 * 60);
 }
 
 int
 main()
 {
-  plan_tests(38);
+  plan_tests(44);
   TestForecastPreloadSelection();
   TestForecastBusyState();
   TestCachedForecastMerge();
+  TestAutomaticForecastSelection();
   return exit_status();
 }
