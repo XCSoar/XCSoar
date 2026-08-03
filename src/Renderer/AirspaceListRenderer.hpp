@@ -17,16 +17,12 @@ namespace AirspaceListRenderer
    * Draws an airspace list item.
    *
    * Comment is e.g. "Class C"
-   *
-   * @param cleared If true, draw a "[Cleared]" tag on the
-   * second row, left of the altitude column
    */
   void Draw(Canvas &canvas, const PixelRect rc,
             const AbstractAirspace &airspace,
             const TwoTextRowsRenderer &row_renderer,
             const AirspaceLook &look,
-            const AirspaceRendererSettings &renderer_settings,
-            bool cleared=false);
+            const AirspaceRendererSettings &renderer_settings);
 
   /**
    * Draws an airspace list item.
@@ -35,14 +31,11 @@ namespace AirspaceListRenderer
    *
    * @param vector The distance and direction that should be
    * added to the comment
-   * @param cleared If true, draw a "[Cleared]" tag on the
-   * second row, left of the altitude column
    */
   void Draw(Canvas &canvas, const PixelRect rc,
             const AbstractAirspace &airspace,
             const GeoVector &vector,
             const TwoTextRowsRenderer &row_renderer,
             const AirspaceLook &look,
-            const AirspaceRendererSettings &renderer_settings,
-            bool cleared=false);
+            const AirspaceRendererSettings &renderer_settings);
 }
