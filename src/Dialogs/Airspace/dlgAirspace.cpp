@@ -22,6 +22,9 @@
 
 #include <cassert>
 
+static_assert(OTHER == 0,
+              "Airspace settings list skips OTHER as the first enum value");
+
 class AirspaceSettingsListWidget : public ListWidget {
   const bool color_mode;
   bool changed;
@@ -43,7 +46,9 @@ public:
     const auto &look = UIGlobals::GetDialogLook();
     ListControl &list = CreateList(parent, look, rc,
                                    row_renderer.CalculateLayout(*look.list.font));
-    list.SetLength(AIRSPACECLASSCOUNT);
+    /* Skip OTHER ("Unknown"): empty AY uses GetTypeOrClass() so its
+       warn/display/colour settings have no effect (#1772). */
+    list.SetLength(AIRSPACECLASSCOUNT - 1);
   }
 
   /* virtual methods from class ListItemRenderer */
@@ -62,7 +67,8 @@ void
 AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
                                         unsigned i) noexcept
 {
-  assert(i < AIRSPACECLASSCOUNT);
+  assert(i + 1 < AIRSPACECLASSCOUNT);
+  const AirspaceClass type = AirspaceClass(i + 1);
 
   const AirspaceComputerSettings &computer =
     CommonInterface::GetComputerSettings().airspace;
@@ -70,7 +76,7 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     CommonInterface::GetMapSettings().airspace;
   const AirspaceLook &look = CommonInterface::main_window->GetLook().map.airspace;
 
-  const char *const name = AirspaceFormatter::GetClass((AirspaceClass)i);
+  const char *const name = AirspaceFormatter::GetClass(type);
 
   if (color_mode) {
     int second_x = row_renderer.NextColumn(canvas, rc, name);
@@ -79,20 +85,20 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
     const Color text_color = canvas.GetTextColor();
     if (AirspacePreviewRenderer::PrepareFill(
-        canvas, (AirspaceClass)i, look, renderer)) {
+        canvas, type, look, renderer)) {
       canvas.DrawRectangle({second_x, rc.top + padding, rc.right - padding, rc.bottom - padding});
       AirspacePreviewRenderer::UnprepareFill(canvas, text_color);
     }
     if (AirspacePreviewRenderer::PrepareOutline(
-        canvas, (AirspaceClass)i, look, renderer)) {
+        canvas, type, look, renderer)) {
       canvas.DrawRectangle({second_x, rc.top + padding, rc.right - padding, rc.bottom - padding});
     }
   } else {
-    rc.right = renderer.classes[i].display
+    rc.right = renderer.classes[type].display
       ? row_renderer.DrawRightColumn(canvas, rc, _("Display"))
       : row_renderer.PreviousRightColumn(canvas, rc, _("Display"));
 
-    rc.right = computer.warnings.class_warnings[i]
+    rc.right = computer.warnings.class_warnings[type]
       ? row_renderer.DrawRightColumn(canvas, rc, _("Warn"))
       : row_renderer.PreviousRightColumn(canvas, rc, _("Warn"));
   }
@@ -103,7 +109,8 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 void
 AirspaceSettingsListWidget::OnActivateItem(unsigned index) noexcept
 {
-  assert(index < AIRSPACECLASSCOUNT);
+  assert(index + 1 < AIRSPACECLASSCOUNT);
+  const AirspaceClass type = AirspaceClass(index + 1);
 
   AirspaceComputerSettings &computer =
     CommonInterface::SetComputerSettings().airspace;
@@ -114,20 +121,20 @@ AirspaceSettingsListWidget::OnActivateItem(unsigned index) noexcept
     AirspaceLook &look =
       CommonInterface::main_window->SetLook().map.airspace;
 
-    if (!ShowAirspaceClassRendererSettingsDialog((AirspaceClass)index))
+    if (!ShowAirspaceClassRendererSettingsDialog(type))
       return;
 
     ActionInterface::SendMapSettings();
     look.Reinitialise(renderer);
   } else {
-    renderer.classes[index].display = !renderer.classes[index].display;
-    if (!renderer.classes[index].display)
-      computer.warnings.class_warnings[index] =
-        !computer.warnings.class_warnings[index];
+    renderer.classes[type].display = !renderer.classes[type].display;
+    if (!renderer.classes[type].display)
+      computer.warnings.class_warnings[type] =
+        !computer.warnings.class_warnings[type];
 
     Profile::SetAirspaceMode(Profile::map,
-                             index, renderer.classes[index].display,
-                             computer.warnings.class_warnings[index]);
+                             type, renderer.classes[type].display,
+                             computer.warnings.class_warnings[type]);
     changed = true;
     ActionInterface::SendMapSettings();
   }
