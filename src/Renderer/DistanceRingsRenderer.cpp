@@ -117,7 +117,9 @@ DrawDistanceRings(Canvas &canvas,
   if (!projection.IsValid() || !aircraft_pos.IsValid())
     return;
 
-  const auto rings = SelectRingSet(projection.GetScreenDistanceMeters());
+  /* 8 * GetMapScale() is the short-edge span; GetScreenDistanceMeters()
+     follows the long edge and changes with InfoBox layout aspect. */
+  const auto rings = SelectRingSet(8 * projection.GetMapScale());
   const PixelPoint aircraft_px = projection.GeoToScreen(aircraft_pos);
   const PixelRect screen_rect = projection.GetScreenRect();
 
