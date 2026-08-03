@@ -15,6 +15,7 @@
 #include "io/FileLineReader.hpp"
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
+#include "lib/curl/Error.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/curl/Slist.hxx"
 #include "lib/fmt/ToBuffer.hxx"
@@ -35,6 +36,22 @@
 #include <utility>
 
 namespace {
+
+[[nodiscard]] bool
+IsHostResolutionFailure(std::exception_ptr error) noexcept
+{
+  if (error == nullptr)
+    return false;
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const std::system_error &e) {
+    return e.code().category() == Curl::error_category &&
+      e.code().value() == CURLE_COULDNT_RESOLVE_HOST;
+  } catch (...) {
+    return false;
+  }
+}
 
 class LimitedOutputStream final : public OutputStream {
   OutputStream &destination;
@@ -561,6 +578,7 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
   login_running = false;
   api_key.clear();
   valid_until = 0;
+  const bool host_resolution_failure = IsHostResolutionFailure(error);
 
   try {
     std::rethrow_exception(error);
@@ -586,10 +604,13 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
              "until credentials are configured again", http_error.status);
     }
   } catch (...) {
+    if (host_resolution_failure)
+      authentication_failures.Reset();
     authentication_failures.OnTransportFailure(std::time(nullptr));
   }
 
-  LogError(error, "SkySight login failed");
+  if (!host_resolution_failure)
+    LogError(error, "SkySight login failed");
   PumpQueue();
 }
 
@@ -750,7 +771,8 @@ SkySightRequest::OnRegionsError(std::exception_ptr error) noexcept
                                     "SkySight regions request failed"))
       return;
   } catch (...) {
-    LogError(error, "SkySight regions request failed");
+    if (!IsHostResolutionFailure(error))
+      LogError(error, "SkySight regions request failed");
   }
 }
 
@@ -812,7 +834,8 @@ SkySightRequest::OnLayersError(std::exception_ptr error) noexcept
                                     "SkySight layers request failed"))
       return;
   } catch (...) {
-    LogError(error, "SkySight layers request failed");
+    if (!IsHostResolutionFailure(error))
+      LogError(error, "SkySight layers request failed");
   }
 }
 
@@ -930,7 +953,8 @@ SkySightRequest::OnLastUpdatesError(std::exception_ptr error) noexcept
                                     "SkySight last-updated request failed"))
       return;
   } catch (...) {
-    LogError(error, "SkySight last-updated request failed");
+    if (!IsHostResolutionFailure(error))
+      LogError(error, "SkySight last-updated request failed");
   }
 }
 
@@ -957,10 +981,12 @@ SkySightRequest::OnDatafilesError(std::exception_ptr error) noexcept
                                     "SkySight datafiles request failed"))
       return;
   } catch (...) {
-    LogError(error, "SkySight datafiles request failed");
+    if (!IsHostResolutionFailure(error)) {
+      LogError(error, "SkySight datafiles request failed");
+      LogFmt("SkySight forecast-step request will retry in {} seconds",
+             DATAFILES_RETRY_SECONDS);
+    }
     datafiles_retry_at = std::time(nullptr) + DATAFILES_RETRY_SECONDS;
-    LogFmt("SkySight forecast-step request will retry in {} seconds",
-           DATAFILES_RETRY_SECONDS);
     api.OnDatafilesRetry(layer_id);
     return;
   }
@@ -1093,21 +1119,25 @@ SkySightRequest::OnFileError(const std::string &key,
                            http_error.status, key);
     }
   } catch (...) {
+    const bool host_resolution_failure = IsHostResolutionFailure(error);
+    if (host_resolution_failure)
+      download_failures.Erase(key);
     const auto decision = download_failures.OnTransportFailure(
       key, std::time(nullptr));
     if (failed_job != nullptr) {
       terminal_forecast_error =
         !RequeueFileJob(*failed_job, decision.ready_at);
     }
-    if (!layer_id.empty()) {
+    if (!layer_id.empty() && !host_resolution_failure) {
       LogFmt("SkySight {} download failed for layer '{}' (forecast_time={})",
              kind == FileJob::Kind::ForecastData ? "forecast" : "tile",
              layer_id, (long long)forecast_time);
     }
-    LogError(error,
-             kind == FileJob::Kind::ForecastData
-             ? "SkySight forecast download failed"
-             : "SkySight tile download failed");
+    if (!host_resolution_failure)
+      LogError(error,
+               kind == FileJob::Kind::ForecastData
+               ? "SkySight forecast download failed"
+               : "SkySight tile download failed");
   }
 
   if (terminal_forecast_error)
