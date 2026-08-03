@@ -22,6 +22,7 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <string_view>
 
 struct MoreData;
 struct DerivedInfo;
@@ -506,6 +507,14 @@ public:
 
   void OnCalculatedUpdate(const MoreData &basic,
                           const DerivedInfo &calculated) override;
+
+  /**
+   * Cache a PLXV0 POLAR response in device_polar and publish
+   * coefficients/masses into ExternalSettings.  ApplyExternalSettings
+   * only adopts the polar when polar_sync is RECEIVE (#2397).
+   */
+  void StoreReceivedPolar(std::string_view value,
+                          NMEAInfo &info) noexcept;
 
 private:
   /**

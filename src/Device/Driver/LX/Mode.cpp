@@ -247,17 +247,15 @@ LXDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
       mc_requested = true;
       ballast_requested = true;
       bugs_requested = true;
+      /* Always request POLAR once so device_polar caches metadata
+         for PutCrewMass/PutEmptyMass/PutPolar (#2397). */
+      polar_requested = true;
+      last_polar_request.Update();
     }
     RequestLXNAVVarioSetting("MC", env);
+    RequestLXNAVVarioSetting("POLAR", env);
 
     if (do_receive) {
-      {
-        const std::lock_guard lock{mutex};
-        polar_requested = true;
-        last_polar_request.Update();
-      }
-      RequestLXNAVVarioSetting("POLAR", env);
-
       {
         const std::lock_guard lock{mutex};
         if (!declaration_requested) {
@@ -313,9 +311,11 @@ LXDevice::PutPolar(const GlidePolar &polar,
   double max_weight = 0;
   std::string glider_name;
   double stall = 0;
+  bool have_device_polar = false;
   {
     const std::lock_guard lock{mutex};
     if (device_polar.valid) {
+      have_device_polar = true;
       if (fabs(device_polar.a - coeffs.a) < 0.0001 &&
           fabs(device_polar.b - coeffs.b) < 0.0001 &&
           fabs(device_polar.c - coeffs.c) < 0.0001 &&
@@ -329,6 +329,15 @@ LXDevice::PutPolar(const GlidePolar &polar,
       glider_name = device_polar.name;
       stall = device_polar.stall;
     }
+  }
+
+  /* Defer until we have device metadata (max weight, name, stall).
+     Empty fields zero those values on the vario (#2397). */
+  if (!have_device_polar) {
+    if (!EnableNMEA(env))
+      return false;
+    RequestLXNAVVarioSetting("POLAR", env);
+    return true;
   }
 
   if (polar_load <= 0) {

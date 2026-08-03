@@ -43,6 +43,9 @@ Version 7.46 - not yet released
     track with Condor 3 UDP in a crosswind #2900
   - fix the Devices Debug button not writing port traffic to xcsoar.log
     #2903
+  - fix LXNAV polar sync writes that could zero the vario polar when
+    crew or empty mass were sent before the device polar was known;
+    preserve max weight and glider name when sending a polar #2397
 * dialogs
   - let Shift type '_' on XCSoar's on-screen keyboard
   - fix keyboard wrap in the Checklist: Down from Close returns
