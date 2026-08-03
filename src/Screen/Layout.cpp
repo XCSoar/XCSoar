@@ -12,6 +12,7 @@
 namespace Layout {
 
 bool landscape = false;
+bool small_screen = false;
 unsigned min_screen_pixels = 512;
 unsigned scale = 1;
 unsigned scale_1024 = 1024;
@@ -80,8 +81,9 @@ Initialise(const UI::Display &display, PixelSize new_size,
     return;
 
   const auto dpi = Display::GetDPI(display, custom_dpi);
-  const bool is_small_screen = IsSmallScreen(GetDisplaySize(display, new_size),
-                                             dpi);
+  const bool is_small_screen =
+    IsSmallScreen(GetDisplaySize(display, new_size), dpi);
+  small_screen = is_small_screen;
 
   const auto SmallScreenAdjust = [is_small_screen](unsigned value) constexpr noexcept {
     if (is_small_screen)
