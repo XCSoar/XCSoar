@@ -178,11 +178,16 @@ ScoringConfigPanel::Save(bool &_changed) noexcept
                        ProfileKeys::Show95PercentRuleHelpers,
                        map_settings.show_95_percent_rule_helpers);
 
-  /* Mark profile as using current Contest enum encoding (see ContestProfile). */
+  /* ContestEnumLayout=2 = current Contest encoding (see ContestProfile).
+     Only stamp when OLCRules is present — do not add the key to
+     untouched profiles.  Rewrite OLCRules so a migrated old NONE
+     (stored as 14) is not read as NET_COUPE after the stamp. */
   unsigned contest_enum_layout = 0;
-  if (!Profile::Get(ProfileKeys::ContestEnumLayout, contest_enum_layout) ||
-      contest_enum_layout < 2U) {
+  if (Profile::Exists(ProfileKeys::OLCRules) &&
+      (!Profile::Get(ProfileKeys::ContestEnumLayout, contest_enum_layout) ||
+       contest_enum_layout < 2U)) {
     Profile::Set(ProfileKeys::ContestEnumLayout, 2U);
+    Profile::SetEnum(ProfileKeys::OLCRules, contest_settings.contest);
     changed = true;
   }
 

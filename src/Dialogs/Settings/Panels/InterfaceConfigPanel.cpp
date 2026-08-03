@@ -248,10 +248,15 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   if (wp != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
 
+    /* Use AllocatedPath here: Path::empty() null-dereferences, while
+       AllocatedPath::empty() is safe. Missing / empty LanguageFile means
+       automatic — same as ReadLanguageFile(); do not persist "auto" just
+       because the key was absent (#1793). */
     const auto old_value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
-    Path old_value = old_value_buffer;
-    if (old_value == nullptr)
-      old_value = Path("");
+    const bool old_is_auto =
+      old_value_buffer == nullptr || old_value_buffer.empty() ||
+      old_value_buffer == Path("auto");
+    Path old_value = old_is_auto ? Path("auto") : Path(old_value_buffer);
 
     auto old_base = old_value.GetBase();
     if (old_base == nullptr)
