@@ -9,7 +9,6 @@
 #include "ui/event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "util/CharUtil.hxx"
 #include "util/Macros.hpp"
 #include "util/StringStrip.hxx"
 #include "util/TruncateString.hpp"
@@ -29,7 +28,7 @@ enum Buttons {
 static constexpr size_t MAX_TEXTENTRY = 40;
 
 static constexpr char EntryLetters[] =
-  " ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-";
+  " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.-";
 
 static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
 
@@ -139,7 +138,7 @@ private:
     }
 
     lettercursor = GetCurrentSequenceLength() == 1
-      ? FindEntryLetter(ToUpperASCII(buffer[cursor]))
+      ? FindEntryLetter(buffer[cursor])
       : 0;
 
     if (IsDefined())
