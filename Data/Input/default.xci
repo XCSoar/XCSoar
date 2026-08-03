@@ -93,7 +93,7 @@ data=RETURN
 event=Traffic details
 
 # Traffic radar: F1 = AVG/ALT side labels; F2/F3 = zoom;
-# UP/DOWN and F4 = next/prev target
+# F5 = auto zoom; F6 = north-up; UP/DOWN and F4 = next/prev target
 mode=default.Traffic Display1.Traffic Display2.Traffic
 type=key
 data=UP
@@ -123,6 +123,16 @@ mode=default.Traffic Display1.Traffic Display2.Traffic
 type=key
 data=F4
 event=Traffic next
+
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
+data=F5
+event=Traffic zoom auto toggle
+
+mode=default.Traffic Display1.Traffic Display2.Traffic
+type=key
+data=F6
+event=Traffic northup toggle
 
 ###### pan mode
 
