@@ -292,7 +292,8 @@ LayoutConfigPanel::Unprepare() noexcept
 bool
 LayoutConfigPanel::Leave() noexcept
 {
-  /* Make the selection visible to sibling panels before Settings closes. */
+  /* Switching to another settings page (still inside Configuration):
+     copy geometry so InfoBox Sets can read settings.geometry. */
   SaveValueEnum(AppInfoBoxGeom,
                 CommonInterface::SetUISettings().info_boxes.geometry);
   return true;
