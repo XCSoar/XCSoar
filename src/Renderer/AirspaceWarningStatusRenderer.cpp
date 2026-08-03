@@ -17,14 +17,9 @@ AirspaceWarningStatusFrom(const AirspaceWarning &warning) noexcept
   AirspaceWarningStatusBadge status;
   status.active = warning.IsActive();
 
-  if (warning.IsCleared()) {
-    if (warning.IsInside())
-      status.kind = AirspaceWarningStatusBadge::Kind::ClearedInside;
-    else if (warning.IsWarning())
-      status.kind = AirspaceWarningStatusBadge::Kind::ClearedNear;
-    else
-      status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
-  } else if (warning.IsCoveredByClearance()) {
+  if (warning.IsCleared())
+    status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
+  else if (warning.IsCoveredByClearance()) {
     if (warning.IsInside())
       status.kind = AirspaceWarningStatusBadge::Kind::CoveredInside;
     else if (warning.IsWarning())
@@ -77,16 +72,6 @@ DrawAirspaceWarningStatus(Canvas &canvas, const Font &font,
       ? COLOR_AIRSPACE_WARNING_NEAR
       : COLOR_AIRSPACE_WARNING_NEAR_ACK;
     state_text = _("Near");
-    break;
-
-  case AirspaceWarningStatusBadge::Kind::ClearedInside:
-    state_color = COLOR_AIRSPACE_CLEARED;
-    state_text = _("(Inside)");
-    break;
-
-  case AirspaceWarningStatusBadge::Kind::ClearedNear:
-    state_color = COLOR_AIRSPACE_CLEARED;
-    state_text = _("(Near)");
     break;
 
   case AirspaceWarningStatusBadge::Kind::Cleared:

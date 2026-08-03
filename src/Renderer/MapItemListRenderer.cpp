@@ -227,12 +227,11 @@ Draw(Canvas &canvas, const PixelRect rc,
      const AirspaceMapItem &item,
      const TwoTextRowsRenderer &row_renderer,
      const AirspaceLook &look,
-     const AirspaceRendererSettings &renderer_settings,
-     bool cleared)
+     const AirspaceRendererSettings &renderer_settings)
 {
   AirspaceListRenderer::Draw(canvas, rc, *item.airspace,
                              row_renderer, look,
-                             renderer_settings, cleared);
+                             renderer_settings);
 }
 
 static void
@@ -461,8 +460,7 @@ Draw(Canvas &canvas, PixelRect rc,
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const MapItem &item,
-                          const TrafficList *traffic_list,
-                          bool airspace_cleared)
+                          const TrafficList *traffic_list)
 {
   switch (item.type) {
   case MapItem::Type::LOCATION:
@@ -479,7 +477,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   case MapItem::Type::AIRSPACE:
     ::Draw(canvas, rc, (const AirspaceMapItem &)item,
            row_renderer, look.airspace,
-           settings.airspace, airspace_cleared);
+           settings.airspace);
     break;
   case MapItem::Type::WAYPOINT:
     ::Draw(canvas, rc, (const WaypointMapItem &)item,

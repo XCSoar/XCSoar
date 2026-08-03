@@ -14,6 +14,7 @@
 #include "Form/DataField/Prefix.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
+#include "Renderer/AirspaceWarningStatusRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
@@ -29,6 +30,7 @@
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Asset.hpp"
 #include "Look/Colors.hpp"
+#include "Screen/Layout.hpp"
 #include "ui/canvas/Canvas.hpp"
 
 #include <cassert>
@@ -328,12 +330,34 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
              airspace_warnings->GetAckDay(airspace))
     canvas.SetTextColor(COLOR_GRAY);
 
+  PixelRect draw_rc = rc;
+  PixelRect status_rc{};
+  bool show_badge = false;
+  if (cleared) {
+    const Font &font = *UIGlobals::GetDialogLook().list.font;
+    const int needed = AirspaceWarningStatusWidth(font);
+    const int min_main = Layout::Scale(80);
+    if ((int)rc.GetWidth() > needed + min_main) {
+      const auto split = rc.VerticalSplit(rc.right - needed);
+      draw_rc = split.first;
+      status_rc = split.second;
+      show_badge = true;
+    }
+  }
+
   AirspaceListRenderer::Draw(
-      canvas, rc, airspace,
+      canvas, draw_rc, airspace,
       items[i].GetVector(location, airspaces->GetProjection()),
       row_renderer, UIGlobals::GetMapLook().airspace,
-      CommonInterface::GetMapSettings().airspace,
-      cleared);
+      CommonInterface::GetMapSettings().airspace);
+
+  if (show_badge) {
+    AirspaceWarningStatusBadge status;
+    status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
+    DrawAirspaceWarningStatus(canvas,
+                              *UIGlobals::GetDialogLook().list.font,
+                              status_rc, status);
+  }
 }
 
 [[gnu::pure]]

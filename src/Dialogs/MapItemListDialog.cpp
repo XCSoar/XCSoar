@@ -70,23 +70,7 @@ QueryWarningStatusNoThrow(ProtectedAirspaceWarningManager &warnings,
     if (warning == nullptr)
       return true;
 
-    status.active = warning->IsActive();
-
-    if (warning->IsCleared()) {
-      /* a clearance overrides the warning colour; the caption still
-         tells the pilot where the airspace is relative to us */
-      if (warning->IsInside())
-        status.kind = AirspaceWarningStatusBadge::Kind::ClearedInside;
-      else if (warning->IsWarning())
-        status.kind = AirspaceWarningStatusBadge::Kind::ClearedNear;
-      else
-        status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
-    } else if (warning->IsWarning()) {
-      status.kind = warning->IsInside()
-        ? AirspaceWarningStatusBadge::Kind::Inside
-        : AirspaceWarningStatusBadge::Kind::Near;
-    }
-
+    status = AirspaceWarningStatusFrom(*warning);
     return true;
   } catch (const std::exception &e) {
     LogFmt("Failed to query airspace warning status: {}", e.what());
@@ -431,6 +415,9 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       cleared = warnings->GetCleared(as);
       QueryAckDayNoThrow(*warnings, as, ack_day);
       QueryWarningStatusNoThrow(*warnings, as, warning_status);
+      /* Outside, with no live warning, clearance is still a badge. */
+      if (cleared && !warning_status.HasStatus())
+        warning_status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
     }
   }
 
@@ -460,8 +447,7 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   renderer.Draw(canvas, draw_rc, *item,
-                &CommonInterface::Basic().flarm.traffic,
-                cleared);
+                &CommonInterface::Basic().flarm.traffic);
 
   if (show_status)
     DrawAirspaceWarningStatus(canvas, *dialog_look.list.font,

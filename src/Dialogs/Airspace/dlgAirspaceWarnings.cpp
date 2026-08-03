@@ -486,35 +486,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     row_renderer.DrawSecondRow(canvas, text_rc, buffer);
   }
 
-  /* draw the warning state indicator */
-  AirspaceWarningStatusBadge status;
-  status.active = warning.IsActive();
-
-  if (warning.IsCleared()) {
-    /* a clearance overrides the warning colour; the caption still
-       tells the pilot where the airspace is relative to us */
-    if (warning.IsInside())
-      status.kind = AirspaceWarningStatusBadge::Kind::ClearedInside;
-    else if (warning.IsWarning())
-      status.kind = AirspaceWarningStatusBadge::Kind::ClearedNear;
-    else
-      status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
-  } else if (warning.IsCoveredByClearance()) {
-    /* suppressed by another airspace's clearance: info only, not a
-       warning */
-    if (warning.IsInside())
-      status.kind = AirspaceWarningStatusBadge::Kind::CoveredInside;
-    else if (warning.IsWarning())
-      status.kind = AirspaceWarningStatusBadge::Kind::CoveredNear;
-    else
-      status.kind = AirspaceWarningStatusBadge::Kind::Covered;
-  } else if (warning.IsWarning()) {
-    status.kind = warning.IsInside()
-      ? AirspaceWarningStatusBadge::Kind::Inside
-      : AirspaceWarningStatusBadge::Kind::Near;
-  }
-
-  DrawAirspaceWarningStatus(canvas, list_font, status_rc, status);
+  DrawAirspaceWarningStatus(canvas, list_font, status_rc,
+                            AirspaceWarningStatusFrom(warning));
 }
 
 inline void

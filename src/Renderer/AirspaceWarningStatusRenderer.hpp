@@ -16,18 +16,14 @@ class Font;
  */
 struct AirspaceWarningStatusBadge {
   /**
-   * The Cleared* variants apply to an airspace the pilot has a
-   * clearance for, the Covered* ones to an airspace whose warning is
-   * suppressed by another airspace's clearance.  Both are drawn in
-   * the clearance colour, but each carries its own caption so the
-   * wording may differ.
+   * Cleared is an airspace the pilot has a clearance for.  The
+   * Covered* kinds are a warning suppressed by another airspace's
+   * clearance; their caption still says where the aircraft is.
    */
   enum class Kind : uint8_t {
     None,
     Inside,
     Near,
-    ClearedInside,
-    ClearedNear,
     Cleared,
     CoveredInside,
     CoveredNear,
@@ -35,7 +31,7 @@ struct AirspaceWarningStatusBadge {
   } kind = Kind::None;
 
   /**
-   * Has the warning no valid "ACK"?  Ignored for the Cleared* and
+   * Has the warning no valid "ACK"?  Ignored for Cleared and the
    * Covered* kinds: a clearance suppresses the acknowledgement
    * distinction.
    */
@@ -49,8 +45,8 @@ struct AirspaceWarningStatusBadge {
 
 /**
  * Badge for @p warning.  Kind::None when the warning is quiet.
- * Clearance and coverage override the warning colour; the caption
- * still says where the airspace is relative to the aircraft.
+ * A clearance is its own badge.  Coverage keeps the warning colour
+ * off and the caption says where the aircraft is.
  */
 [[nodiscard]]
 AirspaceWarningStatusBadge
