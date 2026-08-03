@@ -66,9 +66,12 @@ void CirclingWind::ShowResources(const MoreData &info) noexcept {
   }
 
   if (gyroscope_available != _gyroscope_available) {
-    if (gyroscope_available)
-      LogString("CirclingWind: Using Gyro");
-    else
+    if (gyroscope_available) {
+      if (info.gyroscope.fixed_and_aligned)
+        LogString("CirclingWind: Using fixed Gyro");
+      else
+        LogString("CirclingWind: Using Gyro");
+    } else
       LogString("CirclingWind: Gyro not usable!");
   }
 

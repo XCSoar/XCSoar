@@ -193,6 +193,7 @@ DeviceConfig::Clear() noexcept
   k6bt = false;
   polar_sync = PolarSync::OFF;
   engine_type = EngineType::NONE;
+  instrument_alignment = InstrumentAlignment::NONE;
 #ifndef NDEBUG
   dump_port = false;
 #endif
