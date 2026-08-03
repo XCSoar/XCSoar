@@ -176,24 +176,28 @@ static constexpr StaticEnumChoice infobox_theme_list[] = {
 };
 
 class LayoutConfigPanel final : public RowFormWidget {
+  /** Geometry when this panel was opened; restored if Settings is cancelled. */
+  InfoBoxSettings::Geometry original_geometry{};
+  bool saved = false;
+
 public:
   LayoutConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Unprepare() noexcept override;
+  bool Leave() noexcept override;
   bool Save(bool &changed) noexcept override;
 };
-
-/** Active Screen Layout panel, if any (for pending geometry). */
-static LayoutConfigPanel *layout_config_panel;
 
 void
 LayoutConfigPanel::Prepare(ContainerWindow &parent,
                            const PixelRect &rc) noexcept
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
+
+  original_geometry = ui_settings.info_boxes.geometry;
+  saved = false;
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -274,27 +278,25 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean(_("Invert cursor color"), _("Enable black cursor"),
              ui_settings.display.invert_cursor_colors);
 #endif
-
-  layout_config_panel = this;
 }
 
 void
 LayoutConfigPanel::Unprepare() noexcept
 {
-  if (layout_config_panel == this)
-    layout_config_panel = nullptr;
+  if (!saved)
+    CommonInterface::SetUISettings().info_boxes.geometry = original_geometry;
 
   RowFormWidget::Unprepare();
 }
 
-InfoBoxSettings::Geometry
-GetConfiguredInfoBoxGeometry() noexcept
+bool
+LayoutConfigPanel::Leave() noexcept
 {
-  if (layout_config_panel != nullptr)
-    return static_cast<InfoBoxSettings::Geometry>(
-      layout_config_panel->GetValueEnum(AppInfoBoxGeom));
-
-  return CommonInterface::GetUISettings().info_boxes.geometry;
+  /* Publish the selection so sibling panels (InfoBox Sets) see it
+     before Settings is closed. */
+  CommonInterface::SetUISettings().info_boxes.geometry =
+    static_cast<InfoBoxSettings::Geometry>(GetValueEnum(AppInfoBoxGeom));
+  return true;
 }
 
 bool
@@ -303,6 +305,7 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
+  saved = true;
 
 #ifdef ANDROID
   changed |= SaveValue(FullScreen, ProfileKeys::FullScreen,
@@ -337,9 +340,15 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 
   bool info_box_geometry_changed = false;
 
-  info_box_geometry_changed |=
-    SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
-                  ui_settings.info_boxes.geometry);
+  const auto geometry =
+    static_cast<InfoBoxSettings::Geometry>(GetValueEnum(AppInfoBoxGeom));
+  ui_settings.info_boxes.geometry = geometry;
+  if (geometry != original_geometry) {
+    Profile::Set(ProfileKeys::InfoBoxGeometry,
+                 static_cast<unsigned>(geometry));
+    info_box_geometry_changed = true;
+  }
+
   info_box_geometry_changed |=
     SaveValueInteger(InfoBoxTitleScale, ProfileKeys::InfoBoxTitleScale,
                   ui_settings.info_boxes.scale_title_font);
