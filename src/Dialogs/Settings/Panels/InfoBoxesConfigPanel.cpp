@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxesConfigPanel.hpp"
-#include "LayoutConfigPanel.hpp"
 #include "../dlgConfigInfoboxes.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/Current.hpp"
@@ -39,7 +38,7 @@ InfoBoxesConfigPanel::OnAction(int id) noexcept
     dlgConfigInfoboxesShowModal(UIGlobals::GetMainWindow(),
                                 UIGlobals::GetDialogLook(),
                                 UIGlobals::GetLook().info_box,
-                                GetConfiguredInfoBoxGeometry(), data,
+                                settings.geometry, data,
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
     Profile::Save(Profile::map, data, i);
