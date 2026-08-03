@@ -39,6 +39,9 @@ Version 7.45 - not yet released
   - Bind F5/F6 on the FLARM traffic radar to auto-zoom and north-up
     toggles (also fixes north-up so it no longer changes auto-zoom)
     #2535
+  - Fix InfoBox Sets editor using the previous InfoBox geometry until
+    Settings is closed; it now follows the Screen Layout selection
+    immediately #2596
   - Add pinch-to-zoom on the map for touchscreens that report both
     finger positions (Android, iOS): two fingers scale about the
     pinch centroid and can pan at the same time; a two-finger drag

@@ -182,8 +182,12 @@ public:
 
 public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
   bool Save(bool &changed) noexcept override;
 };
+
+/** Active Screen Layout panel, if any (for pending geometry). */
+static LayoutConfigPanel *layout_config_panel;
 
 void
 LayoutConfigPanel::Prepare(ContainerWindow &parent,
@@ -270,6 +274,27 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean(_("Invert cursor color"), _("Enable black cursor"),
              ui_settings.display.invert_cursor_colors);
 #endif
+
+  layout_config_panel = this;
+}
+
+void
+LayoutConfigPanel::Unprepare() noexcept
+{
+  if (layout_config_panel == this)
+    layout_config_panel = nullptr;
+
+  RowFormWidget::Unprepare();
+}
+
+InfoBoxSettings::Geometry
+GetConfiguredInfoBoxGeometry() noexcept
+{
+  if (layout_config_panel != nullptr)
+    return static_cast<InfoBoxSettings::Geometry>(
+      layout_config_panel->GetValueEnum(AppInfoBoxGeom));
+
+  return CommonInterface::GetUISettings().info_boxes.geometry;
 }
 
 bool
