@@ -797,7 +797,7 @@ TrafficWidget::GetNorthUp() const noexcept
 void
 TrafficWidget::SetNorthUp(bool value) noexcept
 {
-  windows->view.SetAutoZoom(value);
+  windows->view.SetNorthUp(value);
 }
 
 void

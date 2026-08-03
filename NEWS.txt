@@ -33,6 +33,9 @@ Version 7.45 - not yet released
   - fix crash when opening the aircraft type picker without a network
     connection
 * ui
+  - Bind F5/F6 on the FLARM traffic radar to auto-zoom and north-up
+    toggles (also fixes north-up so it no longer changes auto-zoom)
+    #2535
   - Add pinch-to-zoom on the map for touchscreens that report both
     finger positions (Android, iOS): two fingers scale about the
     pinch centroid and can pan at the same time; a two-finger drag
