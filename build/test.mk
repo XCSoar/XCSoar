@@ -96,6 +96,7 @@ TEST_NAMES = \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
+	TestLXNAVPolarConversion \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
@@ -815,6 +816,12 @@ TEST_GLIDE_POLAR_SOURCES = \
 	$(TEST_SRC_DIR)/TestGlidePolar.cpp
 TEST_GLIDE_POLAR_DEPENDS = GEO MATH IO UNITS
 $(eval $(call link-program,TestGlidePolar,TEST_GLIDE_POLAR))
+
+TEST_LXNAV_POLAR_CONVERSION_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLXNAVPolarConversion.cpp
+TEST_LXNAV_POLAR_CONVERSION_DEPENDS = MATH UTIL GLIDE
+$(eval $(call link-program,TestLXNAVPolarConversion,TEST_LXNAV_POLAR_CONVERSION))
 
 TEST_FILE_UTIL_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
