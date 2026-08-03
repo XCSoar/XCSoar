@@ -7,6 +7,9 @@
 #include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "Device/MultipleDevices.hpp"
+#include "Device/Descriptor.hpp"
+#include "Device/Config.hpp"
+#include "Device/Features.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Engine/Task/TaskType.hpp"
@@ -226,6 +229,22 @@ TransponderProcess() noexcept
 }
 
 static bool
+AnyDeviceReceivingPolar() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->devices == nullptr)
+    return false;
+
+  auto &devices = *backend_components->devices;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (devices[i].GetConfig().polar_sync ==
+        DeviceConfig::PolarSync::RECEIVE)
+      return true;
+
+  return false;
+}
+
+static bool
 PolarProcessTimer() noexcept
 {
   static Validity last_coefficients;
@@ -237,6 +256,11 @@ PolarProcessTimer() noexcept
   }
 
   last_coefficients = settings.polar_coefficients_available;
+
+  /* Metadata POLAR reads (SEND/OFF) still fill ExternalSettings for
+     the driver cache path; only RECEIVE may adopt into XCSoar (#2397). */
+  if (!AnyDeviceReceivingPolar())
+    return false;
 
   PolarCoefficients pc(settings.polar_a, settings.polar_b, settings.polar_c);
   if (!pc.IsValid())

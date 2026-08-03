@@ -196,6 +196,9 @@ Version 7.45 - not yet released
   - fix crash opening the log list when replay filenames contain
     non-ASCII characters (Unicode directory listing and file open)
 * devices
+  - LXNAV: fix polar sync writes that could zero the vario polar when
+    crew or empty mass were sent before the device polar was known;
+    preserve max weight and glider name when sending a polar #2397
   - Condor 3: Spectate.json multiplayer traffic driver (Condor3Spectate)
     shows other gliders on the FLARM radar and map
   - Condor3UDP: stop deriving track from ground-velocity vx/vy (caused
