@@ -21,6 +21,7 @@
 using namespace std::chrono;
 
 static constexpr auto CLOUD_INTERVAL = minutes(1);
+static constexpr auto RECONNECT_INTERVAL = seconds(30);
 
 SkyLinesTracking::Glue::Glue(EventLoop &event_loop,
                              Handler *_handler)
@@ -178,6 +179,8 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
     /* disable in simulator/replay */
     return;
 
+  ReconnectClients();
+
   if (client.IsConnected() && !simulator) {
     SendFixes(basic);
 
@@ -205,6 +208,24 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
 }
 
 void
+SkyLinesTracking::Glue::ReconnectClients()
+{
+  const auto now = steady_clock::now();
+  if (client.IsEnabled() && !client.IsDefined() &&
+      IsNetConnected(skylines_roaming) && now >= client_retry_at) {
+    client_retry_at = now + RECONNECT_INTERVAL;
+    client.Open(*global_cares_channel, "tracking.skylines.aero");
+  }
+
+  if (cloud_client.IsEnabled() && !cloud_client.IsDefined() &&
+      !cloud_host.empty() && IsNetConnected(cloud_roaming) &&
+      now >= cloud_retry_at) {
+    cloud_retry_at = now + RECONNECT_INTERVAL;
+    cloud_client.Open(*global_cares_channel, cloud_host.c_str(), cloud_port);
+  }
+}
+
+void
 SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
                                     const CloudSettings &cloud_settings)
 {
@@ -227,8 +248,10 @@ SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
 
     /* Do not start DNS while offline (LiveTrack24 / TIM do the same).
        ProcessTimer re-applies settings often; Open() without this gate
-       retries resolve on every failure and floods xcsoar.log (#1750). */
+       retries resolve on every failure and floods xcsoar.log (#1750).
+       ReconnectClients() retries later when connectivity returns. */
     if (!cloud_client.IsDefined() && IsNetConnected(cloud_roaming)) {
+      cloud_retry_at = steady_clock::now() + RECONNECT_INTERVAL;
       cloud_client.Open(*global_cares_channel, host, port);
       if (GetEnvBool("XCS_CLOUD_DEBUG"))
         LogFmt("Cloud: opening {}:{} (simulator override enabled)",
@@ -236,6 +259,8 @@ SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
     }
   } else {
     cloud_client.Close();
+    cloud_client.SetKey(0);
+    cloud_retry_at = {};
     cloud_host.clear();
     cloud_port = 0;
   }
@@ -244,6 +269,8 @@ SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
     delete queue;
     queue = nullptr;
     client.Close();
+    client.SetKey(0);
+    client_retry_at = {};
     return;
   }
 
@@ -256,6 +283,8 @@ SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
 
   skylines_roaming = skylines_settings.roaming;
 
-  if (!client.IsDefined() && IsNetConnected(skylines_roaming))
+  if (!client.IsDefined() && IsNetConnected(skylines_roaming)) {
+    client_retry_at = steady_clock::now() + RECONNECT_INTERVAL;
     client.Open(*global_cares_channel, "tracking.skylines.aero");
+  }
 }
