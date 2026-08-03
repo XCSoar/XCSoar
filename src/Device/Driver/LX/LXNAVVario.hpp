@@ -146,7 +146,11 @@ namespace LXNAVVario {
   }
 
   /**
-   * Set only the pilot weight in POLAR command, leaving all other fields empty
+   * Set only the pilot weight in POLAR command, leaving all other fields empty.
+   *
+   * Do not use on LXNAV S-series: empty a,b,c fields zero the device
+   * polar (#2397). Prefer a full POLAR write via PutCrewMass().
+   *
    * @param pilot_weight crew mass (kg)
    */
   static inline void
@@ -163,7 +167,11 @@ namespace LXNAVVario {
   }
 
   /**
-   * Set only the empty weight in POLAR command, leaving all other fields empty
+   * Set only the empty weight in POLAR command, leaving all other fields empty.
+   *
+   * Do not use on LXNAV S-series: empty a,b,c fields zero the device
+   * polar (#2397). Prefer a full POLAR write via PutEmptyMass().
+   *
    * @param empty_weight empty mass (kg)
    */
   static inline void
