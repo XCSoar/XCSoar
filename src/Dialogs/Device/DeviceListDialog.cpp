@@ -119,7 +119,10 @@ class DeviceListWidget final
         basic.total_energy_vario_available ||
         basic.noncomp_vario_available;
       traffic = basic.flarm.IsDetected();
-      gdl90 = traffic && config.UsesDriver() && config.driver_name == "GDL90";
+      /* GDL90 status follows protocol activity (heartbeat / any frame
+         sets alive), not traffic presence — SoftRF may have ownship
+         with an empty traffic list. */
+      gdl90 = alive && config.UsesDriver() && config.driver_name == "GDL90";
       foreflight_id = config.UsesDriver() && config.driver_name == "GDL90" &&
         basic.device.license.equals("ForeFlight");
       foreflight_ahrs = config.UsesDriver() && config.driver_name == "GDL90" &&
@@ -441,8 +444,10 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       buffer.append(_("Vario"));
     }
 
-    if (flags.traffic)
-      buffer.append(flags.gdl90 ? "; GDL90" : "; FLARM");
+    if (flags.gdl90)
+      buffer.append("; GDL90");
+    else if (flags.traffic)
+      buffer.append("; FLARM");
 
     if (flags.foreflight_ahrs)
       buffer.append("; ForeFlight AHRS");

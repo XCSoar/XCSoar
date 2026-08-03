@@ -667,6 +667,11 @@ GDL90Device::ParseTrafficReport(std::span<const uint8_t> payload,
 
     slot->Clear();
     slot->id = id;
+    /* Relatives are filled by FlarmComputer from ownship GPS; only clear
+       on first insert so later reports do not stomp computed values. */
+    slot->relative_north = 0;
+    slot->relative_east = 0;
+    slot->relative_altitude = 0;
     info.flarm.traffic.new_traffic.Update(info.clock);
   }
 
@@ -750,15 +755,12 @@ GDL90Device::ParseTrafficReport(std::span<const uint8_t> payload,
   } else
     slot->climb_rate_received = false;
 
-  /* not available / not conveyed by basic Traffic Report */
-  slot->relative_north = 0;
-  slot->relative_east = 0;
-  slot->relative_altitude = 0;
+  /* Not conveyed by the Traffic Report; leave relative_* and
+     climb_rate_avg30s_* for FlarmComputer. */
   slot->stealth = false;
   slot->no_track = false;
   slot->rssi_available = false;
   slot->turn_rate_received = false;
-  slot->climb_rate_avg30s_available = false;
 }
 
 bool

@@ -328,6 +328,12 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      const FlarmTraffic &traffic,
                                      unsigned i) noexcept
 {
+  /* Absolute traffic (GDL90 / ADS-B) has no relatives until FlarmComputer
+     has ownship GPS.  Distance zero would plot on the aircraft — skip
+     until relatives are usable.  Classic FLARM already sends N/E. */
+  if (traffic.absolute_location && traffic.distance.IsZero())
+    return;
+
   // Save relative East/North
   DoublePoint2D p(traffic.relative_east, -traffic.relative_north);
 
