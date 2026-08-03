@@ -85,23 +85,7 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
     return;
   }
 
-  // Gate alpha on the backend's per-pixel source-alpha capability, matching
-  // the map renderer, so the preview never diverges from the actual map.
-  const bool use_alpha = style->HasAlpha() && HaveBitmapSourceAlpha();
-  const auto &map = use_alpha
-    ? style->color_map_alpha : style->color_map;
-  const float min_v = map.points[0].value;
-  const float max_v = map.points[map.num_points - 1].value;
   const unsigned height_scale = style->height_scale;
-
-  // Compute rendering-domain bounds from the physical
-  // color map range
-  const int16_t min_h = (int16_t)std::clamp(
-    (int)(min_v * style->scale + style->offset),
-    0, (int)INT16_MAX);
-  const int16_t max_h = (int16_t)std::clamp(
-    (int)(max_v * style->scale + style->offset),
-    0, (int)INT16_MAX);
 
   // Build the color table using the same code path
   // as the map renderer
@@ -111,6 +95,23 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
                          style->scale, style->offset,
                          height_scale, style->do_water);
   auto ramp = materialized.GetColorRamp();
+
+  // Gate alpha on the backend's per-pixel source-alpha capability, matching
+  // the map renderer, so the preview never diverges from the actual map.
+  const bool use_alpha = ramp.has_alpha && HaveBitmapSourceAlpha();
+  const auto &map = use_alpha
+    ? style->color_map_alpha : style->color_map;
+  const float min_v = map.points[0].value;
+  const float max_v = map.points[map.num_points - 1].value;
+
+  // Compute rendering-domain bounds from the physical
+  // color map range
+  const int16_t min_h = (int16_t)std::clamp(
+    (int)(min_v * style->scale + style->offset),
+    0, (int)INT16_MAX);
+  const int16_t max_h = (int16_t)std::clamp(
+    (int)(max_v * style->scale + style->offset),
+    0, (int)INT16_MAX);
 
   RasterRenderer renderer;
   if (use_alpha)

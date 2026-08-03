@@ -159,9 +159,10 @@ RaspRenderer::Generate(const WindowProjection &projection,
   if (materialized_color_ramp.hash != last_ramp_hash) {
     auto ramp = materialized_color_ramp.GetColorRamp();
 
-    // Choose between RGB and RGBA colormap based on style and on
+    // Choose between RGB and RGBA colormap based on the materialized
+    // ramp (which only carries alpha if the colormap is usable) and on
     // whether the rendering backend can blend per-pixel source alpha.
-    const bool use_alpha = style.HasAlpha() && HaveBitmapSourceAlpha();
+    const bool use_alpha = ramp.has_alpha && HaveBitmapSourceAlpha();
 
     if (use_alpha)
       raster_renderer.PrepareColorTableAlpha(&ramp, do_water,
