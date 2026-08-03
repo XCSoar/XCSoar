@@ -269,24 +269,10 @@ TouchTextEntry(char *text, size_t width,
   WindowStyle button_style;
   button_style.TabStop();
 
-  /* Create the soft keyboard before OK/Cancel/Clear so
-     FocusFirstControl (dialog default focus) lands on a key and the
-     cursor keys can navigate immediately. */
-  KeyboardWidget keyboard(look.button, FormCharacter, !accb,
-                          default_shift_state);
-
-  keyboard.Initialise(client_area, L.keyboard);
-  keyboard.Prepare(client_area, L.keyboard);
-  keyboard.Show(L.keyboard);
-
-  kb = &keyboard;
-
-  Button backspace_button(client_area, look.button, "<-",
-                          L.backspace,
-                          button_style, [](){ OnBackspace(); });
-
-  textentry_backspace = &backspace_button;
-
+  /* Create OK first so FocusFirstControl lands there: Enter confirms
+     instead of typing the focused soft key (often @em 1).  Do not use
+     HasKeyboard() for this — joystick remotes often appear as HID
+     keyboards.  Up from OK still enters the grid (Space). */
   Button ok_button(client_area, look.button, _("OK"),
                    L.ok,
                    button_style, form.MakeModalResultCallback(mrOK));
@@ -302,6 +288,21 @@ TouchTextEntry(char *text, size_t width,
                       button_style,
                       [](){ ClearText(); });
   textentry_clear = &clear_button;
+
+  KeyboardWidget keyboard(look.button, FormCharacter, !accb,
+                          default_shift_state);
+
+  keyboard.Initialise(client_area, L.keyboard);
+  keyboard.Prepare(client_area, L.keyboard);
+  keyboard.Show(L.keyboard);
+
+  kb = &keyboard;
+
+  Button backspace_button(client_area, look.button, "<-",
+                          L.backspace,
+                          button_style, [](){ OnBackspace(); });
+
+  textentry_backspace = &backspace_button;
 
   form.SetClientLayoutFunction([&]() {
     const PixelRect rc = client_area.GetClientRect();

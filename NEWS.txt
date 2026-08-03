@@ -65,10 +65,10 @@ Version 7.45 - not yet released
     on Down
   - Draw map GPS status above the map scale / title line so it is not
     covered by AUTO / Simulator / REPLAY text
-  - Improve soft keyboard text entry: default focus on a key; cursor
-    keys move across the grid (Up from OK/Cancel/Clear enters the
-    keyboard; arrows no longer jump in tab order at row edges); F1 is
-    backspace
+  - Improve soft keyboard text entry: default focus on OK so Enter
+    confirms (not the “1” key); cursor keys move across the grid (Up
+    from OK/Cancel/Clear enters the keyboard; arrows no longer jump in
+    tab order at row edges); F1 is backspace
   - Fix profile selection / startup branding: use transparent RGBA logo
     and title bitmaps on light (parchment) dialog backgrounds #2742
   - Size the InfoBox panel to the current tab and lift map overlays by

@@ -70,8 +70,7 @@ public:
 
   /**
    * Focus the first enabled on-screen key (number row first).  Used as
-   * a fallback when Space is unavailable, and for the dialog default
-   * focus when the keyboard is created before the action buttons.
+   * a fallback when Space is unavailable.
    */
   bool FocusFirstEnabledInGrid() noexcept;
 
