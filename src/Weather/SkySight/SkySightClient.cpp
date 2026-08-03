@@ -545,6 +545,30 @@ SkySightClient::RefreshCatalog() noexcept
   api->PollLayers();
 }
 
+SkySightCache::Usage
+SkySightClient::GetCacheUsage() const noexcept
+{
+  return SkySightCache::GetUsage(GetCachePath());
+}
+
+SkySightCache::Usage
+SkySightClient::ClearDownloadedData() noexcept
+{
+  ResetTiles();
+  const auto deleted = api->ClearDownloadedData();
+  forecast_image_dirty = true;
+  if (IsAutoUpdateEnabled() && active_layer != nullptr) {
+    try {
+      (void)SetLayerActive(active_layer->id);
+    } catch (...) {
+      LogError(std::current_exception(),
+               "SkySight cache clear refresh failed");
+    }
+  }
+  OnDataUpdated();
+  return deleted;
+}
+
 bool
 SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time,
                              bool download)

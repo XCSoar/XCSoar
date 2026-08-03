@@ -141,6 +141,7 @@ public:
 
   void DownloadFile(std::string_view url, Path filename, bool requires_auth);
   void CancelTileDownloads() noexcept;
+  void CancelFileDownloads() noexcept;
   void ReconcileTileDownloads(
     const std::set<std::string, std::less<>> &desired_keys) noexcept;
   [[nodiscard]] bool HasPendingTileDownloads() const noexcept;

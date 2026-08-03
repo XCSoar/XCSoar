@@ -641,6 +641,32 @@ SkySightAPI::CancelTileDownloads() noexcept
   request->CancelTileDownloads();
 }
 
+SkySightCache::Usage
+SkySightAPI::ClearDownloadedData() noexcept
+{
+  request->CancelFileDownloads();
+  if (decode_job != nullptr)
+    decode_job->Cancel();
+  pending_decode_jobs.clear();
+  ResetPreloadProgress();
+
+  for (auto &layer : layers) {
+    layer.forecast_datafiles.erase(
+      std::remove_if(layer.forecast_datafiles.begin(),
+                     layer.forecast_datafiles.end(),
+                     [](const auto &datafile) {
+                       return datafile.link.empty();
+                     }),
+      layer.forecast_datafiles.end());
+    layer.mtime = 0;
+    layer.decoding = false;
+    layer.ClearForecastMetadataRequest();
+    layer.pending_downloads = 0;
+  }
+
+  return SkySightCache::ClearDownloadedData(cache_path);
+}
+
 void
 SkySightAPI::ReconcileTileDownloads(
   const std::set<std::string, std::less<>> &desired_keys) noexcept

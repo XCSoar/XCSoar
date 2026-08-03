@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Layers.hpp"
+#include "SkySightCache.hpp"
 #include "MapWindow/OverlayLimits.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
@@ -78,6 +79,8 @@ public:
   bool HasForecastLayers() const noexcept;
   bool IsForecastDecodeAvailable() const noexcept;
   void RefreshCatalog() noexcept;
+  [[nodiscard]] SkySightCache::Usage GetCacheUsage() const noexcept;
+  [[nodiscard]] SkySightCache::Usage ClearDownloadedData() noexcept;
 
   bool HasCredentials() const noexcept;
   bool IsAutoUpdateEnabled() const noexcept;

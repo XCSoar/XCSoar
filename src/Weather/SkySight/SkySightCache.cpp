@@ -238,6 +238,50 @@ public:
 
 namespace SkySightCache {
 
+Usage
+GetUsage(Path directory) noexcept
+{
+  struct Visitor final : Directory::DirEntryVisitor {
+    Usage usage;
+
+    void Visit(Path path, [[maybe_unused]] Path filename,
+               bool is_directory) noexcept override {
+      if (is_directory)
+        return;
+
+      usage.bytes += File::GetSize(path);
+      ++usage.files;
+    }
+  } visitor;
+
+  Directory::VisitDirectoriesAndFiles(directory, visitor);
+  return visitor.usage;
+}
+
+Usage
+ClearDownloadedData(Path directory) noexcept
+{
+  struct Visitor final : Directory::DirEntryVisitor {
+    Usage deleted;
+
+    void Visit(Path path, Path filename,
+               bool is_directory) noexcept override {
+      if (is_directory ||
+          std::string_view{filename.c_str()}.ends_with(".cache"))
+        return;
+
+      const uint64_t size = File::GetSize(path);
+      if (File::Delete(path)) {
+        deleted.bytes += size;
+        ++deleted.files;
+      }
+    }
+  } visitor;
+
+  Directory::VisitDirectoriesAndFiles(directory, visitor);
+  return visitor.deleted;
+}
+
 /**
  * Returns true only when GPS time is valid or the supported host reports NTP
  * synchronization, allowing age-based forecast cleanup to be trusted.
