@@ -816,6 +816,94 @@ This will:
 **Note**: Requires Debian/Ubuntu package ``socat``. The device port must be
 available (not in use by XCSoar) when monitoring directly.
 
+RunLXNAVPolarEcho
+~~~~~~~~~~~~~~~~~
+
+Hardware check for LXNAV ``PLXV0,POLAR`` coefficient conversion and
+safe full-POLAR rewrites (#2397).  Use with a V7, S80, S10, or compatible
+vario on a free serial/USB port (XCSoar must not hold the port).
+
+**Build**::
+
+   make -j$(nproc) TARGET=UNIX USE_CCACHE=y output/UNIX/bin/RunLXNAVPolarEcho
+   make -j$(nproc) TARGET=WIN64 USE_CCACHE=y output/WIN64/bin/RunLXNAVPolarEcho.exe
+
+**Usage**::
+
+   ./output/UNIX/bin/RunLXNAVPolarEcho /dev/ttyUSB0 115200
+   ./output/UNIX/bin/RunLXNAVPolarEcho /dev/ttyUSB0 115200 --read-only
+   ./output/UNIX/bin/RunLXNAVPolarEcho /dev/ttyUSB0 115200 --preserve-crew
+   ./output/WIN64/bin/RunLXNAVPolarEcho.exe COM3 115200
+
+**Modes**:
+
+- default: write a known Hornet sample polar, read it back, verify SI
+  round-trip of a,b,c
+- ``--read-only``: only ``PLXV0,POLAR,R``; print LX and SI coefficients
+  (non-destructive snapshot of the vario polar)
+- ``--preserve-crew``: after a successful read, rewrite a *full* POLAR
+  sentence with pilot weight 95 kg and check that a,b,c, max weight and
+  name are unchanged (guards against empty-field polar wipes)
+
+**Exit status**: ``0`` on success, non-zero on timeout or mismatch.
+
+LXNAV polar sync — manual XCSoar checklist (#2397)
+--------------------------------------------------
+
+Automated unit tests cover conversion and write shaping.  Confirm on a
+real S10/S80 (or V7) with XCSoar before merging polar-sync changes.
+
+Prerequisites
+^^^^^^^^^^^^^
+
+- LXNAV driver selected; note baud rate and ``Sync from/to device``
+- Plane profile: reference mass, empty mass, pilot weight, and max
+  ballast match the vario (or use polar sync Receive to import them)
+- Enable NMEA logger on the device port if you need a recording
+
+A. Coefficient harness (no full UI)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Quit XCSoar so the serial port is free.
+2. Run ``RunLXNAVPolarEcho PORT BAUD`` then
+   ``RunLXNAVPolarEcho PORT BAUD --preserve-crew``.
+3. Expect ``Round-trip vs sent SI: OK`` and
+   ``Preserve coefficients after crew rewrite: OK``.
+
+B. Polar sync Receive (ballast kg)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Device dialog: **Polar sync = Receive from device**.
+2. Connect; wait for “Polar received from device” (or confirm masses
+   updated in Basic settings / plane).
+3. On the vario set MacCready and water ballast to a known full value
+   (e.g. 180 kg).
+4. XCSoar ballast litres / kg should match within a few kg (same
+   reference, empty, and pilot masses).
+5. Change MC on the vario; XCSoar MC should follow.
+
+C. Polar sync Send (must not corrupt vario)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Note the vario’s polar name, MC speed-to-fly at a fixed MC (e.g. 1.2),
+   and ballast display **before** connecting.
+2. Device dialog: **Polar sync = Send to device**; plane polar in XCSoar
+   must be the intended glider polar.
+3. Connect and wait for polar send.
+4. On the vario, MC speeds and polar must remain plausible (not
+   ±10 m/s nonsense, not 180 km/h at MC 1.2 with no water on a Ventus).
+5. Optional: ``RunLXNAVPolarEcho PORT BAUD --read-only`` afterwards and
+   confirm a,b,c are still non-tiny LX values (order ~1, not ~0.002).
+
+D. Crew / empty mass without wiping polar
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Polar sync Off or Receive; connect so XCSoar has seen a POLAR reply.
+2. Change pilot weight in XCSoar Basic settings (sync to device on).
+3. Vario polar and STF must stay sane; pilot weight updates.
+4. Optional NMEA log: outgoing ``PLXV0,POLAR,W`` must include non-empty
+   a,b,c (not ``PLXV0,POLAR,W,,,,,,,,``).
+
 CAI302Tool
 ~~~~~~~~~~
 
