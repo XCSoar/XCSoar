@@ -301,11 +301,9 @@ LXDevice::PutPolar(const GlidePolar &polar,
   if (!coeffs.IsValid())
     return true;
 
-  /* Convert XCSoar m/s coefficients to LXNAV format
-     (v == 1 corresponds to 100 km/h) */
-  const double a_lx = coeffs.a * (LX_POLAR_V * LX_POLAR_V);
-  const double b_lx = coeffs.b * LX_POLAR_V;
-  const double c_lx = coeffs.c;
+  /* Convert XCSoar m/s coefficients to LXNAV format */
+  double a_lx, b_lx, c_lx;
+  LXNAVPolar::ToNmeaPolar(coeffs, a_lx, b_lx, c_lx);
 
   const double ref_mass = polar.GetReferenceMass();
   const double empty_mass = polar.GetEmptyMass();
