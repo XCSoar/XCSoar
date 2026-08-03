@@ -43,6 +43,7 @@ Version 7.45 - not yet released
   - fix crash when opening the aircraft type picker without a network
     connection
 * ui
+  - add help text for plane ``Max. Cruise Speed`` #1134
   - Bind F5/F6 on the FLARM traffic radar to auto-zoom and north-up
     toggles (also fixes north-up so it no longer changes auto-zoom)
     #2535
