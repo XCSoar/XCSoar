@@ -19,6 +19,7 @@ private:
   void Init();
   void TestBasic();
   void TestBallast();
+  void TestBallastOverload();
   void TestBugs();
   void TestMC();
   void TestDensityRatio();
@@ -113,6 +114,40 @@ GlidePolarTest::TestBallast()
 
   polar.SetBallastLitres(0);
   ok1(!polar.HasBallast());
+}
+
+void
+GlidePolarTest::TestBallastOverload()
+{
+  /* Matches ApplyExternalSettings BallastProcessTimer / LXNAV:
+       overload = (empty + crew + water) / reference_mass
+       water    = overload * reference_mass - crew - empty */
+  constexpr double ref = 318;
+  constexpr double empty = 228;
+  constexpr double crew = 90;
+  constexpr double water = 100;
+
+  polar.SetReferenceMass(ref, false);
+  polar.SetEmptyMass(empty, false);
+  polar.SetCrewMass(crew, false);
+  polar.SetMaxBallast(180);
+  polar.SetBallastLitres(water);
+
+  const double overload = polar.GetBallastOverload();
+  ok1(equals(overload, (empty + crew + water) / ref));
+
+  polar.SetBallastLitres(0);
+  polar.SetBallastOverload(overload);
+  ok1(equals(polar.GetBallastLitres(), water));
+
+  /* Decode path used by ApplyExternalSettings for LXWP2 ballast */
+  const double decoded_water =
+    overload * ref - crew - empty;
+  ok1(equals(decoded_water, water));
+
+  /* Restore baseline for subsequent tests */
+  Init();
+  polar.Update();
 }
 
 void
@@ -230,6 +265,7 @@ GlidePolarTest::Run()
   Init();
   TestBasic();
   TestBallast();
+  TestBallastOverload();
   TestBugs();
   TestMC();
   TestDensityRatio();
@@ -238,7 +274,7 @@ GlidePolarTest::Run()
 
 int main()
 {
-  plan_tests(69);
+  plan_tests(69 + 3);
 
   GlidePolarTest test;
   test.Run();
