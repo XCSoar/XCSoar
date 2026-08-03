@@ -18,7 +18,7 @@ struct VarioLook {
 
   Color sink_color, lift_color;
 
-  Pen arc_pen, tick_pen;
+  Pen arc_pen, tick_pen, thick_tick_pen, half_tick_pen;
   Font arc_label_font;
 
   Brush sink_brush, lift_brush;
