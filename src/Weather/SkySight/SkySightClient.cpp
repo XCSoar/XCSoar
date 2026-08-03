@@ -376,6 +376,33 @@ SkySightClient::HasCredentials() const noexcept
 }
 
 bool
+SkySightClient::IsAutoUpdateEnabled() const noexcept
+{
+  return CommonInterface::GetComputerSettings().weather.skysight.auto_update;
+}
+
+void
+SkySightClient::OnAutoUpdateChanged() noexcept
+{
+  manual_update_requested = false;
+  planned_live_tiles.clear();
+  forecast_image_dirty = true;
+
+  if (!IsAutoUpdateEnabled())
+    api->CancelTileDownloads();
+  else if (active_layer != nullptr) {
+    try {
+      (void)SetLayerActive(active_layer->id);
+    } catch (...) {
+      LogError(std::current_exception(),
+               "SkySight automatic update enabling failed");
+    }
+  }
+
+  OnDataUpdated();
+}
+
+bool
 SkySightClient::IsThrottled() const noexcept
 {
   return api->IsThrottled();
@@ -519,7 +546,8 @@ SkySightClient::RefreshCatalog() noexcept
 }
 
 bool
-SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time)
+SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time,
+                             bool download)
 {
   if (forecast_time <= 0)
     return false;
@@ -537,7 +565,8 @@ SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time)
   layer->forecast_time = forecast_time;
   CommonInterface::SetUIState().weather.skysight.cursor_initialized = true;
 
-  if (!SyncCachedForecastImage(GetRegion(), *layer, forecast_time)) {
+  if (!SyncCachedForecastImage(GetRegion(), *layer, forecast_time) &&
+      download) {
     if (!api->QueueForecastDatafile(id, datafile->time, datafile->link))
       return false;
   }
@@ -550,7 +579,7 @@ SkySightClient::SelectForecastTime(std::string_view id, time_t forecast_time)
 }
 
 bool
-SkySightClient::SelectAutomaticForecastTime(std::string_view id)
+SkySightClient::SelectAutomaticForecastTime(std::string_view id, bool download)
 {
   auto *layer = api->GetLayer(id);
   if (layer == nullptr || !api->IsSelectedLayer(id) ||
@@ -568,7 +597,8 @@ SkySightClient::SelectAutomaticForecastTime(std::string_view id)
   layer->forecast_time_mode = SkySight::ForecastTimeMode::AutoDefault;
   layer->forecast_time = forecast_time;
 
-  if (!SyncCachedForecastImage(GetRegion(), *layer, forecast_time)) {
+  if (!SyncCachedForecastImage(GetRegion(), *layer, forecast_time) &&
+      download) {
     if (!api->QueueForecastDatafile(id, datafile->time, datafile->link))
       return false;
   }
@@ -703,7 +733,7 @@ SkySightClient::ResetTiles() noexcept
 }
 
 bool
-SkySightClient::SetLayerActive(std::string_view id)
+SkySightClient::SetLayerActive(std::string_view id, bool request_update)
 {
   auto *layer = api->GetLayer(id);
   if (layer == nullptr)
@@ -716,18 +746,25 @@ SkySightClient::SetLayerActive(std::string_view id)
     api->CancelTileDownloads();
 
   active_layer = layer;
+  manual_update_requested = request_update;
   if (!active_layer->SupportsLiveTiles()) {
     if (api->IsSelectedLayer(id)) {
       const bool has_exact_forecast_image =
         HasExactForecastImage(GetRegion(), *active_layer);
+      const bool manual_update_started = request_update &&
+        !active_layer->forecast_datafiles.empty() &&
+        SelectAutomaticForecastTime(id, true);
 
-      if (!has_exact_forecast_image)
+      if (!manual_update_started && !has_exact_forecast_image &&
+          (IsAutoUpdateEnabled() || request_update))
         (void)api->PreloadDefaultDatafile(id);
-      else
+      else if (!manual_update_started)
         api->RequestForecastMetadata(id);
     }
   }
   ResetTiles();
+  if (!layer->SupportsLiveTiles())
+    manual_update_requested = false;
   OnDataUpdated();
   return true;
 }
@@ -770,9 +807,11 @@ SkySightClient::ApplyPageOverlay(const PageLayout &page) noexcept
 
     if (!layer->SupportsLiveTiles() && !layer->forecast_datafiles.empty()) {
       if (layer->UsesAutomaticForecastTime())
-        (void)SelectAutomaticForecastTime(overlay_id);
+        (void)SelectAutomaticForecastTime(overlay_id,
+                                          IsAutoUpdateEnabled());
       else if (layer->FindDatafile(layer->forecast_time) != nullptr)
-        (void)SelectForecastTime(overlay_id, layer->forecast_time);
+        (void)SelectForecastTime(overlay_id, layer->forecast_time,
+                                 IsAutoUpdateEnabled());
     }
   } catch (...) {
     LogError(std::current_exception(), "SkySight page overlay selection failed");
@@ -784,6 +823,7 @@ SkySightClient::DeactivateLayer()
 {
   api->CancelTileDownloads();
   active_layer = nullptr;
+  manual_update_requested = false;
   ResetTiles();
   OnDataUpdated();
 }
@@ -1198,8 +1238,10 @@ SkySightClient::DisplayTileLayer()
   std::set<std::string, std::less<>> desired_keys;
   std::vector<GeoBitmap::TileData> missing_target_tiles;
   missing_target_tiles.reserve(target_tiles.size());
+  const bool download_allowed = IsAutoUpdateEnabled() ||
+    manual_update_requested;
 
-  if (has_known_timestamp) {
+  if (download_allowed && has_known_timestamp) {
     for (const auto &target : target_tiles) {
       const auto &exact = cache.Find(target.tile, refresh_time);
       desired_keys.emplace(exact.path.c_str());
@@ -1208,7 +1250,7 @@ SkySightClient::DisplayTileLayer()
     }
   }
 
-  if (!has_known_timestamp && !target_tiles.empty()) {
+  if (download_allowed && !has_known_timestamp && !target_tiles.empty()) {
     /* /data/last_updated does not currently publish timestamps for every
        live pseudo-layer.  Probe one centre tile only; once it succeeds, normal
        viewport downloads begin centre-out. */
@@ -1227,6 +1269,9 @@ SkySightClient::DisplayTileLayer()
   api->ReconcileTileDownloads(desired_keys);
   for (const auto &tile : missing_target_tiles)
     api->EnsureTile(*active_layer, refresh_time, tile);
+
+  if (manual_update_requested && target_view_complete)
+    manual_update_requested = false;
 
   return !visible_tiles.empty();
 #endif

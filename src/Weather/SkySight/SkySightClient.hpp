@@ -37,6 +37,7 @@ class SkySightClient final {
   bool forecast_cleanup_pending = true;
   bool forecast_progress_visible = false;
   bool throttle_notification_active = false;
+  bool manual_update_requested = false;
   bool planned_live_timestamp_known = false;
   time_t planned_live_timestamp = 0;
   GeoBounds planned_live_bounds = GeoBounds::Invalid();
@@ -66,8 +67,10 @@ public:
   bool SelectedLayersFull() const noexcept;
   bool AddSelectedLayer(std::string_view id);
   bool RemoveSelectedLayer(std::string_view id);
-  bool SelectForecastTime(std::string_view id, time_t forecast_time);
-  bool SelectAutomaticForecastTime(std::string_view id);
+  bool SelectForecastTime(std::string_view id, time_t forecast_time,
+                          bool download=true);
+  bool SelectAutomaticForecastTime(std::string_view id,
+                                   bool download=true);
   bool PreloadForecast(std::string_view id) noexcept;
   bool PreloadAllForecasts() noexcept;
   unsigned GetPreloadFileCount() const;
@@ -77,6 +80,8 @@ public:
   void RefreshCatalog() noexcept;
 
   bool HasCredentials() const noexcept;
+  bool IsAutoUpdateEnabled() const noexcept;
+  void OnAutoUpdateChanged() noexcept;
 
   bool IsThrottled() const noexcept;
 
@@ -89,7 +94,7 @@ public:
   std::string_view GetActiveLayerId() const noexcept;
   std::string_view GetDisplayedLayerId() const noexcept;
 
-  bool SetLayerActive(std::string_view id);
+  bool SetLayerActive(std::string_view id, bool request_update=false);
   void ApplyPageOverlay(const PageLayout &page) noexcept;
   void DeactivateLayer();
   void Render();
