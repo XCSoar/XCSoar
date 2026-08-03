@@ -159,7 +159,11 @@ PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
              "%u s", "%u",
              10, 300, 5,
              plane.dump_time);
-  AddFloat(_("Max. Cruise Speed"), nullptr,
+  AddFloat(_("Max. Cruise Speed"),
+           _("Upper limit for MacCready speed-to-fly, including final "
+             "glide. Prevents the glide computer from commanding "
+             "unrealistically high cruise speeds. A typical choice is "
+             "the rough-air / green-arc limit from the flight manual."),
            "%.0f %s", "%.0f", 0, 300, 5,
            false, UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 
