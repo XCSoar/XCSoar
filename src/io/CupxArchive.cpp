@@ -141,17 +141,24 @@ struct ZipEocd {
 };
 
 /**
- * Locate an End-of-Central-Directory record near EOF.
+ * Locate an End-of-Central-Directory record near @p search_end.
  *
- * @param zip_start  if set, require SFX concat == this (pics.zip);
- *                   if nullopt, take the last valid EOCD (points.zip).
+ * @param search_end  exclusive end of the ZIP region (file size for
+ *                    points.zip; points.zip start for pics.zip)
+ * @param zip_start   if set, require SFX concat == this (pics.zip);
+ *                    if nullopt, take the last valid EOCD in the window
  */
 static std::optional<ZipEocd>
-FindEocd(FileDescriptor fd, off_t filesize,
+FindEocd(FileDescriptor fd, off_t filesize, off_t search_end,
          std::optional<off_t> zip_start) noexcept
 {
-  const off_t search_start = std::max(off_t{0}, filesize - ZIP_EOCD_SEARCH);
-  const auto search_len = static_cast<std::size_t>(filesize - search_start);
+  if (search_end <= 0 || search_end > filesize)
+    return std::nullopt;
+
+  const off_t search_start = std::max(off_t{0},
+                                      search_end - ZIP_EOCD_SEARCH);
+  const auto search_len =
+    static_cast<std::size_t>(search_end - search_start);
 
   std::vector<std::byte> tail(search_len);
   if (fd.Seek(search_start) < 0)
@@ -179,7 +186,7 @@ FindEocd(FileDescriptor fd, off_t filesize,
 
     const off_t real_cd = static_cast<off_t>(cd_offset) + concat;
     if (real_cd < 0 ||
-        real_cd + static_cast<off_t>(cd_size) > filesize)
+        real_cd + static_cast<off_t>(cd_size) > search_end)
       continue;
 
     /* Confirm a central-directory signature at the computed offset. */
@@ -192,8 +199,8 @@ FindEocd(FileDescriptor fd, off_t filesize,
     ZipEocd found{concat, cd_size, cd_offset};
 
     if (!zip_start.has_value())
-      /* First hit scanning backward = last EOCD in the file
-         (points.zip). */
+      /* First hit scanning backward = last EOCD in the window
+         (points.zip when search_end is EOF). */
       return found;
 
     if (concat == *zip_start)
@@ -279,17 +286,6 @@ ExtractZipEntry(FileDescriptor fd, off_t filesize,
   return {};
 }
 
-static std::vector<std::byte>
-ExtractNamedEntry(FileDescriptor fd, off_t filesize,
-                  std::string_view entry_name,
-                  std::optional<off_t> zip_start)
-{
-  const auto eocd = FindEocd(fd, filesize, zip_start);
-  if (!eocd)
-    return {};
-  return ExtractZipEntry(fd, filesize, *eocd, entry_name);
-}
-
 std::vector<std::byte>
 CupxArchive::ExtractImage(Path cupx_path, std::string_view image_name)
 {
@@ -308,6 +304,17 @@ CupxArchive::ExtractImage(Path cupx_path, std::string_view image_name)
   if (filesize < 0)
     return {};
 
+  /* points.zip follows pics.zip; bound the pics EOCD search by the
+     start of points.zip so a large points.zip cannot push pics.zip's
+     EOCD outside the ZIP_EOCD_SEARCH window from EOF. */
+  const auto points = FindEocd(fd, filesize, filesize, std::nullopt);
+  if (!points)
+    return {};
+
+  const auto eocd = FindEocd(fd, filesize, points->zip_start, zip_start);
+  if (!eocd)
+    return {};
+
   char entry[520];
   if (image_name.size() + 5 >= sizeof(entry))
     return {};
@@ -315,9 +322,8 @@ CupxArchive::ExtractImage(Path cupx_path, std::string_view image_name)
   std::memcpy(entry, "Pics/", 5);
   std::memcpy(entry + 5, image_name.data(), image_name.size());
 
-  return ExtractNamedEntry(fd, filesize,
-                           {entry, 5 + image_name.size()},
-                           zip_start);
+  return ExtractZipEntry(fd, filesize, *eocd,
+                         {entry, 5 + image_name.size()});
 }
 
 std::vector<std::byte>
@@ -331,5 +337,9 @@ CupxArchive::ExtractPointsCup(Path cupx_path)
   if (filesize < 0)
     return {};
 
-  return ExtractNamedEntry(fd, filesize, "POINTS.CUP", std::nullopt);
+  const auto eocd = FindEocd(fd, filesize, filesize, std::nullopt);
+  if (!eocd)
+    return {};
+
+  return ExtractZipEntry(fd, filesize, *eocd, "POINTS.CUP");
 }
