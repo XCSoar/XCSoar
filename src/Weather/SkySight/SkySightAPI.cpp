@@ -1336,7 +1336,8 @@ SkySightAPI::OnDatafiles(std::string_view layer_id, boost::json::value value) no
                  SkySight::ForecastMetadataIntent::ActiveDefault &&
                selected != nullptr) {
       (void)QueueForecastDatafile(*layer, selected->time, selected->link);
-    } else if (owner.GetActiveLayerId() == layer_id &&
+    } else if (owner.IsAutoUpdateEnabled() &&
+               owner.GetActiveLayerId() == layer_id &&
                selected != nullptr) {
       (void)QueueForecastDatafile(*layer, selected->time, selected->link);
     }
