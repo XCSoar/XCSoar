@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SkySightRequest.hpp"
+#include "SkySightCache.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkySightLimits.hpp"
 #include "SkySightAPI.hpp"
@@ -238,6 +239,12 @@ SkySightRequest::CancelAll() noexcept
   datafiles_layer_id.clear();
   datafiles_retry_at = 0;
 
+  CancelFileDownloads();
+}
+
+void
+SkySightRequest::CancelFileDownloads() noexcept
+{
   for (auto &i : file_jobs)
     i.second->function.Cancel();
 
@@ -246,6 +253,8 @@ SkySightRequest::CancelAll() noexcept
   download_failures.Clear();
   payload_retry_at.clear();
   generic_keys.clear();
+  tile_http_error_count.clear();
+  forecast_prepare_error_count.clear();
 }
 
 void
@@ -1112,7 +1121,8 @@ SkySightRequest::OnFileError(const std::string &key,
 AllocatedPath
 SkySightRequest::GetThrottleCachePath() const noexcept
 {
-  return AllocatedPath::Build(cache_path, "throttle-v1.cache");
+  return AllocatedPath::Build(cache_path,
+                              SkySightCache::THROTTLE_CACHE_FILENAME);
 }
 
 void
