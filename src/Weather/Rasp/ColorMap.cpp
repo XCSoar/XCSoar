@@ -98,7 +98,11 @@ MaterializeColorRamp(const ColorMap &color_map,
   assert(color_map.points != nullptr);
 
   MaterializedColorRamp result;
-  result.has_alpha = color_map_alpha.num_points > 0;
+
+  assert(color_map_alpha.num_points == 0 ||
+         color_map_alpha.num_points == color_map.num_points);
+  result.has_alpha = color_map_alpha.num_points > 0 &&
+    color_map_alpha.num_points == color_map.num_points;
 
   // Materialize RGB entries (drop alpha channel)
   for (unsigned i = 0; i < color_map.num_points; ++i) {
@@ -122,9 +126,6 @@ MaterializeColorRamp(const ColorMap &color_map,
                                        : nullptr);
       result.entries_alpha.push_back({h, p.color});
     }
-
-    assert(result.entries.size()
-           == result.entries_alpha.size());
   }
 
   result.hash = ComputeHash(result.entries, result.entries_alpha,
