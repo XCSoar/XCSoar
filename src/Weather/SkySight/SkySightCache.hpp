@@ -5,11 +5,31 @@
 
 #include "system/Path.hpp"
 
+#include <cstdint>
 #include <ctime>
 #include <string_view>
 #include <vector>
 
 namespace SkySightCache {
+
+inline constexpr char THROTTLE_CACHE_FILENAME[] = "throttle-v1.cache";
+
+struct Usage {
+  uint64_t bytes = 0;
+  unsigned files = 0;
+};
+
+[[nodiscard]] Usage
+GetUsage(Path directory) noexcept;
+
+/**
+ * Delete downloaded forecasts, tiles and temporary files while preserving
+ * provider metadata and the persisted API throttle.
+ *
+ * @return the successfully deleted size and file count
+ */
+[[nodiscard]] Usage
+ClearDownloadedData(Path directory) noexcept;
 
 [[nodiscard]] bool
 IsTrustedTimeAvailableForCleanup() noexcept;

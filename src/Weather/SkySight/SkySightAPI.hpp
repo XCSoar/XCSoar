@@ -6,6 +6,7 @@
 #include "Layers.hpp"
 #include "Regions.hpp"
 #include "SkySightFileDecoder.hpp"
+#include "SkySightCache.hpp"
 #include "system/Path.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 
@@ -119,6 +120,7 @@ public:
   void PollSelectedDatafiles() noexcept;
   void ResetRegions() noexcept;
   void ResetLastUpdates() noexcept;
+  [[nodiscard]] SkySightCache::Usage ClearDownloadedData() noexcept;
 
   void OnAuthenticated() noexcept;
   void OnRegions(boost::json::value value) noexcept;
