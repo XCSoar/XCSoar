@@ -87,11 +87,17 @@ TestBuiltInPolars()
   for (const auto &i : PolarStore::GetAll()) {
     PolarInfo polar = i.ToPolarInfo();
     ok(polar.IsValid(), i.name);
+    /* keep ok(..., name): ok1() would hide which polar failed */
     ok(MaxCruiseUnitPlausible(i.v_no), i.name);
+
+    if (StringIsEqual(i.name, "LS-8 (15m)") ||
+        StringIsEqual(i.name, "LS-8 (18m)"))
+      ok1(equals(i.v_no, 52.78));
   }
 
   const auto &default_polar = PolarStore::GetDefault();
   ok(MaxCruiseUnitPlausible(default_polar.v_no), default_polar.name);
+  ok1(equals(default_polar.v_no, 52.78));
 }
 
 struct PerformanceItem {
@@ -188,7 +194,8 @@ TestBuiltInPolarsPlausibility()
 int main()
 try {
   unsigned num_tests = 19 + 9 +
-    PolarStore::GetAll().size() * 2 + 1;
+    PolarStore::GetAll().size() * 2 + 1 +
+    /* LS-8 (15m), LS-8 (18m), default exact v_no */ 3;
 
   // NOTE: Plausibility tests disabled for now since many fail
   if (0)
