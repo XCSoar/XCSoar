@@ -55,7 +55,7 @@ int main()
 
   FormatGPGGA(buffer, sizeof(buffer), info);
   ok1(StringIsEqual(buffer,
-                    "GPGGA,082311.00,5103.540,N,00741.574,E,2,06,24.4,18.893,M,,,,0000"));
+                    "GPGGA,082311.00,5103.540,N,00741.574,E,2,06,24.4,18.893,M,0.0,M,,0000"));
 
   FormatPGRMZ(buffer, sizeof(buffer), info);
   ok1(StringIsEqual(buffer,
