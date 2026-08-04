@@ -46,8 +46,10 @@ template<typename V>
 void
 VisitForecastImageFiles(Path directory, V &visitor)
 {
-  Directory::VisitSpecificFiles(directory, "*.tif", visitor);
-  Directory::VisitSpecificFiles(directory, "*.tiff", visitor);
+  /* Decoded NetCDF overlays use the versioned .v2.tif suffix.  Plain *.tif
+     files from earlier decoders are ignored so near-zero washes are not
+     selected as the active overlay. */
+  Directory::VisitSpecificFiles(directory, "*.v2.tif", visitor);
   Directory::VisitSpecificFiles(directory, "*.png", visitor);
   Directory::VisitSpecificFiles(directory, "*.jpg", visitor);
   Directory::VisitSpecificFiles(directory, "*.jpeg", visitor);
@@ -113,6 +115,9 @@ StripForecastArtifactSuffix(std::string_view filename) noexcept
 {
   auto stem = filename;
 
+  if (StripSuffix(stem, ".v2.tif"))
+    return stem;
+
   if (StripSuffix(stem, ".min")) {
     if (StripSuffix(stem, ".nc") ||
         StripSuffix(stem, ".tif") ||
@@ -125,7 +130,7 @@ StripForecastArtifactSuffix(std::string_view filename) noexcept
 
   if (StripSuffix(stem, ".zip") ||
       StripSuffix(stem, ".nc") ||
-    StripSuffix(stem, ".jpg") ||
+      StripSuffix(stem, ".jpg") ||
       StripSuffix(stem, ".tif") ||
       StripSuffix(stem, ".tiff") ||
       StripSuffix(stem, ".png") ||
@@ -191,11 +196,12 @@ ParseForecastFileTimestamp(std::string_view filename,
       filename.compare(0, prefix.size(), prefix) != 0)
     return 0;
 
-  const auto dot = filename.find_last_of('.');
-  if (dot == std::string_view::npos || dot <= prefix.size())
+  const auto stem = StripForecastArtifactSuffix(filename);
+  if (stem.size() <= prefix.size() ||
+      stem.compare(0, prefix.size(), prefix) != 0)
     return 0;
 
-  return ParseTimestamp(filename.substr(prefix.size(), dot - prefix.size()));
+  return ParseTimestamp(stem.substr(prefix.size()));
 }
 
 class OlderThanFileVisitor final : public File::Visitor {
