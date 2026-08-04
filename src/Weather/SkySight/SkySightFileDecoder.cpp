@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SkySightFileDecoder.hpp"
+#include "LegendMapping.hpp"
 #include "SkySightLimits.hpp"
 
 #include "LogFile.hpp"
@@ -245,6 +246,9 @@ GetGunzipOutputPath(Path compressed_path);
 void
 DeleteDisplayArtifacts(Path path) noexcept
 {
+  /* Prefer the versioned NetCDF overlay suffix; also remove legacy .tif
+     washes from earlier decoders that painted near-zero opaque. */
+  DeleteIfExists(path.WithSuffix(".v2.tif"));
   DeleteIfExists(path.WithSuffix(".tif"));
   DeleteIfExists(path.WithSuffix(".tiff"));
   DeleteIfExists(path.WithSuffix(".png"));
@@ -257,6 +261,7 @@ DeleteArchiveExtractionVariants(Path archive_path) noexcept
 {
   DeleteIfExists(archive_path.WithSuffix(".min"));
   DeleteIfExists(archive_path.WithSuffix(".nc"));
+  DeleteIfExists(archive_path.WithSuffix(".v2.tif"));
   DeleteIfExists(archive_path.WithSuffix(".tif"));
   DeleteIfExists(archive_path.WithSuffix(".tiff"));
   DeleteIfExists(archive_path.WithSuffix(".png"));
@@ -448,8 +453,11 @@ MakeDisplayReadyData(Path path)
 [[nodiscard]] SkySightPreparedData
 PrepareNetCdfPayload(PreparedForecastPayload payload)
 {
-  auto display_path = payload.source_path.WithSuffix(".tif");
+  auto display_path = payload.source_path.WithSuffix(".v2.tif");
   auto cleanup_source_path = CopyPath(payload.source_path);
+
+  /* Ignore legacy .tif overlays that painted near-zero background opaque. */
+  DeleteIfExists(payload.source_path.WithSuffix(".tif"));
 
   if (File::Exists(display_path) &&
       File::GetLastModification(display_path) >=
@@ -749,16 +757,14 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
         if (!std::isfinite(point) || !std::isfinite(float_point))
           continue;
 
-        auto color = legend.upper_bound(float_point);
-        if (color == legend.begin())
+        auto color = SkySight::FindLegendColor(legend, float_point);
+        if (color == nullptr)
           continue;
 
-        --color;
-
         const auto offset_index = x * samples_per_pixel;
-        row[offset_index] = color->second.red;
-        row[offset_index + 1] = color->second.green;
-        row[offset_index + 2] = color->second.blue;
+        row[offset_index] = color->red;
+        row[offset_index + 1] = color->green;
+        row[offset_index + 2] = color->blue;
         row[offset_index + 3] = 255;
       }
 
@@ -970,7 +976,24 @@ SkySightFileDecoder::Prepare(Path path)
 namespace {
 
 [[nodiscard]] AllocatedPath
-FindDisplayVariant(Path path)
+FindExistingPath(Path path) noexcept
+{
+  return File::Exists(path) ? CopyPath(path) : nullptr;
+}
+
+/**
+ * Locate a decoded NetCDF overlay.  Only the versioned `.v2.tif` product is
+ * accepted so older decodes that painted near-zero legend stops opaque are
+ * not reused.
+ */
+[[nodiscard]] AllocatedPath
+FindNetCdfOverlay(Path path) noexcept
+{
+  return FindExistingPath(path.WithSuffix(".v2.tif"));
+}
+
+[[nodiscard]] AllocatedPath
+FindProviderImage(Path path) noexcept
 {
   if ((path.EndsWithIgnoreCase(".tif") ||
        path.EndsWithIgnoreCase(".tiff") ||
@@ -980,7 +1003,7 @@ FindDisplayVariant(Path path)
       File::Exists(path))
     return CopyPath(path);
 
-  for (const auto *suffix : {".tif", ".tiff", ".png", ".jpg", ".jpeg"}) {
+  for (const auto *suffix : {".png", ".jpg", ".jpeg", ".tiff"}) {
     const auto candidate = path.WithSuffix(suffix);
     if (File::Exists(candidate))
       return AllocatedPath(candidate.c_str());
@@ -994,11 +1017,17 @@ FindDisplayVariant(Path path)
 AllocatedPath
 SkySightFileDecoder::FindCachedDisplay(Path path)
 {
-  if (auto display = FindDisplayVariant(path); display != nullptr)
+  if (auto display = FindProviderImage(path); display != nullptr)
     return display;
 
-  if (NeedsGunzipForecastPayload(path))
-    return FindDisplayVariant(GetGunzipOutputPath(path));
+  if (auto display = FindNetCdfOverlay(path); display != nullptr)
+    return display;
+
+  if (NeedsGunzipForecastPayload(path)) {
+    const auto inflated = GetGunzipOutputPath(path);
+    if (auto display = FindNetCdfOverlay(inflated); display != nullptr)
+      return display;
+  }
 
   return nullptr;
 }
