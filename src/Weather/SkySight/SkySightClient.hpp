@@ -7,6 +7,7 @@
 #include "SkySightCache.hpp"
 #include "MapWindow/OverlayLimits.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "time/RoughTime.hpp"
 #include "ui/canvas/custom/GeoBitmap.hpp"
 #include "system/Path.hpp"
 #include "ui/event/PeriodicTimer.hpp"
@@ -61,6 +62,15 @@ public:
   const SkySight::Layer *GetLayer(std::size_t index) const noexcept;
   const std::vector<SkySightRegionEntry> &GetRegions() const noexcept;
   std::string_view GetRegion() const noexcept;
+  /** IANA tz for the active SkySight region, or empty if unknown. */
+  [[nodiscard]] std::string_view GetRegionTimeZone() const noexcept;
+  /**
+   * UTC offset for displaying a forecast instant in the active region's
+   * local time.  Falls back to the computer UTC offset when the region tz
+   * is unavailable.
+   */
+  [[nodiscard]] RoughTimeDelta
+  GetForecastDisplayOffset(time_t utc_time) const noexcept;
   std::size_t NumSelectedLayers() const noexcept;
   const SkySight::Layer *GetSelectedLayer(std::size_t index) const noexcept;
   const SkySight::Layer *GetSelectedLayer(std::string_view id) const noexcept;

@@ -3,12 +3,14 @@
 
 #include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
+#include "RegionTime.hpp"
 #include "SkySightCache.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkySightLimits.hpp"
 #include "SkySightRequest.hpp"
 #include "SkySightURL.hpp"
 #include "SkySightClient.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "io/FileReader.hxx"
 #include "io/FileOutputStream.hxx"
 #include "json/Parse.hxx"
@@ -263,6 +265,15 @@ SkySightAPI::ParseRegions(const boost::json::value &value,
           projection_value != nullptr && projection_value->is_string())
         projection = projection_value->as_string().c_str();
 
+      std::string tz;
+      if (const auto *tz_value = entry.if_contains("tz");
+          tz_value != nullptr && tz_value->is_string()) {
+        const std::string_view text{tz_value->as_string().c_str(),
+                                    tz_value->as_string().size()};
+        if (ValidateUTF8(text))
+          tz = text;
+      }
+
       GeoBounds bounds = GeoBounds::Invalid();
       if (const auto *bounds_value = entry.if_contains("bounds");
           bounds_value != nullptr && bounds_value->is_array()) {
@@ -284,7 +295,7 @@ SkySightAPI::ParseRegions(const boost::json::value &value,
       }
 
       new_regions.push_back({id, std::move(name), std::move(projection),
-                             bounds});
+                             std::move(tz), bounds});
     }
 
     if (new_regions.empty())
@@ -574,8 +585,27 @@ SkySightAPI::ClearSelectedLayers() noexcept
 }
 
 std::string
-SkySightAPI::FormatUrlTimestamp(time_t timestamp)
+SkySightAPI::FormatUrlTimestamp(time_t timestamp, std::string_view region_tz)
 {
+  if (!region_tz.empty()) {
+    const auto offset = SkySight::GetRegionUtcOffset(
+      region_tz, timestamp, RoughTimeDelta::FromSeconds(0));
+    const auto local = FormatLocalDateTimeYYYYMMDDHHMM(
+      TimeStamp(std::chrono::duration<double>(timestamp)), offset);
+    /* YYYY-MM-DD HH:MM → YYYY/MM/DD/HHMM */
+    std::string out;
+    out.reserve(16);
+    out.append(local.c_str(), 4);
+    out.push_back('/');
+    out.append(local.c_str() + 5, 2);
+    out.push_back('/');
+    out.append(local.c_str() + 8, 2);
+    out.push_back('/');
+    out.append(local.c_str() + 11, 2);
+    out.append(local.c_str() + 14, 2);
+    return out;
+  }
+
   const auto tm = GmTime(std::chrono::system_clock::from_time_t(timestamp));
 
   char buffer[32];
@@ -598,6 +628,7 @@ SkySightAPI::MakeTileUrl(const SkySight::Layer &layer,
                          time_t timestamp,
                          const GeoBitmap::TileData &tile)
 {
+  /* Live rain/satellite tile paths use UTC civil time. */
   return SkySightUrl::Tile(layer.id, tile.zoom, tile.x, tile.y,
                            FormatUrlTimestamp(timestamp));
 }
