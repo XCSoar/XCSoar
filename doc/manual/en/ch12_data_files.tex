@@ -195,7 +195,9 @@ team.
 The format of the file is simple.  Lines beginning with \verb|*| are
 ignored and so may be used to document how the polar was calculated or
 if there are restrictions on its use.  Other than comments, the file
-must contain a single row of numbers separated with commas:
+must contain a single row of numbers separated with commas.
+
+The WinPilot polar format defines eight fields:
 \begin{itemize}
 \item Mass dry gross weight in kg: this is the weight of the glider plus
   a `standard' pilot without ballast.
@@ -204,13 +206,18 @@ must contain a single row of numbers separated with commas:
 \item Sink rate in m/s for first measurement point.
 \item Speed in km/h for second measurement point, (usually best glide speed).
 \item Sink rate in m/s for second measurement point.
-\item Speed in km/h for third measurement point, (usually max manoeuvring speed).
+\item Speed in km/h for third measurement point, (usually a high cruise speed).
 \item Sink rate in m/s for third measurement point.
 \end{itemize}
-The following is an extension to the existing polar file format and thus optional.
+XCSoar optionally accepts two further fields after those eight (not part of
+the WinPilot format):
 \begin{itemize}
-\item The wing area in m$^2$ to allow the wing load computation (could be zero if unknown). 
-\item The max.\ manoeuvring speed in km/h to enable simple checks for the cruise speed command.
+\item The wing area in m$^2$ to allow the wing load computation (could be zero if unknown).
+\item The max.\ cruise speed in m/s.  XCSoar uses this as an upper limit
+  for MacCready speed-to-fly (including final glide), so the computer does
+  not command unrealistically high cruise speeds.  It corresponds to the
+  plane setting ``Max.\ Cruise Speed''.  A typical choice is the rough-air
+  / green-arc limit from the flight manual.
 \end{itemize}
 
 An example, for the LS-3 glider, is given below:

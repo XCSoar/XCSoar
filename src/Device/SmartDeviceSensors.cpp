@@ -22,6 +22,9 @@ static constexpr int MIN_SATELLITES_FOR_3D_FIX = 4;
 static void
 LogNMEABody(NMEALogger &logger, const char *body) noexcept
 {
+  if (body == nullptr || *body == '\0')
+    return;
+
   char sentence[160];
   const int length = snprintf(sentence, sizeof(sentence), "$%s", body);
   if (length < 0 ||
@@ -103,11 +106,15 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   if (n_satellites >= MIN_SATELLITES_FOR_3D_FIX) {
     basic.gps.fix_quality = FixQuality::GPS;
     basic.gps.fix_quality_available.Update(basic.clock);
+  } else {
+    basic.gps.fix_quality = FixQuality::NO_FIX;
+    basic.gps.fix_quality_available.Clear();
   }
 
   const double altitude_correction = geoid_altitude
     ? 0.
     : EGM96::LookupSeparation(basic.location);
+
   if (hasAltitude) {
     basic.gps_altitude = altitude - altitude_correction;
     basic.gps_altitude_available.Update(basic.clock);
@@ -123,7 +130,8 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   if (hasSpeed) {
     basic.ground_speed = ground_speed;
     basic.ground_speed_available.Update(basic.clock);
-  }
+  } else
+    basic.ground_speed_available.Clear();
 
   basic.gps.hdop = hasAccuracy ? accuracy : -1;
 

@@ -5,6 +5,9 @@ Version 7.45 - not yet released
 * data files
   - fix loading SeeYou .cupx waypoint files and embedded photos that
     use ZIP data descriptors (e.g. recent OpenAIP / SeeYou exports)
+  - fix LS-8 polar max.\ cruise speed: the default stored 190 (km/h) in
+    the m/s field; default and built-in LS-8 polars now use 52.78 m/s
+    #1134
 * tracking
   - Do not resolve SkyLines or XCSoar Cloud hosts while the network link is
     down, avoiding repeated DNS timeout errors in the log #1750
@@ -32,6 +35,8 @@ Version 7.45 - not yet released
   - document ``AirspaceLabels`` input event
   - document map pinch-to-zoom on touchscreens that report both
     finger positions #2790
+  - correct ``.plr`` optional max.\ cruise speed unit to m/s and
+    distinguish WinPilot fields from the XCSoar extension #1134
 * development
   - Log screen resolution, DPI, virtual DPI, approximate size, and
     small-screen flag at startup #1548
@@ -39,6 +44,7 @@ Version 7.45 - not yet released
   - fix crash when opening the aircraft type picker without a network
     connection
 * ui
+  - add help text for plane ``Max. Cruise Speed`` #1134
   - Bind F5/F6 on the FLARM traffic radar to auto-zoom and north-up
     toggles (also fixes north-up so it no longer changes auto-zoom)
     #2535
@@ -269,6 +275,7 @@ Version 7.45 - not yet released
     ballast, attitude, radio, and related fields (#2340)
   - Glide polar sync in the device dialog is only shown for drivers that
     implement it (LXNAV)
+  - Write location from built-in GPS when NMEA logger enabled
   - Increase the number of device slots from 6 to 8
 * ui
   - fix crash when switching pages from FLARM radar or thermal assistant back

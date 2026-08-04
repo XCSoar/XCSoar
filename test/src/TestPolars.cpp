@@ -11,6 +11,7 @@
 #include "Polar/Parser.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarStore.hpp"
+#include "Plane/Plane.hpp"
 #include "util/Macros.hpp"
 #include "util/PrintException.hxx"
 #include "util/StringAPI.hxx"
@@ -70,13 +71,33 @@ TestFileImport()
   ok1(equals(polar.wing_area, 9.8));
 }
 
+/**
+ * PolarStore::Item::v_no is SI m/s (0 if unknown).  Values in the
+ * typical km/h range (e.g. 190) indicate a unit mistake.
+ */
+static bool
+MaxCruiseUnitPlausible(double v_no) noexcept
+{
+  return v_no == 0 || (v_no > 0 && v_no <= DEFAULT_MAX_SPEED);
+}
+
 static void
 TestBuiltInPolars()
 {
   for (const auto &i : PolarStore::GetAll()) {
     PolarInfo polar = i.ToPolarInfo();
     ok(polar.IsValid(), i.name);
+    /* keep ok(..., name): ok1() would hide which polar failed */
+    ok(MaxCruiseUnitPlausible(i.v_no), i.name);
+
+    if (StringIsEqual(i.name, "LS-8 (15m)") ||
+        StringIsEqual(i.name, "LS-8 (18m)"))
+      ok1(equals(i.v_no, 52.78));
   }
+
+  const auto &default_polar = PolarStore::GetDefault();
+  ok(MaxCruiseUnitPlausible(default_polar.v_no), default_polar.name);
+  ok1(equals(default_polar.v_no, 52.78));
 }
 
 struct PerformanceItem {
@@ -172,7 +193,9 @@ TestBuiltInPolarsPlausibility()
 
 int main()
 try {
-  unsigned num_tests = 19 + 9 + PolarStore::GetAll().size();
+  unsigned num_tests = 19 + 9 +
+    PolarStore::GetAll().size() * 2 + 1 +
+    /* LS-8 (15m), LS-8 (18m), default exact v_no */ 3;
 
   // NOTE: Plausibility tests disabled for now since many fail
   if (0)
