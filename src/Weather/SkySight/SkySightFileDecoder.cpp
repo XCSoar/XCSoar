@@ -243,9 +243,19 @@ NeedsGunzipForecastPayload(Path path) noexcept;
 [[nodiscard]] AllocatedPath
 GetGunzipOutputPath(Path compressed_path);
 
+/**
+ * Delete overlay products derived from @p path.  When @p include_raw_extracts
+ * is true (zip invalidation), also remove `.min` / `.nc` siblings.
+ */
 void
-DeleteDisplayArtifacts(Path path) noexcept
+DeleteDerivedArtifacts(Path path,
+                       bool include_raw_extracts = false) noexcept
 {
+  if (include_raw_extracts) {
+    DeleteIfExists(path.WithSuffix(".min"));
+    DeleteIfExists(path.WithSuffix(".nc"));
+  }
+
   /* Prefer the versioned NetCDF overlay suffix; also remove legacy .tif
      washes from earlier decoders that painted near-zero opaque. */
   DeleteIfExists(path.WithSuffix(".v2.tif"));
@@ -257,30 +267,17 @@ DeleteDisplayArtifacts(Path path) noexcept
 }
 
 void
-DeleteArchiveExtractionVariants(Path archive_path) noexcept
-{
-  DeleteIfExists(archive_path.WithSuffix(".min"));
-  DeleteIfExists(archive_path.WithSuffix(".nc"));
-  DeleteIfExists(archive_path.WithSuffix(".v2.tif"));
-  DeleteIfExists(archive_path.WithSuffix(".tif"));
-  DeleteIfExists(archive_path.WithSuffix(".tiff"));
-  DeleteIfExists(archive_path.WithSuffix(".png"));
-  DeleteIfExists(archive_path.WithSuffix(".jpg"));
-  DeleteIfExists(archive_path.WithSuffix(".jpeg"));
-}
-
-void
 DeletePreparedPayloadArtifacts(Path path) noexcept
 {
   if (NeedsGunzipForecastPayload(path)) {
     const auto inflated_path = GetGunzipOutputPath(path);
     DeleteIfExists(inflated_path);
-    DeleteDisplayArtifacts(inflated_path);
-    DeleteDisplayArtifacts(path);
+    DeleteDerivedArtifacts(inflated_path);
+    DeleteDerivedArtifacts(path);
     return;
   }
 
-  DeleteDisplayArtifacts(path);
+  DeleteDerivedArtifacts(path);
 }
 
 void
@@ -965,7 +962,7 @@ SkySightFileDecodeJob::OnNotification() noexcept
 }
 
 SkySightPreparedData
-SkySightFileDecoder::Prepare(Path path)
+SkySightFileDecoder::MakeDeferredPreparation(Path path) noexcept
 {
   return {
     SkySightPreparedDataKind::NeedsPreparation,
@@ -1038,7 +1035,7 @@ SkySightFileDecoder::InvalidateCache(Path path) noexcept
   DeleteIfExists(path);
 
   if (path.EndsWithIgnoreCase(".zip")) {
-    DeleteArchiveExtractionVariants(path);
+    DeleteDerivedArtifacts(path, true);
     return;
   }
 

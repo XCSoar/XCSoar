@@ -271,7 +271,6 @@ SkySightRequest::CancelFileDownloads() noexcept
   payload_retry_at.clear();
   generic_keys.clear();
   tile_http_error_count.clear();
-  forecast_prepare_error_count.clear();
 }
 
 void
@@ -677,19 +676,9 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
   }
 
   if (File::Exists(filename)) {
-    try {
-      auto prepared = SkySightFileDecoder::Prepare(filename);
-      api.OnDatafileDownloaded(layer_id, forecast_time,
-                               std::move(prepared));
-      return DownloadDatafileResult::Available;
-    } catch (...) {
-      LogForecastPreparationError(layer_id, forecast_time,
-                                  std::current_exception());
-      SkySightFileDecoder::InvalidateCache(filename);
-      payload_retry_at[key] = std::time(nullptr) + ERROR_RETRY_SECONDS;
-      api.OnDatafileError(layer_id, forecast_time, true);
-      return DownloadDatafileResult::Available;
-    }
+    api.OnDatafileDownloaded(layer_id, forecast_time,
+                             SkySightFileDecoder::MakeDeferredPreparation(filename));
+    return DownloadDatafileResult::Available;
   }
 
   FileRequest job{FileJob::Kind::ForecastData,
@@ -1023,31 +1012,18 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
     download_failures.OnSuccess(key);
     if (i->second->kind == FileJob::Kind::Generic)
       generic_keys.erase(key);
-    const auto layer_id = i->second->layer_id;
-    const auto forecast_time = i->second->forecast_time;
 
-    try {
-      switch (i->second->kind) {
-      case FileJob::Kind::Generic:
-        api.OnTileDownloadStateChanged();
-        break;
+    switch (i->second->kind) {
+    case FileJob::Kind::Generic:
+      api.OnTileDownloadStateChanged();
+      break;
 
-      case FileJob::Kind::ForecastData: {
-        auto prepared = SkySightFileDecoder::Prepare(i->second->path);
-        api.OnDatafileDownloaded(i->second->layer_id,
-                                 i->second->forecast_time,
-                                 std::move(prepared));
-        break;
-      }
-      }
-    } catch (...) {
-      if (i->second->kind == FileJob::Kind::ForecastData)
-        SkySightFileDecoder::InvalidateCache(i->second->path);
-
-      payload_retry_at[key] = std::time(nullptr) + ERROR_RETRY_SECONDS;
-      LogForecastPreparationError(layer_id, forecast_time,
-                                  std::current_exception());
-      api.OnDatafileError(layer_id, forecast_time, true);
+    case FileJob::Kind::ForecastData:
+      api.OnDatafileDownloaded(i->second->layer_id,
+                               i->second->forecast_time,
+                               SkySightFileDecoder::MakeDeferredPreparation(
+                                 i->second->path));
+      break;
     }
   }
   TryPumpQueue();
@@ -1228,33 +1204,6 @@ SkySightRequest::LogThrottleNotice(bool server_retry_after) noexcept
   LogFmt("SkySight throttled by server (HTTP 429), pausing requests for {} "
          "seconds ({})", unsigned(GetThrottleRemainingSeconds()),
          server_retry_after ? "server Retry-After" : "client fallback");
-}
-
-void
-SkySightRequest::LogForecastPreparationError(std::string_view layer_id,
-                                             time_t forecast_time,
-                                             std::exception_ptr error) noexcept
-{
-  if (layer_id.empty()) {
-    LogError(error, "SkySight forecast file preparation failed");
-    return;
-  }
-
-  auto &count = forecast_prepare_error_count[std::string{layer_id}];
-  ++count;
-
-  if (count == 1) {
-    LogFmt("SkySight forecast file preparation failed for layer '{}' (forecast_time={}); suppressing repeats",
-           layer_id, (long long)forecast_time);
-    LogError(error, "SkySight forecast file preparation failed");
-    return;
-  }
-
-  if ((count % 20) == 0) {
-    LogFmt("SkySight forecast file preparation still failing for layer '{}' ({} failures)",
-           layer_id, count);
-    LogError(error, "SkySight forecast file preparation failed");
-  }
 }
 
 void
