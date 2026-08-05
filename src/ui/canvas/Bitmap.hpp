@@ -25,7 +25,7 @@
 class Path;
 class ResourceId;
 class UncompressedImage;
-struct GeoQuadrilateral;
+struct GeoReferencedGrid;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -184,9 +184,9 @@ public:
    * Throws a std::runtime_error on error.
    */
 #ifdef USE_GEOTIFF
-  GeoQuadrilateral LoadGeoFile(Path path);
+  GeoReferencedGrid LoadGeoFile(Path path);
 #else
-  [[noreturn]] GeoQuadrilateral LoadGeoFile(Path path);
+  [[noreturn]] GeoReferencedGrid LoadGeoFile(Path path);
 #endif
 
   void Reset() noexcept;

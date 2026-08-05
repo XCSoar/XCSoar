@@ -15,6 +15,8 @@ unsigned max_texture_size;
 
 bool mapbuffer;
 
+GLint max_texture_size;
+
 GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
 UnsignedPoint2D window_size, viewport_size;
