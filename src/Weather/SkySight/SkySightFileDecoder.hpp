@@ -43,7 +43,14 @@ struct SkySightPreparedData {
 
 class SkySightFileDecoder final {
 public:
-  static SkySightPreparedData Prepare(Path path);
+  /**
+   * Mark a downloaded forecast for unzip/gunzip/decode on the worker
+   * thread.  Does not touch the filesystem and never throws; the decode
+   * job runs #PreparePayload later.
+   */
+  [[nodiscard]] static SkySightPreparedData
+  MakeDeferredPreparation(Path path) noexcept;
+
   [[nodiscard]] static AllocatedPath FindCachedDisplay(Path path);
   static void InvalidateCache(Path path) noexcept;
   static bool IsNetCdfDecodeAvailable() noexcept;

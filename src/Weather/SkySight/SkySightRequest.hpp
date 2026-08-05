@@ -10,6 +10,7 @@
 #include <boost/json.hpp>
 
 #include <deque>
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -91,7 +92,6 @@ class SkySightRequest final {
   std::map<std::string, time_t> payload_retry_at;
   std::set<std::string, std::less<>> generic_keys;
   std::map<std::string, unsigned> tile_http_error_count;
-  std::map<std::string, unsigned> forecast_prepare_error_count;
   std::string email;
   std::string password;
   std::string api_key;
@@ -167,6 +167,23 @@ private:
   void TryPumpQueue() noexcept;
   void OnLoginSuccess(boost::json::value value);
   void OnLoginError(std::exception_ptr error) noexcept;
+
+  /**
+   * Shared gate + start for authenticated catalog/metadata JSON GETs.
+   * @param before_start runs after gates pass and @p running is set
+   *        (e.g. stash layer id), before the coroutine is started.
+   */
+  bool StartAuthenticatedJsonRequest(
+    bool &running,
+    UI::CoInjectFunction<boost::json::value> &job,
+    std::string url,
+    std::function<void(boost::json::value)> on_success,
+    std::function<void(std::exception_ptr)> on_error,
+    std::function<void()> before_start = {});
+
+  void HandleAuthenticatedJsonError(std::exception_ptr error,
+                                    const char *context) noexcept;
+
   void OnRegionsSuccess(boost::json::value value);
   void OnRegionsError(std::exception_ptr error) noexcept;
   void OnLayersSuccess(boost::json::value value);
@@ -179,9 +196,6 @@ private:
                                    const char *context) noexcept;
   void OnFileSuccess(const std::string &key) noexcept;
   void OnFileError(const std::string &key, std::exception_ptr error) noexcept;
-  void LogForecastPreparationError(std::string_view layer_id,
-                                   time_t forecast_time,
-                                   std::exception_ptr error) noexcept;
   void LogDownloadHttpError(bool forecast_download,
                             std::string_view layer_id,
                             time_t forecast_time,
