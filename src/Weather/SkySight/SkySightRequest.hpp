@@ -103,6 +103,7 @@ class SkySightRequest final {
   time_t throttle_until = 0;
   time_t last_throttle_notice = 0;
   bool throttle_resume_notification_pending = false;
+  bool shutting_down = false;
 
 public:
   enum class DownloadDatafileResult {
@@ -113,6 +114,14 @@ public:
 
   SkySightRequest(SkySightAPI &_api, CurlGlobal &_curl, Path _cache_path) noexcept;
   ~SkySightRequest() noexcept;
+
+  /** Cancel inject tasks and refuse new work before UI/curl teardown. */
+  void BeginShutdown() noexcept;
+
+  [[nodiscard]]
+  bool IsShuttingDown() const noexcept {
+    return shutting_down;
+  }
 
   void Configure(std::string_view new_email, std::string_view new_password);
 

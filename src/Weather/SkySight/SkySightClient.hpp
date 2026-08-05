@@ -54,6 +54,9 @@ public:
   explicit SkySightClient(CurlGlobal &curl);
   ~SkySightClient();
 
+  /** Stop polling and cancel network/decode work before teardown. */
+  void BeginShutdown() noexcept;
+
   void Init();
 
   [[nodiscard]] static AllocatedPath GetCachePath() noexcept;
