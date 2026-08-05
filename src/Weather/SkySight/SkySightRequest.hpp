@@ -10,6 +10,7 @@
 #include <boost/json.hpp>
 
 #include <deque>
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -166,6 +167,23 @@ private:
   void TryPumpQueue() noexcept;
   void OnLoginSuccess(boost::json::value value);
   void OnLoginError(std::exception_ptr error) noexcept;
+
+  /**
+   * Shared gate + start for authenticated catalog/metadata JSON GETs.
+   * @param before_start runs after gates pass and @p running is set
+   *        (e.g. stash layer id), before the coroutine is started.
+   */
+  bool StartAuthenticatedJsonRequest(
+    bool &running,
+    UI::CoInjectFunction<boost::json::value> &job,
+    std::string url,
+    std::function<void(boost::json::value)> on_success,
+    std::function<void(std::exception_ptr)> on_error,
+    std::function<void()> before_start = {});
+
+  void HandleAuthenticatedJsonError(std::exception_ptr error,
+                                    const char *context) noexcept;
+
   void OnRegionsSuccess(boost::json::value value);
   void OnRegionsError(std::exception_ptr error) noexcept;
   void OnLayersSuccess(boost::json::value value);
