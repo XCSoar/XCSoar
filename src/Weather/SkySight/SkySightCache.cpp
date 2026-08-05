@@ -6,6 +6,7 @@
 #include "Interface.hpp"
 #include "system/FileUtil.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "util/StringCompare.hxx"
 
 #if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
 #include "lib/dbus/Connection.hxx"
@@ -16,6 +17,8 @@
 #include <charconv>
 #include <chrono>
 #include <utility>
+
+using namespace std::string_view_literals;
 
 namespace {
 
@@ -55,23 +58,52 @@ VisitForecastImageFiles(Path directory, V &visitor)
   Directory::VisitSpecificFiles(directory, "*.jpeg", visitor);
 }
 
-[[nodiscard]] bool
-StripSuffix(std::string_view &value, std::string_view suffix) noexcept
+[[nodiscard]] std::string
+MakeForecastCachePrefix(std::string_view region,
+                        std::string_view layer_id)
 {
-  if (!value.ends_with(suffix))
-    return false;
-
-  value.remove_suffix(suffix.size());
-  return true;
+  std::string prefix;
+  prefix.reserve(region.size() + layer_id.size() + 2);
+  prefix += region;
+  prefix += '-';
+  prefix += layer_id;
+  prefix += '-';
+  return prefix;
 }
 
+/**
+ * Peel a known forecast artifact suffix, leaving
+ * "{region}-{layer}-{YYYY-MM-DD-HHMM}".
+ */
 [[nodiscard]] std::string_view
-ExtractTimestampPrefix(std::string_view stem) noexcept
+StripForecastArtifactSuffix(std::string_view filename) noexcept
 {
-  if (stem.size() < 16 || stem[stem.size() - 16] != '-')
-    return {};
+  auto stem = filename;
 
-  return stem.substr(0, stem.size() - 16);
+  if (RemoveSuffix(stem, ".v2.tif"sv))
+    return stem;
+
+  /* Compressed downloads end in ".nc.min", ".tif.min", … */
+  if (RemoveSuffix(stem, ".min"sv)) {
+    if (RemoveSuffix(stem, ".nc"sv) ||
+        RemoveSuffix(stem, ".tif"sv) ||
+        RemoveSuffix(stem, ".tiff"sv) ||
+        RemoveSuffix(stem, ".png"sv))
+      return stem;
+
+    return {};
+  }
+
+  if (RemoveSuffix(stem, ".zip"sv) ||
+      RemoveSuffix(stem, ".nc"sv) ||
+      RemoveSuffix(stem, ".jpg"sv) ||
+      RemoveSuffix(stem, ".tif"sv) ||
+      RemoveSuffix(stem, ".tiff"sv) ||
+      RemoveSuffix(stem, ".png"sv) ||
+      RemoveSuffix(stem, ".jpeg"sv))
+    return stem;
+
+  return {};
 }
 
 [[nodiscard]] bool
@@ -83,61 +115,37 @@ IsUnsignedNumber(std::string_view value) noexcept
     });
 }
 
+/**
+ * Live tiles are named "{layer}-{zoom}-{x}-{y}-{YYYY-MM-DD-HHMM}.jpg".
+ * Detect that pattern so cleanup does not treat them as forecasts.
+ */
 [[nodiscard]] bool
 LooksLikeTileCacheStem(std::string_view stem) noexcept
 {
-  auto prefix = ExtractTimestampPrefix(stem);
-  if (prefix.empty())
+  /* Drop "-YYYY-MM-DD-HHMM" (15 chars + separator). */
+  if (stem.size() < 16 || stem[stem.size() - 16] != '-')
     return false;
 
-  const auto split3 = prefix.rfind('-');
-  if (split3 == std::string_view::npos ||
-      !IsUnsignedNumber(prefix.substr(split3 + 1)))
+  auto rest = stem.substr(0, stem.size() - 16);
+
+  const auto y_split = rest.rfind('-');
+  if (y_split == std::string_view::npos ||
+      !IsUnsignedNumber(rest.substr(y_split + 1)))
     return false;
 
-  prefix = prefix.substr(0, split3);
-  const auto split2 = prefix.rfind('-');
-  if (split2 == std::string_view::npos ||
-      !IsUnsignedNumber(prefix.substr(split2 + 1)))
+  rest = rest.substr(0, y_split);
+  const auto x_split = rest.rfind('-');
+  if (x_split == std::string_view::npos ||
+      !IsUnsignedNumber(rest.substr(x_split + 1)))
     return false;
 
-  prefix = prefix.substr(0, split2);
-  const auto split1 = prefix.rfind('-');
-  if (split1 == std::string_view::npos ||
-      !IsUnsignedNumber(prefix.substr(split1 + 1)))
+  rest = rest.substr(0, x_split);
+  const auto zoom_split = rest.rfind('-');
+  if (zoom_split == std::string_view::npos ||
+      !IsUnsignedNumber(rest.substr(zoom_split + 1)))
     return false;
 
   return true;
-}
-
-[[nodiscard]] std::string_view
-StripForecastArtifactSuffix(std::string_view filename) noexcept
-{
-  auto stem = filename;
-
-  if (StripSuffix(stem, ".v2.tif"))
-    return stem;
-
-  if (StripSuffix(stem, ".min")) {
-    if (StripSuffix(stem, ".nc") ||
-        StripSuffix(stem, ".tif") ||
-        StripSuffix(stem, ".tiff") ||
-        StripSuffix(stem, ".png"))
-      return stem;
-
-    return {};
-  }
-
-  if (StripSuffix(stem, ".zip") ||
-      StripSuffix(stem, ".nc") ||
-      StripSuffix(stem, ".jpg") ||
-      StripSuffix(stem, ".tif") ||
-      StripSuffix(stem, ".tiff") ||
-      StripSuffix(stem, ".png") ||
-      StripSuffix(stem, ".jpeg"))
-    return stem;
-
-  return {};
 }
 
 [[nodiscard]] bool
@@ -174,41 +182,39 @@ ParseTimestamp(std::string_view timestamp) noexcept
 ParseAnyForecastFileTimestamp(std::string_view filename) noexcept
 {
   const bool is_jpg = filename.ends_with(".jpg");
-  auto stem = StripForecastArtifactSuffix(filename);
+  const auto stem = StripForecastArtifactSuffix(filename);
   if (stem.size() < 16)
     return 0;
 
   if (is_jpg && LooksLikeTileCacheStem(stem))
     return 0;
 
-  const auto timestamp = stem.substr(stem.size() - 15);
   if (stem[stem.size() - 16] != '-')
     return 0;
 
-  return ParseTimestamp(timestamp);
+  return ParseTimestamp(stem.substr(stem.size() - 15));
 }
 
 [[nodiscard]] time_t
 ParseForecastFileTimestamp(std::string_view filename,
                            std::string_view prefix) noexcept
 {
-  if (filename.size() <= prefix.size() ||
-      filename.compare(0, prefix.size(), prefix) != 0)
+  if (!filename.starts_with(prefix))
     return 0;
 
-  const auto stem = StripForecastArtifactSuffix(filename);
-  if (stem.size() <= prefix.size() ||
-      stem.compare(0, prefix.size(), prefix) != 0)
+  auto stem = StripForecastArtifactSuffix(filename);
+  if (!SkipPrefix(stem, prefix))
     return 0;
 
-  return ParseTimestamp(stem.substr(prefix.size()));
+  return ParseTimestamp(stem);
 }
 
 class OlderThanFileVisitor final : public File::Visitor {
   const std::chrono::system_clock::time_point cutoff;
 
 public:
-  explicit OlderThanFileVisitor(std::chrono::system_clock::time_point _cutoff) noexcept
+  explicit OlderThanFileVisitor(
+      std::chrono::system_clock::time_point _cutoff) noexcept
     :cutoff(_cutoff) {}
 
   void Visit(Path full_path, [[maybe_unused]] Path filename) override {
@@ -315,10 +321,7 @@ FindForecastImage(Path directory, std::string_view region,
                   time_t preferred_time)
 {
   const auto now = std::time(nullptr);
-  std::string prefix{region};
-  prefix += '-';
-  prefix += layer_id;
-  prefix += '-';
+  const auto prefix = MakeForecastCachePrefix(region, layer_id);
 
   struct Visitor final : public File::Visitor {
     const std::string_view prefix;
@@ -394,11 +397,7 @@ CollectForecastTimes(Path directory, std::string_view region,
                      std::string_view layer_id)
 {
   std::vector<time_t> times;
-
-  std::string prefix{region};
-  prefix += '-';
-  prefix += layer_id;
-  prefix += '-';
+  const auto prefix = MakeForecastCachePrefix(region, layer_id);
 
   struct Visitor final : public File::Visitor {
     const std::string_view prefix;
