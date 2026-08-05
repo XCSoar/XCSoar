@@ -4,6 +4,7 @@
 #include "SkySightFileDecoder.hpp"
 #include "LegendMapping.hpp"
 #include "SkySightLimits.hpp"
+#include "SkySightPayloadSuffixes.hpp"
 
 #include "LogFile.hpp"
 #include "io/FileReader.hxx"
@@ -55,18 +56,6 @@ CopyPath(Path path)
 CopyOptionalPath(Path path)
 {
   return path != nullptr ? CopyPath(path) : AllocatedPath{};
-}
-
-[[nodiscard]] bool
-HasForecastDataSuffix(std::string_view path) noexcept
-{
-  return path.ends_with(".nc") ||
-    path.ends_with(".nc.min") ||
-    path.ends_with(".tif") || path.ends_with(".tiff") ||
-    path.ends_with(".tif.min") || path.ends_with(".tiff.min") ||
-    path.ends_with(".png") ||
-    path.ends_with(".png.min") ||
-    path.ends_with(".jpg") || path.ends_with(".jpeg");
 }
 
 enum class ForecastPayloadType : uint8_t {
@@ -152,13 +141,13 @@ DetectForecastPayloadType(Path path) noexcept
   if (path.EndsWithIgnoreCase(".nc"))
     return ForecastPayloadType::NetCdf;
 
-  if (path.EndsWithIgnoreCase(".tif") || path.EndsWithIgnoreCase(".tiff"))
+  if (SkySight::PathEndsWithAnyIgnoreCase(path, SkySight::TIFF_SUFFIXES))
     return ForecastPayloadType::Tiff;
 
   if (path.EndsWithIgnoreCase(".png"))
     return ForecastPayloadType::Png;
 
-  if (path.EndsWithIgnoreCase(".jpg") || path.EndsWithIgnoreCase(".jpeg"))
+  if (SkySight::PathEndsWithAnyIgnoreCase(path, SkySight::JPEG_SUFFIXES))
     return ForecastPayloadType::Jpeg;
 
   return ForecastPayloadType::Unknown;
@@ -266,19 +255,14 @@ void
 DeleteDerivedArtifacts(Path path,
                        bool include_raw_extracts = false) noexcept
 {
-  if (include_raw_extracts) {
-    DeleteIfExists(path.WithSuffix(".min"));
-    DeleteIfExists(path.WithSuffix(".nc"));
-  }
+  if (include_raw_extracts)
+    for (const auto suffix : SkySight::RAW_EXTRACT_SUFFIXES)
+      DeleteIfExists(path.WithSuffix(suffix.data()));
 
   /* Prefer the versioned NetCDF overlay suffix; also remove legacy .tif
      washes from earlier decoders that painted near-zero opaque. */
-  DeleteIfExists(path.WithSuffix(".v2.tif"));
-  DeleteIfExists(path.WithSuffix(".tif"));
-  DeleteIfExists(path.WithSuffix(".tiff"));
-  DeleteIfExists(path.WithSuffix(".png"));
-  DeleteIfExists(path.WithSuffix(".jpg"));
-  DeleteIfExists(path.WithSuffix(".jpeg"));
+  for (const auto suffix : SkySight::DERIVED_OVERLAY_SUFFIXES)
+    DeleteIfExists(path.WithSuffix(suffix.data()));
 }
 
 void
@@ -412,7 +396,7 @@ ExtractArchiveEntry(Path archive_path, const CancellationCheck &is_cancelled)
     if (fallback_entry_name.empty())
       fallback_entry_name = entry_name;
 
-    if (HasForecastDataSuffix(entry_name))
+    if (SkySight::HasForecastDataSuffix(entry_name))
       break;
   }
 
@@ -482,7 +466,8 @@ MakeDisplayReadyData(Path path)
 [[nodiscard]] SkySightPreparedData
 PrepareNetCdfPayload(PreparedForecastPayload payload)
 {
-  auto display_path = payload.source_path.WithSuffix(".v2.tif");
+  auto display_path = payload.source_path.WithSuffix(
+    SkySight::DECODED_OVERLAY_SUFFIX.data());
   auto cleanup_source_path = CopyPath(payload.source_path);
 
   /* Ignore legacy .tif overlays that painted near-zero background opaque. */
@@ -1018,22 +1003,20 @@ FindExistingPath(Path path) noexcept
 [[nodiscard]] AllocatedPath
 FindNetCdfOverlay(Path path) noexcept
 {
-  return FindExistingPath(path.WithSuffix(".v2.tif"));
+  return FindExistingPath(
+    path.WithSuffix(SkySight::DECODED_OVERLAY_SUFFIX.data()));
 }
 
 [[nodiscard]] AllocatedPath
 FindProviderImage(Path path) noexcept
 {
-  if ((path.EndsWithIgnoreCase(".tif") ||
-       path.EndsWithIgnoreCase(".tiff") ||
-       path.EndsWithIgnoreCase(".png") ||
-       path.EndsWithIgnoreCase(".jpg") ||
-       path.EndsWithIgnoreCase(".jpeg")) &&
+  if (SkySight::PathEndsWithAnyIgnoreCase(
+        path, SkySight::DISPLAY_IMAGE_SUFFIXES) &&
       File::Exists(path))
     return CopyPath(path);
 
-  for (const auto *suffix : {".png", ".jpg", ".jpeg", ".tiff"}) {
-    const auto candidate = path.WithSuffix(suffix);
+  for (const auto suffix : SkySight::ALTERNATE_DISPLAY_IMAGE_SUFFIXES) {
+    const auto candidate = path.WithSuffix(suffix.data());
     if (File::Exists(candidate))
       return AllocatedPath(candidate.c_str());
   }

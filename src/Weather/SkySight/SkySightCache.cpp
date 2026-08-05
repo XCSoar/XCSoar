@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SkySightCache.hpp"
+#include "SkySightPayloadSuffixes.hpp"
 
 #include "Interface.hpp"
 #include "system/FileUtil.hpp"
@@ -52,10 +53,8 @@ VisitForecastImageFiles(Path directory, V &visitor)
   /* Decoded NetCDF overlays use the versioned .v2.tif suffix.  Plain *.tif
      files from earlier decoders are ignored so near-zero washes are not
      selected as the active overlay. */
-  Directory::VisitSpecificFiles(directory, "*.v2.tif", visitor);
-  Directory::VisitSpecificFiles(directory, "*.png", visitor);
-  Directory::VisitSpecificFiles(directory, "*.jpg", visitor);
-  Directory::VisitSpecificFiles(directory, "*.jpeg", visitor);
+  for (const auto glob : SkySight::DISPLAY_IMAGE_GLOBS)
+    Directory::VisitSpecificFiles(directory, glob.data(), visitor);
 }
 
 [[nodiscard]] std::string
@@ -69,41 +68,6 @@ MakeForecastCachePrefix(std::string_view region,
   prefix += layer_id;
   prefix += '-';
   return prefix;
-}
-
-/**
- * Peel a known forecast artifact suffix, leaving
- * "{region}-{layer}-{YYYY-MM-DD-HHMM}".
- */
-[[nodiscard]] std::string_view
-StripForecastArtifactSuffix(std::string_view filename) noexcept
-{
-  auto stem = filename;
-
-  if (RemoveSuffix(stem, ".v2.tif"sv))
-    return stem;
-
-  /* Compressed downloads end in ".nc.min", ".tif.min", … */
-  if (RemoveSuffix(stem, ".min"sv)) {
-    if (RemoveSuffix(stem, ".nc"sv) ||
-        RemoveSuffix(stem, ".tif"sv) ||
-        RemoveSuffix(stem, ".tiff"sv) ||
-        RemoveSuffix(stem, ".png"sv))
-      return stem;
-
-    return {};
-  }
-
-  if (RemoveSuffix(stem, ".zip"sv) ||
-      RemoveSuffix(stem, ".nc"sv) ||
-      RemoveSuffix(stem, ".jpg"sv) ||
-      RemoveSuffix(stem, ".tif"sv) ||
-      RemoveSuffix(stem, ".tiff"sv) ||
-      RemoveSuffix(stem, ".png"sv) ||
-      RemoveSuffix(stem, ".jpeg"sv))
-    return stem;
-
-  return {};
 }
 
 [[nodiscard]] bool
@@ -182,7 +146,7 @@ ParseTimestamp(std::string_view timestamp) noexcept
 ParseAnyForecastFileTimestamp(std::string_view filename) noexcept
 {
   const bool is_jpg = filename.ends_with(".jpg");
-  const auto stem = StripForecastArtifactSuffix(filename);
+  const auto stem = SkySight::StripForecastArtifactSuffix(filename);
   if (stem.size() < 16)
     return 0;
 
@@ -202,7 +166,7 @@ ParseForecastFileTimestamp(std::string_view filename,
   if (!filename.starts_with(prefix))
     return 0;
 
-  auto stem = StripForecastArtifactSuffix(filename);
+  auto stem = SkySight::StripForecastArtifactSuffix(filename);
   if (!SkipPrefix(stem, prefix))
     return 0;
 
@@ -442,9 +406,9 @@ Cleanup(Path directory) noexcept
       OlderThanForecastTimeVisitor delete_forecasts{
         std::chrono::system_clock::to_time_t(now - FORECAST_RETENTION)};
       VisitForecastImageFiles(directory, delete_forecasts);
-      Directory::VisitSpecificFiles(directory, "*.nc", delete_forecasts);
-      Directory::VisitSpecificFiles(directory, "*.min", delete_forecasts);
-      Directory::VisitSpecificFiles(directory, "*.zip", delete_forecasts);
+      for (const auto glob : SkySight::RAW_FORECAST_GLOBS)
+        Directory::VisitSpecificFiles(directory, glob.data(),
+                                      delete_forecasts);
     }
 
     Directory::VisitSpecificFiles(directory, "*.tmp", delete_tmp);
